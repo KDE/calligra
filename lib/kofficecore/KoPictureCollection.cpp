@@ -20,6 +20,8 @@
 */
 
 #include <qdom.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 #include <kdebug.h>
 #include <kurl.h>
@@ -72,7 +74,7 @@ KoPicture KoPictureCollection::insertPicture(const KoPicture& picture)
     return insertPicture(picture.getKey(), picture);
 }
 
-KoPicture KoPictureCollection::downloadPicture(const KURL& url, QWidget *window)
+KoPicture KoPictureCollection::downloadPicture(const KUrl& url, QWidget *window)
 {
 #ifdef DEBUG_PICTURES
     kdDebug(30003) << "KoPictureCollection::downloadPicture " << url.prettyURL() << endl;
@@ -148,10 +150,10 @@ QString KoPictureCollection::getOasisFileName(const KoPicture& picture) const
     return storeURL;
 }
 
-bool KoPictureCollection::saveToStore(const Type pictureType, KoStore *store, const QValueList<KoPictureKey>& keys)
+bool KoPictureCollection::saveToStore(const Type pictureType, KoStore *store, const Q3ValueList<KoPictureKey>& keys)
 {
     int counter=0;
-    QValueList<KoPictureKey>::const_iterator it = keys.begin();
+    Q3ValueList<KoPictureKey>::const_iterator it = keys.begin();
     for ( ; it != keys.end(); ++it )
     {
         KoPicture c = findPicture( *it );
@@ -174,9 +176,9 @@ bool KoPictureCollection::saveToStore(const Type pictureType, KoStore *store, co
     return true;
 }
 
-bool KoPictureCollection::saveOasisToStore( KoStore *store, QValueList<KoPictureKey> keys, KoXmlWriter* manifestWriter )
+bool KoPictureCollection::saveOasisToStore( KoStore *store, Q3ValueList<KoPictureKey> keys, KoXmlWriter* manifestWriter )
 {
-    QValueList<KoPictureKey>::Iterator it = keys.begin();
+    Q3ValueList<KoPictureKey>::Iterator it = keys.begin();
     for ( ; it != keys.end(); ++it )
     {
         KoPicture c = findPicture( *it );
@@ -199,7 +201,7 @@ bool KoPictureCollection::saveOasisToStore( KoStore *store, QValueList<KoPicture
     return true;
 }
 
-QDomElement KoPictureCollection::saveXML(const Type pictureType, QDomDocument &doc, QValueList<KoPictureKey> keys)
+QDomElement KoPictureCollection::saveXML(const Type pictureType, QDomDocument &doc, Q3ValueList<KoPictureKey> keys)
 {
     QString strElementName("PICTURES");
     if (pictureType==CollectionImage)
@@ -208,7 +210,7 @@ QDomElement KoPictureCollection::saveXML(const Type pictureType, QDomDocument &d
         strElementName="CLIPARTS";
     QDomElement cliparts = doc.createElement( strElementName );
     int counter=0;
-    QValueList<KoPictureKey>::Iterator it = keys.begin();
+    Q3ValueList<KoPictureKey>::Iterator it = keys.begin();
     for ( ; it != keys.end(); ++it )
     {
         KoPicture picture = findPicture( *it );

@@ -21,7 +21,9 @@
 #define __koPictureWmf_h__
 
 #include <qstring.h>
-#include <qpicture.h>
+#include <q3picture.h>
+//Added by qt3to4:
+#include <QPixmap>
 #include <koffice_export.h>
 
 class QPainter;
@@ -96,10 +98,10 @@ protected:
      * @internal
      * Draw a QPicture
      */
-    void drawQPicture(QPicture& clipart, QPainter& painter,
+    void drawQPicture(Q3Picture& clipart, QPainter& painter,
         int x, int y, int width, int height, int sx, int sy, int sw, int sh);
 protected:
-    QPicture m_clipart;
+    Q3Picture m_clipart;
     QByteArray m_rawData;
     QSize m_size;
     QSize m_originalSize;

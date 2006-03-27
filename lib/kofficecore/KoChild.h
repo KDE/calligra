@@ -20,7 +20,9 @@
 #define __koChild_h__
 
 #include <qobject.h>
-#include <qwmatrix.h>
+#include <qmatrix.h>
+//Added by qt3to4:
+#include <Q3PointArray>
 #include <koffice_export.h>
 
 /**
@@ -52,8 +54,8 @@ public:
    *
    * @see #gadgetHitTest
    */
-  enum Gadget { NoGadget, TopLeft, TopMid, TopRight, MidLeft, MidRight,
-		BottomLeft, BottomMid, BottomRight, Move };
+  enum Gadget { NoGadget, Qt::TopLeftCorner, TopMid, Qt::TopRightCorner, MidLeft, MidRight,
+		Qt::BottomLeftCorner, BottomMid, Qt::BottomRightCorner, Move };
 
   KoChild( QObject *parent = 0, const char *name = 0 );
   virtual ~KoChild();
@@ -81,7 +83,7 @@ public:
    *         The region is transformed with the passed
    *         matrix.
    */
-  virtual QRegion region( const QWMatrix& = QWMatrix() ) const;
+  virtual QRegion region( const QMatrix& = QMatrix() ) const;
 
   /**
    * @return the polygon which surrounds the child part. The points
@@ -89,7 +91,7 @@ public:
    *         The points are transformed with the
    *         passed matrix.
    */
-  virtual QPointArray pointArray( const QWMatrix &matrix = QWMatrix() ) const;
+  virtual Q3PointArray pointArray( const QMatrix &matrix = QMatrix() ) const;
 
   /**
    * Tests whether the part contains a certain point. The point is
@@ -200,13 +202,13 @@ public:
    *         If solid is set to true the complete area of the child region
    *         is returned, otherwise only the child border is returned.
    */
-  virtual QRegion frameRegion( const QWMatrix& matrix = QWMatrix(), bool solid = false ) const;
+  virtual QRegion frameRegion( const QMatrix& matrix = QMatrix(), bool solid = false ) const;
 
   /**
    * @return the frame geometry including a border (6 pixels) as a point
    *         array with 4 points, one for each corner, transformed by given matrix.
    */
-  virtual QPointArray framePointArray( const QWMatrix &matrix = QWMatrix() ) const;
+  virtual Q3PointArray framePointArray( const QMatrix &matrix = QMatrix() ) const;
 
   /**
    * @return the current transformation of this child as matrix.
@@ -214,7 +216,7 @@ public:
    *
    * @see #updateMatrix
    */
-  virtual QWMatrix matrix() const;
+  virtual QMatrix matrix() const;
 
   /**
    * Locks this child and stores the current transformation.
@@ -248,7 +250,7 @@ public:
   /**
    * @return the backed up geometry transformed by given matrix.
    */
-  virtual QPointArray oldPointArray( const QWMatrix &matrix );
+  virtual Q3PointArray oldPointArray( const QMatrix &matrix );
 
   /**
    * Marks this child as either transparent or not.
@@ -295,7 +297,7 @@ protected:
    *  @param matrix the transformation of r.
    *  @param r the rectangle for which the point array should be created.
    */
-  virtual QPointArray pointArray( const QRect& r, const QWMatrix& matrix = QWMatrix() ) const;
+  virtual Q3PointArray pointArray( const QRect& r, const QMatrix& matrix = QMatrix() ) const;
 
   /**
    * Stores the current transformation of this child into a matrix.

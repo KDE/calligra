@@ -29,14 +29,19 @@
 
 #include <qcombobox.h>
 #include <qradiobutton.h>
-#include <qbuttongroup.h>
+#include <q3buttongroup.h>
 #include <qspinbox.h>
 #include <qlayout.h>
-#include <qhbox.h>
+#include <q3hbox.h>
 #include <qpushbutton.h>
 #include <qlabel.h>
-#include <qwhatsthis.h>
-#include <qlistbox.h>
+#include <q3whatsthis.h>
+#include <q3listbox.h>
+//Added by qt3to4:
+#include <QPixmap>
+#include <Q3Frame>
+#include <Q3HBoxLayout>
+#include <Q3VBoxLayout>
 #include <kcolorbutton.h>
 
 #include "kchart_params.h"
@@ -48,23 +53,23 @@ KChartBackgroundPixmapConfigPage::KChartBackgroundPixmapConfigPage( KChartParams
     : QWidget( parent, "KChartBackgroundPixmapConfigPage" ),
       _params( params )
 {
-    QWhatsThis::add( this,
+    Q3WhatsThis::add( this,
                      i18n( "On this page, you can select colors or images "
                            "to be displayed behind the different areas. You "
                            "can also select whether the images should be "
                            "stretched or scaled or centered or used as "
                            "background tiles." ) );
 
-    QHBoxLayout* toplevel = new QHBoxLayout( this, 10 );
+    Q3HBoxLayout* toplevel = new Q3HBoxLayout( this, 10 );
 
 #if 0
-    QVBoxLayout* left=new QVBoxLayout(10);
+    Q3VBoxLayout* left=new Q3VBoxLayout(10);
     toplevel->addLayout(left,2);
-    regionList=new QListBox(this);
+    regionList=new Q3ListBox(this);
     left->addWidget(regionList);
 #endif
 
-    QVBoxLayout* center = new QVBoxLayout( 10 );
+    Q3VBoxLayout* center = new Q3VBoxLayout( 10 );
     toplevel->addLayout( center, 2 );
 
 
@@ -75,8 +80,8 @@ KChartBackgroundPixmapConfigPage::KChartBackgroundPixmapConfigPage( KChartParams
     center->addWidget( _backgroundCB);
     QString wtstr = i18n( "Here you set the color in which the background "
                           "of the chart is painted." );
-    QWhatsThis::add( backgroundLA, wtstr );
-    QWhatsThis::add( _backgroundCB, wtstr );
+    Q3WhatsThis::add( backgroundLA, wtstr );
+    Q3WhatsThis::add( _backgroundCB, wtstr );
 
 
     QLabel* wallpaperLA = new QLabel( i18n( "Background wallpaper:" ), this );
@@ -84,7 +89,7 @@ KChartBackgroundPixmapConfigPage::KChartBackgroundPixmapConfigPage( KChartParams
     
     wallCB = new QComboBox( false, this, "wallCombo" );
     wallpaperLA->setBuddy(wallCB);
-    QWhatsThis::add( wallCB, i18n( "You can select a background image from "
+    Q3WhatsThis::add( wallCB, i18n( "You can select a background image from "
                                    "this list. Initially, the installed KDE "
                                    "wallpapers will be offered. If you do not "
                                    "find what you are looking for here, you can "
@@ -97,17 +102,17 @@ KChartBackgroundPixmapConfigPage::KChartBackgroundPixmapConfigPage( KChartParams
 
     for( QStringList::ConstIterator it = list.begin(); it != list.end(); it++ )
 	wallCB->insertItem( ( (*it).at(0)=='/' ) ?        // if absolute path
-                            KURL( *it ).fileName() :    // then only fileName
+                            KUrl( *it ).fileName() :    // then only fileName
                             *it );
 
     QPushButton* browsePB = new QPushButton( i18n("&Browse..."), this );
-    QWhatsThis::add( browsePB, i18n( "Click this button to select a background "
+    Q3WhatsThis::add( browsePB, i18n( "Click this button to select a background "
                                      "image not yet present in the list above. " ) );
     center->addWidget( browsePB );
     connect( browsePB, SIGNAL( clicked() ), SLOT( slotBrowse() ) );
 
     wallWidget = new QWidget( this );
-    QWhatsThis::add( wallWidget, i18n( "This area will always display the "
+    Q3WhatsThis::add( wallWidget, i18n( "This area will always display the "
                                        "currently selected background image. "
                                        "Note that the image will be scaled and "
                                        "thus might have a different ratio than "
@@ -118,12 +123,12 @@ KChartBackgroundPixmapConfigPage::KChartBackgroundPixmapConfigPage( KChartParams
              this, SLOT( slotWallPaperChanged( int ) ) );
 
     right = new QVGroupBox( i18n( "Wallpaper Configuration" ), this );
-    QWhatsThis::add( right, i18n( "In this box, you can set various settings "
+    Q3WhatsThis::add( right, i18n( "In this box, you can set various settings "
                                   "that control how the background image is "
                                   "displayed." ) );
     toplevel->addWidget( right );
 
-    QHBox* intensityHB = new QHBox( right );
+    Q3HBox* intensityHB = new Q3HBox( right );
     intensityHB->setSpacing( 10 );
     QLabel* intensityLA = new QLabel(
       // xgettext:no-c-format
@@ -136,24 +141,24 @@ KChartBackgroundPixmapConfigPage::KChartBackgroundPixmapConfigPage( KChartParams
                           "selected area too much.<br> Different images require "
                           "different settings, but 25% is a good value to start "
                           "with." );
-    QWhatsThis::add( intensityLA, ttstr );
-    QWhatsThis::add( intensitySB, ttstr );
+    Q3WhatsThis::add( intensityLA, ttstr );
+    Q3WhatsThis::add( intensitySB, ttstr );
 
 
     stretchedRB = new QRadioButton( i18n( "Stretched" ), right );
-    QWhatsThis::add( stretchedRB,
+    Q3WhatsThis::add( stretchedRB,
                      i18n( "If you check this box, the selected image will "
                            "be scaled to fit the total size of the selected "
                            "area. Image ratio will be adjusted to match "
                            "the area size and height if necessary." ) );
     stretchedRB->setChecked( true );
     scaledRB = new QRadioButton( i18n( "Scaled" ), right );
-    QWhatsThis::add( scaledRB,
+    Q3WhatsThis::add( scaledRB,
                      i18n( "If you check this box, the selected image will "
                            "be scaled to match the height or width of the "
                            "selected area - whichever is reached first." ) );
     centeredRB = new QRadioButton( i18n( "Centered" ), right );
-    QWhatsThis::add( centeredRB,
+    Q3WhatsThis::add( centeredRB,
                      i18n( "If you check this box, the selected image will "
                            "be centered over the selected area. If the image "
                            "is larger then the area, you will only see the "
@@ -165,9 +170,9 @@ KChartBackgroundPixmapConfigPage::KChartBackgroundPixmapConfigPage( KChartParams
 //                            "be used as a background tile. If the image is "
 //                            "larger then the selected area, you will only see "
 //                            "the upper left part of it." ) );
-    QButtonGroup* alignmentBG;
-    alignmentBG = new QButtonGroup( right, "GroupBox_Alignment" );
-    alignmentBG->setFrameStyle( QFrame::NoFrame );
+    Q3ButtonGroup* alignmentBG;
+    alignmentBG = new Q3ButtonGroup( right, "GroupBox_Alignment" );
+    alignmentBG->setFrameStyle( Q3Frame::NoFrame );
     alignmentBG->insert( stretchedRB );
     alignmentBG->insert( scaledRB );
     alignmentBG->insert( centeredRB );
@@ -349,7 +354,7 @@ void KChartBackgroundPixmapConfigPage::showSettings( const QString& fileName )
 void KChartBackgroundPixmapConfigPage::slotBrowse()
 {
     //TODO: Support non-local wallpapers
-    KURL url = KFileDialog::getOpenFileName( 0 );
+    KUrl url = KFileDialog::getOpenFileName( 0 );
     if( url.isEmpty() )
         return;
     showSettings( url.path() );

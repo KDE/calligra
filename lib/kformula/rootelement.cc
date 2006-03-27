@@ -20,6 +20,8 @@
 
 #include <qpainter.h>
 #include <qpen.h>
+//Added by qt3to4:
+#include <Q3PtrList>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -408,8 +410,8 @@ void RootElement::moveDown(FormulaCursor* cursor, BasicElement* from)
  * Reinserts the index if it has been removed.
  */
 void RootElement::insert(FormulaCursor* cursor,
-                         QPtrList<BasicElement>& newChildren,
-                         Direction direction)
+                         Q3PtrList<BasicElement>& newChildren,
+                         Qt::Orientation direction)
 {
     if (cursor->getPos() == upperLeftPos) {
         index = static_cast<SequenceElement*>(newChildren.take(0));
@@ -433,8 +435,8 @@ void RootElement::insert(FormulaCursor* cursor,
  * We remove ourselve if we are requested to remove our content.
  */
 void RootElement::remove(FormulaCursor* cursor,
-                         QPtrList<BasicElement>& removedChildren,
-                         Direction direction)
+                         Q3PtrList<BasicElement>& removedChildren,
+                         Qt::Orientation direction)
 {
     switch (cursor->getPos()) {
     case contentPos:
@@ -456,7 +458,7 @@ void RootElement::remove(FormulaCursor* cursor,
  * Moves the cursor to a normal place where new elements
  * might be inserted.
  */
-void RootElement::normalize(FormulaCursor* cursor, Direction direction)
+void RootElement::normalize(FormulaCursor* cursor, Qt::Orientation direction)
 {
     if (direction == beforeCursor) {
         content->moveLeft(cursor, this);
@@ -500,7 +502,7 @@ void RootElement::selectChild(FormulaCursor* cursor, BasicElement* child)
 }
 
 
-void RootElement::moveToIndex(FormulaCursor* cursor, Direction direction)
+void RootElement::moveToIndex(FormulaCursor* cursor, Qt::Orientation direction)
 {
     if (hasIndex()) {
         if (direction == beforeCursor) {

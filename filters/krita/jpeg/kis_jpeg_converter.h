@@ -70,15 +70,15 @@ class KisJPEGConverter : public KisProgressSubject {
         KisJPEGConverter(KisDoc *doc, KisUndoAdapter *adapter);
         virtual ~KisJPEGConverter();
     public:
-        KisImageBuilder_Result buildImage(const KURL& uri);
-        KisImageBuilder_Result buildFile(const KURL& uri, KisPaintLayerSP layer, vKisAnnotationSP_it annotationsStart, vKisAnnotationSP_it annotationsEnd, KisJPEGOptions options, KisExifInfo* exifInfo);
+        KisImageBuilder_Result buildImage(const KUrl& uri);
+        KisImageBuilder_Result buildFile(const KUrl& uri, KisPaintLayerSP layer, vKisAnnotationSP_it annotationsStart, vKisAnnotationSP_it annotationsEnd, KisJPEGOptions options, KisExifInfo* exifInfo);
         /** Retrieve the constructed image
         */
         KisImageSP image();
     public slots:
         virtual void cancel();
     private:
-        KisImageBuilder_Result decode(const KURL& uri);
+        KisImageBuilder_Result decode(const KUrl& uri);
     private:
         KisImageSP m_img;
         KisDoc *m_doc;

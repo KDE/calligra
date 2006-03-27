@@ -159,7 +159,7 @@ PixmapEdit::selectPixmapFileName()
 		convertKFileDialogFilterToQFileDialogFilter(KImageIO::pattern(KImageIO::Reading)), 
 		this, 0, caption);
 #else
-	KURL url( KFileDialog::getImageOpenURL(
+	KUrl url( KFileDialog::getImageOpenURL(
 		":lastVisitedImagePath", this, caption) );
 	QString fileName = url.isLocalFile() ? url.path() : url.prettyURL();
 
@@ -184,7 +184,7 @@ PixmapEdit::selectPixmap()
 
 #ifdef Q_WS_WIN
 	//save last visited path
-	KURL url(fileName);
+	KUrl url(fileName);
 	if (url.isLocalFile())
 		KRecentDirs::add(":lastVisitedImagePath", url.directory());
 #endif

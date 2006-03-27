@@ -24,11 +24,14 @@
 
 #include <qpixmap.h>
 #include <qtoolbutton.h>
+//Added by qt3to4:
+#include <QEvent>
+#include <Q3PopupMenu>
 #include <kglobal.h>
 
 class KToolBar;
 class KInstance;
-class QPopupMenu;
+class Q3PopupMenu;
 class QPainter;
 
 class TKToolBarButton : public QToolButton
@@ -150,7 +153,7 @@ public:
   /**
    * Return a pointer to this button's popup menu (if it exists)
    */
-  QPopupMenu *popup();
+  Q3PopupMenu *popup();
 
   /**
    * Give this button a popup menu.  There will not be a delay when
@@ -159,7 +162,7 @@ public:
    *
    * @param p The new popup menu
    */
-  void setPopup (QPopupMenu *p);
+  void setPopup (Q3PopupMenu *p);
 
   /**
    * Gives this button a delayed popup menu.
@@ -175,7 +178,7 @@ public:
    * @param p the new popup menu
    * @param toggle if true, makes the button "sticky" (toggled)
    */
-  void setDelayedPopup(QPopupMenu *p, bool toggle = false);
+  void setDelayedPopup(Q3PopupMenu *p, bool toggle = false);
 
   QPixmap getActivePixmap() const;
 
@@ -211,7 +214,7 @@ private:
   QPixmap defaultPixmap;
   QPixmap activePixmap;
   QPixmap disabledPixmap;
-  virtual void setIcon(const QPixmap &p) { QButton::setIcon(p); }
+  virtual void setIcon(const QPixmap &p) { Q3Button::setIcon(p); }
   class TKToolBarButtonPrivate;
   TKToolBarButtonPrivate *d;
 

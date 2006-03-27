@@ -54,7 +54,14 @@
 #include <kglobalsettings.h>
 #include <ksharedptr.h>
 
-#include <qobjectlist.h>
+#include <qobject.h>
+//Added by qt3to4:
+#include <Q3CString>
+#include <QCloseEvent>
+#include <Q3PtrList>
+#include <QEvent>
+#include <QLabel>
+#include <QResizeEvent>
 
 #include <unistd.h>
 #include <stdlib.h>
@@ -134,7 +141,7 @@ public:
 
   KoDocument *m_rootDoc;
   KoDocument *m_docToOpen;
-  QPtrList<KoView> m_rootViews;
+  Q3PtrList<KoView> m_rootViews;
   KParts::PartManager *m_manager;
 
   KParts::Part *m_activePart;
@@ -143,16 +150,16 @@ public:
   QLabel * statusBarLabel;
   KProgress *m_progress;
 
-  QPtrList<KAction> m_splitViewActionList;
+  Q3PtrList<KAction> m_splitViewActionList;
   // This additional list is needed, because we don't plug
   // the first list, when an embedded view gets activated (Werner)
-  QPtrList<KAction> m_veryHackyActionList;
+  Q3PtrList<KAction> m_veryHackyActionList;
   QSplitter *m_splitter;
   KSelectAction *m_orientation;
   KAction *m_removeView;
   KoMainWindowIface *m_dcopObject;
 
-  QPtrList <KAction> m_toolbarList;
+  Q3PtrList <KAction> m_toolbarList;
 
   bool bMainWindowGUIBuilt;
   bool m_splitted;
@@ -175,8 +182,8 @@ public:
   bool m_isImporting;
   bool m_isExporting;
 
-  KURL m_lastExportURL;
-  QCString m_lastExportFormat;
+  KUrl m_lastExportURL;
+  Q3CString m_lastExportFormat;
   int m_lastExportSpecialOutputFlag;
 
   KSharedPtr<KoSpeaker> m_koSpeaker;
@@ -206,7 +213,7 @@ KoMainWindow::KoMainWindow( KInstance *instance, const char* name )
 
     KStdAction::openNew( this, SLOT( slotFileNew() ), actionCollection(), "file_new" );
     KStdAction::open( this, SLOT( slotFileOpen() ), actionCollection(), "file_open" );
-    m_recent = KStdAction::openRecent( this, SLOT(slotFileOpenRecent(const KURL&)), actionCollection() );
+    m_recent = KStdAction::openRecent( this, SLOT(slotFileOpenRecent(const KUrl&)), actionCollection() );
     d->m_paSave = KStdAction::save( this, SLOT( slotFileSave() ), actionCollection(), "file_save" );
     d->m_paSaveAs = KStdAction::saveAs( this, SLOT( slotFileSaveAs() ), actionCollection(), "file_save_as" );
     d->m_paPrint = KStdAction::print( this, SLOT( slotFilePrint() ), actionCollection(), "file_print" );
@@ -356,7 +363,7 @@ void KoMainWindow::setRootDocument( KoDocument *doc )
   }
 
   //kdDebug(30003) <<  "KoMainWindow::setRootDocument this = " << this << " doc = " << doc << endl;
-  QPtrList<KoView> oldRootViews = d->m_rootViews;
+  Q3PtrList<KoView> oldRootViews = d->m_rootViews;
   d->m_rootViews.clear();
   KoDocument *oldRootDoc = d->m_rootDoc;
 
@@ -416,7 +423,7 @@ void KoMainWindow::updateVersionsFileAction(KoDocument *doc)
 }
 
 
-void KoMainWindow::setRootDocumentDirect( KoDocument *doc, const QPtrList<KoView> & views )
+void KoMainWindow::setRootDocumentDirect( KoDocument *doc, const Q3PtrList<KoView> & views )
 {
   d->m_rootDoc = doc;
   d->m_rootViews = views;
@@ -431,7 +438,7 @@ void KoMainWindow::setRootDocumentDirect( KoDocument *doc, const QPtrList<KoView
   d->m_paCloseFile->setEnabled( enable );
 }
 
-void KoMainWindow::addRecentURL( const KURL& url )
+void KoMainWindow::addRecentURL( const KUrl& url )
 {
     kdDebug(30003) << "KoMainWindow::addRecentURL url=" << url.prettyURL() << endl;
     // Add entry to recent documents list
@@ -453,7 +460,7 @@ void KoMainWindow::addRecentURL( const KURL& url )
             KRecentDocument::add(url.url(-1), true);
 
         if ( ok )
-            m_recent->addURL( url );
+            m_recent->addUrl( url );
         saveRecentFiles();
     }
 }
@@ -502,7 +509,7 @@ void KoMainWindow::updateCaption()
           if (page)
               caption = static_cast<KoDocumentInfoAbout *>(page)->title();
       }
-      const QString url = rootDocument()->url().prettyURL( 0, KURL::StripFileProtocol );
+      const QString url = rootDocument()->url().prettyURL( 0, KUrl::StripFileProtocol );
       if ( !caption.isEmpty() && !url.isEmpty() )
           caption = QString( "%1 - %2" ).arg( caption ).arg( url );
       else if ( caption.isEmpty() )
@@ -539,12 +546,12 @@ KParts::PartManager *KoMainWindow::partManager()
   return d->m_manager;
 }
 
-bool KoMainWindow::openDocument( const KURL & url )
+bool KoMainWindow::openDocument( const KUrl & url )
 {
     if ( !KIO::NetAccess::exists(url,true,0) )
     {
         KMessageBox::error(0L, i18n("The file %1 does not exist.").arg(url.url()) );
-        m_recent->removeURL(url); //remove the file from the recent-opened-file-list
+        m_recent->removeUrl(url); //remove the file from the recent-opened-file-list
         saveRecentFiles();
         return false;
     }
@@ -552,7 +559,7 @@ bool KoMainWindow::openDocument( const KURL & url )
 }
 
 // (not virtual)
-bool KoMainWindow::openDocument( KoDocument *newdoc, const KURL & url )
+bool KoMainWindow::openDocument( KoDocument *newdoc, const KUrl & url )
 {
     if (!KIO::NetAccess::exists(url,true,0) )
     {
@@ -576,7 +583,7 @@ bool KoMainWindow::openDocument( KoDocument *newdoc, const KURL & url )
 }
 
 // ## If you modify anything here, please check KoShellWindow::openDocumentInternal
-bool KoMainWindow::openDocumentInternal( const KURL & url, KoDocument *newdoc )
+bool KoMainWindow::openDocumentInternal( const KUrl & url, KoDocument *newdoc )
 {
     //kdDebug(30003) << "KoMainWindow::openDocument " << url.url() << endl;
 
@@ -667,7 +674,7 @@ void KoMainWindow::slotSaveCompleted()
 }
 
 // returns true if we should save, false otherwise.
-bool KoMainWindow::exportConfirmation( const QCString &outputFormat )
+bool KoMainWindow::exportConfirmation( const Q3CString &outputFormat )
 {
     if (!rootDocument()->wantExportConfirmation()) return true;
     KMimeType::Ptr mime = KMimeType::mimeType( outputFormat );
@@ -732,12 +739,12 @@ bool KoMainWindow::saveDocument( bool saveas, bool silent )
     connect(pDoc, SIGNAL(canceled( const QString & )),
             this, SLOT(slotSaveCanceled( const QString & )));
 
-    KURL oldURL = pDoc->url();
+    KUrl oldURL = pDoc->url();
     QString oldFile = pDoc->file();
-    QCString _native_format = pDoc->nativeFormatMimeType();
-    QCString oldOutputFormat = pDoc->outputMimeType();
+    Q3CString _native_format = pDoc->nativeFormatMimeType();
+    Q3CString oldOutputFormat = pDoc->outputMimeType();
     int oldSpecialOutputFlag = pDoc->specialOutputFlag();
-    KURL suggestedURL = pDoc->url();
+    KUrl suggestedURL = pDoc->url();
 
     QStringList mimeFilter = KoFilterManager::mimeFilter( _native_format, KoFilterManager::Export, pDoc->extraNativeMimeTypes() );
     if (mimeFilter.findIndex (oldOutputFormat) < 0 && !isExporting())
@@ -801,8 +808,8 @@ bool KoMainWindow::saveDocument( bool saveas, bool silent )
                                       _native_format,
                                       pDoc->supportedSpecialFormats() );
 
-        KURL newURL;
-        QCString outputFormat = _native_format;
+        KUrl newURL;
+        Q3CString outputFormat = _native_format;
         int specialOutputFlag = 0;
         bool bOk;
         do {
@@ -1113,7 +1120,7 @@ void KoMainWindow::slotFileOpen()
         delete dialog;
         return;
     }
-    KURL url( dialog->selectedURL() );
+    KUrl url( dialog->selectedURL() );
     delete dialog;
 
     if ( url.isEmpty() )
@@ -1122,7 +1129,7 @@ void KoMainWindow::slotFileOpen()
     (void) openDocument( url );
 }
 
-void KoMainWindow::slotFileOpenRecent( const KURL & url )
+void KoMainWindow::slotFileOpenRecent( const KUrl & url )
 {
     (void) openDocument( url );
 }
@@ -1326,7 +1333,7 @@ void KoMainWindow::showToolbar( const char * tbName, bool shown )
         tb->hide();
 
     // Update the action appropriately
-    QPtrListIterator<KAction> it( d->m_toolbarList );
+    Q3PtrListIterator<KAction> it( d->m_toolbarList );
     for ( ; it.current() ; ++it )
         if ( !strcmp( it.current()->name(), tbName ) )
         {
@@ -1355,7 +1362,7 @@ void KoMainWindow::slotCloseAllViews() {
         if(d->m_rootDoc && d->m_rootDoc->isEmbedded()) {
             hide();
             d->m_rootDoc->removeShell(this);
-            QPtrListIterator<KoMainWindow> it(d->m_rootDoc->shells());
+            Q3PtrListIterator<KoMainWindow> it(d->m_rootDoc->shells());
             while (it.current()) {
                 it.current()->hide();
                 delete it.current(); // this updates the lists' current pointer and thus
@@ -1423,7 +1430,7 @@ void KoMainWindow::slotProgress(int value) {
         QObjectList *l = queryList( "QStatusBar" );
         if ( !l || !l->first() ) {
             statusBar()->show();
-            QApplication::sendPostedEvents( this, QEvent::ChildInserted );
+            QApplication::sendPostedEvents( this, QEvent::ChildAdded );
             setUpLayout();
         }
         delete l;
@@ -1507,8 +1514,8 @@ void KoMainWindow::slotActivePartChanged( KParts::Part *newPart )
 
     // Create and plug toolbar list for Settings menu
     //QPtrListIterator<KToolBar> it = toolBarIterator();
-    QPtrList<QWidget> toolBarList = factory->containers( "ToolBar" );
-    QPtrListIterator<QWidget> it( toolBarList );
+    Q3PtrList<QWidget> toolBarList = factory->containers( "ToolBar" );
+    Q3PtrListIterator<QWidget> it( toolBarList );
     for ( ; it.current() ; ++it )
     {
       if ( it.current()->inherits("KToolBar") )
@@ -1581,10 +1588,10 @@ void KoMainWindow::slotEmailFile()
     {
         //Save the file as a temporary file
         bool const tmp_modified = rootDocument()->isModified();
-        KURL const tmp_url = rootDocument()->url();
-        QCString const tmp_mimetype = rootDocument()->outputMimeType();
+        KUrl const tmp_url = rootDocument()->url();
+        Q3CString const tmp_mimetype = rootDocument()->outputMimeType();
         KTempFile tmpfile; //TODO: The temorary file should be deleted when the mail program is closed
-        KURL u;
+        KUrl u;
         u.setPath(tmpfile.name());
         rootDocument()->setURL(u);
         rootDocument()->setModified(true);
@@ -1638,7 +1645,7 @@ void KoMainWindow::slotReloadFile()
     if ( !bOk )
         return;
 
-    KURL url = pDoc->url();
+    KUrl url = pDoc->url();
     if ( pDoc && !pDoc->isEmpty() )
     {
         setRootDocument( 0L ); // don't delete this shell when deleting the document

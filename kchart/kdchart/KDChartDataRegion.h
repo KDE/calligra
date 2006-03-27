@@ -30,7 +30,9 @@
 #define __KDCHARTDATAREGION__
 
 #include <qregion.h>
-#include <qpointarray.h>
+#include <q3pointarray.h>
+//Added by qt3to4:
+#include <Q3PtrList>
 
 #include "KDChartGlobal.h"
 
@@ -53,10 +55,10 @@ struct KDCHART_EXPORT KDChartDataRegion
         chart   = ch;
     }
 
-    KDChartDataRegion( uint r, uint c, uint ch, QPointArray array )
+    KDChartDataRegion( uint r, uint c, uint ch, Q3PointArray array )
     {
         init();
-        pArray = new QPointArray( array );
+        pArray = new Q3PointArray( array );
         row     = r;
         col     = c;
         chart   = ch;
@@ -122,7 +124,7 @@ struct KDCHART_EXPORT KDChartDataRegion
     }
 
     QRegion*     pRegion;
-    QPointArray* pArray;
+    Q3PointArray* pArray;
     QRect*       pRect;
     QRegion*     pTextRegion;  // for the data values text
 
@@ -132,7 +134,7 @@ struct KDCHART_EXPORT KDChartDataRegion
     // we store the following additional anchor information:
 
     // store 9 elements: one for each value of KDChartEnums::PositionFlag
-    QPointArray points;
+    Q3PointArray points;
 
     int startAngle; // Note: 5760 makes a full circle, 2880 is left 'corner'.
     int angleLen;
@@ -165,6 +167,6 @@ struct KDCHART_EXPORT KDChartDataRegion
 
   \sa KDChart, KDChartWidget
   */
-typedef QPtrList < KDChartDataRegion > KDChartDataRegionList;
+typedef Q3PtrList < KDChartDataRegion > KDChartDataRegionList;
 
 #endif

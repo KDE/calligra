@@ -84,14 +84,14 @@ BoolEdit::drawViewer(QPainter *p, const QColorGroup &, const QRect &r, const QVa
 {
     p->eraseRect(r);
     QRect r2(r);
-    r2.moveLeft(KIcon::SizeSmall + 6);
+    r2.moveLeft(K3Icon::SizeSmall + 6);
 
     if(value.toBool()) {
-        p->drawPixmap(3, (r.height()-1-KIcon::SizeSmall)/2, SmallIcon("button_ok"));
+        p->drawPixmap(3, (r.height()-1-K3Icon::SizeSmall)/2, SmallIcon("button_ok"));
         p->drawText(r2, Qt::AlignVCenter | Qt::AlignLeft, i18n("Yes"));
     }
     else  {
-        p->drawPixmap(3, (r.height()-1-KIcon::SizeSmall)/2, SmallIcon("button_no"));
+        p->drawPixmap(3, (r.height()-1-K3Icon::SizeSmall)/2, SmallIcon("button_no"));
         p->drawText(r2, Qt::AlignVCenter | Qt::AlignLeft, i18n("No"));
     }
 }

@@ -26,18 +26,20 @@
 #include <kcolorbutton.h>
 #include <kdebug.h>
 
-#include <qhbox.h>
+#include <q3hbox.h>
 #include <qlayout.h>
 #include <qlabel.h>
 #include <qlineedit.h>
-#include <qlistbox.h>
-#include <qbuttongroup.h>
+#include <q3listbox.h>
+#include <q3buttongroup.h>
 #include <qvbuttongroup.h>
 #include <qpushbutton.h>
 #include <qradiobutton.h>
 #include <qcheckbox.h>
 #include <qpainter.h>
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
+//Added by qt3to4:
+#include <Q3GridLayout>
 
 #include <kfontdialog.h>
 
@@ -57,15 +59,15 @@ KChartDataConfigPage::KChartDataConfigPage( KChartParams* params,
 					    KDChartTableData *dat) 
     : QWidget( parent ), m_params( params ), data(dat)
 {
-    QGridLayout *grid1 = new QGridLayout(this, 4, 1, KDialog::marginHint(),
+    Q3GridLayout *grid1 = new Q3GridLayout(this, 4, 1, KDialog::marginHint(),
 					 KDialog::spacingHint());
 
     // The Data Area
-    QButtonGroup *gb1 = new QVButtonGroup( i18n( "Data Area" ), this );
+    Q3ButtonGroup *gb1 = new Q3VButtonGroup( i18n( "Data Area" ), this );
 
     // ================================================================
     // This code is copied from kchartWizardSelectDataFormatPage.cc
-    QHBox   *hbox = new QHBox( gb1 );
+    Q3HBox   *hbox = new Q3HBox( gb1 );
     (void) new QLabel( i18n("Area: "), hbox);
     m_dataArea = new QLineEdit( hbox );
     //grid1->addWidget(gb1, 0, 0);
@@ -77,7 +79,7 @@ KChartDataConfigPage::KChartDataConfigPage( KChartParams* params,
     grid1->addWidget(gb1, 0, 0);
 
     // The Data Format button group
-    QButtonGroup *gb = new QVButtonGroup( i18n( "Data Format" ), this );
+    Q3ButtonGroup *gb = new Q3VButtonGroup( i18n( "Data Format" ), this );
 
     m_rowMajor = new QRadioButton( i18n( "Data in rows" ), gb );
     m_rowMajor->resize( m_rowMajor->sizeHint() );
@@ -87,10 +89,10 @@ KChartDataConfigPage::KChartDataConfigPage( KChartParams* params,
 
     grid1->addWidget(gb, 2, 0);
 
-    QWhatsThis::add(this, i18n("This configuration page can be used to swap the interpretation of rows and columns."));
-    QWhatsThis::add(m_rowMajor, i18n("By default one row is considered to be a data set and each column holds the individual values of the data series. This sets the data in rows on your chart."));
+    Q3WhatsThis::add(this, i18n("This configuration page can be used to swap the interpretation of rows and columns."));
+    Q3WhatsThis::add(m_rowMajor, i18n("By default one row is considered to be a data set and each column holds the individual values of the data series. This sets the data in rows on your chart."));
 
-    QWhatsThis::add(m_colMajor, i18n("Here you can choose to have each column hold one data set. Note that the values are not really swapped but only their interpretation."));
+    Q3WhatsThis::add(m_colMajor, i18n("Here you can choose to have each column hold one data set. Note that the values are not really swapped but only their interpretation."));
     m_colMajor->resize( m_colMajor->sizeHint() );
     grid1->addWidget(gb, 1, 0);
     grid1->setColStretch(3, 0);

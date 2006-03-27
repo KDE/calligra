@@ -5,7 +5,7 @@
 #include <qcombobox.h>
 #include <qcheckbox.h>
 #include <qlabel.h>
-#include <qbuttongroup.h>
+#include <q3buttongroup.h>
 #include <qradiobutton.h>
 #include <kglobal.h>
 #include <klocale.h>
@@ -18,7 +18,7 @@
  *  Constructs a TimeFormatWidget which is a child of 'parent', with the
  *  name 'name' and widget flags set to 'f'
  */
-TimeFormatWidget::TimeFormatWidget( QWidget* parent,  const char* name, WFlags fl )
+TimeFormatWidget::TimeFormatWidget( QWidget* parent,  const char* name, Qt::WFlags fl )
     : TimeDateFormatWidgetPrototype( parent, name, fl )
 {
     setCaption( i18n( "TimeFormat", "This Dialog Allows You to Set the Format of the Time Variable" ) );

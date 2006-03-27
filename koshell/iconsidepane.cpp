@@ -24,14 +24,20 @@
 #include <qcursor.h>
 #include <qdrawutil.h>
 #include <qfontmetrics.h>
-#include <qframe.h>
+#include <q3frame.h>
 #include <qlabel.h>
-#include <qobjectlist.h>
+#include <qobject.h>
 #include <qpainter.h>
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 #include <qstyle.h>
 #include <qtooltip.h>
-#include <qwidgetstack.h>
+#include <q3widgetstack.h>
+//Added by qt3to4:
+#include <QPixmap>
+#include <QEvent>
+#include <Q3ValueList>
+#include <QResizeEvent>
+#include <QMouseEvent>
 
 
 #include <kapplication.h>
@@ -45,7 +51,7 @@
 #include "iconsidepane.h"
 
 EntryItem::EntryItem( Navigator *parent, int _id, const QString &_text, const QString & _pix )
-  : QListBoxItem( parent ),
+  : Q3ListBoxItem( parent ),
     mPixmapName(_pix),
     mId(_id),
     mHasHover( false ),
@@ -69,7 +75,7 @@ void EntryItem::reloadPixmap()
 {
   int size = (int)navigator()->viewMode();
   if ( size != 0 )
-    mPixmap = KGlobal::iconLoader()->loadIcon( mPixmapName, KIcon::Desktop, size );
+    mPixmap = KGlobal::iconLoader()->loadIcon( mPixmapName, K3Icon::Desktop, size );
   else
     mPixmap = QPixmap();
 }
@@ -79,7 +85,7 @@ Navigator* EntryItem::navigator() const
   return static_cast<Navigator*>( listBox() );
 }
 
-int EntryItem::width( const QListBox *listbox ) const
+int EntryItem::width( const Q3ListBox *listbox ) const
 {
   int w = 0;
   if( navigator()->showIcons() ) {
@@ -96,7 +102,7 @@ int EntryItem::width( const QListBox *listbox ) const
   return w + ( KDialog::marginHint() * 2 );
 }
 
-int EntryItem::height( const QListBox *listbox ) const
+int EntryItem::height( const Q3ListBox *listbox ) const
 {
   int h = 0;
   if ( navigator()->showIcons() )
@@ -114,7 +120,7 @@ void EntryItem::paint( QPainter *p )
 {
   reloadPixmap();
 
-  QListBox *box = listBox();
+  Q3ListBox *box = listBox();
   bool iconAboveText = ( navigator()->viewMode() > SmallIcons ) 
                      && navigator()->showIcons();
   int w = box->viewport()->width();
@@ -207,21 +213,21 @@ Navigator::Navigator(bool _selectable, KPopupMenu * menu, IconSidePane *_iconsid
   : KListBox( parent, name ), mSidePane( _iconsidepane ), mPopupMenu( menu )
 {
   setSelectionMode( KListBox::Single );
-  viewport()->setBackgroundMode( PaletteBackground );
-  setFrameStyle( QFrame::NoFrame );
-  setHScrollBarMode( QScrollView::AlwaysOff );
+  viewport()->setBackgroundMode( Qt::PaletteBackground );
+  setFrameStyle( Q3Frame::NoFrame );
+  setHScrollBarMode( Q3ScrollView::AlwaysOff );
   //setAcceptDrops( true );
   mMinWidth = 0;
   mSelectable = _selectable;
   executedItem = 0;
   mMouseOn = 0;
 
-  setFocusPolicy( NoFocus );
+  setFocusPolicy( Qt::NoFocus );
 
-  connect( this, SIGNAL( clicked( QListBoxItem* ) ),
-           SLOT( slotExecuted( QListBoxItem* ) ) );
-  connect( this, SIGNAL( onItem( QListBoxItem * ) ),
-            SLOT(  slotMouseOn( QListBoxItem * ) ) );
+  connect( this, SIGNAL( clicked( Q3ListBoxItem* ) ),
+           SLOT( slotExecuted( Q3ListBoxItem* ) ) );
+  connect( this, SIGNAL( onItem( Q3ListBoxItem * ) ),
+            SLOT(  slotMouseOn( Q3ListBoxItem * ) ) );
   connect( this, SIGNAL( onViewport() ), SLOT(  slotMouseOff() ) );
 
   QToolTip::remove( this );
@@ -276,7 +282,7 @@ void Navigator::enterEvent( QEvent *event )
   emit onItem( itemAt( mapFromGlobal( QCursor::pos() ) ) );
 }
 
-void Navigator::slotExecuted( QListBoxItem *item )
+void Navigator::slotExecuted( Q3ListBoxItem *item )
 {
    if ( !item )
      return;
@@ -314,21 +320,21 @@ int Navigator::insertItem(const QString &_text, const QString & _pix)
   return item->id();
 }
 
-void Navigator::setHoverItem( QListBoxItem* item, bool hover )
+void Navigator::setHoverItem( Q3ListBoxItem* item, bool hover )
 {
     static_cast<EntryItem*>( item )->setHover( hover );
     updateItem( item );
 }
 
-void Navigator::setPaintActiveItem( QListBoxItem* item, bool paintActive )
+void Navigator::setPaintActiveItem( Q3ListBoxItem* item, bool paintActive )
 {
     static_cast<EntryItem*>( item )->setPaintActive( paintActive );
     updateItem( item );
 }
 
-void Navigator::slotMouseOn( QListBoxItem* newItem )
+void Navigator::slotMouseOn( Q3ListBoxItem* newItem )
 {
-    QListBoxItem* oldItem = mMouseOn;
+    Q3ListBoxItem* oldItem = mMouseOn;
     if ( oldItem == newItem )
       return;
 
@@ -347,11 +353,11 @@ void Navigator::slotMouseOff()
 
 void Navigator::resizeEvent( QResizeEvent *event )
 {
-  QListBox::resizeEvent( event );
+  Q3ListBox::resizeEvent( event );
   triggerUpdate( true );
 }
 
-void Navigator::slotShowRMBMenu( QListBoxItem *, const QPoint &pos )
+void Navigator::slotShowRMBMenu( Q3ListBoxItem *, const QPoint &pos )
 {
   int choice = mPopupMenu->exec( pos );
 
@@ -403,12 +409,12 @@ void Navigator::slotShowRMBMenu( QListBoxItem *, const QPoint &pos )
 // ************************************************
 
 IconSidePane::IconSidePane(QWidget *parent, const char *name )
-  : QVBox( parent, name )
+  : Q3VBox( parent, name )
 {
-  m_buttongroup = new QButtonGroup(1, QGroupBox::Horizontal, this);
+  m_buttongroup = new Q3ButtonGroup(1, Qt::Horizontal, this);
   m_buttongroup->setExclusive(true);
   m_buttongroup->hide();
-  mWidgetstack = new QWidgetStack(this);
+  mWidgetstack = new Q3WidgetStack(this);
   mWidgetstack->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding));
   
   // setup the popup menu
@@ -495,7 +501,7 @@ int IconSidePane::insertGroup(const QString &_text, bool _selectable, QObject *_
   m_buttongroup->insert( b, id );
   connect( b, SIGNAL( clicked() ), this, SLOT( buttonClicked() ) );
   b->setToggleButton( true );
-  b->setFocusPolicy( NoFocus );
+  b->setFocusPolicy( Qt::NoFocus );
   if (m_buttongroup->count()==1)
   {
     mCurrentNavigator->calculateMinWidth();
@@ -529,7 +535,7 @@ Navigator * IconSidePane::group(int _grp)
 
 void IconSidePane::updateAllWidgets()
 {
-  QValueList<int>::iterator it;
+  Q3ValueList<int>::iterator it;
   for ( it = mWidgetStackIds.begin(); it != mWidgetStackIds.end(); ++it )
     static_cast<Navigator*>(mWidgetstack->widget(*it))->triggerUpdate( true );
 }
@@ -537,7 +543,7 @@ void IconSidePane::updateAllWidgets()
 int IconSidePane::minWidth()
 {
   int width = 0;
-  QValueList<int>::iterator it;
+  Q3ValueList<int>::iterator it;
   Navigator *n;
   for ( it = mWidgetStackIds.begin(); it != mWidgetStackIds.end(); ++it )
   {
@@ -550,7 +556,7 @@ int IconSidePane::minWidth()
 
 void IconSidePane::resetWidth()
 {
-  QValueList<int>::iterator it;
+  Q3ValueList<int>::iterator it;
   Navigator *n;
   for ( it = mWidgetStackIds.begin(); it != mWidgetStackIds.end(); ++it )
   {

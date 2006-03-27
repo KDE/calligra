@@ -1855,7 +1855,7 @@ void KoTextFormatCollection::remove( KoTextFormat *f )
 
 void KoTextFormatCollection::zoomChanged()
 {
-    QDictIterator<KoTextFormat> it( cKey );
+    Q3DictIterator<KoTextFormat> it( cKey );
     for ( ; it.current(); ++it ) {
         it.current()->zoomChanged();
     }
@@ -1864,7 +1864,7 @@ void KoTextFormatCollection::zoomChanged()
 #if 0
 void KoTextFormatCollection::setPainter( QPainter *p )
 {
-    QDictIterator<KoTextFormat> it( cKey );
+    Q3DictIterator<KoTextFormat> it( cKey );
     KoTextFormat *f;
     while ( ( f = it.current() ) ) {
 	++it;
@@ -1878,7 +1878,7 @@ void KoTextFormatCollection::debug()
 {
     kdDebug(32500) << "------------ KoTextFormatCollection: debug --------------- BEGIN" << endl;
     kdDebug(32500) << "Default Format: '" << defFormat->key() << "' (" << (void*)defFormat << "): realfont: " << QFontInfo( defFormat->font() ).family() << endl;
-    QDictIterator<KoTextFormat> it( cKey );
+    Q3DictIterator<KoTextFormat> it( cKey );
     for ( ; it.current(); ++it ) {
          Q_ASSERT(it.currentKey() == it.current()->key());
          if(it.currentKey() != it.current()->key())

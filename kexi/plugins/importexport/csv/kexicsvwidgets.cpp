@@ -157,7 +157,7 @@ KexiCSVInfoLabel::KexiCSVInfoLabel( const QString& labelText, QWidget* parent )
 	m_leftLabel = new QLabel(labelText, this);
 	m_leftLabel->setMinimumWidth(130);
 	m_leftLabel->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
-	m_leftLabel->setAlignment(Qt::AlignVCenter | Qt::AlignLeft | Qt::WordBreak);
+	m_leftLabel->setAlignment(Qt::AlignVCenter | Qt::AlignLeft | Qt::TextWordWrap);
 	hbox->addWidget(m_leftLabel);
 	m_iconLbl = new QLabel(this);
 	m_iconLbl->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
@@ -168,10 +168,10 @@ KexiCSVInfoLabel::KexiCSVInfoLabel( const QString& labelText, QWidget* parent )
 	m_fnameLbl->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
 	m_fnameLbl->setLineWidth(1);
 	m_fnameLbl->setFrameStyle(QFrame::Box);
-	m_fnameLbl->setAlignment(Qt::AlignVCenter | Qt::AlignLeft | Qt::WordBreak);
+	m_fnameLbl->setAlignment(Qt::AlignVCenter | Qt::AlignLeft | Qt::TextWordWrap);
 	hbox->addSpacing(5);
 	hbox->addWidget(m_iconLbl);
-	hbox->addWidget(m_fnameLbl, 0, Qt::AlignVCenter | Qt::AlignLeft | Qt::WordBreak);
+	hbox->addWidget(m_fnameLbl, 0, Qt::AlignVCenter | Qt::AlignLeft | Qt::TextWordWrap);
 
 	m_separator = new QFrame(this);
 	m_separator->setFrameShape(QFrame::HLine);
@@ -184,7 +184,7 @@ void KexiCSVInfoLabel::setFileName( const QString& fileName )
 	m_fnameLbl->setText( QDir::convertSeparators(fileName) );
 	if (!fileName.isEmpty()) {
 		m_iconLbl->setPixmap( 
-			KMimeType::pixmapForURL(KURL::fromPathOrURL(fileName), 0, KIcon::Desktop) );
+			KMimeType::pixmapForURL(KUrl::fromPathOrURL(fileName), 0, K3Icon::Desktop) );
 	}
 }
 

@@ -60,15 +60,15 @@ class KisPNGConverter : public KisProgressSubject {
         KisPNGConverter(KisDoc *doc, KisUndoAdapter *adapter);
         virtual ~KisPNGConverter();
     public:
-        KisImageBuilder_Result buildImage(const KURL& uri);
-        KisImageBuilder_Result buildFile(const KURL& uri, KisPaintLayerSP layer, vKisAnnotationSP_it annotationsStart, vKisAnnotationSP_it annotationsEnd, int compression, bool interlace, bool alpha);
+        KisImageBuilder_Result buildImage(const KUrl& uri);
+        KisImageBuilder_Result buildFile(const KUrl& uri, KisPaintLayerSP layer, vKisAnnotationSP_it annotationsStart, vKisAnnotationSP_it annotationsEnd, int compression, bool interlace, bool alpha);
         /** Retrieve the constructed image
         */
         KisImageSP image();
     public slots:
         virtual void cancel();
     private:
-        KisImageBuilder_Result decode(const KURL& uri);
+        KisImageBuilder_Result decode(const KUrl& uri);
         void progress(png_structp png_ptr, png_uint_32 row_number, int pass);
     private:
         png_uint_32 m_max_row;

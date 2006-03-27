@@ -20,11 +20,14 @@
 
 #include <qlabel.h>
 #include <qlayout.h>
-#include <qmultilineedit.h>
+#include <q3multilineedit.h>
 #include <qpushbutton.h>
 #include <qtoolbutton.h>
 #include <qapplication.h>
 #include <qlayout.h>
+//Added by qt3to4:
+#include <Q3HBoxLayout>
+#include <Q3GridLayout>
 #include <kiconloader.h>
 #include <kbuttonbox.h>
 #include <kdebug.h>
@@ -33,7 +36,7 @@
 #include <klistview.h>
 #include <kdebug.h>
 
-#include <qmultilineedit.h>
+#include <q3multilineedit.h>
 
 #include "Koversiondialog.h"
 
@@ -44,7 +47,7 @@ KoVersionDialog::KoVersionDialog( QWidget* parent,  const char* name )
   QWidget* page = new QWidget( this );
   setMainWidget( page );
 
-  QGridLayout *grid1 = new QGridLayout( page,10,3,KDialog::marginHint(), KDialog::spacingHint());
+  Q3GridLayout *grid1 = new Q3GridLayout( page,10,3,KDialog::marginHint(), KDialog::spacingHint());
 
   list=new KListView(page,  "versionlist");
   list->addColumn(i18n("Date & Time"));
@@ -127,9 +130,9 @@ KoVersionModifyDialog::KoVersionModifyDialog(  QWidget* parent, const QString &/
     QWidget* page = new QWidget( this );
     setMainWidget( page );
 
-    QHBoxLayout *grid1 = new QHBoxLayout( page,KDialog::marginHint(), KDialog::spacingHint());
+    Q3HBoxLayout *grid1 = new Q3HBoxLayout( page,KDialog::marginHint(), KDialog::spacingHint());
 
-    m_multiline=new QMultiLineEdit(page, "multiline");
+    m_multiline=new Q3MultiLineEdit(page, "multiline");
     grid1->addWidget( m_multiline );
 
 }

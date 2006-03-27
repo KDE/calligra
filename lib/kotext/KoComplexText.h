@@ -52,11 +52,11 @@
 
 #ifndef QT_H
 #include <qstring.h>
-#include <qpointarray.h>
+#include <q3pointarray.h>
 #include <qfont.h>
 #include <qpainter.h>
-#include <qptrlist.h>
-#include <qshared.h>
+#include <q3ptrlist.h>
+#include <q3shared.h>
 #endif // QT_H
 
 #ifndef QT_NO_COMPLEXTEXT
@@ -73,7 +73,7 @@ struct Q_EXPORT KoBidiStatus {
     QChar::Direction last;
 };
 
-struct Q_EXPORT KoBidiContext : public QShared {
+struct Q_EXPORT KoBidiContext : public Q3Shared {
     // ### ref and deref parent?
     KoBidiContext( uchar level, QChar::Direction embedding, KoBidiContext *parent = 0, bool override = FALSE );
     ~KoBidiContext();
@@ -121,7 +121,7 @@ public:
     // positions non spacing marks relative to the base character at position pos.
     //static QPointArray positionMarks( QFontPrivate *f, const QString &str, int pos, QRect *boundingRect = 0 );
 
-    static QPtrList<KoTextRun> *bidiReorderLine( KoBidiControl *control, const QString &str, int start, int len,
+    static Q3PtrList<KoTextRun> *bidiReorderLine( KoBidiControl *control, const QString &str, int start, int len,
 						QChar::Direction basicDir = QChar::DirON );
     static QString bidiReorderString( const QString &str, QChar::Direction basicDir = QChar::DirON );
 };

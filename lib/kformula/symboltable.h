@@ -25,7 +25,7 @@
 #include <qmap.h>
 #include <qstring.h>
 #include <qstringlist.h>
-#include <qvaluevector.h>
+#include <q3valuevector.h>
 
 #include "kformuladefs.h"
 
@@ -140,7 +140,7 @@ public:
     typedef QMap<QChar, CharTableEntry> UnicodeTable;
     typedef QMap<QChar, QString> NameTable;
     typedef QMap<QString, QChar> EntryTable;
-    typedef QValueVector<QFont> FontTable;
+    typedef Q3ValueVector<QFont> FontTable;
 
     bool inTable( QChar ch, CharStyle style=anyChar ) const;
 

@@ -31,7 +31,7 @@
 #include "variant.h"
 
 #include <qstring.h>
-#include <qvaluelist.h>
+#include <q3valuelist.h>
 #include <qmap.h>
 #include <kdebug.h>
 

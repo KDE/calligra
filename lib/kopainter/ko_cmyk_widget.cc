@@ -23,11 +23,13 @@
 #include "ko_cmyk_widget.h"
 
 #include <qlayout.h>
-#include <qhbox.h>
+#include <q3hbox.h>
 #include <qlabel.h>
 #include <qspinbox.h>
 #include <qtooltip.h>
 #include <qcolor.h>
+//Added by qt3to4:
+#include <Q3GridLayout>
 
 #include <kdebug.h>
 #include <kglobal.h>
@@ -42,28 +44,28 @@ KoCMYKWidget::KoCMYKWidget(QWidget *parent, const char *name) : super(parent, na
 {
     m_ColorButton = new KDualColorButton(this);
     m_ColorButton ->  setFixedSize(m_ColorButton->sizeHint());
-    QGridLayout *mGrid = new QGridLayout(this, 4, 5, 5, 2);
+    Q3GridLayout *mGrid = new Q3GridLayout(this, 4, 5, 5, 2);
 
     /* setup color sliders */
     mCSlider = new KoColorSlider(this);
     mCSlider->setMaximumHeight(20);
     mCSlider->slotSetRange(0, 255);
-    mCSlider->setFocusPolicy( QWidget::ClickFocus );
+    mCSlider->setFocusPolicy( Qt::ClickFocus );
 
     mMSlider = new KoColorSlider(this);
     mMSlider->setMaximumHeight(20);
     mMSlider->slotSetRange(0, 255);
-    mMSlider->setFocusPolicy( QWidget::ClickFocus );
+    mMSlider->setFocusPolicy( Qt::ClickFocus );
 
     mYSlider = new KoColorSlider(this);
     mYSlider->setMaximumHeight(20);
     mYSlider->slotSetRange(0, 255);
-    mYSlider->setFocusPolicy( QWidget::ClickFocus );
+    mYSlider->setFocusPolicy( Qt::ClickFocus );
 
     mKSlider = new KoColorSlider(this);
     mKSlider->setMaximumHeight(20);
     mKSlider->slotSetRange(0, 255);
-    mKSlider->setFocusPolicy( QWidget::ClickFocus );
+    mKSlider->setFocusPolicy( Qt::ClickFocus );
 
     /* setup slider labels */
     mCLabel = new QLabel("C", this);
@@ -83,25 +85,25 @@ KoCMYKWidget::KoCMYKWidget(QWidget *parent, const char *name) : super(parent, na
     mCIn = new QSpinBox(0, 255, 1, this);
     mCIn->setFixedWidth(50);
     mCIn->setFixedHeight(20);
-    mCIn->setFocusPolicy( QWidget::ClickFocus );
+    mCIn->setFocusPolicy( Qt::ClickFocus );
     QToolTip::add( mCIn, i18n( "Cyan" ) );
 
     mMIn = new QSpinBox(0, 255, 1, this);
     mMIn->setFixedWidth(50);
     mMIn->setFixedHeight(20);
-    mMIn->setFocusPolicy( QWidget::ClickFocus );
+    mMIn->setFocusPolicy( Qt::ClickFocus );
     QToolTip::add( mMIn, i18n( "Magenta" ) );
 
     mYIn = new QSpinBox(0, 255, 1, this);
     mYIn->setFixedWidth(50);
     mYIn->setFixedHeight(20);
-    mYIn->setFocusPolicy( QWidget::ClickFocus );
+    mYIn->setFocusPolicy( Qt::ClickFocus );
     QToolTip::add( mYIn, i18n( "Yellow" ) );
 
     mKIn = new QSpinBox(0, 255, 1, this);
     mKIn->setFixedWidth(50);
     mKIn->setFixedHeight(20);
-    mKIn->setFocusPolicy( QWidget::ClickFocus );
+    mKIn->setFocusPolicy( Qt::ClickFocus );
     QToolTip::add( mKIn, i18n( "Black" ) );
 
     mGrid->addMultiCellWidget(m_ColorButton, 0, 4, 0, 0, Qt::AlignTop);

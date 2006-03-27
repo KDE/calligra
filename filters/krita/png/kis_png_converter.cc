@@ -118,7 +118,7 @@ KisPNGConverter::~KisPNGConverter()
 {
 }
 
-KisImageBuilder_Result KisPNGConverter::decode(const KURL& uri)
+KisImageBuilder_Result KisPNGConverter::decode(const KUrl& uri)
 {
     kdDebug(41008) << "Start decoding PNG File" << endl;
     // open the file
@@ -409,7 +409,7 @@ KisImageBuilder_Result KisPNGConverter::decode(const KURL& uri)
 
 }
 
-KisImageBuilder_Result KisPNGConverter::buildImage(const KURL& uri)
+KisImageBuilder_Result KisPNGConverter::buildImage(const KUrl& uri)
 {
     if (uri.isEmpty())
         return KisImageBuilder_RESULT_NO_URI;
@@ -437,7 +437,7 @@ KisImageSP KisPNGConverter::image()
 }
 
 
-KisImageBuilder_Result KisPNGConverter::buildFile(const KURL& uri, KisPaintLayerSP layer, vKisAnnotationSP_it annotationsStart, vKisAnnotationSP_it annotationsEnd, int compression, bool interlace, bool alpha)
+KisImageBuilder_Result KisPNGConverter::buildFile(const KUrl& uri, KisPaintLayerSP layer, vKisAnnotationSP_it annotationsStart, vKisAnnotationSP_it annotationsEnd, int compression, bool interlace, bool alpha)
 {
     kdDebug(41008) << "Start writing PNG File" << endl;
     if (!layer)

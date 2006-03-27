@@ -22,15 +22,18 @@
 #include "KWQtSqlMailMergeOpen.h"
 #include <qlayout.h>
 #include <qdom.h>
+//Added by qt3to4:
+#include <QSqlError>
+#include <Q3CString>
 #include <kcombobox.h>
 #include <klineedit.h>
 #include <kpushbutton.h>
 #include <qsqldatabase.h>
 #include <qmessagebox.h>
-#include <kpassdlg.h>
+#include <kpassworddialog.h>
 #include <qsqlrecord.h>
-#include <qsqlcursor.h>
-#include <qdatatable.h>
+#include <q3sqlcursor.h>
+#include <q3datatable.h>
 #include <kdebug.h>
 #include <klocale.h>
 #include <kiconloader.h>
@@ -75,12 +78,12 @@ bool KWQtSqlSerialDataSourceBase::showConfigDialog(QWidget *par,int action)
 
 bool  KWQtSqlSerialDataSourceBase::openDatabase()
 {
-	QCString pwd;
+	Q3CString pwd;
 	QSqlDatabase::removeDatabase(DataBaseConnection);
         database=QSqlDatabase::addDatabase(driver,DataBaseConnection);
         if (database)
         {
-                if (database->lastError().type()!=QSqlError::None)
+                if (database->lastError().type()!=QSqlError::NoError)
                 {
 			QMessageBox::critical(0,i18n("Error"),database->lastError().databaseText(),QMessageBox::Abort,QMessageBox::NoButton,QMessageBox::NoButton);
 			return false;

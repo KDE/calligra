@@ -57,7 +57,7 @@ KoFilter::ConversionStatus XCFExport::convert(const QCString& from, const QCStri
     
     if (filename.isEmpty()) return KoFilter::FileNotFound;
 
-    KURL url(filename);
+    KUrl url(filename);
 
     KisImageSP img = output->currentImage();
     if (!img) return KoFilter::ParsingError;

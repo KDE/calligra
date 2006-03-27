@@ -21,9 +21,9 @@
 #include "kexidbdateedit.h"
 #include <qlayout.h>
 #include <qtoolbutton.h>
-#include <kpopupmenu.h>
+#include <kmenu.h>
 #include <kdatepicker.h>
-#include <kdatetbl.h>
+#include <kdatetable.h>
 
 #include <kexiutils/utils.h>
 #include <kexidb/queryschema.h>
@@ -52,7 +52,7 @@ KexiDBDateEdit::KexiDBDateEdit(const QDate &date, QWidget *parent, const char *n
 	m_dte_date = 0;
 #endif
 
-	m_datePickerPopupMenu = new KPopupMenu(0, "date_popup");
+	m_datePickerPopupMenu = new KMenu(0, "date_popup");
 	connect(m_datePickerPopupMenu, SIGNAL(aboutToShow()), this, SLOT(slotShowDatePicker()));
 	m_datePicker = new KDatePicker(m_datePickerPopupMenu, QDate::currentDate(), 0);
 

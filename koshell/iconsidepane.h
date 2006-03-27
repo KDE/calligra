@@ -25,11 +25,17 @@
 #include <kactioncollection.h>
 #include <klistbox.h>
 
-#include <qbuttongroup.h> 
+#include <q3buttongroup.h> 
 #include <qlayout.h>
 #include <qtooltip.h>
-#include <qvbox.h>
-#include <qwidgetstack.h>
+#include <q3vbox.h>
+#include <q3widgetstack.h>
+//Added by qt3to4:
+#include <QPixmap>
+#include <QEvent>
+#include <Q3ValueList>
+#include <QResizeEvent>
+#include <QMouseEvent>
 
 #include "koshellsettings.h"
 
@@ -43,7 +49,7 @@ enum IconViewMode { LargeIcons = 48, NormalIcons = 32, SmallIcons = 22, ShowText
   A @see QListBoxPixmap Square Box with an optional icon and a text
   underneath.
 */
-class EntryItem : public QListBoxItem
+class EntryItem : public Q3ListBoxItem
 {
   public:
     EntryItem( Navigator *, int _id, const QString &_text, const QString & _pix );
@@ -63,11 +69,11 @@ class EntryItem : public QListBoxItem
     /**
       returns the width of this item.
     */
-    virtual int width( const QListBox * ) const;
+    virtual int width( const Q3ListBox * ) const;
     /**
       returns the height of this item.
     */
-    virtual int height( const QListBox * ) const;
+    virtual int height( const Q3ListBox * ) const;
 
   protected:
     void reloadPixmap();
@@ -90,7 +96,7 @@ class EntryItem : public QListBoxItem
 class EntryItemToolTip : public QToolTip
 {
   public:
-    EntryItemToolTip( QListBox* parent )
+    EntryItemToolTip( Q3ListBox* parent )
       : QToolTip( parent->viewport() ), mListBox( parent ) 
       {}
   protected:
@@ -98,7 +104,7 @@ class EntryItemToolTip : public QToolTip
       // We only show tooltips when there are no texts shown
       if ( KoShellSettings::sidePaneShowText() ) return;
       if ( !mListBox ) return;
-      QListBoxItem* item = mListBox->itemAt( p );
+      Q3ListBoxItem* item = mListBox->itemAt( p );
       if ( !item ) return;
       const QRect itemRect = mListBox->itemRect( item );
       if ( !itemRect.isValid() ) return;
@@ -108,7 +114,7 @@ class EntryItemToolTip : public QToolTip
       tip( itemRect, tipStr );
     }
   private:
-    QListBox* mListBox;
+    Q3ListBox* mListBox;
 };
 
 /**
@@ -141,26 +147,26 @@ class Navigator : public KListBox
     void mouseReleaseEvent(QMouseEvent *e);
     void mousePressEvent(QMouseEvent *e);
 
-    void setHoverItem( QListBoxItem*, bool );
-    void setPaintActiveItem( QListBoxItem*, bool );
+    void setHoverItem( Q3ListBoxItem*, bool );
+    void setPaintActiveItem( Q3ListBoxItem*, bool );
 
   protected slots:
-    void slotExecuted( QListBoxItem * );
-    void slotMouseOn( QListBoxItem *item );
+    void slotExecuted( Q3ListBoxItem * );
+    void slotMouseOn( Q3ListBoxItem *item );
     void slotMouseOff();
-    void slotShowRMBMenu( QListBoxItem *, const QPoint& );
+    void slotShowRMBMenu( Q3ListBoxItem *, const QPoint& );
 
   private:
     IconSidePane *mSidePane;
     int mMinWidth;
-    QListBoxItem *executedItem;
+    Q3ListBoxItem *executedItem;
     bool mLeftMouseButtonPressed;
     KPopupMenu *mPopupMenu;
     bool mSelectable;
-    QListBoxItem* mMouseOn;
+    Q3ListBoxItem* mMouseOn;
 };
 
-class IconSidePane :public QVBox
+class IconSidePane :public Q3VBox
 {
     Q_OBJECT
   public:
@@ -185,7 +191,7 @@ class IconSidePane :public QVBox
     void toogleText(){mShowText=!mShowText;}
     bool showIcons() { return mShowIcons; }
     void toogleIcons(){mShowIcons=!mShowIcons;}
-    QButtonGroup *buttonGroup() { return m_buttongroup; }
+    Q3ButtonGroup *buttonGroup() { return m_buttongroup; }
     int minWidth();
     void resetWidth();
 
@@ -197,10 +203,10 @@ class IconSidePane :public QVBox
     void buttonClicked();
 
   private:
-    QWidgetStack *mWidgetstack;
-    QValueList<int> mWidgetStackIds;
+    Q3WidgetStack *mWidgetstack;
+    Q3ValueList<int> mWidgetStackIds;
     Navigator *mCurrentNavigator;
-    QButtonGroup *m_buttongroup;
+    Q3ButtonGroup *m_buttongroup;
     KActionCollection *mActionCollection;
     KPopupMenu *mPopupMenu;
 

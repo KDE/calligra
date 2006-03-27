@@ -5,7 +5,7 @@
 #include <qcombobox.h>
 #include <qcheckbox.h>
 #include <qlabel.h>
-#include <qbuttongroup.h>
+#include <q3buttongroup.h>
 #include <qradiobutton.h>
 #include <kglobal.h>
 #include <klocale.h>
@@ -18,7 +18,7 @@
  *  Constructs a DateFormatWidget which is a child of 'parent', with the
  *  name 'name' and widget flags set to 'fl'
  */
-DateFormatWidget::DateFormatWidget( QWidget* parent,  const char* name, WFlags fl )
+DateFormatWidget::DateFormatWidget( QWidget* parent,  const char* name, Qt::WFlags fl )
     : TimeDateFormatWidgetPrototype( parent, name, fl )
 {
     setCaption( i18n( "DateFormat", "Format of Date Variable" ) );

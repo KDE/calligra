@@ -22,13 +22,18 @@
 
 #include <qvariant.h>
 #include <qdialog.h>
+//Added by qt3to4:
+#include <Q3VBoxLayout>
+#include <Q3HBoxLayout>
+#include <QLabel>
+#include <Q3GridLayout>
 
-class QGridLayout;
-class QHBoxLayout;
+class Q3GridLayout;
+class Q3HBoxLayout;
 class QLabel;
 class QPushButton;
-class QTextEdit;
-class QVBoxLayout;
+class Q3TextEdit;
+class Q3VBoxLayout;
 
 class KFormulaPartView;
 
@@ -37,10 +42,10 @@ class FormulaString : public QDialog
     Q_OBJECT
 
 public:
-    FormulaString( KFormulaPartView* parent = 0, const char* name = 0, bool modal = FALSE, WFlags fl = 0 );
+    FormulaString( KFormulaPartView* parent = 0, const char* name = 0, bool modal = FALSE, Qt::WFlags fl = 0 );
     ~FormulaString();
 
-    QTextEdit* textWidget;
+    Q3TextEdit* textWidget;
     QPushButton* buttonHelp;
     QPushButton* buttonOk;
     QPushButton* buttonCancel;

@@ -26,6 +26,8 @@
 #include "KWTextFrameSet.h"
 
 #include "KWTextImage.h"
+//Added by qt3to4:
+#include <QPixmap>
 
 KWTextImage::KWTextImage( KWTextDocument *textdoc, const QString & filename )
     : KoTextCustomItem( textdoc ), place( PlaceInline )
@@ -41,10 +43,10 @@ KWTextImage::KWTextImage( KWTextDocument *textdoc, const QString & filename )
 
 void KWTextImage::setImage( const KoPictureCollection & collection )
 {
-    kdDebug(32001) << "Loading text image " << m_image.getKey().toString() << " (in KWTextImage::setImage)" << endl;
+    kDebug(32001) << "Loading text image " << m_image.getKey().toString() << " (in KWTextImage::setImage)" << endl;
     m_image=collection.findPicture( m_image.getKey() );
     Q_ASSERT( !m_image.isNull() );
-    kdDebug(32001) << "size: " << m_image.getOriginalSize().width() << "x" << m_image.getOriginalSize().height() << endl;
+    kDebug(32001) << "size: " << m_image.getOriginalSize().width() << "x" << m_image.getOriginalSize().height() << endl;
     resize();
 }
 
@@ -59,7 +61,7 @@ void KWTextImage::resize()
         width = KoTextZoomHandler::ptToLayoutUnitPt( width );
         height = m_image.getOriginalSize().height();
         height = KoTextZoomHandler::ptToLayoutUnitPt( height );
-        kdDebug() << "KWTextImage::resize: " << width << ", " << height << endl;
+        kDebug() << "KWTextImage::resize: " << width << ", " << height << endl;
         // no! m_image.setSize( QSize( width, height ) );
     }
 }
@@ -73,7 +75,7 @@ void KWTextImage::drawCustomItem( QPainter* p, int x, int y, int wpix, int hpix,
     // (wpix,hpix) is the size of the inline item (in pixels)
     // (cx,cy,cw,ch) is the rectangle to be painted, in pixels too
     if ( m_image.isNull() ) {
-        kdDebug() << "KWTextImage::draw null image!" << endl;
+        kDebug() << "KWTextImage::draw null image!" << endl;
         p->fillRect( x, y, 50, 50, cg.dark() );
         return;
     }
@@ -91,7 +93,7 @@ void KWTextImage::drawCustomItem( QPainter* p, int x, int y, int wpix, int hpix,
     //    p->drawPixmap( cx, cy, pixmap, cx - x, cy - y, cw, ch );
 
     if ( selected && placement() == PlaceInline && p->device()->devType() != QInternal::Printer ) {
-        p->fillRect( rect , QBrush( cg.highlight(), QBrush::Dense4Pattern) );
+        p->fillRect( rect , QBrush( cg.highlight(), Qt::Dense4Pattern) );
     }
 }
 
@@ -145,7 +147,7 @@ void KWTextImage::load( QDomElement & parentElem )
         }
         else
         {
-            kdError(32001) << "Missing KEY or FILENAME tag in IMAGE (KWTextImage::load)" << endl;
+            kError(32001) << "Missing KEY or FILENAME tag in IMAGE (KWTextImage::load)" << endl;
         }
     }
 }

@@ -7,9 +7,13 @@
 #include <qfile.h>
 #include <qpainter.h>
 #include <qcursor.h>
-#include <qpopupmenu.h>
-#include <qpaintdevicemetrics.h>
-#include <qcstring.h> // For QByteArray
+#include <q3popupmenu.h>
+#include <q3paintdevicemetrics.h>
+#include <q3cstring.h> // For QByteArray
+//Added by qt3to4:
+#include <QMouseEvent>
+#include <QPixmap>
+#include <QPaintEvent>
 
 #include <kaction.h>
 #include <kglobal.h>
@@ -546,7 +550,7 @@ void KChartView::mousePressEvent ( QMouseEvent *e )
     if (!koDocument()->isReadWrite() || !factory())
         return;
     if ( e->button() == RightButton )
-        ((QPopupMenu*)factory()->container("action_popup",this))->popup(QCursor::pos());
+        ((Q3PopupMenu*)factory()->container("action_popup",this))->popup(QCursor::pos());
 }
 
 
@@ -632,7 +636,7 @@ void KChartView::print(KPrinter &printer)
 
     QPainter painter;
     painter.begin(&printer);
-    QPaintDeviceMetrics  pdm( &printer );
+    Q3PaintDeviceMetrics  pdm( &printer );
 
     int  height;
     int  width;
@@ -676,7 +680,7 @@ void KChartView::importData()
 
     // Check to see if we can read the file.
     QFile  inFile(filename);
-    if (!inFile.open(IO_ReadOnly)) {
+    if (!inFile.open(QIODevice::ReadOnly)) {
 	KMessageBox::sorry( 0, i18n("The file %1 could not be read.")
 			    .arg(filename) );
 	inFile.close();

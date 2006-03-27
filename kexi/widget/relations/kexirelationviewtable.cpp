@@ -75,8 +75,8 @@ KexiRelationViewTableContainer::KexiRelationViewTableContainer(
 //	m_tableView->resize( m_tableView->sizeHint() );
 	lyr->addWidget(m_tableView, 0);
 	connect(m_tableView, SIGNAL(tableScrolling()), this, SLOT(moved()));
-	connect(m_tableView, SIGNAL(contextMenu(KListView*, QListViewItem*, const QPoint&)),
-		this, SLOT(slotContextMenu(KListView*, QListViewItem*, const QPoint&)));
+	connect(m_tableView, SIGNAL(contextMenu(K3ListView*, QListViewItem*, const QPoint&)),
+		this, SLOT(slotContextMenu(K3ListView*, QListViewItem*, const QPoint&)));
 }
 
 KexiRelationViewTableContainer::~KexiRelationViewTableContainer()
@@ -88,24 +88,24 @@ KexiDB::TableOrQuerySchema* KexiRelationViewTableContainer::schema() const
 	return m_tableView->schema();
 }
 
-void KexiRelationViewTableContainer::slotContextMenu(KListView *, QListViewItem *, const QPoint &p)
+void KexiRelationViewTableContainer::slotContextMenu(K3ListView *, QListViewItem *, const QPoint &p)
 {
 //	m_parent->executePopup(p);
 	emit contextMenuRequest( p );
 }
 
 void KexiRelationViewTableContainer::moved() {
-//	kdDebug()<<"finally emitting moved"<<endl;
+//	kDebug()<<"finally emitting moved"<<endl;
 	emit moved(this);
 }
 
 int KexiRelationViewTableContainer::globalY(const QString &field)
 {
-//	kdDebug() << "KexiRelationViewTableContainer::globalY()" << endl;
+//	kDebug() << "KexiRelationViewTableContainer::globalY()" << endl;
 //	QPoint o = mapFromGlobal(QPoint(0, (m_tableView->globalY(field))/*+m_parent->contentsY()*/));
 
 	QPoint o(0, (m_tableView->globalY(field)) + m_parent->contentsY());
-//	kdDebug() << "KexiRelationViewTableContainer::globalY() db2" << endl;
+//	kDebug() << "KexiRelationViewTableContainer::globalY() db2" << endl;
 	return m_parent->viewport()->mapFromGlobal(o).y();
 }
 
@@ -126,7 +126,7 @@ QSize KexiRelationViewTableContainer::sizeHint()
 
 void KexiRelationViewTableContainer::setFocus()
 {
-	kdDebug() << "SET FOCUS" << endl;
+	kDebug() << "SET FOCUS" << endl;
 	//select 1st:
 	if (m_tableView->firstChild()) {
 		if (!m_tableView->selectedItems().first())
@@ -146,7 +146,7 @@ void KexiRelationViewTableContainer::setFocus()
 
 void KexiRelationViewTableContainer::unsetFocus()
 {
-	kdDebug() << "UNSET FOCUS" << endl;
+	kDebug() << "UNSET FOCUS" << endl;
 //	if (m_tableView->selectedItem()) //unselect item if was selected
 //		m_tableView->setSelected(m_tableView->selectedItem(), false);
 //	m_tableView->clearSelection();
@@ -247,7 +247,7 @@ bool KexiRelationViewTableContainerHeader::eventFilter(QObject *, QEvent *ev)
 				parentWidget()->move(newPos);
 				m_grabX=static_cast<QMouseEvent*>(ev)->globalPos().x();
 				m_grabY=static_cast<QMouseEvent*>(ev)->globalPos().y();
-//				kdDebug()<<"HEADER:emitting moved"<<endl;
+//				kDebug()<<"HEADER:emitting moved"<<endl;
 				emit moved();
 			}
 			return true;
@@ -257,7 +257,7 @@ bool KexiRelationViewTableContainerHeader::eventFilter(QObject *, QEvent *ev)
 }
 
 void KexiRelationViewTableContainerHeader::mousePressEvent(QMouseEvent *ev) {
-	kdDebug()<<"KexiRelationViewTableContainerHeader::Mouse Press Event"<<endl;
+	kDebug()<<"KexiRelationViewTableContainerHeader::Mouse Press Event"<<endl;
 	parentWidget()->setFocus();
 	ev->accept();
 	if (ev->button()==Qt::LeftButton) {
@@ -277,7 +277,7 @@ void KexiRelationViewTableContainerHeader::mousePressEvent(QMouseEvent *ev) {
 }
 
 void KexiRelationViewTableContainerHeader::mouseReleaseEvent(QMouseEvent *ev) {
-	kdDebug()<<"KexiRelationViewTableContainerHeader::Mouse Release Event"<<endl;
+	kDebug()<<"KexiRelationViewTableContainerHeader::Mouse Release Event"<<endl;
 	if (m_dragging && ev->button() & Qt::LeftButton) {
 		setCursor(Qt::ArrowCursor);
 		m_dragging=false;
@@ -313,17 +313,17 @@ QSize KexiRelationViewTable::sizeHint()
 {
 	QFontMetrics fm(font());
 
-	kdDebug() << schema()->name() << " cw=" << columnWidth(0) + fm.width("i") 
+	kDebug() << schema()->name() << " cw=" << columnWidth(0) + fm.width("i") 
 		<< ", " << fm.width(schema()->name()+"  ") << endl; 
 
 //! @todo width is still not OK
 	int maxWidth = columnWidth(0) + fm.width("i");
   const KexiDB::QueryColumnInfo::Vector columns(schema()->columns(true/*unique*/));
   for (uint i=0; i<columns.count(); i++)
-  	maxWidth = QMAX(maxWidth, fm.width(columns[i]->field->name())+20);
+  	maxWidth = qMax(maxWidth, fm.width(columns[i]->field->name())+20);
 
 	QSize s(
-		QMAX( maxWidth, fm.width(schema()->name()+"  ")+20), 
+		qMax( maxWidth, fm.width(schema()->name()+"  ")+20), 
 		childCount()*firstChild()->totalHeight() + 4 );
 //	QSize s( columnWidth(1), childCount()*firstChild()->totalHeight() + 3*firstChild()->totalHeight()/10);
 	return s;
@@ -352,7 +352,7 @@ KexiRelationViewTable::globalY(const QString &item)
 bool
 KexiRelationViewTable::acceptDrag(QDropEvent *ev) const
 {
-//	kdDebug() << "KexiRelationViewTable::acceptDrag()" << endl;
+//	kDebug() << "KexiRelationViewTable::acceptDrag()" << endl;
 	QListViewItem *receiver = itemAt(ev->pos());
 	if (!receiver || !KexiFieldDrag::canDecodeSingle(ev))
 		return false;
@@ -363,8 +363,8 @@ KexiRelationViewTable::acceptDrag(QDropEvent *ev) const
 		return false;
 	if (sourceMimeType!="kexi/table" && sourceMimeType=="kexi/query")
 		return false;
-	QString f = receiver->text(0).stripWhiteSpace();
-	if (srcField.stripWhiteSpace()!="*" && f!="*" && ev->source() != (QWidget*)this)
+	QString f = receiver->text(0).trimmed();
+	if (srcField.trimmed()!="*" && f!="*" && ev->source() != (QWidget*)this)
 		return true;
 
 	return false;
@@ -385,7 +385,7 @@ KexiRelationViewTable::slotDropped(QDropEvent *ev)
 		return;
 	if (sourceMimeType!="kexi/table" && sourceMimeType=="kexi/query")
 		return;
-//		kdDebug() << "KexiRelationViewTable::slotDropped() srcfield: " << srcField << endl;
+//		kDebug() << "KexiRelationViewTable::slotDropped() srcfield: " << srcField << endl;
 
 	QString rcvField = recever->text(0);
 
@@ -397,7 +397,7 @@ KexiRelationViewTable::slotDropped(QDropEvent *ev)
 
 	m_view->addConnection(s);
 
-	kdDebug() << "KexiRelationViewTable::slotDropped() " << srcTable << ":" << srcField << " " 
+	kDebug() << "KexiRelationViewTable::slotDropped() " << srcTable << ":" << srcField << " " 
 		<< schema()->name() << ":" << rcvField << endl;
 	ev->accept();
 }
@@ -412,7 +412,7 @@ void KexiRelationViewTable::contentsMousePressEvent(QMouseEvent *ev)
 {
 	parentWidget()->setFocus();
 	setFocus();
-	KListView::contentsMousePressEvent(ev);
+	K3ListView::contentsMousePressEvent(ev);
 //	if (ev->button()==Qt::RightButton)
 //		static_cast<KexiRelationView*>(parentWidget())->executePopup(ev->pos());
 }
@@ -436,7 +436,7 @@ QRect KexiRelationViewTable::drawItemHighlighter(QPainter *painter, QListViewIte
 #if 0
 KexiRelationViewTableItem::KexiRelationViewTableItem(
 	QListView *parent, QListViewItem *after, QString key, QString field)
-	: KListViewItem(parent, after, key, field)
+	: K3ListViewItem(parent, after, key, field)
 {
 }
 

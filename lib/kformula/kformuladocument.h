@@ -23,7 +23,7 @@
 
 #include <qdom.h>
 #include <qobject.h>
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 #include <qstring.h>
 #include <qstringlist.h>
 
@@ -47,10 +47,10 @@ class DocumentWrapper;
  * small utility class representing a sortable (by x,y position) list
  * of formulas you can use sort() and inSort(item)
  **/
-class FormulaList: public QPtrList<Container>
+class FormulaList: public Q3PtrList<Container>
 {
 protected:
-    virtual int compareItems( QPtrCollection::Item a, QPtrCollection::Item b );
+    virtual int compareItems( Q3PtrCollection::Item a, Q3PtrCollection::Item b );
 };
 
 
@@ -190,7 +190,7 @@ public:
     /**
      * @returns an iterator for the collection of formulas.
      */
-    QPtrListIterator<Container> formulas();
+    Q3PtrListIterator<Container> formulas();
 
     SymbolType leftBracketChar();
     SymbolType rightBracketChar();

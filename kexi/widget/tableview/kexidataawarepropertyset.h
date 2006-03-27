@@ -128,10 +128,10 @@ class KEXIDATATABLE_EXPORT KexiDataAwarePropertySet : public QObject
 	protected:
 		SetVector m_sets; //!< prop. buffers vector
 
-		QGuardedPtr<KexiViewBase> m_view;
+		QPointer<KexiViewBase> m_view;
 		KexiDataAwareObjectInterface* m_dataObject;
-//		QGuardedPtr<KexiTableView> m_tableView;
-		QGuardedPtr<KexiTableViewData> m_currentTVData;
+//		QPointer<KexiTableView> m_tableView;
+		QPointer<KexiTableViewData> m_currentTVData;
 
 		int m_row; //!< used to know if a new row is selected in slotCellSelected()
 };

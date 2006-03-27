@@ -22,17 +22,20 @@
 #define kfconfigpages_h
 
 #include <qfont.h>
-#include <qvaluevector.h>
+#include <q3valuevector.h>
+//Added by qt3to4:
+#include <QLabel>
+#include <Q3GridLayout>
 
 #include <kdialogbase.h>
 
 #include "kformuladefs.h"
 
-class QButtonGroup;
+class Q3ButtonGroup;
 class QCheckBox;
 class QColor;
-class QGridLayout;
-class QGroupBox;
+class Q3GridLayout;
+class Q3GroupBox;
 class QLabel;
 class QPushButton;
 class QRadioButton;
@@ -56,7 +59,7 @@ class KOFORMULA_EXPORT ConfigurePage : public QObject
     Q_OBJECT
 public:
 
-    ConfigurePage( Document* document, QWidget* view, KConfig* config, QVBox* box, char* name = 0 );
+    ConfigurePage( Document* document, QWidget* view, KConfig* config, Q3VBox* box, char* name = 0 );
     void apply();
     void slotDefault();
 
@@ -77,7 +80,7 @@ protected slots:
 
 private:
 
-    QPushButton* buildFontLine( QWidget* fontWidget, QGridLayout* layout, int number,
+    QPushButton* buildFontLine( QWidget* fontWidget, Q3GridLayout* layout, int number,
                                 QFont font, QString name, QLabel*& fontName );
 
     void updateFontLabel( QFont font, QLabel* label );
@@ -106,7 +109,7 @@ private:
     QCheckBox* syntaxHighlighting;
 //     QGroupBox* hlBox;
 
-    QButtonGroup* styleBox;
+    Q3ButtonGroup* styleBox;
     QRadioButton* symbolStyle;
     QRadioButton* esstixStyle;
     QRadioButton* cmStyle;

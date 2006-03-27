@@ -28,7 +28,7 @@
 #include "KoLanguageTab.moc"
 
 
-KoLanguageTab::KoLanguageTab( KSpell2::Broker::Ptr broker, QWidget* parent, const char* name, WFlags fl ) 
+KoLanguageTab::KoLanguageTab( KSpell2::Broker::Ptr broker, QWidget* parent, const char* name, Qt::WFlags fl ) 
         : KoLanguageTabBase( parent, name, fl )
 {
     const QStringList langNames = KoGlobal::listOfLanguages();

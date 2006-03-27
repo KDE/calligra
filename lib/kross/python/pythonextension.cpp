@@ -25,6 +25,8 @@
 #include "../api/exception.h"
 
 #include <kdebug.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 using namespace Kross::Python;
 
@@ -146,7 +148,7 @@ Kross::Api::List::Ptr PythonExtension::toObject(const Py::Tuple& tuple)
     kdDebug() << QString("Kross::Python::PythonExtension::toObject(Py::Tuple)") << endl;
 #endif
 
-    QValueList<Kross::Api::Object::Ptr> l;
+    Q3ValueList<Kross::Api::Object::Ptr> l;
     uint size = tuple.size();
     for(uint i = 0; i < size; i++)
         l.append( toObject( tuple[i] ) );
@@ -159,7 +161,7 @@ Kross::Api::List::Ptr PythonExtension::toObject(const Py::List& list)
     kdDebug() << QString("Kross::Python::PythonExtension::toObject(Py::List)") << endl;
 #endif
 
-    QValueList<Kross::Api::Object::Ptr> l;
+    Q3ValueList<Kross::Api::Object::Ptr> l;
     uint length = list.length();
     for(uint i = 0; i < length; i++)
         l.append( toObject( list[i] ) );
@@ -194,7 +196,7 @@ Kross::Api::Object::Ptr PythonExtension::toObject(const Py::Object& object)
     if(type == &PyBool_Type)
         return new Kross::Api::Variant(QVariant(object.isTrue(),0));
     if(type == &PyLong_Type)
-        return new Kross::Api::Variant(Q_LLONG(long(Py::Long(object))));
+        return new Kross::Api::Variant(qlonglong(long(Py::Long(object))));
     if(type == &PyFloat_Type)
         return new Kross::Api::Variant(double(Py::Float(object)));
 
@@ -267,13 +269,13 @@ const Py::Dict PythonExtension::toPyObject(const QMap<QString, QVariant>& map)
     return d;
 }
 
-const Py::List PythonExtension::toPyObject(const QValueList<QVariant>& list)
+const Py::List PythonExtension::toPyObject(const Q3ValueList<QVariant>& list)
 {
 #ifdef KROSS_PYTHON_EXTENSION_TOPYOBJECT_DEBUG
     kdDebug() << QString("Kross::Python::PythonExtension::toPyObject(QValueList<QVariant>)") << endl;
 #endif
     Py::List l;
-    for(QValueList<QVariant>::ConstIterator it = list.constBegin(); it != list.constEnd(); ++it)
+    for(Q3ValueList<QVariant>::ConstIterator it = list.constBegin(); it != list.constEnd(); ++it)
         l.append(toPyObject(*it));
     return l;
 }
@@ -315,7 +317,7 @@ const Py::Object PythonExtension::toPyObject(const QVariant& variant)
         // for such large numbers (TODO maybe BigInt?). So,
         // we risk overflows here, but well...
         case QVariant::LongLong: {
-            Q_LLONG l = variant.toLongLong();
+            qlonglong l = variant.toLongLong();
             //return (l < 0) ? Py::Long((long)l) : Py::Long((unsigned long)l);
             return Py::Long((long)l);
             //return Py::Long(PyLong_FromLong( (long)l ), true);
@@ -355,8 +357,8 @@ const Py::Object PythonExtension::toPyObject(Kross::Api::Object::Ptr object)
 #endif
         Py::List pylist;
         Kross::Api::List* list = static_cast<Kross::Api::List*>( object.data() );
-        QValueList<Kross::Api::Object::Ptr> valuelist = list->getValue();
-        for(QValueList<Kross::Api::Object::Ptr>::Iterator it = valuelist.begin(); it != valuelist.end(); ++it)
+        Q3ValueList<Kross::Api::Object::Ptr> valuelist = list->getValue();
+        for(Q3ValueList<Kross::Api::Object::Ptr>::Iterator it = valuelist.begin(); it != valuelist.end(); ++it)
             pylist.append( toPyObject(*it) ); // recursive
         return pylist;
     }

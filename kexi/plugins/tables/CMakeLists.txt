@@ -1,0 +1,57 @@
+kde4_header()
+
+include_directories( ${CMAKE_SOURCE_DIR}/kexi/core ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/widget ${CMAKE_SOURCE_DIR}/kexi/widget/tableview ${CMAKE_SOURCE_DIR}/kexi/kexidb ${CMAKE_SOURCE_DIR}/lib ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
+
+
+########### next target ###############
+
+set(kexihandler_table_PART_SRCS kexitablepart.cpp kexialtertabledialog.cpp kexialtertable_dataview.cpp )
+
+kde4_automoc(${kexihandler_table_PART_SRCS})
+
+kde4_add_plugin(kexihandler_table ${kexihandler_table_PART_SRCS})
+
+kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kexihandler_table )
+
+target_link_libraries(kexihandler_table  ${KDE4_KDECORE_LIBS} kexicore kexidb kexidatatable kexiextendedwidgets koproperty )
+
+install_targets(${LIB_INSTALL_DIR}/kde4 kexihandler_table )
+
+
+########### install files ###############
+
+install_files( ${DATA_INSTALL_DIR}/kexi FILES  kexitablepartui.rc kexitablepartinstui.rc )
+install_files( ${SERVICES_INSTALL_DIR}/kexi FILES  kexitablehandler.desktop )
+
+kde4_footer()
+
+
+
+#original Makefile.am contents follow:
+
+#include $(top_srcdir)/kexi/Makefile.global
+#
+#kde_module_LTLIBRARIES = kexihandler_table.la
+#
+#kexihandler_table_la_SOURCES = kexitablepart.cpp kexialtertabledialog.cpp kexialtertable_dataview.cpp
+#kexihandler_table_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN) $(VER_INFO) -module
+#kexihandler_table_la_LIBADD = $(top_builddir)/kexi/core/libkexicore.la \
+#	$(top_builddir)/kexi/kexidb/libkexidb.la \
+#	$(top_builddir)/kexi/widget/tableview/libkexidatatable.la \
+#	$(top_builddir)/kexi/widget/libkexiextendedwidgets.la \
+#	$(top_builddir)/lib/koproperty/libkoproperty.la
+#
+#INCLUDES= $(KOFFICE_INCLUDES) \
+#	-I$(top_srcdir)/kexi/core -I$(top_srcdir)/kexi \
+#	-I$(top_srcdir)/kexi/widget -I$(top_srcdir)/kexi/widget/tableview \
+#	-I$(top_srcdir)/kexi/kexidb -I$(top_srcdir)/lib  $(all_includes)
+#
+#servicesdir=$(kde_servicesdir)/kexi
+#services_DATA=kexitablehandler.desktop
+#
+#rcdir = $(kde_datadir)/kexi
+#rc_DATA = kexitablepartui.rc kexitablepartinstui.rc
+#
+#METASOURCES = AUTO
+#
+#include ../Makefile.common

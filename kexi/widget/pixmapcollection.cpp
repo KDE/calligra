@@ -47,7 +47,7 @@ PixmapCollection::PixmapCollection(const QString &collectionName, QObject *paren
 }
 
 QString
-PixmapCollection::addPixmapPath(const KURL &url)
+PixmapCollection::addPixmapPath(const KUrl &url)
 {
 	QString name = url.filename();
 	while(m_pixmaps.contains(name))
@@ -99,7 +99,7 @@ PixmapCollection::getPixmap(const QString &name)
 
 	if(m_pixmaps[name].second != 0)
 	{
-		return kapp->iconLoader()->loadIcon(m_pixmaps[name].first, KIcon::NoGroup, m_pixmaps[name].second);
+		return kapp->iconLoader()->loadIcon(m_pixmaps[name].first, K3Icon::NoGroup, m_pixmaps[name].second);
 	}
 	else
 		return QPixmap(m_pixmaps[name].first);
@@ -182,7 +182,7 @@ LoadIconDialog::LoadIconDialog(QWidget *parent)
 	// Icon chooser button
 	m_button = new KIconButton(frame);
 	m_button->setIcon("kexi");
-	m_button->setIconSize(KIcon::SizeMedium);
+	m_button->setIconSize(K3Icon::SizeMedium);
 	l->addMultiCellWidget(m_button, 0, 1, 2, 2);
 	connect(m_button, SIGNAL(iconChanged(QString)), this, SLOT(updateIconName(QString)));
 	connect(m_nameInput, SIGNAL(textChanged(const QString &)), this, SLOT(setIcon(const QString &)));
@@ -203,15 +203,15 @@ LoadIconDialog::setIcon(const QString &icon)
 void
 LoadIconDialog::changeIconSize(int index)
 {
-	int size = KIcon::SizeMedium;
+	int size = K3Icon::SizeMedium;
 	switch(index)
 	{
-		case 0: size = KIcon::SizeSmall; break;
-		//case 1: size = KIcon::SizeSmallMedium; break;
-		case 1: size = KIcon::SizeMedium; break;
-		case 2: size = KIcon::SizeLarge; break;
+		case 0: size = K3Icon::SizeSmall; break;
+		//case 1: size = K3Icon::SizeSmallMedium; break;
+		case 1: size = K3Icon::SizeMedium; break;
+		case 2: size = K3Icon::SizeLarge; break;
 #if !defined(Q_WS_WIN) && KDE_IS_VERSION(3,1,9)
-		case 3: size = KIcon::SizeHuge; break;
+		case 3: size = K3Icon::SizeHuge; break;
 #endif
 		default:;
 	}
@@ -296,7 +296,7 @@ PixmapCollectionEditor::newItemByName()
 void
 PixmapCollectionEditor::newItemByPath()
 {
-	KURL url = KFileDialog::getImageOpenURL("::kexi", parentWidget());
+	KUrl url = KFileDialog::getImageOpenURL("::kexi", parentWidget());
 	if(url.isEmpty())
 		return;
 	QString name = m_collection->addPixmapPath(url);

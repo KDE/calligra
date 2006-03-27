@@ -26,8 +26,10 @@
 #include <qlayout.h>
 #include <qlabel.h>
 #include <qcheckbox.h>
-#include <qbuttongroup.h>
-#include <qwhatsthis.h>
+#include <q3buttongroup.h>
+#include <q3whatsthis.h>
+//Added by qt3to4:
+#include <Q3GridLayout>
 
 #include "kchart_params.h"
 
@@ -38,7 +40,7 @@ KChartLine3dConfigPage::KChartLine3dConfigPage( KChartParams* params,
                                                           QWidget* parent ) :
     QWidget( parent ),_params( params )
 {
-  QGridLayout *grid1 = new QGridLayout(this,8,3,KDialog::marginHint(), KDialog::spacingHint());
+  Q3GridLayout *grid1 = new Q3GridLayout(this,8,3,KDialog::marginHint(), KDialog::spacingHint());
 
 #if 0
   // The 3D line on/off button.
@@ -53,11 +55,11 @@ KChartLine3dConfigPage::KChartLine3dConfigPage( KChartParams* params,
   QLabel *tmpLabel = new QLabel( i18n( "Line width:" ), this );
   grid1->addWidget(tmpLabel,2,0);
   lineWidth=new KIntNumInput(0, this, 10);
-  QWhatsThis::add(lineWidth, i18n("You can set here the line width for your chart. Default is 1."));
+  Q3WhatsThis::add(lineWidth, i18n("You can set here the line width for your chart. Default is 1."));
   grid1->addWidget(lineWidth,2,1);
 
   lineMarkers = new QCheckBox( i18n( "Line markers" ), this );
-  QWhatsThis::add(lineMarkers, i18n("Check this option if you want to add dots on your chart as markers."));
+  Q3WhatsThis::add(lineMarkers, i18n("Check this option if you want to add dots on your chart as markers."));
   grid1->addWidget(lineMarkers, 3, 0);
 
 #if 0

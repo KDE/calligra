@@ -22,7 +22,9 @@
 
 #include <qobject.h>
 #include <qmap.h>
-#include <qptrstack.h>
+#include <q3ptrstack.h>
+//Added by qt3to4:
+#include <Q3CString>
 #include <koffice_export.h>
 class QIODevice;
 class KoFilterChain;
@@ -80,7 +82,7 @@ public:
      * @return The error status, see the @ref #ConversionStatus enum.
      *         KoFilter::OK means that everything is alright.
      */
-    virtual ConversionStatus convert( const QCString& from, const QCString& to ) = 0;
+    virtual ConversionStatus convert( const Q3CString& from, const Q3CString& to ) = 0;
 
 signals:
     /**
@@ -197,7 +199,7 @@ protected:
      * @return The number of the part (can be used to refer to the part from
      *         within the embedding filter).
      */
-    int embedPart( const QCString& from, QCString& to,
+    int embedPart( const Q3CString& from, Q3CString& to,
                    KoFilter::ConversionStatus& status,
                    const QString& key = QString::null );
 
@@ -211,7 +213,7 @@ protected:
      * @param key The key we use to store reference/mimetype of your new part
      * @param mimeType The mimetype of the part you're about to embed
      */
-    void startInternalEmbedding( const QString& key, const QCString& mimeType );
+    void startInternalEmbedding( const QString& key, const Q3CString& mimeType );
 
     /**
      * This method signals the end of an internal embedding session.
@@ -240,7 +242,7 @@ protected:
      * @return The mimetype, might be empty if the part matching
      *         the given key doesn't exist.
      */
-    QCString internalPartMimeType( const QString& key ) const;
+    Q3CString internalPartMimeType( const QString& key ) const;
 
 private:
     /**
@@ -250,11 +252,11 @@ private:
      */
     struct PartReference
     {
-        PartReference( int index = -1, const QCString& mimeType = "" );
+        PartReference( int index = -1, const Q3CString& mimeType = "" );
         bool isValid() const;
 
         int m_index;
-        QCString m_mimeType;
+        Q3CString m_mimeType;
     };
 
     /**
@@ -306,7 +308,7 @@ private:
      * A stack which keeps track of the current part references.
      * We push one PartState structure for every embedding level.
      */
-    QPtrStack<PartState> m_partStack;
+    Q3PtrStack<PartState> m_partStack;
 
     class Private;
     Private* d;

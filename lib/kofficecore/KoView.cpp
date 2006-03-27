@@ -34,6 +34,12 @@
 #include <kstatusbar.h>
 #include <kapplication.h>
 #include <qtimer.h>
+//Added by qt3to4:
+#include <Q3PtrList>
+#include <QEvent>
+#include <Q3ValueList>
+#include <QMouseEvent>
+#include <QCustomEvent>
 
 class KoViewPrivate
 {
@@ -53,10 +59,10 @@ public:
   {
   }
 
-  QGuardedPtr<KoDocument> m_doc; // our KoDocument
-  QGuardedPtr<KParts::PartManager> m_manager;
+  QPointer<KoDocument> m_doc; // our KoDocument
+  QPointer<KParts::PartManager> m_manager;
   double m_zoom;
-  QPtrList<KoViewChild> m_children;
+  Q3PtrList<KoViewChild> m_children;
   QWidget *m_tempActiveWidget;
   KoViewIface *m_dcopObject;
   bool m_registered;  // are we registered at the part manager?
@@ -102,7 +108,7 @@ public:
       bool m_permanent;
       bool m_visible;  // true when the item has been added to the statusbar
   };
-  QValueList<StatusBarItem> m_statusBarItems; // Our statusbar items
+  Q3ValueList<StatusBarItem> m_statusBarItems; // Our statusbar items
   bool m_inOperation; //in the middle of an operation (no screen refreshing)?
 };
 
@@ -116,7 +122,7 @@ KoView::KoView( KoDocument *document, QWidget *parent, const char *name )
   d->m_doc = document;
   KParts::PartBase::setPartObject( this );
 
-  setFocusPolicy( StrongFocus );
+  setFocusPolicy( Qt::StrongFocus );
 
   setMouseTracking( true );
 
@@ -341,7 +347,7 @@ void KoView::partActivateEvent( KParts::PartActivateEvent *event )
         KoViewChild *viewChild = new KoViewChild( child, this );
         d->m_children.append( viewChild );
 
-        QApplication::setOverrideCursor(waitCursor);
+        QApplication::setOverrideCursor(Qt::waitCursor);
         // This is the long operation (due to toolbar layout stuff)
         d->m_manager->setActivePart( child->document(), viewChild->frame()->view() );
         QApplication::restoreOverrideCursor();
@@ -406,7 +412,7 @@ void KoView::showAllStatusBarItems( bool show )
     KStatusBar * sb = statusBar();
     if ( !sb )
         return;
-    QValueListIterator<KoViewPrivate::StatusBarItem> it = d->m_statusBarItems.begin();
+    Q3ValueListIterator<KoViewPrivate::StatusBarItem> it = d->m_statusBarItems.begin();
     for ( ; it != d->m_statusBarItems.end() ; ++it )
         if ( show )
             (*it).ensureItemShown( sb );
@@ -418,7 +424,7 @@ void KoView::addStatusBarItem( QWidget * widget, int stretch, bool permanent )
 {
     KoViewPrivate::StatusBarItem item( widget, stretch, permanent );
     d->m_statusBarItems.append(item);
-    QValueListIterator<KoViewPrivate::StatusBarItem> it = d->m_statusBarItems.fromLast();
+    Q3ValueListIterator<KoViewPrivate::StatusBarItem> it = d->m_statusBarItems.fromLast();
     KStatusBar * sb = statusBar();
     Q_ASSERT(sb);
     if (sb)
@@ -428,7 +434,7 @@ void KoView::addStatusBarItem( QWidget * widget, int stretch, bool permanent )
 void KoView::removeStatusBarItem( QWidget * widget )
 {
     KStatusBar * sb = statusBar();
-    QValueListIterator<KoViewPrivate::StatusBarItem> it = d->m_statusBarItems.begin();
+    Q3ValueListIterator<KoViewPrivate::StatusBarItem> it = d->m_statusBarItems.begin();
     for ( ; it != d->m_statusBarItems.end() ; ++it )
         if ( (*it).widget() == widget )
         {
@@ -484,7 +490,7 @@ void KoView::paintEverything( QPainter &painter, const QRect &rect, bool transpa
 
 KoViewChild *KoView::child( KoView *view )
 {
-  QPtrListIterator<KoViewChild> it( d->m_children );
+  Q3PtrListIterator<KoViewChild> it( d->m_children );
   for (; it.current(); ++it )
     if ( it.current()->frame()->view() == view )
       return it.current();
@@ -494,7 +500,7 @@ KoViewChild *KoView::child( KoView *view )
 
 KoViewChild *KoView::child( KoDocument *doc )
 {
-  QPtrListIterator<KoViewChild> it( d->m_children );
+  Q3PtrListIterator<KoViewChild> it( d->m_children );
   for (; it.current(); ++it )
     if ( it.current()->documentChild()->document() == doc )
       return it.current();
@@ -502,9 +508,9 @@ KoViewChild *KoView::child( KoDocument *doc )
   return 0L;
 }
 
-QWMatrix KoView::matrix() const
+QMatrix KoView::matrix() const
 {
-  QWMatrix m;
+  QMatrix m;
   m.scale( zoom(), zoom() );
   //m.translate(  canvasXOffset() ,  canvasYOffset() );
   return m;
@@ -542,11 +548,11 @@ void KoView::slotChildActivated( bool a )
 
 
   d->m_tempActiveWidget = activeWidget;
-  QApplication::setOverrideCursor(waitCursor);
+  QApplication::setOverrideCursor(Qt::waitCursor);
   d->m_manager->setActivePart( 0L );
 
-  QGuardedPtr<KoDocumentChild> docChild = ch->documentChild();
-  QGuardedPtr<KoFrame> chFrame = ch->frame();
+  QPointer<KoDocumentChild> docChild = ch->documentChild();
+  QPointer<KoFrame> chFrame = ch->frame();
   if ( docChild && chFrame && chFrame->view() )
   {
     docChild->setContentsPos( chFrame->view()->canvasXOffset(),

@@ -5,6 +5,8 @@
 #include <qapplication.h>
 #include <qfile.h>
 #include <qdatetime.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 static const int numParagraphs = 30000;
 void speedTest()
@@ -12,10 +14,10 @@ void speedTest()
     QTime time;
     time.start();
     QString paragText = QString::fromUtf8( "This is the text of the paragraph. I'm including a euro sign to test encoding issues: €" );
-    QCString styleName = "Heading 1";
+    Q3CString styleName = "Heading 1";
 
     QFile out( QString::fromLatin1( "out5.xml" ) );
-    if ( out.open(IO_WriteOnly) )
+    if ( out.open(QIODevice::WriteOnly) )
     {
         KoXmlWriter writer( &out );
         writer.startDocument( "rootelem" );
@@ -108,10 +110,10 @@ int main( int argc, char** argv ) {
     TEST_END( "addManifestEntry", "<r>\n <manifest:file-entry manifest:media-type=\"mime/type\" manifest:full-path=\"foo/bar/blah\"/>\n</r>\n" );
 
     int sz = 15000;  // must be more than KoXmlWriter::s_escapeBufferLen
-    QCString x( sz );
+    Q3CString x( sz );
     x.fill( 'x', sz );
     x += '&';
-    QCString expected = "<r a=\"";
+    Q3CString expected = "<r a=\"";
     expected += x + "amp;\"/>\n";
     TEST_BEGIN( 0, 0 );
     writer.addAttribute( "a", x );

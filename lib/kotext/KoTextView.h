@@ -24,6 +24,10 @@
 #include <qpoint.h>
 #include <qcolor.h>
 #include <qfont.h>
+//Added by qt3to4:
+#include <QMouseEvent>
+#include <QKeyEvent>
+#include <Q3PtrList>
 #include <KoRuler.h> // for KoTabulatorList
 #include <KoTextObject.h> // for KoTextView
 #include <koffice_export.h>
@@ -104,7 +108,7 @@ public:
     KCommand * setLineSpacingCommand( double spacing, KoParagLayout::SpacingType _type );
     KCommand * setBordersCommand( const KoBorder& leftBorder, const KoBorder& rightBorder, const KoBorder& bottomBorder, const KoBorder& topBorder );
     KCommand * setJoinBordersCommand( bool join );
-    KCommand * setMarginCommand( QStyleSheetItem::Margin m, double margin );
+    KCommand * setMarginCommand( Q3StyleSheetItem::Margin m, double margin );
     KCommand * setTabListCommand( const KoTabulatorList & tabList );
     KCommand * setBackgroundColorCommand( const QColor & color );
     void applyStyle( const KoParagStyle * style );
@@ -133,7 +137,7 @@ public:
     QString wordUnderCursor( const KoTextCursor& cursor );
 
     /** Return the list of actions from data-tools. Used to populate a RMB popupmenu usually. */
-    QPtrList<KAction> dataToolActionList( KInstance * instance, const QString& word, bool & _singleWord );
+    Q3PtrList<KAction> dataToolActionList( KInstance * instance, const QString& word, bool & _singleWord );
 
     void insertSoftHyphen();
     void insertLineBreak();

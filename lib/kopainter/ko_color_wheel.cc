@@ -21,6 +21,10 @@
 #include <qpoint.h>
 #include <qpainter.h>
 #include <qimage.h>
+//Added by qt3to4:
+#include <QPixmap>
+#include <QMouseEvent>
+#include <QResizeEvent>
 
 #include <kdebug.h>
 #include "ko_color_wheel.h"

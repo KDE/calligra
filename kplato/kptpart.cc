@@ -119,7 +119,7 @@ bool Part::initDoc(InitDocFlags flags, QWidget* parentWidget) {
         if ( !result )
             showLoadingErrorDialog();
     } else if (ret == KoTemplateChooseDia::File) {
-        KURL url(templateDoc);
+        KUrl url(templateDoc);
         kdDebug() << "Part::initDoc opening URL " << url.prettyURL() <<endl;
         result = openURL(url);
     } else if (ret == KoTemplateChooseDia::Empty) {

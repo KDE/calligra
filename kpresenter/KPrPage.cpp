@@ -1554,7 +1554,7 @@ void KPrPage::recalcPageNum()
     }
 }
 
-void KPrPage::changePicture( const KURL & url, QWidget *parent )
+void KPrPage::changePicture( const KUrl & url, QWidget *parent )
 {
     // filename has been chosen in KPrView with a filedialog,
     // so we know it exists

@@ -22,10 +22,13 @@
 
 #include <qstring.h>
 #include <qdatetime.h>
-#include <qasciidict.h>
-#include <qptrlist.h>
+#include <q3asciidict.h>
+#include <q3ptrlist.h>
 #include <qmap.h>
 #include <qobject.h>
+//Added by qt3to4:
+#include <Q3CString>
+#include <Q3ValueList>
 #include <kaction.h>
 #include "KoRichText.h"
 #include <qvariant.h>
@@ -127,17 +130,17 @@ public:
      * Return a key describing this format.
      * Used for the flyweight pattern in KoVariableFormatCollection
      */
-    virtual QCString key() const = 0;
+    virtual Q3CString key() const = 0;
     /**
      * @return the key for a given set of properties.
      * Use this key to lookup the format in the "variable format" collection.
      * @param props properties of this format, e.g. DD/MM/YYYY for a date format.
      */
-    virtual QCString getKey( const QString& props ) const = 0;
+    virtual Q3CString getKey( const QString& props ) const = 0;
     /**
      * Create a format from this key.
      */
-    virtual void load( const QCString &key ) = 0;
+    virtual void load( const Q3CString &key ) = 0;
     /**
      * Use this format to convert a piece of data into a string.
      */
@@ -171,9 +174,9 @@ class KOTEXT_EXPORT KoVariableDateFormat : public KoVariableFormat
 public:
     KoVariableDateFormat();
     virtual QString convert(const QVariant& data ) const;
-    virtual QCString key() const;
-    virtual QCString getKey( const QString& props ) const;
-    virtual void load( const QCString &key );
+    virtual Q3CString key() const;
+    virtual Q3CString getKey( const QString& props ) const;
+    virtual void load( const Q3CString &key );
 
     /// Set the format string (e.g. DDMMYYYY)
     virtual void setFormatProperties( const QString& props ) {
@@ -203,9 +206,9 @@ class KOTEXT_EXPORT KoVariableTimeFormat : public KoVariableFormat
 public:
     KoVariableTimeFormat();
     virtual QString convert(const QVariant& data ) const;
-    virtual QCString key() const;
-    virtual QCString getKey( const QString& props ) const;
-    virtual void load( const QCString & /*key*/ );
+    virtual Q3CString key() const;
+    virtual Q3CString getKey( const QString& props ) const;
+    virtual void load( const Q3CString & /*key*/ );
 
     /// Set the format string (e.g. hh:mm:ss)
     virtual void setFormatProperties( const QString& props ) {
@@ -236,9 +239,9 @@ class KoVariableStringFormat : public KoVariableFormat
 public:
     KoVariableStringFormat() : KoVariableFormat() {}
     virtual QString convert(const QVariant& data ) const;
-    virtual QCString key() const;
-    virtual QCString getKey( const QString& props ) const;
-    virtual void load( const QCString & /*key*/ ) {}
+    virtual Q3CString key() const;
+    virtual Q3CString getKey( const QString& props ) const;
+    virtual void load( const Q3CString & /*key*/ ) {}
 };
 
 
@@ -247,9 +250,9 @@ class KOTEXT_EXPORT KoVariableNumberFormat : public KoVariableFormat
 public:
     KoVariableNumberFormat() : KoVariableFormat() {}
     virtual QString convert(const QVariant& data ) const;
-    virtual QCString key() const;
-    virtual QCString getKey( const QString& props ) const;
-    virtual void load( const QCString & /*key*/ ) {}
+    virtual Q3CString key() const;
+    virtual Q3CString getKey( const QString& props ) const;
+    virtual void load( const Q3CString & /*key*/ ) {}
 };
 
 
@@ -272,15 +275,15 @@ public:
     /**
      * Find or create the format for the given @p key
      */
-    KoVariableFormat *format( const QCString &key );
+    KoVariableFormat *format( const Q3CString &key );
 
     // TODO Refcounting and removing unused formats
     // Not critical, that we don't delete unused formats until closing the doc...
 protected:
-    KoVariableFormat *createFormat( const QCString &key );
+    KoVariableFormat *createFormat( const Q3CString &key );
 
 private:
-    QAsciiDict<KoVariableFormat> m_dict;
+    Q3AsciiDict<KoVariableFormat> m_dict;
 };
 
 class KoVariable;
@@ -299,13 +302,13 @@ public:
     ~KoVariableCollection();
     void registerVariable( KoVariable *var );
     void unregisterVariable( KoVariable *var );
-    QValueList<KoVariable *> recalcVariables(int type);
+    Q3ValueList<KoVariable *> recalcVariables(int type);
 
     // For custom variables
     void setVariableValue( const QString &name, const QString &value );
     QString getVariableValue( const QString &name ) const;
 
-    const QPtrList<KoVariable>& getVariables() const {
+    const Q3PtrList<KoVariable>& getVariables() const {
         return variables;
     }
     void clear();
@@ -326,7 +329,7 @@ public:
     KoVariable *selectedVariable()const {return m_varSelected;}
 
     /// List of KActions to put into the popupmenu on a variable
-    QPtrList<KAction> popupActionList() const;
+    Q3PtrList<KAction> popupActionList() const;
 
  protected slots:
     // This is here because variables and formats are not QObjects
@@ -337,7 +340,7 @@ public:
     //typedef QMap<KAction *, int> VariableSubTextMap;
     //VariableSubTextMap m_variableSubTextMap;
 
-    QPtrList<KoVariable> variables;
+    Q3PtrList<KoVariable> variables;
     QMap< QString, QString > varValues; // for custom variables
     KoVariableSettings *m_variableSettings;
     KoVariable *m_varSelected;
@@ -485,11 +488,11 @@ public:
     /**
      * Ask the user and return the date format string with prefix "DATE"
      */
-    static QCString formatStr( int & correct );
+    static Q3CString formatStr( int & correct );
     /**
      * Return the default date format for old file.
      */
-    static QCString defaultFormat();
+    static Q3CString defaultFormat();
 
 protected:
     short int m_subtype;
@@ -530,11 +533,11 @@ public:
     /**
      * Returns the time format string with prefix "TIME"
      */
-    static QCString formatStr(int & _correct);
+    static Q3CString formatStr(int & _correct);
     /**
      * Return the default date format for old file.
      */
-    static QCString defaultFormat();
+    static Q3CString defaultFormat();
 
 protected:
     short int m_subtype;

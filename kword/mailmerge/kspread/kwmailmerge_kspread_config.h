@@ -26,7 +26,7 @@
 #include "kwmailmerge_kspread.h"
 
 class KComboBox;
-class KURLRequester;
+class KUrlRequester;
 
 class KWMailMergeKSpread;
 
@@ -52,7 +52,7 @@ class KWMailMergeKSpreadConfig: public KDialogBase
     KWMailMergeKSpread *_object;
     KSpread::Doc *_document;
 
-    KURLRequester *_urlRequester;
+    KUrlRequester *_urlRequester;
     KComboBox *_pageNumber;
 
     int _initialPage;

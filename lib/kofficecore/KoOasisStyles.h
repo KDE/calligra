@@ -20,8 +20,8 @@
 #define KOOASISSTYLES_H
 
 #include <qdom.h>
-#include <qdict.h>
-#include <qvaluevector.h>
+#include <q3dict.h>
+#include <q3valuevector.h>
 #include <qmap.h>
 #include <koffice_export.h>
 
@@ -69,7 +69,7 @@ public:
 
     /// @return the style:styles that are "user styles", i.e. those from office:styles
     /// findStyle() is used for lookup. userStyles() is used to load all user styles upfront.
-    QValueVector<QDomElement> userStyles() const;
+    Q3ValueVector<QDomElement> userStyles() const;
 
     /// @return the default style for a given family ("graphic","paragraph","table" etc.)
     /// Returns 0 if no default style for this family is available
@@ -79,16 +79,16 @@ public:
     const QDomElement& officeStyle() const { return m_officeStyle; }
 
     /// @return all list styles ("text:list-style" elements), hashed by name
-    const QDict<QDomElement>& listStyles() const { return m_listStyles; }
+    const Q3Dict<QDomElement>& listStyles() const { return m_listStyles; }
 
     /// @return master pages ("style:master-page" elements), hashed by name
-    const QDict<QDomElement>& masterPages() const { return m_masterPages; }
+    const Q3Dict<QDomElement>& masterPages() const { return m_masterPages; }
 
     /// @return draw styles, hashed by name
-    const QDict<QDomElement>& drawStyles() const { return m_drawStyles; }
+    const Q3Dict<QDomElement>& drawStyles() const { return m_drawStyles; }
 
     /// @return all styles ("style:style" elements) for a given family, hashed by name
-    const QDict<QDomElement>& styles(const QString& family) const;
+    const Q3Dict<QDomElement>& styles(const QString& family) const;
 
     /// Prefix and suffix are always included into formatStr. Having them as separate fields simply
     /// allows to extract them from formatStr, to display them in separate widgets.
@@ -135,14 +135,14 @@ private:
     KoOasisStyles& operator=( const KoOasisStyles & ); // forbidden
 
 private:
-    QDict<QDomElement>   m_styles; // page-layout, font-decl etc.
-    QDict<QDomElement>   m_defaultStyle;
+    Q3Dict<QDomElement>   m_styles; // page-layout, font-decl etc.
+    Q3Dict<QDomElement>   m_defaultStyle;
     QDomElement m_officeStyle;
 
-    QDict<QDomElement>   m_masterPages;
-    QDict<QDomElement>   m_listStyles;
+    Q3Dict<QDomElement>   m_masterPages;
+    Q3Dict<QDomElement>   m_listStyles;
 
-    QDict<QDomElement>   m_drawStyles;
+    Q3Dict<QDomElement>   m_drawStyles;
     DataFormatsMap m_dataFormats;
 
     class Private;

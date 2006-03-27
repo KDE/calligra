@@ -20,7 +20,7 @@
 #define kostyle_h
 
 #include <qdom.h>
-#include <qvaluevector.h>
+#include <q3valuevector.h>
 #include "KoParagStyle.h"
 #include "KoUserStyleCollection.h"
 
@@ -100,7 +100,7 @@ public:
     void saveOasisOutlineStyles( KoXmlWriter& writer ) const;
 
     /// @return the list of outline styles
-    QValueVector<KoParagStyle *> outlineStyles() const;
+    Q3ValueVector<KoParagStyle *> outlineStyles() const;
 
     /// @return the [first] outline style for a given level. Can be 0 if not found.
     KoParagStyle* outlineStyleForLevel( int level ) const;

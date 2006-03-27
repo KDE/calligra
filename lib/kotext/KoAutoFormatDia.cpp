@@ -29,13 +29,19 @@
 #include <kstandarddirs.h>
 
 #include <qlayout.h>
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
 #include <qcheckbox.h>
 #include <qpushbutton.h>
 #include <qtooltip.h>
 #include <qcombobox.h>
 #include <qdir.h>
 #include <qapplication.h>
+//Added by qt3to4:
+#include <Q3GridLayout>
+#include <QKeyEvent>
+#include <QLabel>
+#include <Q3HBoxLayout>
+#include <Q3VBoxLayout>
 
 KoAutoFormatLineEdit::KoAutoFormatLineEdit ( QWidget * parent, const char * name )
     : QLineEdit(parent,name)
@@ -44,8 +50,8 @@ KoAutoFormatLineEdit::KoAutoFormatLineEdit ( QWidget * parent, const char * name
 
 void KoAutoFormatLineEdit::keyPressEvent ( QKeyEvent *ke )
 {
-    if( ke->key()  == QKeyEvent::Key_Return ||
-        ke->key()  == QKeyEvent::Key_Enter )
+    if( ke->key()  == Qt::Key_Return ||
+        ke->key()  == Qt::Key_Enter )
     {
         emit keyReturnPressed();
         return;
@@ -63,7 +69,7 @@ KoAutoFormatExceptionWidget::KoAutoFormatExceptionWidget(QWidget *parent, const 
 {
     m_bAbbreviation=_abreviation;
     m_listException=_list;
-    QGridLayout *grid = new QGridLayout(this, 4, 2, 0, KDialog::spacingHint());
+    Q3GridLayout *grid = new Q3GridLayout(this, 4, 2, 0, KDialog::spacingHint());
 
     QLabel *lab=new QLabel(name,this);
     grid->addMultiCellWidget(lab,0,0,0,1);
@@ -85,7 +91,7 @@ KoAutoFormatExceptionWidget::KoAutoFormatExceptionWidget(QWidget *parent, const 
     connect(pbRemoveException, SIGNAL(clicked()),SLOT(slotRemoveException()));
     grid->addWidget(pbRemoveException,2,1,Qt::AlignTop);
 
-    exceptionList=new QListBox(this);
+    exceptionList=new Q3ListBox(this);
     exceptionList->insertStringList(m_listException);
     exceptionList->sort();
     grid->addWidget(exceptionList,2,0);
@@ -220,14 +226,14 @@ void KoAutoFormatDia::slotResetConf()
 void KoAutoFormatDia::setupTab1()
 {
     tab1 = addPage( i18n( "Simple Autocorrection" ) );
-    QVBoxLayout *vbox = new QVBoxLayout(tab1, 0, KDialog::spacingHint());
+    Q3VBoxLayout *vbox = new Q3VBoxLayout(tab1, 0, KDialog::spacingHint());
 
     cbUpperCase = new QCheckBox( tab1 );
     cbUpperCase->setText( i18n(
             "Convert &first letter of a sentence automatically to uppercase\n"
             "(e.g. \"my house. in this town\" to \"my house. In this town\")"
             ) );
-    QWhatsThis::add( cbUpperCase, i18n(
+    Q3WhatsThis::add( cbUpperCase, i18n(
             "Detect when a new sentence is started and always ensure that"
             " the first character is an uppercase character."));
 
@@ -238,7 +244,7 @@ void KoAutoFormatDia::setupTab1()
     cbUpperUpper->setText( i18n(
             "Convert &two uppercase characters to one uppercase and one"
             " lowercase character\n (e.g. PErfect to Perfect)" ) );
-    QWhatsThis::add( cbUpperUpper, i18n(
+    Q3WhatsThis::add( cbUpperUpper, i18n(
             "All words are checked for the common mistake of holding the "
             "shift key down a bit too long. If some words must have two "
             "uppercase characters, then those exceptions should be added in "
@@ -248,7 +254,7 @@ void KoAutoFormatDia::setupTab1()
 
     cbDetectUrl=new QCheckBox( tab1 );
     cbDetectUrl->setText( i18n( "Autoformat &URLs" ) );
-    QWhatsThis::add( cbDetectUrl, i18n(
+    Q3WhatsThis::add( cbDetectUrl, i18n(
             "Detect when a URL (Uniform Resource Locator) is typed and "
             "provide formatting that matches the way an Internet browser "
             "would show a URL."));
@@ -257,7 +263,7 @@ void KoAutoFormatDia::setupTab1()
 
     cbIgnoreDoubleSpace=new QCheckBox( tab1 );
     cbIgnoreDoubleSpace->setText( i18n( "&Suppress double spaces" ) );
-    QWhatsThis::add( cbIgnoreDoubleSpace, i18n(
+    Q3WhatsThis::add( cbIgnoreDoubleSpace, i18n(
             "Make sure that more than one space cannot be typed, as this is a "
             "common mistake which is quite hard to find in formatted text."));
 
@@ -266,7 +272,7 @@ void KoAutoFormatDia::setupTab1()
     cbRemoveSpaceBeginEndLine=new QCheckBox( tab1 );
     cbRemoveSpaceBeginEndLine->setText( i18n(
             "R&emove spaces at the beginning and end of paragraphs" ) );
-    QWhatsThis::add( cbRemoveSpaceBeginEndLine, i18n(
+    Q3WhatsThis::add( cbRemoveSpaceBeginEndLine, i18n(
             "Keep correct formatting and indenting of sentences by "
             "automatically removing spaces typed at the beginning and end of "
             "a paragraph."));
@@ -276,7 +282,7 @@ void KoAutoFormatDia::setupTab1()
     cbAutoChangeFormat=new QCheckBox( tab1 );
     cbAutoChangeFormat->setText( i18n(
             "Automatically do &bold and underline formatting") );
-    QWhatsThis::add( cbAutoChangeFormat, i18n(
+    Q3WhatsThis::add( cbAutoChangeFormat, i18n(
             "When you use _underline_ or *bold*, the text between the "
             "underscores or asterisks will be converted to underlined or "
             "bold text.") );
@@ -287,7 +293,7 @@ void KoAutoFormatDia::setupTab1()
     cbAutoReplaceNumber->setText( i18n(
             "We add the 1/2 char at the %1", "Re&place 1/2... with %1..." )
             .arg( QString( "½" ) ) );
-    QWhatsThis::add( cbAutoReplaceNumber, i18n(
+    Q3WhatsThis::add( cbAutoReplaceNumber, i18n(
             "Most standard fraction notations will be converted when available"
             ) );
 
@@ -296,7 +302,7 @@ void KoAutoFormatDia::setupTab1()
     cbUseNumberStyle=new QCheckBox( tab1 );
     cbUseNumberStyle->setText( i18n(
             "Use &autonumbering for numbered paragraphs" ) );
-    QWhatsThis::add( cbUseNumberStyle, i18n(
+    Q3WhatsThis::add( cbUseNumberStyle, i18n(
             "When typing '1)' or similar in front of a paragraph, "
             "automatically convert the paragraph to use that numbering style. "
             "This has the advantage that further paragraphs will also be "
@@ -316,7 +322,7 @@ void KoAutoFormatDia::setupTab1()
     cbUseBulletStyle=new QCheckBox( tab1 );
     cbUseBulletStyle->setText( i18n(
             "Use l&ist-formatting for bulleted paragraphs" ) );
-    QWhatsThis::add( cbUseBulletStyle, i18n(
+    Q3WhatsThis::add( cbUseBulletStyle, i18n(
             "When typing '*' or '-' in front of a paragraph, automatically "
             "convert the paragraph to use that list-style. Using a list-style "
             "formatting means that a correct bullet is used to draw the list."
@@ -326,7 +332,7 @@ void KoAutoFormatDia::setupTab1()
             SLOT( slotBulletStyleToggled( bool ) ) );
 
     vbox->addWidget(cbUseBulletStyle);
-    QHBoxLayout *hbox = new QHBoxLayout();
+    Q3HBoxLayout *hbox = new Q3HBoxLayout();
 
     hbox->addSpacing( 20 );
     hbox->setSpacing(KDialog::spacingHint());
@@ -378,7 +384,7 @@ void KoAutoFormatDia::setupTab2()
 {
     tab2 = addPage( i18n( "Custom Quotes" ) );
 
-    QVBoxLayout *vbox = new QVBoxLayout(tab2, 0, KDialog::spacingHint());
+    Q3VBoxLayout *vbox = new Q3VBoxLayout(tab2, 0, KDialog::spacingHint());
 
     cbTypographicDoubleQuotes = new QCheckBox( tab2 );
     cbTypographicDoubleQuotes->setText( i18n(
@@ -389,7 +395,7 @@ void KoAutoFormatDia::setupTab2()
 
     vbox->addWidget( cbTypographicDoubleQuotes );
 
-    QHBoxLayout *hbox = new QHBoxLayout( );
+    Q3HBoxLayout *hbox = new Q3HBoxLayout( );
     hbox->addSpacing( 20 );
 
     pbDoubleQuote1 = new QPushButton( tab2 );
@@ -430,7 +436,7 @@ void KoAutoFormatDia::setupTab2()
 
     vbox->addWidget( cbTypographicSimpleQuotes );
 
-    hbox = new QHBoxLayout( );
+    hbox = new Q3HBoxLayout( );
     hbox->addSpacing( 20 );
 
     pbSimpleQuote1 = new QPushButton( tab2 );
@@ -488,7 +494,7 @@ void KoAutoFormatDia::setupTab3()
 
     QLabel *lblFind, *lblReplace;
 
-    QGridLayout *grid = new QGridLayout( tab3, 11, 7, 0, KDialog::spacingHint() );
+    Q3GridLayout *grid = new Q3GridLayout( tab3, 11, 7, 0, KDialog::spacingHint() );
 
     autoFormatLanguage = new QComboBox(tab3);
 
@@ -590,9 +596,9 @@ void KoAutoFormatDia::setupTab3()
     m_pListView->setAllColumnsShowFocus( true );
     grid->addMultiCellWidget( m_pListView, 4, 10, 0, 5 );
 
-    connect(m_pListView, SIGNAL(doubleClicked ( QListViewItem * )),
+    connect(m_pListView, SIGNAL(doubleClicked ( Q3ListViewItem * )),
              SLOT(slotChangeTextFormatEntry()) );
-    connect(m_pListView, SIGNAL(clicked ( QListViewItem * ) ),
+    connect(m_pListView, SIGNAL(clicked ( Q3ListViewItem * ) ),
              SLOT(slotEditEntry()) );
 
     pbRemove = new QPushButton( i18n( "Remove" ), tab3 );
@@ -652,10 +658,10 @@ void KoAutoFormatDia::initTab3()
     cbAutoCorrectionWithFormat->setChecked( m_autoFormat.getConfigCorrectionWithFormat());
     m_pListView->clear();
 
-    QDictIterator<KoAutoFormatEntry> it( m_docAutoFormat->getAutoFormatEntries());
+    Q3DictIterator<KoAutoFormatEntry> it( m_docAutoFormat->getAutoFormatEntries());
     for( ; it.current(); ++it )
     {
-        ( void )new QListViewItem( m_pListView, it.currentKey(), it.current()->replace() );
+        ( void )new Q3ListViewItem( m_pListView, it.currentKey(), it.current()->replace() );
     }
 }
 
@@ -708,7 +714,7 @@ void KoAutoFormatDia::changeAutoformatLanguage(const QString & text)
 void KoAutoFormatDia::setupTab4()
 {
     tab4 = addPage( i18n( "Exceptions" ) );
-    QVBoxLayout *vbox = new QVBoxLayout(tab4, 0, KDialog::spacingHint());
+    Q3VBoxLayout *vbox = new Q3VBoxLayout(tab4, 0, KDialog::spacingHint());
 
     abbreviation=new KoAutoFormatExceptionWidget(tab4,
             i18n("Do not treat as the end of a sentence:"),
@@ -850,10 +856,10 @@ void KoAutoFormatDia::slotfind2( const QString & )
 void KoAutoFormatDia::refreshEntryList()
 {
     m_pListView->clear();
-    QDictIterator<KoAutoFormatEntry> it( m_docAutoFormat->getAutoFormatEntries());
+    Q3DictIterator<KoAutoFormatEntry> it( m_docAutoFormat->getAutoFormatEntries());
     for( ; it.current(); ++it )
     {
-        ( void )new QListViewItem( m_pListView, it.currentKey(), it.current()->replace() );
+        ( void )new Q3ListViewItem( m_pListView, it.currentKey(), it.current()->replace() );
     }
     m_pListView->setCurrentItem(m_pListView->firstChild ());
     bool state = !(m_replace->text().isEmpty()) && !(m_find->text().isEmpty());
@@ -956,7 +962,7 @@ void KoAutoFormatDia::chooseSpecialChar2()
 }
 
 
-void KoAutoFormatDia::slotItemRenamed(QListViewItem *, const QString & , int )
+void KoAutoFormatDia::slotItemRenamed(Q3ListViewItem *, const QString & , int )
 {
     // Wow. This need a redesign (we don't have the old key anymore at this point !)
     // -> inherit QListViewItem and store the KoAutoFormatEntry pointer in it.

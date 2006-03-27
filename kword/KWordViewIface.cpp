@@ -27,6 +27,8 @@
 #include "KWFrameSet.h"
 
 #include <dcopclient.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 KWordViewIface::KWordViewIface( KWView *view_ )
     : KoViewIface( view_ )
@@ -242,7 +244,7 @@ void KWordViewIface::tableDeleteRow()
 
 int KWordViewIface::tableDeleteRow(uint row)
 {
-    QValueList<uint> list;
+    Q3ValueList<uint> list;
     list.append(row);
     return view->tableDeleteRow(list);
 }
@@ -254,7 +256,7 @@ void KWordViewIface::tableDeleteCol()
 
 int KWordViewIface::tableDeleteCol(uint col)
 {
-    QValueList<uint> list;
+    Q3ValueList<uint> list;
     list.append(col);
     return view->tableDeleteCol(list);
 }
@@ -364,7 +366,7 @@ void KWordViewIface::importStyle()
 void KWordViewIface::insertFile(const QString & path)
 {
 
-    KURL url;
+    KUrl url;
     url.setPath( path );
     view->insertFile( url );
 }

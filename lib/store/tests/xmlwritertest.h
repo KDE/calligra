@@ -11,9 +11,9 @@
 
 #define TEST_BEGIN(publicId,systemId) \
     { \
-        QCString cstr; \
+        Q3CString cstr; \
         QBuffer buffer( cstr ); \
-        buffer.open( IO_WriteOnly ); \
+        buffer.open( QIODevice::WriteOnly ); \
         { \
             KoXmlWriter writer( &buffer ); \
             writer.startDocument( "r", publicId, systemId ); \
@@ -24,14 +24,14 @@
             writer.endDocument(); \
         } \
         buffer.putch( '\0' ); /*null-terminate*/ \
-        QCString expectedFull( "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" ); \
+        Q3CString expectedFull( "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" ); \
         expectedFull += expected; \
         if ( cstr == expectedFull ) \
             qDebug( "%s OK", testname ); \
         else { \
             qDebug( "%s FAILED!", testname ); \
-            QCString s1 = cstr; \
-            QCString s2 = expectedFull; \
+            Q3CString s1 = cstr; \
+            Q3CString s2 = expectedFull; \
             if ( s1.length() != s2.length() ) \
                 qDebug( "got length %d, expected %d", s1.length(), s2.length() ); \
             s1.replace( QRegExp( QString::fromLatin1( "[x]{1000}" ) ), "[x]*1000" ); \

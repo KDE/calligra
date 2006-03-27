@@ -22,7 +22,7 @@ namespace KChart
 {
 
 KChartWizard::KChartWizard ( KChartPart* _chart, QWidget *parent, const char* name,
-                             bool modal, WFlags f ) :
+                             bool modal, Qt::WFlags f ) :
     KWizard( parent, name, modal, f ),
     m_chart( _chart )
 {
@@ -132,19 +132,19 @@ void KChartWizard::next()
     //if ( currentPage() == _charttypePage )
     //_chartSubtypePage->createChildren();
 
-    QWizard::next();
+    Q3Wizard::next();
 }
 
 void KChartWizard::accept()
 {
     emit finished();
-    QWizard::accept();
+    Q3Wizard::accept();
 }
 
 void KChartWizard::reject()
 {
     emit cancelled();
-    QWizard::reject();
+    Q3Wizard::reject();
 }
 
 void KChartWizard::setDataArea( const QString &area )

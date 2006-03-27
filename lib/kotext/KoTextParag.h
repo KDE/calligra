@@ -26,6 +26,9 @@
 
 #include "KoTextFormat.h"
 #include "KoRichText.h" // for KoTextString
+//Added by qt3to4:
+#include <Q3PtrList>
+#include <Q3MemArray>
 class KoTextFormatterBase;
 class KoTextParagLineStart;
 class KoTextString;
@@ -43,10 +46,10 @@ struct KoTextParagSelection
 };
 
 #if defined(Q_TEMPLATEDLL)
-// MOC_SKIP_BEGIN
+#ifndef Q_MOC_RUN
 template class QMap<int, KoTextParagSelection>;
 template class QMap<int, KoTextParagLineStart*>;
-// MOC_SKIP_END
+#endif
 #endif
 
 class KOTEXT_EXPORT KoTextParag
@@ -220,9 +223,9 @@ public:
     const KoParagLayout & paragLayout() { return m_layout; }
 
     // Margins
-    double margin( QStyleSheetItem::Margin m ) { return m_layout.margins[m]; }
+    double margin( Q3StyleSheetItem::Margin m ) { return m_layout.margins[m]; }
     const double * margins() const { return m_layout.margins; }
-    void setMargin( QStyleSheetItem::Margin m, double _i );
+    void setMargin( Q3StyleSheetItem::Margin m, double _i );
     void setMargins( const double * _i );
 
     /** Line spacing in pt if >=0, can also be one of the LS_* values */
@@ -347,12 +350,12 @@ protected:
 
     void drawParagString( QPainter &painter, const QString &str, int start, int len, int startX,
                           int lastY, int baseLine, int bw, int h, bool drawSelections,
-                          KoTextFormat *lastFormat, const QMemArray<int> &selectionStarts,
-                          const QMemArray<int> &selectionEnds, const QColorGroup &cg, bool rightToLeft, int line );
+                          KoTextFormat *lastFormat, const Q3MemArray<int> &selectionStarts,
+                          const Q3MemArray<int> &selectionEnds, const QColorGroup &cg, bool rightToLeft, int line );
     void drawParagStringInternal( QPainter &painter, const QString &s, int start, int len, int startX,
                                   int lastY, int baseLine, int bw, int h, bool drawSelections,
-                                  KoTextFormat *lastFormat, const QMemArray<int> &selectionStarts,
-                                  const QMemArray<int> &selectionEnds, const QColorGroup &cg, bool rightToLeft, int line, KoTextZoomHandler* zh, bool drawingShadow );
+                                  KoTextFormat *lastFormat, const Q3MemArray<int> &selectionStarts,
+                                  const Q3MemArray<int> &selectionEnds, const QColorGroup &cg, bool rightToLeft, int line, KoTextZoomHandler* zh, bool drawingShadow );
 
     /// Bitfield for drawFormattingChars's "whichFormattingChars" param
     enum { FormattingSpace = 1, FormattingBreak = 2, FormattingEndParag = 4, FormattingTabs = 8,
@@ -365,8 +368,8 @@ protected:
     virtual void drawFormattingChars( QPainter &painter, int start, int len,
                                       int lastY_pix, int baseLine_pix, int h_pix, // in pixels
                                       bool drawSelections,
-                                      KoTextFormat *format, const QMemArray<int> &selectionStarts,
-                                      const QMemArray<int> &selectionEnds, const QColorGroup &cg,
+                                      KoTextFormat *format, const Q3MemArray<int> &selectionStarts,
+                                      const Q3MemArray<int> &selectionEnds, const QColorGroup &cg,
                                       bool rightToLeft, int line, KoTextZoomHandler* zh,
                                       int whichFormattingChars );
 
@@ -382,7 +385,7 @@ private:
     /////// End of kotext-specific additions
 private:
     QMap<int, KoTextParagSelection> &selections() const;
-    QPtrList<KoTextCustomItem> &floatingItems() const;
+    Q3PtrList<KoTextCustomItem> &floatingItems() const;
     /// Returns the height of the biggest character in that line
     int heightForLineSpacing( int startChar, int lastChar ) const;
 
@@ -403,7 +406,7 @@ private:
     int m_wused;
     KoTextString *str;
     QMap<int, KoTextParagSelection> *mSelections;
-    QPtrList<KoTextCustomItem> *mFloatingItems;
+    Q3PtrList<KoTextCustomItem> *mFloatingItems;
     KoTextFormat *defFormat; // is this really used?
     int *tArray;
 

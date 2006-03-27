@@ -17,8 +17,11 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <qlistbox.h>
+#include <q3listbox.h>
 #include <qpainter.h>
+//Added by qt3to4:
+#include <Q3ValueList>
+#include <Q3MemArray>
 
 #include <kapplication.h>
 #include <kcombobox.h>
@@ -34,14 +37,14 @@
 
 KFORMULA_NAMESPACE_BEGIN
 
-class SymbolComboItem : public QListBoxItem
+class SymbolComboItem : public Q3ListBoxItem
 {
 public:
     SymbolComboItem( const QString&, const QFont&, uchar, QComboBox* combo );
     virtual ~SymbolComboItem();
 
-    virtual int width( const QListBox* ) const;
-    virtual int height( const QListBox* ) const;
+    virtual int width( const Q3ListBox* ) const;
+    virtual int height( const Q3ListBox* ) const;
 
 protected:
     virtual void paint( QPainter *p );
@@ -59,7 +62,7 @@ int SymbolComboItem::widest = 0;
 
 SymbolComboItem::SymbolComboItem( const QString &name, const QFont &font,
                                   uchar symbol, QComboBox *combo )
-    : QListBoxItem( combo->listBox() ),
+    : Q3ListBoxItem( combo->listBox() ),
       m_combo( combo ),
       m_name( name ),
       m_font( font ),
@@ -74,12 +77,12 @@ SymbolComboItem::~SymbolComboItem()
 {
 }
 
-int SymbolComboItem::width( const QListBox * /*lb*/ ) const
+int SymbolComboItem::width( const Q3ListBox * /*lb*/ ) const
 {
     return widest + QFontMetrics( KGlobalSettings::generalFont() ).width( text() ) + 12;
 }
 
-int SymbolComboItem::height( const QListBox * /*lb*/ ) const
+int SymbolComboItem::height( const Q3ListBox * /*lb*/ ) const
 {
     int generalHeight = QFontMetrics( KGlobalSettings::generalFont() ).lineSpacing();
     int fontHeight = QFontMetrics( m_font ).lineSpacing();
@@ -141,8 +144,8 @@ int SymbolAction::plug( QWidget* w, int index )
     else return KSelectAction::plug( w, index );
 }
 
-void SymbolAction::setSymbols( const QStringList &names, const QValueList<QFont>& fonts,
-                               const QMemArray<uchar>& chars )
+void SymbolAction::setSymbols( const QStringList &names, const Q3ValueList<QFont>& fonts,
+                               const Q3MemArray<uchar>& chars )
 {
     m_fonts = fonts;
     m_chars = chars;

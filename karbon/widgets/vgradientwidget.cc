@@ -105,7 +105,7 @@ void VGradientWidget::paintEvent( QPaintEvent* )
 	gradient.setVector( KoPoint( 2 + w, 2 ) );
 	VFill fill;
 	KIconLoader il;
-	fill.pattern() = VPattern( il.iconPath( "karbon.png", KIcon::Small ) );
+	fill.pattern() = VPattern( il.iconPath( "karbon.png", K3Icon::Small ) );
 	fill.setType( VFill::patt );
 	gp.setBrush( fill );
 	gp.drawRect( KoRect( 2, 2, w, gh ) );

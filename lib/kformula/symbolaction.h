@@ -21,9 +21,9 @@
 #define _SYMBOLACTION_H_
 
 #include <kaction.h>
-#include <qvaluelist.h>
+#include <q3valuelist.h>
 #include <qstringlist.h>
-#include <qmemarray.h>
+#include <q3memarray.h>
 
 #include "kformuladefs.h"
 
@@ -38,12 +38,12 @@ public:
                  const char* name = 0 );
 
     int plug( QWidget*, int index = -1 );
-    void setSymbols( const QStringList&, const QValueList<QFont>&, const QMemArray<uchar>& );
+    void setSymbols( const QStringList&, const Q3ValueList<QFont>&, const Q3MemArray<uchar>& );
     void updateItems( int );
 
 private:
-    QValueList<QFont> m_fonts;
-    QMemArray<uchar> m_chars;
+    Q3ValueList<QFont> m_fonts;
+    Q3MemArray<uchar> m_chars;
 };
 
 KFORMULA_NAMESPACE_END

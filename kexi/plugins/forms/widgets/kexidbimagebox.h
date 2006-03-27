@@ -193,7 +193,7 @@ class KEXIFORMUTILS_EXPORT KexiDBImageBox : public QWidget, public KexiFormDataI
 //		QString m_originalFileName;
 		class Button;
 		Button *m_chooser;
-		KPopupMenu *m_popup;
+		KMenu *m_popup;
 		KActionCollection m_actionCollection;
 		KAction *m_insertFromFileAction, *m_saveAsAction, *m_cutAction, *m_copyAction, *m_pasteAction,
 			*m_deleteAction, *m_propertiesAction;

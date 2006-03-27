@@ -25,12 +25,18 @@
 #include <qfile.h>
 #include <qlayout.h>
 #include <qlabel.h>
-#include <qgroupbox.h>
+#include <q3groupbox.h>
 #include <qradiobutton.h>
 #include <qpushbutton.h>
-#include <qheader.h>
+#include <q3header.h>
 #include <qcheckbox.h>
 #include <qtooltip.h>
+//Added by qt3to4:
+#include <Q3VBoxLayout>
+#include <QPixmap>
+#include <Q3HBoxLayout>
+#include <Q3Frame>
+#include <Q3CString>
 
 #include <ktempfile.h>
 #include <klineedit.h>
@@ -97,20 +103,20 @@ public:
  *
  ****************************************************************************/
 
-KoTemplateCreateDia::KoTemplateCreateDia( const QCString &templateType, KInstance *instance,
+KoTemplateCreateDia::KoTemplateCreateDia( const Q3CString &templateType, KInstance *instance,
                                           const QString &file, const QPixmap &pix, QWidget *parent ) :
     KDialogBase( parent, "template create dia", true, i18n( "Create Template" ),
                  KDialogBase::Ok | KDialogBase::Cancel, KDialogBase::Ok ), m_file(file), m_pixmap(pix) {
 
     d=new KoTemplateCreateDiaPrivate( parent, instance );
 
-    QFrame *mainwidget=makeMainWidget();
-    QHBoxLayout *mbox=new QHBoxLayout(mainwidget, 0, KDialogBase::spacingHint());
-    QVBoxLayout *leftbox=new QVBoxLayout(mbox);
+    Q3Frame *mainwidget=makeMainWidget();
+    Q3HBoxLayout *mbox=new Q3HBoxLayout(mainwidget, 0, KDialogBase::spacingHint());
+    Q3VBoxLayout *leftbox=new Q3VBoxLayout(mbox);
 
     QLabel *label=new QLabel(i18n("Name:"), mainwidget);
     leftbox->addSpacing(label->fontMetrics().height()/2);
-    QHBoxLayout *namefield=new QHBoxLayout(leftbox);
+    Q3HBoxLayout *namefield=new Q3HBoxLayout(leftbox);
     namefield->addWidget(label);
     d->m_name=new KLineEdit(mainwidget);
     d->m_name->setFocus();
@@ -131,7 +137,7 @@ KoTemplateCreateDia::KoTemplateCreateDia( const QCString &templateType, KInstanc
     fillGroupTree();
     d->m_groups->sort();
 
-    QHBoxLayout *bbox=new QHBoxLayout(leftbox);
+    Q3HBoxLayout *bbox=new Q3HBoxLayout(leftbox);
     d->m_add=new QPushButton(i18n("&Add Group..."), mainwidget);
     connect(d->m_add, SIGNAL(clicked()), this, SLOT(slotAddGroup()));
     bbox->addWidget(d->m_add);
@@ -139,10 +145,10 @@ KoTemplateCreateDia::KoTemplateCreateDia( const QCString &templateType, KInstanc
     connect(d->m_remove, SIGNAL(clicked()), this, SLOT(slotRemove()));
     bbox->addWidget(d->m_remove);
 
-    QVBoxLayout *rightbox=new QVBoxLayout(mbox);
-    QGroupBox *pixbox=new QGroupBox(i18n("Picture"), mainwidget);
+    Q3VBoxLayout *rightbox=new Q3VBoxLayout(mbox);
+    Q3GroupBox *pixbox=new Q3GroupBox(i18n("Picture"), mainwidget);
     rightbox->addWidget(pixbox);
-    QVBoxLayout *pixlayout=new QVBoxLayout(pixbox, KDialogBase::marginHint(),
+    Q3VBoxLayout *pixlayout=new Q3VBoxLayout(pixbox, KDialogBase::marginHint(),
                                            KDialogBase::spacingHint());
     pixlayout->addSpacing(pixbox->fontMetrics().height()/2);
     pixlayout->addStretch(1);
@@ -150,7 +156,7 @@ KoTemplateCreateDia::KoTemplateCreateDia( const QCString &templateType, KInstanc
     d->m_default->setChecked(true);
     connect(d->m_default, SIGNAL(clicked()), this, SLOT(slotDefault()));
     pixlayout->addWidget(d->m_default);
-    QHBoxLayout *custombox=new QHBoxLayout(pixlayout);
+    Q3HBoxLayout *custombox=new Q3HBoxLayout(pixlayout);
     d->m_custom=new QRadioButton(i18n("Custom"), pixbox);
     d->m_custom->setChecked(false);
     connect(d->m_custom, SIGNAL(clicked()), this, SLOT(slotCustom()));
@@ -162,7 +168,7 @@ KoTemplateCreateDia::KoTemplateCreateDia( const QCString &templateType, KInstanc
     pixlayout->addStretch(1);
     label=new QLabel(i18n("Preview:"), pixbox);
     pixlayout->addWidget(label);
-    QHBoxLayout *previewbox=new QHBoxLayout(pixlayout);
+    Q3HBoxLayout *previewbox=new Q3HBoxLayout(pixlayout);
     previewbox->addStretch(10);
     d->m_preview=new QLabel(pixbox); // setPixmap() -> auto resize?
     previewbox->addWidget(d->m_preview);
@@ -189,7 +195,7 @@ KoTemplateCreateDia::~KoTemplateCreateDia() {
 
 void KoTemplateCreateDia::slotSelectionChanged()
 {
-    const QListViewItem* item = d->m_groups->currentItem();
+    const Q3ListViewItem* item = d->m_groups->currentItem();
     d->m_remove->setEnabled( item );
     if ( ! item )
         return;
@@ -200,7 +206,7 @@ void KoTemplateCreateDia::slotSelectionChanged()
     }
 }
 
-void KoTemplateCreateDia::createTemplate( const QCString &templateType, KInstance *instance,
+void KoTemplateCreateDia::createTemplate( const Q3CString &templateType, KInstance *instance,
                                           const QString &file, const QPixmap &pix, QWidget *parent ) {
 
     KoTemplateCreateDia *dia = new KoTemplateCreateDia( templateType, instance, file, pix, parent );
@@ -211,7 +217,7 @@ void KoTemplateCreateDia::createTemplate( const QCString &templateType, KInstanc
 void KoTemplateCreateDia::slotOk() {
 
     // get the current item, if there is one...
-    QListViewItem *item=d->m_groups->currentItem();
+    Q3ListViewItem *item=d->m_groups->currentItem();
     if(!item)
         item=d->m_groups->firstChild();
     if(!item) {    // safe :)
@@ -261,9 +267,9 @@ void KoTemplateCreateDia::slotOk() {
     else
         kdWarning(30004) << "Template extension not found!" << endl;
 
-    KURL dest;
+    KUrl dest;
     dest.setPath(templateDir+file+ext);
-    if ( QFile::exists( dest.prettyURL(0, KURL::StripFileProtocol) ) )
+    if ( QFile::exists( dest.prettyURL(0, KUrl::StripFileProtocol) ) )
     {
         do
         {
@@ -300,7 +306,7 @@ void KoTemplateCreateDia::slotOk() {
         return;
     }
 
-    KURL orig;
+    KUrl orig;
     orig.setPath( m_file );
     // don't overwrite the hidden template file with a new non-hidden one
     if ( !ignore )
@@ -376,7 +382,7 @@ void KoTemplateCreateDia::slotSelect() {
         return;
     }
     // ### TODO: do a better remote loading without having to have d->m_tempFile
-    QString path = KGlobal::iconLoader()->iconPath(name, KIcon::Desktop);
+    QString path = KGlobal::iconLoader()->iconPath(name, K3Icon::Desktop);
     d->m_customFile = path;
     d->m_customPixmap=QPixmap();
     updatePixmap();
@@ -405,7 +411,7 @@ void KoTemplateCreateDia::slotAddGroup() {
     dir+=name;
     KoTemplateGroup *newGroup=new KoTemplateGroup(name, dir, 0, true);
     d->m_tree->add(newGroup);
-    QListViewItem *item=new QListViewItem(d->m_groups, name);
+    Q3ListViewItem *item=new Q3ListViewItem(d->m_groups, name);
     d->m_groups->setCurrentItem(item);
     d->m_groups->sort();
     d->m_name->setFocus();
@@ -415,7 +421,7 @@ void KoTemplateCreateDia::slotAddGroup() {
 
 void KoTemplateCreateDia::slotRemove() {
 
-    QListViewItem *item=d->m_groups->currentItem();
+    Q3ListViewItem *item=d->m_groups->currentItem();
     if(!item)
         return;
 
@@ -485,11 +491,11 @@ void KoTemplateCreateDia::fillGroupTree() {
     for(KoTemplateGroup *group=d->m_tree->first(); group!=0L; group=d->m_tree->next()) {
         if(group->isHidden())
             continue;
-        QListViewItem *groupItem=new QListViewItem(d->m_groups, group->name());
+        Q3ListViewItem *groupItem=new Q3ListViewItem(d->m_groups, group->name());
         for(KoTemplate *t=group->first(); t!=0L; t=group->next()) {
             if(t->isHidden())
                 continue;
-            (void)new QListViewItem(groupItem, t->name());
+            (void)new Q3ListViewItem(groupItem, t->name());
         }
     }
 }

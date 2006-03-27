@@ -83,7 +83,7 @@ void KPrMSPresentation::initCreation( KProgress *progressBar )
     // be in a file under DCIM/, and they start at 101MSPJP, so
     // we create the DCIM file, and then iterate through looking
     // for the next "available" directory slot
-    KURL str(  path + "/DCIM"  );
+    KUrl str(  path + "/DCIM"  );
     KIO::NetAccess::mkdir( str,( QWidget* )0L  );
 
     p = progressBar->progress();

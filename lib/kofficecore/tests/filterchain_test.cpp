@@ -21,6 +21,8 @@
 #include <KoFilterManager.h>
 #include <kinstance.h>
 #include <kdebug.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 int main( int /*argc*/, char ** /*argv*/ )
 {
@@ -32,7 +34,7 @@ int main( int /*argc*/, char ** /*argv*/ )
 
     KoFilterManager *manager = new KoFilterManager( 0 );
     kdDebug() << "Trying to build some filter chains..." << endl;
-    QCString mimeType( "foo/bar" );
+    Q3CString mimeType( "foo/bar" );
     KoFilterChain::Ptr chain = g.chain( manager, mimeType );
     if ( !chain )
         kdDebug() << "Chain for 'foo/bar' is not available, OK" << endl;

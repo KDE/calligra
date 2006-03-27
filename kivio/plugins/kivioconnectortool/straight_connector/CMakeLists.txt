@@ -1,0 +1,62 @@
+kde4_header()
+
+include_directories( ${CMAKE_SOURCE_DIR}/kivio/kiviopart ${CMAKE_SOURCE_DIR}/kivio/kiviopart/kiviosdk ${CMAKE_SOURCE_DIR}/kivio/kiviopart/tools ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
+
+
+########### next target ###############
+
+set(straight_connector_PART_SRCS straight_connector.cpp )
+
+kde4_automoc(${straight_connector_PART_SRCS})
+
+kde4_add_plugin(straight_connector ${straight_connector_PART_SRCS})
+
+kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} straight_connector )
+
+target_link_libraries(straight_connector  ${KDE4_KDECORE_LIBS} kiviocommon )
+
+install_targets(${LIB_INSTALL_DIR}/kde4 straight_connector )
+
+
+########### install files ###############
+
+install_files( ${DATA_INSTALL_DIR}/kivio/autoloadStencils FILES  straight_connector.xpm )
+
+kde4_footer()
+
+
+
+#original Makefile.am contents follow:
+
+#stencildir = $(kde_datadir)/kivio/autoloadStencils
+#stencil_DATA = straight_connector.xpm
+#
+#kde_module_LTLIBRARIES =straight_connector.la
+#
+#straight_connector_la_LDFLAGS = -module $(KDE_PLUGIN) $(all_libraries)
+#
+## Hack to make it work (dave m)
+#straight_connector_la_LIBADD = $(LIB_KOPAINTER) $(top_builddir)/kivio/kiviopart/libkiviocommon.la
+#
+#INCLUDES = -I$(top_srcdir)/kivio/kiviopart\
+#	-I$(top_srcdir)/kivio/kiviopart/kiviosdk\
+#	-I$(top_srcdir)/kivio/kiviopart/tools\
+#	$(KOTEXT_INCLUDES)\
+#	$(KOFFICE_INCLUDES) $(all_includes)
+#METASOURCES = AUTO
+#
+#straight_connector_la_SOURCES = \
+#		straight_connector.cpp
+#EXTRA_DIST = \
+#		straight_connector.cpp\
+#		straight_connector.h\
+#		straight_connector.xpm
+#
+#install-data-local:
+#	$(mkinstalldirs) $(DESTDIR)$(stencildir)
+#	-rm -f $(DESTDIR)$(stencildir)/straight_connector.so
+#	$(LN_S) $(kde_moduledir)/straight_connector.so $(DESTDIR)$(stencildir)/straight_connector.so
+#
+#uninstall-local:
+#	-rm -f $(DESTDIR)$(stencildir)/straight_connector.so
+#

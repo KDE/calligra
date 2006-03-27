@@ -22,7 +22,7 @@ class KChartWizard : public KWizard
     Q_OBJECT
 public:
     KChartWizard ( KChartPart* chart, QWidget *parent, const char* name,
-		   bool modal = true, WFlags f = 0 );
+		   bool modal = true, Qt::WFlags f = 0 );
     ~KChartWizard();
 
     KChartPart* chart() const { return m_chart; };

@@ -708,7 +708,7 @@ InsertObjectCommand::InsertObjectCommand(const KoRect& _geometry, KoDocumentEntr
   obj = 0;
 }
 
-InsertObjectCommand::InsertObjectCommand( const KoRect& _geometry , KURL& _file, Canvas *_canvas ) //picture
+InsertObjectCommand::InsertObjectCommand( const KoRect& _geometry , KUrl& _file, Canvas *_canvas ) //picture
 {
   //In the case of pictures, only the top left point of the rectangle is relevant
   geometry = _geometry;

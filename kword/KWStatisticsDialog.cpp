@@ -21,23 +21,27 @@
 #include "KWFrameSet.h"
 #include <klocale.h>
 #include <qtabwidget.h>
-#include <qvbox.h>
+#include <q3vbox.h>
 #include <qlabel.h>
 #include <qlayout.h>
-#include <qprogressdialog.h>
+#include <q3progressdialog.h>
 #include <qcheckbox.h>
+//Added by qt3to4:
+#include <Q3VBoxLayout>
+#include <Q3GridLayout>
+#include <Q3Frame>
 
 KWStatisticsDialog::KWStatisticsDialog( QWidget *parent, KWDocument *document )
     : KDialogBase(parent, "statistics", true, i18n("Statistics"),KDialogBase::Ok, KDialogBase::Ok, false )
 {
     QWidget *page = new QWidget( this );
     setMainWidget(page);
-    QVBoxLayout *topLayout = new QVBoxLayout( page, 0, KDialog::spacingHint() );
+    Q3VBoxLayout *topLayout = new Q3VBoxLayout( page, 0, KDialog::spacingHint() );
 
     QTabWidget *tab = new QTabWidget( page );
-    QFrame *pageAll = 0;
-    QFrame *pageGeneral = 0;
-    QFrame *pageSelected = 0;
+    Q3Frame *pageAll = 0;
+    Q3Frame *pageGeneral = 0;
+    Q3Frame *pageSelected = 0;
     for (int i=0; i < 7; ++i) {
         m_resultLabelAll[i] = 0;
         m_resultLabelSelected[i] = 0;
@@ -50,20 +54,20 @@ KWStatisticsDialog::KWStatisticsDialog( QWidget *parent, KWDocument *document )
 
 
     // add Tab "General"
-    pageGeneral = new QFrame( this );
+    pageGeneral = new Q3Frame( this );
     tab->addTab( pageGeneral,  i18n( "General" ) );
 
     addBoxGeneral( pageGeneral, m_resultGeneralLabel );
     calcGeneral( m_resultGeneralLabel );
 
     // add Tab "All"
-    pageAll = new QFrame( this );
+    pageAll = new Q3Frame( this );
     tab->addTab( pageAll,  i18n( "Text" ) );
 
     addBox( pageAll, m_resultLabelAll, true );
 
     m_canceled = true;
-    pageSelected = new QFrame( this );
+    pageSelected = new Q3Frame( this );
     tab->addTab( pageSelected,  i18n( "Selected Text" ) );
     // let's see if there's selected text
     bool b = docHasSelection();
@@ -118,7 +122,7 @@ void KWStatisticsDialog::calcGeneral( QLabel **resultLabel )
     int part = 0;
     int nbFrameset = 0;
     int nbFormula = 0;
-    QPtrListIterator<KWFrameSet> framesetIt( m_doc->framesetsIterator() );
+    Q3PtrListIterator<KWFrameSet> framesetIt( m_doc->framesetsIterator() );
     for ( framesetIt.toFirst(); framesetIt.current(); ++framesetIt ) {
         KWFrameSet *frameSet = framesetIt.current();
         if ( frameSet && frameSet->isVisible())
@@ -154,14 +158,14 @@ bool KWStatisticsDialog::calcStats( QLabel **resultLabel, bool selection, bool u
     // safety check result labels
     for (int i=0; i < 7; ++i) {
         if ( !resultLabel[i] ) {
-            kdDebug() << "Warning: KWStatisticsDiaolog::calcStats result table not initialized." << endl;
+            kDebug() << "Warning: KWStatisticsDiaolog::calcStats result table not initialized." << endl;
             return false;
         }
     }
 
     // count paragraphs for progress dialog:
     ulong paragraphs = 0L;
-    QPtrListIterator<KWFrameSet> framesetIt( m_doc->framesetsIterator() );
+    Q3PtrListIterator<KWFrameSet> framesetIt( m_doc->framesetsIterator() );
     for ( framesetIt.toFirst(); framesetIt.current(); ++framesetIt ) {
         KWFrameSet *frameSet = framesetIt.current();
         if ( (frameSet->frameSetInfo() == KWFrameSet::FI_FOOTNOTE || frameSet->frameSetInfo() == KWFrameSet::FI_BODY) && frameSet->isVisible() )
@@ -176,7 +180,7 @@ bool KWStatisticsDialog::calcStats( QLabel **resultLabel, bool selection, bool u
 
         }
     }
-    QProgressDialog progress( i18n( "Counting..." ), i18n( "Cancel" ), paragraphs, this, "count", true );
+    Q3ProgressDialog progress( i18n( "Counting..." ), i18n( "Cancel" ), paragraphs, this, "count", true );
     progress.setMinimumDuration( 1000 );
     progress.setProgress( 0 );
 
@@ -225,12 +229,12 @@ double KWStatisticsDialog::calcFlesch( ulong sentences, ulong words, ulong sylla
     return flesch_score;
 }
 
-void KWStatisticsDialog::addBoxGeneral( QFrame *page, QLabel **resultLabel )
+void KWStatisticsDialog::addBoxGeneral( Q3Frame *page, QLabel **resultLabel )
 {
     // Layout Managers
-    QVBoxLayout *topLayout = new QVBoxLayout( page, 0, 7 );
-    QGroupBox *box = new QGroupBox( i18n( "Statistics" ), page );
-    QGridLayout *grid = new QGridLayout( box, 9, 3, KDialog::marginHint(), KDialog::spacingHint() );
+    Q3VBoxLayout *topLayout = new Q3VBoxLayout( page, 0, 7 );
+    Q3GroupBox *box = new Q3GroupBox( i18n( "Statistics" ), page );
+    Q3GridLayout *grid = new Q3GridLayout( box, 9, 3, KDialog::marginHint(), KDialog::spacingHint() );
     grid->setRowStretch (9, 1);
     // margins
     int fHeight = box->fontMetrics().height();
@@ -273,23 +277,23 @@ void KWStatisticsDialog::addBoxGeneral( QFrame *page, QLabel **resultLabel )
     topLayout->addWidget( box );
 }
 
-void KWStatisticsDialog::addBox( QFrame *page, QLabel **resultLabel, bool calcWithFootNoteCheckbox )
+void KWStatisticsDialog::addBox( Q3Frame *page, QLabel **resultLabel, bool calcWithFootNoteCheckbox )
 {
     // Layout Managers
-    QVBoxLayout *topLayout = new QVBoxLayout( page, 0, 7 );
+    Q3VBoxLayout *topLayout = new Q3VBoxLayout( page, 0, 7 );
     if ( calcWithFootNoteCheckbox )
     {
         QWidget *w = new QWidget(page);
         topLayout->addWidget( w );
-        QVBoxLayout *noteLayout = new QVBoxLayout( w, KDialog::marginHint(), 0 );
+        Q3VBoxLayout *noteLayout = new Q3VBoxLayout( w, KDialog::marginHint(), 0 );
         QCheckBox *calcWithFootNote = new QCheckBox( i18n("&Include text from foot- and endnotes"), w);
         noteLayout->addWidget( calcWithFootNote );
         connect( calcWithFootNote, SIGNAL(toggled ( bool )), this, SLOT( slotRefreshValue(bool)));
     }
 
 
-    QGroupBox *box = new QGroupBox( i18n( "Statistics" ), page );
-    QGridLayout *grid = new QGridLayout( box, 9, 3, KDialog::marginHint(), KDialog::spacingHint() );
+    Q3GroupBox *box = new Q3GroupBox( i18n( "Statistics" ), page );
+    Q3GridLayout *grid = new Q3GridLayout( box, 9, 3, KDialog::marginHint(), KDialog::spacingHint() );
     grid->setRowStretch (9, 1);
 
     // margins
@@ -343,7 +347,7 @@ void KWStatisticsDialog::addBox( QFrame *page, QLabel **resultLabel, bool calcWi
 
 bool KWStatisticsDialog::docHasSelection()const
 {
-    QPtrListIterator<KWFrameSet> fsIt( m_doc->framesetsIterator() );
+    Q3PtrListIterator<KWFrameSet> fsIt( m_doc->framesetsIterator() );
 
     for ( ; fsIt.current(); ++fsIt ) {
         KWFrameSet *fs = fsIt.current();

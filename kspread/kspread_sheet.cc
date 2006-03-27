@@ -8016,7 +8016,7 @@ bool Sheet::insertChild( const KoRect& _rect, KoDocumentEntry& _e )
     return true;
 }
 
-bool Sheet::insertPicture( const KoPoint& point , const KURL& url )
+bool Sheet::insertPicture( const KoPoint& point , const KUrl& url )
 {
     KoPicture picture = doc()->pictureCollection()->downloadPicture( url , 0 );
 

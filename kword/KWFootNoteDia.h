@@ -23,6 +23,8 @@
 #include <kdialogbase.h>
 #include "defs.h" // for NoteType
 #include "KWVariable.h"
+//Added by qt3to4:
+#include <Q3ValueList>
 class QRadioButton;
 class QLineEdit;
 class KWDocument;
@@ -57,7 +59,7 @@ private:
     QRadioButton *m_rbEndNote;
     QLineEdit *m_footLine;
     KWDocument *m_doc;
-    QValueList<QString> manualFootNotes;
+    Q3ValueList<QString> manualFootNotes;
 };
 
 #endif

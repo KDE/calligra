@@ -34,14 +34,16 @@
 #include <kdebug.h>
 
 #include <qlabel.h>
-#include <qbuttongroup.h>
+#include <q3buttongroup.h>
 #include <qcheckbox.h>
 #include <qcombobox.h>
 #include <qfile.h>
 #include <qdom.h>
 #include <qrect.h>
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 #include <qlayout.h>
+//Added by qt3to4:
+#include <Q3GridLayout>
 
 #include <stdlib.h>
 #include <math.h>
@@ -51,7 +53,7 @@
 /******************************************************************/
 
 KWTableTemplatePreview::KWTableTemplatePreview( const QString& title, KWTableStyle *_emptyStyle, QWidget* parent, const char* name )
-    : QGroupBox( title, parent, name )
+    : Q3GroupBox( title, parent, name )
 {
     m_emptyStyle = _emptyStyle;
     m_zoomHandler = new KoTextZoomHandler;
@@ -547,14 +549,14 @@ KWTableTemplateSelector::KWTableTemplateSelector( KWDocument *_doc, QWidget *_pa
 {
     m_doc = _doc;
 
-    QGridLayout *grid = new QGridLayout( this, 3, 2, 0, KDialog::spacingHint() );
+    Q3GridLayout *grid = new Q3GridLayout( this, 3, 2, 0, KDialog::spacingHint() );
 
     QWidget *innerHolder = new QWidget( this );
-    QGridLayout *innerGrid = new QGridLayout( innerHolder, 2, 1, 0, KDialog::spacingHint() );
+    Q3GridLayout *innerGrid = new Q3GridLayout( innerHolder, 2, 1, 0, KDialog::spacingHint() );
 
-    lbTemplates = new QListBox( innerHolder );
+    lbTemplates = new Q3ListBox( innerHolder );
 
-    QPtrListIterator<KWTableTemplate> it( m_doc->tableTemplateCollection()->tableTemplateList() );
+    Q3PtrListIterator<KWTableTemplate> it( m_doc->tableTemplateCollection()->tableTemplateList() );
     for ( ; it.current() ; ++it )
     {
         lbTemplates->insertItem( it.current()->displayName() );
@@ -572,7 +574,7 @@ KWTableTemplateSelector::KWTableTemplateSelector( KWDocument *_doc, QWidget *_pa
     preview = new KWTableTemplatePreview( i18n( "Preview" ), m_doc->tableStyleCollection()->findStyle("Plain"), this );
     grid->addWidget( preview, 0, 1 );
 
-    bgCustomize = new QButtonGroup( 3, Horizontal, i18n( "Apply To" ), this );
+    bgCustomize = new Q3ButtonGroup( 3, Qt::Horizontal, i18n( "Apply To" ), this );
 
     cbFirstRow = new QCheckBox( i18n( "First row" ), bgCustomize );
     cbLastRow = new QCheckBox( i18n( "Last row" ), bgCustomize );
@@ -596,7 +598,7 @@ KWTableTemplateSelector::KWTableTemplateSelector( KWDocument *_doc, QWidget *_pa
     connect( cbBody,  SIGNAL( toggled( bool ) ), preview, SLOT( cbBodyChanged( bool ) ) );
 
     connect( lbTemplates, SIGNAL(  selectionChanged () ), this, SLOT( changeTableTemplate() ) );
-    QListBoxItem * item = lbTemplates->findItem( _tableTemplate );
+    Q3ListBoxItem * item = lbTemplates->findItem( _tableTemplate );
     int index = 0;
     if ( item  )
         index = lbTemplates->index ( item );

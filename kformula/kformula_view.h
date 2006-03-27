@@ -1,3 +1,7 @@
+//Added by qt3to4:
+#include <QFocusEvent>
+#include <QResizeEvent>
+#include <QPaintEvent>
 /* This file is part of the KDE project
    Copyright (C) 2001 Andrea Rizzi <rizzi@kde.org>
 	              Ulrich Kuettler <ulrich.kuettler@mailbox.tu-dresden.de>
@@ -27,7 +31,7 @@ class KFormulaPartView;
 class KFormulaWidget;
 class KSelectAction;
 class QPaintEvent;
-class QScrollView;
+class Q3ScrollView;
 class DCOPObject;
 
 namespace KFormula {
@@ -35,7 +39,7 @@ namespace KFormula {
 }
 
 #include <KoView.h>
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 #include <qstringlist.h>
 
 /**
@@ -88,7 +92,7 @@ private:
 
     KFormulaDoc *m_pDoc;
     KFormulaWidget* formulaWidget;
-    QScrollView* scrollview;
+    Q3ScrollView* scrollview;
 
     KAction* cutAction;
     KAction* copyAction;

@@ -1577,7 +1577,7 @@ void RTFImport::addImportedPicture( const QString& rawFileName )
     info.setFile( inFileName );
     QDir dir( info.dirPath() );
 
-    KURL url;
+    KUrl url;
     url.setPath(dir.filePath( rawFileName ));
 
     kdDebug(30515) << "Path: " << url.prettyURL() << endl;

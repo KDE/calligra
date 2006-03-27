@@ -117,7 +117,7 @@ public:
     KoRect intersect(const KoRect &r) const;
     bool intersects(const KoRect &r) const;
 
-    KoRect transform(const QWMatrix &m) const;
+    KoRect transform(const QMatrix &m) const;
     KoRect translate(double dx, double dy) const;
 
     QRect toQRect() const;
@@ -141,7 +141,7 @@ inline kdbgstream operator<<( kdbgstream str, const KoRect & r )  { str << "[" <
 inline kndbgstream operator<<( kndbgstream str, const KoRect & )  { return str; }
 
 /** Show the rectangles that form a region (use as a standalone statement) */
-#define DEBUGREGION(reg) { QMemArray<QRect>rs=reg.rects(); for (int i=0;i<rs.size();++i) \
+#define DEBUGREGION(reg) { Q3MemArray<QRect>rs=reg.rects(); for (int i=0;i<rs.size();++i) \
                            kdDebug()<<"  "<<DEBUGRECT(rs[i] )<<endl; }
 // You can now use kdDebug() << theregion << endl; (kdebug.h)
 

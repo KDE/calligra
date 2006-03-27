@@ -37,7 +37,7 @@
 #include <kurlcombobox.h>
 #include <ktoolbar.h>
 #include <kpopupmenu.h>
-#include <ktoolbarbutton.h>
+
 #include <kactionclasses.h>
 
 #include <qlabel.h>
@@ -108,7 +108,7 @@ KexiConnSelectorWidget::KexiConnSelectorWidget( KexiDBConnectionSet& conn_set,
 	d->conn_set = &conn_set;
 	d->startDirOrVariable = startDirOrVariable;
 	QString none, iconname = KMimeType::mimeType( KexiDB::Driver::defaultFileBasedDriverMimeType() )->icon(none,0);
-	const QPixmap &icon = KGlobal::iconLoader()->loadIcon( iconname, KIcon::Desktop );
+	const QPixmap &icon = KGlobal::iconLoader()->loadIcon( iconname, K3Icon::Desktop );
 	setIcon( icon );
 
 	QVBoxLayout* globalLyr = new QVBoxLayout( this );

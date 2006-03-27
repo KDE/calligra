@@ -24,6 +24,10 @@
 
 #include <qevent.h>
 #include <qobject.h>
+//Added by qt3to4:
+#include <QMouseEvent>
+#include <Q3ValueList>
+#include <QKeyEvent>
 
 #include <koffice_export.h>
 
@@ -120,7 +124,7 @@ public:
      * @param horizontalPos A list of the position of the horizontal guide lines.
      * @param verticalPos A list of the position of the vertical guide lines.
      */
-    void setGuideLines( const QValueList<double> &horizontalPos, const QValueList<double> &verticalPos );
+    void setGuideLines( const Q3ValueList<double> &horizontalPos, const Q3ValueList<double> &verticalPos );
 
     /**
      * @brief Set the positions for snapping of auto guide lines
@@ -130,7 +134,7 @@ public:
      * @param horizontalPos A list of the position of the horizontal guide lines.
      * @param verticalPos A list of the position of the vertical guide lines.
      */
-    void setAutoGuideLines( const QValueList<double> &horizontalPos, const QValueList<double> &verticalPos );
+    void setAutoGuideLines( const Q3ValueList<double> &horizontalPos, const Q3ValueList<double> &verticalPos );
 
     /**
      * @brief Get the position of the guide lines
@@ -141,7 +145,7 @@ public:
      * @param horizontalPos A list of the position of the horizontal guide lines.
      * @param verticalPos A list of the position of the vertical guide lines.
      */
-    void getGuideLines( QValueList<double> &horizontalPos, QValueList<double> &verticalPos ) const;
+    void getGuideLines( Q3ValueList<double> &horizontalPos, Q3ValueList<double> &verticalPos ) const;
 
     /**
      * @brief Snap rect to guidelines
@@ -405,7 +409,7 @@ private:
     };
 
     /// array of list of the different guide line types
-    QValueList<KoGuideLine *> m_guideLines[GL_END];
+    Q3ValueList<KoGuideLine *> m_guideLines[GL_END];
     
     /// used to save the last mouse position
     QPoint m_lastPoint;

@@ -17,7 +17,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -61,7 +61,7 @@ private:
 
 void PrimaryNode::buildXML( QDomDocument& doc, QDomElement element )
 {
-    if ( m_unicode != QChar::null ) {
+    if ( m_unicode != QChar::Null ) {
         QDomElement de = doc.createElement( "TEXT" );
         de.setAttribute( "CHAR", QString( m_unicode ) );
         de.setAttribute( "SYMBOL", "3" );
@@ -222,7 +222,7 @@ void PowerNode::buildXML( QDomDocument& doc, QDomElement element )
 
 class FunctionNode : public ParserNode {
 public:
-    FunctionNode( PrimaryNode* name, QPtrList<ParserNode>& args ) : m_name( name ), m_args( args ) {
+    FunctionNode( PrimaryNode* name, Q3PtrList<ParserNode>& args ) : m_name( name ), m_args( args ) {
         m_args.setAutoDelete( true );
     }
     ~FunctionNode() { delete m_name; }
@@ -231,7 +231,7 @@ public:
 private:
     void buildSymbolXML( QDomDocument& doc, QDomElement element, KFormula::SymbolType type );
     PrimaryNode* m_name;
-    QPtrList<ParserNode> m_args;
+    Q3PtrList<ParserNode> m_args;
 };
 
 void FunctionNode::buildSymbolXML( QDomDocument& doc, QDomElement element, KFormula::SymbolType type )
@@ -332,13 +332,13 @@ void FunctionNode::buildXML( QDomDocument& doc, QDomElement element )
 
 class RowNode : public ParserNode {
 public:
-    RowNode( QPtrList<ParserNode> row ) : m_row( row ) { m_row.setAutoDelete( true ); }
+    RowNode( Q3PtrList<ParserNode> row ) : m_row( row ) { m_row.setAutoDelete( true ); }
     //virtual void output( ostream& stream );
     virtual void buildXML( QDomDocument& doc, QDomElement element );
     uint columns() const { return m_row.count(); }
     void setRequiredColumns( uint requiredColumns ) { m_requiredColumns = requiredColumns; }
 private:
-    QPtrList<ParserNode> m_row;
+    Q3PtrList<ParserNode> m_row;
     uint m_requiredColumns;
 };
 
@@ -372,21 +372,21 @@ void RowNode::buildXML( QDomDocument& doc, QDomElement element )
 
 class MatrixNode : public ParserNode {
 public:
-    MatrixNode( QPtrList<RowNode> rows ) : m_rows( rows ) { m_rows.setAutoDelete( true ); }
+    MatrixNode( Q3PtrList<RowNode> rows ) : m_rows( rows ) { m_rows.setAutoDelete( true ); }
     //virtual void output( ostream& stream );
     virtual void buildXML( QDomDocument& doc, QDomElement element );
     virtual bool isSimple() { return true; }
     uint columns();
     uint rows() { return m_rows.count(); }
 private:
-    QPtrList<RowNode> m_rows;
+    Q3PtrList<RowNode> m_rows;
 };
 
 uint MatrixNode::columns()
 {
     uint columns = 0;
     for ( uint i = 0; i < m_rows.count(); i++ ) {
-        columns = QMAX( columns, m_rows.at( i )->columns() );
+        columns = qMax( columns, m_rows.at( i )->columns() );
     }
     return columns;
 }
@@ -437,7 +437,7 @@ FormulaStringParser::~FormulaStringParser()
 {
     delete head;
     if ( ParserNode::debugCount != 0 ) {
-        kdDebug( KFormula::DEBUGID ) << "ParserNode::debugCount = " << ParserNode::debugCount << endl;
+        kDebug( KFormula::DEBUGID ) << "ParserNode::debugCount = " << ParserNode::debugCount << endl;
     }
 }
 
@@ -458,7 +458,7 @@ QDomDocument FormulaStringParser::parse()
     head->buildXML( doc, de );
     root.appendChild(de);
 
-    kdDebug( 39001 ) << doc.toString() << endl;
+    kDebug( 39001 ) << doc.toString() << endl;
     return doc;
 }
 
@@ -547,7 +547,7 @@ ParserNode* FormulaStringParser::parsePrimary()
         nextToken();
         if ( currentType == LP ) {
             nextToken();
-            QPtrList<ParserNode> args;
+            Q3PtrList<ParserNode> args;
             args.setAutoDelete( false );
             while ( ( currentType != EOL ) && ( currentType != RP ) ) {
                 ParserNode* node = parseExpr();
@@ -576,7 +576,7 @@ ParserNode* FormulaStringParser::parsePrimary()
     }
     case LB: {
         nextToken();
-        QPtrList<RowNode> rows;
+        Q3PtrList<RowNode> rows;
         rows.setAutoDelete( false );
         bool innerBrackets = currentType == LB;
         m_newlineIsSpace = innerBrackets;
@@ -584,7 +584,7 @@ ParserNode* FormulaStringParser::parsePrimary()
             if ( innerBrackets ) {
                 expect( LB, QString( i18n( "'%3' expected at %1:%2" ) ).arg( line ).arg( column ).arg( "[" ) );
             }
-            QPtrList<ParserNode> row;
+            Q3PtrList<ParserNode> row;
             row.setAutoDelete( false );
             while ( ( currentType != EOL ) && ( currentType != RB ) &&
                     ( innerBrackets || ( currentType != SEMIC && currentType != NEWLINE ) ) ) {
@@ -824,6 +824,6 @@ void FormulaStringParser::readDigits()
 
 void FormulaStringParser::error( QString err )
 {
-    kdDebug( KFormula::DEBUGID ) << err << " (" << currentType << "; " << current << ")" << endl;
+    kDebug( KFormula::DEBUGID ) << err << " (" << currentType << "; " << current << ")" << endl;
     m_errorList.push_back( err );
 }

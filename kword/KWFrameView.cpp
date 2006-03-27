@@ -34,7 +34,9 @@
 #include <kactionclasses.h>
 
 #include <qapplication.h>
-#include <qpopupmenu.h>
+#include <q3popupmenu.h>
+//Added by qt3to4:
+#include <Q3PtrList>
 
 static const double HORIZONTAL_SNAP = 6; // horizontal snap zone (in pt)
 static const double VERTICAL_SNAP = 6; // vertical snap zone (in pt)
@@ -55,7 +57,7 @@ KWFrameView::KWFrameView(KWFrameViewManager *parent, KWFrame *frame) {
         m_policy = new ImageFramePolicy(this);
     else {
         m_policy = new TextFramePolicy(this);
-        kdWarning() << "Unknown frameset supplied!" << endl;
+        kWarning() << "Unknown frameset supplied!" << endl;
     }
 }
 
@@ -72,7 +74,7 @@ bool KWFrameView::contains(const KoPoint &point, bool fuzzy) const {
 }
 
 bool KWFrameView::hit(const KoPoint &point, bool fuzzy , bool borderOnly) const {
-//kdDebug() << "hit " << point << " " << fuzzy << ", " << borderOnly << endl;
+//kDebug() << "hit " << point << " " << fuzzy << ", " << borderOnly << endl;
     double hs = 0, vs =0;
     if(fuzzy) {
         hs = HORIZONTAL_SNAP;
@@ -100,7 +102,7 @@ bool KWFrameView::hit(const KoPoint &point, bool fuzzy , bool borderOnly) const 
 }
 
 MouseMeaning KWFrameView::mouseMeaning( const KoPoint &point, int keyState ) {
-//kdDebug() << "KWFrameView::mouseMeaning" << point << endl;
+//kDebug() << "KWFrameView::mouseMeaning" << point << endl;
     if(isBorderHit(point)) {
         MouseMeaning mm = m_policy->mouseMeaningOnBorder(point, keyState);
         if(mm != MEANING_NONE && frame()->frameSet()->isProtectSize() ||
@@ -124,7 +126,7 @@ void KWFrameView::setSelected(bool selected, MouseMeaning selectPolicy) {
 void KWFrameView::showPopup( const KoPoint &point, KWView *view, const QPoint &popupPoint) const {
     view->unplugActionList( "tableactions" );
     view->unplugActionList( "frameset_type_action" );
-    QPopupMenu *popup = m_policy->createPopup(point, view);
+    Q3PopupMenu *popup = m_policy->createPopup(point, view);
     Q_ASSERT(popup);
     popup->popup(popupPoint);
 }
@@ -179,7 +181,7 @@ FramePolicy::FramePolicy(KWFrameView *view) {
     m_separator = new KActionSeparator();
     m_view = view;
 }
-void FramePolicy::addFloatingAction(KWView *view, QPtrList<KAction> &actionList) {
+void FramePolicy::addFloatingAction(KWView *view, Q3PtrList<KAction> &actionList) {
     if(m_view->frame()->frameSet()->isMainFrameset())
         return;
     actionList.append(m_separator);
@@ -240,16 +242,16 @@ MouseMeaning TableFramePolicy::mouseMeaning( const KoPoint &point, int keyState 
     Q_UNUSED(point);
     // Found a frame under the cursor
     // Ctrl -> select
-    if ( keyState & Qt::ControlButton )
+    if ( keyState & Qt::ControlModifier )
         return MEANING_MOUSE_SELECT;
     // Shift _and_ at least a frame is selected already
     // (shift + no frame selected is used to select text)
-    if ( (keyState & Qt::ShiftButton) && m_view->parent()->selectedFrame() != 0 )
+    if ( (keyState & Qt::ShiftModifier) && m_view->parent()->selectedFrame() != 0 )
         return MEANING_MOUSE_SELECT;
 
     return MEANING_MOUSE_INSIDE_TEXT;
 }
-QPopupMenu* TableFramePolicy::createPopup( const KoPoint &point, KWView *view ) {
+Q3PopupMenu* TableFramePolicy::createPopup( const KoPoint &point, KWView *view ) {
     view->plugActionList( "tableactions", view->tableActions() );
     if( m_view->isBorderHit(point) )
         return view->popupMenu("frame_popup_table");
@@ -259,7 +261,7 @@ MouseMeaning TableFramePolicy::mouseMeaningOnBorder(const KoPoint &point, int ke
     KWFrame *frame = m_view->frame();
     double hs = HORIZONTAL_SNAP; // horizontal snap zone (in pt)
     double vs = VERTICAL_SNAP; // vertical snap zone (in pt)
-    bool ctrl = keyState & Qt::ControlButton;
+    bool ctrl = keyState & Qt::ControlModifier;
 
     if ( QABS( frame->x() - point.x() ) < hs
             && point.y() >= frame->y() && point.y() <= frame->bottom() ) {
@@ -309,7 +311,7 @@ void TableFramePolicy::setSelected(MouseMeaning selectPolicy) {
         }
     }
     else if( selectPolicy == MEANING_SELECT_RANGE ) {
-kdDebug() << "not yet implemented; select table range\n"; // TODO
+kDebug() << "not yet implemented; select table range\n"; // TODO
     }
 }
 
@@ -318,18 +320,18 @@ PartFramePolicy::PartFramePolicy(KWFrameView *view) : FramePolicy (view) {
 MouseMeaning PartFramePolicy::mouseMeaning( const KoPoint &point, int keyState ) {
     Q_UNUSED(point);
     // Clicking on a selected part frame, but not on its border -> either resize or "activate part"
-    if( keyState & Qt::ControlButton )
+    if( keyState & Qt::ControlModifier )
         return MEANING_MOUSE_SELECT;
     if ( m_view->selected() )
         return MEANING_ACTIVATE_PART;
     return MEANING_NONE;
 }
-QPopupMenu* PartFramePolicy::createPopup( const KoPoint &point, KWView *view ) {
+Q3PopupMenu* PartFramePolicy::createPopup( const KoPoint &point, KWView *view ) {
     Q_UNUSED(point);
     KWPartFrameSet *part = static_cast<KWPartFrameSet *>(m_view->frame()->frameSet());
     KActionSeparator *separator=new KActionSeparator();
     KActionCollection *actionCollection = view->actionCollection();
-    QPtrList<KAction> actionList;
+    Q3PtrList<KAction> actionList;
     actionList.append(separator);
     if( !part->protectContent() ) {
         KToggleAction *action = dynamic_cast<KToggleAction*>(actionCollection->action("embedded_store_internal"));
@@ -347,7 +349,7 @@ QPopupMenu* PartFramePolicy::createPopup( const KoPoint &point, KWView *view ) {
 TextFramePolicy::TextFramePolicy(KWFrameView *view) : FramePolicy (view) {
 }
 MouseMeaning TextFramePolicy::mouseMeaning( const KoPoint &point, int keyState ) {
-    if( (keyState & Qt::ControlButton) == Qt::ControlButton )
+    if( (keyState & Qt::ControlModifier) == Qt::ControlModifier )
         return MEANING_MOUSE_SELECT;
     KWTextFrameSet *fs = dynamic_cast<KWTextFrameSet*>(m_view->frame()->frameSet());
     if(fs == 0 || fs->kWordDocument() == 0)
@@ -364,12 +366,12 @@ MouseMeaning TextFramePolicy::mouseMeaning( const KoPoint &point, int keyState )
     }
     return MEANING_MOUSE_INSIDE_TEXT;
 }
-QPopupMenu* TextFramePolicy::createPopup( const KoPoint &point, KWView *view ) {
+Q3PopupMenu* TextFramePolicy::createPopup( const KoPoint &point, KWView *view ) {
     if( m_view->isBorderHit(point) ) {
         KWFrameSet *fs = m_view->frame()->frameSet();
         KActionSeparator *separator=new KActionSeparator();
         KActionCollection *actionCollection = view->actionCollection();
-        QPtrList<KAction> actionList;
+        Q3PtrList<KAction> actionList;
         if(fs->isHeaderOrFooter()) {
             actionList.append(separator);
             actionList.append(actionCollection->action("configure_headerfooter"));
@@ -402,8 +404,8 @@ QPopupMenu* TextFramePolicy::createPopup( const KoPoint &point, KWView *view ) {
     view->unplugActionList( "datatools_link" );
 
     // Those lists are stored in the KWView. Grab a ref to them.
-    QPtrList<KAction> &actionList = view->dataToolActionList();
-    QPtrList<KAction> &variableList = view->variableActionList();
+    Q3PtrList<KAction> &actionList = view->dataToolActionList();
+    Q3PtrList<KAction> &variableList = view->variableActionList();
 
     actionList.clear();
     variableList.clear();
@@ -422,7 +424,7 @@ QPopupMenu* TextFramePolicy::createPopup( const KoPoint &point, KWView *view ) {
         return view->popupMenu("variable_popup");
     }
 
-    //kdDebug() << "TextFramePolicy::createPopup: plugging actionlist with " << actionList.count() << " actions" << endl;
+    //kDebug() << "TextFramePolicy::createPopup: plugging actionlist with " << actionList.count() << " actions" << endl;
     KoLinkVariable* linkVar = dynamic_cast<KoLinkVariable *>( var );
     if ( linkVar ) {
         view->plugActionList( "datatools_link", actionList );
@@ -443,7 +445,7 @@ QPopupMenu* TextFramePolicy::createPopup( const KoPoint &point, KWView *view ) {
         return view->popupMenu("footnote_popup");
     }
     if ( singleWord ) {
-        QPtrList<KAction> actionCheckSpellList = view->listOfResultOfCheckWord( word );
+        Q3PtrList<KAction> actionCheckSpellList = view->listOfResultOfCheckWord( word );
         if ( !actionCheckSpellList.isEmpty() ) {
             view->plugActionList( "spell_result_action", actionCheckSpellList );
             return view->popupMenu("text_popup_spell_with_result");
@@ -462,11 +464,11 @@ MouseMeaning ImageFramePolicy::mouseMeaning( const KoPoint &point, int keyState 
     Q_UNUSED(keyState);
     return m_view->selected() ? MEANING_MOUSE_MOVE: MEANING_MOUSE_SELECT;
 }
-QPopupMenu* ImageFramePolicy::createPopup( const KoPoint &point, KWView *view ) {
+Q3PopupMenu* ImageFramePolicy::createPopup( const KoPoint &point, KWView *view ) {
     Q_UNUSED(point);
     KActionSeparator *separator=new KActionSeparator();
     KActionCollection *actionCollection = view->actionCollection();
-    QPtrList<KAction> actionList;
+    Q3PtrList<KAction> actionList;
     actionList.append(separator);
     KAction *action = actionCollection->action("change_picture");
     Q_ASSERT(action);

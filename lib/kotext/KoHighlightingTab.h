@@ -30,7 +30,7 @@ class KoHighlightingTab : public KoHighlightingTabBase
     Q_OBJECT
 
 public:
-    KoHighlightingTab( QWidget* parent=0, const char* name=0, WFlags fl=0 );
+    KoHighlightingTab( QWidget* parent=0, const char* name=0, Qt::WFlags fl=0 );
     ~KoHighlightingTab();
 
     KoTextFormat::UnderlineType getUnderline() const;

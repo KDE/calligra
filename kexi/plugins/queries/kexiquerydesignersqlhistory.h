@@ -28,7 +28,7 @@
 #include <qsimplerichtext.h>
 
 class QSimpleRichText;
-class KPopupMenu;
+class KMenu;
 
 class HistoryEntry
 {
@@ -67,7 +67,7 @@ class KexiQueryDesignerSQLHistory : public QScrollView
 		KexiQueryDesignerSQLHistory(QWidget *parent, const char *name=0);
 		virtual ~KexiQueryDesignerSQLHistory();
 
-		KPopupMenu* popupMenu() const;
+		KMenu* popupMenu() const;
 
 //		void		contextMenu(const QPoint &pos, HistoryEntry *e);
 
@@ -98,7 +98,7 @@ class KexiQueryDesignerSQLHistory : public QScrollView
 	private:
 		History *m_history;
 		HistoryEntry *m_selected;
-		KPopupMenu *m_popup;
+		KMenu *m_popup;
 };
 
 #endif

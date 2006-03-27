@@ -21,6 +21,9 @@
 
 #include <qlabel.h>
 #include <qlayout.h>
+//Added by qt3to4:
+#include <Q3GridLayout>
+#include <Q3Frame>
 
 #include <kcombobox.h>
 #include <klineedit.h>
@@ -85,7 +88,7 @@ void KWMailMergeKSpreadConfig::documentLoaded()
 {
   _pageNumber->clear();
 
-  QPtrListIterator<Sheet> it( _document->map()->sheetList() );
+  Q3PtrListIterator<Sheet> it( _document->map()->sheetList() );
   int counter = 1;
   for ( it.toFirst(); it.current(); ++it ) {
     _pageNumber->insertItem( QString::number( counter ) );
@@ -100,12 +103,12 @@ void KWMailMergeKSpreadConfig::initGUI()
 {
   QFrame *page = plainPage();
 
-  QGridLayout *layout = new QGridLayout( page, 2, 2, marginHint(), spacingHint() );
+  Q3GridLayout *layout = new Q3GridLayout( page, 2, 2, marginHint(), spacingHint() );
 
   QLabel *label = new QLabel( i18n( "URL:" ), page );
   layout->addWidget( label, 0, 0 );
 
-  _urlRequester = new KURLRequester( page );
+  _urlRequester = new KUrlRequester( page );
   layout->addWidget( _urlRequester, 0, 1 );
 
   label = new QLabel( i18n( "Page number:" ), page );

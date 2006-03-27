@@ -474,7 +474,7 @@ public slots:
 
 public:
 
-// MOC_SKIP_BEGIN
+#ifndef Q_MOC_RUN
         /**
         \ifnot v200
         \deprecated Feature scheduled for future release, at present not implemented.
@@ -569,7 +569,7 @@ public:
             KDFrameProfile _profile;
         };
 
-// MOC_SKIP_END
+#endif
 
 public slots:
         /**

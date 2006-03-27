@@ -30,6 +30,9 @@
 #include "KoMainWindow.h"
 #include "KoQueryTrader.h"
 #include "KoView.h"
+//Added by qt3to4:
+#include <Q3ValueList>
+#include <Q3PtrList>
 
 KoApplicationIface::KoApplicationIface()
  : DCOPObject( "KoApplicationIface" )
@@ -52,29 +55,29 @@ DCOPRef KoApplicationIface::createDocument( const QString &nativeFormat )
     return DCOPRef( kapp->dcopClient()->appId(), doc->dcopObject()->objId() );
 }
 
-QValueList<DCOPRef> KoApplicationIface::getDocuments()
+Q3ValueList<DCOPRef> KoApplicationIface::getDocuments()
 {
-    QValueList<DCOPRef> lst;
-    QPtrList<KoDocument> *documents = KoDocument::documentList();
+    Q3ValueList<DCOPRef> lst;
+    Q3PtrList<KoDocument> *documents = KoDocument::documentList();
     if ( documents )
     {
-      QPtrListIterator<KoDocument> it( *documents );
+      Q3PtrListIterator<KoDocument> it( *documents );
       for (; it.current(); ++it )
         lst.append( DCOPRef( kapp->dcopClient()->appId(), it.current()->dcopObject()->objId() ) );
     }
     return lst;
 }
 
-QValueList<DCOPRef> KoApplicationIface::getViews()
+Q3ValueList<DCOPRef> KoApplicationIface::getViews()
 {
-    QValueList<DCOPRef> lst;
-    QPtrList<KoDocument> *documents = KoDocument::documentList();
+    Q3ValueList<DCOPRef> lst;
+    Q3PtrList<KoDocument> *documents = KoDocument::documentList();
     if ( documents )
     {
-      QPtrListIterator<KoDocument> it( *documents );
+      Q3PtrListIterator<KoDocument> it( *documents );
       for (; it.current(); ++it )
       {
-          QPtrListIterator<KoView> itview( it.current()->views() );
+          Q3PtrListIterator<KoView> itview( it.current()->views() );
           for ( ; itview.current(); ++itview )
               lst.append( DCOPRef( kapp->dcopClient()->appId(), itview.current()->dcopObject()->objId() ) );
       }
@@ -82,13 +85,13 @@ QValueList<DCOPRef> KoApplicationIface::getViews()
     return lst;
 }
 
-QValueList<DCOPRef> KoApplicationIface::getWindows()
+Q3ValueList<DCOPRef> KoApplicationIface::getWindows()
 {
-    QValueList<DCOPRef> lst;
-    QPtrList<KMainWindow> *mainWindows = KMainWindow::memberList;
+    Q3ValueList<DCOPRef> lst;
+    Q3PtrList<KMainWindow> *mainWindows = KMainWindow::memberList;
     if ( mainWindows )
     {
-      QPtrListIterator<KMainWindow> it( *mainWindows );
+      Q3PtrListIterator<KMainWindow> it( *mainWindows );
       for (; it.current(); ++it )
         lst.append( DCOPRef( kapp->dcopClient()->appId(),
                              static_cast<KoMainWindow *>(it.current())->dcopObject()->objId() ) );

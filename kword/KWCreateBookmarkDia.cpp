@@ -19,11 +19,13 @@
 
 #include <klocale.h>
 #include "KWDocument.h"
-#include <qvbox.h>
+#include <q3vbox.h>
 #include <qlayout.h>
 #include <qlineedit.h>
 #include <qpushbutton.h>
-#include <qlistbox.h>
+#include <q3listbox.h>
+//Added by qt3to4:
+#include <Q3GridLayout>
 #include <kmessagebox.h>
 #include "KWCommand.h"
 #include "KWCreateBookmarkDia.h"
@@ -88,14 +90,14 @@ KWSelectBookmarkDia::KWSelectBookmarkDia( const QStringList & _list, KWDocument 
     QWidget *page = new QWidget( this );
     setMainWidget(page);
 
-    QGridLayout * grid = new QGridLayout(page, 5, 2, KDialog::marginHint(), KDialog::spacingHint());
-    m_bookmarkList = new QListBox( page );
+    Q3GridLayout * grid = new Q3GridLayout(page, 5, 2, KDialog::marginHint(), KDialog::spacingHint());
+    m_bookmarkList = new Q3ListBox( page );
     grid->addMultiCellWidget(m_bookmarkList, 0, 4, 0, 0);
     m_bookmarkList->insertStringList(_list);
 
     connect(m_bookmarkList,  SIGNAL( selectionChanged ()), this, SLOT(slotSelectionChanged()));
-    connect(m_bookmarkList,  SIGNAL(doubleClicked ( QListBoxItem * )), this, SLOT(slotOk()));
-    connect(m_bookmarkList,  SIGNAL(returnPressed ( QListBoxItem * )), this, SLOT(slotOk()));
+    connect(m_bookmarkList,  SIGNAL(doubleClicked ( Q3ListBoxItem * )), this, SLOT(slotOk()));
+    connect(m_bookmarkList,  SIGNAL(returnPressed ( Q3ListBoxItem * )), this, SLOT(slotOk()));
 
     m_pbRename = new QPushButton( i18n("Rename Bookmark"), page );
     grid->addWidget( m_pbRename, 0, 1);

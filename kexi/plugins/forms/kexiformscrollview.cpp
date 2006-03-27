@@ -27,7 +27,7 @@
 #include <formeditor/commands.h>
 #include <widget/utils/kexirecordmarker.h>
 
-#include <kpopupmenu.h>
+#include <kmenu.h>
 
 KexiFormScrollView::KexiFormScrollView(QWidget *parent, bool preview)
  : KexiScrollView(parent, preview)
@@ -50,7 +50,7 @@ KexiFormScrollView::KexiFormScrollView(QWidget *parent, bool preview)
 
 	connect(this, SIGNAL(resizingStarted()), this, SLOT(slotResizingStarted()));
 
-	m_popup = new KPopupMenu(this, "contextMenu");
+	m_popup = new KMenu(this, "contextMenu");
 
 //	setFocusPolicy(NoFocus);
 }

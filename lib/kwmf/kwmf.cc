@@ -27,7 +27,7 @@ DESCRIPTION
 #include <kdebug.h>
 #include <math.h>
 #include <qfile.h>
-#include <qpointarray.h>
+#include <q3pointarray.h>
 #include <kwmf.h>
 #include <qrect.h>
 
@@ -64,12 +64,12 @@ void KWmf::brushSet(
 unsigned KWmf::getColour(
     S32 colour)
 {
-    unsigned red, green, blue;
+    unsigned Qt::red, Qt::green, Qt::blue;
 
-    red = colour & 255;
-    green = (colour >> 8) & 255;
-    blue = (colour >> 16) & 255;
-    return (red << 16) + (green << 8) + blue;
+    Qt::red = colour & 255;
+    Qt::green = (colour >> 8) & 255;
+    Qt::blue = (colour >> 16) & 255;
+    return (Qt::red << 16) + (Qt::green << 8) + Qt::blue;
 }
 
 void KWmf::genericArc(
@@ -291,7 +291,7 @@ void KWmf::invokeHandler(
             QDataStream *body;
 
             operands.readRawBytes(record->data(), words * 2);
-            body = new QDataStream(*record, IO_ReadOnly);
+            body = new QDataStream(*record, QIODevice::ReadOnly);
             body->setByteOrder(QDataStream::LittleEndian);
             (this->*result)(words, *body);
             delete body;
@@ -331,7 +331,7 @@ bool KWmf::parse(
     const QString &file)
 {
     QFile in(file);
-    if (!in.open(IO_ReadOnly))
+    if (!in.open(QIODevice::ReadOnly))
     {
         kdError(s_area) << "Unable to open input file!" << endl;
         in.close();
@@ -651,7 +651,7 @@ void KWmf::opLineTo(
     QPoint lineTo;
 
     lineTo = normalisePoint(operands);
-    QPointArray points(2);
+    Q3PointArray points(2);
     points.setPoint(0, m_lineFrom);
     points.setPoint(1, lineTo);
     gotPolyline(m_dc, points);
@@ -762,7 +762,7 @@ void KWmf::opPolygon(
     S16 tmp;
 
     operands >> tmp;
-    QPointArray points(tmp);
+    Q3PointArray points(tmp);
 
     for (int i = 0; i < tmp; i++)
     {
@@ -778,7 +778,7 @@ void KWmf::opPolyline(
     S16 tmp;
 
     operands >> tmp;
-    QPointArray points(tmp);
+    Q3PointArray points(tmp);
 
     for (int i = 0; i < tmp; i++)
     {
@@ -797,7 +797,7 @@ void KWmf::opRectangle(
     topLeft = normalisePoint(operands);
     size = normaliseSize(operands);
     QRect rect(topLeft, size);
-    QPointArray points(4);
+    Q3PointArray points(4);
 
     points.setPoint(0, topLeft);
     points.setPoint(1, rect.topRight());

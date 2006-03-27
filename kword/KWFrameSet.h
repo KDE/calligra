@@ -22,8 +22,8 @@
 #define frame_set_h
 
 #include "KWFrame.h"
-#include <qptrvector.h>
-#include <qptrlist.h>
+#include <q3ptrvector.h>
+#include <q3ptrlist.h>
 #include "qdom.h"
 
 class KWAnchor;
@@ -46,7 +46,7 @@ class KoXmlWriter;
 
 class KCommand;
 class QPoint;
-class QProgressDialog;
+class Q3ProgressDialog;
 
 
 /**
@@ -74,7 +74,7 @@ public:
      */
     virtual FrameSetType type() const { return FT_BASE; }
 
-    virtual void addTextFrameSets( QPtrList<KWTextFrameSet> & /*lst*/, bool /*onlyReadWrite*/ = false ) {};
+    virtual void addTextFrameSets( Q3PtrList<KWTextFrameSet> & /*lst*/, bool /*onlyReadWrite*/ = false ) {};
     virtual bool ownLine() const { return FALSE;}
 
     /** The different types of textFramesets (that TEXT is important here!)
@@ -155,7 +155,7 @@ public:
     static KWFrame * settingsFrame( const KWFrame* frame );
 
     /** Iterator over the child frames */
-    const QPtrList<KWFrame> &frameIterator() const { return m_frames; }
+    const Q3PtrList<KWFrame> &frameIterator() const { return m_frames; }
     /** Get frame number */
     int frameFromPtr( KWFrame *frame );
     /** Get number of child frames */
@@ -304,7 +304,7 @@ public:
 
     /** Return list of frames in page @p pageNum.
      * This is fast since it uses the m_framesInPage array.*/
-    const QPtrList<KWFrame> & framesInPage( int pageNum ) const;
+    const Q3PtrList<KWFrame> & framesInPage( int pageNum ) const;
 
     /** Allows to detect that updateFrames() hasn't been called yet (e.g. on loading) */
     bool hasFramesInPageArray() const { return !m_framesInPage.isEmpty(); }
@@ -341,7 +341,7 @@ public:
 
     virtual int paragraphs() { return 0; }
     virtual int paragraphsSelected() { return 0; }
-    virtual bool statistics( QProgressDialog * /*progress*/,  ulong & /*charsWithSpace*/, ulong & /*charsWithoutSpace*/, ulong & /*words*/,
+    virtual bool statistics( Q3ProgressDialog * /*progress*/,  ulong & /*charsWithSpace*/, ulong & /*charsWithoutSpace*/, ulong & /*words*/,
                              ulong & /*sentences*/, ulong & /*syllables*/, ulong & /*lines*/,  bool /*process only selected */ ) { return true; }
 
     KWDocument* kWordDocument() const { return m_doc; }
@@ -481,15 +481,15 @@ protected:
 
 
     KWDocument *m_doc;            // Document
-    QPtrList<KWFrame> m_frames;        // Our frames
+    Q3PtrList<KWFrame> m_frames;        // Our frames
 
     // Cached info for optimization
     /// This array provides a direct access to the frames on page N
-    QPtrVector< QPtrList<KWFrame> > m_framesInPage;
+    Q3PtrVector< Q3PtrList<KWFrame> > m_framesInPage;
     /// always equal to m_framesInPage[0].first()->pageNumber() :)
     int m_firstPage;
     /// always empty, for convenience in @ref framesInPage
-    QPtrList<KWFrame> m_emptyList; // ## make static pointer to save memory ?
+    Q3PtrList<KWFrame> m_emptyList; // ## make static pointer to save memory ?
 
     Info m_info;
     KWTableFrameSet *m_groupmanager;

@@ -18,9 +18,9 @@
 #ifndef kwframeviewmanager_h
 #define kwframeviewmanager_h
 #include <qobject.h>
-#include <qptrlist.h>
-#include <qvaluelist.h>
-#include <qvaluevector.h>
+#include <q3ptrlist.h>
+#include <q3valuelist.h>
+#include <q3valuevector.h>
 #include <defs.h>
 
 class KWDocument;
@@ -87,7 +87,7 @@ public:
     /**
      * Return all currently selected frames.
      */
-    QValueList<KWFrameView*> selectedFrames() const;
+    Q3ValueList<KWFrameView*> selectedFrames() const;
     /**
      * Returns the first selected frame.
      * Is the same as selectedFrames()[0]
@@ -95,7 +95,7 @@ public:
     KWFrameView* selectedFrame() const;
 
     // this should be changed to a real iterator when Qt4 is used.
-    const QValueList<KWFrameView*> frameViewsIterator() const { return m_frames; }
+    const Q3ValueList<KWFrameView*> frameViewsIterator() const { return m_frames; }
 
     /**
      * Return the MouseMeaning of what a click of the mouse would do at the @p point.
@@ -167,9 +167,9 @@ signals:
     /// emitted after a frameset that had at least one selected frame was renamed.
     void sigFrameSetRenamed();
     /// emitted after frames were resized
-    void sigFrameResized(const QValueList<KWFrame*>&);
+    void sigFrameResized(const Q3ValueList<KWFrame*>&);
     /// emitted after frames were moved
-    void sigFrameMoved(const QValueList<KWFrame*>&);
+    void sigFrameMoved(const Q3ValueList<KWFrame*>&);
 
 protected slots:
     /**
@@ -212,7 +212,7 @@ private:
      * @param point the location the frame should occupy
      * @param borderOnly if true, only return frames that are hit in the border by point.
      */
-    QValueVector<KWFrameView*> framesAt(const KoPoint &point, bool borderOnly = false) const;
+    Q3ValueVector<KWFrameView*> framesAt(const KoPoint &point, bool borderOnly = false) const;
     /**
      * This is a method used to sort a list using the STL sorting methods.
      * @param f1 the first object
@@ -221,9 +221,9 @@ private:
     static bool compareFrameViewZOrder(KWFrameView *f1, KWFrameView *f2);
 
 private:
-    QValueList<KWFrameView*> m_frames;
-    QValueList<KWFramesListener*> m_framesListener;
-    QValueList<FrameEvent*> m_frameEvents;
+    Q3ValueList<KWFrameView*> m_frames;
+    Q3ValueList<KWFramesListener*> m_framesListener;
+    Q3ValueList<FrameEvent*> m_frameEvents;
     bool m_queueRequested, m_blockEvents;
 };
 

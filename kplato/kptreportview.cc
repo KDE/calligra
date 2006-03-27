@@ -652,7 +652,7 @@ void ReportView::replaceTags(QDomNode &node) {
 
 void ReportView::getTemplateFile(const QString &tpl) {
 
-	KURL url(tpl);
+	KUrl url(tpl);
 	QString localtpl;
 	bool isTemp = false;
 

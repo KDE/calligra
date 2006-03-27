@@ -24,13 +24,16 @@
 
 #include <kdialogbase.h>
 #include <koffice_export.h>
+//Added by qt3to4:
+#include <QPixmap>
+#include <Q3CString>
 
 class QString;
 class QPixmap;
 class QWidget;
 class KInstance;
 class KLineEdit;
-class QListViewItem;
+class Q3ListViewItem;
 class KoTemplateCreateDiaPrivate;
 
 /****************************************************************************
@@ -44,11 +47,11 @@ class KOFFICEUI_EXPORT KoTemplateCreateDia : public KDialogBase
     Q_OBJECT
 
 public:
-    KoTemplateCreateDia( const QCString &templateType, KInstance *instance,
+    KoTemplateCreateDia( const Q3CString &templateType, KInstance *instance,
                          const QString &file, const QPixmap &pix, QWidget *parent=0L );
     ~KoTemplateCreateDia();
 
-    static void createTemplate( const QCString &templateType, KInstance *instance,
+    static void createTemplate( const Q3CString &templateType, KInstance *instance,
                                 const QString &file, const QPixmap &pix, QWidget *parent=0L );
 
 protected:

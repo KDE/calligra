@@ -22,9 +22,9 @@
 
 #include <qtoolbutton.h>
 #include <qlayout.h>
-#include <kpopupmenu.h>
+#include <kmenu.h>
 #include <kdatepicker.h>
-#include <kdatetbl.h>
+#include <kdatetable.h>
 #include <kexiutils/utils.h>
 
 KexiDBTimeEdit::KexiDBTimeEdit(const QTime &time, QWidget *parent, const char *name)

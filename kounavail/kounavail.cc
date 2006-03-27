@@ -20,7 +20,10 @@
 #include "kounavail.h"
 
 #include <qpainter.h>
-#include <qiconset.h>
+#include <qicon.h>
+//Added by qt3to4:
+#include <Q3CString>
+#include <QPaintEvent>
 #include <kaction.h>
 #include <kinstance.h>
 #include <kstdaction.h>
@@ -56,7 +59,7 @@ bool KoUnavailPart::loadXML( QIODevice *, const QDomDocument &doc )
 
 bool KoUnavailPart::saveFile()
 {
-    kdDebug() << "KoUnavailPart::saveFile m_url=" << m_url.prettyURL() << endl;
+    kDebug() << "KoUnavailPart::saveFile m_url=" << m_url.prettyURL() << endl;
     // This is called if the part points to an external file
     // In that case we have nothing to save, the file was unavailable !
     return true;
@@ -64,7 +67,7 @@ bool KoUnavailPart::saveFile()
 
 QDomDocument KoUnavailPart::saveXML()
 {
-    kdDebug() << "KoUnavailPart::saveXML" << endl;
+    kDebug() << "KoUnavailPart::saveXML" << endl;
     return m_doc;
 }
 
@@ -75,9 +78,9 @@ bool KoUnavailPart::saveOasis(KoStore*, KoXmlWriter*)
     return false;
 }
 
-void KoUnavailPart::setMimeType( const QCString& mime )
+void KoUnavailPart::setMimeType( const Q3CString& mime )
 {
-    kdDebug() << "KoUnavailPart::setMimeType " << mime << endl;
+    kDebug() << "KoUnavailPart::setMimeType " << mime << endl;
     m_mimetype = mime;
 }
 
@@ -101,7 +104,7 @@ void KoUnavailPart::paintContent( QPainter& painter, const QRect& rect, bool /*t
     defaultFont.setPointSize( 16 ); // ###
     painter.setFont( defaultFont );
     //painter.drawText( 20, 20, m_reason );
-    painter.drawText( rect, Qt::AlignCenter | Qt::WordBreak, m_reason );
+    painter.drawText( rect, Qt::AlignCenter | Qt::TextWordWrap, m_reason );
     painter.restore();
 }
 

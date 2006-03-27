@@ -76,14 +76,14 @@ KoTextCursor * KWInsertTOCCommand::execute( KoTextCursor *c )
         p = static_cast<KWTextParag *>(p->next());
     }
     // Set a hard frame break after the last TOC parag
-    kdDebug() << "KWInsertTOCCommand::execute setPageBreaking on " << prevTOCParag << " " << prevTOCParag->paragId() << endl;
+    kDebug() << "KWInsertTOCCommand::execute setPageBreaking on " << prevTOCParag << " " << prevTOCParag->paragId() << endl;
     prevTOCParag->setPageBreaking( prevTOCParag->pageBreaking() | KWParagLayout::HardFrameBreakAfter );
 
     // Format paragraphs, to take this page break into account and update page numbers
     fs->layout();
     fs->updateFrames();
 
-    //kdDebug() << "KWInsertTOCCommand::execute layouting done, setting page numbers" << endl;
+    //kDebug() << "KWInsertTOCCommand::execute layouting done, setting page numbers" << endl;
 
     // Now add the page numbers, and apply the style
     QMap<KWTextParag *, KWTextParag *>::Iterator mapIt = paragMap.begin();
@@ -138,7 +138,7 @@ KoTextCursor * KWInsertTOCCommand::removeTOC( KWTextFrameSet *fs, KoTextCursor *
         KWTextParag * parag = static_cast<KWTextParag *>(p);
         if ( parag->partOfTableOfContents() )
         {
-            kdDebug() << "KWContents::createContents Deleting paragraph " << p << " " << p->paragId() << endl;
+            kDebug() << "KWContents::createContents Deleting paragraph " << p << " " << p->paragId() << endl;
             // This paragraph is part of the TOC -> remove
 
             /* This method aims to provide an "undo" that restores the previous version of the TOC.
@@ -164,10 +164,10 @@ KoTextCursor * KWInsertTOCCommand::removeTOC( KWTextFrameSet *fs, KoTextCursor *
             if ( cursor->parag() == p )
                 cursor->setParag( next ? next : prev );
             delete p;
-            kdDebug() << "KWInsertTOCCommand::removeTOC " << p << " deleted" << endl;
+            kDebug() << "KWInsertTOCCommand::removeTOC " << p << " deleted" << endl;
             p = next;
             posOfToc = p;
-            kdDebug() << "KWInsertTOCCommand::removeTOC prev=" << prev << " p=" << p << endl;
+            kDebug() << "KWInsertTOCCommand::removeTOC prev=" << prev << " p=" << p << endl;
             // Fix parag chain
             if ( prev )
             {
@@ -248,7 +248,7 @@ KoParagStyle * KWInsertTOCCommand::findOrCreateTOCStyle( KWTextFrameSet *fs, int
             tab.ptWidth = 0.5;
             tabList.append( tab );
             style->paragLayout().setTabList( tabList );
-            style->paragLayout().margins[QStyleSheetItem::MarginLeft] = KoUnit::fromUserValue( (depth*4.5), KoUnit::unit("mm") );
+            style->paragLayout().margins[Q3StyleSheetItem::MarginLeft] = KoUnit::fromUserValue( (depth*4.5), KoUnit::unit("mm") );
         }
         style = fs->kWordDocument()->styleCollection()->addStyle( style );     // register the new style
         fs->kWordDocument()->updateAllStyleLists();                 // show it in the UI

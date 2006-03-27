@@ -5071,7 +5071,7 @@ void View::insertPicture()
   //This behaviour can be seen in other spreadsheets.
   //-- Robert Knight 12/02/06 <robertknight@gmail.com>
 
-  KURL file = KFileDialog::getImageOpenURL( QString::null, d->canvas );
+  KUrl file = KFileDialog::getImageOpenURL( QString::null, d->canvas );
 
   if (file.isEmpty())
  	return;

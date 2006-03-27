@@ -22,10 +22,12 @@
 
 #include <kselect.h>
 #include <qlayout.h>
-#include <qhbox.h>
+#include <q3hbox.h>
 #include <qlabel.h>
 #include <qspinbox.h>
 #include <qtooltip.h>
+//Added by qt3to4:
+#include <Q3GridLayout>
 #include <koFrameButton.h>
 #include <koColorSlider.h>
 #include <kcolordialog.h>
@@ -39,7 +41,7 @@ KoHSVWidget::KoHSVWidget(QWidget *parent, const char *name) : super(parent, name
     m_ColorButton = new KDualColorButton(this);
     m_ColorButton ->  setFixedSize(m_ColorButton->sizeHint());
 
-    QGridLayout *mGrid = new QGridLayout(this, 5, 7, 5, 2);
+    Q3GridLayout *mGrid = new Q3GridLayout(this, 5, 7, 5, 2);
     m_colorwheel = new KoColorWheel(this);
     m_colorwheel->setFixedSize( 120, 120);
     m_VSelector = new KValueSelector(Qt::Vertical, this);
@@ -56,17 +58,17 @@ KoHSVWidget::KoHSVWidget(QWidget *parent, const char *name) : super(parent, name
     /* setup spin box */
     mHIn = new QSpinBox(0, 359, 1, this);
     mHIn->setFixedSize(50, 20);
-    mHIn->setFocusPolicy( QWidget::ClickFocus );
+    mHIn->setFocusPolicy( Qt::ClickFocus );
     QToolTip::add( mHIn, i18n( "Hue" ) );
 
     mSIn = new QSpinBox(0, 255, 1, this);
     mSIn->setFixedSize(50, 20);
-    mSIn->setFocusPolicy( QWidget::ClickFocus );
+    mSIn->setFocusPolicy( Qt::ClickFocus );
     QToolTip::add( mSIn, i18n( "Saturation" ) );
 
     mVIn = new QSpinBox(0, 255, 1, this);
     mVIn->setFixedSize(50, 20);
-    mVIn->setFocusPolicy( QWidget::ClickFocus );
+    mVIn->setFocusPolicy( Qt::ClickFocus );
     QToolTip::add( mVIn, i18n( "Value (brightness)" ) );
 
     mGrid->addMultiCellWidget(m_ColorButton, 0, 0, 0, 1, Qt::AlignTop);

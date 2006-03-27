@@ -51,7 +51,7 @@ public:
     static QStringList clipartMimeTypes();
 
 public slots:
-    virtual void showPreview(const KURL &url);
+    virtual void showPreview(const KUrl &url);
     virtual void clearPreview();
 
 private:

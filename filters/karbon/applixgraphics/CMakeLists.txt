@@ -1,0 +1,50 @@
+kde4_header()
+
+include_directories( ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
+
+
+########### next target ###############
+
+set(applixgraphicimport_PART_SRCS applixgraphicimport.cc )
+
+kde4_automoc(${applixgraphicimport_PART_SRCS})
+
+kde4_add_plugin(applixgraphicimport WITH_PREFIX ${applixgraphicimport_PART_SRCS})
+
+kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} applixgraphicimport )
+
+target_link_libraries(applixgraphicimport  ${KDE4_KDECORE_LIBS} )
+
+install_targets(${LIB_INSTALL_DIR}/kde4 applixgraphicimport )
+
+
+########### install files ###############
+
+install_files( ${SERVICES_INSTALL_DIR} FILES  kontour_applixgraphic_import.desktop )
+
+kde4_footer()
+
+
+
+#original Makefile.am contents follow:
+
+######## General stuff
+#
+#INCLUDES= -I$(srcdir) $(KOFFICE_INCLUDES) $(all_includes)
+#libapplixgraphicimport_la_LDFLAGS	= -module -avoid-version -no-undefined $(all_libraries)
+#
+######## Files
+#
+#kde_module_LTLIBRARIES = libapplixgraphicimport.la
+#
+#libapplixgraphicimport_la_SOURCES = applixgraphicimport.cc
+#libapplixgraphicimport_la_LIBADD = $(KOFFICE_LIBS)
+#noinst_HEADERS = applixgraphicimport.h
+#
+#METASOURCES = AUTO
+#
+#service_DATA = kontour_applixgraphic_import.desktop
+#servicedir = $(kde_servicesdir)
+#
+#messages: rc.cpp
+#	$(XGETTEXT) *.cc *.cpp -o $(podir)/kontourapplixgraphicsfilter.pot

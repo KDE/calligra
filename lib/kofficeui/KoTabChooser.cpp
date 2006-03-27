@@ -23,8 +23,11 @@
 
 #include <KoTabChooser.h>
 #include <qpainter.h>
-#include <qpopupmenu.h>
+#include <q3popupmenu.h>
 #include <qcursor.h>
+//Added by qt3to4:
+#include <QMouseEvent>
+#include <Q3Frame>
 
 #include <klocale.h>
 
@@ -44,9 +47,9 @@ public:
 
 /*================================================================*/
 KoTabChooser::KoTabChooser( QWidget *parent, int _flags )
-    : QFrame( parent, "" )
+    : Q3Frame( parent, "" )
 {
-    setFrameStyle( MenuBarPanel );
+    setFrameStyle( QFrame::StyledPanel );
     flags = _flags;
     d=new KoTabChooserPrivate();
 
@@ -71,7 +74,7 @@ void KoTabChooser::mousePressEvent( QMouseEvent *e )
         return;
 
     switch ( e->button() ) {
-    case LeftButton: case MidButton: {
+    case Qt::LeftButton: case Qt::MidButton: {
 	switch ( currType ) {
 	case TAB_LEFT: {
 	    if ( flags & TAB_CENTER ) currType = TAB_CENTER;
@@ -96,7 +99,7 @@ void KoTabChooser::mousePressEvent( QMouseEvent *e )
 	}
 	repaint( true );
     } break;
-    case RightButton: {
+    case Qt::RightButton: {
 	QPoint pnt( QCursor::pos() );
 
 	rb_menu->setItemChecked( mLeft, false );
@@ -126,7 +129,7 @@ void KoTabChooser::drawContents( QPainter *painter )
 {
     if ( currType == 0 ) return;
 
-    painter->setPen( QPen( black, 2, SolidLine ) );
+    painter->setPen( QPen( Qt::black, 2, Qt::SolidLine ) );
 
     switch ( currType ) {
     case TAB_LEFT: {
@@ -144,7 +147,7 @@ void KoTabChooser::drawContents( QPainter *painter )
     case TAB_DEC_PNT: {
 	painter->drawLine( 4, height() - 4, width() - 4, height() - 4 );
 	painter->drawLine( width() / 2, 4, width() / 2, height() - 4 );
-	painter->fillRect( width() / 2 + 2, height() - 9, 3, 3, black );
+	painter->fillRect( width() / 2 + 2, height() - 9, 3, 3, Qt::black );
     } break;
     default: break;
     }
@@ -153,7 +156,7 @@ void KoTabChooser::drawContents( QPainter *painter )
 /*================================================================*/
 void KoTabChooser::setupMenu()
 {
-    rb_menu = new QPopupMenu();
+    rb_menu = new Q3PopupMenu();
     Q_CHECK_PTR( rb_menu );
     mLeft = rb_menu->insertItem( i18n( "Tabulator &Left" ), this, SLOT( rbLeft() ) );
     mCenter = rb_menu->insertItem( i18n( "Tabulator &Center" ), this, SLOT( rbCenter() ) );

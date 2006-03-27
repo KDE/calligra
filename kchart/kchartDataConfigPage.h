@@ -21,8 +21,8 @@
 #define __KCHARTDATACONFIGPAGE_H__
 
 #include <qwidget.h>
-#include <qbutton.h>
-#include <qlistbox.h>
+#include <q3button.h>
+#include <q3listbox.h>
 #include <qpainter.h>
 
 #include "koChart.h"

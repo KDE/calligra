@@ -151,7 +151,7 @@ KDChartParams::KDChartParams()
     setDataDefaultColors();
 
     // Default color for data display outlines.
-    setOutlineDataColor( black );
+    setOutlineDataColor( Qt::black );
 
     // Default line width for data display outlines.
     setOutlineDataLineWidth( 1 );
@@ -1715,18 +1715,18 @@ void KDChartParams::setDataColor( uint dataset, QColor color )
   */
 void KDChartParams::setDataDefaultColors()
 {
-    setDataColor(  0, red );
-    setDataColor(  1, green );
-    setDataColor(  2, blue );
-    setDataColor(  3, cyan );
-    setDataColor(  4, magenta );
-    setDataColor(  5, yellow );
-    setDataColor(  6, darkRed );
-    setDataColor(  7, darkGreen );
-    setDataColor(  8, darkBlue );
-    setDataColor(  9, darkCyan );
-    setDataColor( 10, darkMagenta );
-    setDataColor( 11, darkYellow );
+    setDataColor(  0, Qt::red );
+    setDataColor(  1, Qt::green );
+    setDataColor(  2, Qt::blue );
+    setDataColor(  3, Qt::cyan );
+    setDataColor(  4, Qt::magenta );
+    setDataColor(  5, Qt::yellow );
+    setDataColor(  6, Qt::darkRed );
+    setDataColor(  7, Qt::darkGreen );
+    setDataColor(  8, Qt::darkBlue );
+    setDataColor(  9, Qt::darkCyan );
+    setDataColor( 10, Qt::darkMagenta );
+    setDataColor( 11, Qt::darkYellow );
 }
 
 /**
@@ -2614,7 +2614,7 @@ const KDChartParams::KDChartFrameSettings* KDChartParams::frameSettings( uint ar
         return it;
     else if( pIterIdx ){
         QString keyStart( key.left(6) );
-        QDictIterator<KDChartFrameSettings> it2( _areaDict );
+        Q3DictIterator<KDChartFrameSettings> it2( _areaDict );
         for( ; it2.current(); ++it2 ){
             if( it2.currentKey().startsWith( keyStart ) ){
                 bFound = true;
@@ -2640,7 +2640,7 @@ const KDChartParams::KDChartFrameSettings* KDChartParams::nextFrameSettings( boo
     bFound = false;
     if( pIterIdx ){
         int i=0;
-        QDictIterator<KDChartFrameSettings> it( _areaDict );
+        Q3DictIterator<KDChartFrameSettings> it( _areaDict );
         for( ; it.current(); ++it ){
             if( *pIterIdx == i )
                 break;
@@ -2760,7 +2760,7 @@ uint KDChartParams::maxCustomBoxIdx() const
     uint cnt( _customBoxDict.count() );
     if( cnt ) {
         int maxIndex = cnt-1;
-        QIntDictIterator<KDChartCustomBox> it( _customBoxDict );
+        Q3IntDictIterator<KDChartCustomBox> it( _customBoxDict );
         for( ; it.current(); ++it )
             if( it.currentKey() > maxIndex )
                 maxIndex = it.currentKey();
@@ -9137,7 +9137,7 @@ int KDChartParams::headerFooterFontRelSize( uint pos ) const
   */
 bool KDChartParams::findFirstAxisCustomBoxID( uint n, uint& boxID ) const
 {
-    QIntDictIterator<KDChartCustomBox> it( _customBoxDict );
+    Q3IntDictIterator<KDChartCustomBox> it( _customBoxDict );
     for( ; it.current(); ++it ){
         if( (*it).anchorArea() == KDChartEnums::AreaAxisBASE + n ){
             boxID = it.currentKey();

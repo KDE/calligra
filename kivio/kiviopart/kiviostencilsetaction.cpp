@@ -25,7 +25,7 @@
 #include <kapplication.h>
 #include <kdebug.h>
 #include <ktoolbar.h>
-#include <ktoolbarbutton.h>
+
 #include <kiconloader.h>
 #include <klocale.h>
 
@@ -106,7 +106,7 @@ int KivioStencilSetAction::plug( QWidget* widget, int index)
     if ( hasIconSet() )
       id = menu->insertItem( iconSet(), text(), popupMenu(), -1, index );
     else
-      id = menu->insertItem( kapp->iconLoader()->loadIcon(icon(), KIcon::Small),
+      id = menu->insertItem( kapp->iconLoader()->loadIcon(icon(), K3Icon::Small),
         text(), popupMenu(), -1, index );
 
     if ( !isEnabled() )

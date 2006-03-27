@@ -20,7 +20,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <qvaluelist.h>
+#include <q3valuelist.h>
 
 #include <kdebug.h>
 #include "kformuladefs.h"
@@ -163,7 +163,7 @@ QDomElement Compatibility::readMatrix(const QDomDocument& doc)
     element.setAttribute("COLUMNS", cols);
 
     if ((nextToken() == '}') && (nextToken() == OF_MATRIX) && (nextToken() == '{')) {
-        QValueList<QDomElement> matrix;
+        Q3ValueList<QDomElement> matrix;
         for (uint c = 0; c < cols; c++) {
             for (uint r = 0; r < rows; r++) {
                 if (hasNext() && (nextToken() == '{')) {

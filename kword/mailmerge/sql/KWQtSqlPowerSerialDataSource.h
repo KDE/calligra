@@ -26,10 +26,10 @@
 #include <kdialogbase.h>
 #include <qsqldatabase.h>
 /* FOR THE DIRTY HACK */
-#include <qsqlcursor.h>
+#include <q3sqlcursor.h>
 #include <qsqldriver.h>
 /* END FOR THE DIRTY HACK */
-#include <qguardedptr.h>
+#include <qpointer.h>
 
 #include "defs.h"
 #include "KWMailMergeDataSource.h"
@@ -87,7 +87,7 @@ private:
 private slots:
  void openSetup();
  void updateDBViews();
- void slotTableChanged ( QListBoxItem * item );
+ void slotTableChanged ( Q3ListBoxItem * item );
  void slotExecute();
  void slotSetQuery();
 };

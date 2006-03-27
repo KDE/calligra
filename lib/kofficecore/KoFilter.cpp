@@ -20,6 +20,8 @@
 #include <KoFilter.h>
 
 #include <qfile.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 #include <kurl.h>
 #include <kmimetype.h>
@@ -53,7 +55,7 @@ QString KoEmbeddingFilter::mimeTypeByExtension( const QString& extension )
 {
     // We need to resort to an ugly hack to determine the mimetype
     // from the extension, as kservicetypefactory.h isn't installed
-    KURL url;
+    KUrl url;
     url.setPath( QString( "dummy.%1" ).arg( extension ) );
     KMimeType::Ptr m( KMimeType::findByURL( url, 0, true, true ) );
     return m->name();
@@ -64,7 +66,7 @@ KoEmbeddingFilter::KoEmbeddingFilter() : KoFilter()
     m_partStack.push( new PartState() );
 }
 
-int KoEmbeddingFilter::embedPart( const QCString& from, QCString& to,
+int KoEmbeddingFilter::embedPart( const Q3CString& from, Q3CString& to,
                                   KoFilter::ConversionStatus& status, const QString& key )
 {
     ++( m_partStack.top()->m_lruPartIndex );
@@ -86,7 +88,7 @@ int KoEmbeddingFilter::embedPart( const QCString& from, QCString& to,
     return lruPartIndex();
 }
 
-void KoEmbeddingFilter::startInternalEmbedding( const QString& key, const QCString& mimeType )
+void KoEmbeddingFilter::startInternalEmbedding( const QString& key, const Q3CString& mimeType )
 {
     filterChainEnterDirectory( QString::number( ++( m_partStack.top()->m_lruPartIndex ) ) );
     PartReference ref( lruPartIndex(), mimeType );
@@ -112,15 +114,15 @@ int KoEmbeddingFilter::internalPartReference( const QString& key ) const
     return it.data().m_index;
 }
 
-QCString KoEmbeddingFilter::internalPartMimeType( const QString& key ) const
+Q3CString KoEmbeddingFilter::internalPartMimeType( const QString& key ) const
 {
     QMapConstIterator<QString, PartReference> it = m_partStack.top()->m_partReferences.find( key );
     if ( it == m_partStack.top()->m_partReferences.end() )
-        return QCString();
+        return Q3CString();
     return it.data().m_mimeType;
 }
 
-KoEmbeddingFilter::PartReference::PartReference( int index, const QCString& mimeType ) :
+KoEmbeddingFilter::PartReference::PartReference( int index, const Q3CString& mimeType ) :
     m_index( index ), m_mimeType( mimeType )
 {
 }

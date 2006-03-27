@@ -34,6 +34,8 @@
 #include <qdatetime.h>
 #include <qregion.h>
 #include <qstring.h>
+//Added by qt3to4:
+#include <Q3PointArray>
 
 #include "KDChartGlobal.h"
 #include "KDChartUnknownTypeException.h"
@@ -174,7 +176,7 @@ class KDCHART_EXPORT KDChartPainter
         virtual uint numLegendFallbackTexts( KDChartTableDataBase* data ) const;
 
         static QPoint pointOnCircle( const QRect& rect, double angle );
-        static void makeArc( QPointArray& points,
+        static void makeArc( Q3PointArray& points,
                              const QRect& rect,
                              double startAngle, double angles );
 

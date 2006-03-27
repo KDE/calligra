@@ -30,6 +30,8 @@
 #include <KDChartParams.h>
 
 #include <qpainter.h>
+//Added by qt3to4:
+#include <Q3PointArray>
 
 #include <stdlib.h>
 
@@ -488,7 +490,7 @@ void KDChartBarPainter::specificPaintData( QPainter* painter,
 		    if ( myBarColor.isValid() )
 		      painter->setBrush( myBarColor );
 		    else
-		      painter->setBrush( NoBrush );
+		      painter->setBrush( Qt::NoBrush );
 
 		    // Prepare region for detection of mouse clicks
 		    // and for finding anchor positions of data value texts
@@ -569,7 +571,7 @@ void KDChartBarPainter::specificPaintData( QPainter* painter,
 			   */
 			  // Draw solid excess arrows negatives			    
                 
-                          QPointArray points( 5 );
+                          Q3PointArray points( 5 );
 			  
 			  /*this works in a positive view -> 200 500*/ 
 			  points.setPoint( 0, frontX1, cellValue < 0  ? 
@@ -678,7 +680,7 @@ void KDChartBarPainter::specificPaintData( QPainter* painter,
 			   * The value is too low because over the Min negative value
                            * The value is not within the configured view..
 			   */
-			  QPointArray points( 5 );
+			  Q3PointArray points( 5 );
 			  /*this works in a positive view -> 200 500*/ 
 			  points.setPoint( 0, frontX1, cellValue < 0  ? 
 					   static_cast<int>(yZero+height1 - 3.0*delta) + arrowXAxisGap:
@@ -771,7 +773,7 @@ void KDChartBarPainter::specificPaintData( QPainter* painter,
 			    *region += QRegion( points );
 			  }
 
-			  QPointArray points2( 6 );
+			  Q3PointArray points2( 6 );
                           points2.setPoint( 0, frontX1, cellValue < 0 ? 
 					    static_cast<int>( yZero + height1 - 3.0 * delta ) + arrowXAxisGap:
 					    static_cast<int>(yZero + height1) + arrowXAxisGap);
@@ -839,7 +841,7 @@ void KDChartBarPainter::specificPaintData( QPainter* painter,
 			  painter->drawPolygon( points2 );
 			 
 			  if ( region ) {
-			    QPointArray points2cpy( points2 );
+			    Q3PointArray points2cpy( points2 );
 			    points2cpy.detach();
 			    points2cpy.translate( _dataRect.x(),
 						  _dataRect.y() );
@@ -1042,7 +1044,7 @@ void KDChartBarPainter::specificPaintData( QPainter* painter,
 			if( params()->drawSolidExcessArrows() ) {
 
 			  // Draw solid excess arrows
-			  QPointArray points( 5 );                        
+			  Q3PointArray points( 5 );                        
                           /*this works for positive config and 0 include config*/  
 			  points.setPoint( 0, frontX1, 
 					   (minDataValueYPos < static_cast <int> (yZero))? 
@@ -1123,7 +1125,7 @@ void KDChartBarPainter::specificPaintData( QPainter* painter,
                            * or it is not within the configured view.
 			   */
 
-			  QPointArray points( 5 );			
+			  Q3PointArray points( 5 );			
 			  /*this works for positive config and 0 include config*/  
 			  points.setPoint( 0, frontX1, 
 					   (minDataValueYPos < static_cast <int> (yZero))? static_cast <int> (minDataValueYPos - 1) : static_cast <int>(yZero));
@@ -1185,7 +1187,7 @@ void KDChartBarPainter::specificPaintData( QPainter* painter,
 			    *region += QRegion( points );
 			  }
 
-			  QPointArray points2( 6 );
+			  Q3PointArray points2( 6 );
 			  points2.setPoint( 0, frontX1, static_cast<int>( yZero + height1 - 3.0 * delta ) );
 			  points2.setPoint( 1, xm,      static_cast<int>( yZero + height1 ) );
 			  points2.setPoint( 2, frontX2, static_cast<int>( yZero + height1 - 3.0 * delta ) );
@@ -1222,7 +1224,7 @@ void KDChartBarPainter::specificPaintData( QPainter* painter,
 			    painter->drawText( points2.point(4), "point4");
 			  */
 			  if ( region ) {
-			    QPointArray points2cpy( points2 );
+			    Q3PointArray points2cpy( points2 );
 			    points2cpy.detach();
 			    points2cpy.translate( _dataRect.x(),
 						  _dataRect.y() );
@@ -1365,7 +1367,7 @@ void KDChartBarPainter::specificPaintData( QPainter* painter,
 		  if ( bShowThisBar && _bThreeDBars &&  !bDrawExtraLines ) {
 		    //Pending Michel: no need to use that anymore 
 		    //const int maxY = 2*devRect.height();
-		    QPointArray points( 4 );
+		    Q3PointArray points( 4 );
                                     
 		    if (cellValue <= 0 || cellValue < minColumnValue) {                                         
 		      if ( tooLow || cellValue < minColumnValue ) {
@@ -1422,7 +1424,7 @@ void KDChartBarPainter::specificPaintData( QPainter* painter,
 		    if ( myShadow2Color.isValid() )
 		      painter->setBrush( QBrush( myShadow2Color, params()->shadowPattern() ) );
 		    else
-		      painter->setBrush( NoBrush ); 
+		      painter->setBrush( Qt::NoBrush ); 
 
 		    //debug points and lines
 		    /*
@@ -1440,7 +1442,7 @@ void KDChartBarPainter::specificPaintData( QPainter* painter,
 		      
 				    
 		    if ( region ) {
-		      QPointArray points2cpy( points.copy() );
+		      Q3PointArray points2cpy( points.copy() );
 		      //qDebug("g2");
 		      points2cpy.translate( _dataRect.x(), _dataRect.y() );
 		      //qDebug("dataRect XY: %i / %i",_dataRect.x(), _dataRect.y());
@@ -1502,12 +1504,12 @@ void KDChartBarPainter::specificPaintData( QPainter* painter,
 		      }
                                            
 		      if ( /*barHeight*/ cellValue < 0.0 ) {
-			painter->setBrush( bMultiRows ? myBarColor : black );
+			painter->setBrush( bMultiRows ? myBarColor : Qt::black );
 		      }
 		      else
 			painter->setBrush( QBrush( myShadow1Color, params()->shadowPattern() ) );
 		      if ( !myShadow1Color.isValid() )
-			painter->setBrush( NoBrush ); // override prev. setting
+			painter->setBrush( Qt::NoBrush ); // override prev. setting
                                         
 		      // debug points and lines
 		      /*

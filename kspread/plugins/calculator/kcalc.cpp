@@ -64,7 +64,7 @@ QtCalculator :: QtCalculator( Calculator *_corba, QWidget *parent, const char *n
     // Set the window caption/title
 
     // connect(kapp,SIGNAL(kdisplayPaletteChanged()),this,SLOT(set_colors()));
-    // setCaption( kapp->caption() );
+    // setCaption( KInstance::caption() );
 
     // create help button
 

@@ -24,7 +24,18 @@
 #include <qfont.h>
 #include <qlabel.h>
 #include <qlayout.h>
-#include <qsimplerichtext.h>
+#include <q3simplerichtext.h>
+//Added by qt3to4:
+#include <QPixmap>
+#include <QPaintEvent>
+#include <Q3PointArray>
+#include <Q3GridLayout>
+#include <QEvent>
+#include <QKeyEvent>
+#include <Q3HBoxLayout>
+#include <QTimerEvent>
+#include <QResizeEvent>
+#include <QMouseEvent>
 
 #include <kpixmap.h>
 #include <klocale.h>
@@ -35,13 +46,13 @@
 #include <qstring.h>
 
 KoVerticalLabel::KoVerticalLabel( QWidget* parent, const char* name )
-		: QWidget( parent, name, Qt::WRepaintNoErase )
+		: QWidget( parent, name, Qt::WNoAutoErase )
 {
 	QFont f( font() );
 	f.setPointSize( f.pointSize() + 2 );
 	f.setBold( true );
 	setFont( f );
-	setBackgroundMode( PaletteLight );
+	setBackgroundMode( Qt::PaletteLight );
 } // KoVerticalLabel::KoVerticalLabel
 
 KoVerticalLabel::~KoVerticalLabel()
@@ -63,7 +74,7 @@ void KoVerticalLabel::paintEvent( QPaintEvent* )
 	QPainter p( &pm );
 	p.fillRect( 0, 0, height(), width(), colorGroup().background() );
 	p.setFont( font() );
-	p.drawText( 0, 0, height(), width(), AlignCenter, m_text );
+	p.drawText( 0, 0, height(), width(), Qt::AlignCenter, m_text );
 	p.end();
 	QPainter ap( this );
 	ap.rotate( 270. );
@@ -81,7 +92,7 @@ KoHelpNavButton::KoHelpNavButton( NavDirection d, QWidget* parent )
 	m_bitmap = QBitmap( 8, 4, ( d == Up ? upbits : downbits ), true );
 	m_bitmap.setMask( m_bitmap );
 	setFixedSize( 8, 6 );
-	setBackgroundMode( PaletteLight );
+	setBackgroundMode( Qt::PaletteLight );
 } // KoHelpNavButton::KoHelpNavButton
 
 void KoHelpNavButton::paintEvent( QPaintEvent* )
@@ -133,7 +144,7 @@ KoTinyButton::KoTinyButton( Action a, QWidget* parent )
 	}
 	m_bitmap.setMask( m_bitmap );
 	setMinimumSize( 7, 7 );
-	setBackgroundMode( PaletteBackground );
+	setBackgroundMode( Qt::PaletteBackground );
 } // KoTinyButton::KoTinyButton
 
 void KoTinyButton::paintEvent( QPaintEvent* )
@@ -183,7 +194,7 @@ KoHelpView::KoHelpView( QWidget* parent )
 		: QWidget( parent )
 {
 	currentText = 0L;
-	setBackgroundMode( PaletteLight );
+	setBackgroundMode( Qt::PaletteLight );
 	parent->installEventFilter( this );
 	setMouseTracking( true );
 } // KoHelpView::KoHelpView
@@ -198,7 +209,7 @@ void KoHelpView::setText( const QString& text )
 {
 	if ( currentText )
 		delete currentText;
-	currentText = new QSimpleRichText( text, font() );
+	currentText = new Q3SimpleRichText( text, font() );
 	currentText->setWidth( width() );
 	setFixedHeight( currentText->height() );
 } // KoHelpView::setText
@@ -271,20 +282,20 @@ void KoHelpView::paintEvent( QPaintEvent* )
 KoHelpWidget::KoHelpWidget( QString help, QWidget* parent )
 		: QWidget( parent )
 {
-	QGridLayout* layout = new QGridLayout( this, 3, 3 );
+	Q3GridLayout* layout = new Q3GridLayout( this, 3, 3 );
 	layout->setMargin( 2 );
-	layout->addWidget( m_upButton = new KoHelpNavButton( KoHelpNavButton::Up, this ), 0, 1, AlignHCenter );
+	layout->addWidget( m_upButton = new KoHelpNavButton( KoHelpNavButton::Up, this ), 0, 1, Qt::AlignHCenter );
 	layout->addWidget( m_helpViewport = new QWidget( this ), 1, 1 );
-	layout->addWidget( m_downButton = new KoHelpNavButton( KoHelpNavButton::Down, this ), 2, 1, AlignHCenter );
+	layout->addWidget( m_downButton = new KoHelpNavButton( KoHelpNavButton::Down, this ), 2, 1, Qt::AlignHCenter );
 	layout->addColSpacing( 0, 5 );
 	layout->addColSpacing( 2, 5 );
 	layout->setColStretch( 1, 1 );
 
 	m_helpView = new KoHelpView( m_helpViewport );
-	m_helpViewport->setBackgroundMode( PaletteLight );
+	m_helpViewport->setBackgroundMode( Qt::PaletteLight );
 	setText( help );
 
-	setBackgroundMode( PaletteLight );
+	setBackgroundMode( Qt::PaletteLight );
 
 	connect( m_upButton, SIGNAL( pressed() ), this, SLOT( startScrollingUp() ) );
 	connect( m_downButton, SIGNAL( pressed() ), this, SLOT( startScrollingDown() ) );
@@ -368,13 +379,13 @@ void KoHelpWidget::stopScrolling()
 } // KoHelpWidget::stopScrolling
 
 KoContextHelpPopup::KoContextHelpPopup( QWidget* parent )
-		: QWidget( parent, "", WType_Dialog | WStyle_Customize | WStyle_NoBorder )
+		: QWidget( parent, "", Qt::WType_Dialog | Qt::WStyle_Customize | Qt::WStyle_NoBorder )
 {
-	QGridLayout* layout = new QGridLayout( this );
-	QHBoxLayout* buttonLayout;
+	Q3GridLayout* layout = new Q3GridLayout( this );
+	Q3HBoxLayout* buttonLayout;
 	layout->addWidget( m_helpIcon = new QLabel( this ), 0, 0 );
 	layout->addWidget( m_helpTitle = new KoVerticalLabel( this ), 1, 0 );
-	buttonLayout = new QHBoxLayout( layout );
+	buttonLayout = new Q3HBoxLayout( layout );
 	//layout->addLayout( buttonLayout, 2, 0 );
 	layout->addMultiCellWidget( m_helpViewer = new KoHelpWidget( "", this ), 0, 2, 1, 1 );
 	buttonLayout->add( m_close = new KoTinyButton( KoTinyButton::Close, this ) );
@@ -388,7 +399,7 @@ KoContextHelpPopup::KoContextHelpPopup( QWidget* parent )
 	setMinimumSize( 180, 180 );
 
 	m_isSticky = false;
-	setFocusPolicy( StrongFocus );
+	setFocusPolicy( Qt::StrongFocus );
 
 	connect( m_close, SIGNAL( clicked() ), this, SIGNAL( wantsToBeClosed() ) );
 	connect( m_sticky, SIGNAL( toggled( bool ) ), this, SLOT( setSticky( bool ) ) );
@@ -419,11 +430,11 @@ void KoContextHelpPopup::mouseMoveEvent( QMouseEvent* e )
 void KoContextHelpPopup::resizeEvent( QResizeEvent* )
 {
 	QBitmap mask( width(), height() );
-	QPointArray a;
+	Q3PointArray a;
 	QPainter p( &mask );
-	p.fillRect( 0, 0, width(), height(), color1 );
-	p.setPen( color0 );
-	p.setBrush( color0 );
+	p.fillRect( 0, 0, width(), height(), Qt::color1 );
+	p.setPen( Qt::color0 );
+	p.setBrush( Qt::color0 );
 	p.drawLine( 0, 0, 0, 3 );
 	p.drawLine( 0, 0, 3, 0 );
 	p.drawPoint( 1, 1 );
@@ -438,8 +449,8 @@ void KoContextHelpPopup::resizeEvent( QResizeEvent* )
 	p.drawPoint( width() - 6, 0 );
 	p.drawPoint( width() - 5, height() - 3 );
 	p.drawPoint( width() - 3, height() - 5 );
-	p.setPen( NoPen );
-	p.setBrush( QBrush( color0, Dense4Pattern ) );
+	p.setPen( Qt::NoPen );
+	p.setBrush( QBrush( Qt::color0, Qt::Dense4Pattern ) );
 	p.drawRect( 0, height() - 2, width() - 1, height() - 1 );
 	p.drawRect( width() - 2, 0, width() - 1, height() - 1 );
 	p.drawRect( width() - 4, height() - 4, width() - 2, height() - 2 );
@@ -451,10 +462,10 @@ void KoContextHelpPopup::paintEvent( QPaintEvent* )
 {
 	QPainter p( this );
 	p.fillRect( 0, 0, width(), height(), colorGroup().light() );
-	p.setPen( black );
+	p.setPen( Qt::black );
 	p.drawRect( 0, 0, width(), height() );
-	p.fillRect( width() - 3, 0, width() - 1, height() - 1, black );
-	p.fillRect( 0, height() - 3, width() - 1, height() - 1, black );
+	p.fillRect( width() - 3, 0, width() - 1, height() - 1, Qt::black );
+	p.fillRect( 0, height() - 3, width() - 1, height() - 1, Qt::black );
 	p.drawLine( 1, 2, 1, 3 );
 	p.drawLine( 2, 1, 3, 1 );
 	p.drawLine( width() - 4, 2, width() - 4, 3 );
@@ -482,11 +493,11 @@ void KoContextHelpPopup::keyPressEvent( QKeyEvent* e )
 		case Key_Down:
 				m_helpViewer->startScrollingDown();
 			break;*/
-		case Key_Up:
+		case Qt::Key_Up:
 				m_helpViewer->scrollUp();
 			break;
 
-		case Key_Down:
+		case Qt::Key_Down:
 				m_helpViewer->scrollDown();
 			break;
 	}
@@ -501,7 +512,7 @@ void KoContextHelpPopup::keyReleaseEvent( QKeyEvent* e )
 				m_helpViewer->stopScrolling();
 			break;*/
 
-		case Key_Escape:
+		case Qt::Key_Escape:
 				emit wantsToBeClosed();
 			break;
 	}
@@ -537,7 +548,7 @@ KoContextHelpWidget::KoContextHelpWidget( QWidget* parent, const char* name )
 		: QWidget( parent, name )
 {
 	setCaption( i18n( "Context Help" ) );
-	QGridLayout* layout = new QGridLayout( this );
+	Q3GridLayout* layout = new Q3GridLayout( this );
 	layout->addWidget( m_helpIcon = new QLabel( this ), 0, 0 );
 	layout->addWidget( m_helpTitle = new KoVerticalLabel( this ), 1, 0 );
 	layout->addMultiCellWidget( m_helpViewer = new KoHelpWidget( "", this ), 0, 1, 1, 1 );
@@ -563,11 +574,11 @@ void KoContextHelpWidget::setContextHelp( const QString& title, const QString& t
 
 
 KoContextHelpDocker::KoContextHelpDocker( QWidget* parent, const char* name )
-		: QDockWindow( parent, name )
+		: Q3DockWindow( parent, name )
 {
 	setCaption( i18n( "Context Help" ) );
 	QWidget* mainWidget = new QWidget( this );
-	QGridLayout* layout = new QGridLayout( mainWidget );
+	Q3GridLayout* layout = new Q3GridLayout( mainWidget );
 	layout->addWidget( m_helpIcon = new QLabel( mainWidget ), 0, 0 );
 	layout->addWidget( m_helpTitle = new KoVerticalLabel( mainWidget ), 1, 0 );
 	layout->addMultiCellWidget( m_helpViewer = new KoHelpWidget( "", mainWidget ), 0, 1, 1, 1 );

@@ -26,7 +26,7 @@
 #include "argument.h"
 
 #include <qstring.h>
-#include <qvaluelist.h>
+#include <q3valuelist.h>
 #include <ksharedptr.h>
 #include <kdebug.h>
 

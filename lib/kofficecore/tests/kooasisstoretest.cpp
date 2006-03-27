@@ -20,6 +20,8 @@
 #include <KoDom.h>
 #include <kdebug.h>
 #include <assert.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 void testMimeForPath( QDomDocument& doc )
 {
@@ -33,7 +35,7 @@ void testMimeForPath( QDomDocument& doc )
 
 int main( int, char** ) {
 
-    const QCString xml = "\
+    const Q3CString xml = "\
 <?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\
 <manifest:manifest xmlns:manifest=\"urn:oasis:names:tc:opendocument:xmlns:manifest:1.0\">\n\
  <manifest:file-entry manifest:media-type=\"application/vnd.oasis.opendocument.text\" manifest:full-path=\"/\"/>\n\

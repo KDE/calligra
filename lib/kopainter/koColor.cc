@@ -91,9 +91,9 @@ KoColor::KoColor(int c, int m, int y, int k)
 
 KoColor::KoColor(const QColor &c)
 {
-  mR = c.red();
-  mG = c.green();
-  mB = c.blue();
+  mR = c.Qt::red();
+  mG = c.Qt::green();
+  mB = c.Qt::blue();
   mNative = csRGB;
   rgbChanged();
 }
@@ -342,9 +342,9 @@ void KoColor::setNamedColor(const QString &name)
 
 void KoColor::setColor(const QColor &c)
 {
-  mR = c.red();
-  mG = c.green();
-  mB = c.blue();
+  mR = c.Qt::red();
+  mG = c.Qt::green();
+  mB = c.Qt::blue();
   mNative = csRGB;
   rgbChanged();
 }

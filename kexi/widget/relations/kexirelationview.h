@@ -35,7 +35,7 @@ class QFrame;
 class KexiRelationViewTable;
 class KexiRelationViewTableContainer;
 class KAction;
-class KPopupMenu;
+class KMenu;
 
 namespace KexiDB
 {
@@ -156,7 +156,7 @@ class KEXIRELATIONSVIEW_EXPORT KexiRelationView : public QScrollView
 		bool m_readOnly;
 		ConnectionList m_connectionViews;
 		KexiRelationViewConnection* m_selectedConnection;
-		QGuardedPtr<KexiRelationViewTableContainer> m_focusedTableView;
+		QPointer<KexiRelationViewTableContainer> m_focusedTableView;
 };
 
 #endif

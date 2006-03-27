@@ -465,7 +465,7 @@ protected:
 	short m_type;
 	static unsigned short charTable[];
 	KexiDB::RowEditBuffer *m_pRowEditBuffer;
-	QGuardedPtr<KexiDB::Cursor> m_cursor;
+	QPointer<KexiDB::Cursor> m_cursor;
 
 	//! used to faster lookup columns of simple type (not dbaware)
 //	QDict<KexiTableViewColumn> *m_simpleColumnsByName;

@@ -26,6 +26,9 @@
 #include <qpixmap.h>
 #include <qstring.h>
 #include <qtextstream.h>
+//Added by qt3to4:
+#include <Q3PtrList>
+#include <QKeyEvent>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -352,7 +355,7 @@ void Container::paste()
 void Container::paste( const QDomDocument& document, QString desc )
 {
     FormulaCursor* cursor = activeCursor();
-    QPtrList<BasicElement> list;
+    Q3PtrList<BasicElement> list;
     list.setAutoDelete( true );
     if ( cursor->buildElementsFromDom( document.documentElement(), list ) ) {
         uint count = list.count();

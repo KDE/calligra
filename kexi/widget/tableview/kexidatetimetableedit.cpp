@@ -39,9 +39,9 @@
 #include <klocale.h>
 #include <kglobal.h>
 #include <kdatepicker.h>
-#include <kdatetbl.h>
+#include <kdatetable.h>
 #include <klineedit.h>
-#include <kpopupmenu.h>
+#include <kmenu.h>
 #include <kdatewidget.h>
 
 #include <kexiutils/utils.h>
@@ -117,9 +117,9 @@ bool KexiDateTimeTableEdit::valueIsEmpty()
 
 QDateTime KexiDateTimeTableEdit::dateTimeValue()
 {
-	QString s = m_lineedit->text().stripWhiteSpace();
+	QString s = m_lineedit->text().trimmed();
 	const int timepos = s.find(" ");
-	const bool emptyTime = timepos >= 0 && s.mid(timepos+1).replace(':',"").stripWhiteSpace().isEmpty();
+	const bool emptyTime = timepos >= 0 && s.mid(timepos+1).replace(':',"").trimmed().isEmpty();
 	if (emptyTime)
 		s = s.left(timepos);
 	if (timepos>0 && !emptyTime) {
@@ -147,8 +147,8 @@ bool KexiDateTimeTableEdit::valueIsValid()
 {
 	QString s(m_lineedit->text());
 	int timepos = s.find(" ");
-	const bool emptyTime = timepos >= 0 && s.mid(timepos+1).replace(':',"").stripWhiteSpace().isEmpty();
-	if (timepos >= 0 && s.left(timepos).replace(m_dateFormatter.separator(), "").stripWhiteSpace().isEmpty()
+	const bool emptyTime = timepos >= 0 && s.mid(timepos+1).replace(':',"").trimmed().isEmpty();
+	if (timepos >= 0 && s.left(timepos).replace(m_dateFormatter.separator(), "").trimmed().isEmpty()
 		&& emptyTime)
 		//empty date/time is valid
 		return true;
@@ -160,8 +160,8 @@ bool KexiDateTimeTableEdit::textIsEmpty() const
 {
 	QString s(m_lineedit->text());
 	int timepos = s.find(" ");
-	const bool emptyTime = timepos >= 0 && s.mid(timepos+1).replace(':',"").stripWhiteSpace().isEmpty();
-	return (timepos >= 0 && s.left(timepos).replace(m_dateFormatter.separator(), "").stripWhiteSpace().isEmpty()
+	const bool emptyTime = timepos >= 0 && s.mid(timepos+1).replace(':',"").trimmed().isEmpty();
+	return (timepos >= 0 && s.left(timepos).replace(m_dateFormatter.separator(), "").trimmed().isEmpty()
 		&& emptyTime);
 }
 

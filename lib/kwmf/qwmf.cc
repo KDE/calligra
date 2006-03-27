@@ -25,6 +25,9 @@
 #include <qdatastream.h>
 #include <qapplication.h>
 #include <qbuffer.h>
+//Added by qt3to4:
+#include <Q3CString>
+#include <Q3PointArray>
 #include <kdebug.h>
 
 bool qwmfDebug = false;
@@ -140,7 +143,7 @@ bool QWinMetaFile::load( const QString &filename )
         return false;
     }
 
-    if ( !file.open( IO_ReadOnly ) )
+    if ( !file.open( QIODevice::ReadOnly ) )
     {
         kdDebug() << "Cannot open file " << QFile::encodeName(filename) << endl;
         return false;
@@ -150,7 +153,7 @@ bool QWinMetaFile::load( const QString &filename )
     file.close();
 
     QBuffer buffer( ba );
-    buffer.open( IO_ReadOnly );
+    buffer.open( QIODevice::ReadOnly );
     return load( buffer );
 }
 
@@ -479,7 +482,7 @@ void QWinMetaFile::ellipse( long, short* parm )
 //-----------------------------------------------------------------------------
 void QWinMetaFile::polygon( long, short* parm )
 {
-    QPointArray* pa;
+    Q3PointArray* pa;
 
     pa = pointArray( parm[ 0 ], &parm[ 1 ] );
     mPainter.drawPolygon( *pa, mWinding );
@@ -498,7 +501,7 @@ void QWinMetaFile::polyPolygon( long, short* parm )
     QRect win = bbox();
     startPolygon = 1+parm[ 0 ];
     for ( i=0 ; i < parm[ 0 ] ; i++ ) {
-        QPointArray pa1( parm[ 1+i ] );
+        Q3PointArray pa1( parm[ 1+i ] );
         for ( j=0 ; j < parm[ 1+i ] ; j++) {
             pa1.setPoint ( j, parm[ startPolygon ], parm[ startPolygon+1 ] );
             startPolygon += 2;
@@ -516,7 +519,7 @@ void QWinMetaFile::polyPolygon( long, short* parm )
         mPainter.setClipping( false );
         mPainter.setBrush( Qt::NoBrush );
 
-        QPointArray* pa;
+        Q3PointArray* pa;
         int idxPolygon = 1 + parm[ 0 ];
         for ( i=0 ; i < parm[ 0 ] ; i++ ) {
             pa = pointArray( parm[ 1+i ], &parm[ idxPolygon ] );
@@ -532,7 +535,7 @@ void QWinMetaFile::polyPolygon( long, short* parm )
 //-----------------------------------------------------------------------------
 void QWinMetaFile::polyline( long, short* parm )
 {
-    QPointArray* pa;
+    Q3PointArray* pa;
 
     pa = pointArray( parm[ 0 ], &parm[ 1 ] );
     mPainter.drawPolyline( *pa );
@@ -738,7 +741,7 @@ void QWinMetaFile::extTextOut( long num, short* parm )
     else
         ptStr = (char*)&parm[ 4 ];
 
-    QCString text( ptStr, parm[ 2 ] + 1 );
+    Q3CString text( ptStr, parm[ 2 ] + 1 );
 
     QFontMetrics fm( mPainter.font() );
     width = fm.width( text ) + fm.descent();  // because fm.width(text) isn't rigth with Italic text
@@ -805,11 +808,11 @@ void QWinMetaFile::dibBitBlt( long num, short* parm )
             // wmf file allow negative width or height
             mPainter.save();
             if ( parm[ 5 ] < 0 ) {  // width < 0 => horizontal flip
-                QWMatrix m( -1.0F, 0.0F, 0.0F, 1.0F, 0.0F, 0.0F );
+                QMatrix m( -1.0F, 0.0F, 0.0F, 1.0F, 0.0F, 0.0F );
                 mPainter.setWorldMatrix( m, true );
             }
             if ( parm[ 4 ] < 0 ) {  // height < 0 => vertical flip
-                QWMatrix m( 1.0F, 0.0F, 0.0F, -1.0F, 0.0F, 0.0F );
+                QMatrix m( 1.0F, 0.0F, 0.0F, -1.0F, 0.0F, 0.0F );
                 mPainter.setWorldMatrix( m, true );
             }
             mPainter.drawImage( parm[ 7 ], parm[ 6 ], bmpSrc, parm[ 3 ], parm[ 2 ], parm[ 5 ], parm[ 4 ] );
@@ -835,11 +838,11 @@ void QWinMetaFile::dibStretchBlt( long num, short* parm )
         // wmf file allow negative width or height
         mPainter.save();
         if ( parm[ 7 ] < 0 ) {  // width < 0 => horizontal flip
-            QWMatrix m( -1.0F, 0.0F, 0.0F, 1.0F, 0.0F, 0.0F );
+            QMatrix m( -1.0F, 0.0F, 0.0F, 1.0F, 0.0F, 0.0F );
             mPainter.setWorldMatrix( m, true );
         }
         if ( parm[ 6 ] < 0 ) {  // height < 0 => vertical flip
-            QWMatrix m( 1.0F, 0.0F, 0.0F, -1.0F, 0.0F, 0.0F );
+            QMatrix m( 1.0F, 0.0F, 0.0F, -1.0F, 0.0F, 0.0F );
             mPainter.setWorldMatrix( m, true );
         }
         bmpSrc = bmpSrc.copy( parm[ 5 ], parm[ 4 ], parm[ 3 ], parm[ 2 ] );
@@ -864,11 +867,11 @@ void QWinMetaFile::stretchDib( long num, short* parm )
         // wmf file allow negative width or height
         mPainter.save();
         if ( parm[ 8 ] < 0 ) {  // width < 0 => horizontal flip
-            QWMatrix m( -1.0F, 0.0F, 0.0F, 1.0F, 0.0F, 0.0F );
+            QMatrix m( -1.0F, 0.0F, 0.0F, 1.0F, 0.0F, 0.0F );
             mPainter.setWorldMatrix( m, true );
         }
         if ( parm[ 7 ] < 0 ) {  // height < 0 => vertical flip
-            QWMatrix m( 1.0F, 0.0F, 0.0F, -1.0F, 0.0F, 0.0F );
+            QMatrix m( 1.0F, 0.0F, 0.0F, -1.0F, 0.0F, 0.0F );
             mPainter.setWorldMatrix( m, true );
         }
         bmpSrc = bmpSrc.copy( parm[ 6 ], parm[ 5 ], parm[ 4 ], parm[ 3 ] );
@@ -1074,7 +1077,7 @@ int QWinMetaFile::findFunc( unsigned short aFunc ) const
 }
 
 //-----------------------------------------------------------------------------
-QPointArray* QWinMetaFile::pointArray( short num, short* parm )
+Q3PointArray* QWinMetaFile::pointArray( short num, short* parm )
 {
     int i;
 

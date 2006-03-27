@@ -290,13 +290,13 @@ KPrTransEffectDia::KPrTransEffectDia( QWidget *parent, const char *name,
              this, SLOT( slotSoundFileChanged( const QString& ) ) );
 
     buttonTestPlaySoundEffect = new QPushButton( soundgrp );
-    buttonTestPlaySoundEffect->setPixmap( BarIcon("1rightarrow", KIcon::SizeSmall) );
+    buttonTestPlaySoundEffect->setPixmap( BarIcon("1rightarrow", K3Icon::SizeSmall) );
     QToolTip::add( buttonTestPlaySoundEffect, i18n("Play") );
 
     connect( buttonTestPlaySoundEffect, SIGNAL( clicked() ), this, SLOT( playSound() ) );
 
     buttonTestStopSoundEffect = new QPushButton( soundgrp );
-    buttonTestStopSoundEffect->setPixmap( BarIcon("player_stop", KIcon::SizeSmall) );
+    buttonTestStopSoundEffect->setPixmap( BarIcon("player_stop", K3Icon::SizeSmall) );
     QToolTip::add( buttonTestStopSoundEffect, i18n("Stop") );
 
     connect( buttonTestStopSoundEffect, SIGNAL( clicked() ), this, SLOT( stopSound() ) );
@@ -405,7 +405,7 @@ void KPrTransEffectDia::slotRequesterClicked( KURLRequester * )
     // find the first "sound"-resource that contains files
     QStringList soundDirs = KGlobal::dirs()->resourceDirs( "sound" );
     if ( !soundDirs.isEmpty() ) {
-        KURL soundURL;
+        KUrl soundURL;
         QDir dir;
         dir.setFilter( QDir::Files | QDir::Readable );
         QStringList::ConstIterator it = soundDirs.begin();

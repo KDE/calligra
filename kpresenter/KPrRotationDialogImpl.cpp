@@ -118,8 +118,8 @@ KPrCircleToggle::KPrCircleToggle( QWidget *parent, const QString &image, int id 
     : QLabel( parent )
 {
     KIconLoader il("kpresenter");
-    m_off = il.loadIcon("rotate/" + image, KIcon::NoGroup, 28);
-    m_on = il.loadIcon("rotate/" + image + "dn", KIcon::NoGroup, 28);
+    m_off = il.loadIcon("rotate/" + image, K3Icon::NoGroup, 28);
+    m_on = il.loadIcon("rotate/" + image + "dn", K3Icon::NoGroup, 28);
 
     m_selected = false;
     m_id = id;

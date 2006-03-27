@@ -22,6 +22,13 @@
 #define frame_set_edit_h
 
 #include <qrect.h>
+//Added by qt3to4:
+#include <QDragEnterEvent>
+#include <QMouseEvent>
+#include <QDragLeaveEvent>
+#include <QDragMoveEvent>
+#include <QKeyEvent>
+#include <QDropEvent>
 #include <KoPoint.h>
 #include <KoRect.h>
 

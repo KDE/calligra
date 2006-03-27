@@ -21,11 +21,13 @@
 #include "exception.h"
 
 #include <kdebug.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 using namespace Kross::Api;
 
-List::List(QValueList<Object::Ptr> value, const QString& name)
-    : Value< List, QValueList<Object::Ptr> >(value, name)
+List::List(Q3ValueList<Object::Ptr> value, const QString& name)
+    : Value< List, Q3ValueList<Object::Ptr> >(value, name)
 {
 }
 
@@ -41,15 +43,15 @@ const QString List::getClassName() const
 const QString List::toString()
 {
     QString s = "[";
-    QValueList<Object::Ptr> list = getValue();
-    for(QValueList<Object::Ptr>::Iterator it = list.begin(); it != list.end(); ++it)
+    Q3ValueList<Object::Ptr> list = getValue();
+    for(Q3ValueList<Object::Ptr>::Iterator it = list.begin(); it != list.end(); ++it)
         s += "'" + (*it)->toString() + "', ";
     return (s.endsWith(", ") ? s.left(s.length() - 2) : s) + "]";
 }
 
 Object::Ptr List::item(uint idx)
 {
-    QValueList<Object::Ptr>& list = getValue();
+    Q3ValueList<Object::Ptr>& list = getValue();
     if(idx >= list.count()) {
         kdDebug() << "List::item index=" << idx << " is out of bounds. Raising TypeException." << endl;
         throw Exception::Ptr( new Exception(QString("List-index %1 out of bounds.").arg(idx)) );

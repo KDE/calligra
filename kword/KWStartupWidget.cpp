@@ -26,6 +26,8 @@
 #include <qpushbutton.h>
 #include <qcheckbox.h>
 #include <qlayout.h>
+//Added by qt3to4:
+#include <Q3VBoxLayout>
 
 KWStartupWidget::KWStartupWidget(QWidget *parent, KWDocument *doc, const KoColumns &columns)
     : KWStartupWidgetBase(parent) {
@@ -35,11 +37,11 @@ KWStartupWidget::KWStartupWidget(QWidget *parent, KWDocument *doc, const KoColum
 
     setFocusProxy(m_createButton);
 
-    QVBoxLayout *lay = new QVBoxLayout(m_sizeTab, KDialog::marginHint());
+    Q3VBoxLayout *lay = new Q3VBoxLayout(m_sizeTab, KDialog::marginHint());
     m_sizeWidget = new KoPageLayoutSize(m_sizeTab, m_layout, KoUnit::U_MM, m_columns , true, true);
     lay->addWidget(m_sizeWidget);
 
-    lay = new QVBoxLayout(m_columnsTab, KDialog::marginHint());
+    lay = new Q3VBoxLayout(m_columnsTab, KDialog::marginHint());
     m_columnsWidget = new KoPageLayoutColumns(m_columnsTab, m_columns, KoUnit::U_MM, m_layout);
     lay->addWidget(m_columnsWidget);
 

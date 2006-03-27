@@ -24,11 +24,11 @@
 
 #include <qmap.h>
 #include <qdom.h>
-#include <qvaluelist.h>
+#include <q3valuelist.h>
 
 #include "KoPicture.h"
 
-class KURL;
+class KUrl;
 
 class KoStore;
 class KoXmlWriter;
@@ -74,7 +74,7 @@ public:
      * @param window the parent window for the download. You can pass NULL (0)
      *               if you absolutely cannot find anything to use.
      */
-    KoPicture downloadPicture(const KURL& url, QWidget *window);
+    KoPicture downloadPicture(const KUrl& url, QWidget *window);
 
     /**
      * @brief Load a clipart from a file (and insert into the collection).
@@ -96,7 +96,7 @@ public:
      *
      * @todo Reduce lameness of dox for pictureType.
      */
-    bool saveToStore(const Type pictureType, KoStore * store, const QValueList<KoPictureKey>& keys );
+    bool saveToStore(const Type pictureType, KoStore * store, const Q3ValueList<KoPictureKey>& keys );
 
     /**
      * Generate the &lt;PICTURES&gt;, &lt;PIXMAPS> or &lt;CLIPARTS> tag, that saves the key and the related
@@ -107,9 +107,9 @@ public:
      * @param keys the list of keys
      */
     QDomElement saveXML(const Type pictureType, QDomDocument &doc,
-        QValueList<KoPictureKey> keys );
+        Q3ValueList<KoPictureKey> keys );
 
-    bool saveOasisToStore( KoStore *store, QValueList<KoPictureKey> keys, KoXmlWriter* manifestWriter );
+    bool saveOasisToStore( KoStore *store, Q3ValueList<KoPictureKey> keys, KoXmlWriter* manifestWriter );
 
 
     typedef QMap<KoPictureKey, QString> StoreMap;

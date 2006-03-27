@@ -19,6 +19,8 @@
 #include "KoUserStyleCollection.h"
 #include "KoUserStyle.h"
 #include <kdebug.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 KoUserStyleCollection::KoUserStyleCollection( const QString& prefix )
     : m_prefix( prefix ),
@@ -33,7 +35,7 @@ KoUserStyle* KoUserStyleCollection::findStyle( const QString & _name, const QStr
     if ( m_lastStyle && m_lastStyle->name() == _name )
         return m_lastStyle;
 
-    for ( QValueList<KoUserStyle *>::const_iterator styleIt = m_styleList.begin(), styleEnd = m_styleList.end() ; styleIt != styleEnd ; ++styleIt ) {
+    for ( Q3ValueList<KoUserStyle *>::const_iterator styleIt = m_styleList.begin(), styleEnd = m_styleList.end() ; styleIt != styleEnd ; ++styleIt ) {
         if ( (*styleIt)->name() == _name ) {
             m_lastStyle = *styleIt;
             return m_lastStyle;
@@ -51,7 +53,7 @@ KoUserStyle* KoUserStyleCollection::findStyleByDisplayName( const QString& displ
     if ( m_lastStyle && m_lastStyle->displayName() == displayName )
         return m_lastStyle;
 
-    for ( QValueList<KoUserStyle *>::const_iterator styleIt = m_styleList.begin(), styleEnd = m_styleList.end() ; styleIt != styleEnd ; ++styleIt ) {
+    for ( Q3ValueList<KoUserStyle *>::const_iterator styleIt = m_styleList.begin(), styleEnd = m_styleList.end() ; styleIt != styleEnd ; ++styleIt ) {
         if ( (*styleIt)->displayName() == displayName ) {
             m_lastStyle = *styleIt;
             return m_lastStyle;
@@ -79,9 +81,9 @@ KoUserStyleCollection::~KoUserStyleCollection()
 void KoUserStyleCollection::clear()
 {
     // KDE4: qDeleteAll
-    for ( QValueList<KoUserStyle *>::const_iterator styleIt = m_styleList.begin(), styleEnd = m_styleList.end() ; styleIt != styleEnd ; ++styleIt )
+    for ( Q3ValueList<KoUserStyle *>::const_iterator styleIt = m_styleList.begin(), styleEnd = m_styleList.end() ; styleIt != styleEnd ; ++styleIt )
         delete *styleIt;
-    for ( QValueList<KoUserStyle *>::const_iterator styleIt = m_deletedStyles.begin(), styleEnd = m_deletedStyles.end() ; styleIt != styleEnd ; ++styleIt )
+    for ( Q3ValueList<KoUserStyle *>::const_iterator styleIt = m_deletedStyles.begin(), styleEnd = m_deletedStyles.end() ; styleIt != styleEnd ; ++styleIt )
         delete *styleIt;
     m_styleList.clear();
     m_deletedStyles.clear();
@@ -91,7 +93,7 @@ void KoUserStyleCollection::clear()
 QStringList KoUserStyleCollection::displayNameList() const
 {
     QStringList lst;
-    for ( QValueList<KoUserStyle *>::const_iterator styleIt = m_styleList.begin(), styleEnd = m_styleList.end() ; styleIt != styleEnd ; ++styleIt )
+    for ( Q3ValueList<KoUserStyle *>::const_iterator styleIt = m_styleList.begin(), styleEnd = m_styleList.end() ; styleIt != styleEnd ; ++styleIt )
         lst.append( (*styleIt)->displayName() );
     return lst;
 }
@@ -99,7 +101,7 @@ QStringList KoUserStyleCollection::displayNameList() const
 KoUserStyle* KoUserStyleCollection::addStyle( KoUserStyle* sty )
 {
     // First check for duplicates.
-    for ( QValueList<KoUserStyle *>::const_iterator styleIt = m_styleList.begin(), styleEnd = m_styleList.end() ; styleIt != styleEnd ; ++styleIt )
+    for ( Q3ValueList<KoUserStyle *>::const_iterator styleIt = m_styleList.begin(), styleEnd = m_styleList.end() ; styleIt != styleEnd ; ++styleIt )
     {
         KoUserStyle* p = *styleIt;
         if ( p->name() == sty->name() ) {
@@ -131,7 +133,7 @@ void KoUserStyleCollection::removeStyle ( KoUserStyle *style ) {
 
 void KoUserStyleCollection::updateStyleListOrder( const QStringList &lst )
 {
-    QValueList<KoUserStyle *> orderStyle;
+    Q3ValueList<KoUserStyle *> orderStyle;
     for ( QStringList::const_iterator it = lst.begin(); it != lst.end(); ++it )
     {
         KoUserStyle* style = findStyle( *it, QString::null );

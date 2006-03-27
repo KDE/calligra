@@ -19,13 +19,16 @@
 
 #include <kcoloractions.h>
 
-#include <qpopupmenu.h>
-#include <qwhatsthis.h>
+#include <q3popupmenu.h>
+#include <q3whatsthis.h>
 #include <qtooltip.h>
+//Added by qt3to4:
+#include <QPixmap>
+#include <Q3CString>
 
 #include <kapplication.h>
 #include <ktoolbar.h>
-#include <ktoolbarbutton.h>
+
 #include <kdebug.h>
 
 KColorAction::KColorAction( const QString& text, int accel,
@@ -106,8 +109,8 @@ void KColorAction::init()
 void KColorAction::createPixmap()
 {
     int r, g, b;
-    QCString pix;
-    QCString line;
+    Q3CString pix;
+    Q3CString line;
 
     col.rgb( &r, &g, &b );
 
@@ -212,7 +215,7 @@ void KColorAction::createPixmap()
     }
 
     QPixmap pixmap( pix );
-    setIconSet( QIconSet( pixmap ) );
+    setIconSet( QIcon( pixmap ) );
 }
 
 
@@ -239,7 +242,7 @@ int KSelectColorAction::plug( QWidget* w, int index )
 
     if ( w->inherits("QPopupMenu") )
     {
-        QPopupMenu* menu = static_cast<QPopupMenu*>( w );
+        Q3PopupMenu* menu = static_cast<Q3PopupMenu*>( w );
         int id;
 
         if ( hasIcon() )
@@ -251,7 +254,7 @@ int KSelectColorAction::plug( QWidget* w, int index )
             else
                 instance = KGlobal::instance();
             */
-            id = menu->insertItem( iconSet( KIcon::Small, 0 ), text(), this,//dsweet
+            id = menu->insertItem( iconSet( K3Icon::Small, 0 ), text(), this,//dsweet
                                    SLOT( slotActivated() ), 0, -1, index );
         }
         else
@@ -289,7 +292,7 @@ int KSelectColorAction::plug( QWidget* w, int index )
 
         if ( icon().isEmpty() ) // old code using QIconSet directly
         {
-            bar->insertButton( iconSet( KIcon::Small ).pixmap(), id_, SIGNAL( clicked() ), this,
+            bar->insertButton( iconSet( K3Icon::Small ).pixmap(), id_, SIGNAL( clicked() ), this,
                                SLOT( slotActivated() ),
                                isEnabled(), plainText(), index );
         }
@@ -298,10 +301,10 @@ int KSelectColorAction::plug( QWidget* w, int index )
                                SLOT( slotActivated() ),
                                isEnabled(), plainText(), index, instance );
 
-        bar->getButton( id_ )->setName( QCString("toolbutton_")+name() );
+        bar->getButton( id_ )->setName( Q3CString("toolbutton_")+name() );
 
         if ( !whatsThis().isEmpty() )
-            QWhatsThis::add( bar->getButton(id_), whatsThisWithIcon() );
+            Q3WhatsThis::add( bar->getButton(id_), whatsThisWithIcon() );
 
         if ( !toolTip().isEmpty() )
             QToolTip::add( bar->getButton(id_), toolTip() );

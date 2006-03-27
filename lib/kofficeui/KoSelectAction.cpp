@@ -21,14 +21,16 @@
 
 #include <qpixmap.h>
 #include <qbitmap.h>
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
 #include <qmenubar.h>
+//Added by qt3to4:
+#include <Q3PopupMenu>
 
 #include <kpopupmenu.h>
 #include <kapplication.h>
 #include <kdebug.h>
 #include <ktoolbar.h>
-#include <ktoolbarbutton.h>
+
 #include <kiconloader.h>
 #include <klocale.h>
 
@@ -92,13 +94,13 @@ int KoSelectAction::plug(QWidget* widget, int index)
   kdDebug(129) << "KAction::plug( " << widget << ", " << index << " )" << endl; // remove -- ellis
   if ( widget->inherits("QPopupMenu") )
   {
-    QPopupMenu* menu = static_cast<QPopupMenu*>( widget );
+    Q3PopupMenu* menu = static_cast<Q3PopupMenu*>( widget );
     int id;
 
     if ( hasIconSet() )
       id = menu->insertItem( iconSet(), text(), popupMenu(), -1, index );
     else
-      id = menu->insertItem( kapp->iconLoader()->loadIcon(icon(), KIcon::Small),
+      id = menu->insertItem( kapp->iconLoader()->loadIcon(icon(), K3Icon::Small),
         text(), popupMenu(), -1, index );
 
     if ( !isEnabled() )
@@ -136,7 +138,7 @@ int KoSelectAction::plug(QWidget* widget, int index)
     addContainer( bar, id_ );
 
     if (!whatsThis().isEmpty())
-      QWhatsThis::add( bar->getButton(id_), whatsThis() );
+      Q3WhatsThis::add( bar->getButton(id_), whatsThis() );
 
     connect( bar, SIGNAL( destroyed() ), this, SLOT( slotDestroyed() ) );
 

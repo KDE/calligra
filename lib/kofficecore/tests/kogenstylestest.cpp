@@ -21,6 +21,8 @@
 #include "../../store/tests/xmlwritertest.h"
 #include <kdebug.h>
 #include <assert.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 int testLookup()
 {
@@ -108,7 +110,7 @@ int testLookup()
     assert( coll.styles( KoGenStyle::STYLE_AUTO ).count() == 2 );
     assert( coll.styles( KoGenStyle::STYLE_USER ).count() == 1 );
 
-    QValueList<KoGenStyles::NamedStyle> stylesXmlStyles = coll.styles( KoGenStyle::STYLE_AUTO, true );
+    Q3ValueList<KoGenStyles::NamedStyle> stylesXmlStyles = coll.styles( KoGenStyle::STYLE_AUTO, true );
     assert( stylesXmlStyles.count() == 1 );
     KoGenStyles::NamedStyle firstStyle = stylesXmlStyles.first();
     assert( firstStyle.name == headerStyleName );
@@ -123,9 +125,9 @@ int testLookup()
 
     coll.markStyleForStylesXml( firstName );
     {
-        QValueList<KoGenStyles::NamedStyle> stylesXmlStyles = coll.styles( KoGenStyle::STYLE_AUTO, true );
+        Q3ValueList<KoGenStyles::NamedStyle> stylesXmlStyles = coll.styles( KoGenStyle::STYLE_AUTO, true );
         assert( stylesXmlStyles.count() == 2 );
-        QValueList<KoGenStyles::NamedStyle> contentXmlStyles = coll.styles( KoGenStyle::STYLE_AUTO, false );
+        Q3ValueList<KoGenStyles::NamedStyle> contentXmlStyles = coll.styles( KoGenStyle::STYLE_AUTO, false );
         assert( contentXmlStyles.count() == 1 );
     }
 

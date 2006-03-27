@@ -22,6 +22,9 @@
 
 // Qt includes
 #include <qlayout.h>
+//Added by qt3to4:
+#include <Q3VBoxLayout>
+#include <QLabel>
 
 // KDE includes
 #include <kdebug.h>
@@ -37,7 +40,7 @@ namespace KChart
   : KPrintDialogPage( parent, name )
 {
   setTitle( i18n( "KChart Options" ) );
-  QVBoxLayout *layout = new QVBoxLayout( this );
+  Q3VBoxLayout *layout = new Q3VBoxLayout( this );
   layout->setMargin( KDialog::marginHint() );
   layout->setSpacing( KDialog::spacingHint() );
   txtSizex = new KIntNumInput(this );

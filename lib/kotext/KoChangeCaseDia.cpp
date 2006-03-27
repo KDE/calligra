@@ -19,9 +19,9 @@
 
 #include <klocale.h>
 
-#include <qvbox.h>
-#include <qwhatsthis.h>
-#include <qbuttongroup.h>
+#include <q3vbox.h>
+#include <q3whatsthis.h>
+#include <q3buttongroup.h>
 #include <qradiobutton.h>
 
 #include "KoChangeCaseDia.h"
@@ -32,9 +32,9 @@ KoChangeCaseDia::KoChangeCaseDia( QWidget *parent, const char *name )
 {
 
     setCaption( i18n("Change Case") );
-    QVBox *page = makeVBoxMainWidget();
+    Q3VBox *page = makeVBoxMainWidget();
 
-    QButtonGroup *grp = new QButtonGroup( 1, QGroupBox::Horizontal, i18n( "Case" ),page );
+    Q3ButtonGroup *grp = new Q3ButtonGroup( 1, Qt::Horizontal, i18n( "Case" ),page );
     grp->setRadioButtonExclusive( TRUE );
     grp->layout();
     m_upperCase=new QRadioButton( i18n("&Uppercase"), grp );
@@ -44,7 +44,7 @@ KoChangeCaseDia::KoChangeCaseDia( QWidget *parent, const char *name )
 
     m_toggleCase=new QRadioButton( i18n("&Toggle case"), grp );
     m_sentenceCase=new QRadioButton( i18n("Sentence case"), grp );
-    QWhatsThis::add( m_sentenceCase, i18n("Convert first letter of a sentence to uppercase."));
+    Q3WhatsThis::add( m_sentenceCase, i18n("Convert first letter of a sentence to uppercase."));
 
     m_upperCase->setChecked(true);
     grp->setRadioButtonExclusive( TRUE );

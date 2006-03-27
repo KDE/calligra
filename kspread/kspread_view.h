@@ -266,7 +266,7 @@ public:
      */
     void insertChild( const QRect& _geometry, KoDocumentEntry& _entry );
 
-   // void insertPicture( const QRect& _geometry, KURL& _file );
+   // void insertPicture( const QRect& _geometry, KUrl& _file );
 
     virtual void print( KPrinter &printer );
     virtual void setupPrinter( KPrinter &printer );

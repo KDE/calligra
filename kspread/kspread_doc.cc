@@ -321,7 +321,7 @@ bool Doc::initDoc(InitDocFlags flags, QWidget* parentWidget)
 
     if ( ret == KoTemplateChooseDia::File )
     {
-  KURL url( f );
+  KUrl url( f );
 
   bool ok=openURL(url);
 

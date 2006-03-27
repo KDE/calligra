@@ -1,0 +1,28 @@
+kde4_header()
+
+include_directories( ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
+
+
+########### install files ###############
+
+install_files( ${DATA_INSTALL_DIR}/kivio/stencils/Flowcharting/Extended FILES  Database.sml  Database.xpm  Data_Store.sml  Data_Store.xpm  desc  icon.xpm  Process.sml  Process.xpm  Source_or_Sink.sml  Source_or_Sink.xpm )
+
+kde4_footer()
+
+
+
+#original Makefile.am contents follow:
+
+#extendeddir = $(kde_datadir)/kivio/stencils/Flowcharting/Extended
+#
+#extended_DATA = \
+#Database.sml \
+#Database.xpm \
+#Data_Store.sml \
+#Data_Store.xpm \
+#desc \
+#icon.xpm \
+#Process.sml \
+#Process.xpm \
+#Source_or_Sink.sml \
+#Source_or_Sink.xpm

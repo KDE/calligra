@@ -29,7 +29,7 @@
 #include "kis_progress_subject.h"
 
 class QString;
-class KURL;
+class KUrl;
 class KisDoc;
 class KisNameServer;
 class KisUndoAdapter;
@@ -70,8 +70,8 @@ public slots:
     virtual void cancel();
 
 public:
-    KisImageBuilder_Result buildImage(const KURL& uri);
-    KisImageBuilder_Result buildFile(const KURL& uri, KisPaintLayerSP layer, vKisAnnotationSP_it annotationsStart, vKisAnnotationSP_it annotationsEnd);
+    KisImageBuilder_Result buildImage(const KUrl& uri);
+    KisImageBuilder_Result buildFile(const KUrl& uri, KisPaintLayerSP layer, vKisAnnotationSP_it annotationsStart, vKisAnnotationSP_it annotationsEnd);
     KisImageSP image();
 
 public:
@@ -87,7 +87,7 @@ private:
     KisImageMagickConverter(const KisImageMagickConverter&);
     KisImageMagickConverter& operator=(const KisImageMagickConverter&);
     void init(KisDoc *doc, KisUndoAdapter *adapter);
-    KisImageBuilder_Result decode(const KURL& uri, bool isBlob);
+    KisImageBuilder_Result decode(const KUrl& uri, bool isBlob);
 
 private:
     KisImageSP m_img;

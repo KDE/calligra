@@ -56,7 +56,7 @@ int runScriptFile(const QString& scriptfile)
         std::cerr << "No such scriptfile: " << scriptfile.latin1() << std::endl;
         return ERROR_NOSUCHFILE;
     }
-    if(! f.open(IO_ReadOnly)) {
+    if(! f.open(QIODevice::ReadOnly)) {
         std::cerr << "Failed to open scriptfile: " << scriptfile.latin1() << std::endl;
         return ERROR_OPENFAILED;
     }

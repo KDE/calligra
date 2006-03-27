@@ -16,14 +16,14 @@
  */
 
 #include <qwidget.h>
-#include <qdockwindow.h>
+#include <q3dockwindow.h>
 #include <qvariant.h>
 #include <qlabel.h>
 #include <qtoolbutton.h>
 #include <qtabwidget.h>
 #include <qlayout.h>
 #include <qtooltip.h>
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
 #include <qimage.h>
 #include <qpixmap.h>
 #include <qlayout.h>
@@ -40,16 +40,16 @@
 #include "kopalette.h"
 
 KoPalette::KoPalette(QWidget * parent, const char * name)
-    : QDockWindow(parent, name)
+    : Q3DockWindow(parent, name)
 {
 
 #if KDE_VERSION >= KDE_MAKE_VERSION(3,3,90)
     KAcceleratorManager::setNoAccel(this);
 #endif
-    setCloseMode( QDockWindow::Never);
+    setCloseMode( Q3DockWindow::Never);
     setResizeEnabled(true);
     setOpaqueMoving(true);
-    setFocusPolicy(QWidget::NoFocus);
+    setFocusPolicy(Qt::NoFocus);
     setVerticallyStretchable(false);
     setHorizontallyStretchable(false);
 

@@ -39,7 +39,9 @@
 #include <qglobal.h>
 #include <qpainter.h>
 #include <qpaintdevice.h>
-#include <qpaintdevicemetrics.h>
+#include <q3paintdevicemetrics.h>
+//Added by qt3to4:
+#include <QPixmap>
 
 /**
   \class KDChart KDChart.h
@@ -111,7 +113,7 @@ bool hasCartesianAxes( KDChartParams::ChartType chartType )
 bool KDChart::painterToDrawRect( QPainter* painter, QRect& drawRect )
 {
     if( painter ){
-        QPaintDeviceMetrics painterMetrics( painter->device() );
+        Q3PaintDeviceMetrics painterMetrics( painter->device() );
         drawRect = QRect( 0, 0, painterMetrics.width(), painterMetrics.height() );
         drawRect.setWidth(  drawRect.width() -2 );
         drawRect.setHeight( drawRect.height()-2 );

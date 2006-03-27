@@ -23,11 +23,13 @@
 
 #include <klocale.h>
 #include <qlayout.h>
-#include <qsqlcursor.h>
-#include <qdatatable.h>
+#include <q3sqlcursor.h>
+#include <q3datatable.h>
 #include <qcheckbox.h>
 #include <qsqlrecord.h>
 #include <qsqlquery.h>
+//Added by qt3to4:
+#include <Q3VBoxLayout>
 #include <kdebug.h>
 
 #define KWQtSqlBarIcon( x ) BarIcon( x, db->KWInstance() )
@@ -142,11 +144,11 @@ void KWQtSqlSerialDataSource::refresh(bool force)
                 }
                 if ((!database) || (!database->isOpen())) openDatabase();
 		if ((!database) || (!database->isOpen())) return;
-                myquery=new QSqlCursor(tableName,true,database);
-                myquery->setMode(QSqlCursor::ReadOnly);
+                myquery=new Q3SqlCursor(tableName,true,database);
+                myquery->setMode(Q3SqlCursor::ReadOnly);
 		myquery->select(filter);
         }
-        kdDebug()<<QString("There were %1 rows in the query").arg(myquery->size())<<endl;
+        kDebug()<<QString("There were %1 rows in the query").arg(myquery->size())<<endl;
 
 }
 
@@ -167,7 +169,7 @@ KWQtSqlDataSourceEditor::KWQtSqlDataSourceEditor( QWidget *parent, KWQtSqlSerial
 {
 	tableName=db->tableName;
 	filter=db->filter;
-        (new QVBoxLayout(plainPage()))->setAutoAdd(true);
+        (new Q3VBoxLayout(plainPage()))->setAutoAdd(true);
         setMainWidget(widget=new QtSqlDataSourceEditor(plainPage()));
 	connect(widget->tableCombo,SIGNAL(activated(int)),this,SLOT(tableChanged(int)));
 	connect(widget->editFilter,SIGNAL(clicked()),this,SLOT(editFilter()));
@@ -179,13 +181,13 @@ KWQtSqlDataSourceEditor::KWQtSqlDataSourceEditor( QWidget *parent, KWQtSqlSerial
 void KWQtSqlDataSourceEditor::tableChanged(int item)
 {
 	tableName=widget->tableCombo->text(item);
-	QSqlCursor *tmpCursor=new QSqlCursor(tableName,true,db->database);
-	tmpCursor->setMode(QSqlCursor::ReadOnly);
+	Q3SqlCursor *tmpCursor=new Q3SqlCursor(tableName,true,db->database);
+	tmpCursor->setMode(Q3SqlCursor::ReadOnly);
 
 	if (widget->filterCheckBox->isChecked()) tmpCursor->select(filter);
 
 	widget->DataTable->setSqlCursor(tmpCursor,true,true);
-	widget->DataTable->refresh(QDataTable::RefreshAll);
+	widget->DataTable->refresh(Q3DataTable::RefreshAll);
 }
 
 void KWQtSqlDataSourceEditor::updateTableCombo()

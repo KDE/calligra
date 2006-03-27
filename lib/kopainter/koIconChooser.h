@@ -21,9 +21,15 @@
 #ifndef __ko_iconchooser_h__
 #define __ko_iconchooser_h__
 
-#include <qgridview.h>
-#include <qptrlist.h>
+#include <q3gridview.h>
+#include <q3ptrlist.h>
 #include <qpixmap.h>
+//Added by qt3to4:
+#include <QMouseEvent>
+#include <Q3Frame>
+#include <QKeyEvent>
+#include <QResizeEvent>
+#include <QPaintEvent>
 #include <koffice_export.h>
 
 class KoIconItem
@@ -45,7 +51,7 @@ public:
   virtual int compare(const KoIconItem */*other*/) const { return 0; }
 };
 
-class KoPixmapWidget : public QFrame
+class KoPixmapWidget : public Q3Frame
 {
 public:
   KoPixmapWidget(const QPixmap &aPixmap, QWidget *parent = 0L, const char *name = 0L);
@@ -59,7 +65,7 @@ private:
   QPixmap mPixmap;
 };
 
-class KOPAINTER_EXPORT KoIconChooser: public QGridView
+class KOPAINTER_EXPORT KoIconChooser: public Q3GridView
 {
   Q_OBJECT
 public:
@@ -102,7 +108,7 @@ private:
   int sortInsertionIndex(const KoIconItem *item);
 
 private:
-  QPtrList<KoIconItem>    mIconList;
+  Q3PtrList<KoIconItem>    mIconList;
   KoPixmapWidget         *mPixmapWidget;
   int                     mItemWidth;
   int                     mItemHeight;
@@ -124,7 +130,7 @@ class KOPAINTER_EXPORT KoPatternChooser : public QWidget
 {
   Q_OBJECT
 public:
-  KoPatternChooser( const QPtrList<KoIconItem> &list, QWidget *parent, const char *name = 0 );
+  KoPatternChooser( const Q3PtrList<KoIconItem> &list, QWidget *parent, const char *name = 0 );
   ~KoPatternChooser();
 
   KoIconItem *currentPattern();

@@ -67,7 +67,7 @@
 #include <qdom.h>
 
 #include <qmap.h>
-#include <qcstring.h>
+#include <q3cstring.h>
 
 // double QString, used for hashing against namespace and qualified name pair
 class DQString

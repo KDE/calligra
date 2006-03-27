@@ -1305,7 +1305,7 @@ void KDChartAxesPainter::paintAxes( QPainter* painter,
                                                    static_cast<int>( pSecY+pYD-orgYD ),
                                                    static_cast<int>( fabs((0.0 == pXDelta) ? cv.pTextsW : (p2X - pSecX))),
                                                    static_cast<int>( fabs((0.0 == pYDelta) ? cv.pTextsH : (p2Y - pSecY))),
-                                        cv.textAlign | Qt::DontClip,
+                                        cv.textAlign | Qt::TextDontClip,
                                         QString::number( dt.time().second() ) );
                                 painter->setPen( oldPen );
                                 if ( para.axisShowGrid() ){
@@ -1347,7 +1347,7 @@ void KDChartAxesPainter::paintAxes( QPainter* painter,
                                                    static_cast<int>( pMinY+pYD-orgYD ),
                                                    static_cast<int>( fabs((0.0 == pXDelta) ? cv.pTextsW : (p2X - pMinX)) ),
                                                    static_cast<int>( fabs((0.0 == pYDelta) ? cv.pTextsH : (p2Y - pMinY)) ),
-                                                   cv.textAlign | Qt::DontClip,
+                                                   cv.textAlign | Qt::TextDontClip,
                                                    QString::number( dt.time().minute() ) );
                                 painter->setPen( oldPen );
                                 if ( para.axisShowGrid() ){
@@ -1409,7 +1409,7 @@ void KDChartAxesPainter::paintAxes( QPainter* painter,
                                                    static_cast<int>( pHourY+pYD-orgYD ),
                                                    static_cast<int>( fabs((0.0 == pXDelta) ? cv.pTextsW : (p2X - pHourX))),
                                                    static_cast<int>( fabs((0.0 == pYDelta) ? cv.pTextsH : (p2Y - pHourY))),
-                                                   cv.textAlign | Qt::DontClip,
+                                                   cv.textAlign | Qt::TextDontClip,
                                                    QString::number( dt.time().hour() ) );
                                 painter->setPen( oldPen );
                                 if ( para.axisShowGrid() ){
@@ -1458,7 +1458,7 @@ void KDChartAxesPainter::paintAxes( QPainter* painter,
                                                    static_cast<int>( pDayY+pYD-orgYD ),
                                                    static_cast<int>( fabs((0.0 == pXDelta) ? cv.pTextsW : (p2X - pDayX)) ),
                                                    static_cast<int>( fabs((0.0 == pYDelta) ? cv.pTextsH : (p2Y - pDayY)) ),
-                                        cv.textAlign | Qt::DontClip,
+                                        cv.textAlign | Qt::TextDontClip,
                                         QString::number( dt.date().day() ) );
                                 painter->setPen( oldPen );
                                 /* khz: currently not used
@@ -1556,7 +1556,7 @@ void KDChartAxesPainter::paintAxes( QPainter* painter,
                                                    static_cast<int>( pMonthY+pYD-orgYD ),
                                                    static_cast<int>( fabs((0.0 == pXDelta) ? cv.pTextsW : (p2X - pMonthX)) ),
                                                    static_cast<int>( fabs((0.0 == pYDelta) ? cv.pTextsH : (p2Y - pMonthY)) ),
-                                        cv.textAlign | Qt::DontClip,
+                                        cv.textAlign | Qt::TextDontClip,
                                         QString::number( dt.date().month() ) );
                                 painter->setPen( oldPen );
                                 if ( para.axisShowGrid() ){
@@ -1608,7 +1608,7 @@ void KDChartAxesPainter::paintAxes( QPainter* painter,
                                                    static_cast<int>( pYearY+pYD-orgYD ),
                                                    static_cast<int>( fabs((0.0 == pXDelta) ? cv.pTextsW : (p2X - pYearX)) ),
                                                    static_cast<int>( fabs((0.0 == pYDelta) ? cv.pTextsH : (p2Y - pYearY)) ),
-                                        cv.textAlign | Qt::DontClip,
+                                        cv.textAlign | Qt::TextDontClip,
                                         QString::number( dt.date().year() ) );
                                 painter->setPen( oldPen );
                                 if ( para.axisShowGrid() ){
@@ -1756,7 +1756,7 @@ void KDChartAxesPainter::paintAxes( QPainter* painter,
                                                            static_cast<int>( cv.pTextsY ),
                                                            static_cast<int>( cv.pTextsW ),
                                                            static_cast<int>( cv.pTextsH ),
-                                                           cv.textAlign | Qt::DontClip,
+                                                           cv.textAlign | Qt::TextDontClip,
                                                            label );
 				      
                                         // debugging text rect
@@ -4311,7 +4311,7 @@ void KDChartAxesPainter::paintData( QPainter* painter,
     //ourClipRect.setLeft( ourClipRect.left() + 1 );
     //ourClipRect.setRight( ourClipRect.right() - 1 );
 
-    const QWMatrix & world = painter->worldMatrix();
+    const QMatrix & world = painter->worldMatrix();
     ourClipRect =
 #if COMPAT_QT_VERSION >= 0x030000
     world.mapRect( ourClipRect );

@@ -39,18 +39,27 @@
 #include <kcolorbutton.h>
 #include <kdebug.h>
 
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
 #include <qlineedit.h>
 #include <qcheckbox.h>
 #include <qcombobox.h>
 #include <qhbuttongroup.h>
 #include <qlabel.h>
 #include <qradiobutton.h>
-#include <qlistview.h>
-#include <qbuttongroup.h>
-#include <qhbox.h>
-#include <qheader.h>
+#include <q3listview.h>
+#include <q3buttongroup.h>
+#include <q3hbox.h>
+#include <q3header.h>
 #include <qlayout.h>
+//Added by qt3to4:
+#include <QPixmap>
+#include <Q3GridLayout>
+#include <Q3PtrList>
+#include <Q3Frame>
+#include <Q3ValueList>
+#include <Q3HBoxLayout>
+#include <Q3VBoxLayout>
+#include <QMouseEvent>
 
 #include <stdlib.h>
 #include <limits.h>
@@ -59,7 +68,7 @@
 /* Class KWBrushStylePreview - only used by kwframestylemanager   */
 /******************************************************************/
 KWBrushStylePreview::KWBrushStylePreview( QWidget* parent )
-    : QFrame(parent)
+    : Q3Frame(parent)
 {
 }
 
@@ -99,7 +108,7 @@ KWFrameDia::KWFrameDia( QWidget* parent, KWFrame *frame)
     m_frame = frame;
     m_mainFrame = 0;
     if(m_frame==0) {
-        kdDebug() << "ERROR: KWFrameDia::constructor no frame.."<<endl;
+        kDebug() << "ERROR: KWFrameDia::constructor no frame.."<<endl;
         return;
     }
     setCaption( i18n( "Frame Properties for %1" ).arg( m_frame->frameSet()->name() ) );
@@ -130,14 +139,14 @@ KWFrameDia::KWFrameDia( QWidget* parent, KWFrame *frame, KWDocument *doc, FrameS
     m_mainFrameSetIncluded = false;
     m_defaultFrameSetIncluded = false;
     if(m_frame==0) {
-        kdDebug() << "ERROR: KWFrameDia::constructor no m_frame.."<<endl;
+        kDebug() << "ERROR: KWFrameDia::constructor no m_frame.."<<endl;
         return;
     }
     m_mainFrame = 0;
     init();
 }
 
-KWFrameDia::KWFrameDia( QWidget *parent, QPtrList<KWFrame> listOfFrames) : KDialogBase( Tabbed, i18n("Frames Properties"), Ok | Apply | Cancel, Ok, parent, "framedialog", true) , m_allFrames() {
+KWFrameDia::KWFrameDia( QWidget *parent, Q3PtrList<KWFrame> listOfFrames) : KDialogBase( Tabbed, i18n("Frames Properties"), Ok | Apply | Cancel, Ok, parent, "framedialog", true) , m_allFrames() {
     m_noSignal=false;
 
     m_mainFrame = m_frame = 0L;
@@ -145,7 +154,7 @@ KWFrameDia::KWFrameDia( QWidget *parent, QPtrList<KWFrame> listOfFrames) : KDial
 
     KWFrame *f=listOfFrames.first();
     if(f==0) {
-        kdDebug() << "ERROR: KWFrameDia::constructor no frames.."<<endl;
+        kDebug() << "ERROR: KWFrameDia::constructor no frames.."<<endl;
         return;
     }
     if ( listOfFrames.count() == 1 )
@@ -217,7 +226,7 @@ void KWFrameDia::init() {
     }
     if(!m_doc)
     {
-        kdDebug() << "ERROR: KWFrameDia::init frame has no reference to m_doc.."<<endl;
+        kDebug() << "ERROR: KWFrameDia::init frame has no reference to m_doc.."<<endl;
         return;
     }
     if( fs && fs->isMainFrameset() )
@@ -285,7 +294,7 @@ void KWFrameDia::init() {
 }
 
 void KWFrameDia::setupTab1(){ // TAB Frame Options
-    //kdDebug() << "setup tab 1 Frame options"<<endl;
+    //kDebug() << "setup tab 1 Frame options"<<endl;
     m_tab1 = addPage( i18n("Options") );
     int columns = 0;
     if(m_frameType == FT_FORMULA || m_frameType == FT_PICTURE)
@@ -293,7 +302,7 @@ void KWFrameDia::setupTab1(){ // TAB Frame Options
     else if(m_frameType == FT_TEXT)
         columns = 2;
 
-    m_grid1 = new QGridLayout( m_tab1, 0 /*auto create*/, columns, 0, KDialog::spacingHint() );
+    m_grid1 = new Q3GridLayout( m_tab1, 0 /*auto create*/, columns, 0, KDialog::spacingHint() );
 
     // Options for all types of frames
     m_cbCopy = new QCheckBox( i18n("Frame is a copy of the previous frame"),m_tab1 );
@@ -370,12 +379,12 @@ void KWFrameDia::setupTab1(){ // TAB Frame Options
     if(m_frameType==FT_TEXT)
     {
         // AutoCreateNewFrame policy.
-        m_endOfFrame = new QGroupBox(i18n("If Text is Too Long for Frame"), m_tab1 );
+        m_endOfFrame = new Q3GroupBox(i18n("If Text is Too Long for Frame"), m_tab1 );
         m_grid1->addWidget( m_endOfFrame, row, 0 );
 
-        m_eofGrid= new QGridLayout (m_endOfFrame, 4, 1, KDialog::marginHint(), KDialog::spacingHint());
+        m_eofGrid= new Q3GridLayout (m_endOfFrame, 4, 1, KDialog::marginHint(), KDialog::spacingHint());
         m_rAppendFrame = new QRadioButton( i18n( "Create a new page" ), m_endOfFrame );
-        QWhatsThis::add( m_rAppendFrame, "<b>Create a new page:</b><br/> if there is too "
+        Q3WhatsThis::add( m_rAppendFrame, "<b>Create a new page:</b><br/> if there is too "
             "much text for this text frame, a new page will be created and, "
             "since \"Reconnect frame to current flow\" is the only possible "
             "option together with this one, "
@@ -383,7 +392,7 @@ void KWFrameDia::setupTab1(){ // TAB Frame Options
         m_eofGrid->addWidget( m_rAppendFrame, 1, 0 );
 
         m_rResizeFrame = new QRadioButton( i18n( "Resize last frame" ), m_endOfFrame );
-        QWhatsThis::add( m_rResizeFrame, "<b>Resize last frame:</b><br/> "
+        Q3WhatsThis::add( m_rResizeFrame, "<b>Resize last frame:</b><br/> "
             "if there is too much text for this text frame, "
             "the frame will resize itself (increasing its height) as much as it needs, "
             "to be able to contain all the text. More precisely, when the frameset has "
@@ -391,14 +400,14 @@ void KWFrameDia::setupTab1(){ // TAB Frame Options
         m_eofGrid->addWidget( m_rResizeFrame, 2, 0 );
 
         m_rNoShow = new QRadioButton( i18n( "Don't show the extra text" ), m_endOfFrame );
-        QWhatsThis::add( m_rNoShow, "<b>Don't show the extra text:</b><br/> "
+        Q3WhatsThis::add( m_rNoShow, "<b>Don't show the extra text:</b><br/> "
             "if there is too much text for this text frame, nothing happens "
             "automatically. Initially the extra text won't appear. One possibility "
             "then is to resize the frame manually. The other possibility is, with the option "
             "\"Reconnect frame to current flow\" selected, to create a new page "
             "which will then have a followup frame with the extra text." );
         m_eofGrid->addWidget( m_rNoShow, 3, 0 );
-        QButtonGroup *grp = new QButtonGroup( m_endOfFrame );
+        Q3ButtonGroup *grp = new Q3ButtonGroup( m_endOfFrame );
         grp->hide();
         grp->setExclusive( true );
         grp->insert( m_rAppendFrame );
@@ -439,12 +448,12 @@ void KWFrameDia::setupTab1(){ // TAB Frame Options
     }
 
     // NewFrameBehavior - now for all type of frames
-    m_onNewPage = new QGroupBox(i18n("On New Page Creation"),m_tab1);
+    m_onNewPage = new Q3GroupBox(i18n("On New Page Creation"),m_tab1);
     m_grid1->addWidget( m_onNewPage, row, column );
 
-    m_onpGrid = new QGridLayout( m_onNewPage, 4, 1, KDialog::marginHint(), KDialog::spacingHint() );
+    m_onpGrid = new Q3GridLayout( m_onNewPage, 4, 1, KDialog::marginHint(), KDialog::spacingHint() );
     m_reconnect = new QRadioButton (i18n ("Reconnect frame to current flow"), m_onNewPage);
-    QWhatsThis::add(m_reconnect, i18n("<b>Reconnect frame to current flow:</b><br/>"
+    Q3WhatsThis::add(m_reconnect, i18n("<b>Reconnect frame to current flow:</b><br/>"
         "When a new page is created, a new frame will be created for this "
         "frameset, so that the text can flow from one page to the next if necessary. "
         "This is what happens for the \"main text frameset\", but this option makes it possible "
@@ -455,14 +464,14 @@ void KWFrameDia::setupTab1(){ // TAB Frame Options
     m_onpGrid->addWidget( m_reconnect, 1, 0 );
 
     m_noFollowup = new QRadioButton (i18n ("Do not create a followup frame"), m_onNewPage);
-    QWhatsThis::add(m_noFollowup, i18n("<b>Do not create a followup frame:</b><br/>"
+    Q3WhatsThis::add(m_noFollowup, i18n("<b>Do not create a followup frame:</b><br/>"
         "When a new page is created, no frame will be created for this frameset."));
     if ( m_rResizeFrame )
         connect( m_noFollowup, SIGNAL( clicked() ), this, SLOT( setFrameBehaviorInputOn() ) );
     m_onpGrid->addWidget( m_noFollowup, 2, 0 );
 
     m_copyRadio= new QRadioButton (i18n ("Place a copy of this frame"), m_onNewPage);
-    QWhatsThis::add(m_copyRadio, i18n("<b>Place a copy of this frame:</b><br/>"
+    Q3WhatsThis::add(m_copyRadio, i18n("<b>Place a copy of this frame:</b><br/>"
         "When a new page is created, a frame will be created for this frameset, "
         "which will always show the exact same thing as the frame on the previous "
         "page. This is what happens for headers and footers, but this option "
@@ -474,7 +483,7 @@ void KWFrameDia::setupTab1(){ // TAB Frame Options
 
     enableOnNewPageOptions();
 
-    QButtonGroup *grp2 = new QButtonGroup( m_onNewPage );
+    Q3ButtonGroup *grp2 = new Q3ButtonGroup( m_onNewPage );
     grp2->hide();
     grp2->setExclusive( true );
     grp2->insert( m_reconnect );
@@ -513,11 +522,11 @@ void KWFrameDia::setupTab1(){ // TAB Frame Options
     if( false && m_frameType == FT_TEXT ) // disabled in the GUI for now! (TZ June 2002)
     {
         row++;
-        m_sideHeads = new QGroupBox(i18n("SideHead Definition"),m_tab1);
+        m_sideHeads = new Q3GroupBox(i18n("SideHead Definition"),m_tab1);
         m_sideHeads->setEnabled(false); //###
         m_grid1->addWidget(m_sideHeads, row, 0);
 
-        m_sideGrid = new QGridLayout( m_sideHeads, 4, 2, KDialog::marginHint(), KDialog::spacingHint() );
+        m_sideGrid = new Q3GridLayout( m_sideHeads, 4, 2, KDialog::marginHint(), KDialog::spacingHint() );
         sideTitle1 = new QLabel ( i18n("Size (%1):").arg(m_doc->unitName()),m_sideHeads);
         sideTitle1->resize(sideTitle1->sizeHint());
         m_sideGrid->addWidget(sideTitle1,1,0);
@@ -554,7 +563,7 @@ void KWFrameDia::setupTab1(){ // TAB Frame Options
     row++;
     m_grid1->addMultiCellWidget(m_cbAllFrames,row,row, 0, 1);
     m_cbProtectContent = new QCheckBox( i18n("Protect content"), m_tab1);
-    QWhatsThis::add(m_cbProtectContent, i18n("<b>Protect content:</b><br/>"
+    Q3WhatsThis::add(m_cbProtectContent, i18n("<b>Protect content:</b><br/>"
         "Disallow changes to be made to the contents of the frame(s)."));
     connect( m_cbProtectContent, SIGNAL(toggled ( bool ) ), this, SLOT(slotProtectContentChanged( bool )));
     row++;
@@ -609,13 +618,13 @@ void KWFrameDia::setupTab1(){ // TAB Frame Options
 void KWFrameDia::setupTab2() { // TAB Text Runaround
     m_tab2 = addPage( i18n( "Text Run Around" ) );
 
-    QVBoxLayout *tabLayout = new QVBoxLayout( m_tab2, 0, KDialog::spacingHint(), "tabLayout");
+    Q3VBoxLayout *tabLayout = new Q3VBoxLayout( m_tab2, 0, KDialog::spacingHint(), "tabLayout");
 
     // First groupbox
-    m_runGroup = new QButtonGroup(  i18n( "Layout of Text in Other Frames" ), m_tab2);
+    m_runGroup = new Q3ButtonGroup(  i18n( "Layout of Text in Other Frames" ), m_tab2);
     m_runGroup->setColumnLayout( 0, Qt::Vertical );
     m_runGroup->layout()->setSpacing( KDialog::spacingHint() );
-    QGridLayout *groupBox1Layout = new QGridLayout( m_runGroup->layout() );
+    Q3GridLayout *groupBox1Layout = new Q3GridLayout( m_runGroup->layout() );
     groupBox1Layout->setAlignment( Qt::AlignTop );
 
     m_rRunNo = new QRadioButton( i18n( "Text will run &through this frame" ), m_runGroup );
@@ -648,11 +657,11 @@ void KWFrameDia::setupTab2() { // TAB Text Runaround
     tabLayout->addWidget( m_runGroup );
 
     // Second groupbox
-    m_runSideGroup = new QButtonGroup(  i18n( "Run Around Side" ), m_tab2);
+    m_runSideGroup = new Q3ButtonGroup(  i18n( "Run Around Side" ), m_tab2);
     m_runSideGroup->setColumnLayout( 0, Qt::Vertical );
     m_runSideGroup->layout()->setSpacing( KDialog::spacingHint() );
     m_runSideGroup->layout()->setMargin( KDialog::marginHint() );
-    QGridLayout *runSideLayout = new QGridLayout( m_runSideGroup->layout() );
+    Q3GridLayout *runSideLayout = new Q3GridLayout( m_runSideGroup->layout() );
     runSideLayout->setAlignment( Qt::AlignTop );
 
     m_rRunLeft = new QRadioButton( i18n( "Run Around", "&Left" ), m_runSideGroup );
@@ -688,10 +697,10 @@ void KWFrameDia::setupTab2() { // TAB Text Runaround
 
     m_raDistConfigWidget = new KWFourSideConfigWidget( m_doc, i18n("Distance Between Frame && Text"), m_tab2 );
     if ( m_frame )
-        m_raDistConfigWidget->setValues( QMAX(0.00, m_frame->runAroundLeft()),
-                                         QMAX(0.00, m_frame->runAroundRight()),
-                                         QMAX(0.00, m_frame->runAroundTop()),
-                                         QMAX(0.00, m_frame->runAroundBottom()) );
+        m_raDistConfigWidget->setValues( qMax(0.00, m_frame->runAroundLeft()),
+                                         qMax(0.00, m_frame->runAroundRight()),
+                                         qMax(0.00, m_frame->runAroundTop()),
+                                         qMax(0.00, m_frame->runAroundBottom()) );
     tabLayout->addWidget( m_raDistConfigWidget );
 
 
@@ -789,12 +798,12 @@ void KWFrameDia::setupTab3(){ // TAB Frameset
      * framebehaviour will be copied from the frameset
      * then the new connection should be made.
      */
-    //kdDebug() << "setup tab 3 frameSet"<<endl;
+    //kDebug() << "setup tab 3 frameSet"<<endl;
     m_tab3 = addPage( i18n( "Connect Text Frames" ) );
 
-    QVBoxLayout *tabLayout = new QVBoxLayout( m_tab3, 0, KDialog::spacingHint());
+    Q3VBoxLayout *tabLayout = new Q3VBoxLayout( m_tab3, 0, KDialog::spacingHint());
 
-    QButtonGroup *myGroup = new QButtonGroup(this);
+    Q3ButtonGroup *myGroup = new Q3ButtonGroup(this);
     myGroup->hide();
 
     m_rExistingFrameset = new QRadioButton( m_tab3, "m_rExistingFrameset" );
@@ -803,11 +812,11 @@ void KWFrameDia::setupTab3(){ // TAB Frameset
     myGroup->insert(m_rExistingFrameset,1);
     connect (m_rExistingFrameset, SIGNAL( toggled(bool)), this, SLOT(ensureValidFramesetSelected()));
 
-    QHBoxLayout *layout2 = new QHBoxLayout( 0, 0, 6);
+    Q3HBoxLayout *layout2 = new Q3HBoxLayout( 0, 0, 6);
     QSpacerItem* spacer = new QSpacerItem( 20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding );
     layout2->addItem( spacer );
 
-    m_lFrameSList = new QListView( m_tab3, "m_lFrameSList" );
+    m_lFrameSList = new Q3ListView( m_tab3, "m_lFrameSList" );
     m_lFrameSList->addColumn( i18n("No.") );
     m_lFrameSList->addColumn( i18n("Frameset Name") );
     m_lFrameSList->setAllColumnsShowFocus( true );
@@ -823,13 +832,13 @@ void KWFrameDia::setupTab3(){ // TAB Frameset
     tabLayout->addWidget( m_rNewFrameset );
     myGroup->insert(m_rNewFrameset,2);
 
-    QFrame *line1 = new QFrame( m_tab3 );
-    line1->setProperty( "frameShape", (int)QFrame::HLine );
-    line1->setFrameShadow( QFrame::Plain );
-    line1->setFrameShape( QFrame::HLine );
+    Q3Frame *line1 = new Q3Frame( m_tab3 );
+    line1->setProperty( "frameShape", (int)Q3Frame::HLine );
+    line1->setFrameShadow( Q3Frame::Plain );
+    line1->setFrameShape( Q3Frame::HLine );
     tabLayout->addWidget( line1 );
 
-    QHBoxLayout *layout1 = new QHBoxLayout( 0, 0, 6 );
+    Q3HBoxLayout *layout1 = new Q3HBoxLayout( 0, 0, 6 );
     QLabel *textLabel1 = new QLabel( m_tab3 );
     textLabel1->setText( i18n( "Name of frameset:" ) );
     layout1->addWidget( textLabel1 );
@@ -852,7 +861,7 @@ void KWFrameDia::setupTab3(){ // TAB Frameset
             continue;
         if ( fs->isDeleted() )
             continue;
-        QListViewItem *item = new QListViewItem( m_lFrameSList );
+        Q3ListViewItem *item = new Q3ListViewItem( m_lFrameSList );
         item->setText( 0, QString( "%1" ).arg( i + 1 ) );
         item->setText( 1, fs->name() );
         amount++;
@@ -881,8 +890,8 @@ void KWFrameDia::setupTab3(){ // TAB Frameset
     }
     m_eFrameSetName->setText( m_oldFrameSetName );
 
-    connect( m_lFrameSList, SIGNAL( currentChanged( QListViewItem * ) ),
-             this, SLOT( connectListSelected( QListViewItem * ) ) );
+    connect( m_lFrameSList, SIGNAL( currentChanged( Q3ListViewItem * ) ),
+             this, SLOT( connectListSelected( Q3ListViewItem * ) ) );
     connect(m_eFrameSetName, SIGNAL(textChanged ( const QString & ) ),
              this,SLOT(textNameFrameChanged ( const QString & ) ) );
     connect(m_eFrameSetName, SIGNAL(textChanged ( const QString & )),
@@ -898,7 +907,7 @@ void KWFrameDia::selectExistingFrameset() {
 void KWFrameDia::selectNewFrameset(bool on) {
     if(!on) return;
 
-    QListViewItem *frameSetItem  = m_lFrameSList->selectedItem();
+    Q3ListViewItem *frameSetItem  = m_lFrameSList->selectedItem();
     if ( !frameSetItem)
         return;
     QString str = frameSetItem->text( 0 );
@@ -910,7 +919,7 @@ void KWFrameDia::selectNewFrameset(bool on) {
 void KWFrameDia::textNameFrameChanged ( const QString &text )
 {
     if(m_rExistingFrameset->isChecked()) {
-        QListViewItem *item = m_lFrameSList->selectedItem();
+        Q3ListViewItem *item = m_lFrameSList->selectedItem();
         if ( !item )
             return;
         item->setText(1, text );
@@ -925,7 +934,7 @@ void KWFrameDia::setupTab4() { // TAB Geometry
     m_noSignal = true;
 
     m_tab4 = addPage( i18n( "Geometry" ) );
-    QGridLayout* grid4 = new QGridLayout( m_tab4, 5, 1, 0, KDialog::spacingHint() );
+    Q3GridLayout* grid4 = new Q3GridLayout( m_tab4, 5, 1, 0, KDialog::spacingHint() );
 
     m_floating = new QCheckBox( i18n("Frame is inline"), m_tab4 );
 
@@ -957,8 +966,8 @@ void KWFrameDia::setupTab4() { // TAB Geometry
         Absolute
     */
 
-    m_grp1 = new QGroupBox( i18n("Position"), m_tab4 );
-    QGridLayout* pGrid = new QGridLayout( m_grp1, 3, 4, KDialog::marginHint(), KDialog::spacingHint() );
+    m_grp1 = new Q3GroupBox( i18n("Position"), m_tab4 );
+    Q3GridLayout* pGrid = new Q3GridLayout( m_grp1, 3, 4, KDialog::marginHint(), KDialog::spacingHint() );
 
     m_lx = new QLabel( i18n( "Left:" ), m_grp1 );
     m_lx->resize( m_lx->sizeHint() );
@@ -1008,10 +1017,10 @@ void KWFrameDia::setupTab4() { // TAB Geometry
 
     if(m_frame) {
         m_paddingConfigWidget = new KWFourSideConfigWidget( m_doc, i18n("Margins"), m_tab4 );
-        m_paddingConfigWidget->setValues( QMAX(0.00, m_frame->paddingLeft()),
-                                          QMAX(0.00, m_frame->paddingRight()),
-                                          QMAX(0.00, m_frame->paddingTop()),
-                                          QMAX(0.00, m_frame->paddingBottom()) );
+        m_paddingConfigWidget->setValues( qMax(0.00, m_frame->paddingLeft()),
+                                          qMax(0.00, m_frame->paddingRight()),
+                                          qMax(0.00, m_frame->paddingTop()),
+                                          qMax(0.00, m_frame->paddingBottom()) );
         row++;
         grid4->addMultiCellWidget( m_paddingConfigWidget, row, row, 0, 1 );
 
@@ -1125,12 +1134,12 @@ void KWFrameDia::initGeometrySettings()
                 m_floating->setNoChange();
             }
 
-            if ( kAbs( f->width() - commonWidth ) > 1E-6 ) {
-                kdDebug() << k_funcinfo << "width differs:" << f->width() << " " << commonWidth << endl;
+            if ( qAbs( f->width() - commonWidth ) > 1E-6 ) {
+                kDebug() << k_funcinfo << "width differs:" << f->width() << " " << commonWidth << endl;
                 m_sw->setEnabled( false );
             }
-            if ( kAbs( f->height() - commonHeight ) > 1E-6 ) {
-                kdDebug() << k_funcinfo << "height differs:" << f->height() << " " << commonHeight << endl;
+            if ( qAbs( f->height() - commonHeight ) > 1E-6 ) {
+                kDebug() << k_funcinfo << "height differs:" << f->height() << " " << commonHeight << endl;
                 m_sh->setEnabled( false );
             }
 
@@ -1154,7 +1163,7 @@ void KWFrameDia::initGeometrySettings()
 
 void KWFrameDia::setupTab5() { // Tab Background fill/color
     m_tab5 = addPage( i18n("Background") );
-    QGridLayout* grid5 = new QGridLayout( m_tab5, 0 /*auto*/, 2, 0, KDialog::spacingHint() );
+    Q3GridLayout* grid5 = new Q3GridLayout( m_tab5, 0 /*auto*/, 2, 0, KDialog::spacingHint() );
 
     int row = 0;
     if (!m_frame ) {
@@ -1231,7 +1240,7 @@ void KWFrameDia::setupTab6() // Border style
 {
     m_tab6 = addPage( i18n("&Borders") );
 
-    QGridLayout *grid = new QGridLayout( m_tab6, 8, 2, 0, KDialog::spacingHint() );
+    Q3GridLayout *grid = new Q3GridLayout( m_tab6, 8, 2, 0, KDialog::spacingHint() );
 
     QLabel * lStyle = new QLabel( i18n( "St&yle:" ), m_tab6 );
     grid->addWidget( lStyle, 0, 0 );
@@ -1265,8 +1274,8 @@ void KWFrameDia::setupTab6() // Border style
     lColor->setBuddy( m_bColor );
     grid->addWidget( m_bColor, 5, 0 );
 
-    QButtonGroup * bb = new QHButtonGroup( m_tab6 );
-    bb->setFrameStyle(QFrame::NoFrame);
+    Q3ButtonGroup * bb = new Q3HButtonGroup( m_tab6 );
+    bb->setFrameStyle(Q3Frame::NoFrame);
     m_bLeft = new QPushButton(bb);
     m_bLeft->setPixmap( BarIcon( "borderleft" ) );
     m_bLeft->setToggleButton( true );
@@ -1288,12 +1297,12 @@ void KWFrameDia::setupTab6() // Border style
 
     initBorderSettings();
 
-    QGroupBox *grp=new QGroupBox( 0, Qt::Vertical, i18n( "Preview" ), m_tab6, "previewgrp" );
+    Q3GroupBox *grp=new Q3GroupBox( 0, Qt::Vertical, i18n( "Preview" ), m_tab6, "previewgrp" );
     grid->addMultiCellWidget( grp , 0, 7, 1, 1 );
     grp->layout()->setSpacing(KDialog::spacingHint());
     grp->layout()->setMargin(KDialog::marginHint());
     m_prev3 = new KoBorderPreview( grp );
-    QVBoxLayout *lay1 = new QVBoxLayout( grp->layout() );
+    Q3VBoxLayout *lay1 = new Q3VBoxLayout( grp->layout() );
     lay1->addWidget(m_prev3);
 
     connect( m_prev3, SIGNAL( choosearea(QMouseEvent * ) ),
@@ -1446,7 +1455,7 @@ void KWFrameDia::slotProtectContentChanged( bool b )
 
 void KWFrameDia::slotUpdateWidthForHeight(double height)
 {
-    if ( !m_cbAspectRatio || m_cbAspectRatio->state() != QButton::NoChange)
+    if ( !m_cbAspectRatio || m_cbAspectRatio->state() != QCheckBox::NoChange)
         return;
     if ( m_heightByWidthRatio == 0 )
         return; // avoid DBZ
@@ -1456,7 +1465,7 @@ void KWFrameDia::slotUpdateWidthForHeight(double height)
 
 void KWFrameDia::slotUpdateHeightForWidth( double width )
 {
-    if ( !m_cbAspectRatio || m_cbAspectRatio->state() != QButton::NoChange)
+    if ( !m_cbAspectRatio || m_cbAspectRatio->state() != QCheckBox::NoChange)
         return;
     m_sh->setValue( width * m_heightByWidthRatio );
 }
@@ -1503,52 +1512,52 @@ void KWFrameDia::initBrush()
 #if 0
     switch ( m_newBrushStyle.style() )
     {
-        case NoBrush:
+        case Qt::NoBrush:
             brushStyle->setCurrentItem( 0 );
             break;
-        case SolidPattern:
+        case Qt::SolidPattern:
             brushStyle->setCurrentItem( 1 );
             break;
-        case Dense1Pattern:
+        case Qt::Dense1Pattern:
             brushStyle->setCurrentItem( 2 );
             break;
-        case Dense2Pattern:
+        case Qt::Dense2Pattern:
             brushStyle->setCurrentItem( 3 );
             break;
-        case Dense3Pattern:
+        case Qt::Dense3Pattern:
             brushStyle->setCurrentItem( 4 );
             break;
-        case Dense4Pattern:
+        case Qt::Dense4Pattern:
             brushStyle->setCurrentItem( 5 );
             break;
-        case Dense5Pattern:
+        case Qt::Dense5Pattern:
             brushStyle->setCurrentItem( 6 );
             break;
-        case Dense6Pattern:
+        case Qt::Dense6Pattern:
             brushStyle->setCurrentItem( 7 );
             break;
-        case Dense7Pattern:
+        case Qt::Dense7Pattern:
             brushStyle->setCurrentItem( 8 );
             break;
-        case HorPattern:
+        case Qt::HorPattern:
             brushStyle->setCurrentItem( 9 );
             break;
-        case VerPattern:
+        case Qt::VerPattern:
             brushStyle->setCurrentItem( 10 );
             break;
-        case CrossPattern:
+        case Qt::CrossPattern:
             brushStyle->setCurrentItem( 11 );
             break;
-        case BDiagPattern:
+        case Qt::BDiagPattern:
             brushStyle->setCurrentItem( 12 );
             break;
-        case FDiagPattern:
+        case Qt::FDiagPattern:
             brushStyle->setCurrentItem( 13 );
             break;
-        case DiagCrossPattern:
+        case Qt::DiagCrossPattern:
             brushStyle->setCurrentItem( 14 );
             break;
-        case CustomPattern:
+        case Qt::TexturePattern:
             break;
     }
 #endif
@@ -1567,49 +1576,49 @@ QBrush KWFrameDia::frameBrushStyle() const
     switch ( brushStyle->currentItem() )
     {
         case 0:
-            brush.setStyle( NoBrush );
+            brush.setStyle( Qt::NoBrush );
             break;
         case 1:
-            brush.setStyle( SolidPattern );
+            brush.setStyle( Qt::SolidPattern );
             break;
         case 2:
-            brush.setStyle( Dense1Pattern );
+            brush.setStyle( Qt::Dense1Pattern );
             break;
         case 3:
-            brush.setStyle( Dense2Pattern );
+            brush.setStyle( Qt::Dense2Pattern );
             break;
         case 4:
-            brush.setStyle( Dense3Pattern );
+            brush.setStyle( Qt::Dense3Pattern );
             break;
         case 5:
-            brush.setStyle( Dense4Pattern );
+            brush.setStyle( Qt::Dense4Pattern );
             break;
         case 6:
-            brush.setStyle( Dense5Pattern );
+            brush.setStyle( Qt::Dense5Pattern );
             break;
         case 7:
-            brush.setStyle( Dense6Pattern );
+            brush.setStyle( Qt::Dense6Pattern );
             break;
         case 8:
-            brush.setStyle( Dense7Pattern );
+            brush.setStyle( Qt::Dense7Pattern );
             break;
         case 9:
-            brush.setStyle( HorPattern );
+            brush.setStyle( Qt::HorPattern );
             break;
         case 10:
-            brush.setStyle( VerPattern );
+            brush.setStyle( Qt::VerPattern );
             break;
         case 11:
-            brush.setStyle( CrossPattern );
+            brush.setStyle( Qt::CrossPattern );
             break;
         case 12:
-            brush.setStyle( BDiagPattern );
+            brush.setStyle( Qt::BDiagPattern );
             break;
         case 13:
-            brush.setStyle( FDiagPattern );
+            brush.setStyle( Qt::FDiagPattern );
             break;
         case 14:
-            brush.setStyle( DiagCrossPattern );
+            brush.setStyle( Qt::DiagCrossPattern );
             break;
     }
 #endif
@@ -1646,7 +1655,7 @@ void KWFrameDia::setFrameBehaviorInputOn() {
         }
         m_rResizeFrame->setEnabled(true);
         // Can't have "create a new page" if "no followup", that wouldn't work
-        kdDebug() << "setFrameBehaviorInputOn: m_reconnect->isChecked()==" << m_reconnect->isChecked() << endl;
+        kDebug() << "setFrameBehaviorInputOn: m_reconnect->isChecked()==" << m_reconnect->isChecked() << endl;
         m_rAppendFrame->setEnabled( m_reconnect->isChecked() );
         m_rNoShow->setEnabled(true);
     }
@@ -1675,13 +1684,13 @@ void KWFrameDia::setFrameBehaviorInputOff() {
 
 void KWFrameDia::enableSizeAndPosition()
 {
-    bool canMove = ( m_floating->state() == QButton::Off ) // can move if no frame is floating
-                   && ( m_protectSize->state() == QButton::Off ) // protects size too
+    bool canMove = ( m_floating->state() == QCheckBox::Off ) // can move if no frame is floating
+                   && ( m_protectSize->state() == QCheckBox::Off ) // protects size too
                    && !m_defaultFrameSetIncluded // those can't be moved
                    && m_frame; // can't move if multiple frames selected
     m_sx->setEnabled( canMove );
     m_sy->setEnabled( canMove );
-    bool canResize = ( m_protectSize->state() == QButton::Off ) // can resize if no frame is protect-size'd
+    bool canResize = ( m_protectSize->state() == QCheckBox::Off ) // can resize if no frame is protect-size'd
                      && !m_defaultFrameSetIncluded; // those can't be resized
     m_sw->setEnabled( canResize );
     m_sh->setEnabled( canResize );
@@ -1763,7 +1772,7 @@ void KWFrameDia::enableRunAround()
 
 bool KWFrameDia::applyChanges()
 {
-    kdDebug() << "KWFrameDia::applyChanges"<<endl;
+    kDebug() << "KWFrameDia::applyChanges"<<endl;
     KWFrame *frameCopy = 0L;
     bool isNewFrame=false;
     if(m_frame) { // only do undo/redo when we have 1 frame to change for now..
@@ -1784,7 +1793,7 @@ bool KWFrameDia::applyChanges()
         if ( name.isEmpty() ) // Don't allow empty names
             name = m_doc->generateFramesetName( i18n( "Text Frameset %1" ) );
         KWFrameSet *fs = 0L;
-        QListViewItem *frameSetItem  = m_lFrameSList->selectedItem();
+        Q3ListViewItem *frameSetItem  = m_lFrameSList->selectedItem();
         if(frameSetItem) {
             QString str = frameSetItem->text( 0 );
             fs = m_doc->frameSet(str.toInt() - 1);
@@ -1849,7 +1858,7 @@ bool KWFrameDia::applyChanges()
         }
         if(m_rNewFrameset->isChecked() || m_rExistingFrameset->isChecked()) {
             // check if new name is unique
-            for (QPtrListIterator<KWFrameSet> fit = m_doc->framesetsIterator(); fit.current() ; ++fit ) {
+            for (Q3PtrListIterator<KWFrameSet> fit = m_doc->framesetsIterator(); fit.current() ; ++fit ) {
                 if ( !fit.current()->isDeleted() &&  // Allow to reuse a deleted frameset's name
                      fs != fit.current() && fit.current()->name() == name) {
                     if ( m_rNewFrameset->isChecked() )
@@ -1872,7 +1881,7 @@ bool KWFrameDia::applyChanges()
         // Copy
         if(m_frame)
             m_frame->setCopy( m_cbCopy->isChecked() );
-        else if(m_cbCopy->state() != QButton::NoChange) {
+        else if(m_cbCopy->state() != QCheckBox::NoChange) {
             for(KWFrame *f=m_allFrames.first();f; f=m_allFrames.next()) {
                 if(f == f->frameSet()->frame(0))  continue; // skip first frame of any frameset.
                 f->setCopy( m_cbCopy->isChecked() );
@@ -1919,7 +1928,7 @@ bool KWFrameDia::applyChanges()
             }
             else
             {
-                if ( m_cbProtectContent->state() != QButton::NoChange)
+                if ( m_cbProtectContent->state() != QCheckBox::NoChange)
                 {
                     for(KWFrame *f=m_allFrames.first();f; f=m_allFrames.next())
                     {
@@ -1981,7 +1990,7 @@ bool KWFrameDia::applyChanges()
 
                     macroCmd->addCommand(cmd);
                 }
-            } else if(m_cbAspectRatio->state() != QButton::NoChange) {
+            } else if(m_cbAspectRatio->state() != QCheckBox::NoChange) {
                 for(KWFrame *f=m_allFrames.first();f; f=m_allFrames.next()) {
                     KWPictureFrameSet *fs = dynamic_cast<KWPictureFrameSet *> (f->frameSet());
                     if(fs) {
@@ -2073,12 +2082,12 @@ bool KWFrameDia::applyChanges()
     double uRight = 0.0;
     if(m_tab4) { // TAB Geometry
         if ( m_frame ) {
-            px = QMAX( 0, m_sx->value() );
+            px = qMax( 0, m_sx->value() );
             int pageNum = m_doc->pageManager()->pageNumber(m_frame);
-            py = QMAX( 0, m_sy->value() ) + m_doc->pageManager()->topOfPage(pageNum);
+            py = qMax( 0, m_sy->value() ) + m_doc->pageManager()->topOfPage(pageNum);
         }
-        pw = QMAX( m_sw->value(), 0 );
-        ph = QMAX( m_sh->value(), 0 );
+        pw = qMax( m_sw->value(), 0 );
+        ph = qMax( m_sh->value(), 0 );
         if ( m_paddingConfigWidget )
         {
             uLeft = m_paddingConfigWidget->leftValue();
@@ -2089,9 +2098,9 @@ bool KWFrameDia::applyChanges()
     }
     KoRect rect( px, py, pw, ph );
 
-    //kdDebug() << "New geom: " << m_sx->text().toDouble() << ", " << m_sy->text().toDouble()
+    //kDebug() << "New geom: " << m_sx->text().toDouble() << ", " << m_sy->text().toDouble()
     //<< " " << m_sw->text().toDouble() << "x" << m_sh->text().toDouble() << endl;
-    //kdDebug()<<" rect :"<<px <<" py :"<<py<<" pw :"<<pw <<" ph "<<ph<<endl;
+    //kDebug()<<" rect :"<<px <<" py :"<<py<<" pw :"<<pw <<" ph "<<ph<<endl;
     // Undo/redo for frame properties
     if(m_frame) { // only do undo/redo when we edit 1 frame for now..
 
@@ -2146,14 +2155,14 @@ bool KWFrameDia::applyChanges()
 
             // Floating
             if ( m_floating->isChecked() &&
-                 m_floating->state() != QButton::NoChange &&
+                 m_floating->state() != QCheckBox::NoChange &&
                  !parentFs->isFloating() )
             {
                 if(!macroCmd)
                     macroCmd = new KMacroCommand( i18n("Make Frameset Inline") );
 
-                QValueList<FrameIndex> frameindexList;
-                QValueList<FrameMoveStruct> frameindexMove;
+                Q3ValueList<FrameIndex> frameindexList;
+                Q3ValueList<FrameMoveStruct> frameindexMove;
 
                 KoPoint oldPos = f->topLeft();
 
@@ -2170,7 +2179,7 @@ bool KWFrameDia::applyChanges()
                 macroCmd->addCommand(cmd);
             }
             else if ( !m_floating->isChecked() &&
-                      m_floating->state() != QButton::NoChange &&
+                      m_floating->state() != QCheckBox::NoChange &&
                       parentFs->isFloating() )
             {
                 if(!macroCmd)
@@ -2181,7 +2190,7 @@ bool KWFrameDia::applyChanges()
                 cmd->execute();
             }
             if ( fs->isProtectSize() != m_protectSize->isChecked()
-                 && m_protectSize->state() != QButton::NoChange )
+                 && m_protectSize->state() != QCheckBox::NoChange )
             {
                 if(!macroCmd)
                     macroCmd = new KMacroCommand( i18n("Protect Size") );
@@ -2194,8 +2203,8 @@ bool KWFrameDia::applyChanges()
             if ( !fs->isMainFrameset() &&
                 ( ( m_oldX != m_sx->value() && m_sx->isEnabled() )|| ( m_oldY != m_sy->value() && m_sy->isEnabled() ) || ( m_oldW != m_sw->value() && m_sw->isEnabled() ) || ( m_oldH != m_sh->value() && m_sh->isEnabled() ) ) )
             {
-                //kdDebug() << "Old geom: " << m_oldX << ", " << m_oldY<< " " << m_oldW << "x" << m_oldH << endl;
-                //kdDebug() << "New geom: " << m_sx->text().toDouble() << ", " << m_sy->text().toDouble()
+                //kDebug() << "Old geom: " << m_oldX << ", " << m_oldY<< " " << m_oldW << "x" << m_oldH << endl;
+                //kDebug() << "New geom: " << m_sx->text().toDouble() << ", " << m_sy->text().toDouble()
                   //        << " " << m_sw->text().toDouble() << "x" << m_sh->text().toDouble() << endl;
 
                 if( m_doc->pageManager()->page(f)->rect().contains(rect) )
@@ -2250,9 +2259,9 @@ bool KWFrameDia::applyChanges()
             // TODO can't this become shorter??
             if ( f->leftBorder() != m_leftBorder )
             {
-                kdDebug() << "Changing borders!" << endl;
-                QPtrList<KWFrameBorderCommand::FrameBorderTypeStruct> tmpBorderList;
-                QPtrList<FrameIndex> frameindexList;
+                kDebug() << "Changing borders!" << endl;
+                Q3PtrList<KWFrameBorderCommand::FrameBorderTypeStruct> tmpBorderList;
+                Q3PtrList<FrameIndex> frameindexList;
                 f = KWFrameSet::settingsFrame( f );
                 FrameIndex *index = new FrameIndex( f );
                 KWFrameBorderCommand::FrameBorderTypeStruct *tmp =new KWFrameBorderCommand::FrameBorderTypeStruct;
@@ -2268,8 +2277,8 @@ bool KWFrameDia::applyChanges()
             }
             if ( f->rightBorder() != m_rightBorder )
             {
-                QPtrList<KWFrameBorderCommand::FrameBorderTypeStruct> tmpBorderList;
-                QPtrList<FrameIndex> frameindexList;
+                Q3PtrList<KWFrameBorderCommand::FrameBorderTypeStruct> tmpBorderList;
+                Q3PtrList<FrameIndex> frameindexList;
                 f = KWFrameSet::settingsFrame( f );
                 FrameIndex *index = new FrameIndex( f );
                 KWFrameBorderCommand::FrameBorderTypeStruct *tmp =new KWFrameBorderCommand::FrameBorderTypeStruct;
@@ -2285,8 +2294,8 @@ bool KWFrameDia::applyChanges()
             }
             if ( f->topBorder() != m_topBorder )
             {
-                QPtrList<KWFrameBorderCommand::FrameBorderTypeStruct> tmpBorderList;
-                QPtrList<FrameIndex> frameindexList;
+                Q3PtrList<KWFrameBorderCommand::FrameBorderTypeStruct> tmpBorderList;
+                Q3PtrList<FrameIndex> frameindexList;
                 f = KWFrameSet::settingsFrame( f );
                 FrameIndex *index = new FrameIndex( f );
                 KWFrameBorderCommand::FrameBorderTypeStruct *tmp =new KWFrameBorderCommand::FrameBorderTypeStruct;
@@ -2302,8 +2311,8 @@ bool KWFrameDia::applyChanges()
             }
             if ( f->bottomBorder() != m_bottomBorder )
             {
-                QPtrList<KWFrameBorderCommand::FrameBorderTypeStruct> tmpBorderList;
-                QPtrList<FrameIndex> frameindexList;
+                Q3PtrList<KWFrameBorderCommand::FrameBorderTypeStruct> tmpBorderList;
+                Q3PtrList<FrameIndex> frameindexList;
                 f = KWFrameSet::settingsFrame( f );
                 FrameIndex *index = new FrameIndex( f );
                 KWFrameBorderCommand::FrameBorderTypeStruct *tmp =new KWFrameBorderCommand::FrameBorderTypeStruct;
@@ -2351,7 +2360,7 @@ void KWFrameDia::slotOk()
     }
 }
 
-void KWFrameDia::connectListSelected( QListViewItem *item )
+void KWFrameDia::connectListSelected( Q3ListViewItem *item )
 {
 /* belongs to TAB3, is activated when the user selects another frameset from the list */
     if ( !item )
@@ -2384,15 +2393,15 @@ bool KWFrameDia::mayDeleteFrameSet(KWTextFrameSet *fs) {
 
 KWFourSideConfigWidget::KWFourSideConfigWidget( KWDocument* doc, const QString& title,
                                                 QWidget* parent, const char* name )
-    : QGroupBox( title, parent, name ),
+    : Q3GroupBox( title, parent, name ),
       m_doc( doc ),
       m_changed( false ), m_noSignal( false )
 {
-    QGroupBox *grp2 = this;
-    QGridLayout* mGrid = new QGridLayout( grp2, 4, 4, KDialog::marginHint(), KDialog::spacingHint() );
+    Q3GroupBox *grp2 = this;
+    Q3GridLayout* mGrid = new Q3GridLayout( grp2, 4, 4, KDialog::marginHint(), KDialog::spacingHint() );
 
     m_synchronize=new QCheckBox( i18n("Synchronize changes"), grp2 );
-    QWhatsThis::add(m_synchronize, i18n("<b>Synchronize changes:</b><br/>"
+    Q3WhatsThis::add(m_synchronize, i18n("<b>Synchronize changes:</b><br/>"
         "When this is checked any change in margins will be used for all directions."));
     mGrid->addMultiCellWidget( m_synchronize, 1, 1, 0, 1 );
 

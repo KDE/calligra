@@ -22,13 +22,22 @@
 
 #include <qwidget.h>
 #include <qbitmap.h>
-#include <qdockwindow.h>
+#include <q3dockwindow.h>
+//Added by qt3to4:
+#include <QPixmap>
+#include <QMouseEvent>
+#include <QLabel>
+#include <QTimerEvent>
+#include <QResizeEvent>
+#include <QKeyEvent>
+#include <QEvent>
+#include <QPaintEvent>
 
 #include <kaction.h>
 #include <koffice_export.h>
 class QPixmap;
 class QLabel;
-class QSimpleRichText;
+class Q3SimpleRichText;
 
 class KoVerticalLabel : public QWidget
 {
@@ -123,7 +132,7 @@ class KoHelpView : public QWidget
 		virtual void paintEvent( QPaintEvent* e );
 
 	private:
-		QSimpleRichText* currentText;
+		Q3SimpleRichText* currentText;
 		QString currentAnchor;
 }; // KoHelpView
 
@@ -253,7 +262,7 @@ class KoContextHelpWidget : public QWidget
 		QLabel*          m_helpIcon;
 }; // KoContextHelpWidget
 
-class KoContextHelpDocker : public QDockWindow
+class KoContextHelpDocker : public Q3DockWindow
 {
 	Q_OBJECT
 

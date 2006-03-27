@@ -26,19 +26,19 @@
 #include <kconfig.h>
 #include <kdebug.h>
 #include <qlayout.h>
-#include <qvbox.h>
+#include <q3vbox.h>
 #include <qcheckbox.h>
 #include <qpushbutton.h>
 #include <qspinbox.h>
 #include <qcombobox.h>
-#include <qgroupbox.h>
-#include <qwhatsthis.h>
+#include <q3groupbox.h>
+#include <q3whatsthis.h>
 
 KoCompletionDia::KoCompletionDia( QWidget *parent, const char *name, KoAutoFormat * autoFormat )
     : KDialogBase( parent, name , true, i18n( "Completion" ), Ok|Cancel|User1,
       Ok, true, KGuiItem( i18n( "&Reset" ), "undo" ) )
 {
-    QVBox *page = makeVBoxMainWidget();
+    Q3VBox *page = makeVBoxMainWidget();
     m_widget = new KoCompletion(page, autoFormat);
     m_widget->layout()->setMargin(0);
     connect( this, SIGNAL( user1Clicked() ), m_widget, SLOT(slotResetConf()));

@@ -42,7 +42,7 @@ using namespace KSpell2;
 #include <kdebug.h>
 #include <kdeversion.h>
 #include <qtimer.h>
-#include <qptrdict.h>
+#include <q3ptrdict.h>
 
 // #define DEBUG_BGSPELLCHECKING
 
@@ -51,7 +51,7 @@ class KoBgSpellCheck::Private
 public:
     int marked;
     KoSpell *backSpeller;
-    QPtrDict<KoTextParag> paragCache;
+    Q3PtrDict<KoTextParag> paragCache;
     bool startupChecking;
     KoTextParag* intraWordParag;
     int intraWordPosition;
@@ -186,7 +186,7 @@ void KoBgSpellCheck::spellCheckerDone()
     if ( d->paragCache.isEmpty() )
         return;
 
-    QPtrDictIterator<KoTextParag> itr( d->paragCache );
+    Q3PtrDictIterator<KoTextParag> itr( d->paragCache );
     KoTextParag *parag = d->paragCache.take( itr.currentKey() );
 #ifdef DEBUG_BGSPELLCHECKING
     kdDebug(32500) << "spellCheckerDone : " << parag << ", cache = "<< d->paragCache.count() <<endl;

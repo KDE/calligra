@@ -21,7 +21,9 @@
 
 #include <kiconloader.h>
 #include <klocale.h>
-#include <qlistview.h>
+#include <q3listview.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 /****************************************************
  *
@@ -32,24 +34,24 @@
 KoPartSelectDia::KoPartSelectDia( QWidget* parent, const char* name ) :
     KDialogBase( parent, name, TRUE, i18n("Insert Object"), KDialogBase::Ok | KDialogBase::Cancel )
 {
-    listview = new QListView( this );
+    listview = new Q3ListView( this );
     listview->addColumn( i18n( "Object" ) );
     listview->addColumn( i18n( "Comment" ) );
     listview->setAllColumnsShowFocus( TRUE );
     listview->setShowSortIndicator( TRUE );
     setMainWidget( listview );
-    connect( listview, SIGNAL( doubleClicked( QListViewItem * ) ),
+    connect( listview, SIGNAL( doubleClicked( Q3ListViewItem * ) ),
 	     this, SLOT( slotOk() ) );
-    connect( listview, SIGNAL( selectionChanged( QListViewItem * ) ),
-	     this, SLOT( selectionChanged( QListViewItem * ) ) );
+    connect( listview, SIGNAL( selectionChanged( Q3ListViewItem * ) ),
+	     this, SLOT( selectionChanged( Q3ListViewItem * ) ) );
 
     // Query for documents
     m_lstEntries = KoDocumentEntry::query();
-    QValueList<KoDocumentEntry>::Iterator it = m_lstEntries.begin();
+    Q3ValueList<KoDocumentEntry>::Iterator it = m_lstEntries.begin();
     for( ; it != m_lstEntries.end(); ++it ) {
         KService::Ptr serv = (*it).service();
 	if (!serv->genericName().isEmpty()) {
-    	    QListViewItem *item = new QListViewItem( listview, serv->name(), serv->genericName() );
+    	    Q3ListViewItem *item = new Q3ListViewItem( listview, serv->name(), serv->genericName() );
 	    item->setPixmap( 0, SmallIcon( serv->icon() ) );
 	}
     }
@@ -59,7 +61,7 @@ KoPartSelectDia::KoPartSelectDia( QWidget* parent, const char* name ) :
     resize( listview->sizeHint().width() + 20, 300 );
 }
 
-void KoPartSelectDia::selectionChanged( QListViewItem *item )
+void KoPartSelectDia::selectionChanged( Q3ListViewItem *item )
 {
     enableButtonOK( item != 0 );
 }
@@ -67,7 +69,7 @@ void KoPartSelectDia::selectionChanged( QListViewItem *item )
 KoDocumentEntry KoPartSelectDia::entry()
 {
     if ( listview->currentItem() ) {
-	QValueList<KoDocumentEntry>::Iterator it = m_lstEntries.begin();
+	Q3ValueList<KoDocumentEntry>::Iterator it = m_lstEntries.begin();
 	for ( ; it != m_lstEntries.end(); ++it ) {
 	    if ( ( *it ).service()->name() == listview->currentItem()->text( 0 ) )
 		return *it;

@@ -22,19 +22,21 @@
 
 #include <qlayout.h>
 #include <qcheckbox.h>
+//Added by qt3to4:
+#include <Q3HBoxLayout>
 
 KoPageLayoutHeader::KoPageLayoutHeader(QWidget *parent, KoUnit::Unit unit, const KoKWHeaderFooter &kwhf)
     : KoPageLayoutHeaderBase(parent) {
     m_headerFooters = kwhf;
-    QHBoxLayout *lay = new QHBoxLayout(headerSpacingPane);
+    Q3HBoxLayout *lay = new Q3HBoxLayout(headerSpacingPane);
     m_headerSpacing = new KoUnitDoubleSpinBox( headerSpacingPane, 0.0, 999.0, 0.5, kwhf.ptHeaderBodySpacing, unit );
     lay->addWidget(m_headerSpacing);
 
-    lay = new QHBoxLayout(footerSpacingPane);
+    lay = new Q3HBoxLayout(footerSpacingPane);
     m_footerSpacing = new KoUnitDoubleSpinBox( footerSpacingPane, 0.0, 999.0, 0.5, kwhf.ptFooterBodySpacing, unit );
     lay->addWidget(m_footerSpacing);
 
-    lay = new QHBoxLayout(footnotePane);
+    lay = new Q3HBoxLayout(footnotePane);
     m_footnoteSpacing = new KoUnitDoubleSpinBox( footnotePane, 0.0, 999.0, 0.5, kwhf.ptFootNoteBodySpacing, unit );
     lay->addWidget(m_footnoteSpacing);
 

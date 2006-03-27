@@ -21,6 +21,8 @@
 #define kwtextparag_h
 
 #include "KoTextParag.h"
+//Added by qt3to4:
+#include <Q3MemArray>
 
 class KoStyleCollection;
 class QDomDocument;
@@ -88,8 +90,8 @@ protected:
     virtual void drawFormattingChars( QPainter &painter, int start, int len,
                                       int lastY_pix, int baseLine_pix, int h_pix, // in pixels
                                       bool drawSelections,
-                                      KoTextFormat *lastFormat, const QMemArray<int> &selectionStarts,
-                                      const QMemArray<int> &selectionEnds, const QColorGroup &cg,
+                                      KoTextFormat *lastFormat, const Q3MemArray<int> &selectionStarts,
+                                      const Q3MemArray<int> &selectionEnds, const QColorGroup &cg,
                                       bool rightToLeft, int line, KoTextZoomHandler* zh,
                                       int whichFormattingChars );
 

@@ -20,6 +20,9 @@
 
 #include <qpainter.h>
 #include <qfile.h>
+//Added by qt3to4:
+#include <QPixmap>
+#include <Q3CString>
 
 #include <kdebug.h>
 #include <kurl.h>
@@ -56,7 +59,7 @@ KoPictureShared::~KoPictureShared(void)
 }
 
 KoPictureShared::KoPictureShared(const KoPictureShared &other)
-    : QShared() // Some compilers want it explicitly!
+    : Q3Shared() // Some compilers want it explicitly!
 {
     // We need to use newCopy, because we want a real copy, not just a copy of the part of KoPictureBase
     if (other.m_base)
@@ -206,7 +209,7 @@ bool KoPictureShared::identifyAndLoad( QByteArray array )
     {
         // Gzip
         QBuffer buffer(array);
-        buffer.open(IO_ReadOnly);
+        buffer.open(QIODevice::ReadOnly);
 
         const bool flag = loadCompressed( &buffer, "application/x-gzip", "tmp" );
         buffer.close();
@@ -216,7 +219,7 @@ bool KoPictureShared::identifyAndLoad( QByteArray array )
     {
         // BZip2
         QBuffer buffer(array);
-        buffer.open(IO_ReadOnly);
+        buffer.open(QIODevice::ReadOnly);
         const bool flag = loadCompressed( &buffer, "application/x-bzip2", "tmp" );
         buffer.close();
         return flag;
@@ -230,7 +233,7 @@ bool KoPictureShared::identifyAndLoad( QByteArray array )
         // DF: It would be faster to work on array here, and to create a completely
         // different QBuffer for the writing code!
         QBuffer buf( array.copy() );
-        if (!buf.open(IO_ReadOnly))
+        if (!buf.open(QIODevice::ReadOnly))
         {
             kdError(30003) << "Could not open read buffer!" << endl;
             return false;
@@ -246,7 +249,7 @@ bool KoPictureShared::identifyAndLoad( QByteArray array )
 
         buf.close();
 
-        if ( !buf.open( IO_WriteOnly | IO_Truncate ) )
+        if ( !buf.open( QIODevice::WriteOnly | QIODevice::Truncate ) )
         {
             kdError(30003) << "Could not open write buffer!" << endl;
             return false;
@@ -380,7 +383,7 @@ QString KoPictureShared::getMimeType(void) const
 }
 
 
-bool KoPictureShared::loadFromBase64( const QCString& str )
+bool KoPictureShared::loadFromBase64( const Q3CString& str )
 {
     clear();
     QByteArray data;
@@ -432,7 +435,7 @@ bool KoPictureShared::loadFromFile(const QString& fileName)
         return false;
     }
     QFile file(fileName);
-    if (!file.open(IO_ReadOnly))
+    if (!file.open(QIODevice::ReadOnly))
         return false;
 
     bool flag = false;
@@ -467,7 +470,7 @@ QPixmap KoPictureShared::generatePixmap(const QSize& size, bool smoothScale)
     return QPixmap();
 }
 
-QDragObject* KoPictureShared::dragObject( QWidget *dragSource, const char *name )
+Q3DragObject* KoPictureShared::dragObject( QWidget *dragSource, const char *name )
 {
     if (m_base)
         return m_base->dragObject( dragSource, name );
@@ -519,7 +522,7 @@ bool KoPictureShared::loadCompressed( QIODevice* io, const QString& mimeType, co
     }
 
 
-    if ( !in->open( IO_ReadOnly ) )
+    if ( !in->open( QIODevice::ReadOnly ) )
     {
         kdError(30003) << "Cannot open file for uncompressing! Aborting!" << endl;
         delete in;

@@ -317,7 +317,7 @@ KisImageMagickConverter::~KisImageMagickConverter()
 {
 }
 
-KisImageBuilder_Result KisImageMagickConverter::decode(const KURL& uri, bool isBlob)
+KisImageBuilder_Result KisImageMagickConverter::decode(const KUrl& uri, bool isBlob)
 {
     Image *image;
     Image *images;
@@ -602,7 +602,7 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KURL& uri, bool isB
         return KisImageBuilder_RESULT_OK;
     }
 
-    KisImageBuilder_Result KisImageMagickConverter::buildImage(const KURL& uri)
+    KisImageBuilder_Result KisImageMagickConverter::buildImage(const KUrl& uri)
     {
         if (uri.isEmpty())
             return KisImageBuilder_RESULT_NO_URI;
@@ -635,7 +635,7 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KURL& uri, bool isB
         m_job = 0;
     }
 
-    KisImageBuilder_Result KisImageMagickConverter::buildFile(const KURL& uri, KisPaintLayerSP layer, vKisAnnotationSP_it annotationsStart, vKisAnnotationSP_it annotationsEnd)
+    KisImageBuilder_Result KisImageMagickConverter::buildFile(const KUrl& uri, KisPaintLayerSP layer, vKisAnnotationSP_it annotationsStart, vKisAnnotationSP_it annotationsEnd)
     {
         Image *image;
         ExceptionInfo ei;
@@ -908,7 +908,7 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KURL& uri, bool isB
         if (job -> error())
             emit notifyProgressError();
 
-        decode(KURL(), true);
+        decode(KUrl(), true);
     }
 
     void KisImageMagickConverter::ioTotalSize(KIO::Job * /*job*/, KIO::filesize_t size)

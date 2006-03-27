@@ -28,8 +28,8 @@
 
 #include <qstring.h>
 #include <qstringlist.h>
-#include <qvaluelist.h>
-#include <qvaluevector.h>
+#include <q3valuelist.h>
+#include <q3valuevector.h>
 #include <qmap.h>
 #include <qvariant.h>
 
@@ -163,7 +163,7 @@ namespace Kross { namespace Python {
              * \param list The QValueList to convert.
              * \return The to a Py::List converted QValueList.
              */
-            static const Py::List toPyObject(const QValueList<QVariant>& list);
+            static const Py::List toPyObject(const Q3ValueList<QVariant>& list);
 
             /**
              * Converts a QVariant to a Py::Object.

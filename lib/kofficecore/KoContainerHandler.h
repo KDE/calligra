@@ -21,9 +21,12 @@
 #define HANDLER_H
 
 #include <qobject.h>
+//Added by qt3to4:
+#include <QMouseEvent>
+#include <QEvent>
 #include <KoDocumentChild.h>
 
-class QWMatrix;
+class QMatrix;
 
 class KoView;
 class KoPartResizeHandlerPrivate;
@@ -61,7 +64,7 @@ class KoPartResizeHandler : public KoEventHandler
 {
     Q_OBJECT
 public:
-    KoPartResizeHandler( QWidget* widget, const QWMatrix& matrix, KoView* view, KoChild* child,
+    KoPartResizeHandler( QWidget* widget, const QMatrix& matrix, KoView* view, KoChild* child,
                        KoChild::Gadget gadget, const QPoint& point );
     ~KoPartResizeHandler();
 
@@ -81,7 +84,7 @@ class KoPartMoveHandler : public KoEventHandler
 {
     Q_OBJECT
 public:
-    KoPartMoveHandler( QWidget* widget, const QWMatrix& matrix, KoView* view, KoChild* child,
+    KoPartMoveHandler( QWidget* widget, const QMatrix& matrix, KoView* view, KoChild* child,
                      const QPoint& point );
     ~KoPartMoveHandler();
 

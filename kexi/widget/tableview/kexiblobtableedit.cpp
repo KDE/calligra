@@ -60,31 +60,31 @@ KexiBlobTableEdit::KexiBlobTableEdit(KexiTableViewColumn &column, QScrollView *p
 
 KexiBlobTableEdit::~KexiBlobTableEdit()
 {
-	kdDebug() << "KexiBlobTableEdit: Cleaning up..." << endl;
+	kDebug() << "KexiBlobTableEdit: Cleaning up..." << endl;
 	if (m_tempFile) {
 		m_tempFile->unlink();
 		//todo
 	}
 	delete m_proc;
 	m_proc = 0;
-	kdDebug() << "KexiBlobTableEdit: Ready." << endl;
+	kDebug() << "KexiBlobTableEdit: Ready." << endl;
 }
 
 //! initializes this editor with \a add value
 void KexiBlobTableEdit::setValueInternal(const QVariant& /*add*/, bool /*removeOld*/)
 {
 	QByteArray val = m_origValue.toByteArray();
-	kdDebug() << "KexiBlobTableEdit: Size of BLOB: " << val.size() << endl;
+	kDebug() << "KexiBlobTableEdit: Size of BLOB: " << val.size() << endl;
 	m_tempFile = new KTempFile();
 	m_tempFile->setAutoDelete(true);
-	kdDebug() << "KexiBlobTableEdit: Creating temporary file: " << m_tempFile->name() << endl;
+	kDebug() << "KexiBlobTableEdit: Creating temporary file: " << m_tempFile->name() << endl;
 	m_tempFile->dataStream()->writeRawBytes(val.data(), val.size());
 	m_tempFile->close();
 	delete m_tempFile;
 	m_tempFile = 0;
 
 	KMimeMagicResult* mmr = KMimeMagic::self()->findFileType(m_tempFile->name());
-	kdDebug() << "KexiBlobTableEdit: Mimetype = " << mmr->mimeType() << endl;
+	kDebug() << "KexiBlobTableEdit: Mimetype = " << mmr->mimeType() << endl;
 
 	setViewWidget( new QWidget(this) );
 /*js: TODO
@@ -113,7 +113,7 @@ void KexiBlobTableEdit::setValueInternal(const QVariant& /*add*/, bool /*removeO
 		}
 		else
 		{
-			l->setPixmap(KMimeType::pixmapForURL(KURL(m_tempFile->name())));
+			l->setPixmap(KMimeType::pixmapForURL(KUrl(m_tempFile->name())));
 		}
 
 //		QLabel *l = new QLabel(this);
@@ -153,21 +153,21 @@ KexiBlobTableEdit::value()
 	}
 	QByteArray value;
 	QFile f( m_tempFile->name() );
-	f.open(IO_ReadOnly);
+	f.open(QIODevice::ReadOnly);
 	QDataStream stream(&f);
 	char* data = (char*) malloc(f.size());
 	value.resize(f.size());
 	stream.readRawBytes(data, f.size());
 	value.duplicate(data, f.size());
 	free(data);
-	kdDebug() << "KexiBlobTableEdit: Size of BLOB: " << value.size() << endl;
+	kDebug() << "KexiBlobTableEdit: Size of BLOB: " << value.size() << endl;
 	return QVariant(value);
 }
 
 void
 KexiBlobTableEdit::slotFinished(KProcess* /*p*/)
 {
-	kdDebug() << "Prorgam is finished!" << endl;
+	kDebug() << "Prorgam is finished!" << endl;
 
 
 	// No need for m_proc now that the app has exited
@@ -178,8 +178,8 @@ KexiBlobTableEdit::slotFinished(KProcess* /*p*/)
 QString
 KexiBlobTableEdit::openWithDlg(const QString& file)
 {
-	KURL::List ul;
-	KURL url;
+	KUrl::List ul;
+	KUrl url;
 	url.setPath(file);
 	ul.append(url);
 	QString exec = QString::null;
@@ -200,7 +200,7 @@ KexiBlobTableEdit::openWithDlg(const QString& file)
 void
 KexiBlobTableEdit::execute(const QString& app, const QString& file)
 {
-	kdDebug() << "KexiBlobTableEdit: App = " << app << "File = " << file << endl;
+	kDebug() << "KexiBlobTableEdit: App = " << app << "File = " << file << endl;
 
 	// only execute if there isn't any other app already running
 	if(!m_proc)
@@ -217,7 +217,7 @@ void
 KexiBlobTableEdit::open()
 {
 	KMimeMagicResult* mmr = KMimeMagic::self()->findFileType(m_tempFile->name());
-	kdDebug() << "KexiBlobTableEdit: Mimetype = " << mmr->mimeType() << endl;
+	kDebug() << "KexiBlobTableEdit: Mimetype = " << mmr->mimeType() << endl;
 	KService::Ptr ptr = KServiceTypeProfile::preferredService(mmr->mimeType(), "Application");
 	QString exec;
 
@@ -274,7 +274,7 @@ KexiBlobTableEdit::loadFile()
 
 	if(!file.isEmpty())
 	{
-		/*KIO::FileCopyJob* job =*/(void) KIO::file_copy(KURL(file), KURL(m_tempFile->name()), -1, true);
+		/*KIO::FileCopyJob* job =*/(void) KIO::file_copy(KUrl(file), KUrl(m_tempFile->name()), -1, true);
 	}
 }
 
@@ -285,7 +285,7 @@ KexiBlobTableEdit::saveFile()
 
 	if(!file.isEmpty())
 	{
-		/*KIO::FileCopyJob* job =*/ (void)KIO::file_copy(KURL(m_tempFile->name()), KURL(file), -1, true);
+		/*KIO::FileCopyJob* job =*/ (void)KIO::file_copy(KUrl(m_tempFile->name()), KUrl(file), -1, true);
 	}
 }
 
@@ -393,10 +393,10 @@ void KexiKIconTableEdit::setupContents( QPainter *p, bool /*focused*/, QVariant 
 #else
 	y_offset = 0;
 #endif
-	int s = QMAX(h - 5, 12);
-	s = QMIN( h-3, s );
-	s = QMIN( w-3, s );//avoid too large box
-	QRect r( QMAX( w/2 - s/2, 0 ) , h/2 - s/2 /*- 1*/, s, s);
+	int s = qMax(h - 5, 12);
+	s = qMin( h-3, s );
+	s = qMin( w-3, s );//avoid too large box
+	QRect r( qMax( w/2 - s/2, 0 ) , h/2 - s/2 /*- 1*/, s, s);
 	p->setPen(QPen(colorGroup().text(), 1));
 	p->drawRect(r);
 	if (val.asBool()) {
@@ -409,8 +409,8 @@ void KexiKIconTableEdit::setupContents( QPainter *p, bool /*focused*/, QVariant 
 	QPixmap *pix = 0;
 	if (!key.isEmpty() && !(pix = m_pixmapCache[ key ])) {
 		//cache pixmap
-		QPixmap p = KGlobal::iconLoader()->loadIcon( key, KIcon::Small, 
-			0, KIcon::DefaultState, 0L, true/*canReturnNull*/ );
+		QPixmap p = KGlobal::iconLoader()->loadIcon( key, K3Icon::Small, 
+			0, K3Icon::DefaultState, 0L, true/*canReturnNull*/ );
 		if (!p.isNull()) {
 			pix = new QPixmap(p);
 			m_pixmapCache.insert(key, pix);

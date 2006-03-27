@@ -23,6 +23,9 @@
 #include "KWDocument.h"
 #include "KWViewMode.h"
 #include "KWPageManager.h"
+//Added by qt3to4:
+#include <Q3ValueList>
+#include <Q3PtrList>
 
 //#define DEBUG_SPEED
 
@@ -33,25 +36,25 @@ KWFrameList::KWFrameList(KWDocument *doc, KWFrame *theFrame) {
     update();
 }
 
-QValueList<KWFrame *> KWFrameList::framesBelow() const {
-    QValueList<KWFrame *> frames;
-//kdDebug() << "framesBelow " << endl;
+Q3ValueList<KWFrame *> KWFrameList::framesBelow() const {
+    Q3ValueList<KWFrame *> frames;
+//kDebug() << "framesBelow " << endl;
 
     // Copy until we find m_frame
-    for ( QValueVector<KWFrame*>::const_iterator it = m_frames.begin(), end = m_frames.end(); it != end && *it != m_frame; ++it) {
+    for ( Q3ValueVector<KWFrame*>::const_iterator it = m_frames.begin(), end = m_frames.end(); it != end && *it != m_frame; ++it) {
         frames.append( *it );
     }
 
     return  frames;
 }
 
-QValueList<KWFrame *> KWFrameList::framesOnTop() const {
-//kdDebug() << "framesOnTop " << endl;
-    QValueList<KWFrame *> frames;
+Q3ValueList<KWFrame *> KWFrameList::framesOnTop() const {
+//kDebug() << "framesOnTop " << endl;
+    Q3ValueList<KWFrame *> frames;
 
     // Copy from m_frame to the end
     bool found = false;
-    for ( QValueVector<KWFrame*>::const_iterator it = m_frames.begin(), end = m_frames.end(); it != end; ++it) {
+    for ( Q3ValueVector<KWFrame*>::const_iterator it = m_frames.begin(), end = m_frames.end(); it != end; ++it) {
         KWFrame* frame = *it;
         if ( found ) {
             Q_ASSERT( !frame->frameSet()->isFloating() );
@@ -64,13 +67,13 @@ QValueList<KWFrame *> KWFrameList::framesOnTop() const {
     return frames;
 }
 
-void KWFrameList::setFrames(const QPtrList<KWFrame> &frames) {
-    // kdDebug(31001) << "KWFrameList::setFrames for " << m_frame->frameSet()->name() << endl;
+void KWFrameList::setFrames(const Q3PtrList<KWFrame> &frames) {
+    // kDebug(31001) << "KWFrameList::setFrames for " << m_frame->frameSet()->name() << endl;
     m_frames.clear();
     if ( m_doc->layoutViewMode() && !m_doc->layoutViewMode()->hasFrames() )
         return;
 
-    QPtrList<KWFrameSet> parentFramesets;
+    Q3PtrList<KWFrameSet> parentFramesets;
     KWFrameSet *fs = m_frame->frameSet();
     while(fs) {
         parentFramesets.append(fs);
@@ -79,11 +82,11 @@ void KWFrameList::setFrames(const QPtrList<KWFrame> &frames) {
 
     // We now look at all other frames (in the same page)
     // to check for intersections. This is o(n^2), but with n small.
-    QPtrListIterator<KWFrame> it( frames );
+    Q3PtrListIterator<KWFrame> it( frames );
     for ( ; it.current() ; ++it )
     {
         KWFrame* daFrame = it.current();
-        // kdDebug(32001) << "frame: " << daFrame->frameSet()->name() << endl;
+        // kDebug(32001) << "frame: " << daFrame->frameSet()->name() << endl;
         if ( m_frame == daFrame ) {
             m_frames.append( daFrame );
             continue;
@@ -125,15 +128,15 @@ void KWFrameList::update() {
     updateZOrderFor(m_doc->framesInPage( pageNumber, false ));
 }
 
-void KWFrameList::updateZOrderFor(const QPtrList<KWFrame> &frames) {
+void KWFrameList::updateZOrderFor(const Q3PtrList<KWFrame> &frames) {
 #ifdef DEBUG_SPEED
-    kdDebug(32001) << "KWFrameList::updateZOrderFor " << frames.count() << " frames"<< endl;
+    kDebug(32001) << "KWFrameList::updateZOrderFor " << frames.count() << " frames"<< endl;
     QTime dt;
     dt.start();
     int numberAdded = 0;
 #endif
 
-    QPtrListIterator<KWFrame> iter(frames);
+    Q3PtrListIterator<KWFrame> iter(frames);
     while( iter.current() ) {
         KWFrame *frame = iter.current();
         Q_ASSERT( frame->frameStack() );
@@ -146,13 +149,13 @@ void KWFrameList::updateZOrderFor(const QPtrList<KWFrame> &frames) {
     }
 
 #ifdef DEBUG_SPEED
-    kdDebug(32001) << "  updateZOrderFor took " << (float)(dt.elapsed()) / 1000 << " seconds, added " << numberAdded << " frames" << endl;
+    kDebug(32001) << "  updateZOrderFor took " << (float)(dt.elapsed()) / 1000 << " seconds, added " << numberAdded << " frames" << endl;
 #endif
 }
 
 // ****** statics ******
 KWFrameList *KWFrameList::getFirstFrameList(KWDocument *doc) {
-    for (QPtrListIterator<KWFrameSet> fsit = doc->framesetsIterator(); fsit.current() ; ++fsit ) {
+    for (Q3PtrListIterator<KWFrameSet> fsit = doc->framesetsIterator(); fsit.current() ; ++fsit ) {
         KWFrame *frame = fsit.current()->frame(0);
         if (frame && frame->frameStack())
             return frame->frameStack();
@@ -162,7 +165,7 @@ KWFrameList *KWFrameList::getFirstFrameList(KWDocument *doc) {
 
 void KWFrameList::recalcFrames(KWDocument *doc, int pageFrom, int pageTo) {
     for(int i=pageTo; i >= pageFrom; i--) {
-        QPtrList<KWFrame> framesOnPage = doc->framesInPage( i, false );
+        Q3PtrList<KWFrame> framesOnPage = doc->framesInPage( i, false );
         KWFrame *f = framesOnPage.first();
         while(f) {
             Q_ASSERT(f->frameStack());
@@ -185,7 +188,7 @@ void KWFrameList::createFrameList(KWFrame *f, KWDocument *doc) {
 }
 
 void KWFrameList::createFrameList(KWFrameSet *fs, KWDocument *doc, bool forceUpdate) {
-    QPtrListIterator<KWFrame> iter( fs->frameIterator() );
+    Q3PtrListIterator<KWFrame> iter( fs->frameIterator() );
     KWFrame *f = iter.current();
     while(f) {
         createFrameList(f, doc);

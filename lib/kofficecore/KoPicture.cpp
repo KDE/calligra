@@ -20,6 +20,9 @@
 
 #include <qpainter.h>
 #include <qfile.h>
+//Added by qt3to4:
+#include <QPixmap>
+#include <Q3CString>
 
 #include <kdebug.h>
 #include <kurl.h>
@@ -212,7 +215,7 @@ bool KoPicture::loadFromFile(const QString& fileName)
     return m_sharedData->loadFromFile(fileName);
 }
 
-bool KoPicture::loadFromBase64( const QCString& str )
+bool KoPicture::loadFromBase64( const Q3CString& str )
 {
     createSharedData();
     return m_sharedData->loadFromBase64( str );
@@ -232,7 +235,7 @@ QPixmap KoPicture::generatePixmap(const QSize& size, bool smoothScale)
     return QPixmap();
 }
 
-bool KoPicture::setKeyAndDownloadPicture(const KURL& url, QWidget *window)
+bool KoPicture::setKeyAndDownloadPicture(const KUrl& url, QWidget *window)
 {
     bool result=false;
 
@@ -249,7 +252,7 @@ bool KoPicture::setKeyAndDownloadPicture(const KURL& url, QWidget *window)
     return result;
 }
 
-QDragObject* KoPicture::dragObject( QWidget *dragSource, const char *name )
+Q3DragObject* KoPicture::dragObject( QWidget *dragSource, const char *name )
 {
     if (m_sharedData)
         return m_sharedData->dragObject( dragSource, name );

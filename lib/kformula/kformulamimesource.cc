@@ -20,12 +20,14 @@
 
 #include <iostream>
 
-#include <qpopupmenu.h>
+#include <q3popupmenu.h>
 #include <qbuffer.h>
 #include <qcolor.h>
 #include <qimage.h>
 #include <qpainter.h>
 #include <qpixmap.h>
+//Added by qt3to4:
+#include <Q3PtrList>
 
 #include <kcommand.h>
 
@@ -48,7 +50,7 @@ MimeSource::MimeSource(Document* doc, const QDomDocument& formula)
     rootElement = new FormulaElement(this);
     FormulaCursor cursor(rootElement);
 
-    QPtrList<BasicElement> list;
+    Q3PtrList<BasicElement> list;
     list.setAutoDelete(true);
     if ( cursor.buildElementsFromDom( document.documentElement(), list ) ) {
         cursor.insert(list);
@@ -131,7 +133,7 @@ QByteArray MimeSource::encodedData ( const char *format ) const
 
 	QByteArray d;
 	QBuffer buff(d);
-	buff.open(IO_WriteOnly);
+	buff.open(QIODevice::WriteOnly);
 	QImageIO io(&buff,"PPM");
 	QImage ima=pm.convertToImage();
 	ima.detach();

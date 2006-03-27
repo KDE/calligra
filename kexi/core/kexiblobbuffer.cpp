@@ -184,7 +184,7 @@ KexiBLOBBuffer::~KexiBLOBBuffer()
 	delete d;
 }
 
-KexiBLOBBuffer::Handle KexiBLOBBuffer::insertPixmap(const KURL& url)
+KexiBLOBBuffer::Handle KexiBLOBBuffer::insertPixmap(const KUrl& url)
 {
 	if (url.isEmpty() )
 		return KexiBLOBBuffer::Handle();

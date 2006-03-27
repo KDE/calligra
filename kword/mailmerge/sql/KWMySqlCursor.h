@@ -21,8 +21,10 @@
 #define _SERIALLETTER_QtSql_SQLCURSOR_H_
 
 /* FOR THE DIRTY HACK */
-#include <qsqlcursor.h>
+#include <q3sqlcursor.h>
 #include <qsqldriver.h>
+//Added by qt3to4:
+#include <QSqlQuery>
 /* END FOR THE DIRTY HACK */
 
 /******************************************************************
@@ -34,26 +36,26 @@
 
 
 
-class KWMySqlCursor: public QSqlCursor
+class KWMySqlCursor: public Q3SqlCursor
 {
 public:
     KWMySqlCursor( const QString & query = QString::null, bool autopopulate = 
-TRUE, QSqlDatabase* db = 0 ): QSqlCursor( QString::null, autopopulate, db )
+TRUE, QSqlDatabase* db = 0 ): Q3SqlCursor( QString::null, autopopulate, db )
     {
         exec( query );
         if ( autopopulate )
             *(QSqlRecord*)this = ((QSqlQuery*)this)->driver()->record(
 *(QSqlQuery*)this );
-        setMode( QSqlCursor::ReadOnly );
+        setMode( Q3SqlCursor::ReadOnly );
     }
-    KWMySqlCursor( const KWMySqlCursor & other ): QSqlCursor( other ) {}
+    KWMySqlCursor( const KWMySqlCursor & other ): Q3SqlCursor( other ) {}
     KWMySqlCursor( const QSqlQuery & query, bool autopopulate = TRUE ): 
-QSqlCursor( QString::null, autopopulate )
+Q3SqlCursor( QString::null, autopopulate )
     {
         *(QSqlQuery*)this = query;
         if ( autopopulate )
             *(QSqlRecord*)this = query.driver()->record( query );
-        setMode( QSqlCursor::ReadOnly );
+        setMode( Q3SqlCursor::ReadOnly );
     }
     bool select( const QString & /*filter*/, const QSqlIndex & /*sort*/ = 
 QSqlIndex() ) { return exec( lastQuery() ); }

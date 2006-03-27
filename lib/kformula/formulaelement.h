@@ -23,6 +23,8 @@
 
 // Formula include
 #include "sequenceelement.h"
+//Added by qt3to4:
+#include <QKeyEvent>
 
 KFORMULA_NAMESPACE_BEGIN
 

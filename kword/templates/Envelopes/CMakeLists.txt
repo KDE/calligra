@@ -1,0 +1,28 @@
+kde4_header()
+
+include_directories( ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
+
+
+########### install files ###############
+
+install_files(  FILES  EnvelopeC6.kwt EnvelopeDL.kwt )
+install_files(  FILES  .directory EnvelopeC6.desktop EnvelopeDL.desktop )
+install_files( ${DATA_INSTALL_DIR}/kword/icons FILES  )
+
+kde4_footer()
+
+
+
+#original Makefile.am contents follow:
+
+#templatesubdir = Envelopes
+#
+#templates_DATA = .directory EnvelopeC6.desktop EnvelopeDL.desktop
+#templatesdir = $(kde_datadir)/kword/templates/$(templatesubdir)
+#
+#templatesrc_DATA = EnvelopeC6.kwt EnvelopeDL.kwt
+#templatesrcdir = $(kde_datadir)/kword/templates/$(templatesubdir)/.source
+#
+#kworddir = $(kde_datadir)/kword/icons
+#kword_ICON = AUTO
+#

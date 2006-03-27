@@ -21,6 +21,8 @@
 #define EXAMPLE_VIEW
 
 #include <KoView.h>
+//Added by qt3to4:
+#include <QPaintEvent>
 
 class KAction;
 class QPaintEvent;

@@ -22,16 +22,20 @@
 #define _SERIALLETTER_CLASSIC_PLUGIN_H_
 
 #include <qdom.h>
-#include <qlistview.h>
+#include <q3listview.h>
+//Added by qt3to4:
+#include <QLabel>
+#include <Q3ValueList>
+#include <QResizeEvent>
 #include <kdialogbase.h>
 #include <KoCustomVariablesDia.h>
 #include "KWMailMergeDataSource.h"
 #include <qspinbox.h>
 
-class QHBox;
-class QVBox;
+class Q3HBox;
+class Q3VBox;
 class QPushButton;
-class QListBox;
+class Q3ListBox;
 class QLabel;
 class QLineEdit;
 class QToolButton;
@@ -41,7 +45,7 @@ class QToolButton;
  * Class: KWClassicSerialDataSource
  *
  ******************************************************************/
-typedef QValueList< DbRecord > Db;
+typedef Q3ValueList< DbRecord > Db;
 
 class KWClassicSerialDataSource: public KWMailMergeDataSource
 {
@@ -77,11 +81,11 @@ class KWClassicSerialDataSource: public KWMailMergeDataSource
  *
  ******************************************************************/
 
-class KWClassicMailMergeEditorListItem : public QListViewItem
+class KWClassicMailMergeEditorListItem : public Q3ListViewItem
 {
 public:
-    KWClassicMailMergeEditorListItem( QListView *parent );
-    KWClassicMailMergeEditorListItem( QListView *parent, QListViewItem *after );
+    KWClassicMailMergeEditorListItem( Q3ListView *parent );
+    KWClassicMailMergeEditorListItem( Q3ListView *parent, Q3ListViewItem *after );
     virtual ~KWClassicMailMergeEditorListItem();
 
     virtual void setText( int i, const QString &text );
@@ -100,7 +104,7 @@ protected:
  *
  ******************************************************************/
 
-class KWClassicMailMergeEditorList : public QListView
+class KWClassicMailMergeEditorList : public Q3ListView
 {
     Q_OBJECT
 
@@ -113,7 +117,7 @@ public:
     void displayRecord( int i );
 
     void setSorting( int, bool increasing = TRUE ) {
-        QListView::setSorting( -1, increasing );
+        Q3ListView::setSorting( -1, increasing );
     }
 
 protected slots:

@@ -19,6 +19,9 @@
 #include <math.h>
 #include <qfile.h>
 #include <qdatastream.h>
+//Added by qt3to4:
+#include <Q3PointArray>
+#include <Q3PtrList>
 
 #include <kdebug.h>
 
@@ -66,7 +69,7 @@ void KoWmfWrite::setDefaultDpi( int dpi ) {
 
 bool KoWmfWrite::begin() {
     
-    if ( !d->mFileOut.open( IO_WriteOnly ) )
+    if ( !d->mFileOut.open( QIODevice::WriteOnly ) )
     {
         kdDebug() << "Cannot open file " << QFile::encodeName(d->mFileOut.name()) << endl;
         return false;
@@ -326,7 +329,7 @@ void KoWmfWrite::drawChord( int left, int top, int width, int height , int a, in
 }
 
 
-void KoWmfWrite::drawPolyline( const QPointArray &pa ) {
+void KoWmfWrite::drawPolyline( const Q3PointArray &pa ) {
     int size = 4 + (pa.size() * 2);
     
     d->mSt << (Q_UINT32)size << (Q_UINT16)0x0325 << (Q_UINT16)pa.size();
@@ -336,7 +339,7 @@ void KoWmfWrite::drawPolyline( const QPointArray &pa ) {
 }
 
 
-void KoWmfWrite::drawPolygon( const QPointArray &pa, bool  ) {
+void KoWmfWrite::drawPolygon( const Q3PointArray &pa, bool  ) {
     int size = 4 + (pa.size() * 2);
     
     d->mSt << (Q_UINT32)size << (Q_UINT16)0x0324 << (Q_UINT16)pa.size();
@@ -346,9 +349,9 @@ void KoWmfWrite::drawPolygon( const QPointArray &pa, bool  ) {
 }
 
 
-void KoWmfWrite::drawPolyPolygon( QPtrList<QPointArray>& listPa, bool ) {
+void KoWmfWrite::drawPolyPolygon( Q3PtrList<Q3PointArray>& listPa, bool ) {
 
-    QPointArray *pa;
+    Q3PointArray *pa;
     int sizeArrayPoly = 0;
 
     for ( pa = listPa.first() ; pa ; pa = listPa.next() ) {
@@ -393,7 +396,7 @@ void KoWmfWrite::drawText( int , int , int , int , int , const QString& , double
 //-----------------------------------------------------------------------------
 // Utilities and conversion Qt --> Wmf
 
-void KoWmfWrite::pointArray( const QPointArray &pa ) {
+void KoWmfWrite::pointArray( const Q3PointArray &pa ) {
     int  left, top, i, max;
 
     for ( i=0, max=pa.size() ; i < max ; i++ ) {
@@ -406,9 +409,9 @@ void KoWmfWrite::pointArray( const QPointArray &pa ) {
 Q_UINT32 KoWmfWrite::winColor( QColor color ) {
     Q_UINT32 c;
 
-    c = (color.red() & 0xFF);
-    c += ( (color.green() & 0xFF) << 8 );
-    c += ( (color.blue() & 0xFF) << 16 );
+    c = (color.Qt::red() & 0xFF);
+    c += ( (color.Qt::green() & 0xFF) << 8 );
+    c += ( (color.Qt::blue() & 0xFF) << 16 );
 
     return c;
 }

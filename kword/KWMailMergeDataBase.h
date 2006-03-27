@@ -31,17 +31,19 @@
 #include <qstringlist.h>
 #include <qdom.h>
 #include <qtextstream.h>
+//Added by qt3to4:
+#include <QLabel>
 
 #include "KWMailMergeDataSource.h"
 #include "KWordMailMergeDatabaseIface.h"
 #include <koffice_export.h>
 
-class QListBox;
+class Q3ListBox;
 class QPushButton;
 class QLineEdit;
 class QSpinBox;
 class KWDocument;
-class QVBox;
+class Q3VBox;
 
 //class KWMailMergeDataBase;
 
@@ -158,7 +160,7 @@ class KWMailMergeVariableInsertDia : public KDialogBase
     KWMailMergeDataBase *m_db;
 
   protected:
-    QListBox *names;
+    Q3ListBox *names;
 };
 
 #endif

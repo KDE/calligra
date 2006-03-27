@@ -357,9 +357,9 @@ VObjectListViewItem::update()
 	// set thumb preview, lock and visible pixmaps
 	setPixmap( 0, preview );
 	QString s = ( m_object->state() == VObject::normal_locked || m_object->state() == VObject::hidden_locked ) ? "locked" : "unlocked";
-	setPixmap( 1, *KarbonFactory::rServer()->cachePixmap( s, KIcon::Small ) );
+	setPixmap( 1, *KarbonFactory::rServer()->cachePixmap( s, K3Icon::Small ) );
 	s = ( m_object->state() == VObject::hidden || m_object->state() == VObject::hidden_locked ) ? "14_layer_novisible" : "14_layer_visible";
-	setPixmap( 2, *KarbonFactory::rServer()->cachePixmap( s, KIcon::Small ) );
+	setPixmap( 2, *KarbonFactory::rServer()->cachePixmap( s, K3Icon::Small ) );
 }
 
 int 
@@ -414,9 +414,9 @@ VLayerListViewItem::update()
 	// set thumb preview, lock and visible pixmaps
 	setPixmap( 0, preview );
 	QString s = ( m_layer->state() == VObject::normal_locked || m_layer->state() == VObject::hidden_locked ) ? "locked" : "unlocked";
-	setPixmap( 1, *KarbonFactory::rServer()->cachePixmap( s, KIcon::Small ) );
+	setPixmap( 1, *KarbonFactory::rServer()->cachePixmap( s, K3Icon::Small ) );
 	s = ( m_layer->state() == VObject::normal || m_layer->state() == VObject::normal_locked ) ? "14_layer_visible" : "14_layer_novisible";
-	setPixmap( 2, *KarbonFactory::rServer()->cachePixmap( s, KIcon::Small ) );
+	setPixmap( 2, *KarbonFactory::rServer()->cachePixmap( s, K3Icon::Small ) );
 } // VLayerListViewItem::update
 
 void
@@ -1168,7 +1168,7 @@ VHistoryItem::init()
 	char buffer[70];
 	sprintf( buffer, "%064ld", ++g_lastKey );
 	m_key = buffer;
-	setPixmap( 0, QPixmap( KGlobal::iconLoader()->iconPath( m_command->icon(), KIcon::Small ) ) );
+	setPixmap( 0, QPixmap( KGlobal::iconLoader()->iconPath( m_command->icon(), K3Icon::Small ) ) );
 	setText( 0, m_command->name() );
 } // VHistoryITem::init
 

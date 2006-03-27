@@ -7,6 +7,8 @@
 
 // For debugging
 #include <iostream>
+//Added by qt3to4:
+#include <Q3ValueList>
 using std::cout;
 using std::cerr;
 
@@ -143,7 +145,7 @@ bool KChartPart::initDoc(InitDocFlags flags, QWidget* parentWidget)
 				       parentWidget );
 
     if ( ret == KoTemplateChooseDia::File ) {
-	KURL url( f );
+	KUrl url( f );
 	return openURL( url );
     }
     else if ( ret == KoTemplateChooseDia::Empty ) {
@@ -1319,8 +1321,8 @@ void KChartPart::saveOasisData( KoXmlWriter* bodyWriter,
 
 void KChartPart::writeAutomaticStyles( KoXmlWriter& contentWriter, KoGenStyles& mainStyles ) const
 {
-    QValueList<KoGenStyles::NamedStyle> styles = mainStyles.styles( KoGenStyle::STYLE_AUTO );
-    QValueList<KoGenStyles::NamedStyle>::const_iterator it = styles.begin();
+    Q3ValueList<KoGenStyles::NamedStyle> styles = mainStyles.styles( KoGenStyle::STYLE_AUTO );
+    Q3ValueList<KoGenStyles::NamedStyle>::const_iterator it = styles.begin();
     for ( ; it != styles.end() ; ++it ) {
         (*it).style->writeStyle( &contentWriter, mainStyles, "style:style", (*it).name, "style:chart-properties" );
     }

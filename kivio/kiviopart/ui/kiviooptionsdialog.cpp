@@ -98,7 +98,7 @@ KivioOptionsDialog::KivioOptionsDialog(KivioView* parent, const char* name)
 void KivioOptionsDialog::initPage()
 {
   QFrame* page = addPage(i18n("Page"), i18n("Page Settings"),
-    kapp->iconLoader()->loadIcon("empty", KIcon::Toolbar, 32));
+    kapp->iconLoader()->loadIcon("empty", K3Icon::Toolbar, 32));
   m_pageIndex = pageIndex(page);
 
   KivioView* view = static_cast<KivioView*>(parent());
@@ -155,7 +155,7 @@ void KivioOptionsDialog::initPage()
 
 void KivioOptionsDialog::initGrid()
 {
-  QFrame* page = addPage(i18n("Grid"), i18n("Grid Settings"), BarIcon( "grid", KIcon::SizeMedium ));
+  QFrame* page = addPage(i18n("Grid"), i18n("Grid Settings"), BarIcon( "grid", K3Icon::SizeMedium ));
   m_gridIndex = pageIndex(page);
 
   KoUnit::Unit unit = static_cast<KivioView*>(parent())->doc()->unit();

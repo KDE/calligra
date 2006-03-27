@@ -23,6 +23,8 @@
 
 #include <kdialogbase.h>
 #include <qlineedit.h>
+//Added by qt3to4:
+#include <QKeyEvent>
 #include <KoAutoFormat.h>
 class QCheckBox;
 class KCharSelect;
@@ -65,7 +67,7 @@ protected slots:
     void textChanged ( const QString & );
     void slotExceptionListSelected();
  private:
-    QListBox *exceptionList;
+    Q3ListBox *exceptionList;
     KoAutoFormatLineEdit *exceptionLine;
     QPushButton *pbAddException,*pbRemoveException;
     QCheckBox *cbAutoInclude;
@@ -143,7 +145,7 @@ protected slots:
     virtual void slotCancel();
 
     void slotBulletStyleToggled( bool );
-    void slotItemRenamed(QListViewItem * item, const QString & newText, int column);
+    void slotItemRenamed(Q3ListViewItem * item, const QString & newText, int column);
     void slotRemoveEntry();
     void slotEditEntry();
     void slotfind( const QString & );

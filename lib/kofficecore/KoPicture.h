@@ -23,6 +23,8 @@
 #include <qstring.h>
 #include <qiodevice.h>
 #include <qpixmap.h>
+//Added by qt3to4:
+#include <Q3CString>
 #include <koffice_export.h>
 
 #include "KoPictureKey.h"
@@ -30,8 +32,8 @@
 class KoXmlWriter;
 class QPainter;
 class QSize;
-class QDragObject;
-class KURL;
+class Q3DragObject;
+class KUrl;
 
 class KoPictureShared;
 
@@ -103,7 +105,7 @@ public:
      * @param name name for the QDragObject
      * @return 0L if the picture is null, or if a dragobject for it isn't implemented [yet]
      */
-    QDragObject* dragObject( QWidget *dragSource = 0L, const char *name = 0L );
+    Q3DragObject* dragObject( QWidget *dragSource = 0L, const char *name = 0L );
 
     bool load(QIODevice* io, const QString& extension);
 
@@ -160,7 +162,7 @@ public:
     /**
      * Load the picture from base64-encoded data
      */
-    bool loadFromBase64(const QCString& str);
+    bool loadFromBase64(const Q3CString& str);
 
     /**
      * Load a potentially broken XPM file (for old files of KPresenter)
@@ -183,7 +185,7 @@ public:
      *               NULL (0) if you absolutely cannot find a parent
      *               widget to use.
      */
-    bool setKeyAndDownloadPicture(const KURL& url, QWidget *window);
+    bool setKeyAndDownloadPicture(const KUrl& url, QWidget *window);
 
     /**
      * Generate a QImage

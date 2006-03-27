@@ -295,9 +295,9 @@ Kross::Api::Object::Ptr KexiDBConnection::insertRecord(Kross::Api::List::Ptr arg
 {
     QValueList<QVariant> values = Kross::Api::Variant::toList(args->item(1));
     /*
-    kdDebug()<<"Kross::KexiDB::KexiDBConnection::insertRecord()"<<endl;
+    kDebug()<<"Kross::KexiDB::KexiDBConnection::insertRecord()"<<endl;
     for(QValueList<QVariant>::Iterator it = values.begin(); it != values.end(); ++it)
-        kdDebug()<<"  value="<< (*it).toString() << " type=" << (*it).typeName() << endl;
+        kDebug()<<"  value="<< (*it).toString() << " type=" << (*it).typeName() << endl;
     */
 
     Kross::Api::Object::Ptr obj = args->item(0);

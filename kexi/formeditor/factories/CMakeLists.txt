@@ -1,0 +1,65 @@
+kde4_header()
+
+include_directories( ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/formeditor ${CMAKE_SOURCE_DIR}/kexi/core ${CMAKE_SOURCE_DIR}/lib ${CMAKE_SOURCE_DIR}/lib/koproperty ${CMAKE_SOURCE_DIR}/lib/kofficecore ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
+
+
+########### next target ###############
+
+set(kformdesigner_containers_PART_SRCS containerfactory.cpp )
+
+kde4_automoc(${kformdesigner_containers_PART_SRCS})
+
+kde4_add_plugin(kformdesigner_containers ${kformdesigner_containers_PART_SRCS})
+
+kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kformdesigner_containers )
+
+target_link_libraries(kformdesigner_containers  ${KDE4_KDECORE_LIBS} kformdesigner )
+
+install_targets(${LIB_INSTALL_DIR}/kde4 kformdesigner_containers )
+
+
+########### next target ###############
+
+set(kformdesigner_stdwidgets_PART_SRCS stdwidgetfactory.cpp )
+
+kde4_automoc(${kformdesigner_stdwidgets_PART_SRCS})
+
+kde4_add_plugin(kformdesigner_stdwidgets ${kformdesigner_stdwidgets_PART_SRCS})
+
+kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kformdesigner_stdwidgets )
+
+target_link_libraries(kformdesigner_stdwidgets  ${KDE4_KDECORE_LIBS} kformdesigner )
+
+install_targets(${LIB_INSTALL_DIR}/kde4 kformdesigner_stdwidgets )
+
+
+########### install files ###############
+
+install_files( ${SERVICES_INSTALL_DIR}/kformdesigner FILES  kformdesigner_containers.desktop kformdesigner_stdwidgets.desktop )
+
+kde4_footer()
+
+
+
+#original Makefile.am contents follow:
+
+#include $(top_srcdir)/kexi/Makefile.global
+#
+#INCLUDES = -I$(top_srcdir)/kexi -I$(top_srcdir)/kexi/formeditor \
+#	-I$(top_srcdir)/kexi/core \
+#	-I$(top_srcdir)/lib -I$(top_srcdir)/lib/koproperty -I$(top_srcdir)/lib/kofficecore $(all_includes)
+#kde_module_LTLIBRARIES = kformdesigner_containers.la kformdesigner_stdwidgets.la
+#kformdesigner_containers_la_LDFLAGS =  $(all_libraries) $(KDE_PLUGIN) $(VER_INFO) -module
+#kformdesigner_containers_la_SOURCES =  containerfactory.cpp
+#kformdesigner_containers_la_LIBADD = $(top_builddir)/kexi/formeditor/libkformdesigner.la
+#
+#kformdesigner_stdwidgets_la_LDFLAGS =  $(all_libraries) $(KDE_PLUGIN) $(VER_INFO) -module
+#kformdesigner_stdwidgets_la_SOURCES =  stdwidgetfactory.cpp
+#kformdesigner_stdwidgets_la_LIBADD = $(top_builddir)/kexi/formeditor/libkformdesigner.la
+#
+#
+#servicesdir=$(kde_servicesdir)/kformdesigner
+#services_DATA = kformdesigner_containers.desktop kformdesigner_stdwidgets.desktop
+#
+#METASOURCES = AUTO
+#

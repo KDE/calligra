@@ -21,11 +21,14 @@
 #define splitcelldia_h
 
 #include <kdialogbase.h>
-#include <qptrlist.h>
+#include <q3ptrlist.h>
+//Added by qt3to4:
+#include <QLabel>
+#include <Q3GridLayout>
 
 #include "defs.h"
 
-class QGridLayout;
+class Q3GridLayout;
 class QLabel;
 class QCheckBox;
 class QSpinBox;

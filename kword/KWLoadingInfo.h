@@ -21,8 +21,8 @@
 #define KWLOADINGINFO_H
 
 #include <qstring.h>
-#include <qvaluelist.h>
-#include <qdict.h>
+#include <q3valuelist.h>
+#include <q3dict.h>
 #include <KoPageLayout.h>
 
 class KoTextParag;
@@ -50,7 +50,7 @@ public:
         int cursorEndIndex;
     };
 
-    typedef QValueList<BookMark> BookMarkList;
+    typedef Q3ValueList<BookMark> BookMarkList;
     BookMarkList bookMarkList;
 
     /// Bookmarks (OASIS XML). Only need to store bookmark starts, until hitting bookmark ends
@@ -86,8 +86,8 @@ public:
 
 private:
     // Ignore warnings about operator delete from those dicts; we don't use it here...
-    QDict<KWFrame> m_nextFrameDict;
-    QDict<KWFrame> m_frameNameDict;
+    Q3Dict<KWFrame> m_nextFrameDict;
+    Q3Dict<KWFrame> m_frameNameDict;
 };
 
 #endif /* KWLOADINGINFO_H */

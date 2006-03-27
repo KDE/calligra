@@ -27,7 +27,9 @@
 #include <qlayout.h>
 #include <qfileinfo.h>
 #include <qpainter.h>
-#include <qscrollview.h>
+#include <q3scrollview.h>
+//Added by qt3to4:
+#include <Q3VBoxLayout>
 
 #include <kdebug.h>
 
@@ -38,13 +40,13 @@
  * It is a scrollview, to have scrollbars if the image is big,
  * and it supports both pixmaps and cliparts
  */
-class KoPictureFilePreviewWidget : public QScrollView
+class KoPictureFilePreviewWidget : public Q3ScrollView
 {
 public:
     KoPictureFilePreviewWidget( QWidget *parent )
-        : QScrollView( parent ) { viewport()->setBackgroundMode( PaletteBase ); }
+        : Q3ScrollView( parent ) { viewport()->setBackgroundMode( PaletteBase ); }
 
-    bool setPicture( const KURL& url )
+    bool setPicture( const KUrl& url )
     {
         KoPicture picture;
 	if ( url.isLocalFile() )
@@ -91,12 +93,12 @@ private:
 KoPictureFilePreview::KoPictureFilePreview( QWidget *parent )
     : KPreviewWidgetBase( parent )
 {
-    QVBoxLayout *vb = new QVBoxLayout( this, KDialog::marginHint() );
+    Q3VBoxLayout *vb = new Q3VBoxLayout( this, KDialog::marginHint() );
     m_widget = new KoPictureFilePreviewWidget( this );
     vb->addWidget( m_widget, 1 );
 }
 
-void KoPictureFilePreview::showPreview( const KURL &u )
+void KoPictureFilePreview::showPreview( const KUrl &u )
 {
     m_widget->setPicture( u );
 }

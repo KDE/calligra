@@ -32,6 +32,8 @@
 
 #include "KWMailMergeKABC.h"
 #include "KWMailMergeKABCConfig.h"
+//Added by qt3to4:
+#include <Q3ValueList>
 
 KWMailMergeKABC::KWMailMergeKABC( KInstance *inst, QObject *parent )
         : KWMailMergeDataSource( inst, parent )
@@ -126,14 +128,14 @@ void KWMailMergeKABC::clear()
 
 int KWMailMergeKABC::getNumRecords() const
 {
-    kdDebug() << "KWMailMergeKABC::getNumRecords(): " << _exclusiveUIDs.count() << endl;
+    kDebug() << "KWMailMergeKABC::getNumRecords(): " << _exclusiveUIDs.count() << endl;
     return _exclusiveUIDs.count();
 }
 
 
 QString KWMailMergeKABC::getValue( const QString &name, int record ) const
 {
-    kdDebug() << "KWMailMergeKABC::getValue(" << name << ", " << record << ")" << endl;
+    kDebug() << "KWMailMergeKABC::getValue(" << name << ", " << record << ")" << endl;
     if ( record < 0 )
         return name;
 
@@ -421,7 +423,7 @@ void KWMailMergeKABC::load( QDomElement& parentElem )
             }
         }
         else
-            kdDebug() << "rec.nodeName(): " << rec.nodeName() << endl;
+            kDebug() << "rec.nodeName(): " << rec.nodeName() << endl;
     }
 }
 
@@ -430,7 +432,7 @@ void KWMailMergeKABC::makeUIDsExclusive()
 {
     _exclusiveUIDs = _individualUIDs + _listUIDs;
     _exclusiveUIDs.sort();
-    kdDebug() << "KWMailMergeKABC::makeUIDsExclusive(): before: " << _exclusiveUIDs.join(",")
+    kDebug() << "KWMailMergeKABC::makeUIDsExclusive(): before: " << _exclusiveUIDs.join(",")
     << endl;
     QString uid;
     for( QStringList::Iterator it=_exclusiveUIDs.begin();
@@ -442,7 +444,7 @@ void KWMailMergeKABC::makeUIDsExclusive()
         }
         uid = *it;
     }
-    kdDebug() << "KWMailMergeKABC::makeUIDsExclusive(): after: " << _exclusiveUIDs.join(",")
+    kDebug() << "KWMailMergeKABC::makeUIDsExclusive(): after: " << _exclusiveUIDs.join(",")
     << endl;
 }
 
@@ -452,7 +454,7 @@ void KWMailMergeKABC::parseList( const QString& listName )
     if( listName.isEmpty() )
         return;
 
-    kdDebug() << "KWMailMergeKABC::parseList: " << listName << endl;
+    kDebug() << "KWMailMergeKABC::parseList: " << listName << endl;
     KABC::DistributionListManager dlm ( _addressBook );
     dlm.load();
 
@@ -464,7 +466,7 @@ void KWMailMergeKABC::parseList( const QString& listName )
     KABC::DistributionList::Entry::List::Iterator itemIt;
     for ( itemIt = entries.begin(); itemIt != entries.end(); ++itemIt )
     {
-        kdDebug() << "WMailMergeKABC::parseList: Listentry UID: " <<
+        kDebug() << "WMailMergeKABC::parseList: Listentry UID: " <<
         (*itemIt).addressee.uid() << endl;
         _listUIDs.append( (*itemIt).addressee.uid() );
     }
@@ -473,7 +475,7 @@ void KWMailMergeKABC::parseList( const QString& listName )
 
 void KWMailMergeKABC::refresh( bool )
 {
-    kdDebug() << "KWMailMergeKABC::refresh()" << endl;
+    kDebug() << "KWMailMergeKABC::refresh()" << endl;
     _iterator = _addressBook->begin();
     _UIDIterator = _individualUIDs.begin();
 
@@ -485,7 +487,7 @@ void KWMailMergeKABC::save( QDomDocument& doc, QDomElement& parent)
     QDomElement cont=doc.createElement(QString::fromLatin1("CONTENT"));
     parent.appendChild(cont);
 
-    QValueList<QString>::ConstIterator it = _individualUIDs.begin();
+    Q3ValueList<QString>::ConstIterator it = _individualUIDs.begin();
     for( ; it != _individualUIDs.end(); ++it )
     {
         QDomElement rec=doc.createElement(QString::fromLatin1("RECORD"));
@@ -519,7 +521,7 @@ bool KWMailMergeKABC::showConfigDialog( QWidget* par, int action )
         KWMailMergeKABCConfig *dia=new KWMailMergeKABCConfig( par, this );
 
         ret=( dia->exec() == QDialog::Accepted );
-        kdDebug() << "KWMailMergeKABCConfig::Accepted " << ret << endl;
+        kDebug() << "KWMailMergeKABCConfig::Accepted " << ret << endl;
         delete dia;
     }
     refresh(false);

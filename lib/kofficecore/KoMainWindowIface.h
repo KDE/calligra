@@ -23,6 +23,8 @@
 
 #include <dcopobject.h>
 #include <dcopref.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 class KDCOPActionProxy;
 class KoMainWindow;
@@ -35,9 +37,9 @@ public:
     virtual ~KoMainWindowIface();
 
 k_dcop:
-    DCOPRef action( const QCString &name );
+    DCOPRef action( const Q3CString &name );
     QCStringList actions();
-    QMap<QCString,DCOPRef> actionMap();
+    QMap<Q3CString,DCOPRef> actionMap();
     ASYNC print(bool quick);
 
 protected:

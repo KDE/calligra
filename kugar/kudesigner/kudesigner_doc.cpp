@@ -92,7 +92,7 @@ bool KudesignerDoc::initDoc( InitDocFlags flags, QWidget* parentWidget )
     }
     else if ( ret == KoTemplateChooseDia::File )
     {
-        KURL url( file );
+        KUrl url( file );
         ok = openURL( url );
     }
     else if ( ret == KoTemplateChooseDia::Empty )

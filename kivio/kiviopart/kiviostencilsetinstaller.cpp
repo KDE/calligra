@@ -67,7 +67,7 @@ namespace Kivio {
 
   void StencilSetInstaller::install(const QString& urlString)
   {
-    KURL url(urlString);
+    KUrl url(urlString);
 
     if(url.isEmpty()) return;
 

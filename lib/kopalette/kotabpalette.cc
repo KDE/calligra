@@ -16,7 +16,7 @@
  */
 
 
-#include <qdockwindow.h>
+#include <q3dockwindow.h>
 
 #include <ktabwidget.h>
 #include <kdebug.h>
@@ -32,7 +32,7 @@ KoTabPalette::KoTabPalette(QWidget * parent, const char * name)
 {
     m_page = new KTabWidget(this);
     m_page->setTabShape(QTabWidget::Triangular);
-    m_page->setFocusPolicy(QWidget::TabFocus);
+    m_page->setFocusPolicy(Qt::TabFocus);
     //m_page->setFont(m_font);
     m_page->setMargin(1);
     //m_page->setTabReorderingEnabled(true);

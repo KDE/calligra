@@ -4,7 +4,7 @@
 
 #include "kchart_params.h"
 
-class QButtonGroup;
+class Q3ButtonGroup;
 class QPushButton;
 class QRadioButton;
 class QSpinBox;

@@ -22,13 +22,13 @@
 #ifndef __KOPGLAYOUTDIA_H__
 #define __KOPGLAYOUTDIA_H__
 
-#include <qgroupbox.h>
+#include <q3groupbox.h>
 #include <KoGlobal.h>
 #include <KoUnit.h>
 #include <kdialogbase.h>
 #include <KoPageLayout.h>
 
-class QButtonGroup;
+class Q3ButtonGroup;
 class QComboBox;
 class QLineEdit;
 class QCheckBox;
@@ -44,7 +44,7 @@ enum { FORMAT_AND_BORDERS = 1, HEADER_AND_FOOTER = 2, COLUMNS = 4, DISABLE_BORDE
  *  KoPagePreview.
  *  Internal to KoPageLayoutDia.
  */
-class KoPagePreview : public QGroupBox
+class KoPagePreview : public Q3GroupBox
 {
     Q_OBJECT
 

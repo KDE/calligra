@@ -21,6 +21,8 @@
 #include "KoCharSelectDia.moc"
 
 #include <qlayout.h>
+//Added by qt3to4:
+#include <Q3GridLayout>
 
 #include <klocale.h>
 #include <kcharselect.h>
@@ -54,7 +56,7 @@ void KoCharSelectDia::initDialog(const QChar &_chr, const QString &_font, bool /
 {
    QWidget *page = plainPage();
 
-    grid = new QGridLayout( page, 1, 1, 0, KDialog::spacingHint() );
+    grid = new Q3GridLayout( page, 1, 1, 0, KDialog::spacingHint() );
 
     charSelect = new KCharSelect( page, "", _font, _chr );
     connect(charSelect, SIGNAL(doubleClicked()),this, SLOT(slotDoubleClicked()));

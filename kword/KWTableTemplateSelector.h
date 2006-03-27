@@ -21,8 +21,8 @@
 #define kwtabletemplateselector_h
 
 #include <qwidget.h>
-#include <qgroupbox.h>
-#include <qptrlist.h>
+#include <q3groupbox.h>
+#include <q3ptrlist.h>
 
 #include <qlabel.h>
 #include <qpushbutton.h>
@@ -31,10 +31,10 @@
 #include <qbrush.h>
 */
 
-class QListBox;
+class Q3ListBox;
 class QCheckBox;
-class QButtonGroup;
-class QGroupBox;
+class Q3ButtonGroup;
+class Q3GroupBox;
 class QRect;
 
 class KWTableTemplate;
@@ -50,7 +50,7 @@ class KWTableStyle;
 /* Class: KWTableTemplatePreview                                  */
 /******************************************************************/
 
-class KWTableTemplatePreview : public QGroupBox
+class KWTableTemplatePreview : public Q3GroupBox
 {
     Q_OBJECT
 
@@ -108,10 +108,10 @@ protected:
 
     KWTableTemplatePreview *preview;
     QLabel *lTemplates;
-    QListBox *lbTemplates;
+    Q3ListBox *lbTemplates;
     QPushButton *pbCustomize;
 
-    QButtonGroup *bgCustomize;
+    Q3ButtonGroup *bgCustomize;
     QCheckBox *cbFirstRow, *cbFirstCol, *cbLastRow, *cbLastCol, *cbBody;
 
     int selectedTableTemplate;

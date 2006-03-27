@@ -29,6 +29,8 @@
 #include "KDXMLTools.h"
 #include <qbuffer.h>
 #include <qimage.h>
+//Added by qt3to4:
+#include <QPixmap>
 #include <zlib.h>
 
 namespace KDXML {
@@ -129,7 +131,7 @@ namespace KDXML {
         createColorNode( doc, brushElement, "Color", brush.color() );
         createStringNode( doc, brushElement, "Style",
                 KDXML::brushStyleToString( brush.style() ) );
-        if( brush.style() == Qt::CustomPattern && brush.pixmap() )
+        if( brush.style() == Qt::TexturePattern && brush.pixmap() )
             createPixmapNode( doc, brushElement, "Pixmap", *brush.pixmap() );
     }
 
@@ -150,7 +152,7 @@ namespace KDXML {
             // conforms to the file format Qt Designer uses.
             QByteArray ba;
             QBuffer buffer( ba );
-            buffer.open( IO_WriteOnly );
+            buffer.open( QIODevice::WriteOnly );
             QImageIO imgio( &buffer, "XPM" );
             QImage image = pixmap.convertToImage();
             imgio.setImage( image );

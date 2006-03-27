@@ -24,9 +24,16 @@
 #include "tkaction.h"
 #include <koffice_export.h>
 #include <kpopupmenu.h>
-#include <qdict.h>
+#include <q3dict.h>
+//Added by qt3to4:
+#include <QMouseEvent>
+#include <Q3GridLayout>
+#include <QShowEvent>
+#include <Q3Frame>
+#include <QEvent>
+#include <QPaintEvent>
 
-class QGridLayout;
+class Q3GridLayout;
 class TKColorPanel;
 class TKSelectColorActionPrivate;
 
@@ -96,7 +103,7 @@ private:
   TKSelectColorActionPrivate *d;
 };
 /****************************************************************************************/
-class TKColorPanelButton : public QFrame
+class TKColorPanelButton : public Q3Frame
 { Q_OBJECT
 public:
   TKColorPanelButton( const QColor&, QWidget* parent, const char* name = 0 );
@@ -151,13 +158,13 @@ protected:
   virtual void mouseReleaseEvent( QMouseEvent* );
   virtual void showEvent( QShowEvent *e );
 
-  QGridLayout* m_pLayout;
+  Q3GridLayout* m_pLayout;
   int m_iWidth;
   int m_iX;
   int m_iY;
 
   QColor m_activeColor;
-  QDict<TKColorPanelButton> m_pColorDict;
+  Q3Dict<TKColorPanelButton> m_pColorDict;
 
 private:
   void fillPanel();

@@ -18,11 +18,13 @@
 */
 
 #include <klocale.h>
-#include <qvbox.h>
+#include <q3vbox.h>
 #include <qlayout.h>
 #include <qlineedit.h>
 #include <qpushbutton.h>
-#include <qlistbox.h>
+#include <q3listbox.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 #include "KoImportStyleDia.h"
 
 #include <kdebug.h>
@@ -33,10 +35,10 @@ KoImportStyleDia::KoImportStyleDia( KoStyleCollection* currentCollection, QWidge
 {
     setCaption( i18n("Import Styles") );
     m_currentCollection = currentCollection;
-    QVBox *page = makeVBoxMainWidget();
+    Q3VBox *page = makeVBoxMainWidget();
     new QLabel(i18n("Select styles to import:"), page);
-    m_listStyleName = new QListBox( page );
-    m_listStyleName->setSelectionMode( QListBox::Multi );
+    m_listStyleName = new Q3ListBox( page );
+    m_listStyleName->setSelectionMode( Q3ListBox::Multi );
     enableButtonOK( m_listStyleName->count() != 0 );
     setButtonText( KDialogBase::User1, i18n("Load...") );
     connect( this, SIGNAL( user1Clicked() ), this, SLOT(slotLoadFile()));
@@ -65,8 +67,8 @@ void KoImportStyleDia::generateStyleList()
 
 void KoImportStyleDia::updateFollowingStyle( KoParagStyle* removedStyle )
 {
-    QValueList<KoUserStyle *> lst = m_styleList.styleList();
-    for( QValueList<KoUserStyle *>::Iterator it = lst.begin(); it != lst.end(); ++it ) {
+    Q3ValueList<KoUserStyle *> lst = m_styleList.styleList();
+    for( Q3ValueList<KoUserStyle *>::Iterator it = lst.begin(); it != lst.end(); ++it ) {
         KoParagStyle* style = static_cast<KoParagStyle *>( *it );
         if ( style->followingStyle() == removedStyle )
         {

@@ -38,7 +38,7 @@
 
 class QBrush;
 class QPainter;
-class QSimpleRichText;
+class Q3SimpleRichText;
 class QFontMetrics;
 
 class KDCHART_EXPORT KDChartTextPiece :public QObject
@@ -91,7 +91,7 @@ class KDCHART_EXPORT KDChartTextPiece :public QObject
 
     protected:
         bool _isRichText;
-        QSimpleRichText* _richText; // used when _isRichText == true
+        Q3SimpleRichText* _richText; // used when _isRichText == true
         QString _text; // used when _isRichText == false
         QFont _font; // used when _isRichText == false
         QFontMetrics* _metrics;

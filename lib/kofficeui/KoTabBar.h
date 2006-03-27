@@ -27,6 +27,11 @@
 
 #include <qwidget.h>
 #include <qstringlist.h>
+//Added by qt3to4:
+#include <QMouseEvent>
+#include <QWheelEvent>
+#include <QResizeEvent>
+#include <QPaintEvent>
 #include <koffice_export.h>
 class KoTabBarPrivate;
 

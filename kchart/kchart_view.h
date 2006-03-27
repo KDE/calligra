@@ -9,6 +9,9 @@
 
 #include <KoView.h>
 #include "kdchart/KDChartAxisParams.h"
+//Added by qt3to4:
+#include <QMouseEvent>
+#include <QPaintEvent>
 
 class KAction;
 class KToggleAction;

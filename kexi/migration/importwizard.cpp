@@ -874,7 +874,7 @@ void ImportWizard::next()
 {
 	if (currentPage() == m_srcConnPage) {
 		if (fileBasedSrcSelected()
-			&& /*! @todo use KURL? */!QFileInfo(m_srcConn->selectedFileName()).isFile()) {
+			&& /*! @todo use KUrl? */!QFileInfo(m_srcConn->selectedFileName()).isFile()) {
 
 			KMessageBox::sorry(this,i18n("Select source database filename."));
 			return;

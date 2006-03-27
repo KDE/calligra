@@ -24,6 +24,8 @@
 #include <klocale.h>
 #include <qlayout.h>
 #include <qlabel.h>
+//Added by qt3to4:
+#include <Q3GridLayout>
 #include <kfontdialog.h>
 
 #include <qcheckbox.h>
@@ -46,10 +48,10 @@ KChartPieConfigPage::KChartPieConfigPage( KChartParams* params,
 {
     //    col=_params->colPie;
     pos=-1;
-    QGridLayout *grid = new QGridLayout(this,10,4,KDialog::marginHint(), 
+    Q3GridLayout *grid = new Q3GridLayout(this,10,4,KDialog::marginHint(), 
 					KDialog::spacingHint());
     // The listview
-    list = new QListView( this );
+    list = new Q3ListView( this );
     list->resize( list->sizeHint() );
     grid->addMultiCellWidget(list,0,9,0,0);
     list->addColumn( i18n("Hide Piece") );
@@ -91,7 +93,7 @@ KChartPieConfigPage::KChartPieConfigPage( KChartParams* params,
 
     connect(column,SIGNAL(valueChanged(int)),this,SLOT(changeValue(int)));
 
-    connect( list, SIGNAL( selectionChanged(QListViewItem *) ), this, SLOT( slotselected(QListViewItem *) ) );
+    connect( list, SIGNAL( selectionChanged(Q3ListViewItem *) ), this, SLOT( slotselected(Q3ListViewItem *) ) );
 }
 
 
@@ -103,7 +105,7 @@ void KChartPieConfigPage::initList()
 //         (void)new QCheckListItem( list, (*it),QCheckListItem::CheckBox ) ;
 
 //     }
-    QListViewItemIterator it( list );
+    Q3ListViewItemIterator it( list );
     //Select or not CheckBox
     // PENDING(kalle) Put back in
     //     for( ; it.current(); ++it )	{
@@ -114,7 +116,7 @@ void KChartPieConfigPage::initList()
 }
 
 
-void KChartPieConfigPage::slotselected(QListViewItem */*it*/)
+void KChartPieConfigPage::slotselected(Q3ListViewItem */*it*/)
 {
     //column : 0
     //cout <<"Select :"<<(it)->text(0).ascii()<<endl;
@@ -134,7 +136,7 @@ void KChartPieConfigPage::slotselected(QListViewItem */*it*/)
 void KChartPieConfigPage::changeValue(int val)
 {
     col=val-1;
-    QListViewItemIterator it( list );
+    Q3ListViewItemIterator it( list );
     //Select or not CheckBox
     ;
     //int index=0;
@@ -155,7 +157,7 @@ void KChartPieConfigPage::changeValue(int val)
 
 void KChartPieConfigPage::init()
 {
-    QListViewItemIterator it( list );
+    Q3ListViewItemIterator it( list );
     //Select or not CheckBox
 
     //int index = 0;
@@ -177,7 +179,7 @@ void KChartPieConfigPage::init()
 
 void KChartPieConfigPage::apply()
 {
-    QListViewItemIterator it( list );
+    Q3ListViewItemIterator it( list );
     //Select or not CheckBox
     //int index = 0;
     for( ; it.current(); ++it )	{

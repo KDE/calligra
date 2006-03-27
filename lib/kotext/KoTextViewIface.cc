@@ -317,32 +317,32 @@ double KoTextViewIface::lineSpacing() const
 
 double KoTextViewIface::leftMargin() const
 {
-    return m_textView->cursor()->parag()->margin( QStyleSheetItem::MarginLeft);
+    return m_textView->cursor()->parag()->margin( Q3StyleSheetItem::MarginLeft);
 }
 
 double KoTextViewIface::rightMargin() const
 {
-    return m_textView->cursor()->parag()->margin( QStyleSheetItem::MarginRight);
+    return m_textView->cursor()->parag()->margin( Q3StyleSheetItem::MarginRight);
 }
 
 double KoTextViewIface::spaceBeforeParag() const
 {
-    return m_textView->cursor()->parag()->margin( QStyleSheetItem::MarginTop);
+    return m_textView->cursor()->parag()->margin( Q3StyleSheetItem::MarginTop);
 }
 
 double KoTextViewIface::spaceAfterParag() const
 {
-    return m_textView->cursor()->parag()->margin( QStyleSheetItem::MarginBottom);
+    return m_textView->cursor()->parag()->margin( Q3StyleSheetItem::MarginBottom);
 }
 
 double KoTextViewIface::marginFirstLine() const
 {
-    return m_textView->cursor()->parag()->margin( QStyleSheetItem::MarginFirstLine);
+    return m_textView->cursor()->parag()->margin( Q3StyleSheetItem::MarginFirstLine);
 }
 
 void KoTextViewIface::setMarginFirstLine(double pt)
 {
-    m_textView->cursor()->parag()->setMargin( QStyleSheetItem::MarginFirstLine,pt);
+    m_textView->cursor()->parag()->setMargin( Q3StyleSheetItem::MarginFirstLine,pt);
 }
 
 void KoTextViewIface::setLineSpacing(double pt)
@@ -352,22 +352,22 @@ void KoTextViewIface::setLineSpacing(double pt)
 
 void KoTextViewIface::setLeftMargin(double pt)
 {
-    m_textView->cursor()->parag()->setMargin( QStyleSheetItem::MarginLeft,pt);
+    m_textView->cursor()->parag()->setMargin( Q3StyleSheetItem::MarginLeft,pt);
 }
 
 void KoTextViewIface::setRightMargin(double pt)
 {
-    m_textView->cursor()->parag()->setMargin( QStyleSheetItem::MarginRight,pt);
+    m_textView->cursor()->parag()->setMargin( Q3StyleSheetItem::MarginRight,pt);
 }
 
 void KoTextViewIface::setSpaceBeforeParag(double pt)
 {
-    m_textView->cursor()->parag()->setMargin( QStyleSheetItem::MarginTop,pt);
+    m_textView->cursor()->parag()->setMargin( Q3StyleSheetItem::MarginTop,pt);
 }
 
 void KoTextViewIface::setSpaceAfterParag(double pt)
 {
-    m_textView->cursor()->parag()->setMargin( QStyleSheetItem::MarginBottom,pt);
+    m_textView->cursor()->parag()->setMargin( Q3StyleSheetItem::MarginBottom,pt);
 }
 
 

@@ -292,7 +292,7 @@ void
 KFormDesignerPart::open()
 {
 	m_openingFile = true;
-	KURL url = KFileDialog::getOpenURL("::kformdesigner", i18n("*.ui|Qt Designer UI Files"), m_workspace->topLevelWidget());
+	KUrl url = KFileDialog::getOpenURL("::kformdesigner", i18n("*.ui|Qt Designer UI Files"), m_workspace->topLevelWidget());
 	if(!url.isEmpty())
 		ReadWritePart::openURL(url);
 	m_openingFile = false;
@@ -327,7 +327,7 @@ KFormDesignerPart::saveFile()
 void
 KFormDesignerPart::saveAs()
 {
-	KURL url = KFileDialog::getSaveURL("::kformdesigner", i18n("*.ui|Qt Designer UI Files"), 
+	KUrl url = KFileDialog::getSaveURL("::kformdesigner", i18n("*.ui|Qt Designer UI Files"), 
 		m_workspace->topLevelWidget());
 	if(url.isEmpty())
 		return;

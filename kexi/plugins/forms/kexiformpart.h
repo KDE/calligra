@@ -66,8 +66,8 @@ class KEXIFORMUTILS_EXPORT KexiFormPart : public KexiPart::Part
 			public:
 				TempData(QObject* parent);
 				~TempData();
-				QGuardedPtr<KFormDesigner::Form> form;
-				QGuardedPtr<KFormDesigner::Form> previewForm;
+				QPointer<KFormDesigner::Form> form;
+				QPointer<KFormDesigner::Form> previewForm;
 				QString tempForm;
 				QPoint scrollViewContentsPos; //!< to preserve contents pos after switching to other view
 				int resizeMode; //!< form's window's resize mode -one of KexiFormView::ResizeMode items

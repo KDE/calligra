@@ -28,8 +28,13 @@
 #include <kiconloader.h>
 #include <qcursor.h>
 #include <qpainter.h>
-#include <qpopupmenu.h>
+#include <q3popupmenu.h>
 #include <qtooltip.h>
+//Added by qt3to4:
+#include <QPixmap>
+#include <Q3Frame>
+#include <QResizeEvent>
+#include <QMouseEvent>
 #include <KoPageLayout.h>
 
 class KoRulerPrivate {
@@ -53,7 +58,7 @@ public:
     KoTabulator currTab;
     // The action we're currently doing - basically only valid between press and release time
     KoRuler::Action action;
-    QPopupMenu *rb_menu;
+    Q3PopupMenu *rb_menu;
     int mRemoveTab, mPageLayout; // menu item ids
     int frameEnd;
     double i_right;
@@ -79,13 +84,13 @@ const int KoRuler::F_HELPLINES = 4;
 const int KoRuler::F_NORESIZE = 8;
 
 /*================================================================*/
-KoRuler::KoRuler( QWidget *_parent, QWidget *_canvas, Orientation _orientation,
+KoRuler::KoRuler( QWidget *_parent, QWidget *_canvas, Qt::Orientation _orientation,
                  const KoPageLayout& _layout, int _flags, KoUnit::Unit _unit, KoTabChooser *_tabChooser )
-    : QFrame( _parent ), buffer( width(), height() ), m_zoom(1.0), m_1_zoom(1.0),
+    : Q3Frame( _parent ), buffer( width(), height() ), m_zoom(1.0), m_1_zoom(1.0),
       m_unit( _unit )
 {
-    setWFlags( WResizeNoErase | WRepaintNoErase );
-    setFrameStyle( MenuBarPanel );
+    setWFlags( Qt::WResizeNoErase | Qt::WNoAutoErase );
+    setFrameStyle( QFrame::StyledPanel );
 
     d=new KoRulerPrivate();
 
@@ -253,7 +258,7 @@ void KoRuler::drawHorizontal( QPainter *_painter )
         maxwidth = QMAX( maxwidth, textwidth );
         p.drawText( qRound(i) - diffx - qRound(textwidth * 0.5),
                     qRound(( height() - fm.height() ) * 0.5),
-                    textwidth, height(), AlignLeft | AlignTop, str );
+                    textwidth, height(), Qt::AlignLeft | Qt::AlignTop, str );
     }
 
     // Draw the medium-sized lines
@@ -325,7 +330,7 @@ void KoRuler::drawTabs( QPainter &_painter )
 {
     int ptPos = 0;
 
-    _painter.setPen( QPen( colorGroup().color( QColorGroup::Text ), 2, SolidLine ) );
+    _painter.setPen( QPen( colorGroup().color( QColorGroup::Text ), 2, Qt::SolidLine ) );
     // Check if we're in a mousemove event, removing a tab.
     // In that case, we'll have to skip drawing that one.
     bool willRemove = d->mousePressed && willRemoveTab( d->oldMy ) && d->currTab.type != T_INVALID;
@@ -424,7 +429,7 @@ void KoRuler::drawVertical( QPainter *_painter )
             p.translate( qRound(( width() - textheight ) * 0.5),
                          qRound(i) - diffy + qRound(textwidth * 0.5) );
             p.rotate( -90 );
-            p.drawText( 0, 0, textwidth + 1, textheight, AlignLeft | AlignTop, str );
+            p.drawText( 0, 0, textwidth + 1, textheight, Qt::AlignLeft | Qt::AlignTop, str );
             p.restore();
         }
 
@@ -480,7 +485,7 @@ void KoRuler::mousePressEvent( QMouseEvent *e )
     d->removeTab.type = T_INVALID;
 
     switch ( e->button() ) {
-    case RightButton:
+    case Qt::RightButton:
         if(d->currTab.type == T_INVALID || !(d->flags & F_TABS))
             d->rb_menu->setItemEnabled(d->mRemoveTab, false);
         else
@@ -489,11 +494,11 @@ void KoRuler::mousePressEvent( QMouseEvent *e )
         d->action = A_NONE;
         d->mousePressed = false;
         return;
-    case MidButton:
+    case Qt::MidButton:
         // MMB shall do like double-click (it opens a dialog).
         handleDoubleClick();
         return;
-    case LeftButton:
+    case Qt::LeftButton:
         if ( d->action == A_BR_RIGHT || d->action == A_BR_LEFT ) {
             if ( d->action == A_BR_RIGHT )
                 d->whileMovingBorderRight = true;
@@ -651,7 +656,7 @@ void KoRuler::mouseReleaseEvent( QMouseEvent *e )
     {
         emit addGuide( e->pos(), orientation == Qt::Horizontal, orientation == Qt::Horizontal ? size().height() : size().width() );
         emit addHelpline( e->pos(), orientation == Qt::Horizontal);
-        setCursor( ArrowCursor );
+        setCursor( Qt::ArrowCursor );
     }
     d->currTab.type = T_INVALID; // added (DF)
 }
@@ -682,7 +687,7 @@ void KoRuler::mouseMoveEvent( QMouseEvent *e )
     switch ( orientation ) {
         case Qt::Horizontal: {
             if ( !d->mousePressed ) {
-                setCursor( ArrowCursor );
+                setCursor( Qt::ArrowCursor );
                 d->action = A_NONE;
                 /////// ######
                 // At the moment, moving the left and right border indicators
@@ -710,17 +715,17 @@ void KoRuler::mouseMoveEvent( QMouseEvent *e )
                     if ( mx > firstX - 5 && mx < firstX + 5 &&
                          my >= 2 && my <= d->pmFirst.size().height() + 2 ) {
                         QToolTip::add( this, i18n("First line indent") );
-                        setCursor( ArrowCursor );
+                        setCursor( Qt::ArrowCursor );
                         d->action = A_FIRST_INDENT;
                     } else if ( mx > left + ip_left - 5 && mx < left + ip_left + 5 &&
                                 my >= height() - d->pmLeft.size().height() - 2 && my <= height() - 2 ) {
                         QToolTip::add( this, i18n("Left indent") );
-                        setCursor( ArrowCursor );
+                        setCursor( Qt::ArrowCursor );
                         d->action = A_LEFT_INDENT;
                     } else if ( mx > right - ip_right - 5 && mx < right - ip_right + 5 &&
                                 my >= height() - d->pmLeft.size().height() - 2 && my <= height() - 2 ) {
                         QToolTip::add( this, i18n("Right indent") );
-                        setCursor( ArrowCursor );
+                        setCursor( Qt::ArrowCursor );
                         d->action = A_RIGHT_INDENT;
                     }
                 }
@@ -729,7 +734,7 @@ void KoRuler::mouseMoveEvent( QMouseEvent *e )
             } else {
                 // Calculate the new value.
                 int newPos=mx;
-                if( newPos!=right && gridSize!=0.0 && (e->state() & ShiftButton)==0) { // apply grid.
+                if( newPos!=right && gridSize!=0.0 && (e->state() & Qt::ShiftModifier)==0) { // apply grid.
                     double grid=zoomIt(gridSize * 16);
                     newPos=qRound( ((newPos * 16 / grid) * grid) / 16 );
                 }
@@ -867,7 +872,7 @@ void KoRuler::mouseMoveEvent( QMouseEvent *e )
         } break;
         case Qt::Vertical: {
             if ( !d->mousePressed ) {
-                setCursor( ArrowCursor );
+                setCursor( Qt::ArrowCursor );
                 d->action = A_NONE;
                 if ( d->flags & F_NORESIZE )
                     break;
@@ -930,7 +935,7 @@ void KoRuler::mouseMoveEvent( QMouseEvent *e )
 
 void KoRuler::resizeEvent( QResizeEvent *e )
 {
-    QFrame::resizeEvent( e );
+    Q3Frame::resizeEvent( e );
     buffer.resize( size() );
 }
 
@@ -955,7 +960,7 @@ void KoRuler::handleDoubleClick()
             d->removeTab.type = T_INVALID;
             d->currTab.type = T_INVALID;
             emit tabListChanged( d->tabList );
-            setCursor( ArrowCursor );
+            setCursor( Qt::ArrowCursor );
             update();
             // --- we didn't click on a tab, fall out to indents test ---
         } else if ( d->action == A_TAB ) {
@@ -999,7 +1004,7 @@ double KoRuler::makeIntern( double _v )
 
 void KoRuler::setupMenu()
 {
-    d->rb_menu = new QPopupMenu();
+    d->rb_menu = new Q3PopupMenu();
     Q_CHECK_PTR( d->rb_menu );
     for ( uint i = 0 ; i <= KoUnit::U_LASTUNIT ; ++i )
     {

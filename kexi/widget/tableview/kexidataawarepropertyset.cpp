@@ -95,7 +95,7 @@ uint KexiDataAwarePropertySet::size() const
 void KexiDataAwarePropertySet::clear(uint minimumSize)
 {
 	m_sets.clear();
-	m_sets.resize(QMAX(minimumSize, MAX_FIELDS));
+	m_sets.resize(qMax(minimumSize, MAX_FIELDS));
 	m_view->setDirty(true);
 	m_view->propertySetSwitched();
 }
@@ -175,15 +175,15 @@ void KexiDataAwarePropertySet::slotRowsDeleted( const QValueList<int> &rows )
 	for (QValueList<int>::ConstIterator r_it = rows.constBegin(); r_it!=rows.constEnd() && *r_it < orig_size; ++r_it) {
 		cur_r = *r_it;// - num_removed;
 		if (prev_r>=0) {
-//			kdDebug() << "move " << prev_r+num_removed-1 << ".." << cur_r-1 << " to " << prev_r+num_removed-1 << ".." << cur_r-2 << endl;
+//			kDebug() << "move " << prev_r+num_removed-1 << ".." << cur_r-1 << " to " << prev_r+num_removed-1 << ".." << cur_r-2 << endl;
 			int i=prev_r;
 			KoProperty::Set *b = m_sets.take(i+num_removed);
-			kdDebug() << "buffer " << i+num_removed << " deleted" << endl;
+			kDebug() << "buffer " << i+num_removed << " deleted" << endl;
 			delete b;
 			num_removed++;
 			for (; (i+num_removed)<cur_r; i++) {
 				m_sets.insert( i, m_sets[i+num_removed] );
-				kdDebug() << i << " <- " << i+num_removed << endl;
+				kDebug() << i << " <- " << i+num_removed << endl;
 			}
 		}
 		prev_r = cur_r - num_removed;
@@ -191,17 +191,17 @@ void KexiDataAwarePropertySet::slotRowsDeleted( const QValueList<int> &rows )
 	//move remaining buffers up
 	if (cur_r>=0) {
 		KoProperty::Set *b = m_sets.take(cur_r);
-		kdDebug() << "buffer " << cur_r << " deleted" << endl;
+		kDebug() << "buffer " << cur_r << " deleted" << endl;
 		delete b;
 		num_removed++;
 		for (int i=prev_r; (i+num_removed)<orig_size; i++) {
 			m_sets.insert( i, m_sets[i+num_removed] );
-			kdDebug() << i << " <- " << i+num_removed << endl;
+			kDebug() << i << " <- " << i+num_removed << endl;
 		}
 	}
 	//finally: clear last rows
 	for (int i=orig_size-num_removed; i<orig_size; i++) {
-		kdDebug() << i << " <- zero" << endl;
+		kDebug() << i << " <- zero" << endl;
 		m_sets.insert( i, 0 );
 	}
 	m_sets.setAutoDelete(true);//revert the flag

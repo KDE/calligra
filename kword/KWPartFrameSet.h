@@ -157,7 +157,7 @@ public:
 
     void setPartFrameSet( KWPartFrameSet* fs ) { m_partFrameSet = fs; }
     KWPartFrameSet * partFrameSet() const { return m_partFrameSet; }
-    //virtual KoDocument* hitTest( const QPoint& p, const QWMatrix& _matrix = QWMatrix() );
+    //virtual KoDocument* hitTest( const QPoint& p, const QMatrix& _matrix = QMatrix() );
 
 protected:
     KWDocument *m_pKWordDoc;

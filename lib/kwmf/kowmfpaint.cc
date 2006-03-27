@@ -19,6 +19,9 @@
 #include <kdebug.h>
 
 #include "kowmfpaint.h"
+//Added by qt3to4:
+#include <Q3PointArray>
+#include <Q3PtrList>
 
 KoWmfPaint::KoWmfPaint() : KoWmfRead() {
     mTarget = 0;
@@ -188,7 +191,7 @@ void KoWmfPaint::setWindowExt( int w, int h ) {
 }
 
 
-void KoWmfPaint::setWorldMatrix( const QWMatrix &wm, bool combine ) {
+void KoWmfPaint::setWorldMatrix( const QMatrix &wm, bool combine ) {
     mPainter.setWorldMatrix( wm, combine );
 }
 
@@ -243,18 +246,18 @@ void KoWmfPaint::drawChord( int x, int y, int w, int h, int a, int alen ) {
 }
 
 
-void KoWmfPaint::drawPolyline( const QPointArray &pa ) {
+void KoWmfPaint::drawPolyline( const Q3PointArray &pa ) {
     mPainter.drawPolyline( pa );
 }
 
 
-void KoWmfPaint::drawPolygon( const QPointArray &pa, bool winding ) {
+void KoWmfPaint::drawPolygon( const Q3PointArray &pa, bool winding ) {
     mPainter.drawPolygon( pa, winding );
 }
 
 
-void KoWmfPaint::drawPolyPolygon( QPtrList<QPointArray>& listPa, bool winding ) {
-    QPointArray *pa;
+void KoWmfPaint::drawPolyPolygon( Q3PtrList<Q3PointArray>& listPa, bool winding ) {
+    Q3PointArray *pa;
     
     mPainter.save();
     QBrush brush = mPainter.brush();

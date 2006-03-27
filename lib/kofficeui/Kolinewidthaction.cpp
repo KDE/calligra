@@ -22,16 +22,18 @@
 #include <qpainter.h>
 #include <qpixmap.h>
 #include <qbitmap.h>
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
 #include <qmenubar.h>
 #include <qlayout.h>
 #include <qlabel.h>
+//Added by qt3to4:
+#include <Q3GridLayout>
 
 #include <kpopupmenu.h>
 #include <kapplication.h>
 #include <kdebug.h>
 #include <ktoolbar.h>
-#include <ktoolbarbutton.h>
+
 #include <kiconloader.h>
 #include <klocale.h>
 
@@ -88,7 +90,7 @@ void KoLineWidthAction::createMenu()
   QPen pen;
 
   for(int i = 1; i <= 10; i++) {
-    pix.fill(white);
+    pix.fill(Qt::white);
     pen.setWidth(qRound(i * POINT_TO_INCH(static_cast<double>(KoGlobal::dpiY()))));
     p.setPen(pen);
     p.drawLine(0, 10, pix.width(), 10);
@@ -170,7 +172,7 @@ KoLineWidthChooser::KoLineWidthChooser(QWidget* parent, const char* name)
   // Create the ui
   QWidget* mainWidget = new QWidget(this);
   setMainWidget(mainWidget);
-  QGridLayout* gl = new QGridLayout(mainWidget, 1, 2, KDialog::marginHint(), KDialog::spacingHint());
+  Q3GridLayout* gl = new Q3GridLayout(mainWidget, 1, 2, KDialog::marginHint(), KDialog::spacingHint());
   QLabel* textLbl = new QLabel(i18n("Line width:"), mainWidget);
   d->m_lineWidthUSBox = new KoUnitDoubleSpinBox(mainWidget, 0.0, 1000.0, 0.1, 1.0, KoUnit::U_PT, 2);
   gl->addWidget(textLbl, 0, 0);

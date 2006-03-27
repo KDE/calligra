@@ -24,7 +24,7 @@
 #include <qframe.h>
 #include <qstringlist.h>
 #include <qlabel.h>
-#include <klistview.h>
+#include <k3listview.h>
 
 #include <widget/kexifieldlistview.h>
 
@@ -69,7 +69,7 @@ class KEXIRELATIONSVIEW_EXPORT KexiRelationViewTableContainer : public QFrame
 
 	protected slots:
 		void moved();
-		void slotContextMenu(KListView *lv, QListViewItem *i, const QPoint& p);
+		void slotContextMenu(K3ListView *lv, QListViewItem *i, const QPoint& p);
 
 	protected:
 //		KexiDB::TableSchema *m_table;
@@ -81,7 +81,7 @@ class KEXIRELATIONSVIEW_EXPORT KexiRelationViewTableContainer : public QFrame
 };
 
 /*
-class KEXIRELATIONSVIEW_EXPORT KexiRelationViewTableItem : public KListViewItem
+class KEXIRELATIONSVIEW_EXPORT KexiRelationViewTableItem : public K3ListViewItem
 {
 	public:
 		KexiRelationViewTableItem(QListView *parent, QListViewItem *after,

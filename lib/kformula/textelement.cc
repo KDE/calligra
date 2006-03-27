@@ -118,7 +118,7 @@ void TextElement::calcSizes(const ContextStyle& context, ContextStyle::TextStyle
 
     QFontMetrics fm( font );
     QChar ch = getRealCharacter(context);
-    if ( ch != QChar::null ) {
+    if ( ch != QChar::Null ) {
         QRect bound = fm.boundingRect( ch );
         setWidth( context.ptToLayoutUnitPt( fm.width( ch ) ) );
         setHeight( context.ptToLayoutUnitPt( bound.height() ) );
@@ -184,7 +184,7 @@ void TextElement::draw( QPainter& painter, const LuPixelRect& /*r*/,
     else {
         //kdDebug() << "draw char" << endl;
         QChar ch = getRealCharacter(context);
-        if ( ch != QChar::null ) {
+        if ( ch != QChar::Null ) {
             luPixel bl = getBaseline();
             if ( bl == -1 ) {
                 // That's quite hacky and actually not the way it's

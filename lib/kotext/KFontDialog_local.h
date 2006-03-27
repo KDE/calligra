@@ -30,7 +30,9 @@
 #define _K_FONT_DIALOG_LOCAL_H_
 
 #include <qlineedit.h>
-#include <qbutton.h>
+#include <q3button.h>
+//Added by qt3to4:
+#include <QLabel>
 #include <kdialogbase.h>
 
 #include <koffice_export.h>
@@ -38,7 +40,7 @@
 class QComboBox;
 class QCheckBox;
 class QFont;
-class QGroupBox;
+class Q3GroupBox;
 class QLabel;
 class QStringList;
 class KListBox;
@@ -112,7 +114,7 @@ public:
 	       bool onlyFixed = false,
 	       const QStringList &fontList = QStringList(),
 	       bool makeFrame = true, int visibleListSize=8,
-               bool diff = false, QButton::ToggleState *sizeIsRelativeState = 0L );
+               bool diff = false, QCheckBox::ToggleState *sizeIsRelativeState = 0L );
 
   /**
    * Destructs the font chooser.
@@ -180,13 +182,13 @@ public:
    * NOTE: If parameter sizeIsRelative was not set in the constructor
    *       of the widget this setting will be ignored.
    */
-  void setSizeIsRelative( QButton::ToggleState relative );
+  void setSizeIsRelative( QCheckBox::ToggleState relative );
 
   /**
    * @return Whether the font size is to be interpreted as relative size
    *         (default: QButton:Off)
    */
-  QButton::ToggleState sizeIsRelative() const;
+  QCheckBox::ToggleState sizeIsRelative() const;
 
 
   /**
@@ -377,7 +379,7 @@ public:
 	       bool onlyFixed = false, bool modal = false,
 	       const QStringList &fontlist = QStringList(),
 	       bool makeFrame = true, bool diff = false,
-               QButton::ToggleState *sizeIsRelativeState = 0L );
+               QCheckBox::ToggleState *sizeIsRelativeState = 0L );
 
   /**
    * Sets the currently selected font in the dialog.
@@ -400,14 +402,14 @@ public:
    * NOTE: If parameter sizeIsRelative was not set in the constructor
    *       of the dialog this setting will be ignored.
    */
-  void setSizeIsRelative( QButton::ToggleState relative )
+  void setSizeIsRelative( QCheckBox::ToggleState relative )
     { chooser->setSizeIsRelative( relative ); }
 
   /**
    * @return Whether the font size is to be interpreted as relative size
    *         (default: false)
    */
-  QButton::ToggleState sizeIsRelative() const
+  QCheckBox::ToggleState sizeIsRelative() const
     { return chooser->sizeIsRelative(); }
 
   /**
@@ -431,7 +433,7 @@ public:
    */
   static int getFont( QFont &theFont, bool onlyFixed = false,
 		      QWidget *parent = 0L, bool makeFrame = true,
-                      QButton::ToggleState *sizeIsRelativeState = 0L );
+                      QCheckBox::ToggleState *sizeIsRelativeState = 0L );
 
   /**
    * Creates a modal font difference dialog, lets the user choose a selection
@@ -467,7 +469,7 @@ public:
    */
   static int getFontDiff( QFont &theFont, int &diffFlags, bool onlyFixed = false,
 		      QWidget *parent = 0L, bool makeFrame = true,
-                      QButton::ToggleState *sizeIsRelativeState = 0L );
+                      QCheckBox::ToggleState *sizeIsRelativeState = 0L );
 
   /**
    * When you are not only interested in the font selected, but also
@@ -491,7 +493,7 @@ public:
   static int getFontAndText( QFont &theFont, QString &theString,
 			     bool onlyFixed = false, QWidget *parent = 0L,
 			     bool makeFrame = true,
-                             QButton::ToggleState *sizeIsRelativeState = 0L );
+                             QCheckBox::ToggleState *sizeIsRelativeState = 0L );
 
 signals:
   /**

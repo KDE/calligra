@@ -32,6 +32,11 @@
 #include <kdebug.h>
 #include <kdeversion.h>
 #include <qapplication.h>
+//Added by qt3to4:
+#include <QPixmap>
+#include <Q3MemArray>
+#include <Q3PtrList>
+#include <Q3ValueList>
 #include <assert.h>
 
 //#define DEBUG_PAINTING
@@ -75,7 +80,7 @@ void KoTextDocument::init()
     fParag = 0;
     m_pageBreakEnabled = false;
     //minw = 0;
-    align = Qt::AlignAuto;
+    align = Qt::AlignLeft;
     nSelections = 2;
     addMargs = FALSE;
 
@@ -520,7 +525,7 @@ void KoTextDocument::selectAll( int id )
 	for ( int i = 0; i < (int)p->length(); ++i ) {
 	    if ( p->at( i )->isCustom() && p->at( i )->customItem()->isNested() ) {
 		KoTextTable *t = (KoTextTable*)p->at( i )->customItem();
-		QPtrList<KoTextTableCell> tableCells = t->tableCells();
+		Q3PtrList<KoTextTableCell> tableCells = t->tableCells();
 		for ( KoTextTableCell *c = tableCells.first(); c; c = tableCells.next() )
 		    c->richText()->selectAll( id );
 	    }
@@ -615,7 +620,7 @@ QString KoTextDocument::selectedText( int id, bool withCustom ) const
 		    if ( p->at( i )->customItem()->isNested() ) {
 			s += "\n";
 			KoTextTable *t = (KoTextTable*)p->at( i )->customItem();
-			QPtrList<KoTextTableCell> cells = t->tableCells();
+			Q3PtrList<KoTextTableCell> cells = t->tableCells();
 			for ( KoTextTableCell *c = cells.first(); c; c = cells.next() )
 			    s += c->richText()->plainText() + "\n";
 			s += "\n";
@@ -648,7 +653,7 @@ QString KoTextDocument::selectedText( int id, bool withCustom ) const
 		    if ( p->at( i )->customItem()->isNested() ) {
 			s += "\n";
 			KoTextTable *t = (KoTextTable*)p->at( i )->customItem();
-			QPtrList<KoTextTableCell> cells = t->tableCells();
+			Q3PtrList<KoTextTableCell> cells = t->tableCells();
 			for ( KoTextTableCell *c = cells.first(); c; c = cells.next() )
 			    s += c->richText()->plainText() + "\n";
 			s += "\n";
@@ -1297,7 +1302,7 @@ void KoTextDocument::drawParagWYSIWYG( QPainter *p, KoTextParag *parag, int cx, 
     // The test on mat is almost like isIdentity(), but allows for translation.
     //// ##### The way to fix this: initialize the pixmap to be fully transparent instead
     // of being white.
-    QWMatrix mat = p->worldMatrix();
+    QMatrix mat = p->worldMatrix();
     if ( ( mat.m11() != 1.0 || mat.m22() != 1.0 || mat.m12() != 0.0 || mat.m21() != 0.0 )
          && brush.style() != Qt::SolidPattern )
         useDoubleBuffer = FALSE;
@@ -1405,7 +1410,7 @@ void KoTextDocument::drawParagWYSIWYG( QPainter *p, KoTextParag *parag, int cx, 
 }
 
 
-KoTextDocCommand *KoTextDocument::deleteTextCommand( KoTextDocument *textdoc, int id, int index, const QMemArray<KoTextStringChar> & str, const CustomItemsMap & customItemsMap, const QValueList<KoParagLayout> & oldParagLayouts )
+KoTextDocCommand *KoTextDocument::deleteTextCommand( KoTextDocument *textdoc, int id, int index, const Q3MemArray<KoTextStringChar> & str, const CustomItemsMap & customItemsMap, const Q3ValueList<KoParagLayout> & oldParagLayouts )
 {
     return new KoTextDeleteCommand( textdoc, id, index, str, customItemsMap, oldParagLayouts );
 }

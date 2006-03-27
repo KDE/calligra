@@ -35,11 +35,15 @@
 #include <kmainwindow.h>
 
 #include <qfile.h>
-#include <qvbox.h>
+#include <q3vbox.h>
 #include <qspinbox.h>
 #include <qlayout.h>
 #include <qlabel.h>
 #include <qpushbutton.h>
+//Added by qt3to4:
+#include <Q3CString>
+#include <Q3Frame>
+#include <Q3VBoxLayout>
 
 /******************************************************************
  *
@@ -49,7 +53,7 @@
 
 KWMailMergeDataBase::KWMailMergeDataBase( KWDocument *doc_ )
     : QObject(doc_,doc_->dcopObject()->objId()+".MailMergeDataBase"),
-    KWordMailMergeDatabaseIface(QCString(doc_->dcopObject()->objId()+".MailMergeDataBase")),
+    KWordMailMergeDatabaseIface(Q3CString(doc_->dcopObject()->objId()+".MailMergeDataBase")),
       m_version(0),
       doc( doc_ )
 {
@@ -64,7 +68,7 @@ QStringList KWMailMergeDataBase::availablePlugins()
     for (KTrader::OfferList::Iterator it=pluginOffers.begin();*it;++it)
     {
         tmp.append((*it)->property("X-KDE-InternalName").toString());
-        kdDebug()<<"Found mail merge plugin: "<< (*it)->name()<<endl;
+        kDebug()<<"Found mail merge plugin: "<< (*it)->name()<<endl;
     }
     return tmp;
 }
@@ -78,7 +82,7 @@ bool KWMailMergeDataBase::loadPlugin(const QString &name,const QString &command)
 {
     if (rejectdcopcall)return false;
     QString constrain=QString("[X-KDE-InternalName] =='"+name+"'");
-    kdDebug()<<constrain<<endl;
+    kDebug()<<constrain<<endl;
     KTrader::OfferList pluginOffers=KTrader::self()->query(QString::fromLatin1("KWord/MailMergePlugin"),constrain);
     KService::Ptr it=pluginOffers.first();
 
@@ -90,7 +94,7 @@ bool KWMailMergeDataBase::loadPlugin(const QString &name,const QString &command)
         KWMailMergeDataSource *tmp=loadPlugin(it->library());
         if (!tmp)
         {
-            kdDebug()<<"Couldn't load plugin"<<endl;
+            kDebug()<<"Couldn't load plugin"<<endl;
             return false; //Plugin couldn't be loaded
         }
         //Plugin found and loaded
@@ -107,7 +111,7 @@ bool KWMailMergeDataBase::loadPlugin(const QString &name,const QString &command)
     }
     else
     {
-        kdDebug()<<"No plugin found"<<endl;
+        kDebug()<<"No plugin found"<<endl;
         return false; //No plugin with specified name found
     }
 }
@@ -117,19 +121,19 @@ KWMailMergeDataSource *KWMailMergeDataBase::openPluginFor(int type,int &version)
     version=0;
     KWMailMergeDataSource *ret=0;
     QString constrain=QString("'%1' in [X-KDE-Capabilities]").arg(((type==KWSLCreate)?KWSLCreate_text:KWSLOpen_text));
-    kdDebug()<<constrain<<endl;
+    kDebug()<<constrain<<endl;
     KTrader::OfferList pluginOffers=KTrader::self()->query(QString::fromLatin1("KWord/MailMergePlugin"),constrain);
 
     //Only for debugging
     for (KTrader::OfferList::Iterator it=pluginOffers.begin();*it;++it)
     {
-        kdDebug()<<"Found mail merge plugin: "<< (*it)->name()<<endl;
+        kDebug()<<"Found mail merge plugin: "<< (*it)->name()<<endl;
     }
 
     if (!pluginOffers.count())
     {
         //Sorry no suitable plugins found
-        kdDebug()<<"No plugins found"<<endl;
+        kDebug()<<"No plugins found"<<endl;
         KMessageBox::sorry(0,i18n("No plugins supporting the requested action were found."));
     }
     else
@@ -173,16 +177,16 @@ KWMailMergeDataSource *KWMailMergeDataBase::loadPlugin(const QString& name)
               KWMailMergeDataSource *tmpsource =func(KWFactory::instance(),this);
               if (tmpsource)
               {
-                  QDataStream tmpstream(tmpsource->info,IO_WriteOnly);
+                  QDataStream tmpstream(tmpsource->info,QIODevice::WriteOnly);
                   tmpstream<<name;
               }
               return tmpsource;
           }
       }
-      kdWarning() << "Couldn't load plugin " << name <<  endl;
+      kWarning() << "Couldn't load plugin " << name <<  endl;
   }
   else
-      kdWarning()<< "No plugin name specified" <<endl;
+      kWarning()<< "No plugin name specified" <<endl;
   return 0;
 }
 
@@ -267,7 +271,7 @@ bool KWMailMergeDataBase::askUserForConfirmationAndConfig(KWMailMergeDataSource 
             return false;
         }
     }
-    tmpPlugin->setObjId(QCString(objId()+".MailMergePlugin"));
+    tmpPlugin->setObjId(Q3CString(objId()+".MailMergePlugin"));
     return true;
 }
 
@@ -275,25 +279,25 @@ bool KWMailMergeDataBase::askUserForConfirmationAndConfig(KWMailMergeDataSource 
 
 QDomElement KWMailMergeDataBase::save(QDomDocument &doc) const
 {
-    kdDebug()<<"KWMailMergeDataBase::save()"<<endl;
+    kDebug()<<"KWMailMergeDataBase::save()"<<endl;
     QDomElement parentElem=doc.createElement("MAILMERGE");
     if (plugin)
     {
-        kdDebug()<<"KWMailMergeDataBase::save() There is really something to save"<<endl;
+        kDebug()<<"KWMailMergeDataBase::save() There is really something to save"<<endl;
         QDomElement el=doc.createElement(QString::fromLatin1("PLUGIN"));
 
-        QDataStream ds(plugin->info,IO_ReadOnly);
+        QDataStream ds(plugin->info,QIODevice::ReadOnly);
         QString libname;
         ds>>libname;
         el.setAttribute("library",libname);
         parentElem.appendChild(el);
-        kdDebug()<<"KWMailMergeDataBase::save() Calling datasource save()"<<endl;
+        kDebug()<<"KWMailMergeDataBase::save() Calling datasource save()"<<endl;
         QDomElement el2=doc.createElement(QString::fromLatin1("DATASOURCE"));
         plugin->save(doc,el2);
         parentElem.appendChild(el2);
 
     }
-    kdDebug()<<"KWMailMergeDataBase::save() leaving now"<<endl;
+    kDebug()<<"KWMailMergeDataBase::save() leaving now"<<endl;
     return parentElem;
     // if (plugin) plugin->save(parentElem); // Not completely sure, perhaps the database itself has to save something too (JoWenn)
 }
@@ -313,7 +317,7 @@ void KWMailMergeDataBase::load( const QDomElement& parentElem )
 
 
 int KWMailMergeDataBase::version() {
-    kdDebug()<<"KWMailMergeDataBase::version:"<<m_version<<endl;
+    kDebug()<<"KWMailMergeDataBase::version:"<<m_version<<endl;
     return m_version;
 }
 
@@ -329,7 +333,7 @@ KWMailMergeChoosePluginDialog::KWMailMergeChoosePluginDialog( KTrader::OfferList
       /*parent*/ 0, "", true ), pluginOffers( offers )
 {
   QWidget *back = plainPage();
-  QVBoxLayout *layout = new QVBoxLayout( back, 0, spacingHint() );
+  Q3VBoxLayout *layout = new Q3VBoxLayout( back, 0, spacingHint() );
 
   QLabel *label = new QLabel( i18n( "&Available sources:" ), back );
   chooser = new QComboBox( false, back );
@@ -337,8 +341,8 @@ KWMailMergeChoosePluginDialog::KWMailMergeChoosePluginDialog( KTrader::OfferList
   descriptionLabel = new QLabel( back );
   descriptionLabel->hide();
   descriptionLabel->setAlignment( WordBreak );
-  descriptionLabel->setFrameShape( QFrame::Box );
-  descriptionLabel->setFrameShadow( QFrame::Sunken );
+  descriptionLabel->setFrameShape( Q3Frame::Box );
+  descriptionLabel->setFrameShadow( Q3Frame::Sunken );
 
   QSize old_sizeHint;
   for ( KTrader::OfferList::Iterator it = pluginOffers.begin(); *it; ++it )
@@ -387,7 +391,7 @@ KWMailMergeConfigDialog::KWMailMergeConfigDialog(QWidget *parent,KWMailMergeData
 {
     db_=db;
     QWidget *back = plainPage();
-    QVBoxLayout *layout=new QVBoxLayout(back);
+    Q3VBoxLayout *layout=new Q3VBoxLayout(back);
 //    QVBox *back = new QVBox( page );
     layout->setSpacing( KDialog::spacingHint() );
 
@@ -398,7 +402,7 @@ KWMailMergeConfigDialog::KWMailMergeConfigDialog(QWidget *parent,KWMailMergeData
 //    l->setMaximumHeight( l->sizeHint().height() );
     layout->addWidget(l);
 
-    QHBox *row1=new QHBox(back);
+    Q3HBox *row1=new Q3HBox(back);
     layout->addWidget(row1);
     row1->setSpacing( KDialog::spacingHint() );
     edit=new QPushButton(i18n("Edit Current..."),row1);
@@ -411,7 +415,7 @@ KWMailMergeConfigDialog::KWMailMergeConfigDialog(QWidget *parent,KWMailMergeData
     l = new QLabel( i18n( "Merging:" ),back );
     layout->addWidget(l);
 //  l->setMaximumHeight( l->sizeHint().height() );
-    QHBox *row2=new QHBox(back);
+    Q3HBox *row2=new Q3HBox(back);
     layout->addWidget(row2);
     row2->setSpacing( KDialog::spacingHint() );
     preview=new QPushButton(i18n("Print Preview..."),row2);
@@ -487,10 +491,10 @@ void KWMailMergeConfigDialog::slotPreviewClicked()
     {
         KAction *ac=mw->actionCollection()->action(KStdAction::stdName(KStdAction::PrintPreview));
         if (ac) ac->activate();
-        else kdWarning()<<"Toplevel doesn't provide a print preview action"<<endl;
+        else kWarning()<<"Toplevel doesn't provide a print preview action"<<endl;
     }
     else
-        kdWarning()<<"Toplevel is no KMainWindow->no preview"<<endl;
+        kWarning()<<"Toplevel is no KMainWindow->no preview"<<endl;
 }
 
 void KWMailMergeConfigDialog::slotDocumentClicked()
@@ -516,12 +520,12 @@ KWMailMergeVariableInsertDia::KWMailMergeVariableInsertDia( QWidget *parent, KWM
   m_db=db;
   QWidget *page = plainPage();
 
-  QVBoxLayout *layout = new QVBoxLayout( page, marginHint(), spacingHint() );
+  Q3VBoxLayout *layout = new Q3VBoxLayout( page, marginHint(), spacingHint() );
   layout->setAutoAdd( true );
 
   QLabel *l = new QLabel( i18n( "Name:" ), page );
   l->setMaximumHeight( l->sizeHint().height() );
-  names = new QListBox( page );
+  names = new Q3ListBox( page );
 
   QMap< QString, QString >::ConstIterator it = db->getRecordEntries().begin();
   for ( ; it != db->getRecordEntries().end(); ++it )
@@ -530,7 +534,7 @@ KWMailMergeVariableInsertDia::KWMailMergeVariableInsertDia( QWidget *parent, KWM
   setInitialSize( QSize( 350, 400 ) );
   connect( names, SIGNAL( selectionChanged() ),
            this, SLOT( slotSelectionChanged() ) );
-  connect( names, SIGNAL( doubleClicked( QListBoxItem* ) ),
+  connect( names, SIGNAL( doubleClicked( Q3ListBoxItem* ) ),
            this, SLOT( slotOk() ) );
 
   setFocus();

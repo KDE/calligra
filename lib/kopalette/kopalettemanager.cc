@@ -16,9 +16,9 @@
  */
 
 #include <qapplication.h>
-#include <qdockarea.h>
-#include <qdockwindow.h>
-#include <qdict.h>
+#include <q3dockarea.h>
+#include <q3dockwindow.h>
+#include <q3dict.h>
 #include <qwidget.h>
 #include <qobject.h>
 #include <qevent.h>
@@ -50,9 +50,9 @@ KoPaletteManager::KoPaletteManager(KoView * view, KActionCollection *ac, const c
     m_view->installEventFilter(this);
     m_actionCollection = ac;
 
-    m_actions = new QDict<KToggleAction>();
-    m_widgets = new QDict<QWidget>();
-    m_palettes = new QDict<KoPalette>();
+    m_actions = new Q3Dict<KToggleAction>();
+    m_widgets = new Q3Dict<QWidget>();
+    m_palettes = new Q3Dict<KoPalette>();
     m_palettes->setAutoDelete(true);
     m_defaultMapping = new QMap<QString, QString>();
     m_currentMapping = new QMap<QString, QString>();
@@ -262,7 +262,7 @@ void KoPaletteManager::slotReset()
 
 void KoPaletteManager::slotResetFont()
 {
-    QDictIterator<KoPalette> it(*m_palettes);
+    Q3DictIterator<KoPalette> it(*m_palettes);
     for (; it.current(); ++it) {
         it.current()->resetFont();
     }
@@ -359,7 +359,7 @@ KoPalette * KoPaletteManager::createPalette(const QString & name, const QString 
     return palette;
 }
 
-void KoPaletteManager::placePalette(const QString & name, Qt::Dock location)
+void KoPaletteManager::placePalette(const QString & name, Qt::ToolBarDock location)
 {
     Q_ASSERT(!name.isNull());
     KoPalette * palette = m_palettes->find(name);
@@ -388,7 +388,7 @@ void KoPaletteManager::placePalette(const QString & name, Qt::Dock location)
             location = Qt::DockRight;
         }
         else {
-            location = DockTornOff;
+            location = Qt::DockTornOff;
         }
     }
 
@@ -428,7 +428,7 @@ void KoPaletteManager::placePalette(const QString & name, Qt::Dock location)
     m_view->mainWindow()->lineUpDockWindows();
 }
 
-void KoPaletteManager::addPalette(KoPalette * palette, const QString & name, Qt::Dock location)
+void KoPaletteManager::addPalette(KoPalette * palette, const QString & name, Qt::ToolBarDock location)
 {
     Q_ASSERT(palette);
     Q_ASSERT(!name.isNull());
@@ -470,7 +470,7 @@ void KoPaletteManager::slotToggleAllPalettes()
     {
         // Save hidden state and hide all palettes
         m_hiddenWidgets.clear();
-        QDictIterator<QWidget> it(*m_widgets);
+        Q3DictIterator<QWidget> it(*m_widgets);
         for (; it.current(); ++it)
         {
             KToggleAction * a = m_actions->find(it.currentKey());
@@ -489,7 +489,7 @@ void KoPaletteManager::slotToggleAllPalettes()
 
 void KoPaletteManager::showAllPalettes(bool shown)
 {
-    QDictIterator<KoPalette> it(*m_palettes);
+    Q3DictIterator<KoPalette> it(*m_palettes);
     for (; it.current(); ++it) {
         it.current()->makeVisible(shown);
     }
@@ -536,7 +536,7 @@ void KoPaletteManager::save()
     QString widgets;
 
     // Save the list of palettes
-    QDictIterator<KoPalette> itP(*m_palettes);
+    Q3DictIterator<KoPalette> itP(*m_palettes);
 
     QStringList paletteList;
 
@@ -589,7 +589,7 @@ void KoPaletteManager::save()
     bool palettesShown = m_hiddenWidgets.isEmpty();
     cfg->writeEntry("palettesshown", palettesShown);
 
-    QDictIterator<QWidget> itW(*m_widgets);
+    Q3DictIterator<QWidget> itW(*m_widgets);
     for (; itW.current(); ++itW) {
         cfg->setGroup("palettetab-" + itW.currentKey());
         QString pname = *m_currentMapping->find(itW.currentKey());

@@ -22,6 +22,8 @@
 
 #include <qmap.h>
 #include <qstring.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 #include "api/list.h"
 
@@ -64,7 +66,7 @@ VALUE RubyExtension::method_missing(int argc, VALUE *argv, VALUE self)
 VALUE RubyExtension::call_method( Kross::Api::Object::Ptr object, int argc, VALUE *argv)
 {
     QString funcname = rb_id2name(SYM2ID(argv[0]));
-    QValueList<Api::Object::Ptr> argsList;
+    Q3ValueList<Api::Object::Ptr> argsList;
 #ifdef KROSS_RUBY_EXTENSION_DEBUG
     kdDebug() << "Building arguments list for function : " << funcname << " there are " << (argc-1) << " arguments." << endl;
 #endif
@@ -209,7 +211,7 @@ Kross::Api::Object::Ptr RubyExtension::toObject(VALUE value)
             return new Kross::Api::Variant(QString(STR2CSTR(value)));
         case T_ARRAY:
         {
-            QValueList<Kross::Api::Object::Ptr> l;
+            Q3ValueList<Kross::Api::Object::Ptr> l;
             for(int i = 0; i < RARRAY(value)->len; i++)
             {
                 Kross::Api::Object::Ptr o = toObject( rb_ary_entry( value , i ) );
@@ -218,7 +220,7 @@ Kross::Api::Object::Ptr RubyExtension::toObject(VALUE value)
             return new Kross::Api::List(l);
         }
         case T_FIXNUM:
-            return new Kross::Api::Variant((Q_LLONG)FIX2INT(value));
+            return new Kross::Api::Variant((qlonglong)FIX2INT(value));
         case T_HASH:
         {
             QMap<QString, Kross::Api::Object::Ptr> map;
@@ -228,7 +230,7 @@ Kross::Api::Object::Ptr RubyExtension::toObject(VALUE value)
         }
         case T_BIGNUM:
         {
-            return new Kross::Api::Variant((Q_LLONG)NUM2LONG(value));
+            return new Kross::Api::Variant((qlonglong)NUM2LONG(value));
         }
         case T_TRUE:
         {
@@ -280,10 +282,10 @@ VALUE RubyExtension::toVALUE(QMap<QString, QVariant> map)
 
 }
 
-VALUE RubyExtension::toVALUE(QValueList<QVariant> list)
+VALUE RubyExtension::toVALUE(Q3ValueList<QVariant> list)
 {
     VALUE l = rb_ary_new();
-    for(QValueList<QVariant>::Iterator it = list.begin(); it != list.end(); ++it)
+    for(Q3ValueList<QVariant>::Iterator it = list.begin(); it != list.end(); ++it)
         rb_ary_push(l, toVALUE(*it));
     return l;
 }

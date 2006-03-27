@@ -25,7 +25,7 @@
 
 class QPushButton;
 class QComboBox;
-class QListBox;
+class Q3ListBox;
 class QLineEdit;
 
 class KWEditPersonnalExpression : public KDialogBase
@@ -56,8 +56,8 @@ protected slots:
  private:
     typedef QMap<QString,QStringList> list;
     list listExpression;
-    QListBox *m_groupList;
-    QListBox *m_ExpressionsList;
+    Q3ListBox *m_groupList;
+    Q3ListBox *m_ExpressionsList;
     QPushButton *m_addGroup;
     QPushButton *m_delGroup;
     QPushButton *m_addExpression;

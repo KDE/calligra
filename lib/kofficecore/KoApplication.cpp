@@ -21,6 +21,8 @@
 #include <config.h>
 #include <qfile.h>
 #include <qregexp.h>
+//Added by qt3to4:
+#include <Q3CString>
 #include <dcopclient.h>
 #include <KoApplicationIface.h>
 #include <KoQueryTrader.h>
@@ -106,7 +108,7 @@ bool KoApplication::start()
     int argsCount = args->count();
 
     KCmdLineArgs *koargs = KCmdLineArgs::parsedArgs("koffice");
-    QCString dpiValues = koargs->getOption( "dpi" );
+    Q3CString dpiValues = koargs->getOption( "dpi" );
     if ( !dpiValues.isEmpty() ) {
         int sep = dpiValues.find( QRegExp( "[x, ]" ) );
         int dpiX;
@@ -189,12 +191,12 @@ bool KoApplication::start()
 		  }
 
                   if ( !paths.isEmpty() ) {
-		     KURL templateBase;
+		     KUrl templateBase;
 		     templateBase.setPath(paths[0]);
 		     KDesktopFile templateInfo(paths[0]);
 
 		     QString templateName = templateInfo.readURL();
-		     KURL templateURL;
+		     KUrl templateURL;
 		     templateURL.setPath( templateBase.directory() + "/" + templateName );
 		     if ( shell->openDocument(doc, templateURL )) {
 		       doc->resetURL();

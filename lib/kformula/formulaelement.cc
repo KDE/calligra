@@ -20,6 +20,8 @@
 
 #include <iostream>
 #include <qpainter.h>
+//Added by qt3to4:
+#include <QKeyEvent>
 
 #include <kdebug.h>
 

@@ -23,7 +23,10 @@
 
 #include <qpainter.h>
 #include <qpaintdevice.h>
-#include <qvaluestack.h>
+#include <q3valuestack.h>
+//Added by qt3to4:
+#include <QKeyEvent>
+#include <Q3PtrList>
 
 #include <kcommand.h>
 #include <kdebug.h>
@@ -179,7 +182,7 @@ void SequenceElement::calcSizes(const ContextStyle& style,
         luPixel fromBaseline = 0;
 
         // Let's do all normal elements that have a base line.
-        QPtrListIterator<BasicElement> it( children );
+        Q3PtrListIterator<BasicElement> it( children );
         for ( ; it.current(); ++it ) {
             BasicElement* child = it.current();
 
@@ -232,7 +235,7 @@ void SequenceElement::calcSizes(const ContextStyle& style,
 
 void SequenceElement::setChildrenPositions()
 {
-    QPtrListIterator<BasicElement> it( children );
+    Q3PtrListIterator<BasicElement> it( children );
     for ( ; it.current(); ++it ) {
         BasicElement* child = it.current();
         child->setY(getBaseline() - child->getBaseline());
@@ -258,7 +261,7 @@ void SequenceElement::draw( QPainter& painter, const LuPixelRect& r,
     //    return;
 
     if (!isEmpty()) {
-        QPtrListIterator<BasicElement> it( children );
+        Q3PtrListIterator<BasicElement> it( children );
         for ( ; it.current(); ) {
             BasicElement* child = it.current();
             if (!child->isInvisible()) {
@@ -300,7 +303,7 @@ void SequenceElement::draw( QPainter& painter, const LuPixelRect& r,
 
 void SequenceElement::dispatchFontCommand( FontCommand* cmd )
 {
-    QPtrListIterator<BasicElement> it( children );
+    Q3PtrListIterator<BasicElement> it( children );
     for ( ; it.current(); ++it ) {
         BasicElement* child = it.current();
         child->dispatchFontCommand( cmd );
@@ -704,8 +707,8 @@ void SequenceElement::goInside(FormulaCursor* cursor)
  * The list will be emptied but stays the property of the caller.
  */
 void SequenceElement::insert(FormulaCursor* cursor,
-                             QPtrList<BasicElement>& newChildren,
-                             Direction direction)
+                             Q3PtrList<BasicElement>& newChildren,
+                             Qt::Orientation direction)
 {
     int pos = cursor->getPos();
     uint count = newChildren.count();
@@ -733,8 +736,8 @@ void SequenceElement::insert(FormulaCursor* cursor,
  * The ownership of the list is passed to the caller.
  */
 void SequenceElement::remove(FormulaCursor* cursor,
-                             QPtrList<BasicElement>& removedChildren,
-                             Direction direction)
+                             Q3PtrList<BasicElement>& removedChildren,
+                             Qt::Orientation direction)
 {
     if (cursor->isSelection()) {
         int from = cursor->getSelectionStart();
@@ -790,7 +793,7 @@ void SequenceElement::remove(FormulaCursor* cursor,
 /**
  * Removes the children at pos and appends it to the list.
  */
-void SequenceElement::removeChild(QPtrList<BasicElement>& removedChildren, int pos)
+void SequenceElement::removeChild(Q3PtrList<BasicElement>& removedChildren, int pos)
 {
     BasicElement* child = children.at(pos);
     formula()->elementRemoval(child);
@@ -805,7 +808,7 @@ void SequenceElement::removeChild(QPtrList<BasicElement>& removedChildren, int p
  * Moves the cursor to a normal place where new elements
  * might be inserted.
  */
-void SequenceElement::normalize(FormulaCursor* cursor, Direction)
+void SequenceElement::normalize(FormulaCursor* cursor, Qt::Orientation)
 {
     cursor->setSelection(false);
 }
@@ -815,7 +818,7 @@ void SequenceElement::normalize(FormulaCursor* cursor, Direction)
  * Returns the child at the cursor.
  * Does not care about the selection.
  */
-BasicElement* SequenceElement::getChild( FormulaCursor* cursor, Direction direction )
+BasicElement* SequenceElement::getChild( FormulaCursor* cursor, Qt::Orientation direction )
 {
     if ( direction == beforeCursor ) {
         if ( cursor->getPos() > 0 ) {
@@ -875,7 +878,7 @@ bool SequenceElement::onlyTextSelected( FormulaCursor* cursor )
         uint to = QMAX( cursor->getPos(), cursor->getMark() );
         for ( uint i = from; i < to; i++ ) {
             BasicElement* element = getChild( i );
-            if ( element->getCharacter() == QChar::null ) {
+            if ( element->getCharacter() == QChar::Null ) {
                 return false;
             }
         }
@@ -1163,7 +1166,7 @@ KCommand* SequenceElement::input( Container* container, QKeyEvent* event )
         MoveFlag flag = movementFlag(state);
 
 	switch ( action ) {
-        case Qt::Key_BackSpace: {
+        case Qt::Key_Backspace: {
             DirectedRemove r( req_remove, beforeCursor );
             return buildCommand( container, &r );
         }
@@ -1208,7 +1211,7 @@ KCommand* SequenceElement::input( Container* container, QKeyEvent* event )
             break;
         }
         default:
-            if ( state & Qt::ControlButton ) {
+            if ( state & Qt::ControlModifier ) {
                 switch ( event->key() ) {
                 case Qt::Key_AsciiCircum: {
                     IndexRequest r( upperLeftPos );
@@ -1324,7 +1327,7 @@ void SequenceElement::getChildrenDom( QDomDocument& doc, QDomElement elem,
  * puts them into the list.
  * Returns false if an error occures.
  */
-bool SequenceElement::buildChildrenFromDom(QPtrList<BasicElement>& list, QDomNode n)
+bool SequenceElement::buildChildrenFromDom(Q3PtrList<BasicElement>& list, QDomNode n)
 {
     while (!n.isNull()) {
         if (n.isElement()) {
@@ -1477,7 +1480,7 @@ void SequenceElement::writeMathML( QDomDocument& doc, QDomNode parent, bool oasi
     BasicElement* last = children.last();
     if ( last != 0 ) {
         // Create a list (right order!)
-        QPtrList<ElementType> tokenList;
+        Q3PtrList<ElementType> tokenList;
         ElementType* token = last->getElementType();
         while ( token != 0 ) {
             // Add to the list.
@@ -1500,7 +1503,7 @@ void SequenceElement::writeMathML( QDomDocument& doc, QDomNode parent, bool oasi
 
 int SequenceElement::childPos( const BasicElement* child ) const
 {
-    QPtrListIterator<BasicElement> it( children );
+    Q3PtrListIterator<BasicElement> it( children );
     uint count = it.count();
     for ( uint i=0; i<count; ++i, ++it ) {
         if ( it.current() == child ) {

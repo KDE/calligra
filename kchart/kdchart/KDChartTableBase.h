@@ -30,7 +30,7 @@
 #define __KDCHARTTABLEINTERFACE_H__
 
 
-class QTable;
+class Q3Table;
 
 #include <qvariant.h>
 #include <qobject.h>
@@ -434,7 +434,7 @@ const double xVal = data.cellVal( r, c, 2 ).toDouble(); \endverbatim
         return isNormalDouble( dVal );
     }
 
-    virtual void importFromQTable( QTable* table );
+    virtual void importFromQTable( Q3Table* table );
 
     virtual double maxValue( int coordinate=1 ) const;
     virtual double minValue( int coordinate=1, bool bOnlyGTZero=false ) const;

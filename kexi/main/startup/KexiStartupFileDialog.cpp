@@ -129,7 +129,7 @@ void KexiStartupFileDialog::updateFilters()
 	m_filtersUpdated = true;
 
 	m_lastFileName = QString::null;
-//	m_lastUrl = KURL();
+//	m_lastUrl = KUrl();
 
 	clearFilter();
 	
@@ -227,7 +227,7 @@ void KexiStartupFileDialog::show()
 	KexiStartupFileDialogBase::show();
 }
 
-//KURL KexiStartupFileDialog::currentURL()
+//KUrl KexiStartupFileDialog::currentURL()
 QString KexiStartupFileDialog::currentFileName()
 {
 	setResult( QDialog::Accepted ); // selectedURL tests for it
@@ -285,7 +285,7 @@ QString KexiStartupFileDialog::currentFileName()
 //bool KexiStartupFileDialog::checkURL()
 bool KexiStartupFileDialog::checkFileName()
 {
-//	KURL url = currentURL();
+//	KUrl url = currentURL();
 //	QString path = url.path().stripWhiteSpace();
 	QString path = currentFileName().stripWhiteSpace();
 	
@@ -337,7 +337,7 @@ void KexiStartupFileDialog::accept()
 //	kdDebug() << "KexiStartupFileDialog::accept() m_lastUrl == " << m_lastUrl.path() << endl;
 //	if (m_lastUrl.path()==currentURL().path()) {//(js) to prevent more multiple kjob signals (i dont know why this is)
 	if (m_lastFileName==currentFileName()) {//(js) to prevent more multiple kjob signals (i dont know why this is)
-//		m_lastUrl=KURL();
+//		m_lastUrl=KUrl();
 		m_lastFileName=QString::null;
 		kdDebug() << "m_lastFileName==currentFileName()" << endl;
 #ifdef Q_WS_WIN
@@ -351,7 +351,7 @@ void KexiStartupFileDialog::accept()
 		emit accepted();
 	}
 //	else {
-//		m_lastUrl = KURL();
+//		m_lastUrl = KUrl();
 //	}
 //	m_lastUrl = currentURL();
 	m_lastFileName = currentFileName();

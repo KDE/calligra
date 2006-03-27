@@ -60,22 +60,30 @@
 #include <qtimer.h>
 #include <qxml.h>
 #include <qlayout.h>
+//Added by qt3to4:
+#include <Q3CString>
+#include <QPixmap>
+#include <QChildEvent>
+#include <Q3PtrList>
+#include <QEvent>
+#include <Q3ValueList>
+#include <QResizeEvent>
 
 #include <config.h>
 #include <assert.h>
 
 
 // Define the protocol used here for embedded documents' URL
-// This used to "store" but KURL didn't like it,
+// This used to "store" but KUrl didn't like it,
 // so let's simply make it "tar" !
 #define STORE_PROTOCOL "tar"
-// The internal path is a hack to make KURL happy and still pass
+// The internal path is a hack to make KUrl happy and still pass
 // some kind of relative path to KoDocumentChild
 #define INTERNAL_PROTOCOL "intern"
 #define INTERNAL_PREFIX "intern:/"
 // Warning, keep it sync in koStore.cc and koDocumentChild.cc
 
-QPtrList<KoDocument> *KoDocument::s_documentList=0L;
+Q3PtrList<KoDocument> *KoDocument::s_documentList=0L;
 
 using namespace std;
 class KoViewWrapperWidget;
@@ -118,10 +126,10 @@ public:
         }
     }
 
-    QPtrList<KoView> m_views;
-    QPtrList<KoDocumentChild> m_children;
-    QPtrList<KoMainWindow> m_shells;
-    QValueList<QDomDocument> m_viewBuildDocuments;
+    Q3PtrList<KoView> m_views;
+    Q3PtrList<KoDocumentChild> m_children;
+    Q3PtrList<KoMainWindow> m_shells;
+    Q3ValueList<QDomDocument> m_viewBuildDocuments;
 
     KoViewWrapperWidget *m_wrapperWidget;
     KoDocumentIface * m_dcopObject;
@@ -131,8 +139,8 @@ public:
 
     KoFilterManager * filterManager; // The filter-manager to use when loading/saving [for the options]
 
-    QCString mimeType; // The actual mimetype of the document
-    QCString outputMimeType; // The mimetype to use when saving
+    Q3CString mimeType; // The actual mimetype of the document
+    Q3CString outputMimeType; // The mimetype to use when saving
     bool m_confirmNonNativeSave [2]; // used to pop up a dialog when saving for the
                                      // first time if the file is in a foreign format
                                      // (Save/Save As, Export)
@@ -187,7 +195,7 @@ public:
 
     virtual void childEvent( QChildEvent *ev )
     {
-        if ( ev->type() == QEvent::ChildInserted )
+        if ( ev->type() == QEvent::ChildAdded )
             resizeEvent( 0L );
     }
 
@@ -224,7 +232,7 @@ KoDocument::KoDocument( QWidget * parentWidget, const char *widgetName, QObject*
     : KParts::ReadWritePart( parent, name )
 {
     if(s_documentList==0L)
-        s_documentList=new QPtrList<KoDocument>;
+        s_documentList=new Q3PtrList<KoDocument>;
     s_documentList->append(this);
 
     d = new Private;
@@ -269,14 +277,14 @@ KoDocument::~KoDocument()
 {
     d->m_autoSaveTimer.stop();
 
-    QPtrListIterator<KoDocumentChild> childIt( d->m_children );
+    Q3PtrListIterator<KoDocumentChild> childIt( d->m_children );
     for (; childIt.current(); ++childIt )
         disconnect( childIt.current(), SIGNAL( destroyed() ),
                     this, SLOT( slotChildDestroyed() ) );
 
     // Tell our views that the document is already destroyed and
     // that they shouldn't try to access it.
-    QPtrListIterator<KoView> vIt( d->m_views );
+    Q3PtrListIterator<KoView> vIt( d->m_views );
     for (; vIt.current(); ++vIt )
         vIt.current()->setDocumentDeleted();
 
@@ -317,7 +325,7 @@ KoView *KoDocument::createView( QWidget *parent, const char *name )
     return view;
 }
 
-bool KoDocument::exp0rt( const KURL & _url )
+bool KoDocument::exp0rt( const KUrl & _url )
 {
     bool ret;
 
@@ -331,11 +339,11 @@ bool KoDocument::exp0rt( const KURL & _url )
     // reimplementing saveFile() (Note: import() and export() will remain
     // non-virtual).
     //
-    KURL oldURL = m_url;
+    KUrl oldURL = m_url;
     QString oldFile = m_file;
 
     bool wasModified = isModified ();
-    QCString oldMimeType = mimeType ();
+    Q3CString oldMimeType = mimeType ();
 
 
     // save...
@@ -375,12 +383,12 @@ bool KoDocument::saveFile()
     const bool wasModified = isModified ();
 
     // The output format is set by koMainWindow, and by openFile
-    QCString outputMimeType = d->outputMimeType;
+    Q3CString outputMimeType = d->outputMimeType;
     //Q_ASSERT( !outputMimeType.isEmpty() ); // happens when using the DCOP method saveAs
     if ( outputMimeType.isEmpty() )
         outputMimeType = d->outputMimeType = nativeFormatMimeType();
 
-    QApplication::setOverrideCursor( waitCursor );
+    QApplication::setOverrideCursor( Qt::waitCursor );
 
     if ( backupFile() ) {
         if ( url().isLocalFile() )
@@ -389,7 +397,7 @@ bool KoDocument::saveFile()
             KIO::UDSEntry entry;
             if ( KIO::NetAccess::stat( url(), entry, shells().current() ) ) { // this file exists => backup
                 emit sigStatusBarMessage( i18n("Making backup...") );
-                KURL backup;
+                KUrl backup;
                 if ( d->m_backupPath.isEmpty())
                     backup = url();
                 else
@@ -461,23 +469,23 @@ bool KoDocument::saveFile()
     return ret;
 }
 
-QCString KoDocument::mimeType() const
+Q3CString KoDocument::mimeType() const
 {
     return d->mimeType;
 }
 
-void KoDocument::setMimeType( const QCString & mimeType )
+void KoDocument::setMimeType( const Q3CString & mimeType )
 {
     d->mimeType = mimeType;
 }
 
-void KoDocument::setOutputMimeType( const QCString & mimeType, int specialOutputFlag )
+void KoDocument::setOutputMimeType( const Q3CString & mimeType, int specialOutputFlag )
 {
     d->outputMimeType = mimeType;
     d->m_specialOutputFlag = specialOutputFlag;
 }
 
-QCString KoDocument::outputMimeType() const
+Q3CString KoDocument::outputMimeType() const
 {
     return d->outputMimeType;
 }
@@ -584,7 +592,7 @@ void KoDocument::setManager( KParts::PartManager *manager )
 
     if ( manager )
     {
-        QPtrListIterator<KoDocumentChild> it( d->m_children );
+        Q3PtrListIterator<KoDocumentChild> it( d->m_children );
         for (; it.current(); ++it )
             if ( it.current()->document() )
                 manager->addPart( it.current()->document(), false );
@@ -595,11 +603,11 @@ void KoDocument::setReadWrite( bool readwrite )
 {
     KParts::ReadWritePart::setReadWrite( readwrite );
 
-    QPtrListIterator<KoView> vIt( d->m_views );
+    Q3PtrListIterator<KoView> vIt( d->m_views );
     for (; vIt.current(); ++vIt )
         vIt.current()->updateReadWrite( readwrite );
 
-    QPtrListIterator<KoDocumentChild> dIt( d->m_children );
+    Q3PtrListIterator<KoDocumentChild> dIt( d->m_children );
     for (; dIt.current(); ++dIt )
         if ( dIt.current()->document() )
             dIt.current()->document()->setReadWrite( readwrite );
@@ -630,7 +638,7 @@ void KoDocument::removeView( KoView *view )
     d->m_views.removeRef( view );
 }
 
-const QPtrList<KoView>& KoDocument::views() const
+const Q3PtrList<KoView>& KoDocument::views() const
 {
     return d->m_views;
 }
@@ -677,14 +685,14 @@ void KoDocument::slotChildDestroyed()
     d->m_children.removeRef( child );
 }
 
-const QPtrList<KoDocumentChild>& KoDocument::children() const
+const Q3PtrList<KoDocumentChild>& KoDocument::children() const
 {
     return d->m_children;
 }
 
 KParts::Part *KoDocument::hitTest( QWidget *widget, const QPoint &globalPos )
 {
-    QPtrListIterator<KoView> it( d->m_views );
+    Q3PtrListIterator<KoView> it( d->m_views );
     for (; it.current(); ++it )
         if ( static_cast<QWidget *>(it.current()) == widget )
         {
@@ -700,10 +708,10 @@ KParts::Part *KoDocument::hitTest( QWidget *widget, const QPoint &globalPos )
     return 0L;
 }
 
-KoDocument* KoDocument::hitTest( const QPoint &pos, const QWMatrix &matrix )
+KoDocument* KoDocument::hitTest( const QPoint &pos, const QMatrix &matrix )
 {
     // Call KoDocumentChild::hitTest for any child document
-    QPtrListIterator<KoDocumentChild> it( d->m_children );
+    Q3PtrListIterator<KoDocumentChild> it( d->m_children );
     for (; it.current(); ++it )
     {
         KoDocument *doc = it.current()->hitTest( pos, matrix );
@@ -717,7 +725,7 @@ KoDocument* KoDocument::hitTest( const QPoint &pos, const QWMatrix &matrix )
 
 KoDocumentChild *KoDocument::child( KoDocument *doc )
 {
-    QPtrListIterator<KoDocumentChild> it( d->m_children );
+    Q3PtrListIterator<KoDocumentChild> it( d->m_children );
     for (; it.current(); ++it )
         if ( it.current()->document() == doc )
             return it.current();
@@ -771,7 +779,7 @@ void KoDocument::paintEverything( QPainter &painter, const QRect &rect, bool tra
 
 void KoDocument::paintChildren( QPainter &painter, const QRect &/*rect*/, KoView *view, double zoomX, double zoomY )
 {
-    QPtrListIterator<KoDocumentChild> it( d->m_children );
+    Q3PtrListIterator<KoDocumentChild> it( d->m_children );
     for (; it.current(); ++it )
     {
         // #### todo: paint only if child is visible inside rect
@@ -808,24 +816,24 @@ void KoDocument::paintChild( KoDocumentChild *child, QPainter &painter, KoView *
             // painter.setClipRegion( rgn );
             painter.setClipping( FALSE );
 
-            painter.setPen( black );
-            painter.fillRect( -5, -5, w + 10, 5, white );
-            painter.fillRect( -5, h, w + 10, 5, white );
-            painter.fillRect( -5, -5, 5, h + 10, white );
-            painter.fillRect( w, -5, 5, h + 10, white );
-            painter.fillRect( -5, -5, w + 10, 5, BDiagPattern );
-            painter.fillRect( -5, h, w + 10, 5, BDiagPattern );
-            painter.fillRect( -5, -5, 5, h + 10, BDiagPattern );
-            painter.fillRect( w, -5, 5, h + 10, BDiagPattern );
+            painter.setPen( Qt::black );
+            painter.fillRect( -5, -5, w + 10, 5, Qt::white );
+            painter.fillRect( -5, h, w + 10, 5, Qt::white );
+            painter.fillRect( -5, -5, 5, h + 10, Qt::white );
+            painter.fillRect( w, -5, 5, h + 10, Qt::white );
+            painter.fillRect( -5, -5, w + 10, 5, Qt::BDiagPattern );
+            painter.fillRect( -5, h, w + 10, 5, Qt::BDiagPattern );
+            painter.fillRect( -5, -5, 5, h + 10, Qt::BDiagPattern );
+            painter.fillRect( w, -5, 5, h + 10, Qt::BDiagPattern );
 
             if ( manager->selectedPart() == (KParts::Part *)child->document() &&
                  manager->selectedWidget() == (QWidget *)view )
             {
                 QColor color;
                 if ( view->koDocument() == this )
-                    color = black;
+                    color = Qt::black;
                 else
-                    color = gray;
+                    color = Qt::gray;
                 painter.fillRect( -5, -5, 5, 5, color );
                 painter.fillRect( -5, h, 5, 5, color );
                 painter.fillRect( w, h, 5, 5, color );
@@ -849,7 +857,7 @@ bool KoDocument::isModified() const
         return true;
     }
     // Then go through internally stored children (considered to be part of this doc)
-    QPtrListIterator<KoDocumentChild> it = children();
+    Q3PtrListIterator<KoDocumentChild> it = children();
     for (; it.current(); ++it )
     {
         KoDocument *doc = it.current()->document();
@@ -863,7 +871,7 @@ bool KoDocument::saveChildren( KoStore* _store )
 {
     //kdDebug(30003)<<k_funcinfo<<" checking children of doc='"<<url().url()<<"'"<<endl;
     int i = 0;
-    QPtrListIterator<KoDocumentChild> it( children() );
+    Q3PtrListIterator<KoDocumentChild> it( children() );
     for( ; it.current(); ++it ) {
         KoDocument* childDoc = it.current()->document();
         if (childDoc && !it.current()->isDeleted())
@@ -886,7 +894,7 @@ bool KoDocument::saveChildren( KoStore* _store )
 bool KoDocument::saveChildrenOasis( KoStore* store, KoXmlWriter* manifestWriter )
 {
     //kdDebug(30003)<<k_funcinfo<<" checking children of doc='"<<url().url()<<"'"<<endl;
-    QPtrListIterator<KoDocumentChild> it( children() );
+    Q3PtrListIterator<KoDocumentChild> it( children() );
     for( ; it.current(); ++it ) {
         KoDocument* childDoc = it.current()->document();
         if ( childDoc && !it.current()->isDeleted() )
@@ -912,7 +920,7 @@ bool KoDocument::saveExternalChildren()
     //kdDebug(30003)<<k_funcinfo<<" checking children of doc='"<<url().url()<<"'"<<endl;
     KoDocument *doc;
     KoDocumentChild *ch;
-    QPtrListIterator<KoDocumentChild> it = children();
+    Q3PtrListIterator<KoDocumentChild> it = children();
     for (; (ch = it.current()); ++it )
     {
         if ( !ch->isDeleted() )
@@ -958,7 +966,7 @@ bool KoDocument::saveNativeFormat( const QString & file )
     {
         kdDebug(30003) << "Saving as a flat XML file." << endl;
         QFile f( file );
-        if ( f.open( IO_WriteOnly | IO_Translate ) )
+        if ( f.open( QIODevice::WriteOnly | QIODevice::Translate ) )
         {
             bool success = saveToStream( &f );
             f.close();
@@ -971,8 +979,8 @@ bool KoDocument::saveNativeFormat( const QString & file )
     kdDebug(30003) << "KoDocument::saveNativeFormat nativeFormatMimeType=" << nativeFormatMimeType() << endl;
     // OLD: bool oasis = d->m_specialOutputFlag == SaveAsOASIS;
     // OLD: QCString mimeType = oasis ? nativeOasisMimeType() : nativeFormatMimeType();
-    QCString mimeType = d->outputMimeType;
-    QCString nativeOasisMime = nativeOasisMimeType();
+    Q3CString mimeType = d->outputMimeType;
+    Q3CString nativeOasisMime = nativeOasisMimeType();
     bool oasis = !mimeType.isEmpty() && ( mimeType == nativeOasisMime || mimeType == nativeOasisMime + "-template" );
     // TODO: use std::auto_ptr or create store on stack [needs API fixing],
     // to remove all the 'delete store' in all the branches
@@ -1081,7 +1089,7 @@ bool KoDocument::saveNativeFormat( const QString & file )
             QDomDocument doc = d->m_docInfo->save();
             KoStoreDevice dev( store );
 
-            QCString s = doc.toCString(); // this is already Utf8!
+            Q3CString s = doc.toCString(); // this is already Utf8!
             (void)dev.writeBlock( s.data(), s.size()-1 );
             (void)store->close();
         }
@@ -1112,7 +1120,7 @@ bool KoDocument::saveToStream( QIODevice * dev )
 {
     QDomDocument doc = saveXML();
     // Save to buffer
-    QCString s = doc.toCString(); // utf8 already
+    Q3CString s = doc.toCString(); // utf8 already
     // We use QCString::size()-1 here, not the official QCString::length
     // It works here, as we are not modifying QCString as QByteArray
     int nwritten = dev->writeBlock( s.data(), s.size()-1 );
@@ -1128,9 +1136,9 @@ bool KoDocument::saveToStore( KoStore* _store, const QString & _path )
 
     // Use the path as the internal url
     if ( _path.startsWith( STORE_PROTOCOL ) )
-        m_url = KURL( _path );
+        m_url = KUrl( _path );
     else // ugly hack to pass a relative URI
-        m_url = KURL( INTERNAL_PREFIX +  _path );
+        m_url = KUrl( INTERNAL_PREFIX +  _path );
 
     // To make the children happy cd to the correct directory
     _store->pushDirectory();
@@ -1174,7 +1182,7 @@ bool KoDocument::saveOasisPreview( KoStore* store, KoXmlWriter* manifestWriter )
     }
     // ### TODO: freedesktop.org Thumbnail specification (date...)
     KoStoreDevice io ( store );
-    if ( !io.open( IO_WriteOnly ) )
+    if ( !io.open( QIODevice::WriteOnly ) )
         return false;
     if ( ! preview.save( &io, "PNG", 0 ) )
         return false;
@@ -1190,7 +1198,7 @@ bool KoDocument::savePreview( KoStore* store )
     // Reducing to 8bpp reduces file sizes quite a lot.
     const QImage preview ( pix.convertToImage().convertDepth( 8, Qt::AvoidDither | Qt::DiffuseDither) );
     KoStoreDevice io ( store );
-    if ( !io.open( IO_WriteOnly ) )
+    if ( !io.open( QIODevice::WriteOnly ) )
         return false;
     if ( ! preview.save( &io, "PNG" ) ) // ### TODO What is -9 in quality terms?
         return false;
@@ -1260,7 +1268,7 @@ QString KoDocument::autoSaveFile( const QString & path ) const
     }
     else
     {
-        KURL url( path );
+        KUrl url( path );
         Q_ASSERT( url.isLocalFile() );
         QString dir = url.directory(false);
         QString filename = url.fileName();
@@ -1281,7 +1289,7 @@ bool KoDocument::checkAutoSaveFile()
             .arg(asf, dateStr) );
         switch(res) {
         case KMessageBox::Yes : {
-            KURL url;
+            KUrl url;
             url.setPath( asf );
             bool ret = openURL( url );
             if ( ret )
@@ -1298,7 +1306,7 @@ bool KoDocument::checkAutoSaveFile()
     return false;
 }
 
-bool KoDocument::import( const KURL & _url )
+bool KoDocument::import( const KUrl & _url )
 {
     bool ret;
 
@@ -1322,7 +1330,7 @@ bool KoDocument::import( const KURL & _url )
     return ret;
 }
 
-bool KoDocument::openURL( const KURL & _url )
+bool KoDocument::openURL( const KUrl & _url )
 {
     kdDebug(30003) << "KoDocument::openURL url=" << _url.url() << endl;
     d->lastErrorMessage = QString::null;
@@ -1336,7 +1344,7 @@ bool KoDocument::openURL( const KURL & _url )
     if ( !closeURL() )
         return false;
 
-    KURL url( _url );
+    KUrl url( _url );
     bool autosaveOpened = false;
     d->m_bLoading = true;
     if ( url.isLocalFile() && d->m_shouldCheckAutoSaveFile )
@@ -1374,7 +1382,7 @@ bool KoDocument::openURL( const KURL & _url )
         //if ( d->m_shells.isEmpty() )
         //    kdWarning(30003) << "KoDocument::openURL no shell yet !" << endl;
         // Add to recent actions list in our shells
-        QPtrListIterator<KoMainWindow> it( d->m_shells );
+        Q3PtrListIterator<KoMainWindow> it( d->m_shells );
         for (; it.current(); ++it )
             it.current()->addRecentURL( _url );
     }
@@ -1394,12 +1402,12 @@ bool KoDocument::openFile()
         return false;
     }
 
-    QApplication::setOverrideCursor( waitCursor );
+    QApplication::setOverrideCursor( Qt::waitCursor );
 
     d->m_specialOutputFlag = 0;
-    QCString _native_format = nativeFormatMimeType();
+    Q3CString _native_format = nativeFormatMimeType();
 
-    KURL u;
+    KUrl u;
     u.setPath( m_file );
     QString typeName = KMimeType::findByURL( u, 0, true )->name();
 
@@ -1438,7 +1446,7 @@ bool KoDocument::openFile()
         kdError(30003) << "No mimetype found for " << m_file << endl;
         QApplication::restoreOverrideCursor();
         if ( d->m_autoErrorHandlingEnabled )
-            KMessageBox::error( 0L, i18n( "Could not open\n%1" ).arg( url().prettyURL( 0, KURL::StripFileProtocol ) ) );
+            KMessageBox::error( 0L, i18n( "Could not open\n%1" ).arg( url().prettyURL( 0, KUrl::StripFileProtocol ) ) );
         d->m_bLoading = false;
         return false;
     }
@@ -1505,7 +1513,7 @@ bool KoDocument::openFile()
             if( d->m_autoErrorHandlingEnabled && !msg.isEmpty())
             {
                 QString errorMsg( i18n( "Could not open\n%2.\nReason: %1" ) );
-                QString docUrl = url().prettyURL( 0, KURL::StripFileProtocol );
+                QString docUrl = url().prettyURL( 0, KUrl::StripFileProtocol );
                 KMessageBox::error( 0L, errorMsg.arg(msg).arg(docUrl) );
             }
 
@@ -1649,7 +1657,7 @@ bool KoDocument::loadNativeFormat( const QString & file )
         return false;
     }
 
-    QApplication::setOverrideCursor( waitCursor );
+    QApplication::setOverrideCursor( Qt::waitCursor );
 
     kdDebug(30003) << "KoDocument::loadNativeFormat( " << file << " )" << endl;
 
@@ -1658,7 +1666,7 @@ bool KoDocument::loadNativeFormat( const QString & file )
     if ( d->m_specialOutputFlag != SaveAsDirectoryStore ) // Don't try to open a directory ;)
     {
         in.setName(file);
-        if ( !in.open( IO_ReadOnly ) )
+        if ( !in.open( QIODevice::ReadOnly ) )
         {
             QApplication::restoreOverrideCursor();
             d->lastErrorMessage = i18n( "Could not open the file for reading (check read permissions)." );
@@ -1823,9 +1831,9 @@ bool KoDocument::loadFromStore( KoStore* _store, const QString& url )
     _store->pushDirectory();
     // Store as document URL
     if ( url.startsWith( STORE_PROTOCOL ) ) {
-        m_url = KURL( url );
+        m_url = KUrl( url );
     } else {
-        m_url = KURL( INTERNAL_PREFIX + url );
+        m_url = KUrl( INTERNAL_PREFIX + url );
         _store->enterDirectory( url );
     }
 
@@ -1933,7 +1941,7 @@ void KoDocument::setModified( bool mod )
         m_bEmpty = FALSE;
     } else {
         // When saving this document, all non-external child documents get saved too.
-        QPtrListIterator<KoDocumentChild> it = children();
+        Q3PtrListIterator<KoDocumentChild> it = children();
         for (; it.current(); ++it )
         {
             KoDocument *doc = it.current()->document();
@@ -1991,7 +1999,7 @@ int KoDocument::queryCloseExternalChildren()
 {
     //kdDebug(30003)<<k_funcinfo<<" checking for children in: "<<url().url()<<endl;
     setDoNotSaveExtDoc(false);
-    QPtrListIterator<KoDocumentChild> it( children() );
+    Q3PtrListIterator<KoDocumentChild> it( children() );
     for (; it.current(); ++it )
     {
         if ( !it.current()->isDeleted() )
@@ -2029,7 +2037,7 @@ void KoDocument::setTitleModified( const QString caption, bool mod )
         return;
     }
     // we must be root doc so update caption in all related windows
-    QPtrListIterator<KoMainWindow> it( d->m_shells );
+    Q3PtrListIterator<KoMainWindow> it( d->m_shells );
     for (; it.current(); ++it )
     {
         it.current()->updateCaption();
@@ -2053,7 +2061,7 @@ void KoDocument::setTitleModified()
                 caption = static_cast<KoDocumentInfoAbout *>(page)->title();
         }
         if ( caption.isEmpty() )
-            caption = url().prettyURL( 0, KURL::StripFileProtocol );             // Fall back to document URL
+            caption = url().prettyURL( 0, KUrl::StripFileProtocol );             // Fall back to document URL
 
         //kdDebug(30003)<<k_funcinfo<<" url: "<<url().url()<<" caption: "<<caption<<endl;
         if ( doc )
@@ -2157,19 +2165,19 @@ KService::Ptr KoDocument::nativeService()
     return m_nativeService;
 }
 
-QCString KoDocument::nativeFormatMimeType() const
+Q3CString KoDocument::nativeFormatMimeType() const
 {
     KService::Ptr service = const_cast<KoDocument *>(this)->nativeService();
     if ( !service )
-        return QCString();
+        return Q3CString();
     return service->property( "X-KDE-NativeMimeType" ).toString().latin1();
 }
 
-QCString KoDocument::nativeOasisMimeType() const
+Q3CString KoDocument::nativeOasisMimeType() const
 {
     KService::Ptr service = const_cast<KoDocument *>(this)->nativeService();
     if ( !service )
-        return QCString();
+        return Q3CString();
     return service->property( "X-KDE-NativeOasisMimeType" ).toString().latin1();
 }
 
@@ -2199,11 +2207,11 @@ KService::Ptr KoDocument::readNativeService( KInstance *instance )
     return service;
 }
 
-QCString KoDocument::readNativeFormatMimeType( KInstance *instance ) //static
+Q3CString KoDocument::readNativeFormatMimeType( KInstance *instance ) //static
 {
     KService::Ptr service = readNativeService( instance );
     if ( !service )
-        return QCString();
+        return Q3CString();
 
     if ( service->property( "X-KDE-NativeMimeType" ).toString().isEmpty() )
     {
@@ -2244,7 +2252,7 @@ void KoDocument::setupXmlReader( QXmlSimpleReader& reader, bool namespaceProcess
 }
 
 
-bool KoDocument::isNativeFormat( const QCString& mimetype ) const
+bool KoDocument::isNativeFormat( const Q3CString& mimetype ) const
 {
     if ( mimetype == nativeFormatMimeType() )
         return true;
@@ -2286,7 +2294,7 @@ void KoDocument::removeShell( KoMainWindow *shell )
     d->m_shells.removeRef( shell );
 }
 
-const QPtrList<KoMainWindow>& KoDocument::shells() const
+const Q3PtrList<KoMainWindow>& KoDocument::shells() const
 {
     return d->m_shells;
 }
@@ -2303,7 +2311,7 @@ DCOPObject * KoDocument::dcopObject()
     return d->m_dcopObject;
 }
 
-QCString KoDocument::dcopObjectId() const
+Q3CString KoDocument::dcopObjectId() const
 {
     return const_cast<KoDocument *>(this)->dcopObject()->objId();
 }
@@ -2334,11 +2342,11 @@ void KoDocument::showLoadingErrorDialog()
 {
     if ( d->lastErrorMessage.isEmpty() )
     {
-        KMessageBox::error( 0L, i18n( "Could not open\n%1" ).arg( url().prettyURL( 0, KURL::StripFileProtocol ) ) );
+        KMessageBox::error( 0L, i18n( "Could not open\n%1" ).arg( url().prettyURL( 0, KUrl::StripFileProtocol ) ) );
     }
     else if ( d->lastErrorMessage != "USER_CANCELED" )
     {
-        KMessageBox::error( 0L, i18n( "Could not open %1\nReason: %2" ).arg( url().prettyURL( 0, KURL::StripFileProtocol ), d->lastErrorMessage ) );
+        KMessageBox::error( 0L, i18n( "Could not open %1\nReason: %2" ).arg( url().prettyURL( 0, KUrl::StripFileProtocol ), d->lastErrorMessage ) );
     }
 }
 
@@ -2471,9 +2479,9 @@ QString KoDocument::tagNameToDocumentType( const QString& localName )
     return localName;
 }
 
-QValueList<KoTextDocument *> KoDocument::allTextDocuments() const
+Q3ValueList<KoTextDocument *> KoDocument::allTextDocuments() const
 {
-    return QValueList<KoTextDocument *>();
+    return Q3ValueList<KoTextDocument *>();
 }
 
 KoPageLayout KoDocument::pageLayout(int /*pageNumber*/) const
@@ -2525,7 +2533,7 @@ void KoDocument::showStartUpWidget( KoMainWindow* parent, bool alwaysShow )
 
 void KoDocument::openExistingFile( const QString& file )
 {
-    KURL url( file );
+    KUrl url( file );
     bool ok = openURL( url );
     setModified( false );
 

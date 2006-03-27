@@ -60,7 +60,7 @@ KexiAppModule::KexiAppModule(Kross::Api::Manager* manager)
     : Kross::Api::Module("KexiApp")
     , d(new KexiAppModulePrivate())
 {
-    kdDebug() << "Kross::KexiApp::KexiAppModule Ctor" << endl;
+    kDebug() << "Kross::KexiApp::KexiAppModule Ctor" << endl;
 
     d->manager = manager;
 
@@ -74,18 +74,18 @@ KexiAppModule::KexiAppModule(Kross::Api::Manager* manager)
                 addChild( new KexiAppMainWindow(mainwin) );
                 return;
             }
-            else kdDebug()<<"Kross::KexiApp::KexiAppModule: Failed to determinate KexiMainWindow instance"<<endl;
+            else kDebug()<<"Kross::KexiApp::KexiAppModule: Failed to determinate KexiMainWindow instance"<<endl;
         }
-        else kdDebug()<<"Kross::KexiApp::KexiAppModule: Failed to cast 'KexiMainWindow' to a QtObject"<<endl;
+        else kDebug()<<"Kross::KexiApp::KexiAppModule: Failed to cast 'KexiMainWindow' to a QtObject"<<endl;
     }
-    else kdDebug()<<"Kross::KexiApp::KexiAppModule: No such object 'KexiMainWindow'"<<endl;
+    else kDebug()<<"Kross::KexiApp::KexiAppModule: No such object 'KexiMainWindow'"<<endl;
 
     throw Kross::Api::Exception::Ptr( new Kross::Api::Exception("There was no 'KexiMainWindow' published.") );
 }
 
 KexiAppModule::~KexiAppModule()
 {
-    kdDebug() << "Kross::KexiApp::KexiAppModule Dtor" << endl;
+    kDebug() << "Kross::KexiApp::KexiAppModule Dtor" << endl;
     delete d;
 }
 

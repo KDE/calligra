@@ -22,11 +22,15 @@
 #include <klistview.h>
 
 #include "koDetailsPaneBase.h"
+//Added by qt3to4:
+#include <QPixmap>
+#include <Q3ValueList>
+#include <QEvent>
 
 class KoTemplateGroup;
 class KoTemplate;
 class KInstance;
-class QListViewItem;
+class Q3ListViewItem;
 class KoRecentDocumentsPanePrivate;
 class KoRichTextListItemPrivate;
 class KFileItem;
@@ -69,15 +73,15 @@ class KoTemplatesPane : public KoDetailsPaneBase
     /// Emited when the always use checkbox is selected
     void alwaysUseChanged(KoTemplatesPane* sender, const QString& alwaysUse);
 
-    void splitterResized(KoDetailsPaneBase* sender, const QValueList<int>& sizes);
+    void splitterResized(KoDetailsPaneBase* sender, const Q3ValueList<int>& sizes);
 
   public slots:
-    void resizeSplitter(KoDetailsPaneBase* sender, const QValueList<int>& sizes);
+    void resizeSplitter(KoDetailsPaneBase* sender, const Q3ValueList<int>& sizes);
 
   protected slots:
-    void selectionChanged(QListViewItem* item);
+    void selectionChanged(Q3ListViewItem* item);
     void openTemplate();
-    void openTemplate(QListViewItem* item);
+    void openTemplate(Q3ListViewItem* item);
     void alwaysUseClicked();
     void changeAlwaysUseTemplate(KoTemplatesPane* sender, const QString& alwaysUse);
 
@@ -110,15 +114,15 @@ class KoRecentDocumentsPane : public KoDetailsPaneBase
   signals:
     void openFile(const QString&);
 
-    void splitterResized(KoDetailsPaneBase* sender, const QValueList<int>& sizes);
+    void splitterResized(KoDetailsPaneBase* sender, const Q3ValueList<int>& sizes);
 
   public slots:
-    void resizeSplitter(KoDetailsPaneBase* sender, const QValueList<int>& sizes);
+    void resizeSplitter(KoDetailsPaneBase* sender, const Q3ValueList<int>& sizes);
 
   protected slots:
-    void selectionChanged(QListViewItem* item);
+    void selectionChanged(Q3ListViewItem* item);
     void openFile();
-    void openFile(QListViewItem* item);
+    void openFile(Q3ListViewItem* item);
 
     void previewResult(KIO::Job* job);
     void updatePreview(const KFileItem* fileItem, const QPixmap& preview);

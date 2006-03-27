@@ -39,7 +39,7 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-#include <qvaluelist.h>
+#include <q3valuelist.h>
 #include <qdom.h>
 
 KWOasisLoader::KWOasisLoader( KWDocument* doc )
@@ -49,14 +49,14 @@ KWOasisLoader::KWOasisLoader( KWDocument* doc )
 
 // Warning, this method has no undo/redo support, it is *called* by the undo/redo commands.
 // cursor is set when pasting into a textframesetedit (kwcommand), 0 otherwise.
-QValueList<KWFrame *> KWOasisLoader::insertOasisData( KoStore* store, KoTextCursor* cursor )
+Q3ValueList<KWFrame *> KWOasisLoader::insertOasisData( KoStore* store, KoTextCursor* cursor )
 {
-    QValueList<KWFrame *> frames;
+    Q3ValueList<KWFrame *> frames;
     if ( store->bad() || !store->hasFile( "content.xml" ) )
     {
-        kdError(32001) << "Invalid ZIP store in memory" << endl;
+        kError(32001) << "Invalid ZIP store in memory" << endl;
         if ( !store->hasFile( "content.xml" ) )
-            kdError(32001) << "No content.xml file" << endl;
+            kError(32001) << "No content.xml file" << endl;
         return frames;
     }
     store->disallowNameExpansion();
@@ -66,7 +66,7 @@ QValueList<KWFrame *> KWOasisLoader::insertOasisData( KoStore* store, KoTextCurs
     QString errorMessage;
     bool ok = oasisStore.loadAndParse( "content.xml", contentDoc, errorMessage );
     if ( !ok ) {
-        kdError(32001) << "Error parsing content.xml: " << errorMessage << endl;
+        kError(32001) << "Error parsing content.xml: " << errorMessage << endl;
         return frames;
     }
 
@@ -84,7 +84,7 @@ QValueList<KWFrame *> KWOasisLoader::insertOasisData( KoStore* store, KoTextCurs
 
     QDomElement body( KoDom::namedItemNS( content, KoXmlNS::office, "body" ) );
     if ( body.isNull() ) {
-        kdError(32001) << "No office:body found!" << endl;
+        kError(32001) << "No office:body found!" << endl;
         return frames;
     }
     // We then want to use whichever element is the child of <office:body>,
@@ -94,7 +94,7 @@ QValueList<KWFrame *> KWOasisLoader::insertOasisData( KoStore* store, KoTextCurs
         realBody = iter;
     }
     if ( realBody.isNull() ) {
-        kdError(32001) << "No element found inside office:body!" << endl;
+        kError(32001) << "No element found inside office:body!" << endl;
         return frames;
     }
 
@@ -117,7 +117,7 @@ QValueList<KWFrame *> KWOasisLoader::insertOasisData( KoStore* store, KoTextCurs
         {
             context.styleStack().save();
             const QString bodyTagLocalName = tag.localName();
-            kdDebug() << k_funcinfo << bodyTagLocalName << endl;
+            kDebug() << k_funcinfo << bodyTagLocalName << endl;
             if ( bodyTagLocalName == "frame" && tag.namespaceURI() == KoXmlNS::draw )
             {
                 KWFrame * frame = loadFrame( tag, context, KoPoint( 10, 10 ) /*offset pasted object*/ );
@@ -133,7 +133,7 @@ QValueList<KWFrame *> KWOasisLoader::insertOasisData( KoStore* store, KoTextCurs
         }
     }
 
-    //kdDebug() << "KWOasisLoader::execute calling doc->completePasting" << endl;
+    //kDebug() << "KWOasisLoader::execute calling doc->completePasting" << endl;
     m_doc->completeOasisPasting();
     m_doc->deleteLoadingInfo();
     return frames;
@@ -165,7 +165,7 @@ static QString headerTypeToFramesetName( const QString& localName, bool hasEvenO
         return i18n("First Page Header");
     if ( localName == "footer-first" ) // NOT OASIS COMPLIANT
         return i18n("First Page Footer");
-    kdWarning(32001) << "Unknown tag in headerTypeToFramesetName: " << localName << endl;
+    kWarning(32001) << "Unknown tag in headerTypeToFramesetName: " << localName << endl;
     return QString::null;
 }
 
@@ -224,7 +224,7 @@ void KWOasisLoader::loadOasisIgnoreList( const KoOasisSettings& settings )
     if ( !configurationSettings.isNull() )
     {
         const QString ignorelist = configurationSettings.parseConfigItemString( "SpellCheckerIgnoreList" );
-        kdDebug()<<" ignorelist :"<<ignorelist<<endl;
+        kDebug()<<" ignorelist :"<<ignorelist<<endl;
         m_doc->setSpellCheckIgnoreList( QStringList::split( ',', ignorelist ) );
     }
 }
@@ -240,7 +240,7 @@ KWFrame* KWOasisLoader::loadFrame( const QDomElement& frameTag, KoOasisContext& 
         const QString localName = elem.localName();
         if ( localName == "text-box" )
         {
-            //kdDebug()<<" append text-box\n";
+            //kDebug()<<" append text-box\n";
             frame = loadOasisTextBox( frameTag, elem, context );
             break;
         }
@@ -286,22 +286,22 @@ KWFrame* KWOasisLoader::loadOasisTextBox( const QDomElement& frameTag, const QDo
     QString frameName = frameTag.attributeNS( KoXmlNS::draw, "name", QString::null );
     QString chainNextName = tag.attributeNS( KoXmlNS::draw, "chain-next-name", QString::null );
     if ( !chainNextName.isEmpty() && loadingInfo ) { // 'B' in the above example
-        kdDebug(32001) << "Loading " << frameName << " : next-in-chain=" << chainNextName << endl;
+        kDebug(32001) << "Loading " << frameName << " : next-in-chain=" << chainNextName << endl;
         // Check if we already loaded that frame (then we need to go 'before' it)
         KWFrame* nextFrame = loadingInfo->frameByName( chainNextName );
         if ( nextFrame ) {
             fs = dynamic_cast<KWTextFrameSet *>( nextFrame->frameSet() );
             chainNextName = QString::null; // already found, no need to store it
-            kdDebug(32001) << "  found " << nextFrame << " -> frameset " << ( fs ? fs->name() : QString::null ) << endl;
+            kDebug(32001) << "  found " << nextFrame << " -> frameset " << ( fs ? fs->name() : QString::null ) << endl;
         }
     }
     KWFrame* prevFrame = loadingInfo->chainPrevFrame( frameName );
-    //kdDebug(32001) << "Loading " << frameName << " : chainPrevFrame=" << prevFrame << endl;
+    //kDebug(32001) << "Loading " << frameName << " : chainPrevFrame=" << prevFrame << endl;
     if ( prevFrame ) {
         if ( fs ) // we are between prevFrame and nextFrame. They'd better be for the same fs!!
             Q_ASSERT( fs == prevFrame->frameSet() );
         fs = dynamic_cast<KWTextFrameSet *>( prevFrame->frameSet() );
-        //kdDebug(32001) << "  found " << prevFrame << " -> frameset " << fs->name() << endl;
+        //kDebug(32001) << "  found " << prevFrame << " -> frameset " << fs->name() << endl;
     }
     KWFrame* frame = 0;
     if ( !fs ) {

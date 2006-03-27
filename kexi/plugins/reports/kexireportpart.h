@@ -59,8 +59,8 @@ class KEXIREPORTUTILS_EXPORT KexiReportPart : public KexiPart::Part
 			public:
 				TempData(QObject* parent);
 				~TempData();
-				QGuardedPtr<KFormDesigner::Form> form;
-				QGuardedPtr<KFormDesigner::Form> previewForm;
+				QPointer<KFormDesigner::Form> form;
+				QPointer<KFormDesigner::Form> previewForm;
 				QString tempForm;
 				QPoint scrollViewContentsPos; //!< to preserve contents pos after switching to other view
 				int resizeMode; //!< form's window's resize mode -one of KexiFormView::ResizeMode items
@@ -81,7 +81,7 @@ class KEXIREPORTUTILS_EXPORT KexiReportPart : public KexiPart::Part
 		static KFormDesigner::WidgetLibrary* static_reportsLibrary;
 
 	private:
-//		QGuardedPtr<KFormDesigner::FormManager> m_manager;
+//		QPointer<KFormDesigner::FormManager> m_manager;
 };
 
 #endif

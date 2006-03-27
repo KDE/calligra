@@ -23,12 +23,15 @@
 #include "KoVariable.h"
 
 #include <kdialogbase.h>
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 #include <qstring.h>
+//Added by qt3to4:
+#include <QResizeEvent>
+#include <QCloseEvent>
 #include <klistview.h>
 #include <koffice_export.h>
 class QComboBox;
-class QVBox;
+class Q3VBox;
 class QResizeEvent;
 class KLineEdit;
 class QCloseEvent;
@@ -47,7 +50,7 @@ public:
     // For KWMailMergeVariableInsertDia
     KoVariableNameDia( QWidget *parent );
     // For kwview
-    KoVariableNameDia( QWidget *parent, const QPtrList<KoVariable> &vars );
+    KoVariableNameDia( QWidget *parent, const Q3PtrList<KoVariable> &vars );
     QString getName() const;
 
 protected slots:
@@ -56,7 +59,7 @@ protected:
     void init();
 
     QComboBox *names;
-    QVBox *back;
+    Q3VBox *back;
 };
 
 /**
@@ -64,16 +67,16 @@ protected:
  * Used by KoCustomVariablesDia
  * Represents an item in the listview, holding a lineedit to edit the value of the variable.
  */
-class KoCustomVariablesListItem : public QListViewItem
+class KoCustomVariablesListItem : public Q3ListViewItem
 {
 public:
-    KoCustomVariablesListItem( QListView *parent );
+    KoCustomVariablesListItem( Q3ListView *parent );
 
     void setVariable( KoCustomVariable *v );
     KoCustomVariable *getVariable() const;
 
     virtual void setup();
-    virtual int width ( const QFontMetrics & fm, const QListView * lv, int c ) const;
+    virtual int width ( const QFontMetrics & fm, const Q3ListView * lv, int c ) const;
     void update();
 
     // Gets the value from the lineedit and sets it into the variable
@@ -117,12 +120,12 @@ class KOTEXT_EXPORT KoCustomVariablesDia : public KDialogBase
     Q_OBJECT
 
 public:
-    KoCustomVariablesDia( QWidget *parent, const QPtrList<KoVariable> &variables );
+    KoCustomVariablesDia( QWidget *parent, const Q3PtrList<KoVariable> &variables );
 protected slots:
     void slotOk();
 
 protected:
-    QVBox *back;
+    Q3VBox *back;
     KoCustomVariablesList *list;
 
 };
@@ -155,7 +158,7 @@ protected slots:
     void slotTextChanged(const QString&);
 
 protected:
-    QVBox *back;
+    Q3VBox *back;
     KLineEdit *m_name;
     KLineEdit *m_value;
 

@@ -63,7 +63,7 @@ KexiDBInternalLabel::KexiDBInternalLabel( KexiDBLabel* parent )
 	: QLabel( parent )
 	, m_parentLabel(parent)
 {
-	int a = alignment() | Qt::WordBreak;
+	int a = alignment() | Qt::TextWordWrap;
 	a &= (0xffffff ^ Qt::AlignVertical_Mask);
 	a |= Qt::AlignTop;
 	setAlignment( a );
@@ -129,7 +129,7 @@ QImage KexiDBInternalLabel::makeShadow( const QImage& textImage,
 	}
 
 //	result.fill( 0 ); // all black
-	double realOpacity = SHADOW_OPACITY + QMIN(50.0/double(256.0-qGray(bgColor.rgb())), 50.0);
+	double realOpacity = SHADOW_OPACITY + qMin(50.0/double(256.0-qGray(bgColor.rgb())), 50.0);
 	//int _h, _s, _v;
 	//.getHsv( &_h, &_s, &_v );
 	if (colorGroup().background()==Qt::red)//_s>=250 && _v>=250) //for colors like cyan or red, make the result more white
@@ -225,11 +225,11 @@ KPixmap KexiDBInternalLabel::getShadowPixmap() {
 	* The new rect has to fit in the pixmap.
 	* I have to admit this isn't really nice code...
 	*/
-	m_shadowRect.setX( QMAX( m_shadowRect.x() - ( m_shadowRect.width() / 4 ), 0 ) );
-	m_shadowRect.setY( QMAX( m_shadowRect.y() - ( m_shadowRect.height() / 4 ), 0 ) );
+	m_shadowRect.setX( qMax( m_shadowRect.x() - ( m_shadowRect.width() / 4 ), 0 ) );
+	m_shadowRect.setY( qMax( m_shadowRect.y() - ( m_shadowRect.height() / 4 ), 0 ) );
 	m_shadowRect.setBottomRight( QPoint(
-		QMIN( m_shadowRect.x() + ( m_shadowRect.width() * 3 / 2 ), shadowImage.width() ),
-		QMIN( m_shadowRect.y() + ( m_shadowRect.height() * 3 / 2 ), shadowImage.height() ) ) );
+		qMin( m_shadowRect.x() + ( m_shadowRect.width() * 3 / 2 ), shadowImage.width() ),
+		qMin( m_shadowRect.y() + ( m_shadowRect.height() * 3 / 2 ), shadowImage.height() ) ) );
 
 	shadowImage = makeShadow( shadowImage,
 		qGray( colorGroup().background().rgb() ) < 127 ? Qt::white : Qt::black,
@@ -305,10 +305,10 @@ QRect KexiDBInternalLabel::getBounding( const QImage &image, const QRect& startR
 	/*!
 	* Ugly beast to get the correct width and height
 	*/
-	const int width = QMIN( ( startRect.bottomRight().x() > 0
+	const int width = qMin( ( startRect.bottomRight().x() > 0
 		? startRect.bottomRight().x() : QCOORD_MAX ),
 		image.width() );
-	const int height = QMIN( ( startRect.bottomRight().y() > 0
+	const int height = qMin( ( startRect.bottomRight().y() > 0
 		? startRect.bottomRight().y() : QCOORD_MAX ),
 		image.height() );
 
@@ -483,10 +483,10 @@ void KexiDBLabel::paintEvent( QPaintEvent* e ) {
 		if ( !d->pixmapDirty && e->rect().contains( d->shadowPosition ) && !d->shadowPixmap.isNull()) {
 			QPainter p( this );
 			QRect clipRect = QRect(
-				QMAX( e->rect().x() - d->shadowPosition.x(), 0 ),
-				QMAX( e->rect().y() - d->shadowPosition.y(), 0 ),
-				QMIN( e->rect().width() + d->shadowPosition.x(), d->shadowPixmap.width() ),
-				QMIN( e->rect().height() + d->shadowPosition.y(), d->shadowPixmap.height() ) );
+				qMax( e->rect().x() - d->shadowPosition.x(), 0 ),
+				qMax( e->rect().y() - d->shadowPosition.y(), 0 ),
+				qMin( e->rect().width() + d->shadowPosition.x(), d->shadowPixmap.width() ),
+				qMin( e->rect().height() + d->shadowPosition.y(), d->shadowPixmap.height() ) );
 			p.drawPixmap( d->internalLabel->m_shadowRect.topLeft(), d->shadowPixmap, clipRect );
 		}
 	}
@@ -643,7 +643,7 @@ bool KexiDBLabel::shadowEnabled() const
 {
 	if (e->type()==QEvent::FocusOut) {
 		repaint();
-		kdDebug() << "FFFFFFFFFFFFFFFFFF!" << endl;
+		kDebug() << "FFFFFFFFFFFFFFFFFF!" << endl;
 	}
 	return QLabel::event(e);
 }*/

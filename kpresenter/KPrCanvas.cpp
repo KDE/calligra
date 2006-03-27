@@ -2336,7 +2336,7 @@ void KPrCanvas::chPic()
 bool KPrCanvas::exportPage( int nPage,
                             int nWidth,
                             int nHeight,
-                            const KURL& _fileURL,
+                            const KUrl& _fileURL,
                             const char* format,
                             int quality )
 {
@@ -2356,7 +2356,7 @@ bool KPrCanvas::exportPage( int nPage,
         if( desiredSize != pix.size() )
             pix.resize( desiredSize );
         // save the pixmap to the desired file
-        KURL fileURL(_fileURL);
+        KUrl fileURL(_fileURL);
         if( fileURL.protocol().isEmpty() )
             fileURL.setProtocol( "file" );
         const bool bLocalFile = fileURL.isLocalFile();
@@ -3998,12 +3998,12 @@ void KPrCanvas::dropEvent( QDropEvent *e )
         setToolEditMode( TEM_MOUSE );
         deSelectAllObj();
 
-        KURL::List lst;
+        KUrl::List lst;
         KURLDrag::decode( e, lst );
 
-        KURL::List::ConstIterator it = lst.begin();
+        KUrl::List::ConstIterator it = lst.begin();
         for ( ; it != lst.end(); ++it ) {
-            const KURL &url( *it );
+            const KUrl &url( *it );
 
             QString filename;
             if ( !url.isLocalFile() ) {
@@ -5252,7 +5252,7 @@ void KPrCanvas::scrollTopLeftPoint( const QPoint & pos )
     m_view->getVScrollBar()->setValue( pos.y() );
 }
 
-void KPrCanvas::changePicture( const KURL & url, QWidget *window )
+void KPrCanvas::changePicture( const KUrl & url, QWidget *window )
 {
     m_activePage->changePicture( url, window );
 }

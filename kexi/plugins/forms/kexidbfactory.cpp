@@ -386,7 +386,7 @@ KexiDBFactory::createMenuActions(const QCString &classname, QWidget *w, QPopupMe
 		KexiDBImageBox *imageBox = static_cast<KexiDBImageBox*>(w);
 		imageBox->updateActionsAvailability();
 		KActionCollection *ac = imageBox->actionCollection();
-		KPopupMenu *subMenu = new KPopupMenu();
+		KMenu *subMenu = new KMenu();
 //! @todo make these actions undoable/redoable
 		menu->insertItem(i18n("&Image"), subMenu);
 		ac->action("insert")->plug(subMenu);
@@ -463,7 +463,7 @@ KexiDBFactory::startEditing(const QCString &classname, QWidget *w, KFormDesigner
 		{
 			createEditor(classname, label->text(), label, container,
 				label->geometry(), label->alignment(), 
-				false, label->alignment() & Qt::WordBreak /*multiline*/);
+				false, label->alignment() & Qt::TextWordWrap /*multiline*/);
 		}
 		return true;
 	}

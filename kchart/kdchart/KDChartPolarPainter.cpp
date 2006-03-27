@@ -33,6 +33,8 @@
 #include "KDDrawText.h"
 
 #include <qpainter.h>
+//Added by qt3to4:
+#include <Q3PointArray>
 
 /**
   \class KDChartPolarPainter KDChartPolarPainter.h
@@ -89,7 +91,7 @@ void KDChartPolarPainter::paintData( QPainter* painter,
     // PENDING(khz) adjust the clip rect if neccessary...
     //
 
-    const QWMatrix & world = painter->worldMatrix();
+    const QMatrix & world = painter->worldMatrix();
     ourClipRect =
 #if COMPAT_QT_VERSION >= 0x030000
         world.mapRect( ourClipRect );
@@ -557,7 +559,7 @@ void KDChartPolarPainter::paintData( QPainter* painter,
     for ( unsigned int dataset = datasetStart; dataset <= datasetEnd; dataset++ ) {
         painter->setPen( QPen( params()->dataColor( dataset ),
                     dataLinesWidth ) );
-        QPointArray points( numValues );
+        Q3PointArray points( numValues );
         int totalPoints = 0;
         double valueTotal = 0.0; // Will only be used for Percent
         int angleBetweenRays = 360 / numValues;

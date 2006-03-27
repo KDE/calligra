@@ -26,7 +26,7 @@
 
 #include <kiconloader.h>
 #include <klocale.h>
-#include <ktoolbarbutton.h>
+
 #include <kdebug.h>
 
 #include <widget/kexipropertyeditorview.h>
@@ -54,7 +54,7 @@ KexiDataSourcePage::KexiDataSourcePage(QWidget *parent, const char *name)
 	m_noDataSourceAvailableLabel = new QLabel(m_noDataSourceAvailableSingleText, this);
 	m_noDataSourceAvailableLabel->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
 	m_noDataSourceAvailableLabel->setMargin(2);
-	m_noDataSourceAvailableLabel->setAlignment(Qt::WordBreak | Qt::AlignBottom | Qt::AlignLeft);
+	m_noDataSourceAvailableLabel->setAlignment(Qt::TextWordWrap | Qt::AlignBottom | Qt::AlignLeft);
 	vlyr->addWidget(m_noDataSourceAvailableLabel);
 
 	//Widget's Data Source
@@ -67,7 +67,7 @@ KexiDataSourcePage::KexiDataSourcePage(QWidget *parent, const char *name)
 #endif
 	m_widgetDSLabel->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
 	m_widgetDSLabel->setMargin(2);
-	m_widgetDSLabel->setMinimumHeight(IconSize(KIcon::Small)+4);
+	m_widgetDSLabel->setMinimumHeight(IconSize(K3Icon::Small)+4);
 	m_widgetDSLabel->setAlignment(AlignLeft|AlignBottom);
 	hlyr->addWidget(m_widgetDSLabel);
 
@@ -96,7 +96,7 @@ KexiDataSourcePage::KexiDataSourcePage(QWidget *parent, const char *name)
 	m_dataSourceLabel = new QLabel(i18n("Form's data source:"), this);
 	m_dataSourceLabel->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
 	m_dataSourceLabel->setMargin(2);
-	m_dataSourceLabel->setMinimumHeight(IconSize(KIcon::Small)+4);
+	m_dataSourceLabel->setMinimumHeight(IconSize(K3Icon::Small)+4);
 	m_dataSourceLabel->setAlignment(AlignLeft|AlignBottom);
 	hlyr->addWidget(m_dataSourceLabel);
 
@@ -144,7 +144,7 @@ KexiDataSourcePage::KexiDataSourcePage(QWidget *parent, const char *name)
 	m_mousePointerLabel->setPixmap( SmallIcon("mouse_pointer") );
 	m_mousePointerLabel->setFixedWidth( m_mousePointerLabel->pixmap() ? m_mousePointerLabel->pixmap()->width() : 0);
 	m_availableFieldsDescriptionLabel = new QLabel(i18n("Select fields from the list below and drag them onto a form or click the \"Insert\" button"), this);
-	m_availableFieldsDescriptionLabel->setAlignment( Qt::AlignAuto | Qt::WordBreak );
+	m_availableFieldsDescriptionLabel->setAlignment( Qt::AlignAuto | Qt::TextWordWrap );
 	hlyr->addWidget(m_availableFieldsDescriptionLabel);
 
 	//Available Fields
@@ -153,7 +153,7 @@ KexiDataSourcePage::KexiDataSourcePage(QWidget *parent, const char *name)
 	m_availableFieldsLabel = new QLabel(i18n("Available fields:"), this);
 	m_availableFieldsLabel->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
 	m_availableFieldsLabel->setMargin(2);
-	m_availableFieldsLabel->setMinimumHeight(IconSize(KIcon::Small));
+	m_availableFieldsLabel->setMinimumHeight(IconSize(K3Icon::Small));
 	hlyr->addWidget(m_availableFieldsLabel);
 
 	m_addField = new QToolButton(this, "addFieldButton");
@@ -353,7 +353,7 @@ void KexiDataSourcePage::assignPropertySet(KoProperty::Set* propertySet)
 
 
 	const bool isForm = objectClassName=="KexiDBForm";
-//	kdDebug() << "objectClassName=" << objectClassName << endl;
+//	kDebug() << "objectClassName=" << objectClassName << endl;
 //	{
 /*		//this is top level form's surface: data source means table or query
 		QCString dataSourceMimeType, dataSource;

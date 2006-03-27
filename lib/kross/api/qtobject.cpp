@@ -18,6 +18,9 @@
  ***************************************************************************/
 
 #include "qtobject.h"
+//Added by qt3to4:
+#include <Q3StrList>
+#include <Q3CString>
 #include "object.h"
 #include "variant.h"
 #include "event.h"
@@ -27,7 +30,7 @@
 #include "eventsignal.h"
 
 #include <qobject.h>
-#include <qsignal.h>
+#include <q3signal.h>
 //#include <qglobal.h>
 //#include <qobjectdefs.h>
 #include <qmetaobject.h>
@@ -42,15 +45,15 @@ QtObject::QtObject(Object::Ptr parent, QObject* object, const QString& name)
     // Walk through the signals and slots the QObject has
     // and attach them as events to this QtObject.
 
-    QStrList slotnames = m_object->metaObject()->slotNames(false);
+    Q3StrList slotnames = m_object->metaObject()->slotNames(false);
     for(char* c = slotnames.first(); c; c = slotnames.next()) {
-        QCString s = c;
+        Q3CString s = c;
         addChild( new EventSlot(s, this, object, s) );
     }
 
-    QStrList signalnames = m_object->metaObject()->signalNames(false);
+    Q3StrList signalnames = m_object->metaObject()->signalNames(false);
     for(char* c = signalnames.first(); c; c = signalnames.next()) {
-        QCString s = c;
+        Q3CString s = c;
         addChild( new EventSignal(s, this, object, s) );
     }
 

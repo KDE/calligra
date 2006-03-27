@@ -23,13 +23,17 @@
 #include "KWFrameStyle.h"
 
 #include <kdialogbase.h>
-#include <qptrlist.h>
+#include <q3ptrlist.h>
+//Added by qt3to4:
+#include <Q3GridLayout>
+#include <QResizeEvent>
+#include <QPaintEvent>
 
 
-class QGroupBox;
-class QGridLayout;
+class Q3GroupBox;
+class Q3GridLayout;
 class QLineEdit;
-class QListBox;
+class Q3ListBox;
 class QPushButton;
 class QTabWidget;
 class QWidget;
@@ -108,7 +112,7 @@ public:
     ~KWFrameStyleManager();
 
 protected:
-    void addStyles(const QPtrList<KWFrameStyle> & style );
+    void addStyles(const Q3PtrList<KWFrameStyle> & style );
     void setupWidget();
     void addGeneralTab();
     void apply();
@@ -118,20 +122,20 @@ protected:
     int frameStyleIndex( int pos );
 
     QTabWidget *m_tabs;
-    QListBox *m_stylesList;
+    Q3ListBox *m_stylesList;
     QLineEdit *m_nameString;
     QPushButton *m_deleteButton;
     QPushButton *m_newButton;
     QPushButton *m_moveUpButton;
     QPushButton *m_moveDownButton;
 
-    QGroupBox *previewBox;
+    Q3GroupBox *previewBox;
     KWFrameStylePreview *preview;
 
     KWFrameStyle *m_currentFrameStyle;
     QStringList m_styleOrder;
-    QPtrList<KWFrameStyleListItem> m_frameStyles;
-    QPtrList<KWFrameStyleManagerTab> m_tabsList;
+    Q3PtrList<KWFrameStyleListItem> m_frameStyles;
+    Q3PtrList<KWFrameStyleManagerTab> m_tabsList;
     int numFrameStyles;
     bool noSignals;
 
@@ -183,7 +187,7 @@ protected slots:
 protected:
     QBrush m_backgroundColor;
     QWidget *bgwidget;
-    QGridLayout *grid;
+    Q3GridLayout *grid;
     KColorButton *brushColor;
     KWBrushStylePreview *brushPreview;
 };

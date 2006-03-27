@@ -22,8 +22,8 @@
 #define KFORMULACOMMAND_H
 
 #include <qmap.h>
-#include <qptrlist.h>
-#include <qvaluevector.h>
+#include <q3ptrlist.h>
+#include <q3valuevector.h>
 
 #include <kcommand.h>
 
@@ -179,7 +179,7 @@ private:
      * the list where all elements are stored that are removed
      * from the tree.
      */
-    QPtrList<BasicElement> addList;
+    Q3PtrList<BasicElement> addList;
 };
 
 
@@ -195,7 +195,7 @@ public:
      * generic add command, default implementation do nothing
      */
     KFCRemoveSelection(Container* document,
-                       Direction dir = beforeCursor);
+                       Qt::Orientation dir = beforeCursor);
 
     virtual void execute();
     virtual void unexecute();
@@ -206,7 +206,7 @@ private:
      * the list where all elements are stored that are removed
      * from the tree.
      */
-    QPtrList<BasicElement> removedList;
+    Q3PtrList<BasicElement> removedList;
 
     Direction dir;
 };
@@ -246,7 +246,7 @@ public:
     /**
      * generic add command, default implementation do nothing
      */
-    KFCRemove(Container* document, Direction dir);
+    KFCRemove(Container* document, Qt::Orientation dir);
     ~KFCRemove();
 
     virtual void execute();
@@ -264,7 +264,7 @@ private:
      * the list where all elements are stored that are removed
      * from the tree.
      */
-    QPtrList<BasicElement> removedList;
+    Q3PtrList<BasicElement> removedList;
 
     /**
      * The element we might have extracted.
@@ -288,7 +288,7 @@ private:
 class KFCRemoveEnclosing : public Command
 {
 public:
-    KFCRemoveEnclosing(Container* document, Direction dir);
+    KFCRemoveEnclosing(Container* document, Qt::Orientation dir);
     ~KFCRemoveEnclosing();
 
     virtual void execute();
@@ -399,7 +399,7 @@ public:
 
 protected:
 
-    QPtrList<TextElement>& childrenList() { return list; }
+    Q3PtrList<TextElement>& childrenList() { return list; }
 
     void collectChildren();
 
@@ -411,9 +411,9 @@ private:
      * the list where all elements are stored that are removed
      * from the tree.
      */
-    QPtrList<TextElement> list;
+    Q3PtrList<TextElement> list;
 
-    QPtrList<BasicElement> elementList;
+    Q3PtrList<BasicElement> elementList;
 };
 
 
@@ -429,7 +429,7 @@ public:
 
 private:
 
-    typedef QValueVector<CharStyle> StyleList;
+    typedef Q3ValueVector<CharStyle> StyleList;
 
     StyleList styleList;
     CharStyle charStyle;
@@ -448,7 +448,7 @@ public:
 
 private:
 
-    typedef QValueVector<CharFamily> FamilyList;
+    typedef Q3ValueVector<CharFamily> FamilyList;
 
     FamilyList familyList;
     CharFamily charFamily;

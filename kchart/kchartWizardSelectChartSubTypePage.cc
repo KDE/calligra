@@ -3,15 +3,18 @@
 #include "kchart_view.h"
 #include "kchart_part.h"
 
-#include <qbuttongroup.h>
+#include <q3buttongroup.h>
 #include <qpushbutton.h>
 #include <qradiobutton.h>
 #include <qspinbox.h>
 #include <qlabel.h>
-#include <qptrcollection.h>
-#include <qobjectlist.h>
+#include <q3ptrcollection.h>
+#include <qobject.h>
 #include <qlayout.h>
-#include <qhbox.h>
+#include <q3hbox.h>
+//Added by qt3to4:
+#include <Q3VBoxLayout>
+#include <Q3GridLayout>
 
 #include <kdebug.h>
 #include <kiconloader.h>
@@ -34,14 +37,14 @@ KChartWizardSelectChartSubTypePage::KChartWizardSelectChartSubTypePage( QWidget*
     m_charttype  = (KChartParams::ChartType) m_chart->params()->chartType();
     chartSubType = true;
 
-    QGridLayout *grid1 = new QGridLayout(this, 3, 2, KDialog::marginHint(), 
+    Q3GridLayout *grid1 = new Q3GridLayout(this, 3, 2, KDialog::marginHint(), 
 					 KDialog::spacingHint());
 
-    QVBoxLayout *lay1 = new QVBoxLayout(  );
+    Q3VBoxLayout *lay1 = new Q3VBoxLayout(  );
     lay1->setMargin( KDialog::marginHint() );
     lay1->setSpacing( KDialog::spacingHint() );
 
-    QButtonGroup *grp = new QButtonGroup( 1, QGroupBox::Horizontal, 
+    Q3ButtonGroup *grp = new Q3ButtonGroup( 1, Q3GroupBox::Horizontal, 
 					  i18n( "Chart Sub Type" ), this );
     grp->setRadioButtonExclusive( true );
     grp->layout();
@@ -50,7 +53,7 @@ KChartWizardSelectChartSubTypePage::KChartWizardSelectChartSubTypePage( QWidget*
     m_stacked = new QRadioButton( i18n( "Stacked" ), grp );
     m_percent = new QRadioButton( i18n( "Percent" ), grp );
 
-    QHBox   *hbox = new QHBox( this );
+    Q3HBox   *hbox = new Q3HBox( this );
     /*QLabel  *lbl  =*/ new QLabel( i18n( "Number of lines: "), hbox );
     m_numLines    = new QSpinBox( hbox );
 

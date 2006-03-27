@@ -54,7 +54,7 @@ void KPrImportStyleDia::loadFile()
 #endif
     fd.setMimeFilter( lst );
     fd.setCaption(i18n("Import Style"));
-    KURL url;
+    KUrl url;
     if ( fd.exec() != QDialog::Accepted )
         return;
     url = fd.selectedURL();

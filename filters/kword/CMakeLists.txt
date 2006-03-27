@@ -1,0 +1,40 @@
+kde4_header()
+
+add_subdirectory( libexport ) 
+add_subdirectory( abiword ) 
+add_subdirectory( amipro ) 
+add_subdirectory( applixword ) 
+add_subdirectory( ascii ) 
+add_subdirectory( docbook ) 
+add_subdirectory( html ) 
+add_subdirectory( kword1.3 ) 
+add_subdirectory( hancomword ) 
+add_subdirectory( latex ) 
+add_subdirectory( mswrite ) 
+add_subdirectory( oowriter ) 
+add_subdirectory( palmdoc ) 
+add_subdirectory( pdf ) 
+add_subdirectory( rtf ) 
+add_subdirectory( wml ) 
+add_subdirectory( wordperfect ) 
+
+message(STATUS "${CMAKE_CURRENT_SOURCE_DIR}: skipped subdir $(MSWORD_SUBDIR)")
+include_directories( ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
+
+
+########### install files ###############
+
+
+kde4_footer()
+
+
+
+#original Makefile.am contents follow:
+
+#if include_wv2_msword_filter
+#MSWORD_SUBDIR=msword
+#endif
+#
+#SUBDIRS = libexport abiword amipro applixword ascii docbook html kword1.3 \
+#	hancomword latex $(MSWORD_SUBDIR) mswrite oowriter palmdoc pdf rtf  wml \
+#	wordperfect

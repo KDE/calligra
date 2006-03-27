@@ -34,7 +34,7 @@ class XSLTImportDia : public XSLTDialog
 	QByteArray _arrayIn;
 	KoStore* _out;
 	/** xslt file current */
-	KURL _currentFile;
+	KUrl _currentFile;
 	QCString _format;
 	KConfig* _config;
 	/** List of the most recent xslt file used. */

@@ -22,6 +22,10 @@
 #include <math.h>
 #include <kcursor.h>
 #include <kdebug.h>
+//Added by qt3to4:
+#include <QMouseEvent>
+#include <QKeyEvent>
+#include <QEvent>
 
 KoEventHandler::KoEventHandler( QObject* target )
 {
@@ -43,7 +47,7 @@ QObject* KoEventHandler::target()
 
 class KoPartResizeHandlerPrivate {
 public:
-    KoPartResizeHandlerPrivate( const QWMatrix& matrix, KoView *view, KoChild* child,
+    KoPartResizeHandlerPrivate( const QMatrix& matrix, KoView *view, KoChild* child,
                               KoChild::Gadget gadget, const QPoint& point ) :
         m_gadget(gadget), m_view(view), m_child(child), m_parentMatrix(matrix) {
 
@@ -63,13 +67,13 @@ public:
     QRect m_geometryStart;
     KoView* m_view;
     KoChild* m_child;
-    QWMatrix m_invert;
-    QWMatrix m_matrix;
-    QWMatrix m_parentMatrix;
-    QWMatrix m_invertParentMatrix;
+    QMatrix m_invert;
+    QMatrix m_matrix;
+    QMatrix m_parentMatrix;
+    QMatrix m_invertParentMatrix;
 };
 
-KoPartResizeHandler::KoPartResizeHandler( QWidget* widget, const QWMatrix& matrix, KoView* view, KoChild* child,
+KoPartResizeHandler::KoPartResizeHandler( QWidget* widget, const QMatrix& matrix, KoView* view, KoChild* child,
                                       KoChild::Gadget gadget, const QPoint& point )
     : KoEventHandler( widget )
 {
@@ -209,7 +213,7 @@ bool KoPartResizeHandler::eventFilter( QObject*, QEvent* ev )
 
 class KoPartMoveHandlerPrivate {
 public:
-    KoPartMoveHandlerPrivate( const QWMatrix& matrix, KoView* view, KoChild* child,
+    KoPartMoveHandlerPrivate( const QMatrix& matrix, KoView* view, KoChild* child,
                             const QPoint& point) : m_view(view), m_dragChild(child),
                                                    m_parentMatrix(matrix) {
         m_invertParentMatrix = matrix.invert();
@@ -224,11 +228,11 @@ public:
     QPoint m_mouseDragStart;
     QRect m_geometryDragStart;
     QPoint m_rotationDragStart;
-    QWMatrix m_invertParentMatrix;
-    QWMatrix m_parentMatrix;
+    QMatrix m_invertParentMatrix;
+    QMatrix m_parentMatrix;
 };
 
-KoPartMoveHandler::KoPartMoveHandler( QWidget* widget, const QWMatrix& matrix, KoView* view, KoChild* child,
+KoPartMoveHandler::KoPartMoveHandler( QWidget* widget, const QMatrix& matrix, KoView* view, KoChild* child,
                                   const QPoint& point )
     : KoEventHandler( widget )
 {
@@ -305,17 +309,17 @@ bool KoContainerHandler::eventFilter( QObject*, QEvent* ev )
         QMouseEvent *e=static_cast<QMouseEvent*>(ev);
         KoChild *ch=child(gadget, pos, e);
 
-	if ( e->button() == RightButton && gadget != KoChild::NoGadget )
+	if ( e->button() == Qt::RightButton && gadget != KoChild::NoGadget )
         {
 	    emit popupMenu( ch, e->globalPos() );
             return true;
         }
-        else if ( e->button() == LeftButton && gadget == KoChild::Move )
+        else if ( e->button() == Qt::LeftButton && gadget == KoChild::Move )
         {
             (void)new KoPartMoveHandler( static_cast<QWidget*>(target()), m_view->matrix(), m_view, ch, pos );
             return true;
         }
-        else if ( e->button() == LeftButton && gadget != KoChild::NoGadget )
+        else if ( e->button() == Qt::LeftButton && gadget != KoChild::NoGadget )
         {
             (void)new KoPartResizeHandler( static_cast<QWidget*>(target()), m_view->matrix(), m_view, ch, gadget, pos );
             return true;
@@ -335,13 +339,13 @@ bool KoContainerHandler::eventFilter( QObject*, QEvent* ev )
             retval = false;
 
         if ( gadget == KoChild::TopLeft || gadget == KoChild::BottomRight )
-            targetWidget->setCursor( sizeFDiagCursor );
+            targetWidget->setCursor( Qt::sizeFDiagCursor );
         else if ( gadget == KoChild::TopRight || gadget == KoChild::BottomLeft )
-            targetWidget->setCursor( sizeBDiagCursor );
+            targetWidget->setCursor( Qt::sizeBDiagCursor );
         else if ( gadget == KoChild::TopMid || gadget == KoChild::BottomMid )
-            targetWidget->setCursor( sizeVerCursor );
+            targetWidget->setCursor( Qt::sizeVerCursor );
         else if ( gadget == KoChild::MidLeft || gadget == KoChild::MidRight )
-            targetWidget->setCursor( sizeHorCursor );
+            targetWidget->setCursor( Qt::sizeHorCursor );
         else if ( gadget == KoChild::Move )
             targetWidget->setCursor( KCursor::handCursor() );
         else

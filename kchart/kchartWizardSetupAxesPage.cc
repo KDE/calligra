@@ -3,11 +3,14 @@
 #include "kchart_part.h"
 
 #include <qlabel.h>
-#include <qframe.h>
+#include <q3frame.h>
 #include <qlineedit.h>
 #include <qcheckbox.h>
-#include <qgroupbox.h>
+#include <q3groupbox.h>
 #include <qlayout.h>
+//Added by qt3to4:
+#include <Q3GridLayout>
+#include <QPaintEvent>
 #include <klocale.h>
 #include <kfontdialog.h>
 #include <knumvalidator.h>
@@ -31,13 +34,13 @@ KChartWizardSetupAxesPage::KChartWizardSetupAxesPage( QWidget* parent,
 {
     chart3d=true;
 
-    QGridLayout *grid1 = new QGridLayout(this,2,2,KDialog::marginHint(), KDialog::spacingHint());
+    Q3GridLayout *grid1 = new Q3GridLayout(this,2,2,KDialog::marginHint(), KDialog::spacingHint());
 
-    QGroupBox* tmpQGroupBox;
-    tmpQGroupBox = new QGroupBox( this, "GroupBox_1" );
+    Q3GroupBox* tmpQGroupBox;
+    tmpQGroupBox = new Q3GroupBox( this, "GroupBox_1" );
     tmpQGroupBox->setFrameStyle( 49 );
 
-    QGridLayout *grid2 = new QGridLayout(tmpQGroupBox,3,2,KDialog::marginHint(), KDialog::spacingHint());
+    Q3GridLayout *grid2 = new Q3GridLayout(tmpQGroupBox,3,2,KDialog::marginHint(), KDialog::spacingHint());
 
     
     //grid = new QCheckBox( i18n( "Has grid:" ), tmpQGroupBox  );
@@ -72,10 +75,10 @@ KChartWizardSetupAxesPage::KChartWizardSetupAxesPage( QWidget* parent,
     grid1->addWidget(tmpQGroupBox,0,0);
 
 
-    tmpQGroupBox = new QGroupBox( this, "GroupBox_2" );
+    tmpQGroupBox = new Q3GroupBox( this, "GroupBox_2" );
     tmpQGroupBox->setFrameStyle( 49 );
 
-    grid2 = new QGridLayout(tmpQGroupBox,3,2,KDialog::marginHint(), KDialog::spacingHint());
+    grid2 = new Q3GridLayout(tmpQGroupBox,3,2,KDialog::marginHint(), KDialog::spacingHint());
 
     QLabel *tmpLabel;
     tmpLabel=new QLabel(tmpQGroupBox);
@@ -103,10 +106,10 @@ KChartWizardSetupAxesPage::KChartWizardSetupAxesPage( QWidget* parent,
 
     grid1->addWidget(tmpQGroupBox,0,1);
 
-    tmpQGroupBox = new QGroupBox( this, "GroupBox_3" );
+    tmpQGroupBox = new Q3GroupBox( this, "GroupBox_3" );
     tmpQGroupBox->setFrameStyle( 49 );
 
-    grid2 = new QGridLayout(tmpQGroupBox,3,2,KDialog::marginHint(), KDialog::spacingHint());
+    grid2 = new Q3GridLayout(tmpQGroupBox,3,2,KDialog::marginHint(), KDialog::spacingHint());
 
     tmpLabel=new QLabel(tmpQGroupBox);
     tmpLabel->setText(i18n("Y interval:"));
@@ -143,10 +146,10 @@ KChartWizardSetupAxesPage::KChartWizardSetupAxesPage( QWidget* parent,
     grid1->addWidget(tmpQGroupBox,1,0);
     tmpQGroupBox->setEnabled(false);
 
-    tmpQGroupBox = new QGroupBox( this, "GroupBox_3" );
+    tmpQGroupBox = new Q3GroupBox( this, "GroupBox_3" );
     tmpQGroupBox->setFrameStyle( 49 );
 
-    grid2 = new QGridLayout(tmpQGroupBox,3,2,KDialog::marginHint(), KDialog::spacingHint());
+    grid2 = new Q3GridLayout(tmpQGroupBox,3,2,KDialog::marginHint(), KDialog::spacingHint());
 
     tmpLabel=new QLabel(tmpQGroupBox);
     tmpLabel->setText(i18n("Y-label format:"));

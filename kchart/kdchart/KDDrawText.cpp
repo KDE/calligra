@@ -29,6 +29,8 @@
 #include <qpainter.h>
 #include <qbitmap.h>
 #include <qpixmap.h>
+//Added by qt3to4:
+#include <Q3PointArray>
 #include <math.h>
 #include <limits.h>
 
@@ -188,7 +190,7 @@ void KDDrawText::drawRotatedTxt( QPainter* painter,
                     i0 = iLF+1;
                 }
             }else{
-                const QRect r(painter->boundingRect( 0,0,1,1, Qt::AlignAuto, text ));
+                const QRect r(painter->boundingRect( 0,0,1,1, Qt::AlignLeft, text ));
                 // correct width and height before painting with 2 unit to avoid truncating.
                 // PENDING Michel - improve
                 txtWidth  = r.width()+2;
@@ -272,7 +274,7 @@ void KDDrawText::drawRotatedTxt( QPainter* painter,
         QPoint bottomLeft(  painter->xForm( rect.bottomLeft()  ) );
       
         int additor = addPercentOfHeightToRegion * txtHeight / 100;
-        QPointArray points;
+        Q3PointArray points;
         points.setPoints( 4, topLeft.x()-additor,     topLeft.y()-additor,
                 topRight.x()+additor,    topRight.y()-additor,
                 bottomRight.x()+additor, bottomRight.y()+additor,
@@ -359,7 +361,7 @@ void KDDrawText::drawRotatedTxt( QPainter* painter,
             QBitmap mask;
             mask = pm;
             pm.setMask( mask );
-            QWMatrix m;
+            QMatrix m;
             m.rotate( degrees );
             QPixmap theRotatedPixmap = pm.xForm(m);
 

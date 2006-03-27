@@ -32,11 +32,14 @@
 #include <qcolor.h>
 #include <qstring.h>
 #include <qstringlist.h>
+//Added by qt3to4:
+#include <Q3GridLayout>
+#include <Q3ValueList>
 #include <koffice_export.h>
 
 class QPushButton;
 class QRadioButton;
-class QGridLayout;
+class Q3GridLayout;
 class QCheckBox;
 class QComboBox;
 class QSpinBox;
@@ -66,9 +69,9 @@ public:
         Size = 4 * KFindDialog::MinimumUserOption,
         Bold = 8 * KFindDialog::MinimumUserOption,
         Italic = 16 * KFindDialog::MinimumUserOption,
-        Underline = 32 * KFindDialog::MinimumUserOption,
+        Qt::TextUnderline = 32 * KFindDialog::MinimumUserOption,
         VertAlign = 64 * KFindDialog::MinimumUserOption,
-        StrikeOut = 128 * KFindDialog::MinimumUserOption,
+        Qt::TextStrikeOut = 128 * KFindDialog::MinimumUserOption,
         BgColor = 256 * KFindDialog::MinimumUserOption,
         Shadow = 512 * KFindDialog::MinimumUserOption,
         WordByWord = 1024 * KFindDialog::MinimumUserOption,
@@ -111,7 +114,7 @@ private slots:
 
 private:
     KoSearchContext *m_ctx;
-    QGridLayout *m_grid;
+    Q3GridLayout *m_grid;
     bool m_bOptionsShown;
     QPushButton *m_btnShowOptions;
     QWidget *m_parent;
@@ -203,8 +206,8 @@ class KOTEXT_EXPORT KoFindReplace : public QObject
 {
     Q_OBJECT
 public:
-    KoFindReplace( QWidget * parent, KoSearchDia * dialog, const QValueList<KoTextObject *> & lstObject, KoTextView* textView );
-    KoFindReplace( QWidget * parent, KoReplaceDia * dialog, const QValueList<KoTextObject *> & lstObject, KoTextView* textView );
+    KoFindReplace( QWidget * parent, KoSearchDia * dialog, const Q3ValueList<KoTextObject *> & lstObject, KoTextView* textView );
+    KoFindReplace( QWidget * parent, KoReplaceDia * dialog, const Q3ValueList<KoTextObject *> & lstObject, KoTextView* textView );
     ~KoFindReplace();
 
     KoTextParag *currentParag() {

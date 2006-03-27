@@ -30,8 +30,8 @@
 #include <qregion.h>
 #include <qpalette.h>
 #include <qpoint.h>
-#include <qsimplerichtext.h>
-#include <qpaintdevicemetrics.h>
+#include <q3simplerichtext.h>
+#include <q3paintdevicemetrics.h>
 
 #include <KDChartCustomBox.h>
 #include <KDXMLTools.h>
@@ -208,7 +208,7 @@ QRect KDChartCustomBox::trueRect( QPoint anchor, double areaWidthP1000, double a
 #endif
 
         //qDebug("\nw: %i    h: %i", w,h );
-        QSimpleRichText tmpContent( txt, font );
+        Q3SimpleRichText tmpContent( txt, font );
 //        tmpContent.setWidth(pdWidth);
 //        tmpContent.setHeight(pdHeight);
 //        tmpContent.adjustSize();

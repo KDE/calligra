@@ -28,9 +28,11 @@
 
 #include <kmdcodec.h>
 #include <qpainter.h>
-#include <qpicture.h>
+#include <q3picture.h>
 #include <qpixmap.h>
-#include <qdragobject.h>
+#include <q3dragobject.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 static int s_useSlowResizeMode = -1; // unset
 
@@ -94,10 +96,10 @@ bool KoPictureBase::save(QIODevice*) const
 bool KoPictureBase::saveAsBase64( KoXmlWriter& writer ) const
 {
     QBuffer buffer;
-    buffer.open(IO_ReadWrite);
+    buffer.open(QIODevice::ReadWrite);
     if ( !save( &buffer ) )
         return false;
-    QCString encoded = KCodecs::base64Encode( buffer.buffer() );
+    Q3CString encoded = KCodecs::base64Encode( buffer.buffer() );
     writer.addTextNode( encoded );
     return true;
 }
@@ -122,13 +124,13 @@ bool KoPictureBase::isSlowResizeModeAllowed(void) const
     return s_useSlowResizeMode != 0;
 }
 
-QDragObject* KoPictureBase::dragObject( QWidget * dragSource, const char * name )
+Q3DragObject* KoPictureBase::dragObject( QWidget * dragSource, const char * name )
 {
     QImage image (generateImage(getOriginalSize()));
     if (image.isNull())
         return 0L;
     else
-        return new QImageDrag( image, dragSource, name );
+        return new Q3ImageDrag( image, dragSource, name );
 }
 
 QImage KoPictureBase::generateImage(const QSize& size)

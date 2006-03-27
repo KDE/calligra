@@ -37,6 +37,8 @@
 #include <kdebug.h>
 
 #include <float.h> // for DBL_DIG
+//Added by qt3to4:
+#include <Q3CString>
 
 //#define DEBUG_DRAW
 
@@ -44,7 +46,7 @@
 /* Class: ZOrderedFrameList                                       */
 /******************************************************************/
 
-int ZOrderedFrameList::compareItems(QPtrCollection::Item a, QPtrCollection::Item b)
+int ZOrderedFrameList::compareItems(Q3PtrCollection::Item a, Q3PtrCollection::Item b)
 {
     int za = ((KWFrame *)a)->zOrder();
     int zb = ((KWFrame *)b)->zOrder();
@@ -61,7 +63,7 @@ int ZOrderedFrameList::compareItems(QPtrCollection::Item a, QPtrCollection::Item
 KWFrame::KWFrame(KWFrame * frame)
 {
     m_runAround = RA_NO;
-    //kdDebug(32001) << "KWFrame::KWFrame this=" << this << " frame=" << frame << endl;
+    //kDebug(32001) << "KWFrame::KWFrame this=" << this << " frame=" << frame << endl;
     copySettings( frame );
     m_minFrameHeight=0;
     m_frameStack = 0; // lazy initialisation.
@@ -96,13 +98,13 @@ KWFrame::KWFrame(KWFrameSet *fs, double left, double top, double width, double h
       m_borderBottom( QColor(), KoBorder::SOLID, 0 ),
       m_frameSet( fs )
 {
-    //kdDebug(32001) << "KWFrame::KWFrame " << this << " left=" << left << " top=" << top << endl;
+    //kDebug(32001) << "KWFrame::KWFrame " << this << " left=" << left << " top=" << top << endl;
     m_frameStack = 0; // lazy initialisation.
 }
 
 KWFrame::~KWFrame()
 {
-    //kdDebug(32001) << "KWFrame::~KWFrame " << this << endl;
+    //kDebug(32001) << "KWFrame::~KWFrame " << this << endl;
     delete m_frameStack;
     m_frameStack = 0;
 }
@@ -117,11 +119,11 @@ int KWFrame::pageNumber() const
 {
     Q_ASSERT( m_frameSet );
     if( !m_frameSet ) {
-        kdDebug() << k_funcinfo << this << " has no frameset!" << endl;
+        kDebug() << k_funcinfo << this << " has no frameset!" << endl;
         return 0;
     }
     if( !m_frameSet->pageManager() ) {
-        kdWarning() << k_funcinfo << this << " is not a frame that is in use; misses a pageManager!" << endl;
+        kWarning() << k_funcinfo << this << " is not a frame that is in use; misses a pageManager!" << endl;
         return -1;
     }
     return frameSet()->pageManager()->pageNumber(this);
@@ -251,7 +253,7 @@ void KWFrame::save( QDomElement &frameElem )
             frameElem.setAttribute( "runaroundTop", m_runAroundTop );
             frameElem.setAttribute( "runaroundBottom", m_runAroundBottom );
             // The old file format had only one value, keep compat
-            double runAroundGap = QMAX( QMAX( m_runAroundLeft, m_runAroundRight ), QMAX( m_runAroundTop, m_runAroundBottom ) );
+            double runAroundGap = qMax( qMax( m_runAroundLeft, m_runAroundRight ), qMax( m_runAroundTop, m_runAroundBottom ) );
             frameElem.setAttribute( "runaroundGap", runAroundGap );
         }
     }
@@ -492,7 +494,7 @@ void KWFrame::loadCommonOasisProperties( KoOasisContext& context, KWFrameSet* fr
 
     // This attribute isn't part of the OASIS spec. Doesn't matter since it doesn't affect rendering
     // of existing documents, only editing (and only KWord has this kind of option until now).
-    const QCString frameBehaviorOnNewPage = styleStack.attributeNS( KoXmlNS::koffice, "frame-behavior-on-new-page" ).latin1();
+    const Q3CString frameBehaviorOnNewPage = styleStack.attributeNS( KoXmlNS::koffice, "frame-behavior-on-new-page" ).latin1();
     if ( frameBehaviorOnNewPage == "followup" )
         m_newFrameBehavior = Reconnect;
     else if ( frameBehaviorOnNewPage == "copy" )
@@ -502,7 +504,7 @@ void KWFrame::loadCommonOasisProperties( KoOasisContext& context, KWFrameSet* fr
     else { // Defaults for OASIS documents not created by KWord
         m_newFrameBehavior = frameSet->isHeaderOrFooter() ? Copy : NoFollowup;
         if ( !frameBehaviorOnNewPage.isEmpty() )
-            kdWarning(32001) << "Unknown value for koffice:frame-behavior-on-new-page: " << frameBehaviorOnNewPage << endl;
+            kWarning(32001) << "Unknown value for koffice:frame-behavior-on-new-page: " << frameBehaviorOnNewPage << endl;
     }
     // Footnotes and endnotes are handled in a special way.
     if ( frameSet->isFootEndNote() ) // note that isFootNote/isEndNote are not possible yet
@@ -510,7 +512,7 @@ void KWFrame::loadCommonOasisProperties( KoOasisContext& context, KWFrameSet* fr
 
     KWFrame::RunAround runAround = KWFrame::RA_BOUNDINGRECT;
     KWFrame::RunAroundSide runAroundSide = KWFrame::RA_BIGGEST;
-    const QCString oowrap = styleStack.attributeNS( KoXmlNS::style, "wrap" ).latin1();
+    const Q3CString oowrap = styleStack.attributeNS( KoXmlNS::style, "wrap" ).latin1();
     if ( oowrap == "none" )        // 'no wrap' means 'avoid horizontal space'
         runAround = KWFrame::RA_SKIP;
     else if ( oowrap == "left" )
@@ -711,12 +713,12 @@ KoRect KWFrame::innerRect() const
 
 double KWFrame::innerWidth() const
 {
-    return KMAX( 0.0, width() - m_paddingLeft - m_paddingRight );
+    return qMax( 0.0, width() - m_paddingLeft - m_paddingRight );
 }
 
 double KWFrame::innerHeight() const
 {
-    return KMAX( 0.0, height() - m_paddingTop - m_paddingBottom );
+    return qMax( 0.0, height() - m_paddingTop - m_paddingBottom );
 }
 
 void KWFrame::setFramePadding( double left, double top, double right, double bottom)

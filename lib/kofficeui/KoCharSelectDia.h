@@ -22,9 +22,11 @@
 
 #include <kdialogbase.h>
 #include <koffice_export.h>
+//Added by qt3to4:
+#include <Q3GridLayout>
 
 class QWidget;
-class QGridLayout;
+class Q3GridLayout;
 class QPushButton;
 class KCharSelect;
 class KButtonBox;
@@ -64,7 +66,7 @@ private slots:
 
 protected:
     // dialog objects
-    QGridLayout *grid;
+    Q3GridLayout *grid;
     KButtonBox *bbox;
     QPushButton *bOk, *bCancel;
     KCharSelect *charSelect;

@@ -22,7 +22,7 @@
 
 #include <kservice.h>
 #include <ksharedptr.h>
-#include <qvaluelist.h>
+#include <q3valuelist.h>
 #include <koffice_export.h>
 
 class QObject;
@@ -80,7 +80,7 @@ public:
    *                 You can use it to set additional restrictions on the available
    *                 components.
    */
-  static QValueList<KoDocumentEntry> query( const QString &  _constr = QString::null );
+  static Q3ValueList<KoDocumentEntry> query( const QString &  _constr = QString::null );
 
   /**
    *  This function will query the system to find all available filters.
@@ -94,7 +94,7 @@ public:
    *                 components.
    */
   // ### TODO: MERGE WITH ABOVE METHODE WHEN BIC+SIC CHANGES ARE ALLOWED
-  static QValueList<KoDocumentEntry> query( bool _onlyDocEmb,const QString& _constr);
+  static Q3ValueList<KoDocumentEntry> query( bool _onlyDocEmb,const QString& _constr);
   /* this is how the signature should be looking after merging
   static QValueList<KoDocumentEntry> query( bool _onlyDocEmb =true, const QString& _constr = QString::null );
   or better: use an enum for the first arg.
@@ -167,7 +167,7 @@ public:
    *                 You can use it to set additional restrictions on the available
    *                 components.
    */
-  static QValueList<KoFilterEntry::Ptr> query( const QString& _constr = QString::null );
+  static Q3ValueList<KoFilterEntry::Ptr> query( const QString& _constr = QString::null );
 
   KService::Ptr service() const { return m_service; }
 

@@ -54,27 +54,27 @@ bool SpellChecker::run( const QString& command, void* data, const QString& datat
 {
     if ( command != "spellcheck" )
     {
-	kdDebug(31000) << "SpellChecker does only accept the command 'spellcheck'" << endl;
-	kdDebug(31000) << "   The commands " << command << " is not accepted" << endl;
+	kDebug(31000) << "SpellChecker does only accept the command 'spellcheck'" << endl;
+	kDebug(31000) << "   The commands " << command << " is not accepted" << endl;
 	return FALSE;
     }
 
     // Check wether we can accept the data
     if ( datatype != "QString" )
     {
-	kdDebug(31000) << "SpellChecker only accepts datatype QString" << endl;
+	kDebug(31000) << "SpellChecker only accepts datatype QString" << endl;
 	return FALSE;
     }
 
     if ( mimetype != "text/plain" && mimetype != "application/x-singleword" )
     {
-	kdDebug(31000) << "SpellChecker only accepts mimetype text/plain and application/x-singleword" << endl;
+	kDebug(31000) << "SpellChecker only accepts mimetype text/plain and application/x-singleword" << endl;
 	return FALSE;
     }
 
     // Get data
     QString buffer = *((QString *)data);
-    buffer = buffer.stripWhiteSpace();
+    buffer = buffer.trimmed();
 
     if ( instance() )
     {
@@ -82,10 +82,10 @@ bool SpellChecker::run( const QString& command, void* data, const QString& datat
         QCString gn( "KSpell " );
         gn += instance()->instanceName(); // for compat reasons, and to avoid finding the group in kdeglobals (hmm...)
         QString groupName = QString::fromLatin1( gn );
-        //kdDebug() << "Group: " << groupName << endl;
+        //kDebug() << "Group: " << groupName << endl;
         if ( config->hasGroup( groupName ) )
         {
-            //kdDebug() << "SpellChecker::run - group found -" << endl;
+            //kDebug() << "SpellChecker::run - group found -" << endl;
             config->setGroup( groupName );
 #if 0
             kosconfig.setNoRootAffix(config->readNumEntry ("KSpell_NoRootAffix", 0));

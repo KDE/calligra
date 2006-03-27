@@ -26,7 +26,7 @@
 #include <KoRect.h>
 #include <qbrush.h>
 #include "KoBorder.h"
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 
 class KWCanvas;
 class KWDocument;
@@ -52,10 +52,10 @@ class QDomElement;
  *
  * With Qt4 we'll be able to use qSort for lists.
  */
-class ZOrderedFrameList : public QPtrList<KWFrame>
+class ZOrderedFrameList : public Q3PtrList<KWFrame>
 {
 protected:
-    virtual int compareItems(QPtrCollection::Item a, QPtrCollection::Item b);
+    virtual int compareItems(Q3PtrCollection::Item a, Q3PtrCollection::Item b);
 };
 
 

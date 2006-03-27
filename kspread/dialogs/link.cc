@@ -67,7 +67,7 @@ LinkDialog::LinkDialog( QWidget*, const char* )
     
     // link for web or ftp
     d->internetPage = addPage( i18n( "Internet" ), QString::null, 
-        BarIcon( "html",KIcon::SizeMedium ) );
+        BarIcon( "html",K3Icon::SizeMedium ) );
     QVBoxLayout* iLayout = new QVBoxLayout( d->internetPage, marginHint(), spacingHint() );
     iLayout->add( new QLabel( i18n("Text to display:" ), d->internetPage ) );
     d->internetText = new KLineEdit( d->internetPage );
@@ -81,7 +81,7 @@ LinkDialog::LinkDialog( QWidget*, const char* )
     
     // link for e-mail
     d->mailPage = addPage( i18n( "Mail" ), QString::null, 
-        BarIcon( "mail_generic",KIcon::SizeMedium ) );
+        BarIcon( "mail_generic",K3Icon::SizeMedium ) );
     QVBoxLayout* mLayout = new QVBoxLayout( d->mailPage, marginHint(), spacingHint() );
     mLayout->add( new QLabel( i18n("Text to display:" ), d->mailPage ) );
     d->mailText = new KLineEdit( d->mailPage );
@@ -95,7 +95,7 @@ LinkDialog::LinkDialog( QWidget*, const char* )
     
     // link for external file
     d->filePage = addPage( i18n( "File" ), QString::null, 
-        BarIcon( "filenew",KIcon::SizeMedium ) );
+        BarIcon( "filenew",K3Icon::SizeMedium ) );
     QVBoxLayout* fLayout = new QVBoxLayout( d->filePage, marginHint(), spacingHint() );
     fLayout->add( new QLabel( i18n("Text to display:" ), d->filePage ) );
     d->fileText = new KLineEdit( d->filePage );
@@ -130,7 +130,7 @@ LinkDialog::LinkDialog( QWidget*, const char* )
     
     // link to another cell
     d->cellPage =  addPage( i18n( "Cell" ), QString::null, 
-        BarIcon( "misc",KIcon::SizeMedium ) );
+        BarIcon( "misc",K3Icon::SizeMedium ) );
     QVBoxLayout* cLayout = new QVBoxLayout( d->cellPage, marginHint(), spacingHint() );
     cLayout->add( new QLabel( i18n("Text to display:" ), d->cellPage ) );
     d->cellText = new KLineEdit( d->cellPage );

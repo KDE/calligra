@@ -20,10 +20,12 @@
 #include "ko_gray_widget.h"
 
 #include <qlayout.h>
-#include <qhbox.h>
+#include <q3hbox.h>
 #include <qlabel.h>
 #include <qspinbox.h>
 #include <qcolor.h>
+//Added by qt3to4:
+#include <Q3GridLayout>
 
 #include <kdebug.h>
 
@@ -37,11 +39,11 @@ KoGrayWidget::KoGrayWidget(QWidget *parent, const char *name) : super(parent, na
     Q_CHECK_PTR(m_ColorButton);
 
     m_ColorButton ->  setFixedSize(m_ColorButton->sizeHint());
-    QGridLayout *mGrid = new QGridLayout(this, 3, 5, 5, 2);
+    Q3GridLayout *mGrid = new Q3GridLayout(this, 3, 5, 5, 2);
 
     /* setup color sliders */
     mSlider = new KoColorSlider(this);
-    mSlider->setFocusPolicy( QWidget::ClickFocus );
+    mSlider->setFocusPolicy( Qt::ClickFocus );
     mSlider->setMaximumHeight(20);
     mSlider->slotSetRange(0, 255);
     mSlider->slotSetColor1(QColor(255, 255, 255));
@@ -56,7 +58,7 @@ KoGrayWidget::KoGrayWidget(QWidget *parent, const char *name) : super(parent, na
     mIn = new QSpinBox(0, 255, 1, this);
     mIn->setFixedWidth(50);
     mIn->setFixedHeight(20);
-    mIn->setFocusPolicy( QWidget::ClickFocus );
+    mIn->setFocusPolicy( Qt::ClickFocus );
 
     mGrid->addMultiCellWidget(m_ColorButton, 0, 3, 0, 0, Qt::AlignTop);
     mGrid->addWidget(mLabel, 0, 1);

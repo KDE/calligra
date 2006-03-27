@@ -19,7 +19,7 @@
 
 #include "KoFontTab.h"
 
-KoFontTab::KoFontTab( uint fontListCriteria, QWidget* parent, const char* name, WFlags fl ) 
+KoFontTab::KoFontTab( uint fontListCriteria, QWidget* parent, const char* name, Qt::WFlags fl ) 
         : KoFontTabBase( parent, name, fl )
 {
     QStringList list;

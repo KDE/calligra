@@ -31,8 +31,15 @@
 #include <qstyle.h>
 #include <qtimer.h>
 #include <qtoolbutton.h>
-#include <qvaluevector.h>
+#include <q3valuevector.h>
 #include <qwidget.h>
+//Added by qt3to4:
+#include <QWheelEvent>
+#include <QPixmap>
+#include <QPaintEvent>
+#include <Q3PointArray>
+#include <QResizeEvent>
+#include <QMouseEvent>
 
 // TODO
 // improvement possibilities
@@ -64,7 +71,7 @@ public:
     QStringList tabs;
 
     // array of QRect for each visible tabs
-    QValueVector<QRect> tabRects;
+    Q3ValueVector<QRect> tabRects;
 
     // leftmost tab (or rightmost if reverseLayout)
     int firstTab;
@@ -253,7 +260,7 @@ int KoTabBarPrivate::tabAt( const QPoint& pos )
 
 void KoTabBarPrivate::drawTab( QPainter& painter, QRect& rect, const QString& text, bool active )
 {
-    QPointArray polygon;
+    Q3PointArray polygon;
     
     if( !reverseLayout )
         polygon.setPoints( 6, rect.x(), rect.y(),
@@ -300,7 +307,7 @@ void KoTabBarPrivate::drawTab( QPainter& painter, QRect& rect, const QString& te
 
 void KoTabBarPrivate::drawMoveMarker( QPainter& painter, int x, int y )
 {
-    QPointArray movmark;
+    Q3PointArray movmark;
     movmark.setPoints( 3, x, y, x + 7, y, x + 4, y + 6);
     QBrush oldBrush = painter.brush();
     painter.setBrush( Qt::black );
@@ -348,7 +355,7 @@ void KoTabBarPrivate::updateButtons()
 
 // creates a new tabbar
 KoTabBar::KoTabBar( QWidget* parent, const char* name )
-    : QWidget( parent, name, Qt::WResizeNoErase | Qt::WRepaintNoErase )
+    : QWidget( parent, name, Qt::WResizeNoErase | Qt::WNoAutoErase )
 {
     d = new KoTabBarPrivate;
     d->tabbar = this;
@@ -769,7 +776,7 @@ void KoTabBar::mousePressEvent( QMouseEvent* ev )
             scrollForward();
     }
 
-    if( ev->button() == RightButton )
+    if( ev->button() == Qt::RightButton )
     if( !d->readOnly )
         emit contextMenu( ev->globalPos() );
 }
@@ -780,7 +787,7 @@ void KoTabBar::mouseReleaseEvent( QMouseEvent* ev )
 
     d->autoScroll = false;
 
-    if ( ev->button() == LeftButton && d->targetTab != 0 )
+    if ( ev->button() == Qt::LeftButton && d->targetTab != 0 )
     {
         emit tabMoved( d->activeTab-1, d->targetTab-1 );
         d->targetTab = 0;

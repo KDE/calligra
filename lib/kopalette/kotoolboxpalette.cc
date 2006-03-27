@@ -17,7 +17,7 @@
  */
 
 
-#include <qdockwindow.h>
+#include <q3dockwindow.h>
 #include <qtoolbox.h>
 
 #include <kopalette.h>

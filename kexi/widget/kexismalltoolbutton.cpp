@@ -62,7 +62,7 @@ void KexiSmallToolButton::updateAction()
 {
 	if (!m_action)
 		return;
-	update(m_action->text(), m_action->iconSet(KIcon::Small));
+	update(m_action->text(), m_action->iconSet(K3Icon::Small));
 	setAccel(m_action->shortcut());
 	QToolTip::add(this, m_action->toolTip());
 	QWhatsThis::add(this, m_action->whatsThis());
@@ -92,7 +92,7 @@ void KexiSmallToolButton::update(const QString& text, const QIconSet& iconSet, b
 		QToolButton::setTextLabel(text, tipToo);
 	}
 	if (!iconSet.isNull()) {
-		width += IconSize(KIcon::Small);
+		width += IconSize(K3Icon::Small);
 		QToolButton::setIconSet(iconSet);
 	}
 	setFixedWidth( width );

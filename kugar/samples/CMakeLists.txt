@@ -1,0 +1,19 @@
+kde4_header()
+
+include_directories( ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
+
+
+########### install files ###############
+
+install_files( ${DATA_INSTALL_DIR}/kugar/templates FILES  sample1.ktf sample2.ktf sample3.ktf sample1.kdf sample2.kdf sample3.kdf )
+
+kde4_footer()
+
+
+
+#original Makefile.am contents follow:
+
+#templatedir = $(kde_datadir)/kugar/templates
+#template_DATA = sample1.ktf sample2.ktf sample3.ktf sample1.kdf sample2.kdf sample3.kdf
+#
+#EXTRA_DIST = $(template_DATA)

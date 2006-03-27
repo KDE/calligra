@@ -184,15 +184,15 @@ Kross::Api::Object::Ptr KexiDBQuerySchema::setWhereExpression(Kross::Api::List::
             s.remove(QRegExp("^[\\s,]+"));
             int pos = s.find('=');
             if(pos < 0) break;
-            QString key = s.left(pos).stripWhiteSpace();
-            s = s.mid(pos + 1).stripWhiteSpace();
+            QString key = s.left(pos).trimmed();
+            s = s.mid(pos + 1).trimmed();
 
             QString value;
             int sp = s.find(re);
             if(sp >= 0) {
                 if(re.cap(0) == ",") {
-                    value = s.left(sp).stripWhiteSpace();
-                    s = s.mid(sp+1).stripWhiteSpace();
+                    value = s.left(sp).trimmed();
+                    s = s.mid(sp+1).trimmed();
                 }
                 else {
                     int ep = s.find(re.cap(0),sp+1);
@@ -217,7 +217,7 @@ Kross::Api::Object::Ptr KexiDBQuerySchema::setWhereExpression(Kross::Api::List::
         }
     }
     catch(Kross::Api::Exception::Ptr e) {
-        kdWarning() << "Exception in Kross::KexiDB::KexiDBQuerySchema::setWhereExpression: " << e->toString() << endl;
+        kWarning() << "Exception in Kross::KexiDB::KexiDBQuerySchema::setWhereExpression: " << e->toString() << endl;
         static_cast< ::KexiDB::QuerySchema* >(m_schema)->setWhereExpression(oldexpr); // fallback
         return new Kross::Api::Variant(QVariant(false,0));
     }

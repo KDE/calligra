@@ -24,6 +24,11 @@
 #include <qevent.h>
 #include <qobject.h>
 #include <qrect.h>
+//Added by qt3to4:
+#include <QMouseEvent>
+#include <QWheelEvent>
+#include <QFocusEvent>
+#include <QKeyEvent>
 
 #include "kformuladefs.h"
 #include "contextstyle.h"
@@ -122,7 +127,7 @@ public:
     /** @returns whether the cursor is at the last position. */
     bool isEnd() const;
 
-    void eraseSelection( Direction direction = beforeCursor );
+    void eraseSelection( Qt::Orientation direction = beforeCursor );
     void addText( QString str );
 
 signals:

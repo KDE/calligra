@@ -71,7 +71,7 @@ KexiDBCursor::KexiDBCursor(KexiDBConnection* connection, ::KexiDB::Cursor* curso
     // Returns current internal position of the cursor's query. Records 
     // are numbered from 0; the value -1 means that the cursor does not 
     // point to a valid record.
-    this->addProxyFunction< Kross::Api::ProxyValue<Kross::Api::Variant,Q_LLONG> >
+    this->addProxyFunction< Kross::Api::ProxyValue<Kross::Api::Variant,qint64> >
         ("at", m_cursor, &::KexiDB::Cursor::at );
 
     // Returns the number of fields available for this cursor.

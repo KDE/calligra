@@ -28,7 +28,7 @@
 
 class KComboBox;
 class KPushButton;
-class KPopupMenu;
+class KMenu;
 class KAction;
 class QListViewItem;
 
@@ -126,7 +126,7 @@ class KEXIRELATIONSVIEW_EXPORT KexiRelationWidget : public KexiViewBase
 		KexiRelationView *m_relationView;
 		KexiDB::Connection *m_conn;
 
-		KPopupMenu *m_tableQueryPopup //over table/query
+		KMenu *m_tableQueryPopup //over table/query
 			, *m_connectionPopup //over connection
 			, *m_areaPopup; //over outer area
 		KAction *m_openSelectedTableAction, *m_designSelectedTableAction;

@@ -32,7 +32,7 @@
 
 #include <klocale.h>
 #include <kaction.h>
-#include <kpopupmenu.h>
+#include <kmenu.h>
 #include <kglobalsettings.h>
 #include <kmessagebox.h>
 
@@ -62,11 +62,11 @@ KexiRelationView::KexiRelationView(QWidget *parent, const char *name)
 	setResizePolicy(Manual);
 /*MOVED TO KexiRelationDialog
 	//actions
-	m_tableQueryPopup = new KPopupMenu(this, "m_popup");
+	m_tableQueryPopup = new KMenu(this, "m_popup");
 	m_tableQueryPopup->insertTitle(i18n("Table"));
-	m_connectionPopup = new KPopupMenu(this, "m_connectionPopup");
+	m_connectionPopup = new KMenu(this, "m_connectionPopup");
 	m_connectionPopup->insertTitle(i18n("Relation"));
-	m_areaPopup = new KPopupMenu(this, "m_areaPopup");
+	m_areaPopup = new KMenu(this, "m_areaPopup");
 	
 	plugSharedAction("edit_delete", i18n("Hide Table"), m_tableQueryPopup);
 	plugSharedAction("edit_delete",m_connectionPopup);
@@ -86,7 +86,7 @@ KexiRelationView::KexiRelationView(QWidget *parent, const char *name)
 #if 0
 
 
-	m_popup = new KPopupMenu(this, "m_popup");
+	m_popup = new KMenu(this, "m_popup");
 	m_openSelectedTableQueryAction->plug( m_popup );
 	m_removeSelectedTableQueryAction->plug( m_popup );
 	m_removeSelectedConnectionAction->plug( m_popup );
@@ -119,19 +119,19 @@ KexiRelationView::addTable(KexiDB::TableSchema *t, const QRect &rect)
 	if(!t)
 		return 0;
 
-	kdDebug() << "KexiRelationView::addTable(): " << t->name() << ", " << viewport() << endl;
+	kDebug() << "KexiRelationView::addTable(): " << t->name() << ", " << viewport() << endl;
 
 	/*
 	if(m_tables.contains(t->name()))
 	{
-		kdDebug() << "KexiRelationView::addTable(): table already exists" << endl;
+		kDebug() << "KexiRelationView::addTable(): table already exists" << endl;
 //		return;
 	}
 	*/
 
 	KexiRelationViewTableContainer* c = m_tables.find(t->name());
 	if (c) {
-		kdWarning() << "KexiRelationView::addTable(): table already added" << endl;
+		kWarning() << "KexiRelationView::addTable(): table already added" << endl;
 		return c;
 	}
 
@@ -210,7 +210,7 @@ void
 KexiRelationView::addConnection(const SourceConnection& _conn)
 {
 	SourceConnection conn = _conn;
-	kdDebug() << "KexiRelationView::addConnection()" << endl;
+	kDebug() << "KexiRelationView::addConnection()" << endl;
 
 	KexiRelationViewTableContainer *master = m_tables[conn.masterTable];
 	KexiRelationViewTableContainer *details = m_tables[conn.detailsTable];
@@ -251,7 +251,7 @@ KexiRelationView::addConnection(const SourceConnection& _conn)
 		}
 	}
 
-//	kdDebug() << "KexiRelationView::addConnection(): finalSRC = " << m_tables[conn.srcTable] << endl;
+//	kDebug() << "KexiRelationView::addConnection(): finalSRC = " << m_tables[conn.srcTable] << endl;
 
 	KexiRelationViewConnection *connView = new KexiRelationViewConnection(master, details, conn, this);
 	m_connectionViews.append(connView);
@@ -268,7 +268,7 @@ KexiRelationView::addConnection(const SourceConnection& _conn)
 #if 0
 	if(!interactive)
 	{
-		kdDebug() << "KexiRelationView::addConnection: adding self" << endl;
+		kDebug() << "KexiRelationView::addConnection: adding self" << endl;
 		RelationList l = m_relation->projectRelations();
 		l.append(conn);
 		m_relation->updateRelationList(this, l);
@@ -310,9 +310,9 @@ KexiRelationView::containerMoved(KexiRelationViewTableContainer *c)
 			|| cview->connectionRect().intersects(r)) 
 		{
 			r |= cview->oldRect();
-			kdDebug() << r << endl;
+			kDebug() << r << endl;
 			r |= cview->connectionRect();
-			kdDebug() << r << endl;
+			kDebug() << r << endl;
 		}
 //			updateContents(cview->oldRect());
 //			updateContents(cview->connectionRect());
@@ -384,7 +384,7 @@ KexiRelationView::contentsMousePressEvent(QMouseEvent *ev)
 //		invalidateActions();
 
 		if(ev->button() == RightButton) {//show popup
-			kdDebug() << "KexiRelationView::contentsMousePressEvent(): context" << endl;
+			kDebug() << "KexiRelationView::contentsMousePressEvent(): context" << endl;
 //			QPopupMenu m;
 //				m_removeSelectedTableQueryAction->plug( &m );
 //				m_removeSelectedConnectionAction->plug( &m );
@@ -428,7 +428,7 @@ void KexiRelationView::clearSelection()
 void
 KexiRelationView::keyPressEvent(QKeyEvent *ev)
 {
-	kdDebug() << "KexiRelationView::keyPressEvent()" << endl;
+	kDebug() << "KexiRelationView::keyPressEvent()" << endl;
 
 	if (ev->key()==KGlobalSettings::contextMenuKey()) {
 		if (m_selectedConnection) {
@@ -447,9 +447,9 @@ KexiRelationView::keyPressEvent(QKeyEvent *ev)
 void
 KexiRelationView::recalculateSize(int width, int height)
 {
-	kdDebug() << "recalculateSize(" << width << ", " << height << ")" << endl;
+	kDebug() << "recalculateSize(" << width << ", " << height << ")" << endl;
 	int newW = contentsWidth(), newH = contentsHeight();
-	kdDebug() << "contentsSize(" << newW << ", " << newH << ")" << endl;
+	kDebug() << "contentsSize(" << newW << ", " << newH << ")" << endl;
 
 	if(newW < width)
 		newW = width;
@@ -480,7 +480,7 @@ KexiRelationView::stretchExpandSize()
 
 void KexiRelationView::slotTableViewEndDrag()
 {
-	kdDebug() << "END DRAG!" <<endl;
+	kDebug() << "END DRAG!" <<endl;
 	stretchExpandSize();
 
 }
@@ -501,7 +501,7 @@ KexiRelationView::removeSelectedObject()
 			&& (*it).srcField == m_selectedConnection->connection().srcField
 			&& (*it).rcvField == m_selectedConnection->connection().rcvField)
 		{
-			kdDebug() << "KexiRelationView::removeSelectedConnection(): matching found!" << endl;
+			kDebug() << "KexiRelationView::removeSelectedConnection(): matching found!" << endl;
 //			l.remove(it);
 		}
 		else
@@ -510,9 +510,9 @@ KexiRelationView::removeSelectedObject()
 		}
 	}
 
-	kdDebug() << "KexiRelationView::removeSelectedConnection(): d2" << endl;
+	kDebug() << "KexiRelationView::removeSelectedConnection(): d2" << endl;
 	m_relation->updateRelationList(this, nl);
-	kdDebug() << "KexiRelationView::removeSelectedConnection(): d3" << endl;
+	kDebug() << "KexiRelationView::removeSelectedConnection(): d3" << endl;
 #endif
 		delete m_selectedConnection;
 		m_selectedConnection = 0;
@@ -568,14 +568,14 @@ KexiRelationView::removeConnection(KexiRelationViewConnection *conn)
 	emit aboutConnectionRemove(conn);
 	m_connectionViews.remove(conn);
 	updateContents(conn->connectionRect());
-	kdDebug() << "KexiRelationView::removeConnection()" << endl;
+	kDebug() << "KexiRelationView::removeConnection()" << endl;
 }
 
 void KexiRelationView::slotTableViewGotFocus()
 {
 	if (m_focusedTableView == sender())
 		return;
-	kdDebug() << "GOT FOCUS!" <<endl;
+	kDebug() << "GOT FOCUS!" <<endl;
 	clearSelection();
 //	if (m_focusedTableView)
 //		m_focusedTableView->unsetFocus();
@@ -613,7 +613,7 @@ void KexiRelationView::tableHeaderContextMenuRequest(const QPoint& pos)
 {
 	if (m_focusedTableView != sender())
 		return;
-	kdDebug() << "HEADER CTXT MENU!" <<endl;
+	kDebug() << "HEADER CTXT MENU!" <<endl;
 	invalidateActions();
 	m_tableQueryPopup->exec(pos);	
 }

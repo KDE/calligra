@@ -21,6 +21,12 @@
 #include <iostream>
 
 #include <qpainter.h>
+//Added by qt3to4:
+#include <QMouseEvent>
+#include <QFocusEvent>
+#include <QWheelEvent>
+#include <QKeyEvent>
+#include <QPaintEvent>
 
 #include <kapplication.h>
 #include <kdebug.h>
@@ -35,8 +41,8 @@
 #include "kformulawidget.h"
 
 
-KFormulaWidget::KFormulaWidget(Container* doc, QWidget* parent, const char* name, WFlags f)
-    : QWidget(parent, name, f | WRepaintNoErase | WResizeNoErase),
+KFormulaWidget::KFormulaWidget(Container* doc, QWidget* parent, const char* name, Qt::WFlags f)
+    : QWidget(parent, name, f | Qt::WNoAutoErase | Qt::WResizeNoErase),
       formulaView(doc)
 {
     connect(doc, SIGNAL(formulaChanged(int, int)),
@@ -44,8 +50,8 @@ KFormulaWidget::KFormulaWidget(Container* doc, QWidget* parent, const char* name
     connect(&formulaView, SIGNAL(cursorChanged(bool, bool)),
             this, SLOT(slotCursorChanged(bool, bool)));
 
-    setFocusPolicy(QWidget::StrongFocus);
-    setBackgroundMode(NoBackground/*QWidget::PaletteBase*/);
+    setFocusPolicy(Qt::StrongFocus);
+    setBackgroundMode(Qt::NoBackground/*QWidget::PaletteBase*/);
 
     QRect rect = doc->boundingRect();
     slotFormulaChanged(rect.width(), rect.height());

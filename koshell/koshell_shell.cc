@@ -22,9 +22,13 @@
 
 #include <qcursor.h>
 #include <qsplitter.h>
-#include <qiconview.h>
+#include <q3iconview.h>
 #include <qlabel.h>
-#include <qvbox.h>
+#include <q3vbox.h>
+//Added by qt3to4:
+#include <Q3ValueList>
+#include <Q3CString>
+#include <Q3PtrList>
 
 #include <assert.h>
 
@@ -88,8 +92,8 @@ KoShellWindow::KoShellWindow()
   m_pFrame->setCornerWidget( m_tabCloseButton, BottomRight );
   m_tabCloseButton->hide();
 
-  QValueList<KoDocumentEntry> lstComponents = KoDocumentEntry::query(false,QString());
-  QValueList<KoDocumentEntry>::Iterator it = lstComponents.begin();
+  Q3ValueList<KoDocumentEntry> lstComponents = KoDocumentEntry::query(false,QString());
+  Q3ValueList<KoDocumentEntry>::Iterator it = lstComponents.begin();
   int id = 0;
   // Get all available components
   for( ; it != lstComponents.end(); ++it )
@@ -107,7 +111,7 @@ KoShellWindow::KoShellWindow()
       m_mapComponents[ id++ ] = *it;
   }
 
-  QValueList<int> list;
+  Q3ValueList<int> list;
   list.append( KoShellSettings::sidebarWidth() );
   list.append( this->width() - KoShellSettings::sidebarWidth() );
   m_pLayout->setSizes( list );
@@ -133,7 +137,7 @@ KoShellWindow::~KoShellWindow()
   partManager()->setActivePart(0);
 
   // Destroy all documents - queryClose has made sure we saved them first
-  QValueList<Page>::ConstIterator it = m_lstPages.begin();
+  Q3ValueList<Page>::ConstIterator it = m_lstPages.begin();
   for (; it != m_lstPages.end(); ++it )
   {
     (*it).m_pDoc->removeShell( this );
@@ -143,11 +147,11 @@ KoShellWindow::~KoShellWindow()
   }
   m_lstPages.clear();
 
-  setRootDocumentDirect( 0L, QPtrList<KoView>() ); // prevent our parent destructor from doing stupid things
+  setRootDocumentDirect( 0L, Q3PtrList<KoView>() ); // prevent our parent destructor from doing stupid things
   saveSettings(); // Now save our settings before exiting
 }
 
-bool KoShellWindow::openDocumentInternal( const KURL &url, KoDocument* )
+bool KoShellWindow::openDocumentInternal( const KUrl &url, KoDocument* )
 {
   // Here we have to distinguish two cases: The passed URL has a native
   // KOffice mimetype. Then we query the trader and create the document.
@@ -159,7 +163,7 @@ bool KoShellWindow::openDocumentInternal( const KURL &url, KoDocument* )
   /*if (!KIO::NetAccess::exists(url,true,0) )
   {
     KMessageBox::error(0L, i18n("The file %1 doesn't exist.").arg(url.url()) );
-    recentAction()->removeURL(url); //remove the file from the recent-opened-file-list
+    recentAction()->removeUrl(url); //remove the file from the recent-opened-file-list
     saveRecentFiles();
     return false;
   }*/
@@ -168,13 +172,13 @@ bool KoShellWindow::openDocumentInternal( const KURL &url, KoDocument* )
   m_documentEntry = KoDocumentEntry::queryByMimeType( mimeType->name().latin1() );
 
   KTempFile* tmpFile = 0;
-  KURL tmpUrl( url );  // we might have to load a converted temp. file
+  KUrl tmpUrl( url );  // we might have to load a converted temp. file
 
   if ( m_documentEntry.isEmpty() ) { // non-native
     tmpFile = new KTempFile;
 
     KoFilterManager *manager = new KoFilterManager( url.path() );
-    QCString mimetype;                                               // an empty mimetype means, that the "nearest"
+    Q3CString mimetype;                                               // an empty mimetype means, that the "nearest"
     KoFilter::ConversionStatus status = manager->exp0rt( tmpFile->name(), mimetype ); // KOffice part will be chosen
     delete manager;
 
@@ -197,7 +201,7 @@ bool KoShellWindow::openDocumentInternal( const KURL &url, KoDocument* )
     tmpUrl.setPath( tmpFile->name() );
   }
 
-  recentAction()->addURL( url );
+  recentAction()->addUrl( url );
 
   KoDocument* newdoc = m_documentEntry.createDoc();
 
@@ -248,7 +252,7 @@ bool KoShellWindow::openDocumentInternal( const KURL &url, KoDocument* )
   return true;
 }
 
-void KoShellWindow::slotSidebarItemClicked( QIconViewItem *item )
+void KoShellWindow::slotSidebarItemClicked( Q3IconViewItem *item )
 {
   //kdDebug() << "slotSidebarItemClicked called!" << endl;
   if( item != 0 )
@@ -305,7 +309,7 @@ void KoShellWindow::slotKSLoadCanceled( const QString & errMsg )
 void KoShellWindow::saveAll()
 {
   KoView *currentView = (*m_activePage).m_pView;
-  for (QValueList<Page>::iterator it=m_lstPages.begin(); it != m_lstPages.end(); ++it)
+  for (Q3ValueList<Page>::iterator it=m_lstPages.begin(); it != m_lstPages.end(); ++it)
   {
     if ( (*it).m_pDoc->isModified() )
     {
@@ -332,13 +336,13 @@ void KoShellWindow::setRootDocument( KoDocument * doc )
         doc->addShell( this );
 
     KoView *v = doc->createView(this);
-    QPtrList<KoView> views;
+    Q3PtrList<KoView> views;
     views.append(v);
     setRootDocumentDirect( doc, views );
     
     v->setGeometry( 0, 0, m_pFrame->width(), m_pFrame->height() );
     v->setPartManager( partManager() );
-    m_pFrame->addTab( v, KGlobal::iconLoader()->loadIcon( m_documentEntry.service()->icon(), KIcon::Small ), i18n("Untitled") );
+    m_pFrame->addTab( v, KGlobal::iconLoader()->loadIcon( m_documentEntry.service()->icon(), K3Icon::Small ), i18n("Untitled") );
     
     // Create a new page for this doc
     Page page;
@@ -355,7 +359,7 @@ void KoShellWindow::setRootDocument( KoDocument * doc )
     mnuSaveAll->setEnabled(true);
   } else
   {
-    setRootDocumentDirect( 0L, QPtrList<KoView>() );
+    setRootDocumentDirect( 0L, Q3PtrList<KoView>() );
     m_activePage = m_lstPages.end();
     KoMainWindow::updateCaption();
   }
@@ -372,7 +376,7 @@ void KoShellWindow::updateCaption()
     KoMainWindow::updateCaption();
     // Let's take this opportunity for setting a correct name for the icon
     // in koolbar
-    QValueList<Page>::Iterator it = m_lstPages.begin();
+    Q3ValueList<Page>::Iterator it = m_lstPages.begin();
     for( ; it != m_lstPages.end() ; ++it )
     {
       if ( (*it).m_pDoc == rootDocument() )
@@ -434,7 +438,7 @@ void KoShellWindow::slotSidebar_Document(int _item)
        (*m_activePage).m_id == _item )
     return;
     
-  QValueList<Page>::Iterator it = m_lstPages.begin();
+  Q3ValueList<Page>::Iterator it = m_lstPages.begin();
   while( it != m_lstPages.end() )
   {
     if ( (*it).m_id == _item )
@@ -465,7 +469,7 @@ void KoShellWindow::slotUpdatePart( QWidget* widget )
   KoView* v = dynamic_cast<KoView*>(widget);
   if ( v != 0 ) 
   {
-    QValueList<Page>::Iterator it = m_lstPages.begin();
+    Q3ValueList<Page>::Iterator it = m_lstPages.begin();
     for( ; it != m_lstPages.end(); ++it )
     {
       if( (*it).m_pView == v )
@@ -474,7 +478,7 @@ void KoShellWindow::slotUpdatePart( QWidget* widget )
   }
 }
 
-void KoShellWindow::switchToPage( QValueList<Page>::Iterator it )
+void KoShellWindow::switchToPage( Q3ValueList<Page>::Iterator it )
 {
   // Select new active page (view)
   m_activePage = it;
@@ -484,7 +488,7 @@ void KoShellWindow::switchToPage( QValueList<Page>::Iterator it )
   // Make it active (GUI etc.)
   partManager()->setActivePart( (*m_activePage).m_pDoc, v );
   // Change current document
-  QPtrList<KoView> views;
+  Q3PtrList<KoView> views;
   views.append(v);
   setRootDocumentDirect( (*m_activePage).m_pDoc, views );
   // Select the item in the sidebar
@@ -527,10 +531,10 @@ void KoShellWindow::slotFileOpen()
         dialog->setCaption( i18n("Import Document") );
     dialog->setMimeFilter( KoFilterManager::mimeFilter() );
 
-    KURL url;
+    KUrl url;
     if(dialog->exec()==QDialog::Accepted) {
         url=dialog->selectedURL();
-        recentAction()->addURL( url );
+        recentAction()->addUrl( url );
         if ( url.isLocalFile() )
             KRecentDocument::add(url.path(-1));
         else
@@ -609,7 +613,7 @@ void KoShellWindow::closeDocument()
 bool KoShellWindow::queryClose()
 {
   // Save current doc and views
-  QPtrList<KoView> currentViews;
+  Q3PtrList<KoView> currentViews;
   KoDocument * currentDoc = 0L;
   bool ok = true;
   if (m_activePage != m_lstPages.end())
@@ -619,12 +623,12 @@ bool KoShellWindow::queryClose()
 
       // This one is called by slotFileQuit and by the X button.
       // We have to check for unsaved docs...
-      QValueList<Page>::Iterator it = m_lstPages.begin();
+      Q3ValueList<Page>::Iterator it = m_lstPages.begin();
       for( ; it != m_lstPages.end(); ++it )
       {
           // This is quite a HACK
           // We should ask ourselves, to get a better dialog box
-          setRootDocumentDirect( (*it).m_pDoc, QPtrList<KoView>() );
+          setRootDocumentDirect( (*it).m_pDoc, Q3PtrList<KoView>() );
           // Test if we can close this doc
           if ( !KoMainWindow::queryClose() )
           {
@@ -664,8 +668,8 @@ void KoShellWindow::tab_contextMenu(QWidget * w,const QPoint &p)
 {
   KPopupMenu menu;
   KIconLoader il;
-  int const mnuSave = menu.insertItem( il.loadIconSet( "filesave", KIcon::Small ), i18n("Save") );
-  int const mnuClose = menu.insertItem( il.loadIcon( "fileclose", KIcon::Small ), i18n("Close") );
+  int const mnuSave = menu.insertItem( il.loadIconSet( "filesave", K3Icon::Small ), i18n("Save") );
+  int const mnuClose = menu.insertItem( il.loadIcon( "fileclose", K3Icon::Small ), i18n("Close") );
   
   int tabnr = m_pFrame->indexOf( w );
   Page page = m_lstPages[tabnr];

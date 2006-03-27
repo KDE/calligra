@@ -35,7 +35,7 @@
 
 class KMacroCommand;
 class KoSavingContext;
-class KURL;
+class KUrl;
 class KPrTextView;
 class KPrObject;
 class KPrDocument;
@@ -417,7 +417,7 @@ public:
 
     void slotRepaintVariable();
     void recalcPageNum();
-    void changePicture( const KURL & url, QWidget *parent );
+    void changePicture( const KUrl & url, QWidget *parent );
     void insertPicture( const QString &filename, const KoPoint &pos );
     void insertPicture( const QString &_file, const KoRect &_rect );
 

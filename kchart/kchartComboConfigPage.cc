@@ -27,7 +27,9 @@
 #include <qlayout.h>
 #include <qlabel.h>
 #include <qradiobutton.h>
-#include <qbuttongroup.h>
+#include <q3buttongroup.h>
+//Added by qt3to4:
+#include <Q3GridLayout>
 
 #include "kchart_params.h"
 
@@ -40,10 +42,10 @@ KChartComboPage::KChartComboPage( KChartParams* params,
 {
     //QVBoxLayout* toplevel = new QVBoxLayout( this, 10 );
 
-    QGridLayout* layout = new QGridLayout(this, 2, 2,KDialog::marginHint(), KDialog::spacingHint() );
+    Q3GridLayout* layout = new Q3GridLayout(this, 2, 2,KDialog::marginHint(), KDialog::spacingHint() );
     //toplevel->addLayout( layout );
-    QButtonGroup* gb = new QButtonGroup( i18n("HLC Style"), this );
-    QGridLayout *grid1 = new QGridLayout(gb,7,1,KDialog::marginHint(), KDialog::spacingHint());
+    Q3ButtonGroup* gb = new Q3ButtonGroup( i18n("HLC Style"), this );
+    Q3GridLayout *grid1 = new Q3GridLayout(gb,7,1,KDialog::marginHint(), KDialog::spacingHint());
     layout->addWidget(gb,0,0);
 
     diamond=new QRadioButton( i18n("Diamond"), gb ); ;

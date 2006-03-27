@@ -20,8 +20,10 @@
 
 #include <qlayout.h>
 #include <qvgroupbox.h>
-#include <qpopupmenu.h>
+#include <q3popupmenu.h>
 #include <qmenubar.h>
+//Added by qt3to4:
+#include <Q3HBoxLayout>
 
 #include <kdebug.h>
 #include <ktoolbar.h>
@@ -34,15 +36,15 @@
 #include <time.h>
 
 
-TopLevel::TopLevel( QWidget* parent, const char* name) : QMainWindow( parent, name )
+TopLevel::TopLevel( QWidget* parent, const char* name) : Q3MainWindow( parent, name )
 {
     setCaption( QString::fromLatin1( "KColorAction test application" ) );
 
     QWidget *w = new QWidget( this );
     setCentralWidget( w );
 
-    QBoxLayout* l = new QHBoxLayout( w, KDialog::marginHint(), KDialog::spacingHint() );
-    QGroupBox* b1 = new QVGroupBox( QString::fromLatin1( "KoColorPanel 1" ), w );
+    Q3BoxLayout* l = new Q3HBoxLayout( w, KDialog::marginHint(), KDialog::spacingHint() );
+    Q3GroupBox* b1 = new QVGroupBox( QString::fromLatin1( "KoColorPanel 1" ), w );
     panel = new KoColorPanel( b1, "panel1" );
     connect( panel, SIGNAL( colorSelected( const QColor& ) ), SLOT( slotColorSelected( const QColor& ) ) );
     //panel->insertDefaultColors();
@@ -53,7 +55,7 @@ TopLevel::TopLevel( QWidget* parent, const char* name) : QMainWindow( parent, na
     ( void ) new KoColorPanel( b1, "panel2" );
     l->addWidget( b1 );
 
-    QPopupMenu* file = new QPopupMenu( this );
+    Q3PopupMenu* file = new Q3PopupMenu( this );
     menuBar()->insertItem( "&File", file );
 
     file->insertItem( "Custom + Default", KoColorPanel::createColorPopup( KoColorPanel::CustomColors, Qt::red, this,
@@ -65,12 +67,12 @@ TopLevel::TopLevel( QWidget* parent, const char* name) : QMainWindow( parent, na
     file->insertItem( "Plain", KoColorPanel::createColorPopup( KoColorPanel::Plain, QColor(), this,
                                                                SLOT( slotColorSelected( const QColor& ) ), file, "blah" ) );
     file->insertSeparator();
-    file->insertItem( "Default Colors", this, SLOT( defaultColors() ), CTRL+Key_D );
-    file->insertItem( "Insert Random Color", this, SLOT( insertRandomColor() ), CTRL+Key_R );
+    file->insertItem( "Default Colors", this, SLOT( defaultColors() ), Qt::CTRL+Qt::Key_D );
+    file->insertItem( "Insert Random Color", this, SLOT( insertRandomColor() ), Qt::CTRL+Qt::Key_R );
     file->insertSeparator();
-    file->insertItem( "Clear", this, SLOT( clearColors() ), CTRL+Key_C );
+    file->insertItem( "Clear", this, SLOT( clearColors() ), Qt::CTRL+Qt::Key_C );
     file->insertSeparator();
-    file->insertItem( "&Quit", qApp, SLOT( closeAllWindows() ), CTRL+Key_Q );
+    file->insertItem( "&Quit", qApp, SLOT( closeAllWindows() ), Qt::CTRL+Qt::Key_Q );
 
     KToolBar* toolBar = new KToolBar( this );
     addDockWindow( toolBar );

@@ -25,6 +25,9 @@
 #include <klocale.h>
 #include <qpushbutton.h>
 #include <qlayout.h>
+//Added by qt3to4:
+#include <Q3GridLayout>
+#include <QEvent>
 
 
 // ----------------------------------------------------------------
@@ -379,7 +382,7 @@ double KoUnitDoubleComboBox::value( void ) const
 KoUnitDoubleSpinComboBox::KoUnitDoubleSpinComboBox( QWidget *parent, const char *name )
     : QWidget( parent ), m_step( 1.0 )
 {
-    QGridLayout *layout = new QGridLayout( this, 2, 3 );
+    Q3GridLayout *layout = new Q3GridLayout( this, 2, 3 );
     //layout->setMargin( 2 );
     QPushButton *up = new QPushButton( "+", this );
     //up->setFlat( true );
@@ -403,7 +406,7 @@ KoUnitDoubleSpinComboBox::KoUnitDoubleSpinComboBox( QWidget *parent, double lowe
                                                     KoUnit::Unit unit, unsigned int precision, const char *name )
     : QWidget( parent ), m_step( step )//, m_lowerInPoints( lower ), m_upperInPoints( upper )
 {
-    QGridLayout *layout = new QGridLayout( this, 2, 3 );
+    Q3GridLayout *layout = new Q3GridLayout( this, 2, 3 );
     //layout->setMargin( 2 );
     QPushButton *up = new QPushButton( "+", this );
     //up->setFlat( true );

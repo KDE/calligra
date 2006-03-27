@@ -20,6 +20,8 @@
 #include <KoChild.h>
 
 #include <qpainter.h>
+//Added by qt3to4:
+#include <Q3PointArray>
 
 #include <kdebug.h>
 
@@ -42,9 +44,9 @@ public:
   QPoint m_rotationPoint;
   double m_scaleX;
   double m_scaleY;
-  QWMatrix m_matrix;
+  QMatrix m_matrix;
   bool m_lock;
-  QPointArray m_old;
+  Q3PointArray m_old;
   bool m_transparent;
   int m_contentsX;
   int m_contentsY;
@@ -94,12 +96,12 @@ QRect KoChild::geometry() const
   return d->m_geometry;
 }
 
-QRegion KoChild::region( const QWMatrix &matrix ) const
+QRegion KoChild::region( const QMatrix &matrix ) const
 {
   return QRegion( pointArray( matrix ) );
 }
 
-QPointArray KoChild::pointArray( const QWMatrix &matrix ) const
+Q3PointArray KoChild::pointArray( const QMatrix &matrix ) const
 {
   return pointArray( QRect( 0, 0, d->m_geometry.width(), d->m_geometry.height() ), matrix );
 }
@@ -218,7 +220,7 @@ void KoChild::transform( QPainter &painter )
 {
     setClipRegion( painter, true );
 
-    QWMatrix m = painter.worldMatrix();
+    QMatrix m = painter.worldMatrix();
     m = d->m_matrix * m;
     m.scale( d->m_scaleX, d->m_scaleY );
     painter.setWorldMatrix( m );
@@ -236,14 +238,14 @@ QRect KoChild::contentRect() const
                 int(d->m_geometry.height() / d->m_scaleY) );
 }
 
-QPointArray KoChild::framePointArray( const QWMatrix &matrix ) const
+Q3PointArray KoChild::framePointArray( const QMatrix &matrix ) const
 {
   return pointArray( QRect( -6, -6, d->m_geometry.width() + 12, d->m_geometry.height() + 12 ), matrix );
 }
 
-QRegion KoChild::frameRegion( const QWMatrix &matrix, bool solid ) const
+QRegion KoChild::frameRegion( const QMatrix &matrix, bool solid ) const
 {
-  const QPointArray arr = framePointArray( matrix );
+  const Q3PointArray arr = framePointArray( matrix );
   const QRegion frameReg( arr );
 
   if ( solid )
@@ -253,14 +255,14 @@ QRegion KoChild::frameRegion( const QWMatrix &matrix, bool solid ) const
   return frameReg.subtract( reg );
 }
 
-QPointArray KoChild::pointArray( const QRect &r, const QWMatrix &matrix ) const
+Q3PointArray KoChild::pointArray( const QRect &r, const QMatrix &matrix ) const
 {
   QPoint topleft = d->m_matrix.map( QPoint( r.left(), r.top() ) );
   QPoint topright = d->m_matrix.map( QPoint( r.right(), r.top() ) );
   QPoint bottomleft = d->m_matrix.map( QPoint( r.left(), r.bottom() ) );
   QPoint bottomright = d->m_matrix.map( QPoint( r.right(), r.bottom() ) );
 
-  QPointArray arr( 4 );
+  Q3PointArray arr( 4 );
   arr.setPoint( 0, topleft );
   arr.setPoint( 1, topright );
   arr.setPoint( 2, bottomright );
@@ -274,12 +276,12 @@ QPointArray KoChild::pointArray( const QRect &r, const QWMatrix &matrix ) const
 
 void KoChild::updateMatrix()
 {
-  QWMatrix r;
+  QMatrix r;
   r.rotate( - d->m_rotation );
   QPoint p = r.map( QPoint( d->m_rotationPoint.x(),
 			    d->m_rotationPoint.y() ) );
 
-  QWMatrix m;
+  QMatrix m;
   m.rotate( d->m_rotation );
   m.translate( -d->m_rotationPoint.x() + d->m_geometry.x(), -d->m_rotationPoint.y() + d->m_geometry.y() );
   m.translate( p.x(), p.y() );
@@ -288,7 +290,7 @@ void KoChild::updateMatrix()
   d->m_matrix = m;
 }
 
-QWMatrix KoChild::matrix() const
+QMatrix KoChild::matrix() const
 {
   return d->m_matrix;
 }
@@ -316,9 +318,9 @@ bool KoChild::locked() const
   return d->m_lock;
 }
 
-QPointArray KoChild::oldPointArray( const QWMatrix &matrix )
+Q3PointArray KoChild::oldPointArray( const QMatrix &matrix )
 {
-  QPointArray arr = d->m_old;
+  Q3PointArray arr = d->m_old;
 
   for( int i = 0; i < 4; ++i )
       arr.setPoint( i, matrix.map( arr.point( i ) ) );
@@ -342,20 +344,20 @@ KoChild::Gadget KoChild::gadgetHitTest( const QPoint &p )
     return NoGadget;
 
   if ( QRegion( pointArray( QRect( -5, -5, 5, 5 ) ) ).contains( p ) )
-      return TopLeft;
+      return Qt::TopLeftCorner;
   if ( QRegion( pointArray( QRect( d->m_geometry.width() / 2 - 3, -5, 5, 5 ) ) ).contains( p ) )
       return TopMid;
   if ( QRegion( pointArray( QRect( d->m_geometry.width(), -5, 5, 5 ) ) ).contains( p ) )
-      return TopRight;
+      return Qt::TopRightCorner;
   if ( QRegion( pointArray( QRect( -5, d->m_geometry.height() / 2 - 3, 5, 5 ) ) ).contains( p ) )
       return MidLeft;
   if ( QRegion( pointArray( QRect( -5, d->m_geometry.height(), 5, 5 ) ) ).contains( p ) )
-      return BottomLeft;
+      return Qt::BottomLeftCorner;
   if ( QRegion( pointArray( QRect( d->m_geometry.width() / 2 - 3,
 				   d->m_geometry.height(), 5, 5 ) ) ).contains( p ) )
     return BottomMid;
   if ( QRegion( pointArray( QRect( d->m_geometry.width(), d->m_geometry.height(), 5, 5 ) ) ).contains( p ) )
-      return BottomRight;
+      return Qt::BottomRightCorner;
   if ( QRegion( pointArray( QRect( d->m_geometry.width(),
 				   d->m_geometry.height() / 2 - 3, 5, 5 ) ) ).contains( p ) )
     return MidRight;

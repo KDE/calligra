@@ -27,7 +27,7 @@
 #include <qcolor.h>
 #include <qfont.h>
 #include <qstring.h>
-#include <qdict.h>
+#include <q3dict.h>
 #include <koffice_export.h>
 
 class KoGenStyle;
@@ -117,9 +117,9 @@ public:
         Hyphenation = 131072,
         UnderLineWidth = 262144,
 
-	Font = Bold | Italic | Underline | Family | Size,
+	Font = Bold | Italic | Qt::TextUnderline | Family | Size,
         // Format means "everything"
-	Format = Font | Color | Misspelled | VAlign | StrikeOut | TextBackgroundColor |
+	Format = Font | Color | Misspelled | VAlign | Qt::TextStrikeOut | TextBackgroundColor |
                  ExtendUnderLine | Language | ShadowText | OffsetFromBaseLine |
                  WordByWord | Attribute | Hyphenation | UnderLineWidth
     };
@@ -395,9 +395,9 @@ private:
 };
 
 #if defined(Q_TEMPLATEDLL)
-// MOC_SKIP_BEGIN
-template class Q_EXPORT QDict<KoTextFormat>;
-// MOC_SKIP_END
+#ifndef Q_MOC_RUN
+template class Q_EXPORT Q3Dict<KoTextFormat>;
+#endif
 #endif
 
 class KOTEXT_EXPORT KoTextFormatCollection
@@ -438,11 +438,11 @@ public:
     //void updateFontSizes( int base );
     //void updateFontAttributes( const QFont &f, const QFont &old );
 
-    QDict<KoTextFormat> & dict() { return cKey; }
+    Q3Dict<KoTextFormat> & dict() { return cKey; }
 
 private:
     KoTextFormat *defFormat, *lastFormat, *cachedFormat;
-    QDict<KoTextFormat> cKey;
+    Q3Dict<KoTextFormat> cKey;
     KoTextFormat *cres;
     QFont cfont;
     QColor ccol;

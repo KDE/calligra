@@ -21,6 +21,9 @@
 
 #include <qdir.h>
 #include <qimage.h>
+//Added by qt3to4:
+#include <QPixmap>
+#include <Q3CString>
 
 #include <kdesktopfile.h>
 #include <ksimpleconfig.h>
@@ -59,12 +62,12 @@ const QPixmap &KoTemplate::loadPicture( KInstance* instance ) {
         }
         const int maxHeightWidth = 128; // ### TODO: some people would surely like to have 128x128
         if (img.width() > maxHeightWidth || img.height() > maxHeightWidth) {
-            img = img.smoothScale( maxHeightWidth, maxHeightWidth, QImage::ScaleMax );
+            img = img.smoothScale( maxHeightWidth, maxHeightWidth, Qt::KeepAspectRatioByExpanding );
         }
         m_pixmap.convertFromImage(img);
         return m_pixmap;
     } else { // relative path
-        m_pixmap = instance->iconLoader()->loadIcon( m_picture, KIcon::Desktop, 128 );
+        m_pixmap = instance->iconLoader()->loadIcon( m_picture, K3Icon::Desktop, 128 );
         return m_pixmap;
     }
 }
@@ -80,7 +83,7 @@ KoTemplateGroup::KoTemplateGroup(const QString &name, const QString &dir,
 
 bool KoTemplateGroup::isHidden() const {
 
-    QPtrListIterator<KoTemplate> it(m_templates);
+    Q3PtrListIterator<KoTemplate> it(m_templates);
     bool hidden=true;
     while(it.current()!=0L && hidden) {
         hidden=it.current()->isHidden();
@@ -91,7 +94,7 @@ bool KoTemplateGroup::isHidden() const {
 
 void KoTemplateGroup::setHidden(bool hidden) const {
 
-    QPtrListIterator<KoTemplate> it(m_templates);
+    Q3PtrListIterator<KoTemplate> it(m_templates);
     for( ; it.current()!=0L; ++it)
         it.current()->setHidden(hidden);
     m_touched=true;
@@ -120,14 +123,14 @@ bool KoTemplateGroup::add(KoTemplate *t, bool force, bool touch) {
 
 KoTemplate *KoTemplateGroup::find(const QString &name) const {
 
-    QPtrListIterator<KoTemplate> it(m_templates);
+    Q3PtrListIterator<KoTemplate> it(m_templates);
     while(it.current() && it.current()->name()!=name)
         ++it;
     return it.current();
 }
 
 
-KoTemplateTree::KoTemplateTree(const QCString &templateType,
+KoTemplateTree::KoTemplateTree(const Q3CString &templateType,
                                KInstance *instance, bool readTree) :
     m_templateType(templateType), m_instance(instance), m_defaultGroup(0L),
     m_defaultTemplate(0L) {
@@ -199,7 +202,7 @@ void KoTemplateTree::add(KoTemplateGroup *g) {
 
 KoTemplateGroup *KoTemplateTree::find(const QString &name) const {
 
-    QPtrListIterator<KoTemplateGroup> it(m_groups);
+    Q3PtrListIterator<KoTemplateGroup> it(m_groups);
     while(it.current() && it.current()->name()!=name)
         ++it;
     return it.current();
@@ -241,7 +244,7 @@ void KoTemplateTree::readGroups() {
 
 void KoTemplateTree::readTemplates() {
 
-    QPtrListIterator<KoTemplateGroup> groupIt(m_groups);
+    Q3PtrListIterator<KoTemplateGroup> groupIt(m_groups);
     for( ; groupIt.current()!=0L; ++groupIt) {
         QStringList dirs=groupIt.current()->dirs();
         for(QStringList::ConstIterator it=dirs.begin(); it!=dirs.end(); ++it) {

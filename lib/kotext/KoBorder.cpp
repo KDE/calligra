@@ -19,6 +19,8 @@
 
 #include "KoBorder.h"
 #include <qdom.h>
+//Added by qt3to4:
+#include <Q3CString>
 #include <kdebug.h>
 #include "KoZoomHandler.h"
 #include "KoTextFormat.h"
@@ -27,16 +29,16 @@
 #include <float.h>
 
 static const struct BorderStyle {
-    QPen::PenStyle penStyle;
-    QCString oasisName;
-    QCString uiStringStyle;
+    Qt::PenStyle penStyle;
+    Q3CString oasisName;
+    Q3CString uiStringStyle;
 } s_borderStyles[] = {
-    { QPen::SolidLine, "solid", "_________" }, // SOLID
-    { QPen::DashLine, "dashed", "___ ___ __" }, // DASH
-    { QPen::DotLine, "dotted", "_ _ _ _ _ _" }, // DOT
-    { QPen::DashDotLine, "dot-dash", "___ _ ___ _" }, // DASH_DOT
-    { QPen::DashDotDotLine, "dot-dot-dash", "___ _ _ ___" }, // DASH_DOT_DOT
-    { QPen::SolidLine, "double", "===========" } // DOUBLE_LINE
+    { Qt::SolidLine, "solid", "_________" }, // SOLID
+    { Qt::DashLine, "dashed", "___ ___ __" }, // DASH
+    { Qt::DotLine, "dotted", "_ _ _ _ _ _" }, // DOT
+    { Qt::DashDotLine, "dot-dash", "___ _ ___ _" }, // DASH_DOT
+    { Qt::DashDotDotLine, "dot-dot-dash", "___ _ _ ___" }, // DASH_DOT_DOT
+    { Qt::SolidLine, "double", "===========" } // DOUBLE_LINE
 };
 
 KoBorder::KoBorder()
@@ -112,7 +114,7 @@ void KoBorder::loadFoBorder( const QString& border )
 
     // ## isn't it faster to use QStringList::split than parse it 3 times?
     QString _width = border.section(' ', 0, 0);
-    QCString _style = border.section(' ', 1, 1).latin1();
+    Q3CString _style = border.section(' ', 1, 1).latin1();
     QString _color = border.section(' ', 2, 2);
 
     //TODO: let the user choose a more precise border width (in the current unit)
@@ -170,9 +172,9 @@ QString KoBorder::saveFoBorder() const
 void KoBorder::save( QDomElement & elem ) const
 {
     if (color.isValid()) {
-        elem.setAttribute("red", color.red());
-        elem.setAttribute("green", color.green());
-        elem.setAttribute("blue", color.blue());
+        elem.setAttribute("red", color.Qt::red());
+        elem.setAttribute("green", color.Qt::green());
+        elem.setAttribute("blue", color.Qt::blue());
     }
     elem.setAttribute("style", static_cast<int>( m_style ));
     elem.setAttribute("width", ptPenWidth);

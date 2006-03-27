@@ -19,9 +19,12 @@
 #ifndef KOGENSTYLES_H
 #define KOGENSTYLES_H
 
-#include <qdict.h>
+#include <q3dict.h>
 #include <qmap.h>
-#include <qvaluevector.h>
+#include <q3valuevector.h>
+//Added by qt3to4:
+#include <Q3ValueList>
+#include <Q3CString>
 
 #include <koffice_export.h>
 
@@ -116,7 +119,7 @@ public:
      * otherwise only those NOT marked for styles.xml.
      * @see lookup
      */
-    QValueList<NamedStyle> styles( int type, bool markedForStylesXml = false ) const;
+    Q3ValueList<NamedStyle> styles( int type, bool markedForStylesXml = false ) const;
 
     /**
      * @return an existing style by name
@@ -165,7 +168,7 @@ private:
     NameMap m_autoStylesInStylesDotXml;
 
     /// List of styles (used to preserve ordering)
-    typedef QValueVector<NamedStyle> StyleArray;
+    typedef Q3ValueVector<NamedStyle> StyleArray;
     StyleArray m_styleArray;
 
     class Private;
@@ -444,13 +447,13 @@ private:
     // Note that the copy constructor and assignment operator are allowed.
     // Better not use pointers below!
     int m_type;
-    QCString m_familyName;
+    Q3CString m_familyName;
     QString m_parentName;
     /// We use QMaps since they provide automatic sorting on the key (important for unicity!)
     QMap<QString, QString> m_properties[N_NumTypes];
     QMap<QString, QString> m_attributes;
     typedef QMap<QString, QString> StyleMap;
-    QValueVector<StyleMap> m_maps; // we can't really sort the maps between themselves...
+    Q3ValueVector<StyleMap> m_maps; // we can't really sort the maps between themselves...
 
     bool m_autoStyleInStylesDotXml;
     bool m_defaultStyle;

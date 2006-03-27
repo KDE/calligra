@@ -219,7 +219,7 @@ void KWFrameViewTester::testGetView() {
     fvm.slotFrameAdded(frame4);
     frame4->setZOrder(1);
 
-kdDebug() << "frame:" << frame << ", frame2:" << frame2<< ", frame2:" << frame3<< ", frame2:" << frame4 << endl;
+kDebug() << "frame:" << frame << ", frame2:" << frame2<< ", frame2:" << frame3<< ", frame2:" << frame4 << endl;
     fv = fvm.view( KoPoint(90,60), KWFrameViewManager::frameOnTop);
     CHECK(fv != 0, true);
     if(!fv) return;

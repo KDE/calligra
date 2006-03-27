@@ -20,11 +20,14 @@
 #ifndef koTabChooser_h
 #define koTabChooser_h
 
-#include <qframe.h>
+#include <q3frame.h>
+//Added by qt3to4:
+#include <QMouseEvent>
+#include <Q3PopupMenu>
 #include <koffice_export.h>
 class QMouseEvent;
 class QPainter;
-class QPopupMenu;
+class Q3PopupMenu;
 
 /**
  *  class KoTabChooser
@@ -32,7 +35,7 @@ class QPopupMenu;
 
 class KoTabChooserPrivate;
 
-class KOFFICEUI_EXPORT KoTabChooser : public QFrame
+class KOFFICEUI_EXPORT KoTabChooser : public Q3Frame
 {
     Q_OBJECT
 
@@ -61,7 +64,7 @@ protected:
 
     int flags;
     int currType;
-    QPopupMenu *rb_menu;
+    Q3PopupMenu *rb_menu;
     int mLeft;
     int mRight;
     int mCenter;

@@ -20,9 +20,11 @@
 #include "KWFootNoteDia.h"
 #include "KWFootNoteDia.moc"
 
-#include <qbuttongroup.h>
-#include <qvbox.h>
+#include <q3buttongroup.h>
+#include <q3vbox.h>
 #include <qradiobutton.h>
+//Added by qt3to4:
+#include <Q3GridLayout>
 
 #include <klocale.h>
 #include <qlayout.h>
@@ -38,14 +40,14 @@ KWFootNoteDia::KWFootNoteDia( NoteType _noteType, KWFootNoteVariable::Numbering 
     : KDialogBase( parent, name, true, QString::null, Ok|Cancel|User1, Ok, true )
 {
     m_doc =_doc;
-    //setButtonOKText(i18n("&Insert"));
+    //setButtonOK(i18n("&Insert"));
 
     setCaption( i18n("Insert Footnote/Endnote") );
 
-    QVBox *page = makeVBoxMainWidget();
+    KVBox *page = makeVBoxMainWidget();
 
-    QButtonGroup *grp = new QButtonGroup( i18n("Numbering"), page );
-    QGridLayout *grid = new QGridLayout( grp, 9, 4, KDialog::marginHint(), KDialog::spacingHint());
+    Q3ButtonGroup *grp = new Q3ButtonGroup( i18n("Numbering"), page );
+    Q3GridLayout *grid = new Q3GridLayout( grp, 9, 4, KDialog::marginHint(), KDialog::spacingHint());
     m_rbAuto = new QRadioButton( i18n("&Automatic"), grp );
     m_rbManual= new QRadioButton( i18n("&Manual"), grp );
 
@@ -65,7 +67,7 @@ KWFootNoteDia::KWFootNoteDia( NoteType _noteType, KWFootNoteVariable::Numbering 
     grid->addWidget( m_footLine, 2, 1);
 
 
-    grp = new QButtonGroup( 4, Qt::Vertical, page );
+    grp = new Q3ButtonGroup( 4, Qt::Vertical, page );
     m_rbFootNote = new QRadioButton( i18n("&Footnote"), grp );
     m_rbEndNote = new QRadioButton( i18n("&Endnote"), grp );
 

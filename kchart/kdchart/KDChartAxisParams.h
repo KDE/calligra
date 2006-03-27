@@ -139,7 +139,7 @@ class KDCHART_EXPORT KDChartAxisParams : public QObject
     Q_ENUMS(ValueScale)
 
     // Neede by QSA
-    Q_ENUMS( PenStyle )
+    Q_ENUMS( Qt::PenStyle )
 
 public:
 
@@ -244,8 +244,8 @@ public slots:
     bool axisShowFractionalValuesDelimiters() const { return _axisShowFractionalValuesDelimiters; }
     void setAxisShowGrid( bool axisShowGrid );
     bool axisShowGrid() const { return _axisShowGrid; }
-    void setAxisGridStyle( PenStyle axisGridStyle );
-    PenStyle axisGridStyle() const { return _axisGridStyle; }
+    void setAxisGridStyle( Qt::PenStyle axisGridStyle );
+    Qt::PenStyle axisGridStyle() const { return _axisGridStyle; }
     void setAxisGridColor( QColor axisGridColor );
     QColor axisGridColor() const { return _axisGridColor; }
     void setAxisGridLineWidth( int axisGridLineWidth );
@@ -253,8 +253,8 @@ public slots:
     // sub grid:
     void setAxisShowSubDelimiters( bool axisShowSubDelimiters );
     bool axisShowSubDelimiters() const { return _axisShowSubDelimiters; }
-    void setAxisGridSubStyle( PenStyle axisGridSubStyle );
-    PenStyle axisGridSubStyle() const { return _axisGridSubStyle; }
+    void setAxisGridSubStyle( Qt::PenStyle axisGridSubStyle );
+    Qt::PenStyle axisGridSubStyle() const { return _axisGridSubStyle; }
     void setAxisGridSubColor( QColor axisGridSubColor );
     QColor axisGridSubColor() const { return _axisGridSubColor; }
     void setAxisGridSubLineWidth( int axisGridSubLineWidth );

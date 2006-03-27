@@ -20,10 +20,12 @@
 #ifndef __koPictureShared_h__
 #define __koPictureShared_h__
 
-#include <qshared.h>
+#include <q3shared.h>
 #include <qstring.h>
 #include <qiodevice.h>
 #include <qpixmap.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 #include "KoPictureKey.h"
 
@@ -31,7 +33,7 @@ class KoXmlWriter;
 class QPainter;
 class QSize;
 
-class KURL;
+class KUrl;
 
 class KoPictureBase;
 
@@ -41,7 +43,7 @@ class KoPictureBase;
  *
  * @warning As with all QShared objects, the sharing is neither automatic nor transparent!
  */
-class KoPictureShared : public QShared
+class KoPictureShared : public Q3Shared
 {
 public:
     /**
@@ -95,10 +97,10 @@ public:
      * @param dragSource must be 0 when copying to the clipboard
      * @return 0L if the picture is null!
      */
-    QDragObject* dragObject( QWidget *dragSource = 0L, const char *name = 0L );
+    Q3DragObject* dragObject( QWidget *dragSource = 0L, const char *name = 0L );
 
     bool load(QIODevice* io, const QString& extension);
-    bool loadFromBase64( const QCString& str );
+    bool loadFromBase64( const Q3CString& str );
 
     /**
      * Save picture into a QIODevice

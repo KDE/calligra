@@ -25,6 +25,8 @@
 #include <api/dict.h>
 #include <api/list.h>
 #include <api/object.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 namespace Kross {
 
@@ -129,7 +131,7 @@ class RubyExtension{
          * \param list The QValueList to convert.
          * \return The converted QValueList.
          */
-        static VALUE toVALUE(QValueList<QVariant> list);
+        static VALUE toVALUE(Q3ValueList<QVariant> list);
         /**
          * Converts a QVariant to a VALUE.
          * \param variant The QVariant to convert.

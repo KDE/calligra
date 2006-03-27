@@ -24,7 +24,7 @@
 #include <qstringlist.h>
 #include <KoStyleCollection.h>
 class QLineEdit;
-class QListBox;
+class Q3ListBox;
 class QPushButton;
 
 class KOTEXT_EXPORT KoImportStyleDia : public KDialogBase
@@ -57,7 +57,7 @@ protected:
     void initList();
 
     // used by subclasses, hmm...
-    QListBox *m_listStyleName;
+    Q3ListBox *m_listStyleName;
     KoStyleCollection m_styleList;
 
 private:

@@ -21,7 +21,11 @@
 #define tabledia_h
 
 #include <kdialogbase.h>
-#include <qptrlist.h>
+#include <q3ptrlist.h>
+//Added by qt3to4:
+#include <QLabel>
+#include <Q3GridLayout>
+#include <QPaintEvent>
 
 #include "defs.h"
 #include <KoBorder.h>
@@ -30,12 +34,12 @@ class KWCanvas;
 class KWDocument;
 class KWTableTemplateSelector;
 
-class QGridLayout;
+class Q3GridLayout;
 class QLabel;
-class QListBox;
+class Q3ListBox;
 class QWidget;
 class QCheckBox;
-class QButtonGroup;
+class Q3ButtonGroup;
 class QComboBox;
 class QSpinBox;
 
@@ -91,7 +95,7 @@ protected:
     KWTablePreview *preview;
     QCheckBox *cbReapplyTemplate1, *cbReapplyTemplate2;
 
-    QGridLayout *grid;
+    Q3GridLayout *grid;
     KWTableTemplateSelector *tableTemplateSelector;
 
     UseMode m_useMode;

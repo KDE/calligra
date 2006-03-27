@@ -24,6 +24,8 @@
 
 #include <qmap.h>
 #include <qstring.h>
+//Added by qt3to4:
+#include <Q3CString>
 #include "hyphen.h"
 
 class KoHyphenatorException{
@@ -115,9 +117,9 @@ private:
         struct EncodingStruct {
             EncodingStruct() // for QMap
                 : encoding(), codec(0L) {}
-            EncodingStruct(const QCString& _encoding)
+            EncodingStruct(const Q3CString& _encoding)
                 : encoding(_encoding), codec(0L) {}
-            QCString encoding;
+            Q3CString encoding;
             QTextCodec* codec;
         };
         typedef QMap<QString, EncodingStruct> EncodingMap;

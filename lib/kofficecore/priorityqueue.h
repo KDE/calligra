@@ -21,7 +21,7 @@
 
 #include <vector>
 #include <qstring.h>
-#include <qasciidict.h>
+#include <q3asciidict.h>
 #include <kdebug.h>
 
 // Better put all those internal classes in some namespace to avoid clashes
@@ -59,7 +59,7 @@ namespace KOffice {
     public:
         PriorityQueue() {}
         PriorityQueue( const PriorityQueue<T>& rhs ) : m_vector( rhs.m_vector ) {}
-        PriorityQueue( const QAsciiDict<T>& items );
+        PriorityQueue( const Q3AsciiDict<T>& items );
         ~PriorityQueue() {}
 
         PriorityQueue<T> &operator=( const PriorityQueue<T>& rhs ) { m_vector = rhs.m_vector; return *this; }
@@ -100,10 +100,10 @@ namespace KOffice {
     };
 
     template<class T>
-    PriorityQueue<T>::PriorityQueue( const QAsciiDict<T>& items ) : m_vector( items.count() )
+    PriorityQueue<T>::PriorityQueue( const Q3AsciiDict<T>& items ) : m_vector( items.count() )
     {
         // First put all items into the vector
-        QAsciiDictIterator<T> it( items );
+        Q3AsciiDictIterator<T> it( items );
         for ( int i = 0; it.current(); ++it, ++i ) {
             it.current()->setIndex( i );
             m_vector[ i ] = it.current();

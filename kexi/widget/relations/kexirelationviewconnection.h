@@ -63,13 +63,13 @@ class KEXIRELATIONSVIEW_EXPORT KexiRelationViewConnection
 		QString toString() const;
 
 	private:
-		QGuardedPtr<KexiRelationViewTableContainer> m_masterTable;
-		QGuardedPtr<KexiRelationViewTableContainer> m_detailsTable;
+		QPointer<KexiRelationViewTableContainer> m_masterTable;
+		QPointer<KexiRelationViewTableContainer> m_detailsTable;
 		QString				m_masterField;
 		QString				m_detailsField;
 		QRect				m_oldRect;
 		bool				m_selected;
-		QGuardedPtr<KexiRelationView> m_parent;
+		QPointer<KexiRelationView> m_parent;
 };
 
 #endif

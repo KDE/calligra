@@ -526,11 +526,11 @@ KexiDBAutoField::sizeHint() const
 		s1 = m_editor->sizeHint();
 	QSize s2(m_label->sizeHint());
 	if (m_lblPosition == Top)
-		return QSize(QMAX(s1.width(), s2.width()), s1.height()+KexiDBAutoField_SPACING+s2.height());
+		return QSize(qMax(s1.width(), s2.width()), s1.height()+KexiDBAutoField_SPACING+s2.height());
 
 //	if (m_lblPosition == Left) 
 	//left
-	return QSize(s1.width()+KexiDBAutoField_SPACING+s2.width(), QMAX(s1.height(), s2.height()));
+	return QSize(s1.width()+KexiDBAutoField_SPACING+s2.width(), qMax(s1.height(), s2.height()));
 }
 
 void
@@ -567,7 +567,7 @@ KexiDBAutoField::paintEvent( QPaintEvent* pe )
 		p.setPen( m_label->paletteForegroundColor() );
 		p.setClipRect(pe->rect());
 		p.setFont(m_label->font());
-		p.drawText(rect(), Qt::AlignLeft | Qt::WordBreak, 
+		p.drawText(rect(), Qt::AlignLeft | Qt::TextWordWrap, 
 			QString::fromLatin1(name())+" "+i18n(" (unbound)"));
 	}
 }*/

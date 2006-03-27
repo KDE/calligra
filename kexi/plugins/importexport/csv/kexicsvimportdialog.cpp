@@ -51,7 +51,7 @@
 #include <kiconloader.h>
 #include <kcharsets.h>
 #include <knuminput.h>
-#include <kprogress.h>
+#include <kprogressbar.h>
 
 #include <kexiutils/identifier.h>
 #include <kexiutils/utils.h>
@@ -81,6 +81,7 @@
 #include <kspread_sheet.h>
 #include <kspread_undo.h>
 #include <kspread_view.h>
+#include <kglobal.h>
 #endif
 
 #define _IMPORT_ICON "table" /*todo: change to "file_import" or so*/
@@ -174,8 +175,8 @@ KexiCSVImportDialog::KexiCSVImportDialog( Mode mode, KexiMainWindow* mainWin,
 	m_typeNames[3] = i18n("time");
 	m_typeNames[4] = i18n("date/time");
 
-	kapp->config()->setGroup("ImportExport");
-	m_maximumRowsForPreview = kapp->config()->readNumEntry("MaximumRowsForPreviewInImportDialog", MAX_COLUMNS);
+	KGlobal::config()->setGroup("ImportExport");
+	m_maximumRowsForPreview = KGlobal::config()->readNumEntry("MaximumRowsForPreviewInImportDialog", MAX_COLUMNS);
 
 	m_pkIcon = SmallIcon("key");
 
@@ -305,7 +306,7 @@ if ( m_mode == Clipboard )
 			page, "KexiCSVImportDialog", i18n("Open CSV Data File"));
 		if ( !m_fname.isEmpty() ) {
 			//save last visited path
-			KURL url;
+			KUrl url;
 			url.setPath( m_fname );
 			if (url.isLocalFile())
 				KRecentDirs::add(":CSVImportExport", url.directory());
@@ -328,7 +329,7 @@ if ( m_mode == Clipboard )
 		m_data = QApplication::clipboard()->text(subtype, QClipboard::Clipboard);
 /* debug
 		for (int i=0;QApplication::clipboard()->data(QClipboard::Clipboard)->format(i);i++)
-			kdDebug() << i << ": " 
+			kDebug() << i << ": " 
 				<< QApplication::clipboard()->data(QClipboard::Clipboard)->format(i) << endl;
 */
 	}
@@ -391,7 +392,7 @@ void KexiCSVImportDialog::initLater()
 	if (m_mode==File) { //only detect for File mode
 		// try to detect delimiter
 		// \t has priority, then , then ;
-		for (uint i=0; i < QMIN(4096, m_data.length()); i++) {
+		for (uint i=0; i < qMin(4096, m_data.length()); i++) {
 			const QChar c(m_data[i]);
 			if (c=='\t') {
 				detectedDelimiter = c;
@@ -445,7 +446,7 @@ bool KexiCSVImportDialog::openData()
 		delete m_file;
 	}
 	m_file = new QFile(m_fname);
-	if (!m_file->open(IO_ReadOnly))
+	if (!m_file->open(QIODevice::ReadOnly))
 	{
 		m_file->close();
 		delete m_file;
@@ -507,7 +508,7 @@ void KexiCSVImportDialog::fillTable()
 
 	adjustRows( row - m_startline - (m_1stRowForFieldNames->isChecked()?1:0) );
 
-	maxColumn = QMAX( maxColumn, column );
+	maxColumn = qMax( maxColumn, column );
 	m_table->setNumCols(maxColumn);
 
 	for (column = 0; column < m_table->numCols(); ++column)
@@ -535,7 +536,7 @@ void KexiCSVImportDialog::fillTable()
 	if (m_primaryKeyColumn != -1)
 		m_table->setPixmap(0, m_primaryKeyColumn, m_pkIcon);
 
-	const int count = QMAX(0, m_table->numRows()-1+m_startline);
+	const int count = qMax(0, m_table->numRows()-1+m_startline);
 	const bool allRowsLoaded = count < m_maximumRowsForPreview;
 	if (allRowsLoaded) {
 		m_startAtLineSpinBox->setMaxValue(count);
@@ -567,7 +568,7 @@ tristate KexiCSVImportDialog::loadRows(QString &field, int &row, int &column, in
 	QChar x;
 	delete m_inputStream;
 	if ( m_mode == Clipboard ) {
-		m_inputStream = new QTextStream(m_data, IO_ReadOnly);
+		m_inputStream = new QTextStream(m_data, QIODevice::ReadOnly);
 	}
 	else {
 		m_file->at(0); //always seek at 0 because loadRows() is called many times
@@ -580,7 +581,7 @@ tristate KexiCSVImportDialog::loadRows(QString &field, int &row, int &column, in
 	}
 	int progressStep = 0;
 	if (m_importingProgressDlg)
-		progressStep = QMAX( 1, m_importingProgressDlg->progressBar()->totalSteps()/200 );
+		progressStep = qMax( 1, m_importingProgressDlg->progressBar()->totalSteps()/200 );
 	int offset = 0;
 	for (;!m_inputStream->atEnd(); offset++)
 	{
@@ -628,7 +629,7 @@ tristate KexiCSVImportDialog::loadRows(QString &field, int &row, int &column, in
 					}
 				}
 				nextRow = true;
-				maxColumn = QMAX( maxColumn, column );
+				maxColumn = qMax( maxColumn, column );
 				column = 1;
 			}
 			else
@@ -650,7 +651,7 @@ tristate KexiCSVImportDialog::loadRows(QString &field, int &row, int &column, in
 				if (x == '\n')
 				{
 					nextRow = true;
-					maxColumn = QMAX( maxColumn, column );
+					maxColumn = qMax( maxColumn, column );
 					column = 1;
 				}
 				else
@@ -679,7 +680,7 @@ tristate KexiCSVImportDialog::loadRows(QString &field, int &row, int &column, in
 				if (x == '\n')
 				{
 					nextRow = true;
-					maxColumn = QMAX( maxColumn, column );
+					maxColumn = qMax( maxColumn, column );
 					column = 1;
 				}
 				else
@@ -703,7 +704,7 @@ tristate KexiCSVImportDialog::loadRows(QString &field, int &row, int &column, in
 				if (x == '\n')
 				{
 					nextRow = true;
-					maxColumn = QMAX( maxColumn, column );
+					maxColumn = qMax( maxColumn, column );
 					column = 1;
 				}
 				else
@@ -734,7 +735,7 @@ tristate KexiCSVImportDialog::loadRows(QString &field, int &row, int &column, in
 				if (x == '\n')
 				{
 					nextRow = true;
-					maxColumn = QMAX( maxColumn, column );
+					maxColumn = qMax( maxColumn, column );
 					column = 1;
 				}
 				else
@@ -791,7 +792,7 @@ tristate KexiCSVImportDialog::loadRows(QString &field, int &row, int &column, in
 		}
 
 		if (!m_firstFillTableCall && m_loadingProgressDlg) {
-			m_loadingProgressDlg->progressBar()->setValue(QMIN(m_maximumRowsForPreview, row));
+			m_loadingProgressDlg->progressBar()->setValue(qMin(m_maximumRowsForPreview, row));
 		}
 
 		if ( inGUI && row > (m_maximumRowsForPreview + (m_1stRowForFieldNamesDetected?1:0)) ) {
@@ -906,8 +907,8 @@ void KexiCSVImportDialog::detectTypeAndUniqueness(int row, int col, const QStrin
 //! @todo also support timezones?
 					if (ok) {
 						//try all combinations
-						QString datePart( dateTimeList[0].stripWhiteSpace() );
-						QString timePart( dateTimeList[1].stripWhiteSpace() );
+						QString datePart( dateTimeList[0].trimmed() );
+						QString timePart( dateTimeList[1].trimmed() );
 						ok = (m_dateRegExp1.exactMatch(datePart) || m_dateRegExp2.exactMatch(datePart))
 							&& (m_timeRegExp1.exactMatch(timePart) || m_timeRegExp2.exactMatch(timePart));
 					}
@@ -977,8 +978,8 @@ void KexiCSVImportDialog::setText(int row, int col, const QString& text, bool in
 //! @todo also support timezones?
 			if (dateTimeList.count()>=2) {
 				//try all combinations
-				QString datePart( dateTimeList[0].stripWhiteSpace() );
-				QString timePart( dateTimeList[1].stripWhiteSpace() );
+				QString datePart( dateTimeList[0].trimmed() );
+				QString timePart( dateTimeList[1].trimmed() );
 				QDateTime dateTime;
 				dateTime.setDate( QDate::fromString(datePart, Qt::ISODate) ); //same as m_dateRegExp1
 				if (!dateTime.date().isValid() && m_dateRegExp2.exactMatch(datePart)) //dd-mm-yyyy
@@ -1009,7 +1010,7 @@ void KexiCSVImportDialog::setText(int row, int col, const QString& text, bool in
 			if ((col-1) < (int)m_changedColumnNames.size() && false==m_changedColumnNames[col-1]) {
 				//this column has no custom name entered by a user
 				//-get the name from the data cell
-				QString colName(text.simplifyWhiteSpace());
+				QString colName(text.simplified());
 				if (!colName.isEmpty()) {
 					if (colName.left(1)>="0" && colName.left(1)<="9")
 						colName.prepend(i18n("Column")+" ");
@@ -1022,7 +1023,7 @@ void KexiCSVImportDialog::setText(int row, int col, const QString& text, bool in
 	else {
 		if ((row+m_startline)==1) {//this row is for column name
 			if (m_1stRowForFieldNamesDetected && !m_1stRowForFieldNames->isChecked()) {
-				QString f( text.simplifyWhiteSpace() );
+				QString f( text.simplified() );
 				if (f.isEmpty() || !f[0].isLetter())
 					m_1stRowForFieldNamesDetected = false; //this couldn't be a column name
 			}
@@ -1186,12 +1187,12 @@ void KexiCSVImportDialog::accept()
 	//get suggested name based on the file name
 	QString suggestedName;
 	if (m_mode==File) {
-		suggestedName = KURL::fromPathOrURL(m_fname).fileName();
+		suggestedName = KUrl::fromPathOrURL(m_fname).fileName();
 		//remove extension
 		if (!suggestedName.isEmpty()) {
 			const int idx = suggestedName.findRev(".");
 			if (idx!=-1)
-				suggestedName = suggestedName.mid(0, idx ).simplifyWhiteSpace();
+				suggestedName = suggestedName.mid(0, idx ).simplified();
 		}
 	}
 
@@ -1253,7 +1254,7 @@ void KexiCSVImportDialog::accept()
 
 		QStringList colnames;
 		for (uint col = 0; col < numCols; col++)
-			colnames.append( m_table->text(0, col).lower().simplifyWhiteSpace() );
+			colnames.append( m_table->text(0, col).lower().simplified() );
 
 		if (colnames.find(fieldName)!=colnames.end()) {
 			int num = 1;
@@ -1277,7 +1278,7 @@ void KexiCSVImportDialog::accept()
 	}
 
 	for (uint col = 0; col < numCols; col++) {
-		QString fieldCaption( m_table->text(0, col).simplifyWhiteSpace() );
+		QString fieldCaption( m_table->text(0, col).simplified() );
 		QString fieldName( KexiUtils::string2Identifier( fieldCaption ) );
 		if (m_destinationTableSchema->field(fieldName)) {
 			QString fixedFieldName;

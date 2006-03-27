@@ -24,10 +24,12 @@
 #include <kbuttonbox.h>
 
 #include <qcombobox.h>
-#include <qvbox.h>
+#include <q3vbox.h>
 #include <qlabel.h>
 #include <qpushbutton.h>
-#include <qheader.h>
+#include <q3header.h>
+//Added by qt3to4:
+#include <Q3PtrList>
 #include <klineedit.h>
 #include <kdebug.h>
 
@@ -44,13 +46,13 @@ KoVariableNameDia::KoVariableNameDia( QWidget *parent )
 }
 
 
-KoVariableNameDia::KoVariableNameDia( QWidget *parent, const QPtrList<KoVariable>& vars )
+KoVariableNameDia::KoVariableNameDia( QWidget *parent, const Q3PtrList<KoVariable>& vars )
     : KDialogBase( parent, "", TRUE, i18n( "Variable Name" ), Ok|Cancel )
 {
 
     init();
     enableButtonOK(false);
-    QPtrListIterator<KoVariable> it( vars );
+    Q3PtrListIterator<KoVariable> it( vars );
      for ( ; it.current() ; ++it ) {
         KoVariable *var = it.current();
         if ( var->type() == VT_CUSTOM )
@@ -63,7 +65,7 @@ void KoVariableNameDia::init()
 {
     back = makeVBoxMainWidget();
 
-    QHBox *row1 = new QHBox( back );
+    Q3HBox *row1 = new Q3HBox( back );
     row1->setSpacing( KDialog::spacingHint() );
 
     QLabel *l = new QLabel( i18n( "Name:" ), row1 );
@@ -97,8 +99,8 @@ void KoVariableNameDia::textChanged ( const QString &_text )
  *
  ******************************************************************/
 
-KoCustomVariablesListItem::KoCustomVariablesListItem( QListView *parent )
-    : QListViewItem( parent )
+KoCustomVariablesListItem::KoCustomVariablesListItem( Q3ListView *parent )
+    : Q3ListViewItem( parent )
 {
     editWidget = new KLineEdit( listView()->viewport() );
     listView()->addChild( editWidget );
@@ -106,7 +108,7 @@ KoCustomVariablesListItem::KoCustomVariablesListItem( QListView *parent )
 
 void KoCustomVariablesListItem::setup()
 {
-    QListViewItem::setup();
+    Q3ListViewItem::setup();
     setHeight( QMAX( listView()->fontMetrics().height(),
                      editWidget->sizeHint().height() ) );
     //if ( listView()->columnWidth( 1 ) < editWidget->sizeHint().width() )
@@ -140,7 +142,7 @@ void KoCustomVariablesListItem::applyValue()
         var->setValue( newVal );
 }
 
-int KoCustomVariablesListItem::width( const QFontMetrics & fm, const QListView *lv, int c ) const
+int KoCustomVariablesListItem::width( const QFontMetrics & fm, const Q3ListView *lv, int c ) const
 {
     // The text of the 2nd column isn't known to QListViewItem, only we know it
     // (it's in our lineedit)
@@ -149,7 +151,7 @@ int KoCustomVariablesListItem::width( const QFontMetrics & fm, const QListView *
         int w = fm.width( val );
         return w;
     } else
-        return QListViewItem::width( fm, lv, c );
+        return Q3ListViewItem::width( fm, lv, c );
 }
 
 /******************************************************************
@@ -169,13 +171,13 @@ KoCustomVariablesList::KoCustomVariablesList( QWidget *parent )
     connect( header(), SIGNAL( sectionClicked( int ) ),
              this, SLOT( sectionClicked( int ) ) );
 
-    setResizeMode(QListView::LastColumn);
+    setResizeMode(Q3ListView::LastColumn);
     setSorting( -1 );
 }
 
 void KoCustomVariablesList::setValues()
 {
-    QListViewItemIterator it( this );
+    Q3ListViewItemIterator it( this );
     for ( ; it.current(); ++it )
         ( (KoCustomVariablesListItem *)it.current() )->applyValue();
 }
@@ -193,7 +195,7 @@ void KoCustomVariablesList::sectionClicked( int )
 
 void KoCustomVariablesList::updateItems()
 {
-    QListViewItemIterator it( this );
+    Q3ListViewItemIterator it( this );
     for ( ; it.current(); ++it )
         ( (KoCustomVariablesListItem*)it.current() )->update();
 }
@@ -204,7 +206,7 @@ void KoCustomVariablesList::updateItems()
  *
  ******************************************************************/
 
-KoCustomVariablesDia::KoCustomVariablesDia( QWidget *parent, const QPtrList<KoVariable> &variables )
+KoCustomVariablesDia::KoCustomVariablesDia( QWidget *parent, const Q3PtrList<KoVariable> &variables )
     : KDialogBase( parent, "", TRUE,i18n( "Variable Value Editor" ), Ok|Cancel )
 {
 
@@ -213,7 +215,7 @@ KoCustomVariablesDia::KoCustomVariablesDia( QWidget *parent, const QPtrList<KoVa
     list = new KoCustomVariablesList( back );
 
     QStringList lst;
-    QPtrListIterator<KoVariable> it( variables );
+    Q3PtrListIterator<KoVariable> it( variables );
     for ( ; it.current() ; ++it ) {
         KoVariable *var = it.current();
         if ( var->type() == VT_CUSTOM ) {
@@ -294,13 +296,13 @@ KoCustomVarDialog::KoCustomVarDialog( QWidget *parent, KoCustomVariable *var )
 void KoCustomVarDialog::init()
 {
     back = makeVBoxMainWidget();
-    QHBox *row1 = new QHBox( back );
+    Q3HBox *row1 = new Q3HBox( back );
     row1->setSpacing( KDialog::spacingHint() );
     QLabel *ln = new QLabel( i18n( "Name:" ), row1 );
     ln->setFixedSize( ln->sizeHint() );
     m_name = new KLineEdit( row1 );
 
-    QHBox *row2 = new QHBox( back );
+    Q3HBox *row2 = new Q3HBox( back );
     row2->setSpacing( KDialog::spacingHint() );
     QLabel *lv = new QLabel( i18n( "Value:" ), row2 );
     lv->setFixedSize( lv->sizeHint() );

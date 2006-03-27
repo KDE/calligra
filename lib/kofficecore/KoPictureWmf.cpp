@@ -21,7 +21,7 @@
 
 #include <qbuffer.h>
 #include <qpainter.h>
-#include <qpicture.h>
+#include <q3picture.h>
 #include <qpixmap.h>
 
 #include <kdebug.h>
@@ -58,7 +58,7 @@ bool KoPictureWmf::isNull(void) const
     return m_clipart.isNull();
 }
 
-void KoPictureWmf::drawQPicture(QPicture& clipart, QPainter& painter,
+void KoPictureWmf::drawQPicture(Q3Picture& clipart, QPainter& painter,
     int x, int y, int width, int height, int sx, int sy, int sw, int sh)
 {
     kdDebug(30003) << "Drawing KoPictureWmf " << this << endl;

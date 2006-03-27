@@ -152,7 +152,7 @@ KisTIFFConverter::~KisTIFFConverter()
 {
 }
 
-KisImageBuilder_Result KisTIFFConverter::decode(const KURL& uri)
+KisImageBuilder_Result KisTIFFConverter::decode(const KUrl& uri)
 {
     kdDebug(41008) << "Start decoding TIFF File" << endl;
     // Opent the TIFF file
@@ -581,7 +581,7 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory( TIFF* image)
     return KisImageBuilder_RESULT_OK;
 }
 
-KisImageBuilder_Result KisTIFFConverter::buildImage(const KURL& uri)
+KisImageBuilder_Result KisTIFFConverter::buildImage(const KUrl& uri)
 {
     if (uri.isEmpty())
         return KisImageBuilder_RESULT_NO_URI;
@@ -609,7 +609,7 @@ KisImageSP KisTIFFConverter::image()
 }
 
 
-KisImageBuilder_Result KisTIFFConverter::buildFile(const KURL& uri, KisImageSP img, KisTIFFOptions options)
+KisImageBuilder_Result KisTIFFConverter::buildFile(const KUrl& uri, KisImageSP img, KisTIFFOptions options)
 {
     kdDebug(41008) << "Start writing TIFF File" << endl;
     if (!img)

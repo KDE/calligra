@@ -1,0 +1,34 @@
+kde4_header()
+
+add_subdirectory( tables ) 
+add_subdirectory( relations ) 
+add_subdirectory( migration ) 
+add_subdirectory( queries ) 
+add_subdirectory( forms ) 
+add_subdirectory( importexport ) 
+
+message(STATUS "${CMAKE_CURRENT_SOURCE_DIR}: skipped subdir $(REPORTS)")
+message(STATUS "${CMAKE_CURRENT_SOURCE_DIR}: skipped subdir $(SCRIPTINGDIR)")
+include_directories( ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
+
+
+########### install files ###############
+
+
+kde4_footer()
+
+
+
+#original Makefile.am contents follow:
+
+#if compile_kexi_reports_plugin
+#  REPORTS=reports
+#endif
+#
+#if compile_kross
+#  SCRIPTINGDIR=scripting
+#endif
+#
+#SUBDIRS = tables relations migration queries forms $(REPORTS) $(SCRIPTINGDIR) importexport
+#
+##importwizard relations

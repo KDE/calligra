@@ -81,7 +81,7 @@ Kross::Api::Object::Ptr KexiDBDriverManager::driverNames(Kross::Api::List::Ptr)
 Kross::Api::Object::Ptr KexiDBDriverManager::driver(Kross::Api::List::Ptr args)
 {
     QString drivername = Kross::Api::Variant::toString(args->item(0));
-    QGuardedPtr< ::KexiDB::Driver > driver = driverManager().driver(drivername); // caching is done by the DriverManager
+    QPointer< ::KexiDB::Driver > driver = driverManager().driver(drivername); // caching is done by the DriverManager
     if(! driver)
         throw Kross::Api::Exception::Ptr( new Kross::Api::Exception(QString("No such KexiDB::Driver object for the defined drivername '%1'.").arg(drivername)) );
     if(driver->error())

@@ -65,7 +65,7 @@ public:
 	//! Excludes filters list
 	void setExcludedFilters(const QStringList &mimeTypes);
 
-//	KURL currentURL();
+//	KUrl currentURL();
 	QString currentFileName();
 
 //#ifndef Q_WS_WIN
@@ -113,7 +113,7 @@ protected slots:
 private:
 	void updateFilters();
 
-//	KURL m_lastUrl;
+//	KUrl m_lastUrl;
 	QString m_lastFileName;
 	int m_mode;
 	QStringList m_additionalMimeTypes, m_excludedMimeTypes;

@@ -27,9 +27,9 @@
 #include <kdebug.h>
 //#include <kparts/factory.h>
 //#include <klibloader.h>
-//#include <kmdimainfrm.h>
+//#include <k3mdimainfrm.h>
 //#include <kmainwindow.h>
-#include <kpopupmenu.h>
+#include <kmenu.h>
 
 #include <kexidialogbase.h>
 

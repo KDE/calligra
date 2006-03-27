@@ -24,12 +24,14 @@
 
 #include <qstring.h>
 #include <qimage.h>
+//Added by qt3to4:
+#include <QPixmap>
 
 class KoXmlWriter;
 class QPainter;
 class QSize;
 class QIODevice;
-class QDragObject;
+class Q3DragObject;
 
 const char NULL_MIME_TYPE[]="application/x-zerosize";
 
@@ -83,7 +85,7 @@ public:
      * @param dragSource must be 0 when copying to the clipboard
      * @return 0L if the picture is null!
      */
-    virtual QDragObject* dragObject( QWidget *dragSource = 0L, const char *name = 0L );
+    virtual Q3DragObject* dragObject( QWidget *dragSource = 0L, const char *name = 0L );
 
     virtual bool load(QIODevice* io, const QString& extension);
 

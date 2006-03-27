@@ -73,15 +73,15 @@ KexiRelationWidget::KexiRelationWidget(KexiMainWindow *win, QWidget *parent,
 	//m_relationView->setFocus();
 
 	//actions
-	m_tableQueryPopup = new KPopupMenu(this, "m_popup");
+	m_tableQueryPopup = new KMenu(this, "m_popup");
 	m_tableQueryPopupTitleID = m_tableQueryPopup->insertTitle(SmallIcon("table"), "");
 	connect(m_tableQueryPopup, SIGNAL(aboutToShow()), this, SLOT(aboutToShowPopupMenu()));
 
-	m_connectionPopup = new KPopupMenu(this, "m_connectionPopup");
+	m_connectionPopup = new KMenu(this, "m_connectionPopup");
 	m_connectionPopupTitleID = m_connectionPopup->insertTitle("");
 	connect(m_connectionPopup, SIGNAL(aboutToShow()), this, SLOT(aboutToShowPopupMenu()));
 
-	m_areaPopup = new KPopupMenu(this, "m_areaPopup");
+	m_areaPopup = new KMenu(this, "m_areaPopup");
 	
 	m_openSelectedTableAction = new KAction(i18n("&Open Table"), SmallIcon("fileopen"), KShortcut(),
 		this, SLOT(openSelectedTable()), this, "relationsview_openTable");
@@ -92,7 +92,7 @@ KexiRelationWidget::KexiRelationWidget(KexiMainWindow *win, QWidget *parent,
 	m_tableQueryPopup->insertSeparator();
 
 	KAction* hide_action = plugSharedAction("edit_delete", i18n("&Hide Table"), m_tableQueryPopup);
-	hide_action->setIconSet(QIconSet());
+	hide_action->setIconSet(QIcon());
 
 	plugSharedAction("edit_delete",m_connectionPopup);
 	plugSharedAction("edit_delete",this, SLOT(removeSelectedObject()));
@@ -171,7 +171,7 @@ KexiRelationWidget::addTable(KexiDB::TableSchema *t, const QRect &rect)
 		return;
 	connect(c->tableView(), SIGNAL(doubleClicked(QListViewItem*,const QPoint&,int)),
 		this, SLOT(slotTableFieldDoubleClicked(QListViewItem*,const QPoint&,int)));
-	kdDebug() << "KexiRelationWidget::slotAddTable(): adding table " << t->name() << endl;
+	kDebug() << "KexiRelationWidget::slotAddTable(): adding table " << t->name() << endl;
 
 	const QString tname = t->name().lower();
 	const int count = m_tableCombo->count();
@@ -182,7 +182,7 @@ KexiRelationWidget::addTable(KexiDB::TableSchema *t, const QRect &rect)
 	}
 	if (i<count) {
 		int oi = m_tableCombo->currentItem();
-		kdDebug()<<"KexiRelationWidget::slotAddTable(): removing a table from the combo box"<<endl;
+		kDebug()<<"KexiRelationWidget::slotAddTable(): removing a table from the combo box"<<endl;
 		m_tableCombo->removeItem(i);
 		if (m_tableCombo->count()>0) {
 			if (oi>=m_tableCombo->count()) {
@@ -221,7 +221,7 @@ void KexiRelationWidget::tableViewGotFocus()
 {
 //	if (m_relationView->focusedTableView == sender())
 //		return;
-//	kdDebug() << "GOT FOCUS!" <<endl;
+//	kDebug() << "GOT FOCUS!" <<endl;
 //	clearSelection();
 //	if (m_focusedTableView)
 //		m_focusedTableView->unsetFocus();
@@ -243,7 +243,7 @@ void KexiRelationWidget::tableContextMenuRequest(const QPoint& pos)
 {
 //	if (m_focusedTableView != sender())
 //		return;
-	kdDebug() << "HEADER CTXT MENU!" <<endl;
+	kDebug() << "HEADER CTXT MENU!" <<endl;
 	invalidateActions();
 	executePopup( pos );
 //	m_tableQueryPopup->exec(pos);

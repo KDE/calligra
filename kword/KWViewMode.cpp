@@ -48,7 +48,7 @@ void KWViewMode::drawOnePageBorder( QPainter * painter, const QRect & crect, con
         return;
 
     QRect pageRect( _pageRect );
-    //kdDebug() << "KWViewMode::drawOnePageBorder drawing page rect " << pageRect << endl;
+    //kDebug() << "KWViewMode::drawOnePageBorder drawing page rect " << pageRect << endl;
     painter->drawRect( pageRect );
     // Exclude page border line, to get the page contents rect (avoids flicker)
     pageRect.rLeft() += 1;
@@ -59,9 +59,9 @@ void KWViewMode::drawOnePageBorder( QPainter * painter, const QRect & crect, con
     QRect pagecrect = pageRect.intersect( crect );
     if ( !pagecrect.isEmpty() )
     {
-        //kdDebug() << "KWViewMode::drawOnePageBorder : pagecrect=" << pagecrect << " emptySpaceRegion: " << emptySpaceRegion << endl;
+        //kDebug() << "KWViewMode::drawOnePageBorder : pagecrect=" << pagecrect << " emptySpaceRegion: " << emptySpaceRegion << endl;
         QRegion pageEmptyRegion = emptySpaceRegion.intersect( pagecrect );
-        //kdDebug() << "RESULT: pageEmptyRegion: " << pageEmptyRegion << endl;
+        //kDebug() << "RESULT: pageEmptyRegion: " << pageEmptyRegion << endl;
         if ( !pageEmptyRegion.isEmpty() )
             m_doc->eraseEmptySpace( painter, pageEmptyRegion, QApplication::palette().active().brush( QColorGroup::Base ) );
     }
@@ -106,7 +106,7 @@ QPoint KWViewMode::pageCorner()
         pageNum = frame->pageNumber();
     QPoint nPoint( 0, m_doc->pageTop(pageNum) + 1 );
     QPoint cPoint( normalToView( nPoint ) );
-    /*kdDebug() << "KWViewMode::pageCorner frame=" << frame << " pagenum=" << pageNum
+    /*kDebug() << "KWViewMode::pageCorner frame=" << frame << " pagenum=" << pageNum
               << " nPoint=" << nPoint.x() << "," << nPoint.y()
               << " cPoint=" << cPoint.x() << "," << cPoint.y() << endl;*/
     return cPoint;
@@ -175,7 +175,7 @@ KWViewMode * KWViewMode::create( const QString & viewModeType, KWDocument *doc, 
     }
     else
     {
-        kdDebug() << viewModeType << " mode type is unknown\n";
+        kDebug() << viewModeType << " mode type is unknown\n";
         return 0;
     }
 }
@@ -201,7 +201,7 @@ QPoint KWViewModeNormal::normalToView( const QPoint & nPoint )
     double unzoomedY = m_doc->unzoomItY( nPoint.y() );
     KWPage *page = m_doc->pageManager()->page(unzoomedY);   // quotient
     if( !page) {
-        kdWarning(31001) << "KWViewModeNormal::normalToView request for conversion out of the document! Check your input data.. ("<< nPoint << ")" << endl;
+        kWarning(31001) << "KWViewModeNormal::normalToView request for conversion out of the document! Check your input data.. ("<< nPoint << ")" << endl;
         return QPoint(0,0);
     }
     Q_ASSERT(canvas());
@@ -215,7 +215,7 @@ QPoint KWViewModeNormal::viewToNormal( const QPoint & vPoint )
     double unzoomedY = m_doc->unzoomItY( vPoint.y() );
     KWPage *page = m_doc->pageManager()->page(unzoomedY);   // quotient
     if( !page) {
-        kdWarning(31001) << "KWViewModeNormal::normalToView request for conversion out of the document! Check your input data.. ("<< vPoint << ")" << endl;
+        kWarning(31001) << "KWViewModeNormal::normalToView request for conversion out of the document! Check your input data.. ("<< vPoint << ")" << endl;
         return QPoint(-1,-1); // yes this is an ugly way to mark this as an excetional state...
     }
     Q_ASSERT(canvas());
@@ -226,7 +226,7 @@ int KWViewModeNormal::xOffset(KWPage *page, int canvasWidth /* = -1 */) {
     // Center horizontally
     if(canvasWidth < 0)
         canvasWidth = canvas()->visibleWidth();
-    return kMax( 0, ( canvasWidth - m_doc->zoomItX( page->width() ) ) / 2 );
+    return qMax( 0, ( canvasWidth - m_doc->zoomItX( page->width() ) ) / 2 );
 }
 
 void KWViewModeNormal::drawPageBorders( QPainter * painter, const QRect & crect, const QRegion & emptySpaceRegion )
@@ -359,14 +359,14 @@ QPoint KWViewModePreview::normalToView( const QPoint & nPoint )
     double unzoomedY = m_doc->unzoomItY( nPoint.y() );
     KWPage *page = m_doc->pageManager()->page(unzoomedY);   // quotient
     if( !page) {
-        kdWarning(31001) << "KWViewModePreview::normalToView request for conversion out of the document! Check your input data.. ("<< nPoint << ")" << endl;
+        kWarning(31001) << "KWViewModePreview::normalToView request for conversion out of the document! Check your input data.. ("<< nPoint << ")" << endl;
         return QPoint(0,0);
     }
 
     double yInPagePt = unzoomedY - page->offsetInDocument();// and rest
     int row = (page->pageNumber() - m_doc->startPage()) / m_pagesPerRow;
     int col = (page->pageNumber() - m_doc->startPage()) % m_pagesPerRow;
-    /*kdDebug() << "KWViewModePreview::normalToView nPoint=" << nPoint
+    /*kDebug() << "KWViewModePreview::normalToView nPoint=" << nPoint
                 << " unzoomedY=" << unzoomedY
                 << " page=" << page->pageNumber() << " row=" << row << " col=" << col
                 << " yInPagePt=" << yInPagePt << endl;*/
@@ -410,7 +410,7 @@ void KWViewModePreview::drawPageBorders( QPainter * painter, const QRect & crect
     painter->save();
     painter->setPen( QApplication::palette().active().color( QColorGroup::Dark ) );
     painter->setBrush( Qt::NoBrush );
-    //kdDebug() << "KWViewModePreview::drawPageBorders crect=" << DEBUGRECT( crect ) << endl;
+    //kDebug() << "KWViewModePreview::drawPageBorders crect=" << DEBUGRECT( crect ) << endl;
     QRegion grayRegion( crect );
     int pageCount = m_doc->pageCount();
     for ( int counter = 0; counter < pageCount; counter++ )
@@ -435,12 +435,12 @@ void KWViewModePreview::drawPageBorders( QPainter * painter, const QRect & crect
         if ( !bottomShadow.isEmpty() )
             grayRegion -= bottomShadow;
 
-        //kdDebug() << "KWViewModePreview::drawPageBorders grayRegion is now : " << endl;
+        //kDebug() << "KWViewModePreview::drawPageBorders grayRegion is now : " << endl;
         //DEBUGREGION( grayRegion );
     }
     if ( !grayRegion.isEmpty() )
     {
-        //kdDebug() << "KWViewModePreview::drawPageBorders grayRegion's bounding Rect = " << DEBUGRECT( grayRegion.boundingRect() ) << endl;
+        //kDebug() << "KWViewModePreview::drawPageBorders grayRegion's bounding Rect = " << DEBUGRECT( grayRegion.boundingRect() ) << endl;
         m_doc->eraseEmptySpace( painter, grayRegion, QApplication::palette().active().brush( QColorGroup::Mid ) );
     }
     painter->restore();
@@ -513,9 +513,9 @@ QSize KWViewModeText::contentsSize()
 
     int width = m_doc->layoutUnitToPixelX( m_textFrameSet->textDocument()->width() );
 
-    int height = QMAX((int)m_doc->paperHeight(m_doc->startPage()),
+    int height = qMax((int)m_doc->paperHeight(m_doc->startPage()),
                       m_doc->layoutUnitToPixelY( m_textFrameSet->textDocument()->height() ) );
-    //kdDebug() << "KWViewModeText::contentsSize " << width << "x" << height << endl;
+    //kDebug() << "KWViewModeText::contentsSize " << width << "x" << height << endl;
     return QSize( width, height );
 }
 
@@ -543,18 +543,18 @@ void KWViewModeText::drawPageBorders( QPainter * painter, const QRect & crect,
 {
     painter->save();
     QRegion grayRegion( crect );
-    //kdDebug() << "KWViewModeText::drawPageBorders crect=" << grayRegion << endl;
+    //kDebug() << "KWViewModeText::drawPageBorders crect=" << grayRegion << endl;
     painter->setPen( QApplication::palette().active().color( QColorGroup::Dark ) );
     QSize cSize = contentsSize();
     // Draw a line on the right -- ## or a shadow?
     // +1 to be out of the contents, and +1 for QRect
     QRect frameRect( OFFSET, 0, cSize.width() + 2, cSize.height() );
-    //kdDebug() << "KWViewModeText::drawPageBorders right line: "  << frameRect.topRight() << "   " << frameRect.bottomRight()<< endl;
+    //kDebug() << "KWViewModeText::drawPageBorders right line: "  << frameRect.topRight() << "   " << frameRect.bottomRight()<< endl;
     painter->drawLine( frameRect.topRight(), frameRect.bottomRight() );
     if ( frameRect.intersects( crect ) )
         grayRegion -= frameRect;
 
-    //kdDebug() << "KWViewModeText::drawPageBorders grayRegion is now " << grayRegion << endl;
+    //kDebug() << "KWViewModeText::drawPageBorders grayRegion is now " << grayRegion << endl;
     if ( crect.bottom() >= cSize.height() )
     {
         // And draw a line at the bottom -- ## or a shadow?
@@ -563,7 +563,7 @@ void KWViewModeText::drawPageBorders( QPainter * painter, const QRect & crect,
         grayRegion -= QRect( 0, cSize.height(),
                              cSize.width(), cSize.height() );
     }
-    //kdDebug() << "KWViewModeText::drawPageBorders erasing grayRegion " << grayRegion << endl;
+    //kDebug() << "KWViewModeText::drawPageBorders erasing grayRegion " << grayRegion << endl;
     if ( !grayRegion.isEmpty() )
         m_doc->eraseEmptySpace( painter, grayRegion, QApplication::palette().active().brush( QColorGroup::Mid ) );
     painter->restore();
@@ -583,7 +583,7 @@ void KWViewModeText::setPageLayout( KoRuler* hRuler, KoRuler* vRuler, const KoPa
     QSize cSize = contentsSize();
     layout.ptWidth = m_doc->unzoomItX( cSize.width() );
     layout.ptHeight = m_doc->unzoomItY( cSize.height() );
-    //kdDebug() << "KWViewModeText::setPageLayout layout size " << layout.ptWidth << "x" << layout.ptHeight << endl;
+    //kDebug() << "KWViewModeText::setPageLayout layout size " << layout.ptWidth << "x" << layout.ptHeight << endl;
     layout.ptLeft = OFFSET;
     layout.ptRight = 0;
     layout.ptTop = 0;

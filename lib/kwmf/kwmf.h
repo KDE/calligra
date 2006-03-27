@@ -30,10 +30,12 @@ DESCRIPTION
 #ifndef KWMF_H
 #define KWMF_H
 
-#include <qvaluestack.h>
+#include <q3valuestack.h>
+//Added by qt3to4:
+#include <Q3PointArray>
 #include <koffice_export.h>
 class QDataStream;
-class QPointArray;
+class Q3PointArray;
 
 class KOWMF_EXPORT KWmf
 {
@@ -87,13 +89,13 @@ protected:
         unsigned stopAngle) = 0;
     virtual void gotPolygon(
         const DrawContext &dc,
-        const QPointArray &points) = 0;
+        const Q3PointArray &points) = 0;
     virtual void gotPolyline(
         const DrawContext &dc,
-        const QPointArray &points) = 0;
+        const Q3PointArray &points) = 0;
     virtual void gotRectangle(
         const DrawContext &dc,
-        const QPointArray &points) = 0;
+        const Q3PointArray &points) = 0;
 
 private:
     // Debug support.
@@ -112,7 +114,7 @@ private:
     int m_windowFlipX;
     int m_windowFlipY;
     DrawContext m_dc;
-    QValueStack<DrawContext> m_savedDcs;
+    Q3ValueStack<DrawContext> m_savedDcs;
     QPoint m_lineFrom;
 
     // Windows handle management.

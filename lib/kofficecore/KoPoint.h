@@ -20,7 +20,7 @@
 #ifndef koPoint_h
 #define koPoint_h
 
-#include <qwmatrix.h>
+#include <qmatrix.h>
 #include <math.h>
 
 /**
@@ -61,7 +61,7 @@ public:
 
     // Not in QPoint:
     void setCoords(const double &x, const double &y) { m_x = x; m_y = y; }
-    KoPoint transform (const QWMatrix &m) const
+    KoPoint transform (const QMatrix &m) const
     {
       double x, y;
       m.map(m_x, m_y, &x, &y);

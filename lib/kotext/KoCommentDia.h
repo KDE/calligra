@@ -23,7 +23,7 @@
 #include <kdialogbase.h>
 #include <koffice_export.h>
 class QPushButton;
-class QMultiLineEdit;
+class Q3MultiLineEdit;
 
 class KOTEXT_EXPORT KoCommentDia : public KDialogBase
 {
@@ -37,7 +37,7 @@ private slots:
     void slotTextChanged( );
 
 protected:
-    QMultiLineEdit *m_multiLine;
+    Q3MultiLineEdit *m_multiLine;
     QString authorName;
     QPushButton *pbAddAuthorName;
 };

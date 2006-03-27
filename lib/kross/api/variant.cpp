@@ -22,6 +22,8 @@
 
 #include <klocale.h>
 #include <kdebug.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 using namespace Kross::Api;
 
@@ -113,7 +115,7 @@ double Variant::toDouble(Object::Ptr object)
     return variant.toDouble();
 }
 
-Q_LLONG Variant::toLLONG(Object::Ptr object)
+qlonglong Variant::toLLONG(Object::Ptr object)
 {
     const QVariant& variant = toVariant(object);
     if(! variant.canCast(QVariant::LongLong))
@@ -121,7 +123,7 @@ Q_LLONG Variant::toLLONG(Object::Ptr object)
     return variant.toLongLong();
 }
 
-Q_ULLONG Variant::toULLONG(Object::Ptr object)
+qulonglong Variant::toULLONG(Object::Ptr object)
 {
     const QVariant& variant = toVariant(object);
     if(! variant.canCast(QVariant::ULongLong))
@@ -137,12 +139,12 @@ bool Variant::toBool(Object::Ptr object)
     return variant.toBool();
 }
 
-QValueList<QVariant> Variant::toList(Object::Ptr object)
+Q3ValueList<QVariant> Variant::toList(Object::Ptr object)
 {
     if(object->getClassName() == "Kross::Api::List") {
-        QValueList<QVariant> l;
-        QValueList<Object::Ptr> list = Object::fromObject<List>( object.data() )->getValue();
-        for(QValueList<Object::Ptr>::Iterator it = list.begin(); it != list.end(); ++it)
+        Q3ValueList<QVariant> l;
+        Q3ValueList<Object::Ptr> list = Object::fromObject<List>( object.data() )->getValue();
+        for(Q3ValueList<Object::Ptr>::Iterator it = list.begin(); it != list.end(); ++it)
             l.append( toVariant(*it) );
         return l;
     }

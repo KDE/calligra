@@ -39,9 +39,9 @@
 #include <qasciidict.h>
 
 #include <kpushbutton.h>
-#include <ktoolbarbutton.h>
+
 #include <klineedit.h>
-#include <kpopupmenu.h>
+#include <kmenu.h>
 #include <kaction.h>
 
 class KexiTableItem;
@@ -85,7 +85,7 @@ class KexiTableViewPrivate
 
 	QPixmap *pBufferPm;
 	QTimer *pUpdateTimer;
-//moved	KPopupMenu *pContextMenu;
+//moved	KMenu *pContextMenu;
 	int menu_id_addRecord;
 	int menu_id_removeRecord;
 

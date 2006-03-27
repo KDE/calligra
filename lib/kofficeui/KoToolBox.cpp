@@ -17,15 +17,17 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include <qbuttongroup.h>
+#include <q3buttongroup.h>
 #include <qnamespace.h>
 #include <qtoolbutton.h>
 #include <qlabel.h>
 #include <qtooltip.h>
 #include <qlayout.h>
 #include <qpixmap.h>
-#include <qtoolbar.h>
-#include <qdockwindow.h>
+#include <q3toolbar.h>
+#include <q3dockwindow.h>
+//Added by qt3to4:
+#include <Q3GridLayout>
 
 #include <kdebug.h>
 #include <kparts/event.h>
@@ -50,7 +52,7 @@ KoToolBox::KoToolBox( KMainWindow *mainWin, const char* name, KInstance* instanc
     setFullSize( false );
     setMargin(2);
 
-    m_buttonGroup = new QButtonGroup( 0L );
+    m_buttonGroup = new Q3ButtonGroup( 0L );
     m_buttonGroup->setExclusive( true );
     connect( m_buttonGroup, SIGNAL( pressed( int ) ), this, SLOT( slotButtonPressed( int ) ) );
 
@@ -145,7 +147,7 @@ void KoToolBox::setOrientation ( Qt::Orientation o )
         o = o == Qt::Vertical ? Qt::Horizontal : Qt::Vertical;
     }
 
-    QDockWindow::setOrientation( o );
+    Q3DockWindow::setOrientation( o );
 
     for (uint i = 0; i < m_toolBoxes.count(); ++i) {
         ToolArea *t = m_toolBoxes.at(i);
@@ -196,22 +198,22 @@ void KoToolBox::slotSetTool(const QString & toolname)
 ToolArea::ToolArea(QWidget *parent)
     : QWidget(parent), m_left(true)
 {
-    m_layout = new QBoxLayout(this, QBoxLayout::LeftToRight, 0, 0, 0);
+    m_layout = new Q3BoxLayout(this, Q3BoxLayout::LeftToRight, 0, 0, 0);
     QWidget *w = new QWidget(this);
     m_layout->addWidget(w);
 
-    QGridLayout *grid = new QGridLayout(w, 2, 2);
+    Q3GridLayout *grid = new Q3GridLayout(w, 2, 2);
     m_leftRow = new QWidget(w);
     grid->addWidget(m_leftRow, 0, 0);
-    m_leftLayout = new QBoxLayout(m_leftRow, QBoxLayout::TopToBottom, 0, 1, 0);
+    m_leftLayout = new Q3BoxLayout(m_leftRow, Q3BoxLayout::TopToBottom, 0, 1, 0);
 
     w = new QWidget(this);
     m_layout->addWidget(w);
 
-    grid = new QGridLayout(w, 2, 2);
+    grid = new Q3GridLayout(w, 2, 2);
     m_rightRow = new QWidget(w);
     grid->addWidget(m_rightRow, 0, 0);
-    m_rightLayout = new QBoxLayout(m_rightRow, QBoxLayout::TopToBottom, 0, 1, 0);
+    m_rightLayout = new Q3BoxLayout(m_rightRow, Q3BoxLayout::TopToBottom, 0, 1, 0);
 }
 
 
@@ -241,15 +243,15 @@ QWidget* ToolArea::getNextParent()
 
 void ToolArea::setOrientation ( Qt::Orientation o )
 {
-    QBoxLayout::Direction  dir = (o != Qt::Horizontal 
-				  ? QBoxLayout::TopToBottom
-				  : QBoxLayout::LeftToRight);
+    Q3BoxLayout::Direction  dir = (o != Qt::Horizontal 
+				  ? Q3BoxLayout::TopToBottom
+				  : Q3BoxLayout::LeftToRight);
     m_leftLayout->setDirection(dir);
     m_rightLayout->setDirection(dir);
 
     m_layout->setDirection(o == Qt::Horizontal
-			   ? QBoxLayout::TopToBottom
-			   : QBoxLayout::LeftToRight);
+			   ? Q3BoxLayout::TopToBottom
+			   : Q3BoxLayout::LeftToRight);
 }
 
 

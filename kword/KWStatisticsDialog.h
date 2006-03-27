@@ -1,3 +1,7 @@
+//Added by qt3to4:
+#include <Q3VBoxLayout>
+#include <QLabel>
+#include <Q3Frame>
 /* This file is part of the KOffice project
  * Copyright (C) 2005 Thomas Zander <zander@kde.org>
  *
@@ -21,7 +25,7 @@
 
 class KWFrameSet;
 class KWDocument;
-class QVBoxLayout;
+class Q3VBoxLayout;
 class QTabWidget;
 class QLabel;
 
@@ -47,8 +51,8 @@ private:
     QLabel *m_resultLabelSelected[7];
     QLabel *m_resultGeneralLabel[6];
 
-    void addBox( QFrame *page, QLabel **resultLabel, bool calcWithFootNoteCheckbox );
-    void addBoxGeneral( QFrame *page, QLabel **resultLabel );
+    void addBox( Q3Frame *page, QLabel **resultLabel, bool calcWithFootNoteCheckbox );
+    void addBoxGeneral( Q3Frame *page, QLabel **resultLabel );
 
     bool calcStats( QLabel **resultLabel, bool selection, bool useFootEndNote );
     void calcGeneral( QLabel **resultLabel );

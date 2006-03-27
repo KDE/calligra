@@ -17,6 +17,10 @@
 */
 
 #include <qmetaobject.h>
+//Added by qt3to4:
+#include <Q3StrList>
+#include <Q3ValueList>
+#include <Q3CString>
 #include <ktempfile.h>
 #include <kmimetype.h>
 #include <KoFilterChain.h>
@@ -40,7 +44,7 @@ namespace {
 
 
 KoFilterChain::ChainLink::ChainLink( KoFilterChain* chain, KoFilterEntry::Ptr filterEntry,
-                                     const QCString& from, const QCString& to ) :
+                                     const Q3CString& from, const Q3CString& to ) :
     m_chain( chain ), m_filterEntry( filterEntry ), m_from( from ), m_to( to ),
     m_filter( 0 ), d( 0 )
 {
@@ -99,8 +103,8 @@ void KoFilterChain::ChainLink::setupCommunication( const KoFilter* const parentF
     setupConnections( m_filter, child->signalNames(), parentFilter, parent->slotNames() );
 }
 
-void KoFilterChain::ChainLink::setupConnections( const KoFilter* sender, const QStrList& sigs,
-                                                 const KoFilter* receiver, const QStrList& sl0ts ) const
+void KoFilterChain::ChainLink::setupConnections( const KoFilter* sender, const Q3StrList& sigs,
+                                                 const KoFilter* receiver, const Q3StrList& sl0ts ) const
 {
     QStrListIterator signalIt( sigs );
     for ( ; signalIt.current(); ++signalIt ) {
@@ -109,10 +113,10 @@ void KoFilterChain::ChainLink::setupConnections( const KoFilter* sender, const Q
             for ( ; slotIt.current(); ++slotIt ) {
                 if ( strncmp( slotIt.current(), SLOT_PREFIX, SLOT_PREFIX_LEN ) == 0 ) {
                     if ( strcmp( signalIt.current() + SIGNAL_PREFIX_LEN, slotIt.current() + SLOT_PREFIX_LEN ) == 0 ) {
-                        QCString signalString;
+                        Q3CString signalString;
                         signalString.setNum( QSIGNAL_CODE );
                         signalString += signalIt.current();
-                        QCString slotString;
+                        Q3CString slotString;
                         slotString.setNum( QSLOT_CODE );
                         slotString += slotIt.current();
                         QObject::connect( sender, signalString, receiver, slotString );
@@ -308,7 +312,7 @@ KoDocument* KoFilterChain::outputDocument()
 void KoFilterChain::dump() const
 {
     kdDebug( 30500 ) << "########## KoFilterChain with " << m_chainLinks.count() << " members:" << endl;
-    QPtrListIterator<ChainLink> it( m_chainLinks );
+    Q3PtrListIterator<ChainLink> it( m_chainLinks );
     for ( ; it.current(); ++it )
         it.current()->dump();
     kdDebug( 30500 ) << "########## KoFilterChain (done) ##########" << endl;
@@ -324,12 +328,12 @@ KoFilterChain::KoFilterChain( const KoFilterManager* manager ) :
     m_chainLinks.setAutoDelete( true );
 }
 
-void KoFilterChain::appendChainLink( KoFilterEntry::Ptr filterEntry, const QCString& from, const QCString& to )
+void KoFilterChain::appendChainLink( KoFilterEntry::Ptr filterEntry, const Q3CString& from, const Q3CString& to )
 {
     m_chainLinks.append( new ChainLink( this, filterEntry, from, to ) );
 }
 
-void KoFilterChain::prependChainLink( KoFilterEntry::Ptr filterEntry, const QCString& from, const QCString& to )
+void KoFilterChain::prependChainLink( KoFilterEntry::Ptr filterEntry, const Q3CString& from, const Q3CString& to )
 {
     m_chainLinks.prepend( new ChainLink( this, filterEntry, from, to ) );
 }
@@ -521,7 +525,7 @@ KoStoreDevice* KoFilterChain::storageHelper( const QString& file, const QString&
 
 void KoFilterChain::storageInit( const QString& file, KoStore::Mode mode, KoStore** storage )
 {
-    QCString appIdentification( "" );
+    Q3CString appIdentification( "" );
     if ( mode == KoStore::Write ) {
         // To create valid storages we also have to add the mimetype
         // magic "applicationIndentifier" to the storage.
@@ -610,7 +614,7 @@ KoStoreDevice* KoFilterChain::storageCleanupHelper( KoStore** storage )
 
 KoDocument* KoFilterChain::createDocument( const QString& file )
 {
-    KURL url;
+    KUrl url;
     url.setPath( file );
     KMimeType::Ptr t = KMimeType::findByURL( url, 0, true );
     if ( t->name() == KMimeType::defaultMimeType() ) {
@@ -618,7 +622,7 @@ KoDocument* KoFilterChain::createDocument( const QString& file )
         return 0;
     }
 
-    KoDocument *doc = createDocument( QCString( t->name().latin1() ) );
+    KoDocument *doc = createDocument( Q3CString( t->name().latin1() ) );
 
     if ( !doc || !doc->loadNativeFormat( file ) ) {
         kdError( 30500 ) << "Couldn't load from the file" << endl;
@@ -628,7 +632,7 @@ KoDocument* KoFilterChain::createDocument( const QString& file )
     return doc;
 }
 
-KoDocument* KoFilterChain::createDocument( const QCString& mimeType )
+KoDocument* KoFilterChain::createDocument( const Q3CString& mimeType )
 {
     KoDocumentEntry entry = KoDocumentEntry::queryByMimeType(mimeType);
 
@@ -663,7 +667,7 @@ namespace KOffice {
         }
     }
 
-    void Edge::dump( const QCString& indent ) const
+    void Edge::dump( const Q3CString& indent ) const
     {
         if ( m_vertex )
             kdDebug( 30500 ) << indent << "Edge -> '" << m_vertex->mimeType()
@@ -674,7 +678,7 @@ namespace KOffice {
     }
 
 
-    Vertex::Vertex( const QCString& mimeType ) : m_predecessor( 0 ), m_mimeType( mimeType ),
+    Vertex::Vertex( const Q3CString& mimeType ) : m_predecessor( 0 ), m_mimeType( mimeType ),
         m_weight( UINT_MAX ), m_index( -1 ), d( 0 )
     {
         m_edges.setAutoDelete( true );  // we take ownership of added edges
@@ -707,7 +711,7 @@ namespace KOffice {
         if ( !vertex )
             return 0;
         const Edge* edge = 0;
-        QPtrListIterator<Edge> it( m_edges );
+        Q3PtrListIterator<Edge> it( m_edges );
 
         for ( ; it.current(); ++it ) {
             if ( it.current()->vertex() == vertex &&
@@ -723,17 +727,17 @@ namespace KOffice {
             e->relax( this, queue );
     }
 
-    void Vertex::dump( const QCString& indent ) const
+    void Vertex::dump( const Q3CString& indent ) const
     {
         kdDebug( 30500 ) << indent << "Vertex: " << m_mimeType << " (" << m_weight << "):" << endl;
-        const QCString i( indent + "   " );
-        QPtrListIterator<Edge> it( m_edges );
+        const Q3CString i( indent + "   " );
+        Q3PtrListIterator<Edge> it( m_edges );
         for ( ; it.current(); ++it )
             it.current()->dump( i );
     }
 
 
-    Graph::Graph( const QCString& from ) : m_vertices( 47 ), m_from( from ),
+    Graph::Graph( const Q3CString& from ) : m_vertices( 47 ), m_from( from ),
                                            m_graphValid( false ), d( 0 )
     {
         m_vertices.setAutoDelete( true );
@@ -741,7 +745,7 @@ namespace KOffice {
         shortestPaths();  // Will return after a single lookup if "from" is invalid (->no check here)
     }
 
-    void Graph::setSourceMimeType( const QCString& from )
+    void Graph::setSourceMimeType( const Q3CString& from )
     {
         if ( from == m_from )
             return;
@@ -749,7 +753,7 @@ namespace KOffice {
         m_graphValid = false;
 
         // Initialize with "infinity" ...
-        QAsciiDictIterator<Vertex> it( m_vertices );
+        Q3AsciiDictIterator<Vertex> it( m_vertices );
         for ( ; it.current(); ++it )
             it.current()->reset();
 
@@ -757,7 +761,7 @@ namespace KOffice {
         shortestPaths();
     }
 
-    KoFilterChain::Ptr Graph::chain( const KoFilterManager* manager, QCString& to ) const
+    KoFilterChain::Ptr Graph::chain( const KoFilterManager* manager, Q3CString& to ) const
     {
         if ( !isValid() || !manager )
             return 0;
@@ -790,7 +794,7 @@ namespace KOffice {
     {
         kdDebug( 30500 ) << "+++++++++ Graph::dump +++++++++" << endl;
         kdDebug( 30500 ) << "From: " << m_from << endl;
-        QAsciiDictIterator<Vertex> it( m_vertices );
+        Q3AsciiDictIterator<Vertex> it( m_vertices );
         for ( ; it.current(); ++it )
             it.current()->dump( "   " );
         kdDebug( 30500 ) << "+++++++++ Graph::dump (done) +++++++++" << endl;
@@ -801,9 +805,9 @@ namespace KOffice {
     void Graph::buildGraph()
     {
         // Make sure that all available parts are added to the graph
-        QValueList<KoDocumentEntry> parts( KoDocumentEntry::query() );
-        QValueList<KoDocumentEntry>::ConstIterator partIt( parts.begin() );
-        QValueList<KoDocumentEntry>::ConstIterator partEnd( parts.end() );
+        Q3ValueList<KoDocumentEntry> parts( KoDocumentEntry::query() );
+        Q3ValueList<KoDocumentEntry>::ConstIterator partIt( parts.begin() );
+        Q3ValueList<KoDocumentEntry>::ConstIterator partEnd( parts.end() );
 
         while ( partIt != partEnd ) {
             QStringList nativeMimeTypes = ( *partIt ).service()->property( "X-KDE-ExtraNativeMimeTypes" ).toStringList();
@@ -816,16 +820,16 @@ namespace KOffice {
             ++partIt;
         }
 
-        QValueList<KoFilterEntry::Ptr> filters( KoFilterEntry::query() ); // no constraint here - we want *all* :)
-        QValueList<KoFilterEntry::Ptr>::ConstIterator it = filters.begin();
-        QValueList<KoFilterEntry::Ptr>::ConstIterator end = filters.end();
+        Q3ValueList<KoFilterEntry::Ptr> filters( KoFilterEntry::query() ); // no constraint here - we want *all* :)
+        Q3ValueList<KoFilterEntry::Ptr>::ConstIterator it = filters.begin();
+        Q3ValueList<KoFilterEntry::Ptr>::ConstIterator end = filters.end();
 
         for ( ; it != end; ++it ) {
             // First add the "starting points" to the dict
             QStringList::ConstIterator importIt = ( *it )->import.begin();
             QStringList::ConstIterator importEnd = ( *it )->import.end();
             for ( ; importIt != importEnd; ++importIt ) {
-                const QCString key = ( *importIt ).latin1();  // latin1 is okay here (werner)
+                const Q3CString key = ( *importIt ).latin1();  // latin1 is okay here (werner)
                 // already there?
                 if ( !m_vertices[ key ] )
                     m_vertices.insert( key, new Vertex( key ) );
@@ -838,7 +842,7 @@ namespace KOffice {
 
                 for ( ; exportIt != exportEnd; ++exportIt ) {
                     // First make sure the export vertex is in place
-                    const QCString key = ( *exportIt ).latin1();  // latin1 is okay here
+                    const Q3CString key = ( *exportIt ).latin1();  // latin1 is okay here
                     Vertex* exp = m_vertices[ key ];
                     if ( !exp ) {
                         exp = new Vertex( key );
@@ -886,12 +890,12 @@ namespace KOffice {
         m_graphValid = true;
     }
 
-    QCString Graph::findKOfficePart() const
+    Q3CString Graph::findKOfficePart() const
     {
         // Here we simply try to find the closest KOffice mimetype
-        QValueList<KoDocumentEntry> parts( KoDocumentEntry::query() );
-        QValueList<KoDocumentEntry>::ConstIterator partIt( parts.begin() );
-        QValueList<KoDocumentEntry>::ConstIterator partEnd( parts.end() );
+        Q3ValueList<KoDocumentEntry> parts( KoDocumentEntry::query() );
+        Q3ValueList<KoDocumentEntry>::ConstIterator partIt( parts.begin() );
+        Q3ValueList<KoDocumentEntry>::ConstIterator partEnd( parts.end() );
 
         const Vertex *v = 0;
 

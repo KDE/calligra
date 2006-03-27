@@ -31,7 +31,7 @@
 KexiRelationPartImpl::KexiRelationPartImpl(QObject *parent, const char *name, const QStringList &args)
  : KexiInternalPart(parent, name, args)
 {
-	kdDebug() << "KexiRelationPartImpl()" << endl;
+	kDebug() << "KexiRelationPartImpl()" << endl;
 }
 
 KexiRelationPartImpl::~KexiRelationPartImpl()
@@ -48,7 +48,7 @@ KexiRelationPartImpl::createWidget(const char* , KexiMainWindow* mainWin,
 /*KexiDialogBase *
 KexiRelationPartImpl::createDialog(KexiMainWindow* mainWin, const char *)
 {
-	kdDebug() << "KexiRelationPartImpl::createDialog()" << endl;
+	kDebug() << "KexiRelationPartImpl::createDialog()" << endl;
 	KexiDialogBase * dlg = new KexiDialogBase(mainWin, i18n("Relations"));
 	dlg->setIcon(SmallIcon("relation"));
 	dlg->setDocID( mainWin->generatePrivateDocID() );
@@ -64,7 +64,7 @@ KexiRelationPartImpl::createDialog(KexiMainWindow* mainWin, const char *)
 KexiViewBase *
 KexiRelationPartImpl::createView(KexiMainWindow* mainWin, QWidget *parent, const char *)
 {
-//	kdDebug() << "KexiRelationPartImpl::createDialog()" << endl;
+//	kDebug() << "KexiRelationPartImpl::createDialog()" << endl;
 //	KexiDialogBase * dlg = new KexiDialogBase(mainWin, i18n("Relations"));
 //	dlg->setIcon(SmallIcon("relation"));
 //	dlg->setDocID( mainWin->generatePrivateDocID() );

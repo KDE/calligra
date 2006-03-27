@@ -37,7 +37,7 @@ bool KexiUtils::isIdentifier(const QString& s)
 
 QString KexiUtils::string2FileName(const QString &s)
 {
-	QString fn = s.simplifyWhiteSpace();
+	QString fn = s.simplified();
 	fn.replace(' ',"_"); fn.replace('$',"_");
 	fn.replace('\\',"-"); fn.replace('/',"-"); 
 	fn.replace(':',"-"); fn.replace('*',"-"); 
@@ -180,7 +180,7 @@ inline QString char2Identifier(const QChar& c)
 
 QString KexiUtils::string2Identifier(const QString &s)
 {
-	QString r, id = s.simplifyWhiteSpace();
+	QString r, id = s.simplified();
 	if (id.isEmpty())
 		return id;
 	r.reserve(id.length());

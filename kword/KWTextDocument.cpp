@@ -35,6 +35,10 @@
 #include <kdebug.h>
 #include <kglobalsettings.h>
 #include <klocale.h>
+//Added by qt3to4:
+#include <Q3ValueList>
+#include <Q3CString>
+#include <Q3MemArray>
 
 KWTextDocument::KWTextDocument( KWTextFrameSet * textfs, KoTextFormatCollection *fc, KoTextFormatter *formatter )
     : KoTextDocument( textfs->kWordDocument(), fc, formatter, false ), m_textfs( textfs )
@@ -64,9 +68,9 @@ KoTextParag * KWTextDocument::createParag( KoTextDocument *d, KoTextParag *pr, K
     return new KWTextParag( static_cast<KoTextDocument *>(d), static_cast<KoTextParag *>(pr), static_cast<KoTextParag *>(nx), updateIds );
 }
 
-KoTextDocCommand *KWTextDocument::deleteTextCommand( KoTextDocument *textdoc, int id, int index, const QMemArray<KoTextStringChar> & str, const CustomItemsMap & customItemsMap, const QValueList<KoParagLayout> & oldParagLayouts )
+KoTextDocCommand *KWTextDocument::deleteTextCommand( KoTextDocument *textdoc, int id, int index, const Q3MemArray<KoTextStringChar> & str, const CustomItemsMap & customItemsMap, const Q3ValueList<KoParagLayout> & oldParagLayouts )
 {
-    //kdDebug(32500)<<" KoTextDocument::deleteTextCommand************\n";
+    //kDebug(32500)<<" KoTextDocument::deleteTextCommand************\n";
     return new KWTextDeleteCommand( textdoc, id, index, str, customItemsMap, oldParagLayouts );
 }
 
@@ -99,7 +103,7 @@ void KWTextDocument::loadOasisTOC( const QDomElement& tag, KoOasisContext& conte
             lastParagraph->loadOasis( t, context, styleColl, pos );
             lastParagraph->setPartOfTableOfContents( true );
         } else
-            kdWarning() << "OASIS TOC loading: unknown tag " << t.tagName() << " found in index-body" << endl;
+            kWarning() << "OASIS TOC loading: unknown tag " << t.tagName() << " found in index-body" << endl;
         context.styleStack().restore();
     }
 
@@ -176,7 +180,7 @@ void KWTextDocument::loadOasisFootnote( const QDomElement& tag, KoOasisContext& 
     fs->createInitialFrame( 0 ); // we don't know the page number...
 
     // Parse contents into the frameset
-    const QDomElement bodyElem = KoDom::namedItemNS( tag, KoXmlNS::text, QCString( localName.latin1() ) + "-body" ).toElement();
+    const QDomElement bodyElem = KoDom::namedItemNS( tag, KoXmlNS::text, Q3CString( localName.latin1() ) + "-body" ).toElement();
     fs->loadOasisContent( bodyElem, context );
 }
 
@@ -186,7 +190,7 @@ bool KWTextDocument::loadSpanTag( const QDomElement& tag, KoOasisContext& contex
 {
     const QString localName( tag.localName() );
     const bool isTextNS = tag.namespaceURI() == KoXmlNS::text;
-    kdDebug(32500) << "KWTextDocument::loadSpanTag: " << localName << endl;
+    kDebug(32500) << "KWTextDocument::loadSpanTag: " << localName << endl;
 
     if ( isTextNS )
     {
@@ -214,7 +218,7 @@ bool KWTextDocument::loadSpanTag( const QDomElement& tag, KoOasisContext& contex
                 else {
                     // The save/restore of the stack is done by the caller (KoTextParag::loadOasisSpan)
                     // This allows to use the span's format for the variable.
-                    //kdDebug(32500) << "filling stack with " << spanElem.attributeNS( KoXmlNS::text, "style-name", QString::null ) << endl;
+                    //kDebug(32500) << "filling stack with " << spanElem.attributeNS( KoXmlNS::text, "style-name", QString::null ) << endl;
                     context.fillStyleStack( spanElem, KoXmlNS::text, "style-name", "text" );
                     text = spanElem.text();
                 }
@@ -248,7 +252,7 @@ bool KWTextDocument::loadSpanTag( const QDomElement& tag, KoOasisContext& contex
             } else {
                 if ( (*it).doc != this ) {
                     // Oh tell me this never happens...
-                    kdWarning(32500) << "Cross-frameset bookmark! Not supported." << endl;
+                    kWarning(32500) << "Cross-frameset bookmark! Not supported." << endl;
                 } else {
                     appendBookmark( (*it).parag, (*it).pos, parag, pos, it.key() );
                 }
@@ -283,7 +287,7 @@ bool KWTextDocument::loadSpanTag( const QDomElement& tag, KoOasisContext& contex
                     }
                     if ( numberOfElements == 1 ) // if someone added more stuff, keep the wrapper frame
                     {
-                        kdDebug(32001) << "Wrapper frame removed, loading " << firstElem.tagName() << " directly" << endl;
+                        kDebug(32001) << "Wrapper frame removed, loading " << firstElem.tagName() << " directly" << endl;
                         // load the only child, e.g. table:table
                         return loadSpanTag( firstElem, context, parag, pos, textData, customItem );
                     }

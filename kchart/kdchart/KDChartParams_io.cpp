@@ -28,7 +28,10 @@
  **********************************************************************/
 #include "KDChartParams.h"
 
-#include <qintdict.h>
+#include <q3intdict.h>
+//Added by qt3to4:
+#include <QTextStream>
+#include <Q3ValueList>
 
 /**
   \fn QTextStream& operator<<( QTextStream& s, const KDChartParams& p );
@@ -385,7 +388,7 @@ QDomDocument KDChartParams::saveXML( bool withPI ) const
     QDomElement propertySetMapElement =
         doc.createElement( "PropertySetMap" );
     docRoot.appendChild( propertySetMapElement );
-    QIntDictIterator<KDChartPropertySet> it2( _propertySetList );
+    Q3IntDictIterator<KDChartPropertySet> it2( _propertySetList );
     for( ; it2.current(); ++it2 )
         propertySetMapElement.appendChild( it2.current()->saveXML( doc ) );
 
@@ -535,7 +538,7 @@ QDomDocument KDChartParams::saveXML( bool withPI ) const
                 KDXML::penStyleToString( _lineStyle ) );
 
         // the DatasetLineStyles elements
-        {for( QMap<uint,  PenStyle>::ConstIterator it = _datasetLineStyles.begin();
+        {for( QMap<uint,  Qt::PenStyle>::ConstIterator it = _datasetLineStyles.begin();
                 it != _datasetLineStyles.end(); ++it ) {
             QDomElement lineStyleElement = doc.createElement( "DatasetLineStyle" );
             lineSettingsElement.appendChild( lineStyleElement );
@@ -596,7 +599,7 @@ QDomDocument KDChartParams::saveXML( bool withPI ) const
                 _explodeFactors );
 
         // the ExplodeSegment element
-        for( QValueList<int>::ConstIterator it = _explodeList.begin();
+        for( Q3ValueList<int>::ConstIterator it = _explodeList.begin();
                 it != _explodeList.end(); ++it )
             KDXML::createIntNode( doc, pieRingSettingsElement,
                     "ExplodeSegment", *it );
@@ -999,7 +1002,7 @@ QDomDocument KDChartParams::saveXML( bool withPI ) const
         doc.createElement( "AreaMap" );
     docRoot.appendChild( areaMapElement );
     {
-        QDictIterator<KDChartFrameSettings> it( _areaDict );
+        Q3DictIterator<KDChartFrameSettings> it( _areaDict );
         for( ; it.current(); ++it ){
             KDChartFrameSettings::createFrameSettingsNode( doc, areaMapElement,
                     "FrameSettings",
@@ -1013,7 +1016,7 @@ QDomDocument KDChartParams::saveXML( bool withPI ) const
         doc.createElement( "CustomBoxMap" );
     docRoot.appendChild( customBoxMapElement );
     {
-        QIntDictIterator<KDChartCustomBox> it( _customBoxDict );
+        Q3IntDictIterator<KDChartCustomBox> it( _customBoxDict );
         for( ; it.current(); ++it ){
             KDXML::createIntNode( doc, customBoxMapElement, "Number", it.currentKey() );
             KDChartCustomBox::createCustomBoxNode( doc, customBoxMapElement,
@@ -1563,7 +1566,7 @@ bool KDChartParams::loadXML( const QDomDocument& doc )
                         } else if( tagName == "DatasetLineStyle" ) {
                             bool ok = true;
                             uint dataset;
-                            PenStyle style = Qt::SolidLine;
+                            Qt::PenStyle style = Qt::SolidLine;
                             if( element.hasAttribute( "Dataset" ) &&
                                 element.hasAttribute( "Style" ) ) {
                                 dataset = element.attribute( "Dataset" ).toUInt( &ok );

@@ -26,7 +26,7 @@
 #include <KoUnitWidgets.h>
 #include <klocale.h>
 #include <qlabel.h>
-#include <qvbox.h>
+#include <q3vbox.h>
 
 KWResizeTableDia::KWResizeTableDia( QWidget *parent, KWTableFrameSet *table, KWDocument *doc, int resizeColumn )
     : KDialogBase( parent, "resize column dialog" , true, "", Ok | Cancel | User1 | Apply )
@@ -41,7 +41,7 @@ KWResizeTableDia::KWResizeTableDia( QWidget *parent, KWTableFrameSet *table, KWD
 }
 
 void KWResizeTableDia::setupTab1(int resizeColumn) {
-    QVBox *page = makeVBoxMainWidget();
+    KVBox *page = makeVBoxMainWidget();
     QLabel *rc = new QLabel( i18n( "Column:" ), page );
     rc->resize( rc->sizeHint() );
     rc->setAlignment( AlignLeft | AlignBottom );
@@ -75,7 +75,7 @@ void KWResizeTableDia::slotValueChanged( int pos)
 {
     KWFrame *frm = m_table->cell( 0, pos-1 )->frame(0);
     if (frm) {
-        m_position->setValue( KoUnit::toUserValue( QMAX(0.00, frm->normalize().width()), m_doc->unit() ) );
+        m_position->setValue( KoUnit::toUserValue( qMax(0.00, frm->normalize().width()), m_doc->unit() ) );
         m_resetValue = m_position->value();
     }
 }

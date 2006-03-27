@@ -28,13 +28,15 @@
 
 #include <qlayout.h>
 #include <qlabel.h>
-#include <qbuttongroup.h>
+#include <q3buttongroup.h>
 #include <qcheckbox.h>
 #include <qlineedit.h>
 #include <qradiobutton.h>
 #include <qspinbox.h>
 #include <qvbuttongroup.h>
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
+//Added by qt3to4:
+#include <Q3VBoxLayout>
 
 #include "kchart_params.h"
 
@@ -45,29 +47,29 @@ KChartParameterPieConfigPage::KChartParameterPieConfigPage( KChartParams* params
                                                             QWidget* parent ) :
     QWidget( parent ),_params( params )
 {
-    QVBoxLayout  *toplevel = new QVBoxLayout( this, 10 );
-    QVBoxLayout  *grid1 = new QVBoxLayout(this);
+    Q3VBoxLayout  *toplevel = new Q3VBoxLayout( this, 10 );
+    Q3VBoxLayout  *grid1 = new Q3VBoxLayout(this);
     toplevel->addLayout( grid1 );
 
-    QVButtonGroup* gb = new QVButtonGroup( i18n( "Parameter" ), this );
+    Q3VButtonGroup* gb = new Q3VButtonGroup( i18n( "Parameter" ), this );
     grid1->addWidget(gb);
 
     pie3d = new QCheckBox(i18n("Pie 3D"), gb);
-    QWhatsThis::add(pie3d, i18n("Uncheck this option if you do not want a 3D effect for your pie."));
+    Q3WhatsThis::add(pie3d, i18n("Uncheck this option if you do not want a 3D effect for your pie."));
     drawShadowColor=new QCheckBox(i18n("Draw shadow color"), gb);
-    QWhatsThis::add(drawShadowColor, i18n("Uncheck this option if you do not want a shadow color on a 3D pie."));
+    Q3WhatsThis::add(drawShadowColor, i18n("Uncheck this option if you do not want a shadow color on a 3D pie."));
 
     QLabel *label = new QLabel( i18n( "Explode factor (%):" ), gb );
     explode = new QSpinBox(0, 100, 1, gb);
-    QWhatsThis::add(explode, i18n("This will place gaps between the segments of your pie. Default is 0 which means the pie is a whole."));
+    Q3WhatsThis::add(explode, i18n("This will place gaps between the segments of your pie. Default is 0 which means the pie is a whole."));
 
     label = new QLabel( i18n( "Start angle:" ), gb );
     angle = new QSpinBox(0, 90, 1, gb);
-    QWhatsThis::add(angle, i18n("This will set the orientation of your pie. Default is 0."));
+    Q3WhatsThis::add(angle, i18n("This will set the orientation of your pie. Default is 0."));
 
     label = new QLabel( i18n( "3D-depth:" ), gb );
     depth = new QSpinBox(0, 40, 1, gb);
-    QWhatsThis::add(depth, i18n("Set the depth from 0 to 40 of the 3D effect, if you have checked Pie 3D. Default is 20."));
+    Q3WhatsThis::add(depth, i18n("Set the depth from 0 to 40 of the 3D effect, if you have checked Pie 3D. Default is 20."));
 
     grid1->activate();
 

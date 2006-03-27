@@ -2,8 +2,11 @@
 #define KCHART_DATA_EDITOR_H
 
 
-#include <qstrlist.h>
+#include <q3strlist.h>
 #include <qspinbox.h>
+//Added by qt3to4:
+#include <QLabel>
+#include <QEvent>
 
 #include <kdialogbase.h>
 
@@ -71,7 +74,7 @@ private:
 // keyboard navigation in editing mode.
 //
 
-class kchartDataTable : public QTable
+class kchartDataTable : public Q3Table
 {
     Q_OBJECT
 public:

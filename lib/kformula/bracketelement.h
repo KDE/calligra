@@ -23,6 +23,8 @@
 
 #include <qpoint.h>
 #include <qsize.h>
+//Added by qt3to4:
+#include <Q3PtrList>
 
 #include "basicelement.h"
 
@@ -100,13 +102,13 @@ public:
      *
      * We remove ourselve if we are requested to remove our content.
      */
-    virtual void remove(FormulaCursor*, QPtrList<BasicElement>&, Direction);
+    virtual void remove(FormulaCursor*, Q3PtrList<BasicElement>&, Qt::Orientation);
 
     /**
      * Moves the cursor to a normal place where new elements
      * might be inserted.
      */
-    virtual void normalize(FormulaCursor*, Direction);
+    virtual void normalize(FormulaCursor*, Qt::Orientation);
 
     // main child
     //

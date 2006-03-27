@@ -625,7 +625,7 @@ VKoPainter::applyPattern( ArtSVP *svp, bool fill )
 
 	VPattern pat = fill ? m_fill->pattern() : m_stroke->pattern();
 	if( !pat.isValid() ) {
-		pat.load( KGlobal::iconLoader()->iconPath( "karbon.png", -KIcon::SizeMedium ) ); }
+		pat.load( KGlobal::iconLoader()->iconPath( "karbon.png", -K3Icon::SizeMedium ) ); }
 		if( !pat.isValid() ) {
 			pat = *(dynamic_cast<VPattern *>(KarbonFactory::rServer()->patterns().getFirst() )) ;}
 

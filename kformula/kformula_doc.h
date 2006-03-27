@@ -21,7 +21,7 @@
 #ifndef KFORMULA_DOC_H
 #define KFORMULA_DOC_H
 
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 #include <qpainter.h>
 
 #include <kcommand.h>

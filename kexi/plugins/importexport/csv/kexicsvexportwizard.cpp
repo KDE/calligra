@@ -41,6 +41,7 @@
 #include <kapplication.h>
 #include <kdebug.h>
 #include <ksavefile.h>
+#include <kglobal.h>
 
 //-------------------------------------------------------------
 
@@ -206,7 +207,7 @@ KexiCSVExportWizard::KexiCSVExportWizard( const Options& options,
 	setFinishEnabled(m_exportOptionsPage, true);
 
 	// load settings
-	kapp->config()->setGroup("ImportExport");
+	KGlobal::config()->setGroup("ImportExport");
 	if (m_options.mode!=Clipboard && readBoolEntry("ShowOptionsInCSVExportDialog", false)) {
 		show();
 		slotShowOptionsButtonClicked();
@@ -229,7 +230,7 @@ KexiCSVExportWizard::KexiCSVExportWizard( const Options& options,
 	updateGeometry();
 
 	// -keep widths equal on page #2:
-	int width = QMAX( m_infoLblFrom->leftLabel()->sizeHint().width(), 
+	int width = qMax( m_infoLblFrom->leftLabel()->sizeHint().width(), 
 		m_infoLblTo->leftLabel()->sizeHint().width());
 	m_infoLblFrom->leftLabel()->setFixedWidth(width);
 	m_infoLblTo->leftLabel()->setFixedWidth(width);
@@ -304,7 +305,7 @@ void KexiCSVExportWizard::done(int result)
 	}
 
 	//store options
-	kapp->config()->setGroup("ImportExport");
+	KGlobal::config()->setGroup("ImportExport");
 	if (m_options.mode!=Clipboard)
 		writeEntry("ShowOptionsInCSVExportDialog", m_exportOptionsSection->isVisible());
 	const bool store = m_alwaysUseCheckBox->isChecked();
@@ -402,10 +403,10 @@ bool KexiCSVExportWizard::exportData()
 	const bool copyToClipboard = m_options.mode==Clipboard;
 	if (copyToClipboard) {
 //! @todo (during exporting): enlarge bufSize by factor of 2 when it became too small
-		uint bufSize = QMIN((m_rowCount<0 ? 10 : m_rowCount) * fields.count() * 20, 128000);
+		uint bufSize = qMin((m_rowCount<0 ? 10 : m_rowCount) * fields.count() * 20, 128000);
 		buffer.reserve( bufSize );
 		if (buffer.capacity() < bufSize) {
-			kdWarning() << "KexiCSVExportWizard::exportData() cannot allocate memory for " << bufSize 
+			kWarning() << "KexiCSVExportWizard::exportData() cannot allocate memory for " << bufSize 
 				<< " characters" << endl;
 			return false;
 		}
@@ -413,14 +414,14 @@ bool KexiCSVExportWizard::exportData()
 	else {
 		QString fname( m_fileSavePage->currentFileName() );
 		if (fname.isEmpty()) {//sanity
-			kdWarning() << "KexiCSVExportWizard::exportData(): fname is empty" << endl;
+			kWarning() << "KexiCSVExportWizard::exportData(): fname is empty" << endl;
 			return false;
 		}
 		kSaveFile = new KSaveFile(m_fileSavePage->currentFileName());
 		if (0 == kSaveFile->status())
 			stream = kSaveFile->textStream();
 		if (0 != kSaveFile->status() || !stream) {//sanity
-			kdWarning() << "KexiCSVExportWizard::exportData(): status != 0 or stream == 0" << endl;
+			kWarning() << "KexiCSVExportWizard::exportData(): status != 0 or stream == 0" << endl;
 			delete kSaveFile;
 			return false;
 		}
@@ -482,7 +483,7 @@ bool KexiCSVExportWizard::exportData()
 		_ERR;
 	}
 	for (cursor->moveFirst(); !cursor->eof() && !cursor->error(); cursor->moveNext()) {
-		const uint realFieldCount = QMIN(cursor->fieldCount(), fieldsCount);
+		const uint realFieldCount = qMin(cursor->fieldCount(), fieldsCount);
 		for (uint i=0; i<realFieldCount; i++) {
 			if (i>0)
 				APPEND( delimiter );
@@ -519,7 +520,7 @@ bool KexiCSVExportWizard::exportData()
 
 	if (kSaveFile) {
 		if (!kSaveFile->close()) {
-			kdWarning() << "KexiCSVExportWizard::exportData(): error close(); status == " 
+			kWarning() << "KexiCSVExportWizard::exportData(): error close(); status == " 
 				<< kSaveFile->status() << endl;
 		}
 		delete kSaveFile;
@@ -540,27 +541,27 @@ static QString convertKey(const char *key, KexiCSVExportWizard::Mode mode)
 
 bool KexiCSVExportWizard::readBoolEntry(const char *key, bool defaultValue)
 {
-	return kapp->config()->readBoolEntry(convertKey(key, m_options.mode), defaultValue);
+	return KGlobal::config()->readBoolEntry(convertKey(key, m_options.mode), defaultValue);
 }
 
 QString KexiCSVExportWizard::readEntry(const char *key, const QString& defaultValue)
 {
-	return kapp->config()->readEntry(convertKey(key, m_options.mode), defaultValue);
+	return KGlobal::config()->readEntry(convertKey(key, m_options.mode), defaultValue);
 }
 
 void KexiCSVExportWizard::writeEntry(const char *key, const QString& value)
 {
-	kapp->config()->writeEntry(convertKey(key, m_options.mode), value);
+	KGlobal::config()->writeEntry(convertKey(key, m_options.mode), value);
 }
 
 void KexiCSVExportWizard::writeEntry(const char *key, bool value)
 {
-	kapp->config()->writeEntry(convertKey(key, m_options.mode), value);
+	KGlobal::config()->writeEntry(convertKey(key, m_options.mode), value);
 }
 
 void KexiCSVExportWizard::deleteEntry(const char *key)
 {
-	kapp->config()->deleteEntry(convertKey(key, m_options.mode));
+	KGlobal::config()->deleteEntry(convertKey(key, m_options.mode));
 }
 
 QString KexiCSVExportWizard::defaultDelimiter() const

@@ -1,3 +1,6 @@
+//Added by qt3to4:
+#include <QFocusEvent>
+#include <QResizeEvent>
 /* This file is part of the KDE project
    Copyright (C) 2001 Andrea Rizzi <rizzi@kde.org>
 	              Ulrich Kuettler <ulrich.kuettler@mailbox.tu-dresden.de>
@@ -21,8 +24,8 @@
 class KPrinter;
 
 #include <qpainter.h>
-#include <qpopupmenu.h>
-#include <qtextedit.h>
+#include <q3popupmenu.h>
+#include <q3textedit.h>
 #include <qtimer.h>
 
 #include <kaction.h>
@@ -60,7 +63,7 @@ KFormulaPartView::KFormulaPartView(KFormulaDoc* _doc, QWidget* _parent, const ch
     m_dcop = 0;
     dcopObject(); // build it
 
-    scrollview = new QScrollView(this, "scrollview");
+    scrollview = new Q3ScrollView(this, "scrollview");
     formulaWidget = new KFormulaWidget(_doc->getFormula(), scrollview->viewport(), "formulaWidget");
     scrollview->addChild(formulaWidget);
 

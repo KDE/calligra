@@ -6,8 +6,10 @@
 
 #include <qradiobutton.h>
 #include <qcheckbox.h>
-#include <qbuttongroup.h>
+#include <q3buttongroup.h>
 #include <qlabel.h>
+//Added by qt3to4:
+#include <Q3Frame>
 
 namespace KChart
 {
@@ -18,8 +20,8 @@ KChartWizardSetupDataPage::KChartWizardSetupDataPage( QWidget* parent,
   _chart( chart ),
   _parent( (KChartWizard*)parent )
 {
-  QButtonGroup* tmpQGroupBox;
-  tmpQGroupBox = new QButtonGroup( this, "GroupBox_1" );
+  Q3ButtonGroup* tmpQGroupBox;
+  tmpQGroupBox = new Q3ButtonGroup( this, "GroupBox_1" );
   tmpQGroupBox->setGeometry( 260, 10, 130, 80 );
   tmpQGroupBox->setFrameStyle( 49 );
   tmpQGroupBox->setAlignment( 1 );
@@ -44,7 +46,7 @@ KChartWizardSetupDataPage::KChartWizardSetupDataPage( QWidget* parent,
   tmpQLabel->setGeometry( 270, 20, 100, 20 );
   tmpQLabel->setText( i18n("Data is in:") );
 
-  QButtonGroup* descrBG = new QButtonGroup( this );
+  Q3ButtonGroup* descrBG = new Q3ButtonGroup( this );
   descrBG->hide();
   coldescript = new QCheckBox( this, "CheckBox_3" );
   coldescript->setGeometry( 260, 110, 20, 30 );
@@ -71,10 +73,10 @@ KChartWizardSetupDataPage::KChartWizardSetupDataPage( QWidget* parent,
   tmpQLabel->setText( i18n("Use first column as description") );
   tmpQLabel->setAlignment( 1313 );
 
-  QFrame* tmpQFrame;
-  tmpQFrame = new QFrame( this, "Frame_1" );
+  Q3Frame* tmpQFrame;
+  tmpQFrame = new Q3Frame( this, "Frame_1" );
   tmpQFrame->setGeometry( 10, 10, 240, 220 );
-  tmpQFrame->setFrameStyle( QFrame::Panel | QFrame::Sunken );
+  tmpQFrame->setFrameStyle( Q3Frame::Panel | Q3Frame::Sunken );
   tmpQFrame->setLineWidth( 2 );
 
   /*

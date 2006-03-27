@@ -237,7 +237,7 @@ KexiFlowLayout::doHorizontalLayout(const QRect &r, bool testOnly)
 			continue;
 		}
 
-//		kdDebug() << "- doHorizontalLayout(): " << o->widget()->className() << " " << o->widget()->name() << endl;
+//		kDebug() << "- doHorizontalLayout(): " << o->widget()->className() << " " << o->widget()->name() << endl;
 		QSize oSizeHint = o->sizeHint(); // we cache these ones because it can take a while to get it (eg for child layouts)
 		if ((x + oSizeHint.width()) > r.right() && h > 0) {
 			// do the layout of current line
@@ -252,23 +252,23 @@ KexiFlowLayout::doHorizontalLayout(const QRect &r, bool testOnly)
 				if(m_justify) {
 					if(expandingWidgets != 0) {
 						if(item->expanding() == QSizePolicy::Horizontally || item->expanding() == QSizePolicy::BothDirections)
-							s = QSize( QMIN(itemSizeHint.width() + availableSpace / expandingWidgets
+							s = QSize( qMin(itemSizeHint.width() + availableSpace / expandingWidgets
 								, r.width()), itemSizeHint.height() );
 						else
-							s = QSize( QMIN(itemSizeHint.width(), r.width()), itemSizeHint.height() );
+							s = QSize( qMin(itemSizeHint.width(), r.width()), itemSizeHint.height() );
 					}
 					else
-						s = QSize( QMIN(itemSizeHint.width() + availableSpace / (int)currentLine.count()
+						s = QSize( qMin(itemSizeHint.width() + availableSpace / (int)currentLine.count()
 							, r.width()), itemSizeHint.height() );
 				}
 				else
-					s = QSize ( QMIN(itemSizeHint.width(), r.width()), itemSizeHint.height() );
+					s = QSize ( qMin(itemSizeHint.width(), r.width()), itemSizeHint.height() );
 				if(!testOnly)
 					item->setGeometry( QRect(QPoint(wx, y), s) );
 				wx = wx + s.width() + spacing();
 				minSizeWidth = minSizeWidth + spacing() + itemMinSize.width();
 				sizeHintWidth = sizeHintWidth + spacing() +  itemSizeHint.width();
-				lineMinHeight = QMAX( lineMinHeight, itemMinSize.height() );
+				lineMinHeight = qMax( lineMinHeight, itemMinSize.height() );
 				++it2;
 			}
 			sizeHint = sizeHint.expandedTo( QSize(sizeHintWidth, 0) );
@@ -284,11 +284,11 @@ KexiFlowLayout::doHorizontalLayout(const QRect &r, bool testOnly)
 		}
 
 		x = x + spacing() + oSizeHint.width();
-		h = QMAX( h,  oSizeHint.height() );
+		h = qMax( h,  oSizeHint.height() );
 		currentLine.append(o);
 		if(o->expanding() == QSizePolicy::Horizontally || o->expanding() == QSizePolicy::BothDirections)
 			++expandingWidgets;
-		availableSpace = QMAX(0, availableSpace - spacing() - oSizeHint.width());
+		availableSpace = qMax(0, availableSpace - spacing() - oSizeHint.width());
 		++it;
 	}
 
@@ -304,23 +304,23 @@ KexiFlowLayout::doHorizontalLayout(const QRect &r, bool testOnly)
 		if(m_justify) {
 			if(expandingWidgets != 0) {
 				if(item->expanding() == QSizePolicy::Horizontally || item->expanding() == QSizePolicy::BothDirections)
-					s = QSize( QMIN(itemSizeHint.width() + availableSpace / expandingWidgets
+					s = QSize( qMin(itemSizeHint.width() + availableSpace / expandingWidgets
 						, r.width()), itemSizeHint.height() );
 				else
-					s = QSize( QMIN(itemSizeHint.width(), r.width()), itemSizeHint.height() );
+					s = QSize( qMin(itemSizeHint.width(), r.width()), itemSizeHint.height() );
 			}
 			else
-				s = QSize( QMIN(itemSizeHint.width() + availableSpace / (int)currentLine.count()
+				s = QSize( qMin(itemSizeHint.width() + availableSpace / (int)currentLine.count()
 					, r.width()), itemSizeHint.height() );
 		}
 		else
-			s = QSize ( QMIN(itemSizeHint.width(), r.width()), itemSizeHint.height() );
+			s = QSize ( qMin(itemSizeHint.width(), r.width()), itemSizeHint.height() );
 		if(!testOnly)
 			item->setGeometry( QRect(QPoint(wx, y), s) );
 		wx = wx + s.width() + spacing();
 		minSizeWidth = minSizeWidth + spacing() + itemMinSize.width();
 		sizeHintWidth = sizeHintWidth + spacing() +  itemSizeHint.width();
-		lineMinHeight = QMAX( lineMinHeight, itemMinSize.height() );
+		lineMinHeight = qMax( lineMinHeight, itemMinSize.height() );
 		++it2;
 	}
 	sizeHint = sizeHint.expandedTo( QSize(sizeHintWidth, y + spacing() + h) );
@@ -368,23 +368,23 @@ KexiFlowLayout::doVerticalLayout(const QRect &r, bool testOnly)
 				if(m_justify) {
 					if(expandingWidgets != 0) {
 						if(item->expanding() == QSizePolicy::Vertically || item->expanding() == QSizePolicy::BothDirections)
-							s = QSize( itemSizeHint.width(), QMIN(itemSizeHint.height() + availableSpace / expandingWidgets
+							s = QSize( itemSizeHint.width(), qMin(itemSizeHint.height() + availableSpace / expandingWidgets
 								, r.height()) );
 						else
-							s = QSize( itemSizeHint.width(), QMIN(itemSizeHint.height(), r.height()) );
+							s = QSize( itemSizeHint.width(), qMin(itemSizeHint.height(), r.height()) );
 					}
 					else
-						s = QSize( itemSizeHint.width(), QMIN(itemSizeHint.height() + availableSpace / (int)currentLine.count()
+						s = QSize( itemSizeHint.width(), qMin(itemSizeHint.height() + availableSpace / (int)currentLine.count()
 							, r.height()) );
 				}
 				else
-					s = QSize (  itemSizeHint.width(), QMIN(itemSizeHint.height(), r.height()) );
+					s = QSize (  itemSizeHint.width(), qMin(itemSizeHint.height(), r.height()) );
 				if(!testOnly)
 					item->setGeometry( QRect(QPoint(x, wy), s) );
 				wy = wy + s.height() + spacing();
 				minSizeHeight = minSizeHeight + spacing() + itemMinSize.height();
 				sizeHintHeight = sizeHintHeight + spacing() + itemSizeHint.height();
-				colMinWidth = QMAX( colMinWidth, itemMinSize.width() );
+				colMinWidth = qMax( colMinWidth, itemMinSize.width() );
 				++it2;
 			}
 			sizeHint = sizeHint.expandedTo( QSize(0, sizeHintHeight) );
@@ -400,11 +400,11 @@ KexiFlowLayout::doVerticalLayout(const QRect &r, bool testOnly)
 		}
 
 		y = y + spacing() + oSizeHint.height();
-		w = QMAX( w,  oSizeHint.width() );
+		w = qMax( w,  oSizeHint.width() );
 		currentLine.append(o);
 		if(o->expanding() == QSizePolicy::Vertically || o->expanding() == QSizePolicy::BothDirections)
 			++expandingWidgets;
-		availableSpace = QMAX(0, availableSpace - spacing() - oSizeHint.height());
+		availableSpace = qMax(0, availableSpace - spacing() - oSizeHint.height());
 		++it;
 	}
 
@@ -420,23 +420,23 @@ KexiFlowLayout::doVerticalLayout(const QRect &r, bool testOnly)
 		if(m_justify) {
 			if(expandingWidgets != 0) {
 				if(item->expanding() == QSizePolicy::Vertically || item->expanding() == QSizePolicy::BothDirections)
-					s = QSize( itemSizeHint.width(), QMIN(itemSizeHint.height() + availableSpace / expandingWidgets
+					s = QSize( itemSizeHint.width(), qMin(itemSizeHint.height() + availableSpace / expandingWidgets
 						, r.height()) );
 				else
-					s = QSize( itemSizeHint.width(), QMIN(itemSizeHint.height(), r.height()) );
+					s = QSize( itemSizeHint.width(), qMin(itemSizeHint.height(), r.height()) );
 			}
 			else
-				s = QSize( itemSizeHint.width(), QMIN(itemSizeHint.height() + availableSpace / (int)currentLine.count()
+				s = QSize( itemSizeHint.width(), qMin(itemSizeHint.height() + availableSpace / (int)currentLine.count()
 					, r.height()) );
 		}
 		else
-			s = QSize (  itemSizeHint.width(), QMIN(itemSizeHint.height(), r.height()) );
+			s = QSize (  itemSizeHint.width(), qMin(itemSizeHint.height(), r.height()) );
 		if(!testOnly)
 			item->setGeometry( QRect(QPoint(x, wy), s) );
 		wy = wy + s.height() + spacing();
 		minSizeHeight = minSizeHeight + spacing() + itemMinSize.height();
 		sizeHintHeight = sizeHintHeight + spacing() + itemSizeHint.height();
-		colMinWidth = QMAX( colMinWidth, itemMinSize.width() );
+		colMinWidth = qMax( colMinWidth, itemMinSize.width() );
 		++it2;
 	}
 	sizeHint = sizeHint.expandedTo( QSize( x + spacing() + w, sizeHintHeight) );

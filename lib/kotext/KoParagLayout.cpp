@@ -33,6 +33,8 @@
 #include <qdom.h>
 #include <qbuffer.h>
 #include <qcolor.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 #include <float.h>
 
@@ -119,7 +121,7 @@ int KoParagLayout::compare( const KoParagLayout & layout ) const
 
 void KoParagLayout::initialise()
 {
-    alignment = Qt::AlignAuto;
+    alignment = Qt::AlignLeft;
     for ( int i = 0 ; i < 5 ; ++i ) // use memset ?
         margins[i] = 0;
     lineSpacingType = LS_SINGLE;
@@ -172,7 +174,7 @@ void KoParagLayout::loadParagLayout( KoParagLayout& layout, const QDomElement& p
     }
     qHeapSort( tabList );
     layout.setTabList( tabList );
-    layout.alignment = Qt::AlignAuto;
+    layout.alignment = Qt::AlignLeft;
     element = parentElem.namedItem( "FLOW" ).toElement(); // Flow is what is now called alignment internally
     if ( !element.isNull() )
     {
@@ -182,7 +184,7 @@ void KoParagLayout::loadParagLayout( KoParagLayout& layout, const QDomElement& p
             layout.alignment = flow=="right" ? Qt::AlignRight :
                          flow=="center" ? Qt::AlignHCenter :
                          flow=="justify" ? Qt::AlignJustify :
-                         flow=="left" ? Qt::AlignLeft : Qt::AlignAuto;
+                         flow=="left" ? Qt::AlignLeft : Qt::AlignLeft;
 
             QString dir = element.attribute( "dir" ); // KWord-1.2
             if ( !dir.isEmpty() ) {
@@ -195,7 +197,7 @@ void KoParagLayout::loadParagLayout( KoParagLayout& layout, const QDomElement& p
             }
         } else {
             flow = element.attribute( "value" ); // KWord-0.8
-            static const int flow2align[] = { Qt::AlignAuto, Qt::AlignRight, Qt::AlignHCenter, Qt::AlignJustify };
+            static const int flow2align[] = { Qt::AlignLeft, Qt::AlignRight, Qt::AlignHCenter, Qt::AlignJustify };
             if ( !flow.isEmpty() && flow.toInt() < 4 )
                 layout.alignment = flow2align[flow.toInt()];
         }
@@ -205,34 +207,34 @@ void KoParagLayout::loadParagLayout( KoParagLayout& layout, const QDomElement& p
     {
         element = parentElem.namedItem( "OHEAD" ).toElement(); // used by KWord-0.8
         if ( !element.isNull() )
-            layout.margins[QStyleSheetItem::MarginTop] = getAttribute( element, "pt", 0.0 );
+            layout.margins[Q3StyleSheetItem::MarginTop] = getAttribute( element, "pt", 0.0 );
 
         element = parentElem.namedItem( "OFOOT" ).toElement(); // used by KWord-0.8
         if ( !element.isNull() )
-            layout.margins[QStyleSheetItem::MarginBottom] = getAttribute( element, "pt", 0.0 );
+            layout.margins[Q3StyleSheetItem::MarginBottom] = getAttribute( element, "pt", 0.0 );
 
         element = parentElem.namedItem( "IFIRST" ).toElement(); // used by KWord-0.8
         if ( !element.isNull() )
-            layout.margins[QStyleSheetItem::MarginFirstLine] = getAttribute( element, "pt", 0.0 );
+            layout.margins[Q3StyleSheetItem::MarginFirstLine] = getAttribute( element, "pt", 0.0 );
 
         element = parentElem.namedItem( "ILEFT" ).toElement(); // used by KWord-0.8
         if ( !element.isNull() )
-            layout.margins[QStyleSheetItem::MarginLeft] = getAttribute( element, "pt", 0.0 );
+            layout.margins[Q3StyleSheetItem::MarginLeft] = getAttribute( element, "pt", 0.0 );
     }
 
     // KWord-1.0 DTD
     element = parentElem.namedItem( "INDENTS" ).toElement();
     if ( !element.isNull() )
     {
-        layout.margins[QStyleSheetItem::MarginFirstLine] = getAttribute( element, "first", 0.0 );
-        layout.margins[QStyleSheetItem::MarginLeft] = getAttribute( element, "left", 0.0 );
-        layout.margins[QStyleSheetItem::MarginRight] = getAttribute( element, "right", 0.0 );
+        layout.margins[Q3StyleSheetItem::MarginFirstLine] = getAttribute( element, "first", 0.0 );
+        layout.margins[Q3StyleSheetItem::MarginLeft] = getAttribute( element, "left", 0.0 );
+        layout.margins[Q3StyleSheetItem::MarginRight] = getAttribute( element, "right", 0.0 );
     }
     element = parentElem.namedItem( "OFFSETS" ).toElement();
     if ( !element.isNull() )
     {
-        layout.margins[QStyleSheetItem::MarginTop] = getAttribute( element, "before", 0.0 );
-        layout.margins[QStyleSheetItem::MarginBottom] = getAttribute( element, "after", 0.0 );
+        layout.margins[Q3StyleSheetItem::MarginTop] = getAttribute( element, "before", 0.0 );
+        layout.margins[Q3StyleSheetItem::MarginBottom] = getAttribute( element, "after", 0.0 );
     }
 
     if ( docVersion < 2 )
@@ -407,7 +409,7 @@ void KoParagLayout::loadParagLayout( KoParagLayout& layout, const QDomElement& p
 }
 
 //static
-Qt::AlignmentFlags KoParagLayout::loadOasisAlignment( const QCString& str )
+Qt::AlignmentFlags KoParagLayout::loadOasisAlignment( const Q3CString& str )
 {
     return
         str == "left" ? Qt::AlignLeft :
@@ -416,12 +418,12 @@ Qt::AlignmentFlags KoParagLayout::loadOasisAlignment( const QCString& str )
         str == "end" ? Qt::AlignRight :
         str == "center" ? Qt::AlignHCenter :
         str == "justify" ? Qt::AlignJustify :
-        str == "start" ? Qt::AlignAuto // i.e. direction-dependent
-        : Qt::AlignAuto; // default (can't happen unless spec is extended)
+        str == "start" ? Qt::AlignLeft // i.e. direction-dependent
+        : Qt::AlignLeft; // default (can't happen unless spec is extended)
 }
 
 //static
-QCString KoParagLayout::saveOasisAlignment( Qt::AlignmentFlags alignment )
+Q3CString KoParagLayout::saveOasisAlignment( Qt::AlignmentFlags alignment )
 {
    return alignment == Qt::AlignLeft ? "left" :
        alignment == Qt::AlignRight ? "right" :
@@ -438,7 +440,7 @@ void KoParagLayout::loadOasisParagLayout( KoParagLayout& layout, KoOasisContext&
 
     // code from OoWriterImport::writeLayout
     if ( context.styleStack().hasAttributeNS( KoXmlNS::fo, "text-align" ) ) {
-        QCString align = context.styleStack().attributeNS( KoXmlNS::fo, "text-align" ).latin1();
+        Q3CString align = context.styleStack().attributeNS( KoXmlNS::fo, "text-align" ).latin1();
         layout.alignment = loadOasisAlignment( align );
     }
 
@@ -451,8 +453,8 @@ void KoParagLayout::loadOasisParagLayout( KoParagLayout& layout, KoOasisContext&
     // Indentation (margins)
     if ( context.styleStack().hasAttributeNS( KoXmlNS::fo, "margin-left" ) || // 3.11.19
          context.styleStack().hasAttributeNS( KoXmlNS::fo, "margin-right" ) ) {
-        layout.margins[QStyleSheetItem::MarginLeft] = KoUnit::parseValue( context.styleStack().attributeNS( KoXmlNS::fo, "margin-left" ) );
-        layout.margins[QStyleSheetItem::MarginRight] = KoUnit::parseValue( context.styleStack().attributeNS( KoXmlNS::fo, "margin-right" ) );
+        layout.margins[Q3StyleSheetItem::MarginLeft] = KoUnit::parseValue( context.styleStack().attributeNS( KoXmlNS::fo, "margin-left" ) );
+        layout.margins[Q3StyleSheetItem::MarginRight] = KoUnit::parseValue( context.styleStack().attributeNS( KoXmlNS::fo, "margin-right" ) );
         // *text-indent must always be bound to either margin-left or margin-right
         double first = 0;
         if ( context.styleStack().attributeNS( KoXmlNS::style, "auto-text-indent") == "true" ) // style:auto-text-indent takes precedence
@@ -463,14 +465,14 @@ void KoParagLayout::loadOasisParagLayout( KoParagLayout& layout, KoOasisContext&
         else if ( context.styleStack().hasAttributeNS( KoXmlNS::fo, "text-indent") )
             first = KoUnit::parseValue( context.styleStack().attributeNS( KoXmlNS::fo, "text-indent") );
 
-        layout.margins[QStyleSheetItem::MarginFirstLine] = first;
+        layout.margins[Q3StyleSheetItem::MarginFirstLine] = first;
     }
 
     // Offset before and after paragraph
     if( context.styleStack().hasAttributeNS( KoXmlNS::fo, "margin-top") || // 3.11.22
         context.styleStack().hasAttributeNS( KoXmlNS::fo, "margin-bottom")) {
-        layout.margins[QStyleSheetItem::MarginTop] = KoUnit::parseValue( context.styleStack().attributeNS( KoXmlNS::fo, "margin-top" ) );
-        layout.margins[QStyleSheetItem::MarginBottom] = KoUnit::parseValue( context.styleStack().attributeNS( KoXmlNS::fo, "margin-bottom" ) );
+        layout.margins[Q3StyleSheetItem::MarginTop] = KoUnit::parseValue( context.styleStack().attributeNS( KoXmlNS::fo, "margin-top" ) );
+        layout.margins[Q3StyleSheetItem::MarginBottom] = KoUnit::parseValue( context.styleStack().attributeNS( KoXmlNS::fo, "margin-bottom" ) );
     }
 
     // Line spacing
@@ -669,7 +671,7 @@ void KoParagLayout::saveParagLayout( QDomElement & parentElem, int alignment ) c
     element.setAttribute( "align", alignment==Qt::AlignRight ? "right" :
                           alignment==Qt::AlignHCenter ? "center" :
                           alignment==Qt::AlignJustify ? "justify" :
-                          alignment==Qt::AlignAuto ? "auto" : "left" ); // Note: styles can have AlignAuto. Not paragraphs.
+                          alignment==Qt::AlignLeft ? "auto" : "left" ); // Note: styles can have AlignAuto. Not paragraphs.
 
     if ( static_cast<QChar::Direction>(layout.direction) == QChar::DirR )
         element.setAttribute( "dir", "R" );
@@ -677,29 +679,29 @@ void KoParagLayout::saveParagLayout( QDomElement & parentElem, int alignment ) c
 	if ( static_cast<QChar::Direction>(layout.direction) == QChar::DirL )
             element.setAttribute( "dir", "L" );
 
-    if ( layout.margins[QStyleSheetItem::MarginFirstLine] != 0 ||
-         layout.margins[QStyleSheetItem::MarginLeft] != 0 ||
-         layout.margins[QStyleSheetItem::MarginRight] != 0 )
+    if ( layout.margins[Q3StyleSheetItem::MarginFirstLine] != 0 ||
+         layout.margins[Q3StyleSheetItem::MarginLeft] != 0 ||
+         layout.margins[Q3StyleSheetItem::MarginRight] != 0 )
     {
         element = doc.createElement( "INDENTS" );
         parentElem.appendChild( element );
-        if ( layout.margins[QStyleSheetItem::MarginFirstLine] != 0 )
-            element.setAttribute( "first", layout.margins[QStyleSheetItem::MarginFirstLine] );
-        if ( layout.margins[QStyleSheetItem::MarginLeft] != 0 )
-            element.setAttribute( "left", layout.margins[QStyleSheetItem::MarginLeft] );
-        if ( layout.margins[QStyleSheetItem::MarginRight] != 0 )
-            element.setAttribute( "right", layout.margins[QStyleSheetItem::MarginRight] );
+        if ( layout.margins[Q3StyleSheetItem::MarginFirstLine] != 0 )
+            element.setAttribute( "first", layout.margins[Q3StyleSheetItem::MarginFirstLine] );
+        if ( layout.margins[Q3StyleSheetItem::MarginLeft] != 0 )
+            element.setAttribute( "left", layout.margins[Q3StyleSheetItem::MarginLeft] );
+        if ( layout.margins[Q3StyleSheetItem::MarginRight] != 0 )
+            element.setAttribute( "right", layout.margins[Q3StyleSheetItem::MarginRight] );
     }
 
-    if ( layout.margins[QStyleSheetItem::MarginTop] != 0 ||
-         layout.margins[QStyleSheetItem::MarginBottom] != 0 )
+    if ( layout.margins[Q3StyleSheetItem::MarginTop] != 0 ||
+         layout.margins[Q3StyleSheetItem::MarginBottom] != 0 )
     {
         element = doc.createElement( "OFFSETS" );
         parentElem.appendChild( element );
-        if ( layout.margins[QStyleSheetItem::MarginTop] != 0 )
-            element.setAttribute( "before", layout.margins[QStyleSheetItem::MarginTop] );
-        if ( layout.margins[QStyleSheetItem::MarginBottom] != 0 )
-            element.setAttribute( "after", layout.margins[QStyleSheetItem::MarginBottom] );
+        if ( layout.margins[Q3StyleSheetItem::MarginTop] != 0 )
+            element.setAttribute( "before", layout.margins[Q3StyleSheetItem::MarginTop] );
+        if ( layout.margins[Q3StyleSheetItem::MarginBottom] != 0 )
+            element.setAttribute( "after", layout.margins[Q3StyleSheetItem::MarginBottom] );
     }
     if ( layout.lineSpacingType != LS_SINGLE )
     {
@@ -805,11 +807,11 @@ void KoParagLayout::saveOasis( KoGenStyle& gs, KoSavingContext& context, bool sa
     // auto-determination of direction based on first char, works.
     if ( !savingStyle || (QChar::Direction) direction != QChar::DirON )
         gs.addProperty( "style:writing-mode", (QChar::Direction)direction == QChar::DirR ? "rl-tb" : "lr-tb" );
-    gs.addPropertyPt( "fo:margin-left", margins[QStyleSheetItem::MarginLeft] );
-    gs.addPropertyPt( "fo:margin-right", margins[QStyleSheetItem::MarginRight] );
-    gs.addPropertyPt( "fo:text-indent", margins[QStyleSheetItem::MarginFirstLine] );
-    gs.addPropertyPt( "fo:margin-top", margins[QStyleSheetItem::MarginTop] );
-    gs.addPropertyPt( "fo:margin-bottom", margins[QStyleSheetItem::MarginBottom] );
+    gs.addPropertyPt( "fo:margin-left", margins[Q3StyleSheetItem::MarginLeft] );
+    gs.addPropertyPt( "fo:margin-right", margins[Q3StyleSheetItem::MarginRight] );
+    gs.addPropertyPt( "fo:text-indent", margins[Q3StyleSheetItem::MarginFirstLine] );
+    gs.addPropertyPt( "fo:margin-top", margins[Q3StyleSheetItem::MarginTop] );
+    gs.addPropertyPt( "fo:margin-bottom", margins[Q3StyleSheetItem::MarginBottom] );
 
     switch ( lineSpacingType ) {
     case KoParagLayout::LS_SINGLE:
@@ -836,7 +838,7 @@ void KoParagLayout::saveOasis( KoGenStyle& gs, KoSavingContext& context, bool sa
     }
 
     QBuffer buffer;
-    buffer.open( IO_WriteOnly );
+    buffer.open( QIODevice::WriteOnly );
     KoXmlWriter tabsWriter( &buffer, 4 ); // indent==4: root,autostyle,style,parag-props
     tabsWriter.startElement( "style:tab-stops" );
     KoTabulatorList::ConstIterator it = m_tabList.begin();

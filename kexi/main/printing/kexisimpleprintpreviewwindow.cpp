@@ -28,7 +28,7 @@
 #include <qlabel.h>
 
 #include <kdialogbase.h>
-#include <ktoolbarbutton.h>
+
 #include <klocale.h>
 #include <kiconloader.h>
 #include <kdebug.h>

@@ -7,7 +7,7 @@ class TimeFormatWidget : public TimeDateFormatWidgetPrototype
     Q_OBJECT
 
 public:
-    TimeFormatWidget( QWidget* parent = 0, const char* name = 0, WFlags fl = 0 );
+    TimeFormatWidget( QWidget* parent = 0, const char* name = 0, Qt::WFlags fl = 0 );
     ~TimeFormatWidget();
     QString resultString();
     int correctValue();

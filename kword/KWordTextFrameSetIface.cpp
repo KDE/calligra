@@ -30,6 +30,8 @@
 #include "KWordFrameSetIface.h"
 #include <kdebug.h>
 #include <kcommand.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 KWordTextFrameSetIface::KWordTextFrameSetIface( KWTextFrameSet *_frame )
     : KWordFrameSetIface( _frame)
@@ -42,7 +44,7 @@ DCOPRef KWordTextFrameSetIface::startEditing()
     if ( m_frametext->isDeleted() )
         return DCOPRef();
     KWDocument *doc=m_frametext->kWordDocument();
-    QValueList<KWView *> views = doc->getAllViews();
+    Q3ValueList<KWView *> views = doc->getAllViews();
     KWCanvas* canvas = views.first()->getGUI()->canvasWidget();
     canvas->editFrameSet(m_frametext, true);
     return DCOPRef( kapp->dcopClient()->appId(),
@@ -244,7 +246,7 @@ void KWordTextFrameSetIface::changeCaseOfText( const QString & caseType)
     }
 
     else
-        kdDebug()<<"Error in void KWordTextFrameSetIface::changeCaseOfText( const QString & caseType) parameter\n";
+        kDebug()<<"Error in void KWordTextFrameSetIface::changeCaseOfText( const QString & caseType) parameter\n";
     delete cmd;
 }
 

@@ -693,7 +693,7 @@ void KPrView::insertPicture()
     fd.setMimeFilter( mimetypes );
     fd.setPreviewWidget( new KoPictureFilePreview( &fd ) );
 
-    KURL url;
+    KUrl url;
     if ( fd.exec() == QDialog::Accepted )
         url = fd.selectedURL();
 
@@ -730,7 +730,7 @@ void KPrView::savePicture()
 void KPrView::savePicture( const QString& oldName, KoPicture& picture)
 {
     QString oldFile(oldName);
-    KURL url;
+    KUrl url;
     url.setPath( oldFile );
     if (!QDir(url.directory()).exists())
         oldFile = url.fileName();
@@ -1305,7 +1305,7 @@ void KPrView::extraWebPres()
     if ( !allowWebPres )
         return;
 
-    KURL url;
+    KUrl url;
     QString config = QString::null;
     int ret =KMessageBox::questionYesNoCancel( this,
                                                i18n( "Do you want to load a previously saved configuration"
@@ -3357,7 +3357,7 @@ void KPrView::changePicture( const QString & filename )
     fd.setMimeFilter( mimetypes );
     fd.setPreviewWidget( new KoPictureFilePreview( &fd ) );
 
-    KURL url;
+    KUrl url;
     if ( fd.exec() == QDialog::Accepted )
         url = fd.selectedURL();
 
@@ -6052,7 +6052,7 @@ void KPrView::insertFile(  )
     fd.setMimeFilter( filter );
     fd.setCaption(i18n("Insert File"));
 
-    KURL url;
+    KUrl url;
     if ( fd.exec() == QDialog::Accepted )
     {
         url = fd.selectedURL();
@@ -6359,7 +6359,7 @@ void KPrView::documentModified( bool b )
         return;
 
     if ( b )
-        m_sbModifiedLabel->setPixmap( KGlobal::iconLoader()->loadIcon( "action-modified", KIcon::Small ) );
+        m_sbModifiedLabel->setPixmap( KGlobal::iconLoader()->loadIcon( "action-modified", K3Icon::Small ) );
     else
         m_sbModifiedLabel->setText( "   " );
 }

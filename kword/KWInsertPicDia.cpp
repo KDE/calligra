@@ -23,7 +23,9 @@
 #include <qbitmap.h>
 #include <qlayout.h>
 #include <qcheckbox.h>
-#include <qscrollview.h>
+#include <q3scrollview.h>
+//Added by qt3to4:
+#include <Q3GridLayout>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -43,11 +45,11 @@
  * Not to be confused with KoPictureFilePreview, the one inside the file dialog!
  * (Note: this one has to remain separate, for the day we add options like flipping, rotating, etc.)
  */
-class KWInsertPicPreview : public QScrollView
+class KWInsertPicPreview : public Q3ScrollView
 {
 public:
     KWInsertPicPreview( QWidget *parent )
-        : QScrollView( parent )
+        : Q3ScrollView( parent )
     {
         viewport()->setBackgroundMode( PaletteBase );
         setMinimumSize( 300, 200 );
@@ -90,7 +92,7 @@ KWInsertPicDia::KWInsertPicDia( QWidget *parent, bool _inline, bool _keepRatio, 
 {
     setInitialSize( QSize(400, 300) );
     QWidget *page = plainPage();
-    QGridLayout *grid = new QGridLayout( page, 4, 2, KDialog::marginHint(), KDialog::spacingHint() );
+    Q3GridLayout *grid = new Q3GridLayout( page, 4, 2, KDialog::marginHint(), KDialog::spacingHint() );
 
     QPushButton *pbImage = new QPushButton( i18n( "Choose &Picture..." ), page );
     grid->addWidget( pbImage, 0, 0 );
@@ -136,7 +138,7 @@ void KWInsertPicDia::slotChooseImage()
         m_picture = tmppicture;
     if ( m_picture.isNull() && m_bFirst)
     {
-        kdDebug() << "KWInsertPicDia::slotChooseImage cancelled by user." << endl;
+        kDebug() << "KWInsertPicDia::slotChooseImage cancelled by user." << endl;
         // Close, but delayed, otherwise it won't work (we only return from the ctor)
         QTimer::singleShot( 0, this, SLOT( cancel() ) );
         return;
@@ -161,7 +163,7 @@ KoPicture KWInsertPicDia::selectPicture( KFileDialog & fd, QWidget *parent )
     KoPicture picture;
 
     fd.setPreviewWidget( new KoPictureFilePreview( &fd ) );
-    KURL url;
+    KUrl url;
     if ( fd.exec() == QDialog::Accepted )
         url = fd.selectedURL();
 
@@ -173,7 +175,7 @@ KoPicture KWInsertPicDia::selectPicture( KFileDialog & fd, QWidget *parent )
 
 KoPicture KWInsertPicDia::picture ( void ) const
 {
-    kdDebug() << m_picture.getKey().toString() << " selected in KWInsertPicDia" << endl;
+    kDebug() << m_picture.getKey().toString() << " selected in KWInsertPicDia" << endl;
     return m_picture;
 }
 

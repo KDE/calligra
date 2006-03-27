@@ -34,6 +34,13 @@
 #include <qcombobox.h>
 #include <qcheckbox.h>
 #include <qlayout.h>
+//Added by qt3to4:
+#include <Q3GridLayout>
+#include <Q3PtrList>
+#include <Q3Frame>
+#include <Q3ValueList>
+#include <QResizeEvent>
+#include <Q3VBoxLayout>
 
 /******************************************************************/
 /* Class: KoStyleManager                                          */
@@ -98,7 +105,7 @@ KoStyleManager::KoStyleManager( QWidget *_parent, KoUnit::Unit unit,
     newTab->setWidget( new KoParagTabulatorsWidget( unit, -1, newTab ) );
     addTab( newTab );
 
-    QListBoxItem * item = m_stylesList->findItem( activeStyleName );
+    Q3ListBoxItem * item = m_stylesList->findItem( activeStyleName );
     m_stylesList->setCurrentItem( item ? m_stylesList->index(item) : 0 );
 
     noSignals=false;
@@ -127,15 +134,15 @@ void KoStyleManager::addTab( KoStyleManagerTab * tab )
 
 void KoStyleManager::setupWidget(const KoStyleCollection& styleCollection)
 {
-    QFrame * frame1 = makeMainWidget();
-    QGridLayout *frame1Layout = new QGridLayout( frame1, 0, 0, // auto
+    Q3Frame * frame1 = makeMainWidget();
+    Q3GridLayout *frame1Layout = new Q3GridLayout( frame1, 0, 0, // auto
                                                  0, KDialog::spacingHint() );
     numStyles = styleCollection.count();
-    m_stylesList = new QListBox( frame1, "stylesList" );
+    m_stylesList = new Q3ListBox( frame1, "stylesList" );
     m_stylesList->insertStringList( styleCollection.displayNameList() );
 
-    const QValueList<KoUserStyle*> styleList = styleCollection.styleList();
-    for ( QValueList<KoUserStyle *>::const_iterator it = styleList.begin(), end = styleList.end();
+    const Q3ValueList<KoUserStyle*> styleList = styleCollection.styleList();
+    for ( Q3ValueList<KoUserStyle *>::const_iterator it = styleList.begin(), end = styleList.end();
           it != end ; ++it )
     {
         KoParagStyle* style = static_cast<KoParagStyle *>( *it );
@@ -180,7 +187,7 @@ void KoStyleManager::setupWidget(const KoStyleCollection& styleCollection)
 void KoStyleManager::addGeneralTab( int flags ) {
     QWidget *tab = new QWidget( m_tabs );
 
-    QGridLayout *tabLayout = new QGridLayout( tab );
+    Q3GridLayout *tabLayout = new Q3GridLayout( tab );
     tabLayout->setSpacing( KDialog::spacingHint() );
     tabLayout->setMargin( KDialog::marginHint() );
 
@@ -193,7 +200,7 @@ void KoStyleManager::addGeneralTab( int flags ) {
     QLabel *nameLabel = new QLabel( tab );
     nameLabel->setText( i18n( "Name:" ) );
     nameLabel->resize(nameLabel->sizeHint());
-    nameLabel->setAlignment( AlignRight | AlignVCenter );
+    nameLabel->setAlignment( Qt::AlignRight | Qt::AlignVCenter );
 
     tabLayout->addWidget( nameLabel, 0, 0 );
 
@@ -203,7 +210,7 @@ void KoStyleManager::addGeneralTab( int flags ) {
 
     QLabel *nextStyleLabel = new QLabel( tab );
     nextStyleLabel->setText( i18n( "Next style:" ) );
-    nextStyleLabel->setAlignment( AlignRight | AlignVCenter );
+    nextStyleLabel->setAlignment( Qt::AlignRight | Qt::AlignVCenter );
 
     tabLayout->addWidget( nextStyleLabel, 1, 0 );
 
@@ -212,7 +219,7 @@ void KoStyleManager::addGeneralTab( int flags ) {
 
     QLabel *inheritStyleLabel = new QLabel( tab );
     inheritStyleLabel->setText( i18n( "Inherit style:" ) );
-    inheritStyleLabel->setAlignment( AlignRight | AlignVCenter );
+    inheritStyleLabel->setAlignment( Qt::AlignRight | Qt::AlignVCenter );
 
     tabLayout->addWidget( inheritStyleLabel, 2, 0 );
 
@@ -299,7 +306,7 @@ int KoStyleManager::styleIndex( int pos ) {
 // Update the GUI so that it shows m_currentStyle
 void KoStyleManager::updateGUI() {
     kdDebug(32500) << "KoStyleManager::updateGUI m_currentStyle=" << m_currentStyle << " " << m_currentStyle->name() << endl;
-    QPtrListIterator<KoStyleManagerTab> it( m_tabsList );
+    Q3PtrListIterator<KoStyleManagerTab> it( m_tabsList );
     for ( ; it.current() ; ++it )
     {
         it.current()->setStyle( m_currentStyle );
@@ -351,7 +358,7 @@ void KoStyleManager::updatePreview()
 void KoStyleManager::save() {
     if(m_currentStyle) {
         // save changes from UI to object.
-        QPtrListIterator<KoStyleManagerTab> it( m_tabsList );
+        Q3PtrListIterator<KoStyleManagerTab> it( m_tabsList );
         for ( ; it.current() ; ++it )
             it.current()->save();
 
@@ -538,7 +545,7 @@ void KoStyleManager::slotApply() {
 void KoStyleManager::apply() {
     noSignals=true;
     KoStyleChangeDefMap styleChanged;
-    QPtrList<KoParagStyle> removeStyle;
+    Q3PtrList<KoParagStyle> removeStyle;
     for (unsigned int i =0 ; m_origStyles.count() > i ; i++) {
         if(m_origStyles.at(i) == 0L && m_changedStyles.at(i)!=0L) {           // newly added style
             kdDebug(32500) << "adding new " << m_changedStyles.at(i)->name() << " (" << i << ")" << endl;
@@ -640,7 +647,7 @@ void KoStyleManager::renameStyle(const QString &theText) {
 KoStyleParagTab::KoStyleParagTab( QWidget * parent )
     : KoStyleManagerTab( parent )
 {
-    ( new QVBoxLayout( this ) )->setAutoAdd( true );
+    ( new Q3VBoxLayout( this ) )->setAutoAdd( true );
     m_widget = 0L;
 }
 
@@ -668,7 +675,7 @@ void KoStyleParagTab::resizeEvent( QResizeEvent *e )
 KoStyleFontTab::KoStyleFontTab( QWidget * parent )
     : KoStyleManagerTab( parent )
 {
-	( new QVBoxLayout( this ) )->setAutoAdd( true );
+	( new Q3VBoxLayout( this ) )->setAutoAdd( true );
 	QTabWidget *fontTabContainer = new QTabWidget( this );
 
 	m_fontTab = new KoFontTab( KFontChooser::SmoothScalableFonts, this );

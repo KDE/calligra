@@ -20,8 +20,10 @@
 
 #include "KWFrame.h"
 
-#include <qptrlist.h>
-#include <qvaluevector.h>
+#include <q3ptrlist.h>
+#include <q3valuevector.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 class KWDocument;
 
@@ -41,12 +43,12 @@ public:
     /**
      * Fetches the frames below the frame this frameList is for.
      */
-    QValueList<KWFrame *> framesBelow() const;
+    Q3ValueList<KWFrame *> framesBelow() const;
 
     /**
      * Fetches the frames on top of the frame this frameList is for.
      */
-    QValueList<KWFrame *> framesOnTop() const;
+    Q3ValueList<KWFrame *> framesOnTop() const;
 
     /**
      * Update the z-ordering around the frame we host the framelist for.
@@ -100,10 +102,10 @@ public:
 
 private:
     static KWFrameList *getFirstFrameList(KWDocument *doc);
-    void updateZOrderFor(const QPtrList<KWFrame> &frames);
-    void setFrames(const QPtrList<KWFrame> &frames);
+    void updateZOrderFor(const Q3PtrList<KWFrame> &frames);
+    void setFrames(const Q3PtrList<KWFrame> &frames);
 
-    QValueVector<KWFrame *> m_frames; // sorted by Z Order
+    Q3ValueVector<KWFrame *> m_frames; // sorted by Z Order
     KWDocument *m_doc;
     KWFrame *m_frame;
 };

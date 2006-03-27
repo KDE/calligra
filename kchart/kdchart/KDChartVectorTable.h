@@ -29,29 +29,29 @@
 #ifndef __KDCHARTVECTORTABLE_H__
 #define __KDCHARTVECTORTABLE_H__
 
-#include <qvaluevector.h>
-#include <qshared.h>
-#include <qtable.h>
+#include <q3valuevector.h>
+#include <q3shared.h>
+#include <q3table.h>
 
 #include <KDChartDataIntern.h>
 #include <KDChartTableBase.h>
 
-class KDCHART_EXPORT KDChartVectorTablePrivate : public QShared
+class KDCHART_EXPORT KDChartVectorTablePrivate : public Q3Shared
 {
 public:
-    KDChartVectorTablePrivate() : QShared() {
+    KDChartVectorTablePrivate() : Q3Shared() {
         row_count = 0;
         col_count = 0;
     }
 
-    KDChartVectorTablePrivate( uint _rows, uint _cols ) : QShared() {
+    KDChartVectorTablePrivate( uint _rows, uint _cols ) : Q3Shared() {
         matrix.resize( _rows * _cols, KDChartData() );
         col_count = _cols;
         row_count = _rows;
     }
 
     KDChartVectorTablePrivate( const KDChartVectorTablePrivate& _t ) :
-        QShared(),
+        Q3Shared(),
         matrix( _t.matrix ),
         col_count( _t.col_count ),
         row_count( _t.row_count ) {}
@@ -60,7 +60,7 @@ public:
 
     void expand( uint _rows, uint _cols ) {
         // Save the old table
-        QValueVector<KDChartData> save( matrix );
+        Q3ValueVector<KDChartData> save( matrix );
 
         // Delete old data, then resize
         matrix.resize( 0 );
@@ -104,7 +104,7 @@ public:
                 matrix[ r * col_count + c ].clearValue();
     }
 
-    QValueVector<KDChartData> matrix;
+    Q3ValueVector<KDChartData> matrix;
 
     uint col_count;
     uint row_count;
@@ -123,14 +123,14 @@ public:
     /**
      * Typedefs
      */
-    typedef QValueVector<KDChartData>::iterator Iterator;
-    typedef QValueVector<KDChartData>::const_iterator ConstIterator;
+    typedef Q3ValueVector<KDChartData>::iterator Iterator;
+    typedef Q3ValueVector<KDChartData>::const_iterator ConstIterator;
 
-    typedef QValueVector<int>::iterator RowIterator;
-    typedef QValueVector<int>::const_iterator ConstRowIterator;
+    typedef Q3ValueVector<int>::iterator RowIterator;
+    typedef Q3ValueVector<int>::const_iterator ConstRowIterator;
 
-    typedef QValueVector<int>::iterator ColIterator;
-    typedef QValueVector<int>::const_iterator ConstColIterator;
+    typedef Q3ValueVector<int>::iterator ColIterator;
+    typedef Q3ValueVector<int>::const_iterator ConstColIterator;
 
     /**
      * API

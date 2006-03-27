@@ -22,7 +22,7 @@
 #define _KWMAILMERGE_KABC_CONFIG_H_
 
 #include <kdialogbase.h>
-#include <klistview.h>
+#include <k3listview.h>
 #include <kabc/stdaddressbook.h>
 
 #include "KWMailMergeKABC.h"
@@ -111,7 +111,7 @@ private:
        
        Called by KWMailMergeKABCConfig::removeSelectedContacts().
      */
-    void removeContact( QListViewItem* item );
+    void removeContact( Q3ListViewItem* item );
 
     /**
        Appends all KAddressbook entries in KABC::StdAddressBook::self() and all
@@ -121,12 +121,12 @@ private:
 };
 
 
-class KWMailMergeKABCConfigListItem : public QListViewItem
+class KWMailMergeKABCConfigListItem : public Q3ListViewItem
 {
 
 public:
-    KWMailMergeKABCConfigListItem( QListView *parent, const KABC::Addressee& addressEntry );
-    KWMailMergeKABCConfigListItem( QListViewItem *parent, const KABC::Addressee& addressEntry );
+    KWMailMergeKABCConfigListItem( Q3ListView *parent, const KABC::Addressee& addressEntry );
+    KWMailMergeKABCConfigListItem( Q3ListViewItem *parent, const KABC::Addressee& addressEntry );
     virtual ~KWMailMergeKABCConfigListItem();
 
     /**

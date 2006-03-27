@@ -20,6 +20,9 @@
 #define KOOPENPANE_H
 
 #include <koOpenPaneBase.h>
+//Added by qt3to4:
+#include <QPixmap>
+#include <Q3ValueList>
 
 class KoCustomDocumentCreator;
 class KConfig;
@@ -39,8 +42,8 @@ class KoOpenPane : public KoOpenPaneBase
     KoOpenPane(QWidget *parent, KInstance* instance, const QString& templateType = QString::null);
     virtual ~KoOpenPane();
 
-    QListViewItem* addPane(const QString& title, const QString& icon, QWidget* widget, int sortWeight);
-    QListViewItem* addPane(const QString& title, const QPixmap& icon, QWidget* widget, int sortWeight);
+    Q3ListViewItem* addPane(const QString& title, const QString& icon, QWidget* widget, int sortWeight);
+    Q3ListViewItem* addPane(const QString& title, const QPixmap& icon, QWidget* widget, int sortWeight);
 
     /**
      * If the application has a way to create a document not based on a template, but on user
@@ -53,11 +56,11 @@ class KoOpenPane : public KoOpenPaneBase
   protected slots:
     void showOpenFileDialog();
 
-    void selectionChanged(QListViewItem* item);
-    void itemClicked(QListViewItem* item);
+    void selectionChanged(Q3ListViewItem* item);
+    void itemClicked(Q3ListViewItem* item);
 
     /// Saves the splitter sizes for KoDetailsPaneBase based panes
-    void saveSplitterSizes(KoDetailsPaneBase* sender, const QValueList<int>& sizes);
+    void saveSplitterSizes(KoDetailsPaneBase* sender, const Q3ValueList<int>& sizes);
 
   signals:
     void openExistingFile(const QString&);
@@ -67,7 +70,7 @@ class KoOpenPane : public KoOpenPaneBase
     void alwaysUseChanged(KoTemplatesPane* sender, const QString& alwaysUse);
 
     /// Emitted when one of the detail panes have changed it's splitter
-    void splitterResized(KoDetailsPaneBase* sender, const QValueList<int>& sizes);
+    void splitterResized(KoDetailsPaneBase* sender, const Q3ValueList<int>& sizes);
 
   protected:
     void initRecentDocs();

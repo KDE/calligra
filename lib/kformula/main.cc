@@ -2,17 +2,20 @@
 #include <iostream>
 #include <memory>
 
-#include <qaccel.h>
+#include <q3accel.h>
 #include <qdom.h>
 #include <qfile.h>
 #include <qlayout.h>
-#include <qptrlist.h>
-#include <qmainwindow.h>
+#include <q3ptrlist.h>
+#include <q3mainwindow.h>
 #include <qpainter.h>
 #include <qstring.h>
 #include <qtextstream.h>
 #include <qwidget.h>
 #include <qfileinfo.h>
+//Added by qt3to4:
+#include <QFocusEvent>
+#include <QKeyEvent>
 
 #include <kapplication.h>
 #include <kaboutdata.h>
@@ -33,7 +36,7 @@ using namespace KFormula;
 
 class TestWidget : public KFormulaWidget {
 public:
-    TestWidget(Container* doc, QWidget* parent=0, const char* name=0, WFlags f=0)
+    TestWidget(Container* doc, QWidget* parent=0, const char* name=0, Qt::WFlags f=0)
             : KFormulaWidget(doc, parent, name, f) {}
 
 protected:
@@ -46,7 +49,7 @@ private:
 void save( const QString &filename, const QDomDocument& doc )
 {
     QFile f( filename );
-    if(!f.open(IO_Truncate | IO_ReadWrite)) {
+    if(!f.open(QIODevice::Truncate | QIODevice::ReadWrite)) {
         kdWarning( DEBUGID ) << "Error opening file " << filename.latin1() << endl;
         return;
     }
@@ -61,7 +64,7 @@ void save( const QString &filename, const QDomDocument& doc )
 void load( KFormula::Document* document, const QString &filename )
 {
     QFile f(filename);
-    if (!f.open(IO_ReadOnly)) {
+    if (!f.open(QIODevice::ReadOnly)) {
         kdWarning( DEBUGID ) << "Error opening file " << filename.latin1() << endl;
         return;
     }
@@ -83,7 +86,7 @@ void load( KFormula::Document* document, const QString &filename )
 void saveMathML( KFormula::Container* formula, const QString &filename, bool oasisFormat )
 {
     QFile f( filename );
-    if ( !f.open( IO_Truncate | IO_ReadWrite ) ) {
+    if ( !f.open( QIODevice::Truncate | QIODevice::ReadWrite ) ) {
         kdWarning( DEBUGID ) << "Error opening file " << filename.latin1() << endl;
         return;
     }
@@ -98,7 +101,7 @@ void saveMathML( KFormula::Container* formula, const QString &filename, bool oas
 void loadMathML( KFormula::Container* formula, const QString &filename )
 {
     QFile f( filename );
-    if ( !f.open( IO_ReadOnly ) ) {
+    if ( !f.open( QIODevice::ReadOnly ) ) {
         kdWarning( DEBUGID ) << "Error opening file " << filename.latin1() << endl;
         return;
     }
@@ -137,7 +140,7 @@ void TestWidget::keyPressEvent(QKeyEvent* event)
     int state = event->state();
     //MoveFlag flag = movementFlag(state);
 
-    if ( ( state & Qt::ShiftButton ) && ( state & Qt::ControlButton ) ) {
+    if ( ( state & Qt::ShiftModifier ) && ( state & Qt::ControlModifier ) ) {
         switch (event->key()) {
             case Qt::Key_B: document->document()->wrapper()->appendColumn(); return;
             case Qt::Key_I: document->document()->wrapper()->insertColumn(); return;
@@ -161,7 +164,7 @@ void TestWidget::keyPressEvent(QKeyEvent* event)
         }
         }
     }
-    else if (state & Qt::ControlButton) {
+    else if (state & Qt::ControlModifier) {
         switch (event->key()) {
             case Qt::Key_1: document->document()->wrapper()->addSum(); return;
             case Qt::Key_2: document->document()->wrapper()->addProduct(); return;
@@ -201,13 +204,13 @@ void TestWidget::keyPressEvent(QKeyEvent* event)
 
 
 ScrollView::ScrollView()
-        : QScrollView(), child(0)
+        : Q3ScrollView(), child(0)
 {
 }
 
 void ScrollView::addChild(KFormulaWidget* c, int x, int y)
 {
-    QScrollView::addChild(c, x, y);
+    Q3ScrollView::addChild(c, x, y);
     child = c;
     connect(child, SIGNAL(cursorChanged(bool, bool)),
             this, SLOT(cursorChanged(bool, bool)));

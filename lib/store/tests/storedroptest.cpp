@@ -1,12 +1,18 @@
 #include <kapplication.h>
 #include <kcmdlineargs.h>
 #include <KoStore.h>
-#include <qtextbrowser.h>
+#include <q3textbrowser.h>
 #include <qstringlist.h>
 #include <qbuffer.h>
 #include <qclipboard.h>
+//Added by qt3to4:
+#include <QDragEnterEvent>
+#include <QDragMoveEvent>
+#include <QKeyEvent>
+#include <Q3CString>
+#include <QDropEvent>
 
-class StoreDropTest : public QTextBrowser
+class StoreDropTest : public Q3TextBrowser
 {
 public:
     StoreDropTest( QWidget* parent );
@@ -37,7 +43,7 @@ int main( int argc, char** argv )
 }
 
 StoreDropTest::StoreDropTest( QWidget* parent )
-    : QTextBrowser( parent )
+    : Q3TextBrowser( parent )
 {
     setText( "KoStore drop/paste test\nDrop or paste a selection from a KOffice application into this widget to see the ZIP contents" );
     setAcceptDrops( true );
@@ -55,8 +61,8 @@ void StoreDropTest::contentsDragMoveEvent( QDragMoveEvent * ev )
 
 void StoreDropTest::keyPressEvent( QKeyEvent * e )
 {
-    if ( ( ( e->state() & ShiftButton ) && e->key() == Key_Insert ) ||
-         ( ( e->state() & ControlButton ) && e->key() == Key_V ) )
+    if ( ( ( e->state() & Qt::ShiftModifier ) && e->key() == Qt::Key_Insert ) ||
+         ( ( e->state() & Qt::ControlModifier ) && e->key() == Qt::Key_V ) )
         paste();
     //else
     //    QTextBrowser::keyPressEvent( e );
@@ -81,7 +87,7 @@ void StoreDropTest::contentsDropEvent( QDropEvent *ev )
 
 bool StoreDropTest::processMimeSource( QMimeSource* ev )
 {
-    const QCString acceptMimeType = "application/vnd.oasis.opendocument.";
+    const Q3CString acceptMimeType = "application/vnd.oasis.opendocument.";
     const char* fmt;
     QStringList formats;
     for (int i=0; (fmt = ev->format(i)); i++) {

@@ -18,8 +18,11 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 #include <qstringlist.h>
+//Added by qt3to4:
+#include <Q3ValueList>
+#include <Q3MemArray>
 
 #include <kdebug.h>
 #include <kglobal.h>
@@ -51,7 +54,7 @@ static const char * CURRENT_DTD_VERSION = "1.3";
 static OrdinaryCreationStrategy creationStrategy;
 
 
-int FormulaList::compareItems( QPtrCollection::Item a, QPtrCollection::Item b )
+int FormulaList::compareItems( Q3PtrCollection::Item a, Q3PtrCollection::Item b )
 {
     double ya = static_cast<Container*>( a )->getDocumentY();
     double yb = static_cast<Container*>( b )->getDocumentY();
@@ -104,9 +107,9 @@ Container* Document::createFormula( int pos, bool registerMe )
 }
 
 
-QPtrListIterator<Container> Document::formulas()
+Q3PtrListIterator<Container> Document::formulas()
 {
-    return QPtrListIterator<Container>( formulae );
+    return Q3PtrListIterator<Container>( formulae );
 }
 
 
@@ -927,7 +930,7 @@ void DocumentWrapper::insertSymbol()
     if ( hasFormula() &&
          m_document->m_contextStyle->symbolTable().contains( m_selectedName ) ) {
         QChar ch = m_document->m_contextStyle->symbolTable().unicode( m_selectedName );
-        if ( ch != QChar::null ) {
+        if ( ch != QChar::Null ) {
             TextCharRequest r( ch, true );
             formula()->performRequest( &r );
         }
@@ -943,7 +946,7 @@ void DocumentWrapper::insertSymbol( QString name )
     if ( hasFormula() ) {
         if ( m_document->m_contextStyle->symbolTable().contains( name ) ) {
             QChar ch = m_document->m_contextStyle->symbolTable().unicode( name );
-            if ( ch != QChar::null ) {
+            if ( ch != QChar::Null ) {
                 TextCharRequest r( ch, true );
                 formula()->performRequest( &r );
                 return;
@@ -1109,8 +1112,8 @@ void DocumentWrapper::initSymbolNamesAction()
 
         QStringList names = st.allNames();
         //QStringList i18nNames;
-        QValueList<QFont> fonts;
-        QMemArray<uchar> chars( names.count() );
+        Q3ValueList<QFont> fonts;
+        Q3MemArray<uchar> chars( names.count() );
 
         int i = 0;
         for ( QStringList::Iterator it = names.begin();
@@ -1165,15 +1168,15 @@ void DocumentWrapper::setEnabled( bool enabled )
 
     if ( enabled ) {
         getAddGenericUpperAction()->
-            setShortcut( KShortcut( CTRL + Key_U ) );
+            setShortcut( KShortcut( Qt::CTRL + Qt::Key_U ) );
         getAddGenericLowerAction()->
-            setShortcut( KShortcut( CTRL + Key_L ) );
+            setShortcut( KShortcut( Qt::CTRL + Qt::Key_L ) );
         getRemoveEnclosingAction()->
-            setShortcut( KShortcut( CTRL + Key_R ) );
+            setShortcut( KShortcut( Qt::CTRL + Qt::Key_R ) );
         getMakeGreekAction()->
-            setShortcut( KShortcut( CTRL + Key_G ) );
+            setShortcut( KShortcut( Qt::CTRL + Qt::Key_G ) );
         getInsertSymbolAction()->
-            setShortcut( KShortcut( CTRL + Key_I ) );
+            setShortcut( KShortcut( Qt::CTRL + Qt::Key_I ) );
     }
     else {
         getAddGenericUpperAction()->setShortcut( KShortcut() );

@@ -48,14 +48,14 @@ KexiDBModule::KexiDBModule(Kross::Api::Manager* /*manager*/)
     : Kross::Api::Module("KexiDB")
     //, m_manager(manager)
 {
-    //kdDebug() << "Kross::KexiDB::KexiDBModule Ctor" << endl;
+    //kDebug() << "Kross::KexiDB::KexiDBModule Ctor" << endl;
     addChild( new Kross::Api::Variant(KROSS_KEXIDB_VERSION), "version" );
     addChild( KexiDBDriverManager::self() );
 }
 
 KexiDBModule::~KexiDBModule()
 {
-    //kdDebug() << "Kross::KexiDB::KexiDBModule Dtor" << endl;
+    //kDebug() << "Kross::KexiDB::KexiDBModule Dtor" << endl;
 }
 
 const QString KexiDBModule::getClassName() const

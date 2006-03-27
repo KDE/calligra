@@ -3,8 +3,8 @@
 
 #include <kdialogbase.h>
 
-class QTable;
-class QScrollView;
+class Q3Table;
+class Q3ScrollView;
 class QStringList;
 
 class KWQtSqlEasyFilter: public KDialogBase
@@ -19,8 +19,8 @@ protected:
 protected slots:
     void slotValueChanged ( int, int);
 private:
-	QTable *m_table;
-	QScrollView *m_view;
+	Q3Table *m_table;
+	Q3ScrollView *m_view;
         QStringList m_fieldList,m_sortingList,m_operationList;
 
 

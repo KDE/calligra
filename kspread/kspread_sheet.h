@@ -1003,7 +1003,7 @@ public:
      * @param file The URL of the file to insert.
      * @param point The the top-left point in the sheet where the picture should be inserted.
      */
-    bool insertPicture( const KoPoint& point , const KURL& file );
+    bool insertPicture( const KoPoint& point , const KUrl& file );
 
     /**
      * Creates a new embedded picture object and inserts it into the sheet at the specified position.

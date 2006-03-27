@@ -41,7 +41,7 @@
 #include <KoTextFormat.h>
 #include "presstep.h"
 
-class KURL;
+class KUrl;
 class KoTextFormatInterface;
 class KPrView;
 class KPrDocument;
@@ -214,7 +214,7 @@ exportPage( 0, s, 800, 600, "/home/khz/page0.png", "PNG", 100 );
      \sa drawPageInPix, KPrViewIface::exportPage
      */
     bool exportPage( int nPage, int nWidth, int nHeight,
-                     const KURL& fileURL,
+                     const KUrl& fileURL,
                      const char* format,
                      int quality = -1 );
 
@@ -309,7 +309,7 @@ exportPage( 0, s, 800, 600, "/home/khz/page0.png", "PNG", 100 );
      * @param rect the size and position of the picture
      */
     void insertPicture( const KoRect &rect );
-    void changePicture( const KURL & url, QWidget *window );
+    void changePicture( const KUrl & url, QWidget *window );
 
     int numberOfObjectSelected() const;
     KPrObject *getSelectedObj() const;

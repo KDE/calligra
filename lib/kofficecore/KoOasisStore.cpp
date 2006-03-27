@@ -112,7 +112,7 @@ KoXmlWriter* KoOasisStore::manifestWriter( const char* mimeType )
     {
         // the pointer to the buffer is already stored in the KoXmlWriter, no need to store it here as well
         QBuffer *manifestBuffer = new QBuffer;
-        manifestBuffer->open( IO_WriteOnly );
+        manifestBuffer->open( QIODevice::WriteOnly );
         m_manifestWriter = new KoXmlWriter( manifestBuffer );
         m_manifestWriter->startDocument( "manifest:manifest" );
         m_manifestWriter->startElement( "manifest:manifest" );

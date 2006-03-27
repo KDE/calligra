@@ -59,7 +59,7 @@ KoFilter::ConversionStatus XCFImport::convert(const QCString&, const QCString& t
 
     if (!filename.isEmpty()) {
 
-        KURL url(filename);
+        KUrl url(filename);
 
         if (url.isEmpty())
             return KoFilter::FileNotFound;

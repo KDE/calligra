@@ -37,7 +37,11 @@
 
 #include <qtimer.h>
 #include <qregexp.h>
-#include <qprogressdialog.h>
+#include <q3progressdialog.h>
+//Added by qt3to4:
+#include <Q3CString>
+#include <Q3MemArray>
+#include <Q3ValueList>
 
 #include <assert.h>
 
@@ -702,7 +706,7 @@ void KoTextObject::insert( KoTextCursor * cursor, KoTextFormat * currentFormat,
         emit ensureCursorVisible();
         emit showCursor();
         // we typed the first char of a paragraph in AlignAuto mode -> show correct alignment in UI
-        if ( oldCursor.index() == 0 && oldCursor.parag()->alignment() == Qt::AlignAuto )
+        if ( oldCursor.index() == 0 && oldCursor.parag()->alignment() == Qt::AlignLeft )
             emit updateUI( true );
 
     }
@@ -796,7 +800,7 @@ KCommand* KoTextObject::setParagLayoutCommand( KoTextCursor * cursor, const KoPa
             KoTextDocCommand * cmd = new KoTextParagCommand( textdoc, undoRedoInfo.id, undoRedoInfo.eid,
                                                              undoRedoInfo.oldParagLayouts,
                                                              paragLayout, paragLayoutFlags,
-                                                             (QStyleSheetItem::Margin)marginIndex );
+                                                             (Q3StyleSheetItem::Margin)marginIndex );
             textdoc->addCommand( cmd );
             return new KoTextCommand( this, /*cmd, */"related to KoTextParagCommand" );
         }
@@ -865,7 +869,7 @@ KCommand *KoTextObject::applyStyleCommand( KoTextCursor * cursor, const KoParagS
 
         if ( createUndoRedo )
         {
-            QValueList<KoTextFormat *> lstFormats;
+            Q3ValueList<KoTextFormat *> lstFormats;
             //QString str;
             for ( KoTextParag * parag = firstParag ; parag && parag != lastParag->next() ; parag = parag->next() )
             {
@@ -909,7 +913,7 @@ KCommand *KoTextObject::applyStyleCommand( KoTextCursor * cursor, const KoParagS
     }
 
     //resize all variables after applying the style
-    QPtrListIterator<KoTextCustomItem> cit( textdoc->allCustomItems() );
+    Q3PtrListIterator<KoTextCustomItem> cit( textdoc->allCustomItems() );
     for ( ; cit.current() ; ++cit )
         cit.current()->resize();
 
@@ -1170,7 +1174,7 @@ KCommand * KoTextObject::setAlignCommand( KoTextCursor * cursor, int align, KoTe
     return new KoTextCommand( this, /*cmd, */i18n("Change Alignment") );
 }
 
-KCommand * KoTextObject::setMarginCommand( KoTextCursor * cursor, QStyleSheetItem::Margin m, double margin , KoTextDocument::SelectionId selectionId ) {
+KCommand * KoTextObject::setMarginCommand( KoTextCursor * cursor, Q3StyleSheetItem::Margin m, double margin , KoTextDocument::SelectionId selectionId ) {
     if ( protectContent() )
         return 0L;
 
@@ -1203,9 +1207,9 @@ KCommand * KoTextObject::setMarginCommand( KoTextCursor * cursor, QStyleSheetIte
         KoParagLayout::Margins, m );
     textdoc->addCommand( cmd );
     QString name;
-    if ( m == QStyleSheetItem::MarginFirstLine )
+    if ( m == Q3StyleSheetItem::MarginFirstLine )
         name = i18n("Change First Line Indent");
-    else if ( m == QStyleSheetItem::MarginLeft || m == QStyleSheetItem::MarginRight )
+    else if ( m == Q3StyleSheetItem::MarginLeft || m == Q3StyleSheetItem::MarginRight )
         name = i18n("Change Indent");
     else
         name = i18n("Change Paragraph Spacing");
@@ -1366,7 +1370,7 @@ KCommand * KoTextObject::setBordersCommand( KoTextCursor * cursor, const KoBorde
     KoTextParagCommand *cmd = new KoTextParagCommand(
         textdoc, undoRedoInfo.id, undoRedoInfo.eid,
         undoRedoInfo.oldParagLayouts, undoRedoInfo.newParagLayout,
-        KoParagLayout::Borders, (QStyleSheetItem::Margin)-1, borderOutline);
+        KoParagLayout::Borders, (Q3StyleSheetItem::Margin)-1, borderOutline);
     textdoc->addCommand( cmd );
 
     undoRedoInfo.clear();
@@ -1421,7 +1425,7 @@ KCommand * KoTextObject::setJoinBordersCommand( KoTextCursor * cursor, bool join
     KoTextParagCommand *cmd = new KoTextParagCommand(
         textdoc, undoRedoInfo.id, undoRedoInfo.eid,
         undoRedoInfo.oldParagLayouts, undoRedoInfo.newParagLayout,
-        KoParagLayout::Borders, (QStyleSheetItem::Margin)-1, borderOutline);
+        KoParagLayout::Borders, (Q3StyleSheetItem::Margin)-1, borderOutline);
     textdoc->addCommand( cmd );
 
     undoRedoInfo.clear();
@@ -2250,7 +2254,7 @@ void KoTextObject::setNeedSpellCheck(bool b)
         parag->string()->setNeedsSpellCheck( b );
 }
 
-bool KoTextObject::statistics( QProgressDialog *progress, ulong & charsWithSpace, ulong & charsWithoutSpace, ulong & words, ulong & sentences, ulong & syllables, ulong & lines, bool selected )
+bool KoTextObject::statistics( Q3ProgressDialog *progress, ulong & charsWithSpace, ulong & charsWithoutSpace, ulong & words, ulong & sentences, ulong & syllables, ulong & lines, bool selected )
 {
     // parts of words for better counting of syllables:
     // (only use reg exp if necessary -> speed up)
@@ -2420,7 +2424,7 @@ const char * KoTextObject::acceptSelectionMimeType()
     return "application/vnd.oasis.opendocument.";
 }
 
-QCString KoTextObject::providesOasis( QMimeSource* mime )
+Q3CString KoTextObject::providesOasis( QMimeSource* mime )
 {
     const char* fmt;
     const char* acceptMimeType = acceptSelectionMimeType();
@@ -2740,7 +2744,7 @@ void KoTextFormatInterface::setAlign(int align)
     emitNewCommand( cmd );
 }
 
-void KoTextFormatInterface::setMargin(QStyleSheetItem::Margin m, double margin)
+void KoTextFormatInterface::setMargin(Q3StyleSheetItem::Margin m, double margin)
 {
     KCommand *cmd = setMarginCommand( m, margin );
     emitNewCommand( cmd );
@@ -2765,7 +2769,7 @@ void KoTextFormatInterface::setParagLayoutFormat( KoParagLayout *newLayout, int 
 }
 #endif
 
-KCommand *KoTextFormatInterface::setMarginCommand(QStyleSheetItem::Margin m, double margin)
+KCommand *KoTextFormatInterface::setMarginCommand(Q3StyleSheetItem::Margin m, double margin)
 {
     KoParagLayout format( *currentParagLayoutFormat() );
     format.margins[m]=margin;
@@ -2795,7 +2799,7 @@ KCommand *KoTextFormatInterface::setLanguageCommand(const QString &_lang)
     return setFormatCommand( &format, KoTextFormat::Language );
 }
 
-KoTextDocCommand *KoTextFormatInterface::deleteTextCommand( KoTextDocument *textdoc, int id, int index, const QMemArray<KoTextStringChar> & str, const CustomItemsMap & customItemsMap, const QValueList<KoParagLayout> & oldParagLayouts )
+KoTextDocCommand *KoTextFormatInterface::deleteTextCommand( KoTextDocument *textdoc, int id, int index, const Q3MemArray<KoTextStringChar> & str, const CustomItemsMap & customItemsMap, const Q3ValueList<KoParagLayout> & oldParagLayouts )
 {
     return textdoc->deleteTextCommand( textdoc, id, index, str, customItemsMap, oldParagLayouts );
 }

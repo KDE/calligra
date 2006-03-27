@@ -22,6 +22,9 @@
 
 #include <qstring.h>
 #include <qvariant.h>
+//Added by qt3to4:
+#include <Q3ValueList>
+#include <Q3CString>
 //#include <kdebug.h>
 
 #include "object.h"
@@ -56,9 +59,9 @@ namespace Kross { namespace Api {
             operator QString () { return getValue().toString(); }
             operator const QString () { return getValue().toString(); }
             operator const QString& () { return getValue().asString(); }
-            operator QCString () { return getValue().toCString(); }
-            operator const QCString () { return getValue().toCString(); }
-            operator const QCString& () { return getValue().asCString(); }
+            operator Q3CString () { return getValue().toCString(); }
+            operator const Q3CString () { return getValue().toCString(); }
+            operator const Q3CString& () { return getValue().asCString(); }
             operator const QVariant& () { return getValue(); }
 
             /**
@@ -148,7 +151,7 @@ namespace Kross { namespace Api {
              * \param object The object to convert.
              * \return The to a Q_LLONG converted object.
              */
-            static Q_LLONG toLLONG(Object::Ptr object);
+            static qlonglong toLLONG(Object::Ptr object);
 
             /**
              * Try to convert the given \a Object into
@@ -158,7 +161,7 @@ namespace Kross { namespace Api {
              * \param object The object to convert.
              * \return The to a Q_ULLONG converted object.
              */
-            static Q_ULLONG toULLONG(Object::Ptr object);
+            static qulonglong toULLONG(Object::Ptr object);
 
             /**
              * Try to convert the given \a Object into
@@ -178,7 +181,7 @@ namespace Kross { namespace Api {
              * \param object The object to convert.
              * \return The to a QValueList converted object.
              */
-            static QValueList<QVariant> toList(Object::Ptr object);
+            static Q3ValueList<QVariant> toList(Object::Ptr object);
 
     };
 

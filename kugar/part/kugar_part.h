@@ -61,7 +61,7 @@ private:
     QString m_reportData;
     Kugar::MReportEngine *m_reportEngine;
     bool m_templateOk;
-    KURL m_docURL;
+    KUrl m_docURL;
 };
 
 

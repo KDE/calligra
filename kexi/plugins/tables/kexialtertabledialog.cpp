@@ -27,7 +27,7 @@
 #include <kdebug.h>
 #include <klocale.h>
 #include <kaction.h>
-#include <kpopupmenu.h>
+#include <kmenu.h>
 #include <kmessagebox.h>
 
 #include <koproperty/set.h>
@@ -122,7 +122,7 @@ KexiAlterTableDialog::KexiAlterTableDialog(KexiMainWindow *win, QWidget *parent,
 
 	KexiTableViewColumn *col = new KexiTableViewColumn("pk", KexiDB::Field::Text, i18n("Primary Key", "PK"),
 		i18n("Describes primary key for the field."));
-	col->field()->setSubType("KIcon");
+	col->field()->setSubType("K3Icon");
 	col->setReadOnly(true);
 	d->data->addColumn( col );
 
@@ -148,7 +148,7 @@ KexiAlterTableDialog::KexiAlterTableDialog(KexiMainWindow *win, QWidget *parent,
 	QFontMetrics fm(font());
 	for (uint i=1; i<=types.count(); i++) {
 		types[i-1] = KexiDB::Field::typeGroupName(i);
-		d->maxTypeNameTextWidth = QMAX(d->maxTypeNameTextWidth, fm.width(types[i-1]));
+		d->maxTypeNameTextWidth = qMax(d->maxTypeNameTextWidth, fm.width(types[i-1]));
 	}
 	col->field()->setEnumHints(types);
 
@@ -238,7 +238,7 @@ void KexiAlterTableDialog::initData()
 	}
 
 	//column widths
-	d->view->setColumnWidth(COLUMN_ID_PK, IconSize( KIcon::Small ) + 10);
+	d->view->setColumnWidth(COLUMN_ID_PK, IconSize( K3Icon::Small ) + 10);
 	d->view->adjustColumnWidthToContents(COLUMN_ID_CAPTION); //adjust column width
 	d->view->setColumnWidth(COLUMN_ID_TYPE, d->maxTypeNameTextWidth + 2 * d->view->rowHeight());
 	d->view->setColumnStretchEnabled( true, COLUMN_ID_DESC ); //last column occupies the rest of the area
@@ -255,7 +255,7 @@ static bool updatePropertiesVisibility(KexiDB::Field::Type fieldType, KoProperty
 	
 	prop = &set["subType"];
 	const bool isObjectTypeGroup = set["type"].value().toInt() == (int)KexiDB::Field::BLOB;
-	kdDebug() << prop->value().toInt() << set["type"].value().toInt()<< endl;
+	kDebug() << prop->value().toInt() << set["type"].value().toInt()<< endl;
 	
 	//if there is no more than 1 subType name or it's a PK: hide the property
 	visible = (prop->listData() && prop->listData()->keys.count() > 1 || isObjectTypeGroup)
@@ -327,7 +327,7 @@ KexiAlterTableDialog::getSubTypeListData(KexiDB::Field::TypeGroup fieldTypeGroup
 		stringsList = KexiDB::typeStringsForGroup(fieldTypeGroup);
 		namesList = KexiDB::typeNamesForGroup(fieldTypeGroup);
 	}
-	kdDebug() << "KexiAlterTableDialog::getSubTypeListData(): subType strings: " << 
+	kDebug() << "KexiAlterTableDialog::getSubTypeListData(): subType strings: " << 
 		stringsList.join("|") << "\nnames: " << namesList.join("|") << endl;
 }
 
@@ -525,7 +525,7 @@ void KexiAlterTableDialog::setPrimaryKey(KoProperty::Set &propertySet, bool set,
 
 /*void KexiAlterTableDialog::slotCellSelected(int, int row)
 {
-	kdDebug() << "KexiAlterTableDialog::slotCellSelected()" << endl;
+	kDebug() << "KexiAlterTableDialog::slotCellSelected()" << endl;
 	if(row == m_row)
 		return;
 	m_row = row;
@@ -621,7 +621,7 @@ void KexiAlterTableDialog::removeCurrentPropertySet()
 void KexiAlterTableDialog::slotBeforeCellChanged(
 	KexiTableItem *item, int colnum, QVariant& newValue, KexiDB::ResultInfo* /*result*/)
 {
-//	kdDebug() << d->view->selectedItem() << " " << item 
+//	kDebug() << d->view->selectedItem() << " " << item 
 		//<< " " << d->sets->at( d->view->currentRow() ) << " " << propertySet() << endl;
 	if (colnum==COLUMN_ID_CAPTION) {//'caption'
 //		if (!item->at(1).toString().isEmpty() && item->at(1).isNull()) {
@@ -686,7 +686,7 @@ void KexiAlterTableDialog::slotBeforeCellChanged(
 			subTypeValue = KexiDB::Field::typeString(fieldType);
 		}
 		KoProperty::Property *subTypeProperty = &set["subType"];
-kdDebug() << "++++++++++" << slist << nlist << endl;
+kDebug() << "++++++++++" << slist << nlist << endl;
 
 		//update subtype list and value
 		const bool forcePropertySetReload = set["type"].value().toInt() != (int)fieldTypeGroup;
@@ -767,7 +767,7 @@ void KexiAlterTableDialog::slotRowUpdated(KexiTableItem *item)
 			/*width*/0);
 //		m_newTable->addField( field );
 
-		kdDebug() << "KexiAlterTableDialog::slotRowUpdated(): " << field.debugString() << endl;
+		kDebug() << "KexiAlterTableDialog::slotRowUpdated(): " << field.debugString() << endl;
 
 		//create a new property set:
 		createPropertySet( d->view->currentRow(), &field, true );
@@ -825,14 +825,14 @@ void KexiAlterTableDialog::slotPropertyChanged(KoProperty::Set& set, KoProperty:
 	else if (pname=="subType" && d->slotPropertyChanged_subType_enabled) {
 		d->slotPropertyChanged_subType_enabled = false;
 		if (set["primaryKey"].value().toBool()==true && property.value().toString()!=KexiDB::Field::typeString(KexiDB::Field::BigInteger)) {
-			kdDebug() << "INVALID " << property.value().toString() << endl;
+			kDebug() << "INVALID " << property.value().toString() << endl;
 //			if (KMessageBox::Yes == KMessageBox::questionYesNo(this, msg,
 //				i18n("This field has promary key assigned. Setting autonumber field"),
 //				KGuiItem(i18n("Create &Primary Key"), "key"), KStdGuiItem::cancel() ))
 
 		}
-//		kdDebug() << property.value().toString() << endl;
-//		kdDebug() << set["type"].value() << endl;
+//		kDebug() << property.value().toString() << endl;
+//		kDebug() << set["type"].value() << endl;
 		if (KexiDB::Field::typeGroup( set["type"].value().toInt() ) == (int)KexiDB::Field::TextGroup) {
 			updatePropertiesVisibility(KexiDB::Field::typeForString(property.value().toString()), set);
 			//properties' visiblility changed: refresh prop. set
@@ -1106,7 +1106,7 @@ tristate KexiAlterTableDialog::storeData(bool dontAsk)
 	res = buildSchema(*newTable);
 //	bool ok = buildSchema(*newTable, cancel) && !cancel;
 
-	kdDebug() << "KexiAlterTableDialog::storeData() : BUILD SCHEMA:" << endl;
+	kDebug() << "KexiAlterTableDialog::storeData() : BUILD SCHEMA:" << endl;
 	newTable->debug();
 
 	KexiDB::Connection *conn = mainWin()->project()->dbConnection();
@@ -1149,7 +1149,7 @@ KexiTablePart::TempData* KexiAlterTableDialog::tempData() const
 
 	//check if there is a type specified
 //	if ((old_type.isNull() && !buf_type) || (buf_type && buf_type->isNull())) {
-		//kdDebug() << "err" << endl;
+		//kDebug() << "err" << endl;
 	//}
 //	allow = true;
 //	m_dirty = m_dirty | result->success;

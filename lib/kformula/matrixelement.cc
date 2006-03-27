@@ -18,9 +18,11 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <qmemarray.h>
+#include <q3memarray.h>
 #include <qpainter.h>
-#include <qptrlist.h>
+#include <q3ptrlist.h>
+//Added by qt3to4:
+#include <QKeyEvent>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -73,7 +75,7 @@ protected:
     uint rowPos;
     uint colPos;
 
-    QPtrList<MatrixSequenceElement>* row;
+    Q3PtrList<MatrixSequenceElement>* row;
 };
 
 
@@ -99,7 +101,7 @@ protected:
     uint rowPos;
     uint colPos;
 
-    QPtrList<MatrixSequenceElement>* column;
+    Q3PtrList<MatrixSequenceElement>* column;
 };
 
 
@@ -209,7 +211,7 @@ void KFCRemoveRow::unexecute()
 KFCInsertRow::KFCInsertRow( const QString& name, Container* document, MatrixElement* m, uint r, uint c )
     : KFCRemoveRow( name, document, m, r, c )
 {
-    row = new QPtrList< MatrixSequenceElement >;
+    row = new Q3PtrList< MatrixSequenceElement >;
     row->setAutoDelete( true );
     for ( uint i = 0; i < matrix->getColumns(); i++ ) {
         row->append( new MatrixSequenceElement( matrix ) );
@@ -220,7 +222,7 @@ KFCInsertRow::KFCInsertRow( const QString& name, Container* document, MatrixElem
 KFCRemoveColumn::KFCRemoveColumn( const QString& name, Container* document, MatrixElement* m, uint r, uint c )
     : Command( name, document ), matrix( m ), rowPos( r ), colPos( c )
 {
-    column = new QPtrList< MatrixSequenceElement >;
+    column = new Q3PtrList< MatrixSequenceElement >;
     column->setAutoDelete( true );
 }
 
@@ -273,7 +275,7 @@ MatrixElement::MatrixElement(uint rows, uint columns, BasicElement* parent)
     : BasicElement(parent)
 {
     for (uint r = 0; r < rows; r++) {
-        QPtrList< MatrixSequenceElement >* list = new QPtrList< MatrixSequenceElement >;
+        Q3PtrList< MatrixSequenceElement >* list = new Q3PtrList< MatrixSequenceElement >;
         list->setAutoDelete(true);
         for (uint c = 0; c < columns; c++) {
             list->append(new MatrixSequenceElement(this));
@@ -294,12 +296,12 @@ MatrixElement::MatrixElement( const MatrixElement& other )
     uint rows = other.getRows();
     uint columns = other.getColumns();
 
-    QPtrListIterator< QPtrList< MatrixSequenceElement > > rowIter( other.content );
+    Q3PtrListIterator< Q3PtrList< MatrixSequenceElement > > rowIter( other.content );
     for (uint r = 0; r < rows; r++) {
         ++rowIter;
-        QPtrListIterator< MatrixSequenceElement > colIter( *rowIter.current() );
+        Q3PtrListIterator< MatrixSequenceElement > colIter( *rowIter.current() );
 
-        QPtrList< MatrixSequenceElement >* list = new QPtrList< MatrixSequenceElement >;
+        Q3PtrList< MatrixSequenceElement >* list = new Q3PtrList< MatrixSequenceElement >;
         list->setAutoDelete(true);
         for (uint c = 0; c < columns; c++) {
             ++colIter;
@@ -423,9 +425,9 @@ BasicElement* MatrixElement::goToPos( FormulaCursor* cursor, bool& handled,
  */
 void MatrixElement::calcSizes(const ContextStyle& style, ContextStyle::TextStyle tstyle, ContextStyle::IndexStyle istyle)
 {
-    QMemArray<luPixel> toMidlines(getRows());
-    QMemArray<luPixel> fromMidlines(getRows());
-    QMemArray<luPixel> widths(getColumns());
+    Q3MemArray<luPixel> toMidlines(getRows());
+    Q3MemArray<luPixel> fromMidlines(getRows());
+    Q3MemArray<luPixel> widths(getColumns());
 
     toMidlines.fill(0);
     fromMidlines.fill(0);
@@ -438,7 +440,7 @@ void MatrixElement::calcSizes(const ContextStyle& style, ContextStyle::TextStyle
     ContextStyle::IndexStyle i_istyle = style.convertIndexStyleUpper(istyle);
 
     for (uint r = 0; r < rows; r++) {
-        QPtrList< MatrixSequenceElement >* list = content.at(r);
+        Q3PtrList< MatrixSequenceElement >* list = content.at(r);
         for (uint c = 0; c < columns; c++) {
             SequenceElement* element = list->at(c);
             element->calcSizes( style, i_tstyle, i_istyle );
@@ -454,7 +456,7 @@ void MatrixElement::calcSizes(const ContextStyle& style, ContextStyle::TextStyle
 
     luPixel yPos = 0;
     for (uint r = 0; r < rows; r++) {
-        QPtrList< MatrixSequenceElement >* list = content.at(r);
+        Q3PtrList< MatrixSequenceElement >* list = content.at(r);
         luPixel xPos = 0;
         yPos += toMidlines[r];
         for (uint c = 0; c < columns; c++) {
@@ -783,7 +785,7 @@ bool MatrixElement::readAttributesFromDom(QDomElement element)
 
     content.clear();
     for (uint r = 0; r < rows; r++) {
-        QPtrList< MatrixSequenceElement >* list = new QPtrList< MatrixSequenceElement >;
+        Q3PtrList< MatrixSequenceElement >* list = new Q3PtrList< MatrixSequenceElement >;
         list->setAutoDelete(true);
         content.append(list);
         for (uint c = 0; c < cols; c++) {
@@ -966,7 +968,7 @@ public:
 
 private:
 
-    QPtrList<BasicElement> tabs;
+    Q3PtrList<BasicElement> tabs;
 };
 
 
@@ -1016,7 +1018,7 @@ void KFCNewLine::execute()
         // Remove anything after position pos from the current line
         m_line->selectAllChildren( cursor );
         cursor->setMark( m_pos );
-        QPtrList<BasicElement> elementList;
+        Q3PtrList<BasicElement> elementList;
         m_line->remove( cursor, elementList, beforeCursor );
 
         // Insert the removed stuff into the new line
@@ -1056,7 +1058,7 @@ void KFCNewLine::unexecute()
 
         // Remove anything from the line to be deleted
         m_newline->selectAllChildren( cursor );
-        QPtrList<BasicElement> elementList;
+        Q3PtrList<BasicElement> elementList;
         m_newline->remove( cursor, elementList, beforeCursor );
 
         // Insert the removed stuff into the previous line
@@ -1610,8 +1612,8 @@ void MultilineElement::dispatchFontCommand( FontCommand* cmd )
 }
 
 void MultilineElement::insert( FormulaCursor* cursor,
-                               QPtrList<BasicElement>& newChildren,
-                               Direction direction )
+                               Q3PtrList<BasicElement>& newChildren,
+                               Qt::Orientation direction )
 {
     MultilineSequenceElement* e = static_cast<MultilineSequenceElement*>(newChildren.take(0));
     e->setParent(this);
@@ -1628,8 +1630,8 @@ void MultilineElement::insert( FormulaCursor* cursor,
 }
 
 void MultilineElement::remove( FormulaCursor* cursor,
-                               QPtrList<BasicElement>& removedChildren,
-                               Direction direction )
+                               Q3PtrList<BasicElement>& removedChildren,
+                               Qt::Orientation direction )
 {
     if ( content.count() == 1 ) { //&& ( cursor->getPos() == 0 ) ) {
         getParent()->selectChild(cursor, this);
@@ -1644,7 +1646,7 @@ void MultilineElement::remove( FormulaCursor* cursor,
     }
 }
 
-void MultilineElement::normalize( FormulaCursor* cursor, Direction direction )
+void MultilineElement::normalize( FormulaCursor* cursor, Qt::Orientation direction )
 {
     int pos = cursor->getPos();
     if ( ( cursor->getElement() == this ) &&

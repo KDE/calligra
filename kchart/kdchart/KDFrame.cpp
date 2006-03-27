@@ -29,6 +29,8 @@
 
 #include <qpainter.h>
 #include <qbrush.h>
+//Added by qt3to4:
+#include <QPixmap>
 
 #include <KDFrame.h>
 #include <KDFrameProfileSection.h>
@@ -84,7 +86,7 @@ void KDFrame::paintBackground( QPainter& painter, const QRect& innerRect ) const
             ol.setY( innerRect.center().y() - _backPixmap.height()/ 2 );
             bitBlt( painter.device(), ol, &_backPixmap );
         } else {
-            QWMatrix m;
+            QMatrix m;
             double zW = (double)innerRect.width()  / (double)_backPixmap.width();
             double zH = (double)innerRect.height() / (double)_backPixmap.height();
             switch ( _backPixmapMode ) {

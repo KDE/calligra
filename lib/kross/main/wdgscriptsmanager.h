@@ -36,7 +36,7 @@ class WdgScriptsManager : public WdgScriptsManagerBase
 {
     Q_OBJECT
     public:
-        WdgScriptsManager(ScriptGUIClient* scr, QWidget* parent = 0, const char* name = 0, WFlags fl = 0);
+        WdgScriptsManager(ScriptGUIClient* scr, QWidget* parent = 0, const char* name = 0, Qt::WFlags fl = 0);
         ~WdgScriptsManager();
     public slots:
         void slotLoadScript();
@@ -45,14 +45,14 @@ class WdgScriptsManager : public WdgScriptsManagerBase
         void slotExecuteScript();
         void slotUnloadScript();
         void slotGetNewScript();
-        void slotSelectionChanged(QListViewItem*);
+        void slotSelectionChanged(Q3ListViewItem*);
     private slots:
         void slotFillScriptsList();
         void slotResourceInstalled();
     private:
         WdgScriptsManagerPrivate* d;
         void addItem(ScriptActionCollection* collection);
-        QListViewItem* addItem(ScriptAction::Ptr, QListViewItem* parentitem, QListViewItem* afteritem);
+        Q3ListViewItem* addItem(ScriptAction::Ptr, Q3ListViewItem* parentitem, Q3ListViewItem* afteritem);
 };
 
 }}

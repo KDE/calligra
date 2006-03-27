@@ -20,7 +20,7 @@
 #ifndef __kofontdiapreview_h__
 #define __kofontdiapreview_h__
 
-#include <qframe.h>
+#include <q3frame.h>
 #include <qstring.h>
 #include <qcolor.h>
 #include <qfont.h>
@@ -29,14 +29,14 @@
 /**
  * The font dialog Preview
  */
-class KoFontDiaPreview : public QFrame
+class KoFontDiaPreview : public Q3Frame
 {
     Q_OBJECT
 public:
     /**
     * Constructor
     */
-    KoFontDiaPreview( QWidget* parent =0, const char* name = 0, WFlags fl = 0 );
+    KoFontDiaPreview( QWidget* parent =0, const char* name = 0, Qt::WFlags fl = 0 );
     ~KoFontDiaPreview();
 
     void setText( const QString &text );

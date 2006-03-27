@@ -21,22 +21,24 @@
 #define koTarStore_h
 
 #include "KoStoreBase.h"
+//Added by qt3to4:
+#include <Q3CString>
 
 class KTar;
 class KArchiveDirectory;
-class KURL;
+class KUrl;
 
 class KoTarStore : public KoStoreBase
 {
 public:
-    KoTarStore( const QString & _filename, Mode _mode, const QCString & appIdentification );
-    KoTarStore( QIODevice *dev, Mode mode, const QCString & appIdentification );
+    KoTarStore( const QString & _filename, Mode _mode, const Q3CString & appIdentification );
+    KoTarStore( QIODevice *dev, Mode mode, const Q3CString & appIdentification );
     /**
-     * KURL-constructor
+     * KUrl-constructor
      * @todo saving not completely implemented (fixed temporary file)
      * @since 1.4
      */
-    KoTarStore( QWidget* window, const KURL& url, const QString & _filename, Mode _mode, const QCString & appIdentification );
+    KoTarStore( QWidget* window, const KUrl& url, const QString & _filename, Mode _mode, const Q3CString & appIdentification );
     ~KoTarStore();
 protected:
     virtual bool init( Mode _mode );
@@ -48,7 +50,7 @@ protected:
     virtual bool enterAbsoluteDirectory( const QString& path );
     virtual bool fileExists( const QString& absPath ) const;
 
-    static QCString completeMagic( const QCString& appMimetype );
+    static Q3CString completeMagic( const Q3CString& appMimetype );
 
     /// The tar archive
     KTar * m_pTar;

@@ -34,12 +34,15 @@
 #include <qcolor.h>
 #include <qpen.h>
 #include <qmap.h>
-#include <qdict.h>
-#include <qintdict.h>
+#include <q3dict.h>
+#include <q3intdict.h>
 #include <qobject.h>
 #include <qtextstream.h>
-#include <qsimplerichtext.h>
+#include <q3simplerichtext.h>
 #include <qdom.h>
+//Added by qt3to4:
+#include <QPixmap>
+#include <Q3ValueList>
 #include <limits.h>
 
 #include <math.h>
@@ -55,7 +58,7 @@
 #include "KDChartPropertySet.h"
 
 #if COMPAT_QT_VERSION >= 0x030000
-#include <qvaluevector.h>
+#include <q3valuevector.h>
 #else
 #include <qarray.h>
 #endif
@@ -70,7 +73,7 @@
 */
 
 
-typedef QIntDict<KDChartPropertySet> KDChartPropertySetList;
+typedef Q3IntDict<KDChartPropertySet> KDChartPropertySetList;
 
 #define KDCHART_ALL_AXES UINT_MAX-1
 
@@ -156,9 +159,9 @@ class KDCHART_EXPORT KDChartParams : public QObject
     Q_ENUMS(HdFtPos)
 
     // Needed for QSA
-    Q_ENUMS( BrushStyle )
-    Q_ENUMS( PenStyle )
-    Q_ENUMS( Orientation )
+    Q_ENUMS( Qt::BrushStyle )
+    Q_ENUMS( Qt::PenStyle )
+    Q_ENUMS( Qt::Orientation )
 
 public slots: // PENDING(blackie) merge public slots into one section.
     void setOptimizeOutputForScreen( bool screenOutput )
@@ -220,7 +223,7 @@ public slots: // PENDING(blackie) merge public slots into one section.
 
 public:
 
-// MOC_SKIP_BEGIN
+#ifndef Q_MOC_RUN
     class KDCHART_EXPORT KDChartFrameSettings
     {
         // Q_OBJECT
@@ -375,7 +378,7 @@ public:
         bool    _addFrameHeightToLayout;
     };
 
-// MOC_SKIP_END
+#endif
 
 public slots:
 
@@ -506,7 +509,7 @@ public slots:
 
 
 public:
-    typedef QIntDict <KDChartCustomBox > CustomBoxDict;
+    typedef Q3IntDict <KDChartCustomBox > CustomBoxDict;
 
 public slots:
     uint insertCustomBox( const KDChartCustomBox & box );
@@ -632,7 +635,7 @@ public slots:
         }
 
 
-    void setShadowPattern( BrushStyle style ) {
+    void setShadowPattern( Qt::BrushStyle style ) {
         _shadowPattern = style;
         emit changed();
     }
@@ -667,13 +670,13 @@ public slots:
         }
 
 
-    void setOutlineDataLineStyle( PenStyle style )
+    void setOutlineDataLineStyle( Qt::PenStyle style )
         {
             _outlineDataLineStyle = style;
             emit changed();
         }
 
-    PenStyle outlineDataLineStyle() const
+    Qt::PenStyle outlineDataLineStyle() const
         {
             return _outlineDataLineStyle;
         }
@@ -1149,7 +1152,7 @@ public slots:
             return _lineColor;
         }
 
-    void setLineStyle( PenStyle style, uint dataset=KDCHART_GLOBAL_LINE_STYLE );
+    void setLineStyle( Qt::PenStyle style, uint dataset=KDCHART_GLOBAL_LINE_STYLE );
 
     PenStyle lineStyle( uint dataset=KDCHART_GLOBAL_LINE_STYLE ) const;
 
@@ -1390,14 +1393,14 @@ public slots:
         }
 
 
-    void setExplodeValues( QValueList<int> explodeList ) {
+    void setExplodeValues( Q3ValueList<int> explodeList ) {
         _explodeList = explodeList;
         emit changed();
     }
 
 
     // Unfortunately this is not avaialble from QSA-
-    QValueList<int> explodeValues() const {
+    Q3ValueList<int> explodeValues() const {
         return _explodeList;
     }
 
@@ -1865,13 +1868,13 @@ public slots:
             return _legendPosition;
         }
 
-    void setLegendOrientation( Orientation orientation )
+    void setLegendOrientation( Qt::Orientation orientation )
         {
             _legendOrientation = orientation;
             emit changed();
         }
 
-    Orientation legendOrientation() const
+    Qt::Orientation legendOrientation() const
         {
             return _legendOrientation;
         }
@@ -2092,7 +2095,7 @@ public slots:
 
 public:
 #if COMPAT_QT_VERSION >= 0x030000
-    typedef QValueVector<uint> AxesArray;
+    typedef Q3ValueVector<uint> AxesArray;
 #else
     typedef QArray<uint> AxesArray;
 #endif
@@ -2497,7 +2500,7 @@ private:
     int _numValues;
     QFont _defaultFont;
 
-    typedef QDict < KDChartFrameSettings > AreaDict;
+    typedef Q3Dict < KDChartFrameSettings > AreaDict;
     AreaDict _areaDict;
 
     CustomBoxDict _customBoxDict;
@@ -2616,7 +2619,7 @@ private:
     QColor _lineColor;
     int _lineWidth;
     PenStyle _lineStyle;
-    typedef QMap<uint, PenStyle> LineStyleMap;
+    typedef QMap<uint, Qt::PenStyle> LineStyleMap;
     LineStyleMap _datasetLineStyles;
     AreaChartSubType _areaChartSubType;
     AreaLocation _areaLocation;
@@ -2643,7 +2646,7 @@ private:
     bool _explode;
     double _explodeFactor;
     ExplodeFactorsMap _explodeFactors;
-    QValueList<int> _explodeList;
+    Q3ValueList<int> _explodeList;
     bool _threeDPies;
     int _threeDPieHeight;
     int _pieStart;

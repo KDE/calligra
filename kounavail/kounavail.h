@@ -21,11 +21,14 @@
 #define KOUNAVAIL_H
 
 #include <KoDocument.h>
+//Added by qt3to4:
+#include <Q3CString>
+#include <QPaintEvent>
 
 class KoUnavailPart : public KoDocument
 {
     Q_OBJECT
-    Q_PROPERTY( QCString mimetype READ nativeFormatMimeType WRITE setMimeType )
+    Q_PROPERTY( Q3CString mimetype READ nativeFormatMimeType WRITE setMimeType )
     Q_PROPERTY( QString unavailReason READ unavailReason WRITE setUnavailReason )
     Q_PROPERTY( QString realURL READ realURL WRITE setRealURL )
 public:
@@ -43,9 +46,9 @@ public:
     virtual bool saveChildren( KoStore* /*_store*/ ) { return true; }
 
     /** This is called by KoDocumentChild::save */
-    virtual QCString nativeFormatMimeType() const { return m_mimetype; }
+    virtual Q3CString nativeFormatMimeType() const { return m_mimetype; }
     /** This is called by KoDocumentChild::createUnavailDocument */
-    void setMimeType( const QCString& mime );
+    void setMimeType( const Q3CString& mime );
     // keep in sync with koDocumentChild.h
     enum UnavailReason { DocumentNotFound, HandlerNotFound };
     /** This is called by KoDocumentChild::createUnavailDocument */
@@ -64,7 +67,7 @@ protected:
     virtual KoView* createViewInstance( QWidget* parent, const char* name );
 
     QDomDocument m_doc;
-    QCString m_mimetype;
+    Q3CString m_mimetype;
     QString m_reason;
 };
 

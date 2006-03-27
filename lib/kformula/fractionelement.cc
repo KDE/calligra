@@ -19,6 +19,8 @@
 */
 
 #include <qpainter.h>
+//Added by qt3to4:
+#include <Q3PtrList>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -292,8 +294,8 @@ void FractionElement::moveDown(FormulaCursor* cursor, BasicElement* from)
  * Reinserts the denominator if it has been removed.
  */
 void FractionElement::insert(FormulaCursor* cursor,
-                             QPtrList<BasicElement>& newChildren,
-                             Direction direction)
+                             Q3PtrList<BasicElement>& newChildren,
+                             Qt::Orientation direction)
 {
     if (cursor->getPos() == denominatorPos) {
         denominator = static_cast<SequenceElement*>(newChildren.take(0));
@@ -321,8 +323,8 @@ void FractionElement::insert(FormulaCursor* cursor,
  * are senseless and the caller is required to replace us.
  */
 void FractionElement::remove(FormulaCursor* cursor,
-                             QPtrList<BasicElement>& removedChildren,
-                             Direction direction)
+                             Q3PtrList<BasicElement>& removedChildren,
+                             Qt::Orientation direction)
 {
     switch (cursor->getPos()) {
     case numeratorPos:

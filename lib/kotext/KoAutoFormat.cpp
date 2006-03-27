@@ -43,17 +43,21 @@
 #include <qfile.h>
 #include <qlabel.h>
 #include <qtooltip.h>
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
 #include <qdom.h>
 #include <qregexp.h>
+//Added by qt3to4:
+#include <QTextStream>
+#include <Q3Frame>
+#include <QMouseEvent>
 
 
-KoCompletionBox::KoCompletionBox( QWidget * parent, const char * name, WFlags f)
+KoCompletionBox::KoCompletionBox( QWidget * parent, const char * name, Qt::WFlags f)
   : QLabel(parent,name,f)
 {
   setBackgroundColor(QColor("#FFFFE6"));
-  setFocusPolicy(QWidget::NoFocus);
-  setFrameShape(QFrame::Box);
+  setFocusPolicy(Qt::NoFocus);
+  setFrameShape(Q3Frame::Box);
 }
 
 KoCompletionBox::~KoCompletionBox()
@@ -415,7 +419,7 @@ void KoAutoFormat::readAutoCorrectConfig()
     if ( fname.isEmpty() )
         return;
     QFile xmlFile(fname);
-    if(!xmlFile.open(IO_ReadOnly))
+    if(!xmlFile.open(QIODevice::ReadOnly))
         return;
 
     QDomDocument doc;
@@ -496,7 +500,7 @@ void KoAutoFormat::loadAllLanguagesAutoCorrection()
     if ( fname.isEmpty() )
         return;
     QFile xmlFile( fname );
-    if(xmlFile.open(IO_ReadOnly))
+    if(xmlFile.open(QIODevice::ReadOnly))
     {
         QDomDocument doc;
         if(!doc.setContent(&xmlFile)) {
@@ -663,7 +667,7 @@ void KoAutoFormat::saveConfig()
     config->writeEntry( "CompletionKeyAction", ( int )m_keyCompletionAction );
 
     config->setGroup( "AutoFormatEntries" );
-    QDictIterator<KoAutoFormatEntry> it( m_entries );
+    Q3DictIterator<KoAutoFormatEntry> it( m_entries );
 
     //refresh m_maxFindLength
     m_maxFindLength=0;
@@ -736,7 +740,7 @@ void KoAutoFormat::saveConfig()
         f.setName(locateLocal("data", "koffice/autocorrect/"+klocale.languageList().front() + ".xml",m_doc->instance()));
     else
         f.setName(locateLocal("data", "koffice/autocorrect/"+m_autoFormatLanguage + ".xml",m_doc->instance()));
-    if(!f.open(IO_WriteOnly)) {
+    if(!f.open(QIODevice::WriteOnly)) {
         kdWarning()<<"Error during saving autoformat to " << f.name() << endl;
 	return;
     }
@@ -747,7 +751,7 @@ void KoAutoFormat::saveConfig()
     config->sync();
 }
 
-QDomElement KoAutoFormat::saveEntry( QDictIterator<KoAutoFormatEntry> _entry, QDomDocument doc)
+QDomElement KoAutoFormat::saveEntry( Q3DictIterator<KoAutoFormatEntry> _entry, QDomDocument doc)
 {
     QDomElement data;
     data = doc.createElement("item");
@@ -1030,7 +1034,7 @@ bool KoAutoFormat::doToolTipCompletion( KoTextCursor* textEditCursor, KoTextPara
              || ( keyPressed == Qt::Key_Tab && m_keyCompletionAction==Tab )
              || ( keyPressed == Qt::Key_Space && m_keyCompletionAction==Space )
              || ( keyPressed == Qt::Key_End && m_keyCompletionAction==End )
-             || ( keyPressed == Qt::Key_Right && m_keyCompletionAction==Right ))
+             || ( keyPressed == Qt::Key_Right && m_keyCompletionAction==Qt::DockRight ))
         {
             return doCompletion(textEditCursor, parag, index, txtObj);
         }
@@ -2339,12 +2343,12 @@ bool KoAutoFormat::isSeparator( const QChar &c )
 void KoAutoFormat::buildMaxLen()
 {
     m_maxFindLength = 0;
-    QDictIterator<KoAutoFormatEntry> it( m_entries );
+    Q3DictIterator<KoAutoFormatEntry> it( m_entries );
     for( ; it.current(); ++it )
     {
 	m_maxFindLength = QMAX( m_maxFindLength, it.currentKey().length() );
     }
-    QDictIterator<KoAutoFormatEntry> it2( m_allLanguages );
+    Q3DictIterator<KoAutoFormatEntry> it2( m_allLanguages );
     for( ; it2.current(); ++it2 )
     {
 	m_maxFindLength = QMAX( m_maxFindLength, it2.currentKey().length() );

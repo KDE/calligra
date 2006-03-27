@@ -1,0 +1,58 @@
+kde4_header()
+
+include_directories( ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
+
+
+########### next target ###############
+
+set(kexidb_pqxxsqldriver_PART_SRCS 
+   pqxxdriver.cpp 
+   pqxxcursor.cpp 
+   pqxxconnection.cpp 
+   pqxxkeywords.cpp 
+   pqxxconnection_p.cpp 
+   pqxxpreparedstatement.cpp )
+
+kde4_automoc(${kexidb_pqxxsqldriver_PART_SRCS})
+
+kde4_add_plugin(kexidb_pqxxsqldriver ${kexidb_pqxxsqldriver_PART_SRCS})
+
+kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kexidb_pqxxsqldriver )
+
+target_link_libraries(kexidb_pqxxsqldriver  ${KDE4_KDECORE_LIBS} ${KDE4_KPARTS_LIBS} pqxx kexidb )
+
+install_targets(${LIB_INSTALL_DIR}/kde4 kexidb_pqxxsqldriver )
+
+
+########### install files ###############
+
+install_files( ${SERVICES_INSTALL_DIR} FILES  kexidb_pqxxsqldriver.desktop )
+
+kde4_footer()
+
+
+
+#original Makefile.am contents follow:
+
+#include $(top_srcdir)/kexi/Makefile.global
+#
+#kde_module_LTLIBRARIES = kexidb_pqxxsqldriver.la
+#
+#INCLUDES = -I$(srcdir)/../../.. $(all_includes) -I$(PG_INCDIR) -I$(PQXX_INCDIR)
+#
+#kexidb_pqxxsqldriver_la_METASOURCES = AUTO
+#
+#kexidb_pqxxsqldriver_la_SOURCES = pqxxdriver.cpp pqxxcursor.cpp pqxxconnection.cpp \
+#	pqxxkeywords.cpp pqxxconnection_p.cpp pqxxpreparedstatement.cpp
+#
+#kexidb_pqxxsqldriver_la_LIBADD = $(LIB_KPARTS) $(LIB_QT) -lpqxx ../../libkexidb.la
+#
+#kexidb_pqxxsqldriver_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN) \
+#	-L$(PQXX_LIBDIR) -L$(PG_LIBDIR) $(VER_INFO) -no-undefined
+#
+#kde_services_DATA = kexidb_pqxxsqldriver.desktop
+#
+#noinst_HEADERS =  pqxxconnection.h pqxxconnection_p.h
+#
+#KDE_CXXFLAGS += -DKEXIDB_PGSQL_DRIVER_EXPORT= -D__KEXIDB__= \
+#	-include $(top_srcdir)/kexi/kexidb/global.h

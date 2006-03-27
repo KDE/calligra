@@ -148,7 +148,7 @@ class KEXICORE_EXPORT KexiBLOBBuffer : public QObject
 		 and returned instantly. It is assumed that the BLOB is unstored, because it is loaded from 
 		 external source, so stored() will be equal to false for returned handle.
 		 \return handle to the pixmap data or a null handle if such pixmap could not be loaded. */
-		Handle insertPixmap(const KURL& url);
+		Handle insertPixmap(const KUrl& url);
 
 		/*! Inserts a new BLOB data. 
 		 @param data The data for BLOB object.
@@ -199,7 +199,7 @@ class KEXICORE_EXPORT KexiBLOBBuffer : public QObject
 				QPixmap pixmap() const;
 				QByteArray data() const;
 //				KexiBLOBBuffer* buf;
-//				KURL url;
+//				KUrl url;
 				QString name;
 				QString caption; //!< @todo for future use within image gallery
 				QString mimeType;

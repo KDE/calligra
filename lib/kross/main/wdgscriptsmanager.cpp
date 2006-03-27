@@ -20,9 +20,12 @@
 
 #include <qfile.h>
 #include <qfileinfo.h>
-#include <qheader.h>
-#include <qobjectlist.h>
+#include <q3header.h>
+#include <qobject.h>
 #include <qtooltip.h>
+//Added by qt3to4:
+#include <QPixmap>
+#include <Q3ValueList>
 
 #include <kapplication.h>
 #include <kdeversion.h>
@@ -67,17 +70,17 @@ class ScriptNewStuff : public KNewStuffSecure
 };
 #endif
 
-class ListItem : public QListViewItem
+class ListItem : public Q3ListViewItem
 {
     private:
         ScriptActionCollection* m_collection;
         ScriptAction::Ptr m_action;
     public:
-        ListItem(QListView* parentview, ScriptActionCollection* collection)
-            : QListViewItem(parentview), m_collection(collection), m_action(0) {}
+        ListItem(Q3ListView* parentview, ScriptActionCollection* collection)
+            : Q3ListViewItem(parentview), m_collection(collection), m_action(0) {}
 
-        ListItem(ListItem* parentitem, QListViewItem* afteritem, ScriptAction::Ptr action)
-            : QListViewItem(parentitem, afteritem), m_collection( parentitem->collection() ), m_action(action) {}
+        ListItem(ListItem* parentitem, Q3ListViewItem* afteritem, ScriptAction::Ptr action)
+            : Q3ListViewItem(parentitem, afteritem), m_collection( parentitem->collection() ), m_action(action) {}
 
         ScriptAction::Ptr action() const { return m_action; }
         ScriptActionCollection* collection() const { return m_collection; }
@@ -114,7 +117,7 @@ class WdgScriptsManagerPrivate
     //enum { LoadBtn = 0, UnloadBtn, InstallBtn, UninstallBtn, ExecBtn, NewStuffBtn };
 };
 
-WdgScriptsManager::WdgScriptsManager(ScriptGUIClient* scr, QWidget* parent, const char* name, WFlags fl )
+WdgScriptsManager::WdgScriptsManager(ScriptGUIClient* scr, QWidget* parent, const char* name, Qt::WFlags fl )
     : WdgScriptsManagerBase(parent, name, fl)
     , d(new WdgScriptsManagerPrivate)
 {
@@ -135,20 +138,20 @@ WdgScriptsManager::WdgScriptsManager(ScriptGUIClient* scr, QWidget* parent, cons
     slotFillScriptsList();
 
     slotSelectionChanged(0);
-    connect(scriptsList, SIGNAL(selectionChanged(QListViewItem*)), this, SLOT(slotSelectionChanged(QListViewItem*)));
+    connect(scriptsList, SIGNAL(selectionChanged(Q3ListViewItem*)), this, SLOT(slotSelectionChanged(Q3ListViewItem*)));
 
-    btnExec->setIconSet(KGlobal::instance()->iconLoader()->loadIconSet( "exec", KIcon::MainToolbar, 16 ));
+    btnExec->setIconSet(KGlobal::instance()->iconLoader()->loadIconSet( "exec", K3Icon::MainToolbar, 16 ));
     connect(btnExec, SIGNAL(clicked()), this, SLOT(slotExecuteScript()));
-    btnLoad->setIconSet(KGlobal::instance()->iconLoader()->loadIconSet( "fileopen", KIcon::MainToolbar, 16 ));
+    btnLoad->setIconSet(KGlobal::instance()->iconLoader()->loadIconSet( "fileopen", K3Icon::MainToolbar, 16 ));
     connect(btnLoad, SIGNAL(clicked()), this, SLOT(slotLoadScript()));
-    btnUnload->setIconSet(KGlobal::instance()->iconLoader()->loadIconSet( "fileclose", KIcon::MainToolbar, 16 ));
+    btnUnload->setIconSet(KGlobal::instance()->iconLoader()->loadIconSet( "fileclose", K3Icon::MainToolbar, 16 ));
     connect(btnUnload, SIGNAL(clicked()), this, SLOT(slotUnloadScript()));
-    btnInstall->setIconSet(KGlobal::instance()->iconLoader()->loadIconSet( "fileimport", KIcon::MainToolbar, 16 ));
+    btnInstall->setIconSet(KGlobal::instance()->iconLoader()->loadIconSet( "fileimport", K3Icon::MainToolbar, 16 ));
     connect(btnInstall, SIGNAL(clicked()), this, SLOT(slotInstallScript()));
-    btnUninstall->setIconSet(KGlobal::instance()->iconLoader()->loadIconSet( "fileclose", KIcon::MainToolbar, 16 ));
+    btnUninstall->setIconSet(KGlobal::instance()->iconLoader()->loadIconSet( "fileclose", K3Icon::MainToolbar, 16 ));
     connect(btnUninstall, SIGNAL(clicked()), this, SLOT(slotUninstallScript()));
 #ifdef KROSS_SUPPORT_NEWSTUFF
-    btnNewStuff->setIconSet(KGlobal::instance()->iconLoader()->loadIconSet( "knewstuff", KIcon::MainToolbar, 16 ));
+    btnNewStuff->setIconSet(KGlobal::instance()->iconLoader()->loadIconSet( "knewstuff", K3Icon::MainToolbar, 16 ));
     connect(btnNewStuff, SIGNAL(clicked()), this, SLOT(slotGetNewScript()));
 #endif
 /*
@@ -200,13 +203,13 @@ void WdgScriptsManager::addItem(ScriptActionCollection* collection)
     i->setText(0, collection->actionMenu()->text());
     i->setOpen(true);
 
-    QValueList<ScriptAction::Ptr> list = collection->actions();
-    QListViewItem* lastitem = 0;
-    for(QValueList<ScriptAction::Ptr>::Iterator it = list.begin(); it != list.end(); ++it)
+    Q3ValueList<ScriptAction::Ptr> list = collection->actions();
+    Q3ListViewItem* lastitem = 0;
+    for(Q3ValueList<ScriptAction::Ptr>::Iterator it = list.begin(); it != list.end(); ++it)
         lastitem = addItem(*it, i, lastitem);
 }
 
-QListViewItem* WdgScriptsManager::addItem(ScriptAction::Ptr action, QListViewItem* parentitem, QListViewItem* afteritem)
+Q3ListViewItem* WdgScriptsManager::addItem(ScriptAction::Ptr action, Q3ListViewItem* parentitem, Q3ListViewItem* afteritem)
 {
     if(! action)
         return 0;
@@ -219,10 +222,10 @@ QListViewItem* WdgScriptsManager::addItem(ScriptAction::Ptr action, QListViewIte
     QPixmap pm;
     if(action->hasIcon()) {
         KIconLoader* icons = KGlobal::iconLoader();
-        pm = icons->loadIconSet(action->icon(), KIcon::Small).pixmap(QIconSet::Small, QIconSet::Active);
+        pm = icons->loadIconSet(action->icon(), K3Icon::Small).pixmap(QIcon::Small, QIcon::Active);
     }
     else {
-        pm = action->iconSet(KIcon::Small, 16).pixmap(QIconSet::Small, QIconSet::Active);
+        pm = action->iconSet(K3Icon::Small, 16).pixmap(QIcon::Small, QIcon::Active);
     }
     if(! pm.isNull())
         i->setPixmap(0, pm); // display the icon
@@ -230,7 +233,7 @@ QListViewItem* WdgScriptsManager::addItem(ScriptAction::Ptr action, QListViewIte
     return i;
 }
 
-void WdgScriptsManager::slotSelectionChanged(QListViewItem* item)
+void WdgScriptsManager::slotSelectionChanged(Q3ListViewItem* item)
 {
     ListItem* i = dynamic_cast<ListItem*>(item);
     Kross::Api::ScriptActionCollection* installedcollection = d->m_scripguiclient->getActionCollection("installedscripts");

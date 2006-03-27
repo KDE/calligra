@@ -20,7 +20,7 @@
 #ifndef __GRADIENT_LOADER__
 #define __GRADIENT_LOADER__
 
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 #include <qstring.h>
 #include <qstringlist.h>
 #include <qfile.h>
@@ -51,7 +51,7 @@ struct KoGradient
 	int gradientType;
 	int gradientRepeatMethod;
 
-	QPtrList<KoColorStop> colorStops;
+	Q3PtrList<KoColorStop> colorStops;
 };	
 
 class KOPAINTER_EXPORT KoGradientManager

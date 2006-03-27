@@ -27,8 +27,10 @@
 #include <qlabel.h>
 #include <qspinbox.h>
 #include <qradiobutton.h>
-#include <qbuttongroup.h>
+#include <q3buttongroup.h>
 #include <qlayout.h>
+//Added by qt3to4:
+#include <Q3GridLayout>
 
 KWInsertDia::KWInsertDia( KWView *parent, KWTableFrameSet *table, InsertType type, int insertHint)
     : KDialogBase( Plain, (type==insertRow?i18n("Insert Row") : i18n("Insert Column")), Ok | Cancel, Ok, parent, "Insert Table items dialog", true )
@@ -43,11 +45,11 @@ KWInsertDia::KWInsertDia( KWView *parent, KWTableFrameSet *table, InsertType typ
 void KWInsertDia::setupTab1(int insertHint)
 {
     QWidget *tab1 = plainPage();
-    QGridLayout *grid1 = new QGridLayout( tab1, 2, 2, 0, KDialog::spacingHint() );
+    Q3GridLayout *grid1 = new Q3GridLayout( tab1, 2, 2, 0, KDialog::spacingHint() );
 
-    QButtonGroup *grp = new QButtonGroup( m_type == insertRow ? i18n( "Insert New Row" ) : i18n( "Insert New Column" ), tab1 );
+    Q3ButtonGroup *grp = new Q3ButtonGroup( m_type == insertRow ? i18n( "Insert New Row" ) : i18n( "Insert New Column" ), tab1 );
 
-    QGridLayout *grid2 = new QGridLayout( grp, 3, 1, KDialog::marginHint(), KDialog::spacingHint() );
+    Q3GridLayout *grid2 = new Q3GridLayout( grp, 3, 1, KDialog::marginHint(), KDialog::spacingHint() );
 
     m_rBefore = new QRadioButton( i18n( "Before" ), grp, "before_radio_button" );
     grp->insert( m_rBefore );

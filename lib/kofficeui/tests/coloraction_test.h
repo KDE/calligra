@@ -21,11 +21,11 @@
 #ifndef _COLORACTIONTEST_H
 #define _COLORACTIONTEST_H
 
-#include <qmainwindow.h>
+#include <q3mainwindow.h>
 
 class KoColorPanel;
 
-class TopLevel : public QMainWindow
+class TopLevel : public Q3MainWindow
 {
     Q_OBJECT
 public:

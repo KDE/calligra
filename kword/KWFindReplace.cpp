@@ -28,15 +28,17 @@
 #include <kcommand.h>
 #include <KoSearchDia.h>
 #include "KWTextDocument.h"
+//Added by qt3to4:
+#include <Q3ValueList>
 //#include <KoTextDocument.h>
 
-KWFindReplace::KWFindReplace( KWCanvas * canvas, KoSearchDia * dialog, const QValueList<KoTextObject *> & lstObjects, KWTextFrameSetEdit *textView)
+KWFindReplace::KWFindReplace( KWCanvas * canvas, KoSearchDia * dialog, const Q3ValueList<KoTextObject *> & lstObjects, KWTextFrameSetEdit *textView)
     : KoFindReplace( canvas, dialog, lstObjects, textView )
 {
     m_canvas = canvas;
 }
 
-KWFindReplace::KWFindReplace( KWCanvas * canvas, KoReplaceDia * dialog, const QValueList<KoTextObject *> & lstObjects, KWTextFrameSetEdit *textView )
+KWFindReplace::KWFindReplace( KWCanvas * canvas, KoReplaceDia * dialog, const Q3ValueList<KoTextObject *> & lstObjects, KWTextFrameSetEdit *textView )
     : KoFindReplace( canvas, dialog, lstObjects, textView )
 {
     m_canvas = canvas;
@@ -44,7 +46,7 @@ KWFindReplace::KWFindReplace( KWCanvas * canvas, KoReplaceDia * dialog, const QV
 
 KWFindReplace::~KWFindReplace()
 {
-    //kdDebug() << "KWFindReplace::~KWFindReplace m_destroying=" << m_destroying << endl;
+    //kDebug() << "KWFindReplace::~KWFindReplace m_destroying=" << m_destroying << endl;
 }
 
 void KWFindReplace::emitNewCommand(KCommand *cmd)

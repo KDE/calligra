@@ -36,11 +36,13 @@
 #include <kdebug.h>
 
 #include <qapplication.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 #include <assert.h>
 
 // Define the protocol used here for embedded documents' URL
-// This used to "store" but KURL didn't like it,
+// This used to "store" but KUrl didn't like it,
 // so let's simply make it "tar" !
 #define STORE_PROTOCOL "tar"
 #define INTERNAL_PROTOCOL "intern"
@@ -107,12 +109,12 @@ KoDocument* KoDocumentChild::parentDocument() const
   return d->m_parent;
 }
 
-KoDocument* KoDocumentChild::hitTest( const QPoint &p, const QWMatrix &_matrix )
+KoDocument* KoDocumentChild::hitTest( const QPoint &p, const QMatrix &_matrix )
 {
   if ( !region( _matrix ).contains( p ) || !d->m_doc )
     return 0L;
 
-  QWMatrix m( _matrix );
+  QMatrix m( _matrix );
   m = matrix() * m;
   m.scale( xScaling(), yScaling() );
 
@@ -228,7 +230,7 @@ bool KoDocumentChild::loadOasisDocument( KoStore* store, const QDomDocument& man
         path = store->currentDirectory();
         if ( !path.isEmpty() )
             path += '/';
-        QString relPath = KURL( m_tmpURL ).path();
+        QString relPath = KUrl( m_tmpURL ).path();
         path += relPath.mid( 1 ); // remove leading '/'
     }
     if ( !path.endsWith( "/" ) )
@@ -279,18 +281,18 @@ bool KoDocumentChild::loadDocumentInternal( KoStore* store, const KoDocumentEntr
     if ( doOpenURL )
     {
         bool internalURL = false;
-        if ( m_tmpURL.startsWith( STORE_PROTOCOL ) || m_tmpURL.startsWith( INTERNAL_PROTOCOL ) || KURL::isRelativeURL( m_tmpURL ) )
+        if ( m_tmpURL.startsWith( STORE_PROTOCOL ) || m_tmpURL.startsWith( INTERNAL_PROTOCOL ) || KUrl::isRelativeURL( m_tmpURL ) )
         {
             if ( oasis ) {
                 store->pushDirectory();
                 assert( m_tmpURL.startsWith( INTERNAL_PROTOCOL ) );
-                QString relPath = KURL( m_tmpURL ).path().mid( 1 );
+                QString relPath = KUrl( m_tmpURL ).path().mid( 1 );
                 store->enterDirectory( relPath );
                 res = d->m_doc->loadOasisFromStore( store );
                 store->popDirectory();
             } else {
                 if ( m_tmpURL.startsWith( INTERNAL_PROTOCOL ) )
-                    m_tmpURL = KURL( m_tmpURL ).path().mid( 1 );
+                    m_tmpURL = KUrl( m_tmpURL ).path().mid( 1 );
                 res = d->m_doc->loadFromStore( store, m_tmpURL );
             }
             internalURL = true;
@@ -300,7 +302,7 @@ bool KoDocumentChild::loadDocumentInternal( KoStore* store, const KoDocumentEntr
         {
             // Reference to an external document. Hmmm...
             d->m_doc->setStoreInternal( false );
-            KURL url( m_tmpURL );
+            KUrl url( m_tmpURL );
             if ( !url.isLocalFile() )
             {
                 QApplication::restoreOverrideCursor();
@@ -342,7 +344,7 @@ bool KoDocumentChild::loadDocumentInternal( KoStore* store, const KoDocumentEntr
             return res;
         }
         // Still waiting...
-        QApplication::setOverrideCursor( waitCursor );
+        QApplication::setOverrideCursor( Qt::waitCursor );
     }
 
     m_tmpURL = QString::null;
@@ -433,7 +435,7 @@ bool KoDocumentChild::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
     // OOo uses a trailing slash for the path to embedded objects (== directories)
     if ( !path.endsWith( "/" ) )
         path += '/';
-    QCString mimetype = d->m_doc->nativeOasisMimeType();
+    Q3CString mimetype = d->m_doc->nativeOasisMimeType();
     if ( mimetype.isEmpty() )
         mimetype = d->m_doc->nativeFormatMimeType();
     manifestWriter->addManifestEntry( path, mimetype );
@@ -447,7 +449,7 @@ void KoDocumentChild::saveOasisAttributes( KoXmlWriter &xmlWriter, const QString
     {
         // set URL in document so that KoDocument::saveChildrenOasis will save
         // the actual embedded object with the right name in the store.
-        KURL u;
+        KUrl u;
         u.setProtocol( INTERNAL_PROTOCOL );
         u.setPath( name );
         kdDebug() << k_funcinfo << u << endl;
@@ -496,9 +498,9 @@ bool KoDocumentChild::isStoredExtern() const
     return d->m_doc->isStoredExtern();
 }
 
-KURL KoDocumentChild::url() const
+KUrl KoDocumentChild::url() const
 {
-    return ( d->m_doc ? d->m_doc->url() : KURL() );
+    return ( d->m_doc ? d->m_doc->url() : KUrl() );
 }
 
 KoDocumentChild::~KoDocumentChild()

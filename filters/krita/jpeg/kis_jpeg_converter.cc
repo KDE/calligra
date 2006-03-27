@@ -101,7 +101,7 @@ KisJPEGConverter::~KisJPEGConverter()
 {
 }
 
-KisImageBuilder_Result KisJPEGConverter::decode(const KURL& uri)
+KisImageBuilder_Result KisJPEGConverter::decode(const KUrl& uri)
 {
     struct jpeg_decompress_struct cinfo;
     struct jpeg_error_mgr jerr;
@@ -317,7 +317,7 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KURL& uri)
 
 
 
-KisImageBuilder_Result KisJPEGConverter::buildImage(const KURL& uri)
+KisImageBuilder_Result KisJPEGConverter::buildImage(const KUrl& uri)
 {
     if (uri.isEmpty())
         return KisImageBuilder_RESULT_NO_URI;
@@ -345,7 +345,7 @@ KisImageSP KisJPEGConverter::image()
 }
 
 
-KisImageBuilder_Result KisJPEGConverter::buildFile(const KURL& uri, KisPaintLayerSP layer, vKisAnnotationSP_it annotationsStart, vKisAnnotationSP_it annotationsEnd, KisJPEGOptions options, KisExifInfo* exifInfo)
+KisImageBuilder_Result KisJPEGConverter::buildFile(const KUrl& uri, KisPaintLayerSP layer, vKisAnnotationSP_it annotationsStart, vKisAnnotationSP_it annotationsEnd, KisJPEGOptions options, KisExifInfo* exifInfo)
 {
     if (!layer)
         return KisImageBuilder_RESULT_INVALID_ARG;

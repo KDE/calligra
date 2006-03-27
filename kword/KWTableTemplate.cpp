@@ -41,7 +41,7 @@ KWTableTemplateCollection::KWTableTemplateCollection()
 
 KWTableTemplateCollection::~KWTableTemplateCollection()
 {
-    //kdDebug() << "KWTableTemplateCollection::destructor" << endl;
+    //kDebug() << "KWTableTemplateCollection::destructor" << endl;
     clear();
 }
 
@@ -59,7 +59,7 @@ KWTableTemplate* KWTableTemplateCollection::findTableTemplate( const QString & _
     if ( m_lastTemplate && m_lastTemplate->name() == _name )
         return m_lastTemplate;
 
-    QPtrListIterator<KWTableTemplate> templateIt( m_templateList );
+    Q3PtrListIterator<KWTableTemplate> templateIt( m_templateList );
     for ( ; templateIt.current(); ++templateIt )
     {
         if ( templateIt.current()->name() == _name ) {

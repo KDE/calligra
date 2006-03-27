@@ -151,7 +151,7 @@ void KexiTableEdit::setupContents( QPainter * /*p*/, bool /*focused*/, QVariant 
 		align |= AlignRight;
 	}
 	else if (m_column->field()->isIntegerType()) {
-		Q_LLONG num = val.toLongLong();
+		qint64 num = val.toLongLong();
 /*#ifdef Q_WS_WIN
 		x = 1;
 #else
@@ -219,7 +219,7 @@ void KexiTableEdit::paintSelectionBackground( QPainter *p, bool /*focused*/,
 	if (!readOnly && !fullRowSelection && !txt.isEmpty()) {
 		QRect bound=fontMetrics().boundingRect(x, y_offset, w - (x+x), h, align, txt);
 		bound.setY(0);
-		bound.setWidth( QMIN( bound.width()+2, w - (x+x)+1 ) );
+		bound.setWidth( qMin( bound.width()+2, w - (x+x)+1 ) );
 		if (align & Qt::AlignLeft) {
 			bound.setX(bound.x()-1);
 		}

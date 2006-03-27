@@ -25,7 +25,9 @@
 #include <kcursor.h>
 #include <qcursor.h>
 #include <qtimer.h>
-#include "qpopupmenu.h"
+#include "q3popupmenu.h"
+//Added by qt3to4:
+#include <Q3ValueList>
 #include <algorithm>
 
 KWFrameViewManager::KWFrameViewManager() : QObject() {
@@ -37,7 +39,7 @@ KWFrameViewManager::KWFrameViewManager() : QObject() {
 KWFrameViewManager::KWFrameViewManager(KWDocument *doc) {
     m_queueRequested = false;
     m_blockEvents = true;
-    QPtrListIterator<KWFrameSet> frameSets = doc->framesetsIterator();
+    Q3PtrListIterator<KWFrameSet> frameSets = doc->framesetsIterator();
     while(frameSets.current()) {
         slotFrameSetAdded(*frameSets);
         ++frameSets;
@@ -49,7 +51,7 @@ KWFrameViewManager::KWFrameViewManager(KWDocument *doc) {
 }
 
 KWFrameViewManager::~KWFrameViewManager() {
-    QValueListIterator<FrameEvent *> events = m_frameEvents.begin();
+    Q3ValueListIterator<FrameEvent *> events = m_frameEvents.begin();
     while(events != m_frameEvents.end()) {
         delete (*events);
         ++events;
@@ -69,7 +71,7 @@ void KWFrameViewManager::slotFrameSetAdded(KWFrameSet *fs) {
     connect(fs, SIGNAL( sigFrameAdded(KWFrame*)), SLOT( slotFrameAdded(KWFrame *)));
     connect(fs, SIGNAL( sigFrameRemoved(KWFrame*)), SLOT( slotFrameRemoved(KWFrame *)));
     connect(fs, SIGNAL( sigNameChanged(KWFrameSet*)), SLOT( slotFrameSetRenamed(KWFrameSet *)));
-    QPtrListIterator<KWFrame> frames = fs->frameIterator();
+    Q3PtrListIterator<KWFrame> frames = fs->frameIterator();
     while(frames.current()) {
         KWFrame *f = frames.current();
         slotFrameAdded(f);
@@ -83,7 +85,7 @@ void KWFrameViewManager::slotFrameSetRemoved(KWFrameSet *fs) {
     disconnect(fs, SIGNAL( sigFrameAdded(KWFrame*)), this, SLOT( slotFrameAdded(KWFrame *)));
     disconnect(fs, SIGNAL( sigFrameRemoved(KWFrame*)), this, SLOT( slotFrameRemoved(KWFrame *)));
     disconnect(fs, SIGNAL( sigNameChanged(KWFrameSet*)), this, SLOT( slotFrameSetRenamed(KWFrameSet *)));
-    QPtrListIterator<KWFrame> frames = fs->frameIterator();
+    Q3PtrListIterator<KWFrame> frames = fs->frameIterator();
     while(frames.current()) {
         KWFrame *f = frames.current();
         slotFrameRemoved(f);
@@ -100,7 +102,7 @@ void KWFrameViewManager::slotFrameAdded(KWFrame *f) {
 void KWFrameViewManager::slotFrameRemoved(KWFrame *f) {
     if(! m_blockEvents)
         m_frameEvents.append(new FrameEvent(FrameEvent::FrameRemoved, f));
-    QValueListIterator<KWFrameView *> frames = m_frames.begin();
+    Q3ValueListIterator<KWFrameView *> frames = m_frames.begin();
     while(frames != m_frames.end()) {
         KWFrameView *fv = *frames;
         if(fv->frame() == f) {
@@ -154,15 +156,15 @@ void KWFrameViewManager::fireEvents() {
         return;
     recalculateFrameCache();
 
-    QValueList<FrameEvent *> copy(m_frameEvents);
+    Q3ValueList<FrameEvent *> copy(m_frameEvents);
     m_frameEvents.clear();
 
-    QValueList<KWFrame*> resizedFrames;
-    QValueList<KWFrame*> movedFrames;
-    QValueList<KWFramesListener *> listenersCopy(m_framesListener);
+    Q3ValueList<KWFrame*> resizedFrames;
+    Q3ValueList<KWFrame*> movedFrames;
+    Q3ValueList<KWFramesListener *> listenersCopy(m_framesListener);
     bool selectionChangedFired=false;
 
-    QValueListIterator<FrameEvent *> events = copy.begin();
+    Q3ValueListIterator<FrameEvent *> events = copy.begin();
     while(events != copy.end()) {
         FrameEvent *event = *events;
 
@@ -171,7 +173,7 @@ void KWFrameViewManager::fireEvents() {
             emit sigFrameSelectionChanged();
             selectionChangedFired = true;  // only fire ones.
         } else if(event->m_action == FrameEvent::FrameSetRenamed) {
-            QPtrListIterator<KWFrame> frames = event->m_frameSet->frameIterator();
+            Q3PtrListIterator<KWFrame> frames = event->m_frameSet->frameIterator();
             for(;frames.current();++frames) {
                 if(view(frames.current())->selected()) {
                     emit sigFrameSetRenamed();
@@ -185,7 +187,7 @@ void KWFrameViewManager::fireEvents() {
         }
 
         // listener based
-        QValueListIterator<KWFramesListener *> listeners = listenersCopy.begin();
+        Q3ValueListIterator<KWFramesListener *> listeners = listenersCopy.begin();
         while(listeners != listenersCopy.end()) {
             if(event->m_action == FrameEvent::FrameRemoved)
                 (*listeners)->frameRemoved(event->m_frame);
@@ -210,13 +212,13 @@ void KWFrameViewManager::fireEvents() {
 void KWFrameViewManager::recalculateFrameCache() {
     // TODO :) design and implement a cache...
     // list of frames sorted on y-coord, with an additional list containing a jump-index
-    kdDebug(31001) << "recalculateFrameCache " << m_frames.count() << " frames are currently registred" << endl;
+    kDebug(31001) << "recalculateFrameCache " << m_frames.count() << " frames are currently registred" << endl;
 }
 
 KWFrameView *KWFrameViewManager::view(const KoPoint &point, SelectionType selected, bool borderOnly) const {
-    QValueVector<KWFrameView*> framesThatAreHit = framesAt(point, borderOnly);
+    Q3ValueVector<KWFrameView*> framesThatAreHit = framesAt(point, borderOnly);
     bool foundCycleFrame = false;
-    QValueVector<KWFrameView*>::iterator sortedFrames = framesThatAreHit.begin();
+    Q3ValueVector<KWFrameView*>::iterator sortedFrames = framesThatAreHit.begin();
     while(sortedFrames != framesThatAreHit.end()) {
         if(selected == nextUnselected) {
             if((*sortedFrames)->selected() )
@@ -237,10 +239,10 @@ KWFrameView *KWFrameViewManager::view(const KoPoint &point, SelectionType select
     return 0;
 }
 
-QValueVector<KWFrameView*> KWFrameViewManager::framesAt(const KoPoint &point, bool borderOnly) const {
-    QValueVector<KWFrameView*> framesThatAreHit;
+Q3ValueVector<KWFrameView*> KWFrameViewManager::framesAt(const KoPoint &point, bool borderOnly) const {
+    Q3ValueVector<KWFrameView*> framesThatAreHit;
     // This is probably the slowest and worst way to do it, mark this for optimalisation!
-    for(QValueListConstIterator<KWFrameView*> frames = m_frames.begin();
+    for(Q3ValueListConstIterator<KWFrameView*> frames = m_frames.begin();
             frames != m_frames.end(); ++frames) {
         if(! (*frames)->frame()->frameSet()->isVisible())
             continue;
@@ -255,7 +257,7 @@ QValueVector<KWFrameView*> KWFrameViewManager::framesAt(const KoPoint &point, bo
 
 KWFrameView *KWFrameViewManager::view(const KWFrame *frame) const {
     // This is probably the slowest and worst way to do it, mark this for optimalisation!
-    QValueListConstIterator<KWFrameView*> frames = m_frames.begin();
+    Q3ValueListConstIterator<KWFrameView*> frames = m_frames.begin();
     while(frames != m_frames.end()) {
         if((*frames)->frame() == frame)
             return *frames;
@@ -270,8 +272,8 @@ bool KWFrameViewManager::compareFrameViewZOrder(KWFrameView *f1, KWFrameView *f2
 
 QCursor KWFrameViewManager::mouseCursor( const KoPoint &point, int keyState ) const {
     KWFrameView *view = 0;
-    QValueVector<KWFrameView*> framesThatAreHit = framesAt(point);
-    QValueVector<KWFrameView*>::iterator sortedFrames = framesThatAreHit.begin();
+    Q3ValueVector<KWFrameView*> framesThatAreHit = framesAt(point);
+    Q3ValueVector<KWFrameView*>::iterator sortedFrames = framesThatAreHit.begin();
     MouseMeaning meaning;
     while(sortedFrames != framesThatAreHit.end()) {
         meaning = (*sortedFrames)->mouseMeaning(point, keyState);
@@ -288,47 +290,47 @@ QCursor KWFrameViewManager::mouseCursor( const KoPoint &point, int keyState ) co
     KWFrameSet*frameSet = view->frame()->frameSet();
     switch ( meaning ) {
         case MEANING_NONE:
-            return Qt::ibeamCursor; // default cursor in margins
+            return Qt::IBeamCursor; // default cursor in margins
         case MEANING_MOUSE_INSIDE:
             return QCursor(); // default cursor !?!?
         case MEANING_MOUSE_INSIDE_TEXT:
-            return Qt::ibeamCursor;
+            return Qt::IBeamCursor;
         case MEANING_MOUSE_OVER_LINK:
             return Qt::PointingHandCursor;
         case MEANING_MOUSE_OVER_FOOTNOTE:
             return Qt::PointingHandCursor;
         case MEANING_MOUSE_MOVE:
-            return Qt::sizeAllCursor;
+            return Qt::SizeAllCursor;
         case MEANING_MOUSE_SELECT:
             return KCursor::handCursor();
         case MEANING_ACTIVATE_PART:
             return KCursor::handCursor();
         case MEANING_TOPLEFT:
         case MEANING_BOTTOMRIGHT:
-            return Qt::sizeFDiagCursor;
+            return Qt::SizeFDiagCursor;
         case MEANING_LEFT:
         case MEANING_RIGHT:
-            return Qt::sizeHorCursor;
+            return Qt::SizeHorCursor;
         case MEANING_BOTTOMLEFT:
         case MEANING_TOPRIGHT:
-            return Qt::sizeBDiagCursor;
+            return Qt::SizeBDiagCursor;
         case MEANING_TOP:
         case MEANING_BOTTOM:
             if ( frameSet->isProtectSize() || frameSet->isMainFrameset())
-                return Qt::forbiddenCursor;
-            return Qt::sizeVerCursor;
+                return Qt::ForbiddenCursor;
+            return Qt::SizeHorCursor;
         case MEANING_RESIZE_COLUMN:
-            // Bug in Qt up to Qt-3.1.1 : Qt::splitVCursor and Qt::splitHCursor are swapped!
+            // Bug in Qt up to Qt-3.1.1 : Qt::SplitVCursor and Qt::SplitHCursor are swapped!
 #if QT_VERSION <= 0x030101
-            return Qt::splitVCursor;
+            return Qt::SplitVCursor;
 #else
-            return Qt::splitHCursor;
+            return Qt::SplitHCursor;
 #endif
         case MEANING_RESIZE_ROW:
 #if QT_VERSION <= 0x030101
-            return Qt::splitHCursor;
+            return Qt::SplitHCursor;
 #else
-            return Qt::splitVCursor;
+            return Qt::SplitVCursor;
 #endif
         case MEANING_SELECT_RANGE:
         case MEANING_SELECT_COLUMN:
@@ -340,12 +342,12 @@ QCursor KWFrameViewManager::mouseCursor( const KoPoint &point, int keyState ) co
 }
 
 MouseMeaning KWFrameViewManager::mouseMeaning( const KoPoint &point, int keyState) const {
-    QValueVector<KWFrameView*> framesThatAreHit = framesAt(point);
-    QValueVector<KWFrameView*>::iterator sortedFrames = framesThatAreHit.begin();
+    Q3ValueVector<KWFrameView*> framesThatAreHit = framesAt(point);
+    Q3ValueVector<KWFrameView*>::iterator sortedFrames = framesThatAreHit.begin();
     while(sortedFrames != framesThatAreHit.end()) {
         MouseMeaning answer = (*sortedFrames)->mouseMeaning(point, keyState);
         if(answer != MEANING_NONE) {
-            //kdDebug() << "mouseMeaning at " << point << " is " << answer << endl;
+            //kDebug() << "mouseMeaning at " << point << " is " << answer << endl;
             return answer;
         }
         ++sortedFrames;
@@ -353,10 +355,10 @@ MouseMeaning KWFrameViewManager::mouseMeaning( const KoPoint &point, int keyStat
     return MEANING_NONE;
 }
 
-QValueList<KWFrameView*> KWFrameViewManager::selectedFrames() const {
-    QValueList<KWFrameView*> selectedFrames;
+Q3ValueList<KWFrameView*> KWFrameViewManager::selectedFrames() const {
+    Q3ValueList<KWFrameView*> selectedFrames;
 
-    QValueList<KWFrameView*>::const_iterator frames = m_frames.begin();
+    Q3ValueList<KWFrameView*>::const_iterator frames = m_frames.begin();
     for(; frames != m_frames.end(); ++frames )
         if( (*frames)->selected() )
             selectedFrames.append( *frames );
@@ -364,7 +366,7 @@ QValueList<KWFrameView*> KWFrameViewManager::selectedFrames() const {
 }
 
 KWFrameView* KWFrameViewManager::selectedFrame() const {
-    QValueList<KWFrameView*>::const_iterator frames = m_frames.begin();
+    Q3ValueList<KWFrameView*>::const_iterator frames = m_frames.begin();
     for(; frames != m_frames.end(); ++frames )
         if( (*frames)->selected() )
             return *frames;
@@ -372,19 +374,19 @@ KWFrameView* KWFrameViewManager::selectedFrame() const {
 }
 
 void KWFrameViewManager::showPopup( const KoPoint &point, KWView *view, int keyState, const QPoint &popupPoint) const {
-    QValueVector<KWFrameView*> framesThatAreHit = framesAt(point);
+    Q3ValueVector<KWFrameView*> framesThatAreHit = framesAt(point);
     if(framesThatAreHit.count() == 0) {
         view->popupMenu("action_popup")->popup(popupPoint);
         return;
     }
-    if(keyState == Qt::ControlButton) {
+    if(keyState == Qt::ControlModifier) {
         // show the border popup of the top most frame.
         framesThatAreHit[0]->showPopup(framesThatAreHit[0]->frame()->topLeft(), view, popupPoint);
         return;
     }
-    QValueVector<KWFrameView*>::iterator iter = framesThatAreHit.begin();
+    Q3ValueVector<KWFrameView*>::iterator iter = framesThatAreHit.begin();
     while(iter != framesThatAreHit.end()) {
-        if( (*iter)->selected() && keyState == Qt::ControlButton ) {
+        if( (*iter)->selected() && keyState == Qt::ControlModifier ) {
             (*iter)->showPopup(point, view, popupPoint);
             return;
         }
@@ -395,18 +397,18 @@ void KWFrameViewManager::showPopup( const KoPoint &point, KWView *view, int keyS
 
 void KWFrameViewManager::selectFrames(const KoPoint &point, int keyState, bool leftClick) {
     MouseMeaning mm = mouseMeaning(point, keyState);
-    bool multiSelect = mm == MEANING_MOUSE_SELECT || keyState & Qt::ControlButton ;
+    bool multiSelect = mm == MEANING_MOUSE_SELECT || keyState & Qt::ControlModifier ;
     SelectionType se = frameOnTop;
     if(leftClick && multiSelect)
         se = nextUnselected;
     KWFrameView *toBeSelected = view(point, se, !multiSelect);
-    //kdDebug() << "KWFrameViewManager::selectFrames" << point << " got: " << toBeSelected << endl;
-    if(toBeSelected == 0 || !multiSelect || keyState & Qt::ShiftButton &&
+    //kDebug() << "KWFrameViewManager::selectFrames" << point << " got: " << toBeSelected << endl;
+    if(toBeSelected == 0 || !multiSelect || keyState & Qt::ShiftModifier &&
         !(leftClick && (mm == MEANING_TOPLEFT || mm == MEANING_TOPRIGHT || mm == MEANING_TOP ||
         mm == MEANING_LEFT || mm == MEANING_RIGHT || mm == MEANING_MOUSE_MOVE ||
         mm == MEANING_BOTTOMLEFT || mm == MEANING_BOTTOM || mm == MEANING_BOTTOMRIGHT))) {
         // unselect all
-        for(QValueListConstIterator<KWFrameView*> frames = m_frames.begin();
+        for(Q3ValueListConstIterator<KWFrameView*> frames = m_frames.begin();
                 frames != m_frames.end(); ++frames) {
             (*frames)->setSelected(false);
         }

@@ -25,7 +25,12 @@
 #include "KWMailMergeLabelAction.moc"
 #include <KoMainWindow.h>
 #include <kstyle.h>
-#include <kpopupmenu.h>
+#include <kmenu.h>
+//Added by qt3to4:
+#include <QMouseEvent>
+#include <QDragEnterEvent>
+#include <QEvent>
+#include <QDropEvent>
 
 class MailMergeDraggableLabel : public QToolButton
 {
@@ -86,7 +91,7 @@ protected:
             ev->acceptAction();
     }
     void dropEvent( QDropEvent* ev ) {
-        KURL::List lst;
+        KUrl::List lst;
         if ( KURLDrag::decode( ev, lst ) ) {
             m_mw->openURL( 0L, lst.first() );
         }

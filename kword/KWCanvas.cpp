@@ -41,10 +41,21 @@
 #include <qbuffer.h>
 #include <qtimer.h>
 #include <qclipboard.h>
-#include <qprogressdialog.h>
-#include <qobjectlist.h>
+#include <q3progressdialog.h>
+#include <qobject.h>
 #include <qapplication.h>
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
+//Added by qt3to4:
+#include <QResizeEvent>
+#include <QMouseEvent>
+#include <QKeyEvent>
+#include <QEvent>
+#include <QDragMoveEvent>
+#include <QDragLeaveEvent>
+#include <Q3ValueList>
+#include <QDropEvent>
+#include <QDragEnterEvent>
+#include <Q3PtrList>
 
 #include <KoStore.h>
 #include <KoStoreDrag.h>
@@ -64,7 +75,7 @@
 #include <assert.h>
 
 KWCanvas::KWCanvas(const QString& viewMode, QWidget *parent, KWDocument *d, KWGUI *lGui)
-    : QScrollView( parent, "canvas", /*WNorthWestGravity*/ WStaticContents| WResizeNoErase | WRepaintNoErase ), m_doc( d )
+    : Q3ScrollView( parent, "canvas", /*WNorthWestGravity*/ Qt::WStaticContents| Qt::WResizeNoErase | Qt::WNoAutoErase ), m_doc( d )
 {
     m_frameViewManager = new KWFrameViewManager(d);
     m_gui = lGui;
@@ -104,7 +115,7 @@ KWCanvas::KWCanvas(const QString& viewMode, QWidget *parent, KWDocument *d, KWGU
     m_resizedFrameInitialMinHeight = 0;
     m_temporaryStatusBarTextShown = false;
 
-    viewport()->setBackgroundMode( PaletteBase );
+    viewport()->setBackgroundMode( Qt::PaletteBase );
     viewport()->setAcceptDrops( TRUE );
 
     setKeyCompression( TRUE );
@@ -115,7 +126,7 @@ KWCanvas::KWCanvas(const QString& viewMode, QWidget *parent, KWDocument *d, KWGU
              this, SLOT( doAutoScroll() ) );
 
     viewport()->setFocusProxy( this );
-    viewport()->setFocusPolicy( WheelFocus );
+    viewport()->setFocusPolicy( Qt::WheelFocus );
     setFocus();
     setInputMethodEnabled( true );
     viewport()->installEventFilter( this );
@@ -162,10 +173,10 @@ KWCanvas::KWCanvas(const QString& viewMode, QWidget *parent, KWDocument *d, KWGU
     }
     m_doc->deleteInitialEditingInfo();
 
-    connect(frameViewManager(), SIGNAL(sigFrameResized(const QValueList<KWFrame*>&)),
-        m_doc, SLOT(framesChanged(const QValueList<KWFrame*>&)));
-    connect(frameViewManager(), SIGNAL(sigFrameMoved(const QValueList<KWFrame*>&)),
-        m_doc, SLOT(framesChanged(const QValueList<KWFrame*>&)));
+    connect(frameViewManager(), SIGNAL(sigFrameResized(const Q3ValueList<KWFrame*>&)),
+        m_doc, SLOT(framesChanged(const Q3ValueList<KWFrame*>&)));
+    connect(frameViewManager(), SIGNAL(sigFrameMoved(const Q3ValueList<KWFrame*>&)),
+        m_doc, SLOT(framesChanged(const Q3ValueList<KWFrame*>&)));
 }
 
 KWCanvas::~KWCanvas()
@@ -175,10 +186,10 @@ KWCanvas::~KWCanvas()
     m_currentFrameSetEdit = 0;
     delete m_viewMode;
     m_viewMode = 0;
-    disconnect(frameViewManager(), SIGNAL(sigFrameResized(const QValueList<KWFrame*>&)),
-        m_doc, SLOT(framesChanged(const QValueList<KWFrame*>&)));
-    disconnect(frameViewManager(), SIGNAL(sigFrameMoved(const QValueList<KWFrame*>&)),
-        m_doc, SLOT(framesChanged(const QValueList<KWFrame*>&)));
+    disconnect(frameViewManager(), SIGNAL(sigFrameResized(const Q3ValueList<KWFrame*>&)),
+        m_doc, SLOT(framesChanged(const Q3ValueList<KWFrame*>&)));
+    disconnect(frameViewManager(), SIGNAL(sigFrameMoved(const Q3ValueList<KWFrame*>&)),
+        m_doc, SLOT(framesChanged(const Q3ValueList<KWFrame*>&)));
     delete m_frameViewManager;
     m_frameViewManager = 0;
 }
@@ -186,7 +197,7 @@ KWCanvas::~KWCanvas()
 void KWCanvas::repaintChanged( KWFrameSet * fs, bool resetChanged )
 {
     assert(fs); // the new code can't support fs being 0L here. Mail me if it happens (DF)
-    //kdDebug(32002) << "KWCanvas::repaintChanged this=" << this << " fs=" << fs << endl;
+    //kDebug(32002) << "KWCanvas::repaintChanged this=" << this << " fs=" << fs << endl;
     QPainter p( viewport() );
     p.translate( -contentsX(), -contentsY() );
     p.setBrushOrigin( -contentsX(), -contentsY() );
@@ -200,7 +211,7 @@ void KWCanvas::repaintChanged( KWFrameSet * fs, bool resetChanged )
 
 void KWCanvas::repaintAll( bool erase /* = false */ )
 {
-    //kdDebug(32002) << "KWCanvas::repaintAll erase=" << erase << endl;
+    //kDebug(32002) << "KWCanvas::repaintAll erase=" << erase << endl;
     viewport()->repaint( erase );
 }
 
@@ -217,12 +228,12 @@ void KWCanvas::print( QPainter *painter, KPrinter *printer )
     m_printing = true;
     KWViewMode *viewMode = new KWViewModePrint( m_doc, this );
     // Use page list specified in kdeprint dialogbox
-    QValueList<int> pageList = printer->pageList();
-    QProgressDialog progress( i18n( "Printing..." ), i18n( "Cancel" ),
+    Q3ValueList<int> pageList = printer->pageList();
+    Q3ProgressDialog progress( i18n( "Printing..." ), i18n( "Cancel" ),
                               pageList.count() + 1, this );
     int j = 0;
     progress.setProgress( 0 );
-    QValueList<int>::Iterator it = pageList.begin();
+    Q3ValueList<int>::Iterator it = pageList.begin();
     for ( ; it != pageList.end(); ++it )
     {
         progress.setProgress( ++j );
@@ -237,9 +248,9 @@ void KWCanvas::print( QPainter *painter, KPrinter *printer )
         painter->save();
         int pgNum = (*it);
         int yOffset = m_doc->zoomItY( m_doc->pageManager()->topOfPage( pgNum ) );
-        kdDebug(32001) << "printing page " << pgNum << " yOffset=" << yOffset << endl;
+        kDebug(32001) << "printing page " << pgNum << " yOffset=" << yOffset << endl;
         QRect pageRect = m_doc->pageManager()->page(pgNum)->zoomedRect(m_doc);
-        painter->fillRect( pageRect, white );
+        painter->fillRect( pageRect, Qt::white );
 
         painter->translate( 0, -yOffset );
         painter->setBrushOrigin( 0, -yOffset );
@@ -270,7 +281,7 @@ void KWCanvas::drawContents( QPainter *painter, int cx, int cy, int cw, int ch )
 
 void KWCanvas::drawDocument( QPainter *painter, const QRect &crect, KWViewMode* viewMode )
 {
-    //kdDebug(32002) << "KWCanvas::drawDocument crect: " << crect << endl;
+    //kDebug(32002) << "KWCanvas::drawDocument crect: " << crect << endl;
 
     // Draw the outside of the pages (shadow, gray area)
     // and the empty area first (in case of transparent frames)
@@ -282,7 +293,7 @@ void KWCanvas::drawDocument( QPainter *painter, const QRect &crect, KWViewMode* 
     }
 
     // Draw all framesets contents
-    QPtrListIterator<KWFrameSet> fit = m_doc->framesetsIterator();
+    Q3PtrListIterator<KWFrameSet> fit = m_doc->framesetsIterator();
     for ( ; fit.current() ; ++fit )
     {
         KWFrameSet * frameset = fit.current();
@@ -384,8 +395,8 @@ void KWCanvas::mpCreatePixmap( const QPoint& normalPoint, bool noGrid  )
             m_insRect.setWidth( m_doc->unzoomItX( width ) );
             m_insRect.setHeight( m_doc->unzoomItY( height ) );
             // Apply reasonable limits
-            width = kMin( width, m_doc->paperWidth(pageNum) - normalPoint.x() - 5 );
-            height = kMin( height, m_doc->paperHeight(pageNum) - normalPoint.y() - 5 );
+            width = qMin( width, m_doc->paperWidth(pageNum) - normalPoint.x() - 5 );
+            height = qMin( height, m_doc->paperHeight(pageNum) - normalPoint.y() - 5 );
             // And apply aspect-ratio if set
             if ( m_keepRatio )
             {
@@ -413,13 +424,13 @@ void KWCanvas::contentsMousePressEvent( QMouseEvent *e )
     KoPoint docPoint = m_doc->unzoomPoint( normalPoint );
 
 
-    if ( e->button() == LeftButton )
+    if ( e->button() == Qt::LeftButton )
     {
       m_mousePressed = true;
     }
 
     // Only edit-mode (and only LMB) allowed on read-only documents (to select text)
-    if ( !m_doc->isReadWrite() && ( m_mouseMode != MM_EDIT || e->button() != LeftButton ) )
+    if ( !m_doc->isReadWrite() && ( m_mouseMode != MM_EDIT || e->button() != Qt::LeftButton ) )
         return;
     if ( m_printing )
         return;
@@ -430,7 +441,7 @@ void KWCanvas::contentsMousePressEvent( QMouseEvent *e )
     {
         if(! viewMode()->hasFrames() ) { // for the text mode we just forward the click to the text
             // first, make clicks left of text be on the border;
-            docPoint = KoPoint(QMAX(0, docPoint.x()), QMAX(0, docPoint.y()));
+            docPoint = KoPoint(qMax(0, docPoint.x()), qMax(0, docPoint.y()));
             if ( m_currentFrameSetEdit )
                 m_currentFrameSetEdit->mousePressEvent( e, normalPoint, docPoint );
             break;
@@ -438,7 +449,7 @@ void KWCanvas::contentsMousePressEvent( QMouseEvent *e )
         // See if we clicked on a frame's border
         m_mouseMeaning = m_frameViewManager->mouseMeaning( docPoint, e->state());
 
-        //kdDebug(32001) << "contentsMousePressEvent meaning=" << m_mouseMeaning << endl;
+        //kDebug(32001) << "contentsMousePressEvent meaning=" << m_mouseMeaning << endl;
         switch ( m_mouseMeaning )  {
         case MEANING_MOUSE_INSIDE:
         case MEANING_MOUSE_OVER_LINK:
@@ -450,7 +461,7 @@ void KWCanvas::contentsMousePressEvent( QMouseEvent *e )
             // RMB inside a frame unselects too, except when
             //     right-clicking on a selected frame
             KWFrameView *view = m_frameViewManager->view( docPoint, KWFrameViewManager::frameOnTop );
-            if ( ! ( e->button() == RightButton && view && view->selected() ) )
+            if ( ! ( e->button() == Qt::RightButton && view && view->selected() ) )
                 selectAllFrames( false );
 
             KWFrame * frame = view ? view->frame() : 0L;
@@ -510,7 +521,7 @@ void KWCanvas::contentsMousePressEvent( QMouseEvent *e )
                         m_previousTableSize = table->rowSize( m_rowColResized );
                     }
                     m_currentTable = table;
-                    kdDebug(32002) << "resizing row/col edge. m_rowColResized=" << m_rowColResized << endl;
+                    kDebug(32002) << "resizing row/col edge. m_rowColResized=" << m_rowColResized << endl;
                 }
             }
             break;
@@ -529,18 +540,18 @@ void KWCanvas::contentsMousePressEvent( QMouseEvent *e )
     break;
     case MM_CREATE_TEXT: case MM_CREATE_PART: case MM_CREATE_TABLE:
     case MM_CREATE_FORMULA:
-        if ( e->button() == LeftButton )
-            mpCreate( normalPoint, e->state() & Qt::ShiftButton);
+        if ( e->button() == Qt::LeftButton )
+            mpCreate( normalPoint, e->state() & Qt::ShiftModifier);
         break;
     case MM_CREATE_PIX:
-        if ( e->button() == LeftButton )
-            mpCreatePixmap( normalPoint, e->state() & Qt::ShiftButton );
+        if ( e->button() == Qt::LeftButton )
+            mpCreatePixmap( normalPoint, e->state() & Qt::ShiftModifier );
         break;
     default: break;
     }
     m_scrollTimer->start( 50 );
 
-    if ( e->button() == MidButton ) {
+    if ( e->button() == Qt::MidButton ) {
         if ( m_doc->isReadWrite() && m_currentFrameSetEdit && m_mouseMode == MM_EDIT )
         {
             QApplication::clipboard()->setSelectionMode( true );
@@ -548,7 +559,7 @@ void KWCanvas::contentsMousePressEvent( QMouseEvent *e )
             QApplication::clipboard()->setSelectionMode( false );
         }
     }
-    else if ( e->button() == RightButton ) {
+    else if ( e->button() == Qt::RightButton ) {
         if(!m_doc->isReadWrite()) // The popups are not available in readonly mode, since the GUI isn't built...
             return;
         if ( m_deleteMovingRect )
@@ -684,7 +695,7 @@ void KWCanvas::drawGrid( QPainter &p, const QRect& rect )
 
         // docRect is the part of the document that needs to be painted.. Coordinates in pt
         const KoRect docRect = m_doc->unzoomRect( m_viewMode->viewToNormal( crect ) );
-        // kdDebug() << "drawGrid page " << pgNum << " pageRect=" << pageRect << " crect=" << crect << " docRect=" << docRect << endl;
+        // kDebug() << "drawGrid page " << pgNum << " pageRect=" << pageRect << " crect=" << crect << " docRect=" << docRect << endl;
 
         // the following is effectively a docRect.y() modulo offsetY
         const double firstOffsetY = pageTopLeft.y() - offsetY * static_cast<int>( docRect.y() / offsetY );
@@ -712,7 +723,7 @@ void KWCanvas::applyAspectRatio( double ratio, KoRect& insRect )
         height = width / ratio;
     insRect.setRight( insRect.left() + width );
     insRect.setBottom( insRect.top() + height );
-    //kdDebug() << "KWCanvas::applyAspectRatio: width=" << width << " height=" << height << " insRect=" << DEBUGRECT(insRect) << endl;
+    //kDebug() << "KWCanvas::applyAspectRatio: width=" << width << " height=" << height << " insRect=" << DEBUGRECT(insRect) << endl;
 }
 
 void KWCanvas::mmCreate( const QPoint& normalPoint, bool noGrid ) // Mouse move when creating a frame
@@ -721,8 +732,8 @@ void KWCanvas::mmCreate( const QPoint& normalPoint, bool noGrid ) // Mouse move 
     p.begin( viewport() );
     p.translate( -contentsX(), -contentsY() );
     p.setRasterOp( NotROP );
-    p.setPen( black );
-    p.setBrush( NoBrush );
+    p.setPen( Qt::black );
+    p.setBrush( Qt::NoBrush );
 
     if ( m_deleteMovingRect )
         drawMovingRect( p );
@@ -765,7 +776,7 @@ void KWCanvas::mmCreate( const QPoint& normalPoint, bool noGrid ) // Mouse move 
 
 void KWCanvas::drawMovingRect( QPainter & p )
 {
-    p.setPen( black );
+    p.setPen( Qt::black );
     p.drawRect( m_viewMode->normalToView( m_doc->zoomRect( m_insRect ) ) );
 }
 
@@ -776,8 +787,8 @@ void KWCanvas::deleteMovingRect()
     p.begin( viewport() );
     p.translate( -contentsX(), -contentsY() );
     p.setRasterOp( NotROP );
-    p.setPen( black );
-    p.setBrush( NoBrush );
+    p.setPen( Qt::black );
+    p.setBrush( Qt::NoBrush );
     drawMovingRect( p );
     m_deleteMovingRect = false;
     p.end();
@@ -822,7 +833,7 @@ void KWCanvas::contentsMouseMoveEvent( QMouseEvent *e )
             } break;
             case MM_CREATE_TEXT: case MM_CREATE_PIX: case MM_CREATE_PART:
             case MM_CREATE_TABLE: case MM_CREATE_FORMULA:
-                mmCreate( normalPoint, e->state() & ShiftButton );
+                mmCreate( normalPoint, e->state() & Qt::ShiftModifier );
             default:
                 break;
         }
@@ -878,13 +889,13 @@ void KWCanvas::contentsMouseMoveEvent( QMouseEvent *e )
             if(viewMode()->hasFrames())
                 viewport()->setCursor( m_frameViewManager->mouseCursor( docPoint, e->state() ) );
             else
-                viewport()->setCursor( Qt::ibeamCursor );
+                viewport()->setCursor( Qt::IBeamCursor );
         }
     }
 }
 
 void KWCanvas::mrEditFrame() {
-    //kdDebug() << "KWCanvas::mrEditFrame" << endl;
+    //kDebug() << "KWCanvas::mrEditFrame" << endl;
     if(m_interactionPolicy) {
         m_interactionPolicy->finishInteraction();
         KCommand *cmd = m_interactionPolicy->createCommand();
@@ -939,7 +950,7 @@ void KWCanvas::mrCreateText()
 
 void KWCanvas::mrCreatePixmap()
 {
-    // kdDebug() << "KWCanvas::mrCreatePixmap m_insRect=" << DEBUGRECT(m_insRect) << endl;
+    // kDebug() << "KWCanvas::mrCreatePixmap m_insRect=" << DEBUGRECT(m_insRect) << endl;
     Q_ASSERT(m_insRect.width() > 0 && m_insRect.height() > 0);
     // Make sure the pic is completely in document.
     double ratio = m_insRect.width() / m_insRect.height();
@@ -1081,8 +1092,8 @@ void KWCanvas::contentsMouseReleaseEvent( QMouseEvent * e )
             if(page == -1)
                 return;
             KoPageLayout pageLayout = m_doc->pageManager()->pageLayout(page);
-            m_insRect.setLeft(QMIN(m_insRect.left(), pageLayout.ptWidth - 200));
-            m_insRect.setTop(QMIN(m_insRect.top(), pageLayout.ptHeight - 150));
+            m_insRect.setLeft(qMin(m_insRect.left(), pageLayout.ptWidth - 200));
+            m_insRect.setTop(qMin(m_insRect.top(), pageLayout.ptHeight - 150));
             m_insRect.setBottom(m_insRect.top()+150);
             m_insRect.setRight(m_insRect.left()+200);
         }
@@ -1165,14 +1176,14 @@ void KWCanvas::contentsMouseDoubleClickEvent( QMouseEvent * e )
 
 void KWCanvas::setFrameBackgroundColor( const QBrush &_backColor )
 {
-    QValueList<KWFrameView*> selectedFrames = m_frameViewManager->selectedFrames();
+    Q3ValueList<KWFrameView*> selectedFrames = m_frameViewManager->selectedFrames();
     if (selectedFrames.isEmpty())
         return;
     bool colorChanged=false;
-    QPtrList<FrameIndex> frameindexList;
-    QPtrList<QBrush> oldColor;
+    Q3PtrList<FrameIndex> frameindexList;
+    Q3PtrList<QBrush> oldColor;
 
-    QValueListIterator<KWFrameView*> framesIterator = selectedFrames.begin();
+    Q3ValueListIterator<KWFrameView*> framesIterator = selectedFrames.begin();
     while(framesIterator != selectedFrames.end()) {
         KWFrame *frame = KWFrameSet::settingsFrame( (*framesIterator)->frame() );
         FrameIndex *index=new FrameIndex( frame );
@@ -1212,15 +1223,15 @@ void KWCanvas::editFrameProperties( KWFrameSet * frameset )
 
 void KWCanvas::editFrameProperties()
 {
-    QValueList<KWFrameView*> selectedFrames = m_frameViewManager->selectedFrames();
+    Q3ValueList<KWFrameView*> selectedFrames = m_frameViewManager->selectedFrames();
     if(selectedFrames.count()==0) return;
 
     KWFrameDia *frameDia;
     if(selectedFrames.count()==1)
         frameDia = new KWFrameDia( this, selectedFrames[0]->frame());
     else { // multi frame dia.
-        QPtrList<KWFrame> frames;
-        QValueListIterator<KWFrameView*> framesIterator = selectedFrames.begin();
+        Q3PtrList<KWFrame> frames;
+        Q3ValueListIterator<KWFrameView*> framesIterator = selectedFrames.begin();
         for(;framesIterator != selectedFrames.end(); ++framesIterator)
             frames.append( (*framesIterator)->frame() );
         frameDia = new KWFrameDia( this, frames );
@@ -1230,8 +1241,8 @@ void KWCanvas::editFrameProperties()
 }
 
 void KWCanvas::selectAllFrames( bool select ) {
-    QValueList<KWFrameView*> frameViews = m_frameViewManager->frameViewsIterator();
-    QValueList<KWFrameView*>::iterator frames = frameViews.begin();
+    Q3ValueList<KWFrameView*> frameViews = m_frameViewManager->frameViewsIterator();
+    Q3ValueList<KWFrameView*>::iterator frames = frameViews.begin();
     for(; frames != frameViews.end(); ++frames ) {
         KWFrameSet *fs = (*frames)->frame()->frameSet();
         if ( !fs->isVisible() ) continue;
@@ -1378,7 +1389,7 @@ void KWCanvas::terminateEditing( KWFrameSet *fs )
     if ( m_currentFrameSetEdit && m_currentFrameSetEdit->frameSet() == fs )
         terminateCurrentEdit();
     // Also deselect the frames from this frameset
-    QPtrListIterator<KWFrame> frameIt = fs->frameIterator();
+    Q3PtrListIterator<KWFrame> frameIt = fs->frameIterator();
     for ( ; frameIt.current(); ++frameIt )
         m_frameViewManager->view(frameIt.current())->setSelected(false);
 }
@@ -1420,7 +1431,7 @@ void KWCanvas::setMouseMode( MouseMode newMouseMode )
     case MM_CREATE_TABLE:
     case MM_CREATE_FORMULA:
     case MM_CREATE_PART:
-        viewport()->setCursor( crossCursor );
+        viewport()->setCursor( Qt::CrossCursor );
         break;
     }
 }
@@ -1484,7 +1495,7 @@ void KWCanvas::contentsDragMoveEvent( QDragMoveEvent *e )
         bool emitChanged = false;
         if ( fs )
         {
-            //kdDebug()<<"table :"<<table<<endl;
+            //kDebug()<<"table :"<<table<<endl;
             emitChanged = checkCurrentEdit( fs, true );
         }
         if ( m_currentFrameSetEdit )
@@ -1508,18 +1519,18 @@ void KWCanvas::contentsDropEvent( QDropEvent *e )
     QPoint normalPoint = m_viewMode->viewToNormal( e->pos() );
     KoPoint docPoint = m_doc->unzoomPoint( normalPoint );
 
-    if ( QImageDrag::canDecode( e ) ) {
+    if ( Q3ImageDrag::canDecode( e ) ) {
         pasteImage( e, docPoint );
     } else if ( KURLDrag::canDecode( e ) ) {
 
         // TODO ask (with a popupmenu) between inserting a link and inserting the contents
 
-        KURL::List lst;
+        KUrl::List lst;
         KURLDrag::decode( e, lst );
 
-        KURL::List::ConstIterator it = lst.begin();
+        KUrl::List::ConstIterator it = lst.begin();
         for ( ; it != lst.end(); ++it ) {
-            const KURL &url( *it );
+            const KUrl &url( *it );
 
             QString filename;
             if ( !KIO::NetAccess::download( url, filename, this ) )
@@ -1555,7 +1566,7 @@ void KWCanvas::contentsDropEvent( QDropEvent *e )
 void KWCanvas::pasteImage( QMimeSource *e, const KoPoint &docPoint )
 {
     QImage i;
-    QImageDrag::decode(e, i);
+    Q3ImageDrag::decode(e, i);
     KTempFile tmpFile( QString::null, ".png");
     tmpFile.setAutoDelete( true );
     i.save(tmpFile.name(), "PNG");
@@ -1603,11 +1614,11 @@ void KWCanvas::slotContentsMoving( int cx, int cy )
 {
     //QPoint nPointTop = m_viewMode->viewToNormal( QPoint( cx, cy ) );
     QPoint nPointBottom = m_viewMode->viewToNormal( QPoint( cx + visibleWidth(), cy + visibleHeight() ) );
-    //kdDebug() << "KWCanvas::slotContentsMoving cx=" << cx << " cy=" << cy << endl;
-    //kdDebug() << " visibleWidth()=" << visibleWidth() << " visibleHeight()=" << visibleHeight() << endl;
+    //kDebug() << "KWCanvas::slotContentsMoving cx=" << cx << " cy=" << cy << endl;
+    //kDebug() << " visibleWidth()=" << visibleWidth() << " visibleHeight()=" << visibleHeight() << endl;
     // Update our "formatted paragraphs needs" in all the text framesets
-    QPtrList<KWTextFrameSet> textFrameSets = m_doc->allTextFramesets( false );
-    QPtrListIterator<KWTextFrameSet> fit( textFrameSets );
+    Q3PtrList<KWTextFrameSet> textFrameSets = m_doc->allTextFramesets( false );
+    Q3PtrListIterator<KWTextFrameSet> fit( textFrameSets );
     for ( ; fit.current() ; ++fit )
     {
         if(! fit.current()->isVisible()) continue;
@@ -1640,7 +1651,7 @@ void KWCanvas::slotNewContentsSize()
     QSize size = m_viewMode->contentsSize();
     if ( size != QSize( contentsWidth(), contentsHeight() ) )
     {
-        //kdDebug() << "KWCanvas::slotNewContentsSize " << size.width() << "x" << size.height() << endl;
+        //kDebug() << "KWCanvas::slotNewContentsSize " << size.width() << "x" << size.height() << endl;
         resizeContents( size.width(), size.height() );
     }
 }
@@ -1648,12 +1659,12 @@ void KWCanvas::slotNewContentsSize()
 void KWCanvas::resizeEvent( QResizeEvent *e )
 {
     slotContentsMoving( contentsX(), contentsY() );
-    QScrollView::resizeEvent( e );
+    Q3ScrollView::resizeEvent( e );
 }
 
 void KWCanvas::scrollToOffset( const KoPoint & d )
 {
-    kdDebug() << "KWCanvas::scrollToOffset " << d.x() << "," << d.y() << endl;
+    kDebug() << "KWCanvas::scrollToOffset " << d.x() << "," << d.y() << endl;
 #if 0
     bool blinking = blinkTimer.isActive();
     if ( blinking )
@@ -1679,7 +1690,7 @@ void KWCanvas::updateRulerOffsets( int cx, int cy )
     // The offset is usually just the scrollview offset
     // But we also need to offset to the current page, for the graduations
     QPoint pc = m_viewMode->pageCorner();
-    //kdDebug() << "KWCanvas::updateRulerOffsets contentsX=" << cx << ", contentsY=" << cy << endl;
+    //kDebug() << "KWCanvas::updateRulerOffsets contentsX=" << cx << ", contentsY=" << cy << endl;
     m_gui->getHorzRuler()->setOffset( cx - pc.x(), 0 );
     m_gui->getVertRuler()->setOffset( 0, cy - pc.y() );
 
@@ -1697,26 +1708,26 @@ bool KWCanvas::eventFilter( QObject *o, QEvent *e )
 
         switch ( e->type() ) {
             case QEvent::FocusIn:
-                //  kdDebug() << "KWCanvas::eventFilter QEvent::FocusIn" << endl;
+                //  kDebug() << "KWCanvas::eventFilter QEvent::FocusIn" << endl;
                 if ( m_currentFrameSetEdit && !m_printing )
                     m_currentFrameSetEdit->focusInEvent();
                 break;
             case QEvent::FocusOut:
-                //  kdDebug() << "KWCanvas::eventFilter QEvent::FocusOut" << endl;
+                //  kDebug() << "KWCanvas::eventFilter QEvent::FocusOut" << endl;
                 if ( m_currentFrameSetEdit && !m_printing )
                     m_currentFrameSetEdit->focusOutEvent();
                 if ( m_scrollTimer->isActive() )
                     m_scrollTimer->stop();
                 m_mousePressed = false;
                 break;
-            case QEvent::AccelOverride: // was part of KeyPress - changed due to kdelibs BUG!
+            case QEvent::ShortcutOverride: // was part of KeyPress - changed due to kdelibs BUG!
             {
-                //  kdDebug() << " KeyPress m_currentFrameSetEdit=" << m_currentFrameSetEdit << " isRW="<<m_doc->isReadWrite() << endl;
-                //  kdDebug() << " m_printing=" << m_printing << " mousemode=" << m_mouseMode << " (MM_EDIT=" << MM_EDIT<<")"<<endl;
+                //  kDebug() << " KeyPress m_currentFrameSetEdit=" << m_currentFrameSetEdit << " isRW="<<m_doc->isReadWrite() << endl;
+                //  kDebug() << " m_printing=" << m_printing << " mousemode=" << m_mouseMode << " (MM_EDIT=" << MM_EDIT<<")"<<endl;
                 QKeyEvent * keyev = static_cast<QKeyEvent *>(e);
 #ifndef NDEBUG
                 // Debug keys
-                if ( ( keyev->state() & ControlButton ) && ( keyev->state() & ShiftButton ) )
+                if ( ( keyev->state() & Qt::ControlModifier ) && ( keyev->state() & Qt::ShiftModifier ) )
                 {
                     switch ( keyev->key() ) {
                         case Qt::Key_P: // 'P' -> paragraph debug
@@ -1729,7 +1740,7 @@ bool KWCanvas::eventFilter( QObject *o, QEvent *e )
                             break;
                         case Qt::Key_F: // 'F' -> frames debug
                             m_doc->printDebug();
-                            kdDebug(32002) << "Current framesetedit: " << m_currentFrameSetEdit << " " <<
+                            kDebug(32002) << "Current framesetedit: " << m_currentFrameSetEdit << " " <<
                                 ( m_currentFrameSetEdit ? m_currentFrameSetEdit->frameSet()->className() : "" ) << endl;
                             keyev->accept();
                             break;
@@ -1740,7 +1751,7 @@ bool KWCanvas::eventFilter( QObject *o, QEvent *e )
                         case Qt::Key_M: // 'M' -> mark debug output
                             {
                                 const QDateTime dtMark ( QDateTime::currentDateTime() );
-                                kdDebug(32002) << "Developer mark: " << dtMark.toString("yyyy-MM-dd hh:mm:ss,zzz") << endl;
+                                kDebug(32002) << "Developer mark: " << dtMark.toString("yyyy-MM-dd hh:mm:ss,zzz") << endl;
                                 keyev->accept();
                                 break;
                             }
@@ -1754,18 +1765,18 @@ bool KWCanvas::eventFilter( QObject *o, QEvent *e )
                 break;
             case QEvent::KeyPress:
             {
-                //  kdDebug() << " KeyPress m_currentFrameSetEdit=" << m_currentFrameSetEdit << " isRW="<<m_doc->isReadWrite() << endl;
-                //  kdDebug() << " m_printing=" << m_printing << " mousemode=" << m_mouseMode << " (MM_EDIT=" << MM_EDIT<<")"<<endl;
+                //  kDebug() << " KeyPress m_currentFrameSetEdit=" << m_currentFrameSetEdit << " isRW="<<m_doc->isReadWrite() << endl;
+                //  kDebug() << " m_printing=" << m_printing << " mousemode=" << m_mouseMode << " (MM_EDIT=" << MM_EDIT<<")"<<endl;
                 QKeyEvent * keyev = static_cast<QKeyEvent *>(e);
                 // By default PgUp and PgDown move the scrollbars and not the caret anymore - this is done here
-                if ( !m_doc->pgUpDownMovesCaret() && ( (keyev->state() & ShiftButton) == 0 )
-                     && ( keyev->key() == Qt::Key_PageUp || keyev->key() == Key_PageDown ) )
+                if ( !m_doc->pgUpDownMovesCaret() && ( (keyev->state() & Qt::ShiftModifier) == 0 )
+                     && ( keyev->key() == Qt::Key_PageUp || keyev->key() == Qt::Key_PageDown ) )
                 {
                     viewportScroll( keyev->key() == Qt::Key_PageUp );
                 }
                 // Activate this code (and in focusNextPreviousChild() to allow Shift+Tab
                 // out of document window.  Disabled because it conflicts with Shift+Tab inside a table.
-                // else if ( keyev->key() == Qt::Key_BackTab )
+                // else if ( keyev->key() == Qt::Key_Backtab )
                 //    return FALSE;
                 else if ( keyev->key() == KGlobalSettings::contextMenuKey() ) {
                     // The popups are not available in readonly mode, since the GUI isn't built...
@@ -1828,14 +1839,14 @@ bool KWCanvas::eventFilter( QObject *o, QEvent *e )
                             repaintContents();
                     }
                 }
-                else if ( keyev->key() == Key_Insert && keyev->state() == 0 ) {
+                else if ( keyev->key() == Qt::Key_Insert && keyev->state() == 0 ) {
                     m_overwriteMode = !m_overwriteMode;
                     KWTextFrameSetEdit *edit = currentTextEdit();
                     if ( edit ) {
                         edit->setOverwriteMode( m_overwriteMode );
                         emit overwriteModeChanged( m_overwriteMode );
                     }
-                    kdDebug()<<"Insert is pressed, overwrite mode: "<< m_overwriteMode << endl;
+                    kDebug()<<"Insert is pressed, overwrite mode: "<< m_overwriteMode << endl;
                 }
                 else // normal key processing
                     if ( m_currentFrameSetEdit && m_mouseMode == MM_EDIT && m_doc->isReadWrite() && !m_printing )
@@ -1861,7 +1872,7 @@ bool KWCanvas::eventFilter( QObject *o, QEvent *e )
                     KoPoint docPoint = m_doc->unzoomPoint( normalPoint );
                     viewport()->setCursor( m_frameViewManager->mouseCursor( docPoint, keyev->stateAfter() ) );
                 }
-                else if ( (keyev->key() == Qt::Key_Delete || keyev->key() ==Key_Backspace )
+                else if ( (keyev->key() == Qt::Key_Delete || keyev->key() ==Qt::Key_Backspace )
                           && m_frameViewManager->selectedFrame() && !m_printing )
                     m_gui->getView()->editDeleteFrame();
             } break;
@@ -1883,19 +1894,19 @@ bool KWCanvas::eventFilter( QObject *o, QEvent *e )
                 }
             }
                 break;
-            case QEvent::IMStart:
+            case QEvent::InputMethodStart:
             {
                 QIMEvent * imev = static_cast<QIMEvent *>(e);
                 m_currentFrameSetEdit->imStartEvent( imev );
             }
                 break;
-            case QEvent::IMCompose:
+            case QEvent::InputMethodCompose:
             {
                 QIMEvent * imev = static_cast<QIMEvent *>(e);
                 m_currentFrameSetEdit->imComposeEvent( imev );
             }
                 break;
-            case QEvent::IMEnd:
+            case QEvent::InputMethodEnd:
             {
                 QIMEvent * imev = static_cast<QIMEvent *>(e);
                 m_currentFrameSetEdit->imEndEvent( imev );
@@ -1905,7 +1916,7 @@ bool KWCanvas::eventFilter( QObject *o, QEvent *e )
                 break;
         }
     }
-    return QScrollView::eventFilter( o, e );
+    return Q3ScrollView::eventFilter( o, e );
 }
 
 bool KWCanvas::focusNextPrevChild( bool next)
@@ -2026,8 +2037,8 @@ InteractionPolicy::InteractionPolicy(KWCanvas *parent, bool doInit, bool include
     m_gotDragEvents = false;
     m_parent = parent;
     if(doInit) {
-        QValueList<KWFrameView*> selectedFrames = m_parent->frameViewManager()->selectedFrames();
-        QValueListIterator<KWFrameView*> framesIterator = selectedFrames.begin();
+        Q3ValueList<KWFrameView*> selectedFrames = m_parent->frameViewManager()->selectedFrames();
+        Q3ValueListIterator<KWFrameView*> framesIterator = selectedFrames.begin();
         for(;framesIterator != selectedFrames.end(); ++framesIterator) {
             KWFrame *frame = (*framesIterator)->frame();
             KWFrameSet *fs = frame->frameSet();
@@ -2131,7 +2142,7 @@ FrameResizePolicy::FrameResizePolicy(KWCanvas *parent, MouseMeaning meaning, KoP
         m_top = false; m_bottom = false; m_left = true; m_right = false;
     }
 
-    QValueListConstIterator<KWFrame*> framesIterator = m_frames.begin();
+    Q3ValueListConstIterator<KWFrame*> framesIterator = m_frames.begin();
     for(;framesIterator != m_frames.end(); ++framesIterator) {
         KWFrame *frame = *framesIterator;
         FrameResizeStruct frs(*frame, frame->minimumFrameHeight(), *frame);
@@ -2142,19 +2153,19 @@ FrameResizePolicy::FrameResizePolicy(KWCanvas *parent, MouseMeaning meaning, KoP
 }
 
 void FrameResizePolicy::handleMouseMove(Qt::ButtonState keyState, const KoPoint &point) {
-    //kdDebug() << "handleMouseMove " << (m_top?"top ":"") << (m_bottom?"bottom ":"") << (m_left?"left ":"") << (m_right?"right":"") << endl;
-    //kdDebug() << " + point: " << point
+    //kDebug() << "handleMouseMove " << (m_top?"top ":"") << (m_bottom?"bottom ":"") << (m_left?"left ":"") << (m_right?"right":"") << endl;
+    //kDebug() << " + point: " << point
     //          << "  boundingrect: " << m_boundingRect << endl;
 
-    bool keepAspect = keyState & Qt::AltButton;
+    bool keepAspect = keyState & Qt::AltModifier;
     for(unsigned int i=0; !keepAspect && i < m_frames.count(); i++) {
         KWPictureFrameSet *picFs = dynamic_cast<KWPictureFrameSet*>(m_frames[i]->frameSet());
         if(picFs)
             keepAspect = picFs->keepAspectRatio();
     }
 
-    bool noGrid = keyState & Qt::ShiftButton;
-    bool scaleFromCenter = keyState & Qt::ControlButton;
+    bool noGrid = keyState & Qt::ShiftModifier;
+    bool scaleFromCenter = keyState & Qt::ControlModifier;
 
     KoPoint p( point.x() - (m_hotSpot.x() + m_boundingRect.x()),
             point.y() - (m_hotSpot.y() + m_boundingRect.y()) );
@@ -2211,7 +2222,7 @@ void FrameResizePolicy::handleMouseMove(Qt::ButtonState keyState, const KoPoint 
         KWPageManager *pageManager = m_parent->kWordDocument()->pageManager();
         sizeRect.moveTopLeft(pageManager->clipToDocument(sizeRect.topLeft()));
         sizeRect.moveBottomRight(pageManager->clipToDocument(sizeRect.bottomRight()));
-        sizeRect.setX( QMAX(0, sizeRect.x()) ); // otherwise it would get wider than the page
+        sizeRect.setX( qMax(0, sizeRect.x()) ); // otherwise it would get wider than the page
     }
 
     // each frame in m_frames should be reshaped from the original size stored in the
@@ -2224,7 +2235,7 @@ void FrameResizePolicy::handleMouseMove(Qt::ButtonState keyState, const KoPoint 
             m_viewMode = viewMode;
             m_diffX = to.width() / from.width();
             m_diffY = to.height() / from.height();
-            //kdDebug() << "Converter " << from << ", " << to << " x: " << m_diffX << ", y: " << m_diffY << endl;
+            //kDebug() << "Converter " << from << ", " << to << " x: " << m_diffX << ", y: " << m_diffY << endl;
         }
         void update(KWFrame *frame, KoRect &orig) {
             QRect oldRect( m_viewMode->normalToView( frame->outerRect(m_viewMode) ) );
@@ -2294,7 +2305,7 @@ void FrameResizePolicy::finishInteraction() {
 FrameMovePolicy::FrameMovePolicy(KWCanvas *parent, KoPoint &point) :
     InteractionPolicy (parent), m_boundingRect() {
 
-    QValueListConstIterator<KWFrame*> framesIterator = m_frames.begin();
+    Q3ValueListConstIterator<KWFrame*> framesIterator = m_frames.begin();
     for(;framesIterator != m_frames.end(); ++framesIterator) {
         KWFrame *frame = *framesIterator;
         m_boundingRect |= frame->outerKoRect();
@@ -2307,13 +2318,13 @@ FrameMovePolicy::FrameMovePolicy(KWCanvas *parent, KoPoint &point) :
 }
 
 void FrameMovePolicy::handleMouseMove(Qt::ButtonState keyState, const KoPoint &point) {
-    bool noGrid = keyState & Qt::ShiftButton;
-    bool linearMove = (keyState & Qt::AltButton) || (keyState & Qt::ControlButton);
+    bool noGrid = keyState & Qt::ShiftModifier;
+    bool linearMove = (keyState & Qt::AltModifier) || (keyState & Qt::ControlModifier);
 
     KWPageManager *pageManager = m_parent->kWordDocument()->pageManager();
 
     KoRect oldBoundingRect = m_boundingRect;
-    //kdDebug() << "KWCanvas::mmEditFrameMove point: " << point
+    //kDebug() << "KWCanvas::mmEditFrameMove point: " << point
     //          << "  boundingrect: " << m_boundingRect << endl;
 
     KoPoint p( point.x() - m_hotSpot.x(), point.y() - m_hotSpot.y() );
@@ -2333,7 +2344,7 @@ void FrameMovePolicy::handleMouseMove(Qt::ButtonState keyState, const KoPoint &p
     // Another annoying case is if the top and bottom points are not in the same page....
     int topPage = pageManager->pageNumber( m_boundingRect.topLeft() );
     int bottomPage = pageManager->pageNumber( m_boundingRect.bottomRight() );
-    //kdDebug() << "KWCanvas::mmEditFrameMove topPage=" << topPage << " bottomPage=" << bottomPage << endl;
+    //kDebug() << "KWCanvas::mmEditFrameMove topPage=" << topPage << " bottomPage=" << bottomPage << endl;
     if ( topPage != bottomPage ) {
         // Choose the closest page...
         Q_ASSERT( bottomPage == -1 || topPage + 1 == bottomPage ); // Not too sure what to do otherwise
@@ -2349,17 +2360,17 @@ void FrameMovePolicy::handleMouseMove(Qt::ButtonState keyState, const KoPoint &p
     if( m_boundingRect.topLeft() == oldBoundingRect.topLeft() )
         return; // nothing happened (probably due to the grid)
 
-    /*kdDebug() << "boundingRect moved by " << m_boundingRect.left() - oldBoundingRect.left() << ","
+    /*kDebug() << "boundingRect moved by " << m_boundingRect.left() - oldBoundingRect.left() << ","
       << m_boundingRect.top() - oldBoundingRect.top() << endl;
-      kdDebug() << " boundingX+hotspotX=" << m_boundingRect.left() + m_hotSpot.x() << endl;
-      kdDebug() << " point.x()=" << point.x() << endl; */
+      kDebug() << " boundingX+hotspotX=" << m_boundingRect.left() + m_hotSpot.x() << endl;
+      kDebug() << " point.x()=" << point.x() << endl; */
 
-    QPtrList<KWTableFrameSet> tablesMoved;
+    Q3PtrList<KWTableFrameSet> tablesMoved;
     tablesMoved.setAutoDelete( FALSE );
     QRegion repaintRegion;
     KoPoint _move=m_boundingRect.topLeft() - oldBoundingRect.topLeft();
 
-    QValueListIterator<KWFrame*> framesIterator = m_frames.begin();
+    Q3ValueListIterator<KWFrame*> framesIterator = m_frames.begin();
     for(; framesIterator != m_frames.end(); ++framesIterator) {
         KWFrame *frame = *framesIterator;
         KWFrameSet *fs = frame->frameSet();
@@ -2382,7 +2393,7 @@ void FrameMovePolicy::handleMouseMove(Qt::ButtonState keyState, const KoPoint &p
     }
 
     if ( !tablesMoved.isEmpty() ) {
-        //kdDebug() << "KWCanvas::mmEditFrameMove TABLESMOVED" << endl;
+        //kDebug() << "KWCanvas::mmEditFrameMove TABLESMOVED" << endl;
         for ( unsigned int i = 0; i < tablesMoved.count(); i++ ) {
             KWTableFrameSet *table = tablesMoved.at( i );
             for ( KWTableFrameSet::TableIter k(table) ; k ; ++k ) {
@@ -2439,10 +2450,10 @@ FrameSelectPolicy::FrameSelectPolicy(KWCanvas *parent, MouseMeaning meaning, KoP
                 KWFrameViewManager::unselected, true);
         if(view && view->frame()->frameSet() == fse->frameSet()) {
             // make sure 'point' is inside the frame
-            point.setX(QMAX(point.x(), view->frame()->left()));
-            point.setY(QMAX(point.y(), view->frame()->top()));
-            point.setX(QMIN(point.x(), view->frame()->right()));
-            point.setY(QMIN(point.y(), view->frame()->bottom()));
+            point.setX(qMax(point.x(), view->frame()->left()));
+            point.setY(qMax(point.y(), view->frame()->top()));
+            point.setX(qMin(point.x(), view->frame()->right()));
+            point.setY(qMin(point.y(), view->frame()->bottom()));
 
             // convert point to the view coordinate system.
             QPoint normalPoint = parent->kWordDocument()->zoomPoint(point);

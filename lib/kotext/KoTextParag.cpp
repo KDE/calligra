@@ -34,6 +34,9 @@
 #include <kdebug.h>
 #include <kglobalsettings.h>
 #include <assert.h>
+//Added by qt3to4:
+#include <Q3MemArray>
+#include <Q3PtrList>
 
 //#define DEBUG_PAINT
 
@@ -899,10 +902,10 @@ QMap<int, KoTextParagSelection> &KoTextParag::selections() const
     return *mSelections;
 }
 
-QPtrList<KoTextCustomItem> &KoTextParag::floatingItems() const
+Q3PtrList<KoTextCustomItem> &KoTextParag::floatingItems() const
 {
     if ( !mFloatingItems )
-	((KoTextParag *)this)->mFloatingItems = new QPtrList<KoTextCustomItem>;
+	((KoTextParag *)this)->mFloatingItems = new Q3PtrList<KoTextCustomItem>;
     return *mFloatingItems;
 }
 
@@ -941,11 +944,11 @@ KoParagCounter *KoTextParag::counter()
     return m_layout.counter;
 }
 
-void KoTextParag::setMargin( QStyleSheetItem::Margin m, double _i )
+void KoTextParag::setMargin( Q3StyleSheetItem::Margin m, double _i )
 {
     //kdDebug(32500) << "KoTextParag::setMargin " << m << " margin " << _i << endl;
     m_layout.margins[m] = _i;
-    if ( m == QStyleSheetItem::MarginTop && prev() )
+    if ( m == Q3StyleSheetItem::MarginTop && prev() )
         prev()->invalidate(0);     // for top margin (post-1.1: remove this, not necessary anymore)
     invalidate(0);
 }
@@ -967,7 +970,7 @@ void KoTextParag::setAlign( int align )
 
 int KoTextParag::resolveAlignment() const
 {
-    if ( (int)m_layout.alignment == Qt::AlignAuto )
+    if ( (int)m_layout.alignment == Qt::AlignLeft )
         return str->isRightToLeft() ? Qt::AlignRight : Qt::AlignLeft;
     return m_layout.alignment;
 }
@@ -1232,14 +1235,14 @@ int KoTextParag::breakableTopMargin() const
 {
     KoTextZoomHandler * zh = textDocument()->formattingZoomHandler();
     return zh->ptToLayoutUnitPixY(
-        m_layout.margins[ QStyleSheetItem::MarginTop ] );
+        m_layout.margins[ Q3StyleSheetItem::MarginTop ] );
 }
 
 int KoTextParag::topMargin() const
 {
     KoTextZoomHandler * zh = textDocument()->formattingZoomHandler();
     return zh->ptToLayoutUnitPixY(
-        m_layout.margins[ QStyleSheetItem::MarginTop ]
+        m_layout.margins[ Q3StyleSheetItem::MarginTop ]
         + ( ( prev() && prev()->joinBorder() && prev()->bottomBorder() == m_layout.bottomBorder &&
         prev()->topBorder() == m_layout.topBorder && prev()->leftBorder() == m_layout.leftBorder &&
         prev()->rightBorder() == m_layout.rightBorder) ? 0 : m_layout.topBorder.width() ) );
@@ -1249,7 +1252,7 @@ int KoTextParag::bottomMargin() const
 {
     KoTextZoomHandler * zh = textDocument()->formattingZoomHandler();
     return zh->ptToLayoutUnitPixY(
-        m_layout.margins[ QStyleSheetItem::MarginBottom ]
+        m_layout.margins[ Q3StyleSheetItem::MarginBottom ]
         + ( ( joinBorder() && next() && next()->bottomBorder() == m_layout.bottomBorder &&
         next()->topBorder() == m_layout.topBorder && next()->leftBorder() == m_layout.leftBorder &&
         next()->rightBorder() == m_layout.rightBorder) ? 0 : m_layout.bottomBorder.width() ) );
@@ -1259,7 +1262,7 @@ int KoTextParag::leftMargin() const
 {
     KoTextZoomHandler * zh = textDocument()->formattingZoomHandler();
     return zh->ptToLayoutUnitPixX(
-        m_layout.margins[ QStyleSheetItem::MarginLeft ]
+        m_layout.margins[ Q3StyleSheetItem::MarginLeft ]
         + m_layout.leftBorder.width() );
 }
 
@@ -1268,11 +1271,11 @@ int KoTextParag::rightMargin() const
     KoTextZoomHandler * zh = textDocument()->formattingZoomHandler();
     int cw=0;
     if( m_layout.counter && str->isRightToLeft() &&
-    	(( m_layout.counter->alignment() == Qt::AlignRight ) || ( m_layout.counter->alignment() == Qt::AlignAuto )))
+    	(( m_layout.counter->alignment() == Qt::AlignRight ) || ( m_layout.counter->alignment() == Qt::AlignLeft )))
 	    cw = counterWidth();
 
     return zh->ptToLayoutUnitPixX(
-        m_layout.margins[ QStyleSheetItem::MarginRight ]
+        m_layout.margins[ Q3StyleSheetItem::MarginRight ]
         + m_layout.rightBorder.width() )
         + cw; /* in layout units already */
 }
@@ -1281,7 +1284,7 @@ int KoTextParag::firstLineMargin() const
 {
     KoTextZoomHandler * zh = textDocument()->formattingZoomHandler();
     return zh->ptToLayoutUnitPixY(
-        m_layout.margins[ QStyleSheetItem::MarginFirstLine ] );
+        m_layout.margins[ Q3StyleSheetItem::MarginFirstLine ] );
 }
 
 int KoTextParag::lineSpacing( int line ) const
@@ -1488,8 +1491,8 @@ void KoTextParag::paintLines( QPainter &painter, const QColorGroup &cg, KoTextCu
     qstr.replace( QChar(0x00a0U), ' ' ); // Not all fonts have non-breakable-space glyph
 
     const int nSels = doc ? doc->numSelections() : 1;
-    QMemArray<int> selectionStarts( nSels );
-    QMemArray<int> selectionEnds( nSels );
+    Q3MemArray<int> selectionStarts( nSels );
+    Q3MemArray<int> selectionEnds( nSels );
     if ( drawSelections ) {
 	bool hasASelection = FALSE;
 	for ( int i = 0; i < nSels; ++i ) {
@@ -1657,8 +1660,8 @@ void KoTextParag::paintLines( QPainter &painter, const QColorGroup &cg, KoTextCu
 // Reimplemented here to convert coordinates first, and call @ref drawFormattingChars.
 void KoTextParag::drawParagString( QPainter &painter, const QString &str, int start, int len, int startX,
                                    int lastY, int baseLine, int bw, int h, bool drawSelections,
-                                   KoTextFormat *format, const QMemArray<int> &selectionStarts,
-                                   const QMemArray<int> &selectionEnds, const QColorGroup &cg, bool rightToLeft, int line )
+                                   KoTextFormat *format, const Q3MemArray<int> &selectionStarts,
+                                   const Q3MemArray<int> &selectionEnds, const QColorGroup &cg, bool rightToLeft, int line )
 {
     KoTextZoomHandler * zh = textDocument()->paintingZoomHandler();
     assert(zh);
@@ -1794,8 +1797,8 @@ void KoTextParag::drawParagString( QPainter &painter, const QString &str, int st
 // And we have to keep it separate from drawParagString to avoid s/startX/startX_pix/ etc.
 void KoTextParag::drawParagStringInternal( QPainter &painter, const QString &s, int start, int len, int startX,
                                    int lastY, int baseLine, int bw, int h, bool drawSelections,
-                                   KoTextFormat *format, const QMemArray<int> &selectionStarts,
-                                   const QMemArray<int> &selectionEnds, const QColorGroup &cg, bool rightToLeft, int line, KoTextZoomHandler* zh, bool drawingShadow )
+                                   KoTextFormat *format, const Q3MemArray<int> &selectionStarts,
+                                   const Q3MemArray<int> &selectionEnds, const QColorGroup &cg, bool rightToLeft, int line, KoTextZoomHandler* zh, bool drawingShadow )
 {
 #ifdef DEBUG_PAINT
     kdDebug(32500) << "KoTextParag::drawParagStringInternal start=" << start << " len=" << len << " : '" << s.mid(start,len) << "'" << endl;
@@ -2224,7 +2227,7 @@ void KoTextParag::setParagLayout( const KoParagLayout & layout, int flags, int m
         if ( marginIndex == -1 )
             setMargins( layout.margins );
         else
-            setMargin( (QStyleSheetItem::Margin)marginIndex, layout.margins[marginIndex] );
+            setMargin( (Q3StyleSheetItem::Margin)marginIndex, layout.margins[marginIndex] );
     }
     if ( flags & KoParagLayout::LineSpacing )
     {
@@ -3028,7 +3031,7 @@ void KoTextParag::applyListStyle( KoOasisContext& context, int restartNumbering,
     if ( listStyleProperties.hasAttributeNS( KoXmlNS::text, "space-before" ) )
     {
         double spaceBefore = KoUnit::parseValue( listStyleProperties.attributeNS( KoXmlNS::text, "space-before", QString::null ) );
-        m_layout.margins[ QStyleSheetItem::MarginLeft ] += spaceBefore; // added to left-margin, see 15.12 in spec.
+        m_layout.margins[ Q3StyleSheetItem::MarginLeft ] += spaceBefore; // added to left-margin, see 15.12 in spec.
     }
     // need to call invalidateCounters() ? Not during the initial loading at least.
 }
@@ -3068,8 +3071,8 @@ void KoTextParag::fixParagWidth( bool viewFormattingChars )
 void KoTextParag::drawFormattingChars( QPainter &painter, int start, int len,
                                        int lastY_pix, int baseLine_pix, int h_pix, // in pixels
                                        bool /*drawSelections*/,
-                                       KoTextFormat * /*lastFormat*/, const QMemArray<int> &/*selectionStarts*/,
-                                       const QMemArray<int> &/*selectionEnds*/, const QColorGroup & /*cg*/,
+                                       KoTextFormat * /*lastFormat*/, const Q3MemArray<int> &/*selectionStarts*/,
+                                       const Q3MemArray<int> &/*selectionEnds*/, const QColorGroup & /*cg*/,
                                        bool rightToLeft, int /*line*/, KoTextZoomHandler* zh,
                                        int whichFormattingChars )
 {

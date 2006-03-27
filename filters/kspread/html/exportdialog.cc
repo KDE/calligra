@@ -82,7 +82,7 @@ bool ExportDialog::separateFiles() const
 QString ExportDialog::customStyleURL() const
 {
   QString url = m_mainwidget->mCustomURL->url();
-  if( m_mainwidget->mCustomButton->isChecked() && KURL( url ).isValid() )
+  if( m_mainwidget->mCustomButton->isChecked() && KUrl( url ).isValid() )
     return url;
 
   return QString::null;

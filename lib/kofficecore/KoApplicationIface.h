@@ -21,7 +21,7 @@
 #define __KoApplicationIface_h__
 
 #include <dcopobject.h>
-#include <qvaluelist.h>
+#include <q3valuelist.h>
 #include <dcopref.h>
 
 /**
@@ -46,20 +46,20 @@ k_dcop:
    * @return a list of references to all the documents
    * (see KoDocumentIface)
    */
-  QValueList<DCOPRef> getDocuments();
+  Q3ValueList<DCOPRef> getDocuments();
 
   /**
    * @return a list of references to all the views
    * (see KoViewIface)
    * Convenience method to avoid iterating over all documents to get all the views.
    */
-  QValueList<DCOPRef> getViews();
+  Q3ValueList<DCOPRef> getViews();
 
   /**
    * @return a list of references to all the windows
    * (see KoMainWindowIface)
    */
-  QValueList<DCOPRef> getWindows();
+  Q3ValueList<DCOPRef> getWindows();
 };
 
 #endif

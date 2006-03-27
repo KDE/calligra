@@ -106,9 +106,9 @@ enum MoveFlag { NormalMovement = 0, SelectMovement = 1, WordMovement = 2 };
 inline MoveFlag movementFlag( int state )
 {
     int flag = NormalMovement;
-    if ( state & Qt::ControlButton )
+    if ( state & Qt::ControlModifier )
         flag |= WordMovement;
-    if ( state & Qt::ShiftButton )
+    if ( state & Qt::ShiftModifier )
         flag |= SelectMovement;
     return static_cast<MoveFlag>( flag );
 }
@@ -205,7 +205,7 @@ public:
     /**
      * Moves the cursor inside the index. The index has to exist.
      */
-    virtual void moveToIndex(FormulaCursor*, Direction) = 0;
+    virtual void moveToIndex(FormulaCursor*, Qt::Orientation) = 0;
 
     /**
      * Sets the cursor to point to the place where the index normaly
@@ -305,8 +305,8 @@ public:
 class DirectedRemove : public Request {
     Direction m_direction;
 public:
-    DirectedRemove( RequestID id, Direction d ) : Request( id ), m_direction( d ) {}
-    Direction direction() const { return m_direction; }
+    DirectedRemove( RequestID id, Qt::Orientation d ) : Request( id ), m_direction( d ) {}
+    Qt::Orientation direction() const { return m_direction; }
 };
 
 class TextCharRequest : public Request {

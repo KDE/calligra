@@ -20,11 +20,21 @@
 #ifndef _kotoolbutton_h_
 #define _kotoolbutton_h_
 
-#include <ktoolbarbutton.h>
+
 #include <qmap.h>
 #include <qpoint.h>
+//Added by qt3to4:
+#include <QPixmap>
+#include <QFocusEvent>
+#include <QPaintEvent>
+#include <QKeyEvent>
+#include <QEvent>
+#include <QDropEvent>
+#include <Q3PopupMenu>
+#include <QDragEnterEvent>
+#include <QMouseEvent>
 
-class QPopupMenu;
+class Q3PopupMenu;
 
 class KoColorPanel : public QWidget
 {
@@ -37,7 +47,7 @@ public:
     virtual QSize minimumSizeHint() const;
 
     enum MenuStyle { Plain, CustomColors };
-    static QPopupMenu* createColorPopup( MenuStyle style, const QColor& defaultColor,
+    static Q3PopupMenu* createColorPopup( MenuStyle style, const QColor& defaultColor,
                                          const QObject* receiver, const char* slot,
                                          QWidget* parent, const char* name );
 
@@ -176,7 +186,7 @@ private:
     void buttonShift( int& dx, int& dy );
     bool hitArrow( const QPoint& pos );
 
-    QPopupMenu* m_popup;
+    Q3PopupMenu* m_popup;
     bool m_arrowPressed;
 };
 

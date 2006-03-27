@@ -22,7 +22,7 @@
 #define __KCHARTCONFIGDIALOG_H__
 
 
-#include <qtabdialog.h>
+#include <q3tabdialog.h>
 
 #include "koChart.h"
 
@@ -55,7 +55,7 @@ class KChartLegendConfigPage;
 class KChartLine3dConfigPage;
 class KChartParameterPolarConfigPage;
 
-class KChartConfigDialog : public QTabDialog
+class KChartConfigDialog : public Q3TabDialog
 {
     Q_OBJECT
 

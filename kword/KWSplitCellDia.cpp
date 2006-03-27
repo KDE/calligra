@@ -24,6 +24,8 @@
 #include <qlayout.h>
 #include <qlabel.h>
 #include <qspinbox.h>
+//Added by qt3to4:
+#include <Q3GridLayout>
 
 #include <klocale.h>
 
@@ -36,7 +38,7 @@ KWSplitCellDia::KWSplitCellDia( QWidget* parent, const char* name, unsigned int 
     setInitialSize( QSize(400, 300) );
 
     QWidget *page = plainPage();
-    QGridLayout *grid = new QGridLayout( page, 4, 2, KDialog::marginHint(), KDialog::spacingHint() );
+    Q3GridLayout *grid = new Q3GridLayout( page, 4, 2, KDialog::marginHint(), KDialog::spacingHint() );
 
     QLabel *lRows = new QLabel( i18n( "Number of rows:" ), page );
     grid->addWidget( lRows, 0, 0 );
@@ -53,7 +55,7 @@ KWSplitCellDia::KWSplitCellDia( QWidget* parent, const char* name, unsigned int 
     grid->addWidget( nCols, 3, 0 );
 
     preview = new KWTablePreview( page, m_rows, m_cols );
-    preview->setBackgroundColor( white );
+    preview->setBackgroundColor( Qt::white );
     grid->addMultiCellWidget( preview, 0, 4, 1, 1 );
 
     grid->addRowSpacing( 0, lRows->height() );

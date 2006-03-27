@@ -21,6 +21,8 @@
 
 #include <kaction.h>
 #include <KoQueryTrader.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 /**
  * An action for inserting an embedded object.
@@ -50,7 +52,7 @@ protected slots:
     void slotActionActivated();
 
 private:
-    QValueList<KoDocumentEntry> m_lstEntries;
+    Q3ValueList<KoDocumentEntry> m_lstEntries;
     KoDocumentEntry m_documentEntry;
 };
 

@@ -23,9 +23,11 @@
 #include <knumvalidator.h>
 #include <qlineedit.h>
 #include <qlayout.h>
+//Added by qt3to4:
+#include <Q3GridLayout>
 #include <klocale.h>
 #include <qlabel.h>
-#include <qgroupbox.h>
+#include <q3groupbox.h>
 
 namespace KChart
 {
@@ -37,7 +39,7 @@ KChartPageLayout::KChartPageLayout( KChartParams* _params, QWidget* parent, cons
 #if 0
     QWidget *page = new QWidget( this );
 #else
-    QGroupBox* page = new QGroupBox( 2, Qt::Horizontal, i18n("Margins"),
+    Q3GroupBox* page = new Q3GroupBox( 2, Qt::Horizontal, i18n("Margins"),
 				     this );
 #endif
     setMainWidget(page);
@@ -51,7 +53,7 @@ KChartPageLayout::KChartPageLayout( KChartParams* _params, QWidget* parent, cons
 
     setButtonText( KDialogBase::User1, i18n("&Reset") );
 
-    QGridLayout *grid = new QGridLayout(page, 4, 2, KDialog::marginHint(), KDialog::spacingHint());
+    Q3GridLayout *grid = new Q3GridLayout(page, 4, 2, KDialog::marginHint(), KDialog::spacingHint());
 
     QLabel *lab=new QLabel(i18n("Left:"),page);
     grid->addWidget(lab,0,0);

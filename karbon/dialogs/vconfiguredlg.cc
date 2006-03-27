@@ -51,19 +51,19 @@ VConfigureDlg::VConfigureDlg( KarbonView* parent )
 {
 	QVBox * page = addVBoxPage(
 					   i18n( "Interface" ), i18n( "Interface" ),
-					   BarIcon( "misc", KIcon::SizeMedium ) );
+					   BarIcon( "misc", K3Icon::SizeMedium ) );
 
 	m_interfacePage = new VConfigInterfacePage( parent, page );
 
 	page = addVBoxPage(
 			   i18n( "Misc" ), i18n( "Misc" ),
-			   BarIcon( "misc", KIcon::SizeMedium ) );
+			   BarIcon( "misc", K3Icon::SizeMedium ) );
 
 	m_miscPage = new VConfigMiscPage( parent, page );
 
 	page = addVBoxPage(
 			   i18n( "Grid" ), i18n( "Grid" ),
-			   BarIcon( "grid", KIcon::SizeMedium ) );
+			   BarIcon( "grid", K3Icon::SizeMedium ) );
 
 	m_gridPage = new VConfigGridPage( parent, page );
 
@@ -71,7 +71,7 @@ VConfigureDlg::VConfigureDlg( KarbonView* parent )
 
 	page = addVBoxPage(
 			   i18n( "Document" ), i18n( "Document Settings" ),
-			   BarIcon( "document", KIcon::SizeMedium ) );
+			   BarIcon( "document", K3Icon::SizeMedium ) );
 
 	m_defaultDocPage = new VConfigDefaultPage( parent, page );
 	connect( this, SIGNAL( okClicked() ), this, SLOT( slotApply() ) );

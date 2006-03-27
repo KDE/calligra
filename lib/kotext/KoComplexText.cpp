@@ -41,6 +41,9 @@
 //#include "qfontdata_p.h"
 #include "qfontmetrics.h"
 #include "qrect.h"
+//Added by qt3to4:
+#include <Q3PointArray>
+#include <Q3PtrList>
 
 #include <stdlib.h>
 
@@ -120,7 +123,7 @@ static inline const QChar *prevChar( const QString &str, int pos )
 	pos--;
 	ch--;
     }
-    return &QChar::replacement;
+    return &QChar::ReplacementCharacter;
 }
 
 static inline const QChar *nextChar( const QString &str, int pos)
@@ -136,7 +139,7 @@ static inline const QChar *nextChar( const QString &str, int pos)
 	pos++;
 	ch++;
     }
-    return &QChar::replacement;
+    return &QChar::ReplacementCharacter;
 }
 
 static inline bool prevVisualCharJoins( const QString &str, int pos)
@@ -728,7 +731,7 @@ QChar KoComplexText::shapedCharacter( const QString &str, int pos, const QFontMe
 
 // Avoid using QFontPrivate, to which we don't have access. We don't use positionMarks() anyway
 #if 0
-QPointArray KoComplexText::positionMarks( QFontPrivate *f, const QString &str,
+Q3PointArray KoComplexText::positionMarks( QFontPrivate *f, const QString &str,
 					 int pos, QRect *boundingRect )
 {
     int len = str.length();
@@ -737,7 +740,7 @@ QPointArray KoComplexText::positionMarks( QFontPrivate *f, const QString &str,
 	nmarks++;
 
     if ( !nmarks )
-	return QPointArray();
+	return Q3PointArray();
 
     QChar baseChar = KoComplexText::shapedCharacter( str, pos );
     QRect baseRect = f->boundingRect( baseChar );
@@ -746,7 +749,7 @@ QPointArray KoComplexText::positionMarks( QFontPrivate *f, const QString &str,
     //kdDebug() << "base char: bounding rect at " << baseRect.x() << "/" << baseRect.y() << " (" << baseRect.width() << "/" << baseRect.height() << ")" << endl;
     int offset = f->actual.pixelSize / 10 + 1;
     //kdDebug() << "offset = " << offset << endl;
-    QPointArray pa( nmarks );
+    Q3PointArray pa( nmarks );
     int i;
     unsigned char lastCmb = 0;
     QRect attachmentRect;
@@ -890,13 +893,13 @@ static QChar::Direction basicDirection(const QString &str, int start = 0)
 
 // transforms one line of the paragraph to visual order
 // the caller is responisble to delete the returned list of KoTextRuns.
-QPtrList<KoTextRun> *KoComplexText::bidiReorderLine( KoBidiControl *control, const QString &text, int start, int len,
+Q3PtrList<KoTextRun> *KoComplexText::bidiReorderLine( KoBidiControl *control, const QString &text, int start, int len,
 						   QChar::Direction basicDir )
 {
     int last = start + len - 1;
     //printf("doing BiDi reordering from %d to %d!\n", start, last);
 
-    QPtrList<KoTextRun> *runs = new QPtrList<KoTextRun>;
+    Q3PtrList<KoTextRun> *runs = new Q3PtrList<KoTextRun>;
     runs->setAutoDelete(TRUE);
 
     KoBidiContext *context = control->context;
@@ -1344,7 +1347,7 @@ QPtrList<KoTextRun> *KoComplexText::bidiReorderLine( KoBidiControl *control, con
 #ifdef BIDI_DEBUG
     cout << "reorderLine: lineLow = " << (uint)levelLow << ", lineHigh = " << (uint)levelHigh << endl;
     cout << "logical order is:" << endl;
-    QPtrListIterator<KoTextRun> it2(*runs);
+    Q3PtrListIterator<KoTextRun> it2(*runs);
     KoTextRun *r2;
     for ( ; (r2 = it2.current()); ++it2 )
 	cout << "    " << r2 << "  start=" << r2->start << "  stop=" << r2->stop << "  level=" << (uint)r2->level << endl;
@@ -1381,7 +1384,7 @@ QPtrList<KoTextRun> *KoComplexText::bidiReorderLine( KoBidiControl *control, con
 
 #ifdef BIDI_DEBUG
     cout << "visual order is:" << endl;
-    QPtrListIterator<KoTextRun> it3(*runs);
+    Q3PtrListIterator<KoTextRun> it3(*runs);
     KoTextRun *r3;
     for ( ; (r3 = it3.current()); ++it3 )
     {
@@ -1415,7 +1418,7 @@ QString KoComplexText::bidiReorderString( const QString &str, QChar::Direction /
 	    lineEnd++;
 	}
 	lineEnd++;
-	QPtrList<KoTextRun> *runs = bidiReorderLine( &control, str, lineStart, lineEnd - lineStart );
+	Q3PtrList<KoTextRun> *runs = bidiReorderLine( &control, str, lineStart, lineEnd - lineStart );
 
 	// reorder the content of the line, and output to visual
 	KoTextRun *r = runs->first();

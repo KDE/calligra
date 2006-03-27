@@ -27,11 +27,13 @@
 #include <qcolor.h>
 #include <qdom.h>
 #include <qpainter.h>
-#include <qpopupmenu.h>
+#include <q3popupmenu.h>
 #include <qprinter.h>
 #include <qstring.h>
-#include <qwmatrix.h>
+#include <qmatrix.h>
 #include <qfile.h>
+//Added by qt3to4:
+#include <QTextStream>
 
 #include <config.h>
 #include <unistd.h>
@@ -53,16 +55,17 @@
 
 #include <kformulacontainer.h>
 #include <kformuladocument.h>
+#include <kglobal.h>
 
 
 KFormulaDoc::KFormulaDoc(QWidget *parentWidget, const char *widgetName, QObject* parent, const char* name, bool singleViewMode)
         : KoDocument(parentWidget, widgetName, parent, name, singleViewMode)
 {
     setInstance(KFormulaFactory::global(), false);
-    //kdDebug(39001) << "General Settings" << endl;
+    //kDebug(39001) << "General Settings" << endl;
 
     history = new KoCommandHistory( actionCollection() );
-    wrapper = new KFormula::DocumentWrapper( kapp->config(),
+    wrapper = new KFormula::DocumentWrapper( KGlobal::config(),
                                              actionCollection(),
                                              history );
     document = new KFormula::Document;

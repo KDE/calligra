@@ -20,7 +20,9 @@
 #define __koView_h__
 
 #include <qwidget.h>
-#include <qguardedptr.h>
+#include <qpointer.h>
+//Added by qt3to4:
+#include <QCustomEvent>
 
 #include <kparts/part.h>
 
@@ -251,7 +253,7 @@ public:
    *
    * @deprecated, use applyViewTransformations / reverseViewTransformations instead.
    */
-  virtual QWMatrix matrix() const KDE_DEPRECATED;
+  virtual QMatrix matrix() const KDE_DEPRECATED;
 
   /**
    * Apply the transformations that the view makes to its contents.
@@ -492,9 +494,9 @@ private slots:
   void slotDocGeometryChanged();
 
 private:
-  QGuardedPtr<KoDocumentChild> m_child;
-  QGuardedPtr<KoFrame> m_frame;
-  QGuardedPtr<KoView> m_parentView;
+  QPointer<KoDocumentChild> m_child;
+  QPointer<KoFrame> m_frame;
+  QPointer<KoView> m_parentView;
   class KoViewChildPrivate;
   KoViewChildPrivate *d;
 };

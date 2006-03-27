@@ -45,7 +45,7 @@
 #include <widget/utils/kexisharedactionclient.h>
 #include "kexidataawareobjectiface.h"
 
-class KPopupMenu;
+class KMenu;
 class KPrinter;
 class KAction;
 
@@ -609,7 +609,7 @@ class KEXIDATATABLE_EXPORT TableViewHeader : public QHeader
 
 		int addLabel ( const QString & s, int size = -1 );
 
-		int addLabel ( const QIconSet & iconset, const QString & s, int size = -1 );
+		int addLabel ( const QIcon & iconset, const QString & s, int size = -1 );
 
 		void removeLabel( int section );
 

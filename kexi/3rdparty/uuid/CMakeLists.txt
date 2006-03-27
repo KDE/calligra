@@ -1,0 +1,33 @@
+kde4_header()
+
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/uuid_types.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/uuid_types.h )
+
+include_directories( ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
+
+
+########### next target ###############
+
+
+########### install files ###############
+
+
+kde4_footer()
+
+
+
+#original Makefile.am contents follow:
+
+#include $(top_srcdir)/kexi/Makefile.global
+#
+#noinst_LTLIBRARIES = libkexiuuid.la
+#
+#INCLUDES = $(all_includes)
+#
+#SUBDIRS = .
+#
+#
+#libkexiuuid_la_SOURCES = gen_uuid.c parse.c unparse.c compare.c isnull.c pack.c unpack.c copy.c
+#libkexiuuid_la_LDFLAGS = -no-undefined $(VER_INFO)
+#libkexiuuid_la_LIBADD =
+#
+#

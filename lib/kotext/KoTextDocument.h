@@ -23,13 +23,18 @@
 
 #include "KoRichText.h"
 #include <koffice_export.h>
+//Added by qt3to4:
+#include <QPixmap>
+#include <Q3MemArray>
+#include <Q3PtrList>
+#include <Q3ValueList>
 #if defined(Q_TEMPLATEDLL)
-// MOC_SKIP_BEGIN
+#ifndef Q_MOC_RUN
 template class Q_EXPORT QMap<int, QColor>;
 template class Q_EXPORT QMap<int, bool>;
 template class Q_EXPORT QMap<int, KoTextDocumentSelection>;
-template class Q_EXPORT QPtrList<KoTextDocument>;
-// MOC_SKIP_END
+template class Q_EXPORT Q3PtrList<KoTextDocument>;
+#endif
 #endif
 
 class KoStyleCollection;
@@ -162,7 +167,7 @@ public:
 
     void registerCustomItem( KoTextCustomItem *i, KoTextParag *p );
     void unregisterCustomItem( KoTextCustomItem *i, KoTextParag *p );
-    const QPtrList<KoTextCustomItem> & allCustomItems() const { return customItems; }
+    const Q3PtrList<KoTextCustomItem> & allCustomItems() const { return customItems; }
 
     void setFlow( KoTextFlow *f );
     void takeFlow();
@@ -313,7 +318,7 @@ public:
     /** Set by drawParagWYSIWYG, used by KoTextParag::drawParagStringInternal */
     bool dontDrawingNoteVariable() const { return (m_drawingFlags & DontDrawNoteVariable); }
 
-    virtual KoTextDocCommand *deleteTextCommand( KoTextDocument *textdoc, int id, int index, const QMemArray<KoTextStringChar> & str, const CustomItemsMap & customItemsMap, const QValueList<KoParagLayout> & oldParagLayouts );
+    virtual KoTextDocCommand *deleteTextCommand( KoTextDocument *textdoc, int id, int index, const Q3MemArray<KoTextStringChar> & str, const CustomItemsMap & customItemsMap, const Q3ValueList<KoParagLayout> & oldParagLayouts );
 
     void emitNewCommand(KCommand *cmd) {
         emit newCommand( cmd );
@@ -397,7 +402,7 @@ private:
     bool addMargs : 1;
     int nSelections;
     KoTextFlow *flow_;
-    QPtrList<KoTextCustomItem> customItems;
+    Q3PtrList<KoTextCustomItem> customItems;
     QBrush *backBrush;
     QPixmap *buf_pixmap;
     //Focus focusIndicator;

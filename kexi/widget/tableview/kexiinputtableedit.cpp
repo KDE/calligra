@@ -72,8 +72,8 @@ KexiInputTableEdit::~KexiInputTableEdit()
 
 void KexiInputTableEdit::init()
 {
-	kdDebug() << "KexiInputTableEdit: m_origValue.typeName()==" << m_origValue.typeName() << endl;
-	kdDebug() << "KexiInputTableEdit: type== " << field()->typeName() << endl;
+	kDebug() << "KexiInputTableEdit: m_origValue.typeName()==" << m_origValue.typeName() << endl;
+	kDebug() << "KexiInputTableEdit: type== " << field()->typeName() << endl;
 
 	//init settings
 	m_decsym = KGlobal::locale()->decimalSymbol();
@@ -128,7 +128,7 @@ void KexiInputTableEdit::setValueInternal(const QVariant& add_, bool removeOld)
 					m_cview->setText(ov);
 				if(ov == "=")
 				{
-					kdDebug() << "KexiInputTableEdit::KexiInputTableEdit(): calculated!" << endl;
+					kDebug() << "KexiInputTableEdit::KexiInputTableEdit(): calculated!" << endl;
 					m_calculatedCell = true;
 					m_cview->setText(ov);
 				}
@@ -161,7 +161,7 @@ void KexiInputTableEdit::setValueInternal(const QVariant& add_, bool removeOld)
 				if (tmp_val.isEmpty())
 					m_lineedit->setText("");
 				else if (sl.count()==2) {
-					kdDebug() << "sl.count()=="<<sl.count()<< " " <<sl[0] << " | " << sl[1] << endl;
+					kDebug() << "sl.count()=="<<sl.count()<< " " <<sl[0] << " | " << sl[1] << endl;
 					const QString sl1 = sl[1];
 					int pos = sl1.length()-1;
 					if (pos>=1) {
@@ -210,7 +210,7 @@ void KexiInputTableEdit::setValueInternal(const QVariant& add_, bool removeOld)
 			m_lineedit->setText(tmp_val);
 		}
 		
-		kdDebug() << "KexiInputTableEdit:  " << m_lineedit->text().length() << endl;
+		kDebug() << "KexiInputTableEdit:  " << m_lineedit->text().length() << endl;
 //		m_cview->setSelection(0, m_cview->text().length());
 //		QTimer::singleShot(0, m_view, SLOT(selectAll()));
 
@@ -242,12 +242,12 @@ void
 KexiInputTableEdit::setRestrictedCompletion()
 {
 #if 0 //js TODO
-kdDebug() << "KexiInputTableEdit::setRestrictedCompletion()" << endl;
+kDebug() << "KexiInputTableEdit::setRestrictedCompletion()" << endl;
 //	KLineEdit *content = static_cast<KLineEdit*>(m_view);
 	if(m_cview->text().isEmpty())
 		return;
 
-	kdDebug() << "KexiInputTableEdit::setRestrictedCompletion(): something to do" << endl;
+	kDebug() << "KexiInputTableEdit::setRestrictedCompletion(): something to do" << endl;
 
 	m_cview->useGlobalKeyBindings();
 
@@ -264,7 +264,7 @@ kdDebug() << "KexiInputTableEdit::setRestrictedCompletion()" << endl;
 void
 KexiInputTableEdit::completed(const QString &s)
 {
-	kdDebug() << "KexiInputTableEdit::completed(): " << s << endl;
+	kDebug() << "KexiInputTableEdit::completed(): " << s << endl;
 	m_lineedit->setText(s);
 }
 
@@ -320,13 +320,13 @@ QVariant KexiInputTableEdit::value()
 				v = m_cview->text().replace(QRegExp("\\" + KGlobal::locale()->thousandsSeparator()), "");
 				v = v.replace(QRegExp("\\" + KGlobal::locale()->decimalSymbol()), ".");
 				v = v.replace(QRegExp("\\" + KGlobal::locale()->negativeSign()), "-");
-				kdDebug() << "KexiInputTableEdit::value() converting => " << v.latin1() << endl;
+				kDebug() << "KexiInputTableEdit::value() converting => " << v.latin1() << endl;
 				return QVariant(v);
 			}
 			else
 			{
 				//ok here should the formula be parsed so, just feel like in perl :)
-				kdDebug() << "KexiInputTableEdit::value() calculating..." << endl;
+				kDebug() << "KexiInputTableEdit::value() calculating..." << endl;
 				double result = 0;
 				QString real = m_cview->text().right(m_cview->text().length() - 1);
 				real = real.replace(QRegExp("\\" + KGlobal::locale()->thousandsSeparator()), "");
@@ -340,7 +340,7 @@ QVariant KexiInputTableEdit::value()
 				{
 					double next;
 
-					QString op = QString((*ops.at(i))).stripWhiteSpace();
+					QString op = QString((*ops.at(i))).trimmed();
 
 					if(!((*values.at(i+1)).isEmpty()) && i == 0)
 					{
@@ -361,7 +361,7 @@ QVariant KexiInputTableEdit::value()
 					{
 						next = (*values.at(i+1)).toDouble();
 
-						QString op = QString((*ops.at(i))).stripWhiteSpace();
+						QString op = QString((*ops.at(i))).trimmed();
 						if(op == "+")
 							result = result + next;
 						else if(op == "-")
@@ -380,7 +380,7 @@ QVariant KexiInputTableEdit::value()
 			break;
 
 		default:
-			kdDebug() << "KexiInputTableEdit::value() default..." << endl;
+			kDebug() << "KexiInputTableEdit::value() default..." << endl;
 			return QVariant(m_cview->text());
 	}
 

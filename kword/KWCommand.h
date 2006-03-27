@@ -32,6 +32,10 @@
 #include "KWVariable.h"
 #include <KoPoint.h>
 #include <KoPictureKey.h>
+//Added by qt3to4:
+#include <Q3ValueList>
+#include <Q3PtrList>
+#include <Q3MemArray>
 
 class KWFrameSet;
 class KWTableStyle;
@@ -81,14 +85,14 @@ struct ParagBookmark {
 class KWTextDeleteCommand : public KoTextDeleteCommand
 {
 public:
-    KWTextDeleteCommand( KoTextDocument *d, int i, int idx, const QMemArray<KoTextStringChar> &str,
+    KWTextDeleteCommand( KoTextDocument *d, int i, int idx, const Q3MemArray<KoTextStringChar> &str,
                          const CustomItemsMap & customItemsMap,
-                         const QValueList<KoParagLayout> & oldParagLayouts );
+                         const Q3ValueList<KoParagLayout> & oldParagLayouts );
     KoTextCursor *execute( KoTextCursor *c );
     KoTextCursor *unexecute( KoTextCursor *c );
     void createBookmarkList();
 private:
-    QValueList<ParagBookmark> m_listParagBookmark;
+    Q3ValueList<ParagBookmark> m_listParagBookmark;
 };
 
 
@@ -116,15 +120,15 @@ public:
         KoBorder m_OldBorder;
     };
 
-    KWFrameBorderCommand( const QString &name, QPtrList<FrameIndex> &_listFrameIndex, QPtrList<FrameBorderTypeStruct> &_frameTypeBorder,const KoBorder & _newBorder ) ;
+    KWFrameBorderCommand( const QString &name, Q3PtrList<FrameIndex> &_listFrameIndex, Q3PtrList<FrameBorderTypeStruct> &_frameTypeBorder,const KoBorder & _newBorder ) ;
     ~ KWFrameBorderCommand();
 
     void execute();
     void unexecute();
 
 protected:
-    QPtrList<FrameIndex> m_indexFrame;
-    QPtrList<FrameBorderTypeStruct> m_oldBorderFrameType;
+    Q3PtrList<FrameIndex> m_indexFrame;
+    Q3PtrList<FrameBorderTypeStruct> m_oldBorderFrameType;
     KoBorder m_newBorder;
 };
 
@@ -134,15 +138,15 @@ protected:
 class KWFrameBackGroundColorCommand : public KNamedCommand
 {
 public:
-    KWFrameBackGroundColorCommand( const QString &name, QPtrList<FrameIndex> &_listFrameIndex, QPtrList<QBrush> &_oldBrush, const QBrush & _newColor ) ;
+    KWFrameBackGroundColorCommand( const QString &name, Q3PtrList<FrameIndex> &_listFrameIndex, Q3PtrList<QBrush> &_oldBrush, const QBrush & _newColor ) ;
     ~KWFrameBackGroundColorCommand();
 
     void execute();
     void unexecute();
 
 protected:
-    QPtrList<FrameIndex> m_indexFrame;
-    QPtrList<QBrush> m_oldBackGroundColor;
+    Q3PtrList<FrameIndex> m_indexFrame;
+    Q3PtrList<QBrush> m_oldBackGroundColor;
     QBrush m_newColor;
 };
 
@@ -227,7 +231,7 @@ struct FrameResizeStruct {
 class KWFrameResizeCommand : public KNamedCommand
 {
 public:
-    KWFrameResizeCommand(const QString &name, const QValueList<FrameIndex> &frameIndex, const QValueList<FrameResizeStruct> &frameResize );
+    KWFrameResizeCommand(const QString &name, const Q3ValueList<FrameIndex> &frameIndex, const Q3ValueList<FrameResizeStruct> &frameResize );
     KWFrameResizeCommand(const QString &name, FrameIndex frameIndex, const FrameResizeStruct &frameResize );
     ~KWFrameResizeCommand() {}
 
@@ -235,8 +239,8 @@ public:
     void unexecute();
 
 protected:
-    QValueList<FrameIndex> m_indexFrame;
-    QValueList<FrameResizeStruct> m_frameResize;
+    Q3ValueList<FrameIndex> m_indexFrame;
+    Q3ValueList<FrameResizeStruct> m_frameResize;
 };
 
 /**
@@ -273,16 +277,16 @@ class KWFrameMoveCommand : public KNamedCommand
 {
 public:
     KWFrameMoveCommand( const QString &name,
-                        const QValueList<FrameIndex> & _frameIndex,
-                        const QValueList<FrameMoveStruct> & _frameMove );
+                        const Q3ValueList<FrameIndex> & _frameIndex,
+                        const Q3ValueList<FrameMoveStruct> & _frameMove );
     ~KWFrameMoveCommand() {}
 
     void execute();
     void unexecute();
-    QValueList<FrameMoveStruct> & listFrameMoved() { return m_frameMove; }
+    Q3ValueList<FrameMoveStruct> & listFrameMoved() { return m_frameMove; }
 protected:
-    QValueList<FrameIndex> m_indexFrame;
-    QValueList<FrameMoveStruct> m_frameMove;
+    Q3ValueList<FrameIndex> m_indexFrame;
+    Q3ValueList<FrameMoveStruct> m_frameMove;
 };
 
 /**
@@ -341,7 +345,7 @@ public:
     void unexecute();
 protected:
     KWPartFrameSet *m_part;
-    KURL m_url;
+    KUrl m_url;
 };
 
 /**
@@ -455,7 +459,7 @@ public:
     void unexecute();
 protected:
     KWTableFrameSet *m_pTable;
-    QPtrList<KWFrameSet> m_ListFrame;
+    Q3PtrList<KWFrameSet> m_ListFrame;
 };
 
 /**
@@ -579,7 +583,7 @@ protected:
     unsigned int m_rowBegin;
     unsigned int m_colEnd;
     unsigned int m_rowEnd;
-    QPtrList<KWFrameSet> m_ListFrameSet;
+    Q3PtrList<KWFrameSet> m_ListFrameSet;
 };
 
 /**
@@ -588,7 +592,7 @@ protected:
 class KWJoinCellCommand : public KNamedCommand
 {
 public:
-    KWJoinCellCommand( const QString &name, KWTableFrameSet * _table,unsigned int colBegin,unsigned int rowBegin, unsigned int colEnd,unsigned int rowEnd, QPtrList<KWFrameSet> listFrameSet,QPtrList<KWFrame> listCopyFrame);
+    KWJoinCellCommand( const QString &name, KWTableFrameSet * _table,unsigned int colBegin,unsigned int rowBegin, unsigned int colEnd,unsigned int rowEnd, Q3PtrList<KWFrameSet> listFrameSet,Q3PtrList<KWFrame> listCopyFrame);
     ~KWJoinCellCommand();
 
     void execute();
@@ -599,8 +603,8 @@ protected:
     unsigned int m_rowBegin;
     unsigned int m_colEnd;
     unsigned int m_rowEnd;
-    QPtrList<KWFrameSet> m_ListFrameSet;
-    QPtrList<KWFrame> m_copyFrame;
+    Q3PtrList<KWFrameSet> m_ListFrameSet;
+    Q3PtrList<KWFrame> m_copyFrame;
 };
 
 /**
@@ -736,7 +740,7 @@ class KWInsertRemovePageCommand : public KCommand
     KWDocument *m_doc;
     Command m_cmd;
     int m_pgNum;
-    QValueList<KCommand*> childCommands;
+    Q3ValueList<KCommand*> childCommands;
 
     void doRemove(int pageNumber);
     void doInsert(int pageNumber);

@@ -22,7 +22,7 @@
 #include <kdebug.h>
 #include <kgenericfactory.h>
 #include <kdialogbase.h>
-#include <klistview.h>
+#include <k3listview.h>
 #include <ktabwidget.h>
 #include <kiconloader.h>
 #include <kcombobox.h>
@@ -68,9 +68,9 @@ class KexiFormPart::Private
 			delete static_cast<KFormDesigner::ObjectTreeView*>(objectTreeView);
 			delete static_cast<KexiDataSourcePage*>(dataSourcePage);
 		}
-//		QGuardedPtr<KFormDesigner::FormManager> manager;
-		QGuardedPtr<KFormDesigner::ObjectTreeView> objectTreeView;
-		QGuardedPtr<KexiDataSourcePage> dataSourcePage;
+//		QPointer<KFormDesigner::FormManager> manager;
+		QPointer<KFormDesigner::ObjectTreeView> objectTreeView;
+		QPointer<KexiDataSourcePage> dataSourcePage;
 		KexiDataSourceComboBox *dataSourceCombo;
 };
 

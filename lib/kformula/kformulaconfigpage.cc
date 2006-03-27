@@ -19,17 +19,20 @@
 */
 
 #include <qvariant.h>   // first for gcc 2.7.2
-#include <qbuttongroup.h>
+#include <q3buttongroup.h>
 #include <qcheckbox.h>
-#include <qgroupbox.h>
+#include <q3groupbox.h>
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qmap.h>
 #include <qradiobutton.h>
 #include <qspinbox.h>
 #include <qstringlist.h>
-#include <qvbox.h>
+#include <q3vbox.h>
 #include <qwidget.h>
+//Added by qt3to4:
+#include <Q3GridLayout>
+#include <Q3Frame>
 
 //#include <algorithm>
 
@@ -56,17 +59,17 @@
 KFORMULA_NAMESPACE_BEGIN
 
 
-ConfigurePage::ConfigurePage( Document* document, QWidget* view, KConfig* config, QVBox* box, char* name )
+ConfigurePage::ConfigurePage( Document* document, QWidget* view, KConfig* config, Q3VBox* box, char* name )
     : QObject( box->parent(), name ), m_document( document ), m_view( view ), m_config( config ), m_changed( false )
 {
     const ContextStyle& contextStyle = document->getContextStyle( true );
 
     // fonts
 
-    QGroupBox *gbox = new QGroupBox( i18n( "Fonts" ), box );
+    Q3GroupBox *gbox = new Q3GroupBox( i18n( "Fonts" ), box );
     gbox->setColumnLayout( 0, Qt::Horizontal );
 
-    QGridLayout* grid = new QGridLayout( gbox->layout(), 5, 3 );
+    Q3GridLayout* grid = new Q3GridLayout( gbox->layout(), 5, 3 );
     grid->setSpacing( KDialog::spacingHint() );
 
     grid->setColStretch(1, 1);
@@ -163,10 +166,10 @@ ConfigurePage::ConfigurePage( Document* document, QWidget* view, KConfig* config
 
     syntaxHighlightingClicked();
 
-    styleBox = new QButtonGroup( i18n( "Font Style" ), box );
+    styleBox = new Q3ButtonGroup( i18n( "Font Style" ), box );
     styleBox->setColumnLayout( 0, Qt::Horizontal );
 
-    grid = new QGridLayout( styleBox->layout(), 3, 1 );
+    grid = new Q3GridLayout( styleBox->layout(), 3, 1 );
     grid->setSpacing( KDialog::spacingHint() );
 
     esstixStyle = new QRadioButton( i18n( "Esstix font style" ), styleBox, "esstixStyle" );
@@ -191,7 +194,7 @@ ConfigurePage::ConfigurePage( Document* document, QWidget* view, KConfig* config
 
 
 QPushButton* ConfigurePage::buildFontLine( QWidget* parent,
-            QGridLayout* layout, int number, QFont font, QString name,
+            Q3GridLayout* layout, int number, QFont font, QString name,
             QLabel*& fontName )
 {
     QLabel* fontTitle = new QLabel( name, parent );
@@ -199,7 +202,7 @@ QPushButton* ConfigurePage::buildFontLine( QWidget* parent,
     QString labelName = font.family() + ' ' + QString::number( font.pointSize() );
     fontName = new QLabel( labelName, parent );
     fontName->setFont( font );
-    fontName->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
+    fontName->setFrameStyle(Q3Frame::StyledPanel | Q3Frame::Sunken);
 
     QPushButton* chooseButton = new QPushButton( i18n( "Choose..." ), parent );
 

@@ -131,7 +131,7 @@ void VGradientPreview::paintEvent( QPaintEvent* )
 	}
 	VFill fill;
 	KIconLoader il;
-	fill.pattern() = VPattern( il.iconPath( "karbon.png", KIcon::Small ) );
+	fill.pattern() = VPattern( il.iconPath( "karbon.png", K3Icon::Small ) );
 	fill.setType( VFill::patt );
 	gp.setBrush( fill );
 	gp.fillPath();

@@ -20,6 +20,8 @@
 #include <KoDom.h>
 #include <kdebug.h>
 #include <assert.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 void testSelectItemSet( KoOasisSettings& settings )
 {
@@ -71,7 +73,7 @@ void testNamedMap( KoOasisSettings& settings )
 
 int main( int, char** ) {
 
-    const QCString xml = "\
+    const Q3CString xml = "\
 <?xml version=\"1.0\" encoding=\"UTF-8\"?> \
 <office:document-settings xmlns:office=\"urn:oasis:names:tc:opendocument:xmlns:office:1.0\" xmlns:config=\"urn:oasis:names:tc:opendocument:xmlns:config:1.0\"> \
  <office:settings> \

@@ -24,7 +24,7 @@
 #include <kexipartitem.h>
 #include <kexiproject.h>
 
-#include <klistview.h>
+#include <k3listview.h>
 #include <kaction.h>
 #include <kiconloader.h>
 #include <kdebug.h>
@@ -36,17 +36,17 @@
 
 typedef KListViewItemTemplate<QString> ActionSelectorDialogListItem;
 
-class ActionsListView : public KListView
+class ActionsListView : public K3ListView
 {
 public:
 	ActionsListView(QWidget* parent, KexiActionSelectionDialog* dialog)
-		: KListView(parent, "actionslistview")
+		: K3ListView(parent, "actionslistview")
 	{
 		setResizeMode(QListView::LastColumn);
 		addColumn("");
 		header()->hide();
 
-		QPixmap noIcon( IconSize( KIcon::Small ), IconSize( KIcon::Small ) );
+		QPixmap noIcon( IconSize( K3Icon::Small ), IconSize( K3Icon::Small ) );
 		QBitmap bmpNoIcon(noIcon.size());
 		bmpNoIcon.fill(Qt::color0);
 		noIcon.setMask(bmpNoIcon);
@@ -59,7 +59,7 @@ public:
 			//! @todo: store KAction* here?
 			QString name = QString("kaction:%1").arg((*it)->name());
 			pitem = new ActionSelectorDialogListItem(name, this, pitem, (*it)->text().replace("&", "") );
-			pitem->setPixmap( 0, (*it)->iconSet( KIcon::Small, 16 ).pixmap( QIconSet::Small, QIconSet::Active ) );
+			pitem->setPixmap( 0, (*it)->iconSet( K3Icon::Small, 16 ).pixmap( QIcon::Small, QIcon::Active ) );
 			if (!pitem->pixmap(0) || pitem->pixmap(0)->isNull())
 				pitem->setPixmap( 0, noIcon );
 			if (!selectedItem() && dialog->currentActionName() == name)
@@ -70,11 +70,11 @@ public:
 	virtual ~ActionsListView() {}
 };
 
-class ScriptsListView : public KListView
+class ScriptsListView : public K3ListView
 {
 public:
 	ScriptsListView(QWidget* parent, KexiActionSelectionDialog* dialog)
-		: KListView(parent, "scriptslistview")
+		: K3ListView(parent, "scriptslistview")
 	{
 		setResizeMode(QListView::LastColumn);
 		addColumn("");
@@ -105,8 +105,8 @@ class KexiActionSelectionDialog::KexiActionSelectionDialogPrivate
 {
 public:
 	KexiMainWindow* mainWin;
-	KListView* kactionListView;
-	KListView* scriptListView;
+	K3ListView* kactionListView;
+	K3ListView* scriptListView;
 	QVBox *mainbox;
 	QString currentActionName;
 	KexiActionSelectionDialogPrivate() 
@@ -133,11 +133,11 @@ KexiActionSelectionDialog::KexiActionSelectionDialog(KexiMainWindow* mainWin, QW
 	d->mainWin = mainWin;
 	d->currentActionName = _currentActionName;
 
-	QVBox* box = makeVBoxMainWidget();
+	KVBox* box = makeVBoxMainWidget();
 
 	QLabel *lbl = new QLabel(i18n("Select Action to be executed after clicking \"%1\" button.")
 		.arg(actionWidgetName), box);
-	lbl->setAlignment(Qt::AlignTop|Qt::AlignLeft|Qt::WordBreak);
+	lbl->setAlignment(Qt::AlignTop|Qt::AlignLeft|Qt::TextWordWrap);
 
 	QWidget *w = new QWidget(box);
 	QHBoxLayout *lyr = new QHBoxLayout(w, 0, KDialogBase::spacingHint());

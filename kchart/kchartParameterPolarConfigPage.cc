@@ -28,13 +28,15 @@
 
 #include <qlayout.h>
 #include <qlabel.h>
-#include <qbuttongroup.h>
+#include <q3buttongroup.h>
 #include <qcheckbox.h>
 #include <qlineedit.h>
 #include <qradiobutton.h>
 #include <qspinbox.h>
 #include <qvbuttongroup.h>
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
+//Added by qt3to4:
+#include <Q3VBoxLayout>
 
 #include "kchart_params.h"
 
@@ -45,22 +47,22 @@ KChartParameterPolarConfigPage::KChartParameterPolarConfigPage( KChartParams* pa
                                                             QWidget* parent ) :
     QWidget( parent ),_params( params )
 {
-    QVBoxLayout *grid1 = new QVBoxLayout(this);
-    QVButtonGroup* gb = new QVButtonGroup( i18n( "Parameter" ), this );
+    Q3VBoxLayout *grid1 = new Q3VBoxLayout(this);
+    Q3VButtonGroup* gb = new Q3VButtonGroup( i18n( "Parameter" ), this );
     grid1->addWidget(gb);
 
     polarMarker=new QCheckBox(i18n("Polar marker"), gb);
-    QWhatsThis::add(polarMarker, i18n("If this is checked, the polar markers are shown; otherwise they are not."));
+    Q3WhatsThis::add(polarMarker, i18n("If this is checked, the polar markers are shown; otherwise they are not."));
     showCircularLabel = new QCheckBox(i18n("Show circular label"), gb);
-    QWhatsThis::add(showCircularLabel, i18n("Toggle the circular label display."));
+    Q3WhatsThis::add(showCircularLabel, i18n("Toggle the circular label display."));
 
     QLabel *label = new QLabel( i18n( "Zero degree position:" ), gb );
     angle = new QSpinBox(-359, 359, 1, gb);
-    QWhatsThis::add(angle, i18n("Set the position for the X axis (horizontal) from -359 to 359. Default is 0."));
+    Q3WhatsThis::add(angle, i18n("Set the position for the X axis (horizontal) from -359 to 359. Default is 0."));
 
     label=new QLabel(i18n("Line width:"), gb);
     lineWidth=new QSpinBox(gb);
-    QWhatsThis::add(lineWidth, i18n("Set the width for the chart lines. 0 is default and is the thinnest."));
+    Q3WhatsThis::add(lineWidth, i18n("Set the width for the chart lines. 0 is default and is the thinnest."));
 
     grid1->activate();
 }

@@ -32,7 +32,7 @@
 #include <qpainter.h>
 
 #include <kdebug.h>
-#include <kpopupmenu.h>
+#include <kmenu.h>
 #include <klocale.h>
 #include <kiconloader.h>
 #include <kfiledialog.h>
@@ -60,7 +60,7 @@ class KexiDBImageBox::Button : public QToolButton
 		Button(QWidget *parent) : QToolButton(parent, "KexiDBImageBox::Button")
 		{
 			setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
-			setFixedWidth(QMAX(15, qApp->globalStrut().width()));
+			setFixedWidth(qMax(15, qApp->globalStrut().width()));
 			//	setFixedWidth(m_chooser->minimumSizeHint().width()); //! @todo get this from a KStyle
 			setAutoRaise(true);
 		}
@@ -105,7 +105,7 @@ KexiDBImageBox::KexiDBImageBox( bool designMode, QWidget *parent, const char *na
 //		hlyr->addWidget(m_chooser);
 	}
 	//setup popup menu
-	m_popup = new KPopupMenu(this);
+	m_popup = new KMenu(this);
 	QString titleString = i18n("Image Box");
 	m_titleID = m_popup->insertTitle(SmallIcon("pixmaplabel"), titleString);
 	m_insertFromFileAction = new KAction(i18n("Insert From &File..."), SmallIconSet("fileopen"), 0,
@@ -315,10 +315,10 @@ void KexiDBImageBox::insertFromFile()
 		KFileDialog::getStartURL(":LastVisitedImagePath", recentDir).path(), 
 		convertKFileDialogFilterToQFileDialogFilter(KImageIO::pattern(KImageIO::Reading)), 
 		this, 0, i18n("Insert Image From File"));
-	KURL url;
+	KUrl url;
 	url.setPath( fileName );
 #else
-	KURL url( KFileDialog::getImageOpenURL(
+	KUrl url( KFileDialog::getImageOpenURL(
 		":LastVisitedImagePath", this, i18n("Insert Image From File")) );
 //	QString fileName = url.isLocalFile() ? url.path() : url.prettyURL();
 
@@ -342,7 +342,7 @@ void KexiDBImageBox::insertFromFile()
 #endif
 		//! @todo download the file if remote, then set fileName properly
 		QFile f(fileName);
-		if (!f.open(IO_ReadOnly)) {
+		if (!f.open(QIODevice::ReadOnly)) {
 			//! @todo err msg
 			return;
 		}
@@ -359,7 +359,7 @@ void KexiDBImageBox::insertFromFile()
 
 #ifdef Q_WS_WIN
 	//save last visited path
-//	KURL url(fileName);
+//	KUrl url(fileName);
 	if (url.isLocalFile())
 		KRecentDirs::add(":LastVisitedImagePath", url.directory());
 #endif
@@ -381,7 +381,7 @@ void KexiDBImageBox::saveAs()
 {
 //	if (!m_pixmapLabel->pixmap() || m_pixmapLabel->pixmap()->isNull()) {
 	if (data().isEmpty()) {
-		kdWarning() << "KexiDBImageBox::saveAs(): no pixmap!" << endl;
+		kWarning() << "KexiDBImageBox::saveAs(): no pixmap!" << endl;
 		return;
 	}
 #ifdef Q_WS_WIN
@@ -400,11 +400,11 @@ void KexiDBImageBox::saveAs()
 	if (fileName.isEmpty())
 		return;
 	kexipluginsdbg << fileName << endl;
-	KURL url;
+	KUrl url;
 	url.setPath( fileName );
 
 	QFile f(fileName);
-	if (!f.open(IO_WriteOnly)) {
+	if (!f.open(QIODevice::WriteOnly)) {
 		//! @todo err msg
 		return;
 	}
@@ -423,7 +423,7 @@ void KexiDBImageBox::saveAs()
 
 #ifdef Q_WS_WIN
 	//save last visited path
-//	KURL url(fileName);
+//	KUrl url(fileName);
 	if (url.isLocalFile())
 		KRecentDirs::add(":LastVisitedImagePath", url.directory());
 #endif
@@ -632,7 +632,7 @@ void KexiDBImageBox::paintEvent( QPaintEvent*pe )
 //		f.setPointSize(f.pointSize());
 		p2.setFont(f);
 		p2.setPen( KexiUtils::contrastColor( bg ) );
-		p2.drawText(pm.rect(), Qt::AlignCenter|Qt::WordBreak, i18n("No Image"));
+		p2.drawText(pm.rect(), Qt::AlignCenter|Qt::TextWordWrap, i18n("No Image"));
 		p2.end();
 		bitBlt(this, 0, 0, &pm);
 	}
@@ -724,7 +724,7 @@ void KexiDBImageBox::updatePixmap() {
 //			if (KexiDBImageBox_pm) {
 //				QSize size = KexiDBImageBox_pm->size();
 //				if ((KexiDBImageBox_pm->width() > (width()/2) || KexiDBImageBox_pm->height() > (height()/2))) {
-//					int maxSize = QMAX(width()/2, height()/2);
+//					int maxSize = qMax(width()/2, height()/2);
 //					size = QSize(maxSize,maxSize);
 //					delete KexiDBImageBox_pm;
 //					KexiDBImageBox_pm = 0;

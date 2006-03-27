@@ -108,7 +108,7 @@ KexiNewProjectWizard::KexiNewProjectWizard(KexiDBConnectionSet& conn_set,
 	d->lvi_file = new KListViewItem( m_prjtype_sel->lv_types, i18n("New Project Stored in File") );
 	d->lvi_file->setPixmap(0, 
 		KGlobal::iconLoader()->loadIcon( KMimeType::mimeType( 
-			KexiDB::Driver::defaultFileBasedDriverMimeType() )->icon(none,0), KIcon::Desktop 
+			KexiDB::Driver::defaultFileBasedDriverMimeType() )->icon(none,0), K3Icon::Desktop 
 		)
 	);
 	d->lvi_file->setMultiLinesEnabled( true );

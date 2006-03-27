@@ -25,11 +25,15 @@
 #include "KoStyleCollection.h"
 #include "KoTextDocument.h"
 #include <koffice_export.h>
+//Added by qt3to4:
+#include <Q3CString>
+#include <Q3MemArray>
+#include <Q3ValueList>
 
 class KoSavingContext;
 class KCommand;
 class KoTextFormat;
-class QProgressDialog;
+class Q3ProgressDialog;
 class KoLinkVariable;
 class KoVariable;
 
@@ -76,7 +80,7 @@ public:
 
     virtual KCommand *setChangeCaseOfTextCommand(KoChangeCaseDia::TypeOfCase _type)=0;
 
-    KoTextDocCommand *deleteTextCommand( KoTextDocument *textdoc, int id, int index, const QMemArray<KoTextStringChar> & str, const CustomItemsMap & customItemsMap, const QValueList<KoParagLayout> & oldParagLayouts );
+    KoTextDocCommand *deleteTextCommand( KoTextDocument *textdoc, int id, int index, const Q3MemArray<KoTextStringChar> & str, const CustomItemsMap & customItemsMap, const Q3ValueList<KoParagLayout> & oldParagLayouts );
 
     void setParagLayoutFormat( KoParagLayout *newLayout,int flags, int marginIndex=-1);
     void setFormat( KoTextFormat * newFormat, int flags, bool zoomFont = false );
@@ -113,7 +117,7 @@ public:
     KCommand *setAlignCommand(int align);
 
     //void setMargin(QStyleSheetItem::Margin m, double margin);
-    KCommand *setMarginCommand(QStyleSheetItem::Margin m, double margin);
+    KCommand *setMarginCommand(Q3StyleSheetItem::Margin m, double margin);
 
     //void setTabList(const KoTabulatorList & tabList );
     KCommand *setTabListCommand(const KoTabulatorList & tabList );
@@ -217,7 +221,7 @@ public:
     static const char * acceptSelectionMimeType();
     /// Check if the mimesource @p mime provides one of the OASIS mimetypes,
     /// and if so, return it. Otherwise return an empty string.
-    static QCString providesOasis( QMimeSource* mime );
+    static Q3CString providesOasis( QMimeSource* mime );
 
     void setNeedSpellCheck(bool b);
     bool needSpellCheck() const { return m_needsSpellCheck;}
@@ -333,7 +337,7 @@ public:
     KCommand * setLineSpacingCommand( KoTextCursor * cursor, double spacing, KoParagLayout::SpacingType _type,KoTextDocument::SelectionId selectionId = KoTextDocument::Standard );
     KCommand * setBordersCommand( KoTextCursor * cursor, const KoBorder& leftBorder, const KoBorder& rightBorder, const KoBorder& topBorder, const KoBorder& bottomBorder, KoTextDocument::SelectionId selectionId = KoTextDocument::Standard );
     KCommand * setJoinBordersCommand( KoTextCursor * cursor, bool join, KoTextDocument::SelectionId selectionId = KoTextDocument::Standard );
-    KCommand * setMarginCommand( KoTextCursor * cursor, QStyleSheetItem::Margin m, double margin, KoTextDocument::SelectionId selectionId = KoTextDocument::Standard);
+    KCommand * setMarginCommand( KoTextCursor * cursor, Q3StyleSheetItem::Margin m, double margin, KoTextDocument::SelectionId selectionId = KoTextDocument::Standard);
     KCommand* setTabListCommand( KoTextCursor * cursor,const KoTabulatorList & tabList , KoTextDocument::SelectionId selectionId = KoTextDocument::Standard );
     KCommand* setBackgroundColorCommand( KoTextCursor * cursor,const QColor & color , KoTextDocument::SelectionId selectionId = KoTextDocument::Standard );
 
@@ -456,7 +460,7 @@ public:
     void printRTDebug(int);
 #endif
 
-    bool statistics( QProgressDialog *progress, ulong & charsWithSpace, ulong & charsWithoutSpace, ulong & words, ulong & sentences, ulong & syllables, ulong & lines, bool selected );
+    bool statistics( Q3ProgressDialog *progress, ulong & charsWithSpace, ulong & charsWithoutSpace, ulong & words, ulong & sentences, ulong & syllables, ulong & lines, bool selected );
     int numberOfparagraphLineSelected( KoTextParag *parag);
 
     /**
@@ -563,7 +567,7 @@ public: // made public for KWTextFrameSet...
         Type type; // type of command
         KoTextObject* textobj; // parent
         CustomItemsMap customItemsMap; // character position -> qtextcustomitem
-        QValueList<KoParagLayout> oldParagLayouts;
+        Q3ValueList<KoParagLayout> oldParagLayouts;
         KoParagLayout newParagLayout;
         KoTextCursor *cursor; // basically a "mark" of the view that started this undo/redo info
         // If the view changes, the next call to checkUndoRedoInfo will terminate the previous view's edition

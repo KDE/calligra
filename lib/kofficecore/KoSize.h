@@ -24,7 +24,7 @@
 #define koSize_h
 
 #include <qsize.h>
-#include <qtl.h>
+#include <q3tl.h>
 
 /**
  * A size whose coordinates are floating-point values ( "double"s ).

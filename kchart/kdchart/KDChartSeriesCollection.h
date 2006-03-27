@@ -30,12 +30,12 @@
 #define __KDCHARTSERIESCOLLECTION_H__
 
 // to avoid problems in TableBase - it doesn't include this - bug!
-#include <qtable.h>
+#include <q3table.h>
 
 #include "KDChartTableBase.h"
 #include "KDChartBaseSeries.h"
 #if COMPAT_QT_VERSION >= 0x030000
-#include <qvaluevector.h>
+#include <q3valuevector.h>
 #else
 #include <qarray.h>
 #endif
@@ -46,7 +46,7 @@ class KDChartParams;
 // them when it is deleted.
 class KDCHART_EXPORT KDChartSeriesCollection : public KDChartTableDataBase,
 #if COMPAT_QT_VERSION >= 0x030000
-    public QValueVector<KDChartBaseSeries *>
+    public Q3ValueVector<KDChartBaseSeries *>
 #else
     public QArray<KDChartBaseSeries *>
 #endif

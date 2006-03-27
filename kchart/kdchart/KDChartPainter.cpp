@@ -57,7 +57,9 @@
 
 #include <qpainter.h>
 #include <qpaintdevice.h>
-#include <qpaintdevicemetrics.h>
+#include <q3paintdevicemetrics.h>
+//Added by qt3to4:
+#include <Q3PointArray>
 
 #define DEGTORAD(d) (d)*M_PI/180
 
@@ -748,9 +750,9 @@ void KDChartPainter::paintDataValues( QPainter* painter,
                                         oldDatacolorNo = datacolorNo;
                                         QColor color( params()->dataColor( datacolorNo ) );
                                         painter->setPen( QColor(
-                                                        static_cast < int > (255-color.red()  ),
-                                                        static_cast < int > (255-color.green()),
-                                                        static_cast < int > (255-color.blue() )));
+                                                        static_cast < int > (255-color.Qt::red()  ),
+                                                        static_cast < int > (255-color.Qt::green()),
+                                                        static_cast < int > (255-color.Qt::blue() )));
                                     }
                                 }
                             }
@@ -782,7 +784,7 @@ void KDChartPainter::paintDataValues( QPainter* painter,
                            painter->setPen( params()->dataValuesColor( region->chart ) );
                            painter->drawText( infosKDD.x , infosKDD.y ,
                                                infosKDD.width, infosKDD.height,
-                                               Qt::AlignHCenter | Qt::AlignVCenter | Qt::SingleLine,
+                                               Qt::AlignHCenter | Qt::AlignVCenter | Qt::TextSingleLine,
                                                region->text );
 
                         }
@@ -885,9 +887,9 @@ the layout policy feature is implemented !!!
                                                     || KDChartParams::Ring  == params()->chartType() )
                                                 ? region->col
                                                 : region->row ) );
-                                    painter->setPen( QColor( static_cast < int > ( 255- color.red() ),
-                                                static_cast < int > ( 255- color.green() ),
-                                                static_cast < int > ( 255- color.blue() ) ) );
+                                    painter->setPen( QColor( static_cast < int > ( 255- color.Qt::red() ),
+                                                static_cast < int > ( 255- color.Qt::green() ),
+                                                static_cast < int > ( 255- color.Qt::blue() ) ) );
                                 }
                             }
                         }else{
@@ -1177,7 +1179,7 @@ QPoint KDChartPainter::pointOnCircle( const QRect& rect, double angle )
 
 }
 
-void KDChartPainter::makeArc( QPointArray& points,
+void KDChartPainter::makeArc( Q3PointArray& points,
                               const QRect& rect,
                               double startAngle, double angles )
 {
@@ -1449,7 +1451,7 @@ void KDChartPainter::paintLegend( QPainter* painter,
                 bFirstLF = false;
             }
             painter->setBrush( QBrush( params()->dataColor( dataset ),
-                               QBrush::SolidPattern ) );
+                               Qt::SolidPattern ) );
 
             if( params()->legendShowLines() ){
                 painter->setPen( QPen( params()->dataColor( dataset ), 2,
@@ -1508,7 +1510,7 @@ void KDChartPainter::paintLegend( QPainter* painter,
     }
 
     painter->setPen( QPen( Qt::black, 1 ) );
-    painter->setBrush( QBrush::NoBrush );
+    painter->setBrush( Qt::NoBrush );
     if( !bFrameFound )
       painter->drawRect( _legendRect );
     
@@ -1647,7 +1649,7 @@ void KDChartPainter::paintHeaderFooter( QPainter* painter,
             rect.setWidth(  rect.width() -2*dXY +1 );
             rect.setHeight( rect.height()-2*dXY +1 );
             painter->drawText( rect,
-                    Qt::AlignLeft | Qt::AlignTop | Qt::SingleLine,
+                    Qt::AlignLeft | Qt::AlignTop | Qt::TextSingleLine,
                     txt );
         }
     }
@@ -2653,7 +2655,7 @@ KDChartDataRegion* KDChartPainter::drawMarker( QPainter* painter,
         case KDChartParams::LineMarkerDiamond:{
                                                 const QBrush oldBrush( painter->brush() );
                                                 painter->setBrush( color );
-                                                QPointArray points( 4 );
+                                                Q3PointArray points( 4 );
                                                 points.setPoint( 0, p.x() - xsize2, p.y() );
                                                 points.setPoint( 1, p.x(),          p.y() - ysize2 );
                                                 points.setPoint( 2, p.x() + xsize2, p.y() );
@@ -2703,7 +2705,7 @@ KDChartDataRegion* KDChartPainter::drawMarker( QPainter* painter,
                                                 painter->setBrush( Qt::NoBrush );
                                                 painter->drawEllipse( p.x() - xsize2, p.y() - ysize2, xsize, ysize );
                                                 if ( regions ) {
-                                                    QPointArray points;
+                                                    Q3PointArray points;
                                                     points.makeEllipse( p.x() - xsize2, p.y() - ysize2, xsize, ysize );
                                                     // Don't use points for drawing after this!
                                                     points.translate( deltaX, deltaY );
@@ -2724,7 +2726,7 @@ KDChartDataRegion* KDChartPainter::drawMarker( QPainter* painter,
                                                 const QBrush oldBrush( painter->brush() );
                                                 painter->setBrush( color );
                                                 int numPoints = (ysize && xsize) ? 12 : 4;
-                                                QPointArray points( numPoints );
+                                                Q3PointArray points( numPoints );
                                                 if( ysize && xsize ){
                                                     points.setPoint( 0, p.x() - xsize6, p.y() - ysize6 );
                                                     points.setPoint( 1, p.x() - xsize6, p.y() - ysize2 );
@@ -2789,7 +2791,7 @@ KDChartDataRegion* KDChartPainter::drawMarker( QPainter* painter,
                                                 painter->setBrush( color );
                                                 painter->drawEllipse( p.x() - xsize2, p.y() - ysize2, xsize, ysize );
                                                 if ( regions ) {
-                                                    QPointArray points;
+                                                    Q3PointArray points;
                                                     points.makeEllipse( p.x() - xsize2, p.y() - ysize2, xsize, ysize );
                                                     // Don't use points for drawing after this!
                                                     points.translate( deltaX, deltaY );

@@ -673,7 +673,7 @@ KexiFormView::storeData(bool dontAsk)
 
 		QString originalFileName(h.originalFileName());
 		QFileInfo fi(originalFileName);
-		QString caption(fi.baseName().replace('_', " ").simplifyWhiteSpace());
+		QString caption(fi.baseName().replace('_', " ").simplified());
 ////////
 
 //		KexiDB::PreparedStatement st(KexiDB::PreparedStatement::InsertStatement, *conn, *blobsTable);
@@ -697,8 +697,8 @@ KexiFormView::storeData(bool dontAsk)
 #endif
 		delete blobsFieldsWithoutID;
 		blobsFieldsWithoutID=0;
-		const Q_ULLONG storedBLOBID = conn->lastInsertedAutoIncValue("o_id", "kexi__blobs");
-		if ((Q_ULLONG)-1 == storedBLOBID) {
+		const quint64 storedBLOBID = conn->lastInsertedAutoIncValue("o_id", "kexi__blobs");
+		if ((quint64)-1 == storedBLOBID) {
 //! @todo show message?
 			return false;
 		}
@@ -1072,8 +1072,8 @@ KexiFormView::insertAutoFields(const QString& sourceMimeType, const QString& sou
 		//resize form if needed
 		QRect oldFormRect( m_dbform->geometry() );
 		QRect newFormRect( oldFormRect );
-		newFormRect.setWidth(QMAX(m_dbform->width(), widgetsToSelect.last()->geometry().right()+1));
-		newFormRect.setHeight(QMAX(m_dbform->height(), widgetsToSelect.last()->geometry().bottom()+1));
+		newFormRect.setWidth(qMax(m_dbform->width(), widgetsToSelect.last()->geometry().right()+1));
+		newFormRect.setHeight(qMax(m_dbform->height(), widgetsToSelect.last()->geometry().bottom()+1));
 		if (newFormRect != oldFormRect) {
 			//1. resize by hand
 			m_dbform->setGeometry( newFormRect );

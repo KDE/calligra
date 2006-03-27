@@ -2,7 +2,9 @@
 #ifndef SCROLLVIEW_H
 #define SCROLLVIEW_H
 
-#include <qscrollview.h>
+#include <q3scrollview.h>
+//Added by qt3to4:
+#include <QFocusEvent>
 
 #include "kformuladefs.h"
 
@@ -11,7 +13,7 @@ class KFormulaWidget;
 using namespace KFormula;
 
 
-class ScrollView : public QScrollView {
+class ScrollView : public Q3ScrollView {
     Q_OBJECT
 public:
     ScrollView();

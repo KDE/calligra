@@ -30,7 +30,11 @@
 #include "KDChartParams.h"
 
 #include <qpainter.h>
-#include <qvaluestack.h>
+#include <q3valuestack.h>
+//Added by qt3to4:
+#include <Q3PointArray>
+#include <Q3ValueList>
+#include <Q3MemArray>
 
 #include <stdlib.h>
 
@@ -84,7 +88,7 @@ void KDChartRingPainter::paintData( QPainter* painter,
 
     QRect ourClipRect( _dataRect );
 
-    const QWMatrix & world = painter->worldMatrix();
+    const QMatrix & world = painter->worldMatrix();
     ourClipRect =
 #if COMPAT_QT_VERSION >= 0x030000
         world.mapRect( ourClipRect );
@@ -151,7 +155,7 @@ void KDChartRingPainter::paintData( QPainter* painter,
 
     // We need the row sums anyway later, so we can just as well compute them
     // here, because we need them in case of relative ring thicknesses.
-    QMemArray<double> rowsums;
+    Q3MemArray<double> rowsums;
     double totalSum = 0.0;
     rowsums.resize( datasetEnd+1 ); // not datasetNum!
     for( int d1 = (int)datasetStart; d1 <= (int)datasetEnd; d1++ ) {
@@ -159,7 +163,7 @@ void KDChartRingPainter::paintData( QPainter* painter,
         totalSum += rowsums[d1];
     }
 
-    QMemArray<int> ringthicknesses;
+    Q3MemArray<int> ringthicknesses;
     ringthicknesses.resize( datasetEnd+1 ); // not datasetNum!
 
     // constant ring thickness
@@ -199,7 +203,7 @@ void KDChartRingPainter::paintData( QPainter* painter,
                 // of explodeable values, the current value must be on this
                 // list.
 
-                QValueList<int> explodeList = params()->explodeValues();
+                Q3ValueList<int> explodeList = params()->explodeValues();
                 bool explode = params()->explode() && // explosion is on at all
                     ( dataset == (int)datasetStart ) && // outermost ring
                     ( ( explodeList.count() == 0 ) || // either nothing on explode list
@@ -275,11 +279,11 @@ void KDChartRingPainter::drawOneSegment( QPainter* painter,
             innerRadius2, innerRadius2 );
 
     // Start with getting the points for the inner arc.
-    QPointArray innerArc;
+    Q3PointArray innerArc;
     makeArc( innerArc, innerRect, startAngle, angles );
 
     // And the points for the outer arc
-    QPointArray outerArc;
+    Q3PointArray outerArc;
     makeArc( outerArc, outerRect, startAngle, angles );
 
     // Now copy the points from the outer arc in the reverse order onto the

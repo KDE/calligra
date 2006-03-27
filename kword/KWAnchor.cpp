@@ -24,6 +24,8 @@
 #include "KWView.h"
 #include <KoXmlWriter.h>
 #include <kdebug.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 //#define DEBUG_DRAWING
 
@@ -36,7 +38,7 @@ KWAnchor::KWAnchor( KoTextDocument *textDocument, KWFrameSet * frameset, int fra
 
 KWAnchor::~KWAnchor()
 {
-    kdDebug(32001) << "KWAnchor::~KWAnchor" << endl;
+    kDebug(32001) << "KWAnchor::~KWAnchor" << endl;
 }
 
 void KWAnchor::setFormat( KoTextFormat* format )
@@ -51,19 +53,19 @@ void KWAnchor::finalize()
 
     int paragx = paragraph()->rect().x();
     int paragy = paragraph()->rect().y();
-    kdDebug(32001) << this << " KWAnchor::finalize " << x() << "," << y() << " paragx=" << paragx << " paragy=" << paragy << endl;
+    kDebug(32001) << this << " KWAnchor::finalize " << x() << "," << y() << " paragx=" << paragx << " paragy=" << paragy << endl;
 
     KWTextFrameSet * fs = static_cast<KWTextDocument *>(textDocument())->textFrameSet();
     KoPoint dPoint;
     if ( fs->internalToDocument( QPoint( x()+paragx, y()+paragy ), dPoint ) )
     {
-        //kdDebug(32001) << "KWAnchor::finalize moving frame to " << dPoint.x() << "," << dPoint.y() << endl;
+        //kDebug(32001) << "KWAnchor::finalize moving frame to " << dPoint.x() << "," << dPoint.y() << endl;
         // Move the frame to position dPoint.
         m_frameset->moveFloatingFrame( m_frameNum, dPoint );
     } else
     {
         // This can happen if the page hasn't been created yet
-        kdDebug(32001) << "KWAnchor::move internalToDocument returned 0L for " << x()+paragx << ", " << y()+paragy << endl;
+        kDebug(32001) << "KWAnchor::move internalToDocument returned 0L for " << x()+paragx << ", " << y()+paragy << endl;
     }
 }
 
@@ -78,7 +80,7 @@ void KWAnchor::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, 
     Q_ASSERT( x == xpos );
     Q_ASSERT( y == ypos );
     if ( x != xpos || y != ypos )
-        kdDebug() << "Warning: x=" << x << " y=" << y << " xpos=" << xpos << " ypos=" << ypos << endl;
+        kDebug() << "Warning: x=" << x << " y=" << y << " xpos=" << xpos << " ypos=" << ypos << endl;
 
     // The containing text-frameset.
     KWTextFrameSet * fs = static_cast<KWTextDocument *>(textDocument())->textFrameSet();
@@ -88,20 +90,20 @@ void KWAnchor::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, 
     int paragy = paragraph()->rect().y();
     QRect inlineFrameLU( paragx+xpos, paragy+ypos, width, height );
 #ifdef DEBUG_DRAWING
-    kdDebug(32001) << "KWAnchor::draw x:" << x << ", y:" << y << " paragx=" << paragx << " paragy=" << paragy << endl;
-    kdDebug(32001) << "               inline frame in LU coordinates: " << inlineFrameLU << endl;
+    kDebug(32001) << "KWAnchor::draw x:" << x << ", y:" << y << " paragx=" << paragx << " paragy=" << paragy << endl;
+    kDebug(32001) << "               inline frame in LU coordinates: " << inlineFrameLU << endl;
 #endif
 
     QRect crectLU = QRect( (cx > 0 ? cx : 0)+paragx, cy+paragy, cw, ch );
 #ifdef DEBUG_DRAWING
-    kdDebug(32001) << "               crect in LU coordinates: " << DEBUGRECT( crectLU ) << endl;
+    kDebug(32001) << "               crect in LU coordinates: " << DEBUGRECT( crectLU ) << endl;
 #endif
 
     crectLU = crectLU.intersect ( inlineFrameLU ); // KoTextParag::paintDefault could even do this
 
 
 #ifdef DEBUG_DRAWING
-    kdDebug(32001) << "               crect&frame in LU coordinates: " << DEBUGRECT( crectLU ) << endl;
+    kDebug(32001) << "               crect&frame in LU coordinates: " << DEBUGRECT( crectLU ) << endl;
 #endif
 
     // Convert crect to document coordinates, first topleft then bottomright
@@ -127,7 +129,7 @@ void KWAnchor::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, 
     crect.rBottom() += 2; // HACK: 1 doesn't do it, it leaves a white line along window borders
     crect.rRight() += 1;
 #ifdef DEBUG_DRAWING
-    kdDebug() << "               crect in view coordinates (pixel) : " << DEBUGRECT( crect ) << endl;
+    kDebug() << "               crect in view coordinates (pixel) : " << DEBUGRECT( crect ) << endl;
 #endif
 
     // Ok, we finally have our crect in view coordinates!
@@ -137,16 +139,16 @@ void KWAnchor::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, 
     if ( containingFrame && containingFrame->isCopy() )
     {
         // Find last real frame, in case we are in a copied frame
-        QPtrListIterator<KWFrame> frameIt( fs->frameIterator() );
+        Q3PtrListIterator<KWFrame> frameIt( fs->frameIterator() );
         frameIt.toLast(); // from the end to avoid a 2*N in the worst case
         while ( !frameIt.atFirst() && frameIt.current() != containingFrame ) // look for 'containingFrame'
             --frameIt;
         if ( frameIt.atFirst() && frameIt.current() != containingFrame )
-            kdWarning() << "KWAnchor::draw: containingFrame not found " << containingFrame << endl;
+            kWarning() << "KWAnchor::draw: containingFrame not found " << containingFrame << endl;
         while ( !frameIt.atFirst() && frameIt.current()->isCopy() ) // go back to last non-copy
             --frameIt;
         containingFrame = frameIt.current();
-        //kdDebug() << "KWAnchor::draw frame=" << containingFrame << endl;
+        //kDebug() << "KWAnchor::draw frame=" << containingFrame << endl;
     }
 
     // Same calculation as in internalToDocument, but we know the frame already
@@ -167,14 +169,14 @@ void KWAnchor::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, 
     p->save();
     p->translate( -topLeftParag.x(), -topLeftParag.y() );
 #ifdef DEBUG_DRAWING
-    kdDebug() << "               translating by " << -topLeftParag.x() << "," << -topLeftParag.y() << endl;
+    kDebug() << "               translating by " << -topLeftParag.x() << "," << -topLeftParag.y() << endl;
 #endif
 
     QColorGroup cg2( cg );
 
     KWFrameViewManager *fvm = 0;
     if(m_frameset->kWordDocument()) {
-        QValueList<KWView *> views = m_frameset->kWordDocument()->getAllViews();
+        Q3ValueList<KWView *> views = m_frameset->kWordDocument()->getAllViews();
         // Note that "views" is empty when the KWDocument is an (inactive) embedded document
         if ( !views.isEmpty() )
             fvm = views.first()->frameViewManager();
@@ -187,25 +189,25 @@ void KWAnchor::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, 
         // To draw the inline frame as selected, we need to look at the inline frame's own size.
         QRect frameRect = crect;
 #ifdef DEBUG_DRAWING
-        kdDebug() << "KWAnchor::draw selected frame. frameRect=" << frameRect << endl;
+        kDebug() << "KWAnchor::draw selected frame. frameRect=" << frameRect << endl;
 #endif
-        p->fillRect( frameRect, QBrush( cg.highlight(), QBrush::Dense4Pattern) );
+        p->fillRect( frameRect, QBrush( cg.highlight(), Qt::Dense4Pattern) );
     }
     p->restore();
 
 #ifdef DEBUG_DRAWING
-    kdDebug() << "KWAnchor::draw done" << endl;
+    kDebug() << "KWAnchor::draw done" << endl;
 #endif
 }
 
 QSize KWAnchor::size() const
 {
     KoSize kosz = m_frameset->floatingFrameSize( m_frameNum );
-    //kdDebug() << "KWAnchor::size in pt: " << kosz.width() << "x" << kosz.height() << endl;
+    //kDebug() << "KWAnchor::size in pt: " << kosz.width() << "x" << kosz.height() << endl;
     KoTextZoomHandler * zh = textDocument()->formattingZoomHandler();
     QSize sz( zh->ptToLayoutUnitPixX( kosz.width() ), zh->ptToLayoutUnitPixY( kosz.height() ) );
-    //kdDebug() << "KWAnchor::size in LU: " << sz.width() << "x" << sz.height() << endl;
-    //kdDebug() << "          size in pixels: " << zh->layoutUnitToPixelX( sz.width() ) << "x"
+    //kDebug() << "KWAnchor::size in LU: " << sz.width() << "x" << sz.height() << endl;
+    //kDebug() << "          size in pixels: " << zh->layoutUnitToPixelX( sz.width() ) << "x"
     //          << zh->layoutUnitToPixelY( sz.height() ) << endl;
     if ( sz.isNull() ) // for some reason, we don't know the size yet
         sz = QSize( width, height ); // LU
@@ -216,7 +218,7 @@ int KWAnchor::ascent() const
 {
     int baseline = m_frameset->floatingFrameBaseline( m_frameNum );
     int ret = ( baseline == -1 ) ? height : baseline;
-    //kdDebug() << "KWAnchor::ascent " << ret << endl;
+    //kDebug() << "KWAnchor::ascent " << ret << endl;
     return ret;
 }
 
@@ -229,11 +231,11 @@ void KWAnchor::resize()
     {
         width = s.width();
         height = s.height();
-        kdDebug(32001) << "KWAnchor::resize " << width << "x" << height << endl;
+        kDebug(32001) << "KWAnchor::resize " << width << "x" << height << endl;
         KoTextParag * parag = paragraph();
         if ( parag )
         {
-            kdDebug(32001) << "KWAnchor::resize invalidating parag " << parag->paragId() << endl;
+            kDebug(32001) << "KWAnchor::resize invalidating parag " << parag->paragId() << endl;
             parag->invalidate( 0 );
         }
     }
@@ -241,13 +243,13 @@ void KWAnchor::resize()
 
 KCommand * KWAnchor::createCommand()
 {
-    kdDebug(32001) << "KWAnchor::addCreateCommand" << endl;
+    kDebug(32001) << "KWAnchor::addCreateCommand" << endl;
     return m_frameset->anchoredObjectCreateCommand( m_frameNum );
 }
 
 KCommand * KWAnchor::deleteCommand()
 {
-    kdDebug(32001) << "KWAnchor::addDeleteCommand" << endl;
+    kDebug(32001) << "KWAnchor::addDeleteCommand" << endl;
     return m_frameset->anchoredObjectDeleteCommand( m_frameNum );
 }
 
@@ -256,7 +258,7 @@ void KWAnchor::setDeleted( bool b )
     // Do this first, because setAnchored->updateAllFrames->isDeleted, so it must have the right value already
     KoTextCustomItem::setDeleted( b );
 
-    kdDebug() << "KWAnchor::setDeleted " << b << endl;
+    kDebug() << "KWAnchor::setDeleted " << b << endl;
     if ( b )
         m_frameset->setAnchored( 0L );
     else

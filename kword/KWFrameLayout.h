@@ -19,7 +19,7 @@
 #ifndef KWFRAMELAYOUT_H
 #define KWFRAMELAYOUT_H
 
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 #include <kdebug.h>
 #include <KoRect.h>
 #include <qmap.h>
@@ -82,8 +82,8 @@ public:
      * @param footnotes list of footnotes framesets HFFs
      * @param endnotes list of endnotes framesets HFFs
      */
-    KWFrameLayout( KWDocument* doc, QPtrList<HeaderFooterFrameset>& headersFooters,
-                   QPtrList<HeaderFooterFrameset>& footnotes, QPtrList<HeaderFooterFrameset>& endnotes )
+    KWFrameLayout( KWDocument* doc, Q3PtrList<HeaderFooterFrameset>& headersFooters,
+                   Q3PtrList<HeaderFooterFrameset>& footnotes, Q3PtrList<HeaderFooterFrameset>& endnotes )
         : m_headersFooters( headersFooters ), m_footnotes( footnotes ), m_endnotes( endnotes ), m_doc( doc )
         {}
 
@@ -108,9 +108,9 @@ protected:
 
 private:
     // A _ref_ to a list. Must remain alive as long as this object.
-    QPtrList<HeaderFooterFrameset>& m_headersFooters;
-    QPtrList<HeaderFooterFrameset>& m_footnotes;
-    QPtrList<HeaderFooterFrameset>& m_endnotes;
+    Q3PtrList<HeaderFooterFrameset>& m_headersFooters;
+    Q3PtrList<HeaderFooterFrameset>& m_footnotes;
+    Q3PtrList<HeaderFooterFrameset>& m_endnotes;
     QMap<KWFrameSet *, bool> m_framesetsToUpdate;
     KWDocument* m_doc;
     int m_lastMainFramePage;

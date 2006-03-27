@@ -21,8 +21,10 @@
 #define XMLWRITER_H
 
 #include <qstring.h>
-#include <qvaluestack.h>
+#include <q3valuestack.h>
 #include <qmap.h>
+//Added by qt3to4:
+#include <Q3CString>
 #include <koffice_export.h>
 
 class QIODevice;
@@ -80,7 +82,7 @@ public:
      * Add an attribute whose value is an integer
      */
     inline void addAttribute( const char* attrName, int value ) {
-        QCString str;
+        Q3CString str;
         str.setNum( value );
         addAttribute( attrName, str.data() );
     }
@@ -88,7 +90,7 @@ public:
      * Add an attribute whose value is an unsigned integer
      */
     inline void addAttribute( const char* attrName, uint value ) {
-        QCString str;
+        Q3CString str;
         str.setNum( value );
         addAttribute( attrName, str.data() );
     }
@@ -107,7 +109,7 @@ public:
     void addAttributePt( const char* attrName, double value );
 
     /// Overloaded version of the one taking a const char* argument, for convenience
-    inline void addAttribute( const char* attrName, const QCString& value ) {
+    inline void addAttribute( const char* attrName, const Q3CString& value ) {
         addAttribute( attrName, value.data() );
     }
     /**
@@ -127,7 +129,7 @@ public:
         addTextNode( str.utf8() );
     }
     /// Overloaded version of the one taking a const char* argument
-    inline void addTextNode( const QCString& cstr ) {
+    inline void addTextNode( const Q3CString& cstr ) {
         addTextNode( cstr.data() );
     }
     /**
@@ -262,7 +264,7 @@ private:
     void init();
 
     QIODevice* m_dev;
-    QValueStack<Tag> m_tags;
+    Q3ValueStack<Tag> m_tags;
     int m_baseIndentLevel;
 
     class Private;

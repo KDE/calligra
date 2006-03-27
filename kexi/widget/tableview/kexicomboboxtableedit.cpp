@@ -226,16 +226,16 @@ QString KexiComboBoxTableEdit::valueForString(const QString& str,
 		return QString::null; //safety
 	//use 'related table data' model
 //-not effective for large sets: please cache it!
-//.stripWhiteSpace() is not generic!
+//.trimmed() is not generic!
 
-	const QString txt = str.stripWhiteSpace();
+	const QString txt = str.trimmed();
 	KexiTableViewData::Iterator it(relData->iterator());
 	for (;it.current();++it) {
-		if (it.current()->at(lookInColumn).toString().stripWhiteSpace()==txt)
+		if (it.current()->at(lookInColumn).toString().trimmed()==txt)
 			break;
 	}
 	if (it.current())
-		return it.current()->at(returnFromColumn).toString().stripWhiteSpace();
+		return it.current()->at(returnFromColumn).toString().trimmed();
 
 	if (column()->relatedDataEditable())
 		return str; //new value entered and that's allowed
@@ -420,10 +420,10 @@ void KexiComboBoxTableEdit::slotButtonClicked()
 		d->button->setOn(false);
 		return;
 	}
-	kdDebug() << "KexiComboBoxTableEdit::slotButtonClicked()" << endl;
+	kDebug() << "KexiComboBoxTableEdit::slotButtonClicked()" << endl;
 //	if (!d->popup || !d->popup->isVisible()) {
 	if (!d->popup || !d->popup->isVisible()) { // || d->button->isOn()) {
-		kdDebug() << "SHOW POPUP" << endl;
+		kDebug() << "SHOW POPUP" << endl;
 		showPopup();
 		d->button->setOn(true);
 	}
@@ -466,7 +466,7 @@ void KexiComboBoxTableEdit::showPopup()
 		d->popup->move( tv->viewport()->mapToGlobal(pos()) + QPoint(0,height()) );//+ rect().bottomLeft() ) );
 		//to avoid flickering: first resize to 0-height, then show and resize back to prev. height
 //		const int h = d->popup->height()
-		const int w = QMAX(d->popup->width(), d->currentEditorWidth);
+		const int w = qMax(d->popup->width(), d->currentEditorWidth);
 		d->popup->resize(w, 0);
 		d->popup->show();
 		d->popup->updateSize(w);
@@ -477,7 +477,7 @@ void KexiComboBoxTableEdit::showPopup()
 			rowToHighlight = -1; //don't highlight: we've a selection
 		}
 		else {
-			rowToHighlight = QMAX( d->popup->tableView()->highlightedRow(), 0);
+			rowToHighlight = qMax( d->popup->tableView()->highlightedRow(), 0);
 		}
 		d->popup->tableView()->setHighlightedRow( rowToHighlight );
 		if (rowToHighlight < d->popup->tableView()->rowsPerPage())
@@ -549,25 +549,25 @@ bool KexiComboBoxTableEdit::handleKeyPress( QKeyEvent *ke, bool editorActive )
 		case Key_Up:
 	//			d->popup->tableView()->selectPrevRow();
 				d->popup->tableView()->setHighlightedRow( 
-					QMAX(highlightedOrSelectedRow-1, 0) );
+					qMax(highlightedOrSelectedRow-1, 0) );
 				updateTextForHighlightedRow();
 				return true;
 		case Key_Down:
 	//			d->popup->tableView()->selectNextRow();
 				d->popup->tableView()->setHighlightedRow( 
-					QMIN(highlightedOrSelectedRow+1, d->popup->tableView()->rows()-1) );
+					qMin(highlightedOrSelectedRow+1, d->popup->tableView()->rows()-1) );
 				updateTextForHighlightedRow();
 				return true;
 		case Key_PageUp:
 	//			d->popup->tableView()->selectPrevPage();
 				d->popup->tableView()->setHighlightedRow( 
-					QMAX(highlightedOrSelectedRow-d->popup->tableView()->rowsPerPage(), 0) );
+					qMax(highlightedOrSelectedRow-d->popup->tableView()->rowsPerPage(), 0) );
 				updateTextForHighlightedRow();
 				return true;
 		case Key_PageDown:
 	//			d->popup->tableView()->selectNextPage();
 				d->popup->tableView()->setHighlightedRow( 
-					QMIN(highlightedOrSelectedRow+d->popup->tableView()->rowsPerPage(), 
+					qMin(highlightedOrSelectedRow+d->popup->tableView()->rowsPerPage(), 
 					 d->popup->tableView()->rows()-1) );
 				updateTextForHighlightedRow();
 				return true;

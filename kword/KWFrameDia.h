@@ -26,21 +26,28 @@
 #include <kdialogbase.h>
 #include <KoUnit.h>
 #include <KoUnitWidgets.h>
-#include <qgroupbox.h>
+#include <q3groupbox.h>
+//Added by qt3to4:
+#include <QCloseEvent>
+#include <Q3GridLayout>
+#include <Q3PtrList>
+#include <Q3Frame>
+#include <QLabel>
+#include <QMouseEvent>
 
 class KoBorderPreview;
 class KWFrame;
 class KWDocument;
 class KWPage;
 class QWidget;
-class QGridLayout;
-class QGroupBox;
+class Q3GridLayout;
+class Q3GroupBox;
 class QRadioButton;
 class QCheckBox;
 class QLabel;
 class QCloseEvent;
-class QListView;
-class QListViewItem;
+class Q3ListView;
+class Q3ListViewItem;
 class QLineEdit;
 class KColorButton;
 class KDoubleNumInput;
@@ -48,7 +55,7 @@ class KDoubleNumInput;
 /******************************************************************/
 /* Class: KWBrushStylePreview                                     */
 /******************************************************************/
-class KWBrushStylePreview : public QFrame
+class KWBrushStylePreview : public Q3Frame
 {
     Q_OBJECT
 public:
@@ -65,7 +72,7 @@ private:
  * A widget showing unitwidgets for 4 doubles (for left/right/top/bottom values)
  * and a checkbox to synchronize changes to all values
  */
-class KWFourSideConfigWidget : public QGroupBox
+class KWFourSideConfigWidget : public Q3GroupBox
 {
     Q_OBJECT
 public:
@@ -102,7 +109,7 @@ public:
     /** Contructor when the dialog is used on creation of m_frame */
     KWFrameDia( QWidget *parent, KWFrame *_frame,KWDocument *_doc,FrameSetType _ft);
     KWFrameDia( QWidget *parent, KWFrame *_frame);
-    KWFrameDia( QWidget *parent, QPtrList<KWFrame> allFrames);
+    KWFrameDia( QWidget *parent, Q3PtrList<KWFrame> allFrames);
     //KWFrameDia( QWidget *parent, KWCanvas *_canvas);
 
     //void setCanvas(KWCanvas *_canvas) {canvas =_canvas;}
@@ -131,7 +138,7 @@ protected:
 protected slots:
     virtual void slotApply();
     virtual void slotOk();
-    void connectListSelected( QListViewItem * );
+    void connectListSelected( Q3ListViewItem * );
     void setFrameBehaviorInputOn();
     void setFrameBehaviorInputOff();
     void slotFloatingToggled(bool);
@@ -154,8 +161,8 @@ protected slots:
 private:
     // TAB 1:
     QWidget *m_tab1;
-    QGridLayout *m_grid1, *m_eofGrid, *m_onpGrid, *m_sideGrid;
-    QGroupBox *m_endOfFrame, *m_onNewPage, *m_sideHeads;
+    Q3GridLayout *m_grid1, *m_eofGrid, *m_onpGrid, *m_sideGrid;
+    Q3GroupBox *m_endOfFrame, *m_onNewPage, *m_sideHeads;
     QCheckBox *m_cbCopy, *m_cbAspectRatio, *m_cbAllFrames;
     QCheckBox *m_cbProtectContent;
     QRadioButton *m_rResizeFrame, *m_rAppendFrame, *m_rNoShow, *m_reconnect, *m_noFollowup, *m_copyRadio;
@@ -167,19 +174,19 @@ private:
     QWidget *m_tab2;
     QRadioButton *m_rRunNo, *m_rRunBounding, *m_rRunSkip;
     QRadioButton *m_rRunLeft, *m_rRunRight, *m_rRunBiggest;
-    QGroupBox *m_runGroup, *m_runSideGroup;
+    Q3GroupBox *m_runGroup, *m_runSideGroup;
     KWFourSideConfigWidget* m_raDistConfigWidget;
 
     // TAB 3:
     QWidget *m_tab3;
     QLineEdit *m_eFrameSetName;
-    QListView *m_lFrameSList;
+    Q3ListView *m_lFrameSList;
     QRadioButton *m_rExistingFrameset, *m_rNewFrameset;
 
 
     // TAB 4:
     QWidget *m_tab4;
-    QGroupBox *m_grp1;
+    Q3GroupBox *m_grp1;
     QLabel *m_lx, *m_ly, *m_lw, *m_lh;
     KoUnitDoubleSpinBox *m_sx, *m_sy, *m_sw, *m_sh;
     KWFourSideConfigWidget* m_paddingConfigWidget;
@@ -205,7 +212,7 @@ private:
 
     KWFrame *m_frame;
     KWFrame *m_mainFrame;
-    QPtrList<KWFrame> m_allFrames;
+    Q3PtrList<KWFrame> m_allFrames;
     KWDocument *m_doc;
     FrameSetType m_frameType;
     bool m_frameSetFloating;

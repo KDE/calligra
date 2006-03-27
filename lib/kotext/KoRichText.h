@@ -37,16 +37,20 @@
 #ifndef KORICHTEXT_H
 #define KORICHTEXT_H
 
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 #include <qrect.h>
 #include <qmap.h>
 #include <qstringlist.h>
 #include <qcolor.h>
 #include <qsize.h>
-#include <qvaluelist.h>
+#include <q3valuelist.h>
 #include <qobject.h>
-#include <qstylesheet.h>
+#include <q3stylesheet.h>
 #include <qpainter.h>
+//Added by qt3to4:
+#include <QPixmap>
+#include <Q3CString>
+#include <Q3GridLayout>
 #include "KoComplexText.h"
 
 #include <koffice_export.h>
@@ -74,7 +78,7 @@ class KoTextDocCommand;
 class KoXmlWriter;
 class KoSavingContext;
 
-#include <qmemarray.h>
+#include <q3memarray.h>
 #include "KoParagLayout.h"
 ////
 
@@ -141,9 +145,9 @@ private:
 };
 
 #if defined(Q_TEMPLATEDLL)
-// MOC_SKIP_BEGIN
-template class QMemArray<KoTextStringChar>;
-// MOC_SKIP_END
+#ifndef Q_MOC_RUN
+template class Q3MemArray<KoTextStringChar>;
+#endif
 #endif
 
 class KOTEXT_EXPORT KoTextString
@@ -155,7 +159,7 @@ public:
     virtual ~KoTextString();
 
     QString toString() const;
-    static QString toString( const QMemArray<KoTextStringChar> &data );
+    static QString toString( const Q3MemArray<KoTextStringChar> &data );
     QString toReverseString() const;
 
     QString stringToSpellCheck();
@@ -183,9 +187,9 @@ public:
     void setNeedsSpellCheck( bool b ) { bNeedsSpellCheck = b; }
     bool needsSpellCheck() const { return bNeedsSpellCheck; }
 
-    QMemArray<KoTextStringChar> subString( int start = 0, int len = 0xFFFFFF ) const;
+    Q3MemArray<KoTextStringChar> subString( int start = 0, int len = 0xFFFFFF ) const;
     QString mid( int start = 0, int len = 0xFFFFFF ) const; // kotext addition
-    QMemArray<KoTextStringChar> rawData() const { return data.copy(); }
+    Q3MemArray<KoTextStringChar> rawData() const { return data.copy(); }
 
     void operator=( const QString &s ) { clear(); insert( 0, s, 0 ); }
     void operator+=( const QString &s );
@@ -199,7 +203,7 @@ public:
 private:
     void checkBidi() const;
 
-    QMemArray<KoTextStringChar> data;
+    Q3MemArray<KoTextStringChar> data;
     uint bidiDirty : 1;
     uint bidi : 1; // true when the paragraph has right to left characters
     uint rightToLeft : 1;
@@ -264,7 +268,7 @@ public:
     void gotoWordLeft();
     void gotoWordRight();
 
-    void insert( const QString &s, bool checkNewLine, QMemArray<KoTextStringChar> *formatting = 0 );
+    void insert( const QString &s, bool checkNewLine, Q3MemArray<KoTextStringChar> *formatting = 0 );
     void splitAndInsertEmptyParag( bool ind = TRUE, bool updateIds = TRUE );
     bool remove();
     bool removePreviousChar();
@@ -315,9 +319,9 @@ protected:
 };
 
 #if defined(Q_TEMPLATEDLL)
-// MOC_SKIP_BEGIN
-template class QPtrList<KoTextDocCommand>;
-// MOC_SKIP_END
+#ifndef Q_MOC_RUN
+template class Q3PtrList<KoTextDocCommand>;
+#endif
 #endif
 
 class KoTextDocCommandHistory
@@ -342,7 +346,7 @@ public:
     int currentPosition() const { return current; }
 
 private:
-    QPtrList<KoTextDocCommand> history;
+    Q3PtrList<KoTextDocCommand> history;
     int current, steps;
 
 };
@@ -352,9 +356,9 @@ private:
 #include "KoTextCustomItem.h"
 
 #if defined(Q_TEMPLATEDLL)
-// MOC_SKIP_BEGIN
+#ifndef Q_MOC_RUN
 template class QMap<QString, QString>;
-// MOC_SKIP_END
+#endif
 #endif
 
 #if 0
@@ -362,7 +366,7 @@ class KoTextImage : public KoTextCustomItem
 {
 public:
     KoTextImage( KoTextDocument *p, const QMap<QString, QString> &attr, const QString& context,
-		QMimeSourceFactory &factory );
+		Q3MimeSourceFactory &factory );
     virtual ~KoTextImage();
 
     Placement placement() const { return place; }
@@ -389,7 +393,7 @@ class KoTextHorizontalLine : public KoTextCustomItem
 {
 public:
     KoTextHorizontalLine( KoTextDocument *p, const QMap<QString, QString> &attr, const QString& context,
-			 QMimeSourceFactory &factory );
+			 Q3MimeSourceFactory &factory );
     virtual ~KoTextHorizontalLine();
 
     //void setPainter( QPainter*, bool );
@@ -405,9 +409,9 @@ private:
 };
 
 #if defined(Q_TEMPLATEDLL)
-// MOC_SKIP_BEGIN
-template class QPtrList<KoTextCustomItem>;
-// MOC_SKIP_END
+#ifndef Q_MOC_RUN
+template class Q3PtrList<KoTextCustomItem>;
+#endif
 #endif
 
 class KOTEXT_EXPORT KoTextFlow
@@ -455,8 +459,8 @@ private:
     int w;
     //int pagesize;
 
-    QPtrList<KoTextCustomItem> leftItems;
-    QPtrList<KoTextCustomItem> rightItems;
+    Q3PtrList<KoTextCustomItem> leftItems;
+    Q3PtrList<KoTextCustomItem> rightItems;
 
 };
 
@@ -471,9 +475,9 @@ public:
     KoTextTableCell( KoTextTable* table,
 		    int row, int column,
 		    const QMap<QString, QString> &attr,
-		    const QStyleSheetItem* style,
+		    const Q3StyleSheetItem* style,
 		    const KoTextFormat& fmt, const QString& context,
-		    QMimeSourceFactory &factory, QStyleSheet *sheet, const QString& doc );
+		    Q3MimeSourceFactory &factory, Q3StyleSheet *sheet, const QString& doc );
     KoTextTableCell( KoTextTable* table, int row, int column );
     virtual ~KoTextTableCell();
 
@@ -528,10 +532,10 @@ private:
 };
 
 #if defined(Q_TEMPLATEDLL)
-// MOC_SKIP_BEGIN
-template class QPtrList<KoTextTableCell>;
+#ifndef Q_MOC_RUN
+template class Q3PtrList<KoTextTableCell>;
 template class QMap<KoTextCursor*, int>;
-// MOC_SKIP_END
+#endif
 #endif
 
 class KoTextTable: public KoTextCustomItem
@@ -567,7 +571,7 @@ public:
     int minimumWidth() const { return layout ? layout->minimumSize().width() : 0; }
     int widthHint() const { return ( layout ? layout->sizeHint().width() : 0 ) + 2 * outerborder; }
 
-    QPtrList<KoTextTableCell> tableCells() const { return cells; }
+    Q3PtrList<KoTextTableCell> tableCells() const { return cells; }
 
     QRect geometry() const { return layout ? layout->geometry() : QRect(); }
     bool isStretching() const { return stretch; }
@@ -577,8 +581,8 @@ private:
     void addCell( KoTextTableCell* cell );
 
 private:
-    QGridLayout* layout;
-    QPtrList<KoTextTableCell> cells;
+    Q3GridLayout* layout;
+    Q3PtrList<KoTextTableCell> cells;
     QPainter* painter;
     int cachewidth;
     int fixwidth;
@@ -613,7 +617,7 @@ struct KoTextDocumentSelection
 class KOTEXT_EXPORT KoTextDocDeleteCommand : public KoTextDocCommand
 {
 public:
-    KoTextDocDeleteCommand( KoTextDocument *d, int i, int idx, const QMemArray<KoTextStringChar> &str );
+    KoTextDocDeleteCommand( KoTextDocument *d, int i, int idx, const Q3MemArray<KoTextStringChar> &str );
     //KoTextDocDeleteCommand( KoTextParag *p, int idx, const QMemArray<KoTextStringChar> &str );
     virtual ~KoTextDocDeleteCommand();
 
@@ -624,7 +628,7 @@ public:
 protected:
     int id, index;
     KoTextParag *parag;
-    QMemArray<KoTextStringChar> text;
+    Q3MemArray<KoTextStringChar> text;
 
 };
 
@@ -632,9 +636,9 @@ protected:
 class KoTextDocInsertCommand : public KoTextDocDeleteCommand
 {
 public:
-    KoTextDocInsertCommand( KoTextDocument *d, int i, int idx, const QMemArray<KoTextStringChar> &str )
+    KoTextDocInsertCommand( KoTextDocument *d, int i, int idx, const Q3MemArray<KoTextStringChar> &str )
 	: KoTextDocDeleteCommand( d, i, idx, str ) {}
-    KoTextDocInsertCommand( KoTextParag *p, int idx, const QMemArray<KoTextStringChar> &str )
+    KoTextDocInsertCommand( KoTextParag *p, int idx, const Q3MemArray<KoTextStringChar> &str )
 	: KoTextDocDeleteCommand( p, idx, str ) {}
     virtual ~KoTextDocInsertCommand() {}
 
@@ -648,7 +652,7 @@ public:
 class KoTextDocFormatCommand : public KoTextDocCommand
 {
 public:
-    KoTextDocFormatCommand( KoTextDocument *d, int sid, int sidx, int eid, int eidx, const QMemArray<KoTextStringChar> &old, const KoTextFormat *f, int fl );
+    KoTextDocFormatCommand( KoTextDocument *d, int sid, int sidx, int eid, int eidx, const Q3MemArray<KoTextStringChar> &old, const KoTextFormat *f, int fl );
     virtual ~KoTextDocFormatCommand();
 
     Commands type() const { return Format; }
@@ -658,7 +662,7 @@ public:
 protected:
     int startId, startIndex, endId, endIndex;
     KoTextFormat *format;
-    QMemArray<KoTextStringChar> oldFormats;
+    Q3MemArray<KoTextStringChar> oldFormats;
     int flags;
 
 };
@@ -666,7 +670,7 @@ protected:
 class KoTextAlignmentCommand : public KoTextDocCommand
 {
 public:
-    KoTextAlignmentCommand( KoTextDocument *d, int fParag, int lParag, int na, const QMemArray<int> &oa );
+    KoTextAlignmentCommand( KoTextDocument *d, int fParag, int lParag, int na, const Q3MemArray<int> &oa );
     virtual ~KoTextAlignmentCommand() {}
 
     Commands type() const { return Alignment; }
@@ -676,7 +680,7 @@ public:
 private:
     int firstParag, lastParag;
     int newAlign;
-    QMemArray<int> oldAligns;
+    Q3MemArray<int> oldAligns;
 
 };
 
@@ -782,7 +786,7 @@ private:
     bool unused; // for future extensions
 
 #ifdef HAVE_THAI_BREAKS
-    static QCString *thaiCache;
+    static Q3CString *thaiCache;
     static KoTextString *cachedString;
     static ThBreakIterator *thaiIt;
 #endif

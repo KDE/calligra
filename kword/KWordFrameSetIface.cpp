@@ -358,7 +358,7 @@ void KWordFrameSetIface::setRightBorderStyle(const QString & _style)
         tmp.setStyle(KoBorder::DOUBLE_LINE);
     else
     {
-        kdDebug()<<" style :"<<_style<<" do not exist!\n";
+        kDebug()<<" style :"<<_style<<" do not exist!\n";
         return;
     }
     m_frame->frame( 0 )->setRightBorder(tmp);
@@ -381,7 +381,7 @@ void KWordFrameSetIface::setLeftBorderStyle(const QString & _style)
         tmp.setStyle(KoBorder::DOUBLE_LINE);
     else
     {
-        kdDebug()<<" style :"<<_style<<" do not exist!\n";
+        kDebug()<<" style :"<<_style<<" do not exist!\n";
         return;
     }
     m_frame->frame( 0 )->setLeftBorder(tmp);
@@ -406,7 +406,7 @@ void KWordFrameSetIface::setTopBorderStyle(const QString & _style)
         tmp.setStyle(KoBorder::DOUBLE_LINE);
     else
     {
-        kdDebug()<<" style :"<<_style<<" do not exist!\n";
+        kDebug()<<" style :"<<_style<<" do not exist!\n";
         return;
     }
     m_frame->frame( 0 )->setTopBorder(tmp);
@@ -429,7 +429,7 @@ void KWordFrameSetIface::setBottomBorderStyle(const QString & _style)
         tmp.setStyle(KoBorder::DOUBLE_LINE);
     else
     {
-        kdDebug()<<" style :"<<_style<<" do not exist!\n";
+        kDebug()<<" style :"<<_style<<" do not exist!\n";
         return;
     }
     m_frame->frame( 0 )->setBottomBorder(tmp);
@@ -514,7 +514,7 @@ void KWordFrameSetIface::setFrameSetInfo( const QString & _type)
     }
     else
     {
-        kdDebug()<<" Error in setFrameSetInfo() :"<<_type<<endl;
+        kDebug()<<" Error in setFrameSetInfo() :"<<_type<<endl;
     }
 }
 

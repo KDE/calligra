@@ -51,7 +51,7 @@ namespace KChart
 KChartConfigDialog::KChartConfigDialog( KChartParams* params,
 					QWidget* parent, int flags,
 					KDChartTableData *dat ) :
-    QTabDialog( parent, "Chart config dialog", true ),
+    Q3TabDialog( parent, "Chart config dialog", true ),
     m_params( params ),
 
     m_dataPage(0),

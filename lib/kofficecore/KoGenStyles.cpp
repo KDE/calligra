@@ -20,6 +20,8 @@
 #include <KoXmlWriter.h>
 #include <float.h>
 #include <kdebug.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 KoGenStyles::KoGenStyles()
 {
@@ -97,9 +99,9 @@ QString KoGenStyles::makeUniqueName( const QString& base, int flags ) const
     return name;
 }
 
-QValueList<KoGenStyles::NamedStyle> KoGenStyles::styles( int type, bool markedForStylesXml ) const
+Q3ValueList<KoGenStyles::NamedStyle> KoGenStyles::styles( int type, bool markedForStylesXml ) const
 {
-    QValueList<KoGenStyles::NamedStyle> lst;
+    Q3ValueList<KoGenStyles::NamedStyle> lst;
     const NameMap& nameMap = markedForStylesXml ? m_autoStylesInStylesDotXml : m_styleNames;
     StyleArray::const_iterator it = m_styleArray.begin();
     const StyleArray::const_iterator end = m_styleArray.end();

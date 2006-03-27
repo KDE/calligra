@@ -33,7 +33,7 @@
 #include <klocale.h>
 #include <kdebug.h>
 #include <kapplication.h>
-#include <ktoolbarbutton.h>
+
 #include <kstandarddirs.h>
 #include <kiconloader.h>
 
@@ -93,7 +93,7 @@ int KivioArrowHeadAction::plug( QWidget* widget, int index)
     if ( hasIconSet() )
       id = menu->insertItem( iconSet(), text(), popupMenu(), -1, index );
     else
-      id = menu->insertItem( kapp->iconLoader()->loadIcon(icon(), KIcon::Small),
+      id = menu->insertItem( kapp->iconLoader()->loadIcon(icon(), K3Icon::Small),
         text(), popupMenu(), -1, index );
 
     if ( !isEnabled() )

@@ -21,9 +21,12 @@
 #ifndef __ko_koolbar_h__
 #define __ko_koolbar_h__
 
-#include <qframe.h>
+#include <q3frame.h>
 #include <qpixmap.h>
-#include <qintdict.h>
+#include <q3intdict.h>
+//Added by qt3to4:
+#include <QMouseEvent>
+#include <QResizeEvent>
 #include <koffice_export.h>
 class QPushButton;
 class QPixmap;
@@ -80,13 +83,13 @@ public:
   void setEnabled( bool _e ) { m_bEnabled = _e; }
   KoKoolBarItem* item( int _id ) const { return m_mapItems[ _id ]; }
   int items() const { return m_mapItems.size(); }
-  QIntDictIterator<KoKoolBarItem> iterator() const { return QIntDictIterator<KoKoolBarItem>( m_mapItems ); }
+  Q3IntDictIterator<KoKoolBarItem> iterator() const { return Q3IntDictIterator<KoKoolBarItem>( m_mapItems ); }
 
 public slots:
   void pressed();
 
 protected:
-  QIntDict<KoKoolBarItem> m_mapItems;
+  Q3IntDict<KoKoolBarItem> m_mapItems;
   KoKoolBar* m_pBar;
   QString m_strText;
   int m_id;
@@ -96,7 +99,7 @@ protected:
   KoKoolBarGroupPrivate *d;
 };
 
-class KoKoolBarBox : public QFrame
+class KoKoolBarBox : public Q3Frame
 {
   Q_OBJECT
 public:
@@ -155,7 +158,7 @@ public:
 protected:
   virtual void resizeEvent( QResizeEvent *_ev );
 
-  QIntDict<KoKoolBarGroup> m_mapGroups;
+  Q3IntDict<KoKoolBarGroup> m_mapGroups;
 
   int m_iActiveGroup;
   KoKoolBarBox* m_pBox;

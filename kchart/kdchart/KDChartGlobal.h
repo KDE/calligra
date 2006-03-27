@@ -180,10 +180,10 @@
 #endif // Q_OS_TEMP
 #endif // QT_NO_COMPAT
 
-#define QPtrList QList
-#define QPtrListIterator QListIterator
-#define QPtrVector QVector
-#define QMemArray QArray
+#define Q3PtrList QList
+#define Q3PtrListIterator QListIterator
+#define Q3PtrVector QVector
+#define Q3MemArray QArray
 
 #include <qlist.h>
 #include <qvector.h>
@@ -191,9 +191,9 @@
 
 #else
 
-#include <qptrlist.h>
-#include <qptrvector.h>
-#include <qmemarray.h>
+#include <q3ptrlist.h>
+#include <q3ptrvector.h>
+#include <q3memarray.h>
 
 #endif
 // end of #if COMPAT_QT_VERSION < 0x030000

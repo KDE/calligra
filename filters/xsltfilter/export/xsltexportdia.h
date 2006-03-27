@@ -34,7 +34,7 @@ class XSLTExportDia : public XSLTDialog
     QString _fileOut;
     KoStoreDevice* _in;
     /** xslt file current */
-    KURL _currentFile;
+    KUrl _currentFile;
     QCString _format;
     KConfig* _config;
     /** List of the most recent xslt file used. */

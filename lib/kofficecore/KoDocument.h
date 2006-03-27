@@ -1,3 +1,8 @@
+//Added by qt3to4:
+#include <QPixmap>
+#include <Q3CString>
+#include <Q3PtrList>
+#include <Q3ValueList>
 // -*- c-basic-offset: 4 -*-
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
@@ -25,7 +30,7 @@
 class KoTextDocument;
 namespace std { }
 using namespace std;
-#include <qwmatrix.h>
+#include <qmatrix.h>
 
 #include <kparts/part.h>
 #include <kurl.h>
@@ -61,7 +66,7 @@ class KoOpenPane;
 class KOFFICECORE_EXPORT KoDocument : public KParts::ReadWritePart
 {
     Q_OBJECT
-    Q_PROPERTY( QCString dcopObjectId READ dcopObjectId)
+    Q_PROPERTY( Q3CString dcopObjectId READ dcopObjectId)
     Q_PROPERTY( bool backupFile READ backupFile WRITE setBackupFile )
 
 public:
@@ -142,7 +147,7 @@ public:
      * Reimplemented from KParts::ReadWritePart for internal reasons
      * (for the autosave functionality)
      */
-    virtual bool openURL( const KURL & url );
+    virtual bool openURL( const KUrl & url );
 
     /**
      * Opens the document given by @p url, without storing the URL
@@ -154,7 +159,7 @@ public:
      *       Open operation (in any reimplementation of openURL() or openFile())
      *       call isImporting().
      */
-    bool import( const KURL &url );
+    bool import( const KUrl &url );
 
     /**
      * Saves the document as @p url without changing the state of the
@@ -166,7 +171,7 @@ public:
      *       from an ordinary Save operation (in any reimplementation of
      *       saveFile()) call isExporting().
      */
-    bool exp0rt( const KURL &url );
+    bool exp0rt( const KUrl &url );
 
     /**
      * @brief Sets whether the document can be edited or is read only.
@@ -187,7 +192,7 @@ public:
      * @see KService
      * @see KDesktopFile
      */
-    static QCString readNativeFormatMimeType( KInstance *instance = 0 );
+    static Q3CString readNativeFormatMimeType( KInstance *instance = 0 );
 
     /**
      * Used by KoMainWindow, when no document exists yet.
@@ -220,16 +225,16 @@ public:
      * This comes from the X-KDE-NativeMimeType key in the .desktop file
      * You do NOT have to reimplement this (it is only virtual for kounavail).
      */
-    virtual QCString nativeFormatMimeType() const;
+    virtual Q3CString nativeFormatMimeType() const;
 
     /**
      * Returns the OASIS OpenDocument mimetype of the document, if supported
      * This comes from the X-KDE-NativeOasisMimeType key in the .desktop file
      */
-    QCString nativeOasisMimeType() const;
+    Q3CString nativeOasisMimeType() const;
 
     /// Checks whether a given mimetype can be handled natively.
-    bool isNativeFormat( const QCString& mimetype ) const;
+    bool isNativeFormat( const Q3CString& mimetype ) const;
 
     /// Returns a list of the mimetypes considered "native", i.e. which can
     /// be saved by KoDocument without a filter, in *addition* to the main one
@@ -251,7 +256,7 @@ public:
     /**
      * Returns the actual mimetype of the document
      */
-    QCString mimeType() const;
+    Q3CString mimeType() const;
 
     /**
      * @brief Sets the mime type for the document.
@@ -259,7 +264,7 @@ public:
      * When choosing "save as" this is also the mime type
      * selected by default.
      */
-    void setMimeType( const QCString & mimeType );
+    void setMimeType( const Q3CString & mimeType );
 
     /**
      * @brief Set the format in which the document should be saved.
@@ -270,8 +275,8 @@ public:
      * @param mimeType the mime type (format) to use.
      * @param specialOutputFlag is for "save as older version" etc.
      */
-    void setOutputMimeType( const QCString & mimeType, int specialOutputFlag = 0 );
-    QCString outputMimeType() const;
+    void setOutputMimeType( const Q3CString & mimeType, int specialOutputFlag = 0 );
+    Q3CString outputMimeType() const;
     int specialOutputFlag() const;
 
     /**
@@ -345,7 +350,7 @@ public:
     /**
      * @return a list of views this document is displayed in
      */
-    const QPtrList<KoView> & views() const;
+    const Q3PtrList<KoView> & views() const;
 
     /**
      * @return number of views this document is displayed in
@@ -372,7 +377,7 @@ public:
      *
      *  @return Pointer to the document under the mouse at that position
      */
-    virtual KoDocument *hitTest( const QPoint &pos, const QWMatrix& matrix = QWMatrix() );
+    virtual KoDocument *hitTest( const QPoint &pos, const QMatrix& matrix = QMatrix() );
 
     /**
      *  Paints the whole document into the given painter object.
@@ -657,7 +662,7 @@ public:
      * @return the list of all children. Do not modify the
      *         returned list.
      */
-    const QPtrList<KoDocumentChild>& children() const;
+    const Q3PtrList<KoDocumentChild>& children() const;
 
     /**
      * @return the KoDocumentChild associated with the given Document, but only if
@@ -695,7 +700,7 @@ public:
     /**
      * @return the list of shells for the main window
      */
-    const QPtrList<KoMainWindow>& shells() const;
+    const Q3PtrList<KoMainWindow>& shells() const;
 
     /**
      * @return the number of shells for the main window
@@ -705,7 +710,7 @@ public:
     /**
      * @return the list of all the currently opened documents
      */
-    static QPtrList<KoDocument> *documentList() { return s_documentList; }
+    static Q3PtrList<KoDocument> *documentList() { return s_documentList; }
 
     /**
      * @brief Return a DCOP interface for this document
@@ -718,7 +723,7 @@ public:
     /**
      * @return the ID of the DCOP interface for this document.
      **/
-    QCString dcopObjectId() const;
+    Q3CString dcopObjectId() const;
 
     /**
      * Signal the progress of operations such as loading or saving.
@@ -809,9 +814,9 @@ public:
      * Sets the document URL to empty URL
      * KParts doesn't allow this, but %KOffice apps have e.g. templates
      * After using loadNativeFormat on a template, one wants
-     * to set the url to KURL()
+     * to set the url to KUrl()
      */
-    void resetURL() { m_url = KURL(); m_file = QString::null; }
+    void resetURL() { m_url = KUrl(); m_file = QString::null; }
 
     /**
      * Set when you want an external embedded document to be stored internally
@@ -829,7 +834,7 @@ public:
      * Sets the document URL to @p url
      * KParts doesn't really allow this, but it is needed for undo of setStoreInternal()
      */
-    void setURL( const KURL& url ) { m_url = url; }
+    void setURL( const KUrl& url ) { m_url = url; }
 
     /**
      * _Only_ use these functions to restore m_file (in KoMainWindow) after a
@@ -866,7 +871,7 @@ public:
      * This is used by some text-analyzer plugins.
      * @since 1.5
      */
-    virtual QValueList<KoTextDocument *> allTextDocuments() const;
+    virtual Q3ValueList<KoTextDocument *> allTextDocuments() const;
 
     /**
      * Returns the unit used to display all measures/distances.
@@ -1144,7 +1149,7 @@ private:
     Private *d;
     KService::Ptr m_nativeService;
     bool m_bEmpty;
-    static QPtrList<KoDocument> *s_documentList;
+    static Q3PtrList<KoDocument> *s_documentList;
     static const int s_defaultAutoSave;
 };
 

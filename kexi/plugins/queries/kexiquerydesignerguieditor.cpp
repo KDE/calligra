@@ -82,7 +82,7 @@ public:
 
 	KexiTableViewData *data;
 	KexiDataTable *dataTable;
-	QGuardedPtr<KexiDB::Connection> conn;
+	QPointer<KexiDB::Connection> conn;
 
 	KexiRelationWidget *relations;
 	KexiSectionHeader *head;
@@ -345,7 +345,7 @@ KexiQueryDesignerGuiEditor::buildSchema(QString *errMsg)
 	//add fields
 	KexiDB::BaseExpr *whereExpr = 0;
 	KexiTableViewData::Iterator it(d->data->iterator());
-	const uint count = QMIN(d->data->count(), d->sets->size());
+	const uint count = qMin(d->data->count(), d->sets->size());
 	bool fieldsFound = false;
 	for (uint i=0; i<count && it.current(); ++it, i++) {
 		if (!it.current()->at(COLUMN_ID_TABLE).isNull() && it.current()->at(COLUMN_ID_COLUMN).isNull()) {
@@ -360,7 +360,7 @@ KexiQueryDesignerGuiEditor::buildSchema(QString *errMsg)
 
 		KoProperty::Set *set = d->sets->at(i);
 		if (set) {
-			QString tableName = (*set)["table"].value().toString().stripWhiteSpace();
+			QString tableName = (*set)["table"].value().toString().trimmed();
 			QString fieldName = (*set)["field"].value().toString();
 			QString fieldAndTableName = fieldName;
 			if (!tableName.isEmpty())
@@ -1008,7 +1008,7 @@ QSize KexiQueryDesignerGuiEditor::sizeHint() const
 {
 	QSize s1 = d->relations->sizeHint();
 	QSize s2 = d->head->sizeHint();
-	return QSize(QMAX(s1.width(),s2.width()), s1.height()+s2.height());
+	return QSize(qMax(s1.width(),s2.width()), s1.height()+s2.height());
 }
 
 KexiTableItem*
@@ -1114,7 +1114,7 @@ KexiDB::BaseExpr*
 KexiQueryDesignerGuiEditor::parseExpressionString(const QString& fullString, int& token,
  bool allowRelationalOperator)
 {
-	QString str = fullString.stripWhiteSpace();
+	QString str = fullString.trimmed();
 	int len = 0;
 	//KexiDB::BaseExpr *expr = 0;
 	//1. get token
@@ -1150,7 +1150,7 @@ KexiQueryDesignerGuiEditor::parseExpressionString(const QString& fullString, int
 
 	//1. get expression after token
 	if (len>0)
-		str = str.mid(len).stripWhiteSpace();
+		str = str.mid(len).trimmed();
 	if (str.isEmpty())
 		return 0;
 
@@ -1167,24 +1167,24 @@ KexiQueryDesignerGuiEditor::parseExpressionString(const QString& fullString, int
 	else if ((re = QRegExp("(\\d{1,4})-(\\d{1,2})-(\\d{1,2})")).exactMatch( str ))
 	{
 			valueExpr = new KexiDB::ConstExpr(DATE_CONST, QDate::fromString(
-				re.cap(1).rightJustify(4, '0')+"-"+re.cap(2).rightJustify(2, '0')
-				+"-"+re.cap(3).rightJustify(2, '0'), Qt::ISODate));
+				re.cap(1).rightJustified(4, '0')+"-"+re.cap(2).rightJustified(2, '0')
+				+"-"+re.cap(3).rightJustified(2, '0'), Qt::ISODate));
 	}
 	else if ((re = QRegExp("(\\d{1,2}):(\\d{1,2})")).exactMatch( str )
 	      || (re = QRegExp("(\\d{1,2}):(\\d{1,2}):(\\d{1,2})")).exactMatch( str ))
 	{
-		QString res = re.cap(1).rightJustify(2, '0')+":"+re.cap(2).rightJustify(2, '0')
-			+":"+re.cap(3).rightJustify(2, '0');
+		QString res = re.cap(1).rightJustified(2, '0')+":"+re.cap(2).rightJustified(2, '0')
+			+":"+re.cap(3).rightJustified(2, '0');
 //		kexipluginsdbg << res << endl;
 		valueExpr = new KexiDB::ConstExpr(TIME_CONST, QTime::fromString(res, Qt::ISODate));
 	}
 	else if ((re = QRegExp("(\\d{1,4})-(\\d{1,2})-(\\d{1,2})\\s+(\\d{1,2}):(\\d{1,2})")).exactMatch( str )
 	      || (re = QRegExp("(\\d{1,4})-(\\d{1,2})-(\\d{1,2})\\s+(\\d{1,2}):(\\d{1,2}):(\\d{1,2})")).exactMatch( str ))
 	{
-		QString res = re.cap(1).rightJustify(4, '0')+"-"+re.cap(2).rightJustify(2, '0')
-			+"-"+re.cap(3).rightJustify(2, '0')
-			+"T"+re.cap(4).rightJustify(2, '0')+":"+re.cap(5).rightJustify(2, '0')
-			+":"+re.cap(6).rightJustify(2, '0');
+		QString res = re.cap(1).rightJustified(4, '0')+"-"+re.cap(2).rightJustified(2, '0')
+			+"-"+re.cap(3).rightJustified(2, '0')
+			+"T"+re.cap(4).rightJustified(2, '0')+":"+re.cap(5).rightJustified(2, '0')
+			+":"+re.cap(6).rightJustified(2, '0');
 //		kexipluginsdbg << res << endl;
 		valueExpr = new KexiDB::ConstExpr(DATETIME_CONST,
 			QDateTime::fromString(res, Qt::ISODate));
@@ -1208,7 +1208,7 @@ KexiQueryDesignerGuiEditor::parseExpressionString(const QString& fullString, int
 		}
 		else {
 			//integer const
-			const Q_LLONG val = str.toLongLong(&ok);
+			const qint64 val = str.toLongLong(&ok);
 			if (!ok)
 				return 0;
 			valueExpr = new KexiDB::ConstExpr(INTEGER_CONST, val);
@@ -1248,7 +1248,7 @@ void KexiQueryDesignerGuiEditor::slotBeforeCellChanged(KexiTableItem *item, int 
 		}
 		else {
 			//auto fill 'table' column
-			QString fieldId( newValue.toString().stripWhiteSpace() ); //tmp, can look like "table.field"
+			QString fieldId( newValue.toString().trimmed() ); //tmp, can look like "table.field"
 			QString fieldName; //"field" part of "table.field" or expression string
 			QString tableName; //empty for expressions
 			QCString alias;
@@ -1261,7 +1261,7 @@ void KexiQueryDesignerGuiEditor::slotBeforeCellChanged(KexiTableItem *item, int 
 				//-find "alias" in something like "alias : expr"
 				const int id = fieldId.find(':');
 				if (id>0) {
-					alias = fieldId.left(id).stripWhiteSpace().latin1();
+					alias = fieldId.left(id).trimmed().latin1();
 					if (!KexiUtils::isIdentifier(alias)) {
 						result->success = false;
 						result->column = 0;
@@ -1271,7 +1271,7 @@ void KexiQueryDesignerGuiEditor::slotBeforeCellChanged(KexiTableItem *item, int 
 						return;
 					}
 				}
-				fieldName = fieldId.mid(id+1).stripWhiteSpace();
+				fieldName = fieldId.mid(id+1).trimmed();
 				//check expr.
 				KexiDB::BaseExpr *e;
 				int dummyToken;
@@ -1390,7 +1390,7 @@ void KexiQueryDesignerGuiEditor::slotBeforeCellChanged(KexiTableItem *item, int 
 //TODO: this is primitive, temporary: reuse SQL parser
 		QString operatorStr, argStr;
 		KexiDB::BaseExpr* e = 0;
-		const QString str = newValue.toString().stripWhiteSpace();
+		const QString str = newValue.toString().trimmed();
 //		KoProperty::Set &set = *propertySet();
 		int token;
 		QString field, table;
@@ -1563,7 +1563,7 @@ void KexiQueryDesignerGuiEditor::slotPropertyChanged(KoProperty::Set& set, KoPro
  */
 	if (pname=="alias" || pname=="name") {
 		const QVariant& v = property.value();
-		if (!v.toString().stripWhiteSpace().isEmpty() && !KexiUtils::isIdentifier( v.toString() )) {
+		if (!v.toString().trimmed().isEmpty() && !KexiUtils::isIdentifier( v.toString() )) {
 			KMessageBox::sorry(this,
 				KexiUtils::identifierExpectedMessage(property.caption(), v.toString()));
 			property.resetValue();

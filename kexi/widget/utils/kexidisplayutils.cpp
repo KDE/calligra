@@ -115,14 +115,14 @@ void KexiDisplayUtils::drawAutonumberSign(const DisplayParameters& par, QPainter
 
 	int y_pixmap_pos = 0;
 	if (align & Qt::AlignVCenter) {
-		y_pixmap_pos = QMAX(0, y+1 + (height - KexiDisplayUtils_autonum->height())/2);
+		y_pixmap_pos = qMax(0, y+1 + (height - KexiDisplayUtils_autonum->height())/2);
 	}
 	else if (align & Qt::AlignTop) {
-		y_pixmap_pos = y + QMAX(0, (par.textHeight - KexiDisplayUtils_autonum->height())/2);
+		y_pixmap_pos = y + qMax(0, (par.textHeight - KexiDisplayUtils_autonum->height())/2);
 	}
 	else if (align & Qt::AlignBottom) {
 		y_pixmap_pos = y+1 + height - KexiDisplayUtils_autonum->height() 
-			- QMAX(0, (par.textHeight - KexiDisplayUtils_autonum->height())/2);
+			- qMax(0, (par.textHeight - KexiDisplayUtils_autonum->height())/2);
 	}
 
 	if (align & (Qt::AlignLeft | Qt::AlignJustify)) {

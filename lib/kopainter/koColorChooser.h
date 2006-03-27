@@ -22,10 +22,13 @@
 #define __ko_ColorChooser_h__
 
 #include <qwidget.h>
+//Added by qt3to4:
+#include <QLabel>
+#include <Q3GridLayout>
 #include "koColor.h"
 
 class KoFrameButton;
-class QGridLayout;
+class Q3GridLayout;
 class QTabWidget;
 class RGBWidget;
 class HSVWidget;
@@ -66,7 +69,7 @@ private:
   ColorWidget *m_current;
   KoColor           mColor;
   QTabWidget *m_tab;
-  QGridLayout      *mGrid;
+  Q3GridLayout      *mGrid;
   KoFrameButton    *btnRGB;
   KoFrameButton    *btnHSV;
   KoFrameButton    *btnCMYK;

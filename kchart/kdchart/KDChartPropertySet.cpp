@@ -30,7 +30,7 @@
 #include "KDChartParams.h"
 
 #include <qpainter.h>
-#include <qvaluestack.h>
+#include <q3valuestack.h>
 
 #include <stdlib.h>
 

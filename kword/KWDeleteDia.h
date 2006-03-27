@@ -22,6 +22,8 @@
 #define deldia_h
 
 #include <kdialogbase.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 class KWTableFrameSet;
 class KWView;
@@ -45,7 +47,7 @@ public:
      * @param type the type of dialog this should become, either deleteRow or deleteColumn
      * @param remove a list of all the rows or columns that should be deleted.
      */
-    KWDeleteDia( KWView *parent, KWTableFrameSet *table, DeleteType type, QValueList<uint> remove);
+    KWDeleteDia( KWView *parent, KWTableFrameSet *table, DeleteType type, Q3ValueList<uint> remove);
 
 protected:
     void setupTab1();
@@ -54,7 +56,7 @@ protected:
     KWTableFrameSet *m_table;
     DeleteType m_type;
 
-    QValueList<uint> m_toRemove;
+    Q3ValueList<uint> m_toRemove;
 
 protected slots:
     virtual void slotOk();

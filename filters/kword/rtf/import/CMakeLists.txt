@@ -1,0 +1,48 @@
+kde4_header()
+
+include_directories( ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
+
+
+########### next target ###############
+
+set(rtfimport_PART_SRCS rtfimport.cpp rtfimport_dom.cpp rtfimport_tokenizer.cpp )
+
+kde4_automoc(${rtfimport_PART_SRCS})
+
+kde4_add_plugin(rtfimport WITH_PREFIX ${rtfimport_PART_SRCS})
+
+kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} rtfimport )
+
+target_link_libraries(rtfimport  ${KDE4_KDECORE_LIBS} )
+
+install_targets(${LIB_INSTALL_DIR}/kde4 rtfimport )
+
+
+########### install files ###############
+
+install_files( ${SERVICES_INSTALL_DIR} FILES  kword_rtf_import.desktop )
+
+kde4_footer()
+
+
+
+#original Makefile.am contents follow:
+
+######## General stuff
+#
+#INCLUDES= $(KOFFICE_INCLUDES) $(all_includes)
+#librtfimport_la_LDFLAGS	= $(all_libraries) -module -avoid-version -no-undefined
+#librtfimport_la_LIBADD = $(KOFFICE_LIBS)
+#
+######## Files
+#
+#kde_module_LTLIBRARIES = librtfimport.la
+#
+#librtfimport_la_SOURCES = rtfimport.cpp rtfimport_dom.cpp rtfimport_tokenizer.cpp
+#
+#noinst_HEADERS = rtfimport.h rtfimport_dom.h rtfimport_tokenizer.h
+#
+#METASOURCES = AUTO
+#
+#service_DATA = kword_rtf_import.desktop
+#servicedir = $(kde_servicesdir)

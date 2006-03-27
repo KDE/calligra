@@ -24,6 +24,8 @@
 //#define KOXML_USE_QDOM
 
 #include <qdom.h> 
+//Added by qt3to4:
+#include <QTextStream>
 #include <koffice_export.h>
 
 #ifdef KOXML_USE_QDOM

@@ -4,7 +4,9 @@
 #include <kcmdlineargs.h>
 #include <qpainter.h>
 #include <qwidget.h>
-#include <qgrid.h>
+#include <q3grid.h>
+//Added by qt3to4:
+#include <QPaintEvent>
 
 class MyWidget : public QWidget
 {
@@ -35,7 +37,7 @@ protected:
                                m_rightBorder, m_topBorder, m_bottomBorder,
                                0, QPen() );
         // Show the corners of the rect - they must apppear _inside_ the borders.
-        p.setPen( black );
+        p.setPen( Qt::black );
         p.drawPoint( rect.topLeft() );
         p.drawPoint( rect.topRight() );
         p.drawPoint( rect.bottomRight() );
@@ -53,7 +55,7 @@ int main (int argc, char ** argv)
 
     KoZoomHandler* zh = new KoZoomHandler();
 
-    QGrid* grid = new QGrid(2, Qt::Horizontal, 0L); // 2 columns
+    Q3Grid* grid = new Q3Grid(2, Qt::Horizontal, 0L); // 2 columns
     {
         // First square
         MyWidget* w = new MyWidget(zh, grid);

@@ -32,10 +32,10 @@
 
 #include <qpainter.h>
 #if COMPAT_QT_VERSION >= 0x030000
-#include <qmemarray.h>
+#include <q3memarray.h>
 #else
 #include <qarray.h>
-#define QMemArray QArray
+#define Q3MemArray QArray
 #endif
 
 #include <stdlib.h>
@@ -68,7 +68,7 @@ KDChartBWPainter::~KDChartBWPainter()
 }
 
 
-void quicksort( QMemArray<double>& a, int lo, int hi )
+void quicksort( Q3MemArray<double>& a, int lo, int hi )
 {
     int    i=lo, j=hi;
     double h;
@@ -94,7 +94,7 @@ int KDChartBWPainter::calculateStats( KDChartTableDataBase& data,
 {
     const uint nMax = data.usedCols();
     int nUsed = 0;
-    QMemArray<double> values( nMax );
+    Q3MemArray<double> values( nMax );
     double sum = 0.0;
     QVariant vVal;
     if( data.sorted() ){

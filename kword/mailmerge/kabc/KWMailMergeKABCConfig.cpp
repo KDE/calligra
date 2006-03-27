@@ -19,9 +19,11 @@
 */
 
 
-#include <qvbox.h>
+#include <q3vbox.h>
 #include <qlayout.h>
 #include <qlineedit.h>
+//Added by qt3to4:
+#include <Q3VBoxLayout>
 
 #include <kapplication.h>
 #include <kdebug.h>
@@ -33,6 +35,7 @@
 #include <krun.h>
 #include <kabc/stdaddressbook.h>
 #include <kabc/distributionlist.h>
+#include <ktoolinvocation.h>
 
 #include "addresspicker.h"
 #include "KWMailMergeKABC.h"
@@ -45,7 +48,7 @@ KWMailMergeKABCConfig::KWMailMergeKABCConfig( QWidget *parent, KWMailMergeKABC *
 {
     _db = db_;
 
-    (new QVBoxLayout(plainPage()))->setAutoAdd(true);
+    (new Q3VBoxLayout(plainPage()))->setAutoAdd(true);
     setMainWidget( _ui=new AddressPickerUI( plainPage() ) );
 
     updateAvailable();
@@ -65,26 +68,26 @@ void KWMailMergeKABCConfig::acceptSelection()
 {
     _db->clear();
 
-    QListViewItem* top = _ui->mSelectedView->firstChild();
+    Q3ListViewItem* top = _ui->mSelectedView->firstChild();
     while(top)
     {
-        kdDebug() << "acceptSelection(): " << top->text(0) << endl;
+        kDebug() << "acceptSelection(): " << top->text(0) << endl;
         if( top->text(0) == i18n("Distribution Lists") )
         {
-            QListViewItem* item = top->firstChild();
+            Q3ListViewItem* item = top->firstChild();
             while(item)
             {
-                kdDebug() << "acceptSelection(): " << item->text(0) << endl;
+                kDebug() << "acceptSelection(): " << item->text(0) << endl;
                 _db->addList( item->text(0) );
                 item = item->nextSibling();
             }
         }
         else if( top->text(0) == i18n("Single Entries") )
         {
-            QListViewItem* item = top->firstChild();
+            Q3ListViewItem* item = top->firstChild();
             while(item)
             {
-                kdDebug() << "acceptSelection(): " << item->text(0) << endl;
+                kDebug() << "acceptSelection(): " << item->text(0) << endl;
                 _db->addEntry( item->text(-1) );
                 item = item->nextSibling();
             }
@@ -97,17 +100,17 @@ void KWMailMergeKABCConfig::acceptSelection()
 
 void KWMailMergeKABCConfig::addSelectedContacts()
 {
-    QListViewItemIterator it( _ui->mAvailableView, QListViewItemIterator::Selected  );
-    QListViewItem* selected = _ui->mSelectedView->findItem(
+    Q3ListViewItemIterator it( _ui->mAvailableView, Q3ListViewItemIterator::Selected  );
+    Q3ListViewItem* selected = _ui->mSelectedView->findItem(
                                   i18n("Single Entries"), 0, Qt::ExactMatch );
-    QListViewItem* selectedLists = _ui->mSelectedView->findItem(
+    Q3ListViewItem* selectedLists = _ui->mSelectedView->findItem(
                                        i18n("Distribution Lists"), 0, Qt::ExactMatch );
     while ( it.current() )
     {
         if( it.current()->depth() > 0 )
         {
             QString uid = it.current()->text( -1 );
-            kdDebug() << "addSelectedContacts(): uid :" << uid << endl;
+            kDebug() << "addSelectedContacts(): uid :" << uid << endl;
             if( !uid.isEmpty() )
             {
                 KWMailMergeKABCConfigListItem *item =
@@ -139,7 +142,7 @@ void KWMailMergeKABCConfig::destroyAvailableClones( const QString& uid )
     if( uid.isEmpty() )
         return;
 
-    QListViewItemIterator it( _ui->mAvailableView  );
+    Q3ListViewItemIterator it( _ui->mAvailableView  );
 
     while ( it.current() )
     {
@@ -157,16 +160,16 @@ void KWMailMergeKABCConfig::destroyAvailableClones( const QString& uid )
 
 void KWMailMergeKABCConfig::filterChanged( const QString& txt )
 {
-    kdDebug() << "KWMailMergeKABCConfig::filterChanged( " << txt << " )" << endl;
+    kDebug() << "KWMailMergeKABCConfig::filterChanged( " << txt << " )" << endl;
 
     bool showAll = txt.isEmpty();
 
-    QListViewItem* category = _ui->mAvailableView->firstChild();
+    Q3ListViewItem* category = _ui->mAvailableView->firstChild();
     while(category)
     {
         if( category->text(0)!=i18n("Distribution Lists") )
         {
-            QListViewItem* item = category->firstChild();
+            Q3ListViewItem* item = category->firstChild();
             while(item)
             {
                 if(showAll)
@@ -194,8 +197,8 @@ void KWMailMergeKABCConfig::initSelectedAddressees()
 {
     QStringList records = _db->singleRecords();
 
-    QListViewItem* category = _ui->mAvailableView->firstChild();
-    QListViewItem* selected = _ui->mSelectedView->findItem(
+    Q3ListViewItem* category = _ui->mAvailableView->firstChild();
+    Q3ListViewItem* selected = _ui->mSelectedView->findItem(
                                   i18n("Single Entries"), 0, Qt::ExactMatch );
     while ( category && (records.count()>0) )
     {
@@ -237,17 +240,17 @@ void KWMailMergeKABCConfig::initSelectedLists()
 {
     QStringList lists = _db->lists();
 
-    kdDebug() << "::initSelectedLists()" << lists.join(",") << endl;
+    kDebug() << "::initSelectedLists()" << lists.join(",") << endl;
 
-    QListViewItem* l = _ui->mAvailableView->findItem(
+    Q3ListViewItem* l = _ui->mAvailableView->findItem(
                            i18n("Distribution Lists"), 0, Qt::ExactMatch );
-    QListViewItem* selected = _ui->mSelectedView->findItem(
+    Q3ListViewItem* selected = _ui->mSelectedView->findItem(
                                   i18n("Distribution Lists"), 0, Qt::ExactMatch );
 
-    QListViewItem* item = ( l->firstChild() );
+    Q3ListViewItem* item = ( l->firstChild() );
     while( item && (lists.count()>0) )
     {
-        QListViewItem* nextItem = item->nextSibling();
+        Q3ListViewItem* nextItem = item->nextSibling();
 
         for( QStringList::Iterator itLists = lists.begin();
                 itLists != lists.end(); ++itLists )
@@ -271,29 +274,29 @@ void KWMailMergeKABCConfig::initSlotSignalConnections()
     connect( _ui->mAddButton, SIGNAL( clicked() ), SLOT( addSelectedContacts() ) );
     connect( _ui->mAddressBook, SIGNAL( clicked() ), SLOT( launchAddressbook() ) );
 
-    connect( _ui->mAvailableView, SIGNAL( doubleClicked( QListViewItem *, const QPoint &, int ) ),
+    connect( _ui->mAvailableView, SIGNAL( doubleClicked( Q3ListViewItem *, const QPoint &, int ) ),
              SLOT( addSelectedContacts() ) );
 
     connect( _ui->mFilterEdit, SIGNAL( textChanged(const QString &) ),
              SLOT( filterChanged(const QString &) ) );
     connect( _ui->mRemoveButton, SIGNAL( clicked() ), SLOT( removeSelectedContacts() ) );
     connect( _ui->mSaveList, SIGNAL( clicked() ), SLOT( saveDistributionList() ) );
-    connect( _ui->mSelectedView, SIGNAL( doubleClicked( QListViewItem *, const QPoint &, int ) ),
+    connect( _ui->mSelectedView, SIGNAL( doubleClicked( Q3ListViewItem *, const QPoint &, int ) ),
              SLOT( removeSelectedContacts() ) );
 }
 
 
 void KWMailMergeKABCConfig::launchAddressbook() const
 {
-    kapp->startServiceByDesktopName( "kaddressbook", QString() );
+    KToolInvocation::startServiceByDesktopName( "kaddressbook", QString() );
 }
 
 
 
-void KWMailMergeKABCConfig::removeContact( QListViewItem* item )
+void KWMailMergeKABCConfig::removeContact( Q3ListViewItem* item )
 {
     QStringList& categories = _usedCategories;
-    QListViewItem* availableLists = _ui->mAvailableView->findItem(
+    Q3ListViewItem* availableLists = _ui->mAvailableView->findItem(
                                         i18n("Distribution Lists"), 0, Qt::ExactMatch );
     if( item->depth() > 0 )
     {
@@ -309,7 +312,7 @@ void KWMailMergeKABCConfig::removeContact( QListViewItem* item )
                 int i = categories.findIndex(*itEntryCat);
                 if(  i == -1 )
                 {
-                    QListViewItem* category = new QListViewItem( _ui->mAvailableView,
+                    Q3ListViewItem* category = new Q3ListViewItem( _ui->mAvailableView,
                                               *itEntryCat );
                     categories.append( *itEntryCat );
 
@@ -346,11 +349,11 @@ void KWMailMergeKABCConfig::removeContact( QListViewItem* item )
 
 void KWMailMergeKABCConfig::removeSelectedContacts()
 {
-    QListViewItemIterator it( _ui->mSelectedView, QListViewItemIterator::Selected  );
+    Q3ListViewItemIterator it( _ui->mSelectedView, Q3ListViewItemIterator::Selected  );
 
     while( it.current() )
     {
-        kdDebug() << "removeSelectedContacts(): text: " << it.current()->text(-1) << endl;
+        kDebug() << "removeSelectedContacts(): text: " << it.current()->text(-1) << endl;
         removeContact( it.current() );
         ++it;
     }
@@ -381,10 +384,10 @@ void KWMailMergeKABCConfig::saveDistributionList()
     }
     KABC::DistributionList *distList = new KABC::DistributionList( &dlm, listName );
 
-    QListViewItem* newListItem = new QListViewItem( _ui->mSelectedView->findItem(
+    Q3ListViewItem* newListItem = new Q3ListViewItem( _ui->mSelectedView->findItem(
                                      i18n("Distribution Lists"),0 , Qt::ExactMatch), listName );
 
-    QListViewItem* category = _ui->mSelectedView->firstChild();
+    Q3ListViewItem* category = _ui->mSelectedView->firstChild();
     while(category)
     {
         if( category->text(0)==i18n("Single Entries") )
@@ -398,14 +401,14 @@ void KWMailMergeKABCConfig::saveDistributionList()
 
                 KABC::Addressee addr = item->addressee();
                 QString formattedName = addr.formattedName();
-                QListViewItem* newItem = new QListViewItem(
+                Q3ListViewItem* newItem = new Q3ListViewItem(
                                              newListItem, item->addressee().formattedName() );
                 newItem->setEnabled( false );
 
                 item = static_cast<KWMailMergeKABCConfigListItem*>( item->nextSibling() );
             }
 
-            QListViewItemIterator it ( category->firstChild() );
+            Q3ListViewItemIterator it ( category->firstChild() );
             while( it.current() )
             {
                 removeContact( it.current() );
@@ -428,7 +431,7 @@ void KWMailMergeKABCConfig::updateAvailable()
     //
     // First append the addressees.
     //
-    QListViewItem* noCategory = new QListViewItem( _ui->mAvailableView,
+    Q3ListViewItem* noCategory = new Q3ListViewItem( _ui->mAvailableView,
                                 i18n("no category") );
 
     QStringList& categories = _usedCategories ;
@@ -448,7 +451,7 @@ void KWMailMergeKABCConfig::updateAvailable()
             // Create category, if not yet in listview and append item to it.
             if(  i == -1 )
             {
-                QListViewItem* category = new QListViewItem( _ui->mAvailableView, *itCat );
+                Q3ListViewItem* category = new Q3ListViewItem( _ui->mAvailableView, *itCat );
                 categories.append( *itCat );
 
                 KWMailMergeKABCConfigListItem* item = new KWMailMergeKABCConfigListItem(
@@ -479,7 +482,7 @@ void KWMailMergeKABCConfig::updateAvailable()
     dlm.load();
 
     QStringList distributionLists = dlm.listNames();
-    QListViewItem* distributionListsItem = new QListViewItem( _ui->mAvailableView,
+    Q3ListViewItem* distributionListsItem = new Q3ListViewItem( _ui->mAvailableView,
                                            i18n("Distribution Lists") );
 
     QStringList::Iterator itDistributionLists;
@@ -491,7 +494,7 @@ void KWMailMergeKABCConfig::updateAvailable()
 
         KABC::DistributionList::Entry::List entries = list->entries();
 
-        QListViewItem* listItem = new QListViewItem( distributionListsItem,
+        Q3ListViewItem* listItem = new Q3ListViewItem( distributionListsItem,
                                   *itDistributionLists );
 
         KABC::DistributionList::Entry::List::Iterator itList;
@@ -499,7 +502,7 @@ void KWMailMergeKABCConfig::updateAvailable()
         {
             // Create a normal QListViewItem and disable it, because this is not a
             // distribution-list-editor. KAddressbook should be used instead.
-            QListViewItem* item = new QListViewItem(
+            Q3ListViewItem* item = new Q3ListViewItem(
                                       listItem, (*itList).addressee.formattedName() );
             item->setEnabled( false );
         }
@@ -509,15 +512,15 @@ void KWMailMergeKABCConfig::updateAvailable()
 
 
 
-KWMailMergeKABCConfigListItem::KWMailMergeKABCConfigListItem( QListView *parent,
-        const KABC::Addressee& addressEntry ) : QListViewItem( parent )
+KWMailMergeKABCConfigListItem::KWMailMergeKABCConfigListItem( Q3ListView *parent,
+        const KABC::Addressee& addressEntry ) : Q3ListViewItem( parent )
 {
     setText( 0, addressEntry.formattedName() );
     _addressEntry = addressEntry;
 }
 
-KWMailMergeKABCConfigListItem::KWMailMergeKABCConfigListItem( QListViewItem *parent,
-        const KABC::Addressee& addressEntry ) : QListViewItem( parent )
+KWMailMergeKABCConfigListItem::KWMailMergeKABCConfigListItem( Q3ListViewItem *parent,
+        const KABC::Addressee& addressEntry ) : Q3ListViewItem( parent )
 {
     setText( 0, addressEntry.formattedName() );
     _addressEntry = addressEntry;
@@ -539,7 +542,7 @@ QString KWMailMergeKABCConfigListItem::text( int column ) const
     }
     else
     {
-        return QListViewItem::text( column );
+        return Q3ListViewItem::text( column );
     }
 }
 

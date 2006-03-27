@@ -22,7 +22,7 @@
 #include <qclipboard.h>
 #include <qregexp.h>
 
-#include <kpopupmenu.h>
+#include <kmenu.h>
 #include <klocale.h>
 #include <kiconloader.h>
 #include <kdebug.h>
@@ -40,7 +40,7 @@ KexiQueryDesignerSQLHistory::KexiQueryDesignerSQLHistory(QWidget *parent, const 
 	m_history = new History();
 	m_history->setAutoDelete(true);
 
-	m_popup = new KPopupMenu(this);
+	m_popup = new KMenu(this);
 	m_popup->insertItem(SmallIcon("editcopy"), i18n("Copy to Clipboard"), this, SLOT(slotToClipboard()));
 }
 
@@ -161,7 +161,7 @@ KexiQueryDesignerSQLHistory::addEntry(HistoryEntry *e)
 /*void
 KexiQueryDesignerSQLHistory::contextMenu(const QPoint &pos, HistoryEntry *)
 {
-	KPopupMenu p(this);
+	KMenu p(this);
 	p.insertItem(SmallIcon("editcopy"), i18n("Copy to Clipboard"), this, SLOT(slotToClipboard()));
 	
 
@@ -209,7 +209,7 @@ void KexiQueryDesignerSQLHistory::clear()
 	updateContents();
 }
 
-KPopupMenu* KexiQueryDesignerSQLHistory::popupMenu() const
+KMenu* KexiQueryDesignerSQLHistory::popupMenu() const
 {
 	return m_popup;
 }
@@ -244,7 +244,7 @@ HistoryEntry::drawItem(QPainter *p, int width, const QColorGroup &cg)
 	p->setBrush(QColor(255, 255, 255));
 	m_formated->setWidth(width - 2);
 	QRect content(2, 21, width - 2, m_formated->height());
-//	QRect content = p->fontMetrics().boundingRect(2, 21, width - 2, 0, Qt::WordBreak | Qt::AlignLeft | Qt::AlignVCenter, m_statement);
+//	QRect content = p->fontMetrics().boundingRect(2, 21, width - 2, 0, Qt::TextWordWrap | Qt::AlignLeft | Qt::AlignVCenter, m_statement);
 //	QRect content(2, 21, width - 2, p->fontMetrics().height() + 4);
 //	content = QRect(2, 21, width - 2, m_for.height());
 
@@ -260,7 +260,7 @@ HistoryEntry::drawItem(QPainter *p, int width, const QColorGroup &cg)
 
 	content.setX(content.x() + 2);
 	content.setWidth(content.width() - 2);
-//	p->drawText(content, Qt::WordBreak | Qt::AlignLeft | Qt::AlignVCenter, m_statement);
+//	p->drawText(content, Qt::TextWordWrap | Qt::AlignLeft | Qt::AlignVCenter, m_statement);
 	m_formated->draw(p, content.x(), content.y(), content, cg);
 }
 
@@ -338,7 +338,7 @@ HistoryEntry::highlight(const QColorGroup &cg)
 //		text += QString("<br><font face=\"") + KGlobalSettings::generalFont().family() + QString("\" size=\"-1\">") + i18n("Error: %1").arg(m_error) + "</font>";
 		text += QString("<br><font face=\"") + KGlobalSettings::generalFont().family() + QString("\">") + i18n("Error: %1").arg(m_error) + "</font>";
 
-	kdDebug() << "HistoryEntry::highlight() text:" << text << endl;
+	kDebug() << "HistoryEntry::highlight() text:" << text << endl;
 //	m_formated = new QSimpleRichText(text, QFont("courier", 8));
 	m_formated = new QSimpleRichText(text, KGlobalSettings::fixedFont());
 
@@ -356,7 +356,7 @@ HistoryEntry::geometry(int y, int width, QFontMetrics f)
 {
 	Q_UNUSED( f );
 
-//	int h = 21 + f.boundingRect(2, 21, width - 2, 0, Qt::WordBreak | Qt::AlignLeft | Qt::AlignVCenter, m_statement).height();
+//	int h = 21 + f.boundingRect(2, 21, width - 2, 0, Qt::TextWordWrap | Qt::AlignLeft | Qt::AlignVCenter, m_statement).height();
 //	return QRect(0, y, width, h);
 	m_formated->setWidth(width - 2);
 	return QRect(0, y, width, m_formated->height() + 21);

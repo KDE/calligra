@@ -20,7 +20,7 @@
 //  Ariya Hidayat, November 2005
 
 #include <qstring.h>
-#include <qcstring.h>
+#include <q3cstring.h>
 #include <qbuffer.h>
 #include <qtextstream.h>
 #include <qdatetime.h>
@@ -43,7 +43,7 @@ const T& result, const T& expected )
   {
     testFailed++;
     QString message;
-    QTextStream ts( &message, IO_WriteOnly );
+    QTextStream ts( &message, QIODevice::WriteOnly );
     ts << msg;
     ts << "  Result:";
     ts << result;
@@ -62,7 +62,7 @@ bool expected )
   {
     testFailed++;
     QString message;
-    QTextStream ts( &message, IO_WriteOnly );
+    QTextStream ts( &message, QIODevice::WriteOnly );
     ts << msg;
     ts << "  Result: ";
     if( result ) ts << "True"; else ts << "False";
@@ -81,7 +81,7 @@ void testNode()
 
   QByteArray xmlbuf;
   QBuffer xmldevice( xmlbuf );
-  QTextStream xmlstream( xmlbuf, IO_WriteOnly );
+  QTextStream xmlstream( xmlbuf, QIODevice::WriteOnly );
   xmlstream << "<earth>";
   xmlstream << "<continents>";
   xmlstream << "<asia/>";
@@ -233,7 +233,7 @@ void testElement()
   QByteArray xmlbuf;
   QBuffer xmldevice( xmlbuf );
 
-  QTextStream xmlstream( xmlbuf, IO_WriteOnly );
+  QTextStream xmlstream( xmlbuf, QIODevice::WriteOnly );
   xmlstream << "<html>";
   xmlstream << "<body bgcolor=\"#000\">";
   xmlstream << "<p>";
@@ -385,7 +385,7 @@ void testAttributes()
   QByteArray xmlbuf;
   QBuffer xmldevice( xmlbuf );
 
-  QTextStream xmlstream( xmlbuf, IO_WriteOnly );
+  QTextStream xmlstream( xmlbuf, QIODevice::WriteOnly );
   xmlstream << "<p>";
   xmlstream << "<img src=\"foo.png\" width=\"300\" height=\"150\"/>";
   xmlstream << "</p>";
@@ -435,7 +435,7 @@ void testText()
   QByteArray xmlbuf;
   QBuffer xmldevice( xmlbuf );
 
-  QTextStream xmlstream( xmlbuf, IO_WriteOnly );
+  QTextStream xmlstream( xmlbuf, QIODevice::WriteOnly );
   xmlstream << "<p>";
   xmlstream << "Hello ";
   xmlstream << "<b>world</b>";
@@ -524,7 +524,7 @@ void testCDATA()
   QByteArray xmlbuf;
   QBuffer xmldevice( xmlbuf );
 
-  QTextStream xmlstream( xmlbuf, IO_WriteOnly );
+  QTextStream xmlstream( xmlbuf, QIODevice::WriteOnly );
   xmlstream << "<p>";
   xmlstream << "Hello ";
   xmlstream << "<![CDATA[world]]>";
@@ -602,7 +602,7 @@ void testDocument()
   QByteArray xmlbuf;
   QBuffer xmldevice( xmlbuf );
 
-  QTextStream xmlstream( xmlbuf, IO_WriteOnly );
+  QTextStream xmlstream( xmlbuf, QIODevice::WriteOnly );
   xmlstream << "<koffice>";
   xmlstream << "  <kword/>\n";
   xmlstream << "  <kpresenter/>\n";
@@ -683,7 +683,7 @@ void testNamespace()
 
   QByteArray xmlbuf;
   QBuffer xmldevice( xmlbuf );
-  QTextStream xmlstream( xmlbuf, IO_WriteOnly );
+  QTextStream xmlstream( xmlbuf, QIODevice::WriteOnly );
   
   // taken from example in Qt documentation (xml.html)
   xmlstream << "<document xmlns:book = \"http://trolltech.com/fnord/book/\"";
@@ -851,7 +851,7 @@ void testUnload()
 
   QByteArray xmlbuf;
   QBuffer xmldevice( xmlbuf );
-  QTextStream xmlstream( xmlbuf, IO_WriteOnly );
+  QTextStream xmlstream( xmlbuf, QIODevice::WriteOnly );
   xmlstream << "<earth>";
   xmlstream << "<continents>";
   xmlstream << "<asia/>";
@@ -919,7 +919,7 @@ void testSimpleXML()
   QByteArray xmlbuf;
   QBuffer xmldevice( xmlbuf );
 
-  QTextStream xmlstream( xmlbuf, IO_WriteOnly );
+  QTextStream xmlstream( xmlbuf, QIODevice::WriteOnly );
   xmlstream << "<solarsystem>";
   xmlstream << "  <mercurius/>\n";
   xmlstream << "  <venus/>\n";
@@ -1017,7 +1017,7 @@ void testRootError()
   // multiple root nodes are not valid !
   QByteArray xmlbuf;
   QBuffer xmldevice( xmlbuf );
-  QTextStream xmlstream( xmlbuf, IO_WriteOnly );
+  QTextStream xmlstream( xmlbuf, QIODevice::WriteOnly );
   xmlstream << "<earth></earth><moon></moon>";
 
   KoXmlDocument doc;
@@ -1036,7 +1036,7 @@ void testMismatchedTag()
 
   QByteArray xmlbuf;
   QBuffer xmldevice( xmlbuf );
-  QTextStream xmlstream( xmlbuf, IO_WriteOnly );
+  QTextStream xmlstream( xmlbuf, QIODevice::WriteOnly );
   xmlstream << "<earth></e>";
 
   KoXmlDocument doc;
@@ -1055,7 +1055,7 @@ void testSimpleOpenDocumentText()
 
   QByteArray xmlbuf;
   QBuffer xmldevice( xmlbuf );
-  QTextStream xmlstream( xmlbuf, IO_WriteOnly );
+  QTextStream xmlstream( xmlbuf, QIODevice::WriteOnly );
   
   // content.xml from a simple OpenDocument text
   // it has only paragraph "Hello, world!"
@@ -1200,7 +1200,7 @@ void testSimpleOpenDocumentSpreadsheet()
 
   QByteArray xmlbuf;
   QBuffer xmldevice( xmlbuf );
-  QTextStream xmlstream( xmlbuf, IO_WriteOnly );
+  QTextStream xmlstream( xmlbuf, QIODevice::WriteOnly );
   
   // content.xml from a simple OpenDocument spreadsheet
   // the document has three worksheets, the last two are empty.
@@ -1398,7 +1398,7 @@ void testSimpleOpenDocumentPresentation()
 
   QByteArray xmlbuf;
   QBuffer xmldevice( xmlbuf );
-  QTextStream xmlstream( xmlbuf, IO_WriteOnly );
+  QTextStream xmlstream( xmlbuf, QIODevice::WriteOnly );
   
   // content.xml from a simple OpenDocument presentation
   // styles, declarations and unnecessary namespaces are omitted
@@ -1698,7 +1698,7 @@ void testSimpleOpenDocumentFormula()
 
   QByteArray xmlbuf;
   QBuffer xmldevice( xmlbuf );
-  QTextStream xmlstream( xmlbuf, IO_WriteOnly );
+  QTextStream xmlstream( xmlbuf, QIODevice::WriteOnly );
   
   // content.xml from a simple OpenDocument formula
   // this is essentially MathML
@@ -1875,7 +1875,7 @@ void testLargeOpenDocumentSpreadsheet()
 
   QByteArray xmlbuf;
   QBuffer xmldevice( xmlbuf );
-  QTextStream xmlstream( xmlbuf, IO_WriteOnly );
+  QTextStream xmlstream( xmlbuf, QIODevice::WriteOnly );
   
   // content.xml
   xmlstream << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";

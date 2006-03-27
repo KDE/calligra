@@ -23,7 +23,10 @@
 // This file hides those definitions from "users" of koParagDia.h
 // to reduce compile-time dependencies.
 
-#include <qgroupbox.h>
+#include <q3groupbox.h>
+//Added by qt3to4:
+#include <QMouseEvent>
+#include <Q3Frame>
 #include <KoParagCounter.h>
 #include <qspinbox.h>
 class QWidget;
@@ -55,7 +58,7 @@ public:
 /******************************************************************/
 /* class KPagePreview                                            */
 /******************************************************************/
-class KPagePreview : public QGroupBox
+class KPagePreview : public Q3GroupBox
 {
     Q_OBJECT
 
@@ -88,7 +91,7 @@ protected:
 /* class KPagePreview2                                           */
 /******************************************************************/
 
-class KPagePreview2 : public QGroupBox
+class KPagePreview2 : public Q3GroupBox
 {
     Q_OBJECT
 
@@ -110,7 +113,7 @@ protected:
 /* class KoBorderPreview                                          */
 /******************************************************************/
 
-class KoBorderPreview : public QFrame/*QGroupBox*/
+class KoBorderPreview : public Q3Frame/*QGroupBox*/
 {
     Q_OBJECT
 

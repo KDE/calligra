@@ -23,7 +23,7 @@
 
 #include <koffice_export.h>
 #include <qstring.h>
-#include <qvaluelist.h>
+#include <q3valuelist.h>
 #include <qmap.h>
 class KoTextParag;
 class KoTextDocument;
@@ -66,7 +66,7 @@ private:
     int m_endIndex;
 };
 
-class KOTEXT_EXPORT KoTextBookmarkList : public QValueList<KoTextBookmark>
+class KOTEXT_EXPORT KoTextBookmarkList : public Q3ValueList<KoTextBookmark>
 {
 public:
     const_iterator findByName( const QString& name ) const {

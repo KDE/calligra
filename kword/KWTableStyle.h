@@ -25,7 +25,7 @@
 #include <KoParagStyle.h>
 
 #include <qdom.h>
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 #include <qbrush.h>
 
 class KWFrameStyleCollection;

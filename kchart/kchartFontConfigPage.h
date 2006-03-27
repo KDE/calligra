@@ -21,14 +21,14 @@
 #define __KCHARTFONTCONFIGPAGE_H__
 
 #include <qwidget.h>
-#include <qbutton.h>
+#include <q3button.h>
 
 #include "kchartcolorarray.h"
 
 #include "koChart.h"
 
 class QLineEdit;
-class QListBox;
+class Q3ListBox;
 class QPushButton;
 
 namespace KChart
@@ -55,7 +55,7 @@ private:
 
     // Widgets
     QLineEdit     *m_font;
-    QListBox      *m_list;
+    Q3ListBox      *m_list;
     QPushButton   *m_fontButton;
 
     // Fonts for different things.
@@ -66,12 +66,12 @@ private:
     QFont label;
 
     // Old stuff.  Remove?
-    QButton::ToggleState xTitleIsRelative;
-    QButton::ToggleState yTitleIsRelative;
-    QButton::ToggleState labelIsRelative;
-    QButton::ToggleState yAxisIsRelative;
-    QButton::ToggleState xAxisIsRelative;
-    QButton::ToggleState legendIsRelative;
+    QCheckBox::ToggleState xTitleIsRelative;
+    QCheckBox::ToggleState yTitleIsRelative;
+    QCheckBox::ToggleState labelIsRelative;
+    QCheckBox::ToggleState yAxisIsRelative;
+    QCheckBox::ToggleState xAxisIsRelative;
+    QCheckBox::ToggleState legendIsRelative;
     KDChartTableData *data;
 };
 

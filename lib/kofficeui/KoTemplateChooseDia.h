@@ -28,13 +28,19 @@
 #include <kicondialog.h>
 #include <kiconview.h>
 #include <koffice_export.h>
+//Added by qt3to4:
+#include <QPixmap>
+#include <QHideEvent>
+#include <Q3GridLayout>
+#include <QKeyEvent>
+#include <Q3CString>
 
 // KoTCD : KoTemplateChooseDia
 
 class KoTCDIconViewItem;
 class KoTemplateTree;
 class KoTemplateGroup;
-class QGridLayout;
+class Q3GridLayout;
 
 /**
  * Our reimplementation of KIconCanvas used within the template-chooser dialog.
@@ -48,7 +54,7 @@ class KoTCDIconCanvas : public KIconCanvas
 	    : KIconCanvas( parent, name ) {}
 
 	bool isCurrentValid() { return currentItem(); }
-	QIconViewItem * load(KoTemplateGroup *group, const QString& name, KInstance* instance);
+	Q3IconViewItem * load(KoTemplateGroup *group, const QString& name, KInstance* instance);
 
     protected:
 	virtual void keyPressEvent( QKeyEvent *e ) {
@@ -63,11 +69,11 @@ class KoTCDIconCanvas : public KIconCanvas
 class KoTCDIconViewItem : public KIconViewItem
 {
     public:
-	KoTCDIconViewItem(QIconView *parent=0)
+	KoTCDIconViewItem(Q3IconView *parent=0)
 	    : KIconViewItem ( parent )
 	    {}
 
-	KoTCDIconViewItem(QIconView *parent=0, const QString &text=0, const QPixmap &icon=0,
+	KoTCDIconViewItem(Q3IconView *parent=0, const QString &text=0, const QPixmap &icon=0,
                       const QString &descr=0, const QString &fullname=0)
 	    : KIconViewItem(parent, text, icon)
 	    {
@@ -97,8 +103,8 @@ class KoTCDRecentFilesIconView : public KFileIconView {
 	KoTCDRecentFilesIconView( QWidget* parent, const char* name ) :
 		KFileIconView( parent, name ), toolTip(0)
 	{
-	    connect( this, SIGNAL( onItem( QIconViewItem * ) ),
-                     SLOT( showToolTip( QIconViewItem * ) ) );
+	    connect( this, SIGNAL( onItem( Q3IconViewItem * ) ),
+                     SLOT( showToolTip( Q3IconViewItem * ) ) );
 	    connect( this, SIGNAL( onViewport() ),
                      SLOT( removeToolTip() ) );
 	}
@@ -110,7 +116,7 @@ class KoTCDRecentFilesIconView : public KFileIconView {
         virtual void hideEvent( QHideEvent * );
 
     private slots:
-        void showToolTip( QIconViewItem* );
+        void showToolTip( Q3IconViewItem* );
         void removeToolTip();
     private:
         QLabel* toolTip;
@@ -159,7 +165,7 @@ public:
      * @param instance the KInstance of your app
      * The native mimetype is retrieved from the (desktop file of) that instance.
      * @param file this is the filename which is returned to your app
-     * More precisely, it's a url (to give to KURL) if ReturnType is File
+     * More precisely, it's a url (to give to KUrl) if ReturnType is File
      * and it's a path (to open directly) if ReturnType is Template
      *
      * @param dialogType the type of the dialog
@@ -170,17 +176,17 @@ public:
      */
     static ReturnType choose(KInstance* instance, QString &file,
                              const DialogType &dialogType,
-                             const QCString& templateType,
+                             const Q3CString& templateType,
                              QWidget* parent);
 
 private:
     /// Ditto, with extraNativeMimeTypes added
     static ReturnType choose(KInstance* instance, QString &file,
-                             const QCString &format,
+                             const Q3CString &format,
                              const QString &nativeName,
                              const QStringList& extraNativeMimeTypes,
                              const DialogType &dialogType=Everything,
-                             const QCString& templateType="",
+                             const Q3CString& templateType="",
                              QWidget* parent = 0);
 public:
 
@@ -222,28 +228,28 @@ private:
      * @return The return type (see above)
      */
     KoTemplateChooseDia(QWidget *parent, const char *name, KInstance* instance,
-                        const QCString &format,
+                        const Q3CString &format,
                         const QString &nativeName,
                         const QStringList &extraNativeMimeTypes,
                         const DialogType &dialogType=Everything,
-                        const QCString& templateType="");
+                        const Q3CString& templateType="");
 
 private:
     KoTemplateChooseDiaPrivate *d;
 
     QString descriptionText(const QString &name, const QString &description);
     void setupDialog();
-    void setupTemplateDialog(QWidget * widgetbase, QGridLayout * layout);
-    void setupFileDialog(QWidget * widgetbase, QGridLayout * layout);
-    void setupRecentDialog(QWidget * widgetbase, QGridLayout * layout);
+    void setupTemplateDialog(QWidget * widgetbase, Q3GridLayout * layout);
+    void setupFileDialog(QWidget * widgetbase, Q3GridLayout * layout);
+    void setupRecentDialog(QWidget * widgetbase, Q3GridLayout * layout);
     bool collectInfo();
     bool noStartupDlg() const;
 
 private slots:
 
-    void chosen(QIconViewItem *);
-    void currentChanged( QIconViewItem * );
-    void recentSelected( QIconViewItem * );
+    void chosen(Q3IconViewItem *);
+    void currentChanged( Q3IconViewItem * );
+    void recentSelected( Q3IconViewItem * );
 };
 
 #endif

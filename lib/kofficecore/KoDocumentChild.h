@@ -23,7 +23,7 @@
 #include <koffice_export.h>
 class QDomDocument;
 class QDomElement;
-class KURL;
+class KUrl;
 class KoStore;
 class KoDocument;
 class KoDocumentChildPrivate;
@@ -74,12 +74,12 @@ public:
    */
   virtual KoDocument *parentDocument() const; // TODO: remove virtual, makes no sense
 
-  virtual KoDocument* hitTest( const QPoint& p, const QWMatrix& _matrix = QWMatrix() );
+  virtual KoDocument* hitTest( const QPoint& p, const QMatrix& _matrix = QMatrix() );
 
   /**
-   * @note Can be empty (which is why it doesn't return a const KURL &)
+   * @note Can be empty (which is why it doesn't return a const KUrl &)
    */
-  KURL url() const;
+  KUrl url() const;
 
   /**
    *  Writes the "object" tag, but does NOT write the content of the

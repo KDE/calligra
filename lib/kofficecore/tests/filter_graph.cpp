@@ -18,6 +18,9 @@
 */
 
 #include <qfile.h>
+//Added by qt3to4:
+#include <Q3ValueList>
+#include <Q3CString>
 #include <KoQueryTrader.h>
 #include <KoFilterManager.h>
 #include <kinstance.h>
@@ -27,18 +30,18 @@ int main( int /*argc*/, char ** /*argv*/ )
 {
     KInstance instance( "filter_graph" );  // we need an instance when using the trader
 
-    QCString output = "digraph filters {\n";
+    Q3CString output = "digraph filters {\n";
 
     // The following code is shamelessly copied over from KOffice::Graph::buildGraph
     // It wasn't feasible to do some serious changes in the lib for that tiny bit
     // of duplicated code in a test file.
 
-    QValueList<QString> vertices; // to keep track of already inserted values, not performance critical
+    Q3ValueList<QString> vertices; // to keep track of already inserted values, not performance critical
 
     // Make sure that all available parts are added to the graph
-    QValueList<KoDocumentEntry> parts( KoDocumentEntry::query() );
-    QValueList<KoDocumentEntry>::ConstIterator partIt( parts.begin() );
-    QValueList<KoDocumentEntry>::ConstIterator partEnd( parts.end() );
+    Q3ValueList<KoDocumentEntry> parts( KoDocumentEntry::query() );
+    Q3ValueList<KoDocumentEntry>::ConstIterator partIt( parts.begin() );
+    Q3ValueList<KoDocumentEntry>::ConstIterator partEnd( parts.end() );
 
     while ( partIt != partEnd ) {
         //kdDebug() << ( *partIt ).service()->desktopEntryName() << endl;
@@ -60,9 +63,9 @@ int main( int /*argc*/, char ** /*argv*/ )
         ++partIt;
     }
 
-    QValueList<KoFilterEntry::Ptr> filters( KoFilterEntry::query() ); // no constraint here - we want *all* :)
-    QValueList<KoFilterEntry::Ptr>::ConstIterator it = filters.begin();
-    QValueList<KoFilterEntry::Ptr>::ConstIterator end = filters.end();
+    Q3ValueList<KoFilterEntry::Ptr> filters( KoFilterEntry::query() ); // no constraint here - we want *all* :)
+    Q3ValueList<KoFilterEntry::Ptr>::ConstIterator it = filters.begin();
+    Q3ValueList<KoFilterEntry::Ptr>::ConstIterator end = filters.end();
 
     for ( ; it != end; ++it ) {
         kdDebug() << "import " << ( *it )->import << " export " << ( *it )->export_ << endl;
@@ -108,7 +111,7 @@ int main( int /*argc*/, char ** /*argv*/ )
     output += "}\n";
 
     QFile f( "graph.dot" );
-    if ( f.open( IO_WriteOnly ) )
+    if ( f.open( QIODevice::WriteOnly ) )
         f.writeBlock( output.data(), output.size() - 1 );
     f.close();
     return 0;

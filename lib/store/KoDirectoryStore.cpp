@@ -80,7 +80,7 @@ bool KoDirectoryStore::openReadOrWrite( const QString& name, int iomode )
         m_stream = 0L;
         return false;
     }
-    if ( iomode == IO_ReadOnly )
+    if ( iomode == QIODevice::ReadOnly )
         m_iSize = m_stream->size();
     return true;
 }

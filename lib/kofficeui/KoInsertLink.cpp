@@ -21,7 +21,9 @@
 #include <klocale.h>
 
 #include <qlayout.h>
-#include <qvbox.h>
+#include <q3vbox.h>
+//Added by qt3to4:
+#include <Q3VBoxLayout>
 #include <kdebug.h>
 #include <qlabel.h>
 #include <qcombobox.h>
@@ -42,21 +44,21 @@ KoInsertLinkDia::KoInsertLinkDia( QWidget *parent, const char *name, bool displa
 		   KDialogBase::Ok, parent, name )
 {
   bookmarkLink = 0L;
-  QVBox *page=addVBoxPage(i18n("Internet"), QString::null,BarIcon("html",KIcon::SizeMedium));
+  Q3VBox *page=addVBoxPage(i18n("Internet"), QString::null,BarIcon("html",K3Icon::SizeMedium));
   internetLink = new  internetLinkPage(page );
   connect(internetLink,SIGNAL(textChanged()),this,SLOT(slotTextChanged (  )));
 
-  page=addVBoxPage(i18n("Mail & News"), QString::null,BarIcon("mail_generic",KIcon::SizeMedium));
+  page=addVBoxPage(i18n("Mail & News"), QString::null,BarIcon("mail_generic",K3Icon::SizeMedium));
   mailLink = new  mailLinkPage(page );
   connect(mailLink,SIGNAL(textChanged()),this,SLOT(slotTextChanged ()));
 
-  page=addVBoxPage(i18n("File"), QString::null,BarIcon("filenew",KIcon::SizeMedium));
+  page=addVBoxPage(i18n("File"), QString::null,BarIcon("filenew",K3Icon::SizeMedium));
   fileLink = new  fileLinkPage(page );
   connect(fileLink,SIGNAL(textChanged()),this,SLOT(slotTextChanged ()));
 
   if ( displayBookmarkLink)
   {
-      page=addVBoxPage(i18n("Bookmark"), QString::null,BarIcon("bookmark",KIcon::SizeMedium));
+      page=addVBoxPage(i18n("Bookmark"), QString::null,BarIcon("bookmark",K3Icon::SizeMedium));
       bookmarkLink = new  bookmarkLinkPage(page );
       connect(bookmarkLink,SIGNAL(textChanged()),this,SLOT(slotTextChanged ()));
   }
@@ -220,9 +222,9 @@ void KoInsertLinkDia::slotOk()
 internetLinkPage::internetLinkPage( QWidget *parent , char *name  )
   : QWidget(parent,name)
 {
-  QVBoxLayout *lay1 = new QVBoxLayout( this );
+  Q3VBoxLayout *lay1 = new Q3VBoxLayout( this );
   lay1->setSpacing( KDialog::spacingHint() );
-  QVBoxLayout *lay2 = new QVBoxLayout( lay1);
+  Q3VBoxLayout *lay2 = new Q3VBoxLayout( lay1);
   lay2->setSpacing( KDialog::spacingHint() );
 
   QLabel* tmpQLabel = new QLabel( this);
@@ -293,9 +295,9 @@ void internetLinkPage::textChanged ( const QString & )
 bookmarkLinkPage::bookmarkLinkPage( QWidget *parent , char *name  )
   : QWidget(parent,name)
 {
-  QVBoxLayout *lay1 = new QVBoxLayout( this );
+  Q3VBoxLayout *lay1 = new Q3VBoxLayout( this );
   lay1->setSpacing( KDialog::spacingHint() );
-  QVBoxLayout *lay2 = new QVBoxLayout( lay1);
+  Q3VBoxLayout *lay2 = new Q3VBoxLayout( lay1);
   lay2->setSpacing( KDialog::spacingHint() );
 
   QLabel* tmpQLabel = new QLabel( this);
@@ -375,9 +377,9 @@ void bookmarkLinkPage::textChanged ( const QString & )
 mailLinkPage::mailLinkPage( QWidget *parent , char *name  )
   : QWidget(parent,name)
 {
-  QVBoxLayout *lay1 = new QVBoxLayout( this );
+  Q3VBoxLayout *lay1 = new Q3VBoxLayout( this );
   lay1->setSpacing( KDialog::spacingHint() );
-  QVBoxLayout *lay2 = new QVBoxLayout( lay1);
+  Q3VBoxLayout *lay2 = new Q3VBoxLayout( lay1);
   lay2->setSpacing( KDialog::spacingHint() );
 
   QLabel* tmpQLabel = new QLabel( this);
@@ -445,9 +447,9 @@ void mailLinkPage::textChanged ( const QString & )
 fileLinkPage::fileLinkPage( QWidget *parent , char *name  )
   : QWidget(parent,name)
 {
-  QVBoxLayout *lay1 = new QVBoxLayout( this );
+  Q3VBoxLayout *lay1 = new Q3VBoxLayout( this );
   lay1->setSpacing( KDialog::spacingHint() );
-  QVBoxLayout *lay2 = new QVBoxLayout( lay1);
+  Q3VBoxLayout *lay2 = new Q3VBoxLayout( lay1);
   lay2->setSpacing( KDialog::spacingHint() );
 
   QLabel* tmpQLabel = new QLabel( this);

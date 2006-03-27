@@ -21,21 +21,24 @@
 #ifndef kocommandhistory_h
 #define kocommandhistory_h
 
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 #include <qstring.h>
 #include <qobject.h>
+//Added by qt3to4:
+#include <QMouseEvent>
+#include <Q3PopupMenu>
 #include <koffice_export.h>
 
 class KAction;
 class KActionCollection;
-class QPopupMenu;
+class Q3PopupMenu;
 class KCommand;
-#include <qlistbox.h>
+#include <q3listbox.h>
 
-class KoListBox : public QListBox {
+class KoListBox : public Q3ListBox {
     Q_OBJECT
 public:
-    KoListBox( QWidget *parent = 0, const char *name = 0, WFlags f = 0 );
+    KoListBox( QWidget *parent = 0, const char *name = 0, Qt::WFlags f = 0 );
 protected:
     virtual void contentsMouseMoveEvent ( QMouseEvent * );
     virtual QSize sizeHint() const;
@@ -154,8 +157,8 @@ protected slots:
     void slotUndoActivated( int );
     void slotRedoAboutToShow();
     void slotRedoActivated( int );
-    void slotUndoActivated( QListBoxItem *);
-    void slotRedoActivated( QListBoxItem *);
+    void slotUndoActivated( Q3ListBoxItem *);
+    void slotRedoActivated( Q3ListBoxItem *);
     void slotChangeRedoNumberOfSelectedItem( int );
     void slotChangeUndoNumberOfSelectedItem( int );
 signals:
@@ -183,9 +186,9 @@ signals:
 private:
     void clipCommands();  // ensures that the limits are kept
 
-    QPtrList<KCommand> m_commands;
+    Q3PtrList<KCommand> m_commands;
     KAction *m_undo, *m_redo;
-    QPopupMenu *m_undoPopup, *m_redoPopup;
+    Q3PopupMenu *m_undoPopup, *m_redoPopup;
     int m_undoLimit, m_redoLimit;
     bool m_first;  // attention: it's the first command in the list!
 protected:

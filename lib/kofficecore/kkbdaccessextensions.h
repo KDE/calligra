@@ -26,6 +26,10 @@
 
 // Qt includes.
 #include <qobject.h>
+//Added by qt3to4:
+#include <QLabel>
+#include <QKeyEvent>
+#include <QEvent>
 
 // KOffice includes.
 #include <koffice_export.h>

@@ -41,8 +41,8 @@ KexiBoolTableEdit::~KexiBoolTableEdit()
 
 void KexiBoolTableEdit::init()
 {
-	kdDebug() << "KexiBoolTableEdit: m_origValue.typeName()==" << m_origValue.typeName() << endl;
-	kdDebug() << "KexiBoolTableEdit: type== " << field()->typeName() << endl;
+	kDebug() << "KexiBoolTableEdit: m_origValue.typeName()==" << m_origValue.typeName() << endl;
+	kDebug() << "KexiBoolTableEdit: type== " << field()->typeName() << endl;
 
 	m_hasFocusableWidget = false;
 }
@@ -108,11 +108,11 @@ void KexiBoolTableEdit::setupContents( QPainter *p, bool /*focused*/, QVariant v
 //	x = 1;
 	y_offset = 0;
 #endif
-	int s = QMAX(h - 5, 12);
-	s = QMIN( h-3, s );
-	s = QMIN( w-3, s );//avoid too large box
+	int s = qMax(h - 5, 12);
+	s = qMin( h-3, s );
+	s = qMin( w-3, s );//avoid too large box
 //		QRect r(w/2 - s/2 + x, h/2 - s/2 - 1, s, s);
-	QRect r( QMAX( w/2 - s/2, 0 ) , h/2 - s/2 /*- 1*/, s, s);
+	QRect r( qMax( w/2 - s/2, 0 ) , h/2 - s/2 /*- 1*/, s, s);
 	p->setPen(QPen(colorGroup().text(), 1));
 	p->drawRect(r);
 	if (val.asBool()) {

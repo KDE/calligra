@@ -71,24 +71,24 @@ KexiScriptPart::~KexiScriptPart()
 KAction* KexiScriptPart::action(const QString& scripturi, QObject*)
 {
 	if(! m_mainWin) {
-		kdWarning() << "KexiScriptPart::action(KURL,QObject*) KexiMainWindow undefined." << endl;
+		kWarning() << "KexiScriptPart::action(KUrl,QObject*) KexiMainWindow undefined." << endl;
 		return 0;
 	}
 
 	KexiProject* project = m_mainWin->project();
 	if(! project) {
-		kdWarning() << "KexiScriptPart::action(KURL,QObject*) No project loaded." << endl;
+		kWarning() << "KexiScriptPart::action(KUrl,QObject*) No project loaded." << endl;
 		return 0;
 	}
 
 	KexiPart::ItemDict* itemdict = project->items( info() );
 	if(! itemdict) {
-		kdWarning() << "KexiScriptPart::action(KURL,QObject*) Project has no Scripts-items." << endl;
+		kWarning() << "KexiScriptPart::action(KUrl,QObject*) Project has no Scripts-items." << endl;
 		return 0;
 	}
 
 	if(scripturi.isEmpty()) {
-		kdWarning() << "KexiScriptPart::action(KURL,QObject*) Filename is empty." << endl;
+		kWarning() << "KexiScriptPart::action(KUrl,QObject*) Filename is empty." << endl;
 		return 0;
 	}
 
@@ -101,7 +101,7 @@ KAction* KexiScriptPart::action(const QString& scripturi, QObject*)
 	}
 
 	if(! item) {
-		kdWarning() << QString("KexiScriptPart::action(KURL,QObject*) No such item: \"%1\"").arg(scripturi) << endl;
+		kWarning() << QString("KexiScriptPart::action(KUrl,QObject*) No such item: \"%1\"").arg(scripturi) << endl;
 		return 0;
 	}
 
@@ -111,7 +111,7 @@ KAction* KexiScriptPart::action(const QString& scripturi, QObject*)
 	dialog->setId( item->identifier() );
 	KexiScriptDesignView* view = dynamic_cast<KexiScriptDesignView*>( createView(dialog, dialog, *item, Kexi::DesignViewMode) );
 	if(! view) {
-		kdWarning() << "KexiScriptPart::action(KURL,QObject*) Failed to create a view." << endl;
+		kWarning() << "KexiScriptPart::action(KUrl,QObject*) Failed to create a view." << endl;
 		return 0;
 	}
 

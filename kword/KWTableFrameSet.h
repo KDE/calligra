@@ -30,10 +30,19 @@ DESCRIPTION
 #include "KWFrame.h"
 #include "KWTextFrameSet.h"
 
-#include <qptrlist.h>
-#include <qvaluevector.h>
+#include <q3ptrlist.h>
+#include <q3valuevector.h>
 #include <qobject.h>
 #include <qstring.h>
+//Added by qt3to4:
+#include <QDragLeaveEvent>
+#include <Q3MemArray>
+#include <QKeyEvent>
+#include <QDragMoveEvent>
+#include <QDropEvent>
+#include <Q3ValueList>
+#include <QDragEnterEvent>
+#include <QMouseEvent>
 #include <KoRichText.h>
 
 class KWDocument;
@@ -161,7 +170,7 @@ public:
          * If a cell has m_cols = N, N values in this array point to the same cell.
          * (Same thing is a cell from a row above has m_rows > 1)
          */
-        QPtrVector< Cell > m_cellArray;
+        Q3PtrVector< Cell > m_cellArray;
 
     };
 
@@ -303,7 +312,7 @@ public:
 
     virtual KWordFrameSetIface* dcopObject();
 
-    virtual void addTextFrameSets( QPtrList<KWTextFrameSet> & lst, bool onlyReadWrite =false  );
+    virtual void addTextFrameSets( Q3PtrList<KWTextFrameSet> & lst, bool onlyReadWrite =false  );
 
     /// constructor
     KWTableFrameSet( KWDocument *_doc, const QString & name );
@@ -441,8 +450,8 @@ public:
      * @param listFrame needed for undo reasons
      */
     KCommand * splitCell(unsigned int intoRows, unsigned int intoColumns, unsigned int column,
-            unsigned int row, QPtrList<KWFrameSet> listFrameSet=QPtrList<KWFrameSet>(),
-            QPtrList<KWFrame>listFrame=QPtrList<KWFrame>() );
+            unsigned int row, Q3PtrList<KWFrameSet> listFrameSet=Q3PtrList<KWFrameSet>(),
+            Q3PtrList<KWFrame>listFrame=Q3PtrList<KWFrame>() );
 
     /** display formatting information */
     void viewFormatting( QPainter &painter, int zoom );
@@ -467,7 +476,7 @@ public:
     /** Contribute to the document statistics */
     virtual int paragraphs();
     virtual int paragraphsSelected();
-    virtual bool statistics( QProgressDialog *progress, ulong & charsWithSpace, ulong & charsWithoutSpace, ulong & words,
+    virtual bool statistics( Q3ProgressDialog *progress, ulong & charsWithSpace, ulong & charsWithoutSpace, ulong & words,
         ulong & sentences, ulong & syllables,ulong & lines, bool selected );
 
     virtual void finalize();
@@ -525,10 +534,10 @@ private:
     void addCellToArray( Cell* cell );
     void afterLoadingCell( Cell* cell );
     void parseInsideOfTable( const QDomElement& parent, KoOasisContext& context,
-                             const QMemArray<double> & columnLefts, uint& row, uint& column,
+                             const Q3MemArray<double> & columnLefts, uint& row, uint& column,
                              double currentRowHeight );
     void loadOasisCell( const QDomElement& element, KoOasisContext& context,
-                        const QMemArray<double> & columnLefts, uint row, uint column,
+                        const Q3MemArray<double> & columnLefts, uint row, uint column,
                         double currentRowHeight );
 
    /**
@@ -570,7 +579,7 @@ private:
 private:
     unsigned int m_rows, m_cols, m_nr_cells;
     bool m_active;
-    QPtrVector< Row > m_rowArray;
+    Q3PtrVector< Row > m_rowArray;
 
     /** The list of page boundaries.
     *   Each page the table spans has an entry in this list which points to the last _line_
@@ -578,9 +587,9 @@ private:
     *   For a 1 page table there is no page break; and therefor for such tables this list is
     *   empty.
     */
-    QValueList<unsigned int> m_pageBoundaries;
+    Q3ValueList<unsigned int> m_pageBoundaries;
     unsigned int m_redrawFromCol;
-    QValueList<double> m_rowPositions, m_colPositions;
+    Q3ValueList<double> m_rowPositions, m_colPositions;
 };
 
 
@@ -671,8 +680,8 @@ public:
 
 class RemovedColumn {
 
-    QPtrList<KWTableFrameSet::Cell> m_column;
-    QValueList<bool> m_removed;
+    Q3PtrList<KWTableFrameSet::Cell> m_column;
+    Q3ValueList<bool> m_removed;
     uint m_index;
     double m_width;
     bool m_initialized;

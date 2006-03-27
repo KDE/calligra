@@ -21,6 +21,9 @@
 #define KROSS_API_SCRIPTACTION_H
 
 #include <qdom.h>
+//Added by qt3to4:
+#include <Q3ValueList>
+#include <Q3CString>
 #include <kaction.h>
 
 #include "scriptcontainer.h"
@@ -65,7 +68,7 @@ namespace Kross { namespace Api {
             /**
              * Constructor.
              *
-             * \param file The KURL scriptfile this \a ScriptAction
+             * \param file The KUrl scriptfile this \a ScriptAction
              *        points to.
              */
             explicit ScriptAction(const QString& file);
@@ -196,13 +199,13 @@ namespace Kross { namespace Api {
             /**
              * The list of \a ScriptAction shared pointers.
              */
-            QValueList<ScriptAction::Ptr> m_list;
+            Q3ValueList<ScriptAction::Ptr> m_list;
 
             /**
              * A map of \a ScriptAction shared pointers used to access
              * the actions with there name.
              */
-            QMap<QCString, ScriptAction::Ptr> m_actions;
+            QMap<Q3CString, ScriptAction::Ptr> m_actions;
 
             /**
              * A KActionMenu which could be used to display the
@@ -246,7 +249,7 @@ namespace Kross { namespace Api {
              * Destructor.
              */
             ~ScriptActionCollection() {
-                for(QValueList<ScriptAction::Ptr>::Iterator it = m_list.begin(); it != m_list.end(); ++it)
+                for(Q3ValueList<ScriptAction::Ptr>::Iterator it = m_list.begin(); it != m_list.end(); ++it)
                     (*it)->detach(this);
             }
 
@@ -254,12 +257,12 @@ namespace Kross { namespace Api {
              * \return the \a ScriptAction instance which has the name \p name
              * or NULL if there exists no such action.
              */
-            ScriptAction::Ptr action(const QCString& name) { return m_actions[name]; }
+            ScriptAction::Ptr action(const Q3CString& name) { return m_actions[name]; }
 
             /**
              * \return a list of actions.
              */
-            QValueList<ScriptAction::Ptr> actions() { return m_list; }
+            Q3ValueList<ScriptAction::Ptr> actions() { return m_list; }
 
             /**
              * \return the KActionMenu \a m_actionmenu .
@@ -293,7 +296,7 @@ namespace Kross { namespace Api {
              * will be empty and there are no actions attach any longer.
              */
             void clear() {
-                for(QValueList<ScriptAction::Ptr>::Iterator it = m_list.begin(); it != m_list.end(); ++it) {
+                for(Q3ValueList<ScriptAction::Ptr>::Iterator it = m_list.begin(); it != m_list.end(); ++it) {
                     m_actionmenu->remove(*it);
                     (*it)->detach(this);
                 }

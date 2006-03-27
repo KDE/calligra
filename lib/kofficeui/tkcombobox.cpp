@@ -19,10 +19,13 @@
  */
 #include "tkcombobox.h"
 
-#include <qlistbox.h>
+#include <q3listbox.h>
 #include <qpainter.h>
 #include <qstyle.h>
 #include <qdrawutil.h>
+//Added by qt3to4:
+#include <QPixmap>
+#include <QPaintEvent>
 
 #include <kapplication.h>
 
@@ -88,7 +91,7 @@ void TKComboBox::paintEvent(QPaintEvent*)
 
 
   style().drawControl( QStyle::CE_PushButton, &p, this, QRect( bx, by, bw, bh ), colorGroup() );
-  style().drawItem( &p, QRect( bx, by, bw, bh), AlignCenter, colorGroup(), isEnabled(), &pixmap, QString::null );
+  style().drawItem( &p, QRect( bx, by, bw, bh), Qt::AlignCenter, colorGroup(), isEnabled(), &pixmap, QString::null );
 
   if ( hasFocus()) {
     style().drawPrimitive( QStyle::PE_FocusRect, &p, fr, g );
@@ -100,7 +103,7 @@ void TKComboBox::paintEvent(QPaintEvent*)
     p.setBackgroundColor( g.background() );
 
     if ( listBox()->item(currentItem()) ) {
-      QListBoxItem * item = listBox()->item(currentItem());
+      Q3ListBoxItem * item = listBox()->item(currentItem());
       const QPixmap *pix = item->pixmap();
       QString text = item->text();
       int x = r.x();
@@ -109,7 +112,7 @@ void TKComboBox::paintEvent(QPaintEvent*)
         x += pix->width()+3;
       }
       if (!text.isEmpty())
-        p.drawText( x, r.y(), r.width()-x, r.height(), AlignLeft|AlignVCenter|SingleLine, text );
+        p.drawText( x, r.y(), r.width()-x, r.height(), Qt::AlignLeft|Qt::AlignVCenter|Qt::TextSingleLine, text );
     }
   }
   p.end();

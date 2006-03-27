@@ -18,14 +18,16 @@
 */
 
 #include "KoStoreDrag.h"
+//Added by qt3to4:
+#include <Q3CString>
 
-QCString KoStoreDrag::mimeType( const char* nativeMimeType )
+Q3CString KoStoreDrag::mimeType( const char* nativeMimeType )
 {
-    return QCString(nativeMimeType); // + "-selection"; removed for OASIS
+    return Q3CString(nativeMimeType); // + "-selection"; removed for OASIS
 }
 
 KoStoreDrag::KoStoreDrag( const char* nativeMimeType, QWidget *dragSource, const char *name )
-    : QStoredDrag( mimeType(nativeMimeType), dragSource, name )
+    : Q3StoredDrag( mimeType(nativeMimeType), dragSource, name )
 {
 }
 

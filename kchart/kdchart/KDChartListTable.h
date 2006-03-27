@@ -29,22 +29,22 @@
 #ifndef __KDCHARTLISTTABLE_H__
 #define __KDCHARTLISTTABLE_H__
 
-#include <qvaluelist.h>
-#include <qshared.h>
-#include <qtable.h>
+#include <q3valuelist.h>
+#include <q3shared.h>
+#include <q3table.h>
 
 #include <KDChartDataIntern.h>
 #include <KDChartTableBase.h>
 
-class KDCHART_EXPORT KDChartListTablePrivate : public QShared
+class KDCHART_EXPORT KDChartListTablePrivate : public Q3Shared
 {
     public:
-        KDChartListTablePrivate() : QShared() {
+        KDChartListTablePrivate() : Q3Shared() {
             row_count = 0;
             col_count = 0;
         }
 
-        KDChartListTablePrivate( uint _rows, uint _cols ) : QShared() {
+        KDChartListTablePrivate( uint _rows, uint _cols ) : Q3Shared() {
             for ( uint i = 0; i < _rows; i++ )
                 row_list.append( int() );
             for ( uint j = 0; j < _cols; j++ )
@@ -56,7 +56,7 @@ class KDCHART_EXPORT KDChartListTablePrivate : public QShared
         }
 
         KDChartListTablePrivate( const KDChartListTablePrivate& _t ) :
-            QShared(),
+            Q3Shared(),
         matrix( _t.matrix ),
         row_list( _t.row_list ),
         col_list( _t.col_list ),
@@ -146,54 +146,54 @@ class KDCHART_EXPORT KDChartListTablePrivate : public QShared
         void insertColumn( uint _c ) {
             Q_ASSERT( _c <= col_count );
             ++col_count;
-            QValueList < KDChartData > ::Iterator it;
+            Q3ValueList < KDChartData > ::Iterator it;
             for ( uint i = 0; i < row_count; ++i ) {
                 it = matrix.at( i * col_count + _c );
                 matrix.insert( it, KDChartData() );
             }
 
-            QValueList < int > ::Iterator it2 = col_list.at( _c );
+            Q3ValueList < int > ::Iterator it2 = col_list.at( _c );
             col_list.insert( it2, int() );
         }
 
         void insertRow( uint _r ) {
             Q_ASSERT( _r <= row_count );
             ++row_count;
-            QValueList < KDChartData > ::Iterator it = matrix.at( _r * col_count );
+            Q3ValueList < KDChartData > ::Iterator it = matrix.at( _r * col_count );
             for ( uint i = 0; i < col_count; ++i )
                 matrix.insert( it, KDChartData() );
 
-            QValueList < int > ::Iterator it2 = row_list.at( _r );
+            Q3ValueList < int > ::Iterator it2 = row_list.at( _r );
             row_list.insert( it2, int() );
         }
 
         void removeColumn( uint _c ) {
             Q_ASSERT( _c < col_count );
             --col_count;
-            QValueList < KDChartData > ::Iterator it;
+            Q3ValueList < KDChartData > ::Iterator it;
             for ( uint i = 0; i < row_count; ++i ) {
                 it = matrix.at( i * col_count + _c );
                 matrix.remove( it );
             }
 
-            QValueList < int > ::Iterator it2 = col_list.at( _c );
+            Q3ValueList < int > ::Iterator it2 = col_list.at( _c );
             col_list.remove( it2 );
         }
 
         void removeRow( uint _r ) {
             Q_ASSERT( _r < row_count );
             --row_count;
-            QValueList < KDChartData > ::Iterator it = matrix.at( _r * col_count );
+            Q3ValueList < KDChartData > ::Iterator it = matrix.at( _r * col_count );
             for ( uint i = 0; i < col_count; ++i )
                 it = matrix.remove( it );
 
-            QValueList < int > ::Iterator it2 = row_list.at( _r );
+            Q3ValueList < int > ::Iterator it2 = row_list.at( _r );
             row_list.remove( it2 );
         }
 
-        QValueList < KDChartData > matrix;
-        QValueList < int > row_list;
-        QValueList < int > col_list;
+        Q3ValueList < KDChartData > matrix;
+        Q3ValueList < int > row_list;
+        Q3ValueList < int > col_list;
 
         uint col_count;
         uint row_count;
@@ -210,14 +210,14 @@ class KDChartListTableData : public KDChartTableDataBase
         /**
          * Typedefs
          */
-        typedef QValueList < KDChartData > ::Iterator Iterator;
-        typedef QValueList < KDChartData > ::ConstIterator ConstIterator;
+        typedef Q3ValueList < KDChartData > ::Iterator Iterator;
+        typedef Q3ValueList < KDChartData > ::ConstIterator ConstIterator;
 
-        typedef QValueList < int > ::Iterator RowIterator;
-        typedef QValueList < int > ::ConstIterator ConstRowIterator;
+        typedef Q3ValueList < int > ::Iterator RowIterator;
+        typedef Q3ValueList < int > ::ConstIterator ConstRowIterator;
 
-        typedef QValueList < int > ::Iterator ColIterator;
-        typedef QValueList < int > ::ConstIterator ConstColIterator;
+        typedef Q3ValueList < int > ::Iterator ColIterator;
+        typedef Q3ValueList < int > ::ConstIterator ConstColIterator;
 
         /**
          * API

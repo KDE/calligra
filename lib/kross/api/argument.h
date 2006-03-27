@@ -21,7 +21,7 @@
 #define KROSS_API_ARGUMENT_H
 
 #include <qstring.h>
-#include <qvaluelist.h>
+#include <q3valuelist.h>
 
 #include "object.h"
 
@@ -121,7 +121,7 @@ namespace Kross { namespace Api {
              *
              * \return List of \a Argument instances.
              */
-            operator QValueList<Argument>& () { return m_arguments; }
+            operator Q3ValueList<Argument>& () { return m_arguments; }
 
             /**
              * Implementation of the << operator.
@@ -157,7 +157,7 @@ namespace Kross { namespace Api {
             /// Maximal needed parameters.
             //uint m_maxparams;
             /// List of \a Argument.
-            QValueList<Argument> m_arguments;
+            Q3ValueList<Argument> m_arguments;
     };
 
 }}

@@ -2364,7 +2364,7 @@ bool KPrDocument::loadXML( const QDomDocument &doc )
         return false;
     }
     if(document.hasAttribute("url"))
-        urlIntern=KURL(document.attribute("url")).path();
+        urlIntern=KUrl(document.attribute("url")).path();
 
     emit sigProgress( 10 );
 
@@ -3316,7 +3316,7 @@ bool KPrDocument::initDoc(InitDocFlags flags, QWidget* parentWidget)
     } else if ( ret == KoTemplateChooseDia::File ) {
         objStartY = 0;
         _clean = true;
-        KURL url( file );
+        KUrl url( file );
         bool ok = openURL( url );
         return ok;
     } else if ( ret == KoTemplateChooseDia::Empty ) {
@@ -3594,7 +3594,7 @@ QString KPrDocument::templateFileName( bool chooseTemplate, const QString &theFi
         QFileInfo fileInfo( _template );
         fileName = fileInfo.dirPath( true ) + "/" + fileInfo.baseName() + ".kpt";
 
-        KURL src, dest;
+        KUrl src, dest;
         src.setPath( fileName );
         dest.setPath( locateLocal( "appdata", "default.kpr" ) );
         kdDebug(33001) << "Copying template  (in KPrDocument::templateFileName)" << endl
@@ -3939,8 +3939,8 @@ void KPrDocument::copyPageToClipboard( int pgnum )
     kdDebug(33001) << "mimeType = " << mimeType() << ", outputMimeType = " << outputMimeType() << endl;
     KTempFile tempFile( QString::null, mimeType() == nativeOasisMimeType() ? ".oop": ".kpr" );
     savePage( tempFile.name(), pgnum, true );
-    KURL url; url.setPath( tempFile.name() );
-    KURL::List lst;
+    KUrl url; url.setPath( tempFile.name() );
+    KUrl::List lst;
     lst.append( url );
     QApplication::clipboard()->setData( new KURLDrag( lst ) );
     m_tempFileInClipboard = tempFile.name(); // do this last, the above calls clipboardDataChanged
@@ -3948,7 +3948,7 @@ void KPrDocument::copyPageToClipboard( int pgnum )
 
 void KPrDocument::pastePage( const QMimeSource * data, int pgnum )
 {
-    KURL::List lst;
+    KUrl::List lst;
     if ( KURLDrag::decode( data, lst ) && !lst.isEmpty() )
     {
         insertNewPage(i18n("Paste Slide"),  pgnum, IP_BEFORE, FALSE, lst.first().path() );

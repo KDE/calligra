@@ -37,7 +37,7 @@ public:
   /**
    * Creates a new zoom action.
    */
-  KoZoomAction( const QString& text, const QIconSet& pix, 
+  KoZoomAction( const QString& text, const QIcon& pix, 
     const KShortcut& cut = KShortcut(), QObject* parent = 0, const char* name = 0 );
       
   /**

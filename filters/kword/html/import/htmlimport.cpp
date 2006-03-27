@@ -47,7 +47,7 @@ KoFilter::ConversionStatus HTMLImport::convert( const QCString& from, const QCSt
 	KoStore *k= KoStore::createStore(m_chain->outputFile(), KoStore::Write, "application/x-kword");
 	KWDWriter *w= new KWDWriter(k);
 	KHTMLReader h(w);
-	KURL url;
+	KUrl url;
 	url.setPath(m_chain->inputFile());
 	bool b= h.filter(url);
 	delete(w);

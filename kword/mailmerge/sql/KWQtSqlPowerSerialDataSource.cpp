@@ -22,15 +22,17 @@
 #include "KWQtSqlMailMergeOpen.h"
 #include <qlayout.h>
 #include <qdom.h>
+//Added by qt3to4:
+#include <Q3VBoxLayout>
 #include <kcombobox.h>
 #include <klineedit.h>
 #include <kpushbutton.h>
 #include <qsqldatabase.h>
 #include <qmessagebox.h>
-#include <kpassdlg.h>
+#include <kpassworddialog.h>
 #include <qsqlrecord.h>
-#include <qsqlcursor.h>
-#include <qdatatable.h>
+#include <q3sqlcursor.h>
+#include <q3datatable.h>
 #include <kdebug.h>
 
 #define KWQtSqlBarIcon( x ) BarIcon( x, db->KWInstance() )
@@ -66,9 +68,9 @@ void KWQtSqlPowerSerialDataSource::refresh(bool force)
 		if (!tmp.startsWith("SELECT")) return;
 		if ((!database) || (!database->isOpen()))openDatabase();
 		myquery=new KWMySqlCursor(query,true,database);
-		myquery->setMode(QSqlCursor::ReadOnly);
+		myquery->setMode(Q3SqlCursor::ReadOnly);
 	}
-	kdDebug()<<QString("There were %1 rows in the query").arg(myquery->size())<<endl;
+	kDebug()<<QString("There were %1 rows in the query").arg(myquery->size())<<endl;
 }
 
 QString KWQtSqlPowerSerialDataSource::getValue( const QString &name, int record ) const
@@ -178,10 +180,10 @@ void KWQtSqlPowerSerialDataSource::addSampleRecordEntry(QString name)
 KWQtSqlPowerMailMergeEditor::KWQtSqlPowerMailMergeEditor( QWidget *parent, KWQtSqlPowerSerialDataSource *db_ )
 	:KDialogBase( Plain, i18n( "Mail Merge - Editor" ), Ok | Cancel, Ok, parent, "", true ), db( db_ )
 {
-        (new QVBoxLayout(plainPage()))->setAutoAdd(true);
+        (new Q3VBoxLayout(plainPage()))->setAutoAdd(true);
         setMainWidget(widget=new KWQtSqlPowerWidget(plainPage()));
 	connect(widget->setup,SIGNAL(clicked()),this,SLOT(openSetup()));
-	connect(widget->tables,SIGNAL(currentChanged(QListBoxItem*)),this,SLOT(slotTableChanged(QListBoxItem*)));
+	connect(widget->tables,SIGNAL(currentChanged(Q3ListBoxItem*)),this,SLOT(slotTableChanged(Q3ListBoxItem*)));
 	connect(widget->execute,SIGNAL(clicked()),this,SLOT(slotExecute()));
 	connect(this,SIGNAL(okClicked()),this,SLOT(slotSetQuery()));
 	widget->query->setText(db->query);
@@ -200,18 +202,18 @@ void KWQtSqlPowerMailMergeEditor::slotExecute()
 	QString tmp=widget->query->text().upper();
 	if (!tmp.startsWith("SELECT")) return;
 	KWMySqlCursor *cur=new KWMySqlCursor(widget->query->text(),true,db->database);
-	cur->setMode(QSqlCursor::ReadOnly);
+	cur->setMode(Q3SqlCursor::ReadOnly);
 
 	db->clearSampleRecord();
-	kdDebug()<<QString("Fieldname count %1").arg(cur->count())<<endl;
+	kDebug()<<QString("Fieldname count %1").arg(cur->count())<<endl;
 	for (uint i=0;i<cur->count();i++)
 		db->addSampleRecordEntry(cur->fieldName(i));
 
 	widget->queryresult->setSqlCursor(cur,true,true);
-	widget->queryresult->refresh(QDataTable::RefreshAll);
+	widget->queryresult->refresh(Q3DataTable::RefreshAll);
 }
 
-void KWQtSqlPowerMailMergeEditor::slotTableChanged ( QListBoxItem * item )
+void KWQtSqlPowerMailMergeEditor::slotTableChanged ( Q3ListBoxItem * item )
 {
 	widget->fields->clear();
 	if (item)

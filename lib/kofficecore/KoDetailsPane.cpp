@@ -22,13 +22,16 @@
 #include <qlabel.h>
 #include <qfile.h>
 #include <qimage.h>
-#include <qheader.h>
+#include <q3header.h>
 #include <qrect.h>
 #include <qbrush.h>
 #include <qpainter.h>
-#include <qsimplerichtext.h>
+#include <q3simplerichtext.h>
 #include <qevent.h>
 #include <qsplitter.h>
+//Added by qt3to4:
+#include <QPixmap>
+#include <Q3ValueList>
 
 #include <kinstance.h>
 #include <klocale.h>
@@ -47,7 +50,7 @@
 class KoFileListItem : public KListViewItem
 {
   public:
-    KoFileListItem(KListView* listView, QListViewItem* after, const QString& filename,
+    KoFileListItem(KListView* listView, Q3ListViewItem* after, const QString& filename,
                    const QString& fullPath, KFileItem* fileItem)
       : KListViewItem(listView, after, filename, fullPath), m_fileItem(fileItem)
     {
@@ -121,7 +124,7 @@ KoTemplatesPane::KoTemplatesPane(QWidget* parent, KInstance* instance,
 
     KListViewItem* item = new KListViewItem(m_documentList, t->name(), t->description(), t->file());
     QImage icon = t->loadPicture(instance).convertToImage();
-    icon = icon.smoothScale(64, 64, QImage::ScaleMin);
+    icon = icon.smoothScale(64, 64, Qt::KeepAspectRatio);
     icon.setAlphaBuffer(true);
     icon = icon.copy((icon.width() - 64) / 2, (icon.height() - 64) / 2, 64, 64);
     item->setPixmap(0, QPixmap(icon));
@@ -134,12 +137,12 @@ KoTemplatesPane::KoTemplatesPane(QWidget* parent, KInstance* instance,
     }
   }
 
-  connect(m_documentList, SIGNAL(selectionChanged(QListViewItem*)),
-          this, SLOT(selectionChanged(QListViewItem*)));
-  connect(m_documentList, SIGNAL(doubleClicked(QListViewItem*, const QPoint&, int)),
-          this, SLOT(openTemplate(QListViewItem*)));
-  connect(m_documentList, SIGNAL(returnPressed(QListViewItem*)),
-          this, SLOT(openTemplate(QListViewItem*)));
+  connect(m_documentList, SIGNAL(selectionChanged(Q3ListViewItem*)),
+          this, SLOT(selectionChanged(Q3ListViewItem*)));
+  connect(m_documentList, SIGNAL(doubleClicked(Q3ListViewItem*, const QPoint&, int)),
+          this, SLOT(openTemplate(Q3ListViewItem*)));
+  connect(m_documentList, SIGNAL(returnPressed(Q3ListViewItem*)),
+          this, SLOT(openTemplate(Q3ListViewItem*)));
   connect(m_openButton, SIGNAL(clicked()), this, SLOT(openTemplate()));
 
   if(selectItem) {
@@ -155,7 +158,7 @@ KoTemplatesPane::~KoTemplatesPane()
   delete d;
 }
 
-void KoTemplatesPane::selectionChanged(QListViewItem* item)
+void KoTemplatesPane::selectionChanged(Q3ListViewItem* item)
 {
   if(item) {
     m_openButton->setEnabled(true);
@@ -175,11 +178,11 @@ void KoTemplatesPane::selectionChanged(QListViewItem* item)
 
 void KoTemplatesPane::openTemplate()
 {
-  QListViewItem* item = m_documentList->selectedItem();
+  Q3ListViewItem* item = m_documentList->selectedItem();
   openTemplate(item);
 }
 
-void KoTemplatesPane::openTemplate(QListViewItem* item)
+void KoTemplatesPane::openTemplate(Q3ListViewItem* item)
 {
   if(item) {
     KConfigGroup cfgGrp(d->m_instance->config(), "TemplateChooserDialog");
@@ -205,7 +208,7 @@ bool KoTemplatesPane::isSelected()
 
 void KoTemplatesPane::alwaysUseClicked()
 {
-  QListViewItem* item = m_documentList->selectedItem();
+  Q3ListViewItem* item = m_documentList->selectedItem();
 
   if(!m_alwaysUseCheckBox->isChecked()) {
     KConfigGroup cfgGrp(d->m_instance->config(), "TemplateChooserDialog");
@@ -223,7 +226,7 @@ void KoTemplatesPane::changeAlwaysUseTemplate(KoTemplatesPane* sender, const QSt
   if(this == sender)
     return;
 
-  QListViewItem* item = m_documentList->selectedItem();
+  Q3ListViewItem* item = m_documentList->selectedItem();
 
   // If the old always use template is selected uncheck the checkbox
   if(item && (item->text(2) == d->m_alwaysUseTemplate)) {
@@ -250,7 +253,7 @@ bool KoTemplatesPane::eventFilter(QObject* watched, QEvent* e)
   return false;
 }
 
-void KoTemplatesPane::resizeSplitter(KoDetailsPaneBase* sender, const QValueList<int>& sizes)
+void KoTemplatesPane::resizeSplitter(KoDetailsPaneBase* sender, const Q3ValueList<int>& sizes)
 {
   if(sender == this)
     return;
@@ -319,7 +322,7 @@ KoRecentDocumentsPane::KoRecentDocumentsPane(QWidget* parent, KInstance* instanc
         path = path.mid(pos + 1, path.length() - pos - 2);
       }
 
-      KURL url(path);
+      KUrl url(path);
 
       if(name.isEmpty())
         name = url.filename();
@@ -343,14 +346,14 @@ KoRecentDocumentsPane::KoRecentDocumentsPane(QWidget* parent, KInstance* instanc
 
   instance->config()->setGroup( oldGroup );
 
-  connect(m_documentList, SIGNAL(selectionChanged(QListViewItem*)),
-          this, SLOT(selectionChanged(QListViewItem*)));
-  connect(m_documentList, SIGNAL(clicked(QListViewItem*)),
-          this, SLOT(selectionChanged(QListViewItem*)));
-  connect(m_documentList, SIGNAL(doubleClicked(QListViewItem*, const QPoint&, int)),
-          this, SLOT(openFile(QListViewItem*)));
-  connect(m_documentList, SIGNAL(returnPressed(QListViewItem*)),
-          this, SLOT(openFile(QListViewItem*)));
+  connect(m_documentList, SIGNAL(selectionChanged(Q3ListViewItem*)),
+          this, SLOT(selectionChanged(Q3ListViewItem*)));
+  connect(m_documentList, SIGNAL(clicked(Q3ListViewItem*)),
+          this, SLOT(selectionChanged(Q3ListViewItem*)));
+  connect(m_documentList, SIGNAL(doubleClicked(Q3ListViewItem*, const QPoint&, int)),
+          this, SLOT(openFile(Q3ListViewItem*)));
+  connect(m_documentList, SIGNAL(returnPressed(Q3ListViewItem*)),
+          this, SLOT(openFile(Q3ListViewItem*)));
   connect(m_openButton, SIGNAL(clicked()), this, SLOT(openFile()));
 
   m_documentList->setSelected(m_documentList->firstChild(), true);
@@ -367,7 +370,7 @@ KoRecentDocumentsPane::~KoRecentDocumentsPane()
   delete d;
 }
 
-void KoRecentDocumentsPane::selectionChanged(QListViewItem* item)
+void KoRecentDocumentsPane::selectionChanged(Q3ListViewItem* item)
 {
   if(item) {
     m_openButton->setEnabled(true);
@@ -396,11 +399,11 @@ void KoRecentDocumentsPane::selectionChanged(QListViewItem* item)
 
 void KoRecentDocumentsPane::openFile()
 {
-  QListViewItem* item = m_documentList->selectedItem();
+  Q3ListViewItem* item = m_documentList->selectedItem();
   openFile(item);
 }
 
-void KoRecentDocumentsPane::openFile(QListViewItem* item)
+void KoRecentDocumentsPane::openFile(Q3ListViewItem* item)
 {
   KConfigGroup cfgGrp(d->m_instance->config(), "TemplateChooserDialog");
   cfgGrp.writeEntry("LastReturnType", "File");
@@ -421,13 +424,13 @@ void KoRecentDocumentsPane::updatePreview(const KFileItem* fileItem, const QPixm
     return;
   }
 
-  QListViewItemIterator it(m_documentList);
+  Q3ListViewItemIterator it(m_documentList);
 
   while(it.current()) {
     if(it.current()->text(1) == fileItem->url().url()) {
       it.current()->setPixmap(2, preview);
       QImage icon = preview.convertToImage();
-      icon = icon.smoothScale(64, 64, QImage::ScaleMin);
+      icon = icon.smoothScale(64, 64, Qt::KeepAspectRatio);
       icon.setAlphaBuffer(true);
       icon = icon.copy((icon.width() - 64) / 2, (icon.height() - 64) / 2, 64, 64);
       it.current()->setPixmap(0, QPixmap(icon));
@@ -468,7 +471,7 @@ bool KoRecentDocumentsPane::eventFilter(QObject* watched, QEvent* e)
   return false;
 }
 
-void KoRecentDocumentsPane::resizeSplitter(KoDetailsPaneBase* sender, const QValueList<int>& sizes)
+void KoRecentDocumentsPane::resizeSplitter(KoDetailsPaneBase* sender, const Q3ValueList<int>& sizes)
 {
   if(sender == this)
     return;

@@ -20,7 +20,7 @@
 
 #ifndef _SERIALLETTER_INTERFACE_H_
 #define _SERIALLETTER_INTERFACE_H_
-#include <qcstring.h>
+#include <q3cstring.h>
 #include <qdom.h>
 #include <kinstance.h>
 #include <qmap.h>

@@ -47,14 +47,14 @@ extern "C" KOFFICETOOLS_EXPORT int kdemain(int argc, char **argv)
 
 	KService::Ptr service = KService::serviceByDesktopName("thesaurustool");
 	if( ! service ) {
-		kdWarning() << "Could not find Service/KDataTool 'thesaurustool'!" << endl;
+		kWarning() << "Could not find Service/KDataTool 'thesaurustool'!" << endl;
 		return 1;
 	}
 
 	KDataToolInfo *info = new KDataToolInfo(service, 0);
 	KDataTool *tool = info->createTool();
 	if ( !tool ) {
-		kdWarning() << "Could not create tool 'thesaurustool'!" << endl;
+		kWarning() << "Could not create tool 'thesaurustool'!" << endl;
 		return 2;
 	}
 
@@ -76,7 +76,7 @@ extern "C" KOFFICETOOLS_EXPORT int kdemain(int argc, char **argv)
 	QString mimetype = "text/plain";
 	QString datatype = "QString";
 
-	//kdDebug() << "KThesaurus command=" << command
+	//kDebug() << "KThesaurus command=" << command
 	//		<< " dataType=" << info->dataType() << endl;
 
 	tool->run(command, &text, datatype, mimetype);

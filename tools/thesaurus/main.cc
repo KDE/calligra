@@ -237,11 +237,11 @@ bool Thesaurus::run(const QString& command, void* data, const QString& datatype,
 
     // Check whether we can accept the data
     if ( datatype != "QString" ) {
-        kdDebug(31000) << "Thesaurus only accepts datatype QString" << endl;
+        kDebug(31000) << "Thesaurus only accepts datatype QString" << endl;
         return FALSE;
     }
     if ( mimetype != "text/plain" ) {
-        kdDebug(31000) << "Thesaurus only accepts mimetype text/plain" << endl;
+        kDebug(31000) << "Thesaurus only accepts mimetype text/plain" << endl;
         return FALSE;
     }
 
@@ -249,23 +249,23 @@ bool Thesaurus::run(const QString& command, void* data, const QString& datatype,
         // not called from an application like KWord, so make it possible
         // to replace text:
         m_replacement = true;
-        m_dialog->setButtonOKText(i18n("&Replace"));
+        m_dialog->setButtonOK(i18n("&Replace"));
     } else if ( command == "thesaurus_standalone" ) {
         // not called from any application, but from KThesaurus
         m_replacement = false;
         m_dialog->showButtonOK(false);
-        m_dialog->setButtonCancelText(i18n("&Close"));
+        m_dialog->setButtonCancel(i18n("&Close"));
         m_replace->setEnabled(false);
         m_replace_label->setEnabled(false);
     } else {
-        kdDebug(31000) << "Thesaurus does only accept the command 'thesaurus' or 'thesaurus_standalone'" << endl;
-        kdDebug(31000) << "The command " << command << " is not accepted" << endl;
+        kDebug(31000) << "Thesaurus does only accept the command 'thesaurus' or 'thesaurus_standalone'" << endl;
+        kDebug(31000) << "The command " << command << " is not accepted" << endl;
         return FALSE;
     }
 
     // Get data and clean it up:
     QString buffer = *((QString *)data);
-    buffer = buffer.stripWhiteSpace();
+    buffer = buffer.trimmed();
     QRegExp re("[.,;!?\"'()\\[\\]]");
     buffer.remove(re);
     buffer = buffer.left(100);        // limit maximum length
@@ -300,7 +300,7 @@ void Thesaurus::slotChangeLanguage()
 
 void Thesaurus::setCaption()
 {
-    KURL url = KURL();
+    KUrl url = KUrl();
     url.setPath(m_data_file);
     m_dialog->setCaption(i18n("Related Words - %1").arg(url.fileName()));
 }
@@ -371,7 +371,7 @@ void Thesaurus::slotFindTerm(const QString &term, bool add_to_history)
 {
     slotSetReplaceTerm(term);
     if( term.startsWith("http://") ) {
-        (void) new KRun(KURL(term));
+        (void) new KRun(KUrl(term));
     } else {
         if( add_to_history ) {
             m_edit->insertItem(term, 0);
@@ -410,7 +410,7 @@ void Thesaurus::findTermThesaurus(const QString &term)
     
     // Find only whole words. Looks clumsy, but this way we don't have to rely on
     // features that might only be in certain versions of grep:
-    QString term_tmp = ";" + term.stripWhiteSpace() + ";";
+    QString term_tmp = ";" + term.trimmed() + ";";
     m_thesproc->clearArguments();
     *m_thesproc << "grep" << "-i" << term_tmp;
     *m_thesproc << m_data_file;
@@ -434,7 +434,7 @@ void Thesaurus::thesExited(KProcess *)
         return;
     }
 
-    QString search_term = m_edit->currentText().stripWhiteSpace();
+    QString search_term = m_edit->currentText().trimmed();
     
     QStringList syn;
     QStringList hyper;
@@ -623,7 +623,7 @@ void Thesaurus::findTermWordnet(const QString &term)
 
     if( m_wnproc->isRunning() ) {
         // should never happen
-        kdDebug(31000) << "Warning: findTerm(): process is already running?!" << endl;
+        kDebug(31000) << "Warning: findTerm(): process is already running?!" << endl;
         QApplication::restoreOverrideCursor();
         return;
     }
@@ -681,10 +681,10 @@ void Thesaurus::wnExited(KProcess *)
             result += "<tr>";
             if( l.startsWith(" ") ) {
                 result += "\t<td width=\"15\"></td>";
-                l = l.stripWhiteSpace();
+                l = l.trimmed();
                 result += "\t<td>" + l + "</td>";
             } else {
-                l = l.stripWhiteSpace();
+                l = l.trimmed();
                 result += "<td colspan=\"2\">" + l + "</td>";
             }
             result += "</tr>\n";
@@ -693,7 +693,7 @@ void Thesaurus::wnExited(KProcess *)
         result += "\n</table></qt>\n";
         m_resultbox->setText(result);
         m_resultbox->setContentsPos(0,0);
-        //kdDebug() << result << endl;
+        //kDebug() << result << endl;
     }
     
     QApplication::restoreOverrideCursor();
@@ -737,7 +737,7 @@ QString Thesaurus::formatLine(QString l)
     } 
 
     if( m_mode == grep ) {
-        l = l.stripWhiteSpace();
+        l = l.trimmed();
         return QString("<a href=\"" +l+ "\">" +l+ "</a>");
     }
 
@@ -758,7 +758,7 @@ QString Thesaurus::formatLine(QString l)
             if( it != links.begin() ) {
                 l += ", ";
             }
-            link = link.stripWhiteSpace();
+            link = link.trimmed();
             link = link.remove(QRegExp("#\\d+"));
             l += "<a href=\"" +link+ "\">" +link+ "</a>";
         }
@@ -778,7 +778,7 @@ QString Thesaurus::formatLine(QString l)
             if( it != links.begin() ) {
                 l += ", ";
             }
-            link = link.stripWhiteSpace();
+            link = link.trimmed();
             l += "<a href=\"" +link+ "\">" +link+ "</a>";
         }
         l += "<font color=\"#777777\">" +line_end+ "</font>";

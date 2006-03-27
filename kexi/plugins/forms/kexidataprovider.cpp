@@ -224,7 +224,7 @@ void KexiFormDataProvider::invalidateDataSources( const QValueList<uint>& invali
 		query->debug();
 
 	//if (query && m_dataItems.count()!=query->fieldCount()) {
-	//	kdWarning() << "KexiFormDataProvider::invalidateDataSources(): m_dataItems.count()!=query->fieldCount() ("
+	//	kWarning() << "KexiFormDataProvider::invalidateDataSources(): m_dataItems.count()!=query->fieldCount() ("
 	//	 << m_dataItems.count() << "," << query->fieldCount() << ")" << endl;
 	//}
 	//i = 0;

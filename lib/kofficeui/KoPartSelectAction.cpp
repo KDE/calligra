@@ -20,6 +20,8 @@
 #include "KoPartSelectDia.h"
 
 #include <kdebug.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 KoPartSelectAction::KoPartSelectAction( const QString& text, QObject* parent, const char* name )
     : KActionMenu( text, parent, name )
@@ -48,7 +50,7 @@ void KoPartSelectAction::init()
 {
     // Query for documents
     m_lstEntries = KoDocumentEntry::query();
-    QValueList<KoDocumentEntry>::Iterator it = m_lstEntries.begin();
+    Q3ValueList<KoDocumentEntry>::Iterator it = m_lstEntries.begin();
     for( ; it != m_lstEntries.end(); ++it ) {
         KService::Ptr serv = (*it).service();
 	if (!serv->genericName().isEmpty()) {

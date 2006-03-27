@@ -61,7 +61,7 @@ KoFilter::ConversionStatus KisTIFFImport::convert(const QCString&, const QCStrin
 
     if (!filename.isEmpty()) {
     
-        KURL url(filename);
+        KUrl url(filename);
 
         if (url.isEmpty())
             return KoFilter::FileNotFound;

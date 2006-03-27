@@ -25,22 +25,26 @@
 #include <qtimer.h>
 #include <qcursor.h>
 #include <qtooltip.h>
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
 #include <qmenubar.h>
 #include <qlabel.h>
-#include <qbutton.h>
+#include <q3button.h>
 #include <qcombobox.h>
 #include <qtabbar.h>
-#include <qgroupbox.h>
+#include <q3groupbox.h>
 #include <qlineedit.h>
-#include <qtextedit.h>
-#include <qlistview.h>
-#include <qlistbox.h>
-#include <qiconview.h>
-#include <qtable.h>
-#include <qgridview.h>
+#include <q3textedit.h>
+#include <q3listview.h>
+#include <q3listbox.h>
+#include <q3iconview.h>
+#include <q3table.h>
+#include <q3gridview.h>
 #include <qregexp.h>
-#include <qstylesheet.h>
+#include <q3stylesheet.h>
+//Added by qt3to4:
+#include <Q3CString>
+#include <Q3ValueList>
+#include <Q3PopupMenu>
 
 // KDE includes.
 #include <kapplication.h>
@@ -76,7 +80,7 @@ public:
         {}
 
     // List of text jobs.
-    QValueList<uint> m_jobNums;
+    Q3ValueList<uint> m_jobNums;
     // Whether the version of KTTSD has been requested from the daemon.
     bool m_versionChecked;
     // KTTSD version string.
@@ -246,7 +250,7 @@ bool KoSpeaker::maybeSayWidget(QWidget* w, const QPoint& pos /*=QPoint()*/)
     }
     else
     if (w->inherits("QPopupMenu")) {
-        QPopupMenu* popupMenu = dynamic_cast<QPopupMenu *>(w);
+        Q3PopupMenu* popupMenu = dynamic_cast<Q3PopupMenu *>(w);
         if (pos == QPoint()) {
             for (uint i = 0; i < popupMenu->count(); ++i)
                 if (popupMenu->isItemActive(popupMenu->idAt(i))) {
@@ -273,8 +277,8 @@ bool KoSpeaker::maybeSayWidget(QWidget* w, const QPoint& pos /*=QPoint()*/)
     }
     else
     if (w->inherits("QListView")) {
-        QListView* lv = dynamic_cast<QListView *>(w);
-        QListViewItem* item = 0;
+        Q3ListView* lv = dynamic_cast<Q3ListView *>(w);
+        Q3ListViewItem* item = 0;
         if (pos == QPoint())
             item = lv->currentItem();
         else
@@ -288,9 +292,9 @@ bool KoSpeaker::maybeSayWidget(QWidget* w, const QPoint& pos /*=QPoint()*/)
     }
     else
     if (w->inherits("QListBox")) {
-        QListBox* lb = dynamic_cast<QListBox *>(w);
+        Q3ListBox* lb = dynamic_cast<Q3ListBox *>(w);
         // qt docs say coordinates are in "on-screen" coordinates.  What does that mean?
-        QListBoxItem* item = 0;
+        Q3ListBoxItem* item = 0;
         if (pos == QPoint())
             item = lb->item(lb->currentItem());
         else
@@ -302,8 +306,8 @@ bool KoSpeaker::maybeSayWidget(QWidget* w, const QPoint& pos /*=QPoint()*/)
     }
     else
     if (w->inherits("QIconView")) {
-        QIconView* iv = dynamic_cast<QIconView *>(w);
-        QIconViewItem* item = 0;
+        Q3IconView* iv = dynamic_cast<Q3IconView *>(w);
+        Q3IconViewItem* item = 0;
         if (pos == QPoint())
             item = iv->currentItem();
         else
@@ -315,7 +319,7 @@ bool KoSpeaker::maybeSayWidget(QWidget* w, const QPoint& pos /*=QPoint()*/)
     }
     else
     if (w->inherits("QTable")) {
-        QTable* tbl = dynamic_cast<QTable *>(w);
+        Q3Table* tbl = dynamic_cast<Q3Table *>(w);
         int row = -1;
         int col = -1;
         if (pos == QPoint()) {
@@ -333,7 +337,7 @@ bool KoSpeaker::maybeSayWidget(QWidget* w, const QPoint& pos /*=QPoint()*/)
     }
     else
     if (w->inherits("QGridView")) {
-        QGridView* gv = dynamic_cast<QGridView *>(w);
+        Q3GridView* gv = dynamic_cast<Q3GridView *>(w);
         // TODO: QGridView does not have a "current" row or column.  Don't think they can even get focus?
         int row = -1;
         int col = -1;
@@ -367,7 +371,7 @@ bool KoSpeaker::maybeSayWidget(QWidget* w, const QPoint& pos /*=QPoint()*/)
 
     // Handle simple, single-part widgets.
     if ( w->inherits("QButton") )
-        text = dynamic_cast<QButton *>(w)->text();
+        text = dynamic_cast<Q3Button *>(w)->text();
     else
     if (w->inherits("QComboBox"))
         text = dynamic_cast<QComboBox *>(w)->currentText();
@@ -376,7 +380,7 @@ bool KoSpeaker::maybeSayWidget(QWidget* w, const QPoint& pos /*=QPoint()*/)
         text = dynamic_cast<QLineEdit *>(w)->text();
     else 
     if (w->inherits("QTextEdit"))
-        text = dynamic_cast<QTextEdit *>(w)->text();
+        text = dynamic_cast<Q3TextEdit *>(w)->text();
     else
     if (w->inherits("QLabel"))
         text = dynamic_cast<QLabel *>(w)->text();
@@ -384,7 +388,7 @@ bool KoSpeaker::maybeSayWidget(QWidget* w, const QPoint& pos /*=QPoint()*/)
     if (w->inherits("QGroupBox")) {
         // TODO: Should calculate this number from font size?
         if (w->mapFromGlobal(pos).y() < 30)
-            text = dynamic_cast<QGroupBox *>(w)->title();
+            text = dynamic_cast<Q3GroupBox *>(w)->title();
     }
 //    else
 //     if (w->inherits("QWhatsThat")) {
@@ -411,7 +415,7 @@ bool KoSpeaker::maybeSayWidget(QWidget* w, const QPoint& pos /*=QPoint()*/)
     }
 
     if (d->m_speakFlags & SpeakWhatsThis || text.isEmpty()) {
-        QString t = QWhatsThis::textFor(w, pos);
+        QString t = Q3WhatsThis::textFor(w, pos);
         t = t.stripWhiteSpace();
         if (!t.isEmpty()) {
             if (t.right(1) != ".") t += ".";
@@ -440,7 +444,7 @@ bool KoSpeaker::sayWidget(const QString& msg)
         }
     }
     s.remove("&");
-    if (QStyleSheet::mightBeRichText(s)) {
+    if (Q3StyleSheet::mightBeRichText(s)) {
         // kdDebug() << "richtext" << endl;
         s.replace(QRegExp("</?[pbius]>"), "");
         s.replace(QRegExp("</?h\\d>"), "");
@@ -504,10 +508,10 @@ QString KoSpeaker::getKttsdVersion()
         if (!d->m_versionChecked) {
             DCOPClient *client = kapp->dcopClient();
             QByteArray  data;
-            QCString    replyType;
+            Q3CString    replyType;
             QByteArray  replyData;
             if ( client->call("kttsd", "KSpeech", "version()", data, replyType, replyData, true) ) {
-                QDataStream arg(replyData, IO_ReadOnly);
+                QDataStream arg(replyData, QIODevice::ReadOnly);
                 arg >> d->m_kttsdVersion;
                 kdDebug() << "KoSpeaker::startKttsd: KTTSD version = " << d->m_kttsdVersion << endl;
             }
@@ -522,9 +526,9 @@ void KoSpeaker::sayScreenReaderOutput(const QString &msg, const QString &talker)
     if (msg.isEmpty()) return;
     DCOPClient *client = kapp->dcopClient();
     QByteArray  data;
-    QCString    replyType;
+    Q3CString    replyType;
     QByteArray  replyData;
-    QDataStream arg(data, IO_WriteOnly);
+    QDataStream arg(data, QIODevice::WriteOnly);
     arg << msg << talker;
     if ( !client->call("kttsd", "KSpeech", "sayScreenReaderOutput(QString,QString)",
         data, replyType, replyData, true) ) {
@@ -537,16 +541,16 @@ uint KoSpeaker::setText(const QString &text, const QString &talker)
     if (text.isEmpty()) return 0;
     DCOPClient *client = kapp->dcopClient();
     QByteArray  data;
-    QCString    replyType;
+    Q3CString    replyType;
     QByteArray  replyData;
-    QDataStream arg(data, IO_WriteOnly);
+    QDataStream arg(data, QIODevice::WriteOnly);
     arg << text << talker;
     uint jobNum = 0;
     if ( !client->call("kttsd", "KSpeech", "setText(QString,QString)",
         data, replyType, replyData, true) ) {
         kdDebug() << "KoSpeaker::sayText: failed" << endl;
     } else {
-        QDataStream arg2(replyData, IO_ReadOnly);
+        QDataStream arg2(replyData, QIODevice::ReadOnly);
         arg2 >> jobNum;
     }
     return jobNum;
@@ -557,16 +561,16 @@ int KoSpeaker::appendText(const QString &text, uint jobNum /*=0*/)
     if (text.isEmpty()) return 0;
     DCOPClient *client = kapp->dcopClient();
     QByteArray  data;
-    QCString    replyType;
+    Q3CString    replyType;
     QByteArray  replyData;
-    QDataStream arg(data, IO_WriteOnly);
+    QDataStream arg(data, QIODevice::WriteOnly);
     arg << text << jobNum;
     int partNum = 0;
     if ( !client->call("kttsd", "KSpeech", "appendText(QString,uint)",
         data, replyType, replyData, true) ) {
         kdDebug() << "KoSpeaker::appendText: failed" << endl;
     } else {
-        QDataStream arg2(replyData, IO_ReadOnly);
+        QDataStream arg2(replyData, QIODevice::ReadOnly);
         arg2 >> partNum;
     }
     return partNum;
@@ -576,9 +580,9 @@ void KoSpeaker::startText(uint jobNum /*=0*/)
 {
     DCOPClient *client = kapp->dcopClient();
     QByteArray  data;
-    QCString    replyType;
+    Q3CString    replyType;
     QByteArray  replyData;
-    QDataStream arg(data, IO_WriteOnly);
+    QDataStream arg(data, QIODevice::WriteOnly);
     arg << jobNum;
     if ( !client->call("kttsd", "KSpeech", "startText(uint)",
         data, replyType, replyData, true) ) {
@@ -590,9 +594,9 @@ void KoSpeaker::removeText(uint jobNum /*=0*/)
 {
     DCOPClient *client = kapp->dcopClient();
     QByteArray  data;
-    QCString    replyType;
+    Q3CString    replyType;
     QByteArray  replyData;
-    QDataStream arg(data, IO_WriteOnly);
+    QDataStream arg(data, QIODevice::WriteOnly);
     arg << jobNum;
     if ( !client->call("kttsd", "KSpeech", "removeText(uint)",
         data, replyType, replyData, true) ) {

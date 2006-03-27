@@ -22,6 +22,8 @@
 #define FORMULACURSOR_H
 
 #include <qstring.h>
+//Added by qt3to4:
+#include <Q3PtrList>
 
 #include "basicelement.h"
 #include "kformuladefs.h"
@@ -148,23 +150,23 @@ public:
      * Inserts the child at the current position.
      * Ignores the selection.
      */
-    void insert(BasicElement*, Direction = beforeCursor);
+    void insert(BasicElement*, Qt::Orientation = beforeCursor);
 
     /**
      * Inserts the listed children at the current position.
      * Ignores the selection.
      * The list will be emptied.
      */
-    void insert(QPtrList<BasicElement>&,
-                Direction = beforeCursor);
+    void insert(Q3PtrList<BasicElement>&,
+                Qt::Orientation = beforeCursor);
 
     /**
      * Removes the current selected children and returns them.
      * The cursor needs to be normal (that is be inside a SequenceElement)
      * for this to have any effect.
      */
-    void remove(QPtrList<BasicElement>&,
-                Direction = beforeCursor);
+    void remove(Q3PtrList<BasicElement>&,
+                Qt::Orientation = beforeCursor);
 
 
     /**
@@ -172,13 +174,13 @@ public:
      * The replaced elements become the new element's main child's content.
      */
     void replaceSelectionWith(BasicElement*,
-                              Direction = beforeCursor);
+                              Qt::Orientation = beforeCursor);
 
     /**
      * Replaces the element the cursor points to with its main child's
      * content.
      */
-    BasicElement* replaceByMainChildContent(Direction = beforeCursor);
+    BasicElement* replaceByMainChildContent(Qt::Orientation = beforeCursor);
 
     /**
      * Trys to find the element we are the main child of and replace
@@ -187,7 +189,7 @@ public:
      * This is simply another form of replaceByMainChildContent. You
      * use this one if the cursor is normalized and inside the main child.
      */
-    BasicElement* removeEnclosingElement(Direction = beforeCursor);
+    BasicElement* removeEnclosingElement(Qt::Orientation = beforeCursor);
 
     /**
      * Returns wether the element the cursor points to should be replaced.
@@ -238,7 +240,7 @@ public:
      * You need to call this after each removal because the cursor
      * might point to some non existing place.
      */
-    void normalize(Direction direction = beforeCursor);
+    void normalize(Qt::Orientation direction = beforeCursor);
 
 
     /**
@@ -296,7 +298,7 @@ public:
      * Inserts the elements that could be read from the dom into
      * the list. Returns true on success.
      */
-    bool buildElementsFromDom( QDomElement root, QPtrList<BasicElement>& list );
+    bool buildElementsFromDom( QDomElement root, Q3PtrList<BasicElement>& list );
 
     // undo/redo support
 
@@ -373,7 +375,7 @@ private:
      *
      * Might be 0 is there is no such child.
      */
-    BasicElement* getActiveChild(Direction direction);
+    BasicElement* getActiveChild(Qt::Orientation direction);
 
     /**
      * Returns the child that is currently selected.

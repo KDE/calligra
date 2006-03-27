@@ -21,11 +21,11 @@
 #include <qstring.h>
 #include <qstringlist.h>
 #include <qregexp.h>
-#include <qvaluelist.h>
+#include <q3valuelist.h>
 
 #include <klocale.h>
 
-KoZoomAction::KoZoomAction( const QString& text, const QIconSet& pix, 
+KoZoomAction::KoZoomAction( const QString& text, const QIcon& pix, 
   const KShortcut& cut, QObject* parent, const char* name ):
   KSelectAction( text, pix, cut, parent, name )
 {
@@ -47,7 +47,7 @@ void KoZoomAction::setZoom( const QString& text )
   int zoom = t.remove( '%' ).toInt( &ok );
   
   // where we'll store sorted new zoom values
-  QValueList<int> list;
+  Q3ValueList<int> list;
   if( zoom > 10 ) list.append( zoom );
   
   // "Captured" non-empty sequence of digits
@@ -68,7 +68,7 @@ void KoZoomAction::setZoom( const QString& text )
 
   // update items with new sorted zoom values
   QStringList values;
-  for (QValueList<int>::Iterator it = list.begin(); it != list.end(); ++it )
+  for (Q3ValueList<int>::Iterator it = list.begin(); it != list.end(); ++it )
     values.append( i18n("%1%").arg(*it) );
   setItems( values );
   

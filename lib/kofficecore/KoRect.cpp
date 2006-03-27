@@ -226,7 +226,7 @@ bool operator!=(const KoRect &lhs, const KoRect &rhs) {
              lhs.bottomRight()!=rhs.bottomRight() );
 }
 
-KoRect KoRect::transform(const QWMatrix &m) const
+KoRect KoRect::transform(const QMatrix &m) const
 {
   KoRect result;
   if(m.m12() == 0.0F && m.m21() == 0.0F)

@@ -21,6 +21,11 @@
 #include <KoView.h>
 
 #include <qpainter.h>
+//Added by qt3to4:
+#include <QMouseEvent>
+#include <QResizeEvent>
+#include <QEvent>
+#include <QPaintEvent>
 #include <kparts/event.h>
 #include <kcursor.h>
 #include <kdebug.h>
@@ -56,7 +61,7 @@ KoFrame::KoFrame( QWidget *parent, const char *name )
   d->m_mode = -1;
   d->m_view = 0;
 
-  setBackgroundColor( white );
+  setBackgroundColor( Qt::white );
   setMouseTracking( true );
 }
 
@@ -188,19 +193,19 @@ void KoFrame::paintEvent( QPaintEvent* )
   QPainter painter;
   painter.begin( this );
 
-  painter.setPen( black );
-  painter.fillRect( 0, 0, width(), height(), BDiagPattern );
+  painter.setPen( Qt::black );
+  painter.fillRect( 0, 0, width(), height(), Qt::BDiagPattern );
 
   if ( d->m_state == Selected )
   {
-    painter.fillRect( 0, 0, 5, 5, black );
-    painter.fillRect( 0, height() - 5, 5, 5, black );
-    painter.fillRect( width() - 5, height() - 5, 5, 5, black );
-    painter.fillRect( width() - 5, 0, 5, 5, black );
-    painter.fillRect( width() / 2 - 3, 0, 5, 5, black );
-    painter.fillRect( width() / 2 - 3, height() - 5, 5, 5, black );
-    painter.fillRect( 0, height() / 2 - 3, 5, 5, black );
-    painter.fillRect( width() - 5, height() / 2 - 3, 5, 5, black );
+    painter.fillRect( 0, 0, 5, 5, Qt::black );
+    painter.fillRect( 0, height() - 5, 5, 5, Qt::black );
+    painter.fillRect( width() - 5, height() - 5, 5, 5, Qt::black );
+    painter.fillRect( width() - 5, 0, 5, 5, Qt::black );
+    painter.fillRect( width() / 2 - 3, 0, 5, 5, Qt::black );
+    painter.fillRect( width() / 2 - 3, height() - 5, 5, 5, Qt::black );
+    painter.fillRect( 0, height() / 2 - 3, 5, 5, Qt::black );
+    painter.fillRect( width() - 5, height() / 2 - 3, 5, 5, Qt::black );
   }
 
   painter.end();
@@ -328,13 +333,13 @@ void KoFrame::mouseMoveEvent( QMouseEvent* ev )
     QRect r8( width()- 5, height() / 2 - 3, 5, 5 );
 
     if ( r1.contains( ev->pos() ) || r3.contains( ev->pos() ) )
-      setCursor( sizeFDiagCursor );
+      setCursor( Qt::sizeFDiagCursor );
     else if ( r2.contains( ev->pos() ) || r4.contains( ev->pos() ) )
-      setCursor( sizeBDiagCursor );
+      setCursor( Qt::sizeBDiagCursor );
     else if ( r5.contains( ev->pos() ) || r6.contains( ev->pos() ) )
-      setCursor( sizeVerCursor );
+      setCursor( Qt::sizeVerCursor );
     else if ( r7.contains( ev->pos() ) || r8.contains( ev->pos() ) )
-      setCursor( sizeHorCursor );
+      setCursor( Qt::sizeHorCursor );
     else
       setCursor( KCursor::handCursor() );
   }

@@ -22,6 +22,9 @@
 
 #include <kcommand.h>
 #include <KoRichText.h>
+//Added by qt3to4:
+#include <Q3ValueList>
+#include <Q3MemArray>
 class KoTextObject;
 class KoTextDocument;
 class KoVariable;
@@ -55,13 +58,13 @@ protected:
 class KOTEXT_EXPORT KoTextDeleteCommand : public KoTextDocDeleteCommand
 {
 public:
-    KoTextDeleteCommand( KoTextDocument *d, int i, int idx, const QMemArray<KoTextStringChar> &str,
+    KoTextDeleteCommand( KoTextDocument *d, int i, int idx, const Q3MemArray<KoTextStringChar> &str,
                          const CustomItemsMap & customItemsMap,
-                         const QValueList<KoParagLayout> & oldParagLayouts );
+                         const Q3ValueList<KoParagLayout> & oldParagLayouts );
     KoTextCursor *execute( KoTextCursor *c );
     KoTextCursor *unexecute( KoTextCursor *c );
 protected:
-    QValueList<KoParagLayout> m_oldParagLayouts;
+    Q3ValueList<KoParagLayout> m_oldParagLayouts;
     CustomItemsMap m_customItemsMap;
 };
 
@@ -71,9 +74,9 @@ protected:
 class KoTextInsertCommand : public KoTextDeleteCommand
 {
 public:
-    KoTextInsertCommand( KoTextDocument *d, int i, int idx, const QMemArray<KoTextStringChar> &str,
+    KoTextInsertCommand( KoTextDocument *d, int i, int idx, const Q3MemArray<KoTextStringChar> &str,
                          const CustomItemsMap & customItemsMap,
-                         const QValueList<KoParagLayout> &oldParagLayouts )
+                         const Q3ValueList<KoParagLayout> &oldParagLayouts )
         : KoTextDeleteCommand( d, i, idx, str, customItemsMap, oldParagLayouts ) {}
     Commands type() const { return Insert; };
     KoTextCursor *execute( KoTextCursor *c ) { return KoTextDeleteCommand::unexecute( c ); }
@@ -87,16 +90,16 @@ class KOTEXT_EXPORT KoTextParagCommand : public KoTextDocCommand
 {
 public:
     KoTextParagCommand( KoTextDocument *d, int fParag, int lParag,
-                        const QValueList<KoParagLayout> &oldParagLayouts,
+                        const Q3ValueList<KoParagLayout> &oldParagLayouts,
                         KoParagLayout newParagLayout,
                         int /*KoParagLayout::Flags*/ flags,
-                        QStyleSheetItem::Margin margin = (QStyleSheetItem::Margin)-1, bool borderOutline=false );
+                        Q3StyleSheetItem::Margin margin = (Q3StyleSheetItem::Margin)-1, bool borderOutline=false );
                         // margin is only meaningful if flags==Margins only. -1 means all.
     KoTextCursor *execute( KoTextCursor *c );
     KoTextCursor *unexecute( KoTextCursor *c );
 protected:
     int firstParag, lastParag;
-    QValueList<KoParagLayout> m_oldParagLayouts;
+    Q3ValueList<KoParagLayout> m_oldParagLayouts;
     KoParagLayout m_newParagLayout;
     int m_flags;
     int m_margin;
@@ -112,14 +115,14 @@ class KoParagFormatCommand : public KoTextDocCommand
 {
 public:
     KoParagFormatCommand( KoTextDocument *d, int fParag, int lParag,
-                          const QValueList<KoTextFormat *> &oldFormats,
+                          const Q3ValueList<KoTextFormat *> &oldFormats,
                           KoTextFormat * newFormat );
     ~KoParagFormatCommand();
     KoTextCursor *execute( KoTextCursor *c );
     KoTextCursor *unexecute( KoTextCursor *c );
 protected:
     int firstParag, lastParag;
-    QValueList<KoTextFormat *> m_oldFormats;
+    Q3ValueList<KoTextFormat *> m_oldFormats;
     KoTextFormat * m_newFormat;
 };
 
@@ -129,7 +132,7 @@ protected:
 class KoTextFormatCommand : public KoTextDocFormatCommand
 {
 public:
-    KoTextFormatCommand( KoTextDocument *d, int sid, int sidx, int eid, int eidx, const QMemArray<KoTextStringChar> &old, const KoTextFormat *f, int fl );
+    KoTextFormatCommand( KoTextDocument *d, int sid, int sidx, int eid, int eidx, const Q3MemArray<KoTextStringChar> &old, const KoTextFormat *f, int fl );
     virtual ~KoTextFormatCommand();
 
     KoTextCursor *execute( KoTextCursor *c );

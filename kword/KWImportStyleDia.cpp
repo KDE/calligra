@@ -20,11 +20,13 @@
 #include <klocale.h>
 #include "KWDocument.h"
 
-#include <qvbox.h>
+#include <q3vbox.h>
 #include <qlayout.h>
 #include <qlineedit.h>
 #include <qpushbutton.h>
-#include <qlistbox.h>
+#include <q3listbox.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 #include <kmessagebox.h>
 #include "KWImportStyleDia.h"
 #include <KoStore.h>
@@ -57,7 +59,7 @@ void KWImportStyleDia::loadFile()
 #endif
     fd.setMimeFilter( lst );
     fd.setCaption(i18n("Import Style"));
-    KURL url;
+    KUrl url;
     if ( fd.exec() != QDialog::Accepted )
         return;
     url = fd.selectedURL();
@@ -92,7 +94,7 @@ void KWImportStyleDia::loadFile()
                 // I guess we'll have to keep this old loading code forever though,
                 // so we can't really get rid of the subclasses.
 
-                QValueList<QString> followingStyles;
+                Q3ValueList<QString> followingStyles;
                 QDomNodeList listStyles = stylesElem.elementsByTagName( "STYLE" );
                 for (unsigned int item = 0; item < listStyles.count(); item++)
                 {
@@ -115,7 +117,7 @@ void KWImportStyleDia::loadFile()
                     if ( !formatElem.isNull() )
                         sty->format() = KWTextParag::loadFormat( formatElem, 0L, m_doc->defaultFont(), m_doc->globalLanguage(), m_doc->globalHyphenation() );
                     else
-                        kdWarning(32001) << "No FORMAT tag in <STYLE>" << endl; // This leads to problems in applyStyle().
+                        kWarning(32001) << "No FORMAT tag in <STYLE>" << endl; // This leads to problems in applyStyle().
 
                     // Style created, now let's try to add it
                     sty = m_styleList.addStyle(sty);
@@ -126,13 +128,13 @@ void KWImportStyleDia::loadFile()
                         followingStyles.append( following );
                     }
                     else
-                        kdWarning () << "Found duplicate style declaration, overwriting former " << sty->name() << endl;
+                        kWarning () << "Found duplicate style declaration, overwriting former " << sty->name() << endl;
                 }
 
                 Q_ASSERT( m_styleList.count() >= 0 && followingStyles.count() == uint( m_styleList.count() ) );
 
                 unsigned int i=0;
-                for( QValueList<QString>::Iterator it = followingStyles.begin(); it != followingStyles.end(); ++it ) {
+                for( Q3ValueList<QString>::Iterator it = followingStyles.begin(); it != followingStyles.end(); ++it ) {
                     QString newName =*it;
                     if ( insertStyle.contains( *it ) )
                         newName = (insertStyle)[ *it ];
@@ -173,10 +175,10 @@ KWImportFrameTableStyleDia::KWImportFrameTableStyleDia( KWDocument *_doc, const 
     m_doc=_doc;
     m_typeStyle = _type;
     m_list =_list;
-    QVBox *page = makeVBoxMainWidget();
+    KVBox *page = makeVBoxMainWidget();
     new QLabel(i18n("Select style to import:"), page);
-    m_listStyleName = new QListBox( page );
-    m_listStyleName->setSelectionMode( QListBox::Multi );
+    m_listStyleName = new Q3ListBox( page );
+    m_listStyleName->setSelectionMode( Q3ListBox::Multi );
     loadFile();
     resize (300, 400);
     setFocus();
@@ -213,7 +215,7 @@ void KWImportFrameTableStyleDia::loadFile()
 #endif
     fd.setMimeFilter( lst );
     fd.setCaption(i18n("Import Style"));
-    KURL url;
+    KUrl url;
     if ( fd.exec() != QDialog::Accepted )
         return;
     url = fd.selectedURL();
@@ -313,7 +315,7 @@ void KWImportFrameTableStyleDia::slotOk()
             if ( m_typeStyle ==frameStyle ) // frame styles
             {
                 //remove this style from list
-                QPtrListIterator<KWFrameStyle> styleIt( m_frameStyleList );
+                Q3PtrListIterator<KWFrameStyle> styleIt( m_frameStyleList );
                 for ( ; styleIt.current(); ++styleIt )
                 {
                     if ( styleIt.current()->displayName() == name )
@@ -326,7 +328,7 @@ void KWImportFrameTableStyleDia::slotOk()
             else // then it will have to be table styles
             {
                 //remove this style from list
-                QPtrListIterator<KWTableStyle> styleIt( m_tableStyleList );
+                Q3PtrListIterator<KWTableStyle> styleIt( m_tableStyleList );
                 for ( ; styleIt.current(); ++styleIt )
                 {
                     if ( styleIt.current()->displayName() == name )

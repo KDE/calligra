@@ -74,8 +74,8 @@ class KWMailMergeKSpread: public KWMailMergeDataSource
     virtual bool showConfigDialog( QWidget*, int action);
 
 
-    void setURL( const KURL &url ) { _url = url; }
-    KURL url() const { return _url; }
+    void setURL( const KUrl &url ) { _url = url; }
+    KUrl url() const { return _url; }
 
     void setSpreadSheetNumber( int number ) { _spreadSheetNumber = number; }
     int spreadSheetNumber() const { return _spreadSheetNumber; }
@@ -96,7 +96,7 @@ class KWMailMergeKSpread: public KWMailMergeDataSource
 
     KSpread::Doc *_document;
     KSpread::Sheet* _sheet;
-    KURL _url;
+    KUrl _url;
     int _spreadSheetNumber;
 
     QMap<QString, int> _columnMap;

@@ -29,6 +29,8 @@
 #include <kdebug.h>
 #include <klocale.h>
 #include <qdom.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 KWTableStyleCollection::KWTableStyleCollection()
     : KoUserStyleCollection( QString::fromLatin1( "table" ) )
@@ -38,7 +40,7 @@ KWTableStyleCollection::KWTableStyleCollection()
 void KWTableStyleCollection::saveOasis( KoGenStyles& mainStyles, KoSavingContext& savingContext ) const
 {
     if ( !isDefault() ) {
-        for ( QValueList<KoUserStyle *>::const_iterator styleIt = m_styleList.begin(), styleEnd = m_styleList.end() ; styleIt != styleEnd ; ++styleIt )
+        for ( Q3ValueList<KoUserStyle *>::const_iterator styleIt = m_styleList.begin(), styleEnd = m_styleList.end() ; styleIt != styleEnd ; ++styleIt )
         {
             KWTableStyle* style = static_cast<KWTableStyle *>( *styleIt );
             style->saveOasis( mainStyles, savingContext );
@@ -48,7 +50,7 @@ void KWTableStyleCollection::saveOasis( KoGenStyles& mainStyles, KoSavingContext
 
 int KWTableStyleCollection::loadOasisStyles( KoOasisContext& context, const KoStyleCollection& paragraphStyles, const KWFrameStyleCollection& frameStyles )
 {
-    QValueVector<QDomElement> userStyles = context.oasisStyles().userStyles();
+    Q3ValueVector<QDomElement> userStyles = context.oasisStyles().userStyles();
     bool defaultStyleDeleted = false;
     int stylesLoaded = 0;
     for (unsigned int item = 0; item < userStyles.count(); item++) {
@@ -60,7 +62,7 @@ int KWTableStyleCollection::loadOasisStyles( KoOasisContext& context, const KoSt
 
         if ( !defaultStyleDeleted ) {
             KWTableStyle *s = findStyle( defaultStyleName() );
-            //kdDebug() << "KWTableStyleCollection::loadOasisStyles looking for " << defaultStyleName() << ", to delete it. Found " << s << endl;
+            //kDebug() << "KWTableStyleCollection::loadOasisStyles looking for " << defaultStyleName() << ", to delete it. Found " << s << endl;
             if(s) // delete the standard style.
                 removeStyle(s);
             defaultStyleDeleted = true;
@@ -72,7 +74,7 @@ int KWTableStyleCollection::loadOasisStyles( KoOasisContext& context, const KoSt
         // Style created, now let's try to add it
         sty = static_cast<KWTableStyle *>( addStyle( sty ) );
 
-        kdDebug() << " Loaded table cell style " << sty->name() << " - now " << count() << " styles" << endl;
+        kDebug() << " Loaded table cell style " << sty->name() << " - now " << count() << " styles" << endl;
         ++stylesLoaded;
     }
     return stylesLoaded;
@@ -97,7 +99,7 @@ KWTableStyle::KWTableStyle( QDomElement & parentElem, KWDocument *_doc, int /*do
         m_name = element.attribute( "value" );
         m_displayName = i18n( "Style name", m_name.utf8() );
     } else
-        kdWarning() << "No NAME tag in table style!" << endl;
+        kWarning() << "No NAME tag in table style!" << endl;
 
     element = parentElem.namedItem( "PFRAMESTYLE" ).toElement();
     m_frameStyle = 0;
@@ -195,7 +197,7 @@ void KWTableStyle::loadOasis( QDomElement & styleElem, KoOasisContext& context, 
     m_displayName = styleElem.attributeNS( KoXmlNS::style, "display-name", QString::null );
     if ( m_displayName.isEmpty() )
         m_displayName = m_name;
-    kdDebug() << k_funcinfo << m_name << " " << m_displayName << endl;
+    kDebug() << k_funcinfo << m_name << " " << m_displayName << endl;
 
     KoStyleStack& styleStack = context.styleStack();
     styleStack.setTypeProperties( "table-cell" );
@@ -206,12 +208,12 @@ void KWTableStyle::loadOasis( QDomElement & styleElem, KoOasisContext& context, 
     const QString frameStyleName = styleStack.attributeNS( KoXmlNS::koffice, "frame-style-name" );
     m_frameStyle = frameStyles.findStyle( frameStyleName );
     if ( !m_frameStyle )
-        kdWarning(32001) << "Frame style " << frameStyleName << " not found!" << endl;
+        kWarning(32001) << "Frame style " << frameStyleName << " not found!" << endl;
 
     const QString paragraphStyleName = styleStack.attributeNS( KoXmlNS::koffice, "paragraph-style-name" );
     m_paragStyle = paragraphStyles.findStyle( paragraphStyleName );
     if ( !m_paragStyle )
-        kdWarning(32001) << "Paragraph style " << paragraphStyleName << " not found!" << endl;
+        kWarning(32001) << "Paragraph style " << paragraphStyleName << " not found!" << endl;
 
     styleStack.restore();
 }

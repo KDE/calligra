@@ -5,10 +5,13 @@
 #include "kchart_factory.h"
 #include "kchart_part.h"
 
-#include <qbuttongroup.h>
-#include <qframe.h>
+#include <q3buttongroup.h>
+#include <q3frame.h>
 #include <qpushbutton.h>
 #include <qlabel.h>
+//Added by qt3to4:
+#include <QPixmap>
+#include <Q3GridLayout>
 
 #include <klocale.h>
 #include <kglobal.h>
@@ -19,7 +22,7 @@ namespace KChart
 
 
 KChartButton::KChartButton(QWidget *parent, const QString & _text, const QPixmap &_pixmap)
-  : QVBox(parent)
+  : Q3VBox(parent)
 {
   // The button
   m_button = new QPushButton(this);
@@ -45,14 +48,14 @@ KChartWizardSelectChartTypePage::KChartWizardSelectChartTypePage( QWidget* paren
   : QWidget( parent ),
     m_chart( chart )
 {
-    m_typeBG = new QButtonGroup( this );
+    m_typeBG = new Q3ButtonGroup( this );
     m_typeBG->setExclusive( true );
     m_typeBG->hide();
     //  m_typeBG->resize
 
     m_colPos=0;
     m_rowPos=0;
-    m_layout = new QGridLayout(this, 3, 4, 5);
+    m_layout = new Q3GridLayout(this, 3, 4, 5);
     m_layout->setRowStretch(0, 0);
     m_layout->setRowStretch(1, 0);
     m_layout->setRowStretch(2, 0);
@@ -93,8 +96,8 @@ void KChartWizardSelectChartTypePage::addButton(const QString &name,
 {
     KChartButton *button = new KChartButton( this, name, 
 					     BarIcon( icon_name, 
-						      KIcon::SizeMedium,
-						      KIcon::DefaultState,
+						      K3Icon::SizeMedium,
+						      K3Icon::DefaultState,
 						      KChartFactory::global()) );
     m_layout->addWidget(button, m_rowPos, m_colPos);
     m_typeBG->insert( button->button(), type );

@@ -28,17 +28,21 @@
 #include <kaction.h>
 #include <kdebug.h>
 #include <kdcoppropertyproxy.h>
+//Added by qt3to4:
+#include <Q3ValueList>
+#include <Q3CString>
+#include <Q3PtrList>
 
 //static
-QCString KoDocumentIface::newIfaceName()
+Q3CString KoDocumentIface::newIfaceName()
 {
     static int s_docIFNumber = 0;
-    QCString name; name.setNum( s_docIFNumber++ ); name.prepend("Document-");
+    Q3CString name; name.setNum( s_docIFNumber++ ); name.prepend("Document-");
     return name;
 }
 
 KoDocumentIface::KoDocumentIface( KoDocument * doc, const char * name )
-    : DCOPObject( name ? QCString(name) : newIfaceName() )
+    : DCOPObject( name ? Q3CString(name) : newIfaceName() )
 {
   m_pDoc = doc;
   m_actionProxy = new KDCOPActionProxy( doc->actionCollection(), this );
@@ -51,7 +55,7 @@ KoDocumentIface::~KoDocumentIface()
 
 void KoDocumentIface::openURL( QString url )
 {
-  m_pDoc->openURL( KURL( url ) );
+  m_pDoc->openURL( KUrl( url ) );
 }
 
 bool KoDocumentIface::isLoading()
@@ -76,7 +80,7 @@ int KoDocumentIface::viewCount()
 
 DCOPRef KoDocumentIface::view( int idx )
 {
-  QPtrList<KoView> views = m_pDoc->views();
+  Q3PtrList<KoView> views = m_pDoc->views();
   KoView *v = views.at( idx );
   if ( !v )
     return DCOPRef();
@@ -89,7 +93,7 @@ DCOPRef KoDocumentIface::view( int idx )
   return DCOPRef( kapp->dcopClient()->appId(), obj->objId() );
 }
 
-DCOPRef KoDocumentIface::action( const QCString &name )
+DCOPRef KoDocumentIface::action( const Q3CString &name )
 {
     return DCOPRef( kapp->dcopClient()->appId(), m_actionProxy->actionObjectId( name ) );
 }
@@ -97,16 +101,16 @@ DCOPRef KoDocumentIface::action( const QCString &name )
 QCStringList KoDocumentIface::actions()
 {
     QCStringList res;
-    QValueList<KAction *> lst = m_actionProxy->actions();
-    QValueList<KAction *>::ConstIterator it = lst.begin();
-    QValueList<KAction *>::ConstIterator end = lst.end();
+    Q3ValueList<KAction *> lst = m_actionProxy->actions();
+    Q3ValueList<KAction *>::ConstIterator it = lst.begin();
+    Q3ValueList<KAction *>::ConstIterator end = lst.end();
     for (; it != end; ++it )
         res.append( (*it)->name() );
 
     return res;
 }
 
-QMap<QCString,DCOPRef> KoDocumentIface::actionMap()
+QMap<Q3CString,DCOPRef> KoDocumentIface::actionMap()
 {
     return m_actionProxy->actionMap();
 }
@@ -118,11 +122,11 @@ void KoDocumentIface::save()
 
 void KoDocumentIface::saveAs( const QString & url )
 {
-    m_pDoc->saveAs( KURL( url ) );
+    m_pDoc->saveAs( KUrl( url ) );
     m_pDoc->waitSaveComplete(); // see ReadWritePart
 }
 
-void KoDocumentIface::setOutputMimeType( const QCString & mimetype )
+void KoDocumentIface::setOutputMimeType( const Q3CString & mimetype )
 {
     m_pDoc->setOutputMimeType( mimetype );
 }
@@ -557,8 +561,8 @@ QCStringList KoDocumentIface::functionsDynamic()
     return DCOPObject::functionsDynamic() + KDCOPPropertyProxy::functions( m_pDoc );
 }
 
-bool KoDocumentIface::processDynamic( const QCString &fun, const QByteArray &data,
-                                      QCString& replyType, QByteArray &replyData )
+bool KoDocumentIface::processDynamic( const Q3CString &fun, const QByteArray &data,
+                                      Q3CString& replyType, QByteArray &replyData )
 {
     if ( KDCOPPropertyProxy::isPropertyRequest( fun, m_pDoc ) )
         return KDCOPPropertyProxy::processPropertyRequest( fun, data, replyType, replyData, m_pDoc );

@@ -150,7 +150,7 @@ KarbonPart::initDoc(InitDocFlags flags, QWidget* parentWidget)
 	}
 	else if( result == KoTemplateChooseDia::File )
 	{
-		KURL url( file );
+		KUrl url( file );
 		return openURL( url );
 	}
 

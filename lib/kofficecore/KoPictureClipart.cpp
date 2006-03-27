@@ -21,7 +21,7 @@
 
 #include <qbuffer.h>
 #include <qpainter.h>
-#include <qpicture.h>
+#include <q3picture.h>
 #include <qpixmap.h>
 
 #include <kdebug.h>
@@ -57,7 +57,7 @@ bool KoPictureClipart::isNull(void) const
     return m_clipart.isNull();
 }
 
-void KoPictureClipart::drawQPicture(QPicture& clipart, QPainter& painter,
+void KoPictureClipart::drawQPicture(Q3Picture& clipart, QPainter& painter,
     int x, int y, int width, int height, int sx, int sy, int sw, int sh)
 {
     kdDebug(30003) << "Drawing KoPictureClipart " << this << endl;
@@ -88,7 +88,7 @@ bool KoPictureClipart::loadData(const QByteArray& array, const QString& extensio
     kdDebug(30003) << "Trying to load clipart... (Size:" << m_rawData.size() << ")" << endl;
     m_rawData=array;
     QBuffer buffer(m_rawData);
-    buffer.open(IO_ReadOnly);
+    buffer.open(QIODevice::ReadOnly);
     bool check = true;
     if (extension=="svg")
     {

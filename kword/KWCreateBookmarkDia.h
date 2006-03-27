@@ -23,7 +23,7 @@
 #include <kdialogbase.h>
 #include <qstringlist.h>
 class QLineEdit;
-class QListBox;
+class Q3ListBox;
 class KWDocument;
 class QPushButton;
 
@@ -56,7 +56,7 @@ protected slots:
     void slotRenameBookmark();
     void slotDeleteBookmark();
 private:
-    QListBox *m_bookmarkList;
+    Q3ListBox *m_bookmarkList;
     KWDocument *m_doc;
     QPushButton *m_pbDelete;
     QPushButton *m_pbRename;

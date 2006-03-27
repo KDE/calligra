@@ -42,6 +42,8 @@
 #include <qfont.h>
 #include <qstringlist.h>
 #include <qdatetime.h>
+//Added by qt3to4:
+#include <QPixmap>
 
 namespace KDXML {
     QString penStyleToString( Qt::PenStyle style );

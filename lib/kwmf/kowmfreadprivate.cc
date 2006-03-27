@@ -21,9 +21,9 @@
 #include <math.h>
 #include <qfileinfo.h>
 #include <qimage.h>
-#include <qwmatrix.h>
-#include <qptrlist.h>
-#include <qpointarray.h>
+#include <qmatrix.h>
+#include <q3ptrlist.h>
+#include <q3pointarray.h>
 #include <qdatastream.h>
 #include <kdebug.h>
 
@@ -69,7 +69,7 @@ bool KoWmfReadPrivate::load( const QByteArray& array )
 
     // load into buffer
     mBuffer = new QBuffer( array );
-    mBuffer->open( IO_ReadOnly );
+    mBuffer->open( QIODevice::ReadOnly );
 
     // read and check the header
     WmfEnhMetaHeader eheader;
@@ -426,7 +426,7 @@ void KoWmfReadPrivate::polygon( Q_UINT32, QDataStream& stream )
 
     stream >> num;
 
-    QPointArray pa( num );
+    Q3PointArray pa( num );
 
     pointArray( stream, pa );
     mReadWmf->drawPolygon( pa, mWinding );
@@ -437,18 +437,18 @@ void KoWmfReadPrivate::polyPolygon( Q_UINT32, QDataStream& stream )
 {
     Q_UINT16 numberPoly;
     Q_UINT16 sizePoly;
-    QPtrList<QPointArray> listPa;
+    Q3PtrList<Q3PointArray> listPa;
 
     stream >> numberPoly;
     
     listPa.setAutoDelete( true );
     for ( int i=0 ; i < numberPoly ; i++ ) {
         stream >> sizePoly;
-        listPa.append( new QPointArray( sizePoly ) );
+        listPa.append( new Q3PointArray( sizePoly ) );
     }
 
     // list of point array
-    QPointArray *pa;
+    Q3PointArray *pa;
     for ( pa = listPa.first() ; pa ; pa = listPa.next() ) {
         pointArray( stream, *pa );
     }
@@ -464,7 +464,7 @@ void KoWmfReadPrivate::polyline( Q_UINT32, QDataStream& stream )
     Q_UINT16 num;
 
     stream >> num;
-    QPointArray pa( num );
+    Q3PointArray pa( num );
 
     pointArray( stream, pa );
     mReadWmf->drawPolyline( pa );
@@ -725,12 +725,12 @@ void KoWmfReadPrivate::dibBitBlt( Q_UINT32 size, QDataStream& stream )
             mReadWmf->save();
             if ( widthSrc < 0 ) {
                 // negative width => horizontal flip
-                QWMatrix m( -1.0F, 0.0F, 0.0F, 1.0F, 0.0F, 0.0F );
+                QMatrix m( -1.0F, 0.0F, 0.0F, 1.0F, 0.0F, 0.0F );
                 mReadWmf->setWorldMatrix( m, true );
             }
             if ( heightSrc < 0 ) {
                 // negative height => vertical flip
-                QWMatrix m( 1.0F, 0.0F, 0.0F, -1.0F, 0.0F, 0.0F );
+                QMatrix m( 1.0F, 0.0F, 0.0F, -1.0F, 0.0F, 0.0F );
                 mReadWmf->setWorldMatrix( m, true );
             }
             mReadWmf->drawImage( leftDst, topDst, bmpSrc, leftSrc, topSrc, widthSrc, heightSrc );
@@ -760,12 +760,12 @@ void KoWmfReadPrivate::dibStretchBlt( Q_UINT32 size, QDataStream& stream )
         mReadWmf->save();
         if ( widthDst < 0 ) {
             // negative width => horizontal flip
-            QWMatrix m( -1.0F, 0.0F, 0.0F, 1.0F, 0.0F, 0.0F );
+            QMatrix m( -1.0F, 0.0F, 0.0F, 1.0F, 0.0F, 0.0F );
             mReadWmf->setWorldMatrix( m, true );
         }
         if ( heightDst < 0 ) {
             // negative height => vertical flip
-            QWMatrix m( 1.0F, 0.0F, 0.0F, -1.0F, 0.0F, 0.0F );
+            QMatrix m( 1.0F, 0.0F, 0.0F, -1.0F, 0.0F, 0.0F );
             mReadWmf->setWorldMatrix( m, true );
         }
         bmpSrc = bmpSrc.copy( leftSrc, topSrc, widthSrc, heightSrc );
@@ -795,12 +795,12 @@ void KoWmfReadPrivate::stretchDib( Q_UINT32 size, QDataStream& stream )
         mReadWmf->save();
         if ( widthDst < 0 ) {
             // negative width => horizontal flip
-            QWMatrix m( -1.0F, 0.0F, 0.0F, 1.0F, 0.0F, 0.0F );
+            QMatrix m( -1.0F, 0.0F, 0.0F, 1.0F, 0.0F, 0.0F );
             mReadWmf->setWorldMatrix( m, true );
         }
         if ( heightDst < 0 ) {
             // negative height => vertical flip
-            QWMatrix m( 1.0F, 0.0F, 0.0F, -1.0F, 0.0F, 0.0F );
+            QMatrix m( 1.0F, 0.0F, 0.0F, -1.0F, 0.0F, 0.0F );
             mReadWmf->setWorldMatrix( m, true );
         }
         bmpSrc = bmpSrc.copy( leftSrc, topSrc, widthSrc, heightSrc );
@@ -1163,7 +1163,7 @@ void KoWmfReadPrivate::deleteHandle( int idx )
 }
 
 
-void KoWmfReadPrivate::pointArray( QDataStream& stream, QPointArray& pa )
+void KoWmfReadPrivate::pointArray( QDataStream& stream, Q3PointArray& pa )
 {
     Q_INT16 left, top;
     int  i, max;

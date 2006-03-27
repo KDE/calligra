@@ -23,11 +23,13 @@
 #include "qtobject.h"
 
 #include <qmetaobject.h>
+//Added by qt3to4:
+#include <Q3CString>
 #include <private/qucom_p.h> // for the Qt QUObject API.
 
 using namespace Kross::Api;
 
-EventSignal::EventSignal(const QString& name, Object::Ptr parent, QObject* sender, QCString signal)
+EventSignal::EventSignal(const QString& name, Object::Ptr parent, QObject* sender, Q3CString signal)
     : Event<EventSignal>(name, parent)
     , m_sender(sender)
     , m_signal(signal) //QObject::normalizeSignalSlot(signal)

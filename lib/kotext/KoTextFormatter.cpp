@@ -27,6 +27,9 @@
 
 #include <kdebug.h>
 #include <assert.h>
+//Added by qt3to4:
+#include <Q3ValueList>
+#include <Q3PtrList>
 
 //#define DEBUG_FORMATTER
 
@@ -132,7 +135,7 @@ int KoTextFormatterCore::leftMargin( bool firstLine, bool includeFirstLineMargin
         // Add the width of the paragraph counter - first line of parag only.
         if( parag->counter() &&
             ( parag->counter()->alignment() == Qt::AlignLeft ||
-              parag->counter()->alignment() == Qt::AlignAuto ) )
+              parag->counter()->alignment() == Qt::AlignLeft ) )
             left += parag->counterWidth(); // in LU pixels
     }
     return left;
@@ -235,7 +238,7 @@ bool KoTextFormatterCore::format()
 
     wused = 0;
 
-    QValueList<TemporaryWordData> tempWordData;
+    Q3ValueList<TemporaryWordData> tempWordData;
 
 #ifdef DEBUG_FORMATTER
     kdDebug(32500) << "Initial KoTextParagLineStart at y=" << y << endl;
@@ -252,7 +255,7 @@ bool KoTextFormatterCore::format()
     bool abort = false;
 
     int align = parag->alignment();
-    if ( align == Qt::AlignAuto && doc && doc->alignment() != Qt::AlignAuto )
+    if ( align == Qt::AlignLeft && doc && doc->alignment() != Qt::AlignLeft )
         align = doc->alignment();
 
     int col = 0;
@@ -787,7 +790,7 @@ bool KoTextFormatterCore::format()
 #endif
         // last line in a paragraph is not justified
         if ( align == Qt::AlignJustify )
-            align = Qt::AlignAuto;
+            align = Qt::AlignLeft;
         int space = availableWidth - x + c->width; // don't count the trailing space (it breaks e.g. centering)
         KoTextParagLineStart *lineStart2 = koFormatLine( zh, parag, string, lineStart, firstChar, c, align, space );
         delete lineStart2;
@@ -999,7 +1002,7 @@ KoTextParagLineStart *KoTextFormatterCore::koBidiReorderLine(
     }
     int x = startChar->x;
 
-    QPtrList<KoTextRun> *runs;
+    Q3PtrList<KoTextRun> *runs;
     runs = KoComplexText::bidiReorderLine(control, str, 0, last - start + 1,
                                          (text->isRightToLeft() ? QChar::DirR : QChar::DirL) );
 
@@ -1007,7 +1010,7 @@ KoTextParagLineStart *KoTextFormatterCore::koBidiReorderLine(
 
     int numSpaces = 0;
     // set the correct alignment. This is a bit messy....
-    if( align == Qt::AlignAuto ) {
+    if( align == Qt::AlignLeft ) {
         // align according to directionality of the paragraph...
         if ( text->isRightToLeft() )
             align = Qt::AlignRight;

@@ -29,6 +29,8 @@
 #include <KoXmlWriter.h>
 #include <klocale.h>
 #include <kdebug.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 //#define DEBUG_DRAW
 
@@ -144,11 +146,11 @@ void KWPictureFrameSet::load( QDomElement &attributes, bool loadFrames )
             }
             else
             {
-                kdError(32001) << "Missing KEY tag in IMAGE" << endl;
+                kError(32001) << "Missing KEY tag in IMAGE" << endl;
             }
         }
     } else {
-        kdError(32001) << "Missing PICTURE/IMAGE/CLIPART tag in FRAMESET" << endl;
+        kError(32001) << "Missing PICTURE/IMAGE/CLIPART tag in FRAMESET" << endl;
     }
 }
 
@@ -177,12 +179,12 @@ void KWPictureFrameSet::saveOasis( KoXmlWriter& writer, KoSavingContext& context
 
 void KWPictureFrameSet::loadOasis( const QDomElement& frame, const QDomElement& tag, KoOasisContext& context )
 {
-    kdDebug() << k_funcinfo << endl;
+    kDebug() << k_funcinfo << endl;
     KoPictureKey key;
     QDomNode binaryData = KoDom::namedItemNS( tag, KoXmlNS::office, "binary-data" );
     if ( !binaryData.isNull() )
     {
-        QCString data = binaryData.toElement().text().latin1();
+        Q3CString data = binaryData.toElement().text().latin1();
         m_picture.loadFromBase64( data );
         key = KoPictureKey("nofile", QDateTime::currentDateTime(Qt::UTC));
         m_picture.setKey(key);
@@ -208,7 +210,7 @@ void KWPictureFrameSet::loadOasis( const QDomElement& frame, const QDomElement& 
             {
                 KoStoreDevice dev(store);
                 if ( !m_picture.load( &dev, strExtension ) )
-                    kdWarning(32001) << "Cannot load picture: " << filename << " " << href << endl;
+                    kWarning(32001) << "Cannot load picture: " << filename << " " << href << endl;
                 store->close();
             }
         }
@@ -225,7 +227,7 @@ void KWPictureFrameSet::drawFrameContents( KWFrame *frame, QPainter *painter, co
                                            const QColorGroup &, bool, bool, KWFrameSetEdit *, KWViewMode * )
 {
 #ifdef DEBUG_DRAW
-    kdDebug(32001) << "KWPictureFrameSet::drawFrameContents crect=" << crect << " size=" << kWordDocument()->zoomItX( frame->innerWidth() ) << "x" << kWordDocument()->zoomItY( frame->innerHeight() ) << endl;
+    kDebug(32001) << "KWPictureFrameSet::drawFrameContents crect=" << crect << " size=" << kWordDocument()->zoomItX( frame->innerWidth() ) << "x" << kWordDocument()->zoomItY( frame->innerHeight() ) << endl;
 #endif
     m_picture.draw( *painter, 0, 0, kWordDocument()->zoomItX( frame->innerWidth() ), kWordDocument()->zoomItY( frame->innerHeight() ),
                   crect.x(), crect.y(), crect.width(), crect.height(), !m_finalSize);
@@ -252,7 +254,7 @@ void KWPictureFrameSet::printDebug( KWFrame *frame )
     KWFrameSet::printDebug( frame );
     if ( !isDeleted() )
     {
-        kdDebug(32001) << "Image: key=" << m_picture.getKey().toString() << endl;
+        kDebug(32001) << "Image: key=" << m_picture.getKey().toString() << endl;
     }
 }
 #endif

@@ -24,16 +24,19 @@
 #include "KWTableStyle.h"
 
 #include <kdialogbase.h>
-#include <qgroupbox.h>
-#include <qptrlist.h>
+#include <q3groupbox.h>
+#include <q3ptrlist.h>
+//Added by qt3to4:
+#include <Q3GridLayout>
+#include <Q3Frame>
 
 
-class QGridLayout;
+class Q3GridLayout;
 class QLineEdit;
-class QListBox;
+class Q3ListBox;
 class QPushButton;
 class QWidget;
-class QFrame;
+class Q3Frame;
 class QComboBox;
 
 class KWDocument;
@@ -45,7 +48,7 @@ class KoTextDocument;
 /* Class: KWTableStylePreview                                     */
 /******************************************************************/
 
-class KWTableStylePreview : public QGroupBox
+class KWTableStylePreview : public Q3GroupBox
 {
     Q_OBJECT
 
@@ -110,9 +113,9 @@ private:
     void save();
     int tableStyleIndex( int pos );
 
-    void addStyles(const QPtrList<KWTableStyle> &listStyle );
+    void addStyles(const Q3PtrList<KWTableStyle> &listStyle );
 
-    QListBox *m_stylesList;
+    Q3ListBox *m_stylesList;
     QLineEdit *m_nameString;
     QPushButton *m_deleteButton;
     QPushButton *m_newButton;
@@ -123,13 +126,13 @@ private:
     QPushButton *m_changeFrameStyleButton;
     QPushButton *m_changeStyleButton;
     QStringList m_styleOrder;
-    QGroupBox *previewBox;
+    Q3GroupBox *previewBox;
     KWTableStylePreview *preview;
 
     QWidget *main;
 
     KWTableStyle *m_currentTableStyle;
-    QPtrList<KWTableStyleListItem> m_tableStyles;
+    Q3PtrList<KWTableStyleListItem> m_tableStyles;
     int numTableStyles;
     bool noSignals;
 

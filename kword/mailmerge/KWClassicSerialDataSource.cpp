@@ -23,18 +23,21 @@
 #include "KWMailMergeDataBase.h"
 #include <kinputdialog.h>
 #include <qlabel.h>
-#include <qhbox.h>
+#include <q3hbox.h>
 #include <qlayout.h>
-#include <qvbox.h>
+#include <q3vbox.h>
 #include <qpushbutton.h>
 #include <qlineedit.h>
 #include <qvalidator.h>
+//Added by qt3to4:
+#include <QResizeEvent>
+#include <Q3VBoxLayout>
 #include <klocale.h>
 #include <kdebug.h>
 #include <qtoolbutton.h>
 #include <qtooltip.h>
 #include <kiconloader.h>
-#include <qheader.h>
+#include <q3header.h>
 #include "KWDocument.h"
 #include "defs.h"
 
@@ -107,7 +110,7 @@ void KWClassicSerialDataSource::removeRecord( int i )
     if ( (i < 0) || (i > (int)db.count() - 1) )
         return;
 
-	kdDebug()<<QString("Removing record %1").arg(i)<<endl;
+	kDebug()<<QString("Removing record %1").arg(i)<<endl;
 
     Db::Iterator it = db.at( i);
     db.remove( it );
@@ -183,15 +186,15 @@ bool KWClassicSerialDataSource::showConfigDialog(QWidget *par,int action)
  *
  ******************************************************************/
 
-KWClassicMailMergeEditorListItem::KWClassicMailMergeEditorListItem( QListView *parent )
-    : QListViewItem( parent )
+KWClassicMailMergeEditorListItem::KWClassicMailMergeEditorListItem( Q3ListView *parent )
+    : Q3ListViewItem( parent )
 {
     editWidget = new QLineEdit( listView()->viewport() );
     listView()->addChild( editWidget );
 }
 
-KWClassicMailMergeEditorListItem::KWClassicMailMergeEditorListItem( QListView *parent, QListViewItem *after )
-    : QListViewItem( parent, after )
+KWClassicMailMergeEditorListItem::KWClassicMailMergeEditorListItem( Q3ListView *parent, Q3ListViewItem *after )
+    : Q3ListViewItem( parent, after )
 {
     editWidget = new QLineEdit( listView()->viewport() );
     listView()->addChild( editWidget );
@@ -204,7 +207,7 @@ KWClassicMailMergeEditorListItem::~KWClassicMailMergeEditorListItem()
 
 void KWClassicMailMergeEditorListItem::setText( int i, const QString &text )
 {
-    QListViewItem::setText( i, text );
+    Q3ListViewItem::setText( i, text );
     if ( i == 1 )
         editWidget->setText( text );
 }
@@ -213,12 +216,12 @@ QString KWClassicMailMergeEditorListItem::text( int i ) const
 {
     if ( i == 1 )
         return editWidget->text();
-    return QListViewItem::text( i );
+    return Q3ListViewItem::text( i );
 }
 
 void KWClassicMailMergeEditorListItem::setup()
 {
-    setHeight( QMAX( listView()->fontMetrics().height(),
+    setHeight( qMax( listView()->fontMetrics().height(),
                      editWidget->sizeHint().height() ) );
     if ( listView()->columnWidth( 1 ) < editWidget->sizeHint().width() )
         listView()->setColumnWidth( 1, editWidget->sizeHint().width() );
@@ -239,7 +242,7 @@ void KWClassicMailMergeEditorListItem::update()
  ******************************************************************/
 
 KWClassicMailMergeEditorList::KWClassicMailMergeEditorList( QWidget *parent, KWClassicSerialDataSource *db_ )
-    : QListView( parent ), db( db_ )
+    : Q3ListView( parent ), db( db_ )
 {
     setSorting( -1 );
     addColumn( i18n( "Name" ) );
@@ -265,10 +268,10 @@ KWClassicMailMergeEditorList::~KWClassicMailMergeEditorList()
     if ( currentRecord == -1 )
         return;
 
-    QListViewItemIterator lit( this );
+    Q3ListViewItemIterator lit( this );
     QMap< QString, QString >::ConstIterator it = db->getRecordEntries().begin();
     for ( ; it != db->getRecordEntries().end(); ++it ) {
-        QListViewItem *item = 0;
+        Q3ListViewItem *item = 0;
         item = lit.current();
         ++lit;
         if ( currentRecord != -1 && item )
@@ -289,7 +292,7 @@ void KWClassicMailMergeEditorList::sectionClicked( int )
 
 void KWClassicMailMergeEditorList::updateItems()
 {
-    QListViewItemIterator it( this );
+    Q3ListViewItemIterator it( this );
     for ( ; it.current(); ++it )
         ( (KWClassicMailMergeEditorListItem*)it.current() )->update();
 }
@@ -300,11 +303,11 @@ void KWClassicMailMergeEditorList::displayRecord( int i )
         return;
 
     bool create = !firstChild();
-    QListViewItemIterator lit( this );
+    Q3ListViewItemIterator lit( this );
     QMap< QString, QString >::ConstIterator it = db->getRecordEntries().begin();
-    QListViewItem *after = 0;
+    Q3ListViewItem *after = 0;
     for ( ; it != db->getRecordEntries().end(); ++it ) {
-        QListViewItem *item = 0;
+        Q3ListViewItem *item = 0;
         if ( create ) {
             item = new KWClassicMailMergeEditorListItem( this, after );
             item->setText( 0, it.key() );
@@ -334,11 +337,11 @@ KWClassicMailMergeEditor::KWClassicMailMergeEditor( QWidget *parent, KWClassicSe
 {
     back = plainPage();
 
-    QVBoxLayout *l = new QVBoxLayout( back );
+    Q3VBoxLayout *l = new Q3VBoxLayout( back );
     l->setAutoAdd(true);
     l->setSpacing( KDialog::spacingHint() );
 
-    QHBox *toolbar = new QHBox( back );
+    Q3HBox *toolbar = new Q3HBox( back );
 
     first = new QToolButton( toolbar );
     first->setIconSet( SmallIconSet( "start" ) );
@@ -503,7 +506,7 @@ void KWClassicMailMergeEditor::addRecord()
 
 void KWClassicMailMergeEditor::removeEntry()
 {
-    QListViewItem * item = dbList->selectedItem ();
+    Q3ListViewItem * item = dbList->selectedItem ();
     if ( item )
     {
         db->removeEntry( item->text(0) );

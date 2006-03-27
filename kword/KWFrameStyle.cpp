@@ -30,6 +30,8 @@
 #include <kdebug.h>
 #include <klocale.h>
 #include <qdom.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 KWFrameStyleCollection::KWFrameStyleCollection()
     : KoUserStyleCollection( QString::fromLatin1( "frame" ) )
@@ -39,7 +41,7 @@ KWFrameStyleCollection::KWFrameStyleCollection()
 void KWFrameStyleCollection::saveOasis( KoGenStyles& mainStyles, KoSavingContext& savingContext ) const
 {
     if ( !isDefault() ) {
-        for ( QValueList<KoUserStyle *>::const_iterator styleIt = m_styleList.begin(), styleEnd = m_styleList.end() ; styleIt != styleEnd ; ++styleIt )
+        for ( Q3ValueList<KoUserStyle *>::const_iterator styleIt = m_styleList.begin(), styleEnd = m_styleList.end() ; styleIt != styleEnd ; ++styleIt )
         {
             KWFrameStyle* style = static_cast<KWFrameStyle *>( *styleIt );
             style->saveOasis( mainStyles, savingContext );
@@ -49,7 +51,7 @@ void KWFrameStyleCollection::saveOasis( KoGenStyles& mainStyles, KoSavingContext
 
 int KWFrameStyleCollection::loadOasisStyles( KoOasisContext& context )
 {
-    QValueVector<QDomElement> userStyles = context.oasisStyles().userStyles();
+    Q3ValueVector<QDomElement> userStyles = context.oasisStyles().userStyles();
     bool defaultStyleDeleted = false;
     int stylesLoaded = 0;
     for (unsigned int item = 0; item < userStyles.count(); item++) {
@@ -61,7 +63,7 @@ int KWFrameStyleCollection::loadOasisStyles( KoOasisContext& context )
 
         if ( !defaultStyleDeleted ) {
             KWFrameStyle *s = findStyle( defaultStyleName() );
-            //kdDebug() << "KWFrameStyleCollection::loadOasisStyles looking for " << defaultStyleName() << ", to delete it. Found " << s << endl;
+            //kDebug() << "KWFrameStyleCollection::loadOasisStyles looking for " << defaultStyleName() << ", to delete it. Found " << s << endl;
             if(s) // delete the standard style.
                 removeStyle(s);
             defaultStyleDeleted = true;
@@ -73,7 +75,7 @@ int KWFrameStyleCollection::loadOasisStyles( KoOasisContext& context )
         // Style created, now let's try to add it
         sty = static_cast<KWFrameStyle *>( addStyle( sty ) );
 
-        kdDebug() << " Loaded frame style " << sty->name() << " - now " << count() << " styles" << endl;
+        kDebug() << " Loaded frame style " << sty->name() << " - now " << count() << " styles" << endl;
         ++stylesLoaded;
     }
     return stylesLoaded;
@@ -107,7 +109,7 @@ KWFrameStyle::KWFrameStyle( QDomElement & parentElem, int /*docVersion=2*/ )
         m_name = element.attribute( "value" );
         m_displayName = i18n( "Style name", m_name.utf8() );
     } else
-        kdWarning() << "No NAME tag in frame style!" << endl;
+        kWarning() << "No NAME tag in frame style!" << endl;
 
     element = parentElem.namedItem( "LEFTBORDER" ).toElement();
     if ( !element.isNull() )
@@ -208,9 +210,9 @@ void KWFrameStyle::saveFrameStyle( QDomElement & parentElem )
 
     if(m_backgroundColor.color().isValid())
     {
-        parentElem.setAttribute( "red", m_backgroundColor.color().red() );
-        parentElem.setAttribute( "green", m_backgroundColor.color().green() );
-        parentElem.setAttribute( "blue", m_backgroundColor.color().blue() );
+        parentElem.setAttribute( "red", m_backgroundColor.color().Qt::red() );
+        parentElem.setAttribute( "green", m_backgroundColor.color().Qt::green() );
+        parentElem.setAttribute( "blue", m_backgroundColor.color().Qt::blue() );
     }
 }
 

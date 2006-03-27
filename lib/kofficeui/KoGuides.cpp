@@ -24,6 +24,11 @@
 #include <qcursor.h>
 #include <qpainter.h>
 #include <qpixmap.h>
+//Added by qt3to4:
+#include <QMouseEvent>
+#include <Q3ValueList>
+#include <QKeyEvent>
+#include <QEvent>
 
 #include <klocale.h>
 #include <kpopupmenu.h>
@@ -98,17 +103,17 @@ void KoGuides::paintGuides( QPainter &painter )
 
     for ( int i = 0; i < GL_END; ++i )
     {
-        QValueList<KoGuideLine *>::iterator it = m_guideLines[i].begin();
+        Q3ValueList<KoGuideLine *>::iterator it = m_guideLines[i].begin();
         for ( ; it != m_guideLines[i].end(); ++it )
         {
             if ( !( *it )->automatic || ( *it )->snapping ) // dont paint autoStyle guides when they are not snapping
             {
                 if ( ( *it )->snapping )
-                    painter.setPen( QPen( green, 0, DotLine ) );
+                    painter.setPen( QPen( Qt::green, 0, Qt::DotLine ) );
                 else if ( ( *it )->selected )
-                    painter.setPen( QPen( red, 0, DotLine ) );
+                    painter.setPen( QPen( Qt::red, 0, Qt::DotLine ) );
                 else
-                    painter.setPen( QPen( blue, 0, DotLine ) );
+                    painter.setPen( QPen( Qt::blue, 0, Qt::DotLine ) );
 
                 painter.save();
                 if ( ( *it )->orientation == Qt::Vertical )
@@ -144,7 +149,7 @@ bool KoGuides::mousePressEvent( QMouseEvent *e )
             {
                 m_mouseSelected = true;
             }
-            if ( e->state() & Qt::ControlButton )
+            if ( e->state() & Qt::ControlModifier )
             {
                 if ( guideLine->selected )
                 {
@@ -167,7 +172,7 @@ bool KoGuides::mousePressEvent( QMouseEvent *e )
     }
     else 
     {   
-        if ( !( e->state() && Qt::ControlButton ) )
+        if ( !( e->state() && Qt::ControlModifier ) )
         {
             changed = unselectAll();
         }
@@ -283,18 +288,18 @@ bool KoGuides::keyPressEvent( QKeyEvent *e )
     return eventProcessed;
 }
 
-void KoGuides::setGuideLines( const QValueList<double> &horizontalPos, const QValueList<double> &verticalPos )
+void KoGuides::setGuideLines( const Q3ValueList<double> &horizontalPos, const Q3ValueList<double> &verticalPos )
 {
     removeSelected();
 
-    QValueList<KoGuideLine *>::iterator it = m_guideLines[GL].begin();
+    Q3ValueList<KoGuideLine *>::iterator it = m_guideLines[GL].begin();
     for ( ; it != m_guideLines[GL].end(); ++it )
     {
         delete ( *it );
     }
     m_guideLines[GL].clear();
 
-    QValueList<double>::ConstIterator posIt = horizontalPos.begin();
+    Q3ValueList<double>::ConstIterator posIt = horizontalPos.begin();
     for ( ; posIt != horizontalPos.end(); ++posIt )
     {
         KoGuideLine *guideLine = new KoGuideLine( Qt::Horizontal, *posIt, false );
@@ -309,16 +314,16 @@ void KoGuides::setGuideLines( const QValueList<double> &horizontalPos, const QVa
     paint();
 }
 
-void KoGuides::setAutoGuideLines( const QValueList<double> &horizontalPos, const QValueList<double> &verticalPos )
+void KoGuides::setAutoGuideLines( const Q3ValueList<double> &horizontalPos, const Q3ValueList<double> &verticalPos )
 {
-    QValueList<KoGuideLine *>::iterator it = m_guideLines[GL_AUTOMATIC].begin();
+    Q3ValueList<KoGuideLine *>::iterator it = m_guideLines[GL_AUTOMATIC].begin();
     for ( ; it != m_guideLines[GL_AUTOMATIC].end(); ++it )
     {
         delete ( *it );
     }
     m_guideLines[GL_AUTOMATIC].clear();
 
-    QValueList<double>::ConstIterator posIt = horizontalPos.begin();
+    Q3ValueList<double>::ConstIterator posIt = horizontalPos.begin();
     for ( ; posIt != horizontalPos.end(); ++posIt )
     {
         KoGuideLine *guideLine = new KoGuideLine( Qt::Horizontal, *posIt, true );
@@ -333,12 +338,12 @@ void KoGuides::setAutoGuideLines( const QValueList<double> &horizontalPos, const
 }
 
 
-void KoGuides::getGuideLines( QValueList<double> &horizontalPos, QValueList<double> &verticalPos ) const
+void KoGuides::getGuideLines( Q3ValueList<double> &horizontalPos, Q3ValueList<double> &verticalPos ) const
 {
     horizontalPos.clear();
     verticalPos.clear();
 
-    QValueList<KoGuideLine *>::const_iterator it = m_guideLines[GL].begin();
+    Q3ValueList<KoGuideLine *>::const_iterator it = m_guideLines[GL].begin();
     for ( ; it != m_guideLines[GL].end(); ++it )
     {
         if ( ( *it )->orientation == Qt::Horizontal )
@@ -374,7 +379,7 @@ void KoGuides::snapToGuideLines( KoRect &rect, int snap, SnapStatus &snapStatus,
 
     for ( int i = 0; i < GL_END; ++i )
     {
-        QValueList<KoGuideLine *>::const_iterator it = m_guideLines[i].begin();
+        Q3ValueList<KoGuideLine *>::const_iterator it = m_guideLines[i].begin();
         for ( ; it != m_guideLines[i].end(); ++it )
         {
             if ( ( *it )->orientation == Qt::Horizontal )
@@ -438,7 +443,7 @@ void KoGuides::snapToGuideLines( KoPoint &pos, int snap, SnapStatus &snapStatus,
 
     for ( int i = 0; i < GL_END; ++i )
     {
-        QValueList<KoGuideLine *>::const_iterator it = m_guideLines[i].begin();
+        Q3ValueList<KoGuideLine *>::const_iterator it = m_guideLines[i].begin();
         for ( ; it != m_guideLines[i].end(); ++it )
         {
             if ( ( *it )->orientation == Qt::Horizontal )
@@ -481,7 +486,7 @@ void KoGuides::repaintSnapping( const KoRect &snappedRect )
     bool needRepaint = false;
     for ( int i = 0; i < GL_END; ++i )
     {
-        QValueList<KoGuideLine *>::const_iterator it = m_guideLines[i].begin();
+        Q3ValueList<KoGuideLine *>::const_iterator it = m_guideLines[i].begin();
         for ( ; it != m_guideLines[i].end(); ++it )
         {
             if ( ( *it )->orientation == Qt::Horizontal )
@@ -535,7 +540,7 @@ void KoGuides::repaintSnapping( const KoPoint &snappedPoint, SnapStatus snapStat
     bool needRepaint = false;
     for ( int i = 0; i < GL_END; ++i )
     {
-        QValueList<KoGuideLine *>::const_iterator it = m_guideLines[i].begin();
+        Q3ValueList<KoGuideLine *>::const_iterator it = m_guideLines[i].begin();
         for ( ; it != m_guideLines[i].end(); ++it )
         {
             if ( ( *it )->orientation == Qt::Horizontal && ( snapStatus & SNAP_HORIZ ) )
@@ -591,7 +596,7 @@ void KoGuides::repaintAfterSnapping()
 
     for ( int i = 0; i < GL_END; ++i )
     {
-        QValueList<KoGuideLine *>::const_iterator it = m_guideLines[i].begin();
+        Q3ValueList<KoGuideLine *>::const_iterator it = m_guideLines[i].begin();
         for ( ; it != m_guideLines[i].end(); ++it )
         {
             if ( ( *it )->snapping )
@@ -615,7 +620,7 @@ void KoGuides::diffNextGuide( KoRect &rect, KoPoint &diff )
 {
     for ( int i = 0; i < GL_END; ++i )
     {
-        QValueList<KoGuideLine *>::const_iterator it = m_guideLines[i].begin();
+        Q3ValueList<KoGuideLine *>::const_iterator it = m_guideLines[i].begin();
         for ( ; it != m_guideLines[i].end(); ++it )
         {
             if ( ( *it )->orientation == Qt::Horizontal )
@@ -790,7 +795,7 @@ bool KoGuides::unselectAll()
 {
     bool selected = m_guideLines[GL_SELECTED].empty() == false;
     
-    QValueList<KoGuideLine *>::iterator it = m_guideLines[GL_SELECTED].begin();
+    Q3ValueList<KoGuideLine *>::iterator it = m_guideLines[GL_SELECTED].begin();
     for ( ; it != m_guideLines[GL_SELECTED].end(); ++it )
     {
         ( *it )->selected = false;
@@ -804,7 +809,7 @@ bool KoGuides::unselectAll()
 
 void KoGuides::removeSelected()
 {
-    QValueList<KoGuideLine *>::iterator it = m_guideLines[GL_SELECTED].begin();
+    Q3ValueList<KoGuideLine *>::iterator it = m_guideLines[GL_SELECTED].begin();
     for ( ; it != m_guideLines[GL_SELECTED].end(); ++it )
     {
         delete ( *it );
@@ -821,7 +826,7 @@ bool KoGuides::hasSelected()
 
 KoGuides::KoGuideLine * KoGuides::find( KoPoint &p, double diff )
 {
-    QValueList<KoGuideLine *>::iterator it = m_guideLines[GL_SELECTED].begin();
+    Q3ValueList<KoGuideLine *>::iterator it = m_guideLines[GL_SELECTED].begin();
     for ( ; it != m_guideLines[GL_SELECTED].end(); ++it )
     {
         if ( ( *it )->orientation == Qt::Vertical && QABS( ( *it )->position - p.x() ) < diff )
@@ -859,7 +864,7 @@ void KoGuides::moveSelectedBy( QPoint &p )
         double right = QMAX( pl.ptWidth, m_zoomHandler->unzoomItX( m_view->canvas()->width() + m_view->canvasXOffset() - 1 ) );
         double bottom = QMAX( pl.ptHeight, m_zoomHandler->unzoomItY( m_view->canvas()->height() + m_view->canvasYOffset() - 1 ) );
 
-        QValueList<KoGuideLine *>::iterator it = m_guideLines[GL_SELECTED].begin();
+        Q3ValueList<KoGuideLine *>::iterator it = m_guideLines[GL_SELECTED].begin();
         for ( ; it != m_guideLines[GL_SELECTED].end(); ++it )
         {
             if ( ( *it )->orientation == Qt::Vertical )
@@ -888,7 +893,7 @@ void KoGuides::moveSelectedBy( QPoint &p )
             }
         }
     }
-    QValueList<KoGuideLine *>::iterator it = m_guideLines[GL_SELECTED].begin();
+    Q3ValueList<KoGuideLine *>::iterator it = m_guideLines[GL_SELECTED].begin();
     for ( ; it != m_guideLines[GL_SELECTED].end(); ++it )
     {
         ( *it )->snapping = false;

@@ -18,7 +18,7 @@
 #ifndef _KO_TOOLBOX_PALETTE_
 #define _KO_TOOLBOX_PALETTE_
 
-#include <qdockwindow.h>
+#include <q3dockwindow.h>
 #include <qtoolbox.h>
 
 #include <kopalettemanager.h>

@@ -30,7 +30,7 @@
 #define __KDCHARTENUMS_H__
 
 #include <qrect.h>
-#include <qpointarray.h>
+#include <q3pointarray.h>
 
 #include "KDChartGlobal.h"
 #include <qobject.h>
@@ -220,7 +220,7 @@ class KDCHART_EXPORT KDChartEnums :public QObject
 
                       \note The array \c points <b>must</b> have at least nine elements.
                       */
-                    static QPoint positionFlagToPoint( const QPointArray& points,
+                    static QPoint positionFlagToPoint( const Q3PointArray& points,
                             PositionFlag pos )
                     {
                         QPoint pt;

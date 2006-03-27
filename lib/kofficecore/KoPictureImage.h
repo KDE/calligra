@@ -22,6 +22,8 @@
 
 #include "KoPictureBase.h"
 #include <qstring.h>
+//Added by qt3to4:
+#include <QPixmap>
 
 class KoPictureImagePrivate;
 // TODO: fix documentation
@@ -73,7 +75,7 @@ public:
      */
     virtual void draw(QPainter& painter, int x, int y, int width, int height, int sx = 0, int sy = 0, int sw = -1, int sh = -1, bool fastMode = false);
 
-    virtual QDragObject* dragObject( QWidget *dragSource = 0L, const char *name = 0L );
+    virtual Q3DragObject* dragObject( QWidget *dragSource = 0L, const char *name = 0L );
 
     virtual bool loadData(const QByteArray& array, const QString& extension);
 

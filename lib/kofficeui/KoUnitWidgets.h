@@ -27,6 +27,8 @@
 #include <kcombobox.h>
 #include <KoUnit.h>
 #include <koffice_export.h>
+//Added by qt3to4:
+#include <QEvent>
 
 
 // ----------------------------------------------------------------

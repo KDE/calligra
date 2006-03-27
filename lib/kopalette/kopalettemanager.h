@@ -19,14 +19,16 @@
 #define _KO_PALETTE_MANAGER_
 
 #include <qobject.h>
-#include <qdockwindow.h>
+#include <q3dockwindow.h>
 #include <qstring.h>
 #include <qmap.h>
-#include <qdict.h>
-#include <qvaluestack.h>
+#include <q3dict.h>
+#include <q3valuestack.h>
 #include <qwidget.h>
 #include <qsignalmapper.h>
 #include <qstringlist.h>
+//Added by qt3to4:
+#include <QEvent>
 
 #include <koffice_export.h>
 
@@ -151,13 +153,13 @@ public:
      * a location for the palette in the saved settings, then move it there
      * instead of the specified location.
      */
-    virtual void placePalette(const QString & name, Dock location = DockRight);
+    virtual void placePalette(const QString & name, Qt::ToolBarDock location = Qt::DockRight);
 
     /**
      * Add a palette; this can be used to add palettes other than those in the two
      * default styles.
      */
-     virtual void addPalette(KoPalette * palette, const QString & name, Dock location = DockRight);
+     virtual void addPalette(KoPalette * palette, const QString & name, Qt::ToolBarDock location = Qt::DockRight);
 
      /**
       * Sets all palettes to the specified fixed width
@@ -205,10 +207,10 @@ private:
     
     QStringList             * m_widgetNames;
 
-    QDict<QWidget>          * m_widgets;
-    QDict<KoPalette>        * m_palettes;
-    QValueStack<QString>   m_hiddenWidgets; // names of widgets actively hidden by hide all
-    QDict<KToggleAction>    * m_actions;
+    Q3Dict<QWidget>          * m_widgets;
+    Q3Dict<KoPalette>        * m_palettes;
+    Q3ValueStack<QString>   m_hiddenWidgets; // names of widgets actively hidden by hide all
+    Q3Dict<KToggleAction>    * m_actions;
     QSignalMapper           * m_mapper;
 
     QMap<QString, QString>  * m_defaultMapping; // widget to docker

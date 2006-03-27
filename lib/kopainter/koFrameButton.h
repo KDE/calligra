@@ -22,6 +22,9 @@
 #define __ko_framebutton_h__
 
 #include <qlabel.h>
+//Added by qt3to4:
+#include <QPixmap>
+#include <QMouseEvent>
 
 class QPixmap;
 class QString;

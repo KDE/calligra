@@ -24,8 +24,18 @@
 
 #include <kprinter.h>
 #include <KoRect.h>
-#include <qscrollview.h>
-#include <qstylesheet.h>
+#include <q3scrollview.h>
+#include <q3stylesheet.h>
+//Added by qt3to4:
+#include <QDragLeaveEvent>
+#include <QKeyEvent>
+#include <QEvent>
+#include <QDragMoveEvent>
+#include <QDropEvent>
+#include <Q3ValueList>
+#include <QResizeEvent>
+#include <QDragEnterEvent>
+#include <QMouseEvent>
 #include <KoRichText.h>
 #include <KoQueryTrader.h>
 #include <KoPicture.h>
@@ -57,7 +67,7 @@ class KWFrameView;
  * the screen as well as the interaction with the user via mouse
  * and keyboard. There is one per view.
  */
-class KWCanvas : public QScrollView
+class KWCanvas : public Q3ScrollView
 {
     Q_OBJECT
 
@@ -408,7 +418,7 @@ class InteractionPolicy {
          * @param meaning the mouseMeaning of as it is at 'point'
          * @param point the place where the mouseDown is registred.
          * @param buttonState which button is used to click, like Qt::LeftButton
-         * @param keyState which keys are held down at the click, like Qt::ControlButton
+         * @param keyState which keys are held down at the click, like Qt::ControlModifier
          */
         static InteractionPolicy* createPolicy(KWCanvas *parent, MouseMeaning meaning, KoPoint &point, Qt::ButtonState buttonState, Qt::ButtonState keyState);
 
@@ -424,9 +434,9 @@ class InteractionPolicy {
          */
         InteractionPolicy(KWCanvas *parent, bool doInit = true, bool includeInlineFrames = false);
 
-        QValueList<FrameIndex> m_indexFrame;
+        Q3ValueList<FrameIndex> m_indexFrame;
         KWCanvas *m_parent;
-        QValueList<KWFrame*> m_frames;
+        Q3ValueList<KWFrame*> m_frames;
 
     private:
         void init();
@@ -446,7 +456,7 @@ class FrameResizePolicy : public InteractionPolicy {
         void finishInteraction();
 
     private:
-        QValueList<FrameResizeStruct> m_frameResize;
+        Q3ValueList<FrameResizeStruct> m_frameResize;
         bool m_top, m_bottom, m_left, m_right;
         KoRect m_boundingRect;
         KoPoint m_hotSpot;
@@ -464,7 +474,7 @@ class FrameMovePolicy : public InteractionPolicy {
         KCommand *createCommand();
         void finishInteraction();
     private:
-        QValueList<FrameMoveStruct> m_frameMove;
+        Q3ValueList<FrameMoveStruct> m_frameMove;
         KoPoint m_hotSpot;
         KoPoint m_startPoint;
         KoRect m_boundingRect;

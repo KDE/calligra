@@ -32,7 +32,7 @@
 #include <kglobal.h>
 #include <klocale.h>
 
-#include <qobjectlist.h>
+#include <qobject.h>
 #include <qdatetime.h>
 #include "KoXmlNS.h"
 

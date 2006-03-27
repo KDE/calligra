@@ -27,6 +27,16 @@
 #include <KoParagLayout.h>
 #include <KoChangeCaseDia.h>
 #include "KWVariable.h"
+//Added by qt3to4:
+#include <QDragLeaveEvent>
+#include <Q3MemArray>
+#include <Q3PtrList>
+#include <QKeyEvent>
+#include <QDragMoveEvent>
+#include <QDropEvent>
+#include <Q3ValueList>
+#include <QDragEnterEvent>
+#include <QMouseEvent>
 
 class KoGenStyles;
 class KoParagStyle;
@@ -49,8 +59,8 @@ class KAction;
 class KNamedCommand;
 class KMacroCommand;
 
-class QDragObject;
-class QProgressDialog;
+class Q3DragObject;
+class Q3ProgressDialog;
 
 /**
  * Class: KWTextFrameSet
@@ -217,7 +227,7 @@ public:
     void highlightPortion( KoTextParag * parag, int index, int length, KWCanvas * canvas, bool repaint = true, KDialogBase* dialog = 0 );
     void removeHighlight( bool repaint = true );
 
-    virtual void addTextFrameSets( QPtrList<KWTextFrameSet> &lst, bool onlyReadWrite=false );
+    virtual void addTextFrameSets( Q3PtrList<KWTextFrameSet> &lst, bool onlyReadWrite=false );
 
     /** Update the paragraph that use the given style, after this style was changed.
      *  The flags tell which changes should be applied.
@@ -243,7 +253,7 @@ public:
     virtual int paragraphs();
     virtual int paragraphsSelected();
     /** Calculate statistics for this frameset */
-    virtual bool statistics( QProgressDialog *progress, ulong & charsWithSpace, ulong & charsWithoutSpace,
+    virtual bool statistics( Q3ProgressDialog *progress, ulong & charsWithSpace, ulong & charsWithoutSpace,
         ulong & words, ulong& sentences, ulong & syllables, ulong & lines, bool selected );
 
     /** reimplemented from KoTextFlow, implements flowing around frames etc. */
@@ -310,7 +320,7 @@ public:
      */
     KWFootNoteFrameSet * insertFootNote( NoteType noteType, KWFootNoteVariable::Numbering numType, const QString &manualString );
 
-    KoTextDocCommand *deleteTextCommand( KoTextDocument *textdoc, int id, int index, const QMemArray<KoTextStringChar> & str, const CustomItemsMap & customItemsMap, const QValueList<KoParagLayout> & oldParagLayouts );
+    KoTextDocCommand *deleteTextCommand( KoTextDocument *textdoc, int id, int index, const Q3MemArray<KoTextStringChar> & str, const CustomItemsMap & customItemsMap, const Q3ValueList<KoParagLayout> & oldParagLayouts );
 
     QString copyTextParag( KoXmlWriter& writer, KoSavingContext& context, int selectionId );
 
@@ -357,7 +367,7 @@ private:
      * Return the list of frames containing the text that goes from @p y1 to @p y2
      * (in internal coordinates).
      */
-    QValueList<KWFrame*> framesFromTo( int y1, int y2 ) const;
+    Q3ValueList<KWFrame*> framesFromTo( int y1, int y2 ) const;
     double footerHeaderSizeMax( KWFrame *theFrame );
     double footNoteSize( KWFrame *theFrame );
     QDomElement saveInternal( QDomElement &parentElem, bool saveFrames, bool saveAnchorsFramesets );
@@ -454,7 +464,7 @@ public:
 
 
     //const KoParagLayout & currentParagLayout() const { return m_paragLayout; }
-    double currentLeftMargin() const { return m_paragLayout.margins[QStyleSheetItem::MarginLeft]; }
+    double currentLeftMargin() const { return m_paragLayout.margins[Q3StyleSheetItem::MarginLeft]; }
 
     virtual void removeToolTipCompletion();
 
@@ -496,7 +506,7 @@ protected:
     virtual bool textDecreaseIndent();
 
     virtual void startDrag();
-    QDragObject * newDrag( QWidget * parent );
+    Q3DragObject * newDrag( QWidget * parent );
 
 private slots:
     void slotFrameDeleted(KWFrame *);

@@ -21,7 +21,7 @@
 #include "KoTextFormat.h"
 
 #include <qstringlist.h>
-#include <qbuttongroup.h>
+#include <q3buttongroup.h>
 #include <qradiobutton.h>
 #include <qcheckbox.h>
 
@@ -31,7 +31,7 @@
 #include "KoHighlightingTab.moc"
 
 
-KoHighlightingTab::KoHighlightingTab( QWidget* parent, const char* name, WFlags fl ) 
+KoHighlightingTab::KoHighlightingTab( QWidget* parent, const char* name, Qt::WFlags fl ) 
         : KoHighlightingTabBase( parent, name, fl )
 {
     underlineStyleKComboBox->insertStringList( KoTextFormat::underlineTypeList() );

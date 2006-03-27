@@ -23,11 +23,19 @@
 #include "tktoolbarbutton.h"
 
 #include <qlayout.h>
+//Added by qt3to4:
+#include <QPixmap>
+#include <QPaintEvent>
+#include <Q3GridLayout>
+#include <QEvent>
+#include <Q3Frame>
+#include <QShowEvent>
+#include <QMouseEvent>
 #include <kcolordialog.h>
 #include <ktoolbar.h>
 #include <qpainter.h>
 #include <qtooltip.h>
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
 #include <klocale.h>
 #include <kdebug.h>
 #include <qapplication.h>
@@ -103,17 +111,17 @@ void TKSelectColorAction::init()
   switch (m_type) {
     case TextColor:
       m_pMenu->insertItem(i18n("More Text Colors..."),this,SLOT(selectColorDialog()));
-      setCurrentColor(black);
+      setCurrentColor(Qt::black);
       setIcon("textcolor");
       break;
     case LineColor:
       m_pMenu->insertItem(i18n("More Line Colors..."),this,SLOT(selectColorDialog()));
-      setCurrentColor(black);
+      setCurrentColor(Qt::black);
       setIcon("color_line");
       break;
     case FillColor:
       m_pMenu->insertItem(i18n("More Fill Colors..."),this,SLOT(selectColorDialog()));
-      setCurrentColor(white);
+      setCurrentColor(Qt::white);
       setIcon("color_fill");
       break;
     case Color:
@@ -137,7 +145,7 @@ TKSelectColorAction::~TKSelectColorAction()
 
 void TKSelectColorAction::initToolBarButton(TKToolBarButton* b)
 {
-  QWhatsThis::add( b, whatsThis() );
+  Q3WhatsThis::add( b, whatsThis() );
   TKAction::initToolBarButton(b);
   b->setDelayedPopup( popupMenu() );
   updatePixmap(b);
@@ -166,7 +174,7 @@ void TKSelectColorAction::updatePixmap()
       }
     }
     else if(w->inherits("QPopupMenu") ) {
-        QPixmap pix =iconSet(KIcon::Small).pixmap(QIconSet::Automatic,QIconSet::Active);
+        QPixmap pix =iconSet(K3Icon::Small).pixmap(QIcon::Automatic,QIcon::Active);
   if ( pix.isNull() )
       return;
         QPainter p(&pix);
@@ -315,7 +323,7 @@ void TKColorPanel::setNumCols( int col )
   m_iWidth = col;
   resetGrid();
 
-  QDictIterator<TKColorPanelButton> it(m_pColorDict);
+  Q3DictIterator<TKColorPanelButton> it(m_pColorDict);
   while ( it.current() ) {
     addToGrid(it.current());
     ++it;
@@ -333,7 +341,7 @@ void TKColorPanel::resetGrid()
   m_iY = 0;
 
   delete m_pLayout;
-  m_pLayout = new QGridLayout(this,0,m_iWidth+1,0,0);
+  m_pLayout = new Q3GridLayout(this,0,m_iWidth+1,0,0);
 
   emit sizeChanged();
 }
@@ -575,7 +583,7 @@ void TKColorPanel::fillPanel()
 
 /****************************************************************************************/
 TKColorPanelButton::TKColorPanelButton( const QColor& color, QWidget* parent, const char* name )
-: QFrame(parent,name), m_Color(color), m_bActive(false)
+: Q3Frame(parent,name), m_Color(color), m_bActive(false)
 {
   setFixedSize(16,16);
   setFrameStyle( NoFrame );
@@ -599,7 +607,7 @@ void TKColorPanelButton::leaveEvent( QEvent* )
 
 void TKColorPanelButton::paintEvent( QPaintEvent* ev )
 {
-  QFrame::paintEvent(ev);
+  Q3Frame::paintEvent(ev);
 
   QPainter p(this,this);
   p.fillRect(2,2,12,12,m_Color);

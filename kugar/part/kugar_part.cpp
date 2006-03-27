@@ -122,7 +122,7 @@ bool KugarPart::initDoc( InitDocFlags /*flags*/, QWidget* /*parentWidget*/ )
         return false;
     }
 
-    KURL url( dialog->selectedURL() );
+    KUrl url( dialog->selectedURL() );
     delete dialog;
 
     if ( url.isEmpty() )
@@ -149,7 +149,7 @@ KoView* KugarPart::createViewInstance( QWidget* parent, const char* name )
 
 void KugarPart::slotPreferredTemplate( const QString &tpl )
 {
-    KURL url( tpl );
+    KUrl url( tpl );
     QString localtpl;
     bool isTemp = false;
 
@@ -160,7 +160,7 @@ void KugarPart::slotPreferredTemplate( const QString &tpl )
         {
             if ( tpl.startsWith( "." ) )
             {
-                KURL tmpURL( m_docURL );
+                KUrl tmpURL( m_docURL );
                 tmpURL.setFileName( "" );
                 tmpURL.addPath( tpl );
                 if ( KIO::NetAccess::download( tmpURL, localtpl ) )
@@ -177,7 +177,7 @@ void KugarPart::slotPreferredTemplate( const QString &tpl )
             localtpl = kapp -> dirs() -> findResource( "data", "kugar/templates/" + tpl );
             if ( localtpl.isEmpty() )
             {
-                KURL tmpURL( m_docURL );
+                KUrl tmpURL( m_docURL );
                 tmpURL.setFileName( "" );
                 tmpURL.addPath( tpl );
                 if ( KIO::NetAccess::download( tmpURL, localtpl ) )

@@ -21,8 +21,10 @@
 #define KWORD_PARAGVISITORS_H
 
 #include <KoTextDocument.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 class KWFrameSet;
-template <class T> class QValueList;
+template <class T> class Q3ValueList;
 
 // This paragraph visitor collects the inline framesets (found via KWAnchor)
 // found in a text selection.
@@ -32,10 +34,10 @@ public:
     KWCollectFramesetsVisitor() : KoParagVisitor() {}
     virtual bool visit( KoTextParag *parag, int start, int end );
 
-    const QValueList<KWFrameSet *>& frameSets() const { return m_framesets; }
+    const Q3ValueList<KWFrameSet *>& frameSets() const { return m_framesets; }
 
 private:
-    QValueList<KWFrameSet *> m_framesets;
+    Q3ValueList<KWFrameSet *> m_framesets;
 };
 
 #endif /* KWORD_PARAGVISITORS_H */

@@ -179,7 +179,7 @@ void KexiScriptDesignView::slotPropertyChanged(KoProperty::Set& /*set*/, KoPrope
 
     if(property.name() == "language") {
         QString language = property.value().toString();
-        kdDebug() << QString("KexiScriptDesignView::slotPropertyChanged() language=%1").arg(language) << endl;
+        kDebug() << QString("KexiScriptDesignView::slotPropertyChanged() language=%1").arg(language) << endl;
         d->scriptaction->setInterpreterName( language );
         // We assume Kross and the HighlightingInterface are using same
         // names for the support languages...
@@ -192,7 +192,7 @@ void KexiScriptDesignView::slotPropertyChanged(KoProperty::Set& /*set*/, KoPrope
     else {
         bool ok = d->scriptaction->setOption( property.name(), property.value() );
         if(! ok) {
-            kdWarning() << QString("KexiScriptDesignView::slotPropertyChanged() unknown property '%1'.").arg(property.name()) << endl;
+            kWarning() << QString("KexiScriptDesignView::slotPropertyChanged() unknown property '%1'.").arg(property.name()) << endl;
             return;
         }
     }
@@ -284,7 +284,7 @@ KexiDB::SchemaData* KexiScriptDesignView::storeNewData(const KexiDB::SchemaData&
     }
 
     if(! storeData()) {
-        kdWarning() << "KexiScriptDesignView::storeNewData Failed to store the data." << endl;
+        kWarning() << "KexiScriptDesignView::storeNewData Failed to store the data." << endl;
         //failure: remove object's schema data to avoid garbage
         KexiDB::Connection *conn = parentDialog()->mainWin()->project()->dbConnection();
         conn->removeObject( s->id() );

@@ -47,7 +47,7 @@
 static bool compareSQL(const QString& sql1, const QString& sql2)
 {
 	//TODO: use reformatting functions here
-	return sql1.stripWhiteSpace()==sql2.stripWhiteSpace();
+	return sql1.trimmed()==sql2.trimmed();
 }
 
 //===================
@@ -169,14 +169,14 @@ void KexiQueryDesignerSQLView::setStatusOk()
 {
 	d->pixmapStatus->setPixmap(d->statusPixmapOk);
 	setStatusText("<h2>"+i18n("The query is correct")+"</h2>");
-	d->history->addEvent(d->editor->text().stripWhiteSpace(), true, QString::null);
+	d->history->addEvent(d->editor->text().trimmed(), true, QString::null);
 }
 
 void KexiQueryDesignerSQLView::setStatusError(const QString& msg)
 {
 	d->pixmapStatus->setPixmap(d->statusPixmapErr);
 	setStatusText("<h2>"+i18n("The query is incorrect")+"</h2><p>"+msg+"</p>");
-	d->history->addEvent(d->editor->text().stripWhiteSpace(), false, msg);
+	d->history->addEvent(d->editor->text().trimmed(), false, msg);
 }
 
 void KexiQueryDesignerSQLView::setStatusEmpty()
@@ -206,7 +206,7 @@ KexiQueryDesignerSQLView::beforeSwitchTo(int mode, bool &dontStore)
 //TODO
 	dontStore = true;
 	if (mode==Kexi::DesignViewMode || mode==Kexi::DataViewMode) {
-		QString sqlText = d->editor->text().stripWhiteSpace();
+		QString sqlText = d->editor->text().trimmed();
 		KexiQueryPart::TempData * temp = tempData();
 		if (sqlText.isEmpty()) {
 			//special case: empty SQL text
@@ -263,7 +263,7 @@ KexiQueryDesignerSQLView::beforeSwitchTo(int mode, bool &dontStore)
 		if(parser->operation() == KexiDB::Parser::OP_Error)
 		{
 			d->history->addEvent(getQuery(), false, parser->error().error());
-			kdDebug() << "KexiQueryDesignerSQLView::beforeSwitchTo(): syntax error!" << endl;
+			kDebug() << "KexiQueryDesignerSQLView::beforeSwitchTo(): syntax error!" << endl;
 			return false;
 		}
 		delete parser;
@@ -278,7 +278,7 @@ KexiQueryDesignerSQLView::beforeSwitchTo(int mode, bool &dontStore)
 tristate
 KexiQueryDesignerSQLView::afterSwitchFrom(int mode)
 {
-	kdDebug() << "KexiQueryDesignerSQLView::afterSwitchFrom()" << endl;
+	kDebug() << "KexiQueryDesignerSQLView::afterSwitchFrom()" << endl;
 //	if (mode==Kexi::DesignViewMode || mode==Kexi::DataViewMode) {
 	if (mode==Kexi::NoViewMode) {
 		//User opened text view _directly_. 
@@ -308,7 +308,7 @@ KexiQueryDesignerSQLView::afterSwitchFrom(int mode)
 //		temp->query = query;
 		KexiDB::Connection* conn = mainWin()->project()->dbConnection();
 		int flags = KexiDB::Driver::EscapeKexi;
-		d->origStatement = conn->selectStatement(*query, flags).stripWhiteSpace();
+		d->origStatement = conn->selectStatement(*query, flags).trimmed();
 	}
 
 	d->editor->setText( d->origStatement );
@@ -323,7 +323,7 @@ KexiQueryDesignerSQLView::sqlText() const
 
 bool KexiQueryDesignerSQLView::slotCheckQuery()
 {
-	QString sqlText( d->editor->text().stripWhiteSpace() );
+	QString sqlText( d->editor->text().trimmed() );
 	if (sqlText.isEmpty()) {
 		delete d->parsedQuery;
 		d->parsedQuery = 0;
@@ -331,7 +331,7 @@ bool KexiQueryDesignerSQLView::slotCheckQuery()
 		return true;
 	}
 
-	kdDebug() << "KexiQueryDesignerSQLView::slotCheckQuery()" << endl;
+	kDebug() << "KexiQueryDesignerSQLView::slotCheckQuery()" << endl;
 	//KexiQueryPart::TempData * temp = tempData();
 	KexiDB::Parser *parser = mainWin()->project()->sqlParser();
 	const bool ok = parser->parse( sqlText );

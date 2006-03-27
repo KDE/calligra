@@ -255,7 +255,7 @@ bool ScriptContainer::initialize()
         }
 
         QFile f( d->scriptfile );
-        if(! f.open(IO_ReadOnly)) {
+        if(! f.open(QIODevice::ReadOnly)) {
             setException( new Exception(QString(i18n("Failed to open scriptfile '%1'")).arg(d->scriptfile)) );
             return false;
         }

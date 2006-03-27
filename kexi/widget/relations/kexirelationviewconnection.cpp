@@ -43,14 +43,14 @@ KexiRelationViewConnection::KexiRelationViewConnection(
 	SourceConnection &c, KexiRelationView *parent)
 {
 	m_parent = parent;
-	kdDebug() << "KexiRelationViewConnection::KexiRelationViewConnection()" << endl;
+	kDebug() << "KexiRelationViewConnection::KexiRelationViewConnection()" << endl;
 
 	m_masterTable = masterTbl;
 	if(!masterTbl || !detailsTbl)
 	{
-		kdDebug() << "KexiRelationViewConnection::KexiRelationViewConnection(): expect sig11" << endl;
-		kdDebug() << "KexiRelationViewConnection::KexiRelationViewConnection()" << masterTbl << endl;
-		kdDebug() << "KexiRelationViewConnection::KexiRelationViewConnection()" << detailsTbl << endl;
+		kDebug() << "KexiRelationViewConnection::KexiRelationViewConnection(): expect sig11" << endl;
+		kDebug() << "KexiRelationViewConnection::KexiRelationViewConnection()" << masterTbl << endl;
+		kDebug() << "KexiRelationViewConnection::KexiRelationViewConnection()" << detailsTbl << endl;
 	}
 
 	m_detailsTable = detailsTbl;
@@ -203,13 +203,13 @@ KexiRelationViewConnection::connectionRect()
 	int dx = QABS((leftX + width) - rightX);
 	int dy = QABS(sy - ry) + 2;
 
-	int top = QMIN(sy, ry);
+	int top = qMin(sy, ry);
 	int left = leftX + width;
 
 
 //	return QRect(sx - 1, sy - 1, (rx + m_detailsTable->width()) - sx + 1, ry - sy + 1);
 	QRect rect(left - 150, top - 150, dx + 150, dy + 150);
-	kdDebug() << "KexiRelationViewConnection::connectionRect():" << m_oldRect << "," << rect << endl;
+	kDebug() << "KexiRelationViewConnection::connectionRect():" << m_oldRect << "," << rect << endl;
 	
 	m_oldRect = rect;
 
@@ -258,23 +258,23 @@ KexiRelationViewConnection::matchesPoint(const QPoint &p, int tolerance)
 	float my = y2-y1;
 	float mag = sqrt(mx * mx + my * my);
 	float u = (((p.x() - x1)*(x2 - x1))+((p.y() - y1)*(y2 - y1)))/(mag * mag);
-	kdDebug() << "KexiRelationViewConnection::matchesPoint(): u: " << u << endl;
+	kDebug() << "KexiRelationViewConnection::matchesPoint(): u: " << u << endl;
 
 	float iX = x1 + u * (x2 - x1);
 	float iY = y1 + u * (y2 - y1);
-	kdDebug() << "KexiRelationViewConnection::matchesPoint(): px: " << p.x() << endl;
-	kdDebug() << "KexiRelationViewConnection::matchesPoint(): py: " << p.y() << endl;
-	kdDebug() << "KexiRelationViewConnection::matchesPoint(): ix: " << iX << endl;
-	kdDebug() << "KexiRelationViewConnection::matchesPoint(): iy: " << iY << endl;
+	kDebug() << "KexiRelationViewConnection::matchesPoint(): px: " << p.x() << endl;
+	kDebug() << "KexiRelationViewConnection::matchesPoint(): py: " << p.y() << endl;
+	kDebug() << "KexiRelationViewConnection::matchesPoint(): ix: " << iX << endl;
+	kDebug() << "KexiRelationViewConnection::matchesPoint(): iy: " << iY << endl;
 
 	float dX = iX - p.x();
 	float dY = iY - p.y();
 
-	kdDebug() << "KexiRelationViewConnection::matchesPoint(): dx: " << dX << endl;
-	kdDebug() << "KexiRelationViewConnection::matchesPoint(): dy: " << dY << endl;
+	kDebug() << "KexiRelationViewConnection::matchesPoint(): dx: " << dX << endl;
+	kDebug() << "KexiRelationViewConnection::matchesPoint(): dy: " << dY << endl;
 
 	float distance = sqrt(dX * dX + dY * dY);
-	kdDebug() << "KexiRelationViewConnection::matchesPoint(): distance: " << distance << endl;
+	kDebug() << "KexiRelationViewConnection::matchesPoint(): distance: " << distance << endl;
 
 	if(distance <= tolerance)
 		return true;

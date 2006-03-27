@@ -39,7 +39,7 @@
 
 #include "KDChartBaseSeries.h"
 #if COMPAT_QT_VERSION >= 0x030000
-#include <qvaluevector.h>
+#include <q3valuevector.h>
 #else
 #include <qarray.h>
 #endif
@@ -49,7 +49,7 @@ class KDChartSeriesCollection;
 
 class KDCHART_EXPORT KDChartVectorSeries : public KDChartBaseSeries, 
 #if COMPAT_QT_VERSION >= 0x030000
-    public QValueVector<KDChartData>
+    public Q3ValueVector<KDChartData>
 #else
     public QArray<KDChartData>
 #endif

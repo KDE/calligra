@@ -333,7 +333,7 @@ KexiSimplePrintingPageSetup::KexiSimplePrintingPageSetup( KexiMainWindow *mainWi
 //	setFocusPolicy(WheelFocus);
 	m_contents->setFocusProxy(m_contents->headerTitleLineEdit);
 
-	m_contents->printButton->setIconSet( KStdGuiItem::print().iconSet(KIcon::Small) );
+	m_contents->printButton->setIconSet( KStdGuiItem::print().iconSet(K3Icon::Small) );
 	m_contents->printButton->setText( KStdGuiItem::print().text() );
 	connect(m_contents->printButton, SIGNAL(clicked()), this, SLOT(print()));
 

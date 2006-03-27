@@ -20,7 +20,7 @@
 
 #include <klocale.h>  //This is for undo descriptions
 
-#include <qvaluelist.h>
+#include <q3valuelist.h>
 
 #include "formulacursor.h"
 #include "formulaelement.h"
@@ -123,7 +123,7 @@ void KFCAdd::unexecute()
 // ******  Remove selection command
 
 KFCRemoveSelection::KFCRemoveSelection(Container *document,
-                                       Direction direction)
+                                       Qt::Orientation direction)
         : Command(i18n("Remove Selected Text"), document),
           dir(direction)
 {
@@ -180,7 +180,7 @@ void KFCReplace::unexecute()
 
 
 KFCRemove::KFCRemove(Container *document,
-                     Direction direction)
+                     Qt::Orientation direction)
         : Command(i18n("Remove Selected Text"), document),
           element(0), simpleRemoveCursor(0), dir(direction)
 {
@@ -224,7 +224,7 @@ void KFCRemove::unexecute()
 
 
 KFCRemoveEnclosing::KFCRemoveEnclosing(Container* document,
-                                       Direction dir)
+                                       Qt::Orientation dir)
         : Command(i18n("Remove Enclosing Element"), document),
           element(0), direction(dir)
 {
@@ -369,8 +369,8 @@ void FontCommand::collectChildren()
 
 void FontCommand::parseSequences( const QMap<SequenceElement*, int>& parents )
 {
-    QValueList<SequenceElement*> sequences = parents.keys();
-    for ( QValueList<SequenceElement*>::iterator i = sequences.begin();
+    Q3ValueList<SequenceElement*> sequences = parents.keys();
+    for ( Q3ValueList<SequenceElement*>::iterator i = sequences.begin();
           i != sequences.end();
           ++i ) {
         ( *i )->parse();

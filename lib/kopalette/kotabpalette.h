@@ -18,7 +18,7 @@
 #ifndef _KO_TAB_PALETTE_
 #define _KO_TAB_PALETTE_
 
-#include <qdockwindow.h>
+#include <q3dockwindow.h>
 #include <ktabwidget.h>
 
 #include "kopalette.h"

@@ -46,7 +46,7 @@ static const KCmdLineOptions options[]=
 	KCmdLineLastOption
 };
 
-bool convert( const KURL & uIn, const QString & /*inputFormat*/, const KURL & uOut, const QString & outputFormat, const bool batch )
+bool convert( const KUrl & uIn, const QString & /*inputFormat*/, const KUrl & uOut, const QString & outputFormat, const bool batch )
 {
     KoFilterManager* manager = new KoFilterManager( uIn.path() );
 
@@ -67,7 +67,7 @@ void ProgressObject::slotProgress(int /* progress */ )
 {
     // Well, we could have a nifty "=====> " progress bar, but with all the
     // debug output, it would be badly messed up :)
-    // kdDebug() << "ProgressObject::slotProgress " << progress << endl;
+    // kDebug() << "ProgressObject::slotProgress " << progress << endl;
 }
 
 int main( int argc, char **argv )
@@ -84,16 +84,16 @@ int main( int argc, char **argv )
     KApplication app;
 
     // Install the libkoffice* translations
-    KGlobal::locale()->insertCatalogue("koffice");
+    KGlobal::locale()->insertCatalog("koffice");
 
-    KImageIO::registerFormats();
+    
 
     // Get the command line arguments which we have to parse
     KCmdLineArgs *args= KCmdLineArgs::parsedArgs();
     if ( args->count() == 2 )
     {
-        KURL uIn = args->url( 0 );
-        KURL uOut = args->url( 1 );
+        KUrl uIn = args->url( 0 );
+        KUrl uOut = args->url( 1 );
 
         // Are we in batch mode or in interactive mode.
         bool batch = args->isSet("batch");
@@ -106,8 +106,8 @@ int main( int argc, char **argv )
             KIO::UDSEntry entry;
             if ( KIO::NetAccess::stat( uOut, entry, 0L ) ) // this file exists => backup
             {
-                kdDebug() << "Making backup..." << endl;;
-                KURL backup( uOut );
+                kDebug() << "Making backup..." << endl;;
+                KUrl backup( uOut );
                 backup.setPath( uOut.path() + '~' );
                 KIO::NetAccess::file_copy( uOut, backup, -1, true /*overwrite*/, false /*resume*/, 0L );
             }
@@ -117,7 +117,7 @@ int main( int argc, char **argv )
         KMimeType::Ptr inputMimetype = KMimeType::findByURL( uIn );
         if ( inputMimetype->name() == KMimeType::defaultMimeType() )
         {
-            kdError() << i18n("Mimetype for input file %1 not found!").arg(uIn.prettyURL()) << endl;
+            kError() << i18n("Mimetype for input file %1 not found!").arg(uIn.prettyURL()) << endl;
             return 1;
         }
         KMimeType::Ptr outputMimetype;
@@ -127,7 +127,7 @@ int main( int argc, char **argv )
             outputMimetype = KMimeType::mimeType( mime );
             if ( outputMimetype->name() == KMimeType::defaultMimeType() )
             {
-                kdError() << i18n("Mimetype not found %1").arg(mime) << endl;
+                kError() << i18n("Mimetype not found %1").arg(mime) << endl;
                 return 1;
             }
         }
@@ -136,12 +136,12 @@ int main( int argc, char **argv )
             outputMimetype = KMimeType::findByURL( uOut, 0, false, true /* file doesn't exist */ );
             if ( outputMimetype->name() == KMimeType::defaultMimeType() )
             {
-                kdError() << i18n("Mimetype not found, try using the -mimetype option") << endl;
+                kError() << i18n("Mimetype not found, try using the -mimetype option") << endl;
                 return 1;
             }
         }
 
-        QApplication::setOverrideCursor( Qt::waitCursor );
+        QApplication::setOverrideCursor( Qt::WaitCursor );
         bool ok = convert( uIn, inputMimetype->name(), uOut, outputMimetype->name(), batch );
         QApplication::restoreOverrideCursor();
         if ( ok )
@@ -150,7 +150,7 @@ int main( int argc, char **argv )
         }
         else
         {
-            kdError() << i18n("*** The conversion failed! ***") << endl;
+            kError() << i18n("*** The conversion failed! ***") << endl;
             return 2;
         }
     }

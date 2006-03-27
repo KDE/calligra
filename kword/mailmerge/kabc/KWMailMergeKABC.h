@@ -24,7 +24,7 @@
 #define _KWMAILMERGE_KABC_H_
 
 #include <qdom.h>
-#include <qguardedptr.h>
+#include <qpointer.h>
 
 #include <kabc/addressbook.h>
 

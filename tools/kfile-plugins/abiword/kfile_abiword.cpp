@@ -77,27 +77,27 @@ bool AbiwordPlugin::readInfo( KFileMetaInfo& info, uint what)
     {
         // Compressed with gzip
         strMime="application/x-gzip";
-        kdDebug() << "Compression: gzip" << endl;
+        kDebug() << "Compression: gzip" << endl;
     }
     else if ((strExt==".bz2")||(strExt==".BZ2") //in case of .abw.bz2 (logical extension)
         ||(strExt==".bzabw")||(strExt==".BZABW")) //in case of .bzabw (extension used prioritary with AbiWord)
     {
         // Compressed with bzip2
         strMime="application/x-bzip2";
-        kdDebug() << "Compression: bzip2" << endl;
+        kDebug() << "Compression: bzip2" << endl;
     }
 
     KFileMetaInfoGroup group = appendGroup(info, "DocumentInfo");
     QIODevice* in = KFilterDev::deviceForFile(info.path(),strMime);
     if ( !in )
     {
-        kdError() << "Cannot create device for uncompressing! Aborting!" << endl;
+        kError() << "Cannot create device for uncompressing! Aborting!" << endl;
         return false;
     }
 
-    if (!in->open(IO_ReadOnly))
+    if (!in->open(QIODevice::ReadOnly))
     {
-        kdError() << "Cannot open file for uncompressing! Aborting!" << endl;
+        kError() << "Cannot open file for uncompressing! Aborting!" << endl;
         delete in;
         return false;
     }
@@ -114,7 +114,7 @@ bool AbiwordPlugin::readInfo( KFileMetaInfo& info, uint what)
 
     while( !m_item.isNull() )
     {
-        kdDebug()<<" m_item.toElement().text: "<<m_item.toElement().text()<<endl;
+        kDebug()<<" m_item.toElement().text: "<<m_item.toElement().text()<<endl;
         QString key = m_item.toElement().attribute( "key" );
         if ( key.isEmpty() )
             continue;
@@ -125,7 +125,7 @@ bool AbiwordPlugin::readInfo( KFileMetaInfo& info, uint what)
         else if ( key=="dc.title" )
             title=m_item.toElement().text();
         else
-            kdDebug()<<" Other key :"<<key<<endl;
+            kDebug()<<" Other key :"<<key<<endl;
         m_item = m_item.nextSibling();
     }
     appendItem(group, "Author", stringItem( author ));

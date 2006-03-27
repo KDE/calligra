@@ -24,10 +24,13 @@
 #include <qclipboard.h>
 #include <qdom.h>
 #include <qimage.h>
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 #include <qobject.h>
-#include <qptrstack.h>
+#include <q3ptrstack.h>
 #include <qstring.h>
+//Added by qt3to4:
+#include <QTextStream>
+#include <QKeyEvent>
 
 #include <kcommand.h>
 //#include <KoCommandHistory.h>

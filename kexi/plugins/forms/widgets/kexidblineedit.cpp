@@ -21,7 +21,7 @@
 #include "kexidblineedit.h"
 
 #include <knumvalidator.h>
-#include <kdatetbl.h>
+#include <kdatetable.h>
 #include <kexiutils/utils.h>
 #include <kexidb/queryschema.h>
 #include <kexiutils/utils.h>

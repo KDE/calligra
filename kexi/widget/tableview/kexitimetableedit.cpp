@@ -37,9 +37,9 @@
 #include <klocale.h>
 #include <kglobal.h>
 #include <kdatepicker.h>
-#include <kdatetbl.h>
+#include <kdatetable.h>
 #include <klineedit.h>
-#include <kpopupmenu.h>
+#include <kmenu.h>
 #include <kdatewidget.h>
 
 #include <kexiutils/utils.h>
@@ -153,7 +153,7 @@ QTime KexiTimeFormatter::stringToTime( const QString& str )
 			min = m_hmsRegExp.cap(2).toInt();
 			sec = m_hmsRegExp.cap(3).toInt();
 			if (m_ampmpos >= 0 && m_hmsRegExp.numCaptures()>3)
-				pm = m_hmsRegExp.cap(4).stripWhiteSpace().lower()=="pm";
+				pm = m_hmsRegExp.cap(4).trimmed().lower()=="pm";
 			tryWithoutSeconds = false;
 		}
 	}
@@ -227,7 +227,7 @@ void KexiTimeTableEdit::setupContents( QPainter *p, bool focused, QVariant val,
 
 bool KexiTimeTableEdit::valueIsNull()
 {
-	if (m_lineedit->text().replace(':',"").stripWhiteSpace().isEmpty())
+	if (m_lineedit->text().replace(':',"").trimmed().isEmpty())
 		return true;
 	return !timeValue().isValid();
 }
@@ -244,7 +244,7 @@ QTime KexiTimeTableEdit::timeValue()
 
 QVariant KexiTimeTableEdit::value()
 {
-	if (m_lineedit->text().replace(':',"").stripWhiteSpace().isEmpty())
+	if (m_lineedit->text().replace(':',"").trimmed().isEmpty())
 		return QVariant();
 	return timeValue();
 
@@ -254,7 +254,7 @@ QVariant KexiTimeTableEdit::value()
 
 bool KexiTimeTableEdit::valueIsValid()
 {
-	if (m_lineedit->text().replace(':',"").stripWhiteSpace().isEmpty()) //empty time is valid
+	if (m_lineedit->text().replace(':',"").trimmed().isEmpty()) //empty time is valid
 		return true;
 	return m_formatter.stringToTime( m_lineedit->text() ).isValid();
 }

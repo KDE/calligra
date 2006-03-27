@@ -22,15 +22,20 @@
 #include <qpainter.h>
 #include <qcursor.h>
 #include <qpen.h>
+//Added by qt3to4:
+#include <QMouseEvent>
+#include <Q3Frame>
+#include <QResizeEvent>
+#include <QPaintEvent>
 
 #include <kdebug.h>
 #include <kpixmapeffect.h>
 
 KoColorFrame::KoColorFrame(QWidget *parent):
-QFrame(parent)
+Q3Frame(parent)
 {
   setFrameStyle(Panel | Sunken);
-  setBackgroundMode(NoBackground);
+  setBackgroundMode(Qt::NoBackground);
 
   /* default values */
   mC1 = QColor(0, 0, 0);
@@ -87,7 +92,7 @@ void KoColorFrame::drawContents(QPainter *p)
 
 void KoColorFrame::mousePressEvent(QMouseEvent *e)
 {
-  if(e->button() & LeftButton)
+  if(e->button() & Qt::LeftButton)
   {
     emit clicked(e->pos());
 
@@ -108,15 +113,15 @@ void KoColorFrame::mousePressEvent(QMouseEvent *e)
     emit colorSelected(c);
   }
   else
-    QFrame::mousePressEvent(e);
+    Q3Frame::mousePressEvent(e);
 }
 
 void KoColorFrame::mouseReleaseEvent(QMouseEvent *e)
 {
-  if(e->button() & LeftButton)
+  if(e->button() & Qt::LeftButton)
     mDragging = false;
   else
-    QFrame::mouseReleaseEvent(e);
+    Q3Frame::mouseReleaseEvent(e);
 }
 
 void KoColorFrame::mouseMoveEvent(QMouseEvent *e)
@@ -162,7 +167,7 @@ void KoColorFrame::mouseMoveEvent(QMouseEvent *e)
     emit colorSelected(c);
   }
   else
-    QFrame::mouseMoveEvent(e);
+    Q3Frame::mouseMoveEvent(e);
 }
 
 /***********************************************************************************/
@@ -178,7 +183,7 @@ QWidget(parent)
 void KoSliderWidget::paintEvent(QPaintEvent *)
 {
   QPainter p;
-  QPen pen(black, 1);
+  QPen pen(Qt::black, 1);
   p.begin(this);
 
   p.setPen(pen);
@@ -190,7 +195,7 @@ void KoSliderWidget::paintEvent(QPaintEvent *)
 
 void KoSliderWidget::mousePressEvent(QMouseEvent *e)
 {
-  if(e->button() & LeftButton)
+  if(e->button() & Qt::LeftButton)
   {
     mPos = e->pos();
     mDragging = true;
@@ -201,7 +206,7 @@ void KoSliderWidget::mousePressEvent(QMouseEvent *e)
 
 void KoSliderWidget::mouseReleaseEvent(QMouseEvent *e)
 {
-  if(e->button() & LeftButton)
+  if(e->button() & Qt::LeftButton)
     mDragging = false;
   else
     QWidget::mouseReleaseEvent(e);
@@ -346,7 +351,7 @@ void KoColorSlider::slotFrameClicked(const QPoint &p)
 
 void KoColorSlider::mousePressEvent(QMouseEvent *e)
 {
-  if(e->button() & LeftButton)
+  if(e->button() & Qt::LeftButton)
   {
     QPoint pos = QPoint(e->pos().x() - mSlider->width() / 2, height() - mSlider->height());
 

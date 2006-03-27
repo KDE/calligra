@@ -21,7 +21,7 @@
 #define _SERIALLETTER_QtSql_PLUGIN_H_
 
 #include <qdom.h>
-#include <qsqlcursor.h>
+#include <q3sqlcursor.h>
 #include "KWMailMergeDataSource.h"
 #include "KWQtSqlSerialDataSourceBase.h"
 #include "qtsqldatasourceeditor.h"
@@ -52,7 +52,7 @@ class KWQtSqlSerialDataSource: public KWQtSqlSerialDataSourceBase
 	friend class KWQtSqlDataSourceEditor;
 	QString tableName;
 	QString filter;
-	QSqlCursor *myquery;
+	Q3SqlCursor *myquery;
 };
 
 /******************************************************************

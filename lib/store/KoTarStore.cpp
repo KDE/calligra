@@ -20,6 +20,8 @@
 #include "KoTarStore.h"
 
 #include <qbuffer.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 #include <ktar.h>
 #include <kdebug.h>
@@ -27,7 +29,7 @@
 #include <kdeversion.h>
 #include <kio/netaccess.h>
 
-KoTarStore::KoTarStore( const QString & _filename, Mode _mode, const QCString & appIdentification )
+KoTarStore::KoTarStore( const QString & _filename, Mode _mode, const Q3CString & appIdentification )
 {
     kdDebug(s_area) << "KoTarStore Constructor filename = " << _filename
                     << " mode = " << int(_mode) << endl;
@@ -40,7 +42,7 @@ KoTarStore::KoTarStore( const QString & _filename, Mode _mode, const QCString & 
         m_pTar->setOrigFileName( completeMagic( appIdentification ) );
 }
 
-KoTarStore::KoTarStore( QIODevice *dev, Mode mode, const QCString & appIdentification )
+KoTarStore::KoTarStore( QIODevice *dev, Mode mode, const Q3CString & appIdentification )
 {
     m_pTar = new KTar( dev );
 
@@ -50,7 +52,7 @@ KoTarStore::KoTarStore( QIODevice *dev, Mode mode, const QCString & appIdentific
         m_pTar->setOrigFileName( completeMagic( appIdentification ) );
 }
 
-KoTarStore::KoTarStore( QWidget* window, const KURL& _url, const QString & _filename, Mode _mode, const QCString & appIdentification )
+KoTarStore::KoTarStore( QWidget* window, const KUrl& _url, const QString & _filename, Mode _mode, const Q3CString & appIdentification )
 {
     kdDebug(s_area) << "KoTarStore Constructor url= " << _url.prettyURL()
                     << " filename = " << _filename
@@ -96,10 +98,10 @@ KoTarStore::~KoTarStore()
     }
 }
 
-QCString KoTarStore::completeMagic( const QCString& appMimetype )
+Q3CString KoTarStore::completeMagic( const Q3CString& appMimetype )
 {
     kdDebug()<<"QCString KoTarStore::completeMagic( const QCString& appMimetype )********************\n";
-    QCString res( "KOffice " );
+    Q3CString res( "KOffice " );
     res += appMimetype;
     res += '\004'; // Two magic bytes to make the identification
     res += '\006'; // more reliable (DF)
@@ -112,7 +114,7 @@ bool KoTarStore::init( Mode _mode )
 {
     KoStore::init( _mode );
     m_currentDir = 0;
-    bool good = m_pTar->open( _mode == Write ? IO_WriteOnly : IO_ReadOnly );
+    bool good = m_pTar->open( _mode == Write ? QIODevice::WriteOnly : QIODevice::ReadOnly );
 
     if ( good && _mode == Read )
         good = m_pTar->directory() != 0;
@@ -127,7 +129,7 @@ bool KoTarStore::openWrite( const QString& /*name*/ )
     // Prepare memory buffer for writing
     m_byteArray.resize( 0 );
     m_stream = new QBuffer( m_byteArray );
-    m_stream->open( IO_WriteOnly );
+    m_stream->open( QIODevice::WriteOnly );
     return true;
 }
 

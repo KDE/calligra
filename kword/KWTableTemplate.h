@@ -23,7 +23,7 @@
 #include "KWTableStyle.h"
 
 #include <qdom.h>
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 #include <qbrush.h>
 
 class KWTableTemplate;
@@ -38,7 +38,7 @@ class KWTableTemplateCollection
 public:
     KWTableTemplateCollection();
     ~KWTableTemplateCollection();
-    const QPtrList<KWTableTemplate> & tableTemplateList() const { return m_templateList; }
+    const Q3PtrList<KWTableTemplate> & tableTemplateList() const { return m_templateList; }
     void clear();
 
     KWTableTemplate* findTableTemplate( const QString & name );
@@ -52,8 +52,8 @@ public:
     void removeTableTemplate ( KWTableTemplate *tt );
 
 private:
-    QPtrList<KWTableTemplate> m_templateList;
-    QPtrList<KWTableTemplate> m_deletedTemplates;
+    Q3PtrList<KWTableTemplate> m_templateList;
+    Q3PtrList<KWTableTemplate> m_deletedTemplates;
     KWTableTemplate *m_lastTemplate;
 };
 

@@ -7,7 +7,7 @@
 class QLineEdit;
 class QRadioButton;
 class QCheckBox;
-class QButtonGroup;
+class Q3ButtonGroup;
 class QPushButton;
 
 

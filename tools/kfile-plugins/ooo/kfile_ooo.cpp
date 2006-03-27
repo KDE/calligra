@@ -217,7 +217,7 @@ void KOfficePlugin::getEditingTime(KFileMetaInfoGroup group1,
 	int minutes = 0;
 	int seconds = 0;
 	if (txt.at(0) != 'P'){
-		kdDebug(7034) << labelid << "=" << txt <<
+		kDebug(7034) << labelid << "=" << txt <<
 			" does not seems to be a valid duration" << endl;
 		return;
 	}
@@ -226,12 +226,12 @@ void KOfficePlugin::getEditingTime(KFileMetaInfoGroup group1,
 		days = getNumber(txt, &pos);
 		if (txt.at(pos++)!='D'){
 			days=0;
-			kdDebug(7034) << labelid <<
+			kDebug(7034) << labelid <<
 				" First arg was not a day in " << txt << endl;
 		}
 	}
 	if (txt.at(pos)!= 'T'){
-		kdDebug(7034) << labelid << "=" << txt <<
+		kDebug(7034) << labelid << "=" << txt <<
 			" does not seems to contain time information" << endl;
 		return;
 	}
@@ -252,7 +252,7 @@ void KOfficePlugin::getEditingTime(KFileMetaInfoGroup group1,
 				seconds = res;
 				break;
 			default:
-				kdDebug(7034) << "Unknown unit at pos " << pos << " while parsing " <<
+				kDebug(7034) << "Unknown unit at pos " << pos << " while parsing " <<
 					labelid << "="<< txt << endl;
 		}
 		pos++;
@@ -366,7 +366,7 @@ bool KOfficePlugin::writeTextNode(QDomDocument & doc,
 				  const QString  &value) const
 {
   if (parentNode.toElement().isNull()){
-    kdDebug(7034) << "Parent node is Null or not an Element, cannot write node "
+    kDebug(7034) << "Parent node is Null or not an Element, cannot write node "
 		  << nodeName << endl;
     return false;
   }
@@ -380,7 +380,7 @@ bool KOfficePlugin::writeTextNode(QDomDocument & doc,
 
   // Ooops... existing node were not of the good type...
   if (nodeA.isNull()){
-    kdDebug(7034) << "Wrong type of node " << nodeName << ", should be Element"
+    kDebug(7034) << "Wrong type of node " << nodeName << ", should be Element"
 		  << endl;
     return false;
   }
@@ -415,11 +415,11 @@ bool KOfficePlugin::writeInfo( const KFileMetaInfo& info) const
   for (int i = childs.length(); i >= 0; --i){
 	  metaKeyNode.removeChild( childs.item(i) );
   }
-  QStringList keywordList = QStringList::split(",", info[DocumentInfo][metakeyword].value().toString().stripWhiteSpace(), false);
+  QStringList keywordList = QStringList::split(",", info[DocumentInfo][metakeyword].value().toString().trimmed(), false);
   for ( QStringList::Iterator it = keywordList.begin(); it != keywordList.end(); ++it ) {
 	QDomElement elem = doc.createElement(metakeyword);
 	metaKeyNode.appendChild(elem);
-	elem.appendChild(doc.createTextNode((*it).stripWhiteSpace()));
+	elem.appendChild(doc.createTextNode((*it).trimmed()));
     }
 
   // Now, we store the user-defined data
@@ -428,7 +428,7 @@ bool KOfficePlugin::writeInfo( const KFileMetaInfo& info) const
     {
       QDomElement el = theElements.item(i).toElement();
       if (el.isNull()){
-	kdDebug(7034) << metauserdef << " is not an Element" << endl;
+	kDebug(7034) << metauserdef << " is not an Element" << endl;
 	no_errors = false;
       }
 
@@ -443,7 +443,7 @@ bool KOfficePlugin::writeInfo( const KFileMetaInfo& info) const
     }
 
   if (!no_errors){
-    kdDebug(7034) << "Errors were found while building " << metafile
+    kDebug(7034) << "Errors were found while building " << metafile
 	     	  << " for file " << info.path() << endl;
     // It is safer to avoid to manipulate meta.xml if errors, we abort.
     return false;
@@ -494,7 +494,7 @@ bool copyZipToZip( const KZip * src, KZip * dest)
           src_dirStack.push( dynamic_cast<KArchiveDirectory*>( curEntry ) );
         }
         else {
-		kdDebug(7034) << *it << " is a unknown type. Aborting." << endl;
+		kDebug(7034) << *it << " is a unknown type. Aborting." << endl;
 		return false;
 	}
       }
@@ -511,7 +511,7 @@ bool KOfficePlugin::writeMetaData(const QString & path,
     KZip * m_zip = new KZip(tmp_file.name());
     KZip * current= new KZip(path);
     /* To correct problem with OOo 1.1, we have to recreate the file from scratch */
-    if (!m_zip->open(IO_WriteOnly) || !current->open(IO_ReadOnly) )
+    if (!m_zip->open(QIODevice::WriteOnly) || !current->open(QIODevice::ReadOnly) )
 	    return false;
     QCString text = doc.toCString();
     m_zip->setCompression(KZip::DeflateCompression);
@@ -523,8 +523,8 @@ bool KOfficePlugin::writeMetaData(const QString & path,
     delete m_zip;
     // NULL as third parameter is not good, but I don't know the Window ID
     // That is only to avoid the deprecated warning at compile time
-    if (!KIO::NetAccess::upload( tmp_file.name(), KURL(path), NULL)){
-	    kdDebug(7034) << "Error while saving " << tmp_file.name() << " as " << path << endl;
+    if (!KIO::NetAccess::upload( tmp_file.name(), KUrl(path), NULL)){
+	    kDebug(7034) << "Error while saving " << tmp_file.name() << " as " << path << endl;
 	    return false;
     }
     return true;
@@ -551,13 +551,13 @@ QDomDocument KOfficePlugin::getMetaDocument(const QString &path) const
 {
     QDomDocument doc;
     KZip m_zip(path);
-    QIODevice * io = getData(m_zip, IO_ReadOnly);
+    QIODevice * io = getData(m_zip, QIODevice::ReadOnly);
     if (!io || !io->isReadable())
 	    return doc;
     QString errorMsg;
     int errorLine, errorColumn;
     if ( !doc.setContent( io, &errorMsg, &errorLine, &errorColumn ) ){
-      kdDebug(7034) << "Error " << errorMsg.latin1()
+      kDebug(7034) << "Error " << errorMsg.latin1()
 		    << "while getting XML content at line "
 		    << errorLine << ", column "<< errorColumn << endl;
     	delete io;

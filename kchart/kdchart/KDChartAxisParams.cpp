@@ -1150,7 +1150,7 @@ void  KDChartAxisParams::setAxisGridSubLineWidth( int axisGridSubLineWidth )
   \param axisGridStyle the axis grid line pattern.
   \sa axisGridStyle, setAxisShowGrid
   */
-void  KDChartAxisParams::setAxisGridStyle( PenStyle axisGridStyle )
+void  KDChartAxisParams::setAxisGridStyle( Qt::PenStyle axisGridStyle )
 {
     _axisGridStyle = axisGridStyle;
     emit changed();
@@ -1174,7 +1174,7 @@ void  KDChartAxisParams::setAxisGridStyle( PenStyle axisGridStyle )
   \sa axisGridSubStyle, setAxisGridStyle, axisGridStyle
   \sa setAxisShowGrid
   */
-void  KDChartAxisParams::setAxisGridSubStyle( PenStyle axisGridSubStyle )
+void  KDChartAxisParams::setAxisGridSubStyle( Qt::PenStyle axisGridSubStyle )
 {
     _axisGridSubStyle = axisGridSubStyle;
     emit changed();

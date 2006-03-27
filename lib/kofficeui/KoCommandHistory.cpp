@@ -20,7 +20,9 @@
 
 #include <qlabel.h>
 #include <qlayout.h>
-#include <qlistbox.h>
+#include <q3listbox.h>
+//Added by qt3to4:
+#include <QMouseEvent>
 
 #include <kaction.h>
 #include <kcommand.h>
@@ -33,15 +35,15 @@
 
 #include "KoCommandHistory.h"
 
-KoListBox::KoListBox( QWidget *parent , const char *name , WFlags f)
-    : QListBox( parent, name, f)
+KoListBox::KoListBox( QWidget *parent , const char *name , Qt::WFlags f)
+    : Q3ListBox( parent, name, f)
 {
     setVScrollBarMode( AlwaysOn );
 }
 
 void KoListBox::contentsMouseMoveEvent ( QMouseEvent * e)
 {
-    QListBoxItem *item_p = itemAt( contentsToViewport(e->pos()));
+    Q3ListBoxItem *item_p = itemAt( contentsToViewport(e->pos()));
     if ( item_p )
     {
         int itemIndex = index( item_p );
@@ -98,14 +100,14 @@ KoCommandHistory::KoCommandHistory(KActionCollection * actionCollection, bool wi
         m_undo = undo;
         m_undoPopup = undo->popupMenu();
         d->m_undoListBox = new KoListBox( m_undoPopup );
-        d->m_undoListBox->setSelectionMode( QListBox::Multi );
+        d->m_undoListBox->setSelectionMode( Q3ListBox::Multi );
 
         m_undoPopup->insertItem(d->m_undoListBox);
         d->m_undoLabel = new QLabel( m_undoPopup);
         m_undoPopup->insertItem(d->m_undoLabel);
 
         connect( d->m_undoListBox, SIGNAL( selected( int ) ), this, SLOT( slotUndoActivated( int ) ) );
-        connect( d->m_undoListBox, SIGNAL(clicked ( QListBoxItem *)), this, SLOT( slotUndoActivated( QListBoxItem * ) ) );
+        connect( d->m_undoListBox, SIGNAL(clicked ( Q3ListBoxItem *)), this, SLOT( slotUndoActivated( Q3ListBoxItem * ) ) );
 
         connect( d->m_undoListBox, SIGNAL( changeNumberOfSelectedItem( int )), this, SLOT( slotChangeUndoNumberOfSelectedItem( int )));
 
@@ -118,7 +120,7 @@ KoCommandHistory::KoCommandHistory(KActionCollection * actionCollection, bool wi
         m_redo = redo;
         m_redoPopup = redo->popupMenu();
         d->m_redoListBox = new KoListBox( m_redoPopup );
-        d->m_redoListBox->setSelectionMode( QListBox::Multi );
+        d->m_redoListBox->setSelectionMode( Q3ListBox::Multi );
         m_redoPopup->insertItem(d->m_redoListBox);
 
         d->m_redoLabel = new QLabel( m_redoPopup);
@@ -126,7 +128,7 @@ KoCommandHistory::KoCommandHistory(KActionCollection * actionCollection, bool wi
 
 
         connect( d->m_redoListBox, SIGNAL( selected( int ) ), this, SLOT( slotRedoActivated( int ) ) );
-        connect( d->m_redoListBox, SIGNAL(clicked ( QListBoxItem *)), this, SLOT( slotRedoActivated( QListBoxItem * ) ) );
+        connect( d->m_redoListBox, SIGNAL(clicked ( Q3ListBoxItem *)), this, SLOT( slotRedoActivated( Q3ListBoxItem * ) ) );
         connect( d->m_redoListBox, SIGNAL( changeNumberOfSelectedItem( int )), this, SLOT( slotChangeRedoNumberOfSelectedItem( int )));
 
     }
@@ -379,13 +381,13 @@ void KoCommandHistory::slotUndoActivated( int pos )
     m_undoPopup->hide();
 }
 
-void KoCommandHistory::slotUndoActivated( QListBoxItem * item)
+void KoCommandHistory::slotUndoActivated( Q3ListBoxItem * item)
 {
     if ( item )
         slotUndoActivated( item->listBox()->index(item));
 }
 
-void KoCommandHistory::slotRedoActivated( QListBoxItem * item)
+void KoCommandHistory::slotRedoActivated( Q3ListBoxItem * item)
 {
     if ( item )
         slotRedoActivated( item->listBox()->index(item));

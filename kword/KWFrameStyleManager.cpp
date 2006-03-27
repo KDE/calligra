@@ -34,9 +34,16 @@
 #include <qpushbutton.h>
 #include <qlabel.h>
 #include <qbrush.h>
-#include <qgroupbox.h>
+#include <q3groupbox.h>
 #include <qpainter.h>
 #include <qlayout.h>
+//Added by qt3to4:
+#include <QPaintEvent>
+#include <Q3GridLayout>
+#include <Q3PtrList>
+#include <Q3Frame>
+#include <Q3ValueList>
+#include <QResizeEvent>
 
 /******************************************************************/
 /* Class: KWTableStylePreview                                     */
@@ -151,7 +158,7 @@ KWFrameStyleManager::KWFrameStyleManager( QWidget *_parent, KWDocument *_doc,
     KWFrameStyleBackgroundTab *bgTab = new KWFrameStyleBackgroundTab( m_tabs );
     addTab( bgTab );
 
-    QListBoxItem * item = m_stylesList->findItem( activeStyleName );
+    Q3ListBoxItem * item = m_stylesList->findItem( activeStyleName );
     m_stylesList->setCurrentItem( item ? m_stylesList->index(item) : 0 );
 
     noSignals=false;
@@ -176,14 +183,14 @@ void KWFrameStyleManager::addTab( KWFrameStyleManagerTab * tab )
 void KWFrameStyleManager::setupWidget()
 {
     QFrame * frame1 = makeMainWidget();
-    QGridLayout *frame1Layout = new QGridLayout( frame1, 0, 0, // auto
+    Q3GridLayout *frame1Layout = new Q3GridLayout( frame1, 0, 0, // auto
                                                  0, KDialog::spacingHint() );
     KWFrameStyleCollection* collection = m_doc->frameStyleCollection();
     numFrameStyles = collection->count();
-    m_stylesList = new QListBox( frame1, "stylesList" );
+    m_stylesList = new Q3ListBox( frame1, "stylesList" );
     m_stylesList->insertStringList( collection->displayNameList() );
-    const QValueList<KoUserStyle*> styleList = collection->styleList();
-    for ( QValueList<KoUserStyle *>::const_iterator it = styleList.begin(), end = styleList.end();
+    const Q3ValueList<KoUserStyle*> styleList = collection->styleList();
+    for ( Q3ValueList<KoUserStyle *>::const_iterator it = styleList.begin(), end = styleList.end();
           it != end ; ++it )
     {
         KWFrameStyle* style = static_cast<KWFrameStyle *>( *it );
@@ -230,14 +237,14 @@ void KWFrameStyleManager::addGeneralTab()
 {
     QWidget *tab = new QWidget( m_tabs );
 
-    QGridLayout *tabLayout = new QGridLayout( tab );
+    Q3GridLayout *tabLayout = new Q3GridLayout( tab );
     tabLayout->setSpacing( KDialog::spacingHint() );
     tabLayout->setMargin( KDialog::marginHint() );
 
-    previewBox = new QGroupBox( 0, Qt::Vertical, i18n( "Preview" ), tab );
+    previewBox = new Q3GroupBox( 0, Qt::Vertical, i18n( "Preview" ), tab );
     previewBox->layout()->setSpacing(KDialog::spacingHint());
     previewBox->layout()->setMargin(KDialog::marginHint());
-    QGridLayout *previewLayout = new QGridLayout( previewBox->layout() );
+    Q3GridLayout *previewLayout = new Q3GridLayout( previewBox->layout() );
 
     preview = new KWFrameStylePreview( previewBox );
     preview->resize(preview->sizeHint());
@@ -264,7 +271,7 @@ void KWFrameStyleManager::addGeneralTab()
 
 void KWFrameStyleManager::switchStyle()
 {
-    kdDebug() << "KWFrameStyleManager::switchStyle noSignals=" << noSignals << endl;
+    kDebug() << "KWFrameStyleManager::switchStyle noSignals=" << noSignals << endl;
     if(noSignals) return;
     noSignals=true;
 
@@ -274,7 +281,7 @@ void KWFrameStyleManager::switchStyle()
     m_currentFrameStyle = 0L;
     int num = frameStyleIndex( m_stylesList->currentItem() );
 
-    kdDebug() << "KWFrameStyleManager::switchStyle switching to " << num << endl;
+    kDebug() << "KWFrameStyleManager::switchStyle switching to " << num << endl;
     if( m_frameStyles.at(num)->origFrameStyle() == m_frameStyles.at(num)->changedFrameStyle() )
         m_frameStyles.at(num)->switchStyle();
     else
@@ -301,7 +308,7 @@ int KWFrameStyleManager::frameStyleIndex( int pos ) {
             return i;
         ++p;
     }
-    kdWarning() << "KWFrameStyleManager::frameStyleIndex no style found at pos " << pos << " count=" << m_frameStyles.count() << endl;
+    kWarning() << "KWFrameStyleManager::frameStyleIndex no style found at pos " << pos << " count=" << m_frameStyles.count() << endl;
 
 #ifdef __GNUC_
 #warning implement undo/redo
@@ -312,8 +319,8 @@ int KWFrameStyleManager::frameStyleIndex( int pos ) {
 
 void KWFrameStyleManager::updateGUI()
 {
-    kdDebug() << "KWFrameStyleManager::updateGUI m_currentFrameStyle=" << m_currentFrameStyle << " " << m_currentFrameStyle->name() << endl;
-    QPtrListIterator<KWFrameStyleManagerTab> it( m_tabsList );
+    kDebug() << "KWFrameStyleManager::updateGUI m_currentFrameStyle=" << m_currentFrameStyle << " " << m_currentFrameStyle->name() << endl;
+    Q3PtrListIterator<KWFrameStyleManagerTab> it( m_tabsList );
     for ( ; it.current() ; ++it )
     {
         it.current()->setStyle( m_currentFrameStyle );
@@ -339,7 +346,7 @@ void KWFrameStyleManager::updatePreview()
 void KWFrameStyleManager::save() {
     if(m_currentFrameStyle) {
         // save changes from UI to object.
-        QPtrListIterator<KWFrameStyleManagerTab> it( m_tabsList );
+        Q3PtrListIterator<KWFrameStyleManagerTab> it( m_tabsList );
         for ( ; it.current() ; ++it )
             it.current()->save();
 
@@ -362,11 +369,11 @@ void KWFrameStyleManager::importFromFile()
     }
 }
 
-void KWFrameStyleManager::addStyles( const QPtrList<KWFrameStyle> &listStyle )
+void KWFrameStyleManager::addStyles( const Q3PtrList<KWFrameStyle> &listStyle )
 {
     save();
 
-    QPtrListIterator<KWFrameStyle> style( listStyle );
+    Q3PtrListIterator<KWFrameStyle> style( listStyle );
     for ( ; style.current() ; ++style )
     {
         noSignals=true;
@@ -495,21 +502,21 @@ void KWFrameStyleManager::apply()
     for (unsigned int i =0 ; i < m_frameStyles.count() ; i++) {
         if(m_frameStyles.at(i)->origFrameStyle() == 0) {           // newly added style
 
-            kdDebug() << "adding new " << m_frameStyles.at(i)->changedFrameStyle()->name() << " (" << i << ")" << endl;
+            kDebug() << "adding new " << m_frameStyles.at(i)->changedFrameStyle()->name() << " (" << i << ")" << endl;
 
             KWFrameStyle* style = m_doc->frameStyleCollection()->addStyle(m_frameStyles.take(i)->changedFrameStyle());
             m_frameStyles.insert( i, new KWFrameStyleListItem(0, style) );
 
         } else if(m_frameStyles.at(i)->changedFrameStyle() == 0) { // deleted style
 
-            kdDebug() << "deleting orig " << m_frameStyles.at(i)->origFrameStyle()->name() << " (" << i << ")" << endl;
+            kDebug() << "deleting orig " << m_frameStyles.at(i)->origFrameStyle()->name() << " (" << i << ")" << endl;
 
             KWFrameStyle *orig = m_frameStyles.at(i)->origFrameStyle();
             m_doc->frameStyleCollection()->removeStyle( orig );
 
         } else {
 
-            kdDebug() << "update style " << m_frameStyles.at(i)->changedFrameStyle()->name() << " (" << i << ")" << endl;
+            kDebug() << "update style " << m_frameStyles.at(i)->changedFrameStyle()->name() << " (" << i << ")" << endl;
             // TODO check if modified, so that we can do m_doc->setModified(true) only if a style was changed
             m_frameStyles.at(i)->apply();
         }
@@ -525,7 +532,7 @@ void KWFrameStyleManager::renameStyle(const QString &theText) {
     noSignals=true;
 
     int index = m_stylesList->currentItem();
-    kdDebug() << "KWFrameStyleManager::renameStyle " << index << " to " << theText << endl;
+    kDebug() << "KWFrameStyleManager::renameStyle " << index << " to " << theText << endl;
 
     // rename only in the GUI, not even in the underlying objects (save() does it).
     m_stylesList->changeItem( theText, index );
@@ -570,7 +577,7 @@ KWFrameStyleBackgroundTab::KWFrameStyleBackgroundTab( QWidget * parent )
     bgwidget = this;
     m_backgroundColor.setStyle( SolidPattern );
 
-    grid = new QGridLayout( bgwidget, 7, 2, KDialog::marginHint(), KDialog::spacingHint() );
+    grid = new Q3GridLayout( bgwidget, 7, 2, KDialog::marginHint(), KDialog::spacingHint() );
 
     int row=0;
 

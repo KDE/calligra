@@ -1,0 +1,44 @@
+kde4_header()
+
+include_directories( ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
+
+
+########### next target ###############
+
+set(wpimport_PART_SRCS wpimport.cc )
+
+kde4_automoc(${wpimport_PART_SRCS})
+
+kde4_add_plugin(wpimport WITH_PREFIX ${wpimport_PART_SRCS})
+
+kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} wpimport )
+
+target_link_libraries(wpimport  ${KDE4_KDECORE_LIBS} )
+
+install_targets(${LIB_INSTALL_DIR}/kde4 wpimport )
+
+
+########### install files ###############
+
+install_files( ${SERVICES_INSTALL_DIR} FILES  kword_wp_import.desktop  )
+
+kde4_footer()
+
+
+
+#original Makefile.am contents follow:
+
+#INCLUDES= -I$(srcdir) $(KOFFICE_INCLUDES) $(LIBWPD_CFLAGS) $(all_includes)
+#
+#kde_module_LTLIBRARIES = libwpimport.la 
+#
+#libwpimport_la_SOURCES = wpimport.cc 
+#libwpimport_la_LDFLAGS	= $(all_libraries) -module -avoid-version -no-undefined
+#libwpimport_la_LIBADD = $(KOFFICE_LIBS) $(LIBWPD_LIBS)
+#
+#noinst_HEADERS = wpimport.h 
+#
+#METASOURCES = AUTO
+#
+#service_DATA = kword_wp_import.desktop 
+#servicedir = $(kde_servicesdir)

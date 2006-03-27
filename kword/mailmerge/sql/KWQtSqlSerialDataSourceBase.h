@@ -23,7 +23,7 @@
 #include <qdom.h>
 #include <kdialogbase.h>
 #include <qsqldatabase.h>
-#include <qguardedptr.h>
+#include <qpointer.h>
 
 #include "KWMailMergeDataSource.h"
 #include "qtsqlopenwidget.h"
@@ -52,7 +52,7 @@ class KWQtSqlSerialDataSourceBase: public KWMailMergeDataSource
 	QString driver;
 	QString port;
 	QString databasename;
-	QGuardedPtr<QSqlDatabase> database;
+	QPointer<QSqlDatabase> database;
 	QString DataBaseConnection;
         static int connectionId;
    k_dcop:

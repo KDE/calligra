@@ -31,6 +31,8 @@
 
 #include <KDChartPainter.h>
 #include <KDChartTable.h>
+//Added by qt3to4:
+#include <Q3MemArray>
 
 class KDChartParams;
 
@@ -72,8 +74,8 @@ class KDChartPiePainter : public KDChartPainter
     uint findLeftPie( uint pie );
     uint findRightPie( uint pie );
 
-    QMemArray < int > _startAngles;
-    QMemArray < int > _angleLens;
+    Q3MemArray < int > _startAngles;
+    Q3MemArray < int > _angleLens;
 
     QRect _position;
     int _size;

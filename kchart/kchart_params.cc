@@ -21,6 +21,8 @@
 
 //#include <stdlib.h>
 #include <iostream>
+//Added by qt3to4:
+#include <Q3CString>
 using std::cout;
 using std::cerr;
 
@@ -969,7 +971,7 @@ void KChartParams::saveOasisAxis( KoXmlWriter* bodyWriter,
     bodyWriter->startElement( "chart:axis" );
 
     bodyWriter->addAttribute( "chart:dimension", axisName );
-    bodyWriter->addAttribute( "chart:name", QCString( "primary-" ) + axisName );
+    bodyWriter->addAttribute( "chart:name", Q3CString( "primary-" ) + axisName );
 
     KoGenStyle axisStyle( KoGenStyle::STYLE_AUTO, "chart" );
 

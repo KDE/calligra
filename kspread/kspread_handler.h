@@ -75,14 +75,14 @@ class InsertChartHandler : public InsertHandler
 class InsertPictureHandler : public InsertHandler
 {
   public:
-    InsertPictureHandler( View* view, QWidget* widget, const KURL &);
+    InsertPictureHandler( View* view, QWidget* widget, const KUrl &);
     virtual ~InsertPictureHandler();
     HandlerType getType() { return Picture; }
 
   private:
     void insertObject( QRect );
 
-    KURL m_file;
+    KUrl m_file;
 };
 
 } // namespace KSpread

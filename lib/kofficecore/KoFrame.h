@@ -21,6 +21,11 @@
 #define __koFrame_h__
 
 #include <qwidget.h>
+//Added by qt3to4:
+#include <QMouseEvent>
+#include <QResizeEvent>
+#include <QEvent>
+#include <QPaintEvent>
 
 class KoView;
 class KoFramePrivate;

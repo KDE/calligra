@@ -38,7 +38,12 @@
 #include <KoZoomMode.h>
 
 #include <qbrush.h>
-#include <qhbox.h>
+#include <q3hbox.h>
+//Added by qt3to4:
+#include <Q3ValueList>
+#include <QResizeEvent>
+#include <Q3PopupMenu>
+#include <Q3PtrList>
 
 class KWPage;
 class KWViewMode;
@@ -72,7 +77,7 @@ class KoTextIterator;
 class DCOPObject;
 class KStatusBarLabel;
 class KoSpell;
-class KURL;
+class KUrl;
 class KAction;
 class KActionMenu;
 class KSelectAction;
@@ -184,11 +189,11 @@ public:
 
     void deleteFrame(bool warning=true);
 
-    QPopupMenu * popupMenu( const QString& name );
+    Q3PopupMenu * popupMenu( const QString& name );
 
-    QPtrList<KAction> &dataToolActionList() { return m_actionList; }
-    QPtrList<KAction> &variableActionList() { return m_variableActionList; }
-    QPtrList<KAction> &tableActions() { return m_tableActionList; }
+    Q3PtrList<KAction> &dataToolActionList() { return m_actionList; }
+    Q3PtrList<KAction> &variableActionList() { return m_variableActionList; }
+    Q3PtrList<KAction> &tableActions() { return m_tableActionList; }
 
     enum { // bitfield
         ProvidesImage = 1,
@@ -209,7 +214,7 @@ public:
     void updateHeader();
     void switchModeView();
     void changeFootNoteMenuItem( bool b);
-    void insertFile(const KURL& url);
+    void insertFile(const KUrl& url);
     void testAndCloseAllFrameSetProtectedContent();
     void updateBgSpellCheckingState();
     void updateRulerInProtectContentMode();
@@ -220,13 +225,13 @@ public:
 
     void deleteFrameSet( KWFrameSet *);
 
-    QPtrList<KAction> listOfResultOfCheckWord( const QString &word );
+    Q3PtrList<KAction> listOfResultOfCheckWord( const QString &word );
 
     int  tableSelectCell(const QString &tableName, uint row, uint col);
     void tableInsertRow(uint row, KWTableFrameSet *table = 0);
     void tableInsertCol(uint col, KWTableFrameSet *table = 0);
-    int tableDeleteRow(const QValueList<uint>& rows, KWTableFrameSet *table = 0);
-    int tableDeleteCol(const QValueList<uint>& cols, KWTableFrameSet *table = 0);
+    int tableDeleteRow(const Q3ValueList<uint>& rows, KWTableFrameSet *table = 0);
+    int tableDeleteCol(const Q3ValueList<uint>& cols, KWTableFrameSet *table = 0);
 
     void pasteData( QMimeSource* data, bool drop );
 
@@ -507,7 +512,7 @@ protected:
     KWTextFrameSetEdit *currentTextEdit() const;
     /** The current text-edit if there is one, otherwise the selected text objects
      * This is what the "bold", "italic" etc. buttons apply to. */
-    QPtrList<KoTextFormatInterface> applicableTextInterfaces() const;
+    Q3PtrList<KoTextFormatInterface> applicableTextInterfaces() const;
 
     void setupActions();
 
@@ -520,23 +525,23 @@ protected:
      * @param selectFrames a list of selected frames
      * @see KWFrameViewManager::selectedFrames()
      */
-    void updateTableActions( QValueList<KWFrameView*> selectFrames);
+    void updateTableActions( Q3ValueList<KWFrameView*> selectFrames);
 
 
     void startKSpell();
     void clearSpellChecker(bool cancelSpellCheck = false );
 
-    QValueList<QString> getInlineFramesets( const QDomNode &framesetElem );
+    Q3ValueList<QString> getInlineFramesets( const QDomNode &framesetElem );
 
     // Helper stuff for the frame adjustment;
     enum MoveFrameType  { RaiseFrame, LowerFrame, BringToFront, SendToBack };
     void adjustZOrderOfSelectedFrames(MoveFrameType moveType);
-    void increaseAllZOrdersAbove(int refZOrder, int pageNum, const QPtrList<KWFrame>& frameSelection);
-    void decreaseAllZOrdersUnder(int refZOrder, int pageNum, const QPtrList<KWFrame>& frameSelection);
-    int raiseFrame(const QPtrList<KWFrame>& frameSelection, const KWFrame *frame);
-    int lowerFrame(const QPtrList<KWFrame>& frameSelection, const KWFrame *frame);
-    int bringToFront(const QPtrList<KWFrame>& frameSelection, const KWFrame *frame);
-    int sendToBack(const QPtrList<KWFrame>& frameSelection, const KWFrame *frame);
+    void increaseAllZOrdersAbove(int refZOrder, int pageNum, const Q3PtrList<KWFrame>& frameSelection);
+    void decreaseAllZOrdersUnder(int refZOrder, int pageNum, const Q3PtrList<KWFrame>& frameSelection);
+    int raiseFrame(const Q3PtrList<KWFrame>& frameSelection, const KWFrame *frame);
+    int lowerFrame(const Q3PtrList<KWFrame>& frameSelection, const KWFrame *frame);
+    int bringToFront(const Q3PtrList<KWFrame>& frameSelection, const KWFrame *frame);
+    int sendToBack(const Q3PtrList<KWFrame>& frameSelection, const KWFrame *frame);
     void textStyleSelected( KoParagStyle *sty );
     void frameStyleSelected( KWFrameStyle *sty );
     void tableStyleSelected( KWTableStyle *sty );
@@ -769,9 +774,9 @@ private: // variables
     KoSearchContext *m_searchEntry, *m_replaceEntry;
     KWFindReplace *m_findReplace;
 
-    QPtrList<KAction> m_actionList; // for the kodatatools
-    QPtrList<KAction> m_variableActionList;
-    QPtrList<KAction> m_tableActionList;
+    Q3PtrList<KAction> m_actionList; // for the kodatatools
+    Q3PtrList<KAction> m_variableActionList;
+    Q3PtrList<KAction> m_tableActionList;
 
     KWPage *m_currentPage; ///< current page number
 
@@ -816,7 +821,7 @@ private: // variables
 /* Class: KWGUI                                                   */
 /******************************************************************/
 
-class KWGUI : public QHBox
+class KWGUI : public Q3HBox
 {
     Q_OBJECT
 

@@ -19,6 +19,8 @@
 */
 
 #include <qpainter.h>
+//Added by qt3to4:
+#include <Q3PtrList>
 
 #include <kdebug.h>
 
@@ -523,8 +525,8 @@ void SymbolElement::moveDown(FormulaCursor* cursor, BasicElement* from)
  * The list will be emptied but stays the property of the caller.
  */
 void SymbolElement::insert(FormulaCursor* cursor,
-                           QPtrList<BasicElement>& newChildren,
-                           Direction direction)
+                           Q3PtrList<BasicElement>& newChildren,
+                           Qt::Orientation direction)
 {
     SequenceElement* index = static_cast<SequenceElement*>(newChildren.take(0));
     index->setParent(this);
@@ -563,8 +565,8 @@ void SymbolElement::insert(FormulaCursor* cursor,
  * The ownership of the list is passed to the caller.
  */
 void SymbolElement::remove(FormulaCursor* cursor,
-                           QPtrList<BasicElement>& removedChildren,
-                           Direction direction)
+                           Q3PtrList<BasicElement>& removedChildren,
+                           Qt::Orientation direction)
 {
     int pos = cursor->getPos();
     switch (pos) {
@@ -594,7 +596,7 @@ void SymbolElement::remove(FormulaCursor* cursor,
  * Moves the cursor to a normal place where new elements
  * might be inserted.
  */
-void SymbolElement::normalize(FormulaCursor* cursor, Direction direction)
+void SymbolElement::normalize(FormulaCursor* cursor, Qt::Orientation direction)
 {
     if (direction == beforeCursor) {
         content->moveLeft(cursor, this);
@@ -607,7 +609,7 @@ void SymbolElement::normalize(FormulaCursor* cursor, Direction direction)
 /**
  * Returns the child at the cursor.
  */
-BasicElement* SymbolElement::getChild(FormulaCursor* cursor, Direction)
+BasicElement* SymbolElement::getChild(FormulaCursor* cursor, Qt::Orientation)
 {
     int pos = cursor->getPos();
     switch (pos) {
@@ -660,7 +662,7 @@ void SymbolElement::setToContent(FormulaCursor* cursor)
 }
 
 
-void SymbolElement::moveToUpper(FormulaCursor* cursor, Direction direction)
+void SymbolElement::moveToUpper(FormulaCursor* cursor, Qt::Orientation direction)
 {
     if (hasUpper()) {
         if (direction == beforeCursor) {
@@ -672,7 +674,7 @@ void SymbolElement::moveToUpper(FormulaCursor* cursor, Direction direction)
     }
 }
 
-void SymbolElement::moveToLower(FormulaCursor* cursor, Direction direction)
+void SymbolElement::moveToLower(FormulaCursor* cursor, Qt::Orientation direction)
 {
     if (hasLower()) {
         if (direction == beforeCursor) {

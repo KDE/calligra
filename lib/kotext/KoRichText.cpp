@@ -37,8 +37,11 @@
 #include "KoTextFormat.h"
 #include "KoTextParag.h"
 
-#include <qpaintdevicemetrics.h>
+#include <q3paintdevicemetrics.h>
 #include "qdrawutil.h" // for KoTextHorizontalLine
+//Added by qt3to4:
+#include <Q3MemArray>
+#include <Q3PtrList>
 
 #include <stdlib.h>
 #include "KoParagCounter.h"
@@ -59,7 +62,7 @@
 void KoTextDocCommandHistory::addCommand( KoTextDocCommand *cmd )
 {
     if ( current < (int)history.count() - 1 ) {
-	QPtrList<KoTextDocCommand> commands;
+	Q3PtrList<KoTextDocCommand> commands;
 	commands.setAutoDelete( FALSE );
 
 	for( int i = 0; i <= current; ++i ) {
@@ -119,7 +122,7 @@ bool KoTextDocCommandHistory::isRedoAvailable()
 
 // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-KoTextDocDeleteCommand::KoTextDocDeleteCommand( KoTextDocument *d, int i, int idx, const QMemArray<KoTextStringChar> &str )
+KoTextDocDeleteCommand::KoTextDocDeleteCommand( KoTextDocument *d, int i, int idx, const Q3MemArray<KoTextStringChar> &str )
     : KoTextDocCommand( d ), id( i ), index( idx ), parag( 0 ), text( str )
 {
     for ( int j = 0; j < (int)text.size(); ++j ) {
@@ -208,7 +211,7 @@ KoTextCursor *KoTextDocDeleteCommand::unexecute( KoTextCursor *c )
 }
 
 KoTextDocFormatCommand::KoTextDocFormatCommand( KoTextDocument *d, int sid, int sidx, int eid, int eidx,
-					const QMemArray<KoTextStringChar> &old, const KoTextFormat *f, int fl )
+					const Q3MemArray<KoTextStringChar> &old, const KoTextFormat *f, int fl )
     : KoTextDocCommand( d ), startId( sid ), startIndex( sidx ), endId( eid ), endIndex( eidx ), oldFormats( old ), flags( fl )
 {
     format = d->formatCollection()->format( f );
@@ -297,7 +300,7 @@ KoTextCursor *KoTextDocFormatCommand::unexecute( KoTextCursor *c )
     return c;
 }
 
-KoTextAlignmentCommand::KoTextAlignmentCommand( KoTextDocument *d, int fParag, int lParag, int na, const QMemArray<int> &oa )
+KoTextAlignmentCommand::KoTextAlignmentCommand( KoTextDocument *d, int fParag, int lParag, int na, const Q3MemArray<int> &oa )
     : KoTextDocCommand( d ), firstParag( fParag ), lastParag( lParag ), newAlign( na ), oldAligns( oa )
 {
 }
@@ -371,7 +374,7 @@ bool KoTextCursor::operator==( const KoTextCursor &c ) const
     return doc == c.doc && string == c.string && idx == c.idx;
 }
 
-void KoTextCursor::insert( const QString &str, bool checkNewLine, QMemArray<KoTextStringChar> *formatting )
+void KoTextCursor::insert( const QString &str, bool checkNewLine, Q3MemArray<KoTextStringChar> *formatting )
 {
     string->invalidate( idx );
     tmpIndex = -1;
@@ -1186,7 +1189,7 @@ void KoTextString::remove( int index, int len )
     }
     memmove( data.data() + index, data.data() + index + len,
 	     sizeof( KoTextStringChar ) * ( data.size() - index - len ) );
-    data.resize( data.size() - len, QGArray::SpeedOptim );
+    data.resize( data.size() - len, Q3GArray::SpeedOptim );
     bidiDirty = TRUE;
     bNeedsSpellCheck = true;
 }
@@ -1281,11 +1284,11 @@ void KoTextString::checkBidi() const
     }
 }
 
-QMemArray<KoTextStringChar> KoTextString::subString( int start, int len ) const
+Q3MemArray<KoTextStringChar> KoTextString::subString( int start, int len ) const
 {
     if ( len == 0xFFFFFF )
 	len = data.size();
-    QMemArray<KoTextStringChar> a;
+    Q3MemArray<KoTextStringChar> a;
     a.resize( len );
     for ( int i = 0; i < len; ++i ) {
 	KoTextStringChar *c = &data[ i + start ];
@@ -1318,7 +1321,7 @@ QString KoTextString::mid( int start, int len ) const
     return res;
 }
 
-QString KoTextString::toString( const QMemArray<KoTextStringChar> &data )
+QString KoTextString::toString( const Q3MemArray<KoTextStringChar> &data )
 {
     QString s;
     int l = data.size();
@@ -1505,7 +1508,7 @@ KoTextParagLineStart *KoTextFormatterBase::bidiReorderLine( KoTextParag * /*para
     }
     int x = startChar->x;
 
-    QPtrList<KoTextRun> *runs;
+    Q3PtrList<KoTextRun> *runs;
     runs = KoComplexText::bidiReorderLine(control, str, 0, last - start + 1,
 					 (text->isRightToLeft() ? QChar::DirR : QChar::DirL) );
 
@@ -1513,7 +1516,7 @@ KoTextParagLineStart *KoTextFormatterBase::bidiReorderLine( KoTextParag * /*para
 
     int numSpaces = 0;
     // set the correct alignment. This is a bit messy....
-    if( align == Qt::AlignAuto ) {
+    if( align == Qt::AlignLeft ) {
 	// align according to directionality of the paragraph...
 	if ( text->isRightToLeft() )
 	    align = Qt::AlignRight;

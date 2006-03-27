@@ -22,7 +22,7 @@
 
 #include <qstring.h>
 #include <qdatetime.h>
-#include <qasciidict.h>
+#include <q3asciidict.h>
 
 #include "defs.h"
 

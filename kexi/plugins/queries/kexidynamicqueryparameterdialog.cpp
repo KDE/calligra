@@ -51,9 +51,9 @@ void KexiDynamicQueryParameterDialog::slotOk() {
 	QObjectList *l=queryList(0,"kexi_.*",true,true);
 	QObjectListIt it(*l);
 	QObject *obj;
-	kdDebug()<<"KexiDynamicQueryParameterDialog::slotOk()"<<endl;
+	kDebug()<<"KexiDynamicQueryParameterDialog::slotOk()"<<endl;
 	while ((obj=it.current())!=0) {
-		kdDebug()<<"KexiDynamicQueryParameterDialog::slotOk()::loop"<<endl;
+		kDebug()<<"KexiDynamicQueryParameterDialog::slotOk()::loop"<<endl;
 		(*m_values)[QString().fromUtf8(obj->name())]=
 			(dynamic_cast<QLineEdit*>(obj))->text();
 		++it;

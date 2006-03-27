@@ -28,7 +28,7 @@ class KoLayoutTab : public KoLayoutTabBase
     Q_OBJECT
 
 public:
-    KoLayoutTab( bool withSubSuperScript, QWidget* parent=0, const char* name=0, WFlags fl=0 );
+    KoLayoutTab( bool withSubSuperScript, QWidget* parent=0, const char* name=0, Qt::WFlags fl=0 );
     ~KoLayoutTab();
 
     KoTextFormat::VerticalAlignment getSubSuperScript() const;

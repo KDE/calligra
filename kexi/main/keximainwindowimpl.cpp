@@ -431,7 +431,7 @@ void KexiMainWindowImpl::initActions()
 	action->setWhatsThis(i18n("Downloads example databases from the Internet."));
 #endif
 
-//	d->action_open_recent = KStdAction::openRecent( this, SLOT(slotProjectOpenRecent(const KURL&)), actionCollection(), "project_open_recent" );
+//	d->action_open_recent = KStdAction::openRecent( this, SLOT(slotProjectOpenRecent(const KUrl&)), actionCollection(), "project_open_recent" );
 
 //#ifdef KEXI_SHOW_UNIMPLEMENTED
 #ifndef KEXI_NO_UNFINISHED
@@ -2772,7 +2772,7 @@ tristate KexiMainWindowImpl::getNewObjectInfo(
 	d->nameDialog->widget()->setCaptionText(partItem->caption());
 	d->nameDialog->widget()->setNameText(partItem->name());
 	d->nameDialog->setCaption(i18n("Save Object As"));
-	d->nameDialog->setDialogIcon( DesktopIcon( info->itemIcon(), KIcon::SizeMedium ) );
+	d->nameDialog->setDialogIcon( DesktopIcon( info->itemIcon(), K3Icon::SizeMedium ) );
 	allowOverwriting = false;
 	bool found;
 	do {

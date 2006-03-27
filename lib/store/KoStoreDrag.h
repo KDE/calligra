@@ -20,7 +20,9 @@
 #ifndef koStoreDrag_h
 #define koStoreDrag_h
 
-#include <qdragobject.h>
+#include <q3dragobject.h>
+//Added by qt3to4:
+#include <Q3CString>
 #include <koffice_export.h>
 /**
  * A generic drag object that holds a store (e.g. KoZipStore) in memory.
@@ -33,7 +35,7 @@
  * then KoStore::createStore( theBuffer, .... ), save the
  * data into the store and delete it. Finally, call setEncodedData().
  */
-class KOSTORE_EXPORT KoStoreDrag : public QStoredDrag
+class KOSTORE_EXPORT KoStoreDrag : public Q3StoredDrag
 {
 public:
     /** Constructor.
@@ -49,7 +51,7 @@ public:
      * Returns the mimetype of the clipboard data for a given application,
      * depending on the application's native mimetype.
      */
-    static QCString mimeType( const char* nativeMimeType );
+    static Q3CString mimeType( const char* nativeMimeType );
 };
 
 #endif

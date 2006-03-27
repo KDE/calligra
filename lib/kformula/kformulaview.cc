@@ -22,6 +22,11 @@
 
 #include <qpainter.h>
 #include <qtimer.h>
+//Added by qt3to4:
+#include <QMouseEvent>
+#include <QFocusEvent>
+#include <QWheelEvent>
+#include <QKeyEvent>
 
 #include <kapplication.h>
 #include <kdebug.h>
@@ -370,7 +375,7 @@ bool View::isEnd() const
     return cursor()->isEnd();
 }
 
-void View::eraseSelection( Direction direction )
+void View::eraseSelection( Qt::Orientation direction )
 {
     DirectedRemove r( req_remove, direction );
     container()->performRequest( &r );

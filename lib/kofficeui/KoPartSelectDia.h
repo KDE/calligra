@@ -22,9 +22,11 @@
 
 #include <kdialogbase.h>
 #include <KoQueryTrader.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
-class QListView;
-class QListViewItem;
+class Q3ListView;
+class Q3ListViewItem;
 class QPushButton;
 
 /**
@@ -60,11 +62,11 @@ public:
     static KoDocumentEntry selectPart( QWidget *parent = 0L );
 
 private slots:
-    void selectionChanged( QListViewItem * );
+    void selectionChanged( Q3ListViewItem * );
 
 private:
-    QValueList<KoDocumentEntry> m_lstEntries;
-    QListView *listview;
+    Q3ValueList<KoDocumentEntry> m_lstEntries;
+    Q3ListView *listview;
 };
 
 #endif

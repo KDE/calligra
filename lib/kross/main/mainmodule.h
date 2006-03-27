@@ -32,6 +32,8 @@
 #include <qstring.h>
 #include <qvariant.h>
 #include <qobject.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 #include <ksharedptr.h>
 #include <kaction.h>
@@ -115,7 +117,7 @@ namespace Kross { namespace Api {
              * \return the newly added \a EventSignal instance
              *       which is now a child of this \a MainModule
              */
-            EventSignal::Ptr addSignal(const QString& name, QObject* sender, QCString signal);
+            EventSignal::Ptr addSignal(const QString& name, QObject* sender, Q3CString signal);
 
             /**
              * Add a Qt slot to the \a Module by creating
@@ -130,7 +132,7 @@ namespace Kross { namespace Api {
              * \return the newly added \a EventSlot instance
              *       which is now a child of this \a MainModule
              */
-            EventSlot::Ptr addSlot(const QString& name, QObject* receiver, QCString slot);
+            EventSlot::Ptr addSlot(const QString& name, QObject* receiver, Q3CString slot);
 
             /**
              * Add a \a QObject to the eventcollection. All

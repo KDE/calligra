@@ -87,27 +87,27 @@ KPrConfig::KPrConfig( KPrView* parent )
 {
     m_doc = parent->kPresenterDoc();
     QVBox *page = addVBoxPage( i18n("Interface"), i18n("Interface"),
-                               BarIcon("misc", KIcon::SizeMedium) );
+                               BarIcon("misc", K3Icon::SizeMedium) );
     _interfacePage=new KPrConfigureInterfacePage( parent, page );
     page = addVBoxPage( i18n("Color"), i18n("Color"),
-                        BarIcon("colorize", KIcon::SizeMedium) );
+                        BarIcon("colorize", K3Icon::SizeMedium) );
     _colorBackground = new KPrConfigureColorBackground( parent, page );
 
     page = addVBoxPage( i18n("Spelling"), i18n("Spellchecker Behavior"),
-                        BarIcon("spellcheck", KIcon::SizeMedium) );
+                        BarIcon("spellcheck", K3Icon::SizeMedium) );
     _spellPage=new KPrConfigureSpellPage(parent, page);
 
     page = addVBoxPage( i18n("Misc"), i18n("Misc"),
-                        BarIcon("misc", KIcon::SizeMedium) );
+                        BarIcon("misc", K3Icon::SizeMedium) );
     _miscPage=new KPrConfigureMiscPage(parent, page);
 
     page = addVBoxPage( i18n("Document"), i18n("Document Settings"),
-                        BarIcon("kpresenter_kpr", KIcon::SizeMedium) );
+                        BarIcon("kpresenter_kpr", K3Icon::SizeMedium) );
 
     _defaultDocPage=new KPrConfigureDefaultDocPage(parent, page);
 
     page = addVBoxPage( i18n("Tools"), i18n("Default Tools Settings"),
-                        BarIcon("configure", KIcon::SizeMedium) );
+                        BarIcon("configure", K3Icon::SizeMedium) );
 
     _toolsPage=new KPrConfigureToolsPage(parent, page);
 
@@ -118,7 +118,7 @@ KPrConfig::KPrConfig( KPrView* parent )
 
     if (KoSpeaker::isKttsdInstalled()) {
         page = addVBoxPage( i18n("Abbreviation for Text-to-Speech", "TTS"), i18n("Text-to-Speech Settings"),
-                            BarIcon("access", KIcon::SizeMedium) );
+                            BarIcon("access", K3Icon::SizeMedium) );
         m_ttsPage=new KPrConfigureTTSPage(parent, page);
     } else m_ttsPage = 0;
 

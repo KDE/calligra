@@ -7,13 +7,13 @@
 #ifndef KCHARTCOLORARRAY
 #define KCHARTCOLORARRAY
 
-#include <qvaluevector.h>
+#include <q3valuevector.h>
 #include <qcolor.h>
 
 namespace KChart
 {
 
-typedef QValueVector<QColor> KChartColorArray;
+typedef Q3ValueVector<QColor> KChartColorArray;
 
 }  //KChart namespace
 

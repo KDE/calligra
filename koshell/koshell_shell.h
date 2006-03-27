@@ -25,16 +25,18 @@
 #include <KoMainWindow.h>
 #include <KoQueryTrader.h>
 #include <ktabwidget.h>
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 #include <qmap.h>
 #include <qtoolbutton.h>
-#include <qvaluelist.h>
+#include <q3valuelist.h>
+//Added by qt3to4:
+#include <QLabel>
 
 #include "iconsidepane.h"
 
-class QVBox;
-class QIconView;
-class QIconViewItem;
+class Q3VBox;
+class Q3IconView;
+class Q3IconViewItem;
 class QSplitter;
 class KoDocumentEntry;
 class KoView;
@@ -85,7 +87,7 @@ protected slots:
     document which can be edited with the chosen component.
     @param item The component the user clicked on
   */
-  void slotSidebarItemClicked( QIconViewItem *item );
+  void slotSidebarItemClicked( Q3IconViewItem *item );
   void slotKSLoadCompleted();
   void slotKSLoadCanceled (const QString &);
   void slotNewDocumentName();
@@ -107,15 +109,15 @@ private:
   };
 
   virtual bool queryClose();
-  virtual bool openDocumentInternal( const KURL & url, KoDocument * newdoc = 0L );
+  virtual bool openDocumentInternal( const KUrl & url, KoDocument * newdoc = 0L );
   virtual void slotConfigureKeys();
   void closeDocument();
   void saveSettings();
-  void switchToPage( QValueList<Page>::Iterator it );
+  void switchToPage( Q3ValueList<Page>::Iterator it );
 
 
-  QValueList<Page> m_lstPages;
-  QValueList<Page>::Iterator m_activePage;
+  Q3ValueList<Page> m_lstPages;
+  Q3ValueList<Page>::Iterator m_activePage;
 
   IconSidePane *m_pSidebar;
   QLabel *m_pComponentsLabel;

@@ -140,7 +140,7 @@ void XSLTImportDia::chooseSlot()
     KFileDialog *dialog = new KFileDialog(dir, QString::null, 0L, "file dialog", true);
     dialog->setCaption( i18n("Open Document") );
     dialog->setMimeFilter( KoFilterManager::mimeFilter( _format, KoFilterManager::Import ) );
-	KURL u;
+	KUrl u;
 
     if(dialog->exec() == QDialog::Accepted)
     {

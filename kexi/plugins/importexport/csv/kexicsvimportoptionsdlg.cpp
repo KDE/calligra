@@ -61,9 +61,9 @@ KexiCSVImportOptionsDialog::KexiCSVImportOptionsDialog( const QString& selectedE
 	lyr->addWidget( m_chkAlwaysUseThisEncoding, 1, 1 );
 
 	//read config
-	kapp->config()->setGroup("ImportExport");
+	KGlobal::config()->setGroup("ImportExport");
 	QString defaultEncodingForImportingCSVFiles 
-		= kapp->config()->readEntry("DefaultEncodingForImportingCSVFiles");
+		= KGlobal::config()->readEntry("DefaultEncodingForImportingCSVFiles");
 	if (!defaultEncodingForImportingCSVFiles.isEmpty()) {
 		m_encodingComboBox->setSelectedEncoding(defaultEncodingForImportingCSVFiles);
 		m_chkAlwaysUseThisEncoding->setChecked(true);
@@ -84,12 +84,12 @@ KexiCharacterEncodingComboBox* KexiCSVImportOptionsDialog::encodingComboBox() co
 
 void KexiCSVImportOptionsDialog::accept()
 {
-	kapp->config()->setGroup("ImportExport");
+	KGlobal::config()->setGroup("ImportExport");
 	if (m_chkAlwaysUseThisEncoding->isChecked())
-		kapp->config()->writeEntry("defaultEncodingForImportingCSVFiles", 
+		KGlobal::config()->writeEntry("defaultEncodingForImportingCSVFiles", 
 			m_encodingComboBox->selectedEncoding());
 	else
-		kapp->config()->deleteEntry("defaultEncodingForImportingCSVFiles");
+		KGlobal::config()->deleteEntry("defaultEncodingForImportingCSVFiles");
 
 	KDialogBase::accept();
 }

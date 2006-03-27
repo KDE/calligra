@@ -20,7 +20,7 @@
 
 #include "KoPageLayout.h"
 
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 
 class KWPage;
 class KoPoint;
@@ -125,9 +125,9 @@ private:
     /// helper method for the topOfPage and bottomOfPage
     double pageOffset(int pageNumber, bool bottom) const;
     /// sorter for numbered pages.
-    class PageList : public QPtrList<KWPage> {
+    class PageList : public Q3PtrList<KWPage> {
     protected:
-        virtual int compareItems(QPtrCollection::Item a, QPtrCollection::Item b);
+        virtual int compareItems(Q3PtrCollection::Item a, Q3PtrCollection::Item b);
     };
 
     PageList m_pageList;

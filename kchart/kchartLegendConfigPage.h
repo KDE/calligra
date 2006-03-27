@@ -22,8 +22,10 @@
 #define __KCHARTLEGENDCONFIGPAGE_H__
 
 #include <qwidget.h>
-#include <qbutton.h>
+#include <q3button.h>
 #include <qlayout.h>
+//Added by qt3to4:
+#include <Q3GridLayout>
 
 class QRadioButton;
 class QLineEdit;
@@ -57,9 +59,9 @@ private:
     KColorButton *legendTitleColor, *legendTextColor;
     QFont titleLegend, textLegend;
     QPushButton *titleLegendFontButton, *textLegendFontButton;
-    QButton::ToggleState titleLegendIsRelative, textLegendIsRelative;
+    QCheckBox::ToggleState titleLegendIsRelative, textLegendIsRelative;
 
-    QPushButton* addButton( QGridLayout* layout, QButtonGroup* gb,
+    QPushButton* addButton( Q3GridLayout* layout, Q3ButtonGroup* gb,
                             const QString &toolTipText, const QString &icon,
                             int posY, int posX );
 };

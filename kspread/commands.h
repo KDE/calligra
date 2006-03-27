@@ -394,7 +394,7 @@ class InsertObjectCommand : public KCommand
   public:
     InsertObjectCommand( const KoRect& _geometry, KoDocumentEntry&, Canvas *_canvas ); //child
     InsertObjectCommand( const KoRect& _geometry, KoDocumentEntry&, const QRect& _data, Canvas *_canvas ); //chart
-    InsertObjectCommand( const KoRect& _geometry, KURL& _file, Canvas *_canvas ); //picture
+    InsertObjectCommand( const KoRect& _geometry, KUrl& _file, Canvas *_canvas ); //picture
     ~InsertObjectCommand();
 
     virtual void execute();
@@ -408,7 +408,7 @@ class InsertObjectCommand : public KCommand
     KoDocumentEntry entry;
     QRect data;
     ObjType type;
-    KURL file;
+    KUrl file;
     EmbeddedObject *obj;
 };
 

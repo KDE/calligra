@@ -34,14 +34,14 @@ KFConfig::KFConfig( KFormulaPartView* parent )
                    KDialogBase::Ok | KDialogBase::Apply | KDialogBase::Cancel | KDialogBase::Default,
                    KDialogBase::Ok, parent )
 {
-    //kdDebug( 40000 ) << "KFConfig::KFConfig" << endl;
-    QVBox* page1 = addVBoxPage( i18n( "Formula" ), i18n( "Formula Settings" ),
-                               BarIcon( "kformula", KIcon::SizeMedium ) );
+    //kDebug( 40000 ) << "KFConfig::KFConfig" << endl;
+    KVBox* page1 = addVBoxPage( i18n( "Formula" ), i18n( "Formula Settings" ),
+                               BarIcon( "kformula", K3Icon::SizeMedium ) );
     _page = new KFormula::ConfigurePage( parent->document()->getDocument(), this,
                                          KFormulaFactory::global()->config(),
                                          page1 );
 //     QVBox* page2 = addVBoxPage( i18n( "Math Fonts" ), i18n( "Math Fonts Settings" ),
-//                                BarIcon( "kformula", KIcon::SizeMedium ) );
+//                                BarIcon( "kformula", K3Icon::SizeMedium ) );
 //     _mathFontPage = new KFormula::MathFontsConfigurePage( parent->document()->getDocument(), this,
 //                                          KFormulaFactory::global()->config(),
 //                                          page2 );

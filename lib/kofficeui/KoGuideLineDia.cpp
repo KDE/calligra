@@ -21,9 +21,9 @@
 
 #include "KoGuideLineDia.h"
 
-#include <qbuttongroup.h>
-#include <qhbox.h>
-#include <qvbox.h>
+#include <q3buttongroup.h>
+#include <q3hbox.h>
+#include <q3vbox.h>
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qradiobutton.h>
@@ -39,7 +39,7 @@ KoGuideLineDia::KoGuideLineDia( QWidget *parent, double pos, double minPos, doub
 , m_vButton( 0 )
 {
     setCaption( i18n("Set Guide Line Position") );
-    QHBox *page = makeHBoxMainWidget();
+    Q3HBox *page = makeHBoxMainWidget();
     new QLabel( i18n( "Position:" ), page );
     m_position= new KoUnitDoubleSpinBox( page, QMAX( 0.00, minPos ), QMAX( 0.00, maxPos ), 1, QMAX( 0.00, pos ), unit );
     m_position->setFocus();
@@ -56,9 +56,9 @@ KoGuideLineDia::KoGuideLineDia( QWidget *parent, KoPoint &pos, KoRect &rect,
 , m_vButton( 0 )
 {
     setCaption( i18n("Add Guide Line") );
-    QVBox * vbox = makeVBoxMainWidget();
+    Q3VBox * vbox = makeVBoxMainWidget();
 
-    QButtonGroup *group = new QButtonGroup( 1, QGroupBox::Horizontal, i18n( "Orientation" ), vbox );
+    Q3ButtonGroup *group = new Q3ButtonGroup( 1, Qt::Horizontal, i18n( "Orientation" ), vbox );
     group->setRadioButtonExclusive( true );
     //group->layout();
     m_hButton = new QRadioButton( i18n( "Horizontal" ), group );
@@ -68,7 +68,7 @@ KoGuideLineDia::KoGuideLineDia( QWidget *parent, KoPoint &pos, KoRect &rect,
 
     m_vButton->setChecked( true );;
 
-    QHBox *hbox = new QHBox( vbox );
+    Q3HBox *hbox = new Q3HBox( vbox );
     QLabel *label = new QLabel( i18n( "&Position:" ), hbox );
     m_position= new KoUnitDoubleSpinBox( hbox, QMAX( 0.0, m_rect.left() ), QMAX( 0.0, m_rect.right() ), 1, QMAX( 0.0, pos.x() ), unit );
     m_position->setFocus();

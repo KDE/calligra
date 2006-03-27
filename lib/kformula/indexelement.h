@@ -23,6 +23,8 @@
 
 // Formula include
 #include "basicelement.h"
+//Added by qt3to4:
+#include <Q3PtrList>
 
 KFORMULA_NAMESPACE_BEGIN
 class SequenceElement;
@@ -168,7 +170,7 @@ public:
      *
      * The list will be emptied but stays the property of the caller.
      */
-    virtual void insert(FormulaCursor*, QPtrList<BasicElement>&, Direction);
+    virtual void insert(FormulaCursor*, Q3PtrList<BasicElement>&, Qt::Orientation);
 
     /**
      * Removes all selected children and returns them. Places the
@@ -181,18 +183,18 @@ public:
      *
      * The ownership of the list is passed to the caller.
      */
-    virtual void remove(FormulaCursor*, QPtrList<BasicElement>&, Direction);
+    virtual void remove(FormulaCursor*, Q3PtrList<BasicElement>&, Qt::Orientation);
 
     /**
      * Moves the cursor to a normal place where new elements
      * might be inserted.
      */
-    virtual void normalize(FormulaCursor*, Direction);
+    virtual void normalize(FormulaCursor*, Qt::Orientation);
 
     /**
      * Returns the child at the cursor.
      */
-    virtual BasicElement* getChild(FormulaCursor*, Direction = beforeCursor);
+    virtual BasicElement* getChild(FormulaCursor*, Qt::Orientation = beforeCursor);
 
     /**
      * Sets the cursor to select the child. The mark is placed before,
@@ -232,12 +234,12 @@ public:
 
     // If the index is there we need a way to move into it.
 
-    void moveToUpperLeft(FormulaCursor* cursor, Direction direction);
-    void moveToUpperMiddle(FormulaCursor* cursor, Direction direction);
-    void moveToUpperRight(FormulaCursor* cursor, Direction direction);
-    void moveToLowerLeft(FormulaCursor* cursor, Direction direction);
-    void moveToLowerMiddle(FormulaCursor* cursor, Direction direction);
-    void moveToLowerRight(FormulaCursor* cursor, Direction direction);
+    void moveToUpperLeft(FormulaCursor* cursor, Qt::Orientation direction);
+    void moveToUpperMiddle(FormulaCursor* cursor, Qt::Orientation direction);
+    void moveToUpperRight(FormulaCursor* cursor, Qt::Orientation direction);
+    void moveToLowerLeft(FormulaCursor* cursor, Qt::Orientation direction);
+    void moveToLowerMiddle(FormulaCursor* cursor, Qt::Orientation direction);
+    void moveToLowerRight(FormulaCursor* cursor, Qt::Orientation direction);
 
     // Generic access to each index.
 
@@ -309,7 +311,7 @@ private:
     class UpperLeftIndex : public IndexElementIndex {
     public:
         UpperLeftIndex(IndexElement* parent) : IndexElementIndex(parent) {}
-        virtual void moveToIndex(FormulaCursor* cursor, Direction direction)
+        virtual void moveToIndex(FormulaCursor* cursor, Qt::Orientation direction)
             { parent->moveToUpperLeft(cursor, direction); }
         virtual void setToIndex(FormulaCursor* cursor)
             { parent->setToUpperLeft(cursor); }
@@ -320,7 +322,7 @@ private:
     class LowerLeftIndex : public IndexElementIndex {
     public:
         LowerLeftIndex(IndexElement* parent) : IndexElementIndex(parent) {}
-        virtual void moveToIndex(FormulaCursor* cursor, Direction direction)
+        virtual void moveToIndex(FormulaCursor* cursor, Qt::Orientation direction)
             { parent->moveToLowerLeft(cursor, direction); }
         virtual void setToIndex(FormulaCursor* cursor)
             { parent->setToLowerLeft(cursor); }
@@ -331,7 +333,7 @@ private:
     class UpperMiddleIndex : public IndexElementIndex {
     public:
         UpperMiddleIndex(IndexElement* parent) : IndexElementIndex(parent) {}
-        virtual void moveToIndex(FormulaCursor* cursor, Direction direction)
+        virtual void moveToIndex(FormulaCursor* cursor, Qt::Orientation direction)
             { parent->moveToUpperMiddle(cursor, direction); }
         virtual void setToIndex(FormulaCursor* cursor)
             { parent->setToUpperMiddle(cursor); }
@@ -342,7 +344,7 @@ private:
     class LowerMiddleIndex : public IndexElementIndex {
     public:
         LowerMiddleIndex(IndexElement* parent) : IndexElementIndex(parent) {}
-        virtual void moveToIndex(FormulaCursor* cursor, Direction direction)
+        virtual void moveToIndex(FormulaCursor* cursor, Qt::Orientation direction)
             { parent->moveToLowerMiddle(cursor, direction); }
         virtual void setToIndex(FormulaCursor* cursor)
             { parent->setToLowerMiddle(cursor); }
@@ -353,7 +355,7 @@ private:
     class UpperRightIndex : public IndexElementIndex {
     public:
         UpperRightIndex(IndexElement* parent) : IndexElementIndex(parent) {}
-        virtual void moveToIndex(FormulaCursor* cursor, Direction direction)
+        virtual void moveToIndex(FormulaCursor* cursor, Qt::Orientation direction)
             { parent->moveToUpperRight(cursor, direction); }
         virtual void setToIndex(FormulaCursor* cursor)
             { parent->setToUpperRight(cursor); }
@@ -364,7 +366,7 @@ private:
     class LowerRightIndex : public IndexElementIndex {
     public:
         LowerRightIndex(IndexElement* parent) : IndexElementIndex(parent) {}
-        virtual void moveToIndex(FormulaCursor* cursor, Direction direction)
+        virtual void moveToIndex(FormulaCursor* cursor, Qt::Orientation direction)
             { parent->moveToLowerRight(cursor, direction); }
         virtual void setToIndex(FormulaCursor* cursor)
             { parent->setToLowerRight(cursor); }

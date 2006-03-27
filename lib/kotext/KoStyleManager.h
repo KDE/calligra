@@ -22,6 +22,9 @@
 
 #include <kdialogbase.h>
 #include <qstringlist.h>
+//Added by qt3to4:
+#include <Q3GridLayout>
+#include <QResizeEvent>
 
 #include <KoParagDia.h>
 #include <KoFontTab.h>
@@ -30,7 +33,7 @@
 #include <KoLayoutTab.h>
 #include <KoLanguageTab.h>
 #include <KoUnit.h>
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 #include <KoStyleCollection.h>
 
 //class KoFontChooser;
@@ -39,9 +42,9 @@ class KoStyleEditor;
 class KoStyleManagerTab;
 class QCheckBox;
 class QComboBox;
-class QGridLayout;
+class Q3GridLayout;
 class QLineEdit;
-class QListBox;
+class Q3ListBox;
 class QPushButton;
 class QTabWidget;
 class QWidget;
@@ -84,7 +87,7 @@ protected:
 
 private:
     QTabWidget *m_tabs;
-    QListBox *m_stylesList;
+    Q3ListBox *m_stylesList;
     QLineEdit *m_nameString;
     QComboBox *m_styleCombo;
     QPushButton *m_deleteButton;
@@ -95,9 +98,9 @@ private:
     KoStyleManagerPrivate *d;
 
     KoParagStyle *m_currentStyle;
-    QPtrList<KoParagStyle> m_origStyles;      // internal list of orig styles we have modified
-    QPtrList<KoParagStyle> m_changedStyles;   // internal list of changed styles.
-    QPtrList<KoStyleManagerTab> m_tabsList;
+    Q3PtrList<KoParagStyle> m_origStyles;      // internal list of orig styles we have modified
+    Q3PtrList<KoParagStyle> m_changedStyles;   // internal list of changed styles.
+    Q3PtrList<KoStyleManagerTab> m_tabsList;
     QStringList m_styleOrder;
     int numStyles;
     bool noSignals;

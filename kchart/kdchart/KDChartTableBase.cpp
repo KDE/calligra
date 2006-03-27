@@ -28,7 +28,7 @@
  **********************************************************************/
 #include <math.h>
 #include <limits.h>
-#include <qtable.h>
+#include <q3table.h>
 
 #include <KDChartTableBase.h>
 
@@ -740,7 +740,7 @@ uint KDChartTableDataBase::lastPositiveCellInColumn( uint col, int coordinate ) 
 }
 
 
-void KDChartTableDataBase::importFromQTable( QTable* table )
+void KDChartTableDataBase::importFromQTable( Q3Table* table )
 {
     if( table->numRows() > (int)rows() ||
         table->numCols() > (int)cols() )

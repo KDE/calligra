@@ -2,14 +2,18 @@
 #define _kchartWIZARDSELECTCHARTTYPEPAGE_H
 
 #include <qlayout.h>
-#include <qvbox.h>
+#include <q3vbox.h>
 #include <qwidget.h>
+//Added by qt3to4:
+#include <QPixmap>
+#include <Q3GridLayout>
+#include <Q3Frame>
 
 #include "kchart_params.h"
 
-class QFrame;
+class Q3Frame;
 class QPushButton;
-class QButtonGroup;
+class Q3ButtonGroup;
 
 namespace KChart
 {
@@ -19,7 +23,7 @@ class KChartPart;
 // Contains a button with a text label below it
 //
 // FIXME: Move to kchartWizardSelectChartTypePage.cc
-class KChartButton : public QVBox
+class KChartButton : public Q3VBox
 {
   Q_OBJECT
   public:
@@ -54,8 +58,8 @@ private:
 private:
   KChartPart    *m_chart;
 
-  QButtonGroup  *m_typeBG;
-  QGridLayout   *m_layout;
+  Q3ButtonGroup  *m_typeBG;
+  Q3GridLayout   *m_layout;
 
   // column and row position (used by addButton() to know where to put
   // the new button)

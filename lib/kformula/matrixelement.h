@@ -21,7 +21,7 @@
 #ifndef MATRIXELEMENT_H
 #define MATRIXELEMENT_H
 
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 
 #include "basicelement.h"
 
@@ -238,7 +238,7 @@ private:
     /**
      * The elements we contain.
      */
-    QPtrList< QPtrList< MatrixSequenceElement > > content;
+    Q3PtrList< Q3PtrList< MatrixSequenceElement > > content;
 };
 
 
@@ -338,10 +338,10 @@ public:
      */
     virtual void dispatchFontCommand( FontCommand* cmd );
 
-    virtual void insert(FormulaCursor*, QPtrList<BasicElement>&, Direction);
-    virtual void remove(FormulaCursor*, QPtrList<BasicElement>&, Direction);
+    virtual void insert(FormulaCursor*, Q3PtrList<BasicElement>&, Qt::Orientation);
+    virtual void remove(FormulaCursor*, Q3PtrList<BasicElement>&, Qt::Orientation);
 
-    virtual void normalize(FormulaCursor*, Direction);
+    virtual void normalize(FormulaCursor*, Qt::Orientation);
 
     virtual SequenceElement* getMainChild();
 
@@ -394,7 +394,7 @@ private:
     /**
      * The list of sequences. Each one is a line.
      */
-    QPtrList< MultilineSequenceElement > content;
+    Q3PtrList< MultilineSequenceElement > content;
 };
 
 

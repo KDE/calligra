@@ -20,22 +20,26 @@
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qstringlist.h>
-#include <qtextedit.h>
+#include <q3textedit.h>
 #include <qtooltip.h>
 #include <qvariant.h>
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
+//Added by qt3to4:
+#include <Q3VBoxLayout>
+#include <Q3HBoxLayout>
 
 #include <kapplication.h>
 #include <kmessagebox.h>
 #include <klocale.h>
 #include <kstdguiitem.h>
 #include <kpushbutton.h>
+#include <ktoolinvocation.h>
 
 #include "formulastring.h"
 #include "kformula_view.h"
 
 
-FormulaString::FormulaString( KFormulaPartView* parent, const char* name, bool modal, WFlags fl )
+FormulaString::FormulaString( KFormulaPartView* parent, const char* name, bool modal, Qt::WFlags fl )
     : QDialog( parent, name, modal, fl ), view( parent )
 {
     if ( !name )
@@ -43,12 +47,12 @@ FormulaString::FormulaString( KFormulaPartView* parent, const char* name, bool m
     resize( 511, 282 );
     setCaption( i18n( "Formula String" ) );
     setSizeGripEnabled( TRUE );
-    QVBoxLayout* FormulaStringLayout = new QVBoxLayout( this, 11, 6, "FormulaStringLayout");
+    Q3VBoxLayout* FormulaStringLayout = new Q3VBoxLayout( this, 11, 6, "FormulaStringLayout");
 
-    textWidget = new QTextEdit( this, "textWidget" );
+    textWidget = new Q3TextEdit( this, "textWidget" );
     FormulaStringLayout->addWidget( textWidget );
 
-    QHBoxLayout* Layout2 = new QHBoxLayout( 0, 0, 6, "Layout2");
+    Q3HBoxLayout* Layout2 = new Q3HBoxLayout( 0, 0, 6, "Layout2");
     QSpacerItem* spacer = new QSpacerItem( 20, 20, QSizePolicy::Expanding, QSizePolicy::Minimum );
     Layout2->addItem( spacer );
 
@@ -57,7 +61,7 @@ FormulaString::FormulaString( KFormulaPartView* parent, const char* name, bool m
     Layout2->addWidget( position );
     FormulaStringLayout->addLayout( Layout2 );
 
-    QHBoxLayout* Layout1 = new QHBoxLayout( 0, 0, 6, "Layout1");
+    Q3HBoxLayout* Layout1 = new Q3HBoxLayout( 0, 0, 6, "Layout1");
 
     buttonHelp = new KPushButton( KStdGuiItem::help(), this, "buttonHelp" );
     buttonHelp->setAccel( 4144 );
@@ -107,7 +111,7 @@ void FormulaString::accept()
 
 void FormulaString::helpButtonClicked()
 {
-  kapp->invokeHelp( "formula-strings", "kformula" );
+  KToolInvocation::invokeHelp( "formula-strings", "kformula" );
 }
 
 void FormulaString::cursorPositionChanged( int para, int pos )

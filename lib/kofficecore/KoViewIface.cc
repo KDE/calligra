@@ -26,12 +26,15 @@
 #include <dcopclient.h>
 #include <kdcopactionproxy.h>
 #include <kaction.h>
+//Added by qt3to4:
+#include <Q3ValueList>
+#include <Q3CString>
 
 //static
-QCString KoViewIface::newIfaceName()
+Q3CString KoViewIface::newIfaceName()
 {
     static int s_viewIFNumber = 0;
-    QCString name; name.setNum( s_viewIFNumber++ ); name.prepend("View-");
+    Q3CString name; name.setNum( s_viewIFNumber++ ); name.prepend("View-");
     return name;
 }
 
@@ -53,7 +56,7 @@ KoViewIface::~KoViewIface()
     delete m_actionProxy;
 }
 
-DCOPRef KoViewIface::action( const QCString &name )
+DCOPRef KoViewIface::action( const Q3CString &name )
 {
     return DCOPRef( kapp->dcopClient()->appId(), m_actionProxy->actionObjectId( name ) );
 }
@@ -61,16 +64,16 @@ DCOPRef KoViewIface::action( const QCString &name )
 QCStringList KoViewIface::actions()
 {
     QCStringList res;
-    QValueList<KAction *> lst = m_actionProxy->actions();
-    QValueList<KAction *>::ConstIterator it = lst.begin();
-    QValueList<KAction *>::ConstIterator end = lst.end();
+    Q3ValueList<KAction *> lst = m_actionProxy->actions();
+    Q3ValueList<KAction *>::ConstIterator it = lst.begin();
+    Q3ValueList<KAction *>::ConstIterator end = lst.end();
     for (; it != end; ++it )
         res.append( (*it)->name() );
 
     return res;
 }
 
-QMap<QCString,DCOPRef> KoViewIface::actionMap()
+QMap<Q3CString,DCOPRef> KoViewIface::actionMap()
 {
     return m_actionProxy->actionMap();
 }

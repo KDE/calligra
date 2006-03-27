@@ -111,7 +111,7 @@ void KWMailMergeKSpread::initSpreadSheets()
   _columnMap.clear();
   sampleRecord.clear();
 
-  QPtrListIterator<Sheet> it( _document->map()->sheetList() );
+  Q3PtrListIterator<Sheet> it( _document->map()->sheetList() );
   int counter = 0;
   for ( it.toFirst(); it.current(), counter < _spreadSheetNumber; ++it ) {
     _sheet = it.current();
@@ -119,7 +119,7 @@ void KWMailMergeKSpread::initSpreadSheets()
   }
 
   if ( !_sheet ) {
-    kdError() << "No spread sheet available" << endl;
+    kError() << "No spread sheet available" << endl;
     return;
   }
 

@@ -23,7 +23,7 @@
 #include <kdialogbase.h>
 
 class KexiMainWindow;
-class KListView;
+class K3ListView;
 
 class KEXIFORMUTILS_EXPORT KexiActionSelectionDialog : public KDialogBase
 {

@@ -23,13 +23,15 @@
 
 #include <qstring.h>
 #include <qmap.h>
-#include <qvaluelist.h>
+#include <q3valuelist.h>
 #include <qstringlist.h>
-#include <qptrvector.h>
+#include <q3ptrvector.h>
 #include <qdom.h>
-#include <qdict.h>
+#include <q3dict.h>
 #include <qlabel.h>
 #include <qwidget.h>
+//Added by qt3to4:
+#include <QMouseEvent>
 #include <koffice_export.h>
 
 class KoDocument;
@@ -50,7 +52,7 @@ class KoCompletionBox : public QLabel
 {
   Q_OBJECT
   public:
-    KoCompletionBox( QWidget * parent = 0, const char * name = 0, WFlags f = 0 );
+    KoCompletionBox( QWidget * parent = 0, const char * name = 0, Qt::WFlags f = 0 );
     ~KoCompletionBox();
     QString& lastWord();
     void setLastWord(QString const &);
@@ -274,7 +276,7 @@ public:
     KeyCompletionAction getConfigKeyAction() const
         { return m_keyCompletionAction;}
 
-    const QDict<KoAutoFormatEntry> & getAutoFormatEntries() const{
+    const Q3Dict<KoAutoFormatEntry> & getAutoFormatEntries() const{
         return m_entries;
     }
 
@@ -354,7 +356,7 @@ protected:
 
     static void changeTextFormat(KoSearchContext *formatOptions, KoTextFormat * format, int & flags );
     void loadEntry( const QDomElement &nl, bool _allLanguages = false);
-    QDomElement saveEntry( QDictIterator<KoAutoFormatEntry> _entry, QDomDocument doc);
+    QDomElement saveEntry( Q3DictIterator<KoAutoFormatEntry> _entry, QDomDocument doc);
 private:
     void detectStartOfLink(KoTextParag * parag, int const index, bool const insertedDot);
     void autoFormatIsActive();
@@ -400,8 +402,8 @@ private:
 
     KCompletion *m_listCompletion;
 
-    QDict<KoAutoFormatEntry> m_entries;
-    QDict<KoAutoFormatEntry> m_allLanguages;
+    Q3Dict<KoAutoFormatEntry> m_entries;
+    Q3Dict<KoAutoFormatEntry> m_allLanguages;
 
     KoAutoFormatEntryMap m_superScriptEntries;
 

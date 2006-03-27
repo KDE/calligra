@@ -23,7 +23,15 @@
 #include <qdrawutil.h>
 #include <qpixmap.h>
 #include <qstyle.h>
-#include <qpopupmenu.h>
+#include <q3popupmenu.h>
+//Added by qt3to4:
+#include <QFocusEvent>
+#include <QPaintEvent>
+#include <QKeyEvent>
+#include <QEvent>
+#include <QDropEvent>
+#include <QDragEnterEvent>
+#include <QMouseEvent>
 
 #include <kglobalsettings.h>
 #include <ktoolbar.h>
@@ -42,7 +50,7 @@ namespace {
 }
 
 KoColorPanel::KoColorPanel( QWidget* parent, const char* name ) :
-    QWidget( parent, name, WStaticContents | WRepaintNoErase | WResizeNoErase )
+    QWidget( parent, name, Qt::WStaticContents | Qt::WNoAutoErase | Qt::WResizeNoErase )
 {
     setMouseTracking( true );
     setAcceptDrops( true );
@@ -63,11 +71,11 @@ QSize KoColorPanel::minimumSizeHint() const
     return QSize( COLS << 4, lines() << 4 );
 }
 
-QPopupMenu* KoColorPanel::createColorPopup( KoColorPanel::MenuStyle style, const QColor& defaultColor,
+Q3PopupMenu* KoColorPanel::createColorPopup( KoColorPanel::MenuStyle style, const QColor& defaultColor,
                                             const QObject* receiver, const char* slot,
                                             QWidget* parent, const char* name )
 {
-    QPopupMenu* menu = new QPopupMenu( parent, name );
+    Q3PopupMenu* menu = new Q3PopupMenu( parent, name );
     KoColorPopupProxy* proxy = 0;
 
     if ( defaultColor.isValid() ) {
@@ -77,7 +85,7 @@ QPopupMenu* KoColorPanel::createColorPopup( KoColorPanel::MenuStyle style, const
         p.end();
         proxy = new KoColorPopupProxy( defaultColor, 0, menu, "color proxy" );
         connect( proxy, SIGNAL( colorSelected( const QColor& ) ), receiver, slot );
-        menu->insertItem( QIconSet( pixmap ), i18n( "Default Color" ), proxy, SLOT( slotDefaultColor() ) );
+        menu->insertItem( QIcon( pixmap ), i18n( "Default Color" ), proxy, SLOT( slotDefaultColor() ) );
         menu->insertSeparator();
     }
 
@@ -369,7 +377,7 @@ void KoColorPanel::paintEvent( QPaintEvent* e )
     if ( hasFocus() && m_focusPosition.x != -1 && m_focusPosition.y != -1 &&
          mapFromPosition( m_focusPosition ).intersects( e->rect() ) )
         style().drawPrimitive( QStyle::PE_Panel, &p, QRect( m_focusPosition.x << 4, m_focusPosition.y << 4, TILESIZE, TILESIZE ),
-                               colorGroup(), QStyle::Style_Sunken | QStyle::Style_Enabled );
+                               colorGroup(), QStyle::State_Sunken | QStyle::State_Enabled );
 
     --lns;  // Attention: We just avoid some lns - 1 statements
 
@@ -458,7 +466,7 @@ void KoColorPanel::finalizeInsertion( const Position& pos )
     paint( pos );
 
     if ( !isFocusEnabled() )
-        setFocusPolicy( QWidget::StrongFocus );
+        setFocusPolicy( Qt::StrongFocus );
     // Did we start a new row?
     if ( m_nextPosition.x == 1 )
         updateGeometry();
@@ -580,7 +588,7 @@ void KoColorPanel::updateFocusPosition( const Position& newPosition )
     if ( it != m_colorMap.end() ) {
         // draw at the new focus position
         style().drawPrimitive( QStyle::PE_Panel, &p, QRect( m_focusPosition.x << 4, m_focusPosition.y << 4, TILESIZE, TILESIZE ),
-                               colorGroup(), QStyle::Style_Sunken | QStyle::Style_Enabled );
+                               colorGroup(), QStyle::State_Sunken | QStyle::State_Enabled );
         p.fillRect( ( m_focusPosition.x << 4 ) + 2, ( m_focusPosition.y << 4 ) + 2, 12, 12, it.data() );
     }
 
@@ -599,7 +607,7 @@ void KoColorPanel::paint( const Position& position )
 
 void KoColorPanel::init()
 {
-    setFocusPolicy( QWidget::NoFocus ); // it's empty
+    setFocusPolicy( Qt::NoFocus ); // it's empty
     m_nextPosition.x = 0;
     m_nextPosition.y = 0;
     m_focusPosition.x = -1;
@@ -687,24 +695,24 @@ void KoToolButton::colorSelected( const QColor& color )
 
 void KoToolButton::drawButton(QPainter *_painter)
 {
-    QStyle::SFlags flags = QStyle::Style_Default;
-    QStyle::SCFlags active = QStyle::SC_None;
-    QStyle::SCFlags arrowActive = QStyle::SC_None;
+    QStyle::State flags = QStyle::State_None;
+    QStyle::SubControls active = QStyle::SC_None;
+    QStyle::SubControls arrowActive = QStyle::SC_None;
     QStyleOption opt;
     QColorGroup cg( colorGroup() );
 
     if ( isEnabled() ) {
-  	flags |= QStyle::Style_Enabled;
+  	flags |= QStyle::State_Enabled;
         if ( KToolBarButton::isRaised() || m_arrowPressed )
-            flags |= QStyle::Style_Raised;
+            flags |= QStyle::State_Raised;
     }
     if ( isOn() )
-        flags |= QStyle::Style_On;
+        flags |= QStyle::State_On;
 
-    QStyle::SFlags arrowFlags = flags;
+    QStyle::State arrowFlags = flags;
 
     if ( isDown() && !m_arrowPressed ) {
-        flags  |= QStyle::Style_Down;
+        flags  |= QStyle::State_DownArrow;
         active |= QStyle::SC_ToolButton;
     }
     if ( m_arrowPressed )
@@ -733,9 +741,9 @@ void KoToolButton::drawButton(QPainter *_painter)
     int textFlags = 0;
 
     if ( static_cast<KToolBar::IconText>( iconTextMode() ) == KToolBar::IconOnly ) { // icon only
-        QPixmap pixmap = iconSet().pixmap( QIconSet::Automatic,
-                                           isEnabled() ? ( KToolBarButton::isActive() ? QIconSet::Active : QIconSet::Normal ) :
-                                           QIconSet::Disabled, isOn() ? QIconSet::On : QIconSet::Off );
+        QPixmap pixmap = iconSet().pixmap( QIcon::Automatic,
+                                           isEnabled() ? ( KToolBarButton::isActive() ? QIcon::Active : QIcon::Normal ) :
+                                           QIcon::Disabled, isOn() ? QIcon::On : QIcon::Off );
         if ( !pixmap.isNull() ) {
             dx = ( width() - ARROW_WIDTH - pixmap.width() ) / 2;
             dy = ( height() - pixmap.height() ) / 2;
@@ -744,9 +752,9 @@ void KoToolButton::drawButton(QPainter *_painter)
         }
     }
     else if ( static_cast<KToolBar::IconText>( iconTextMode() ) == KToolBar::IconTextRight ) { // icon and text (if any)
-        QPixmap pixmap = iconSet().pixmap( QIconSet::Automatic,
-                                           isEnabled() ? ( KToolBarButton::isActive() ? QIconSet::Active : QIconSet::Normal ) :
-                                           QIconSet::Disabled, isOn() ? QIconSet::On : QIconSet::Off );
+        QPixmap pixmap = iconSet().pixmap( QIcon::Automatic,
+                                           isEnabled() ? ( KToolBarButton::isActive() ? QIcon::Active : QIcon::Normal ) :
+                                           QIcon::Disabled, isOn() ? QIcon::On : QIcon::Off );
         if( !pixmap.isNull()) {
             dx = 4;
             dy = ( height() - pixmap.height() ) / 2;
@@ -755,7 +763,7 @@ void KoToolButton::drawButton(QPainter *_painter)
         }
 
         if (!textLabel().isNull()) {
-            textFlags = AlignVCenter | AlignLeft;
+            textFlags = Qt::AlignVCenter | Qt::AlignLeft;
             if ( !pixmap.isNull() )
                 dx = 4 + pixmap.width() + 2;
             else
@@ -767,7 +775,7 @@ void KoToolButton::drawButton(QPainter *_painter)
     }
     else if ( static_cast<KToolBar::IconText>( iconTextMode() ) == KToolBar::TextOnly ) {
         if ( !textLabel().isNull() ) {
-            textFlags = AlignTop | AlignLeft;
+            textFlags = Qt::AlignTop | Qt::AlignLeft;
             dx = ( width() - ARROW_WIDTH - fm.width( textLabel() ) ) / 2;
             dy = ( height() - fm.lineSpacing() ) / 2;
             buttonShift( dx, dy );
@@ -775,9 +783,9 @@ void KoToolButton::drawButton(QPainter *_painter)
         }
     }
     else if ( static_cast<KToolBar::IconText>( iconTextMode() ) == KToolBar::IconTextBottom ) {
-        QPixmap pixmap = iconSet().pixmap( QIconSet::Automatic,
-                                           isEnabled() ? ( KToolBarButton::isActive() ? QIconSet::Active : QIconSet::Normal ) :
-                                           QIconSet::Disabled, isOn() ? QIconSet::On : QIconSet::Off );
+        QPixmap pixmap = iconSet().pixmap( QIcon::Automatic,
+                                           isEnabled() ? ( KToolBarButton::isActive() ? QIcon::Active : QIcon::Normal ) :
+                                           QIcon::Disabled, isOn() ? QIcon::On : QIcon::Off );
         if( !pixmap.isNull()) {
             dx = ( width() - ARROW_WIDTH - pixmap.width() ) / 2;
             dy = ( height() - fm.lineSpacing() - pixmap.height() ) / 2;
@@ -786,7 +794,7 @@ void KoToolButton::drawButton(QPainter *_painter)
         }
 
         if ( !textLabel().isNull() ) {
-            textFlags = AlignBottom | AlignHCenter;
+            textFlags = Qt::AlignBottom | Qt::AlignHCenter;
             dx = ( width() - ARROW_WIDTH - fm.width( textLabel() ) ) / 2;
             dy = height() - fm.lineSpacing() - 4;
             buttonShift( dx, dy );

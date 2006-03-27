@@ -23,12 +23,14 @@
 #include <klineedit.h>
 #include <kdebug.h>
 #include <qlayout.h>
+//Added by qt3to4:
+#include <Q3VBoxLayout>
 #include <kconfig.h>
 #include <kpushbutton.h>
 #include <klineeditdlg.h>
 #include <kiconloader.h>
 #include <qsqldatabase.h>
-#include <qguardedptr.h>
+#include <qpointer.h>
 #include <klocale.h>
 
 /******************************************************************
@@ -39,7 +41,7 @@
 
 KWQtSqlMailMergeOpen::KWQtSqlMailMergeOpen( QWidget *parent, KWQtSqlSerialDataSourceBase *db_ )
         :KDialogBase( Plain, i18n( "Mail Merge - Setup Database Connection" ), Ok | Cancel, Ok, parent, "", true ), db( db_ ){
-        (new QVBoxLayout(plainPage()))->setAutoAdd(true);
+        (new Q3VBoxLayout(plainPage()))->setAutoAdd(true);
         setMainWidget(widget=new KWQtSqlOpenWidget(plainPage()));
         widget->drivers->insertStringList(QSqlDatabase::drivers());
         widget->hostname->setText(db->hostname);
@@ -97,8 +99,8 @@ void KWQtSqlMailMergeOpen::slotSave()
 	bool ok;
 	value=KLineEditDlg::getText(i18n("Store Settings"),i18n("Name:"),
 		QString::null, &ok,this);
-	if (!ok) kdDebug()<<"Cancel was pressed"<<endl;
-	if (value.isEmpty()) kdDebug()<<"Name value was empty"<<endl;
+	if (!ok) kDebug()<<"Cancel was pressed"<<endl;
+	if (value.isEmpty()) kDebug()<<"Name value was empty"<<endl;
 	if ((ok) && (!value.isEmpty()))
 	{
 		KConfig conf("kwmailmergerc");

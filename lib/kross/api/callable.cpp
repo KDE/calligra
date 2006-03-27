@@ -22,6 +22,8 @@
 #include "dict.h"
 
 #include <kdebug.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 using namespace Kross::Api;
 
@@ -78,7 +80,7 @@ void Callable::checkArguments(List::Ptr arguments)
                  .arg(getName()).arg(arguments ? arguments->toString() : QString::null) << endl;
 #endif
 
-    QValueList<Object::Ptr>& arglist = arguments->getValue();
+    Q3ValueList<Object::Ptr>& arglist = arguments->getValue();
 
     // check the number of parameters passed.
     if(arglist.size() < m_arglist.getMinParams())
@@ -89,9 +91,9 @@ void Callable::checkArguments(List::Ptr arguments)
     //    throw Exception::Ptr( new Exception(QString("Too many parameters for callable object '%1'.").arg(getName())) );
 
     // check type of passed parameters.
-    QValueList<Argument>& farglist = m_arglist;
-    QValueList<Argument>::Iterator it = farglist.begin();
-    QValueList<Object::Ptr>::Iterator argit = arglist.begin();
+    Q3ValueList<Argument>& farglist = m_arglist;
+    Q3ValueList<Argument>::Iterator it = farglist.begin();
+    Q3ValueList<Object::Ptr>::Iterator argit = arglist.begin();
     bool argend = ( argit == arglist.end() );
     for(; it != farglist.end(); ++it) {
         //if(! argend)

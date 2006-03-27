@@ -23,14 +23,14 @@
 
 #include <qbuffer.h>
 #include <qpainter.h>
-#include <qpaintdevicemetrics.h>
+#include <q3paintdevicemetrics.h>
 #include <qfile.h>
 #include <qtextstream.h>
 #include <qregexp.h>
 #include <qimage.h>
 #include <qpixmap.h>
 #include <qapplication.h>
-#include <qdragobject.h>
+#include <q3dragobject.h>
 
 #include <kglobal.h>
 #include <kdebug.h>
@@ -241,7 +241,7 @@ void KoPictureEps::draw(QPainter& painter, int x, int y, int width, int height, 
     QSize screenSize( width, height );
     //kdDebug() << "KoPictureEps::draw screenSize=" << screenSize.width() << "x" << screenSize.height() << endl;
 
-    QPaintDeviceMetrics metrics (painter.device());
+    Q3PaintDeviceMetrics metrics (painter.device());
     kdDebug(30003) << "Metrics: X: " << metrics.logicalDpiX() << " x Y: " << metrics.logicalDpiX() << " (in KoPictureEps::draw)" << endl;
 
     if ( painter.device()->isExtDev() ) // Is it an external device (i.e. printer)
@@ -266,7 +266,7 @@ void KoPictureEps::draw(QPainter& painter, int x, int y, int width, int height, 
 bool KoPictureEps::extractPostScriptStream( void )
 {
     kdDebug(30003) << "KoPictureEps::extractPostScriptStream" << endl;
-    QDataStream data( m_rawData, IO_ReadOnly );
+    QDataStream data( m_rawData, QIODevice::ReadOnly );
     data.setByteOrder( QDataStream::LittleEndian );
     Q_UINT32 magic, offset, length;
     data >> magic;

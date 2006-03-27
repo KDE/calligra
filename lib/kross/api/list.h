@@ -21,8 +21,10 @@
 #define KROSS_API_LIST_H
 
 #include <qstring.h>
-#include <qvaluelist.h>
-#include <qintdict.h>
+#include <q3valuelist.h>
+#include <q3intdict.h>
+//Added by qt3to4:
+#include <Q3PtrList>
 
 #include "object.h"
 #include "value.h"
@@ -33,9 +35,9 @@ namespace Kross { namespace Api {
      * The List class implementates \a Value to handle
      * lists and collections.
      */
-    class List : public Value< List, QValueList<Object::Ptr> >
+    class List : public Value< List, Q3ValueList<Object::Ptr> >
     {
-            friend class Value< List, QValueList<Object::Ptr> >;
+            friend class Value< List, Q3ValueList<Object::Ptr> >;
         public:
 
             /**
@@ -50,7 +52,7 @@ namespace Kross { namespace Api {
              *        list has initialy.
              * \param name A name this list has.
              */
-            List(QValueList<Object::Ptr> value = QValueList<Object::Ptr>(), const QString& name = "list");
+            List(Q3ValueList<Object::Ptr> value = Q3ValueList<Object::Ptr>(), const QString& name = "list");
 
             /**
              * Destructor.
@@ -105,10 +107,10 @@ namespace Kross { namespace Api {
     class ListT : public List
     {
         public:
-            ListT(QValueList<TYPE> values) : List(values) {}
+            ListT(Q3ValueList<TYPE> values) : List(values) {}
 
-            ListT(QIntDict<TYPE> values) : List() {
-                QIntDictIterator<TYPE> it( values );
+            ListT(Q3IntDict<TYPE> values) : List() {
+                Q3IntDictIterator<TYPE> it( values );
                 TYPE *t;
                 while( (t = it.current()) != 0 ) {
                     this->append( new OBJECT(t) );
@@ -116,8 +118,8 @@ namespace Kross { namespace Api {
                 }
             }
 
-            ListT(const QPtrList<TYPE> values) : List() {
-                QPtrListIterator<TYPE> it( values );
+            ListT(const Q3PtrList<TYPE> values) : List() {
+                Q3PtrListIterator<TYPE> it( values );
                 TYPE *t;
                 while( (t = it.current()) != 0 ) {
                     this->append( new OBJECT(t) );

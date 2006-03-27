@@ -72,15 +72,15 @@ class KisTIFFConverter : public KisProgressSubject {
         KisTIFFConverter(KisDoc *doc, KisUndoAdapter *adapter);
         virtual ~KisTIFFConverter();
     public:
-        KisImageBuilder_Result buildImage(const KURL& uri);
-        KisImageBuilder_Result buildFile(const KURL& uri, KisImageSP layer, KisTIFFOptions);
+        KisImageBuilder_Result buildImage(const KUrl& uri);
+        KisImageBuilder_Result buildFile(const KUrl& uri, KisImageSP layer, KisTIFFOptions);
         /** Retrieve the constructed image
         */
         KisImageSP image();
     public slots:
         virtual void cancel();
     private:
-        KisImageBuilder_Result decode(const KURL& uri);
+        KisImageBuilder_Result decode(const KUrl& uri);
         KisImageBuilder_Result readTIFFDirectory( TIFF* image);
     private:
         KisImageSP m_img;

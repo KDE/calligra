@@ -84,7 +84,7 @@ void KexiStartupFileDialogBase::init(const QString& startDir, const QString& fil
 //TODO    d->keepLocation = false;
 //TODO    d->operationMode = Opening;
     setMode(KFile::File | KFile::ExistingOnly); //(js) default: open action
-    setIcon( KGlobal::iconLoader()->loadIcon("fileopen", KIcon::Desktop) );
+    setIcon( KGlobal::iconLoader()->loadIcon("fileopen", K3Icon::Desktop) );
 		setDir(QDir(startDir));
 //TODO    d->hasDefaultFilter = false;
 //TODO    d->hasView = false;
@@ -118,31 +118,31 @@ void KexiStartupFileDialogBase::init(const QString& startDir, const QString& fil
 //(js)                                                 "This includes standard locations, such as your home directory, as well as "
 //(js)                                                 "locations that have been visited recently.") + autocompletionWhatsThisText);
 /*
-    KURL u;
+    KUrl u;
     u.setPath( QDir::rootDirPath() );
     QString text = i18n("Root Directory: %1").arg( u.path() );
     d->pathCombo->addDefaultURL( u,
-                                 KMimeType::pixmapForURL( u, 0, KIcon::Small ),
+                                 KMimeType::pixmapForURL( u, 0, K3Icon::Small ),
                                  text );
 
     u.setPath( QDir::homeDirPath() );
     text = i18n("Home Directory: %1").arg( u.path( +1 ) );
-    d->pathCombo->addDefaultURL( u, KMimeType::pixmapForURL( u, 0, KIcon::Small ),
+    d->pathCombo->addDefaultURL( u, KMimeType::pixmapForURL( u, 0, K3Icon::Small ),
                                  text );
 
-    KURL docPath;
+    KUrl docPath;
     docPath.setPath( KGlobalSettings::documentPath() );
     if ( u.path(+1) != docPath.path(+1) ) {
         text = i18n("Documents: %1").arg( docPath.path( +1 ) );
         d->pathCombo->addDefaultURL( u,
-                                     KMimeType::pixmapForURL( u, 0, KIcon::Small ),
+                                     KMimeType::pixmapForURL( u, 0, K3Icon::Small ),
                                      text );
     }
 
     u.setPath( KGlobalSettings::desktopPath() );
     text = i18n("Desktop: %1").arg( u.path( +1 ) );
     d->pathCombo->addDefaultURL( u,
-                                 KMimeType::pixmapForURL( u, 0, KIcon::Small ),
+                                 KMimeType::pixmapForURL( u, 0, K3Icon::Small ),
                                  text );
 
     u.setPath( "/tmp" );
@@ -167,8 +167,8 @@ void KexiStartupFileDialogBase::init(const QString& startDir, const QString& fil
 
     ops = new KDirOperator(d->url, d->mainWidget, "KFileDialog::ops");
     ops->setOnlyDoubleClickSelectsFiles( true );
-    connect(ops, SIGNAL(urlEntered(const KURL&)),
-            SLOT(urlEntered(const KURL&)));
+    connect(ops, SIGNAL(urlEntered(const KUrl&)),
+            SLOT(urlEntered(const KUrl&)));
     connect(ops, SIGNAL(fileHighlighted(const KFileItem *)),
             SLOT(fileHighlighted(const KFileItem *)));
     connect(ops, SIGNAL(fileSelected(const KFileItem *)),
@@ -264,8 +264,8 @@ void KexiStartupFileDialogBase::init(const QString& startDir, const QString& fil
 
     d->pathCombo->setCompletionObject( ops->dirCompletionObject(), false );
 
-    connect( d->pathCombo, SIGNAL( urlActivated( const KURL&  )),
-             this,  SLOT( enterURL( const KURL& ) ));
+    connect( d->pathCombo, SIGNAL( urlActivated( const KUrl&  )),
+             this,  SLOT( enterURL( const KUrl& ) ));
     connect( d->pathCombo, SIGNAL( returnPressed( const QString&  )),
              this,  SLOT( enterURL( const QString& ) ));
     connect( d->pathCombo, SIGNAL(textChanged( const QString& )),
@@ -387,7 +387,7 @@ void KexiStartupFileDialogBase::setOperationMode( KFileDialog::OperationMode mod
   //  d->keepLocation = (mode == Saving);
     if (mode == KFileDialog::Saving) {
       setMode( KFile::File );
-      setIcon( KGlobal::iconLoader()->loadIcon("filesave", KIcon::Desktop) );
+      setIcon( KGlobal::iconLoader()->loadIcon("filesave", K3Icon::Desktop) );
     }
 //(js)    filterWidget->setEditable( !d->hasDefaultFilter || mode != Saving );
 //(js)    d->okButton->setGuiItem( (mode == Saving) ? KStdGuiItem::save() : KStdGuiItem::ok() );

@@ -68,13 +68,13 @@ bool GnumericPlugin::readInfo( KFileMetaInfo& info, uint what)
     QIODevice* in = KFilterDev::deviceForFile(info.path(),"application/x-gzip");
     if ( !in )
     {
-        kdError() << "Cannot create device for uncompressing! Aborting!" << endl;
+        kError() << "Cannot create device for uncompressing! Aborting!" << endl;
         return false;
     }
 
-    if (!in->open(IO_ReadOnly))
+    if (!in->open(QIODevice::ReadOnly))
     {
-        kdError() << "Cannot open file for uncompressing! Aborting!" << endl;
+        kError() << "Cannot open file for uncompressing! Aborting!" << endl;
         delete in;
         return false;
     }

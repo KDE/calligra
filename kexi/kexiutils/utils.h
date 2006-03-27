@@ -69,7 +69,7 @@ namespace KexiUtils
 	{
 		if (s.isEmpty())
 			return QDateTime();
-	//		kdDebug() << QDateTime( QDate(0,1,2), QTime::fromString( s, Qt::ISODate ) ).toString(Qt::ISODate) << endl;;
+	//		kDebug() << QDateTime( QDate(0,1,2), QTime::fromString( s, Qt::ISODate ) ).toString(Qt::ISODate) << endl;;
 		return QDateTime( QDate(0,1,2), QTime::fromString( s, Qt::ISODate ) );
 	}
 
@@ -140,7 +140,7 @@ namespace KexiUtils
 
 	/*! \return a valid filename converted from \a string by:
 	 - replacing \\, /, :, *, ?, ", <, >, |, \n \t characters with a space
-	 - simplifing whitespace by removing redundant space characters using QString::simplifyWhiteSpace()
+	 - simplifing whitespace by removing redundant space characters using QString::simplified()
 	 Do not pass full paths here, but only filename strings. */
 	KEXIUTILS_EXPORT QString stringToFileName(const QString& string);
 

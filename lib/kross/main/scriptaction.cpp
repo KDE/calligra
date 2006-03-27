@@ -20,10 +20,12 @@
 #include "scriptaction.h"
 #include "manager.h"
 
-#include <qstylesheet.h>
+#include <q3stylesheet.h>
 #include <qdir.h>
 #include <qfile.h>
 #include <qfileinfo.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 #include <kurl.h>
 #include <kstandarddirs.h>
 #include <kmimetype.h>
@@ -73,7 +75,7 @@ namespace Kross { namespace Api {
             * List of \a ScriptActionCollection instances this \a ScriptAction
             * is attached to.
             */
-            QValueList<ScriptActionCollection*> collections;
+            Q3ValueList<ScriptActionCollection*> collections;
 
             /**
             * Constructor.
@@ -90,7 +92,7 @@ ScriptAction::ScriptAction(const QString& file)
 {
     //kdDebug() << QString("Kross::Api::ScriptAction::ScriptAction(const char*, const QString&) name='%1' text='%2'").arg(name).arg(text) << endl;
 
-    KURL url(file);
+    KUrl url(file);
     if(url.isLocalFile()) {
         setFile(file);
         setText(url.fileName());
@@ -155,7 +157,7 @@ ScriptAction::ScriptAction(const QString& scriptconfigfile, const QDomElement& e
         setEnabled(fi.exists());
         setFile(file);
         if(icon.isNull())
-            icon = KMimeType::iconForURL( KURL(file) );
+            icon = KMimeType::iconForURL( KUrl(file) );
         if(description.isEmpty())
             description = QString("%1<br>%2").arg(text.isEmpty() ? name : text).arg(file);
         else
@@ -224,7 +226,7 @@ void ScriptAction::detach(ScriptActionCollection* collection)
 
 void ScriptAction::detachAll()
 {
-    for(QValueList<ScriptActionCollection*>::Iterator it = d->collections.begin(); it != d->collections.end(); ++it)
+    for(Q3ValueList<ScriptActionCollection*>::Iterator it = d->collections.begin(); it != d->collections.end(); ++it)
         (*it)->detach( this );
 }
 
@@ -236,8 +238,8 @@ void ScriptAction::activate()
         QString errormessage = Kross::Api::ScriptContainer::getException()->getError();
         QString tracedetails = Kross::Api::ScriptContainer::getException()->getTrace();
         d->logs << QString("<b>%1</b><br>%2")
-                   .arg( QStyleSheet::escape(errormessage) )
-                   .arg( QStyleSheet::escape(tracedetails) );
+                   .arg( Q3StyleSheet::escape(errormessage) )
+                   .arg( Q3StyleSheet::escape(tracedetails) );
         emit failed(errormessage, tracedetails);
     }
     else {

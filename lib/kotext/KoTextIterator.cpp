@@ -22,6 +22,8 @@
 #include <kfinddialog.h>
 #include <kdebug.h>
 #include <assert.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 //#define DEBUG_ITERATOR
 
@@ -33,7 +35,7 @@
  * So we go from the first to the last textobject, or from the last to the first textobject.
  */
 
-void KoTextIterator::init( const QValueList<KoTextObject *> & lstObjects, KoTextView* textView, int options )
+void KoTextIterator::init( const Q3ValueList<KoTextObject *> & lstObjects, KoTextView* textView, int options )
 {
     Q_ASSERT( !lstObjects.isEmpty() );
 
@@ -128,7 +130,7 @@ void KoTextIterator::init( const QValueList<KoTextObject *> & lstObjects, KoText
     m_currentParag = m_firstParag;
 #ifdef DEBUG_ITERATOR
     kdDebug(32500) << "KoTextIterator::init from(" << *m_currentTextObj << "," << m_firstParag->paragId() << ") - to(" << (forw?m_lstObjects.last():m_lstObjects.first()) << "," << m_lastParag->paragId() << "), " << m_lstObjects.count() << " textObjects." << endl;
-    QValueList<KoTextObject *>::Iterator it = m_lstObjects.begin();
+    Q3ValueList<KoTextObject *>::Iterator it = m_lstObjects.begin();
     for( ; it != m_lstObjects.end(); ++it )
         kdDebug(32500) << (*it) << " " << (*it)->name() << endl;
 #endif
@@ -161,7 +163,7 @@ void KoTextIterator::restart()
 
 void KoTextIterator::connectTextObjects()
 {
-    QValueList<KoTextObject *>::Iterator it = m_lstObjects.begin();
+    Q3ValueList<KoTextObject *>::Iterator it = m_lstObjects.begin();
     for( ; it != m_lstObjects.end(); ++it ) {
         connect( (*it), SIGNAL( paragraphDeleted( KoTextParag* ) ),
                  this, SLOT( slotParagraphDeleted( KoTextParag* ) ) );

@@ -22,6 +22,10 @@
 
 #include <qpainter.h>
 #include <qpushbutton.h>
+//Added by qt3to4:
+#include <QPixmap>
+#include <Q3Frame>
+#include <QResizeEvent>
 
 static int g_koKoolBarId = 0;
 
@@ -79,7 +83,7 @@ void KoKoolBar::removeGroup( int _grp )
     }
     else
     {
-      QIntDictIterator<KoKoolBarGroup> it( m_mapGroups );
+      Q3IntDictIterator<KoKoolBarGroup> it( m_mapGroups );
       g = it.current();
       m_iActiveGroup = g->id();
       m_pBox->setActiveGroup( g );
@@ -141,16 +145,16 @@ void KoKoolBar::resizeEvent( QResizeEvent * ev )
     return;
 
   // Go behind g
-  QIntDictIterator<KoKoolBarGroup> it( m_mapGroups );
+  Q3IntDictIterator<KoKoolBarGroup> it( m_mapGroups );
   while( it.current() != g )
     ++it;
   // Position of g
-  QIntDictIterator<KoKoolBarGroup> pos = it;
+  Q3IntDictIterator<KoKoolBarGroup> pos = it;
   ++it;
 
   // How many left ?
   int result = 0;
-  QIntDictIterator<KoKoolBarGroup> i = it;
+  Q3IntDictIterator<KoKoolBarGroup> i = it;
   while( i.current() )
   {
     ++result;
@@ -208,7 +212,7 @@ void KoKoolBar::enableGroup( int _grp, bool _enable )
 }
 
 KoKoolBarBox::KoKoolBarBox( KoKoolBar *_bar ) :
-  QFrame( _bar ), m_pBar( _bar ),
+  Q3Frame( _bar ), m_pBar( _bar ),
   m_pButtonUp( 0L ), m_pButtonDown( 0L )
 {
   m_iYOffset = 0;
@@ -275,7 +279,7 @@ KoKoolBarItem* KoKoolBarBox::findByPos( int _abs_y ) const
 
   int y = 0;
 
-  QIntDictIterator<KoKoolBarItem> it = m_pGroup->iterator();
+  Q3IntDictIterator<KoKoolBarItem> it = m_pGroup->iterator();
   for ( ; it.current(); ++it )
   {
     int dy = it.current()->height();
@@ -291,7 +295,7 @@ int KoKoolBarBox::maxHeight() const
 {
   int y = 0;
 
-  QIntDictIterator<KoKoolBarItem> it = m_pGroup->iterator();
+  Q3IntDictIterator<KoKoolBarItem> it = m_pGroup->iterator();
   for ( ; it.current(); ++it )
     y += it.current()->height();
 
@@ -324,7 +328,7 @@ void KoKoolBarBox::scrollUp()
   int i = 0;
   m_iYIcon--;
 
-  QIntDictIterator<KoKoolBarItem> it = m_pGroup->iterator();
+  Q3IntDictIterator<KoKoolBarItem> it = m_pGroup->iterator();
   for ( ; i < m_iYIcon && it.current(); ++it )
   {
     y += it.current()->height();
@@ -347,7 +351,7 @@ void KoKoolBarBox::scrollDown()
   int i = 0;
   m_iYIcon++;
 
-  QIntDictIterator<KoKoolBarItem> it = m_pGroup->iterator();
+  Q3IntDictIterator<KoKoolBarItem> it = m_pGroup->iterator();
   for ( ; i < m_iYIcon && it.current(); ++it )
   {
     y += it.current()->height();
@@ -388,7 +392,7 @@ void KoKoolBarBox::drawContents( QPainter * painter )
 
   int y = -m_iYOffset;
 
-  QIntDictIterator<KoKoolBarItem> it = m_pGroup->iterator();
+  Q3IntDictIterator<KoKoolBarItem> it = m_pGroup->iterator();
   for ( ; it.current(); ++it )
   {
     if ( y + it.current()->height() >= 0 && y <= height() ) // visible ?

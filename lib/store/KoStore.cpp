@@ -31,6 +31,8 @@
 #include <qfileinfo.h>
 #include <qfile.h>
 #include <qdir.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 #include <kurl.h>
 #include <kdebug.h>
@@ -56,7 +58,7 @@ KoStore::Backend KoStore::determineBackend( QIODevice* dev )
     return DefaultFormat; // fallback
 }
 
-KoStore* KoStore::createStore( const QString& fileName, Mode mode, const QCString & appIdentification, Backend backend )
+KoStore* KoStore::createStore( const QString& fileName, Mode mode, const Q3CString & appIdentification, Backend backend )
 {
   if ( backend == Auto ) {
     if ( mode == KoStore::Write )
@@ -69,7 +71,7 @@ KoStore* KoStore::createStore( const QString& fileName, Mode mode, const QCStrin
       else
       {
         QFile file( fileName );
-        if ( file.open( IO_ReadOnly ) )
+        if ( file.open( QIODevice::ReadOnly ) )
           backend = determineBackend( &file );
         else
           backend = DefaultFormat; // will create a "bad" store (bad()==true)
@@ -90,14 +92,14 @@ KoStore* KoStore::createStore( const QString& fileName, Mode mode, const QCStrin
   }
 }
 
-KoStore* KoStore::createStore( QIODevice *device, Mode mode, const QCString & appIdentification, Backend backend )
+KoStore* KoStore::createStore( QIODevice *device, Mode mode, const Q3CString & appIdentification, Backend backend )
 {
   if ( backend == Auto )
   {
     if ( mode == KoStore::Write )
       backend = DefaultFormat;
     else {
-      if ( device->open( IO_ReadOnly ) ) {
+      if ( device->open( QIODevice::ReadOnly ) ) {
         backend = determineBackend( device );
         device->close();
       }
@@ -118,7 +120,7 @@ KoStore* KoStore::createStore( QIODevice *device, Mode mode, const QCString & ap
   }
 }
 
-KoStore* KoStore::createStore( QWidget* window, const KURL& url, Mode mode, const QCString & appIdentification, Backend backend )
+KoStore* KoStore::createStore( QWidget* window, const KUrl& url, Mode mode, const Q3CString & appIdentification, Backend backend )
 {
   if ( url.isLocalFile() )
     return createStore(url.path(), mode,  appIdentification, backend );
@@ -142,7 +144,7 @@ KoStore* KoStore::createStore( QWidget* window, const KURL& url, Mode mode, cons
     else if ( backend == Auto )
     {
       QFile file( tmpFile );
-      if ( file.open( IO_ReadOnly ) )
+      if ( file.open( QIODevice::ReadOnly ) )
       {
         backend = determineBackend( &file );
         file.close();
@@ -156,7 +158,7 @@ KoStore* KoStore::createStore( QWidget* window, const KURL& url, Mode mode, cons
   case Zip:
     return new KoZipStore( window, url, tmpFile, mode, appIdentification );
   default:
-    kdWarning(s_area) << "Unsupported backend requested for KoStore (KURL) : " << backend << endl;
+    kdWarning(s_area) << "Unsupported backend requested for KoStore (KUrl) : " << backend << endl;
     KMessageBox::sorry( window,
         i18n("The directory mode is not supported for remote locations."),
         i18n("KOffice Storage"));
@@ -357,17 +359,17 @@ Q_LONG KoStore::write( const char* _data, Q_ULONG _len )
   return nwritten;
 }
 
-QIODevice::Offset KoStore::size() const
+qlonglong KoStore::size() const
 {
   if ( !m_bIsOpen )
   {
     kdWarning(s_area) << "KoStore: You must open before asking for a size" << endl;
-    return static_cast<QIODevice::Offset>(-1);
+    return static_cast<qlonglong>(-1);
   }
   if ( m_mode != Read )
   {
     kdWarning(s_area) << "KoStore: Can not get size from store that is opened for writing" << endl;
-    return static_cast<QIODevice::Offset>(-1);
+    return static_cast<qlonglong>(-1);
   }
   return m_iSize;
 }
@@ -432,7 +434,7 @@ bool KoStore::addLocalFile( const QString &fileName, const QString &destName )
   QFileInfo fi( fileName );
   uint size = fi.size();
   QFile file( fileName );
-  if ( !file.open( IO_ReadOnly ))
+  if ( !file.open( QIODevice::ReadOnly ))
   {
     return false;
   }
@@ -467,7 +469,7 @@ bool KoStore::extractFile ( const QString &srcName, const QString &fileName )
 
   QFile file( fileName );
 
-  if( !file.open ( IO_WriteOnly ) )
+  if( !file.open ( QIODevice::WriteOnly ) )
   {
     close();
     return false;
@@ -480,7 +482,7 @@ bool KoStore::extractFile ( const QString &srcName, const QString &fileName )
     file.writeBlock ( data.data(), block );
   }
 
-  if( size() != static_cast<QIODevice::Offset>(-1) )
+  if( size() != static_cast<qlonglong>(-1) )
   	Q_ASSERT( total == size() );
 
   file.close();
@@ -497,7 +499,7 @@ QStringList KoStore::addLocalDirectory( const QString &dirPath, const QString &d
 
   QDir dir(dirPath);
   if ( !dir.exists() )
-    return 0;
+    return QStringList();
 
   QStringList files = dir.entryList();
   for ( QStringList::Iterator it = files.begin(); it != files.end(); ++it )
@@ -524,12 +526,12 @@ QStringList KoStore::addLocalDirectory( const QString &dirPath, const QString &d
 }
 
 
-bool KoStore::at( QIODevice::Offset pos )
+bool KoStore::at( qlonglong pos )
 {
   return m_stream->at( pos );
 }
 
-QIODevice::Offset KoStore::at() const
+qlonglong KoStore::at() const
 {
   return m_stream->at();
 }

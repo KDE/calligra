@@ -23,6 +23,8 @@
 #include <qlabel.h>
 #include <qcheckbox.h>
 #include <qlayout.h>
+//Added by qt3to4:
+#include <Q3GridLayout>
 #include <klocale.h>
 
 KFORMULA_NAMESPACE_BEGIN
@@ -39,7 +41,7 @@ MatrixDialog::MatrixDialog( QWidget *parent, int _width, int _height )
     QLabel *rows, *columns;
     QWidget *page = new QWidget( this );
     setMainWidget(page);
-    QGridLayout *grid = new QGridLayout(page, 4, 2, 10);
+    Q3GridLayout *grid = new Q3GridLayout(page, 4, 2, 10);
 
     rows = new QLabel(i18n("Rows:"), page);
     columns = new QLabel(i18n("Columns:"), page);

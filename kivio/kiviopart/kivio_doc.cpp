@@ -199,7 +199,7 @@ bool KivioDoc::initDoc(InitDocFlags flags, QWidget* parentWidget)
                                      dlgtype, "kivio_template", parentWidget );
 
   if( ret == KoTemplateChooseDia::File ) {
-    KURL url(f);
+    KUrl url(f);
     bool ok = openURL(url);
     m_docOpened = ok; // Used to for a hack that make kivio not crash if you cancel startup dialog.
     return ok;

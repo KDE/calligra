@@ -19,6 +19,9 @@
 #define _KOWMFPAINT_H_
 
 #include <qpainter.h>
+//Added by qt3to4:
+#include <Q3PointArray>
+#include <Q3PtrList>
 
 #include "kowmfread.h"
 #include <../kofficecore/koffice_export.h>
@@ -98,13 +101,13 @@ private:
     void  drawArc( int x, int y, int w, int h, int a, int alen );
     void  drawPie( int x, int y, int w, int h, int a, int alen );
     void  drawChord( int x, int y, int w, int h, int a, int alen );
-    void  drawPolyline( const QPointArray& pa );
-    void  drawPolygon( const QPointArray& pa, bool winding=FALSE );
+    void  drawPolyline( const Q3PointArray& pa );
+    void  drawPolygon( const Q3PointArray& pa, bool winding=FALSE );
     /**
      * drawPolyPolygon draw the XOR of a list of polygons
      * listPa : list of polygons
      */
-    void  drawPolyPolygon( QPtrList<QPointArray>& listPa, bool winding=FALSE );
+    void  drawPolyPolygon( Q3PtrList<Q3PointArray>& listPa, bool winding=FALSE );
     void  drawImage( int x, int y, const QImage &, int sx = 0, int sy = 0, int sw = -1, int sh = -1 );
 
     // Text drawing functions
@@ -113,14 +116,14 @@ private:
     void  drawText( int x, int y, int w, int h, int flags, const QString &s, double rotation );
 
     // matrix transformation : only used in some bitmap manipulation
-    void  setWorldMatrix( const QWMatrix &, bool combine=FALSE );
+    void  setWorldMatrix( const QMatrix &, bool combine=FALSE );
 
 private:
     QPainter mPainter;
     QPaintDevice *mTarget;
     bool  mRelativeCoord;
     // memorisation of WMF matrix transformation (in relative coordinate)
-    QWMatrix  mInternalWorldMatrix;
+    QMatrix  mInternalWorldMatrix;
 
 };
 

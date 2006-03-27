@@ -133,7 +133,7 @@ double KDChartSeriesCollection::maxValue( int coordinate ) const
 
     // find the first max
 #if COMPAT_QT_VERSION >= 0x030000
-    QValueVector<KDChartBaseSeries *>::const_iterator i;
+    Q3ValueVector<KDChartBaseSeries *>::const_iterator i;
 #else
     QArray<KDChartBaseSeries *>::ConstIterator i;
 #endif
@@ -164,7 +164,7 @@ double KDChartSeriesCollection::minValue( int coordinate ) const
 
     // find the first min
 #if COMPAT_QT_VERSION >= 0x030000
-    QValueVector<KDChartBaseSeries *>::const_iterator i;
+    Q3ValueVector<KDChartBaseSeries *>::const_iterator i;
 #else
     QArray<KDChartBaseSeries *>::ConstIterator i;
 #endif
@@ -187,7 +187,7 @@ unsigned int KDChartSeriesCollection::indexOf( KDChartBaseSeries *series )
 {
     unsigned int index = 0;
 #if COMPAT_QT_VERSION >= 0x030000
-    QValueVector<KDChartBaseSeries *>::const_iterator i;
+    Q3ValueVector<KDChartBaseSeries *>::const_iterator i;
 #else
     QArray<KDChartBaseSeries *>::ConstIterator i;
 #endif

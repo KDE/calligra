@@ -65,28 +65,28 @@ PreferenceDialog::PreferenceDialog( View* parent, const char* /*name*/)
 
   connect(this, SIGNAL(okClicked()),this,SLOT(slotApply()));
 
-  QVBox *page2=addVBoxPage(i18n("Locale Settings"), QString::null,BarIcon("gohome",KIcon::SizeMedium));
+  QVBox *page2=addVBoxPage(i18n("Locale Settings"), QString::null,BarIcon("gohome",K3Icon::SizeMedium));
  _localePage=new parameterLocale(parent,page2 );
 
-  QVBox *page3=addVBoxPage(i18n("Interface"), QString::null,BarIcon("signature", KIcon::SizeMedium) );
+  QVBox *page3=addVBoxPage(i18n("Interface"), QString::null,BarIcon("signature", K3Icon::SizeMedium) );
   _configure = new  configure(parent,page3 );
 
-  QVBox * page4=addVBoxPage(i18n("Misc"), QString::null,BarIcon("misc",KIcon::SizeMedium) );
+  QVBox * page4=addVBoxPage(i18n("Misc"), QString::null,BarIcon("misc",K3Icon::SizeMedium) );
   _miscParameter = new  miscParameters(parent,page4 );
 
-  QVBox *page5=addVBoxPage(i18n("Color"), QString::null,BarIcon("colorize",KIcon::SizeMedium) );
+  QVBox *page5=addVBoxPage(i18n("Color"), QString::null,BarIcon("colorize",K3Icon::SizeMedium) );
   _colorParameter=new colorParameters(parent,page5 );
 
-  QVBox *page6=addVBoxPage(i18n("Page Layout"), QString::null,BarIcon("edit",KIcon::SizeMedium) );
+  QVBox *page6=addVBoxPage(i18n("Page Layout"), QString::null,BarIcon("edit",K3Icon::SizeMedium) );
   _layoutPage=new configureLayoutPage(parent,page6 );
 
   QVBox *page7 = addVBoxPage( i18n("Spelling"), i18n("Spell Checker Behavior"),
-                          BarIcon("spellcheck", KIcon::SizeMedium) );
+                          BarIcon("spellcheck", K3Icon::SizeMedium) );
   _spellPage=new configureSpellPage(parent,page7);
 
   if (KoSpeaker::isKttsdInstalled()) {
       QVBox *page8 = addVBoxPage( i18n("Abbreviation for Text-to-Speech", "TTS"),
-          i18n("Text-to-Speech Settings"), BarIcon("access", KIcon::SizeMedium) );
+          i18n("Text-to-Speech Settings"), BarIcon("access", K3Icon::SizeMedium) );
       _ttsPage=new configureTTSPage(parent, page8);
   } else _ttsPage = 0;
 

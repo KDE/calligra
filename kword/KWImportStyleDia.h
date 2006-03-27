@@ -23,12 +23,14 @@
 #include <kdialogbase.h>
 #include <KoImportStyleDia.h>
 #include <qstringlist.h>
+//Added by qt3to4:
+#include <Q3PtrList>
 
 #include "KWFrameStyle.h"
 #include "KWTableStyle.h"
 
 class QLineEdit;
-class QListBox;
+class Q3ListBox;
 class KWDocument;
 class QPushButton;
 class KoParagStyle;
@@ -55,8 +57,8 @@ public:
     enum StyleType { frameStyle, TableStyle};
     KWImportFrameTableStyleDia( KWDocument *_doc, const QStringList & _list, StyleType _type , QWidget *parent, const char *name );
     ~KWImportFrameTableStyleDia();
-    QPtrList<KWFrameStyle> listOfFrameStyleImported() const { return m_frameStyleList;}
-    QPtrList<KWTableStyle> listOfTableStyleImported() const { return m_tableStyleList;}
+    Q3PtrList<KWFrameStyle> listOfFrameStyleImported() const { return m_frameStyleList;}
+    Q3PtrList<KWTableStyle> listOfTableStyleImported() const { return m_tableStyleList;}
 
 protected slots:
     virtual void slotOk();
@@ -65,10 +67,10 @@ protected:
     QString generateStyleName( const QString & templateName );
     void loadFile();
     void initList();
-    QListBox *m_listStyleName;
+    Q3ListBox *m_listStyleName;
     KWDocument *m_doc;
-    QPtrList<KWFrameStyle> m_frameStyleList;
-    QPtrList<KWTableStyle> m_tableStyleList;
+    Q3PtrList<KWFrameStyle> m_frameStyleList;
+    Q3PtrList<KWTableStyle> m_tableStyleList;
     QStringList m_list;
     StyleType m_typeStyle;
 };

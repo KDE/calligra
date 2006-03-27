@@ -19,7 +19,7 @@
 #ifndef KOTEXTITERATOR_H
 #define KOTEXTITERATOR_H
 
-#include <qvaluelist.h>
+#include <q3valuelist.h>
 #include <qstring.h>
 #include <qpair.h>
 #include <qobject.h>
@@ -42,10 +42,10 @@ public:
      * @param textView view in which the objects live
      * @param options see KFindDialog
      */
-    KoTextIterator( const QValueList<KoTextObject *> & lstObjects, KoTextView* textView, int options ) {
+    KoTextIterator( const Q3ValueList<KoTextObject *> & lstObjects, KoTextView* textView, int options ) {
         init( lstObjects, textView, options );
     }
-    void init( const QValueList<KoTextObject *> & lstObjects, KoTextView* textView, int options );
+    void init( const Q3ValueList<KoTextObject *> & lstObjects, KoTextView* textView, int options );
 
     /**
      * Restart from the beginning - assumes same parameters given to init
@@ -133,7 +133,7 @@ private:
     // The reason we use a QValueList of pointers instead of QPtrList
     // is that having a QPtrListIterator member var can't work, one can't
     // initialize it afterwards.
-    QValueList<KoTextObject *> m_lstObjects;
+    Q3ValueList<KoTextObject *> m_lstObjects;
     int m_options;
 
     // This is relative to the first textobject in m_lstObjects
@@ -147,7 +147,7 @@ private:
     int m_lastIndex;
 
     // Our current position
-    QValueList<KoTextObject *>::Iterator m_currentTextObj;
+    Q3ValueList<KoTextObject *>::Iterator m_currentTextObj;
     KoTextParag* m_currentParag;
 };
 

@@ -33,8 +33,8 @@ class KoOasisStyles::Private
 {
 public:
     // The key of the map is the family
-    QMap<QString, QDict<QDomElement> > m_styles;
-    QMap<QString, QDict<QDomElement> > m_stylesAutoStyles;
+    QMap<QString, Q3Dict<QDomElement> > m_styles;
+    QMap<QString, Q3Dict<QDomElement> > m_stylesAutoStyles;
 };
 
 KoOasisStyles::KoOasisStyles()
@@ -105,9 +105,9 @@ void KoOasisStyles::createStyleMap( const QDomDocument& doc, bool stylesDotXml )
     //kdDebug(30003) << "Styles read in." << endl;
 }
 
-QValueVector<QDomElement> KoOasisStyles::userStyles() const
+Q3ValueVector<QDomElement> KoOasisStyles::userStyles() const
 {
-    QValueVector<QDomElement> vec;
+    Q3ValueVector<QDomElement> vec;
     // Collect user styles
     unsigned int i = 0;
     QDomElement e;
@@ -123,7 +123,7 @@ QValueVector<QDomElement> KoOasisStyles::userStyles() const
     return vec;
 }
 
-const QDict<QDomElement>& KoOasisStyles::styles(const QString& family) const
+const Q3Dict<QDomElement>& KoOasisStyles::styles(const QString& family) const
 {
     // hmm this can create an empty item in the map, but otherwise we couldn't
     // return a const reference.
@@ -178,14 +178,14 @@ void KoOasisStyles::insertStyle( const QDomElement& e, bool styleAutoStyles )
         const QString family = e.attributeNS( KoXmlNS::style, "family", QString::null );
 
         if ( styleAutoStyles ) {
-            QDict<QDomElement>& dict = d->m_stylesAutoStyles[ family ];
+            Q3Dict<QDomElement>& dict = d->m_stylesAutoStyles[ family ];
             dict.setAutoDelete( true );
             if ( dict.find( name ) != 0 )
                 kdDebug(30003) << "Auto-style: '" << name << "' already exists" << endl;
             dict.insert( name, new QDomElement( e ) );
             //kdDebug(30003) << "Style: '" << name << "' loaded as a style auto style" << endl;
         } else {
-            QDict<QDomElement>& dict = d->m_styles[ family ];
+            Q3Dict<QDomElement>& dict = d->m_styles[ family ];
             dict.setAutoDelete( true );
 
             if ( dict.find( name ) != 0 )
@@ -628,7 +628,7 @@ QString KoOasisStyles::saveOasisTimeStyle( KoGenStyles &mainStyles, const QStrin
     QString format( _format );
     KoGenStyle currentStyle( KoGenStyle::STYLE_NUMERIC_TIME );
     QBuffer buffer;
-    buffer.open( IO_WriteOnly );
+    buffer.open( QIODevice::WriteOnly );
     KoXmlWriter elementWriter( &buffer );  // TODO pass indentation level
     QString text;
     if ( klocaleFormat )
@@ -780,7 +780,7 @@ QString KoOasisStyles::saveOasisDateStyle( KoGenStyles &mainStyles, const QStrin
 
     KoGenStyle currentStyle( KoGenStyle::STYLE_NUMERIC_DATE );
     QBuffer buffer;
-    buffer.open( IO_WriteOnly );
+    buffer.open( QIODevice::WriteOnly );
     KoXmlWriter elementWriter( &buffer );  // TODO pass indentation level
     QString text;
     if ( klocaleFormat )
@@ -954,7 +954,7 @@ QString KoOasisStyles::saveOasisFractionStyle( KoGenStyles &mainStyles, const QS
 
     KoGenStyle currentStyle( KoGenStyle::STYLE_NUMERIC_FRACTION );
     QBuffer buffer;
-    buffer.open( IO_WriteOnly );
+    buffer.open( QIODevice::WriteOnly );
     KoXmlWriter elementWriter( &buffer );  // TODO pass indentation level
     QString text;
     int integer = 0;
@@ -1023,7 +1023,7 @@ QString KoOasisStyles::saveOasisPercentageStyle( KoGenStyles &mainStyles, const 
 
     KoGenStyle currentStyle( KoGenStyle::STYLE_NUMERIC_PERCENTAGE );
     QBuffer buffer;
-    buffer.open( IO_WriteOnly );
+    buffer.open( QIODevice::WriteOnly );
     KoXmlWriter elementWriter( &buffer );  // TODO pass indentation level
     QString text;
     int decimalplaces = 0;
@@ -1073,7 +1073,7 @@ QString KoOasisStyles::saveOasisScientificStyle( KoGenStyles &mainStyles, const 
 
     KoGenStyle currentStyle( KoGenStyle::STYLE_NUMERIC_SCIENTIFIC );
     QBuffer buffer;
-    buffer.open( IO_WriteOnly );
+    buffer.open( QIODevice::WriteOnly );
     int decimalplace = 0;
     int integerdigits = 0;
     int exponentdigits = 0;
@@ -1149,7 +1149,7 @@ QString KoOasisStyles::saveOasisCurrencyStyle( KoGenStyles &mainStyles, const QS
 
     KoGenStyle currentStyle( KoGenStyle::STYLE_NUMERIC_CURRENCY );
     QBuffer buffer;
-    buffer.open( IO_WriteOnly );
+    buffer.open( QIODevice::WriteOnly );
     KoXmlWriter elementWriter( &buffer );  // TODO pass indentation level
     QString text;
     do
@@ -1184,7 +1184,7 @@ QString KoOasisStyles::saveOasisTextStyle( KoGenStyles &mainStyles, const QStrin
 
     KoGenStyle currentStyle( KoGenStyle::STYLE_NUMERIC_TEXT );
     QBuffer buffer;
-    buffer.open( IO_WriteOnly );
+    buffer.open( QIODevice::WriteOnly );
     KoXmlWriter elementWriter( &buffer );  // TODO pass indentation level
     QString text;
     do

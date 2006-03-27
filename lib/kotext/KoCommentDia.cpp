@@ -18,8 +18,8 @@
 */
 
 #include <klocale.h>
-#include <qvbox.h>
-#include <qmultilineedit.h>
+#include <q3vbox.h>
+#include <q3multilineedit.h>
 #include "KoCommentDia.h"
 #include <qlayout.h>
 #include <qpushbutton.h>
@@ -33,12 +33,12 @@ KoCommentDia::KoCommentDia( QWidget *parent, const QString &_note, const QString
 {
     setCaption( i18n("Edit Comment") );
     authorName = _authorName;
-    QVBox *page = makeVBoxMainWidget();
+    Q3VBox *page = makeVBoxMainWidget();
     kdDebug()<<"_createNote :"<<_createNote<<endl;
     if ( !_createNote.isEmpty() )
         new QLabel( _createNote, page );
 
-    m_multiLine = new QMultiLineEdit( page );
+    m_multiLine = new Q3MultiLineEdit( page );
     m_multiLine->setText( _note );
     m_multiLine->setFocus();
     pbAddAuthorName = new QPushButton(i18n("Add Author Name"),page);

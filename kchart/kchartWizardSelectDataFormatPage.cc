@@ -3,18 +3,20 @@
 #include "kchart_view.h"
 #include "kchart_part.h"
 
-#include <qhbox.h>
+#include <q3hbox.h>
 #include <qcheckbox.h>
 #include <qlayout.h>
 #include <qlabel.h>
 #include <qlineedit.h>
-#include <qlistbox.h>
-#include <qbuttongroup.h>
+#include <q3listbox.h>
+#include <q3buttongroup.h>
 #include <qvbuttongroup.h>
 #include <qpushbutton.h>
 #include <qradiobutton.h>
 #include <qlineedit.h>
 #include <qpainter.h>
+//Added by qt3to4:
+#include <Q3GridLayout>
 
 #include <kdebug.h>
 #include <kiconloader.h>
@@ -32,13 +34,13 @@ KChartWizardSelectDataFormatPage::KChartWizardSelectDataFormatPage( QWidget* par
   QWidget( parent ),
   m_chart( chart )
 {
-    QGridLayout *grid1 = new QGridLayout(this, 6, 1, KDialog::marginHint(),
+    Q3GridLayout *grid1 = new Q3GridLayout(this, 6, 1, KDialog::marginHint(),
 					 KDialog::spacingHint());
 
     // The Data Area
-    QButtonGroup *gb1 = new QVButtonGroup( i18n( "Data Area" ), this );
+    Q3ButtonGroup *gb1 = new Q3VButtonGroup( i18n( "Data Area" ), this );
 
-    QHBox   *hbox = new QHBox( gb1 );
+    Q3HBox   *hbox = new Q3HBox( gb1 );
     (void) new QLabel( i18n("Area: "), hbox);
     m_dataArea = new QLineEdit( hbox );
     grid1->addWidget(gb1, 0, 0);
@@ -48,7 +50,7 @@ KChartWizardSelectDataFormatPage::KChartWizardSelectDataFormatPage( QWidget* par
     m_firstColAsLabel = new QCheckBox( i18n( "First column as label" ), gb1);
 
     // The Data Format button group
-    QButtonGroup *gb = new QVButtonGroup( i18n( "Data Format" ), this );
+    Q3ButtonGroup *gb = new Q3VButtonGroup( i18n( "Data Format" ), this );
 
     m_rowMajor = new QRadioButton( i18n( "Data in rows" ), gb );
     m_rowMajor->resize( m_rowMajor->sizeHint() );

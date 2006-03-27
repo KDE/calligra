@@ -22,6 +22,8 @@
 #include <kglobal.h> // kMin
 #include <kdebug.h>
 #include <qiodevice.h>
+//Added by qt3to4:
+#include <Q3CString>
 #include <float.h>
 
 static const int s_indentBufferLength = 100;
@@ -123,7 +125,7 @@ void KoXmlWriter::addCompleteElement( const char* cstr )
 void KoXmlWriter::addCompleteElement( QIODevice* indev )
 {
     prepareForChild();
-    bool openOk = indev->open( IO_ReadOnly );
+    bool openOk = indev->open( QIODevice::ReadOnly );
     Q_ASSERT( openOk );
     if ( !openOk )
         return;
@@ -191,14 +193,14 @@ void KoXmlWriter::addAttribute( const char* attrName, const char* value )
 
 void KoXmlWriter::addAttribute( const char* attrName, double value )
 {
-    QCString str;
+    Q3CString str;
     str.setNum( value, 'g', DBL_DIG );
     addAttribute( attrName, str.data() );
 }
 
 void KoXmlWriter::addAttributePt( const char* attrName, double value )
 {
-    QCString str;
+    Q3CString str;
     str.setNum( value, 'g', DBL_DIG );
     str += "pt";
     addAttribute( attrName, str.data() );
@@ -214,7 +216,7 @@ void KoXmlWriter::writeIndent()
 void KoXmlWriter::writeString( const QString& str )
 {
     // cachegrind says .utf8() is where most of the time is spent
-    QCString cstr = str.utf8();
+    Q3CString cstr = str.utf8();
     m_dev->writeBlock( cstr.data(), cstr.size() - 1 );
 }
 

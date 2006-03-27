@@ -268,7 +268,7 @@ void KPrWebPresentation::initCreation( KProgress *progressBar )
 {
     QString cmd;
     int p;
-    KURL str(  path + "/html"  );
+    KUrl str(  path + "/html"  );
     KIO::NetAccess::mkdir( str,( QWidget* )0L  );
 
     p = progressBar->progress();
@@ -284,7 +284,7 @@ void KPrWebPresentation::initCreation( KProgress *progressBar )
 
     const char *pics[] = { "home", "first", "next", "prev", "last", 0 };
 
-    KURL srcurl, desturl;
+    KUrl srcurl, desturl;
 
     for ( uint index = 0; pics[ index ]; index ++ )
     {

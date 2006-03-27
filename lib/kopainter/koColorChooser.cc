@@ -24,6 +24,9 @@
 #include <qlayout.h>
 #include <qspinbox.h>
 #include <qtabwidget.h>
+//Added by qt3to4:
+#include <QLabel>
+#include <Q3GridLayout>
 
 #include <klocale.h>
 #include <kiconloader.h>
@@ -36,7 +39,7 @@ KoColorChooser::KoColorChooser(QWidget *parent, const char *name) : QWidget(pare
 {
   m_current = 0;
   m_tab = new QTabWidget(this, "KoColorChooser tab");
-  mGrid = new QGridLayout(this, 3, 5);
+  mGrid = new Q3GridLayout(this, 3, 5);
   mRGBWidget = new RGBWidget(m_tab);
   m_current = mRGBWidget;
   m_tab -> addTab(mRGBWidget, "RGB");
@@ -97,7 +100,7 @@ void KoColorChooser::slotChangeColor(const KoColor &c)
 /*           RGBWidget         */
 RGBWidget::RGBWidget(QWidget *parent) : ColorWidget(parent)
 {
-  QGridLayout *mGrid = new QGridLayout(this, 4, 5);
+  Q3GridLayout *mGrid = new Q3GridLayout(this, 4, 5);
 
   mColorPatch = new KColorPatch(this);
 
@@ -278,7 +281,7 @@ void RGBWidget::slotPatchChanged(const QColor& clr)
 
 HSVWidget::HSVWidget(QWidget *parent): ColorWidget(parent)
 {
-  QGridLayout *mGrid = new QGridLayout(this, 3, 3);
+  Q3GridLayout *mGrid = new Q3GridLayout(this, 3, 3);
 
   mColorPatch = new KColorPatch(this);
 
@@ -439,7 +442,7 @@ void HSVWidget::slotPatchChanged(const QColor& clr)
 
 GreyWidget::GreyWidget(QWidget *parent): ColorWidget(parent)
 {
-  QGridLayout *mGrid = new QGridLayout(this, 3, 3);
+  Q3GridLayout *mGrid = new Q3GridLayout(this, 3, 3);
 
   mColorPatch = new KColorPatch(this);
 
@@ -513,7 +516,7 @@ void GreyWidget::slotPatchChanged(const QColor& clr)
 
 LABWidget::LABWidget(QWidget *parent) : ColorWidget(parent)
 {
-  QGridLayout *mGrid = new QGridLayout(this, 4, 5);
+  Q3GridLayout *mGrid = new Q3GridLayout(this, 4, 5);
 
   mColorPatch = new KColorPatch(this);
 

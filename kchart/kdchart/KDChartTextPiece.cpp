@@ -28,8 +28,8 @@
  **********************************************************************/
 #include "KDChartTextPiece.h"
 
-#include <qstylesheet.h>
-#include <qsimplerichtext.h>
+#include <q3stylesheet.h>
+#include <q3simplerichtext.h>
 #include <qfontmetrics.h>
 #include <qpainter.h>
 #include <qapplication.h>
@@ -52,9 +52,9 @@ KDChartTextPiece::KDChartTextPiece()
 KDChartTextPiece::KDChartTextPiece( const QString& text, const QFont& font )
     :QObject(0)
 {
-    if( QStyleSheet::mightBeRichText( text ) ) {
+    if( Q3StyleSheet::mightBeRichText( text ) ) {
         _isRichText = true;
-        _richText = new QSimpleRichText( text, font );
+        _richText = new Q3SimpleRichText( text, font );
         _richText->adjustSize();
     } else {
         _isRichText = false;
@@ -73,9 +73,9 @@ KDChartTextPiece::KDChartTextPiece( QPainter *p, const QString& text, const QFon
     :QObject(0)
 {
     
-    if( QStyleSheet::mightBeRichText( text ) ) {
+    if( Q3StyleSheet::mightBeRichText( text ) ) {
         _isRichText = true;
-        _richText = new QSimpleRichText( text, font );
+        _richText = new Q3SimpleRichText( text, font );
         //qDebug( "richtext width %s", QString::number(_richText->width()).latin1());
 	//qDebug( "richtext height %s", QString::number(_richText->height()).latin1());
         _richText->adjustSize();
@@ -115,7 +115,7 @@ void KDChartTextPiece::deepCopy( const KDChartTextPiece* source )
         delete _richText;
     _isRichText = source->_isRichText;
     if( source->_richText ) {
-        _richText = new QSimpleRichText( source->_text, source->_font );
+        _richText = new Q3SimpleRichText( source->_text, source->_font );
         _richText->adjustSize();
     }
     else

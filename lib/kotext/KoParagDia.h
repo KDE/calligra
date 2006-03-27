@@ -23,17 +23,23 @@
 
 #include <kdialogbase.h>
 #include <qstringlist.h>
-#include <qptrlist.h>
-#include <qstylesheet.h>
+#include <q3ptrlist.h>
+#include <q3stylesheet.h>
+//Added by qt3to4:
+#include <Q3GridLayout>
+#include <QKeyEvent>
+#include <QLabel>
+#include <Q3VBoxLayout>
+#include <QMouseEvent>
 #include <KoRuler.h>
 #include <KoUnit.h>
 #include <KoUnitWidgets.h>
-#include <qdict.h>
+#include <q3dict.h>
 #include <qlineedit.h>
 #include "KoParagLayout.h"
 #include "KoParagCounter.h"
 #include <knuminput.h>
-#include <qgroupbox.h>
+#include <q3groupbox.h>
 #include <qvgroupbox.h>
 #include <koffice_export.h>
 class KoTextZoomHandler;
@@ -46,21 +52,21 @@ class KoStylePreview;
 class KPagePreview2;
 class KPagePreview;
 class KoSpinBox;
-class QButtonGroup;
+class Q3ButtonGroup;
 class QCheckBox;
 class QComboBox;
-class QGridLayout;
-class QGroupBox;
+class Q3GridLayout;
+class Q3GroupBox;
 class QLabel;
-class QListBox;
+class Q3ListBox;
 class QPushButton;
 class QRadioButton;
 class QWidget;
-class QWidgetStack;
+class Q3WidgetStack;
 class KIntNumInput;
 class KDoubleNumInput;
 class KComboBox;
-class QVBoxLayout;
+class Q3VBoxLayout;
 class KoUnitDoubleSpinBox;
 class KoParagDecorationTab; // From KoParagDecorationTab.ui
 
@@ -135,7 +141,7 @@ private slots:
 private:
     void updateLineSpacing( KoParagLayout::SpacingType _type );
 
-    QWidgetStack *sSpacingStack;
+    Q3WidgetStack *sSpacingStack;
     KIntNumInput *eSpacingPercent;
     KoUnitDoubleSpinBox *eBefore, *eAfter, *eSpacing;
     KoUnitDoubleSpinBox *eLeft, *eRight, *eFirstLine;
@@ -279,7 +285,7 @@ public:
             bool m_bullet;
     };
 
-    static void makeCounterRepresenterList( QPtrList<StyleRepresenter>& stylesList , bool onlyStyleTypeLetter = false );
+    static void makeCounterRepresenterList( Q3PtrList<StyleRepresenter>& stylesList , bool onlyStyleTypeLetter = false );
     void fillStyleCombo(KoParagCounter::Numbering type = KoParagCounter::NUM_LIST);
     void display( const KoParagLayout & lay );
     void changeKWSpinboxType(KoParagCounter::Style st);
@@ -316,9 +322,9 @@ protected:
     void displayStyle( KoParagCounter::Style style );
 
 private:
-    QGroupBox *gStyle;
-    QPtrList <StyleRepresenter> stylesList;
-    QListBox *lstStyle;
+    Q3GroupBox *gStyle;
+    Q3PtrList <StyleRepresenter> stylesList;
+    Q3ListBox *lstStyle;
     KoParagCounter m_counter;
     QLineEdit *sSuffix, *sPrefix;
     QPushButton *bCustom;
@@ -370,7 +376,7 @@ protected slots:
 private:
     void updatePreview();
 
-    QButtonGroup *gNumbering;
+    Q3ButtonGroup *gNumbering;
     KoParagCounter m_counter;
     KoStylePreview *preview;
     KoCounterStyleWidget *m_styleWidget;
@@ -428,18 +434,18 @@ private:
     void sortLists();
     QString tabToString(const KoTabulator &tab);
 
-    QVBoxLayout* editLayout;
+    Q3VBoxLayout* editLayout;
 
-    QListBox* lstTabs;
-    QGroupBox* gPosition;
+    Q3ListBox* lstTabs;
+    Q3GroupBox* gPosition;
     KoTabulatorsLineEdit* sTabPos;
-    QButtonGroup* bgAlign;
+    Q3ButtonGroup* bgAlign;
     QRadioButton* rAlignLeft;
     QRadioButton* rAlignCentre;
     QRadioButton* rAlignRight;
     QRadioButton* rAlignVar;
     QLineEdit* sAlignChar;
-    QGroupBox* gTabLeader;
+    Q3GroupBox* gTabLeader;
     QComboBox* cFilling;
     KoUnitDoubleSpinBox* eWidth;
     QPushButton* bNew;
@@ -457,7 +463,7 @@ private:
  * Used in the parag bullet/number tab of the parag dia,
  * and in the main tab of the stylist.
  */
-class KoStylePreview : public QGroupBox
+class KoStylePreview : public Q3GroupBox
 {
     Q_OBJECT
 
@@ -545,19 +551,19 @@ public:
                 oldLayout.lineSpacingType != lineSpacingType());
     }
     bool isLeftMarginChanged() const {
-	return oldLayout.margins[QStyleSheetItem::MarginLeft]!=leftIndent();
+	return oldLayout.margins[Q3StyleSheetItem::MarginLeft]!=leftIndent();
     }
     bool isRightMarginChanged() const {
-	return oldLayout.margins[QStyleSheetItem::MarginRight]!=rightIndent();
+	return oldLayout.margins[Q3StyleSheetItem::MarginRight]!=rightIndent();
     }
     bool isFirstLineChanged() const {
-	return oldLayout.margins[ QStyleSheetItem::MarginFirstLine]!=firstLineIndent();
+	return oldLayout.margins[ Q3StyleSheetItem::MarginFirstLine]!=firstLineIndent();
     }
     bool isSpaceBeforeChanged() const {
-	return oldLayout.margins[QStyleSheetItem::MarginTop]!=spaceBeforeParag();
+	return oldLayout.margins[Q3StyleSheetItem::MarginTop]!=spaceBeforeParag();
     }
     bool isSpaceAfterChanged() const {
-	return oldLayout.margins[QStyleSheetItem::MarginBottom]!=spaceAfterParag();
+	return oldLayout.margins[Q3StyleSheetItem::MarginBottom]!=spaceAfterParag();
     }
     bool isPageBreakingChanged() const {
 	return oldLayout.pageBreaking!=pageBreaking();

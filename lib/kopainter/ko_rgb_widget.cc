@@ -22,11 +22,13 @@
 #include "ko_rgb_widget.h"
 
 #include <qlayout.h>
-#include <qhbox.h>
+#include <q3hbox.h>
 #include <qlabel.h>
 #include <qspinbox.h>
 #include <qtooltip.h>
 #include <qcolor.h>
+//Added by qt3to4:
+#include <Q3GridLayout>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -39,23 +41,23 @@ KoRGBWidget::KoRGBWidget(QWidget *parent, const char *name) : super(parent, name
 {
     m_ColorButton = new KDualColorButton(this);
     m_ColorButton ->  setFixedSize(m_ColorButton->sizeHint());
-    QGridLayout *mGrid = new QGridLayout(this, 3, 5, 5, 2);
+    Q3GridLayout *mGrid = new Q3GridLayout(this, 3, 5, 5, 2);
 
     /* setup color sliders */
     mRSlider = new KoColorSlider(this);
     mRSlider->setMaximumHeight(20);
     mRSlider->slotSetRange(0, 255);
-    mRSlider->setFocusPolicy( QWidget::ClickFocus );
+    mRSlider->setFocusPolicy( Qt::ClickFocus );
 
     mGSlider = new KoColorSlider(this);
     mGSlider->setMaximumHeight(20);
     mGSlider->slotSetRange(0, 255);
-    mGSlider->setFocusPolicy( QWidget::ClickFocus );
+    mGSlider->setFocusPolicy( Qt::ClickFocus );
 
     mBSlider = new KoColorSlider(this);
     mBSlider->setMaximumHeight(20);
     mBSlider->slotSetRange(0, 255);
-    mBSlider->setFocusPolicy( QWidget::ClickFocus );
+    mBSlider->setFocusPolicy( Qt::ClickFocus );
 
     /* setup slider labels */
     mRLabel = new QLabel("R:", this);
@@ -72,19 +74,19 @@ KoRGBWidget::KoRGBWidget(QWidget *parent, const char *name) : super(parent, name
     mRIn = new QSpinBox(0, 255, 1, this);
     mRIn->setFixedWidth(50);
     mRIn->setFixedHeight(20);
-    mRIn->setFocusPolicy( QWidget::ClickFocus );
+    mRIn->setFocusPolicy( Qt::ClickFocus );
     QToolTip::add( mRIn, i18n( "Red" ) );
 
     mGIn = new QSpinBox(0, 255, 1, this);
     mGIn->setFixedWidth(50);
     mGIn->setFixedHeight(20);
-    mGIn->setFocusPolicy( QWidget::ClickFocus );
+    mGIn->setFocusPolicy( Qt::ClickFocus );
     QToolTip::add( mGIn, i18n( "Green" ) );
 
     mBIn = new QSpinBox(0, 255, 1, this);
     mBIn->setFixedWidth(50);
     mBIn->setFixedHeight(20);
-    mBIn->setFocusPolicy( QWidget::ClickFocus );
+    mBIn->setFocusPolicy( Qt::ClickFocus );
     QToolTip::add( mBIn, i18n( "Blue" ) );
 
     mGrid->addMultiCellWidget(m_ColorButton, 0, 3, 0, 0, Qt::AlignTop);

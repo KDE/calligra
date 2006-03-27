@@ -137,25 +137,25 @@ QColor KexiUtils::bleachedColor(const QColor& c, int factor)
 	if (factor < 100)
 		factor = 100;
 	if (s>=250 && v>=250) //for colors like cyan or red, make the result more white
-		s = QMAX(0, s - factor - 50);
+		s = qMax(0, s - factor - 50);
 	else if (s<=5 && s<=5)
 		v += factor-50;
-	c2.setHsv(h, s, QMIN(255,v + factor-100));
+	c2.setHsv(h, s, qMin(255,v + factor-100));
 	return c2;
 }
 
 void KexiUtils::serializeMap(const QMap<QString,QString>& map, QByteArray& array)
 {
-	QDataStream ds(array, IO_WriteOnly);
+	QDataStream ds(array, QIODevice::WriteOnly);
 	ds << map;
 }
 
 void KexiUtils::serializeMap(const QMap<QString,QString>& map, QString& string)
 {
 	QByteArray array;
-	QDataStream ds(array, IO_WriteOnly);
+	QDataStream ds(array, QIODevice::WriteOnly);
 	ds << map;
-	kdDebug() << array[3] << " " << array[4] << " " << array[5] << endl;
+	kDebug() << array[3] << " " << array[4] << " " << array[5] << endl;
 	const uint size = array.size();
 	string = QString::null;
 	string.reserve(size);
@@ -167,7 +167,7 @@ void KexiUtils::serializeMap(const QMap<QString,QString>& map, QString& string)
 QMap<QString,QString> KexiUtils::deserializeMap(const QByteArray& array)
 {
 	QMap<QString,QString> map;
-	QDataStream ds(array, IO_ReadOnly);
+	QDataStream ds(array, QIODevice::ReadOnly);
 	ds >> map;
 	return map;
 }
@@ -181,7 +181,7 @@ QMap<QString,QString> KexiUtils::deserializeMap(const QString& string)
 		array[i] = char(string[i].unicode()-1);
 	}
 	QMap<QString,QString> map;
-	QDataStream ds(array, IO_ReadOnly);
+	QDataStream ds(array, QIODevice::ReadOnly);
 	ds >> map;
 	return map;
 }
@@ -190,7 +190,7 @@ QString KexiUtils::stringToFileName(const QString& string)
 {
 	QString _string(string);
 	_string.replace(QRegExp("[\\\\/:\\*?\"<>|]"), " ");
-	return _string.simplifyWhiteSpace();
+	return _string.simplified();
 }
 
 void KexiUtils::simpleCrypt(QString& string)

@@ -19,6 +19,8 @@
 
 #include <qfile.h>
 #include <qdir.h>
+//Added by qt3to4:
+#include <Q3CString>
 #include <kcmdlineargs.h>
 #include <kapplication.h>
 
@@ -58,7 +60,7 @@ int test( const char* testName, KoStore::Backend backend, const QString& testFil
         QFile::remove( testFile );
     QDir dirTest( testFile );
     if ( dirTest.exists() ) {
-        system( QCString( "rm -rf " ) + QFile::encodeName( testFile ) ); // QDir::rmdir isn't recursive!
+        system( Q3CString( "rm -rf " ) + QFile::encodeName( testFile ) ); // QDir::rmdir isn't recursive!
     }
 
     kdDebug() << "======================="<<testName<<"====================================" << endl;

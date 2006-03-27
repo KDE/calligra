@@ -32,6 +32,8 @@
 #include <qregion.h>
 #include <qpen.h>
 #include <qdom.h>
+//Added by qt3to4:
+#include <Q3PtrList>
 #include "KDChartGlobal.h"
 
 
@@ -70,7 +72,7 @@ public:
     \param dir the direction enum to convert
     \return the string representation of the direction enum
     */
-    static QString directionToString( Direction dir ) {
+    static QString directionToString( Qt::Orientation dir ) {
         switch( dir ) {
             case DirPlain:
                 return "Plain";
@@ -90,7 +92,7 @@ public:
     \param string the string to convert
     \return the direction enum value
     */
-    static Direction stringToDirection( const QString& string ) {
+    static Qt::Orientation stringToDirection( const QString& string ) {
         if( string == "Plain" )
             return DirPlain;
         else if( string == "Raising" )
@@ -157,7 +159,7 @@ public:
     \Note Instead of instantiating KDFrameProfileSection yourself
     you would normally rather call \c KDFrame::addProfileSection()
     */
-    KDFrameProfileSection( Direction direction,
+    KDFrameProfileSection( Qt::Orientation direction,
                            Curvature curvature,
                            int       width,
                            QPen      pen )
@@ -210,7 +212,7 @@ public:
     static bool readFrameProfileSectionNode( const QDomElement& element,
             KDFrameProfileSection* section );
 
-    Direction direction() const { return _direction; }
+    Qt::Orientation direction() const { return _direction; }
     Curvature curvature() const { return _curvature; }
     int       width()     const { return _width;     }
     QPen      pen()       const { return _pen;       }
@@ -227,6 +229,6 @@ private:
 
   \sa setProfile, profile
   */
-typedef QPtrList < KDFrameProfileSection > KDFrameProfile;
+typedef Q3PtrList < KDFrameProfileSection > KDFrameProfile;
 
 #endif

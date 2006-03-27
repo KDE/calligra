@@ -19,14 +19,20 @@
 
 // Qt includes
 #include <qsplitter.h>
-#include <qdockwindow.h>
-#include <qdockarea.h>
+#include <q3dockwindow.h>
+#include <q3dockarea.h>
 #include <qevent.h>
 #include <qcursor.h>
-#include <qobjectlist.h>
-#include <qwidgetlist.h>
+#include <qobject.h>
+#include <qwidget.h>
 #include <qlabel.h>
 #include <qtooltip.h>
+//Added by qt3to4:
+#include <Q3PtrList>
+#include <QKeyEvent>
+#include <Q3Frame>
+#include <Q3ValueList>
+#include <QMouseEvent>
 
 // KDE includes
 #include <klocale.h>
@@ -151,7 +157,7 @@ class KKbdAccessExtensionsPrivate
         int stepSize;
 
         // List of the access key QLabels.  If not 0, access keys are onscreen.
-        QPtrList<QLabel>* accessKeyLabels;
+        Q3PtrList<QLabel>* accessKeyLabels;
 
         // Pointer to the KMainWindow.
         KMainWindow* mainWindow;
@@ -214,7 +220,7 @@ bool KKbdAccessExtensions::eventFilter( QObject *o, QEvent *e )
             }
         }
         if (d->panel) {
-            if (k == KKey(Key_Escape))
+            if (k == KKey(Qt::Key_Escape))
                 exitSizing();
             else
                 resizePanelFromKey(kev->key(), kev->state());
@@ -230,7 +236,7 @@ bool KKbdAccessExtensions::eventFilter( QObject *o, QEvent *e )
             return true;
         }
         if (d->accessKeyLabels) {
-            if (k == KKey(Key_Escape)) {
+            if (k == KKey(Qt::Key_Escape)) {
                 delete d->accessKeyLabels;
                 d->accessKeyLabels = 0;
             } else
@@ -283,8 +289,8 @@ QWidgetList* KKbdAccessExtensions::getAllPanels()
                 // Only size QSplitters with at least two handles (there is always one hidden).
                 if (dynamic_cast<QSplitter *>(widget)->sizes().count() >= 2)
                     allPanels->append(widget);
-            } else if (::qt_cast<QDockWindow*>( widget )) {
-                if (dynamic_cast<QDockWindow *>(widget)->isResizeEnabled()) {
+            } else if (::qt_cast<Q3DockWindow*>( widget )) {
+                if (dynamic_cast<Q3DockWindow *>(widget)->isResizeEnabled()) {
                     // kdDebug() << "KKbdAccessExtensions::getAllPanels: QDockWindow = " << widget->name() << endl;
                     allPanels->append(widget);
                 }
@@ -307,7 +313,7 @@ void KKbdAccessExtensions::nextHandle()
             advance = (d->handleNdx >= dynamic_cast<QSplitter *>(panel)->sizes().count());
         else
             // Undocked windows have only one "handle" (center).
-            advance = (d->handleNdx > 2 || !dynamic_cast<QDockWindow *>(panel)->area());
+            advance = (d->handleNdx > 2 || !dynamic_cast<Q3DockWindow *>(panel)->area());
         if (advance) {
             QWidgetList* allWidgets = getAllPanels();
             allWidgets->findRef(panel);
@@ -348,7 +354,7 @@ void KKbdAccessExtensions::prevHandle()
                 if (::qt_cast<QSplitter*>( panel ))
                     d->handleNdx = dynamic_cast<QSplitter *>(panel)->sizes().count() - 1;
                 else {
-                    if (dynamic_cast<QDockWindow *>(panel)->area())
+                    if (dynamic_cast<Q3DockWindow *>(panel)->area())
                         d->handleNdx = 2;
                     else
                         d->handleNdx = 1;
@@ -364,7 +370,7 @@ void KKbdAccessExtensions::prevHandle()
             if (::qt_cast<QSplitter*>( panel ))
                 d->handleNdx = dynamic_cast<QSplitter *>(panel)->sizes().count() - 1;
             else {
-                if (dynamic_cast<QDockWindow *>(panel)->area())
+                if (dynamic_cast<Q3DockWindow *>(panel)->area())
                     d->handleNdx = 2;
                 else
                     d->handleNdx = 1;
@@ -394,7 +400,7 @@ void KKbdAccessExtensions::showIcon()
     if (::qt_cast<QSplitter*>( d->panel )) {
         QSplitter* splitter = dynamic_cast<QSplitter *>(d->panel);
         int handleNdx = d->handleNdx - 1;
-        QValueList<int> sizes = splitter->sizes();
+        Q3ValueList<int> sizes = splitter->sizes();
         // kdDebug() << "KKbdAccessExtensions::showIcon: sizes = " << sizes << endl;
         if (splitter->orientation() == Qt::Horizontal) {
             d->icon->setShape(Qt::SizeHorCursor);
@@ -409,7 +415,7 @@ void KKbdAccessExtensions::showIcon()
         p = splitter->mapToGlobal(p);
         // kdDebug() << "KKbdAccessExtensions::showIcon: mapToGlobal = " << p << endl;
     } else {
-        QDockWindow* dockWindow = dynamic_cast<QDockWindow *>(d->panel);
+        Q3DockWindow* dockWindow = dynamic_cast<Q3DockWindow *>(d->panel);
         p = dockWindow->pos();
         if (dockWindow->area()) {
             // kdDebug() << "KKbdAccessExtensions::showIcon: pos = " << p << " of window = " << dockWindow->parentWidget()->name() << endl;
@@ -419,7 +425,7 @@ void KKbdAccessExtensions::showIcon()
             if (d->handleNdx == 1) {
                 d->icon->setShape(Qt::SizeHorCursor);
                 if (dockWindow->area()->orientation() == Qt::Vertical) {
-                    if (dockWindow->area()->handlePosition() == QDockArea::Normal)
+                    if (dockWindow->area()->handlePosition() == Q3DockArea::Normal)
                         // Handle is to the right of the dock window.
                         p.setX(p.x() + dockWindow->width());
                         // else Handle is to the left of the dock window.
@@ -434,7 +440,7 @@ void KKbdAccessExtensions::showIcon()
                     // Handle is below the dock window.
                     p.setY(p.y() + dockWindow->height());
                 else {
-                    if (dockWindow->area()->handlePosition() == QDockArea::Normal)
+                    if (dockWindow->area()->handlePosition() == Q3DockArea::Normal)
                         // Handle is below the dock window.
                         p.setY(p.y() + dockWindow->height());
                         // else Handle is above the dock window.
@@ -464,15 +470,15 @@ void KKbdAccessExtensions::resizePanel(int dx, int dy, int state)
     if (::qt_cast<QSplitter*>( d->panel )) {
         QSplitter* splitter = dynamic_cast<QSplitter *>(d->panel);
         int handleNdx = d->handleNdx - 1;
-        QValueList<int> sizes = splitter->sizes();
+        Q3ValueList<int> sizes = splitter->sizes();
         // kdDebug() << "KKbdAccessExtensions::resizePanel: before sizes = " << sizes << endl;
         sizes[handleNdx] = sizes[handleNdx] + adj;
         // kdDebug() << "KKbdAccessExtensions::resizePanel: setSizes = " << sizes << endl;
         splitter->setSizes(sizes);
-        QApplication::postEvent(splitter, new QEvent(QEvent::LayoutHint));
+        QApplication::postEvent(splitter, new QEvent(QEvent::LayoutRequest));
     } else {
         // TODO: How to get the handle width?
-        QDockWindow* dockWindow = dynamic_cast<QDockWindow *>(d->panel);
+        Q3DockWindow* dockWindow = dynamic_cast<Q3DockWindow *>(d->panel);
         if (dockWindow->area()) {
             // kdDebug() << "KKbdAccessExtensions::resizePanel: fixedExtent = " << dockWindow->fixedExtent() << endl;
             QSize fe = dockWindow->fixedExtent();
@@ -480,7 +486,7 @@ void KKbdAccessExtensions::resizePanel(int dx, int dy, int state)
                 // When vertically oriented and dock area is on right side of screen, pressing
                 // left arrow increases size.
                 if (dockWindow->area()->orientation() == Qt::Vertical &&
-                    dockWindow->area()->handlePosition() == QDockArea::Reverse) adj = -adj;
+                    dockWindow->area()->handlePosition() == Q3DockArea::Reverse) adj = -adj;
                 int w = fe.width();
                 if (w < 0) w = dockWindow->width();
                 w = w + adj;
@@ -489,17 +495,17 @@ void KKbdAccessExtensions::resizePanel(int dx, int dy, int state)
                 // When horizontally oriented and dock area is at bottom of screen,
                 // pressing up arrow increases size.
                 if (dockWindow->area()->orientation() == Qt::Horizontal &&
-                    dockWindow->area()->handlePosition() == QDockArea::Reverse) adj = -adj;
+                    dockWindow->area()->handlePosition() == Q3DockArea::Reverse) adj = -adj;
                 int h = fe.height();
                 if (h < 0) h = dockWindow->height();
                 h = h + adj;
                 if (h > 0) dockWindow->setFixedExtentHeight(h);
             }
             dockWindow->updateGeometry();
-            QApplication::postEvent(dockWindow->area(), new QEvent(QEvent::LayoutHint));
+            QApplication::postEvent(dockWindow->area(), new QEvent(QEvent::LayoutRequest));
             // kdDebug() << "KKbdAccessExtensions::resizePanel: fixedExtent = " << dockWindow->fixedExtent() << endl;
         } else {
-            if (state == Qt::ShiftButton) {
+            if (state == Qt::ShiftModifier) {
                 QSize s = dockWindow->size();
                 s.setWidth(s.width() + dx);
                 s.setHeight(s.height() + dy);
@@ -526,16 +532,16 @@ void KKbdAccessExtensions::resizePanelFromKey(int key, int state)
         case Qt::Key_Right:     dx = stepSize;      break;
         case Qt::Key_Up:        dy = -stepSize;     break;
         case Qt::Key_Down:      dy = stepSize;      break;
-        case Qt::Key_Prior:     dy = -5 * stepSize; break;
-        case Qt::Key_Next:      dy = 5 * stepSize;  break;
+        case Qt::Key_PageUp:     dy = -5 * stepSize; break;
+        case Qt::Key_PageDown:      dy = 5 * stepSize;  break;
     }
     int adj = dx + dy;
     // kdDebug() << "KKbdAccessExtensions::resizePanelFromKey: adj = " << adj << endl;
     if (adj != 0)
         resizePanel(dx, dy, state);
     else {
-        if (key == Qt::Key_Enter && ::qt_cast<QDockWindow*>( d->panel )) {
-            QDockWindow* dockWindow = dynamic_cast<QDockWindow *>(d->panel);
+        if (key == Qt::Key_Enter && ::qt_cast<Q3DockWindow*>( d->panel )) {
+            Q3DockWindow* dockWindow = dynamic_cast<Q3DockWindow *>(d->panel);
             if (dockWindow->area())
                 dockWindow->undock();
             else
@@ -549,8 +555,8 @@ void KKbdAccessExtensions::displayAccessKeys()
 {
     // Build a list of valid access keys that don't collide with shortcuts.
     QString availableAccessKeys = "ABCDEFGHIJKLMNOPQRSTUVWXYZ01234567890";
-    QPtrList<KXMLGUIClient> allClients = d->mainWindow->factory()->clients();
-    QPtrListIterator<KXMLGUIClient> it( allClients );
+    Q3PtrList<KXMLGUIClient> allClients = d->mainWindow->factory()->clients();
+    Q3PtrListIterator<KXMLGUIClient> it( allClients );
     KXMLGUIClient *client;
     while( (client=it.current()) !=0 )
     {
@@ -589,12 +595,12 @@ void KKbdAccessExtensions::displayAccessKeys()
                 QLabel* lab=new QLabel(widget, "", widget, 0, Qt::WDestructiveClose);
                 lab->setPalette(QToolTip::palette());
                 lab->setLineWidth(2);
-                lab->setFrameStyle(QFrame::Box | QFrame::Plain);
+                lab->setFrameStyle(Q3Frame::Box | Q3Frame::Plain);
                 lab->setMargin(3);
                 lab->adjustSize();
                 lab->move(p);
                 if (!d->accessKeyLabels) {
-                    d->accessKeyLabels = new QPtrList<QLabel>;
+                    d->accessKeyLabels = new Q3PtrList<QLabel>;
                     d->accessKeyLabels->setAutoDelete(true);
                 }
                 d->accessKeyLabels->append(lab);
@@ -605,7 +611,7 @@ void KKbdAccessExtensions::displayAccessKeys()
     }
     if (accessCount > 0) {
         // Sort the access keys from left to right and down the screen.
-        QValueList<KSortedLabel> sortedLabels;
+        Q3ValueList<KSortedLabel> sortedLabels;
         for (int i = 0; i < accessCount; i++)
             sortedLabels.append(KSortedLabel(d->accessKeyLabels->at(i)));
         qHeapSort( sortedLabels );
@@ -627,10 +633,10 @@ bool KKbdAccessExtensions::handleAccessKey( const QKeyEvent* ev )
 // but this code must act as if the modifiers weren't pressed
     if (!d->accessKeyLabels) return false;
     QChar c;
-    if( ev->key() >= Key_A && ev->key() <= Key_Z )
-        c = 'A' + ev->key() - Key_A;
-    else if( ev->key() >= Key_0 && ev->key() <= Key_9 )
-        c = '0' + ev->key() - Key_0;
+    if( ev->key() >= Qt::Key_A && ev->key() <= Qt::Key_Z )
+        c = 'A' + ev->key() - Qt::Key_A;
+    else if( ev->key() >= Qt::Key_0 && ev->key() <= Qt::Key_9 )
+        c = '0' + ev->key() - Qt::Key_0;
     else {
         // TODO fake XKeyEvent and XLookupString ?
         // This below seems to work e.g. for eacute though.

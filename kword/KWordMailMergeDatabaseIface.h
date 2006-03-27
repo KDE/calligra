@@ -22,6 +22,8 @@
 
 #include <dcopobject.h>
 #include <qstringlist.h>
+//Added by qt3to4:
+#include <Q3CString>
 /**
  * DCOP interface for the MailMergeDataBase class
  */
@@ -29,7 +31,7 @@ class KWordMailMergeDatabaseIface : public DCOPObject
 {
     K_DCOP
 public:
-    KWordMailMergeDatabaseIface(const QCString &name);
+    KWordMailMergeDatabaseIface(const Q3CString &name);
     ~KWordMailMergeDatabaseIface();
 k_dcop:
     virtual void refresh(bool)=0; //will not be blocked when the configuration dialog is open

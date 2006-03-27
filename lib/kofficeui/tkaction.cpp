@@ -23,6 +23,9 @@
 
 #include <qlabel.h>
 #include <qlayout.h>
+//Added by qt3to4:
+#include <QPixmap>
+#include <Q3HBoxLayout>
 
 #include <ktoolbar.h>
 #include <kiconloader.h>
@@ -128,8 +131,8 @@ QWidget* TKAction::createLayout(QWidget* parent, QWidget* children)
   QLabel* pixLabel = new QLabel(base,"pixmap");
   children->reparent(base,QPoint(0,0));
   children->setName("widget");
-  QHBoxLayout* layout = new QHBoxLayout(base,0,3);
-  layout->setResizeMode(QLayout::Minimum);
+  Q3HBoxLayout* layout = new Q3HBoxLayout(base,0,3);
+  layout->setResizeMode(QLayout::SetMinimumSize);
   layout->addWidget(textLabel);
   layout->addWidget(pixLabel);
   layout->addWidget(children,1);
@@ -155,7 +158,7 @@ void TKAction::updateLayout(QWidget* base)
 
   QPixmap pix;
   if (hasIcon())
-    pix = iconSet(KIcon::Small).pixmap();
+    pix = iconSet(K3Icon::Small).pixmap();
 
   if (!icon().isEmpty())
     pix = BarIcon(icon());

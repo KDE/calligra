@@ -21,6 +21,8 @@
 #define KOOASISCONTEXT_H
 
 #include <KoOasisLoadingContext.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 class KoVariableSettings;
 class KoTextParag;
@@ -148,7 +150,7 @@ public:
             return pos < rhs.pos;
         }
     };
-    typedef QValueList<BookmarkPosition> BookmarkPositions;
+    typedef Q3ValueList<BookmarkPosition> BookmarkPositions;
     void setBookmarkPositions( const BookmarkPositions& bkStarts,
                                const BookmarkPositions& bkEnds ) {
         m_bookmarkStarts = bkStarts;

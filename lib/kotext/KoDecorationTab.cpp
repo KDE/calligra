@@ -25,11 +25,11 @@
 #include <knuminput.h>
 #include <klocale.h>
 
-#include <qbuttongroup.h>
+#include <q3buttongroup.h>
 
 #include "KoDecorationTab.moc"
 
-KoDecorationTab::KoDecorationTab( QWidget* parent, const char* name, WFlags fl )
+KoDecorationTab::KoDecorationTab( QWidget* parent, const char* name, Qt::WFlags fl )
     : KoDecorationTabBase( parent, name, fl )
 {
     shadowDistanceKDoubleNumInput->setRange(0, 9, 0.5, false);

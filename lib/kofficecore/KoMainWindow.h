@@ -25,11 +25,17 @@
 #include <kfiledialog.h>
 #include <koffice_export.h>
 #include "KoDocument.h"
+//Added by qt3to4:
+#include <QLabel>
+#include <QResizeEvent>
+#include <Q3CString>
+#include <Q3PtrList>
+#include <QCloseEvent>
 
 class QLabel;
 class KoView;
 class KoMainWindowPrivate;
-class KURL;
+class KUrl;
 class KRecentFilesAction;
 class KoFilterManager;
 class DCOPObject;
@@ -123,7 +129,7 @@ public:
     /**
      * The document opened a URL -> store into recent documents list.
      */
-    void addRecentURL( const KURL& url );
+    void addRecentURL( const KUrl& url );
 
     /**
      * Load the desired document and show it.
@@ -131,14 +137,14 @@ public:
      *
      * @return TRUE on success.
      */
-    virtual bool openDocument( const KURL & url );
+    virtual bool openDocument( const KUrl & url );
 
     /**
      * Load the URL into this document (and make it root doc after loading)
      *
      * Special method for KoApplication::start, don't use.
      */
-    bool openDocument( KoDocument *newdoc, const KURL & url );
+    bool openDocument( KoDocument *newdoc, const KUrl & url );
 
     virtual DCOPObject * dcopObject();
 
@@ -194,7 +200,7 @@ public slots:
      *  If the current document is empty, the opened document replaces it.
      *  If not a new shell will be opened for showing the opened file.
      */
-    virtual void slotFileOpenRecent( const KURL & );
+    virtual void slotFileOpenRecent( const KUrl & );
 
     /**
      *  Saves the current document with the current name.
@@ -298,7 +304,7 @@ protected: // protected methods are mostly for koshell, it's the only one derivi
      * Special method for KOShell, to allow switching the root
      * document (and its views) among a set of them.
      */
-    void setRootDocumentDirect( KoDocument *doc, const QPtrList<KoView> & views );
+    void setRootDocumentDirect( KoDocument *doc, const Q3PtrList<KoView> & views );
 
     /**
      * Create a new empty document.
@@ -326,7 +332,7 @@ protected: // protected methods are mostly for koshell, it's the only one derivi
      */
     virtual bool queryClose();
 
-    virtual bool openDocumentInternal( const KURL & url, KoDocument * newdoc = 0L );
+    virtual bool openDocumentInternal( const KUrl & url, KoDocument * newdoc = 0L );
 
     /**
      * Returns whether or not the current slotFileSave[As]() or saveDocument()
@@ -363,7 +369,7 @@ private:
      *
      * @return true if the document should be saved
      */
-    bool exportConfirmation( const QCString &outputFormat );
+    bool exportConfirmation( const Q3CString &outputFormat );
 
     void saveWindowSettings();
 

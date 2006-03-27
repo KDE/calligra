@@ -29,7 +29,7 @@
 #include <qimage.h>
 #include <qpixmap.h>
 #include <qapplication.h>
-#include <qdragobject.h>
+#include <q3dragobject.h>
 
 KoPictureImage::KoPictureImage(void) : m_cacheIsInFastMode(true)
 {
@@ -130,7 +130,7 @@ bool KoPictureImage::loadData(const QByteArray& array, const QString& /* extensi
     m_rawData=array;
     // Second, create the original image
     QBuffer buffer(m_rawData);
-    buffer.open(IO_ReadWrite);
+    buffer.open(QIODevice::ReadWrite);
     QImageIO imageIO(&buffer,NULL);
 
     if (!imageIO.read())
@@ -175,9 +175,9 @@ QString KoPictureImage::getMimeType(const QString& extension) const
     return mimetype;
 }
 
-QDragObject* KoPictureImage::dragObject( QWidget *dragSource, const char *name )
+Q3DragObject* KoPictureImage::dragObject( QWidget *dragSource, const char *name )
 {
-    return new QImageDrag( m_originalImage, dragSource, name );
+    return new Q3ImageDrag( m_originalImage, dragSource, name );
 }
 
 QImage KoPictureImage::generateImage(const QSize& size)

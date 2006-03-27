@@ -33,13 +33,16 @@
 #include <klocale.h>
 #include <kseparator.h>
 
-#include <qbuttongroup.h>
+#include <q3buttongroup.h>
 #include <qcheckbox.h>
 #include <qcombobox.h>
 #include <qradiobutton.h>
 #include <qregexp.h>
 #include <qspinbox.h>
 #include <qlayout.h>
+//Added by qt3to4:
+#include <Q3GridLayout>
+#include <Q3ValueList>
 
 KoSearchContext::KoSearchContext()
 {
@@ -69,7 +72,7 @@ KoSearchContextUI::KoSearchContextUI( KoSearchContext *ctx, QWidget *parent )
     m_btnShowOptions = new QPushButton( i18n("Show Formatting Options"), parent );
     connect( m_btnShowOptions, SIGNAL( clicked() ), SLOT( slotShowOptions() ) );
 
-    m_grid = new QGridLayout( m_parent, 1, 1, 0, 6 );
+    m_grid = new Q3GridLayout( m_parent, 1, 1, 0, 6 );
     m_grid->addWidget( m_btnShowOptions, 0, 0 );
     m_btnShowOptions->setEnabled( true );
 }
@@ -146,7 +149,7 @@ void KoReplaceDia::slotOk()
 
 
 
-KoFindReplace::KoFindReplace( QWidget * parent, KoSearchDia * dialog, const QValueList<KoTextObject *> & lstObject, KoTextView* textView )
+KoFindReplace::KoFindReplace( QWidget * parent, KoSearchDia * dialog, const Q3ValueList<KoTextObject *> & lstObject, KoTextView* textView )
     : m_find( new KoTextFind( dialog->pattern(), dialog->options(), this, parent ) ),
       m_replace( 0L ),
       m_searchContext( *dialog->searchContext() ),
@@ -161,7 +164,7 @@ KoFindReplace::KoFindReplace( QWidget * parent, KoSearchDia * dialog, const QVal
     connectFind( m_find );
 }
 
-KoFindReplace::KoFindReplace( QWidget * parent, KoReplaceDia * dialog, const QValueList<KoTextObject *> & lstObject, KoTextView* textView )
+KoFindReplace::KoFindReplace( QWidget * parent, KoReplaceDia * dialog, const Q3ValueList<KoTextObject *> & lstObject, KoTextView* textView )
     : m_find( 0L ),
       m_replace( new KoTextReplace( dialog->pattern(), dialog->replacement(), dialog->options(), this, parent ) ),
       m_searchContext( *dialog->searchContext() ),
@@ -552,7 +555,7 @@ KoFormatDia::KoFormatDia( QWidget* parent, const QString & _caption, KoSearchCon
     connect( this, SIGNAL( user1Clicked() ), this, SLOT(slotReset()));
     connect( this, SIGNAL( user2Clicked() ), this, SLOT(slotClear()));
 
-    QGridLayout *m_grid = new QGridLayout( page, 15, 2, 0, 6 );
+    Q3GridLayout *m_grid = new Q3GridLayout( page, 15, 2, 0, 6 );
     m_checkFamily = new QCheckBox( i18n( "Family:" ),page  );
     m_checkSize = new QCheckBox( i18n( "Size:" ), page );
     m_checkColor = new QCheckBox( i18n( "Color:" ), page );
@@ -603,25 +606,25 @@ KoFormatDia::KoFormatDia( QWidget* parent, const QString & _caption, KoSearchCon
 
 
 
-    QButtonGroup *grpBold = new QButtonGroup( 1, QGroupBox::Vertical, page );
+    Q3ButtonGroup *grpBold = new Q3ButtonGroup( 1, Qt::Vertical, page );
     grpBold->setRadioButtonExclusive( TRUE );
     grpBold->layout();
     m_boldYes=new QRadioButton( i18n("Yes"), grpBold );
     m_boldNo=new QRadioButton( i18n("No"), grpBold );
 
-    QButtonGroup *grpItalic = new QButtonGroup( 1, QGroupBox::Vertical, page );
+    Q3ButtonGroup *grpItalic = new Q3ButtonGroup( 1, Qt::Vertical, page );
     grpItalic->setRadioButtonExclusive( TRUE );
     grpItalic->layout();
     m_italicYes=new QRadioButton( i18n("Yes"), grpItalic );
     m_italicNo=new QRadioButton( i18n("No"), grpItalic );
 
-    QButtonGroup *grpShadow = new QButtonGroup( 1, QGroupBox::Vertical, page );
+    Q3ButtonGroup *grpShadow = new Q3ButtonGroup( 1, Qt::Vertical, page );
     grpShadow->setRadioButtonExclusive( TRUE );
     grpShadow->layout();
     m_shadowYes=new QRadioButton( i18n("Yes"), grpShadow );
     m_shadowNo=new QRadioButton( i18n("No"), grpShadow );
 
-    QButtonGroup *grpWordByWord = new QButtonGroup( 1, QGroupBox::Vertical, page );
+    Q3ButtonGroup *grpWordByWord = new Q3ButtonGroup( 1, Qt::Vertical, page );
     grpWordByWord->setRadioButtonExclusive( TRUE );
     grpWordByWord->layout();
     m_wordByWordYes=new QRadioButton( i18n("Yes"), grpWordByWord );

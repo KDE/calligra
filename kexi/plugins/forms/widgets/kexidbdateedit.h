@@ -24,7 +24,7 @@
 #include "kexiformdataiteminterface.h"
 #include <qdatetimeedit.h>
 
-class KPopupMenu;
+class KMenu;
 class KDatePicker;
 class QDateTimeEditor;
 
@@ -108,7 +108,7 @@ class KEXIFORMUTILS_EXPORT KexiDBDateEdit : public QWidget, public KexiFormDataI
 	private:
 		KDatePicker *m_datePicker;
 		QDateEdit *m_edit;
-		KPopupMenu *m_datePickerPopupMenu;
+		KMenu *m_datePickerPopupMenu;
 		QDateTimeEditor *m_dte_date;
 		bool m_invalidState : 1;
 		bool m_cleared : 1;

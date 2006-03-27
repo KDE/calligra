@@ -52,9 +52,15 @@
 #include <qcombobox.h>
 #include <qcheckbox.h>
 #include <qpoint.h>
-#include <qobjectlist.h>
+#include <qobject.h>
 #include <qvgroupbox.h>
 #include <qtooltip.h>
+//Added by qt3to4:
+#include <Q3CString>
+#include <QHideEvent>
+#include <Q3GridLayout>
+#include <Q3Frame>
+#include <QLabel>
 
 class MyFileDialog : public KFileDialog
 {
@@ -68,7 +74,7 @@ class MyFileDialog : public KFileDialog
             :  KFileDialog (startDir, filter, parent, name, modal),
         m_slotOkCalled( false ) {}
 
-        KURL currentURL()
+        KUrl currentURL()
         {
             setResult( QDialog::Accepted ); // selectedURL tests for it
             return KFileDialog::selectedURL();
@@ -78,7 +84,7 @@ class MyFileDialog : public KFileDialog
         bool checkURL()
         {
             bool ok = true;
-            KURL url = currentURL();
+            KUrl url = currentURL();
             if ( url.isLocalFile() )
             {
                 ok = QFile::exists( url.path() );
@@ -119,8 +125,8 @@ private:
 
 class KoTemplateChooseDiaPrivate {
     public:
-	KoTemplateChooseDiaPrivate(const QCString& templateType, KInstance* instance,
-                                   const QCString &format,
+	KoTemplateChooseDiaPrivate(const Q3CString& templateType, KInstance* instance,
+                                   const Q3CString &format,
                                    const QString &nativeName,
                                    const QStringList& extraNativeMimeTypes,
                                    const KoTemplateChooseDia::DialogType &dialogType) :
@@ -135,9 +141,9 @@ class KoTemplateChooseDiaPrivate {
 
 	~KoTemplateChooseDiaPrivate() {}
 
-	QCString m_templateType;
+	Q3CString m_templateType;
 	KInstance* m_instance;
-	QCString m_format;
+	Q3CString m_format;
 	QString m_nativeName;
         QStringList m_extraNativeMimeTypes;
 
@@ -179,11 +185,11 @@ class KoTemplateChooseDiaPrivate {
 
 /*================================================================*/
 KoTemplateChooseDia::KoTemplateChooseDia(QWidget *parent, const char *name, KInstance* instance,
-                                         const QCString &format,
+                                         const Q3CString &format,
                                          const QString &nativeName,
                                          const QStringList &extraNativeMimeTypes,
                                          const DialogType &dialogType,
-                                         const QCString& templateType) :
+                                         const Q3CString& templateType) :
     KDialogBase(parent, name, true, i18n("Open Document"), KDialogBase::Ok | KDialogBase::Cancel,
                 KDialogBase::Ok)
 {
@@ -229,11 +235,11 @@ static bool cancelQuits() {
 
 KoTemplateChooseDia::ReturnType KoTemplateChooseDia::choose(KInstance* instance, QString &file,
                                                             const KoTemplateChooseDia::DialogType &dialogType,
-                                                            const QCString& templateType,
+                                                            const Q3CString& templateType,
                                                             QWidget* parent)
 {
     const QString nativeName = instance->aboutData()->programName();
-    const QCString format = KoDocument::readNativeFormatMimeType( instance );
+    const Q3CString format = KoDocument::readNativeFormatMimeType( instance );
     const QStringList extraNativeMimeTypes = KoDocument::readExtraNativeMimeTypes( instance );
     // Maybe the above two can be combined into one call, for speed:
     //KoDocument::getNativeMimeTypeInfo( instance, nativeName, extraNativeMimeTypes );
@@ -242,11 +248,11 @@ KoTemplateChooseDia::ReturnType KoTemplateChooseDia::choose(KInstance* instance,
 }
 
 KoTemplateChooseDia::ReturnType KoTemplateChooseDia::choose(KInstance* instance, QString &file,
-                                       const QCString &format,
+                                       const Q3CString &format,
                                        const QString &nativeName,
                                        const QStringList& extraNativeMimeTypes,
                                        const DialogType &dialogType,
-                                       const QCString& templateType,
+                                       const Q3CString& templateType,
                                        QWidget* parent )
 {
     KoTemplateChooseDia *dlg = new KoTemplateChooseDia(
@@ -298,7 +304,7 @@ KoTemplateChooseDia::DialogType KoTemplateChooseDia::getDialogType() const {
 
 /*================================================================*/
 // private
-void KoTemplateChooseDia::setupRecentDialog(QWidget * widgetbase, QGridLayout * layout)
+void KoTemplateChooseDia::setupRecentDialog(QWidget * widgetbase, Q3GridLayout * layout)
 {
 
         d->m_recent = new KoTCDRecentFilesIconView(widgetbase, "recent files");
@@ -322,7 +328,7 @@ void KoTemplateChooseDia::setupRecentDialog(QWidget * widgetbase, QGridLayout * 
                         int pos = s.find("[");
                         s = s.mid( pos + 1, s.length() - pos - 2);
                     }
-                    KURL url(s);
+                    KUrl url(s);
 
                     if(!url.isLocalFile() || QFile::exists(url.path())) {
                         KFileItem *item = new KFileItem( KFileItem::Unknown, KFileItem::Unknown, url );
@@ -335,14 +341,14 @@ void KoTemplateChooseDia::setupRecentDialog(QWidget * widgetbase, QGridLayout * 
         d->m_instance->config()->setGroup( oldGroup );
         d->m_recent->showPreviews();
 
-	connect(d->m_recent, SIGNAL( doubleClicked ( QIconViewItem * ) ),
-			this, SLOT( recentSelected( QIconViewItem * ) ) );
+	connect(d->m_recent, SIGNAL( doubleClicked ( Q3IconViewItem * ) ),
+			this, SLOT( recentSelected( Q3IconViewItem * ) ) );
 
 }
 
 /*================================================================*/
 // private
-void KoTemplateChooseDia::setupFileDialog(QWidget * widgetbase, QGridLayout * layout)
+void KoTemplateChooseDia::setupFileDialog(QWidget * widgetbase, Q3GridLayout * layout)
 {
     QString dir = QString::null;
     QPoint point( 0, 0 );
@@ -387,7 +393,7 @@ void KoTemplateChooseDia::setupFileDialog(QWidget * widgetbase, QGridLayout * la
 
 /*================================================================*/
 // private
-void KoTemplateChooseDia::setupTemplateDialog(QWidget * widgetbase, QGridLayout * layout)
+void KoTemplateChooseDia::setupTemplateDialog(QWidget * widgetbase, Q3GridLayout * layout)
 {
 
     d->m_jwidget = new KJanusWidget(
@@ -410,7 +416,7 @@ void KoTemplateChooseDia::setupTemplateDialog(QWidget * widgetbase, QGridLayout 
 		templateName = d->tree->defaultTemplate()->name(); //select the default template for the app
 
     // item which will be selected initially
-    QIconViewItem * itemtoselect = 0;
+    Q3IconViewItem * itemtoselect = 0;
 
     // count the templates inserted
     int entriesnumber = 0;
@@ -424,32 +430,32 @@ void KoTemplateChooseDia::setupTemplateDialog(QWidget * widgetbase, QGridLayout 
 	if ( d->tree->defaultGroup() == group )
 		defaultTemplateGroup = entriesnumber; //select the default template group for the app
 
-	QFrame * frame = d->m_jwidget->addPage (
+	Q3Frame * frame = d->m_jwidget->addPage (
 		group->name(),
 		group->name(),
 		group->first()->loadPicture(d->m_instance));
 
-	QGridLayout * layout = new QGridLayout(frame);
+	Q3GridLayout * layout = new Q3GridLayout(frame);
 	KoTCDIconCanvas *canvas = new KoTCDIconCanvas( frame );
 	layout->addWidget(canvas,0,0);
 
 	canvas->setBackgroundColor( colorGroup().base() );
-	canvas->setResizeMode(QIconView::Adjust);
+	canvas->setResizeMode(Q3IconView::Adjust);
 	canvas->setWordWrapIconText( true );
 	canvas->show();
 
-	QIconViewItem * tempitem = canvas->load(group, templateName, d->m_instance);
+	Q3IconViewItem * tempitem = canvas->load(group, templateName, d->m_instance);
 	if (tempitem)
 	    itemtoselect = tempitem;
 
 	canvas->sort();
-	canvas->setSelectionMode(QIconView::Single);
+	canvas->setSelectionMode(Q3IconView::Single);
 
-	connect( canvas, SIGNAL( clicked ( QIconViewItem * ) ),
-		this, SLOT( currentChanged( QIconViewItem * ) ) );
+	connect( canvas, SIGNAL( clicked ( Q3IconViewItem * ) ),
+		this, SLOT( currentChanged( Q3IconViewItem * ) ) );
 
-	connect( canvas, SIGNAL( doubleClicked( QIconViewItem * ) ),
-		this, SLOT( chosen(QIconViewItem *) ) );
+	connect( canvas, SIGNAL( doubleClicked( Q3IconViewItem * ) ),
+		this, SLOT( chosen(Q3IconViewItem *) ) );
 
 	entriesnumber++;
     }
@@ -503,7 +509,7 @@ void KoTemplateChooseDia::setupTemplateDialog(QWidget * widgetbase, QGridLayout 
 void KoTemplateChooseDia::setupDialog()
 {
 
-    QGridLayout *maingrid=new QGridLayout( d->m_mainwidget, 1, 1, 2, 6);
+    Q3GridLayout *maingrid=new Q3GridLayout( d->m_mainwidget, 1, 1, 2, 6);
     KConfigGroup grp( d->m_instance->config(), "TemplateChooserDialog" );
 
     if (d->m_dialogType == Everything)
@@ -543,17 +549,17 @@ void KoTemplateChooseDia::setupDialog()
 	// new document
 	d->newTab = new QWidget( d->tabWidget, "newTab" );
 	d->tabWidget->insertTab( d->newTab, i18n( "&Create Document" ) );
-	QGridLayout * newTabLayout = new QGridLayout( d->newTab, 1, 1, KDialogBase::marginHint(), KDialogBase::spacingHint());
+	Q3GridLayout * newTabLayout = new Q3GridLayout( d->newTab, 1, 1, KDialogBase::marginHint(), KDialogBase::spacingHint());
 
 	// existing document
 	d->existingTab = new QWidget( d->tabWidget, "existingTab" );
 	d->tabWidget->insertTab( d->existingTab, i18n( "Open &Existing Document" ) );
-	QGridLayout * existingTabLayout = new QGridLayout( d->existingTab, 1, 1, 0, KDialog::spacingHint());
+	Q3GridLayout * existingTabLayout = new Q3GridLayout( d->existingTab, 1, 1, 0, KDialog::spacingHint());
 
         // recent document
         d->recentTab = new QWidget( d->tabWidget, "recentTab" );
         d->tabWidget->insertTab( d->recentTab, i18n( "Open &Recent Document" ) );
-        QGridLayout * recentTabLayout = new QGridLayout( d->recentTab, 1, 1, KDialogBase::marginHint(), KDialog::spacingHint());
+        Q3GridLayout * recentTabLayout = new Q3GridLayout( d->recentTab, 1, 1, KDialogBase::marginHint(), KDialog::spacingHint());
 
 	setupTemplateDialog(d->newTab, newTabLayout);
 	setupFileDialog(d->existingTab, existingTabLayout);
@@ -586,11 +592,11 @@ void KoTemplateChooseDia::setupDialog()
 
 /*================================================================*/
 // private SLOT
-void KoTemplateChooseDia::currentChanged( QIconViewItem * item)
+void KoTemplateChooseDia::currentChanged( Q3IconViewItem * item)
 {
     if (item)
     {
-	QIconView* canvas =  item->iconView();
+	Q3IconView* canvas =  item->iconView();
 
 	// set text in the textarea
 	d->textedit->setText( descriptionText(
@@ -610,7 +616,7 @@ void KoTemplateChooseDia::currentChanged( QIconViewItem * item)
 
 /*================================================================*/
 // private SLOT
-void KoTemplateChooseDia::chosen(QIconViewItem * item)
+void KoTemplateChooseDia::chosen(Q3IconViewItem * item)
 {
     // the user double clicked on a template
     if (item)
@@ -622,7 +628,7 @@ void KoTemplateChooseDia::chosen(QIconViewItem * item)
 
 /* */
 // private SLOT
-void KoTemplateChooseDia::recentSelected( QIconViewItem * item)
+void KoTemplateChooseDia::recentSelected( Q3IconViewItem * item)
 {
 	if (item)
 	{
@@ -654,10 +660,10 @@ void KoTemplateChooseDia::slotOk()
 	    {
 		// The checkbox m_nodiag is in tri-state mode for new documents
 		// fixes bug:77542
-		if (d->m_nodiag->state() == QButton::On) {
+		if (d->m_nodiag->state() == QCheckBox::On) {
 		    grp.writeEntry( "NoStartDlg", "yes");
 		}
-		else if (d->m_nodiag->state() == QButton::Off) {
+		else if (d->m_nodiag->state() == QCheckBox::Off) {
 		    grp.writeEntry( "NoStartDlg", "no");
 		}
 	    }
@@ -703,7 +709,7 @@ bool KoTemplateChooseDia::collectInfo()
 		KFileItem * item = d->m_recent->currentFileItem();
 		if (! item)
 			return false;
-		KURL url = item->url();
+		KUrl url = item->url();
 		if(url.isLocalFile() && !QFile::exists(url.path()))
 		{
 			KMessageBox::error( this, i18n( "The file %1 does not exist." ).arg( url.path() ) );
@@ -717,7 +723,7 @@ bool KoTemplateChooseDia::collectInfo()
 		// Existing file from file dialog
 	        if ( !d->m_filedialog->slotOkCalled() )
 	            d->m_filedialog->slotOk();
-		KURL url = d->m_filedialog->currentURL();
+		KUrl url = d->m_filedialog->currentURL();
 		d->m_fullTemplateName = url.url();
 	        d->m_returnType = File;
 	        return d->m_filedialog->checkURL();
@@ -746,14 +752,14 @@ QString KoTemplateChooseDia::descriptionText(const QString &name, const QString 
 
 /*================================================================*/
 
-QIconViewItem * KoTCDIconCanvas::load( KoTemplateGroup *group, const QString& name, KInstance* instance )
+Q3IconViewItem * KoTCDIconCanvas::load( KoTemplateGroup *group, const QString& name, KInstance* instance )
 {
-    QIconViewItem * itemtoreturn = 0;
+    Q3IconViewItem * itemtoreturn = 0;
 
     for (KoTemplate *t=group->first(); t!=0L; t=group->next()) {
 	if (t->isHidden())
 	    continue;
-	QIconViewItem *item = new KoTCDIconViewItem(
+	Q3IconViewItem *item = new KoTCDIconViewItem(
 		this,
 		t->name(),
 		t->loadPicture(instance),
@@ -780,7 +786,7 @@ KoTCDRecentFilesIconView::~KoTCDRecentFilesIconView()
     removeToolTip();
 }
 
-void KoTCDRecentFilesIconView::showToolTip( QIconViewItem* item )
+void KoTCDRecentFilesIconView::showToolTip( Q3IconViewItem* item )
 {
     removeToolTip();
     if ( !item )
@@ -792,11 +798,11 @@ void KoTCDRecentFilesIconView::showToolTip( QIconViewItem* item )
     // KFileIconView would need a virtual method for deciding if a tooltip should be shown,
     // and another one for deciding what's the text of the tooltip...
     const KFileItem *fi = ( (KFileIconViewItem*)item )->fileInfo();
-    QString toolTipText = fi->url().prettyURL( 0, KURL::StripFileProtocol );
+    QString toolTipText = fi->url().prettyURL( 0, KUrl::StripFileProtocol );
     toolTip = new QLabel( QString::fromLatin1(" %1 ").arg(toolTipText), 0,
                           "myToolTip",
                           WStyle_StaysOnTop | WStyle_Customize | WStyle_NoBorder | WStyle_Tool | WX11BypassWM );
-    toolTip->setFrameStyle( QFrame::Plain | QFrame::Box );
+    toolTip->setFrameStyle( Q3Frame::Plain | Q3Frame::Box );
     toolTip->setLineWidth( 1 );
     toolTip->setAlignment( AlignLeft | AlignTop );
     toolTip->move( QCursor::pos() + QPoint( 14, 14 ) );

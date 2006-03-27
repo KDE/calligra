@@ -123,9 +123,9 @@ public:
 		result = 0;
 		QString none, iconname;
 		iconname = KMimeType::mimeType( KexiDB::Driver::defaultFileBasedDriverMimeType() )->icon(none,0);
-		kexi_sqlite_icon = KGlobal::iconLoader()->loadIcon( iconname, KIcon::Desktop );
+		kexi_sqlite_icon = KGlobal::iconLoader()->loadIcon( iconname, K3Icon::Desktop );
 		iconname = KMimeType::mimeType("application/x-kexiproject-shortcut")->icon(none,0);
-		kexi_shortcut_icon = KGlobal::iconLoader()->loadIcon( iconname, KIcon::Desktop );
+		kexi_shortcut_icon = KGlobal::iconLoader()->loadIcon( iconname, K3Icon::Desktop );
 		prj_selector = 0;
 		chkDoNotShow = 0;
 		openExistingConnWidget = 0;

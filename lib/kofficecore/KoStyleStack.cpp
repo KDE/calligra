@@ -24,6 +24,9 @@
 #include "KoXmlNS.h"
 
 #include <kdebug.h>
+//Added by qt3to4:
+#include <Q3ValueList>
+#include <Q3CString>
 
 //#define DEBUG_STYLESTACK
 
@@ -97,7 +100,7 @@ bool KoStyleStack::hasAttribute( const QString& name, const QString& detail ) co
         fullName += '-';
         fullName += detail;
     }
-    QValueList<QDomElement>::ConstIterator it = m_stack.end();
+    Q3ValueList<QDomElement>::ConstIterator it = m_stack.end();
     while ( it != m_stack.begin() )
     {
         --it;
@@ -117,7 +120,7 @@ QString KoStyleStack::attribute( const QString& name, const QString& detail ) co
         fullName += '-';
         fullName += detail;
     }
-    QValueList<QDomElement>::ConstIterator it = m_stack.end();
+    Q3ValueList<QDomElement>::ConstIterator it = m_stack.end();
     while ( it != m_stack.begin() )
     {
         --it;
@@ -138,7 +141,7 @@ QString KoStyleStack::attributeNS( const char* nsURI, const char* name, const ch
         fullName += '-';
         fullName += detail;
     }
-    QValueList<QDomElement>::ConstIterator it = m_stack.end();
+    Q3ValueList<QDomElement>::ConstIterator it = m_stack.end();
     while ( it != m_stack.begin() )
     {
         --it;
@@ -159,7 +162,7 @@ bool KoStyleStack::hasAttributeNS( const char* nsURI, const char* name, const ch
         fullName += '-';
         fullName += detail;
     }
-    QValueList<QDomElement>::ConstIterator it = m_stack.end();
+    Q3ValueList<QDomElement>::ConstIterator it = m_stack.end();
     while ( it != m_stack.begin() )
     {
         --it;
@@ -178,7 +181,7 @@ double KoStyleStack::fontSize() const
 {
     const QString name = "font-size";
     double percent = 1;
-    QValueList<QDomElement>::ConstIterator it = m_stack.end(); // reverse iterator
+    Q3ValueList<QDomElement>::ConstIterator it = m_stack.end(); // reverse iterator
 
     while ( it != m_stack.begin() )
     {
@@ -197,7 +200,7 @@ double KoStyleStack::fontSize() const
 
 bool KoStyleStack::hasChildNode(const QString & name) const
 {
-    QValueList<QDomElement>::ConstIterator it = m_stack.end();
+    Q3ValueList<QDomElement>::ConstIterator it = m_stack.end();
     while ( it != m_stack.begin() )
     {
         --it;
@@ -211,7 +214,7 @@ bool KoStyleStack::hasChildNode(const QString & name) const
 
 QDomElement KoStyleStack::childNode(const QString & name) const
 {
-    QValueList<QDomElement>::ConstIterator it = m_stack.end();
+    Q3ValueList<QDomElement>::ConstIterator it = m_stack.end();
 
     while ( it != m_stack.begin() )
     {
@@ -226,7 +229,7 @@ QDomElement KoStyleStack::childNode(const QString & name) const
 
 bool KoStyleStack::hasChildNodeNS( const char* nsURI, const char* localName ) const
 {
-    QValueList<QDomElement>::ConstIterator it = m_stack.end();
+    Q3ValueList<QDomElement>::ConstIterator it = m_stack.end();
     while ( it != m_stack.begin() )
     {
         --it;
@@ -240,7 +243,7 @@ bool KoStyleStack::hasChildNodeNS( const char* nsURI, const char* localName ) co
 
 QDomElement KoStyleStack::childNodeNS( const char* nsURI, const char* localName) const
 {
-    QValueList<QDomElement>::ConstIterator it = m_stack.end();
+    Q3ValueList<QDomElement>::ConstIterator it = m_stack.end();
 
     while ( it != m_stack.begin() )
     {
@@ -265,7 +268,7 @@ bool KoStyleStack::isUserStyle( const QDomElement& e, const QString& family ) co
 
 QString KoStyleStack::userStyleName( const QString& family ) const
 {
-    QValueList<QDomElement>::ConstIterator it = m_stack.end();
+    Q3ValueList<QDomElement>::ConstIterator it = m_stack.end();
     while ( it != m_stack.begin() )
     {
         --it;
@@ -279,7 +282,7 @@ QString KoStyleStack::userStyleName( const QString& family ) const
 
 QString KoStyleStack::userStyleDisplayName( const QString& family ) const
 {
-    QValueList<QDomElement>::ConstIterator it = m_stack.end();
+    Q3ValueList<QDomElement>::ConstIterator it = m_stack.end();
     while ( it != m_stack.begin() )
     {
         --it;
@@ -292,5 +295,5 @@ QString KoStyleStack::userStyleDisplayName( const QString& family ) const
 
 void KoStyleStack::setTypeProperties( const char* typeProperties )
 {
-    m_propertiesTagName = typeProperties == 0 ? QCString( "properties" ) : ( QCString( typeProperties ) + "-properties" );
+    m_propertiesTagName = typeProperties == 0 ? Q3CString( "properties" ) : ( Q3CString( typeProperties ) + "-properties" );
 }

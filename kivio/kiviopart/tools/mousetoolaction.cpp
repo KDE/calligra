@@ -19,7 +19,7 @@
 #include "mousetoolaction.h"
 
 #include <ktoolbar.h>
-#include <ktoolbarbutton.h>
+
 #include <kdebug.h>
 
 namespace Kivio {

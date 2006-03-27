@@ -145,7 +145,7 @@ void KexiComboBoxPopup::setData(KexiDB::Field &f)
 	for(uint i=0; i < hints.size(); i++) {
 		KexiTableItem *item = data->createItem();//new KexiTableItem(1);
 		(*item)[0]=QVariant(hints[i]);
-		kdDebug() << "added: '" << hints[i] <<"'"<<endl;
+		kDebug() << "added: '" << hints[i] <<"'"<<endl;
 		data->append( item );
 	}
 	setDataInternal( data, true );
@@ -154,7 +154,7 @@ void KexiComboBoxPopup::setData(KexiDB::Field &f)
 void KexiComboBoxPopup::setData(KexiTableViewColumn &column)
 {
 	if (!column.relatedData()) {
-		kdWarning() << "KexiComboBoxPopup::setData(KexiTableViewColumn &): no column relatedData \n - moving to setData(KexiDB::Field &)" << endl;
+		kWarning() << "KexiComboBoxPopup::setData(KexiTableViewColumn &): no column relatedData \n - moving to setData(KexiDB::Field &)" << endl;
 		setData(*column.field());
 		return;
 	}
@@ -181,14 +181,14 @@ void KexiComboBoxPopup::updateSize(int minWidth)
 //	d->tv->adjustColumnWidthToContents( 0 ); //TODO: not only for column 0, if there are more columns!
 //	d->tv->adjustColumnWidthToContents( 0 ); //TODO: not only for column 0, if there are more columns!
 //	                                         //TODO: check if the width is not too big
-	const int rows = QMIN( d->max_rows, d->tv->rows() );
+	const int rows = qMin( d->max_rows, d->tv->rows() );
 	KexiTableEdit *te = dynamic_cast<KexiTableEdit*>(parentWidget());
-	const int width = QMAX( d->tv->tableSize().width(), 
+	const int width = qMax( d->tv->tableSize().width(), 
 		(te ? te->totalSize().width() : parentWidget()->width()/*sanity*/) );
-//	resize( QMAX(minWidth, width), d->tv->rowHeight() * rows +2 );
-	resize( QMAX(minWidth, width), d->tv->rowHeight() * rows +2 );
+//	resize( qMax(minWidth, width), d->tv->rowHeight() * rows +2 );
+	resize( qMax(minWidth, width), d->tv->rowHeight() * rows +2 );
 
-//	resize( d->tv->columnWidth( 0 ), d->tv->rowHeight() * QMIN( d->max_rows, d->tv->rows() ) +2 );
+//	resize( d->tv->columnWidth( 0 ), d->tv->rowHeight() * qMin( d->max_rows, d->tv->rows() ) +2 );
 }
 
 KexiTableView* KexiComboBoxPopup::tableView()
@@ -232,7 +232,7 @@ bool KexiComboBoxPopup::eventFilter( QObject *o, QEvent *e )
 		emit hidden();
 	}
 	else if (e->type()==QEvent::MouseButtonPress) {
-		kdDebug() << "QEvent::MousePress" << endl;
+		kDebug() << "QEvent::MousePress" << endl;
 	}
 	else if (o==d->tv) {
 		if (e->type()==QEvent::KeyPress) {

@@ -30,10 +30,12 @@
 #include <qlayout.h>
 #include <qlabel.h>
 #include <qlineedit.h>
-#include <qlistbox.h>
+#include <q3listbox.h>
 #include <qpushbutton.h>
 #include <qpainter.h>
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
+//Added by qt3to4:
+#include <Q3GridLayout>
 
 #include <kfontdialog.h>
 
@@ -45,13 +47,13 @@ using namespace std;
 #include "kchart_params.h"
 
 
-class KChartFontListBoxItem : public QListBoxText
+class KChartFontListBoxItem : public Q3ListBoxText
 {
 public:
-    KChartFontListBoxItem( QListBox* lb,  const QString& text = QString::null ) :
-        QListBoxText( lb,  text )  {}
+    KChartFontListBoxItem( Q3ListBox* lb,  const QString& text = QString::null ) :
+        Q3ListBoxText( lb,  text )  {}
     KChartFontListBoxItem( const QString& text = QString::null ) :
-        QListBoxText( text )  {}
+        Q3ListBoxText( text )  {}
 
     void setFont( const QFont& font )  {
         _font = font;
@@ -66,7 +68,7 @@ protected:
     {
         painter->save();
         painter->setFont( _font );
-        QListBoxText::paint( painter );
+        Q3ListBoxText::paint( painter );
         painter->restore();
     }
 
@@ -86,17 +88,17 @@ KChartFontConfigPage::KChartFontConfigPage( KChartParams* params,
 					    KDChartTableData *dat) :
     QWidget( parent ), m_params( params ), data(dat)
 {
-    QGridLayout *grid = new QGridLayout(this,4,3,KDialog::marginHint(), KDialog::spacingHint());
+    Q3GridLayout *grid = new Q3GridLayout(this,4,3,KDialog::marginHint(), KDialog::spacingHint());
 
     // The listbox
-    m_list = new QListBox(this);
+    m_list = new Q3ListBox(this);
     m_list->resize( m_list->sizeHint() );
     grid->addWidget(m_list, 0, 0); // Row 0-0, col 0-1
 
     // The font button.
     m_fontButton = new QPushButton( this);
     m_fontButton->setText(i18n("Font..."));
-    QWhatsThis::add(m_fontButton, i18n("Select an item in the list above and click on this button to display the KDE font dialog in order to choose a new font for this item."));
+    Q3WhatsThis::add(m_fontButton, i18n("Select an item in the list above and click on this button to display the KDE font dialog in order to choose a new font for this item."));
     m_fontButton->resize( m_fontButton->sizeHint() );
     grid->addWidget( m_fontButton, 1, 0);
 
@@ -111,7 +113,7 @@ KChartFontConfigPage::KChartFontConfigPage( KChartParams* params,
 
     connect( m_fontButton, SIGNAL(clicked()),
 	     this,         SLOT(changeLabelFont()));
-    connect( m_list,       SIGNAL(doubleClicked ( QListBoxItem * )),
+    connect( m_list,       SIGNAL(doubleClicked ( Q3ListBoxItem * )),
 	     this,         SLOT(changeLabelFont()));
 
     // Enter the items into the list.
@@ -139,7 +141,7 @@ void KChartFontConfigPage::initList()
 void KChartFontConfigPage::changeLabelFont()
 {
     QFont                 *font = 0;
-    QButton::ToggleState  *state = 0;
+    QCheckBox::ToggleState  *state = 0;
     bool                   diffAxes = false;
 
     if (m_list->currentText()==i18n("X-Title")) {
@@ -166,10 +168,10 @@ void KChartFontConfigPage::changeLabelFont()
     if ( diffAxes ) {
         QFont newFont;
         int flags = 0;
-        QButton::ToggleState newState
+        QCheckBox::ToggleState newState
             = (xAxisIsRelative == yAxisIsRelative)
-            ? (xAxisIsRelative ? QButton::On : QButton::Off)
-            : QButton::NoChange;
+            ? (xAxisIsRelative ? QCheckBox::On : QCheckBox::Off)
+            : QCheckBox::NoChange;
         if (KFontDialog::getFontDiff( newFont,
                                       flags,
                                       false,
@@ -202,7 +204,7 @@ void KChartFontConfigPage::changeLabelFont()
             // if( KFontChooser::CharsetList & flags ) {
             // }
 
-            if ( QButton::NoChange != newState ) {
+            if ( QCheckBox::NoChange != newState ) {
                 xAxisIsRelative = newState;
                 yAxisIsRelative = newState;
             }
@@ -210,14 +212,14 @@ void KChartFontConfigPage::changeLabelFont()
     }
     else if ( font && state ) {
         QFont newFont( *font );
-        QButton::ToggleState newState = *state;
+        QCheckBox::ToggleState newState = *state;
         if (KFontDialog::getFont( newFont,
                                   false,
                                   this,
                                   true,
                                   &newState ) != QDialog::Rejected) {
             *font = newFont;
-            if ( QButton::NoChange != newState )
+            if ( QCheckBox::NoChange != newState )
                 *state = newState;
         }
     }
@@ -235,16 +237,16 @@ void KChartFontConfigPage::init()
 
     xAxis           = bottomparms.axisLabelsFont();
     xAxisIsRelative = bottomparms.axisLabelsFontUseRelSize() 
-	? QButton::On : QButton::Off;
+	? QCheckBox::On : QCheckBox::Off;
 
-    if ( QButton::On == xAxisIsRelative )
+    if ( QCheckBox::On == xAxisIsRelative )
         xAxis.setPointSize( bottomparms.axisLabelsFontRelSize() );
 
     yAxis = leftparms.axisLabelsFont();
     yAxisIsRelative = leftparms.axisLabelsFontUseRelSize()
-	? QButton::On : QButton::Off;
+	? QCheckBox::On : QCheckBox::Off;
 
-    if ( QButton::On == yAxisIsRelative )
+    if ( QCheckBox::On == yAxisIsRelative )
         yAxis.setPointSize( leftparms.axisLabelsFontRelSize() );
     // PENDING(khz) Add support for the other 6 possible axes
 
@@ -275,19 +277,19 @@ void KChartFontConfigPage::apply()
     KDChartAxisParams  bottomparms;
     bottomparms = m_params->axisParams( KDChartAxisParams::AxisPosBottom );
 
-    leftparms.setAxisLabelsFont( yAxis, QButton::Off == yAxisIsRelative );
-    if ( QButton::On == yAxisIsRelative )
+    leftparms.setAxisLabelsFont( yAxis, QCheckBox::Off == yAxisIsRelative );
+    if ( QCheckBox::On == yAxisIsRelative )
         leftparms.setAxisLabelsFontRelSize( yAxis.pointSize() );
 
     // PENDING(khz) change right axis handling
     // use left axis settings for the right axis as well
     //   (this must be changed, khz 14.12.2001)
-    rightparms.setAxisLabelsFont( yAxis, QButton::Off == yAxisIsRelative );
-    if ( QButton::On == yAxisIsRelative )
+    rightparms.setAxisLabelsFont( yAxis, QCheckBox::Off == yAxisIsRelative );
+    if ( QCheckBox::On == yAxisIsRelative )
         rightparms.setAxisLabelsFontRelSize( yAxis.pointSize() );
 
-    bottomparms.setAxisLabelsFont( xAxis, QButton::Off == xAxisIsRelative );
-    if ( QButton::On == xAxisIsRelative )
+    bottomparms.setAxisLabelsFont( xAxis, QCheckBox::Off == xAxisIsRelative );
+    if ( QCheckBox::On == xAxisIsRelative )
         bottomparms.setAxisLabelsFontRelSize( xAxis.pointSize() );
     // PENDING(khz) Add support for the other 6 possible axes
 

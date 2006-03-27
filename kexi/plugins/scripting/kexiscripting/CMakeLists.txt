@@ -1,0 +1,68 @@
+kde4_header()
+
+include_directories( ${CMAKE_SOURCE_DIR}/lib ${CMAKE_SOURCE_DIR}/kexi/core ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/widget ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
+
+
+########### next target ###############
+
+set(kexihandler_script_PART_SRCS kexiscriptpart.cpp kexiscripteditor.cpp kexiscriptdesignview.cpp )
+
+kde4_automoc(${kexihandler_script_PART_SRCS})
+
+kde4_add_plugin(kexihandler_script ${kexihandler_script_PART_SRCS})
+
+kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kexihandler_script )
+
+target_link_libraries(kexihandler_script  ${KDE4_KDECORE_LIBS} krossmain kexicore kexiextendedwidgets koproperty )
+
+install_targets(${LIB_INSTALL_DIR}/kde4 kexihandler_script )
+
+
+########### install files ###############
+
+install_files( ${DATA_INSTALL_DIR}/kexi FILES  kexiscriptpartui.rc kexiscriptpartinstui.rc )
+install_files( ${SERVICES_INSTALL_DIR}/kexi FILES  kexiscripthandler.desktop )
+
+kde4_footer()
+
+
+
+#original Makefile.am contents follow:
+
+#include $(top_srcdir)/kexi/Makefile.global
+#
+#kde_module_LTLIBRARIES = kexihandler_script.la
+#
+#kexihandler_script_la_SOURCES = \
+#    kexiscriptpart.cpp kexiscripteditor.cpp kexiscriptdesignview.cpp
+#
+#kexihandler_script_la_LDFLAGS = \
+#    $(KDE_PLUGIN) -module -no-undefined -Wnounresolved $(all_libraries) $(VER_INFO)
+#
+#kexihandler_script_la_LIBADD = \
+#    $(top_builddir)/lib/kross/main/libkrossmain.la \
+#    $(top_builddir)/kexi/core/libkexicore.la \
+#    $(top_builddir)/kexi/widget/libkexiextendedwidgets.la \
+#    $(top_builddir)/lib/koproperty/libkoproperty.la
+#
+#INCLUDES = \
+#    $(KOFFICE_INCLUDES) \
+#    -I$(top_srcdir)/lib  \
+#    -I$(top_srcdir)/kexi/core \
+#    -I$(top_srcdir)/kexi \
+#    -I$(top_srcdir)/kexi/widget \
+#    $(all_includes)
+#
+#servicesdir=$(kde_servicesdir)/kexi
+#services_DATA=kexiscripthandler.desktop
+#
+#rcdir = $(kde_datadir)/kexi
+#rc_DATA = kexiscriptpartui.rc kexiscriptpartinstui.rc
+#
+#METASOURCES = AUTO
+#
+#SUBDIRS = .
+#
+#include ../../Makefile.common
+#
+#noinst_HEADERS = kexiscriptpart.h kexiscripteditor.h kexiscriptdesignview.h

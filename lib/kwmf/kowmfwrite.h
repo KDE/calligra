@@ -26,10 +26,10 @@
 #include <qbuffer.h>
 #include <qregion.h>
 #include <qstring.h>
-#include <qwmatrix.h>
+#include <qmatrix.h>
 #include <qimage.h>
-#include <qptrlist.h>
-#include <qpointarray.h>
+#include <q3ptrlist.h>
+#include <q3pointarray.h>
 #include <koffice_export.h>
 class KoWmfWritePrivate;
 
@@ -103,11 +103,11 @@ public:
     void  drawArc( int left, int top, int width, int height, int a, int alen );
     void  drawPie( int left, int top, int width, int height, int a, int alen );
     void  drawChord( int left, int top, int width, int height, int a, int alen );
-    void  drawPolyline( const QPointArray& pa );
-    void  drawPolygon( const QPointArray& pa, bool winding=FALSE );
+    void  drawPolyline( const Q3PointArray& pa );
+    void  drawPolygon( const Q3PointArray& pa, bool winding=FALSE );
     // drawPolyPolygon draw the XOR of a list of polygons
     // listPa : list of polygons
-    void  drawPolyPolygon( QPtrList<QPointArray>& listPa, bool winding=FALSE );
+    void  drawPolyPolygon( Q3PtrList<Q3PointArray>& listPa, bool winding=FALSE );
     void  drawImage( int left, int top, const QImage &, int sx = 0, int sy = 0, int sw = -1, int sh = -1 );
 
     // Text drawing functions
@@ -120,7 +120,7 @@ private:
     // Utilities and conversion Qt --> Wmf
 
     /** Convert QPointArray into Q_INT16 position (result in mSt) */
-    void pointArray( const QPointArray& pa );
+    void pointArray( const Q3PointArray& pa );
 
     /** Convertion between windows color and QColor */
     Q_UINT32 winColor( QColor color );

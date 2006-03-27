@@ -48,8 +48,8 @@ class KEXIEXTWIDGETS_EXPORT PixmapCollection : public QObject
 		PixmapCollection(const QString &collectionName, QObject *parent = 0, const char *name = 0);
 		~PixmapCollection() {;}
 
-		QString addPixmapPath(const KURL &url);
-		QString addPixmapName(const QString &name, int size = KIcon::SizeMedium);
+		QString addPixmapPath(const KUrl &url);
+		QString addPixmapName(const QString &name, int size = K3Icon::SizeMedium);
 		void removePixmap(const QString &name);
 
 		bool   contains(const QString &name);

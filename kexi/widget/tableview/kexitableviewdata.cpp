@@ -120,7 +120,7 @@ KexiTableViewColumn::KexiTableViewColumn(
 	// true if it's not from parent table's field or if the query itself is coming read-only connection
 	m_readOnly = (query.masterTable()!=fieldinfo->field->table())
 		|| (query.connection() && query.connection()->isReadOnly());
-//	kdDebug() << "KexiTableViewColumn: query.masterTable()==" 
+//	kDebug() << "KexiTableViewColumn: query.masterTable()==" 
 //		<< (query.masterTable() ? query.masterTable()->name() : "notable") << ", fieldinfo->field->table()=="
 //		<< (fieldinfo->field->table() ? fieldinfo->field->table()->name()  : "notable") << endl;
 
@@ -279,7 +279,7 @@ void KexiTableViewData::init(
 	KexiTableViewColumn *valueColumn = new KexiTableViewColumn(*valueField, true);
 	addColumn(valueColumn);
 
-	uint cnt = QMIN(keys.count(), values.count());
+	uint cnt = qMin(keys.count(), values.count());
 	QValueList<QVariant>::ConstIterator it_keys = keys.constBegin();
 	QValueList<QVariant>::ConstIterator it_values = values.constBegin();
 	for (;cnt>0;++it_keys, ++it_values, cnt--) {
@@ -483,7 +483,7 @@ int KexiTableViewData::cmpStr(Item item1, Item item2)
 	unsigned short au;
 	unsigned short bu;
 
-	int l=QMIN(as.length(),bs.length());
+	int l=qMin(as.length(),bs.length());
 
 	au = a->unicode();
 	bu = b->unicode();
@@ -541,17 +541,17 @@ bool KexiTableViewData::updateRowEditBufferRef(KexiTableItem *item,
 	if (!m_result.success)
 		return false;
 
-	kdDebug() << "KexiTableViewData::updateRowEditBufferRef() column #" 
+	kDebug() << "KexiTableViewData::updateRowEditBufferRef() column #" 
 		<< colnum << " = " << newval.toString() << endl;
 //	KexiTableViewColumn* col = columns.at(colnum);
 	if (!col) {
-		kdDebug() << "KexiTableViewData::updateRowEditBufferRef(): column #" 
+		kDebug() << "KexiTableViewData::updateRowEditBufferRef(): column #" 
 			<< colnum << " not found! col==0" << endl;
 		return false;
 	}
 	if (m_pRowEditBuffer->isDBAware()) {
 		if (!(col->fieldinfo)) {
-			kdDebug() << "KexiTableViewData::updateRowEditBufferRef(): column #" 
+			kDebug() << "KexiTableViewData::updateRowEditBufferRef(): column #" 
 				<< colnum << " not found!" << endl;
 			return false;
 		}
@@ -560,13 +560,13 @@ bool KexiTableViewData::updateRowEditBufferRef(KexiTableItem *item,
 		return true;
 	}
 	if (!(col->field())) {
-		kdDebug() << "KexiTableViewData::updateRowEditBufferRef(): column #" << colnum<<" not found!" << endl;
+		kDebug() << "KexiTableViewData::updateRowEditBufferRef(): column #" << colnum<<" not found!" << endl;
 		return false;
 	}
 	//not db-aware:
 	const QString colname = col->field()->name();
 	if (colname.isEmpty()) {
-		kdDebug() << "KexiTableViewData::updateRowEditBufferRef(): column #" << colnum<<" not found!" << endl;
+		kDebug() << "KexiTableViewData::updateRowEditBufferRef(): column #" << colnum<<" not found!" << endl;
 		return false;
 	}
 	m_pRowEditBuffer->insert(colname, newval);
@@ -659,7 +659,7 @@ js: TODO: use KexiMainWindowImpl::showErrorMessage(const QString &title, KexiDB:
 			uint i=0;
 			for (KexiTableViewColumn::ListIterator it2(columns);it2.current();++it2, i++) {
 				if (it2.current()->field()->name()==it.key()) {
-					kdDebug() << it2.current()->field()->name()<< ": "<<item[i].toString()<<" -> "<<it.data().toString()<<endl;
+					kDebug() << it2.current()->field()->name()<< ": "<<item[i].toString()<<" -> "<<it.data().toString()<<endl;
 					item[i] = it.data();
 				}
 			}
@@ -675,7 +675,7 @@ js: TODO: use KexiMainWindowImpl::showErrorMessage(const QString &title, KexiDB:
 
 bool KexiTableViewData::saveRowChanges(KexiTableItem& item, bool repaint)
 {
-	kdDebug() << "KexiTableViewData::saveRowChanges()..." << endl;
+	kDebug() << "KexiTableViewData::saveRowChanges()..." << endl;
 	m_result.clear();
 	emit aboutToUpdateRow(&item, m_pRowEditBuffer, &m_result);
 	if (!m_result.success)
@@ -690,7 +690,7 @@ bool KexiTableViewData::saveRowChanges(KexiTableItem& item, bool repaint)
 
 bool KexiTableViewData::saveNewRow(KexiTableItem& item, bool repaint)
 {
-	kdDebug() << "KexiTableViewData::saveNewRow()..." << endl;
+	kDebug() << "KexiTableViewData::saveNewRow()..." << endl;
 	m_result.clear();
 	emit aboutToInsertRow(&item, &m_result, repaint);
 	if (!m_result.success)
@@ -723,7 +723,7 @@ bool KexiTableViewData::deleteRow(KexiTableItem& item, bool repaint)
 
 	if (!removeRef(&item)) {
 		//aah - this shouldn't be!
-		kdWarning() << "KexiTableViewData::deleteRow(): !removeRef() - IMPL. ERROR?" << endl;
+		kWarning() << "KexiTableViewData::deleteRow(): !removeRef() - IMPL. ERROR?" << endl;
 		m_result.success = false;
 		return false;
 	}
@@ -753,7 +753,7 @@ void KexiTableViewData::deleteRows( const QValueList<int> &rowsToDelete, bool re
 
 void KexiTableViewData::insertRow(KexiTableItem& item, uint index, bool repaint)
 {
-	if (!insert( index = QMIN(index, count()), &item ))
+	if (!insert( index = qMin(index, count()), &item ))
 		return;
 	emit rowInserted(&item, index, repaint);
 }

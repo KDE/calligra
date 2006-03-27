@@ -25,6 +25,9 @@
 #include <kapplication.h>
 #include <dcopclient.h>
 #include <kdcopactionproxy.h>
+//Added by qt3to4:
+#include <Q3ValueList>
+#include <Q3CString>
 
 KoMainWindowIface::KoMainWindowIface( KoMainWindow *mainwindow )
     : DCOPObject( mainwindow )
@@ -38,7 +41,7 @@ KoMainWindowIface::~KoMainWindowIface()
     delete m_actionProxy;
 }
 
-DCOPRef KoMainWindowIface::action( const QCString &name )
+DCOPRef KoMainWindowIface::action( const Q3CString &name )
 {
     return DCOPRef( kapp->dcopClient()->appId(), m_actionProxy->actionObjectId( name ) );
 }
@@ -46,16 +49,16 @@ DCOPRef KoMainWindowIface::action( const QCString &name )
 QCStringList KoMainWindowIface::actions()
 {
     QCStringList res;
-    QValueList<KAction *> lst = m_actionProxy->actions();
-    QValueList<KAction *>::ConstIterator it = lst.begin();
-    QValueList<KAction *>::ConstIterator end = lst.end();
+    Q3ValueList<KAction *> lst = m_actionProxy->actions();
+    Q3ValueList<KAction *>::ConstIterator it = lst.begin();
+    Q3ValueList<KAction *>::ConstIterator end = lst.end();
     for (; it != end; ++it )
         res.append( (*it)->name() );
 
     return res;
 }
 
-QMap<QCString,DCOPRef> KoMainWindowIface::actionMap()
+QMap<Q3CString,DCOPRef> KoMainWindowIface::actionMap()
 {
     return m_actionProxy->actionMap();
 }

@@ -21,11 +21,14 @@
 
 #include <qtimer.h>
 #include <qtooltip.h>
-#include <qpopupmenu.h>
+#include <q3popupmenu.h>
 #include <qcursor.h>
 #include <qpainter.h>
 #include <qdrawutil.h>
 #include <qstyle.h>
+//Added by qt3to4:
+#include <QPixmap>
+#include <QEvent>
 
 #include <kdeversion.h>
 #include <kapplication.h>
@@ -83,7 +86,7 @@ public:
   TK::IconMode m_iconMode;
 
   QTimer     *m_delayTimer;
-  QPopupMenu *m_popup;
+  Q3PopupMenu *m_popup;
 
   KInstance  *m_instance;
 };
@@ -97,7 +100,7 @@ TKToolBarButton::TKToolBarButton( const QString& icon, const QString& txt,
   d->m_text = txt;
   d->m_instance = instance;
 
-  setFocusPolicy( NoFocus );
+  setFocusPolicy( Qt::NoFocus );
 
   connect(this, SIGNAL(clicked()), SLOT(slotClicked()) );
   connect(this, SIGNAL(pressed()), SLOT(slotPressed()) );
@@ -115,7 +118,7 @@ TKToolBarButton::TKToolBarButton( const QPixmap& pixmap, const QString& txt, QWi
   d = new TKToolBarButtonPrivate;
   d->m_text = txt;
 
-  setFocusPolicy( NoFocus );
+  setFocusPolicy( Qt::NoFocus );
 
   connect(this, SIGNAL(clicked()), SLOT(slotClicked()) );
   connect(this, SIGNAL(pressed()), SLOT(slotPressed()) );
@@ -190,23 +193,23 @@ void TKToolBarButton::setIcon( const QString& icon )
   d->m_iconName = icon;
   int iconSize = 16;
 
-  setPixmap( BarIcon(icon, iconSize, KIcon::ActiveState, d->m_instance), false );
-  setDisabledPixmap( BarIcon(icon, iconSize, KIcon::DisabledState, d->m_instance) );
-  setDefaultPixmap( BarIcon(icon, iconSize, KIcon::DefaultState, d->m_instance) );
+  setPixmap( BarIcon(icon, iconSize, K3Icon::ActiveState, d->m_instance), false );
+  setDisabledPixmap( BarIcon(icon, iconSize, K3Icon::DisabledState, d->m_instance) );
+  setDefaultPixmap( BarIcon(icon, iconSize, K3Icon::DefaultState, d->m_instance) );
 }
 
 void TKToolBarButton::setDisabledIcon( const QString &icon )
 {
   d->m_disabledIconName = icon;
   int iconSize = 16;
-  setDisabledPixmap( BarIcon(icon, iconSize, KIcon::DisabledState, d->m_instance) );
+  setDisabledPixmap( BarIcon(icon, iconSize, K3Icon::DisabledState, d->m_instance) );
 }
 
 void TKToolBarButton::setDefaultIcon( const QString &icon )
 {
   d->m_defaultIconName = icon;
   int iconSize = 16;
-  setDefaultPixmap( BarIcon(icon, iconSize, KIcon::DefaultState, d->m_instance) );
+  setDefaultPixmap( BarIcon(icon, iconSize, K3Icon::DefaultState, d->m_instance) );
 }
 
 QPixmap TKToolBarButton::getActivePixmap() const
@@ -251,7 +254,7 @@ void TKToolBarButton::setDisabledPixmap( const QPixmap &pixmap )
   QToolButton::setPixmap( isEnabled() ? defaultPixmap : disabledPixmap );
 }
 
-void TKToolBarButton::setPopup(QPopupMenu *p)
+void TKToolBarButton::setPopup(Q3PopupMenu *p)
 {
   d->m_popup = p;
   d->m_popup->setFont(KGlobalSettings::toolBarFont());
@@ -260,12 +263,12 @@ void TKToolBarButton::setPopup(QPopupMenu *p)
   modeChange();
 }
 
-QPopupMenu *TKToolBarButton::popup()
+Q3PopupMenu *TKToolBarButton::popup()
 {
   return d->m_popup;
 }
 
-void TKToolBarButton::setDelayedPopup (QPopupMenu *p, bool toggle )
+void TKToolBarButton::setDelayedPopup (Q3PopupMenu *p, bool toggle )
 {
   d->m_isPopup = true;
   setToggle(toggle);
@@ -353,14 +356,14 @@ void TKToolBarButton::drawButton( QPainter* p )
 #define DRAW_PIXMAP_AND_TEXT \
   int x = 3;\
   if (pixmap()) {\
-    style().drawItem( p, QRect( x, 0, pixmap()->width(), height() ), AlignCenter, colorGroup(), isEnabled(), pixmap(), QString::null );\
+    style().drawItem( p, QRect( x, 0, pixmap()->width(), height() ), Qt::AlignCenter, colorGroup(), isEnabled(), pixmap(), QString::null );\
     if (d->m_iconMode==TK::IconAndText && !d->m_text.isEmpty()) {\
       x += pixmap()->width() + 3;\
     }\
   }\
   if ((d->m_iconMode==TK::IconAndText||d->m_iconMode==TK::TextOnly) && !d->m_text.isEmpty()) {\
     QFontMetrics fm(KGlobalSettings::toolBarFont());\
-    style().drawItem( p, QRect( x, 0, fm.width(d->m_text), height() ), AlignCenter, colorGroup(), isEnabled(), 0, d->m_text );\
+    style().drawItem( p, QRect( x, 0, fm.width(d->m_text), height() ), Qt::AlignCenter, colorGroup(), isEnabled(), 0, d->m_text );\
   }
 
   const char* arrow[] = {
@@ -378,15 +381,15 @@ void TKToolBarButton::drawButton( QPainter* p )
     {
         if (d->m_isPopup)
         {
-            QStyle::SFlags flags   = QStyle::Style_Default;
-            if (isEnabled()) 	flags |= QStyle::Style_Enabled;
-            if (isOn()) 		flags |= QStyle::Style_On;
-            if (d->m_isRaised)	flags |= QStyle::Style_Raised;
-            if (hasFocus())	flags |= QStyle::Style_HasFocus;
+            QStyle::State flags   = QStyle::State_None;
+            if (isEnabled()) 	flags |= QStyle::State_Enabled;
+            if (isOn()) 		flags |= QStyle::State_On;
+            if (d->m_isRaised)	flags |= QStyle::State_Raised;
+            if (hasFocus())	flags |= QStyle::State_HasFocus;
 
             style().drawComplexControl( QStyle::CC_ToolButton, p, this, QRect( 0, 0, width()-12, height() ), colorGroup(), flags, QStyle::SC_ToolButton );
             style().drawComplexControl( QStyle::CC_ToolButton, p, this, QRect( width()-13, 0, 13, height() ), colorGroup(), flags, QStyle::SC_ToolButton );
-            style().drawItem( p, QRect( width()-13, 0, 13, height() ), AlignCenter, colorGroup(), isEnabled(), &arrow_pix, QString::null );
+            style().drawItem( p, QRect( width()-13, 0, 13, height() ), Qt::AlignCenter, colorGroup(), isEnabled(), &arrow_pix, QString::null );
             if ( d->m_isRaised )
                 qDrawShadeLine( p, width()-12, 0, width()-12, height(), colorGroup(), true );
             DRAW_PIXMAP_AND_TEXT
@@ -418,7 +421,7 @@ void TKToolBarButton::makeDefaultPixmap()
     return;
 
   KIconEffect effect;
-  defaultPixmap = effect.apply(activePixmap, KIcon::Toolbar, KIcon::DefaultState);
+  defaultPixmap = effect.apply(activePixmap, K3Icon::Toolbar, K3Icon::DefaultState);
 }
 
 void TKToolBarButton::makeDisabledPixmap()
@@ -427,7 +430,7 @@ void TKToolBarButton::makeDisabledPixmap()
     return;
 
   KIconEffect effect;
-  disabledPixmap = effect.apply(activePixmap, KIcon::Toolbar, KIcon::DisabledState);
+  disabledPixmap = effect.apply(activePixmap, K3Icon::Toolbar, K3Icon::DisabledState);
 }
 
 QSize TKToolBarButton::sizeHint() const

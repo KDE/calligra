@@ -1,7 +1,7 @@
 #include "KWQtSqlEasyFilter.h"
 #include "KWQtSqlEasyFilter.moc"
-#include <qtable.h>
-#include <qscrollview.h>
+#include <q3table.h>
+#include <q3scrollview.h>
 #include <klocale.h>
 #include <qlayout.h>
 #include <qcheckbox.h>
@@ -13,7 +13,7 @@ KWQtSqlEasyFilter::KWQtSqlEasyFilter( QWidget *parent)
        m_sortingList << ""<<i18n("ascending")<<i18n("descending");
        m_operationList <<"="<<i18n("contains")<< "<" << ">";
 
-	m_table=new QTable(6,3,this);
+	m_table=new Q3Table(6,3,this);
 	setMainWidget(m_table);
 		
 	m_table->verticalHeader()->setLabel(0,i18n("Field"));
@@ -22,7 +22,7 @@ KWQtSqlEasyFilter::KWQtSqlEasyFilter( QWidget *parent)
 	m_table->verticalHeader()->setLabel(3,i18n("Operator"));
 	m_table->verticalHeader()->setLabel(4,i18n("Condition"));
 	m_table->verticalHeader()->setLabel(5,i18n("Value"));
-	m_table->setSelectionMode(QTable::NoSelection);
+	m_table->setSelectionMode(Q3Table::NoSelection);
         m_table->setColumnMovingEnabled(true);
 	m_table->setSorting(false);
 
@@ -45,17 +45,17 @@ KWQtSqlEasyFilter::KWQtSqlEasyFilter( QWidget *parent)
 
 void KWQtSqlEasyFilter::createColumn(int i)
 {
-	QTableItem *it;
-	m_table->setItem(0,i,it=new QComboTableItem(m_table,m_fieldList,false));
-	m_table->setItem(1,i,it=new QComboTableItem(m_table,m_sortingList,false));
+	Q3TableItem *it;
+	m_table->setItem(0,i,it=new Q3ComboTableItem(m_table,m_fieldList,false));
+	m_table->setItem(1,i,it=new Q3ComboTableItem(m_table,m_sortingList,false));
 	it->setEnabled(false);
-	m_table->setItem(2,i,it=new QCheckTableItem(m_table,i18n("Yes")));
+	m_table->setItem(2,i,it=new Q3CheckTableItem(m_table,i18n("Yes")));
 	it->setEnabled(false);
-	m_table->setItem(3,i,it=new QCheckTableItem(m_table,i18n("NOT")));
+	m_table->setItem(3,i,it=new Q3CheckTableItem(m_table,i18n("NOT")));
 	it->setEnabled(false);
-	m_table->setItem(4,i,it=new QComboTableItem(m_table,m_operationList,false));		
+	m_table->setItem(4,i,it=new Q3ComboTableItem(m_table,m_operationList,false));		
 	it->setEnabled(false);
-	m_table->setItem(5,i,it=new QTableItem(m_table,QTableItem::WhenCurrent,""));		
+	m_table->setItem(5,i,it=new Q3TableItem(m_table,Q3TableItem::WhenCurrent,""));		
 	it->setEnabled(false);
 	m_table->ensureCellVisible(0,i);
 }
@@ -75,7 +75,7 @@ void KWQtSqlEasyFilter::slotValueChanged ( int row, int col )
 				}
 				m_table->item(1,col)->setEnabled(true);
 				m_table->item(2,col)->setEnabled(true);
-				bool enableSearch=(static_cast<QCheckTableItem*>(m_table->item(2,col))->isChecked());
+				bool enableSearch=(static_cast<Q3CheckTableItem*>(m_table->item(2,col))->isChecked());
 				m_table->item(3,col)->setEnabled(enableSearch);
 				m_table->item(4,col)->setEnabled(enableSearch);
 				m_table->item(5,col)->setEnabled(enableSearch);
@@ -86,7 +86,7 @@ void KWQtSqlEasyFilter::slotValueChanged ( int row, int col )
 			}
 			break;
 		case 2:
-			bool enSearch=static_cast<QCheckTableItem*>(m_table->item(row,col))->isChecked();
+			bool enSearch=static_cast<Q3CheckTableItem*>(m_table->item(row,col))->isChecked();
 			m_table->item(3,col)->setEnabled(enSearch);
 			m_table->item(4,col)->setEnabled(enSearch);
 			m_table->item(5,col)->setEnabled(enSearch);

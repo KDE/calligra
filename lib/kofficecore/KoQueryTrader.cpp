@@ -27,6 +27,8 @@
 #include <kdebug.h>
 
 #include <qfile.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 #include <limits.h> // UINT_MAX
 
@@ -78,7 +80,7 @@ KoDocumentEntry KoDocumentEntry::queryByMimeType( const QString & mimetype )
 {
   QString constr = QString::fromLatin1( "[X-KDE-NativeMimeType] == '%1' or '%2' in [X-KDE-ExtraNativeMimeTypes]" ).arg( mimetype ).arg( mimetype );
 
-  QValueList<KoDocumentEntry> vec = query( false,constr );
+  Q3ValueList<KoDocumentEntry> vec = query( false,constr );
   if ( vec.isEmpty() )
   {
     kdWarning(30003) << "Got no results with " << constr << endl;
@@ -105,15 +107,15 @@ KoDocumentEntry KoDocumentEntry::queryByMimeType( const QString & mimetype )
   return vec[0];
 }
 
-QValueList<KoDocumentEntry> KoDocumentEntry::query( const QString & _constr )
+Q3ValueList<KoDocumentEntry> KoDocumentEntry::query( const QString & _constr )
 {
   return query(true,_constr);
 }
 
-QValueList<KoDocumentEntry> KoDocumentEntry::query( bool _onlyDocEmb, const QString & _constr )
+Q3ValueList<KoDocumentEntry> KoDocumentEntry::query( bool _onlyDocEmb, const QString & _constr )
 {
 
-  QValueList<KoDocumentEntry> lst;
+  Q3ValueList<KoDocumentEntry> lst;
   QString constr;
   if ( !_constr.isEmpty() ) {
       constr = "(";
@@ -169,10 +171,10 @@ KoFilterEntry::KoFilterEntry( KService::Ptr service )
   available = service->property( "X-KDE-Available" ).toString();
 }
 
-QValueList<KoFilterEntry::Ptr> KoFilterEntry::query( const QString & _constr )
+Q3ValueList<KoFilterEntry::Ptr> KoFilterEntry::query( const QString & _constr )
 {
   kdDebug(30500) << "KoFilterEntry::query( " << _constr << " )" << endl;
-  QValueList<KoFilterEntry::Ptr> lst;
+  Q3ValueList<KoFilterEntry::Ptr> lst;
 
   KTrader::OfferList offers = KTrader::self()->query( "KOfficeFilter", _constr );
 

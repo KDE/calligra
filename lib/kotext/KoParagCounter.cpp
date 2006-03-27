@@ -29,6 +29,8 @@
 #include <kdebug.h>
 #include <qdom.h>
 #include <qbuffer.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 static KoTextParag * const INVALID_PARAG = (KoTextParag *)-1;
 
@@ -42,7 +44,7 @@ KoParagCounter::KoParagCounter()
     m_restartCounter = false;
     m_customBulletChar = QChar( '-' );
     m_customBulletFont = QString::null;
-    m_align = Qt::AlignAuto;
+    m_align = Qt::AlignLeft;
     invalidate();
 }
 
@@ -267,7 +269,7 @@ void KoParagCounter::saveOasis( KoGenStyle& listStyle, bool savingStyle ) const
 
     // Prepare a sub-xmlwriter for the list-level-style-* element
     QBuffer buffer;
-    buffer.open( IO_WriteOnly );
+    buffer.open( QIODevice::WriteOnly );
     KoXmlWriter listLevelWriter( &buffer, 3 /*indentation*/ );
     const char* tagName = isBullet() ? "text:list-level-style-bullet" : "text:list-level-style-number";
     listLevelWriter.startElement( tagName );
@@ -829,10 +831,10 @@ KoTextFormat* KoParagCounter::counterFormat( const KoTextParag *paragraph )
 
 ///
 
-const QCString RNUnits[] = {"", "i", "ii", "iii", "iv", "v", "vi", "vii", "viii", "ix"};
-const QCString RNTens[] = {"", "x", "xx", "xxx", "xl", "l", "lx", "lxx", "lxxx", "xc"};
-const QCString RNHundreds[] = {"", "c", "cc", "ccc", "cd", "d", "dc", "dcc", "dccc", "cm"};
-const QCString RNThousands[] = {"", "m", "mm", "mmm"};
+const Q3CString RNUnits[] = {"", "i", "ii", "iii", "iv", "v", "vi", "vii", "viii", "ix"};
+const Q3CString RNTens[] = {"", "x", "xx", "xxx", "xl", "l", "lx", "lxx", "lxxx", "xc"};
+const Q3CString RNHundreds[] = {"", "c", "cc", "ccc", "cd", "d", "dc", "dcc", "dccc", "cm"};
+const Q3CString RNThousands[] = {"", "m", "mm", "mmm"};
 
 QString KoParagCounter::makeRomanNumber( int n )
 {
@@ -883,26 +885,26 @@ int KoParagCounter::fromRomanNumber( const QString &string )
 
     for (int base = 1000; base >= 1 && stringStart < stringLen; base /= 10)
     {
-        const QCString *rn;
+        const Q3CString *rn;
         int rnNum;
         switch (base)
         {
             case 1000:
                 rn = RNThousands;
-                rnNum = sizeof (RNThousands) / sizeof (const QCString);
+                rnNum = sizeof (RNThousands) / sizeof (const Q3CString);
                 break;
             case 100:
                 rn = RNHundreds;
-                rnNum = sizeof (RNHundreds) / sizeof (const QCString);
+                rnNum = sizeof (RNHundreds) / sizeof (const Q3CString);
                 break;
             case 10:
                 rn = RNTens;
-                rnNum = sizeof (RNTens) / sizeof (const QCString);
+                rnNum = sizeof (RNTens) / sizeof (const Q3CString);
                 break;
             case 1:
             default:
                 rn = RNUnits;
-                rnNum = sizeof (RNUnits) / sizeof (const QCString);
+                rnNum = sizeof (RNUnits) / sizeof (const Q3CString);
                 break;
         }
 

@@ -20,6 +20,9 @@
 #define KO_HSV_WIDGET_H
 
 #include "qwidget.h"
+//Added by qt3to4:
+#include <QLabel>
+#include <Q3GridLayout>
 #include "kdualcolorbutton.h"
 
 #include "koColor.h"
@@ -31,7 +34,7 @@ class KValueSelector;
 class KoColorWheel;
 class KoColorSlider;
 class KoFrameButton;
-class QGridLayout;
+class Q3GridLayout;
 class QLabel;
 class QSpinBox;
 

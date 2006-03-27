@@ -34,7 +34,7 @@
 #include "kexitableviewdata.h"
 
 class QObject;
-class KPopupMenu;
+class KMenu;
 class KexiTableItem;
 class KexiTableViewData;
 class KexiRecordMarker;
@@ -393,7 +393,7 @@ class KEXIDATATABLE_EXPORT KexiDataAwareObjectInterface
 		virtual void dataRefreshed() = 0;
 		virtual void dataSet( KexiTableViewData *data ) = 0;
 
-		KPopupMenu* contextMenu() const { return m_popup; }
+		KMenu* contextMenu() const { return m_popup; }
 
 		/*! \return true if the context menu is enabled (visible) for the view.
 		  True by default. */
@@ -693,7 +693,7 @@ class KEXIDATATABLE_EXPORT KexiDataAwareObjectInterface
 		int m_dragIndicatorLine;
 
 		/*! Context menu widget. */
-		KPopupMenu *m_popup;
+		KMenu *m_popup;
 
 		bool m_contextMenuEnabled : 1;
 
@@ -708,13 +708,13 @@ class KEXIDATATABLE_EXPORT KexiDataAwareObjectInterface
 		int m_rowWillBeDeleted;
 
 		/*! Displays passive error popup label used when invalid data has been entered. */
-		QGuardedPtr<QLabel> m_errorMessagePopup;
+		QPointer<QLabel> m_errorMessagePopup;
 };
 
 inline bool KexiDataAwareObjectInterface::hasData() const
 {
 	if (!m_data)
-		kdDebug() << "KexiDataAwareObjectInterface: No data assigned!" << endl;
+		kDebug() << "KexiDataAwareObjectInterface: No data assigned!" << endl;
 	return m_data!=0;
 }
 
@@ -722,12 +722,12 @@ inline KexiTableItem *KexiDataAwareObjectInterface::itemAt(int row) const
 {
 	KexiTableItem *item = m_data->at(row);
 	if (!item)
-		kdDebug() << "KexiTableView::itemAt(" << row << "): NO ITEM!!" << endl;
+		kDebug() << "KexiTableView::itemAt(" << row << "): NO ITEM!!" << endl;
 	else {
-/*		kdDebug() << "KexiTableView::itemAt(" << row << "):" << endl;
+/*		kDebug() << "KexiTableView::itemAt(" << row << "):" << endl;
 		int i=1;
 		for (KexiTableItem::Iterator it = item->begin();it!=item->end();++it,i++)
-			kdDebug() << i<<": " << (*it).toString()<< endl;*/
+			kDebug() << i<<": " << (*it).toString()<< endl;*/
 	}
 	return item;
 }

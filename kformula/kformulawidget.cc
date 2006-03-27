@@ -21,6 +21,11 @@
 #include <iostream>
 
 #include <qpainter.h>
+//Added by qt3to4:
+#include <QMouseEvent>
+#include <QFocusEvent>
+#include <QKeyEvent>
+#include <QPaintEvent>
 
 #include <kapplication.h>
 #include <kdebug.h>
@@ -34,8 +39,8 @@
 
 
 KFormulaWidget::KFormulaWidget(KFormula::Container* doc,
-                               QWidget* parent, const char* name, WFlags f)
-    : QWidget(parent, name, f | WRepaintNoErase | WResizeNoErase),
+                               QWidget* parent, const char* name, Qt::WFlags f)
+    : QWidget(parent, name, f | Qt::WNoAutoErase | Qt::WResizeNoErase),
       formulaView(doc)
 {
     connect(doc, SIGNAL(formulaChanged(int, int)),
@@ -43,8 +48,8 @@ KFormulaWidget::KFormulaWidget(KFormula::Container* doc,
     connect(&formulaView, SIGNAL(cursorChanged(bool, bool)),
             this, SLOT(slotCursorChanged(bool, bool)));
 
-    setFocusPolicy(QWidget::StrongFocus);
-    setBackgroundMode(NoBackground/*QWidget::PaletteBase*/);
+    setFocusPolicy(Qt::StrongFocus);
+    setBackgroundMode(Qt::NoBackground/*QWidget::PaletteBase*/);
 
     QRect rect = doc->boundingRect();
     slotFormulaChanged(rect.width(), rect.height());
@@ -123,7 +128,7 @@ void KFormulaWidget::slotFormulaChanged(int width, int height)
     resize(width + 5, height + 5);
     buffer.resize(width + 5, height + 5);
     update();
-    //kdDebug( 40000 ) << "KFormulaWidget::slotFormulaChanged" << endl;
+    //kDebug( 40000 ) << "KFormulaWidget::slotFormulaChanged" << endl;
 }
 
 /**

@@ -31,8 +31,8 @@
 #define KWBarIcon( x ) BarIcon( x, KWFactory::instance() )
 
 #define DEBUGRECT(rc) (rc).x() << "," << (rc).y() << " " << (rc).width() << "x" << (rc).height()
-#define DEBUGREGION(reg) { QMemArray<QRect>rs=reg.rects(); for (int i=0;i<rs.size();++i) \
-                           kdDebug()<<"  "<<DEBUGRECT(rs[i] )<<endl; }
+#define DEBUGREGION(reg) { Q3MemArray<QRect>rs=reg.rects(); for (int i=0;i<rs.size();++i) \
+                           kDebug()<<"  "<<DEBUGRECT(rs[i] )<<endl; }
 
 const unsigned int s_minFrameWidth=4;
 const unsigned int s_minFrameHeight=11;

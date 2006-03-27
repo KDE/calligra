@@ -21,8 +21,10 @@
 #ifndef SEQUENCEELEMENT_H
 #define SEQUENCEELEMENT_H
 
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 #include <qstring.h>
+//Added by qt3to4:
+#include <QKeyEvent>
 
 #include "basicelement.h"
 
@@ -203,25 +205,25 @@ public:
      *
      * The list will be emptied but stays the property of the caller.
      */
-    virtual void insert(FormulaCursor*, QPtrList<BasicElement>&, Direction);
+    virtual void insert(FormulaCursor*, Q3PtrList<BasicElement>&, Qt::Orientation);
 
     /**
      * Removes all selected children and returns them. Places the
      * cursor to where the children have been.
      */
-    virtual void remove(FormulaCursor*, QPtrList<BasicElement>&, Direction);
+    virtual void remove(FormulaCursor*, Q3PtrList<BasicElement>&, Qt::Orientation);
 
     /**
      * Moves the cursor to a normal place where new elements
      * might be inserted.
      */
-    virtual void normalize(FormulaCursor*, Direction);
+    virtual void normalize(FormulaCursor*, Qt::Orientation);
 
     /**
      * Returns the child at the cursor.
      * Does not care about the selection.
      */
-    virtual BasicElement* getChild(FormulaCursor*, Direction = beforeCursor);
+    virtual BasicElement* getChild(FormulaCursor*, Qt::Orientation = beforeCursor);
 
     /**
      * Sets the cursor to select the child. The mark is placed before,
@@ -289,7 +291,7 @@ public:
      * puts them into the list.
      * Returns false if an error occures.
      */
-    bool buildChildrenFromDom(QPtrList<BasicElement>& list, QDomNode n);
+    bool buildChildrenFromDom(Q3PtrList<BasicElement>& list, QDomNode n);
 
     /**
      * @returns the latex representation of the element and
@@ -416,14 +418,14 @@ private:
     /**
      * Removes the children at pos and appends it to the list.
      */
-    void removeChild(QPtrList<BasicElement>& removedChildren, int pos);
+    void removeChild(Q3PtrList<BasicElement>& removedChildren, int pos);
 
 
     /**
      * Our children. Be sure to notify the rootElement before
      * you remove any.
      */
-    QPtrList<BasicElement> children;
+    Q3PtrList<BasicElement> children;
 
     /**
      * the syntax tree of the sequence

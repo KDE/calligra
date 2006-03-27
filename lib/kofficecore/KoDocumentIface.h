@@ -21,7 +21,9 @@
 #define __KoDocumentIface_h__
 
 #include <dcopobject.h>
-#include <qvaluelist.h>
+#include <q3valuelist.h>
+//Added by qt3to4:
+#include <Q3CString>
 #include <dcopref.h>
 #include <koffice_export.h>
 class KoDocument;
@@ -48,7 +50,7 @@ public:
      * Generate a name for this interface. Automatically used if name=0 is
      * passed to the constructor
      */
-    static QCString newIfaceName();
+    static Q3CString newIfaceName();
 
 k_dcop:
     /**
@@ -86,7 +88,7 @@ k_dcop:
     /**
      * DCOP-action proxy
      */
-    DCOPRef action( const QCString &name );
+    DCOPRef action( const Q3CString &name );
     /**
      * @return list of actions
      */
@@ -94,7 +96,7 @@ k_dcop:
     /**
      * @return a map of (action name, DCOP reference)
      */
-    QMap<QCString,DCOPRef> actionMap();
+    QMap<Q3CString,DCOPRef> actionMap();
 
     /**
      * Saves the document under its existing filename
@@ -106,7 +108,7 @@ k_dcop:
      */
     void saveAs( const QString & url );
 
-    void setOutputMimeType( const QCString & mimetype );
+    void setOutputMimeType( const Q3CString & mimetype );
 
     QString documentInfoAuthorName() const;
     QString documentInfoEmail() const;
@@ -145,8 +147,8 @@ k_dcop:
 
 public:
     virtual QCStringList functionsDynamic();
-    virtual bool processDynamic( const QCString &fun, const QByteArray &data,
-                                 QCString& replyType, QByteArray &replyData );
+    virtual bool processDynamic( const Q3CString &fun, const QByteArray &data,
+                                 Q3CString& replyType, QByteArray &replyData );
 
 protected:
     KoDocument * m_pDoc;

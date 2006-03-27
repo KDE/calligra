@@ -1,3 +1,5 @@
+//Added by qt3to4:
+#include <Q3ValueList>
 /* This file is part of the KDE project
    Copyright (C) 2005 David Faure <faure@kde.org>
 
@@ -66,7 +68,7 @@ public:
     /**
      * Return the list of all styles in the collection.
      */
-    QValueList<KoUserStyle *> styleList() const { return m_styleList; }
+    Q3ValueList<KoUserStyle *> styleList() const { return m_styleList; }
 
     /**
      * Generate a new unique name, to create a style whose internal name
@@ -136,10 +138,10 @@ protected:
     KoUserStyleCollection( const KoUserStyleCollection& rhs ); ///< forbidden
     void operator=( const KoUserStyleCollection& rhs ); ///< forbidden
 
-    QValueList<KoUserStyle *> m_styleList;
+    Q3ValueList<KoUserStyle *> m_styleList;
 
 private:
-    QValueList<KoUserStyle *> m_deletedStyles;
+    Q3ValueList<KoUserStyle *> m_deletedStyles;
     const QString m_prefix;
     // can become d pointer if needed
     mutable KoUserStyle *m_lastStyle; ///< Last style that was searched

@@ -22,6 +22,10 @@
 
 #include "KWFrameSet.h"
 #include "KWFrameSetEdit.h"
+//Added by qt3to4:
+#include <QPixmap>
+#include <QMouseEvent>
+#include <QKeyEvent>
 
 namespace KFormula {
     class FormulaCursor;

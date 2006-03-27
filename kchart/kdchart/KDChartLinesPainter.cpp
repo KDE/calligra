@@ -33,9 +33,11 @@
 #include <qpainter.h>
 
 #if COMPAT_QT_VERSION >= 0x030000
-#include <qvaluevector.h>
+#include <q3valuevector.h>
 #else
 #include <qarray.h>
+//Added by qt3to4:
+#include <Q3PointArray>
 #endif
 
 #include <stdlib.h>
@@ -285,7 +287,7 @@ void KDChartLinesPainter::specificPaintData( QPainter* painter,
          --dataset )
         ++arrayNumDatasets;
 #if COMPAT_QT_VERSION >= 0x030000
-        QValueVector<MyPoint> allPoints(
+        Q3ValueVector<MyPoint> allPoints(
 #else
         QArray<MyPoint> allPoints(
 #endif
@@ -446,7 +448,7 @@ void KDChartLinesPainter::specificPaintData( QPainter* painter,
 
 
 
-    QPointArray previousPoints; // no vector since only areas need it,
+    Q3PointArray previousPoints; // no vector since only areas need it,
     // and these do not support 3d yet
 
     // Store some (dataset-independend) default values
@@ -470,11 +472,11 @@ void KDChartLinesPainter::specificPaintData( QPainter* painter,
         const KDChartParams::LineMarkerStyle markerStyle = params()->lineMarkerStyle( dataset );
 
         // the +2 is for the areas (if any)
-        QPtrVector< QPointArray > points( 2 );
+        Q3PtrVector< Q3PointArray > points( 2 );
         points.setAutoDelete( true );
         int i = 0;
         for( i = 0; i < 2; ++i )
-            points.insert( i, new QPointArray( ai.numValues + 2 ) );
+            points.insert( i, new Q3PointArray( ai.numValues + 2 ) );
 
         if( ai.bAbscissaHasTrueAxisDtValues )
             ai.numValues = data->cols();
@@ -652,7 +654,7 @@ void KDChartLinesPainter::specificPaintData( QPainter* painter,
                             painter->setBrush( theAreaBrush );
 
                         }
-                        QPointArray segment( 4 );
+                        Q3PointArray segment( 4 );
                         segment.setPoint( 0, points[0]->point( value                 ) );
                         segment.setPoint( 1, points[0]->point( value+1               ) );
                         segment.setPoint( 2, points[0]->point( value+1 ).x(), yCoord );
@@ -674,7 +676,7 @@ void KDChartLinesPainter::specificPaintData( QPainter* painter,
 
                     //qDebug("222");
                     // no 3d handling for areas yet
-                    QPointArray thisSection = points[0]->copy();
+                    Q3PointArray thisSection = points[0]->copy();
 
                     thisSection.resize( point + previousPoints.size() );
                     // append the previous array (there is guaranteed to be
@@ -721,7 +723,7 @@ void KDChartLinesPainter::specificPaintData( QPainter* painter,
                         //          if( data->cell( dataset, value ).hasValue() &&
                         //              data->cell( dataset, value+1 ).hasValue() ) {
                         //              qDebug( "Draw a segment in dataset %d from %d to %d", dataset, value, value+1 );
-                        QPointArray segment( 4 );
+                        Q3PointArray segment( 4 );
                         segment.setPoint( 0, points[0]->point( value ) );
                         segment.setPoint( 1, points[0]->point( value+1 ) );
                         segment.setPoint( 2, points[1]->point( value+1 ) );

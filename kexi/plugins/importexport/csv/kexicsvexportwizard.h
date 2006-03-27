@@ -82,7 +82,7 @@ class KexiCSVExportWizard : public KWizard
 		//! \return default text quote depending on mode.
 		QString defaultTextQuote() const;
 
-		//! Helper, works like kapp->config()->readBoolEntry(const char*, bool) but if mode is Clipboard,
+		//! Helper, works like KGlobal::config()->readBoolEntry(const char*, bool) but if mode is Clipboard,
 		//! "Exporting" is replaced with "Copying" and "Export" is replaced with "Copy" 
 		//! and "CSVFiles" is replaced with "CSVToClipboard"
 		//! in \a key, to keep the setting separate.
@@ -91,7 +91,7 @@ class KexiCSVExportWizard : public KWizard
 		//! Helper like \ref readBoolEntry(const char *, bool), but for QString values.
 		QString readEntry(const char *key, const QString& defaultValue = QString::null);
 
-		//! Helper, works like kapp->config()->writeEntry(const char*,bool) but if mode is Clipboard,
+		//! Helper, works like KGlobal::config()->writeEntry(const char*,bool) but if mode is Clipboard,
 		//! "Exporting" is replaced with "Copying" and "Export" is replaced with "Copy" 
 		//! and "CSVFiles" is replaced with "CSVToClipboard"
 		//! in \a key, to keep the setting separate.

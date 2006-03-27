@@ -39,9 +39,9 @@
 #include <klocale.h>
 #include <kglobal.h>
 #include <kdatepicker.h>
-#include <kdatetbl.h>
+#include <kdatetable.h>
 #include <klineedit.h>
-#include <kpopupmenu.h>
+#include <kmenu.h>
 #include <kdatewidget.h>
 
 #include <kexiutils/utils.h>
@@ -218,7 +218,7 @@ void KexiDateTableEdit::setupContents( QPainter *p, bool focused, QVariant val,
 
 bool KexiDateTableEdit::valueIsNull()
 {
-	if (m_lineedit->text().replace(m_formatter.separator(),"").stripWhiteSpace().isEmpty())
+	if (m_lineedit->text().replace(m_formatter.separator(),"").trimmed().isEmpty())
 		return true;
 	return dateValue().isNull();
 }
@@ -235,7 +235,7 @@ QDate KexiDateTableEdit::dateValue() const
 
 QVariant KexiDateTableEdit::value()
 {
-	if (m_lineedit->text().replace(m_formatter.separator(),"").stripWhiteSpace().isEmpty())
+	if (m_lineedit->text().replace(m_formatter.separator(),"").trimmed().isEmpty())
 		return QVariant();
 	return dateValue();
 //	ok = true;
@@ -245,7 +245,7 @@ QVariant KexiDateTableEdit::value()
 
 bool KexiDateTableEdit::valueIsValid()
 {
-	if (m_lineedit->text().replace(m_formatter.separator(),"").stripWhiteSpace().isEmpty()) //empty date is valid
+	if (m_lineedit->text().replace(m_formatter.separator(),"").trimmed().isEmpty()) //empty date is valid
 		return true;
 	return m_formatter.stringToDate( m_lineedit->text() ).isValid();
 }
@@ -289,14 +289,14 @@ void KexiDateTableEdit::moveToFirstSection()
 bool KexiDateTableEdit::eventFilter( QObject *o, QEvent *e )
 {
 	if (o==m_datePicker) {
-		kdDebug() << e->type() << endl;
+		kDebug() << e->type() << endl;
 		switch (e->type()) {
 		case QEvent::Hide:
 			m_datePickerPopupMenu->hide();
 			break;
 		case QEvent::KeyPress:
 		case QEvent::KeyRelease: {
-			kdDebug() << "ok!" << endl;
+			kDebug() << "ok!" << endl;
 			QKeyEvent *ke = (QKeyEvent *)e;
 			if (ke->key()==Key_Enter || ke->key()==Key_Return) {
 				//accepting picker
@@ -306,7 +306,7 @@ bool KexiDateTableEdit::eventFilter( QObject *o, QEvent *e )
 			else if (ke->key()==Key_Escape) {
 				//cancelling picker
 				m_datePickerPopupMenu->hide();
-				kdDebug() << "reject" << endl;
+				kDebug() << "reject" << endl;
 				return true;
 			}
 			else m_datePickerPopupMenu->setFocus();
@@ -350,7 +350,7 @@ void KexiDateTableEdit::acceptDate()
 {
 	m_edit->setDate(m_datePicker->date());
 	m_datePickerPopupMenu->hide();
-	kdDebug() << "accept" << endl;
+	kDebug() << "accept" << endl;
 }
 
 bool KexiDateTableEdit::cursorAtStart()

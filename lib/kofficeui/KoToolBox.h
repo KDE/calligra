@@ -20,8 +20,11 @@
 #define _KO_TOOLBOX_H_
 
 #include <qtoolbutton.h>
-#include <qptrvector.h>
-#include <qtoolbar.h>
+#include <q3ptrvector.h>
+#include <q3toolbar.h>
+//Added by qt3to4:
+#include <Q3GridLayout>
+#include <Q3PtrList>
 #include <koffice_export.h>
 #include <ktoolbar.h>
 
@@ -29,7 +32,7 @@ class QWidget;
 class KAction;
 class KMainWindow;
 class KDualColorButton;
-class QGridLayout;
+class Q3GridLayout;
 class ToolArea;
 
 
@@ -62,7 +65,7 @@ public:
 
 public slots:
 
-    virtual void setOrientation ( Orientation o );
+    virtual void setOrientation ( Qt::Orientation o );
     void slotButtonPressed( int id );
     void slotPressButton( int id );
 
@@ -79,14 +82,14 @@ private:
 private:
     Q_UINT32 m_numberOfButtons;
 
-    QButtonGroup * m_buttonGroup; // The invisible group of all toolbuttons, so only one can be active at a given time
+    Q3ButtonGroup * m_buttonGroup; // The invisible group of all toolbuttons, so only one can be active at a given time
 
-    QPtrList<ToolArea> m_toolBoxes; // For every ToolArea
+    Q3PtrList<ToolArea> m_toolBoxes; // For every ToolArea
 
     typedef QMap< int, KAction*> ToolList; // The priority ordered list of tools for a certain tooltype
 
-    QPtrList<ToolList> m_tools;
-    QPtrList<KAction> m_idToActionMap; // Map the buttongroup id's to actions for easy activating.
+    Q3PtrList<ToolList> m_tools;
+    Q3PtrList<KAction> m_idToActionMap; // Map the buttongroup id's to actions for easy activating.
     KInstance* m_instance;
 };
 
@@ -103,14 +106,14 @@ public:
     QWidget* getNextParent();
 
 private:
-    QPtrList<QWidget>  m_children;
-    QBoxLayout        *m_layout;
+    Q3PtrList<QWidget>  m_children;
+    Q3BoxLayout        *m_layout;
 
     QWidget           *m_leftRow;
-    QBoxLayout        *m_leftLayout;
+    Q3BoxLayout        *m_leftLayout;
 
     QWidget           *m_rightRow;
-    QBoxLayout        *m_rightLayout;
+    Q3BoxLayout        *m_rightLayout;
 
     bool               m_left;
 };

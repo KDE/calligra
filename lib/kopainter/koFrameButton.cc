@@ -19,6 +19,10 @@
 */
 
 #include "koFrameButton.h"
+//Added by qt3to4:
+#include <QPixmap>
+#include <QMouseEvent>
+#include <QLabel>
 
 KoFrameButton::KoFrameButton(QWidget *parent, const char *name):
 QLabel(parent, name)
@@ -37,7 +41,7 @@ QLabel(parent, name)
   setFrameStyle(Panel | Raised);
   setLineWidth(1);
   setText(text);
-  setAlignment(AlignHCenter | AlignVCenter);
+  setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
   mActive = false;
   mToggle = false;
 }

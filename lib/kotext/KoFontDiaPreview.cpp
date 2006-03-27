@@ -30,13 +30,15 @@
 #include <qstringlist.h>
 #include <qstring.h>
 #include <qregexp.h>
+//Added by qt3to4:
+#include <Q3Frame>
 
 #include <math.h>
 
 #include "KoFontDiaPreview.moc"
 
-KoFontDiaPreview::KoFontDiaPreview( QWidget* parent, const char* name , WFlags fl )
-        : QFrame( parent, name, fl )
+KoFontDiaPreview::KoFontDiaPreview( QWidget* parent, const char* name , Qt::WFlags fl )
+        : Q3Frame( parent, name, fl )
         ,m_text( i18n( "The quick brown dog jumps over the lazy cat." ) )
         ,displayText( i18n( "The quick brown dog jumps over the lazy cat." ) )
         ,m_font( KoGlobal::defaultFont() )
@@ -57,8 +59,8 @@ KoFontDiaPreview::KoFontDiaPreview( QWidget* parent, const char* name , WFlags f
         ,m_relativeSize( 1 )
 
 {
-    setFrameStyle( QFrame::WinPanel | QFrame::Plain );
-    setBackgroundMode( PaletteBase );
+    setFrameStyle( Q3Frame::WinPanel | Q3Frame::Plain );
+    setBackgroundMode( Qt::PaletteBase );
     setBackgroundColor( Qt::white );
     setMinimumSize( 400, 100 );
 }
@@ -191,7 +193,7 @@ void KoFontDiaPreview::drawContents( QPainter* p )
 
 // draw the stuff
     QFontMetrics fm( displayFont );
-    QRect br = fm.boundingRect( contentsRect().x(), contentsRect().y(), contentsRect().width(), contentsRect().height(), Qt::AlignCenter | Qt::WordBreak, displayText );
+    QRect br = fm.boundingRect( contentsRect().x(), contentsRect().y(), contentsRect().width(), contentsRect().height(), Qt::AlignCenter | Qt::TextWordWrap, displayText );
 
     if ( br.width() > contentsRect().width() || br.height() > contentsRect().height() ) {
         displayText = formatCapitalisation( i18n( "Font too large for the preview pane" ) );
@@ -199,7 +201,7 @@ void KoFontDiaPreview::drawContents( QPainter* p )
     }
 
     QFontMetrics fm1( displayFont );
-    br = fm1.boundingRect( contentsRect().x(), contentsRect().y(), contentsRect().width(), contentsRect().height(), Qt::AlignCenter | Qt::WordBreak, displayText );
+    br = fm1.boundingRect( contentsRect().x(), contentsRect().y(), contentsRect().width(), contentsRect().height(), Qt::AlignCenter | Qt::TextWordWrap, displayText );
 
     int xorg = qRound( ( contentsRect().width() - br.width() ) / 2 ) + contentsRect().x() - fm1.leftBearing( displayText.at( 0 ) );
 
@@ -225,7 +227,7 @@ void KoFontDiaPreview::drawContents( QPainter* p )
     }
 
     QFontMetrics fm2( displayFont );
-    br = fm2.boundingRect( contentsRect().x(), contentsRect().y(), contentsRect().width(), contentsRect().height(), Qt::AlignCenter | Qt::WordBreak, displayText );
+    br = fm2.boundingRect( contentsRect().x(), contentsRect().y(), contentsRect().width(), contentsRect().height(), Qt::AlignCenter | Qt::TextWordWrap, displayText );
     int yorg = qRound( ( contentsRect().height() - br.height() ) / 2 ) + fm1.ascent() + subSuperOffset;
     int sxorg = xorg + int( m_shadowDistanceX );
     int syorg = yorg + int( m_shadowDistanceY );

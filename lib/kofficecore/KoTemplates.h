@@ -21,9 +21,11 @@
 #ifndef koTemplates_h
 #define koTemplates_h
 
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 #include <qstringlist.h>
 #include <qpixmap.h>
+//Added by qt3to4:
+#include <Q3CString>
 #include <koffice_export.h>
 
 class KInstance;
@@ -99,7 +101,7 @@ public:
 private:
     QString m_name;
     QStringList m_dirs;
-    QPtrList<KoTemplate> m_templates;
+    Q3PtrList<KoTemplate> m_templates;
     mutable bool m_touched;
     int m_sortingWeight;
 };
@@ -108,11 +110,11 @@ private:
 class KoTemplateTree {
 
 public:
-    KoTemplateTree(const QCString &templateType, KInstance *instance,
+    KoTemplateTree(const Q3CString &templateType, KInstance *instance,
 		   bool readTree=false);
     ~KoTemplateTree() {}
 
-    QCString templateType() const { return m_templateType; }
+    Q3CString templateType() const { return m_templateType; }
     KInstance *instance() const { return m_instance; }
     void readTemplateTree();
     void writeTemplateTree();
@@ -135,9 +137,9 @@ private:
     void writeTemplate(KoTemplate *t, KoTemplateGroup *group,
 		       const QString &localDir);
 
-    QCString m_templateType;
+    Q3CString m_templateType;
     KInstance *m_instance;
-    QPtrList<KoTemplateGroup> m_groups;
+    Q3PtrList<KoTemplateGroup> m_groups;
     KoTemplateGroup *m_defaultGroup;
     KoTemplate *m_defaultTemplate;
 };

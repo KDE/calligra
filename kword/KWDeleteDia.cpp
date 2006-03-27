@@ -25,8 +25,11 @@
 #include <klocale.h>
 #include <qlabel.h>
 #include <qlayout.h>
+//Added by qt3to4:
+#include <Q3GridLayout>
+#include <Q3ValueList>
 
-KWDeleteDia::KWDeleteDia( KWView *parent, KWTableFrameSet *table, DeleteType type, QValueList<uint> remove)
+KWDeleteDia::KWDeleteDia( KWView *parent, KWTableFrameSet *table, DeleteType type, Q3ValueList<uint> remove)
     : KDialogBase( Plain, (type==deleteRow?i18n("Delete Row") : i18n("Delete Column")), Ok | Cancel, Ok, parent, "Delete Table items dialog", true )
 {
     Q_ASSERT(type == deleteRow || type == deleteColumn);
@@ -44,7 +47,7 @@ KWDeleteDia::KWDeleteDia( KWView *parent, KWTableFrameSet *table, DeleteType typ
 
 void KWDeleteDia::setupTab1() {
     QWidget *tab1 = plainPage();
-    QGridLayout *grid1 = new QGridLayout( tab1, 4, 1, 0, spacingHint() );
+    Q3GridLayout *grid1 = new Q3GridLayout( tab1, 4, 1, 0, spacingHint() );
     unsigned int count = m_toRemove.count();
     Q_ASSERT(count > 0);
 
@@ -63,7 +66,7 @@ void KWDeleteDia::setupTab1() {
     else {
         message = m_type == deleteRow ? i18n( "Delete rows: %1 ?" ) : i18n( "Delete columns: %1 ?" );
 
-        QValueListIterator<uint> items = m_toRemove.begin();
+        Q3ValueListIterator<uint> items = m_toRemove.begin();
         QString rows;
         for(;items != m_toRemove.end(); ++items) {
             if(! rows.isEmpty())

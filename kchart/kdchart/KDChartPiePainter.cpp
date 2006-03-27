@@ -31,8 +31,11 @@
 #include "KDChartParams.h"
 
 #include <qpainter.h>
-#include <qvaluestack.h>
+#include <q3valuestack.h>
 #include <qmessagebox.h>
+//Added by qt3to4:
+#include <Q3PointArray>
+#include <Q3ValueList>
 
 #define DEGTORAD(d) (d)*M_PI/180
 
@@ -89,7 +92,7 @@ void KDChartPiePainter::paintData( QPainter* painter,
     QRect ourClipRect( _dataRect );
     ourClipRect.addCoords( -1,-1,1,1 );
 
-    const QWMatrix & world = painter->worldMatrix();
+    const QMatrix & world = painter->worldMatrix();
     ourClipRect =
 #if COMPAT_QT_VERSION >= 0x030000
         world.mapRect( ourClipRect );
@@ -205,7 +208,7 @@ void KDChartPiePainter::paintData( QPainter* painter,
     int frontmostpie = findPieAt( 270 * 16 );
     // and put the backmost pie on the TODO stack to initialize it,
     // but only if it is not the frontmostpie
-    QValueStack < int > todostack;
+    Q3ValueStack < int > todostack;
     if ( backmostpie != frontmostpie )
         todostack.push( backmostpie );
     else {
@@ -225,7 +228,7 @@ void KDChartPiePainter::paintData( QPainter* painter,
 
     // The list with pies that have already been drawn
 
-    QValueList < int > donelist;
+    Q3ValueList < int > donelist;
 
     // Draw pies until the todostack is empty or only the frontmost
     // pie is there
@@ -324,7 +327,7 @@ void KDChartPiePainter::drawOnePie( QPainter* painter,
         QRect drawPosition = _position;
         if ( params()->explode() ) {
             // need to compute a new position for each or some of the pie
-            QValueList<int> explodeList = params()->explodeValues();
+            Q3ValueList<int> explodeList = params()->explodeValues();
             if( explodeList.count() == 0 || // nothing on list, explode all
                     explodeList.find( pie ) != explodeList.end() ) {
                 double explodeAngle = ( startAngle + angleLen / 2 ) / 16;
@@ -361,7 +364,7 @@ void KDChartPiePainter::drawOnePie( QPainter* painter,
             // full circle, avoid nasty line in the middle
             painter->drawEllipse( drawPosition );
             if ( regions ) {
-                QPointArray hitregion;
+                Q3PointArray hitregion;
                 hitregion.makeEllipse( drawPosition.x(), drawPosition.y(),
                                        drawPosition.width(),
                                        drawPosition.height() );
@@ -395,7 +398,7 @@ void KDChartPiePainter::drawOnePie( QPainter* painter,
             // draw the top of this piece
             // Start with getting the points for the arc.
             const int arcPoints = angleLen;
-            QPointArray collect(arcPoints+2);
+            Q3PointArray collect(arcPoints+2);
             int i=0;
             for ( ; i<=angleLen; ++i){
                 collect.setPoint(i, pointOnCircle( drawPosition, startAngle+i ));
@@ -415,7 +418,7 @@ void KDChartPiePainter::drawOnePie( QPainter* painter,
 
 
             if ( regions ) {
-                QPointArray hitregion;
+                Q3PointArray hitregion;
                 hitregion.makeArc( drawPosition.x(), drawPosition.y(),
                         drawPosition.width(),
                         drawPosition.height(),
@@ -686,7 +689,7 @@ void KDChartPiePainter::drawStraightEffectSegment( QPainter* painter,
         QRegion* region )
 {
     QPoint center = rect.center();
-    QPointArray points( 4 );
+    Q3PointArray points( 4 );
     QPoint circlePoint = pointOnCircle( rect, angle );
     points.setPoint( 0, center );
     points.setPoint( 1, circlePoint );
@@ -722,7 +725,7 @@ void KDChartPiePainter::drawArcEffectSegment( QPainter* painter,
     const int startA = QMIN(startAngle, endAngle);
     const int endA   = QMAX(startAngle, endAngle);
     const int arcPoints = endA-startA+1;
-    QPointArray collect(arcPoints * 2);
+    Q3PointArray collect(arcPoints * 2);
     for ( int angle=endA; angle>=startA; --angle){
         collect.setPoint(endA-angle, pointOnCircle( rect, angle ));
     }

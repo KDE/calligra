@@ -201,7 +201,7 @@ class KEXIFORMUTILS_EXPORT KexiFormView : public KexiDataAwareView
 		int m_delayedFormContentsResizeOnShow;
 
 		//! Used in setFocusInternal()
-		QGuardedPtr<QWidget> m_setFocusInternalOnce;
+		QPointer<QWidget> m_setFocusInternalOnce;
 
 	
 		/*! Stores geometry of widget recently inserted using insertAutoFields() method.

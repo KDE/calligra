@@ -35,7 +35,7 @@
 KexiRelationMainDlg::KexiRelationMainDlg(KexiMainWindow *mainWin, QWidget *parent, const char *name)
  : KexiViewBase(mainWin, parent, name)
 {
-	kdDebug() << "KexiRelationMainDlg()" << endl;
+	kDebug() << "KexiRelationMainDlg()" << endl;
 //	setIcon(SmallIcon("relation"));
 	m_defaultIconName = "relation";
 	setCaption( i18n("Relationships") );

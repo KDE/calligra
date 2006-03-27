@@ -21,7 +21,7 @@
 #define KROSS_API_OBJECT_H
 
 #include <qstring.h>
-#include <qvaluelist.h>
+#include <q3valuelist.h>
 #include <qmap.h>
 #include <qvariant.h>
 //#include <qobject.h>

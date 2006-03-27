@@ -22,7 +22,9 @@
 #include "example_part.h"
 
 #include <qpainter.h>
-#include <qiconset.h>
+#include <qicon.h>
+//Added by qt3to4:
+#include <QPaintEvent>
 #include <kaction.h>
 #include <kstdaction.h>
 #include <klocale.h>
@@ -65,12 +67,12 @@ void ExampleView::updateReadWrite( bool /*readwrite*/ )
 
 void ExampleView::copy()
 {
-    kdDebug(31000) << "ExampleView::copy(): COPY called" << endl;
+    kDebug(31000) << "ExampleView::copy(): COPY called" << endl;
 }
 
 void ExampleView::cut()
 {
-    kdDebug(31000) << "ExampleView::cut(): CUT called" << endl;
+    kDebug(31000) << "ExampleView::cut(): CUT called" << endl;
 }
 
 #include "example_view.moc"

@@ -21,7 +21,7 @@
 #define KOLISTSTYLESTACK_H
 
 #include <qdom.h>
-#include <qvaluestack.h>
+#include <q3valuestack.h>
 
 /**
  * This class implements the list styles currently active at a given point.
@@ -82,7 +82,7 @@ public:
 
 
 private:
-    QValueStack<QDomElement> m_stack;
+    Q3ValueStack<QDomElement> m_stack;
     int m_initialLevel;
 
 };

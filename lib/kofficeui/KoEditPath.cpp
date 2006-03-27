@@ -21,14 +21,16 @@
 #include <klocale.h>
 #include <qlayout.h>
 #include <qpushbutton.h>
-#include <qlistbox.h>
+#include <q3listbox.h>
+//Added by qt3to4:
+#include <Q3GridLayout>
 #include "KoEditPath.h"
 #include <keditlistbox.h>
 #include <kfiledialog.h>
 #include <kurlrequester.h>
-#include <qhbox.h>
+#include <q3hbox.h>
 #include <klineedit.h>
-#include <qvbox.h>
+#include <q3vbox.h>
 #include <qcheckbox.h>
 #include <qlabel.h>
 
@@ -38,7 +40,7 @@ KoEditPathDia::KoEditPathDia( const QString & _path, QWidget *parent, const char
     setCaption( i18n("Edit Path") );
     QWidget *page = new QWidget( this );
     setMainWidget(page);
-    QGridLayout * grid = new QGridLayout(page, 5, 2, KDialog::marginHint(), KDialog::spacingHint());
+    Q3GridLayout * grid = new Q3GridLayout(page, 5, 2, KDialog::marginHint(), KDialog::spacingHint());
 
     urlReq = new KURLRequester();
     urlReq->fileDialog()->setMode(KFile::Directory | KFile::LocalOnly);
@@ -72,7 +74,7 @@ KoChangePathDia::KoChangePathDia( const QString & _path, QWidget *parent, const 
 {
     setCaption( i18n("Edit Path") );
 
-    QVBox *page =makeVBoxMainWidget();
+    Q3VBox *page =makeVBoxMainWidget();
     new QLabel( i18n("Location:"), page);
     m_urlReq = new KURLRequester(page);
     m_urlReq->setMinimumWidth( m_urlReq->sizeHint().width() * 3 );

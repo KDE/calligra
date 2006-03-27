@@ -126,7 +126,7 @@ KoVariable* KWVariableCollection::loadOasisField( KoTextDocument* textdoc, const
     const bool isTextNS = tag.namespaceURI() == KoXmlNS::text;
     if ( isTextNS )
     {
-        //kdDebug()<<" localName :"<<localName<<endl;
+        //kDebug()<<" localName :"<<localName<<endl;
         if ( localName ==  "note" )
         {
             QString key = "STRING";
@@ -290,7 +290,7 @@ void KWFootNoteVariable::loadOasis( const QDomElement& footNoteTag, KoOasisConte
       else if ( str == "endnote" )
         m_noteType = EndNote;
       else {
-        kdWarning()<<" Unknown footnote type: '" << str << "'" << endl;
+        kWarning()<<" Unknown footnote type: '" << str << "'" << endl;
         m_noteType = FootNote;
       }
     }
@@ -311,13 +311,13 @@ void KWFootNoteVariable::loadOasis( const QDomElement& footNoteTag, KoOasisConte
             m_numberingType = Auto;
         if ( m_numberingType == Auto )
         {
-            //kdDebug()<<" automatic \n";
+            //kDebug()<<" automatic \n";
             m_numDisplay = element.text().toInt();
             formatedNote();
         }
         else
         {
-           // kdDebug()<<" manual \n";
+           // kDebug()<<" manual \n";
             m_varValue = QVariant( element.text() );
         }
       } else if ( localName == "note-body" ) {
@@ -394,7 +394,7 @@ void KWFootNoteVariable::load( QDomElement &elem )
         else if ( str == "endnote" )
             m_noteType = EndNote;
         else
-            kdWarning() << "Unknown footnote type: '" << str << "'" << endl;
+            kWarning() << "Unknown footnote type: '" << str << "'" << endl;
 
         str = footnoteElem.attribute("numberingtype").lower();
         if ( str == "auto" )
@@ -402,7 +402,7 @@ void KWFootNoteVariable::load( QDomElement &elem )
         else if ( str == "manual")
             m_numberingType = Manual;
         else
-            kdWarning() << "Unknown footnote numbering: '" << str << "'" << endl;
+            kWarning() << "Unknown footnote numbering: '" << str << "'" << endl;
 
         if ( m_numberingType == Auto )
         {
@@ -515,7 +515,7 @@ void KWFootNoteVariable::finalize()
     if ( m_frameset->isDeleted() )
         return;
 
-    //kdDebug(32001) << "KWFootNoteVariable::finalize" << endl;
+    //kDebug(32001) << "KWFootNoteVariable::finalize" << endl;
 
     int pageNum = this->pageNum();
     if ( pageNum == -1 )
@@ -525,13 +525,13 @@ void KWFootNoteVariable::finalize()
     int framePage = footNoteFrame->pageNumber();
     if ( framePage != pageNum )
     {
-        //kdDebug(32001) << "Footnote var '" << text() << "' at page " << pageNum << ", footnote frame at page " << framePage << " -> abortFormatting() and recalcFrames()" << endl;
+        //kDebug(32001) << "Footnote var '" << text() << "' at page " << pageNum << ", footnote frame at page " << framePage << " -> abortFormatting() and recalcFrames()" << endl;
         KWTextFrameSet * fs = static_cast<KWTextDocument *>(textDocument())->textFrameSet();
         fs->textObject()->abortFormatting();
 
         // abortFormatting is a bool in kotextobject. So we need to return there before
         // starting text layout again.
-        m_doc->delayedRecalcFrames( QMIN( pageNum, framePage ) );
+        m_doc->delayedRecalcFrames( qMin( pageNum, framePage ) );
         m_doc->delayedRepaintAllViews();
     }
 }
@@ -556,12 +556,12 @@ void KWFootNoteVariable::resize()
     width = qRound( KoTextZoomHandler::ptToLayoutUnitPt( width ) );
     height = fmt->height();
     m_ascent = fmt->ascent();
-    //kdDebug() << "KWFootNoteVariable::resize text=" << txt << " width=" << width << " height=" << height << endl;
+    //kDebug() << "KWFootNoteVariable::resize text=" << txt << " width=" << width << " height=" << height << endl;
 }
 
 void KWFootNoteVariable::setDeleted( bool del )
 {
-    kdDebug() << "KWFootNoteVariable::setDeleted " << del << endl;
+    kDebug() << "KWFootNoteVariable::setDeleted " << del << endl;
     if ( del )
     {
         Q_ASSERT( m_frameset );
@@ -574,7 +574,7 @@ void KWFootNoteVariable::setDeleted( bool del )
     {
         Q_ASSERT( m_frameset );
         if ( m_frameset ) {
-            kdDebug() << "Making frameset " << m_frameset << " visible" << endl;
+            kDebug() << "Making frameset " << m_frameset << " visible" << endl;
             m_frameset->setVisible( true );
             if ( m_frameset->isDeleted() )
                 m_frameset->createInitialFrame( 0 ); // Page number shouldn't matter (see recalcFrames below).
@@ -614,29 +614,29 @@ double KWFootNoteVariable::varY() const
     KWTextFrameSet * fs = static_cast<KWTextDocument *>(textDocument())->textFrameSet();
     if ( !fs->hasFramesInPageArray() ) // we need it for internalToDocument
     {
-        kdDebug(32001) << "KWFootNoteVariable::varY too early, no updateFrames yet" << endl;
+        kDebug(32001) << "KWFootNoteVariable::varY too early, no updateFrames yet" << endl;
         return 0; // this happens on loading - frame layout is done before text layout
     }
     // What we need is "has never been formatted". Not "has just been invalidated"...
     //if ( !paragraph()->isValid() )
     //{
-    //    kdDebug(32001) << "KWFootNoteVariable::varY called but paragraph " << paragraph()->paragId() << " not valid" << endl;
+    //    kDebug(32001) << "KWFootNoteVariable::varY called but paragraph " << paragraph()->paragId() << " not valid" << endl;
     //    return 0;
     //}
     KoPoint dPoint;
-    //kdDebug(32001) << "KWFootNoteVariable::pageNum position of variable (LU): " << QPoint( x(), paragy + y() + height ) << endl;
+    //kDebug(32001) << "KWFootNoteVariable::pageNum position of variable (LU): " << QPoint( x(), paragy + y() + height ) << endl;
     KWFrame* containingFrame = fs->internalToDocument( QPoint( x(), paragy + y() + height ), dPoint );
     if ( containingFrame )
     {
         // Ok, the (bottom of the) footnote variable is at dPoint.
         double varY = dPoint.y();
-        //kdDebug(32001) << " found containingFrame " << containingFrame << " page:" << containingFrame->pageNumber() << "  varY=" << varY << endl;
+        //kDebug(32001) << " found containingFrame " << containingFrame << " page:" << containingFrame->pageNumber() << "  varY=" << varY << endl;
         //int pageNum = containingFrame->pageNumber(); // and at page pageNum
         return varY;
     } else
     {
         // This can happen if the page hasn't been created yet
-        //kdDebug(32001) << "KWFootNoteVariable::pageNum internalToDocument returned 0L for " << x << ", " << y+paragy << endl;
+        //kDebug(32001) << "KWFootNoteVariable::pageNum internalToDocument returned 0L for " << x << ", " << y+paragy << endl;
         return 0;
     }
 }
@@ -661,7 +661,7 @@ void KWStatisticVariable::recalc()
                         m_subtype == VST_STATISTIC_NB_SENTENCE ||
                         m_subtype == VST_STATISTIC_NB_LINES ||
                         m_subtype == VST_STATISTIC_NB_CHARACTERE);
-    QPtrListIterator<KWFrameSet> framesetIt( m_doc->framesetsIterator() );
+    Q3PtrListIterator<KWFrameSet> framesetIt( m_doc->framesetsIterator() );
     //TODO change int to ulong
     for ( framesetIt.toFirst(); framesetIt.current(); ++framesetIt )
     {

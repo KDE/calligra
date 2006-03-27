@@ -23,8 +23,10 @@
 
 // Qt Include
 #include <qdom.h>
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 #include <qstring.h>
+//Added by qt3to4:
+#include <QKeyEvent>
 
 // KDE Include
 
@@ -120,7 +122,7 @@ public:
      * parsing a sequence.
      * This is guaranteed to be QChar::null for all non-text elements.
      */
-    virtual QChar getCharacter() const { return QChar::null; }
+    virtual QChar getCharacter() const { return QChar::Null; }
 
     /**
      * @returns the type of this element. Used for
@@ -268,19 +270,19 @@ public:
      *
      * The list will be emptied but stays the property of the caller.
      */
-    virtual void insert(FormulaCursor*, QPtrList<BasicElement>&, Direction) {}
+    virtual void insert(FormulaCursor*, Q3PtrList<BasicElement>&, Qt::Orientation) {}
 
     /**
      * Removes all selected children and returns them. Places the
      * cursor to where the children have been.
      */
-    virtual void remove(FormulaCursor*, QPtrList<BasicElement>&, Direction) {}
+    virtual void remove(FormulaCursor*, Q3PtrList<BasicElement>&, Qt::Orientation) {}
 
     /**
      * Moves the cursor to a normal place where new elements
      * might be inserted.
      */
-    virtual void normalize(FormulaCursor*, Direction);
+    virtual void normalize(FormulaCursor*, Qt::Orientation);
 
 
     /**
@@ -293,7 +295,7 @@ public:
     /**
      * Returns the child at the cursor.
      */
-    virtual BasicElement* getChild(FormulaCursor*, Direction = beforeCursor) { return 0; }
+    virtual BasicElement* getChild(FormulaCursor*, Qt::Orientation = beforeCursor) { return 0; }
 
 
     /**

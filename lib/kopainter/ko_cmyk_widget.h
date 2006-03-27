@@ -21,11 +21,14 @@
 #define KO_CMYK_WIDGET_H
 
 #include "qwidget.h"
+//Added by qt3to4:
+#include <QLabel>
+#include <Q3GridLayout>
 
 #include <koffice_export.h>
 
 class KoFrameButton;
-class QGridLayout;
+class Q3GridLayout;
 class QColor;
 class KoColorSlider;
 class QLabel;

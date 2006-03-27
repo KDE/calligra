@@ -25,6 +25,8 @@
 
 #include <qobject.h>
 #include <qdom.h>
+//Added by qt3to4:
+#include <Q3PtrList>
 #include <kurl.h>
 #include <kxmlguiclient.h>
 
@@ -50,7 +52,7 @@ namespace Kross { namespace Api {
         public:
 
             /// List of KAction instances.
-            typedef QPtrList<KAction> List;
+            typedef Q3PtrList<KAction> List;
 
             /**
              * Constructor.
@@ -143,9 +145,9 @@ namespace Kross { namespace Api {
 
            /**
             * A KFileDialog will be displayed to let the user choose
-            * a scriptfile. The choosen file will be returned as KURL.
+            * a scriptfile. The choosen file will be returned as KUrl.
             */
-            KURL openScriptFile(const QString& caption = QString::null);
+            KUrl openScriptFile(const QString& caption = QString::null);
 
            /**
             * A KFileDialog will be displayed to let the user choose

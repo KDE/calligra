@@ -26,8 +26,12 @@
 #include <qfile.h>
 #include <qlabel.h>
 #include <qlayout.h>
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 #include <qapplication.h>
+//Added by qt3to4:
+#include <Q3CString>
+#include <Q3ValueList>
+#include <Q3VBoxLayout>
 
 #include <klocale.h>
 #include <kmessagebox.h>
@@ -59,7 +63,7 @@ KoFilterChooser::KoFilterChooser (QWidget *parent, const QStringList &mimeTypes,
     setMainWidget (page);
 
     // looks too squashed together without * 2
-    QVBoxLayout *layout = new QVBoxLayout (page, marginHint (), spacingHint () * 2);
+    Q3VBoxLayout *layout = new Q3VBoxLayout (page, marginHint (), spacingHint () * 2);
 
     QLabel *filterLabel = new QLabel (i18n ("Select a filter:"), page, "filterlabel");
     layout->addWidget (filterLabel);
@@ -124,7 +128,7 @@ KoFilterManager::KoFilterManager( KoDocument* document ) :
 }
 
 
-KoFilterManager::KoFilterManager( const QString& url, const QCString& mimetypeHint,
+KoFilterManager::KoFilterManager( const QString& url, const Q3CString& mimetypeHint,
                                   KoFilterChain* const parentChain ) :
     m_document( 0 ), m_parentChain( parentChain ), m_importUrl( url ), m_importUrlMimetypeHint( mimetypeHint ),
     m_graph( "" ), d( 0 )
@@ -141,7 +145,7 @@ KoFilterManager::~KoFilterManager()
 QString KoFilterManager::import( const QString& url, KoFilter::ConversionStatus& status )
 {
     // Find the mime type for the file to be imported.
-    KURL u;
+    KUrl u;
     u.setPath( url );
     KMimeType::Ptr t = KMimeType::findByURL( u, 0, true );
     if ( t->name() == KMimeType::defaultMimeType() ) {
@@ -162,15 +166,15 @@ QString KoFilterManager::import( const QString& url, KoFilter::ConversionStatus&
 		status = KoFilter::BadConversionGraph;
 		return QString::null;
 	    }
-            QCString nativeFormat = m_document->nativeFormatMimeType ();
+            Q3CString nativeFormat = m_document->nativeFormatMimeType ();
 
-            QApplication::setOverrideCursor( arrowCursor );
+            QApplication::setOverrideCursor( Qt::arrowCursor );
             KoFilterChooser chooser(0,
                                     KoFilterManager::mimeFilter (nativeFormat, KoFilterManager::Import, m_document->extraNativeMimeTypes()),
                                     nativeFormat);
             if (chooser.exec ())
             {
-                QCString f = chooser.filterSelected ().latin1();
+                Q3CString f = chooser.filterSelected ().latin1();
 
                 if (f == nativeFormat)
                 {
@@ -199,7 +203,7 @@ QString KoFilterManager::import( const QString& url, KoFilter::ConversionStatus&
     KoFilterChain::Ptr chain( 0 );
     // Are we owned by a KoDocument?
     if ( m_document ) {
-        QCString mimeType = m_document->nativeFormatMimeType();
+        Q3CString mimeType = m_document->nativeFormatMimeType();
         QStringList extraMimes = m_document->extraNativeMimeTypes();
         int i=0, n = extraMimes.count();
         chain = m_graph.chain( this, mimeType );
@@ -236,7 +240,7 @@ QString KoFilterManager::import( const QString& url, KoFilter::ConversionStatus&
     return QString::null;
 }
 
-KoFilter::ConversionStatus KoFilterManager::exp0rt( const QString& url, QCString& mimeType )
+KoFilter::ConversionStatus KoFilterManager::exp0rt( const QString& url, Q3CString& mimeType )
 {
     bool userCancelled = false;
 
@@ -265,7 +269,7 @@ KoFilter::ConversionStatus KoFilterManager::exp0rt( const QString& url, QCString
         m_graph.setSourceMimeType( m_importUrlMimetypeHint );
     }
     else {
-        KURL u;
+        KUrl u;
         u.setPath( m_importUrl );
         KMimeType::Ptr t = KMimeType::findByURL( u, 0, true );
         if ( t->name() == KMimeType::defaultMimeType() ) {
@@ -277,7 +281,7 @@ KoFilter::ConversionStatus KoFilterManager::exp0rt( const QString& url, QCString
         if ( !m_graph.isValid() ) {
             kdWarning(s_area) << "Can't open " << t->name () << ", trying filter chooser" << endl;
 
-            QApplication::setOverrideCursor( arrowCursor );
+            QApplication::setOverrideCursor( Qt::arrowCursor );
             KoFilterChooser chooser(0, KoFilterManager::mimeFilter ());
             if (chooser.exec ())
                 m_graph.setSourceMimeType (chooser.filterSelected ().latin1 ());
@@ -313,26 +317,26 @@ namespace  // in order not to mess with the global namespace ;)
     class Vertex
     {
     public:
-        Vertex( const QCString& mimeType ) : m_color( White ), m_mimeType( mimeType ) {}
+        Vertex( const Q3CString& mimeType ) : m_color( White ), m_mimeType( mimeType ) {}
 
         enum Color { White, Gray, Black };
         Color color() const { return m_color; }
         void setColor( Color color ) { m_color = color; }
 
-        QCString mimeType() const { return m_mimeType; }
+        Q3CString mimeType() const { return m_mimeType; }
 
         void addEdge( Vertex* vertex ) { if ( vertex ) m_edges.append( vertex ); }
-        QPtrList<Vertex> edges() const { return m_edges; }
+        Q3PtrList<Vertex> edges() const { return m_edges; }
 
     private:
         Color m_color;
-        QCString m_mimeType;
-        QPtrList<Vertex> m_edges;
+        Q3CString m_mimeType;
+        Q3PtrList<Vertex> m_edges;
     };
 
     // Some helper methods for the static stuff
     // This method builds up the graph in the passed ascii dict
-    void buildGraph( QAsciiDict<Vertex>& vertices, KoFilterManager::Direction direction )
+    void buildGraph( Q3AsciiDict<Vertex>& vertices, KoFilterManager::Direction direction )
     {
         QStringList stopList; // Lists of mimetypes that are considered end of chains
         stopList << "text/plain";
@@ -344,9 +348,9 @@ namespace  // in order not to mess with the global namespace ;)
 
         // partly copied from build graph, but I don't see any other
         // way without crude hacks, as we have to obey the direction here
-        QValueList<KoDocumentEntry> parts( KoDocumentEntry::query(false, QString::null) );
-        QValueList<KoDocumentEntry>::ConstIterator partIt( parts.begin() );
-        QValueList<KoDocumentEntry>::ConstIterator partEnd( parts.end() );
+        Q3ValueList<KoDocumentEntry> parts( KoDocumentEntry::query(false, QString::null) );
+        Q3ValueList<KoDocumentEntry>::ConstIterator partIt( parts.begin() );
+        Q3ValueList<KoDocumentEntry>::ConstIterator partEnd( parts.end() );
 
         while ( partIt != partEnd ) {
             QStringList nativeMimeTypes = ( *partIt ).service()->property( "X-KDE-ExtraNativeMimeTypes" ).toStringList();
@@ -359,9 +363,9 @@ namespace  // in order not to mess with the global namespace ;)
             ++partIt;
         }
 
-        QValueList<KoFilterEntry::Ptr> filters = KoFilterEntry::query(); // no constraint here - we want *all* :)
-        QValueList<KoFilterEntry::Ptr>::ConstIterator it = filters.begin();
-        const QValueList<KoFilterEntry::Ptr>::ConstIterator end = filters.end();
+        Q3ValueList<KoFilterEntry::Ptr> filters = KoFilterEntry::query(); // no constraint here - we want *all* :)
+        Q3ValueList<KoFilterEntry::Ptr>::ConstIterator it = filters.begin();
+        const Q3ValueList<KoFilterEntry::Ptr>::ConstIterator end = filters.end();
 
         for ( ; it != end; ++it ) {
 
@@ -404,7 +408,7 @@ namespace  // in order not to mess with the global namespace ;)
             QStringList::ConstIterator importIt = impList.begin();
             const QStringList::ConstIterator importEnd = impList.end();
             for ( ; importIt != importEnd; ++importIt ) {
-                const QCString key = ( *importIt ).latin1();  // latin1 is okay here (werner)
+                const Q3CString key = ( *importIt ).latin1();  // latin1 is okay here (werner)
                 // already there?
                 if ( !vertices[ key ] )
                     vertices.insert( key, new Vertex( key ) );
@@ -417,7 +421,7 @@ namespace  // in order not to mess with the global namespace ;)
 
                 for ( ; exportIt != exportEnd; ++exportIt ) {
                     // First make sure the export vertex is in place
-                    const QCString key = ( *exportIt ).latin1();  // latin1 is okay here
+                    const Q3CString key = ( *exportIt ).latin1();  // latin1 is okay here
                     Vertex* exp = vertices[ key ];
                     if ( !exp ) {
                         exp = new Vertex( key );
@@ -445,7 +449,7 @@ namespace  // in order not to mess with the global namespace ;)
     // This method runs a BFS on the graph to determine the connected
     // nodes. Make sure that the graph is "cleared" (the colors of the
     // nodes are all white)
-    QStringList connected( const QAsciiDict<Vertex>& vertices, const QCString& mimetype )
+    QStringList connected( const Q3AsciiDict<Vertex>& vertices, const Q3CString& mimetype )
     {
         if ( mimetype.isEmpty() )
             return QStringList();
@@ -461,8 +465,8 @@ namespace  // in order not to mess with the global namespace ;)
         while ( !queue.empty() ) {
             v = queue.front();
             queue.pop();
-            QPtrList<Vertex> edges = v->edges();
-            QPtrListIterator<Vertex> it( edges );
+            Q3PtrList<Vertex> edges = v->edges();
+            Q3PtrListIterator<Vertex> it( edges );
             for ( ; it.current(); ++it ) {
                 if ( it.current()->color() == Vertex::White ) {
                     it.current()->setColor( Vertex::Gray );
@@ -478,10 +482,10 @@ namespace  // in order not to mess with the global namespace ;)
 
 // The static method to figure out to which parts of the
 // graph this mimetype has a connection to.
-QStringList KoFilterManager::mimeFilter( const QCString& mimetype, Direction direction, const QStringList& extraNativeMimeTypes )
+QStringList KoFilterManager::mimeFilter( const Q3CString& mimetype, Qt::Orientation direction, const QStringList& extraNativeMimeTypes )
 {
     //kdDebug(s_area) << "mimetype=" << mimetype << " extraNativeMimeTypes=" << extraNativeMimeTypes << endl;
-    QAsciiDict<Vertex> vertices;
+    Q3AsciiDict<Vertex> vertices;
     buildGraph( vertices, direction );
 
     // TODO maybe use the fake vertex trick from the method below, to make the search faster?
@@ -506,12 +510,12 @@ QStringList KoFilterManager::mimeFilter( const QCString& mimetype, Direction dir
 
 QStringList KoFilterManager::mimeFilter()
 {
-    QAsciiDict<Vertex> vertices;
+    Q3AsciiDict<Vertex> vertices;
     buildGraph( vertices, KoFilterManager::Import );
 
-    QValueList<KoDocumentEntry> parts( KoDocumentEntry::query(false, QString::null) );
-    QValueList<KoDocumentEntry>::ConstIterator partIt( parts.begin() );
-    QValueList<KoDocumentEntry>::ConstIterator partEnd( parts.end() );
+    Q3ValueList<KoDocumentEntry> parts( KoDocumentEntry::query(false, QString::null) );
+    Q3ValueList<KoDocumentEntry>::ConstIterator partIt( parts.begin() );
+    Q3ValueList<KoDocumentEntry>::ConstIterator partEnd( parts.end() );
 
     if ( partIt == partEnd )
         return QStringList();
@@ -567,7 +571,7 @@ bool KoFilterManager::filterAvailable( KoFilterEntry::Ptr entry )
         }
 
         // This code is "borrowed" from klibloader ;)
-        QCString symname;
+        Q3CString symname;
         symname.sprintf("check_%s", library->name().latin1() );
         void* sym = library->symbol( symname );
         if ( !sym )

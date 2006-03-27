@@ -178,7 +178,7 @@ void InsertChartHandler::insertObject( QRect r)
   m_view->insertChart( r, m_entry );
 }
 
-InsertPictureHandler::InsertPictureHandler( View* view, QWidget* widget, const KURL &file )
+InsertPictureHandler::InsertPictureHandler( View* view, QWidget* widget, const KUrl &file )
   : InsertHandler( view, widget )
 {
   m_file = file;

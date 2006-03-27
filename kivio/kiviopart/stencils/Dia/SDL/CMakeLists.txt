@@ -1,0 +1,58 @@
+kde4_header()
+
+include_directories( ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
+
+
+########### install files ###############
+
+install_files( ${DATA_INSTALL_DIR}/kivio/stencils/Dia/SDL FILES  $(SHAPES) 	desc icon.xpm )
+
+kde4_footer()
+
+
+
+#original Makefile.am contents follow:
+
+#sdldir = $(kde_datadir)/kivio/stencils/Dia/SDL
+#
+#SHAPES = \
+#	block.shape \
+#	block.xpm \
+#	comment.shape \
+#	comment.xpm \
+#	decision.shape \
+#	decision.xpm \
+#	function.shape \
+#	function.xpm \
+#	header.shape \
+#	header.xpm \
+#	inout.shape \
+#	inout.xpm \
+#	macro.shape \
+#	macro.xpm \
+#	note.shape \
+#	note.xpm \
+#	process.shape \
+#	process.xpm \
+#	receive.shape \
+#	receive.xpm \
+#	return.shape \
+#	return.xpm \
+#	save.shape \
+#	save.xpm \
+#	send.shape \
+#	send.xpm \
+#	service.shape \
+#	service.xpm \
+#	state.shape \
+#	state.xpm \
+#	stop.shape \
+#	stop.xpm \
+#	task.shape \
+#	task.xpm
+#
+#EXTRA_DIST = $(SHAPES)\
+#	desc icon.xpm
+#
+#sdl_DATA = $(SHAPES)\
+#	desc icon.xpm

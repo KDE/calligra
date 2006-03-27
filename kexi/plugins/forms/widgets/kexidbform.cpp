@@ -313,7 +313,7 @@ void KexiDBForm::updateTabStopsOrder(KFormDesigner::Form* form)
 		//restore ordering
 		for (QPtrListIterator<QWidget> it(d->orderedFocusWidgets); it.current(); ++it) {
 			if (fromWidget) {
-				kdDebug() << "KexiDBForm::updateTabStopsOrder() tab order: " << fromWidget->name() 
+				kDebug() << "KexiDBForm::updateTabStopsOrder() tab order: " << fromWidget->name() 
 					<< " -> " << it.current()->name() << endl;
 				setTabOrder( fromWidget, it.current() );
 			}
@@ -354,11 +354,11 @@ bool KexiDBForm::eventFilter( QObject * watched, QEvent * e )
 			// jstaniek: Fix for Qt bug (handling e.g. Alt+2, Ctrl+2 keys on every platform)
 			//           It's important because we're using alt+2 short cut by default
 			//           Damn! I've reported this to Trolltech in November 2004 - still not fixed.
-			if (ke->isAccepted() && (ke->state() & Qt::AltButton) && ke->text()>="0" && ke->text()<="9")
+			if (ke->isAccepted() && (ke->state() & Qt::AltModifier) && ke->text()>="0" && ke->text()<="9")
 				return true;
 			const bool tab = ke->state() == Qt::NoButton && ke->key() == Qt::Key_Tab;
-			const bool backtab = ((ke->state() == Qt::NoButton || ke->state() == Qt::ShiftButton) && ke->key() == Qt::Key_Backtab)
-				|| (ke->state() == Qt::ShiftButton && ke->key() == Qt::Key_Tab);
+			const bool backtab = ((ke->state() == Qt::NoButton || ke->state() == Qt::ShiftModifier) && ke->key() == Qt::Key_Backtab)
+				|| (ke->state() == Qt::ShiftModifier && ke->key() == Qt::Key_Tab);
 
 			if (tab || backtab) {
 				if (d->orderedFocusWidgetsIterator.current() != static_cast<QWidget*>(watched)) {

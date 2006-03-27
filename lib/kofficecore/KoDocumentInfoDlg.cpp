@@ -37,8 +37,11 @@
 #include <qbuffer.h>
 #include <qdom.h>
 #include <qdir.h>
-#include <qvbox.h>
+#include <q3vbox.h>
 #include <qdatetime.h>
+//Added by qt3to4:
+#include <QTextStream>
+#include <Q3CString>
 
 #include <kabc/addressee.h>
 #include <kabc/stdaddressbook.h>
@@ -51,7 +54,7 @@
 #include <kmimetype.h>
 #include <qlayout.h>
 #include <klistview.h>
-#include <qgrid.h>
+#include <q3grid.h>
 #include <qmap.h>
 #include <kfilterdev.h>
 #include <klineedit.h>
@@ -200,11 +203,11 @@ void KoDocumentInfoDlg::resetMetaData()
 
 void KoDocumentInfoDlg::addAuthorPage( KoDocumentInfoAuthor *authorInfo )
 {
-  QVBox *page = d->m_dialog->addVBoxPage( i18n( "Author" ) );
+  Q3VBox *page = d->m_dialog->addVBoxPage( i18n( "Author" ) );
   d->m_authorWidget = new KoDocumentInfoAuthorWidget( page );
-  d->m_authorWidget->labelAuthor->setPixmap( KGlobal::iconLoader()->loadIcon( "personal", KIcon::Desktop, 48 ) );
-  d->m_authorWidget->pbLoadKABC->setIconSet( QIconSet( KGlobal::iconLoader()->loadIcon( "kaddressbook", KIcon::Small ) ) );
-  d->m_authorWidget->pbDelete->setIconSet( QIconSet( KGlobal::iconLoader()->loadIcon( "eraser", KIcon::Small ) ) );
+  d->m_authorWidget->labelAuthor->setPixmap( KGlobal::iconLoader()->loadIcon( "personal", K3Icon::Desktop, 48 ) );
+  d->m_authorWidget->pbLoadKABC->setIconSet( QIcon( KGlobal::iconLoader()->loadIcon( "kaddressbook", K3Icon::Small ) ) );
+  d->m_authorWidget->pbDelete->setIconSet( QIcon( KGlobal::iconLoader()->loadIcon( "eraser", K3Icon::Small ) ) );
 
   d->m_authorWidget->leFullName->setText( authorInfo->fullName() );
   d->m_authorWidget->leInitial->setText( authorInfo->initial() );
@@ -254,15 +257,15 @@ void KoDocumentInfoDlg::addAuthorPage( KoDocumentInfoAuthor *authorInfo )
 
 void KoDocumentInfoDlg::addAboutPage( KoDocumentInfoAbout *aboutInfo )
 {
-  QVBox *page = d->m_dialog->addVBoxPage( i18n( "General" ) );
+  Q3VBox *page = d->m_dialog->addVBoxPage( i18n( "General" ) );
   d->m_aboutWidget = new KoDocumentInfoAboutWidget( page );
-  d->m_aboutWidget->pbReset->setIconSet( QIconSet( KGlobal::iconLoader()->loadIcon( "reload", KIcon::Small ) ) );
+  d->m_aboutWidget->pbReset->setIconSet( QIcon( KGlobal::iconLoader()->loadIcon( "reload", K3Icon::Small ) ) );
   KoDocument* doc = dynamic_cast< KoDocument* >( d->m_info->parent() );
   if ( doc )
   {
     d->m_aboutWidget->leDocFile->setText( doc->file() );
     d->m_aboutWidget->labelType->setText( KMimeType::mimeType( doc->mimeType() )->comment() );
-    d->m_aboutWidget->pixmapLabel->setPixmap( KMimeType::mimeType( doc->mimeType() )->pixmap( KIcon::Desktop, 48 ) );
+    d->m_aboutWidget->pixmapLabel->setPixmap( KMimeType::mimeType( doc->mimeType() )->pixmap( K3Icon::Desktop, 48 ) );
   }
   if ( aboutInfo->creationDate() != QString::null )
     d->m_aboutWidget->labelCreated->setText( aboutInfo->creationDate() + ", " + aboutInfo->initialCreator() );
@@ -290,7 +293,7 @@ void KoDocumentInfoDlg::addAboutPage( KoDocumentInfoAbout *aboutInfo )
 
 void KoDocumentInfoDlg::addUserMetadataPage( KoDocumentInfoUserMetadata *userMetadataInfo )
 {
-  QVBox *page = d->m_dialog->addVBoxPage( i18n( "User-Defined Metadata" ) );
+  Q3VBox *page = d->m_dialog->addVBoxPage( i18n( "User-Defined Metadata" ) );
   d->m_metaWidget = new KoDocumentInfoUserMetadataWidget( page );
 
   d->m_metaWidget->metaListView->addColumn( "Name" );
@@ -302,7 +305,7 @@ void KoDocumentInfoDlg::addUserMetadataPage( KoDocumentInfoUserMetadata *userMet
         QString name = it.key();
         QString value = it.data();
         KListViewItem* it = new KListViewItem( d->m_metaWidget->metaListView, name, value );
-        it->setPixmap( 0, KGlobal::iconLoader()->loadIcon( "text", KIcon::Small ) );
+        it->setPixmap( 0, KGlobal::iconLoader()->loadIcon( "text", K3Icon::Small ) );
     }
 }
 
@@ -376,7 +379,7 @@ class KoDocumentInfoPropsPage::KoDocumentInfoPropsPagePrivate
 public:
   KoDocumentInfo *m_info;
   KoDocumentInfoDlg *m_dlg;
-  KURL m_url;
+  KUrl m_url;
   KTarGz *m_src;
   KTarGz *m_dst;
 
@@ -403,7 +406,7 @@ KoDocumentInfoPropsPage::KoDocumentInfoPropsPage( KPropertiesDialog *props,
 #endif
   d->m_src = new KTarGz( d->m_url.path(), "application/x-gzip" );
 
-  if ( !d->m_src->open( IO_ReadOnly ) )
+  if ( !d->m_src->open( QIODevice::ReadOnly ) )
     return;
 
   const KTarDirectory *root = d->m_src->directory();
@@ -417,7 +420,7 @@ KoDocumentInfoPropsPage::KoDocumentInfoPropsPage( KPropertiesDialog *props,
     d->m_docInfoFile = static_cast<const KTarFile *>( entry );
 
     QBuffer buffer( d->m_docInfoFile->data() );
-    buffer.open( IO_ReadOnly );
+    buffer.open( QIODevice::ReadOnly );
 
     QDomDocument doc;
     doc.setContent( &buffer );
@@ -462,13 +465,13 @@ void KoDocumentInfoPropsPage::applyChanges()
 
   d->m_dst = new KTarGz( tempFile.name(), "application/x-gzip" );
 
-  if ( !d->m_dst->open( IO_WriteOnly ) )
+  if ( !d->m_dst->open( QIODevice::WriteOnly ) )
     return;
 
   KMimeType::Ptr mimeType = KMimeType::findByURL( d->m_url, 0, true );
   if ( mimeType && dynamic_cast<KFilterDev *>( d->m_dst->device() ) != 0 )
   {
-      QCString appIdentification( "KOffice " ); // We are limited in the number of chars.
+      Q3CString appIdentification( "KOffice " ); // We are limited in the number of chars.
       appIdentification += mimeType->name().latin1();
       appIdentification += '\004'; // Two magic bytes to make the identification
       appIdentification += '\006'; // more reliable (DF)
@@ -492,7 +495,7 @@ void KoDocumentInfoPropsPage::applyChanges()
       d->m_dlg->save();
 
       QBuffer buffer;
-      buffer.open( IO_WriteOnly );
+      buffer.open( QIODevice::WriteOnly );
       QTextStream str( &buffer );
       str << d->m_info->save();
       buffer.close();

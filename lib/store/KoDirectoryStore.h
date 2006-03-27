@@ -31,8 +31,8 @@ public:
     ~KoDirectoryStore();
 protected:
     virtual bool init( Mode _mode );
-    virtual bool openWrite( const QString& name ) { return openReadOrWrite( name, IO_WriteOnly ); }
-    virtual bool openRead( const QString& name ) { return openReadOrWrite( name, IO_ReadOnly ); }
+    virtual bool openWrite( const QString& name ) { return openReadOrWrite( name, QIODevice::WriteOnly ); }
+    virtual bool openRead( const QString& name ) { return openReadOrWrite( name, QIODevice::ReadOnly ); }
     virtual bool closeRead() { return true; }
     virtual bool closeWrite() { return true; }
     virtual bool enterRelativeDirectory( const QString& dirName );

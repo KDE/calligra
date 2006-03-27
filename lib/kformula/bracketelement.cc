@@ -18,10 +18,10 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 #include <qpainter.h>
 #include <qpen.h>
-#include <qpointarray.h>
+#include <q3pointarray.h>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -132,8 +132,8 @@ void SingleContentElement::moveDown(FormulaCursor* cursor, BasicElement* /*from*
 }
 
 void SingleContentElement::remove( FormulaCursor* cursor,
-                                   QPtrList<BasicElement>& removedChildren,
-                                   Direction direction )
+                                   Q3PtrList<BasicElement>& removedChildren,
+                                   Qt::Orientation direction )
 {
     switch (cursor->getPos()) {
     case contentPos:
@@ -143,7 +143,7 @@ void SingleContentElement::remove( FormulaCursor* cursor,
     }
 }
 
-void SingleContentElement::normalize( FormulaCursor* cursor, Direction direction )
+void SingleContentElement::normalize( FormulaCursor* cursor, Qt::Orientation direction )
 {
     if (direction == beforeCursor) {
         content->moveLeft(cursor, this);

@@ -1,3 +1,6 @@
+//Added by qt3to4:
+#include <QPixmap>
+#include <Q3ValueList>
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
    Copyright (C) 2002-2006 David Faure <faure@kde.org>
@@ -26,7 +29,7 @@
 #include <config.h>
 #endif
 
-class QDragObject;
+class Q3DragObject;
 class KoSavingContext;
 class KoGenStyles;
 class KWDocument;
@@ -93,9 +96,9 @@ class KoOasisSettings;
 #include <KoStyleCollection.h> // for KoStyleChangeDefMap
 
 #include <qmap.h>
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 #include <qfont.h>
-#include <qvaluevector.h>
+#include <q3valuevector.h>
 
 /******************************************************************/
 /* Class: KWDocument                                           */
@@ -164,11 +167,11 @@ public:
     /**
      * Return a drag object with the selected frames
      */
-    QDragObject* dragSelected( const QValueList<KWFrameView*> &selectedFrames);
+    Q3DragObject* dragSelected( const Q3ValueList<KWFrameView*> &selectedFrames);
     /**
      * Return a drag object with the selected text
      */
-    QDragObject* dragSelected( QWidget *parent, KWTextFrameSet* fs );
+    Q3DragObject* dragSelected( QWidget *parent, KWTextFrameSet* fs );
 
     virtual bool loadXML( QIODevice *, const QDomDocument & dom );
     virtual bool loadChildren( KoStore *store );
@@ -233,9 +236,9 @@ public:
     QString generateFramesetName( const QString & templateName );
 
     /// Prefer this over frameSet(i), if iterating over all of them
-    QPtrListIterator<KWFrameSet> framesetsIterator() const { return QPtrListIterator<KWFrameSet>(m_lstFrameSet); }
+    Q3PtrListIterator<KWFrameSet> framesetsIterator() const { return Q3PtrListIterator<KWFrameSet>(m_lstFrameSet); }
 
-    QValueList<KoTextObject *> visibleTextObjects(KWViewMode *viewmode) const;
+    Q3ValueList<KoTextObject *> visibleTextObjects(KWViewMode *viewmode) const;
 
     /// Register new frameset
     void addFrameSet( KWFrameSet *f, bool finalize = true );
@@ -292,7 +295,7 @@ public:
      * and everything will be update / repainted accordingly.
      */
     void frameChanged( KWFrame * frame );
-    void framesChanged( const QPtrList<KWFrame> & frames, KWView * view = 0L );
+    void framesChanged( const Q3PtrList<KWFrame> & frames, KWView * view = 0L );
 
     QString uniqueFramesetName( const QString& oldName );
     /**
@@ -337,7 +340,7 @@ public:
     KoPictureCollection *pictureCollection() { return m_pictureCollection; }
     KoVariableFormatCollection *variableFormatCollection()const { return m_varFormatCollection; }
 
-    QValueList<KWView *> getAllViews() const { return m_lstViews; }
+    Q3ValueList<KWView *> getAllViews() const { return m_lstViews; }
 
     /**
      * Insert a new page after another,
@@ -364,7 +367,7 @@ public:
      * Used by insertPage but also by KWTextFrameSet to check if it's worth
      * auto-inserting a new page (to avoid infinite loops if not)
      */
-    QPtrList<KWFrame> framesToCopyOnNewPage( int afterPageNum ) const;
+    Q3PtrList<KWFrame> framesToCopyOnNewPage( int afterPageNum ) const;
 
     /**
      * Remove a page. Call afterRemovePages() after removing one or more pages.
@@ -390,7 +393,7 @@ public:
     void lowerMainFrames( int pageNum, int lowestZOrder );
 
     /// \note This method considers _all_ text framesets, even table cells
-    QPtrList<KWTextFrameSet> allTextFramesets( bool onlyReadWrite ) const;
+    Q3PtrList<KWTextFrameSet> allTextFramesets( bool onlyReadWrite ) const;
     /// \note This method considers _all_ text framesets, even table cells
     int numberOfTextFrameSet( KWFrameSet* fs, bool onlyReadWrite );
     /// \note This method considers _all_ text framesets, even table cells
@@ -398,7 +401,7 @@ public:
 
     /// Reimplementation from KoDocument.
     /// \note This method considers _all_ text framesets, even table cells
-    virtual QValueList<KoTextDocument *> allTextDocuments() const;
+    virtual Q3ValueList<KoTextDocument *> allTextDocuments() const;
 
 
     /** Gather all the frames which are on a certain page and return them.
@@ -406,7 +409,7 @@ public:
      * @param pageNum the number of the page
      * @param sorted if true the list is ordered per z-order. should be true always.
      */
-    QPtrList<KWFrame> framesInPage( int pageNum , bool sorted=true) const;
+    Q3PtrList<KWFrame> framesInPage( int pageNum , bool sorted=true) const;
 
 
     /**
@@ -490,7 +493,7 @@ public:
     /// This is used by loadFrameSets() and by KWCanvas to paste framesets
     KWFrameSet *loadFrameSet( QDomElement framesetElem, bool loadFrames = true , bool loadFootnote = true);
     void loadEmbeddedObjects( QDomElement& word );
-    void saveEmbeddedObjects( QDomElement& parentElem, const QPtrList<KoDocumentChild>& childList );
+    void saveEmbeddedObjects( QDomElement& parentElem, const Q3PtrList<KoDocumentChild>& childList );
     void loadEmbedded( const QDomElement &embedded );
 
     void recalcVariables( int type );
@@ -793,7 +796,7 @@ signals:
 
 public slots:
     void slotRepaintChanged( KWFrameSet * frameset );
-    void framesChanged( const QValueList<KWFrame*> &frames);
+    void framesChanged( const Q3ValueList<KWFrame*> &frames);
 
     /** calls invalidate() on all framesets  */
     void invalidate(const KWFrameSet *skipThisFrameSet=0);
@@ -842,10 +845,10 @@ protected:
     void saveOasisBody( KoXmlWriter& writer, KoSavingContext& context ) const;
     void saveOasisCustomFied( KoXmlWriter &writer )const;
 
-    QValueList<KoPictureKey> savePictureList();
+    Q3ValueList<KoPictureKey> savePictureList();
 
     /// helper method for the 2 different dragSelected() versions
-    QDragObject* dragSelectedPrivate( QWidget *parent, const QValueList<KWFrameView*> &selectedFrames, KWTextFrameSet* fs);
+    Q3DragObject* dragSelectedPrivate( QWidget *parent, const Q3ValueList<KWFrameView*> &selectedFrames, KWTextFrameSet* fs);
     /**
      * Save the whole document, or just the selection, into OASIS format
      * When saving the selection, also return the data as plain text and/or plain picture,
@@ -861,13 +864,13 @@ protected:
      * @param fs the text frameset, which must be set when saveFlag==SaveSelected.
      */
     bool saveOasisHelper( KoStore* store, KoXmlWriter* manifestWriter, SaveFlag saveFlag,
-                    const QValueList<KWFrameView*> &selectedFrames,
+                    const Q3ValueList<KWFrameView*> &selectedFrames,
                     QString* plainText = 0, KoPicture* picture = 0, KWTextFrameSet* fs = 0 );
 
     void saveOasisSettings( KoXmlWriter &settingsWriter ) const;
     void saveSelectedFrames( KoXmlWriter& bodyWriter,
-                             KoSavingContext& savingContext, QValueList<KoPictureKey>& pictureList,
-                             const QValueList<KWFrameView*> &selectedFrames, QString* plainText ) const;
+                             KoSavingContext& savingContext, Q3ValueList<KoPictureKey>& pictureList,
+                             const Q3ValueList<KWFrameView*> &selectedFrames, QString* plainText ) const;
 
     // inherited from KoDocument
     QWidget* createCustomDocumentWidget(QWidget *parent);
@@ -884,19 +887,19 @@ private:
             void execute();
         private:
             KWDocument *m_parent;
-            QValueList<KWFrameSet*> m_frameSets;
+            Q3ValueList<KWFrameSet*> m_frameSets;
             bool m_needLayout;
     };
 
     // Variables:
-    QValueList<KWView *> m_lstViews;
+    Q3ValueList<KWView *> m_lstViews;
 
     KoColumns m_pageColumns;
     KoKWHeaderFooter m_pageHeaderFooter;
 
     KoPictureCollection* m_pictureCollection;
 
-    QPtrList<KWFrameSet> m_lstFrameSet;
+    Q3PtrList<KWFrameSet> m_lstFrameSet;
 
     unsigned int m_itemsLoaded;
     unsigned int m_nrItemsToLoad;
@@ -916,8 +919,8 @@ private:
     QMap<KoPictureKey, QString> m_pictureMap;
 
     /// List used to help loading and saving images of the old type ("text image" of class KWTextImage)
-    QPtrList<KWTextImage> m_textImageRequests;
-    QPtrList<KWPictureFrameSet> m_pictureRequests;
+    Q3PtrList<KWTextImage> m_textImageRequests;
+    Q3PtrList<KWPictureFrameSet> m_pictureRequests;
     QMap<QString, KWAnchorPosition> m_anchorRequests;
     QMap<QString, KWFootNoteVariable *> m_footnoteVarRequests; ///< \todo still needed? (move to KWLoadingInfo if so)
     // ===== End of legacy loading stuff =====
@@ -990,7 +993,7 @@ private:
 
     /** Page number -> section title array, for the Section variable.
      * Note that pages without a section title don't appear in the array. */
-    QValueVector< QString > m_sectionTitles;
+    Q3ValueVector< QString > m_sectionTitles;
 
     double m_tabStop;
     QStringList m_spellCheckIgnoreList; // per-document

@@ -1848,7 +1848,7 @@ QString OoWriterImport::appendPicture(QDomDocument& doc, const QDomElement& obje
     }
     else
     {
-        KURL url;
+        KUrl url;
         url.setPath(href); // ### TODO: is this really right?
         picture.setKeyAndDownloadPicture(url, 0); // ### TODO: find a better parent if possible
     }

@@ -25,15 +25,24 @@
 #include <qpainter.h>
 #include <qcursor.h>
 #include <qapplication.h>
-#include <qhbox.h>
+#include <q3hbox.h>
 #include <qlayout.h>
+//Added by qt3to4:
+#include <QPixmap>
+#include <QPaintEvent>
+#include <Q3PtrList>
+#include <QKeyEvent>
+#include <Q3Frame>
+#include <QResizeEvent>
+#include <Q3VBoxLayout>
+#include <QMouseEvent>
 #include <kdebug.h>
 
 KoPixmapWidget::KoPixmapWidget(const QPixmap &aPixmap, QWidget *parent, const char *name):
-QFrame(parent, name, WType_Popup)
+Q3Frame(parent, name, Qt::WType_Popup)
 {
   kdDebug() << "Popup created: " << name << "\n";
-  setFrameStyle(QFrame::WinPanel | QFrame::Raised);
+  setFrameStyle(Q3Frame::WinPanel | Q3Frame::Raised);
   mPixmap = aPixmap;
   int w = mPixmap.width() + 2 * lineWidth();
   int h = mPixmap.height() + 2 * lineWidth();
@@ -48,7 +57,7 @@ KoPixmapWidget::~KoPixmapWidget()
 // paint the centered pixmap; don't overpaint the frame
 void KoPixmapWidget::paintEvent(QPaintEvent *e)
 {
-  QFrame::paintEvent(e);
+  Q3Frame::paintEvent(e);
   QPainter p(this);
   p.setClipRect(e->rect());
   p.drawPixmap(lineWidth(), lineWidth(), mPixmap);
@@ -62,9 +71,9 @@ void KoPixmapWidget::mouseReleaseEvent(QMouseEvent *)
 
 
 KoIconChooser::KoIconChooser(QSize aIconSize, QWidget *parent, const char *name, bool sort):
-QGridView(parent, name)
+Q3GridView(parent, name)
 {
-  QGridView::setBackgroundColor(Qt::white);
+  Q3GridView::setBackgroundColor(Qt::white);
 
   mMargin = 2;
   setCellWidth(aIconSize.width() + 2 * mMargin);
@@ -177,7 +186,7 @@ void KoIconChooser::setCurrentItem(KoIconItem *item)
 // eventually select the item, clicked on
 void KoIconChooser::mousePressEvent(QMouseEvent *e)
 {
-  QGridView::mousePressEvent(e);
+  Q3GridView::mousePressEvent(e);
 }
 
 void KoIconChooser::mouseMoveEvent(QMouseEvent *e)
@@ -205,7 +214,7 @@ KoIconChooser::startDrag()
 void KoIconChooser::mouseReleaseEvent(QMouseEvent * e)
 {
   mMouseButtonDown = true;
-  if(e->button() == LeftButton)
+  if(e->button() == Qt::LeftButton)
   {
     QPoint p = e->pos();
     mDragStartPos = p;
@@ -235,14 +244,14 @@ void KoIconChooser::mouseReleaseEvent(QMouseEvent * e)
 // FIXME: implement keyboard navigation
 void KoIconChooser::keyPressEvent(QKeyEvent *e)
 {
-  QGridView::keyPressEvent(e);
+  Q3GridView::keyPressEvent(e);
 }
 
 // recalculate the number of items that fit into one row
 // set the current item again after calculating the new grid
 void KoIconChooser::resizeEvent(QResizeEvent *e)
 {
-  QGridView::resizeEvent(e);
+  Q3GridView::resizeEvent(e);
 
   KoIconItem *item = currentItem();
   int oldNCols = mNCols;
@@ -308,12 +317,12 @@ void KoIconChooser::paintCell(QPainter *p, int row, int col)
     // highlight current item
     if(row == mCurRow && col == mCurCol)
     {
-      p->setPen(blue);
+      p->setPen(Qt::blue);
       p->drawRect(0, 0, cw, ch);
     }
     else
     {
-      p->setPen(gray);
+      p->setPen(Qt::gray);
       //p->drawRect(0, 0, cw, ch);
       p->drawLine(cw-1, 0, cw-1, ch-1);
       p->drawLine(0, ch-1, cw-1, ch-1);
@@ -431,7 +440,7 @@ int KoIconChooser::sortInsertionIndex(const KoIconItem *item)
   return index;
 }
 
-KoPatternChooser::KoPatternChooser( const QPtrList<KoIconItem> &list, QWidget *parent, const char *name )
+KoPatternChooser::KoPatternChooser( const Q3PtrList<KoIconItem> &list, QWidget *parent, const char *name )
  : QWidget( parent, name )
 {
     // only serves as beautifier for the iconchooser
@@ -442,11 +451,11 @@ KoPatternChooser::KoPatternChooser( const QPtrList<KoIconItem> &list, QWidget *p
 	QObject::connect( chooser, SIGNAL(selected( KoIconItem * ) ),
 					            this, SIGNAL( selected( KoIconItem * )));
 
-	QPtrListIterator<KoIconItem> itr( list );
+	Q3PtrListIterator<KoIconItem> itr( list );
 	for( itr.toFirst(); itr.current(); ++itr )
 		chooser->addItem( itr.current() );
 
-	QVBoxLayout *mainLayout = new QVBoxLayout( this, 1, -1, "main layout" );
+	Q3VBoxLayout *mainLayout = new Q3VBoxLayout( this, 1, -1, "main layout" );
 	mainLayout->addWidget( chooser, 10 );
 }
 

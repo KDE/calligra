@@ -22,6 +22,9 @@
 
 #include "KoRichText.h"
 #include <KoTextDocument.h>
+//Added by qt3to4:
+#include <Q3ValueList>
+#include <Q3MemArray>
 
 class KWFrame;
 class KWTextFrameSet;
@@ -49,7 +52,7 @@ public:
      * Note that this can be 0L (e.g. for paragraphs in the paragdia preview) */
     KWTextFrameSet * textFrameSet() const { return m_textfs; }
 
-    virtual KoTextDocCommand *deleteTextCommand( KoTextDocument *textdoc, int id, int index, const QMemArray<KoTextStringChar> & str, const CustomItemsMap & customItemsMap, const QValueList<KoParagLayout> & oldParagLayouts );
+    virtual KoTextDocCommand *deleteTextCommand( KoTextDocument *textdoc, int id, int index, const Q3MemArray<KoTextStringChar> & str, const CustomItemsMap & customItemsMap, const Q3ValueList<KoParagLayout> & oldParagLayouts );
 
     /// Extensions to KoTextParag::loadOasisSpan
     virtual bool loadSpanTag( const QDomElement& tag, KoOasisContext& context,

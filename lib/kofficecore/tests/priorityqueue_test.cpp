@@ -19,8 +19,8 @@
 
 #include <priorityqueue.h>
 #include <kdebug.h>
-#include <qptrlist.h>
-#include <qasciidict.h>
+#include <q3ptrlist.h>
+#include <q3asciidict.h>
 #include <stdlib.h>
 #include <time.h>
 
@@ -43,9 +43,9 @@ static const char* const keys[] = { "one",  "two", "three",  "four", "five",
 
 int main( int /*argc*/, char **/*argv*/ )
 {
-    QPtrList<Node> list;
+    Q3PtrList<Node> list;
     list.setAutoDelete( true );
-    QAsciiDict<Node> dict;
+    Q3AsciiDict<Node> dict;
 
     KOffice::PriorityQueue<Node> queue;
 

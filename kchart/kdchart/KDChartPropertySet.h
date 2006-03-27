@@ -67,7 +67,7 @@ class KDCHART_EXPORT KDChartPropertySet :public QObject
     Q_ENUMS( SpecialDataPropertyID )
 
     // Required by QSA
-    Q_ENUMS( PenStyle )
+    Q_ENUMS( Qt::PenStyle )
 
     friend class KDChartParams;
 
@@ -518,7 +518,7 @@ public slots:
       \sa setLineWidth, setLineColor, setShowMarker
       \sa hasOwnLineWidth, hasOwnLineColor, hasOwnLineStyle, hasOwnShowMarker
       */
-    void setLineStyle( int idLineStyle, const PenStyle& lineStyle )
+    void setLineStyle( int idLineStyle, const Qt::PenStyle& lineStyle )
     {
         mIdLineStyle = idLineStyle;
         mLineStyle =   lineStyle;
@@ -556,7 +556,7 @@ public slots:
       \sa setLineWidth, setLineColor, setLineStyle, setShowMarker
       \sa hasOwnLineWidth, hasOwnLineColor, hasOwnShowMarker
       */
-    bool hasOwnLineStyle( int& idLineStyle, PenStyle& lineStyle )
+    bool hasOwnLineStyle( int& idLineStyle, Qt::PenStyle& lineStyle )
     {
         idLineStyle = mIdLineStyle;
         if( OwnID == mIdLineStyle ){
@@ -874,12 +874,12 @@ public slots:
         }
         return false;
     }
-    void setExtraLinesStyle( int idExtraLinesStyle, const PenStyle extraLinesStyle )
+    void setExtraLinesStyle( int idExtraLinesStyle, const Qt::PenStyle extraLinesStyle )
     {
         mIdExtraLinesStyle = idExtraLinesStyle;
         mExtraLinesStyle =   extraLinesStyle;
     }
-    bool hasOwnExtraLinesStyle( int& idExtraLinesStyle, PenStyle& extraLinesStyle )
+    bool hasOwnExtraLinesStyle( int& idExtraLinesStyle, Qt::PenStyle& extraLinesStyle )
     {
         idExtraLinesStyle = mIdExtraLinesStyle;
         if( OwnID == idExtraLinesStyle ){

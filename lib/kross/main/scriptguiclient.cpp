@@ -35,6 +35,8 @@
 #include <kdebug.h>
 
 #include <kio/netaccess.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 using namespace Kross::Api;
 
@@ -139,7 +141,7 @@ void ScriptGUIClient::reloadInstalledScripts()
     if(installedcollection)
         installedcollection->clear();
 
-    QCString partname = d->guiclient->instance()->instanceName();
+    Q3CString partname = d->guiclient->instance()->instanceName();
     QStringList files = KGlobal::dirs()->findAllResources("data", partname + "/scripts/*/*.rc");
     //files.sort();
     for(QStringList::iterator it = files.begin(); it != files.end(); ++it)
@@ -150,12 +152,12 @@ bool ScriptGUIClient::installScriptPackage(const QString& scriptpackagefile)
 {
     kdDebug() << QString("Install script package: %1").arg(scriptpackagefile) << endl;
     KTar archive( scriptpackagefile );
-    if(! archive.open(IO_ReadOnly)) {
+    if(! archive.open(QIODevice::ReadOnly)) {
         KMessageBox::sorry(0, i18n("Could not read the package \"%1\".").arg(scriptpackagefile));
         return false;
     }
 
-    QCString partname = d->guiclient->instance()->instanceName();
+    Q3CString partname = d->guiclient->instance()->instanceName();
     QString destination = KGlobal::dirs()->saveLocation("data", partname + "/scripts/", true);
     //QString destination = KGlobal::dirs()->saveLocation("appdata", "scripts", true);
     if(destination.isNull()) {
@@ -202,7 +204,7 @@ bool ScriptGUIClient::loadScriptConfigFile(const QString& scriptconfigfile)
 
     QDomDocument domdoc;
     QFile file(scriptconfigfile);
-    if(! file.open(IO_ReadOnly)) {
+    if(! file.open(QIODevice::ReadOnly)) {
         kdWarning() << "ScriptGUIClient::loadScriptConfig(): Failed to read scriptconfigfile: " << scriptconfigfile << endl;
         return false;
     }
@@ -302,7 +304,7 @@ void ScriptGUIClient::executionFailed(const QString& errormessage, const QString
         KMessageBox::detailedError(0, errormessage, tracedetails);
 }
 
-KURL ScriptGUIClient::openScriptFile(const QString& caption)
+KUrl ScriptGUIClient::openScriptFile(const QString& caption)
 {
     QStringList mimetypes;
     QMap<QString, InterpreterInfo*> infos = Manager::scriptManager()->getInterpreterInfos();
@@ -320,12 +322,12 @@ KURL ScriptGUIClient::openScriptFile(const QString& caption)
         filedialog->setCaption(caption);
     if( filedialog->exec() )
         return filedialog->selectedURL();
-    return KURL();
+    return KUrl();
 }
 
 bool ScriptGUIClient::loadScriptFile()
 {
-    KURL url = openScriptFile( i18n("Load Script File") );
+    KUrl url = openScriptFile( i18n("Load Script File") );
     if(url.isValid()) {
         ScriptActionCollection* loadedcollection = d->collections["loadedscripts"];
         if(loadedcollection) {
@@ -346,7 +348,7 @@ bool ScriptGUIClient::loadScriptFile()
 
 bool ScriptGUIClient::executeScriptFile()
 {
-    KURL url = openScriptFile( i18n("Execute Script File") );
+    KUrl url = openScriptFile( i18n("Execute Script File") );
     if(url.isValid())
         return executeScriptFile( url.path() );
     return false;

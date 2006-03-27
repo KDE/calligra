@@ -20,15 +20,19 @@
 #ifndef __ko_ColorSlider_h__
 #define __ko_ColorSlider_h__
 
-#include <qframe.h>
+#include <q3frame.h>
 #include <qpoint.h>
 #include <qimage.h>
 #include <qwidget.h>
+//Added by qt3to4:
+#include <QMouseEvent>
+#include <QResizeEvent>
+#include <QPaintEvent>
 #include <kpixmap.h>
 #include <koffice_export.h>
 class SliderWidget;
 
-class KOPAINTER_EXPORT KoColorFrame : public QFrame
+class KOPAINTER_EXPORT KoColorFrame : public Q3Frame
 {
   Q_OBJECT
 public:

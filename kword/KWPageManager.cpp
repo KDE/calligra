@@ -31,7 +31,7 @@ KWPageManager::KWPageManager() {
 int KWPageManager::pageNumber(const KoRect &frame) const {
     int page=m_firstPage;
     double startOfpage = 0.0;
-    QPtrListIterator<KWPage> pages(m_pageList);
+    Q3PtrListIterator<KWPage> pages(m_pageList);
     while(pages.current() && startOfpage < frame.top()) {
         startOfpage += pages.current()->height();
         if(startOfpage >= frame.top())
@@ -49,13 +49,13 @@ int KWPageManager::pageNumber(const KoRect &frame) const {
             frame.top() > pages.current()->height() + startOfpage) {
 #ifdef DEBUG_PAGES
     if(!pages.current())
-        kdDebug(31001) << "  KWPageManager::pageNumber of "<< frame << " is too high, no page there\n";
+        kDebug(31001) << "  KWPageManager::pageNumber of "<< frame << " is too high, no page there\n";
     else if(frame.right() > pages.current()->width())
-        kdDebug(31001) << "  KWPageManager::pageNumber right of "<< frame << " is out of bounds\n";
+        kDebug(31001) << "  KWPageManager::pageNumber right of "<< frame << " is out of bounds\n";
     else if(frame.top() > pages.current()->height() + startOfpage)
-        kdDebug(31001) << "  KWPageManager::pageNumber "<< frame << " spans multiple pages\n";
+        kDebug(31001) << "  KWPageManager::pageNumber "<< frame << " spans multiple pages\n";
 
-kdDebug(31001) << kdBacktrace() << endl;
+kDebug(31001) << kBacktrace() << endl;
 #endif
         return -1; // not inside the page...
     }
@@ -78,15 +78,15 @@ int KWPageManager::pageCount() const {
 }
 
 KWPage* KWPageManager::page(int pageNum) const {
-    QPtrListIterator<KWPage> pages(m_pageList);
+    Q3PtrListIterator<KWPage> pages(m_pageList);
     while(pages.current()) {
         if(pages.current()->pageNumber() == pageNum)
             return pages.current();
         ++pages;
     }
-    kdWarning(31001) << "KWPageManager::page(" << pageNum << ") failed; Requested page does not exist ["<< m_firstPage << "-"<< lastPageNumber() << "]"<< endl;
+    kWarning(31001) << "KWPageManager::page(" << pageNum << ") failed; Requested page does not exist ["<< m_firstPage << "-"<< lastPageNumber() << "]"<< endl;
 #ifdef DEBUG_PAGES
-    kdDebug(31001) << kdBacktrace();
+    kDebug(31001) << kBacktrace();
 #endif
     return 0;
 }
@@ -107,7 +107,7 @@ KWPage* KWPageManager::page(const KoRect *rect) const {
 void KWPageManager::setStartPage(int startPage) {
     int offset = startPage - m_firstPage;
     bool switchSides = startPage % 2 != m_firstPage % 2;
-    for(QPtrListIterator<KWPage> pages(m_pageList); pages.current(); ++pages) {
+    for(Q3PtrListIterator<KWPage> pages(m_pageList); pages.current(); ++pages) {
         KWPage *page = pages.current();
         page->m_pageNum = page->m_pageNum + offset;
         if(switchSides)
@@ -123,8 +123,8 @@ int KWPageManager::lastPageNumber() const {
 KWPage* KWPageManager::insertPage(int index) {
     if(m_onlyAllowAppend)
         return appendPage();
-    KWPage *page = new KWPage(this, QMIN( QMAX(index, m_firstPage), lastPageNumber()+1 ));
-    QPtrListIterator<KWPage> pages(m_pageList);
+    KWPage *page = new KWPage(this, qMin( qMax(index, m_firstPage), lastPageNumber()+1 ));
+    Q3PtrListIterator<KWPage> pages(m_pageList);
     while(pages.current() && pages.current()->pageNumber() < index)
         ++pages;
     while(pages.current()) {
@@ -165,7 +165,7 @@ double KWPageManager::bottomOfPage(int pageNum) const {
 double KWPageManager::pageOffset(int pageNum, bool bottom) const {
     if(pageNum < m_firstPage)
         return 0;
-    QPtrListIterator<KWPage> pages(m_pageList);
+    Q3PtrListIterator<KWPage> pages(m_pageList);
     double offset = 0.0;
     while(pages.current()) {
         if(pages.current()->pageNumber() == pageNum) {
@@ -185,7 +185,7 @@ void KWPageManager::removePage(int pageNumber) {
 void KWPageManager::removePage(KWPage *page) {
     if(!page)
         return;
-    QPtrListIterator<KWPage> pages(m_pageList);
+    Q3PtrListIterator<KWPage> pages(m_pageList);
     while(pages.current() && pages.current()->pageNumber() <= page->pageNumber())
         ++pages;
     while(pages.current()) {
@@ -205,16 +205,16 @@ void KWPageManager::setDefaultPage(const KoPageLayout &layout) {
     } else {
         m_defaultPageLayout.ptPageEdge = -1;
         m_defaultPageLayout.ptBindingSide = -1;
-        m_defaultPageLayout.ptLeft = QMAX(m_defaultPageLayout.ptLeft, 0);
-        m_defaultPageLayout.ptRight = QMAX(m_defaultPageLayout.ptRight, 0);
+        m_defaultPageLayout.ptLeft = qMax(m_defaultPageLayout.ptLeft, 0);
+        m_defaultPageLayout.ptRight = qMax(m_defaultPageLayout.ptRight, 0);
     }
-    kdDebug() << "setDefaultPage l:" << m_defaultPageLayout.ptLeft << ", r: " << m_defaultPageLayout.ptRight << ", a: " << m_defaultPageLayout.ptPageEdge << ", b: " << m_defaultPageLayout.ptBindingSide << endl;
+    kDebug() << "setDefaultPage l:" << m_defaultPageLayout.ptLeft << ", r: " << m_defaultPageLayout.ptRight << ", a: " << m_defaultPageLayout.ptPageEdge << ", b: " << m_defaultPageLayout.ptBindingSide << endl;
 }
 
 KoPoint KWPageManager::clipToDocument(const KoPoint &point) {
     int page=m_firstPage;
     double startOfpage = 0.0;
-    QPtrListIterator<KWPage> pages(m_pageList);
+    Q3PtrListIterator<KWPage> pages(m_pageList);
     while(pages.current()) {
         startOfpage += pages.current()->height();
         if(startOfpage >= point.y())
@@ -222,7 +222,7 @@ KoPoint KWPageManager::clipToDocument(const KoPoint &point) {
         page++;
         ++pages;
     }
-    page = QMIN(page, lastPageNumber());
+    page = qMin(page, lastPageNumber());
     KoRect rect = this->page(page)->rect();
     if(rect.contains(point))
         return point;
@@ -241,7 +241,7 @@ KoPoint KWPageManager::clipToDocument(const KoPoint &point) {
 }
 
 // **** PageList ****
-int KWPageManager::PageList::compareItems(QPtrCollection::Item a, QPtrCollection::Item b)
+int KWPageManager::PageList::compareItems(Q3PtrCollection::Item a, Q3PtrCollection::Item b)
 {
     int pa = ((KWPage *)a)->pageNumber();
     int pb = ((KWPage *)b)->pageNumber();

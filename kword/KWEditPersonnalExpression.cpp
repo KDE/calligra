@@ -31,6 +31,11 @@
 #include <qlineedit.h>
 #include <qlabel.h>
 #include <qlayout.h>
+//Added by qt3to4:
+#include <Q3CString>
+#include <Q3GridLayout>
+#include <Q3HBoxLayout>
+#include <Q3VBoxLayout>
 
 KWEditPersonnalExpression::KWEditPersonnalExpression( QWidget *parent, const char *name )
     : KDialogBase( parent, name , true, i18n("Edit Personal Expression"), Ok|Cancel, Ok, true )
@@ -38,9 +43,9 @@ KWEditPersonnalExpression::KWEditPersonnalExpression( QWidget *parent, const cha
     resize( 412, 339 );
     QWidget *page = new QWidget( this );
     setMainWidget(page);
-    QGridLayout* form1Layout = new QGridLayout( page, 1, 1, 0, KDialog::spacingHint(), "form1Layout");
+    Q3GridLayout* form1Layout = new Q3GridLayout( page, 1, 1, 0, KDialog::spacingHint(), "form1Layout");
 
-    QHBoxLayout *horlayout1 = new QHBoxLayout( 0, 0, KDialog::spacingHint(), "horlayout1");
+    Q3HBoxLayout *horlayout1 = new Q3HBoxLayout( 0, 0, KDialog::spacingHint(), "horlayout1");
 
     QLabel *groupnameLabel = new QLabel(i18n("Group name:"), page, "groupnameLabel" );
     horlayout1->addWidget( groupnameLabel );
@@ -50,23 +55,23 @@ KWEditPersonnalExpression::KWEditPersonnalExpression( QWidget *parent, const cha
 
     form1Layout->addLayout( horlayout1, 0, 1 );
 
-    QGroupBox *expressionGroupBox = new QGroupBox( page, "expressionGroupBox" );
+    Q3GroupBox *expressionGroupBox = new Q3GroupBox( page, "expressionGroupBox" );
     expressionGroupBox->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)5, (QSizePolicy::SizeType)5, 1, 0, expressionGroupBox->sizePolicy().hasHeightForWidth() ) );
     expressionGroupBox->setTitle( i18n( "Expressions" ) );
     expressionGroupBox->setColumnLayout(0, Qt::Vertical );
     expressionGroupBox->layout()->setSpacing( KDialog::spacingHint() );
     expressionGroupBox->layout()->setMargin( KDialog::marginHint() );
-    QVBoxLayout *expressionGroupBoxLayout = new QVBoxLayout( expressionGroupBox->layout() );
+    Q3VBoxLayout *expressionGroupBoxLayout = new Q3VBoxLayout( expressionGroupBox->layout() );
     expressionGroupBoxLayout->setAlignment( Qt::AlignTop );
 
-    m_ExpressionsList = new QListBox( expressionGroupBox, "listOfExpressions" );
+    m_ExpressionsList = new Q3ListBox( expressionGroupBox, "listOfExpressions" );
     m_ExpressionsList->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)7, (QSizePolicy::SizeType)7, 1, 0, m_ExpressionsList->sizePolicy().hasHeightForWidth() ) );
     expressionGroupBoxLayout->addWidget( m_ExpressionsList );
 
     m_expressionLineEdit = new QLineEdit( expressionGroupBox, "expressionLineEdit" );
     expressionGroupBoxLayout->addWidget( m_expressionLineEdit );
 
-    QHBoxLayout *horlayout2 = new QHBoxLayout( 0, 0, KDialog::spacingHint(), "horlayout2");
+    Q3HBoxLayout *horlayout2 = new Q3HBoxLayout( 0, 0, KDialog::spacingHint(), "horlayout2");
     QSpacerItem* spacer = new QSpacerItem( 0, 0, QSizePolicy::Expanding, QSizePolicy::Minimum );
     horlayout2->addItem( spacer );
 
@@ -79,14 +84,14 @@ KWEditPersonnalExpression::KWEditPersonnalExpression( QWidget *parent, const cha
 
     form1Layout->addWidget( expressionGroupBox, 1, 1 );
 
-    QVBoxLayout *vertlayout = new QVBoxLayout( 0, 0, KDialog::spacingHint(), "vertlayout");
+    Q3VBoxLayout *vertlayout = new Q3VBoxLayout( 0, 0, KDialog::spacingHint(), "vertlayout");
 
-    m_groupList = new QListBox( page, "groupList" );
+    m_groupList = new Q3ListBox( page, "groupList" );
     m_groupList->insertItem( "group1"  );
     m_groupList->setMaximumSize( QSize( 200, 32767 ) );
     vertlayout->addWidget( m_groupList );
 
-    QHBoxLayout *horlayout3 = new QHBoxLayout( 0, 0, KDialog::spacingHint(), "horlayout3");
+    Q3HBoxLayout *horlayout3 = new Q3HBoxLayout( 0, 0, KDialog::spacingHint(), "horlayout3");
 
     m_addGroup = new QPushButton( i18n("New"), page, "m_addGroup" );
     horlayout3->addWidget( m_addGroup );
@@ -195,10 +200,10 @@ void KWEditPersonnalExpression::initGroupList()
 void KWEditPersonnalExpression::init(const QString& filename )
 {
     QFile file( filename );
-    if ( !file.open( IO_ReadOnly ) )
+    if ( !file.open( QIODevice::ReadOnly ) )
         return;
 
-    kdDebug() << "KWEditPersonnalExpression::init parsing " << filename << endl;
+    kDebug() << "KWEditPersonnalExpression::init parsing " << filename << endl;
     QDomDocument doc;
     doc.setContent( &file );
     file.close();
@@ -355,12 +360,12 @@ void KWEditPersonnalExpression::saveFile()
             }
         }
     }
-    QCString s = doc.toCString();
+    Q3CString s = doc.toCString();
 
     QFile file( locateLocal("data","kword/expression/perso.xml") );
-    if ( !file.open( IO_WriteOnly ) )
+    if ( !file.open( QIODevice::WriteOnly ) )
     {
-        kdDebug()<<"Error \n";
+        kDebug()<<"Error \n";
         return;
     }
     file.writeBlock(s,s.length());

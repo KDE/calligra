@@ -24,7 +24,9 @@
 
 
 #include <qwidget.h>
-#include <qlistview.h>
+#include <q3listview.h>
+//Added by qt3to4:
+#include <Q3MemArray>
 
 #include <koChart.h>
 
@@ -55,16 +57,16 @@ public:
     
 public slots:
     void changeValue(int);
-    void slotselected(QListViewItem *);
+    void slotselected(Q3ListViewItem *);
     
 private:
     int col;
     KChartParams* _params;
     QSpinBox *dist;
     QSpinBox *column;
-    QListView *list;
+    Q3ListView *list;
     QSpinBox *explose;
-    QMemArray<int> value;
+    Q3MemArray<int> value;
     int pos;
 };
 

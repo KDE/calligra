@@ -4,10 +4,15 @@
 #include <qlayout.h>
 #include <qlineedit.h>
 #include <qregexp.h>
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
 #include <qtooltip.h>
 #include <qvalidator.h>
 #include <qpushbutton.h>
+//Added by qt3to4:
+#include <QKeyEvent>
+#include <QEvent>
+#include <Q3HBoxLayout>
+#include <Q3VBoxLayout>
 
 #include <kinputdialog.h>
 #include <klocale.h>
@@ -95,7 +100,7 @@ bool kchartDataSpinBox::eventFilter( QObject *obj, QEvent *ev )
 // Used for the keyboard navigation
 //
 kchartDataTable::kchartDataTable(QWidget *parent)
-    : QTable(parent)
+    : Q3Table(parent)
 {
 }
 
@@ -151,7 +156,7 @@ bool kchartDataTable::eventFilter( QObject *obj, QEvent *ev )
         }
     }
 
-    return QTable::eventFilter( obj, ev );
+    return Q3Table::eventFilter( obj, ev );
 }
 
 
@@ -171,7 +176,7 @@ kchartDataEditor::kchartDataEditor(QWidget* parent) :
 
     // Create the main table.
     m_table = new kchartDataTable(page);
-    m_table->setSelectionMode(QTable::NoSelection);
+    m_table->setSelectionMode(Q3Table::NoSelection);
     m_table->setFocus();
     m_table->setRowMovingEnabled(true);
     m_table->setColumnMovingEnabled(true);
@@ -214,9 +219,9 @@ kchartDataEditor::kchartDataEditor(QWidget* parent) :
         
   
     // Start the layout.  The buttons are at the top.
-    QVBoxLayout  *topLayout = new QVBoxLayout( page );
+    Q3VBoxLayout  *topLayout = new Q3VBoxLayout( page );
     
-    QHBoxLayout* insertRemoveLayout = new QHBoxLayout( );
+    Q3HBoxLayout* insertRemoveLayout = new Q3HBoxLayout( );
    
     insertRemoveLayout->setSpacing(5);
     insertRemoveLayout->addWidget(insertRowButton);
@@ -232,7 +237,7 @@ kchartDataEditor::kchartDataEditor(QWidget* parent) :
     topLayout->addWidget(m_table);
 
     // Then, a horizontal layer with the rows and columns settings
-    QHBoxLayout  *hbl1 = new QHBoxLayout(  );
+    Q3HBoxLayout  *hbl1 = new Q3HBoxLayout(  );
     hbl1->addWidget(m_rowsLA);
     hbl1->addWidget(m_rowsSB);
     hbl1->addSpacing(20);
@@ -243,7 +248,7 @@ kchartDataEditor::kchartDataEditor(QWidget* parent) :
     topLayout->addLayout(hbl1);
 
 #if 0
-    QHBoxLayout  *hbl2 = new QHBoxLayout(  );
+    Q3HBoxLayout  *hbl2 = new Q3HBoxLayout(  );
     hbl2->addWidget(m_firstRowAsLabel);
     hbl2->addWidget(m_firstColAsLabel);
     hbl2->addStretch(1);
@@ -296,15 +301,15 @@ void kchartDataEditor::addDocs()
     QString rowwhatsthis = i18n("<p><b>Sets the number of rows in the data table."
 				"</b><br><br>Each row represents one data set.</p>");
     QToolTip::add(m_rowsSB, i18n("Number of active data rows"));
-    QWhatsThis::add(m_rowsLA, rowwhatsthis);
-    QWhatsThis::add(m_rowsSB, rowwhatsthis);
+    Q3WhatsThis::add(m_rowsLA, rowwhatsthis);
+    Q3WhatsThis::add(m_rowsSB, rowwhatsthis);
 
     // The columns settings.
     QString colwhatsthis = i18n("<p><b>Sets the number of columns in the data table."
 				"</b><br><br>The number of columns defines the number of data values in each data set (row).</p>");
     QToolTip::add(m_colsSB, i18n("Number of active data columns"));
-    QWhatsThis::add(m_colsLA, colwhatsthis);
-    QWhatsThis::add(m_colsSB, colwhatsthis);
+    Q3WhatsThis::add(m_colsLA, colwhatsthis);
+    Q3WhatsThis::add(m_colsSB, colwhatsthis);
 
     // The table.
     QToolTip::add(m_table, i18n("Chart data table"));
@@ -329,7 +334,7 @@ void kchartDataEditor::addDocs()
     
     
 #if 0
-    QWhatsThis::add(m_table, i18n("<p>This table contains the data"
+    Q3WhatsThis::add(m_table, i18n("<p>This table contains the data"
     " for the chart.<br><br> Each row is one data set of values."
     " The name of such a data set can be changed in the column header (on the left)"
     " of the table. In a line diagram each row is one line. In a ring diagram each row"
@@ -473,7 +478,7 @@ void kchartDataEditor::getData( KChartParams *params, KDChartTableData *dat )
 void kchartDataEditor::setRowLabels(const QStringList &rowLabels)
 {
 #if 0
-    QHeader  *rowHeader = m_table->verticalHeader();
+    Q3Header  *rowHeader = m_table->verticalHeader();
     int       row;
     int       numRows = m_rowsSB->value();
 
@@ -509,7 +514,7 @@ int kchartDataEditor::headerCols()
 void kchartDataEditor::getRowLabels(QStringList &rowLabels)
 {
 #if 0
-    QHeader  *rowHeader = m_table->verticalHeader();
+    Q3Header  *rowHeader = m_table->verticalHeader();
     int  numRows = m_rowsSB->value();
     int  row;
 
@@ -532,7 +537,7 @@ void kchartDataEditor::getRowLabels(QStringList &rowLabels)
 void kchartDataEditor::setColLabels(const QStringList &colLabels)
 {
 #if 0
-    QHeader  *colHeader = m_table->horizontalHeader();
+    Q3Header  *colHeader = m_table->horizontalHeader();
     int       col;
 
     int  numCols = m_colsSB->value();
@@ -559,7 +564,7 @@ void kchartDataEditor::setColLabels(const QStringList &colLabels)
 void kchartDataEditor::getColLabels(QStringList &colLabels)
 {
 #if 0
-    QHeader  *colHeader = m_table->horizontalHeader();
+    Q3Header  *colHeader = m_table->horizontalHeader();
     int  numCols = m_colsSB->value();
     int  col;
 
@@ -806,7 +811,7 @@ void kchartDataEditor::updateRowHeaders()
 {
     for (int i=0;i<m_table->numRows();i++)
     {
-        QHeader* header=m_table->verticalHeader();
+        Q3Header* header=m_table->verticalHeader();
         
         QString tableCellText=m_table->text(i,0);
         
@@ -821,7 +826,7 @@ void kchartDataEditor::updateColHeaders()
 {
     for (int i=0;i<m_table->numCols();i++)
     {
-        QHeader* header=m_table->horizontalHeader();
+        Q3Header* header=m_table->horizontalHeader();
         
         QString tableCellText=m_table->text(0,i);
         

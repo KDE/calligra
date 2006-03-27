@@ -20,6 +20,8 @@
 #include "mainmodule.h"
 
 #include <kdebug.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 using namespace Kross::Api;
 
@@ -75,7 +77,7 @@ bool MainModule::hasChild(const QString& name) const
     return Object::hasChild(name);
 }
 
-EventSignal::Ptr MainModule::addSignal(const QString& name, QObject* sender, QCString signal)
+EventSignal::Ptr MainModule::addSignal(const QString& name, QObject* sender, Q3CString signal)
 {
     EventSignal* event = new EventSignal(name, this, sender, signal);
     if(! addChild(event)) {
@@ -85,7 +87,7 @@ EventSignal::Ptr MainModule::addSignal(const QString& name, QObject* sender, QCS
     return event;
 }
 
-EventSlot::Ptr MainModule::addSlot(const QString& name, QObject* receiver, QCString slot)
+EventSlot::Ptr MainModule::addSlot(const QString& name, QObject* receiver, Q3CString slot)
 {
     EventSlot* event = new EventSlot(name, this, receiver, slot);
     if(! addChild(event)) {

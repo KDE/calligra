@@ -28,7 +28,7 @@ class QSpinBox;
 class QRadioButton;
 class QComboBox;
 class QPixmap;
-class QListBox;
+class Q3ListBox;
 class KColorButton;
 
 namespace KChart
@@ -65,7 +65,7 @@ private:
     QString wallFile;
     QPixmap wallPixmap;
 #if 0
-    QListBox *regionList;
+    Q3ListBox *regionList;
 #endif
     KColorButton* _backgroundCB;
     QVGroupBox* right;
