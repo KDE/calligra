@@ -335,6 +335,8 @@ SizePolicyCustomProperty::setValue(const QVariant &value, bool rememberOldValue)
 		return;
 
 	if(m_property->parent()) {
+#warning "kde4: port it"			
+#if 0			
 		QSizePolicy v = m_property->parent()->value().toSizePolicy();
 
 		if(m_property->type() == SizePolicy_HorData)
@@ -347,6 +349,7 @@ SizePolicyCustomProperty::setValue(const QVariant &value, bool rememberOldValue)
 			v.setVerStretch(value.toInt());
 
 		m_property->parent()->setValue(v, true, false);
+#endif		
 	}
 	else {
 		QSizePolicy v = value.toSizePolicy();
@@ -362,7 +365,8 @@ SizePolicyCustomProperty::value() const
 {
 	if(!m_property || !m_property->parent())
 		return QVariant();
-
+#warning "kde4: port it"
+#if 0
 	if(m_property->type() == SizePolicy_HorData)
 		return m_property->parent()->value().toSizePolicy().horData();
 	else if(m_property->type() == SizePolicy_VerData)
@@ -371,6 +375,6 @@ SizePolicyCustomProperty::value() const
 		return m_property->parent()->value().toSizePolicy().horStretch();
 	else if(m_property->type() == SizePolicy_VerStretch)
 		return m_property->parent()->value().toSizePolicy().verStretch();
-
+#endif
 	return QVariant();
 }

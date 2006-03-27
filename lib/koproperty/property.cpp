@@ -35,7 +35,7 @@
 //Added by qt3to4:
 #include <Q3ValueList>
 #include <Q3CString>
-
+#include <QStringList>
 namespace KoProperty {
 
 QT_STATIC_CONST_IMPL Property Property::null;
