@@ -261,7 +261,7 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const char *, const QStringL
 	wProgressBar->setPixmap("progress");
 	wProgressBar->setClassName("KProgress");
 	wProgressBar->addAlternateClassName("QProgressBar");
-	wProgressBar->setIncludeFileName("kprogress.h");
+	wProgressBar->setIncludeFileName("kprogressbar.h");
 	wProgressBar->setName(i18n("Progress Bar"));
 	wProgressBar->setNamePrefix(
 		i18n("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "progressBar"));
