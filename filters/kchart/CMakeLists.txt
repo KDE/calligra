@@ -9,7 +9,7 @@ add_subdirectory( svg )
 add_subdirectory( xbm ) 
 add_subdirectory( xpm ) 
 
-include_directories( ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
+
 
 
 ########### install files ###############

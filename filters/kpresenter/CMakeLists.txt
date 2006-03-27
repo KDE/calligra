@@ -12,7 +12,7 @@ add_subdirectory( kword )
 add_subdirectory( ooimpress ) 
 add_subdirectory( powerpoint ) 
 
-include_directories( ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
+
 
 
 ########### install files ###############

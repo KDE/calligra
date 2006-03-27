@@ -3,7 +3,7 @@ kde4_header()
 add_subdirectory( Arrows ) 
 add_subdirectory( Connections ) 
 
-include_directories( ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
+
 
 
 ########### install files ###############

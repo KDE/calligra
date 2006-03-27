@@ -14,7 +14,7 @@ message(STATUS "${CMAKE_CURRENT_SOURCE_DIR}: skipped subdir $(KARBONDIR)")
 message(STATUS "${CMAKE_CURRENT_SOURCE_DIR}: skipped subdir $(KUGARDIR)")
 message(STATUS "${CMAKE_CURRENT_SOURCE_DIR}: skipped subdir $(KRITADIR)")
 message(STATUS "${CMAKE_CURRENT_SOURCE_DIR}: skipped subdir $(KIVIODIR)")
-include_directories( ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
+
 
 
 ########### install files ###############

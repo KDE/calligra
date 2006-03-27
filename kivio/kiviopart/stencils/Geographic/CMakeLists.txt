@@ -3,7 +3,7 @@ kde4_header()
 add_subdirectory( Maps ) 
 add_subdirectory( Flags ) 
 
-include_directories( ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
+
 
 
 ########### install files ###############

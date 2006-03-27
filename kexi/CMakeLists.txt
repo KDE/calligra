@@ -13,7 +13,7 @@ add_subdirectory( migration )
 add_subdirectory( plugins ) 
 add_subdirectory( tests ) 
 
-include_directories( ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
+
 
 
 ########### next target ###############

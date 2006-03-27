@@ -4,7 +4,7 @@ add_subdirectory( BasicFlowcharting )
 add_subdirectory( Logic ) 
 add_subdirectory( Extended ) 
 
-include_directories( ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
+
 
 
 ########### install files ###############

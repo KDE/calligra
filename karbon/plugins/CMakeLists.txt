@@ -8,7 +8,7 @@ add_subdirectory( shadoweffect )
 add_subdirectory( zoomtool ) 
 add_subdirectory( imagetool ) 
 
-include_directories( ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
+
 
 
 ########### install files ###############

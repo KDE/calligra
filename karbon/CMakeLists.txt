@@ -14,7 +14,7 @@ add_subdirectory( data )
 add_subdirectory( pics ) 
 add_subdirectory( templates ) 
 
-include_directories( ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
+
 
 
 ########### next target ###############

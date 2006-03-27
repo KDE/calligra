@@ -6,7 +6,7 @@ add_subdirectory( projectdocumentor )
 add_subdirectory( copycenter ) 
 add_subdirectory( python ) 
 
-include_directories( ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
+
 
 
 ########### install files ###############

@@ -19,7 +19,7 @@ add_subdirectory( wml )
 add_subdirectory( wordperfect ) 
 
 message(STATUS "${CMAKE_CURRENT_SOURCE_DIR}: skipped subdir $(MSWORD_SUBDIR)")
-include_directories( ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
+
 
 
 ########### install files ###############

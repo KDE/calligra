@@ -3,7 +3,7 @@ kde4_header()
 add_subdirectory( parser ) 
 add_subdirectory( generator ) 
 
-include_directories( ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
+
 
 
 ########### next target ###############

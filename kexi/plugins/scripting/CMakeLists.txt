@@ -5,7 +5,7 @@ add_subdirectory( kexiapp )
 add_subdirectory( kexidb ) 
 add_subdirectory( scripts ) 
 
-include_directories( ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
+
 
 
 ########### install files ###############

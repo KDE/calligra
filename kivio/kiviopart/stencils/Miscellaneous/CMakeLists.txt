@@ -7,7 +7,7 @@ add_subdirectory( Arrows )
 add_subdirectory( NassiShneiderman ) 
 add_subdirectory( ER ) 
 
-include_directories( ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
+
 
 
 ########### install files ###############

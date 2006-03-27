@@ -6,7 +6,7 @@ add_subdirectory( samples )
 add_subdirectory( kudesigner_lib ) 
 add_subdirectory( kudesigner ) 
 
-include_directories( ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
+
 
 
 ########### install files ###############

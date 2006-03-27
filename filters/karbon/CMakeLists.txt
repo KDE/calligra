@@ -10,7 +10,7 @@ add_subdirectory( xcf )
 add_subdirectory( msod ) 
 add_subdirectory( oodraw ) 
 
-include_directories( ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
+
 
 
 ########### install files ###############

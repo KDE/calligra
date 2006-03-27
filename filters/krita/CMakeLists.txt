@@ -8,7 +8,7 @@ message(STATUS "${CMAKE_CURRENT_SOURCE_DIR}: skipped subdir $(PNG_SUBDIR)")
 message(STATUS "${CMAKE_CURRENT_SOURCE_DIR}: skipped subdir $(LIBKISEXIF)")
 message(STATUS "${CMAKE_CURRENT_SOURCE_DIR}: skipped subdir $(JPEG_SUBDIR)")
 message(STATUS "${CMAKE_CURRENT_SOURCE_DIR}: skipped subdir $(TIFF_SUBDIR)")
-include_directories( ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
+
 
 
 ########### install files ###############

@@ -13,7 +13,7 @@ add_subdirectory( Pneumatic )
 add_subdirectory( SDL ) 
 add_subdirectory( Sybase ) 
 
-include_directories( ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
+
 
 
 ########### install files ###############

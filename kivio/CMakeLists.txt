@@ -4,7 +4,7 @@ add_subdirectory( kiviopart )
 add_subdirectory( plugins ) 
 add_subdirectory( templates ) 
 
-include_directories( ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
+
 
 
 ########### install files ###############

@@ -3,7 +3,7 @@ kde4_header()
 add_subdirectory( Computer ) 
 add_subdirectory( Miscellaneous ) 
 
-include_directories( ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
+
 
 
 ########### install files ###############

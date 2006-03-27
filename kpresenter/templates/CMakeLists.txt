@@ -7,7 +7,7 @@ add_subdirectory( A4 )
 add_subdirectory( legal ) 
 add_subdirectory( letter ) 
 
-include_directories( ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
+
 
 
 ########### install files ###############

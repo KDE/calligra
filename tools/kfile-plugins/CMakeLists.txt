@@ -5,7 +5,7 @@ add_subdirectory( ooo )
 add_subdirectory( gnumeric ) 
 add_subdirectory( abiword ) 
 
-include_directories( ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
+
 
 
 ########### install files ###############

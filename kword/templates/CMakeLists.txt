@@ -4,7 +4,7 @@ add_subdirectory( Wordprocessing )
 add_subdirectory( Envelopes ) 
 add_subdirectory( CardsAndLabels ) 
 
-include_directories( ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
+
 
 
 ########### install files ###############

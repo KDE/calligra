@@ -6,7 +6,7 @@ add_subdirectory( kiviozoomtool )
 add_subdirectory( kivioselecttool ) 
 add_subdirectory( kiviotargettool ) 
 
-include_directories( ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
+
 
 
 ########### install files ###############

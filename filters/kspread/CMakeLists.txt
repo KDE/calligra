@@ -10,7 +10,7 @@ add_subdirectory( html )
 add_subdirectory( qpro ) 
 add_subdirectory( excel ) 
 
-include_directories( ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
+
 
 
 ########### install files ###############

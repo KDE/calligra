@@ -9,7 +9,7 @@ add_subdirectory( importexport )
 
 message(STATUS "${CMAKE_CURRENT_SOURCE_DIR}: skipped subdir $(REPORTS)")
 message(STATUS "${CMAKE_CURRENT_SOURCE_DIR}: skipped subdir $(SCRIPTINGDIR)")
-include_directories( ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
+
 
 
 ########### install files ###############

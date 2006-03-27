@@ -7,7 +7,7 @@ add_subdirectory( Geographic )
 add_subdirectory( Miscellaneous ) 
 add_subdirectory( Hardware ) 
 
-include_directories( ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
+
 
 
 ########### install files ###############

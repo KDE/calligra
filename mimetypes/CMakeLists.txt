@@ -1,7 +1,7 @@
 kde4_header()
 
 message(STATUS "${CMAKE_CURRENT_SOURCE_DIR}: skipped subdir $(KDE351MIMEDIR)")
-include_directories( ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
+
 
 
 ########### install files ###############

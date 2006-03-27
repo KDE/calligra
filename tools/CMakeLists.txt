@@ -7,7 +7,7 @@ add_subdirectory( kthesaurus )
 add_subdirectory( kfile-plugins ) 
 add_subdirectory( quickprint ) 
 
-include_directories( ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
+
 
 
 ########### install files ###############

@@ -8,7 +8,7 @@ add_subdirectory( dtd )
 add_subdirectory( slideshow ) 
 add_subdirectory( toolbar ) 
 
-include_directories( ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
+
 
 
 ########### next target ###############
