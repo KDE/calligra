@@ -4,11 +4,17 @@ add_subdirectory( kohyphen )
 add_subdirectory( tests ) 
 
 include_directories( ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
-
+# Need by kohyphen
+set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  ${KDE4_ENABLE_EXCEPTIONS}")
 
 ########### next target ###############
+set(libkohyphen_SRCS 
+	${CMAKE_SOURCE_DIR}/lib/kotext/kohyphen/hnjalloc.c 
+	${CMAKE_SOURCE_DIR}/lib/kotext/kohyphen/hyphen.c 
+	${CMAKE_SOURCE_DIR}/lib/kotext/kohyphen/kohyphen.cpp
+	)
 
-set(kotext_LIB_SRCS 
+set(kotext_LIB_SRCS ${libkohyphen_SRCS}
    KoComplexText.cpp 
    KoRichText.cpp 
    KoTextZoomHandler.cpp 
@@ -73,7 +79,7 @@ kde4_add_dcop_skels(kotext_LIB_SRCS KoTextViewIface.h )
 
 kde4_add_library(kotext SHARED ${kotext_LIB_SRCS})
 
-target_link_libraries(kotext  ${KDE4_KDECORE_LIBS} kohyphen kutils )
+target_link_libraries(kotext  ${KDE4_KDECORE_LIBS} kutils )
 
 set_target_properties(kotext PROPERTIES VERSION 3.0.0 SOVERSION 3 )
 install_targets(${LIB_INSTALL_DIR} kotext )
