@@ -64,6 +64,7 @@ if (WIN32)
 endif (WIN32)
 
 check_include_files(dlfcn.h HAVE_DLFCN_H)
+check_include_files(paths.h HAVE_PATHS_H)
 check_include_files(crt_externs.h HAVE_CRT_EXTERNS_H)
 check_include_files(inttypes.h HAVE_INTTYPES_H)
 check_include_files(memory.h HAVE_MEMORY_H)

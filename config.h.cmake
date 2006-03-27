@@ -84,7 +84,7 @@
 #define HAVE_MAGICK6 1
 
 /* Define to 1 if you have the <memory.h> header file. */
-#define HAVE_MEMORY_H 1
+#cmakedefine HAVE_MEMORY_H 1
 
 /* Define to 1 if you have the `mkstemp' function. */
 #cmakedefine HAVE_MKSTEMP 1
@@ -93,7 +93,7 @@
 #cmakedefine HAVE_NDIR_H 1
 
 /* Define if your system needs _NSGetEnviron to set up the environment */
-/* #undef HAVE_NSGETENVIRON */
+#cmakedefine HAVE_NSGETENVIRON 1
 
 /* GetMagickInfoList has different number of arguments with versions >= 6.1.3
    */
@@ -106,7 +106,7 @@
 /* #undef HAVE_PAPER_H */
 
 /* Define to 1 if you have the <paths.h> header file. */
-#define HAVE_PATHS_H 1
+#cmakedefine HAVE_PATHS_H 1
 
 /* Define to 1 if you have the `popen' function. */
 #define HAVE_POPEN 1
@@ -118,10 +118,10 @@
 #define HAVE_READLINE 1
 
 /* Define if you have res_init */
-#define HAVE_RES_INIT 1
+#cmakedefine HAVE_RES_INIT 1
 
 /* Define if you have the res_init prototype */
-#define HAVE_RES_INIT_PROTO 1
+#cmakedefine HAVE_RES_INIT_PROTO 1
 
 /* Define to 1 if you have the `rewinddir' function. */
 #define HAVE_REWINDDIR 1
