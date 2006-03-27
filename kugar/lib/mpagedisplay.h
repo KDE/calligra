@@ -12,8 +12,10 @@
 #include <qwidget.h>
 #include <qpainter.h>
 #include <qpixmap.h>
-#include <qpicture.h>
+#include <q3picture.h>
 #include <qsize.h>
+//Added by qt3to4:
+#include <QPaintEvent>
 
 /**Kugar page display widget
   *@author Mutiny Bay Software
@@ -37,7 +39,7 @@ private:
 
 public:
     /** Sets the page image */
-    void setPage( QPicture* image );
+    void setPage( Q3Picture* image );
     /** Sets the page display dimensions */
     void setPageDimensions( QSize size );
 

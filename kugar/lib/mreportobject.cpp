@@ -72,7 +72,7 @@ void MReportObject::draw( QPainter* p, int xoffset, int yoffset )
 void MReportObject::drawBase( QPainter* p, int xoffset, int yoffset )
 {
     QBrush bgBrush( backgroundColor );
-    QPen borderPen( borderColor, borderWidth, ( QPen::PenStyle ) borderStyle );
+    QPen borderPen( borderColor, borderWidth, ( Qt::PenStyle ) borderStyle );
 
     // Set the offsets
     int xcalc = xpos + xoffset;
@@ -99,7 +99,7 @@ void MReportObject::drawBase( QPainter* p, int xoffset, int yoffset )
     }
     else
     {
-        p->setPen( QPen( QColor( 255, 255, 255 ), 1, QPen::SolidLine ) );
+        p->setPen( QPen( QColor( 255, 255, 255 ), 1, Qt::SolidLine ) );
         p->drawRect( xcalc, ycalc, width, height );
     }
 }

@@ -20,10 +20,10 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 
 #include <klocale.h>
 
-#include <qcanvas.h>
+#include <q3canvas.h>
 #include <qpainter.h>
 #include <qprinter.h>
-#include <qpaintdevicemetrics.h>
+#include <q3paintdevicemetrics.h>
 
 #include <koproperty/property.h>
 
@@ -180,7 +180,7 @@ void KugarTemplate::updatePaperProps()
     printer->setOrientation( ( QPrinter::Orientation ) props[ "PageOrientation" ].value().toInt() );
 
     // Get the page metrics and set appropriate wigth and height
-    QPaintDeviceMetrics pdm( printer );
+    Q3PaintDeviceMetrics pdm( printer );
     canvas() ->resize( pdm.width(), pdm.height() );
     setSize( pdm.width(), pdm.height() );
 
@@ -297,7 +297,7 @@ QString KugarTemplate::getXml()
     return result;
 }
 
-bool KugarTemplate::removeReportItem( QCanvasItem *item )
+bool KugarTemplate::removeReportItem( Q3CanvasItem *item )
 {
     if ( item->rtti() > 2000 )
     {

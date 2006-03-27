@@ -11,8 +11,10 @@
 #ifndef MREPORTSECTION_H
 #define MREPORTSECTION_H
 
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 #include <qobject.h>
+//Added by qt3to4:
+#include <Q3MemArray>
 
 #include "mlineobject.h"
 #include "mlabelobject.h"
@@ -56,15 +58,15 @@ protected:
     QDate reportDate;
 
     /** Section's line collection */
-    QPtrList<MLineObject> lines;
+    Q3PtrList<MLineObject> lines;
     /** Section's label collection */
-    QPtrList<MLabelObject> labels;
+    Q3PtrList<MLabelObject> labels;
     /** Section's special field collection */
-    QPtrList<MSpecialObject> specialFields;
+    Q3PtrList<MSpecialObject> specialFields;
     /** Section's calculated field collection */
-    QPtrList<MCalcObject> calculatedFields;
+    Q3PtrList<MCalcObject> calculatedFields;
     /** Section's field collection (for use as report variables) */
-    QPtrList<MFieldObject> fields;
+    Q3PtrList<MFieldObject> fields;
 
 public:
     /** Adds a new line object to the section's line collection */
@@ -100,7 +102,7 @@ public:
     /** Sets the data for the specified calculated field */
     void setCalcFieldData( int idx, QString data );
     /** Sets the data for the all calculated fields - list size must match number of calculated fields */
-    void setCalcFieldData( QPtrList<QMemArray<double> >* values );
+    void setCalcFieldData( Q3PtrList<Q3MemArray<double> >* values );
     /** Returns the number of calculated fields in the section */
     int getCalcFieldCount();
     /** Sets the field data */

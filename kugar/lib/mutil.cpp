@@ -11,6 +11,8 @@
 #include <math.h>
 
 #include "mutil.h"
+//Added by qt3to4:
+#include <Q3MemArray>
 
 
 namespace Kugar
@@ -82,13 +84,13 @@ QString MUtil::formatDate( const QDate& value, int format )
 }
 
 /** Returns the count for an array of doubles */
-int MUtil::count( QMemArray<double>* values )
+int MUtil::count( Q3MemArray<double>* values )
 {
     return values->size();
 }
 
 /** Returns the sum for an array of doubles */
-double MUtil::sum( QMemArray<double>* values )
+double MUtil::sum( Q3MemArray<double>* values )
 {
     double tmpSum = 0.0;
     int size = count( values );
@@ -100,13 +102,13 @@ double MUtil::sum( QMemArray<double>* values )
 }
 
 /** Returns the average value for an array of doubles */
-double MUtil::average( QMemArray<double>* values )
+double MUtil::average( Q3MemArray<double>* values )
 {
     return sum( values ) / count( values );
 }
 
 /** Returns the variance for an array of doubles */
-double MUtil::variance( QMemArray<double>* values )
+double MUtil::variance( Q3MemArray<double>* values )
 {
     double tmpVar = 0.0;
     double tmpAvg = average( values );
@@ -119,7 +121,7 @@ double MUtil::variance( QMemArray<double>* values )
 }
 
 /** Returns the standard deviation for an array of doubles */
-double MUtil::stdDeviation( QMemArray<double>* values )
+double MUtil::stdDeviation( Q3MemArray<double>* values )
 {
     return sqrt( variance( values ) );
 }

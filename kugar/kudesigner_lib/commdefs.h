@@ -20,7 +20,7 @@
 #define COMMDEFS_H
 
 #include <qapplication.h>
-#include <qcanvas.h>
+#include <q3canvas.h>
 #include <qstringlist.h>
 
 namespace Kudesigner

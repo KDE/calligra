@@ -18,7 +18,7 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 */
 #include "band.h"
 
-#include <qcanvas.h>
+#include <q3canvas.h>
 #include <qrect.h>
 #include <qpainter.h>
 
@@ -34,7 +34,7 @@ namespace Kudesigner
 
 Band::~Band()
 {
-    for ( QCanvasItemList::Iterator it = items.begin(); it != items.end(); ++it )
+    for ( Q3CanvasItemList::Iterator it = items.begin(); it != items.end(); ++it )
     {
         //  (*it)->hide();
         m_canvas->selected.remove( static_cast<Box*>( *it ) );
@@ -61,7 +61,7 @@ void Band::arrange( int base, bool destructive )
     setY( base );
     if ( !destructive )
         return ;
-    for ( QCanvasItemList::Iterator it = items.begin(); it != items.end(); ++it )
+    for ( Q3CanvasItemList::Iterator it = items.begin(); it != items.end(); ++it )
     {
         ( *it ) ->moveBy( 0, diff );
         //  ( (CanvasReportItem *)(*it) )->updateGeomProps();
@@ -74,10 +74,10 @@ void Band::arrange( int base, bool destructive )
 int Band::minHeight()
 {
     int result = static_cast<int>( y() + 10 );
-    for ( QCanvasItemList::Iterator it = items.begin(); it != items.end(); ++it )
+    for ( Q3CanvasItemList::Iterator it = items.begin(); it != items.end(); ++it )
     {
-        result = qMax( result, static_cast<int>( static_cast<QCanvasRectangle*>( *it ) ->y() +
-                       static_cast<QCanvasRectangle*>( *it ) ->height() ) );
+        result = qMax( result, static_cast<int>( static_cast<Q3CanvasRectangle*>( *it ) ->y() +
+                       static_cast<Q3CanvasRectangle*>( *it ) ->height() ) );
     }
     return result - static_cast<int>( y() );
 }
@@ -92,7 +92,7 @@ QString Band::getXml()
     }
 
     result += ">\n";
-    for ( QCanvasItemList::Iterator it = items.begin(); it != items.end(); ++it )
+    for ( Q3CanvasItemList::Iterator it = items.begin(); it != items.end(); ++it )
     {
         result += static_cast<ReportItem*>( *it ) ->getXml();
     }

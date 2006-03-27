@@ -13,6 +13,8 @@
 #include <kmessagebox.h>
 #include <kio/netaccess.h>
 #include <qfile.h>
+//Added by qt3to4:
+#include <Q3PtrList>
 #include <kglobal.h>
 #include <kiconloader.h>
 #include <qwidget.h>
@@ -76,7 +78,7 @@ bool KugarPart::loadXML( QIODevice *file, const QDomDocument & /*doc*/ )
                 m_reportEngine->renderReport();
                 if ( ok )
                 {
-                    QPtrList<KoView> vs = views();
+                    Q3PtrList<KoView> vs = views();
                     if ( vs.count() )
                     {
                         for ( KoView * v = vs.first();v;v = vs.next() )

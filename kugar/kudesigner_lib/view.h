@@ -19,16 +19,21 @@
 #ifndef VIEW_H
 #define VIEW_H
 
-#include <qcanvas.h>
+#include <q3canvas.h>
 #include <qpainter.h>
-#include <qptrlist.h>
+#include <q3ptrlist.h>
+//Added by qt3to4:
+#include <QMouseEvent>
+#include <QDragEnterEvent>
+#include <QDragMoveEvent>
+#include <QKeyEvent>
 
 #include <koproperty/property.h>
 
 class KuDesignerPlugin;
 
 class QMouseEvent;
-class QCanvasItemList;
+class Q3CanvasItemList;
 
 namespace KoProperty
 {
@@ -45,21 +50,21 @@ class Box;
 class Canvas;
 class Band;
 
-class SelectionRect: public QCanvasRectangle
+class SelectionRect: public Q3CanvasRectangle
 {
 public:
     SelectionRect( int x, int y, int width, int height, Canvas *canvas ) :
-            QCanvasRectangle( x, y, width, height, ( QCanvas* ) canvas )
+            Q3CanvasRectangle( x, y, width, height, ( Q3Canvas* ) canvas )
     {}
 
     virtual void draw( QPainter & painter );
 };
 
-class View: public QCanvasView
+class View: public Q3CanvasView
 {
     Q_OBJECT
 public:
-    View( Canvas *canvas, QWidget *parent, const char *name = 0, WFlags f = 0 );
+    View( Canvas *canvas, QWidget *parent, const char *name = 0, Qt::WFlags f = 0 );
 
     int itemToInsert;
 
@@ -87,12 +92,12 @@ protected:
     //    void contentsDropEvent ( QDropEvent * );
     void keyPressEvent( QKeyEvent * );
 
-    void startMoveOrResizeOrSelectItem( QCanvasItemList &l, QMouseEvent *e, QPoint &p );
+    void startMoveOrResizeOrSelectItem( Q3CanvasItemList &l, QMouseEvent *e, QPoint &p );
     bool startResizing( QMouseEvent *e, QPoint &p );
-    void placeItem( QCanvasItemList &l, QMouseEvent *e );
-    void editItem( QCanvasItemList &l );
-    void deleteItem( QCanvasItemList &l );
-    void selectItemFromList( QCanvasItemList &l );
+    void placeItem( Q3CanvasItemList &l, QMouseEvent *e );
+    void editItem( Q3CanvasItemList &l );
+    void deleteItem( Q3CanvasItemList &l );
+    void selectItemFromList( Q3CanvasItemList &l );
 
     void stickToGrid( double &x, double &y );
     void stickDimToGrid( double x, double y, double &X, double &Y );

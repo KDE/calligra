@@ -7,6 +7,8 @@
 ***************************************************************************/
 
 #include "mpagedisplay.h"
+//Added by qt3to4:
+#include <QPaintEvent>
 
 namespace Kugar
 {
@@ -22,9 +24,9 @@ MPageDisplay::~MPageDisplay()
 {}
 
 /** Sets the report page image */
-void MPageDisplay::setPage( QPicture* image )
+void MPageDisplay::setPage( Q3Picture* image )
 {
-    buffer.fill( white );
+    buffer.fill( Qt::white );
     QPainter p( &buffer );
     image->play( &p );
 }

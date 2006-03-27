@@ -21,6 +21,8 @@
 
 #include <kcommand.h>
 #include "commdefs.h"
+//Added by qt3to4:
+#include <Q3ValueList>
 
 /*    void slotAddDetailFooter();
     void slotAddDetail();
@@ -169,13 +171,13 @@ private:
 class DeleteReportItemsCommand: public KNamedCommand
 {
 public:
-    DeleteReportItemsCommand( Canvas *doc, QValueList<Box*>& items );
+    DeleteReportItemsCommand( Canvas *doc, Q3ValueList<Box*>& items );
     virtual void execute();
     virtual void unexecute();
 
 private:
     Canvas *m_doc;
-    QValueList<Box*> m_items;
+    Q3ValueList<Box*> m_items;
 };
 
 }

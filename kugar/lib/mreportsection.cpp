@@ -10,6 +10,9 @@
 
 #include "mreportsection.h"
 #include "mutil.h"
+//Added by qt3to4:
+#include <Q3PtrList>
+#include <Q3MemArray>
 
 namespace Kugar
 {
@@ -180,7 +183,7 @@ void MReportSection::setCalcFieldData( int idx, QString data )
 }
 
 /** Sets the data for the all calculated fields - list size must number of calculated fields */
-void MReportSection::setCalcFieldData( QPtrList<QMemArray<double> >* values )
+void MReportSection::setCalcFieldData( Q3PtrList<Q3MemArray<double> >* values )
 {
     MCalcObject * field;
     int i = 0;

@@ -29,9 +29,9 @@
 
 #include <qpainter.h>
 #include <qprinter.h>
-#include <qpaintdevicemetrics.h>
+#include <q3paintdevicemetrics.h>
 #include <qfileinfo.h>
-#include <qdockwindow.h>
+#include <q3dockwindow.h>
 #include <qdom.h>
 #include <qtextstream.h>
 #include <qtextcodec.h>
@@ -42,7 +42,7 @@
 #include "kudesigner_view.h"
 
 KudesignerDoc::KudesignerDoc( QWidget *parentWidget, const char *widgetName, QObject* parent, const char* name, bool singleViewMode )
-        : KoDocument( parentWidget, widgetName, parent, name, singleViewMode ), m_plugin( 0 ), m_propPos( DockRight ), m_modified( false )
+        : KoDocument( parentWidget, widgetName, parent, name, singleViewMode ), m_plugin( 0 ), m_propPos( Qt::DockRight ), m_modified( false )
 {
     setInstance( KudesignerFactory::global(), false );
     history = new KoCommandHistory( actionCollection() );
@@ -211,12 +211,12 @@ KuDesignerPlugin *KudesignerDoc::plugin()
     return canvas() ->plugin();
 }
 
-Qt::Dock KudesignerDoc::propertyPosition()
+Qt::ToolBarDock KudesignerDoc::propertyPosition()
 {
     return m_propPos;
 }
 
-void KudesignerDoc::setForcedPropertyEditorPosition( Dock d )
+void KudesignerDoc::setForcedPropertyEditorPosition( Qt::ToolBarDock d )
 {
     m_propPos = d;
 }
@@ -267,7 +267,7 @@ bool KudesignerDoc::loadXML( QIODevice *, const QDomDocument &rt )
     printer->setOrientation( ( QPrinter::Orientation ) attributes.namedItem( "PageOrientation" ).nodeValue().toInt() );
 
     // Get the page metrics and set appropriate wigth and height
-    QPaintDeviceMetrics pdm( printer );
+    Q3PaintDeviceMetrics pdm( printer );
     width = pdm.width();
     height = pdm.height();
 

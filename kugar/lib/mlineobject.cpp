@@ -87,7 +87,7 @@ void MLineObject::draw( QPainter* p, int xoffset, int yoffset )
 /** Draws the base object to the specified painter & x/y offsets */
 void MLineObject::drawBase( QPainter* p, int xoffset, int yoffset )
 {
-    QPen linePen( penColor, penWidth, ( QPen::PenStyle ) penStyle );
+    QPen linePen( penColor, penWidth, ( Qt::PenStyle ) penStyle );
 
     // Set the offsets
     int xcalc1 = xpos1 + xoffset;

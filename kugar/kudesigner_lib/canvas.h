@@ -19,8 +19,8 @@
 #ifndef MYCANVAS_H
 #define MYCANVAS_H
 
-#include <qcanvas.h>
-#include <qvaluelist.h>
+#include <q3canvas.h>
+#include <q3valuelist.h>
 
 #include "box.h"
 
@@ -35,9 +35,9 @@ class KugarTemplate;
 class Band;
 class ReportItem;
 
-typedef QValueList<Box*> BoxList;
+typedef Q3ValueList<Box*> BoxList;
 
-class Canvas: public QCanvas
+class Canvas: public Q3Canvas
 {
     Q_OBJECT
 public:

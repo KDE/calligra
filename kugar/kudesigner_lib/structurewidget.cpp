@@ -21,7 +21,9 @@
 #include "structurewidget.h"
 
 #include <qpainter.h>
-#include <qcanvas.h>
+#include <q3canvas.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 #include <koproperty/property.h>
 
@@ -81,7 +83,7 @@ StructureWidget::StructureWidget( QWidget* parent, const char* name )
     setFullWidth( true );
     addColumn( tr( "Report Structure" ) );
     setSorting( -1 );
-    connect( this, SIGNAL( clicked( QListViewItem* ) ), this, SLOT( selectItem( QListViewItem* ) ) );
+    connect( this, SIGNAL( clicked( Q3ListViewItem* ) ), this, SLOT( selectItem( Q3ListViewItem* ) ) );
 }
 
 void StructureWidget::refresh()
@@ -154,7 +156,7 @@ void StructureWidget::refreshSectionContents( Kudesigner::Band *section, Structu
     if ( !section )
         return ;
 
-    for ( QCanvasItemList::iterator it = section->items.begin(); it != section->items.end(); ++it )
+    for ( Q3CanvasItemList::iterator it = section->items.begin(); it != section->items.end(); ++it )
     {
         Kudesigner::Box *box = static_cast<Kudesigner::Box*>( *it );
         if ( !box )
@@ -206,7 +208,7 @@ void StructureWidget::selectionMade()
 
 void StructureWidget::selectionClear()
 {
-    for ( QValueList<StructureItem*>::iterator it = m_selected.begin(); it != m_selected.end(); ++it )
+    for ( Q3ValueList<StructureItem*>::iterator it = m_selected.begin(); it != m_selected.end(); ++it )
     {
         if ( ( *it ) == 0 )
             continue;
@@ -216,7 +218,7 @@ void StructureWidget::selectionClear()
     m_selected.clear();
 }
 
-void StructureWidget::selectItem( QListViewItem *item )
+void StructureWidget::selectItem( Q3ListViewItem *item )
 {
     if ( !item )
         return ;

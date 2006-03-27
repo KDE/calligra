@@ -23,6 +23,8 @@
 
 #include <k3listview.h>
 #include <qmap.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 class KudesignerDoc;
 
@@ -45,7 +47,7 @@ public slots:
     void selectionMade();
     void selectionClear();
 
-    void selectItem( QListViewItem *item );
+    void selectItem( Q3ListViewItem *item );
     void setDocument( Kudesigner::Canvas *doc );
 
 private:
@@ -54,7 +56,7 @@ private:
 
     Kudesigner::Canvas *m_doc;
     QMap<Kudesigner::Box*, StructureItem*> m_items;
-    QValueList<StructureItem*> m_selected;
+    Q3ValueList<StructureItem*> m_selected;
 };
 
 }

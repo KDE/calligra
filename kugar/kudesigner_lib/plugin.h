@@ -19,6 +19,8 @@
 #define _KUGAR_DESIGNER_PLUGIN_H_
 
 #include <qobject.h>
+//Added by qt3to4:
+#include <QDragMoveEvent>
 #include <koproperty/property.h>
 #include <koproperty/editor.h>
 #include <box.h>

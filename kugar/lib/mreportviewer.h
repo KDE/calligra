@@ -13,12 +13,15 @@
 
 #include <qapplication.h>
 #include <qwidget.h>
-#include <qscrollview.h>
+#include <q3scrollview.h>
 #include <qpixmap.h>
 #include <qpainter.h>
-#include <qpaintdevicemetrics.h>
-#include <qprogressdialog.h>
-#include <qguardedptr.h>
+#include <q3paintdevicemetrics.h>
+#include <q3progressdialog.h>
+#include <qpointer.h>
+//Added by qt3to4:
+#include <QResizeEvent>
+#include <QPaintEvent>
 #include <koffice_export.h>
 #include "mreportengine.h"
 #include "mpagecollection.h"
@@ -77,14 +80,14 @@ protected:
     void paintEvent( QPaintEvent *event );
     void resizeEvent( QResizeEvent *event );
 
-    QScrollView *scroller;
+    Q3ScrollView *scroller;
     MPageDisplay *display;
     MReportEngine *rptEngine;
     QPointer<MPageCollection> report;
     KPrinter *printer;
 
 private:
-    QProgressDialog* progress;
+    Q3ProgressDialog* progress;
     int totalSteps;
     void init();
 };

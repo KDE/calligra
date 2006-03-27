@@ -31,13 +31,13 @@ namespace Kudesigner
 
 class Canvas;
 
-class Box: public QCanvasRectangle
+class Box: public Q3CanvasRectangle
 {
 public:
     enum ResizeType {ResizeNothing = 0, ResizeLeft = 1, ResizeTop = 2, ResizeRight = 4, ResizeBottom = 8};
 
     Box( int x, int y, int width, int height, Canvas *canvas ) :
-            QCanvasRectangle( x, y, width, height, ( QCanvas* ) canvas ), m_canvas( canvas )
+            Q3CanvasRectangle( x, y, width, height, ( Q3Canvas* ) canvas ), m_canvas( canvas )
     {
         setSelected( false );
     }

@@ -20,10 +20,10 @@
 
 #include <math.h>
 
-#include <qwmatrix.h>
+#include <qmatrix.h>
 #include <qevent.h>
 #include <qpoint.h>
-#include <qcanvas.h>
+#include <q3canvas.h>
 #include <qaction.h>
 #include <qcursor.h>
 #include <qpainter.h>
@@ -31,6 +31,11 @@
 #include <qimage.h>
 
 #include <qprinter.h>
+//Added by qt3to4:
+#include <QDragMoveEvent>
+#include <QKeyEvent>
+#include <QDragEnterEvent>
+#include <QMouseEvent>
 #include <kdebug.h>
 
 #include <koproperty/property.h>
@@ -93,8 +98,8 @@ void SelectionRect::draw( QPainter & painter )
 
 
 
-View::View( Canvas *canvas, QWidget *parent, const char *name, WFlags f ) :
-        QCanvasView( canvas, parent, name, f ), selectionBuf( 0 ), m_plugin( 0 ), m_canvas( canvas )
+View::View( Canvas *canvas, QWidget *parent, const char *name, Qt::WFlags f ) :
+        Q3CanvasView( canvas, parent, name, f ), selectionBuf( 0 ), m_plugin( 0 ), m_canvas( canvas )
 {
     itemToInsert = 0;
     moving = 0;
@@ -107,9 +112,9 @@ View::View( Canvas *canvas, QWidget *parent, const char *name, WFlags f ) :
     connect( m_canvas, SIGNAL( itemSelected() ), this, SLOT( selectItem() ) );
 }
 
-void View::deleteItem( QCanvasItemList &l )
+void View::deleteItem( Q3CanvasItemList &l )
 {
-    for ( QCanvasItemList::Iterator it = l.begin(); it != l.end(); ++it )
+    for ( Q3CanvasItemList::Iterator it = l.begin(); it != l.end(); ++it )
     {
         m_canvas->unselectItem( static_cast<Kudesigner::Box*>( *it ) );
         if ( m_canvas->kugarTemplate() ->removeReportItem( *it ) )
@@ -117,7 +122,7 @@ void View::deleteItem( QCanvasItemList &l )
     }
 }
 
-void View::editItem( QCanvasItemList & /* l */ )
+void View::editItem( Q3CanvasItemList & /* l */ )
 {
     //display editor for report items or sections
     /*  for (QCanvasItemList::Iterator it=l.begin(); it!=l.end(); ++it)
@@ -141,10 +146,10 @@ void View::editItem( QCanvasItemList & /* l */ )
         }*/
 }
 
-void View::selectItemFromList( QCanvasItemList &l )
+void View::selectItemFromList( Q3CanvasItemList &l )
 {
     //display editor for report items or sections
-    for ( QCanvasItemList::Iterator it = l.begin(); it != l.end(); ++it )
+    for ( Q3CanvasItemList::Iterator it = l.begin(); it != l.end(); ++it )
     {
         if ( ( *it ) ->rtti() >= 1800 )  //include bands and the template itself
         {
@@ -175,9 +180,9 @@ void View::selectItemFromList( QCanvasItemList &l )
 }
 
 
-void View::placeItem( QCanvasItemList &l, QMouseEvent *e )
+void View::placeItem( Q3CanvasItemList &l, QMouseEvent *e )
 {
-    for ( QCanvasItemList::Iterator it = l.begin(); it != l.end(); ++it )
+    for ( Q3CanvasItemList::Iterator it = l.begin(); it != l.end(); ++it )
     {
         if ( ( ( *it ) ->rtti() > 1800 ) && ( ( ( *it ) ->rtti() < 2000 ) ) )
         {
@@ -256,11 +261,11 @@ bool View::startResizing( QMouseEvent * /*e*/, QPoint &p )
     return false;
 }
 
-void View::startMoveOrResizeOrSelectItem( QCanvasItemList &l,
+void View::startMoveOrResizeOrSelectItem( Q3CanvasItemList &l,
         QMouseEvent * /*e*/, QPoint &p )
 {
     //allow user to move any item except for page rectangle
-    for ( QCanvasItemList::Iterator it = l.begin(); it != l.end(); ++it )
+    for ( Q3CanvasItemList::Iterator it = l.begin(); it != l.end(); ++it )
     {
         Kudesigner::Box *cb = static_cast<Kudesigner::Box*>( *it );
         if ( cb->rtti() >= 1700 )  //> 2001)
@@ -293,7 +298,7 @@ void View::startMoveOrResizeOrSelectItem( QCanvasItemList &l,
 void View::contentsMousePressEvent( QMouseEvent* e )
 {
     QPoint p = inverseWorldMatrix().QMatrix::map( e->pos() );
-    QCanvasItemList l = m_canvas->collisions( p );
+    Q3CanvasItemList l = m_canvas->collisions( p );
 
     //if there is a request for properties or for delete operation
     //perform that and do not take care about mouse buttons
@@ -358,7 +363,7 @@ void View::contentsMouseReleaseEvent( QMouseEvent* e )
     selectionRect->hide();
 
     QPoint p = inverseWorldMatrix().QMatrix::map( e->pos() );
-    QCanvasItemList l = m_canvas->collisions( p );
+    Q3CanvasItemList l = m_canvas->collisions( p );
 
     switch ( e->button() )
     {
@@ -503,7 +508,7 @@ void View::contentsMouseMoveEvent( QMouseEvent* e )
     }
     if ( resizing )
     {
-        QCanvasRectangle * r = ( QCanvasRectangle * ) resizing;
+        Q3CanvasRectangle * r = ( Q3CanvasRectangle * ) resizing;
         double newXPos = r->x();
         double newYPos = r->y();
         double h = r->height();
@@ -584,8 +589,8 @@ void View::contentsMouseMoveEvent( QMouseEvent* e )
         selectionRect->setSize( ( int ) ( e->pos().x() - selectionRect->x() ),
                                 ( int ) ( e->pos().y() - selectionRect->y() ) );
         m_canvas->unselectAll();
-        QCanvasItemList l = m_canvas->collisions( selectionRect->rect() );
-        for ( QCanvasItemList::Iterator it = l.begin(); it != l.end(); ++it )
+        Q3CanvasItemList l = m_canvas->collisions( selectionRect->rect() );
+        for ( Q3CanvasItemList::Iterator it = l.begin(); it != l.end(); ++it )
         {
             QRect r;
             int left = selectionRect->rect().left();
@@ -721,7 +726,7 @@ void View::contentsDragMoveEvent( QDragMoveEvent * event )
     //perhaps this could be optimized a little bit
     if ( !m_plugin )
         return ;
-    QCanvasItemList l = m_canvas->collisions( event->pos() );
+    Q3CanvasItemList l = m_canvas->collisions( event->pos() );
     /*    kDebug()<<l.count()<<endl;*/
     if ( l.count() < 2 )
     {
@@ -822,7 +827,7 @@ void View::setCanvas( Canvas *canvas )
 {
     if ( selectionRect )
         delete selectionRect;
-    QCanvasView::setCanvas( ( QCanvas* ) canvas );
+    Q3CanvasView::setCanvas( ( Q3Canvas* ) canvas );
     m_canvas = canvas;
     selectionRect = new SelectionRect( 0, 0, 0, 0, m_canvas );
     connect( m_canvas, SIGNAL( itemSelected() ), this, SLOT( selectItem() ) );

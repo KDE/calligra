@@ -23,17 +23,21 @@
 #include <map>
 
 #include <qpainter.h>
-#include <qiconset.h>
+#include <qicon.h>
 #include <qinputdialog.h>
 #include <qevent.h>
-#include <qmainwindow.h>
+#include <q3mainwindow.h>
 #include <qaction.h>
 #include <qlayout.h>
-#include <qdockwindow.h>
+#include <q3dockwindow.h>
 #include <qmenubar.h>
 #include <qmessagebox.h>
 #include <qspinbox.h>
 #include <qlabel.h>
+//Added by qt3to4:
+#include <Q3VBoxLayout>
+#include <QResizeEvent>
+#include <QPaintEvent>
 
 #include <kaction.h>
 #include <kstdaction.h>
@@ -77,7 +81,7 @@ KudesignerView::KudesignerView( KudesignerDoc* part, QWidget* parent, const char
     else
         setXMLFile( "kudesignerui.rc" );
 
-    QVBoxLayout *l = new QVBoxLayout( this, 0, 0 );
+    Q3VBoxLayout *l = new Q3VBoxLayout( this, 0, 0 );
     m_view = new Kudesigner::View( part->canvas(), this );
     if ( part->plugin() )
     {
@@ -93,8 +97,8 @@ KudesignerView::KudesignerView( KudesignerDoc* part, QWidget* parent, const char
 
     m_view->itemToInsert = 0;
 
-    QDockWindow *dw1 = new QDockWindow( QDockWindow::OutsideDock, shell() );
-    QDockWindow *dw2 = new QDockWindow( QDockWindow::OutsideDock, shell() );
+    Q3DockWindow *dw1 = new Q3DockWindow( Q3DockWindow::OutsideDock, shell() );
+    Q3DockWindow *dw2 = new Q3DockWindow( Q3DockWindow::OutsideDock, shell() );
     m_structure = new Kudesigner::StructureWidget( dw1 );
     m_propertyEditor = new Editor( dw2 );
     dw1->boxLayout() ->addWidget( m_structure, 1 );

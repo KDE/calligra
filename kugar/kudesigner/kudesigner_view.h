@@ -23,6 +23,10 @@
 #include <kparts/event.h>
 
 #include <qdom.h>
+//Added by qt3to4:
+#include <QLabel>
+#include <QResizeEvent>
+#include <QPaintEvent>
 
 #include <set>
 
@@ -30,8 +34,8 @@ class QLabel;
 class QSpinBox;
 class QAction;
 class QPaintEvent;
-class QDockWindow;
-class QToolBar;
+class Q3DockWindow;
+class Q3ToolBar;
 
 class KAction;
 class KRadioAction;

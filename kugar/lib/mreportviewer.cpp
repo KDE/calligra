@@ -9,6 +9,9 @@
 ***************************************************************************/
 
 #include <qapplication.h>
+//Added by qt3to4:
+#include <QResizeEvent>
+#include <QPaintEvent>
 #include <kmessagebox.h>
 #include <kprinter.h>
 #include <klocale.h>
@@ -35,7 +38,7 @@ MReportViewer::MReportViewer( QWidget *parent, const char *name ) : QWidget( par
 
 void MReportViewer::init()
 {
-    scroller = new QScrollView( this );
+    scroller = new Q3ScrollView( this );
 
     // Connect the rendering update signal and slot
     connect( rptEngine, SIGNAL( signalRenderStatus( int ) ),
@@ -55,7 +58,7 @@ void MReportViewer::init()
     display = new MPageDisplay( scroller->viewport() );
 
     // Set the display's default background color
-    display->setBackgroundColor( white );
+    display->setBackgroundColor( Qt::white );
 
     // Add the display to the scrollview
     scroller->addChild( display );
@@ -167,7 +170,7 @@ void MReportViewer::printReport()
 /** Shows the first page in the report */
 void MReportViewer::slotFirstPage()
 {
-    QPicture * page;
+    Q3Picture * page;
 
     if ( !report )
         return ;
@@ -182,7 +185,7 @@ void MReportViewer::slotFirstPage()
 /** Shows the next page in the report */
 void MReportViewer::slotNextPage()
 {
-    QPicture * page;
+    Q3Picture * page;
 
     if ( !report )
         return ;
@@ -201,7 +204,7 @@ void MReportViewer::slotNextPage()
 /** Shows the prevoius page in the report */
 void MReportViewer::slotPrevPage()
 {
-    QPicture * page;
+    Q3Picture * page;
 
     if ( !report )
         return ;
@@ -220,7 +223,7 @@ void MReportViewer::slotPrevPage()
 /** Shows the last page in the report */
 void MReportViewer::slotLastPage()
 {
-    QPicture * page;
+    Q3Picture * page;
 
     if ( !report )
         return ;
@@ -246,7 +249,7 @@ void MReportViewer::slotRenderProgress( int p )
     if ( progress == 0 )
     {
         totalSteps = rptEngine->getRenderSteps();
-        progress = new QProgressDialog( "Creating report...", "Cancel",
+        progress = new Q3ProgressDialog( "Creating report...", "Cancel",
                                         totalSteps, this, "progress", true );
         progress->setMinimumDuration( M_PROGRESS_DELAY );
     }
@@ -295,7 +298,7 @@ void MReportViewer::printReport( KPrinter &printer )
     }
 
 
-    QPicture* page;
+    Q3Picture* page;
     QPainter painter;
     bool printRev;
 
@@ -320,7 +323,7 @@ void MReportViewer::printReport( KPrinter &printer )
     printer.setNumCopies( 1 );
 
     // Setup the progress dialog
-    QProgressDialog progress( i18n( "Printing report..." ),
+    Q3ProgressDialog progress( i18n( "Printing report..." ),
                               i18n( "Cancel" ),
                               totalSteps, this, "progress", true );
     progress.setMinimumDuration( M_PROGRESS_DELAY );
@@ -363,7 +366,7 @@ void MReportViewer::printReport( KPrinter &printer )
     }
 
     // Cleanup printing
-    setCursor( arrowCursor );
+    setCursor( Qt::arrowCursor );
     painter.end();
     report->setCurrentPage( viewIdx );
 }

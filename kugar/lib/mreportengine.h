@@ -12,12 +12,14 @@
 #define MREPORTENGINE_H
 
 #include <qobject.h>
-#include <qpicture.h>
-#include <qpaintdevicemetrics.h>
+#include <q3picture.h>
+#include <q3paintdevicemetrics.h>
 #include <qsize.h>
-#include <qmemarray.h>
+#include <q3memarray.h>
 #include <qdom.h>
-#include <qguardedptr.h>
+#include <qpointer.h>
+//Added by qt3to4:
+#include <Q3PtrList>
 
 #include "mlineobject.h"
 #include "mlabelobject.h"
@@ -115,11 +117,11 @@ private:
     /** Page header */
     MReportSection pHeader;
     /** Detail headers */
-    QPtrList<MReportSection> dHeaders;
+    Q3PtrList<MReportSection> dHeaders;
     /** Detail sections */
-    QPtrList<MReportDetail> details;
+    Q3PtrList<MReportDetail> details;
     /** Detail footers */
-    QPtrList<MReportSection> dFooters;
+    Q3PtrList<MReportSection> dFooters;
     /** Page footer */
     MReportSection pFooter;
     /** Report footer */
@@ -138,7 +140,7 @@ private:
     QDate currDate;
 
     /** Grand total array */
-    QPtrList<QMemArray<double> > grandTotal;
+    Q3PtrList<Q3MemArray<double> > grandTotal;
 
     /** Cancel rendering flag */
     bool cancelRender;

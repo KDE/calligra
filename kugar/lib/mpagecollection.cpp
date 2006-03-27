@@ -65,13 +65,13 @@ void MPageCollection::clear()
 /** Appends a new page to the page collection */
 void MPageCollection::appendPage()
 {
-    pages.append( new QPicture() );
+    pages.append( new Q3Picture() );
 }
 
 /** Gets the current page in the page collection,
   * the current page may be null
   */
-QPicture* MPageCollection::getCurrentPage()
+Q3Picture* MPageCollection::getCurrentPage()
 {
     return pages.current();
 }
@@ -79,7 +79,7 @@ QPicture* MPageCollection::getCurrentPage()
 /** Gets the first page in the page collection,
   * returns NULL if the list is empty
   */
-QPicture* MPageCollection::getFirstPage()
+Q3Picture* MPageCollection::getFirstPage()
 {
     return pages.first();
 }
@@ -87,7 +87,7 @@ QPicture* MPageCollection::getFirstPage()
 /** Gets the next page in the page collection,
   * returns NULL if the end of the list has been reached
   */
-QPicture* MPageCollection::getNextPage()
+Q3Picture* MPageCollection::getNextPage()
 {
     return pages.next();
 }
@@ -95,7 +95,7 @@ QPicture* MPageCollection::getNextPage()
 /** Get the previous page in the page collection,
   * returns NULL if the beginning of the list has been reached
   */
-QPicture* MPageCollection::getPreviousPage()
+Q3Picture* MPageCollection::getPreviousPage()
 {
     return pages.prev();
 }
@@ -103,7 +103,7 @@ QPicture* MPageCollection::getPreviousPage()
 /** Gets the last page in the page collection,
   * returns NULL if the list is empty
   */
-QPicture* MPageCollection::getLastPage()
+Q3Picture* MPageCollection::getLastPage()
 {
     return pages.last();
 }

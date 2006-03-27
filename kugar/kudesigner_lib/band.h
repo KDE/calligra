@@ -22,7 +22,7 @@
 #include "commdefs.h"
 #include "section.h"
 
-class QCanvasItemList;
+class Q3CanvasItemList;
 class QPainter;
 class QRect;
 class QPoint;
@@ -54,7 +54,7 @@ public:
     void arrange( int base, bool destructive = TRUE );
     virtual void updateGeomProps();
 
-    QCanvasItemList items;
+    Q3CanvasItemList items;
 };
 
 }

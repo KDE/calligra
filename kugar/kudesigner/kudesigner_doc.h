@@ -24,7 +24,7 @@
 #include <KoCommandHistory.h>
 #include "plugin.h"
 
-class QCanvas;
+class Q3Canvas;
 class QDomNode;
 class QIODevice;
 class QDomDocument;
@@ -60,7 +60,7 @@ public:
     void loadPlugin( const QString& name );
     KuDesignerPlugin *plugin();
     Dock propertyPosition();
-    void setForcedPropertyEditorPosition( Dock );
+    void setForcedPropertyEditorPosition( Qt::ToolBarDock );
 
     void addCommand( KCommand *cmd );
 

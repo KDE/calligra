@@ -49,7 +49,7 @@ namespace Kudesigner
 {
 
 Canvas::Canvas( int w, int h /*, Canvas *doc*/ )
-        : QCanvas( w, h ), m_plugin( 0 ), m_kugarTemplate( 0 )  //, m_doc(doc)
+        : Q3Canvas( w, h ), m_plugin( 0 ), m_kugarTemplate( 0 )  //, m_doc(doc)
 {
 }
 
@@ -110,7 +110,7 @@ void Canvas::unselectAll()
 
 void Canvas::selectAll()
 {
-    for ( QCanvasItemList::Iterator it = allItems().begin(); it != allItems().end(); ++it )
+    for ( Q3CanvasItemList::Iterator it = allItems().begin(); it != allItems().end(); ++it )
     {
         if ( ( ( *it ) ->rtti() > 2001 ) && ( ( *it ) ->isVisible() ) )
             selectItem( static_cast<Box*>( *it ) );
@@ -190,8 +190,8 @@ bool Canvas::loadXML( const QDomNode &report )
         }
     }
     templ->arrangeSections( FALSE );
-    QCanvasItemList l = allItems();
-    for ( QCanvasItemList::Iterator it = l.begin(); it != l.end(); ++it )
+    Q3CanvasItemList l = allItems();
+    for ( Q3CanvasItemList::Iterator it = l.begin(); it != l.end(); ++it )
     {
         ( *it ) ->show();
     }

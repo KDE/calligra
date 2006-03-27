@@ -10,8 +10,8 @@
 #define MPAGECOLLECTION_H
 
 #include <qobject.h>
-#include <qptrlist.h>
-#include <qpicture.h>
+#include <q3ptrlist.h>
+#include <q3picture.h>
 #include <qsize.h>
 
 /**Kugar report page collection
@@ -36,7 +36,7 @@ public:
 
 private:
     /** The report page list */
-    QPtrList<QPicture> pages;
+    Q3PtrList<Q3Picture> pages;
     /** Page dimensions */
     QSize dimensions;
     /** Page size */
@@ -54,23 +54,23 @@ public:
     /** Gets the current page in the page collection,
       * the current page may be null
       */
-    QPicture* getCurrentPage();
+    Q3Picture* getCurrentPage();
     /** Gets the first page in the page collection,
       * returns NULL if the list is empty
       */
-    QPicture* getFirstPage();
+    Q3Picture* getFirstPage();
     /** Get the previous page in the page collection,
       * returns NULL if the beginning of the list has been reached
       */
-    QPicture* getPreviousPage();
+    Q3Picture* getPreviousPage();
     /** Gets the next page in the page collection,
       * returns NULL if the end of the list has been reached
       */
-    QPicture* getNextPage();
+    Q3Picture* getNextPage();
     /** Gets the last page in the page collection,
       * returns NULL if the list empty
       */
-    QPicture* getLastPage();
+    Q3Picture* getLastPage();
 
     /** Get the index of the current page */
     int getCurrentIndex();

@@ -68,7 +68,7 @@ public:
     virtual QString getXml();
 
     void removeSection( Band *section, DetailHeader **header, DetailFooter **footer );
-    bool removeReportItem( QCanvasItem *item );
+    bool removeReportItem( Q3CanvasItem *item );
 
     Band *band( Kudesigner::RttiValues type, int level = -1 );
 

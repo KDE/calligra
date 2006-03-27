@@ -13,6 +13,8 @@
 #include <kmessagebox.h>
 #include <kio/netaccess.h>
 #include <qfile.h>
+//Added by qt3to4:
+#include <Q3VBoxLayout>
 #include <kglobal.h>
 #include <kiconloader.h>
 #include <qlayout.h>
@@ -33,10 +35,10 @@ KugarView::KugarView( KugarPart *part, QWidget *parent, const char *name )
 {
     setInstance( KugarFactory::global() );
 
-    ( new QVBoxLayout( this ) ) ->setAutoAdd( true );
+    ( new Q3VBoxLayout( this ) ) ->setAutoAdd( true );
     view = new Kugar::MReportViewer( part->reportEngine(), this );
 
-    view -> setFocusPolicy( QWidget::ClickFocus );
+    view -> setFocusPolicy( Qt::ClickFocus );
     view -> show();
 
     //  setWidget(view);

@@ -16,7 +16,7 @@
  the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
 */
-#include <qcanvas.h>
+#include <q3canvas.h>
 
 #include "box.h"
 #include "canvas.h"
@@ -37,7 +37,7 @@ void Box::scale( int scale )
 
 void Box::draw( QPainter &painter )
 {
-    QCanvasRectangle::draw( painter );
+    Q3CanvasRectangle::draw( painter );
 }
 
 }

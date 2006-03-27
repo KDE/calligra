@@ -43,6 +43,8 @@
 #include "detailheader.h"
 #include "detailfooter.h"
 #include "detail.h"
+//Added by qt3to4:
+#include <Q3ValueList>
 
 
 namespace Kudesigner
@@ -269,7 +271,7 @@ void AddReportItemCommand::unexecute()
     }
 }
 
-DeleteReportItemsCommand::DeleteReportItemsCommand( Canvas * doc, QValueList< Box* > & items )
+DeleteReportItemsCommand::DeleteReportItemsCommand( Canvas * doc, Q3ValueList< Box* > & items )
         : KNamedCommand( QObject::tr( "Delete Report Item(s)" ) ), m_doc( doc ), m_items( items )
 {}
 
@@ -277,7 +279,7 @@ void DeleteReportItemsCommand::execute( )
 {
     m_doc->unselectAll();
 
-    for ( QValueList< Box* >::iterator it = m_items.begin(); it != m_items.end(); ++it )
+    for ( Q3ValueList< Box* >::iterator it = m_items.begin(); it != m_items.end(); ++it )
     {
         Box *b = *it;
         m_doc->kugarTemplate() ->removeReportItem( b );

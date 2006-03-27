@@ -14,7 +14,7 @@
 #include <qobject.h>
 #include <qstring.h>
 #include <qdatetime.h>
-#include <qmemarray.h>
+#include <q3memarray.h>
 
 
 /**Kugar utlity class
@@ -42,15 +42,15 @@ public:
     static QString formatDate( const QDate& value, int format );
 
     /** Returns the count for an array of doubles */
-    static int count( QMemArray<double>* values );
+    static int count( Q3MemArray<double>* values );
     /** Returns the sum for an array of doubles */
-    static double sum( QMemArray<double>* values );
+    static double sum( Q3MemArray<double>* values );
     /** Returns the average value for an array of doubles */
-    static double average( QMemArray<double>* values );
+    static double average( Q3MemArray<double>* values );
     /** Returns the variance for an array of doubles */
-    static double variance( QMemArray<double>* values );
+    static double variance( Q3MemArray<double>* values );
     /** Returns the standard deviation for an array of doubles */
-    static double stdDeviation( QMemArray<double>* values );
+    static double stdDeviation( Q3MemArray<double>* values );
 
 };
 

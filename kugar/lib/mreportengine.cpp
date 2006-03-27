@@ -10,6 +10,9 @@
 
 #include <qfile.h>
 #include <qprinter.h>
+//Added by qt3to4:
+#include <Q3PtrList>
+#include <Q3MemArray>
 
 #include "mreportengine.h"
 #include "mutil.h"
@@ -314,7 +317,7 @@ MPageCollection* MReportEngine::renderReport()
     // Initialize the grand total array
     grandTotal.clear();
     for ( int i = 0; i < rFooter.getCalcFieldCount(); i++ )
-        grandTotal.append( new QMemArray<double> );
+        grandTotal.append( new Q3MemArray<double> );
 
     // Create the first page
     startPage( pages );
@@ -619,7 +622,7 @@ QSize MReportEngine::getPageMetrics( int size, int orientation )
     printer->setOrientation( ( QPrinter::Orientation ) orientation );
 
     // Get the page metrics
-    QPaintDeviceMetrics pdm( printer );
+    Q3PaintDeviceMetrics pdm( printer );
 
     // Display the first page of the report
     ps.setWidth( pdm.width() );
@@ -1048,7 +1051,7 @@ void MReportEngine::copy( const MReportEngine* mReportEngine )
     pHeader = mReportEngine->pHeader;
     // Copy the detail sections
     MReportDetail *detail;
-    QPtrList<MReportDetail> temp = mReportEngine->details;
+    Q3PtrList<MReportDetail> temp = mReportEngine->details;
     temp.setAutoDelete( false );
     for ( detail = temp.first(); detail; detail = temp.next() )
     {

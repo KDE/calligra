@@ -147,8 +147,8 @@ void ReportItem::drawHolders( QPainter &painter )
 
     painter.setBrush( KGlobalSettings::highlightColor() );
 
-    QCanvasItemList list = collisions( false );
-    QCanvasItemList::iterator it = list.begin();
+    Q3CanvasItemList list = collisions( false );
+    Q3CanvasItemList::iterator it = list.begin();
     for ( ; it != list.end(); ++it )
     {
         switch ( ( *it )->rtti() )

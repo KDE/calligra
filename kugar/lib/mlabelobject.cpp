@@ -98,7 +98,7 @@ void MLabelObject::setWordWrap( bool state )
 void MLabelObject::draw( QPainter* p, int xoffset, int yoffset )
 {
     QFont font( fontFamily, fontSize, fontWeight, fontItalic );
-    QPen textPen( foregroundColor, 0, QPen::NoPen );
+    QPen textPen( foregroundColor, 0, Qt::NoPen );
 
     int tf;
 
@@ -119,31 +119,31 @@ void MLabelObject::draw( QPainter* p, int xoffset, int yoffset )
     switch ( hAlignment )
     {
     case MLabelObject::Left:
-        tf = QPainter::AlignLeft;
+        tf = Qt::AlignLeft;
         break;
     case MLabelObject::Center:
-        tf = QPainter::AlignHCenter;
+        tf = Qt::AlignHCenter;
         break;
     case MLabelObject::Right:
-        tf = QPainter::AlignRight;
+        tf = Qt::AlignRight;
     }
 
     // Vertical
     switch ( vAlignment )
     {
     case MLabelObject::Top:
-        tf = tf | QPainter::AlignTop;
+        tf = tf | Qt::AlignTop;
         break;
     case MLabelObject::Bottom:
-        tf = tf | QPainter::AlignBottom;
+        tf = tf | Qt::AlignBottom;
         break;
     case MLabelObject::Middle:
-        tf = tf | QPainter::AlignVCenter;
+        tf = tf | Qt::AlignVCenter;
     }
 
     // Word wrap
     if ( wordWrap )
-        tf = tf | QPainter::WordBreak;
+        tf = tf | Qt::TextWordWrap;
 
     // Draw the text
     p->setPen( textPen );

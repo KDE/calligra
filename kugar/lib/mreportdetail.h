@@ -11,6 +11,8 @@
 
 #include "mfieldobject.h"
 #include "mreportsection.h"
+//Added by qt3to4:
+#include <Q3PtrList>
 
 /**Kugar report detail section
   *@author Mutiny Bay Software
@@ -36,7 +38,7 @@ protected:
     /** Sections's repeat on new pages */
     bool repeat;
     /** Section's field collection */
-    QPtrList<MFieldObject> fields;
+    Q3PtrList<MFieldObject> fields;
 
 public:
     /** Sets whether to repeat the detail on new pages */
