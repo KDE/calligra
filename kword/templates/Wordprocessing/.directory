@@ -1,24 +1,4 @@
 [Desktop Entry]
 Name=Blank Documents
-Name[br]=Teul goullo
-Name[ca]=Document buit
-Name[da]=Blankt dokument
-Name[de]=Leeres Dokument
-Name[el]=Κενό έγγραφο
-Name[es]=Documento vacío
-Name[et]=Tühi dokument
-Name[ga]=Cáipéis Fholamh
-Name[hu]=Üres dokumentum
-Name[is]=Tómt skjal
-Name[it]=Documento vuoto
-Name[ja]=空のドキュメント
-Name[nl]=Leeg document
-Name[pt]=Documento Vazio
-Name[pt_BR]=Documento Vazio
-Name[sl]=Prazen dokument
-Name[sr]=Празан документ
-Name[sr@Latn]=Prazan dokument
-Name[sv]=Tomt dokument
-Name[uk]=Порожній документ
 X-KDE-DefaultTab=true
 X-KDE-SortingWeight=10
