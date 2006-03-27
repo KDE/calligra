@@ -28,7 +28,8 @@
 
 #include <KoChild.h>
 #include <koffice_export.h>
-
+#include <KoDocumentChild.h>
+#include <KoFrame.h>
 class KAction;
 class KActionCollection;
 class QCustomEvent;

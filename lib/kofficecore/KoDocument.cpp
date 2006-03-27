@@ -2221,7 +2221,8 @@ Q3CString KoDocument::readNativeFormatMimeType( KInstance *instance ) //static
     if ( service->property( "X-KDE-NativeMimeType" ).toString().isEmpty() )
     {
         // It may be that the servicetype "KOfficePart" is missing, which leads to this property not being known
-        if ( KServiceType::serviceType( "KOfficePart" ) == 0L )
+		KServiceType::Ptr ptr = KServiceType::serviceType( "KOfficePart" );
+        if ( !ptr )
             kError(30003) << "The serviceType KOfficePart is missing. Check that you have a kofficepart.desktop file in the share/servicetypes directory." << endl;
         else {
             QString instname = instance ? instance->instanceName() : kapp->instanceName();
