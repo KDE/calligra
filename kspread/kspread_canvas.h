@@ -38,6 +38,19 @@
 #include <qlineedit.h>
 #include <qtooltip.h>
 #include <qpen.h>
+//Added by qt3to4:
+#include <QWheelEvent>
+#include <QFocusEvent>
+#include <QDragLeaveEvent>
+#include <QPaintEvent>
+#include <Q3PtrList>
+#include <QKeyEvent>
+#include <QDragMoveEvent>
+#include <QEvent>
+#include <QDropEvent>
+#include <QLabel>
+#include <QResizeEvent>
+#include <QMouseEvent>
 
 #include <ksharedptr.h>
 
@@ -50,7 +63,7 @@
 
 class QWidget;
 class QTimer;
-class QButton;
+class Q3Button;
 class QPainter;
 class QLabel;
 class QScrollBar;
@@ -349,7 +362,7 @@ public:
      *
      * @return List of objects
      */
-    void displayObjectList( QPtrList<EmbeddedObject> &list );
+    void displayObjectList( Q3PtrList<EmbeddedObject> &list );
 
     KoRect objectRect( bool all ) const;
 
@@ -445,7 +458,7 @@ private:
     /**
      * Paints the children
      */
-    void paintChildren( QPainter& painter, QWMatrix& matrix );
+    void paintChildren( QPainter& painter, QMatrix& matrix );
 
     /**
      * @see #setLastEditorWithFocus

@@ -22,6 +22,8 @@
 #define KSPREAD_SELECTION
 
 #include <qobject.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 #include <kdebug.h>
 
@@ -160,7 +162,7 @@ public:
   QRect lastRange(bool extend = true) const;
   QRect extendToMergedAreas(QRect area) const;
 
-  const QValueList<QColor>& colors() const;
+  const Q3ValueList<QColor>& colors() const;
 
   // TODO Stefan #2: replace this
   QRect selection(bool extend = true) const;

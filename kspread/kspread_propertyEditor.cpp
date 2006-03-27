@@ -39,7 +39,7 @@
 using namespace KSpread;
 
 PropertyEditor::PropertyEditor( QWidget *parent, const char *name, Sheet *page, Doc *doc )
-    : QTabDialog( parent, name, true )
+    : Q3TabDialog( parent, name, true )
     , m_page( page )
     , m_doc( doc )
     , m_objects( page->getSelectedObjects() )
@@ -277,7 +277,7 @@ KCommand * PropertyEditor::getCommand()
                     macro = new KMacroCommand( i18n( "Apply Properties" ) );
                 }
 
-                QPtrListIterator<EmbeddedObject> it( m_objects );
+                Q3PtrListIterator<EmbeddedObject> it( m_objects );
                 for ( ; it.current(); ++it )
                 {
                     KoRect oldRect = it.current()->geometry()/*getRect()*/;
@@ -439,7 +439,7 @@ GeneralProperty::GeneralValue PropertyEditor::getGeneralValue()
     bool keepRatio = false;
     generalValue.m_keepRatio = STATE_OFF;
 
-    QPtrListIterator<EmbeddedObject> it( m_objects );
+    Q3PtrListIterator<EmbeddedObject> it( m_objects );
     if ( it.current() )
     {
         protect = it.current()->isProtect();

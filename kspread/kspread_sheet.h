@@ -23,13 +23,18 @@
 #define KSPREAD_SHEET
 
 #include <qclipboard.h>
-#include <qdragobject.h>
-#include <qintdict.h>
-#include <qmemarray.h>
+#include <q3dragobject.h>
+#include <q3intdict.h>
+#include <q3memarray.h>
 #include <qpen.h>
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 #include <qrect.h>
 #include <qwidget.h>
+//Added by qt3to4:
+#include <Q3CString>
+#include <QPixmap>
+#include <Q3PointArray>
+#include <Q3ValueList>
 
 #include <KoDocument.h>
 #include <KoDocumentChild.h>
@@ -147,7 +152,7 @@ private:
  * @short This is a class for handling clipboard data
  */
 
-class TextDrag : public QTextDrag
+class TextDrag : public Q3TextDrag
 {
     Q_OBJECT
 
@@ -190,7 +195,7 @@ class KSPREAD_EXPORT Sheet : public QObject
     Q_PROPERTY( bool showGrid READ getShowGrid WRITE setShowGrid )
 
 public:
-    enum Direction { Right, Left, Up, Down };
+    enum Qt::Orientation { Qt::DockRight, Qt::DockLeft, Up, Down };
     enum SortingOrder{ Increase, Decrease };
     enum ChangeRef { ColumnInsert, ColumnRemove, RowInsert, RowRemove };
     enum TestType { Text, Validity, Comment, ConditionalCellAttribute };
@@ -245,7 +250,7 @@ public:
      */
     virtual bool loadXML( const QDomElement& );
 
-    virtual bool loadOasis( const QDomElement& sheet, KoOasisLoadingContext& oasisContext, QDict<Style>& styleMap );
+    virtual bool loadOasis( const QDomElement& sheet, KoOasisLoadingContext& oasisContext, Q3Dict<Style>& styleMap );
 
     virtual bool saveOasis( KoXmlWriter & xmlWriter, KoGenStyles &mainStyles, GenValidationStyles &valStyle, KoStore *store, KoXmlWriter* manifestWriter, int & indexObj, int &partIndexObj );
     void saveOasisHeaderFooter( KoXmlWriter &xmlWriter ) const;
@@ -273,7 +278,7 @@ public:
      *
      * @return list of selected objets.
      */
-    QPtrList<EmbeddedObject> getSelectedObjects();
+    Q3PtrList<EmbeddedObject> getSelectedObjects();
 
 
     /**
@@ -317,10 +322,10 @@ public:
      */
     bool isRightToLeft() const;
 
-    void password( QCString & passwd ) const ;
+    void password( Q3CString & passwd ) const ;
     bool isProtected() const;
-    void setProtected( QCString const & passwd );
-    bool checkPassword( QCString const & passwd ) const;
+    void setProtected( Q3CString const & passwd );
+    bool checkPassword( Q3CString const & passwd ) const;
 
     void setDefaultHeight( double height );
     void setDefaultWidth( double width );
@@ -725,7 +730,7 @@ public:
     void borderRight( Selection* selectionInfo, const QColor &_color );
 
     void setConditional( Selection* selectionInfo,
-       QValueList<Conditional> const & newConditions );
+       Q3ValueList<Conditional> const & newConditions );
 
     void setValidity( Selection* selectionInfo, KSpread::Validity tmp );
 
@@ -895,7 +900,7 @@ public:
      * The cells we are interested in are in the rectangle '_range'.
      * The cells are stored row after row in '_list'.
      */
-    bool getCellRectangle( const QRect &_range, QPtrList<Cell> &_list );
+    bool getCellRectangle( const QRect &_range, Q3PtrList<Cell> &_list );
 
     /**
      * A convenience function that finds a sheet by its name.
@@ -1258,7 +1263,7 @@ signals:
      * Emitted if a certain area of some sheet has to be redrawn.
      * That is for example the case when a new child is inserted.
      */
-    void sig_polygonInvalidated( const QPointArray& );
+    void sig_polygonInvalidated( const Q3PointArray& );
 
     void sig_SheetHidden( Sheet* sheet);
     void sig_SheetShown( Sheet* sheet);
@@ -1281,13 +1286,13 @@ protected:
      */
     void changeCellTabName( QString const & old_name,QString const & new_name );
 
-    bool loadRowFormat( const QDomElement& row, int &rowIndex, KoOasisLoadingContext& oasisContext, QDict<Style>& styleMap );
+    bool loadRowFormat( const QDomElement& row, int &rowIndex, KoOasisLoadingContext& oasisContext, Q3Dict<Style>& styleMap );
 
     /**
      * Loads the properties of a column from a table:table-column element in an OASIS XML file
      * defaultColumnCellStyles is a map from column indicies to the default cell style for that column
      */
-    bool loadColumnFormat(const QDomElement& row, const KoOasisStyles& oasisStyles, int & indexCol, const QDict<Style>& styleMap);
+    bool loadColumnFormat(const QDomElement& row, const KoOasisStyles& oasisStyles, int & indexCol, const Q3Dict<Style>& styleMap);
     bool loadSheetStyleFormat( QDomElement *style );
     void loadOasisMasterLayoutPage( KoStyleStack &styleStack );
 
@@ -1308,10 +1313,10 @@ protected:
     /**
      * @see #autofill
      */
-    void fillSequence( QPtrList<Cell>& _srcList, QPtrList<Cell>& _destList, QPtrList<AutoFillSequence>& _seqList, bool down = true );
+    void fillSequence( Q3PtrList<Cell>& _srcList, Q3PtrList<Cell>& _destList, Q3PtrList<AutoFillSequence>& _seqList, bool down = true );
 
     static int s_id;
-    static QIntDict<Sheet>* s_mapSheets;
+    static Q3IntDict<Sheet>* s_mapSheets;
 
 public:
     // see kspread_sheet.cc for an explanation of this
@@ -1358,20 +1363,20 @@ private:
      */
     bool insertPicture( const KoPoint& point, KoPicture& picture );
 
-    bool FillSequenceWithInterval (QPtrList<Cell>& _srcList,
-           QPtrList<Cell>& _destList,
-           QPtrList<AutoFillSequence>& _seqList,
+    bool FillSequenceWithInterval (Q3PtrList<Cell>& _srcList,
+           Q3PtrList<Cell>& _destList,
+           Q3PtrList<AutoFillSequence>& _seqList,
                                    bool down);
 
-    void FillSequenceWithCopy (QPtrList<Cell>& _srcList,
-                               QPtrList<Cell>& _destList,
+    void FillSequenceWithCopy (Q3PtrList<Cell>& _srcList,
+                               Q3PtrList<Cell>& _destList,
                                bool down);
 
     void convertObscuringBorders();
     void checkCellContent(Cell * cell1, Cell * cell2, int & ret);
     int  adjustColumnHelper(Cell * c, int _col, int _row);
     void checkContentDirection( QString const & name );
-    bool objectNameExists( EmbeddedObject *object, QPtrList<EmbeddedObject> &list );
+    bool objectNameExists( EmbeddedObject *object, Q3PtrList<EmbeddedObject> &list );
 
     class Private;
     Private* d;

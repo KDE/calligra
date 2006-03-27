@@ -20,10 +20,12 @@
 #include "kspread_generalProperty.h"
 
 #include <qcheckbox.h>
-#include <qgroupbox.h>
+#include <q3groupbox.h>
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qlineedit.h>
+//Added by qt3to4:
+#include <Q3VBoxLayout>
 
 #include <knuminput.h>
 #include <klocale.h>
@@ -38,7 +40,7 @@ GeneralProperty::GeneralProperty( QWidget *parent, const char *name, GeneralValu
 , m_generalValue( generalValue )
 , m_unit( unit )
 {
-    QVBoxLayout *layout = new QVBoxLayout( this );
+    Q3VBoxLayout *layout = new Q3VBoxLayout( this );
     layout->addWidget( m_ui = new KoGeneralPropertyUI( this ) );
 
     QSpacerItem* spacer = new QSpacerItem( 20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding );
@@ -90,7 +92,7 @@ int GeneralProperty::getGeneralPropertyChange() const
     if ( !m_generalValue.m_name.isNull() && m_generalValue.m_name != m_ui->nameInput->text() )
         flags |= Name;
 
-    if ( m_ui->protect->state() != QButton::NoChange )
+    if ( m_ui->protect->state() != QCheckBox::NoChange )
     {
         if ( ( m_ui->protect->isOn() ? STATE_ON : STATE_OFF ) != m_generalValue.m_protect )
             flags |= Protect;
@@ -99,9 +101,9 @@ int GeneralProperty::getGeneralPropertyChange() const
         {
             KoRect rect = getRect();
             if ( m_generalValue.m_rect.left() != rect.left() )
-                flags |= Left;
+                flags |= Qt::DockLeft;
             if ( m_generalValue.m_rect.top() != rect.top() )
-                flags |= Top;
+                flags |= Qt::DockTop;
             // this has to be done as the rect cahnges width/hight if left or top is changed
             if ( QABS( m_generalValue.m_rect.width() - rect.width() ) > 1e-6 )
                 flags |= Width;
@@ -110,7 +112,7 @@ int GeneralProperty::getGeneralPropertyChange() const
         }
     }
 
-    if ( m_ui->keepRatio->state() != QButton::NoChange
+    if ( m_ui->keepRatio->state() != QCheckBox::NoChange
          && ( m_ui->keepRatio->isOn() ? STATE_ON : STATE_OFF ) != m_generalValue.m_keepRatio )
     {
         flags |= KeepRatio;

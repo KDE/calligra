@@ -33,7 +33,10 @@
 #include <qpainter.h>
 #include <qrect.h>
 #include <qstring.h>
-#include <qvaluelist.h>
+#include <q3valuelist.h>
+//Added by qt3to4:
+#include <Q3CString>
+#include <Q3PtrList>
 
 #include <kcompletion.h>
 
@@ -141,12 +144,12 @@ public:
   /**
    * Returns list of all documents.
    */
-  static QValueList<Doc*> documents();
+  static Q3ValueList<Doc*> documents();
 
   /**
    * Returns the MIME type of KSpread document.
    */
-  virtual QCString mimeType() const { return MIME_TYPE; }
+  virtual Q3CString mimeType() const { return MIME_TYPE; }
 
   KLocale *locale () const;
   Map *map () const;
@@ -500,13 +503,13 @@ public:
    */
   void paintCellRegions(QPainter& painter, const QRect &viewRect,
                         View* view,
-                        QValueList<QRect> cellRegions,
+                        Q3ValueList<QRect> cellRegions,
                         const Sheet* sheet, bool drawCursor);
 
   virtual DCOPObject* dcopObject();
 
   void addAreaName(const QRect &_rect,const QString & name,const QString & sheetName);
-  const QValueList<Reference>  & listArea();
+  const Q3ValueList<Reference>  & listArea();
   void removeArea( const QString &name);
   KCompletion & completion();
   void addStringCompletion(const QString & stringCompletion);
@@ -523,7 +526,7 @@ public:
     /**
     * @return the list of all embedded objects (charts, pictures and koffice objects) Use insertObject to add an object to the list.
     */
-  QPtrList<EmbeddedObject>& embeddedObjects();
+  Q3PtrList<EmbeddedObject>& embeddedObjects();
   KoPictureCollection *pictureCollection();
 
   void initConfig();
@@ -657,7 +660,7 @@ signals:
   void sig_addAreaName( const QString & );
   void sig_removeAreaName( const QString & );
 
-  void damagesFlushed( const QValueList<Damage*>& damages );
+  void damagesFlushed( const Q3ValueList<Damage*>& damages );
 
 protected slots:
   void commandExecuted();

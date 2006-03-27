@@ -35,8 +35,10 @@
 #define KSPREAD_CELL
 
 #include <qpainter.h>
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 #include <qdatetime.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 #include "kspread_condition.h"
 
@@ -338,7 +340,7 @@ public:
                     QPen & bottomPen,
                     QPen & leftPen,
                     QPen & topPen,
-		    QValueList<QPoint> &mergedCellsPainted,
+		    Q3ValueList<QPoint> &mergedCellsPainted,
                     bool drawCursor = true );
 
 
@@ -684,7 +686,7 @@ public:
     /**
      * @return the obscuring cell list (might be empty)
      */
-    QValueList<Cell*> obscuringCells() const;
+    Q3ValueList<Cell*> obscuringCells() const;
 
     void clearObscuringCells();
 
@@ -785,12 +787,12 @@ public:
     /**
      * Gets a copy of the list of current conditions
      */
-    QValueList<Conditional> conditionList() const;
+    Q3ValueList<Conditional> conditionList() const;
 
     /**
      * Replace the old set of conditions with a new one
      */
-    void setConditionList(const QValueList<Conditional> &newList);
+    void setConditionList(const Q3ValueList<Conditional> &newList);
 
     Validity * getValidity( int newStruct = -1 );
 
@@ -1012,7 +1014,7 @@ private:
                              bool paintBorderLeft, bool paintBorderTop,
                              QPen & rightPen, QPen & bottomPen,
                              QPen & leftPen, QPen & topPen,
-			     QValueList<QPoint> &mergedCellsPainted );
+			     Q3ValueList<QPoint> &mergedCellsPainted );
     void paintCellDiagonalLines( QPainter& painter, const KoRect &cellRect,
                                  const QPoint &cellRef );
 

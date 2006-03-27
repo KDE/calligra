@@ -23,7 +23,7 @@
 #define __kspread_condition_h__
 
 #include <qdom.h>
-#include <qvaluelist.h>
+#include <q3valuelist.h>
 
 #include <koffice_export.h>
 
@@ -95,12 +95,12 @@ class Conditions
   /**
    * Retrieve the current list of conditions we're checking
    */
-  QValueList<Conditional> conditionList() const;
+  Q3ValueList<Conditional> conditionList() const;
 
   /**
    * Replace the current list of conditions with this new one
    */
-  void setConditionList( const QValueList<Conditional> & list );
+  void setConditionList( const Q3ValueList<Conditional> & list );
 
   /**
    * Saves the conditions to a DOM tree structure.
@@ -136,7 +136,7 @@ class Conditions
 
 
   const Cell * m_cell;
-  QValueList<Conditional> m_condList;
+  Q3ValueList<Conditional> m_condList;
   Style * m_matchedStyle;
 };
 

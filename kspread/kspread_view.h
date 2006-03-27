@@ -29,9 +29,12 @@
 #define KSPREAD_VIEW
 
 #include <qpoint.h>
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 #include <qstringlist.h>
-#include <qvaluelist.h>
+#include <q3valuelist.h>
+//Added by qt3to4:
+#include <QKeyEvent>
+#include <QResizeEvent>
 
 #include <kprinter.h>
 #include <kdeprint/kprintdialogpage.h>
@@ -586,7 +589,7 @@ public slots:
      */
     void popupTabBarMenu( const QPoint& );
 
-    void handleDamages( const QValueList<Damage*>& damages );
+    void handleDamages( const Q3ValueList<Damage*>& damages );
 
     void runInternalTests();
     void runInspector();
@@ -695,7 +698,7 @@ protected:
     virtual void keyPressEvent ( QKeyEvent * _ev );
     virtual void resizeEvent( QResizeEvent *_ev );
 
-    virtual QWMatrix matrix() const;
+    virtual QMatrix matrix() const;
 
     /**
      * Returns the position of the top-left point of the currently selected cell in document coordinates.

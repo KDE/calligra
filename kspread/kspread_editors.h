@@ -24,8 +24,13 @@
 
 #include <vector>
 
-#include <qsyntaxhighlighter.h>
+#include <q3syntaxhighlighter.h>
 #include <qwidget.h>
+//Added by qt3to4:
+#include <QFocusEvent>
+#include <QKeyEvent>
+#include <QEvent>
+#include <QResizeEvent>
 
 #include <kcombobox.h>
 #include <klineedit.h>
@@ -33,7 +38,7 @@
 
 class KTextEdit;
 class QFont;
-class QButton;
+class Q3Button;
 class QTextCursor;
 
 namespace KSpread
@@ -52,7 +57,7 @@ class View;
  * Colours cell references in formulas.  Installed by CellEditor instances in
  * the constructor.
  */
-class FormulaEditorHighlighter : public QSyntaxHighlighter
+class FormulaEditorHighlighter : public Q3SyntaxHighlighter
 {
 public:
   /**
@@ -61,7 +66,7 @@ public:
    * @param textEdit The QTextEdit widget which the highlighter should operate on
    * @param canvas The Canvas object
    */
-  FormulaEditorHighlighter(QTextEdit* textEdit, Canvas* canvas);
+  FormulaEditorHighlighter(Q3TextEdit* textEdit, Canvas* canvas);
   virtual ~FormulaEditorHighlighter();
 
 
@@ -290,7 +295,7 @@ class EditWidget : public QLineEdit
     Q_OBJECT
 public:
     EditWidget( QWidget *parent, Canvas *canvas,
-                       QButton *cancelButton, QButton *okButton);
+                       Q3Button *cancelButton, Q3Button *okButton);
 
     virtual void setText( const QString& t );
 
@@ -307,8 +312,8 @@ protected:
     virtual void focusOutEvent( QFocusEvent* ev );
 
 private:
-    QButton* m_pCancelButton;
-    QButton* m_pOkButton;
+    Q3Button* m_pCancelButton;
+    Q3Button* m_pOkButton;
     Canvas* m_pCanvas;
     bool isArray;
 };

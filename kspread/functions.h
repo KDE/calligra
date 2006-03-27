@@ -23,7 +23,9 @@
 #define KSPREAD_FUNCTIONS
 
 #include <qstringlist.h>
-#include <qvaluevector.h>
+#include <q3valuevector.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 class QDomElement;
 
@@ -33,14 +35,14 @@ class Sheet;
 class Value;
 class ValueCalc;
 
-typedef QValueVector<Value> valVector;
+typedef Q3ValueVector<Value> valVector;
 
 struct rangeInfo {
   int col1, col2, row1, row2;
 };
 struct FuncExtra {
   // here we'll add all the extras a function may need
-  QValueVector<rangeInfo> ranges;
+  Q3ValueVector<rangeInfo> ranges;
   Sheet *sheet;
   int myrow, mycol;
 };
@@ -125,7 +127,7 @@ private:
   QStringList m_help;
   QString m_name;
   ParameterType m_type;
-  QValueList<FunctionParameter> m_params;
+  Q3ValueList<FunctionParameter> m_params;
 };
 
 class FunctionRepository

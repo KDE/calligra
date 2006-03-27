@@ -22,8 +22,8 @@
 
 #include <map>
 
-#include <qvaluelist.h>
-#include <qvaluevector.h>
+#include <q3valuelist.h>
+#include <q3valuevector.h>
 
 #include "kspread_value.h"
 
@@ -46,7 +46,7 @@ struct Condition
   Type     type;
 };
 
-typedef QValueList<Condition> ConditionList;
+typedef Q3ValueList<Condition> ConditionList;
 
 typedef void (*arrayWalkFunc) (ValueCalc *, Value &result,
     Value val, Value param);
@@ -199,12 +199,12 @@ class ValueCalc {
       arrayWalkFunc func, Value param);
   /** Walk the array in function-like style.
   This method is here to avoid duplication in function handlers. */
-  void arrayWalk (QValueVector<Value> &range, Value &res,
+  void arrayWalk (Q3ValueVector<Value> &range, Value &res,
       arrayWalkFunc func, Value param);
   void twoArrayWalk (const Value &a1, const Value &a2,
       Value &res, arrayWalkFunc func);
-  void twoArrayWalk (QValueVector<Value> &a1,
-      QValueVector<Value> &a2, Value &res, arrayWalkFunc func);
+  void twoArrayWalk (Q3ValueVector<Value> &a1,
+      Q3ValueVector<Value> &a2, Value &res, arrayWalkFunc func);
   arrayWalkFunc awFunc (const QString &name);
   void registerAwFunc (const QString &name, arrayWalkFunc func);
 
@@ -229,18 +229,18 @@ class ValueCalc {
       bool full = true);
   
   /** range functions using value lists */
-  Value sum (QValueVector<Value> range, bool full = true);
-  int count (QValueVector<Value> range, bool full = true);
-  Value avg (QValueVector<Value> range, bool full = true);
-  Value max (QValueVector<Value> range, bool full = true);
-  Value min (QValueVector<Value> range, bool full = true);
-  Value product (QValueVector<Value> range, Value init,
+  Value sum (Q3ValueVector<Value> range, bool full = true);
+  int count (Q3ValueVector<Value> range, bool full = true);
+  Value avg (Q3ValueVector<Value> range, bool full = true);
+  Value max (Q3ValueVector<Value> range, bool full = true);
+  Value min (Q3ValueVector<Value> range, bool full = true);
+  Value product (Q3ValueVector<Value> range, Value init,
       bool full = true);
-  Value stddev (QValueVector<Value> range, bool full = true);
-  Value stddev (QValueVector<Value> range, Value avg,
+  Value stddev (Q3ValueVector<Value> range, bool full = true);
+  Value stddev (Q3ValueVector<Value> range, Value avg,
       bool full = true);
-  Value stddevP (QValueVector<Value> range, bool full = true);
-  Value stddevP (QValueVector<Value> range, Value avg,
+  Value stddevP (Q3ValueVector<Value> range, bool full = true);
+  Value stddevP (Q3ValueVector<Value> range, Value avg,
       bool full = true);
 
   /**

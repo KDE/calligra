@@ -20,13 +20,13 @@
 #ifndef __kspread_map_h__
 #define __kspread_map_h__
 
-#include <qcstring.h>
-#include <qptrlist.h>
+#include <q3cstring.h>
+#include <q3ptrlist.h>
 #include <qstring.h>
 #include <qstringlist.h>
-#include <qintdict.h>
+#include <q3intdict.h>
 #include <qobject.h>
-#include <qdict.h>
+#include <q3dict.h>
 
 #include <koffice_export.h>
 
@@ -77,16 +77,16 @@ public:
 
     bool saveOasis( KoXmlWriter & xmlWriter, KoGenStyles & mainStyles, KoStore *store, KoXmlWriter* manifestWriter, int &_indexObj, int &_partIndexObj );
 
-  bool loadOasis( const QDomElement& mymap, KoOasisLoadingContext& oasisContext , QDict<Style>& styleMap );
+  bool loadOasis( const QDomElement& mymap, KoOasisLoadingContext& oasisContext , Q3Dict<Style>& styleMap );
   bool loadXML( const QDomElement& mymap );
   bool loadChildren( KoStore* _store );
 
   bool saveChildren( KoStore* _store );
 
-  void password( QCString & passwd ) const { passwd = m_strPassword; }
+  void password( Q3CString & passwd ) const { passwd = m_strPassword; }
   bool isProtected() const { return !m_strPassword.isNull(); }
-  void setProtected( QCString const & passwd );
-  bool checkPassword( QCString const & passwd ) const { return ( passwd == m_strPassword ); }
+  void setProtected( Q3CString const & passwd );
+  bool checkPassword( Q3CString const & passwd ) const { return ( passwd == m_strPassword ); }
 
   /**
    * The sheet named @p _from is being moved to the sheet @p _to.
@@ -145,7 +145,7 @@ public:
    */
   Sheet* nextSheet() { return m_lstSheets.next();  }
 
-  QPtrList<Sheet>& sheetList() { return m_lstSheets; }
+  Q3PtrList<Sheet>& sheetList() { return m_lstSheets; }
 
   /**
    * @return amount of sheets in this map.
@@ -183,13 +183,13 @@ private:
   /**
    * List of all sheets in this map. The list has autodelete turned on.
    */
-  QPtrList<Sheet> m_lstSheets;
-  QPtrList<Sheet> m_lstDeletedSheets;
+  Q3PtrList<Sheet> m_lstSheets;
+  Q3PtrList<Sheet> m_lstDeletedSheets;
 
   /**
    * Password to protect the map from being changed.
    */
-  QCString m_strPassword;
+  Q3CString m_strPassword;
   /**
    * Set from the XML
    */

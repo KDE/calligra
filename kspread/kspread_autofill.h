@@ -27,9 +27,9 @@
 #define __kspread_autofill_h__
 
 #include <qdatetime.h>
-#include <qmemarray.h>
+#include <q3memarray.h>
 #include <qstring.h>
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 #include <qstringlist.h>
 
 namespace KSpread
@@ -91,7 +91,7 @@ public:
     void fillCell( Cell *src, Cell *dest, AutoFillDeltaSequence *delta, int _block, bool down = true );
 
 protected:
-    QPtrList<AutoFillSequenceItem> sequence;
+    Q3PtrList<AutoFillSequenceItem> sequence;
 };
 
 class AutoFillDeltaSequence
@@ -104,13 +104,13 @@ public:
 
     bool equals( AutoFillDeltaSequence *_delta );
 
-    QMemArray<double>* getSequence() { return m_sequence; }
+    Q3MemArray<double>* getSequence() { return m_sequence; }
 
     double getItemDelta( int _pos );
 
 protected:
     bool m_ok;
-    QMemArray<double>* m_sequence;
+    Q3MemArray<double>* m_sequence;
 };
 
 } // namespace KSpread

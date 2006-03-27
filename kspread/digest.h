@@ -43,13 +43,13 @@
 #ifndef _DIGEST_
 #define _DIGEST_ 
 
-#include <qcstring.h>
+#include <q3cstring.h>
 #include <qstring.h>
 
 class SHA1
 {
  public:
-  static bool getHash( QString const & text, QCString & hash );
+  static bool getHash( QString const & text, Q3CString & hash );
 };
 
 #endif

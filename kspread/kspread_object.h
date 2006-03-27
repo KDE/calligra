@@ -34,6 +34,8 @@
 #include <KoStore.h>
 #include <KoStoreDevice.h>
 #include <KoXmlNS.h>
+//Added by qt3to4:
+#include <QPixmap>
 
 namespace KoChart
 {

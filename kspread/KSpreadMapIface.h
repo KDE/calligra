@@ -22,7 +22,9 @@
 #define KSPREAD_MAP_IFACE_H
 
 #include <qstringlist.h>
-#include <qvaluelist.h>
+#include <q3valuelist.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 #include <dcopobject.h>
 #include <dcopref.h>
@@ -38,15 +40,15 @@ class MapIface : virtual public DCOPObject
 public:
     MapIface( Map* );
 
-    virtual bool processDynamic(const QCString &fun, const QByteArray &data,
-				QCString& replyType, QByteArray &replyData);
+    virtual bool processDynamic(const Q3CString &fun, const QByteArray &data,
+				Q3CString& replyType, QByteArray &replyData);
 
 k_dcop:
     virtual DCOPRef sheet( const QString& name );
     virtual DCOPRef sheetByIndex( int index );
     virtual int sheetCount() const;
     virtual QStringList sheetNames() const;
-    virtual QValueList<DCOPRef> sheets();
+    virtual Q3ValueList<DCOPRef> sheets();
     virtual DCOPRef insertSheet( const QString& name );
 
 private:

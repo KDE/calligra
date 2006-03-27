@@ -22,6 +22,9 @@
 #define __kspread_sheetprint_h__
 
 #include <qobject.h>
+//Added by qt3to4:
+#include <QPixmap>
+#include <Q3ValueList>
 
 #include <koffice_export.h>
 #include <KoUnit.h>
@@ -473,12 +476,12 @@ private:
     /**
      * Returns the iterator for the column in the newPage list for columns
      */
-    QValueList<PrintNewPageEntry>::iterator findNewPageColumn( int col );
+    Q3ValueList<PrintNewPageEntry>::iterator findNewPageColumn( int col );
 
     /**
      * Returns the iterator for the row in the newPage list for rows
      */
-    QValueList<PrintNewPageEntry>::iterator findNewPageRow( int row );
+    Q3ValueList<PrintNewPageEntry>::iterator findNewPageRow( int row );
 
     /**
      * Replaces macros like <name>, <file>, <date> etc. in the string and
@@ -633,12 +636,12 @@ private:
     /**
      * Stores the new page columns
      */
-     QValueList<PrintNewPageEntry> m_lnewPageListX;
+     Q3ValueList<PrintNewPageEntry> m_lnewPageListX;
 
     /**
      * Stores the new page columns
      */
-     QValueList<PrintNewPageEntry> m_lnewPageListY;
+     Q3ValueList<PrintNewPageEntry> m_lnewPageListY;
 
     /**
      * Stores internally the maximum column that was checked already
@@ -665,7 +668,7 @@ private:
      */
     int m_iPageLimitY;
 
-    QValueList<PrintObject*> m_printObjects;
+    Q3ValueList<PrintObject*> m_printObjects;
 };
 
 

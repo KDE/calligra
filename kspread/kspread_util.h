@@ -24,6 +24,8 @@
 #include <qstring.h>
 #include <qrect.h>
 #include <qdatetime.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 #include <koffice_export.h>
 
@@ -242,8 +244,8 @@ TODO: use this as selection
 TODO: anything I forgot ;)
 */
 struct RangeList {
-  QValueList<Point> cells;
-  QValueList<Range> ranges;
+  Q3ValueList<Point> cells;
+  Q3ValueList<Range> ranges;
 };
 
 

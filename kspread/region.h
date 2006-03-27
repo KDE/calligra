@@ -22,7 +22,7 @@
 
 #include <qrect.h>
 #include <qstring.h>
-#include <qvaluelist.h>
+#include <q3valuelist.h>
 
 #include <kdebug.h>
 
@@ -265,8 +265,8 @@ public:
   void setView(View*);
 
 
-  typedef QValueList<Element*>::Iterator      Iterator;
-  typedef QValueList<Element*>::ConstIterator ConstIterator;
+  typedef Q3ValueList<Element*>::Iterator      Iterator;
+  typedef Q3ValueList<Element*>::ConstIterator ConstIterator;
 
   ConstIterator constBegin() const;
   ConstIterator constEnd() const;
@@ -275,7 +275,7 @@ protected:
   /**
    * @return the list of elements
    */
-  QValueList<Element*>& cells() const;
+  Q3ValueList<Element*>& cells() const;
 
   /**
    * @param iterator the iterator to the element in whose front the new point

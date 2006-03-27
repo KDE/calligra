@@ -20,7 +20,7 @@
 #ifndef KSPREAD_DEPENDENCIES
 #define KSPREAD_DEPENDENCIES
 
-#include <qvaluelist.h>
+#include <q3valuelist.h>
 
 #include "kspread_util.h"
 
@@ -69,7 +69,7 @@ class DependencyManager {
   /** get dependencies of a cell */
   RangeList getDependencies (const Point &cell);
   /** get cells depending on this cell, either through normal or range dependency */
-  QValueList<Point> getDependants (const Point &cell);
+  Q3ValueList<Point> getDependants (const Point &cell);
 protected:
   
   /** local d-pointer */

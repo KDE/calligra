@@ -20,10 +20,14 @@
 #ifndef TOOLBOX_H
 #define TOOLBOX_H
 
-#include <qframe.h>
+#include <q3frame.h>
 #include <qpoint.h>
+//Added by qt3to4:
+#include <Q3VBoxLayout>
+#include <QMouseEvent>
+#include <QChildEvent>
 #include <koffice_export.h>
-class QVBoxLayout;
+class Q3VBoxLayout;
 class QSpinBox;
 
 class KoDocumentChild;
@@ -31,7 +35,7 @@ class KoDocumentChild;
 namespace KSpread
 {
 
-class KOFFICEUI_EXPORT ToolBox : public QFrame
+class KOFFICEUI_EXPORT ToolBox : public Q3Frame
 {
     Q_OBJECT
 public:
@@ -47,7 +51,7 @@ protected:
     void mouseMoveEvent( QMouseEvent* ev );
 
 private:
-    QVBoxLayout* m_layout;
+    Q3VBoxLayout* m_layout;
     QPoint m_mousePos;
     QPoint m_startPos;
 };
