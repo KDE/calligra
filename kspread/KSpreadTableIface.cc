@@ -86,9 +86,9 @@ bool KSpread::CellProxy::process( const QCString& obj, const QCString& fun, cons
         return false;
 
 	if ( fun == "functions()" ) {
-        	replyType = "QCStringList";
+        	replyType = "DCOPCStringList";
 	        QDataStream reply( replyData, QIODevice::WriteOnly );
-		 QCStringList repList=m_cell->functions();
+		 DCOPCStringList repList=m_cell->functions();
 		reply<<repList;
 	        return true;
 	}
