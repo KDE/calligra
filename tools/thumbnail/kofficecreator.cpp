@@ -35,6 +35,7 @@
 #include "kofficecreator.h"
 #include <KoStore.h>
 #include <KoDocument.h>
+#include <QAbstractEventDispatcher>
 #include "koffice_export.h"
 
 extern "C"
@@ -87,7 +88,7 @@ bool KOfficeCreator::create(const QString &path, int width, int height, QImage &
     startTimer(5000);
     while (!m_completed)
         kapp->processOneEvent();
-    killTimers();
+    QAbstractEventDispatcher::instance()->unregisterTimers(this);
 
     // render the page on a bigger pixmap and use smoothScale,
     // looks better than directly scaling with the QPainter (malte)
