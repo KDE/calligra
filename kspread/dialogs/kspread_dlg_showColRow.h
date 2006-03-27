@@ -23,11 +23,11 @@
 #ifndef __kspread_dlg_showColRow__
 #define __kspread_dlg_showColRow__
 
-#include <qvaluelist.h>
+#include <q3valuelist.h>
 
 #include <kdialogbase.h>
 
-class QListBox;
+class Q3ListBox;
 
 namespace KSpread
 {
@@ -42,13 +42,13 @@ public:
 
 public slots:
   void slotOk();
-  void slotDoubleClicked(QListBoxItem *);
+  void slotDoubleClicked(Q3ListBoxItem *);
 
 protected:
   View* m_pView;
-  QListBox * list;
+  Q3ListBox * list;
   Type typeShow;
-  QValueList<int> listInt;
+  Q3ValueList<int> listInt;
 };
 
 } // namespace KSpread

@@ -20,9 +20,11 @@
 #ifndef __my_app_h__
 #define __my_app_h__
 
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 #include <qstring.h>
 #include <qobject.h>
+//Added by qt3to4:
+#include <QEvent>
 
 #include <klibloader.h>
 #include <kparts/plugin.h>

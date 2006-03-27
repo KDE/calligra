@@ -24,10 +24,10 @@
 
 #include <kdialogbase.h>
 
-class QListBox;
-class QListBoxItem;
+class Q3ListBox;
+class Q3ListBoxItem;
 class QLineEdit;
-class QMultiLineEdit;
+class Q3MultiLineEdit;
 class QPushButton;
 
 class KConfig;
@@ -45,8 +45,8 @@ public:
 
 public slots:
   virtual void slotOk();
-  void slotDoubleClicked(QListBoxItem *);
-  void slotTextClicked(QListBoxItem*);
+  void slotDoubleClicked(Q3ListBoxItem *);
+  void slotTextClicked(Q3ListBoxItem*);
   void slotRemove();
   void slotAdd();
   void slotNew();
@@ -56,8 +56,8 @@ public slots:
 protected:
   KConfig *config;
 
-  QListBox * list;
-  QMultiLineEdit *entryList;
+  Q3ListBox * list;
+  Q3MultiLineEdit *entryList;
   QPushButton* m_pRemove;
   QPushButton* m_pNew;
   QPushButton* m_pAdd;

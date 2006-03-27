@@ -29,14 +29,22 @@
 #include <kdialog.h>
 #include <qpoint.h>
 #include <qrect.h>
+//Added by qt3to4:
+#include <Q3VBoxLayout>
+#include <Q3HBoxLayout>
+#include <QLabel>
+#include <Q3GridLayout>
+#include <Q3Frame>
+#include <QEvent>
+#include <QCloseEvent>
 
-class QFrame;
-class QGridLayout;
-class QHBoxLayout;
+class Q3Frame;
+class Q3GridLayout;
+class Q3HBoxLayout;
 class QLabel;
 class QLineEdit;
 class QPushButton;
-class QVBoxLayout;
+class Q3VBoxLayout;
 
 namespace KSpread
 {
@@ -51,7 +59,7 @@ class GoalSeekDialog : public KDialog
 
  public:
    GoalSeekDialog( View * parent, QPoint const & marker, const char * name = 0,
-                      bool modal = FALSE, WFlags fl = 0 );
+                      bool modal = FALSE, Qt::WFlags fl = 0 );
    ~GoalSeekDialog();
 
   /**
@@ -67,9 +75,9 @@ class GoalSeekDialog : public KDialog
  protected:
   virtual void closeEvent ( QCloseEvent * );
 
-  QGridLayout * GoalSeekDialogLayout;
-  QGridLayout * m_startFrameLayout;
-  QGridLayout * m_resultFrameLayout;
+  Q3GridLayout * GoalSeekDialogLayout;
+  Q3GridLayout * m_startFrameLayout;
+  Q3GridLayout * m_resultFrameLayout;
 
  private:
   View * m_pView;
@@ -83,13 +91,13 @@ class GoalSeekDialog : public KDialog
   QString       m_oldText;
   QString       m_sheetName;
 
-  QFrame      * m_startFrame;
+  Q3Frame      * m_startFrame;
   QLineEdit   * m_targetValueEdit;
   QLineEdit   * m_targetEdit;
   QLineEdit   * m_sourceEdit;
   QPushButton * m_buttonOk;
   QPushButton * m_buttonCancel;
-  QFrame      * m_resultFrame;
+  Q3Frame      * m_resultFrame;
   QLabel      * m_newValueDesc;
   QLabel      * m_currentValueLabel;
   QLabel      * m_newValue;

@@ -28,10 +28,12 @@
 
 #include <kdialogbase.h>
 #include <qstring.h>
-#include <qvaluelist.h>
+#include <q3valuelist.h>
 #include <qcolor.h>
 #include <qpen.h>
 #include <qfont.h>
+//Added by qt3to4:
+#include <QLabel>
 
 class QComboBox;
 class QLabel;
@@ -71,7 +73,7 @@ private:
 	QString config;
 	QString name;
     };
-    QValueList<Entry> m_entries;
+    Q3ValueList<Entry> m_entries;
 
     Format* m_cells[ 16 ];
 };

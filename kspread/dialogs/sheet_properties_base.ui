@@ -72,19 +72,19 @@ Fifth Floor, Boston, MA 02110-1301, USA.</comment>
                         <widget class="KComboBox">
                             <item>
                                 <property name="text">
-                                    <string>Left to Right</string>
+                                    <string>Qt::DockLeft to Qt::DockRight</string>
                                 </property>
                             </item>
                             <item>
                                 <property name="text">
-                                    <string>Right to Left</string>
+                                    <string>Qt::DockRight to Qt::DockLeft</string>
                                 </property>
                             </item>
                             <property name="name">
                                 <cstring>directionComboBox</cstring>
                             </property>
                             <property name="whatsThis" stdset="0">
-                                <string>Defaut is that the first column of the sheet is on the left. If you choose Right to Left, then the first column will be on the right and the others added from right to left.</string>
+                                <string>Defaut is that the first column of the sheet is on the left. If you choose Qt::DockRight to Qt::DockLeft, then the first column will be on the right and the others added from right to left.</string>
                             </property>
                         </widget>
                     </hbox>
@@ -94,7 +94,7 @@ Fifth Floor, Boston, MA 02110-1301, USA.</comment>
                         <cstring>spacer1</cstring>
                     </property>
                     <property name="orientation">
-                        <enum>Horizontal</enum>
+                        <enum>Qt::Horizontal</enum>
                     </property>
                     <property name="sizeType">
                         <enum>Expanding</enum>
@@ -113,7 +113,7 @@ Fifth Floor, Boston, MA 02110-1301, USA.</comment>
                 <cstring>spacer2</cstring>
             </property>
             <property name="orientation">
-                <enum>Vertical</enum>
+                <enum>Qt::Vertical</enum>
             </property>
             <property name="sizeType">
                 <enum>Fixed</enum>
@@ -141,7 +141,7 @@ Fifth Floor, Boston, MA 02110-1301, USA.</comment>
                         <string>Show c&amp;omment indicator</string>
                     </property>
                     <property name="whatsThis" stdset="0">
-                        <string>If this box is checked cells containing comments will be marked by a small red triangle at the top right corner.</string>
+                        <string>If this box is checked cells containing comments will be marked by a small Qt::red triangle at the top right corner.</string>
                     </property>
                 </widget>
                 <widget class="QCheckBox" row="3" column="0">
@@ -218,7 +218,7 @@ Fifth Floor, Boston, MA 02110-1301, USA.</comment>
                         <string>Show formula &amp;indicator</string>
                     </property>
                     <property name="whatsThis" stdset="0">
-                        <string>If this box is checked KSpread will display a small blue triangle at the bottom left corner of cells containing formulae. This is useful if you want to protect cells with formulae.</string>
+                        <string>If this box is checked KSpread will display a small Qt::blue triangle at the bottom left corner of cells containing formulae. This is useful if you want to protect cells with formulae.</string>
                     </property>
                 </widget>
                 <widget class="QCheckBox" row="0" column="1">

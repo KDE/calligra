@@ -82,7 +82,7 @@
                 <cstring>m_endDateGroupBox</cstring>
             </property>
             <property name="frameShape">
-                <enum>GroupBoxPanel</enum>
+                <enum>QFrame::StyledPanel</enum>
             </property>
             <property name="frameShadow">
                 <enum>Sunken</enum>
@@ -139,7 +139,7 @@
                 <cstring>spacer1</cstring>
             </property>
             <property name="orientation">
-                <enum>Vertical</enum>
+                <enum>Qt::Vertical</enum>
             </property>
             <property name="sizeType">
                 <enum>Expanding</enum>

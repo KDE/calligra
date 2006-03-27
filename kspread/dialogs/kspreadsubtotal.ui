@@ -190,7 +190,7 @@ Fifth Floor, Boston, MA 02110-1301, USA.</comment>
                             <cstring>Spacer4</cstring>
                         </property>
                         <property name="orientation">
-                            <enum>Vertical</enum>
+                            <enum>Qt::Vertical</enum>
                         </property>
                         <property name="sizeType">
                             <enum>Expanding</enum>

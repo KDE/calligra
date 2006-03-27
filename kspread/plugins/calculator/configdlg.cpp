@@ -30,6 +30,11 @@
 #include <klocale.h>
 #include <kdialog.h>
 #include <qlayout.h>
+//Added by qt3to4:
+#include <Q3VBoxLayout>
+#include <QLabel>
+#include <Q3GridLayout>
+#include <Q3Frame>
 
 // Undefine HAVE_LONG_DOUBLE for Beta 4 since RedHat 5.0 comes with a borken
 // glibc
@@ -43,15 +48,15 @@ ConfigDlg::ConfigDlg(QWidget *parent, const char *name, DefStruct *defstruct)
 {
   defst = defstruct;
 
-  QVBoxLayout *lay1 = new QVBoxLayout( this );
+  Q3VBoxLayout *lay1 = new Q3VBoxLayout( this );
   lay1->setMargin( KDialog::marginHint() );
   lay1->setSpacing( KDialog::spacingHint() );
 
-  box = new QGroupBox(0, Qt::Vertical, i18n("Defaults"), this, "box");
+  box = new Q3GroupBox(0, Qt::Vertical, i18n("Defaults"), this, "box");
   box->layout()->setSpacing(KDialog::spacingHint());
   box->layout()->setMargin(KDialog::marginHint());
 
-  QGridLayout *grid1 = new QGridLayout(box->layout(),8,2);
+  Q3GridLayout *grid1 = new Q3GridLayout(box->layout(),8,2);
   label1 = new QLabel(box);
   label1->setText(i18n("Foreground color:"));
   grid1->addWidget(label1,0,0);
@@ -130,11 +135,11 @@ ConfigDlg::ConfigDlg(QWidget *parent, const char *name, DefStruct *defstruct)
     cb2->setChecked(true);
 
 
-  stylegroup = new QButtonGroup(box,"stylegroup");
+  stylegroup = new Q3ButtonGroup(box,"stylegroup");
   grid1->addMultiCellWidget(stylegroup,5,7,0,1);
-  stylegroup->setFrameStyle(QFrame::NoFrame);
+  stylegroup->setFrameStyle(Q3Frame::NoFrame);
 
-  QGridLayout *grid2 = new QGridLayout(stylegroup,2,2,KDialog::marginHint(), KDialog::spacingHint());
+  Q3GridLayout *grid2 = new Q3GridLayout(stylegroup,2,2,KDialog::marginHint(), KDialog::spacingHint());
 
   trigstyle = new QRadioButton(i18n("Trigonometry mode"),stylegroup,"trigstyle");
   grid2->addWidget(trigstyle,0,0);

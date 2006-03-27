@@ -25,6 +25,9 @@
 */
 
 #include "dlabel.h"
+//Added by qt3to4:
+#include <QMouseEvent>
+#include <QLabel>
 
 DLabel::DLabel(QWidget *parent, const char *name)
   :QLabel(parent,name){
@@ -35,12 +38,12 @@ DLabel::DLabel(QWidget *parent, const char *name)
 
 void DLabel::mousePressEvent(QMouseEvent *e){
 
-  if(e->button() == LeftButton){
+  if(e->button() == Qt::LeftButton){
     lit = !lit;
-    button = LeftButton;
+    button = Qt::LeftButton;
   }
   else{
-    button = MidButton;
+    button = Qt::MidButton;
   }
 
 

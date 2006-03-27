@@ -24,18 +24,23 @@
 #define CSVDIALOG_H
 
 #include <kdialogbase.h>
+//Added by qt3to4:
+#include <Q3VBoxLayout>
+#include <Q3HBoxLayout>
+#include <QLabel>
+#include <Q3GridLayout>
 
-class QVBoxLayout;
-class QHBoxLayout;
-class QGridLayout;
-class QButtonGroup;
+class Q3VBoxLayout;
+class Q3HBoxLayout;
+class Q3GridLayout;
+class Q3ButtonGroup;
 class QComboBox;
 class QCheckBox;
 class QLabel;
 class QLineEdit;
 class QPushButton;
 class QRadioButton;
-class QTable;
+class Q3Table;
 
 
 namespace KSpread
@@ -74,19 +79,19 @@ class CSVDialog : public KDialogBase
  private:
   View* m_pView;
 
-  QGridLayout* MyDialogLayout;
-  QHBoxLayout* Layout1;
-  QGridLayout* m_delimiterBoxLayout;
-  QGridLayout* m_formatBoxLayout;
-  QTable* m_sheet;
-  QButtonGroup* m_delimiterBox;
+  Q3GridLayout* MyDialogLayout;
+  Q3HBoxLayout* Layout1;
+  Q3GridLayout* m_delimiterBoxLayout;
+  Q3GridLayout* m_formatBoxLayout;
+  Q3Table* m_sheet;
+  Q3ButtonGroup* m_delimiterBox;
   QRadioButton* m_radioComma;
   QRadioButton* m_radioSemicolon;
   QRadioButton* m_radioTab;
   QRadioButton* m_radioSpace;
   QRadioButton* m_radioOther;
   QLineEdit* m_delimiterEdit;
-  QButtonGroup* m_formatBox;
+  Q3ButtonGroup* m_formatBox;
   QRadioButton* m_radioNumber;
   QRadioButton* m_radioText;
   QRadioButton* m_radioCurrency;

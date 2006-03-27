@@ -30,6 +30,8 @@
 #include <kdebug.h>
 
 #include <stdio.h>
+//Added by qt3to4:
+#include <QEvent>
 
 using namespace KSpread;
 

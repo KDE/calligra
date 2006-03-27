@@ -27,13 +27,15 @@
 #define __kspread_dlg_reference__
 
 #include <kdialogbase.h>
+//Added by qt3to4:
+#include <QLabel>
 
 class QComboBox;
 class QLabel;
 class QLineEdit;
 class QPushButton;
-class QListBox;
-class QListBoxItem;
+class Q3ListBox;
+class Q3ListBoxItem;
 
 namespace KSpread
 {
@@ -49,14 +51,14 @@ public:
 public slots:
   void slotOk();
   void slotCancel();
-  void slotDoubleClicked(QListBoxItem *);
+  void slotDoubleClicked(Q3ListBoxItem *);
   void slotRemove();
   void slotEdit();
-  void slotHighlighted(QListBoxItem *);
+  void slotHighlighted(Q3ListBoxItem *);
 protected:
   View * m_pView;
 
-  QListBox    * m_list;
+  Q3ListBox    * m_list;
   QPushButton * m_pOk;
   QPushButton * m_pCancel;
   QPushButton * m_pEdit;

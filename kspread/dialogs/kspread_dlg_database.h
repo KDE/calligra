@@ -24,21 +24,27 @@
 
 #include <qdialog.h>
 #include <qrect.h>
+//Added by qt3to4:
+#include <Q3GridLayout>
+#include <Q3Frame>
+#include <QLabel>
+#include <Q3HBoxLayout>
+#include <Q3VBoxLayout>
 
 #include <kwizard.h>
 
 class QCheckBox;
 class QComboBox;
-class QFrame;
-class QGridLayout;
+class Q3Frame;
+class Q3GridLayout;
 class QLabel;
 class QLineEdit;
-class QListViewItem;
-class QHBoxLayout;
+class Q3ListViewItem;
+class Q3HBoxLayout;
 class QRadioButton;
 class QSqlDatabase;
-class QTextEdit;
-class QVBoxLayout;
+class Q3TextEdit;
+class Q3VBoxLayout;
 class QWidget;
 
 class KListView;
@@ -54,7 +60,7 @@ class DatabaseDialog : public KWizard
  public:
   enum PageId { eDatabase = 0, eSheets = 1, eColumns = 2, eOptions = 3, eResult = 4 };
 
-  DatabaseDialog( View * parent, QRect const & rect, const char * name = 0, bool modal = FALSE, WFlags fl = 0 );
+  DatabaseDialog( View * parent, QRect const & rect, const char * name = 0, bool modal = FALSE, Qt::WFlags fl = 0 );
   virtual ~DatabaseDialog();
 
  private slots:
@@ -66,19 +72,19 @@ class DatabaseDialog : public KWizard
   void databaseNameChanged( const QString & s );
   void databaseHostChanged( const QString & s );
   void databaseDriverChanged( int );
-  void popupSheetViewMenu( QListViewItem *, const QPoint &, int );
-  void sheetViewClicked( QListViewItem * );
+  void popupSheetViewMenu( Q3ListViewItem *, const QPoint &, int );
+  void sheetViewClicked( Q3ListViewItem * );
   void accept();
 
  protected:
   void next();
   void back();
 
-  QGridLayout  * m_databaseLayout;
-  QGridLayout  * m_sheetLayout;
-  QGridLayout  * m_columnsLayout;
-  QGridLayout  * m_optionsLayout;
-  QGridLayout  * m_resultLayout;
+  Q3GridLayout  * m_databaseLayout;
+  Q3GridLayout  * m_sheetLayout;
+  Q3GridLayout  * m_columnsLayout;
+  Q3GridLayout  * m_optionsLayout;
+  Q3GridLayout  * m_resultLayout;
 
  private:
   int            m_currentPage;
@@ -122,7 +128,7 @@ class DatabaseDialog : public KWizard
   QComboBox    * m_sortMode_2;
   QCheckBox    * m_distinct;
   QWidget      * m_result;
-  QTextEdit    * m_sqlQuery;
+  Q3TextEdit    * m_sqlQuery;
   QRadioButton * m_startingRegion;
   QLineEdit    * m_cell;
   QLineEdit    * m_region;

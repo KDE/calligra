@@ -41,6 +41,8 @@
 #include <knotifyclient.h>
 
 #include "kcalc.h"
+//Added by qt3to4:
+#include <Q3PtrList>
 
 //What's that?!? (Werner)
 //#define i18n( x ) x
@@ -62,7 +64,7 @@
 int isinf(double x) { return !finite(x) && x==x; }
 #endif
 
-extern QPtrList<CALCAMNT> temp_stack;
+extern Q3PtrList<CALCAMNT> temp_stack;
 last_input_type last_input;
 char            display_str[DSP_SIZE+1];
 

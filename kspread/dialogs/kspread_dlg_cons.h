@@ -30,13 +30,15 @@
 #define __kspread_dlg_cons__
 
 #include <qstringlist.h>
+//Added by qt3to4:
+#include <QCloseEvent>
 #include <kdialogbase.h>
 
 class QLineEdit;
 class QPushButton;
 class QComboBox;
 class QCheckBox;
-class QListBox;
+class Q3ListBox;
 
 namespace KSpread
 {
@@ -65,7 +67,7 @@ protected:
 
   View* m_pView;
   QLineEdit* m_pRef;
-  QListBox* m_pRefs;
+  Q3ListBox* m_pRefs;
   QComboBox* m_pFunction;
   QPushButton* m_pAdd;
   QPushButton* m_pRemove;

@@ -27,8 +27,18 @@
 #include <klocale.h>
 #include <knotifyclient.h>
 #include <qlayout.h>
-#include <qobjectlist.h>
+#include <qobject.h>
 #include <qpushbutton.h>
+//Added by qt3to4:
+#include <QPixmap>
+#include <QCloseEvent>
+#include <Q3GridLayout>
+#include <Q3PtrList>
+#include <QKeyEvent>
+#include <Q3Frame>
+#include <QLabel>
+#include <Q3HBoxLayout>
+#include <Q3VBoxLayout>
 #include <kapplication.h>
 #include <kglobalsettings.h>
 #include <qstyle.h>
@@ -41,7 +51,7 @@ extern last_input_type last_input;
 extern item_contents   display_data;
 extern num_base        current_base;
 
-QPtrList<CALCAMNT>       temp_stack;
+Q3PtrList<CALCAMNT>       temp_stack;
 
 QtCalculator :: QtCalculator( Calculator *_corba, QWidget *parent, const char *name )
   : QDialog( parent, name )
@@ -79,50 +89,50 @@ QtCalculator :: QtCalculator( Calculator *_corba, QWidget *parent, const char *n
 
     // Create the display
     calc_display = new DLabel( this, "display" );
-    calc_display->setFrameStyle( QFrame::WinPanel | QFrame::Sunken );
-    calc_display->setAlignment( AlignRight|AlignVCenter );
+    calc_display->setFrameStyle( Q3Frame::WinPanel | Q3Frame::Sunken );
+    calc_display->setAlignment( Qt::AlignRight|Qt::AlignVCenter );
     calc_display->setFocus();
-    calc_display->setFocusPolicy( QWidget::StrongFocus );
+    calc_display->setFocusPolicy( Qt::StrongFocus );
 
     connect(calc_display,SIGNAL(clicked()),this,SLOT(display_selected()));
 
     statusINVLabel = new QLabel( this, "INV" );
     Q_CHECK_PTR( statusINVLabel );
-    statusINVLabel->setFrameStyle( QFrame::Panel | QFrame::Sunken );
-    statusINVLabel->setAlignment( AlignCenter );
+    statusINVLabel->setFrameStyle( Q3Frame::Panel | Q3Frame::Sunken );
+    statusINVLabel->setAlignment( Qt::AlignCenter );
     statusINVLabel->setText("NORM");
 
     statusHYPLabel = new QLabel( this, "HYP" );
     Q_CHECK_PTR( statusHYPLabel );
-    statusHYPLabel->setFrameStyle( QFrame::Panel | QFrame::Sunken );
-    statusHYPLabel->setAlignment( AlignCenter );
+    statusHYPLabel->setFrameStyle( Q3Frame::Panel | Q3Frame::Sunken );
+    statusHYPLabel->setAlignment( Qt::AlignCenter );
 
     statusERRORLabel = new QLabel( this, "ERROR" );
     Q_CHECK_PTR( statusERRORLabel );
-    statusERRORLabel->setFrameStyle( QFrame::Panel | QFrame::Sunken );
-    statusERRORLabel->setAlignment( AlignLeft|AlignVCenter );
+    statusERRORLabel->setFrameStyle( Q3Frame::Panel | Q3Frame::Sunken );
+    statusERRORLabel->setAlignment( Qt::AlignLeft|Qt::AlignVCenter );
 
     // create angle button group
 
-    QAccel *accel = new QAccel( this );
+    Q3Accel *accel = new Q3Accel( this );
 
-    QButtonGroup *angle_group = new QButtonGroup( 3, Horizontal,this, "AngleButtons" );
+    Q3ButtonGroup *angle_group = new Q3ButtonGroup( 3, Qt::Horizontal,this, "AngleButtons" );
     angle_group->setTitle(i18n( "Angle") );
 
     anglebutton[0] = new QRadioButton( angle_group );
     anglebutton[0]->setText( "&Deg" )   ;
     anglebutton[0]->setChecked(   TRUE);
-    accel->connectItem( accel->insertItem(Key_D + ALT), this ,
+    accel->connectItem( accel->insertItem(Qt::Key_D + Qt::ALT), this ,
                         SLOT(Deg_Selected()) );
 
     anglebutton[1] = new QRadioButton( angle_group );
     anglebutton[1]->setText( "&Rad" );
-    accel->connectItem( accel->insertItem(Key_R + ALT), this ,
+    accel->connectItem( accel->insertItem(Qt::Key_R + Qt::ALT), this ,
                         SLOT(Rad_Selected()) );
 
     anglebutton[2] = new QRadioButton( angle_group );
     anglebutton[2]->setText( "&Gra" );
-    accel->connectItem( accel->insertItem(Key_G + ALT), this ,
+    accel->connectItem( accel->insertItem(Qt::Key_G + Qt::ALT), this ,
                         SLOT(Gra_Selected()) );
 
     connect( angle_group, SIGNAL(clicked(int)), SLOT(angle_selected(int)) );
@@ -135,28 +145,28 @@ QtCalculator :: QtCalculator( Calculator *_corba, QWidget *parent, const char *n
 
 
 
-    QButtonGroup *base_group = new QButtonGroup( 4, Horizontal,this, "BaseButtons" );
+    Q3ButtonGroup *base_group = new Q3ButtonGroup( 4, Qt::Horizontal,this, "BaseButtons" );
     base_group->setTitle( i18n("Base") );
 
     basebutton[0] = new QRadioButton( base_group );
     basebutton[0]->setText( "&Hex" );
-    accel->connectItem( accel->insertItem(Key_H + ALT), this ,
+    accel->connectItem( accel->insertItem(Qt::Key_H + Qt::ALT), this ,
                         SLOT(Hex_Selected()) );
 
     basebutton[1] = new QRadioButton( base_group );
     basebutton[1]->setText( "D&ec" );
     basebutton[1]->setChecked(TRUE);
-    accel->connectItem( accel->insertItem(Key_E + ALT), this ,
+    accel->connectItem( accel->insertItem(Qt::Key_E + Qt::ALT), this ,
                         SLOT(Dec_Selected()) );
 
     basebutton[2] = new QRadioButton( base_group );
     basebutton[2]->setText( "&Oct" );
-    accel->connectItem( accel->insertItem(Key_O + ALT), this ,
+    accel->connectItem( accel->insertItem(Qt::Key_O + Qt::ALT), this ,
                         SLOT(Oct_Selected()) );
 
     basebutton[3] = new QRadioButton( base_group);
     basebutton[3]->setText( "&Bin" );
-    accel->connectItem( accel->insertItem(Key_B + ALT), this ,
+    accel->connectItem( accel->insertItem(Qt::Key_B + Qt::ALT), this ,
                         SLOT(Bin_Selected()) );
 
     connect( base_group, SIGNAL(clicked(int)), SLOT(base_selected(int)) );
@@ -371,18 +381,18 @@ QtCalculator :: QtCalculator( Calculator *_corba, QWidget *parent, const char *n
     connect( pbmod, SIGNAL(toggled(bool)), SLOT(pbmodtoggled(bool)));
     pbmod->setToggleButton(TRUE);
 
-    QGridLayout *smallBtnLayout = new QGridLayout(mSmallPage, 6, 3, 0,
+    Q3GridLayout *smallBtnLayout = new Q3GridLayout(mSmallPage, 6, 3, 0,
                                                   mInternalSpacing);
-    QGridLayout *largeBtnLayout = new QGridLayout(mLargePage, 5, 6, 0,
+    Q3GridLayout *largeBtnLayout = new Q3GridLayout(mLargePage, 5, 6, 0,
                                                   mInternalSpacing);
 
-    QHBoxLayout *topLayout		= new QHBoxLayout();
-    QHBoxLayout *radioLayout	= new QHBoxLayout();
-    QHBoxLayout *btnLayout		= new QHBoxLayout();
-    QHBoxLayout *statusLayout	= new QHBoxLayout();
+    Q3HBoxLayout *topLayout		= new Q3HBoxLayout();
+    Q3HBoxLayout *radioLayout	= new Q3HBoxLayout();
+    Q3HBoxLayout *btnLayout		= new Q3HBoxLayout();
+    Q3HBoxLayout *statusLayout	= new Q3HBoxLayout();
 
     // bring them all together
-    QVBoxLayout *mainLayout = new QVBoxLayout(this, mInternalSpacing,
+    Q3VBoxLayout *mainLayout = new Q3VBoxLayout(this, mInternalSpacing,
                                               mInternalSpacing );
 
     mainLayout->addLayout(topLayout );
@@ -391,9 +401,9 @@ QtCalculator :: QtCalculator( Calculator *_corba, QWidget *parent, const char *n
     mainLayout->addLayout(statusLayout);
 
     // button layout
-    btnLayout->addWidget(mSmallPage,0,AlignTop);
+    btnLayout->addWidget(mSmallPage,0,Qt::AlignTop);
     btnLayout->addSpacing(mInternalSpacing);
-    btnLayout->addWidget(mLargePage,0,AlignTop);
+    btnLayout->addWidget(mLargePage,0,Qt::AlignTop);
 
     // small button layout
     smallBtnLayout->addWidget(pbhyp, 0, 0);
@@ -704,13 +714,13 @@ void QtCalculator::keyPressEvent( QKeyEvent *e ){
 
   switch (e->key() ){
 
-  case Key_F1:
+  case Qt::Key_F1:
      helpclicked();
      break;
-  case Key_F2:
+  case Qt::Key_F2:
      configclicked();
      break;
-  case Key_F3:
+  case Qt::Key_F3:
     if(kcalcdefaults.style == 0)
       kcalcdefaults.style = 1;
     else if(kcalcdefaults.style == 1)
@@ -719,217 +729,217 @@ void QtCalculator::keyPressEvent( QKeyEvent *e ){
       kcalcdefaults.style = 0;
      set_style();
      break;
-  case Key_Up:
+  case Qt::Key_Up:
      temp_stack_prev();
      break;
-  case Key_Down:
+  case Qt::Key_Down:
      temp_stack_next();
      break;
 
-  case Key_Next:
+  case Qt::Key_PageDown:
      key_pressed = TRUE;
      pbAC->setOn(TRUE);
      break;
-  case Key_Prior:
+  case Qt::Key_PageUp:
      key_pressed = TRUE;
      pbClear->setOn(TRUE);
      break;
 
-  case Key_H:
+  case Qt::Key_H:
      key_pressed = TRUE;
      pbhyp->setOn(TRUE);
      break;
-  case Key_I:
+  case Qt::Key_I:
      key_pressed = TRUE;
      pbinv->setOn(TRUE);
      break;
-  case Key_A:
+  case Qt::Key_A:
      key_pressed = TRUE;
      pbA->setOn(TRUE);
 
      break;
-  case Key_E:
+  case Qt::Key_E:
      key_pressed = TRUE;
     if (current_base == NB_HEX)
      pbE->setOn(TRUE);
     else
      pbEE->setOn(TRUE);
      break;
-  case Key_Escape:
+  case Qt::Key_Escape:
      key_pressed = TRUE;
      pbClear->setOn(TRUE);
      break;
-  case Key_Delete:
+  case Qt::Key_Delete:
      key_pressed = TRUE;
      pbAC->setOn(TRUE);
      break;
-  case Key_S:
+  case Qt::Key_S:
      key_pressed = TRUE;
      pbSin->setOn(TRUE);
      break;
-  case Key_Backslash:
+  case Qt::Key_Backslash:
      key_pressed = TRUE;
      pbplusminus->setOn(TRUE);
      break;
-  case Key_B:
+  case Qt::Key_B:
      key_pressed = TRUE;
      pbB->setOn(TRUE);
      break;
-  case Key_7:
+  case Qt::Key_7:
      key_pressed = TRUE;
      pb7->setOn(TRUE);
      break;
-  case Key_8:
+  case Qt::Key_8:
      key_pressed = TRUE;
      pb8->setOn(TRUE);
      break;
-  case Key_9:
+  case Qt::Key_9:
      key_pressed = TRUE;
      pb9->setOn(TRUE);
      break;
-  case Key_ParenLeft:
+  case Qt::Key_ParenLeft:
      key_pressed = TRUE;
      pbparenopen->setOn(TRUE);
      break;
-  case Key_ParenRight:
+  case Qt::Key_ParenRight:
      key_pressed = TRUE;
      pbparenclose->setOn(TRUE);
      break;
-  case Key_Ampersand:
+  case Qt::Key_Ampersand:
      key_pressed = TRUE;
      pband->setOn(TRUE);
      break;
-  case Key_C:
+  case Qt::Key_C:
      key_pressed = TRUE;
     if (current_base == NB_HEX)
      pbC->setOn(TRUE);
     else
      pbCos->setOn(TRUE);
      break;
-  case Key_4:
+  case Qt::Key_4:
      key_pressed = TRUE;
      pb4->setOn(TRUE);
      break;
-  case Key_5:
+  case Qt::Key_5:
      key_pressed = TRUE;
      pb5->setOn(TRUE);
      break;
-  case Key_6:
+  case Qt::Key_6:
      key_pressed = TRUE;
      pb6->setOn(TRUE);
      break;
-  case Key_Asterisk:
+  case Qt::Key_Asterisk:
      key_pressed = TRUE;
      pbX->setOn(TRUE);
      break;
-  case Key_Slash:
+  case Qt::Key_Slash:
      key_pressed = TRUE;
      pbdivision->setOn(TRUE);
      break;
-  case Key_O:
+  case Qt::Key_O:
      key_pressed = TRUE;
      pbor->setOn(TRUE);
      break;
-  case Key_T:
+  case Qt::Key_T:
      key_pressed = TRUE;
      pbTan->setOn(TRUE);
      break;
-  case Key_Exclam:
+  case Qt::Key_Exclam:
      key_pressed = TRUE;
      pbfactorial->setOn(TRUE);
      break;
-  case Key_D:
+  case Qt::Key_D:
      key_pressed = TRUE;
      if(kcalcdefaults.style == 0)
        pbD->setOn(TRUE); // trig mode
      else
        pblog->setOn(TRUE); // stat mode
     break;
-  case Key_1:
+  case Qt::Key_1:
      key_pressed = TRUE;
      pb1->setOn(TRUE);
      break;
-  case Key_2:
+  case Qt::Key_2:
      key_pressed = TRUE;
      pb2->setOn(TRUE);
      break;
-  case Key_3:
+  case Qt::Key_3:
      key_pressed = TRUE;
      pb3->setOn(TRUE);
      break;
-  case Key_Plus:
+  case Qt::Key_Plus:
      key_pressed = TRUE;
      pbplus->setOn(TRUE);
      break;
-  case Key_Minus:
+  case Qt::Key_Minus:
      key_pressed = TRUE;
      pbminus->setOn(TRUE);
      break;
-  case Key_Less:
+  case Qt::Key_Less:
      key_pressed = TRUE;
      pbshift->setOn(TRUE);
      break;
-  case Key_N:
+  case Qt::Key_N:
      key_pressed = TRUE;
      pbln->setOn(TRUE);
      break;
-  case Key_L:
+  case Qt::Key_L:
      key_pressed = TRUE;
      pblog->setOn(TRUE);
      break;
-  case Key_AsciiCircum:
+  case Qt::Key_AsciiCircum:
      key_pressed = TRUE;
      pbpower->setOn(TRUE);
      break;
-  case Key_F:
+  case Qt::Key_F:
      key_pressed = TRUE;
      pbF->setOn(TRUE);
      break;
-  case Key_Period:
+  case Qt::Key_Period:
      key_pressed = TRUE;
      pbperiod->setOn(TRUE);
      break;
-  case Key_Comma:
+  case Qt::Key_Comma:
      key_pressed = TRUE;
      pbperiod->setOn(TRUE);
      break;
-  case Key_0:
+  case Qt::Key_0:
      key_pressed = TRUE;
      pb0->setOn(TRUE);
      break;
-     case Key_Equal:
+     case Qt::Key_Equal:
      key_pressed = TRUE;
      pbequal->setOn(TRUE);
      break;
-  case Key_Return:
+  case Qt::Key_Return:
      key_pressed = TRUE;
      pbequal->setOn(TRUE);
      break;
-  case Key_Enter:
+  case Qt::Key_Enter:
      key_pressed = TRUE;
      pbequal->setOn(TRUE);
      break;
-  case Key_Percent:
+  case Qt::Key_Percent:
      key_pressed = TRUE;
      pbpercent->setOn(TRUE);
      break;
-  case Key_AsciiTilde:
+  case Qt::Key_AsciiTilde:
      key_pressed = TRUE;
      pbnegate->setOn(TRUE);
      break;
-  case Key_Colon:
+  case Qt::Key_Colon:
      key_pressed = TRUE;
      pbmod->setOn(TRUE);
      break;
-  case Key_BracketLeft:
+  case Qt::Key_BracketLeft:
      key_pressed = TRUE;
      pbsquare->setOn(TRUE);
      break;
- case Key_Backspace:
+ case Qt::Key_Backspace:
      key_pressed = TRUE;
      pbAC->setOn(TRUE);
      break;
-  case Key_R:
+  case Qt::Key_R:
      key_pressed = TRUE;
      pbreci->setOn(TRUE);
      break;
@@ -939,209 +949,209 @@ void QtCalculator::keyPressEvent( QKeyEvent *e ){
 void QtCalculator::keyReleaseEvent( QKeyEvent *e ){
   switch (e->key() ){
 
-  case Key_Next:
+  case Qt::Key_PageDown:
      key_pressed = FALSE;
      pbAC->setOn(FALSE);
      break;
-  case Key_Prior:
+  case Qt::Key_PageUp:
      key_pressed = FALSE;
      pbClear->setOn(FALSE);
      break;
 
-  case Key_H:
+  case Qt::Key_H:
     key_pressed = FALSE;
      pbhyp->setOn(FALSE);
      break;
-  case Key_I:
+  case Qt::Key_I:
     key_pressed = FALSE;
      pbinv->setOn(FALSE);
      break;
-  case Key_A:
+  case Qt::Key_A:
     key_pressed = FALSE;
      pbA->setOn(FALSE);
      break;
-  case Key_E:
+  case Qt::Key_E:
     key_pressed = FALSE;
     if (current_base == NB_HEX)
      pbE->setOn(FALSE);
     else
      pbEE->setOn(FALSE);
      break;
-  case Key_Escape:
+  case Qt::Key_Escape:
     key_pressed = FALSE;
      pbClear->setOn(FALSE);
      break;
-  case Key_Delete:
+  case Qt::Key_Delete:
     key_pressed = FALSE;
      pbAC->setOn(FALSE);
      break;
-  case Key_S:
+  case Qt::Key_S:
     key_pressed = FALSE;
      pbSin->setOn(FALSE);
      break;
-  case Key_Backslash:
+  case Qt::Key_Backslash:
     key_pressed = FALSE;
      pbplusminus->setOn(FALSE);
      break;
-  case Key_B:
+  case Qt::Key_B:
     key_pressed = FALSE;
      pbB->setOn(FALSE);
      break;
-  case Key_7:
+  case Qt::Key_7:
     key_pressed = FALSE;
      pb7->setOn(FALSE);
      break;
-  case Key_8:
+  case Qt::Key_8:
     key_pressed = FALSE;
      pb8->setOn(FALSE);
      break;
-  case Key_9:
+  case Qt::Key_9:
     key_pressed = FALSE;
      pb9->setOn(FALSE);
      break;
-  case Key_ParenLeft:
+  case Qt::Key_ParenLeft:
     key_pressed = FALSE;
      pbparenopen->setOn(FALSE);
      break;
-  case Key_ParenRight:
+  case Qt::Key_ParenRight:
     key_pressed = FALSE;
      pbparenclose->setOn(FALSE);
      break;
-  case Key_Ampersand:
+  case Qt::Key_Ampersand:
     key_pressed = FALSE;
      pband->setOn(FALSE);
      break;
-  case Key_C:
+  case Qt::Key_C:
     key_pressed = FALSE;
     if (current_base == NB_HEX)
      pbC->setOn(FALSE);
     else
      pbCos->setOn(FALSE);
      break;
-  case Key_4:
+  case Qt::Key_4:
     key_pressed = FALSE;
      pb4->setOn(FALSE);
      break;
-  case Key_5:
+  case Qt::Key_5:
     key_pressed = FALSE;
      pb5->setOn(FALSE);
      break;
-  case Key_6:
+  case Qt::Key_6:
     key_pressed = FALSE;
      pb6->setOn(FALSE);
      break;
-  case Key_Asterisk:
+  case Qt::Key_Asterisk:
     key_pressed = FALSE;
      pbX->setOn(FALSE);
      break;
-  case Key_Slash:
+  case Qt::Key_Slash:
     key_pressed = FALSE;
      pbdivision->setOn(FALSE);
      break;
-  case Key_O:
+  case Qt::Key_O:
     key_pressed = FALSE;
      pbor->setOn(FALSE);
      break;
-  case Key_T:
+  case Qt::Key_T:
     key_pressed = FALSE;
      pbTan->setOn(FALSE);
      break;
-  case Key_Exclam:
+  case Qt::Key_Exclam:
     key_pressed = FALSE;
      pbfactorial->setOn(FALSE);
      break;
-  case Key_D:
+  case Qt::Key_D:
     key_pressed = FALSE;
     if(kcalcdefaults.style == 0)
       pbD->setOn(FALSE); // trig mode
     else
       pblog->setOn(FALSE);// stat mode
      break;
-  case Key_1:
+  case Qt::Key_1:
     key_pressed = FALSE;
      pb1->setOn(FALSE);
      break;
-  case Key_2:
+  case Qt::Key_2:
     key_pressed = FALSE;
      pb2->setOn(FALSE);
      break;
-  case Key_3:
+  case Qt::Key_3:
     key_pressed = FALSE;
      pb3->setOn(FALSE);
      break;
-  case Key_Plus:
+  case Qt::Key_Plus:
     key_pressed = FALSE;
      pbplus->setOn(FALSE);
      break;
-  case Key_Minus:
+  case Qt::Key_Minus:
     key_pressed = FALSE;
      pbminus->setOn(FALSE);
      break;
-  case Key_Less:
+  case Qt::Key_Less:
     key_pressed = FALSE;
      pbshift->setOn(FALSE);
      break;
-  case Key_N:
+  case Qt::Key_N:
     key_pressed = FALSE;
      pbln->setOn(FALSE);
      break;
-  case Key_L:
+  case Qt::Key_L:
     key_pressed = FALSE;
      pblog->setOn(FALSE);
      break;
-  case Key_AsciiCircum:
+  case Qt::Key_AsciiCircum:
     key_pressed = FALSE;
      pbpower->setOn(FALSE);
      break;
-  case Key_F:
+  case Qt::Key_F:
     key_pressed = FALSE;
      pbF->setOn(FALSE);
      break;
-  case Key_Period:
+  case Qt::Key_Period:
     key_pressed = FALSE;
      pbperiod->setOn(FALSE);
      break;
-  case Key_Comma:
+  case Qt::Key_Comma:
     key_pressed = FALSE;
      pbperiod->setOn(FALSE);
      break;
-  case Key_0:
+  case Qt::Key_0:
     key_pressed = FALSE;
      pb0->setOn(FALSE);
      break;
-  case Key_Equal:
+  case Qt::Key_Equal:
     key_pressed = FALSE;
      pbequal->setOn(FALSE);
      break;
-  case Key_Return:
+  case Qt::Key_Return:
     key_pressed = FALSE;
      pbequal->setOn(FALSE);
      break;
-  case Key_Enter:
+  case Qt::Key_Enter:
      key_pressed = FALSE;
      pbequal->setOn(FALSE);
      break;
-  case Key_Percent:
+  case Qt::Key_Percent:
     key_pressed = FALSE;
      pbpercent->setOn(FALSE);
      break;
-  case Key_AsciiTilde:
+  case Qt::Key_AsciiTilde:
     key_pressed = FALSE;
      pbnegate->setOn(FALSE);
      break;
-  case Key_Colon:
+  case Qt::Key_Colon:
     key_pressed = FALSE;
      pbmod->setOn(FALSE);
      break;
-  case Key_BracketLeft:
+  case Qt::Key_BracketLeft:
      key_pressed = FALSE;
      pbsquare->setOn(FALSE);
      break;
-  case Key_Backspace:
+  case Qt::Key_Backspace:
      key_pressed = FALSE;
      pbAC->setOn(FALSE);
      break;
-  case Key_R:
+  case Qt::Key_R:
      key_pressed = FALSE;
      pbreci->setOn(FALSE);
      break;
@@ -1451,8 +1461,8 @@ void QtCalculator::pbmodtoggled(bool myboolean)  {
 void QtCalculator::configclicked(){
 
 
-  QTabDialog * tabdialog;
-  tabdialog = new QTabDialog(0,"tabdialog",TRUE);
+  Q3TabDialog * tabdialog;
+  tabdialog = new Q3TabDialog(0,"tabdialog",TRUE);
 
   tabdialog->setCaption( i18n("KCalc Configuration") );
   tabdialog->resize( 360, 390 );
@@ -1460,14 +1470,14 @@ void QtCalculator::configclicked(){
   tabdialog->setOKButton(i18n("&OK"));
 
   QWidget *about = new QWidget(tabdialog,"about");
-  QVBoxLayout *lay1 = new QVBoxLayout( about );
+  Q3VBoxLayout *lay1 = new Q3VBoxLayout( about );
   lay1->setMargin( KDialog::marginHint() );
   lay1->setSpacing( KDialog::spacingHint() );
 
-  QGroupBox *box = new QGroupBox(0,Qt::Vertical,about,"box");
+  Q3GroupBox *box = new Q3GroupBox(0,Qt::Vertical,about,"box");
   box->layout()->setSpacing(KDialog::spacingHint());
   box->layout()->setMargin(KDialog::marginHint());
-  QGridLayout *grid1 = new QGridLayout(box->layout(),2,2);
+  Q3GridLayout *grid1 = new Q3GridLayout(box->layout(),2,2);
   QLabel  *label = new QLabel(box,"label");
   QLabel  *label2 = new QLabel(box,"label2");
 
@@ -1494,10 +1504,10 @@ void QtCalculator::configclicked(){
                       "enabled. See the README for details.");
 #endif
 
-  label->setAlignment(AlignLeft|WordBreak|ExpandTabs);
+  label->setAlignment(Qt::AlignLeft|Qt::TextWordWrap|Qt::TextExpandTabs);
   label->setText(labelstring);
 
-  label2->setAlignment(AlignLeft|WordBreak|ExpandTabs);
+  label2->setAlignment(Qt::AlignLeft|Qt::TextWordWrap|Qt::TextExpandTabs);
   label2->setText(labelstring2);
 
   // HACK
@@ -1624,7 +1634,7 @@ void QtCalculator::writeSettings()
 
 void QtCalculator::display_selected(){
 
-  if(calc_display->Button() == LeftButton){
+  if(calc_display->Button() == Qt::LeftButton){
 
     if(calc_display->isLit()){
 

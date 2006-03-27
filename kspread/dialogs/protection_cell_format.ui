@@ -90,7 +90,7 @@ Note that you can print it even if the cell is protected</string>
                                         <cstring>spacer3</cstring>
                                     </property>
                                     <property name="orientation">
-                                        <enum>Horizontal</enum>
+                                        <enum>Qt::Horizontal</enum>
                                     </property>
                                     <property name="sizeType">
                                         <enum>Fixed</enum>
@@ -131,7 +131,7 @@ Note that you can print it even if the cell is protected</string>
                                         <cstring>spacer4</cstring>
                                     </property>
                                     <property name="orientation">
-                                        <enum>Horizontal</enum>
+                                        <enum>Qt::Horizontal</enum>
                                     </property>
                                     <property name="sizeType">
                                         <enum>Fixed</enum>

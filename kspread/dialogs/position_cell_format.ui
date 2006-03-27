@@ -32,7 +32,7 @@
                 </sizepolicy>
             </property>
             <property name="title">
-                <string>Horizontal</string>
+                <string>Qt::Horizontal</string>
             </property>
             <property name="whatsThis" stdset="0">
                 <string>&lt;qt&gt;Set the content position horizontally in the cell. 
@@ -66,7 +66,7 @@
                                 <cstring>left</cstring>
                             </property>
                             <property name="text">
-                                <string>Left</string>
+                                <string>Qt::DockLeft</string>
                             </property>
                         </widget>
                         <widget class="QRadioButton">
@@ -82,7 +82,7 @@
                                 <cstring>right</cstring>
                             </property>
                             <property name="text">
-                                <string>Right</string>
+                                <string>Qt::DockRight</string>
                             </property>
                         </widget>
                     </vbox>
@@ -94,7 +94,7 @@
                 <cstring>buttonGroup2</cstring>
             </property>
             <property name="title">
-                <string>Vertical</string>
+                <string>Qt::Vertical</string>
             </property>
             <property name="whatsThis" stdset="0">
                 <string>Set the content position vertically in the cell. 
@@ -111,7 +111,7 @@
                         <cstring>top</cstring>
                     </property>
                     <property name="text">
-                        <string>Top</string>
+                        <string>Qt::DockTop</string>
                     </property>
                 </widget>
                 <widget class="QRadioButton">
@@ -127,7 +127,7 @@
                         <cstring>bottom</cstring>
                     </property>
                     <property name="text">
-                        <string>Bottom</string>
+                        <string>Qt::DockBottom</string>
                     </property>
                 </widget>
             </vbox>
@@ -157,7 +157,7 @@
                         <number>90</number>
                     </property>
                     <property name="orientation">
-                        <enum>Horizontal</enum>
+                        <enum>Qt::Horizontal</enum>
                     </property>
                     <property name="tickmarks">
                         <enum>Below</enum>
@@ -195,7 +195,7 @@
             <property name="whatsThis" stdset="0">
                 <string>This is only available when the rotation is 0°. 
 Wrap text wraps the text so it fits in the previous cell size. If this is not checked, the text will stay on one line and the cell size will be adjusted to contain the text.
-Vertical text puts your text vertically.</string>
+Qt::Vertical text puts your text vertically.</string>
             </property>
             <vbox>
                 <property name="name">
@@ -214,7 +214,7 @@ Vertical text puts your text vertically.</string>
                         <cstring>vertical</cstring>
                     </property>
                     <property name="text">
-                        <string>Vertical text</string>
+                        <string>Qt::Vertical text</string>
                     </property>
                 </widget>
             </vbox>
@@ -293,7 +293,7 @@ When a merged cell is selected and when you uncheck this, then all cells come ba
                                 <cstring>spacer2</cstring>
                             </property>
                             <property name="orientation">
-                                <enum>Horizontal</enum>
+                                <enum>Qt::Horizontal</enum>
                             </property>
                             <property name="sizeType">
                                 <enum>MinimumExpanding</enum>
@@ -353,7 +353,7 @@ When a merged cell is selected and when you uncheck this, then all cells come ba
                                 <cstring>spacer1</cstring>
                             </property>
                             <property name="orientation">
-                                <enum>Horizontal</enum>
+                                <enum>Qt::Horizontal</enum>
                             </property>
                             <property name="sizeType">
                                 <enum>MinimumExpanding</enum>

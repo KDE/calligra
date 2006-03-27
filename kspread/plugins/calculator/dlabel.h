@@ -30,6 +30,8 @@
 #define _D_LABEL_H_
 
 #include <qlabel.h>
+//Added by qt3to4:
+#include <QMouseEvent>
 
 
 class DLabel : public QLabel {

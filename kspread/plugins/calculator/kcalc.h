@@ -28,17 +28,20 @@
 #define QTCALC_H
 
 #include <queue>
+//Added by qt3to4:
+#include <QKeyEvent>
+#include <QCloseEvent>
 using std::queue;
 
 #include <unistd.h>
 #include <stdlib.h>
 #include <ctype.h>
 
-#include <qlistbox.h>
+#include <q3listbox.h>
 #include <qclipboard.h>
-#include <qptrlist.h>
-#include <qaccel.h>
-#include <qtabdialog.h>
+#include <q3ptrlist.h>
+#include <q3accel.h>
+#include <q3tabdialog.h>
 #include <qwidget.h>
 #include <qtimer.h>
 #include <qdialog.h>
@@ -46,10 +49,10 @@ using std::queue;
 #include <qapplication.h>
 #include <qfont.h>
 #include <qlabel.h>
-#include <qbuttongroup.h>
+#include <q3buttongroup.h>
 #include <qcheckbox.h>
-#include <qframe.h>
-#include <qgroupbox.h>
+#include <q3frame.h>
+#include <q3groupbox.h>
 #include <qlineedit.h>
 #include <qpushbutton.h>
 #include <qradiobutton.h>
@@ -425,15 +428,15 @@ private:
     QPushButton* 	pbnegate;
     QPushButton* 	pbmod;
 
-    QPtrList<QPushButton> mNumButtonList;
-    QPtrList<QPushButton> mFunctionButtonList;
-    QPtrList<QPushButton> mHexButtonList;
-    QPtrList<QPushButton> mMemButtonList;
-    QPtrList<QPushButton> mOperationButtonList;
+    Q3PtrList<QPushButton> mNumButtonList;
+    Q3PtrList<QPushButton> mFunctionButtonList;
+    Q3PtrList<QPushButton> mHexButtonList;
+    Q3PtrList<QPushButton> mMemButtonList;
+    Q3PtrList<QPushButton> mOperationButtonList;
 
     bool		key_pressed;
     KStats		stats;
-    QListBox            *paper;
+    Q3ListBox            *paper;
     QTimer		*status_timer;
 
     QRect               sheet_range;

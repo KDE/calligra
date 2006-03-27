@@ -27,7 +27,11 @@
 #ifndef __kspread_dlg_formula__
 #define __kspread_dlg_formula__
 
-#include <qframe.h>
+#include <q3frame.h>
+//Added by qt3to4:
+#include <QLabel>
+#include <QEvent>
+#include <QCloseEvent>
 
 #include <kcompletion.h>
 #include <kdialogbase.h>
@@ -35,10 +39,10 @@
 class QComboBox;
 class QLabel;
 class QLineEdit;
-class QListBox;
+class Q3ListBox;
 class QPushButton;
 class QTabWidget;
-class QTextBrowser;
+class Q3TextBrowser;
 class KLineEdit;
 
 namespace KSpread
@@ -90,7 +94,7 @@ private slots:
      * That will switch into editing mode, allowing the user
      * to enter the parameters for the function.
      */
-    void slotDoubleClicked( QListBoxItem* item );
+    void slotDoubleClicked( Q3ListBoxItem* item );
     /**
      * Called if a category of methods has been selected.
      */
@@ -129,12 +133,12 @@ private:
     View* m_pView;
 
     QTabWidget* m_tabwidget;
-    QTextBrowser* m_browser;
+    Q3TextBrowser* m_browser;
     QWidget* m_input;
 
     QPushButton *selectFunction;
     QComboBox *typeFunction;
-    QListBox *functions;
+    Q3ListBox *functions;
     QLineEdit *result;
 
     KLineEdit *searchFunct;

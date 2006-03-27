@@ -28,6 +28,8 @@
 #define __kspread_dlg_preference__
 
 #include <kdialogbase.h>
+//Added by qt3to4:
+#include <QLabel>
 
 class KConfig;
 class KIntNumInput;
@@ -48,7 +50,7 @@ class parameterLocale :  public QObject
 {
  Q_OBJECT
 public:
-   parameterLocale( View* _view,QVBox *box, char *name = 0);
+   parameterLocale( View* _view,Q3VBox *box, char *name = 0);
  void apply();
 public slots:
    void updateDefaultSystemConfig();
@@ -68,7 +70,7 @@ class configure : public QObject
 {
   Q_OBJECT
 public:
-  configure( View* _view,QVBox *box, char *name = 0 );
+  configure( View* _view,Q3VBox *box, char *name = 0 );
   void apply();
   void slotDefault();
 protected:
@@ -96,7 +98,7 @@ class miscParameters : public QObject
 {
   Q_OBJECT
 public:
-  miscParameters( View* _view, QVBox *box, char *name = 0 );
+  miscParameters( View* _view, Q3VBox *box, char *name = 0 );
   void apply();
   void slotDefault();
 
@@ -127,7 +129,7 @@ class colorParameters : public QObject
 {
   Q_OBJECT
 public:
-  colorParameters( View* _view, QVBox *box, char *name = 0 );
+  colorParameters( View* _view, Q3VBox *box, char *name = 0 );
   void apply();
   void slotDefault();
 protected:
@@ -141,7 +143,7 @@ class configureLayoutPage : public QObject
 {
   Q_OBJECT
 public:
-  configureLayoutPage( View* _view,QVBox *box, char *name = 0 );
+  configureLayoutPage( View* _view,Q3VBox *box, char *name = 0 );
   void apply();
   void slotDefault();
   void initCombo();
@@ -162,7 +164,7 @@ class configureSpellPage : public QObject
 {
   Q_OBJECT
 public:
-  configureSpellPage( View* _view, QVBox *box, char *name = 0 );
+  configureSpellPage( View* _view, Q3VBox *box, char *name = 0 );
   void apply();
   void slotDefault();
 protected:
@@ -177,7 +179,7 @@ class configureTTSPage : public QObject
 {
   Q_OBJECT
 public:
-  configureTTSPage( View *_view, QVBox *box, char *name = 0 );
+  configureTTSPage( View *_view, Q3VBox *box, char *name = 0 );
   void slotDefault();
   void apply();
 private slots:

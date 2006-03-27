@@ -27,7 +27,7 @@
 class KComboBox;
 class KListView;
 
-class QListViewItem;
+class Q3ListViewItem;
 
 namespace KSpread
 {
@@ -39,7 +39,7 @@ class StyleWidget : public QWidget
   Q_OBJECT
 
  public:
-  StyleWidget( QWidget* parent = 0, const char* name = 0, WFlags fl = 0 );
+  StyleWidget( QWidget* parent = 0, const char* name = 0, Qt::WFlags fl = 0 );
   ~StyleWidget();
 
   KListView * m_styleList;
@@ -62,7 +62,7 @@ class StyleDlg : public KDialogBase
   void slotUser2();
   void slotUser3();
   void slotDisplayMode( int mode );
-  void slotSelectionChanged( QListViewItem * );
+  void slotSelectionChanged( Q3ListViewItem * );
 
  private:
   View         * m_view;

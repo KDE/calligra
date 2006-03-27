@@ -27,7 +27,7 @@
 #include <kdialogbase.h>
 
 class QPushButton;
-class QMultiLineEdit;
+class Q3MultiLineEdit;
 
 namespace KSpread
 {
@@ -46,7 +46,7 @@ public slots:
 protected:
 
   View* m_pView;
-  QMultiLineEdit *multiLine; 
+  Q3MultiLineEdit *multiLine; 
   QPoint  marker;
 };
 

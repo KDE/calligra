@@ -93,7 +93,7 @@ The default font is set for all cells in the Format -&gt; Style Manager menu wit
                         <cstring>underline</cstring>
                     </property>
                     <property name="text">
-                        <string>Underline</string>
+                        <string>Qt::TextUnderline</string>
                     </property>
                     <property name="whatsThis" stdset="0">
                         <string>If this is checked, the current cell text wil be underlined.</string>
@@ -163,7 +163,7 @@ The default font is set for all cells in the Format -&gt; Style Manager menu wit
                 <cstring>spacer1</cstring>
             </property>
             <property name="orientation">
-                <enum>Vertical</enum>
+                <enum>Qt::Vertical</enum>
             </property>
             <property name="sizeType">
                 <enum>Expanding</enum>
@@ -207,7 +207,7 @@ The default font is set for all cells in the Format -&gt; Style Manager menu wit
                         </sizepolicy>
                     </property>
                     <property name="alignment">
-                        <set>AlignHCenter</set>
+                        <set>Qt::AlignHCenter</set>
                     </property>
                     <property name="whatsThis" stdset="0">
                         <string>You can see a preview of the font you are choosing for the current cell.</string>

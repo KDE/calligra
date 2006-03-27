@@ -31,10 +31,16 @@
 #define __kspread_dlg_layout_h__
 
 
-#include <qtabdialog.h>
+#include <q3tabdialog.h>
 #include <qapplication.h>
-#include <qbuttongroup.h>
-#include <qgroupbox.h>
+#include <q3buttongroup.h>
+#include <q3groupbox.h>
+//Added by qt3to4:
+#include <QPixmap>
+#include <QPaintEvent>
+#include <Q3Frame>
+#include <QLabel>
+#include <QMouseEvent>
 #include <knuminput.h>
 #include <kcompletion.h>
 #include "kspread_view.h"
@@ -58,8 +64,8 @@ class QTime;
 class QLabel;
 class QWidget;
 class KLineEdit;
-class QFrame;
-class QListBox;
+class Q3Frame;
+class Q3ListBox;
 class QCheckBox;
 class KColorButton;
 class QComboBox;
@@ -95,20 +101,20 @@ enum BorderShortcutType
   BorderShortcutType_END
 };
 
-class PatternSelect : public QFrame
+class PatternSelect : public Q3Frame
 {
     Q_OBJECT
 public:
     PatternSelect( QWidget *parent, const char *_name );
 
-    void setPenStyle( PenStyle _pat ) { penStyle = _pat; repaint(); }
-    PenStyle getPenStyle() { return penStyle; }
+    void setPenStyle( Qt::PenStyle _pat ) { penStyle = _pat; repaint(); }
+    Qt::PenStyle getPenStyle() { return penStyle; }
     void setColor( const QColor &_col ) { penColor = _col; repaint(); }
     const QColor& getColor() { return penColor; }
     void setPenWidth( int _w ) { penWidth = _w; repaint(); }
     int getPenWidth() { return penWidth; }
 
-    void setPattern( const QColor &_color, int _width, PenStyle _style );
+    void setPattern( const QColor &_color, int _width, Qt::PenStyle _style );
     void setUndefined();
     void setDefined() { undefined = FALSE; repaint(); }
 
@@ -236,7 +242,7 @@ protected:
     QRadioButton *time;
     QRadioButton *textFormat;
     QRadioButton *customFormat;
-    QListBox *listFormat;
+    Q3ListBox *listFormat;
     QLineEdit* customFormatEdit;
     QLabel *exampleLabel;
     CellFormatDialog *dlg;
@@ -277,7 +283,7 @@ protected:
 
 
 
-class Border : public QFrame
+class Border : public Q3Frame
 {
     Q_OBJECT
 public:
@@ -297,8 +303,8 @@ class BorderButton : public QPushButton
     Q_OBJECT
 public:
     BorderButton( QWidget *parent, const char *_name );
-    void setPenStyle( PenStyle _pat ) { penStyle = _pat;}
-    PenStyle getPenStyle() { return penStyle; }
+    void setPenStyle( Qt::PenStyle _pat ) { penStyle = _pat;}
+    Qt::PenStyle getPenStyle() { return penStyle; }
     void setColor( const QColor &_col ) { penColor = _col; }
     const QColor& getColor() { return penColor; }
     void setPenWidth( int _w ) { penWidth = _w; }
@@ -326,7 +332,7 @@ public:
 
     void apply(FormatManipulator* obj);
     void invertState(BorderButton *_button);
-    QPixmap paintFormatPixmap(PenStyle _style);
+    QPixmap paintFormatPixmap(Qt::PenStyle _style);
 
 public slots:
     void changeState(BorderButton *_this);
@@ -375,17 +381,17 @@ private:
   void applyDiagonalOutline(FormatManipulator* obj);
 };
 
-class BrushSelect : public QFrame
+class BrushSelect : public Q3Frame
 {
     Q_OBJECT
 public:
     BrushSelect( QWidget *parent, const char *_name );
 
-    void setBrushStyle( BrushStyle _pat ) { brushStyle = _pat; repaint(); }
-    BrushStyle getBrushStyle() const { return brushStyle; }
+    void setBrushStyle( Qt::BrushStyle _pat ) { brushStyle = _pat; repaint(); }
+    Qt::BrushStyle getBrushStyle() const { return brushStyle; }
     QColor getBrushColor() const { return brushColor; }
     void setBrushColor(const QColor &_c) { brushColor=_c;}
-    void setPattern( const QColor &_color, BrushStyle _style );
+    void setPattern( const QColor &_color, Qt::BrushStyle _style );
 
 signals:
     void clicked( BrushSelect *_this );
@@ -516,13 +522,13 @@ public:
       bool bStyle;
       QColor color;
       bool bColor;
-      PenStyle style;
+      Qt::PenStyle style;
     };
 
     // The format of the selected area
     CellBorderFormat borders[BorderType_END];
 
-    BrushStyle brushStyle;
+    Qt::BrushStyle brushStyle;
     QColor brushColor;
 
     bool oneCol;
@@ -621,7 +627,7 @@ protected:
     CellFormatPagePosition *positionPage;
     CellFormatPagePattern *patternPage;
     CellFormatPageProtection *protectPage;
-    QTabDialog *tab;
+    Q3TabDialog *tab;
 
     Doc   * m_doc;
     Sheet * m_sheet;

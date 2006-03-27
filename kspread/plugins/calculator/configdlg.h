@@ -31,14 +31,14 @@
 #ifndef _CONFIG_DLG_H_
 #define _CONFIG_DLG_H_
 
-#include <qgroupbox.h>
+#include <q3groupbox.h>
 #include <qcheckbox.h>
 #include <qdialog.h>
 #include <qlineedit.h>
 #include <qpushbutton.h>
 #include <qpainter.h>
 #include <qlabel.h>
-#include <qframe.h>
+#include <q3frame.h>
 #include <qspinbox.h>
 #include <kcolorbutton.h>
 
@@ -78,7 +78,7 @@ public:
 private:
 
 
-  QGroupBox *box;
+  Q3GroupBox *box;
 
   QPushButton *ok;
   QPushButton *cancel;
@@ -93,7 +93,7 @@ private:
   QPushButton *button3;
   QLabel *label5;
 
-  QGroupBox *gbox;
+  Q3GroupBox *gbox;
   QCheckBox *cb;
   QCheckBox *cb2;
   QSpinBox* precspin;
@@ -101,7 +101,7 @@ private:
   QCheckBox *mybox;
   QCheckBox *frame3d;
 
-  QButtonGroup *stylegroup;
+  Q3ButtonGroup *stylegroup;
   QLabel *stylelabel;
   QRadioButton *trigstyle;
   QRadioButton *statstyle;

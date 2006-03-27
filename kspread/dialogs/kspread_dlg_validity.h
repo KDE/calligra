@@ -27,10 +27,12 @@
 #include <kdialogbase.h>
 
 #include "kspread_cell.h"
+//Added by qt3to4:
+#include <QLabel>
 
 class QLabel;
 class QLineEdit;
-class QTextEdit;
+class Q3TextEdit;
 class QComboBox;
 class QPushButton;
 class QCheckBox;
@@ -65,14 +67,14 @@ protected:
   QComboBox *chooseAction;
   QComboBox *chooseType;
   QLineEdit * title;
-  QTextEdit *message;
+  Q3TextEdit *message;
   Validity result;
   QCheckBox *displayMessage;
   QCheckBox *allowEmptyCell;
     QCheckBox *displayHelp;
-    QTextEdit *messageHelp;
+    Q3TextEdit *messageHelp;
     QLineEdit *titleHelp;
-    QTextEdit *validityList;
+    Q3TextEdit *validityList;
     QLabel *validityLabelList;
 };
 
