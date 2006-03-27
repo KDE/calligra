@@ -1,0 +1,10 @@
+Here is the list of apps that will be develloped in the 1.6 cycle:
+- kchart
+- kexi
+- krita
+- kdgantt
+
+It's up to the maintainer of those apps to merge their change with trunk, and with 1.5 for bug fixed.
+
+Here is the list of apps that won't be develloped in the 1.6 cycle, which mean that any modification made here will be lost when 1.6 is released:
+- kword
