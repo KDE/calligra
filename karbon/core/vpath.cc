@@ -29,6 +29,7 @@
 #include "vvisitor.h"
 
 #include <kdebug.h>
+#include <q3tl.h>
 
 
 class VSubpathIteratorList

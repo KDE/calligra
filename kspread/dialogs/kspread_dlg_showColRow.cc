@@ -24,6 +24,7 @@
 #include <qlayout.h>
 
 #include <klocale.h>
+#include <q3tl.h>
 
 #include "kspread_doc.h"
 #include "kspread_sheet.h"

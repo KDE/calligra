@@ -52,6 +52,7 @@
 #include <widget/relations/kexirelationviewtable.h>
 #include <koproperty/property.h>
 #include <koproperty/set.h>
+#include <q3tl.h>
 
 #include "kexiquerypart.h"
 

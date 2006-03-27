@@ -29,6 +29,7 @@
 #include "dialog.h"
 //Added by qt3to4:
 #include <Q3ValueList>
+#include <q3tl.h>
 
 #define TIME_START(str) { \
     kDebug(30516) << str << endl; \

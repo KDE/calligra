@@ -50,6 +50,7 @@
 #include <Q3ValueList>
 #include <QPaintEvent>
 #include <Q3PtrList>
+#include <q3tl.h>
 
 /******************************************************************/
 /* Class: KWOrderedFrameSet                                       */

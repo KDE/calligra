@@ -29,6 +29,7 @@
 #include <core/kexi.h>
 #include <core/kexiproject.h>
 #include <kexidb/drivermanager.h>
+#include <q3tl.h>
 
 using namespace KexiDB;
 using namespace KexiMigration;

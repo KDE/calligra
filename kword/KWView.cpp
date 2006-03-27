@@ -142,6 +142,7 @@
 
 #include <kspell2/dialog.h>
 #include <kspell2/defaultdictionary.h>
+#include <q3tl.h>
 #include "KoSpell.h"
 
 using namespace KSpell2;

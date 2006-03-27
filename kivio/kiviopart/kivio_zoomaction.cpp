@@ -21,6 +21,7 @@
 #include <qregexp.h>
 
 #include <klocale.h>
+#include <q3tl.h>
 
 using namespace Kivio;
 

@@ -80,6 +80,7 @@
 
 #include <assert.h>
 #include <qapplication.h>
+#include <q3tl.h>
 
 //#define DEBUG_MARGINS
 //#define DEBUG_FORMATVERTICALLY

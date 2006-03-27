@@ -28,6 +28,7 @@
 #include <q3valuevector.h>
 #include <q3dict.h>
 #include <qmap.h>
+#include <q3tl.h>
 
 class LinkAction;
 class Catalog;

@@ -155,6 +155,7 @@
 #include <kspell2/broker.h>
 #include <kspell2/defaultdictionary.h>
 #include <kspell2/dialog.h>
+#include <q3tl.h>
 #include "KoSpell.h"
 #include "KPrPrinterDlg.h"
 using namespace KSpell2;

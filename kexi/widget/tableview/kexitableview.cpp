@@ -65,6 +65,7 @@
 #include "kexitableview_p.h"
 #include <widget/utils/kexirecordmarker.h>
 #include <widget/utils/kexidisplayutils.h>
+#include <q3tl.h>
 
 KexiTableView::Appearance::Appearance(QWidget *widget)
  : alternateBackgroundColor( KGlobalSettings::alternateBackgroundColor() )

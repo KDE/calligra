@@ -82,6 +82,7 @@
 #include <kspread_undo.h>
 #include <kspread_view.h>
 #include <kglobal.h>
+#include <q3tl.h>
 #endif
 
 #define _IMPORT_ICON "table" /*todo: change to "file_import" or so*/

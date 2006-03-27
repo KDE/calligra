@@ -23,6 +23,7 @@
 #include <qvaluelist.h>
 
 #include <klocale.h>
+#include <q3tl.h>
 
 #include "vbooleancmd.h"
 #include "vpath.h"

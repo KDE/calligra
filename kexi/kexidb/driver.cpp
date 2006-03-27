@@ -32,6 +32,7 @@
 #include <kdebug.h>
 
 #include <assert.h>
+#include <q3tl.h>
 
 using namespace KexiDB;
 
