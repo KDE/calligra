@@ -147,7 +147,7 @@ namespace KOffice {
     template<class T>
     void PriorityQueue<T>::dump() const
     {
-        kdDebug( 30500 ) << "++++++++++ PriorityQueue::dump ++++++++++" << endl;
+        kDebug( 30500 ) << "++++++++++ PriorityQueue::dump ++++++++++" << endl;
         QString out;
         int size = static_cast<int>( m_vector.size() );
         for ( int i = 0; i < size; ++i ) {
@@ -159,8 +159,8 @@ namespace KOffice {
         }
         if ( out.isEmpty() )
             out = "(empty)";
-        kdDebug( 30500 ) << out << endl;
-        kdDebug( 30500 ) << "++++++++++ PriorityQueue::dump (done) ++++++++++" << endl;
+        kDebug( 30500 ) << out << endl;
+        kDebug( 30500 ) << "++++++++++ PriorityQueue::dump (done) ++++++++++" << endl;
     }
 
     template<class T>

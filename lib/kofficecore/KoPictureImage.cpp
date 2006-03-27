@@ -71,7 +71,7 @@ void KoPictureImage::scaleAndCreatePixmap(const QSize& size, bool fastMode)
     // Slow mode can be very slow, especially at high zoom levels -> configurable
     if ( !isSlowResizeModeAllowed() )
     {
-        kdDebug(30003) << "User has disallowed slow mode!" << endl;
+        kDebug(30003) << "User has disallowed slow mode!" << endl;
         fastMode = true;
     }
 
@@ -91,7 +91,7 @@ void KoPictureImage::scaleAndCreatePixmap(const QSize& size, bool fastMode)
 
 void KoPictureImage::draw(QPainter& painter, int x, int y, int width, int height, int sx, int sy, int sw, int sh, bool fastMode)
 {
-    //kdDebug() << "KoImage::draw currentSize:" << currentSize.width() << "x" << currentSize.height() << endl;
+    //kDebug() << "KoImage::draw currentSize:" << currentSize.width() << "x" << currentSize.height() << endl;
     if ( !width || !height )
         return;
     QSize origSize = getOriginalSize();
@@ -115,7 +115,7 @@ void KoPictureImage::draw(QPainter& painter, int x, int y, int width, int height
     else
     {
         QSize screenSize( width, height );
-        //kdDebug() << "KoPictureImage::draw screenSize=" << screenSize.width() << "x" << screenSize.height() << endl;
+        //kDebug() << "KoPictureImage::draw screenSize=" << screenSize.width() << "x" << screenSize.height() << endl;
 
         scaleAndCreatePixmap(screenSize, fastMode);
 
@@ -136,7 +136,7 @@ bool KoPictureImage::loadData(const QByteArray& array, const QString& /* extensi
     if (!imageIO.read())
     {
         buffer.close();
-        kdError(30003) << "Image could not be loaded!" << endl;
+        kError(30003) << "Image could not be loaded!" << endl;
         return false;
     }
     buffer.close();
@@ -147,7 +147,7 @@ bool KoPictureImage::loadData(const QByteArray& array, const QString& /* extensi
 
 bool KoPictureImage::save(QIODevice* io) const
 {
-    kdDebug() << k_funcinfo << "writing raw data. size=" << m_rawData.size() << endl;
+    kDebug() << k_funcinfo << "writing raw data. size=" << m_rawData.size() << endl;
     // We save the raw data, to avoid damaging the file by many load/save cycles (especially for JPEG)
     Q_ULONG size=io->writeBlock(m_rawData); // WARNING: writeBlock returns Q_LONG but size() Q_ULONG!
     return (size==m_rawData.size());
@@ -171,7 +171,7 @@ QString KoPictureImage::getMimeType(const QString& extension) const
     // Find the mimetype only by the extension, not by file content (as the file is empty!)
     const QString mimetype( KMimeType::findByPath( fileName, 0 ,true )->name() );
     // ### TODO: use KMimeType::findByContent (but then the mimetype probably need to be cached)
-    kdDebug(30003) << "Image is mime type: " << mimetype << endl;
+    kDebug(30003) << "Image is mime type: " << mimetype << endl;
     return mimetype;
 }
 

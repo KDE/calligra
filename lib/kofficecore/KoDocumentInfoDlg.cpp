@@ -53,7 +53,7 @@
 #include <ktempfile.h>
 #include <kmimetype.h>
 #include <qlayout.h>
-#include <klistview.h>
+#include <k3listview.h>
 #include <q3grid.h>
 #include <qmap.h>
 #include <kfilterdev.h>
@@ -203,7 +203,7 @@ void KoDocumentInfoDlg::resetMetaData()
 
 void KoDocumentInfoDlg::addAuthorPage( KoDocumentInfoAuthor *authorInfo )
 {
-  Q3VBox *page = d->m_dialog->addVBoxPage( i18n( "Author" ) );
+  KVBox *page = d->m_dialog->addVBoxPage( i18n( "Author" ) );
   d->m_authorWidget = new KoDocumentInfoAuthorWidget( page );
   d->m_authorWidget->labelAuthor->setPixmap( KGlobal::iconLoader()->loadIcon( "personal", K3Icon::Desktop, 48 ) );
   d->m_authorWidget->pbLoadKABC->setIconSet( QIcon( KGlobal::iconLoader()->loadIcon( "kaddressbook", K3Icon::Small ) ) );
@@ -257,7 +257,7 @@ void KoDocumentInfoDlg::addAuthorPage( KoDocumentInfoAuthor *authorInfo )
 
 void KoDocumentInfoDlg::addAboutPage( KoDocumentInfoAbout *aboutInfo )
 {
-  Q3VBox *page = d->m_dialog->addVBoxPage( i18n( "General" ) );
+  KVBox *page = d->m_dialog->addVBoxPage( i18n( "General" ) );
   d->m_aboutWidget = new KoDocumentInfoAboutWidget( page );
   d->m_aboutWidget->pbReset->setIconSet( QIcon( KGlobal::iconLoader()->loadIcon( "reload", K3Icon::Small ) ) );
   KoDocument* doc = dynamic_cast< KoDocument* >( d->m_info->parent() );
@@ -293,7 +293,7 @@ void KoDocumentInfoDlg::addAboutPage( KoDocumentInfoAbout *aboutInfo )
 
 void KoDocumentInfoDlg::addUserMetadataPage( KoDocumentInfoUserMetadata *userMetadataInfo )
 {
-  Q3VBox *page = d->m_dialog->addVBoxPage( i18n( "User-Defined Metadata" ) );
+  KVBox *page = d->m_dialog->addVBoxPage( i18n( "User-Defined Metadata" ) );
   d->m_metaWidget = new KoDocumentInfoUserMetadataWidget( page );
 
   d->m_metaWidget->metaListView->addColumn( "Name" );
@@ -304,7 +304,7 @@ void KoDocumentInfoDlg::addUserMetadataPage( KoDocumentInfoUserMetadata *userMet
     {
         QString name = it.key();
         QString value = it.data();
-        KListViewItem* it = new KListViewItem( d->m_metaWidget->metaListView, name, value );
+        K3ListViewItem* it = new K3ListViewItem( d->m_metaWidget->metaListView, name, value );
         it->setPixmap( 0, KGlobal::iconLoader()->loadIcon( "text", K3Icon::Small ) );
     }
 }
@@ -500,7 +500,7 @@ void KoDocumentInfoPropsPage::applyChanges()
       str << d->m_info->save();
       buffer.close();
 
-      kdDebug( 30003 ) << "writing documentinfo.xml" << endl;
+      kDebug( 30003 ) << "writing documentinfo.xml" << endl;
       d->m_dst->writeFile( "documentinfo.xml", entry->user(), entry->group(), buffer.buffer().size(),
                            buffer.buffer().data() );
 
@@ -521,12 +521,12 @@ void KoDocumentInfoPropsPage::applyChanges()
 
 void KoDocumentInfoPropsPage::copy( const QString &path, const KArchiveEntry *entry )
 {
-  kdDebug( 30003 ) << "copy " << entry->name() << endl;
+  kDebug( 30003 ) << "copy " << entry->name() << endl;
   if ( entry->isFile() )
   {
     const KTarFile *file = static_cast<const KTarFile *>( entry );
-    kdDebug( 30003 ) << "file :" << entry->name() << endl;
-    kdDebug( 30003 ) << "full path is: " << path << entry->name() << endl;
+    kDebug( 30003 ) << "file :" << entry->name() << endl;
+    kDebug( 30003 ) << "full path is: " << path << entry->name() << endl;
     d->m_dst->writeFile( path + entry->name(), entry->user(), entry->group(),
                          file->size(),
                          file->data().data() );
@@ -534,8 +534,8 @@ void KoDocumentInfoPropsPage::copy( const QString &path, const KArchiveEntry *en
   else
   {
     const KTarDirectory *dir = static_cast<const KTarDirectory *>( entry );
-    kdDebug( 30003 ) << "dir : " << entry->name() << endl;
-    kdDebug( 30003 ) << "full path is: " << path << entry->name() << endl;
+    kDebug( 30003 ) << "dir : " << entry->name() << endl;
+    kDebug( 30003 ) << "full path is: " << path << entry->name() << endl;
 
     QString p = path + entry->name();
     if ( p != "/" )

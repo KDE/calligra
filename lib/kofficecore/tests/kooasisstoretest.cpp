@@ -26,11 +26,11 @@
 void testMimeForPath( QDomDocument& doc )
 {
     QString mime = KoOasisStore::mimeForPath( doc, "Object 1" );
-    kdDebug() << k_funcinfo << mime << endl;
+    kDebug() << k_funcinfo << mime << endl;
     assert( !mime.isNull() );
     assert( !mime.isEmpty() );
     assert( mime == "application/vnd.oasis.opendocument.text" );
-    kdDebug() << "testMimeForPath OK" << endl;
+    kDebug() << "testMimeForPath OK" << endl;
 }
 
 int main( int, char** ) {
@@ -49,7 +49,7 @@ int main( int, char** ) {
     int errorLine, errorColumn;
     bool ok = doc.setContent( xml, true /* namespace processing */, &errorMsg, &errorLine, &errorColumn );
     if ( !ok ) {
-        kdError() << "Parsing error! Aborting!" << endl
+        kError() << "Parsing error! Aborting!" << endl
             << " In line: " << errorLine << ", column: " << errorColumn << endl
             << " Error message: " << errorMsg << endl;
         return 1;

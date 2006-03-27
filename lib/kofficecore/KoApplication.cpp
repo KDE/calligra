@@ -97,9 +97,9 @@ bool KoApplication::start()
     KoDocumentEntry entry = KoDocumentEntry( KoDocument::readNativeService() );
     if ( entry.isEmpty() )
     {
-        kdError( 30003 ) << instanceName() << "part.desktop not found." << endl;
-        kdError( 30003 ) << "Run 'kde-config --path services' to see which directories were searched, assuming kde startup had the same environment as your current shell." << endl;
-        kdError( 30003 ) << "Check your installation (did you install KOffice in a different prefix than KDE, without adding the prefix to /etc/kderc ?)" << endl;
+        kError( 30003 ) << instanceName() << "part.desktop not found." << endl;
+        kError( 30003 ) << "Run 'kde-config --path services' to see which directories were searched, assuming kde startup had the same environment as your current shell." << endl;
+        kError( 30003 ) << "Check your installation (did you install KOffice in a different prefix than KDE, without adding the prefix to /etc/kderc ?)" << endl;
         return false;
     }
 
@@ -172,7 +172,7 @@ bool KoApplication::start()
 		  if ( args->url(i).isLocalFile() && QFile::exists(args->url(i).path()) )
 		  {
 		    paths << QString(args->url(i).path());
-		    kdDebug(30003) << "using full path..." << endl;
+		    kDebug(30003) << "using full path..." << endl;
 		  } else {
 		     QString desktopName(args->arg(i));
 		     QString appName = KGlobal::instance()->instanceName();
@@ -202,7 +202,7 @@ bool KoApplication::start()
 		       doc->resetURL();
 		       doc->setEmpty();
                        doc->setTitleModified();
-		       kdDebug(30003) << "Template loaded..." << endl;
+		       kDebug(30003) << "Template loaded..." << endl;
 		       n++;
 		     } else {
 		        KMessageBox::error(0L, i18n("Template %1 failed to load.").arg(templateURL.prettyURL()) );

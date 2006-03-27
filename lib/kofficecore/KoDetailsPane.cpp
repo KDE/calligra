@@ -35,7 +35,7 @@
 
 #include <kinstance.h>
 #include <klocale.h>
-#include <klistview.h>
+#include <k3listview.h>
 #include <kpushbutton.h>
 #include <kconfig.h>
 #include <kurl.h>
@@ -47,12 +47,12 @@
 
 #include "KoTemplates.h"
 
-class KoFileListItem : public KListViewItem
+class KoFileListItem : public K3ListViewItem
 {
   public:
-    KoFileListItem(KListView* listView, Q3ListViewItem* after, const QString& filename,
+    KoFileListItem(K3ListView* listView, Q3ListViewItem* after, const QString& filename,
                    const QString& fullPath, KFileItem* fileItem)
-      : KListViewItem(listView, after, filename, fullPath), m_fileItem(fileItem)
+      : K3ListViewItem(listView, after, filename, fullPath), m_fileItem(fileItem)
     {
     }
 
@@ -116,13 +116,13 @@ KoTemplatesPane::KoTemplatesPane(QWidget* parent, KInstance* instance,
     dontShow = "metric";
   }
 
-  KListViewItem* selectItem = 0;
+  K3ListViewItem* selectItem = 0;
 
   for (KoTemplate* t = group->first(); t != 0L; t = group->next()) {
     if(t->isHidden() || (t->measureSystem() == dontShow))
       continue;
 
-    KListViewItem* item = new KListViewItem(m_documentList, t->name(), t->description(), t->file());
+    K3ListViewItem* item = new K3ListViewItem(m_documentList, t->name(), t->description(), t->file());
     QImage icon = t->loadPicture(instance).convertToImage();
     icon = icon.smoothScale(64, 64, Qt::KeepAspectRatio);
     icon.setAlphaBuffer(true);

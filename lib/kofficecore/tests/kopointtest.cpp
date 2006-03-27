@@ -7,9 +7,9 @@
 bool check( QString txt, bool res, bool expected )
 {
     if ( res == expected ) {
-        kdDebug() << txt << " : checking '" << res << "' against expected value '" << expected << "'... " << "ok" << endl;
+        kDebug() << txt << " : checking '" << res << "' against expected value '" << expected << "'... " << "ok" << endl;
     } else {
-        kdDebug() << txt << " : checking '" << res << "' against expected value '" << expected << "'... " << "KO !" << endl;
+        kDebug() << txt << " : checking '" << res << "' against expected value '" << expected << "'... " << "KO !" << endl;
         exit( 1 );
     }
     return true;
@@ -17,10 +17,10 @@ bool check( QString txt, bool res, bool expected )
 
 bool check( QString txt, double res, double expected )
 {
-    if ( kAbs(res - expected) < 0.000001 ) {
-        kdDebug() << txt << " : checking '" << res << "' against expected value '" << expected << "'... " << "ok" << endl;
+    if ( qAbs(res - expected) < 0.000001 ) {
+        kDebug() << txt << " : checking '" << res << "' against expected value '" << expected << "'... " << "ok" << endl;
     } else {
-        kdDebug() << txt << " : checking '" << res << "' against expected value '" << expected << "'... " << "KO !" << endl;
+        kDebug() << txt << " : checking '" << res << "' against expected value '" << expected << "'... " << "KO !" << endl;
         exit( 1 );
     }
     return true;
@@ -84,6 +84,6 @@ int main()
     // can we define a behaviour ?
     // ### check( "KoPoint::getAngle()", KoPoint::getAngle( p7, p7 ), ??? );
 
-    kdDebug() << endl << "Test OK !" << endl;
+    kDebug() << endl << "Test OK !" << endl;
 }
 

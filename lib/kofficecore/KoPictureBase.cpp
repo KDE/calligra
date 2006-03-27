@@ -43,7 +43,7 @@ KoPictureBase::KoPictureBase(void)
     {
         KConfigGroup group( KGlobal::config(), "KOfficeImage" );
         s_useSlowResizeMode = group.readNumEntry( "HighResolution", 1 );
-        kdDebug(30003) << "HighResolution = " << s_useSlowResizeMode << endl;
+        kDebug(30003) << "HighResolution = " << s_useSlowResizeMode << endl;
     }
 }
 
@@ -69,7 +69,7 @@ bool KoPictureBase::isNull(void) const
 void KoPictureBase::draw(QPainter& painter, int x, int y, int width, int height, int, int, int, int, bool /*fastMode*/)
 {
     // Draw a light red box (easier DEBUG)
-    kdWarning(30003) << "Drawing light red rectangle! (KoPictureBase::draw)" << endl;
+    kWarning(30003) << "Drawing light red rectangle! (KoPictureBase::draw)" << endl;
     painter.save();
     painter.setBrush(QColor(128,0,0));
     painter.drawRect(x,y,width,height);

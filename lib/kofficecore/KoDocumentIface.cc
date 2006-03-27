@@ -137,7 +137,7 @@ QString KoDocumentIface::documentInfoAuthorName() const
     KoDocumentInfoAuthor * authorPage = static_cast<KoDocumentInfoAuthor *>(info->page( "author" ));
     if ( !authorPage )
     {
-        kdWarning() << "Author information not found in documentInfo !" << endl;
+        kWarning() << "Author information not found in documentInfo !" << endl;
         return QString::null;
     }
     else
@@ -150,7 +150,7 @@ QString KoDocumentIface::documentInfoEmail() const
     KoDocumentInfoAuthor * authorPage = static_cast<KoDocumentInfoAuthor *>(info->page( "author" ));
     if ( !authorPage )
     {
-        kdWarning() << "Author information not found in documentInfo !" << endl;
+        kWarning() << "Author information not found in documentInfo !" << endl;
         return QString::null;
     }
     else
@@ -163,7 +163,7 @@ QString KoDocumentIface::documentInfoCompanyName() const
     KoDocumentInfoAuthor * authorPage = static_cast<KoDocumentInfoAuthor *>(info->page( "author" ));
     if ( !authorPage )
     {
-        kdWarning() << "Author information not found in documentInfo !" << endl;
+        kWarning() << "Author information not found in documentInfo !" << endl;
         return QString::null;
     }
     else
@@ -172,7 +172,7 @@ QString KoDocumentIface::documentInfoCompanyName() const
 
 QString KoDocumentIface::documentInfoTelephone() const
 {
-    kdDebug()<<" Keep compatibility with koffice <= 1.3 : use documentInfoTelephoneWork\n";
+    kDebug()<<" Keep compatibility with koffice <= 1.3 : use documentInfoTelephoneWork\n";
     return documentInfoTelephoneWork();
 }
 
@@ -182,7 +182,7 @@ QString KoDocumentIface::documentInfoTelephoneWork() const
     KoDocumentInfoAuthor * authorPage = static_cast<KoDocumentInfoAuthor *>(info->page( "author" ));
     if ( !authorPage )
     {
-        kdWarning() << "Author information not found in documentInfo !" << endl;
+        kWarning() << "Author information not found in documentInfo !" << endl;
         return QString::null;
     }
     else
@@ -195,7 +195,7 @@ QString KoDocumentIface::documentInfoTelephoneHome() const
     KoDocumentInfoAuthor * authorPage = static_cast<KoDocumentInfoAuthor *>(info->page( "author" ));
     if ( !authorPage )
     {
-        kdWarning() << "Author information not found in documentInfo !" << endl;
+        kWarning() << "Author information not found in documentInfo !" << endl;
         return QString::null;
     }
     else
@@ -209,7 +209,7 @@ QString KoDocumentIface::documentInfoFax() const
     KoDocumentInfoAuthor * authorPage = static_cast<KoDocumentInfoAuthor *>(info->page( "author" ));
     if ( !authorPage )
     {
-        kdWarning() << "Author information not found in documentInfo !" << endl;
+        kWarning() << "Author information not found in documentInfo !" << endl;
         return QString::null;
     }
     else
@@ -222,7 +222,7 @@ QString KoDocumentIface::documentInfoCountry() const
     KoDocumentInfoAuthor * authorPage = static_cast<KoDocumentInfoAuthor *>(info->page( "author" ));
     if ( !authorPage )
     {
-        kdWarning() << "Author information not found in documentInfo !" << endl;
+        kWarning() << "Author information not found in documentInfo !" << endl;
         return QString::null;
     }
     else
@@ -235,7 +235,7 @@ QString KoDocumentIface::documentInfoPostalCode() const
     KoDocumentInfoAuthor * authorPage = static_cast<KoDocumentInfoAuthor *>(info->page( "author" ));
     if ( !authorPage )
     {
-        kdWarning() << "Author information not found in documentInfo !" << endl;
+        kWarning() << "Author information not found in documentInfo !" << endl;
         return QString::null;
     }
     else
@@ -248,7 +248,7 @@ QString KoDocumentIface::documentInfoCity() const
     KoDocumentInfoAuthor * authorPage = static_cast<KoDocumentInfoAuthor *>(info->page( "author" ));
     if ( !authorPage )
     {
-        kdWarning() << "Author information not found in documentInfo !" << endl;
+        kWarning() << "Author information not found in documentInfo !" << endl;
         return QString::null;
     }
     else
@@ -262,7 +262,7 @@ QString KoDocumentIface::documentInfoInitial() const
     KoDocumentInfoAuthor * authorPage = static_cast<KoDocumentInfoAuthor *>(info->page( "author" ));
     if ( !authorPage )
     {
-        kdWarning() << "Author information not found in documentInfo !" << endl;
+        kWarning() << "Author information not found in documentInfo !" << endl;
         return QString::null;
     }
     else
@@ -275,7 +275,7 @@ QString KoDocumentIface::documentInfoAuthorPostion() const
     KoDocumentInfoAuthor * authorPage = static_cast<KoDocumentInfoAuthor *>(info->page( "author" ));
     if ( !authorPage )
     {
-        kdWarning() << "Author information not found in documentInfo !" << endl;
+        kWarning() << "Author information not found in documentInfo !" << endl;
         return QString::null;
     }
     else
@@ -289,7 +289,7 @@ QString KoDocumentIface::documentInfoStreet() const
     KoDocumentInfoAuthor * authorPage = static_cast<KoDocumentInfoAuthor *>(info->page( "author" ));
     if ( !authorPage )
     {
-        kdWarning() << "Author information not found in documentInfo !" << endl;
+        kWarning() << "Author information not found in documentInfo !" << endl;
         return QString::null;
     }
     else
@@ -303,7 +303,7 @@ QString KoDocumentIface::documentInfoTitle() const
     KoDocumentInfoAbout * aboutPage = static_cast<KoDocumentInfoAbout *>(info->page( "about" ));
     if ( !aboutPage )
     {
-        kdWarning() << "'About' page not found in documentInfo !" << endl;
+        kWarning() << "'About' page not found in documentInfo !" << endl;
         return QString::null;
     }
     else
@@ -317,7 +317,7 @@ QString KoDocumentIface::documentInfoAbstract() const
     KoDocumentInfoAbout * aboutPage = static_cast<KoDocumentInfoAbout *>(info->page( "about" ));
     if ( !aboutPage )
     {
-        kdWarning() << "'About' page not found in documentInfo !" << endl;
+        kWarning() << "'About' page not found in documentInfo !" << endl;
         return QString::null;
     }
     else
@@ -330,7 +330,7 @@ QString KoDocumentIface::documentInfoKeywords() const
     KoDocumentInfoAbout * aboutPage = static_cast<KoDocumentInfoAbout *>(info->page( "about" ));
     if ( !aboutPage )
     {
-        kdWarning() << "'About' page not found in documentInfo !" << endl;
+        kWarning() << "'About' page not found in documentInfo !" << endl;
         return QString::null;
     }
     else
@@ -343,7 +343,7 @@ QString KoDocumentIface::documentInfoSubject() const
     KoDocumentInfoAbout * aboutPage = static_cast<KoDocumentInfoAbout *>(info->page( "about" ));
     if ( !aboutPage )
     {
-        kdWarning() << "'About' page not found in documentInfo !" << endl;
+        kWarning() << "'About' page not found in documentInfo !" << endl;
         return QString::null;
     }
     else
@@ -355,7 +355,7 @@ void KoDocumentIface::setDocumentInfoKeywords(const QString & text )
     KoDocumentInfoAbout * aboutPage = static_cast<KoDocumentInfoAbout *>(info->page( "about" ));
     if ( !aboutPage )
     {
-        kdWarning() << "'About' page not found in documentInfo !" << endl;
+        kWarning() << "'About' page not found in documentInfo !" << endl;
     }
     else
        aboutPage->setKeywords(text);
@@ -367,7 +367,7 @@ void KoDocumentIface::setDocumentInfoSubject(const QString & text)
     KoDocumentInfoAbout * aboutPage = static_cast<KoDocumentInfoAbout *>(info->page( "about" ));
     if ( !aboutPage )
     {
-        kdWarning() << "'About' page not found in documentInfo !" << endl;
+        kWarning() << "'About' page not found in documentInfo !" << endl;
     }
     else
        aboutPage->setSubject(text);
@@ -379,7 +379,7 @@ void KoDocumentIface::setDocumentInfoAuthorName(const QString & text)
     KoDocumentInfoAuthor * authorPage = static_cast<KoDocumentInfoAuthor *>(info->page( "author" ));
     if ( !authorPage )
     {
-        kdWarning() << "Author information not found in documentInfo !" << endl;
+        kWarning() << "Author information not found in documentInfo !" << endl;
     }
     else
         authorPage->setFullName(text);
@@ -392,7 +392,7 @@ void KoDocumentIface::setDocumentInfoEmail(const QString &text)
     KoDocumentInfoAuthor * authorPage = static_cast<KoDocumentInfoAuthor *>(info->page( "author" ));
     if ( !authorPage )
     {
-        kdWarning() << "Author information not found in documentInfo !" << endl;
+        kWarning() << "Author information not found in documentInfo !" << endl;
     }
     else
         authorPage->setEmail(text);
@@ -404,7 +404,7 @@ void KoDocumentIface::setDocumentInfoCompanyName(const QString &text)
     KoDocumentInfoAuthor * authorPage = static_cast<KoDocumentInfoAuthor *>(info->page( "author" ));
     if ( !authorPage )
     {
-        kdWarning() << "Author information not found in documentInfo !" << endl;
+        kWarning() << "Author information not found in documentInfo !" << endl;
     }
     else
         authorPage->setCompany(text);
@@ -416,7 +416,7 @@ void KoDocumentIface::setDocumentInfoAuthorPosition(const QString &text)
     KoDocumentInfoAuthor * authorPage = static_cast<KoDocumentInfoAuthor *>(info->page( "author" ));
     if ( !authorPage )
     {
-        kdWarning() << "Author information not found in documentInfo !" << endl;
+        kWarning() << "Author information not found in documentInfo !" << endl;
     }
     else
         authorPage->setPosition(text);
@@ -425,7 +425,7 @@ void KoDocumentIface::setDocumentInfoAuthorPosition(const QString &text)
 
 void KoDocumentIface::setDocumentInfoTelephone(const QString &text)
 {
-    kdDebug()<<"Keep compatibility with koffice <= 1.3 : use setDocumentInfoTelephoneWork\n";
+    kDebug()<<"Keep compatibility with koffice <= 1.3 : use setDocumentInfoTelephoneWork\n";
     setDocumentInfoTelephoneWork(text);
 }
 
@@ -435,7 +435,7 @@ void KoDocumentIface::setDocumentInfoTelephoneWork(const QString &text)
     KoDocumentInfoAuthor * authorPage = static_cast<KoDocumentInfoAuthor *>(info->page( "author" ));
     if ( !authorPage )
     {
-        kdWarning() << "Author information not found in documentInfo !" << endl;
+        kWarning() << "Author information not found in documentInfo !" << endl;
     }
     else
         authorPage->setTelephoneWork(text);
@@ -447,7 +447,7 @@ void KoDocumentIface::setDocumentInfoTelephoneHome(const QString &text)
     KoDocumentInfoAuthor * authorPage = static_cast<KoDocumentInfoAuthor *>(info->page( "author" ));
     if ( !authorPage )
     {
-        kdWarning() << "Author information not found in documentInfo !" << endl;
+        kWarning() << "Author information not found in documentInfo !" << endl;
     }
     else
         authorPage->setTelephoneHome(text);
@@ -460,7 +460,7 @@ void KoDocumentIface::setDocumentInfoFax(const QString &text)
     KoDocumentInfoAuthor * authorPage = static_cast<KoDocumentInfoAuthor *>(info->page( "author" ));
     if ( !authorPage )
     {
-        kdWarning() << "Author information not found in documentInfo !" << endl;
+        kWarning() << "Author information not found in documentInfo !" << endl;
     }
     else
         authorPage->setFax(text);
@@ -472,7 +472,7 @@ void KoDocumentIface::setDocumentInfoCountry(const QString &text)
     KoDocumentInfoAuthor * authorPage = static_cast<KoDocumentInfoAuthor *>(info->page( "author" ));
     if ( !authorPage )
     {
-        kdWarning() << "Author information not found in documentInfo !" << endl;
+        kWarning() << "Author information not found in documentInfo !" << endl;
     }
     else
         authorPage->setCountry(text);
@@ -485,7 +485,7 @@ void KoDocumentIface::setDocumentInfoTitle(const QString & text)
     KoDocumentInfoAbout * aboutPage = static_cast<KoDocumentInfoAbout *>(info->page( "about" ));
     if ( !aboutPage )
     {
-        kdWarning() << "'About' page not found in documentInfo !" << endl;
+        kWarning() << "'About' page not found in documentInfo !" << endl;
     }
     else
         aboutPage->setTitle(text);
@@ -497,7 +497,7 @@ void KoDocumentIface::setDocumentInfoPostalCode(const QString &text)
     KoDocumentInfoAuthor * authorPage = static_cast<KoDocumentInfoAuthor *>(info->page( "author" ));
     if ( !authorPage )
     {
-        kdWarning() << "Author information not found in documentInfo !" << endl;
+        kWarning() << "Author information not found in documentInfo !" << endl;
     }
     else
         authorPage->setPostalCode(text);
@@ -511,7 +511,7 @@ void KoDocumentIface::setDocumentInfoCity(const QString & text)
     KoDocumentInfoAuthor * authorPage = static_cast<KoDocumentInfoAuthor *>(info->page( "author" ));
     if ( !authorPage )
     {
-        kdWarning() << "Author information not found in documentInfo !" << endl;
+        kWarning() << "Author information not found in documentInfo !" << endl;
     }
     else
         authorPage->setCity(text);
@@ -523,7 +523,7 @@ void KoDocumentIface::setDocumentInfoInitial(const QString & text)
     KoDocumentInfoAuthor * authorPage = static_cast<KoDocumentInfoAuthor *>(info->page( "author" ));
     if ( !authorPage )
     {
-        kdWarning() << "Author information not found in documentInfo !" << endl;
+        kWarning() << "Author information not found in documentInfo !" << endl;
     }
     else
         authorPage->setInitial(text);
@@ -536,7 +536,7 @@ void KoDocumentIface::setDocumentInfoStreet(const QString &text)
     KoDocumentInfoAuthor * authorPage = static_cast<KoDocumentInfoAuthor *>(info->page( "author" ));
     if ( !authorPage )
     {
-        kdWarning() << "Author information not found in documentInfo !" << endl;
+        kWarning() << "Author information not found in documentInfo !" << endl;
     }
     else
         authorPage->setStreet(text);
@@ -550,7 +550,7 @@ void KoDocumentIface::setDocumentInfoAbstract(const QString &text)
     KoDocumentInfoAbout * aboutPage = static_cast<KoDocumentInfoAbout *>(info->page( "about" ));
     if ( !aboutPage )
     {
-        kdWarning() << "'About' page not found in documentInfo !" << endl;
+        kWarning() << "'About' page not found in documentInfo !" << endl;
     }
     else
        aboutPage->setAbstract(text);

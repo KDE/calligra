@@ -72,7 +72,7 @@ bool KoDocumentInfo::load( const QDomDocument& doc )
 
 bool KoDocumentInfo::loadOasis( const QDomDocument& metaDoc )
 {
-    //kdDebug()<<" metaDoc.toString() :"<<metaDoc.toString()<<endl;
+    //kDebug()<<" metaDoc.toString() :"<<metaDoc.toString()<<endl;
     QStringList lst = pages();
     QStringList::ConstIterator it = lst.begin();
     for( ; it != lst.end(); ++it )
@@ -170,7 +170,7 @@ QString KoDocumentInfo::title() const
 {
     KoDocumentInfoAbout * aboutPage = static_cast<KoDocumentInfoAbout *>(page( "about" ));
     if ( !aboutPage ) {
-        kdWarning() << "'About' page not found in documentInfo !" << endl;
+        kWarning() << "'About' page not found in documentInfo !" << endl;
         return QString::null;
     }
     else
@@ -181,7 +181,7 @@ QString KoDocumentInfo::creator() const
 {
     KoDocumentInfoAuthor * authorPage = static_cast<KoDocumentInfoAuthor *>(page( "author" ));
     if ( !authorPage ) {
-        kdWarning() << "'Author' page not found in documentInfo !" << endl;
+        kWarning() << "'Author' page not found in documentInfo !" << endl;
         return QString::null;
     }
     else

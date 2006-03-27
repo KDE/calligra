@@ -59,7 +59,7 @@ void KoOasisLoadingContext::fillStyleStack( const QDomElement& object, const cha
         if ( style )
             addStyles( style, family, isStyleAutoStyle );
         else
-            kdWarning(32500) << "fillStyleStack: no style named " << styleName << " found." << endl;
+            kWarning(32500) << "fillStyleStack: no style named " << styleName << " found." << endl;
     }
 }
 
@@ -81,17 +81,17 @@ void KoOasisLoadingContext::addStyles( const QDomElement* style, const char* fam
         if ( parentStyle )
             addStyles( parentStyle, family, usingStylesAutoStyles );
         else
-            kdWarning(32500) << "Parent style not found: " << parentStyleName << endl;
+            kWarning(32500) << "Parent style not found: " << parentStyleName << endl;
     }
     else if ( family ) {
         const QDomElement* def = m_styles.defaultStyle( family );
         if ( def ) { // on top of all, the default style for this family
-            //kdDebug(32500) << "pushing default style " << style->attributeNS( KoXmlNS::style, "name", QString::null ) << endl;
+            //kDebug(32500) << "pushing default style " << style->attributeNS( KoXmlNS::style, "name", QString::null ) << endl;
             m_styleStack.push( *def );
         }
     }
 
-    //kdDebug(32500) << "pushing style " << style->attributeNS( KoXmlNS::style, "name", QString::null ) << endl;
+    //kDebug(32500) << "pushing style " << style->attributeNS( KoXmlNS::style, "name", QString::null ) << endl;
     m_styleStack.push( *style );
 }
 

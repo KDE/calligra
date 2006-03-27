@@ -117,7 +117,7 @@ KoView::KoView( KoDocument *document, QWidget *parent, const char *name )
 {
   Q_ASSERT( document );
 
-  //kdDebug(30003) << "KoView::KoView " << this << endl;
+  //kDebug(30003) << "KoView::KoView " << this << endl;
   d = new KoViewPrivate;
   d->m_doc = document;
   KParts::PartBase::setPartObject( this );
@@ -169,7 +169,7 @@ KoView::KoView( KoDocument *document, QWidget *parent, const char *name )
 
 KoView::~KoView()
 {
-  kdDebug(30003) << "KoView::~KoView " << this << endl;
+  kDebug(30003) << "KoView::~KoView " << this << endl;
   delete d->m_scrollTimer;
   delete d->m_dcopObject;
   if (!d->m_documentDeleted)
@@ -347,7 +347,7 @@ void KoView::partActivateEvent( KParts::PartActivateEvent *event )
         KoViewChild *viewChild = new KoViewChild( child, this );
         d->m_children.append( viewChild );
 
-        QApplication::setOverrideCursor(Qt::waitCursor);
+        QApplication::setOverrideCursor(Qt::WaitCursor);
         // This is the long operation (due to toolbar layout stuff)
         d->m_manager->setActivePart( child->document(), viewChild->frame()->view() );
         QApplication::restoreOverrideCursor();
@@ -444,7 +444,7 @@ void KoView::removeStatusBarItem( QWidget * widget )
             break;
         }
     if ( it == d->m_statusBarItems.end() )
-        kdWarning() << "KoView::removeStatusBarItem. Widget not found : " << widget << endl;
+        kWarning() << "KoView::removeStatusBarItem. Widget not found : " << widget << endl;
 }
 
 KoDocumentChild *KoView::selectedChild()
@@ -548,7 +548,7 @@ void KoView::slotChildActivated( bool a )
 
 
   d->m_tempActiveWidget = activeWidget;
-  QApplication::setOverrideCursor(Qt::waitCursor);
+  QApplication::setOverrideCursor(Qt::WaitCursor);
   d->m_manager->setActivePart( 0L );
 
   QPointer<KoDocumentChild> docChild = ch->documentChild();
@@ -639,12 +639,12 @@ void KoView::setupGlobalActions() {
 
 void KoView::setupPrinter( KPrinter & )
 {
-    kdDebug() << "KoView::setupPrinter not implemented by the application!" << endl;
+    kDebug() << "KoView::setupPrinter not implemented by the application!" << endl;
 }
 
 void KoView::print( KPrinter & )
 {
-    kdDebug() << "KoView::print not implemented by the application!" << endl;
+    kDebug() << "KoView::print not implemented by the application!" << endl;
 }
 
 void KoView::newView() {
@@ -736,7 +736,7 @@ KoViewChild::KoViewChild( KoDocumentChild *child, KoView *_parentView )
   view->setPartManager( parentView()->partManager() );
 
   // hack? (Werner)
-  view->setZoom( parentView()->zoom() * QMAX(child->xScaling(), child->yScaling()) );
+  view->setZoom( parentView()->zoom() * qMax(child->xScaling(), child->yScaling()) );
 
   m_frame->setView( view );
   m_frame->show();
@@ -805,7 +805,7 @@ void KoViewChild::slotFrameGeometryChanged()
     // We don't want to trigger slotDocGeometryChanged again
     lock();
     QRect childGeom = parentView()->reverseViewTransformations( borderLessRect );
-    kdDebug() << "KoChild::slotFrameGeometryChanged child geometry "
+    kDebug() << "KoChild::slotFrameGeometryChanged child geometry "
               << ( geometry() == childGeom ? "already " : "set to " )
               << childGeom << endl;
     m_child->setGeometry( childGeom );
@@ -824,7 +824,7 @@ void KoViewChild::slotDocGeometryChanged()
                     geom.y() - m_frame->topBorder() - parentView()->canvasYOffset(),
                     geom.width() + m_frame->leftBorder() + m_frame->rightBorder(),
                     geom.height() + m_frame->topBorder() + m_frame->bottomBorder() );
-  kdDebug() << "KoViewChild::slotDocGeometryChanged frame geometry "
+  kDebug() << "KoViewChild::slotDocGeometryChanged frame geometry "
             << ( m_frame->geometry() == borderRect ? "already " : "set to " )
             << borderRect << endl;
 
@@ -855,7 +855,7 @@ QRect KoView::reverseViewTransformations( const QRect& r ) const
 
 void KoViewChild::setInitialFrameGeometry()
 {
-    kdDebug() << k_funcinfo << endl;
+    kDebug() << k_funcinfo << endl;
 
     // Connect only now, so that the GUI building doesn't move us around.
     connect( m_frame, SIGNAL( geometryChanged() ),

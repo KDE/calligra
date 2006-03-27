@@ -19,7 +19,7 @@
         <property name="margin">
             <number>0</number>
         </property>
-        <widget class="KListView" row="0" column="0">
+        <widget class="K3ListView" row="0" column="0">
             <property name="name">
                 <cstring>metaListView</cstring>
             </property>

@@ -223,7 +223,7 @@ void KoChild::transform( QPainter &painter )
     QMatrix m = painter.worldMatrix();
     m = d->m_matrix * m;
     m.scale( d->m_scaleX, d->m_scaleY );
-    painter.setWorldMatrix( m );
+    painter.setMatrix( m );
 }
 
 void KoChild::setContentsPos( int x, int y )

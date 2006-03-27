@@ -188,8 +188,8 @@ KoRect KoRect::intersect(const KoRect &r) const {
 }
 
 bool KoRect::intersects(const KoRect &r) const {
-    return ( QMAX(m_tl.x(), r.left()) <= QMIN(m_br.x(), r.right()) &&
-             QMAX(m_tl.y(), r.top()) <= QMIN(m_br.y(), r.bottom()) );
+    return ( qMax(m_tl.x(), r.left()) <= qMin(m_br.x(), r.right()) &&
+             qMax(m_tl.y(), r.top()) <= qMin(m_br.y(), r.bottom()) );
 }
 
 KoRect operator|(const KoRect &lhs, const KoRect &rhs) {
@@ -248,10 +248,10 @@ KoRect KoRect::transform(const QMatrix &m) const
 
     for(int i = 1; i < 4; i++)
     {
-      result.setLeft(QMIN(p[i].x(), result.left()));
-      result.setTop(QMIN(p[i].y(), result.top()));
-      result.setRight(QMAX(p[i].x(), result.right()));
-      result.setBottom(QMAX(p[i].y(), result.bottom()));
+      result.setLeft(qMin(p[i].x(), result.left()));
+      result.setTop(qMin(p[i].y(), result.top()));
+      result.setRight(qMax(p[i].x(), result.right()));
+      result.setBottom(qMax(p[i].y(), result.bottom()));
     }
   }
   return result;

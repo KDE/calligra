@@ -33,7 +33,7 @@
 #include <kdebug.h>
 #include <kmessagebox.h>
 #include <klocale.h>
-#include <klistview.h>
+#include <k3listview.h>
 #include <kdebug.h>
 
 #include <q3multilineedit.h>
@@ -49,7 +49,7 @@ KoVersionDialog::KoVersionDialog( QWidget* parent,  const char* name )
 
   Q3GridLayout *grid1 = new Q3GridLayout( page,10,3,KDialog::marginHint(), KDialog::spacingHint());
 
-  list=new KListView(page,  "versionlist");
+  list=new K3ListView(page,  "versionlist");
   list->addColumn(i18n("Date & Time"));
   list->addColumn(i18n("Saved By"));
   list->addColumn(i18n("Comment"));
@@ -108,7 +108,7 @@ void KoVersionDialog::slotModify()
     if ( dlg->exec() )
     {
         //TODO
-        kdDebug()<<" comment :"<<dlg->comment()<<endl;
+        kDebug()<<" comment :"<<dlg->comment()<<endl;
     }
     delete dlg;
 

@@ -33,31 +33,31 @@ int main( int /*argc*/, char ** /*argv*/ )
     g.dump();
 
     KoFilterManager *manager = new KoFilterManager( 0 );
-    kdDebug() << "Trying to build some filter chains..." << endl;
+    kDebug() << "Trying to build some filter chains..." << endl;
     Q3CString mimeType( "foo/bar" );
     KoFilterChain::Ptr chain = g.chain( manager, mimeType );
     if ( !chain )
-        kdDebug() << "Chain for 'foo/bar' is not available, OK" << endl;
+        kDebug() << "Chain for 'foo/bar' is not available, OK" << endl;
     else {
-        kdError() << "Chain for 'foo/bar' is available!" << endl;
+        kError() << "Chain for 'foo/bar' is available!" << endl;
         chain->dump();
     }
 
     mimeType = "application/x-krita";
     chain = g.chain( manager, mimeType );
     if ( !chain )
-        kdDebug() << "Chain for 'application/x-krita' is not available, OK" << endl;
+        kDebug() << "Chain for 'application/x-krita' is not available, OK" << endl;
     else {
-        kdError() << "Chain 'application/x-krita' is available!" << endl;
+        kError() << "Chain 'application/x-krita' is available!" << endl;
         chain->dump();
     }
 
     mimeType = "text/x-csv";
     chain = g.chain( manager, mimeType );
     if ( !chain )
-        kdError() << "Chain for 'text/x-csv' is not available!" << endl;
+        kError() << "Chain for 'text/x-csv' is not available!" << endl;
     else {
-        kdDebug() << "Chain for 'text/x-csv' is available, OK" << endl;
+        kDebug() << "Chain for 'text/x-csv' is available, OK" << endl;
         chain->dump();
     }
 
@@ -65,44 +65,44 @@ int main( int /*argc*/, char ** /*argv*/ )
     mimeType = "";
     chain = g.chain( manager, mimeType );
     if ( !chain )
-        kdDebug() << "It was already a KOffice part, OK" << endl;
+        kDebug() << "It was already a KOffice part, OK" << endl;
     else
-        kdError() << "We really got a chain? ugh :}" << endl;
+        kError() << "We really got a chain? ugh :}" << endl;
 
     g.setSourceMimeType( "text/x-csv" );
     mimeType = "";
     chain = g.chain( manager, mimeType );
     if ( !chain )
-        kdError() << "Hmm... why didn't we find a chain?" << endl;
+        kError() << "Hmm... why didn't we find a chain?" << endl;
     else {
-        kdDebug() << "Chain for 'text/x-csv' -> closest part is available ("
+        kDebug() << "Chain for 'text/x-csv' -> closest part is available ("
                   << mimeType << "), OK" << endl;
         chain->dump();
     }
 
-    kdDebug() << "Checking mimeFilter() for Import:" << endl;
+    kDebug() << "Checking mimeFilter() for Import:" << endl;
     QStringList list = KoFilterManager::mimeFilter( "application/x-kword",  KoFilterManager::Import );
     QStringList::ConstIterator it = list.begin();
     QStringList::ConstIterator end = list.end();
     for ( ; it != end; ++it )
-        kdDebug() << "   " << *it << endl;
-    kdDebug() << "   " << list.count() << " entries." << endl;
+        kDebug() << "   " << *it << endl;
+    kDebug() << "   " << list.count() << " entries." << endl;
 
-    kdDebug() << "Checking mimeFilter() for Export:" << endl;
+    kDebug() << "Checking mimeFilter() for Export:" << endl;
     list = KoFilterManager::mimeFilter( "application/x-kword",  KoFilterManager::Export );
     it = list.begin();
     end = list.end();
     for ( ; it != end; ++it )
-        kdDebug() << "   " << *it << endl;
-    kdDebug() << "   " << list.count() << " entries." << endl;
+        kDebug() << "   " << *it << endl;
+    kDebug() << "   " << list.count() << " entries." << endl;
 
-    kdDebug() << "Checking KoShell's mimeFilter():" << endl;
+    kDebug() << "Checking KoShell's mimeFilter():" << endl;
     list = KoFilterManager::mimeFilter();
     it = list.begin();
     end = list.end();
     for ( ; it != end; ++it )
-        kdDebug() << "   " << *it << endl;
-    kdDebug() << "   " << list.count() << " entries." << endl;
+        kDebug() << "   " << *it << endl;
+    kDebug() << "   " << list.count() << " entries." << endl;
 
     delete manager;
     return 0;

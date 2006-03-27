@@ -41,7 +41,7 @@
 #include <kio/netaccess.h>
 #include <kkeydialog.h>
 #include <kedittoolbar.h>
-#include <kprogress.h>
+#include <kprogressbar.h>
 #include <kpushbutton.h>
 #include <kdebug.h>
 #include <ktempfile.h>
@@ -310,7 +310,7 @@ KoMainWindow::KoMainWindow( KInstance *instance, const char* name )
 
     // Saved size
     config->setGroup( "MainWindow" );
-    //kdDebug(30003) << "KoMainWindow::restoreWindowSize" << endl;
+    //kDebug(30003) << "KoMainWindow::restoreWindowSize" << endl;
     restoreWindowSize( config );
 }
 
@@ -341,7 +341,7 @@ KoMainWindow::~KoMainWindow()
     if ( d->m_rootDoc && d->m_rootDoc->viewCount() == 0 &&
          !d->m_rootDoc->isEmbedded())
     {
-        //kdDebug(30003) << "Destructor. No more views, deleting old doc " << d->m_rootDoc << endl;
+        //kDebug(30003) << "Destructor. No more views, deleting old doc " << d->m_rootDoc << endl;
         delete d->m_rootDoc;
     }
 
@@ -362,7 +362,7 @@ void KoMainWindow::setRootDocument( KoDocument *doc )
     d->m_docToOpen = 0;
   }
 
-  //kdDebug(30003) <<  "KoMainWindow::setRootDocument this = " << this << " doc = " << doc << endl;
+  //kDebug(30003) <<  "KoMainWindow::setRootDocument this = " << this << " doc = " << doc << endl;
   Q3PtrList<KoView> oldRootViews = d->m_rootViews;
   d->m_rootViews.clear();
   KoDocument *oldRootDoc = d->m_rootDoc;
@@ -406,7 +406,7 @@ void KoMainWindow::setRootDocument( KoDocument *doc )
 
   if ( oldRootDoc && oldRootDoc->viewCount() == 0 )
   {
-    //kdDebug(30003) << "No more views, deleting old doc " << oldRootDoc << endl;
+    //kDebug(30003) << "No more views, deleting old doc " << oldRootDoc << endl;
     delete oldRootDoc;
   }
 }
@@ -440,7 +440,7 @@ void KoMainWindow::setRootDocumentDirect( KoDocument *doc, const Q3PtrList<KoVie
 
 void KoMainWindow::addRecentURL( const KUrl& url )
 {
-    kdDebug(30003) << "KoMainWindow::addRecentURL url=" << url.prettyURL() << endl;
+    kDebug(30003) << "KoMainWindow::addRecentURL url=" << url.prettyURL() << endl;
     // Add entry to recent documents list
     // (call coming from KoDocument because it must work with cmd line, template dlg, file/open, etc.)
     if ( !url.isEmpty() )
@@ -469,7 +469,7 @@ void KoMainWindow::saveRecentFiles()
 {
     // Save list of recent files
     KConfig * config = instance() ? instance()->config() : KGlobal::config();
-    kdDebug(30003) << this << " Saving recent files list into config. instance()=" << instance() << endl;
+    kDebug(30003) << this << " Saving recent files list into config. instance()=" << instance() << endl;
     m_recent->saveEntries( config );
     config->sync();
     if (KMainWindow::memberList)
@@ -496,7 +496,7 @@ KoDocument* KoMainWindow::createDoc() const
 
 void KoMainWindow::updateCaption()
 {
-  //kdDebug(30003) << "KoMainWindow::updateCaption()" << endl;
+  //kDebug(30003) << "KoMainWindow::updateCaption()" << endl;
   if ( !d->m_rootDoc )
     setCaption(QString::null);
   else if ( rootDocument()->isCurrent() )
@@ -525,7 +525,7 @@ void KoMainWindow::updateCaption()
 
 void KoMainWindow::updateCaption( QString caption, bool mod )
 {
-  //kdDebug(30003)<<"KoMainWindow::updateCaption("<<caption<<","<<mod<<")"<<endl;
+  //kDebug(30003)<<"KoMainWindow::updateCaption("<<caption<<","<<mod<<")"<<endl;
   setCaption( caption, mod );
 }
 
@@ -585,7 +585,7 @@ bool KoMainWindow::openDocument( KoDocument *newdoc, const KUrl & url )
 // ## If you modify anything here, please check KoShellWindow::openDocumentInternal
 bool KoMainWindow::openDocumentInternal( const KUrl & url, KoDocument *newdoc )
 {
-    //kdDebug(30003) << "KoMainWindow::openDocument " << url.url() << endl;
+    //kDebug(30003) << "KoMainWindow::openDocument " << url.url() << endl;
 
     if ( !newdoc )
         newdoc = createDoc();
@@ -610,7 +610,7 @@ bool KoMainWindow::openDocumentInternal( const KUrl & url, KoDocument *newdoc )
 // Separate from openDocument to handle async loading (remote URLs)
 void KoMainWindow::slotLoadCompleted()
 {
-    kdDebug(30003) << "KoMainWindow::slotLoadCompleted" << endl;
+    kDebug(30003) << "KoMainWindow::slotLoadCompleted" << endl;
     KoDocument* doc = rootDocument();
     KoDocument* newdoc = (KoDocument *)(sender());
 
@@ -641,7 +641,7 @@ void KoMainWindow::slotLoadCompleted()
 
 void KoMainWindow::slotLoadCanceled( const QString & errMsg )
 {
-    kdDebug(30003) << "KoMainWindow::slotLoadCanceled" << endl;
+    kDebug(30003) << "KoMainWindow::slotLoadCanceled" << endl;
     if ( !errMsg.isEmpty() ) // empty when canceled by user
         KMessageBox::error( this, errMsg );
     // ... can't delete the document, it's the one who emitted the signal...
@@ -657,7 +657,7 @@ void KoMainWindow::slotLoadCanceled( const QString & errMsg )
 
 void KoMainWindow::slotSaveCanceled( const QString &errMsg )
 {
-    kdDebug(30003) << "KoMainWindow::slotSaveCanceled" << endl;
+    kDebug(30003) << "KoMainWindow::slotSaveCanceled" << endl;
     if ( !errMsg.isEmpty() ) // empty when canceled by user
         KMessageBox::error( this, errMsg );
     slotSaveCompleted();
@@ -665,7 +665,7 @@ void KoMainWindow::slotSaveCanceled( const QString &errMsg )
 
 void KoMainWindow::slotSaveCompleted()
 {
-    kdDebug(30003) << "KoMainWindow::slotSaveCompleted" << endl;
+    kDebug(30003) << "KoMainWindow::slotSaveCompleted" << endl;
     KoDocument* pDoc = (KoDocument *)(sender());
     disconnect(pDoc, SIGNAL(sigProgress(int)), this, SLOT(slotProgress(int)));
     disconnect(pDoc, SIGNAL(completed()), this, SLOT(slotSaveCompleted()));
@@ -749,7 +749,7 @@ bool KoMainWindow::saveDocument( bool saveas, bool silent )
     QStringList mimeFilter = KoFilterManager::mimeFilter( _native_format, KoFilterManager::Export, pDoc->extraNativeMimeTypes() );
     if (mimeFilter.findIndex (oldOutputFormat) < 0 && !isExporting())
     {
-        kdDebug(30003) << "KoMainWindow::saveDocument no export filter for '" << oldOutputFormat << "'" << endl;
+        kDebug(30003) << "KoMainWindow::saveDocument no export filter for '" << oldOutputFormat << "'" << endl;
 
         // --- don't setOutputMimeType in case the user cancels the Save As
         // dialog and then tries to just plain Save ---
@@ -818,7 +818,7 @@ bool KoMainWindow::saveDocument( bool saveas, bool silent )
                 newURL=dialog->selectedURL();
                 outputFormat=dialog->currentMimeFilter().latin1();
                 specialOutputFlag = dialog->specialEntrySelected();
-                kdDebug(30003) << "KoMainWindow::saveDocument outputFormat = " << outputFormat << endl;
+                kDebug(30003) << "KoMainWindow::saveDocument outputFormat = " << outputFormat << endl;
 
                 if (!isExporting())
                     justChangingFilterOptions = (newURL == pDoc->url()) &&
@@ -898,12 +898,12 @@ bool KoMainWindow::saveDocument( bool saveas, bool silent )
 
                     if (ret)
                     {
-                        kdDebug(30003) << "Successful Save As!" << endl;
+                        kDebug(30003) << "Successful Save As!" << endl;
                         addRecentURL( newURL );
                     }
                     else
                     {
-                        kdDebug(30003) << "Failed Save As!" << endl;
+                        kDebug(30003) << "Failed Save As!" << endl;
                         pDoc->setURL( oldURL ), pDoc->setFile( oldFile );
                         pDoc->setOutputMimeType( oldOutputFormat, oldSpecialOutputFlag );
                     }
@@ -945,7 +945,7 @@ bool KoMainWindow::saveDocument( bool saveas, bool silent )
 
             if (!ret)
             {
-                kdDebug(30003) << "Failed Save!" << endl;
+                kDebug(30003) << "Failed Save!" << endl;
                 pDoc->setURL( oldURL ), pDoc->setFile( oldFile );
             }
         }
@@ -990,11 +990,11 @@ void KoMainWindow::saveWindowSettings()
     {
         // Save window size into the config file of our instance
         instance()->config()->setGroup( "MainWindow" );
-        //kdDebug(30003) << "KoMainWindow::saveWindowSettings" << endl;
+        //kDebug(30003) << "KoMainWindow::saveWindowSettings" << endl;
         saveWindowSize( instance()->config() );
         d->m_windowSizeDirty = false;
         // Save toolbar position into the config file of the app, under the doc's instance name
-        //kdDebug(30003) << "KoMainWindow::closeEvent -> saveMainWindowSettings rootdoc's instance=" << rootDocument()->instance()->instanceName() << endl;
+        //kDebug(30003) << "KoMainWindow::closeEvent -> saveMainWindowSettings rootdoc's instance=" << rootDocument()->instance()->instanceName() << endl;
         saveMainWindowSettings( KGlobal::config(), rootDocument()->instance()->instanceName() );
         KGlobal::config()->sync();
         resetAutoSaveSettings(); // Don't let KMainWindow override the good stuff we wrote down
@@ -1011,7 +1011,7 @@ bool KoMainWindow::queryClose()
 {
     if ( rootDocument() == 0 )
         return true;
-    //kdDebug(30003) << "KoMainWindow::queryClose() viewcount=" << rootDocument()->viewCount()
+    //kDebug(30003) << "KoMainWindow::queryClose() viewcount=" << rootDocument()->viewCount()
     //               << " shellcount=" << rootDocument()->shellCount() << endl;
     if ( !d->m_forQuit && rootDocument()->shellCount() > 1 )
         // there are more open, and we are closing just one, so no problem for closing
@@ -1187,7 +1187,7 @@ void KoMainWindow::slotFileQuit()
 void KoMainWindow::print(bool quick) {
     if ( !rootView() )
     {
-        kdDebug(30003) << "KoMainWindow::slotFilePrint : No root view!" << endl;
+        kDebug(30003) << "KoMainWindow::slotFilePrint : No root view!" << endl;
         return;
     }
 
@@ -1228,7 +1228,7 @@ void KoMainWindow::slotFilePrintPreview()
 {
     if ( !rootView() )
     {
-        kdWarning() << "KoMainWindow::slotFilePrint : No root view!" << endl;
+        kWarning() << "KoMainWindow::slotFilePrint : No root view!" << endl;
         return;
     }
     KPrinter printer( false );
@@ -1296,7 +1296,7 @@ void KoMainWindow::slotNewToolbarConfig()
 
 void KoMainWindow::slotToolbarToggled( bool toggle )
 {
-  //kdDebug(30003) << "KoMainWindow::slotToolbarToggled " << sender()->name() << " toggle=" << true << endl;
+  //kDebug(30003) << "KoMainWindow::slotToolbarToggled " << sender()->name() << " toggle=" << true << endl;
   // The action (sender) and the toolbar have the same name
   KToolBar * bar = toolBar( sender()->name() );
   if (bar)
@@ -1310,7 +1310,7 @@ void KoMainWindow::slotToolbarToggled( bool toggle )
         saveMainWindowSettings( KGlobal::config(), rootDocument()->instance()->instanceName() );
   }
   else
-    kdWarning(30003) << "slotToolbarToggled : Toolbar " << sender()->name() << " not found!" << endl;
+    kWarning(30003) << "slotToolbarToggled : Toolbar " << sender()->name() << " not found!" << endl;
 }
 
 bool KoMainWindow::toolbarIsVisible(const char *tbName)
@@ -1324,7 +1324,7 @@ void KoMainWindow::showToolbar( const char * tbName, bool shown )
     QWidget * tb = toolBar( tbName );
     if ( !tb )
     {
-        kdWarning(30003) << "KoMainWindow: toolbar " << tbName << " not found." << endl;
+        kWarning(30003) << "KoMainWindow: toolbar " << tbName << " not found." << endl;
         return;
     }
     if ( shown )
@@ -1337,7 +1337,7 @@ void KoMainWindow::showToolbar( const char * tbName, bool shown )
     for ( ; it.current() ; ++it )
         if ( !strcmp( it.current()->name(), tbName ) )
         {
-            //kdDebug(30003) << "KoMainWindow::showToolbar setChecked " << shown << endl;
+            //kDebug(30003) << "KoMainWindow::showToolbar setChecked " << shown << endl;
             static_cast<KToggleAction *>(it.current())->setChecked( shown );
             break;
         }
@@ -1386,7 +1386,7 @@ void KoMainWindow::slotRemoveView() {
         view=d->m_rootViews.first();
     view->hide();
     if ( !d->m_rootViews.removeRef(view) )
-        kdWarning() << "view not found in d->m_rootViews!" << endl;
+        kWarning() << "view not found in d->m_rootViews!" << endl;
 
     if(d->m_rootViews.count()==1)
     {
@@ -1412,7 +1412,7 @@ void KoMainWindow::slotSetOrientation() {
 }
 
 void KoMainWindow::slotProgress(int value) {
-    //kdDebug(30003) << "KoMainWindow::slotProgress " << value << endl;
+    //kDebug(30003) << "KoMainWindow::slotProgress " << value << endl;
     if(value==-1) {
         if ( d->m_progress )
         {
@@ -1460,12 +1460,12 @@ void KoMainWindow::slotActivePartChanged( KParts::Part *newPart )
   // to reimplement it because it works with an active part, whereas we work
   // with an active view _and_ an active part, depending for what.
   // Both are KXMLGUIClients, but e.g. the plugin query needs a QObject.
-  //kdDebug(30003) <<  "KoMainWindow::slotActivePartChanged( Part * newPart) newPart = " << newPart << endl;
-  //kdDebug(30003) <<  "current active part is " << d->m_activePart << endl;
+  //kDebug(30003) <<  "KoMainWindow::slotActivePartChanged( Part * newPart) newPart = " << newPart << endl;
+  //kDebug(30003) <<  "current active part is " << d->m_activePart << endl;
 
   if ( d->m_activePart && d->m_activePart == newPart && !d->m_splitted )
   {
-    //kdDebug(30003) << "no need to change the GUI" << endl;
+    //kDebug(30003) << "no need to change the GUI" << endl;
     return;
   }
 
@@ -1497,7 +1497,7 @@ void KoMainWindow::slotActivePartChanged( KParts::Part *newPart )
   {
     d->m_activeView = (KoView *)d->m_manager->activeWidget();
     d->m_activePart = newPart;
-    //kdDebug(30003) <<  "new active part is " << d->m_activePart << endl;
+    //kDebug(30003) <<  "new active part is " << d->m_activePart << endl;
 
     factory->addClient( d->m_activeView );
 
@@ -1529,7 +1529,7 @@ void KoMainWindow::slotActivePartChanged( KParts::Part *newPart )
           d->m_toolbarList.append( act );
       }
       else
-          kdWarning(30003) << "Toolbar list contains a " << it.current()->className() << " which is not a toolbar!" << endl;
+          kWarning(30003) << "Toolbar list contains a " << it.current()->className() << " which is not a toolbar!" << endl;
     }
     plugActionList( "toolbarlist", d->m_toolbarList );
 
@@ -1614,11 +1614,11 @@ void KoMainWindow::slotEmailFile()
         urls.append( fileURL );
     }
 
-    kdDebug(30003) << "(" << fileURL <<")" << endl;
+    kDebug(30003) << "(" << fileURL <<")" << endl;
 
     if (!fileURL.isEmpty())
     {
-        kapp->invokeMailer(QString::null, QString::null, QString::null, theSubject,
+        KToolInvocation::invokeMailer(QString::null, QString::null, QString::null, theSubject,
                             QString::null, //body
                             QString::null,
                             urls); // attachments
@@ -1659,7 +1659,7 @@ void KoMainWindow::slotReloadFile()
 
 void KoMainWindow::slotImportFile()
 {
-    kdDebug(30003) << "slotImportFile()" << endl;
+    kDebug(30003) << "slotImportFile()" << endl;
 
     d->m_isImporting = true;
     slotFileOpen();
@@ -1668,7 +1668,7 @@ void KoMainWindow::slotImportFile()
 
 void KoMainWindow::slotExportFile()
 {
-    kdDebug(30003) << "slotExportFile()" << endl;
+    kDebug(30003) << "slotExportFile()" << endl;
 
     d->m_isExporting = true;
     slotFileSaveAs();
@@ -1691,3 +1691,4 @@ void KoMainWindow::setDocToOpen( KoDocument *doc )
 }
 
 #include <KoMainWindow.moc>
+#include <ktoolinvocation.h>

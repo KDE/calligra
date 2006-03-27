@@ -73,14 +73,14 @@ QString KoPicture::uniquePictureId() const
 
 KoPicture& KoPicture::operator=( const KoPicture &other )
 {
-    //kdDebug(30003) << "KoPicture::= before" << endl;
+    //kDebug(30003) << "KoPicture::= before" << endl;
     if (other.m_sharedData)
         other.linkSharedData();
     if (m_sharedData)
         unlinkSharedData();
     m_sharedData=other.m_sharedData;
     m_key=other.m_key;
-    //kdDebug(30003) << "KoPicture::= after" << endl;
+    //kDebug(30003) << "KoPicture::= after" << endl;
     return *this;
 }
 
@@ -139,7 +139,7 @@ void KoPicture::draw(QPainter& painter, int x, int y, int width, int height, int
     else
     {
         // Draw a white box
-        kdWarning(30003) << "Drawing white rectangle! (KoPicture::draw)" << endl;
+        kWarning(30003) << "Drawing white rectangle! (KoPicture::draw)" << endl;
         painter.save();
         painter.setBrush(QColor(255, 255, 255));
         painter.drawRect(x,y,width,height);
@@ -149,10 +149,10 @@ void KoPicture::draw(QPainter& painter, int x, int y, int width, int height, int
 
 bool KoPicture::loadXpm(QIODevice* io)
 {
-    kdDebug(30003) << "KoPicture::loadXpm" << endl;
+    kDebug(30003) << "KoPicture::loadXpm" << endl;
     if (!io)
     {
-        kdError(30003) << "No QIODevice!" << endl;
+        kError(30003) << "No QIODevice!" << endl;
         return false;
     }
     createSharedData();
@@ -202,7 +202,7 @@ QString KoPicture::getMimeType(void) const
 
 bool KoPicture::load(QIODevice* io, const QString& extension)
 {
-    kdDebug(30003) << "KoPicture::load(QIODevice*, const QString&) " << extension << endl;
+    kDebug(30003) << "KoPicture::load(QIODevice*, const QString&) " << extension << endl;
     createSharedData();
 
     return m_sharedData->load(io,extension);
@@ -210,7 +210,7 @@ bool KoPicture::load(QIODevice* io, const QString& extension)
 
 bool KoPicture::loadFromFile(const QString& fileName)
 {
-    kdDebug(30003) << "KoPicture::loadFromFile " << fileName << endl;
+    kDebug(30003) << "KoPicture::loadFromFile " << fileName << endl;
     createSharedData();
     return m_sharedData->loadFromFile(fileName);
 }

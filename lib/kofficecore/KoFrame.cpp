@@ -30,7 +30,7 @@
 #include <kcursor.h>
 #include <kdebug.h>
 
-#define QMAX32767(a,b) QMAX(QMAX(32767,a),b)
+#define qMax32767(a,b) qMax(qMax(32767,a),b)
 
 class KoFramePrivate
 {
@@ -101,13 +101,13 @@ void KoFrame::setState( State s )
   if ( d->m_view )
   {
       /*
-      kdDebug(30003) << "KoFrame::setView setMaximumSize "
-              << "QMAX32767(" << d->m_view->maximumWidth() + 2 * border() << "," << d->m_view->maximumWidth() << "), "
-              << "QMAX32767(" << d->m_view->maximumHeight() + 2 * border() << "," <<  d->m_view->maximumHeight() << ")"
+      kDebug(30003) << "KoFrame::setView setMaximumSize "
+              << "qMax32767(" << d->m_view->maximumWidth() + 2 * border() << "," << d->m_view->maximumWidth() << "), "
+              << "qMax32767(" << d->m_view->maximumHeight() + 2 * border() << "," <<  d->m_view->maximumHeight() << ")"
               << endl;
       */
-      setMaximumSize( QMAX32767( d->m_view->maximumWidth() + 2 * border(), d->m_view->maximumWidth() ),
-		      QMAX32767( d->m_view->maximumHeight() + 2 * border(), d->m_view->maximumHeight() ) );
+      setMaximumSize( qMax32767( d->m_view->maximumWidth() + 2 * border(), d->m_view->maximumWidth() ),
+		      qMax32767( d->m_view->maximumHeight() + 2 * border(), d->m_view->maximumHeight() ) );
       setMinimumSize( d->m_view->minimumWidth() + leftBorder() + rightBorder(),
 		      d->m_view->minimumHeight() + topBorder() + bottomBorder() );
   }
@@ -244,7 +244,7 @@ void KoFrame::mousePressEvent( QMouseEvent* ev )
   //  if ( d->m_state == Active )
   //    d->m_mode = 0;
 
-  kdDebug(30003) << "---- MODE=" << d->m_mode << endl;
+  kDebug(30003) << "---- MODE=" << d->m_mode << endl;
 
   d->m_mousePressPos = mapToParent( ev->pos() );
   d->m_framePos = mapToParent( QPoint( 0, 0 ) );
@@ -262,63 +262,63 @@ void KoFrame::mouseMoveEvent( QMouseEvent* ev )
       // The other modes change the geometry so they call resizeEvent.
       // This one doesn't, so it has to emit geometryChangedby itself.
       emit geometryChanged();
-      //kdDebug() << "KoFrame::mouseMoveEvent koFrame position is " << x() << "," << y() << endl;
+      //kDebug() << "KoFrame::mouseMoveEvent koFrame position is " << x() << "," << y() << endl;
   }
   else if ( d->m_mode == 1 )
   {
       QPoint p = parentWidget()->mapFromGlobal( ev->globalPos() );
-      int w = QMIN( QMAX( d->m_width + d->m_mousePressPos.x() - p.x(), minimumWidth() ), maximumWidth() );
-      int h = QMIN( QMAX( d->m_height + d->m_mousePressPos.y() - p.y(), minimumHeight() ), maximumHeight() );
+      int w = qMin( qMax( d->m_width + d->m_mousePressPos.x() - p.x(), minimumWidth() ), maximumWidth() );
+      int h = qMin( qMax( d->m_height + d->m_mousePressPos.y() - p.y(), minimumHeight() ), maximumHeight() );
       setGeometry( d->m_framePos.x() - w + d->m_width,
 		   d->m_framePos.y() - h + d->m_height, w, h );
   }
   else if ( d->m_mode == 2 )
   {
     QPoint p = parentWidget()->mapFromGlobal( ev->globalPos() );
-    int w = QMIN( QMAX( d->m_width + d->m_mousePressPos.x() - p.x(), minimumWidth() ), maximumWidth() );
-    int h = QMIN( QMAX( d->m_height - d->m_mousePressPos.y() + p.y(), minimumHeight() ), maximumHeight() );
+    int w = qMin( qMax( d->m_width + d->m_mousePressPos.x() - p.x(), minimumWidth() ), maximumWidth() );
+    int h = qMin( qMax( d->m_height - d->m_mousePressPos.y() + p.y(), minimumHeight() ), maximumHeight() );
     setGeometry( d->m_framePos.x() - w + d->m_width,
 		 d->m_framePos.y(), w, h );
   }
   else if ( d->m_mode == 3 )
   {
     QPoint p = parentWidget()->mapFromGlobal( ev->globalPos() );
-    int w = QMIN( QMAX( d->m_width - d->m_mousePressPos.x() + p.x(), minimumWidth() ), maximumWidth() );
-    int h = QMIN( QMAX( d->m_height - d->m_mousePressPos.y() + p.y(), minimumHeight() ), maximumHeight() );
+    int w = qMin( qMax( d->m_width - d->m_mousePressPos.x() + p.x(), minimumWidth() ), maximumWidth() );
+    int h = qMin( qMax( d->m_height - d->m_mousePressPos.y() + p.y(), minimumHeight() ), maximumHeight() );
     resize( w, h );
   }
   else if ( d->m_mode == 4 )
   {
     QPoint p = parentWidget()->mapFromGlobal( ev->globalPos() );
-    int w = QMIN( QMAX( d->m_width - d->m_mousePressPos.x() + p.x(), minimumWidth() ), maximumWidth() );
-    int h = QMIN( QMAX( d->m_height + d->m_mousePressPos.y() - p.y(), minimumHeight() ), maximumHeight() );
+    int w = qMin( qMax( d->m_width - d->m_mousePressPos.x() + p.x(), minimumWidth() ), maximumWidth() );
+    int h = qMin( qMax( d->m_height + d->m_mousePressPos.y() - p.y(), minimumHeight() ), maximumHeight() );
     setGeometry( d->m_framePos.x(),
 		 d->m_framePos.y() - h + d->m_height, w, h );
   }
   else if ( d->m_mode == 5 )
   {
     QPoint p = parentWidget()->mapFromGlobal( ev->globalPos() );
-    int h = QMIN( QMAX( d->m_height + d->m_mousePressPos.y() - p.y(), minimumHeight() ), maximumHeight() );
+    int h = qMin( qMax( d->m_height + d->m_mousePressPos.y() - p.y(), minimumHeight() ), maximumHeight() );
     setGeometry( d->m_framePos.x(),
 		 d->m_framePos.y() - h + d->m_height, d->m_width, h );
   }
   else if ( d->m_mode == 6 )
   {
     QPoint p = parentWidget()->mapFromGlobal( ev->globalPos() );
-    int h = QMIN( QMAX( d->m_height - d->m_mousePressPos.y() + p.y(), minimumHeight() ), maximumHeight() );
+    int h = qMin( qMax( d->m_height - d->m_mousePressPos.y() + p.y(), minimumHeight() ), maximumHeight() );
     resize( d->m_width, h );
   }
   else if ( d->m_mode == 7 )
   {
     QPoint p = parentWidget()->mapFromGlobal( ev->globalPos() );
-    int w = QMIN( QMAX( d->m_width + d->m_mousePressPos.x() - p.x(), minimumWidth() ), maximumWidth() );
+    int w = qMin( qMax( d->m_width + d->m_mousePressPos.x() - p.x(), minimumWidth() ), maximumWidth() );
     setGeometry( d->m_framePos.x() - w + d->m_width,
 		 d->m_framePos.y(), w, d->m_height );
   }
   else if ( d->m_mode == 8 )
   {
     QPoint p = parentWidget()->mapFromGlobal( ev->globalPos() );
-    int w = QMIN( QMAX( d->m_width - d->m_mousePressPos.x() + p.x(), minimumWidth() ), maximumWidth() );
+    int w = qMin( qMax( d->m_width - d->m_mousePressPos.x() + p.x(), minimumWidth() ), maximumWidth() );
     resize( w, d->m_height );
   }
   else if ( d->m_state == Selected || d->m_state == Active )
@@ -333,13 +333,13 @@ void KoFrame::mouseMoveEvent( QMouseEvent* ev )
     QRect r8( width()- 5, height() / 2 - 3, 5, 5 );
 
     if ( r1.contains( ev->pos() ) || r3.contains( ev->pos() ) )
-      setCursor( Qt::sizeFDiagCursor );
+      setCursor( Qt::SizeFDiagCursor );
     else if ( r2.contains( ev->pos() ) || r4.contains( ev->pos() ) )
-      setCursor( Qt::sizeBDiagCursor );
+      setCursor( Qt::SizeBDiagCursor );
     else if ( r5.contains( ev->pos() ) || r6.contains( ev->pos() ) )
-      setCursor( Qt::sizeVerCursor );
+      setCursor( Qt::SizeHorCursor );
     else if ( r7.contains( ev->pos() ) || r8.contains( ev->pos() ) )
-      setCursor( Qt::sizeHorCursor );
+      setCursor( Qt::SizeHorCursor );
     else
       setCursor( KCursor::handCursor() );
   }
@@ -369,7 +369,7 @@ bool KoFrame::eventFilter( QObject* obj, QEvent* ev )
 {
   if ( obj == d->m_view && KParts::PartActivateEvent::test( ev ) )
   {
-    kdDebug(30003) << "Activate event"<< endl;
+    kDebug(30003) << "Activate event"<< endl;
     KParts::PartActivateEvent* e = (KParts::PartActivateEvent*)ev;
     if ( e->part() == (KParts::Part *)d->m_view->koDocument() )
     {
@@ -381,7 +381,7 @@ bool KoFrame::eventFilter( QObject* obj, QEvent* ev )
   }
   else if ( obj == d->m_view && KParts::PartSelectEvent::test( ev ) )
   {
-    kdDebug(30003) << "Selected event" << endl;
+    kDebug(30003) << "Selected event" << endl;
     KParts::PartSelectEvent* e = (KParts::PartSelectEvent*)ev;
     if ( e->part() == (KParts::Part *)d->m_view->koDocument() )
     {

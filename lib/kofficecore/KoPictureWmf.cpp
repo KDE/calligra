@@ -61,19 +61,19 @@ bool KoPictureWmf::isNull(void) const
 void KoPictureWmf::drawQPicture(Q3Picture& clipart, QPainter& painter,
     int x, int y, int width, int height, int sx, int sy, int sw, int sh)
 {
-    kdDebug(30003) << "Drawing KoPictureWmf " << this << endl;
-    kdDebug(30003) << "  x=" << x << " y=" << y << " width=" << width << " height=" << height << endl;
-    kdDebug(30003) << "  sx=" << sx << " sy=" << sy << " sw=" << sw << " sh=" << sh << endl;
+    kDebug(30003) << "Drawing KoPictureWmf " << this << endl;
+    kDebug(30003) << "  x=" << x << " y=" << y << " width=" << width << " height=" << height << endl;
+    kDebug(30003) << "  sx=" << sx << " sy=" << sy << " sw=" << sw << " sh=" << sh << endl;
     painter.save();
     // Thanks to Harri, Qt3 makes it much easier than Qt2 ;)
     QRect br = clipart.boundingRect();
-    kdDebug(30003) << "  Bounding rect. " << br << endl;
+    kDebug(30003) << "  Bounding rect. " << br << endl;
 
     painter.translate(x,y); // Translating must be done before scaling!
     if ( br.width() && br.height() )
         painter.scale(double(width)/double(br.width()),double(height)/double(br.height()));
     else
-        kdWarning(30003) << "Null bounding rectangle: " << br.width() << " x " << br.height() << endl;
+        kWarning(30003) << "Null bounding rectangle: " << br.width() << " x " << br.height() << endl;
     painter.drawPicture(0,0,clipart);
     painter.restore();
 }
@@ -86,13 +86,13 @@ void KoPictureWmf::draw(QPainter& painter, int x, int y, int width, int height, 
 bool KoPictureWmf::loadData(const QByteArray& array, const QString& /* extension */)
 {
     // Second, create the original clipart
-    kdDebug(30003) << "Trying to load clipart... (Size:" << array.size() << ")" << endl;
+    kDebug(30003) << "Trying to load clipart... (Size:" << array.size() << ")" << endl;
     m_rawData=array;
 
     KoWmfPaint wmf;
     if (!wmf.load(array))
     {
-        kdWarning(30003) << "Loading WMF has failed! (KoPictureWmf::load)" << endl;
+        kWarning(30003) << "Loading WMF has failed! (KoPictureWmf::load)" << endl;
         return false;
     }
     m_originalSize = wmf.boundingRect().size();

@@ -37,7 +37,7 @@
 #include <kpushbutton.h>
 #include <kiconloader.h>
 #include <kdebug.h>
-#include <klistview.h>
+#include <k3listview.h>
 
 #include "KoFilterManager.h"
 #include "KoTemplates.h"
@@ -50,7 +50,7 @@
 class KoSectionListItem : public Q3ListViewItem
 {
   public:
-    KoSectionListItem(KListView* listView, const QString& name, int sortWeight, int widgetIndex = -1)
+    KoSectionListItem(K3ListView* listView, const QString& name, int sortWeight, int widgetIndex = -1)
       : Q3ListViewItem(listView, name), m_sortWeight(sortWeight), m_widgetIndex(widgetIndex)
     {
     }

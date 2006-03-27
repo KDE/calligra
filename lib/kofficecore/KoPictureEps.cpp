@@ -75,7 +75,7 @@ QImage KoPictureEps::scaleWithGhostScript(const QSize& size, const int resolutio
 {
     if (!m_boundingBox.width() || !m_boundingBox.height())
     {
-        kdDebug(30003) << "EPS image has a null size! (in KoPictureEps::scaleWithGhostScript)" << endl;
+        kDebug(30003) << "EPS image has a null size! (in KoPictureEps::scaleWithGhostScript)" << endl;
         return QImage();
     }
 
@@ -97,7 +97,7 @@ QImage KoPictureEps::scaleWithGhostScript(const QSize& size, const int resolutio
 
     }
 
-    kdError(30003) << "Image from GhostScript cannot be loaded (in KoPictureEps::scaleWithGhostScript)" << endl;
+    kError(30003) << "Image from GhostScript cannot be loaded (in KoPictureEps::scaleWithGhostScript)" << endl;
     return img;
 }
 
@@ -106,14 +106,14 @@ QImage KoPictureEps::scaleWithGhostScript(const QSize& size, const int resolutio
 int KoPictureEps::tryScaleWithGhostScript(QImage &image, const QSize& size, const int resolutionx, const int resolutiony, const char* device )
 // Based on the code of the file kdelibs/kimgio/eps.cpp
 {
-    kdDebug(30003) << "Sampling with GhostScript, using device \"" << device << "\" (in KoPictureEps::tryScaleWithGhostScript)" << endl;
+    kDebug(30003) << "Sampling with GhostScript, using device \"" << device << "\" (in KoPictureEps::tryScaleWithGhostScript)" << endl;
 
     KTempFile tmpFile;
     tmpFile.setAutoDelete(true);
 
     if ( tmpFile.status() )
     {
-        kdError(30003) << "No KTempFile! (in KoPictureEps::tryScaleWithGhostScript)" << endl;
+        kError(30003) << "No KTempFile! (in KoPictureEps::tryScaleWithGhostScript)" << endl;
         return 0; // error
     }
 
@@ -155,7 +155,7 @@ int KoPictureEps::tryScaleWithGhostScript(QImage &image, const QSize& size, cons
 
     if ( ghostfd == 0 )
     {
-        kdError(30003) << "No connection to GhostScript (in KoPictureEps::tryScaleWithGhostScript)" << endl;
+        kError(30003) << "No connection to GhostScript (in KoPictureEps::tryScaleWithGhostScript)" << endl;
         return 0; // error
     }
 
@@ -177,17 +177,17 @@ int KoPictureEps::tryScaleWithGhostScript(QImage &image, const QSize& size, cons
     }
     if ( image.size() != size ) // this can happen due to rounding problems
     {
-        //kdDebug(30003) << "fixing size to " << size.width() << "x" << size.height()
+        //kDebug(30003) << "fixing size to " << size.width() << "x" << size.height()
         //          << " (was " << image.width() << "x" << image.height() << ")" << endl;
         image = image.scale( size ); // hmm, smoothScale instead?
     }
-    kdDebug(30003) << "Image parameters: " << image.width() << "x" << image.height() << "x" << image.depth() << endl;
+    kDebug(30003) << "Image parameters: " << image.width() << "x" << image.height() << "x" << image.depth() << endl;
     return 1; // success
 }
 
 void KoPictureEps::scaleAndCreatePixmap(const QSize& size, bool fastMode, const int resolutionx, const int resolutiony )
 {
-    kdDebug(30003) << "KoPictureEps::scaleAndCreatePixmap " << size << " " << (fastMode?QString("fast"):QString("slow"))
+    kDebug(30003) << "KoPictureEps::scaleAndCreatePixmap " << size << " " << (fastMode?QString("fast"):QString("slow"))
         << " resolutionx: " << resolutionx << " resolutiony: " << resolutiony << endl;
     if ((size==m_cachedSize)
         && ((fastMode) || (!m_cacheIsInFastMode)))
@@ -196,21 +196,21 @@ void KoPictureEps::scaleAndCreatePixmap(const QSize& size, bool fastMode, const 
         // and:
         // - we are in fast mode (We do not care if the re-size was done slowly previously)
         // - the re-size was already done in slow mode
-        kdDebug(30003) << "Already cached!" << endl;
+        kDebug(30003) << "Already cached!" << endl;
         return;
     }
 
     // Slow mode can be very slow, especially at high zoom levels -> configurable
     if ( !isSlowResizeModeAllowed() )
     {
-        kdDebug(30003) << "User has disallowed slow mode!" << endl;
+        kDebug(30003) << "User has disallowed slow mode!" << endl;
         fastMode = true;
     }
 
     // We cannot use fast mode, if nothing was ever cached.
     if ( fastMode && !m_cachedSize.isEmpty())
     {
-        kdDebug(30003) << "Fast scaling!" << endl;
+        kDebug(30003) << "Fast scaling!" << endl;
         // Slower than caching a QImage, but faster than re-sampling!
         QImage image( m_cachedPixmap.convertToImage() );
         m_cachedPixmap=image.scale( size );
@@ -222,15 +222,15 @@ void KoPictureEps::scaleAndCreatePixmap(const QSize& size, bool fastMode, const 
         QTime time;
         time.start();
 
-        QApplication::setOverrideCursor( Qt::waitCursor );
+        QApplication::setOverrideCursor( Qt::WaitCursor );
         m_cachedPixmap = scaleWithGhostScript( size, resolutionx, resolutiony );
         QApplication::restoreOverrideCursor();
         m_cacheIsInFastMode=false;
         m_cachedSize=size;
 
-        kdDebug(30003) << "Time: " << (time.elapsed()/1000.0) << " s" << endl;
+        kDebug(30003) << "Time: " << (time.elapsed()/1000.0) << " s" << endl;
     }
-    kdDebug(30003) << "New size: " << size << endl;
+    kDebug(30003) << "New size: " << size << endl;
 }
 
 void KoPictureEps::draw(QPainter& painter, int x, int y, int width, int height, int sx, int sy, int sw, int sh, bool fastMode)
@@ -239,14 +239,14 @@ void KoPictureEps::draw(QPainter& painter, int x, int y, int width, int height, 
         return;
 
     QSize screenSize( width, height );
-    //kdDebug() << "KoPictureEps::draw screenSize=" << screenSize.width() << "x" << screenSize.height() << endl;
+    //kDebug() << "KoPictureEps::draw screenSize=" << screenSize.width() << "x" << screenSize.height() << endl;
 
     Q3PaintDeviceMetrics metrics (painter.device());
-    kdDebug(30003) << "Metrics: X: " << metrics.logicalDpiX() << " x Y: " << metrics.logicalDpiX() << " (in KoPictureEps::draw)" << endl;
+    kDebug(30003) << "Metrics: X: " << metrics.logicalDpiX() << " x Y: " << metrics.logicalDpiX() << " (in KoPictureEps::draw)" << endl;
 
     if ( painter.device()->isExtDev() ) // Is it an external device (i.e. printer)
     {
-        kdDebug(30003) << "Drawing for a printer (in KoPictureEps::draw)" << endl;
+        kDebug(30003) << "Drawing for a printer (in KoPictureEps::draw)" << endl;
         // For printing, always re-sample the image, as a printer has never the same resolution than a display.
         QImage image( scaleWithGhostScript( screenSize, metrics.logicalDpiX(), metrics.logicalDpiY() ) );
         // sx,sy,sw,sh is meant to be used as a cliprect on the pixmap, but drawImage
@@ -265,21 +265,21 @@ void KoPictureEps::draw(QPainter& painter, int x, int y, int width, int height, 
 
 bool KoPictureEps::extractPostScriptStream( void )
 {
-    kdDebug(30003) << "KoPictureEps::extractPostScriptStream" << endl;
+    kDebug(30003) << "KoPictureEps::extractPostScriptStream" << endl;
     QDataStream data( m_rawData, QIODevice::ReadOnly );
     data.setByteOrder( QDataStream::LittleEndian );
-    Q_UINT32 magic, offset, length;
+    quint32 magic, offset, length;
     data >> magic;
     data >> offset;
     data >> length;
     if ( !length )
     {
-        kdError(30003) << "Length of PS stream is zero!" << endl;
+        kError(30003) << "Length of PS stream is zero!" << endl;
         return false;
     }
     if ( offset+length>m_rawData.size() )
     {
-        kdError(30003) << "Data stream of the EPSF file is longer than file: " << offset << "+" << length << ">" << m_rawData.size() << endl;
+        kError(30003) << "Data stream of the EPSF file is longer than file: " << offset << "+" << length << ">" << m_rawData.size() << endl;
         return false;
     }
     m_psStreamStart = offset;
@@ -290,7 +290,7 @@ bool KoPictureEps::extractPostScriptStream( void )
 QString KoPictureEps::readLine( const QByteArray& array, const uint start, const uint length, uint& pos, bool& lastCharWasCr )
 {
     QString strLine;
-    const uint finish = kMin( start + length, array.size() );
+    const uint finish = qMin( start + length, array.size() );
     for ( ; pos < finish; ++pos ) // We are starting at pos
     {
         const char ch = array[ pos ]; // Read one character
@@ -333,13 +333,13 @@ QString KoPictureEps::readLine( const QByteArray& array, const uint start, const
 bool KoPictureEps::loadData(const QByteArray& array, const QString& /* extension */ )
 {
 
-    kdDebug(30003) << "KoPictureEps::load" << endl;
+    kDebug(30003) << "KoPictureEps::load" << endl;
     // First, read the raw data
     m_rawData=array;
 
     if (m_rawData.isNull())
     {
-        kdError(30003) << "No data was loaded!" << endl;
+        kError(30003) << "No data was loaded!" << endl;
         return false;
     }
 
@@ -360,10 +360,10 @@ bool KoPictureEps::loadData(const QByteArray& array, const QString& /* extension
     bool lastWasCr = false; // Was the last character of the line a carriage return?
     uint pos = m_psStreamStart; // We start to search the bounding box at the start of the PostScript stream
     QString line( readLine( m_rawData, m_psStreamStart, m_psStreamLength, pos, lastWasCr ) );
-    kdDebug(30003) << "Header: " << line << endl;
+    kDebug(30003) << "Header: " << line << endl;
     if (!line.startsWith("%!"))
     {
-        kdError(30003) << "Not a PostScript file!" << endl;
+        kError(30003) << "Not a PostScript file!" << endl;
         return false;
     }
     QRect rect;
@@ -372,7 +372,7 @@ bool KoPictureEps::loadData(const QByteArray& array, const QString& /* extension
     {
         ++pos; // Get over the previous line end (CR or LF)
         line = readLine( m_rawData,  m_psStreamStart, m_psStreamLength, pos, lastWasCr );
-        kdDebug(30003) << "Checking line: " << line << endl;
+        kDebug(30003) << "Checking line: " << line << endl;
         // ### TODO: it seems that the bounding box can be delayed with "(atend)" in the trailer (GhostScript 7.07 does not support it either.)
         if (line.startsWith("%%BoundingBox:"))
         {
@@ -386,7 +386,7 @@ bool KoPictureEps::loadData(const QByteArray& array, const QString& /* extension
     }
     if ( !lineIsBoundingBox )
     {
-        kdError(30003) << "KoPictureEps::load: could not find a bounding box!" << endl;
+        kError(30003) << "KoPictureEps::load: could not find a bounding box!" << endl;
         return false;
     }
     // Floating point values are not allowed in a Bounding Box, but ther are many such files out there...
@@ -396,17 +396,17 @@ bool KoPictureEps::loadData(const QByteArray& array, const QString& /* extension
         // ### TODO: it might be an "(atend)" and the bounding box is in the trailer
         // (but GhostScript 7.07 does not support a bounding box in the trailer.)
         // Note: in Trailer, it is the last BoundingBox that counts not the first!
-        kdError(30003) << "Not standard bounding box: " << line << endl;
+        kError(30003) << "Not standard bounding box: " << line << endl;
         return false;
     }
-    kdDebug(30003) << "Reg. Exp. Found: " << exp.capturedTexts() << endl;
+    kDebug(30003) << "Reg. Exp. Found: " << exp.capturedTexts() << endl;
     rect.setLeft((int)exp.cap(1).toDouble());
     rect.setTop((int)exp.cap(2).toDouble());
     rect.setRight((int)exp.cap(3).toDouble());
     rect.setBottom((int)exp.cap(4).toDouble());
     m_boundingBox=rect;
     m_originalSize=rect.size();
-    kdDebug(30003) << "Rect: " << rect << " Size: "  << m_originalSize << endl;
+    kDebug(30003) << "Rect: " << rect << " Size: "  << m_originalSize << endl;
     return true;
 }
 

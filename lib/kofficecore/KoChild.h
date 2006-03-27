@@ -32,7 +32,7 @@
  *
  * In detail it handles size, matrix operations and can give you
  * a clip region. It can deal with scaling, rotation etc. because it
- * makes heavy usage of QWMatrix.
+ * makes heavy usage of QMatrix.
  *
  * After applying the matrix, viewGeometry() applies zooming, but can be
  * reimplemented to also apply e.g. some translation by the application
@@ -54,8 +54,8 @@ public:
    *
    * @see #gadgetHitTest
    */
-  enum Gadget { NoGadget, Qt::TopLeftCorner, TopMid, Qt::TopRightCorner, MidLeft, MidRight,
-		Qt::BottomLeftCorner, BottomMid, Qt::BottomRightCorner, Move };
+  enum Gadget { NoGadget, TopLeftCorner, TopMid, TopRightCorner, MidLeft, MidRight,
+		BottomLeftCorner, BottomMid, BottomRightCorner, Move };
 
   KoChild( QObject *parent = 0, const char *name = 0 );
   virtual ~KoChild();

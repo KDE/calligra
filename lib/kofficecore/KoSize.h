@@ -206,12 +206,12 @@ inline const KoSize operator/( const KoSize &s, double c )
 
 inline KoSize KoSize::expandedTo( const KoSize & otherSize ) const
 {
-  return KoSize( QMAX(wd,otherSize.wd), QMAX(ht,otherSize.ht) );
+  return KoSize( qMax(wd,otherSize.wd), qMax(ht,otherSize.ht) );
 }
 
 inline KoSize KoSize::boundedTo( const KoSize & otherSize ) const
 {
-  return KoSize( QMIN(wd,otherSize.wd), QMIN(ht,otherSize.ht) );
+  return KoSize( qMin(wd,otherSize.wd), qMin(ht,otherSize.ht) );
 }
 
 inline QSize KoSize::toQSize() const
@@ -220,7 +220,7 @@ inline QSize KoSize::toQSize() const
 }
 
 /******************************
-  kdDebug support
+  kDebug support
 *******************************/
 #include <kdebug.h>
 

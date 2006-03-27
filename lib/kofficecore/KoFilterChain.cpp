@@ -53,14 +53,14 @@ KoFilterChain::ChainLink::ChainLink( KoFilterChain* chain, KoFilterEntry::Ptr fi
 KoFilter::ConversionStatus KoFilterChain::ChainLink::invokeFilter( const ChainLink* const parentChainLink )
 {
     if ( !m_filterEntry ) {
-        kdError( 30500 ) << "This filter entry is null. Strange stuff going on." << endl;
+        kError( 30500 ) << "This filter entry is null. Strange stuff going on." << endl;
         return KoFilter::CreationError;
     }
 
     m_filter = m_filterEntry->createFilter( m_chain, 0, 0 );
 
     if ( !m_filter ) {
-        kdError( 30500 ) << "Couldn't create the filter." << endl;
+        kError( 30500 ) << "Couldn't create the filter." << endl;
         return KoFilter::CreationError;
     }
 
@@ -75,7 +75,7 @@ KoFilter::ConversionStatus KoFilterChain::ChainLink::invokeFilter( const ChainLi
 
 void KoFilterChain::ChainLink::dump() const
 {
-    kdDebug( 30500 ) << "   Link: " << m_filterEntry->service()->name() << endl;
+    kDebug( 30500 ) << "   Link: " << m_filterEntry->service()->name() << endl;
 }
 
 int KoFilterChain::ChainLink::lruPartIndex() const
@@ -157,7 +157,7 @@ KoFilter::ConversionStatus KoFilterChain::invokeChain()
     }
 
     if ( !m_chainLinks.current() ) {
-        kdWarning( 30500 ) << "Huh?? Found a null pointer in the chain" << endl;
+        kWarning( 30500 ) << "Huh?? Found a null pointer in the chain" << endl;
         return KoFilter::StupidError;
     }
 
@@ -188,7 +188,7 @@ QString KoFilterChain::inputFile()
     if ( m_inputQueried == File )
         return m_inputFile;
     else if ( m_inputQueried != Nil ) {
-        kdWarning( 30500 ) << "You already asked for some different source." << endl;
+        kWarning( 30500 ) << "You already asked for some different source." << endl;
         return QString::null;
     }
     m_inputQueried = File;
@@ -212,12 +212,12 @@ QString KoFilterChain::outputFile()
     // sanity check: No embedded filter should ask for a plain file
     // ###### CHECK: This will break as soon as we support exporting embedding filters
     if ( filterManagerParentChain() )
-        kdWarning( 30500 )<< "An embedded filter has to use storageFile()!" << endl;
+        kWarning( 30500 )<< "An embedded filter has to use storageFile()!" << endl;
 
     if ( m_outputQueried == File )
         return m_outputFile;
     else if ( m_outputQueried != Nil ) {
-        kdWarning( 30500 ) << "You already asked for some different destination." << endl;
+        kWarning( 30500 ) << "You already asked for some different destination." << endl;
         return QString::null;
     }
     m_outputQueried = File;
@@ -256,7 +256,7 @@ KoStoreDevice* KoFilterChain::storageFile( const QString& name, KoStore::Mode mo
         return storageHelper( outputFile(), name, KoStore::Write,
                               &m_outputStorage, &m_outputStorageDevice );
     else {
-        kdWarning( 30500 ) << "Oooops, how did we get here? You already asked for a"
+        kWarning( 30500 ) << "Oooops, how did we get here? You already asked for a"
                            << " different source/destination?" << endl;
         return 0;
     }
@@ -267,7 +267,7 @@ KoDocument* KoFilterChain::inputDocument()
     if ( m_inputQueried == Document )
         return m_inputDocument;
     else if ( m_inputQueried != Nil ) {
-        kdWarning( 30500 ) << "You already asked for some different source." << endl;
+        kWarning( 30500 ) << "You already asked for some different source." << endl;
         return 0;
     }
 
@@ -287,14 +287,14 @@ KoDocument* KoFilterChain::outputDocument()
     // sanity check: No embedded filter should ask for a document
     // ###### CHECK: This will break as soon as we support exporting embedding filters
     if ( filterManagerParentChain() ) {
-        kdWarning( 30500 )<< "An embedded filter has to use storageFile()!" << endl;
+        kWarning( 30500 )<< "An embedded filter has to use storageFile()!" << endl;
         return 0;
     }
 
     if ( m_outputQueried == Document )
         return m_outputDocument;
     else if ( m_outputQueried != Nil ) {
-        kdWarning( 30500 ) << "You already asked for some different destination." << endl;
+        kWarning( 30500 ) << "You already asked for some different destination." << endl;
         return 0;
     }
 
@@ -311,11 +311,11 @@ KoDocument* KoFilterChain::outputDocument()
 
 void KoFilterChain::dump() const
 {
-    kdDebug( 30500 ) << "########## KoFilterChain with " << m_chainLinks.count() << " members:" << endl;
+    kDebug( 30500 ) << "########## KoFilterChain with " << m_chainLinks.count() << " members:" << endl;
     Q3PtrListIterator<ChainLink> it( m_chainLinks );
     for ( ; it.current(); ++it )
         it.current()->dump();
-    kdDebug( 30500 ) << "########## KoFilterChain (done) ##########" << endl;
+    kDebug( 30500 ) << "########## KoFilterChain (done) ##########" << endl;
 }
 
 KoFilterChain::KoFilterChain( const KoFilterManager* manager ) :
@@ -431,7 +431,7 @@ void KoFilterChain::finalizeIO()
     // Note: m_*input*Document as we already called manageIO()
     if ( m_inputDocument &&
          static_cast<KoFilterManager::Direction>( filterManagerDirection() ) == KoFilterManager::Export ) {
-        kdDebug( 30500 ) << "Saving the output document to the export file" << endl;
+        kDebug( 30500 ) << "Saving the output document to the export file" << endl;
         m_inputDocument->saveNativeFormat( filterManagerExportFile() );
         m_inputFile = filterManagerExportFile();
     }
@@ -440,7 +440,7 @@ void KoFilterChain::finalizeIO()
 bool KoFilterChain::createTempFile( KTempFile** tempFile, bool autoDelete )
 {
     if ( *tempFile ) {
-        kdError( 30500 ) << "Ooops, why is there already a temp file???" << endl;
+        kError( 30500 ) << "Ooops, why is there already a temp file???" << endl;
         return false;
     }
     *tempFile = new KTempFile();
@@ -503,7 +503,7 @@ KoStoreDevice* KoFilterChain::storageHelper( const QString& file, const QString&
     if ( file.isEmpty() )
         return 0;
     if ( *storage ) {
-        kdDebug( 30500 ) << "Uh-oh, we forgot to clean up..." << endl;
+        kDebug( 30500 ) << "Uh-oh, we forgot to clean up..." << endl;
         return 0;
     }
 
@@ -541,7 +541,7 @@ void KoFilterChain::storageInit( const QString& file, KoStore::Mode mode, KoStor
 KoStoreDevice* KoFilterChain::storageInitEmbedding( const QString& name )
 {
     if ( m_outputStorage ) {
-        kdWarning( 30500 ) << "Ooops! Something's really screwed here." << endl;
+        kWarning( 30500 ) << "Ooops! Something's really screwed here." << endl;
         return 0;
     }
 
@@ -568,7 +568,7 @@ KoStoreDevice* KoFilterChain::storageInitEmbedding( const QString& name )
     // and remember it for later!
     const int lruPartIndex = filterManagerParentChain()->m_chainLinks.current()->lruPartIndex();
     if ( lruPartIndex == -1 ) {
-        kdError( 30500 ) << "Huh! You want to use embedding features w/o inheriting KoEmbeddingFilter?" << endl;
+        kError( 30500 ) << "Huh! You want to use embedding features w/o inheriting KoEmbeddingFilter?" << endl;
         return storageCleanupHelper( &m_outputStorage );
     }
 
@@ -594,7 +594,7 @@ KoStoreDevice* KoFilterChain::storageCreateFirstStream( const QString& streamNam
         return 0;
 
     if ( *device ) {
-        kdDebug( 30500 ) << "Uh-oh, we forgot to clean up the storage device!" << endl;
+        kDebug( 30500 ) << "Uh-oh, we forgot to clean up the storage device!" << endl;
         ( *storage )->close();
         return storageCleanupHelper( storage );
     }
@@ -618,14 +618,14 @@ KoDocument* KoFilterChain::createDocument( const QString& file )
     url.setPath( file );
     KMimeType::Ptr t = KMimeType::findByURL( url, 0, true );
     if ( t->name() == KMimeType::defaultMimeType() ) {
-        kdError( 30500 ) << "No mimetype found for " << file << endl;
+        kError( 30500 ) << "No mimetype found for " << file << endl;
         return 0;
     }
 
     KoDocument *doc = createDocument( Q3CString( t->name().latin1() ) );
 
     if ( !doc || !doc->loadNativeFormat( file ) ) {
-        kdError( 30500 ) << "Couldn't load from the file" << endl;
+        kError( 30500 ) << "Couldn't load from the file" << endl;
         delete doc;
         return 0;
     }
@@ -638,12 +638,12 @@ KoDocument* KoFilterChain::createDocument( const Q3CString& mimeType )
 
     if (entry.isEmpty())
     {
-        kdError( 30500 ) << "Couldn't find a part that can handle mimetype " << mimeType << endl;
+        kError( 30500 ) << "Couldn't find a part that can handle mimetype " << mimeType << endl;
     }
     
     KoDocument* doc = entry.createDoc(); /*entries.first().createDoc();*/
     if ( !doc ) {
-        kdError( 30500 ) << "Couldn't create the document" << endl;
+        kError( 30500 ) << "Couldn't create the document" << endl;
         return 0;
     }
     return doc;
@@ -670,10 +670,10 @@ namespace KOffice {
     void Edge::dump( const Q3CString& indent ) const
     {
         if ( m_vertex )
-            kdDebug( 30500 ) << indent << "Edge -> '" << m_vertex->mimeType()
+            kDebug( 30500 ) << indent << "Edge -> '" << m_vertex->mimeType()
                              << "' (" << m_filterEntry->weight << ")" << endl;
         else
-            kdDebug( 30500 ) << indent << "Edge -> '(null)' ("
+            kDebug( 30500 ) << indent << "Edge -> '(null)' ("
                              << m_filterEntry->weight << ")" << endl;
     }
 
@@ -729,7 +729,7 @@ namespace KOffice {
 
     void Vertex::dump( const Q3CString& indent ) const
     {
-        kdDebug( 30500 ) << indent << "Vertex: " << m_mimeType << " (" << m_weight << "):" << endl;
+        kDebug( 30500 ) << indent << "Vertex: " << m_mimeType << " (" << m_weight << "):" << endl;
         const Q3CString i( indent + "   " );
         Q3PtrListIterator<Edge> it( m_edges );
         for ( ; it.current(); ++it )
@@ -792,12 +792,12 @@ namespace KOffice {
 
     void Graph::dump() const
     {
-        kdDebug( 30500 ) << "+++++++++ Graph::dump +++++++++" << endl;
-        kdDebug( 30500 ) << "From: " << m_from << endl;
+        kDebug( 30500 ) << "+++++++++ Graph::dump +++++++++" << endl;
+        kDebug( 30500 ) << "From: " << m_from << endl;
         Q3AsciiDictIterator<Vertex> it( m_vertices );
         for ( ; it.current(); ++it )
             it.current()->dump( "   " );
-        kdDebug( 30500 ) << "+++++++++ Graph::dump (done) +++++++++" << endl;
+        kDebug( 30500 ) << "+++++++++ Graph::dump (done) +++++++++" << endl;
     }
 
     // Query the trader and create the vertices and edges representing
@@ -855,7 +855,7 @@ namespace KOffice {
                 }
             }
             else
-                kdDebug( 30500 ) << "Filter: " << ( *it )->service()->name() << " doesn't apply." << endl;
+                kDebug( 30500 ) << "Filter: " << ( *it )->service()->name() << " doesn't apply." << endl;
         }
     }
 

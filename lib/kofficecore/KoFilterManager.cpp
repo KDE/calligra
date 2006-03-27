@@ -149,7 +149,7 @@ QString KoFilterManager::import( const QString& url, KoFilter::ConversionStatus&
     u.setPath( url );
     KMimeType::Ptr t = KMimeType::findByURL( u, 0, true );
     if ( t->name() == KMimeType::defaultMimeType() ) {
-        kdError(s_area) << "No mimetype found for " << url << endl;
+        kError(s_area) << "No mimetype found for " << url << endl;
         status = KoFilter::BadMimeType;
         return QString::null;
     }
@@ -158,7 +158,7 @@ QString KoFilterManager::import( const QString& url, KoFilter::ConversionStatus&
     if ( !m_graph.isValid() ) {
         bool userCancelled = false;
 
-        kdWarning(s_area) << "Can't open " << t->name () << ", trying filter chooser" << endl;
+        kWarning(s_area) << "Can't open " << t->name () << ", trying filter chooser" << endl;
         if ( m_document )
         {
 	    if ( !m_document->isAutoErrorHandlingEnabled() )
@@ -168,7 +168,7 @@ QString KoFilterManager::import( const QString& url, KoFilter::ConversionStatus&
 	    }
             Q3CString nativeFormat = m_document->nativeFormatMimeType ();
 
-            QApplication::setOverrideCursor( Qt::arrowCursor );
+            QApplication::setOverrideCursor( Qt::ArrowCursor );
             KoFilterChooser chooser(0,
                                     KoFilterManager::mimeFilter (nativeFormat, KoFilterManager::Import, m_document->extraNativeMimeTypes()),
                                     nativeFormat);
@@ -192,7 +192,7 @@ QString KoFilterManager::import( const QString& url, KoFilter::ConversionStatus&
 
         if (!m_graph.isValid())
         {
-            kdError(s_area) << "Couldn't create a valid graph for this source mimetype: "
+            kError(s_area) << "Couldn't create a valid graph for this source mimetype: "
                             << t->name() << endl;
             importErrorHelper( t->name(), userCancelled );
             status = KoFilter::BadConversionGraph;
@@ -214,13 +214,13 @@ QString KoFilterManager::import( const QString& url, KoFilter::ConversionStatus&
         }
     }
     else {
-        kdError(s_area) << "You aren't supposed to use import() from a filter!" << endl;
+        kError(s_area) << "You aren't supposed to use import() from a filter!" << endl;
         status = KoFilter::UsageError;
         return QString::null;
     }
 
     if ( !chain ) {
-        kdError(s_area) << "Couldn't create a valid filter chain!" << endl;
+        kError(s_area) << "Couldn't create a valid filter chain!" << endl;
         importErrorHelper( t->name() );
         status = KoFilter::BadConversionGraph;
         return QString::null;
@@ -265,7 +265,7 @@ KoFilter::ConversionStatus KoFilterManager::exp0rt( const QString& url, Q3CStrin
         }
     }
     else if ( !m_importUrlMimetypeHint.isEmpty() ) {
-        kdDebug(s_area) << "Using the mimetype hint: '" << m_importUrlMimetypeHint << "'" << endl;
+        kDebug(s_area) << "Using the mimetype hint: '" << m_importUrlMimetypeHint << "'" << endl;
         m_graph.setSourceMimeType( m_importUrlMimetypeHint );
     }
     else {
@@ -273,15 +273,15 @@ KoFilter::ConversionStatus KoFilterManager::exp0rt( const QString& url, Q3CStrin
         u.setPath( m_importUrl );
         KMimeType::Ptr t = KMimeType::findByURL( u, 0, true );
         if ( t->name() == KMimeType::defaultMimeType() ) {
-            kdError(s_area) << "No mimetype found for " << m_importUrl << endl;
+            kError(s_area) << "No mimetype found for " << m_importUrl << endl;
             return KoFilter::BadMimeType;
         }
         m_graph.setSourceMimeType( t->name().latin1() );
 
         if ( !m_graph.isValid() ) {
-            kdWarning(s_area) << "Can't open " << t->name () << ", trying filter chooser" << endl;
+            kWarning(s_area) << "Can't open " << t->name () << ", trying filter chooser" << endl;
 
-            QApplication::setOverrideCursor( Qt::arrowCursor );
+            QApplication::setOverrideCursor( Qt::ArrowCursor );
             KoFilterChooser chooser(0, KoFilterManager::mimeFilter ());
             if (chooser.exec ())
                 m_graph.setSourceMimeType (chooser.filterSelected ().latin1 ());
@@ -294,7 +294,7 @@ KoFilter::ConversionStatus KoFilterManager::exp0rt( const QString& url, Q3CStrin
 
     if (!m_graph.isValid ())
     {
-        kdError(s_area) << "Couldn't create a valid graph for this source mimetype." << endl;
+        kError(s_area) << "Couldn't create a valid graph for this source mimetype." << endl;
         if (!userCancelled) KMessageBox::error( 0L, i18n("Could not export file."), i18n("Missing Export Filter") );
         return KoFilter::BadConversionGraph;
     }
@@ -303,7 +303,7 @@ KoFilter::ConversionStatus KoFilterManager::exp0rt( const QString& url, Q3CStrin
         chain = m_graph.chain( this, mimeType );
 
     if ( !chain ) {
-        kdError(s_area) << "Couldn't create a valid filter chain to " << mimeType << " !" << endl;
+        kError(s_area) << "Couldn't create a valid filter chain to " << mimeType << " !" << endl;
         KMessageBox::error( 0L, i18n("Could not export file."), i18n("Missing Export Filter") );
         return KoFilter::BadConversionGraph;
     }
@@ -400,7 +400,7 @@ namespace  // in order not to mess with the global namespace ;)
             if ( impList.empty() || expList.empty() )
             {
                 // This filter cannot be used under these conditions
-                kdDebug( 30500 ) << "Filter: " << ( *it )->service()->name() << " ruled out" << endl;
+                kDebug( 30500 ) << "Filter: " << ( *it )->service()->name() << " ruled out" << endl;
                 continue;
             }
 
@@ -442,7 +442,7 @@ namespace  // in order not to mess with the global namespace ;)
                 }
             }
             else
-                kdDebug( 30500 ) << "Filter: " << ( *it )->service()->name() << " does not apply." << endl;
+                kDebug( 30500 ) << "Filter: " << ( *it )->service()->name() << " does not apply." << endl;
         }
     }
 
@@ -484,7 +484,7 @@ namespace  // in order not to mess with the global namespace ;)
 // graph this mimetype has a connection to.
 QStringList KoFilterManager::mimeFilter( const Q3CString& mimetype, Qt::Orientation direction, const QStringList& extraNativeMimeTypes )
 {
-    //kdDebug(s_area) << "mimetype=" << mimetype << " extraNativeMimeTypes=" << extraNativeMimeTypes << endl;
+    //kDebug(s_area) << "mimetype=" << mimetype << " extraNativeMimeTypes=" << extraNativeMimeTypes << endl;
     Q3AsciiDict<Vertex> vertices;
     buildGraph( vertices, direction );
 
@@ -500,7 +500,7 @@ QStringList KoFilterManager::mimeFilter( const Q3CString& mimetype, Qt::Orientat
     // Now look for filters which output each of those natives mimetypes
     for( QStringList::ConstIterator natit = nativeMimeTypes.begin(); natit != nativeMimeTypes.end(); ++natit ) {
         const QStringList outMimes = connected( vertices, (*natit).latin1() );
-        //kdDebug(s_area) << k_funcinfo << "output formats connected to mime " << *natit << " : " << outMimes << endl;
+        //kDebug(s_area) << k_funcinfo << "output formats connected to mime " << *natit << " : " << outMimes << endl;
         for ( QStringList::ConstIterator mit = outMimes.begin(); mit != outMimes.end(); ++mit )
             if ( lst.find( *mit ) == lst.end() ) // append only if not there already. Qt4: QSet<QString>?
                 lst.append( *mit );
@@ -553,18 +553,18 @@ bool KoFilterManager::filterAvailable( KoFilterEntry::Ptr entry )
     if ( entry->available != "check" )
         return true;
 
-    //kdDebug( 30500 ) << "Checking whether " << entry->service()->name() << " applies." << endl;
+    //kDebug( 30500 ) << "Checking whether " << entry->service()->name() << " applies." << endl;
     // generate some "unique" key
     QString key( entry->service()->name() );
     key += " - ";
     key += entry->service()->library();
 
     if ( !m_filterAvailable.contains( key ) ) {
-        //kdDebug( 30500 ) << "Not cached, checking..." << endl;
+        //kDebug( 30500 ) << "Not cached, checking..." << endl;
 
         KLibrary* library = KLibLoader::self()->library( QFile::encodeName( entry->service()->library() ) );
         if ( !library ) {
-            kdWarning( 30500 ) << "Huh?? Couldn't load the lib: "
+            kWarning( 30500 ) << "Huh?? Couldn't load the lib: "
                                << KLibLoader::self()->lastErrorMessage() << endl;
             m_filterAvailable[ key ] = false;
             return false;
@@ -576,7 +576,7 @@ bool KoFilterManager::filterAvailable( KoFilterEntry::Ptr entry )
         void* sym = library->symbol( symname );
         if ( !sym )
         {
-            kdWarning( 30500 ) << "The library " << library->name()
+            kWarning( 30500 ) << "The library " << library->name()
                                << " does not offer a check_" << library->name()
                                << " function." << endl;
             m_filterAvailable[ key ] = false;

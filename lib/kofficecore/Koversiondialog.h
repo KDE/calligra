@@ -24,7 +24,7 @@
 
 class QPushButton;
 class QToolButton;
-class KListView;
+class K3ListView;
 class Q3MultiLineEdit;
 
 class KoVersionDialog : public KDialogBase
@@ -46,7 +46,7 @@ protected:
     void init();
     void updateButton();
 
-    KListView * list;
+    K3ListView * list;
     QPushButton* m_pRemove;
     QPushButton* m_pAdd;
     QPushButton* m_pOpen;

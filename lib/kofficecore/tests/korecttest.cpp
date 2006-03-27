@@ -8,10 +8,10 @@
 bool check(QString txt, bool res, bool expected)
 {
   if (res == expected) {
-    kdDebug() << txt << " : checking '" << res << "' against expected value '" << expected << "'... " << "ok" << endl;
+    kDebug() << txt << " : checking '" << res << "' against expected value '" << expected << "'... " << "ok" << endl;
   }
   else {
-    kdDebug() << txt << " : checking '" << res << "' against expected value '" << expected << "'... " << "KO !" << endl;
+    kDebug() << txt << " : checking '" << res << "' against expected value '" << expected << "'... " << "KO !" << endl;
     exit(1);
   }
   return true;
@@ -24,10 +24,10 @@ bool check(QString txt, QString a, QString b)
   if (b.isEmpty())
      b = QString::null;
   if (a == b) {
-    kdDebug() << txt << " : checking '" << a << "' against expected value '" << b << "'... " << "ok" << endl;
+    kDebug() << txt << " : checking '" << a << "' against expected value '" << b << "'... " << "ok" << endl;
   }
   else {
-    kdDebug() << txt << " : checking '" << a << "' against expected value '" << b << "'... " << "KO !" << endl;
+    kDebug() << txt << " : checking '" << a << "' against expected value '" << b << "'... " << "KO !" << endl;
     exit(1);
   }
   return true;
@@ -46,7 +46,7 @@ int main(int argc, char *argv[])
   KoRect unionRect = rect | emptyRect;
   check( "Union is not null", unionRect.isNull(), false );
   check( "Union is not empty", unionRect.isEmpty(), false );
-  kdDebug() << unionRect << endl;
+  kDebug() << unionRect << endl;
 
   printf("\nTest OK !\n");
 }

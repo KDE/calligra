@@ -44,14 +44,14 @@ int main( int /*argc*/, char ** /*argv*/ )
     Q3ValueList<KoDocumentEntry>::ConstIterator partEnd( parts.end() );
 
     while ( partIt != partEnd ) {
-        //kdDebug() << ( *partIt ).service()->desktopEntryName() << endl;
+        //kDebug() << ( *partIt ).service()->desktopEntryName() << endl;
         QStringList nativeMimeTypes = ( *partIt ).service()->property( "X-KDE-ExtraNativeMimeTypes" ).toStringList();
         nativeMimeTypes += ( *partIt ).service()->property( "X-KDE-NativeMimeType" ).toString();
         QStringList::ConstIterator it = nativeMimeTypes.begin();
         QStringList::ConstIterator end = nativeMimeTypes.end();
         for ( ; it != end; ++it ) {
             QString key = *it;
-            //kdDebug() << "    " << key << endl;
+            //kDebug() << "    " << key << endl;
             if ( !key.isEmpty() ) {
                 output += "    \"";
                 output += key.latin1();
@@ -68,7 +68,7 @@ int main( int /*argc*/, char ** /*argv*/ )
     Q3ValueList<KoFilterEntry::Ptr>::ConstIterator end = filters.end();
 
     for ( ; it != end; ++it ) {
-        kdDebug() << "import " << ( *it )->import << " export " << ( *it )->export_ << endl;
+        kDebug() << "import " << ( *it )->import << " export " << ( *it )->export_ << endl;
         // First add the "starting points"
         QStringList::ConstIterator importIt = ( *it )->import.begin();
         QStringList::ConstIterator importEnd = ( *it )->import.end();

@@ -41,11 +41,11 @@ QString KoGenStyles::lookup( const KoGenStyle& style, const QString& name, int f
             KoGenStyle testStyle( style );
             const KoGenStyle* parentStyle = this->style( style.parentName() ); // ## linear search
             if( !parentStyle ) {
-                kdDebug(30003) << "KoGenStyles::lookup(" << name << "): parent style '" << style.parentName() << "' not found in collection" << endl;
+                kDebug(30003) << "KoGenStyles::lookup(" << name << "): parent style '" << style.parentName() << "' not found in collection" << endl;
             } else {
                 if ( testStyle.m_familyName != parentStyle->m_familyName )
                 {
-                    kdWarning(30003) << "KoGenStyles::lookup(" << name << ", family=" << testStyle.m_familyName << ") parent style '" << style.parentName() << "' has a different family: " << parentStyle->m_familyName << endl;
+                    kWarning(30003) << "KoGenStyles::lookup(" << name << ", family=" << testStyle.m_familyName << ") parent style '" << style.parentName() << "' has a different family: " << parentStyle->m_familyName << endl;
                 }
 
                 testStyle.m_parentName = parentStyle->m_parentName;
@@ -140,17 +140,17 @@ void KoGenStyles::markStyleForStylesXml( const QString& name )
 
 void KoGenStyles::dump()
 {
-    kdDebug() << "Style array:" << endl;
+    kDebug() << "Style array:" << endl;
     StyleArray::const_iterator it = m_styleArray.begin();
     const StyleArray::const_iterator end = m_styleArray.end();
     for ( ; it != end ; ++it ) {
-        kdDebug() << (*it).name << endl;
+        kDebug() << (*it).name << endl;
     }
     for ( NameMap::const_iterator it = m_styleNames.begin(); it != m_styleNames.end(); ++it ) {
-        kdDebug() << "style: " << it.key() << endl;
+        kDebug() << "style: " << it.key() << endl;
     }
     for ( NameMap::const_iterator it = m_autoStylesInStylesDotXml.begin(); it != m_autoStylesInStylesDotXml.end(); ++it ) {
-        kdDebug() << "auto style for style.xml: " << it.key() << endl;
+        kDebug() << "auto style for style.xml: " << it.key() << endl;
         const KoGenStyle* s = style( it.key() );
         Q_ASSERT( s );
         Q_ASSERT( s->autoStyleInStylesDotXml() );
@@ -202,7 +202,7 @@ void KoGenStyle::writeStyleProperties( KoXmlWriter* writer, PropertyType i,
 
 void KoGenStyle::writeStyle( KoXmlWriter* writer, KoGenStyles& styles, const char* elementName, const QString& name, const char* propertiesElementName, bool closeElement, bool drawElement ) const
 {
-    //kdDebug(30003) << "writing out style " << name << " display-name=" << m_attributes["style:display-name"] << " family=" << m_familyName << endl;
+    //kDebug(30003) << "writing out style " << name << " display-name=" << m_attributes["style:display-name"] << " family=" << m_familyName << endl;
     writer->startElement( elementName );
     const KoGenStyle* parentStyle = 0;
     if ( !m_defaultStyle ) {
@@ -217,7 +217,7 @@ void KoGenStyle::writeStyle( KoXmlWriter* writer, KoGenStyles& styles, const cha
                 // Note: this is saving code, don't convert to attributeNS!
                 const_cast<KoGenStyle *>( this )->
                     m_familyName = parentStyle->attribute( "style:family" ).latin1();
-                //kdDebug(30003) << "Got familyname " << m_familyName << " from parent" << endl;
+                //kDebug(30003) << "Got familyname " << m_familyName << " from parent" << endl;
             }
             writer->addAttribute( "style:parent-style-name", m_parentName );
         }
@@ -230,14 +230,14 @@ void KoGenStyle::writeStyle( KoXmlWriter* writer, KoGenStyles& styles, const cha
             addAttribute( "style:family", QString::fromLatin1( m_familyName ) );
     else {
         if ( qstrcmp( elementName, "style:style" ) == 0 )
-            kdWarning(30003) << "User style " << name << " is without family - invalid. m_type=" << m_type << endl;
+            kWarning(30003) << "User style " << name << " is without family - invalid. m_type=" << m_type << endl;
     }
 
 #if 0 // #ifndef NDEBUG
-    kdDebug() << "style: " << name << endl;
+    kDebug() << "style: " << name << endl;
     printDebug();
     if ( parentStyle ) {
-        kdDebug() << " parent: " << m_parentName << endl;
+        kDebug() << " parent: " << m_parentName << endl;
         parentStyle->printDebug();
     }
 #endif
@@ -318,37 +318,37 @@ void KoGenStyle::addAttributePt( const QString& attrName, double attrValue )
 void KoGenStyle::printDebug() const
 {
     int i = DefaultType;
-    kdDebug() << m_properties[i].count() << " properties." << endl;
+    kDebug() << m_properties[i].count() << " properties." << endl;
     for( QMap<QString,QString>::ConstIterator it = m_properties[i].begin(); it != m_properties[i].end(); ++it ) {
-        kdDebug() << "     " << it.key() << " = " << it.data() << endl;
+        kDebug() << "     " << it.key() << " = " << it.data() << endl;
     }
     i = TextType;
-    kdDebug() << m_properties[i].count() << " text properties." << endl;
+    kDebug() << m_properties[i].count() << " text properties." << endl;
     for( QMap<QString,QString>::ConstIterator it = m_properties[i].begin(); it != m_properties[i].end(); ++it ) {
-        kdDebug() << "     " << it.key() << " = " << it.data() << endl;
+        kDebug() << "     " << it.key() << " = " << it.data() << endl;
     }
     i = ParagraphType;
-    kdDebug() << m_properties[i].count() << " paragraph properties." << endl;
+    kDebug() << m_properties[i].count() << " paragraph properties." << endl;
     for( QMap<QString,QString>::ConstIterator it = m_properties[i].begin(); it != m_properties[i].end(); ++it ) {
-        kdDebug() << "     " << it.key() << " = " << it.data() << endl;
+        kDebug() << "     " << it.key() << " = " << it.data() << endl;
     }
     i = ChildElement;
-    kdDebug() << m_properties[i].count() << " child elements." << endl;
+    kDebug() << m_properties[i].count() << " child elements." << endl;
     for( QMap<QString,QString>::ConstIterator it = m_properties[i].begin(); it != m_properties[i].end(); ++it ) {
-        kdDebug() << "     " << it.key() << " = " << it.data() << endl;
+        kDebug() << "     " << it.key() << " = " << it.data() << endl;
     }
-    kdDebug() << m_attributes.count() << " attributes." << endl;
+    kDebug() << m_attributes.count() << " attributes." << endl;
     for( QMap<QString,QString>::ConstIterator it = m_attributes.begin(); it != m_attributes.end(); ++it ) {
-        kdDebug() << "     " << it.key() << " = " << it.data() << endl;
+        kDebug() << "     " << it.key() << " = " << it.data() << endl;
     }
-    kdDebug() << m_maps.count() << " maps." << endl;
+    kDebug() << m_maps.count() << " maps." << endl;
     for ( uint i = 0; i < m_maps.count(); ++i ) {
-        kdDebug() << "map " << i << ":" << endl;
+        kDebug() << "map " << i << ":" << endl;
         for( QMap<QString,QString>::ConstIterator it = m_maps[i].begin(); it != m_maps[i].end(); ++it ) {
-            kdDebug() << "     " << it.key() << " = " << it.data() << endl;
+            kDebug() << "     " << it.key() << " = " << it.data() << endl;
         }
     }
-    kdDebug() << endl;
+    kDebug() << endl;
 }
 #endif
 

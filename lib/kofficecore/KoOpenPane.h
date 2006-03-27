@@ -30,7 +30,7 @@ class KoTemplateGroup;
 class KoOpenPanePrivate;
 class KInstance;
 class QPixmap;
-class KListViewItem;
+class K3ListViewItem;
 class KoTemplatesPane;
 class KoDetailsPaneBase;
 

@@ -109,12 +109,12 @@ inline double operator*( const KoPoint &a, const KoPoint &b )
 { return a.m_x * b.m_x + a.m_y * b.m_y; }
 
 /******************************
-  kdDebug support
+  kDebug support
 *******************************/
 
 #include <kdebug.h>
 
-/** Show a floating point value with great precision (use within kdDebug) */
+/** Show a floating point value with great precision (use within kDebug) */
 #define DEBUGDOUBLE(d) QString::number( (d), 'g', 20 )
 
 inline kdbgstream operator<<( kdbgstream str, const KoPoint & r )  {

@@ -42,7 +42,7 @@ KoFilter::~KoFilter()
 KoEmbeddingFilter::~KoEmbeddingFilter()
 {
     if ( m_partStack.count() != 1 )
-        kdWarning() << "Someone messed with the part stack" << endl;
+        kWarning() << "Someone messed with the part stack" << endl;
     delete m_partStack.pop();
 }
 
@@ -99,7 +99,7 @@ void KoEmbeddingFilter::startInternalEmbedding( const QString& key, const Q3CStr
 void KoEmbeddingFilter::endInternalEmbedding()
 {
     if ( m_partStack.count() == 1 ) {
-        kdError( 30500 ) << "You're trying to endInternalEmbedding more often than you started it" << endl;
+        kError( 30500 ) << "You're trying to endInternalEmbedding more often than you started it" << endl;
         return;
     }
     delete m_partStack.pop();

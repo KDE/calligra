@@ -133,7 +133,7 @@ KOFFICEUI_EXPORT bool operator==(const KoRect &lhs, const KoRect &rhs);
 KOFFICEUI_EXPORT bool operator!=(const KoRect &lhs, const KoRect &rhs);
 
 
-/** Show the position and size of a rectangle (use within kdDebug) */
+/** Show the position and size of a rectangle (use within kDebug) */
 #define DEBUGRECT(rc) (rc).x() << "," << (rc).y() << " " << (rc).width() << "x" << (rc).height()
 
 //inline kdbgstream operator<<( kdbgstream str, const KoRect & r )  { str << "[" << r.left() << ", " << r.top() << " - " << r.right() << ", " << r.bottom() << "]"; return str; }
@@ -142,7 +142,7 @@ inline kndbgstream operator<<( kndbgstream str, const KoRect & )  { return str; 
 
 /** Show the rectangles that form a region (use as a standalone statement) */
 #define DEBUGREGION(reg) { Q3MemArray<QRect>rs=reg.rects(); for (int i=0;i<rs.size();++i) \
-                           kdDebug()<<"  "<<DEBUGRECT(rs[i] )<<endl; }
-// You can now use kdDebug() << theregion << endl; (kdebug.h)
+                           kDebug()<<"  "<<DEBUGRECT(rs[i] )<<endl; }
+// You can now use kDebug() << theregion << endl; (kdebug.h)
 
 #endif

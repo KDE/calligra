@@ -55,7 +55,7 @@ KoDocument* KoDocumentEntry::createDoc( KoDocument* parent, const char* name ) c
     KLibFactory* factory = KLibLoader::self()->factory( QFile::encodeName(m_service->library()) );
 
     if( !factory ) {
-        kdWarning(30003) << KLibLoader::self()->lastErrorMessage() << endl;
+        kWarning(30003) << KLibLoader::self()->lastErrorMessage() << endl;
         return 0;
     }
 
@@ -63,7 +63,7 @@ KoDocument* KoDocumentEntry::createDoc( KoDocument* parent, const char* name ) c
     if ( factory->inherits( "KParts::Factory" ) )
       obj = static_cast<KParts::Factory *>(factory)->createPart( 0L, "", parent, name, "KoDocument" );
     else {
-      kdWarning(30003) << "factory doesn't inherit KParts::Factory ! It is a " << factory->className() << endl; // This shouldn't happen...
+      kWarning(30003) << "factory doesn't inherit KParts::Factory ! It is a " << factory->className() << endl; // This shouldn't happen...
       obj = factory->create( parent, name, "KoDocument" );
     }
 
@@ -83,7 +83,7 @@ KoDocumentEntry KoDocumentEntry::queryByMimeType( const QString & mimetype )
   Q3ValueList<KoDocumentEntry> vec = query( false,constr );
   if ( vec.isEmpty() )
   {
-    kdWarning(30003) << "Got no results with " << constr << endl;
+    kWarning(30003) << "Got no results with " << constr << endl;
     // Fallback to the old way (which was probably wrong, but better be safe)
     QString constr = QString::fromLatin1( "'%1' in ServiceTypes" ).arg( mimetype );
     vec = query( constr );
@@ -93,12 +93,12 @@ KoDocumentEntry KoDocumentEntry::queryByMimeType( const QString & mimetype )
       // Help the user debugging stuff by providing some more diagnostics
       if ( KServiceType::serviceType( mimetype ) == 0L )
       {
-        kdError(30003) << "Unknown KOffice MimeType " << mimetype << "." << endl;
-        kdError(30003) << "Check your installation (for instance, run 'kde-config --path mime' and check the result)." << endl;
+        kError(30003) << "Unknown KOffice MimeType " << mimetype << "." << endl;
+        kError(30003) << "Check your installation (for instance, run 'kde-config --path mime' and check the result)." << endl;
       } else
       {
-        kdError(30003) << "Found no KOffice part able to handle " << mimetype << "!" << endl;
-        kdError(30003) << "Check your installation (does the desktop file have X-KDE-NativeMimeType and KOfficePart, did you install KOffice in a different prefix than KDE, without adding the prefix to /etc/kderc ?)" << endl;
+        kError(30003) << "Found no KOffice part able to handle " << mimetype << "!" << endl;
+        kError(30003) << "Check your installation (does the desktop file have X-KDE-NativeMimeType and KOfficePart, did you install KOffice in a different prefix than KDE, without adding the prefix to /etc/kderc ?)" << endl;
       }
       return KoDocumentEntry();
     }
@@ -131,7 +131,7 @@ Q3ValueList<KoDocumentEntry> KoDocumentEntry::query( bool _onlyDocEmb, const QSt
   unsigned int max = offers.count();
   for( unsigned int i = 0; i < max; i++, ++it )
   {
-    //kdDebug(30003) << "   desktopEntryPath=" << (*it)->desktopEntryPath()
+    //kDebug(30003) << "   desktopEntryPath=" << (*it)->desktopEntryPath()
     //               << "   library=" << (*it)->library() << endl;
 
     if ( (*it)->noDisplay() )
@@ -147,7 +147,7 @@ Q3ValueList<KoDocumentEntry> KoDocumentEntry::query( bool _onlyDocEmb, const QSt
   }
 
   if ( lst.count() > 1 && !_constr.isEmpty() )
-    kdWarning(30003) << "KoDocumentEntry::query " << constr << " got " << max << " offers!" << endl;
+    kWarning(30003) << "KoDocumentEntry::query " << constr << " got " << max << " offers!" << endl;
 
   return lst;
 }
@@ -173,17 +173,17 @@ KoFilterEntry::KoFilterEntry( KService::Ptr service )
 
 Q3ValueList<KoFilterEntry::Ptr> KoFilterEntry::query( const QString & _constr )
 {
-  kdDebug(30500) << "KoFilterEntry::query( " << _constr << " )" << endl;
+  kDebug(30500) << "KoFilterEntry::query( " << _constr << " )" << endl;
   Q3ValueList<KoFilterEntry::Ptr> lst;
 
   KTrader::OfferList offers = KTrader::self()->query( "KOfficeFilter", _constr );
 
   KTrader::OfferList::ConstIterator it = offers.begin();
   unsigned int max = offers.count();
-  //kdDebug(30500) << "Query returned " << max << " offers" << endl;
+  //kDebug(30500) << "Query returned " << max << " offers" << endl;
   for( unsigned int i = 0; i < max; i++ )
   {
-    //kdDebug(30500) << "   desktopEntryPath=" << (*it)->desktopEntryPath()
+    //kDebug(30500) << "   desktopEntryPath=" << (*it)->desktopEntryPath()
     //               << "   library=" << (*it)->library() << endl;
     // Append converted offer
     lst.append( new KoFilterEntry( *it ) );
@@ -199,7 +199,7 @@ KoFilter* KoFilterEntry::createFilter( KoFilterChain* chain, QObject* parent, co
     KLibFactory* factory = KLibLoader::self()->factory( QFile::encodeName( m_service->library() ) );
 
     if ( !factory ) {
-        kdWarning(30003) << KLibLoader::self()->lastErrorMessage() << endl;
+        kWarning(30003) << KLibLoader::self()->lastErrorMessage() << endl;
         return 0;
     }
 

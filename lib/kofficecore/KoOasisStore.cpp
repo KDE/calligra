@@ -140,11 +140,11 @@ bool KoOasisStore::closeManifestWriter()
 
 bool KoOasisStore::loadAndParse( const QString& fileName, QDomDocument& doc, QString& errorMessage )
 {
-    //kdDebug(30003) << "loadAndParse: Trying to open " << fileName << endl;
+    //kDebug(30003) << "loadAndParse: Trying to open " << fileName << endl;
 
     if (!m_store->open(fileName))
     {
-        kdWarning(30003) << "Entry " << fileName << " not found!" << endl;
+        kWarning(30003) << "Entry " << fileName << " not found!" << endl;
         errorMessage = i18n( "Could not find %1" ).arg( fileName );
         return false;
     }
@@ -164,7 +164,7 @@ bool KoOasisStore::loadAndParse( const QString& fileName, QDomDocument& doc, QSt
     bool ok = doc.setContent( &source, &reader, &errorMsg, &errorLine, &errorColumn );
     if ( !ok )
     {
-        kdError(30003) << "Parsing error in " << fileName << "! Aborting!" << endl
+        kError(30003) << "Parsing error in " << fileName << "! Aborting!" << endl
                        << " In line: " << errorLine << ", column: " << errorColumn << endl
                        << " Error message: " << errorMsg << endl;
         errorMessage = i18n( "Parsing error in the main document at line %1, column %2\nError message: %3" )
@@ -172,7 +172,7 @@ bool KoOasisStore::loadAndParse( const QString& fileName, QDomDocument& doc, QSt
     }
     else
     {
-        kdDebug(30003) << "File " << fileName << " loaded and parsed" << endl;
+        kDebug(30003) << "File " << fileName << " loaded and parsed" << endl;
     }
     m_store->close();
     return ok;

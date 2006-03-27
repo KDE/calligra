@@ -92,7 +92,7 @@ KoDocumentChild::KoDocumentChild( KoDocument* parent )
 
 void KoDocumentChild::setDocument( KoDocument *doc, const QRect &geometry )
 {
-  kdDebug()<<k_funcinfo<<"doc: "<<doc->url().url()<<endl;
+  kDebug()<<k_funcinfo<<"doc: "<<doc->url().url()<<endl;
   d->m_doc = doc;
   setGeometry( geometry );
 
@@ -138,7 +138,7 @@ void KoDocumentChild::loadOasis( const QDomElement &frameElement, const QDomElem
         m_tmpURL = QString( INTERNAL_PROTOCOL ) + ":/" + url.mid( 2 );
     else
         m_tmpURL = url;
-    kdDebug() << k_funcinfo << m_tmpURL << endl;
+    kDebug() << k_funcinfo << m_tmpURL << endl;
 }
 
 
@@ -151,12 +151,12 @@ bool KoDocumentChild::load( const QDomElement& element, bool uppercase )
 
     if ( m_tmpURL.isEmpty() )
     {
-        kdDebug(30003) << "Empty 'url' attribute in OBJECT" << endl;
+        kDebug(30003) << "Empty 'url' attribute in OBJECT" << endl;
         return false;
     }
     if ( m_tmpMimeType.isEmpty() )
     {
-        kdDebug(30003) << "Empty 'mime' attribute in OBJECT" << endl;
+        kDebug(30003) << "Empty 'mime' attribute in OBJECT" << endl;
         return false;
     }
 
@@ -186,7 +186,7 @@ bool KoDocumentChild::load( const QDomElement& element, bool uppercase )
 
     if ( !brect )
     {
-        kdDebug(30003) << "Missing RECT in OBJECT" << endl;
+        kDebug(30003) << "Missing RECT in OBJECT" << endl;
         return false;
     }
 
@@ -197,7 +197,7 @@ bool KoDocumentChild::loadDocument( KoStore* store )
 {
     assert( !m_tmpURL.isEmpty() );
 
-    kdDebug(30003) << "KoDocumentChild::loadDocument: trying to load " << m_tmpURL << endl;
+    kDebug(30003) << "KoDocumentChild::loadDocument: trying to load " << m_tmpURL << endl;
 
     // Backwards compatibility
     if ( m_tmpMimeType == "application/x-killustrator" )
@@ -206,7 +206,7 @@ bool KoDocumentChild::loadDocument( KoStore* store )
     KoDocumentEntry e = KoDocumentEntry::queryByMimeType( m_tmpMimeType );
     if ( e.isEmpty() )
     {
-        kdWarning(30003) << "Could not create child document with type " << m_tmpMimeType << endl;
+        kWarning(30003) << "Could not create child document with type " << m_tmpMimeType << endl;
         bool res = createUnavailDocument( store, true, m_tmpMimeType );
         if ( res )
         {
@@ -236,16 +236,16 @@ bool KoDocumentChild::loadOasisDocument( KoStore* store, const QDomDocument& man
     if ( !path.endsWith( "/" ) )
         path += '/';
     const QString mimeType = KoOasisStore::mimeForPath( manifestDoc, path );
-    kdDebug() << k_funcinfo << "path for manifest file=" << path << " mimeType=" << mimeType << endl;
+    kDebug() << k_funcinfo << "path for manifest file=" << path << " mimeType=" << mimeType << endl;
     if ( mimeType.isEmpty() ) {
-        kdError(30003) << "Manifest doesn't have media-type for " << path << endl;
+        kError(30003) << "Manifest doesn't have media-type for " << path << endl;
         return false;
     }
 
     KoDocumentEntry e = KoDocumentEntry::queryByMimeType( mimeType );
     if ( e.isEmpty() )
     {
-        kdWarning(30003) << "Could not create child document with type " << mimeType << endl;
+        kWarning(30003) << "Could not create child document with type " << mimeType << endl;
         bool res = createUnavailDocument( store, true, mimeType );
         if ( res )
         {
@@ -262,17 +262,17 @@ bool KoDocumentChild::loadOasisDocument( KoStore* store, const QDomDocument& man
     const bool oasis = mimeType.startsWith( "application/vnd.oasis.opendocument" );
     if ( !oasis ) {
         m_tmpURL += "/maindoc.xml";
-        kdDebug() << " m_tmpURL adjusted to " << m_tmpURL << endl;
+        kDebug() << " m_tmpURL adjusted to " << m_tmpURL << endl;
     }
     return loadDocumentInternal( store, e, true /*open url*/, oasis );
 }
 
 bool KoDocumentChild::loadDocumentInternal( KoStore* store, const KoDocumentEntry& e, bool doOpenURL, bool oasis )
 {
-    kdDebug(30003) << "KoDocumentChild::loadDocumentInternal doOpenURL=" << doOpenURL << " m_tmpURL=" << m_tmpURL << endl;
+    kDebug(30003) << "KoDocumentChild::loadDocumentInternal doOpenURL=" << doOpenURL << " m_tmpURL=" << m_tmpURL << endl;
     KoDocument * doc = e.createDoc( d->m_parent );
     if (!doc) {
-        kdWarning(30003) << "createDoc failed" << endl;
+        kWarning(30003) << "createDoc failed" << endl;
         return false;
     }
     setDocument( doc, m_tmpGeometry );
@@ -344,7 +344,7 @@ bool KoDocumentChild::loadDocumentInternal( KoStore* store, const KoDocumentEntr
             return res;
         }
         // Still waiting...
-        QApplication::setOverrideCursor( Qt::waitCursor );
+        QApplication::setOverrideCursor( Qt::WaitCursor );
     }
 
     m_tmpURL = QString::null;
@@ -376,7 +376,7 @@ bool KoDocumentChild::createUnavailDocument( KoStore* store, bool doOpenURL, con
     KService::Ptr serv = KService::serviceByDesktopName( "kounavail" );
     if ( serv == 0L )
     {
-        kdWarning(30003) << "ERROR: service kounavail not found " << endl;
+        kWarning(30003) << "ERROR: service kounavail not found " << endl;
         return false;
     }
     KoDocumentEntry e( serv );
@@ -391,7 +391,7 @@ bool KoDocumentChild::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
     QString path;
     if ( d->m_doc->isStoredExtern() )
     {
-        kdDebug(30003)<<k_funcinfo<<" external (don't save) url:" << d->m_doc->url().url()<<endl;
+        kDebug(30003)<<k_funcinfo<<" external (don't save) url:" << d->m_doc->url().url()<<endl;
         path = d->m_doc->url().url();
     }
     else
@@ -400,11 +400,11 @@ bool KoDocumentChild::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
         // parent document).
         assert( d->m_doc->url().protocol() == INTERNAL_PROTOCOL );
         const QString name = d->m_doc->url().path();
-        kdDebug() << k_funcinfo << "saving " << name << endl;
+        kDebug() << k_funcinfo << "saving " << name << endl;
 
         if ( d->m_doc->nativeOasisMimeType().isEmpty() ) {
             // Embedded object doesn't support OASIS OpenDocument, save in the old format.
-            kdDebug() << k_funcinfo << "Embedded object doesn't support OASIS OpenDocument, save in the old format." << endl;
+            kDebug() << k_funcinfo << "Embedded object doesn't support OASIS OpenDocument, save in the old format." << endl;
 
             if ( !d->m_doc->saveToStore( store, name ) )
                 return false;
@@ -416,7 +416,7 @@ bool KoDocumentChild::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
             store->enterDirectory( name );
 
             if ( !d->m_doc->saveOasis( store, manifestWriter ) ) {
-                kdWarning(30003) << "KoDocumentChild::saveOasis failed" << endl;
+                kWarning(30003) << "KoDocumentChild::saveOasis failed" << endl;
                 return false;
             }
             // Now that we're done leave the directory again
@@ -452,7 +452,7 @@ void KoDocumentChild::saveOasisAttributes( KoXmlWriter &xmlWriter, const QString
         KUrl u;
         u.setProtocol( INTERNAL_PROTOCOL );
         u.setPath( name );
-        kdDebug() << k_funcinfo << u << endl;
+        kDebug() << k_funcinfo << u << endl;
         d->m_doc->setURL( u );
     }
 
@@ -462,7 +462,7 @@ void KoDocumentChild::saveOasisAttributes( KoXmlWriter &xmlWriter, const QString
     xmlWriter.addAttribute( "xlink:actuate", "onLoad" );
 
     const QString ref = d->m_doc->isStoredExtern() ? d->m_doc->url().url() : "./"+ name;
-    kdDebug(30003) << "KoDocumentChild::saveOasis saving reference to embedded document as " << ref << endl;
+    kDebug(30003) << "KoDocumentChild::saveOasis saving reference to embedded document as " << ref << endl;
     xmlWriter.addAttribute( "xlink:href", /*"#" + */ref );
 }
 
@@ -473,14 +473,14 @@ QDomElement KoDocumentChild::save( QDomDocument& doc, bool uppercase )
         QDomElement e = doc.createElement( ( uppercase ? "OBJECT" : "object" ) );
         if ( d->m_doc->url().protocol() != INTERNAL_PROTOCOL ) {
             e.setAttribute( "url", d->m_doc->url().url() );
-            kdDebug() << "KoDocumentChild::save url=" << d->m_doc->url().url() << endl;
+            kDebug() << "KoDocumentChild::save url=" << d->m_doc->url().url() << endl;
         }
         else {
             e.setAttribute( "url", d->m_doc->url().path().mid( 1 ) );
-            kdDebug() << "KoDocumentChild::save url=" << d->m_doc->url().path().mid( 1 ) << endl;
+            kDebug() << "KoDocumentChild::save url=" << d->m_doc->url().path().mid( 1 ) << endl;
         }
         e.setAttribute( "mime", d->m_doc->nativeFormatMimeType() );
-        kdDebug() << "KoDocumentChild::save mime=" << d->m_doc->nativeFormatMimeType() << endl;
+        kDebug() << "KoDocumentChild::save mime=" << d->m_doc->nativeFormatMimeType() << endl;
         QDomElement rect = doc.createElement( ( uppercase ? "RECT" : "rect" ) );
         rect.setAttribute( "x", geometry().left() );
         rect.setAttribute( "y", geometry().top() );

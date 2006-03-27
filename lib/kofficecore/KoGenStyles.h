@@ -356,7 +356,7 @@ public:
      * KoXmlWriter to generate it:
      * @code
      * QBuffer buffer;
-     * buffer.open( IO_WriteOnly );
+     * buffer.open( QIODevice::WriteOnly );
      * KoXmlWriter elementWriter( &buffer );  // TODO pass indentation level
      * elementWriter.startElement( "..." );
      * ...

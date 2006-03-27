@@ -149,12 +149,12 @@ int KoPageFormat::printerPageSize( KoFormat format )
 {
     if ( format == PG_SCREEN )
     {
-            kdWarning() << "You use the page layout SCREEN. Printing in DIN A4 LANDSCAPE." << endl;
+            kWarning() << "You use the page layout SCREEN. Printing in DIN A4 LANDSCAPE." << endl;
             return KPrinter::A4;
     }
     else if ( format == PG_CUSTOM )
     {
-            kdWarning() << "The used page layout (CUSTOM) is not supported by KPrinter. Printing in A4." << endl;
+            kWarning() << "The used page layout (CUSTOM) is not supported by KPrinter. Printing in A4." << endl;
             return KPrinter::A4;
     }
     else if ( format <= PG_LAST_FORMAT )
@@ -188,8 +188,8 @@ KoFormat KoPageFormat::guessFormat( double width, double height )
         // We have some tolerance. 1pt is a third of a mm, this is
         // barely noticeable for a page size.
         if ( i != PG_CUSTOM
-             && kAbs( width - pageFormatInfo[i].width ) < 1.0
-             && kAbs( height - pageFormatInfo[i].height ) < 1.0 )
+             && qAbs( width - pageFormatInfo[i].width ) < 1.0
+             && qAbs( height - pageFormatInfo[i].height ) < 1.0 )
             return static_cast<KoFormat>(i);
     }
     return PG_CUSTOM;

@@ -54,6 +54,8 @@
 #include <kconfig.h>
 #include <ktrader.h>
 #include <kdebug.h>
+#include <QTextDocument>
+#include <ktoolinvocation.h>
 
 // KoSpeaker includes.
 #include "KoSpeaker.h"
@@ -168,14 +170,14 @@ void KoSpeaker::queueSpeech(const QString& msg, const QString& langCode /*= QStr
         d->m_jobNums.clear();
         jobCount = 0;
     }
-    QString s = msg.stripWhiteSpace();
+    QString s = msg.trimmed();
     if (s.isEmpty()) return;
-    // kdDebug() << "KoSpeaker::queueSpeech: s = [" << s << "]" << endl;
+    // kDebug() << "KoSpeaker::queueSpeech: s = [" << s << "]" << endl;
     // If no language code given, assume desktop setting.
     QString languageCode = langCode;
     if (langCode.isEmpty())
         languageCode = KGlobal::locale()->language();
-    // kdDebug() << "KoSpeaker::queueSpeech:languageCode = " << languageCode << endl;
+    // kDebug() << "KoSpeaker::queueSpeech:languageCode = " << languageCode << endl;
     // If KTTSD version is 0.3.5 or later, we can use the appendText method to submit a
     // single, multi-part text job.  Otherwise, must submit separate text jobs.
     // If language code changes, then must also start a new text job so that it will
@@ -363,7 +365,7 @@ bool KoSpeaker::maybeSayWidget(QWidget* w, const QPoint& pos /*=QPoint()*/)
     d->m_prevWidget = w;
     d->m_prevId = id;
 
-    // kdDebug() << " w = " << w << endl;
+    // kDebug() << " w = " << w << endl;
 
     d->m_cancelSpeakWidget = false;
     emit customSpeakNewWidget(w, pos, d->m_speakFlags);
@@ -395,7 +397,7 @@ bool KoSpeaker::maybeSayWidget(QWidget* w, const QPoint& pos /*=QPoint()*/)
 //         text = dynamic_cast<QWhatsThat *>(w)->text();
 //     }
 
-    text = text.stripWhiteSpace();
+    text = text.trimmed();
     if (!text.isEmpty()) {
         if (text.right(1) == ".")
             text += " ";
@@ -403,11 +405,11 @@ bool KoSpeaker::maybeSayWidget(QWidget* w, const QPoint& pos /*=QPoint()*/)
             text += ". ";
     }
     if (d->m_speakFlags & SpeakTooltip || text.isEmpty()) {
-        // kdDebug() << "pos = " << pos << endl;
+        // kDebug() << "pos = " << pos << endl;
         // QPoint p = w->mapFromGlobal(pos);
-        // kdDebug() << "p = " << p << endl;
+        // kDebug() << "p = " << p << endl;
         QString t = QToolTip::textFor(w, pos);
-        t = t.stripWhiteSpace();
+        t = t.trimmed();
         if (!t.isEmpty()) {
             if (t.right(1) != ".") t += ".";
             text += t + " ";
@@ -416,7 +418,7 @@ bool KoSpeaker::maybeSayWidget(QWidget* w, const QPoint& pos /*=QPoint()*/)
 
     if (d->m_speakFlags & SpeakWhatsThis || text.isEmpty()) {
         QString t = Q3WhatsThis::textFor(w, pos);
-        t = t.stripWhiteSpace();
+        t = t.trimmed();
         if (!t.isEmpty()) {
             if (t.right(1) != ".") t += ".";
             text += t + " ";
@@ -438,14 +440,14 @@ bool KoSpeaker::sayWidget(const QString& msg)
         int amp = s.find("&");
         if (amp >= 0) {
             QString acc = s.mid(++amp,1);
-            acc = acc.stripWhiteSpace();
+            acc = acc.trimmed();
             if (!acc.isEmpty())
                 s += ". " + d->m_acceleratorPrefix + " " + acc + ".";
         }
     }
     s.remove("&");
-    if (Q3StyleSheet::mightBeRichText(s)) {
-        // kdDebug() << "richtext" << endl;
+    if (Qt::mightBeRichText(s)) {
+        // kDebug() << "richtext" << endl;
         s.replace(QRegExp("</?[pbius]>"), "");
         s.replace(QRegExp("</?h\\d>"), "");
         s.replace(QRegExp("<(br|hr)>"), " ");
@@ -490,8 +492,8 @@ bool KoSpeaker::startKttsd()
     if (!client->isApplicationRegistered("kttsd"))
     {
         QString error;
-        if (kapp->startServiceByDesktopName("kttsd", QStringList(), &error)) {
-            kdDebug() << "KoSpeaker::startKttsd: error starting KTTSD service: " << error << endl;
+        if (KToolInvocation::startServiceByDesktopName("kttsd", QStringList(), &error)) {
+            kDebug() << "KoSpeaker::startKttsd: error starting KTTSD service: " << error << endl;
             d->m_enabled = false;
         } else
             d->m_enabled = true;
@@ -513,7 +515,7 @@ QString KoSpeaker::getKttsdVersion()
             if ( client->call("kttsd", "KSpeech", "version()", data, replyType, replyData, true) ) {
                 QDataStream arg(replyData, QIODevice::ReadOnly);
                 arg >> d->m_kttsdVersion;
-                kdDebug() << "KoSpeaker::startKttsd: KTTSD version = " << d->m_kttsdVersion << endl;
+                kDebug() << "KoSpeaker::startKttsd: KTTSD version = " << d->m_kttsdVersion << endl;
             }
             d->m_versionChecked = true;
         }
@@ -532,7 +534,7 @@ void KoSpeaker::sayScreenReaderOutput(const QString &msg, const QString &talker)
     arg << msg << talker;
     if ( !client->call("kttsd", "KSpeech", "sayScreenReaderOutput(QString,QString)",
         data, replyType, replyData, true) ) {
-        kdDebug() << "KoSpeaker::sayScreenReaderOutput: failed" << endl;
+        kDebug() << "KoSpeaker::sayScreenReaderOutput: failed" << endl;
     }
 }
 
@@ -548,7 +550,7 @@ uint KoSpeaker::setText(const QString &text, const QString &talker)
     uint jobNum = 0;
     if ( !client->call("kttsd", "KSpeech", "setText(QString,QString)",
         data, replyType, replyData, true) ) {
-        kdDebug() << "KoSpeaker::sayText: failed" << endl;
+        kDebug() << "KoSpeaker::sayText: failed" << endl;
     } else {
         QDataStream arg2(replyData, QIODevice::ReadOnly);
         arg2 >> jobNum;
@@ -568,7 +570,7 @@ int KoSpeaker::appendText(const QString &text, uint jobNum /*=0*/)
     int partNum = 0;
     if ( !client->call("kttsd", "KSpeech", "appendText(QString,uint)",
         data, replyType, replyData, true) ) {
-        kdDebug() << "KoSpeaker::appendText: failed" << endl;
+        kDebug() << "KoSpeaker::appendText: failed" << endl;
     } else {
         QDataStream arg2(replyData, QIODevice::ReadOnly);
         arg2 >> partNum;
@@ -586,7 +588,7 @@ void KoSpeaker::startText(uint jobNum /*=0*/)
     arg << jobNum;
     if ( !client->call("kttsd", "KSpeech", "startText(uint)",
         data, replyType, replyData, true) ) {
-        kdDebug() << "KoSpeaker::startText: failed" << endl;
+        kDebug() << "KoSpeaker::startText: failed" << endl;
     }
 }
 
@@ -600,7 +602,7 @@ void KoSpeaker::removeText(uint jobNum /*=0*/)
     arg << jobNum;
     if ( !client->call("kttsd", "KSpeech", "removeText(uint)",
         data, replyType, replyData, true) ) {
-        kdDebug() << "KoSpeaker::removeText: failed" << endl;
+        kDebug() << "KoSpeaker::removeText: failed" << endl;
     }
 }
 

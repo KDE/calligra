@@ -71,10 +71,10 @@ KoPictureShared::KoPictureShared(const KoPictureShared &other)
 KoPictureShared& KoPictureShared::operator=( const KoPictureShared &other )
 {
     clear();
-    kdDebug(30003) << "KoPictureShared::= before" << endl;
+    kDebug(30003) << "KoPictureShared::= before" << endl;
     if (other.m_base)
         m_base=other.m_base->newCopy();
-    kdDebug(30003) << "KoPictureShared::= after" << endl;
+    kDebug(30003) << "KoPictureShared::= after" << endl;
     return *this;
 }
 
@@ -99,7 +99,7 @@ void KoPictureShared::draw(QPainter& painter, int x, int y, int width, int heigh
     else
     {
         // Draw a red box (easier DEBUG)
-        kdWarning(30003) << "Drawing red rectangle! (KoPictureShared::draw)" << endl;
+        kWarning(30003) << "Drawing red rectangle! (KoPictureShared::draw)" << endl;
         painter.save();
         painter.setBrush(QColor(255,0,0));
         painter.drawRect(x,y,width,height);
@@ -109,10 +109,10 @@ void KoPictureShared::draw(QPainter& painter, int x, int y, int width, int heigh
 
 bool KoPictureShared::loadWmf(QIODevice* io)
 {
-    kdDebug(30003) << "KoPictureShared::loadWmf" << endl;
+    kDebug(30003) << "KoPictureShared::loadWmf" << endl;
     if (!io)
     {
-        kdError(30003) << "No QIODevice!" << endl;
+        kError(30003) << "No QIODevice!" << endl;
         return false;
     }
 
@@ -140,10 +140,10 @@ bool KoPictureShared::loadTmp(QIODevice* io)
 // We have a temp file, probably from a downloaded file
 //   We must check the file type
 {
-    kdDebug(30003) << "KoPictureShared::loadTmp" << endl;
+    kDebug(30003) << "KoPictureShared::loadTmp" << endl;
     if (!io)
     {
-        kdError(30003) << "No QIODevice!" << endl;
+        kError(30003) << "No QIODevice!" << endl;
         return false;
     }
 
@@ -158,7 +158,7 @@ bool KoPictureShared::identifyAndLoad( QByteArray array )
 {
     if ( array.size() < 5 )
     {
-        kdError(30003) << "Picture is less than 5 bytes long!" << endl;
+        kError(30003) << "Picture is less than 5 bytes long!" << endl;
         return false;
     }
 
@@ -226,7 +226,7 @@ bool KoPictureShared::identifyAndLoad( QByteArray array )
     }
     else
     {
-        kdDebug(30003) << "Cannot identify the type of temp file!"
+        kDebug(30003) << "Cannot identify the type of temp file!"
             << " Trying to convert to PNG! (in KoPictureShared::loadTmp" << endl;
 
         // Do not trust QBuffer and do not work directly on the QByteArray array
@@ -235,7 +235,7 @@ bool KoPictureShared::identifyAndLoad( QByteArray array )
         QBuffer buf( array.copy() );
         if (!buf.open(QIODevice::ReadOnly))
         {
-            kdError(30003) << "Could not open read buffer!" << endl;
+            kError(30003) << "Could not open read buffer!" << endl;
             return false;
         }
 
@@ -243,7 +243,7 @@ bool KoPictureShared::identifyAndLoad( QByteArray array )
 
         if (!imageIO.read())
         {
-            kdError(30003) << "Could not read image!" << endl;
+            kError(30003) << "Could not read image!" << endl;
             return false;
         }
 
@@ -251,7 +251,7 @@ bool KoPictureShared::identifyAndLoad( QByteArray array )
 
         if ( !buf.open( QIODevice::WriteOnly | QIODevice::Truncate ) )
         {
-            kdError(30003) << "Could not open write buffer!" << endl;
+            kError(30003) << "Could not open write buffer!" << endl;
             return false;
         }
 
@@ -260,7 +260,7 @@ bool KoPictureShared::identifyAndLoad( QByteArray array )
 
         if (!imageIO.write())
         {
-            kdError(30003) << "Could not write converted image!" << endl;
+            kError(30003) << "Could not write converted image!" << endl;
             return false;
         }
         buf.close();
@@ -270,7 +270,7 @@ bool KoPictureShared::identifyAndLoad( QByteArray array )
         strExtension="png";
     }
 
-    kdDebug(30003) << "Temp file considered to be " << strExtension << endl;
+    kDebug(30003) << "Temp file considered to be " << strExtension << endl;
 
     clearAndSetMode(strExtension);
     if (m_base)
@@ -284,10 +284,10 @@ bool KoPictureShared::identifyAndLoad( QByteArray array )
 
 bool KoPictureShared::loadXpm(QIODevice* io)
 {
-    kdDebug(30003) << "KoPictureShared::loadXpm" << endl;
+    kDebug(30003) << "KoPictureShared::loadXpm" << endl;
     if (!io)
     {
-        kdError(30003) << "No QIODevice!" << endl;
+        kError(30003) << "No QIODevice!" << endl;
         return false;
     }
 
@@ -393,7 +393,7 @@ bool KoPictureShared::loadFromBase64( const Q3CString& str )
 
 bool KoPictureShared::load(QIODevice* io, const QString& extension)
 {
-    kdDebug(30003) << "KoPictureShared::load(QIODevice*, const QString&) " << extension << endl;
+    kDebug(30003) << "KoPictureShared::load(QIODevice*, const QString&) " << extension << endl;
     bool flag=false;
     QString ext(extension.lower());
     if (ext=="wmf")
@@ -421,17 +421,17 @@ bool KoPictureShared::load(QIODevice* io, const QString& extension)
     }
     if (!flag)
     {
-        kdError(30003) << "File was not loaded! (KoPictureShared::load)" << endl;
+        kError(30003) << "File was not loaded! (KoPictureShared::load)" << endl;
     }
     return flag;
 }
 
 bool KoPictureShared::loadFromFile(const QString& fileName)
 {
-    kdDebug(30003) << "KoPictureShared::loadFromFile " << fileName << endl;
+    kDebug(30003) << "KoPictureShared::loadFromFile " << fileName << endl;
     if ( fileName.isEmpty() )
     {
-        kdError(30003) << "Cannot load file with empty name!" << endl;
+        kError(30003) << "Cannot load file with empty name!" << endl;
         return false;
     }
     QFile file(fileName);
@@ -442,7 +442,7 @@ bool KoPictureShared::loadFromFile(const QString& fileName)
     const int pos=fileName.findRev('.');
     if (pos==-1)
     {
-        kdDebug(30003) << "File with no extension!" << endl;
+        kDebug(30003) << "File with no extension!" << endl;
         // As we have no extension, consider it like a temporary file
         flag = loadTmp( &file );
     }
@@ -517,14 +517,14 @@ bool KoPictureShared::loadCompressed( QIODevice* io, const QString& mimeType, co
 
     if ( !in )
     {
-        kdError(30003) << "Cannot create device for uncompressing! Aborting!" << endl;
+        kError(30003) << "Cannot create device for uncompressing! Aborting!" << endl;
         return false;
     }
 
 
     if ( !in->open( QIODevice::ReadOnly ) )
     {
-        kdError(30003) << "Cannot open file for uncompressing! Aborting!" << endl;
+        kError(30003) << "Cannot open file for uncompressing! Aborting!" << endl;
         delete in;
         return false;
     }

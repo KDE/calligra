@@ -127,8 +127,8 @@ bool KoPartResizeHandler::eventFilter( QObject*, QEvent* ev )
         {
         case KoChild::TopLeft:
             {
-                x = QMIN( d->m_geometryStart.width() - 1, x );
-                y = QMIN( d->m_geometryStart.height() - 1, y );
+                x = qMin( d->m_geometryStart.width() - 1, x );
+                y = qMin( d->m_geometryStart.height() - 1, y );
 
                 d->m_child->setGeometry( QRect( d->m_geometryStart.x() + x, d->m_geometryStart.y() + y,
                                              d->m_geometryStart.width() - x, d->m_geometryStart.height() - y ) );
@@ -137,7 +137,7 @@ bool KoPartResizeHandler::eventFilter( QObject*, QEvent* ev )
             break;
         case KoChild::TopMid:
             {
-                y = QMIN( d->m_geometryStart.height() - 1, y );
+                y = qMin( d->m_geometryStart.height() - 1, y );
 
                 d->m_child->setGeometry( QRect( d->m_geometryStart.x(), d->m_geometryStart.y() + y,
                                              d->m_geometryStart.width(), d->m_geometryStart.height() - y ) );
@@ -146,8 +146,8 @@ bool KoPartResizeHandler::eventFilter( QObject*, QEvent* ev )
             break;
         case KoChild::TopRight:
             {
-                x = QMAX( -d->m_geometryStart.width() + 1, x );
-                y = QMIN( d->m_geometryStart.height() - 1, y );
+                x = qMax( -d->m_geometryStart.width() + 1, x );
+                y = qMin( d->m_geometryStart.height() - 1, y );
 
                 d->m_child->setGeometry( QRect( d->m_geometryStart.x(), d->m_geometryStart.y() + y,
                                              d->m_geometryStart.width() + x, d->m_geometryStart.height() - y ) );
@@ -156,7 +156,7 @@ bool KoPartResizeHandler::eventFilter( QObject*, QEvent* ev )
             break;
         case KoChild::MidLeft:
             {
-                x = QMIN( d->m_geometryStart.width() - 1, x );
+                x = qMin( d->m_geometryStart.width() - 1, x );
 
                 d->m_child->setGeometry( QRect( d->m_geometryStart.x() + x, d->m_geometryStart.y(),
                                              d->m_geometryStart.width() - x, d->m_geometryStart.height() ) );
@@ -165,7 +165,7 @@ bool KoPartResizeHandler::eventFilter( QObject*, QEvent* ev )
             break;
         case KoChild::MidRight:
             {
-                x = QMAX( -d->m_geometryStart.width() + 1, x );
+                x = qMax( -d->m_geometryStart.width() + 1, x );
 
                 d->m_child->setGeometry( QRect( d->m_geometryStart.x(), d->m_geometryStart.y(),
                                              d->m_geometryStart.width() + x, d->m_geometryStart.height() ) );
@@ -174,8 +174,8 @@ bool KoPartResizeHandler::eventFilter( QObject*, QEvent* ev )
             break;
         case KoChild::BottomLeft:
             {
-                x = QMIN( d->m_geometryStart.width() - 1, x );
-                y = QMAX( -d->m_geometryStart.height() + 1, y );
+                x = qMin( d->m_geometryStart.width() - 1, x );
+                y = qMax( -d->m_geometryStart.height() + 1, y );
 
                 d->m_child->setGeometry( QRect( d->m_geometryStart.x() + x, d->m_geometryStart.y(),
                                              d->m_geometryStart.width() - x, d->m_geometryStart.height() + y ) );
@@ -184,7 +184,7 @@ bool KoPartResizeHandler::eventFilter( QObject*, QEvent* ev )
             break;
         case KoChild::BottomMid:
             {
-                y = QMAX( -d->m_geometryStart.height() + 1, y );
+                y = qMax( -d->m_geometryStart.height() + 1, y );
 
                 d->m_child->setGeometry( QRect( d->m_geometryStart.x(), d->m_geometryStart.y(),
                                              d->m_geometryStart.width(), d->m_geometryStart.height() + y ) );
@@ -193,8 +193,8 @@ bool KoPartResizeHandler::eventFilter( QObject*, QEvent* ev )
             break;
         case KoChild::BottomRight:
             {
-                x = QMAX( -d->m_geometryStart.width() + 1, x );
-                y = QMAX( -d->m_geometryStart.height() + 1, y );
+                x = qMax( -d->m_geometryStart.width() + 1, x );
+                y = qMax( -d->m_geometryStart.height() + 1, y );
 
                 d->m_child->setGeometry( QRect( d->m_geometryStart.x(), d->m_geometryStart.y(),
                                              d->m_geometryStart.width() + x, d->m_geometryStart.height() + y ) );
@@ -339,13 +339,13 @@ bool KoContainerHandler::eventFilter( QObject*, QEvent* ev )
             retval = false;
 
         if ( gadget == KoChild::TopLeft || gadget == KoChild::BottomRight )
-            targetWidget->setCursor( Qt::sizeFDiagCursor );
+            targetWidget->setCursor( Qt::SizeFDiagCursor );
         else if ( gadget == KoChild::TopRight || gadget == KoChild::BottomLeft )
-            targetWidget->setCursor( Qt::sizeBDiagCursor );
+            targetWidget->setCursor( Qt::SizeBDiagCursor );
         else if ( gadget == KoChild::TopMid || gadget == KoChild::BottomMid )
-            targetWidget->setCursor( Qt::sizeVerCursor );
+            targetWidget->setCursor( Qt::SizeHorCursor );
         else if ( gadget == KoChild::MidLeft || gadget == KoChild::MidRight )
-            targetWidget->setCursor( Qt::sizeHorCursor );
+            targetWidget->setCursor( Qt::SizeHorCursor );
         else if ( gadget == KoChild::Move )
             targetWidget->setCursor( KCursor::handCursor() );
         else

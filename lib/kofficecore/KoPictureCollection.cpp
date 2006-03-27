@@ -37,7 +37,7 @@
 KoPicture KoPictureCollection::findPicture(const KoPictureKey& key) const
 {
 #ifdef DEBUG_PICTURES
-    kdDebug(30003) << "KoPictureCollection::findPicture " << key.toString() << endl;
+    kDebug(30003) << "KoPictureCollection::findPicture " << key.toString() << endl;
 #endif
     ConstIterator it = find( key );
     if ( it == end() )
@@ -54,13 +54,13 @@ KoPicture KoPictureCollection::findPicture(const KoPictureKey& key) const
 KoPicture KoPictureCollection::insertPicture(const KoPictureKey& key, const KoPicture& picture)
 {
 #ifdef DEBUG_PICTURES
-    kdDebug(30003) << "KoPictureCollection::insertPicture " << key.toString() << endl;
+    kDebug(30003) << "KoPictureCollection::insertPicture " << key.toString() << endl;
 #endif
     KoPicture c = findPicture(key);
     if (c.isNull())
     {
 #ifdef DEBUG_PICTURES
-        kdDebug(30003) << "KoPictureCollection::insertPicture not found -> inserting" << endl;
+        kDebug(30003) << "KoPictureCollection::insertPicture not found -> inserting" << endl;
 #endif
         c=picture;
         c.setKey(key); // Be sure that the key is correctly set in the KoPicture!
@@ -77,7 +77,7 @@ KoPicture KoPictureCollection::insertPicture(const KoPicture& picture)
 KoPicture KoPictureCollection::downloadPicture(const KUrl& url, QWidget *window)
 {
 #ifdef DEBUG_PICTURES
-    kdDebug(30003) << "KoPictureCollection::downloadPicture " << url.prettyURL() << endl;
+    kDebug(30003) << "KoPictureCollection::downloadPicture " << url.prettyURL() << endl;
 #endif
 
     // If it is a local file, we can check the last modification date, so we should better use loadPicture
@@ -90,13 +90,13 @@ KoPicture KoPictureCollection::downloadPicture(const KUrl& url, QWidget *window)
 
     KoPicture pic;
 #ifdef DEBUG_PICTURES
-    kdDebug(30003) << "Trying to download picture from file " << url.prettyURL() << endl;
+    kDebug(30003) << "Trying to download picture from file " << url.prettyURL() << endl;
 #endif
 
     if (pic.setKeyAndDownloadPicture(url, window))
         insertPicture(pic.getKey(), pic);
     else
-        kdWarning(30003) << "Could not download KoPicture from " << url.prettyURL() << endl;
+        kWarning(30003) << "Could not download KoPicture from " << url.prettyURL() << endl;
 
     return pic;
 }
@@ -104,7 +104,7 @@ KoPicture KoPictureCollection::downloadPicture(const KUrl& url, QWidget *window)
 KoPicture KoPictureCollection::loadPicture(const QString& fileName)
 {
 #ifdef DEBUG_PICTURES
-    kdDebug(30003) << "KoPictureCollection::loadPicture " << fileName << endl;
+    kDebug(30003) << "KoPictureCollection::loadPicture " << fileName << endl;
 #endif
     // Check the last modified date of the file, as it is now.
     KoPictureKey key;
@@ -114,12 +114,12 @@ KoPicture KoPictureCollection::loadPicture(const QString& fileName)
     if (c.isNull())
     {
 #ifdef DEBUG_PICTURES
-        kdDebug(30003) << "Trying to load picture from file " << fileName << endl;
+        kDebug(30003) << "Trying to load picture from file " << fileName << endl;
 #endif
         if (c.loadFromFile(fileName))
             insertPicture(key, c);
         else
-            kdWarning(30003) << "Could not load KoPicture from " << fileName << endl;
+            kWarning(30003) << "Could not load KoPicture from " << fileName << endl;
     }
     return c;
 }
@@ -158,7 +158,7 @@ bool KoPictureCollection::saveToStore(const Type pictureType, KoStore *store, co
     {
         KoPicture c = findPicture( *it );
         if (c.isNull())
-            kdWarning(30003) << "Picture " << (*it).toString() << " not found in collection !" << endl;
+            kWarning(30003) << "Picture " << (*it).toString() << " not found in collection !" << endl;
         else
         {
             QString storeURL=getFileName(pictureType, c, counter);
@@ -183,7 +183,7 @@ bool KoPictureCollection::saveOasisToStore( KoStore *store, Q3ValueList<KoPictur
     {
         KoPicture c = findPicture( *it );
         if (c.isNull())
-            kdWarning(30003) << "Picture " << (*it).toString() << " not found in collection !" << endl;
+            kWarning(30003) << "Picture " << (*it).toString() << " not found in collection !" << endl;
         else
         {
             QString storeURL( getOasisFileName(c) );
@@ -215,7 +215,7 @@ QDomElement KoPictureCollection::saveXML(const Type pictureType, QDomDocument &d
     {
         KoPicture picture = findPicture( *it );
         if ( picture.isNull() )
-            kdWarning(30003) << "Picture " << (*it).toString() << " not found in collection !" << endl;
+            kWarning(30003) << "Picture " << (*it).toString() << " not found in collection !" << endl;
         else
         {
             QString pictureName=getFileName(pictureType, picture, counter);
@@ -256,7 +256,7 @@ KoPictureCollection::StoreMap KoPictureCollection::readXML( QDomElement& pixmaps
 void KoPictureCollection::readFromStore( KoStore * store, const StoreMap & storeMap )
 {
 #ifdef DEBUG_PICTURES
-    kdDebug(30003) << "KoPictureCollection::readFromStore " << store << endl;
+    kDebug(30003) << "KoPictureCollection::readFromStore " << store << endl;
 #endif
     StoreMap::ConstIterator it = storeMap.begin();
     for ( ; it != storeMap.end(); ++it )
@@ -265,7 +265,7 @@ void KoPictureCollection::readFromStore( KoStore * store, const StoreMap & store
         if (!c.isNull())
         {
             // Do not load a file that we already have!
-            //kdDebug(30003) << store << endl;
+            //kDebug(30003) << store << endl;
             continue;
         }
         QString u(it.data());
@@ -282,7 +282,7 @@ void KoPictureCollection::readFromStore( KoStore * store, const StoreMap & store
             u.prepend( "file:" );
             if (!store->open( u ))
             {
-                kdWarning(30003) << "Could load neither from store nor from file: " << it.data() << endl;
+                kWarning(30003) << "Could load neither from store nor from file: " << it.data() << endl;
                 return;
             }
         }
@@ -290,7 +290,7 @@ void KoPictureCollection::readFromStore( KoStore * store, const StoreMap & store
         const int pos=u.findRev('.');
         if (pos==-1)
         {
-            kdError(30003) << "File with no extension! Not supported!" << endl;
+            kError(30003) << "File with no extension! Not supported!" << endl;
             return;
         }
         const QString extension(u.mid(pos+1));

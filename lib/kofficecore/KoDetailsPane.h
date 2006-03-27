@@ -19,7 +19,7 @@
 #ifndef KODETAILSPANE_H
 #define KODETAILSPANE_H
 
-#include <klistview.h>
+#include <k3listview.h>
 
 #include "koDetailsPaneBase.h"
 //Added by qt3to4:
