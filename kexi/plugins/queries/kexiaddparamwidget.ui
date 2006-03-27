@@ -51,7 +51,7 @@
                                 <string>kexi_</string>
                             </property>
                             <property name="alignment">
-                                <set>AlignVCenter|AlignRight</set>
+                                <set>Qt::AlignVCenter|Qt::AlignRight</set>
                             </property>
                         </widget>
                         <widget class="KLineEdit">
@@ -68,7 +68,7 @@
                 <cstring>spacer1</cstring>
             </property>
             <property name="orientation">
-                <enum>Vertical</enum>
+                <enum>Qt::Vertical</enum>
             </property>
             <property name="sizeType">
                 <enum>Expanding</enum>

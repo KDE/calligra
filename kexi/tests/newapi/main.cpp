@@ -18,7 +18,9 @@
 */
 
 #include <qfileinfo.h>
-#include <qguardedptr.h>
+#include <qpointer.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 #include <kdebug.h>
 #include <kcmdlineargs.h>
@@ -41,10 +43,10 @@
 
 using namespace std;
 
-QCString prgname;
-QCString db_name;
-QCString drv_name;
-QCString test_name;
+Q3CString prgname;
+Q3CString db_name;
+Q3CString drv_name;
+Q3CString test_name;
 int cursor_options = 0;
 bool db_name_required = true;
 

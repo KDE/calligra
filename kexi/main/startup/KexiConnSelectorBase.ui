@@ -144,7 +144,7 @@
                 <cstring>spacer4</cstring>
             </property>
             <property name="orientation">
-                <enum>Horizontal</enum>
+                <enum>Qt::Horizontal</enum>
             </property>
             <property name="sizeType">
                 <enum>Fixed</enum>
@@ -161,7 +161,7 @@
                 <cstring>spacer4_2</cstring>
             </property>
             <property name="orientation">
-                <enum>Vertical</enum>
+                <enum>Qt::Vertical</enum>
             </property>
             <property name="sizeType">
                 <enum>Expanding</enum>
@@ -218,7 +218,7 @@
                         <number>0</number>
                     </property>
                     <property name="textFormat">
-                        <enum>PlainText</enum>
+                        <enum>Qt::PlainText</enum>
                     </property>
                     <property name="readOnly">
                         <bool>true</bool>
@@ -247,7 +247,7 @@
 </string>
             </property>
             <property name="alignment">
-                <set>WordBreak|AlignTop</set>
+                <set>Qt::TextWordWrap|Qt::AlignTop</set>
             </property>
             <property name="buddy" stdset="0">
                 <cstring>list</cstring>
@@ -269,7 +269,7 @@
                 <string></string>
             </property>
             <property name="alignment">
-                <set>AlignTop</set>
+                <set>Qt::AlignTop</set>
             </property>
         </widget>
     </grid>

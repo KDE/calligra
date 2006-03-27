@@ -54,7 +54,7 @@
                         <cstring>spacer7</cstring>
                     </property>
                     <property name="orientation">
-                        <enum>Vertical</enum>
+                        <enum>Qt::Vertical</enum>
                     </property>
                     <property name="sizeType">
                         <enum>Expanding</enum>
@@ -73,7 +73,7 @@
                 <cstring>spacer6</cstring>
             </property>
             <property name="orientation">
-                <enum>Vertical</enum>
+                <enum>Qt::Vertical</enum>
             </property>
             <property name="sizeType">
                 <enum>MinimumExpanding</enum>
@@ -109,7 +109,7 @@
                         <cstring>spacer9</cstring>
                     </property>
                     <property name="orientation">
-                        <enum>Horizontal</enum>
+                        <enum>Qt::Horizontal</enum>
                     </property>
                     <property name="sizeType">
                         <enum>Expanding</enum>
@@ -161,7 +161,7 @@
                         <cstring>spacer1</cstring>
                     </property>
                     <property name="orientation">
-                        <enum>Horizontal</enum>
+                        <enum>Qt::Horizontal</enum>
                     </property>
                     <property name="sizeType">
                         <enum>Expanding</enum>
@@ -212,7 +212,7 @@
                         <cstring>lblEngine</cstring>
                     </property>
                     <property name="focusPolicy">
-                        <enum>TabFocus</enum>
+                        <enum>Qt::TabFocus</enum>
                     </property>
                     <property name="text">
                         <string>&amp;Engine:</string>
@@ -341,7 +341,7 @@
                         <string>&amp;Title (optional):</string>
                     </property>
                     <property name="alignment">
-                        <set>AlignTop</set>
+                        <set>Qt::AlignTop</set>
                     </property>
                     <property name="buddy" stdset="0">
                         <cstring>titleEdit</cstring>
@@ -409,7 +409,7 @@
                         <cstring>spacer13</cstring>
                     </property>
                     <property name="orientation">
-                        <enum>Horizontal</enum>
+                        <enum>Qt::Horizontal</enum>
                     </property>
                     <property name="sizeType">
                         <enum>Minimum</enum>

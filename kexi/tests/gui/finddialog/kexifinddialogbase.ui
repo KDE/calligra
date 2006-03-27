@@ -38,7 +38,7 @@
                 <cstring>m_caseSensitive</cstring>
             </property>
             <property name="focusPolicy">
-                <enum>WheelFocus</enum>
+                <enum>Qt::WheelFocus</enum>
             </property>
             <property name="text">
                 <string>C&amp;ase sensitive</string>
@@ -145,7 +145,7 @@
                 <cstring>m_search</cstring>
             </property>
             <property name="focusPolicy">
-                <enum>WheelFocus</enum>
+                <enum>Qt::WheelFocus</enum>
             </property>
             <property name="insertionPolicy">
                 <enum>NoInsertion</enum>
@@ -175,7 +175,7 @@
                 <cstring>spacer2</cstring>
             </property>
             <property name="orientation">
-                <enum>Horizontal</enum>
+                <enum>Qt::Horizontal</enum>
             </property>
             <property name="sizeType">
                 <enum>Expanding</enum>
@@ -192,7 +192,7 @@
                 <cstring>m_wholeWords</cstring>
             </property>
             <property name="focusPolicy">
-                <enum>WheelFocus</enum>
+                <enum>Qt::WheelFocus</enum>
             </property>
             <property name="text">
                 <string>&amp;Whole words only</string>
@@ -203,7 +203,7 @@
                 <cstring>m_promptOnReplace</cstring>
             </property>
             <property name="focusPolicy">
-                <enum>WheelFocus</enum>
+                <enum>Qt::WheelFocus</enum>
             </property>
             <property name="text">
                 <string>Prompt on replace</string>
@@ -220,7 +220,7 @@
                 <cstring>spacer3</cstring>
             </property>
             <property name="orientation">
-                <enum>Vertical</enum>
+                <enum>Qt::Vertical</enum>
             </property>
             <property name="sizeType">
                 <enum>Expanding</enum>
@@ -280,7 +280,7 @@
                         <cstring>spacer8</cstring>
                     </property>
                     <property name="orientation">
-                        <enum>Vertical</enum>
+                        <enum>Qt::Vertical</enum>
                     </property>
                     <property name="sizeType">
                         <enum>Expanding</enum>

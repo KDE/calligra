@@ -2,6 +2,8 @@
 #include <string>
 
 #include <qfileinfo.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 #include <kdebug.h>
 #include <kinstance.h>
@@ -13,7 +15,7 @@
 #include <kexidb/parser/parser.h>
 
 using namespace std;
-QCString prgname;
+Q3CString prgname;
 
 int main(int argc, char **argv)
 {
@@ -24,8 +26,8 @@ int main(int argc, char **argv)
 	if (argc<2) {
 		return 1;
 	}
-	QCString drv_name(argv[1]);
-	QCString db_name = QString(argv[2]).lower().latin1();
+	Q3CString drv_name(argv[1]);
+	Q3CString db_name = QString(argv[2]).lower().latin1();
 
 	KexiDB::DriverManager manager; // = KexiDB::DriverManager::self();
 	QStringList names = manager.driverNames();

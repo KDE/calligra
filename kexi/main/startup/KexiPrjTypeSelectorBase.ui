@@ -75,7 +75,7 @@
                         <bool>true</bool>
                     </property>
                     <property name="alignment">
-                        <set>AlignVCenter|AlignLeft</set>
+                        <set>Qt::AlignVCenter|Qt::AlignLeft</set>
                     </property>
                 </widget>
                 <widget class="QLabel" row="0" column="0">
@@ -97,7 +97,7 @@
                         <bool>true</bool>
                     </property>
                     <property name="alignment">
-                        <set>AlignVCenter|AlignLeft</set>
+                        <set>Qt::AlignVCenter|Qt::AlignLeft</set>
                     </property>
                 </widget>
                 <widget class="QRadioButton" row="0" column="1">
