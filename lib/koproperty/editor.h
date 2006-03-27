@@ -22,11 +22,17 @@
 #ifndef KPROPERTY_PROPERTYEDITOR_H
 #define KPROPERTY_PROPERTYEDITOR_H
 
-#include <qguardedptr.h>
+#include <qpointer.h>
+//Added by qt3to4:
+#include <QMouseEvent>
+#include <QResizeEvent>
+#include <QKeyEvent>
+#include <QEvent>
+#include <Q3CString>
 #include "koproperty_global.h"
 
 #ifdef QT_ONLY
-#include <qlistview.h>
+#include <q3listview.h>
 #else
 #include <k3listview.h>
 //#define QListView K3ListView
@@ -121,7 +127,7 @@ class KOPROPERTY_EXPORT Editor : public K3ListView
 		/*! This slot is called when the user clicks the list view.
 		   It takes care of deleting current editor and
 		   creating a new editor for the newly selected item. */
-		void slotClicked(QListViewItem *item);
+		void slotClicked(Q3ListViewItem *item);
 
 		/*! Undoes the last change in property editor.*/
 		void undo();
@@ -131,11 +137,11 @@ class KOPROPERTY_EXPORT Editor : public K3ListView
 
 		void hideEditor();
 
-		void slotCollapsed(QListViewItem *item);
-		void slotExpanded(QListViewItem *item);
+		void slotCollapsed(Q3ListViewItem *item);
+		void slotExpanded(Q3ListViewItem *item);
 		void slotColumnSizeChanged(int section);
 		void slotColumnSizeChanged(int section, int oldSize, int newSize);
-		void slotCurrentChanged(QListViewItem *item);
+		void slotCurrentChanged(Q3ListViewItem *item);
 		void changeSetLater();
 		void selectItemLater();
 	protected:
@@ -148,7 +154,7 @@ class KOPROPERTY_EXPORT Editor : public K3ListView
 		void clearWidgetCache();
 
 		void fill();
-		void addItem(const QCString &name, EditorItem *parent);
+		void addItem(const Q3CString &name, EditorItem *parent);
 
 		void showUndoButton( bool show );
 

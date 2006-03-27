@@ -27,7 +27,7 @@
 
 #include <qpainter.h>
 #include <qpixmap.h>
-#include <qheader.h>
+#include <q3header.h>
 #include <qstyle.h>
 
 #ifdef QT_ONLY
@@ -54,7 +54,7 @@ class EditorItemPrivate
 
 using namespace KoProperty;
 
-EditorItem::EditorItem(Editor *editor, EditorItem *parent, Property *property, QListViewItem *after)
+EditorItem::EditorItem(Editor *editor, EditorItem *parent, Property *property, Q3ListViewItem *after)
  : K3ListViewItem(parent, after, 
 	property->captionForDisplaying().isEmpty() ? property->name() : property->captionForDisplaying())
 {
@@ -125,7 +125,7 @@ EditorItem::paintCell(QPainter *p, const QColorGroup & cg, int column, int width
 		p->setBrush(cg.highlight());
 		p->setPen(cg.highlightedText());
 #ifdef QT_ONLY
-		QListViewItem::paintCell(p, cg, column, width, align);
+		Q3ListViewItem::paintCell(p, cg, column, width, align);
 #else
 		K3ListViewItem::paintCell(p, cg, column, width, align);
 #endif
@@ -183,7 +183,7 @@ EditorItem::paintBranches(QPainter *p, const QColorGroup &cg, int w, int y, int 
 {
 	p->eraseRect(0,0,w,h);
 #ifdef QT_ONLY
-	QListViewItem *item = firstChild();
+	Q3ListViewItem *item = firstChild();
 #else
 	K3ListViewItem *item = static_cast<K3ListViewItem*>(firstChild());
 #endif
@@ -277,7 +277,7 @@ EditorItem::paintBranches(QPainter *p, const QColorGroup &cg, int w, int y, int 
 			if (kstyle) {
 				kstyle->drawKStylePrimitive( 
 					KStyle::KPE_ListViewExpander, p, listView(), 
-					QRect( xmarg, marg, BRANCHBOX_SIZE, BRANCHBOX_SIZE ), cg, item->isOpen() ? 0 : QStyle::Style_On,
+					QRect( xmarg, marg, BRANCHBOX_SIZE, BRANCHBOX_SIZE ), cg, item->isOpen() ? 0 : QStyle::State_On,
 						QStyleOption::Default);
 			}
 			else {//draw by hand
@@ -317,10 +317,10 @@ EditorItem::paintFocus(QPainter *, const QColorGroup &, const QRect & )
 {}
 
 int
-EditorItem::compare( QListViewItem *i, int col, bool ascending ) const
+EditorItem::compare( Q3ListViewItem *i, int col, bool ascending ) const
 {
 	if (!ascending)
-		return -QListViewItem::key( col, ascending ).localeAwareCompare( i->key( col, ascending ) );
+		return -Q3ListViewItem::key( col, ascending ).localeAwareCompare( i->key( col, ascending ) );
 
 	if (d->property) {
 //		kopropertydbg << d->property->name() << " " << d->property->sortingKey() << " | "

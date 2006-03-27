@@ -24,6 +24,8 @@
 #include <qrect.h>
 #include <qsizepolicy.h>
 #include <qpoint.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 #ifdef QT_ONLY
 // \todo
@@ -269,7 +271,7 @@ SizePolicyCustomProperty::SizePolicyCustomProperty(Property *property)
 {
 	if(property && (property->type() == SizePolicy) ) {
 //		QMap<QString, QVariant> spValues;
-		QValueList<QVariant> keys;
+		Q3ValueList<QVariant> keys;
 		keys << QSizePolicy::Fixed
 			<< QSizePolicy::Minimum
 			<< QSizePolicy::Maximum

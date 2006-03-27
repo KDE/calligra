@@ -23,10 +23,13 @@
 #define KPROPERTY_PROPERTY_H
 
 #include <qvariant.h>
+//Added by qt3to4:
+#include <Q3ValueList>
+#include <Q3CString>
 #include "koproperty_global.h"
 
-template<class U> class QAsciiDict;
-template<class U> class QAsciiDictIterator;
+template<class U> class Q3AsciiDict;
+template<class U> class Q3AsciiDictIterator;
 
 /*! \brief Namespace for a set of classes implementing generic properties framework.
 
@@ -164,8 +167,8 @@ class KOPROPERTY_EXPORT Property
 		//! A contant for null property
 		QT_STATIC_CONST Property null;
 
-		typedef QAsciiDict<Property> Dict;
-		typedef QAsciiDictIterator<Property> DictIterator;
+		typedef Q3AsciiDict<Property> Dict;
+		typedef Q3AsciiDictIterator<Property> DictIterator;
 
 		/*! Data container for properties of list type. */
 		class KOPROPERTY_EXPORT ListData
@@ -174,7 +177,7 @@ class KOPROPERTY_EXPORT Property
 			/*! Data container for list-value property.
 			 We will be able to choose an item from this list. */
 			ListData(const QStringList& keys_, const QStringList& names_);
-			ListData(const QValueList<QVariant> keys_, const QStringList& names_);
+			ListData(const Q3ValueList<QVariant> keys_, const QStringList& names_);
 			ListData();
 			~ListData();
 
@@ -185,7 +188,7 @@ class KOPROPERTY_EXPORT Property
 			 or NULL if this is not a property of type 'list'. The values in this list are ordered,
 			 so the first key element is associated with first element from
 			 the 'names' list, and so on. */
-			QValueList<QVariant> keys;
+			Q3ValueList<QVariant> keys;
 //			QStringList keys;
 
 //! @todo what about using QValueList<QVariant> here too?
@@ -205,19 +208,19 @@ class KOPROPERTY_EXPORT Property
 		 If \a caption contains newline characters, caption() will return \a caption with substituted 
 		 these with spaces. captionForDisplaying() is used to get original caption text usable 
 		 (with newline, if any) for displaying within a property editor. */
-		Property(const QCString &name, const QVariant &value = QVariant(),
+		Property(const Q3CString &name, const QVariant &value = QVariant(),
 			const QString &caption = QString::null, const QString &description = QString::null,
 			int type = Auto, Property* parent = 0);
 
 		/*! Constructs property of \ref ValueFromList type. */
-		Property(const QCString &name, const QStringList &keys, const QStringList &strings, 
+		Property(const Q3CString &name, const QStringList &keys, const QStringList &strings, 
 			const QVariant &value = QVariant(),
 			const QString &caption = QString::null, const QString &description = QString::null,
 			int type = ValueFromList, Property* parent = 0);
 
 		/*! Constructs property of \ref ValueFromList type.
 		 This is overload of the above ctor added for convenience. */
-		Property(const QCString &name, ListData* listData,
+		Property(const Q3CString &name, ListData* listData,
 			const QVariant &value = QVariant(),
 			const QString &caption = QString::null, const QString &description = QString::null,
 			int type = ValueFromList, Property* parent = 0);
@@ -228,10 +231,10 @@ class KOPROPERTY_EXPORT Property
 		~Property();
 
 		/*! \return the internal name of the property (that's used in List).*/
-		QCString name() const;
+		Q3CString name() const;
 
 		/*! Sets the internal name of the property.*/
-		void setName(const QCString &name);
+		void setName(const Q3CString &name);
 
 		/*! \return the caption of the property.*/
 		QString caption() const;
@@ -293,10 +296,10 @@ class KOPROPERTY_EXPORT Property
 
 		/*! \return a list of all children for this property, or NULL of there
 		 is no children for this property */
-		const QValueList<Property*>*  children() const;
+		const Q3ValueList<Property*>*  children() const;
 
 		/*! \return a child property for \a name, or NULL if there is no property with that name. */
-		Property* child(const QCString &name);
+		Property* child(const Q3CString &name);
 
 		/*! \return parent property for this property, or NULL if there is no parent property. */
 		Property* parent() const;
@@ -395,7 +398,7 @@ class KOPROPERTY_EXPORT Property
 		void setSortingKey(int key);
 
 		/*! \return a list of related properties for this property. */
-		const QValueList<Property*>* related() const;
+		const Q3ValueList<Property*>* related() const;
 
 		/*! Adds related property for this property. */
 		void addRelatedProperty(Property *property);

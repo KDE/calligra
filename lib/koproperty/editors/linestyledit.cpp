@@ -26,6 +26,8 @@
 #include <qcombobox.h>
 #include <qlayout.h>
 #include <qvariant.h>
+//Added by qt3to4:
+#include <Q3HBoxLayout>
 
 using namespace KoProperty;
 
@@ -138,7 +140,7 @@ using namespace KoProperty;
 LineStyleEdit::LineStyleEdit(Property *property, QWidget *parent, const char *name)
  : Widget(property, parent, name)
 {
-	QHBoxLayout *l = new QHBoxLayout(this, 0, 0);
+	Q3HBoxLayout *l = new Q3HBoxLayout(this, 0, 0);
 	m_edit = new QComboBox(this);
 	m_edit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 	m_edit->setMinimumHeight(5);

@@ -24,15 +24,18 @@
 
 #include "koproperty_global.h"
 #include <qobject.h>
-#include <qasciidict.h>
+#include <q3asciidict.h>
+//Added by qt3to4:
+#include <Q3ValueList>
+#include <Q3CString>
 
 namespace KoProperty {
 
 class Property;
 class SetPrivate;
 
-typedef QMap<QCString, QValueList<QCString> > StringListMap ;
-typedef QMapIterator<QCString, QStringList> StringListMapIterator;
+typedef QMap<Q3CString, Q3ValueList<Q3CString> > StringListMap ;
+typedef QMapIterator<Q3CString, QStringList> StringListMapIterator;
 
 /*! \brief Lists holding properties in groups
 
@@ -60,11 +63,11 @@ class KOPROPERTY_EXPORT Set : public QObject
 				void operator ++();
 				Property*  operator *();
 
-				QCString  currentKey();
+				Q3CString  currentKey();
 				Property*  current();
 
 			private:
-				QAsciiDictIterator<Property> *iterator;
+				Q3AsciiDictIterator<Property> *iterator;
 				friend class Set;
 		};
 
@@ -77,14 +80,14 @@ class KOPROPERTY_EXPORT Set : public QObject
 
 		/*! Adds the property to the set, in the group. You can use any group name, except "common"
 		  (which is already used for basic group). */
-		void addProperty(Property *property, QCString group = "common");
+		void addProperty(Property *property, Q3CString group = "common");
 
 		/*! Removes property from the set. Emits aboutToDeleteProperty before removing.*/
 		void removeProperty(Property *property);
 
 		/*! Removes property with the given name from the set.
 		Emits aboutToDeleteProperty() before removing.*/
-		void removeProperty(const QCString &name);
+		void removeProperty(const Q3CString &name);
 
 		/*! Removes all properties from the property set and destroys them. */
 		virtual void clear();
@@ -109,11 +112,11 @@ class KOPROPERTY_EXPORT Set : public QObject
 		void setReadOnly(bool readOnly);
 
 		/*! \return true if the set contains property names \a name. */
-		bool contains(const QCString &name);
+		bool contains(const Q3CString &name);
 
 		/*! \return property named with \a name. If no such property is found,
 		 null property (Property::null) is returned. */
-		Property&  property( const QCString &name);
+		Property&  property( const Q3CString &name);
 
 		/*! Accesses a property by it's name. 
 		Property reference is returned, so all property modifications are allowed.
@@ -129,26 +132,26 @@ class KOPROPERTY_EXPORT Set : public QObject
 		set["myProperty"].setValue("My Value");
 		/endcode
 		\return \ref Property with given name. */
-		Property&  operator[](const QCString &name);
+		Property&  operator[](const Q3CString &name);
 
 		/*! Creates a deep copy of \a set and assigns it to this property set. */
 		const Set& operator= (const Set &set);
 
 		/*! Change the value of property whose key is \a property to \a value.
 		By default, it only calls Property::setValue(). */
-		void changeProperty(const QCString &property, const QVariant &value);
+		void changeProperty(const Q3CString &property, const QVariant &value);
 
 		/*! Sets the i18n'ed string that will be shown in Editor to represent this group. */
-		void setGroupDescription(const QCString &group, const QString desc);
+		void setGroupDescription(const Q3CString &group, const QString desc);
 
-		QString groupDescription(const QCString &group);
+		QString groupDescription(const Q3CString &group);
 
 		const StringListMap& groups();
 
 		/*! Used by property editor to preserve previous selection when this set is assigned again. */
-		QCString prevSelection() const;
+		Q3CString prevSelection() const;
 
-		void setPrevSelection(const QCString& prevSelection);
+		void setPrevSelection(const Q3CString& prevSelection);
 
 		/*! A name of this property set type, that is usable when
 		 we want to know if two property set objects have the same type.
@@ -165,7 +168,7 @@ class KOPROPERTY_EXPORT Set : public QObject
 		Set(bool propertyOwner);
 
 		/*! Adds property to a group.*/
-		void addToGroup(const QCString &group, Property *property);
+		void addToGroup(const Q3CString &group, Property *property);
 
 		/*! Removes property from a group.*/
 		void removeFromGroup(Property *property);

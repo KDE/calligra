@@ -39,7 +39,7 @@ SizeEdit::SizeEdit(Property *property, QWidget *parent, const char *name)
 {
 	setHasBorders(false);
 	m_edit = new KActiveLabel(this);
-	m_edit->setFocusPolicy(NoFocus);
+	m_edit->setFocusPolicy(Qt::NoFocus);
 //	m_edit->setIndent(KPROPEDITOR_ITEM_MARGIN);
 	m_edit->setPaletteBackgroundColor(palette().active().base());
 //	m_edit->setBackgroundMode(Qt::PaletteBase);

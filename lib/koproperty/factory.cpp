@@ -43,8 +43,8 @@
 #include "timeedit.h"
 #include "urledit.h"
 
-#include <qvaluelist.h>
-#include <qintdict.h>
+#include <q3valuelist.h>
+#include <q3intdict.h>
 
 #ifdef QT_ONLY
 #else
@@ -74,8 +74,8 @@ class FactoryManagerPrivate
 		~FactoryManagerPrivate() {}
 
 		//registered widgets for property types
-		QIntDict<CustomPropertyFactory> registeredWidgets;
-		QIntDict<CustomPropertyFactory> registeredCustomProperties;
+		Q3IntDict<CustomPropertyFactory> registeredWidgets;
+		Q3IntDict<CustomPropertyFactory> registeredCustomProperties;
 };
 }
 
@@ -114,10 +114,10 @@ FactoryManager::registerFactoryForEditor(int editorType, CustomPropertyFactory *
 }
 
 void
-FactoryManager::registerFactoryForEditors(const QValueList<int> &editorTypes, CustomPropertyFactory *factory)
+FactoryManager::registerFactoryForEditors(const Q3ValueList<int> &editorTypes, CustomPropertyFactory *factory)
 {
-	QValueList<int>::ConstIterator endIt = editorTypes.constEnd();
-	for(QValueList<int>::ConstIterator it = editorTypes.constBegin(); it != endIt; ++it)
+	Q3ValueList<int>::ConstIterator endIt = editorTypes.constEnd();
+	for(Q3ValueList<int>::ConstIterator it = editorTypes.constBegin(); it != endIt; ++it)
 		registerFactoryForEditor(*it, factory);
 }
 
@@ -229,11 +229,11 @@ FactoryManager::registerFactoryForProperty(int propertyType, CustomPropertyFacto
 }
 
 void
-FactoryManager::registerFactoryForProperties(const QValueList<int> &propertyTypes, 
+FactoryManager::registerFactoryForProperties(const Q3ValueList<int> &propertyTypes, 
 	CustomPropertyFactory *factory)
 {
-	QValueList<int>::ConstIterator endIt = propertyTypes.constEnd();
-	for(QValueList<int>::ConstIterator it = propertyTypes.constBegin(); it != endIt; ++it)
+	Q3ValueList<int>::ConstIterator endIt = propertyTypes.constEnd();
+	for(Q3ValueList<int>::ConstIterator it = propertyTypes.constBegin(); it != endIt; ++it)
 		registerFactoryForProperty(*it, factory);
 }
 

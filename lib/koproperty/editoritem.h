@@ -24,7 +24,7 @@
 
 #include "koproperty_global.h"
 #ifdef QT_ONLY
-#include <qlistview.h>
+#include <q3listview.h>
 #else
 #include <k3listview.h>
 //#define K3ListViewItem QListViewItem
@@ -33,7 +33,7 @@
 #define KPROPEDITOR_ITEM_MARGIN 2
 #define KPROPEDITOR_ITEM_BORDER_COLOR QColor(200,200,200) //! \todo custom color?
 
-template<class U> class QAsciiDict;
+template<class U> class Q3AsciiDict;
 
 
 namespace KoProperty {
@@ -51,13 +51,13 @@ class Editor;
 class EditorItem : public K3ListViewItem
 {
 	public:
-		typedef QAsciiDict<EditorItem> Dict;
+		typedef Q3AsciiDict<EditorItem> Dict;
 
 		/*! Creates an EditorItem child of \a parent, associated to \a property.
 		 It \a property has not desctiption set, its name (i.e. not i18n'ed) is reused.
 		*/
 		EditorItem(Editor *editor, EditorItem *parent, Property *property,
-			QListViewItem *after=0);
+			Q3ListViewItem *after=0);
 
 		//! Two helper contructors for subclass
 		EditorItem(K3ListView *parent);
@@ -81,7 +81,7 @@ class EditorItem : public K3ListViewItem
 
 		virtual void paintFocus(QPainter * p, const QColorGroup & cg, const QRect & r);
 
-		virtual int compare( QListViewItem *i, int col, bool ascending ) const;
+		virtual int compare( Q3ListViewItem *i, int col, bool ascending ) const;
 
 		virtual void setHeight( int height );
 

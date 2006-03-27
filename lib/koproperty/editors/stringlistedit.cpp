@@ -26,6 +26,9 @@
 #include <qpainter.h>
 #include <qvariant.h>
 #include <qpushbutton.h>
+//Added by qt3to4:
+#include <Q3VBoxLayout>
+#include <Q3HBoxLayout>
 
 #ifndef QT_ONLY
 #include <keditlistbox.h>
@@ -46,7 +49,7 @@ StringListEdit::StringListEdit(Property *property, QWidget *parent, const char *
  : Widget(property, parent, name)
 {
 	setHasBorders(false);
-	QHBoxLayout *l = new QHBoxLayout(this, 0, 0);
+	Q3HBoxLayout *l = new Q3HBoxLayout(this, 0, 0);
 
 	m_edit = new QLineEdit(this);
 	m_edit->setLineWidth(0);
@@ -94,11 +97,11 @@ StringListEdit::showEditor()
 {
 #ifdef QT_ONLY
 	QDialog* dia = new QDialog(this, "stringlist_dialog", true);
-	QVBoxLayout *dv = new QVBoxLayout(dia, 2);
+	Q3VBoxLayout *dv = new Q3VBoxLayout(dia, 2);
 	QEditListBox *select = new QEditListBox(dia, "select_char");
 	dv->addWidget(select);
 
-	QHBoxLayout *dh = new QHBoxLayout(dv, 6);
+	Q3HBoxLayout *dh = new Q3HBoxLayout(dv, 6);
 	QPushButton *pbOk = new QPushButton(i18n("Ok"), dia);
 	QPushButton *pbCancel = new QPushButton(i18n("Cancel"), dia);
 

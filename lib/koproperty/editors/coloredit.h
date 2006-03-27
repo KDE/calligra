@@ -22,6 +22,8 @@
 #define KPROPERTY_COLOREDIT_H
 
 #include "../widget.h"
+//Added by qt3to4:
+#include <QEvent>
 
 #ifdef QT_ONLY
 class QPushButton;

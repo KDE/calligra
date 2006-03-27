@@ -29,6 +29,10 @@
 #include <qcolordialog.h>
 #include <qpushbutton.h>
 #include <qpixmap.h>
+//Added by qt3to4:
+#include <Q3HBoxLayout>
+#include <QKeyEvent>
+#include <QEvent>
 #else
 #include <kcolorcombo.h>
 #endif
@@ -38,13 +42,13 @@ using namespace KoProperty;
 ColorButton::ColorButton(Property *property, QWidget *parent, const char *name)
  : Widget(property, parent, name)
 {
-	QHBoxLayout *l = new QHBoxLayout(this, 0, 0);
+	Q3HBoxLayout *l = new Q3HBoxLayout(this, 0, 0);
 #ifdef QT_ONLY
 	m_edit = new QPushButton(this);
 	connect(m_edit, SIGNAL(clicked()), this, SLOT(selectColor()));
 #else
 	m_edit = new KColorCombo(this);
-	m_edit->setFocusPolicy(QWidget::NoFocus);
+	m_edit->setFocusPolicy(Qt::NoFocus);
 	connect(m_edit, SIGNAL(activated(int)), this, SLOT(slotValueChanged(int)));
 #endif
 	m_edit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
@@ -125,7 +129,7 @@ ColorButton::eventFilter(QObject* watched, QEvent* e)
 #ifdef QT_ONLY
 	if(e->type() == QEvent::KeyPress) {
 		QKeyEvent* ev = static_cast<QKeyEvent*>(e);
-		if(ev->key() == Key_Space) {
+		if(ev->key() == Qt::Key_Space) {
 			m_edit->animteClick();
 			return true;
 		}

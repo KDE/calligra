@@ -27,7 +27,11 @@
 #include <qvariant.h>
 
 #ifdef QT_ONLY
-#include <qlistview.h>
+#include <q3listview.h>
+//Added by qt3to4:
+#include <QKeyEvent>
+#include <QResizeEvent>
+#include <QEvent>
 #else
 #include <k3listview.h>
 #include <kdebug.h>
@@ -113,12 +117,12 @@ Widget::eventFilter(QObject*, QEvent* e)
 	if(e->type() == QEvent::KeyPress)
 	{
 		QKeyEvent* ev = static_cast<QKeyEvent*>(e);
-		if(ev->key() == Key_Escape)
+		if(ev->key() == Qt::Key_Escape)
 		{
 			emit rejectInput(this);
 			return true;
 		}
-		else if((ev->key() == Key_Return) || (ev->key() == Key_Enter))
+		else if((ev->key() == Qt::Key_Return) || (ev->key() == Qt::Key_Enter))
 		{
 			// should apply when autosync == false
 			emit acceptInput(this);
@@ -155,7 +159,7 @@ void
 Widget::setFocusWidget(QWidget*focusProxy)
 {
 	if (focusProxy) {
-		if (focusProxy->focusPolicy() != NoFocus)
+		if (focusProxy->focusPolicy() != Qt::NoFocus)
 			setFocusProxy(focusProxy);
 		focusProxy->installEventFilter(this);
 	}

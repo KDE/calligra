@@ -23,7 +23,7 @@
 
 #include "../widget.h"
 
-class QDateTimeEdit;
+class Q3DateTimeEdit;
 class QDateTime;
 
 namespace KoProperty {
@@ -48,7 +48,7 @@ class KOPROPERTY_EXPORT DateTimeEdit : public Widget
 		void  slotValueChanged(const QDateTime &dateTime);
 
 	private:
-		QDateTimeEdit   *m_edit;
+		Q3DateTimeEdit   *m_edit;
 };
 
 }

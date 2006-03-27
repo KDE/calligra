@@ -22,6 +22,8 @@
 
 #include <qlayout.h>
 #include <qvariant.h>
+//Added by qt3to4:
+#include <Q3HBoxLayout>
 
 #ifndef QT_ONLY
 #include <kurlrequester.h>
@@ -29,7 +31,7 @@
 #else
 #include <qpushbutton.h>
 #include <qlineedit.h>
-#include <qfiledialog.h>
+#include <q3filedialog.h>
 #endif
 
 #include "property.h"
@@ -40,7 +42,7 @@ using namespace KoProperty;
 URLEdit::URLEdit(Property *property, QWidget *parent, const char *name)
  : Widget(property, parent, name)
 {
-	QHBoxLayout *l = new QHBoxLayout(this, 0, 0);
+	Q3HBoxLayout *l = new Q3HBoxLayout(this, 0, 0);
 #ifndef QT_ONLY
 	m_edit = new KUrlRequester(this);
 	m_edit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
@@ -117,9 +119,9 @@ URLEdit::selectFile()
 #ifdef QT_ONLY
 	QString path;
 	if(m_property->type() == DirectoryURL)
-		path = QFileDialog::getExistingDirectory(path,this);
+		path = Q3FileDialog::getExistingDirectory(path,this);
 	else if(m_property->type() == FileURL)
-		path = QFileDialog::getOpenFileName(path, QString::null, this);
+		path = Q3FileDialog::getOpenFileName(path, QString::null, this);
 	//slotValueChanged(m_url);
 	m_edit->setText(path);
 #endif

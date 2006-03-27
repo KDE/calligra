@@ -30,6 +30,11 @@
 #include <qfontmetrics.h>
 #include <qlabel.h>
 #include <qtooltip.h>
+//Added by qt3to4:
+#include <QEvent>
+#include <QKeyEvent>
+#include <Q3Frame>
+#include <QResizeEvent>
 
 #include <kdeversion.h>
 #include <kfontrequester.h>
@@ -51,7 +56,7 @@ class FontEditRequester : public KFontRequester
 		{
 			label()->setPaletteBackgroundColor(palette().active().base());
 			label()->setMinimumWidth(0);
-			label()->setFrameShape(QFrame::Box);
+			label()->setFrameShape(Q3Frame::Box);
 			label()->setIndent(-1);
 #if KDE_VERSION >= KDE_MAKE_VERSION(3,4,0) 
 			label()->setFocusPolicy(ClickFocus);
@@ -139,7 +144,7 @@ FontEdit::eventFilter(QObject* watched, QEvent* e)
 {
 	if(e->type() == QEvent::KeyPress) {
 		QKeyEvent* ev = static_cast<QKeyEvent*>(e);
-		if(ev->key() == Key_Space) {
+		if(ev->key() == Qt::Key_Space) {
 			m_edit->button()->animateClick();
 			return true;
 		}

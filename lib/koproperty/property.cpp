@@ -29,9 +29,12 @@
 #endif
 
 #include <qobject.h>
-#include <qptrdict.h>
-#include <qasciidict.h>
-#include <qguardedptr.h>
+#include <q3ptrdict.h>
+#include <q3asciidict.h>
+#include <qpointer.h>
+//Added by qt3to4:
+#include <Q3ValueList>
+#include <Q3CString>
 
 namespace KoProperty {
 
@@ -71,7 +74,7 @@ class PropertyPrivate
 		}
 
 	int type;
-	QCString name;
+	Q3CString name;
 	QString captionForDisplaying;
 	QString* caption;
 	QString description;
@@ -87,7 +90,7 @@ class PropertyPrivate
 	bool readOnly : 1;
 	bool visible : 1;
 	int autosync;
-	QMap<QCString, QVariant> options;
+	QMap<Q3CString, QVariant> options;
 
 	CustomProperty *custom;
 	//! Flag used to allow CustomProperty to use setValue()
@@ -96,13 +99,13 @@ class PropertyPrivate
 	//! Used when a single set is assigned for the property
 	QPointer<Set> set;
 	//! Used when multiple sets are assigned for the property
-	QPtrDict< QPointer<Set> > *sets;
+	Q3PtrDict< QPointer<Set> > *sets;
 //	QValueList<Set*>  sets;
 
 	Property  *parent;
-	QValueList<Property*>  *children;
+	Q3ValueList<Property*>  *children;
 	//! list of properties with the same name (when intersecting buffers)
-	QValueList<Property*>  *relatedProperties;
+	Q3ValueList<Property*>  *relatedProperties;
 
 	int sortingKey;
 };
@@ -119,7 +122,7 @@ Property::ListData::ListData(const QStringList& keys_, const QStringList& names_
 	setKeysAsStringList(keys_);
 }
 
-Property::ListData::ListData(const QValueList<QVariant> keys_, const QStringList& names_)
+Property::ListData::ListData(const Q3ValueList<QVariant> keys_, const QStringList& names_)
  : keys(keys_), names(names_)
 // , fixed(true)
 {
@@ -145,7 +148,7 @@ void Property::ListData::setKeysAsStringList(const QStringList& list)
 QStringList Property::ListData::keysAsStringList() const
 {
 	QStringList result;
-	for (QValueList<QVariant>::ConstIterator it = keys.constBegin(); it!=keys.constEnd(); ++it) {
+	for (Q3ValueList<QVariant>::ConstIterator it = keys.constBegin(); it!=keys.constEnd(); ++it) {
 		result.append((*it).toString());
 	}
 	return result;
@@ -171,7 +174,7 @@ KoProperty::createValueListFromStringLists(const QStringList &keys, const QStrin
 */
 
 
-Property::Property(const QCString &name, const QVariant &value,
+Property::Property(const Q3CString &name, const QVariant &value,
 	const QString &caption, const QString &description,
 	int type, Property* parent)
  : d( new PropertyPrivate() )
@@ -192,7 +195,7 @@ Property::Property(const QCString &name, const QVariant &value,
 	setValue(value, false);
 }
 
-Property::Property(const QCString &name, const QStringList &keys, const QStringList &strings,
+Property::Property(const Q3CString &name, const QStringList &keys, const QStringList &strings,
 	const QVariant &value, const QString &caption, const QString &description, 
 	int type, Property* parent)
  : d( new PropertyPrivate() )
@@ -210,7 +213,7 @@ Property::Property(const QCString &name, const QStringList &keys, const QStringL
 	setValue(value, false);
 }
 
-Property::Property(const QCString &name, ListData* listData, 
+Property::Property(const Q3CString &name, ListData* listData, 
 	const QVariant &value, const QString &caption, const QString &description, 
 	int type, Property* parent)
  : d( new PropertyPrivate() )
@@ -245,14 +248,14 @@ Property::~Property()
 	d = 0;
 }
 
-QCString
+Q3CString
 Property::name() const
 {
 	return d->name;
 }
 
 void
-Property::setName(const QCString &name)
+Property::setName(const Q3CString &name)
 {
 	d->name = name;
 }
@@ -392,7 +395,7 @@ Property::setValue(const QVariant &value, bool rememberOldValue, bool useCustomP
 		d->value = value;
 
 	if (d->sets) {
-		for (QPtrDictIterator< QPointer<Set> > it(*d->sets); it.current(); ++it) {
+		for (Q3PtrDictIterator< QPointer<Set> > it(*d->sets); it.current(); ++it) {
 			if (it.current()) {//may be destroyed in the meantime
 				emit (*it.current())->propertyChanged(**it.current(), *this, prevValue);
 				emit (*it.current())->propertyChanged(**it.current(), *this);
@@ -417,7 +420,7 @@ Property::resetValue()
 		d->parent->d->changed = false;
 
 	if (d->sets) {
-		for (QPtrDictIterator< QPointer<Set> > it(*d->sets); it.current(); ++it) {
+		for (Q3PtrDictIterator< QPointer<Set> > it(*d->sets); it.current(); ++it) {
 			if (it.current()) //may be destroyed in the meantime
 				emit (*it.current())->propertyReset(**it.current(), *this);
 		}
@@ -599,8 +602,8 @@ Property::operator= (const Property &property)
 		}
 		else {
 			// no CustomProperty (should never happen), simply copy all children
-			QValueList<Property*>::ConstIterator endIt = d->children->constEnd();
-			for(QValueList<Property*>::ConstIterator it = d->children->constBegin(); it != endIt; ++it) {
+			Q3ValueList<Property*>::ConstIterator endIt = d->children->constEnd();
+			for(Q3ValueList<Property*>::ConstIterator it = d->children->constBegin(); it != endIt; ++it) {
 				Property *child = new Property( *(*it) );
 				addChild(child);
 			}
@@ -608,7 +611,7 @@ Property::operator= (const Property &property)
 	}
 
 	if(property.d->relatedProperties) {
-		d->relatedProperties = new QValueList<Property*>( *(property.d->relatedProperties));
+		d->relatedProperties = new Q3ValueList<Property*>( *(property.d->relatedProperties));
 	}
 
 	// update these later because they may have been changed when creating children
@@ -626,17 +629,17 @@ Property::operator ==(const Property &prop) const
 
 /////////////////////////////////////////////////////////////////
 
-const QValueList<Property*>*
+const Q3ValueList<Property*>*
 Property::children() const
 {
 	return d->children;
 }
 
 Property*
-Property::child(const QCString &name)
+Property::child(const Q3CString &name)
 {
-	QValueList<Property*>::ConstIterator endIt = d->children->constEnd();
-	for(QValueList<Property*>::ConstIterator it = d->children->constBegin(); it != endIt; ++it) {
+	Q3ValueList<Property*>::ConstIterator endIt = d->children->constEnd();
+	for(Q3ValueList<Property*>::ConstIterator it = d->children->constBegin(); it != endIt; ++it) {
 		if((*it)->name() == name)
 			return *it;
 	}
@@ -657,7 +660,7 @@ Property::addChild(Property *prop)
 
 	if(!d->children || qFind( d->children->begin(), d->children->end(), prop) == d->children->end()) { // not in our list
 		if(!d->children)
-			d->children = new QValueList<Property*>();
+			d->children = new Q3ValueList<Property*>();
 		d->children->append(prop);
 		prop->setSortingKey(d->children->count());
 		prop->d->parent = this;
@@ -685,7 +688,7 @@ Property::addSet(Set *set)
 	if (pset && (Set*)*pset == set)
 		return;
 	if (!d->sets) {
-		d->sets = new QPtrDict< QPointer<Set> >( 101 );
+		d->sets = new Q3PtrDict< QPointer<Set> >( 101 );
 		d->sets->setAutoDelete(true);
 	}
 
@@ -696,7 +699,7 @@ Property::addSet(Set *set)
 //		d->sets.append(set);
 }
 
-const QValueList<Property*>*
+const Q3ValueList<Property*>*
 Property::related() const
 {
 	return d->relatedProperties;
@@ -706,9 +709,9 @@ void
 Property::addRelatedProperty(Property *property)
 {
 	if(!d->relatedProperties)
-		d->relatedProperties = new QValueList<Property*>();
+		d->relatedProperties = new Q3ValueList<Property*>();
 
-	QValueList<Property*>::iterator it = qFind( d->relatedProperties->begin(), d->relatedProperties->end(), property);
+	Q3ValueList<Property*>::iterator it = qFind( d->relatedProperties->begin(), d->relatedProperties->end(), property);
 	if(it == d->relatedProperties->end()) // not in our list
 		d->relatedProperties->append(property);
 }

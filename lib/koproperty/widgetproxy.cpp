@@ -24,6 +24,8 @@
 
 #include <qlayout.h>
 #include <qvariant.h>
+//Added by qt3to4:
+#include <Q3HBoxLayout>
 
 namespace KoProperty {
 class WidgetProxyPrivate
@@ -38,7 +40,7 @@ class WidgetProxyPrivate
 		Widget  *widget;
 		PropertyType  type;
 
-		QHBoxLayout *layout;
+		Q3HBoxLayout *layout;
 };
 }
 
@@ -49,7 +51,7 @@ WidgetProxy::WidgetProxy(QWidget *parent, const char *name)
 {
 	d = new WidgetProxyPrivate();
 	d->property = new Property();
-	d->layout = new QHBoxLayout(this, 0, 0);
+	d->layout = new Q3HBoxLayout(this, 0, 0);
 }
 
 WidgetProxy::~WidgetProxy()

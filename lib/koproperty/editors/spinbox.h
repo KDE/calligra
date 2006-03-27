@@ -24,6 +24,8 @@
 #include <knuminput.h>
 
 #include "../widget.h"
+//Added by qt3to4:
+#include <QEvent>
 
 namespace KoProperty {
 

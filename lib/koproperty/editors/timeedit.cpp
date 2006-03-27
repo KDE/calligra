@@ -20,13 +20,15 @@
 
 #include "timeedit.h"
 
-#include <qdatetimeedit.h>
-#include <qrangecontrol.h>
-#include <qobjectlist.h>
+#include <q3datetimeedit.h>
+#include <q3rangecontrol.h>
+#include <qobject.h>
 #include <qpainter.h>
 #include <qlayout.h>
 #include <qvariant.h>
 #include <qdatetime.h>
+//Added by qt3to4:
+#include <Q3HBoxLayout>
 
 #ifdef QT_ONLY
 // \todo
@@ -40,8 +42,8 @@ using namespace KoProperty;
 TimeEdit::TimeEdit(Property *property, QWidget *parent, const char *name)
  : Widget(property, parent, name)
 {
-	QHBoxLayout *l = new QHBoxLayout(this, 0, 0);
-	m_edit = new QTimeEdit(this);
+	Q3HBoxLayout *l = new Q3HBoxLayout(this, 0, 0);
+	m_edit = new Q3TimeEdit(this);
 	m_edit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 	m_edit->setMinimumHeight(5);
 	l->addWidget(m_edit);

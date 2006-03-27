@@ -23,9 +23,12 @@
 #include "property.h"
 
 #include <qlayout.h>
-#include <qobjectlist.h>
+#include <qobject.h>
 #include <qvariant.h>
 #include <qpainter.h>
+//Added by qt3to4:
+#include <QKeyEvent>
+#include <QEvent>
 
 #include <kglobal.h>
 #include <klocale.h>
@@ -45,7 +48,7 @@ IntSpinBox::IntSpinBox(int lower, int upper, int step, int value, int base, IntE
 	installEventFilter(editor());
 	installEventFilter(this);
 	QObjectList *spinwidgets = queryList( "QSpinWidget", 0, false, true );
-	QSpinWidget* spin = static_cast<QSpinWidget*>(spinwidgets->first());
+	Q3SpinWidget* spin = static_cast<Q3SpinWidget*>(spinwidgets->first());
 	if (spin)
 		spin->installEventFilter(this);
 	delete spinwidgets;
@@ -59,7 +62,7 @@ IntSpinBox::eventFilter(QObject *o, QEvent *e)
 		if(e->type() == QEvent::KeyPress)
 		{
 			QKeyEvent* ev = static_cast<QKeyEvent*>(e);
-			if((ev->key()==Key_Up || ev->key()==Key_Down) && ev->state() !=ControlButton)
+			if((ev->key()==Qt::Key_Up || ev->key()==Qt::Key_Down) && ev->state() !=Qt::ControlModifier)
 			{
 				parentWidget()->eventFilter(o, e);
 				return true;
@@ -149,7 +152,7 @@ void
 IntEdit::updateSpinWidgets()
 {
 	QObjectList *spinwidgets = queryList( "QSpinWidget", 0, false, true );
-	QSpinWidget* spin = static_cast<QSpinWidget*>(spinwidgets->first());
+	Q3SpinWidget* spin = static_cast<Q3SpinWidget*>(spinwidgets->first());
 	if (spin) {
 		spin->setUpEnabled(!isReadOnly());
 		spin->setDownEnabled(!isReadOnly());
@@ -177,7 +180,7 @@ DoubleSpinBox::DoubleSpinBox (double lower, double upper, double step, double va
 	installEventFilter(editor());
 	installEventFilter(this);
 	QObjectList *spinwidgets = queryList( "QSpinWidget", 0, false, true );
-	QSpinWidget* spin = static_cast<QSpinWidget*>(spinwidgets->first());
+	Q3SpinWidget* spin = static_cast<Q3SpinWidget*>(spinwidgets->first());
 	if (spin)
 		spin->installEventFilter(this);
 	delete spinwidgets;
@@ -298,7 +301,7 @@ void
 DoubleEdit::updateSpinWidgets()
 {
 	QObjectList *spinwidgets = queryList( "QSpinWidget", 0, false, true );
-	QSpinWidget* spin = static_cast<QSpinWidget*>(spinwidgets->first());
+	Q3SpinWidget* spin = static_cast<Q3SpinWidget*>(spinwidgets->first());
 	if (spin) {
 		spin->setUpEnabled(!isReadOnly());
 		spin->setDownEnabled(!isReadOnly());

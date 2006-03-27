@@ -25,9 +25,11 @@
 
 #include <qpixmap.h>
 #include <qstringlist.h>
-#include <qdatetimeedit.h>
+#include <q3datetimeedit.h>
 #include <qcursor.h>
 #include <qapplication.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 #include <koproperty/property.h>
 #include <koproperty/editor.h>
@@ -51,7 +53,7 @@ test::test()
 //  Simple
 	m_set = new Set(this, "test");
 	m_set->setReadOnly( readOnly );
-	QCString group;
+	Q3CString group;
 	if (!flat)
 		group = "SimpleGroup";
 	m_set->addProperty(new Property("Name", "Name"), group);

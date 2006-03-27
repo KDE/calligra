@@ -29,13 +29,20 @@
 #include <qpushbutton.h>
 #include <qlayout.h>
 #include <qmap.h>
-#include <qguardedptr.h>
-#include <qheader.h>
-#include <qasciidict.h>
+#include <qpointer.h>
+#include <q3header.h>
+#include <q3asciidict.h>
 #include <qtooltip.h>
 #include <qapplication.h>
 #include <qeventloop.h>
 #include <qtimer.h>
+//Added by qt3to4:
+#include <Q3CString>
+#include <QEvent>
+#include <QKeyEvent>
+#include <Q3ValueList>
+#include <QResizeEvent>
+#include <QMouseEvent>
 
 #ifdef QT_ONLY
 #else
@@ -112,8 +119,8 @@ class EditorPrivate
 		//! used by selectItemLater()
 		EditorItem *itemToSelectLater;
 
-		QListViewItem *previouslyCollapsedGroupItem;
-		QListViewItem *childFormPreviouslyCollapsedGroupItem;
+		Q3ListViewItem *previouslyCollapsedGroupItem;
+		Q3ListViewItem *childFormPreviouslyCollapsedGroupItem;
 };
 }
 
@@ -135,8 +142,8 @@ Editor::Editor(QWidget *parent, bool autoSync, const char *name)
 	d->setListLater_list = 0;
 
 	d->undoButton = new QPushButton(viewport());
-	d->undoButton->setFocusPolicy(QWidget::NoFocus);
-	setFocusPolicy(QWidget::ClickFocus);
+	d->undoButton->setFocusPolicy(Qt::NoFocus);
+	setFocusPolicy(Qt::ClickFocus);
 	d->undoButton->setMinimumSize(QSize(5,5)); // allow to resize undoButton even below pixmap size
 	d->undoButton->setPixmap(SmallIcon("undo"));
 	QToolTip::add(d->undoButton, i18n("Undo changes"));
@@ -149,7 +156,7 @@ Editor::Editor(QWidget *parent, bool autoSync, const char *name)
 	addColumn(i18n("Name"));
 	addColumn(i18n("Value"));
 	setAllColumnsShowFocus(true);
-	setColumnWidthMode(0, QListView::Maximum);
+	setColumnWidthMode(0, Q3ListView::Maximum);
 	setFullWidth(true);
 	setShowSortIndicator(false);
 #if KDE_IS_VERSION(3,3,9)
@@ -164,10 +171,10 @@ Editor::Editor(QWidget *parent, bool autoSync, const char *name)
 	updateFont();
 //	d->baseRowHeight = QFontMetrics(font()).height() + itemMargin()*2;
 
-	connect(this, SIGNAL(selectionChanged(QListViewItem *)), this, SLOT(slotClicked(QListViewItem *)));
-	connect(this, SIGNAL(currentChanged(QListViewItem *)), this, SLOT(slotCurrentChanged(QListViewItem *)));
-	connect(this, SIGNAL(expanded(QListViewItem *)), this, SLOT(slotExpanded(QListViewItem *)));
-	connect(this, SIGNAL(collapsed(QListViewItem *)), this, SLOT(slotCollapsed(QListViewItem *)));
+	connect(this, SIGNAL(selectionChanged(Q3ListViewItem *)), this, SLOT(slotClicked(Q3ListViewItem *)));
+	connect(this, SIGNAL(currentChanged(Q3ListViewItem *)), this, SLOT(slotCurrentChanged(Q3ListViewItem *)));
+	connect(this, SIGNAL(expanded(Q3ListViewItem *)), this, SLOT(slotExpanded(Q3ListViewItem *)));
+	connect(this, SIGNAL(collapsed(Q3ListViewItem *)), this, SLOT(slotCollapsed(Q3ListViewItem *)));
 	connect(header(), SIGNAL(sizeChange(int, int, int)), this, SLOT(slotColumnSizeChanged(int, int, int)));
 	connect(header(), SIGNAL(clicked(int)), this, SLOT(updateEditorGeometry()));
 	connect(header(), SIGNAL(sectionHandleDoubleClicked (int)), this, SLOT(slotColumnSizeChanged(int)));
@@ -203,8 +210,8 @@ Editor::fill()
 	if(map.count() == 1) { // one group (default one), so don't show groups
 //		EditorGroupItem *hiddenGroupItem = new EditorGroupItem(d->topItem, "");
 
-		QValueList<QCString> props = map.begin().data();
-		QValueList<QCString>::ConstIterator it = props.constBegin();
+		Q3ValueList<Q3CString> props = map.begin().data();
+		Q3ValueList<Q3CString>::ConstIterator it = props.constBegin();
 		for( ; it != props.constEnd(); ++it)
 			addItem(*it, d->topItem);
 
@@ -215,7 +222,7 @@ Editor::fill()
 			if(!it.key().isEmpty() && !it.data().isEmpty() && map.count() > 1)
 				groupItem = new EditorGroupItem(d->topItem, d->set->groupDescription(it.key()) );
 
-			QValueList<QCString>::ConstIterator it2 = it.data().constBegin();
+			Q3ValueList<Q3CString>::ConstIterator it2 = it.data().constBegin();
 			for( ; it2 != it.data().constEnd(); ++it2)
 				addItem(*it2, groupItem);
 		}
@@ -236,7 +243,7 @@ Editor::fill()
 }
 
 void
-Editor::addItem(const QCString &name, EditorItem *parent)
+Editor::addItem(const Q3CString &name, EditorItem *parent)
 {
 	if(!d->set || !d->set->contains(name))
 		return;
@@ -246,7 +253,7 @@ Editor::addItem(const QCString &name, EditorItem *parent)
 //		kopropertydbg << "Property is not visible: " << name << endl;
 		return;
 	}
-	QListViewItem *last = parent ? parent->firstChild() : d->topItem->firstChild();
+	Q3ListViewItem *last = parent ? parent->firstChild() : d->topItem->firstChild();
 	while(last && last->nextSibling())
 		last = last->nextSibling();
 
@@ -263,8 +270,8 @@ Editor::addItem(const QCString &name, EditorItem *parent)
 		return;
 
 	last = 0;
-	QValueList<Property*>::ConstIterator endIt = property->children()->constEnd();
-	for(QValueList<Property*>::ConstIterator it = property->children()->constBegin(); it != endIt; ++it) {
+	Q3ValueList<Property*>::ConstIterator endIt = property->children()->constEnd();
+	for(Q3ValueList<Property*>::ConstIterator it = property->children()->constBegin(); it != endIt; ++it) {
 		//! \todo allow to have child prop with child items too
 		if( *it && (*it)->isVisible() )
 			last = new EditorItem(this, item, *it, last);
@@ -296,7 +303,7 @@ Editor::changeSet(Set *set, bool preservePrevSelection)
 		d->set->disconnect(this);
 	}
 
-	QCString selectedPropertyName1, selectedPropertyName2;
+	Q3CString selectedPropertyName1, selectedPropertyName2;
 	if (preservePrevSelection) {
 		//try to find prev. selection:
 		//1. in new list's prev. selection
@@ -413,7 +420,7 @@ Editor::slotPropertyChanged(Set& set, Property& property)
 
 	if (d->currentItem && d->currentItem->property() == &property) {
 		d->currentWidget->setValue(property.value(), false);
-		for(QListViewItem *item = d->currentItem->firstChild(); item; item = item->nextSibling())
+		for(Q3ListViewItem *item = d->currentItem->firstChild(); item; item = item->nextSibling())
 			repaintItem(item);
 	}
 	else  {
@@ -423,7 +430,7 @@ Editor::slotPropertyChanged(Set& set, Property& property)
 			item = d->itemDict[property.parent()->name()];
 		if (item) {
 			repaintItem(item);
-			for(QListViewItem *it = item->firstChild(); it; it = it->nextSibling())
+			for(Q3ListViewItem *it = item->firstChild(); it; it = it->nextSibling())
 				repaintItem(it);
 		}
 	}
@@ -461,7 +468,7 @@ Editor::slotPropertyReset(Set& set, Property& property)
 
 	if (d->currentItem && d->currentItem->property() == &property) {
 		d->currentWidget->setValue(property.value(), false);
-		for(QListViewItem *item = d->currentItem->firstChild(); item; item = item->nextSibling())
+		for(Q3ListViewItem *item = d->currentItem->firstChild(); item; item = item->nextSibling())
 			repaintItem(item);
 	}
 	else  {
@@ -470,7 +477,7 @@ Editor::slotPropertyReset(Set& set, Property& property)
 		if(!item && property.parent())
 			item = d->itemDict[property.parent()->name()];
 		repaintItem(item);
-		for(QListViewItem *it = item->firstChild(); it; it = it->nextSibling())
+		for(Q3ListViewItem *it = item->firstChild(); it; it = it->nextSibling())
 			repaintItem(it);
 	}
 
@@ -525,7 +532,7 @@ Editor::slotWidgetRejectInput(Widget *widget)
 }
 
 void
-Editor::slotClicked(QListViewItem *it)
+Editor::slotClicked(Q3ListViewItem *it)
 {
 	d->previouslyCollapsedGroupItem = 0;
 	d->childFormPreviouslyCollapsedGroupItem = 0;
@@ -558,10 +565,10 @@ Editor::slotClicked(QListViewItem *it)
 }
 
 void
-Editor::slotCurrentChanged(QListViewItem *item)
+Editor::slotCurrentChanged(Q3ListViewItem *item)
 {
 	if (item == firstChild()) {
-		QListViewItem *oldItem = item;
+		Q3ListViewItem *oldItem = item;
 		while (item && (!item->isSelectable() || !item->isVisible()))
 			item = item->itemBelow();
 		if (item && item != oldItem) {
@@ -716,7 +723,7 @@ Editor::showUndoButton( bool show )
 }
 
 void
-Editor::slotExpanded(QListViewItem *item)
+Editor::slotExpanded(Q3ListViewItem *item)
 {
 	if (!item)
 		return;
@@ -732,13 +739,13 @@ Editor::slotExpanded(QListViewItem *item)
 }
 
 void
-Editor::slotCollapsed(QListViewItem *item)
+Editor::slotCollapsed(Q3ListViewItem *item)
 {
 	if (!item)
 		return;
 	//unselect child item and hide editor if a group item has been collapsed
 	if (dynamic_cast<EditorGroupItem*>(item)) {
-		for (QListViewItem *i = selectedItem(); i; i = i->parent()) {
+		for (Q3ListViewItem *i = selectedItem(); i; i = i->parent()) {
 			if (i->parent()==item) {
 				d->previouslyCollapsedGroupItem = item;
 				d->childFormPreviouslyCollapsedGroupItem = selectedItem();
@@ -759,7 +766,7 @@ Editor::slotColumnSizeChanged(int section, int oldSize, int newSize)
 	Q_UNUSED(oldSize);
 	Q_UNUSED(newSize);
 	updateEditorGeometry();
-	for (QListViewItemIterator it(this); it.current(); ++it) {
+	for (Q3ListViewItemIterator it(this); it.current(); ++it) {
 //		if (section == 0 && dynamic_cast<EditorGroupItem*>(it.current())) {
 //			it.current()->repaint();
 //	}
@@ -860,9 +867,9 @@ Editor::handleKeyPress(QKeyEvent* ev)
 	const Qt::ButtonState s = ev->state();
 
 	//selection moving
-	QListViewItem *item = 0;
+	Q3ListViewItem *item = 0;
 
-	if ( ((s == NoButton) && (k == Key_Up)) || (k==Key_BackTab) ) {
+	if ( ((s == Qt::NoButton) && (k == Qt::Key_Up)) || (k==Qt::Key_Backtab) ) {
 		//find prev visible
 		item = selectedItem() ? selectedItem()->itemAbove() : 0;
 		while (item && (!item->isSelectable() || !item->isVisible()))
@@ -870,7 +877,7 @@ Editor::handleKeyPress(QKeyEvent* ev)
 		if (!item)
 			return true;
 	}
-	else if( (s == NoButton) && ((k == Key_Down) || (k == Key_Tab)) ) {
+	else if( (s == Qt::NoButton) && ((k == Qt::Key_Down) || (k == Qt::Key_Tab)) ) {
 		//find next visible
 		item = selectedItem() ? selectedItem()->itemBelow() : 0;
 		while (item && (!item->isSelectable() || !item->isVisible()))
@@ -878,7 +885,7 @@ Editor::handleKeyPress(QKeyEvent* ev)
 		if (!item)
 			return true;
 	}
-	else if( (s==NoButton) && (k==Key_Home) ) {
+	else if( (s==Qt::NoButton) && (k==Qt::Key_Home) ) {
 		if (d->currentWidget && d->currentWidget->hasFocus())
 			return false;
 		//find 1st visible
@@ -886,12 +893,12 @@ Editor::handleKeyPress(QKeyEvent* ev)
 		while (item && (!item->isSelectable() || !item->isVisible()))
 			item = item->itemBelow();
 	}
-	else if( (s==NoButton) && (k==Key_End) ) {
+	else if( (s==Qt::NoButton) && (k==Qt::Key_End) ) {
 		if (d->currentWidget && d->currentWidget->hasFocus())
 			return false;
 		//find last visible
 		item = selectedItem();
-		QListViewItem *lastVisible = item;
+		Q3ListViewItem *lastVisible = item;
 		while (item) { // && (!item->isSelectable() || !item->isVisible()))
 			item = item->itemBelow();
 			if (item && item->isSelectable() && item->isVisible())
@@ -934,7 +941,7 @@ Editor::event( QEvent * e )
 void
 Editor::contentsMousePressEvent( QMouseEvent * e )
 {
-	QListViewItem *item = itemAt(e->pos());
+	Q3ListViewItem *item = itemAt(e->pos());
 	if (dynamic_cast<EditorGroupItem*>(item)) {
 		setOpen( item, !isOpen(item) );
 		return;

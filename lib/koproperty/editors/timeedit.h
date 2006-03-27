@@ -23,7 +23,7 @@
 
 #include "../widget.h"
 
-class QTimeEdit;
+class Q3TimeEdit;
 
 namespace KoProperty {
 
@@ -47,7 +47,7 @@ class KOPROPERTY_EXPORT TimeEdit : public Widget
 		void slotValueChanged(const QTime &time);
 
 	private:
-		QTimeEdit   *m_edit;
+		Q3TimeEdit   *m_edit;
 };
 
 }

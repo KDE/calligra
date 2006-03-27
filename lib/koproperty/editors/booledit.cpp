@@ -29,6 +29,10 @@
 #include <qpainter.h>
 #include <qvariant.h>
 #include <qlayout.h>
+//Added by qt3to4:
+#include <QResizeEvent>
+#include <QKeyEvent>
+#include <QEvent>
 
 #include <kdebug.h>
 
@@ -38,10 +42,10 @@ BoolEdit::BoolEdit(Property *property, QWidget *parent, const char *name)
  : Widget(property, parent, name)
 {
     m_toggle = new QToolButton(this);
-    m_toggle->setFocusPolicy(QWidget::WheelFocus);
+    m_toggle->setFocusPolicy(Qt::WheelFocus);
     m_toggle->setToggleButton(true);
     m_toggle->setUsesTextLabel(true);
-    m_toggle->setTextPosition(QToolButton::Right);
+    m_toggle->setTextPosition(QToolButton::BesideIcon);
     m_toggle->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     //we're not using layout to because of problems with button size
     m_toggle->move(0, 0);
@@ -122,7 +126,7 @@ BoolEdit::eventFilter(QObject* watched, QEvent* e)
 {
     if(e->type() == QEvent::KeyPress) {
         QKeyEvent* ev = static_cast<QKeyEvent*>(e);
-        if(ev->key() == Key_Space) {
+        if(ev->key() == Qt::Key_Space) {
             m_toggle->toggle();
             return true;
         }

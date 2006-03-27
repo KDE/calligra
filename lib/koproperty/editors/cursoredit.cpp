@@ -23,6 +23,8 @@
 #include <qmap.h>
 #include <qvariant.h>
 #include <qcursor.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 #ifdef QT_ONLY
 // \tdo
@@ -65,14 +67,14 @@ CursorEdit::CursorEdit(Property *property, QWidget *parent, const char *name)
 
 //! @todo NOT THREAD-SAFE
 	if (!m_cursorListData) {
-		QValueList<QVariant> keys;
+		Q3ValueList<QVariant> keys;
 		keys 
 			<< Qt::BlankCursor
 			<< Qt::ArrowCursor
 			<< Qt::UpArrowCursor
 			<< Qt::CrossCursor
 			<< Qt::WaitCursor
-			<< Qt::IbeamCursor
+			<< Qt::IBeamCursor
 			<< Qt::SizeVerCursor
 			<< Qt::SizeHorCursor
 			<< Qt::SizeBDiagCursor

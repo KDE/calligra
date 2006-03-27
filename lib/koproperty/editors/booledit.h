@@ -22,6 +22,9 @@
 #define KPROPERTY_BOOLEDIT_H
 
 #include "../widget.h"
+//Added by qt3to4:
+#include <QResizeEvent>
+#include <QEvent>
 
 class QToolButton;
 
