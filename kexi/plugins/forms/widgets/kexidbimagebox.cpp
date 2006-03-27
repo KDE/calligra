@@ -557,9 +557,9 @@ void KexiDBImageBox::updateActionStrings()
 
 	if (m_chooser) {
 		if (popupMenuAvailable() && dataSource().isEmpty()) //this may work in the future (see @todo below)
-			QToolTip::add(m_chooser, i18n("Click to show actions for this image box"));
+			m_chooser->setToolTip( i18n("Click to show actions for this image box"));
 		else
-			QToolTip::add(m_chooser, i18n("Click to show actions for \"%1\" image box").arg(dataSource()));
+			m_chooser->setToolTip( i18n("Click to show actions for \"%1\" image box").arg(dataSource()));
 	}
 }
 

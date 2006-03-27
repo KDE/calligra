@@ -39,7 +39,7 @@
 #include <kcolorbutton.h>
 #include <kdebug.h>
 
-#include <q3whatsthis.h>
+
 #include <qlineedit.h>
 #include <qcheckbox.h>
 #include <qcombobox.h>
@@ -384,7 +384,7 @@ void KWFrameDia::setupTab1(){ // TAB Frame Options
 
         m_eofGrid= new Q3GridLayout (m_endOfFrame, 4, 1, KDialog::marginHint(), KDialog::spacingHint());
         m_rAppendFrame = new QRadioButton( i18n( "Create a new page" ), m_endOfFrame );
-        Q3WhatsThis::add( m_rAppendFrame, "<b>Create a new page:</b><br/> if there is too "
+        m_rAppendFrame->setWhatsThis( "<b>Create a new page:</b><br/> if there is too "
             "much text for this text frame, a new page will be created and, "
             "since \"Reconnect frame to current flow\" is the only possible "
             "option together with this one, "
@@ -392,7 +392,7 @@ void KWFrameDia::setupTab1(){ // TAB Frame Options
         m_eofGrid->addWidget( m_rAppendFrame, 1, 0 );
 
         m_rResizeFrame = new QRadioButton( i18n( "Resize last frame" ), m_endOfFrame );
-        Q3WhatsThis::add( m_rResizeFrame, "<b>Resize last frame:</b><br/> "
+        m_rResizeFrame->setWhatsThis( "<b>Resize last frame:</b><br/> "
             "if there is too much text for this text frame, "
             "the frame will resize itself (increasing its height) as much as it needs, "
             "to be able to contain all the text. More precisely, when the frameset has "
@@ -400,7 +400,7 @@ void KWFrameDia::setupTab1(){ // TAB Frame Options
         m_eofGrid->addWidget( m_rResizeFrame, 2, 0 );
 
         m_rNoShow = new QRadioButton( i18n( "Don't show the extra text" ), m_endOfFrame );
-        Q3WhatsThis::add( m_rNoShow, "<b>Don't show the extra text:</b><br/> "
+        m_rNoShow->setWhatsThis( "<b>Don't show the extra text:</b><br/> "
             "if there is too much text for this text frame, nothing happens "
             "automatically. Initially the extra text won't appear. One possibility "
             "then is to resize the frame manually. The other possibility is, with the option "
@@ -453,7 +453,7 @@ void KWFrameDia::setupTab1(){ // TAB Frame Options
 
     m_onpGrid = new Q3GridLayout( m_onNewPage, 4, 1, KDialog::marginHint(), KDialog::spacingHint() );
     m_reconnect = new QRadioButton (i18n ("Reconnect frame to current flow"), m_onNewPage);
-    Q3WhatsThis::add(m_reconnect, i18n("<b>Reconnect frame to current flow:</b><br/>"
+    m_reconnect->setWhatsThis( i18n("<b>Reconnect frame to current flow:</b><br/>"
         "When a new page is created, a new frame will be created for this "
         "frameset, so that the text can flow from one page to the next if necessary. "
         "This is what happens for the \"main text frameset\", but this option makes it possible "
@@ -464,14 +464,14 @@ void KWFrameDia::setupTab1(){ // TAB Frame Options
     m_onpGrid->addWidget( m_reconnect, 1, 0 );
 
     m_noFollowup = new QRadioButton (i18n ("Do not create a followup frame"), m_onNewPage);
-    Q3WhatsThis::add(m_noFollowup, i18n("<b>Do not create a followup frame:</b><br/>"
+    m_noFollowup->setWhatsThis( i18n("<b>Do not create a followup frame:</b><br/>"
         "When a new page is created, no frame will be created for this frameset."));
     if ( m_rResizeFrame )
         connect( m_noFollowup, SIGNAL( clicked() ), this, SLOT( setFrameBehaviorInputOn() ) );
     m_onpGrid->addWidget( m_noFollowup, 2, 0 );
 
     m_copyRadio= new QRadioButton (i18n ("Place a copy of this frame"), m_onNewPage);
-    Q3WhatsThis::add(m_copyRadio, i18n("<b>Place a copy of this frame:</b><br/>"
+    m_copyRadio->setWhatsThis( i18n("<b>Place a copy of this frame:</b><br/>"
         "When a new page is created, a frame will be created for this frameset, "
         "which will always show the exact same thing as the frame on the previous "
         "page. This is what happens for headers and footers, but this option "
@@ -563,7 +563,7 @@ void KWFrameDia::setupTab1(){ // TAB Frame Options
     row++;
     m_grid1->addMultiCellWidget(m_cbAllFrames,row,row, 0, 1);
     m_cbProtectContent = new QCheckBox( i18n("Protect content"), m_tab1);
-    Q3WhatsThis::add(m_cbProtectContent, i18n("<b>Protect content:</b><br/>"
+    m_cbProtectContent->setWhatsThis( i18n("<b>Protect content:</b><br/>"
         "Disallow changes to be made to the contents of the frame(s)."));
     connect( m_cbProtectContent, SIGNAL(toggled ( bool ) ), this, SLOT(slotProtectContentChanged( bool )));
     row++;
@@ -2401,7 +2401,7 @@ KWFourSideConfigWidget::KWFourSideConfigWidget( KWDocument* doc, const QString& 
     Q3GridLayout* mGrid = new Q3GridLayout( grp2, 4, 4, KDialog::marginHint(), KDialog::spacingHint() );
 
     m_synchronize=new QCheckBox( i18n("Synchronize changes"), grp2 );
-    Q3WhatsThis::add(m_synchronize, i18n("<b>Synchronize changes:</b><br/>"
+    m_synchronize->setWhatsThis( i18n("<b>Synchronize changes:</b><br/>"
         "When this is checked any change in margins will be used for all directions."));
     mGrid->addMultiCellWidget( m_synchronize, 1, 1, 0, 1 );
 

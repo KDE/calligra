@@ -37,7 +37,7 @@
 #include <qradiobutton.h>
 #include <qcheckbox.h>
 #include <qpainter.h>
-#include <q3whatsthis.h>
+
 //Added by qt3to4:
 #include <Q3GridLayout>
 
@@ -89,10 +89,10 @@ KChartDataConfigPage::KChartDataConfigPage( KChartParams* params,
 
     grid1->addWidget(gb, 2, 0);
 
-    Q3WhatsThis::add(this, i18n("This configuration page can be used to swap the interpretation of rows and columns."));
-    Q3WhatsThis::add(m_rowMajor, i18n("By default one row is considered to be a data set and each column holds the individual values of the data series. This sets the data in rows on your chart."));
+    this->setWhatsThis( i18n("This configuration page can be used to swap the interpretation of rows and columns."));
+    m_rowMajor->setWhatsThis( i18n("By default one row is considered to be a data set and each column holds the individual values of the data series. This sets the data in rows on your chart."));
 
-    Q3WhatsThis::add(m_colMajor, i18n("Here you can choose to have each column hold one data set. Note that the values are not really swapped but only their interpretation."));
+    m_colMajor->setWhatsThis( i18n("Here you can choose to have each column hold one data set. Note that the values are not really swapped but only their interpretation."));
     m_colMajor->resize( m_colMajor->sizeHint() );
     grid1->addWidget(gb, 1, 0);
     grid1->setColStretch(3, 0);

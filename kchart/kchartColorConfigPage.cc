@@ -27,7 +27,7 @@
 #include <qlayout.h>
 #include <qlabel.h>
 #include <q3buttongroup.h>
-#include <q3whatsthis.h>
+
 #include <q3hbox.h>
 //Added by qt3to4:
 #include <Q3VBoxLayout>
@@ -47,7 +47,7 @@ KChartColorConfigPage::KChartColorConfigPage( KChartParams* params,
     m_data( dat ),
     index( 0 )
 {
-    Q3WhatsThis::add( this, i18n( "This page lets you configure the colors "
+    this->setWhatsThis( i18n( "This page lets you configure the colors "
                                  "in which your chart is displayed. Each "
                                  "part of the chart can be assigned a "
                                  "different color." ) );
@@ -67,8 +67,8 @@ KChartColorConfigPage::KChartColorConfigPage( KChartParams* params,
     lineLA->setBuddy( _lineCB );
     grid->addWidget( _lineCB, 0, 1 );
     wtstr = i18n( "This is the color that is used for drawing lines like axes." );
-    Q3WhatsThis::add( lineLA, wtstr );
-    Q3WhatsThis::add( _lineCB, wtstr );
+    lineLA->setWhatsThis( wtstr );
+    _lineCB->setWhatsThis( wtstr );
 
     QLabel* gridLA = new QLabel( i18n( "&Grid color:" ), gb );
     gridLA->setAlignment( Qt::AlignRight | Qt::AlignVCenter );
@@ -79,8 +79,8 @@ KChartColorConfigPage::KChartColorConfigPage( KChartParams* params,
     wtstr = i18n( "Here you can configure the color that is used for the "
                   "chart grid. Of course, this setting will only "
                   "take effect if grid drawing is turned on." );
-    Q3WhatsThis::add( gridLA, wtstr );
-    Q3WhatsThis::add( _gridCB, wtstr );
+    gridLA->setWhatsThis( wtstr );
+    _gridCB->setWhatsThis( wtstr );
 
     QLabel* xtitleLA = new QLabel( i18n("&X-title color:" ), gb );
     xtitleLA->setAlignment( Qt::AlignRight | Qt::AlignVCenter );
@@ -91,8 +91,8 @@ KChartColorConfigPage::KChartColorConfigPage( KChartParams* params,
     wtstr = i18n( "This color is used for displaying titles for the "
                   "X (horizontal) axis. This setting overrides the setting "
                   "<i>Title Color</i>." );
-    Q3WhatsThis::add( xtitleLA, wtstr );
-    Q3WhatsThis::add( _xtitleCB, wtstr );
+    xtitleLA->setWhatsThis( wtstr );
+    _xtitleCB->setWhatsThis( wtstr );
 
     QLabel* ytitleLA = new QLabel( i18n("&Y-title color:" ), gb );
     ytitleLA->setAlignment( Qt::AlignRight | Qt::AlignVCenter );
@@ -103,8 +103,8 @@ KChartColorConfigPage::KChartColorConfigPage( KChartParams* params,
     wtstr = i18n( "This color is used for displaying titles for the "
                   "Y (vertical) axis. This setting overrides the setting "
                   "<i>Title Color</i>." );
-    Q3WhatsThis::add( ytitleLA, wtstr );
-    Q3WhatsThis::add( _ytitleCB, wtstr );
+    ytitleLA->setWhatsThis( wtstr );
+    _ytitleCB->setWhatsThis( wtstr );
 
 #if 0
     QLabel* ytitle2LA = new QLabel( i18n( "Y-title color (2nd axis):" ), gb );
@@ -117,8 +117,8 @@ KChartColorConfigPage::KChartColorConfigPage( KChartParams* params,
                   "second Y (vertical) axis. It only takes effect if the "
                   "chart is configured to have a second Y axis. This setting "
                   "overrides the setting <i>Title Color</i>." );
-    Q3WhatsThis::add( ytitle2LA, wtstr );
-    Q3WhatsThis::add( _ytitle2CB, wtstr );
+    ytitle2LA->setWhatsThis( wtstr );
+    _ytitle2CB->setWhatsThis( wtstr );
 #endif
 
     QLabel* xlabelLA = new QLabel( i18n( "X-label color:" ), gb );
@@ -129,8 +129,8 @@ KChartColorConfigPage::KChartColorConfigPage( KChartParams* params,
     grid->addWidget( _xlabelCB, 4, 1 );
     wtstr = i18n( "Here you can configure the color that is used for "
                   "labeling the X (horizontal) axis" );
-    Q3WhatsThis::add( xlabelLA, wtstr );
-    Q3WhatsThis::add( _xlabelCB, wtstr );
+    xlabelLA->setWhatsThis( wtstr );
+    _xlabelCB->setWhatsThis( wtstr );
 
     QLabel* ylabelLA = new QLabel( i18n( "Y-label color:" ), gb );
     ylabelLA->setAlignment( Qt::AlignRight | Qt::AlignVCenter );
@@ -140,8 +140,8 @@ KChartColorConfigPage::KChartColorConfigPage( KChartParams* params,
     grid->addWidget( _ylabelCB, 5, 1 );
     wtstr = i18n( "Here you can configure the color that is used for "
                   "labeling the Y (vertical) axis" );
-    Q3WhatsThis::add( ylabelLA, wtstr );
-    Q3WhatsThis::add( _ylabelCB, wtstr );
+    ylabelLA->setWhatsThis( wtstr );
+    _ylabelCB->setWhatsThis( wtstr );
 
 #if 0
     QLabel* ylabel2LA = new QLabel( i18n( "Y-label color (2nd axis):" ), gb );
@@ -154,8 +154,8 @@ KChartColorConfigPage::KChartColorConfigPage( KChartParams* params,
                   "labeling the second Y (vertical) axis. Of course, "
                   "this setting only takes effect if the chart is "
                   "configured to have two vertical axes." );
-    Q3WhatsThis::add( ylabel2LA, wtstr );
-    Q3WhatsThis::add( _ylabel2CB, wtstr );
+    ylabel2LA->setWhatsThis( wtstr );
+    _ylabel2CB->setWhatsThis( wtstr );
 #endif
 
     Q3HBox* dataColorHB = new Q3HBox( gb );
@@ -163,7 +163,7 @@ KChartColorConfigPage::KChartColorConfigPage( KChartParams* params,
     _dataColorLB = new KListBox(dataColorHB);
     _dataColorCB = new KColorButton( dataColorHB);
     wtstr = i18n( "Choose a row/column in the list on the left and change its color using this button.");
-    Q3WhatsThis::add( _dataColorCB, wtstr );
+    _dataColorCB->setWhatsThis( wtstr );
     initDataColorList();
     connect( _dataColorLB, SIGNAL(highlighted(int )), this, SLOT(changeIndex(int)));
     connect( _dataColorLB, SIGNAL(doubleClicked ( Q3ListBoxItem * )), this, SLOT(activeColorButton()));

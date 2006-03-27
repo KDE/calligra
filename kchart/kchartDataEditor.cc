@@ -4,7 +4,7 @@
 #include <qlayout.h>
 #include <qlineedit.h>
 #include <qregexp.h>
-#include <q3whatsthis.h>
+
 #include <qtooltip.h>
 #include <qvalidator.h>
 #include <qpushbutton.h>
@@ -300,19 +300,19 @@ void kchartDataEditor::addDocs()
     // The rows settings.
     QString rowwhatsthis = i18n("<p><b>Sets the number of rows in the data table."
 				"</b><br><br>Each row represents one data set.</p>");
-    QToolTip::add(m_rowsSB, i18n("Number of active data rows"));
-    Q3WhatsThis::add(m_rowsLA, rowwhatsthis);
-    Q3WhatsThis::add(m_rowsSB, rowwhatsthis);
+    m_rowsSB->setToolTip( i18n("Number of active data rows"));
+    m_rowsLA->setWhatsThis( rowwhatsthis);
+    m_rowsSB->setWhatsThis( rowwhatsthis);
 
     // The columns settings.
     QString colwhatsthis = i18n("<p><b>Sets the number of columns in the data table."
 				"</b><br><br>The number of columns defines the number of data values in each data set (row).</p>");
-    QToolTip::add(m_colsSB, i18n("Number of active data columns"));
-    Q3WhatsThis::add(m_colsLA, colwhatsthis);
-    Q3WhatsThis::add(m_colsSB, colwhatsthis);
+    m_colsSB->setToolTip( i18n("Number of active data columns"));
+    m_colsLA->setWhatsThis( colwhatsthis);
+    m_colsSB->setWhatsThis( colwhatsthis);
 
     // The table.
-    QToolTip::add(m_table, i18n("Chart data table"));
+    m_table->setToolTip( i18n("Chart data table"));
     
     //GUI
     //The QWhatsThis information below is incorrect since the way that the contents of the table
@@ -334,7 +334,7 @@ void kchartDataEditor::addDocs()
     
     
 #if 0
-    Q3WhatsThis::add(m_table, i18n("<p>This table contains the data"
+    m_table->setWhatsThis( i18n("<p>This table contains the data"
     " for the chart.<br><br> Each row is one data set of values."
     " The name of such a data set can be changed in the column header (on the left)"
     " of the table. In a line diagram each row is one line. In a ring diagram each row"

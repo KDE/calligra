@@ -77,7 +77,7 @@ KexiDataSourcePage::KexiDataSourcePage(QWidget *parent, const char *name)
 	m_clearWidgetDSButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
 	m_clearWidgetDSButton->setAutoRaise(true);
 	m_clearWidgetDSButton->setPaletteBackgroundColor(palette().active().background());
-	QToolTip::add(m_clearWidgetDSButton, i18n("Clear widget's data source"));
+	m_clearWidgetDSButton->setToolTip( i18n("Clear widget's data source"));
 	hlyr->addWidget(m_clearWidgetDSButton);
 	connect(m_clearWidgetDSButton, SIGNAL(clicked()), this, SLOT(clearWidgetDataSourceSelection()));
 
@@ -106,7 +106,7 @@ KexiDataSourcePage::KexiDataSourcePage(QWidget *parent, const char *name)
 	m_gotoButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
 	m_gotoButton->setAutoRaise(true);
 	m_gotoButton->setPaletteBackgroundColor(palette().active().background());
-	QToolTip::add(m_gotoButton, i18n("Go to selected data source"));
+	m_gotoButton->setToolTip( i18n("Go to selected data source"));
 	hlyr->addWidget(m_gotoButton);
 	connect(m_gotoButton, SIGNAL(clicked()), this, SLOT(slotGotoSelected()));
 
@@ -116,7 +116,7 @@ KexiDataSourcePage::KexiDataSourcePage(QWidget *parent, const char *name)
 	m_clearDSButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
 	m_clearDSButton->setAutoRaise(true);
 	m_clearDSButton->setPaletteBackgroundColor(palette().active().background());
-	QToolTip::add(m_clearDSButton, i18n("Clear data source"));
+	m_clearDSButton->setToolTip( i18n("Clear data source"));
 	hlyr->addWidget(m_clearDSButton);
 	connect(m_clearDSButton, SIGNAL(clicked()), this, SLOT(clearDataSourceSelection()));
 	
@@ -165,7 +165,7 @@ KexiDataSourcePage::KexiDataSourcePage(QWidget *parent, const char *name)
 	m_addField->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
 	m_addField->setAutoRaise(true);
 	m_addField->setPaletteBackgroundColor(palette().active().background());
-	QToolTip::add(m_addField, i18n("Insert selected fields into form"));
+	m_addField->setToolTip( i18n("Insert selected fields into form"));
 	hlyr->addWidget(m_addField);
 	connect(m_addField, SIGNAL(clicked()), this, SLOT(slotInsertSelectedFields()));
 

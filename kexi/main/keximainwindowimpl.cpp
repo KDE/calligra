@@ -266,7 +266,7 @@ KexiMainWindowImpl::KexiMainWindowImpl()
 		closeButton->setPaletteBackgroundColor(closeButton->palette().active().background()); 
 //		closeButton->setIconSet(SmallIconSet("tab_remove"));
 		tabWidget()->setCornerWidget( closeButton, Qt::TopRight );
-		QToolTip::add(closeButton, 
+		closeButton->setToolTip( 
 			i18n("Close the current tab page in Kexi tab interface", "Close the current tab"));
 		QObject::connect( closeButton, SIGNAL( clicked() ), this, SLOT( closeActiveView() ) );
 	}

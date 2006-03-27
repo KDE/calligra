@@ -3653,12 +3653,12 @@ void KPrView::setupScrollbars()
     pgNext = new QToolButton( pageBase );
     pgNext->setPixmap( QPixmap( pagedown_xpm ) );
     pgNext->setAutoRepeat( TRUE );
-    QToolTip::add( pgNext, i18n( "Next slide" ) );
+    pgNext->setToolTip( i18n( "Next slide" ) );
     connect( pgNext, SIGNAL( clicked() ), this, SLOT( nextPage() ) );
     pgPrev = new QToolButton( pageBase );
     pgPrev->setPixmap( QPixmap( pageup_xpm ) );
     pgPrev->setAutoRepeat( TRUE );
-    QToolTip::add( pgPrev, i18n( "Previous slide" ) );
+    pgPrev->setToolTip( i18n( "Previous slide" ) );
     connect( pgPrev, SIGNAL( clicked() ), this, SLOT( prevPage() ) );
 }
 

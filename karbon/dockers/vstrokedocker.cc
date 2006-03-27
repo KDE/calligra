@@ -53,7 +53,7 @@ VStrokeDocker::VStrokeDocker( KarbonPart* part, KarbonView* parent, const char* 
 	// set min/max/step and value in points, then set actual unit
 	m_setLineWidth = new KoUnitDoubleSpinBox( this, 0.0, 1000.0, 0.5, 1.0, KoUnit::U_PT, 2 );
 	m_setLineWidth->setUnit( part->unit() );
-    QToolTip::add( m_setLineWidth, i18n( "Set line width of actual selection" ) );
+    m_setLineWidth->setToolTip( i18n( "Set line width of actual selection" ) );
 	mainLayout->addWidget ( m_setLineWidth, 0, 1 );
 	connect( m_setLineWidth, SIGNAL( valueChanged( double ) ), this, SLOT( widthChanged() ) ); 
 	
@@ -66,17 +66,17 @@ VStrokeDocker::VStrokeDocker( KarbonPart* part, KarbonView* parent, const char* 
 	button = new QPushButton( "", m_capGroup );
 	button->setPixmap( SmallIcon( "cap_butt" ) );
 	button->setToggleButton( true );
-    QToolTip::add( button, i18n( "Butt cap" ) );
+    button->setToolTip( i18n( "Butt cap" ) );
 	m_capGroup->insert( button );
 	button = new QPushButton( "", m_capGroup );
 	button->setPixmap( SmallIcon( "cap_round" ) );
 	button->setToggleButton( true );
-    QToolTip::add( button, i18n( "Round cap" ) );
+    button->setToolTip( i18n( "Round cap" ) );
 	m_capGroup->insert( button );
 	button = new QPushButton( "", m_capGroup );
 	button->setPixmap( SmallIcon( "cap_square" ) );
 	button->setToggleButton( true );
-    QToolTip::add( button, i18n( "Square cap" ) );
+    button->setToolTip( i18n( "Square cap" ) );
 	m_capGroup->insert( button );
 	mainLayout->addWidget( m_capGroup, 1, 1 );
 	connect( m_capGroup, SIGNAL( clicked( int ) ), this, SLOT( slotCapChanged( int ) ) );
@@ -91,17 +91,17 @@ VStrokeDocker::VStrokeDocker( KarbonPart* part, KarbonView* parent, const char* 
 	button = new QPushButton( "", m_joinGroup );
 	button->setPixmap( SmallIcon( "join_miter" ) );
 	button->setToggleButton( true );
-    QToolTip::add( button, i18n( "Miter join" ) );
+    button->setToolTip( i18n( "Miter join" ) );
 	m_joinGroup->insert( button );
 	button = new QPushButton( "", m_joinGroup );
 	button->setPixmap( SmallIcon( "join_round" ) );
 	button->setToggleButton( true );
-    QToolTip::add( button, i18n( "Round join" ) );
+    button->setToolTip( i18n( "Round join" ) );
 	m_joinGroup->insert( button );
 	button = new QPushButton( "", m_joinGroup );
 	button->setPixmap( SmallIcon( "join_bevel" ) );
 	button->setToggleButton( true );
-    QToolTip::add( button, i18n( "Bevel join" ) );
+    button->setToolTip( i18n( "Bevel join" ) );
 	m_joinGroup->insert( button );
 	mainLayout->addWidget( m_joinGroup, 2, 1 );
 	connect( m_joinGroup, SIGNAL( clicked( int ) ), this, SLOT( slotJoinChanged( int ) ) );

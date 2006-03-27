@@ -98,11 +98,11 @@ Thesaurus::Thesaurus(QObject* parent, const char* name, const QStringList &)
     row1->addWidget(m_search, 0);
     m_back = new QToolButton(m_page);
     m_back->setIconSet(BarIconSet(QString::fromLatin1("back")));
-    QToolTip::add(m_back, i18n("Back"));
+    m_back->setToolTip( i18n("Back"));
     row1->addWidget(m_back, 0);
     m_forward = new QToolButton(m_page);
     m_forward->setIconSet(BarIconSet(QString::fromLatin1("forward")));
-    QToolTip::add(m_forward, i18n("Forward"));
+    m_forward->setToolTip( i18n("Forward"));
     row1->addWidget(m_forward, 0);
     m_lang = new KPushButton(i18n("Change Language..."), m_page);
     connect(m_lang, SIGNAL(clicked()), this, SLOT(slotChangeLanguage()));

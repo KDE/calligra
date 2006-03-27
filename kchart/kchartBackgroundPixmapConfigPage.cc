@@ -35,7 +35,7 @@
 #include <q3hbox.h>
 #include <qpushbutton.h>
 #include <qlabel.h>
-#include <q3whatsthis.h>
+
 #include <q3listbox.h>
 //Added by qt3to4:
 #include <QPixmap>
@@ -53,7 +53,7 @@ KChartBackgroundPixmapConfigPage::KChartBackgroundPixmapConfigPage( KChartParams
     : QWidget( parent, "KChartBackgroundPixmapConfigPage" ),
       _params( params )
 {
-    Q3WhatsThis::add( this,
+    this->setWhatsThis(
                      i18n( "On this page, you can select colors or images "
                            "to be displayed behind the different areas. You "
                            "can also select whether the images should be "
@@ -80,8 +80,8 @@ KChartBackgroundPixmapConfigPage::KChartBackgroundPixmapConfigPage( KChartParams
     center->addWidget( _backgroundCB);
     QString wtstr = i18n( "Here you set the color in which the background "
                           "of the chart is painted." );
-    Q3WhatsThis::add( backgroundLA, wtstr );
-    Q3WhatsThis::add( _backgroundCB, wtstr );
+    backgroundLA->setWhatsThis( wtstr );
+    _backgroundCB->setWhatsThis( wtstr );
 
 
     QLabel* wallpaperLA = new QLabel( i18n( "Background wallpaper:" ), this );
@@ -89,7 +89,7 @@ KChartBackgroundPixmapConfigPage::KChartBackgroundPixmapConfigPage( KChartParams
     
     wallCB = new QComboBox( false, this, "wallCombo" );
     wallpaperLA->setBuddy(wallCB);
-    Q3WhatsThis::add( wallCB, i18n( "You can select a background image from "
+    wallCB->setWhatsThis( i18n( "You can select a background image from "
                                    "this list. Initially, the installed KDE "
                                    "wallpapers will be offered. If you do not "
                                    "find what you are looking for here, you can "
@@ -106,13 +106,13 @@ KChartBackgroundPixmapConfigPage::KChartBackgroundPixmapConfigPage( KChartParams
                             *it );
 
     QPushButton* browsePB = new QPushButton( i18n("&Browse..."), this );
-    Q3WhatsThis::add( browsePB, i18n( "Click this button to select a background "
+    browsePB->setWhatsThis( i18n( "Click this button to select a background "
                                      "image not yet present in the list above. " ) );
     center->addWidget( browsePB );
     connect( browsePB, SIGNAL( clicked() ), SLOT( slotBrowse() ) );
 
     wallWidget = new QWidget( this );
-    Q3WhatsThis::add( wallWidget, i18n( "This area will always display the "
+    wallWidget->setWhatsThis( i18n( "This area will always display the "
                                        "currently selected background image. "
                                        "Note that the image will be scaled and "
                                        "thus might have a different ratio than "
@@ -122,8 +122,8 @@ KChartBackgroundPixmapConfigPage::KChartBackgroundPixmapConfigPage( KChartParams
     connect( wallCB, SIGNAL( activated( int ) ),
              this, SLOT( slotWallPaperChanged( int ) ) );
 
-    right = new QVGroupBox( i18n( "Wallpaper Configuration" ), this );
-    Q3WhatsThis::add( right, i18n( "In this box, you can set various settings "
+    right = new Q3GroupBox(1, Qt::Horizontal, i18n( "Wallpaper Configuration" ), this );
+    right->setWhatsThis( i18n( "In this box, you can set various settings "
                                   "that control how the background image is "
                                   "displayed." ) );
     toplevel->addWidget( right );
@@ -141,24 +141,24 @@ KChartBackgroundPixmapConfigPage::KChartBackgroundPixmapConfigPage( KChartParams
                           "selected area too much.<br> Different images require "
                           "different settings, but 25% is a good value to start "
                           "with." );
-    Q3WhatsThis::add( intensityLA, ttstr );
-    Q3WhatsThis::add( intensitySB, ttstr );
+    intensityLA->setWhatsThis( ttstr );
+    intensitySB->setWhatsThis( ttstr );
 
 
     stretchedRB = new QRadioButton( i18n( "Stretched" ), right );
-    Q3WhatsThis::add( stretchedRB,
+    stretchedRB->setWhatsThis(
                      i18n( "If you check this box, the selected image will "
                            "be scaled to fit the total size of the selected "
                            "area. Image ratio will be adjusted to match "
                            "the area size and height if necessary." ) );
     stretchedRB->setChecked( true );
     scaledRB = new QRadioButton( i18n( "Scaled" ), right );
-    Q3WhatsThis::add( scaledRB,
+    scaledRB->setWhatsThis(
                      i18n( "If you check this box, the selected image will "
                            "be scaled to match the height or width of the "
                            "selected area - whichever is reached first." ) );
     centeredRB = new QRadioButton( i18n( "Centered" ), right );
-    Q3WhatsThis::add( centeredRB,
+    centeredRB->setWhatsThis(
                      i18n( "If you check this box, the selected image will "
                            "be centered over the selected area. If the image "
                            "is larger then the area, you will only see the "

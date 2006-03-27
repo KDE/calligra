@@ -96,7 +96,7 @@ DragBarButton::DragBarButton( const QString& text, QWidget* parent, const char* 
   };
   m_pClosePix = new QPixmap(close_xpm);
 
-  QToolTip::add(this, text);
+  this->setToolTip( text);
 }
 
 DragBarButton::~DragBarButton()

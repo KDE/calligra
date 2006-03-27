@@ -103,7 +103,7 @@ FormulaDialog::FormulaDialog( View* parent, const char* name,const QString& form
     grid1->addWidget( functions, 2, 0 );
 
     selectFunction = new QPushButton( page );
-    QToolTip::add(selectFunction, i18n("Insert function") );
+    selectFunction->setToolTip( i18n("Insert function") );
     selectFunction->setPixmap( BarIcon( "down", K3Icon::SizeSmall ) );
     grid1->addWidget( selectFunction, 3, 0 );
 

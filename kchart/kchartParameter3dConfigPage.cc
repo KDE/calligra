@@ -27,7 +27,7 @@
 #include <qlabel.h>
 #include <qcheckbox.h>
 #include <q3buttongroup.h>
-#include <q3whatsthis.h>
+
 //Added by qt3to4:
 #include <Q3GridLayout>
 
@@ -54,7 +54,7 @@ KChartParameter3dConfigPage::KChartParameter3dConfigPage( KChartParams* params,
 
   // The main on/off checkbox.
   bar3d=new QCheckBox(i18n("3D bar"),gb);
-  Q3WhatsThis::add(bar3d, i18n("If checked, this will enable 3D mode for viewing the bars. You can then add a shadow and set the angle and depth for 3D."));
+  bar3d->setWhatsThis( i18n("If checked, this will enable 3D mode for viewing the bars. You can then add a shadow and set the angle and depth for 3D."));
   grid1->addWidget(bar3d,0,0);
 
   connect(bar3d, SIGNAL(toggled ( bool )),
@@ -62,7 +62,7 @@ KChartParameter3dConfigPage::KChartParameter3dConfigPage( KChartParams* params,
 
   // Checkbox for shadows
   drawShadowColor=new QCheckBox(i18n("Draw dark shadow"),gb);
-  Q3WhatsThis::add(drawShadowColor, i18n("If checked, this will add a dark shadow on the 3D bars."));
+  drawShadowColor->setWhatsThis( i18n("If checked, this will add a dark shadow on the 3D bars."));
   grid1->addWidget(drawShadowColor,1,0);
 
   QLabel *tmpLabel = new QLabel( i18n( "Angle:" ), gb );
@@ -70,7 +70,7 @@ KChartParameter3dConfigPage::KChartParameter3dConfigPage( KChartParams* params,
   grid1->addWidget(tmpLabel,2,0);
 
   angle3d=new KIntNumInput(0, gb, 10);
-  Q3WhatsThis::add(angle3d, i18n("You can set here the angle for the 3D effect from 0 to 90. 90 will give you flat bars without any 3D effect.\nDefault is 45."));
+  angle3d->setWhatsThis( i18n("You can set here the angle for the 3D effect from 0 to 90. 90 will give you flat bars without any 3D effect.\nDefault is 45."));
   grid1->addWidget(angle3d,2,1);
   angle3d->setRange(0, 90, 1);
 
@@ -79,7 +79,7 @@ KChartParameter3dConfigPage::KChartParameter3dConfigPage( KChartParams* params,
   grid1->addWidget(tmpLabel,3,0);
 
   depth=new KDoubleNumInput(0, gb);
-  Q3WhatsThis::add(depth, i18n("You can set here the depth of the 3D effect from 0 to 2. 0 will give you no depth at all.\nDefault is 1."));
+  depth->setWhatsThis( i18n("You can set here the depth of the 3D effect from 0 to 2. 0 will give you no depth at all.\nDefault is 1."));
   depth->resize(100,depth->sizeHint().height());
   grid1->addWidget(depth,3,1);
   depth->setRange(0, 2.0, 0.1);

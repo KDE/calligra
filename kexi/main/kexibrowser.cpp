@@ -379,7 +379,7 @@ KexiBrowser::slotSelectionChanged(QListViewItem* i)
 //			m_newObjectToolbarAction->setIcon( part->info()->createItemIcon() );
 //			m_newObjectToolbarAction->setText(m_newObjectAction->text());
 			m_newObjectToolButton->setIconSet( part->info()->createItemIcon() );
-			QToolTip::add(m_newObjectToolButton, 
+			m_newObjectToolButton->setToolTip( 
 				i18n("Create object: %1").arg( part->instanceCaption().lower() ));
 			QWhatsThis::add(m_newObjectToolButton, 
 				i18n("Creates a new object: %1").arg( part->instanceCaption().lower() ));
@@ -388,7 +388,7 @@ KexiBrowser::slotSelectionChanged(QListViewItem* i)
 //			m_newObjectToolbarAction->setIconSet( SmallIconSet("filenew") );
 //			m_newObjectToolbarAction->setText(m_newObjectAction->text());
 			m_newObjectToolButton->setIconSet( "filenew" );
-			QToolTip::add(m_newObjectToolButton, i18n("Create object"));
+			m_newObjectToolButton->setToolTip( i18n("Create object"));
 			QWhatsThis::add(m_newObjectToolButton, i18n("Creates a new object"));
 		}
 	}

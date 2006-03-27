@@ -31,7 +31,7 @@
 #include <knuminput.h>
 
 #include <qradiobutton.h>
-#include <q3whatsthis.h>
+
 #include <qvbuttongroup.h>
 #include <qlabel.h>
 #include <q3vbox.h>
@@ -78,13 +78,13 @@ void KWConfigFootNoteDia::setupTab3()
     QFrame * page = addPage( i18n( "Separator Line" ) );
     QString comment= i18n ("Configure the separator line. The separator line "
         "is drawn directly above the frame for the footnotes.");
-    Q3WhatsThis::add(page, comment);
+    page->setWhatsThis( comment);
     Q3VBoxLayout *pageLayout= new Q3VBoxLayout( page, 0, KDialog::spacingHint());
 
     Q3ButtonGroup *positionGroupBox = new Q3ButtonGroup( i18n( "Position"), page );
     comment= i18n ("The separator can be positioned horizontally by picking one "
         "of the three alignments.");
-    Q3WhatsThis::add(positionGroupBox, comment);
+    positionGroupBox->setWhatsThis( comment);
     positionGroupBox->setColumnLayout(0, Qt::Vertical );
     Q3VBoxLayout *positionLayout = new Q3VBoxLayout( positionGroupBox->layout() );
     positionLayout->setAlignment( Qt::AlignTop );
@@ -126,8 +126,8 @@ void KWConfigFootNoteDia::setupTab3()
     QLabel *lSize = new QLabel( i18n( "&Width:"), page );
     lSize->setBuddy( spWidth );
     comment= i18n ("The width is the thickness of the separator line, set to 0 for no separator line.");
-    Q3WhatsThis::add(lSize, comment);
-    Q3WhatsThis::add(spWidth, comment);
+    lSize->setWhatsThis( comment);
+    spWidth->setWhatsThis( comment);
     layout->addWidget( lSize, 1, 0 );
 
     QSpacerItem* spacer = new QSpacerItem( 0, 0, QSizePolicy::Expanding, QSizePolicy::Minimum );
@@ -136,8 +136,8 @@ void KWConfigFootNoteDia::setupTab3()
     QLabel *lWidth = new QLabel( i18n("&Size on page:"), page, "lWidth" );
     lWidth->setBuddy( spLength );
     comment= i18n ("The size of the separator line can be defined as a percentage of the width of the page.");
-    Q3WhatsThis::add(spLength, comment);
-    Q3WhatsThis::add(lWidth, comment);
+    spLength->setWhatsThis( comment);
+    lWidth->setWhatsThis( comment);
     layout->addWidget( lWidth, 0, 0 );
     pageLayout->addLayout( layout );
 
@@ -157,8 +157,8 @@ void KWConfigFootNoteDia::setupTab3()
     m_cbLineType->setCurrentItem( static_cast<int>(m_doc->footNoteSeparatorLineType()));
     comment= i18n ("The separator line can be drawn as a solid line or as a line which has a "
         "pattern; the pattern can be set in the style-type.");
-    Q3WhatsThis::add(styleLabel, comment);
-    Q3WhatsThis::add(m_cbLineType, comment);
+    styleLabel->setWhatsThis( comment);
+    m_cbLineType->setWhatsThis( comment);
     styleLayout->addWidget( m_cbLineType );
 
     QSpacerItem* spacer_2 = new QSpacerItem( 0, 0, QSizePolicy::Expanding, QSizePolicy::Minimum );

@@ -49,7 +49,7 @@
   connect( txtColumns, SIGNAL( valueChanged( int ) ), this, SLOT( txtColumns_valueChanged( int ) ) );
 
   QLabel *caption = new QLabel(i18n("Slides in the pages:"), this );
-  QToolTip::add( caption, i18n("Choose how many rows and columns with slides you want to have on all pages") );
+  caption->setToolTip( i18n("Choose how many rows and columns with slides you want to have on all pages") );
   layout->addMultiCellWidget( caption, 0, 0, 0, 1 );
   QVBoxLayout *l2 = new QVBoxLayout( 0, 0, 6 );
   l2->addWidget( new QLabel(i18n("Rows: "), this) );

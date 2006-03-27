@@ -36,7 +36,7 @@
 #include <Q3HBoxLayout>
 #include <Q3GridLayout>
 #include <kfontdialog.h>
-#include <q3whatsthis.h>
+
 
 #include "kdchart/KDChartAxisParams.h"
 #include "kchart_params.h"
@@ -59,16 +59,16 @@ KChartParameterConfigPage::KChartParameterConfigPage( KChartParams* params,
     Q3GridLayout *grid1 = new Q3GridLayout(gb1->layout(),9,1);
 
     grid = new QCheckBox( i18n( "Grid" ), gb1 );
-    Q3WhatsThis::add(grid, i18n("If this is checked, the grid is shown. If you uncheck this option, the grid will not be displayed anymore."));
+    grid->setWhatsThis( i18n("If this is checked, the grid is shown. If you uncheck this option, the grid will not be displayed anymore."));
     grid1->addWidget(grid, 0, 0);
 
     yaxis = new QCheckBox( i18n( "Y-axis" ), gb1);
-    Q3WhatsThis::add(yaxis, i18n("If this is checked, the Y-axis is shown. If you uncheck this option, the Y-axis and the Y grid lines will not be displayed anymore."));
+    yaxis->setWhatsThis( i18n("If this is checked, the Y-axis is shown. If you uncheck this option, the Y-axis and the Y grid lines will not be displayed anymore."));
     connect( yaxis, SIGNAL( clicked() ), this, SLOT( axisChanged() ) );
     grid1->addWidget(yaxis, 1, 0);
 
     xaxis = new QCheckBox( i18n( "X-axis" ), gb1 );
-    Q3WhatsThis::add(xaxis, i18n("If this is checked, the X-axis is shown. If you uncheck this option, the X-axis and the X grid lines will not be displayed anymore."));
+    xaxis->setWhatsThis( i18n("If this is checked, the X-axis is shown. If you uncheck this option, the X-axis and the X grid lines will not be displayed anymore."));
     connect( xaxis, SIGNAL( clicked() ), this, SLOT( axisChanged() ) );
     grid1->addWidget(xaxis, 2, 0);
 
@@ -105,11 +105,11 @@ KChartParameterConfigPage::KChartParameterConfigPage( KChartParams* params,
 
     Q3HBoxLayout * bottom = new Q3HBoxLayout( this );
     xtitle= new QLineEdit( gb2 );
-    Q3WhatsThis::add(xtitle, i18n("Write the title for the X-axis here, if you want a title. The color for this title is set in the Colors tab, in the same dialog, and the font is set in the Font tab."));
+    xtitle->setWhatsThis( i18n("Write the title for the X-axis here, if you want a title. The color for this title is set in the Colors tab, in the same dialog, and the font is set in the Font tab."));
     bottom->addWidget(xtitle);
     Q3BoxLayout * l = new Q3VBoxLayout( this );
     ytitle= new QLineEdit( gb2 );
-    Q3WhatsThis::add(ytitle, i18n("Write the title for the Y-axis here, if you want a title. The color for this title is set in the Colors tab, in the same dialog, and the font is set in the Font tab."));
+    ytitle->setWhatsThis( i18n("Write the title for the Y-axis here, if you want a title. The color for this title is set in the Colors tab, in the same dialog, and the font is set in the Font tab."));
     bottom->addWidget(ytitle);
 
     l->addLayout(top);
@@ -119,23 +119,23 @@ KChartParameterConfigPage::KChartParameterConfigPage( KChartParams* params,
     // Linear or logarithmic scale
     Q3VButtonGroup *scaletype = new Q3VButtonGroup(i18n("Scale Types"), gb2);
     lin = new QRadioButton( i18n("Linear scale"), scaletype);
-    Q3WhatsThis::add(lin, i18n("This sets the Y-axis to be linear. This is default."));
+    lin->setWhatsThis( i18n("This sets the Y-axis to be linear. This is default."));
     log = new QRadioButton( i18n("Logarithmic scale"), scaletype);
-    Q3WhatsThis::add(log, i18n("This sets the Y-axis to be logarithmic."));
+    log->setWhatsThis( i18n("This sets the Y-axis to be logarithmic."));
     grid2->addWidget(scaletype, 1, 0);
 
     // Decimal precision
     Q3VButtonGroup *precision = new Q3VButtonGroup(i18n("Precision for Numerical Left Axis"), gb2);
     grid2->addWidget(precision, 2, 0);
     QRadioButton * automatic_precision = new QRadioButton( i18n("Automatic precision"), precision);
-    Q3WhatsThis::add(automatic_precision, i18n("This sets the precision as automatic which means that KChart decides what precision to apply."));
+    automatic_precision->setWhatsThis( i18n("This sets the precision as automatic which means that KChart decides what precision to apply."));
     automatic_precision->setChecked(true);
     max = new QRadioButton( i18n("Decimal precision:"), precision);
-    Q3WhatsThis::add(max, i18n("This sets the Y-axis precision. For example, if you choose a precision of 2, the value 5 will be displayed as 5.00 alongside the Y-axis."));
+    max->setWhatsThis( i18n("This sets the Y-axis precision. For example, if you choose a precision of 2, the value 5 will be displayed as 5.00 alongside the Y-axis."));
     connect(automatic_precision, SIGNAL(toggled(bool)), this,
             SLOT(automatic_precision_toggled(bool)) );
     maximum_length = new QSpinBox(0, 15, 1, precision );
-    Q3WhatsThis::add(maximum_length, i18n("Set the precision you want to display for the Y-axis, if you choose Decimal precision. The range is 0 to 15; 2 being the default."));
+    maximum_length->setWhatsThis( i18n("Set the precision you want to display for the Y-axis, if you choose Decimal precision. The range is 0 to 15; 2 being the default."));
     maximum_length->setValue(2);
 
 #if 0

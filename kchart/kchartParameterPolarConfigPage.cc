@@ -34,7 +34,7 @@
 #include <qradiobutton.h>
 #include <qspinbox.h>
 #include <qvbuttongroup.h>
-#include <q3whatsthis.h>
+
 //Added by qt3to4:
 #include <Q3VBoxLayout>
 
@@ -52,17 +52,17 @@ KChartParameterPolarConfigPage::KChartParameterPolarConfigPage( KChartParams* pa
     grid1->addWidget(gb);
 
     polarMarker=new QCheckBox(i18n("Polar marker"), gb);
-    Q3WhatsThis::add(polarMarker, i18n("If this is checked, the polar markers are shown; otherwise they are not."));
+    polarMarker->setWhatsThis( i18n("If this is checked, the polar markers are shown; otherwise they are not."));
     showCircularLabel = new QCheckBox(i18n("Show circular label"), gb);
-    Q3WhatsThis::add(showCircularLabel, i18n("Toggle the circular label display."));
+    showCircularLabel->setWhatsThis( i18n("Toggle the circular label display."));
 
     QLabel *label = new QLabel( i18n( "Zero degree position:" ), gb );
     angle = new QSpinBox(-359, 359, 1, gb);
-    Q3WhatsThis::add(angle, i18n("Set the position for the X axis (horizontal) from -359 to 359. Default is 0."));
+    angle->setWhatsThis( i18n("Set the position for the X axis (horizontal) from -359 to 359. Default is 0."));
 
     label=new QLabel(i18n("Line width:"), gb);
     lineWidth=new QSpinBox(gb);
-    Q3WhatsThis::add(lineWidth, i18n("Set the width for the chart lines. 0 is default and is the thinnest."));
+    lineWidth->setWhatsThis( i18n("Set the width for the chart lines. 0 is default and is the thinnest."));
 
     grid1->activate();
 }

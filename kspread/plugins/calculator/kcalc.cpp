@@ -83,7 +83,7 @@ QtCalculator :: QtCalculator( Calculator *_corba, QWidget *parent, const char *n
     pb = new QPushButton( this, "helpbutton" );
     pb->setText( "kCalc" );
     pb->setFont( QFont("times",12,QFont::Bold,FALSE) );
-    QToolTip::add( pb, i18n("KCalc Setup/Help") );
+    pb->setToolTip( i18n("KCalc Setup/Help") );
 
     connect( pb, SIGNAL(clicked()), SLOT(configclicked()) );
 

@@ -179,14 +179,14 @@ KPrEffectDia::KPrEffectDia( QWidget* parent, const char* name, const QPtrList<KP
 
     buttonTestPlaySoundEffect1 = new QPushButton( grp1 );
     buttonTestPlaySoundEffect1->setIconSet( SmallIconSet("1rightarrow") );
-    QToolTip::add( buttonTestPlaySoundEffect1, i18n("Play") );
+    buttonTestPlaySoundEffect1->setToolTip( i18n("Play") );
     upperRow->addWidget( buttonTestPlaySoundEffect1, 6, 2 );
 
     connect( buttonTestPlaySoundEffect1, SIGNAL( clicked() ), this, SLOT( playSound1() ) );
 
     buttonTestStopSoundEffect1 = new QPushButton( grp1 );
     buttonTestStopSoundEffect1->setIconSet( SmallIconSet("player_stop") );
-    QToolTip::add( buttonTestStopSoundEffect1, i18n("Stop") );
+    buttonTestStopSoundEffect1->setToolTip( i18n("Stop") );
     upperRow->addWidget( buttonTestStopSoundEffect1, 6, 3 );
 
     connect( buttonTestStopSoundEffect1, SIGNAL( clicked() ), this, SLOT( stopSound1() ) );
@@ -283,14 +283,14 @@ KPrEffectDia::KPrEffectDia( QWidget* parent, const char* name, const QPtrList<KP
 
     buttonTestPlaySoundEffect2 = new QPushButton( grp2 );
     buttonTestPlaySoundEffect2->setIconSet( SmallIconSet("1rightarrow") );
-    QToolTip::add( buttonTestPlaySoundEffect2, i18n("Play") );
+    buttonTestPlaySoundEffect2->setToolTip( i18n("Play") );
     lowerRow->addWidget( buttonTestPlaySoundEffect2, 5, 2 );
 
     connect( buttonTestPlaySoundEffect2, SIGNAL( clicked() ), this, SLOT( playSound2() ) );
 
     buttonTestStopSoundEffect2 = new QPushButton( grp2 );
     buttonTestStopSoundEffect2->setIconSet( SmallIconSet("player_stop") );
-    QToolTip::add( buttonTestStopSoundEffect2, i18n("Stop") );
+    buttonTestStopSoundEffect2->setToolTip( i18n("Stop") );
     lowerRow->addWidget( buttonTestStopSoundEffect2, 5, 3 );
 
     connect( buttonTestStopSoundEffect2, SIGNAL( clicked() ), this, SLOT( stopSound2() ) );

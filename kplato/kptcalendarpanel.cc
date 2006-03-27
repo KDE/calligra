@@ -88,13 +88,13 @@ void CalendarPanel::init( const QDate &dt )
   d = new CalendarPanelPrivate();
   d->selectWeek = new QToolButton( this );
 
-  QToolTip::add(yearForward, i18n("Next year"));
-  QToolTip::add(yearBackward, i18n("Previous year"));
-  QToolTip::add(monthForward, i18n("Next month"));
-  QToolTip::add(monthBackward, i18n("Previous month"));
-  QToolTip::add(d->selectWeek, i18n("Select a week"));
-  QToolTip::add(selectMonth, i18n("Select a month"));
-  QToolTip::add(selectYear, i18n("Select a year"));
+  yearForward->setToolTip( i18n("Next year"));
+  yearBackward->setToolTip( i18n("Previous year"));
+  monthForward->setToolTip( i18n("Next month"));
+  monthBackward->setToolTip( i18n("Previous month"));
+  d->selectWeek->setToolTip( i18n("Select a week"));
+  selectMonth->setToolTip( i18n("Select a month"));
+  selectYear->setToolTip( i18n("Select a year"));
 
   // -----
   setFontSize(10);
@@ -491,7 +491,7 @@ CalendarPanel::setCloseButton( bool enable )
 
     if ( enable ) {
         d->closeButton = new QToolButton( this );
-        QToolTip::add(d->closeButton, i18n("Close"));
+        d->closeButton->setToolTip( i18n("Close"));
         d->closeButton->setPixmap( SmallIcon("remove") );
         connect( d->closeButton, SIGNAL( clicked() ),
                  topLevelWidget(), SLOT( close() ) );

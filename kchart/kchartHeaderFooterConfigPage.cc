@@ -27,7 +27,7 @@
 #include <qlabel.h>
 #include <qlineedit.h>
 #include <q3buttongroup.h>
-#include <q3whatsthis.h>
+
 //Added by qt3to4:
 #include <Q3GridLayout>
 #include <kfontdialog.h>
@@ -46,53 +46,53 @@ KChartHeaderFooterConfigPage::KChartHeaderFooterConfigPage( KChartParams* params
     layout->setMargin( KDialog::marginHint() );
 
     QLabel *lab=new QLabel(i18n("Title:"), this);
-    Q3WhatsThis::add(lab, i18n("Write here the title of your chart if you want one. The title will be centered on top above your chart."));
+    lab->setWhatsThis( i18n("Write here the title of your chart if you want one. The title will be centered on top above your chart."));
     layout->addWidget(lab,0,0);
 
     titleEdit=new QLineEdit(this);
-    Q3WhatsThis::add(titleEdit, i18n("Write here the title of your chart if you want one. The title will be centered on top above your chart."));
+    titleEdit->setWhatsThis( i18n("Write here the title of your chart if you want one. The title will be centered on top above your chart."));
     layout->addWidget(titleEdit,0,1);
 
     titleColorButton=new KColorButton(this);
-    Q3WhatsThis::add(titleColorButton, i18n("Click on this button to choose the color for the title font."));
+    titleColorButton->setWhatsThis( i18n("Click on this button to choose the color for the title font."));
     layout->addWidget(titleColorButton,0,2);
 
     titleFontButton=new QPushButton(i18n("Font..."),this);
-    Q3WhatsThis::add(titleFontButton, i18n("Click on this button to choose the font family, style and size for the title."));
+    titleFontButton->setWhatsThis( i18n("Click on this button to choose the font family, style and size for the title."));
     layout->addWidget(titleFontButton,0,3);
     connect( titleFontButton, SIGNAL(clicked()), this, SLOT(changeTitleFont()));
 
     lab=new QLabel(i18n("Subtitle:"),this);
-    Q3WhatsThis::add(lab, i18n("Write here the subtitle of your chart if you want one. The subtitle will be centered on top just below the title."));
+    lab->setWhatsThis( i18n("Write here the subtitle of your chart if you want one. The subtitle will be centered on top just below the title."));
     layout->addWidget(lab,1,0);
 
     subtitleEdit=new QLineEdit(this);
-    Q3WhatsThis::add(subtitleEdit, i18n("Write here the subtitle of your chart if you want one. The subtitle will be centered on top just below the title."));
+    subtitleEdit->setWhatsThis( i18n("Write here the subtitle of your chart if you want one. The subtitle will be centered on top just below the title."));
     layout->addWidget(subtitleEdit,1,1);
 
     subtitleColorButton=new KColorButton(this);
-    Q3WhatsThis::add(subtitleColorButton, i18n("Click on this button to choose the color for the subtitle font."));
+    subtitleColorButton->setWhatsThis( i18n("Click on this button to choose the color for the subtitle font."));
     layout->addWidget(subtitleColorButton,1,2);
 
     subtitleFontButton=new QPushButton(i18n("Font..."),this);
-    Q3WhatsThis::add(subtitleFontButton, i18n("Click on this button to choose the font family, style and size for the subtitle."));
+    subtitleFontButton->setWhatsThis( i18n("Click on this button to choose the font family, style and size for the subtitle."));
     layout->addWidget(subtitleFontButton,1,3);
     connect( subtitleFontButton, SIGNAL(clicked()), this, SLOT(changeSubtitleFont()));
 
     lab=new QLabel(i18n("Footer:"),this);
-    Q3WhatsThis::add(lab, i18n("Write here the footer of your chart if you want one. The footer will be centered at the bottom just below your chart."));
+    lab->setWhatsThis( i18n("Write here the footer of your chart if you want one. The footer will be centered at the bottom just below your chart."));
     layout->addWidget(lab,2,0);
 
     footerEdit=new QLineEdit(this);
-    Q3WhatsThis::add(footerEdit, i18n("Write here the subtitle of your chart if you want one. The subtitle will be centered on top just below the title."));
+    footerEdit->setWhatsThis( i18n("Write here the subtitle of your chart if you want one. The subtitle will be centered on top just below the title."));
     layout->addWidget(footerEdit,2,1);
 
     footerColorButton=new KColorButton(this);
-    Q3WhatsThis::add(footerColorButton, i18n("Click on this button to choose the color for the footer font."));
+    footerColorButton->setWhatsThis( i18n("Click on this button to choose the color for the footer font."));
     layout->addWidget(footerColorButton,2,2);
 
     footerFontButton=new QPushButton(i18n("Font..."),this);
-    Q3WhatsThis::add(footerFontButton, i18n("Click on this button to choose the font family, style and size for the footer."));
+    footerFontButton->setWhatsThis( i18n("Click on this button to choose the font family, style and size for the footer."));
     connect( footerFontButton, SIGNAL(clicked()), this, SLOT(changeFooterFont()));
     layout->addWidget(footerFontButton,2,3);
 

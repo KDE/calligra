@@ -90,7 +90,7 @@ VColorDocker::VColorDocker( KarbonPart* part, KarbonView* parent, const char* /*
 	mOpacity = new VColorSlider( i18n( "Opacity:" ), QColor( "white" ), QColor( "black" ), 0, 100, 100, this );
 	//TODO: Make "white" a transparent color
 	connect( mOpacity, SIGNAL( valueChanged ( int ) ), this, SLOT( updateOpacity() ) );
-	QToolTip::add( mOpacity, i18n( "Alpha (opacity)" ) );
+	mOpacity->setToolTip( i18n( "Alpha (opacity)" ) );
 
 	QVBoxLayout *mainWidgetLayout = new QVBoxLayout( this, 3 );
 	mainWidgetLayout->addWidget( mTabWidget );

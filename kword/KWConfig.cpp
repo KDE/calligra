@@ -31,8 +31,8 @@
 #include <qlabel.h>
 #include <q3vbox.h>
 #include <qcombobox.h>
-#include <q3whatsthis.h>
-#include <qvgroupbox.h>
+
+
 #include <qpushbutton.h>
 #include <q3listbox.h>
 #include <qlineedit.h>
@@ -247,7 +247,7 @@ ConfigureInterfacePage::ConfigureInterfacePage( KWView *view, Q3VBox *box, char 
 {
     m_pView=view;
     config = KWFactory::instance()->config();
-    QVGroupBox* gbInterfaceGroup = new QVGroupBox( i18n("Interface"), box, "GroupBox" );
+    Q3GroupBox * gbInterfaceGroup = new Q3GroupBox(1, Qt::Horizontal, i18n("Interface"), box, "GroupBox" );
     gbInterfaceGroup->setMargin( KDialog::marginHint() );
     gbInterfaceGroup->setInsideSpacing( KDialog::spacingHint() );
 
@@ -285,20 +285,20 @@ ConfigureInterfacePage::ConfigureInterfacePage( KWView *view, Q3VBox *box, char 
                             "is displayed or entered. This one setting is for the whole of KWord: all dialogs, the rulers etc. "
                             "Note that KWord documents specify the unit which was used to create them, so this setting "
                             "only affects this document and all documents that will be created later.");
-    Q3WhatsThis::add( unitLabel, unitHelp );
-    Q3WhatsThis::add( m_unitCombo, unitHelp );
+    unitLabel->setWhatsThis( unitHelp );
+    m_unitCombo->setWhatsThis( unitHelp );
 
     showStatusBar = new QCheckBox(i18n("Show &status bar"),gbInterfaceGroup);
     showStatusBar->setChecked(oldShowStatusBar);
-    Q3WhatsThis::add( showStatusBar, i18n("Show or hide the status bar. If enabled, the status bar is shown at the bottom, which displays various information."));
+    showStatusBar->setWhatsThis( i18n("Show or hide the status bar. If enabled, the status bar is shown at the bottom, which displays various information."));
 
     showScrollBar = new QCheckBox( i18n("Show s&crollbar"), gbInterfaceGroup);
     showScrollBar->setChecked(oldShowScrollBar);
-    Q3WhatsThis::add( showScrollBar, i18n("Show or hide the scroll bar. If enabled, the scroll bar is shown on the right and lets you scroll up and down, which is useful for navigating through the document."));
+    showScrollBar->setWhatsThis( i18n("Show or hide the scroll bar. If enabled, the scroll bar is shown on the right and lets you scroll up and down, which is useful for navigating through the document."));
 
     pgUpDownMovesCaret = new QCheckBox(i18n("PageUp/PageDown &moves the caret"),gbInterfaceGroup);
     pgUpDownMovesCaret->setChecked(oldPgUpDownMovesCaret);
-    Q3WhatsThis::add( pgUpDownMovesCaret, i18n(
+    pgUpDownMovesCaret->setWhatsThis( i18n(
                          "If this option is enabled, the PageUp and PageDown keys "
                          "move the text caret, as in other KDE applications. "
                          "If it is disabled, they move the scrollbars, as in most other word processors." ) );
@@ -307,17 +307,17 @@ ConfigureInterfacePage::ConfigureInterfacePage( KWView *view, Q3VBox *box, char 
     QString recentHelp = i18n("The number of files remembered in the file open dialog and in the "
                               "recent files menu item.");
     QLabel* labelRecent = new QLabel( i18n("Number of recent &files:"), hbRecent );
-    Q3WhatsThis::add( labelRecent, recentHelp );
+    labelRecent->setWhatsThis( recentHelp );
     recentFiles=new KIntNumInput( oldNbRecentFiles, hbRecent );
     recentFiles->setRange(1, 20, 1);
     labelRecent->setBuddy( recentFiles );
-    Q3WhatsThis::add( recentFiles, recentHelp );
+    recentFiles->setWhatsThis( recentHelp );
 
     Q3HBox* hbGridX = new Q3HBox( gbInterfaceGroup );
     QString gridxHelp = i18n("The grid size on which frames, tabs and other content snaps while "
                              "moving and scaling.");
     QLabel* labelGridX = new QLabel( i18n("&Horizontal grid size:"), hbGridX );
-    Q3WhatsThis::add( labelGridX, gridxHelp );
+    labelGridX->setWhatsThis( gridxHelp );
     gridX=new KoUnitDoubleSpinBox( hbGridX,
                                    0.1,
                                    50,
@@ -325,13 +325,13 @@ ConfigureInterfacePage::ConfigureInterfacePage( KWView *view, Q3VBox *box, char 
                                    ptGridX,
                                    unit );
     labelGridX->setBuddy( gridX );
-    Q3WhatsThis::add( gridX, gridxHelp );
+    gridX->setWhatsThis( gridxHelp );
 
     Q3HBox* hbGridY = new Q3HBox( gbInterfaceGroup );
     QString gridyHelp = i18n("The grid size on which frames and other content snaps while "
                              "moving and scaling.");
     QLabel* labelGridY = new QLabel( i18n("&Vertical grid size:"), hbGridY );
-    Q3WhatsThis::add( labelGridY, gridyHelp );
+    labelGridY->setWhatsThis( gridyHelp );
     gridY=new KoUnitDoubleSpinBox( hbGridY,
                                    0.1,
                                    50,
@@ -340,7 +340,7 @@ ConfigureInterfacePage::ConfigureInterfacePage( KWView *view, Q3VBox *box, char 
                                    unit );
     labelGridY->setBuddy( gridY );
 
-    Q3WhatsThis::add( gridY, gridyHelp );
+    gridY->setWhatsThis( gridyHelp );
 
     Q3HBox* hbIndent = new Q3HBox( gbInterfaceGroup );
     QString indentHelp = i18n("Configure the indent width used when using the 'Increase' "
@@ -348,7 +348,7 @@ ConfigureInterfacePage::ConfigureInterfacePage( KWView *view, Q3VBox *box, char 
                               "the more often the buttons will have to be pressed to gain the same "
                               "indentation.");
     QLabel* labelIndent = new QLabel( i18n("&Paragraph indent by toolbar buttons:"), hbIndent );
-    Q3WhatsThis::add( labelIndent, indentHelp );
+    labelIndent->setWhatsThis( indentHelp );
     indent = new KoUnitDoubleSpinBox( hbIndent,
                                       0.1,
                                       50,
@@ -356,19 +356,19 @@ ConfigureInterfacePage::ConfigureInterfacePage( KWView *view, Q3VBox *box, char 
                                       ptIndent,
                                       unit );
     labelIndent->setBuddy( indent );
-    Q3WhatsThis::add( indent, indentHelp );
+    indent->setWhatsThis( indentHelp );
 
     Q3HBox* hbPagePerRow = new Q3HBox( gbInterfaceGroup );
     QString pagePerRowHelp = i18n("After selecting Preview Mode (from the \"View\" menu,) "
                                   "this is the number of pages KWord will "
                                   "position on one horizontal row.");
     QLabel* labelPagePerRow = new QLabel( i18n("Number of pa&ges per row in preview mode:" ), hbPagePerRow );
-    Q3WhatsThis::add( labelPagePerRow, pagePerRowHelp );
+    labelPagePerRow->setWhatsThis( pagePerRowHelp );
     m_nbPagePerRow=new KIntNumInput( 0, nbPagePerRow, hbPagePerRow );
     m_nbPagePerRow->setRange(1, 10, 1);
     labelPagePerRow->setBuddy( m_nbPagePerRow );
     hbPagePerRow->setStretchFactor( m_nbPagePerRow, 1 );
-    Q3WhatsThis::add(m_nbPagePerRow , pagePerRowHelp );
+    m_nbPagePerRow ->setWhatsThis( pagePerRowHelp );
 }
 
 void ConfigureInterfacePage::apply()
@@ -489,7 +489,7 @@ ConfigureMiscPage::ConfigureMiscPage( KWView *view, Q3VBox *box, char *name )
 {
     m_pView=view;
     config = KWFactory::instance()->config();
-    QVGroupBox* gbMiscGroup = new QVGroupBox( i18n("Misc"), box, "GroupBox" );
+    Q3GroupBox * gbMiscGroup = new Q3GroupBox(1, Qt::Horizontal, i18n("Misc"), box, "GroupBox" );
     gbMiscGroup->setMargin( KDialog::marginHint() );
     gbMiscGroup->setInsideSpacing( KDialog::spacingHint() );
 
@@ -512,33 +512,33 @@ ConfigureMiscPage::ConfigureMiscPage( KWView *view, Q3VBox *box, char *name )
     m_undoRedoLimit=new KIntNumInput( m_oldNbRedo, hbUndoRedo );
     m_undoRedoLimit->setRange(1, 100, 1);
     labelUndoRedo->setBuddy( m_undoRedoLimit );
-    Q3WhatsThis::add( m_undoRedoLimit, undoHelp );
-    Q3WhatsThis::add( labelUndoRedo, undoHelp );
+    m_undoRedoLimit->setWhatsThis( undoHelp );
+    labelUndoRedo->setWhatsThis( undoHelp );
 
     KWDocument* doc = m_pView->kWordDocument();
     m_displayLink=new QCheckBox(i18n("Display &links"),gbMiscGroup);
     m_displayLink->setChecked(doc->variableCollection()->variableSetting()->displayLink());
-    Q3WhatsThis::add( m_displayLink, i18n("If enabled, a link is highlighted as such and is clickable.\n\n"
+    m_displayLink->setWhatsThis( i18n("If enabled, a link is highlighted as such and is clickable.\n\n"
                                          "You can insert a link from the Insert menu."));
     m_underlineLink=new QCheckBox(i18n("&Underline all links"),gbMiscGroup);
     m_underlineLink->setChecked(doc->variableCollection()->variableSetting()->underlineLink());
-    Q3WhatsThis::add( m_underlineLink, i18n("If enabled, a link is underlined."));
+    m_underlineLink->setWhatsThis( i18n("If enabled, a link is underlined."));
 
     m_displayComment=new QCheckBox(i18n("Display c&omments"),gbMiscGroup);
     m_displayComment->setChecked(doc->variableCollection()->variableSetting()->displayComment());
-    Q3WhatsThis::add( m_displayComment, i18n("If enabled, comments are indicated by a small yellow box.\n\n"
+    m_displayComment->setWhatsThis( i18n("If enabled, comments are indicated by a small yellow box.\n\n"
                                             "You can show and edit a comment from the context menu."));
 
     m_displayFieldCode=new QCheckBox(i18n("Display field code"),gbMiscGroup);
     m_displayFieldCode->setChecked(doc->variableCollection()->variableSetting()->displayFieldCode());
-    Q3WhatsThis::add( m_displayFieldCode, i18n("If enabled, the type of link is displayed instead "
+    m_displayFieldCode->setWhatsThis( i18n("If enabled, the type of link is displayed instead "
                                               "of displaying the link text.\n\n"
                                               "There are various types of link that can be inserted, "
                                               "such as hyperlinks, files, mail, news and bookmarks."));
 
 
-    QVGroupBox* gbViewFormatting = new QVGroupBox( i18n("View Formatting"), box, "view_formatting" );
-    Q3WhatsThis::add( gbViewFormatting, i18n("These settings can be used to select the formatting "
+    Q3GroupBox * gbViewFormatting = new Q3GroupBox(1, Qt::Horizontal, i18n("View Formatting"), box, "view_formatting" );
+    gbViewFormatting->setWhatsThis( i18n("These settings can be used to select the formatting "
                                             "characters that should be shown.\n\n"
                                             "Note that the selected formatting characters are only "
                                             "shown if formatting characters are enabled in general, "
@@ -690,7 +690,7 @@ ConfigureDefaultDocPage::ConfigureDefaultDocPage( KWView *view, Q3VBox *box, cha
     m_pView=view;
     KWDocument * doc = m_pView->kWordDocument();
     config = KWFactory::instance()->config();
-    QVGroupBox* gbDocumentDefaults = new QVGroupBox( i18n("Document Defaults"), box, "GroupBox" );
+    Q3GroupBox * gbDocumentDefaults = new Q3GroupBox(1, Qt::Horizontal, i18n("Document Defaults"), box, "GroupBox" );
     gbDocumentDefaults->setMargin( KDialog::marginHint() );
     gbDocumentDefaults->setInsideSpacing( KDialog::spacingHint() );
 
@@ -713,7 +713,7 @@ ConfigureDefaultDocPage::ConfigureDefaultDocPage( KWView *view, Q3VBox *box, cha
                                                ptColumnSpacing,
                                                unit );
     columnSpacingLabel->setBuddy( m_columnSpacing );
-    Q3WhatsThis::add( m_columnSpacing, i18n("When setting a document to use more than one column "
+    m_columnSpacing->setWhatsThis( i18n("When setting a document to use more than one column "
                 "this distance will be used to separate the columns. This value is merely a default "
                 "setting as the column spacing can be changed per document") );
 
@@ -773,7 +773,7 @@ ConfigureDefaultDocPage::ConfigureDefaultDocPage( KWView *view, Q3VBox *box, cha
     m_autoHyphenation = new QCheckBox( i18n("Automatic hyphenation"), gbDocumentDefaults);
     m_autoHyphenation->setChecked( m_oldHyphenation );
 
-    QVGroupBox* gbDocumentSettings = new QVGroupBox( i18n("Document Settings"), box );
+    Q3GroupBox * gbDocumentSettings = new Q3GroupBox(1, Qt::Horizontal, i18n("Document Settings"), box );
     gbDocumentSettings->setMargin( KDialog::marginHint() );
     gbDocumentSettings->setInsideSpacing( KDialog::spacingHint() );
 
@@ -782,7 +782,7 @@ ConfigureDefaultDocPage::ConfigureDefaultDocPage( KWView *view, Q3VBox *box, cha
     autoSave = new KIntNumInput( oldAutoSaveValue, hbAutoSave );
     autoSave->setRange(0, 60, 1);
     labelAutoSave->setBuddy(autoSave);
-    Q3WhatsThis::add( autoSave, i18n("A backup copy of the current document is created when a change "
+    autoSave->setWhatsThis( i18n("A backup copy of the current document is created when a change "
                     "has been made. The interval used to create backup documents is set here.") );
     autoSave->setSpecialValueText(i18n("No autosave"));
     autoSave->setSuffix(i18n(" min"));
@@ -816,7 +816,7 @@ ConfigureDefaultDocPage::ConfigureDefaultDocPage( KWView *view, Q3VBox *box, cha
                                               unit );
     m_oldTabStopWidth = doc->tabStopValue();
 
-    QVGroupBox* gbDocumentCursor = new QVGroupBox( i18n("Cursor"), box );
+    Q3GroupBox * gbDocumentCursor = new Q3GroupBox(1, Qt::Horizontal, i18n("Cursor"), box );
     gbDocumentCursor->setMargin( KDialog::marginHint() );
     gbDocumentCursor->setInsideSpacing( KDialog::spacingHint() );
 
@@ -949,7 +949,7 @@ ConfigurePathPage::ConfigurePathPage( KWView *view, Q3VBox *box, char *name )
     m_pView=view;
     KWDocument * doc = m_pView->kWordDocument();
     config = KWFactory::instance()->config();
-    QVGroupBox* gbPathGroup = new QVGroupBox( i18n("Path"), box, "GroupBox" );
+    Q3GroupBox * gbPathGroup = new Q3GroupBox(1, Qt::Horizontal, i18n("Path"), box, "GroupBox" );
     gbPathGroup->setMargin( KDialog::marginHint() );
     gbPathGroup->setInsideSpacing( KDialog::spacingHint() );
 
@@ -1042,7 +1042,7 @@ ConfigureTTSPage::ConfigureTTSPage( KWView *view, Q3VBox *box, char *name )
 
     m_cbSpeakPointerWidget = new QCheckBox(i18n("Speak widget under &mouse pointer"), box);
     m_cbSpeakFocusWidget = new QCheckBox(i18n("Speak widget with &focus"), box);
-    m_gbScreenReaderOptions = new QVGroupBox("", box);
+    m_gbScreenReaderOptions = new Q3GroupBox(1, Qt::Horizontal,"", box);
     m_gbScreenReaderOptions->setMargin( KDialog::marginHint() );
     m_gbScreenReaderOptions->setInsideSpacing( KDialog::spacingHint() );
     m_cbSpeakTooltips = new QCheckBox(i18n("Speak &tool tips"), m_gbScreenReaderOptions);

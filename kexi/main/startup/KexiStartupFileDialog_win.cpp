@@ -113,7 +113,7 @@ void KexiStartupFileDialogBase::init(const QString& startDir, const QString& fil
 
 //(js)    d->pathCombo = new KUrlComboBox( KUrlComboBox::Directories, true,
 //(js)                                     toolbar, "path combo" );
-//(js)    QToolTip::add( d->pathCombo, i18n("Often used directories") );
+//(js)    d->pathCombo->setToolTip( i18n("Often used directories") );
 //(js)    QWhatsThis::add( d->pathCombo, "<qt>" + i18n("Commonly used locations are listed here. "
 //(js)                                                 "This includes standard locations, such as your home directory, as well as "
 //(js)                                                 "locations that have been visited recently.") + autocompletionWhatsThisText);

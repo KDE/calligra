@@ -376,28 +376,28 @@ KWClassicMailMergeEditor::KWClassicMailMergeEditor( QWidget *parent, KWClassicSe
     newRecord->setFixedSize( newRecord->sizeHint() );
     connect( newRecord, SIGNAL( clicked() ),
              this, SLOT( addRecord() ) );
-    QToolTip::add( newRecord, i18n( "Add record" ) );
+    newRecord->setToolTip( i18n( "Add record" ) );
 
     newEntry = new QToolButton( toolbar );
     newEntry->setIconSet( SmallIconSet( "sl_addentry" ) );
     newEntry->setFixedSize( newEntry->sizeHint() );
     connect( newEntry, SIGNAL( clicked() ),
              this, SLOT( addEntry() ) );
-    QToolTip::add( newEntry, i18n( "Add entry" ) );
+    newEntry->setToolTip( i18n( "Add entry" ) );
 
     deleteRecord = new QToolButton( toolbar );
     deleteRecord->setIconSet( SmallIconSet( "sl_delrecord" ) );
     deleteRecord->setFixedSize( deleteRecord->sizeHint() );
     connect( deleteRecord, SIGNAL( clicked() ),
              this, SLOT( removeRecord() ) );
-    QToolTip::add( deleteRecord, i18n( "Remove record" ) );
+    deleteRecord->setToolTip( i18n( "Remove record" ) );
 
     deleteEntry = new QToolButton( toolbar );
     deleteEntry->setIconSet( SmallIconSet( "sl_delentry" ) );
     deleteEntry->setFixedSize( deleteEntry->sizeHint() );
     connect( deleteEntry, SIGNAL( clicked() ),
              this, SLOT( removeEntry() ) );
-    QToolTip::add( deleteEntry, i18n( "Remove entry" ) );
+    deleteEntry->setToolTip( i18n( "Remove entry" ) );
 
     dbList = new KWClassicMailMergeEditorList( back, db );
 

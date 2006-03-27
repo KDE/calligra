@@ -81,7 +81,7 @@ KexiDBConnectionWidget::KexiDBConnectionWidget( QWidget* parent,  const char* na
 	btnLoadDBList->hide();
 #endif
 	btnLoadDBList->setIconSet(SmallIconSet("reload"));
-	QToolTip::add(btnLoadDBList, i18n("Load database list from the server"));
+	btnLoadDBList->setToolTip( i18n("Load database list from the server"));
 	QWhatsThis::add(btnLoadDBList, 
 		i18n("Loads database list from the server, so you can select one using the \"Name\" combo box."));
 

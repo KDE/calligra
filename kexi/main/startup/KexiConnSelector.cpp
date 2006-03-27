@@ -145,9 +145,9 @@ KexiConnSelectorWidget::KexiConnSelectorWidget( KexiDBConnectionSet& conn_set,
 	connect(m_remote->btn_add, SIGNAL(clicked()), this, SLOT(slotRemoteAddBtnClicked()));
 	connect(m_remote->btn_edit, SIGNAL(clicked()), this, SLOT(slotRemoteEditBtnClicked()));
 	connect(m_remote->btn_remove, SIGNAL(clicked()), this, SLOT(slotRemoteRemoveBtnClicked()));
-	QToolTip::add(m_remote->btn_add, i18n("Add a new database connection"));
-	QToolTip::add(m_remote->btn_edit, i18n("Edit selected database connection"));
-	QToolTip::add(m_remote->btn_remove, i18n("Remove selected database connections"));
+	m_remote->btn_add->setToolTip( i18n("Add a new database connection"));
+	m_remote->btn_edit->setToolTip( i18n("Edit selected database connection"));
+	m_remote->btn_remove->setToolTip( i18n("Remove selected database connections"));
 	d->stack->addWidget(m_remote);
 	if (m_remote->layout())
 		m_remote->layout()->setMargin(0);

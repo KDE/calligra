@@ -155,7 +155,7 @@ bool TableViewHeader::eventFilter(QObject * watched, QEvent * e)
 				m_lastToolTipSection = -1;
 			}
 			else {
-				QToolTip::add(this, m_toolTipRect = sectionRect(section), tip);
+				this->setToolTip( m_toolTipRect = sectionRect(section), tip);
 				m_lastToolTipSection = section;
 			}
 		}

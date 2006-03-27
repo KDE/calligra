@@ -21,7 +21,7 @@
 #include "dialog.moc"
 
 #include <q3hbox.h>
-#include <qvgroupbox.h>
+
 #include <qregexp.h>
 #include <qapplication.h>
 #include <q3grid.h>
@@ -29,7 +29,7 @@
 #include <qlayout.h>
 #include <q3buttongroup.h>
 #include <qradiobutton.h>
-#include <q3whatsthis.h>
+
 #include <qcheckbox.h>
 //Added by qt3to4:
 #include <Q3VBoxLayout>
@@ -126,7 +126,7 @@ Dialog::Dialog(uint nbPages, bool isEncrypted, QWidget *widget)
                                        KDialogBase::spacingHint());
 
     // page selection
-    QVGroupBox *gbox = new QVGroupBox(i18n("Page Selection"), plainPage());
+    Q3GroupBox *gbox = new Q3GroupBox(1, Qt::Horizontal,i18n("Page Selection"), plainPage());
     gbox->setInsideSpacing(KDialogBase::spacingHint());
     top->addWidget(gbox);
     _group = new Q3ButtonGroup;
@@ -147,7 +147,7 @@ Dialog::Dialog(uint nbPages, bool isEncrypted, QWidget *widget)
     top->addWidget(_images);
     _smart = new QCheckBox(i18n("\"Smart\" mode"), plainPage());
     _smart->setChecked(true);
-    Q3WhatsThis::add(_smart,
+    _smart->setWhatsThis(
                     i18n("Removes returns and hyphens at end of line. "
                          "Also tries to compute the paragraph alignment. "
                          "Note that the layout of some pages can "
@@ -155,7 +155,7 @@ Dialog::Dialog(uint nbPages, bool isEncrypted, QWidget *widget)
     top->addWidget(_smart);
 
     // passwords
-    gbox = new QVGroupBox(i18n("Passwords"), plainPage());
+    gbox = new Q3GroupBox(1, Qt::Horizontal,i18n("Passwords"), plainPage());
     top->addWidget(gbox);
     Q3Grid *grid = new Q3Grid(2, gbox);
     grid->setSpacing(KDialogBase::spacingHint());

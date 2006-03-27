@@ -89,7 +89,7 @@ KoShellWindow::KoShellWindow()
            this, SLOT( slotFileClose() ) );
   m_tabCloseButton->setIconSet( SmallIconSet( "tab_remove" ) );
   m_tabCloseButton->adjustSize();
-  QToolTip::add(m_tabCloseButton, i18n("Close"));
+  m_tabCloseButton->setToolTip( i18n("Close"));
   m_pFrame->setCornerWidget( m_tabCloseButton, BottomRight );
   m_tabCloseButton->hide();
 

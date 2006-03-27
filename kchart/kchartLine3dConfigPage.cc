@@ -27,7 +27,7 @@
 #include <qlabel.h>
 #include <qcheckbox.h>
 #include <q3buttongroup.h>
-#include <q3whatsthis.h>
+
 //Added by qt3to4:
 #include <Q3GridLayout>
 
@@ -55,11 +55,11 @@ KChartLine3dConfigPage::KChartLine3dConfigPage( KChartParams* params,
   QLabel *tmpLabel = new QLabel( i18n( "Line width:" ), this );
   grid1->addWidget(tmpLabel,2,0);
   lineWidth=new KIntNumInput(0, this, 10);
-  Q3WhatsThis::add(lineWidth, i18n("You can set here the line width for your chart. Default is 1."));
+  lineWidth->setWhatsThis( i18n("You can set here the line width for your chart. Default is 1."));
   grid1->addWidget(lineWidth,2,1);
 
   lineMarkers = new QCheckBox( i18n( "Line markers" ), this );
-  Q3WhatsThis::add(lineMarkers, i18n("Check this option if you want to add dots on your chart as markers."));
+  lineMarkers->setWhatsThis( i18n("Check this option if you want to add dots on your chart as markers."));
   grid1->addWidget(lineMarkers, 3, 0);
 
 #if 0

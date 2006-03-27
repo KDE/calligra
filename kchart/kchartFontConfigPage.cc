@@ -33,7 +33,7 @@
 #include <q3listbox.h>
 #include <qpushbutton.h>
 #include <qpainter.h>
-#include <q3whatsthis.h>
+
 //Added by qt3to4:
 #include <Q3GridLayout>
 
@@ -98,7 +98,7 @@ KChartFontConfigPage::KChartFontConfigPage( KChartParams* params,
     // The font button.
     m_fontButton = new QPushButton( this);
     m_fontButton->setText(i18n("Font..."));
-    Q3WhatsThis::add(m_fontButton, i18n("Select an item in the list above and click on this button to display the KDE font dialog in order to choose a new font for this item."));
+    m_fontButton->setWhatsThis( i18n("Select an item in the list above and click on this button to display the KDE font dialog in order to choose a new font for this item."));
     m_fontButton->resize( m_fontButton->sizeHint() );
     grid->addWidget( m_fontButton, 1, 0);
 

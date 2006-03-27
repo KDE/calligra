@@ -362,7 +362,7 @@ KexiSimplePrintingPageSetup::KexiSimplePrintingPageSetup( KexiMainWindow *mainWi
 
 	QWhatsThis::add(m_contents->openDataLink, 
 		i18n("Shows data for table or query associated with this page setup."));
-	QToolTip::add(m_contents->openDataLink, 
+	m_contents->openDataLink->setToolTip( 
 		i18n("Shows data for table or query associated with this page setup."));
 	connect(m_contents->openDataLink, SIGNAL(leftClickedURL()), this, SLOT(slotOpenData())); 
 

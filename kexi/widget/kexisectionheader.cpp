@@ -94,7 +94,7 @@ void KexiSectionHeader::addButton(const QString& icon, const QString& toolTip,
 		btn->setMaximumHeight( qMax(fm.height(), 16) );
 	}
 	if (!toolTip.isEmpty()) {
-		QToolTip::add(btn, toolTip);
+		btn->setToolTip( toolTip);
 	}
 }
 
