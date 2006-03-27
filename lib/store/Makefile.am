@@ -3,7 +3,7 @@ SUBDIRS = . tests
 
 KDE_CXXFLAGS = $(USE_RTTI)
 lib_LTLIBRARIES = libkstore.la
-INCLUDES = $(KOFFICECORE_INCLUDES) $(all_includes)
+INCLUDES = $(all_includes)
 
 ####### Files
 

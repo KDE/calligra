@@ -19,8 +19,6 @@
 
 #include <qfile.h>
 #include <qdir.h>
-//Added by qt3to4:
-#include <Q3CString>
 #include <kcmdlineargs.h>
 #include <kapplication.h>
 
@@ -60,7 +58,7 @@ int test( const char* testName, KoStore::Backend backend, const QString& testFil
         QFile::remove( testFile );
     QDir dirTest( testFile );
     if ( dirTest.exists() ) {
-        system( Q3CString( "rm -rf " ) + QFile::encodeName( testFile ) ); // QDir::rmdir isn't recursive!
+        system( QByteArray( "rm -rf " ) + QFile::encodeName( testFile ) ); // QDir::rmdir isn't recursive!
     }
 
     kDebug() << "======================="<<testName<<"====================================" << endl;
@@ -207,8 +205,8 @@ int test( const char* testName, KoStore::Backend backend, const QString& testFil
 
 int main( int argc, char **argv )
 {
-    KCmdLineArgs::init( argc, argv, "storage_test", "A test for the KoStore classes", "1" );
-    KApplication app( argc, argv );
+    KCmdLineArgs::init( argc, argv, "storage_test", "Storage Test", "A test for the KoStore classes", "1" );
+    KApplication app;
 
     // KZip (due to KSaveFile) doesn't support relative filenames
     // So use $PWD as base for the paths explicitely.

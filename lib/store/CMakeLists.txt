@@ -2,7 +2,7 @@ kde4_header()
 
 add_subdirectory( tests ) 
 
-include_directories(${CMAKE_SOURCE_DIR}/lib/kofficecore/ ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
+include_directories( ${KDE4_INCLUDE_DIRS} )
 
 
 ########### next target ###############
@@ -41,7 +41,7 @@ kde4_footer()
 #
 #KDE_CXXFLAGS = $(USE_RTTI)
 #lib_LTLIBRARIES = libkstore.la
-#INCLUDES = $(KOFFICECORE_INCLUDES) $(all_includes)
+#INCLUDES = $(all_includes)
 #
 ######## Files
 #
