@@ -1,7 +1,7 @@
 kde4_header()
 
-add_subdirectory( parser ) 
-add_subdirectory( drivers ) 
+add_subdirectory( parser )
+add_subdirectory( drivers )
 
 include_directories( ${CMAKE_SOURCE_DIR}/kexi ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
 

@@ -1,11 +1,11 @@
 kde4_header()
 
-add_subdirectory( tables ) 
-add_subdirectory( relations ) 
-add_subdirectory( migration ) 
-add_subdirectory( queries ) 
-add_subdirectory( forms ) 
-add_subdirectory( importexport ) 
+add_subdirectory( tables )
+add_subdirectory( relations )
+add_subdirectory( migration )
+add_subdirectory( queries )
+add_subdirectory( forms )
+add_subdirectory( importexport )
 
 message(STATUS "${CMAKE_CURRENT_SOURCE_DIR}: skipped subdir $(REPORTS)")
 message(STATUS "${CMAKE_CURRENT_SOURCE_DIR}: skipped subdir $(SCRIPTINGDIR)")

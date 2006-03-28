@@ -1,13 +1,13 @@
 kde4_header()
 
-add_subdirectory( mailmerge ) 
-add_subdirectory( templates ) 
-add_subdirectory( dtd ) 
-add_subdirectory( pics ) 
-add_subdirectory( toolbar ) 
-add_subdirectory( expression ) 
-add_subdirectory( data ) 
-add_subdirectory( tests ) 
+add_subdirectory( mailmerge )
+add_subdirectory( templates )
+add_subdirectory( dtd )
+add_subdirectory( pics )
+add_subdirectory( toolbar )
+add_subdirectory( expression )
+add_subdirectory( data )
+add_subdirectory( tests )
 
 include_directories( ${CMAKE_SOURCE_DIR}/lib/kformula ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
 
@@ -138,7 +138,7 @@ kde4_add_dcop_skels(kwordprivate_LIB_SRCS
 
 kde4_add_library(kwordprivate SHARED ${kwordprivate_LIB_SRCS})
 
-target_link_libraries(kwordprivate  ${KDE4_KDECORE_LIBS} kformulalib kwmailmerge_interface )
+target_link_libraries(kwordprivate  ${KDE4_KDECORE_LIBS} kofficeui kotext kformulalib kwmailmerge_interface )
 
 set_target_properties(kwordprivate PROPERTIES VERSION 4.0.0 SOVERSION 4 )
 install_targets(${LIB_INSTALL_DIR} kwordprivate )
@@ -152,7 +152,7 @@ kde4_automoc(${kword_KDEINIT_SRCS})
 
 kde4_add_kdeinit_executable( kword ${kword_KDEINIT_SRCS})
 
-target_link_libraries(kdeinit_kword  ${KDE4_KDECORE_LIBS} )
+target_link_libraries(kdeinit_kword  ${KDE4_KDECORE_LIBS} kofficecore )
 
 install_targets(${LIB_INSTALL_DIR} kdeinit_kword )
 

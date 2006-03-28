@@ -13,7 +13,7 @@ kde4_add_plugin(karbonepsexport WITH_PREFIX ${karbonepsexport_PART_SRCS})
 
 kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} karbonepsexport )
 
-target_link_libraries(karbonepsexport  ${KDE4_KDECORE_LIBS} karboncommon )
+target_link_libraries(karbonepsexport  ${KDE4_KDECORE_LIBS} kofficeui karboncommon )
 
 install_targets(${LIB_INSTALL_DIR}/kde4 karbonepsexport )
 
@@ -28,7 +28,7 @@ kde4_add_plugin(karbonepsimport WITH_PREFIX ${karbonepsimport_PART_SRCS})
 
 kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} karbonepsimport )
 
-target_link_libraries(karbonepsimport  ${KDE4_KDECORE_LIBS} )
+target_link_libraries(karbonepsimport  ${KDE4_KDECORE_LIBS} kofficeui )
 
 install_targets(${LIB_INSTALL_DIR}/kde4 karbonepsimport )
 

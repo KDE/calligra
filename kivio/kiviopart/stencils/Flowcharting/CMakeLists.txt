@@ -1,8 +1,8 @@
 kde4_header()
 
-add_subdirectory( BasicFlowcharting ) 
-add_subdirectory( Logic ) 
-add_subdirectory( Extended ) 
+add_subdirectory( BasicFlowcharting )
+add_subdirectory( Logic )
+add_subdirectory( Extended )
 
 
 

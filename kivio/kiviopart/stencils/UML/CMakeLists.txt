@@ -1,7 +1,7 @@
 kde4_header()
 
-add_subdirectory( ActivityDiagrams ) 
-add_subdirectory( ClassDiagrams ) 
+add_subdirectory( ActivityDiagrams )
+add_subdirectory( ClassDiagrams )
 
 
 

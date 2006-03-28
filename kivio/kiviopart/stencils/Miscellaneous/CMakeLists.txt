@@ -1,11 +1,11 @@
 kde4_header()
 
-add_subdirectory( People ) 
-add_subdirectory( Buildings ) 
-add_subdirectory( Transport ) 
-add_subdirectory( Arrows ) 
-add_subdirectory( NassiShneiderman ) 
-add_subdirectory( ER ) 
+add_subdirectory( People )
+add_subdirectory( Buildings )
+add_subdirectory( Transport )
+add_subdirectory( Arrows )
+add_subdirectory( NassiShneiderman )
+add_subdirectory( ER )
 
 
 

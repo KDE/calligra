@@ -26,7 +26,7 @@ kde4_automoc(${writeup_KDEINIT_SRCS})
 
 kde4_add_kdeinit_executable( writeup ${writeup_KDEINIT_SRCS})
 
-target_link_libraries(kdeinit_writeup  ${KDE4_KDECORE_LIBS} )
+target_link_libraries(kdeinit_writeup  ${KDE4_KDECORE_LIBS} kofficecore )
 
 install_targets(${LIB_INSTALL_DIR} kdeinit_writeup )
 

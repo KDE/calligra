@@ -1,8 +1,8 @@
 kde4_header()
 
-add_subdirectory( toolbar ) 
-add_subdirectory( pics ) 
-add_subdirectory( templates ) 
+add_subdirectory( toolbar )
+add_subdirectory( pics )
+add_subdirectory( templates )
 
 
 
@@ -15,7 +15,7 @@ kde4_automoc(${kudesignercore_LIB_SRCS})
 
 kde4_add_library(kudesignercore SHARED ${kudesignercore_LIB_SRCS})
 
-target_link_libraries(kudesignercore  ${KDE4_KDECORE_LIBS} kudesignercommon ${KDE4_KPARTS_LIBS} ${KDE4_KIO_LIBS} ${KDE4_KDEPRINT_LIBS} )
+target_link_libraries(kudesignercore  ${KDE4_KDECORE_LIBS} kudesignercommon kofficeui ${KDE4_KPARTS_LIBS} kofficecore koproperty ${KDE4_KIO_LIBS} ${KDE4_KDEPRINT_LIBS} )
 
 set_target_properties(kudesignercore PROPERTIES VERSION 1.0.0 SOVERSION 1 )
 install_targets(${LIB_INSTALL_DIR} kudesignercore )
@@ -31,7 +31,7 @@ kde4_add_plugin(kudesignerpart WITH_PREFIX ${kudesignerpart_PART_SRCS})
 
 kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kudesignerpart )
 
-target_link_libraries(kudesignerpart  ${KDE4_KDECORE_LIBS} kudesignercore ${KDE4_KPARTS_LIBS} )
+target_link_libraries(kudesignerpart  ${KDE4_KDECORE_LIBS} kudesignercore kofficeui ${KDE4_KPARTS_LIBS} kofficecore )
 
 install_targets(${LIB_INSTALL_DIR}/kde4 kudesignerpart )
 
@@ -44,7 +44,7 @@ kde4_automoc(${kudesigner_KDEINIT_SRCS})
 
 kde4_add_kdeinit_executable( kudesigner ${kudesigner_KDEINIT_SRCS})
 
-target_link_libraries(kdeinit_kudesigner  ${KDE4_KDECORE_LIBS} )
+target_link_libraries(kdeinit_kudesigner  ${KDE4_KDECORE_LIBS} kofficecore )
 
 install_targets(${LIB_INSTALL_DIR} kdeinit_kudesigner )
 

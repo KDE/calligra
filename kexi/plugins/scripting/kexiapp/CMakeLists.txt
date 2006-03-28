@@ -13,7 +13,7 @@ kde4_add_plugin(krosskexiapp ${krosskexiapp_PART_SRCS})
 
 kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} krosskexiapp )
 
-target_link_libraries(krosskexiapp  ${KDE4_KDECORE_LIBS} kexicore )
+target_link_libraries(krosskexiapp  ${KDE4_KDECORE_LIBS} krossapi krossmain kexicore )
 
 install_targets(${LIB_INSTALL_DIR}/kde4 krosskexiapp )
 

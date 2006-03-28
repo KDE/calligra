@@ -1,6 +1,6 @@
 kde4_header()
 
-add_subdirectory( xpdf ) 
+add_subdirectory( xpdf )
 
 
 
@@ -24,7 +24,7 @@ kde4_add_plugin(pdfimport WITH_PREFIX ${pdfimport_PART_SRCS})
 
 kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} pdfimport )
 
-target_link_libraries(pdfimport  ${KDE4_KDECORE_LIBS} xpdf goo )
+target_link_libraries(pdfimport  ${KDE4_KDECORE_LIBS} kofficecore xpdf goo )
 
 install_targets(${LIB_INSTALL_DIR}/kde4 pdfimport )
 

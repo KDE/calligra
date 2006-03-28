@@ -1,8 +1,8 @@
 kde4_header()
 
-add_subdirectory( kiviopart ) 
-add_subdirectory( plugins ) 
-add_subdirectory( templates ) 
+add_subdirectory( kiviopart )
+add_subdirectory( plugins )
+add_subdirectory( templates )
 
 
 

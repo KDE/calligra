@@ -1,7 +1,7 @@
 kde4_header()
 
-add_subdirectory( parser ) 
-add_subdirectory( generator ) 
+add_subdirectory( parser )
+add_subdirectory( generator )
 
 
 

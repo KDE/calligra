@@ -15,7 +15,7 @@ kde4_add_plugin(kiviotexttool WITH_PREFIX ${kiviotexttool_PART_SRCS})
 
 kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kiviotexttool )
 
-target_link_libraries(kiviotexttool  ${KDE4_KDECORE_LIBS} kiviocommon )
+target_link_libraries(kiviotexttool  ${KDE4_KDECORE_LIBS} kotext kopainter kiviocommon )
 
 install_targets(${LIB_INSTALL_DIR}/kde4 kiviotexttool )
 

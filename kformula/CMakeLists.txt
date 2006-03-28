@@ -1,6 +1,6 @@
 kde4_header()
 
-add_subdirectory( pics ) 
+add_subdirectory( pics )
 
 
 
@@ -25,7 +25,7 @@ kde4_add_plugin(kformulapart WITH_PREFIX ${kformulapart_PART_SRCS})
 
 kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kformulapart )
 
-target_link_libraries(kformulapart  ${KDE4_KDECORE_LIBS} )
+target_link_libraries(kformulapart  ${KDE4_KDECORE_LIBS} kofficeui kformula kotext )
 
 install_targets(${LIB_INSTALL_DIR}/kde4 kformulapart )
 
@@ -38,7 +38,7 @@ kde4_automoc(${kformula_KDEINIT_SRCS})
 
 kde4_add_kdeinit_executable( kformula ${kformula_KDEINIT_SRCS})
 
-target_link_libraries(kdeinit_kformula  ${KDE4_KDECORE_LIBS} )
+target_link_libraries(kdeinit_kformula  ${KDE4_KDECORE_LIBS} kofficecore )
 
 install_targets(${LIB_INSTALL_DIR} kdeinit_kformula )
 

@@ -43,7 +43,7 @@ kde4_add_plugin(mswriteexport WITH_PREFIX ${mswriteexport_PART_SRCS})
 
 kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} mswriteexport )
 
-target_link_libraries(mswriteexport  ${KDE4_KDECORE_LIBS} kwordexportfilters )
+target_link_libraries(mswriteexport  ${KDE4_KDECORE_LIBS} kowmf kwordexportfilters )
 
 install_targets(${LIB_INSTALL_DIR}/kde4 mswriteexport )
 

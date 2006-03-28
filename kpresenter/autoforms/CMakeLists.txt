@@ -1,7 +1,7 @@
 kde4_header()
 
-add_subdirectory( Arrows ) 
-add_subdirectory( Connections ) 
+add_subdirectory( Arrows )
+add_subdirectory( Connections )
 
 
 

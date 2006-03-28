@@ -1,7 +1,7 @@
 kde4_header()
 
-add_subdirectory( libppt ) 
-add_subdirectory( import ) 
+add_subdirectory( libppt )
+add_subdirectory( import )
 
 
 

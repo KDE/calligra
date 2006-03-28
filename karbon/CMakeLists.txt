@@ -1,18 +1,18 @@
 kde4_header()
 
-add_subdirectory( commands ) 
-add_subdirectory( visitors ) 
-add_subdirectory( core ) 
-add_subdirectory( shapes ) 
-add_subdirectory( widgets ) 
-add_subdirectory( dialogs ) 
-add_subdirectory( dockers ) 
-add_subdirectory( render ) 
-add_subdirectory( tools ) 
-add_subdirectory( plugins ) 
-add_subdirectory( data ) 
-add_subdirectory( pics ) 
-add_subdirectory( templates ) 
+add_subdirectory( commands )
+add_subdirectory( visitors )
+add_subdirectory( core )
+add_subdirectory( shapes )
+add_subdirectory( widgets )
+add_subdirectory( dialogs )
+add_subdirectory( dockers )
+add_subdirectory( render )
+add_subdirectory( tools )
+add_subdirectory( plugins )
+add_subdirectory( data )
+add_subdirectory( pics )
+add_subdirectory( templates )
 
 
 
@@ -39,7 +39,7 @@ kde4_add_dcop_skels(karboncommon_LIB_SRCS karbon_part_iface.h karbon_view_iface.
 
 kde4_add_library(karboncommon SHARED ${karboncommon_LIB_SRCS})
 
-target_link_libraries(karboncommon  ${KDE4_KDECORE_LIBS} karbondockers karbonwidgets vpainter karbonxrgbrender karboncore karbonshapes karboncommands karbonvisitors karbondialogs )
+target_link_libraries(karboncommon  ${KDE4_KDECORE_LIBS} kofficecore kofficeui kopalette kopainter kotext karbondockers karbonwidgets vpainter karbonxrgbrender karboncore karbonshapes karboncommands karbonvisitors karbondialogs )
 
 set_target_properties(karboncommon PROPERTIES VERSION 1.0.0 SOVERSION 1 )
 install_targets(${LIB_INSTALL_DIR} karboncommon )

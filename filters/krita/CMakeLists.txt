@@ -1,6 +1,6 @@
 kde4_header()
 
-add_subdirectory( raw ) 
+add_subdirectory( raw )
 
 message(STATUS "${CMAKE_CURRENT_SOURCE_DIR}: skipped subdir $(IMAGEMAGICK_SUBDIR)")
 message(STATUS "${CMAKE_CURRENT_SOURCE_DIR}: skipped subdir $(OPENEXR_SUBDIR)")

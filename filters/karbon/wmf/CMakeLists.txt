@@ -13,7 +13,7 @@ kde4_add_plugin(wmfimport WITH_PREFIX ${wmfimport_PART_SRCS})
 
 kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} wmfimport )
 
-target_link_libraries(wmfimport  ${KDE4_KDECORE_LIBS} karboncommon )
+target_link_libraries(wmfimport  ${KDE4_KDECORE_LIBS} kowmf karboncommon )
 
 install_targets(${LIB_INSTALL_DIR}/kde4 wmfimport )
 
@@ -28,7 +28,7 @@ kde4_add_plugin(wmfexport WITH_PREFIX ${wmfexport_PART_SRCS})
 
 kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} wmfexport )
 
-target_link_libraries(wmfexport  ${KDE4_KDECORE_LIBS} karboncommon )
+target_link_libraries(wmfexport  ${KDE4_KDECORE_LIBS} kowmf karboncommon )
 
 install_targets(${LIB_INSTALL_DIR}/kde4 wmfexport )
 

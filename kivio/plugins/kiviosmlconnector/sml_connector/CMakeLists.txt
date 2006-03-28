@@ -13,7 +13,7 @@ kde4_add_plugin(sml_connector ${sml_connector_PART_SRCS})
 
 kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} sml_connector )
 
-target_link_libraries(sml_connector  ${KDE4_KDECORE_LIBS} kiviocommon )
+target_link_libraries(sml_connector  ${KDE4_KDECORE_LIBS} kopainter kiviocommon )
 
 install_targets(${LIB_INSTALL_DIR}/kde4 sml_connector )
 

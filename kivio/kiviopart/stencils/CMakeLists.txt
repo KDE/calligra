@@ -1,11 +1,11 @@
 kde4_header()
 
-add_subdirectory( Dia ) 
-add_subdirectory( Flowcharting ) 
-add_subdirectory( UML ) 
-add_subdirectory( Geographic ) 
-add_subdirectory( Miscellaneous ) 
-add_subdirectory( Hardware ) 
+add_subdirectory( Dia )
+add_subdirectory( Flowcharting )
+add_subdirectory( UML )
+add_subdirectory( Geographic )
+add_subdirectory( Miscellaneous )
+add_subdirectory( Hardware )
 
 
 

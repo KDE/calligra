@@ -1,12 +1,12 @@
 kde4_header()
 
-add_subdirectory( autoformEdit ) 
-add_subdirectory( autoforms ) 
-add_subdirectory( pics ) 
-add_subdirectory( templates ) 
-add_subdirectory( dtd ) 
-add_subdirectory( slideshow ) 
-add_subdirectory( toolbar ) 
+add_subdirectory( autoformEdit )
+add_subdirectory( autoforms )
+add_subdirectory( pics )
+add_subdirectory( templates )
+add_subdirectory( dtd )
+add_subdirectory( slideshow )
+add_subdirectory( toolbar )
 
 
 
@@ -144,7 +144,7 @@ kde4_add_dcop_skels(kpresenterprivate_LIB_SRCS
 
 kde4_add_library(kpresenterprivate SHARED ${kpresenterprivate_LIB_SRCS})
 
-target_link_libraries(kpresenterprivate  ${KDE4_KDECORE_LIBS} af )
+target_link_libraries(kpresenterprivate  ${KDE4_KDECORE_LIBS} af kofficeui kotext kopainter )
 
 set_target_properties(kpresenterprivate PROPERTIES VERSION 4.0.0 SOVERSION 4 )
 install_targets(${LIB_INSTALL_DIR} kpresenterprivate )
@@ -173,7 +173,7 @@ kde4_automoc(${kpresenter_KDEINIT_SRCS})
 
 kde4_add_kdeinit_executable( kpresenter ${kpresenter_KDEINIT_SRCS})
 
-target_link_libraries(kdeinit_kpresenter  ${KDE4_KDECORE_LIBS} )
+target_link_libraries(kdeinit_kpresenter  ${KDE4_KDECORE_LIBS} kofficecore )
 
 install_targets(${LIB_INSTALL_DIR} kdeinit_kpresenter )
 

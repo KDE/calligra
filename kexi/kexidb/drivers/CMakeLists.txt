@@ -1,7 +1,7 @@
 kde4_header()
 
-add_subdirectory( sqlite ) 
-add_subdirectory( sqlite2 ) 
+add_subdirectory( sqlite )
+add_subdirectory( sqlite2 )
 
 message(STATUS "${CMAKE_CURRENT_SOURCE_DIR}: skipped subdir $(pgsql_dir)")
 message(STATUS "${CMAKE_CURRENT_SOURCE_DIR}: skipped subdir $(mysql_dir)")

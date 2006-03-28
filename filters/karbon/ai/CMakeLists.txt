@@ -21,7 +21,7 @@ kde4_add_plugin(karbonaiimport WITH_PREFIX ${karbonaiimport_PART_SRCS})
 
 kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} karbonaiimport )
 
-target_link_libraries(karbonaiimport  ${KDE4_KDECORE_LIBS} karboncommon )
+target_link_libraries(karbonaiimport  ${KDE4_KDECORE_LIBS} kofficeui karboncommon )
 
 install_targets(${LIB_INSTALL_DIR}/kde4 karbonaiimport )
 

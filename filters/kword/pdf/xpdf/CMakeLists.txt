@@ -1,7 +1,7 @@
 kde4_header()
 
-add_subdirectory( goo ) 
-add_subdirectory( xpdf ) 
+add_subdirectory( goo )
+add_subdirectory( xpdf )
 
 
 

@@ -1,7 +1,7 @@
 kde4_header()
 
-add_subdirectory( locolor ) 
-add_subdirectory( crystalsvg ) 
+add_subdirectory( locolor )
+add_subdirectory( crystalsvg )
 
 
 

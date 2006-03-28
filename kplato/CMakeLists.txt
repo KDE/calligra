@@ -1,10 +1,10 @@
 kde4_header()
 
-add_subdirectory( templates ) 
-add_subdirectory( pics ) 
-add_subdirectory( reports ) 
-add_subdirectory( toolbar ) 
-add_subdirectory( tests ) 
+add_subdirectory( templates )
+add_subdirectory( pics )
+add_subdirectory( reports )
+add_subdirectory( toolbar )
+add_subdirectory( tests )
 
 include_directories( ${CMAKE_SOURCE_DIR}/kdgantt ${CMAKE_SOURCE_DIR}/kugar/lib ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
 
@@ -20,7 +20,7 @@ kde4_add_plugin(kplatopart WITH_PREFIX ${kplatopart_PART_SRCS})
 
 kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kplatopart )
 
-target_link_libraries(kplatopart  ${KDE4_KDECORE_LIBS} kdgantt )
+target_link_libraries(kplatopart  ${KDE4_KDECORE_LIBS} kofficeui kdgantt )
 
 install_targets(${LIB_INSTALL_DIR}/kde4 kplatopart )
 
@@ -33,7 +33,7 @@ kde4_automoc(${kplato_KDEINIT_SRCS})
 
 kde4_add_kdeinit_executable( kplato ${kplato_KDEINIT_SRCS})
 
-target_link_libraries(kdeinit_kplato  ${KDE4_KDECORE_LIBS} )
+target_link_libraries(kdeinit_kplato  ${KDE4_KDECORE_LIBS} kofficecore )
 
 install_targets(${LIB_INSTALL_DIR} kdeinit_kplato )
 

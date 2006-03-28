@@ -13,7 +13,7 @@ kde4_add_plugin(karbonxamlexport WITH_PREFIX ${karbonxamlexport_PART_SRCS})
 
 kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} karbonxamlexport )
 
-target_link_libraries(karbonxamlexport  ${KDE4_KDECORE_LIBS} karboncommon )
+target_link_libraries(karbonxamlexport  ${KDE4_KDECORE_LIBS} kofficeui karboncommon )
 
 install_targets(${LIB_INSTALL_DIR}/kde4 karbonxamlexport )
 
@@ -28,7 +28,7 @@ kde4_add_plugin(karbonxamlimport WITH_PREFIX ${karbonxamlimport_PART_SRCS})
 
 kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} karbonxamlimport )
 
-target_link_libraries(karbonxamlimport  ${KDE4_KDECORE_LIBS} karboncommon )
+target_link_libraries(karbonxamlimport  ${KDE4_KDECORE_LIBS} kofficeui karboncommon )
 
 install_targets(${LIB_INSTALL_DIR}/kde4 karbonxamlimport )
 

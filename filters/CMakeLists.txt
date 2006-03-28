@@ -1,8 +1,8 @@
 kde4_header()
 
-add_subdirectory( generic_wrapper ) 
-add_subdirectory( libdialogfilter ) 
-add_subdirectory( liboofilter ) 
+add_subdirectory( generic_wrapper )
+add_subdirectory( libdialogfilter )
+add_subdirectory( liboofilter )
 
 message(STATUS "${CMAKE_CURRENT_SOURCE_DIR}: skipped subdir $(KSPREADDIR)")
 message(STATUS "${CMAKE_CURRENT_SOURCE_DIR}: skipped subdir $(KCHARTDIR)")

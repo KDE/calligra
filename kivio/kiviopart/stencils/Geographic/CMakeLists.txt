@@ -1,7 +1,7 @@
 kde4_header()
 
-add_subdirectory( Maps ) 
-add_subdirectory( Flags ) 
+add_subdirectory( Maps )
+add_subdirectory( Flags )
 
 
 

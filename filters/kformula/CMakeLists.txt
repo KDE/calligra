@@ -1,9 +1,9 @@
 kde4_header()
 
-add_subdirectory( png ) 
-add_subdirectory( latex ) 
-add_subdirectory( mathml ) 
-add_subdirectory( svg ) 
+add_subdirectory( png )
+add_subdirectory( latex )
+add_subdirectory( mathml )
+add_subdirectory( svg )
 
 
 

@@ -1,7 +1,7 @@
 kde4_header()
 
-add_subdirectory( tool ) 
-add_subdirectory( src ) 
+add_subdirectory( tool )
+add_subdirectory( src )
 
 
 

@@ -1,9 +1,9 @@
 kde4_header()
 
-add_subdirectory( kdchart ) 
-add_subdirectory( toolbar ) 
-add_subdirectory( pics ) 
-add_subdirectory( templates ) 
+add_subdirectory( kdchart )
+add_subdirectory( toolbar )
+add_subdirectory( pics )
+add_subdirectory( templates )
 
 include_directories( ${CMAKE_SOURCE_DIR}/interfaces ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
 
@@ -53,7 +53,7 @@ kde4_add_dcop_skels(kchartcommon_LIB_SRCS KChartViewIface.h KChartParamsIface.h 
 
 kde4_add_library(kchartcommon SHARED ${kchartcommon_LIB_SRCS})
 
-target_link_libraries(kchartcommon  ${KDE4_KDECORE_LIBS} kochart kdchart )
+target_link_libraries(kchartcommon  ${KDE4_KDECORE_LIBS} kochart kofficeui kdchart )
 
 set_target_properties(kchartcommon PROPERTIES VERSION 2.0.0 SOVERSION 2 )
 install_targets(${LIB_INSTALL_DIR} kchartcommon )
@@ -82,7 +82,7 @@ kde4_automoc(${kchart_KDEINIT_SRCS})
 
 kde4_add_kdeinit_executable( kchart ${kchart_KDEINIT_SRCS})
 
-target_link_libraries(kdeinit_kchart  ${KDE4_KDECORE_LIBS} )
+target_link_libraries(kdeinit_kchart  ${KDE4_KDECORE_LIBS} kofficecore )
 
 install_targets(${LIB_INSTALL_DIR} kdeinit_kchart )
 

@@ -1,7 +1,7 @@
 kde4_header()
 
-add_subdirectory( kabc ) 
-add_subdirectory( kspread ) 
+add_subdirectory( kabc )
+add_subdirectory( kspread )
 
 message(STATUS "${CMAKE_CURRENT_SOURCE_DIR}: skipped subdir $(SQLDIRECTORY)")
 include_directories( ${CMAKE_SOURCE_DIR}/lib/kformula ${CMAKE_SOURCE_DIR}/kword ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
@@ -17,7 +17,7 @@ kde4_add_plugin(kwmailmerge_classic ${kwmailmerge_classic_PART_SRCS})
 
 kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kwmailmerge_classic )
 
-target_link_libraries(kwmailmerge_classic  ${KDE4_KDECORE_LIBS} kwmailmerge_interface ${KDE4_KDEUI_LIBS} )
+target_link_libraries(kwmailmerge_classic  ${KDE4_KDECORE_LIBS} kwmailmerge_interface ${KDE4_KDEUI_LIBS} kotext )
 
 install_targets(${LIB_INSTALL_DIR}/kde4 kwmailmerge_classic )
 

@@ -13,7 +13,7 @@ kde4_add_plugin(clipartthumbnail ${clipartthumbnail_PART_SRCS})
 
 kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} clipartthumbnail )
 
-target_link_libraries(clipartthumbnail  ${KDE4_KDECORE_LIBS} )
+target_link_libraries(clipartthumbnail  ${KDE4_KDECORE_LIBS} kofficecore )
 
 install_targets(${LIB_INSTALL_DIR}/kde4 clipartthumbnail )
 
@@ -28,7 +28,7 @@ kde4_add_plugin(kofficethumbnail ${kofficethumbnail_PART_SRCS})
 
 kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kofficethumbnail )
 
-target_link_libraries(kofficethumbnail  ${KDE4_KDECORE_LIBS} )
+target_link_libraries(kofficethumbnail  ${KDE4_KDECORE_LIBS} kofficecore )
 
 install_targets(${LIB_INSTALL_DIR}/kde4 kofficethumbnail )
 

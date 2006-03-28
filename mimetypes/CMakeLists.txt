@@ -1,5 +1,6 @@
 kde4_header()
 
+message(STATUS "${CMAKE_CURRENT_SOURCE_DIR}: skipped subdir $(KDE33MIMEDIR)")
 message(STATUS "${CMAKE_CURRENT_SOURCE_DIR}: skipped subdir $(KDE351MIMEDIR)")
 
 

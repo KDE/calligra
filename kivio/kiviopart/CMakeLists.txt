@@ -1,12 +1,12 @@
 kde4_header()
 
-add_subdirectory( config ) 
-add_subdirectory( ui ) 
-add_subdirectory( kiviosdk ) 
-add_subdirectory( tools ) 
-add_subdirectory( pics ) 
-add_subdirectory( tiles ) 
-add_subdirectory( stencils ) 
+add_subdirectory( config )
+add_subdirectory( ui )
+add_subdirectory( kiviosdk )
+add_subdirectory( tools )
+add_subdirectory( pics )
+add_subdirectory( tiles )
+add_subdirectory( stencils )
 
 include_directories( ${CMAKE_SOURCE_DIR}/lib/kformula ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
 
@@ -56,7 +56,7 @@ kde4_add_dcop_skels(kiviocommon_LIB_SRCS
 
 kde4_add_library(kiviocommon SHARED ${kiviocommon_LIB_SRCS})
 
-target_link_libraries(kiviocommon  ${KDE4_KDECORE_LIBS} tools kiviosdk kivioconfig ui )
+target_link_libraries(kiviocommon  ${KDE4_KDECORE_LIBS} tools kiviosdk kivioconfig ui kofficeui kopainter kopalette kotext )
 
 set_target_properties(kiviocommon PROPERTIES VERSION 1.0.0 SOVERSION 1 )
 install_targets(${LIB_INSTALL_DIR} kiviocommon )
@@ -85,7 +85,7 @@ kde4_automoc(${kivio_KDEINIT_SRCS})
 
 kde4_add_kdeinit_executable( kivio ${kivio_KDEINIT_SRCS})
 
-target_link_libraries(kdeinit_kivio  ${KDE4_KDECORE_LIBS} )
+target_link_libraries(kdeinit_kivio  ${KDE4_KDECORE_LIBS} kofficecore )
 
 install_targets(${LIB_INSTALL_DIR} kdeinit_kivio )
 

@@ -1,7 +1,7 @@
 kde4_header()
 
-add_subdirectory( Computer ) 
-add_subdirectory( Miscellaneous ) 
+add_subdirectory( Computer )
+add_subdirectory( Miscellaneous )
 
 
 

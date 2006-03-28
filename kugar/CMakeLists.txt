@@ -1,10 +1,10 @@
 kde4_header()
 
-add_subdirectory( lib ) 
-add_subdirectory( part ) 
-add_subdirectory( samples ) 
-add_subdirectory( kudesigner_lib ) 
-add_subdirectory( kudesigner ) 
+add_subdirectory( lib )
+add_subdirectory( part )
+add_subdirectory( samples )
+add_subdirectory( kudesigner_lib )
+add_subdirectory( kudesigner )
 
 
 
