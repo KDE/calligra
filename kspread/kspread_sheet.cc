@@ -39,7 +39,7 @@
 #include <qmap.h>
 
 #include <kdebug.h>
-#include <kmdcodec.h>
+#include <kcodecs.h>
 #include <kfind.h>
 #include <kfinddialog.h>
 #include <kmessagebox.h>

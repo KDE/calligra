@@ -22,7 +22,7 @@
 
 #include <qfile.h>
 
-#include <kmdcodec.h>
+#include <kcodecs.h>
 #include <ktempfile.h>
 
 #include <KoDom.h>

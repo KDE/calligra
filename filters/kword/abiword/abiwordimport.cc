@@ -33,7 +33,7 @@
 #include <Q3CString>
 
 #include <kdebug.h>
-#include <kmdcodec.h>
+#include <kcodecs.h>
 #include <kfilterdev.h>
 #include <kgenericfactory.h>
 #include <kmessagebox.h>

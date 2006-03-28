@@ -34,7 +34,7 @@
 
 #include <kdebug.h>
 #include <kmessagebox.h>
-#include <kmdcodec.h>
+#include <kcodecs.h>
 #include <kgenericfactory.h>
 #include <klocale.h>
 

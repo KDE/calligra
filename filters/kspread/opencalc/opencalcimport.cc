@@ -36,7 +36,7 @@
 #include <KoDocumentInfo.h>
 #include <kgenericfactory.h>
 #include <kmessagebox.h>
-#include <kmdcodec.h>
+#include <kcodecs.h>
 #include <KoFilterChain.h>
 #include <KoGlobal.h>
 #include <KoUnit.h>

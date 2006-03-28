@@ -43,7 +43,7 @@
 #include "../config.h"
 #include "digest.h"
 #include <kdebug.h>
-#include <kmdcodec.h>
+#include <kcodecs.h>
 
 typedef unsigned char sal_uInt8;
 typedef unsigned short sal_uInt16;
