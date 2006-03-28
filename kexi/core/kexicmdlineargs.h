@@ -70,6 +70,11 @@ static KCmdLineOptions options[] =
 	"Note: Options like --user, --host have\n"
 	"precedence over settings defined in the shortcut\n"
 	"file." ), 0 },
+  { "readonly", I18N_NOOP(
+	"Specify that any database connections will\n"
+	"be performed without write support. This option\n"
+	"is ignored when \"createdb\" option is present,\n"
+	"otherwise the database could not be created."), 0 },
 
   { ":", I18N_NOOP("Options related to opening objects within a project:"), 0 },
   { "open [<object_type>:]<object_name>", I18N_NOOP(

@@ -44,11 +44,13 @@ class KexiProjectDataPrivate
 public:
 	KexiProjectDataPrivate()
 	 : finalMode(false)
+	 , readOnly(false)
 	{}
 	
 	KexiDB::ConnectionData connData;
 	QDateTime lastOpened;
 	bool finalMode : 1;
+	bool readOnly : 1;
 };
 
 //---------------------------------------
@@ -161,3 +163,14 @@ QString KexiProjectData::infoString(bool nobr) const
 	return QString(nobr ? "<nobr>" : "") 
 		+ QString("\"%1\"").arg(constConnectionData()->fileName()) + (nobr ? "</nobr>" : "");
 }
+
+void KexiProjectData::setReadOnly(bool set)
+{
+	d->readOnly = set;
+}
+
+bool KexiProjectData::isReadOnly() const
+{
+	return d->readOnly;
+}
+

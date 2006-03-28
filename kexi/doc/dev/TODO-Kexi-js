@@ -824,10 +824,6 @@ TODO:
   the label jumps around. ccpasteur said he fixed it last year ;)
 - only change bg color of tab widget, not its outer area; fix changing tabs bg color
 
-HOT TODO:
-- ask for password when .kexis or .kexic file has no password defined
-- "save password" flag is not properly saved in .kexis or .kexic files
-
 Import
 - error "BLOB/TEXT column 'isbn' used in key specification without a key length"
   when importing books.mdb into a mysql db

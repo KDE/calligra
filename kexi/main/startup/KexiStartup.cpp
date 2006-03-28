@@ -368,9 +368,10 @@ tristate KexiStartupHandler::init(int /*argc*/, char ** /*argv*/)
 		createDB = true;
 	const bool dropDB = args->isSet("dropdb");
 	const bool openExisting = !createDB && !dropDB;
+	const bool readOnly = args->isSet("readonly");
 	const QString couldnotMsg = QString::fromLatin1("\n")
 		+i18n("Could not start Kexi application this way.");
-	
+
 	if (createDB && dropDB) {
 		KMessageBox::sorry( 0, i18n(
 			"You have used both \"createdb\" and \"dropdb\" startup options.")+couldnotMsg);
@@ -718,6 +719,7 @@ tristate KexiStartupHandler::init(int /*argc*/, char ** /*argv*/)
 	}
 	
 	if (m_projectData && (openExisting || (createDB && alsoOpenDB))) {
+		m_projectData->setReadOnly( readOnly );
 		m_action = OpenProject;
 	}
 	//show if wasn't show yet

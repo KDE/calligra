@@ -9,6 +9,15 @@
 For most important commits use: CCMAIL:kexi-devel@kde.org
 Use CCMAIL:###-done@bugs.kde.org
 
+2006-03-28
+Startup
+- --readonly command line option added
+TableView
+- boolean editor: only accept clicking on the [x] rect
+1.0/2.0: ported
+
+TODO: merge trunk with revision 523723
+
 ~~~~~~~~~~~~~~~~ 1.0 rc1 (with KOffice 1.5) ~~~~~~~~~~~~~~~~
 
 2006-03-20

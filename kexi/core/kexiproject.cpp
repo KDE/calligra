@@ -432,7 +432,10 @@ KexiProject::createConnection()
 		return false;
 	}
 
-	d->connection = driver->createConnection(*d->data->connectionData());
+	int connectionOptions = 0;
+	if (d->data->isReadOnly())
+		connectionOptions |= KexiDB::Driver::ReadOnlyConnection;
+	d->connection = driver->createConnection(*d->data->connectionData(), connectionOptions);
 	if (!d->connection)
 	{
 		kdDebug() << "KexiProject::open(): uuups failed " << driver->errorMsg()  << endl;
@@ -709,7 +712,7 @@ bool KexiProject::checkWritable()
 {
 	if (!d->connection->isReadOnly())
 		return true;
-	setError(futureI18n("This project is opened as read only."));
+	setError(i18n("This project is opened as read only."));
 	return false;
 }
 
@@ -941,7 +944,7 @@ tristate KexiProject::dropProject(KexiProjectData* data,
 
 	if (prj.dbConnection()->isReadOnly()) {
 		handler->showErrorMessage(
-			futureI18n("Could not drop this project. Database connection project is opened as read only."));
+			i18n("Could not drop this project. Database connection project is opened as read only."));
 		return false;
 	}
 

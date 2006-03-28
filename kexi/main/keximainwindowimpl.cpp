@@ -501,7 +501,7 @@ void KexiMainWindowImpl::initActions()
 
 #ifndef KEXI_NO_CSV_IMPORT
 	d->action_project_import_data_table = new KAction(
-		i18n("Import->Data Table...", "Data &Table..."),
+		i18n("Import->Table Data From File...", "Table Data From &File..."),
 		"table"/*! @todo: change to "file_import" or so*/,
 		0, this, SLOT(slotProjectImportDataTable()), actionCollection(), 
 		"project_import_data_table");
@@ -510,8 +510,8 @@ void KexiMainWindowImpl::initActions()
 #else
 	d->action_project_import_data_table = d->dummy_action;
 #endif
-	d->action_project_export_data_table = new KAction(i18n("Export->Table or Query as Data Table...", 
-		"Table or Query as Data &Table..."),
+	d->action_project_export_data_table = new KAction(i18n("Export->Table or Query Data to File...", 
+		"Table or Query Data to &File..."),
 		"table"/*! @todo: change to "file_export" or so*/,
 		0, this, SLOT(slotProjectExportDataTable()), actionCollection(), 
 		"project_export_data_table");
@@ -557,14 +557,14 @@ void KexiMainWindowImpl::initActions()
 		"table", 0, this, SLOT(slotEditPasteSpecialDataTable()),
 		actionCollection(), "edit_paste_special_data_table");
 	d->action_edit_paste_special_data_table->setToolTip(
-		i18n("Paste clipboard data to a new table"));
+		i18n("Paste clipboard data as a table"));
 	d->action_edit_paste_special_data_table->setWhatsThis(
-		i18n("Pastes clipboard data to a new table."));
+		i18n("Pastes clipboard data to a table."));
 #else
 	d->action_edit_paste_special_data_table = d->dummy_action;
 #endif
 	d->action_edit_copy_special_data_table =
-		new KAction(i18n("Copy Special->Table or Query As Data Table...", 
+		new KAction(i18n("Copy Special->Table or Query Data...", 
 			"Table or Query As Data Table..."),
 		"table", 0, this, SLOT(slotEditCopySpecialDataTable()),
 		actionCollection(), "edit_copy_special_data_table");

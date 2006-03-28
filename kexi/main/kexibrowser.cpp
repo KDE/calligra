@@ -192,7 +192,7 @@ KexiBrowser::KexiBrowser(KexiMainWindow *mainWin)
 	m_itemPopup->insertSeparator();
 #endif
 	m_exportActionMenu = new KActionMenu(i18n("Export"));
-	m_dataExportAction = new KAction(i18n("Export->As Data &Table... ", "As Data &Table..."), 
+	m_dataExportAction = new KAction(i18n("Export->To File As Data &Table... ", "To &File As Data Table..."), 
 		"table", 0, this, SLOT(slotExportAsDataTable()), this, "exportAsDataTable");
 	m_dataExportAction->setWhatsThis(
 		i18n("Exports data from the currently selected table or query data to a file."));
