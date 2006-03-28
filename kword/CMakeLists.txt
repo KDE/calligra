@@ -1,5 +1,7 @@
 kde4_header()
 
+project(kword)
+
 add_subdirectory( mailmerge )
 add_subdirectory( templates )
 add_subdirectory( dtd )

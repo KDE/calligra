@@ -1,5 +1,5 @@
 kde4_header()
-
+project(koshell)
 
 
 

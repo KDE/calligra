@@ -1,4 +1,5 @@
 kde4_header()
+project(kspread)
 
 add_subdirectory( dialogs ) 
 add_subdirectory( tests ) 

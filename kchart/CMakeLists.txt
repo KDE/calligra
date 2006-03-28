@@ -1,4 +1,5 @@
 kde4_header()
+project(kchart)
 
 add_subdirectory( kdchart )
 add_subdirectory( toolbar )

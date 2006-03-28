@@ -1,5 +1,6 @@
 kde4_header()
 
+project(kpresenter)
 add_subdirectory( autoformEdit )
 add_subdirectory( autoforms )
 add_subdirectory( pics )

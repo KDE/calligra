@@ -1,4 +1,5 @@
 kde4_header()
+project(kplato)
 
 add_subdirectory( templates )
 add_subdirectory( pics )
