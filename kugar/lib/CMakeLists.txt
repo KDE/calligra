@@ -25,7 +25,7 @@ kde4_automoc(${kugarlib_LIB_SRCS})
 
 kde4_add_library(kugarlib SHARED ${kugarlib_LIB_SRCS})
 
-target_link_libraries(kugarlib  ${KDE4_KDECORE_LIBS} )
+target_link_libraries(kugarlib  ${KDE4_KDECORE_LIBS} ${KDE4_KDEPRINT_LIBS})
 
 set_target_properties(kugarlib PROPERTIES VERSION 1.0.0 SOVERSION 1 )
 install_targets(${LIB_INSTALL_DIR} kugarlib )

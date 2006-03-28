@@ -103,45 +103,26 @@ void InputMask::parseInputMask( const QString &maskFields )
             index++;
             escape = FALSE;
         }
-        else if ( c == '<' || c == '>' || c == '!' )
-        {
-            switch ( c )
-            {
-            case '<':
-                m = MaskInputData::Lower;
-                break;
-            case '>':
-                m = MaskInputData::Upper;
-                break;
-            case '!':
-                m = MaskInputData::NoCaseMode;
-                break;
-            }
-        }
+		else if( c == '<' )
+		{
+			m = MaskInputData::Lower;
+		}
+		else if( c == '>' )
+		{
+			m = MaskInputData::Upper;
+		}
+		else if( c == '!' )
+		{
+			m = MaskInputData::NoCaseMode;
+		}
         else if ( c != '{' && c != '}' && c != '[' && c != ']' )
         {
-            switch ( c )
-            {
-            case 'A':
-            case 'a':
-            case 'N':
-            case 'n':
-            case 'X':
-            case 'x':
-            case '9':
-            case '0':
-            case 'D':
-            case 'd':
-            case '#':
-                s = FALSE;
-                break;
-            case '\\':
-                escape = TRUE;
-            default:
-                s = TRUE;
-                break;
-            }
-
+			if( c == 'A' || c == 'a' || c == 'N' || c =='n' || c == 'X' || c == 'x' || c == '9' || c == '0' || c =='D' || c == 'd' || c == '#')
+					s = FALSE;
+			else if( c == '\\' )
+					escape = TRUE;
+			else
+					s = TRUE;
             if ( !escape )
             {
                 m_maskData[ index ].maskChar = c;
@@ -155,55 +136,61 @@ void InputMask::parseInputMask( const QString &maskFields )
 
 bool InputMask::isValidInput( QChar key, QChar mask ) const
 {
-    switch ( mask )
-    {
-    case 'A':
+    if( mask ==  'A')
+	{
         if ( key.isLetter() && key != m_blank )
             return TRUE;
-        break;
-    case 'a':
+	}
+	else if(mask ==  'a')
+	{
         if ( key.isLetter() || key == m_blank )
             return TRUE;
-        break;
-    case 'N':
+	}
+	else if( mask == 'N')
+	{
         if ( key.isLetterOrNumber() && key != m_blank )
             return TRUE;
-        break;
-    case 'n':
+	}
+	else if( mask == 'n')
+	{
         if ( key.isLetterOrNumber() || key == m_blank )
             return TRUE;
-        break;
-    case 'X':
+	}
+	else if(mask == 'X')
+	{
         if ( key.isPrint() && key != m_blank )
             return TRUE;
-        break;
-    case 'x':
+	}
+	else if(mask == 'x')
+	{
         if ( key.isPrint() || key == m_blank )
             return TRUE;
-        break;
-    case '9':
+	}
+	else if(mask ==  '9')
+	{
         if ( key.isNumber() && key != m_blank )
             return TRUE;
-        break;
-    case '0':
+	}
+	else if(mask == '0')
+	{
         if ( key.isNumber() || key == m_blank )
             return TRUE;
-        break;
-    case 'D':
+	}
+	else if(mask == 'D')
+	{
         if ( key.isNumber() && key.digitValue() > 0 && key != m_blank )
             return TRUE;
-        break;
-    case 'd':
+	}
+	else if(mask ==  'd')
+	{			
         if ( ( key.isNumber() && key.digitValue() > 0 ) || key == m_blank )
             return TRUE;
-        break;
-    case '#':
+	}
+	else if(mask ==  '#')
+	{
         if ( key.isNumber() || key == '+' || key == '-' || key == m_blank )
             return TRUE;
-        break;
-    default:
-        break;
-    }
+	}
     return FALSE;
 }
 
