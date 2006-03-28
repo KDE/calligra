@@ -246,7 +246,7 @@ void MReportViewer::slotRenderProgress( int p )
     if ( progress == 0 )
     {
         totalSteps = rptEngine->getRenderSteps();
-        progress = new QProgressDialog( "Creating report...", "Cancel",
+        progress = new QProgressDialog( i18n("Creating report..."), i18n("Cancel"),
                                         totalSteps, this, "progress", true );
         progress->setMinimumDuration( M_PROGRESS_DELAY );
     }
