@@ -154,14 +154,14 @@ KPrBackDialog::KPrBackDialog( QWidget* parent, const char* name,
 
     labXFactor =new QLabel( i18n( "X-factor:" ), colorTab );
 
-    xfactor = new QSlider( -200, 200, 1, 100, QSlider::Horizontal, colorTab );
+    xfactor = new QSlider( -200, 200, 1, 100, Qt::Horizontal, colorTab );
     connect( xfactor, SIGNAL( valueChanged( int ) ),
              this, SLOT( updateConfiguration() ) );
     xfactor->setValue( _xfactor );
 
     labYFactor=new QLabel( i18n( "Y-factor:" ), colorTab );
 
-    yfactor = new QSlider( -200, 200, 1, 100, QSlider::Horizontal, colorTab );
+    yfactor = new QSlider( -200, 200, 1, 100, Qt::Horizontal, colorTab );
     connect( yfactor, SIGNAL( valueChanged( int ) ),
              this, SLOT( updateConfiguration() ) );
     yfactor->setValue( _yfactor );
