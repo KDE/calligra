@@ -482,7 +482,7 @@ void KexiMainWindowImpl::initActions()
 	KStdAction::quit( this, SLOT(slotProjectQuit()), actionCollection(), "quit");
 
 #ifdef KEXI_SHOW_UNIMPLEMENTED
-	d->action_project_relations = new KAction(i18n("&Relationships..."), "relation", CTRL + Key_R,
+	d->action_project_relations = new KAction(i18n("&Relationships..."), "relation", CTRL + Qt::Key_R,
 		this, SLOT(slotProjectRelations()), actionCollection(), "project_relations");
 	d->action_project_relations->setToolTip(i18n("Project relationships"));
 	d->action_project_relations->setWhatsThis(i18n("Shows project relationships."));
@@ -582,12 +582,12 @@ void KexiMainWindowImpl::initActions()
 	d->action_edit_select_all =  createSharedAction( KStdAction::SelectAll, "edit_select_all");
 
 	d->action_edit_delete = createSharedAction(i18n("&Delete"), "editdelete",
-		0/*Key_Delete*/, "edit_delete");
+		0/*Qt::Key_Delete*/, "edit_delete");
 	d->action_edit_delete->setToolTip(i18n("Delete object"));
 	d->action_edit_delete->setWhatsThis(i18n("Deletes currently selected object."));
 
 	d->action_edit_delete_row = createSharedAction(i18n("Delete Row"), "delete_table_row",
-		CTRL+Key_Delete, "edit_delete_row");
+		CTRL+Qt::Key_Delete, "edit_delete_row");
 	d->action_edit_delete_row->setToolTip(i18n("Delete currently selected row from a table"));
 	d->action_edit_delete_row->setWhatsThis(i18n("Deletes currently selected row from a table."));
 
@@ -597,51 +597,51 @@ void KexiMainWindowImpl::initActions()
 	d->action_edit_clear_table->setWhatsThis(i18n("Clears table contents."));
 	setActionVolatile( d->action_edit_clear_table, true );
 
-	d->action_edit_edititem = createSharedAction(i18n("Edit Item"), 0, Key_F2, "edit_edititem");
+	d->action_edit_edititem = createSharedAction(i18n("Edit Item"), 0, Qt::Key_F2, "edit_edititem");
 	d->action_edit_edititem->setToolTip(i18n("Edit currently selected item"));
 	d->action_edit_edititem->setWhatsThis(i18n("Edits currently selected item."));
 
-	d->action_edit_insert_empty_row = createSharedAction(i18n("&Insert Empty Row"), "insert_table_row", SHIFT | CTRL | Key_Insert, "edit_insert_empty_row");
+	d->action_edit_insert_empty_row = createSharedAction(i18n("&Insert Empty Row"), "insert_table_row", SHIFT | CTRL | Qt::Key_Insert, "edit_insert_empty_row");
 	setActionVolatile( d->action_edit_insert_empty_row, true );
 	d->action_edit_insert_empty_row->setToolTip(i18n("Insert one empty row above"));
 	d->action_edit_insert_empty_row->setWhatsThis(i18n("Inserts one empty row above currently selected table row."));
 
 	//VIEW MENU
-	d->action_view_data_mode = new KRadioAction(i18n("&Data View"), "state_data", Key_F6,
+	d->action_view_data_mode = new KRadioAction(i18n("&Data View"), "state_data", Qt::Key_F6,
 		this, SLOT(slotViewDataMode()), actionCollection(), "view_data_mode");
 	d->actions_for_view_modes.insert( Kexi::DataViewMode, d->action_view_data_mode );
 	d->action_view_data_mode->setExclusiveGroup("view_mode");
 	d->action_view_data_mode->setToolTip(i18n("Switch to Data View"));
 	d->action_view_data_mode->setWhatsThis(i18n("Switches to Data View."));
 
-	d->action_view_design_mode = new KRadioAction(i18n("D&esign View"), "state_edit", Key_F7,
+	d->action_view_design_mode = new KRadioAction(i18n("D&esign View"), "state_edit", Qt::Key_F7,
 		this, SLOT(slotViewDesignMode()), actionCollection(), "view_design_mode");
 	d->actions_for_view_modes.insert( Kexi::DesignViewMode, d->action_view_design_mode );
 	d->action_view_design_mode->setExclusiveGroup("view_mode");
 	d->action_view_design_mode->setToolTip(i18n("Switch to Design View"));
 	d->action_view_design_mode->setWhatsThis(i18n("Switches to Design View."));
 
-	d->action_view_text_mode = new KRadioAction(i18n("&Text View"), "state_sql", Key_F8,
+	d->action_view_text_mode = new KRadioAction(i18n("&Text View"), "state_sql", Qt::Key_F8,
 		this, SLOT(slotViewTextMode()), actionCollection(), "view_text_mode");
 	d->actions_for_view_modes.insert( Kexi::TextViewMode, d->action_view_text_mode );
 	d->action_view_text_mode->setExclusiveGroup("view_mode");
 	d->action_view_text_mode->setToolTip(i18n("Switch to Text View"));
 	d->action_view_text_mode->setWhatsThis(i18n("Switches to Text View."));
 
-	d->action_view_nav = new KAction(i18n("Project Navigator"), "", ALT + Key_1,
+	d->action_view_nav = new KAction(i18n("Project Navigator"), "", ALT + Qt::Key_1,
 		this, SLOT(slotViewNavigator()), actionCollection(), "view_navigator");
 	d->action_view_nav->setToolTip(i18n("Go to project navigator panel"));
 	d->action_view_nav->setWhatsThis(i18n("Goes to project navigator panel."));
 
 #ifdef KEXI_PROP_EDITOR
-	d->action_view_propeditor = new KAction(i18n("Property Editor"), "", ALT + Key_2,
+	d->action_view_propeditor = new KAction(i18n("Property Editor"), "", ALT + Qt::Key_2,
 		this, SLOT(slotViewPropertyEditor()), actionCollection(), "view_propeditor");
 	d->action_view_propeditor->setToolTip(i18n("Go to property editor panel"));
 	d->action_view_propeditor->setWhatsThis(i18n("Goes to property editor panel."));
 #endif
 
 	//DATA MENU
-	d->action_data_save_row = createSharedAction(i18n("&Save Row"), "button_ok", SHIFT | Key_Return, "data_save_row");
+	d->action_data_save_row = createSharedAction(i18n("&Save Row"), "button_ok", SHIFT | Qt::Key_Return, "data_save_row");
 	d->action_data_save_row->setToolTip(i18n("Save currently selected table row's data"));
 	d->action_data_save_row->setWhatsThis(i18n("Saves currently selected table row's data."));
 	setActionVolatile( d->action_data_save_row, true );
@@ -685,9 +685,9 @@ void KexiMainWindowImpl::initActions()
 	//additional 'Window' menu items
 	d->action_window_next = new KAction( i18n("&Next Window"), "",
 #ifdef Q_WS_WIN
-		CTRL+Key_Tab,
+		CTRL+Qt::Key_Tab,
 #else
-		ALT+Key_Right,
+		ALT+Qt::Key_Right,
 #endif
 		this, SLOT(activateNextWin()), actionCollection(), "window_next");
 	d->action_window_next->setToolTip( i18n("Next window") );
@@ -695,9 +695,9 @@ void KexiMainWindowImpl::initActions()
 
 	d->action_window_previous = new KAction( i18n("&Previous Window"), "",
 #ifdef Q_WS_WIN
-		CTRL+SHIFT+Key_Tab,
+		CTRL+SHIFT+Qt::Key_Tab,
 #else
-		ALT+Key_Left,
+		ALT+Qt::Key_Left,
 #endif
 		this, SLOT(activatePrevWin()), actionCollection(), "window_previous");
 	d->action_window_previous->setToolTip( i18n("Previous window") );
@@ -716,7 +716,7 @@ void KexiMainWindowImpl::initActions()
 	d->action_show_other = new KActionMenu(i18n("Other"),
 		actionCollection(), "options_show_other");
 #ifndef KEXI_NO_CTXT_HELP
-	d->action_show_helper = new KToggleAction(i18n("Show Context Help"), "", CTRL + Key_H,
+	d->action_show_helper = new KToggleAction(i18n("Show Context Help"), "", CTRL + Qt::Key_H,
 	 actionCollection(), "options_show_contexthelp");
 #if KDE_IS_VERSION(3,2,90)
 	d->action_show_helper->setCheckedState(i18n("Hide Context Help"));
@@ -3104,8 +3104,8 @@ bool KexiMainWindowImpl::eventFilter( QObject *obj, QEvent * e )
 		//KexiVDebug << "AccelOverride EVENT " << static_cast<QKeyEvent*>(e)->key() << " " << static_cast<QKeyEvent*>(e)->state() == ControlButton << endl;
 
 		//avoid sending CTRL+Tab key twice for tabbed/ideal mode, epecially for win32
-		if (static_cast<QKeyEvent*>(e)->key()==Key_Tab && static_cast<QKeyEvent*>(e)->state() == ControlButton) {
-			if (d->action_window_next->shortcut().keyCodeQt()==Key_Tab+CTRL && d->action_window_next->shortcut().count()==1
+		if (static_cast<QKeyEvent*>(e)->key()==Qt::Key_Tab && static_cast<QKeyEvent*>(e)->state() == ControlButton) {
+			if (d->action_window_next->shortcut().keyCodeQt()==Qt::Key_Tab+CTRL && d->action_window_next->shortcut().count()==1
 				&& (mdiMode()==KMdi::TabPageMode || mdiMode()==KMdi::IDEAlMode))
 			{
 				static_cast<QKeyEvent*>(e)->accept();

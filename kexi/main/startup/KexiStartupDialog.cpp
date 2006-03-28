@@ -678,7 +678,7 @@ bool KexiStartupDialog::eventFilter( QObject *o, QEvent *e )
 {
 	if (o==d->templatesWidget_IconListBox && d->templatesWidget_IconListBox) {
 		if (e->type()==QEvent::KeyPress 
-			&& (static_cast<QKeyEvent*>(e)->key()==Key_Enter || static_cast<QKeyEvent*>(e)->key()==Key_Return)
+			&& (static_cast<QKeyEvent*>(e)->key()==Qt::Key_Enter || static_cast<QKeyEvent*>(e)->key()==Qt::Key_Return)
 			|| e->type()==QEvent::MouseButtonDblClick) 
 		{
 			const int t_id = d->templatesWidget->activePageIndex();

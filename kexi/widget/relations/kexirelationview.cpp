@@ -439,7 +439,7 @@ KexiRelationView::keyPressEvent(QKeyEvent *ev)
 //		executePopup();
 	}
 	else {
-		if(ev->key() == Key_Delete)
+		if(ev->key() == Qt::Key_Delete)
 			removeSelectedObject();
 	}
 }

@@ -143,7 +143,7 @@ bool InsertHandler::eventFilter( QObject*, QEvent* ev )
     else if ( ev->type() == QEvent::KeyPress )
     {
     QKeyEvent* e = (QKeyEvent*)ev;
-    if ( e->key() != Key_Escape )
+    if ( e->key() != Qt::Key_Escape )
         return false;
     
     delete this;

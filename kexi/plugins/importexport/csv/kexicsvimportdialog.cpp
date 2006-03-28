@@ -1474,7 +1474,7 @@ bool KexiCSVImportDialog::eventFilter ( QObject * watched, QEvent * e )
 
 	if (watched == m_startAtLineSpinBox && t==QEvent::KeyPress) {
 		QKeyEvent *ke = static_cast<QKeyEvent*>(e);
-		if (ke->key()==Key_Enter || ke->key()==Key_Return) {
+		if (ke->key()==Qt::Key_Enter || ke->key()==Qt::Key_Return) {
 			m_table->setFocus();
 			return true;
 		}

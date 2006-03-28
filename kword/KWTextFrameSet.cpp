@@ -3425,7 +3425,7 @@ void KWTextFrameSetEdit::keyPressEvent( QKeyEvent* e )
         if (e->state() != Qt::NoButton)
                 removeToolTipCompletion();
         switch ( e->key() ) {
-        case Key_Left: {
+        case Qt::Key_Left: {
             KoTextCursor* cursor = textView()->cursor();
             KoTextParag* parag = cursor->parag();
             int index = cursor->index();
@@ -3444,7 +3444,7 @@ void KWTextFrameSetEdit::keyPressEvent( QKeyEvent* e )
                     return;
             break;
         }
-        case Key_Right: {
+        case Qt::Key_Right: {
             KoTextCursor* cursor = textView()->cursor();
             KoTextParag* parag = cursor->parag();
             int index = cursor->index();

@@ -52,12 +52,12 @@ SelectTool::SelectTool( KivioView* parent ) : Kivio::MouseTool(parent, "Selectio
 {
   view()->pluginManager()->setDefaultTool(this);
 
-  KShortcut selectShortCut(Key_Space);
-  selectShortCut.setSeq(1, QKeySequence(Key_Escape));
+  KShortcut selectShortCut(Qt::Key_Space);
+  selectShortCut.setSeq(1, QKeySequence(Qt::Key_Escape));
   m_selectAction = new KRadioAction(i18n("&Select"), "select", selectShortCut, actionCollection(), "select");
   connect(m_selectAction, SIGNAL(toggled(bool)), this, SLOT(setActivated(bool)));
 
-  m_textEditAction = new KAction(i18n("&Edit Text..."), "text", Key_F2,
+  m_textEditAction = new KAction(i18n("&Edit Text..."), "text", Qt::Key_F2,
                                  this, SLOT(editStencilText()), actionCollection(), "editText");
   (void) new KAction(i18n("Format &Stencils && Connectors..."), 0, 0, view(), SLOT(stencilFormat()),
                           actionCollection(), "formatStencil");
@@ -133,7 +133,7 @@ bool SelectTool::processEvent(QEvent* e)
       break;
 
     case QEvent::KeyPress:
-      if((static_cast<QKeyEvent*>(e)->key() >= Key_Left) && (static_cast<QKeyEvent*>(e)->key() <= Key_Down)) {
+      if((static_cast<QKeyEvent*>(e)->key() >= Qt::Key_Left) && (static_cast<QKeyEvent*>(e)->key() <= Qt::Key_Down)) {
         keyPress(static_cast<QKeyEvent*>(e));
         return true;
       }
@@ -1233,19 +1233,19 @@ void SelectTool::keyPress(QKeyEvent* e)
   }
   
   switch(e->key()) {
-    case Key_Left:
+    case Qt::Key_Left:
       continueDragging(canvas->mapToScreen(KoPoint(m_selectedRect.x() - distX,
         m_selectedRect.y())), ignoreGridGuides);
       break;
-    case Key_Up:
+    case Qt::Key_Up:
       continueDragging(canvas->mapToScreen(KoPoint(m_selectedRect.x(),
         m_selectedRect.y() - distY)), ignoreGridGuides);
       break;
-    case Key_Right:
+    case Qt::Key_Right:
       continueDragging(canvas->mapToScreen(KoPoint(m_selectedRect.x() + distX,
         m_selectedRect.y())), ignoreGridGuides);
       break;
-    case Key_Down:
+    case Qt::Key_Down:
       continueDragging(canvas->mapToScreen(KoPoint(m_selectedRect.x(),
         m_selectedRect.y() + distY)), ignoreGridGuides);
       break;

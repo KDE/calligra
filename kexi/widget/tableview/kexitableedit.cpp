@@ -98,7 +98,7 @@ KexiTableEdit::eventFilter(QObject* watched, QEvent* e)
 /*	if (watched == m_view) {
 		if(e->type() == QEvent::KeyPress) {
 			QKeyEvent* ev = static_cast<QKeyEvent*>(e);
-//			if (ev->key()==Key_Tab) {
+//			if (ev->key()==Qt::Key_Tab) {
 
 //			}
 		}
@@ -110,7 +110,7 @@ KexiTableEdit::eventFilter(QObject* watched, QEvent* e)
 		{
 			QKeyEvent* ev = static_cast<QKeyEvent*>(e);
 
-			if(ev->key() == Key_Escape)
+			if(ev->key() == Qt::Key_Escape)
 			{
 				return false;
 			}

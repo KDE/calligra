@@ -368,7 +368,7 @@ bool Canvas::eventFilter( QObject *o, QEvent *e )
   case QEvent::KeyPress:
   {
     QKeyEvent * keyev = static_cast<QKeyEvent *>(e);
-    if ((keyev->key()==Key_Tab) || (keyev->key()==Key_Backtab))
+    if ((keyev->key()==Qt::Key_Tab) || (keyev->key()==Qt::Key_Backtab))
     {
       keyPressEvent ( keyev );
       return true;
@@ -2091,28 +2091,28 @@ void Canvas::processArrowKey( QKeyEvent *event)
 
   switch (event->key())
   {
-  case Key_Down:
+  case Qt::Key_Down:
     direction = Bottom;
     break;
-  case Key_Up:
+  case Qt::Key_Up:
     direction = Top;
     break;
-  case Key_Left:
+  case Qt::Key_Left:
     if (activeSheet()->layoutDirection()==Sheet::RightToLeft)
       direction = Right;
     else
       direction = Left;
     break;
-  case Key_Right:
+  case Qt::Key_Right:
     if (activeSheet()->layoutDirection()==Sheet::RightToLeft)
       direction = Left;
     else
       direction = Right;
     break;
-  case Key_Tab:
+  case Qt::Key_Tab:
       direction = Right;
       break;
-  case Key_Backtab:
+  case Qt::Key_Backtab:
       //Shift+Tab moves to the left
       direction = Left;
       makingSelection = false;
@@ -2451,8 +2451,8 @@ bool Canvas::processControlArrowKey( QKeyEvent *event )
      actually being used.  Ignore empty cells and cells on hidden rows/columns */
   switch ( event->key() )
   {
-    //Ctrl+Key_Up
-   case Key_Up:
+    //Ctrl+Qt::Key_Up
+   case Qt::Key_Up:
 
     cell = sheet->cellAt( marker.x(), marker.y() );
     if ( (cell != NULL) && (!cell->isEmpty()) && (marker.y() != 1))
@@ -2498,8 +2498,8 @@ bool Canvas::processControlArrowKey( QKeyEvent *event )
     destination.setY(row);
     break;
 
-    //Ctrl+Key_Down
-   case Key_Down:
+    //Ctrl+Qt::Key_Down
+   case Qt::Key_Down:
 
     cell = sheet->cellAt( marker.x(), marker.y() );
     if ( (cell != NULL) && (!cell->isEmpty()) && (marker.y() != KS_rowMax))
@@ -2544,8 +2544,8 @@ bool Canvas::processControlArrowKey( QKeyEvent *event )
     destination.setY(row);
     break;
 
-  //Ctrl+Key_Left
-  case Key_Left:
+  //Ctrl+Qt::Key_Left
+  case Qt::Key_Left:
 
   if ( sheet->layoutDirection()==Sheet::RightToLeft )
   {
@@ -2638,8 +2638,8 @@ bool Canvas::processControlArrowKey( QKeyEvent *event )
   }
     break;
 
-  //Ctrl+Key_Right
-  case Key_Right:
+  //Ctrl+Qt::Key_Right
+  case Qt::Key_Right:
 
   if ( sheet->layoutDirection()==Sheet::RightToLeft )
   {
@@ -2761,13 +2761,13 @@ void Canvas::keyPressEvent ( QKeyEvent * _ev )
 
   // Dont handle the remaining special keys.
   if ( _ev->state() & ( Qt::AltModifier | Qt::ControlModifier ) &&
-       (_ev->key() != Key_Down) &&
-       (_ev->key() != Key_Up) &&
-       (_ev->key() != Key_Right) &&
-       (_ev->key() != Key_Left) &&
-       (_ev->key() != Key_Home) &&
-       (_ev->key() != Key_Enter) &&
-       (_ev->key() != Key_Return) &&
+       (_ev->key() != Qt::Key_Down) &&
+       (_ev->key() != Qt::Key_Up) &&
+       (_ev->key() != Qt::Key_Right) &&
+       (_ev->key() != Qt::Key_Left) &&
+       (_ev->key() != Qt::Key_Home) &&
+       (_ev->key() != Qt::Key_Enter) &&
+       (_ev->key() != Qt::Key_Return) &&
        (_ev->key() != KGlobalSettings::contextMenuKey()))
   {
     QWidget::keyPressEvent( _ev );
@@ -2789,17 +2789,17 @@ void Canvas::keyPressEvent ( QKeyEvent * _ev )
   }
   switch( _ev->key() )
   {
-   case Key_Return:
-   case Key_Enter:
+   case Qt::Key_Return:
+   case Qt::Key_Enter:
     processEnterKey( _ev );
     return;
     break;
-   case Key_Down:
-   case Key_Up:
-   case Key_Left:
-   case Key_Right:
-   case Key_Tab: /* a tab behaves just like a right/left arrow */
-   case Key_Backtab:  /* and so does Shift+Tab */
+   case Qt::Key_Down:
+   case Qt::Key_Up:
+   case Qt::Key_Left:
+   case Qt::Key_Right:
+   case Qt::Key_Tab: /* a tab behaves just like a right/left arrow */
+   case Qt::Key_Backtab:  /* and so does Shift+Tab */
     if (_ev->state() & ControlButton)
     {
       if ( !processControlArrowKey( _ev ) )
@@ -2812,42 +2812,42 @@ void Canvas::keyPressEvent ( QKeyEvent * _ev )
     }
     break;
 
-   case Key_Escape:
+   case Qt::Key_Escape:
     processEscapeKey( _ev );
     return;
     break;
 
-   case Key_Home:
+   case Qt::Key_Home:
     if ( !processHomeKey( _ev ) )
       return;
     break;
 
-   case Key_End:
+   case Qt::Key_End:
     if ( !processEndKey( _ev ) )
       return;
     break;
 
-   case Key_Prior:  /* Page Up */
+   case Qt::Key_Prior:  /* Page Up */
     if ( !processPriorKey( _ev ) )
       return;
     break;
 
-   case Key_Next:   /* Page Down */
+   case Qt::Key_Next:   /* Page Down */
     if ( !processNextKey( _ev ) )
       return;
     break;
 
-   case Key_Delete:
+   case Qt::Key_Delete:
     processDeleteKey( _ev );
     return;
     break;
 
-   case Key_F2:
+   case Qt::Key_F2:
     processF2Key( _ev );
     return;
     break;
 
-   case Key_F4:
+   case Qt::Key_F4:
     processF4Key( _ev );
     return;
     break;
@@ -2895,9 +2895,9 @@ bool Canvas::formatKeyPress( QKeyEvent * _ev )
     return false;
 
   int key = _ev->key();
-  if ( key != Key_Exclam && key != Key_At && key != Key_Ampersand
-       && key != Key_Dollar && key != Key_Percent && key != Key_AsciiCircum
-       && key != Key_NumberSign )
+  if ( key != Qt::Key_Exclam && key != Qt::Key_At && key != Qt::Key_Ampersand
+       && key != Qt::Key_Dollar && key != Qt::Key_Percent && key != Qt::Key_AsciiCircum
+       && key != Qt::Key_NumberSign )
     return false;
 
   Cell  * cell = 0L;
@@ -2941,33 +2941,33 @@ bool Canvas::formatKeyPress( QKeyEvent * _ev )
       QPen pen;
       switch ( _ev->key() )
       {
-       case Key_Exclam:
+       case Qt::Key_Exclam:
         rw->setFormatType (Number_format);
         rw->setPrecision( 2 );
         break;
 
-       case Key_Dollar:
+       case Qt::Key_Dollar:
         rw->setFormatType (Money_format);
         rw->setPrecision( d->view->doc()->locale()->fracDigits() );
         break;
 
-       case Key_Percent:
+       case Qt::Key_Percent:
         rw->setFormatType (Percentage_format);
         break;
 
-       case Key_At:
+       case Qt::Key_At:
         rw->setFormatType( SecondeTime_format );
         break;
 
-       case Key_NumberSign:
+       case Qt::Key_NumberSign:
         rw->setFormatType( ShortDate_format );
         break;
 
-       case Key_AsciiCircum:
+       case Qt::Key_AsciiCircum:
         rw->setFormatType( Scientific_format );
         break;
 
-       case Key_Ampersand:
+       case Qt::Key_Ampersand:
         if ( r == rect.top() )
         {
           pen = QPen( d->view->borderColor(), 1, SolidLine);
@@ -3013,33 +3013,33 @@ bool Canvas::formatKeyPress( QKeyEvent * _ev )
       QPen pen;
       switch ( _ev->key() )
       {
-       case Key_Exclam:
+       case Qt::Key_Exclam:
         cw->setFormatType( Number_format );
         cw->setPrecision( 2 );
         break;
 
-       case Key_Dollar:
+       case Qt::Key_Dollar:
         cw->setFormatType( Money_format );
         cw->setPrecision( d->view->doc()->locale()->fracDigits() );
         break;
 
-       case Key_Percent:
+       case Qt::Key_Percent:
         cw->setFormatType( Percentage_format );
         break;
 
-       case Key_At:
+       case Qt::Key_At:
         cw->setFormatType( SecondeTime_format );
         break;
 
-       case Key_NumberSign:
+       case Qt::Key_NumberSign:
         cw->setFormatType( ShortDate_format );
         break;
 
-       case Key_AsciiCircum:
+       case Qt::Key_AsciiCircum:
         cw->setFormatType( Scientific_format );
         break;
 
-       case Key_Ampersand:
+       case Qt::Key_Ampersand:
         if ( c == rect.left() )
         {
           pen = QPen( d->view->borderColor(), 1, SolidLine);
@@ -3087,34 +3087,34 @@ bool Canvas::formatCellByKey (Cell *cell, int key, const QRect &rect)
   QPen pen;
   switch (key)
   {
-    case Key_Exclam:
+    case Qt::Key_Exclam:
     cell->convertToDouble ();
     cell->format()->setFormatType (Number_format);
     cell->format()->setPrecision( 2 );
     break;
 
-    case Key_Dollar:
+    case Qt::Key_Dollar:
     cell->convertToMoney ();
     break;
 
-    case Key_Percent:
+    case Qt::Key_Percent:
     cell->convertToPercent ();
     break;
 
-    case Key_At:
+    case Qt::Key_At:
     cell->convertToTime ();
     break;
 
-    case Key_NumberSign:
+    case Qt::Key_NumberSign:
     cell->convertToDate ();
     break;
 
-    case Key_AsciiCircum:
+    case Qt::Key_AsciiCircum:
     cell->format()->setFormatType (Scientific_format);
     cell->convertToDouble ();
     break;
 
-    case Key_Ampersand:
+    case Qt::Key_Ampersand:
     if ( cell->row() == rect.top() )
     {
       pen = QPen( d->view->borderColor(), 1, SolidLine);

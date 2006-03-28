@@ -283,10 +283,10 @@ View::View(Part* part, QWidget* parent, const char* /*name*/)
     actNoInformation = new KAction("Toggle no information", Qt::CTRL+Qt::SHIFT+Qt::Key_T, this, SLOT(slotViewGanttNoInformation()), actionCollection(), "show_noinformation");
     
 #ifndef NDEBUG
-    //new KAction("Print Debug", CTRL+SHIFT+Key_P, this, SLOT( slotPrintDebug()), actionCollection(), "print_debug");
+    //new KAction("Print Debug", CTRL+SHIFT+Qt::Key_P, this, SLOT( slotPrintDebug()), actionCollection(), "print_debug");
     new KAction("Print Debug", Qt::CTRL+Qt::SHIFT+Qt::Key_P, this, SLOT(slotPrintSelectedDebug()), actionCollection(), "print_debug");
     new KAction("Print Calendar Debug", Qt::CTRL+Qt::SHIFT+Qt::Key_C, this, SLOT(slotPrintCalendarDebug()), actionCollection(), "print_calendar_debug");
-//     new KAction("Print Test Debug", CTRL+SHIFT+Key_T, this, SLOT(slotPrintTestDebug()), actionCollection(), "print_test_debug");
+//     new KAction("Print Test Debug", CTRL+SHIFT+Qt::Key_T, this, SLOT(slotPrintTestDebug()), actionCollection(), "print_test_debug");
 
     KAction* actExportGantt = new KAction( i18n( "Export Gantt" ), Qt::CTRL+Qt::SHIFT+Qt::Key_G,
                         this, SLOT( slotExportGantt() ), actionCollection(), "export_gantt" );

@@ -383,15 +383,15 @@ bool FunctionCompletion::eventFilter( QObject *obj, QEvent *ev )
       if ( ev->type() == QEvent::KeyPress )
       {
               QKeyEvent *ke = (QKeyEvent*)ev;
-              if ( ke->key() == Key_Enter || ke->key() == Key_Return  )
+              if ( ke->key() == Qt::Key_Enter || ke->key() == Qt::Key_Return  )
               {
                   doneCompletion();
                   return true;
               }
-              else if ( ke->key() == Key_Left || ke->key() == Key_Right ||
-              ke->key() == Key_Up || ke->key() == Key_Down ||
-              ke->key() == Key_Home || ke->key() == Key_End ||
-              ke->key() == Key_Prior || ke->key() == Key_Next )
+              else if ( ke->key() == Qt::Key_Left || ke->key() == Qt::Key_Right ||
+              ke->key() == Qt::Key_Up || ke->key() == Qt::Key_Down ||
+              ke->key() == Qt::Key_Home || ke->key() == Qt::Key_End ||
+              ke->key() == Qt::Key_Prior || ke->key() == Qt::Key_Next )
                   return false;
 
               d->hintLabel->hide();
@@ -1177,18 +1177,18 @@ bool CellEditor::eventFilter( QObject* o, QEvent* e )
         {
           //If the user presses the return key to finish editing this cell, choose mode must be turned off first
           //otherwise it will merely select a different cell
-          if (k->key() == Key_Return || k->key() == Key_Enter)
+          if (k->key() == Qt::Key_Return || k->key() == Qt::Key_Enter)
           {
             kDebug() << "CellEditor::eventFilter: canvas()->endChoose();" << endl;
             canvas()->endChoose();
           }
 
-          //NB - Added check for Key_Return when migrating text edit from KLineEdit to KTextEdit, since
+          //NB - Added check for Qt::Key_Return when migrating text edit from KLineEdit to KTextEdit, since
           //normal behaviour for KTextEdit is to swallow return key presses
-          if ( k->key() == Key_Up || k->key() == Key_Down ||
-                k->key() == Key_Next || k->key() == Key_Prior ||
-                k->key() == Key_Escape || k->key() == Key_Tab ||
-                k->key() == Key_Return || k->key() == Key_Enter)
+          if ( k->key() == Qt::Key_Up || k->key() == Qt::Key_Down ||
+                k->key() == Qt::Key_Next || k->key() == Qt::Key_Prior ||
+                k->key() == Qt::Key_Escape || k->key() == Qt::Key_Tab ||
+                k->key() == Qt::Key_Return || k->key() == Qt::Key_Enter)
           {
               // Send directly to canvas
               QApplication::sendEvent( parent(), e );
@@ -1398,8 +1398,8 @@ void LocationEditWidget::keyPressEvent( QKeyEvent * _ev )
     // Handle some special keys here. Eve
     switch( _ev->key() )
     {
-    case Key_Return:
-    case Key_Enter:
+    case Qt::Key_Return:
+    case Qt::Key_Enter:
     {
         if ( activateItem() )
             return;
@@ -1407,7 +1407,7 @@ void LocationEditWidget::keyPressEvent( QKeyEvent * _ev )
     }
     break;
     // Escape pressed, restore original value
-    case Key_Escape:
+    case Qt::Key_Escape:
         // #### Torben says: This is duplicated code. Bad.
         if ( m_pView->selectionInfo()->isSingular() ) {
             setText( Cell::columnName( m_pView->canvasWidget()->markerColumn() )
@@ -1498,9 +1498,9 @@ void EditWidget::keyPressEvent ( QKeyEvent* _ev )
     // Dont handle special keys and accelerators, except Enter ones
     if (( ( _ev->state() & ( Qt::AltModifier | Qt::ControlModifier ) )
          || ( _ev->state() & Qt::ShiftModifier )
-         || ( _ev->key() == Key_Shift )
-         || ( _ev->key() == Key_Control ) )
-      && (_ev->key() != Key_Return) && (_ev->key() != Key_Enter))
+         || ( _ev->key() == Qt::Key_Shift )
+         || ( _ev->key() == Qt::Key_Control ) )
+      && (_ev->key() != Qt::Key_Return) && (_ev->key() != Qt::Key_Enter))
     {
         QLineEdit::keyPressEvent( _ev );
         _ev->accept();
@@ -1519,10 +1519,10 @@ void EditWidget::keyPressEvent ( QKeyEvent* _ev )
 
   switch ( _ev->key() )
   {
-    case Key_Down:
-    case Key_Up:
-    case Key_Return:
-    case Key_Enter:
+    case Qt::Key_Down:
+    case Qt::Key_Up:
+    case Qt::Key_Return:
+    case Qt::Key_Enter:
       cellEditor->setText( text());
       // Don't allow to start a chooser when pressing the arrow keys
       // in this widget, since only up and down would work anyway.
@@ -1535,7 +1535,7 @@ void EditWidget::keyPressEvent ( QKeyEvent* _ev )
       m_pCanvas->view()->updateEditWidget();
       _ev->accept();
       break;
-    case Key_F2:
+    case Qt::Key_F2:
       cellEditor->setFocus();
       cellEditor->setText( text());
       cellEditor->setCursorPosition(cursorPosition());

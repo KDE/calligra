@@ -40,9 +40,9 @@
 
 ZoomTool::ZoomTool(KivioView* parent) : Kivio::MouseTool(parent, "Zoom Mouse Tool")
 {
-  m_zoomAction = new KRadioAction(i18n("&Zoom"), "viewmag", CTRL + ALT + Key_Z, actionCollection(), "zoom");
+  m_zoomAction = new KRadioAction(i18n("&Zoom"), "viewmag", CTRL + ALT + Qt::Key_Z, actionCollection(), "zoom");
   m_zoomAction->setWhatsThis(i18n("By pressing this button you can zoom in on a specific area."));
-  m_panAction = new KRadioAction(i18n("&Pan Document"), "kivio_zoom_hand", CTRL + ALT + Key_H, actionCollection(), "pan");
+  m_panAction = new KRadioAction(i18n("&Pan Document"), "kivio_zoom_hand", CTRL + ALT + Qt::Key_H, actionCollection(), "pan");
   m_panAction->setWhatsThis(i18n("You can drag the document by using the mouse."));
   m_zoomAction->setExclusiveGroup("zoomAction");
   m_panAction->setExclusiveGroup("zoomAction");
@@ -62,19 +62,19 @@ ZoomTool::ZoomTool(KivioView* parent) : Kivio::MouseTool(parent, "Zoom Mouse Too
   m_pMinus = KStdAction::zoomOut(this, SLOT(zoomMinus()), actionCollection(), "zoomMinus");
   m_pMinus->setWhatsThis(i18n("By pressing this button you can zoom out of the document."));
 
-  m_pZoomWidth = new KAction( i18n("Zoom Width"), "kivio_zoom_width", SHIFT+Key_F4, actionCollection(), "zoomWidth" );
+  m_pZoomWidth = new KAction( i18n("Zoom Width"), "kivio_zoom_width", SHIFT+Qt::Key_F4, actionCollection(), "zoomWidth" );
   m_pZoomWidth->setWhatsThis(i18n("You can zoom the document that it fits into the window width."));
   connect(m_pZoomWidth,SIGNAL(activated()),SLOT(zoomWidth()));
 
-  m_pZoomHeight = new KAction( i18n("Zoom Height"), "kivio_zoom_height", SHIFT+Key_F5, actionCollection(), "zoomHeight" );
+  m_pZoomHeight = new KAction( i18n("Zoom Height"), "kivio_zoom_height", SHIFT+Qt::Key_F5, actionCollection(), "zoomHeight" );
   m_pZoomHeight->setWhatsThis(i18n("You can zoom the document that it fits into the window height."));
   connect(m_pZoomHeight,SIGNAL(activated()),SLOT(zoomHeight()));
 
-  m_pZoomPage = new KAction( i18n("Zoom Page"), "kivio_zoom_page", SHIFT+Key_F6, actionCollection(), "zoomPage" );
+  m_pZoomPage = new KAction( i18n("Zoom Page"), "kivio_zoom_page", SHIFT+Qt::Key_F6, actionCollection(), "zoomPage" );
   m_pZoomPage->setWhatsThis(i18n("The Zoom Page button shows the entire page."));
   connect(m_pZoomPage,SIGNAL(activated()),SLOT(zoomPage()));
 
-  m_pZoomSelected = new KAction( i18n("Zoom Selected"), "kivio_zoom_selected", CTRL+Key_Y, actionCollection(), "zoomSelected" );
+  m_pZoomSelected = new KAction( i18n("Zoom Selected"), "kivio_zoom_selected", CTRL+Qt::Key_Y, actionCollection(), "zoomSelected" );
   m_pZoomSelected->setWhatsThis(i18n("By pressing this button you zoom in on the document, so that all <b>selected</b> objects are visible."));
   connect(m_pZoomSelected,SIGNAL(activated()),SLOT(zoomSelected()));
 
@@ -110,14 +110,14 @@ bool ZoomTool::processEvent(QEvent* e)
   if(!m_bHandMode) {
     switch(e->type()) {
       case QEvent::KeyPress:
-        if (!m_bLockKeyboard && (static_cast<QKeyEvent*>(e)->key() == Key_Shift)) {
+        if (!m_bLockKeyboard && (static_cast<QKeyEvent*>(e)->key() == Qt::Key_Shift)) {
           m_pCurrent = m_pMinus;
           canvas->setCursor(*m_pMinusCursor);
           return true;
         }
         break;
       case QEvent::KeyRelease:
-        if (!m_bLockKeyboard && (static_cast<QKeyEvent*>(e)->key() == Key_Shift)) {
+        if (!m_bLockKeyboard && (static_cast<QKeyEvent*>(e)->key() == Qt::Key_Shift)) {
           m_pCurrent = m_pPlus;
           canvas->setCursor(*m_pPlusCursor);
           return true;

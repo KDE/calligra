@@ -345,7 +345,7 @@ Container::eventFilter(QObject *s, QEvent *e)
 		{
 			QKeyEvent *kev = static_cast<QKeyEvent*>(e);
 
-			if(kev->key() == Key_F2) // pressing F2 == double-clicking
+			if(kev->key() == Qt::Key_F2) // pressing F2 == double-clicking
 			{
 				m_state = InlineEditing;
 				QWidget *w;
@@ -359,7 +359,7 @@ Container::eventFilter(QObject *s, QEvent *e)
 					w = m_form->selectedWidgets()->last();
 				m_form->library()->startEditing(w->className(), w, this);
 			}
-			else if(kev->key() == Key_Escape)
+			else if(kev->key() == Qt::Key_Escape)
 			{
 				if(FormManager::self()->isCreatingConnection())
 					FormManager::self()->stopCreatingConnection();
@@ -367,7 +367,7 @@ Container::eventFilter(QObject *s, QEvent *e)
 					FormManager::self()->stopInsert();
 				return true;
 			}
-			else if((kev->key() == Key_Control) && (m_state == MovingWidget))
+			else if((kev->key() == Qt::Key_Control) && (m_state == MovingWidget))
 			{
 				if(!m_moving)
 					return true;
@@ -382,29 +382,29 @@ Container::eventFilter(QObject *s, QEvent *e)
 					FormManager::self()->createContextMenu(static_cast<QWidget*>(s), this, false);
 					return true;
 			}
-			else if (kev->key() == Key_Delete)
+			else if (kev->key() == Qt::Key_Delete)
 			{
 				FormManager::self()->deleteWidget();
 				return true;
 			}
 			// directional buttons move the widget
-			else if(kev->key() == Key_Left){ // move the widget of gridX to the left
+			else if(kev->key() == Qt::Key_Left){ // move the widget of gridX to the left
 				moveSelectedWidgetsBy(-form()->gridSize(), 0);
 				return true;
 			}
-			else if(kev->key() == Key_Right){ // move the widget of gridX to the right
+			else if(kev->key() == Qt::Key_Right){ // move the widget of gridX to the right
 				moveSelectedWidgetsBy(form()->gridSize(), 0);
 				return true;
 			}
-			else if(kev->key() == Key_Up){ // move the widget of gridY to the top
+			else if(kev->key() == Qt::Key_Up){ // move the widget of gridY to the top
 				moveSelectedWidgetsBy(0, - form()->gridSize());
 				return true;
 			}
-			else if(kev->key() == Key_Down){ // move the widget of gridX to the bottom
+			else if(kev->key() == Qt::Key_Down){ // move the widget of gridX to the bottom
 				moveSelectedWidgetsBy(0, form()->gridSize());
 				return true;
 			}
-			else if((kev->key() == Key_Tab) || (kev->key() == Key_BackTab)){
+			else if((kev->key() == Qt::Key_Tab) || (kev->key() == Qt::Key_BackTab)){
 				ObjectTreeItem *item = form()->objectTree()->lookup(form()->selectedWidgets()->first()->name());
 				if(!item || !item->parent())
 					return true;
@@ -413,7 +413,7 @@ Container::eventFilter(QObject *s, QEvent *e)
 					return true;
 				int index = list->findRef(item);
 
-				if(kev->key() == Key_BackTab){
+				if(kev->key() == Qt::Key_BackTab){
 					if(index == 0) // go back to the last item
 						index = list->count() - 1;
 					else
@@ -436,7 +436,7 @@ Container::eventFilter(QObject *s, QEvent *e)
 		case QEvent::KeyRelease:
 		{
 			QKeyEvent *kev = static_cast<QKeyEvent*>(e);
-			if((kev->key() == Key_Control) && (m_state == CopyingWidget)) {
+			if((kev->key() == Qt::Key_Control) && (m_state == CopyingWidget)) {
 				// cancel copying
 				//m_copyRect = QRect();
 				if(m_form->formWidget())

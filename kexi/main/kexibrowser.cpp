@@ -93,7 +93,7 @@ KexiBrowser::KexiBrowser(KexiMainWindow *mainWin)
 	slotSettingsChanged(0);
 
 	// actions
-	m_deleteAction = new KAction(i18n("&Delete"), "editdelete", 0/*Key_Delete*/, 
+	m_deleteAction = new KAction(i18n("&Delete"), "editdelete", 0/*Qt::Key_Delete*/, 
 		this, SLOT(slotRemove()), m_actions, "edit_delete");
 //! @todo 1.1: just add "Delete" tooltip and what's this
 	m_deleteAction->setToolTip(i18n("&Delete").replace("&",""));
@@ -139,7 +139,7 @@ KexiBrowser::KexiBrowser(KexiMainWindow *mainWin)
 	//init popups
 	m_itemPopup = new KMenu(this, "itemPopup");
 	m_itemPopupTitle_id = m_itemPopup->insertTitle("");
-	m_openAction = new KAction(i18n("&Open"), "fileopen", Key_Enter, this, 
+	m_openAction = new KAction(i18n("&Open"), "fileopen", Qt::Key_Enter, this, 
 		SLOT(slotOpenObject()), this, "open_object");
 	m_openAction->setToolTip(i18n("Open object"));
 	m_openAction->setWhatsThis(i18n("Opens object selected in the list"));
@@ -149,7 +149,7 @@ KexiBrowser::KexiBrowser(KexiMainWindow *mainWin)
 	KexiSmallToolButton *btn = new KexiSmallToolButton(this, m_openAction);
 	buttons_flyr->add(btn);
 
-	m_designAction = new KAction(i18n("&Design"), "edit", CTRL + Key_Enter, this, 
+	m_designAction = new KAction(i18n("&Design"), "edit", CTRL + Qt::Key_Enter, this, 
 		SLOT(slotDesignObject()), this, "design_object");
 	m_designAction->setToolTip(i18n("Design object"));
 	m_designAction->setWhatsThis(i18n("Starts designing of the object selected in the list"));
@@ -221,7 +221,7 @@ KexiBrowser::KexiBrowser(KexiMainWindow *mainWin)
 
 	m_renameAction->plug(m_itemPopup);
 //	plugSharedAction("edit_edititem", i18n("&Rename"), m_itemPopup);
-//	m_renameObjectAction = new KAction(i18n("&Rename"), 0, Key_F2, this, 
+//	m_renameObjectAction = new KAction(i18n("&Rename"), 0, Qt::Key_F2, this, 
 //		SLOT(slotRename()), this, "rename_object");
 //	m_renameObjectAction->plug(m_itemPopup);
 	m_deleteAction->plug(m_itemPopup);
@@ -413,17 +413,17 @@ bool KexiBrowser::eventFilter ( QObject *o, QEvent * e )
 	else if (e->type()==QEvent::AccelOverride) {
 		QKeyEvent *ke = static_cast<QKeyEvent*>(e);
 		//override delete action
-		if (ke->key()==Key_Delete && ke->state()==NoButton) {
+		if (ke->key()==Qt::Key_Delete && ke->state()==NoButton) {
 			slotRemove();
 			ke->accept();
 			return true;
 		}
-		if (ke->key()==Key_F2 && ke->state()==NoButton) {
+		if (ke->key()==Qt::Key_F2 && ke->state()==NoButton) {
 			slotRename();
 			ke->accept();
 			return true;
 		}
-		else if (ke->key()==Key_Enter || ke->key()==Key_Return) {
+		else if (ke->key()==Qt::Key_Enter || ke->key()==Qt::Key_Return) {
 			if (ke->state()==ControlButton) {
 				slotDesignObject();
 			}

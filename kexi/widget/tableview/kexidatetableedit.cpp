@@ -298,12 +298,12 @@ bool KexiDateTableEdit::eventFilter( QObject *o, QEvent *e )
 		case QEvent::KeyRelease: {
 			kDebug() << "ok!" << endl;
 			QKeyEvent *ke = (QKeyEvent *)e;
-			if (ke->key()==Key_Enter || ke->key()==Key_Return) {
+			if (ke->key()==Qt::Key_Enter || ke->key()==Qt::Key_Return) {
 				//accepting picker
 				acceptDate();
 				return true;
 			}
-			else if (ke->key()==Key_Escape) {
+			else if (ke->key()==Qt::Key_Escape) {
 				//cancelling picker
 				m_datePickerPopupMenu->hide();
 				kDebug() << "reject" << endl;

@@ -232,9 +232,9 @@ bool KPrCanvas::eventFilter( QObject *o, QEvent *e )
             return true;
         }
         if ( m_currentTextObjectView &&
-                (keyev->key()==Qt::Key_Home ||keyev->key()==Key_End
-                 || keyev->key()==Qt::Key_Tab || keyev->key()==Key_Prior
-                 || keyev->key()==Qt::Key_PageDown || keyev->key() == Key_Backtab) )
+                (keyev->key()==Qt::Key_Home ||keyev->key()==Qt::Key_End
+                 || keyev->key()==Qt::Key_Tab || keyev->key()==Qt::Key_Prior
+                 || keyev->key()==Qt::Key_PageDown || keyev->key() == Qt::Key_Backtab) )
         {
             m_currentTextObjectView->keyPressEvent( keyev );
             return true;
@@ -1930,7 +1930,7 @@ void KPrCanvas::keyPressEvent( QKeyEvent *e )
         return;
     if ( !editMode ) {
         switch ( e->key() ) {
-        case Qt::Key_Space: case Key_Right: case Key_Down:
+        case Qt::Key_Space: case Qt::Key_Right: case Qt::Key_Down:
             setSwitchingMode( false );
             m_view->screenNext();
             break;
@@ -1938,7 +1938,7 @@ void KPrCanvas::keyPressEvent( QKeyEvent *e )
             setSwitchingMode( false );
             m_view->screenNext( true );
             break;
-        case Qt::Key_Backspace: case Key_Left: case Key_Up:
+        case Qt::Key_Backspace: case Qt::Key_Left: case Qt::Key_Up:
             setSwitchingMode( false );
             finishObjectEffects();
             finishPageEffect( true );
@@ -1950,7 +1950,7 @@ void KPrCanvas::keyPressEvent( QKeyEvent *e )
             finishPageEffect( true );
             m_view->screenPrev( true );
             break;
-        case Qt::Key_Escape: case Key_Q: case Key_X:
+        case Qt::Key_Escape: case Qt::Key_Q: case Qt::Key_X:
             setSwitchingMode( false );
             finishObjectEffects();
             finishPageEffect( true );
@@ -2050,7 +2050,7 @@ void KPrCanvas::keyPressEvent( QKeyEvent *e )
                     moveObjectsByKey( -offsetx, 0 );
                     break;
                 case Qt::Key_Delete:
-                case Key_Backspace:
+                case Qt::Key_Backspace:
                     m_view->editDelete();
                     break;
                 case Qt::Key_Escape:
@@ -2161,7 +2161,7 @@ void KPrCanvas::keyReleaseEvent( QKeyEvent *e )
     {
         if ( mouseSelectedObject )
         {
-            if(e->key()==Qt::Key_Up || e->key()==Key_Down || e->key()==Key_Right || e->key()==Key_Left)
+            if(e->key()==Qt::Key_Up || e->key()==Qt::Key_Down || e->key()==Qt::Key_Right || e->key()==Qt::Key_Left)
             {
                 if ( !e->isAutoRepeat() )
                 {

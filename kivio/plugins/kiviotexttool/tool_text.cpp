@@ -48,7 +48,7 @@
 
 TextTool::TextTool( KivioView* parent ) : Kivio::MouseTool(parent, "Text Mouse Tool")
 {
-  m_textAction = new Kivio::MouseToolAction( i18n("Text Tool"), "text", Key_F2, actionCollection(), "text" );
+  m_textAction = new Kivio::MouseToolAction( i18n("Text Tool"), "text", Qt::Key_F2, actionCollection(), "text" );
   connect(m_textAction, SIGNAL(toggled(bool)), this, SLOT(setActivated(bool)));
   connect(m_textAction, SIGNAL(doubleClicked()), this, SLOT(makePermanent()));
 

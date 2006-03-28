@@ -384,7 +384,7 @@ void KivioView::setupActions()
   connect(this, SIGNAL(updateStencilSetList()), addStSet, SLOT(updateMenu()));
   connect(addStSet, SIGNAL(showDialog()), this, SLOT(showAddStencilSetDialog()));
 
-  m_alignAndDistribute = new KAction( i18n("Align && Distribute..."), CTRL+ALT+Key_A, this,
+  m_alignAndDistribute = new KAction( i18n("Align && Distribute..."), CTRL+ALT+Qt::Key_A, this,
     SLOT(alignStencilsDlg()), actionCollection(), "alignStencils" );
 
   m_editCut = KStdAction::cut( this, SLOT(cutStencil()), actionCollection(), "cutStencil" );
@@ -395,9 +395,9 @@ void KivioView::setupActions()
   m_selectAll = KStdAction::selectAll(this, SLOT(selectAllStencils()), actionCollection(), "selectAllStencils");
   m_selectNone = KStdAction::deselect(this, SLOT(unselectAllStencils()), actionCollection(), "unselectAllStencils");
 
-  m_groupAction = new KAction( i18n("Group Selection"), "group", CTRL+Key_G, this, SLOT(groupStencils()), actionCollection(), "groupStencils" );
+  m_groupAction = new KAction( i18n("Group Selection"), "group", CTRL+Qt::Key_G, this, SLOT(groupStencils()), actionCollection(), "groupStencils" );
   m_groupAction->setWhatsThis(i18n("Group selected objects into a single stencil"));
-  m_ungroupAction = new KAction( i18n("Ungroup"), "ungroup", CTRL+SHIFT+Key_G, this, SLOT(ungroupStencils()), actionCollection(), "ungroupStencils" );
+  m_ungroupAction = new KAction( i18n("Ungroup"), "ungroup", CTRL+SHIFT+Qt::Key_G, this, SLOT(ungroupStencils()), actionCollection(), "ungroupStencils" );
   m_ungroupAction->setWhatsThis(i18n("Break up a selected group stencil"));
 
   m_stencilToFront = new KAction( i18n("Bring to Front"), "bring_forward", 0, this, SLOT(bringStencilToFront()), actionCollection(), "bringStencilToFront" );
@@ -442,16 +442,16 @@ void KivioView::setupActions()
   m_setUnderline = new KToggleAction( i18n("Toggle Underline Text"), "text_under", 0, actionCollection(), "setFontUnderline" );
   connect( m_setUnderline, SIGNAL(toggled(bool)), SLOT(toggleFontUnderline(bool)));
 
-  m_textAlignLeft = new KToggleAction( i18n( "Align &Left" ), "text_left", CTRL + Key_L,
+  m_textAlignLeft = new KToggleAction( i18n( "Align &Left" ), "text_left", CTRL + Qt::Key_L,
                                     this, SLOT( textAlignLeft() ),
                                     actionCollection(), "textAlignLeft" );
   m_textAlignLeft->setExclusiveGroup( "align" );
-  m_textAlignCenter = new KToggleAction( i18n( "Align &Center" ), "text_center", CTRL + ALT + Key_C,
+  m_textAlignCenter = new KToggleAction( i18n( "Align &Center" ), "text_center", CTRL + ALT + Qt::Key_C,
                                       this, SLOT( textAlignCenter() ),
                                       actionCollection(), "textAlignCenter" );
   m_textAlignCenter->setExclusiveGroup( "align" );
   m_textAlignCenter->setChecked( TRUE );
-  m_textAlignRight = new KToggleAction( i18n( "Align &Right" ), "text_right", CTRL + ALT + Key_R,
+  m_textAlignRight = new KToggleAction( i18n( "Align &Right" ), "text_right", CTRL + ALT + Qt::Key_R,
                                       this, SLOT( textAlignRight() ),
                                       actionCollection(), "textAlignRight" );
   m_textAlignRight->setExclusiveGroup( "align" );
@@ -521,7 +521,7 @@ void KivioView::setupActions()
   (void) new KAction(i18n("Install Stencil Set..."), 0, this,
     SLOT(installStencilSet()), actionCollection(), "installStencilSet");
 
-  m_editDelete = new KAction(i18n("Delete"), "editdelete", Key_Delete,
+  m_editDelete = new KAction(i18n("Delete"), "editdelete", Qt::Key_Delete,
     this, SLOT(deleteObject()), actionCollection(), "deleteObject");
 }
 

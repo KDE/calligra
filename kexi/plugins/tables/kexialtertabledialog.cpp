@@ -70,7 +70,7 @@ class KexiAlterTableDialogPrivate
 		 , dontAskOnStoreData(false)
 		 , slotTogglePrimaryKeyCalled(false)
 		 , primaryKeyExists(false)
-		 , slotPropertyChanged_primaryKey_enabled(true)
+		 , slotPropertyChanged_primaryQt::Key_enabled(true)
 		 , slotPropertyChanged_subType_enabled(true)
 		{
 		}
@@ -98,7 +98,7 @@ class KexiAlterTableDialogPrivate
 
 		bool primaryKeyExists : 1;
 		//! Used in slotPropertyChanged() to avoid infinite recursion
-		bool slotPropertyChanged_primaryKey_enabled : 1;
+		bool slotPropertyChanged_primaryQt::Key_enabled : 1;
 		//! Used in slotPropertyChanged() to avoid infinite recursion
 		bool slotPropertyChanged_subType_enabled : 1;
 };
@@ -792,8 +792,8 @@ void KexiAlterTableDialog::slotPropertyChanged(KoProperty::Set& set, KoProperty:
 {
 	const QCString pname = property.name();
 	kexipluginsdbg << "KexiAlterTableDialog::slotPropertyChanged(): " << pname << " = " << property.value() << endl;
-	if (pname=="primaryKey" && d->slotPropertyChanged_primaryKey_enabled) {
-		d->slotPropertyChanged_primaryKey_enabled = false;
+	if (pname=="primaryKey" && d->slotPropertyChanged_primaryQt::Key_enabled) {
+		d->slotPropertyChanged_primaryQt::Key_enabled = false;
 		if (property.value().toBool()) {
 			//primary key implies some rules
 			set["unique"] = QVariant(true,1);
@@ -811,7 +811,7 @@ void KexiAlterTableDialog::slotPropertyChanged(KoProperty::Set& set, KoProperty:
 			KexiDB::Field::typeForString( set["subType"].value().toString() ), set);
 		//properties' visiblility changed: refresh prop. set
 		propertySetReloaded(true/*preservePrevSelection*/);
-		d->slotPropertyChanged_primaryKey_enabled = true;
+		d->slotPropertyChanged_primaryQt::Key_enabled = true;
 	}
 //TODO: perhaps show a hint in help panel telling what happens?
 	else if (property.value().toBool()==false

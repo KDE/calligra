@@ -220,7 +220,7 @@ FormManager::createActions(WidgetLibrary *lib, KActionCollection *parent)
 	actions.append(m_snapToGrid);
 
 	// Create the Style selection action (with a combo box in toolbar and submenu items)
-	KSelectAction *m_style = new KSelectAction( i18n("Style"), CTRL + Key_S, this, SLOT(slotStyle()), parent, "change_style");
+	KSelectAction *m_style = new KSelectAction( i18n("Style"), CTRL + Qt::Key_S, this, SLOT(slotStyle()), parent, "change_style");
 	m_style->setEditable(false);
 
 	KGlobal::config()->setGroup("General");

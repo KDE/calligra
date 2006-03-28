@@ -147,14 +147,14 @@ void KexiFormPart::initInstanceActions( int mode, KActionCollection *col )
 
 void KexiFormPart::initPartActions()
 {
-//	new KAction(i18n("Show Form UI Code"), "show_form_ui", CTRL+Key_U, m_manager, SLOT(showFormUICode()),
+//	new KAction(i18n("Show Form UI Code"), "show_form_ui", CTRL+Qt::Key_U, m_manager, SLOT(showFormUICode()),
 //		guiClient()->actionCollection(), "show_form_ui");
 }
 
 void KexiFormPart::initInstanceActions()
 {
 #ifdef KEXI_SHOW_DEBUG_ACTIONS
-	new KAction(i18n("Show Form UI Code"), "compfile", CTRL+Key_U, KFormDesigner::FormManager::self(), SLOT(showFormUICode()),
+	new KAction(i18n("Show Form UI Code"), "compfile", CTRL+Qt::Key_U, KFormDesigner::FormManager::self(), SLOT(showFormUICode()),
 		actionCollectionForMode(Kexi::DesignViewMode), "show_form_ui");
 #endif
 

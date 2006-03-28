@@ -26,7 +26,7 @@
 using namespace KFormDesigner;
 
 LibActionWidget::LibActionWidget(WidgetInfo *w, KActionCollection *c)
- : KToggleAction(w->name(), w->pixmap(), 0/*Key_F5*/, 0, 0 /*SLOT(slotWidget())*/, 
+ : KToggleAction(w->name(), w->pixmap(), 0/*Qt::Key_F5*/, 0, 0 /*SLOT(slotWidget())*/, 
 	c, QString("library_widget_" + w->className()).latin1())
 {
 //	kDebug() << "LibActionWidget::LibActionWidget(): " << QString("library_widget_" + w->className()).latin1() << endl;
