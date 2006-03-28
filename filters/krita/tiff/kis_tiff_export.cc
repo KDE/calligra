@@ -76,7 +76,8 @@ KoFilter::ConversionStatus KisTIFFExport::convert(const QCString& from, const QC
     
     if (filename.isEmpty()) return KoFilter::FileNotFound;
 
-    KURL url(filename);
+    KURL url;
+    url.setPath(filename);
 
     KisImageSP img;
     

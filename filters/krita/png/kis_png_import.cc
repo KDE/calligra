@@ -61,7 +61,8 @@ KoFilter::ConversionStatus KisPNGImport::convert(const QCString&, const QCString
 
     if (!filename.isEmpty()) {
     
-        KURL url(filename);
+        KURL url;
+        url.setPath(filename);
 
         if (url.isEmpty())
             return KoFilter::FileNotFound;
