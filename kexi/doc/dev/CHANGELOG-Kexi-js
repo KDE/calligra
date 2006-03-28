@@ -9,6 +9,11 @@
 For most important commits use: CCMAIL:kexi-devel@kde.org
 Use CCMAIL:###-done@bugs.kde.org
 
+2006-03-28
+TableView
+- boolean editor: only accept clicking on the [x] rect
+
+~~~~~~~~~~~~~~~~ 1.0 rc1 (with KOffice 1.5) ~~~~~~~~~~~~~~~~
 
 2006-03-20
 KexiDB
@@ -28,6 +33,8 @@ PostgreSQL driver
 - fix for displaying unicode error messages
 - fixed escaping binary data (octal values are used for special characters)
 - fixed loading and saving BLOB data (images within forms work now)
+
+~~~~~~~~~~~~~~~~ 2006 (OOPL) ~~~~~~~~~~~~~~~~
 
 2006-02-22
 CSV Import Dialog
