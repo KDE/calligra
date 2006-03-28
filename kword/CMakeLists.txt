@@ -11,7 +11,7 @@ add_subdirectory( expression )
 add_subdirectory( data )
 add_subdirectory( tests )
 
-include_directories( ${CMAKE_SOURCE_DIR}/lib/kformula ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
+include_directories( ${KOTEXT_INCLUDES} ${CMAKE_SOURCE_DIR}/lib/kformula ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
 
 
 ########### next target ###############
