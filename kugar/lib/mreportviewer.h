@@ -17,7 +17,7 @@
 #include <qpixmap.h>
 #include <qpainter.h>
 #include <q3paintdevicemetrics.h>
-#include <q3progressdialog.h>
+#include <qprogressdialog.h>
 #include <qpointer.h>
 //Added by qt3to4:
 #include <QResizeEvent>
@@ -87,7 +87,7 @@ protected:
     KPrinter *printer;
 
 private:
-    Q3ProgressDialog* progress;
+    QProgressDialog* progress;
     int totalSteps;
     void init();
 };

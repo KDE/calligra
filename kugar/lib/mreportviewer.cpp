@@ -249,24 +249,23 @@ void MReportViewer::slotRenderProgress( int p )
     if ( progress == 0 )
     {
         totalSteps = rptEngine->getRenderSteps();
-        progress = new Q3ProgressDialog( "Creating report...", "Cancel",
-                                        totalSteps, this, "progress", true );
-        progress->setMinimumDuration( M_PROGRESS_DELAY );
+        progress = new QProgressDialog( i18n("Creating report..."), i18n("Cancel"),
+                                        M_PROGRESS_DELAY, totalSteps, this );
     }
 
     // Update the dialog
-    progress->setProgress( p );
+    progress->setValue( p );
     qApp->processEvents();
 
     // Check if the action was canceled
-    if ( progress->wasCancelled() )
+    if ( progress->wasCanceled() )
     {
-        progress->setProgress( totalSteps );
+        progress->setValue( totalSteps );
         rptEngine->slotCancelRendering();
     }
 
     // Cleanup dialog if necessary
-    if ( progress->progress() == -1 )
+    if ( progress->value() == -1 )
     {
         delete progress;
         progress = 0;
@@ -323,12 +322,11 @@ void MReportViewer::printReport( KPrinter &printer )
     printer.setNumCopies( 1 );
 
     // Setup the progress dialog
-    Q3ProgressDialog progress( i18n( "Printing report..." ),
+    QProgressDialog progress( i18n( "Printing report..." ),
                               i18n( "Cancel" ),
-                              totalSteps, this, "progress", true );
-    progress.setMinimumDuration( M_PROGRESS_DELAY );
+                              M_PROGRESS_DELAY, totalSteps, this );
     QObject::connect( &progress, SIGNAL( cancelled() ), this, SLOT( slotCancelPrinting() ) );
-    progress.setProgress( 0 );
+    progress.setValue( 0 );
     qApp->processEvents();
 
     // Start the printer
@@ -342,7 +340,7 @@ void MReportViewer::printReport( KPrinter &printer )
         {
             if ( !printer.aborted() )
             {
-                progress.setProgress( currentStep );
+                progress.setValue( currentStep );
                 qApp->processEvents();
 
                 if ( printRev )
