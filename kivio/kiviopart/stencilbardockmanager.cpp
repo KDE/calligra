@@ -317,7 +317,7 @@ KoToolDockMoveManager::KoToolDockMoveManager()
     noLast=true;
 
 #if defined Q_WS_X11 && !defined K_WS_QTONLY
-    scr = qt_xscreen();
+    scr = QX11Info::appScreen();
     root = QX11Info::appRootWindow();
 
     gv.function = GXxor;
