@@ -24,6 +24,8 @@
 #include <qpixmap.h>
 #include <qimage.h>
 #include <qpainter.h>
+//Added by qt3to4:
+#include <QTimerEvent>
 
 #include <kapplication.h>
 #include <kfileitem.h>

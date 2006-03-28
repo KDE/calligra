@@ -44,6 +44,11 @@ NOT TODO:
 
 #include <qfile.h>
 #include <qtoolbutton.h>
+//Added by qt3to4:
+#include <Q3CString>
+#include <QLabel>
+#include <Q3HBoxLayout>
+#include <Q3VBoxLayout>
 #include <kiconloader.h>
 #include <kfiledialog.h>
 #include <kdeversion.h>
@@ -85,9 +90,9 @@ Thesaurus::Thesaurus(QObject* parent, const char* name, const QStringList &)
     m_history_pos = 1;
     
     m_page = m_dialog->plainPage();
-    QVBoxLayout *m_top_layout = new QVBoxLayout(m_page, KDialog::marginHint(), KDialog::spacingHint());
+    Q3VBoxLayout *m_top_layout = new Q3VBoxLayout(m_page, KDialog::marginHint(), KDialog::spacingHint());
 
-    QHBoxLayout *row1 = new QHBoxLayout(m_top_layout);
+    Q3HBoxLayout *row1 = new Q3HBoxLayout(m_top_layout);
     m_edit = new KHistoryCombo(m_page);
     m_edit_label = new QLabel(m_edit, i18n("&Search for:"), m_page);
     m_search = new KPushButton(i18n("S&earch"), m_page);
@@ -118,39 +123,39 @@ Thesaurus::Thesaurus(QObject* parent, const char* name, const QStringList &)
     // Thesaurus Tab
     //
     
-    vbox = new QVBox(m_tab);
+    vbox = new Q3VBox(m_tab);
     m_tab->addTab(vbox, i18n("&Thesaurus"));
     vbox->setMargin(KDialog::marginHint());
     vbox->setSpacing(KDialog::spacingHint());
     
-    QHBox *hbox = new QHBox(vbox);
+    Q3HBox *hbox = new Q3HBox(vbox);
     hbox->setSpacing(KDialog::spacingHint());
 
-    grpbox_syn = new QGroupBox( 1, Qt::Horizontal, i18n("Synonyms"), hbox);
-    m_thes_syn = new QListBox(grpbox_syn);
+    grpbox_syn = new Q3GroupBox( 1, Qt::Horizontal, i18n("Synonyms"), hbox);
+    m_thes_syn = new Q3ListBox(grpbox_syn);
     
-    grpbox_hyper = new QGroupBox( 1, Qt::Horizontal, i18n("More General Words"), hbox);
-    m_thes_hyper = new QListBox(grpbox_hyper);
+    grpbox_hyper = new Q3GroupBox( 1, Qt::Horizontal, i18n("More General Words"), hbox);
+    m_thes_hyper = new Q3ListBox(grpbox_hyper);
 
-    grpbox_hypo = new QGroupBox( 1, Qt::Horizontal, i18n("More Specific Words"), hbox);
-    m_thes_hypo = new QListBox(grpbox_hypo);
+    grpbox_hypo = new Q3GroupBox( 1, Qt::Horizontal, i18n("More Specific Words"), hbox);
+    m_thes_hypo = new Q3ListBox(grpbox_hypo);
 
     // single click -- keep display unambiguous by removing other selections:
     
-    connect(m_thes_syn, SIGNAL(clicked(QListBoxItem *)), m_thes_hyper, SLOT(clearSelection()));
-    connect(m_thes_syn, SIGNAL(clicked(QListBoxItem *)), m_thes_hypo, SLOT(clearSelection()));
-    connect(m_thes_syn, SIGNAL(selectionChanged(QListBoxItem *)),
-        this, SLOT(slotSetReplaceTerm(QListBoxItem *)));
+    connect(m_thes_syn, SIGNAL(clicked(Q3ListBoxItem *)), m_thes_hyper, SLOT(clearSelection()));
+    connect(m_thes_syn, SIGNAL(clicked(Q3ListBoxItem *)), m_thes_hypo, SLOT(clearSelection()));
+    connect(m_thes_syn, SIGNAL(selectionChanged(Q3ListBoxItem *)),
+        this, SLOT(slotSetReplaceTerm(Q3ListBoxItem *)));
 
-    connect(m_thes_hyper, SIGNAL(clicked(QListBoxItem *)), m_thes_syn, SLOT(clearSelection()));
-    connect(m_thes_hyper, SIGNAL(clicked(QListBoxItem *)), m_thes_hypo, SLOT(clearSelection()));
-    connect(m_thes_hyper, SIGNAL(selectionChanged(QListBoxItem *)),
-        this, SLOT(slotSetReplaceTerm(QListBoxItem *)));
+    connect(m_thes_hyper, SIGNAL(clicked(Q3ListBoxItem *)), m_thes_syn, SLOT(clearSelection()));
+    connect(m_thes_hyper, SIGNAL(clicked(Q3ListBoxItem *)), m_thes_hypo, SLOT(clearSelection()));
+    connect(m_thes_hyper, SIGNAL(selectionChanged(Q3ListBoxItem *)),
+        this, SLOT(slotSetReplaceTerm(Q3ListBoxItem *)));
 
-    connect(m_thes_hypo, SIGNAL(clicked(QListBoxItem *)), m_thes_syn, SLOT(clearSelection()));
-    connect(m_thes_hypo, SIGNAL(clicked(QListBoxItem *)), m_thes_hyper, SLOT(clearSelection()));
-    connect(m_thes_hypo, SIGNAL(selectionChanged(QListBoxItem *)),
-        this, SLOT(slotSetReplaceTerm(QListBoxItem *)));
+    connect(m_thes_hypo, SIGNAL(clicked(Q3ListBoxItem *)), m_thes_syn, SLOT(clearSelection()));
+    connect(m_thes_hypo, SIGNAL(clicked(Q3ListBoxItem *)), m_thes_hyper, SLOT(clearSelection()));
+    connect(m_thes_hypo, SIGNAL(selectionChanged(Q3ListBoxItem *)),
+        this, SLOT(slotSetReplaceTerm(Q3ListBoxItem *)));
 
     // double click:
     connect(m_thes_syn, SIGNAL(selected(const QString &)),
@@ -164,7 +169,7 @@ Thesaurus::Thesaurus(QObject* parent, const char* name, const QStringList &)
     // WordNet Tab
     //
 
-    vbox2 = new QVBox(m_tab);
+    vbox2 = new Q3VBox(m_tab);
     m_tab->addTab(vbox2, i18n("&WordNet"));
     vbox2->setMargin(KDialog::marginHint());    
     vbox2->setSpacing(KDialog::spacingHint());    
@@ -173,7 +178,7 @@ Thesaurus::Thesaurus(QObject* parent, const char* name, const QStringList &)
     m_combobox->setEditable(false);
     connect(m_combobox, SIGNAL(activated(int)), this, SLOT(slotFindTerm()));
 
-    m_resultbox = new QTextBrowser(vbox2);
+    m_resultbox = new Q3TextBrowser(vbox2);
     m_resultbox->setTextFormat(Qt::RichText);
     // TODO?: m_resultbox->setMimeSourceFactory(...); to avoid warning
     connect(m_resultbox, SIGNAL(linkClicked(const QString &)),
@@ -184,7 +189,7 @@ Thesaurus::Thesaurus(QObject* parent, const char* name, const QStringList &)
     connect(m_edit, SIGNAL(returnPressed(const QString&)), this, SLOT(slotFindTerm(const QString&)));
     connect(m_edit, SIGNAL(activated(int)), this, SLOT(slotGotoHistory(int)));
 
-    QHBoxLayout *row2 = new QHBoxLayout( m_top_layout );
+    Q3HBoxLayout *row2 = new Q3HBoxLayout( m_top_layout );
     m_replace = new KLineEdit(m_page);
     m_replace_label = new QLabel(m_replace, i18n("&Replace with:"), m_page);
     row2->addWidget(m_replace_label, 0);
@@ -346,7 +351,7 @@ void Thesaurus::slotForward()
 }
 
 // Triggered when a word is selected in the list box.
-void Thesaurus::slotSetReplaceTerm(QListBoxItem *item)
+void Thesaurus::slotSetReplaceTerm(Q3ListBoxItem *item)
 {
     if( ! item )
         return;
@@ -513,12 +518,12 @@ void Thesaurus::thesExited(KProcess *)
 
 void Thesaurus::receivedThesStdout(KProcess *, char *result, int len)
 {
-    m_thesproc_stdout += QString::fromLocal8Bit( QCString(result, len+1) );
+    m_thesproc_stdout += QString::fromLocal8Bit( Q3CString(result, len+1) );
 }
 
 void Thesaurus::receivedThesStderr(KProcess *, char *result, int len)
 {
-    m_thesproc_stderr += QString::fromLocal8Bit( QCString(result, len+1) );
+    m_thesproc_stderr += QString::fromLocal8Bit( Q3CString(result, len+1) );
 }
 
 
@@ -701,12 +706,12 @@ void Thesaurus::wnExited(KProcess *)
 
 void Thesaurus::receivedWnStdout(KProcess *, char *result, int len)
 {
-    m_wnproc_stdout += QString::fromLocal8Bit( QCString(result, len+1) );
+    m_wnproc_stdout += QString::fromLocal8Bit( Q3CString(result, len+1) );
 }
 
 void Thesaurus::receivedWnStderr(KProcess *, char *result, int len)
 {
-    m_wnproc_stderr += QString::fromLocal8Bit( QCString(result, len+1) );
+    m_wnproc_stderr += QString::fromLocal8Bit( Q3CString(result, len+1) );
 }
 
 

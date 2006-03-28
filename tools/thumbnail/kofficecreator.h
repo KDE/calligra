@@ -23,6 +23,8 @@
 #include <kio/thumbcreator.h>
 #include <kparts/part.h>
 #include "../../lib/kofficecore/KoDocument.h"
+//Added by qt3to4:
+#include <QTimerEvent>
 
 class KoDocument;
 

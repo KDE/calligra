@@ -45,12 +45,14 @@
 #include <KoStoreDevice.h>
 #include <kzip.h>
 #include <ktempfile.h>
-#include <qptrstack.h>
+#include <q3ptrstack.h>
 
 #include <qdom.h>
 #include <qfile.h>
 #include <qdatetime.h>
 #include <qvalidator.h>
+//Added by qt3to4:
+#include <Q3CString>
 #include <kdebug.h>
 #include <kio/netaccess.h>
 
@@ -460,7 +462,7 @@ bool copyZipToZip( const KZip * src, KZip * dest)
 {
   KArchiveDirectory * src_dir;
   KArchiveFile * input_file;
-  QPtrStack<KArchiveDirectory> src_dirStack ;
+  Q3PtrStack<KArchiveDirectory> src_dirStack ;
   QStringList dirEntries;
   QStringList curDirName;
   QStringList::Iterator it;
@@ -513,7 +515,7 @@ bool KOfficePlugin::writeMetaData(const QString & path,
     /* To correct problem with OOo 1.1, we have to recreate the file from scratch */
     if (!m_zip->open(QIODevice::WriteOnly) || !current->open(QIODevice::ReadOnly) )
 	    return false;
-    QCString text = doc.toCString();
+    Q3CString text = doc.toCString();
     m_zip->setCompression(KZip::DeflateCompression);
     if (!copyZipToZip(current, m_zip))
 	    return false;

@@ -21,6 +21,8 @@
 #include <qimage.h>
 #include <qpainter.h>
 #include <qfile.h>
+//Added by qt3to4:
+#include <QPixmap>
 
 #include <KoPicture.h>
 

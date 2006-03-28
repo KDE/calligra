@@ -25,20 +25,23 @@
 
 #include <qapplication.h>
 #include <qcombobox.h>
-#include <qgroupbox.h>
+#include <q3groupbox.h>
 #include <qlabel.h>
 #include <qlayout.h>
-#include <qlistbox.h>
+#include <q3listbox.h>
 #include <qobject.h>
 #include <qregexp.h>
 #include <qstring.h>
 #include <qstringlist.h>
-#include <qtabdialog.h>
+#include <q3tabdialog.h>
 #include <qtabwidget.h>
-#include <qtextbrowser.h>
+#include <q3textbrowser.h>
 #include <qtooltip.h>
 #include <qwidget.h>
-#include <qvbox.h>
+#include <q3vbox.h>
+//Added by qt3to4:
+#include <Q3VBoxLayout>
+#include <Q3Frame>
 
 #include <kapplication.h>
 #include <kcombobox.h>
@@ -79,7 +82,7 @@ protected slots:
     void slotUpdateNavButtons();
     void slotGotoHistory(int index);
 
-    void slotSetReplaceTerm(QListBoxItem *item);
+    void slotSetReplaceTerm(Q3ListBoxItem *item);
     void slotSetReplaceTerm(const QString &term);
 
     void slotBack();
@@ -126,13 +129,13 @@ protected:
 
     Mode m_mode;
 
-    QFrame *m_page;
-    QVBoxLayout *m_top_layout;
+    Q3Frame *m_page;
+    Q3VBoxLayout *m_top_layout;
 
     KDialogBase *m_dialog;
     QTabWidget *m_tab;
-    QVBox *vbox;
-    QVBox *vbox2;
+    Q3VBox *vbox;
+    Q3VBox *vbox2;
 
     QToolButton *m_back;
     QToolButton *m_forward;
@@ -148,16 +151,16 @@ protected:
     QString m_data_file;
 
     // WordNet:
-    QTextBrowser *m_resultbox;
+    Q3TextBrowser *m_resultbox;
     QComboBox *m_combobox;
 
     // Thesaurus:
-    QGroupBox *grpbox_syn;
-    QListBox *m_thes_syn;
-    QGroupBox *grpbox_hyper;
-    QListBox *m_thes_hyper;
-    QGroupBox *grpbox_hypo;
-    QListBox *m_thes_hypo;
+    Q3GroupBox *grpbox_syn;
+    Q3ListBox *m_thes_syn;
+    Q3GroupBox *grpbox_hyper;
+    Q3ListBox *m_thes_hyper;
+    Q3GroupBox *grpbox_hypo;
+    Q3ListBox *m_thes_hypo;
 };
 
 #endif
