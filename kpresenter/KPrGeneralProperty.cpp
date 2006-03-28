@@ -89,7 +89,7 @@ int KPrGeneralProperty::getGeneralPropertyChange() const
     if ( !m_generalValue.m_name.isNull() && m_generalValue.m_name != m_ui->nameInput->text() )
         flags |= Name;
 
-    if ( m_ui->protect->state() != QButton::NoChange )
+    if ( m_ui->protect->state() != QCheckBox::NoChange )
     {
         if ( ( m_ui->protect->isOn() ? STATE_ON : STATE_OFF ) != m_generalValue.m_protect )
             flags |= Protect;
@@ -109,7 +109,7 @@ int KPrGeneralProperty::getGeneralPropertyChange() const
         }
     }
 
-    if ( m_ui->keepRatio->state() != QButton::NoChange
+    if ( m_ui->keepRatio->state() != QCheckBox::NoChange
          && ( m_ui->keepRatio->isOn() ? STATE_ON : STATE_OFF ) != m_generalValue.m_keepRatio )
     {
         flags |= KeepRatio;

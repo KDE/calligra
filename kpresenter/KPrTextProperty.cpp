@@ -63,7 +63,7 @@ int KPrTextProperty::getTextPropertyChange() const
 {
     int flags = 0;
 
-    if ( m_protectContentCheck->state() != QButton::NoChange )
+    if ( m_protectContentCheck->state() != QCheckBox::NoChange )
     {
         if ( ( m_protectContentCheck->isOn() ? STATE_ON : STATE_OFF ) != m_protectContent )
         {
