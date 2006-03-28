@@ -118,7 +118,8 @@ KoFilter::ConversionStatus KisJPEGExport::convert(const QCString& from, const QC
     
     if (filename.isEmpty()) return KoFilter::FileNotFound;
 
-    KURL url(filename);
+    KURL url;
+    url.setPath(filename);
 
     KisImageSP img = output->currentImage();
     Q_CHECK_PTR(img);

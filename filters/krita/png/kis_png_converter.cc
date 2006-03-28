@@ -122,6 +122,7 @@ KisImageBuilder_Result KisPNGConverter::decode(const KURL& uri)
 {
     kdDebug(41008) << "Start decoding PNG File" << endl;
     // open the file
+    kdDebug(41008) << QFile::encodeName(uri.path()) << " " << uri.path() << " " << uri << endl;
     FILE *fp = fopen(QFile::encodeName(uri.path()), "rb");
     if (!fp)
     {
@@ -411,6 +412,7 @@ KisImageBuilder_Result KisPNGConverter::decode(const KURL& uri)
 
 KisImageBuilder_Result KisPNGConverter::buildImage(const KURL& uri)
 {
+    kdDebug(41008) << QFile::encodeName(uri.path()) << " " << uri.path() << " " << uri << endl;
     if (uri.isEmpty())
         return KisImageBuilder_RESULT_NO_URI;
 
@@ -423,7 +425,9 @@ KisImageBuilder_Result KisPNGConverter::buildImage(const KURL& uri)
     QString tmpFile;
 
     if (KIO::NetAccess::download(uri, tmpFile, qApp -> mainWidget())) {
-        result = decode(tmpFile);
+        KURL uriTF;
+        uriTF.setPath( tmpFile );
+        result = decode(uriTF);
         KIO::NetAccess::removeTempFile(tmpFile);
     }
 

@@ -56,7 +56,8 @@ KoFilter::ConversionStatus MagickExport::convert(const QCString& from, const QCS
     
     if (filename.isEmpty()) return KoFilter::FileNotFound;
 
-    KURL url(filename);
+    KURL url;
+    url.setPath(filename);
 
     KisImageSP img = output->currentImage();
 
