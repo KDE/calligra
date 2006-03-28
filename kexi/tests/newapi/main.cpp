@@ -127,7 +127,7 @@ int main(int argc, char** argv)
 	KCmdLineArgs::addCmdLineOptions( options );
 	
 	KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
-	QCStringList tests;
+	QByteArrayList tests;
 	tests << "cursors" << "schema" << "dbcreation" << "tables" 
 		<< "tableview" << "parser" << "dr_prop";
 	if (!args->isSet("test")) {
