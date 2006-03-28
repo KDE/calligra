@@ -25,6 +25,7 @@ Name[sr]=Krita-ин филтер за извоз у XCF
 Name[sr@Latn]=Krita-in filter za izvoz u XCF
 Name[sv]=Krita XCF-exportfilter
 Name[uk]=Фільтр експорту XCF для Krita
+Name[uz]=Krita XCF экспорт филтери
 Name[zh_CN]=Krita XCF 导出过滤器
 X-KDE-Export=image/x-xcf-gimp
 ServiceTypes=KOfficeFilter

@@ -24,6 +24,7 @@ Name[sr]=Алат за слике
 Name[sr@Latn]=Alat za slike
 Name[sv]=Bildverktyg
 Name[uk]=Засіб для зображень
+Name[uz]=Расм воситаси
 ServiceTypes=Karbon/CoreModule
 Type=Service
 X-KDE-Library=karbon_imagetoolplugin

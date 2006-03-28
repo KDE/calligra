@@ -85,6 +85,7 @@ Comment[sl]=Ustvari dokument A4 z dvema stolpcema na stran.
 Comment[sr]=Прави A4 документ са две колоне по страни.
 Comment[sr@Latn]=Pravi A4 dokument sa dve kolone po strani.
 Comment[sv]=Skapar ett A4-dokument med två kolumner per sida.
+Comment[uz]=Икки устунли бўш A4 ҳужжатини яратиш.
 Comment[zh_CN]=创建每页两栏的 A4 文档。
 Icon=template_twocolumns
 X-KDE-MeasureSystem=metric

@@ -24,6 +24,7 @@ Name[sr]=KChart-ов филтер за извоз у JPEG
 Name[sr@Latn]=KChart-ov filter za izvoz u JPEG
 Name[sv]=Kchart JPEG-exportfilter
 Name[uk]=Фільтр експорту JPEG для KChart
+Name[uz]=KChart JPEG экспорт филтери
 Name[zh_CN]=KChart JPEG 导出过滤器
 X-KDE-Import=application/x-kchart
 X-KDE-Export=image/jpeg

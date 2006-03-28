@@ -24,6 +24,7 @@ Name[sr]=KChart-ов филтер за извоз у JPEG
 Name[sr@Latn]=KChart-ov filter za izvoz u JPEG
 Name[sv]=Kpresenter JPEG-exportfilter
 Name[uk]=Фільтр експорту JPEG для KPresenter
+Name[uz]=KPresenter JPEG экспорт филтери
 Name[zh_CN]=KPresenter JPEG 导出过滤器
 X-KDE-Import=application/x-kpresenter
 X-KDE-Export=image/jpeg

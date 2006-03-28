@@ -26,6 +26,7 @@ Name[sr]=Krita-ин филтер за увоз из XCF-а
 Name[sr@Latn]=Krita-in filter za uvoz iz XCF-a
 Name[sv]=Krita XCF-importfilter
 Name[uk]=Фільтр імпорту XCF для Krita
+Name[uz]=Krita XCF импорт филтери
 Name[zh_CN]=Krita XCF 导入过滤器
 X-KDE-Export=application/x-krita
 X-KDE-Import=image/x-xcf-gimp

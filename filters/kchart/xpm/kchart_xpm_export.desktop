@@ -24,6 +24,7 @@ Name[sr]=KChart-ов филтер за извоз у XPM
 Name[sr@Latn]=KChart-ov filter za izvoz u XPM
 Name[sv]=Kchart XPM-exportfilter
 Name[uk]=Фільтр експорту XPM для KChart
+Name[uz]=KChart XPM экспорт филтери
 Name[zh_CN]=KChart XPM 导出过滤器
 X-KDE-Import=application/x-kchart
 X-KDE-Export=image/x-xpm

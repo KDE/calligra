@@ -25,6 +25,7 @@ Name[sr]=Krita-ин филтер за извоз у OpenEXR
 Name[sr@Latn]=Krita-in filter za izvoz u OpenEXR
 Name[sv]=Krita OpenEXR-exportfilter
 Name[uk]=Фільтр експорту OpenEXR для Krita
+Name[uz]=Krita OpenEXR экспорт филтери
 Name[zh_CN]=Krita OpenEXR 导出过滤器
 X-KDE-Export=image/x-exr
 ServiceTypes=KOfficeFilter

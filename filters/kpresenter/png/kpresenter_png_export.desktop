@@ -26,6 +26,7 @@ Name[sr]=KPresenter-ов филтер за извоз у PNG
 Name[sr@Latn]=KPresenter-ov filter za izvoz u PNG
 Name[sv]=Kpresenter PNG-exportfilter
 Name[uk]=Фільтр експорту PNG для KPresenter
+Name[uz]=KPresenter PNG экспорт филтери
 Name[zh_CN]=KPresenter PNG 导出过滤器
 X-KDE-Import=application/x-kpresenter
 X-KDE-Export=image/png

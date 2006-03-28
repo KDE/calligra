@@ -24,6 +24,7 @@ Name[sr]=KChart-ов филтер за извоз у MNG
 Name[sr@Latn]=KChart-ov filter za izvoz u MNG
 Name[sv]=Kpresenter MNG-exportfilter
 Name[uk]=Фільтр експорту MNG для KPresenter
+Name[uz]=KPresenter MNG экспорт филтери
 Name[zh_CN]=KPresenter MNG 导出过滤器
 X-KDE-Import=application/x-kpresenter
 X-KDE-Export=video/x-mng

@@ -24,6 +24,7 @@ Name[sr]=Krita-ин филтер за увоз из PNG-а
 Name[sr@Latn]=Krita-in filter za uvoz iz PNG-a
 Name[sv]=Krita PNG-importfilter
 Name[uk]=Фільтр імпорту PNG для Krita
+Name[uz]=Krita PNG импорт филтери
 Name[zh_CN]=Krita PNG 导入过滤器
 ServiceTypes=KOfficeFilter
 Type=Service

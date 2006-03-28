@@ -1,4 +1,11 @@
 [Desktop Entry]
 Name=Blank Documents
+Name[da]=Blanke dokumenter
+Name[el]=Κενά έγγραφα
+Name[et]=Tühjad dokumendid
+Name[pt]=Documento Vazio
+Name[pt_BR]=Documento Vazio
+Name[sv]=Tomma dokument
+Name[uz]=Бўш ҳужжатлар
 X-KDE-DefaultTab=true
 X-KDE-SortingWeight=10

@@ -38,6 +38,7 @@ Name[sv]=OpenOffice.org Calc-importfilter för Kspread
 Name[ta]=கேஸ்பெரெட்டுக்கான OpenOffice.org கால்க் இறக்கும் அலங்காரம்
 Name[tr]=KSpread için OpenOffice.org Calc Alma Filtresi
 Name[uk]=Фільтр імпорту OpenOffice.org Calc для KSpread
+Name[uz]=KSpread учун OpenOffice.org Calc импорт филтери
 Name[zh_CN]=KSpread 的 OpenOffice.org Calc 导入过滤器
 X-KDE-Export=application/x-kspread
 X-KDE-Import=application/vnd.sun.xml.calc,application/vnd.sun.xml.calc.template

@@ -34,6 +34,7 @@ Name[sr]=KWord-ов филтер за увоз ASCII-ја
 Name[sr@Latn]=KWord-ov filter za uvoz ASCII-ja
 Name[sv]=Kword ASCII-importfilter
 Name[uk]=Фільтр імпорту ASCII для KWord
+Name[uz]=KWord ASCII импорт филтери
 Name[zh_CN]=KWord ASCII 导入过滤器
 X-KDE-Export=application/x-kword
 X-KDE-Import=text/plain
