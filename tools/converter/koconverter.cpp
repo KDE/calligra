@@ -19,6 +19,8 @@
 */
 
 #include <qfile.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 #include <kaboutdata.h>
 #include <kimageio.h>
@@ -55,7 +57,7 @@ bool convert( const KUrl & uIn, const QString & /*inputFormat*/, const KUrl & uO
 
     manager->setBatchMode( batch );
 
-    QCString mime( outputFormat.latin1() );
+    Q3CString mime( outputFormat.latin1() );
     KoFilter::ConversionStatus status = manager->exp0rt( uOut.path(), mime );
     progressObj.slotProgress(-1);
 
