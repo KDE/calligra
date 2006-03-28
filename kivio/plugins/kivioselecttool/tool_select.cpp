@@ -108,7 +108,7 @@ bool SelectTool::processEvent(QEvent* e)
       if( m->button() == RightButton ) {
         showPopupMenu(m->globalPos());
       } else if( m->button() == LeftButton ) {
-        if(m->state() & ControlButton) {
+        if(m->state() & Qt::ControlButton) {
           m_controlKey = true;
         } else {
           m_controlKey = false;
@@ -453,7 +453,7 @@ bool SelectTool::startResizing(const QPoint &pos)
 void SelectTool::mouseMove(QMouseEvent* e)
 {
     QPoint pos = e->pos();
-    bool ignoreGridGuides = e->state() & ShiftButton;
+    bool ignoreGridGuides = e->state() & Qt::ShiftButton;
     
     switch( m_mode )
     {
@@ -1221,7 +1221,7 @@ void SelectTool::keyPress(QKeyEvent* e)
   canvas->setEnabled(true);
   m_origPoint = m_selectedRect.topLeft();
   KivioGridData gd = view()->doc()->grid();
-  bool ignoreGridGuides = e->state() & ShiftButton;
+  bool ignoreGridGuides = e->state() & Qt::ShiftButton;
   double distX, distY;
   
   if(ignoreGridGuides || !view()->doc()->grid().isSnap) {

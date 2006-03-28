@@ -251,7 +251,7 @@ bool KPrCanvas::eventFilter( QObject *o, QEvent *e )
 #ifndef NDEBUG
         QKeyEvent * keyev = static_cast<QKeyEvent *>(e);
         // Debug keys
-        if ( ( keyev->state() & ControlButton ) && ( keyev->state() & ShiftButton ) )
+        if ( ( keyev->state() & Qt::ControlButton ) && ( keyev->state() & Qt::ShiftButton ) )
         {
             switch ( keyev->key() ) {
             case Qt::Key_P: // 'P' -> paragraph debug
@@ -717,7 +717,7 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
 
     KPrObject *kpobject = 0;
 
-    m_disableSnapping = e->state() & ShiftButton;
+    m_disableSnapping = e->state() & Qt::ShiftButton;
 
     exitEditMode();
 
@@ -812,9 +812,9 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
 
                 if ( kpobject ) {
                     // use ctrl + Button to select / deselect object
-                    if ( e->state() & ControlButton && kpobject->isSelected() )
+                    if ( e->state() & Qt::ControlButton && kpobject->isSelected() )
                         deSelectObj( kpobject );
-                    else if ( e->state() & ControlButton )
+                    else if ( e->state() & Qt::ControlButton )
                     {
                         selectObj( kpobject );
                         raiseObject( kpobject );
@@ -884,7 +884,7 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
                     }
                     else {
                         modType = MT_NONE;
-                        if ( !( e->state() & ShiftButton ) && !( e->state() & ControlButton ) )
+                        if ( !( e->state() & Qt::ShiftButton ) && !( e->state() & Qt::ControlButton ) )
                             deSelectAllObj();
 
                         drawRubber = true;
@@ -1055,7 +1055,7 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
                 QPoint pnt = QCursor::pos();
                 mousePressed = false;
                 m_view->disableAutoScroll();
-                bool state=!( e->state() & ShiftButton ) && !( e->state() & ControlButton ) && !kpobject->isSelected();
+                bool state=!( e->state() & Qt::ShiftButton ) && !( e->state() & Qt::ControlButton ) && !kpobject->isSelected();
 
                 if ( state )
                     deSelectAllObj();
@@ -1431,7 +1431,7 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
         }
     }
 
-    m_disableSnapping = e->state() & ShiftButton;
+    m_disableSnapping = e->state() & Qt::ShiftButton;
 
     if ( editMode ) {
         m_view->setRulerMousePos( e->x(), e->y() );
@@ -1487,7 +1487,7 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
                         m_moveStartPoint = objectRect( false ).topLeft();
                         m_isMoving = true;
                     }
-                    moveObjectsByMouse( docPoint, e->state() & AltButton || e->state() & ControlButton );
+                    moveObjectsByMouse( docPoint, e->state() & AltButton || e->state() & Qt::ControlButton );
                 } else if ( modType != MT_NONE && m_resizeObject ) {
                     if ( !m_isResizing )
                     {
@@ -1502,7 +1502,7 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
                         keepRatio = true;
                     }
                     bool scaleAroundCenter = false;
-                    if ( e->state() & ControlButton )
+                    if ( e->state() & Qt::ControlButton )
                     {
                         scaleAroundCenter = true;
                     }
@@ -2016,12 +2016,12 @@ void KPrCanvas::keyPressEvent( QKeyEvent *e )
 
         if ( mouseSelectedObject )
         {
-            m_disableSnapping = e->state() & ShiftButton;
+            m_disableSnapping = e->state() & Qt::ShiftButton;
 
             int offsetx = 1;
             int offsety = 1;
 
-            if ( e->state() & ControlButton )
+            if ( e->state() & Qt::ControlButton )
             {
                 offsetx = qMax(1,m_view->zoomHandler()->zoomItX(10));
                 offsety = qMax(1,m_view->zoomHandler()->zoomItY(10));
@@ -2115,7 +2115,7 @@ void KPrCanvas::keyPressEvent( QKeyEvent *e )
                     // undo snapping for move by mouse
                     if ( e->state() & Qt::LeftButton && m_isMoving )
                     {
-                        moveObjectsByMouse( m_origMousePos, e->state() & AltButton || e->state() & ControlButton );
+                        moveObjectsByMouse( m_origMousePos, e->state() & AltButton || e->state() & Qt::ControlButton );
                     }
                     break;
                 }

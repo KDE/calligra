@@ -183,9 +183,9 @@ void KivioCanvas::wheelEvent( QWheelEvent* ev )
   
   if( (ev->delta()>0))
   {
-     if(ev->state() == ControlButton) {
+     if(ev->state() == Qt::ControlButton) {
        zoomIn(ev->pos());
-     } else if(ev->state() == ShiftButton) {
+     } else if(ev->state() == Qt::ShiftButton) {
        m_pVertScrollBar->setValue(m_pVertScrollBar->value() - height());
      } else {
        m_pVertScrollBar->setValue(m_pVertScrollBar->value() - 30);
@@ -193,9 +193,9 @@ void KivioCanvas::wheelEvent( QWheelEvent* ev )
   }
   else
   {
-     if(ev->state() == ControlButton) {
+     if(ev->state() == Qt::ControlButton) {
        zoomOut(ev->pos());
-     } else if(ev->state() == ShiftButton) {
+     } else if(ev->state() == Qt::ShiftButton) {
        m_pVertScrollBar->setValue(m_pVertScrollBar->value() + height());
      } else {
        m_pVertScrollBar->setValue(m_pVertScrollBar->value() + 30);

@@ -424,7 +424,7 @@ bool KexiBrowser::eventFilter ( QObject *o, QEvent * e )
 			return true;
 		}
 		else if (ke->key()==Qt::Key_Enter || ke->key()==Qt::Key_Return) {
-			if (ke->state()==ControlButton) {
+			if (ke->state()==Qt::ControlButton) {
 				slotDesignObject();
 			}
 			else if (ke->state()==0 && !m_list->renameLineEdit()->isVisible()) {

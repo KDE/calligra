@@ -1333,15 +1333,15 @@ bool KexiTableView::shortCutPressed( QKeyEvent *e, const QCString &action_name )
 	//check default shortcut (when user app has no action shortcuts defined
 	// but we want these shortcuts to still work)
 	if (action_name=="data_save_row")
-		return (k == Qt::Key_Return || k == Qt::Key_Enter) && e->state()==ShiftButton;
+		return (k == Qt::Key_Return || k == Qt::Key_Enter) && e->state()==Qt::ShiftButton;
 	if (action_name=="edit_delete_row")
-		return k == Qt::Key_Delete && e->state()==ControlButton;
+		return k == Qt::Key_Delete && e->state()==Qt::ControlButton;
 	if (action_name=="edit_delete")
 		return k == Qt::Key_Delete && e->state()==NoButton;
 	if (action_name=="edit_edititem")
 		return k == Qt::Key_F2 && e->state()==NoButton;
 	if (action_name=="edit_insert_empty_row")
-		return k == Qt::Key_Insert && e->state()==(ShiftButton | ControlButton);
+		return k == Qt::Key_Insert && e->state()==(Qt::ShiftButton | Qt::ControlButton);
 
 	return false;
 }
@@ -1477,10 +1477,10 @@ void KexiTableView::keyPressEvent(QKeyEvent* e)
 			if (nobtn) {
 				curCol = 0;//to 1st col
 			}
-			else if (e->state()==ControlButton) {
+			else if (e->state()==Qt::ControlButton) {
 				curRow = 0;//to 1st row
 			}
-			else if (e->state()==(ControlButton|ShiftButton)) {
+			else if (e->state()==(Qt::ControlButton|Qt::ShiftButton)) {
 				curRow = 0;//to 1st row and col
 				curCol = 0;
 			}
@@ -1495,10 +1495,10 @@ void KexiTableView::keyPressEvent(QKeyEvent* e)
 			if (nobtn) {
 				curCol = columns()-1;//to last col
 			}
-			else if (e->state()==ControlButton) {
+			else if (e->state()==Qt::ControlButton) {
 				curRow = m_data->count()-1+(isInsertingEnabled()?1:0);//to last row
 			}
-			else if (e->state()==(ControlButton|ShiftButton)) {
+			else if (e->state()==(Qt::ControlButton|Qt::ShiftButton)) {
 				curRow = m_data->count()-1+(isInsertingEnabled()?1:0);//to last row and col
 				curCol = columns()-1;//to last col
 			}
@@ -1539,9 +1539,9 @@ void KexiTableView::keyPressEvent(QKeyEvent* e)
 					curCol++;
 			}
 		}
-		else if ((e->state()==ShiftButton && k==Qt::Key_Tab)
+		else if ((e->state()==Qt::ShiftButton && k==Qt::Key_Tab)
 		 || (nobtn && k==Qt::Key_Backtab)
-		 || (e->state()==ShiftButton && k==Qt::Key_Backtab)
+		 || (e->state()==Qt::ShiftButton && k==Qt::Key_Backtab)
 		 || (nobtn && k==Qt::Key_Left)
 			) {
 //! \todo add option for stopping at last column
@@ -2505,7 +2505,7 @@ bool KexiTableView::eventFilter( QObject *o, QEvent *e )
 				return true;
 			}
 			else if (m_editor && (o==dynamic_cast<QObject*>(m_editor) || o==m_editor->widget())) {
-				if ( (k==Qt::Key_Tab && (s==NoButton || s==ShiftButton))
+				if ( (k==Qt::Key_Tab && (s==NoButton || s==Qt::ShiftButton))
 					|| (overrideEditorShortcutNeeded(ke))
 					|| (k==Qt::Key_Enter || k==Qt::Key_Return || k==Qt::Key_Up || k==Qt::Key_Down) 
 					|| (k==Qt::Key_Left && m_editor->cursorAtStart())

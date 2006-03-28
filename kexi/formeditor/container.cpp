@@ -171,7 +171,7 @@ Container::eventFilter(QObject *s, QEvent *e)
 				return true;
 			}
 
-			if(((mev->state() == ControlButton) || (mev->state() == ShiftButton)) 
+			if(((mev->state() == Qt::ControlButton) || (mev->state() == Qt::ShiftButton)) 
 				&& (!FormManager::self()->isInserting())) // multiple selection mode
 			{
 				if(m_form->selectedWidgets()->findRef(m_moving) != -1) // widget is already selected
@@ -202,7 +202,7 @@ Container::eventFilter(QObject *s, QEvent *e)
 			if((/*s == m_container &&*/ FormManager::self()->isInserting()) || ((s == m_container) && !m_toplevel))
 			{
 				int tmpx,tmpy;
-				if(!FormManager::self()->snapWidgetsToGrid() || (mev->state() == (LeftButton|ControlButton|AltButton)))
+				if(!FormManager::self()->snapWidgetsToGrid() || (mev->state() == (LeftButton|Qt::ControlButton|AltButton)))
 				{
 					tmpx = mev->x();
 					tmpy = mev->y();
@@ -253,8 +253,8 @@ Container::eventFilter(QObject *s, QEvent *e)
 		case QEvent::MouseMove:
 		{
 			QMouseEvent *mev = static_cast<QMouseEvent*>(e);
-			if(m_insertBegin!=QPoint(-1,-1) && FormManager::self()->isInserting() && ((mev->state() == LeftButton) || (mev->state() == (LeftButton|ControlButton)) ||
-			(mev->state() == (LeftButton|ControlButton|AltButton)) || (mev->state() == (LeftButton|ShiftButton)) ) )
+			if(m_insertBegin!=QPoint(-1,-1) && FormManager::self()->isInserting() && ((mev->state() == LeftButton) || (mev->state() == (LeftButton|Qt::ControlButton)) ||
+			(mev->state() == (LeftButton|Qt::ControlButton|AltButton)) || (mev->state() == (LeftButton|Qt::ShiftButton)) ) )
 			// draw the insert rect
 			{
 				drawInsertRect(mev, s);
@@ -270,7 +270,7 @@ Container::eventFilter(QObject *s, QEvent *e)
 				if(m_form->formWidget() && (tree->widget() != s))
 					m_form->formWidget()->highlightWidgets(tree->widget(), static_cast<QWidget*>(s));
 			}
-			else if(m_insertBegin!=QPoint(-1,-1) && s == m_container && !m_toplevel && (mev->state() != ControlButton) && !FormManager::self()->isCreatingConnection()) // draw the selection rect
+			else if(m_insertBegin!=QPoint(-1,-1) && s == m_container && !m_toplevel && (mev->state() != Qt::ControlButton) && !FormManager::self()->isCreatingConnection()) // draw the selection rect
 			{
 				if((mev->state() != LeftButton) || /*m_inlineEditing*/ m_state == InlineEditing)
 					return true;
@@ -287,14 +287,14 @@ Container::eventFilter(QObject *s, QEvent *e)
 				m_state = DoingNothing;
 				return true;
 			}
-			else if(mev->state() == (LeftButton|ControlButton)) // draw the insert rect for the copied widget
+			else if(mev->state() == (LeftButton|Qt::ControlButton)) // draw the insert rect for the copied widget
 			{
 				if(s == m_container)// || (m_form->selectedWidgets()->count() > 1))
 					return true;
 				drawCopiedWidgetRect(mev);
 				return true;
 			}
-			else if( ( (mev->state() == Qt::LeftButton) || (mev->state() == (LeftButton|ControlButton|AltButton)) )
+			else if( ( (mev->state() == Qt::LeftButton) || (mev->state() == (LeftButton|Qt::ControlButton|AltButton)) )
 			  && !FormManager::self()->isInserting() && (m_state != CopyingWidget)) // we are dragging the widget(s) to move it
 			{
 				if(!m_toplevel && m_moving == m_container) // no effect for form
@@ -373,7 +373,7 @@ Container::eventFilter(QObject *s, QEvent *e)
 					return true;
 				// we simulate a mouse move event to update screen
 				QMouseEvent *mev = new QMouseEvent(QEvent::MouseMove, m_moving->mapFromGlobal(QCursor::pos()), NoButton,
-				LeftButton|ControlButton );
+				LeftButton|Qt::ControlButton );
 				eventFilter(m_moving, mev);
 				delete mev;
 			}
@@ -1017,7 +1017,7 @@ Container::drawInsertRect(QMouseEvent *mev, QObject *s)
 	QPoint pos = static_cast<QWidget*>(s)->mapTo(m_container, mev->pos());
 	int gridX = m_form->gridSize();
 	int gridY = m_form->gridSize();
-	if(!FormManager::self()->snapWidgetsToGrid() || (mev->state() == (LeftButton|ControlButton|AltButton)) )
+	if(!FormManager::self()->snapWidgetsToGrid() || (mev->state() == (LeftButton|Qt::ControlButton|AltButton)) )
 	{
 		tmpx = pos.x();
 		tmpy = pos.y();
@@ -1138,7 +1138,7 @@ Container::moveSelectedWidgetsBy(int realdx, int realdy, QMouseEvent *mev)
 		}
 
 		int tmpx, tmpy;
-		if(!FormManager::self()->snapWidgetsToGrid() || (mev && mev->state() == (LeftButton|ControlButton|AltButton)) )
+		if(!FormManager::self()->snapWidgetsToGrid() || (mev && mev->state() == (LeftButton|Qt::ControlButton|AltButton)) )
 		{
 			tmpx = w->x() + dx;
 			tmpy = w->y() + dy;

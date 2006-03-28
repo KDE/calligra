@@ -161,7 +161,7 @@ void ResizeHandle::mouseMoveEvent(QMouseEvent *ev)
 	int dummyx = ev->x() - m_x;
 	int dummyy = ev->y() - m_y;
 
-	if(FormManager::self()->snapWidgetsToGrid() && (ev->state() != (LeftButton|ControlButton|AltButton)))
+	if(FormManager::self()->snapWidgetsToGrid() && (ev->state() != (LeftButton|Qt::ControlButton|AltButton)))
 	{
 		dummyy = (int) ( ((float)dummyy) / ((float)gridY) + 0.5 );
 		dummyy *= gridY;
