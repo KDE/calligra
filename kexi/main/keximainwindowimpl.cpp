@@ -601,7 +601,7 @@ void KexiMainWindowImpl::initActions()
 	d->action_edit_edititem->setToolTip(i18n("Edit currently selected item"));
 	d->action_edit_edititem->setWhatsThis(i18n("Edits currently selected item."));
 
-	d->action_edit_insert_empty_row = createSharedAction(i18n("&Insert Empty Row"), "insert_table_row", SHIFT | CTRL | Qt::Key_Insert, "edit_insert_empty_row");
+	d->action_edit_insert_empty_row = createSharedAction(i18n("&Insert Empty Row"), "insert_table_row", Qt::SHIFT | CTRL | Qt::Key_Insert, "edit_insert_empty_row");
 	setActionVolatile( d->action_edit_insert_empty_row, true );
 	d->action_edit_insert_empty_row->setToolTip(i18n("Insert one empty row above"));
 	d->action_edit_insert_empty_row->setWhatsThis(i18n("Inserts one empty row above currently selected table row."));
@@ -641,7 +641,7 @@ void KexiMainWindowImpl::initActions()
 #endif
 
 	//DATA MENU
-	d->action_data_save_row = createSharedAction(i18n("&Save Row"), "button_ok", SHIFT | Qt::Key_Return, "data_save_row");
+	d->action_data_save_row = createSharedAction(i18n("&Save Row"), "button_ok", Qt::SHIFT | Qt::Key_Return, "data_save_row");
 	d->action_data_save_row->setToolTip(i18n("Save currently selected table row's data"));
 	d->action_data_save_row->setWhatsThis(i18n("Saves currently selected table row's data."));
 	setActionVolatile( d->action_data_save_row, true );
@@ -695,7 +695,7 @@ void KexiMainWindowImpl::initActions()
 
 	d->action_window_previous = new KAction( i18n("&Previous Window"), "",
 #ifdef Q_WS_WIN
-		CTRL+SHIFT+Qt::Key_Tab,
+		CTRL+Qt::SHIFT+Qt::Key_Tab,
 #else
 		ALT+Qt::Key_Left,
 #endif

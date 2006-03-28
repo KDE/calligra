@@ -397,7 +397,7 @@ void KivioView::setupActions()
 
   m_groupAction = new KAction( i18n("Group Selection"), "group", CTRL+Qt::Key_G, this, SLOT(groupStencils()), actionCollection(), "groupStencils" );
   m_groupAction->setWhatsThis(i18n("Group selected objects into a single stencil"));
-  m_ungroupAction = new KAction( i18n("Ungroup"), "ungroup", CTRL+SHIFT+Qt::Key_G, this, SLOT(ungroupStencils()), actionCollection(), "ungroupStencils" );
+  m_ungroupAction = new KAction( i18n("Ungroup"), "ungroup", CTRL+Qt::SHIFT+Qt::Key_G, this, SLOT(ungroupStencils()), actionCollection(), "ungroupStencils" );
   m_ungroupAction->setWhatsThis(i18n("Break up a selected group stencil"));
 
   m_stencilToFront = new KAction( i18n("Bring to Front"), "bring_forward", 0, this, SLOT(bringStencilToFront()), actionCollection(), "bringStencilToFront" );

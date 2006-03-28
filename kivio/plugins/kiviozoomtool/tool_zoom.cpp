@@ -62,15 +62,15 @@ ZoomTool::ZoomTool(KivioView* parent) : Kivio::MouseTool(parent, "Zoom Mouse Too
   m_pMinus = KStdAction::zoomOut(this, SLOT(zoomMinus()), actionCollection(), "zoomMinus");
   m_pMinus->setWhatsThis(i18n("By pressing this button you can zoom out of the document."));
 
-  m_pZoomWidth = new KAction( i18n("Zoom Width"), "kivio_zoom_width", SHIFT+Qt::Key_F4, actionCollection(), "zoomWidth" );
+  m_pZoomWidth = new KAction( i18n("Zoom Width"), "kivio_zoom_width", Qt::SHIFT+Qt::Key_F4, actionCollection(), "zoomWidth" );
   m_pZoomWidth->setWhatsThis(i18n("You can zoom the document that it fits into the window width."));
   connect(m_pZoomWidth,SIGNAL(activated()),SLOT(zoomWidth()));
 
-  m_pZoomHeight = new KAction( i18n("Zoom Height"), "kivio_zoom_height", SHIFT+Qt::Key_F5, actionCollection(), "zoomHeight" );
+  m_pZoomHeight = new KAction( i18n("Zoom Height"), "kivio_zoom_height", Qt::SHIFT+Qt::Key_F5, actionCollection(), "zoomHeight" );
   m_pZoomHeight->setWhatsThis(i18n("You can zoom the document that it fits into the window height."));
   connect(m_pZoomHeight,SIGNAL(activated()),SLOT(zoomHeight()));
 
-  m_pZoomPage = new KAction( i18n("Zoom Page"), "kivio_zoom_page", SHIFT+Qt::Key_F6, actionCollection(), "zoomPage" );
+  m_pZoomPage = new KAction( i18n("Zoom Page"), "kivio_zoom_page", Qt::SHIFT+Qt::Key_F6, actionCollection(), "zoomPage" );
   m_pZoomPage->setWhatsThis(i18n("The Zoom Page button shows the entire page."));
   connect(m_pZoomPage,SIGNAL(activated()),SLOT(zoomPage()));
 
