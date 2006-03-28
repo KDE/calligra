@@ -215,7 +215,7 @@ KivioView::KivioView( QWidget *_parent, const char *_name, KivioDoc* doc )
   m_pCanvas = new KivioCanvas(canvasBase,this,doc,m_vertScrollBar,m_horzScrollBar);
   canvasBase->addWidget(m_pCanvas,0);
   canvasBase->raiseWidget(m_pCanvas);
-  m_pCanvas->setFocusPolicy(QWidget::StrongFocus);
+  m_pCanvas->setFocusPolicy(Qt::StrongFocus);
 
   // Rulers
   vRuler = new KoRuler(pRightSide, m_pCanvas, Qt::Vertical, Kivio::Config::defaultPageLayout(),
@@ -254,7 +254,7 @@ KivioView::KivioView( QWidget *_parent, const char *_name, KivioDoc* doc )
   layout->setRowStretch(1, 10);
   layout->setColStretch(1, 10);
 
-  QWidget::setFocusPolicy( QWidget::StrongFocus );
+  QWidget::setFocusPolicy( Qt::StrongFocus );
   setFocusProxy( m_pCanvas );
 
   connect( this, SIGNAL( invalidated() ), m_pCanvas, SLOT( update() ) );

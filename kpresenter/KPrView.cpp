@@ -1489,7 +1489,7 @@ void KPrView::startScreenPres( int pgNum /*1-based*/ )
         m_canvas->reparent( ( QWidget* )0L, 0, QPoint( 0, 0 ), FALSE );
         m_canvas->setPaletteBackgroundColor( Qt::white );
         m_canvas->showFullScreen();
-        m_canvas->setFocusPolicy( QWidget::StrongFocus );
+        m_canvas->setFocusPolicy( Qt::StrongFocus );
 
         if ( !kPresenterDoc()->spManualSwitch() )
         {

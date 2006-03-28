@@ -152,7 +152,7 @@ KPrCanvas::KPrCanvas( QWidget *parent, const char *name, KPrView *_view )
         hide();
     }
 
-    setFocusPolicy( QWidget::StrongFocus );
+    setFocusPolicy( Qt::StrongFocus );
     setFocus();
     setKeyCompression( true );
     setInputMethodEnabled( true ); // ensure using the InputMethod

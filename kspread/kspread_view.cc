@@ -1949,7 +1949,7 @@ void View::initView()
     // The line-editor that appears above the sheet and allows to
     // edit the cells content. It knows about the two buttons.
     d->editWidget = new EditWidget( d->toolWidget, d->canvas, d->cancelButton, d->okButton );
-    d->editWidget->setFocusPolicy( QWidget::StrongFocus );
+    d->editWidget->setFocusPolicy( Qt::StrongFocus );
     d->formulaBarLayout->addWidget( d->editWidget, 2 );
     d->formulaBarLayout->addSpacing( 2 );
 
@@ -1958,8 +1958,8 @@ void View::initView()
     d->hBorderWidget = new HBorder( this, d->canvas,this );
     d->vBorderWidget = new VBorder( this, d->canvas ,this );
 
-    d->canvas->setFocusPolicy( QWidget::StrongFocus );
-    QWidget::setFocusPolicy( QWidget::StrongFocus );
+    d->canvas->setFocusPolicy( Qt::StrongFocus );
+    QWidget::setFocusPolicy( Qt::StrongFocus );
     setFocusProxy( d->canvas );
 
     connect( this, SIGNAL( invalidated() ), d->canvas, SLOT( update() ) );

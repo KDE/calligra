@@ -213,7 +213,7 @@ Canvas::Canvas (View *_view)
   d->chooseCell = false;
   d->validationInfo = 0L;
 
-  QWidget::setFocusPolicy( QWidget::StrongFocus );
+  QWidget::setFocusPolicy( Qt::StrongFocus );
 
   d->dragStart = QPoint( -1, -1 );
   d->dragging = false;

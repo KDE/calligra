@@ -98,7 +98,7 @@ VCanvas::VCanvas( QWidget *parent, KarbonView* view, KarbonPart* part )
 	  WRepaintNoErase ), m_part( part ), m_view( view )
 {
 	connect(this, SIGNAL( contentsMoving( int, int ) ), this, SLOT( slotContentsMoving( int, int ) ) );
-	viewport()->setFocusPolicy( QWidget::StrongFocus );
+	viewport()->setFocusPolicy( Qt::StrongFocus );
 
 	viewport()->setMouseTracking( true );
 	setMouseTracking( true );
