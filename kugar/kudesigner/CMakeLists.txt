@@ -9,13 +9,13 @@ add_subdirectory( templates )
 
 ########### next target ###############
 
-set(kudesignercore_LIB_SRCS kudesigner_view.cpp kudesigner_factory.cpp kudesigner_doc.cpp )
+set(kudesignercore_LIB_SRCS ${libkudesignercommon_SRCS} kudesigner_view.cpp kudesigner_factory.cpp kudesigner_doc.cpp )
 
 kde4_automoc(${kudesignercore_LIB_SRCS})
 
 kde4_add_library(kudesignercore SHARED ${kudesignercore_LIB_SRCS})
 
-target_link_libraries(kudesignercore  ${KDE4_KDECORE_LIBS} kudesignercommon kofficeui ${KDE4_KPARTS_LIBS} kofficecore koproperty ${KDE4_KIO_LIBS} ${KDE4_KDEPRINT_LIBS} )
+target_link_libraries(kudesignercore  ${KDE4_KDECORE_LIBS} kofficeui ${KDE4_KPARTS_LIBS} kofficecore koproperty ${KDE4_KIO_LIBS} ${KDE4_KDEPRINT_LIBS} )
 
 set_target_properties(kudesignercore PROPERTIES VERSION 1.0.0 SOVERSION 1 )
 install_targets(${LIB_INSTALL_DIR} kudesignercore )

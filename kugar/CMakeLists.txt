@@ -1,5 +1,34 @@
 kde4_header()
 
+set(libkudesignercommon_SRCS 
+	${CMAKE_SOURCE_DIR}/kugar/kudesigner_lib/band.cpp 
+	${CMAKE_SOURCE_DIR}/kugar/kudesigner_lib/box.cpp 
+	${CMAKE_SOURCE_DIR}/kugar/kudesigner_lib/calcfield.cpp 
+	${CMAKE_SOURCE_DIR}/kugar/kudesigner_lib/canvas.cpp 
+	${CMAKE_SOURCE_DIR}/kugar/kudesigner_lib/command.cpp 
+	${CMAKE_SOURCE_DIR}/kugar/kudesigner_lib/commdefs.cpp 
+	${CMAKE_SOURCE_DIR}/kugar/kudesigner_lib/detailbase.cpp 
+	${CMAKE_SOURCE_DIR}/kugar/kudesigner_lib/detail.cpp 
+	${CMAKE_SOURCE_DIR}/kugar/kudesigner_lib/detailfooter.cpp 
+	${CMAKE_SOURCE_DIR}/kugar/kudesigner_lib/detailheader.cpp 
+	${CMAKE_SOURCE_DIR}/kugar/kudesigner_lib/field.cpp 
+	${CMAKE_SOURCE_DIR}/kugar/kudesigner_lib/kugartemplate.cpp 
+	${CMAKE_SOURCE_DIR}/kugar/kudesigner_lib/label.cpp 
+	${CMAKE_SOURCE_DIR}/kugar/kudesigner_lib/line.cpp 
+	${CMAKE_SOURCE_DIR}/kugar/kudesigner_lib/pagefooter.cpp 
+	${CMAKE_SOURCE_DIR}/kugar/kudesigner_lib/pageheader.cpp 
+	${CMAKE_SOURCE_DIR}/kugar/kudesigner_lib/propertyserializer.cpp 
+	${CMAKE_SOURCE_DIR}/kugar/kudesigner_lib/reportfooter.cpp 
+	${CMAKE_SOURCE_DIR}/kugar/kudesigner_lib/reportheader.cpp 
+	${CMAKE_SOURCE_DIR}/kugar/kudesigner_lib/reportitem.cpp 
+	${CMAKE_SOURCE_DIR}/kugar/kudesigner_lib/section.cpp 
+	${CMAKE_SOURCE_DIR}/kugar/kudesigner_lib/specialfield.cpp 
+	${CMAKE_SOURCE_DIR}/kugar/kudesigner_lib/structurewidget.cpp 
+	${CMAKE_SOURCE_DIR}/kugar/kudesigner_lib/view.cpp 
+	${CMAKE_SOURCE_DIR}/kugar/kudesigner_lib/plugin.cpp
+)
+ 
+
 add_subdirectory( lib )
 add_subdirectory( part )
 add_subdirectory( samples )
