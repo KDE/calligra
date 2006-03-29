@@ -146,14 +146,16 @@ QColor KexiUtils::bleachedColor(const QColor& c, int factor)
 
 void KexiUtils::serializeMap(const QMap<QString,QString>& map, QByteArray& array)
 {
-	QDataStream ds(array, QIODevice::WriteOnly);
+	QDataStream ds( &array,QIODevice::WriteOnly);
+	ds.setVersion(QDataStream::Qt_3_1);
 	ds << map;
 }
 
 void KexiUtils::serializeMap(const QMap<QString,QString>& map, QString& string)
 {
 	QByteArray array;
-	QDataStream ds(array, QIODevice::WriteOnly);
+	QDataStream ds( &array,QIODevice::WriteOnly);
+	ds.setVersion(QDataStream::Qt_3_1);
 	ds << map;
 	kDebug() << array[3] << " " << array[4] << " " << array[5] << endl;
 	const uint size = array.size();
@@ -167,7 +169,8 @@ void KexiUtils::serializeMap(const QMap<QString,QString>& map, QString& string)
 QMap<QString,QString> KexiUtils::deserializeMap(const QByteArray& array)
 {
 	QMap<QString,QString> map;
-	QDataStream ds(array, QIODevice::ReadOnly);
+	QDataStream ds( &array,QIODevice::ReadOnly);
+	ds.setVersion(QDataStream::Qt_3_1);
 	ds >> map;
 	return map;
 }
@@ -181,7 +184,8 @@ QMap<QString,QString> KexiUtils::deserializeMap(const QString& string)
 		array[i] = char(string[i].unicode()-1);
 	}
 	QMap<QString,QString> map;
-	QDataStream ds(array, QIODevice::ReadOnly);
+	QDataStream ds( &array,QIODevice::ReadOnly);
+	ds.setVersion(QDataStream::Qt_3_1);
 	ds >> map;
 	return map;
 }

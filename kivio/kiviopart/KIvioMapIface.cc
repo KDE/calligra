@@ -113,7 +113,8 @@ bool KIvioMapIface::processDynamic(const QCString &fun, const QByteArray &/*data
         return false;
 
     replyType = "DCOPRef";
-    QDataStream out( replyData, QIODevice::WriteOnly );
+    QDataStream out( &replyData,QIODevice::WriteOnly );
+    out.setVersion(QDataStream::Qt_3_1);
     out << DCOPRef( kapp->dcopClient()->appId(), t->dcopObject()->objId() );
     return true;
 }

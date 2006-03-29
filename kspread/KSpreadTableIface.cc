@@ -87,7 +87,8 @@ bool KSpread::CellProxy::process( const QCString& obj, const QCString& fun, cons
 
 	if ( fun == "functions()" ) {
         	replyType = "DCOPCStringList";
-	        QDataStream reply( replyData, QIODevice::WriteOnly );
+	        QDataStream reply( &replyData,QIODevice::WriteOnly );
+	        reply.setVersion(QDataStream::Qt_3_1);
 		 DCOPCStringList repList=m_cell->functions();
 		reply<<repList;
 	        return true;
@@ -248,7 +249,8 @@ bool SheetIface::processDynamic( const QCString& fun, const QByteArray&/*data*/,
     QCString str = objId() + "/" + fun.left( len - 2 );
 
     replyType = "DCOPRef";
-    QDataStream out( replyData, QIODevice::WriteOnly );
+    QDataStream out( &replyData,QIODevice::WriteOnly );
+    out.setVersion(QDataStream::Qt_3_1);
     out << DCOPRef( kapp->dcopClient()->appId(), str );
     return true;
 }

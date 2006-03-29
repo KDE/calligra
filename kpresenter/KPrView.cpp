@@ -1445,12 +1445,14 @@ void KPrView::startScreenPres( int pgNum /*1-based*/ )
         if (kapp->dcopClient()->call("kdesktop", "KScreensaverIface", "isEnabled()", data, replyType, replyData)
             && replyType=="bool")
         {
-            QDataStream replyArg(replyData, QIODevice::ReadOnly);
+            QDataStream replyArg( &replyData,QIODevice::ReadOnly);
+            replyArg.setVersion(QDataStream::Qt_3_1);
             replyArg >> m_screenSaverWasEnabled;
             if ( m_screenSaverWasEnabled )
             {
                 // disable screensaver
-                QDataStream arg(data, QIODevice::WriteOnly);
+                QDataStream arg( &data,QIODevice::WriteOnly);
+                arg.setVersion(QDataStream::Qt_3_1);
                 arg << false;
                 if (!kapp->dcopClient()->send("kdesktop", "KScreensaverIface", "enable(bool)", data))
                     kWarning(33001) << "Couldn't disable screensaver (using dcop to kdesktop)!" << endl;
@@ -1546,7 +1548,8 @@ void KPrView::screenStop()
         {
             // start screensaver again
             QByteArray data;
-            QDataStream arg(data, QIODevice::WriteOnly);
+            QDataStream arg( &data,QIODevice::WriteOnly);
+            arg.setVersion(QDataStream::Qt_3_1);
             arg << true;
             if (!kapp->dcopClient()->send("kdesktop", "KScreensaverIface", "enable(bool)", data))
                 kWarning(33001) << "Couldn't re-enabled screensaver (using dcop to kdesktop)" << endl;

@@ -178,7 +178,8 @@ KWMailMergeDataSource *KWMailMergeDataBase::loadPlugin(const QString& name)
               KWMailMergeDataSource *tmpsource =func(KWFactory::instance(),this);
               if (tmpsource)
               {
-                  QDataStream tmpstream(tmpsource->info,QIODevice::WriteOnly);
+                  QDataStream tmpstream( &tmpsource->info,QIODevice::WriteOnly);
+                  tmpstream.setVersion(QDataStream::Qt_3_1);
                   tmpstream<<name;
               }
               return tmpsource;
@@ -287,7 +288,8 @@ QDomElement KWMailMergeDataBase::save(QDomDocument &doc) const
         kDebug()<<"KWMailMergeDataBase::save() There is really something to save"<<endl;
         QDomElement el=doc.createElement(QString::fromLatin1("PLUGIN"));
 
-        QDataStream ds(plugin->info,QIODevice::ReadOnly);
+        QDataStream ds( &plugin->info,QIODevice::ReadOnly);
+        ds.setVersion(QDataStream::Qt_3_1);
         QString libname;
         ds>>libname;
         el.setAttribute("library",libname);
