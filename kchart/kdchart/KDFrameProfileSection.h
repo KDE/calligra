@@ -72,7 +72,7 @@ public:
     \param dir the direction enum to convert
     \return the string representation of the direction enum
     */
-    static QString directionToString( Qt::Orientation dir ) {
+    static QString directionToString( Direction dir ) {
         switch( dir ) {
             case DirPlain:
                 return "Plain";

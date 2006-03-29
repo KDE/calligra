@@ -56,7 +56,7 @@ bool KDFrameProfileSection::readFrameProfileSectionNode( const QDomElement& elem
         KDFrameProfileSection* section )
 {
     bool ok = true;
-    Qt::Orientation tempDirection = DirPlain;
+    Direction tempDirection = DirPlain;
     Curvature tempCurvature = CvtPlain;
     int tempWidth;
     QPen tempPen;

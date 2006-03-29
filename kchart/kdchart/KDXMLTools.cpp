@@ -151,7 +151,7 @@ namespace KDXML {
             // XPM representation and compress this representation. This
             // conforms to the file format Qt Designer uses.
             QByteArray ba;
-            QBuffer buffer( ba );
+            QBuffer buffer( &ba );
             buffer.open( QIODevice::WriteOnly );
             QImageIO imgio( &buffer, "XPM" );
             QImage image = pixmap.convertToImage();
