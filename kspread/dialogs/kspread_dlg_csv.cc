@@ -42,6 +42,7 @@
 #include <kfiledialog.h>
 #include <klocale.h>
 #include <kmessagebox.h>
+#include <kpushbutton.h>
 
 #include <kspread_cell.h>
 #include <kspread_doc.h>
@@ -308,7 +309,7 @@ void CSVDialog::fillSheet()
     m_fileArray.resize(0);
   }
 
-  QTextStream inputStream(m_data, QIODevice::ReadOnly);
+  QTextStream inputStream(&m_data, QIODevice::ReadOnly);
   inputStream.setEncoding(QTextStream::Locale);
 
   while (!inputStream.atEnd())
