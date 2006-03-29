@@ -75,7 +75,6 @@
 #include <kcursor.h>
 #include <kdebug.h>
 #include <kmessagebox.h>
-#include <kmultipledrag.h>
 #include <krun.h>
 #include <kmimetype.h>
 #include <ksharedptr.h>

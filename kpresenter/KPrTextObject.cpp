@@ -46,7 +46,6 @@
 #include <klocale.h>
 #include <kdebug.h>
 #include <kdeversion.h>
-#include <kmultipledrag.h>
 
 #include <qfont.h>
 #include <qfile.h>

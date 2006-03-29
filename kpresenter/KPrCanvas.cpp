@@ -49,7 +49,6 @@
 #include <kdebug.h>
 #include <kcursor.h>
 #include <kmessagebox.h>
-#include <kmultipledrag.h>
 #include <kconfig.h>
 #include <kurl.h>
 #include <kurldrag.h>

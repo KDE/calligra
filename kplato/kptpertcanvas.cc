@@ -45,7 +45,6 @@
 #include <kapplication.h>
 #include <kmessagebox.h>
 #include <assert.h>
-#include <kmultipledrag.h>
 #include <k3listview.h>
 
 namespace KPlato

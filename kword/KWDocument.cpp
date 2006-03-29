@@ -76,7 +76,6 @@
 #include <kdebug.h>
 #include <kglobalsettings.h>
 #include <klibloader.h>
-#include <kmultipledrag.h>
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kspell.h>

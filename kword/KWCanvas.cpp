@@ -66,7 +66,6 @@
 #include <kcursor.h>
 #include <kdebug.h>
 #include <kmessagebox.h>
-#include <kmultipledrag.h>
 #include <kurl.h>
 #include <kurldrag.h>
 #include <kio/netaccess.h>
