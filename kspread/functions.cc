@@ -33,7 +33,7 @@
 #include <klocale.h>
 #include <kstandarddirs.h>
 #include <kstaticdeleter.h>
-
+#include <kinstance.h>
 #include "kspread_factory.h"
 
 namespace KSpread

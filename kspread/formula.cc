@@ -477,7 +477,7 @@ Tokens Formula::scan( const QString& expr, KLocale* locale ) const
 
   // use locale settings if specified
   QString thousand = locale ? locale->thousandsSeparator() : "";
-  QString decimal = locale ? locale->decimalSymbol() : ".";
+  QChar decimal = locale ? locale->decimalSymbol() : '.';
 
   // initialize variables
   state = Start;

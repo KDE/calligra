@@ -381,7 +381,7 @@ QString AutoFillSequenceItem::getSuccessor( int _no, double _delta )
             while (j < 0)
               j += month->count();
             int k = j % month->count();
-            erg = (*month->at( k ));
+            erg = (month->at( k ));
         }
         break;
     case SHORTMONTH:
@@ -391,7 +391,7 @@ QString AutoFillSequenceItem::getSuccessor( int _no, double _delta )
             while (j < 0)
               j += shortMonth->count();
             int k = j % shortMonth->count();
-            erg = (*shortMonth->at( k ));
+            erg = (shortMonth->at( k ));
         }
         break;
     case DAY:
@@ -401,7 +401,7 @@ QString AutoFillSequenceItem::getSuccessor( int _no, double _delta )
             while (j < 0)
               j += day->count();
             int k = j % day->count();
-            erg = (*day->at( k ));
+            erg = (day->at( k ));
         }
 	break;
     case SHORTDAY:
@@ -411,7 +411,7 @@ QString AutoFillSequenceItem::getSuccessor( int _no, double _delta )
             while (j < 0)
               j += shortDay->count();
             int k = j % shortDay->count();
-            erg = (*shortDay->at( k ));
+            erg = (shortDay->at( k ));
         }
         break;
     case OTHER:
@@ -419,7 +419,7 @@ QString AutoFillSequenceItem::getSuccessor( int _no, double _delta )
 	 int i = other->findIndex( m_String )-(m_OtherBegin+1);
 	 int j = i + _no * (int) _delta;
 	 int k = j % (m_OtherEnd - m_OtherBegin-1);
-	 erg = (*other->at( (k+m_OtherBegin+1) ));
+	 erg = (other->at( (k+m_OtherBegin+1) ));
       }
      case TIME:
      case DATE:
@@ -452,7 +452,7 @@ QString AutoFillSequenceItem::getPredecessor( int _no, double _delta )
       while ( j < 0 )
         j += month->count();
       int k = j % month->count();
-      erg = (*month->at( k ));
+      erg = (month->at( k ));
     }
     break;
    case SHORTMONTH:
@@ -462,7 +462,7 @@ QString AutoFillSequenceItem::getPredecessor( int _no, double _delta )
       while ( j < 0 )
         j += shortMonth->count();
       int k = j % shortMonth->count();
-      erg = (*shortMonth->at( k ));
+      erg = (shortMonth->at( k ));
     }
     break;
    case DAY:
@@ -472,7 +472,7 @@ QString AutoFillSequenceItem::getPredecessor( int _no, double _delta )
       while ( j < 0 )
         j += day->count();
       int k = j % day->count();
-      erg = (*day->at( k ));
+      erg = (day->at( k ));
     }
    case SHORTDAY:
     {
@@ -481,7 +481,7 @@ QString AutoFillSequenceItem::getPredecessor( int _no, double _delta )
       while ( j < 0 )
         j += shortDay->count();
       int k = j % shortDay->count();
-      erg = (*shortDay->at( k ));
+      erg = (shortDay->at( k ));
     }
     break;
    case OTHER:
@@ -491,7 +491,7 @@ QString AutoFillSequenceItem::getPredecessor( int _no, double _delta )
       while ( j < 0 )
         j += (m_OtherEnd - m_OtherBegin - 1);
       int k = j % (m_OtherEnd - m_OtherBegin - 1);
-      erg = (*other->at( (k + m_OtherBegin + 1) ));
+      erg = (other->at( (k + m_OtherBegin + 1) ));
     }
    case TIME:
    case DATE:
@@ -1153,7 +1153,7 @@ void Sheet::FillSequenceWithCopy(Q3PtrList<Cell>& _srcList,
 	QString strMonth=_srcList.at( s )->text();
 	int i = AutoFillSequenceItem::month->findIndex( strMonth )+incr;
 	int k = (i) % AutoFillSequenceItem::month->count();
-	cell->setCellText((*AutoFillSequenceItem::month->at( k )));
+	cell->setCellText((AutoFillSequenceItem::month->at( k )));
         incr++;
       }
       else if(AutoFillSequenceItem::day != 0L
@@ -1165,7 +1165,7 @@ void Sheet::FillSequenceWithCopy(Q3PtrList<Cell>& _srcList,
 	QString strDay=_srcList.at( s )->text();
 	int i = AutoFillSequenceItem::day->findIndex( strDay )+incr;
 	int k = (i) % AutoFillSequenceItem::day->count();
-	cell->setCellText((*AutoFillSequenceItem::day->at( k )));
+	cell->setCellText((AutoFillSequenceItem::day->at( k )));
         incr++;
       }
       else
