@@ -32,7 +32,7 @@
 //Added by qt3to4:
 #include <QPixmap>
 #include <zlib.h>
-
+#include <QImageWriter>
 namespace KDXML {
 
     void createBoolNode( QDomDocument& doc, QDomNode& parent,
@@ -147,13 +147,15 @@ namespace KDXML {
             // we store an empty image without any data
             createIntNode( doc, pixmapElement, "Length", 0 );
         }else{
+#warning "kde4 port"
+#if 0				
             // Convert the pixmap to an image, save that image to an in-memory
             // XPM representation and compress this representation. This
             // conforms to the file format Qt Designer uses.
             QByteArray ba;
             QBuffer buffer( &ba );
             buffer.open( QIODevice::WriteOnly );
-            QImageIO imgio( &buffer, "XPM" );
+            QImageWriter imgio( &buffer, "XPM" );
             QImage image = pixmap.convertToImage();
             imgio.setImage( image );
             imgio.write();
@@ -170,6 +172,7 @@ namespace KDXML {
             }
             createIntNode( doc, pixmapElement, "Length", ba.size() );
             createStringNode( doc, pixmapElement, "Data", dataString );
+#endif
         }
     }
 
