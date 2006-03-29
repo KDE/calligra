@@ -196,7 +196,7 @@ class KSPREAD_EXPORT Sheet : public QObject
     Q_PROPERTY( bool showGrid READ getShowGrid WRITE setShowGrid )
 
 public:
-    enum Direction { DockRight, DockLeft, Up, Down };
+    enum Direction { Right, Left, Up, Down };
     enum SortingOrder{ Increase, Decrease };
     enum ChangeRef { ColumnInsert, ColumnRemove, RowInsert, RowRemove };
     enum TestType { Text, Validity, Comment, ConditionalCellAttribute };

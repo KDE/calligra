@@ -372,9 +372,9 @@ bool Canvas::eventFilter( QObject *o, QEvent *e )
   case QEvent::IMCompose:
   case QEvent::IMEnd:
   {
-      QIMEvent * imev = static_cast<QIMEvent *>(e);
-      processIMEvent( imev );
-      break;
+      //QIMEvent * imev = static_cast<QIMEvent *>(e);
+      //processIMEvent( imev );
+      //break;
   }
   default:
     break;
@@ -2856,7 +2856,7 @@ void Canvas::keyPressEvent ( QKeyEvent * _ev )
   d->view->doc()->emitEndOperation( sheet->visibleRect( this ) );
   return;
 }
-
+#if 0
 void Canvas::processIMEvent( QIMEvent * event )
 {
   d->view->doc()->emitBeginOperation( false );
@@ -2881,6 +2881,7 @@ void Canvas::processIMEvent( QIMEvent * event )
 
   d->view->doc()->emitEndOperation( QRect( cursor, cursor ) );
 }
+#endif
 
 bool Canvas::formatKeyPress( QKeyEvent * _ev )
 {

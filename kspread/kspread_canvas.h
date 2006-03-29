@@ -555,7 +555,7 @@ private:
   void processOtherKey(QKeyEvent *event);
   bool processControlArrowKey(QKeyEvent *event);
 
-  void processIMEvent( QIMEvent * event );
+  //void processIMEvent( QIMEvent * event );
 
   /**
    * Used in choose mode. Shows/hides the editor depending on the selected

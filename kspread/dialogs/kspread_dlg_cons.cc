@@ -37,7 +37,8 @@
 #include <Q3GridLayout>
 #include <Q3ValueList>
 #include <QCloseEvent>
-
+#include <Q3ListBox>
+#include <kpushbutton.h>
 #include <kdebug.h>
 #include <kdialogbase.h>
 #include <kmessagebox.h>
