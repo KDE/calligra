@@ -428,9 +428,9 @@ void KWTableFrameSet::recalcRows(unsigned int col, unsigned int row) {
             activeCell->frame(0)->setHeight(activeCell->frame(0)->minimumFrameHeight());
             //kDebug(32004) << activeCell->name() << " grew to its minheight: " << activeCell->frame(0)->minimumFrameHeight() << endl;
         } else { // wants to shrink
-            double newHeight=kMax(activeCell->frame(0)->minimumFrameHeight(),minHeightActiveRow);
+            double newHeight=qMax(activeCell->frame(0)->minimumFrameHeight(),minHeightActiveRow);
             if(bottomRow) // I'm a strech cell
-                newHeight=kMax(newHeight, minHeightOtherCols - (minHeightMyCol - activeCell->frame(0)->minimumFrameHeight()));
+                newHeight=qMax(newHeight, minHeightOtherCols - (minHeightMyCol - activeCell->frame(0)->minimumFrameHeight()));
             activeCell->frame(0)->setHeight(newHeight);
             //kDebug(32004) << activeCell->name() << " shrunk to: " << newHeight << endl;
         }
@@ -531,7 +531,7 @@ void KWTableFrameSet::recalcRows(unsigned int col, unsigned int row) {
                 pageNumber++;
                 pageBottom = pageNumber * m_doc->ptPaperHeight() - m_doc->ptBottomBorder();
                 // kDebug(32004) << "pageBottom; " << pageBottom << endl;
-                untilRow=kMax(untilRow, *pageBound);
+                untilRow=qMax(untilRow, *pageBound);
                 pageBound++;
             }
         }
@@ -555,7 +555,7 @@ void KWTableFrameSet::recalcRows(unsigned int col, unsigned int row) {
                 }
             }
             kDebug() << "breakRow: " << breakRow<< endl;
-            fromRow=kMin(fromRow, breakRow);
+            fromRow=qMin(fromRow, breakRow);
             if(breakRow < lineNumber+1) {
                 for(unsigned int i=lineNumber+1; i > breakRow;i--)
                     kDebug() << "j--";
@@ -827,7 +827,7 @@ void KWTableFrameSet::setBoundingRect( KoRect rect, CellSize widthMode, CellSize
     double rowHeight = 0;
     if( heightMode != TblAuto )
         rowHeight = rect.height() / m_rows;
-    rowHeight=kMax(rowHeight, 22.0); // m_doc->getDefaultParagLayout()->getFormat().ptFontSize()) // TODO use table style font-size
+    rowHeight=qMax(rowHeight, 22.0); // m_doc->getDefaultParagLayout()->getFormat().ptFontSize()) // TODO use table style font-size
 
     for(unsigned int i=0; i <= m_rows;i++) {
         m_rowPositions.append(rect.y() + rowHeight * i);
@@ -1541,7 +1541,7 @@ void KWTableFrameSet::drawBorders( QPainter& painter, const QRect &crect, KWView
                         if(daCell) offset=daCell->leftBorder();
                         if ( row > 0 ) {
                             Cell *c = cell(row-1, col);
-                            if(c) offset=kMax(offset, c->leftBorder());
+                            if(c) offset=qMax(offset, c->leftBorder());
                         }
                     }
                     double x = m_colPositions[col] + offset;
@@ -1577,7 +1577,7 @@ void KWTableFrameSet::drawBorders( QPainter& painter, const QRect &crect, KWView
                         if(daCell) offset=daCell->leftBorder();
                         if ( row > 0 ) {
                             Cell *c = cell(row-1, col);
-                            if(c) offset=kMax(offset, c->leftBorder());
+                            if(c) offset=qMax(offset, c->leftBorder());
                         }
                     }
                     startPos = m_colPositions[col] - offset;
@@ -1673,7 +1673,7 @@ void KWTableFrameSet::drawBorders( QPainter& painter, const QRect &crect, KWView
                             bottomRow = *(pageBound++);
 
                         //kDebug(32004) << "from: " << topRow << " to: " << qMin((uint)row, bottomRow) << endl;
-                        //kDebug(32004) << "from: " << m_rowPositions[topRow] << " to: " << m_rowPositions[kMin((uint)row, bottomRow)] << endl;
+                        //kDebug(32004) << "from: " << m_rowPositions[topRow] << " to: " << m_rowPositions[qMin((uint)row, bottomRow)] << endl;
                         double offset=0.0;
                         if(border->width() > 0) {
                             //kDebug(32004) << "looking at topRow=" << topRow << " col=" << col << endl;
@@ -1681,18 +1681,18 @@ void KWTableFrameSet::drawBorders( QPainter& painter, const QRect &crect, KWView
                             if(c) offset=c->topBorder();
                             if ( col > 0 ) {
                                 c=cell(topRow,col-1);
-                                if(c) offset=kMax(offset,c->topBorder());
+                                if(c) offset=qMax(offset,c->topBorder());
                             }
                             if(topRow==0) offset=0.0;
                         }
                         double top=m_rowPositions[topRow]-offset;
 
-                        unsigned int toRow=kMin((uint)row,bottomRow);
+                        unsigned int toRow=qMin((uint)row,bottomRow);
                         offset=0.0;
                         if(border->width() > 0 && toRow!=bottomRow) {
                             if(daCell) offset=daCell->topBorder();
                             Cell *c=cell(toRow,col-1);
-                            if(c) offset=kMax(offset,c->topBorder());
+                            if(c) offset=qMax(offset,c->topBorder());
                         }
                         double bottom=m_rowPositions[toRow] + offset;
 

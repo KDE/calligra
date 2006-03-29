@@ -3420,7 +3420,7 @@ bool KWTextFrameSetEdit::enterCustomItem( KoTextCustomItem* customItem, bool fro
 void KWTextFrameSetEdit::keyPressEvent( QKeyEvent* e )
 {
     // Handle moving into inline frames (e.g. formula frames).
-    if ( !( e->state() & Qt::ControlButton ) && !( e->state() & Qt::ShiftButton ) )
+    if ( !( e->state() & Qt::ControlModifier ) && !( e->state() & Qt::ShiftModifier ) )
     {
         if (e->state() != Qt::NoButton)
                 removeToolTipCompletion();
