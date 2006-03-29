@@ -35,7 +35,6 @@
 #include "KPrCanvas.h"
 #include <tkcoloractions.h>
 
-#include <KoSpeaker.h>
 
 #include <qgroupbox.h>
 #include <qvgroupbox.h>
