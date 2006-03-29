@@ -6,7 +6,11 @@ add_subdirectory( toolbar )
 add_subdirectory( pics )
 add_subdirectory( templates )
 
-include_directories( ${CMAKE_SOURCE_DIR}/interfaces ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
+include_directories(
+	${KOFFICEUI_INCLUDES}
+	${CMAKE_SOURCE_DIR}/kchart/kdchart/ 
+	${CMAKE_SOURCE_DIR}/interfaces 
+	${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
 
 
 ########### next target ###############
