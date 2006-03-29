@@ -44,7 +44,8 @@
 #include <Q3Frame>
 #include <QInputMethodEvent>
 #include <QResizeEvent>
-#include <private/qrichtext_p.h>
+#warning "kde4: I think that it's not a good idea to use private class"
+//#include <private/qrichtext_p.h>
 
 //#include <klineedit.h>
 #include <ktextedit.h>
@@ -1255,8 +1256,9 @@ void CellEditor::setCursorToRange(uint pos)
 
 ComboboxLocationEditWidget::ComboboxLocationEditWidget( QWidget * _parent,
                                                       View * _view )
-    : KComboBox( _parent, "ComboboxLocationEditWidget" )
+    : KComboBox( _parent)
 {
+	setObjectName("ComboboxLocationEditWidget" );
     m_locationWidget = new LocationEditWidget( _parent, _view );
     setLineEdit( m_locationWidget );
     insertItem( "" );
@@ -1298,9 +1300,10 @@ void ComboboxLocationEditWidget::slotRemoveAreaName( const QString &_name )
 
 LocationEditWidget::LocationEditWidget( QWidget * _parent,
                                                       View * _view )
-    : KLineEdit( _parent, "LocationEditWidget" ),
+    : KLineEdit( _parent),
       m_pView(_view)
 {
+	setObjectName("LocationEditWidget" );
     setCompletionObject( &completionList,true );
     setCompletionMode(KGlobalSettings::CompletionAuto  );
 }

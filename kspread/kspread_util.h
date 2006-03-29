@@ -133,7 +133,7 @@ class KSPREAD_EXPORT Range
 {
 public:
   Range();
-
+  virtual ~Range() {}
   Range( const QString& );
   Range( const QString&, Map*, Sheet* default_sheet = 0 );
   Range( const Range& r );
