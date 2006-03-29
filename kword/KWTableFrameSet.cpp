@@ -2571,7 +2571,7 @@ void KWTableFrameSetEdit::keyPressEvent( QKeyEvent * e )
     if(moveToOtherCell)
     {
         switch( e->key() ) {
-            case QKeyEvent::Qt::Key_Up:
+            case Qt::Key_Up:
             {
                 if(!(static_cast<KWTextFrameSetEdit *>(m_currentCell))->cursor()->parag()->prev())
                 {
@@ -2595,7 +2595,7 @@ void KWTableFrameSetEdit::keyPressEvent( QKeyEvent * e )
                 }
             }
             break;
-            case QKeyEvent::Qt::Key_Down:
+            case Qt::Key_Down:
             {
                 if(!(static_cast<KWTextFrameSetEdit *>(m_currentCell))->cursor()->parag()->next())
                 {
@@ -2617,12 +2617,12 @@ void KWTableFrameSetEdit::keyPressEvent( QKeyEvent * e )
                 }
             }
             break;
-            case QKeyEvent::Qt::Key_Backtab:
+            case Qt::Key_Backtab:
                 tab=true;
                 if (e->state() & Qt::ControlModifier)
                     break; // Break if tab was pressed with Control (in *any* key combination)
                 // Do not break
-            case QKeyEvent::Qt::Key_Left:
+            case Qt::Key_Left:
             {
                 KoTextCursor *cur = (static_cast<KWTextFrameSetEdit *>(m_currentCell))->cursor();
                 if ( tab || (!cur->parag()->prev()&&cur->index()==0) )
@@ -2647,12 +2647,12 @@ void KWTableFrameSetEdit::keyPressEvent( QKeyEvent * e )
                 }
             }
             break;
-            case QKeyEvent::Qt::Key_Tab:
+            case Qt::Key_Tab:
                 tab=true;
                 if (e->state() & Qt::ControlModifier)
                     break; // Break if tab was pressed with Control (in *any* key combination)
                 // Do not break
-            case QKeyEvent::Qt::Key_Right:
+            case Qt::Key_Right:
             {
                 KoTextCursor *cur = (static_cast<KWTextFrameSetEdit *>(m_currentCell))->cursor();
                 if( tab || (!cur->parag()->next()&&cur->index()==cur->parag()->string()->length()-1) )
@@ -2690,7 +2690,7 @@ void KWTableFrameSetEdit::keyPressEvent( QKeyEvent * e )
         {
             if (tab && (e->state() & Qt::ControlModifier) )
             {
-                QKeyEvent event(QEvent::KeyPress, QKeyEvent::Qt::Key_Tab, 9, 0, QChar(9));
+                QKeyEvent event(QEvent::KeyPress, Qt::Key_Tab, 9, 0, QChar(9));
                 m_currentCell->keyPressEvent( &event );
             }
             else
