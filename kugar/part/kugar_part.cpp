@@ -83,10 +83,12 @@ bool KugarPart::loadXML( QIODevice *file, const QDomDocument & /*doc*/ )
                     {
                         for ( KoView * v = vs.first();v;v = vs.next() )
                         {
-                            ok = static_cast<KugarView*>( v->qt_cast( "KugarView" ) ) ->renderReport();
+
+                            ok = static_cast<KugarView*>( qobject_cast<KugarView*>(v))->renderReport();
                             if ( !ok )
                                 break;
-                        }
+								
+						}
                     }
                 }
             }
@@ -115,7 +117,7 @@ bool KugarPart::initDoc( InitDocFlags /*flags*/, QWidget* /*parentWidget*/ )
     bool ok = false;
 
     KFileDialog *dialog = 
-        new KFileDialog( QString::null, QString::null, 0L, "file dialog", true );
+        new KFileDialog( QString::null, QString::null, 0L);
     dialog->setMimeFilter( KoFilterManager::mimeFilter( KoDocument::readNativeFormatMimeType(),
                            KoFilterManager::Import ) );
     if ( dialog->exec() != QDialog::Accepted )
@@ -165,7 +167,7 @@ void KugarPart::slotPreferredTemplate( const QString &tpl )
                 KUrl tmpURL( m_docURL );
                 tmpURL.setFileName( "" );
                 tmpURL.addPath( tpl );
-                if ( KIO::NetAccess::download( tmpURL, localtpl ) )
+                if ( KIO::NetAccess::download( tmpURL, localtpl,0L) )
                     isTemp = true;
                 else
                     KMessageBox::sorry( 0, i18n( "Unable to download template file: %1" ).arg( url.prettyURL() ) );
@@ -182,7 +184,7 @@ void KugarPart::slotPreferredTemplate( const QString &tpl )
                 KUrl tmpURL( m_docURL );
                 tmpURL.setFileName( "" );
                 tmpURL.addPath( tpl );
-                if ( KIO::NetAccess::download( tmpURL, localtpl ) )
+                if ( KIO::NetAccess::download( tmpURL, localtpl,0L ) )
                     isTemp = true;
                 else
                     KMessageBox::sorry( 0, i18n( "Unable to download template file: %1" ).arg( url.prettyURL() ) );
@@ -191,7 +193,7 @@ void KugarPart::slotPreferredTemplate( const QString &tpl )
     }
     else
     {
-        if ( KIO::NetAccess::download( url, localtpl ) )
+        if ( KIO::NetAccess::download( url, localtpl,0L ) )
             isTemp = true;
         else
             KMessageBox::sorry( 0, i18n( "Unable to download template file: %1" ).arg( url.prettyURL() ) );

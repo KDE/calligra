@@ -1,6 +1,6 @@
 kde4_header()
 
-
+include_directories(${CMAKE_SOURCE_DIR}/kugar/lib/)
 
 
 ########### next target ###############
@@ -13,7 +13,7 @@ kde4_add_plugin(kugarpart WITH_PREFIX ${kugarpart_PART_SRCS})
 
 kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kugarpart )
 
-target_link_libraries(kugarpart  ${KDE4_KDECORE_LIBS} kugarlib ${KDE4_KPARTS_LIBS} ${KDE4_KDEPRINT_LIBS} kofficecore )
+target_link_libraries(kugarpart  ${KDE4_KIO_LIBS} kugarlib ${KDE4_KPARTS_LIBS} ${KDE4_KDEPRINT_LIBS} kofficecore )
 
 install_targets(${LIB_INSTALL_DIR}/kde4 kugarpart )
 
