@@ -4121,7 +4121,7 @@ void View::paste()
     const QByteArray arr = data->encodedData( returnedTypeMime );
     if( arr.isEmpty() )
       return;
-    QBuffer buffer( arr );
+    QBuffer buffer( &arr );
     KoStore * store = KoStore::createStore( &buffer, KoStore::Read );
 
     KoOasisStore oasisStore( store );

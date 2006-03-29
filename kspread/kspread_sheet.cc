@@ -5209,7 +5209,7 @@ void Sheet::paste( const QByteArray& b, const QRect& pasteArea, bool makeUndo,
 {
     kDebug(36001) << "Parsing " << b.size() << " bytes" << endl;
 
-    QBuffer buffer( b );
+    QBuffer buffer( &b );
     buffer.open( QIODevice::ReadOnly );
     QDomDocument doc;
     doc.setContent( &buffer );
@@ -5512,7 +5512,7 @@ bool Sheet::testAreaPasteInsert()const
     else
         return false;
 
-    QBuffer buffer( b );
+    QBuffer buffer( &b );
     buffer.open( QIODevice::ReadOnly );
     QDomDocument d;
     d.setContent( &buffer );
@@ -8072,7 +8072,7 @@ bool Sheet::insertPicture( const KoPoint& point ,  KoPicture& picture )
 bool Sheet::insertPicture( const KoPoint& point, const QPixmap& pixmap  )
 {
 	QByteArray data;
-	QBuffer buffer(data);
+	QBuffer buffer( &data );
 
 	buffer.open( QIODevice::ReadWrite );
 	pixmap.save( &buffer , "PNG" );
