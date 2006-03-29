@@ -78,7 +78,7 @@ bool KoUnavailPart::saveOasis(KoStore*, KoXmlWriter*)
     return false;
 }
 
-void KoUnavailPart::setMimeType( const Q3CString& mime )
+void KoUnavailPart::setMimeType( const QByteArray& mime )
 {
     kDebug() << "KoUnavailPart::setMimeType " << mime << endl;
     m_mimetype = mime;

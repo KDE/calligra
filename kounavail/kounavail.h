@@ -46,9 +46,9 @@ public:
     virtual bool saveChildren( KoStore* /*_store*/ ) { return true; }
 
     /** This is called by KoDocumentChild::save */
-    virtual Q3CString nativeFormatMimeType() const { return m_mimetype; }
+    virtual QByteArray nativeFormatMimeType() const { return m_mimetype; }
     /** This is called by KoDocumentChild::createUnavailDocument */
-    void setMimeType( const Q3CString& mime );
+    void setMimeType( const QByteArray& mime );
     // keep in sync with koDocumentChild.h
     enum UnavailReason { DocumentNotFound, HandlerNotFound };
     /** This is called by KoDocumentChild::createUnavailDocument */
@@ -67,7 +67,7 @@ protected:
     virtual KoView* createViewInstance( QWidget* parent, const char* name );
 
     QDomDocument m_doc;
-    Q3CString m_mimetype;
+    QByteArray m_mimetype;
     QString m_reason;
 };
 
