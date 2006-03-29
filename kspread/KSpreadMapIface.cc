@@ -31,6 +31,10 @@
 #include "kspread_sheet.h"
 
 #include "KSpreadMapIface.h"
+//Added by qt3to4:
+#include <Q3ValueList>
+#include <Q3CString>
+#include <Q3PtrList>
 
 using namespace KSpread;
 
@@ -72,20 +76,20 @@ QStringList MapIface::sheetNames() const
 {
     QStringList names;
 
-    QPtrList<Sheet>& lst = m_map->sheetList();
-    QPtrListIterator<Sheet> it( lst );
+    Q3PtrList<Sheet>& lst = m_map->sheetList();
+    Q3PtrListIterator<Sheet> it( lst );
     for( ; it.current(); ++it )
         names.append( it.current()->name() );
 
     return names;
 }
 
-QValueList<DCOPRef> MapIface::sheets()
+Q3ValueList<DCOPRef> MapIface::sheets()
 {
-    QValueList<DCOPRef> t;
+    Q3ValueList<DCOPRef> t;
 
-    QPtrList<Sheet>& lst = m_map->sheetList();
-    QPtrListIterator<Sheet> it( lst );
+    Q3PtrList<Sheet>& lst = m_map->sheetList();
+    Q3PtrListIterator<Sheet> it( lst );
     for( ; it.current(); ++it )
         t.append( DCOPRef( kapp->dcopClient()->appId(), it.current()->dcopObject()->objId() ) );
 
@@ -103,8 +107,8 @@ DCOPRef MapIface::insertSheet( const QString& name )
     return sheet( name );
 }
 
-bool MapIface::processDynamic(const QCString &fun, const QByteArray &/*data*/,
-                                     QCString& replyType, QByteArray &replyData)
+bool MapIface::processDynamic(const Q3CString &fun, const QByteArray &/*data*/,
+                                     Q3CString& replyType, QByteArray &replyData)
 {
     // Does the name follow the pattern "foobar()" ?
     uint len = fun.length();

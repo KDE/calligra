@@ -54,7 +54,23 @@
 #include <qscrollbar.h>
 #include <qtimer.h>
 #include <qtooltip.h>
-#include <qwidgetlist.h>
+#include <qwidget.h>
+//Added by qt3to4:
+#include <QPaintEvent>
+#include <QResizeEvent>
+#include <QMouseEvent>
+#include <QFocusEvent>
+#include <QKeyEvent>
+#include <QEvent>
+#include <QTextStream>
+#include <QDragMoveEvent>
+#include <Q3CString>
+#include <QDragLeaveEvent>
+#include <Q3ValueList>
+#include <QWheelEvent>
+#include <QDropEvent>
+#include <Q3PtrList>
+#include <QPixmap>
 
 #include <kcursor.h>
 #include <kdebug.h>
@@ -204,7 +220,7 @@ class Canvas::Private
  ****************************************************************/
 
 Canvas::Canvas (View *_view)
-  : QWidget( _view, "", /*WNorthWestGravity*/ WStaticContents| WResizeNoErase | WRepaintNoErase )
+  : QWidget( _view, "", /*WNorthWestGravity*/ Qt::WStaticContents| Qt::WResizeNoErase | Qt::WNoAutoErase )
 {
   d = new Private;
 
@@ -218,9 +234,9 @@ Canvas::Canvas (View *_view)
   d->dragging = false;
 
 
-  d->defaultGridPen.setColor( lightGray );
+  d->defaultGridPen.setColor( Qt::lightGray );
   d->defaultGridPen.setWidth( 1 );
-  d->defaultGridPen.setStyle( SolidLine );
+  d->defaultGridPen.setStyle( Qt::SolidLine );
 
   d->xOffset = 0.0;
   d->yOffset = 0.0;
@@ -234,7 +250,7 @@ Canvas::Canvas (View *_view)
   //d->editWidget = d->view->editWidget();
   d->posWidget = d->view->posWidget();
 
-  setBackgroundMode( PaletteBase );
+  setBackgroundMode( Qt::PaletteBase );
 
   setMouseTracking( true );
   d->mousePressed = false;
@@ -368,9 +384,9 @@ bool Canvas::eventFilter( QObject *o, QEvent *e )
     }
     break;
   }
-  case QEvent::IMStart:
-  case QEvent::IMCompose:
-  case QEvent::IMEnd:
+  case QEvent::InputMethodStart:
+  case QEvent::InputMethodCompose:
+  case QEvent::InputMethodEnd:
   {
       //QIMEvent * imev = static_cast<QIMEvent *>(e);
       //processIMEvent( imev );
@@ -889,7 +905,7 @@ void Canvas::mouseMoveEvent( QMouseEvent * _ev )
         d->m_moveStartPoint = objectRect( false ).topLeft();
         d->m_isMoving = true;
       }
-      moveObjectsByMouse( docPoint, _ev->state() & AltButton || _ev->state() & Qt::ControlButton );
+      moveObjectsByMouse( docPoint, _ev->state() & Qt::AltModifier || _ev->state() & Qt::ControlModifier );
     }
     else if ( d->m_resizeObject )
     {
@@ -897,7 +913,7 @@ void Canvas::mouseMoveEvent( QMouseEvent * _ev )
         d->m_isResizing = true;
 
       bool keepRatio = d->m_resizeObject->isKeepRatio();
-      if ( _ev->state() & AltButton )
+      if ( _ev->state() & Qt::AltModifier )
       {
         keepRatio = true;
       }
@@ -1059,9 +1075,9 @@ void Canvas::mouseMoveEvent( QMouseEvent * _ev )
   if (highlightRangeSizeGripAt(ev_PosX,ev_PosY))
   {
     if ( sheet->layoutDirection()==Sheet::RightToLeft )
-      setCursor( sizeBDiagCursor );
+      setCursor( Qt::sizeBDiagCursor );
     else
-      setCursor( sizeFDiagCursor );
+      setCursor( Qt::sizeFDiagCursor );
     return;
   }
 
@@ -1120,9 +1136,9 @@ void Canvas::mouseMoveEvent( QMouseEvent * _ev )
     if ( !sheet->isProtected() )
     {
       if ( sheet->layoutDirection()==Sheet::RightToLeft )
-        setCursor( sizeBDiagCursor );
+        setCursor( Qt::sizeBDiagCursor );
       else
-        setCursor( sizeFDiagCursor );
+        setCursor( Qt::sizeFDiagCursor );
     }
   }
   else if ( !d->anchor.isEmpty() )
@@ -1143,7 +1159,7 @@ void Canvas::mouseMoveEvent( QMouseEvent * _ev )
   else
   {
 	//Nothing special is happening, use a normal arrow cursor
-    setCursor( arrowCursor );
+    setCursor( Qt::arrowCursor );
   }
 
   // No marking, selecting etc. in progess? Then quit here.
@@ -1227,14 +1243,14 @@ void Canvas::mouseReleaseEvent( QMouseEvent* /*_ev*/)
 void Canvas::processClickSelectionHandle( QMouseEvent *event )
 {
   // Auto fill ? That is done using the left mouse button.
-  if ( event->button() == LeftButton )
+  if ( event->button() == Qt::LeftButton )
   {
     d->mouseAction = AutoFill;
     d->autoFillSource = selectionInfo()->lastRange();
   }
   // Resize a cell (done with the right mouse button) ?
   // But for that to work there must not be a selection.
-  else if ( event->button() == MidButton && selectionInfo()->isSingular())
+  else if ( event->button() == Qt::MidButton && selectionInfo()->isSingular())
   {
     d->mouseAction = ResizeCell;
   }
@@ -1306,13 +1322,13 @@ bool Canvas::highlightRangeSizeGripAt(double x, double y)
 
 void Canvas::mousePressEvent( QMouseEvent * _ev )
 {
-  if ( _ev->button() == LeftButton )
+  if ( _ev->button() == Qt::LeftButton )
   {
     d->mousePressed = true;
     d->view->enableAutoScroll();
   }
 
-  if ( activeSheet() && _ev->button() == LeftButton)
+  if ( activeSheet() && _ev->button() == Qt::LeftButton)
   {
     d->m_moveStartPosMouse = objectRect( false ).topLeft();
     EmbeddedObject *obj = getObject( _ev->pos(), activeSheet() );
@@ -1320,9 +1336,9 @@ void Canvas::mousePressEvent( QMouseEvent * _ev )
     if ( obj )
     {
        // use ctrl + Button to select / deselect object
-      if ( _ev->state() & Qt::ControlButton && obj->isSelected() )
+      if ( _ev->state() & Qt::ControlModifier && obj->isSelected() )
         deselectObject( obj );
-      else if ( _ev->state() & Qt::ControlButton )
+      else if ( _ev->state() & Qt::ControlModifier )
       {
         if ( d->modType == MT_NONE)
           return;
@@ -1365,7 +1381,7 @@ void Canvas::mousePressEvent( QMouseEvent * _ev )
     else
     {
       d->modType = MT_NONE;
-      if ( !( _ev->state() & Qt::ShiftButton ) && !( _ev->state() & Qt::ControlButton ) )
+      if ( !( _ev->state() & Qt::ShiftModifier ) && !( _ev->state() & Qt::ControlModifier ) )
         deselectAllObjects();
     }
   }
@@ -1474,7 +1490,7 @@ void Canvas::mousePressEvent( QMouseEvent * _ev )
   //  kDebug() << "Clicked in cell " << col << ", " << row << endl;
 
   // Extending an existing selection with the shift button ?
-  if ((_ev->state() & Qt::ShiftButton) &&
+  if ((_ev->state() & Qt::ShiftModifier) &&
       d->view->koDocument()->isReadWrite() &&
       !selectionInfo()->isColumnOrRowSelected())
   {
@@ -1494,14 +1510,14 @@ void Canvas::mousePressEvent( QMouseEvent * _ev )
 
   switch (_ev->button())
   {
-    case LeftButton:
+    case Qt::LeftButton:
       if (!d->anchor.isEmpty())
       {
         // Hyperlink pressed
         processLeftClickAnchor();
       }
 #ifdef NONCONTIGUOUSSELECTION
-      else if ( _ev->state() & Qt::ControlButton )
+      else if ( _ev->state() & Qt::ControlModifier )
       {
         if (d->chooseCell)
         {
@@ -1531,7 +1547,7 @@ void Canvas::mousePressEvent( QMouseEvent * _ev )
         (d->chooseCell ? choice() : selectionInfo())->initialize(QPoint(col,row), activeSheet());
       }
       break;
-    case MidButton:
+    case Qt::MidButton:
       // Paste operation with the middle button?
       if ( d->view->koDocument()->isReadWrite() && !sheet->isProtected() )
       {
@@ -1541,7 +1557,7 @@ void Canvas::mousePressEvent( QMouseEvent * _ev )
         sheet->setRegionPaintDirty(*selectionInfo());
       }
       break;
-    case RightButton:
+    case Qt::RightButton:
       if (!selectionInfo()->contains( QPoint( col, row ) ))
       {
         // No selection or the mouse press was outside of an existing selection?
@@ -1560,7 +1576,7 @@ void Canvas::mousePressEvent( QMouseEvent * _ev )
   updatePosWidget();
 
   // Context menu?
-  if ( _ev->button() == RightButton )
+  if ( _ev->button() == Qt::RightButton )
   {
     // TODO: Handle anchor // TODO Stefan: ???
     QPoint p = mapToGlobal( _ev->pos() );
@@ -1825,7 +1841,7 @@ void Canvas::dropEvent( QDropEvent * _ev )
   else
   {
     QString text;
-    if ( !QTextDrag::decode( _ev, text ) )
+    if ( !Q3TextDrag::decode( _ev, text ) )
     {
       _ev->ignore();
       return;
@@ -1953,7 +1969,7 @@ QRect Canvas::moveDirection( KSpread::MoveTo direction, bool extendSelection )
        NEVER use cell->column() or cell->row() -- it might be a default cell
     */
   {
-    case Bottom:
+    case Qt::DockBottom:
       offset = cell->mergedYCells() - (cursor.y() - cellCorner.y()) + 1;
       rl = activeSheet()->rowFormat( cursor.y() + offset );
       while ( ((cursor.y() + offset) <= KS_rowMax) && rl->isHide())
@@ -1964,7 +1980,7 @@ QRect Canvas::moveDirection( KSpread::MoveTo direction, bool extendSelection )
 
       destination = QPoint(cursor.x(), qMin(cursor.y() + offset, KS_rowMax));
       break;
-    case Top:
+    case Qt::DockTop:
       offset = (cellCorner.y() - cursor.y()) - 1;
       rl = activeSheet()->rowFormat( cursor.y() + offset );
       while ( ((cursor.y() + offset) >= 1) && rl->isHide())
@@ -1974,7 +1990,7 @@ QRect Canvas::moveDirection( KSpread::MoveTo direction, bool extendSelection )
       }
       destination = QPoint(cursor.x(), qMax(cursor.y() + offset, 1));
       break;
-    case Left:
+    case Qt::DockLeft:
       offset = (cellCorner.x() - cursor.x()) - 1;
       cl = activeSheet()->columnFormat( cursor.x() + offset );
       while ( ((cursor.x() + offset) >= 1) && cl->isHide())
@@ -1984,7 +2000,7 @@ QRect Canvas::moveDirection( KSpread::MoveTo direction, bool extendSelection )
       }
       destination = QPoint(qMax(cursor.x() + offset, 1), cursor.y());
       break;
-    case Right:
+    case Qt::DockRight:
       offset = cell->mergedXCells() - (cursor.x() - cellCorner.x()) + 1;
       cl = activeSheet()->columnFormat( cursor.x() + offset );
       while ( ((cursor.x() + offset) <= KS_colMax) && cl->isHide())
@@ -2042,17 +2058,17 @@ void Canvas::processEnterKey(QKeyEvent* event)
   {
     switch( direction )
     {
-     case Bottom:
-      direction = Top;
+     case Qt::DockBottom:
+      direction = Qt::DockTop;
       break;
-     case Top:
-      direction = Bottom;
+     case Qt::DockTop:
+      direction = Qt::DockBottom;
       break;
-     case Left:
-      direction = Right;
+     case Qt::DockLeft:
+      direction = Qt::DockRight;
       break;
-     case Right:
-      direction = Left;
+     case Qt::DockRight:
+      direction = Qt::DockLeft;
       break;
      case BottomFirst:
       direction = BottomFirst;
@@ -2079,35 +2095,35 @@ void Canvas::processArrowKey( QKeyEvent *event)
     deleteEditor( true );
   }
 
-  KSpread::MoveTo direction = Bottom;
-  bool makingSelection = event->state() & Qt::ShiftButton;
+  KSpread::MoveTo direction = Qt::DockBottom;
+  bool makingSelection = event->state() & Qt::ShiftModifier;
 
   switch (event->key())
   {
   case Qt::Key_Down:
-    direction = Bottom;
+    direction = Qt::DockBottom;
     break;
   case Qt::Key_Up:
-    direction = Top;
+    direction = Qt::DockTop;
     break;
   case Qt::Key_Left:
     if (activeSheet()->layoutDirection()==Sheet::RightToLeft)
-      direction = Right;
+      direction = Qt::DockRight;
     else
-      direction = Left;
+      direction = Qt::DockLeft;
     break;
   case Qt::Key_Right:
     if (activeSheet()->layoutDirection()==Sheet::RightToLeft)
-      direction = Left;
+      direction = Qt::DockLeft;
     else
-      direction = Right;
+      direction = Qt::DockRight;
     break;
   case Qt::Key_Tab:
-      direction = Right;
+      direction = Qt::DockRight;
       break;
   case Qt::Key_Backtab:
       //Shift+Tab moves to the left
-      direction = Left;
+      direction = Qt::DockLeft;
       makingSelection = false;
       break;
   default:
@@ -2127,7 +2143,7 @@ void Canvas::processEscapeKey(QKeyEvent * event)
   if ( view()->isInsertingObject() )
   {
     view()->resetInsertHandle();
-    setCursor( arrowCursor );
+    setCursor( Qt::arrowCursor );
     return;
   }
 
@@ -2187,7 +2203,7 @@ void Canvas::processEscapeKey(QKeyEvent * event)
 
 bool Canvas::processHomeKey(QKeyEvent* event)
 {
-  bool makingSelection = event->state() & Qt::ShiftButton;
+  bool makingSelection = event->state() & Qt::ShiftModifier;
   Sheet* sheet = activeSheet();
 
   if ( d->cellEditor )
@@ -2209,7 +2225,7 @@ bool Canvas::processHomeKey(QKeyEvent* event)
        We might want to change to that behavior.
     */
 
-    if (event->state() & Qt::ControlButton)
+    if (event->state() & Qt::ControlModifier)
     {
       /* ctrl + Home will always just send us to location (1,1) */
       destination = QPoint( 1, 1 );
@@ -2250,7 +2266,7 @@ bool Canvas::processHomeKey(QKeyEvent* event)
 
 bool Canvas::processEndKey( QKeyEvent *event )
 {
-  bool makingSelection = event->state() & Qt::ShiftButton;
+  bool makingSelection = event->state() & Qt::ShiftModifier;
   Sheet* sheet = activeSheet();
   Cell* cell = NULL;
   QPoint marker = d->chooseCell ? choice()->marker() : selectionInfo()->marker();
@@ -2296,7 +2312,7 @@ bool Canvas::processEndKey( QKeyEvent *event )
 
 bool Canvas::processPriorKey(QKeyEvent *event)
 {
-  bool makingSelection = event->state() & Qt::ShiftButton;
+  bool makingSelection = event->state() & Qt::ShiftModifier;
   if (!d->chooseCell)
   {
     deleteEditor( true );
@@ -2324,7 +2340,7 @@ bool Canvas::processPriorKey(QKeyEvent *event)
 
 bool Canvas::processNextKey(QKeyEvent *event)
 {
-  bool makingSelection = event->state() & Qt::ShiftButton;
+  bool makingSelection = event->state() & Qt::ShiftModifier;
 
   if (!d->chooseCell)
   {
@@ -2428,7 +2444,7 @@ void Canvas::processOtherKey(QKeyEvent *event)
 
 bool Canvas::processControlArrowKey( QKeyEvent *event )
 {
-  bool makingSelection = event->state() & Qt::ShiftButton;
+  bool makingSelection = event->state() & Qt::ShiftModifier;
 
   Sheet* sheet = activeSheet();
   Cell* cell = NULL;
@@ -2793,7 +2809,7 @@ void Canvas::keyPressEvent ( QKeyEvent * _ev )
    case Qt::Key_Right:
    case Qt::Key_Tab: /* a tab behaves just like a right/left arrow */
    case Qt::Key_Backtab:  /* and so does Shift+Tab */
-    if (_ev->state() & Qt::ControlButton)
+    if (_ev->state() & Qt::ControlModifier)
     {
       if ( !processControlArrowKey( _ev ) )
         return;
@@ -2820,12 +2836,12 @@ void Canvas::keyPressEvent ( QKeyEvent * _ev )
       return;
     break;
 
-   case Qt::Key_Prior:  /* Page Up */
+   case Qt::Key_PageUp:  /* Page Up */
     if ( !processPriorKey( _ev ) )
       return;
     break;
 
-   case Qt::Key_Next:   /* Page Down */
+   case Qt::Key_PageDown:   /* Page Down */
     if ( !processNextKey( _ev ) )
       return;
     break;
@@ -2885,7 +2901,7 @@ void Canvas::processIMEvent( QIMEvent * event )
 
 bool Canvas::formatKeyPress( QKeyEvent * _ev )
 {
-  if (!(_ev->state() & Qt::ControlButton ))
+  if (!(_ev->state() & Qt::ControlModifier ))
     return false;
 
   int key = _ev->key();
@@ -2964,12 +2980,12 @@ bool Canvas::formatKeyPress( QKeyEvent * _ev )
        case Qt::Key_Ampersand:
         if ( r == rect.top() )
         {
-          pen = QPen( d->view->borderColor(), 1, SolidLine);
+          pen = QPen( d->view->borderColor(), 1, Qt::SolidLine);
           rw->setTopBorderPen( pen );
         }
         if ( r == rect.bottom() )
         {
-          pen = QPen( d->view->borderColor(), 1, SolidLine);
+          pen = QPen( d->view->borderColor(), 1, Qt::SolidLine);
           rw->setBottomBorderPen( pen );
         }
         break;
@@ -3036,12 +3052,12 @@ bool Canvas::formatKeyPress( QKeyEvent * _ev )
        case Qt::Key_Ampersand:
         if ( c == rect.left() )
         {
-          pen = QPen( d->view->borderColor(), 1, SolidLine);
+          pen = QPen( d->view->borderColor(), 1, Qt::SolidLine);
           cw->setLeftBorderPen( pen );
         }
         if ( c == rect.right() )
         {
-          pen = QPen( d->view->borderColor(), 1, SolidLine);
+          pen = QPen( d->view->borderColor(), 1, Qt::SolidLine);
           cw->setRightBorderPen( pen );
         }
         break;
@@ -3111,22 +3127,22 @@ bool Canvas::formatCellByKey (Cell *cell, int key, const QRect &rect)
     case Qt::Key_Ampersand:
     if ( cell->row() == rect.top() )
     {
-      pen = QPen( d->view->borderColor(), 1, SolidLine);
+      pen = QPen( d->view->borderColor(), 1, Qt::SolidLine);
       cell->setTopBorderPen( pen );
     }
     if ( cell->row() == rect.bottom() )
     {
-      pen = QPen( d->view->borderColor(), 1, SolidLine);
+      pen = QPen( d->view->borderColor(), 1, Qt::SolidLine);
       cell->setBottomBorderPen( pen );
     }
     if ( cell->column() == rect.left() )
     {
-      pen = QPen( d->view->borderColor(), 1, SolidLine);
+      pen = QPen( d->view->borderColor(), 1, Qt::SolidLine);
       cell->setLeftBorderPen( pen );
     }
     if ( cell->column() == rect.right() )
     {
-      pen = QPen( d->view->borderColor(), 1, SolidLine);
+      pen = QPen( d->view->borderColor(), 1, Qt::SolidLine);
       cell->setRightBorderPen( pen );
     }
     break;
@@ -3221,7 +3237,7 @@ KSpread::EmbeddedObject *Canvas::getObject( const QPoint &pos, Sheet *_sheet )
   QPoint const p ( (int) pos.x() ,
               (int) pos.y() );
 
-  QPtrListIterator<EmbeddedObject> itObject( doc()->embeddedObjects() );
+  Q3PtrListIterator<EmbeddedObject> itObject( doc()->embeddedObjects() );
   for( ; itObject.current(); ++itObject )
   {
     if ( itObject.current()->sheet() == _sheet )
@@ -3263,7 +3279,7 @@ void Canvas::deselectObject( EmbeddedObject *obj )
 
 void Canvas::selectAllObjects()
 {
-  QPtrListIterator<EmbeddedObject> it( doc()->embeddedObjects() );
+  Q3PtrListIterator<EmbeddedObject> it( doc()->embeddedObjects() );
   for ( ; it.current() ; ++it )
   {
     if ( it.current()->sheet() == activeSheet() )
@@ -3281,7 +3297,7 @@ void Canvas::deselectAllObjects()
 
   //lowerObject();
 
-  QPtrListIterator<EmbeddedObject> it( doc()->embeddedObjects() );
+  Q3PtrListIterator<EmbeddedObject> it( doc()->embeddedObjects() );
   for ( ; it.current() ; ++it )
       deselectObject( it.current() );
 
@@ -3563,7 +3579,7 @@ void Canvas::lowerObject()
     d->m_objectDisplayAbove = 0;
 }
 
-void Canvas::displayObjectList( QPtrList<EmbeddedObject> &list )
+void Canvas::displayObjectList( Q3PtrList<EmbeddedObject> &list )
 {
   list = doc()->embeddedObjects();
   list.setAutoDelete( false );
@@ -3795,7 +3811,7 @@ void Canvas::copyOasisObjects()
 {
     // We'll create a store (ZIP format) in memory
     QBuffer buffer;
-    QCString mimeType = "application/vnd.oasis.opendocument.spreadsheet";
+    Q3CString mimeType = "application/vnd.oasis.opendocument.spreadsheet";
     KoStore* store = KoStore::createStore( &buffer, KoStore::Write, mimeType );
     Q_ASSERT( store );
     Q_ASSERT( !store->bad() );
@@ -3815,7 +3831,7 @@ void Canvas::copyOasisObjects()
 
     KMultipleDrag* multiDrag = new KMultipleDrag();
     if ( !plainText.isEmpty() )
-        multiDrag->addDragObject( new QTextDrag( plainText, 0 ) );
+        multiDrag->addDragObject( new Q3TextDrag( plainText, 0 ) );
     if ( !picture.isNull() )
         multiDrag->addDragObject( picture.dragObject( 0 ) );
     KoStoreDrag* storeDrag = new KoStoreDrag( mimeType, 0 );
@@ -3824,7 +3840,7 @@ void Canvas::copyOasisObjects()
     multiDrag->addDragObject( storeDrag );
 
     //save the objects as pictures too so that other programs can access them
-    QPtrListIterator<EmbeddedObject> itObject( doc()->embeddedObjects() );
+    Q3PtrListIterator<EmbeddedObject> itObject( doc()->embeddedObjects() );
     itObject.toFirst();
     if ( itObject.current() )
     {
@@ -3841,12 +3857,12 @@ void Canvas::copyOasisObjects()
       p.end();
       if (!pixmap.isNull())
       {
-        QImageDrag *imagedrag = new QImageDrag( pixmap.convertToImage() );
+        Q3ImageDrag *imagedrag = new Q3ImageDrag( pixmap.convertToImage() );
         multiDrag->addDragObject( imagedrag );
       }
     }
 
-    QDragObject *dragObject = multiDrag;
+    Q3DragObject *dragObject = multiDrag;
     QApplication::clipboard()->setData( dragObject, QClipboard::Clipboard );
 }
 
@@ -4048,7 +4064,7 @@ void Canvas::paintUpdates()
   kDebug(36001) << "painting dirty cells " << endl;
 #endif
 
-  QValueList<QPoint>  mergedCellsPainted;
+  Q3ValueList<QPoint>  mergedCellsPainted;
   for ( x = range.left(); x <= right; ++x )
   {
     for ( y = range.top(); y <= bottom; ++y )
@@ -4193,7 +4209,7 @@ void Canvas::clipoutChildren( QPainter& painter ) const
   const double horizontalOffset = -xOffset() * doc()->zoomedResolutionX();
   const double verticalOffset = -yOffset() * doc()->zoomedResolutionY();
 
-  QPtrListIterator<EmbeddedObject> itObject( doc()->embeddedObjects() );
+  Q3PtrListIterator<EmbeddedObject> itObject( doc()->embeddedObjects() );
   for( ; itObject.current(); ++itObject )
   {
     if ( ( itObject.current() )->sheet() == activeSheet() )
@@ -4225,7 +4241,7 @@ QRect Canvas::painterWindowGeometry( const QPainter& painter ) const
 
 void Canvas::paintChildren( QPainter& painter, QMatrix& /*matrix*/ )
 {
-  QPtrListIterator<EmbeddedObject> itObject( doc()->embeddedObjects() );
+  Q3PtrListIterator<EmbeddedObject> itObject( doc()->embeddedObjects() );
   itObject.toFirst();
   if ( !itObject.current() )
     return;
@@ -4273,7 +4289,7 @@ void Canvas::paintChildren( QPainter& painter, QMatrix& /*matrix*/ )
 
 void Canvas::paintHighlightedRanges(QPainter& painter, const KoRect& /*viewRect*/)
 {
-  QValueList<QColor> colors = choice()->colors();
+  Q3ValueList<QColor> colors = choice()->colors();
   QBrush nullBrush;
   int index = 0;
   Region::ConstIterator end(choice()->constEnd());
@@ -4607,7 +4623,7 @@ void Canvas::retrieveMarkerInfo( const QRect &marker,
  ****************************************************************/
 
 VBorder::VBorder( QWidget *_parent, Canvas *_canvas, View *_view)
-    : QWidget( _parent, "", /*WNorthWestGravity*/WStaticContents | WResizeNoErase | WRepaintNoErase )
+    : QWidget( _parent, "", /*WNorthWestGravity*/Qt::WStaticContents | Qt::WResizeNoErase | Qt::WNoAutoErase )
 {
   m_pView = _view;
   m_pCanvas = _canvas;
@@ -4713,13 +4729,13 @@ void VBorder::mousePressEvent( QMouseEvent * _ev )
       QPoint newMarker( 1, hit_row );
       QPoint newAnchor( KS_colMax, hit_row );
 #ifdef NONCONTIGUOUSSELECTION
-      if (_ev->state() == Qt::ControlButton)
+      if (_ev->state() == Qt::ControlModifier)
       {
         m_pView->selectionInfo()->extend(QRect(newAnchor, newMarker));
       }
       else
 #endif
-      if (_ev->state() == Qt::ShiftButton)
+      if (_ev->state() == Qt::ShiftModifier)
       {
         m_pView->selectionInfo()->update(newMarker);
       }
@@ -4829,7 +4845,7 @@ void VBorder::mouseReleaseEvent( QMouseEvent * _ev )
 
             int i;
             RowFormat * row;
-            QValueList<int>hiddenRows;
+            Q3ValueList<int>hiddenRows;
 
             for ( i = rect.top(); i <= rect.bottom(); ++i )
             {
@@ -5164,7 +5180,7 @@ void VBorder::focusOutEvent( QFocusEvent* )
  ****************************************************************/
 
 HBorder::HBorder( QWidget *_parent, Canvas *_canvas,View *_view )
-    : QWidget( _parent, "", /*WNorthWestGravity*/ WStaticContents| WResizeNoErase | WRepaintNoErase )
+    : QWidget( _parent, "", /*WNorthWestGravity*/ Qt::WStaticContents| Qt::WResizeNoErase | Qt::WNoAutoErase )
 {
   m_pView = _view;
   m_pCanvas = _canvas;
@@ -5329,13 +5345,13 @@ void HBorder::mousePressEvent( QMouseEvent * _ev )
       QPoint newMarker( hit_col, 1 );
       QPoint newAnchor( hit_col, KS_rowMax );
 #ifdef NONCONTIGUOUSSELECTION
-      if (_ev->state() == Qt::ControlButton)
+      if (_ev->state() == Qt::ControlModifier)
       {
         m_pView->selectionInfo()->extend(QRect(newAnchor, newMarker));
       }
       else
 #endif
-      if (_ev->state() == Qt::ShiftButton)
+      if (_ev->state() == Qt::ShiftModifier)
       {
         m_pView->selectionInfo()->update(newMarker);
       }
@@ -5454,7 +5470,7 @@ void HBorder::mouseReleaseEvent( QMouseEvent * _ev )
 
             int i;
             ColumnFormat * col;
-            QValueList<int>hiddenCols;
+            Q3ValueList<int>hiddenCols;
 
             for ( i = rect.left(); i <= rect.right(); ++i )
             {

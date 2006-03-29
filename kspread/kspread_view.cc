@@ -38,13 +38,25 @@
 #include <qclipboard.h>
 #include <qcursor.h>
 #include <qlayout.h>
-#include <qpaintdevicemetrics.h>
+#include <q3paintdevicemetrics.h>
 #include <qregexp.h>
 #include <qtimer.h>
 #include <qtoolbutton.h>
 #include <qsqldatabase.h>
-#include <qlistview.h>
+#include <q3listview.h>
 #include <qsizepolicy.h>
+//Added by qt3to4:
+#include <QResizeEvent>
+#include <Q3PopupMenu>
+#include <Q3Frame>
+#include <QKeyEvent>
+#include <QEvent>
+#include <Q3GridLayout>
+#include <Q3CString>
+#include <Q3ValueList>
+#include <Q3PtrList>
+#include <QPixmap>
+#include <Q3HBoxLayout>
 
 // KDE includes
 #include <dcopclient.h>
@@ -168,7 +180,7 @@ public:
 
     // GUI elements
     QWidget *frame;
-    QFrame *toolWidget;
+    Q3Frame *toolWidget;
     Canvas *canvas;
     VBorder *vBorderWidget;
     HBorder *hBorderWidget;
@@ -178,14 +190,14 @@ public:
     KStatusBarLabel* calcLabel;
 
     // formulabar, consists of:
-    QHBoxLayout* formulaBarLayout;
+    Q3HBoxLayout* formulaBarLayout;
     ComboboxLocationEditWidget *posWidget;
-    QButton* formulaButton;
-    QButton *okButton;
-    QButton *cancelButton;
+    Q3Button* formulaButton;
+    Q3Button *okButton;
+    Q3Button *cancelButton;
     KSpread::EditWidget *editWidget;
-    QGridLayout* viewLayout;
-    QHBoxLayout* tabScrollBarLayout;
+    Q3GridLayout* viewLayout;
+    Q3HBoxLayout* tabScrollBarLayout;
 
     // all UI actions
     ViewActions* actions;
@@ -231,13 +243,13 @@ public:
     // the last popup menu (may be 0).
     // Since only one popup menu can be opened at once, its pointer is stored here.
     // Delete the old one before you store a pointer to anotheron here.
-    QPopupMenu *popupMenu;
+    Q3PopupMenu *popupMenu;
     int popupMenuFirstToolId;
 
-    QPopupMenu *popupRow;
-    QPopupMenu *popupColumn;
-    QPopupMenu* popupChild;       // for embedded children
-    QPopupMenu* popupListChoose;  // for list of choose
+    Q3PopupMenu *popupRow;
+    Q3PopupMenu *popupColumn;
+    Q3PopupMenu* popupChild;       // for embedded children
+    Q3PopupMenu* popupListChoose;  // for list of choose
 
     // the child for which the popup menu has been opened.
     Child* popupChildObject;
@@ -272,14 +284,14 @@ public:
       QString command;
       KDataToolInfo info;
     };
-    QPtrList<ToolEntry> toolList;
+    Q3PtrList<ToolEntry> toolList;
 
     void initActions();
     void adjustActions( bool mode );
     void adjustActions( Sheet* sheet, Cell* cell );
     void adjustWorkbookActions( bool mode );
     void updateButton( Cell *cell, int column, int row);
-    QButton* newIconButton( const char *_file, bool _kbutton = false, QWidget *_parent = 0L );
+    Q3Button* newIconButton( const char *_file, bool _kbutton = false, QWidget *_parent = 0L );
 
     PropertyEditor *m_propertyEditor;
 
@@ -1384,7 +1396,7 @@ void View::Private::updateButton( Cell *cell, int column, int row)
       adjustActions( activeSheet, cell );
 }
 
-QButton* View::Private::newIconButton( const char *_file, bool _kbutton, QWidget *_parent )
+Q3Button* View::Private::newIconButton( const char *_file, bool _kbutton, QWidget *_parent )
 {
   if ( _parent == 0L )
     _parent = view;
@@ -1476,20 +1488,20 @@ QString KPSheetSelectPage::printOptionForIndex(unsigned int index)
 void KPSheetSelectPage::prependAvailableSheet(const QString& sheetname)
 {
   Q_ASSERT(gui);
-  new QListViewItem(gui->ListViewAvailable,sheetname);
+  new Q3ListViewItem(gui->ListViewAvailable,sheetname);
 }
 
 void KPSheetSelectPage::prependSelectedSheet(const QString& sheetname)
 {
   Q_ASSERT(gui);
-  new QListViewItem(gui->ListViewSelected,sheetname);
+  new Q3ListViewItem(gui->ListViewSelected,sheetname);
 }
 
 QStringList KPSheetSelectPage::selectedSheets()
 {
   Q_ASSERT(gui);
   QStringList list;
-  QListViewItem* item = gui->ListViewSelected->firstChild();
+  Q3ListViewItem* item = gui->ListViewSelected->firstChild();
   while (item)
   {
     list.append(item->text(0));
@@ -1520,7 +1532,7 @@ void KPSheetSelectPage::selectAll()
   //we have to add all the stuff in reverse order
   // because inserted items (prependSelectedSheet) are prepended
   QStringList list;
-  QListViewItem* item = gui->ListViewAvailable->firstChild();
+  Q3ListViewItem* item = gui->ListViewAvailable->firstChild();
   while (item)
   {
     list.prepend(item->text(0));
@@ -1538,7 +1550,7 @@ void KPSheetSelectPage::select()
   //we have to add all the stuff in reverse order
   // because inserted items (prependSelectedSheet) are prepended
   QStringList list;
-  QListViewItem* item = gui->ListViewAvailable->firstChild();
+  Q3ListViewItem* item = gui->ListViewAvailable->firstChild();
   while (item)
   {
     if (item->isSelected())
@@ -1554,8 +1566,8 @@ void KPSheetSelectPage::select()
 
 void KPSheetSelectPage::remove()
 {
-  QListViewItem* item = gui->ListViewSelected->firstChild();
-  QListViewItem* nextitem = NULL;
+  Q3ListViewItem* item = gui->ListViewSelected->firstChild();
+  Q3ListViewItem* nextitem = NULL;
   while (item)
   {
     nextitem = item->nextSibling();
@@ -1576,9 +1588,9 @@ void KPSheetSelectPage::moveTop()
   //this creates a temporary new list (selected first, then rest)
   // which replaces the existing one, to avoid the need of an additional sort column
 
-  QValueList<QListViewItem*> newlist;
-  QListViewItem* item = gui->ListViewSelected->firstChild();
-  QListViewItem* nextitem = NULL;
+  Q3ValueList<Q3ListViewItem*> newlist;
+  Q3ListViewItem* item = gui->ListViewSelected->firstChild();
+  Q3ListViewItem* nextitem = NULL;
 //   kDebug() << "Filling new list with selected items first" << endl;
   while (item)
   {
@@ -1606,7 +1618,7 @@ void KPSheetSelectPage::moveTop()
 
 //   kDebug() << "Refill the view with the correctly ordered list" << endl;
   //the view is empty now, refill in correct order (reversed!!)
-  QValueList<QListViewItem*>::iterator it;
+  Q3ValueList<Q3ListViewItem*>::iterator it;
   for (it = newlist.begin(); it != newlist.end(); ++it)
   {
 //     kDebug() << " adding " << (*it)->text(0) << endl;
@@ -1619,9 +1631,9 @@ void KPSheetSelectPage::moveUp()
   //this creates a temporary new list
   // which replaces the existing one, to avoid the need of an additional sort column
 
-  QValueList<QListViewItem*> newlist;
-  QListViewItem* item = gui->ListViewSelected->firstChild();
-  QListViewItem* nextitem = NULL;
+  Q3ValueList<Q3ListViewItem*> newlist;
+  Q3ListViewItem* item = gui->ListViewSelected->firstChild();
+  Q3ListViewItem* nextitem = NULL;
   while (item)
   {
     nextitem = item->nextSibling();
@@ -1629,7 +1641,7 @@ void KPSheetSelectPage::moveUp()
     {
       while (nextitem && nextitem->isSelected())
       {
-        QListViewItem* nextnextitem = nextitem->nextSibling();
+        Q3ListViewItem* nextnextitem = nextitem->nextSibling();
         newlist.prepend(nextitem);
         gui->ListViewSelected->takeItem(nextitem);
         nextitem = nextnextitem;
@@ -1643,7 +1655,7 @@ void KPSheetSelectPage::moveUp()
 
 //   kDebug() << "Refill the view with the correctly ordered list" << endl;
   //the view is empty now, refill in correct order (reversed!!)
-  QValueList<QListViewItem*>::iterator it;
+  Q3ValueList<Q3ListViewItem*>::iterator it;
   for (it = newlist.begin(); it != newlist.end(); ++it)
   {
 //     kDebug() << " adding " << (*it)->text(0) << endl;
@@ -1653,7 +1665,7 @@ void KPSheetSelectPage::moveUp()
 
 void KPSheetSelectPage::moveDown()
 {
-  QListViewItem* item = gui->ListViewSelected->lastItem();
+  Q3ListViewItem* item = gui->ListViewSelected->lastItem();
 //   while (item)
 //   {
 //     nextitem = item->nextSibling();
@@ -1668,7 +1680,7 @@ void KPSheetSelectPage::moveDown()
   {
     while (item && !item->isSelected() && item->itemAbove() && item->itemAbove()->isSelected())
     {
-      QListViewItem* tempitem = item->itemAbove();
+      Q3ListViewItem* tempitem = item->itemAbove();
       tempitem->moveItem(item);
     }
     if (item)
@@ -1681,9 +1693,9 @@ void KPSheetSelectPage::moveBottom()
   //this creates a temporary new list (unselected first, then rest)
   // which replaces the existing one, to avoid the need of an additional sort column
 
-  QValueList<QListViewItem*> newlist;
-  QListViewItem* item = gui->ListViewSelected->firstChild();
-  QListViewItem* nextitem = NULL;
+  Q3ValueList<Q3ListViewItem*> newlist;
+  Q3ListViewItem* item = gui->ListViewSelected->firstChild();
+  Q3ListViewItem* nextitem = NULL;
 //   kDebug() << "Filling new list with unselected items first" << endl;
   while (item)
   {
@@ -1711,7 +1723,7 @@ void KPSheetSelectPage::moveBottom()
 
 //   kDebug() << "Refill the view with the correctly ordered list" << endl;
   //the view is empty now, refill in correct order (reversed!!)
-  QValueList<QListViewItem*>::iterator it;
+  Q3ValueList<Q3ListViewItem*>::iterator it;
   for (it = newlist.begin(); it != newlist.end(); ++it)
   {
 //     kDebug() << " adding " << (*it)->text(0) << endl;
@@ -1829,8 +1841,8 @@ View::View( QWidget *_parent, const char *_name,
 
     QObject::connect( doc(), SIGNAL( sig_removeAreaName( const QString & ) ), d->posWidget, SLOT( slotRemoveAreaName( const QString & ) ) );
 
-    QObject::connect( doc(), SIGNAL( damagesFlushed( const QValueList<Damage*>& ) ),
-        this, SLOT( handleDamages( const QValueList<Damage*>& ) ) );
+    QObject::connect( doc(), SIGNAL( damagesFlushed( const Q3ValueList<Damage*>& ) ),
+        this, SLOT( handleDamages( const Q3ValueList<Damage*>& ) ) );
 
     //KoView::setZoom( doc()->zoomedResolutionY() /* KoView only supports one zoom */ ); // initial value
     //when kspread is embedded into konqueror apply a zoom=100
@@ -1910,20 +1922,20 @@ Doc* View::doc() const
 
 void View::initView()
 {
-    d->viewLayout = new QGridLayout( this, 3, 4 );
+    d->viewLayout = new Q3GridLayout( this, 3, 4 );
 
     // Vert. Scroll Bar
     d->calcLabel  = 0;
     d->vertScrollBar = new QScrollBar( this, "ScrollBar_2" );
     d->vertScrollBar->setRange( 0, 4096 );
-    d->vertScrollBar->setOrientation( QScrollBar::Vertical );
+    d->vertScrollBar->setOrientation( Qt::Vertical );
     d->vertScrollBar->setLineStep(60);  //just random guess based on what feels okay
     d->vertScrollBar->setPageStep(60);  //This should be controlled dynamically, depending on how many rows are shown
 
     // Edit Bar
-    d->toolWidget = new QFrame( this );
+    d->toolWidget = new Q3Frame( this );
 
-    d->formulaBarLayout = new QHBoxLayout( d->toolWidget );
+    d->formulaBarLayout = new Q3HBoxLayout( d->toolWidget );
     d->formulaBarLayout->setMargin( 4 );
     d->formulaBarLayout->addSpacing( 2 );
 
@@ -1965,13 +1977,13 @@ void View::initView()
     connect( this, SIGNAL( invalidated() ), d->canvas, SLOT( update() ) );
 
     QWidget* bottomPart = new QWidget( this );
-    d->tabScrollBarLayout = new QHBoxLayout( bottomPart );
+    d->tabScrollBarLayout = new Q3HBoxLayout( bottomPart );
     d->tabScrollBarLayout->setAutoAdd( true );
     d->tabBar = new KoTabBar( bottomPart );
     d->horzScrollBar = new QScrollBar( bottomPart, "ScrollBar_1" );
 
     d->horzScrollBar->setRange( 0, 4096 );
-    d->horzScrollBar->setOrientation( QScrollBar::Horizontal );
+    d->horzScrollBar->setOrientation( Qt::Horizontal );
 
     d->horzScrollBar->setLineStep(60); //just random guess based on what feels okay
     d->horzScrollBar->setPageStep(60);
@@ -2098,7 +2110,7 @@ void View::initConfig()
         doc()->setShowRowHeader(config->readBoolEntry("Row Header",true));
         if ( !doc()->configLoadFromFile() )
             doc()->setCompletionMode((KGlobalSettings::Completion)config->readNumEntry("Completion Mode",(int)(KGlobalSettings::CompletionAuto)));
-        doc()->setMoveToValue((KSpread::MoveTo)config->readNumEntry("Move",(int)(Bottom)));
+        doc()->setMoveToValue((KSpread::MoveTo)config->readNumEntry("Move",(int)(Qt::DockBottom)));
         doc()->setIndentValue( config->readDoubleNumEntry( "Indent", 10.0 ) );
         doc()->setTypeOfCalc((MethodOfCalc)config->readNumEntry("Method of Calc",(int)(SumOfNumber)));
         if ( !doc()->configLoadFromFile() )
@@ -2329,7 +2341,7 @@ void View::spellCheckerIgnoreAll( const QString & word)
 void View::spellCheckerReady()
 {
   if (d->canvas)
-    d->canvas->setCursor( WaitCursor );
+    d->canvas->setCursor( Qt::WaitCursor );
 
   // go on to the next cell
   if (!d->spell.spellCheckSelection)
@@ -2411,7 +2423,7 @@ void View::spellCheckerReady()
 void View::spellCleanup()
 {
   if ( d->canvas )
-    d->canvas->setCursor( ArrowCursor );
+    d->canvas->setCursor( Qt::ArrowCursor );
 
   d->spell.kspell->cleanUp();
   delete d->spell.kspell;
@@ -2437,7 +2449,7 @@ bool View::spellSwitchToOtherSheet()
     return false;
 
   // for optimization
-  QPtrList<Sheet> sheetList = doc()->map()->sheetList();
+  Q3PtrList<Sheet> sheetList = doc()->map()->sheetList();
 
   unsigned int curIndex = sheetList.findRef(d->spell.currentSpellSheet);
   ++curIndex;
@@ -2576,7 +2588,7 @@ void View::spellCheckerDone( const QString & )
 void View::spellCheckerFinished()
 {
   if (d->canvas)
-    d->canvas->setCursor( ArrowCursor );
+    d->canvas->setCursor( Qt::ArrowCursor );
 
   KSpell::spellStatus status = d->spell.kspell->status();
   d->spell.kspell->cleanUp();
@@ -2615,7 +2627,7 @@ void View::spellCheckerFinished()
 void View::initialPosition()
 {
     // Loading completed, pick initial worksheet
-    QPtrListIterator<Sheet> it( doc()->map()->sheetList() );
+    Q3PtrListIterator<Sheet> it( doc()->map()->sheetList() );
     for( ; it.current(); ++it )
       addSheet( it.current() );
 
@@ -2790,9 +2802,9 @@ void View::updateReadWrite( bool readwrite )
     // d->okButton->setEnabled( readwrite );
   d->editWidget->setEnabled( readwrite );
 
-  QValueList<KAction*> actions = actionCollection()->actions();
-  QValueList<KAction*>::ConstIterator aIt = actions.begin();
-  QValueList<KAction*>::ConstIterator aEnd = actions.end();
+  Q3ValueList<KAction*> actions = actionCollection()->actions();
+  Q3ValueList<KAction*>::ConstIterator aIt = actions.begin();
+  Q3ValueList<KAction*>::ConstIterator aEnd = actions.end();
   for (; aIt != aEnd; ++aIt )
     (*aIt)->setEnabled( readwrite );
 
@@ -3745,8 +3757,8 @@ void View::slotSheetRemoved( Sheet *_t )
   else
     d->activeSheet = 0L;
 
-  QValueList<Reference>::Iterator it;
-  QValueList<Reference> area=doc()->listArea();
+  Q3ValueList<Reference>::Iterator it;
+  Q3ValueList<Reference> area=doc()->listArea();
   for ( it = area.begin(); it != area.end(); ++it )
   {
     //remove Area Name when sheet target is removed
@@ -4057,7 +4069,7 @@ void View::cutSelection()
     doc()->emitEndOperation();
 
     KMacroCommand * macroCommand = 0L;
-    QPtrListIterator<EmbeddedObject> it( doc()->embeddedObjects() );
+    Q3PtrListIterator<EmbeddedObject> it( doc()->embeddedObjects() );
     for ( ; it.current() ; ++it )
     {
       if ( it.current()->sheet() == canvasWidget()->activeSheet() && it.current()->isSelected() )
@@ -4105,7 +4117,7 @@ void View::paste()
   if ( data->provides( KoStoreDrag::mimeType("application/vnd.oasis.opendocument.spreadsheet" ) ))
   {
     canvasWidget()->deselectAllObjects();
-    QCString returnedTypeMime = "application/vnd.oasis.opendocument.spreadsheet";
+    Q3CString returnedTypeMime = "application/vnd.oasis.opendocument.spreadsheet";
     const QByteArray arr = data->encodedData( returnedTypeMime );
     if( arr.isEmpty() )
       return;
@@ -4161,8 +4173,8 @@ void View::paste()
     d->doc->loadOasisCellValidation( body );
 
     //Copied from kspread_doc.cc - refactor into one place asap.
-    QDictIterator<QDomElement> it( oasisStyles.styles("table-cell") );
-    QDict<Style> styleElements;
+    Q3DictIterator<QDomElement> it( oasisStyles.styles("table-cell") );
+    Q3Dict<Style> styleElements;
     for (;it.current();++it)
     {
 	if ( it.current()->hasAttributeNS( KoXmlNS::style , "name" ) )
@@ -4177,7 +4189,7 @@ void View::paste()
     bool result = d->doc->map()->loadOasis( body, context, styleElements );
 
     //release unused styles (again, copied from kspread_doc.cc, needs to be refactored into one place asap.)
-    QDictIterator<Style> styleIter( styleElements );
+    Q3DictIterator<Style> styleIter( styleElements );
     for (;styleIter.current();++styleIter)
 	    if (styleIter.current()->release())
 		    delete styleIter.current();
@@ -4900,7 +4912,7 @@ void View::setupPrinter( KPrinter &prt )
     prt.addDialogPage(sheetpage);
 
 //     kDebug() << "Iterating through available sheets and initializing list of available sheets." << endl;
-    QPtrList<Sheet> sheetlist = doc()->map()->sheetList();
+    Q3PtrList<Sheet> sheetlist = doc()->map()->sheetList();
     Sheet* sheet = sheetlist.last();
     while ( sheet )
     {
@@ -4967,7 +4979,7 @@ void View::print( KPrinter &prt )
         //   anyway (it's the PS driver that takes care of the printer resolution).
         //But KSpread uses fixed 300 dpis, so we can use it.
 
-        QPaintDeviceMetrics metrics( &prt );
+        Q3PaintDeviceMetrics metrics( &prt );
 
         int dpiX = metrics.logicalDpiX();
         int dpiY = metrics.logicalDpiY();
@@ -5116,7 +5128,7 @@ void View::toggleProtectDoc( bool mode )
    if ( !doc() || !doc()->map() )
      return;
 
-   QCString passwd;
+   Q3CString passwd;
    if ( mode )
    {
      int result = KPasswordDialog::getNewPassword( passwd, i18n( "Protect Document" ) );
@@ -5126,7 +5138,7 @@ void View::toggleProtectDoc( bool mode )
        return;
      }
 
-     QCString hash( "" );
+     Q3CString hash( "" );
      QString password( passwd );
      if ( password.length() > 0 )
        SHA1::getHash( password, hash );
@@ -5141,7 +5153,7 @@ void View::toggleProtectDoc( bool mode )
        return;
      }
 
-     QCString hash( "" );
+     Q3CString hash( "" );
      QString password( passwd );
      if ( password.length() > 0 )
        SHA1::getHash( password, hash );
@@ -5152,7 +5164,7 @@ void View::toggleProtectDoc( bool mode )
        return;
      }
 
-     doc()->map()->setProtected( QCString() );
+     doc()->map()->setProtected( Q3CString() );
    }
 
    doc()->setModified( true );
@@ -5164,7 +5176,7 @@ void View::toggleProtectSheet( bool mode )
    if ( !d->activeSheet )
        return;
 
-   QCString passwd;
+   Q3CString passwd;
    if ( mode )
    {
      int result = KPasswordDialog::getNewPassword( passwd, i18n( "Protect Sheet" ) );
@@ -5174,7 +5186,7 @@ void View::toggleProtectSheet( bool mode )
        return;
      }
 
-     QCString hash( "" );
+     Q3CString hash( "" );
      QString password( passwd );
      if ( password.length() > 0 )
        SHA1::getHash( password, hash );
@@ -5190,7 +5202,7 @@ void View::toggleProtectSheet( bool mode )
        return;
      }
 
-     QCString hash( "" );
+     Q3CString hash( "" );
      QString password( passwd );
      if ( password.length() > 0 )
        SHA1::getHash( password, hash );
@@ -5202,7 +5214,7 @@ void View::toggleProtectSheet( bool mode )
        return;
      }
 
-     d->activeSheet->setProtected( QCString() );
+     d->activeSheet->setProtected( Q3CString() );
    }
    doc()->setModified( true );
    d->adjustActions( !mode );
@@ -5545,16 +5557,16 @@ void View::refreshView()
   if ((sheetDir == Sheet::LeftToRight && !interfaceIsRTL) ||
       (sheetDir == Sheet::RightToLeft && interfaceIsRTL))
   {
-    d->formulaBarLayout->setDirection( QBoxLayout::LeftToRight );
-    d->viewLayout->setOrigin( QGridLayout::TopLeft );
-    d->tabScrollBarLayout->setDirection( QBoxLayout::LeftToRight );
+    d->formulaBarLayout->setDirection( Q3BoxLayout::LeftToRight );
+    d->viewLayout->setOrigin( Qt::TopLeftCorner );
+    d->tabScrollBarLayout->setDirection( Q3BoxLayout::LeftToRight );
     d->tabBar->setReverseLayout( interfaceIsRTL );
   }
   else
   {
-    d->formulaBarLayout->setDirection( QBoxLayout::RightToLeft );
-    d->viewLayout->setOrigin( QGridLayout::TopRight );
-    d->tabScrollBarLayout->setDirection( QBoxLayout::RightToLeft );
+    d->formulaBarLayout->setDirection( Q3BoxLayout::RightToLeft );
+    d->viewLayout->setOrigin( Qt::TopRightCorner );
+    d->tabScrollBarLayout->setDirection( Q3BoxLayout::RightToLeft );
     d->tabBar->setReverseLayout( !interfaceIsRTL );
   }
 
@@ -5611,7 +5623,7 @@ void View::popupColumnMenu( const QPoint & _point )
 
     delete d->popupColumn ;
 
-    d->popupColumn = new QPopupMenu( this );
+    d->popupColumn = new Q3PopupMenu( this );
 
     bool isProtected = d->activeSheet->isProtected();
 
@@ -5707,7 +5719,7 @@ void View::popupRowMenu( const QPoint & _point )
 
     delete d->popupRow ;
 
-    d->popupRow= new QPopupMenu();
+    d->popupRow= new Q3PopupMenu();
 
     bool isProtected = d->activeSheet->isProtected();
 
@@ -5801,7 +5813,7 @@ void View::slotListChoosePopupMenu( )
   assert( d->activeSheet );
   delete d->popupListChoose;
 
-  d->popupListChoose = new QPopupMenu();
+  d->popupListChoose = new Q3PopupMenu();
   int id = 0;
   QRect selection( d->selection->selection() );
   Cell * cell = d->activeSheet->cellAt( d->canvas->markerColumn(), d->canvas->markerRow() );
@@ -5910,7 +5922,7 @@ void View::openPopupMenu( const QPoint & _point )
     if ( !koDocument()->isReadWrite() )
         return;
 
-    d->popupMenu = new QPopupMenu();
+    d->popupMenu = new Q3PopupMenu();
 
     EmbeddedObject *obj;
     if ( d->canvas->isObjectSelected() && ( obj = d->canvas->getObject( d->canvas->mapFromGlobal( _point ), d->activeSheet ) ) && obj->isSelected() )
@@ -5983,11 +5995,11 @@ void View::openPopupMenu( const QPoint & _point )
     {
       d->popupMenuFirstToolId = 10;
       int i = 0;
-      QValueList<KDataToolInfo> tools = KDataToolInfo::query( "QString", "text/plain", doc()->instance() );
+      Q3ValueList<KDataToolInfo> tools = KDataToolInfo::query( "QString", "text/plain", doc()->instance() );
       if ( tools.count() > 0 )
       {
         d->popupMenu->insertSeparator();
-        QValueList<KDataToolInfo>::Iterator entry = tools.begin();
+        Q3ValueList<KDataToolInfo>::Iterator entry = tools.begin();
         for( ; entry != tools.end(); ++entry )
         {
           QStringList lst = (*entry).userCommands();
@@ -6069,7 +6081,7 @@ void View::deleteSelection()
 void View::deleteSelectedObjects()
 {
   KMacroCommand * macroCommand = 0L;
-  QPtrListIterator<EmbeddedObject> it( doc()->embeddedObjects() );
+  Q3PtrListIterator<EmbeddedObject> it( doc()->embeddedObjects() );
   for ( ; it.current() ; ++it )
   {
     if ( it.current()->sheet() == canvasWidget()->activeSheet() && it.current()->isSelected() )
@@ -6690,7 +6702,7 @@ void View::insertChart()
     KMessageBox::error( this, i18n("Area too large."));
     return;
   }
-  QValueList<KoDocumentEntry> vec = KoDocumentEntry::query( true, "'KOfficeChart' in ServiceTypes" );
+  Q3ValueList<KoDocumentEntry> vec = KoDocumentEntry::query( true, "'KOfficeChart' in ServiceTypes" );
   if ( vec.isEmpty() )
   {
     KMessageBox::error( this, i18n("No charting component registered.") );
@@ -7117,7 +7129,7 @@ void View::statusBarClicked(int _id)
   if ( _id == 0 ) //menu calc
   {
     QPoint mousepos = QCursor::pos();
-    ((QPopupMenu*)factory()->container( "calc_popup" , this ) )->popup( mousepos );
+    ((Q3PopupMenu*)factory()->container( "calc_popup" , this ) )->popup( mousepos );
   }
 }
 
@@ -7317,7 +7329,7 @@ void View::popupTabBarMenu( const QPoint & _point )
       d->actions->hideSheet->setEnabled( false );
       d->actions->removeSheet->setEnabled( false );
     }
-    static_cast<QPopupMenu*>(factory()->container("menupage_popup",this))->popup(_point);
+    static_cast<Q3PopupMenu*>(factory()->container("menupage_popup",this))->popup(_point);
   }
 }
 
@@ -7429,9 +7441,9 @@ void View::saveCurrentSheetSelection()
     }
 }
 
-void View::handleDamages( const QValueList<Damage*>& damages )
+void View::handleDamages( const Q3ValueList<Damage*>& damages )
 {
-    QValueList<Damage*>::ConstIterator it;
+    Q3ValueList<Damage*>::ConstIterator it;
     for( it = damages.begin(); it != damages.end(); ++it )
     {
         Damage* damage = *it;

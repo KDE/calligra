@@ -35,6 +35,8 @@
 #include <kdebug.h>
 #include <qdom.h>
 #include <qbuffer.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 #include "kspread_condition.h"
 
@@ -101,7 +103,7 @@ bool Conditions::currentCondition( Conditional & condition )
 {
   /* for now, the first condition that is true is the one that will be used */
 
-  QValueList<Conditional>::const_iterator it;
+  Q3ValueList<Conditional>::const_iterator it;
   double value   = m_cell->value().asFloat();
   QString strVal = m_cell->text();
 
@@ -234,16 +236,16 @@ bool Conditions::currentCondition( Conditional & condition )
   return false;
 }
 
-QValueList<Conditional> Conditions::conditionList() const
+Q3ValueList<Conditional> Conditions::conditionList() const
 {
   return m_condList;
 }
 
-void Conditions::setConditionList( const QValueList<Conditional> & list )
+void Conditions::setConditionList( const Q3ValueList<Conditional> & list )
 {
   m_condList.clear();
 
-  QValueList<Conditional>::const_iterator it;
+  Q3ValueList<Conditional>::const_iterator it;
   for ( it = list.begin(); it != list.end(); ++it )
   {
     Conditional d = *it;
@@ -256,7 +258,7 @@ void Conditions::saveOasisConditions( KoGenStyle &currentCellStyle )
     //todo fix me with kspread old format!!!
     if ( m_condList.isEmpty() )
         return;
-    QValueList<Conditional>::const_iterator it;
+    Q3ValueList<Conditional>::const_iterator it;
     int i = 0;
     for ( it = m_condList.begin(); it != m_condList.end(); ++it, ++i )
     {
@@ -363,7 +365,7 @@ QString Conditions::saveOasisConditionValue( Conditional &condition)
 QDomElement Conditions::saveConditions( QDomDocument & doc ) const
 {
   QDomElement conditions = doc.createElement("condition");
-  QValueList<Conditional>::const_iterator it;
+  Q3ValueList<Conditional>::const_iterator it;
   QDomElement child;
   int num = 0;
   QString name;

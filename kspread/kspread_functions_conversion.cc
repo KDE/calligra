@@ -24,6 +24,8 @@
 #include "functions.h"
 #include "valuecalc.h"
 #include "valueconverter.h"
+//Added by qt3to4:
+#include <Q3CString>
 
 using namespace KSpread;
 
@@ -158,10 +160,10 @@ Value func_sexdec (valVector args, ValueCalc *calc, FuncExtra *)
 // Function: ROMAN
 Value func_roman (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  const QCString RNUnits[] = {"", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX"};
-  const QCString RNTens[] = {"", "X", "XX", "XXX", "XL", "L", "LX", "LXX", "LXXX", "XC"};
-  const QCString RNHundreds[] = {"", "C", "CC", "CCC", "CD", "D", "DC", "DCC", "DCCC", "CM"};
-  const QCString RNThousands[] = {"", "M", "MM", "MMM"};
+  const Q3CString RNUnits[] = {"", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX"};
+  const Q3CString RNTens[] = {"", "X", "XX", "XXX", "XL", "L", "LX", "LXX", "LXXX", "XC"};
+  const Q3CString RNHundreds[] = {"", "C", "CC", "CCC", "CD", "D", "DC", "DCC", "DCCC", "CM"};
+  const Q3CString RNThousands[] = {"", "M", "MM", "MMM"};
 
   // precision loss is not a problem here, as we only use the 0-3999 range
   long value = calc->conv()->asInteger (args[0]).asInteger ();

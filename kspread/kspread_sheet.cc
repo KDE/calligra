@@ -33,10 +33,16 @@
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qlineedit.h>
-#include <qpicture.h>
+#include <q3picture.h>
 #include <qregexp.h>
-#include <qvbox.h>
+#include <q3vbox.h>
 #include <qmap.h>
+//Added by qt3to4:
+#include <QTextStream>
+#include <Q3CString>
+#include <Q3ValueList>
+#include <Q3PtrList>
+#include <QPixmap>
 
 #include <kdebug.h>
 #include <kcodecs.h>
@@ -213,7 +219,7 @@ void ChartBinding::cellChanged( Cell* /*changedCell*/ )
 
 
 TextDrag::TextDrag( QWidget * dragSource, const char * name )
-    : QTextDrag( dragSource, name )
+    : Q3TextDrag( dragSource, name )
 {
 }
 
@@ -227,20 +233,20 @@ QByteArray TextDrag::encodedData( const char * mime ) const
   if ( strcmp( selectionMimeType(), mime ) == 0)
     return m_kspread;
   else
-    return QTextDrag::encodedData( mime );
+    return Q3TextDrag::encodedData( mime );
 }
 
 bool TextDrag::canDecode( QMimeSource* e )
 {
   if ( e->provides( selectionMimeType() ) )
     return true;
-  return QTextDrag::canDecode(e);
+  return Q3TextDrag::canDecode(e);
 }
 
 const char * TextDrag::format( int i ) const
 {
   if ( i < 4 ) // HACK, but how to do otherwise ??
-    return QTextDrag::format(i);
+    return Q3TextDrag::format(i);
   else if ( i == 4 )
     return selectionMimeType();
   else return 0;
@@ -274,7 +280,7 @@ public:
   bool hide;
 
   // password of protected sheet
-  QCString password;
+  Q3CString password;
 
 
   bool showGrid;
@@ -310,7 +316,7 @@ public:
 
   // List of all cell bindings. For example charts use bindings to get
   // informed about changing cell contents.
-  QPtrList<CellBinding> cellBindings;
+  Q3PtrList<CellBinding> cellBindings;
 
   // Indicates whether the sheet should paint the page breaks.
   // Doing so costs some time, so by default it should be turned off.
@@ -342,7 +348,7 @@ public:
 };
 
 int Sheet::s_id = 0L;
-QIntDict<Sheet>* Sheet::s_mapSheets;
+Q3IntDict<Sheet>* Sheet::s_mapSheets;
 
 Sheet* Sheet::find( int _id )
 {
@@ -357,7 +363,7 @@ Sheet::Sheet (Map* map,
   : QObject( map, _name )
 {
   if ( s_mapSheets == 0L )
-    s_mapSheets = new QIntDict<Sheet>;
+    s_mapSheets = new Q3IntDict<Sheet>;
   d = new Private;
 
   d->workbook = map;
@@ -413,7 +419,7 @@ Sheet::Sheet (Map* map,
   // Get a unique name so that we can offer scripting
   if ( !_name )
   {
-      QCString s;
+      Q3CString s;
       s.sprintf("Sheet%i", s_id );
       QObject::setName( s.data() );
   }
@@ -660,7 +666,7 @@ Value Sheet::valueRange (int col1, int row1,
   return d->cells.valueRange (col1, row1, col2, row2);
 }
 
-void Sheet::password( QCString & passwd ) const
+void Sheet::password( Q3CString & passwd ) const
 {
     passwd = d->password;
 }
@@ -670,12 +676,12 @@ bool Sheet::isProtected() const
     return !d->password.isNull();
 }
 
-void Sheet::setProtected( QCString const & passwd )
+void Sheet::setProtected( Q3CString const & passwd )
 {
   d->password = passwd;
 }
 
-bool Sheet::checkPassword( QCString const & passwd ) const
+bool Sheet::checkPassword( Q3CString const & passwd ) const
 {
     return ( passwd == d->password );
 }
@@ -765,7 +771,7 @@ int Sheet::numSelected() const
 {
     int num = 0;
 
-    QPtrListIterator<EmbeddedObject> it(  d->workbook->doc()->embeddedObjects() );
+    Q3PtrListIterator<EmbeddedObject> it(  d->workbook->doc()->embeddedObjects() );
     for ( ; it.current() ; ++it )
     {
         if( it.current()->sheet() == this && it.current()->isSelected() )
@@ -2378,7 +2384,7 @@ bool Sheet::shiftRow( const QRect &rect,bool makeUndo )
                 res=false;
         }
     }
-    QPtrListIterator<Sheet> it( workbook()->sheetList() );
+    Q3PtrListIterator<Sheet> it( workbook()->sheetList() );
     for( ; it.current(); ++it )
     {
         for(int i = rect.top(); i <= rect.bottom(); i++ )
@@ -2416,7 +2422,7 @@ bool Sheet::shiftColumn( const QRect& rect,bool makeUndo )
         }
     }
 
-    QPtrListIterator<Sheet> it( workbook()->sheetList() );
+    Q3PtrListIterator<Sheet> it( workbook()->sheetList() );
     for( ; it.current(); ++it )
     {
         for(int i=rect.left();i<=rect.right();i++)
@@ -2450,7 +2456,7 @@ void Sheet::unshiftColumn( const QRect & rect,bool makeUndo )
         for(int j=0;j<=(rect.bottom()-rect.top());j++)
                 d->cells.unshiftColumn( QPoint(i,rect.top()) );
 
-    QPtrListIterator<Sheet> it( workbook()->sheetList() );
+    Q3PtrListIterator<Sheet> it( workbook()->sheetList() );
     for( ; it.current(); ++it )
         for(int i=rect.left();i<=rect.right();i++)
                 it.current()->changeNameCellRef( QPoint( i, rect.top() ), false,
@@ -2480,7 +2486,7 @@ void Sheet::unshiftRow( const QRect & rect,bool makeUndo )
         for(int j=0;j<=(rect.right()-rect.left());j++)
                 d->cells.unshiftRow( QPoint(rect.left(),i) );
 
-    QPtrListIterator<Sheet> it( workbook()->sheetList() );
+    Q3PtrListIterator<Sheet> it( workbook()->sheetList() );
     for( ; it.current(); ++it )
         for(int i=rect.top();i<=rect.bottom();i++)
                 it.current()->changeNameCellRef( QPoint( rect.left(), i ), false,
@@ -2519,7 +2525,7 @@ bool Sheet::insertColumn( int col, int nbCol, bool makeUndo )
         d->sizeMaxX += columnFormat( col+i )->dblWidth();
     }
 
-    QPtrListIterator<Sheet> it( workbook()->sheetList() );
+    Q3PtrListIterator<Sheet> it( workbook()->sheetList() );
     for( ; it.current(); ++it )
         it.current()->changeNameCellRef( QPoint( col, 1 ), true,
                                          Sheet::ColumnInsert, name(),
@@ -2562,7 +2568,7 @@ bool Sheet::insertRow( int row, int nbRow, bool makeUndo )
         d->sizeMaxY += rowFormat( row )->dblHeight();
     }
 
-    QPtrListIterator<Sheet> it( workbook()->sheetList() );
+    Q3PtrListIterator<Sheet> it( workbook()->sheetList() );
     for( ; it.current(); ++it )
         it.current()->changeNameCellRef( QPoint( 1, row ), true,
                                          Sheet::RowInsert, name(),
@@ -2601,7 +2607,7 @@ void Sheet::removeColumn( int col, int nbCol, bool makeUndo )
         d->sizeMaxX += columnFormat( KS_colMax )->dblWidth();
     }
 
-    QPtrListIterator<Sheet> it( workbook()->sheetList() );
+    Q3PtrListIterator<Sheet> it( workbook()->sheetList() );
     for( ; it.current(); ++it )
         it.current()->changeNameCellRef( QPoint( col, 1 ), true,
                                          Sheet::ColumnRemove, name(),
@@ -2638,7 +2644,7 @@ void Sheet::removeRow( int row, int nbRow, bool makeUndo )
         d->sizeMaxY += rowFormat( KS_rowMax )->dblHeight();
     }
 
-    QPtrListIterator<Sheet> it( workbook()->sheetList() );
+    Q3PtrListIterator<Sheet> it( workbook()->sheetList() );
     for( ; it.current(); ++it )
         it.current()->changeNameCellRef( QPoint( 1, row ), true,
                                          Sheet::RowRemove, name(),
@@ -4041,7 +4047,7 @@ void Sheet::swapCells( int x1, int y1, int x2, int y2, bool cpFormat )
     ref1->format()->setIndent( ref2->format()->getIndent( ref2->column(), ref2->row() ) );
     ref2->format()->setIndent( ind );
 
-    QValueList<Conditional> conditionList = ref1->conditionList();
+    Q3ValueList<Conditional> conditionList = ref1->conditionList();
     ref1->setConditionList(ref2->conditionList());
     ref2->setConditionList(conditionList);
 
@@ -4636,7 +4642,7 @@ struct ClearConditionalSelectionWorker : public Sheet::CellWorker
   }
   void doWork( Cell* cell, bool, int, int )
   {
-    QValueList<Conditional> emptyList;
+    Q3ValueList<Conditional> emptyList;
     cell->setConditionList(emptyList);
   }
 };
@@ -4664,7 +4670,7 @@ void Sheet::fillSelection( Selection * selectionInfo, int direction )
 
   switch( direction )
   {
-   case Right:
+   case Qt::DockRight:
     doc = saveCellRegion( QRect( left, top, 1, height ) );
     break;
 
@@ -4672,7 +4678,7 @@ void Sheet::fillSelection( Selection * selectionInfo, int direction )
     doc = saveCellRegion( QRect( left, bottom, width, 1 ) );
     break;
 
-   case Left:
+   case Qt::DockLeft:
     doc = saveCellRegion( QRect( right, top, 1, height ) );
     break;
 
@@ -4692,7 +4698,7 @@ void Sheet::fillSelection( Selection * selectionInfo, int direction )
   int i;
   switch( direction )
   {
-   case Right:
+   case Qt::DockRight:
     for ( i = left + 1; i <= right; ++i )
     {
       paste( buffer.buffer(), QRect( i, top, 1, 1 ), false );
@@ -4706,7 +4712,7 @@ void Sheet::fillSelection( Selection * selectionInfo, int direction )
     }
     break;
 
-   case Left:
+   case Qt::DockLeft:
     for ( i = right - 1; i >= left; --i )
     {
       paste( buffer.buffer(), QRect( i, top, 1, 1 ), false );
@@ -4771,8 +4777,8 @@ void Sheet::defaultSelection( Selection* selectionInfo )
 
 struct SetConditionalWorker : public Sheet::CellWorker
 {
-  QValueList<Conditional> conditionList;
-  SetConditionalWorker( QValueList<Conditional> _tmp ) :
+  Q3ValueList<Conditional> conditionList;
+  SetConditionalWorker( Q3ValueList<Conditional> _tmp ) :
     Sheet::CellWorker( ), conditionList( _tmp ) { }
 
   class UndoAction* createUndoAction( Doc* doc,
@@ -4797,7 +4803,7 @@ struct SetConditionalWorker : public Sheet::CellWorker
 };
 
 void Sheet::setConditional( Selection* selectionInfo,
-                                   QValueList<Conditional> const & newConditions)
+                                   Q3ValueList<Conditional> const & newConditions)
 {
   if ( !doc()->undoLocked() )
   {
@@ -5530,7 +5536,7 @@ bool Sheet::testAreaPasteInsert()const
 void Sheet::deleteCells(const Region& region)
 {
     // A list of all cells we want to delete.
-    QPtrStack<Cell> cellStack;
+    Q3PtrStack<Cell> cellStack;
 
   Region::ConstIterator endOfList = region.constEnd();
   for (Region::ConstIterator it = region.constBegin(); it != endOfList; ++it)
@@ -5910,7 +5916,7 @@ QDomElement Sheet::saveXML( QDomDocument& dd )
     {
       if ( d->password.size() > 0 )
       {
-        QCString str = KCodecs::base64Encode( d->password );
+        Q3CString str = KCodecs::base64Encode( d->password );
         sheet.setAttribute( "protected", QString( str.data() ) );
       }
       else
@@ -6053,7 +6059,7 @@ QDomElement Sheet::saveXML( QDomDocument& dd )
         }
     }
 
-    QPtrListIterator<EmbeddedObject>  chl = doc()->embeddedObjects();
+    Q3PtrListIterator<EmbeddedObject>  chl = doc()->embeddedObjects();
     for( ; chl.current(); ++chl )
     {
        if ( chl.current()->sheet() == this )
@@ -6074,10 +6080,10 @@ bool Sheet::isLoading()
 }
 
 
-QPtrList<EmbeddedObject> Sheet::getSelectedObjects()
+Q3PtrList<EmbeddedObject> Sheet::getSelectedObjects()
 {
-    QPtrList<EmbeddedObject> objects;
-    QPtrListIterator<EmbeddedObject> it = doc()->embeddedObjects();
+    Q3PtrList<EmbeddedObject> objects;
+    Q3PtrListIterator<EmbeddedObject> it = doc()->embeddedObjects();
     for ( ; it.current() ; ++it )
     {
         if( it.current()->isSelected()
@@ -6093,7 +6099,7 @@ KoRect Sheet::getRealRect( bool all )
 {
     KoRect rect;
 
-    QPtrListIterator<EmbeddedObject> it( doc()->embeddedObjects() );
+    Q3PtrListIterator<EmbeddedObject> it( doc()->embeddedObjects() );
     for ( ; it.current() ; ++it )
     {
 
@@ -6110,9 +6116,9 @@ KCommand *Sheet::moveObject(View *_view, double diffx, double diffy)
     bool createCommand=false;
     MoveObjectByCmd *moveByCmd=0L;
     Canvas * canvas = _view->canvasWidget();
-    QPtrList<EmbeddedObject> _objects;
+    Q3PtrList<EmbeddedObject> _objects;
     _objects.setAutoDelete( false );
-    QPtrListIterator<EmbeddedObject> it( doc()->embeddedObjects()/*m_objectList*/ );
+    Q3PtrListIterator<EmbeddedObject> it( doc()->embeddedObjects()/*m_objectList*/ );
     for ( ; it.current() ; ++it )
     {
         if ( it.current()->isSelected() && !it.current()->isProtect())
@@ -6139,11 +6145,11 @@ KCommand *Sheet::moveObject(View *_view, double diffx, double diffy)
 
 KCommand *Sheet::moveObject(View *_view,const KoPoint &_move,bool key)
 {
-    QPtrList<EmbeddedObject> _objects;
+    Q3PtrList<EmbeddedObject> _objects;
     _objects.setAutoDelete( false );
     MoveObjectByCmd *moveByCmd=0L;
     Canvas * canvas = _view->canvasWidget();
-    QPtrListIterator<EmbeddedObject> it( doc()->embeddedObjects()/*m_objectList*/ );
+    Q3PtrListIterator<EmbeddedObject> it( doc()->embeddedObjects()/*m_objectList*/ );
     for ( ; it.current() ; ++it )
     {
         if ( it.current()->isSelected() && !it.current()->isProtect()) {
@@ -6175,8 +6181,8 @@ KCommand *Sheet::moveObject(View *_view,const KoPoint &_move,bool key)
 /*
  * Check if object name already exists.
  */
-bool Sheet::objectNameExists( EmbeddedObject *object, QPtrList<EmbeddedObject> &list ) {
-    QPtrListIterator<EmbeddedObject> it( list );
+bool Sheet::objectNameExists( EmbeddedObject *object, Q3PtrList<EmbeddedObject> &list ) {
+    Q3PtrListIterator<EmbeddedObject> it( list );
 
     for ( it.toFirst(); it.current(); ++it ) {
         // object name can exist in current object.
@@ -6194,7 +6200,7 @@ void Sheet::unifyObjectName( EmbeddedObject *object ) {
     }
     QString objectName( object->getObjectName() );
 
-    QPtrList<EmbeddedObject> list( doc()->embeddedObjects() );
+    Q3PtrList<EmbeddedObject> list( doc()->embeddedObjects() );
 
     int count = 1;
 
@@ -6357,7 +6363,7 @@ QString Sheet::getPart( const QDomNode & part )
 }
 
 
-bool Sheet::loadOasis( const QDomElement& sheetElement, KoOasisLoadingContext& oasisContext, QDict<Style>& styleMap )
+bool Sheet::loadOasis( const QDomElement& sheetElement, KoOasisLoadingContext& oasisContext, Q3Dict<Style>& styleMap )
 {
     d->layoutDirection = LeftToRight;
     if ( sheetElement.hasAttributeNS( KoXmlNS::table, "style-name" ) )
@@ -6456,11 +6462,11 @@ bool Sheet::loadOasis( const QDomElement& sheetElement, KoOasisLoadingContext& o
 
     if ( sheetElement.attributeNS( KoXmlNS::table, "protected", QString::null ) == "true" )
     {
-        QCString passwd( "" );
+        Q3CString passwd( "" );
         if ( sheetElement.hasAttributeNS( KoXmlNS::table, "protection-key" ) )
         {
             QString p = sheetElement.attributeNS( KoXmlNS::table, "protection-key", QString::null );
-            QCString str( p.latin1() );
+            Q3CString str( p.latin1() );
             kDebug(30518) << "Decoding password: " << str << endl;
             passwd = KCodecs::base64Decode( str );
         }
@@ -6655,7 +6661,7 @@ void Sheet::loadOasisMasterLayoutPage( KoStyleStack &styleStack )
 }
 
 
-bool Sheet::loadColumnFormat(const QDomElement& column, const KoOasisStyles& oasisStyles, int & indexCol, const QDict<Style>& styleMap)
+bool Sheet::loadColumnFormat(const QDomElement& column, const KoOasisStyles& oasisStyles, int & indexCol, const Q3Dict<Style>& styleMap)
 {
     kDebug()<<"bool Sheet::loadColumnFormat(const QDomElement& column, const KoOasisStyles& oasisStyles, unsigned int & indexCol ) index Col :"<<indexCol<<endl;
 
@@ -6747,7 +6753,7 @@ bool Sheet::loadColumnFormat(const QDomElement& column, const KoOasisStyles& oas
 }
 
 
-bool Sheet::loadRowFormat( const QDomElement& row, int &rowIndex, KoOasisLoadingContext& oasisContext,  QDict<Style>& styleMap )
+bool Sheet::loadRowFormat( const QDomElement& row, int &rowIndex, KoOasisLoadingContext& oasisContext,  Q3Dict<Style>& styleMap )
 {
 //    kDebug()<<"Sheet::loadRowFormat( const QDomElement& row, int &rowIndex,const KoOasisStyles& oasisStyles, bool isLast )***********\n";
     double height = -1.0;
@@ -7235,7 +7241,7 @@ bool Sheet::saveOasis( KoXmlWriter & xmlWriter, KoGenStyles &mainStyles, GenVali
     if ( !d->password.isEmpty() )
     {
         xmlWriter.addAttribute("table:protected", "true" );
-        QCString str = KCodecs::base64Encode( d->password );
+        Q3CString str = KCodecs::base64Encode( d->password );
         xmlWriter.addAttribute("table:protection-key", QString( str.data() ) );/* FIXME !!!!*/
     }
     QRect _printRange = d->print->printRange();
@@ -7813,11 +7819,11 @@ bool Sheet::loadXML( const QDomElement& sheet )
 
       if ( passwd.length() > 0 )
       {
-        QCString str( passwd.latin1() );
+        Q3CString str( passwd.latin1() );
         d->password = KCodecs::base64Decode( str );
       }
       else
-        d->password = QCString( "" );
+        d->password = Q3CString( "" );
     }
 
     return true;
@@ -7826,7 +7832,7 @@ bool Sheet::loadXML( const QDomElement& sheet )
 
 bool Sheet::loadChildren( KoStore* _store )
 {
-    QPtrListIterator<EmbeddedObject> it( doc()->embeddedObjects() );
+    Q3PtrListIterator<EmbeddedObject> it( doc()->embeddedObjects() );
     for( ; it.current(); ++it )
     {
         if ( it.current()->sheet() == this && ( it.current()->getType() == OBJECT_KOFFICE_PART || it.current()->getType() == OBJECT_CHART ) )
@@ -8099,7 +8105,7 @@ bool Sheet::saveChildren( KoStore* _store, const QString &_path )
 {
     int i = 0;
 
-    QPtrListIterator<EmbeddedObject> it( doc()->embeddedObjects() );
+    Q3PtrListIterator<EmbeddedObject> it( doc()->embeddedObjects() );
     for( ; it.current(); ++it )
     {
         if ( it.current()->sheet() == this && ( it.current()->getType() == OBJECT_KOFFICE_PART || it.current()->getType() == OBJECT_CHART ) )
@@ -8120,7 +8126,7 @@ bool Sheet::saveOasisObjects( KoStore */*store*/, KoXmlWriter &xmlWriter, KoGenS
 
   bool objectFound = false; // object on this sheet?
   EmbeddedObject::KSpreadOasisSaveContext sc( xmlWriter, mainStyles, indexObj, partIndexObj );
-  QPtrListIterator<EmbeddedObject> it( doc()->embeddedObjects() );
+  Q3PtrListIterator<EmbeddedObject> it( doc()->embeddedObjects() );
   for( ; it.current(); ++it )
   {
     if ( it.current()->sheet() == this && ( doc()->savingWholeDocument() || it.current()->isSelected() ) )
@@ -8251,7 +8257,7 @@ bool Sheet::setSheetName( const QString& name, bool init, bool /*makeUndo*/ )
     if ( init )
         return true;
 
-    QPtrListIterator<Sheet> it( workbook()->sheetList() );
+    Q3PtrListIterator<Sheet> it( workbook()->sheetList() );
     for ( ; it.current(); ++it )
         it.current()->changeCellTabName( old_name, name );
 

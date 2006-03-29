@@ -31,6 +31,9 @@
 #include <math.h>
 
 #include <qregexp.h>
+//Added by qt3to4:
+#include <Q3PtrList>
+#include <Q3MemArray>
 
 #include <kconfig.h>
 #include <kdebug.h>
@@ -66,7 +69,7 @@ AutoFillDeltaSequence::AutoFillDeltaSequence( AutoFillSequence *_first, AutoFill
     return;
   }
 
-  m_sequence = new QMemArray<double> ( _first->count() );
+  m_sequence = new Q3MemArray<double> ( _first->count() );
 
   AutoFillSequenceItem *item = _first->getFirst();
   AutoFillSequenceItem *item2 = _next->getFirst();
@@ -598,13 +601,13 @@ void Sheet::autofill( QRect &src, QRect &dest )
         for ( int y = src.top(); y <= src.bottom(); y++ )
         {
             int x;
-            QPtrList<Cell> destList;
+            Q3PtrList<Cell> destList;
             for ( x = src.right() + 1; x <= dest.right(); x++ )
                 destList.append( nonDefaultCell( x, y ) );
-            QPtrList<Cell> srcList;
+            Q3PtrList<Cell> srcList;
             for ( x = src.left(); x <= src.right(); x++ )
                 srcList.append( cellAt( x, y ) );
-            QPtrList<AutoFillSequence> seqList;
+            Q3PtrList<AutoFillSequence> seqList;
             seqList.setAutoDelete( true );
             for ( x = src.left(); x <= src.right(); x++ )
                 seqList.append( new AutoFillSequence( cellAt( x, y ) ) );
@@ -618,15 +621,15 @@ void Sheet::autofill( QRect &src, QRect &dest )
         for ( int x = src.left(); x <= dest.right(); x++ )
         {
             int y;
-            QPtrList<Cell> destList;
+            Q3PtrList<Cell> destList;
             for ( y = src.bottom() + 1; y <= dest.bottom(); y++ )
                 destList.append( nonDefaultCell( x, y ) );
-            QPtrList<Cell> srcList;
+            Q3PtrList<Cell> srcList;
             for ( y = src.top(); y <= src.bottom(); y++ )
             {
                 srcList.append( cellAt( x, y ) );
             }
-            QPtrList<AutoFillSequence> seqList;
+            Q3PtrList<AutoFillSequence> seqList;
             seqList.setAutoDelete( true );
             for ( y = src.top(); y <= src.bottom(); y++ )
                 seqList.append( new AutoFillSequence( cellAt( x, y ) ) );
@@ -643,18 +646,18 @@ void Sheet::autofill( QRect &src, QRect &dest )
         for ( int y = dest.top(); y <= dest.bottom(); y++ )
         {
             int x;
-            QPtrList<Cell> destList;
+            Q3PtrList<Cell> destList;
 
             for ( x = dest.left(); x < src.left(); x++ )
             {
                 destList.append( nonDefaultCell( x, y ) );
             }
-            QPtrList<Cell> srcList;
+            Q3PtrList<Cell> srcList;
             for ( x = src.left(); x <= src.right(); x++ )
             {
                 srcList.append( cellAt( x, y ) );
             }
-            QPtrList<AutoFillSequence> seqList;
+            Q3PtrList<AutoFillSequence> seqList;
             seqList.setAutoDelete( true );
             for ( x = src.left(); x <= src.right(); x++ )
                 seqList.append( new AutoFillSequence( cellAt( x, y ) ) );
@@ -672,15 +675,15 @@ void Sheet::autofill( QRect &src, QRect &dest )
         for ( int x = startVal; x <= endVal; x++ )
         {
             int y;
-            QPtrList<Cell> destList;
+            Q3PtrList<Cell> destList;
             for ( y = dest.top(); y < src.top(); y++ )
                 destList.append( nonDefaultCell( x, y ) );
-            QPtrList<Cell> srcList;
+            Q3PtrList<Cell> srcList;
             for ( y = src.top(); y <= src.bottom(); ++y )
             {
                 srcList.append( cellAt( x, y ) );
             }
-            QPtrList<AutoFillSequence> seqList;
+            Q3PtrList<AutoFillSequence> seqList;
             seqList.setAutoDelete( true );
             for ( y = src.top(); y <= src.bottom(); y++ )
                 seqList.append( new AutoFillSequence( cellAt( x, y ) ) );
@@ -693,9 +696,9 @@ void Sheet::autofill( QRect &src, QRect &dest )
 }
 
 
-void Sheet::fillSequence( QPtrList<Cell>& _srcList,
-				 QPtrList<Cell>& _destList,
-                                 QPtrList<AutoFillSequence>& _seqList,
+void Sheet::fillSequence( Q3PtrList<Cell>& _srcList,
+				 Q3PtrList<Cell>& _destList,
+                                 Q3PtrList<AutoFillSequence>& _seqList,
                                  bool down)
 {
     doc()->emitBeginOperation(true);
@@ -729,15 +732,15 @@ QVariant getDiff( const Value& value1, const Value& value2  , AutoFillSequenceIt
     return 0.0;*/
 }
 
-bool Sheet::FillSequenceWithInterval(QPtrList<Cell>& _srcList,
-                                            QPtrList<Cell>& _destList,
-                                            QPtrList<AutoFillSequence>& _seqList,
+bool Sheet::FillSequenceWithInterval(Q3PtrList<Cell>& _srcList,
+                                            Q3PtrList<Cell>& _destList,
+                                            Q3PtrList<AutoFillSequence>& _seqList,
                                             bool down)
 {
   if (_srcList.first()->isFormula())
     return false;
 
-  QPtrList<AutoFillDeltaSequence> deltaList;
+  Q3PtrList<AutoFillDeltaSequence> deltaList;
   deltaList.setAutoDelete( true );
   bool ok = false;
 
@@ -745,8 +748,8 @@ bool Sheet::FillSequenceWithInterval(QPtrList<Cell>& _srcList,
   {
     AutoFillSequenceItem::Type type;
 
-    QValueVector< QVariant > tmp( _seqList.count() );  /*= new QValueList< QVariant > ( _seqList.count() )*/;
-    QValueVector< QVariant > diff( _seqList.count() ); /*= new QValueList< QVariant > ( _seqList.count() )*/;
+    Q3ValueVector< QVariant > tmp( _seqList.count() );  /*= new QValueList< QVariant > ( _seqList.count() )*/;
+    Q3ValueVector< QVariant > diff( _seqList.count() ); /*= new QValueList< QVariant > ( _seqList.count() )*/;
     int p = -1;
     int count = 0;
     int tmpcount = 0;
@@ -1065,8 +1068,8 @@ bool Sheet::FillSequenceWithInterval(QPtrList<Cell>& _srcList,
   return ok;
 }
 
-void Sheet::FillSequenceWithCopy(QPtrList<Cell>& _srcList,
-                                        QPtrList<Cell>& _destList,
+void Sheet::FillSequenceWithCopy(Q3PtrList<Cell>& _srcList,
+                                        Q3PtrList<Cell>& _destList,
                                         bool down)
 {
   // We did not find any valid interval. So just copy over the marked

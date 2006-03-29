@@ -44,6 +44,8 @@
 #include "digest.h"
 #include <kdebug.h>
 #include <kcodecs.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 typedef unsigned char sal_uInt8;
 typedef unsigned short sal_uInt16;

@@ -29,6 +29,9 @@
 #include "kspread_util.h"
 
 #include "kspread_sheetprint.h"
+//Added by qt3to4:
+#include <Q3ValueList>
+#include <Q3PtrList>
 
 using namespace KSpread;
 
@@ -821,7 +824,7 @@ void RenameNameObjectCommand::unexecute()
 //     doc->updateSideBarItem( m_page );
 }
 
-GeometryPropertiesCommand::GeometryPropertiesCommand( const QString &name, QPtrList<EmbeddedObject> &objects,
+GeometryPropertiesCommand::GeometryPropertiesCommand( const QString &name, Q3PtrList<EmbeddedObject> &objects,
                                                             bool newValue, KgpType type, Doc *_doc )
 : KNamedCommand( name )
 , m_objects( objects )
@@ -829,7 +832,7 @@ GeometryPropertiesCommand::GeometryPropertiesCommand( const QString &name, QPtrL
 , m_type( type )
     , m_doc( _doc )
 {
-    QPtrListIterator<EmbeddedObject> it( m_objects );
+    Q3PtrListIterator<EmbeddedObject> it( m_objects );
     for ( ; it.current() ; ++it )
     {
         it.current()->incCmdRef();
@@ -840,8 +843,8 @@ GeometryPropertiesCommand::GeometryPropertiesCommand( const QString &name, QPtrL
     }
 }
 
-GeometryPropertiesCommand::GeometryPropertiesCommand( const QString &name, QValueList<bool> &lst,
-                                                            QPtrList<EmbeddedObject> &objects, bool newValue,
+GeometryPropertiesCommand::GeometryPropertiesCommand( const QString &name, Q3ValueList<bool> &lst,
+                                                            Q3PtrList<EmbeddedObject> &objects, bool newValue,
                                                             KgpType type, Doc *_doc)
 : KNamedCommand( name )
 , m_oldValue( lst )
@@ -850,21 +853,21 @@ GeometryPropertiesCommand::GeometryPropertiesCommand( const QString &name, QValu
 , m_type( type )
 , m_doc ( _doc )
 {
-    QPtrListIterator<EmbeddedObject> it( m_objects );
+    Q3PtrListIterator<EmbeddedObject> it( m_objects );
     for ( ; it.current() ; ++it )
         it.current()->incCmdRef();
 }
 
 GeometryPropertiesCommand::~GeometryPropertiesCommand()
 {
-    QPtrListIterator<EmbeddedObject> it( m_objects );
+    Q3PtrListIterator<EmbeddedObject> it( m_objects );
     for ( ; it.current() ; ++it )
         it.current()->decCmdRef();
 }
 
 void GeometryPropertiesCommand::execute()
 {
-    QPtrListIterator<EmbeddedObject> it( m_objects );
+    Q3PtrListIterator<EmbeddedObject> it( m_objects );
     for ( ; it.current() ; ++it )
     {
         if ( m_type == ProtectSize )
@@ -894,14 +897,14 @@ void GeometryPropertiesCommand::unexecute()
     }
 }
 
-MoveObjectByCmd::MoveObjectByCmd( const QString &_name, const KoPoint &_diff, QPtrList<EmbeddedObject> &_objects,
+MoveObjectByCmd::MoveObjectByCmd( const QString &_name, const KoPoint &_diff, Q3PtrList<EmbeddedObject> &_objects,
                       Doc *_doc,Sheet *_page )
     : KNamedCommand( _name ), diff( _diff ), objects( _objects )
 {
     objects.setAutoDelete( false );
     doc = _doc;
     m_page=_page;
-    QPtrListIterator<EmbeddedObject> it( objects );
+    Q3PtrListIterator<EmbeddedObject> it( objects );
     for ( ; it.current() ; ++it )
     {
         it.current()->incCmdRef();
@@ -910,7 +913,7 @@ MoveObjectByCmd::MoveObjectByCmd( const QString &_name, const KoPoint &_diff, QP
 
 MoveObjectByCmd::~MoveObjectByCmd()
 {
-    QPtrListIterator<EmbeddedObject> it( objects );
+    Q3PtrListIterator<EmbeddedObject> it( objects );
     for ( ; it.current() ; ++it )
         it.current()->decCmdRef();
 }

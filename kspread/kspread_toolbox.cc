@@ -24,19 +24,24 @@
 
 #include <qlayout.h>
 #include <qspinbox.h>
-#include <qobjectlist.h>
+#include <qobject.h>
+//Added by qt3to4:
+#include <Q3VBoxLayout>
+#include <QMouseEvent>
+#include <Q3Frame>
+#include <QChildEvent>
 
 using namespace KSpread;
 
 ToolBox::ToolBox( QWidget* parent, const char* name )
-    : QFrame( parent, name, WType_TopLevel | WStyle_Tool )
+    : Q3Frame( parent, name, Qt::WType_TopLevel | Qt::WStyle_Tool )
 {
     KWin::setType( winId(), NET::Tool );
 
     setFrameShape( Panel );
     setFrameShadow( Raised );
 
-    m_layout = new QVBoxLayout( this, 2, 2 );
+    m_layout = new Q3VBoxLayout( this, 2, 2 );
     // m_layout->addSpacing( 12 );
 }
 

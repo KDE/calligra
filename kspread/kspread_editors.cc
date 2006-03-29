@@ -32,17 +32,24 @@
 #include <klistbox.h>
 
 #include <qapplication.h>
-#include <qlistbox.h>
+#include <q3listbox.h>
 #include <qtimer.h>
 #include <qlabel.h>
-#include <qvbox.h>
-#include <qvaluelist.h>
+#include <q3vbox.h>
+#include <q3valuelist.h>
+//Added by qt3to4:
+#include <QFocusEvent>
+#include <QKeyEvent>
+#include <QEvent>
+#include <Q3Frame>
+#include <QInputMethodEvent>
+#include <QResizeEvent>
 #include <private/qrichtext_p.h>
 
 //#include <klineedit.h>
 #include <ktextedit.h>
 #include <qapplication.h>
-#include <qbutton.h>
+#include <q3button.h>
 #include <qfont.h>
 #include <qfontmetrics.h>
 #include <qregexp.h>
@@ -80,8 +87,8 @@ public:
 };
 
 
-FormulaEditorHighlighter::FormulaEditorHighlighter(QTextEdit* textEdit, Canvas* canvas)
-  : QSyntaxHighlighter(textEdit)
+FormulaEditorHighlighter::FormulaEditorHighlighter(Q3TextEdit* textEdit, Canvas* canvas)
+  : Q3SyntaxHighlighter(textEdit)
 {
   d = new Private();
   d->canvas = canvas;
@@ -116,8 +123,8 @@ int FormulaEditorHighlighter::highlightParagraph(const QString& text, int /* end
   uint oldRangeCount = d->rangeCount;
 
   d->rangeCount = 0;
-  QValueList<QColor> colors = d->canvas->choice()->colors();
-  QValueList<Range> alreadyFoundRanges;
+  Q3ValueList<QColor> colors = d->canvas->choice()->colors();
+  Q3ValueList<Range> alreadyFoundRanges;
 
   for (uint i = 0; i < d->tokens.count(); ++i)
   {
@@ -303,7 +310,7 @@ class FunctionCompletion::Private
 {
 public:
   CellEditor* editor;
-  QVBox *completionPopup;
+  Q3VBox *completionPopup;
   KListBox *completionListBox;
   QLabel* hintLabel;
 };
@@ -315,15 +322,15 @@ QObject( editor )
   d->editor = editor;
   d->hintLabel = 0;
 
-  d->completionPopup = new QVBox( editor->topLevelWidget(), 0, WType_Popup );
-  d->completionPopup->setFrameStyle( QFrame::Box | QFrame::Plain );
+  d->completionPopup = new Q3VBox( editor->topLevelWidget(), 0, Qt::WType_Popup );
+  d->completionPopup->setFrameStyle( Q3Frame::Box | Q3Frame::Plain );
   d->completionPopup->setLineWidth( 1 );
   d->completionPopup->installEventFilter( this );
   d->completionPopup->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Minimum);
 
   d->completionListBox = new KListBox( d->completionPopup );
   d->completionPopup->setFocusProxy( d->completionListBox );
-  d->completionListBox->setFrameStyle( QFrame::NoFrame );
+  d->completionListBox->setFrameStyle( Q3Frame::NoFrame );
   d->completionListBox->setVariableWidth( true );
   d->completionListBox->installEventFilter( this );
   connect( d->completionListBox, SIGNAL(selected(const QString&)), this,
@@ -333,7 +340,7 @@ QObject( editor )
 
   d->hintLabel = new QLabel( 0, "autocalc", Qt::WStyle_StaysOnTop |
     Qt::WStyle_Customize | Qt::WStyle_NoBorder | Qt::WStyle_Tool |  Qt::WX11BypassWM );
-  d->hintLabel->setFrameStyle( QFrame::Plain | QFrame::Box );
+  d->hintLabel->setFrameStyle( Q3Frame::Plain | Q3Frame::Box );
   d->hintLabel->setPalette( QToolTip::palette() );
   d->hintLabel->hide();
 }
@@ -391,7 +398,7 @@ bool FunctionCompletion::eventFilter( QObject *obj, QEvent *ev )
               else if ( ke->key() == Qt::Key_Left || ke->key() == Qt::Key_Right ||
               ke->key() == Qt::Key_Up || ke->key() == Qt::Key_Down ||
               ke->key() == Qt::Key_Home || ke->key() == Qt::Key_End ||
-              ke->key() == Qt::Key_Prior || ke->key() == Qt::Key_Next )
+              ke->key() == Qt::Key_PageUp || ke->key() == Qt::Key_PageDown )
                   return false;
 
               d->hintLabel->hide();
@@ -425,7 +432,7 @@ void FunctionCompletion::showCompletion( const QStringList &choices )
 
   d->completionListBox->clear();
   for( unsigned i = 0; i < choices.count(); i++ )
-    new QListBoxText( (QListBox*)d->completionListBox, choices[i] );
+    new Q3ListBoxText( (Q3ListBox*)d->completionListBox, choices[i] );
   d->completionListBox->setCurrentItem( 0 );
 
   // size of the pop-up
@@ -507,9 +514,9 @@ CellEditor::CellEditor( Cell* _cell, Canvas* _parent, bool captureAllKeyEvents, 
 
 //TODO - Get rid of QTextEdit margins, this doesn't seem easily possible in Qt 3.3, so a job for Qt 4 porting.
 
-  d->textEdit->setHScrollBarMode(QScrollView::AlwaysOff);
-  d->textEdit->setVScrollBarMode(QScrollView::AlwaysOff);
-  d->textEdit->setFrameStyle(QFrame::NoFrame);
+  d->textEdit->setHScrollBarMode(Q3ScrollView::AlwaysOff);
+  d->textEdit->setVScrollBarMode(Q3ScrollView::AlwaysOff);
+  d->textEdit->setFrameStyle(Q3Frame::NoFrame);
   d->textEdit->setLineWidth(0);
   d->textEdit->installEventFilter( this );
 
@@ -524,9 +531,9 @@ CellEditor::CellEditor( Cell* _cell, Canvas* _parent, bool captureAllKeyEvents, 
     SLOT( triggerFunctionAutoComplete() ) );
 
   if (!cell()->format()->multiRow(cell()->column(),cell()->row()))
-    d->textEdit->setWordWrap(QTextEdit::NoWrap);
+    d->textEdit->setWordWrap(Q3TextEdit::NoWrap);
   else
-	d->textEdit->setWrapPolicy(QTextEdit::AtWordOrDocumentBoundary);
+	d->textEdit->setWrapPolicy(Q3TextEdit::AtWordOrDocumentBoundary);
 
 //TODO - Custom KTextEdit class which supports text completion
 /*
@@ -755,7 +762,7 @@ void CellEditor::slotCursorPositionChanged(int /* para */, int pos)
       //A list of regions which have already been highlighted on the spreadsheet.
       //This is so that we don't end up highlighting the same region twice in two different
       //colours.
-      QValueList<Region> alreadyUsedRegions;
+      Q3ValueList<Region> alreadyUsedRegions;
 
       for (uint i = 0; i < tokens.count(); ++i)
       {
@@ -860,7 +867,7 @@ void CellEditor::slotTextChanged()
   //allow the text to fit if the new text is too wide
   //For multi-row (word-wrap enabled) cells, the text editor must expand vertically to
   //allow for new rows of text & the width of the text editor is not affected
-  if (d->textEdit->wordWrap() == QTextEdit::NoWrap)
+  if (d->textEdit->wordWrap() == Q3TextEdit::NoWrap)
   {
     if (requiredWidth > width())
     {
@@ -1186,7 +1193,7 @@ bool CellEditor::eventFilter( QObject* o, QEvent* e )
           //NB - Added check for Qt::Key_Return when migrating text edit from KLineEdit to KTextEdit, since
           //normal behaviour for KTextEdit is to swallow return key presses
           if ( k->key() == Qt::Key_Up || k->key() == Qt::Key_Down ||
-                k->key() == Qt::Key_Next || k->key() == Qt::Key_Prior ||
+                k->key() == Qt::Key_PageDown || k->key() == Qt::Key_PageUp ||
                 k->key() == Qt::Key_Escape || k->key() == Qt::Key_Tab ||
                 k->key() == Qt::Key_Return || k->key() == Qt::Key_Enter)
           {
@@ -1254,8 +1261,8 @@ ComboboxLocationEditWidget::ComboboxLocationEditWidget( QWidget * _parent,
     setLineEdit( m_locationWidget );
     insertItem( "" );
 
-    QValueList<Reference>::Iterator it;
-    QValueList<Reference> area = _view->doc()->listArea();
+    Q3ValueList<Reference>::Iterator it;
+    Q3ValueList<Reference> area = _view->doc()->listArea();
     for ( it = area.begin(); it != area.end(); ++it )
         slotAddAreaName( (*it).ref_name);
     connect( this, SIGNAL( activated ( const QString & ) ), m_locationWidget, SLOT( slotActivateItem() ) );
@@ -1323,8 +1330,8 @@ bool LocationEditWidget::activateItem()
 {
     QString ltext = text();
     QString tmp = ltext.lower();
-    QValueList<Reference>::Iterator it;
-    QValueList<Reference> area = m_pView->doc()->listArea();
+    Q3ValueList<Reference>::Iterator it;
+    Q3ValueList<Reference> area = m_pView->doc()->listArea();
     for ( it = area.begin(); it != area.end(); ++it )
     {
         if ((*it).ref_name == tmp)
@@ -1440,7 +1447,7 @@ void LocationEditWidget::keyPressEvent( QKeyEvent * _ev )
  ****************************************************************/
 
 EditWidget::EditWidget( QWidget *_parent, Canvas *_canvas,
-                                      QButton *cancelButton, QButton *okButton )
+                                      Q3Button *cancelButton, Q3Button *okButton )
   : QLineEdit( _parent, "EditWidget" )
 {
   m_pCanvas = _canvas;

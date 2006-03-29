@@ -19,6 +19,8 @@
 */
 
 #include <qregexp.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 #include <kdebug.h>
 
@@ -73,7 +75,7 @@ public:
   QPoint anchor;
   QPoint cursor;
   QPoint marker;
-  QValueList<QColor> colors;
+  Q3ValueList<QColor> colors;
 
   bool multipleSelection : 1;
 
@@ -816,7 +818,7 @@ void Selection::setMultipleSelection(bool state)
   d->multipleSelection = state;
 }
 
-const QValueList<QColor>& Selection::colors() const
+const Q3ValueList<QColor>& Selection::colors() const
 {
   return d->colors;
 }

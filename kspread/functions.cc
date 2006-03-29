@@ -22,10 +22,12 @@
 #include "functions.h"
 #include "valuecalc.h"
 
-#include <qdict.h>
+#include <q3dict.h>
 #include <qdom.h>
 #include <qfile.h>
-#include <qvaluevector.h>
+#include <q3valuevector.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -50,8 +52,8 @@ public:
 class FunctionRepository::Private
 {
 public:
-  QDict<Function> functions;
-  QDict<FunctionDescription> funcs;
+  Q3Dict<Function> functions;
+  Q3Dict<FunctionDescription> funcs;
 };
 
 } // namespace KSpread
@@ -255,7 +257,7 @@ QStringList FunctionRepository::functionNames( const QString& group )
 {
   QStringList lst;
 
-  QDictIterator<FunctionDescription> it (d->funcs);
+  Q3DictIterator<FunctionDescription> it (d->funcs);
   for(; it.current(); ++it) {
     if (group.isNull() || (it.current()->group() == group))
       lst.append (it.current()->name());
@@ -484,7 +486,7 @@ QString FunctionDescription::toQML() const
   if ( !m_params.isEmpty() )
   {
     text += i18n("<h2>Parameters</h2><ul>");
-    QValueList<FunctionParameter>::ConstIterator it = m_params.begin();
+    Q3ValueList<FunctionParameter>::ConstIterator it = m_params.begin();
     for( ; it != m_params.end(); ++it )
     {
       text += i18n("<li><b>Comment:</b> ");

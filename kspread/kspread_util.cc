@@ -21,6 +21,9 @@
 #include <ctype.h>
 
 #include <qregexp.h>
+//Added by qt3to4:
+#include <Q3ValueList>
+#include <Q3CString>
 
 #include <kdebug.h>
 
@@ -529,8 +532,8 @@ Range::Range(const QString & str, Map * map,
   //try to parse as named area
   bool gotNamed = false;
   QString tmp = str.lower();
-  QValueList < Reference >::Iterator it;
-  QValueList < Reference > area = map->doc()->listArea();
+  Q3ValueList < Reference >::Iterator it;
+  Q3ValueList < Reference > area = map->doc()->listArea();
   for (it = area.begin(); it != area.end(); ++it) {
     if ((*it).ref_name.lower() == tmp) {
       // success - such named area exists
@@ -969,7 +972,7 @@ QPen KSpread::convertOasisStringToPen( const QString &border )
     //code from koborder, for the moment kspread doesn't use koborder
     // ## isn't it faster to use QStringList::split than parse it 3 times?
     QString _width = border.section(' ', 0, 0);
-    QCString _style = border.section(' ', 1, 1).latin1();
+    Q3CString _style = border.section(' ', 1, 1).latin1();
     QString _color = border.section(' ', 2, 2);
 
     pen.setWidth( ( int )( KoUnit::parseValue( _width, 1.0 ) ) );

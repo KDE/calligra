@@ -45,8 +45,11 @@
 #include <math.h>
 
 #include <qapplication.h>
-#include <qpopupmenu.h>
+#include <q3popupmenu.h>
 #include <qregexp.h>
+//Added by qt3to4:
+#include <Q3PointArray>
+#include <Q3ValueList>
 
 #include "kspread_canvas.h"
 #include "kspread_condition.h"
@@ -139,7 +142,7 @@ public:
   // FIXME (comment): If the list consists of more than one obscuring
   //                  element, then is there an order between them that
   //                  is important?
-  QValueList<Cell*> obscuringCells;
+  Q3ValueList<Cell*> obscuringCells;
 
   // If non-NULL, contains a pointer to a condition or a validity test.
   Conditions  *conditions;
@@ -612,7 +615,7 @@ void Cell::copyFormat( const Cell* cell )
     if ( cell->format()->currencyInfo( c ) )
       format()->setCurrency( c );*/
 
-    QValueList<Conditional> conditionList = cell->conditionList();
+    Q3ValueList<Conditional> conditionList = cell->conditionList();
     if (d->hasExtra())
       delete d->extra()->conditions;
     if ( cell->d->hasExtra() && cell->d->extra()->conditions )
@@ -763,8 +766,8 @@ void Cell::setLayoutDirtyFlag( bool format )
     if (!d->hasExtra())
       return;
 
-    QValueList<Cell*>::iterator it  = d->extra()->obscuringCells.begin();
-    QValueList<Cell*>::iterator end = d->extra()->obscuringCells.end();
+    Q3ValueList<Cell*>::iterator it  = d->extra()->obscuringCells.begin();
+    Q3ValueList<Cell*>::iterator end = d->extra()->obscuringCells.end();
     for ( ; it != end; ++it ) {
       (*it)->setLayoutDirtyFlag( format );
     }
@@ -839,8 +842,8 @@ bool Cell::isPartOfMerged() const
   if (!d->hasExtra())
     return false;
 
-  QValueList<Cell*>::const_iterator it = d->extra()->obscuringCells.begin();
-  QValueList<Cell*>::const_iterator end = d->extra()->obscuringCells.end();
+  Q3ValueList<Cell*>::const_iterator it = d->extra()->obscuringCells.begin();
+  Q3ValueList<Cell*>::const_iterator end = d->extra()->obscuringCells.end();
   for ( ; it != end; ++it ) {
     Cell *cell = *it;
 
@@ -879,8 +882,8 @@ Cell *Cell::ultimateObscuringCell() const
     return d->extra()->obscuringCells.first();
 
 #if 0
-  QValueList<Cell*>::const_iterator it = d->extra()->obscuringCells.begin();
-  QValueList<Cell*>::const_iterator end = d->extra()->obscuringCells.end();
+  Q3ValueList<Cell*>::const_iterator it = d->extra()->obscuringCells.begin();
+  Q3ValueList<Cell*>::const_iterator end = d->extra()->obscuringCells.end();
   for ( ; it != end; ++it ) {
     Cell *cell = *it;
 
@@ -900,11 +903,11 @@ Cell *Cell::ultimateObscuringCell() const
 }
 
 
-QValueList<Cell*> Cell::obscuringCells() const
+Q3ValueList<Cell*> Cell::obscuringCells() const
 {
   if (!d->hasExtra())
   {
-    QValueList<Cell*> empty;
+    Q3ValueList<Cell*> empty;
     return empty;
   }
   return d->extra()->obscuringCells;
@@ -2091,7 +2094,7 @@ void Cell::paintCell( const KoRect   &rect, QPainter & painter,
           int paintBorder,
           QPen & rightPen, QPen & bottomPen,
           QPen & leftPen,  QPen & topPen,
-          QValueList<QPoint> &mergedCellsPainted,
+          Q3ValueList<QPoint> &mergedCellsPainted,
           bool drawCursor )
 {
   bool paintBorderRight  = paintBorder & Border_Right;
@@ -2364,17 +2367,17 @@ void Cell::paintCell( const KoRect   &rect, QPainter & painter,
     // itself gets changed during a call of obscuringCell->paintCell
     // (this happens e.g. when there is an updateDepend)
     if (d->hasExtra()) {
-      QValueList<QPoint>           listPoints;
-      QValueList<Cell*>::iterator  it = d->extra()->obscuringCells.begin();
-      QValueList<Cell*>::iterator  end = d->extra()->obscuringCells.end();
+      Q3ValueList<QPoint>           listPoints;
+      Q3ValueList<Cell*>::iterator  it = d->extra()->obscuringCells.begin();
+      Q3ValueList<Cell*>::iterator  end = d->extra()->obscuringCells.end();
       for ( ; it != end; ++it ) {
         Cell *obscuringCell = *it;
 
         listPoints.append( QPoint( obscuringCell->column(), obscuringCell->row() ) );
       }
 
-      QValueList<QPoint>::iterator  it1  = listPoints.begin();
-      QValueList<QPoint>::iterator  end1 = listPoints.end();
+      Q3ValueList<QPoint>::iterator  it1  = listPoints.begin();
+      Q3ValueList<QPoint>::iterator  end1 = listPoints.end();
       for ( ; it1 != end1; ++it1 ) {
         QPoint obscuringCellRef = *it1;
 
@@ -2544,7 +2547,7 @@ void Cell::paintObscuredCells(const KoRect& rect, QPainter& painter,
             bool _paintBorderTop,
             QPen & rightPen, QPen & _bottomPen,
             QPen & leftPen,  QPen & _topPen,
-            QValueList<QPoint> &mergedCellsPainted)
+            Q3ValueList<QPoint> &mergedCellsPainted)
 {
   // If there are no obscured cells, return.
   if ( !extraXCells() && !extraYCells() )
@@ -2658,7 +2661,7 @@ void Cell::paintBackground( QPainter& painter, const KoRect &cellRect,
     //Otherwise use a lighter version of the cell's background color.
     QColor c;
 
-    int averageColor = (backgroundColor.red() + backgroundColor.green() + backgroundColor.blue()) / 3;
+    int averageColor = (backgroundColor.Qt::red() + backgroundColor.Qt::green() + backgroundColor.Qt::blue()) / 3;
 
     if (averageColor > 180)
 	if (averageColor > 225)
@@ -2769,8 +2772,8 @@ void Cell::paintDefaultBorders( QPainter& painter, const KoRect &rect,
 
   // If there are extra cells, there might be more conditions.
   if (d->hasExtra()) {
-    QValueList<Cell*>::const_iterator it  = d->extra()->obscuringCells.begin();
-    QValueList<Cell*>::const_iterator end = d->extra()->obscuringCells.end();
+    Q3ValueList<Cell*>::const_iterator it  = d->extra()->obscuringCells.begin();
+    Q3ValueList<Cell*>::const_iterator end = d->extra()->obscuringCells.end();
     for ( ; it != end; ++it ) {
       Cell *cell = *it;
 
@@ -2989,7 +2992,7 @@ void Cell::paintCommentIndicator( QPainter& painter,
     }
 
     // Get the triangle.
-    QPointArray  point( 3 );
+    Q3PointArray  point( 3 );
     if ( format()->sheet()->layoutDirection()==Sheet::RightToLeft ) {
       point.setPoint( 0, doc->zoomItX( cellRect.x() + 6.0 ),
                          doc->zoomItY( cellRect.y() ) );
@@ -3039,7 +3042,7 @@ void Cell::paintFormulaIndicator( QPainter& painter,
     }
 
     // Get the triangle...
-    QPointArray point( 3 );
+    Q3PointArray point( 3 );
     if ( format()->sheet()->layoutDirection()==Sheet::RightToLeft ) {
       point.setPoint( 0, doc->zoomItX( cellRect.right() - 6.0 ),
                          doc->zoomItY( cellRect.bottom() ) );
@@ -3090,7 +3093,7 @@ void Cell::paintMoreTextIndicator( QPainter& painter,
     }
 
     // Get the triangle...
-    QPointArray point( 3 );
+    Q3PointArray point( 3 );
     if ( d->strOutText.isRightToLeft() ) {
       point.setPoint( 0, doc->zoomItX( cellRect.left() + 4.0 ),
                          doc->zoomItY( cellRect.y() + cellRect.height() / 2.0 -4.0 ) );
@@ -3531,8 +3534,8 @@ void Cell::paintCellBorders( QPainter& painter, const KoRect& rect,
   // paintBottom = paintBottom && ( d->extra()->extraYCells() == 0 );
 
   if (d->hasExtra()) {
-    QValueList<Cell*>::const_iterator it  = d->extra()->obscuringCells.begin();
-    QValueList<Cell*>::const_iterator end = d->extra()->obscuringCells.end();
+    Q3ValueList<Cell*>::const_iterator it  = d->extra()->obscuringCells.begin();
+    Q3ValueList<Cell*>::const_iterator end = d->extra()->obscuringCells.end();
     for ( ; it != end; ++it ) {
       Cell* cell = *it;
 
@@ -7117,18 +7120,18 @@ QRect Cell::cellRect()
   return QRect(QPoint(d->column, d->row), QPoint(d->column, d->row));
 }
 
-QValueList<Conditional> Cell::conditionList() const
+Q3ValueList<Conditional> Cell::conditionList() const
 {
   if ( !d->hasExtra() || !d->extra()->conditions )
   {
-    QValueList<Conditional> emptyList;
+    Q3ValueList<Conditional> emptyList;
     return emptyList;
   }
 
   return d->extra()->conditions->conditionList();
 }
 
-void Cell::setConditionList( const QValueList<Conditional> & newList )
+void Cell::setConditionList( const Q3ValueList<Conditional> & newList )
 {
   if (d->hasExtra())
     delete d->extra()->conditions;

@@ -27,6 +27,8 @@
 
 // needed for MODE
 #include <qmap.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 using namespace KSpread;
 
@@ -87,7 +89,7 @@ Value func_variancep (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_variancepa (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_weibull (valVector args, ValueCalc *calc, FuncExtra *);
 
-typedef QValueList<double> List;
+typedef Q3ValueList<double> List;
 
 // registers all statistical functions
 void RegisterStatisticalFunctions()

@@ -37,6 +37,9 @@
 #include <qfileinfo.h>
 #include <qfont.h>
 #include <qpair.h>
+//Added by qt3to4:
+#include <Q3PtrList>
+#include <Q3ValueList>
 
 #include <kstandarddirs.h>
 #include <kdebug.h>
@@ -105,7 +108,7 @@ public:
 
   Sheet *activeSheet;
     KSPLoadingInfo *m_loadingInfo;
-  static QValueList<Doc*> s_docs;
+  static Q3ValueList<Doc*> s_docs;
   static int s_docId;
 
   DCOPObject* dcop;
@@ -124,14 +127,14 @@ public:
 
   QColor pageBorderColor;
 
-  QPtrList<Plugin> plugins;
+  Q3PtrList<Plugin> plugins;
 
-  QValueList<Reference> refs;
+  Q3ValueList<Reference> refs;
   KCompletion listCompletion;
 
   int numOperations;
 
-  QValueList<Damage*> damages;
+  Q3ValueList<Damage*> damages;
 
   // document properties
   int syntaxVersion;
@@ -155,9 +158,9 @@ public:
     bool configLoadFromFile:1;
   QStringList spellListIgnoreAll;
   /// list of all objects
-  QPtrList<EmbeddedObject> m_embeddedObjects;
+  Q3PtrList<EmbeddedObject> m_embeddedObjects;
   KoPictureCollection m_pictureCollection;
-  QValueList<KoPictureKey> usedPictures;
+  Q3ValueList<KoPictureKey> usedPictures;
   bool m_savingWholeDocument;
 };
 
@@ -167,7 +170,7 @@ public:
  *
  *****************************************************************************/
 
-QValueList<Doc*> Doc::Private::s_docs;
+Q3ValueList<Doc*> Doc::Private::s_docs;
 int Doc::Private::s_docId = 0;
 
 #define deleteLoadingInfo() { \
@@ -244,7 +247,7 @@ Doc::Doc( QWidget *parentWidget, const char *widgetName, QObject* parent, const 
   d->showTabBar = true;
   d->showError = false;
   d->calcMethod = SumOfNumber;
-  d->moveTo = Bottom;
+  d->moveTo = Qt::DockBottom;
   d->completionMode = KGlobalSettings::CompletionAuto;
   d->spellConfig = 0;
   d->dontCheckUpperWord = false;
@@ -277,7 +280,7 @@ Doc::~Doc()
   delete d;
 }
 
-QValueList<Doc*> Doc::documents()
+Q3ValueList<Doc*> Doc::documents()
 {
   return Private::s_docs;
 }
@@ -493,7 +496,7 @@ void Doc::changePageBorderColor( const QColor  & _color)
   d->pageBorderColor = _color;
 }
 
-const QValueList<Reference>  &Doc::listArea()
+const Q3ValueList<Reference>  &Doc::listArea()
 {
   return d->refs;
 }
@@ -531,7 +534,7 @@ bool Doc::completeSaving( KoStore* _store )
 QDomDocument Doc::saveXML()
 {
     //Terminate current cell edition, if any
-    QPtrListIterator<KoView> it( views() );
+    Q3PtrListIterator<KoView> it( views() );
 
     /* don't pull focus away from the editor if this is just a background
        autosave */
@@ -619,7 +622,7 @@ bool Doc::saveOasisHelper( KoStore* store, KoXmlWriter* manifestWriter, SaveFlag
 {
     d->m_pictureCollection.assignUniqueIds();
     //Terminate current cell edition, if any
-    QPtrListIterator<KoView> it2( views() );
+    Q3PtrListIterator<KoView> it2( views() );
     d->m_savingWholeDocument = saveFlag == SaveAll ? true : false;
 
     /* don't pull focus away from the editor if this is just a background
@@ -667,8 +670,8 @@ bool Doc::saveOasisHelper( KoStore* store, KoXmlWriter* manifestWriter, SaveFlag
     // Done with writing out the contents to the tempfile, we can now write out the automatic styles
     contentWriter->startElement( "office:automatic-styles" );
 
-    QValueList<KoGenStyles::NamedStyle> styles = mainStyles.styles( KoGenStyle::STYLE_AUTO );
-    QValueList<KoGenStyles::NamedStyle>::const_iterator it = styles.begin();
+    Q3ValueList<KoGenStyles::NamedStyle> styles = mainStyles.styles( KoGenStyle::STYLE_AUTO );
+    Q3ValueList<KoGenStyles::NamedStyle>::const_iterator it = styles.begin();
     for ( ; it != styles.end() ; ++it ) {
         (*it).style->writeStyle( contentWriter, mainStyles, "style:style", (*it).name, "style:paragraph-properties" );
     }
@@ -798,7 +801,7 @@ bool Doc::saveOasisHelper( KoStore* store, KoXmlWriter* manifestWriter, SaveFlag
 
     if ( saveFlag == SaveSelected )
     {
-      QPtrListIterator<EmbeddedObject> it(embeddedObjects() );
+      Q3PtrListIterator<EmbeddedObject> it(embeddedObjects() );
       for( ; it.current(); ++it )
       {
         if ( it.current()->getType() != OBJECT_CHART  && it.current()->getType() != OBJECT_KOFFICE_PART )
@@ -859,8 +862,8 @@ void Doc::saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyles ) con
     KoXmlWriter* stylesWriter = createOasisXmlWriter( &stylesDev, "office:document-styles" );
 
     stylesWriter->startElement( "office:styles" );
-    QValueList<KoGenStyles::NamedStyle> styles = mainStyles.styles( KoGenStyle::STYLE_USER );
-    QValueList<KoGenStyles::NamedStyle>::const_iterator it = styles.begin();
+    Q3ValueList<KoGenStyles::NamedStyle> styles = mainStyles.styles( KoGenStyle::STYLE_USER );
+    Q3ValueList<KoGenStyles::NamedStyle>::const_iterator it = styles.begin();
     for ( ; it != styles.end() ; ++it ) {
         (*it).style->writeStyle( stylesWriter, mainStyles, "style:style", (*it).name, "style:paragraph-properties" );
     }
@@ -965,8 +968,8 @@ bool Doc::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles, const 
     loadOasisCellValidation( body );
 
     //pre-load auto styles
-    QDictIterator<QDomElement> it( oasisStyles.styles("table-cell") );
-    QDict<Style> styleElements;
+    Q3DictIterator<QDomElement> it( oasisStyles.styles("table-cell") );
+    Q3Dict<Style> styleElements;
     for (;it.current();++it)
     {
 	if ( it.current()->hasAttributeNS( KoXmlNS::style , "name" ) )
@@ -996,7 +999,7 @@ bool Doc::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles, const 
     emit sigProgress(-1);
 
     //delete any styles which were not used
-    QDictIterator<Style> styleIt( styleElements );
+    Q3DictIterator<Style> styleIt( styleElements );
     for (;styleIt.current();++styleIt)
     {
 	Style* style = styleIt.current();
@@ -1173,7 +1176,7 @@ void Doc::loadPaper( QDomElement const & paper )
     float bottom = borders.attribute( "bottom" ).toFloat();
 
     //apply to all sheet
-    QPtrListIterator<Sheet> it ( map()->sheetList() );
+    Q3PtrListIterator<Sheet> it ( map()->sheetList() );
     for( ; it.current(); ++it )
     {
       it.current()->print()->setPaperLayout( left, top, right, bottom,
@@ -1219,7 +1222,7 @@ void Doc::loadPaper( QDomElement const & paper )
   fcenter = fcenter.replace( "<table>", "<sheet>" );
   fright  = fright.replace(  "<table>", "<sheet>" );
 
-  QPtrListIterator<Sheet> it ( map()->sheetList() );
+  Q3PtrListIterator<Sheet> it ( map()->sheetList() );
   for( ; it.current(); ++it )
   {
     it.current()->print()->setHeadFootLine( hleft, hcenter, hright,
@@ -1235,7 +1238,7 @@ bool Doc::completeLoading( KoStore* /* _store */ )
 
   //  map()->update();
 
-  QPtrListIterator<KoView> it( views() );
+  Q3PtrListIterator<KoView> it( views() );
   for (; it.current(); ++it )
     ((View*)it.current())->initialPosition();
 
@@ -1557,14 +1560,14 @@ KoCommandHistory* Doc::commandHistory()
 
 void Doc::enableUndo( bool _b )
 {
-    QPtrListIterator<KoView> it( views() );
+    Q3PtrListIterator<KoView> it( views() );
     for (; it.current(); ++it )
       static_cast<View *>( it.current() )->enableUndo( _b );
 }
 
 void Doc::enableRedo( bool _b )
 {
-    QPtrListIterator<KoView> it( views() );
+    Q3PtrListIterator<KoView> it( views() );
     for (; it.current(); ++it )
       static_cast<View *>( it.current() )->enableRedo( _b );
 }
@@ -1634,7 +1637,7 @@ void Doc::paintContent( QPainter& painter, const QRect& rect, bool /*transparent
     painter.setPen( pen );
 
     /* Update the entire visible area. */
-    QValueList<QRect>  cellAreaList;
+    Q3ValueList<QRect>  cellAreaList;
     cellAreaList.append( QRect( left_col,
                                 top_row,
                                 right_col - left_col + 1,
@@ -1647,7 +1650,7 @@ void Doc::paintUpdates()
 {
   //  ElapsedTime et( "Doc::paintUpdates" );
 
-  QPtrListIterator<KoView> it( views() );
+  Q3PtrListIterator<KoView> it( views() );
   View  * view  = NULL;
   Sheet * sheet = NULL;
 
@@ -1666,7 +1669,7 @@ void Doc::paintUpdates()
 
 void Doc::paintCellRegions(QPainter& painter, const QRect &viewRect,
 			   View* view,
-			   QValueList<QRect> cellRegions,
+			   Q3ValueList<QRect> cellRegions,
 			   const Sheet* sheet, bool /*drawCursor*/)
 {
   //
@@ -1746,7 +1749,7 @@ void Doc::PaintRegion(QPainter &painter, const KoRect &viewRegion,
   int regionLeft   = paintRegion.left();
   int regionTop    = paintRegion.top();
 
-  QValueList<QPoint>  mergedCellsPainted;
+  Q3ValueList<QPoint>  mergedCellsPainted;
   for ( int y = regionTop;
         y <= regionBottom && dblCurrentCellPos.y() <= viewRegion.bottom();
         ++y )
@@ -1892,7 +1895,7 @@ void Doc::addAreaName(const QRect &_rect,const QString & name,const QString & sh
 
 void Doc::removeArea( const QString & name)
 {
-    QValueList<Reference>::Iterator it2;
+    Q3ValueList<Reference>::Iterator it2;
     for ( it2 = d->refs.begin(); it2 != d->refs.end(); ++it2 )
     {
         if((*it2).ref_name==name)
@@ -1906,7 +1909,7 @@ void Doc::removeArea( const QString & name)
 
 void Doc::changeAreaSheetName(const QString & oldName,const QString & sheetName)
 {
-  QValueList<Reference>::Iterator it2;
+  Q3ValueList<Reference>::Iterator it2;
   for ( it2 = d->refs.begin(); it2 != d->refs.end(); ++it2 )
         {
         if((*it2).sheet_name==oldName)
@@ -1916,7 +1919,7 @@ void Doc::changeAreaSheetName(const QString & oldName,const QString & sheetName)
 
 QRect Doc::getRectArea(const QString  &_sheetName)
 {
-  QValueList<Reference>::Iterator it2;
+  Q3ValueList<Reference>::Iterator it2;
   for ( it2 = d->refs.begin(); it2 != d->refs.end(); ++it2 )
         {
         if((*it2).ref_name==_sheetName)
@@ -1930,7 +1933,7 @@ QRect Doc::getRectArea(const QString  &_sheetName)
 QDomElement Doc::saveAreaName( QDomDocument& doc )
 {
    QDomElement element = doc.createElement( "areaname" );
-   QValueList<Reference>::Iterator it2;
+   Q3ValueList<Reference>::Iterator it2;
    for ( it2 = d->refs.begin(); it2 != d->refs.end(); ++it2 )
    {
         QDomElement e = doc.createElement("reference");
@@ -1984,7 +1987,7 @@ void Doc::saveOasisAreaName( KoXmlWriter & xmlWriter )
     if ( listArea().count()>0 )
     {
         xmlWriter.startElement( "table:named-expressions" );
-        QValueList<Reference>::Iterator it;
+        Q3ValueList<Reference>::Iterator it;
         for ( it = d->refs.begin(); it != d->refs.end(); ++it )
         {
             xmlWriter.startElement( "table:named-range" );
@@ -2116,7 +2119,7 @@ void Doc::emitBeginOperation(bool waitCursor)
     //are expected to be completed in a short time anyway.
     QCursor* activeOverride = QApplication::overrideCursor();
 
-    if (waitCursor && ( (!activeOverride) || (activeOverride->shape() != Qt::WaitCursor.shape()) )  )
+    if (Qt::waitCursor && ( (!activeOverride) || (activeOverride->shape() != Qt::WaitCursor.shape()) )  )
     {
         QApplication::setOverrideCursor(Qt::WaitCursor);
     }
@@ -2191,21 +2194,21 @@ bool Doc::delayCalculation() const
 
 void Doc::updateBorderButton()
 {
-    QPtrListIterator<KoView> it( views() );
+    Q3PtrListIterator<KoView> it( views() );
     for (; it.current(); ++it )
       static_cast<View *>( it.current() )->updateBorderButton();
 }
 
 void Doc::insertSheet( Sheet * sheet )
 {
-    QPtrListIterator<KoView> it( views() );
+    Q3PtrListIterator<KoView> it( views() );
     for (; it.current(); ++it )
   ((View*)it.current())->insertSheet( sheet );
 }
 
 void Doc::takeSheet( Sheet * sheet )
 {
-    QPtrListIterator<KoView> it( views() );
+    Q3PtrListIterator<KoView> it( views() );
     for (; it.current(); ++it )
   ((View*)it.current())->removeSheet( sheet );
 }
@@ -2239,7 +2242,7 @@ Sheet * Doc::displaySheet() const
 void Doc::addView( KoView *_view )
 {
     KoDocument::addView( _view );
-    QPtrListIterator<KoView> it( views() );
+    Q3PtrListIterator<KoView> it( views() );
     for (; it.current(); ++it )
   ((View*)it.current())->closeEditor();
 }
@@ -2255,7 +2258,7 @@ void Doc::addDamage( Damage* damage )
 void Doc::flushDamages()
 {
     emit damagesFlushed( d->damages );
-    QValueList<Damage*>::Iterator it;
+    Q3ValueList<Damage*>::Iterator it;
     for( it = d->damages.begin(); it != d->damages.end(); ++it )
       delete *it;
     d->damages.clear();
@@ -2287,7 +2290,7 @@ void Doc::insertObject( EmbeddedObject * obj )
   d->m_embeddedObjects.append( obj );
 }
 
-QPtrList<EmbeddedObject>& Doc::embeddedObjects()
+Q3PtrList<EmbeddedObject>& Doc::embeddedObjects()
 {
     return d->m_embeddedObjects;
 }
@@ -2300,7 +2303,7 @@ KoPictureCollection *Doc::pictureCollection()
 void Doc::repaint( const QRect& rect )
 {
   QRect r;
-  QPtrListIterator<KoView> it( views() );
+  Q3PtrListIterator<KoView> it( views() );
   for( ; it.current(); ++it )
   {
     r = rect;
@@ -2313,7 +2316,7 @@ void Doc::repaint( const QRect& rect )
 
 void Doc::repaint( EmbeddedObject *obj )
 {
-  QPtrListIterator<KoView> it( views() );
+  Q3PtrListIterator<KoView> it( views() );
   for( ; it.current(); ++it )
   {
     Canvas* canvas = ((View*)it.current())->canvasWidget();
@@ -2325,7 +2328,7 @@ void Doc::repaint( EmbeddedObject *obj )
 void Doc::repaint( const KoRect& rect )
 {
   QRect r;
-  QPtrListIterator<KoView> it( views() );
+  Q3PtrListIterator<KoView> it( views() );
   for( ; it.current(); ++it )
   {
     Canvas* canvas = ((View*)it.current())->canvasWidget();
@@ -2363,7 +2366,7 @@ void Doc::insertPixmapKey( KoPictureKey key )
 void Doc::makeUsedPixmapList()
 {
     d->usedPictures.clear();
-    QPtrListIterator<EmbeddedObject> it( d->m_embeddedObjects );
+    Q3PtrListIterator<EmbeddedObject> it( d->m_embeddedObjects );
     for ( ; it.current() ; ++it )
     {
         if( it.current()->getType() == OBJECT_PICTURE && ( d->m_savingWholeDocument || it.current()->isSelected() ) )

@@ -36,8 +36,11 @@
 
 #include <qregexp.h>
 #include <qstring.h>
-#include <qvaluevector.h>
-#include <qvaluestack.h>
+#include <q3valuevector.h>
+#include <q3valuestack.h>
+//Added by qt3to4:
+#include <Q3ValueList>
+#include <QTextStream>
 
 #include <klocale.h>
 
@@ -99,11 +102,11 @@ public:
   bool dirty;
   bool valid;
   QString expression;
-  QValueVector<Opcode> codes;
-  QValueVector<Value> constants;
+  Q3ValueVector<Opcode> codes;
+  Q3ValueVector<Value> constants;
 };
 
-class TokenStack : public QValueVector<Token>
+class TokenStack : public Q3ValueVector<Token>
 {
 public:
   TokenStack();
@@ -305,7 +308,7 @@ QString Token::description() const
     TokenStack
  **********************/
 
-TokenStack::TokenStack(): QValueVector<Token>()
+TokenStack::TokenStack(): Q3ValueVector<Token>()
 {
   topIndex = 0;
   ensureSpace();
@@ -544,7 +547,7 @@ Tokens Formula::scan( const QString& expr, KLocale* locale ) const
        }
 
        // terminator character
-       else if ( ch == QChar::null )
+       else if ( ch == QChar::Null )
           state = Finish;
 
        // look for operator match
@@ -600,8 +603,8 @@ Tokens Formula::scan( const QString& expr, KLocale* locale ) const
            bool gotNamed = false;
            // check for named areas ...
            if (d->sheet) {
-             const QValueList<Reference> areas = d->sheet->doc()->listArea();
-             QValueList<Reference>::const_iterator it;
+             const Q3ValueList<Reference> areas = d->sheet->doc()->listArea();
+             Q3ValueList<Reference>::const_iterator it;
              for (it = areas.begin(); it != areas.end(); ++it) {
                if ((*it).ref_name.lower() == tokenText.lower()) {
                  // we got a named area
@@ -704,8 +707,8 @@ Tokens Formula::scan( const QString& expr, KLocale* locale ) const
            // check for named areas ...
            if (d->sheet) {
 	     QString txt = tokenText.mid(1, tokenText.length() - 2).lower();
-             const QValueList<Reference> areas = d->sheet->doc()->listArea();
-             QValueList<Reference>::const_iterator it;
+             const Q3ValueList<Reference> areas = d->sheet->doc()->listArea();
+             Q3ValueList<Reference>::const_iterator it;
              for (it = areas.begin(); it != areas.end(); ++it) {
                if ((*it).ref_name.lower() == txt) {
                  // we got a named area
@@ -847,7 +850,7 @@ void Formula::compile( const Tokens& tokens ) const
   if( tokens.count() == 0 ) return;
 
   TokenStack syntaxStack;
-  QValueStack<int> argStack;
+  Q3ValueStack<int> argStack;
   unsigned argCount = 1;
 
   for( unsigned i = 0; i <= tokens.count(); i++ )
@@ -1157,12 +1160,12 @@ struct stackEntry {
 
 Value Formula::eval() const
 {
-  QValueStack<stackEntry> stack;
+  Q3ValueStack<stackEntry> stack;
   stackEntry entry;
   unsigned index;
   Value val1, val2;
   QString c;
-  QValueVector<Value> args;
+  Q3ValueVector<Value> args;
 
   Sheet *sheet = 0;
   ValueParser* parser = 0;

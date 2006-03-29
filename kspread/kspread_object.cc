@@ -37,7 +37,7 @@
 #include <qimage.h>
 #include <qpainter.h>
 #include <qpixmap.h>
-#include <qwmatrix.h>
+#include <qmatrix.h>
 
 #include <KoDocument.h>
 #include <KoDocumentChild.h>
@@ -56,7 +56,7 @@ class View;
  *
  **********************************************************/
 EmbeddedObject::EmbeddedObject( Sheet *_sheet, const KoRect& _geometry )
-  : m_geometry( _geometry), m_sheet(_sheet), m_objectName(""), m_selected(false), m_protect(false), m_keepRatio(false), pen( Qt::black, 1, QPen::SolidLine )
+  : m_geometry( _geometry), m_sheet(_sheet), m_objectName(""), m_selected(false), m_protect(false), m_keepRatio(false), pen( Qt::black, 1, Qt::SolidLine )
 {
   angle = 0.0;
   inObjList = true;
@@ -1404,8 +1404,8 @@ QPixmap EmbeddedPictureObject::changePictureSettings( QPixmap _tmpPixmap )
         if ( depth == 1 || depth == 8 ) {
             for ( int i = 0; i < _tmpImage.numColors(); ++i ) {
                 QRgb rgb = _tmpImage.color( i );
-                int gray = qGray( rgb );
-                rgb = qRgb( gray, gray, gray );
+                int Qt::gray = qGray( rgb );
+                rgb = qRgb( Qt::gray, Qt::gray, Qt::gray );
                 _tmpImage.setColor( i, rgb );
             }
         }
@@ -1419,8 +1419,8 @@ QPixmap EmbeddedPictureObject::changePictureSettings( QPixmap _tmpPixmap )
                 for ( _y = 0; _y < _height; ++_y ) {
                     if ( _tmpImage.valid( _x, _y ) ) {
                         QRgb rgb = _tmpImage.pixel( _x, _y );
-                        int gray = qGray( rgb );
-                        rgb = qRgb( gray, gray, gray );
+                        int Qt::gray = qGray( rgb );
+                        rgb = qRgb( Qt::gray, Qt::gray, Qt::gray );
                         _tmpImage.setPixel( _x, _y, rgb );
                     }
                 }

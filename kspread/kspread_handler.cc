@@ -3,6 +3,10 @@
 //
 
 #include <qpainter.h>
+//Added by qt3to4:
+#include <QMouseEvent>
+#include <QKeyEvent>
+#include <QEvent>
 
 #include "kspread_view.h"
 
@@ -19,12 +23,12 @@ InsertHandler::InsertHandler( View* view, QWidget* widget )
     m_started = false;
     m_clicked = false;
 
-    widget->setCursor( crossCursor );
+    widget->setCursor( Qt::crossCursor );
 }
 
 InsertHandler::~InsertHandler()
 {
-    ((QWidget*)target())->setCursor( arrowCursor );
+    ((QWidget*)target())->setCursor( Qt::arrowCursor );
     m_view->resetInsertHandle();
 }
 
@@ -53,7 +57,7 @@ bool InsertHandler::eventFilter( QObject*, QEvent* ev )
     painter.setRasterOp( NotROP );
 
     QPen pen;
-    pen.setStyle( DashLine );
+    pen.setStyle( Qt::DashLine );
     painter.setPen( pen );
 
     if ( m_started )
@@ -128,7 +132,7 @@ bool InsertHandler::eventFilter( QObject*, QEvent* ev )
     painter.begin( (QWidget*)target() );
 
     QPen pen;
-    pen.setStyle( DashLine );
+    pen.setStyle( Qt::DashLine );
     painter.setPen( pen );
 
     painter.setRasterOp( NotROP );

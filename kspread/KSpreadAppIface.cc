@@ -30,6 +30,8 @@
 
 #include <dcopclient.h>
 #include <kapplication.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 using namespace KSpread;
 
@@ -59,8 +61,8 @@ QMap<QString,DCOPRef> AppIface::documents()
 {
     QMap<QString,DCOPRef> map;
 
-    QValueList<Doc*> lst = Doc::documents();
-    QValueListIterator<Doc*> it = lst.begin();
+    Q3ValueList<Doc*> lst = Doc::documents();
+    Q3ValueListIterator<Doc*> it = lst.begin();
     for( ; it != lst.end(); ++it )
     {
 	map[ QString( (*it)->name() ) ] =
@@ -72,8 +74,8 @@ QMap<QString,DCOPRef> AppIface::documents()
 
 DCOPRef AppIface::document( const QString& name )
 {
-    QValueList<Doc*> lst = Doc::documents();
-    QValueListIterator<Doc*> it = lst.begin();
+    Q3ValueList<Doc*> lst = Doc::documents();
+    Q3ValueListIterator<Doc*> it = lst.begin();
     for( ; it != lst.end(); ++it )
 	if ( name == (*it)->name() )
 	    return DCOPRef( kapp->dcopClient()->appId(), (*it)->dcopObject()->objId() );

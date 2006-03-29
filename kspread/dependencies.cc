@@ -26,6 +26,8 @@
 #include "kspread_sheet.h"
 
 #include <qmap.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 //rows x cols in one cell-chunk; bigger values lead to slower updating
 //of range-dependencies, lower values will increase memory usage
@@ -63,7 +65,7 @@ class DependencyList {
   /** get dependencies of a cell */
   RangeList getDependencies (const Point &cell);
   /** get cells depending on this cell, either through normal or range dependency */
-  QValueList<Point> getDependants (const Point &cell);
+  Q3ValueList<Point> getDependants (const Point &cell);
 
   void areaModified (const QString &name);
   protected:
@@ -87,13 +89,13 @@ class DependencyList {
   dependencies effectively) */
   Point leadingCell (const Point &cell) const;
   /** list of leading cells of all cell chunks that this range belongs to */
-  QValueList<Point> leadingCells (const Range &range) const;
+  Q3ValueList<Point> leadingCells (const Range &range) const;
   /** retrieve a list of cells that a given cell depends on */
   RangeList computeDependencies (const Point &cell) const;
 
-  QValueList<Point> getCellDeps(const Point& cell) const {
+  Q3ValueList<Point> getCellDeps(const Point& cell) const {
       CellDepsMap::const_iterator it = cellDeps.find( cell );
-      return it == cellDeps.end() ? QValueList<Point>() : *it;
+      return it == cellDeps.end() ? Q3ValueList<Point>() : *it;
   }
 
   /** debug */
@@ -105,10 +107,10 @@ class DependencyList {
   /** dependencies of each cell */
   QMap<Point, RangeList> dependencies;
   /** list of cells (but NOT ranges) that depend on a cell */
-  typedef QMap<Point, QValueList<Point> > CellDepsMap;
+  typedef QMap<Point, Q3ValueList<Point> > CellDepsMap;
   CellDepsMap cellDeps;
   /** all range dependencies splitted into cell-chunks (TODO: describe) */
-  QMap<Point, QValueList<RangeDependency> > rangeDeps;
+  QMap<Point, Q3ValueList<RangeDependency> > rangeDeps;
   /** list of cells referencing a given named area */
   QMap<QString, QMap<Point, bool> > areaDeps;
 };
@@ -127,10 +129,10 @@ void DependencyList::dump()
     kDebug() << "Cell " << p.sheetName() << " " << p.pos()
               << " depends on :" << endl;
     RangeList rl = (*it);
-    QValueList<Point>::const_iterator itp = rl.cells.begin();
+    Q3ValueList<Point>::const_iterator itp = rl.cells.begin();
     for ( ; itp != rl.cells.end(); ++itp )
       kDebug() << "  cell " << (*itp).pos() << endl;
-    QValueList<Range>::const_iterator itr = rl.ranges.begin();
+    Q3ValueList<Range>::const_iterator itr = rl.ranges.begin();
     for ( ; itr != rl.ranges.end(); ++itr )
       kDebug() << "  range " << (*itr).toString() << endl;
   }
@@ -141,7 +143,7 @@ void DependencyList::dump()
     Point p = cit.key();
     kDebug() << "The cells that depend on " << p.sheetName() << " " << p.pos()
               << " are :" << endl;
-    QValueList<Point>::const_iterator itp = (*cit).begin();
+    Q3ValueList<Point>::const_iterator itp = (*cit).begin();
     for ( ; itp != (*cit).end(); ++itp )
       kDebug() << "  cell " << (*itp).pos() << endl;
   }
@@ -191,7 +193,7 @@ RangeList DependencyManager::getDependencies (const Point &cell)
   return deps->getDependencies (cell);
 }
 
-QValueList<Point> DependencyManager::getDependants (const Point &cell)
+Q3ValueList<Point> DependencyManager::getDependants (const Point &cell)
 {
   return deps->getDependants (cell);
 }
@@ -238,13 +240,13 @@ RangeList DependencyList::getDependencies (const Point &cell)
   return dependencies[cell];
 }
 
-QValueList<Point> DependencyList::getDependants (const Point &cell)
+Q3ValueList<Point> DependencyList::getDependants (const Point &cell)
 {
   //cell dependencies go first
-  QValueList<Point> list = getCellDeps( cell );
+  Q3ValueList<Point> list = getCellDeps( cell );
   //next, append range dependencies
   Point leading = leadingCell (cell);
-  QValueList<RangeDependency>::iterator it;
+  Q3ValueList<RangeDependency>::iterator it;
   if (!rangeDeps.count (leading))
     return list;  //no range dependencies in this cell chunk -> nothing more to do
 
@@ -310,8 +312,8 @@ void DependencyList::addRangeDependency (const RangeDependency &rd)
   cell.setColumn (rd.cellcolumn);
   dependencies[cell].ranges.push_back (rd.range);
 
-  QValueList<Point> leadings = leadingCells (rd.range);
-  QValueList<Point>::iterator it;
+  Q3ValueList<Point> leadings = leadingCells (rd.range);
+  Q3ValueList<Point>::iterator it;
   for (it = leadings.begin(); it != leadings.end(); ++it)
     sh->dependencies()->deps->rangeDeps[*it].push_back (rd);
 
@@ -327,8 +329,8 @@ void DependencyList::removeDependencies (const Point &cell)
     return;  //it doesn't - nothing more to do
 
   //first we remove cell-dependencies
-  QValueList<Point> cells = dependencies[cell].cells;
-  QValueList<Point>::iterator it1;
+  Q3ValueList<Point> cells = dependencies[cell].cells;
+  Q3ValueList<Point>::iterator it1;
   for (it1 = cells.begin(); it1 != cells.end(); ++it1)
   {
     //get sheet-pointer - needed to handle inter-sheet dependencies correctly
@@ -340,21 +342,21 @@ void DependencyList::removeDependencies (const Point &cell)
       continue;  //this should never happen
 
     //we no longer depend on this cell
-    QValueList<Point>::iterator cit;
+    Q3ValueList<Point>::iterator cit;
     cit = sh->dependencies()->deps->cellDeps[*it1].find (cell);
     if (cit != sh->dependencies()->deps->cellDeps[*it1].end())
       sh->dependencies()->deps->cellDeps[*it1].erase (cit);
   }
 
   //then range-dependencies are removed
-  QValueList<Range> ranges = dependencies[cell].ranges;
-  QValueList<Range>::iterator it2;
-  QValueList<Point> leads;
+  Q3ValueList<Range> ranges = dependencies[cell].ranges;
+  Q3ValueList<Range>::iterator it2;
+  Q3ValueList<Point> leads;
   for (it2 = ranges.begin(); it2 != ranges.end(); ++it2)
   {
     //we construct a list of cell-chunks containing a range and merge it
     //with lists generated from all previous ranges (duplicates are removed)
-    QValueList<Point> leadings = leadingCells (*it2);
+    Q3ValueList<Point> leadings = leadingCells (*it2);
     for (it1 = leadings.begin(); it1 != leadings.end(); ++it1)
       if (!leads.contains (*it1))
         leads.push_back (*it1);
@@ -368,7 +370,7 @@ void DependencyList::removeDependencies (const Point &cell)
 
     if (sh->dependencies()->deps->rangeDeps.contains (*it1))
     {
-      QValueList<RangeDependency>::iterator it3;
+      Q3ValueList<RangeDependency>::iterator it3;
       it3 = sh->dependencies()->deps->rangeDeps[*it1].begin();
       //erase all range dependencies of this cell in this cell-chunk
       while (it3 != sh->dependencies()->deps->rangeDeps[*it1].end())
@@ -413,8 +415,8 @@ void DependencyList::generateDependencies (const Point &cell)
 
   //now that we have the new dependencies, we put them into our data structures
   //and we're done
-  QValueList<Point>::iterator it1;
-  QValueList<Range>::iterator it2;
+  Q3ValueList<Point>::iterator it1;
+  Q3ValueList<Range>::iterator it2;
 
   for (it1 = rl.cells.begin(); it1 != rl.cells.end(); ++it1)
     addDependency (cell, *it1);
@@ -448,8 +450,8 @@ void DependencyList::generateDependencies (const Range &range)
 
 void DependencyList::generateDependencies (const RangeList &rangeList)
 {
-  QValueList<Point>::const_iterator it1;
-  QValueList<Range>::const_iterator it2;
+  Q3ValueList<Point>::const_iterator it1;
+  Q3ValueList<Range>::const_iterator it2;
 
   for (it1 = rangeList.cells.begin(); it1 != rangeList.cells.end(); ++it1)
     generateDependencies (*it1);
@@ -459,9 +461,9 @@ void DependencyList::generateDependencies (const RangeList &rangeList)
 
 void DependencyList::processDependencies (const Point &cell)
 {
-  const QValueList<Point> d = getCellDeps(cell);
-  QValueList<Point>::const_iterator it = d.begin();
-  const QValueList<Point>::const_iterator end = d.end();
+  const Q3ValueList<Point> d = getCellDeps(cell);
+  Q3ValueList<Point>::const_iterator it = d.begin();
+  const Q3ValueList<Point>::const_iterator end = d.end();
   for (; it != end; ++it)
       updateCell (*it);
 
@@ -474,9 +476,9 @@ void DependencyList::processRangeDependencies (const Point &cell)
   if (!rangeDeps.count (leading))
     return;  //no range dependencies in this cell chunk
 
-  const QValueList<RangeDependency> rd = rangeDeps[leading];
+  const Q3ValueList<RangeDependency> rd = rangeDeps[leading];
 
-  QValueList<RangeDependency>::const_iterator it;
+  Q3ValueList<RangeDependency>::const_iterator it;
   for (it = rd.begin(); it != rd.end(); ++it)
   {
     //process all range dependencies, and for each range including the modified cell,
@@ -504,9 +506,9 @@ void DependencyList::processDependencies (const Range &range)
       c.setColumn (col);
       c.setSheet( sheet );
 
-      const QValueList<Point> d = getCellDeps(c);
-      QValueList<Point>::const_iterator it = d.begin();
-      const QValueList<Point>::const_iterator end = d.end();
+      const Q3ValueList<Point> d = getCellDeps(c);
+      Q3ValueList<Point>::const_iterator it = d.begin();
+      const Q3ValueList<Point>::const_iterator end = d.end();
       for (; it != end; ++it)
           updateCell (*it);
     }
@@ -521,13 +523,13 @@ void DependencyList::processRangeDependencies (const Range &range)
   //This will probably happen as a part of splitting this into dep manager
   //and recalc manager
 
-  QValueList<Point> leadings = leadingCells (range);
-  QValueList<Point>::iterator it;
+  Q3ValueList<Point> leadings = leadingCells (range);
+  Q3ValueList<Point>::iterator it;
   for (it = leadings.begin(); it != leadings.end(); ++it)
   {
     if (!rangeDeps.count (*it))
       continue;  //no range dependencies in this cell chunk
-    QValueList<RangeDependency>::iterator it2;
+    Q3ValueList<RangeDependency>::iterator it2;
     for (it2 = rangeDeps[*it].begin(); it2 != rangeDeps[*it].end(); ++it2)
     {
       //process all range dependencies, and for each range intersecting with our range,
@@ -546,8 +548,8 @@ void DependencyList::processRangeDependencies (const Range &range)
 
 void DependencyList::processDependencies (const RangeList &rangeList)
 {
-  QValueList<Point>::const_iterator it1;
-  QValueList<Range>::const_iterator it2;
+  Q3ValueList<Point>::const_iterator it1;
+  Q3ValueList<Range>::const_iterator it2;
 
   for (it1 = rangeList.cells.begin(); it1 != rangeList.cells.end(); ++it1)
     processDependencies (*it1);
@@ -601,9 +603,9 @@ Point DependencyList::leadingCell (const Point &cell) const
   return c;
 }
 
-QValueList<Point> DependencyList::leadingCells (const Range &range) const
+Q3ValueList<Point> DependencyList::leadingCells (const Range &range) const
 {
-  QValueList<Point> cells;
+  Q3ValueList<Point> cells;
   Point cell1, cell2, cell;
 
   cell1.setRow (range.startRow());

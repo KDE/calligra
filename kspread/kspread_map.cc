@@ -21,6 +21,8 @@
 #include <time.h>
 
 #include <qfile.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 #include <kcodecs.h>
 #include <ktempfile.h>
@@ -69,7 +71,7 @@ Doc* Map::doc() const
   return m_doc;
 }
 
-void Map::setProtected( QCString const & passwd )
+void Map::setProtected( Q3CString const & passwd )
 {
   m_strPassword = passwd;
 }
@@ -136,7 +138,7 @@ void Map::loadOasisSettings( KoOasisSettings &settings )
     kDebug()<<" loadOasisSettings( KoOasisSettings &settings ) exist : "<< !sheetsMap.isNull() <<endl;
     if ( !sheetsMap.isNull() )
     {
-        QPtrListIterator<Sheet> it( m_lstSheets );
+        Q3PtrListIterator<Sheet> it( m_lstSheets );
         for( ; it.current(); ++it )
         {
             it.current()->loadOasisSettings( sheetsMap );
@@ -172,7 +174,7 @@ void Map::saveOasisSettings( KoXmlWriter &settingsWriter )
     //<config:config-item-map-named config:name="Tables">
     settingsWriter.startElement("config:config-item-map-named" );
     settingsWriter.addAttribute("config:name","Tables" );
-    QPtrListIterator<Sheet> it( m_lstSheets );
+    Q3PtrListIterator<Sheet> it( m_lstSheets );
     for( ; it.current(); ++it )
     {
         QPoint marker;
@@ -194,7 +196,7 @@ bool Map::saveOasis( KoXmlWriter & xmlWriter, KoGenStyles & mainStyles, KoStore 
     if ( !m_strPassword.isEmpty() )
     {
         xmlWriter.addAttribute("table:structure-protected", "true" );
-        QCString str = KCodecs::base64Encode( m_strPassword );
+        Q3CString str = KCodecs::base64Encode( m_strPassword );
         xmlWriter.addAttribute("table:protection-key", QString( str.data() ) );/* FIXME !!!!*/
     }
 
@@ -213,7 +215,7 @@ bool Map::saveOasis( KoXmlWriter & xmlWriter, KoGenStyles & mainStyles, KoStore 
     KoXmlWriter bodyTmpWriter( tmpFile );
 
 
-    QPtrListIterator<Sheet> it( m_lstSheets );
+    Q3PtrListIterator<Sheet> it( m_lstSheets );
     for( ; it.current(); ++it )
     {
         it.current()->saveOasis( bodyTmpWriter, mainStyles, valStyle, store, manifestWriter, _indexObj, _partIndexObj );
@@ -249,14 +251,14 @@ QDomElement Map::save( QDomDocument& doc )
   {
     if ( m_strPassword.size() > 0 )
     {
-      QCString str = KCodecs::base64Encode( m_strPassword );
+      Q3CString str = KCodecs::base64Encode( m_strPassword );
       mymap.setAttribute( "protected", QString( str.data() ) );
     }
     else
       mymap.setAttribute( "protected", "" );
   }
 
-  QPtrListIterator<Sheet> it( m_lstSheets );
+  Q3PtrListIterator<Sheet> it( m_lstSheets );
   for( ; it.current(); ++it )
   {
     QDomElement e = it.current()->saveXML( doc );
@@ -267,15 +269,15 @@ QDomElement Map::save( QDomDocument& doc )
   return mymap;
 }
 
-bool Map::loadOasis( const QDomElement& body, KoOasisLoadingContext& oasisContext, QDict<Style>& styleMap )
+bool Map::loadOasis( const QDomElement& body, KoOasisLoadingContext& oasisContext, Q3Dict<Style>& styleMap )
 {
     if ( body.hasAttributeNS( KoXmlNS::table, "structure-protected" ) )
     {
-        QCString passwd( "" );
+        Q3CString passwd( "" );
         if ( body.hasAttributeNS( KoXmlNS::table, "protection-key" ) )
         {
             QString p = body.attributeNS( KoXmlNS::table, "protection-key", QString::null );
-            QCString str( p.latin1() );
+            Q3CString str( p.latin1() );
             passwd = KCodecs::base64Decode( str );
         }
         m_strPassword = passwd;
@@ -363,11 +365,11 @@ bool Map::loadXML( const QDomElement& mymap )
 
     if ( passwd.length() > 0 )
     {
-      QCString str( passwd.latin1() );
+      Q3CString str( passwd.latin1() );
       m_strPassword = KCodecs::base64Decode( str );
     }
     else
-      m_strPassword = QCString( "" );
+      m_strPassword = Q3CString( "" );
   }
 
   if (!activeSheet.isEmpty())
@@ -381,7 +383,7 @@ bool Map::loadXML( const QDomElement& mymap )
 
 void Map::update()
 {
-  QPtrListIterator<Sheet> it( m_lstSheets );
+  Q3PtrListIterator<Sheet> it( m_lstSheets );
   for( ; it.current(); ++it )
     it.current()->recalc();
 }
@@ -433,7 +435,7 @@ Sheet * Map::previousSheet( Sheet * currentSheet )
 
 bool Map::saveChildren( KoStore * _store )
 {
-  QPtrListIterator<Sheet> it( m_lstSheets );
+  Q3PtrListIterator<Sheet> it( m_lstSheets );
   for( ; it.current(); ++it )
   {
     // set the child document's url to an internal url (ex: "tar:/0/1")
@@ -445,7 +447,7 @@ bool Map::saveChildren( KoStore * _store )
 
 bool Map::loadChildren( KoStore * _store )
 {
-  QPtrListIterator<Sheet> it( m_lstSheets );
+  Q3PtrListIterator<Sheet> it( m_lstSheets );
   for( ; it.current(); ++it )
     if ( !it.current()->loadChildren( _store ) )
       return false;
@@ -481,7 +483,7 @@ QStringList Map::visibleSheets() const
 {
     QStringList result;
 
-    QPtrListIterator<Sheet> it( m_lstSheets );
+    Q3PtrListIterator<Sheet> it( m_lstSheets );
     for( ; it; ++it )
     {
         Sheet* sheet = it.current();
@@ -497,7 +499,7 @@ QStringList Map::hiddenSheets() const
 {
     QStringList result;
 
-    QPtrListIterator<Sheet> it( m_lstSheets );
+    Q3PtrListIterator<Sheet> it( m_lstSheets );
     for( ; it; ++it )
     {
         Sheet* sheet = it.current();
