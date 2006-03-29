@@ -23,8 +23,10 @@
 */
 
 #include <qlayout.h>
+//Added by qt3to4:
+#include <Q3VBoxLayout>
 #include <klocale.h>
-#include <qlistbox.h>
+#include <q3listbox.h>
 #include <qlabel.h>
 
 #include <kcommand.h>
@@ -44,15 +46,15 @@ ShowDialog::ShowDialog( View* parent, const char* name )
   m_pView = parent;
   QWidget *page = new QWidget( this );
   setMainWidget(page);
-  QVBoxLayout *lay1 = new QVBoxLayout( page, 0, spacingHint() );
+  Q3VBoxLayout *lay1 = new Q3VBoxLayout( page, 0, spacingHint() );
 
   QLabel *label = new QLabel( i18n("Select hidden sheets to show:"), page );
   lay1->addWidget( label );
 
-  list=new QListBox(page);
+  list=new Q3ListBox(page);
   lay1->addWidget( list );
 
-  list->setSelectionMode(QListBox::Multi);
+  list->setSelectionMode(Q3ListBox::Multi);
   QString text;
   QStringList::Iterator it;
   QStringList tabsList=m_pView->doc()->map()->hiddenSheets();
@@ -64,12 +66,12 @@ ShowDialog::ShowDialog( View* parent, const char* name )
   if(!list->count())
   	enableButtonOK(false);
   connect( this, SIGNAL( okClicked() ), this, SLOT( slotOk() ) );
-  connect( list, SIGNAL(doubleClicked(QListBoxItem *)),this,SLOT(slotDoubleClicked(QListBoxItem *)));
+  connect( list, SIGNAL(doubleClicked(Q3ListBoxItem *)),this,SLOT(slotDoubleClicked(Q3ListBoxItem *)));
   resize( 200, 150 );
   setFocus();
 }
 
-void ShowDialog::slotDoubleClicked(QListBoxItem *)
+void ShowDialog::slotDoubleClicked(Q3ListBoxItem *)
 {
     slotOk();
 }

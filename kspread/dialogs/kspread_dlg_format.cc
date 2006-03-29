@@ -28,6 +28,9 @@
 #include <qlayout.h>
 #include <qlabel.h>
 #include <qpushbutton.h>
+//Added by qt3to4:
+#include <Q3VBoxLayout>
+#include <QPixmap>
 
 #include <kbuttonbox.h>
 #include <kmessagebox.h>
@@ -56,7 +59,7 @@ FormatDialog::FormatDialog( View* view, const char* name )
     m_view = view;
     QWidget *page = new QWidget( this );
     setMainWidget(page);
-    QVBoxLayout *vbox = new QVBoxLayout( page, 0, spacingHint() );
+    Q3VBoxLayout *vbox = new Q3VBoxLayout( page, 0, spacingHint() );
 
     QLabel *toplabel = new QLabel( i18n("Select the sheet style to apply:"), page );
     m_combo = new QComboBox( page );

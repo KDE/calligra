@@ -22,9 +22,11 @@
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qlineedit.h>
-#include <qlistbox.h>
-#include <qmultilineedit.h>
+#include <q3listbox.h>
+#include <q3multilineedit.h>
 #include <qpushbutton.h>
+//Added by qt3to4:
+#include <Q3GridLayout>
 
 #include <kbuttonbox.h>
 #include <kconfig.h>
@@ -45,13 +47,13 @@ ListDialog::ListDialog( QWidget* parent, const char* name )
   QWidget* page = new QWidget( this );
   setMainWidget( page );
 
-  QGridLayout *grid1 = new QGridLayout( page,10,3,KDialog::marginHint(), KDialog::spacingHint());
+  Q3GridLayout *grid1 = new Q3GridLayout( page,10,3,KDialog::marginHint(), KDialog::spacingHint());
 
   QLabel *lab=new QLabel(page);
   lab->setText(i18n("List:" ));
   grid1->addWidget(lab,0,0);
 
-  list=new QListBox(page);
+  list=new Q3ListBox(page);
   grid1->addMultiCellWidget(list,1,8,0,0);
 
 
@@ -59,7 +61,7 @@ ListDialog::ListDialog( QWidget* parent, const char* name )
   lab->setText(i18n("Entry:" ));
   grid1->addWidget(lab,0,1);
 
-  entryList=new QMultiLineEdit(page);
+  entryList=new Q3MultiLineEdit(page);
   grid1->addMultiCellWidget(entryList,1,8,1,1);
 
   m_pRemove=new QPushButton(i18n("&Remove"),page);
@@ -84,8 +86,8 @@ ListDialog::ListDialog( QWidget* parent, const char* name )
   connect( m_pNew, SIGNAL( clicked() ), this, SLOT( slotNew() ) );
   connect( m_pModify, SIGNAL( clicked() ), this, SLOT( slotModify() ) );
   connect( m_pCopy, SIGNAL( clicked() ), this, SLOT( slotCopy() ) );
-  connect( list, SIGNAL(doubleClicked(QListBoxItem *)),this,SLOT(slotDoubleClicked(QListBoxItem *)));
-  connect( list, SIGNAL(clicked ( QListBoxItem * )),this,SLOT(slotTextClicked(QListBoxItem * )));
+  connect( list, SIGNAL(doubleClicked(Q3ListBoxItem *)),this,SLOT(slotDoubleClicked(Q3ListBoxItem *)));
+  connect( list, SIGNAL(clicked ( Q3ListBoxItem * )),this,SLOT(slotTextClicked(Q3ListBoxItem * )));
   init();
   entryList->setEnabled(false);
   m_pModify->setEnabled(false);
@@ -96,7 +98,7 @@ ListDialog::ListDialog( QWidget* parent, const char* name )
 }
 
 
-void ListDialog::slotTextClicked(QListBoxItem*)
+void ListDialog::slotTextClicked(Q3ListBoxItem*)
 {
     //we can't remove the two first item
     bool state=list->currentItem()>1;
@@ -174,7 +176,7 @@ void ListDialog::init()
     list->insertStringList(lst);
 }
 
-void ListDialog::slotDoubleClicked(QListBoxItem *)
+void ListDialog::slotDoubleClicked(Q3ListBoxItem *)
 {
     //we can't modify the two first item
     if(list->currentItem()<2)

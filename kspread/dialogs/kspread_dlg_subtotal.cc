@@ -21,8 +21,8 @@
 
 #include <qcheckbox.h>
 #include <qcombobox.h>
-#include <qlistview.h>
-#include <qmemarray.h>
+#include <q3listview.h>
+#include <q3memarray.h>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -45,7 +45,7 @@ SubtotalDialog::SubtotalDialog( View * parent, QRect const & selection, const ch
     m_selection( selection ),
     m_dialog( new Subtotal( this ) )
 {
-  setButtonBoxOrientation( Vertical );
+  setButtonBoxOrientation( Qt::Vertical );
   setMainWidget( m_dialog );
 
   fillColumnBoxes();
@@ -59,14 +59,14 @@ SubtotalDialog::~SubtotalDialog()
 void SubtotalDialog::slotOk()
 {
   int numOfCols = m_selection.width();
-  QMemArray<int> columns( numOfCols );
+  Q3MemArray<int> columns( numOfCols );
 
   int n = 0;
   bool empty = true;
   int left = m_selection.left();
-  for ( QListViewItem * item = m_dialog->m_columnList->firstChild(); item; item = item->nextSibling() )
+  for ( Q3ListViewItem * item = m_dialog->m_columnList->firstChild(); item; item = item->nextSibling() )
   {
-    if ( ((QCheckListItem * ) item)->isOn() )
+    if ( ((Q3CheckListItem * ) item)->isOn() )
     {
       columns[n] = left + n;
       empty = false;
@@ -231,7 +231,7 @@ void SubtotalDialog::fillColumnBoxes()
   int row = m_selection.top();
 
   Cell    * cell;
-  QCheckListItem * item;
+  Q3CheckListItem * item;
 
   QString text;
   QString col( i18n( "Column '%1' ") );
@@ -248,9 +248,9 @@ void SubtotalDialog::fillColumnBoxes()
 
     m_dialog->m_columnBox->insertItem( text );
 
-    item = new QCheckListItem( m_dialog->m_columnList,
+    item = new Q3CheckListItem( m_dialog->m_columnList,
                                text,
-                               QCheckListItem::CheckBox );
+                               Q3CheckListItem::CheckBox );
     item->setOn(false);
     m_dialog->m_columnList->insertItem( item );
   }

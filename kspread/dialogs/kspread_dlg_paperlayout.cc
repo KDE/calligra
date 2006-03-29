@@ -35,10 +35,15 @@
 #include <qlabel.h>
 #include <qlineedit.h>
 #include <qradiobutton.h>
-#include <qbuttongroup.h>
+#include <q3buttongroup.h>
 #include <qcombobox.h>
 #include <qlayout.h>
 #include <qhgroupbox.h>
+//Added by qt3to4:
+#include <QCloseEvent>
+#include <Q3GridLayout>
+#include <QEvent>
+#include <Q3VBoxLayout>
 
 #include <kapplication.h>
 #include <kdebug.h>
@@ -68,7 +73,7 @@ void PaperLayout::initTab()
     SheetPrint* print = m_pSheet->print();
 
     QWidget *tab = addPage(i18n( "Options" ));
-    QVBoxLayout *vbox = new QVBoxLayout( tab, KDialog::marginHint(), KDialog::spacingHint() );
+    Q3VBoxLayout *vbox = new Q3VBoxLayout( tab, KDialog::marginHint(), KDialog::spacingHint() );
 
     pApplyToAll = new QCheckBox ( i18n( "&Apply to all sheets" ), tab );
     pApplyToAll->setChecked( print->printGrid() );
@@ -86,12 +91,12 @@ void PaperLayout::initTab()
     vbox->addStretch( 1 );
 }
 
-void PaperLayout::initGeneralOptions( QWidget * tab, QVBoxLayout * vbox )
+void PaperLayout::initGeneralOptions( QWidget * tab, Q3VBoxLayout * vbox )
 {
     SheetPrint* print = m_pSheet->print();
 
-    QGroupBox *group = new QGroupBox( i18n("General Options"), tab );
-    QGridLayout *l = new QGridLayout( group, 2, 3 );
+    Q3GroupBox *group = new Q3GroupBox( i18n("General Options"), tab );
+    Q3GridLayout *l = new Q3GridLayout( group, 2, 3 );
 
     pPrintGrid = new QCheckBox ( i18n("Print &grid"), group );
     pPrintGrid->setChecked( print->printGrid() );
@@ -121,16 +126,16 @@ void PaperLayout::initGeneralOptions( QWidget * tab, QVBoxLayout * vbox )
     vbox->addWidget( group );
 }
 
-void PaperLayout::initRanges( QWidget * tab, QVBoxLayout * vbox )
+void PaperLayout::initRanges( QWidget * tab, Q3VBoxLayout * vbox )
 {
     SheetPrint* print = m_pSheet->print();
 
-    QGroupBox *rangeGroup = new QGroupBox( i18n("Ranges"), tab );
+    Q3GroupBox *rangeGroup = new Q3GroupBox( i18n("Ranges"), tab );
     rangeGroup->setColumnLayout( 0, Qt::Vertical );
     rangeGroup->setMargin( KDialog::marginHint() );
     vbox->addWidget( rangeGroup );
 
-    QGridLayout *grid = new QGridLayout( rangeGroup->layout(), 3, 2, KDialog::spacingHint() );
+    Q3GridLayout *grid = new Q3GridLayout( rangeGroup->layout(), 3, 2, KDialog::spacingHint() );
 
     QLabel *pPrintRange = new QLabel ( i18n("Print range:"), rangeGroup );
     grid->addWidget( pPrintRange, 0, 0 );
@@ -173,16 +178,16 @@ void PaperLayout::initRanges( QWidget * tab, QVBoxLayout * vbox )
     grid->addRowSpacing( 2, eRepeatCols->height() );
 }
 
-void PaperLayout::initScaleOptions( QWidget * tab, QVBoxLayout * vbox )
+void PaperLayout::initScaleOptions( QWidget * tab, Q3VBoxLayout * vbox )
 {
     SheetPrint* print = m_pSheet->print();
 
-    QButtonGroup *zoomGroup = new QButtonGroup( i18n("Scale Printout"), tab );
+    Q3ButtonGroup *zoomGroup = new Q3ButtonGroup( i18n("Scale Printout"), tab );
     zoomGroup->setColumnLayout( 0, Qt::Vertical );
     zoomGroup->setMargin( KDialog::marginHint() );
     vbox->addWidget( zoomGroup );
 
-    QGridLayout *grid = new QGridLayout( zoomGroup->layout(), 2, 6,
+    Q3GridLayout *grid = new Q3GridLayout( zoomGroup->layout(), 2, 6,
                                          KDialog::spacingHint() );
 
     m_rScalingZoom = new QRadioButton ( i18n("Zoom:"), zoomGroup );

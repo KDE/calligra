@@ -41,22 +41,25 @@
 
 #include <KoGlobal.h>
 
-#include <qgroupbox.h>
+#include <q3groupbox.h>
 #include <qlabel.h>
 #include <qlayout.h>
+//Added by qt3to4:
+#include <Q3GridLayout>
+#include <Q3ValueList>
 
 using namespace KSpread;
 
-ConditionalWidget::ConditionalWidget( QWidget* parent, const char* name, WFlags fl )
+ConditionalWidget::ConditionalWidget( QWidget* parent, const char* name, Qt::WFlags fl )
     : QWidget( parent, name, fl )
 {
-  QGridLayout * Form1Layout = new QGridLayout( this, 1, 1, 11, 6, "Form1Layout");
+  Q3GridLayout * Form1Layout = new Q3GridLayout( this, 1, 1, 11, 6, "Form1Layout");
 
-  QGroupBox * groupBox1_3 = new QGroupBox( this, "groupBox1_3" );
+  Q3GroupBox * groupBox1_3 = new Q3GroupBox( this, "groupBox1_3" );
   groupBox1_3->setColumnLayout(0, Qt::Vertical );
   groupBox1_3->layout()->setSpacing( KDialog::spacingHint() );
   groupBox1_3->layout()->setMargin( KDialog::marginHint() );
-  QGridLayout * groupBox1_3Layout = new QGridLayout( groupBox1_3->layout() );
+  Q3GridLayout * groupBox1_3Layout = new Q3GridLayout( groupBox1_3->layout() );
   groupBox1_3Layout->setAlignment( Qt::AlignTop );
 
   QLabel * textLabel1_3 = new QLabel( groupBox1_3, "textLabel1_3" );
@@ -87,12 +90,12 @@ ConditionalWidget::ConditionalWidget( QWidget* parent, const char* name, WFlags 
 
   Form1Layout->addWidget( groupBox1_3, 2, 0 );
 
-  QGroupBox * groupBox1_2 = new QGroupBox( this, "groupBox1_2" );
+  Q3GroupBox * groupBox1_2 = new Q3GroupBox( this, "groupBox1_2" );
   groupBox1_2->setColumnLayout(0, Qt::Vertical );
   groupBox1_2->layout()->setSpacing( KDialog::spacingHint() );
   groupBox1_2->layout()->setMargin( KDialog::marginHint() );
 
-  QGridLayout * groupBox1_2Layout = new QGridLayout( groupBox1_2->layout() );
+  Q3GridLayout * groupBox1_2Layout = new Q3GridLayout( groupBox1_2->layout() );
   groupBox1_2Layout->setAlignment( Qt::AlignTop );
 
   QLabel * textLabel1_2 = new QLabel( groupBox1_2, "textLabel1_2" );
@@ -123,12 +126,12 @@ ConditionalWidget::ConditionalWidget( QWidget* parent, const char* name, WFlags 
   groupBox1_2Layout->addItem( spacer_4, 1, 3 );
   Form1Layout->addWidget( groupBox1_2, 1, 0 );
 
-  QGroupBox * groupBox1_1 = new QGroupBox( this, "groupBox1_1" );
+  Q3GroupBox * groupBox1_1 = new Q3GroupBox( this, "groupBox1_1" );
   groupBox1_1->setColumnLayout(0, Qt::Vertical );
   groupBox1_1->layout()->setSpacing( KDialog::spacingHint() );
   groupBox1_1->layout()->setMargin( KDialog::marginHint() );
 
-  QGridLayout * groupBox1_1Layout = new QGridLayout( groupBox1_1->layout() );
+  Q3GridLayout * groupBox1_1Layout = new Q3GridLayout( groupBox1_1->layout() );
   groupBox1_1Layout->setAlignment( Qt::AlignTop );
 
   QLabel * textLabel1_1 = new QLabel( groupBox1_1, "textLabel1_2_2" );
@@ -291,7 +294,7 @@ ConditionalDialog::ConditionalDialog( View * parent, const char * name,
   m_dlg->m_style_3->insertStringList( list );
 
   setCaption( i18n( "Conditional Cell Attributes" ) );
-  setButtonBoxOrientation( Vertical );
+  setButtonBoxOrientation( Qt::Vertical );
   setMainWidget( m_dlg );
 
   init();
@@ -299,13 +302,13 @@ ConditionalDialog::ConditionalDialog( View * parent, const char * name,
 
 void ConditionalDialog::init()
 {
-  QValueList<Conditional> conditionList;
-  QValueList<Conditional> otherList;
+  Q3ValueList<Conditional> conditionList;
+  Q3ValueList<Conditional> otherList;
   bool found;
   int numCondition;
 
-  QValueList<Conditional>::iterator it1;
-  QValueList<Conditional>::iterator it2;
+  Q3ValueList<Conditional>::iterator it1;
+  Q3ValueList<Conditional>::iterator it2;
 
   Cell * obj = m_view->activeSheet()->cellAt( m_marker.left(),
                                                      m_marker.top() );
@@ -649,7 +652,7 @@ void ConditionalDialog::slotOk()
   m_view->doc()->emitBeginOperation( false );
   StyleManager * manager = m_view->doc()->styleManager();
 
-  QValueList<Conditional> newList;
+  Q3ValueList<Conditional> newList;
 
   Conditional newCondition;
 

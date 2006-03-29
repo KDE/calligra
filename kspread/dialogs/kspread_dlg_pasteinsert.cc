@@ -21,9 +21,11 @@
 */
 
 #include <qlayout.h>
+//Added by qt3to4:
+#include <Q3VBoxLayout>
 #include <klocale.h>
 #include <kbuttonbox.h>
-#include <qbuttongroup.h>
+#include <q3buttongroup.h>
 #include <kdebug.h>
 #include <qradiobutton.h>
 #include <qcheckbox.h>
@@ -45,9 +47,9 @@ PasteInsertDialog::PasteInsertDialog( View* parent, const char* name,const QRect
 
   QWidget *page = new QWidget( this );
   setMainWidget(page);
-  QVBoxLayout *lay1 = new QVBoxLayout( page, 0, spacingHint() );
+  Q3VBoxLayout *lay1 = new Q3VBoxLayout( page, 0, spacingHint() );
 
-  QButtonGroup *grp = new QButtonGroup( 1, QGroupBox::Horizontal, i18n("Insert"),page);
+  Q3ButtonGroup *grp = new Q3ButtonGroup( 1, Qt::Horizontal, i18n("Insert"),page);
   grp->setRadioButtonExclusive( TRUE );
   grp->layout();
   lay1->addWidget(grp);

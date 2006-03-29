@@ -24,8 +24,12 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <qtextbrowser.h>
+#include <q3textbrowser.h>
 #include <qtabwidget.h>
+//Added by qt3to4:
+#include <QCloseEvent>
+#include <Q3GridLayout>
+#include <Q3VBoxLayout>
 
 #include "kspread_dlg_formula.h"
 #include "kspread_canvas.h"
@@ -45,7 +49,7 @@
 #include <knumvalidator.h>
 #include <qcombobox.h>
 #include <qevent.h>
-#include <qlistbox.h>
+#include <q3listbox.h>
 #include <qlabel.h>
 #include <qpushbutton.h>
 #include <klineedit.h>
@@ -83,7 +87,7 @@ FormulaDialog::FormulaDialog( View* parent, const char* name,const QString& form
     QWidget *page = new QWidget( this );
     setMainWidget(page);
 
-    QGridLayout *grid1 = new QGridLayout(page,11,2,KDialog::marginHint(), KDialog::spacingHint());
+    Q3GridLayout *grid1 = new Q3GridLayout(page,11,2,KDialog::marginHint(), KDialog::spacingHint());
 
     searchFunct = new KLineEdit(page);
     QSizePolicy sp3( QSizePolicy::Preferred, QSizePolicy::Fixed );
@@ -97,7 +101,7 @@ FormulaDialog::FormulaDialog( View* parent, const char* name,const QString& form
     typeFunction->insertStringList( cats  );
     grid1->addWidget( typeFunction, 1, 0 );
 
-    functions = new QListBox(page);
+    functions = new Q3ListBox(page);
     QSizePolicy sp1( QSizePolicy::Preferred, QSizePolicy::Expanding );
     functions->setSizePolicy( sp1 );
     grid1->addWidget( functions, 2, 0 );
@@ -115,14 +119,14 @@ FormulaDialog::FormulaDialog( View* parent, const char* name,const QString& form
     m_tabwidget->setSizePolicy( sp2 );
     grid1->addMultiCellWidget( m_tabwidget, 0, 2, 1, 1 );
 
-    m_browser = new QTextBrowser( m_tabwidget );
+    m_browser = new Q3TextBrowser( m_tabwidget );
     m_browser->setMinimumWidth( 300 );
 
     m_tabwidget->addTab( m_browser, i18n("&Help") );
     int index = m_tabwidget->currentPageIndex();
 
     m_input = new QWidget( m_tabwidget );
-    QVBoxLayout *grid2 = new QVBoxLayout( m_input, KDialog::marginHint(), KDialog::spacingHint() );
+    Q3VBoxLayout *grid2 = new Q3VBoxLayout( m_input, KDialog::marginHint(), KDialog::spacingHint() );
 
     // grid2->setResizeMode (QLayout::Minimum);
 
@@ -173,8 +177,8 @@ FormulaDialog::FormulaDialog( View* parent, const char* name,const QString& form
              this, SLOT( slotSelected(const QString &) ) );
     connect( functions, SIGNAL( selected(const QString &) ),
              this, SLOT( slotSelected(const QString &) ) );
-    connect( functions, SIGNAL( doubleClicked(QListBoxItem * ) ),
-             this ,SLOT( slotDoubleClicked(QListBoxItem *) ) );
+    connect( functions, SIGNAL( doubleClicked(Q3ListBoxItem * ) ),
+             this ,SLOT( slotDoubleClicked(Q3ListBoxItem *) ) );
 
     slotActivated(i18n("All"));
 
@@ -553,7 +557,7 @@ static void showEntry( QLineEdit* edit, QLabel* label,
 
 }
 
-void FormulaDialog::slotDoubleClicked( QListBoxItem* item )
+void FormulaDialog::slotDoubleClicked( Q3ListBoxItem* item )
 {
     if ( !item )
 	return;
@@ -711,7 +715,7 @@ void FormulaDialog::slotShowFunction( const QString& function )
     slotActivated( category );
 
     // select the function
-    QListBoxItem* item = functions->findItem( function,
+    Q3ListBoxItem* item = functions->findItem( function,
       Qt::ExactMatch | Qt::CaseSensitive );
     if( item ) functions->setCurrentItem( item );
 

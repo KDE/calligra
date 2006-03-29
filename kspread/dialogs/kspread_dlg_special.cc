@@ -21,8 +21,10 @@
 */
 
 #include <qlayout.h>
-#include <qbuttongroup.h>
+#include <q3buttongroup.h>
 #include <qradiobutton.h>
+//Added by qt3to4:
+#include <Q3VBoxLayout>
 
 #include <klocale.h>
 
@@ -42,9 +44,9 @@ SpecialDialog::SpecialDialog( View* parent, const char* name )
     m_pView = parent;
     QWidget *page = new QWidget( this );
     setMainWidget(page);
-    QVBoxLayout *lay1 = new QVBoxLayout( page, 0, spacingHint() );
+    Q3VBoxLayout *lay1 = new Q3VBoxLayout( page, 0, spacingHint() );
 
-    QButtonGroup *grp = new QButtonGroup( 1, QGroupBox::Horizontal, i18n( "Paste What" ),page );
+    Q3ButtonGroup *grp = new Q3ButtonGroup( 1, Qt::Horizontal, i18n( "Paste What" ),page );
     grp->setRadioButtonExclusive( TRUE );
     grp->layout();
     lay1->addWidget(grp);
@@ -57,7 +59,7 @@ SpecialDialog::SpecialDialog( View* parent, const char* name )
     rb4 = new QRadioButton( i18n("Everything without border"), grp );
     rb1->setChecked(true);
 
-    grp = new QButtonGroup( 1, QGroupBox::Horizontal, i18n("Operation"),page);
+    grp = new Q3ButtonGroup( 1, Qt::Horizontal, i18n("Operation"),page);
     grp->setRadioButtonExclusive( TRUE );
     grp->layout();
     lay1->addWidget(grp);

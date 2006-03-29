@@ -42,20 +42,25 @@
 #include <kstdguiitem.h>
 #include <kpushbutton.h>
 
-#include <qframe.h>
+#include <q3frame.h>
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qlineedit.h>
 #include <qtooltip.h>
 #include <qvariant.h>
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
+//Added by qt3to4:
+#include <Q3VBoxLayout>
+#include <Q3GridLayout>
+#include <QEvent>
+#include <QCloseEvent>
 
 #include <math.h>
 
 using namespace KSpread;
 
 GoalSeekDialog::GoalSeekDialog( View * parent,  QPoint const & marker,
-                                        const char * name, bool, WFlags fl )
+                                        const char * name, bool, Qt::WFlags fl )
   : KDialog( parent, name, false, fl ),
     m_pView( parent ),
     m_maxIter( 1000 ),
@@ -74,12 +79,12 @@ GoalSeekDialog::GoalSeekDialog( View * parent,  QPoint const & marker,
   setCaption( i18n( "Goal Seek" ) );
   setSizeGripEnabled( true );
 
-  GoalSeekDialogLayout = new QGridLayout( this, 1, 1, 11, 6, "GoalSeekDialogLayout");
+  GoalSeekDialogLayout = new Q3GridLayout( this, 1, 1, 11, 6, "GoalSeekDialogLayout");
 
-  m_startFrame = new QFrame( this, "m_startFrame" );
-  m_startFrame->setFrameShape( QFrame::StyledPanel );
-  m_startFrame->setFrameShadow( QFrame::Raised );
-  m_startFrameLayout = new QGridLayout( m_startFrame, 1, 1, 11, 6, "m_startFrameLayout");
+  m_startFrame = new Q3Frame( this, "m_startFrame" );
+  m_startFrame->setFrameShape( Q3Frame::StyledPanel );
+  m_startFrame->setFrameShadow( Q3Frame::Raised );
+  m_startFrameLayout = new Q3GridLayout( m_startFrame, 1, 1, 11, 6, "m_startFrameLayout");
 
   QLabel * TextLabel4 = new QLabel( m_startFrame, "TextLabel4" );
   TextLabel4->setText( i18n( "To value:" ) );
@@ -106,7 +111,7 @@ GoalSeekDialog::GoalSeekDialog( View * parent,  QPoint const & marker,
   m_startFrameLayout->addWidget( TextLabel3, 0, 0 );
   GoalSeekDialogLayout->addWidget( m_startFrame, 0, 0 );
 
-  QVBoxLayout * Layout5 = new QVBoxLayout( 0, 0, 6, "Layout5");
+  Q3VBoxLayout * Layout5 = new Q3VBoxLayout( 0, 0, 6, "Layout5");
 
   m_buttonOk = new QPushButton( this, "m_buttonOk" );
   m_buttonOk->setText( i18n( "&Start" ) );
@@ -124,11 +129,11 @@ GoalSeekDialog::GoalSeekDialog( View * parent,  QPoint const & marker,
 
   GoalSeekDialogLayout->addMultiCellLayout( Layout5, 0, 1, 1, 1 );
 
-  m_resultFrame = new QFrame( this, "m_resultFrame" );
-  m_resultFrame->setFrameShape( QFrame::StyledPanel );
-  m_resultFrame->setFrameShadow( QFrame::Raised );
+  m_resultFrame = new Q3Frame( this, "m_resultFrame" );
+  m_resultFrame->setFrameShape( Q3Frame::StyledPanel );
+  m_resultFrame->setFrameShadow( Q3Frame::Raised );
   m_resultFrame->setMinimumWidth( 350 );
-  m_resultFrameLayout = new QGridLayout( m_resultFrame, 1, 1, 11, 6, "m_resultFrameLayout");
+  m_resultFrameLayout = new Q3GridLayout( m_resultFrame, 1, 1, 11, 6, "m_resultFrameLayout");
 
   m_currentValueLabel = new QLabel( m_resultFrame, "m_currentValueLabel" );
   m_currentValueLabel->setText( i18n( "Current value:" ) );
@@ -152,7 +157,7 @@ GoalSeekDialog::GoalSeekDialog( View * parent,  QPoint const & marker,
 
   m_resultText = new QLabel( m_resultFrame, "m_resultText" );
   m_resultText->setText( "Goal seeking with cell <cell> found <a | no> solution:" );
-  m_resultText->setAlignment( int( QLabel::WordBreak | QLabel::AlignVCenter ) );
+  m_resultText->setAlignment( int( Qt::TextWordWrap | Qt::AlignVCenter ) );
 
   m_resultFrameLayout->addMultiCellWidget( m_resultText, 0, 0, 0, 1 );
 

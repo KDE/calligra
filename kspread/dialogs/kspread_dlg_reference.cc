@@ -41,6 +41,12 @@
 #include <qlineedit.h>
 #include <qpushbutton.h>
 #include <qlayout.h>
+//Added by qt3to4:
+#include <Q3GridLayout>
+#include <Q3PtrList>
+#include <Q3ValueList>
+#include <Q3HBoxLayout>
+#include <Q3VBoxLayout>
 
 #include <kbuttonbox.h>
 #include <kmessagebox.h>
@@ -55,10 +61,10 @@ reference::reference( View* parent, const char* name )
   : QDialog( parent, name,TRUE )
 {
   m_pView = parent;
-  QVBoxLayout *lay1 = new QVBoxLayout( this );
+  Q3VBoxLayout *lay1 = new Q3VBoxLayout( this );
   lay1->setMargin( KDialog::marginHint() );
   lay1->setSpacing( KDialog::spacingHint() );
-  m_list = new QListBox(this);
+  m_list = new Q3ListBox(this);
   lay1->addWidget( m_list );
 
   setCaption( i18n("Area Name") );
@@ -80,14 +86,14 @@ reference::reference( View* parent, const char* name )
 
   QString text;
   QStringList sheetName;
-  QPtrListIterator<Sheet> it2 ( m_pView->doc()->map()->sheetList() );
+  Q3PtrListIterator<Sheet> it2 ( m_pView->doc()->map()->sheetList() );
   for( ; it2.current(); ++it2 )
   {
       sheetName.append( it2.current()->sheetName());
   }
 
-  QValueList<Reference>::Iterator it;
-  QValueList<Reference> area = m_pView->doc()->listArea();
+  Q3ValueList<Reference>::Iterator it;
+  Q3ValueList<Reference> area = m_pView->doc()->listArea();
   for ( it = area.begin(); it != area.end(); ++it )
   {
     text = (*it).ref_name;
@@ -106,10 +112,10 @@ reference::reference( View* parent, const char* name )
   connect( m_pCancel, SIGNAL( clicked() ), this, SLOT( slotCancel() ) );
   connect( m_pEdit, SIGNAL( clicked() ), this, SLOT( slotEdit() ) );
   connect( m_pRemove, SIGNAL( clicked() ), this, SLOT( slotRemove() ) );
-  connect( m_list, SIGNAL(doubleClicked(QListBoxItem *)), this,
-           SLOT(slotDoubleClicked(QListBoxItem *)));
-  connect( m_list, SIGNAL(highlighted ( QListBoxItem * ) ), this,
-           SLOT(slotHighlighted(QListBoxItem * )));
+  connect( m_list, SIGNAL(doubleClicked(Q3ListBoxItem *)), this,
+           SLOT(slotDoubleClicked(Q3ListBoxItem *)));
+  connect( m_list, SIGNAL(highlighted ( Q3ListBoxItem * ) ), this,
+           SLOT(slotHighlighted(Q3ListBoxItem * )));
   m_rangeName->setText(i18n("Area: %1").arg(""));
 
   resize( 250, 200 );
@@ -118,8 +124,8 @@ reference::reference( View* parent, const char* name )
 void reference::displayAreaValues(QString const & areaName)
 {
   QString tmpName;
-  QValueList<Reference>::Iterator it;
-  QValueList<Reference> area( m_pView->doc()->listArea() );
+  Q3ValueList<Reference>::Iterator it;
+  Q3ValueList<Reference> area( m_pView->doc()->listArea() );
   for ( it = area.begin(); it != area.end(); ++it )
   {
     if ((*it).ref_name == areaName)
@@ -138,13 +144,13 @@ void reference::displayAreaValues(QString const & areaName)
   m_rangeName->setText(tmpName);
 }
 
-void reference::slotHighlighted(QListBoxItem * )
+void reference::slotHighlighted(Q3ListBoxItem * )
 {
   QString tmp = m_list->text(m_list->currentItem());
   displayAreaValues(tmp);
 }
 
-void reference::slotDoubleClicked(QListBoxItem *)
+void reference::slotDoubleClicked(Q3ListBoxItem *)
 {
   slotOk();
 }
@@ -221,7 +227,7 @@ void reference::slotOk()
   {
     int index = m_list->currentItem();
     text = m_list->text(index);
-    QValueList<Reference> area = m_pView->doc()->listArea();
+    Q3ValueList<Reference> area = m_pView->doc()->listArea();
 
     if (m_pView->activeSheet()->sheetName() != area[ index ].sheet_name)
     {
@@ -261,10 +267,10 @@ EditAreaName::EditAreaName( View * parent,
   QWidget * page = new QWidget( this );
   setMainWidget(page);
 
-  QGridLayout * EditAreaNameLayout
-    = new QGridLayout( page, 1, 1, 11, 6, "EditAreaNameLayout");
+  Q3GridLayout * EditAreaNameLayout
+    = new Q3GridLayout( page, 1, 1, 11, 6, "EditAreaNameLayout");
 
-  QHBoxLayout * Layout1 = new QHBoxLayout( 0, 0, 6, "Layout1");
+  Q3HBoxLayout * Layout1 = new Q3HBoxLayout( 0, 0, 6, "Layout1");
   QSpacerItem * spacer = new QSpacerItem( 0, 0, QSizePolicy::Expanding,
                                           QSizePolicy::Minimum );
   Layout1->addItem( spacer );
@@ -299,7 +305,7 @@ EditAreaName::EditAreaName( View * parent,
 
   EditAreaNameLayout->addWidget( m_areaName, 0, 1 );
 
-  QPtrList<Sheet> sheetList = m_pView->doc()->map()->sheetList();
+  Q3PtrList<Sheet> sheetList = m_pView->doc()->map()->sheetList();
   for (unsigned int c = 0; c < sheetList.count(); ++c)
   {
     Sheet * t = sheetList.at(c);
@@ -309,8 +315,8 @@ EditAreaName::EditAreaName( View * parent,
   }
 
   QString tmpName;
-  QValueList<Reference>::Iterator it;
-  QValueList<Reference> area(m_pView->doc()->listArea());
+  Q3ValueList<Reference>::Iterator it;
+  Q3ValueList<Reference> area(m_pView->doc()->listArea());
   for ( it = area.begin(); it != area.end(); ++it )
   {
     if ((*it).ref_name == areaname)

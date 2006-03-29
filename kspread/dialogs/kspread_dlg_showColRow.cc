@@ -22,6 +22,9 @@
 
 #include <qlabel.h>
 #include <qlayout.h>
+//Added by qt3to4:
+#include <Q3VBoxLayout>
+#include <Q3ValueList>
 
 #include <klocale.h>
 #include <q3tl.h>
@@ -44,7 +47,7 @@ ShowColRow::ShowColRow( View* parent, const char* name, Type _type )
 
   QWidget *page = new QWidget( this );
   setMainWidget(page);
-  QVBoxLayout *lay1 = new QVBoxLayout( page, 0, spacingHint() );
+  Q3VBoxLayout *lay1 = new Q3VBoxLayout( page, 0, spacingHint() );
 
   QLabel *label = new QLabel( page );
 
@@ -57,7 +60,7 @@ ShowColRow::ShowColRow( View* parent, const char* name, Type _type )
         label->setText(i18n("Select hidden rows to show:"));
   }
 
-  list=new QListBox(page);
+  list=new Q3ListBox(page);
 
   lay1->addWidget( label );
   lay1->addWidget( list );
@@ -75,7 +78,7 @@ ShowColRow::ShowColRow( View* parent, const char* name, Type _type )
 	      listInt.append(col->column());
 	  }
         qHeapSort(listInt);
-        QValueList<int>::Iterator it;
+        Q3ValueList<int>::Iterator it;
         for( it = listInt.begin(); it != listInt.end(); ++it )
 	  {
 	    if(!showColNumber)
@@ -97,7 +100,7 @@ ShowColRow::ShowColRow( View* parent, const char* name, Type _type )
 	      listInt.append(row->row());
 	  }
         qHeapSort(listInt);
-        QValueList<int>::Iterator it;
+        Q3ValueList<int>::Iterator it;
         for( it = listInt.begin(); it != listInt.end(); ++it )
 	  listRow+=i18n("Row: %1").arg(text.setNum(*it));
 
@@ -108,14 +111,14 @@ ShowColRow::ShowColRow( View* parent, const char* name, Type _type )
       enableButtonOK(false);
 
   //selection multiple
-  list->setSelectionMode(QListBox::Multi);
+  list->setSelectionMode(Q3ListBox::Multi);
   connect( this, SIGNAL( okClicked() ), this, SLOT( slotOk() ) );
-  connect( list, SIGNAL(doubleClicked(QListBoxItem *)),this,SLOT(slotDoubleClicked(QListBoxItem *)));
+  connect( list, SIGNAL(doubleClicked(Q3ListBoxItem *)),this,SLOT(slotDoubleClicked(Q3ListBoxItem *)));
   resize( 200, 150 );
   setFocus();
 }
 
-void ShowColRow::slotDoubleClicked(QListBoxItem *)
+void ShowColRow::slotDoubleClicked(Q3ListBoxItem *)
 {
     slotOk();
 }

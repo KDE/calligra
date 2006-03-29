@@ -25,9 +25,11 @@
 #include "link.h"
 
 #include <qcombobox.h>
-#include <qframe.h>
+#include <q3frame.h>
 #include <qlabel.h>
 #include <qlayout.h>
+//Added by qt3to4:
+#include <Q3VBoxLayout>
 
 #include <kdesktopfile.h>
 #include <kdialogbase.h>
@@ -44,16 +46,16 @@ class LinkDialog::Private
 {
 public:
     QString text;
-    QFrame* internetPage;
+    Q3Frame* internetPage;
     KLineEdit* internetText;
     KLineEdit* internetLink;
-    QFrame* mailPage;
+    Q3Frame* mailPage;
     KLineEdit* mailText;
     KLineEdit* mailLink;
-    QFrame* filePage;
+    Q3Frame* filePage;
     KLineEdit* fileText;
     KUrlRequester* fileLink;
-    QFrame* cellPage;
+    Q3Frame* cellPage;
     KLineEdit* cellText;
     KLineEdit* cellLink;
 };
@@ -68,7 +70,7 @@ LinkDialog::LinkDialog( QWidget*, const char* )
     // link for web or ftp
     d->internetPage = addPage( i18n( "Internet" ), QString::null, 
         BarIcon( "html",K3Icon::SizeMedium ) );
-    QVBoxLayout* iLayout = new QVBoxLayout( d->internetPage, marginHint(), spacingHint() );
+    Q3VBoxLayout* iLayout = new Q3VBoxLayout( d->internetPage, marginHint(), spacingHint() );
     iLayout->add( new QLabel( i18n("Text to display:" ), d->internetPage ) );
     d->internetText = new KLineEdit( d->internetPage );
     iLayout->add( d->internetText );
@@ -82,7 +84,7 @@ LinkDialog::LinkDialog( QWidget*, const char* )
     // link for e-mail
     d->mailPage = addPage( i18n( "Mail" ), QString::null, 
         BarIcon( "mail_generic",K3Icon::SizeMedium ) );
-    QVBoxLayout* mLayout = new QVBoxLayout( d->mailPage, marginHint(), spacingHint() );
+    Q3VBoxLayout* mLayout = new Q3VBoxLayout( d->mailPage, marginHint(), spacingHint() );
     mLayout->add( new QLabel( i18n("Text to display:" ), d->mailPage ) );
     d->mailText = new KLineEdit( d->mailPage );
     mLayout->add( d->mailText );
@@ -96,7 +98,7 @@ LinkDialog::LinkDialog( QWidget*, const char* )
     // link for external file
     d->filePage = addPage( i18n( "File" ), QString::null, 
         BarIcon( "filenew",K3Icon::SizeMedium ) );
-    QVBoxLayout* fLayout = new QVBoxLayout( d->filePage, marginHint(), spacingHint() );
+    Q3VBoxLayout* fLayout = new Q3VBoxLayout( d->filePage, marginHint(), spacingHint() );
     fLayout->add( new QLabel( i18n("Text to display:" ), d->filePage ) );
     d->fileText = new KLineEdit( d->filePage );
     fLayout->add( d->fileText );
@@ -131,7 +133,7 @@ LinkDialog::LinkDialog( QWidget*, const char* )
     // link to another cell
     d->cellPage =  addPage( i18n( "Cell" ), QString::null, 
         BarIcon( "misc",K3Icon::SizeMedium ) );
-    QVBoxLayout* cLayout = new QVBoxLayout( d->cellPage, marginHint(), spacingHint() );
+    Q3VBoxLayout* cLayout = new Q3VBoxLayout( d->cellPage, marginHint(), spacingHint() );
     cLayout->add( new QLabel( i18n("Text to display:" ), d->cellPage ) );
     d->cellText = new KLineEdit( d->cellPage );
     cLayout->add( d->cellText );

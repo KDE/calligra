@@ -24,6 +24,9 @@
 #include <qlayout.h>
 #include <qlabel.h>
 #include <qlineedit.h>
+//Added by qt3to4:
+#include <Q3VBoxLayout>
+#include <Q3ValueList>
 
 #include <kmessagebox.h>
 
@@ -45,7 +48,7 @@ AreaDialog::AreaDialog( View * parent, const char * name, const QPoint & _marker
 
   QWidget * page = new QWidget( this );
   setMainWidget(page);
-  QVBoxLayout * lay1 = new QVBoxLayout( page, 0, spacingHint() );
+  Q3VBoxLayout * lay1 = new Q3VBoxLayout( page, 0, spacingHint() );
 
   QLabel * label = new QLabel( i18n("Enter the area name:"), page );
   lay1->addWidget( label );
@@ -75,8 +78,8 @@ void AreaDialog::slotOk()
 
     QRect rect( m_pView->selectionInfo()->selection() );
     bool newName = true;
-    QValueList<Reference>::Iterator it;
-    QValueList<Reference> area = m_pView->doc()->listArea();
+    Q3ValueList<Reference>::Iterator it;
+    Q3ValueList<Reference> area = m_pView->doc()->listArea();
     for ( it = area.begin(); it != area.end(); ++it )
     {
       if(tmp == (*it).ref_name)

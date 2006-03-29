@@ -34,14 +34,20 @@
 
 #include <qbitmap.h>
 #include <qcheckbox.h>
-#include <qframe.h>
+#include <q3frame.h>
 #include <qlabel.h>
 #include <qlayout.h>
-#include <qlistbox.h>
+#include <q3listbox.h>
 #include <qfontdatabase.h>
 #include <qradiobutton.h>
 #include <qslider.h>
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
+//Added by qt3to4:
+#include <QPaintEvent>
+#include <QMouseEvent>
+#include <Q3VBoxLayout>
+#include <Q3GridLayout>
+#include <QPixmap>
 
 #include <kcolorbutton.h>
 #include <kcombobox.h>
@@ -74,16 +80,16 @@ using namespace KSpread;
  ***************************************************************************/
 
 PatternSelect::PatternSelect( QWidget *parent, const char * )
-  : QFrame( parent )
+  : Q3Frame( parent )
 {
-    penStyle = NoPen;
+    penStyle = Qt::NoPen;
     penWidth = 1;
     penColor = colorGroup().text();
     selected = false;
     undefined = false;
 }
 
-void PatternSelect::setPattern( const QColor &_color, int _width, PenStyle _style )
+void PatternSelect::setPattern( const QColor &_color, int _width, Qt::PenStyle _style )
 {
     penStyle = _style;
     penColor = _color;
@@ -98,7 +104,7 @@ void PatternSelect::setUndefined()
 
 void PatternSelect::paintEvent( QPaintEvent *_ev )
 {
-    QFrame::paintEvent( _ev );
+    Q3Frame::paintEvent( _ev );
 
     QPainter painter( this );
 
@@ -110,7 +116,7 @@ void PatternSelect::paintEvent( QPaintEvent *_ev )
     }
     else
     {
-        painter.fillRect( 2, 2, width() - 4, height() - 4, BDiagPattern );
+        painter.fillRect( 2, 2, width() - 4, height() - 4, Qt::BDiagPattern );
     }
 }
 
@@ -126,7 +132,7 @@ void PatternSelect::slotUnselect()
     selected = false;
 
     setLineWidth( 1 );
-    setFrameStyle( QFrame::Panel | QFrame::Sunken );
+    setFrameStyle( Q3Frame::Panel | Q3Frame::Sunken );
     repaint();
 }
 
@@ -135,7 +141,7 @@ void PatternSelect::slotSelect()
     selected = true;
 
     setLineWidth( 2 );
-    setFrameStyle( QFrame::Panel | QFrame::Plain );
+    setFrameStyle( Q3Frame::Panel | Q3Frame::Plain );
     repaint();
 }
 
@@ -151,15 +157,15 @@ GeneralTab::GeneralTab( QWidget* parent, CellFormatDialog * dlg )
   : QWidget( parent ),
     m_dlg( dlg )
 {
-  QGridLayout * layout = new QGridLayout( this, 1, 1, KDialog::marginHint(), KDialog::spacingHint(), "layout");
+  Q3GridLayout * layout = new Q3GridLayout( this, 1, 1, KDialog::marginHint(), KDialog::spacingHint(), "layout");
 
-  QGroupBox * groupBox = new QGroupBox( this, "groupBox1" );
+  Q3GroupBox * groupBox = new Q3GroupBox( this, "groupBox1" );
   groupBox->setColumnLayout(0, Qt::Vertical );
   groupBox->setTitle( i18n( "Style" ) );
   groupBox->layout()->setSpacing( KDialog::spacingHint() );
   groupBox->layout()->setMargin( KDialog::marginHint() );
 
-  QGridLayout * groupBoxLayout = new QGridLayout( groupBox->layout() );
+  Q3GridLayout * groupBoxLayout = new Q3GridLayout( groupBox->layout() );
   groupBoxLayout->setAlignment( Qt::AlignTop );
 
   QLabel * label1 = new QLabel( groupBox, "label1" );
@@ -892,15 +898,15 @@ void CellFormatDialog::init()
   // Did we initialize the bitmaps ?
   if ( formatOnlyNegSignedPixmap == 0L )
   {
-    QColor black = colorGroup.text(); // not necessarily black :)
-    formatOnlyNegSignedPixmap    = paintFormatPixmap( "123.456", black, "-123.456", black );
-    formatRedOnlyNegSignedPixmap = paintFormatPixmap( "123.456", black, "-123.456", Qt::red );
-    formatRedNeverSignedPixmap   = paintFormatPixmap( "123.456", black, "123.456", Qt::red );
-    formatAlwaysSignedPixmap     = paintFormatPixmap( "+123.456", black, "-123.456", black );
-    formatRedAlwaysSignedPixmap  = paintFormatPixmap( "+123.456", black, "-123.456", Qt::red );
+    QColor Qt::black = colorGroup.text(); // not necessarily black :)
+    formatOnlyNegSignedPixmap    = paintFormatPixmap( "123.456", Qt::black, "-123.456", Qt::black );
+    formatRedOnlyNegSignedPixmap = paintFormatPixmap( "123.456", Qt::black, "-123.456", Qt::red );
+    formatRedNeverSignedPixmap   = paintFormatPixmap( "123.456", Qt::black, "123.456", Qt::red );
+    formatAlwaysSignedPixmap     = paintFormatPixmap( "+123.456", Qt::black, "-123.456", Qt::black );
+    formatRedAlwaysSignedPixmap  = paintFormatPixmap( "+123.456", Qt::black, "-123.456", Qt::red );
   }
 
-  tab = new QTabDialog( (QWidget*)m_pView, 0L, true );
+  tab = new Q3TabDialog( (QWidget*)m_pView, 0L, true );
   //tab->setGeometry( tab->x(), tab->y(), 420, 400 );
 
   if ( m_style )
@@ -957,9 +963,9 @@ QPixmap * CellFormatDialog::paintFormatPixmap( const char * _string1, const QCol
   painter.end();
 
   QBitmap bm( pixmap->size() );
-  bm.fill( color0 );
+  bm.fill( Qt::color0 );
   painter.begin( &bm );
-  painter.setPen( color1 );
+  painter.setPen( Qt::color1 );
   painter.drawText( 2, 11, _string1 );
   painter.drawText( 75, 11, _string2 );
   painter.end();
@@ -1082,62 +1088,62 @@ CellFormatPageFloat::CellFormatPageFloat( QWidget* parent, CellFormatDialog *_dl
   : QWidget ( parent ),
     dlg( _dlg )
 {
-    QVBoxLayout* layout = new QVBoxLayout( this, 6,10 );
+    Q3VBoxLayout* layout = new Q3VBoxLayout( this, 6,10 );
 
-    QButtonGroup *grp = new QButtonGroup( i18n("Format"),this);
-    QGridLayout *grid = new QGridLayout(grp,11,2,KDialog::marginHint(), KDialog::spacingHint());
+    Q3ButtonGroup *grp = new Q3ButtonGroup( i18n("Format"),this);
+    Q3GridLayout *grid = new Q3GridLayout(grp,11,2,KDialog::marginHint(), KDialog::spacingHint());
 
     int fHeight = grp->fontMetrics().height();
     grid->addRowSpacing( 0, fHeight/2 ); // groupbox title
 
     grp->setRadioButtonExclusive( true );
     generic=new QRadioButton(i18n("Generic"),grp);
-    QWhatsThis::add(generic, i18n( "This is the default format and KSpread autodetects the actual data type depending on the current cell data. By default, KSpread right justifies numbers, dates and times within a cell and left justifies anything else." ) );
+    Q3WhatsThis::add(generic, i18n( "This is the default format and KSpread autodetects the actual data type depending on the current cell data. By default, KSpread right justifies numbers, dates and times within a cell and left justifies anything else." ) );
     grid->addWidget(generic,1,0);
 
     number=new QRadioButton(i18n("Number"),grp);
-    QWhatsThis::add(number, i18n( "The number notation uses the notation you globally choose in KControl -> Regional & Accessibility -> Numbers tab. Numbers are right justified by default." ) );
+    Q3WhatsThis::add(number, i18n( "The number notation uses the notation you globally choose in KControl -> Regional & Accessibility -> Numbers tab. Numbers are right justified by default." ) );
     grid->addWidget(number,2,0);
 
     percent=new QRadioButton(i18n("Percent"),grp);
-    QWhatsThis::add(percent, i18n( "When you have a number in the current cell and you switch from the dcell format from Generic to Percent, the current cell number will be multiplied by 100%.\nFor example if you enter 12 and set the cell format to Percent, the number will then be 1,200 %. Switching back to Generic cell format will bring it back to 12.\nYou can also use the Percent icon in the Format Toolbar." ) );
+    Q3WhatsThis::add(percent, i18n( "When you have a number in the current cell and you switch from the dcell format from Generic to Percent, the current cell number will be multiplied by 100%.\nFor example if you enter 12 and set the cell format to Percent, the number will then be 1,200 %. Switching back to Generic cell format will bring it back to 12.\nYou can also use the Percent icon in the Format Toolbar." ) );
     grid->addWidget(percent,3,0);
 
     money=new QRadioButton(i18n("Money"),grp);
-    QWhatsThis::add(money, i18n( "The Money format converts your number into money notation using the settings globally fixed in KControl in Regional & Accessibility -> Money. The currency symbol will be displayed and the precision will be the one set in KControl.\nYou can also use the Currency icon in the Format Toolbar to set the cell formatting to look like your current currency." ) );
+    Q3WhatsThis::add(money, i18n( "The Money format converts your number into money notation using the settings globally fixed in KControl in Regional & Accessibility -> Money. The currency symbol will be displayed and the precision will be the one set in KControl.\nYou can also use the Currency icon in the Format Toolbar to set the cell formatting to look like your current currency." ) );
     grid->addWidget(money,4,0);
 
     scientific=new QRadioButton(i18n("Scientific"),grp);
-    QWhatsThis::add(scientific, i18n( "The scientific format changes your number using the scientific notation. For example, 0.0012 will be changed to 1.2E-03. Going back using Generic cell format will display 0.0012 again." ) );
+    Q3WhatsThis::add(scientific, i18n( "The scientific format changes your number using the scientific notation. For example, 0.0012 will be changed to 1.2E-03. Going back using Generic cell format will display 0.0012 again." ) );
     grid->addWidget(scientific,5,0);
 
     fraction=new QRadioButton(i18n("Fraction"),grp);
-    QWhatsThis::add(fraction, i18n( "The fraction format changes your number into a fraction. For example, 0.1 can be changed to 1/8, 2/16, 1/10, etc. You define the type of fraction by choosing it in the field on the right. If the exact fraction is not possible in the fraction mode you choose, the nearest closest match is chosen.\n For example: when we have 1.5 as number, we choose Fraction and Sixteenths 1/16 the text displayed into cell is \"1 8/16\" which is an exact fraction. If you have 1.4 as number in your cell and you choose Fraction and Sixteenths 1/16 then the cell will display \"1 6/16\" which is the nearest closest Sixteenth fraction." ) );
+    Q3WhatsThis::add(fraction, i18n( "The fraction format changes your number into a fraction. For example, 0.1 can be changed to 1/8, 2/16, 1/10, etc. You define the type of fraction by choosing it in the field on the right. If the exact fraction is not possible in the fraction mode you choose, the nearest closest match is chosen.\n For example: when we have 1.5 as number, we choose Fraction and Sixteenths 1/16 the text displayed into cell is \"1 8/16\" which is an exact fraction. If you have 1.4 as number in your cell and you choose Fraction and Sixteenths 1/16 then the cell will display \"1 6/16\" which is the nearest closest Sixteenth fraction." ) );
     grid->addWidget(fraction,6,0);
 
     date=new QRadioButton(i18n("Date format"),grp);
-    QWhatsThis::add(date, i18n( "To enter a date, you should enter it in one of the formats set in KControl in Regional & Accessibility ->Time & Dates. There are two formats set here: the date format and the short date format.\nJust like you can drag down numbers you can also drag down dates and the next cells will also get dates." ) );
+    Q3WhatsThis::add(date, i18n( "To enter a date, you should enter it in one of the formats set in KControl in Regional & Accessibility ->Time & Dates. There are two formats set here: the date format and the short date format.\nJust like you can drag down numbers you can also drag down dates and the next cells will also get dates." ) );
     grid->addWidget(date,7,0);
 
     time=new QRadioButton(i18n("Time format"),grp);
-    QWhatsThis::add(time, i18n( "This formats your cell content as a time. To enter a time, you should enter it in the Time format set in KControl in Regional & Accessibility ->Time & Dates. In the Cell Format dialog box you can set how the time should be displayed by choosing one of the available time format options. The default format is the system format set in KControl. When the number in the cell does not make sense as a time, KSpread will display 00:00 in the global format you have in KControl." ) );
+    Q3WhatsThis::add(time, i18n( "This formats your cell content as a time. To enter a time, you should enter it in the Time format set in KControl in Regional & Accessibility ->Time & Dates. In the Cell Format dialog box you can set how the time should be displayed by choosing one of the available time format options. The default format is the system format set in KControl. When the number in the cell does not make sense as a time, KSpread will display 00:00 in the global format you have in KControl." ) );
     grid->addWidget(time,8,0);
 
     textFormat=new QRadioButton(i18n("Text"),grp);
-    QWhatsThis::add(textFormat, i18n( "This formats your cell content as text. This can be useful if you want a number treated as text instead as a number, for example for a ZIP code. Setting a number as text format will left justify it. When numbers are formatted as text, they cannot be used in calculations or formulas. It also change the way the cell is justified." ) );
+    Q3WhatsThis::add(textFormat, i18n( "This formats your cell content as text. This can be useful if you want a number treated as text instead as a number, for example for a ZIP code. Setting a number as text format will left justify it. When numbers are formatted as text, they cannot be used in calculations or formulas. It also change the way the cell is justified." ) );
     grid->addWidget(textFormat,9,0);
 
     customFormat=new QRadioButton(i18n("Custom"),grp);
-    QWhatsThis::add(customFormat, i18n( "The custom format does not work yet. To be enabled in the next release." ) );
+    Q3WhatsThis::add(customFormat, i18n( "The custom format does not work yet. To be enabled in the next release." ) );
     grid->addWidget(customFormat,10,0);
     customFormat->setEnabled( false );
 
-    QGroupBox *box2 = new QGroupBox( grp, "Box");
+    Q3GroupBox *box2 = new Q3GroupBox( grp, "Box");
     box2->setTitle(i18n("Preview"));
-    QGridLayout *grid3 = new QGridLayout(box2,1,3,KDialog::marginHint(), KDialog::spacingHint());
+    Q3GridLayout *grid3 = new Q3GridLayout(box2,1,3,KDialog::marginHint(), KDialog::spacingHint());
 
     exampleLabel=new QLabel(box2);
-    QWhatsThis::add(exampleLabel, i18n( "This will display a preview of your choice so you can know what it does before clicking the OK button to validate it." ) );
+    Q3WhatsThis::add(exampleLabel, i18n( "This will display a preview of your choice so you can know what it does before clicking the OK button to validate it." ) );
     grid3->addWidget(exampleLabel,0,1);
 
     grid->addMultiCellWidget(box2,9,10,1,1);
@@ -1146,32 +1152,32 @@ CellFormatPageFloat::CellFormatPageFloat( QWidget* parent, CellFormatDialog *_dl
     grid->addMultiCellWidget( customFormatEdit, 1, 1, 1, 1 );
     customFormatEdit->setHidden( true );
 
-    listFormat=new QListBox(grp);
+    listFormat=new Q3ListBox(grp);
     grid->addMultiCellWidget(listFormat,2,7,1,1);
-    QWhatsThis::add(listFormat, i18n( "Displays choices of format for the fraction, date or time formats." ) );
+    Q3WhatsThis::add(listFormat, i18n( "Displays choices of format for the fraction, date or time formats." ) );
     layout->addWidget(grp);
 
     /* *** */
 
-    QGroupBox *box = new QGroupBox( this, "Box");
+    Q3GroupBox *box = new Q3GroupBox( this, "Box");
 
-    grid = new QGridLayout(box,3,4,KDialog::marginHint(), KDialog::spacingHint());
+    grid = new Q3GridLayout(box,3,4,KDialog::marginHint(), KDialog::spacingHint());
 
     postfix = new QLineEdit( box, "LineEdit_1" );
-    QWhatsThis::add(postfix, i18n( "You can add here a Postfix such as a $HK symbol to the end of each cell content in the checked format." ) );
+    Q3WhatsThis::add(postfix, i18n( "You can add here a Postfix such as a $HK symbol to the end of each cell content in the checked format." ) );
     grid->addWidget(postfix,2,1);
     precision = new KIntNumInput( dlg->precision, box, 10 );
     precision->setSpecialValueText(i18n("variable"));
     precision->setRange(-1,10,1,false);
-    QWhatsThis::add(precision, i18n( "You can control how many digits are displayed after the decimal point for numeric values. This can also be changed using the Increase precision or Decrease precision icons in the Format toolbar. " ) );
+    Q3WhatsThis::add(precision, i18n( "You can control how many digits are displayed after the decimal point for numeric values. This can also be changed using the Increase precision or Decrease precision icons in the Format toolbar. " ) );
     grid->addWidget(precision,1,1);
 
     prefix = new QLineEdit( box, "LineEdit_3" );
-    QWhatsThis::add(prefix, i18n( "You can add here a Prefix such as a $ symbol at the start of each cell content in the checked format." ) );
+    Q3WhatsThis::add(prefix, i18n( "You can add here a Prefix such as a $ symbol at the start of each cell content in the checked format." ) );
     grid->addWidget(prefix,0,1);
 
     format = new QComboBox( box, "ListBox_1" );
-    QWhatsThis::add(format, i18n( "You can choose whether positive values are displayed with a leading + sign and whether negative values are shown in red." ) );
+    Q3WhatsThis::add(format, i18n( "You can choose whether positive values are displayed with a leading + sign and whether negative values are shown in red." ) );
     grid->addWidget(format,0,3);
 
     QLabel* tmpQLabel;
@@ -1685,7 +1691,7 @@ void CellFormatPageFloat::makeformat()
   {
     case 0:
       floatFormat = Style::OnlyNegSigned;
-      color = black;
+      color = Qt::black;
       break;
     case 1:
       floatFormat =  Style::OnlyNegSigned;
@@ -1697,7 +1703,7 @@ void CellFormatPageFloat::makeformat()
       break;
     case 3:
       floatFormat =  Style::AlwaysSigned;
-      color = black;
+      color = Qt::black;
       break;
     case 4:
       floatFormat =  Style::AlwaysSigned;
@@ -1706,7 +1712,7 @@ void CellFormatPageFloat::makeformat()
   }
   if (!dlg->value.isNumber() || dlg->value.asFloat() >= 0 || !format->isEnabled())
   {
-    color = black;
+    color = Qt::black;
   }
   ValueFormatter *fmt = dlg->getDoc()->formatter();
   tmp = fmt->formatText(dlg->value, newFormatType, precision->value(),
@@ -2265,13 +2271,13 @@ CellFormatPagePosition::CellFormatPagePosition( QWidget* parent, CellFormatDialo
     mergeCell->setChecked(dlg->isMerged);
     mergeCell->setEnabled(!dlg->oneCell && ((!dlg->isRowSelected) && (!dlg->isColumnSelected)));
 
-    QGridLayout *grid2 = new QGridLayout(indentGroup, 1, 1, KDialog::marginHint(), KDialog::spacingHint());
+    Q3GridLayout *grid2 = new Q3GridLayout(indentGroup, 1, 1, KDialog::marginHint(), KDialog::spacingHint());
     grid2->addRowSpacing( 0, indentGroup->fontMetrics().height()/8 ); // groupbox title
     m_indent = new KoUnitDoubleSpinBox( indentGroup, 0.0,  400.0, 10.0,dlg->indent,dlg->getDoc()->unit() );
     grid2->addWidget(m_indent, 0, 0);
 
     width = new KoUnitDoubleSpinBox( m_widthPanel );
-    QGridLayout *gridWidth = new QGridLayout(m_widthPanel, 1, 1, 0, 0);
+    Q3GridLayout *gridWidth = new Q3GridLayout(m_widthPanel, 1, 1, 0, 0);
     gridWidth->addWidget(width, 0, 0);
     width->setValue ( dlg->widthSize );
     width->setUnit( dlg->getDoc()->unit() );
@@ -2286,7 +2292,7 @@ CellFormatPagePosition::CellFormatPagePosition( QWidget* parent, CellFormatDialo
         defaultWidth->setEnabled(false);
 
     height=new KoUnitDoubleSpinBox( m_heightPanel );
-    QGridLayout *gridHeight = new QGridLayout(m_heightPanel, 1, 1, 0, 0);
+    Q3GridLayout *gridHeight = new Q3GridLayout(m_heightPanel, 1, 1, 0, 0);
     gridHeight->addWidget(height, 0, 0);
     height->setValue( dlg->heightSize );
     height->setUnit(  dlg->getDoc()->unit() );
@@ -2533,7 +2539,7 @@ void BorderButton::mousePressEvent( QMouseEvent * )
 
 void BorderButton::setUndefined()
 {
- setPenStyle(SolidLine );
+ setPenStyle(Qt::SolidLine );
  setPenWidth(1);
  setColor(colorGroup().midlight());
 }
@@ -2557,7 +2563,7 @@ void BorderButton::unselect()
  ***************************************************************************/
 
 Border::Border( QWidget *parent, const char *_name,bool _oneCol, bool _oneRow )
-    : QFrame( parent, _name )
+    : Q3Frame( parent, _name )
 {
   oneCol=_oneCol;
   oneRow=_oneRow;
@@ -2568,11 +2574,11 @@ Border::Border( QWidget *parent, const char *_name,bool _oneCol, bool _oneRow )
 #define OFFSETY 5
 void Border::paintEvent( QPaintEvent *_ev )
 {
-  QFrame::paintEvent( _ev );
+  Q3Frame::paintEvent( _ev );
   QPen pen;
   QPainter painter;
   painter.begin( this );
-  pen=QPen( colorGroup().midlight(),2,SolidLine);
+  pen=QPen( colorGroup().midlight(),2,Qt::SolidLine);
   painter.setPen( pen );
 
   painter.drawLine( OFFSETX-5, OFFSETY, OFFSETX , OFFSETY );
@@ -2632,15 +2638,15 @@ CellFormatPageBorder::CellFormatPageBorder( QWidget* parent, CellFormatDialog *_
 
   style->setEnabled(false);
   size->setEnabled(false);
-  preview->setPattern( black , 1, SolidLine );
+  preview->setPattern( Qt::black , 1, Qt::SolidLine );
   this->resize( 400, 400 );
 }
 
 void CellFormatPageBorder::InitializeGrids()
 {
-  QGridLayout *grid = new QGridLayout(this,5,2,KDialog::marginHint(), KDialog::spacingHint());
-  QGridLayout *grid2 = NULL;
-  QGroupBox* tmpQGroupBox = NULL;
+  Q3GridLayout *grid = new Q3GridLayout(this,5,2,KDialog::marginHint(), KDialog::spacingHint());
+  Q3GridLayout *grid2 = NULL;
+  Q3GroupBox* tmpQGroupBox = NULL;
 
   /***********************/
   /* here is the data to initialize all the border buttons with */
@@ -2665,11 +2671,11 @@ void CellFormatPageBorder::InitializeGrids()
   /***********************/
 
   /* set up a layout box for most of the border setting buttons */
-  tmpQGroupBox = new QGroupBox( this, "GroupBox_1" );
-  tmpQGroupBox->setFrameStyle( QFrame::Box | QFrame::Sunken );
+  tmpQGroupBox = new Q3GroupBox( this, "GroupBox_1" );
+  tmpQGroupBox->setFrameStyle( Q3Frame::Box | Q3Frame::Sunken );
   tmpQGroupBox->setTitle( i18n("Border") );
-  tmpQGroupBox->setAlignment( AlignLeft );
-  grid2 = new QGridLayout(tmpQGroupBox,6,5,KDialog::marginHint(), KDialog::spacingHint());
+  tmpQGroupBox->setAlignment( Qt::AlignLeft );
+  grid2 = new Q3GridLayout(tmpQGroupBox,6,5,KDialog::marginHint(), KDialog::spacingHint());
   int fHeight = tmpQGroupBox->fontMetrics().height();
   grid2->addRowSpacing( 0, fHeight/2 ); // groupbox title
 
@@ -2692,12 +2698,12 @@ void CellFormatPageBorder::InitializeGrids()
   /* the remove, all, and outline border buttons are in a second box down
      below.*/
 
-  tmpQGroupBox = new QGroupBox( this, "GroupBox_3" );
-  tmpQGroupBox->setFrameStyle( QFrame::Box | QFrame::Sunken );
+  tmpQGroupBox = new Q3GroupBox( this, "GroupBox_3" );
+  tmpQGroupBox->setFrameStyle( Q3Frame::Box | Q3Frame::Sunken );
   tmpQGroupBox->setTitle( i18n("Preselect") );
-  tmpQGroupBox->setAlignment( AlignLeft );
+  tmpQGroupBox->setAlignment( Qt::AlignLeft );
 
-  grid2 = new QGridLayout(tmpQGroupBox,1,3,KDialog::marginHint(), KDialog::spacingHint());
+  grid2 = new Q3GridLayout(tmpQGroupBox,1,3,KDialog::marginHint(), KDialog::spacingHint());
 
   /* the "all" button is different depending on what kind of region is currently
      selected */
@@ -2731,12 +2737,12 @@ void CellFormatPageBorder::InitializeGrids()
   grid->addMultiCellWidget(tmpQGroupBox,3,4,0,0);
 
   /* now set up the group box with the pattern selector */
-  tmpQGroupBox = new QGroupBox( this, "GroupBox_10" );
-  tmpQGroupBox->setFrameStyle( QFrame::Box | QFrame::Sunken );
+  tmpQGroupBox = new Q3GroupBox( this, "GroupBox_10" );
+  tmpQGroupBox->setFrameStyle( Q3Frame::Box | Q3Frame::Sunken );
   tmpQGroupBox->setTitle( i18n("Pattern") );
-  tmpQGroupBox->setAlignment( AlignLeft );
+  tmpQGroupBox->setAlignment( Qt::AlignLeft );
 
-  grid2 = new QGridLayout(tmpQGroupBox,7,2,KDialog::marginHint(), KDialog::spacingHint());
+  grid2 = new Q3GridLayout(tmpQGroupBox,7,2,KDialog::marginHint(), KDialog::spacingHint());
   fHeight = tmpQGroupBox->fontMetrics().height();
   grid2->addRowSpacing( 0, fHeight/2 ); // groupbox title
 
@@ -2748,7 +2754,7 @@ void CellFormatPageBorder::InitializeGrids()
     name[7] = '0' + (i+1) / 10;
     name[8] = '0' + (i+1) % 10;
     pattern[i] = new PatternSelect( tmpQGroupBox, name );
-    pattern[i]->setFrameStyle( QFrame::Panel | QFrame::Sunken );
+    pattern[i]->setFrameStyle( Q3Frame::Panel | Q3Frame::Sunken );
     grid2->addWidget(pattern[i], i % 5 + 1, i / 5);
     /* this puts them in the pattern:
        1  6
@@ -2768,7 +2774,7 @@ void CellFormatPageBorder::InitializeGrids()
   grid2->addWidget(tmpQLabel,7,0);
 
   /* tack on the 'customize' border pattern selector */
-  QGridLayout *grid3 = new QGridLayout( this, 2, 2, KDialog::marginHint(), KDialog::spacingHint() );
+  Q3GridLayout *grid3 = new Q3GridLayout( this, 2, 2, KDialog::marginHint(), KDialog::spacingHint() );
   customize  = new QCheckBox(i18n("Customize"),tmpQGroupBox);
   grid3->addWidget(customize,0,0);
   connect( customize, SIGNAL( clicked()), SLOT(cutomize_chosen_slot()) );
@@ -2786,28 +2792,28 @@ void CellFormatPageBorder::InitializeGrids()
 
   style=new QComboBox(tmpQGroupBox);
   grid3->addWidget(style,1,0);
-  style->insertItem(paintFormatPixmap(DotLine),0 );
-  style->insertItem(paintFormatPixmap(DashLine) ,1);
-  style->insertItem(paintFormatPixmap(DashDotLine),2 );
-  style->insertItem(paintFormatPixmap(DashDotDotLine),3  );
-  style->insertItem(paintFormatPixmap(SolidLine),4);
+  style->insertItem(paintFormatPixmap(Qt::DotLine),0 );
+  style->insertItem(paintFormatPixmap(Qt::DashLine) ,1);
+  style->insertItem(paintFormatPixmap(Qt::DashDotLine),2 );
+  style->insertItem(paintFormatPixmap(Qt::DashDotDotLine),3  );
+  style->insertItem(paintFormatPixmap(Qt::SolidLine),4);
   style->setBackgroundColor( colorGroup().background() );
 
   grid2->addMultiCell(grid3,6,6,0,1);
   grid->addMultiCellWidget(tmpQGroupBox,0,3,1,1);
 
   /* Now the preview box is put together */
-  tmpQGroupBox = new QGroupBox(this, "GroupBox_4" );
-  tmpQGroupBox->setFrameStyle( QFrame::Box | QFrame::Sunken );
+  tmpQGroupBox = new Q3GroupBox(this, "GroupBox_4" );
+  tmpQGroupBox->setFrameStyle( Q3Frame::Box | Q3Frame::Sunken );
   tmpQGroupBox->setTitle( i18n("Preview") );
-  tmpQGroupBox->setAlignment( AlignLeft );
+  tmpQGroupBox->setAlignment( Qt::AlignLeft );
 
-  grid2 = new QGridLayout(tmpQGroupBox,1,1,KDialog::marginHint(), KDialog::spacingHint());
+  grid2 = new Q3GridLayout(tmpQGroupBox,1,1,KDialog::marginHint(), KDialog::spacingHint());
   fHeight = tmpQGroupBox->fontMetrics().height();
   grid2->addRowSpacing( 0, fHeight/2 ); // groupbox title
 
   preview = new PatternSelect( tmpQGroupBox, "Pattern_preview" );
-  preview->setFrameStyle( QFrame::Panel | QFrame::Sunken );
+  preview->setFrameStyle( Q3Frame::Panel | Q3Frame::Sunken );
   grid2->addWidget(preview,1,0);
 
   grid->addWidget(tmpQGroupBox,4,1);
@@ -2846,18 +2852,18 @@ void CellFormatPageBorder::InitializeBorderButtons()
 
 void CellFormatPageBorder::InitializePatterns()
 {
-  pattern[0]->setPattern( black, 1, DotLine );
-  pattern[1]->setPattern( black, 1, DashLine );
-  pattern[2]->setPattern( black, 1, SolidLine );
-  pattern[3]->setPattern( black, 1, DashDotLine );
-  pattern[4]->setPattern( black, 1, DashDotDotLine );
-  pattern[5]->setPattern( black, 2, SolidLine );
-  pattern[6]->setPattern( black, 3, SolidLine );
-  pattern[7]->setPattern( black, 4, SolidLine );
-  pattern[8]->setPattern( black, 5, SolidLine );
-  pattern[9]->setPattern( black, 1, NoPen );
+  pattern[0]->setPattern( Qt::black, 1, Qt::DotLine );
+  pattern[1]->setPattern( Qt::black, 1, Qt::DashLine );
+  pattern[2]->setPattern( Qt::black, 1, Qt::SolidLine );
+  pattern[3]->setPattern( Qt::black, 1, Qt::DashDotLine );
+  pattern[4]->setPattern( Qt::black, 1, Qt::DashDotDotLine );
+  pattern[5]->setPattern( Qt::black, 2, Qt::SolidLine );
+  pattern[6]->setPattern( Qt::black, 3, Qt::SolidLine );
+  pattern[7]->setPattern( Qt::black, 4, Qt::SolidLine );
+  pattern[8]->setPattern( Qt::black, 5, Qt::SolidLine );
+  pattern[9]->setPattern( Qt::black, 1, Qt::NoPen );
 
-  slotSetColorButton( black );
+  slotSetColorButton( Qt::black );
 }
 
 void CellFormatPageBorder::SetConnections()
@@ -2906,7 +2912,7 @@ void CellFormatPageBorder::cutomize_chosen_slot()
     style->setEnabled( false );
     size->setEnabled( false );
     pattern[2]->slotSelect();
-    preview->setPattern( black , 1, SolidLine );
+    preview->setPattern( Qt::black , 1, Qt::SolidLine );
   }
 }
 
@@ -2923,26 +2929,26 @@ void CellFormatPageBorder::slotChangeStyle(int)
   int penSize = size->currentText().toInt();
   if ( !penSize)
   {
-    preview->setPattern( preview->getColor(), penSize, NoPen );
+    preview->setPattern( preview->getColor(), penSize, Qt::NoPen );
   }
   else
   {
     switch(index)
     {
     case 0:
-      preview->setPattern( preview->getColor(), penSize, DotLine );
+      preview->setPattern( preview->getColor(), penSize, Qt::DotLine );
       break;
     case 1:
-      preview->setPattern( preview->getColor(), penSize, DashLine );
+      preview->setPattern( preview->getColor(), penSize, Qt::DashLine );
       break;
     case 2:
-      preview->setPattern( preview->getColor(), penSize, DashDotLine );
+      preview->setPattern( preview->getColor(), penSize, Qt::DashDotLine );
       break;
     case 3:
-      preview->setPattern( preview->getColor(), penSize, DashDotDotLine );
+      preview->setPattern( preview->getColor(), penSize, Qt::DashDotDotLine );
       break;
     case 4:
-      preview->setPattern( preview->getColor(), penSize, SolidLine );
+      preview->setPattern( preview->getColor(), penSize, Qt::SolidLine );
       break;
     default:
       kDebug(36001)<<"Error in combobox\n";
@@ -2952,7 +2958,7 @@ void CellFormatPageBorder::slotChangeStyle(int)
   slotUnselect2(preview);
 }
 
-QPixmap CellFormatPageBorder::paintFormatPixmap(PenStyle _style)
+QPixmap CellFormatPageBorder::paintFormatPixmap(Qt::PenStyle _style)
 {
   QPixmap pixmap( style->width(), 14 );
   QPainter painter;
@@ -3481,14 +3487,14 @@ if (rect.contains(QPoint(_ev->x(),_ev->y())))
  *
  ***************************************************************************/
 
-BrushSelect::BrushSelect( QWidget *parent, const char * ) : QFrame( parent )
+BrushSelect::BrushSelect( QWidget *parent, const char * ) : Q3Frame( parent )
 {
     brushStyle = Qt::NoBrush;
     brushColor = Qt::red;
     selected = false;
 }
 
-void BrushSelect::setPattern( const QColor &_color,BrushStyle _style )
+void BrushSelect::setPattern( const QColor &_color,Qt::BrushStyle _style )
 {
     brushStyle = _style;
     brushColor = _color;
@@ -3498,7 +3504,7 @@ void BrushSelect::setPattern( const QColor &_color,BrushStyle _style )
 
 void BrushSelect::paintEvent( QPaintEvent *_ev )
 {
-    QFrame::paintEvent( _ev );
+    Q3Frame::paintEvent( _ev );
 
     QPainter painter;
     QBrush brush(brushColor,brushStyle);
@@ -3521,7 +3527,7 @@ void BrushSelect::slotUnselect()
     selected = false;
 
     setLineWidth( 1 );
-    setFrameStyle( QFrame::Panel | QFrame::Sunken );
+    setFrameStyle( Q3Frame::Panel | Q3Frame::Sunken );
     repaint();
 }
 
@@ -3530,7 +3536,7 @@ void BrushSelect::slotSelect()
     selected = true;
 
     setLineWidth( 2 );
-    setFrameStyle( QFrame::Panel | QFrame::Plain );
+    setFrameStyle( Q3Frame::Panel | Q3Frame::Plain );
     repaint();
 }
 
@@ -3548,80 +3554,80 @@ CellFormatPagePattern::CellFormatPagePattern( QWidget* parent, CellFormatDialog 
 
     bBgColorUndefined = !dlg->bBgColor;
 
-    QGridLayout *grid = new QGridLayout(this,5,2,KDialog::marginHint(), KDialog::spacingHint());
+    Q3GridLayout *grid = new Q3GridLayout(this,5,2,KDialog::marginHint(), KDialog::spacingHint());
 
-    QGroupBox* tmpQGroupBox;
-    tmpQGroupBox = new QGroupBox( this, "GroupBox_20" );
-    tmpQGroupBox->setFrameStyle( QFrame::Box | QFrame::Sunken );
+    Q3GroupBox* tmpQGroupBox;
+    tmpQGroupBox = new Q3GroupBox( this, "GroupBox_20" );
+    tmpQGroupBox->setFrameStyle( Q3Frame::Box | Q3Frame::Sunken );
     tmpQGroupBox->setTitle( i18n("Pattern") );
-    tmpQGroupBox->setAlignment( AlignLeft );
+    tmpQGroupBox->setAlignment( Qt::AlignLeft );
 
-    QGridLayout *grid2 = new QGridLayout(tmpQGroupBox,8,3,KDialog::marginHint(), KDialog::spacingHint());
+    Q3GridLayout *grid2 = new Q3GridLayout(tmpQGroupBox,8,3,KDialog::marginHint(), KDialog::spacingHint());
     int fHeight = tmpQGroupBox->fontMetrics().height();
     grid2->addRowSpacing( 0, fHeight/2 ); // groupbox title
 
 
     brush1 = new BrushSelect( tmpQGroupBox, "Frame_1" );
-    brush1->setFrameStyle( QFrame::Panel | QFrame::Sunken );
+    brush1->setFrameStyle( Q3Frame::Panel | Q3Frame::Sunken );
     grid2->addWidget(brush1,1,0);
 
     brush2 = new BrushSelect( tmpQGroupBox, "Frame_2" );
-    brush2->setFrameStyle( QFrame::Panel | QFrame::Sunken );
+    brush2->setFrameStyle( Q3Frame::Panel | Q3Frame::Sunken );
     grid2->addWidget(brush2,1,1);
 
     brush3 = new BrushSelect( tmpQGroupBox, "Frame_3" );
-    brush3->setFrameStyle( QFrame::Panel | QFrame::Sunken );
+    brush3->setFrameStyle( Q3Frame::Panel | Q3Frame::Sunken );
     grid2->addWidget(brush3,1,2);
 
     brush4 = new BrushSelect( tmpQGroupBox, "Frame_4" );
-    brush4->setFrameStyle( QFrame::Panel | QFrame::Sunken );
+    brush4->setFrameStyle( Q3Frame::Panel | Q3Frame::Sunken );
     grid2->addWidget(brush4,2,0);
 
     brush5 = new BrushSelect( tmpQGroupBox, "Frame_5" );
-    brush5->setFrameStyle( QFrame::Panel | QFrame::Sunken );
+    brush5->setFrameStyle( Q3Frame::Panel | Q3Frame::Sunken );
     grid2->addWidget(brush5,2,1);
 
     brush6 = new BrushSelect( tmpQGroupBox, "Frame_6" );
-    brush6->setFrameStyle( QFrame::Panel | QFrame::Sunken );
+    brush6->setFrameStyle( Q3Frame::Panel | Q3Frame::Sunken );
     grid2->addWidget(brush6,2,2);
 
     brush7 = new BrushSelect( tmpQGroupBox, "Frame_7" );
-    brush7->setFrameStyle( QFrame::Panel | QFrame::Sunken );
+    brush7->setFrameStyle( Q3Frame::Panel | Q3Frame::Sunken );
     grid2->addWidget(brush7,3,0);
 
     brush8 = new BrushSelect( tmpQGroupBox, "Frame_8" );
-    brush8->setFrameStyle( QFrame::Panel | QFrame::Sunken );
+    brush8->setFrameStyle( Q3Frame::Panel | Q3Frame::Sunken );
     grid2->addWidget(brush8,3,1);
 
     brush9 = new BrushSelect( tmpQGroupBox, "Frame_9" );
-    brush9->setFrameStyle( QFrame::Panel | QFrame::Sunken );
+    brush9->setFrameStyle( Q3Frame::Panel | Q3Frame::Sunken );
     grid2->addWidget(brush9,3,2);
 
     brush10 = new BrushSelect( tmpQGroupBox, "Frame_10" );
-    brush10->setFrameStyle( QFrame::Panel | QFrame::Sunken );
+    brush10->setFrameStyle( Q3Frame::Panel | Q3Frame::Sunken );
     grid2->addWidget(brush10,4,0);
 
     brush11 = new BrushSelect( tmpQGroupBox, "Frame_11" );
-    brush11->setFrameStyle( QFrame::Panel | QFrame::Sunken );
+    brush11->setFrameStyle( Q3Frame::Panel | Q3Frame::Sunken );
     grid2->addWidget(brush11,4,1);
 
     brush12 = new BrushSelect( tmpQGroupBox, "Frame_12" );
-    brush12->setFrameStyle( QFrame::Panel | QFrame::Sunken );
+    brush12->setFrameStyle( Q3Frame::Panel | Q3Frame::Sunken );
     grid2->addWidget(brush12,4,2);
 
     brush13 = new BrushSelect( tmpQGroupBox, "Frame_13" );
-    brush13->setFrameStyle( QFrame::Panel | QFrame::Sunken );
+    brush13->setFrameStyle( Q3Frame::Panel | Q3Frame::Sunken );
     grid2->addWidget(brush13,5,0);
 
     brush14 = new BrushSelect( tmpQGroupBox, "Frame_14" );
-    brush14->setFrameStyle( QFrame::Panel | QFrame::Sunken );
+    brush14->setFrameStyle( Q3Frame::Panel | Q3Frame::Sunken );
     grid2->addWidget(brush14,5,1);
 
     brush15 = new BrushSelect( tmpQGroupBox, "Frame_15" );
-    brush15->setFrameStyle( QFrame::Panel | QFrame::Sunken );
+    brush15->setFrameStyle( Q3Frame::Panel | Q3Frame::Sunken );
     grid2->addWidget(brush15,5,2);
 
-    QGridLayout *grid3 = new QGridLayout( 1, 2 );
+    Q3GridLayout *grid3 = new Q3GridLayout( 1, 2 );
     color = new KColorButton ( tmpQGroupBox );
     color->setObjectName( "ColorButton_1" );
     grid3->addWidget(color,0,1);
@@ -3632,7 +3638,7 @@ CellFormatPagePattern::CellFormatPagePattern( QWidget* parent, CellFormatDialog 
 
     grid2->addMultiCell(grid3,6,6,0,2);
 
-    grid3 = new QGridLayout( 1, 3 );
+    grid3 = new Q3GridLayout( 1, 3 );
     grid3->setSpacing(KDialog::spacingHint());
 
     tmpQLabel = new QLabel( tmpQGroupBox, "Label_2" );
@@ -3664,17 +3670,17 @@ CellFormatPagePattern::CellFormatPagePattern( QWidget* parent, CellFormatDialog 
 
     grid->addMultiCellWidget(tmpQGroupBox,0,3,0,0);
 
-    tmpQGroupBox = new QGroupBox( this, "GroupBox1" );
+    tmpQGroupBox = new Q3GroupBox( this, "GroupBox1" );
     tmpQGroupBox->setTitle( i18n("Preview") );
-    tmpQGroupBox->setFrameStyle( QFrame::Box | QFrame::Sunken );
-    tmpQGroupBox->setAlignment( AlignLeft );
+    tmpQGroupBox->setFrameStyle( Q3Frame::Box | Q3Frame::Sunken );
+    tmpQGroupBox->setAlignment( Qt::AlignLeft );
 
-    grid2 = new QGridLayout(tmpQGroupBox,2,1,KDialog::marginHint(), KDialog::spacingHint());
+    grid2 = new Q3GridLayout(tmpQGroupBox,2,1,KDialog::marginHint(), KDialog::spacingHint());
     fHeight = tmpQGroupBox->fontMetrics().height();
     grid2->addRowSpacing( 0, fHeight/2 ); // groupbox title
 
     current = new BrushSelect( tmpQGroupBox, "Current" );
-    current->setFrameStyle( QFrame::Panel | QFrame::Sunken );
+    current->setFrameStyle( Q3Frame::Panel | Q3Frame::Sunken );
     grid2->addWidget(current,1,0);
     grid->addWidget( tmpQGroupBox,4,0);
 

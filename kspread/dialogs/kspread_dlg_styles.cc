@@ -18,9 +18,11 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <qheader.h>
+#include <q3header.h>
 #include <qlayout.h>
 #include <qmap.h>
+//Added by qt3to4:
+#include <Q3VBoxLayout>
 
 #include <kcombobox.h>
 #include <kdebug.h>
@@ -39,10 +41,10 @@
 
 using namespace KSpread;
 
-StyleWidget::StyleWidget( QWidget * parent, const char * name, WFlags fl )
+StyleWidget::StyleWidget( QWidget * parent, const char * name, Qt::WFlags fl )
   : QWidget( parent, name, fl )
 {
-  QVBoxLayout * layout = new QVBoxLayout( this, 11, 6, "layout");
+  Q3VBoxLayout * layout = new Q3VBoxLayout( this, 11, 6, "layout");
 
   m_styleList = new K3ListView( this, "m_styleList" );
   m_styleList->addColumn( i18n( "Styles" ) );
@@ -59,7 +61,7 @@ StyleWidget::StyleWidget( QWidget * parent, const char * name, WFlags fl )
   m_displayBox->insertItem( i18n( "Applied Styles" ) );
   m_displayBox->insertItem( i18n( "Custom Styles" ) );
   m_displayBox->insertItem( i18n( "Hierarchical" ) );
-  connect( m_styleList, SIGNAL(doubleClicked ( QListViewItem *)),this, SIGNAL( modifyStyle()));
+  connect( m_styleList, SIGNAL(doubleClicked ( Q3ListViewItem *)),this, SIGNAL( modifyStyle()));
   resize( QSize(446, 384).expandedTo(minimumSizeHint()) );
 }
 
@@ -79,7 +81,7 @@ StyleDlg::StyleDlg( View * parent, StyleManager * manager,
     m_dlg( new StyleWidget( this ) )
 {
   setCaption( i18n( "Style Manager" ) );
-  setButtonBoxOrientation( Vertical );
+  setButtonBoxOrientation( Qt::Vertical );
   setMainWidget( m_dlg );
 
   slotDisplayMode( 0 );
@@ -87,8 +89,8 @@ StyleDlg::StyleDlg( View * parent, StyleManager * manager,
   enableButton( KDialogBase::User2, true );
   enableButton( KDialogBase::User3, false );
 
-  connect( m_dlg->m_styleList, SIGNAL( selectionChanged( QListViewItem * ) ),
-           this, SLOT( slotSelectionChanged( QListViewItem * ) ) );
+  connect( m_dlg->m_styleList, SIGNAL( selectionChanged( Q3ListViewItem * ) ),
+           this, SLOT( slotSelectionChanged( Q3ListViewItem * ) ) );
   connect( m_dlg->m_displayBox, SIGNAL( activated( int ) ), this, SLOT( slotDisplayMode( int ) ) );
   connect( this, SIGNAL( user3Clicked() ), this, SLOT( slotUser3() ) );
   connect( m_dlg, SIGNAL( modifyStyle() ), this, SLOT( slotUser2()));
@@ -305,7 +307,7 @@ void StyleDlg::slotUser3()
   slotDisplayMode( m_dlg->m_displayBox->currentItem() );
 }
 
-void StyleDlg::slotSelectionChanged( QListViewItem * item )
+void StyleDlg::slotSelectionChanged( Q3ListViewItem * item )
 {
   if ( !item )
     return;

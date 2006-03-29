@@ -26,11 +26,11 @@
 */
 
 
-#include <qbuttongroup.h>
+#include <q3buttongroup.h>
 #include <qhbuttongroup.h>
 #include <qcheckbox.h>
 #include <qcombobox.h>
-#include <qgroupbox.h>
+#include <q3groupbox.h>
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qlineedit.h>
@@ -39,7 +39,11 @@
 #include <qrect.h>
 #include <qtabwidget.h>
 #include <qwidget.h>
-#include <qvbox.h>
+#include <q3vbox.h>
+//Added by qt3to4:
+#include <Q3VBoxLayout>
+#include <Q3HBoxLayout>
+#include <Q3GridLayout>
 
 #include <kconfig.h>
 #include <kdebug.h>
@@ -73,16 +77,16 @@ SortDialog::SortDialog( View * parent,  const char * name,
   m_tabWidget = new QTabWidget( page, "m_tabWidget" );
 
   m_page1 = new QWidget( m_tabWidget, "m_page1" );
-  QGridLayout * page1Layout
-    = new QGridLayout( m_page1, 1, 1, 11, 6, "page1Layout");
+  Q3GridLayout * page1Layout
+    = new Q3GridLayout( m_page1, 1, 1, 11, 6, "page1Layout");
 
 //---------------- Sort Layout & Header Row/Column Toggle
 
   //Sort orientation selector (for selecting Left-To-Right or Top-To-Bottom sorting of the selection)
-  QGroupBox* layoutGroup = new QGroupBox(2 , Qt::Vertical,  m_page1, "layoutGroup");
+  Q3GroupBox* layoutGroup = new Q3GroupBox(2 , Qt::Vertical,  m_page1, "layoutGroup");
   layoutGroup->setTitle( i18n("Layout") );
   
-  QHButtonGroup * orientationGroup = new QHButtonGroup( layoutGroup, "orientationGroup" );
+  Q3HButtonGroup * orientationGroup = new Q3HButtonGroup( layoutGroup, "orientationGroup" );
   orientationGroup->setLineWidth(0);
   orientationGroup->setMargin(0);
   orientationGroup->layout()->setMargin(0);
@@ -104,13 +108,13 @@ SortDialog::SortDialog( View * parent,  const char * name,
   page1Layout->addRowSpacing(2,10);
   
 
-  QGroupBox * sort1Box = new QGroupBox( m_page1, "sort1Box" );
+  Q3GroupBox * sort1Box = new Q3GroupBox( m_page1, "sort1Box" );
   sort1Box->setTitle( i18n( "Sort By" ) );
   sort1Box->setFlat(true);
   sort1Box->setColumnLayout(0, Qt::Vertical );
   sort1Box->layout()->setSpacing( KDialog::spacingHint() );
   sort1Box->layout()->setMargin( KDialog::marginHint() );
-  QHBoxLayout * sort1BoxLayout = new QHBoxLayout( sort1Box->layout() );
+  Q3HBoxLayout * sort1BoxLayout = new Q3HBoxLayout( sort1Box->layout() );
   sort1BoxLayout->setAlignment( Qt::AlignTop );
 
   m_sortKey1 = new QComboBox( false, sort1Box, "m_sortKey1" );
@@ -123,13 +127,13 @@ SortDialog::SortDialog( View * parent,  const char * name,
 
   page1Layout->addWidget( sort1Box, 3, 0 );
 
-  QGroupBox * sort2Box = new QGroupBox( m_page1, "sort2Box" );
+  Q3GroupBox * sort2Box = new Q3GroupBox( m_page1, "sort2Box" );
   sort2Box->setTitle( i18n( "Then By" ) );
   sort2Box->setFlat(true);
   sort2Box->setColumnLayout(0, Qt::Vertical );
   sort2Box->layout()->setSpacing( KDialog::spacingHint() );
   sort2Box->layout()->setMargin( KDialog::marginHint() );
-  QHBoxLayout * sort2BoxLayout = new QHBoxLayout( sort2Box->layout() );
+  Q3HBoxLayout * sort2BoxLayout = new Q3HBoxLayout( sort2Box->layout() );
   sort2BoxLayout->setAlignment( Qt::AlignTop );
 
   m_sortKey2 = new QComboBox( false, sort2Box, "m_sortKey2" );
@@ -143,13 +147,13 @@ SortDialog::SortDialog( View * parent,  const char * name,
 
   page1Layout->addWidget( sort2Box, 4, 0 );
 
-  QGroupBox * sort3Box = new QGroupBox( m_page1, "sort3Box" );
+  Q3GroupBox * sort3Box = new Q3GroupBox( m_page1, "sort3Box" );
   sort3Box->setTitle( i18n( "Then By" ) );
   sort3Box->setFlat(true);
   sort3Box->setColumnLayout(0, Qt::Vertical );
   sort3Box->layout()->setSpacing( KDialog::spacingHint() );
   sort3Box->layout()->setMargin( KDialog::marginHint() );
-  QHBoxLayout * sort3BoxLayout = new QHBoxLayout( sort3Box->layout() );
+  Q3HBoxLayout * sort3BoxLayout = new Q3HBoxLayout( sort3Box->layout() );
   sort3BoxLayout->setAlignment( Qt::AlignTop );
 
   m_sortKey3 = new QComboBox( false, sort3Box, "m_sortKey3" );
@@ -170,15 +174,15 @@ SortDialog::SortDialog( View * parent,  const char * name,
   //---------------- options page
 
   m_page2 = new QWidget( m_tabWidget, "m_page2" );
-  QGridLayout * page2Layout = new QGridLayout( m_page2, 1, 1, 11, 6, "page2Layout");
+  Q3GridLayout * page2Layout = new Q3GridLayout( m_page2, 1, 1, 11, 6, "page2Layout");
   page2Layout->setAlignment(Qt::AlignTop);
 
-  QGroupBox * firstKeyBox = new QGroupBox( m_page2, "firstKeyBox" );
+  Q3GroupBox * firstKeyBox = new Q3GroupBox( m_page2, "firstKeyBox" );
   firstKeyBox->setTitle( i18n( "First Key" ) );
   firstKeyBox->setColumnLayout(0, Qt::Vertical );
   firstKeyBox->layout()->setSpacing( KDialog::spacingHint() );
   firstKeyBox->layout()->setMargin( KDialog::marginHint() );
-  QVBoxLayout * firstKeyBoxLayout = new QVBoxLayout( firstKeyBox->layout() );
+  Q3VBoxLayout * firstKeyBoxLayout = new Q3VBoxLayout( firstKeyBox->layout() );
   firstKeyBoxLayout->setAlignment( Qt::AlignTop );
 
   m_useCustomLists = new QCheckBox( firstKeyBox, "m_useCustomLists_2" );
@@ -230,7 +234,7 @@ SortDialog::SortDialog( View * parent,  const char * name,
   
   m_tabWidget->insertTab( m_page2, i18n( "Options" ) );
 
-  QHBoxLayout * Layout1 = new QHBoxLayout( 0, 0, 6, "Layout1");
+  Q3HBoxLayout * Layout1 = new Q3HBoxLayout( 0, 0, 6, "Layout1");
   QSpacerItem * spacer_2 = new QSpacerItem( 20, 20, QSizePolicy::Expanding,
                                             QSizePolicy::Minimum );
   Layout1->addItem( spacer_2 );
@@ -522,7 +526,7 @@ void SortDialog::slotOk()
 {
   m_pView->doc()->emitBeginOperation( false );
   
-  Orientation sortOrientation;
+  Qt::Orientation sortOrientation;
   if (m_sortRow->isChecked())
     sortOrientation=SortColumns;
   else

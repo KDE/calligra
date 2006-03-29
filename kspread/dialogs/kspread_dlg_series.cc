@@ -31,18 +31,21 @@
 #include "kspread_view.h"
 
 #include <qlayout.h>
+//Added by qt3to4:
+#include <Q3HBoxLayout>
+#include <Q3GridLayout>
 #include <klocale.h>
 #include <qlabel.h>
 
-#include <qbuttongroup.h>
-#include <qgroupbox.h>
+#include <q3buttongroup.h>
+#include <q3groupbox.h>
 #include <kmessagebox.h>
 #include <knumvalidator.h>
 
 #include <qradiobutton.h>
 #include <qcheckbox.h>
 #include <qlineedit.h>
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
 #include <knuminput.h>
 
 using namespace KSpread;
@@ -55,35 +58,35 @@ SeriesDlg::SeriesDlg( View* parent, const char* name,const QPoint &_marker)
   QWidget *page = new QWidget( this );
   setMainWidget(page);
 
-  QBoxLayout *grid1 = new QHBoxLayout(page);
+  Q3BoxLayout *grid1 = new Q3HBoxLayout(page);
   grid1->setSpacing( spacingHint() );
 
-  QButtonGroup* gb1 = new QButtonGroup( 2, Qt::Vertical,
+  Q3ButtonGroup* gb1 = new Q3ButtonGroup( 2, Qt::Vertical,
     i18n("Insert Values"), page );
   column = new QRadioButton( i18n("Vertical"), gb1 );
-  QWhatsThis::add(column, i18n("Insert the series vertically, one below the other") );
+  Q3WhatsThis::add(column, i18n("Insert the series vertically, one below the other") );
   row = new QRadioButton( i18n("Horizontal"), gb1 );
-  QWhatsThis::add(row, i18n("Insert the series horizontally, from left to right") );
+  Q3WhatsThis::add(row, i18n("Insert the series horizontally, from left to right") );
 
   column->setChecked(true);
 
-  QButtonGroup* gb2 = new QButtonGroup( 2, Qt::Vertical,
+  Q3ButtonGroup* gb2 = new Q3ButtonGroup( 2, Qt::Vertical,
     i18n("Type"), page );
   linear = new QRadioButton( i18n("Linear (2,4,6,...)"), gb2 );
-  QWhatsThis::add(linear, i18n("Generate a series from 'start' to 'end' and for each step add "
+  Q3WhatsThis::add(linear, i18n("Generate a series from 'start' to 'end' and for each step add "
      "the value provided in step. This creates a series where each value "
      "is 'step' larger than the value before it.") );
   geometric = new QRadioButton( i18n("Geometric (2,4,8,...)"), gb2 );
-  QWhatsThis::add(geometric, i18n("Generate a series from 'start' to 'end' and for each step multiply "
+  Q3WhatsThis::add(geometric, i18n("Generate a series from 'start' to 'end' and for each step multiply "
      "the value with the value provided in step. Using a step of 5 produces a list like: "
       "5, 25, 125, 625 since 5 multiplied by 5 (step) equals 25, and that multiplied by 5 equals 125, "
       "which multiplied by the same step-value of 5 equals 625.") );
 
   linear->setChecked(true);
 
-  QGroupBox* gb = new QGroupBox( 1, Qt::Vertical, i18n("Parameters"), page );
+  Q3GroupBox* gb = new Q3GroupBox( 1, Qt::Vertical, i18n("Parameters"), page );
   QWidget *params = new QWidget( gb );
-  QGridLayout *params_layout = new QGridLayout( params, 3, 2 );
+  Q3GridLayout *params_layout = new Q3GridLayout( params, 3, 2 );
   params_layout->setSpacing( spacingHint() );
   params_layout->setAutoAdd( true );
 

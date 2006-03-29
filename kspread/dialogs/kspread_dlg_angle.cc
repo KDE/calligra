@@ -23,6 +23,8 @@
 
 #include <qlayout.h>
 #include <qpushbutton.h>
+//Added by qt3to4:
+#include <Q3VBoxLayout>
 
 #include <kbuttonbox.h>
 #include <kdebug.h>
@@ -47,7 +49,7 @@ AngleDialog::AngleDialog(View* parent, const char* name, const QPoint &_marker)
   QWidget *page = new QWidget( this );
   setMainWidget(page);
 
-  QVBoxLayout *lay = new QVBoxLayout( page, 0, spacingHint() );
+  Q3VBoxLayout *lay = new Q3VBoxLayout( page, 0, spacingHint() );
   m_pAngle = new KIntNumInput( page );
   m_pAngle->setRange( -90, 90, 1 );
   m_pAngle->setLabel( i18n("Angle:") );

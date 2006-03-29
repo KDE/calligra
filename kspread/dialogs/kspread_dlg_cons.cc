@@ -33,6 +33,10 @@
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qpushbutton.h>
+//Added by qt3to4:
+#include <Q3GridLayout>
+#include <Q3ValueList>
+#include <QCloseEvent>
 
 #include <kdebug.h>
 #include <kdialogbase.h>
@@ -62,7 +66,7 @@ ConsolidateDialog::ConsolidateDialog( View* parent, const char* name )
   QWidget* page = new QWidget( this );
   setMainWidget( page );
 
-  QGridLayout *grid1 = new QGridLayout( page, 12, 2, marginHint(), spacingHint() );
+  Q3GridLayout *grid1 = new Q3GridLayout( page, 12, 2, marginHint(), spacingHint() );
 
   QLabel* tmpQLabel;
   tmpQLabel = new QLabel( page, "Label_1" );
@@ -94,7 +98,7 @@ ConsolidateDialog::ConsolidateDialog( View* parent, const char* name )
   grid1->addWidget(tmpQLabel,4,0);
   tmpQLabel->setText( i18n("&Entered references:") );
 
-  m_pRefs = new QListBox( page );
+  m_pRefs = new Q3ListBox( page );
   grid1->addMultiCellWidget( m_pRefs,5,8,0,0);
   tmpQLabel->setBuddy(m_pRefs);
 
@@ -162,7 +166,7 @@ void ConsolidateDialog::slotOk()
   }
 
   QStringList r = refs();
-  QValueList<Range> ranges;
+  Q3ValueList<Range> ranges;
   QStringList::Iterator s = r.begin();
   for( ; s != r.end(); ++s )
   {
@@ -190,7 +194,7 @@ void ConsolidateDialog::slotOk()
 
   // Check whether all ranges have same size
   Q_ASSERT( ranges.count() > 0 );
-  QValueList<Range>::Iterator it = ranges.begin();
+  Q3ValueList<Range>::Iterator it = ranges.begin();
   int w = (*it).range().right() - (*it).range().left() + 1;
   int h = (*it).range().bottom() - (*it).range().top() + 1;
   if ( w <= ( ( desc == D_BOTH || desc == D_COL ) ? 1 : 0 ) ||
@@ -515,7 +519,7 @@ void ConsolidateDialog::slotOk()
     }
 
     // Fill the list with all interesting cells
-    QValueList<st_cell> lst;
+    Q3ValueList<st_cell> lst;
     it = ranges.begin();
     for( ; it != ranges.end(); ++it )
     {
@@ -574,7 +578,7 @@ void ConsolidateDialog::slotOk()
       {
 	int count = 0;
         QString formula = "=" + function + "(";
-	QValueList<st_cell>::Iterator lit = lst.begin();
+	Q3ValueList<st_cell>::Iterator lit = lst.begin();
 	for( ; lit != lst.end(); ++lit )
 	{
 	  if ( (*lit).xdesc == *xdesc && (*lit).ydesc == *ydesc )

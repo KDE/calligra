@@ -25,12 +25,15 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <qvbox.h>
+#include <q3vbox.h>
 #include <qlayout.h>
 #include <qcheckbox.h>
 #include <qcombobox.h>
 #include <qvgroupbox.h>
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
+//Added by qt3to4:
+#include <Q3GridLayout>
+#include <QLabel>
 
 #include <kconfig.h>
 #include <kstatusbar.h>
@@ -65,22 +68,22 @@ PreferenceDialog::PreferenceDialog( View* parent, const char* /*name*/)
 
   connect(this, SIGNAL(okClicked()),this,SLOT(slotApply()));
 
-  QVBox *page2=addVBoxPage(i18n("Locale Settings"), QString::null,BarIcon("gohome",K3Icon::SizeMedium));
+  Q3VBox *page2=addVBoxPage(i18n("Locale Settings"), QString::null,BarIcon("gohome",K3Icon::SizeMedium));
  _localePage=new parameterLocale(parent,page2 );
 
-  QVBox *page3=addVBoxPage(i18n("Interface"), QString::null,BarIcon("signature", K3Icon::SizeMedium) );
+  Q3VBox *page3=addVBoxPage(i18n("Interface"), QString::null,BarIcon("signature", K3Icon::SizeMedium) );
   _configure = new  configure(parent,page3 );
 
-  QVBox * page4=addVBoxPage(i18n("Misc"), QString::null,BarIcon("misc",K3Icon::SizeMedium) );
+  Q3VBox * page4=addVBoxPage(i18n("Misc"), QString::null,BarIcon("misc",K3Icon::SizeMedium) );
   _miscParameter = new  miscParameters(parent,page4 );
 
-  QVBox *page5=addVBoxPage(i18n("Color"), QString::null,BarIcon("colorize",K3Icon::SizeMedium) );
+  Q3VBox *page5=addVBoxPage(i18n("Color"), QString::null,BarIcon("colorize",K3Icon::SizeMedium) );
   _colorParameter=new colorParameters(parent,page5 );
 
-  QVBox *page6=addVBoxPage(i18n("Page Layout"), QString::null,BarIcon("edit",K3Icon::SizeMedium) );
+  Q3VBox *page6=addVBoxPage(i18n("Page Layout"), QString::null,BarIcon("edit",K3Icon::SizeMedium) );
   _layoutPage=new configureLayoutPage(parent,page6 );
 
-  QVBox *page7 = addVBoxPage( i18n("Spelling"), i18n("Spell Checker Behavior"),
+  Q3VBox *page7 = addVBoxPage( i18n("Spelling"), i18n("Spell Checker Behavior"),
                           BarIcon("spellcheck", K3Icon::SizeMedium) );
   _spellPage=new configureSpellPage(parent,page7);
 
@@ -140,12 +143,12 @@ void PreferenceDialog::slotDefault()
 }
 
 
-parameterLocale::parameterLocale( View* _view, QVBox *box , char *name )
+parameterLocale::parameterLocale( View* _view, Q3VBox *box , char *name )
  :QObject ( box->parent(),name)
 {
     m_pView = _view;
     m_bUpdateLocale=false;
-  QGroupBox* tmpQGroupBox = new QVGroupBox( i18n("Settings"), box, "GroupBox" );
+  Q3GroupBox* tmpQGroupBox = new QVGroupBox( i18n("Settings"), box, "GroupBox" );
 
   KLocale* locale=_view->doc()->locale();
 
@@ -190,7 +193,7 @@ void parameterLocale::updateToMatchLocale(KLocale* locale)
   m_money->setText( i18n("Currency format: %1").arg( locale->formatMoney(12.55) ));
 }
 
-configure::configure( View* _view, QVBox *box , char *name )
+configure::configure( View* _view, Q3VBox *box , char *name )
  :QObject ( box->parent(),name)
  {
   m_pView = _view;
@@ -204,7 +207,7 @@ configure::configure( View* _view, QVBox *box , char *name )
   bool statusBar=true;
   m_oldBackupFile = true;
 
-  QGroupBox* tmpQGroupBox = new QVGroupBox( i18n("Settings"), box, "GroupBox" );
+  Q3GroupBox* tmpQGroupBox = new QVGroupBox( i18n("Settings"), box, "GroupBox" );
 
   config = Factory::global()->config();
   int _page=1;
@@ -230,50 +233,50 @@ configure::configure( View* _view, QVBox *box , char *name )
   nbPage=new KIntNumInput(_page, tmpQGroupBox , 10);
   nbPage->setRange(1, 10, 1);
   nbPage->setLabel(i18n("Number of sheets open at the &beginning:"));
-  QWhatsThis::add(nbPage, i18n( "Controls how many worksheets will be created if the option Start with an empty document is chosen when KSpread is started." ) );
+  Q3WhatsThis::add(nbPage, i18n( "Controls how many worksheets will be created if the option Start with an empty document is chosen when KSpread is started." ) );
 
   nbRecentFile=new KIntNumInput(oldRecent, tmpQGroupBox , 10);
   nbRecentFile->setRange(1, 20, 1);
   nbRecentFile->setLabel(i18n("&Number of files to show in Recent Files list:"));
-  QWhatsThis::add(nbRecentFile, i18n( "Controls the maximum number of filenames that are shown when you select File-> Open Recent." ) );
+  Q3WhatsThis::add(nbRecentFile, i18n( "Controls the maximum number of filenames that are shown when you select File-> Open Recent." ) );
 
   autoSaveDelay=new KIntNumInput(oldAutoSaveValue, tmpQGroupBox , 10);
   autoSaveDelay->setRange(0, 60, 1);
   autoSaveDelay->setLabel(i18n("Au&tosave delay (minutes):"));
   autoSaveDelay->setSpecialValueText(i18n("Do not save automatically"));
   autoSaveDelay->setSuffix(i18n("min"));
-  QWhatsThis::add(autoSaveDelay, i18n( "Here you can select the time between autosaves, or disable this feature altogether by choosing Do not save automatically (drag the slider to the far left)." ) );
+  Q3WhatsThis::add(autoSaveDelay, i18n( "Here you can select the time between autosaves, or disable this feature altogether by choosing Do not save automatically (drag the slider to the far left)." ) );
 
   m_createBackupFile = new QCheckBox( i18n("Create backup files"), tmpQGroupBox );
   m_createBackupFile->setChecked( m_oldBackupFile );
-  QWhatsThis::add(m_createBackupFile, i18n( "Check this box if you want some backup files created. This is checked per default." ) );
+  Q3WhatsThis::add(m_createBackupFile, i18n( "Check this box if you want some backup files created. This is checked per default." ) );
 
   showVScrollBar=new QCheckBox(i18n("Show &vertical scrollbar"),tmpQGroupBox);
   showVScrollBar->setChecked(vertical);
-  QWhatsThis::add(showVScrollBar, i18n( "Check or uncheck this box to show or hide the vertical scrollbar in all sheets." ) );
+  Q3WhatsThis::add(showVScrollBar, i18n( "Check or uncheck this box to show or hide the vertical scrollbar in all sheets." ) );
 
   showHScrollBar=new QCheckBox(i18n("Show &horizontal scrollbar"),tmpQGroupBox);
   showHScrollBar->setChecked(horizontal);
-  QWhatsThis::add(showHScrollBar, i18n( "Check or uncheck this box to show or hide the horizontal scrollbar in all sheets." ) );
+  Q3WhatsThis::add(showHScrollBar, i18n( "Check or uncheck this box to show or hide the horizontal scrollbar in all sheets." ) );
 
   showColHeader=new QCheckBox(i18n("Show c&olumn header"),tmpQGroupBox);
   showColHeader->setChecked(colHeader);
-  QWhatsThis::add(showColHeader, i18n( "Check this box to show the column letters across the top of each worksheet." ) );
+  Q3WhatsThis::add(showColHeader, i18n( "Check this box to show the column letters across the top of each worksheet." ) );
   showRowHeader=new QCheckBox(i18n("Show &row header"),tmpQGroupBox);
   showRowHeader->setChecked(rowHeader);
-  QWhatsThis::add(showRowHeader, i18n( "Check this box to show the row numbers down the left side." ) );
+  Q3WhatsThis::add(showRowHeader, i18n( "Check this box to show the row numbers down the left side." ) );
 
   showTabBar =new QCheckBox(i18n("Show ta&bs"),tmpQGroupBox);
   showTabBar->setChecked(tabbar);
-  QWhatsThis::add(showTabBar, i18n( "This check box controls whether the sheet tabs are shown at the bottom of the worksheet." ) );
+  Q3WhatsThis::add(showTabBar, i18n( "This check box controls whether the sheet tabs are shown at the bottom of the worksheet." ) );
 
   showFormulaBar =new QCheckBox(i18n("Sho&w formula toolbar"),tmpQGroupBox);
   showFormulaBar->setChecked(formulaBar);
-  QWhatsThis::add(showFormulaBar, i18n( "Here is where you can choose to show or hide the Formula bar." ) );
+  Q3WhatsThis::add(showFormulaBar, i18n( "Here is where you can choose to show or hide the Formula bar." ) );
 
   showStatusBar =new QCheckBox(i18n("Show stat&us bar"),tmpQGroupBox);
   showStatusBar->setChecked(statusBar);
-  QWhatsThis::add(showStatusBar, i18n( "Uncheck this box if you want to hide the status bar." ) );
+  Q3WhatsThis::add(showStatusBar, i18n( "Uncheck this box if you want to hide the status bar." ) );
 }
 
 
@@ -395,13 +398,13 @@ void configure::apply()
 }
 
 
-miscParameters::miscParameters( View* _view,QVBox *box, char *name )
+miscParameters::miscParameters( View* _view,Q3VBox *box, char *name )
  :QObject ( box->parent(),name)
  {
   m_pView = _view;
 
 
-  QGroupBox* tmpQGroupBox = new QVGroupBox( i18n("Misc"), box, "GroupBox" );
+  Q3GroupBox* tmpQGroupBox = new QVGroupBox( i18n("Misc"), box, "GroupBox" );
 
   config = Factory::global()->config();
   indentUnit = _view->doc()->unit();
@@ -429,7 +432,7 @@ miscParameters::miscParameters( View* _view,QVBox *box, char *name )
 
   typeCompletion=new QComboBox(tmpQGroupBox);
   label->setBuddy(typeCompletion);
-  QWhatsThis::add(typeCompletion, i18n( "Lets you choose the (auto) text completion mode from a range of options in the drop down selection box." ) );
+  Q3WhatsThis::add(typeCompletion, i18n( "Lets you choose the (auto) text completion mode from a range of options in the drop down selection box." ) );
   QStringList listType;
   listType+=i18n("None");
   listType+=i18n("Manual");
@@ -452,7 +455,7 @@ miscParameters::miscParameters( View* _view,QVBox *box, char *name )
   listType+=i18n("Down, First Column");
   typeOfMove->insertStringList(listType);
   typeOfMove->setCurrentItem(0);
-  QWhatsThis::add(typeOfMove, i18n( "When you have selected a cell, pressing the Enter key will move the cell cursor one cell left, right, up or down, as determined by this setting." ) );
+  Q3WhatsThis::add(typeOfMove, i18n( "When you have selected a cell, pressing the Enter key will move the cell cursor one cell left, right, up or down, as determined by this setting." ) );
 
   label=new QLabel(i18n("&Method of calc:"), tmpQGroupBox);
 
@@ -468,7 +471,7 @@ miscParameters::miscParameters( View* _view,QVBox *box, char *name )
   listTypeCalc+=i18n("None");
   typeCalc->insertStringList(listTypeCalc);
   typeCalc->setCurrentItem(0);
-  QWhatsThis::add(typeCalc, i18n( "This drop down selection box can be used to choose the calculation performed by the Statusbar Summary  function." ) );
+  Q3WhatsThis::add(typeCalc, i18n( "This drop down selection box can be used to choose the calculation performed by the Statusbar Summary  function." ) );
 
 //   valIndent = new KDoubleNumInput( _indent, tmpQGroupBox , 10.0 );
   valIndent = new KDoubleNumInput( tmpQGroupBox );
@@ -477,12 +480,12 @@ miscParameters::miscParameters( View* _view,QVBox *box, char *name )
                        KoUnit::toUserValue( 10.0, indentUnit) );
 //   valIndent->setRange( 0.0, 100.0, 10.0 );
   valIndent->setValue ( KoUnit::toUserValue( _indent, indentUnit ) );
-  QWhatsThis::add(valIndent, i18n( "Lets you define the amount of indenting used by the Increase Indent and Decrease Indent option in the Format menu." ) );
+  Q3WhatsThis::add(valIndent, i18n( "Lets you define the amount of indenting used by the Increase Indent and Decrease Indent option in the Format menu." ) );
   valIndent->setLabel(i18n("&Indentation step (%1):").arg(KoUnit::unitName(indentUnit)));
 
   msgError= new QCheckBox(i18n("&Show error message for invalid formulae"),tmpQGroupBox);
   msgError->setChecked(m_bMsgError);
-  QWhatsThis::add(msgError, i18n( "If this box is checked a message box will pop up when what you have entered into a cell cannot be understood by KSpread." ) );
+  Q3WhatsThis::add(msgError, i18n( "If this box is checked a message box will pop up when what you have entered into a cell cannot be understood by KSpread." ) );
 
   initComboBox();
 }
@@ -524,16 +527,16 @@ switch(tmpCompletion )
         }
 switch( m_pView->doc()->getMoveToValue( ))
         {
-        case  Bottom:
+        case  Qt::DockBottom:
                 typeOfMove->setCurrentItem(0);
                 break;
-        case  Left:
+        case  Qt::DockLeft:
                 typeOfMove->setCurrentItem(3);
                 break;
-        case  Top:
+        case  Qt::DockTop:
                 typeOfMove->setCurrentItem(1);
                 break;
-        case  Right:
+        case  Qt::DockRight:
                 typeOfMove->setCurrentItem(2);
                 break;
         case  BottomFirst:
@@ -627,20 +630,20 @@ void miscParameters::apply()
         config->writeEntry( "Completion Mode", (int)tmpCompletion);
     }
 
-    KSpread::MoveTo tmpMoveTo=Bottom;
+    KSpread::MoveTo tmpMoveTo=Qt::DockBottom;
     switch(typeOfMove->currentItem())
     {
         case 0:
-            tmpMoveTo=Bottom;
+            tmpMoveTo=Qt::DockBottom;
             break;
         case 1:
-            tmpMoveTo=Top;
+            tmpMoveTo=Qt::DockTop;
             break;
         case 2:
-            tmpMoveTo=Right;
+            tmpMoveTo=Qt::DockRight;
             break;
         case 3:
-            tmpMoveTo=Left;
+            tmpMoveTo=Qt::DockLeft;
             break;
         case 4:
             tmpMoveTo=BottomFirst;
@@ -706,7 +709,7 @@ void miscParameters::apply()
 
 
 
-colorParameters::colorParameters( View* _view,QVBox *box , char *name )
+colorParameters::colorParameters( View* _view,Q3VBox *box , char *name )
  :QObject ( box->parent(),name)
 {
   m_pView = _view;
@@ -720,14 +723,14 @@ colorParameters::colorParameters( View* _view,QVBox *box , char *name )
     _gridColor = config->readColorEntry("GridColor",&_gridColor);
   }
 
-  QGroupBox* tmpQGroupBox = new QVGroupBox( i18n("Color"), box, "GroupBox" );
+  Q3GroupBox* tmpQGroupBox = new QVGroupBox( i18n("Color"), box, "GroupBox" );
 
   QLabel *label = new QLabel(i18n("&Grid color:"), tmpQGroupBox,"label20" );
 
   gridColor = new KColorButton( _gridColor,
                                 Qt::lightGray,
                                 tmpQGroupBox );
-  QWhatsThis::add(gridColor, i18n( "Click here to change the grid color ie the color of the borders of each cell." ) );
+  Q3WhatsThis::add(gridColor, i18n( "Click here to change the grid color ie the color of the borders of each cell." ) );
   label->setBuddy(gridColor);
 
   QColor _pbColor(Qt::red);
@@ -742,7 +745,7 @@ colorParameters::colorParameters( View* _view,QVBox *box , char *name )
   pageBorderColor = new KColorButton( _pbColor,
                                 Qt::red,
                                 tmpQGroupBox );
-  QWhatsThis::add(pageBorderColor, i18n( "When the View ->Show Page Borders menu item is checked, the page borders are displayed. Click here to choose another color for the borders than the default red." ) );
+  Q3WhatsThis::add(pageBorderColor, i18n( "When the View ->Show Page Borders menu item is checked, the page borders are displayed. Click here to choose another color for the borders than the default red." ) );
 
   label2->setBuddy(pageBorderColor);
 }
@@ -768,22 +771,22 @@ void colorParameters::apply()
 
 void colorParameters::slotDefault()
 {
-  gridColor->setColor( lightGray );
-  pageBorderColor->setColor( red );
+  gridColor->setColor( Qt::lightGray );
+  pageBorderColor->setColor( Qt::red );
 }
 
 
 
-configureLayoutPage::configureLayoutPage( View* _view,QVBox *box , char *name )
+configureLayoutPage::configureLayoutPage( View* _view,Q3VBox *box , char *name )
  :QObject ( box->parent(),name)
 {
   m_pView = _view;
 
-  QGroupBox* tmpQGroupBox = new QGroupBox( 0, Qt::Vertical, i18n("Default Parameters"), box, "GroupBox" );
+  Q3GroupBox* tmpQGroupBox = new Q3GroupBox( 0, Qt::Vertical, i18n("Default Parameters"), box, "GroupBox" );
   tmpQGroupBox->layout()->setSpacing(KDialog::spacingHint());
   tmpQGroupBox->layout()->setMargin(KDialog::marginHint());
 
-  QGridLayout *grid1 = new QGridLayout(tmpQGroupBox->layout(),8,1);
+  Q3GridLayout *grid1 = new Q3GridLayout(tmpQGroupBox->layout(),8,1);
   grid1->addRowSpacing( 0, KDialog::marginHint()  );
   grid1->setRowStretch( 7, 10 );
 
@@ -797,7 +800,7 @@ configureLayoutPage::configureLayoutPage( View* _view,QVBox *box , char *name )
   label->setBuddy(defaultSizePage);
   defaultSizePage->insertStringList( KoPageFormat::allFormats() );
   defaultSizePage->setCurrentItem(1);
-  QWhatsThis::add(defaultSizePage, i18n( "Choose the default page size for your worksheet among all the most common page sizes.\nNote that you can overwrite the page size for the current sheet using the Format -> Page Layout... dialog." ) );
+  Q3WhatsThis::add(defaultSizePage, i18n( "Choose the default page size for your worksheet among all the most common page sizes.\nNote that you can overwrite the page size for the current sheet using the Format -> Page Layout... dialog." ) );
   grid1->addWidget(defaultSizePage,1,0);
 
   label=new QLabel(i18n("Default page &orientation:"), tmpQGroupBox);
@@ -811,7 +814,7 @@ configureLayoutPage::configureLayoutPage( View* _view,QVBox *box , char *name )
   listType+=i18n( "Landscape" );
   defaultOrientationPage->insertStringList(listType);
   defaultOrientationPage->setCurrentItem(0);
-  QWhatsThis::add(defaultOrientationPage, i18n( "Choose the sheet orientation: portrait or lanscape.\nNote that you can overwrite the orientation for the current sheet using the Format -> Page Layout... dialog." ) );
+  Q3WhatsThis::add(defaultOrientationPage, i18n( "Choose the sheet orientation: portrait or lanscape.\nNote that you can overwrite the orientation for the current sheet using the Format -> Page Layout... dialog." ) );
   grid1->addWidget(defaultOrientationPage,3,0);
 
   label=new QLabel(tmpQGroupBox);
@@ -822,7 +825,7 @@ configureLayoutPage::configureLayoutPage( View* _view,QVBox *box , char *name )
   
   defaultUnit->insertStringList(KoUnit::listOfUnitName());
   defaultUnit->setCurrentItem(0);
-  QWhatsThis::add(defaultUnit, i18n( "Choose the default unit that will be used in your sheet.\nNote that you can overwrite the unit for the current sheet using the Format -> Page Layout... dialog." ) );
+  Q3WhatsThis::add(defaultUnit, i18n( "Choose the default unit that will be used in your sheet.\nNote that you can overwrite the unit for the current sheet using the Format -> Page Layout... dialog." ) );
   grid1->addWidget(defaultUnit,5,0);
   initCombo();
 
@@ -880,7 +883,7 @@ void configureLayoutPage::apply()
   m_pView->slotUpdateView( m_pView->activeSheet() );
 }
 
-configureSpellPage::configureSpellPage( View* _view,QVBox *box , char *name )
+configureSpellPage::configureSpellPage( View* _view,Q3VBox *box , char *name )
  :QObject ( box->parent(),name)
 {
   m_pView = _view;
@@ -890,9 +893,9 @@ configureSpellPage::configureSpellPage( View* _view,QVBox *box , char *name )
 
   m_spellConfigWidget = new KSpellConfig( box, "spell_check",m_pView->doc()->getKSpellConfig()/*, false*/);
   dontCheckUpperWord = new QCheckBox( i18n("Skip all uppercase words"),box);
-  QWhatsThis::add(dontCheckUpperWord, i18n( "If checked, the words written in uppercase letters are not spell checked. This might be useful if you have a lot of acronyms such as KDE for example." ) );
+  Q3WhatsThis::add(dontCheckUpperWord, i18n( "If checked, the words written in uppercase letters are not spell checked. This might be useful if you have a lot of acronyms such as KDE for example." ) );
   dontCheckTitleCase = new QCheckBox( i18n("Do not check title case"),box);
-  QWhatsThis::add(dontCheckTitleCase, i18n( "Check this box if you want the spellchecker to ignore the title case, for example My Own Spreadsheet or My own spreadsheet. If this is unchecked, the spell checker will ask for a uppercase letter in the title nouns." ) );
+  Q3WhatsThis::add(dontCheckTitleCase, i18n( "Check this box if you want the spellchecker to ignore the title case, for example My Own Spreadsheet or My own spreadsheet. If this is unchecked, the spell checker will ask for a uppercase letter in the title nouns." ) );
 
   QWidget* spacer = new QWidget( box );
   spacer->setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Expanding ) );

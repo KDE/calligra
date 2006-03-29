@@ -20,7 +20,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <qbuttongroup.h>
+#include <q3buttongroup.h>
 #include <qcheckbox.h>
 #include <qclipboard.h>
 #include <qcombobox.h>
@@ -29,8 +29,12 @@
 #include <qmime.h>
 #include <qpushbutton.h>
 #include <qradiobutton.h>
-#include <qtable.h>
+#include <q3table.h>
 #include <qlayout.h>
+//Added by qt3to4:
+#include <QTextStream>
+#include <Q3MemArray>
+#include <Q3GridLayout>
 
 #include <kapplication.h>
 #include <kdebug.h>
@@ -68,7 +72,7 @@ CSVDialog::CSVDialog( View * parent, const char * name, QRect const & rect, Mode
   QWidget* page = new QWidget( this );
   setMainWidget( page );
   //  MyDialogLayout = new QGridLayout( page, 4, 4, marginHint(), spacingHint(), "MyDialogLayout");
-  MyDialogLayout = new QGridLayout( page, 1, 1, 11, 6, "MyDialogLayout");
+  MyDialogLayout = new Q3GridLayout( page, 1, 1, 11, 6, "MyDialogLayout");
 
   // Limit the range
   int column = m_targetRect.left();
@@ -77,7 +81,7 @@ CSVDialog::CSVDialog( View * parent, const char * name, QRect const & rect, Mode
     if( m_targetRect.bottom() > lastCell->row() )
       m_targetRect.setBottom( lastCell->row() );
 
-  m_sheet = new QTable( page, "m_table" );
+  m_sheet = new Q3Table( page, "m_table" );
   //m_sheet->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)5, (QSizePolicy::SizeType)7, 0, 0, m_sheet->sizePolicy().hasHeightForWidth() ) );
   m_sheet->setNumRows( 0 );
   m_sheet->setNumCols( 0 );
@@ -85,13 +89,13 @@ CSVDialog::CSVDialog( View * parent, const char * name, QRect const & rect, Mode
   MyDialogLayout->addMultiCellWidget( m_sheet, 3, 3, 0, 3 );
 
   // Delimiter: comma, semicolon, tab, space, other
-  m_delimiterBox = new QButtonGroup( page, "m_delimiterBox" );
+  m_delimiterBox = new Q3ButtonGroup( page, "m_delimiterBox" );
   m_delimiterBox->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)1, (QSizePolicy::SizeType)1, 0, 0, m_delimiterBox->sizePolicy().hasHeightForWidth() ) );
   m_delimiterBox->setTitle( i18n( "Delimiter" ) );
   m_delimiterBox->setColumnLayout(0, Qt::Vertical );
   m_delimiterBox->layout()->setSpacing( KDialog::spacingHint() );
   m_delimiterBox->layout()->setMargin( KDialog::marginHint() );
-  m_delimiterBoxLayout = new QGridLayout( m_delimiterBox->layout() );
+  m_delimiterBoxLayout = new Q3GridLayout( m_delimiterBox->layout() );
   m_delimiterBoxLayout->setAlignment( Qt::AlignTop );
   MyDialogLayout->addMultiCellWidget( m_delimiterBox, 0, 2, 0, 0 );
 
@@ -128,13 +132,13 @@ CSVDialog::CSVDialog( View * parent, const char * name, QRect const & rect, Mode
 
 
   // Format: number, text, currency,
-  m_formatBox = new QButtonGroup( page, "m_formatBox" );
+  m_formatBox = new Q3ButtonGroup( page, "m_formatBox" );
   m_formatBox->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)1, (QSizePolicy::SizeType)1, 0, 0, m_formatBox->sizePolicy().hasHeightForWidth() ) );
   m_formatBox->setTitle( i18n( "Format" ) );
   m_formatBox->setColumnLayout(0, Qt::Vertical );
   m_formatBox->layout()->setSpacing( KDialog::spacingHint() );
   m_formatBox->layout()->setMargin( KDialog::marginHint() );
-  m_formatBoxLayout = new QGridLayout( m_formatBox->layout() );
+  m_formatBoxLayout = new Q3GridLayout( m_formatBox->layout() );
   m_formatBoxLayout->setAlignment( Qt::AlignTop );
   MyDialogLayout->addMultiCellWidget( m_formatBox, 0, 2, 1, 1 );
 
@@ -251,7 +255,7 @@ CSVDialog::CSVDialog( View * parent, const char * name, QRect const & rect, Mode
 
   resize(sizeHint());
 
-  m_sheet->setSelectionMode(QTable::NoSelection);
+  m_sheet->setSelectionMode(Q3Table::NoSelection);
 
   connect(m_formatBox, SIGNAL(clicked(int)),
           this, SLOT(formatClicked(int)));
@@ -647,7 +651,7 @@ void CSVDialog::accept()
   int left = m_targetRect.left();
   int top  = m_targetRect.top();
 
-  QMemArray<double> widths( numCols );
+  Q3MemArray<double> widths( numCols );
   for ( i = 0; i < numCols; ++i )
   {
     ColumnFormat * c  = sheet->nonDefaultColumnFormat( left + i );
