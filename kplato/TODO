@@ -5,10 +5,21 @@ find . -name "*.c*" -o -name "*.h" | xargs grep -E "(###|TODO|FIXME|todo)"
 Using -A and -B with grep gives you some additional context around the particular comment:
 find . -name "*.c*" -o -name "*.h" | xargs grep -A 3 -B 3 -E "(###|TODO|FIXME|todo)"
 
+--------------------------------------------------------------------------------
+There are 5 main areas to work on before koffice 2.0:
+1) Port to kde4.
+2) Improve the gui. (Take advantage of the new qt4 possibilities)
+3) Improve scheduling functionality. This can be done by:
+   * Improving the existing scheduling code, or
+   * Switching to taskjuggler.
+     Atm. (29-03-2006) I (Dag Andersen) am in contact with Chris Schlaeger 
+     and we're investigating problems/possibilities.
+4) Improve koffice integration.
+5) Work on XML file format towards a odf standard.
 
+Note that the decision on 3) above may severly influence the TODO list below.
 The list is not sorted in any order, allthough more urgent things tend to
-gravitate to the top. Also it is not limited to what should be fixed 
-before the 1.5 release!
+gravitate to the top.
 --------------------------------------------------------------------------------
 Status      Description
 --------------------------------------------------------------------------------
