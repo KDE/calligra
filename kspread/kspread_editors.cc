@@ -1118,7 +1118,7 @@ void CellEditor::handleKeyPressEvent( QKeyEvent * _ev )
   QApplication::sendEvent( d->textEdit, _ev );
 }
 
-void CellEditor::handleIMEvent( QIMEvent * _ev )
+void CellEditor::handleIMEvent( QInputMethodEvent  * _ev )
 {
     // send the IM event to the KLineEdit
     QApplication::sendEvent( d->textEdit, _ev );

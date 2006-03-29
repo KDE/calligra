@@ -47,7 +47,7 @@
 #include <Q3ValueList>
 #include <Q3HBoxLayout>
 #include <Q3VBoxLayout>
-
+#include <Q3ListBox>
 #include <kbuttonbox.h>
 #include <kmessagebox.h>
 #include <kdebug.h>

@@ -60,7 +60,8 @@ using namespace KSpread;
 FormulaDialog::FormulaDialog( View* parent, const char* name,const QString& formulaName)
     : KDialogBase( parent, name,false,i18n("Function"), Ok|Cancel )
 {
-  setWFlags( Qt::WDestructiveClose );
+
+  //setWFlags( Qt::WDestructiveClose );
 
     m_pView = parent;
     m_focus = 0;
@@ -716,7 +717,7 @@ void FormulaDialog::slotShowFunction( const QString& function )
 
     // select the function
     Q3ListBoxItem* item = functions->findItem( function,
-      Qt::ExactMatch | Qt::CaseSensitive );
+        QKeySequence::ExactMatch | Qt::CaseSensitive );
     if( item ) functions->setCurrentItem( item );
 
     slotSelected( function );

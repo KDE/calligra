@@ -70,7 +70,7 @@ GoalSeekDialog::GoalSeekDialog( View * parent,  QPoint const & marker,
     m_marker( m_pView->selectionInfo()->marker() ),
     m_selection( m_pView->selectionInfo()->selection() )
 {
-  setWFlags( Qt::WDestructiveClose );
+  //setWFlags( Qt::WDestructiveClose );
 
   if ( !name )
     setName( "GoalSeekDialog" );
@@ -120,7 +120,7 @@ GoalSeekDialog::GoalSeekDialog( View * parent,  QPoint const & marker,
   m_buttonOk->setDefault( TRUE );
   Layout5->addWidget( m_buttonOk );
 
-  m_buttonCancel = new KPushButton( KStdGuiItem::cancel(), this, "m_buttonCancel" );
+  m_buttonCancel = new KPushButton( KStdGuiItem::cancel(), this );
   m_buttonCancel->setAccel( 276824131 );
   m_buttonCancel->setAutoDefault( TRUE );
   Layout5->addWidget( m_buttonCancel );

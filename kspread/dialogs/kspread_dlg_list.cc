@@ -24,6 +24,7 @@
 #include <qlineedit.h>
 #include <q3listbox.h>
 #include <q3multilineedit.h>
+#include <kinstance.h>
 #include <qpushbutton.h>
 //Added by qt3to4:
 #include <Q3GridLayout>

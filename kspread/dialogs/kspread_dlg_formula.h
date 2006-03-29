@@ -32,7 +32,7 @@
 #include <QLabel>
 #include <QEvent>
 #include <QCloseEvent>
-
+#include <Q3ListBoxItem>
 #include <kcompletion.h>
 #include <kdialogbase.h>
 

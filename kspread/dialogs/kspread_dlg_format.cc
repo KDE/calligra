@@ -36,6 +36,7 @@
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
 #include <ksimpleconfig.h>
+#include <kinstance.h>
 
 #include "kspread_dlg_format.h"
 #include "kspread_doc.h"

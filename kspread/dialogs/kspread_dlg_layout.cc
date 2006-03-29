@@ -2738,7 +2738,8 @@ void CellFormatPageBorder::InitializeGrids()
 
   /* now set up the group box with the pattern selector */
   tmpQGroupBox = new Q3GroupBox( this, "GroupBox_10" );
-  tmpQGroupBox->setFrameStyle( Q3Frame::Box | Q3Frame::Sunken );
+#warning "kde4 port it"  
+  //tmpQGroupBox->setFrameStyle( Q3Frame::Box | Q3Frame::Sunken );
   tmpQGroupBox->setTitle( i18n("Pattern") );
   tmpQGroupBox->setAlignment( Qt::AlignLeft );
 
@@ -3672,7 +3673,8 @@ CellFormatPagePattern::CellFormatPagePattern( QWidget* parent, CellFormatDialog 
 
     tmpQGroupBox = new Q3GroupBox( this, "GroupBox1" );
     tmpQGroupBox->setTitle( i18n("Preview") );
-    tmpQGroupBox->setFrameStyle( Q3Frame::Box | Q3Frame::Sunken );
+#warning "kde4: port it"	
+    //tmpQGroupBox->setFrameStyle( Q3Frame::Box | Q3Frame::Sunken );
     tmpQGroupBox->setAlignment( Qt::AlignLeft );
 
     grid2 = new Q3GridLayout(tmpQGroupBox,2,1,KDialog::marginHint(), KDialog::spacingHint());

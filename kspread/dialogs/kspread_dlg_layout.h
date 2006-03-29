@@ -404,7 +404,7 @@ protected:
     virtual void paintEvent( QPaintEvent *_ev );
     virtual void mousePressEvent( QMouseEvent *_ev );
 
-    BrushStyle brushStyle;
+	Qt::BrushStyle brushStyle;
     QColor brushColor;
     bool selected;
 };

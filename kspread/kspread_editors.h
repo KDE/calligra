@@ -187,7 +187,7 @@ public:
     Canvas* canvas() const;
 
     void handleKeyPressEvent( QKeyEvent* _ev );
-    void handleIMEvent( QIMEvent * _ev );
+    void handleIMEvent( QInputMethodEvent  * _ev );
     void setEditorFont(QFont const & font, bool updateSize);
 
     int cursorPosition() const;

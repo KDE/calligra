@@ -29,7 +29,6 @@
 #include <qlayout.h>
 #include <qcheckbox.h>
 #include <qcombobox.h>
-#include <qvgroupbox.h>
 #include <q3whatsthis.h>
 //Added by qt3to4:
 #include <Q3GridLayout>
@@ -44,7 +43,6 @@
 #include <kcolorbutton.h>
 
 #include <KoTabBar.h>
-#include <KoSpeaker.h>
 
 #include "kspread_sheet.h"
 #include "kspread_sheetprint.h"
@@ -68,22 +66,22 @@ PreferenceDialog::PreferenceDialog( View* parent, const char* /*name*/)
 
   connect(this, SIGNAL(okClicked()),this,SLOT(slotApply()));
 
-  Q3VBox *page2=addVBoxPage(i18n("Locale Settings"), QString::null,BarIcon("gohome",K3Icon::SizeMedium));
+  KVBox *page2=addVBoxPage(i18n("Locale Settings"), QString::null,BarIcon("gohome",K3Icon::SizeMedium));
  _localePage=new parameterLocale(parent,page2 );
 
-  Q3VBox *page3=addVBoxPage(i18n("Interface"), QString::null,BarIcon("signature", K3Icon::SizeMedium) );
+  KVBox *page3=addVBoxPage(i18n("Interface"), QString::null,BarIcon("signature", K3Icon::SizeMedium) );
   _configure = new  configure(parent,page3 );
 
-  Q3VBox * page4=addVBoxPage(i18n("Misc"), QString::null,BarIcon("misc",K3Icon::SizeMedium) );
+  KVBox * page4=addVBoxPage(i18n("Misc"), QString::null,BarIcon("misc",K3Icon::SizeMedium) );
   _miscParameter = new  miscParameters(parent,page4 );
 
-  Q3VBox *page5=addVBoxPage(i18n("Color"), QString::null,BarIcon("colorize",K3Icon::SizeMedium) );
+  KVBox *page5=addVBoxPage(i18n("Color"), QString::null,BarIcon("colorize",K3Icon::SizeMedium) );
   _colorParameter=new colorParameters(parent,page5 );
 
-  Q3VBox *page6=addVBoxPage(i18n("Page Layout"), QString::null,BarIcon("edit",K3Icon::SizeMedium) );
+  KVBox *page6=addVBoxPage(i18n("Page Layout"), QString::null,BarIcon("edit",K3Icon::SizeMedium) );
   _layoutPage=new configureLayoutPage(parent,page6 );
 
-  Q3VBox *page7 = addVBoxPage( i18n("Spelling"), i18n("Spell Checker Behavior"),
+  KVBox *page7 = addVBoxPage( i18n("Spelling"), i18n("Spell Checker Behavior"),
                           BarIcon("spellcheck", K3Icon::SizeMedium) );
   _spellPage=new configureSpellPage(parent,page7);
 
@@ -143,7 +141,7 @@ void PreferenceDialog::slotDefault()
 }
 
 
-parameterLocale::parameterLocale( View* _view, Q3VBox *box , char *name )
+parameterLocale::parameterLocale( View* _view, KVBox *box , char *name )
  :QObject ( box->parent(),name)
 {
     m_pView = _view;
@@ -193,7 +191,7 @@ void parameterLocale::updateToMatchLocale(KLocale* locale)
   m_money->setText( i18n("Currency format: %1").arg( locale->formatMoney(12.55) ));
 }
 
-configure::configure( View* _view, Q3VBox *box , char *name )
+configure::configure( View* _view, KVBox *box , char *name )
  :QObject ( box->parent(),name)
  {
   m_pView = _view;
@@ -398,7 +396,7 @@ void configure::apply()
 }
 
 
-miscParameters::miscParameters( View* _view,Q3VBox *box, char *name )
+miscParameters::miscParameters( View* _view,KVBox *box, char *name )
  :QObject ( box->parent(),name)
  {
   m_pView = _view;
@@ -709,7 +707,7 @@ void miscParameters::apply()
 
 
 
-colorParameters::colorParameters( View* _view,Q3VBox *box , char *name )
+colorParameters::colorParameters( View* _view,KVBox *box , char *name )
  :QObject ( box->parent(),name)
 {
   m_pView = _view;
@@ -777,7 +775,7 @@ void colorParameters::slotDefault()
 
 
 
-configureLayoutPage::configureLayoutPage( View* _view,Q3VBox *box , char *name )
+configureLayoutPage::configureLayoutPage( View* _view,KVBox *box , char *name )
  :QObject ( box->parent(),name)
 {
   m_pView = _view;
@@ -883,7 +881,7 @@ void configureLayoutPage::apply()
   m_pView->slotUpdateView( m_pView->activeSheet() );
 }
 
-configureSpellPage::configureSpellPage( View* _view,Q3VBox *box , char *name )
+configureSpellPage::configureSpellPage( View* _view,KVBox *box , char *name )
  :QObject ( box->parent(),name)
 {
   m_pView = _view;
@@ -891,7 +889,7 @@ configureSpellPage::configureSpellPage( View* _view,Q3VBox *box , char *name )
   config = Factory::global()->config();
 
 
-  m_spellConfigWidget = new KSpellConfig( box, "spell_check",m_pView->doc()->getKSpellConfig()/*, false*/);
+  m_spellConfigWidget = new KSpellConfig( box, m_pView->doc()->getKSpellConfig()/*, false*/);
   dontCheckUpperWord = new QCheckBox( i18n("Skip all uppercase words"),box);
   Q3WhatsThis::add(dontCheckUpperWord, i18n( "If checked, the words written in uppercase letters are not spell checked. This might be useful if you have a lot of acronyms such as KDE for example." ) );
   dontCheckTitleCase = new QCheckBox( i18n("Do not check title case"),box);

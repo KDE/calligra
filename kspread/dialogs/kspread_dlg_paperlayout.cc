@@ -38,7 +38,7 @@
 #include <q3buttongroup.h>
 #include <qcombobox.h>
 #include <qlayout.h>
-#include <qhgroupbox.h>
+//#include <qhgroupbox.h>
 //Added by qt3to4:
 #include <QCloseEvent>
 #include <Q3GridLayout>
