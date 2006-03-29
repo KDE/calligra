@@ -1,5 +1,10 @@
 kde4_header()
 
+set(libdialogfilter_SRCS 
+	${CMAKE_SOURCE_DIR}/filters/libdialogfilter/exportsizedia.cpp
+)
+
+
 add_subdirectory( generic_wrapper )
 add_subdirectory( libdialogfilter )
 add_subdirectory( liboofilter )
