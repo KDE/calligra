@@ -185,8 +185,9 @@ bool PalmDB::load( const char* filename )
         {
           data->resize( recsize[r] );
           stream.device()->at( recpos[r] );
-          for( int q = 0; q < recsize[r]; q++ )
-            { quint8 c; stream >> c; data->at(q) = c; }
+# warning "kde4 port it"
+          //for( int q = 0; q < recsize[r]; q++ )
+            //{ quint8 c; stream >> c; data->at(q) = c; }
         }
     records.append( data );
   }
@@ -238,7 +239,7 @@ bool PalmDB::save( const char* filename )
 
   // reference date is 1 Jan 1904
   // see also note in function load() above
-  QDateTime ref = QDate( 1904, 1, 1 );
+  QDateTime ref = QDateTime(QDate( 1904, 1, 1) );
 
   // write creation date
   quint32 creation = -m_creationDate.secsTo( ref );

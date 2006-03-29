@@ -17,7 +17,7 @@ kde4_automoc(${kwordexportfilters_LIB_SRCS})
 
 kde4_add_library(kwordexportfilters SHARED ${kwordexportfilters_LIB_SRCS})
 
-target_link_libraries(kwordexportfilters  ${KDE4_KDECORE_LIBS} )
+target_link_libraries(kwordexportfilters  ${KDE4_KDECORE_LIBS} kofficecore )
 
 set_target_properties(kwordexportfilters PROPERTIES VERSION 1.0.0 SOVERSION 1 )
 install_targets(${LIB_INSTALL_DIR} kwordexportfilters )
