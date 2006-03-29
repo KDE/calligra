@@ -98,7 +98,6 @@
 #include <KoCustomVariablesDia.h>
 #include <KoTextObject.h>
 #include <tkcoloractions.h>
-#include <KoSpeaker.h>
 
 #include <kparts/partmanager.h>
 #include <kaccelgen.h>
@@ -1350,9 +1349,6 @@ void KWView::setupActions()
     m_actionDocStructEdit = new KAction( i18n( "Edit Text" ), 0,
                                          this, SLOT( docStructEdit() ),
                                          actionCollection(), "docstruct_edit" );
-    m_actionDocStructSpeak = new KAction( i18n("Speak Text" ), 0,
-                                          this, SLOT( docStructSpeak() ),
-                                          actionCollection(), "docstruct_speak" );
     m_actionDocStructSelect = new KAction( i18n( "Show" ), 0,
                                            this, SLOT( docStructSelect() ),
                                            actionCollection(), "docstruct_select" );
@@ -6691,15 +6687,11 @@ void KWView::goToFootEndNote()
 void KWView::openDocStructurePopupMenu( const QPoint &p, KWFrameSet *frameset, KWTextParag *parag)
 {
     bool rw = koDocument()->isReadWrite();
-    bool kttsdInstalled = KoSpeaker::isKttsdInstalled();
-    if (!rw && !kttsdInstalled)
-        return;
     bool hasText = (frameset->type()==FT_TEXT || frameset->type()==FT_TABLE || frameset->type()==FT_FORMULA );
 
     m_actionDocStructEdit->setEnabled( rw && hasText );
     m_actionDocStructDelete->setEnabled( (rw && !parag && !frameset->isMainFrameset() &&
         !frameset->isFootEndNote() && !frameset->isHeaderOrFooter()) );
-    m_actionDocStructSpeak->setEnabled( hasText && kttsdInstalled );
 
     Q3PopupMenu* popup = static_cast<Q3PopupMenu *>(factory()->container("docstruct_popup",this));
     if ( popup )
@@ -6737,14 +6729,6 @@ void KWView::docStructDelete()
     if ( m_gui->getDocStruct() )
     {
         m_gui->getDocStruct()->deleteItem();
-    }
-}
-
-void KWView::docStructSpeak()
-{
-    if ( m_gui->getDocStruct() )
-    {
-        m_gui->getDocStruct()->speakItem();
     }
 }
 

@@ -78,7 +78,6 @@ public:
     virtual void editItem() {}
     virtual void deleteItem() {}
     virtual void editProperties() {}
-    virtual void speakItem() {}
     virtual void contextMenu(Q3ListViewItem *, const QPoint &, int) {}
 
 protected:
@@ -101,7 +100,6 @@ public:
     virtual void editItem();
     virtual void deleteItem();
     virtual void editProperties();
-    virtual void speakItem();
     virtual void contextMenu(Q3ListViewItem* item, const QPoint& p, int);
 
     KWTextParag* parag() const { return m_parag; }
@@ -126,7 +124,6 @@ public:
     virtual void editItem();
     virtual void deleteItem();
     virtual void editProperties();
-    virtual void speakItem();
     virtual void contextMenu(Q3ListViewItem* item, const QPoint& p, int);
 
     KWFrame* frame() const { return m_frame; }
@@ -155,7 +152,6 @@ public:
     virtual void editItem();
     virtual void deleteItem();
     virtual void editProperties();
-    virtual void speakItem();
     virtual void contextMenu(Q3ListViewItem* item, const QPoint& p, int);
 
     KWTextFrameSet* frameSet() const { return m_frameset; };
@@ -182,7 +178,6 @@ public:
     virtual void editItem();
     virtual void deleteItem();
     virtual void editProperties();
-    virtual void speakItem();
     virtual void contextMenu(Q3ListViewItem* item, const QPoint& p, int);
 
     KWTableFrameSet* table() const { return m_table; };
@@ -206,7 +201,6 @@ public:
     virtual void editItem();
     virtual void deleteItem();
     virtual void editProperties();
-    virtual void speakItem();
     virtual void contextMenu(Q3ListViewItem* item, const QPoint& p, int);
 
 protected:
@@ -299,7 +293,6 @@ public:
     void editItem();
     void deleteItem();
     void editProperties();
-    void speakItem();
 
     KWDocument* doc() { return m_doc; };
     KWGUI* gui() { return m_gui; };
@@ -331,7 +324,6 @@ public:
     void editItem();
     void deleteItem();
     void editProperties();
-    void speakItem();
     /** Refresh the specified branches of the tree.  Actual refreshing is deferred
         until the paint event. */
     void refreshTree(int _type);

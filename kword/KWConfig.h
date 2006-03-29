@@ -156,29 +156,6 @@ private:
     QPushButton *m_modifyPath;
 };
 
-class ConfigureTTSPage : public QObject
-{
-    Q_OBJECT
-public:
-    ConfigureTTSPage( KWView *view, KVBox *box, char *name = 0 );
-    void slotDefault();
-    void apply();
-private slots:
-    void screenReaderOptionChanged();
-private:
-    KConfig* config;
-    QCheckBox* m_cbSpeakPointerWidget;
-    QCheckBox* m_cbSpeakFocusWidget;
-    QVGroupBox* m_gbScreenReaderOptions;
-    QCheckBox* m_cbSpeakTooltips;
-    QCheckBox* m_cbSpeakWhatsThis;
-    QCheckBox* m_cbSpeakDisabled;
-    QCheckBox* m_cbSpeakAccelerators;
-    QLabel* m_lblAcceleratorPrefix;
-    QLineEdit* m_leAcceleratorPrefixWord;
-    KIntNumInput* m_iniPollingInterval;
-};
-
 class KWConfig : public KDialogBase
 {
     Q_OBJECT
@@ -197,7 +174,6 @@ private:
     ConfigureDefaultDocPage *m_defaultDocPage;
     KFormula::ConfigurePage *m_formulaPage;
     ConfigurePathPage *m_pathPage;
-    ConfigureTTSPage *m_ttsPage;
     KWDocument *m_doc;
 };
 

@@ -31,7 +31,6 @@
 
 // KOffice includes.
 #include <KoParagCounter.h>
-#include <KoSpeaker.h>
 
 // KDE includes.
 #include <klocale.h>
@@ -164,7 +163,12 @@ void KWDocStructParagItem::editItem()
 
 void KWDocStructParagItem::deleteItem()
 {
-    // TODO
+    editItem();
+    KWTextFrameSetEdit *edit = dynamic_cast<KWTextFrameSetEdit *>(gui()->canvasWidget()->currentFrameSetEdit());
+    if (edit) {
+        edit->textView()->deleteParagraph(m_parag);
+        doc()->refreshDocStructure(TextFrames | Tables);
+    }
 }
 
 void KWDocStructParagItem::editProperties()
@@ -172,20 +176,6 @@ void KWDocStructParagItem::editProperties()
     gui()->canvasWidget()->editTextFrameSet(m_parag->kwTextDocument()->textFrameSet(), m_parag, 0);
     gui()->getView()->formatParagraph();
 }
-
-void KWDocStructParagItem::speakItem()
-{
-    QString text;
-    KoParagCounter* tmpCounter = m_parag->counter();
-    if (tmpCounter)
-        text = tmpCounter->text(m_parag) + " ";
-    text += m_parag->toString();
-    if (!text.isEmpty()) {
-        kospeaker->queueSpeech(text, m_parag->paragraphFormat()->language(), true);
-        kospeaker->startSpeech();
-    }
-}
-
 
 /******************************************************************/
 /* Class: KWDocStructTextFrameItem                                */
@@ -297,40 +287,6 @@ void KWDocStructTextFrameItem::editProperties()
      gui()->canvasWidget()->editFrameProperties(m_frameset);
 }
 
-void KWDocStructTextFrameItem::speakItem()
-{
-    KoTextParag* textParag = 0;
-    KoTextParag* lastParag = 0;
-    int index = 0;
-    // Get upper left corner of the frame and get coordinates just inside it.
-    KoPoint dPoint = m_frame->topLeft() + KoPoint(2,2);
-    // Get the first paragraph of the frame.
-    m_frameset->findPosition(dPoint, textParag, index);
-    // Get lower right corner of the frame and get coordinate just inside it.
-    dPoint = m_frame->bottomRight() - KoPoint(2,2);
-    // Get the last paragraph of the frame.
-    m_frameset->findPosition(dPoint, lastParag, index);
-    bool first = true;
-    if (textParag && lastParag) {
-        while (textParag) {
-            KWTextParag* parag = dynamic_cast<KWTextParag *>(textParag);
-            if (parag) {
-                // Don't speak an empty paragraph.
-                QString text = parag->toString().trimmed();
-                if ( text.length() > 0) {
-                    kospeaker->queueSpeech(text, parag->paragraphFormat()->language(), first);
-                    first = false;
-                }
-            }
-            if (textParag == lastParag)
-                textParag = 0;
-            else
-                textParag = textParag->next();
-        }
-        kospeaker->startSpeech();
-    }
-}
-
 KWDocStructParagItem* KWDocStructTextFrameItem::findTextParagItem(const KWTextParag* parag)
 {
     if ( childCount() > 0 )
@@ -437,16 +393,6 @@ void KWDocStructTextFrameSetItem::deleteItem()
 void KWDocStructTextFrameSetItem::editProperties()
 {
     gui()->canvasWidget()->editFrameProperties(m_frameset);
-}
-
-void KWDocStructTextFrameSetItem::speakItem()
-{
-    KoTextParag* parag = m_frameset->textDocument()->firstParag();
-    kospeaker->queueSpeech(parag->toString(), parag->paragraphFormat()->language(), true);
-    parag = parag->next();
-    for ( ; parag ; parag = parag->next() )
-        kospeaker->queueSpeech(parag->toString(), parag->paragraphFormat()->language(), false);
-    kospeaker->startSpeech();
 }
 
 KWDocStructTextFrameItem* KWDocStructTextFrameSetItem::findTextFrameItem(const KWFrame* frame)
@@ -559,22 +505,6 @@ void KWDocStructTableItem::editProperties()
      gui()->canvasWidget()->editFrameProperties(m_table);
 }
 
-void KWDocStructTableItem::speakItem()
-{
-    bool first = true;
-    for (uint row = 0; row < m_table->getRows(); ++row) {
-        for (uint col = 0; col < m_table->getColumns(); ++ col) {
-            KoTextParag* parag = m_table->cell(row, col)->textDocument()->firstParag();
-            kospeaker->queueSpeech(parag->toString(), parag->paragraphFormat()->language(), first);
-            first = false;
-            parag = parag->next();
-            for ( ; parag ; parag = parag->next() )
-                kospeaker->queueSpeech(parag->toString(), parag->paragraphFormat()->language(), false);
-        }
-    }
-    kospeaker->startSpeech();
-}
-
 KWDocStructTextFrameItem* KWDocStructTableItem::findCellItem(const KWTextFrameSet* cell)
 {
     if ( childCount() > 0 )
@@ -670,12 +600,6 @@ void KWDocStructFormulaItem::editProperties()
 {
     gui()->canvasWidget()->editFrameProperties(m_form);
 }
-
-void KWDocStructFormulaItem::speakItem()
-{
-    // TODO
-}
-
 
 /******************************************************************/
 /* Class: KWDocStructPartItem                                     */
@@ -1148,14 +1072,6 @@ void KWDocStructTree::editProperties()
         tmp->editProperties();
 }
 
-void KWDocStructTree::speakItem()
-{
-    Q3ListViewItem* select = currentItem();
-    KWDocListViewItem* tmp = dynamic_cast<KWDocListViewItem *>(select);
-    if ( tmp )
-        tmp->speakItem();
-}
-
 void KWDocStructTree::slotContextMenu(K3ListView* lv, Q3ListViewItem* i, const QPoint& p)
 {
     if (lv != this)
@@ -1262,9 +1178,4 @@ void KWDocStruct::deleteItem()
 void KWDocStruct::editProperties()
 {
     m_tree->editProperties();
-}
-
-void KWDocStruct::speakItem()
-{
-    m_tree->speakItem();
 }
