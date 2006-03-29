@@ -4,22 +4,25 @@ set(libdialogfilter_SRCS
 	${CMAKE_SOURCE_DIR}/filters/libdialogfilter/exportsizedia.cpp
 )
 
+set(liboofilter_SRCS 
+	${CMAKE_SOURCE_DIR}/filters/liboofilter/ooutils.cc 
+	${CMAKE_SOURCE_DIR}/filters/liboofilter/liststylestack.cc
+	)
 
 add_subdirectory( generic_wrapper )
 add_subdirectory( libdialogfilter )
 add_subdirectory( liboofilter )
+add_subdirectory(kspread)
+add_subdirectory(kchart)
+add_subdirectory(kword)
+#add_subdirectory(kpresenter)
+add_subdirectory(kformula)
+#add_subdirectory(karbon)
+add_subdirectory(krita)
+#add_subdirectory(kivio)
+add_subdirectory(xsltfilter)
 
-message(STATUS "${CMAKE_CURRENT_SOURCE_DIR}: skipped subdir $(KSPREADDIR)")
-message(STATUS "${CMAKE_CURRENT_SOURCE_DIR}: skipped subdir $(KCHARTDIR)")
-message(STATUS "${CMAKE_CURRENT_SOURCE_DIR}: skipped subdir $(KWORDDIR)")
-message(STATUS "${CMAKE_CURRENT_SOURCE_DIR}: skipped subdir $(KPRESENTERDIR)")
-message(STATUS "${CMAKE_CURRENT_SOURCE_DIR}: skipped subdir $(XSLTFILTERDIR)")
-message(STATUS "${CMAKE_CURRENT_SOURCE_DIR}: skipped subdir $(KFORMULADIR)")
-message(STATUS "${CMAKE_CURRENT_SOURCE_DIR}: skipped subdir $(KARBONDIR)")
-message(STATUS "${CMAKE_CURRENT_SOURCE_DIR}: skipped subdir $(KUGARDIR)")
-message(STATUS "${CMAKE_CURRENT_SOURCE_DIR}: skipped subdir $(KRITADIR)")
-message(STATUS "${CMAKE_CURRENT_SOURCE_DIR}: skipped subdir $(KIVIODIR)")
-
+message (status "readd karbon kivio kpresenter ")
 
 
 ########### install files ###############

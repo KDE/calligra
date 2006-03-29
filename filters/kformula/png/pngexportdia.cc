@@ -24,7 +24,6 @@
 #include <qlineedit.h>
 #include <qpaintdevice.h>
 #include <qrect.h>
-#include <qvbuttongroup.h>
 #include <qwidget.h>
 //Added by qt3to4:
 #include <Q3VBoxLayout>
