@@ -59,8 +59,8 @@ KoFilter::ConversionStatus GenericFilter::convert( const Q3CString &from, const 
         kDebug() << "Got a filter script, exec: " << (*it)->exec() <<
             ", imports: " << (*it)->property("X-KDE-Wrapper-Import").toString() <<
             ", exports: " << (*it)->property("X-KDE-Wrapper-Export").toString() << endl;
-        if ((*it)->property("X-KDE-Wrapper-Import").toCString()==from
-            && (*it)->property("X-KDE-Wrapper-Export").toCString()==to)
+        if ((*it)->property("X-KDE-Wrapper-Import").toString()==from
+            && (*it)->property("X-KDE-Wrapper-Export").toString()==to)
         {
             m_exec=(*it)->exec();
             m_from=from;
