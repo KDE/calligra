@@ -383,7 +383,7 @@ KexiRelationView::contentsMousePressEvent(QMouseEvent *ev)
 		emit connectionViewGotFocus();
 //		invalidateActions();
 
-		if(ev->button() == RightButton) {//show popup
+		if(ev->button() == Qt::RightButton) {//show popup
 			kDebug() << "KexiRelationView::contentsMousePressEvent(): context" << endl;
 //			QPopupMenu m;
 //				m_removeSelectedTableQueryAction->plug( &m );
@@ -396,7 +396,7 @@ KexiRelationView::contentsMousePressEvent(QMouseEvent *ev)
 	//connection not found
 	clearSelection();
 //	invalidateActions();
-	if(ev->button() == RightButton) {//show popup on view background area
+	if(ev->button() == Qt::RightButton) {//show popup on view background area
 //		QPopupMenu m;
 //			m_removeSelectedConnectionAction->plug( &m );
 		emit emptyAreaContextMenuRequest( ev->globalPos() );

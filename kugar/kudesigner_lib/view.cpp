@@ -374,7 +374,7 @@ void View::contentsMouseReleaseEvent( QMouseEvent* e )
         /*        case MidButton:
                     deleteItem(l);
                     break;
-                case RightButton:
+                case Qt::RightButton:
                     editItem(l);
                     break;*/
     default:

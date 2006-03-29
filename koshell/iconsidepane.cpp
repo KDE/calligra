@@ -267,7 +267,7 @@ void Navigator::mousePressEvent(QMouseEvent *e)
   if ( e->button() != LeftButton || itemAt( e->pos() ) == 0 )
   {
     mLeftMouseButtonPressed = false;
-    if (e->button() == RightButton)
+    if (e->button() == Qt::RightButton)
       slotShowRMBMenu( 0,mapToGlobal( e->pos() ) );
     return;
   }

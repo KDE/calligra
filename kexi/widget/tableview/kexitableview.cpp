@@ -1122,7 +1122,7 @@ void KexiTableView::contentsMousePressEvent( QMouseEvent* e )
 	}
 
 //	kDebug(44021)<<"void KexiTableView::contentsMousePressEvent( QMouseEvent* e ) by now the current items should be set, if not -> error + crash"<<endl;
-	if(e->button() == RightButton)
+	if(e->button() == Qt::RightButton)
 	{
 		showContextMenu(e->globalPos());
 	}

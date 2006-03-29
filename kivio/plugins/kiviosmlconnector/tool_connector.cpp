@@ -137,7 +137,7 @@ void SMLConnector::connector(QRect)
 
 void SMLConnector::mousePress( QMouseEvent *e )
 {
-  if(e->button() == RightButton)
+  if(e->button() == Qt::RightButton)
   {
     return;
   }

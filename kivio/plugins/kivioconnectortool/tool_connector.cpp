@@ -200,7 +200,7 @@ void ConnectorTool::mousePress( QMouseEvent *e )
     } else {
       m_mode = stmNone;
     }
-  } else if(e->button() == RightButton) {
+  } else if(e->button() == Qt::RightButton) {
     if(m_type == PolyLineConnector) {
       if(m_mode == stmDrawRubber) {
         endRubberBanding(e);

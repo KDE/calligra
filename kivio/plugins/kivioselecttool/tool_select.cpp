@@ -105,7 +105,7 @@ bool SelectTool::processEvent(QEvent* e)
     case QEvent::MouseButtonPress:
       m = (QMouseEvent *)e;
 
-      if( m->button() == RightButton ) {
+      if( m->button() == Qt::RightButton ) {
         showPopupMenu(m->globalPos());
       } else if( m->button() == LeftButton ) {
         if(m->state() & Qt::ControlButton) {

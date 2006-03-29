@@ -24,6 +24,7 @@
 #include <kstandarddirs.h>
 #include <ktempfile.h>
 #include <dcopobject.h>
+#include <kinstance.h>
 #include <kxmlguifactory.h>
 #include <kfiledialog.h>
 #include <kmessagebox.h>
@@ -549,7 +550,7 @@ void KChartView::mousePressEvent ( QMouseEvent *e )
 {
     if (!koDocument()->isReadWrite() || !factory())
         return;
-    if ( e->button() == RightButton )
+    if ( e->button() == Qt::RightButton )
         ((Q3PopupMenu*)factory()->container("action_popup",this))->popup(QCursor::pos());
 }
 

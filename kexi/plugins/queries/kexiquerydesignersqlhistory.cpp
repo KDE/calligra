@@ -100,7 +100,7 @@ KexiQueryDesignerSQLHistory::contentsMousePressEvent(QMouseEvent * e)
 			m_selected = popupHistory;
 			m_selected->setSelected(true, colorGroup());
 			updateContents(m_selected->geometry(pos, visibleWidth(), fontMetrics()));
-			if(e->button() == RightButton) {
+			if(e->button() == Qt::RightButton) {
 				m_popup->exec(e->globalPos());
 			}
 	}

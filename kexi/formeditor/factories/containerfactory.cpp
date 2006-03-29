@@ -82,7 +82,7 @@ class KFORMEDITOR_EXPORT MyTabWidget : public KTabWidget
 				return KTabWidget::eventFilter(o, ev);
 
 			QMouseEvent *mev = static_cast<QMouseEvent*>(ev);
-			if(mev->button() != RightButton)
+			if(mev->button() != Qt::RightButton)
 				return KTabWidget::eventFilter(o, ev);
 
 			bool ok = m_container->eventFilter(this, ev);

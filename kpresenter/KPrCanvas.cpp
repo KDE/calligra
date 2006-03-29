@@ -692,7 +692,7 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
             m_currentTextObjectView->mousePressEvent(e, m_view->zoomHandler()->ptToLayoutUnitPix( pos ) ); // in LU pixels
             mousePressed = true;
             m_view->enableAutoScroll();
-            if(e->button() == RightButton)
+            if(e->button() == Qt::RightButton)
             {
                 m_currentTextObjectView->showPopup( m_view, QCursor::pos(), m_view->actionList() );
                 m_view->disableAutoScroll();
@@ -972,7 +972,7 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
             }
         }
 
-        if ( e->button() == RightButton && ( toolEditMode == INS_POLYLINE || toolEditMode == INS_CLOSED_POLYLINE )
+        if ( e->button() == Qt::RightButton && ( toolEditMode == INS_POLYLINE || toolEditMode == INS_CLOSED_POLYLINE )
              && !m_pointArray.isNull() && m_drawPolyline ) {
             if( m_indexPointArray > 1)
             {
@@ -1020,7 +1020,7 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
             return;
         }
 
-        if ( e->button() == RightButton && ( toolEditMode == INS_CUBICBEZIERCURVE || toolEditMode == INS_QUADRICBEZIERCURVE
+        if ( e->button() == Qt::RightButton && ( toolEditMode == INS_CUBICBEZIERCURVE || toolEditMode == INS_QUADRICBEZIERCURVE
                                              || toolEditMode == INS_CLOSED_CUBICBEZIERCURVE || toolEditMode == INS_CLOSED_QUADRICBEZIERCURVE )
              && !m_pointArray.isNull() && m_drawCubicBezierCurve ) {
             if ( m_drawLineWithCubicBezierCurve ) {
@@ -1041,7 +1041,7 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
             return;
         }
 
-        if ( e->button() == RightButton && toolEditMode == TEM_MOUSE ) {
+        if ( e->button() == Qt::RightButton && toolEditMode == TEM_MOUSE ) {
             KPrObject * obj = getObjectAt( docPoint );
             if ( obj ) 
             {
@@ -1064,13 +1064,13 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
             modType = MT_NONE;
 
         }
-        else if( e->button() == RightButton && toolEditMode == TEM_ZOOM ) {
+        else if( e->button() == Qt::RightButton && toolEditMode == TEM_ZOOM ) {
             QPoint pnt = QCursor::pos();
             mousePressed = false;
             m_view->disableAutoScroll();
             m_view->openPopupMenuZoom( pnt );
         }
-        else if( e->button() == RightButton && toolEditMode != TEM_MOUSE ) {
+        else if( e->button() == Qt::RightButton && toolEditMode != TEM_MOUSE ) {
             //deactivate tools when you click on right button
             setToolEditMode( TEM_MOUSE );
         }
@@ -1087,7 +1087,7 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
                 m_view->screenNext();
         } else if ( e->button() == MidButton )
             m_view->screenPrev();
-        else if ( e->button() == RightButton ) {
+        else if ( e->button() == Qt::RightButton ) {
             if ( !m_drawMode && !spManualSwitch() )
             {
                 finishObjectEffects();

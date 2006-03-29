@@ -187,16 +187,16 @@ Container::eventFilter(QObject *s, QEvent *e)
 					}
 				}
 				else // the widget is not yet selected, we add it
-					setSelectedWidget(m_moving, true, (mev->button() == RightButton));
+					setSelectedWidget(m_moving, true, (mev->button() == Qt::RightButton));
 			}
 			else if((m_form->selectedWidgets()->count() > 1))//&& (!m_form->manager()->isInserting())) // more than one widget selected
 			{
 				if(m_form->selectedWidgets()->findRef(m_moving) == -1) // widget is not selected, it becomes the only selected widget
-					setSelectedWidget(m_moving, false, (mev->button() == RightButton));
+					setSelectedWidget(m_moving, false, (mev->button() == Qt::RightButton));
 				// If the widget is already selected, we do nothing (to ease widget moving, etc.)
 			}
 			else// if(!m_form->manager()->isInserting())
-				setSelectedWidget(m_moving, false, (mev->button() == RightButton));
+				setSelectedWidget(m_moving, false, (mev->button() == Qt::RightButton));
 
 			// we are inserting a widget or drawing a selection rect in the form
 			if((/*s == m_container &&*/ FormManager::self()->isInserting()) || ((s == m_container) && !m_toplevel))
@@ -487,12 +487,12 @@ Container::handleMouseReleaseEvent(QObject *s, QMouseEvent *mev)
 		m_insertRect = QRect();
 		return true;
 	}
-	else if(s == m_container && !m_toplevel && (mev->button() != RightButton) && m_insertRect.isValid()) // we are drawing a rect to select widgets
+	else if(s == m_container && !m_toplevel && (mev->button() != Qt::RightButton) && m_insertRect.isValid()) // we are drawing a rect to select widgets
 	{
 		drawSelectionRect(mev);
 		return true;
 	}
-	if(mev->button() == RightButton) // Right-click -> context menu
+	if(mev->button() == Qt::RightButton) // Right-click -> context menu
 	{
 		FormManager::self()->createContextMenu(static_cast<QWidget*>(s), this);
 	}
