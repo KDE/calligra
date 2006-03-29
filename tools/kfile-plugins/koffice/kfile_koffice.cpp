@@ -36,7 +36,7 @@ K_EXPORT_COMPONENT_FACTORY(kfile_koffice, KOfficeFactory( "kfile_koffice" ))
 KOfficePlugin::KOfficePlugin(QObject *parent, const char *name,
                        const QStringList &args)
 
-    : KFilePlugin(parent, name, args)
+    : KFilePlugin(parent, args)
 {
     makeMimeTypeInfo( "application/x-kword" );
     makeMimeTypeInfo( "application/x-kpresenter" );

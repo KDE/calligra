@@ -36,7 +36,7 @@ K_EXPORT_COMPONENT_FACTORY(kfile_abiword, AbiwordFactory( "kfile_abiword" ))
 AbiwordPlugin::AbiwordPlugin(QObject *parent, const char *name,
                        const QStringList &args)
 
-    : KFilePlugin(parent, name, args)
+    : KFilePlugin(parent, args)
 {
     init();
 }

@@ -36,7 +36,7 @@ K_EXPORT_COMPONENT_FACTORY(kfile_gnumeric, GnumericFactory( "kfile_gnumeric" ))
 GnumericPlugin::GnumericPlugin(QObject *parent, const char *name,
                        const QStringList &args)
 
-    : KFilePlugin(parent, name, args)
+    : KFilePlugin(parent, args)
 {
     init();
 }
