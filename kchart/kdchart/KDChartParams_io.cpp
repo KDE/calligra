@@ -1283,7 +1283,7 @@ void KDChartParams::loadAxesFormXML(int& curAxisSettings, QDomElement& element)
             } else if( tagName == "LabelText" ) {
                 QString string;
                 if( KDXML::readStringNode( element, string ) )
-                    axisSettings->_axisLabelTexts = string;
+                    axisSettings->_axisLabelTexts = QStringList(string);
             } else if( tagName == "LabelTextsDirty" ) {
                 bool labelTextsDirty;
                 if( KDXML::readBoolNode( element, labelTextsDirty ) )

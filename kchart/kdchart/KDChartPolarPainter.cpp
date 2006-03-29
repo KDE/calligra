@@ -679,7 +679,7 @@ void KDChartPolarPainter::paintCircularAxisLabel( QPainter* painter,
             txt,
             0,
             step
-            ? (rotate ? Qt::AlignBottom | Qt::AlignHCenter : align)
+            ? (rotate ? (int)(Qt::AlignBottom | Qt::AlignHCenter) : align)
             : Qt::AlignCenter,
             false,0,false,
             false );

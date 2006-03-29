@@ -750,9 +750,9 @@ void KDChartPainter::paintDataValues( QPainter* painter,
                                         oldDatacolorNo = datacolorNo;
                                         QColor color( params()->dataColor( datacolorNo ) );
                                         painter->setPen( QColor(
-                                                        static_cast < int > (255-color.Qt::red()  ),
-                                                        static_cast < int > (255-color.Qt::green()),
-                                                        static_cast < int > (255-color.Qt::blue() )));
+                                                        static_cast < int > (255-color.red()  ),
+                                                        static_cast < int > (255-color.green()),
+                                                        static_cast < int > (255-color.blue() )));
                                     }
                                 }
                             }
@@ -887,9 +887,9 @@ the layout policy feature is implemented !!!
                                                     || KDChartParams::Ring  == params()->chartType() )
                                                 ? region->col
                                                 : region->row ) );
-                                    painter->setPen( QColor( static_cast < int > ( 255- color.Qt::red() ),
-                                                static_cast < int > ( 255- color.Qt::green() ),
-                                                static_cast < int > ( 255- color.Qt::blue() ) ) );
+                                    painter->setPen( QColor( static_cast < int > ( 255- color.red() ),
+                                                static_cast < int > ( 255- color.green() ),
+                                                static_cast < int > ( 255- color.blue() ) ) );
                                 }
                             }
                         }else{
@@ -1916,7 +1916,7 @@ void KDChartPainter::calculateAllAxesRects(
                             if( KDCHART_AXIS_LABELS_AUTO_DATETIME_FORMAT == format )
                                 areaMin = qMax( areaMin, static_cast < int > ( fntHeight * 6.75 ) );
                             else
-                                areaMin = qMax( areaMin, fntHeight * ( 3 + format.contains("\n") ) );
+                                areaMin = qMax( areaMin, fntHeight * ( 3 + format.count("\n") ) );
                         }
                         else
                             areaMin = qMax( areaMin, fntHeight * 3 );
@@ -1958,7 +1958,7 @@ void KDChartPainter::calculateAllAxesRects(
                                 for ( uint i = 0; i < nLabels; ++i )
                                     maxLabelsWidth =
                                         qMax( maxLabelsWidth,
-                                              axisLabelsFontMetrics.boundingRect(*labelTexts->at(i)).width() );
+                                              axisLabelsFontMetrics.boundingRect(labelTexts->at(i)).width() );
                                 if( nUsableAxisWidth < maxLabelsWidth )
                                     areaSize = maxLabelsWidth
                                              + (para.axisTrueAreaRect().width() - nUsableAxisWidth)
