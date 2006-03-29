@@ -188,12 +188,12 @@ void PNGExportDia::setupGUI()
 
     QLabel* height = new QLabel( page, "Height" );
     height->setText( i18n( "Height" ) );
-    widthEdit = new KIntNumInput( page, "widthEdit" );
+    widthEdit = new KIntNumInput( page );
     QLabel* width = new QLabel( page, "Width" );
     width->setText( i18n( "Width" ) );
-    heightEdit = new KIntNumInput( page, "heightEdit" );
+    heightEdit = new KIntNumInput( page );
 
-    Q3GridLayout* layout1 = new Q3GridLayout;
+    Q3GridLayout* layout1 = new Q3GridLayout(this);
     layout1->addWidget( height, 1, 0 );
     layout1->addWidget( widthEdit, 0, 1 );
     layout1->addWidget( width, 0, 0 );
@@ -205,8 +205,8 @@ void PNGExportDia::setupGUI()
     percentHeight->setText( i18n( "Height (%)" ) );
     QLabel* percentWidth = new QLabel( page, "PercentWidth" );
     percentWidth->setText( i18n( "Width (%)" ) );
-    percWidthEdit = new KDoubleNumInput( page, "percWidthEdit" );
-    percHeightEdit = new KDoubleNumInput( page, "percHeightEdit" );
+    percWidthEdit = new KDoubleNumInput( page );
+    percHeightEdit = new KDoubleNumInput( page );
 
     Q3GridLayout* layout2 = new Q3GridLayout;
     layout2->addWidget( percWidthEdit, 0, 1 );
