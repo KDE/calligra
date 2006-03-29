@@ -1396,7 +1396,7 @@ void Cell::makeLayout( QPainter &_painter, int _col, int _row )
     }
     else
     {
-      lines = o.contains('\n');
+      lines = o.count( '\n' );
     }
 
     d->textHeight *= lines;
@@ -3157,7 +3157,7 @@ void Cell::paintText( QPainter& painter,
       double v = value().asFloat();
       if ( format()->floatColor( cellRef.x(), cellRef.y()) == Style::NegRed
      && v < 0.0 )
-        tmpPen.setColor( red );
+        tmpPen.setColor( Qt::red );
     }
   }
 

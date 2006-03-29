@@ -3630,8 +3630,8 @@ void Canvas::deleteEditor (bool saveChanges, bool array)
       if ( t.at(0)=='=' )
       {
           //a formula
-          int openParenthese = t.contains('(' );
-          int closeParenthese = t.contains(')' );
+          int openParenthese = t.count( '(' );
+          int closeParenthese = t.count( ')' );
           int diff = QABS( openParenthese - closeParenthese );
           if ( openParenthese > closeParenthese )
           {

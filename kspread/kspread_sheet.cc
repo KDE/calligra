@@ -2349,15 +2349,15 @@ void Sheet::changeCellTabName( QString const & old_name, QString const & new_nam
         {
             if(c->text().find(old_name)!=-1)
             {
-                int nb = c->text().contains(old_name+"!");
-                QString tmp=old_name+"!";
+                int nb = c->text().count( old_name + "!" ) );
+                QString tmp = old_name + "!";
                 int len = tmp.length();
                 tmp=c->text();
 
                 for( int i=0; i<nb; i++ )
                 {
-                    int pos = tmp.find( old_name+"!" );
-                    tmp.replace( pos, len, new_name+"!" );
+                    int pos = tmp.find( old_name + "!" );
+                    tmp.replace( pos, len, new_name + "!" );
                 }
                 c->setCellText(tmp);
             }
