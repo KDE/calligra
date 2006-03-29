@@ -7,3 +7,7 @@ X-KDE-Weight=1
 X-KDE-Library=libkchartmngexport
 ServiceTypes=KOfficeFilter
 Name=KChart MNG Export Filter
+Name[da]=KChart MNG-eksportfilter
+Name[et]=KCharti MNG ekspordifilter
+Name[pt]=Filtro de Exportação de MNG para o KChart
+Name[pt_BR]=Filtro de Exportação de MNG para o KChart

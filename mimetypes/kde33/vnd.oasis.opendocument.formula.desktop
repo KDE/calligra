@@ -28,7 +28,7 @@ Comment[ms]=Formula Dokumen Terbuka OASIS
 Comment[nb]=OASIS OpenDocument-formel
 Comment[nl]=OASIS OpenDocument-formule
 Comment[nn]=OASIS OpenDocument-formel
-Comment[pt]=Formula OASIS OpenDocument
+Comment[pl]=Wyrażenie matematyczne w formacie OASIS OpenDocument
 Comment[pt_BR]=Fórmula OpenDocument OASIS
 Comment[ru]=Формула OASIS OpenDocument
 Comment[sl]=Formula OASIS OpenDocument
@@ -36,6 +36,7 @@ Comment[sr]=OASIS-ова OpenDocument формула
 Comment[sr@Latn]=OASIS-ova OpenDocument formula
 Comment[sv]=OASIS OpenDocument formel
 Comment[uk]=Формула OASIS OpenDocument
+Comment[uz]=OASIS OpenDocument формула
 Comment[zh_CN]=OASIS OpenDocument 公式
 [Property::X-KDE-NativeExtension]
 Type=QString

@@ -24,7 +24,7 @@ Name[ms]=Widget DB Kexi
 Name[nb]=DB-element for Kexi
 Name[nl]=Kexi DB-widgets
 Name[nn]=DB-element for Kexi
-Name[pl]=Widżety bazodanowe dla Kexi
+Name[pl]=Kontrolki baz danych dla Kexi
 Name[pt]=Elementos de Base de Dados Kexi
 Name[pt_BR]=Widgets de BD do Kexi
 Name[ru]=Элементы управления для работы с базами данных Kexi
@@ -35,6 +35,7 @@ Name[sv]=Kexi-databaskomponenter
 Name[ta]=கெக்சி டிபி சாளர உருக்கள்
 Name[tr]=Kexi DB Parçacıkları
 Name[uk]=Віджети Kexi DB
+Name[uz]=Kexi маълумот база виджетлари
 Name[zh_CN]=Kexi 数据库部件
 
 X-KDE-Library=kformdesigner_kexidbwidgets

@@ -23,7 +23,7 @@ Name[ms]=Widget Laporan Kexi
 Name[nb]=Skjermelement for Kexi-rapport
 Name[nl]=Kexi Rapportwidgets
 Name[nn]=Skjermelement for Kexi-rapport
-Name[pl]=Widżety raportów Kexi
+Name[pl]=Kontrolki raportów dla Kexi
 Name[pt]=Elementos de Relatório do Kexi
 Name[pt_BR]=Widgets de Relatório do Kexi
 Name[ru]=Элементы управления для отчётов Kexi
@@ -32,6 +32,7 @@ Name[sr]=Kexi-јеве контроле за извештаје
 Name[sr@Latn]=Kexi-jeve kontrole za izveštaje
 Name[sv]=Kexi-rapportkomponenter
 Name[uk]=Віджети звітів Kexi
+Name[uz]=Kexi ҳисобот виджетлари
 Name[zh_CN]=Kexi 报表部件
 
 X-KDE-Library=kformdesigner_kexireportwidgets
