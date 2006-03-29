@@ -129,7 +129,7 @@ protected:
 
     Mode m_mode;
 
-    Q3Frame *m_page;
+    QFrame *m_page;
     Q3VBoxLayout *m_top_layout;
 
     KDialogBase *m_dialog;

@@ -68,9 +68,9 @@ K_EXPORT_COMPONENT_FACTORY( libthesaurustool, ThesaurusFactory("thesaurus_tool")
  ***************************************************/
 
 Thesaurus::Thesaurus(QObject* parent, const char* name, const QStringList &)
-    : KDataTool(parent, name)
+    : KDataTool(parent)
 {
-    
+   setObjectName(name); 
     m_dialog = new KDialogBase(KJanusWidget::Plain, QString::null,
         KDialogBase::Help|KDialogBase::Ok|KDialogBase::Cancel, KDialogBase::Ok);
     m_dialog->setHelp(QString::null, "thesaurus");
@@ -78,7 +78,7 @@ Thesaurus::Thesaurus(QObject* parent, const char* name, const QStringList &)
 
     m_config = new KConfig("kthesaurusrc");
     m_data_file = m_config->readPathEntry("datafile");
-    if( ! m_data_file ) {
+    if( m_data_file.isEmpty() ) {
         m_data_file = KGlobal::dirs()->findResourceDir("data", "thesaurus/")
            + "thesaurus/thesaurus.txt";
     }
@@ -376,7 +376,7 @@ void Thesaurus::slotFindTerm(const QString &term, bool add_to_history)
 {
     slotSetReplaceTerm(term);
     if( term.startsWith("http://") ) {
-        (void) new KRun(KUrl(term));
+        (void) new KRun(KUrl(term),0L);
     } else {
         if( add_to_history ) {
             m_edit->insertItem(term, 0);
