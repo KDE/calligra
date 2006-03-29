@@ -46,7 +46,7 @@ StyleWidget::StyleWidget( QWidget * parent, const char * name, Qt::WFlags fl )
 {
   Q3VBoxLayout * layout = new Q3VBoxLayout( this, 11, 6, "layout");
 
-  m_styleList = new K3ListView( this, "m_styleList" );
+  m_styleList = new K3ListView( this);
   m_styleList->addColumn( i18n( "Styles" ) );
   m_styleList->setResizeMode( K3ListView::AllColumns );
   layout->addWidget( m_styleList );

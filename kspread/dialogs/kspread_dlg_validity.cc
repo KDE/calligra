@@ -53,7 +53,7 @@ DlgValidity::DlgValidity(View* parent,const char* name , const QRect &_marker )
 {
   m_pView=parent;
   marker=_marker;
-  Q3Frame *page1 = addPage(i18n("&Values"));
+  QFrame *page1 = addPage(i18n("&Values"));
   Q3VBoxLayout *lay1 = new Q3VBoxLayout( page1, KDialogBase::marginHint(), KDialogBase::spacingHint() );
 
   Q3GroupBox* tmpQButtonGroup;
@@ -147,7 +147,7 @@ DlgValidity::DlgValidity(View* parent,const char* name , const QRect &_marker )
   validityLabelList->setText(i18n("Entries:" ));
   grid1->addWidget(validityLabelList,2,0);
 
-  Q3Frame *page2 = addPage(i18n("&Error Alert"));
+  QFrame *page2 = addPage(i18n("&Error Alert"));
 
   lay1 = new Q3VBoxLayout( page2, KDialogBase::marginHint(), KDialogBase::spacingHint() );
 
@@ -188,7 +188,7 @@ DlgValidity::DlgValidity(View* parent,const char* name , const QRect &_marker )
   lay1->addWidget(tmpQButtonGroup);
   message->setTextFormat( Qt::PlainText );
 
-  Q3Frame *page3 = addPage(i18n("Input Help"));
+  QFrame *page3 = addPage(i18n("Input Help"));
   lay1 = new Q3VBoxLayout( page3, KDialogBase::marginHint(), KDialogBase::spacingHint() );
 
   tmpQButtonGroup = new Q3ButtonGroup( 0, Qt::Vertical, i18n("Contents"), page3, "ButtonGroup_2" );

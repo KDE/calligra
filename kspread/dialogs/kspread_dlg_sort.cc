@@ -27,7 +27,6 @@
 
 
 #include <q3buttongroup.h>
-#include <qhbuttongroup.h>
 #include <qcheckbox.h>
 #include <qcombobox.h>
 #include <q3groupbox.h>
@@ -39,7 +38,8 @@
 #include <qrect.h>
 #include <qtabwidget.h>
 #include <qwidget.h>
-#include <q3vbox.h>
+#include <kvbox.h>
+#include <kinstance.h>
 //Added by qt3to4:
 #include <Q3VBoxLayout>
 #include <Q3HBoxLayout>
@@ -87,8 +87,8 @@ SortDialog::SortDialog( View * parent,  const char * name,
   layoutGroup->setTitle( i18n("Layout") );
   
   Q3HButtonGroup * orientationGroup = new Q3HButtonGroup( layoutGroup, "orientationGroup" );
-  orientationGroup->setLineWidth(0);
-  orientationGroup->setMargin(0);
+  //orientationGroup->setLineWidth(0);
+  //orientationGroup->setMargin(0);
   orientationGroup->layout()->setMargin(0);
 
   m_sortColumn = new QRadioButton( orientationGroup, "m_sortColumn" );
@@ -526,7 +526,7 @@ void SortDialog::slotOk()
 {
   m_pView->doc()->emitBeginOperation( false );
   
-  Qt::Orientation sortOrientation;
+  Orientation sortOrientation;
   if (m_sortRow->isChecked())
     sortOrientation=SortColumns;
   else

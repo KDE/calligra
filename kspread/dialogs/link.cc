@@ -46,16 +46,16 @@ class LinkDialog::Private
 {
 public:
     QString text;
-    Q3Frame* internetPage;
+    QFrame* internetPage;
     KLineEdit* internetText;
     KLineEdit* internetLink;
-    Q3Frame* mailPage;
+    QFrame* mailPage;
     KLineEdit* mailText;
     KLineEdit* mailLink;
-    Q3Frame* filePage;
+    QFrame* filePage;
     KLineEdit* fileText;
     KUrlRequester* fileLink;
-    Q3Frame* cellPage;
+    QFrame* cellPage;
     KLineEdit* cellText;
     KLineEdit* cellLink;
 };

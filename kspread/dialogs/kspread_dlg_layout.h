@@ -131,7 +131,7 @@ protected:
     virtual void paintEvent( QPaintEvent *_ev );
     virtual void mousePressEvent( QMouseEvent *_ev );
 
-    PenStyle penStyle;
+	Qt::PenStyle penStyle;
     QColor penColor;
     int penWidth;
 
@@ -317,7 +317,7 @@ public:
     void clicked(BorderButton *);
  protected:
     virtual void mousePressEvent( QMouseEvent *_ev );
-    PenStyle penStyle;
+	Qt::PenStyle penStyle;
     QColor penColor;
     int penWidth;
     bool changed;
