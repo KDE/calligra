@@ -35,6 +35,7 @@
 #include <QPixmap>
 #include <Q3PointArray>
 #include <Q3ValueList>
+#include <Q3Dict>
 
 #include <KoDocument.h>
 #include <KoDocumentChild.h>
@@ -195,7 +196,7 @@ class KSPREAD_EXPORT Sheet : public QObject
     Q_PROPERTY( bool showGrid READ getShowGrid WRITE setShowGrid )
 
 public:
-    enum Qt::Orientation { Qt::DockRight, Qt::DockLeft, Up, Down };
+    enum Direction { DockRight, DockLeft, Up, Down };
     enum SortingOrder{ Increase, Decrease };
     enum ChangeRef { ColumnInsert, ColumnRemove, RowInsert, RowRemove };
     enum TestType { Text, Validity, Comment, ConditionalCellAttribute };
