@@ -115,7 +115,7 @@ KoFilter::ConversionStatus PdfImport::convert(const Q3CString& from,
                          : i18n("Second pass: page #%1..."));
             pd.setLabel( s.arg(it.current()) );
             qApp->processEvents();
-            if (pd.wasCancelled()) return KoFilter::UserCancelled;
+            if (pd.wasCanceled()) return KoFilter::UserCancelled;
             kDebug(30516) << "-- " << "pass #" << k
                            << "  treat page: " << it.current()
                            << "----------------" << endl;

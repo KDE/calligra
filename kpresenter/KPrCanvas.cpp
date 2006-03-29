@@ -3565,7 +3565,7 @@ void KPrCanvas::print( QPainter *painter, KPrinter *printer, float /*left_margin
         progress.setProgress( ++j );
         kapp->processEvents();
 
-        if ( progress.wasCancelled() )
+        if ( progress.wasCanceled() )
             break;
 
         step.m_pageNumber = i - 1;
@@ -3598,7 +3598,7 @@ void KPrCanvas::print( QPainter *painter, KPrinter *printer, float /*left_margin
     KPrNoteBar *noteBar = m_view->getNoteBar();
     //don't print notes when there is no note to print or it's disabled
     if ( noteBar && !noteBar->getNotesTextForPrinting(list).isEmpty()
-         && !progress.wasCancelled() && printNotes )
+         && !progress.wasCanceled() && printNotes )
     {
         printer->newPage();
         painter->resetXForm();

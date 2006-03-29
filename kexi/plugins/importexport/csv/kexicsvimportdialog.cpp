@@ -593,7 +593,7 @@ tristate KexiCSVImportDialog::loadRows(QString &field, int &row, int &column, in
 			//update progr. bar dlg on final exporting
 			m_importingProgressDlg->progressBar()->setValue(offset);
 			qApp->processEvents();
-			if (m_importingProgressDlg->wasCancelled()) {
+			if (m_importingProgressDlg->wasCanceled()) {
 				delete m_importingProgressDlg;
 				m_importingProgressDlg = 0;
 				return ::cancelled;
@@ -783,7 +783,7 @@ tristate KexiCSVImportDialog::loadRows(QString &field, int &row, int &column, in
 		if (!m_importingProgressDlg && row % 20 == 0) {
 			qApp->processEvents();
 			//only for GUI mode:
-			if (!m_firstFillTableCall && m_loadingProgressDlg && m_loadingProgressDlg->wasCancelled()) {
+			if (!m_firstFillTableCall && m_loadingProgressDlg && m_loadingProgressDlg->wasCanceled()) {
 				delete m_loadingProgressDlg;
 				m_loadingProgressDlg = 0;
 				m_dialogCancelled = true;

@@ -67,7 +67,7 @@
 #include <kdebug.h>
 #include <kmessagebox.h>
 #include <kurl.h>
-#include <kurldrag.h>
+#include <k3urldrag.h>
 #include <kio/netaccess.h>
 #include <kmimetype.h>
 
@@ -238,7 +238,7 @@ void KWCanvas::print( QPainter *painter, KPrinter *printer )
         progress.setProgress( ++j );
         qApp->processEvents();
 
-        if ( progress.wasCancelled() )
+        if ( progress.wasCanceled() )
             break;
 
         if ( it != pageList.begin() )
@@ -1469,7 +1469,7 @@ void KWCanvas::insertPart( const KoDocumentEntry &entry )
 void KWCanvas::contentsDragEnterEvent( QDragEnterEvent *e )
 {
     int provides = KWView::checkClipboard( e );
-    if ( ( provides & KWView::ProvidesImage ) || KURLDrag::canDecode( e ) )
+    if ( ( provides & KWView::ProvidesImage ) || K3URLDrag::canDecode( e ) )
     {
         m_imageDrag = true;
         e->acceptAction();
@@ -1520,12 +1520,12 @@ void KWCanvas::contentsDropEvent( QDropEvent *e )
 
     if ( Q3ImageDrag::canDecode( e ) ) {
         pasteImage( e, docPoint );
-    } else if ( KURLDrag::canDecode( e ) ) {
+    } else if ( K3URLDrag::canDecode( e ) ) {
 
         // TODO ask (with a popupmenu) between inserting a link and inserting the contents
 
         KUrl::List lst;
-        KURLDrag::decode( e, lst );
+        K3URLDrag::decode( e, lst );
 
         KUrl::List::ConstIterator it = lst.begin();
         for ( ; it != lst.end(); ++it ) {
@@ -2221,7 +2221,7 @@ void FrameResizePolicy::handleMouseMove(Qt::ButtonState keyState, const KoPoint 
         KWPageManager *pageManager = m_parent->kWordDocument()->pageManager();
         sizeRect.moveTopLeft(pageManager->clipToDocument(sizeRect.topLeft()));
         sizeRect.moveBottomRight(pageManager->clipToDocument(sizeRect.bottomRight()));
-        sizeRect.setX( qMax(0, sizeRect.x()) ); // otherwise it would get wider than the page
+        sizeRect.setX( qMax(0.0, sizeRect.x()) ); // otherwise it would get wider than the page
     }
 
     // each frame in m_frames should be reshaped from the original size stored in the
