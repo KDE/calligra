@@ -165,7 +165,7 @@ void KDDrawText::drawRotatedTxt( QPainter* painter,
             pFM = const_cast<QFontMetrics*>(fontMet);
         }
 
-        int nLF = text.contains('\n');
+        int nLF = text.count('\n');
         if( INT_MAX == txtWidth ) {
             if( nLF ){
                 int tw;
@@ -334,7 +334,7 @@ void KDDrawText::drawRotatedTxt( QPainter* painter,
 */
         }else{
             // new code (rotating the text ourselves for better quality on screens)
-            QPixmap pm( txtWidth+2, txtHeight+2, 1 );
+            QPixmap pm( txtWidth+2, txtHeight+2, Qt::AutoColor );
             // note: When using colored axis labels it will be necessary
             //       to change this code and use a 256 color pixmap instead
             //       of a monochrome one.                 (khz, 2002/08/15)
