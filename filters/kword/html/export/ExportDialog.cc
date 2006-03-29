@@ -30,7 +30,6 @@
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qradiobutton.h>
-#include <qvbuttongroup.h>
 #include <qcheckbox.h>
 #include <kurlrequester.h>
 

@@ -234,7 +234,7 @@ bool OOWriterWorker::doOpenFile(const QString& filenameOut, const QString& )
 
     const Q3CString appId( "application/vnd.sun.xml.writer" );
 
-    m_zip->writeFile( "mimetype", QString::null, QString::null, appId.length(), appId.data() );
+    m_zip->writeFile( "mimetype", QString::null, QString::null,appId.data(), appId.length() );
 
     m_zip->setCompression( KZip::DeflateCompression );
 
@@ -257,7 +257,7 @@ bool OOWriterWorker::zipDoneWriting(void)
 {
     if (!m_zip)
         return false;
-    return m_zip->doneWriting(m_size);
+    return m_zip->finishWriting(m_size);
 }
 
 bool OOWriterWorker::zipWriteData(const char* str)
