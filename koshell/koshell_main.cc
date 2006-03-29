@@ -47,7 +47,7 @@ class KoShellApp : public KUniqueApplication {
 
 int KoShellApp::newInstance()
 {
-  if ( isRestored() ) {
+  if ( QApplication::isSessionRestored() ) {
     // There can only be one main window
     if ( KMainWindow::canBeRestored( 1 ) ) {
       mMainWindow = new KoShellWindow();
