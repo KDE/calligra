@@ -28,13 +28,12 @@
 //Added by qt3to4:
 #include <Q3VBoxLayout>
 #include <QMouseEvent>
-#include <Q3Frame>
 #include <QChildEvent>
 
 using namespace KSpread;
 
 ToolBox::ToolBox( QWidget* parent, const char* name )
-    : Q3Frame( parent, name, Qt::WType_TopLevel | Qt::WStyle_Tool )
+    : QFrame( parent, name, Qt::WType_TopLevel | Qt::WStyle_Tool )
 {
     KWin::setType( winId(), NET::Tool );
 
@@ -49,15 +48,13 @@ void ToolBox::setEnabled( bool enable )
 {
     if ( enable )
     {
-	if ( children() )
+        if ( !children().isEmpty() )
         {
-	    QObjectListIt it( *children() );
-	    QWidget *w;
-	    while( (w=(QWidget *)it.current()) != 0 )
+            QList<QObject*> children( QObject::children() );
+	    foreach ( QObject* child, children )
 	    {
-		++it;
-		if ( w->isWidgetType() )
-		    w->setEnabled( TRUE );
+		if ( child->isWidgetType() )
+                    static_cast<QWidget*>(child)->setEnabled( TRUE );
 	    }
 	}
     }
@@ -65,17 +62,15 @@ void ToolBox::setEnabled( bool enable )
     {
 	if ( focusWidget() == this )
 	    focusNextPrevChild( TRUE );
-	if ( children() )
+        if ( !children().isEmpty() )
         {
-	    QObjectListIt it( *children() );
-	    QWidget *w;
-	    while( (w=(QWidget *)it.current()) != 0 )
+            QList<QObject*> children( QObject::children() );
+	    foreach ( QObject* child, children )
 	    {
-		++it;
-		if ( w->isWidgetType() )
+		if ( child->isWidgetType() )
 	        {
-		    w->setEnabled( FALSE );
-		    // w->clearWState( WState_ForceDisabled );
+                    static_cast<QWidget*>(child)->setEnabled( FALSE );
+		    // child->clearWState( WState_ForceDisabled );
 		}
 	    }
 	}

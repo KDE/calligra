@@ -20,7 +20,7 @@
 #ifndef TOOLBOX_H
 #define TOOLBOX_H
 
-#include <q3frame.h>
+#include <qframe.h>
 #include <qpoint.h>
 //Added by qt3to4:
 #include <Q3VBoxLayout>
@@ -35,7 +35,7 @@ class KoDocumentChild;
 namespace KSpread
 {
 
-class KOFFICEUI_EXPORT ToolBox : public Q3Frame
+class KOFFICEUI_EXPORT ToolBox : public QFrame
 {
     Q_OBJECT
 public:

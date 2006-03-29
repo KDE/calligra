@@ -4656,7 +4656,7 @@ void VBorder::mousePressEvent( QMouseEvent * _ev )
   if ( !m_pView->koDocument()->isReadWrite() )
     return;
 
-  if ( _ev->button() == LeftButton )
+  if ( _ev->button() == Qt::LeftButton )
     m_bMousePressed = true;
 
   const Sheet *sheet = m_pCanvas->activeSheet();
@@ -4722,7 +4722,7 @@ void VBorder::mousePressEvent( QMouseEvent * _ev )
     m_iSelectionAnchor = hit_row;
 
     if ( !m_pView->selectionInfo()->contains( QPoint(1, hit_row) ) ||
-         !( _ev->button() == RightButton ) ||
+         !( _ev->button() == Qt::RightButton ) ||
          !m_pView->selectionInfo()->isRowSelected() )
     {
       QPoint newMarker( 1, hit_row );
@@ -4744,7 +4744,7 @@ void VBorder::mousePressEvent( QMouseEvent * _ev )
       }
     }
 
-    if ( _ev->button() == RightButton )
+    if ( _ev->button() == Qt::RightButton )
     {
       QPoint p = mapToGlobal( _ev->pos() );
       m_pView->popupRowMenu( p );
@@ -5211,7 +5211,7 @@ void HBorder::mousePressEvent( QMouseEvent * _ev )
   if (!m_pView->koDocument()->isReadWrite())
     return;
 
-  if ( _ev->button() == LeftButton )
+  if ( _ev->button() == Qt::LeftButton )
     m_bMousePressed = true;
 
   const Sheet *sheet = m_pCanvas->activeSheet();
@@ -5338,7 +5338,7 @@ void HBorder::mousePressEvent( QMouseEvent * _ev )
     m_iSelectionAnchor = hit_col;
 
     if ( !m_pView->selectionInfo()->contains( QPoint( hit_col, 1 ) ) ||
-         !( _ev->button() == RightButton ) ||
+         !( _ev->button() == Qt::RightButton ) ||
          !m_pView->selectionInfo()->isColumnSelected() )
     {
       QPoint newMarker( hit_col, 1 );
@@ -5360,7 +5360,7 @@ void HBorder::mousePressEvent( QMouseEvent * _ev )
       }
     }
 
-    if ( _ev->button() == RightButton )
+    if ( _ev->button() == Qt::RightButton )
     {
       QPoint p = mapToGlobal( _ev->pos() );
       m_pView->popupColumnMenu( p );

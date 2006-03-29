@@ -28,6 +28,7 @@
 #include <unistd.h>
 
 #include <qapplication.h>
+#include <qbuffer.h>
 #include <qcheckbox.h>
 #include <qclipboard.h>
 #include <qlabel.h>

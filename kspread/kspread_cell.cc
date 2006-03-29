@@ -2661,7 +2661,7 @@ void Cell::paintBackground( QPainter& painter, const KoRect &cellRect,
     //Otherwise use a lighter version of the cell's background color.
     QColor c;
 
-    int averageColor = (backgroundColor.Qt::red() + backgroundColor.Qt::green() + backgroundColor.Qt::blue()) / 3;
+    int averageColor = (backgroundColor.red() + backgroundColor.green() + backgroundColor.blue()) / 3;
 
     if (averageColor > 180)
 	if (averageColor > 225)
@@ -3157,7 +3157,7 @@ void Cell::paintText( QPainter& painter,
       double v = value().asFloat();
       if ( format()->floatColor( cellRef.x(), cellRef.y()) == Style::NegRed
      && v < 0.0 )
-        tmpPen.setColor( Qt::red );
+        tmpPen.setColor( red );
     }
   }
 
