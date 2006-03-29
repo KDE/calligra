@@ -490,7 +490,7 @@ bool copyZipToZip( const KZip * src, KZip * dest)
 	} else {
 		filename = curDirName.join("/") + "/" + *it;
 	}
-	dest->writeFile(filename , QString::null, QString::null, b.count(), b.data() );
+	dest->writeFile(filename , QString::null, QString::null,b.data(), b.count() );
       } else
         if (curEntry->isDirectory()) {
           src_dirStack.push( dynamic_cast<KArchiveDirectory*>( curEntry ) );
