@@ -218,7 +218,6 @@ private :
   configureLayoutPage *_layoutPage;
   configureSpellPage *_spellPage;
   parameterLocale *_localePage;
-  configureTTSPage *_ttsPage;
 };
 
 } // namespace KSpread

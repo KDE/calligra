@@ -220,7 +220,6 @@ private:
     KPrConfigureDefaultDocPage *_defaultDocPage;
     KPrConfigureToolsPage *_toolsPage;
     KPrConfigurePathPage *m_pathPage;
-    KPrConfigureTTSPage *m_ttsPage;
     KPrDocument* m_doc;
 
 };

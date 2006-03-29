@@ -422,7 +422,6 @@ private slots:
     void slotAutoScroll(const QPoint &scrollDist);
 
     void doAutoScroll();
-    void speakCell(QWidget* w, const QPoint& p, uint flags);
 
 private:
     virtual bool eventFilter( QObject *o, QEvent *e );

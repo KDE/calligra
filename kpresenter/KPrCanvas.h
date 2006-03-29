@@ -775,12 +775,6 @@ private slots:
      */
     void slotAutoScroll(const QPoint &scrollDist);
 
-    /**
-     * Speak the text object under the mouse.  This slot is normally
-     * connected to the kospeaker customSpeakWidget signal.
-     */
-    void speakTextUnderMouse(QWidget* w, const QPoint& p, uint flags);
-
 private:
     /// Distance for snapping to guide line with mouse 
     static const int MOUSE_SNAP_DISTANCE;

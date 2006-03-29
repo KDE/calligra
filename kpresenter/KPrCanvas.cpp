@@ -61,7 +61,6 @@
 #include <KoStore.h>
 #include <KoStoreDrag.h>
 #include "KoPointArray.h"
-#include <KoSpeaker.h>
 
 #include "KPrView.h"
 #include "KPrBackground.h"
@@ -167,10 +166,6 @@ KPrCanvas::KPrCanvas( QWidget *parent, const char *name, KPrView *_view )
                  this, SLOT( terminateEditing( KPrTextObject * ) ) );
         connect( m_view, SIGNAL( autoScroll( const QPoint & )), this, SLOT( slotAutoScroll( const QPoint &)));
     }
-
-    if ( kospeaker )
-        connect( kospeaker, SIGNAL( customSpeakWidget(QWidget*, const QPoint&, uint) ),
-                 this, SLOT( speakTextUnderMouse(QWidget*, const QPoint&, uint) ) );
 }
 
 KPrCanvas::~KPrCanvas()
@@ -5402,22 +5397,6 @@ KPrTextObject* KPrCanvas::textUnderMouse( const QPoint & point )
             return it2.current();
     }
     return 0L;
-}
-
-void KPrCanvas::speakTextUnderMouse(QWidget* w, const QPoint& p, uint flags)
-{
-    Q_UNUSED( flags );
-    if ( w != this ) return;
-    // Since text objects can't get focus without clicking with the mouse,
-    // no point in supporting focus speaking.
-    if ( p == QPoint() ) return;
-    KPrTextObject *to = textUnderMouse( w->mapFromGlobal( p ) );
-    if ( to == m_prevSpokenTO ) return;
-    m_prevSpokenTO = to;
-    if ( to ) {
-        QString text = to->textObject()->textDocument()->plainText();
-        if ( !text.isEmpty() ) kospeaker->sayWidget( text );
-    }
 }
 
 bool KPrCanvas::checkCurrentTextEdit( KPrTextObject * textObj )

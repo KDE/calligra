@@ -66,7 +66,6 @@
 #include <kwordwrap.h>
 
 #include <KoOasisStore.h>
-#include <KoSpeaker.h>
 #include <KoStore.h>
 #include <KoStoreDrag.h>
 #include <KoXmlWriter.h>
@@ -263,12 +262,6 @@ Canvas::Canvas (View *_view)
   {
     connect( d->view, SIGNAL( autoScroll( const QPoint & )), this, SLOT( slotAutoScroll( const QPoint &)));
   }
-  if (kospeaker)
-  {
-    connect (kospeaker, SIGNAL(customSpeakWidget(QWidget*, const QPoint&, uint)),
-      this, SLOT(speakCell(QWidget*, const QPoint&, uint)));
-  }
-
   setFocus();
   installEventFilter( this );
   (void)new ToolTip( this );
@@ -3195,70 +3188,6 @@ void Canvas::doAutoScroll()
 
     //Restart timer
     d->scrollTimer->start( 50 );
-}
-
-void Canvas::speakCell(QWidget* w, const QPoint& p, uint flags)
-{
-  Q_UNUSED(flags);
-  if (w != this) return;
-  Sheet* sheet = activeSheet();
-  if (!sheet) return;
-  int row = -1;
-  int col = -1;
-  if (p == QPoint()) {
-    row = markerRow();
-    col = markerColumn();
-    if (row == d->prevSpokenFocusRow && col == d->prevSpokenFocusCol) return;
-    d->prevSpokenFocusRow = row;
-    d->prevSpokenFocusCol = col;
-  } else {
-    QPoint wp = w->mapFromGlobal(p);
-    double tmp;
-    double posX;
-    if ( sheet->layoutDirection()==Sheet::RightToLeft )
-    {
-      double dwidth = d->view->doc()->unzoomItX( width() );
-      posX = dwidth - d->view->doc()->unzoomItX( wp.x() );
-    }
-    else
-      posX = d->view->doc()->unzoomItX( wp.x() );
-
-    double posY = d->view->doc()->unzoomItY( wp.y() );
-    col = sheet->leftColumn( (posX + xOffset()), tmp );
-    row = sheet->topRow( (posY + yOffset()), tmp );
-    if (row == d->prevSpokenPointerRow && col == d->prevSpokenPointerCol) return;
-    d->prevSpokenPointerRow = row;
-    d->prevSpokenPointerCol = col;
-  }
-  if (row == d->prevSpokenRow && col == d->prevSpokenCol) return;
-  d->prevSpokenRow = row;
-  d->prevSpokenCol = col;
-  // kDebug() << "Canvas::speakCell: row = " << row << " col = " << col << endl;
-  if (row >=0 && col >= 0) {
-    Cell* cell = sheet->cellAt( col, row );
-    if (!cell) return;
-    QString text = cell->strOutText();
-    if (!text.isEmpty()) {
-      text.prepend(i18n("Spreadsheet cell", "Cell ") + cell->name() + " ");
-      if (cell->isFormula()) {
-        QString f = cell->text();
-        // Try to format the formula so synth can more clearly speak it.
-        QString f2;
-        for (uint i = 0; i < f.length(); i++) f2 += f[i] + " ";
-        f2.replace("(", i18n("character (", "left paren"));
-        f2.replace(")", i18n("character )", "right paren"));
-        f2.replace(":", i18n("character :", "colon"));
-        f2.replace(";", i18n("character ;", "semicolon"));
-        f2.replace("=", i18n("character =", "equals"));
-        f2.replace(".", i18n("character .", "point"));
-        f2.replace(",", i18n("character ,", "comma"));
-        f2.replace(" . . ", i18n("characters ..", " dot dot "));
-        text.append(i18n("Spreadsheet formula", " Formula ") + f2);
-      }
-      // kDebug() << "Canvas::speakCell: text = " << text << endl;
-      kospeaker->sayWidget(text);
-    }
-  }
 }
 
 double Canvas::autoScrollAccelerationX( int offset )

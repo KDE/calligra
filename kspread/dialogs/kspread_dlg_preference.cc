@@ -84,12 +84,6 @@ PreferenceDialog::PreferenceDialog( View* parent, const char* /*name*/)
                           BarIcon("spellcheck", K3Icon::SizeMedium) );
   _spellPage=new configureSpellPage(parent,page7);
 
-  if (KoSpeaker::isKttsdInstalled()) {
-      QVBox *page8 = addVBoxPage( i18n("Abbreviation for Text-to-Speech", "TTS"),
-          i18n("Text-to-Speech Settings"), BarIcon("access", K3Icon::SizeMedium) );
-      _ttsPage=new configureTTSPage(parent, page8);
-  } else _ttsPage = 0;
-
 }
 
 void PreferenceDialog::openPage(int flags)
@@ -117,7 +111,6 @@ void PreferenceDialog::slotApply()
   _layoutPage->apply();
   _spellPage->apply();
   _localePage->apply();
-  if (_ttsPage) _ttsPage->apply();
   m_pView->doc()->refreshInterface();
   m_pView->slotUpdateView( m_pView->activeSheet() );
 }
@@ -140,9 +133,6 @@ void PreferenceDialog::slotDefault()
             break;
         case 5:
             _spellPage->slotDefault();
-            break;
-        case 6:
-            _ttsPage->slotDefault();
             break;
         default:
             break;
@@ -954,89 +944,5 @@ void configureSpellPage::slotDefault()
 }
 
 ////
-
-configureTTSPage::configureTTSPage( View *_view, QVBox *box, char *name )
- : QObject( box->parent(), name )
-{
-    Q_UNUSED(_view);
-
-    m_cbSpeakPointerWidget = new QCheckBox(i18n("Speak widget under &mouse pointer"), box);
-    m_cbSpeakFocusWidget = new QCheckBox(i18n("Speak widget with &focus"), box);
-    m_gbScreenReaderOptions = new QVGroupBox("", box);
-    m_gbScreenReaderOptions->setMargin( KDialog::marginHint() );
-    m_gbScreenReaderOptions->setInsideSpacing( KDialog::spacingHint() );
-    m_cbSpeakTooltips = new QCheckBox(i18n("Speak &tool tips"), m_gbScreenReaderOptions);
-    m_cbSpeakWhatsThis = new QCheckBox(i18n("Speak &What's This"), m_gbScreenReaderOptions);
-    m_cbSpeakDisabled = new QCheckBox(i18n("Verbal indication if widget is disabled (grayed)",
-        "&Say whether disabled"), m_gbScreenReaderOptions);
-    m_cbSpeakAccelerators = new QCheckBox(i18n("Spea&k accelerators"), m_gbScreenReaderOptions);
-    QHBox* hbAcceleratorPrefix = new QHBox(m_gbScreenReaderOptions);
-    QWidget* spacer = new QWidget(hbAcceleratorPrefix);
-    spacer->setMinimumWidth(2 * KDialog::marginHint());
-    m_lblAcceleratorPrefix = 
-        new QLabel(i18n("A word spoken before another word", "Pr&efaced by the word:"),
-        hbAcceleratorPrefix);
-    m_leAcceleratorPrefixWord = new QLineEdit(i18n("Keyboard accelerator, such as Alt+F", "Accelerator"),
-        hbAcceleratorPrefix);
-    m_lblAcceleratorPrefix->setBuddy(m_leAcceleratorPrefixWord);
-    QHBox* hbPollingInterval = new QHBox(m_gbScreenReaderOptions);
-    hbPollingInterval->setMargin( 0 );
-    QLabel* lblPollingInterval = new QLabel(i18n("&Polling interval:"), hbPollingInterval);
-    m_iniPollingInterval = new KIntNumInput(hbPollingInterval);
-    m_iniPollingInterval->setSuffix(" ms");
-    m_iniPollingInterval->setRange(100, 5000, 100, true);
-    lblPollingInterval->setBuddy(m_iniPollingInterval);
-
-    config = Factory::global()->config();
-    config->setGroup("TTS");
-    m_cbSpeakPointerWidget->setChecked(config->readBoolEntry("SpeakPointerWidget", false));
-    m_cbSpeakFocusWidget->setChecked(config->readBoolEntry("SpeakFocusWidget", false));
-    m_cbSpeakTooltips->setChecked(config->readBoolEntry("SpeakTooltips", true));
-    m_cbSpeakWhatsThis->setChecked(config->readBoolEntry("SpeakWhatsThis", false));
-    m_cbSpeakDisabled->setChecked(config->readBoolEntry("SpeakDisabled", true));
-    m_cbSpeakAccelerators->setChecked(config->readBoolEntry("SpeakAccelerators", true));
-    m_leAcceleratorPrefixWord->setText(config->readEntry("AcceleratorPrefixWord",
-        i18n("Keyboard accelerator, such as Alt+F", "Accelerator")));
-    m_iniPollingInterval->setValue(config->readNumEntry("PollingInterval", 600));
-
-    screenReaderOptionChanged();
-    connect(m_cbSpeakPointerWidget, SIGNAL(toggled(bool)), this, SLOT(screenReaderOptionChanged()));
-    connect(m_cbSpeakFocusWidget, SIGNAL(toggled(bool)), this, SLOT(screenReaderOptionChanged()));
-    connect(m_cbSpeakAccelerators, SIGNAL(toggled(bool)), this, SLOT(screenReaderOptionChanged()));
-}
-
-void configureTTSPage::slotDefault()
-{
-    m_cbSpeakPointerWidget->setChecked(false);
-    m_cbSpeakFocusWidget->setChecked(false);
-    m_cbSpeakTooltips->setChecked(true);
-    m_cbSpeakWhatsThis->setChecked(false);
-    m_cbSpeakDisabled->setChecked(true);
-    m_cbSpeakAccelerators->setChecked(true);
-    m_leAcceleratorPrefixWord->setText(i18n("Keyboard accelerator, such as Alt+F", "Accelerator"));
-    m_iniPollingInterval->setValue(600);
-}
-
-void configureTTSPage::apply()
-{
-    config->setGroup("TTS");
-    config->writeEntry("SpeakPointerWidget", m_cbSpeakPointerWidget->isChecked());
-    config->writeEntry("SpeakFocusWidget", m_cbSpeakFocusWidget->isChecked());
-    config->writeEntry("SpeakTooltips", m_cbSpeakTooltips->isChecked());
-    config->writeEntry("SpeakWhatsThis", m_cbSpeakWhatsThis->isChecked());
-    config->writeEntry("SpeakDisabled", m_cbSpeakDisabled->isChecked());
-    config->writeEntry("SpeakAccelerators", m_cbSpeakAccelerators->isChecked());
-    config->writeEntry("AcceleratorPrefixWord", m_leAcceleratorPrefixWord->text());
-    config->writeEntry("PollingInterval", m_iniPollingInterval->value());
-    if (kospeaker) kospeaker->readConfig(config);
-}
-
-void configureTTSPage::screenReaderOptionChanged()
-{
-    m_gbScreenReaderOptions->setEnabled(
-        m_cbSpeakPointerWidget->isChecked() | m_cbSpeakFocusWidget->isChecked());
-    m_leAcceleratorPrefixWord->setEnabled(m_cbSpeakAccelerators->isChecked());
-    m_lblAcceleratorPrefix->setEnabled(m_cbSpeakAccelerators->isChecked());
-}
 
 #include "kspread_dlg_preference.moc"
