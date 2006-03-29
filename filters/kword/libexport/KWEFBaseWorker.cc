@@ -131,7 +131,7 @@ bool KWEFBaseWorker::loadAndConvertToImage(const QString& strName, const QString
     QImageIO imageIO;
     imageIO.setImage(qimage);
 
-    QBuffer buffer(image); // A QBuffer is a QIODevice
+    QBuffer buffer(&image); // A QBuffer is a QIODevice
     if (!buffer.open(QIODevice::WriteOnly))
     {
         kWarning(30508) << "Could not open buffer! (KWEFBaseWorker::loadAndConvertToImage)" << endl;
