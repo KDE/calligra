@@ -12,7 +12,7 @@ include_directories( ${CMAKE_SOURCE_DIR}/kdgantt ${CMAKE_SOURCE_DIR}/kugar/lib $
 
 ########### next target ###############
 
-set(kplatopart_PART_SRCS dummy.cpp )
+set(kplatopart_PART_SRCS dummy.cpp ${libkdgantt_SRCS})
 
 kde4_automoc(${kplatopart_PART_SRCS})
 
@@ -21,7 +21,7 @@ kde4_add_plugin(kplatopart WITH_PREFIX ${kplatopart_PART_SRCS})
 
 kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kplatopart )
 
-target_link_libraries(kplatopart  ${KDE4_KDECORE_LIBS} kofficeui ${libkdgantt_SRCS} )
+target_link_libraries(kplatopart  ${KDE4_KDECORE_LIBS} kofficeui  )
 
 install_targets(${LIB_INSTALL_DIR}/kde4 kplatopart )
 
