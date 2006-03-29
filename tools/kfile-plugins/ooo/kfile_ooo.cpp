@@ -128,7 +128,7 @@ static const char * metafile      = "meta.xml"     ;
 KOfficePlugin::KOfficePlugin(QObject *parent, const char *name,
                        const QStringList &args)
 
-    : KFilePlugin(parent, name, args)
+    : KFilePlugin(parent, args)
 {
    int i = 0;
    while (mimetypes[i])
