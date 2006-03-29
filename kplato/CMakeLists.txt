@@ -21,7 +21,7 @@ kde4_add_plugin(kplatopart WITH_PREFIX ${kplatopart_PART_SRCS})
 
 kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kplatopart )
 
-target_link_libraries(kplatopart  ${KDE4_KDECORE_LIBS} kofficeui kdgantt )
+target_link_libraries(kplatopart  ${KDE4_KDECORE_LIBS} kofficeui ${libkdgantt_SRCS} )
 
 install_targets(${LIB_INSTALL_DIR}/kde4 kplatopart )
 
