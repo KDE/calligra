@@ -4670,7 +4670,7 @@ void Sheet::fillSelection( Selection * selectionInfo, int direction )
 
   switch( direction )
   {
-   case Qt::DockRight:
+   case Right:
     doc = saveCellRegion( QRect( left, top, 1, height ) );
     break;
 
@@ -4678,7 +4678,7 @@ void Sheet::fillSelection( Selection * selectionInfo, int direction )
     doc = saveCellRegion( QRect( left, bottom, width, 1 ) );
     break;
 
-   case Qt::DockLeft:
+   case Left:
     doc = saveCellRegion( QRect( right, top, 1, height ) );
     break;
 
@@ -4698,7 +4698,7 @@ void Sheet::fillSelection( Selection * selectionInfo, int direction )
   int i;
   switch( direction )
   {
-   case Qt::DockRight:
+   case Right:
     for ( i = left + 1; i <= right; ++i )
     {
       paste( buffer.buffer(), QRect( i, top, 1, 1 ), false );
@@ -4712,7 +4712,7 @@ void Sheet::fillSelection( Selection * selectionInfo, int direction )
     }
     break;
 
-   case Qt::DockLeft:
+   case Left:
     for ( i = right - 1; i >= left; --i )
     {
       paste( buffer.buffer(), QRect( i, top, 1, 1 ), false );

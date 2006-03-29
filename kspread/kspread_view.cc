@@ -2110,7 +2110,7 @@ void View::initConfig()
         doc()->setShowRowHeader(config->readBoolEntry("Row Header",true));
         if ( !doc()->configLoadFromFile() )
             doc()->setCompletionMode((KGlobalSettings::Completion)config->readNumEntry("Completion Mode",(int)(KGlobalSettings::CompletionAuto)));
-        doc()->setMoveToValue((KSpread::MoveTo)config->readNumEntry("Move",(int)(Qt::DockBottom)));
+        doc()->setMoveToValue((KSpread::MoveTo)config->readNumEntry("Move",(int)(Bottom)));
         doc()->setIndentValue( config->readDoubleNumEntry( "Indent", 10.0 ) );
         doc()->setTypeOfCalc((MethodOfCalc)config->readNumEntry("Method of Calc",(int)(SumOfNumber)));
         if ( !doc()->configLoadFromFile() )

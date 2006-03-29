@@ -291,9 +291,9 @@ void Style::loadOasisStyle( KoOasisStyles& oasisStyles, const QDomElement & elem
         if ( str == "center" )
             m_alignX = Center;
         else if ( str == "end" )
-            m_alignX = Qt::DockRight;
+            m_alignX = Right;
         else if ( str == "start" )
-            m_alignX = Qt::DockLeft;
+            m_alignX = Left;
         else
             m_alignX = HAlignUndefined;
         m_featuresSet |= SHAlign;
@@ -330,9 +330,9 @@ void Style::loadOasisStyle( KoOasisStyles& oasisStyles, const QDomElement & elem
 
         str = styleStack.attributeNS( KoXmlNS::style, "vertical-align" );
         if ( str == "bottom" )
-            m_alignY = Qt::DockBottom;
+            m_alignY = Bottom;
         else if ( str =="top" )
-            m_alignY = Qt::DockTop;
+            m_alignY = Top;
         else if ( str =="middle" )
             m_alignY = Middle;
 
@@ -1127,10 +1127,10 @@ void Style::saveOasisStyle( KoGenStyle &style, KoGenStyles &mainStyles )
         case Center:
             value = "center";
             break;
-        case Qt::DockRight:
+        case Right:
             value = "end";
             break;
-        case Qt::DockLeft:
+        case Left:
             value = "start";
             break;
         case HAlignUndefined:
@@ -1145,13 +1145,13 @@ void Style::saveOasisStyle( KoGenStyle &style, KoGenStyles &mainStyles )
         QString value;
         switch( valign() )
         {
-        case Qt::DockTop:
+        case Top:
             value = "top";
             break;
         case Middle:
             value = "middle";
             break;
-        case Qt::DockBottom:
+        case Bottom:
             value = "bottom";
             break;
         case VAlignUndefined:

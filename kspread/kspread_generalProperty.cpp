@@ -101,9 +101,9 @@ int GeneralProperty::getGeneralPropertyChange() const
         {
             KoRect rect = getRect();
             if ( m_generalValue.m_rect.left() != rect.left() )
-                flags |= Qt::DockLeft;
+                flags |= Left;
             if ( m_generalValue.m_rect.top() != rect.top() )
-                flags |= Qt::DockTop;
+                flags |= Top;
             // this has to be done as the rect cahnges width/hight if left or top is changed
             if ( QABS( m_generalValue.m_rect.width() - rect.width() ) > 1e-6 )
                 flags |= Width;

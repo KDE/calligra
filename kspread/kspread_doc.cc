@@ -247,7 +247,7 @@ Doc::Doc( QWidget *parentWidget, const char *widgetName, QObject* parent, const 
   d->showTabBar = true;
   d->showError = false;
   d->calcMethod = SumOfNumber;
-  d->moveTo = Qt::DockBottom;
+  d->moveTo = Bottom;
   d->completionMode = KGlobalSettings::CompletionAuto;
   d->spellConfig = 0;
   d->dontCheckUpperWord = false;

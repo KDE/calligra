@@ -1968,7 +1968,7 @@ QRect Canvas::moveDirection( KSpread::MoveTo direction, bool extendSelection )
        NEVER use cell->column() or cell->row() -- it might be a default cell
     */
   {
-    case Qt::DockBottom:
+    case Bottom:
       offset = cell->mergedYCells() - (cursor.y() - cellCorner.y()) + 1;
       rl = activeSheet()->rowFormat( cursor.y() + offset );
       while ( ((cursor.y() + offset) <= KS_rowMax) && rl->isHide())
@@ -1979,7 +1979,7 @@ QRect Canvas::moveDirection( KSpread::MoveTo direction, bool extendSelection )
 
       destination = QPoint(cursor.x(), qMin(cursor.y() + offset, KS_rowMax));
       break;
-    case Qt::DockTop:
+    case Top:
       offset = (cellCorner.y() - cursor.y()) - 1;
       rl = activeSheet()->rowFormat( cursor.y() + offset );
       while ( ((cursor.y() + offset) >= 1) && rl->isHide())
@@ -1989,7 +1989,7 @@ QRect Canvas::moveDirection( KSpread::MoveTo direction, bool extendSelection )
       }
       destination = QPoint(cursor.x(), qMax(cursor.y() + offset, 1));
       break;
-    case Qt::DockLeft:
+    case Left:
       offset = (cellCorner.x() - cursor.x()) - 1;
       cl = activeSheet()->columnFormat( cursor.x() + offset );
       while ( ((cursor.x() + offset) >= 1) && cl->isHide())
@@ -1999,7 +1999,7 @@ QRect Canvas::moveDirection( KSpread::MoveTo direction, bool extendSelection )
       }
       destination = QPoint(qMax(cursor.x() + offset, 1), cursor.y());
       break;
-    case Qt::DockRight:
+    case Right:
       offset = cell->mergedXCells() - (cursor.x() - cellCorner.x()) + 1;
       cl = activeSheet()->columnFormat( cursor.x() + offset );
       while ( ((cursor.x() + offset) <= KS_colMax) && cl->isHide())
@@ -2057,17 +2057,17 @@ void Canvas::processEnterKey(QKeyEvent* event)
   {
     switch( direction )
     {
-     case Qt::DockBottom:
-      direction = Qt::DockTop;
+     case Bottom:
+      direction = Top;
       break;
-     case Qt::DockTop:
-      direction = Qt::DockBottom;
+     case Top:
+      direction = Bottom;
       break;
-     case Qt::DockLeft:
-      direction = Qt::DockRight;
+     case Left:
+      direction = Right;
       break;
-     case Qt::DockRight:
-      direction = Qt::DockLeft;
+     case Right:
+      direction = Left;
       break;
      case BottomFirst:
       direction = BottomFirst;
@@ -2094,35 +2094,35 @@ void Canvas::processArrowKey( QKeyEvent *event)
     deleteEditor( true );
   }
 
-  KSpread::MoveTo direction = Qt::DockBottom;
+  KSpread::MoveTo direction = Bottom;
   bool makingSelection = event->state() & Qt::ShiftModifier;
 
   switch (event->key())
   {
   case Qt::Key_Down:
-    direction = Qt::DockBottom;
+    direction = Bottom;
     break;
   case Qt::Key_Up:
-    direction = Qt::DockTop;
+    direction = Top;
     break;
   case Qt::Key_Left:
     if (activeSheet()->layoutDirection()==Sheet::RightToLeft)
-      direction = Qt::DockRight;
+      direction = Right;
     else
-      direction = Qt::DockLeft;
+      direction = Left;
     break;
   case Qt::Key_Right:
     if (activeSheet()->layoutDirection()==Sheet::RightToLeft)
-      direction = Qt::DockLeft;
+      direction = Left;
     else
-      direction = Qt::DockRight;
+      direction = Right;
     break;
   case Qt::Key_Tab:
-      direction = Qt::DockRight;
+      direction = Right;
       break;
   case Qt::Key_Backtab:
       //Shift+Tab moves to the left
-      direction = Qt::DockLeft;
+      direction = Left;
       makingSelection = false;
       break;
   default:

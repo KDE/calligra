@@ -141,16 +141,16 @@ QString DocIface::moveToValue()const
 {
     switch(doc->getMoveToValue())
     {
-    case Qt::DockBottom:
+    case Bottom:
         return QString("bottom");
         break;
-    case Qt::DockLeft:
+    case Left:
         return QString("left");
         break;
-    case Qt::DockTop:
+    case Top:
         return QString("top");
         break;
-    case Qt::DockRight:
+    case Right:
         return QString("right");
         break;
     case BottomFirst:
@@ -163,13 +163,13 @@ QString DocIface::moveToValue()const
 void DocIface::setMoveToValue(const QString & move)
 {
     if ( move.lower()=="bottom" )
-        doc->setMoveToValue(Qt::DockBottom);
+        doc->setMoveToValue(Bottom);
     else if ( move.lower()=="top" )
-        doc->setMoveToValue(Qt::DockTop);
+        doc->setMoveToValue(Top);
     else if ( move.lower()=="left" )
-        doc->setMoveToValue(Qt::DockLeft);
+        doc->setMoveToValue(Left);
     else if ( move.lower()=="right" )
-        doc->setMoveToValue(Qt::DockRight);
+        doc->setMoveToValue(Right);
     else if ( move.lower()=="bottomfirst" )
         doc->setMoveToValue(BottomFirst);
 }

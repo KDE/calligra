@@ -158,7 +158,7 @@ parameterLocale::parameterLocale( View* _view, KVBox *box , char *name )
   m_money=new QLabel( tmpQGroupBox,"label3");
 
   updateToMatchLocale(locale);
-  
+
   m_updateButton=new QPushButton ( i18n("&Update Locale Settings"), tmpQGroupBox);
   connect(m_updateButton, SIGNAL(clicked()),this,SLOT(updateDefaultSystemConfig()));
 }
@@ -525,16 +525,16 @@ switch(tmpCompletion )
         }
 switch( m_pView->doc()->getMoveToValue( ))
         {
-        case  Qt::DockBottom:
+        case  Bottom:
                 typeOfMove->setCurrentItem(0);
                 break;
-        case  Qt::DockLeft:
+        case  Left:
                 typeOfMove->setCurrentItem(3);
                 break;
-        case  Qt::DockTop:
+        case  Top:
                 typeOfMove->setCurrentItem(1);
                 break;
-        case  Qt::DockRight:
+        case  Right:
                 typeOfMove->setCurrentItem(2);
                 break;
         case  BottomFirst:
@@ -628,20 +628,20 @@ void miscParameters::apply()
         config->writeEntry( "Completion Mode", (int)tmpCompletion);
     }
 
-    KSpread::MoveTo tmpMoveTo=Qt::DockBottom;
+    KSpread::MoveTo tmpMoveTo=Bottom;
     switch(typeOfMove->currentItem())
     {
         case 0:
-            tmpMoveTo=Qt::DockBottom;
+            tmpMoveTo=Bottom;
             break;
         case 1:
-            tmpMoveTo=Qt::DockTop;
+            tmpMoveTo=Top;
             break;
         case 2:
-            tmpMoveTo=Qt::DockRight;
+            tmpMoveTo=Right;
             break;
         case 3:
-            tmpMoveTo=Qt::DockLeft;
+            tmpMoveTo=Left;
             break;
         case 4:
             tmpMoveTo=BottomFirst;
@@ -806,7 +806,7 @@ configureLayoutPage::configureLayoutPage( View* _view,KVBox *box , char *name )
 
   defaultOrientationPage=new QComboBox( tmpQGroupBox);
   label->setBuddy(defaultOrientationPage);
-  
+
   QStringList listType;
   listType+=i18n( "Portrait" );
   listType+=i18n( "Landscape" );
@@ -820,7 +820,7 @@ configureLayoutPage::configureLayoutPage( View* _view,KVBox *box , char *name )
   grid1->addWidget(label,4,0);
   defaultUnit=new QComboBox( tmpQGroupBox);
   label->setBuddy(defaultUnit);
-  
+
   defaultUnit->insertStringList(KoUnit::listOfUnitName());
   defaultUnit->setCurrentItem(0);
   Q3WhatsThis::add(defaultUnit, i18n( "Choose the default unit that will be used in your sheet.\nNote that you can overwrite the unit for the current sheet using the Format -> Page Layout... dialog." ) );
