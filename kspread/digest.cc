@@ -828,14 +828,14 @@ void rtl_digest_destroySHA1 (rtlDigest Digest)
  *
  *======================================================================*/
 
-bool SHA1::getHash( QString const & text, QCString & hash )
+bool SHA1::getHash( QString const & text, Q3CString & hash )
 {
   rtlDigest aDigest     = rtl_digest_createSHA1();
   rtlDigestError aError = rtl_digest_updateSHA1( aDigest, text.unicode(), text.length() * sizeof(QChar) );
   
   if ( aError == rtl_Digest_E_None )
   {
-    QCString digest;
+    Q3CString digest;
     digest.resize( RTL_DIGEST_LENGTH_SHA1 + 1 );
     digest.fill( '\0', RTL_DIGEST_LENGTH_SHA1 );
 
