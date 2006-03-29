@@ -13,25 +13,13 @@ kde4_add_plugin(examplepart WITH_PREFIX ${examplepart_PART_SRCS})
 
 kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} examplepart )
 
-target_link_libraries(examplepart  ${KDE4_KDECORE_LIBS} kofficeui )
+target_link_libraries(examplepart  ${KDE4_KPARTS_LIBS} kofficecore )
 
 install_targets(${LIB_INSTALL_DIR}/kde4 examplepart )
 
 
 ########### next target ###############
 
-set(example_KDEINIT_SRCS main.cc )
-
-kde4_automoc(${example_KDEINIT_SRCS})
-
-kde4_add_kdeinit_executable( example ${example_KDEINIT_SRCS})
-
-target_link_libraries(kdeinit_example  ${KDE4_KDECORE_LIBS} kofficeui )
-
-install_targets(${LIB_INSTALL_DIR} kdeinit_example )
-
-target_link_libraries( example kdeinit_example )
-install_targets(/bin example )
 
 ########### install files ###############
 
