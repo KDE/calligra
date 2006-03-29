@@ -92,7 +92,7 @@ public:
     \param string the string to convert
     \return the direction enum value
     */
-    static Qt::Orientation stringToDirection( const QString& string ) {
+    static Direction stringToDirection( const QString& string ) {
         if( string == "Plain" )
             return DirPlain;
         else if( string == "Raising" )
@@ -159,7 +159,7 @@ public:
     \Note Instead of instantiating KDFrameProfileSection yourself
     you would normally rather call \c KDFrame::addProfileSection()
     */
-    KDFrameProfileSection( Qt::Orientation direction,
+    KDFrameProfileSection( Direction direction,
                            Curvature curvature,
                            int       width,
                            QPen      pen )
@@ -212,7 +212,7 @@ public:
     static bool readFrameProfileSectionNode( const QDomElement& element,
             KDFrameProfileSection* section );
 
-    Qt::Orientation direction() const { return _direction; }
+    Direction direction() const { return _direction; }
     Curvature curvature() const { return _curvature; }
     int       width()     const { return _width;     }
     QPen      pen()       const { return _pen;       }

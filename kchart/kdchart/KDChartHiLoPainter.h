@@ -36,7 +36,7 @@
 
 class KDChartParams;
 
-class KDChartHiLoPainter : public KDChartAxesPainter, public Qt
+class KDChartHiLoPainter : public KDChartAxesPainter//, public Qt
 {
     friend class KDChartPainter;
     protected:

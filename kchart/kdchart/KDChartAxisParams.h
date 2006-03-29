@@ -37,7 +37,7 @@
 #include <qstringlist.h>
 #include <qdatetime.h>
 #include <qvariant.h>
-
+#include <qrect.h>
 #include "KDChartGlobal.h"
 
 class KDChartParams;
@@ -445,12 +445,12 @@ private:
     bool     _axisShowGrid;
     QColor   _axisGridColor;
     int      _axisGridLineWidth;
-    PenStyle _axisGridStyle;
+	Qt::PenStyle _axisGridStyle;
 
     bool     _axisShowSubDelimiters;
     QColor   _axisGridSubColor;
     int      _axisGridSubLineWidth;
-    PenStyle _axisGridSubStyle;
+	Qt::PenStyle _axisGridSubStyle;
 
     QColor _axisZeroLineColor;
     bool _axisLabelsVisible;

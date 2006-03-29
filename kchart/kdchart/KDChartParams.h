@@ -1154,7 +1154,7 @@ public slots:
 
     void setLineStyle( Qt::PenStyle style, uint dataset=KDCHART_GLOBAL_LINE_STYLE );
 
-    PenStyle lineStyle( uint dataset=KDCHART_GLOBAL_LINE_STYLE ) const;
+	Qt::PenStyle lineStyle( uint dataset=KDCHART_GLOBAL_LINE_STYLE ) const;
 
 
     void setThreeDLines( bool threeD ) {
@@ -2556,7 +2556,7 @@ private:
     QMap < uint, QColor > _dataColorsShadow2;
     QColor _outlineDataColor;
     uint _outlineDataLineWidth;
-    PenStyle _outlineDataLineStyle;
+	Qt::PenStyle _outlineDataLineStyle;
 
 
     struct PrintDataValuesSettings {
@@ -2618,7 +2618,7 @@ private:
     QSize _lineMarkerSize;
     QColor _lineColor;
     int _lineWidth;
-    PenStyle _lineStyle;
+	Qt::PenStyle _lineStyle;
     typedef QMap<uint, Qt::PenStyle> LineStyleMap;
     LineStyleMap _datasetLineStyles;
     AreaChartSubType _areaChartSubType;

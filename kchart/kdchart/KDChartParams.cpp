@@ -7121,10 +7121,10 @@ void KDChartParams::setAxisDatasets( uint n, uint dataset,
 {
     uint a1 = ( KDCHART_ALL_AXES == n )
         ? 0
-        : qMin( n, KDCHART_MAX_AXES-1 );
+        : qMin( n, (uint)(KDCHART_MAX_AXES-1) );
     uint a2 = ( KDCHART_ALL_AXES == n )
         ? KDCHART_MAX_AXES-1
-        : qMin( n, KDCHART_MAX_AXES-1 );
+        : qMin( n, (uint)(KDCHART_MAX_AXES-1) );
     for( uint i = a1;  i <= a2;  ++i ) {
         _axisSettings[ i ].params.setAxisVisible( KDCHART_NO_DATASET != dataset );
         _axisSettings[ i ].dataset = dataset;

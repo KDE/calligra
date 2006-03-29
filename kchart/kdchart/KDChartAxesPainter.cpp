@@ -660,7 +660,7 @@ void KDChartAxesPainter::paintAxes( QPainter* painter,
                         // test if all texts match without mutually overlapping
                         unitedRegions = QRegion();
                         int align = nRotation
-                            ? (Qt::AlignRight | Qt::AlignVCenter) // adjusting for rotation
+                            ? (int)(Qt::AlignRight | Qt::AlignVCenter) // adjusting for rotation
                             : cv.textAlign;
                         QPoint anchor(200,200);
                         int iLeaveOut = 0;
