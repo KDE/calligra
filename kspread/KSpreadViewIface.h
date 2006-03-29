@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
-   
-   
+
+
    Copyright 2002-2003 Joseph Wenninger <jowenn@kde.org>
    Copyright 2002 John Dailey <dailey@vt.edu>
    Copyright 2001-2002 Laurent Montel <montel@kde.org>
@@ -27,6 +27,7 @@
 #define KSPREAD_VIEW_IFACE_H
 
 #include <qcolor.h>
+#include <qrect.h>
 #include <qstring.h>
 
 #include <KoViewIface.h>

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   
+
    Copyright 2000, 2003 Laurent Montel <montel@kde.org>
    Copyright 2002-2003 Joseph Wenninger <jowenn@kde.org>
    Copyright 2002 Philipp Mueller <philipp.mueller@gmx.de>
@@ -29,6 +29,7 @@
 #include <dcopobject.h>
 #include <dcopref.h>
 
+#include <qrect.h>
 #include <qstring.h>
 //Added by qt3to4:
 #include <Q3CString>

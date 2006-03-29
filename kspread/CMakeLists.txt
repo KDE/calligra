@@ -1,55 +1,55 @@
 kde4_header()
 project(kspread)
 
-add_subdirectory( dialogs ) 
-add_subdirectory( tests ) 
-add_subdirectory( plugins ) 
-add_subdirectory( pics ) 
-add_subdirectory( dtd ) 
-add_subdirectory( toolbar ) 
-add_subdirectory( extensions ) 
-add_subdirectory( sheetstyles ) 
-add_subdirectory( templates ) 
+add_subdirectory( dialogs )
+add_subdirectory( tests )
+add_subdirectory( plugins )
+add_subdirectory( pics )
+add_subdirectory( dtd )
+add_subdirectory( toolbar )
+add_subdirectory( extensions )
+add_subdirectory( sheetstyles )
+add_subdirectory( templates )
 
-include_directories( ${CMAKE_SOURCE_DIR}/interfaces ${CMAKE_SOURCE_DIR}/kchart/kdchart ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
+include_directories( ${CMAKE_SOURCE_DIR}/interfaces ${CMAKE_SOURCE_DIR}/kchart/kdchart ${KOFFICEUI_INCLUDES} ${KOFFICECORE_INCLUDES} ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
 
 
 ########### next target ###############
 set(libdialogs_SRCS
-	${CMAKE_SOURCE_DIR}/kspread/dialogs/kspread_dlg_angle.cc 
-	${CMAKE_SOURCE_DIR}/kspread/dialogs/kspread_dlg_area.cc 
+	${CMAKE_SOURCE_DIR}/kspread/dialogs/kspread_dlg_angle.cc
+	${CMAKE_SOURCE_DIR}/kspread/dialogs/kspread_dlg_area.cc
 	${CMAKE_SOURCE_DIR}/kspread/dialogs/kspread_dlg_comment.cc
-	${CMAKE_SOURCE_DIR}/kspread/dialogs/kspread_dlg_conditional.cc 
-	${CMAKE_SOURCE_DIR}/kspread/dialogs/kspread_dlg_cons.cc 
-	${CMAKE_SOURCE_DIR}/kspread/dialogs/kspread_dlg_csv.cc 
-	${CMAKE_SOURCE_DIR}/kspread/dialogs/kspread_dlg_database.cc 
-	${CMAKE_SOURCE_DIR}/kspread/dialogs/kspread_dlg_format.cc 
-	${CMAKE_SOURCE_DIR}/kspread/dialogs/kspread_dlg_formula.cc 
-	${CMAKE_SOURCE_DIR}/kspread/dialogs/kspread_dlg_goalseek.cc 
-	${CMAKE_SOURCE_DIR}/kspread/dialogs/kspread_dlg_goto.cc 
-	${CMAKE_SOURCE_DIR}/kspread/dialogs/kspread_dlg_insert.cc 
+	${CMAKE_SOURCE_DIR}/kspread/dialogs/kspread_dlg_conditional.cc
+	${CMAKE_SOURCE_DIR}/kspread/dialogs/kspread_dlg_cons.cc
+	${CMAKE_SOURCE_DIR}/kspread/dialogs/kspread_dlg_csv.cc
+	${CMAKE_SOURCE_DIR}/kspread/dialogs/kspread_dlg_database.cc
+	${CMAKE_SOURCE_DIR}/kspread/dialogs/kspread_dlg_format.cc
+	${CMAKE_SOURCE_DIR}/kspread/dialogs/kspread_dlg_formula.cc
+	${CMAKE_SOURCE_DIR}/kspread/dialogs/kspread_dlg_goalseek.cc
+	${CMAKE_SOURCE_DIR}/kspread/dialogs/kspread_dlg_goto.cc
+	${CMAKE_SOURCE_DIR}/kspread/dialogs/kspread_dlg_insert.cc
 	${CMAKE_SOURCE_DIR}/kspread/dialogs/kspread_dlg_layout.cc
-	${CMAKE_SOURCE_DIR}/kspread/dialogs/kspread_dlg_list.cc 
-	${CMAKE_SOURCE_DIR}/kspread/dialogs/kspread_dlg_paperlayout.cc 
-	${CMAKE_SOURCE_DIR}/kspread/dialogs/kspread_dlg_pasteinsert.cc 
-	${CMAKE_SOURCE_DIR}/kspread/dialogs/kspread_dlg_preference.cc 
-	${CMAKE_SOURCE_DIR}/kspread/dialogs/kspread_dlg_reference.cc 
-	${CMAKE_SOURCE_DIR}/kspread/dialogs/kspread_dlg_resize2.cc 
-	${CMAKE_SOURCE_DIR}/kspread/dialogs/kspread_dlg_series.cc 
-	${CMAKE_SOURCE_DIR}/kspread/dialogs/kspread_dlg_show.cc 
-	${CMAKE_SOURCE_DIR}/kspread/dialogs/kspread_dlg_showColRow.cc 
-	${CMAKE_SOURCE_DIR}/kspread/dialogs/kspread_dlg_sort.cc 
-	${CMAKE_SOURCE_DIR}/kspread/dialogs/kspread_dlg_special.cc 
-	${CMAKE_SOURCE_DIR}/kspread/dialogs/kspread_dlg_styles.cc 
-	${CMAKE_SOURCE_DIR}/kspread/dialogs/kspread_dlg_subtotal.cc 
-	${CMAKE_SOURCE_DIR}/kspread/dialogs/kspread_dlg_validity.cc 
+	${CMAKE_SOURCE_DIR}/kspread/dialogs/kspread_dlg_list.cc
+	${CMAKE_SOURCE_DIR}/kspread/dialogs/kspread_dlg_paperlayout.cc
+	${CMAKE_SOURCE_DIR}/kspread/dialogs/kspread_dlg_pasteinsert.cc
+	${CMAKE_SOURCE_DIR}/kspread/dialogs/kspread_dlg_preference.cc
+	${CMAKE_SOURCE_DIR}/kspread/dialogs/kspread_dlg_reference.cc
+	${CMAKE_SOURCE_DIR}/kspread/dialogs/kspread_dlg_resize2.cc
+	${CMAKE_SOURCE_DIR}/kspread/dialogs/kspread_dlg_series.cc
+	${CMAKE_SOURCE_DIR}/kspread/dialogs/kspread_dlg_show.cc
+	${CMAKE_SOURCE_DIR}/kspread/dialogs/kspread_dlg_showColRow.cc
+	${CMAKE_SOURCE_DIR}/kspread/dialogs/kspread_dlg_sort.cc
+	${CMAKE_SOURCE_DIR}/kspread/dialogs/kspread_dlg_special.cc
+	${CMAKE_SOURCE_DIR}/kspread/dialogs/kspread_dlg_styles.cc
+	${CMAKE_SOURCE_DIR}/kspread/dialogs/kspread_dlg_subtotal.cc
+	${CMAKE_SOURCE_DIR}/kspread/dialogs/kspread_dlg_validity.cc
 	${CMAKE_SOURCE_DIR}/kspread/dialogs/link.cc
 	${CMAKE_SOURCE_DIR}/kspread/dialogs/sheet_properties.cc
 	${CMAKE_SOURCE_DIR}/kspread/dialogs/kspread_dlg_find.cc
 )
 
 
-kde4_add_ui3_files(libdialogs_SRCS 
+kde4_add_ui3_files(libdialogs_SRCS
 	${CMAKE_SOURCE_DIR}/kspread/dialogs/kspreadsubtotal.ui
 	${CMAKE_SOURCE_DIR}/kspread/dialogs/sheet_properties_base.ui
 	${CMAKE_SOURCE_DIR}/kspread/dialogs/position_cell_format.ui
@@ -59,81 +59,81 @@ kde4_add_ui3_files(libdialogs_SRCS
 	)
 
 set(kspreadcommon_LIB_SRCS ${libdialogs_SRCS}
-   digest.cc 
-   commands.cc 
-   damages.cc 
-   dependencies.cc 
-   formula.cc 
-   functions.cc 
-   kspread_autofill.cc 
-   kspread_canvas.cc 
-   kspread_cell.cc 
-   kspread_cluster.cc 
-   kspread_condition.cc 
-   kspread_doc.cc 
-   kspread_editors.cc 
-   kspread_events.cc 
-   kspread_factory.cc 
-   kspread_format.cc 
-   kspread_functions_conversion.cc 
-   kspread_functions_database.cc 
-   kspread_functions_datetime.cc 
-   kspread_functions_engineering.cc 
-   kspread_functions_financial.cc 
-   kspread_functions_helper.cc 
-   kspread_functions_information.cc 
-   kspread_functions_logic.cc 
-   kspread_functions_math.cc 
-   kspread_functions_reference.cc 
-   kspread_functions_statistical.cc 
-   kspread_functions_text.cc 
-   kspread_functions_trig.cc 
-   kspread_handler.cc 
-   kspread_locale.cc 
-   kspread_map.cc 
-   kspread_numformat.cc 
-   kspread_object.cc 
-   kspread_style.cc 
-   kspread_style_manager.cc 
-   kspread_undo.cc 
-   kspread_value.cc 
-   kspread_view.cc 
-   kspread_sheet.cc 
-   kspread_sheetprint.cc 
-   kspread_util.cc 
-   kspread_toolbox.cc 
-   valuecalc.cc 
-   valueconverter.cc 
-   valueformatter.cc 
-   valueparser.cc 
-   KSpreadAppIface.cc 
-   KSpreadCellIface.cc 
-   KSpreadColumnIface.cc 
-   KSpreadDocIface.cc 
-   KSpreadLayoutIface.cc 
-   KSpreadMapIface.cc 
-   KSpreadRowIface.cc 
-   KSpreadTableIface.cc 
-   KSpreadViewIface.cc 
-   kspread_genvalidationstyle.cc 
-   region.cc 
-   selection.cc 
-   manipulator.cc 
-   manipulator_data.cc 
-   kspread_generalProperty.cpp 
+   digest.cc
+   commands.cc
+   damages.cc
+   dependencies.cc
+   formula.cc
+   functions.cc
+   kspread_autofill.cc
+   kspread_canvas.cc
+   kspread_cell.cc
+   kspread_cluster.cc
+   kspread_condition.cc
+   kspread_doc.cc
+   kspread_editors.cc
+   kspread_events.cc
+   kspread_factory.cc
+   kspread_format.cc
+   kspread_functions_conversion.cc
+   kspread_functions_database.cc
+   kspread_functions_datetime.cc
+   kspread_functions_engineering.cc
+   kspread_functions_financial.cc
+   kspread_functions_helper.cc
+   kspread_functions_information.cc
+   kspread_functions_logic.cc
+   kspread_functions_math.cc
+   kspread_functions_reference.cc
+   kspread_functions_statistical.cc
+   kspread_functions_text.cc
+   kspread_functions_trig.cc
+   kspread_handler.cc
+   kspread_locale.cc
+   kspread_map.cc
+   kspread_numformat.cc
+   kspread_object.cc
+   kspread_style.cc
+   kspread_style_manager.cc
+   kspread_undo.cc
+   kspread_value.cc
+   kspread_view.cc
+   kspread_sheet.cc
+   kspread_sheetprint.cc
+   kspread_util.cc
+   kspread_toolbox.cc
+   valuecalc.cc
+   valueconverter.cc
+   valueformatter.cc
+   valueparser.cc
+   KSpreadAppIface.cc
+   KSpreadCellIface.cc
+   KSpreadColumnIface.cc
+   KSpreadDocIface.cc
+   KSpreadLayoutIface.cc
+   KSpreadMapIface.cc
+   KSpreadRowIface.cc
+   KSpreadTableIface.cc
+   KSpreadViewIface.cc
+   kspread_genvalidationstyle.cc
+   region.cc
+   selection.cc
+   manipulator.cc
+   manipulator_data.cc
+   kspread_generalProperty.cpp
    kspread_propertyEditor.cpp )
 
 kde4_automoc(${kspreadcommon_LIB_SRCS})
 
-kde4_add_dcop_skels(kspreadcommon_LIB_SRCS 
-   KSpreadAppIface.h 
-   KSpreadCellIface.h 
-   KSpreadColumnIface.h 
-   KSpreadDocIface.h 
-   KSpreadLayoutIface.h 
-   KSpreadMapIface.h 
-   KSpreadRowIface.h 
-   KSpreadTableIface.h 
+kde4_add_dcop_skels(kspreadcommon_LIB_SRCS
+   KSpreadAppIface.h
+   KSpreadCellIface.h
+   KSpreadColumnIface.h
+   KSpreadDocIface.h
+   KSpreadLayoutIface.h
+   KSpreadMapIface.h
+   KSpreadRowIface.h
+   KSpreadTableIface.h
    KSpreadViewIface.h )
 
 kde4_add_library(kspreadcommon SHARED ${kspreadcommon_LIB_SRCS})
@@ -216,7 +216,7 @@ kde4_footer()
 #	KSpreadMapIface.skel KSpreadRowIface.skel KSpreadRowIface.cc KSpreadTableIface.cc \
 #	KSpreadTableIface.skel KSpreadViewIface.skel KSpreadViewIface.cc \
 #		kspread_genvalidationstyle.cc region.cc selection.cc manipulator.cc manipulator_data.cc \
-#	kspread_generalProperty.cpp kspread_propertyEditor.cpp 
+#	kspread_generalProperty.cpp kspread_propertyEditor.cpp
 #
 #libkspreadcommon_la_LDFLAGS = $(all_libraries) $(KDE_RPATH) -no-undefined
 #libkspreadcommon_la_LIBADD = $(top_builddir)/interfaces/libkochart.la \
@@ -245,7 +245,7 @@ kde4_footer()
 #rcdir = $(kde_datadir)/kspread
 #rc_DATA = kspread.rc kspread_readonly.rc
 #
-#SUBDIRS = dialogs tests . plugins pics dtd toolbar extensions sheetstyles templates 
+#SUBDIRS = dialogs tests . plugins pics dtd toolbar extensions sheetstyles templates
 #
 #parser:
 #	flex lex.l
