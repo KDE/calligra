@@ -48,7 +48,7 @@
 //Added by qt3to4:
 #include <QResizeEvent>
 #include <Q3PopupMenu>
-#include <Q3Frame>
+#include <QFrame>
 #include <QKeyEvent>
 #include <QEvent>
 #include <Q3GridLayout>
@@ -180,7 +180,7 @@ public:
 
     // GUI elements
     QWidget *frame;
-    Q3Frame *toolWidget;
+    QFrame *toolWidget;
     Canvas *canvas;
     VBorder *vBorderWidget;
     HBorder *hBorderWidget;
@@ -192,9 +192,9 @@ public:
     // formulabar, consists of:
     Q3HBoxLayout* formulaBarLayout;
     ComboboxLocationEditWidget *posWidget;
-    Q3Button* formulaButton;
-    Q3Button *okButton;
-    Q3Button *cancelButton;
+    QAbstractButton* formulaButton;
+    QAbstractButton *okButton;
+    QAbstractButton *cancelButton;
     KSpread::EditWidget *editWidget;
     Q3GridLayout* viewLayout;
     Q3HBoxLayout* tabScrollBarLayout;
@@ -1923,7 +1923,7 @@ void View::initView()
     d->vertScrollBar->setPageStep(60);  //This should be controlled dynamically, depending on how many rows are shown
 
     // Edit Bar
-    d->toolWidget = new Q3Frame( this );
+    d->toolWidget = new QFrame( this );
 
     d->formulaBarLayout = new Q3HBoxLayout( d->toolWidget );
     d->formulaBarLayout->setMargin( 4 );
@@ -3819,8 +3819,8 @@ void View::setActiveSheet( Sheet * _t, bool updateSheet )
   d->adjustWorkbookActions( !doc()->map()->isProtected() );
 
   /* see if there was a previous selection on this other sheet */
-  QMapIterator<Sheet*, QPoint> it = d->savedAnchors.find(d->activeSheet);
-  QMapIterator<Sheet*, QPoint> it2 = d->savedMarkers.find(d->activeSheet);
+  QMap<Sheet*, QPoint>::Iterator it = d->savedAnchors.find(d->activeSheet);
+  QMap<Sheet*, QPoint>::Iterator it2 = d->savedMarkers.find(d->activeSheet);
 
   // TODO Stefan: store the save markers/anchors in the Selection?
   QPoint newAnchor = (it == d->savedAnchors.end()) ? QPoint(1,1) : *it;

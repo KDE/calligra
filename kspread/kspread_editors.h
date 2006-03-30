@@ -38,7 +38,7 @@
 
 class KTextEdit;
 class QFont;
-class Q3Button;
+class QAbstractButton;
 class QTextCursor;
 class QTextEdit;
 
@@ -296,7 +296,7 @@ class EditWidget : public QLineEdit
     Q_OBJECT
 public:
     EditWidget( QWidget *parent, Canvas *canvas,
-                       Q3Button *cancelButton, Q3Button *okButton);
+                QAbstractButton *cancelButton, QAbstractButton *okButton);
 
     virtual void setText( const QString& t );
 
@@ -313,8 +313,8 @@ protected:
     virtual void focusOutEvent( QFocusEvent* ev );
 
 private:
-    Q3Button* m_pCancelButton;
-    Q3Button* m_pOkButton;
+    QAbstractButton* m_pCancelButton;
+    QAbstractButton* m_pOkButton;
     Canvas* m_pCanvas;
     bool isArray;
 };
