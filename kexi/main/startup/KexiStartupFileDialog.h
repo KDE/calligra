@@ -21,6 +21,8 @@
 #define _KexiStartupFileDialog_h_
 
 #include <kfiledialog.h>
+//Added by qt3to4:
+#include <QEvent>
 
 #ifdef Q_WS_WIN
 # include "KexiStartupFileDialogBase_win.h"

@@ -23,7 +23,7 @@
 #include <kmimetype.h>
 #include <kexidb/driver.h>
 
-KexiPrjTypeSelector::KexiPrjTypeSelector( QWidget* parent,  const char* name, WFlags fl )
+KexiPrjTypeSelector::KexiPrjTypeSelector( QWidget* parent,  const char* name, Qt::WFlags fl )
 	: KexiPrjTypeSelectorBase( parent, name, fl )
 {
 	QString none;

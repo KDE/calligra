@@ -33,8 +33,10 @@
 #include <qlayout.h>
 #include <qpainter.h>
 #include <qcheckbox.h>
-#include <qwhatsthis.h>
-#include <qpaintdevicemetrics.h>
+#include <q3whatsthis.h>
+#include <q3paintdevicemetrics.h>
+//Added by qt3to4:
+#include <QPixmap>
 
 #include <kprinter.h>
 
@@ -210,7 +212,7 @@ void KexiSimplePrintingEngine::paintPage(int pageNumber, QPainter& painter, bool
 	const bool printer = painter.device()->devType() == QInternal::Printer;
 
 	int w = 0, h = 0;
-	m_pdm = QPaintDeviceMetrics( painter.device() );
+	m_pdm = Q3PaintDeviceMetrics( painter.device() );
 	
 	if (dynamic_cast<QWidget*>(painter.device())) {
 		w = dynamic_cast<QWidget*>(painter.device())->width();

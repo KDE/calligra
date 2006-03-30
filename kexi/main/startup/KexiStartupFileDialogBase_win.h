@@ -20,7 +20,7 @@
 #ifndef _KexiStartupFileDialogBase_win_h_
 #define _KexiStartupFileDialogBase_win_h_
 
-#include <qfiledialog.h>
+#include <q3filedialog.h>
 #include <qpushbutton.h>
 
 class KexiStartupFileDialogBasePrivate;
@@ -29,7 +29,7 @@ class KexiStartupFileDialogBasePrivate;
  Temporary moved from QKW KFileDialog implementation.
  TODO: move to KDElibs/win32 KFileDialog wrapper
 */
-class KexiStartupFileDialogBase : public QFileDialog
+class KexiStartupFileDialogBase : public Q3FileDialog
 {
 public:
 	KexiStartupFileDialogBase(const QString & dirName, const QString & filter = QString::null, 

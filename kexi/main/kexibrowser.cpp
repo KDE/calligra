@@ -22,12 +22,17 @@
 #include "kexibrowser_p.h"
 #include "kexibrowseritem.h"
 
-#include <qheader.h>
+#include <q3header.h>
 #include <qpoint.h>
 #include <qpixmapcache.h>
 #include <qtoolbutton.h>
 #include <qtooltip.h>
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
+//Added by qt3to4:
+#include <Q3VBoxLayout>
+#include <QKeyEvent>
+#include <QEvent>
+#include <Q3CString>
 
 #include <kapplication.h>
 #include <kiconloader.h>
@@ -80,7 +85,7 @@ KexiBrowser::KexiBrowser(KexiMainWindow *mainWin)
  , m_readOnly(false)
 // , m_enableExecuteArea(true)
 {
-	QVBoxLayout *lyr = new QVBoxLayout(this);
+	Q3VBoxLayout *lyr = new Q3VBoxLayout(this);
 	KexiFlowLayout *buttons_flyr = new KexiFlowLayout(lyr);
 //	buttons_flyr->addSpacing(4);
 
@@ -117,22 +122,22 @@ KexiBrowser::KexiBrowser(KexiMainWindow *mainWin)
 	m_list->setAllColumnsShowFocus(true);
 	m_list->setTooltipColumn(0);
 	m_list->renameLineEdit()->setValidator( new KexiUtils::IdentifierValidator(this) );
-	m_list->setResizeMode(QListView::LastColumn);
+	m_list->setResizeMode(Q3ListView::LastColumn);
 
-	connect(m_list, SIGNAL(contextMenu(K3ListView *, QListViewItem *, const QPoint &)),
-		this, SLOT(slotContextMenu(K3ListView*, QListViewItem *, const QPoint&)));
-	connect(m_list, SIGNAL(selectionChanged(QListViewItem*)), this,
-		SLOT(slotSelectionChanged(QListViewItem*)));
+	connect(m_list, SIGNAL(contextMenu(K3ListView *, Q3ListViewItem *, const QPoint &)),
+		this, SLOT(slotContextMenu(K3ListView*, Q3ListViewItem *, const QPoint&)));
+	connect(m_list, SIGNAL(selectionChanged(Q3ListViewItem*)), this,
+		SLOT(slotSelectionChanged(Q3ListViewItem*)));
 	
 	KConfig *config = KGlobal::config();
 	config->setGroup("MainWindow");
 	if (config->readBoolEntry("SingleClickOpensItem", false)) {
-		connect(m_list, SIGNAL(executed(QListViewItem*)), this,
-			SLOT(slotExecuteItem(QListViewItem*)));
+		connect(m_list, SIGNAL(executed(Q3ListViewItem*)), this,
+			SLOT(slotExecuteItem(Q3ListViewItem*)));
 	}
 	else {
-		connect(m_list, SIGNAL(doubleClicked(QListViewItem*)), this,
-			SLOT(slotExecuteItem(QListViewItem*)));
+		connect(m_list, SIGNAL(doubleClicked(Q3ListViewItem*)), this,
+			SLOT(slotExecuteItem(Q3ListViewItem*)));
 		m_list->enableExecuteArea = false;
 	}
 
@@ -149,7 +154,7 @@ KexiBrowser::KexiBrowser(KexiMainWindow *mainWin)
 	KexiSmallToolButton *btn = new KexiSmallToolButton(this, m_openAction);
 	buttons_flyr->add(btn);
 
-	m_designAction = new KAction(i18n("&Design"), "edit", CTRL + Qt::Key_Enter, this, 
+	m_designAction = new KAction(i18n("&Design"), "edit", Qt::CTRL + Qt::Key_Enter, this, 
 		SLOT(slotDesignObject()), this, "design_object");
 	m_designAction->setToolTip(i18n("Design object"));
 	m_designAction->setWhatsThis(i18n("Starts designing of the object selected in the list"));
@@ -274,7 +279,7 @@ KexiBrowser::slotRemoveItem(const KexiPart::Item &item)
 
 	KexiBrowserItem *it = static_cast<KexiBrowserItem*>(m_list->selectedItem());
 	
-	QListViewItem *new_item_to_select = 0;
+	Q3ListViewItem *new_item_to_select = 0;
 	if (it==to_remove) {//compute item to select if current one will be removed
 		new_item_to_select = it->itemBelow();//nearest item to select
 		if (!new_item_to_select || new_item_to_select->parent()!=it->parent()) {
@@ -288,7 +293,7 @@ KexiBrowser::slotRemoveItem(const KexiPart::Item &item)
 }
 
 void
-KexiBrowser::slotContextMenu(K3ListView* /*list*/, QListViewItem *item, const QPoint &pos)
+KexiBrowser::slotContextMenu(K3ListView* /*list*/, Q3ListViewItem *item, const QPoint &pos)
 {
 	if(!item)
 		return;
@@ -323,7 +328,7 @@ KexiBrowser::slotContextMenu(K3ListView* /*list*/, QListViewItem *item, const QP
 }
 
 void
-KexiBrowser::slotExecuteItem(QListViewItem *vitem)
+KexiBrowser::slotExecuteItem(Q3ListViewItem *vitem)
 {
 //	kDebug() << "KexiBrowser::slotExecuteItem()" << endl;
 	KexiBrowserItem *it = static_cast<KexiBrowserItem*>(vitem);
@@ -336,7 +341,7 @@ KexiBrowser::slotExecuteItem(QListViewItem *vitem)
 }
 
 void
-KexiBrowser::slotSelectionChanged(QListViewItem* i)
+KexiBrowser::slotSelectionChanged(Q3ListViewItem* i)
 {
 	KexiBrowserItem *it = static_cast<KexiBrowserItem*>(i);
 	KexiPart::Part* part = Kexi::partManager().part(it->info());
@@ -381,7 +386,7 @@ KexiBrowser::slotSelectionChanged(QListViewItem* i)
 			m_newObjectToolButton->setIconSet( part->info()->createItemIcon() );
 			m_newObjectToolButton->setToolTip( 
 				i18n("Create object: %1").arg( part->instanceCaption().lower() ));
-			QWhatsThis::add(m_newObjectToolButton, 
+			Q3WhatsThis::add(m_newObjectToolButton, 
 				i18n("Creates a new object: %1").arg( part->instanceCaption().lower() ));
 		} else {
 			m_newObjectAction->setText(i18n("&Create Object..."));
@@ -389,7 +394,7 @@ KexiBrowser::slotSelectionChanged(QListViewItem* i)
 //			m_newObjectToolbarAction->setText(m_newObjectAction->text());
 			m_newObjectToolButton->setIconSet( "filenew" );
 			m_newObjectToolButton->setToolTip( i18n("Create object"));
-			QWhatsThis::add(m_newObjectToolButton, i18n("Creates a new object"));
+			Q3WhatsThis::add(m_newObjectToolButton, i18n("Creates a new object"));
 		}
 	}
 	emit selectionChanged(it ? it->item() : 0);
@@ -410,25 +415,25 @@ bool KexiBrowser::eventFilter ( QObject *o, QEvent * e )
 		if (e->type()==QEvent::Hide) 
 			itemRenameDone();
 	}
-	else if (e->type()==QEvent::AccelOverride) {
+	else if (e->type()==QEvent::ShortcutOverride) {
 		QKeyEvent *ke = static_cast<QKeyEvent*>(e);
 		//override delete action
-		if (ke->key()==Qt::Key_Delete && ke->state()==NoButton) {
+		if (ke->key()==Qt::Key_Delete && ke->state()==Qt::NoButton) {
 			slotRemove();
 			ke->accept();
 			return true;
 		}
-		if (ke->key()==Qt::Key_F2 && ke->state()==NoButton) {
+		if (ke->key()==Qt::Key_F2 && ke->state()==Qt::NoButton) {
 			slotRename();
 			ke->accept();
 			return true;
 		}
 		else if (ke->key()==Qt::Key_Enter || ke->key()==Qt::Key_Return) {
-			if (ke->state()==Qt::ControlButton) {
+			if (ke->state()==Qt::ControlModifier) {
 				slotDesignObject();
 			}
 			else if (ke->state()==0 && !m_list->renameLineEdit()->isVisible()) {
-				QListViewItem *it = m_list->selectedItem();
+				Q3ListViewItem *it = m_list->selectedItem();
 				if (it)
 					slotExecuteItem(it);
 			}
@@ -591,7 +596,7 @@ KexiPart::Item* KexiBrowser::selectedPartItem() const
 	return it ? it->item() : 0;
 }
 
-bool KexiBrowser::actionEnabled(const QCString& actionName) const
+bool KexiBrowser::actionEnabled(const Q3CString& actionName) const
 {
 	if (actionName=="project_export_data_table")
 		return m_itemPopup->isItemVisible(m_exportActionMenu_id);
@@ -646,7 +651,7 @@ KexiBrowserListView::~KexiBrowserListView()
 {
 }
 
-void KexiBrowserListView::rename(QListViewItem *item, int c)
+void KexiBrowserListView::rename(Q3ListViewItem *item, int c)
 {
 	if (renameLineEdit()->isVisible())
 		return;

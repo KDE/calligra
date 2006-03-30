@@ -21,7 +21,9 @@
 #define KEXISIMPLEPRINTPREVIEWWINDOW_H
 
 #include <qpainter.h>
-#include <qscrollview.h>
+#include <q3scrollview.h>
+//Added by qt3to4:
+#include <QEvent>
 #include <ktoolbar.h>
 #include <KoPageLayoutDia.h>
 
@@ -37,7 +39,7 @@ class KexiSimplePrintPreviewWindow : public QWidget
 
 	public:
 		KexiSimplePrintPreviewWindow(KexiSimplePrintingEngine &engine,
-			const QString& previewName, QWidget *parent, WFlags f = 0);
+			const QString& previewName, QWidget *parent, Qt::WFlags f = 0);
 		~KexiSimplePrintPreviewWindow();
 
 		int currentPage() const { return m_pageNumber; }

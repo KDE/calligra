@@ -22,6 +22,8 @@
 
 #include <qstring.h>
 #include <qwidget.h>
+//Added by qt3to4:
+#include <Q3CString>
 #include <kpassworddialog.h>
 
 #include <core/kexistartupdata.h>
@@ -119,7 +121,7 @@ class KEXIMAIN_EXPORT KexiStartupHandler
 //		void slotShowConnectionDetails();
 
 	protected:
-		bool getAutoopenObjects(KCmdLineArgs *args, const QCString &action_name);
+		bool getAutoopenObjects(KCmdLineArgs *args, const Q3CString &action_name);
 
 		KexiStartupHandlerPrivate *d;
 };

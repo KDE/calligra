@@ -22,6 +22,8 @@
 
 #include <qlabel.h>
 #include <qlayout.h>
+//Added by qt3to4:
+#include <Q3GridLayout>
 #include <klineedit.h>
 
 namespace KexiUtils {
@@ -35,12 +37,12 @@ class KEXIMAIN_EXPORT KexiNameWidget : public QWidget
 
 	public:
 		KexiNameWidget(const QString& message, 
-			QWidget * parent = 0, const char * name = 0, WFlags fl = 0);
+			QWidget * parent = 0, const char * name = 0, Qt::WFlags fl = 0);
 
 		KexiNameWidget(const QString& message, 
 			const QString& nameLabel, const QString& nameText, 
 			const QString& captionLabel, const QString& captionText, 
-			QWidget * parent = 0, const char * name = 0, WFlags fl = 0);
+			QWidget * parent = 0, const char * name = 0, Qt::WFlags fl = 0);
 
 		virtual ~KexiNameWidget(); 
 
@@ -128,7 +130,7 @@ class KEXIMAIN_EXPORT KexiNameWidget : public QWidget
 		QLabel* lbl_name;
 		KLineEdit* le_caption;
 		KLineEdit* le_name;
-		QGridLayout* lyr;
+		Q3GridLayout* lyr;
 		KexiUtils::MultiValidator *m_validator;
 		QString m_nameWarning, m_captionWarning;
 

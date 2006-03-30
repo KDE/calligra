@@ -24,9 +24,12 @@
 #include <kexiutils/utils.h>
 
 #include <qlayout.h>
-#include <qobjectlist.h>
+#include <qobject.h>
 #include <qpushbutton.h>
 #include <qapplication.h>
+//Added by qt3to4:
+#include <QKeyEvent>
+#include <QEvent>
 
 #include <kmessagebox.h>
 #include <klocale.h>
@@ -192,12 +195,12 @@ void KexiStartupFileDialog::updateFilters()
 //	}
 	//remove duplicates made because upper- and lower-case extenstions are used:
 	QStringList allfiltersUnique;
-	QDict<char> uniqueDict(499, false);
+	Q3Dict<char> uniqueDict(499, false);
 	foreach (QStringList::ConstIterator, it, allfilters) {
 //		kDebug() << *it << endl;
 		uniqueDict.insert(*it, (char*)1);
 	}
-	foreach_dict (QDictIterator<char>, it, uniqueDict) {
+	foreach_dict (Q3DictIterator<char>, it, uniqueDict) {
 		allfiltersUnique += it.currentKey();
 	}
 	allfiltersUnique.sort();

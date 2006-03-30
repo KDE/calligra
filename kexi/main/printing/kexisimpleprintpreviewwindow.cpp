@@ -23,9 +23,17 @@
 #include <kexi_version.h>
 
 #include <qlayout.h>
-#include <qaccel.h>
+#include <q3accel.h>
 #include <qtimer.h>
 #include <qlabel.h>
+//Added by qt3to4:
+#include <QPixmap>
+#include <QPaintEvent>
+#include <QEvent>
+#include <QKeyEvent>
+#include <Q3Frame>
+#include <QResizeEvent>
+#include <Q3VBoxLayout>
 
 #include <kdialogbase.h>
 
@@ -37,7 +45,7 @@
 
 KexiSimplePrintPreviewView::KexiSimplePrintPreviewView(
 	QWidget *parent, KexiSimplePrintPreviewWindow *window)
- : QWidget(parent, "KexiSimplePrintPreviewView", WStaticContents)//|WNoAutoErase)
+ : QWidget(parent, "KexiSimplePrintPreviewView", Qt::WStaticContents)//|WNoAutoErase)
  , m_window(window)
 {
 	enablePainting = false;
@@ -54,7 +62,7 @@ void KexiSimplePrintPreviewView::paintEvent( QPaintEvent *pe )
 	QPainter p;
 	p.begin(&pm, this);
 //! @todo only for screen!
-	p.fillRect(QRect(QPoint(0,0),pm.size()), QBrush(white));//pe->rect(), QBrush(white));
+	p.fillRect(QRect(QPoint(0,0),pm.size()), QBrush(Qt::white));//pe->rect(), QBrush(white));
 	if (m_window->currentPage()>=0)
 		m_window->m_engine.paintPage(m_window->currentPage(), p);
 //		emit m_window->paintingPageRequested(m_window->currentPage(), p);
@@ -68,7 +76,7 @@ void KexiSimplePrintPreviewView::paintEvent( QPaintEvent *pe )
 
 KexiSimplePrintPreviewScrollView::KexiSimplePrintPreviewScrollView(
 	KexiSimplePrintPreviewWindow *window)
- : QScrollView(window, "scrollview", WStaticContents|WNoAutoErase)
+ : Q3ScrollView(window, "scrollview", Qt::WStaticContents|Qt::WNoAutoErase)
  , m_window(window)
 {
 //			this->settings = settings;
@@ -86,7 +94,7 @@ KexiSimplePrintPreviewScrollView::KexiSimplePrintPreviewScrollView(
 
 void KexiSimplePrintPreviewScrollView::resizeEvent( QResizeEvent *re )
 {
-	QScrollView::resizeEvent(re);
+	Q3ScrollView::resizeEvent(re);
 //	kDebug() << re->size().width() << " " << re->size().height() << endl;
 //	kDebug() << contentsWidth() << " " << contentsHeight() << endl;
 //	kDebug() << widget->width() << " " << widget->height() << endl;
@@ -137,14 +145,14 @@ void KexiSimplePrintPreviewScrollView::setContentsPos(int x, int y)
 //	kDebug() << "############" << x << " " << y << " " << contentsX()<< " " <<contentsY() << endl;
 	if (x<0 || y<0) //to avoid endless loop on Linux
 		return;
-	QScrollView::setContentsPos(x,y);
+	Q3ScrollView::setContentsPos(x,y);
 }
 
 //------------------
 
 KexiSimplePrintPreviewWindow::KexiSimplePrintPreviewWindow(
 	KexiSimplePrintingEngine &engine, const QString& previewName, 
-	QWidget *parent, WFlags f)
+	QWidget *parent, Qt::WFlags f)
  : QWidget(parent, "KexiSimplePrintPreviewWindow", f)
  , m_engine(engine)
  , m_settings(*m_engine.settings())
@@ -154,12 +162,12 @@ KexiSimplePrintPreviewWindow::KexiSimplePrintPreviewWindow(
 
 	setCaption(i18n("%1 - Print Preview - %2").arg(previewName).arg(KEXI_APP_NAME));
 	setIcon(DesktopIcon("filequickprint"));
-	QVBoxLayout *lyr = new QVBoxLayout(this, 6);
+	Q3VBoxLayout *lyr = new Q3VBoxLayout(this, 6);
 
 	int id;
 	m_toolbar = new KToolBar(0, this);
 	m_toolbar->setLineWidth(0);
-	m_toolbar->setFrameStyle(QFrame::NoFrame);
+	m_toolbar->setFrameStyle(Q3Frame::NoFrame);
 	m_toolbar->setIconText(KToolBar::IconTextRight);
 	lyr->addWidget(m_toolbar);
 
@@ -197,7 +205,7 @@ KexiSimplePrintPreviewWindow::KexiSimplePrintPreviewWindow(
 	m_navToolbar = new KToolBar(0, this);
 //	m_navToolbar->setFullWidth(true);
 	m_navToolbar->setLineWidth(0);
-	m_navToolbar->setFrameStyle(QFrame::NoFrame);
+	m_navToolbar->setFrameStyle(Q3Frame::NoFrame);
 	m_navToolbar->setIconText(KToolBar::IconTextRight);
 	lyr->addWidget(m_navToolbar);
 
@@ -345,7 +353,7 @@ bool KexiSimplePrintPreviewWindow::event( QEvent * e )
 			return true;
 		}
 	}
-	else if (t==QEvent::AccelOverride) {
+	else if (t==QEvent::ShortcutOverride) {
 		QKeyEvent *ke = static_cast<QKeyEvent*>(e);
 		const int k = ke->key();
 		bool ok = true;

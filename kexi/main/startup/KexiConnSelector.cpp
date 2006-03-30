@@ -45,14 +45,18 @@
 #include <qlayout.h>
 #include <qcheckbox.h>
 #include <qtooltip.h>
-#include <qtextedit.h>
-#include <qgroupbox.h>
-#include <qwidgetstack.h>
-#include <qbuttongroup.h>
+#include <q3textedit.h>
+#include <q3groupbox.h>
+#include <q3widgetstack.h>
+#include <q3buttongroup.h>
+//Added by qt3to4:
+#include <Q3VBoxLayout>
+#include <QPixmap>
+#include <Q3Frame>
 
 ConnectionDataLVItem::ConnectionDataLVItem(KexiDB::ConnectionData *data, 
-	const KexiDB::Driver::Info& info, QListView *list)
-	: QListViewItem(list)
+	const KexiDB::Driver::Info& info, Q3ListView *list)
+	: Q3ListViewItem(list)
 	, m_data(data)
 {
 	update(info);
@@ -90,7 +94,7 @@ public:
 	QWidget* openExistingWidget;
 	KexiPrjTypeSelector* prjTypeSelector;
 	QString startDirOrVariable;
-	QWidgetStack *stack;
+	Q3WidgetStack *stack;
 	QPointer<KexiDBConnectionSet> conn_set;
 	KexiDB::DriverManager manager;
 	bool conn_sel_shown;//! helper
@@ -111,24 +115,24 @@ KexiConnSelectorWidget::KexiConnSelectorWidget( KexiDBConnectionSet& conn_set,
 	const QPixmap &icon = KGlobal::iconLoader()->loadIcon( iconname, K3Icon::Desktop );
 	setIcon( icon );
 
-	QVBoxLayout* globalLyr = new QVBoxLayout( this );
+	Q3VBoxLayout* globalLyr = new Q3VBoxLayout( this );
 
 	//create header with radio buttons
 	d->openExistingWidget = new QWidget(this, "openExistingWidget");
-	QVBoxLayout* openExistingWidgetLyr = new QVBoxLayout( d->openExistingWidget );
+	Q3VBoxLayout* openExistingWidgetLyr = new Q3VBoxLayout( d->openExistingWidget );
 //	QLabel* lbl = new QLabel(i18n("<b>Select existing Kexi project to open:</b>"), openExistingWidget);
 //	openExistingWidgetLyr->addWidget( lbl );
 	d->prjTypeSelector = new KexiPrjTypeSelector( d->openExistingWidget );
 	connect(d->prjTypeSelector->buttonGroup,SIGNAL(clicked(int)),this,SLOT(slotPrjTypeSelected(int)));
 	openExistingWidgetLyr->addWidget( d->prjTypeSelector );
 	openExistingWidgetLyr->addSpacing( KDialogBase::spacingHint() );
-	QFrame* line = new QFrame( d->openExistingWidget, "line" );
-	line->setFrameShape( QFrame::HLine );
-	line->setFrameShadow( QFrame::Sunken );
+	Q3Frame* line = new Q3Frame( d->openExistingWidget, "line" );
+	line->setFrameShape( Q3Frame::HLine );
+	line->setFrameShadow( Q3Frame::Sunken );
 	openExistingWidgetLyr->addWidget( line );
 	globalLyr->addWidget(d->openExistingWidget);
 
-	d->stack = new QWidgetStack(this, "stack");
+	d->stack = new Q3WidgetStack(this, "stack");
 	globalLyr->addWidget(d->stack);
 
 //	m_file = new KexiOpenExistingFile( this, "KexiOpenExistingFile");
@@ -152,10 +156,10 @@ KexiConnSelectorWidget::KexiConnSelectorWidget( KexiDBConnectionSet& conn_set,
 	if (m_remote->layout())
 		m_remote->layout()->setMargin(0);
 //	connect(m_remote->btn_back,SIGNAL(clicked()),this,SLOT(showSimpleConn()));
-	connect(m_remote->list,SIGNAL(doubleClicked(QListViewItem*)),
-		this,SLOT(slotConnectionItemExecuted(QListViewItem*)));
-	connect(m_remote->list,SIGNAL(returnPressed(QListViewItem*)),
-		this,SLOT(slotConnectionItemExecuted(QListViewItem*)));
+	connect(m_remote->list,SIGNAL(doubleClicked(Q3ListViewItem*)),
+		this,SLOT(slotConnectionItemExecuted(Q3ListViewItem*)));
+	connect(m_remote->list,SIGNAL(returnPressed(Q3ListViewItem*)),
+		this,SLOT(slotConnectionItemExecuted(Q3ListViewItem*)));
 	connect(m_remote->list,SIGNAL(selectionChanged()),
 		this,SLOT(slotConnectionSelectionChanged()));
 }
@@ -291,7 +295,7 @@ void KexiConnSelectorWidget::setSelectedFileName(const QString& fileName)
 	return m_fileDlg->setSelection(fileName);
 }
 
-void KexiConnSelectorWidget::slotConnectionItemExecuted(QListViewItem *item)
+void KexiConnSelectorWidget::slotConnectionItemExecuted(Q3ListViewItem *item)
 {
 	emit connectionItemExecuted(static_cast<ConnectionDataLVItem*>(item));
 }
@@ -319,7 +323,7 @@ void KexiConnSelectorWidget::slotConnectionSelectionChanged()
 	emit connectionItemHighlighted(item);
 }
 
-QListView* KexiConnSelectorWidget::connectionsList() const
+Q3ListView* KexiConnSelectorWidget::connectionsList() const
 {
 	return m_remote->list;
 }
@@ -422,7 +426,7 @@ void KexiConnSelectorWidget::slotRemoteRemoveBtnClicked()
 		KMessageBox::Notify|KMessageBox::Dangerous))
 		return;
 
-	QListViewItem* nextItem = item->itemBelow();
+	Q3ListViewItem* nextItem = item->itemBelow();
 	if (!nextItem)
 		nextItem = item->itemAbove();
 	if (!d->conn_set->removeConnectionData(item->data()))

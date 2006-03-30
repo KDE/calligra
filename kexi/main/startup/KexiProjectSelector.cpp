@@ -32,7 +32,10 @@
 #include <qlabel.h>
 #include <qpushbutton.h>
 #include <qlayout.h>
-#include <qlistview.h>
+#include <q3listview.h>
+//Added by qt3to4:
+#include <Q3VBoxLayout>
+#include <QPixmap>
 
 #include <assert.h>
 
@@ -53,12 +56,12 @@ public:
 /*================================================================*/
 
 //! helper class
-class ProjectDataLVItem : public QListViewItem
+class ProjectDataLVItem : public Q3ListViewItem
 {
 public:
 	ProjectDataLVItem(KexiProjectData *d, 
 		const KexiDB::Driver::Info& info, KexiProjectSelectorWidget *selector )
-		: QListViewItem(selector->list)
+		: Q3ListViewItem(selector->list)
 		, data(d)
 	{
 		int colnum = 0;
@@ -121,8 +124,8 @@ KexiProjectSelectorWidget::KexiProjectSelectorWidget(
 
 	//show projects
 	setProjectSet( m_prj_set );
-	connect(list,SIGNAL(doubleClicked(QListViewItem*)),this,SLOT(slotItemExecuted(QListViewItem*)));
-	connect(list,SIGNAL(returnPressed(QListViewItem*)),this,SLOT(slotItemExecuted(QListViewItem*)));
+	connect(list,SIGNAL(doubleClicked(Q3ListViewItem*)),this,SLOT(slotItemExecuted(Q3ListViewItem*)));
+	connect(list,SIGNAL(returnPressed(Q3ListViewItem*)),this,SLOT(slotItemExecuted(Q3ListViewItem*)));
 	connect(list,SIGNAL(selectionChanged()),this,SLOT(slotItemSelected()));
 }
 
@@ -142,7 +145,7 @@ KexiProjectData* KexiProjectSelectorWidget::selectedProjectData() const
 	return 0;
 }
 
-void KexiProjectSelectorWidget::slotItemExecuted(QListViewItem *item)
+void KexiProjectSelectorWidget::slotItemExecuted(Q3ListViewItem *item)
 {
 	if (!d->selectable)
 		return;
@@ -204,7 +207,7 @@ void KexiProjectSelectorWidget::setSelectable(bool set)
 		return;
 	d->selectable = set;
 	//update items' state
-	QListViewItemIterator it( list );
+	Q3ListViewItemIterator it( list );
 	while ( it.current() ) {
 		it.current()->setSelectable( d->selectable );
 	}
@@ -260,7 +263,7 @@ void KexiProjectSelectorDialog::init(KexiProjectSet* prj_set, bool showProjectNa
 {
 	setSizeGripEnabled(true);
 	
-	QVBoxLayout *lyr = new QVBoxLayout(plainPage(), 0, KDialogBase::spacingHint(), "lyr");
+	Q3VBoxLayout *lyr = new Q3VBoxLayout(plainPage(), 0, KDialogBase::spacingHint(), "lyr");
 	m_sel = new KexiProjectSelectorWidget(plainPage(), "sel", 
 		prj_set, showProjectNameColumn, showConnectionColumns);
 	lyr->addWidget(m_sel);

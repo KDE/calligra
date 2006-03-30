@@ -28,6 +28,9 @@
 
 #include <qlabel.h>
 #include <qsplitter.h>
+//Added by qt3to4:
+#include <QPixmap>
+#include <QEvent>
 
 #include <kexidb/connectiondata.h>
 
@@ -39,12 +42,12 @@ class KEXIMAIN_EXPORT TemplatesPage : public QSplitter
 	Q_OBJECT
 	
 	public:
-		TemplatesPage( Orientation o, QWidget * parent = 0, const char * name = 0 );
+		TemplatesPage( Qt::Orientation o, QWidget * parent = 0, const char * name = 0 );
 		~TemplatesPage(); 
 		void addItem(const QString& key, const QString& name, 
 			const QString& description, const QPixmap& icon);
 	private slots:
-		void itemClicked(QIconViewItem *item);
+		void itemClicked(Q3IconViewItem *item);
 	
 	public:
 		K3IconView *templates;
@@ -155,10 +158,10 @@ protected slots:
 	void templatesPageShown(QWidget *page);
 
 	//! Any icon view item has been executed (dblclicked)
-	void templateItemExecuted(QIconViewItem *item);
+	void templateItemExecuted(Q3IconViewItem *item);
 
 	//! Any icon view item has been selected
-	void templateItemSelected(QIconViewItem *item);
+	void templateItemSelected(Q3IconViewItem *item);
 
 	//! Any tab has been selected
 	void tabShown(QWidget *w);

@@ -29,7 +29,7 @@
 #include <kdebug.h>
 #include <krecentdirs.h>
 
-#include <qobjectlist.h>
+#include <qobject.h>
 #include <qlineedit.h>
 
 #include <win/win32_utils.h>
@@ -48,7 +48,7 @@ class KexiStartupFileDialogBasePrivate
 KexiStartupFileDialogBase::KexiStartupFileDialogBase(
 	const QString & dirName, const QString & filter, 
 	QWidget * parent, const char * name, bool modal )
- : QFileDialog( realStartDir(dirName), filter, parent, name, modal )
+ : Q3FileDialog( realStartDir(dirName), filter, parent, name, modal )
  , d(new KexiStartupFileDialogBasePrivate())
 {
 //	QString _dirName = dirName;
@@ -342,7 +342,7 @@ void KexiStartupFileDialogBase::init(const QString& startDir, const QString& fil
 void KexiStartupFileDialogBase::clearFilter()
 {
 	d->kde_filters = "";//(js)
-	QFileDialog::setFilter(""); //(js);
+	Q3FileDialog::setFilter(""); //(js);
 //todo    d->mimetypes.clear();
 //todo    d->hasDefaultFilter = false;
 
@@ -358,13 +358,13 @@ void KexiStartupFileDialogBase::setMode( KFile::Mode m )
 {
     //(js) translate mode for QFileDialog
     d->mode = m;
-    QFileDialog::Mode qm = (QFileDialog::Mode)0;
-    if (m & KFile::File) qm = Mode(qm | QFileDialog::AnyFile);
-    else if (m & KFile::Directory) qm = Mode(qm | QFileDialog::DirectoryOnly);
-    if (m & KFile::Files) qm = Mode(qm | QFileDialog::ExistingFiles);
-    if (m & KFile::ExistingOnly) qm = Mode(qm | QFileDialog::ExistingFile);
+    Q3FileDialog::Mode qm = (Q3FileDialog::Mode)0;
+    if (m & KFile::File) qm = Mode(qm | Q3FileDialog::AnyFile);
+    else if (m & KFile::Directory) qm = Mode(qm | Q3FileDialog::DirectoryOnly);
+    if (m & KFile::Files) qm = Mode(qm | Q3FileDialog::ExistingFiles);
+    if (m & KFile::ExistingOnly) qm = Mode(qm | Q3FileDialog::ExistingFile);
     
-    QFileDialog::setMode( qm );
+    Q3FileDialog::setMode( qm );
 /*(js)    ops->setMode(m);
     if ( ops->dirOnlyMode() ) {
 //(js)        filterWidget->setDefaultFilter( i18n("*|All Directories") );
@@ -423,7 +423,7 @@ void KexiStartupFileDialogBase::setFilter(const QString& filter)
         setMimeFilter( filters );
         return;
     }
-	QFileDialog::setFilters( convertKFileDialogFilterToQFileDialogFilter(filter) );
+	Q3FileDialog::setFilters( convertKFileDialogFilterToQFileDialogFilter(filter) );
 	//</js>
 //(js)    ops->clearFilter();
 //(js)    filterWidget->setFilter(copy);

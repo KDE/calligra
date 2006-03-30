@@ -21,6 +21,9 @@
 #define KEXISIMPLEPRINTPREVIEWWINDOW_P_H
 
 #include <kexisimpleprintpreviewwindow.h>
+//Added by qt3to4:
+#include <QResizeEvent>
+#include <QPaintEvent>
 
 class KexiSimplePrintPreviewView : public QWidget
 {
@@ -34,7 +37,7 @@ class KexiSimplePrintPreviewView : public QWidget
 		KexiSimplePrintPreviewWindow *m_window;
 };
 
-class KexiSimplePrintPreviewScrollView : public QScrollView
+class KexiSimplePrintPreviewScrollView : public Q3ScrollView
 {
 	Q_OBJECT
 

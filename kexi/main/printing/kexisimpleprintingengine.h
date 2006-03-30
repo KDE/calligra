@@ -1,3 +1,5 @@
+//Added by qt3to4:
+#include <Q3PtrList>
 /* This file is part of the KDE project
    Copyright (C) 2005 Jaroslaw Staniek <js@iidea.pl>
 
@@ -30,7 +32,7 @@ class KexiSimplePrintingSettings;
 #include <widget/tableview/kexitableviewdata.h>
 #include <KoPageLayoutDia.h>
 
-#include <qpaintdevicemetrics.h>
+#include <q3paintdevicemetrics.h>
 #include <qfontmetrics.h>
 #include <qfont.h>
 
@@ -99,14 +101,14 @@ class KexiSimplePrintingEngine : public QObject
 
 //		QPainter* m_painter;
 		QFont m_mainFont, m_headerFont;
-		QPaintDeviceMetrics m_pdm;
+		Q3PaintDeviceMetrics m_pdm;
 		int m_dpiX, m_dpiY;
 		uint m_pageWidth, m_pageHeight;
 		//QFontMetrics m_headerFM, m_mainFM;
 		KexiDB::Cursor *m_cursor;
 		KexiTableViewData *m_data;
 //		KexiTableViewData::Iterator *m_dataIterator;
-		QPtrList<uint> m_dataOffsets;
+		Q3PtrList<uint> m_dataOffsets;
 		QString m_headerText;
 		QString m_dateTimeText;
 		uint m_dateTimeWidth;

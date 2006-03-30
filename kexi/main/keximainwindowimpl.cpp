@@ -26,12 +26,21 @@
 #include <qeventloop.h>
 #include <qfile.h>
 #include <qtimer.h>
-#include <qobjectlist.h>
-#include <qprocess.h>
+#include <qobject.h>
+#include <q3process.h>
 #include <qtoolbutton.h>
 #include <qtooltip.h>
 #include <qmutex.h>
 #include <qwaitcondition.h>
+//Added by qt3to4:
+#include <QPixmap>
+#include <Q3CString>
+#include <QFocusEvent>
+#include <QTextStream>
+#include <QEvent>
+#include <QKeyEvent>
+#include <Q3ValueList>
+#include <Q3PopupMenu>
 
 #include <kapplication.h>
 #include <kcmdlineargs.h>
@@ -212,14 +221,14 @@ KexiMainWindowImpl::KexiMainWindowImpl()
 			//kDebug() << "name=" <<it.current()->name() << " cname="<<it.current()->className()<<endl;
 			//KexiMainWindowImpl::eventFilter() will filter our popups:
 			it.current()->installEventFilter(this);
-			d->popups.insert(it.current()->name(), static_cast<QPopupMenu*>(it.current()));
+			d->popups.insert(it.current()->name(), static_cast<Q3PopupMenu*>(it.current()));
 		}
 		delete l;
 		d->createMenu = d->popups["create"];
 
 #ifdef KEXI_NO_REPORTBUG_COMMAND
 		//remove "bug report" action to avoid confusion for supported with commercial technical support
-		QPopupMenu *helpMenu = d->popups["help"];
+		Q3PopupMenu *helpMenu = d->popups["help"];
 		if (helpMenu) {
 			//const int idx = helpMenu->indexOf( (int)KHelpMenu::menuReportBug );
 			helpMenu->removeItemAt(int(KHelpMenu::menuReportBug)-1);
@@ -240,7 +249,7 @@ KexiMainWindowImpl::KexiMainWindowImpl()
 
 	if (!isFakingSDIApplication() && !d->final) {
 //		QPopupMenu *menu = (QPopupMenu*) child( "window", "KMenu" );
-		QPopupMenu *menu = d->popups["window"];
+		Q3PopupMenu *menu = d->popups["window"];
 		unsigned int count = menuBar()->count();
 		if (menu)
 			setWindowMenu(menu);
@@ -286,7 +295,7 @@ KexiProject	*KexiMainWindowImpl::project()
 	return d->prj;
 }
 
-void KexiMainWindowImpl::setWindowMenu(QPopupMenu *menu)
+void KexiMainWindowImpl::setWindowMenu(Q3PopupMenu *menu)
 {
 	delete m_pWindowMenu;
 	m_pWindowMenu = menu;
@@ -398,7 +407,7 @@ void KexiMainWindowImpl::switchToChildframeMode(bool showMessage)
 		KexiMainWindow::switchToChildframeMode();
 }
 
-QPopupMenu* KexiMainWindowImpl::findPopupMenu(const char *popupName)
+Q3PopupMenu* KexiMainWindowImpl::findPopupMenu(const char *popupName)
 {
 	return d->popups[popupName];
 }
@@ -482,7 +491,7 @@ void KexiMainWindowImpl::initActions()
 	KStdAction::quit( this, SLOT(slotProjectQuit()), actionCollection(), "quit");
 
 #ifdef KEXI_SHOW_UNIMPLEMENTED
-	d->action_project_relations = new KAction(i18n("&Relationships..."), "relation", CTRL + Qt::Key_R,
+	d->action_project_relations = new KAction(i18n("&Relationships..."), "relation", Qt::CTRL + Qt::Key_R,
 		this, SLOT(slotProjectRelations()), actionCollection(), "project_relations");
 	d->action_project_relations->setToolTip(i18n("Project relationships"));
 	d->action_project_relations->setWhatsThis(i18n("Shows project relationships."));
@@ -587,7 +596,7 @@ void KexiMainWindowImpl::initActions()
 	d->action_edit_delete->setWhatsThis(i18n("Deletes currently selected object."));
 
 	d->action_edit_delete_row = createSharedAction(i18n("Delete Row"), "delete_table_row",
-		CTRL+Qt::Key_Delete, "edit_delete_row");
+		Qt::CTRL+Qt::Key_Delete, "edit_delete_row");
 	d->action_edit_delete_row->setToolTip(i18n("Delete currently selected row from a table"));
 	d->action_edit_delete_row->setWhatsThis(i18n("Deletes currently selected row from a table."));
 
@@ -601,7 +610,7 @@ void KexiMainWindowImpl::initActions()
 	d->action_edit_edititem->setToolTip(i18n("Edit currently selected item"));
 	d->action_edit_edititem->setWhatsThis(i18n("Edits currently selected item."));
 
-	d->action_edit_insert_empty_row = createSharedAction(i18n("&Insert Empty Row"), "insert_table_row", Qt::SHIFT | CTRL | Qt::Key_Insert, "edit_insert_empty_row");
+	d->action_edit_insert_empty_row = createSharedAction(i18n("&Insert Empty Row"), "insert_table_row", Qt::SHIFT | Qt::CTRL | Qt::Key_Insert, "edit_insert_empty_row");
 	setActionVolatile( d->action_edit_insert_empty_row, true );
 	d->action_edit_insert_empty_row->setToolTip(i18n("Insert one empty row above"));
 	d->action_edit_insert_empty_row->setWhatsThis(i18n("Inserts one empty row above currently selected table row."));
@@ -628,13 +637,13 @@ void KexiMainWindowImpl::initActions()
 	d->action_view_text_mode->setToolTip(i18n("Switch to Text View"));
 	d->action_view_text_mode->setWhatsThis(i18n("Switches to Text View."));
 
-	d->action_view_nav = new KAction(i18n("Project Navigator"), "", ALT + Qt::Key_1,
+	d->action_view_nav = new KAction(i18n("Project Navigator"), "", Qt::ALT + Qt::Key_1,
 		this, SLOT(slotViewNavigator()), actionCollection(), "view_navigator");
 	d->action_view_nav->setToolTip(i18n("Go to project navigator panel"));
 	d->action_view_nav->setWhatsThis(i18n("Goes to project navigator panel."));
 
 #ifdef KEXI_PROP_EDITOR
-	d->action_view_propeditor = new KAction(i18n("Property Editor"), "", ALT + Qt::Key_2,
+	d->action_view_propeditor = new KAction(i18n("Property Editor"), "", Qt::ALT + Qt::Key_2,
 		this, SLOT(slotViewPropertyEditor()), actionCollection(), "view_propeditor");
 	d->action_view_propeditor->setToolTip(i18n("Go to property editor panel"));
 	d->action_view_propeditor->setWhatsThis(i18n("Goes to property editor panel."));
@@ -685,9 +694,9 @@ void KexiMainWindowImpl::initActions()
 	//additional 'Window' menu items
 	d->action_window_next = new KAction( i18n("&Next Window"), "",
 #ifdef Q_WS_WIN
-		CTRL+Qt::Key_Tab,
+		Qt::CTRL+Qt::Key_Tab,
 #else
-		ALT+Qt::Key_Right,
+		Qt::ALT+Qt::Key_Right,
 #endif
 		this, SLOT(activateNextWin()), actionCollection(), "window_next");
 	d->action_window_next->setToolTip( i18n("Next window") );
@@ -695,9 +704,9 @@ void KexiMainWindowImpl::initActions()
 
 	d->action_window_previous = new KAction( i18n("&Previous Window"), "",
 #ifdef Q_WS_WIN
-		CTRL+Qt::SHIFT+Qt::Key_Tab,
+		Qt::CTRL+Qt::SHIFT+Qt::Key_Tab,
 #else
-		ALT+Qt::Key_Left,
+		Qt::ALT+Qt::Key_Left,
 #endif
 		this, SLOT(activatePrevWin()), actionCollection(), "window_previous");
 	d->action_window_previous->setToolTip( i18n("Previous window") );
@@ -716,7 +725,7 @@ void KexiMainWindowImpl::initActions()
 	d->action_show_other = new KActionMenu(i18n("Other"),
 		actionCollection(), "options_show_other");
 #ifndef KEXI_NO_CTXT_HELP
-	d->action_show_helper = new KToggleAction(i18n("Show Context Help"), "", CTRL + Qt::Key_H,
+	d->action_show_helper = new KToggleAction(i18n("Show Context Help"), "", Qt::CTRL + Qt::Key_H,
 	 actionCollection(), "options_show_contexthelp");
 #if KDE_IS_VERSION(3,2,90)
 	d->action_show_helper->setCheckedState(i18n("Hide Context Help"));
@@ -1020,13 +1029,13 @@ void KexiMainWindowImpl::slotAutoOpenObjectsLater()
 {
 	QString not_found_msg;
 	//ok, now open "autoopen: objects
-	for (QValueList<KexiProjectData::ObjectInfo>::ConstIterator it = 
+	for (Q3ValueList<KexiProjectData::ObjectInfo>::ConstIterator it = 
 			d->prj->data()->autoopenObjects.constBegin();
 		it != d->prj->data()->autoopenObjects.constEnd(); ++it )
 	{
 		KexiProjectData::ObjectInfo info = *it;
 		KexiPart::Info *i = Kexi::partManager().infoForMimeType( 
-			QCString("kexi/")+info["type"].lower().latin1() );
+			Q3CString("kexi/")+info["type"].lower().latin1() );
 		if (!i) {
 			not_found_msg += "<li>";
 			if (!info["name"].isEmpty())
@@ -1609,7 +1618,7 @@ KexiMainWindowImpl::restoreSettings()
 	if (tbe || d->config->readEntry("Position")=="Bottom") {
 		if (tbe)
 			d->config->writeEntry("Position","Bottom");
-		moveDockWindow(m_pTaskBar, DockBottom);
+		moveDockWindow(m_pTaskBar, Qt::DockBottom);
 	}
 
 	d->config->setGroup("MainWindow");
@@ -2146,8 +2155,8 @@ KexiMainWindowImpl::slotProjectNew()
 //todo:			pass new_data->caption()
 	//start new instance
 //! @todo use KProcess?
-	QProcess proc(args, this, "process");
-	proc.setCommunication((QProcess::Communication)0);
+	Q3Process proc(args, this, "process");
+	proc.setCommunication((Q3Process::Communication)0);
 //		proc.setWorkingDirectory( QFileInfo(new_data->connectionData()->fileName()).dir(true) );
 	proc.setWorkingDirectory( QFileInfo(fileName).dir(true) );
 	if (!proc.start()) {
@@ -2163,7 +2172,7 @@ KexiMainWindowImpl::createKexiProject(KexiProjectData* new_data)
 //	d->prj = ::createKexiProject(new_data);
 //provided by KexiMessageHandler	connect(d->prj, SIGNAL(error(const QString&,KexiDB::Object*)), this, SLOT(showErrorMessage(const QString&,KexiDB::Object*)));
 //provided by KexiMessageHandler	connect(d->prj, SIGNAL(error(const QString&,const QString&)), this, SLOT(showErrorMessage(const QString&,const QString&)));
-	connect(d->prj, SIGNAL(itemRenamed(const KexiPart::Item&, const QCString&)), this, SLOT(slotObjectRenamed(const KexiPart::Item&, const QCString&)));
+	connect(d->prj, SIGNAL(itemRenamed(const KexiPart::Item&, const Q3CString&)), this, SLOT(slotObjectRenamed(const KexiPart::Item&, const Q3CString&)));
 
 	if (d->nav)
 		connect(d->prj, SIGNAL(itemRemoved(const KexiPart::Item&)), d->nav, SLOT(slotRemoveItem(const KexiPart::Item&)));
@@ -2363,7 +2372,7 @@ tristate KexiMainWindowImpl::openProjectInExternalKexiInstance(const QString& aF
 	}
 //! @todo use KRun
 	args << fileName;
-	QProcess proc(args, this, "process");
+	Q3Process proc(args, this, "process");
 	proc.setWorkingDirectory( QFileInfo(fileName).dir(true) );
 	const bool ok = proc.start();
 	if (!ok) {
@@ -3100,12 +3109,12 @@ bool KexiMainWindowImpl::eventFilter( QObject *obj, QEvent * e )
 		KexiVDebug << "KEY EVENT " << QString::number(static_cast<QKeyEvent*>(e)->key(), 16) << endl;
 		KexiVDebug << endl;
 	}
-	if (e->type()==QEvent::AccelOverride) {
+	if (e->type()==QEvent::ShortcutOverride) {
 		//KexiVDebug << "AccelOverride EVENT " << static_cast<QKeyEvent*>(e)->key() << " " << static_cast<QKeyEvent*>(e)->state() == Qt::ControlButton << endl;
 
 		//avoid sending CTRL+Tab key twice for tabbed/ideal mode, epecially for win32
-		if (static_cast<QKeyEvent*>(e)->key()==Qt::Key_Tab && static_cast<QKeyEvent*>(e)->state() == Qt::ControlButton) {
-			if (d->action_window_next->shortcut().keyCodeQt()==Qt::Key_Tab+CTRL && d->action_window_next->shortcut().count()==1
+		if (static_cast<QKeyEvent*>(e)->key()==Qt::Key_Tab && static_cast<QKeyEvent*>(e)->state() == Qt::ControlModifier) {
+			if (d->action_window_next->shortcut().keyCodeQt()==Qt::Key_Tab+Qt::CTRL && d->action_window_next->shortcut().count()==1
 				&& (mdiMode()==KMdi::TabPageMode || mdiMode()==KMdi::IDEAlMode))
 			{
 				static_cast<QKeyEvent*>(e)->accept();
@@ -3269,7 +3278,7 @@ bool KexiMainWindowImpl::eventFilter( QObject *obj, QEvent * e )
 }
 
 KexiDialogBase *
-KexiMainWindowImpl::openObject(const QCString& mimeType, const QString& name, 
+KexiMainWindowImpl::openObject(const Q3CString& mimeType, const QString& name, 
 	int viewMode, bool &openingCancelled, QMap<QString,QString>* staticObjectArgs)
 {
 	KexiPart::Item *item = d->prj->itemForMimeType(mimeType,name);
@@ -3564,7 +3573,7 @@ void KexiMainWindowImpl::renameObject( KexiPart::Item *item, const QString& _new
 	d->pendingDialogsExist();
 }
 
-void KexiMainWindowImpl::slotObjectRenamed(const KexiPart::Item &item, const QCString& /*oldName*/)
+void KexiMainWindowImpl::slotObjectRenamed(const KexiPart::Item &item, const Q3CString& /*oldName*/)
 {
 #ifndef KEXI_NO_PENDING_DIALOGS
 	Private::PendingJobType pendingType;
@@ -3648,7 +3657,7 @@ void KexiMainWindowImpl::slotStartFeedbackAgent()
 	{
 		KToolInvocation::invokeMailer( "kexi-reports-dummy@kexi.org",
 			QString::null, QString::null,
-			about->appName() + QCString( " [feedback]" ),
+			about->appName() + Q3CString( " [feedback]" ),
 			wizard->feedbackDocument().toString( 2 ).local8Bit() );
 	}
 
@@ -3686,7 +3695,7 @@ void KexiMainWindowImpl::importantInfo(bool /*onStartup*/)
 		if ( f.open( QIODevice::ReadOnly ) ) {
 			QTextStream ts(&f);
 			ts.setCodec( KGlobal::locale()->codecForEncoding() );
-			QTextBrowser *tb = KexiUtils::findFirstChild<KTextBrowser>(&tipDialog,"KTextBrowser");
+			Q3TextBrowser *tb = KexiUtils::findFirstChild<KTextBrowser>(&tipDialog,"KTextBrowser");
 			if (tb) {
 				tb->setText( QString("<qt>%1</qt>").arg(ts.read()) );
 			}
@@ -4129,7 +4138,7 @@ void KexiMainWindowImpl::slotGetNewStuff()
 #endif
 }
 
-void KexiMainWindowImpl::highlightObject(const QCString& mime, const QCString& name)
+void KexiMainWindowImpl::highlightObject(const Q3CString& mime, const Q3CString& name)
 {
 	slotViewNavigator();
 	if (!d->prj)

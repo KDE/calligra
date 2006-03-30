@@ -30,11 +30,18 @@
 #include <qcombobox.h>
 #include <qcheckbox.h>
 #include <qpoint.h>
-#include <qobjectlist.h>
+#include <qobject.h>
 #include <qvgroupbox.h>
 #include <qapplication.h>
 #include <qtooltip.h>
-#include <qwidgetstack.h>
+#include <q3widgetstack.h>
+//Added by qt3to4:
+#include <Q3VBoxLayout>
+#include <QPixmap>
+#include <QLabel>
+#include <Q3Frame>
+#include <QKeyEvent>
+#include <QEvent>
 
 #include <klocale.h>
 #include <kdeversion.h>
@@ -70,7 +77,7 @@ class TemplateItem : public K3IconViewItem
 		QString key, name, description;
 };
 
-TemplatesPage::TemplatesPage( Orientation o, QWidget * parent, const char * name )
+TemplatesPage::TemplatesPage( Qt::Orientation o, QWidget * parent, const char * name )
 	: QSplitter(o, parent, name)
 {
 	templates = new K3IconView(this, "templates");
@@ -80,7 +87,7 @@ TemplatesPage::TemplatesPage( Orientation o, QWidget * parent, const char * name
 	setResizeMode(templates,KeepSize);
 	setResizeMode(info,KeepSize);
 
-	connect(templates,SIGNAL(selectionChanged(QIconViewItem*)),this,SLOT(itemClicked(QIconViewItem*)));
+	connect(templates,SIGNAL(selectionChanged(Q3IconViewItem*)),this,SLOT(itemClicked(Q3IconViewItem*)));
 }
 
 TemplatesPage::~TemplatesPage() {}
@@ -94,7 +101,7 @@ void TemplatesPage::addItem(const QString& key, const QString& name,
 	item->description=description;
 }
 
-void TemplatesPage::itemClicked(QIconViewItem *item) {
+void TemplatesPage::itemClicked(Q3IconViewItem *item) {
 	if (!item) {
 		info->setText("");
 		return;
@@ -137,7 +144,7 @@ public:
 
 	int dialogType, dialogOptions;
 
-	QFrame *pageTemplates, *pageOpenExisting, *pageOpenRecent;
+	Q3Frame *pageTemplates, *pageOpenExisting, *pageOpenRecent;
 	int pageTemplatesID;
 	int pageOpenExistingID, pageOpenRecentID;
 	int templatesSectionID_blank, templatesSectionID_import;
@@ -150,7 +157,7 @@ public:
 	KJanusWidget* templatesWidget;
 	QObject *templatesWidget_IconListBox;//helper
 
-	QWidgetStack *viewBlankTempl;
+	Q3WidgetStack *viewBlankTempl;
 	TemplatesPage *viewPersonalTempl;
 	TemplatesPage *viewBusinessTempl;
 
@@ -340,7 +347,7 @@ void KexiStartupDialog::reject()
 void KexiStartupDialog::setupPageTemplates()
 {
 	d->pageTemplates = addPage( i18n("&Create Project") );
-	QVBoxLayout *lyr = new QVBoxLayout( d->pageTemplates, 0, KDialogBase::spacingHint() );
+	Q3VBoxLayout *lyr = new Q3VBoxLayout( d->pageTemplates, 0, KDialogBase::spacingHint() );
 
 	d->templatesWidget = new KJanusWidget(
 		d->pageTemplates, "templatesWidget", KJanusWidget::IconList);
@@ -358,8 +365,8 @@ void KexiStartupDialog::setupPageTemplates()
 	}
 
 	//template groups:
-	QFrame *templPageFrame;
-	QVBoxLayout *tmplyr;
+	Q3Frame *templPageFrame;
+	Q3VBoxLayout *tmplyr;
 	QLabel *lbl_blank;
 	int itemID = 0; //used just to set up templatesSectionID_*
 
@@ -368,7 +375,7 @@ void KexiStartupDialog::setupPageTemplates()
 	QString clickMsg( "\n\n" + i18n("Click \"OK\" button to proceed.") );
 	templPageFrame = d->templatesWidget->addPage(
 		i18n("Blank Database"), i18n("New Blank Database Project"), DesktopIcon("empty") );
-	tmplyr = new QVBoxLayout(templPageFrame, 0, KDialogBase::spacingHint());
+	tmplyr = new Q3VBoxLayout(templPageFrame, 0, KDialogBase::spacingHint());
 	lbl_blank = new QLabel( 
 		i18n("Kexi will create a new blank database project.")+clickMsg, templPageFrame );
 	lbl_blank->setAlignment(Qt::AlignLeft|Qt::AlignTop|Qt::TextWordWrap);
@@ -381,7 +388,7 @@ void KexiStartupDialog::setupPageTemplates()
 	templPageFrame = d->templatesWidget->addPage(
 		i18n("Import Existing\nDatabase"), i18n("Import Existing Database as New Database Project"), 
 		DesktopIcon("database_import") );
-	tmplyr = new QVBoxLayout(templPageFrame, 0, KDialogBase::spacingHint());
+	tmplyr = new Q3VBoxLayout(templPageFrame, 0, KDialogBase::spacingHint());
 	lbl_blank = new QLabel( 
 		i18n("Kexi will import the structure and data of an existing database as a new database project.")
 		+clickMsg, templPageFrame );
@@ -458,12 +465,12 @@ void KexiStartupDialog::templatesPageShown(QWidget *page)
 	updateDialogOKButton(d->pageTemplates);
 }
 
-void KexiStartupDialog::templateItemSelected(QIconViewItem *)
+void KexiStartupDialog::templateItemSelected(Q3IconViewItem *)
 {
 	updateDialogOKButton(d->pageTemplates);
 }
 
-void KexiStartupDialog::templateItemExecuted(QIconViewItem *item)
+void KexiStartupDialog::templateItemExecuted(Q3IconViewItem *item)
 {
 	if (!item)
 		return;
@@ -479,7 +486,7 @@ void KexiStartupDialog::updateSelectedTemplateKeyInfo()
 		d->selectedTemplateKey=QString::null;
 		return;
 	}
-	QIconViewItem *item;
+	Q3IconViewItem *item;
 	if (d->templatesWidget->activePageIndex()==d->templatesSectionID_blank) {
 		d->selectedTemplateKey = "blank";
 	}
@@ -566,7 +573,7 @@ void KexiStartupDialog::setupPageOpenExisting()
 		d->pageOpenExisting = plainPage();
 	else
 		d->pageOpenExisting = addPage( i18n("Open &Existing Project") );
-	QVBoxLayout *lyr = new QVBoxLayout( d->pageOpenExisting, 0, KDialogBase::spacingHint() );
+	Q3VBoxLayout *lyr = new Q3VBoxLayout( d->pageOpenExisting, 0, KDialogBase::spacingHint() );
 
 	d->openExistingConnWidget = new KexiConnSelectorWidget(*d->connSet, 
 		":OpenExistingOrCreateNewProject",
@@ -649,7 +656,7 @@ void KexiStartupDialog::setupPageOpenRecent()
 {
 #ifdef KEXI_STARTUP_SHOW_RECENT
 	d->pageOpenRecent = addPage( i18n("Open &Recent Project") );
-	QVBoxLayout *lyr = new QVBoxLayout( d->pageOpenRecent, 0, KDialogBase::spacingHint() );
+	Q3VBoxLayout *lyr = new Q3VBoxLayout( d->pageOpenRecent, 0, KDialogBase::spacingHint() );
 	lyr->addWidget( d->prj_selector = new KexiProjectSelectorWidget(
 		d->pageOpenRecent, "prj_selector", d->recentProjects ) );
 	connect(d->prj_selector,SIGNAL(projectExecuted(KexiProjectData*)),

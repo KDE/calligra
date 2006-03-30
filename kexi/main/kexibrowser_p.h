@@ -36,7 +36,7 @@ class KexiBrowserListView : public K3ListView
 		bool nameEndsWithAsterisk : 1;
 		bool enableExecuteArea : 1; //!< used in isExecuteArea()
 	public slots:
-		virtual void rename(QListViewItem *item, int c);
+		virtual void rename(Q3ListViewItem *item, int c);
 	protected:
 };
 

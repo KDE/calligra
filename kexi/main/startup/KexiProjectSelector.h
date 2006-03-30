@@ -24,7 +24,7 @@
 #include "kexiprojectset.h"
 
 #include <kdialogbase.h>
-#include <qwidgetstack.h>
+#include <q3widgetstack.h>
 
 class KexiNewFileDBWidget;
 class KexiProjectSelectorWidgetPrivate;
@@ -77,7 +77,7 @@ signals:
 	void selectionChanged(KexiProjectData*);
 
 protected slots:
-	void slotItemExecuted(QListViewItem*);
+	void slotItemExecuted(Q3ListViewItem*);
 	void slotItemSelected();
 	virtual void languageChange() { KexiProjectSelectorBase::languageChange(); }
 

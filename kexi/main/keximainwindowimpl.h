@@ -24,6 +24,10 @@
 #include <kmessagebox.h>
 #include "core/keximainwindow.h"
 #include "core/kexiguimsghandler.h"
+//Added by qt3to4:
+#include <QEvent>
+#include <Q3PopupMenu>
+#include <Q3CString>
 
 class KexiProjectData;
 class KexiActionProxy;
@@ -81,7 +85,7 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow, public KexiGUI
 
 		virtual bool eventFilter( QObject *obj, QEvent * e );
 
-		virtual QPopupMenu* findPopupMenu(const char *popupName);
+		virtual Q3PopupMenu* findPopupMenu(const char *popupName);
 
 		/*! Implemented for KexiMainWindow. */
 		virtual KActionPtrList allActions() const;
@@ -129,7 +133,7 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow, public KexiGUI
 			bool &openingCancelled, QMap<QString,QString>* staticObjectArgs = 0);
 
 		//! For convenience
-		virtual KexiDialogBase* openObject(const QCString& mime, const QString& name, 
+		virtual KexiDialogBase* openObject(const Q3CString& mime, const QString& name, 
 			int viewMode, bool &openingCancelled, QMap<QString,QString>* staticObjectArgs = 0);
 
 		/*! Implemented for KexiMainWindow */
@@ -141,7 +145,7 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow, public KexiGUI
 			bool& allowOverwriting, const QString& messageWhenAskingForName = QString::null );
 
 		/*! Implemented for KexiMainWindow */
-		virtual void highlightObject(const QCString& mime, const QCString& name);
+		virtual void highlightObject(const Q3CString& mime, const Q3CString& name);
 
 	protected:
 		/*! Initialises final mode: constructs window according to kexi__final database
@@ -241,7 +245,7 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow, public KexiGUI
 		KexiProjectData* createBlankProjectData(bool &cancelled, bool confirmOverwrites = true, 
 			QString *shortcutFileName = 0);
 
-		void setWindowMenu(QPopupMenu *menu);
+		void setWindowMenu(Q3PopupMenu *menu);
 
 		/*! \return focused kexi window (KexiDialogBase or KexiDockBase subclass) */
 //		QWidget* focusWindow() const;
@@ -343,7 +347,7 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow, public KexiGUI
 		/*! Reaction for object rename (signalled by KexiProject).
 		 If this item has opened dialog, it's caption is updated,
 		 and also optionally application's caption. */
-		virtual void slotObjectRenamed(const KexiPart::Item &item, const QCString& oldName);
+		virtual void slotObjectRenamed(const KexiPart::Item &item, const Q3CString& oldName);
 
 		virtual void fillWindowMenu();
 

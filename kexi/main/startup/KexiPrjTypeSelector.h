@@ -28,7 +28,7 @@ class KEXIMAIN_EXPORT KexiPrjTypeSelector : public KexiPrjTypeSelectorBase
 	Q_OBJECT
 
 public:
-	KexiPrjTypeSelector( QWidget* parent = 0, const char* name = 0, WFlags fl = 0 );
+	KexiPrjTypeSelector( QWidget* parent = 0, const char* name = 0, Qt::WFlags fl = 0 );
 	~KexiPrjTypeSelector();
 
 

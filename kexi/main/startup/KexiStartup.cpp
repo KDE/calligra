@@ -55,7 +55,7 @@
 # include <kuser.h>
 #endif
 
-#include <qcstring.h>
+#include <q3cstring.h>
 #include <qapplication.h>
 #include <qlayout.h>
 
@@ -114,7 +114,7 @@ static bool stripQuotes(const QString &item, QString &name)
 void updateProgressBar(KProgressDialog *pd, char *buffer, int buflen)
 {
 	char *p = buffer;
-	QCString line(80);
+	Q3CString line(80);
 	for (int i=0; i<buflen; i++, p++) {
 		if ((i==0 || buffer[i-1]=='\n') && buffer[i]=='%') {
 			bool ok;
@@ -209,7 +209,7 @@ KexiStartupHandler::~KexiStartupHandler()
 	delete d;
 }
 
-bool KexiStartupHandler::getAutoopenObjects(KCmdLineArgs *args, const QCString &action_name)
+bool KexiStartupHandler::getAutoopenObjects(KCmdLineArgs *args, const Q3CString &action_name)
 {
 	QByteArrayList list = args->getOptionList(action_name);
 	QCStringList::ConstIterator it;

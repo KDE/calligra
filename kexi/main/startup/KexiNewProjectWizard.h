@@ -25,7 +25,7 @@
 
 #include <k3wizard.h>
 
-class QListViewItem;
+class Q3ListViewItem;
 
 class KexiNewPrjTypeSelector;
 class KexiConnSelectorWidget;
@@ -39,7 +39,7 @@ class KEXIMAIN_EXPORT KexiNewProjectWizard : public K3Wizard
 	Q_OBJECT
 	public:
 		KexiNewProjectWizard(KexiDBConnectionSet& conn_set, QWidget *parent=0, 
-			const char *name=0, bool modal=false, WFlags f=0);
+			const char *name=0, bool modal=false, Qt::WFlags f=0);
 		~KexiNewProjectWizard();
 	
 		/*! \return name for a new project's database if server-based project 
@@ -63,8 +63,8 @@ class KEXIMAIN_EXPORT KexiNewProjectWizard : public K3Wizard
 		void setConfirmOverwrites(bool set);
 
 	protected slots:
-		void slotLvTypesSelected(QListViewItem *);
-		void slotLvTypesExecuted(QListViewItem *);
+		void slotLvTypesSelected(Q3ListViewItem *);
+		void slotLvTypesExecuted(Q3ListViewItem *);
 		void slotServerDBCaptionTxtChanged(const QString &capt);
 		void slotServerDBNameTxtChanged(const QString &n);
 		

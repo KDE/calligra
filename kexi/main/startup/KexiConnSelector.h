@@ -27,16 +27,16 @@
 #include <kdialogbase.h>
 #include <k3listview.h>
 
-#include <qguardedptr.h>
+#include <qpointer.h>
 
 class KexiConnSelectorBase;
 
 //! helper class
-class ConnectionDataLVItem : public QListViewItem
+class ConnectionDataLVItem : public Q3ListViewItem
 {
 	public:
 		ConnectionDataLVItem(KexiDB::ConnectionData *data, 
-			const KexiDB::Driver::Info& info, QListView *list);
+			const KexiDB::Driver::Info& info, Q3ListView *list);
 		~ConnectionDataLVItem();
 
 		void update(const KexiDB::Driver::Info& info);
@@ -95,7 +95,7 @@ class KEXIMAIN_EXPORT KexiConnSelectorWidget : public QWidget
 //		//! Usable when we want to do other things for "back" button
 //		void disconnectShowSimpleConnButton();
 
-		QListView* connectionsList() const;
+		Q3ListView* connectionsList() const;
 		
 		KexiConnSelectorBase *m_remote;
 //		KexiOpenExistingFile *m_file;
@@ -125,7 +125,7 @@ class KEXIMAIN_EXPORT KexiConnSelectorWidget : public QWidget
 		void hideConnectonIcon();
 
 	protected slots:
-		void slotConnectionItemExecuted(QListViewItem *item);
+		void slotConnectionItemExecuted(Q3ListViewItem *item);
 		void slotRemoteAddBtnClicked();
 		void slotRemoteEditBtnClicked();
 		void slotRemoteRemoveBtnClicked();

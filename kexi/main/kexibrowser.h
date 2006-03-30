@@ -22,10 +22,13 @@
 #define KEXIBROWSER_H
 
 #include <k3listview.h>
-#include <qasciidict.h>
-#include <qintdict.h>
+#include <q3asciidict.h>
+#include <q3intdict.h>
+//Added by qt3to4:
+#include <QEvent>
+#include <Q3CString>
 
-class QListViewItem;
+class Q3ListViewItem;
 class KIconLoader;
 class KMenu;
 class KAction;
@@ -60,7 +63,7 @@ class KEXIMAIN_EXPORT KexiBrowser : public QWidget
 		void installEventFilter ( const QObject * filterObj );
 		virtual bool eventFilter ( QObject *o, QEvent * e );
 
-		bool actionEnabled(const QCString& actionName) const;
+		bool actionEnabled(const Q3CString& actionName) const;
 //		virtual bool isExecuteArea( const QPoint& point );
 
 	public slots:
@@ -105,9 +108,9 @@ class KEXIMAIN_EXPORT KexiBrowser : public QWidget
 //		void actionAvailable(const char *name, bool avail);
 
 	protected slots:
-		void slotContextMenu(K3ListView*, QListViewItem *i, const QPoint &point);
-		void slotExecuteItem(QListViewItem *item);
-		void slotSelectionChanged(QListViewItem* i);
+		void slotContextMenu(K3ListView*, Q3ListViewItem *i, const QPoint &point);
+		void slotExecuteItem(Q3ListViewItem *item);
+		void slotSelectionChanged(Q3ListViewItem* i);
 		void slotSettingsChanged(int);
 		void slotNewObjectPopupAboutToShow();
 
@@ -131,8 +134,8 @@ class KEXIMAIN_EXPORT KexiBrowser : public QWidget
 		KexiMainWindow *m_mainWin;
 		KexiBrowserListView *m_list;
 		KActionCollection *m_actions;
-		QAsciiDict<KexiBrowserItem> m_baseItems;
-		QIntDict<KexiBrowserItem> m_normalItems;
+		Q3AsciiDict<KexiBrowserItem> m_baseItems;
+		Q3IntDict<KexiBrowserItem> m_normalItems;
 		KMenu *m_itemPopup, *m_partPopup;
 		KAction *m_deleteAction, *m_renameAction, 
 			*m_newObjectAction, // *m_newObjectToolbarAction,

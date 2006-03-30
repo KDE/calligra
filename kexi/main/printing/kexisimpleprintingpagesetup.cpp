@@ -41,8 +41,11 @@
 #include <qlayout.h>
 #include <qpainter.h>
 #include <qcheckbox.h>
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
 #include <qtooltip.h>
+//Added by qt3to4:
+#include <Q3VBoxLayout>
+#include <Q3ValueList>
 
 #include <kexiutils/tristate.h>
 
@@ -134,7 +137,7 @@ bool KexiSimplePrintingCommand::print(const QString& aTitleText)
 	engine.calculatePagesCount(painter);
 
 	uint loops, loopsPerPage;
-	QValueList<int> pagesToPrint;
+	Q3ValueList<int> pagesToPrint;
 	int fromPage = 0;
 #ifdef Q_WS_WIN
 	int toPage = 0;
@@ -190,7 +193,7 @@ bool KexiSimplePrintingCommand::print(const QString& aTitleText)
 	for (uint copy = 0;copy < loops; copy++) {
 		kDebug() << "copy " << (copy+1) << " of " << loops << endl;
 		uint pageNumber = fromPage;
-		QValueList<int>::ConstIterator pagesIt = pagesToPrint.constBegin();
+		Q3ValueList<int>::ConstIterator pagesIt = pagesToPrint.constBegin();
 		for(;(int)pageNumber == fromPage || !engine.atEnd(); ++pageNumber) {
 			kDebug() << "printing..." << endl;
 			if (pagesIt == pagesToPrint.constEnd()) //no more pages to print
@@ -325,7 +328,7 @@ KexiSimplePrintingPageSetup::KexiSimplePrintingPageSetup( KexiMainWindow *mainWi
 	m_unit = KLocale::Metric == KGlobal::locale()->measureSystem() ? KoUnit::U_CM : KoUnit::U_INCH;
 
 	// GUI
-	QVBoxLayout *lyr = new QVBoxLayout(this);
+	Q3VBoxLayout *lyr = new Q3VBoxLayout(this);
 	m_contents = new KexiSimplePrintingPageSetupBase(this, "KexiSimplePrintingPageSetupBase");
 	lyr->addWidget(m_contents);
 
@@ -343,7 +346,7 @@ KexiSimplePrintingPageSetup::KexiSimplePrintingPageSetup( KexiMainWindow *mainWi
 
 	m_contents->iconLabel->setFixedWidth(32+6);
 	m_contents->iconLabel->setPixmap( DesktopIcon("document", 32) );
-	QWhatsThis::add(m_contents->headerTitleFontButton, i18n("Changes font for title text."));
+	Q3WhatsThis::add(m_contents->headerTitleFontButton, i18n("Changes font for title text."));
 	connect(m_contents->headerTitleFontButton, SIGNAL(clicked()), 
 		this, SLOT(slotChangeTitleFont()));
 
@@ -360,13 +363,13 @@ KexiSimplePrintingPageSetup::KexiSimplePrintingPageSetup( KexiMainWindow *mainWi
 		this, SLOT(slotTitleTextChanged(const QString&)));
 	m_contents->headerTitleLineEdit->setFont( m_settings.pageTitleFont );
 
-	QWhatsThis::add(m_contents->openDataLink, 
+	Q3WhatsThis::add(m_contents->openDataLink, 
 		i18n("Shows data for table or query associated with this page setup."));
 	m_contents->openDataLink->setToolTip( 
 		i18n("Shows data for table or query associated with this page setup."));
 	connect(m_contents->openDataLink, SIGNAL(leftClickedURL()), this, SLOT(slotOpenData())); 
 
-	QWhatsThis::add(m_contents->saveSetupLink, i18n("Saves settings for this setup as default."));
+	Q3WhatsThis::add(m_contents->saveSetupLink, i18n("Saves settings for this setup as default."));
 	connect(m_contents->saveSetupLink, SIGNAL(leftClickedURL()), this, SLOT(slotSaveSetup()));
 #if !KDE_IS_VERSION(3,5,1) && !defined(Q_WS_WIN)
 	//a fix for problems with focusable KUrlLabel on KDElibs<=3.5.0
@@ -374,9 +377,9 @@ KexiSimplePrintingPageSetup::KexiSimplePrintingPageSetup( KexiMainWindow *mainWi
 	m_contents->saveSetupLink->setFocusPolicy(NoFocus);
 #endif
 
-	QWhatsThis::add(m_contents->addDateTimeCheckbox, i18n("Adds date and time to the header."));
-	QWhatsThis::add(m_contents->addPageNumbersCheckbox, i18n("Adds page numbers to the footer."));
-	QWhatsThis::add(m_contents->addTableBordersCheckbox, i18n("Adds table borders."));
+	Q3WhatsThis::add(m_contents->addDateTimeCheckbox, i18n("Adds date and time to the header."));
+	Q3WhatsThis::add(m_contents->addPageNumbersCheckbox, i18n("Adds page numbers to the footer."));
+	Q3WhatsThis::add(m_contents->addTableBordersCheckbox, i18n("Adds table borders."));
 	
 #ifdef KEXI_NO_UNFINISHED 
 	m_contents->addDateTimeCheckbox->hide();
@@ -384,7 +387,7 @@ KexiSimplePrintingPageSetup::KexiSimplePrintingPageSetup( KexiMainWindow *mainWi
 #endif
 
 	updatePageLayoutAndUnitInfo();
-	QWhatsThis::add(m_contents->changePageSizeAndMarginsButton, 
+	Q3WhatsThis::add(m_contents->changePageSizeAndMarginsButton, 
 		i18n("Changes page size and margins."));
 	connect(m_contents->changePageSizeAndMarginsButton, SIGNAL(clicked()), 
 		this, SLOT(slotChangePageSizeAndMargins()));

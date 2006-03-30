@@ -43,12 +43,14 @@
 #include <kmessagebox.h>
 #include <klineedit.h>
 
-#include <qobjectlist.h>
+#include <qobject.h>
 #include <qlabel.h>
 #include <qpushbutton.h>
 #include <qlayout.h>
 #include <qcheckbox.h>
-#include <qheader.h>
+#include <q3header.h>
+//Added by qt3to4:
+#include <Q3VBoxLayout>
 
 //! @internal
 class KexiNewProjectWizardPrivate
@@ -84,7 +86,7 @@ class KexiNewProjectWizardPrivate
 };
 
 KexiNewProjectWizard::KexiNewProjectWizard(KexiDBConnectionSet& conn_set,
-	QWidget *parent, const char *name, bool modal, WFlags f)
+	QWidget *parent, const char *name, bool modal, Qt::WFlags f)
 : K3Wizard(parent, name, modal, f)
 , d(new KexiNewProjectWizardPrivate() )
 {
@@ -123,9 +125,9 @@ KexiNewProjectWizard::KexiNewProjectWizard(KexiDBConnectionSet& conn_set,
 //	d->chk_server_txt = i18n("Always &use database server for creating new projects.")
 //		+"\n"+txt_dns;
 
-	connect(m_prjtype_sel->lv_types,SIGNAL(executed(QListViewItem*)),this,SLOT(slotLvTypesExecuted(QListViewItem*)));
-	connect(m_prjtype_sel->lv_types,SIGNAL(returnPressed(QListViewItem*)),this,SLOT(slotLvTypesExecuted(QListViewItem*)));
-	connect(m_prjtype_sel->lv_types,SIGNAL(selectionChanged( QListViewItem*)),this,SLOT(slotLvTypesSelected(QListViewItem*)));
+	connect(m_prjtype_sel->lv_types,SIGNAL(executed(Q3ListViewItem*)),this,SLOT(slotLvTypesExecuted(Q3ListViewItem*)));
+	connect(m_prjtype_sel->lv_types,SIGNAL(returnPressed(Q3ListViewItem*)),this,SLOT(slotLvTypesExecuted(Q3ListViewItem*)));
+	connect(m_prjtype_sel->lv_types,SIGNAL(selectionChanged( Q3ListViewItem*)),this,SLOT(slotLvTypesSelected(Q3ListViewItem*)));
 
 //	static_cast<QVBoxLayout*>(m_prjtype_sel->layout())->insertWidget(1,d->m_prjtype_sel->lv_types);
 //	static_cast<QVBoxLayout*>(m_prjtype_sel->layout())->insertStretch(3,1);
@@ -140,7 +142,7 @@ KexiNewProjectWizard::KexiNewProjectWizard(KexiDBConnectionSet& conn_set,
 
 	//page: connection selector
 	m_conn_sel_widget = new QWidget(this);
-	QVBoxLayout* conn_sel_lyr = new QVBoxLayout(m_conn_sel_widget);
+	Q3VBoxLayout* conn_sel_lyr = new Q3VBoxLayout(m_conn_sel_widget);
 	QLabel *conn_sel_label = new QLabel(i18n("Enter a new Kexi project's file name:"), m_conn_sel_widget);
 	conn_sel_label->setAlignment(Qt::AlignLeft|Qt::AlignTop|Qt::TextWordWrap);
 	conn_sel_lyr->addWidget( conn_sel_label );
@@ -192,7 +194,7 @@ KexiNewProjectWizard::KexiNewProjectWizard(KexiDBConnectionSet& conn_set,
 	m_project_selector = new KexiProjectSelectorWidget(
 		m_server_db_name->frm_dblist, "KexiProjectSelectorWidget", 0, false, false );
 	GLUE_WIDGET(m_project_selector, m_server_db_name->frm_dblist);
-	m_project_selector->setFocusPolicy(NoFocus);
+	m_project_selector->setFocusPolicy(Qt::NoFocus);
 	m_project_selector->setSelectable(false);
 
 	addPage(m_server_db_name, i18n("Select Project's Caption & Database Name"));
@@ -239,12 +241,12 @@ void KexiNewProjectWizard::show()
 	K3Wizard::show();
 }
 
-void KexiNewProjectWizard::slotLvTypesExecuted(QListViewItem *)
+void KexiNewProjectWizard::slotLvTypesExecuted(Q3ListViewItem *)
 {
 	next();
 }
 
-void KexiNewProjectWizard::slotLvTypesSelected(QListViewItem *item)
+void KexiNewProjectWizard::slotLvTypesSelected(Q3ListViewItem *item)
 {
 /*	if (item==d->lvi_file) {
 		m_prjtype_sel->chk_always->setText(d->chk_file_txt);

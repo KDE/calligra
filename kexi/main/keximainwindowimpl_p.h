@@ -1,3 +1,6 @@
+//Added by qt3to4:
+#include <Q3PopupMenu>
+#include <Q3PtrList>
 /* This file is part of the KDE projec
    Copyright (C) 2003 Lucijan Busch <lucijan@kde.org>
    Copyright (C) 2003-2005 Jaroslaw Staniek <js@iidea.pl>
@@ -223,7 +226,7 @@ void updatePropEditorDockWidthInfo() {
 
 	void hideMenuItem(const QString& menuName, const QString& itemText, bool alsoSeparator)
 	{
-		QPopupMenu *pm = popups[menuName.ascii()];
+		Q3PopupMenu *pm = popups[menuName.ascii()];
 		if (!pm)
 			return;
 		uint i=0;
@@ -336,8 +339,8 @@ void updatePropEditorDockWidthInfo() {
 		QTimer timer; //helper timer
 //		QSignalMapper *actionMapper;
 
-		QAsciiDict<QPopupMenu> popups; //list of menu popups
-		QPopupMenu *createMenu;
+		Q3AsciiDict<Q3PopupMenu> popups; //list of menu popups
+		Q3PopupMenu *createMenu;
 
 		QString origAppCaption; //<! original application's caption (without project name)
 		QString appCaptionPrefix; //<! application's caption prefix - prj name (if opened), else: null
@@ -372,7 +375,7 @@ void updatePropEditorDockWidthInfo() {
 		//! view menu
 		KAction *action_view_nav, *action_view_propeditor;
 		KRadioAction *action_view_data_mode, *action_view_design_mode, *action_view_text_mode;
-		QIntDict<KRadioAction> actions_for_view_modes;
+		Q3IntDict<KRadioAction> actions_for_view_modes;
 //		KRadioAction *last_checked_mode;
 #ifndef KEXI_NO_CTXT_HELP
 		KToggleAction *action_show_helper;
@@ -439,10 +442,10 @@ void updatePropEditorDockWidthInfo() {
 #endif
 
 		//! Used for delayed dialogs closing for 'close all'
-		QPtrList<KexiDialogBase> windowsToClose;
+		Q3PtrList<KexiDialogBase> windowsToClose;
 
 		//! Opened page setup dialogs, used by printOrPrintPreviewForItem().
-		QIntDict<KexiDialogBase> pageSetupDialogs;
+		Q3IntDict<KexiDialogBase> pageSetupDialogs;
 
 		/*! A map from Kexi dialog to "print setup" part item's ID of the data item
 		 used by closeDialog() to find an ID of the data item, so the entry 
@@ -474,7 +477,7 @@ void updatePropEditorDockWidthInfo() {
 #endif
 
 		//! Used by openedCustomObjectsForItem() and addOpenedCustomObjectForItem()
-		QAsciiDict<QObject> m_openedCustomObjectsForItem;
+		Q3AsciiDict<QObject> m_openedCustomObjectsForItem;
 
 	int propEditorDockSeparatorPos, navDockSeparatorPos;
 //	int navDockSeparatorPosWithAutoOpen;

@@ -23,6 +23,9 @@
 #include <kdialogbase.h>
 
 #include "kexinamewidget.h"
+//Added by qt3to4:
+#include <QPixmap>
+#include <QLabel>
 
 class KEXIMAIN_EXPORT KexiNameDialog : public KDialogBase
 {
