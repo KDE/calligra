@@ -2,12 +2,29 @@ kde4_header()
 
 add_subdirectory( raw )
 
+macro_optional_find_package(PNG)
+macro_optional_find_package(OpenEXR)
+macro_optional_find_package(TIFF)
+macro_optional_find_package(JPEG)
+
+if(JPEG_FOUND)
+	add_subdirectory(jpeg)
+endif(JPEG_FOUND)
+
+if(TIFF_FOUND)
+	add_subdirectory(tiff)
+endif(TIFF_FOUND)		
+
+if(PNG_FOUND)
+	add_subdirectory(png)
+endif(PNG_FOUND)
+
+if(OPENEXR_FOUND)
+	add_subdirectory(openexr)
+endif(OPENEXR_FOUND)
+
 message(STATUS "${CMAKE_CURRENT_SOURCE_DIR}: skipped subdir $(IMAGEMAGICK_SUBDIR)")
-message(STATUS "${CMAKE_CURRENT_SOURCE_DIR}: skipped subdir $(OPENEXR_SUBDIR)")
-message(STATUS "${CMAKE_CURRENT_SOURCE_DIR}: skipped subdir $(PNG_SUBDIR)")
 message(STATUS "${CMAKE_CURRENT_SOURCE_DIR}: skipped subdir $(LIBKISEXIF)")
-message(STATUS "${CMAKE_CURRENT_SOURCE_DIR}: skipped subdir $(JPEG_SUBDIR)")
-message(STATUS "${CMAKE_CURRENT_SOURCE_DIR}: skipped subdir $(TIFF_SUBDIR)")
 
 
 
