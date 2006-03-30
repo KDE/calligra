@@ -21,7 +21,9 @@
 
 #include <qwidget.h>
 #include <qlabel.h>
-#include <qobjectlist.h>
+#include <qobject.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -123,7 +125,7 @@ Form::widget() const
 //////////////// Container -related functions ///////////////////////
 
 void
-Form::createToplevel(QWidget *container, FormWidget *formWidget, const QCString &)
+Form::createToplevel(QWidget *container, FormWidget *formWidget, const Q3CString &)
 {
 	kDebug() << "Form::createToplevel() container= "<< (container ? container->name() : "<NULL>")
 		<< " formWidget=" << formWidget << "className=" << name() << endl;
@@ -357,7 +359,7 @@ Form::formDeleted()
 }
 
 void
-Form::changeName(const QCString &oldname, const QCString &newname)
+Form::changeName(const Q3CString &oldname, const Q3CString &newname)
 {
 	if(oldname == newname)
 		return;
@@ -456,7 +458,7 @@ Form::addWidgetToTabStops(ObjectTreeItem *c)
 	QWidget *w = c->widget();
 	if(!w)
 		return;
-	if(!(w->focusPolicy() & QWidget::TabFocus))
+	if(!(w->focusPolicy() & Qt::TabFocus))
 	{
 		if(!w->children())
 		return;
@@ -483,7 +485,7 @@ void
 Form::updateTabStopsOrder()
 {
 	for (ObjectTreeListIterator it(d->tabstops);it.current();) {
-		if(!(it.current()->widget()->focusPolicy() & QWidget::TabFocus)) {
+		if(!(it.current()->widget()->focusPolicy() & Qt::TabFocus)) {
 			kexidbg << "Form::updateTabStopsOrder(): widget removed because has no TabFocus: " << it.current()->widget()->name() << endl;
 			d->tabstops.remove( it.current() );
 		}

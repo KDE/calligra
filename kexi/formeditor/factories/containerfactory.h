@@ -34,6 +34,12 @@
 #include <kcommand.h>
 
 #include "widgetfactory.h"
+//Added by qt3to4:
+#include <Q3Frame>
+#include <Q3ValueList>
+#include <Q3CString>
+#include <Q3PopupMenu>
+#include <QPaintEvent>
 
 namespace KFormDesigner
 {
@@ -60,7 +66,7 @@ class InsertPageCommand : public KCommand
 };
 
 //! Helper widget (used when using 'Lay out horizontally')
-class KFORMEDITOR_EXPORT HBox : public QFrame
+class KFORMEDITOR_EXPORT HBox : public Q3Frame
 {
 	Q_OBJECT
 
@@ -75,7 +81,7 @@ class KFORMEDITOR_EXPORT HBox : public QFrame
 };
 
 //! Helper widget (used when using 'Lay out vertically')
-class KFORMEDITOR_EXPORT VBox : public QFrame
+class KFORMEDITOR_EXPORT VBox : public Q3Frame
 {
 	Q_OBJECT
 
@@ -90,7 +96,7 @@ class KFORMEDITOR_EXPORT VBox : public QFrame
 };
 
 //! Helper widget (used when using 'Lay out in a grid')
-class KFORMEDITOR_EXPORT Grid : public QFrame
+class KFORMEDITOR_EXPORT Grid : public Q3Frame
 {
 	Q_OBJECT
 
@@ -105,7 +111,7 @@ class KFORMEDITOR_EXPORT Grid : public QFrame
 };
 
 //! Helper widget (used when using 'Lay out with horizontal flow')
-class KFORMEDITOR_EXPORT HFlow : public QFrame
+class KFORMEDITOR_EXPORT HFlow : public Q3Frame
 {
 	Q_OBJECT
 
@@ -120,7 +126,7 @@ class KFORMEDITOR_EXPORT HFlow : public QFrame
 };
 
 //! Helper widget (used when using 'Lay out with horizontal flow')
-class KFORMEDITOR_EXPORT VFlow : public QFrame
+class KFORMEDITOR_EXPORT VFlow : public Q3Frame
 {
 	Q_OBJECT
 
@@ -149,7 +155,7 @@ class KFORMEDITOR_EXPORT KFDTabWidget : public TabWidgetBase
 };
 
 //! A form embedded as a widget inside other form
-class KFORMEDITOR_EXPORT SubForm : public QScrollView
+class KFORMEDITOR_EXPORT SubForm : public Q3ScrollView
 {
 	Q_OBJECT
 	Q_PROPERTY(QString formName READ formName WRITE setFormName DESIGNABLE true)
@@ -178,25 +184,25 @@ class ContainerFactory : public KFormDesigner::WidgetFactory
 		ContainerFactory(QObject *parent, const char *name, const QStringList &args);
 		~ContainerFactory();
 
-		virtual QWidget *createWidget(const QCString & classname, QWidget *parent, const char *name, KFormDesigner::Container *container,
+		virtual QWidget *createWidget(const Q3CString & classname, QWidget *parent, const char *name, KFormDesigner::Container *container,
 			int options = DefaultOptions);
-		virtual bool createMenuActions(const QCString& classname, QWidget *w, QPopupMenu *menu,
+		virtual bool createMenuActions(const Q3CString& classname, QWidget *w, Q3PopupMenu *menu,
 			KFormDesigner::Container *container);
-		virtual bool startEditing(const QCString &classname, QWidget *w,
+		virtual bool startEditing(const Q3CString &classname, QWidget *w,
 			KFormDesigner::Container *container);
-		virtual bool previewWidget(const QCString &classname, QWidget *widget,
+		virtual bool previewWidget(const Q3CString &classname, QWidget *widget,
 			KFormDesigner::Container *container);
-		virtual bool saveSpecialProperty(const QCString &classname, const QString &name,
+		virtual bool saveSpecialProperty(const Q3CString &classname, const QString &name,
 			const QVariant &value, QWidget *w, QDomElement &parentNode, QDomDocument &parent);
-		virtual bool readSpecialProperty(const QCString &classname, QDomElement &node, QWidget *w,
+		virtual bool readSpecialProperty(const Q3CString &classname, QDomElement &node, QWidget *w,
 			KFormDesigner::ObjectTreeItem *item);
-		virtual QValueList<QCString> autoSaveProperties(const QCString &classname);
+		virtual Q3ValueList<Q3CString> autoSaveProperties(const Q3CString &classname);
 
 	protected:
-		virtual bool isPropertyVisibleInternal(const QCString &classname, QWidget *w, 
-			const QCString &property, bool isTopLevel);
+		virtual bool isPropertyVisibleInternal(const Q3CString &classname, QWidget *w, 
+			const Q3CString &property, bool isTopLevel);
 		virtual bool changeText(const QString &newText);
-		virtual void resizeEditor(QWidget *editor, QWidget *widget, const QCString &classname);
+		virtual void resizeEditor(QWidget *editor, QWidget *widget, const Q3CString &classname);
 
 	public slots:
 		void addTabPage();

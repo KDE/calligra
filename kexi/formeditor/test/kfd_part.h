@@ -22,6 +22,9 @@
 
 #include <qwidget.h>
 #include <qpixmap.h>
+//Added by qt3to4:
+#include <Q3ValueList>
+#include <QCloseEvent>
 
 #include <kparts/part.h>
 #include <kparts/factory.h>
@@ -114,12 +117,12 @@ class KFORMEDITOR_EXPORT FormWidgetBase : public QWidget, public KFormDesigner::
 	Q_OBJECT
 
 	public:
-		FormWidgetBase(KFormDesignerPart *part, QWidget *parent = 0, const char *name = 0, int WFlags = WDestructiveClose)
-		: QWidget(parent, name, WFlags), m_part(part) {}
+		FormWidgetBase(KFormDesignerPart *part, QWidget *parent = 0, const char *name = 0, int WFlags = Qt::WDestructiveClose)
+		: QWidget(parent, name, Qt::WFlags), m_part(part) {}
 		~FormWidgetBase() {;}
 
 		void drawRect(const QRect& r, int type);
-		void drawRects(const QValueList<QRect> &list, int type);
+		void drawRects(const Q3ValueList<QRect> &list, int type);
 		void initBuffer();
 		void clearForm();
 		void highlightWidgets(QWidget *from, QWidget *to);//, const QPoint &p);

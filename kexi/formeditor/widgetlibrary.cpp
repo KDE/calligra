@@ -20,6 +20,12 @@
 */
 
 #include <qdom.h>
+//Added by qt3to4:
+#include <QPixmap>
+#include <Q3CString>
+#include <Q3PtrList>
+#include <Q3ValueList>
+#include <Q3PopupMenu>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -78,11 +84,11 @@ class WidgetLibraryPrivate
 		}
 		// dict which associates a class name with a Widget class
 		WidgetInfo::Dict widgets;//, alternateWidgets;
-		QAsciiDict<KService::Ptr> services;
-		QAsciiDict<char> supportedFactoryGroups;
-		QAsciiDict<WidgetFactory> factories;
-		QAsciiDict<char> advancedProperties;
-		QAsciiDict<char> hiddenClasses;
+		Q3AsciiDict<KService::Ptr> services;
+		Q3AsciiDict<char> supportedFactoryGroups;
+		Q3AsciiDict<WidgetFactory> factories;
+		Q3AsciiDict<char> advancedProperties;
+		Q3AsciiDict<char> hiddenClasses;
 		bool showAdvancedProperties : 1;
 		bool factoriesLoaded : 1;
 };
@@ -114,7 +120,7 @@ WidgetLibrary::loadFactoryWidgets(WidgetFactory *f)
 {
 	const WidgetInfo::Dict widgets = f->classes();
 	WidgetInfo *w;
-	for(QAsciiDictIterator<WidgetInfo> it(widgets); (w = it.current()); ++it)
+	for(Q3AsciiDictIterator<WidgetInfo> it(widgets); (w = it.current()); ++it)
 	{
 		if (0 != d->hiddenClasses[ w->className() ])
 			continue; //this class is hidden
@@ -137,7 +143,7 @@ WidgetLibrary::loadFactoryWidgets(WidgetFactory *f)
 			if (w->pixmap().isEmpty())
 				w->setPixmap( inheritedClass->pixmap() );
 			//ok?
-			foreach (QValueList<QCString>::ConstIterator, it_alt, inheritedClass->m_alternateNames) {
+			foreach (Q3ValueList<Q3CString>::ConstIterator, it_alt, inheritedClass->m_alternateNames) {
 				w->addAlternateClassName( *it_alt, inheritedClass->isOverriddenClassName( *it_alt ) );
 			}
 			if (w->includeFileName().isEmpty())
@@ -151,13 +157,13 @@ WidgetLibrary::loadFactoryWidgets(WidgetFactory *f)
 		}
 
 //		kDebug() << "WidgetLibrary::addFactory(): adding class " << w->className() << endl;
-		QValueList<QCString> l = w->alternateClassNames();
+		Q3ValueList<Q3CString> l = w->alternateClassNames();
 		l.prepend( w->className() );
 		//d->widgets.insert(w->className(), w);
 //		if(!w->alternateClassName().isEmpty()) {
 //			QStringList l = QStringList::split("|", w->alternateClassName());
-		QValueList<QCString>::ConstIterator endIt = l.constEnd();
-		for(QValueList<QCString>::ConstIterator it = l.constBegin(); it != endIt; ++it) {
+		Q3ValueList<Q3CString>::ConstIterator endIt = l.constEnd();
+		for(Q3ValueList<Q3CString>::ConstIterator it = l.constBegin(); it != endIt; ++it) {
 			WidgetInfo *widgetForClass = d->widgets.find( *it );
 			if (!widgetForClass || (widgetForClass && !widgetForClass->isOverriddenClassName(*it))) {
 				//insert a widgetinfo, if:
@@ -194,7 +200,7 @@ WidgetLibrary::lookupFactories()
 		}
 		kDebug() << "WidgetLibrary::lookupFactories(): found factory: " << ptr->name() << endl;
 
-		QCString groupName = ptr->property("X-KFormDesigner-FactoryGroup").toCString();
+		Q3CString groupName = ptr->property("X-KFormDesigner-FactoryGroup").toCString();
 		if (!groupName.isEmpty() && !d->supportedFactoryGroups[groupName]) {
 			kDebug() << "WidgetLibrary::lookupFactories(): factory group '" << groupName
 				<< "' is unsupported by this application (library=" << ptr->library() << ")"<< endl;
@@ -218,7 +224,7 @@ WidgetLibrary::loadFactories()
 	if (d->factoriesLoaded)
 		return;
 	d->factoriesLoaded = true;
-	for (QAsciiDictIterator<KService::Ptr> it(d->services); it.current(); ++it) {
+	for (Q3AsciiDictIterator<KService::Ptr> it(d->services); it.current(); ++it) {
 		WidgetFactory *f = KParts::ComponentFactory::createInstanceFromService<WidgetFactory>(
 			*it.current(), this, (*it.current())->library().latin1(), QStringList());
 		if (!f) {
@@ -231,15 +237,15 @@ WidgetLibrary::loadFactories()
 		d->factories.insert( f->name(), f );
 		//collect information about classes to be hidden
 		if (f->m_hiddenClasses) {
-			for (QAsciiDictIterator<char> it2(*f->m_hiddenClasses); it2.current(); ++it2) {
+			for (Q3AsciiDictIterator<char> it2(*f->m_hiddenClasses); it2.current(); ++it2) {
 				d->hiddenClasses.replace( it2.currentKey(), (char*)1 );
 			}
 		}
 	}
 
 	//now we have factories instantiated: load widgets
-	QPtrList<WidgetFactory> loadLater;
-	for (QAsciiDictIterator<WidgetFactory> it(d->factories); it.current(); ++it) {
+	Q3PtrList<WidgetFactory> loadLater;
+	for (Q3AsciiDictIterator<WidgetFactory> it(d->factories); it.current(); ++it) {
 		//ONE LEVEL, FLAT INHERITANCE, but works!
 		//if this factory inherits from something, load its witgets later
 //! @todo improve
@@ -249,7 +255,7 @@ WidgetLibrary::loadFactories()
 			loadFactoryWidgets(it.current());
 	}
 	//load now the rest
-	for (QPtrListIterator<WidgetFactory> it(loadLater); it.current(); ++it) {
+	for (Q3PtrListIterator<WidgetFactory> it(loadLater); it.current(); ++it) {
 		loadFactoryWidgets(it.current());
 	}
 }
@@ -286,7 +292,7 @@ WidgetLibrary::createXML()
 	QDomElement menu = doc.createElement("Menu");
 	menu.setAttribute("name", "widgets");
 
-	QAsciiDictIterator<WidgetInfo> it(d->widgets);
+	Q3AsciiDictIterator<WidgetInfo> it(d->widgets);
 	int i = 0;
 	for(; it.current(); ++it)
 	{
@@ -305,10 +311,10 @@ WidgetLibrary::addCreateWidgetActions(KActionCollection *parent,  QObject *recei
 {
 	loadFactories();
 	ActionList actions;
-	for (QAsciiDictIterator<WidgetInfo> it(d->widgets); it.current(); ++it)
+	for (Q3AsciiDictIterator<WidgetInfo> it(d->widgets); it.current(); ++it)
 	{
 		LibActionWidget *a = new LibActionWidget(it.current(), parent);
-		connect(a, SIGNAL(prepareInsert(const QCString &)), receiver, slot);
+		connect(a, SIGNAL(prepareInsert(const Q3CString &)), receiver, slot);
 		actions.append(a);
 	}
 	return actions;
@@ -317,14 +323,14 @@ WidgetLibrary::addCreateWidgetActions(KActionCollection *parent,  QObject *recei
 void
 WidgetLibrary::addCustomWidgetActions(KActionCollection *parent)
 {
-	for (QAsciiDictIterator<WidgetFactory> it(d->factories); it.current(); ++it)
+	for (Q3AsciiDictIterator<WidgetFactory> it(d->factories); it.current(); ++it)
 	{
 		it.current()->createCustomActions( parent );
 	}
 }
 
 QWidget*
-WidgetLibrary::createWidget(const QCString &classname, QWidget *parent, const char *name, Container *c,
+WidgetLibrary::createWidget(const Q3CString &classname, QWidget *parent, const char *name, Container *c,
 	int options)
 {
 	loadFactories();
@@ -343,7 +349,7 @@ WidgetLibrary::createWidget(const QCString &classname, QWidget *parent, const ch
 }
 
 bool
-WidgetLibrary::createMenuActions(const QCString &c, QWidget *w, QPopupMenu *menu,
+WidgetLibrary::createMenuActions(const Q3CString &c, QWidget *w, Q3PopupMenu *menu,
 	KFormDesigner::Container *container)
 {
 	loadFactories();
@@ -363,7 +369,7 @@ WidgetLibrary::createMenuActions(const QCString &c, QWidget *w, QPopupMenu *menu
 }
 
 bool
-WidgetLibrary::startEditing(const QCString &classname, QWidget *w, Container *container)
+WidgetLibrary::startEditing(const Q3CString &classname, QWidget *w, Container *container)
 {
 	loadFactories();
 	WidgetInfo *wclass = d->widgets[classname];
@@ -379,7 +385,7 @@ WidgetLibrary::startEditing(const QCString &classname, QWidget *w, Container *co
 }
 
 bool
-WidgetLibrary::previewWidget(const QCString &classname, QWidget *widget, Container *container)
+WidgetLibrary::previewWidget(const Q3CString &classname, QWidget *widget, Container *container)
 {
 	loadFactories();
 	WidgetInfo *wclass = d->widgets[classname];
@@ -395,7 +401,7 @@ WidgetLibrary::previewWidget(const QCString &classname, QWidget *widget, Contain
 }
 
 bool
-WidgetLibrary::clearWidgetContent(const QCString &classname, QWidget *w)
+WidgetLibrary::clearWidgetContent(const Q3CString &classname, QWidget *w)
 {
 	loadFactories();
 	WidgetInfo *wclass = d->widgets[classname];
@@ -411,7 +417,7 @@ WidgetLibrary::clearWidgetContent(const QCString &classname, QWidget *w)
 }
 
 QString
-WidgetLibrary::displayName(const QCString &classname)
+WidgetLibrary::displayName(const Q3CString &classname)
 {
 	loadFactories();
 	WidgetInfo *wi = d->widgets.find(classname);
@@ -422,7 +428,7 @@ WidgetLibrary::displayName(const QCString &classname)
 }
 
 QString
-WidgetLibrary::savingName(const QCString &classname)
+WidgetLibrary::savingName(const Q3CString &classname)
 {
 	loadFactories();
 	QString s;
@@ -434,7 +440,7 @@ WidgetLibrary::savingName(const QCString &classname)
 }
 
 QString
-WidgetLibrary::namePrefix(const QCString &classname)
+WidgetLibrary::namePrefix(const Q3CString &classname)
 {
 	loadFactories();
 	WidgetInfo *wi = d->widgets.find(classname);
@@ -445,7 +451,7 @@ WidgetLibrary::namePrefix(const QCString &classname)
 }
 
 QString
-WidgetLibrary::textForWidgetName(const QCString &name, const QCString &className)
+WidgetLibrary::textForWidgetName(const Q3CString &name, const Q3CString &className)
 {
 	loadFactories();
 	WidgetInfo *widget = d->widgets[className];
@@ -458,8 +464,8 @@ WidgetLibrary::textForWidgetName(const QCString &name, const QCString &className
 	return newName;
 }
 
-QCString
-WidgetLibrary::classNameForAlternate(const QCString &classname)
+Q3CString
+WidgetLibrary::classNameForAlternate(const Q3CString &classname)
 {
 	loadFactories();
 	if(d->widgets.find(classname))
@@ -475,7 +481,7 @@ WidgetLibrary::classNameForAlternate(const QCString &classname)
 }
 
 QString
-WidgetLibrary::includeFileName(const QCString &classname)
+WidgetLibrary::includeFileName(const Q3CString &classname)
 {
 	loadFactories();
 	WidgetInfo *wi = d->widgets.find(classname);
@@ -486,7 +492,7 @@ WidgetLibrary::includeFileName(const QCString &classname)
 }
 
 QString
-WidgetLibrary::iconName(const QCString &classname)
+WidgetLibrary::iconName(const Q3CString &classname)
 {
 	loadFactories();
 	WidgetInfo *wi = d->widgets.find(classname);
@@ -497,7 +503,7 @@ WidgetLibrary::iconName(const QCString &classname)
 }
 
 bool
-WidgetLibrary::saveSpecialProperty(const QCString &classname, const QString &name, const QVariant &value, QWidget *w, QDomElement &parentNode, QDomDocument &parent)
+WidgetLibrary::saveSpecialProperty(const Q3CString &classname, const QString &name, const QVariant &value, QWidget *w, QDomElement &parentNode, QDomDocument &parent)
 {
 	loadFactories();
 	WidgetInfo *wi = d->widgets.find(classname);
@@ -513,7 +519,7 @@ WidgetLibrary::saveSpecialProperty(const QCString &classname, const QString &nam
 }
 
 bool
-WidgetLibrary::readSpecialProperty(const QCString &classname, QDomElement &node, QWidget *w, ObjectTreeItem *item)
+WidgetLibrary::readSpecialProperty(const Q3CString &classname, QDomElement &node, QWidget *w, ObjectTreeItem *item)
 {
 	loadFactories();
 	WidgetInfo *wi = d->widgets.find(classname);
@@ -538,8 +544,8 @@ bool WidgetLibrary::advancedPropertiesVisible() const
 }
 
 bool
-WidgetLibrary::isPropertyVisible(const QCString &classname, QWidget *w,
-	const QCString &property, bool multiple, bool isTopLevel)
+WidgetLibrary::isPropertyVisible(const Q3CString &classname, QWidget *w,
+	const Q3CString &property, bool multiple, bool isTopLevel)
 {
 	if (isTopLevel) {
 		// no focus policy for top-level form widget...
@@ -570,14 +576,14 @@ WidgetLibrary::isPropertyVisible(const QCString &classname, QWidget *w,
 	return true;
 }
 
-QValueList<QCString>
-WidgetLibrary::autoSaveProperties(const QCString &classname)
+Q3ValueList<Q3CString>
+WidgetLibrary::autoSaveProperties(const Q3CString &classname)
 {
 	loadFactories();
 	WidgetInfo *wi = d->widgets.find(classname);
 	if(!wi)
-		return QValueList<QCString>();
-	QValueList<QCString> lst;
+		return Q3ValueList<Q3CString>();
+	Q3ValueList<Q3CString> lst;
 	//prepend from inherited class
 	if (wi->inheritedClass())
 		lst = wi->inheritedClass()->factory()->autoSaveProperties(wi->className());
@@ -599,7 +605,7 @@ WidgetLibrary::factoryForClassName(const char* classname)
 	return wi ? wi->factory() : 0;
 }
 
-QString WidgetLibrary::propertyDescForName(WidgetInfo *winfo, const QCString& propertyName)
+QString WidgetLibrary::propertyDescForName(WidgetInfo *winfo, const Q3CString& propertyName)
 {
 	if (!winfo || !winfo->factory())
 		return QString::null;
@@ -617,7 +623,7 @@ QString WidgetLibrary::propertyDescForName(WidgetInfo *winfo, const QCString& pr
 	return parentFactory->propertyDescForName(propertyName);
 }
 
-QString WidgetLibrary::propertyDescForValue(WidgetInfo *winfo, const QCString& name)
+QString WidgetLibrary::propertyDescForValue(WidgetInfo *winfo, const Q3CString& name)
 {
 	if (!winfo->factory())
 		return QString::null;
@@ -653,7 +659,7 @@ WidgetFactory* WidgetLibrary::factory(const char* factoryName) const
 	return d->factories[factoryName];
 }
 
-QString WidgetLibrary::internalProperty(const QCString& classname, const QCString& property)
+QString WidgetLibrary::internalProperty(const Q3CString& classname, const Q3CString& property)
 {
 	loadFactories();
 	WidgetInfo *wclass = d->widgets[classname];
@@ -666,7 +672,7 @@ QString WidgetLibrary::internalProperty(const QCString& classname, const QCStrin
 }
 
 WidgetFactory::CreateWidgetOptions WidgetLibrary::showOrientationSelectionPopup(
-	const QCString &classname, QWidget* parent, const QPoint& pos)
+	const Q3CString &classname, QWidget* parent, const QPoint& pos)
 {
 	loadFactories();
 	WidgetInfo *wclass = d->widgets[classname];

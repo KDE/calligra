@@ -41,7 +41,7 @@ class KFORMEDITOR_EXPORT RichTextDialog : public KDialogBase
 
 		QString  text();
 
-		enum VerticalAlignment{AlignNormal = QTextEdit::AlignNormal, AlignSuperScript = QTextEdit::AlignSuperScript, AlignSubScript = QTextEdit::AlignSubScript};
+		enum VerticalAlignment{AlignNormal = Q3TextEdit::AlignNormal, AlignSuperScript = Q3TextEdit::AlignSuperScript, AlignSubScript = Q3TextEdit::AlignSubScript};
 
 	public slots:
 		void  changeFont(const QString &);

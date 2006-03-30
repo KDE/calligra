@@ -22,9 +22,12 @@
 #define FORMEDITORCONTAINER_H
 
 #include <qobject.h>
-#include <qguardedptr.h>
-#include <qptrlist.h>
+#include <qpointer.h>
+#include <q3ptrlist.h>
 #include <qwidget.h>
+//Added by qt3to4:
+#include <QMouseEvent>
+#include <QEvent>
 
 #include "utils.h"
 

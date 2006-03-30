@@ -22,7 +22,10 @@
 #define KFD_WIDGETPROPERTYSET_H
 
 #include <qobject.h>
-#include <qstrlist.h>
+#include <q3strlist.h>
+//Added by qt3to4:
+#include <QEvent>
+#include <Q3CString>
 
 #include <koproperty/set.h>
 #include <koproperty/property.h>
@@ -48,17 +51,17 @@ class KFORMEDITOR_EXPORT WidgetPropertySet : public QObject
 
 //		FormManager* manager();
 
-		KoProperty::Property&  operator[](const QCString &name);
+		KoProperty::Property&  operator[](const Q3CString &name);
 
-		KoProperty::Property&  property(const QCString &name);
+		KoProperty::Property&  property(const Q3CString &name);
 
-		bool  contains(const QCString &property);
+		bool  contains(const Q3CString &property);
 
 		/*! i18n function used by factories to add new property caption.
 		  Should be called on Factory creation. */
-		void  addPropertyCaption(const QCString &property, const QString &caption);
+		void  addPropertyCaption(const Q3CString &property, const QString &caption);
 
-		void  addValueCaption(const QCString &value, const QString &caption);
+		void  addValueCaption(const Q3CString &value, const QString &caption);
 
 	public slots:
 		/*! Sets the widget which property are shown in the list. If \a add is true, the list switch to
@@ -77,7 +80,7 @@ class KFORMEDITOR_EXPORT WidgetPropertySet : public QObject
 		void slotWidgetDestroyed();
 
 //		void setPropertyValueInDesignMode(QWidget* widget, const QMap<QCString, QVariant> &propValues,
-		void createPropertyCommandsInDesignMode(QWidget* widget, const QMap<QCString, 
+		void createPropertyCommandsInDesignMode(QWidget* widget, const QMap<Q3CString, 
 			QVariant> &propValues, CommandGroup *group, bool addToActiveForm = true,
 			bool execFlagForSubCommands = false);
 
@@ -85,12 +88,12 @@ class KFORMEDITOR_EXPORT WidgetPropertySet : public QObject
 		/*! This signal is emitted when a property was changed.
 		  \a widg is the widget concerned, \a property
 		  is the name of the modified property, and \a v is the new value of this property. */
-		void widgetPropertyChanged(QWidget *w, const QCString &property, const QVariant &v);
+		void widgetPropertyChanged(QWidget *w, const Q3CString &property, const QVariant &v);
 
 		/*! This signal is emitted when the name of the widget is modified.
 		\a oldname is the name of the widget before the
 		  change, \a newname is the name after renaming. */
-		void widgetNameChanged(const QCString &oldname, const QCString &newname);
+		void widgetNameChanged(const Q3CString &oldname, const Q3CString &newname);
 
 	protected:
 		/*! Adds the widget in d->widgets, and updates property visibilty. */
@@ -140,8 +143,8 @@ class KFORMEDITOR_EXPORT WidgetPropertySet : public QObject
 		/*! This function is used to filter the properties to be shown
 		   (ie not show "caption" if the widget isn't toplevel).
 		   \return true if the property should be shown. False otherwise.*/
-		bool isPropertyVisible(const QCString &property, bool isTopLevel, 
-			const QCString &classname=QCString());
+		bool isPropertyVisible(const Q3CString &property, bool isTopLevel, 
+			const Q3CString &classname=Q3CString());
 
 		// Following functions are used to create special types of properties, different
 		// from Q_PROPERTY
@@ -166,10 +169,10 @@ class KFORMEDITOR_EXPORT WidgetPropertySet : public QObject
 
 		/*! \return The i18n'ed name of the property whose name is \a name, that will be
 		displayed in PropertyEditor. */
-		QString propertyCaption(const QCString &name);
+		QString propertyCaption(const Q3CString &name);
 
 		/*! \return The i18n'ed name of the property's value whose name is \a name. */
-		QString valueCaption(const QCString &name);
+		QString valueCaption(const Q3CString &name);
 
 		/*! \return The i18n'ed list of values, that will be shown by Property
 		Editor (using descFromValue()).*/

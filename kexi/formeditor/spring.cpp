@@ -22,6 +22,10 @@
 #include <qpainter.h>
 #include <qdom.h>
 #include <qvariant.h>
+//Added by qt3to4:
+#include <Q3PointArray>
+#include <Q3CString>
+#include <QPaintEvent>
 
 #include <kdebug.h>
 
@@ -37,12 +41,12 @@ Spring::Spring(QWidget *parent, const char *name)
   : QWidget(parent, name)
 {
 	m_edit = true;
-	m_orient = Horizontal;
+	m_orient = Qt::Horizontal;
 	setSizeType((SizeType)QSizePolicy::Expanding);
 }
 
 void
-Spring::setOrientation(Orientation orient)
+Spring::setOrientation(Qt::Orientation orient)
 {
 	SizeType type = sizeType();
 	m_orient = orient;
@@ -53,7 +57,7 @@ Spring::setOrientation(Orientation orient)
 Spring::SizeType
 Spring::sizeType() const
 {
-	if(m_orient == Vertical)
+	if(m_orient == Qt::Vertical)
 		return (SizeType)sizePolicy().verData();
 	else
 		return (SizeType)sizePolicy().horData();
@@ -62,7 +66,7 @@ Spring::sizeType() const
 void
 Spring::setSizeType(SizeType size)
 {
-	if(m_orient == Vertical)
+	if(m_orient == Qt::Vertical)
 		setSizePolicy(QSizePolicy::Minimum, (QSizePolicy::SizeType)size);
 	else
 		setSizePolicy( (QSizePolicy::SizeType)size, QSizePolicy::Minimum);
@@ -79,8 +83,8 @@ Spring::paintEvent(QPaintEvent *ev)
 		p.eraseRect(0,0,width(), height());
 	p.setPen(QPen(Qt::white, 1));
 	p.setRasterOp(Qt::XorROP);
-	QPointArray pa(4);
-	if(m_orient == Vertical) {
+	Q3PointArray pa(4);
+	if(m_orient == Qt::Vertical) {
 		uint part = (height()+16) / 16;
 		if (part<3)
 			part=3;
@@ -113,7 +117,7 @@ Spring::paintEvent(QPaintEvent *ev)
 }
 
 bool
-Spring::isPropertyVisible(const QCString &name)
+Spring::isPropertyVisible(const Q3CString &name)
 {
 	if((name == "name") || (name == "sizeType") || (name == "orientation") || (name == "geometry"))
 		return true;

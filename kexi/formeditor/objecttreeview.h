@@ -21,6 +21,8 @@
 #define OBJECTTREEVIEW_H
 
 #include <k3listview.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 namespace KFormDesigner {
 
@@ -79,7 +81,7 @@ class KFORMEDITOR_EXPORT ObjectTreeView : public K3ListView
 		void setForm(Form *form);
 
 		//! \return the pixmap name for a given class, to be shown next to the widget name.
-		QString iconNameForClass(const QCString &classname);
+		QString iconNameForClass(const Q3CString &classname);
 
 	public slots:
 		/*! Sets the widget \a w as selected item, so it will be written bold. It is added to current selection if \a add is true. */
@@ -92,11 +94,11 @@ class KFORMEDITOR_EXPORT ObjectTreeView : public K3ListView
 		void removeItem(ObjectTreeItem *item);
 
 		/*! Just renames the list item from \a oldname to \a newname. */
-		void renameItem(const QCString &oldname, const QCString &newname);
+		void renameItem(const Q3CString &oldname, const Q3CString &newname);
 
 	protected slots:
 		/*! This slot is called when the user right-click a list item. The widget context menu is shown, as inisde the Form. */
-		void displayContextMenu(K3ListView *list, QListViewItem *item, const QPoint &p);
+		void displayContextMenu(K3ListView *list, Q3ListViewItem *item, const QPoint &p);
 
 		void slotColumnSizeChanged(int);
 

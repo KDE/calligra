@@ -22,7 +22,7 @@
 
 #include <kdialogbase.h>
 
-class QListViewItem;
+class Q3ListViewItem;
 class QCheckBox;
 class QToolButton;
 class KPushButton;
@@ -47,7 +47,7 @@ class KFORMEDITOR_EXPORT TabStopDialog : public KDialogBase
 		int exec(KFormDesigner::Form *form);
 		void moveItemUp();
 		void moveItemDown();
-		void updateButtons(QListViewItem*);
+		void updateButtons(Q3ListViewItem*);
 		void slotRadioClicked(bool isOn);
 
 		bool autoTabStops() const;

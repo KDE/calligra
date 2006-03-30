@@ -24,12 +24,16 @@
 #include <qcursor.h>
 #include <qstring.h>
 #include <qlabel.h>
-#include <qobjectlist.h>
+#include <qobject.h>
 #include <qstylefactory.h>
 #include <qmetaobject.h>
 #include <qregexp.h>
-#include <qvaluevector.h>
-#include <qvbox.h>
+#include <q3valuevector.h>
+#include <q3vbox.h>
+//Added by qt3to4:
+#include <Q3CString>
+#include <Q3StrList>
+#include <Q3PtrList>
 
 #include <klocale.h>
 #include <kiconloader.h>
@@ -187,8 +191,8 @@ FormManager::setObjectTreeView(ObjectTreeView *treeview)
 {
 	m_treeview = treeview;
 	if (m_treeview)
-		connect(m_propSet, SIGNAL(widgetNameChanged(const QCString&, const QCString&)),
-			m_treeview, SLOT(renameItem(const QCString&, const QCString&)));
+		connect(m_propSet, SIGNAL(widgetNameChanged(const Q3CString&, const Q3CString&)),
+			m_treeview, SLOT(renameItem(const Q3CString&, const Q3CString&)));
 }
 
 ActionList
@@ -196,7 +200,7 @@ FormManager::createActions(WidgetLibrary *lib, KActionCollection *parent)
 {
 	m_collection = parent;
 
-	ActionList actions = lib->addCreateWidgetActions(parent, this, SLOT(insertWidget(const QCString &)));
+	ActionList actions = lib->addCreateWidgetActions(parent, this, SLOT(insertWidget(const Q3CString &)));
 
 	if (m_options & HideSignalSlotConnections)
 		m_dragConnection = 0;
@@ -220,7 +224,7 @@ FormManager::createActions(WidgetLibrary *lib, KActionCollection *parent)
 	actions.append(m_snapToGrid);
 
 	// Create the Style selection action (with a combo box in toolbar and submenu items)
-	KSelectAction *m_style = new KSelectAction( i18n("Style"), CTRL + Qt::Key_S, this, SLOT(slotStyle()), parent, "change_style");
+	KSelectAction *m_style = new KSelectAction( i18n("Style"), Qt::CTRL + Qt::Key_S, this, SLOT(slotStyle()), parent, "change_style");
 	m_style->setEditable(false);
 
 	KGlobal::config()->setGroup("General");
@@ -275,7 +279,7 @@ FormManager::redo()
 }
 
 void
-FormManager::insertWidget(const QCString &classname)
+FormManager::insertWidget(const Q3CString &classname)
 {
 	if(m_drawingSlot)
 		stopCreatingConnection();
@@ -287,7 +291,7 @@ FormManager::insertWidget(const QCString &classname)
 	{
 //		form->d->cursors = new QMap<QString, QCursor>();
 		if (form->toplevelContainer())
-			form->widget()->setCursor(QCursor(CrossCursor));
+			form->widget()->setCursor(QCursor(Qt::CrossCursor));
 		QObjectList *l = form->widget()->queryList( "QWidget" );
 		for(QObject *o = l->first(); o; o = l->next())
 		{
@@ -367,7 +371,7 @@ FormManager::startCreatingConnection()
 		form->d->mouseTrackers = new QStringList();
 		if (form->toplevelContainer())
 		{
-			form->widget()->setCursor(QCursor(PointingHandCursor));
+			form->widget()->setCursor(QCursor(Qt::PointingHandCursor));
 			form->widget()->setMouseTracking(true);
 		}
 		QObjectList *l = form->widget()->queryList( "QWidget" );
@@ -378,7 +382,7 @@ FormManager::startCreatingConnection()
 			{
 				form->d->cursors.insert(w, w->cursor());
 //				form->d->cursors->insert(w->name(), w->cursor());
-				w->setCursor(QCursor(PointingHandCursor ));
+				w->setCursor(QCursor(Qt::PointingHandCursor ));
 			}
 			if(w->hasMouseTracking())
 				form->d->mouseTrackers->append(w->name());
@@ -632,8 +636,8 @@ FormManager::initForm(Form *form)
 		connect(form, SIGNAL(childAdded(ObjectTreeItem* )), m_treeview, SLOT(addItem(ObjectTreeItem*)));
 		connect(form, SIGNAL(childRemoved(ObjectTreeItem* )), m_treeview, SLOT(removeItem(ObjectTreeItem*)));
 	}
-	connect(m_propSet, SIGNAL(widgetNameChanged(const QCString&, const QCString&)),
-		form, SLOT(changeName(const QCString&, const QCString&)));
+	connect(m_propSet, SIGNAL(widgetNameChanged(const Q3CString&, const Q3CString&)),
+		form, SLOT(changeName(const Q3CString&, const Q3CString&)));
 
 	form->setSelectedWidget(form->widget());
 	windowChanged(form->widget());
@@ -702,7 +706,7 @@ FormManager::deleteWidget()
 	if(!activeForm() || !activeForm()->objectTree())
 		return;
 
-	QPtrList<QWidget> *list = activeForm()->selectedWidgets();
+	Q3PtrList<QWidget> *list = activeForm()->selectedWidgets();
 	if(list->isEmpty())
 		return;
 
@@ -721,7 +725,7 @@ FormManager::copyWidget()
 	if (!activeForm() || !activeForm()->objectTree())
 		return;
 
-	QPtrList<QWidget> *list = activeForm()->selectedWidgets();
+	Q3PtrList<QWidget> *list = activeForm()->selectedWidgets();
 	if(list->isEmpty())
 		return;
 
@@ -753,7 +757,7 @@ FormManager::cutWidget()
 	if(!activeForm() || !activeForm()->objectTree())
 		return;
 
-	QPtrList<QWidget> *list = activeForm()->selectedWidgets();
+	Q3PtrList<QWidget> *list = activeForm()->selectedWidgets();
 	if(list->isEmpty())
 		return;
 
@@ -785,7 +789,7 @@ FormManager::createSignalMenu(QWidget *w)
 	m_sigSlotMenu = new KMenu();
 	m_sigSlotMenu->insertTitle(SmallIcon("connection"), i18n("Signals"));
 
-	QStrList list = w->metaObject()->signalNames(true);
+	Q3StrList list = w->metaObject()->signalNames(true);
 	QStrListIterator it(list);
 	for(; it.current() != 0; ++it)
 		m_sigSlotMenu->insertItem(*it);
@@ -808,7 +812,7 @@ FormManager::createSlotMenu(QWidget *w)
 
 	QString signalArg( m_connection->signal().remove( QRegExp(".*[(]|[)]") ) );
 
-	QStrList list = w->metaObject()->slotNames(true);
+	Q3StrList list = w->metaObject()->slotNames(true);
 	QStrListIterator it(list);
 	for(; it.current() != 0; ++it)
 	{
@@ -893,7 +897,7 @@ FormManager::createContextMenu(QWidget *w, Container *container, bool popupAtCur
 	separatorNeeded = true;
 
 	// We create the buddy menu
-	if(!multiple && w->inherits("QLabel") && ((QLabel*)w)->text().contains("&") && (((QLabel*)w)->textFormat() != RichText))
+	if(!multiple && w->inherits("QLabel") && ((QLabel*)w)->text().contains("&") && (((QLabel*)w)->textFormat() != Qt::RichText))
 	{
 		if (separatorNeeded)
 			m_popup->insertSeparator();
@@ -932,7 +936,7 @@ FormManager::createContextMenu(QWidget *w, Container *container, bool popupAtCur
 
 		// We create the signals menu
 		KMenu *sigMenu = new KMenu();
-		QStrList list = w->metaObject()->signalNames(true);
+		Q3StrList list = w->metaObject()->signalNames(true);
 		QStrListIterator it(list);
 		for(; it.current() != 0; ++it)
 			sigMenu->insertItem(*it);
@@ -1128,7 +1132,7 @@ FormManager::breakLayout()
 		return;
 
 	Container *container = activeForm()->activeContainer();
-	QCString c( container->widget()->className() );
+	Q3CString c( container->widget()->className() );
 
 	if((c == "Grid") || (c == "VBox") || (c == "HBox") || (c == "HFlow") || (c == "VFlow"))
 	{
@@ -1389,7 +1393,7 @@ void
 FormManager::deleteWidgetLater( QWidget *w )
 {
 	w->hide();
-	w->reparent(0, WType_TopLevel, QPoint(0,0));
+	w->reparent(0, Qt::WType_TopLevel, QPoint(0,0));
 	m_deleteWidgetLater_list.append( w );
 	m_deleteWidgetLater_timer.start( 100, true );
 }

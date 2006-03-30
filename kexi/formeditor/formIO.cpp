@@ -28,10 +28,19 @@
 #include <qbuffer.h>
 #include <qimage.h>
 #include <qlayout.h>
-#include <qobjectlist.h>
+#include <qobject.h>
 #include <qdatetime.h>
 #include <qlabel.h>
 #include <qpainter.h>
+//Added by qt3to4:
+#include <QPaintEvent>
+#include <Q3VBoxLayout>
+#include <Q3StrList>
+#include <Q3GridLayout>
+#include <Q3CString>
+#include <Q3ValueList>
+#include <QPixmap>
+#include <Q3HBoxLayout>
 
 #include <kfiledialog.h>
 #include <klocale.h>
@@ -52,7 +61,7 @@
 #include "formIO.h"
 
 /// A blank widget used when the class name is not supported
-CustomWidget::CustomWidget(const QCString &className, QWidget *parent, const char *name)
+CustomWidget::CustomWidget(const Q3CString &className, QWidget *parent, const char *name)
 : QWidget(parent, name), m_className(className)
 {
 	setBackgroundMode(Qt::PaletteDark);
@@ -74,7 +83,7 @@ CustomWidget::paintEvent(QPaintEvent *)
 
 using namespace KFormDesigner;
 
-QDict<QLabel> *FormIO::m_buddies = 0;
+Q3Dict<QLabel> *FormIO::m_buddies = 0;
 ObjectTreeItem *FormIO::m_currentItem = 0;
 Form *FormIO::m_currentForm = 0;
 bool FormIO::m_savePixmapsInline = false;
@@ -165,7 +174,7 @@ FormIO::saveFormToDom(Form *form, QDomDocument &domDoc)
 	form->headerProperties()->insert("version", QString::number(form->formatVersion()));
 	//custom properties
 	QDomElement headerPropertiesEl = domDoc.createElement("kfd:customHeader");
-	for (QMapConstIterator<QCString,QString> it=form->headerProperties()->constBegin(); it!=form->headerProperties()->constEnd(); ++it) {
+	for (QMapConstIterator<Q3CString,QString> it=form->headerProperties()->constBegin(); it!=form->headerProperties()->constEnd(); ++it) {
 		headerPropertiesEl.setAttribute(it.key(), it.data());
 	}
 	uiElement.appendChild(headerPropertiesEl);
@@ -446,7 +455,7 @@ FormIO::savePropertyValue(QDomElement &parentNode, QDomDocument &parent, const c
 	if(value.type() == QVariant::Pixmap) {
 		QDomText valueE;
 		QDomElement type = parent.createElement("pixmap");
-		QCString property = propertyE.attribute("name").latin1();
+		Q3CString property = propertyE.attribute("name").latin1();
 //todo		QCString pixmapName = m_currentItem->widget()->property("pixmapName").toCString();
 		if(m_savePixmapsInline /* (js)too risky: || m_currentItem->pixmapName(property).isNull() */)
 			valueE = parent.createTextNode(saveImage(parent, value.toPixmap()));
@@ -514,9 +523,9 @@ FormIO::writeVariant(QDomDocument &parent, QDomElement &parentNode, QVariant val
 			QDomElement r = parent.createElement("red");
 			QDomElement g = parent.createElement("green");
 			QDomElement b = parent.createElement("blue");
-			QDomText valueR = parent.createTextNode(QString::number(value.toColor().red()));
-			QDomText valueG = parent.createTextNode(QString::number(value.toColor().green()));
-			QDomText valueB = parent.createTextNode(QString::number(value.toColor().blue()));
+			QDomText valueR = parent.createTextNode(QString::number(value.toColor().Qt::red()));
+			QDomText valueG = parent.createTextNode(QString::number(value.toColor().Qt::green()));
+			QDomText valueB = parent.createTextNode(QString::number(value.toColor().Qt::blue()));
 
 			r.appendChild(valueR);
 			g.appendChild(valueG);
@@ -752,11 +761,11 @@ FormIO::readPropertyValue(QDomNode node, QObject *obj, const QString &name)
 		QDomElement g = node.namedItem("green").toElement();
 		QDomElement b = node.namedItem("blue").toElement();
 
-		int red = r.text().toInt();
-		int green = g.text().toInt();
-		int blue = b.text().toInt();
+		int Qt::red = r.text().toInt();
+		int Qt::green = g.text().toInt();
+		int Qt::blue = b.text().toInt();
 
-		return QColor(red, green, blue);
+		return QColor(Qt::red, Qt::green, Qt::blue);
 	}
 	else if(type == "bool")
 	{
@@ -873,7 +882,7 @@ FormIO::readPropertyValue(QDomNode node, QObject *obj, const QString &name)
 
 		if(meta->isSetType())
 		{
-			QStrList keys;
+			Q3StrList keys;
 			QStringList list = QStringList::split("|", text);
 			for(QStringList::iterator it = list.begin(); it != list.end(); ++it)
 				keys.append((*it).latin1());
@@ -1113,7 +1122,7 @@ FormIO::loadWidget(Container *container, const QDomElement &el, QWidget *parent)
 	}
 
 	QWidget *w;
-	QCString classname, alternate;
+	Q3CString classname, alternate;
 	// We translate some name (for compatibility)
 	if(el.tagName() == "spacer")
 		classname = "Spring";
@@ -1208,7 +1217,7 @@ FormIO::loadWidget(Container *container, const QDomElement &el, QWidget *parent)
 	m_currentItem = item;
 	// if we are inside a Grid, we need to insert the widget in the good cell
 	if(container->layoutType() == Container::Grid)  {
-		QGridLayout *layout = (QGridLayout*)container->layout();
+		Q3GridLayout *layout = (Q3GridLayout*)container->layout();
 		if(el.hasAttribute("rowspan")) { // widget spans multiple cells
 			if(layout)
 				layout->addMultiCellWidget(w, el.attribute("row").toInt(), el.attribute("row").toInt() + el.attribute("rowspan").toInt()-1,
@@ -1231,9 +1240,9 @@ FormIO::loadWidget(Container *container, const QDomElement &el, QWidget *parent)
 		item->container()->layout()->activate();
 
 	// We add the autoSaveProperties in the modifProp list of the ObjectTreeItem, so that they are saved later
-	QValueList<QCString> list(container->form()->library()->autoSaveProperties(w->className()));
-	QValueList<QCString>::ConstIterator endIt = list.constEnd();
-	for(QValueList<QCString>::ConstIterator it = list.constBegin(); it != endIt; ++it) {
+	Q3ValueList<Q3CString> list(container->form()->library()->autoSaveProperties(w->className()));
+	Q3ValueList<Q3CString>::ConstIterator endIt = list.constEnd();
+	for(Q3ValueList<Q3CString>::ConstIterator it = list.constBegin(); it != endIt; ++it) {
 		if(w->metaObject()->findProperty(*it, true) != -1)
 			item->addModifiedProperty(*it, w->property(*it));
 	}
@@ -1263,16 +1272,16 @@ FormIO::createToplevelWidget(Form *form, QWidget *container, QDomElement &el)
 		form->objectTree()->rename(form->objectTree()->name(), wname);
 	form->setInteractiveMode(false);
 
-	QDict<QLabel>  *oldBuddies = 0;
+	Q3Dict<QLabel>  *oldBuddies = 0;
 	if(m_buddies)  // save old buddies (for subforms)
 		oldBuddies = m_buddies;
-	m_buddies = new QDict<QLabel>();
+	m_buddies = new Q3Dict<QLabel>();
 	m_currentItem = form->objectTree();
 
 	readChildNodes(form->objectTree(), form->toplevelContainer(), el, container);
 
 	// Now the Form is fully loaded, we can assign the buddies
-	QDictIterator<QLabel> it(*m_buddies);
+	Q3DictIterator<QLabel> it(*m_buddies);
 	for(; it.current(); ++it)
 	{
 		ObjectTreeItem *item = form->objectTree()->lookup(it.currentKey());
@@ -1390,31 +1399,31 @@ FormIO::readChildNodes(ObjectTreeItem *item, Container *container, const QDomEle
 			 if(layoutName == "HFlow") {
 				item->container()->m_layType = Container::HFlow;
 				KexiFlowLayout *layout = new KexiFlowLayout(item->widget());
-				layout->setOrientation(Horizontal);
+				layout->setOrientation(Qt::Horizontal);
 				item->container()->m_layout = (QLayout*)layout;
 			}
 			else if(layoutName == "VFlow") {
 				item->container()->m_layType = Container::VFlow;
 				KexiFlowLayout *layout = new KexiFlowLayout(item->widget());
-				layout->setOrientation(Vertical);
+				layout->setOrientation(Qt::Vertical);
 				item->container()->m_layout = (QLayout*)layout;
 			}
 			else { // grid layout
 				item->container()->m_layType = Container::Grid;
-				QGridLayout *layout = new QGridLayout(item->widget(), 1, 1);
+				Q3GridLayout *layout = new Q3GridLayout(item->widget(), 1, 1);
 				item->container()->m_layout = (QLayout*)layout;
 			}
 			readChildNodes(item, container, node, w);
 		}
 		else if(tag == "vbox")  {
 			item->container()->m_layType = Container::VBox;
-			QVBoxLayout *layout = new QVBoxLayout(item->widget());
+			Q3VBoxLayout *layout = new Q3VBoxLayout(item->widget());
 			item->container()->m_layout = (QLayout*)layout;
 			readChildNodes(item, container, node, w);
 		}
 		else if(tag == "hbox") {
 			item->container()->m_layType = Container::HBox;
-			QHBoxLayout *layout = new QHBoxLayout(item->widget());
+			Q3HBoxLayout *layout = new Q3HBoxLayout(item->widget());
 			item->container()->m_layout = (QLayout*)layout;
 			readChildNodes(item, container, node, w);
 		}

@@ -20,6 +20,9 @@
 #include <kdebug.h>
 
 #include <qpainter.h>
+//Added by qt3to4:
+#include <Q3CString>
+#include <Q3PtrList>
 
 #include <kiconloader.h>
 #include <klocale.h>
@@ -177,7 +180,7 @@ ObjectTreeView::ObjectTreeView(QWidget *parent, const char *name, bool tabStop)
 	{
 		setSelectionModeExt(Extended);
 		connect(this, SIGNAL(selectionChanged()), this, SLOT(slotSelectionChanged()));
-		connect(this, SIGNAL(contextMenu(K3ListView *, QListViewItem *, const QPoint&)), this, SLOT(displayContextMenu(K3ListView*, QListViewItem*, const QPoint&)));
+		connect(this, SIGNAL(contextMenu(K3ListView *, Q3ListViewItem *, const QPoint&)), this, SLOT(displayContextMenu(K3ListView*, Q3ListViewItem*, const QPoint&)));
 	}
 
 	setFullWidth(true);
@@ -198,7 +201,7 @@ ObjectTreeView::sizeHint() const
 }
 
 QString
-ObjectTreeView::iconNameForClass(const QCString &classname)
+ObjectTreeView::iconNameForClass(const Q3CString &classname)
 {
 	return m_form->library()->iconName(classname);
 }
@@ -210,7 +213,7 @@ ObjectTreeView::slotColumnSizeChanged(int)
 }
 
 void
-ObjectTreeView::displayContextMenu(K3ListView *list, QListViewItem *item, const QPoint &)
+ObjectTreeView::displayContextMenu(K3ListView *list, Q3ListViewItem *item, const QPoint &)
 {
 	if(list != this || !m_form || !item)
 		return;
@@ -225,7 +228,7 @@ ObjectTreeView::displayContextMenu(K3ListView *list, QListViewItem *item, const 
 ObjectTreeViewItem*
 ObjectTreeView::findItem(const QString &name)
 {
-	QListViewItemIterator it(this);
+	Q3ListViewItemIterator it(this);
         while(it.current())
 	{
 		ObjectTreeViewItem *item = static_cast<ObjectTreeViewItem*>(it.current());
@@ -257,7 +260,7 @@ ObjectTreeView::setSelectedWidget(QWidget *w, bool add)
 		clearSelection();
 
 
-	QListViewItem *item = (QListViewItem*) findItem(w->name());
+	Q3ListViewItem *item = (Q3ListViewItem*) findItem(w->name());
 	if(!add)
 	{
 		setCurrentItem(item);
@@ -274,9 +277,9 @@ void
 ObjectTreeView::slotSelectionChanged()
 {
 	const bool hadFocus = hasFocus();
-	QPtrList<QListViewItem> list = selectedItems();
+	Q3PtrList<Q3ListViewItem> list = selectedItems();
 	m_form->selectFormWidget();
-	for(QListViewItem *item = list.first(); item; item = list.next())
+	for(Q3ListViewItem *item = list.first(); item; item = list.next())
 	{
 		ObjectTreeViewItem *it = static_cast<ObjectTreeViewItem*>(item);
 		QWidget *w = it->objectTree()->widget();
@@ -309,7 +312,7 @@ ObjectTreeView::removeItem(ObjectTreeItem *item)
 }
 
 void
-ObjectTreeView::renameItem(const QCString &oldname, const QCString &newname)
+ObjectTreeView::renameItem(const Q3CString &oldname, const Q3CString &newname)
 {
 	if(findItem(newname))
 		return;
@@ -362,7 +365,7 @@ ObjectTreeView::loadTree(ObjectTreeItem *item, ObjectTreeViewItem *parent)
 	treeItem->setOpen(true);
 
 	// The item is inserted by default at the beginning, but we want it to be at the end, so we move it
-	QListViewItem *last = parent->firstChild();
+	Q3ListViewItem *last = parent->firstChild();
 	while(last->nextSibling())
 		last = last->nextSibling();
 	treeItem->moveItem(last);

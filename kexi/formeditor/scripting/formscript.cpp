@@ -90,8 +90,8 @@ FormScript::connectEvents()
 	m_script->addQObject(m_form->widget());
 
 	// Then we connect all signals
-	QValueListConstIterator<Event*> endIt = m_list.constEnd();
-	for(QValueListConstIterator<Event*> it = m_list.constBegin(); it != endIt; ++it) {
+	Q3ValueListConstIterator<Event*> endIt = m_list.constEnd();
+	for(Q3ValueListConstIterator<Event*> it = m_list.constBegin(); it != endIt; ++it) {
 		if( (*it)->type() == Event::Slot) {
 			connect((*it)->sender(), (*it)->signal(), (*it)->receiver(), (*it)->slot());
 		}

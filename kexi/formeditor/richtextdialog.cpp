@@ -17,6 +17,9 @@
  * Boston, MA 02110-1301, USA.
 */
 #include <qlayout.h>
+//Added by qt3to4:
+#include <Q3VBoxLayout>
+#include <Q3Frame>
 
 #include <ktoolbar.h>
 #include <kfontcombo.h>
@@ -36,8 +39,8 @@ namespace KFormDesigner {
 RichTextDialog::RichTextDialog(QWidget *parent, const QString &text)
 : KDialogBase(parent, "richtext_dialog", true, i18n("Edit Rich Text"), Ok|Cancel, Ok, false)
 {
-	QFrame *frame = makeMainWidget();
-	QVBoxLayout *l = new QVBoxLayout(frame);
+	Q3Frame *frame = makeMainWidget();
+	Q3VBoxLayout *l = new Q3VBoxLayout(frame);
 	l->setAutoAdd(true);
 
 	m_toolbar = new KToolBar(frame);
@@ -85,14 +88,14 @@ RichTextDialog::RichTextDialog(QWidget *parent, const QString &text)
 	connect(m_toolbar, SIGNAL(toggled(int)), this, SLOT(buttonToggled(int)));
 
 	m_edit = new KTextEdit(text, QString::null, frame, "richtext_edit");
-	m_edit->setTextFormat(RichText);
+	m_edit->setTextFormat(Qt::RichText);
 	m_edit->setFocus();
 
 	connect(m_edit, SIGNAL(cursorPositionChanged(int, int)), this, SLOT(cursorPositionChanged(int, int)));
 	connect(m_edit, SIGNAL(clicked(int, int)), this, SLOT(cursorPositionChanged(int, int)));
 	connect(m_edit, SIGNAL(currentVerticalAlignmentChanged(VerticalAlignment)), this, SLOT(slotVerticalAlignmentChanged(VerticalAlignment)));
 
-	m_edit->moveCursor(QTextEdit::MoveEnd, false);
+	m_edit->moveCursor(Q3TextEdit::MoveEnd, false);
 	cursorPositionChanged(0, 0);
 	m_edit->show();
 	frame->show();
@@ -130,14 +133,14 @@ RichTextDialog::buttonToggled(int id)
 		{
 			if(isOn && m_toolbar->isButtonOn(TBSub))
 				m_toolbar->setButton(TBSub, false);
-			m_edit->setVerticalAlignment(isOn ? QTextEdit::AlignSuperScript : QTextEdit::AlignNormal);
+			m_edit->setVerticalAlignment(isOn ? Q3TextEdit::AlignSuperScript : Q3TextEdit::AlignNormal);
 			break;
 		}
 		case TBSub:
 		{
 			if(isOn && m_toolbar->isButtonOn(TBSuper))
 				m_toolbar->setButton(TBSuper, false);
-			m_edit->setVerticalAlignment(isOn ? QTextEdit::AlignSubScript : QTextEdit::AlignNormal);
+			m_edit->setVerticalAlignment(isOn ? Q3TextEdit::AlignSubScript : Q3TextEdit::AlignNormal);
 			break;
 		}
 		case TBLeft: case TBCenter:
@@ -184,13 +187,13 @@ RichTextDialog::slotVerticalAlignmentChanged(VerticalAlignment align)
 {
 	switch(align)
 	{
-		case QTextEdit::AlignSuperScript:
+		case Q3TextEdit::AlignSuperScript:
 		{
 			m_toolbar->setButton(TBSuper, true);
 			m_toolbar->setButton(TBSub, false);
 			break;
 		}
-		case QTextEdit::AlignSubScript:
+		case Q3TextEdit::AlignSubScript:
 		{
 			m_toolbar->setButton(TBSub, true);
 			m_toolbar->setButton(TBSuper, false);

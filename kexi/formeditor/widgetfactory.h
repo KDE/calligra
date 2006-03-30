@@ -24,22 +24,27 @@
 
 
 #include <qobject.h>
-#include <qguardedptr.h>
+#include <qpointer.h>
 #include <qpixmap.h>
-#include <qpopupmenu.h>
-#include <qasciidict.h>
+#include <q3popupmenu.h>
+#include <q3asciidict.h>
+//Added by qt3to4:
+#include <Q3CString>
+#include <Q3PtrList>
+#include <QEvent>
+#include <Q3ValueList>
 
 #include <kexiutils/tristate.h>
 
 // class QPixmap;
-template<class type> class QValueVector;
-template<class type> class QPtrList;
-template<class type> class QDict;
+template<class type> class Q3ValueVector;
+template<class type> class Q3PtrList;
+template<class type> class Q3Dict;
 class QWidget;
 class QDomElement;
 class QDomDocument;
 class QVariant;
-class QListView;
+class Q3ListView;
 class KActionCollection;
 class KTextEdit;
 class KLineEdit;
@@ -64,8 +69,8 @@ class Form;
 class KFORMEDITOR_EXPORT WidgetInfo
 {
 	public:
-		typedef QPtrList<WidgetInfo> List;
-		typedef QAsciiDict<WidgetInfo> Dict;
+		typedef Q3PtrList<WidgetInfo> List;
+		typedef Q3AsciiDict<WidgetInfo> Dict;
 
 		WidgetInfo(WidgetFactory *f);
 
@@ -77,7 +82,7 @@ class KFORMEDITOR_EXPORT WidgetInfo
 		QString pixmap() const { return m_pixmap; }
 
 		//! \return the class name of a widget e.g. 'QLineEdit'
-		QCString className() const { return m_class; }
+		Q3CString className() const { return m_class; }
 
 		/*! \return the name used to name widget, that will appear eg in scripts (must not contain spaces
 		  nor non-latin1 characters) */
@@ -88,12 +93,12 @@ class KFORMEDITOR_EXPORT WidgetInfo
 
 		QString description() const { return m_desc; }
 		QString includeFileName() const { return m_include; }
-		QValueList<QCString> alternateClassNames() const { return m_alternateNames; }
+		Q3ValueList<Q3CString> alternateClassNames() const { return m_alternateNames; }
 		QString savingName() const { return m_saveName; }
 		WidgetFactory *factory() const { return m_factory; }
 
 		void setPixmap(const QString &p) { m_pixmap = p; }
-		void setClassName(const QCString &s) { m_class = s; }
+		void setClassName(const Q3CString &s) { m_class = s; }
 		void setName(const QString &n) { m_name = n; }
 		void setNamePrefix(const QString &n) { m_prefixName = n; }
 		void setDescription(const QString &desc) { m_desc = desc;}
@@ -118,13 +123,13 @@ class KFORMEDITOR_EXPORT WidgetInfo
 		 For example, in Kexi application, KLineEdit class contains additional
 		 "datasource" property for binding to database sources.
 		*/
-		void addAlternateClassName(const QCString& alternateName, bool override = false);
+		void addAlternateClassName(const Q3CString& alternateName, bool override = false);
 
 		/*! \return true is a class \a alternateName is defined as alternate name with
 		 'override' flag set to true, using addAlternateClassName().
 		 If this flag is set to false (the default) or there's no such alternate class
 		 name defined. */
-		bool isOverriddenClassName(const QCString& alternateName) const;
+		bool isOverriddenClassName(const Q3CString& alternateName) const;
 
 		/*! Sets the name that will be written in the .ui file when saving.
 		 This name must be one of alternate names (or loading will be impossible).
@@ -145,7 +150,7 @@ class KFORMEDITOR_EXPORT WidgetInfo
 		 If cancelled value is returned, there is no overriding (the default). */
 		tristate autoSyncForProperty(const char *propertyName) const;
 
-		QCString parentFactoryName() const { return m_parentFactoryName; }
+		Q3CString parentFactoryName() const { return m_parentFactoryName; }
 
 		WidgetInfo* inheritedClass() const { return m_inheritedClass; }
 
@@ -160,22 +165,22 @@ class KFORMEDITOR_EXPORT WidgetInfo
 		int customTypeForProperty(const char *propertyName) const;
 
 	protected:
-		QCString m_parentFactoryName, m_inheritedClassName; //!< Used for inheriting widgets between factories
+		Q3CString m_parentFactoryName, m_inheritedClassName; //!< Used for inheriting widgets between factories
 		WidgetInfo* m_inheritedClass;
 
 	private:
 		QString m_pixmap;
-		QCString m_class;
+		Q3CString m_class;
 		QString m_name;
 		QString m_prefixName;
 		QString m_desc;
 		QString m_include;
-		QValueList<QCString> m_alternateNames;
-		QAsciiDict<char> *m_overriddenAlternateNames;
+		Q3ValueList<Q3CString> m_alternateNames;
+		Q3AsciiDict<char> *m_overriddenAlternateNames;
 		QString m_saveName;
 		QPointer<WidgetFactory> m_factory;
-		QAsciiDict<char> *m_propertiesWithDisabledAutoSync;
-		QMap<QCString,int> *m_customTypesForProperty;
+		Q3AsciiDict<char> *m_propertiesWithDisabledAutoSync;
+		QMap<Q3CString,int> *m_customTypesForProperty;
 
 	friend class WidgetLibrary;
 };
@@ -292,7 +297,7 @@ class KFORMEDITOR_EXPORT WidgetFactory : public QObject
 		 * \param container the toplevel Container (if a container should get created)
 		 * \param options options for the created widget: orientation and view mode (see CreateWidgetOptions)
 		 */
-		virtual QWidget* createWidget(const QCString &classname, QWidget *parent, const char *name,
+		virtual QWidget* createWidget(const Q3CString &classname, QWidget *parent, const char *name,
 			KFormDesigner::Container *container, 
 			int options = DefaultOptions) = 0;
 
@@ -300,7 +305,7 @@ class KFORMEDITOR_EXPORT WidgetFactory : public QObject
 
 		/*! This function can be used to add custom items in widget \a w context
 		menu \a menu. */
-		virtual bool createMenuActions(const QCString &classname, QWidget *w, QPopupMenu *menu,
+		virtual bool createMenuActions(const Q3CString &classname, QWidget *w, Q3PopupMenu *menu,
 		    KFormDesigner::Container *container)=0;
 
 		/*! Creates (if necessary) an editor to edit the contents of the widget directly in the Form
@@ -308,20 +313,20 @@ class KFORMEDITOR_EXPORT WidgetFactory : public QObject
 		   the class the widget belongs to, \a w is the widget to edit
 		   and \a container is the parent container of this widget (to access Form etc.).
 		 */
-		virtual bool startEditing(const QCString &classname, QWidget *w, Container *container)=0;
+		virtual bool startEditing(const Q3CString &classname, QWidget *w, Container *container)=0;
 
 		/*! This function is called just before the Form is previewed. It allows widgets
 		 to make changes before switching (ie for a Spring, hiding the cross) */
-		virtual bool previewWidget(const QCString &classname, QWidget *widget, Container *container)=0;
+		virtual bool previewWidget(const Q3CString &classname, QWidget *widget, Container *container)=0;
 
-		virtual bool clearWidgetContent(const QCString &classname, QWidget *w);
+		virtual bool clearWidgetContent(const Q3CString &classname, QWidget *w);
 
 		/*! This function is called when FormIO finds a property, at save time,
 		 that it cannot handle (ie not a normal property).
 		This way you can save special properties, for example the contents of a listbox.
 		  \sa readSpecialProperty()
 		 */
-		virtual bool saveSpecialProperty(const QCString &classname, const QString &name,
+		virtual bool saveSpecialProperty(const Q3CString &classname, const QString &name,
 			const QVariant &value, QWidget *w,
 			QDomElement &parentNode, QDomDocument &parent);
 
@@ -330,7 +335,7 @@ class KFORMEDITOR_EXPORT WidgetFactory : public QObject
 		  example the contents of a listbox.
 		   \sa saveSpecialProperty()
 		*/
-		virtual bool readSpecialProperty(const QCString &classname, QDomElement &node,
+		virtual bool readSpecialProperty(const Q3CString &classname, QDomElement &node,
 			QWidget *w, ObjectTreeItem *item);
 
 		/*! This function is used to know whether the \a property for the widget \a w
@@ -338,20 +343,20 @@ class KFORMEDITOR_EXPORT WidgetFactory : public QObject
 		then multiple widgets of the same class are selected, and you should
 		only show properties shared by widgets (eg font, color). By default,
 		all properties are shown if multiple == true, and none if multiple == false. */
-		bool isPropertyVisible(const QCString &classname, QWidget *w,
-			const QCString &property, bool multiple, bool isTopLevel);
+		bool isPropertyVisible(const Q3CString &classname, QWidget *w,
+			const Q3CString &property, bool multiple, bool isTopLevel);
 
 		/*! You need to return here a list of the properties that should automatically be saved
 		for a widget belonging to \a classname, and your custom properties (eg "text"
 		for label or button, "contents" for combobox...). */
-		virtual QValueList<QCString> autoSaveProperties(const QCString &classname)=0;
+		virtual Q3ValueList<Q3CString> autoSaveProperties(const Q3CString &classname)=0;
 
 		/*! \return The i18n'ed name of the property whose name is \a name,
 		 that will be displayed in PropertyEditor. */
-		inline QString propertyDescForName(const QCString &name) { return m_propDesc[name]; };
+		inline QString propertyDescForName(const Q3CString &name) { return m_propDesc[name]; };
 
 		/*! \return The i18n'ed name of the property's value whose name is \a name. */
-		inline QString propertyDescForValue(const QCString &name) { return m_propValDesc[name]; };
+		inline QString propertyDescForValue(const Q3CString &name) { return m_propValDesc[name]; };
 
 		/*! This method is called after WidgetPropertySet was filled with properties
 		 of a widget \a w, of class defined by \a info.
@@ -362,23 +367,23 @@ class KFORMEDITOR_EXPORT WidgetFactory : public QObject
 		/*! \return internal property \a property for a class \a classname.
 		 Internal properties are not stored within objects, but can be just provided
 		 to describe classes' details. */
-		inline QString internalProperty(const QCString& classname, const QCString& property) const {
+		inline QString internalProperty(const Q3CString& classname, const Q3CString& property) const {
 			return m_internalProp[classname+":"+property];
 		}
 
 	protected:
-		virtual bool isPropertyVisibleInternal(const QCString &classname, QWidget *w,
-			const QCString &property, bool isTopLevel);
+		virtual bool isPropertyVisibleInternal(const Q3CString &classname, QWidget *w,
+			const Q3CString &property, bool isTopLevel);
 
 		/*! This function creates a KLineEdit to input some text and edit a widget's contents.
 		 This can be used in startEditing(). \a text is the text to display by default
 		  in the line edit, \a w is the edited widget, \a geometry is the geometry the new line
 		   edit should have, and \a align is Qt::AlignmentFlags of the new line edit.
 		 */
-		void createEditor(const QCString &classname, const QString &text,
+		void createEditor(const Q3CString &classname, const QString &text,
 			QWidget *w, Container *container, QRect geometry,
 			int align, bool useFrame=false, bool multiLine = false,
-			BackgroundMode background = Qt::NoBackground);
+			Qt::BackgroundMode background = Qt::NoBackground);
 
 		/*! This function provides a simple editing mode : it justs disable event filtering
 		for the widget, and it install it again when
@@ -400,7 +405,7 @@ class KFORMEDITOR_EXPORT WidgetFactory : public QObject
 
 		/*! This function creates a dialog to modify the contents of a ListView. You can modify both
 		columns and list items. The listview is automatically  updated if the user presses "Ok".*/
-		void editListView(QListView *listview);
+		void editListView(Q3ListView *listview);
 
 		/*! This function destroys the editor when it loses focus or Enter is pressed. */
 		virtual bool  eventFilter(QObject *obj, QEvent *ev);
@@ -412,7 +417,7 @@ class KFORMEDITOR_EXPORT WidgetFactory : public QObject
 
 		/*! This function is called when the widget is resized,
 		 and the \a editor size needs to be updated. */
-		virtual void resizeEditor(QWidget *editor, QWidget *widget, const QCString &classname);
+		virtual void resizeEditor(QWidget *editor, QWidget *widget, const Q3CString &classname);
 
 //		/*! Adds the i18n'ed description of a property, which will be shown in PropertyEditor. */
 //		void  addPropertyDescription(Container *container, const char *prop, const QString &desc);
@@ -460,10 +465,10 @@ class KFORMEDITOR_EXPORT WidgetFactory : public QObject
 		/*! Assigns \a value for internal property \a property for a class \a classname.
 		 Internal properties are not stored within objects, but can be provided
 		 to describe classes' details. */
-		void setInternalProperty(const QCString& classname, const QCString& property, const QString& value);
+		void setInternalProperty(const Q3CString& classname, const Q3CString& property, const QString& value);
 
 		WidgetLibrary *m_library;
-		QCString m_editedWidgetClass;
+		Q3CString m_editedWidgetClass;
 //#ifdef KEXI_KTEXTEDIT
 //		QPointer<KTextEdit>  m_editor;
 //#else
@@ -474,13 +479,13 @@ class KFORMEDITOR_EXPORT WidgetFactory : public QObject
 		QPointer<Container> m_container;
 //		WidgetInfo::List m_classes;
 		WidgetInfo::Dict m_classesByName;
-		QAsciiDict<char>* m_hiddenClasses;
+		Q3AsciiDict<char>* m_hiddenClasses;
 
 		//! i18n stuff
-		QMap<QCString, QString> m_propDesc;
-		QMap<QCString, QString> m_propValDesc;
+		QMap<Q3CString, QString> m_propDesc;
+		QMap<Q3CString, QString> m_propValDesc;
 		//! internal properties
-		QMap<QCString, QString> m_internalProp;
+		QMap<Q3CString, QString> m_internalProp;
 
 		/*! flag useful to decide whether to hide some properties.
 		 It's value is inherited from WidgetLibrary. */

@@ -20,7 +20,7 @@
 #ifndef KFORMDESIGNEREVENTS_H
 #define KFORMDESIGNEREVENTS_H
 
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 #include <qstring.h>
 
 class QDomNode;
@@ -52,7 +52,7 @@ class KFORMEDITOR_EXPORT Connection
 		QString m_slot;
 };
 
-typedef QPtrList<Connection> ConnectionList;
+typedef Q3PtrList<Connection> ConnectionList;
 
 class KFORMEDITOR_EXPORT ConnectionBuffer : public ConnectionList
 {

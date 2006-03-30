@@ -23,7 +23,10 @@
 #define KFORMDESIGNERFORM_H
 
 #include <qobject.h>
-#include <qptrlist.h>
+#include <q3ptrlist.h>
+//Added by qt3to4:
+#include <Q3ValueList>
+#include <Q3CString>
 
 #include "resizehandle.h"
 #include "utils.h"
@@ -60,7 +63,7 @@ class KFORMEDITOR_EXPORT FormWidget
 		 using double-buffering. \a type can be 1 (selection rect)
 		 or 2 (insert rect, dotted). */
 
-		virtual void drawRects(const QValueList<QRect> &list, int type) = 0;
+		virtual void drawRects(const Q3ValueList<QRect> &list, int type) = 0;
 
 		virtual void drawRect(const QRect &r, int type) = 0;
 
@@ -119,7 +122,7 @@ class FormPrivate
 
 		//! A set of head properties to be stored in a .ui file.
 		//! This includes KFD format version.
-		QMap<QCString,QString> headerProperties;
+		QMap<Q3CString,QString> headerProperties;
 
 		//! Format version, set by FormIO or on creating a new form.
 		uint formatVersion;
@@ -153,7 +156,7 @@ class KFORMEDITOR_EXPORT Form : public QObject
 		 form->createToplevel(toplevel); \endcode
 		 */
 		void createToplevel(QWidget *container, FormWidget *formWidget =0,
-			const QCString &classname="QWidget");
+			const Q3CString &classname="QWidget");
 
 		/*! \return the toplevel Container or 0 if this is a preview Form or createToplevel()
 		   has not been called yet. */
@@ -302,7 +305,7 @@ class KFORMEDITOR_EXPORT Form : public QObject
 
 		/*! A set of value/key pairs provided to be stored as attributes in 
 		 <kfd:customHeader/> XML element (saved as a first child of \<UI> element). */
-		QMap<QCString,QString>* headerProperties() const { return &d->headerProperties; }
+		QMap<Q3CString,QString>* headerProperties() const { return &d->headerProperties; }
 
 		//! \return format version number for this form. 
 		//! For new forms it is equal to KFormDesigner::version().
@@ -318,7 +321,7 @@ class KFORMEDITOR_EXPORT Form : public QObject
 		/*! This slot is called when the name of a widget was changed in Property Editor.
 		It renames the ObjectTreeItem associated to this widget.
 		 */
-		void changeName(const QCString &oldname, const QCString &newname);
+		void changeName(const Q3CString &oldname, const Q3CString &newname);
 
 		/*! Sets \a selected to be the selected widget of this Form. 
 		 If \a add is true, the formerly selected widget is still selected, 

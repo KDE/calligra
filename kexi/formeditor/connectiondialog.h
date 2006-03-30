@@ -21,7 +21,9 @@
 #ifndef FORMCONNECTIONDIALOG_H
 #define FORMCONNECTIONDIALOG_H
 
-#include <qintdict.h>
+#include <q3intdict.h>
+//Added by qt3to4:
+#include <QLabel>
 #include <kdialogbase.h>
 
 namespace KexiDB {
@@ -29,7 +31,7 @@ namespace KexiDB {
 }
 
 class QLabel;
-class QButton;
+class Q3Button;
 class KexiTableView;
 class KexiTableViewData;
 class KexiTableItem;
@@ -106,7 +108,7 @@ class KFORMEDITOR_EXPORT ConnectionDialog : public KDialogBase
 		KexiTableViewData  *m_data;
 		KexiTableViewData *m_widgetsColumnData, *m_slotsColumnData, *m_signalsColumnData;
 		QLabel  *m_pixmapLabel, *m_textLabel;
-		QIntDict<QButton>  m_buttons;  //! dict of button (for disabling them)
+		Q3IntDict<Q3Button>  m_buttons;  //! dict of button (for disabling them)
 };
 
 }

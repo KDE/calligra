@@ -22,11 +22,13 @@
 #define KFORMEDITOR_COMMANDS_H
 
 #include <qmap.h>
-#include <qdict.h>
-#include <qptrlist.h>
-#include <qptrdict.h>
+#include <q3dict.h>
+#include <q3ptrlist.h>
+#include <q3ptrdict.h>
 #include <qvariant.h>
 #include <qdom.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 #include <kcommand.h>
 #include "utils.h"
@@ -35,7 +37,7 @@ class QWidget;
 class QRect;
 class QPoint;
 class QStringList;
-class QCString;
+class Q3CString;
 
 namespace KFormDesigner {
 
@@ -61,25 +63,25 @@ class KFORMEDITOR_EXPORT Command : public KCommand
 class KFORMEDITOR_EXPORT PropertyCommand : public Command
 {
 	public:
-		PropertyCommand(WidgetPropertySet *set, const QCString &wname, const QVariant &oldValue,
-			const QVariant &value, const QCString &property);
-		PropertyCommand(WidgetPropertySet *set, const QMap<QCString, QVariant> &oldvalues,
-			 const QVariant &value, const QCString &property);
+		PropertyCommand(WidgetPropertySet *set, const Q3CString &wname, const QVariant &oldValue,
+			const QVariant &value, const Q3CString &property);
+		PropertyCommand(WidgetPropertySet *set, const QMap<Q3CString, QVariant> &oldvalues,
+			 const QVariant &value, const Q3CString &property);
 
 		virtual void execute();
 		virtual void unexecute();
 		virtual QString name() const;
-		QCString property() const { return m_property; }
+		Q3CString property() const { return m_property; }
 
 		void  setValue(const QVariant &value);
-		const QMap<QCString, QVariant>& oldValues() const { return m_oldvalues; }
+		const QMap<Q3CString, QVariant>& oldValues() const { return m_oldvalues; }
 		virtual void debug();
 
 	protected:
 		WidgetPropertySet *m_propSet;
 		QVariant m_value;
-		QMap<QCString, QVariant> m_oldvalues;
-		QCString m_property;
+		QMap<Q3CString, QVariant> m_oldvalues;
+		Q3CString m_property;
 };
 
 /*! This command is used when moving multiples widgets at the same time, while holding Ctrl or Shift.
@@ -121,7 +123,7 @@ class KFORMEDITOR_EXPORT AlignWidgetsCommand : public Command
 	protected:
 		Form *m_form;
 		int m_type;
-		QMap<QCString, QPoint> m_pos;
+		QMap<Q3CString, QPoint> m_pos;
 };
 
 /*! This command is used when an item in 'Adjust Widgets Size' is selected. You just need
@@ -146,8 +148,8 @@ class KFORMEDITOR_EXPORT AdjustSizeCommand : public Command
 	protected:
 		Form *m_form;
 		int m_type;
-		QMap<QCString, QPoint> m_pos;
-		QMap<QCString, QSize> m_sizes;
+		QMap<Q3CString, QPoint> m_pos;
+		QMap<Q3CString, QSize> m_sizes;
 };
 
 /*! This command is used when switching the layout of a Container. It remembers the old pos
@@ -155,7 +157,7 @@ class KFORMEDITOR_EXPORT AdjustSizeCommand : public Command
 class KFORMEDITOR_EXPORT LayoutPropertyCommand : public PropertyCommand
 {
 	public:
-		LayoutPropertyCommand(WidgetPropertySet *set, const QCString &wname,
+		LayoutPropertyCommand(WidgetPropertySet *set, const Q3CString &wname,
 			const QVariant &oldValue, const QVariant &value);
 
 		virtual void execute();
@@ -165,7 +167,7 @@ class KFORMEDITOR_EXPORT LayoutPropertyCommand : public PropertyCommand
 
 	protected:
 		Form *m_form;
-		QMap<QCString,QRect>  m_geometries;
+		QMap<Q3CString,QRect>  m_geometries;
 };
 
 /*! This command is used when inserting a widger using toolbar or menu. You only need to give
@@ -183,8 +185,8 @@ class KFORMEDITOR_EXPORT InsertWidgetCommand : public Command
 		 otherwise, \a namePrefix is used to generate widget's name.
 		 This allows e.g. inserting a widgets having name constructed using 
 		 */
-		InsertWidgetCommand(Container *container, const QCString& className, 
-			const QPoint& pos, const QCString& namePrefix = QCString());
+		InsertWidgetCommand(Container *container, const Q3CString& className, 
+			const QPoint& pos, const Q3CString& namePrefix = Q3CString());
 
 		virtual void execute();
 		virtual void unexecute();
@@ -192,14 +194,14 @@ class KFORMEDITOR_EXPORT InsertWidgetCommand : public Command
 		virtual void debug();
 
 		//! \return inserted widget's name
-		QCString widgetName() const { return m_name; }
+		Q3CString widgetName() const { return m_name; }
 
 	protected:
 		Form *m_form;
 		QString m_containername;
 		QPoint m_point;
-		QCString m_name;
-		QCString m_class;
+		Q3CString m_name;
+		Q3CString m_class;
 		QRect m_insertRect;
 };
 
@@ -221,7 +223,7 @@ class KFORMEDITOR_EXPORT CreateLayoutCommand : public Command
 		Form *m_form;
 		QString m_containername;
 		QString m_name;
-		QMap<QCString,QRect> m_pos;
+		QMap<Q3CString,QRect> m_pos;
 		int m_type;
 };
 
@@ -270,7 +272,7 @@ class KFORMEDITOR_EXPORT PasteWidgetCommand : public Command
 
 	protected:
 		Form *m_form;
-		QCString m_data;
+		Q3CString m_data;
 		QString m_containername;
 		QPoint m_point;
 		QStringList m_names;
@@ -291,8 +293,8 @@ class KFORMEDITOR_EXPORT DeleteWidgetCommand : public Command
 	protected:
 		QDomDocument m_domDoc;
 		Form *m_form;
-		QMap<QCString, QCString>  m_containers;
-		QMap<QCString, QCString>  m_parents;
+		QMap<Q3CString, Q3CString>  m_containers;
+		QMap<Q3CString, Q3CString>  m_parents;
 };
 
 /*! This command is used when cutting widgets. It is basically a DeleteWidgetCommand
@@ -308,7 +310,7 @@ class KFORMEDITOR_EXPORT CutWidgetCommand : public DeleteWidgetCommand
 		virtual void debug();
 
 	protected:
-		QCString m_data;
+		Q3CString m_data;
 };
 
 /*! A Command Group is a command that holds several subcommands.
@@ -357,7 +359,7 @@ class KFORMEDITOR_EXPORT CommandGroup : public Command
 		/*! \return a list of all subcommands of this group. 
 		 Note that if a given subcommand is a group itself, 
 		 it will not be expanded to subcommands on this list. */
-		const QPtrList<KCommand>& commands() const;
+		const Q3PtrList<KCommand>& commands() const;
 
 		/*! Resets all 'allowExecute' flags that was set in addCommand().
 		 Call this after calling CommandGroup::execute() to ensure that
@@ -371,7 +373,7 @@ class KFORMEDITOR_EXPORT CommandGroup : public Command
 		SubCommands *m_subCommands;
 		//! Used to store pointers to subcommands that shouldn't be executed 
 		//! on CommandGroup::execute()
-		QPtrDict<char> m_commandsShouldntBeExecuted;
+		Q3PtrDict<char> m_commandsShouldntBeExecuted;
 		WidgetPropertySet *m_propSet;
 };
 

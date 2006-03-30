@@ -24,16 +24,21 @@
 
 #include <qobject.h>
 #include <qmap.h>
-#include <qdict.h>
+#include <q3dict.h>
+//Added by qt3to4:
+#include <Q3ValueList>
+#include <Q3PopupMenu>
+#include <Q3CString>
+#include <Q3PtrList>
 
 #include "widgetfactory.h"
 
-template<class type> class QPtrList;
-template<class type> class QValueVector;
+template<class type> class Q3PtrList;
+template<class type> class Q3ValueVector;
 class KActionCollection;
 class KAction;
 class QWidget;
-class QPopupMenu;
+class Q3PopupMenu;
 class QVariant;
 class QDomDocument;
 class QDomElement;
@@ -45,7 +50,7 @@ class ObjectTreeItem;
 class WidgetLibraryPrivate;
 class WidgetPropertySet;
 
-typedef QPtrList<KAction> ActionList;
+typedef Q3PtrList<KAction> ActionList;
 
 /**
  * This class searches for factories and provides KActions for widget creation.
@@ -85,10 +90,10 @@ class KFORMEDITOR_EXPORT WidgetLibrary : public QObject
 		 * searches the right factory and creates a widget.
 		 * \return the widget or 0 if something falid
 		 */
-		QWidget *createWidget(const QCString &classname, QWidget *parent, const char *name, Container *c,
+		QWidget *createWidget(const Q3CString &classname, QWidget *parent, const char *name, Container *c,
 			int options = WidgetFactory::DefaultOptions);
 
-		bool createMenuActions(const QCString &c, QWidget *w, QPopupMenu *menu,
+		bool createMenuActions(const Q3CString &c, QWidget *w, Q3PopupMenu *menu,
 			KFormDesigner::Container *container);
 
 		/** 
@@ -99,34 +104,34 @@ class KFORMEDITOR_EXPORT WidgetLibrary : public QObject
 		 * - WidgetFactory::VerticalOrientation
 		 */
 		WidgetFactory::CreateWidgetOptions showOrientationSelectionPopup(
-			const QCString &classname, QWidget* parent, const QPoint& pos);
+			const Q3CString &classname, QWidget* parent, const QPoint& pos);
 
-		QString internalProperty(const QCString& classname, const QCString& property);
+		QString internalProperty(const Q3CString& classname, const Q3CString& property);
 
-		QString displayName(const QCString &classname);
-		QString namePrefix(const QCString &classname);
-		QString textForWidgetName(const QCString &name, const QCString &className);
+		QString displayName(const Q3CString &classname);
+		QString namePrefix(const Q3CString &classname);
+		QString textForWidgetName(const Q3CString &name, const Q3CString &className);
 
 		/*! Checks if the \a classname is an alternate classname,
 		 and returns the good classname. 
 		 If \a classname is not alternate, \a classname is returned. */
-		QCString classNameForAlternate(const QCString &classname);
-		QString iconName(const QCString &classname);
-		QString includeFileName(const QCString &classname);
-		QString savingName(const QCString &classname);
+		Q3CString classNameForAlternate(const Q3CString &classname);
+		QString iconName(const Q3CString &classname);
+		QString includeFileName(const Q3CString &classname);
+		QString savingName(const Q3CString &classname);
 
-		bool startEditing(const QCString &classname, QWidget *w, Container *container);
-		bool previewWidget(const QCString &classname, QWidget *widget, Container *container);
-		bool clearWidgetContent(const QCString &classname, QWidget *w);
+		bool startEditing(const Q3CString &classname, QWidget *w, Container *container);
+		bool previewWidget(const Q3CString &classname, QWidget *widget, Container *container);
+		bool clearWidgetContent(const Q3CString &classname, QWidget *w);
 
-		bool saveSpecialProperty(const QCString &classname, const QString &name,
+		bool saveSpecialProperty(const Q3CString &classname, const QString &name,
 			const QVariant &value, QWidget *w, QDomElement &parentNode, QDomDocument &parent);
-		bool readSpecialProperty(const QCString &classname, QDomElement &node, QWidget *w,
+		bool readSpecialProperty(const Q3CString &classname, QDomElement &node, QWidget *w,
 			ObjectTreeItem *item);
-		bool isPropertyVisible(const QCString &classname, QWidget *w,
-			const QCString &property, bool multiple = false, bool isTopLevel = false);
+		bool isPropertyVisible(const Q3CString &classname, QWidget *w,
+			const Q3CString &property, bool multiple = false, bool isTopLevel = false);
 
-		QValueList<QCString> autoSaveProperties(const QCString &classname);
+		Q3ValueList<Q3CString> autoSaveProperties(const Q3CString &classname);
 
 		WidgetInfo* widgetInfoForClassName(const char* classname);
 
@@ -151,7 +156,7 @@ class KFORMEDITOR_EXPORT WidgetLibrary : public QObject
 		 is asked for returning description string.
 		 Eventually, if even this failed, empty string is returned.
 		 @see WidgetFactory::propertyDescForName() */
-		QString propertyDescForName(WidgetInfo *winfo, const QCString& propertyName);
+		QString propertyDescForName(WidgetInfo *winfo, const Q3CString& propertyName);
 
 		/*! \return The i18n'ed name of the property's value whose name is \a name.
 		 Works in the same way as propertyDescForName(): if actual library
@@ -159,13 +164,13 @@ class KFORMEDITOR_EXPORT WidgetLibrary : public QObject
 		 to return such description.
 		 Eventually, if even this failed, empty string is returned.
 		 @see WidgetFactory::propertyDescForValue() */
-		QString propertyDescForValue(WidgetInfo *winfo, const QCString& name);
+		QString propertyDescForValue(WidgetInfo *winfo, const Q3CString& name);
 
 		/*! Used by WidgetPropertySet::setWidget() after creating properties. */
 		void setPropertyOptions( WidgetPropertySet &list, const WidgetInfo& winfo, QWidget* w );
 
 	signals:
-		void prepareInsert(const QCString &c);
+		void prepareInsert(const Q3CString &c);
 
 	protected:
 		/**

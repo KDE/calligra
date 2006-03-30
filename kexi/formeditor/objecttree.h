@@ -21,12 +21,14 @@
 #ifndef KFORMDESIGNEROBJECTTREE_H
 #define KFORMDESIGNEROBJECTTREE_H
 
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 #include <qmap.h>
-#include <qdict.h>
+#include <q3dict.h>
 #include <qvariant.h>
 #include <qstring.h>
-#include <qguardedptr.h>
+#include <qpointer.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 class QWidget;
 class QDomElement;
@@ -38,16 +40,16 @@ class Container;
 class EventEater;
 
 //! @short An list of ObjectTreeItem pointers.
-typedef QPtrList<ObjectTreeItem> ObjectTreeList;
+typedef Q3PtrList<ObjectTreeItem> ObjectTreeList;
 
 //! @short An iterator for ObjectTreeList.
-typedef QPtrListIterator<ObjectTreeItem> ObjectTreeListIterator;
+typedef Q3PtrListIterator<ObjectTreeItem> ObjectTreeListIterator;
 
 //! @short A QString-based disctionary of ObjectTreeItem pointers.
-typedef QDict<ObjectTreeItem> ObjectTreeDict;
+typedef Q3Dict<ObjectTreeItem> ObjectTreeDict;
 
 //! @short An iterator for ObjectTreeDict.
-typedef QDictIterator<ObjectTreeItem> ObjectTreeDictIterator;
+typedef Q3DictIterator<ObjectTreeItem> ObjectTreeDictIterator;
 
 //! @short A QString -> QVarinat map.
 typedef QMap<QString, QVariant> QVariantMap;
@@ -92,11 +94,11 @@ class KFORMEDITOR_EXPORT ObjectTreeItem
 		/*! Adds \a property in the list of the modified properties for this object.
 		    These modified properties are written in the .ui files when saving the form.
 		*/
-		void addModifiedProperty(const QCString &property, const QVariant &oldValue);
+		void addModifiedProperty(const Q3CString &property, const QVariant &oldValue);
 		void storeUnknownProperty(QDomElement &el);
 
-		void setPixmapName(const QCString &property, const QString &name);
-		QString pixmapName(const QCString &property);
+		void setPixmapName(const Q3CString &property, const QString &name);
+		QString pixmapName(const Q3CString &property);
 
 		void setEnabled(bool enabled)  { m_enabled = enabled; }
 		bool isEnabled() const { return m_enabled; }
@@ -115,7 +117,7 @@ class KFORMEDITOR_EXPORT ObjectTreeItem
 		QPointer<Container> m_container;
 		QMap<QString, QVariant> m_props;
 		QString  m_unknownProps;
-		QMap<QCString, QString> m_pixmapNames;
+		QMap<Q3CString, QString> m_pixmapNames;
 		ObjectTreeItem* m_parent;
 		QPointer<QWidget> m_widget;
 		QPointer<EventEater> m_eater;
@@ -162,7 +164,7 @@ class KFORMEDITOR_EXPORT ObjectTree : public ObjectTreeItem
 		 If \a numberSuffixRequired is false and there's a widget prefix \a prefix,
 		 then \a prefix is returned (e.g. if \a prefix is "lineEdit", and "lineEdit" doesn't exist yet,
 		 "lineEdit" is returned). */
-		QCString generateUniqueName(const QCString &prefix, bool numberSuffixRequired = true);
+		Q3CString generateUniqueName(const Q3CString &prefix, bool numberSuffixRequired = true);
 
 	private:
 		ObjectTreeDict	m_treeDict;

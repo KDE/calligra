@@ -20,7 +20,7 @@
 #ifndef FORMEDITORUTILS_H
 #define FORMEDITORUTILS_H
 
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 #include <qwidget.h>
 
 namespace KFormDesigner {
@@ -28,17 +28,17 @@ namespace KFormDesigner {
 class Form;
 
 //! @short A list of widget pointers.
-typedef QPtrList<QWidget> WidgetList;
+typedef Q3PtrList<QWidget> WidgetList;
 
 //! @short An iterator for WidgetList.
-typedef QPtrListIterator<QWidget> WidgetListIterator;
+typedef Q3PtrListIterator<QWidget> WidgetListIterator;
 
 //! Helper classes for sorting widgets horizontally
 class HorWidgetList : public WidgetList
 {
 	public:
 	HorWidgetList() {;}
-	virtual int compareItems(QPtrCollection::Item item1, QPtrCollection::Item item2)
+	virtual int compareItems(Q3PtrCollection::Item item1, Q3PtrCollection::Item item2)
 	{
 		QWidget *w1 = static_cast<QWidget*>(item1);
 		QWidget *w2 = static_cast<QWidget*>(item2);
@@ -56,7 +56,7 @@ class VerWidgetList : public WidgetList
 {
 	public:
 	VerWidgetList() {;}
-	virtual int compareItems(QPtrCollection::Item item1, QPtrCollection::Item item2)
+	virtual int compareItems(Q3PtrCollection::Item item1, Q3PtrCollection::Item item2)
 	{
 		QWidget *w1 = static_cast<QWidget*>(item1);
 		QWidget *w2 = static_cast<QWidget*>(item2);

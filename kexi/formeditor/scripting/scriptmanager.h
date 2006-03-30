@@ -21,7 +21,7 @@
 #define SCRIPTMANAGER_H
 
 #include <qobject.h>
-#include <qptrdict.h>
+#include <q3ptrdict.h>
 
 class FormScript;
 
@@ -62,7 +62,7 @@ class ScriptManager : public QObject
 	private:
 		Kross::Api::Manager  *m_manager;
 		KFormDesigner::FormManager *m_formManager;
-		QPtrDict<FormScript>  m_dict;
+		Q3PtrDict<FormScript>  m_dict;
 };
 
 #endif

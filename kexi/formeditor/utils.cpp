@@ -18,7 +18,7 @@
 */
 
 #include <qcursor.h>
-#include <qobjectlist.h>
+#include <qobject.h>
 #include <kdebug.h>
 
 #include "form.h"

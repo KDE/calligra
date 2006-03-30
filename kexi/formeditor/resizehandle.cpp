@@ -22,6 +22,10 @@
 
 #include <qpainter.h>
 #include <qcursor.h>
+//Added by qt3to4:
+#include <QMouseEvent>
+#include <QEvent>
+#include <QPaintEvent>
 
 #include "form.h"
 #include "formmanager.h"
@@ -61,46 +65,46 @@ ResizeHandle::~ResizeHandle()
 void ResizeHandle::setEditingMode(bool editing)
 {
 	if(editing)
-		setBackgroundColor(blue);
+		setBackgroundColor(Qt::blue);
 	else
-		setBackgroundColor(black);
+		setBackgroundColor(Qt::black);
 }
 
 void ResizeHandle::updatePos()
 {
 	switch (m_pos)
 	{
-		case TopLeft:
+		case Qt::TopLeftCorner:
 			move(m_set->m_widget->x() - 3, m_set->m_widget->y() - 3);
-			setCursor(QCursor(SizeFDiagCursor));
+			setCursor(QCursor(Qt::SizeFDiagCursor));
 			break;
 		case TopCenter:
 		 	move(m_set->m_widget->x() + m_set->m_widget->width()/2 - 3, m_set->m_widget->y() - 3);
-			setCursor(QCursor(SizeVerCursor));
+			setCursor(QCursor(Qt::SizeVerCursor));
 			break;
-		case TopRight:
+		case Qt::TopRightCorner:
 			move(m_set->m_widget->x() + m_set->m_widget->width() - 3, m_set->m_widget->y() - 3);
-			setCursor(QCursor(SizeBDiagCursor));
+			setCursor(QCursor(Qt::SizeBDiagCursor));
 			break;
 		case LeftCenter:
 			move(m_set->m_widget->x() - 3, m_set->m_widget->y() + m_set->m_widget->height()/2 - 3);
-			setCursor(QCursor(SizeHorCursor));
+			setCursor(QCursor(Qt::SizeHorCursor));
 			break;
 		case RightCenter:
 			move(m_set->m_widget->x() + m_set->m_widget->width() - 3, m_set->m_widget->y() + m_set->m_widget->height()/2 - 3);
-			setCursor(QCursor(SizeHorCursor));
+			setCursor(QCursor(Qt::SizeHorCursor));
 			break;
-		case BottomLeft:
+		case Qt::BottomLeftCorner:
 			move(m_set->m_widget->x() - 3, m_set->m_widget->y() + m_set->m_widget->height() - 3);
-			setCursor(QCursor(SizeBDiagCursor));
+			setCursor(QCursor(Qt::SizeBDiagCursor));
 			break;
 		case BottomCenter:
 			move(m_set->m_widget->x() + m_set->m_widget->width()/2 - 3, m_set->m_widget->y() + m_set->m_widget->height() - 3);
-			setCursor(QCursor(SizeVerCursor));
+			setCursor(QCursor(Qt::SizeVerCursor));
 			break;
-		case BottomRight:
+		case Qt::BottomRightCorner:
 			move(m_set->m_widget->x() + m_set->m_widget->width() - 3, m_set->m_widget->y() + m_set->m_widget->height() - 3);
-			setCursor(QCursor(SizeFDiagCursor));
+			setCursor(QCursor(Qt::SizeFDiagCursor));
 			break;
 	}
 }
@@ -161,7 +165,7 @@ void ResizeHandle::mouseMoveEvent(QMouseEvent *ev)
 	int dummyx = ev->x() - m_x;
 	int dummyy = ev->y() - m_y;
 
-	if(FormManager::self()->snapWidgetsToGrid() && (ev->state() != (LeftButton|Qt::ControlButton|AltButton)))
+	if(FormManager::self()->snapWidgetsToGrid() && (ev->state() != (Qt::LeftButton|Qt::ControlModifier|Qt::AltModifier)))
 	{
 		dummyy = (int) ( ((float)dummyy) / ((float)gridY) + 0.5 );
 		dummyy *= gridY;
@@ -171,7 +175,7 @@ void ResizeHandle::mouseMoveEvent(QMouseEvent *ev)
 
 	switch (m_pos)
 	{
-		case TopRight:
+		case Qt::TopRightCorner:
 			tmpw += dummyx;
 			tmpy += dummyy;
 			tmph -= dummyy;
@@ -179,7 +183,7 @@ void ResizeHandle::mouseMoveEvent(QMouseEvent *ev)
 		case RightCenter:
 			tmpw += dummyx;
 			break;
-		case BottomRight:
+		case Qt::BottomRightCorner:
 			tmpw += dummyx;
 			tmph += dummyy;
 			break;
@@ -190,7 +194,7 @@ void ResizeHandle::mouseMoveEvent(QMouseEvent *ev)
 		case BottomCenter:
 			tmph=tmph+dummyy;
 			break;
-		case TopLeft:
+		case Qt::TopLeftCorner:
 			tmpx += dummyx;
 			tmpw -= dummyx;
 			tmpy += dummyy;
@@ -200,7 +204,7 @@ void ResizeHandle::mouseMoveEvent(QMouseEvent *ev)
 			tmpx += dummyx;
 			tmpw -= dummyx;
 			break;
-		case BottomLeft:
+		case Qt::BottomLeftCorner:
 			tmpx += dummyx;
 			tmpw -= dummyx;
 			tmph += dummyy;

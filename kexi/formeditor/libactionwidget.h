@@ -23,6 +23,8 @@
 
 
 #include <kactionclasses.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 namespace KFormDesigner
 {
@@ -45,14 +47,14 @@ class KFORMEDITOR_EXPORT LibActionWidget : public KToggleAction
 		/**
 		 * emits a signal containing the class name
 		 */
-		void prepareInsert(const QCString &className);
+		void prepareInsert(const Q3CString &className);
 
 	protected slots:
 		/** reimplemented from KToggleAction */
 		virtual void slotActivated();
 
 	private:
-		QCString m_className;
+		Q3CString m_className;
 };
 
 }

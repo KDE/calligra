@@ -8,24 +8,28 @@
  *   License, or (at your option) any later version.                       *
  ***************************************************************************/
 
-#include <qwidgetstack.h>
-#include <qframe.h>
-#include <qbuttongroup.h>
+#include <q3widgetstack.h>
+#include <q3frame.h>
+#include <q3buttongroup.h>
 #include <qwidget.h>
-#include <qhbox.h>
-#include <qvbox.h>
+#include <q3hbox.h>
+#include <q3vbox.h>
 #include <qstring.h>
-#include <qpopupmenu.h>
+#include <q3popupmenu.h>
 #include <qdom.h>
 #include <qevent.h>
-#include <qobjectlist.h>
+#include <qobject.h>
 #include <qpainter.h>
-#include <qvaluevector.h>
+#include <q3valuevector.h>
 #include <qfileinfo.h>
-#include <qscrollview.h>
+#include <q3scrollview.h>
 #include <qtabbar.h>
 #include <qsplitter.h>
 #include <qlayout.h>
+//Added by qt3to4:
+#include <Q3CString>
+#include <QPaintEvent>
+#include <Q3ValueList>
 
 #include <kiconloader.h>
 #include <kgenericfactory.h>
@@ -109,7 +113,7 @@ KFDTabWidget::sizeHint() const
 /// Various layout widgets /////////////////:
 
 HBox::HBox(QWidget *parent, const char *name)
- : QFrame(parent, name), m_preview(false)
+ : Q3Frame(parent, name), m_preview(false)
 {}
 
 void
@@ -117,12 +121,12 @@ HBox::paintEvent(QPaintEvent *)
 {
 	if(m_preview) return;
 	QPainter p(this);
-	p.setPen(QPen(red, 2, Qt::DashLine));
+	p.setPen(QPen(Qt::red, 2, Qt::DashLine));
 	p.drawRect(1, 1, width()-1, height() - 1);
 }
 
 VBox::VBox(QWidget *parent, const char *name)
- : QFrame(parent, name), m_preview(false)
+ : Q3Frame(parent, name), m_preview(false)
 {}
 
 void
@@ -130,12 +134,12 @@ VBox::paintEvent(QPaintEvent *)
 {
 	if(m_preview) return;
 	QPainter p(this);
-	p.setPen(QPen(blue, 2, Qt::DashLine));
+	p.setPen(QPen(Qt::blue, 2, Qt::DashLine));
 	p.drawRect(1, 1, width()-1, height() - 1);
 }
 
 Grid::Grid(QWidget *parent, const char *name)
- : QFrame(parent, name), m_preview(false)
+ : Q3Frame(parent, name), m_preview(false)
 {}
 
 void
@@ -143,12 +147,12 @@ Grid::paintEvent(QPaintEvent *)
 {
 	if(m_preview) return;
 	QPainter p(this);
-	p.setPen(QPen(darkGreen, 2, Qt::DashLine));
+	p.setPen(QPen(Qt::darkGreen, 2, Qt::DashLine));
 	p.drawRect(1, 1, width()-1, height() - 1);
 }
 
 HFlow::HFlow(QWidget *parent, const char *name)
- : QFrame(parent, name), m_preview(false)
+ : Q3Frame(parent, name), m_preview(false)
 {}
 
 void
@@ -156,12 +160,12 @@ HFlow::paintEvent(QPaintEvent *)
 {
 	if(m_preview) return;
 	QPainter p(this);
-	p.setPen(QPen(magenta, 2, Qt::DashLine));
+	p.setPen(QPen(Qt::magenta, 2, Qt::DashLine));
 	p.drawRect(1, 1, width()-1, height() - 1);
 }
 
 VFlow::VFlow(QWidget *parent, const char *name)
- : QFrame(parent, name), m_preview(false)
+ : Q3Frame(parent, name), m_preview(false)
 {}
 
 void
@@ -169,7 +173,7 @@ VFlow::paintEvent(QPaintEvent *)
 {
 	if(m_preview) return;
 	QPainter p(this);
-	p.setPen(QPen(cyan, 2, Qt::DashLine));
+	p.setPen(QPen(Qt::cyan, 2, Qt::DashLine));
 	p.drawRect(1, 1, width()-1, height() - 1);
 }
 
@@ -206,7 +210,7 @@ InsertPageCommand::execute()
 	QWidget *page = new QWidget(parent, m_name.latin1());
 	new KFormDesigner::Container(container, page, parent);
 
-	QCString classname = parent->className();
+	Q3CString classname = parent->className();
 	if(classname == "KFDTabWidget")
 	{
 		TabWidgetBase *tab = dynamic_cast<TabWidgetBase*>(parent);
@@ -219,7 +223,7 @@ InsertPageCommand::execute()
 	}
 	else if(classname == "QWidgetStack")
 	{
-		QWidgetStack *stack = (QWidgetStack*)parent;
+		Q3WidgetStack *stack = (Q3WidgetStack*)parent;
 		stack->addWidget(page, m_pageid);
 		stack->raiseWidget(page);
 		m_pageid = stack->id(page);
@@ -239,7 +243,7 @@ InsertPageCommand::unexecute()
 	list.append(page);
 	KCommand *com = new KFormDesigner::DeleteWidgetCommand(list, m_form);
 
-	QCString classname = parent->className();
+	Q3CString classname = parent->className();
 	if(classname == "KFDTabWidget")
 	{
 		TabWidgetBase *tab = dynamic_cast<TabWidgetBase*>(parent);
@@ -247,7 +251,7 @@ InsertPageCommand::unexecute()
 	}
 	else if(classname == "QWidgetStack")
 	{
-		QWidgetStack *stack = (QWidgetStack*)parent;
+		Q3WidgetStack *stack = (Q3WidgetStack*)parent;
 		int id = stack->id(page) - 1;
 		while(!stack->widget(id))
 			id--;
@@ -269,9 +273,9 @@ InsertPageCommand::name() const
 /////// Sub forms ////////////////////////:
 
 SubForm::SubForm(QWidget *parent, const char *name)
-: QScrollView(parent, name), m_form(0), m_widget(0)
+: Q3ScrollView(parent, name), m_form(0), m_widget(0)
 {
-	setFrameStyle(QFrame::WinPanel | QFrame::Sunken);
+	setFrameStyle(Q3Frame::WinPanel | Q3Frame::Sunken);
 	viewport()->setPaletteBackgroundColor(colorGroup().mid());
 }
 
@@ -457,13 +461,13 @@ ContainerFactory::ContainerFactory(QObject *parent, const char *, const QStringL
 }
 
 QWidget*
-ContainerFactory::createWidget(const QCString &c, QWidget *p, const char *n, 
+ContainerFactory::createWidget(const Q3CString &c, QWidget *p, const char *n, 
 	KFormDesigner::Container *container, int options)
 {
 	if(c == "QButtonGroup")
 	{
 		QString text = container->form()->library()->textForWidgetName(n, c);
-		QButtonGroup *w = new QButtonGroup(/*i18n("Button Group")*/text, p, n);
+		Q3ButtonGroup *w = new Q3ButtonGroup(/*i18n("Button Group")*/text, p, n);
 		new KFormDesigner::Container(container, w, container);
 		return w;
 	}
@@ -500,23 +504,23 @@ ContainerFactory::createWidget(const QCString &c, QWidget *p, const char *n,
 	else if(c == "QGroupBox")
 	{
 		QString text = container->form()->library()->textForWidgetName(n, c);
-		QGroupBox *w = new QGroupBox(/*i18n("Group Box")*/text, p, n);
+		Q3GroupBox *w = new Q3GroupBox(/*i18n("Group Box")*/text, p, n);
 		new KFormDesigner::Container(container, w, container);
 		return w;
 	}
 	else if(c == "QFrame")
 	{
-		QFrame *w = new QFrame(p, n);
+		Q3Frame *w = new Q3Frame(p, n);
 		w->setLineWidth(2);
-		w->setFrameStyle(QFrame::StyledPanel|QFrame::Raised);
+		w->setFrameStyle(Q3Frame::StyledPanel|Q3Frame::Raised);
 		new KFormDesigner::Container(container, w, container);
 		return w;
 	}
 	else if(c == "QWidgetStack")
 	{
-		QWidgetStack *stack = new QWidgetStack(p, n);
+		Q3WidgetStack *stack = new Q3WidgetStack(p, n);
 		stack->setLineWidth(2);
-		stack->setFrameStyle(QFrame::StyledPanel|QFrame::Raised);
+		stack->setFrameStyle(Q3Frame::StyledPanel|Q3Frame::Raised);
 		container->form()->objectTree()->addItem( container->objectTree(), 
 			new KFormDesigner::ObjectTreeItem( 
 				container->form()->library()->displayName(c), n, stack, container));
@@ -572,14 +576,14 @@ ContainerFactory::createWidget(const QCString &c, QWidget *p, const char *n,
 }
 
 bool
-ContainerFactory::previewWidget(const QCString &classname, QWidget *widget, KFormDesigner::Container *container)
+ContainerFactory::previewWidget(const Q3CString &classname, QWidget *widget, KFormDesigner::Container *container)
 {
 	if(classname == "WidgetStack")
 	{
-		QWidgetStack *stack = ((QWidgetStack*)widget);
+		Q3WidgetStack *stack = ((Q3WidgetStack*)widget);
 		KFormDesigner::ObjectTreeItem *tree = container->form()->objectTree()->lookup(widget->name());
 		if(!tree->modifiedProperties()->contains("frameShape"))
-			stack->setFrameStyle(QFrame::NoFrame);
+			stack->setFrameStyle(Q3Frame::NoFrame);
 	}
 	else if(classname == "HBox")
 		((HBox*)widget)->setPreviewMode();
@@ -597,7 +601,7 @@ ContainerFactory::previewWidget(const QCString &classname, QWidget *widget, KFor
 }
 
 bool
-ContainerFactory::createMenuActions(const QCString &classname, QWidget *w, QPopupMenu *menu,
+ContainerFactory::createMenuActions(const Q3CString &classname, QWidget *w, Q3PopupMenu *menu,
 	KFormDesigner::Container *container)
 {
 	setWidget(w, container);
@@ -624,7 +628,7 @@ ContainerFactory::createMenuActions(const QCString &classname, QWidget *w, QPopu
 	else if(w->parentWidget()->isA("QWidgetStack") && !w->parentWidget()->parentWidget()->inherits("QTabWidget"))
 	{
 		//m_widget = w->parentWidget();
-		QWidgetStack *stack = (QWidgetStack*)w->parentWidget(); //m_widget;
+		Q3WidgetStack *stack = (Q3WidgetStack*)w->parentWidget(); //m_widget;
 		setWidget(
 			w->parentWidget(), 
 			container->form()->objectTree()->lookup(stack->name())->parent()->container()
@@ -652,19 +656,19 @@ ContainerFactory::createMenuActions(const QCString &classname, QWidget *w, QPopu
 }
 
 bool
-ContainerFactory::startEditing(const QCString &classname, QWidget *w, KFormDesigner::Container *container)
+ContainerFactory::startEditing(const Q3CString &classname, QWidget *w, KFormDesigner::Container *container)
 {
 	m_container = container;
 	if(classname == "QButtonGroup")
 	{
-		QButtonGroup *group = static_cast<QButtonGroup*>(w);
+		Q3ButtonGroup *group = static_cast<Q3ButtonGroup*>(w);
 		QRect r = QRect(group->x()+2, group->y()-5, group->width()-10, w->fontMetrics().height() + 10);
 		createEditor(classname, group->title(), group, container, r, Qt::AlignLeft);
 		return true;
 	}
 	if(classname == "QGroupBox")
 	{
-		QGroupBox *group = static_cast<QGroupBox*>(w);
+		Q3GroupBox *group = static_cast<Q3GroupBox*>(w);
 		QRect r = QRect(group->x()+2, group->y()-5, group->width()-10, w->fontMetrics().height() + 10);
 		createEditor(classname, group->title(), group, container, r, Qt::AlignLeft);
 		return true;
@@ -673,7 +677,7 @@ ContainerFactory::startEditing(const QCString &classname, QWidget *w, KFormDesig
 }
 
 bool
-ContainerFactory::saveSpecialProperty(const QCString &, const QString &name, const QVariant &, QWidget *w, QDomElement &parentNode, QDomDocument &parent)
+ContainerFactory::saveSpecialProperty(const Q3CString &, const QString &name, const QVariant &, QWidget *w, QDomElement &parentNode, QDomDocument &parent)
 {
 	if((name == "title") && (w->parentWidget()->parentWidget()->inherits("QTabWidget")))
 	{
@@ -682,7 +686,7 @@ ContainerFactory::saveSpecialProperty(const QCString &, const QString &name, con
 	}
 	else if((name == "id") && (w->parentWidget()->isA("QWidgetStack")))
 	{
-		QWidgetStack *stack = (QWidgetStack*)w->parentWidget();
+		Q3WidgetStack *stack = (Q3WidgetStack*)w->parentWidget();
 		KFormDesigner::FormIO::savePropertyElement(parentNode, parent, "attribute", "id", stack->id(w));
 	}
 	else
@@ -691,7 +695,7 @@ ContainerFactory::saveSpecialProperty(const QCString &, const QString &name, con
 }
 
 bool
-ContainerFactory::readSpecialProperty(const QCString &, QDomElement &node, QWidget *w, KFormDesigner::ObjectTreeItem *item)
+ContainerFactory::readSpecialProperty(const Q3CString &, QDomElement &node, QWidget *w, KFormDesigner::ObjectTreeItem *item)
 {
 	QString name = node.attribute("name");
 	if((name == "title") && (item->parent()->widget()->inherits("QTabWidget")))
@@ -704,7 +708,7 @@ ContainerFactory::readSpecialProperty(const QCString &, QDomElement &node, QWidg
 
 	if((name == "id") && (w->parentWidget()->isA("QWidgetStack")))
 	{
-		QWidgetStack *stack = (QWidgetStack*)w->parentWidget();
+		Q3WidgetStack *stack = (Q3WidgetStack*)w->parentWidget();
 		int id = KFormDesigner::FormIO::readPropertyValue(node.firstChild(), w, name).toInt();
 		stack->addWidget(w, id);
 		stack->raiseWidget(w);
@@ -715,10 +719,10 @@ ContainerFactory::readSpecialProperty(const QCString &, QDomElement &node, QWidg
 	return false;
 }
 
-QValueList<QCString>
-ContainerFactory::autoSaveProperties(const QCString &c)
+Q3ValueList<Q3CString>
+ContainerFactory::autoSaveProperties(const Q3CString &c)
 {
-	QValueList<QCString> lst;
+	Q3ValueList<Q3CString> lst;
 //	if(c == "SubForm")
 //		lst << "formName";
 	if(c == "QSplitter")
@@ -727,8 +731,8 @@ ContainerFactory::autoSaveProperties(const QCString &c)
 }
 
 bool
-ContainerFactory::isPropertyVisibleInternal(const QCString &classname,
-	QWidget *w, const QCString &property, bool isTopLevel)
+ContainerFactory::isPropertyVisibleInternal(const Q3CString &classname,
+	QWidget *w, const Q3CString &property, bool isTopLevel)
 {
 	bool ok = true;
 
@@ -763,7 +767,7 @@ ContainerFactory::changeText(const QString &text)
 }
 
 void
-ContainerFactory::resizeEditor(QWidget *editor, QWidget *widget, const QCString &)
+ContainerFactory::resizeEditor(QWidget *editor, QWidget *widget, const Q3CString &)
 {
 	QSize s = widget->size();
 	editor->move(widget->x() + 2, widget->y() - 5);
@@ -834,7 +838,7 @@ void ContainerFactory::addStackPage()
 	if (!widget()->isA("QWidgetStack"))
 		return;
 	KCommand *com = new InsertPageCommand(m_container, widget());
-	if(!((QWidgetStack*)widget())->visibleWidget())
+	if(!((Q3WidgetStack*)widget())->visibleWidget())
 	{
 		com->execute();
 		delete com;
@@ -847,7 +851,7 @@ void ContainerFactory::removeStackPage()
 {
 	if (!widget()->isA("QWidgetStack"))
 		return;
-	QWidgetStack *stack = (QWidgetStack*)widget();
+	Q3WidgetStack *stack = (Q3WidgetStack*)widget();
 	QWidget *page = stack->visibleWidget();
 
 	KFormDesigner::WidgetList list;
@@ -866,7 +870,7 @@ void ContainerFactory::removeStackPage()
 
 void ContainerFactory::prevStackPage()
 {
-	QWidgetStack *stack = (QWidgetStack*)widget();
+	Q3WidgetStack *stack = (Q3WidgetStack*)widget();
 	int id = stack->id(stack->visibleWidget()) - 1;
 	if(stack->widget(id))
 		stack->raiseWidget(id);
@@ -874,7 +878,7 @@ void ContainerFactory::prevStackPage()
 
 void ContainerFactory::nextStackPage()
 {
-	QWidgetStack *stack = (QWidgetStack*)widget();
+	Q3WidgetStack *stack = (Q3WidgetStack*)widget();
 	int id = stack->id(stack->visibleWidget()) + 1;
 	if(stack->widget(id))
 		stack->raiseWidget(id);

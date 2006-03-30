@@ -22,9 +22,14 @@
 #include "widgetfactory.h"
 
 #include <qcursor.h>
-#include <qobjectlist.h>
-#include <qdict.h>
+#include <qobject.h>
+#include <q3dict.h>
 #include <qmetaobject.h>
+//Added by qt3to4:
+#include <Q3CString>
+#include <QEvent>
+#include <QKeyEvent>
+#include <Q3Frame>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -63,7 +68,7 @@ WidgetInfo::WidgetInfo(WidgetFactory *f)
 
 WidgetInfo::WidgetInfo(WidgetFactory *f, const char* parentFactoryName,
 	const char* inheritedClassName)
- : m_parentFactoryName( QCString("kformdesigner_")+parentFactoryName )
+ : m_parentFactoryName( Q3CString("kformdesigner_")+parentFactoryName )
  , m_inheritedClassName(inheritedClassName)
  , m_inheritedClass(0)
  , m_overriddenAlternateNames(0)
@@ -81,12 +86,12 @@ WidgetInfo::~WidgetInfo()
 	delete m_customTypesForProperty;
 }
 
-void WidgetInfo::addAlternateClassName(const QCString& alternateName, bool override)
+void WidgetInfo::addAlternateClassName(const Q3CString& alternateName, bool override)
 {
 	m_alternateNames += alternateName;
 	if (override) {
 		if (!m_overriddenAlternateNames)
-			m_overriddenAlternateNames = new QAsciiDict<char>(101);
+			m_overriddenAlternateNames = new Q3AsciiDict<char>(101);
 		m_overriddenAlternateNames->insert(alternateName, (char*)1);
 	}
 	else {
@@ -95,7 +100,7 @@ void WidgetInfo::addAlternateClassName(const QCString& alternateName, bool overr
 	}
 }
 
-bool WidgetInfo::isOverriddenClassName(const QCString& alternateName) const
+bool WidgetInfo::isOverriddenClassName(const Q3CString& alternateName) const
 {
 	return m_overriddenAlternateNames && (m_overriddenAlternateNames->find(alternateName) != 0);
 }
@@ -105,7 +110,7 @@ void WidgetInfo::setAutoSyncForProperty(const char *propertyName, tristate flag)
 	if (!m_propertiesWithDisabledAutoSync) {
 		if (~flag)
 			return;
-		m_propertiesWithDisabledAutoSync = new QAsciiDict<char>(101);
+		m_propertiesWithDisabledAutoSync = new Q3AsciiDict<char>(101);
 	}
 
 	if (~flag) {
@@ -129,7 +134,7 @@ void WidgetInfo::setCustomTypeForProperty(const char *propertyName, int type)
 	if (!propertyName || type==KoProperty::Auto)
 		return;
 	if (!m_customTypesForProperty) {
-		m_customTypesForProperty = new QMap<QCString,int>();
+		m_customTypesForProperty = new QMap<Q3CString,int>();
 	}
 	m_customTypesForProperty->replace(propertyName, type);
 }
@@ -145,7 +150,7 @@ int WidgetInfo::customTypeForProperty(const char *propertyName) const
 ///// Widget Factory //////////////////////////
 
 WidgetFactory::WidgetFactory(QObject *parent, const char *name)
- : QObject(parent, (const char*)(QCString("kformdesigner_")+name))
+ : QObject(parent, (const char*)(Q3CString("kformdesigner_")+name))
 {
 	m_showAdvancedProperties = true;
 	m_classesByName.setAutoDelete(true);
@@ -173,27 +178,27 @@ void WidgetFactory::addClass(WidgetInfo *w)
 void WidgetFactory::hideClass(const char *classname)
 {
 	if (!m_hiddenClasses)
-		m_hiddenClasses = new QAsciiDict<char>(101, false);
+		m_hiddenClasses = new Q3AsciiDict<char>(101, false);
 	m_hiddenClasses->insert(classname, (char*)1);
 }
 
 void
-WidgetFactory::createEditor(const QCString &classname, const QString &text,
+WidgetFactory::createEditor(const Q3CString &classname, const QString &text,
 	QWidget *w, Container *container, QRect geometry,
-	int align, bool useFrame, bool multiLine, BackgroundMode background)
+	int align, bool useFrame, bool multiLine, Qt::BackgroundMode background)
 {
 //#ifdef KEXI_KTEXTEDIT
 	if (multiLine) {
 		KTextEdit *textedit = new KTextEdit(text, QString::null, w->parentWidget());
 		textedit->setTextFormat(Qt::PlainText);
 		textedit->setAlignment(align);
-		if (dynamic_cast<QTextEdit*>(w)) {
-			textedit->setWordWrap(dynamic_cast<QTextEdit*>(w)->wordWrap());
-			textedit->setWrapPolicy(dynamic_cast<QTextEdit*>(w)->wrapPolicy());
+		if (dynamic_cast<Q3TextEdit*>(w)) {
+			textedit->setWordWrap(dynamic_cast<Q3TextEdit*>(w)->wordWrap());
+			textedit->setWrapPolicy(dynamic_cast<Q3TextEdit*>(w)->wrapPolicy());
 		}
 		textedit->setPalette(w->palette());
 		textedit->setFont(w->font());
-		textedit->setResizePolicy(QScrollView::Manual);
+		textedit->setResizePolicy(Q3ScrollView::Manual);
 		textedit->setGeometry(geometry);
 		if(background == Qt::NoBackground)
 			textedit->setBackgroundMode(w->backgroundMode());
@@ -206,12 +211,12 @@ WidgetFactory::createEditor(const QCString &classname, const QString &text,
 		textedit->selectAll(true);
 		textedit->setColor(w->paletteForegroundColor());
 		textedit->selectAll(false);
-		textedit->moveCursor(QTextEdit::MoveEnd, false);
+		textedit->moveCursor(Q3TextEdit::MoveEnd, false);
 		textedit->setParagraphBackgroundColor(0, w->paletteBackgroundColor());
-		textedit->setVScrollBarMode(QScrollView::AlwaysOff); //ok?
-		textedit->setHScrollBarMode(QScrollView::AlwaysOff); //ok?
+		textedit->setVScrollBarMode(Q3ScrollView::AlwaysOff); //ok?
+		textedit->setHScrollBarMode(Q3ScrollView::AlwaysOff); //ok?
 		textedit->installEventFilter(this);
-		textedit->setFrameShape(useFrame ? QFrame::LineEditPanel : QFrame::NoFrame);
+		textedit->setFrameShape(useFrame ? QFrame::StyledPanel : Q3Frame::NoFrame);
 		textedit->setMargin(2); //to move away from resize handle
 		textedit->show();
 		textedit->setFocus();
@@ -337,7 +342,7 @@ WidgetFactory::editRichText(QWidget *w, QString &text)
 }
 
 void
-WidgetFactory::editListView(QListView *listview)
+WidgetFactory::editListView(Q3ListView *listview)
 {
 	EditListViewDialog dlg(((QWidget*)listview)->topLevelWidget());
 	//dlg.exec(listview);
@@ -383,7 +388,7 @@ WidgetFactory::eventFilter(QObject *obj, QEvent *ev)
 			return false;
 
 		QKeyEvent *e = static_cast<QKeyEvent*>(ev);
-		if(((e->key() == Qt::Key_Return) || (e->key() == Qt::Key_Enter)) && (e->state() != AltButton))
+		if(((e->key() == Qt::Key_Return) || (e->key() == Qt::Key_Enter)) && (e->state() != Qt::AltModifier))
 			resetEditor();
 		if(e->key() == Qt::Key_Escape)
 		{
@@ -535,8 +540,8 @@ WidgetFactory::addValueDescription(Container *container, const char *value, cons
 }*/
 
 bool
-WidgetFactory::isPropertyVisible(const QCString &classname, QWidget *w, 
-	const QCString &property, bool multiple, bool isTopLevel)
+WidgetFactory::isPropertyVisible(const Q3CString &classname, QWidget *w, 
+	const Q3CString &property, bool multiple, bool isTopLevel)
 {
 	if (multiple)
 	{
@@ -554,8 +559,8 @@ WidgetFactory::isPropertyVisible(const QCString &classname, QWidget *w,
 }
 
 bool
-WidgetFactory::isPropertyVisibleInternal(const QCString &, QWidget *w,
-	const QCString &property, bool isTopLevel)
+WidgetFactory::isPropertyVisibleInternal(const Q3CString &, QWidget *w,
+	const Q3CString &property, bool isTopLevel)
 {
 	Q_UNUSED( w );
 
@@ -574,7 +579,7 @@ WidgetFactory::isPropertyVisibleInternal(const QCString &, QWidget *w,
 }
 
 void
-WidgetFactory::resizeEditor(QWidget *, QWidget *, const QCString&)
+WidgetFactory::resizeEditor(QWidget *, QWidget *, const Q3CString&)
 {
 }
 
@@ -585,7 +590,7 @@ WidgetFactory::slotTextChanged()
 }
 
 bool
-WidgetFactory::clearWidgetContent(const QCString &, QWidget *)
+WidgetFactory::clearWidgetContent(const Q3CString &, QWidget *)
 {
 	return false;
 }
@@ -613,20 +618,20 @@ WidgetFactory::changeText(const QString& text)
 }
 
 bool
-WidgetFactory::readSpecialProperty(const QCString &, QDomElement &, QWidget *, ObjectTreeItem *)
+WidgetFactory::readSpecialProperty(const Q3CString &, QDomElement &, QWidget *, ObjectTreeItem *)
 {
 	return false;
 }
 
 bool
-WidgetFactory::saveSpecialProperty(const QCString &, const QString &, const QVariant&, QWidget *, QDomElement &,  QDomDocument &)
+WidgetFactory::saveSpecialProperty(const Q3CString &, const QString &, const QVariant&, QWidget *, QDomElement &,  QDomDocument &)
 {
 	return false;
 }
 
 bool WidgetFactory::inheritsFactories()
 {
-	for (QAsciiDictIterator<WidgetInfo> it(m_classesByName); it.current(); ++it) {
+	for (Q3AsciiDictIterator<WidgetInfo> it(m_classesByName); it.current(); ++it) {
 		if (!it.current()->parentFactoryName().isEmpty())
 			return true;
 	}
@@ -695,7 +700,7 @@ QWidget *WidgetFactory::widget() const
 	return m_widget;
 }
 
-void WidgetFactory::setInternalProperty(const QCString& classname, const QCString& property,
+void WidgetFactory::setInternalProperty(const Q3CString& classname, const Q3CString& property,
 	const QString& value)
 {
 	m_internalProp[classname+":"+property]=value;

@@ -20,9 +20,13 @@
 #ifndef KFE_RESIZEHANDLER_H
 #define KFE_RESIZEHANDLER_H
 
-#include <qdict.h>
-#include <qguardedptr.h>
+#include <q3dict.h>
+#include <qpointer.h>
 #include <qwidget.h>
+//Added by qt3to4:
+#include <QMouseEvent>
+#include <QEvent>
+#include <QPaintEvent>
 
 /**
   *@author Joseph Wenninger
@@ -43,8 +47,8 @@ class KFORMEDITOR_EXPORT ResizeHandle : public QWidget
 	Q_OBJECT
 
 	public:
-		enum HandlePos { TopLeft = 0, TopCenter = 2, TopRight = 4, LeftCenter = 8, RightCenter = 16,
-			BottomLeft = 32, BottomCenter = 64, BottomRight = 128 };
+		enum HandlePos { Qt::TopLeftCorner = 0, TopCenter = 2, Qt::TopRightCorner = 4, LeftCenter = 8, RightCenter = 16,
+			Qt::BottomLeftCorner = 32, BottomCenter = 64, Qt::BottomRightCorner = 128 };
 		ResizeHandle(ResizeHandleSet *set, HandlePos pos, bool editing=false);
 		virtual ~ResizeHandle();
 		void setEditingMode(bool editing);
@@ -78,7 +82,7 @@ class KFORMEDITOR_EXPORT ResizeHandleSet: public QObject
 	Q_OBJECT
 
 	public:
-		typedef QDict<ResizeHandleSet> Dict;
+		typedef Q3Dict<ResizeHandleSet> Dict;
 
 		ResizeHandleSet(QWidget *modify, Form *form, bool editing = false);
 		~ResizeHandleSet();

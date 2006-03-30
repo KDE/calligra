@@ -20,6 +20,10 @@
 #include <qlayout.h>
 #include <qcheckbox.h>
 #include <qtooltip.h>
+//Added by qt3to4:
+#include <Q3VBoxLayout>
+#include <Q3GridLayout>
+#include <Q3Frame>
 
 #include <kiconloader.h>
 #include <kdebug.h>
@@ -40,8 +44,8 @@ using namespace KFormDesigner;
 TabStopDialog::TabStopDialog(QWidget *parent)
 : KDialogBase(parent, "tabstop_dialog", true, i18n("Edit Tab Order"), Ok|Cancel, Ok, false)
 {
-	QFrame *frame = makeMainWidget();
-	QGridLayout *l = new QGridLayout(frame, 2, 2, 0, 6);
+	Q3Frame *frame = makeMainWidget();
+	Q3GridLayout *l = new Q3GridLayout(frame, 2, 2, 0, 6);
 	m_treeview = new ObjectTreeView(frame, "tabstops_treeview", true);
 	m_treeview->setItemsMovable(true);
 	m_treeview->setDragEnabled(true);
@@ -51,10 +55,10 @@ TabStopDialog::TabStopDialog(QWidget *parent)
 	l->addWidget(m_treeview, 0, 0);
 
 	m_treeview->m_form = 0;
-	connect(m_treeview, SIGNAL(currentChanged(QListViewItem*)), this, SLOT(updateButtons(QListViewItem*)));
-	connect(m_treeview, SIGNAL(moved(QListViewItem*, QListViewItem*, QListViewItem*)), this, SLOT(updateButtons(QListViewItem*)));
+	connect(m_treeview, SIGNAL(currentChanged(Q3ListViewItem*)), this, SLOT(updateButtons(Q3ListViewItem*)));
+	connect(m_treeview, SIGNAL(moved(Q3ListViewItem*, Q3ListViewItem*, Q3ListViewItem*)), this, SLOT(updateButtons(Q3ListViewItem*)));
 
-	QVBoxLayout *vbox = new QVBoxLayout();
+	Q3VBoxLayout *vbox = new Q3VBoxLayout();
 	l->addLayout(vbox, 0, 1);
 	m_btnUp = new KPushButton(SmallIconSet("1uparrow"), i18n("Move Up"), frame);
 	m_btnUp->setToolTip( i18n("Move widget up") );
@@ -128,7 +132,7 @@ TabStopDialog::moveItemUp()
 {
 	if (!m_treeview->selectedItem())
 		return;
-	QListViewItem *before = m_treeview->selectedItem()->itemAbove();
+	Q3ListViewItem *before = m_treeview->selectedItem()->itemAbove();
 	before->moveItem(m_treeview->selectedItem());
 	updateButtons(m_treeview->selectedItem());
 }
@@ -136,7 +140,7 @@ TabStopDialog::moveItemUp()
 void
 TabStopDialog::moveItemDown()
 {
-	QListViewItem *item = m_treeview->selectedItem();
+	Q3ListViewItem *item = m_treeview->selectedItem();
 	if (!item)
 		return;
 	item->moveItem( item->nextSibling());
@@ -144,7 +148,7 @@ TabStopDialog::moveItemDown()
 }
 
 void
-TabStopDialog::updateButtons(QListViewItem *item)
+TabStopDialog::updateButtons(Q3ListViewItem *item)
 {
 	m_btnUp->setEnabled( item && (item->itemAbove() && m_treeview->isEnabled()
 	/*&& (item->itemAbove()->parent() == item->parent()))*/ ));

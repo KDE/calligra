@@ -22,10 +22,15 @@
 #define FORMIO_H
 
 #include <qobject.h>
-#include <qdict.h>
+#include <q3dict.h>
 #include <qstring.h>
 #include <qwidget.h>
 #include <qmap.h>
+//Added by qt3to4:
+#include <QPixmap>
+#include <QLabel>
+#include <Q3CString>
+#include <QPaintEvent>
 
 class QString;
 class QDomElement;
@@ -41,13 +46,13 @@ class KFORMEDITOR_EXPORT CustomWidget : public QWidget
 	Q_OBJECT
 
 	public:
-		CustomWidget(const QCString &className, QWidget *parent, const char *name);
+		CustomWidget(const Q3CString &className, QWidget *parent, const char *name);
 		virtual ~CustomWidget();
 
 		virtual void paintEvent(QPaintEvent *ev);
 
 	private:
-		QCString m_className;
+		Q3CString m_className;
 };
 
 namespace KFormDesigner {
@@ -205,7 +210,7 @@ class KFORMEDITOR_EXPORT FormIO : public QObject
 
 	private:
 		// This dict stores buddies associations until the Form is completely loaded.
-		static QDict<QLabel>  *m_buddies;
+		static Q3Dict<QLabel>  *m_buddies;
 
 		/// Instead of having to pass these for every functions, we just store them in the class
 		//static QWidgdet  *m_currentWidget;

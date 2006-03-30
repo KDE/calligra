@@ -18,12 +18,16 @@
 */
 
 #include <qworkspace.h>
-#include <qdockarea.h>
-#include <qdockwindow.h>
-#include <qhbox.h>
+#include <q3dockarea.h>
+#include <q3dockwindow.h>
+#include <q3hbox.h>
 #include <qpainter.h>
 #include <qevent.h>
-#include <qobjectlist.h>
+#include <qobject.h>
+//Added by qt3to4:
+#include <QPixmap>
+#include <QCloseEvent>
+#include <Q3ValueList>
 
 #include <kdeversion.h>
 #include <kaction.h>
@@ -137,7 +141,7 @@ KFormDesignerPart::KFormDesignerPart(QWidget *parent, const char *name, bool rea
 		setUniqueFormMode(false);
 	m_inShell = (!args.grep("shell").isEmpty());
 
-	QHBox *container = new QHBox(parent, "kfd_container_widget");
+	Q3HBox *container = new Q3HBox(parent, "kfd_container_widget");
 
 	m_workspace = new QWorkspace(container, "kfd_workspace");
 	m_workspace->show();
@@ -149,16 +153,16 @@ KFormDesignerPart::KFormDesignerPart(QWidget *parent, const char *name, bool rea
 
 	if(!readOnly)
 	{
-		QDockArea *dockArea = new QDockArea(Vertical, QDockArea::Reverse, container, "kfd_part_dockarea");
+		Q3DockArea *dockArea = new Q3DockArea(Qt::Vertical, Q3DockArea::Reverse, container, "kfd_part_dockarea");
 
-		QDockWindow *dockTree = new QDockWindow(dockArea);
+		Q3DockWindow *dockTree = new Q3DockWindow(dockArea);
 		KFormDesigner::ObjectTreeView *view = new KFormDesigner::ObjectTreeView(dockTree);
 		dockTree->setWidget(view);
 		dockTree->setCaption(i18n("Objects"));
 		dockTree->setResizeEnabled(true);
 		dockTree->setFixedExtentWidth(256);
 
-		QDockWindow *dockEditor = new QDockWindow(dockArea);
+		Q3DockWindow *dockEditor = new Q3DockWindow(dockArea);
 		KoProperty::Editor *editor = new KoProperty::Editor(dockEditor);
 		dockEditor->setWidget(editor);
 		dockEditor->setCaption(i18n("Properties"));
@@ -210,7 +214,7 @@ KFormDesignerPart::setupActions()
 	KStdAction::selectAll(KFormDesigner::FormManager::self(), SLOT(selectAll()), actionCollection());
 	new KAction(i18n("Clear Widget Contents"), "editclear", KShortcut(0), KFormDesigner::FormManager::self(), SLOT(clearWidgetContent()), actionCollection(), "clear_contents");
 	new KAction(i18n("Delete Widget"), "editdelete", KShortcut(0), KFormDesigner::FormManager::self(), SLOT(deleteWidget()), actionCollection(), "edit_delete");
-	new KAction(i18n("Preview Form"), "filequickprint", CTRL+Qt::Key_T, this, SLOT(slotPreviewForm()), actionCollection(), "preview_form");
+	new KAction(i18n("Preview Form"), "filequickprint", Qt::CTRL+Qt::Key_T, this, SLOT(slotPreviewForm()), actionCollection(), "preview_form");
 	new KAction(i18n("Edit Tab Order"), "tab_order", KShortcut(0), KFormDesigner::FormManager::self(), SLOT(editTabOrder()), actionCollection(), "taborder");
 	new KAction(i18n("Edit Pixmap Collection"), "icons", KShortcut(0), KFormDesigner::FormManager::self(), SLOT(editFormPixmapCollection()), actionCollection(), "pixmap_collection");
 	new KAction(i18n("Edit Form Connections"), "connections", KShortcut(0), KFormDesigner::FormManager::self(), SLOT(editConnections()), actionCollection(), "form_connections");
@@ -564,7 +568,7 @@ static void repaintAll(QWidget *w)
 }
 
 void
-FormWidgetBase::drawRects(const QValueList<QRect> &list, int type)
+FormWidgetBase::drawRects(const Q3ValueList<QRect> &list, int type)
 {
 	QPainter p;
 	p.begin(this, true);
@@ -575,16 +579,16 @@ FormWidgetBase::drawRects(const QValueList<QRect> &list, int type)
 		//redraw prev. selection's rectangle
 		p.drawPixmap( QPoint(prev_rect.x()-2, prev_rect.y()-2), buffer, QRect(prev_rect.x()-2, prev_rect.y()-2, prev_rect.width()+4, prev_rect.height()+4));
 	}
-	p.setBrush(QBrush::NoBrush);
+	p.setBrush(Qt::NoBrush);
 	if(type == 1) // selection rect
-		p.setPen(QPen(white, 1, Qt::DotLine));
+		p.setPen(QPen(Qt::white, 1, Qt::DotLine));
 	else if(type == 2) // insert rect
-		p.setPen(QPen(white, 2));
+		p.setPen(QPen(Qt::white, 2));
 	p.setRasterOp(XorROP);
 
 	prev_rect = QRect();
-	QValueList<QRect>::ConstIterator endIt = list.constEnd();
-	for(QValueList<QRect>::ConstIterator it = list.constBegin(); it != endIt; ++it) {
+	Q3ValueList<QRect>::ConstIterator endIt = list.constEnd();
+	for(Q3ValueList<QRect>::ConstIterator it = list.constBegin(); it != endIt; ++it) {
 		p.drawRect(*it);
 		prev_rect = prev_rect.unite(*it);
 	}
@@ -597,7 +601,7 @@ FormWidgetBase::drawRects(const QValueList<QRect> &list, int type)
 void
 FormWidgetBase::drawRect(const QRect& r, int type)
 {
-	QValueList<QRect> l;
+	Q3ValueList<QRect> l;
 	l.append(r);
 	drawRects(l, type);
 }

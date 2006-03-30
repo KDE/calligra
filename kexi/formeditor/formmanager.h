@@ -23,10 +23,12 @@
 
 #include <qobject.h>
 #include <qdom.h>
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 #include <qtimer.h>
-#include <qguardedptr.h>
+#include <qpointer.h>
 #include <qstringlist.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 class QWidget;
 class QWorkspace;
@@ -55,7 +57,7 @@ class WidgetLibrary;
 class ObjectTreeView;
 class Connection;
 class FormManager;
-typedef QPtrList<KAction> ActionList;
+typedef Q3PtrList<KAction> ActionList;
 
 //! @internal
 //static FormManager* FormManager_static = 0;
@@ -123,7 +125,7 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 
 		/*! \return The name of the class being inserted, corresponding
 		 to the menu item or the toolbar button clicked. */
-		QCString selectedClass() const { return m_selectedClass; }
+		Q3CString selectedClass() const { return m_selectedClass; }
 
 		/*! Sets the point where the pasted widget should be moved to. */
 		void setInsertPoint(const QPoint &p);
@@ -298,7 +300,7 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		  or a "Widget" menu item. Prepares all Forms for
 		  creation of a new widget (ie changes cursor ...).
 		 */
-		void insertWidget(const QCString &classname);
+		void insertWidget(const Q3CString &classname);
 
 		/*! Stops the current widget insertion (ie unset the cursor ...). */
 		void stopInsert();
@@ -438,8 +440,8 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		QPointer<KoProperty::Editor>  m_editor;
 		QPointer<ObjectTreeView>  m_treeview;
 		// Forms
-		QPtrList<Form> m_forms;
-		QPtrList<Form> m_preview;
+		Q3PtrList<Form> m_forms;
+		Q3PtrList<Form> m_preview;
 		QPointer<Form> m_active;
 
 		// Copy/Paste
@@ -450,7 +452,7 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 
 		// Insertion
 		bool m_inserting;
-		QCString m_selectedClass;
+		Q3CString m_selectedClass;
 
 		// Connection stuff
 		bool m_drawingSlot;
@@ -463,7 +465,7 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 
 		//! Used to delayed widgets deletion
 		QTimer m_deleteWidgetLater_timer;
-		QPtrList<QWidget> m_deleteWidgetLater_list;
+		Q3PtrList<QWidget> m_deleteWidgetLater_list;
 
 #ifdef KEXI_SHOW_DEBUG_ACTIONS
 		KDialogBase *m_uiCodeDialog;

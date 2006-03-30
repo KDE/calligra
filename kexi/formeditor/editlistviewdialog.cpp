@@ -16,8 +16,11 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
 */
-#include <qheader.h>
+#include <q3header.h>
 #include <qlayout.h>
+//Added by qt3to4:
+#include <Q3VBoxLayout>
+#include <Q3HBoxLayout>
 
 #include <k3listview.h>
 #include <ktabwidget.h>
@@ -46,10 +49,10 @@ EditListViewDialog::EditListViewDialog(QWidget *parent)
 	m_contents = addPage(i18n("Contents"));
 
 	///////// Setup the "Contents" page /////////////////////////////
-	QHBoxLayout *layout = new QHBoxLayout(m_contents, 0, 6);
+	Q3HBoxLayout *layout = new Q3HBoxLayout(m_contents, 0, 6);
 
 	//// Setup the icon toolbar /////////////////
-	QVBoxLayout *vlayout = new QVBoxLayout(layout, 3);
+	Q3VBoxLayout *vlayout = new Q3VBoxLayout(layout, 3);
 	QToolButton *newRow = new QToolButton(m_contents);
 	newRow->setIconSet(BarIconSet("edit_add"));
 	newRow->setTextLabel(i18n("&Add Item"), true);
@@ -98,11 +101,11 @@ EditListViewDialog::EditListViewDialog(QWidget *parent)
 	m_listview->setSorting(-1);
 	layout->addWidget(m_listview);
 	m_listview->setFocus();
-	connect(m_listview, SIGNAL(currentChanged(QListViewItem*)), this, SLOT(updateButtons(QListViewItem*)));
-	connect(m_listview, SIGNAL(moved(QListViewItem*, QListViewItem*, QListViewItem*)), this, SLOT(updateButtons(QListViewItem*)));
+	connect(m_listview, SIGNAL(currentChanged(Q3ListViewItem*)), this, SLOT(updateButtons(Q3ListViewItem*)));
+	connect(m_listview, SIGNAL(moved(Q3ListViewItem*, Q3ListViewItem*, Q3ListViewItem*)), this, SLOT(updateButtons(Q3ListViewItem*)));
 
 	/////////////////// Setup the columns page ////////////////
-	QHBoxLayout *hbox = new QHBoxLayout(m_column, 0, 6);
+	Q3HBoxLayout *hbox = new Q3HBoxLayout(m_column, 0, 6);
 
 	// The "item properties" field
 	m_editor = new KoProperty::Editor(m_column, "editcolumn_propeditor");
@@ -117,7 +120,7 @@ EditListViewDialog::EditListViewDialog(QWidget *parent)
 		this, SLOT(changeProperty(KoProperty::Set & KoProperty::Property&)));
 
 	// Setup the icon toolbar //////////
-	QVBoxLayout *vbox = new QVBoxLayout(hbox, 3);
+	Q3VBoxLayout *vbox = new Q3VBoxLayout(hbox, 3);
 	QToolButton *add = new QToolButton(m_column);
 	add->setIconSet(BarIconSet("edit_add"));
 	add->setTextLabel(i18n("&Add Item"), true);
@@ -152,14 +155,14 @@ EditListViewDialog::EditListViewDialog(QWidget *parent)
 	m_listbox->setFocus();
 	hbox->insertWidget(0, m_listbox);
 	hbox->addWidget(m_editor);
-	connect(m_listbox, SIGNAL(currentChanged(QListBoxItem*)), this, SLOT(updateItemProperties(QListBoxItem*)));
+	connect(m_listbox, SIGNAL(currentChanged(Q3ListBoxItem*)), this, SLOT(updateItemProperties(Q3ListBoxItem*)));
 
 	//// Init dialog and display it ////////////////////////
 	setInitialSize(QSize(500, 300), true);
 }
 
 int
-EditListViewDialog::exec(QListView *listview)
+EditListViewDialog::exec(Q3ListView *listview)
 {
 	if(!listview)
 	{
@@ -176,7 +179,7 @@ EditListViewDialog::exec(QListView *listview)
 		m_listview->header()->setStretchEnabled(listview->header()->isStretchEnabled(i), i);
 		m_listview->setRenameable(i, true);
 	}
-	QListViewItem *item = listview->firstChild();
+	Q3ListViewItem *item = listview->firstChild();
 	while(item)  {
 		loadChildNodes(m_listview, item, 0);
 		item = item->nextSibling();
@@ -210,7 +213,7 @@ EditListViewDialog::exec(QListView *listview)
 			listview->header()->setStretchEnabled(m_listview->header()->isStretchEnabled(i), i);
 		}
 
-		QListViewItem *item = m_listview->firstChild();
+		Q3ListViewItem *item = m_listview->firstChild();
 		while(item)
 		{
 			loadChildNodes(listview, item, 0);
@@ -246,7 +249,7 @@ EditListViewDialog::changeProperty(KoProperty::Set& set, KoProperty::Property& p
 }
 
 void
-EditListViewDialog::updateItemProperties(QListBoxItem *item)
+EditListViewDialog::updateItemProperties(Q3ListBoxItem *item)
 {
 	if(!item)
 		return;
@@ -345,7 +348,7 @@ EditListViewDialog::MoveItemDown()
 
 /// Contents page slots ////////
 void
-EditListViewDialog::updateButtons(QListViewItem *item)
+EditListViewDialog::updateButtons(Q3ListViewItem *item)
 {
 	if(!item)
 	{
@@ -361,9 +364,9 @@ EditListViewDialog::updateButtons(QListViewItem *item)
 }
 
 void
-EditListViewDialog::loadChildNodes(QListView *listview, QListViewItem *item, QListViewItem *parent)
+EditListViewDialog::loadChildNodes(Q3ListView *listview, Q3ListViewItem *item, Q3ListViewItem *parent)
 {
-	QListViewItem *newItem;
+	Q3ListViewItem *newItem;
 	if(listview->inherits("K3ListView"))
 	{
 		if(parent)
@@ -374,13 +377,13 @@ EditListViewDialog::loadChildNodes(QListView *listview, QListViewItem *item, QLi
 	else
 	{
 		if(parent)
-			newItem = new QListViewItem(parent);
+			newItem = new Q3ListViewItem(parent);
 		else
-			newItem = new QListViewItem(listview);
+			newItem = new Q3ListViewItem(listview);
 	}
 
 	// We need to move the item at the end, which is the expected behaviour (by default it is inserted at the beginning)
-	QListViewItem *last;
+	Q3ListViewItem *last;
 	if(parent)
 		last = parent->firstChild();
 	else
@@ -394,7 +397,7 @@ EditListViewDialog::loadChildNodes(QListView *listview, QListViewItem *item, QLi
 	for(int i = 0; i < listview->columns(); i++)
 		newItem->setText(i, item->text(i));
 
-	QListViewItem *child = item->firstChild();
+	Q3ListViewItem *child = item->firstChild();
 	if(child)
 		newItem->setOpen(true);
 	while(child)  {
@@ -442,7 +445,7 @@ EditListViewDialog::removeRow()
 void
 EditListViewDialog::MoveRowUp()
 {
-	QListViewItem *item = m_listview->currentItem()->itemAbove();
+	Q3ListViewItem *item = m_listview->currentItem()->itemAbove();
 	item->moveItem(m_listview->currentItem());
 	updateButtons(m_listview->currentItem());
 }
@@ -450,7 +453,7 @@ EditListViewDialog::MoveRowUp()
 void
 EditListViewDialog::MoveRowDown()
 {
-	QListViewItem *before = m_listview->currentItem();
+	Q3ListViewItem *before = m_listview->currentItem();
 	before->moveItem(before->nextSibling());
 	updateButtons(before);
 }

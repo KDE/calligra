@@ -21,6 +21,9 @@
 #define SPACER_H
 
 #include <qwidget.h>
+//Added by qt3to4:
+#include <Q3CString>
+#include <QPaintEvent>
 
 class QDomElement;
 class QDomDocument;
@@ -37,7 +40,7 @@ class KFORMEDITOR_EXPORT Spring : public QWidget
 {
 	Q_OBJECT
 	Q_ENUMS(SizeType)
-	Q_PROPERTY(Orientation orientation READ orientation WRITE setOrientation)
+	Q_PROPERTY(Qt::Orientation orientation READ orientation WRITE setOrientation)
 	Q_PROPERTY(SizeType sizeType READ sizeType WRITE setSizeType)
 
 	private:
@@ -50,11 +53,11 @@ class KFORMEDITOR_EXPORT Spring : public QWidget
 		Spring(QWidget *parent, const char *name);
 		~Spring() {;}
 
-		static bool isPropertyVisible(const QCString &name);
+		static bool isPropertyVisible(const Q3CString &name);
 		static void saveSpring(KFormDesigner::ObjectTreeItem *item, QDomElement &parent, QDomDocument &domDoc, bool insideGridLayout);
 
-		void setOrientation(Orientation orient);
-		Orientation orientation() const { return m_orient;}
+		void setOrientation(Qt::Orientation orient);
+		Qt::Orientation orientation() const { return m_orient;}
 		void setSizeType(SizeType size);
 		SizeType sizeType() const;
 

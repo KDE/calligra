@@ -22,6 +22,8 @@
 #include <qvariant.h>
 #include <qdom.h>
 #include <qtextstream.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 #include "form.h"
 #include "container.h"
@@ -67,7 +69,7 @@ ObjectTreeItem::removeChild(ObjectTreeItem *c)
 }
 
 void
-ObjectTreeItem::addModifiedProperty(const QCString &property, const QVariant &oldValue)
+ObjectTreeItem::addModifiedProperty(const Q3CString &property, const QVariant &oldValue)
 {
 	if(property == "name")
 		return;
@@ -88,13 +90,13 @@ ObjectTreeItem::storeUnknownProperty(QDomElement &el)
 }
 
 void
-ObjectTreeItem::setPixmapName(const QCString &property, const QString &name)
+ObjectTreeItem::setPixmapName(const Q3CString &property, const QString &name)
 {
 	m_pixmapNames[property] = name;
 }
 
 QString
-ObjectTreeItem::pixmapName(const QCString &property)
+ObjectTreeItem::pixmapName(const Q3CString &property)
 {
 	if(m_pixmapNames.contains(property))
 		return m_pixmapNames[property];
@@ -212,8 +214,8 @@ ObjectTree::removeItem(ObjectTreeItem *c)
 	delete c;
 }
 
-QCString
-ObjectTree::generateUniqueName(const QCString &prefix, bool numberSuffixRequired)
+Q3CString
+ObjectTree::generateUniqueName(const Q3CString &prefix, bool numberSuffixRequired)
 {
 	/* old way of naming widgets
 	int appendix = m_names[c] + 1;

@@ -20,17 +20,19 @@
 #ifndef EDITLISTVIEW_DIALOG_H
 #define EDITLISTVIEW_DIALOG_H
 
-#include <qintdict.h>
+#include <q3intdict.h>
 #include <qtoolbutton.h>
+//Added by qt3to4:
+#include <Q3Frame>
 #include <kdialogbase.h>
 
-class QFrame;
-class QListView;
-class QListViewItem;
+class Q3Frame;
+class Q3ListView;
+class Q3ListViewItem;
 class K3ListViewItem;
 class K3ListView;
 class KListBox;
-class QListBoxItem;
+class Q3ListBoxItem;
 
 namespace KoProperty {
 	class Property;
@@ -54,11 +56,11 @@ class KFORMEDITOR_EXPORT EditListViewDialog : public KDialogBase
 		EditListViewDialog(QWidget *parent);
 		~EditListViewDialog() {}
 
-		int exec(QListView *listview);
+		int exec(Q3ListView *listview);
 
 	public slots:
 		// Columns page
-		void updateItemProperties(QListBoxItem*);
+		void updateItemProperties(Q3ListBoxItem*);
 		void newItem();
 		void removeItem();
 		void MoveItemUp();
@@ -66,7 +68,7 @@ class KFORMEDITOR_EXPORT EditListViewDialog : public KDialogBase
 		void changeProperty(KoProperty::Set& set, KoProperty::Property& property);
 
 		// Contents page
-		void updateButtons(QListViewItem*);
+		void updateButtons(Q3ListViewItem*);
 		void newRow();
 		void newChildRow();
 		void removeRow();
@@ -76,16 +78,16 @@ class KFORMEDITOR_EXPORT EditListViewDialog : public KDialogBase
 	protected:
 		/*! Loads all child items of \a item into \a listview (may be different from the \a items 's listview) as child of \a parent item.
 		This is used to copy the contents of a listview into another listview. */
-		void loadChildNodes(QListView *listview, QListViewItem *item, QListViewItem *parent);
+		void loadChildNodes(Q3ListView *listview, Q3ListViewItem *item, Q3ListViewItem *parent);
 
 	protected:
 		enum { BNewRow = 10, BNewChild, BRemRow, BRowUp, BRowDown , BColAdd = 20, BColRem, BColUp, BColDown };
 		KoProperty::Editor  *m_editor;
 		KoProperty::Set  *m_propSet;
-		QFrame   *m_contents, *m_column;
+		Q3Frame   *m_contents, *m_column;
 		KListBox  *m_listbox;
 		K3ListView  *m_listview;
-		QIntDict<QToolButton>  m_buttons;
+		Q3IntDict<QToolButton>  m_buttons;
 };
 
 }

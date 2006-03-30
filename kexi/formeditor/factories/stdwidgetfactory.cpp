@@ -8,18 +8,23 @@
  ***************************************************************************/
 
 #include <qlabel.h>
-#include <qpopupmenu.h>
+#include <q3popupmenu.h>
 #include <qcursor.h>
 #include <qradiobutton.h>
 #include <qcheckbox.h>
 #include <qslider.h>
-#include <qobjectlist.h>
+#include <qobject.h>
 #include <qstring.h>
 #include <qvariant.h>
-#include <qheader.h>
+#include <q3header.h>
 #include <qdom.h>
 #include <qstyle.h>
-#include <qvaluevector.h>
+#include <q3valuevector.h>
+//Added by qt3to4:
+#include <QPixmap>
+#include <Q3CString>
+#include <Q3Frame>
+#include <Q3ValueList>
 
 #include <klineedit.h>
 #include <kpushbutton.h>
@@ -36,10 +41,10 @@
 #include <kdeversion.h>
 
 #if KDE_VERSION < KDE_MAKE_VERSION(3,1,9)
-# include <qdatetimeedit.h>
-# define KTimeWidget QTimeEdit
-# define KDateWidget QDateEdit
-# define KDateTimeWidget QDateTimeEdit
+# include <q3datetimeedit.h>
+# define KTimeWidget Q3TimeEdit
+# define KDateWidget Q3DateEdit
+# define KDateTimeWidget Q3DateTimeEdit
 #else
 # include <ktimewidget.h>
 # include <kdatewidget.h>
@@ -73,10 +78,10 @@ KexiPictureLabel::setProperty(const char *name, const QVariant &value)
 }
 
 Line::Line(Qt::Orientation orient, QWidget *parent, const char *name)
- : QFrame(parent, name)
+ : Q3Frame(parent, name)
 {
 	setFrameShadow(Sunken);
-	if(orient == Horizontal)
+	if(orient == Qt::Horizontal)
 		setFrameShape(HLine);
 	else
 		setFrameShape(VLine);
@@ -85,7 +90,7 @@ Line::Line(Qt::Orientation orient, QWidget *parent, const char *name)
 void
 Line::setOrientation(Qt::Orientation orient)
 {
-	if(orient == Horizontal)
+	if(orient == Qt::Horizontal)
 		setFrameShape(HLine);
 	else
 		setFrameShape(VLine);
@@ -95,9 +100,9 @@ Qt::Orientation
 Line::orientation() const
 {
 	if(frameShape() == HLine)
-		return Horizontal;
+		return Qt::Horizontal;
 	else
-		return Vertical;
+		return Qt::Vertical;
 }
 
 // The factory itself
@@ -378,7 +383,7 @@ StdWidgetFactory::~StdWidgetFactory()
 }
 
 QWidget*
-StdWidgetFactory::createWidget(const QCString &c, QWidget *p, const char *n, 
+StdWidgetFactory::createWidget(const Q3CString &c, QWidget *p, const char *n, 
 	KFormDesigner::Container *container, int options)
 {
 	QWidget *w=0;
@@ -457,7 +462,7 @@ StdWidgetFactory::createWidget(const QCString &c, QWidget *p, const char *n,
 }
 
 bool
-StdWidgetFactory::previewWidget(const QCString &classname, QWidget *widget, KFormDesigner::Container *)
+StdWidgetFactory::previewWidget(const Q3CString &classname, QWidget *widget, KFormDesigner::Container *)
 {
 	if(classname == "Spring") {
 		((Spring*)widget)->setPreviewMode();
@@ -467,7 +472,7 @@ StdWidgetFactory::previewWidget(const QCString &classname, QWidget *widget, KFor
 }
 
 bool
-StdWidgetFactory::createMenuActions(const QCString &classname, QWidget *, QPopupMenu *menu,
+StdWidgetFactory::createMenuActions(const Q3CString &classname, QWidget *, Q3PopupMenu *menu,
 	KFormDesigner::Container *)
 {
 	if((classname == "QLabel") || (classname == "KTextEdit"))
@@ -485,7 +490,7 @@ StdWidgetFactory::createMenuActions(const QCString &classname, QWidget *, QPopup
 }
 
 bool
-StdWidgetFactory::startEditing(const QCString &classname, QWidget *w, KFormDesigner::Container *container)
+StdWidgetFactory::startEditing(const Q3CString &classname, QWidget *w, KFormDesigner::Container *container)
 {
 	setWidget(w, container);
 //	m_container = container;
@@ -578,7 +583,7 @@ StdWidgetFactory::startEditing(const QCString &classname, QWidget *w, KFormDesig
 }
 
 bool
-StdWidgetFactory::clearWidgetContent(const QCString &classname, QWidget *w)
+StdWidgetFactory::clearWidgetContent(const Q3CString &classname, QWidget *w)
 {
 	if(classname == "KLineEdit")
 		((KLineEdit*)w)->clear();
@@ -598,7 +603,7 @@ StdWidgetFactory::clearWidgetContent(const QCString &classname, QWidget *w)
 bool
 StdWidgetFactory::changeText(const QString &text)
 {
-	QCString n = WidgetFactory::widget()->className();
+	Q3CString n = WidgetFactory::widget()->className();
 	QWidget *w = WidgetFactory::widget();
 	if(n == "KIntSpinBox")
 		((KIntSpinBox*)w)->setValue(text.toInt());
@@ -637,7 +642,7 @@ StdWidgetFactory::changeText(const QString &text)
 }
 
 void
-StdWidgetFactory::resizeEditor(QWidget *editor, QWidget *widget, const QCString &classname)
+StdWidgetFactory::resizeEditor(QWidget *editor, QWidget *widget, const Q3CString &classname)
 {
 	QSize s = widget->size();
 	QPoint p = widget->pos();
@@ -667,7 +672,7 @@ StdWidgetFactory::resizeEditor(QWidget *editor, QWidget *widget, const QCString 
 }
 
 bool
-StdWidgetFactory::saveSpecialProperty(const QCString &classname, const QString &name, const QVariant &, QWidget *w, QDomElement &parentNode, QDomDocument &domDoc)
+StdWidgetFactory::saveSpecialProperty(const Q3CString &classname, const QString &name, const QVariant &, QWidget *w, QDomElement &parentNode, QDomDocument &domDoc)
 {
 	if(name == "list_items" && classname == "KComboBox")
 	{
@@ -707,7 +712,7 @@ StdWidgetFactory::saveSpecialProperty(const QCString &classname, const QString &
 		}
 
 		// Then we save the list view items
-		QListViewItem *item = listview->firstChild();
+		Q3ListViewItem *item = listview->firstChild();
 		while(item)
 		{
 			saveListItem(item, parentNode, domDoc);
@@ -720,7 +725,7 @@ StdWidgetFactory::saveSpecialProperty(const QCString &classname, const QString &
 }
 
 void
-StdWidgetFactory::saveListItem(QListViewItem *item, QDomNode &parentNode, QDomDocument &domDoc)
+StdWidgetFactory::saveListItem(Q3ListViewItem *item, QDomNode &parentNode, QDomDocument &domDoc)
 {
 	QDomElement element = domDoc.createElement("item");
 	parentNode.appendChild(element);
@@ -730,7 +735,7 @@ StdWidgetFactory::saveListItem(QListViewItem *item, QDomNode &parentNode, QDomDo
 		KFormDesigner::FormIO::savePropertyElement(element, domDoc, "property", "text", item->text(i));
 
 	// Then we save every sub items
-	QListViewItem *child = item->firstChild();
+	Q3ListViewItem *child = item->firstChild();
 	while(child)
 	{
 		saveListItem(child, element, domDoc);
@@ -739,7 +744,7 @@ StdWidgetFactory::saveListItem(QListViewItem *item, QDomNode &parentNode, QDomDo
 }
 
 bool
-StdWidgetFactory::readSpecialProperty(const QCString &classname, QDomElement &node, QWidget *w, KFormDesigner::ObjectTreeItem *)
+StdWidgetFactory::readSpecialProperty(const Q3CString &classname, QDomElement &node, QWidget *w, KFormDesigner::ObjectTreeItem *)
 {
 	QString tag = node.tagName();
 	QString name = node.attribute("name");
@@ -798,16 +803,16 @@ StdWidgetFactory::readSpecialProperty(const QCString &classname, QDomElement &no
 }
 
 void
-StdWidgetFactory::readListItem(QDomElement &node, QListViewItem *parent, K3ListView *listview)
+StdWidgetFactory::readListItem(QDomElement &node, Q3ListViewItem *parent, K3ListView *listview)
 {
-	QListViewItem *item;
+	Q3ListViewItem *item;
 	if(parent)
 		item = new K3ListViewItem(parent);
 	else
 		item = new K3ListViewItem(listview);
 
 	// We need to move the item at the end of the list
-	QListViewItem *last;
+	Q3ListViewItem *last;
 	if(parent)
 		last = parent->firstChild();
 	else
@@ -841,8 +846,8 @@ StdWidgetFactory::readListItem(QDomElement &node, QListViewItem *parent, K3ListV
 }
 
 bool
-StdWidgetFactory::isPropertyVisibleInternal(const QCString &classname, 
-	QWidget *w, const QCString &property, bool isTopLevel)
+StdWidgetFactory::isPropertyVisibleInternal(const Q3CString &classname, 
+	QWidget *w, const Q3CString &property, bool isTopLevel)
 {
 	bool ok = true;
 	if(classname == "FormWidgetBase")
@@ -906,10 +911,10 @@ StdWidgetFactory::isPropertyVisibleInternal(const QCString &classname,
 	return ok && WidgetFactory::isPropertyVisibleInternal(classname, w, property, isTopLevel);
 }
 
-QValueList<QCString>
-StdWidgetFactory::autoSaveProperties(const QCString &classname)
+Q3ValueList<Q3CString>
+StdWidgetFactory::autoSaveProperties(const Q3CString &classname)
 {
-	QValueList<QCString> l;
+	Q3ValueList<Q3CString> l;
 
 	if(classname == "QLabel")
 		l << "text";
@@ -942,7 +947,7 @@ StdWidgetFactory::autoSaveProperties(const QCString &classname)
 void
 StdWidgetFactory::editText()
 {
-	QCString classname = widget()->className();
+	Q3CString classname = widget()->className();
 	QString text;
 	if(classname == "KTextEdit")
 		text = ((KTextEdit*)widget())->text();
@@ -963,7 +968,7 @@ void
 StdWidgetFactory::editListContents()
 {
 	if(widget()->inherits("QListView"))
-		editListView((QListView*)widget());
+		editListView((Q3ListView*)widget());
 }
 
 void
