@@ -1,6 +1,6 @@
 kde4_header()
 
-
+include_directories(${KFORMULA_INCLUDES})
 
 
 ########### next target ###############
