@@ -25,6 +25,8 @@
 #include <qlayout.h>
 #include <qtextcodec.h>
 #include <qcheckbox.h>
+//Added by qt3to4:
+#include <Q3GridLayout>
 
 #include <kapplication.h>
 #include <kconfig.h>
@@ -49,7 +51,7 @@ OptionsDialog::OptionsDialog( const QString& databaseFile, const QString& select
  )
 {
 	setIcon(DesktopIcon("configure"));
-	QGridLayout *lyr = new QGridLayout( plainPage(), 4, 3, KDialogBase::marginHint(), 
+	Q3GridLayout *lyr = new Q3GridLayout( plainPage(), 4, 3, KDialogBase::marginHint(), 
 		KDialogBase::spacingHint());
 
 	m_encodingComboBox = new KexiCharacterEncodingComboBox(plainPage(), selectedEncoding);

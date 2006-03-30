@@ -21,6 +21,8 @@
 #include "pg_type.h"
 
 #include <qstring.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 #include <kdebug.h>
 #include <qstringlist.h>
 
@@ -424,7 +426,7 @@ bool PqxxMigrate::drv_copyTable(const QString& srcTable, KexiDB::Connection *des
     //Loop round each row, reading into a vector of strings
     for (int n=0; (stream >> R); ++n)
     {
-        QValueList<QVariant> vals = QValueList<QVariant>();
+        Q3ValueList<QVariant> vals = Q3ValueList<QVariant>();
         for (std::vector<std::string>::const_iterator i = R.begin(); i != R.end(); ++i)
         {
              QVariant var = QVariant((*i).c_str());

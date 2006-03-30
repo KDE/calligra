@@ -21,7 +21,7 @@
 #define KEXI_MIGRATE_MNGR_P_H
 
 #include <qobject.h>
-#include <qasciidict.h>
+#include <q3asciidict.h>
 
 namespace KexiMigration {
 
@@ -65,7 +65,7 @@ class MigrateManagerInternal : public QObject, public KexiDB::Object
 		MigrateManager::ServicesMap m_services_lcase; //! as above but service names in lowercase
 		MigrateManager::ServicesMap m_services_by_mimetype;
 		
-		QAsciiDict<KexiMigrate> m_drivers;
+		Q3AsciiDict<KexiMigrate> m_drivers;
 		ulong m_refCount;
 
 		QString m_serverErrMsg;

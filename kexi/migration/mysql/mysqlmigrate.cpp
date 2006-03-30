@@ -23,7 +23,7 @@
 #include <qregexp.h>
 #include <qfile.h>
 #include <qvariant.h>
-#include <qvaluelist.h>
+#include <q3valuelist.h>
 #include <kdebug.h>
 
 #include <mysql_version.h>
@@ -156,7 +156,7 @@ bool MySQLMigrate::drv_copyTable(const QString& srcTable, KexiDB::Connection *de
 			MYSQL_ROW row;
 			while ((row = mysql_fetch_row(res)) != NULL) {
 				int numFields = mysql_num_fields(res);
-				QValueList<QVariant> vals = QValueList<QVariant>();
+				Q3ValueList<QVariant> vals = Q3ValueList<QVariant>();
 				for(int i = 0; i < numFields; i++) {
 					QVariant var = QVariant(row[i]);
 					vals << var;

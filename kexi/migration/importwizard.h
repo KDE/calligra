@@ -27,13 +27,17 @@
 #include <kapplication.h>
 
 #include <kexiutils/tristate.h> 
+//Added by qt3to4:
+#include <Q3VBoxLayout>
+#include <QLabel>
+#include <Q3HBoxLayout>
 
 class QLabel;
 class QCheckBox;
 class QPushButton;
-class QHBoxLayout;
-class QVBoxLayout;
-class QVButtonGroup;
+class Q3HBoxLayout;
+class Q3VBoxLayout;
+class Q3VButtonGroup;
 class KComboBox;
 class K3ListView;
 class KLineEdit;
@@ -119,7 +123,7 @@ private:
 	QWidget *m_introPage, /* *m_srcTypePage,*/ *m_srcConnPage, *m_srcDBPage, 
 		*m_dstTypePage, *m_dstPage, *m_importTypePage, *m_importingPage, *m_finishPage;
 
-	QVButtonGroup *m_importTypeButtonGroup;
+	Q3VButtonGroup *m_importTypeButtonGroup;
 	KexiDBTitlePage* m_dstTitlePage;
 
 	KComboBox *m_srcTypeCombo;

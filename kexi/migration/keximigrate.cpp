@@ -30,6 +30,9 @@
 #include <core/kexiproject.h>
 #include <kexidb/drivermanager.h>
 #include <q3tl.h>
+//Added by qt3to4:
+#include <Q3ValueList>
+#include <Q3CString>
 
 using namespace KexiDB;
 using namespace KexiMigration;
@@ -213,7 +216,7 @@ bool KexiMigrate::performImport(Kexi::ObjectStatus* result)
 			m_tableSchemas.append(destConn->tableSchema("kexi__objectdata")); 
 	}
 
-	for(QPtrListIterator<TableSchema> ts(m_tableSchemas); ok && ts.current() != 0 ; ++ts)
+	for(Q3PtrListIterator<TableSchema> ts(m_tableSchemas); ok && ts.current() != 0 ; ++ts)
 	{
 		const QString tname( ts.current()->name().lower() );
 		if (destConn->driver()->isSystemObjectName( tname )
@@ -349,7 +352,7 @@ KexiProject *KexiMigrate::createProject(Kexi::ObjectStatus* result)
 
 	//Right, were connected..create the tables
 	KexiDB::TableSchema *ts;
-	for(QPtrListIterator<TableSchema> it (m_tableSchemas); (ts = it.current()) != 0;++it) {
+	for(Q3PtrListIterator<TableSchema> it (m_tableSchemas); (ts = it.current()) != 0;++it) {
 		if(!prj->dbConnection()->createTable( ts )) {
 			kDebug() << "Failed to create a table " << ts->name() << endl;
 			prj->dbConnection()->debugError();
@@ -488,24 +491,24 @@ KexiDB::Field::Type KexiMigrate::userType(const QString& fname)
 		return KexiDB::Field::Text;
 }
 
-QVariant KexiMigrate::propertyValue( const QCString& propName )
+QVariant KexiMigrate::propertyValue( const Q3CString& propName )
 {
 	return m_properties[propName.lower()];
 }
 
-QString KexiMigrate::propertyCaption( const QCString& propName ) const
+QString KexiMigrate::propertyCaption( const Q3CString& propName ) const
 {
 	return m_propertyCaptions[propName.lower()];
 }
 
-void KexiMigrate::setPropertyValue( const QCString& propName, const QVariant& value )
+void KexiMigrate::setPropertyValue( const Q3CString& propName, const QVariant& value )
 {
 	m_properties[propName.lower()] = value;
 }
 
-QValueList<QCString> KexiMigrate::propertyNames() const
+Q3ValueList<Q3CString> KexiMigrate::propertyNames() const
 {
-	QValueList<QCString> names = m_properties.keys();
+	Q3ValueList<Q3CString> names = m_properties.keys();
 	qHeapSort(names);
 	return names;
 }
