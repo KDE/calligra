@@ -1,6 +1,6 @@
 kde4_header()
 
-
+include_directories(${LIBXML2_INCLUDE_DIR} ${LIBXSLT_INCLUDE_DIR})
 
 
 ########### next target ###############
@@ -15,7 +15,7 @@ kde4_add_plugin(xsltimport WITH_PREFIX ${xsltimport_PART_SRCS})
 
 kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} xsltimport )
 
-target_link_libraries(xsltimport  ${KDE4_KDECORE_LIBS} )
+target_link_libraries(xsltimport  ${KDE4_KIO_LIBS} kofficecore ${LIBXML2_LIBRARIES} ${LIBXSLT_LIBRARIES} )
 
 install_targets(${LIB_INSTALL_DIR}/kde4 xsltimport )
 

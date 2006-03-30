@@ -1,5 +1,9 @@
 kde4_header()
 
+macro_optional_find_package(LibXml2)
+macro_optional_find_package(LibXslt)
+
+
 set(libdialogfilter_SRCS 
 	${CMAKE_SOURCE_DIR}/filters/libdialogfilter/exportsizedia.cpp
 )
@@ -20,7 +24,9 @@ add_subdirectory(kformula)
 #add_subdirectory(karbon)
 add_subdirectory(krita)
 #add_subdirectory(kivio)
-add_subdirectory(xsltfilter)
+if(LIBXML2_FOUND AND LIBXSLT_FOUND)
+	add_subdirectory(xsltfilter)
+endif(LIBXML2_FOUND AND LIBXSLT_FOUND)	
 
 message (status "readd karbon kivio kpresenter ")
 
