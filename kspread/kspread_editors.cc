@@ -32,6 +32,7 @@
 #include <klistbox.h>
 
 #include <qapplication.h>
+#include <qdesktopwidget.h>
 #include <q3listbox.h>
 #include <qtimer.h>
 #include <qlabel.h>
@@ -105,7 +106,7 @@ const Tokens& FormulaEditorHighlighter::formulaTokens() const
   return d->tokens;
 }
 
-int FormulaEditorHighlighter::highlightParagraph(const QString& text, int /* endStateOfLastPara */)
+void FormulaEditorHighlighter::highlightBlock( const QString& text )
 {
   // reset syntax highlighting
   setFormat(0, text.length(), Qt::black);
@@ -187,18 +188,15 @@ int FormulaEditorHighlighter::highlightParagraph(const QString& text, int /* end
 
   if (oldRangeCount != d->rangeCount)
     d->rangeChanged = true;
-
-  return 0;
 }
 
 void FormulaEditorHighlighter::handleBrace( uint index )
 {
-  int cursorParagraph;
-  int cursorPos;
   const Token& token = d->tokens.at( index );
 
-  document()->getCursorPosition( &cursorParagraph , &cursorPos );
-
+  QTextEdit* textEdit = qobject_cast<QTextEdit*>( parent() );
+  Q_ASSERT( textEdit );
+  int cursorPos = textEdit->textCursor().position();
   int distance = cursorPos-token.pos();
   int opType = token.asOperator();
   bool highlightBrace=false;
@@ -515,13 +513,13 @@ CellEditor::CellEditor( Cell* _cell, Canvas* _parent, bool captureAllKeyEvents, 
 
 //TODO - Get rid of QTextEdit margins, this doesn't seem easily possible in Qt 3.3, so a job for Qt 4 porting.
 
-  d->textEdit->setHScrollBarMode(Q3ScrollView::AlwaysOff);
-  d->textEdit->setVScrollBarMode(Q3ScrollView::AlwaysOff);
+  d->textEdit->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+  d->textEdit->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
   d->textEdit->setFrameStyle(Q3Frame::NoFrame);
   d->textEdit->setLineWidth(0);
   d->textEdit->installEventFilter( this );
 
-  d->highlighter = new FormulaEditorHighlighter(d->textEdit, _parent);
+  d->highlighter = new FormulaEditorHighlighter( d->textEdit, _parent );
 
   d->functionCompletion = new FunctionCompletion( this );
   d->functionCompletionTimer = new QTimer( this );
@@ -532,11 +530,11 @@ CellEditor::CellEditor( Cell* _cell, Canvas* _parent, bool captureAllKeyEvents, 
     SLOT( triggerFunctionAutoComplete() ) );
 
   if (!cell()->format()->multiRow(cell()->column(),cell()->row()))
-    d->textEdit->setWordWrap(QTextEdit::NoWrap);
+    d->textEdit->setWordWrapMode( QTextOption::NoWrap );
   else
-	d->textEdit->setWrapPolicy(QTextEdit::AtWordOrDocumentBoundary);
+    d->textEdit->setWordWrapMode( QTextOption::WordWrap );
 
-//TODO - Custom KTextEdit class which supports text completion
+  //TODO - Custom KTextEdit class which supports text completion
 /*
   d->textEdit->setFrame( false );
   d->textEdit->setCompletionMode((KGlobalSettings::Completion)canvas()->view()->doc()->completionMode()  );
@@ -600,8 +598,7 @@ void CellEditor::checkFunctionAutoComplete()
 void CellEditor::triggerFunctionAutoComplete()
 {
   // tokenize the expression (don't worry, this is very fast)
-  int para = 0, curPos = 0;
-  d->textEdit->getCursorPosition( &para, &curPos );
+  int curPos = d->textEdit->textCursor().position();
   QString subtext = d->textEdit->text().left( curPos );
 
   KSpread::Formula f;
@@ -640,8 +637,7 @@ void CellEditor::functionAutoComplete( const QString& item )
 {
   if( item.isEmpty() ) return;
 
-  int para = 0, curPos = 0;
-  d->textEdit->getCursorPosition( &para, &curPos );
+  int curPos = d->textEdit->textCursor().position();
   QString subtext = text().left( curPos );
 
   KSpread::Formula f;
@@ -868,7 +864,7 @@ void CellEditor::slotTextChanged()
   //allow the text to fit if the new text is too wide
   //For multi-row (word-wrap enabled) cells, the text editor must expand vertically to
   //allow for new rows of text & the width of the text editor is not affected
-  if (d->textEdit->wordWrap() == QTextEdit::NoWrap)
+  if ( d->textEdit->wordWrapMode() == QTextOption::NoWrap )
   {
     if (requiredWidth > width())
     {
@@ -917,13 +913,13 @@ void CellEditor::slotTextChanged()
     {
       QString tmp = t + " %";
       d->textEdit->setText(tmp);
-      d->textEdit->setCursorPosition(0,1);
+      d->textEdit->textCursor().setPosition( 1 );
       return;
     }
   }
 
   canvas()->view()->editWidget()->setText( t );
-  // canvas()->view()->editWidget()->setCursorPosition( d->textEdit->cursorPosition() );
+  // canvas()->view()->editWidget()->textCursor().setPosition( d->textEdit->cursorPosition() );
 }
 
 void CellEditor::setCheckChoice(bool state)
@@ -949,8 +945,7 @@ bool CellEditor::checkChoice()
   }
   else
   {
-    int para, cur;
-    d->textEdit->getCursorPosition(&para, &cur);
+    int cur = d->textEdit->textCursor().position();
 
     Tokens tokens = d->highlighter->formulaTokens();
 
@@ -1079,9 +1074,7 @@ void CellEditor::handleKeyPressEvent( QKeyEvent * _ev )
 
     QRegExp exp("(\\$?)([a-zA-Z]+)(\\$?)([0-9]+)$");
 
-    int para,cur;
-    d->textEdit->getCursorPosition(&para,&cur);
-   // int cur = d->textEdit->cursorPosition();
+    int cur = d->textEdit->textCursor().position();
     QString tmp, tmp2;
     int n = -1;
 
@@ -1115,7 +1108,7 @@ void CellEditor::handleKeyPressEvent( QKeyEvent * _ev )
     newString += tmp2;
 
     d->textEdit->setText(newString);
-    d->textEdit->setCursorPosition( 0, cur );
+    d->textEdit->textCursor().setPosition( cur );
 
     _ev->accept();
 
@@ -1144,7 +1137,7 @@ void CellEditor::setText(QString text)
   //be quickly deleted using the backspace key
 
   //This also ensures that the caret is sized correctly for the text
-  d->textEdit->setCursorPosition(0,text.length());
+  d->textEdit->textCursor().setPosition( text.length() );
 
     if (d->fontLength == 0)
     {
@@ -1155,16 +1148,13 @@ void CellEditor::setText(QString text)
 
 int CellEditor::cursorPosition() const
 {
-  int para,cur;
-  d->textEdit->getCursorPosition(&para,&cur);
-  return cur;
-   // return d->textEdit->cursorPosition();
+  return d->textEdit->textCursor().position();
 }
 
 void CellEditor::setCursorPosition( int pos )
 {
-    d->textEdit->setCursorPosition(0,pos);
-    canvas()->view()->editWidget()->setCursorPosition( pos );
+  d->textEdit->textCursor().setPosition( pos );
+  canvas()->view()->editWidget()->setCursorPosition( pos );
 }
 
 bool CellEditor::eventFilter( QObject* o, QEvent* e )

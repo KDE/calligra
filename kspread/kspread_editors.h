@@ -74,7 +74,7 @@ public:
   /**
    * Called automatically by KTextEditor to highlight text when modified.
    */
-  virtual int highlightParagraph(const QString& text, int endStateOfLastPara);
+  virtual void highlightBlock(const QString& text);
   /**
    *
    */
