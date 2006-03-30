@@ -28,6 +28,7 @@ Comment[nb]=OASIS OpenDocument-bilde
 Comment[nl]=OASIS OpenDocument-afbeelding
 Comment[nn]=OASIS OpenDocument-bilete
 Comment[pl]=Obrazek w formacie OASIS OpenDocument
+Comment[pt]=Imagem OASIS OpenDocument
 Comment[pt_BR]=Imagem OpenDocument OASIS
 Comment[ru]=Изображение OASIS OpenDocument
 Comment[sl]=Slika OASIS OpenDocument
@@ -35,6 +36,7 @@ Comment[sr]=OASIS-ова OpenDocument слика
 Comment[sr@Latn]=OASIS-ova OpenDocument slika
 Comment[sv]=OASIS OpenDocument bild
 Comment[uk]=Зображення OASIS OpenDocument
+Comment[uz]=OASIS OpenDocument расм
 Comment[zh_CN]=OASIS OpenDocument 图像
 [Property::X-KDE-NativeExtension]
 Type=QString

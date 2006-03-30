@@ -29,6 +29,7 @@ Comment[nb]=OASIS OpenDocument-tekst
 Comment[nl]=OASIS OpenDocument Tekst
 Comment[nn]=OASIS OpenDocument-tekst
 Comment[pl]=Tekst w formacie OASIS OpenDocument
+Comment[pt]=Texto OASIS OpenDocument
 Comment[pt_BR]=Documento Texto OpenDocument OASIS
 Comment[ru]=Текстовый документ OASIS OpenDocument
 Comment[sl]=Besedilo OASIS OpenDocument
@@ -36,6 +37,7 @@ Comment[sr]=OASIS-ов OpenDocument текст
 Comment[sr@Latn]=OASIS-ov OpenDocument tekst
 Comment[sv]=OASIS OpenDocument text
 Comment[uk]=Текстовий документ OASIS OpenDocument
+Comment[uz]=OASIS OpenDocument матн
 Comment[zh_CN]=OASIS OpenDocument 文本
 [Property::X-KDE-NativeExtension]
 Type=QString

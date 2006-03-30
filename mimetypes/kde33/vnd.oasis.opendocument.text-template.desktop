@@ -29,6 +29,7 @@ Comment[nb]=OASIS OpenDocument-tekstmal
 Comment[nl]=OpenOffice.org Tekstsjabloon
 Comment[nn]=OASIS OpenDocument-tekstmal
 Comment[pl]=Szablon tekstowy w formacie OASIS OpenDocument
+Comment[pt]=Modelo de Texto OASIS OpenDocument
 Comment[pt_BR]=Modelo de Documento Texto OpenDocument OASIS
 Comment[ru]=Шаблон текстового документа OASIS OpenDocument
 Comment[sl]=Predloga besedilnega dokumenta OASIS OpenDocument
@@ -36,6 +37,7 @@ Comment[sr]=OASIS-ов OpenDocument шаблон за текст
 Comment[sr@Latn]=OASIS-ov OpenDocument šablon za tekst
 Comment[sv]=OASIS OpenDocument textmall
 Comment[uk]=Шаблон текстового документу OASIS OpenDocument
+Comment[uz]=OASIS OpenDocument матн намунаси
 Comment[zh_CN]=OASIS OpenDocument 文本模板
 [Property::X-KDE-NativeExtension]
 Type=QString

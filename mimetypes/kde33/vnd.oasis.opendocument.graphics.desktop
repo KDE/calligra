@@ -28,6 +28,7 @@ Comment[nb]=OASIS OpenDocument-tegning
 Comment[nl]=OASIS OpenDocument-illustraties
 Comment[nn]=OASIS OpenDocument-teikning
 Comment[pl]=Grafika w formacie OASIS OpenDocument
+Comment[pt]=Desenho OASIS OpenDocument
 Comment[pt_BR]=Gráfico OpenDocument OASIS
 Comment[ru]=Рисунок OASIS OpenDocument
 Comment[sl]=Grafika OASIS OpenDocument
@@ -35,6 +36,7 @@ Comment[sr]=OASIS-ова OpenDocument графика
 Comment[sr@Latn]=OASIS-ova OpenDocument grafika
 Comment[sv]=OASIS OpenDocument grafik
 Comment[uk]=Графіка OASIS OpenDocument
+Comment[uz]=OASIS OpenDocument графика
 Comment[zh_CN]=OASIS OpenDocument 绘图
 [Property::X-KDE-NativeExtension]
 Type=QString

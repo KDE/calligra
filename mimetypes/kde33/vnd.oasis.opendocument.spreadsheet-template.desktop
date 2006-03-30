@@ -29,6 +29,7 @@ Comment[nb]=OASIS OpenDocument-reknearkmal
 Comment[nl]=OASIS OpenDocument Werkbladsjabloon
 Comment[nn]=OASIS OpenDocument-reknearkmal
 Comment[pl]=Szablon arkusza kalkulacyjnego w formacie OASIS OpenDocument
+Comment[pt]=Modelo de Folha de Cálculo OASIS OpenDocument
 Comment[pt_BR]=Modelo de Planilha OpenDocument OASIS
 Comment[ru]=Шаблон таблицы OASIS Open Office
 Comment[sl]=Predloga preglednice OASIS OpenDocument
@@ -36,6 +37,7 @@ Comment[sr]=OASIS-ов OpenDocument шаблон табеларног прора
 Comment[sr@Latn]=OASIS-ov OpenDocument šablon tabelarnog proračuna
 Comment[sv]=OASIS OpenDocument kalkylarksmall
 Comment[uk]=Шаблон електронної таблиці OASIS OpenDocument
+Comment[uz]=OASIS OpenDocument электрон жадвал намунаси
 Comment[zh_CN]=OASIS OpenDocument 工作簿模板
 [Property::X-KDE-NativeExtension]
 Type=QString

@@ -29,6 +29,7 @@ Comment[nb]=OASIS OpenDocument-tegningsmal
 Comment[nl]=OASIS OpenDocument illustratiesjabloon
 Comment[nn]=OASIS OpenDocument-teikningsmal
 Comment[pl]=Szablon graficzny w formacie OASIS OpenDocument
+Comment[pt]=Modelo de Desenho OASIS OpenDocument
 Comment[pt_BR]=Modelo de Gráfico OpenDocument OASIS
 Comment[ru]=Шаблон рисунка OASIS OpenDocument Graphics
 Comment[sl]=Predloga grafike OASIS OpenDocument
@@ -36,6 +37,7 @@ Comment[sr]=OASIS-ов OpenDocument графички шаблон
 Comment[sr@Latn]=OASIS-ov OpenDocument grafički šablon
 Comment[sv]=OASIS OpenDocument grafikmall
 Comment[uk]=Шаблон графічного зображення OASIS OpenDocument
+Comment[uz]=OASIS OpenDocument графика намунаси
 Comment[zh_CN]=OASIS OpenDocument 绘图模板
 [Property::X-KDE-NativeExtension]
 Type=QString
