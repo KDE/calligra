@@ -62,7 +62,7 @@ public:
     Schedule();
     Schedule(Schedule *parent);
     Schedule(QString name, Type type, long id);
-    ~Schedule();
+    virtual ~Schedule();
     
     QString name() const { return m_name; }
     void setName(QString name) { m_name = name; }
@@ -234,7 +234,7 @@ public:
     NodeSchedule();
     NodeSchedule(Node *node, QString name, Schedule::Type type, long id);
     NodeSchedule(Schedule *parent, Node *node);
-    ~NodeSchedule();
+    virtual ~NodeSchedule();
     
     virtual bool isDeleted() const 
         { return m_parent == 0 ? true : m_parent->isDeleted(); }
@@ -271,7 +271,7 @@ public:
     ResourceSchedule();
     ResourceSchedule(Resource *Resource, QString name, Schedule::Type type, long id);
     ResourceSchedule(Schedule *parent, Resource *Resource);
-    ~ResourceSchedule();
+    virtual ~ResourceSchedule();
     
     virtual bool isDeleted() const 
         { return m_parent == 0 ? true : m_parent->isDeleted(); }
