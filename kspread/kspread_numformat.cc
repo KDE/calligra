@@ -119,7 +119,7 @@ namespace NumFormat_Local
 
   class BaseFormat
   {
-   public: 
+   public:
     int        type;
 
     QString    postfix;
@@ -157,7 +157,7 @@ namespace NumFormat_Local
   class DateTimeFormat : public BaseFormat
   {
    public:
-    bool       ampm;    
+    bool       ampm;
     QString    format;
   };
 
@@ -318,7 +318,7 @@ void convertDateTime( Value const & value )
   g_convertionInfo.dt = &g_dateTime;
 }
 
-void parseNegativePart( QString & format, int i, 
+void parseNegativePart( QString & format, int i,
                         int l, bool acceptDigits )
 {
   g_convertionInfo.showMinus = false;
@@ -329,7 +329,7 @@ void parseNegativePart( QString & format, int i,
   while ( i < l && !end)
   {
     QChar c( format[i] );
-    switch( c )
+    switch( c.toLatin1() )
     {
      case '-':
       g_convertionInfo.showMinus = true;
@@ -360,8 +360,8 @@ void parseNegativePart( QString & format, int i,
       continue;
     }
 
-    if ( !quote && ( format[j] == '0' || format[j] != '?' 
-                     || format[j] != '#' 
+    if ( !quote && ( format[j] == '0' || format[j] != '?'
+                     || format[j] != '#'
                      || ( format[j].isDigit() && acceptDigits ) ) )
     {
       g_convertionInfo.postfix = format.mid( j + 1 );
@@ -400,7 +400,7 @@ void createNumberStruct( BaseFormat * data, QString const & format, bool insert 
   data = d;
 }
 
-void createDateTimeStruct( BaseFormat * data, QString const & format, 
+void createDateTimeStruct( BaseFormat * data, QString const & format,
                            QString const & optFormat, bool insert )
 {
   DateTimeFormat * d = new DateTimeFormat();
@@ -440,7 +440,7 @@ void createScientificStruct( BaseFormat * data, QString const & format, bool ins
 
 int doPreScan( QString & format, QString const & formatBack, KLocale const * const /* locale */,
                bool insert, BaseFormat * data )
-{  
+{
   int type = g_formatStore.getType( format, data );
   if ( data != 0 )
     return type;
@@ -475,7 +475,7 @@ int doPreScan( QString & format, QString const & formatBack, KLocale const * con
       break;
     }
     QChar ch( format[i] );
-    switch( ch )
+    switch( ch.toLatin1() )
     {
      case '[':
       if ( type == Number )
@@ -503,7 +503,7 @@ int doPreScan( QString & format, QString const & formatBack, KLocale const * con
       }
       else
       {
-        if ( i + 1 >= l )  
+        if ( i + 1 >= l )
         {
           g_convertionInfo.postfix += '[';
           format.remove( i, 1 );
@@ -601,7 +601,7 @@ int doPreScan( QString & format, QString const & formatBack, KLocale const * con
           format.remove( i, l - i );
           break;
         }
-        else 
+        else
         {
           ++d;
           frac += format[i];
@@ -624,7 +624,7 @@ int doPreScan( QString & format, QString const & formatBack, KLocale const * con
               parseNegativePart( format, i, l, true );
             }
           }
-      }      
+      }
 
       ok = false;
       f = frac.toInt( &ok );
@@ -656,7 +656,7 @@ int doPreScan( QString & format, QString const & formatBack, KLocale const * con
       if ( type == Unknown )
       {
         g_convertionInfo.prefix += ',';
-      }      
+      }
       else if ( type == Number )
       {
         if ( dcSeen )
@@ -681,7 +681,7 @@ int doPreScan( QString & format, QString const & formatBack, KLocale const * con
       if ( type == Unknown )
       {
         int j = i + 1;
-        if ( ( j < l ) 
+        if ( ( j < l )
              && ( format[j] == '0' || format[j] == '#' ) )
         {
           type = Number;
@@ -705,7 +705,7 @@ int doPreScan( QString & format, QString const & formatBack, KLocale const * con
 
      case '*':
       break;
-      
+
      case '"':
       n = i;
       ++i;
@@ -716,7 +716,7 @@ int doPreScan( QString & format, QString const & formatBack, KLocale const * con
       }
       if ( type == Unknown )
         g_convertionInfo.prefix += s;
-      else 
+      else
       {
         g_convertionInfo.postfix += s;
       }
@@ -753,7 +753,7 @@ int doPreScan( QString & format, QString const & formatBack, KLocale const * con
 
           return Number;
         }
-      }    
+      }
       break;
 
      case ';':
@@ -800,7 +800,7 @@ int doPreScan( QString & format, QString const & formatBack, KLocale const * con
         g_convertionInfo.prefix += ' ';
         format.remove( i, 1 );
         --i; --l;
-      }      
+      }
       break;
 
      case 'A':
@@ -812,7 +812,7 @@ int doPreScan( QString & format, QString const & formatBack, KLocale const * con
           g_convertionInfo.ampm = true;
           ++i;
           if ( ( i + 3 < l ) && ( format[i + 1] == '/' )
-               && ( format[i + 2].lower() == 'p' ) 
+               && ( format[i + 2].lower() == 'p' )
                && ( format[i + 3].lower() == 'm' ) )
           {
             i += 3;
@@ -825,7 +825,7 @@ int doPreScan( QString & format, QString const & formatBack, KLocale const * con
           --i; --l;
         }
       }
-      else 
+      else
       {
         if ( !endFixed )
           endFixed = true;
@@ -866,7 +866,7 @@ int doPreScan( QString & format, QString const & formatBack, KLocale const * con
       if ( type == Unknown )
         type = TimeDate;
       else if ( type != TimeDate )
-        endFixed = true;        
+        endFixed = true;
       break;
 
      case 'S':
@@ -874,7 +874,7 @@ int doPreScan( QString & format, QString const & formatBack, KLocale const * con
      case 'H':
      case 'h':
       if ( type != Unknown && type != TimeDate )
-        endFixed = true;        
+        endFixed = true;
       else
         type = TimeDate;
       break;
@@ -884,7 +884,7 @@ int doPreScan( QString & format, QString const & formatBack, KLocale const * con
      case 'Y':
      case 'y':
       if ( type != Unknown && type != TimeDate )
-        endFixed = true;        
+        endFixed = true;
       else
         type = TimeDate;
       break;
@@ -896,13 +896,13 @@ int doPreScan( QString & format, QString const & formatBack, KLocale const * con
         format.remove( i, 1 );
         --i; --l;
       }
-      else if ( type == Number || type == Scientific 
+      else if ( type == Number || type == Scientific
                 || type == Fraction )
       {
         endFixed = true;
         g_convertionInfo.postfix += format[i];
         format.remove( i, 1 );
-        --l; --i;      
+        --l; --i;
       }
     }
 
@@ -919,7 +919,7 @@ int doPreScan( QString & format, QString const & formatBack, KLocale const * con
   return type;
 }
 
-void createNumber( QString & result, Value const & value, 
+void createNumber( QString & result, Value const & value,
                    QString const & /*format*/, bool & setRed,
                    NumberFormat const * const data )
 {
@@ -942,7 +942,7 @@ void createNumber( QString & result, Value const & value,
 
     // remove '0' from the end if not required
     if ( data->rightOpt > 0 )
-    {      
+    {
       int i = result.length() - 1; // index
       int n = result.length() - data->rightOpt;
 
@@ -988,7 +988,7 @@ void createNumber( QString & result, Value const & value,
   }
 
   if ( negative )
-  { 
+  {
     if ( data->showMinus )
       result.prepend( g_negSymbol );
 
@@ -1006,7 +1006,7 @@ void createNumber( QString & result, Value const & value,
   result.append( data->postfix );
 }
 
-void createFraction( QString & result, Value const & value, 
+void createFraction( QString & result, Value const & value,
                      QString const & /*format*/,  bool & setRed,
                      FractionFormat const * const data )
 {
@@ -1015,7 +1015,7 @@ void createFraction( QString & result, Value const & value,
   bool negative = ( num < 0 ? true : false );
 
   double fnum = floor( negative ? -num : num );
-  
+
   double dec = num - fnum;
   double fraction;
   int index = 0;
@@ -1032,7 +1032,7 @@ void createFraction( QString & result, Value const & value,
     if ( data->fractionDigists >= 3 )
       limit += 990;
 
-    do 
+    do
     {
       double val1   = nnum;
       double val2   = rint( nnum );
@@ -1044,7 +1044,7 @@ void createFraction( QString & result, Value const & value,
       numerator   = val2;
       denominator = 1;
 
-      while ( fabs( numerator / denominator - nnum ) > precision ) 
+      while ( fabs( numerator / denominator - nnum ) > precision )
       {
         val1 = (1 / ( val1 - val2 ) );
         val2 = rint( val1 );
@@ -1070,42 +1070,42 @@ void createFraction( QString & result, Value const & value,
     double calc = 0.0;
     double diff = dec;
     double d;
-    for ( int i = 1; i <= fraction; ++i ) 
+    for ( int i = 1; i <= fraction; ++i )
     {
       calc = i * 1.0 / index;
       d = fabs( dec - calc );
-      if ( d < diff ) 
+      if ( d < diff )
       {
         index = i;
         diff = d;
       }
     }
   }
-   
+
   // ? index/fraction
 
   // 2.25:  #/4 => 9/4
   if ( data->optFirst == 0 && data->reqFirst == 0 && fnum > 0 )
     index += (int) (fnum * fraction);
-  
+
   QString frac;
   QString left;
   if ( index > 0 )
   {
     QString numerator;
     QString denominator;
-    
+
     numerator = QString::number( index );
     int n = numerator.length() - data->reqCounter;
     for ( int i = 0; i < n; ++i )
     {
       numerator.prepend( '0' );
     }
-    
+
     denominator = QString::number( fraction );
     frac = numerator + '/' + denominator;
   }
-  
+
   if ( data->optFirst > 0 || data->reqFirst > 0 )
   {
     if ( fnum == 0 && data->reqFirst > 0 )
@@ -1126,7 +1126,7 @@ void createFraction( QString & result, Value const & value,
       }
     }
   }
-  
+
   if ( data->thSet )
   {
     int l = left.length() - 3;
@@ -1157,7 +1157,7 @@ void createFraction( QString & result, Value const & value,
   result = left;
 }
 
-void createScientific( QString & result, Value const & value, 
+void createScientific( QString & result, Value const & value,
                        QString const & /*format*/, bool & setRed,
                        ScientificFormat const * const data )
 {
@@ -1167,13 +1167,13 @@ void createScientific( QString & result, Value const & value,
   double nnum     = ( negative ? -num : num );
 
   result = QString::number( nnum, 'E', data->rightReq + data->rightOpt );
-  
+
   int pos = result.find( '.' );
   if ( pos >= 0 )
   {
     result = result.replace( pos, 1, g_dcSymbol );
     if ( data->rightOpt > 0 )
-    {      
+    {
       int i   = result.find( 'E', pos, false ) - 1;
       int n   = result.length() - data->rightOpt;
 
@@ -1187,7 +1187,7 @@ void createScientific( QString & result, Value const & value,
           else
             ++rem;
         }
-        result = result.remove( i + 1, rem ); 
+        result = result.remove( i + 1, rem );
       }
     }
 
@@ -1209,7 +1209,7 @@ void createScientific( QString & result, Value const & value,
   }
 
   if ( negative )
-  { 
+  {
     if ( data->showMinus )
       result.prepend( g_negSymbol );
 
@@ -1239,12 +1239,12 @@ void appendAMPM( QString & result, Value const & value )
     result.append( i18n("AM") );
 }
 
-void appendHour( QString & result, Value const & value, 
+void appendHour( QString & result, Value const & value,
                  int digits, bool elapsed, bool ampm )
 {
   if ( !g_convertionInfo.dt )
     convertDateTime( value );
-    
+
   int hour = g_convertionInfo.dt->hour;
   if ( elapsed )
   {
@@ -1265,12 +1265,12 @@ void appendHour( QString & result, Value const & value,
   result += QString::number( hour );
 }
 
-void appendMinutes( QString & result, Value const & value, 
+void appendMinutes( QString & result, Value const & value,
                     int digits, bool elapsed )
 {
   if ( !g_convertionInfo.dt )
     convertDateTime( value );
-    
+
   int minute = g_convertionInfo.dt->minute;
   if ( elapsed )
   {
@@ -1284,12 +1284,12 @@ void appendMinutes( QString & result, Value const & value,
   result += QString::number( minute );
 }
 
-void appendSecond( QString & result, Value const & value, 
+void appendSecond( QString & result, Value const & value,
                    int digits, bool elapsed )
 {
   if ( !g_convertionInfo.dt )
     convertDateTime( value );
-    
+
   int second = g_convertionInfo.dt->second;
   if ( elapsed )
   {
@@ -1303,7 +1303,7 @@ void appendSecond( QString & result, Value const & value,
   result += QString::number( second );
 }
 
-void appendYear( QString & result, Value const & value, 
+void appendYear( QString & result, Value const & value,
                  int digits )
 {
   if ( !g_convertionInfo.dt )
@@ -1316,7 +1316,7 @@ void appendYear( QString & result, Value const & value,
     result += QString::number( year );
 }
 
-void appendMonth( QString & result, Value const & value, 
+void appendMonth( QString & result, Value const & value,
                   int digits )
 {
   if ( !g_convertionInfo.dt )
@@ -1384,11 +1384,11 @@ void appendMonth( QString & result, Value const & value,
        case 12:
         result += ( digits != 3 ? g_December : g_Dec );
         break;
-      }    
+      }
     }
 }
 
-void appendDays( QString & result, Value const & value, 
+void appendDays( QString & result, Value const & value,
                  int digits )
 {
   if ( !g_convertionInfo.dt )
@@ -1404,7 +1404,7 @@ void appendDays( QString & result, Value const & value,
         result += '0';
 
       result += QString::number( day );
-    }    
+    }
     else
     {
       QDate date( g_convertionInfo.dt->year, g_convertionInfo.dt->month, g_convertionInfo.dt->day );
@@ -1442,8 +1442,8 @@ void appendDays( QString & result, Value const & value,
     }
 }
 
-void createDateTime( QString & result, Value const & value, 
-                     QString const & /*format*/, 
+void createDateTime( QString & result, Value const & value,
+                     QString const & /*format*/,
                      DateTimeFormat const * const data )
 {
   result = data->prefix;
@@ -1455,7 +1455,7 @@ void createDateTime( QString & result, Value const & value,
   int l = (int) data->format.length();
   while ( i < l )
   {
-    switch( data->format[i].lower() )
+    switch( data->format[i].lower().toLatin1() )
     {
      case '"':
       ++i;
@@ -1498,7 +1498,7 @@ void createDateTime( QString & result, Value const & value,
 
      case 'm':
       digits = 1;
-      
+
       while ( data->format[i + 1] == 'm' )
       {
         ++i;
@@ -1509,7 +1509,7 @@ void createDateTime( QString & result, Value const & value,
         appendMinutes( result, value, digits, elapsed );
       else
         appendMonth( result, value, digits );
-      
+
       break;
 
      case 's':
@@ -1526,7 +1526,7 @@ void createDateTime( QString & result, Value const & value,
      case 'd':
       minute = false;
       digits = 1;
-      
+
       while ( data->format[i + 1] == 'd' )
       {
         ++i;
@@ -1538,7 +1538,7 @@ void createDateTime( QString & result, Value const & value,
      case 'y':
       minute = false;
       digits = 1;
-      
+
       while ( data->format[i + 1] == 'y' )
       {
         ++i;
@@ -1552,14 +1552,14 @@ void createDateTime( QString & result, Value const & value,
       if ( data->format[i + 1] == 'm' )
       {
         ++i;
-        if ( data->format[i + 1] == '/' 
-             && data->format[i + 2].lower() == 'p' 
+        if ( data->format[i + 1] == '/'
+             && data->format[i + 2].lower() == 'p'
              && data->format[i + 3].lower() == 'm' )
           i += 3;
 
         appendAMPM( result, value );
       }
-      
+
      default:
       result += data->format[i];
     }

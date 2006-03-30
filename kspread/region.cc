@@ -18,8 +18,6 @@
 
 #include <qregexp.h>
 #include <qstringlist.h>
-//Added by qt3to4:
-#include <Q3ValueList>
 
 #include <kdebug.h>
 
@@ -45,7 +43,7 @@ public:
   }
 
   View* view;
-  Q3ValueList<Element*> cells;
+  QList<Element*> cells;
 };
 
 
@@ -651,7 +649,7 @@ Region::ConstIterator Region::constEnd() const
   return d->cells.constEnd();
 }
 
-Q3ValueList<Region::Element*>& Region::cells() const
+QList<Region::Element*>& Region::cells() const
 {
   return d->cells;
 }

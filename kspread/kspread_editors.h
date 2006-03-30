@@ -24,7 +24,7 @@
 
 #include <vector>
 
-#include <q3syntaxhighlighter.h>
+#include <qsyntaxhighlighter.h>
 #include <qwidget.h>
 //Added by qt3to4:
 #include <QFocusEvent>
@@ -40,6 +40,7 @@ class KTextEdit;
 class QFont;
 class Q3Button;
 class QTextCursor;
+class QTextEdit;
 
 namespace KSpread
 {
@@ -57,7 +58,7 @@ class View;
  * Colours cell references in formulas.  Installed by CellEditor instances in
  * the constructor.
  */
-class FormulaEditorHighlighter : public Q3SyntaxHighlighter
+class FormulaEditorHighlighter : public QSyntaxHighlighter
 {
 public:
   /**
@@ -66,7 +67,7 @@ public:
    * @param textEdit The QTextEdit widget which the highlighter should operate on
    * @param canvas The Canvas object
    */
-  FormulaEditorHighlighter(Q3TextEdit* textEdit, Canvas* canvas);
+  FormulaEditorHighlighter(QTextEdit* textEdit, Canvas* canvas);
   virtual ~FormulaEditorHighlighter();
 
 
@@ -75,7 +76,7 @@ public:
    */
   virtual int highlightParagraph(const QString& text, int endStateOfLastPara);
   /**
-   * 
+   *
    */
   const Tokens& formulaTokens() const;
   /**
@@ -83,17 +84,17 @@ public:
    */
   uint rangeCount() const;
   /**
-   * Returns true if any of the ranges or cells in the formula have changed since the 
-   * last call to @ref FormulaEditorHighlighter::rangeChanged() 
+   * Returns true if any of the ranges or cells in the formula have changed since the
+   * last call to @ref FormulaEditorHighlighter::rangeChanged()
    */
   bool rangeChanged() const;
-  
+
   /**
    * Sets the highlighter's range changed flag to false.
    */
   void resetRangeChanged();
-  
-  
+
+
 
 protected:
   /**
@@ -101,11 +102,11 @@ protected:
   */
   int findMatchingBrace(int pos);
   /**
-  * Examines the brace (Token::LeftPar or Token::RightPar) operator token at the given index in the token vector 
+  * Examines the brace (Token::LeftPar or Token::RightPar) operator token at the given index in the token vector
   * ( as returned by formulaTokens() ) and if the cursor is next to it, the token plus any matching brace will be highlighted
   */
   void handleBrace(uint index);
-  
+
 private:
   class Private;
   Private* d;

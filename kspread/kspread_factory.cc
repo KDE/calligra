@@ -18,6 +18,7 @@
 */
 
 #include <kdebug.h>
+#include <kinstance.h>
 #include <kstandarddirs.h>
 
 #include "kspread_aboutdata.h"

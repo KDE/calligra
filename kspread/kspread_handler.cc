@@ -37,24 +37,24 @@ bool InsertHandler::eventFilter( QObject*, QEvent* ev )
     if ( ev->type() == QEvent::MouseButtonPress )
     {
     QMouseEvent* e = (QMouseEvent*)ev;
-    
+
     m_geometryStart = e->pos();
     m_geometryEnd = e->pos();
     m_started = false;
     m_clicked = true;
-    
+
     return true;
     }
     else if ( ev->type() == QEvent::MouseMove )
     {
     if ( !m_clicked )
         return true;
-    
+
     QMouseEvent* e = (QMouseEvent*)ev;
-    
+
     QPainter painter;
     painter.begin( (QWidget*)target() );
-    painter.setRasterOp( NotROP );
+    painter.setCompositionMode( QPainter::CompositionMode_DestinationOut );
 
     QPen pen;
     pen.setStyle( Qt::DashLine );
@@ -105,13 +105,13 @@ bool InsertHandler::eventFilter( QObject*, QEvent* ev )
     else if ( ev->type() == QEvent::MouseButtonRelease )
     {
     QMouseEvent* e = (QMouseEvent*)ev;
-    
+
     if ( !m_started )
         {
         delete this;
         return true;
     }
-    
+
     m_geometryEnd = e->pos();
 
     int x = m_geometryStart.x();
@@ -127,7 +127,7 @@ bool InsertHandler::eventFilter( QObject*, QEvent* ev )
 
     if ( w < KS_MIN_RECTSIZE ) w = KS_MIN_RECTSIZE;
     if ( h < KS_MIN_RECTSIZE ) h = KS_MIN_RECTSIZE;
-        
+
     QPainter painter;
     painter.begin( (QWidget*)target() );
 
@@ -135,7 +135,7 @@ bool InsertHandler::eventFilter( QObject*, QEvent* ev )
     pen.setStyle( Qt::DashLine );
     painter.setPen( pen );
 
-    painter.setRasterOp( NotROP );
+    painter.setCompositionMode( QPainter::CompositionMode_DestinationOut );
     painter.drawRect( x, y, w, h );
     painter.end();
 
@@ -149,7 +149,7 @@ bool InsertHandler::eventFilter( QObject*, QEvent* ev )
     QKeyEvent* e = (QKeyEvent*)ev;
     if ( e->key() != Qt::Key_Escape )
         return false;
-    
+
     delete this;
     return true;
     }

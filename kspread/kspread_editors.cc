@@ -88,8 +88,8 @@ public:
 };
 
 
-FormulaEditorHighlighter::FormulaEditorHighlighter(Q3TextEdit* textEdit, Canvas* canvas)
-  : Q3SyntaxHighlighter(textEdit)
+FormulaEditorHighlighter::FormulaEditorHighlighter(QTextEdit* textEdit, Canvas* canvas)
+  : QSyntaxHighlighter(textEdit)
 {
   d = new Private();
   d->canvas = canvas;
@@ -118,7 +118,7 @@ int FormulaEditorHighlighter::highlightParagraph(const QString& text, int /* end
   Formula f;
   d->tokens = f.scan(text);
 
-  QFont editorFont = textEdit()->currentFont();
+  QFont editorFont = document()->defaultFont();
   QFont font;
 
   uint oldRangeCount = d->rangeCount;
@@ -197,7 +197,7 @@ void FormulaEditorHighlighter::handleBrace( uint index )
   int cursorPos;
   const Token& token = d->tokens.at( index );
 
-  textEdit()->getCursorPosition( &cursorParagraph , &cursorPos );
+  document()->getCursorPosition( &cursorParagraph , &cursorPos );
 
   int distance = cursorPos-token.pos();
   int opType = token.asOperator();
@@ -237,7 +237,7 @@ void FormulaEditorHighlighter::handleBrace( uint index )
 
   if (highlightBrace)
   {
-    QFont font = QFont( textEdit()->currentFont() );
+    QFont font = QFont( document()->defaultFont() );
     font.setBold(true);
     setFormat(token.pos() + 1, token.text().length(), font);
 
@@ -532,9 +532,9 @@ CellEditor::CellEditor( Cell* _cell, Canvas* _parent, bool captureAllKeyEvents, 
     SLOT( triggerFunctionAutoComplete() ) );
 
   if (!cell()->format()->multiRow(cell()->column(),cell()->row()))
-    d->textEdit->setWordWrap(Q3TextEdit::NoWrap);
+    d->textEdit->setWordWrap(QTextEdit::NoWrap);
   else
-	d->textEdit->setWrapPolicy(Q3TextEdit::AtWordOrDocumentBoundary);
+	d->textEdit->setWrapPolicy(QTextEdit::AtWordOrDocumentBoundary);
 
 //TODO - Custom KTextEdit class which supports text completion
 /*
@@ -868,7 +868,7 @@ void CellEditor::slotTextChanged()
   //allow the text to fit if the new text is too wide
   //For multi-row (word-wrap enabled) cells, the text editor must expand vertically to
   //allow for new rows of text & the width of the text editor is not affected
-  if (d->textEdit->wordWrap() == Q3TextEdit::NoWrap)
+  if (d->textEdit->wordWrap() == QTextEdit::NoWrap)
   {
     if (requiredWidth > width())
     {

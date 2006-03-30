@@ -20,9 +20,10 @@
 #ifndef KSPREAD_REGION
 #define KSPREAD_REGION
 
+#include <qcolor.h>
+#include <qlist.h>
 #include <qrect.h>
 #include <qstring.h>
-#include <q3valuelist.h>
 
 #include <kdebug.h>
 
@@ -265,8 +266,8 @@ public:
   void setView(View*);
 
 
-  typedef Q3ValueList<Element*>::Iterator      Iterator;
-  typedef Q3ValueList<Element*>::ConstIterator ConstIterator;
+  typedef QList<Element*>::Iterator      Iterator;
+  typedef QList<Element*>::ConstIterator ConstIterator;
 
   ConstIterator constBegin() const;
   ConstIterator constEnd() const;
@@ -275,7 +276,7 @@ protected:
   /**
    * @return the list of elements
    */
-  Q3ValueList<Element*>& cells() const;
+  QList<Element*>& cells() const;
 
   /**
    * @param iterator the iterator to the element in whose front the new point

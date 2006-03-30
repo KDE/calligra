@@ -2119,7 +2119,8 @@ void Doc::emitBeginOperation(bool waitCursor)
     //are expected to be completed in a short time anyway.
     QCursor* activeOverride = QApplication::overrideCursor();
 
-    if (waitCursor && ( (!activeOverride) || (activeOverride->shape() != Qt::WaitCursor.shape()) )  )
+    if ( waitCursor &&
+         ( !activeOverride || activeOverride->shape() != QCursor(Qt::WaitCursor).shape() ) )
     {
         QApplication::setOverrideCursor(Qt::WaitCursor);
     }

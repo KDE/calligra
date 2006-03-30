@@ -984,7 +984,7 @@ void Canvas::mouseMoveEvent( QMouseEvent * _ev )
 
     //update( d->m_boundingRealRect );
     QPainter p(this);
-    p.setRasterOp( NotROP );
+    p.setCompositionMode( QPainter::CompositionMode_DestinationOut );
     p.setPen( QPen( black, 0, DotLine ) );
     p.drawRect( drawingRect );
     p.end();
@@ -4775,7 +4775,7 @@ void VBorder::mouseReleaseEvent( QMouseEvent * _ev )
         // Remove size indicator painted by paintSizeIndicator
         QPainter painter;
         painter.begin( m_pCanvas );
-        painter.setRasterOp( NotROP );
+        painter.setCompositionMode( QPainter::CompositionMode_DestinationOut );
         painter.drawLine( 0, m_iResizePos, m_pCanvas->width(), m_iResizePos );
         painter.end();
 
@@ -5007,7 +5007,7 @@ void VBorder::paintSizeIndicator( int mouseY, bool firstTime )
 
     QPainter painter;
     painter.begin( m_pCanvas );
-    painter.setRasterOp( NotROP );
+    painter.setCompositionMode( QPainter::CompositionMode_DestinationOut );
 
     if ( !firstTime )
       painter.drawLine( 0, m_iResizePos, m_pCanvas->width(), m_iResizePos );
@@ -5392,7 +5392,7 @@ void HBorder::mouseReleaseEvent( QMouseEvent * _ev )
         // Remove size indicator painted by paintSizeIndicator
         QPainter painter;
         painter.begin( m_pCanvas );
-        painter.setRasterOp( NotROP );
+        painter.setCompositionMode( QPainter::CompositionMode_DestinationOut );
         painter.drawLine( m_iResizePos, 0, m_iResizePos, m_pCanvas->height() );
         painter.end();
 
@@ -5694,7 +5694,7 @@ void HBorder::paintSizeIndicator( int mouseX, bool firstTime )
 
     QPainter painter;
     painter.begin( m_pCanvas );
-    painter.setRasterOp( NotROP );
+    painter.setCompositionMode( QPainter::CompositionMode_DestinationOut );
 
     if ( !firstTime )
       painter.drawLine( m_iResizePos, 0, m_iResizePos, m_pCanvas->height() );
@@ -5980,16 +5980,12 @@ ToolTip::ToolTip( Canvas* canvas )
 // this is a hack of course, because it's not available from QToolTip
 QLabel *tip_findLabel()
 {
-    QWidgetList  *list = QApplication::allWidgets();
-    QWidgetListIt it( *list );
-    QWidget * w;
-    while ( (w=it.current()) != 0 )
+    QWidgetList widgets = QApplication::allWidgets();
+    foreach ( QWidget* widget, widgets )
     {
-        if(w->isA("QTipLabel"))
-            return static_cast<QLabel*>(w);
-        ++it;
+        if ( widget->isA("QTipLabel") )
+            return static_cast<QLabel*>(widget);
     }
-    delete list;
     return 0;
 }
 
