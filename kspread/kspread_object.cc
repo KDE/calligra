@@ -463,7 +463,7 @@ void EmbeddedKOfficeObject::draw( QPainter *_painter )
   	new_geometry.moveBy( -_painter->window().x(), -_painter->window().y() );
   //}
 
-  _painter->setClipRect( zoomedBound, QPainter::CoordPainter );
+  _painter->setClipRect( zoomedBound );
 
    assert( embeddedObject()->document() != 0 );
 
@@ -692,8 +692,6 @@ EmbeddedPictureObject::EmbeddedPictureObject( Sheet *_sheet, const KoRect& _geom
     m_ie_par1 = QVariant();
     m_ie_par2 = QVariant();
     m_ie_par3 = QVariant();
-    // Forbid QPixmap to cache the X-Window resources (Yes, it is slower!)
-    m_cachedPixmap.setOptimization(QPixmap::MemoryOptim);
 }
 
 
@@ -713,8 +711,6 @@ EmbeddedPictureObject::EmbeddedPictureObject( Sheet *_sheet, const KoRect& _geom
     m_ie_par1 = QVariant();
     m_ie_par2 = QVariant();
     m_ie_par3 = QVariant();
-    // Forbid QPixmap to cache the X-Window resources (Yes, it is slower!)
-    m_cachedPixmap.setOptimization(QPixmap::MemoryOptim);
 
     setPicture( key );
 }
@@ -735,8 +731,6 @@ EmbeddedPictureObject::EmbeddedPictureObject( Sheet *_sheet, KoPictureCollection
   m_ie_par1 = QVariant();
   m_ie_par2 = QVariant();
   m_ie_par3 = QVariant();
-    // Forbid QPixmap to cache the X-Window resources (Yes, it is slower!)
-  m_cachedPixmap.setOptimization(QPixmap::MemoryOptim);
 }
 
 EmbeddedPictureObject::~EmbeddedPictureObject()
@@ -1473,11 +1467,11 @@ QPixmap EmbeddedPictureObject::changePictureSettings( QPixmap _tmpPixmap )
         break;
     }
     case IE_FADE: {
-        _tmpImage = KImageEffect::fade(_tmpImage, m_ie_par1.toDouble(), m_ie_par2.toColor());
+        _tmpImage = KImageEffect::fade(_tmpImage, m_ie_par1.toDouble(), m_ie_par2.value<QColor>());
         break;
     }
     case IE_FLATTEN: {
-        _tmpImage = KImageEffect::flatten(_tmpImage, m_ie_par1.toColor(), m_ie_par2.toColor());
+        _tmpImage = KImageEffect::flatten(_tmpImage, m_ie_par1.value<QColor>(), m_ie_par2.value<QColor>());
         break;
     }
     case IE_INTENSITY: {
