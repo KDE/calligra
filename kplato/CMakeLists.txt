@@ -7,12 +7,98 @@ add_subdirectory( reports )
 add_subdirectory( toolbar )
 add_subdirectory( tests )
 
-include_directories( ${CMAKE_SOURCE_DIR}/kdgantt ${CMAKE_SOURCE_DIR}/kugar/lib ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
+include_directories(${KOTEXT_INCLUDES} ${CMAKE_SOURCE_DIR}/kdgantt ${CMAKE_SOURCE_DIR}/kugar/lib   )
 
 
+set(libkplatopart_SRCS 
+    kptsummarytaskdialog.cc 
+    kptsummarytaskgeneralpanel.cc 
+    kptschedule.cc 
+    kptappointment.cc 
+    kptresourceappointmentsview.cc 
+    kpttaskappointmentsview.cc 
+    kptdoublelistviewbase.cc 
+    kptaccountsviewconfigdialog.cc 
+    kptaccountsview.cc 
+    kpttaskcostpanel.cc 
+    kptmilestoneprogresspanel.cc 
+    kptmilestoneprogressdialog.cc 
+    kptaccount.cc 
+	kptaccountsdialog.cc 
+	kptaccountspanel.cc 
+    kptnode.cc 
+	kptproject.cc 
+    kptrelation.cc 
+	kptresource.cc 
+	kpttask.cc 
+    kptduration.cc 
+	kptfactory.cc 
+	kptpart.cc 
+	kptview.cc 
+    kptprojectdialog.cc 
+	kpttaskdialog.cc  
+    kptmainprojectdialog.cc 
+	kptmainprojectpanel.cc 
+    kptganttview.cc 
+	kptresourcespanel.cc 
+    kptpertview.cc 
+	kptpertcanvas.cc 
+	kptrelationdialog.cc 
+    kptcanvasitem.cc 
+    kptresourceview.cc 
+	kptrequestresourcespanel.cc 
+	kptresourcedialog.cc 
+    kptdatetime.cc 
+    kptcalendar.cc 
+	kptcalendaredit.cc 
+	kptcalendarlistdialog.cc 
+    kptcalendarpanel.cc 
+	kptdatetable.cc 
+    kptcalendarlistdialogbase.cc 
+	kptcalendareditbase.cc 
+    kptcommand.cc 
+	kptstandardworktimedialog.cc 
+	kptintervaledit.cc 
+    kpttaskgeneralpanel.cc 
+	kpttaskdefaultpanel.cc 
+    kptconfigdialog.cc 
+    kpttaskprogresspanel.cc 
+    kpttaskprogressdialog.cc 
+    kptconfig.cc 
+	kptcontext.cc 
+    kptresourcesdialog.cc 
+    kptwbsdefinitiondialog.cc 
+	kptwbsdefinitionpanel.cc 
+    kptwbsdefinition.cc
+)
+
+kde4_add_dcop_skels(libkplatopart_SRCS KPtViewIface.h )
+
+kde4_add_ui3_files(libkplatopart_SRCS
+	kpttaskcostpanelbase.ui 
+    kptsummarytaskgeneralpanelbase.ui 
+    kptcalendarlistpanel.ui 
+	kptaccountsviewconfigurepanelbase.ui
+    kptmilestoneprogresspanelbase.ui
+	kptaccountspanelbase.ui
+    kptdurationwidget.ui 
+	kptmainprojectpanelbase.ui
+	relationpanel.ui
+	resourcedialogbase.ui
+	kpttaskresourcespanelbase.ui 
+	resourcespanelbase.ui 
+	kptprojectdialogbase.ui
+	kpttasknotespanelbase.ui
+	kpttaskgeneralpanelbase.ui
+	kptwbsdefinitionpanelbase.ui
+	kpttaskprogresspanelbase.ui
+	kptconfigtaskpanelbase.ui
+	kptintervaleditbase.ui
+	standardworktimedialogbase.ui
+	)
 ########### next target ###############
 
-set(kplatopart_PART_SRCS dummy.cpp ${libkdgantt_SRCS})
+set(kplatopart_PART_SRCS dummy.cpp ${libkdgantt_SRCS} ${libkplatopart_SRCS} )
 
 kde4_automoc(${kplatopart_PART_SRCS})
 
