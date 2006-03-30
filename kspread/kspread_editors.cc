@@ -637,7 +637,8 @@ void CellEditor::functionAutoComplete( const QString& item )
 {
   if( item.isEmpty() ) return;
 
-  int curPos = d->textEdit->textCursor().position();
+  QTextCursor textCursor = d->textEdit->textCursor();
+  int curPos = textCursor.position();
   QString subtext = text().left( curPos );
 
   KSpread::Formula f;
@@ -649,7 +650,9 @@ void CellEditor::functionAutoComplete( const QString& item )
   if( !lastToken.isIdentifier() ) return;
 
   d->textEdit->blockSignals( true );
-  d->textEdit->setSelection( 0, lastToken.pos()+1, 0, lastToken.pos()+lastToken.text().length()+1 );
+  textCursor.setPosition( lastToken.pos() + 1 );
+  textCursor.setPosition( lastToken.pos() + lastToken.text().length() + 1,
+                            QTextCursor::KeepAnchor );
   d->textEdit->insert( item );
   d->textEdit->blockSignals( false );
 }
