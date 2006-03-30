@@ -169,7 +169,7 @@ QByteArray HancomWordImport::Private::createContent()
 {
   KoXmlWriter* contentWriter;
   QByteArray contentData;
-  QBuffer contentBuffer( contentData );
+  QBuffer contentBuffer( &contentData );
 
   contentBuffer.open( QIODevice::WriteOnly );
   contentWriter = new KoXmlWriter( &contentBuffer );
@@ -221,7 +221,7 @@ QByteArray HancomWordImport::Private::createStyles()
 {
   KoXmlWriter* stylesWriter;
   QByteArray stylesData;
-  QBuffer stylesBuffer( stylesData );
+  QBuffer stylesBuffer( &stylesData );
 
   stylesBuffer.open( QIODevice::WriteOnly );
   stylesWriter = new KoXmlWriter( &stylesBuffer );
@@ -277,7 +277,7 @@ QByteArray HancomWordImport::Private::createManifest()
 {
   KoXmlWriter* manifestWriter;
   QByteArray manifestData;
-  QBuffer manifestBuffer( manifestData );
+  QBuffer manifestBuffer( &manifestData );
 
   manifestBuffer.open( QIODevice::WriteOnly );
   manifestWriter = new KoXmlWriter( &manifestBuffer );
