@@ -20,7 +20,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
 #include <qbuffer.h>
 #include <q3cstring.h>
 #include <qfile.h>
@@ -1128,12 +1127,12 @@ public:
 
 				QByteArray imageWMF;
 					// input device
-					QBuffer inBuffer (imageData);
+					QBuffer inBuffer (&imageData);
 					inBuffer.open (QIODevice::ReadOnly);
 					QBufferDevice inDevice (&inBuffer);
 
 					// output device
-					QBuffer outBuffer (imageWMF);
+					QBuffer outBuffer (&imageWMF);
 					outBuffer.open (QIODevice::WriteOnly);
 					QBufferDevice outDevice (&outBuffer);
 
@@ -1172,7 +1171,7 @@ public:
 
 				QByteArray imageBMP;
 					// input device
-					QBuffer inBuffer (imageData);
+					QBuffer inBuffer (&imageData);
 					inBuffer.open (QIODevice::ReadOnly);
 
 					// read foreign image
@@ -1184,7 +1183,7 @@ public:
 					}
 
 					// output device
-					QBuffer outBuffer (imageBMP);
+					QBuffer outBuffer (&imageBMP);
 					outBuffer.open (QIODevice::WriteOnly);
 
 					// write BMP
@@ -1198,7 +1197,7 @@ public:
 
 					outBuffer.close ();
 					inBuffer.close ();
-				imageData = imageBMP.copy ();
+				imageData = imageBMP/*.copy ()*/;
 
 				imageType = ".bmp";
 			}
