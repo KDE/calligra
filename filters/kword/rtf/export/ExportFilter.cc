@@ -264,11 +264,13 @@ QString RTFWorker::makeImage(const FrameAnchor& anchor)
             unsigned bottom = data[12]+(data[13]<<8);
             origWidth = (long) (MM_TO_TWIP(right-left)/100);
             origHeight = (long) (MM_TO_TWIP(bottom-top)/100);
-
+#warning "kde4 : port it"
+#if 0			
             // throw away WMF metaheader (22 bytes)
             for( uint i=0; i<image.size()-22; i++)
-                image.at(i) = image.at(i+22); // As we use uint, we need at()  ( [] uses int only .)
+                image.at(i)=image.at(i+22)); // As we use uint, we need at()  ( [] uses int only .)
             image.resize( image.size()-22 );
+#endif			
         }
     }
     else
