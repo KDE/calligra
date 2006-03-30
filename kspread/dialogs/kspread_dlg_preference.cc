@@ -29,12 +29,15 @@
 #include <qlayout.h>
 #include <qcheckbox.h>
 #include <qcombobox.h>
+#include <qgroupbox.h>
+#include <qscrollbar.h>
 #include <q3whatsthis.h>
 //Added by qt3to4:
 #include <Q3GridLayout>
 #include <QLabel>
 
 #include <kconfig.h>
+#include <kinstance.h>
 #include <kstatusbar.h>
 #include <knuminput.h>
 #include <kspell.h>
@@ -146,7 +149,7 @@ parameterLocale::parameterLocale( View* _view, KVBox *box , char *name )
 {
     m_pView = _view;
     m_bUpdateLocale=false;
-  Q3GroupBox* tmpQGroupBox = new QVGroupBox( i18n("Settings"), box, "GroupBox" );
+  QGroupBox* tmpQGroupBox = new QGroupBox( i18n("Settings"), box, "GroupBox" );
 
   KLocale* locale=_view->doc()->locale();
 
@@ -205,7 +208,7 @@ configure::configure( View* _view, KVBox *box , char *name )
   bool statusBar=true;
   m_oldBackupFile = true;
 
-  Q3GroupBox* tmpQGroupBox = new QVGroupBox( i18n("Settings"), box, "GroupBox" );
+  QGroupBox* tmpQGroupBox = new QGroupBox( i18n("Settings"), box, "GroupBox" );
 
   config = Factory::global()->config();
   int _page=1;
@@ -402,7 +405,7 @@ miscParameters::miscParameters( View* _view,KVBox *box, char *name )
   m_pView = _view;
 
 
-  Q3GroupBox* tmpQGroupBox = new QVGroupBox( i18n("Misc"), box, "GroupBox" );
+  QGroupBox* tmpQGroupBox = new QGroupBox( i18n("Misc"), box, "GroupBox" );
 
   config = Factory::global()->config();
   indentUnit = _view->doc()->unit();
@@ -721,7 +724,7 @@ colorParameters::colorParameters( View* _view,KVBox *box , char *name )
     _gridColor = config->readColorEntry("GridColor",&_gridColor);
   }
 
-  Q3GroupBox* tmpQGroupBox = new QVGroupBox( i18n("Color"), box, "GroupBox" );
+  QGroupBox* tmpQGroupBox = new QGroupBox( i18n("Color"), box, "GroupBox" );
 
   QLabel *label = new QLabel(i18n("&Grid color:"), tmpQGroupBox,"label20" );
 
@@ -780,7 +783,8 @@ configureLayoutPage::configureLayoutPage( View* _view,KVBox *box , char *name )
 {
   m_pView = _view;
 
-  Q3GroupBox* tmpQGroupBox = new Q3GroupBox( 0, Qt::Vertical, i18n("Default Parameters"), box, "GroupBox" );
+  QGroupBox* tmpQGroupBox = new QGroupBox( i18n("Default Parameters"), box );
+  tmpQGroupBox->setObjectName( "GroupBox" );
   tmpQGroupBox->layout()->setSpacing(KDialog::spacingHint());
   tmpQGroupBox->layout()->setMargin(KDialog::marginHint());
 

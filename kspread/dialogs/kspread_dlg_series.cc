@@ -6,7 +6,7 @@
              (C) 2001-2002 Philipp Mueller <philipp.mueller@gmx.de>
              (C) 2000-2001 Werner Trobin <trobin@kde.org>
              (C) 1998-2000 Torben Weis <weis@kde.org>
-   
+
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
@@ -91,14 +91,14 @@ SeriesDlg::SeriesDlg( View* parent, const char* name,const QPoint &_marker)
   params_layout->setAutoAdd( true );
 
   new QLabel( i18n( "Start value:" ), params );
-  start=new KDoubleNumInput(-999999.999, 999999.99, 0.0, 1.0, 3, params);
+  start=new KDoubleNumInput(-999999.999, 999999.99, 0.0, params, 1.0, 3);
 
   new QLabel( i18n( "Stop value:" ), params );
-  end=new KDoubleNumInput(-999999.999, 999999.99, 0.0, 1.0, 3, params);
+  end=new KDoubleNumInput(-999999.999, 999999.99, 0.0, params, 1.0, 3);
 
   new QLabel( i18n( "Step value:" ), params );
-  step=new KDoubleNumInput(-999999.999, 999999.99, 0.0, 1.0, 3, params);
- 
+  step=new KDoubleNumInput(-999999.999, 999999.99, 0.0, params, 1.0, 3);
+
   grid1->addWidget(gb);
 
   grid1->addWidget(gb1);

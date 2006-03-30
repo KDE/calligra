@@ -132,7 +132,6 @@ void PaperLayout::initRanges( QWidget * tab, Q3VBoxLayout * vbox )
 
     Q3GroupBox *rangeGroup = new Q3GroupBox( i18n("Ranges"), tab );
     rangeGroup->setColumnLayout( 0, Qt::Vertical );
-    rangeGroup->setMargin( KDialog::marginHint() );
     vbox->addWidget( rangeGroup );
 
     Q3GridLayout *grid = new Q3GridLayout( rangeGroup->layout(), 3, 2, KDialog::spacingHint() );
@@ -184,7 +183,6 @@ void PaperLayout::initScaleOptions( QWidget * tab, Q3VBoxLayout * vbox )
 
     Q3ButtonGroup *zoomGroup = new Q3ButtonGroup( i18n("Scale Printout"), tab );
     zoomGroup->setColumnLayout( 0, Qt::Vertical );
-    zoomGroup->setMargin( KDialog::marginHint() );
     vbox->addWidget( zoomGroup );
 
     Q3GridLayout *grid = new Q3GridLayout( zoomGroup->layout(), 2, 6,
@@ -442,28 +440,28 @@ void PaperLayout::slotOk()
       {
         kDebug() << "Limit pages is selected" << endl;
         kDebug() << "Current zoom: " << print->zoom() << endl;
-        
+
         //reset first, otherwise setting the first limit
         //would still check against the second limit and
         //possibly result in a smaller total zoom
         print->setPageLimitX( 0 );
         print->setPageLimitY( 0 );
-        
+
         //start with at least 100%
-        
+
         if (print->zoom() < 1.0)
         {
           kDebug() << "Resetting zoom to 1.0" << endl;
           print->setZoom(1.0,false); //don't check page limits here
           kDebug() << "Zoom is now: " << print->zoom() << endl;
         }
-        
+
         bool convertok = false;
-        
+
         int limitX = m_cLimitPagesX->currentText().toInt(&convertok);
         if (!convertok)  //THIS IS THE CASE WITH "No Limit"
           limitX = 0;  //0 means no limit
-        
+
         convertok=false;
         int limitY = m_cLimitPagesY->currentText().toInt(&convertok);
         if (!convertok)  //THIS IS THE CASE WITH "No Limit"

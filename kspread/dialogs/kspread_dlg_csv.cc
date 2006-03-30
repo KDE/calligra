@@ -325,7 +325,7 @@ void CSVDialog::fillSheet()
       {
         state = S_QUOTED_FIELD;
       }
-      else if (x == m_delimiter)
+      else if (QString(x) == m_delimiter)
       {
         if ((ignoreDups == false) || (lastCharDelimiter == false))
           ++column;
@@ -375,7 +375,7 @@ void CSVDialog::fillSheet()
         field += x;
         state = S_QUOTED_FIELD;
       }
-      else if (x == m_delimiter || x == '\n')
+      else if (QString(x) == m_delimiter || x == '\n')
       {
         setText(row - m_startline, column, field);
         field = "";
@@ -398,7 +398,7 @@ void CSVDialog::fillSheet()
       }
       break;
      case S_END_OF_QUOTED_FIELD :
-      if (x == m_delimiter || x == '\n')
+       if (QString(x) == m_delimiter || x == '\n')
       {
         setText(row - m_startline, column, field);
         field = "";
@@ -428,7 +428,7 @@ void CSVDialog::fillSheet()
         break;
       }
      case S_NORMAL_FIELD :
-      if (x == m_delimiter || x == '\n')
+       if (QString(x) == m_delimiter || x == '\n')
       {
         setText(row - m_startline, column, field);
         field = "";
@@ -450,7 +450,7 @@ void CSVDialog::fillSheet()
         field += x;
       }
     }
-    if (x != m_delimiter)
+    if (QString(x) != m_delimiter)
       lastCharDelimiter = false;
   }
 
@@ -682,7 +682,7 @@ void CSVDialog::accept()
       Disabling this code for now, everything will use Generic formatting,
       hoping for the best (Tomas)
       //### FIXME: long term solution is to allow to select Generic format ("autodetect") in the dialog and make it the default
-      
+
       switch (getHeader(col))
       {
        case TEXT:

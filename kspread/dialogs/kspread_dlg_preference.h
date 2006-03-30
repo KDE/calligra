@@ -38,7 +38,6 @@ class KDoubleNumInput;
 class KSpellConfig;
 class QCheckBox;
 class QComboBox;
-class QVGroupBox;
 class QPushButton;
 class KColorButton;
 
@@ -57,7 +56,7 @@ public slots:
    void updateDefaultSystemConfig();
  protected:
    /**
-    * Updates the GUI widgets to match the specified locale.  
+    * Updates the GUI widgets to match the specified locale.
     */
    void updateToMatchLocale(KLocale* locale);
 
@@ -111,7 +110,7 @@ public slots:
 protected:
   View* m_pView;
   KDoubleNumInput  *valIndent;
-  
+
   /**
    * Needed to ensure the same unit for loading and saving.
    */
@@ -189,7 +188,7 @@ private:
   KConfig* config;
   QCheckBox* m_cbSpeakPointerWidget;
   QCheckBox* m_cbSpeakFocusWidget;
-  QVGroupBox* m_gbScreenReaderOptions;
+  QGroupBox* m_gbScreenReaderOptions;
   QCheckBox* m_cbSpeakTooltips;
   QCheckBox* m_cbSpeakWhatsThis;
   QCheckBox* m_cbSpeakDisabled;

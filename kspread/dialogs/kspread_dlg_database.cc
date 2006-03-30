@@ -83,15 +83,15 @@ DatabaseDialog::DatabaseDialog( View * parent, QRect const & rect, const char * 
   m_database = new QWidget( this, "m_database" );
   m_databaseLayout = new Q3GridLayout( m_database, 1, 1, -1, -1, "m_databaseLayout");
 
-  Q3Frame * Frame5 = new Q3Frame( m_database, "Frame5" );
-  Frame5->setFrameShape( Q3Frame::MShape );
-  Frame5->setFrameShadow( Q3Frame::MShadow );
+  QFrame * Frame5 = new QFrame( m_database, "Frame5" );
+// ###  Frame5->setFrameShape( QFrame::MShape );
+// ###  Frame5->setFrameShadow( QFrame::MShadow );
   Q3VBoxLayout * Frame5Layout = new Q3VBoxLayout( Frame5, 11, 6, "Frame5Layout");
 
 
-  Q3Frame * Frame16 = new Q3Frame( Frame5, "Frame16" );
-  Frame16->setFrameShape( Q3Frame::NoFrame );
-  Frame16->setFrameShadow( Q3Frame::Plain );
+  QFrame * Frame16 = new QFrame( Frame5, "Frame16" );
+  Frame16->setFrameShape( QFrame::NoFrame );
+  Frame16->setFrameShadow( QFrame::Plain );
   Q3GridLayout * Frame16Layout = new Q3GridLayout( Frame16, 1, 1, 11, 7, "Frame16Layout");
 
   m_Type = new QLabel( Frame16, "m_Type" );
@@ -151,11 +151,11 @@ DatabaseDialog::DatabaseDialog( View * parent, QRect const & rect, const char * 
 
   m_databaseLayout->addWidget( Frame5, 0, 1 );
 
-  Q3Frame * Frame17 = new Q3Frame( m_database, "Frame17" );
+  QFrame * Frame17 = new QFrame( m_database, "Frame17" );
   Frame17->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)0, (QSizePolicy::SizeType)7, 0, 0, Frame17->sizePolicy().hasHeightForWidth() ) );
   Frame17->setMinimumSize( QSize( 111, 0 ) );
-  Frame17->setFrameShape( Q3Frame::NoFrame );
-  Frame17->setFrameShadow( Q3Frame::Plain );
+  Frame17->setFrameShape( QFrame::NoFrame );
+  Frame17->setFrameShadow( QFrame::Plain );
 
   m_databaseLayout->addWidget( Frame17, 0, 0 );
   addPage( m_database, i18n( "Database" ) );
@@ -165,9 +165,9 @@ DatabaseDialog::DatabaseDialog( View * parent, QRect const & rect, const char * 
   m_sheet = new QWidget( this, "m_table" );
   m_sheetLayout = new Q3GridLayout( m_sheet, 1, 1, 11, 6, "m_tableLayout");
 
-  Q3Frame * Frame5_2 = new Q3Frame( m_sheet, "Frame5_2" );
-  Frame5_2->setFrameShape( Q3Frame::MShape );
-  Frame5_2->setFrameShadow( Q3Frame::MShadow );
+  QFrame * Frame5_2 = new QFrame( m_sheet, "Frame5_2" );
+// ###  Frame5_2->setFrameShape( QFrame::MShape );
+// ###  Frame5_2->setFrameShadow( QFrame::MShadow );
   Q3GridLayout * Frame5_2Layout = new Q3GridLayout( Frame5_2, 1, 1, 11, 6, "Frame5_2Layout");
 
   Q3HBoxLayout * Layout21 = new Q3HBoxLayout( 0, 0, 6, "Layout21");
@@ -193,7 +193,8 @@ DatabaseDialog::DatabaseDialog( View * parent, QRect const & rect, const char * 
   m_SelectSheetLabel->setText( i18n( "Select tables:" ) );
   Frame5_2Layout->addWidget( m_SelectSheetLabel, 1, 0 );
 
-  m_sheetView = new K3ListView( Frame5_2, "m_tableView" );
+  m_sheetView = new K3ListView( Frame5_2 );
+  m_sheetView->setObjectName( "m_tableView" );
   m_sheetView->addColumn( i18n( "Sheet" ) );
   m_sheetView->setRootIsDecorated( FALSE );
 
@@ -201,11 +202,11 @@ DatabaseDialog::DatabaseDialog( View * parent, QRect const & rect, const char * 
 
   m_sheetLayout->addWidget( Frame5_2, 0, 1 );
 
-  Q3Frame * Frame17_2 = new Q3Frame( m_sheet, "Frame17_2" );
+  QFrame * Frame17_2 = new QFrame( m_sheet, "Frame17_2" );
   Frame17_2->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)0, (QSizePolicy::SizeType)7, 0, 0, Frame17_2->sizePolicy().hasHeightForWidth() ) );
   Frame17_2->setMinimumSize( QSize( 111, 0 ) );
-  Frame17_2->setFrameShape( Q3Frame::NoFrame );
-  Frame17_2->setFrameShadow( Q3Frame::Plain );
+  Frame17_2->setFrameShape( QFrame::NoFrame );
+  Frame17_2->setFrameShadow( QFrame::Plain );
 
   m_sheetLayout->addWidget( Frame17_2, 0, 0 );
   addPage( m_sheet, i18n( "Sheets" ) );
@@ -213,9 +214,9 @@ DatabaseDialog::DatabaseDialog( View * parent, QRect const & rect, const char * 
   m_columns = new QWidget( this, "m_columns" );
   m_columnsLayout = new Q3GridLayout( m_columns, 1, 1, 11, 6, "m_columnsLayout");
 
-  Q3Frame * Frame5_2_2 = new Q3Frame( m_columns, "Frame5_2_2" );
-  Frame5_2_2->setFrameShape( Q3Frame::MShape );
-  Frame5_2_2->setFrameShadow( Q3Frame::MShadow );
+  QFrame * Frame5_2_2 = new QFrame( m_columns, "Frame5_2_2" );
+// ###  Frame5_2_2->setFrameShape( QFrame::MShape );
+// ###  Frame5_2_2->setFrameShadow( QFrame::MShadow );
   Q3GridLayout * Frame5_2_2Layout = new Q3GridLayout( Frame5_2_2, 1, 1, 11, 6, "Frame5_2_2Layout");
 
   QLabel * TextLabel11_2 = new QLabel( Frame5_2_2, "TextLabel11_2" );
@@ -223,7 +224,8 @@ DatabaseDialog::DatabaseDialog( View * parent, QRect const & rect, const char * 
 
   Frame5_2_2Layout->addWidget( TextLabel11_2, 0, 0 );
 
-  m_columnView = new K3ListView( Frame5_2_2, "m_columnView" );
+  m_columnView = new K3ListView( Frame5_2_2 );
+  m_columnView->setObjectName( "m_columnView" );
   m_columnView->addColumn( i18n( "Column" ) );
   m_columnView->addColumn( i18n( "Sheet" ) );
   m_columnView->addColumn( i18n( "Data Type" ) );
@@ -237,11 +239,11 @@ DatabaseDialog::DatabaseDialog( View * parent, QRect const & rect, const char * 
 
   m_columnsLayout->addWidget( Frame5_2_2, 0, 1 );
 
-  Q3Frame * Frame17_3 = new Q3Frame( m_columns, "Frame17_3" );
+  QFrame * Frame17_3 = new QFrame( m_columns, "Frame17_3" );
   Frame17_3->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)0, (QSizePolicy::SizeType)7, 0, 0, Frame17_3->sizePolicy().hasHeightForWidth() ) );
   Frame17_3->setMinimumSize( QSize( 111, 0 ) );
-  Frame17_3->setFrameShape( Q3Frame::NoFrame );
-  Frame17_3->setFrameShadow( Q3Frame::Plain );
+  Frame17_3->setFrameShape( QFrame::NoFrame );
+  Frame17_3->setFrameShadow( QFrame::Plain );
 
   m_columnsLayout->addWidget( Frame17_3, 0, 0 );
   addPage( m_columns, i18n( "Columns" ) );
@@ -251,9 +253,10 @@ DatabaseDialog::DatabaseDialog( View * parent, QRect const & rect, const char * 
   m_options = new QWidget( this, "m_options" );
   m_optionsLayout = new Q3GridLayout( m_options, 1, 1, 11, 6, "m_optionsLayout");
 
-  Q3Frame * optionsFrame = new Q3Frame( m_options, "optionsFrame" );
-  optionsFrame->setFrameShape( Q3Frame::MShape );
-  optionsFrame->setFrameShadow( Q3Frame::MShadow );
+  QFrame * optionsFrame = new QFrame( m_options );
+  optionsFrame->setObjectName( "optionsFrame" );
+// ###  optionsFrame->setFrameShape( QFrame::MShape );
+// ###  optionsFrame->setFrameShadow( QFrame::MShadow );
   Q3GridLayout * optionsFrameLayout = new Q3GridLayout( optionsFrame, 1, 1, 11, 6, "optionsFrameLayout");
 
   m_columns_1 = new QComboBox( false, optionsFrame, "m_columns_1" );
@@ -356,11 +359,11 @@ DatabaseDialog::DatabaseDialog( View * parent, QRect const & rect, const char * 
 
   m_optionsLayout->addWidget( optionsFrame, 0, 1 );
 
-  Q3Frame * Frame17_4 = new Q3Frame( m_options, "Frame17_4" );
+  QFrame * Frame17_4 = new QFrame( m_options, "Frame17_4" );
   Frame17_4->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)0, (QSizePolicy::SizeType)7, 0, 0, Frame17_4->sizePolicy().hasHeightForWidth() ) );
   Frame17_4->setMinimumSize( QSize( 111, 0 ) );
-  Frame17_4->setFrameShape( Q3Frame::NoFrame );
-  Frame17_4->setFrameShadow( Q3Frame::Plain );
+  Frame17_4->setFrameShape( QFrame::NoFrame );
+  Frame17_4->setFrameShadow( QFrame::Plain );
 
   m_optionsLayout->addWidget( Frame17_4, 0, 0 );
   addPage( m_options, i18n( "Query Options" ) );
@@ -370,9 +373,10 @@ DatabaseDialog::DatabaseDialog( View * parent, QRect const & rect, const char * 
   m_result = new QWidget( this, "m_result" );
   m_resultLayout = new Q3GridLayout( m_result, 1, 1, 11, 6, "m_resultLayout");
 
-  Q3Frame * Frame5_2_2_3 = new Q3Frame( m_result, "Frame5_2_2_3" );
-  Frame5_2_2_3->setFrameShape( Q3Frame::MShape );
-  Frame5_2_2_3->setFrameShadow( Q3Frame::MShadow );
+  QFrame * Frame5_2_2_3 = new QFrame( m_result );
+  Frame5_2_2_3->setObjectName( "Frame5_2_2_3" );
+// ###  Frame5_2_2_3->setFrameShape( QFrame::MShape );
+// ###  Frame5_2_2_3->setFrameShadow( QFrame::MShadow );
   Q3GridLayout * Frame5_2_2_3Layout = new Q3GridLayout( Frame5_2_2_3, 1, 1, 11, 6, "Frame5_2_2_3Layout");
 
   QLabel * TextLabel17 = new QLabel( Frame5_2_2_3, "TextLabel17" );
@@ -382,9 +386,9 @@ DatabaseDialog::DatabaseDialog( View * parent, QRect const & rect, const char * 
   m_sqlQuery = new Q3TextEdit( Frame5_2_2_3, "m_sqlQuery" );
   Frame5_2_2_3Layout->addWidget( m_sqlQuery, 1, 0 );
 
-  Q3Frame * Frame12 = new Q3Frame( Frame5_2_2_3, "Frame12" );
-  Frame12->setFrameShape( Q3Frame::StyledPanel );
-  Frame12->setFrameShadow( Q3Frame::Raised );
+  QFrame * Frame12 = new QFrame( Frame5_2_2_3, "Frame12" );
+  Frame12->setFrameShape( QFrame::StyledPanel );
+  Frame12->setFrameShadow( QFrame::Raised );
   Q3GridLayout * Frame12Layout = new Q3GridLayout( Frame12, 1, 1, 11, 6, "Frame12Layout");
 
   m_startingRegion = new QRadioButton( Frame12, "m_startingRegion" );
@@ -405,11 +409,11 @@ DatabaseDialog::DatabaseDialog( View * parent, QRect const & rect, const char * 
   Frame5_2_2_3Layout->addWidget( Frame12, 2, 0 );
   m_resultLayout->addWidget( Frame5_2_2_3, 0, 1 );
 
-  Q3Frame * Frame17_5 = new Q3Frame( m_result, "Frame17_5" );
+  QFrame * Frame17_5 = new QFrame( m_result, "Frame17_5" );
   Frame17_5->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)0, (QSizePolicy::SizeType)7, 0, 0, Frame17_5->sizePolicy().hasHeightForWidth() ) );
   Frame17_5->setMinimumSize( QSize( 111, 0 ) );
-  Frame17_5->setFrameShape( Q3Frame::NoFrame );
-  Frame17_5->setFrameShadow( Q3Frame::Plain );
+  Frame17_5->setFrameShape( QFrame::NoFrame );
+  Frame17_5->setFrameShadow( QFrame::Plain );
 
   m_resultLayout->addWidget( Frame17_5, 0, 0 );
   addPage( m_result, i18n( "Result" ) );
@@ -431,7 +435,7 @@ DatabaseDialog::DatabaseDialog( View * parent, QRect const & rect, const char * 
   QStringList str = QSqlDatabase::drivers();
   m_driver->insertItem("");
   m_driver->insertStringList( str );
- 
+
 
   helpButton()->hide();
   setNextEnabled(m_database, false);
@@ -553,7 +557,7 @@ void DatabaseDialog::accept()
       m_region->selectAll();
       return;
     }
-    
+
     top    = range.range().top();
     left   = range.range().left();
     width  = range.range().width();
@@ -594,14 +598,14 @@ void DatabaseDialog::accept()
   }
 
   Cell * cell;
-  QSqlQuery query( QString::null, m_dbConnection );
+  QSqlQuery query( *m_dbConnection );
 
   // Check the whole query for SQL that might modify database.
   // If there is an update command, then it must be at the start of the string,
   // or after an open bracket (e.g. nested update) or a space to be valid SQL.
   // An update command must also be followed by a space, or it would be parsed
   // as an identifier.
-  // For sanity, also check that there is a SELECT 
+  // For sanity, also check that there is a SELECT
   QRegExp couldModifyDB( "(^|[( \\s])(UPDATE|DELETE|INSERT|CREATE) ", false /* cs */ );
   QRegExp couldQueryDB( "(^|[( \\s])(SELECT) ", false /* cs */ );
 
@@ -696,7 +700,7 @@ void DatabaseDialog::accept()
 
 bool DatabaseDialog::databaseDoNext()
 {
-  m_dbConnection = QSqlDatabase::addDatabase( m_driver->currentText() );
+  m_dbConnection = &QSqlDatabase::addDatabase( m_driver->currentText() );
 
   if ( m_dbConnection )
   {
@@ -813,8 +817,8 @@ bool DatabaseDialog::sheetsDoNext()
       item->setOn(false);
       m_columnView->insertItem( item );
       item->setText( 1, sheets[i] );
-      QSqlField * field = info.field(name);
-      item->setText( 2, QVariant::typeToName(field->type()) );
+      QSqlField field = info.field(name);
+      item->setText( 2, QVariant::typeToName(field.type()) );
     }
   }
   m_columnView->setSorting(1, true);
