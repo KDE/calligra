@@ -515,11 +515,11 @@ bool KOfficePlugin::writeMetaData(const QString & path,
     /* To correct problem with OOo 1.1, we have to recreate the file from scratch */
     if (!m_zip->open(QIODevice::WriteOnly) || !current->open(QIODevice::ReadOnly) )
 	    return false;
-    Q3CString text = doc.toCString();
+    QString text = doc.toString();
     m_zip->setCompression(KZip::DeflateCompression);
     if (!copyZipToZip(current, m_zip))
 	    return false;
-    m_zip->writeFile(metafile, QString::null, QString::null,text.length(),
+    m_zip->writeFile(QString(metafile), QString::null, QString::null,text.length(),
 		     text);
     delete current;
     delete m_zip;
