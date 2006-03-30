@@ -20,7 +20,7 @@
 #include "KWFactory.h"
 #include "KWAboutData.h"
 #include "KWDocument.h"
-
+#include <kinstance.h>
 #include <kstandarddirs.h>
 
 #include <kiconloader.h>

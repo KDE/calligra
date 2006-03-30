@@ -387,6 +387,7 @@ private:
  */
 class InteractionPolicy {
     public:
+		virtual ~InteractionPolicy() {}
         /**
          * Extending classes should implement this method to alter the frames or other data
          * based on the new mouse position.
@@ -451,6 +452,7 @@ class InteractionPolicy {
 class FrameResizePolicy : public InteractionPolicy {
     public:
         FrameResizePolicy(KWCanvas *parent, MouseMeaning meaning, KoPoint &point);
+		virtual ~FrameResizePolicy() {}
         void handleMouseMove(Qt::ButtonState keyState, const KoPoint &point);
         KCommand *createCommand();
         void finishInteraction();
@@ -470,6 +472,7 @@ class FrameResizePolicy : public InteractionPolicy {
 class FrameMovePolicy : public InteractionPolicy {
     public:
         FrameMovePolicy(KWCanvas *parent, KoPoint &point);
+		virtual ~FrameMovePolicy() {}
         void handleMouseMove(Qt::ButtonState keyState, const KoPoint &point);
         KCommand *createCommand();
         void finishInteraction();
@@ -486,6 +489,7 @@ class FrameMovePolicy : public InteractionPolicy {
 class FrameSelectPolicy : public InteractionPolicy {
     public:
         FrameSelectPolicy(KWCanvas *parent, MouseMeaning meaning, KoPoint &point, Qt::ButtonState state, Qt::ButtonState keyState);
+		virtual ~FrameSelectPolicy() {}
         void handleMouseMove(Qt::ButtonState keyState, const KoPoint &point);
         KCommand *createCommand();
         void finishInteraction();

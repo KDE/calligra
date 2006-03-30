@@ -443,7 +443,7 @@ void KWDocument::saveConfig()
         config->writeEntry( "ViewFormattingSpace", m_viewFormattingSpace );
         config->writeEntry( "ViewFrameBorders", m_viewFrameBorders );
         config->writeEntry( "Zoom", m_zoom );
-        config->writeEntry( "ZoomMode", m_zoomMode );
+        config->writeEntry( "ZoomMode", (int)m_zoomMode );
         config->writeEntry( "showDocStruct", m_bShowDocStruct );
         config->writeEntry( "Rulers", m_bShowRuler );
         config->writeEntry( "viewmode", m_viewModeType) ;
@@ -2832,7 +2832,7 @@ bool KWDocument::saveOasisHelper( KoStore* store, KoXmlWriter* manifestWriter, S
         // However the paragraph styles used by header/footers need to be known before
         // hand, to promote them to styles.xml. So we collect them first, which means
         // storing the content into a buffer.
-        QBuffer buffer( headerFooterContent );
+        QBuffer buffer( &headerFooterContent );
         buffer.open( QIODevice::WriteOnly );
         KoXmlWriter headerFooterTmpWriter( &buffer );  // TODO pass indentation level
         Q3PtrListIterator<KWFrameSet> fit = framesetsIterator();

@@ -158,6 +158,7 @@ private:
 /**  A policy for Table Frames */
 class TableFramePolicy : public FramePolicy {
 public:
+	virtual ~TableFramePolicy(){}
     TableFramePolicy(KWFrameView *view);
     MouseMeaning mouseMeaning( const KoPoint &point, int keyState );
     Q3PopupMenu* createPopup( const KoPoint &point, KWView *view );
@@ -170,6 +171,7 @@ protected:
 /**  A policy for Part Frames */
 class PartFramePolicy : public FramePolicy {
 public:
+	virtual ~PartFramePolicy() {}
     PartFramePolicy(KWFrameView *view);
     MouseMeaning mouseMeaning( const KoPoint &point, int keyState );
     Q3PopupMenu* createPopup( const KoPoint &point, KWView *view );
@@ -178,6 +180,7 @@ public:
 /**  A policy for Text Frames */
 class TextFramePolicy : public FramePolicy {
 public:
+	virtual ~TextFramePolicy(){}		
     TextFramePolicy(KWFrameView *view);
     MouseMeaning mouseMeaning( const KoPoint &point, int keyState );
     Q3PopupMenu* createPopup( const KoPoint &point, KWView *view );
@@ -186,6 +189,7 @@ public:
 /**  A policy for Image (aka Picture) Frames */
 class ImageFramePolicy : public FramePolicy {
 public:
+	virtual ~ImageFramePolicy() {}
     ImageFramePolicy(KWFrameView *view);
     MouseMeaning mouseMeaning( const KoPoint &point, int keyState );
     Q3PopupMenu* createPopup( const KoPoint &point, KWView *view );

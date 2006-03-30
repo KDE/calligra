@@ -229,6 +229,7 @@ private:
 
 class KWFramesListener {
 public:
+	virtual ~KWFramesListener(){}
     virtual void frameSetAdded(KWFrameSet *fs) = 0;
     virtual void frameSetRemoved(KWFrameSet *fs) = 0;
     virtual void frameAdded(KWFrame *f) = 0;
