@@ -202,6 +202,10 @@ void KWOasisLoader::loadOasisHeaderFooter( const QDomElement& headerFooter, bool
         context.styleStack().push( style );
     KWFrame* frame = new KWFrame( fs, 29, isHeader?0:567, 798-29, 41 );
     frame->loadCommonOasisProperties( context, fs, "header-footer" );
+    const QString minHeight = context.styleStack().attributeNS( KoXmlNS::fo, "min-height" );
+    if ( !minHeight.isEmpty() )
+        frame->setMinimumFrameHeight( KoUnit::parseValue( minHeight ) );
+
     frame->setFrameBehavior( KWFrame::AutoExtendFrame );
     frame->setNewFrameBehavior( KWFrame::Copy );
     fs->addFrame( frame );
