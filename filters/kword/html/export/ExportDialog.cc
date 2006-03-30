@@ -46,7 +46,7 @@ HtmlExportDialog :: HtmlExportDialog(QWidget* parent)
     QStringList encodingList;
 
     encodingList += i18n( "Descriptive encoding name", "Recommended ( %1 )" ).arg( "UTF-8" );
-    encodingList += i18n( "Descriptive encoding name", "Locale ( %1 )" ).arg( QTextCodec::codecForLocale()->name() );
+    encodingList += i18n( "Descriptive encoding name", "Locale ( %1 )" ).arg( QString(QTextCodec::codecForLocale()->name()) );
     encodingList += KGlobal::charsets()->descriptiveEncodingNames();
 
     m_dialog->comboBoxEncoding->insertStringList( encodingList );
