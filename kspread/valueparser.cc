@@ -39,7 +39,7 @@ KLocale* ValueParser::locale()
 void ValueParser::parse (const QString& str, Cell *cell)
 {
   FormatType format = cell->formatType();
-  
+
   // If the text is empty, we don't have a value
   // If the user stated explicitly that he wanted text
   // (using the format or using a quote),
@@ -51,13 +51,13 @@ void ValueParser::parse (const QString& str, Cell *cell)
   }
 
   QString strStripped = str.trimmed();
-  
+
   // Try parsing as various datatypes, to find the type of the cell
-  
+
   // First as number
   if (tryParseNumber (strStripped, cell))
     return;
-  
+
   // Then as bool
   if (tryParseBool (strStripped, cell))
     return;
@@ -88,7 +88,7 @@ void ValueParser::parse (const QString& str, Cell *cell)
 Value ValueParser::parse (const QString &str)
 {
   Value val;
-  
+
   // If the text is empty, we don't have a value
   // If the user stated explicitly that he wanted text
   // (using the format or using a quote),
@@ -100,10 +100,10 @@ Value ValueParser::parse (const QString &str)
   }
 
   bool ok;
-  
+
   QString strStripped = str.trimmed();
   // Try parsing as various datatypes, to find the type of the string
-  
+
   // First as number
   val = tryParseNumber (strStripped, &ok);
   if (ok)
@@ -182,7 +182,7 @@ Value ValueParser::tryParseBool (const QString& str, bool *ok)
   if (ok) *ok = false;
 
   const QString& lowerStr = str.lower();
-  
+
   if ((lowerStr == "true") ||
       (lowerStr == parserLocale->translate("true").lower()))
   {
@@ -205,21 +205,21 @@ double ValueParser::readNumber(const QString &_str, bool * ok, bool * isInt)
   bool neg = str.find(parserLocale->negativeSign()) == 0;
   if (neg)
 	str.remove( 0, parserLocale->negativeSign().length() );
- 
+
   /* will hold the scientific notation portion of the number.
 	 Example, with 2.34E+23, exponentialPart == "E+23"
   */
   QString exponentialPart;
   int EPos;
- 
+
   EPos = str.find('E', 0, false);
- 
+
   if (EPos != -1)
   {
     exponentialPart = str.mid(EPos);
     str = str.left(EPos);
   }
- 
+
   int pos = str.find(parserLocale->decimalSymbol());
   QString major;
   QString minor;
@@ -234,7 +234,7 @@ double ValueParser::readNumber(const QString &_str, bool * ok, bool * isInt)
     minor = str.mid(pos + parserLocale->decimalSymbol().length());
     if (isInt) *isInt = false;
   }
- 
+
   // Remove thousand separators
   int thlen = parserLocale->thousandsSeparator().length();
   int lastpos = 0;
@@ -250,7 +250,7 @@ double ValueParser::readNumber(const QString &_str, bool * ok, bool * isInt)
       if (ok) *ok = false;
       return 0.0;
     }
- 
+
     lastpos = pos;
     major.remove( pos, thlen );
   }
@@ -259,12 +259,12 @@ double ValueParser::readNumber(const QString &_str, bool * ok, bool * isInt)
     if (ok) *ok = false;
     return 0.0;
   }
- 
+
   QString tot;
   if (neg) tot = '-';
- 
+
   tot += major + '.' + minor + exponentialPart;
- 
+
   return tot.toDouble(ok);
 }
 
@@ -282,7 +282,7 @@ Value ValueParser::tryParseNumber (const QString& str, bool *ok)
   else
     str2 = str;
 
-  
+
   // First try to understand the number using the parserLocale
   bool isInt;
   double val = readNumber (str2, ok, &isInt);
@@ -314,7 +314,7 @@ Value ValueParser::tryParseNumber (const QString& str, bool *ok)
 		value.setValue (static_cast<long> (val));
 	  else
 		value.setValue (val);
-      
+
       if ( str2.contains('E') || str2.contains('e') )
         fmtType = Scientific_format;
       else
@@ -366,7 +366,7 @@ Value ValueParser::tryParseDate (const QString& str, bool *ok)
     // will be treated as in year 3055, while 3/4/55 as year 2055
     // (because 55 < 69, see KLocale) and thus there's no way to enter for
     // year 1995
-  
+
     // The following fixes the problem, 3/4/1955 will always be 1955
 
     QString fmt = parserLocale->dateFormatShort();
@@ -388,11 +388,11 @@ Value ValueParser::tryParseDate (const QString& str, bool *ok)
 
       // if year is 2045, check to see if "2045" isn't there --> actual
       // input is "45"
-      if( ( str.contains( yearTwoDigits ) >= 1 ) &&
-          ( str.contains( yearFourDigits ) == 0 ) )
+      if( ( str.count( yearTwoDigits ) >= 1 ) &&
+          ( str.count( yearFourDigits ) == 0 ) )
         tmpDate = tmpDate.addYears( -100 );
     }
-    
+
     //test if it's a short date or text date.
     if (parserLocale->formatDate (tmpDate, false) == str)
       fmtType = TextDate_format;
@@ -408,10 +408,10 @@ Value ValueParser::tryParseDate (const QString& str, bool *ok)
       valid = true;
     }
   }
-  
+
   if (ok)
     *ok = valid;
-    
+
   return Value (tmpDate);
 }
 
@@ -465,10 +465,10 @@ Value ValueParser::tryParseTime (const QString& str, bool *ok)
     else
       val.setValue (tmpTime.time());
   }
-  
+
   if (ok)
     *ok = valid;
-    
+
   return val;
 }
 
@@ -518,7 +518,7 @@ QDateTime ValueParser::readTime (const QString & intstr, bool withSeconds,
       ++strpos;
 
     c = format.at( formatpos++ );
-    switch (c)
+    switch ( c.toLatin1() )
     {
      case 'p':
       {
@@ -604,7 +604,7 @@ QDateTime ValueParser::readTime (const QString & intstr, bool withSeconds,
   if (ok)
     *ok = false;
   // return invalid date if it didn't work
-  return QDateTime( refDate, QTime( -1, -1, -1 ) ); 
+  return QDateTime( refDate, QTime( -1, -1, -1 ) );
 }
 
 /**

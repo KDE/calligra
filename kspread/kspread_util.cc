@@ -330,7 +330,7 @@ void Point::init(const QString & _str)
     uint p2 = p;
     while ( p < len )
     {
-  if ( !isdigit( QChar(str[p++]) ) )
+      if ( !QChar(str[p++]).isDigit() )
   {
       kDebug(36001) << "Point::init: no number" << endl;
       return;

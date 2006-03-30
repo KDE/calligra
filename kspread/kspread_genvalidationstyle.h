@@ -30,28 +30,7 @@ class KoXmlWriter;
 namespace KSpread
 {
 class Validity;
-class GenValidationStyle;
-
-class GenValidationStyles
-{
-public:
-    GenValidationStyles();
-    ~GenValidationStyles();
-    QString lookup( const GenValidationStyle& style );
-
-    typedef QMap<GenValidationStyle, QString> StyleMap;
-    void writeStyle( KoXmlWriter& writer );
-
-private:
-    QString makeUniqueName( const QString& base ) const;
-
-    /// style definition -> name
-    StyleMap m_styles;
-    /// name -> style   (used to check for name uniqueness)
-    typedef QMap<QString, bool> NameMap;
-    NameMap m_names;
-
-};
+class GenValidationStyles;
 
 class GenValidationStyle
 {
@@ -92,6 +71,27 @@ private:
     QString message;
     QString title;
     friend class GenValidationStyles;
+};
+
+class GenValidationStyles
+{
+public:
+    GenValidationStyles();
+    ~GenValidationStyles();
+    QString lookup( const GenValidationStyle& style );
+
+    typedef QMap<GenValidationStyle, QString> StyleMap;
+    void writeStyle( KoXmlWriter& writer );
+
+private:
+    QString makeUniqueName( const QString& base ) const;
+
+    /// style definition -> name
+    StyleMap m_styles;
+    /// name -> style   (used to check for name uniqueness)
+    typedef QMap<QString, bool> NameMap;
+    NameMap m_names;
+
 };
 
 } // namespace KSpread

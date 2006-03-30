@@ -36,7 +36,7 @@ KLocale* ValueConverter::locale()
 Value ValueConverter::asBoolean (const Value &value) const
 {
   Value val;
-  bool ok;  
+  bool ok;
   switch (value.type()) {
     case Value::Empty:
       val.setValue (false);
@@ -45,7 +45,7 @@ Value ValueConverter::asBoolean (const Value &value) const
       val = value;
     break;
     case Value::Integer:
-      val.setValue (value.asInteger() ? true : false); 
+      val.setValue (value.asInteger() ? true : false);
     break;
     case Value::Float:
       val.setValue ((value.asFloat() == 0.0) ? false : true);
@@ -65,7 +65,7 @@ Value ValueConverter::asBoolean (const Value &value) const
       val.setValue (false);
     break;
   };
-  
+
   return val;
 }
 
@@ -73,7 +73,7 @@ Value ValueConverter::asInteger (const Value &value) const
 {
   Value val;
   bool ok;
-  
+
   switch (value.type()) {
     case Value::Empty:
       val.setValue (0);
@@ -103,7 +103,7 @@ Value ValueConverter::asInteger (const Value &value) const
       val.setValue (0);
     break;
   };
-  
+
   return val;
 }
 
@@ -111,7 +111,7 @@ Value ValueConverter::asFloat (const Value &value) const
 {
   Value val;
   bool ok;
-  
+
   switch (value.type()) {
     case Value::Empty:
       val.setValue (0.0);
@@ -140,7 +140,7 @@ Value ValueConverter::asFloat (const Value &value) const
       val.setValue (0.0);
     break;
   };
-  
+
   return val;
 }
 
@@ -163,7 +163,7 @@ Value ValueConverter::asString (const Value &value) const
   int pos;
   switch (value.type()) {
     case Value::Empty:
-      val = QString::null;
+      val = QString();
     break;
     case Value::Boolean:
       val.setValue (value.asBoolean() ? parser->locale()->translate ("True") :
@@ -197,7 +197,7 @@ Value ValueConverter::asString (const Value &value) const
         //convert the number, change decimal point from English to local
         s = QString::number (value.asFloat(), 'g', 10);
         decimal_point = parser->locale()->decimalSymbol()[0];
-        if (decimal_point && ((pos = s.find ('.')) != -1))
+        if (!decimal_point.isNull() && ((pos = s.find ('.')) != -1))
           s = s.replace (pos, 1, decimal_point);
         if (fmt == Value::fmt_Percent)
           s += " %";
@@ -217,7 +217,7 @@ Value ValueConverter::asString (const Value &value) const
       val.setValue (value.errorMessage ());
     break;
   };
-  
+
   return val;
 }
 
@@ -225,7 +225,7 @@ Value ValueConverter::asDateTime (const Value &value) const
 {
   Value val;
   bool ok;
-  
+
   switch (value.type()) {
     case Value::Empty:
       val.setValue (QDateTime::currentDateTime());
@@ -258,7 +258,7 @@ Value ValueConverter::asDateTime (const Value &value) const
     case Value::Error:
     break;
   };
-  
+
   return val;
 }
 
@@ -266,7 +266,7 @@ Value ValueConverter::asDate (const Value &value) const
 {
   Value val;
   bool ok;
-  
+
   switch (value.type()) {
     case Value::Empty:
       val.setValue (QDate::currentDate());
@@ -297,7 +297,7 @@ Value ValueConverter::asDate (const Value &value) const
     case Value::Error:
     break;
   };
-  
+
   return val;
 }
 
@@ -305,7 +305,7 @@ Value ValueConverter::asTime (const Value &value) const
 {
   Value val;
   bool ok;
-  
+
   switch (value.type()) {
     case Value::Empty:
       val.setValue (QTime::currentTime());
@@ -336,7 +336,7 @@ Value ValueConverter::asTime (const Value &value) const
     case Value::Error:
     break;
   };
-  
+
   return val;
 }
 

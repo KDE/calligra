@@ -34,6 +34,7 @@
 // #include "KPrObjectProperties.h"
 
 #include <klocale.h>
+#include <kguiitem.h>
 #include <kstdguiitem.h>
 
 using namespace KSpread;
@@ -81,79 +82,79 @@ KCommand * PropertyEditor::getCommand()
 //         if ( change )
 //         {
 //             KoPenCmd::Pen pen( m_penProperty->getPen() );
-// 
+//
 //             KoPenCmd *cmd = new KoPenCmd( i18n( "Apply Styles" ), m_objects, pen, m_doc, m_page, change );
-// 
+//
 //             if ( !macro )
 //             {
 //                 macro = new KMacroCommand( i18n( "Apply Properties" ) );
 //             }
-// 
+//
 //             macro->addCommand( cmd );
 //         }
 //     }
-// 
+//
 //     if ( m_brushProperty )
 //     {
 //         int change = m_brushProperty->getBrushPropertyChange();
 //         if ( change )
 //         {
 //             KPrBrushCmd::Brush brush( m_brushProperty->getBrush() );
-// 
+//
 //             KPrBrushCmd *cmd = new KPrBrushCmd( i18n( "Apply Styles" ), m_objects, brush, m_doc, m_page, change );
-// 
+//
 //             if ( !macro )
 //             {
 //                 macro = new KMacroCommand( i18n( "Apply Properties" ) );
 //             }
-// 
+//
 //             macro->addCommand( cmd );
 //         }
 //     }
-// 
+//
 //     if ( m_rectProperty )
 //     {
 //         int change = m_rectProperty->getRectPropertyChange();
-// 
+//
 //         if ( change )
 //         {
 //             KPrRectValueCmd::RectValues rectValue( m_rectProperty->getRectValues() );
-// 
+//
 //             KPrRectValueCmd *cmd = new KPrRectValueCmd( i18n( "Apply Styles" ), m_objects, rectValue, m_doc, m_page, change );
-// 
+//
 //             if ( !macro )
 //             {
 //                 macro = new KMacroCommand( i18n( "Apply Properties" ) );
 //             }
-// 
+//
 //             macro->addCommand( cmd );
 //         }
 //     }
-// 
+//
 //     if ( m_polygonProperty )
 //     {
 //         int change = m_polygonProperty->getPolygonPropertyChange();
-// 
+//
 //         if ( change )
 //         {
 //             KPrPolygonSettingCmd::PolygonSettings polygonSettings( m_polygonProperty->getPolygonSettings() );
-// 
+//
 //             KPrPolygonSettingCmd *cmd = new KPrPolygonSettingCmd( i18n("Apply Styles"), polygonSettings,
 //                                                             m_objects, m_doc, m_page, change );
-// 
+//
 //             if ( !macro )
 //             {
 //                 macro = new KMacroCommand( i18n( "Apply Properties" ) );
 //             }
-// 
+//
 //             macro->addCommand( cmd );
 //         }
 //     }
-// 
+//
 //     if ( m_pieProperty )
 //     {
 //         int change = m_pieProperty->getPiePropertyChange();
-// 
+//
 //         if ( change )
 //         {
 //             KPrPieValueCmd *cmd = new KPrPieValueCmd( i18n("Apply Styles"), m_pieProperty->getPieValues(),
@@ -162,15 +163,15 @@ KCommand * PropertyEditor::getCommand()
 //             {
 //                 macro = new KMacroCommand( i18n( "Apply Properties" ) );
 //             }
-// 
+//
 //             macro->addCommand( cmd );
 //         }
 //     }
-// 
+//
 //     if ( m_pictureProperty )
 //     {
 //         int change = m_pictureProperty->getPicturePropertyChange();
-// 
+//
 //         if ( change )
 //         {
 //             KPrPictureSettingCmd *cmd = new KPrPictureSettingCmd( i18n("Apply Styles"), m_pictureProperty->getPictureSettings(),
@@ -179,15 +180,15 @@ KCommand * PropertyEditor::getCommand()
 //             {
 //                 macro = new KMacroCommand( i18n( "Apply Properties" ) );
 //             }
-// 
+//
 //             macro->addCommand( cmd );
 //         }
 //     }
-// 
+//
 //     if ( m_textProperty )
 //     {
 //         int change = m_textProperty->getTextPropertyChange();
-// 
+//
 //         if ( change )
 //         {
 //             if ( change & KPrTextProperty::ProtectContent )
@@ -199,21 +200,21 @@ KCommand * PropertyEditor::getCommand()
 //                 {
 //                     macro = new KMacroCommand( i18n( "Apply Properties" ) );
 //                 }
-// 
+//
 //                 macro->addCommand( cmd );
 //             }
-// 
+//
 //             if ( change & KPrTextProperty::Margins )
 //             {
 //                 KPrChangeMarginCommand *cmd = new KPrChangeMarginCommand( i18n( "Apply Styles" ), m_objects,
 //                                                                           m_textProperty->getMarginsStruct(),
 //                                                                           m_doc, m_page );
-// 
+//
 //                 if ( !macro )
 //                 {
 //                     macro = new KMacroCommand( i18n( "Apply Properties" ) );
 //                 }
-// 
+//
 //                 macro->addCommand( cmd );
 //             }
 //         }
@@ -313,25 +314,25 @@ void PropertyEditor::setupTabs()
     setupTabGeneral();
 
 //     int flags = m_objectProperties->getPropertyFlags();
-// 
+//
 //     if ( flags & KPrObjectProperties::PtPen )
 //         setupTabPen( flags & KPrObjectProperties::PtLineEnds );
-// 
+//
 //     if ( flags & KPrObjectProperties::PtBrush )
 //         setupTabBrush();
-// 
+//
 //     if ( flags & KPrObjectProperties::PtRectangle )
 //         setupTabRect();
-// 
+//
 //     if ( flags & KPrObjectProperties::PtPolygon )
 //         setupTabPolygon();
-// 
+//
 //     if ( flags & KPrObjectProperties::PtPie )
 //         setupTabPie();
-// 
+//
 //     if ( flags & KPrObjectProperties::PtPicture )
 //         setupTabPicture();
-// 
+//
 //     if ( flags & KPrObjectProperties::PtText )
 //         setupTabText();
 }

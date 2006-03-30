@@ -2349,7 +2349,7 @@ void Sheet::changeCellTabName( QString const & old_name, QString const & new_nam
         {
             if(c->text().find(old_name)!=-1)
             {
-                int nb = c->text().count( old_name + "!" ) );
+                int nb = c->text().count( old_name + "!" );
                 QString tmp = old_name + "!";
                 int len = tmp.length();
                 tmp=c->text();
@@ -5209,7 +5209,8 @@ void Sheet::paste( const QByteArray& b, const QRect& pasteArea, bool makeUndo,
 {
     kDebug(36001) << "Parsing " << b.size() << " bytes" << endl;
 
-    QBuffer buffer( &b );
+    QByteArray byteArray( b );
+    QBuffer buffer( &byteArray );
     buffer.open( QIODevice::ReadOnly );
     QDomDocument doc;
     doc.setContent( &buffer );
@@ -6843,7 +6844,7 @@ bool Sheet::loadRowFormat( const QDomElement& row, int &rowIndex, KoOasisLoading
 
     int columnIndex = 0;
     QDomNode cellNode = row.firstChild();
-    int endRow = min(backupRow+number,KS_rowMax);
+    int endRow = qMin(backupRow+number,KS_rowMax);
 
 
     while( !cellNode.isNull() )

@@ -57,8 +57,8 @@ public:
     CellProxy( Sheet* sheet, const Q3CString& prefix );
     ~CellProxy();
 
-    virtual bool process( const Q3CString& obj, const Q3CString& fun, const QByteArray& data,
-                          Q3CString& replyType, QByteArray &replyData );
+    virtual bool process( const DCOPCString& obj, const DCOPCString& fun, const QByteArray& data,
+                          DCOPCString& replyType, QByteArray &replyData );
 
 private:
     Q3CString m_prefix;
@@ -67,7 +67,7 @@ private:
 };
 
 KSpread::CellProxy::CellProxy( Sheet* sheet, const Q3CString& prefix )
-    : DCOPObjectProxy( kapp->dcopClient() ), m_prefix( prefix )
+    : DCOPObjectProxy(), m_prefix( prefix )
 {
     m_cell = new CellIface;
     m_sheet = sheet;
@@ -78,8 +78,9 @@ KSpread::CellProxy::~CellProxy()
     delete m_cell;
 }
 
-bool KSpread::CellProxy::process( const Q3CString& obj, const Q3CString& fun, const QByteArray& data,
-                                        Q3CString& replyType, QByteArray &replyData )
+bool KSpread::CellProxy::process( const DCOPCString& obj, const DCOPCString& fun,
+                                  const QByteArray& data,
+                                  DCOPCString& replyType, QByteArray &replyData )
 {
 
 	kDebug()<<"CellProxy::process: requested object:"<<obj<<endl;
