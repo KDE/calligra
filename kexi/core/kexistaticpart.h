@@ -23,6 +23,8 @@
 
 #include "kexipart.h"
 #include "kexipartinfo.h"
+//Added by qt3to4:
+#include <Q3CString>
 
 namespace KexiPart
 {
@@ -33,7 +35,7 @@ namespace KexiPart
 class KEXICORE_EXPORT StaticInfo : public Info
 {
 	public:
-		StaticInfo(const QCString& mimeType, const QString& itemIcon, const QString& objectName);
+		StaticInfo(const Q3CString& mimeType, const QString& itemIcon, const QString& objectName);
 		~StaticInfo();
 
 	protected:
@@ -45,7 +47,7 @@ class KEXICORE_EXPORT StaticInfo : public Info
 class KEXICORE_EXPORT StaticPart : public Part
 {
 	public:
-		StaticPart(const QCString& mimeType, const QString& itemIcon, const QString& objectName);
+		StaticPart(const Q3CString& mimeType, const QString& itemIcon, const QString& objectName);
 		virtual ~StaticPart();
 
 		/*! Creates a new view for mode \a viewMode, \a item and \a parent. The view will be 

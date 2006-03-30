@@ -1,12 +1,12 @@
 #ifndef KEXIUSERACTIONMETHOD_H
 #define KEXIUSERACTIONMETHOD_H
 
-#include <qvaluevector.h>
+#include <q3valuevector.h>
 #include <qstring.h>
 #include <qvariant.h>
 
-typedef QValueVector<int> ArgTypes;
-typedef QValueVector<QString> ArgNames;
+typedef Q3ValueVector<int> ArgTypes;
+typedef Q3ValueVector<QString> ArgNames;
 
 /*! describes a UserActionCommand */
 class KEXICORE_EXPORT KexiUserActionMethod

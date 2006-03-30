@@ -32,6 +32,8 @@
 
 #include <kexidb/connection.h>
 #include <kexidb/cursor.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 using namespace KexiPart;
 
@@ -62,14 +64,14 @@ Manager::lookup()
 	conf.setGroup("Parts");
 	QStringList sl_order = QStringList::split( ",", conf.readEntry("Order") );//we'll set parts in defined order
 	const int size = qMax( tlist.count(), sl_order.count() );
-	QPtrVector<KService> ordered( size*2 );
+	Q3PtrVector<KService> ordered( size*2 );
 	int offset = size; //we will insert not described parts from #offset
 	
 	//compute order
 	for(KTrader::OfferList::ConstIterator it(tlist.constBegin()); it != tlist.constEnd(); ++it)
 	{
 		KService::Ptr ptr = (*it);
-		QCString mime = ptr->property("X-Kexi-TypeMime").toCString();
+		Q3CString mime = ptr->property("X-Kexi-TypeMime").toCString();
 		kDebug() << "Manager::lookup(): " << mime << endl;
 //<TEMP>: disable some parts if needed
 		if (!Kexi::tempShowForms() && mime=="kexi/form")

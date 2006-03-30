@@ -34,7 +34,9 @@
 #include <kexiutils/identifier.h>
 #include <kexiutils/utils.h>
 
-#include <qwidgetstack.h>
+#include <q3widgetstack.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 #include <kiconloader.h>
 #include <kdebug.h>
@@ -188,7 +190,7 @@ KAction* Part::sharedPartAction(int mode, const char* name, const char *classnam
 
 void Part::setActionAvailable(const char *action_name, bool avail)
 {
-	QIntDictIterator<GUIClient> it( m_instanceGuiClients );
+	Q3IntDictIterator<GUIClient> it( m_instanceGuiClients );
 	for (;it.current();++it) {
 		KAction *act = it.current()->actionCollection()->action(action_name);
 		if (act) {
@@ -358,7 +360,7 @@ KexiDialogTempData* Part::createTempData(KexiDialogBase* dialog)
 	return new KexiDialogTempData(dialog);
 }
 
-QString Part::i18nMessage(const QCString& englishMessage, KexiDialogBase* dlg) const
+QString Part::i18nMessage(const Q3CString& englishMessage, KexiDialogBase* dlg) const
 {
 	Q_UNUSED(dlg);
 	return QString(englishMessage).startsWith(":") ? QString::null : englishMessage;
@@ -368,7 +370,7 @@ void Part::setupCustomPropertyPanelTabs(KTabWidget *, KexiMainWindow*)
 {
 }
 
-QCString Part::instanceName() const
+Q3CString Part::instanceName() const
 {
 	// "instanceName" should be already valid identifier but we're using
 	// KexiUtils::string2Identifier() to be sure translators did it right.

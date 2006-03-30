@@ -26,8 +26,11 @@
 #include <kshortcut.h>
 
 #include <qwidget.h>
-#include <qsignal.h>
-#include <qiconset.h>
+#include <q3signal.h>
+#include <qicon.h>
+//Added by qt3to4:
+#include <Q3ValueList>
+#include <Q3CString>
 
 KAction_setEnabled_Helper::KAction_setEnabled_Helper(KexiActionProxy* proxy)
  : QObject(0,"KAction_setEnabled_Helper")
@@ -67,7 +70,7 @@ void KexiSharedActionConnector::plugSharedActionToExternalGUI(
 }
 
 void KexiSharedActionConnector::plugSharedActionsToExternalGUI(
-	const QValueList<QCString>& action_names, KXMLGUIClient *client)
+	const Q3ValueList<Q3CString>& action_names, KXMLGUIClient *client)
 {
 	m_proxy->plugSharedActionsToExternalGUI(action_names, client);
 }
@@ -92,7 +95,7 @@ KexiActionProxy::KexiActionProxy(QObject *receiver, KexiSharedActionHost *host)
 
 KexiActionProxy::~KexiActionProxy()
 {
-	QPtrListIterator<KexiActionProxy> it(m_sharedActionChildren);
+	Q3PtrListIterator<KexiActionProxy> it(m_sharedActionChildren);
 	//detach myself from every child
 	for (;it.current();++it) {
 		it.current()->setActionProxyParent_internal( 0 );
@@ -110,9 +113,9 @@ void KexiActionProxy::plugSharedAction(const char *action_name, QObject* receive
 {
 	if (!action_name)// || !receiver || !slot)
 		return;
-	QPair<QSignal*,bool> *p = m_signals[action_name];
+	QPair<Q3Signal*,bool> *p = m_signals[action_name];
 	if (!p) {
-		p = new QPair<QSignal*,bool>( new QSignal(&m_signal_parent), true );
+		p = new QPair<Q3Signal*,bool>( new Q3Signal(&m_signal_parent), true );
 		m_signals.insert(action_name, p);
 	}
 	if (receiver && slot)
@@ -121,7 +124,7 @@ void KexiActionProxy::plugSharedAction(const char *action_name, QObject* receive
 
 void KexiActionProxy::unplugSharedAction(const char *action_name)
 {
-	QPair<QSignal*,bool> *p = m_signals.take(action_name);
+	QPair<Q3Signal*,bool> *p = m_signals.take(action_name);
 	if (!p)
 		return;
 	delete p->first;
@@ -155,7 +158,7 @@ KAction* KexiActionProxy::plugSharedAction(const char *action_name, const QStrin
 		kWarning() << "KexiActionProxy::plugSharedAction(): NO SUCH ACTION: " << action_name << endl;
 		return 0;
 	}
-	QCString altName = a->name();
+	Q3CString altName = a->name();
 	altName += "_alt";
 	KAction *alt_act = new KAction(alternativeText, a->iconSet(), a->shortcut(), 
 		0, 0, a->parent(), altName);
@@ -182,20 +185,20 @@ void KexiActionProxy::plugSharedActionToExternalGUI(const char *action_name, KXM
 }
 
 void KexiActionProxy::plugSharedActionsToExternalGUI(
-	const QValueList<QCString>& action_names, KXMLGUIClient *client)
+	const Q3ValueList<Q3CString>& action_names, KXMLGUIClient *client)
 {
-	for (QValueList<QCString>::const_iterator it = action_names.constBegin(); it!=action_names.constEnd(); ++it) {
+	for (Q3ValueList<Q3CString>::const_iterator it = action_names.constBegin(); it!=action_names.constEnd(); ++it) {
 		plugSharedActionToExternalGUI(*it, client);
 	}
 }
 
 bool KexiActionProxy::activateSharedAction(const char *action_name, bool alsoCheckInChildren)
 {
-	QPair<QSignal*,bool> *p = m_signals[action_name];
+	QPair<Q3Signal*,bool> *p = m_signals[action_name];
 	if (!p || !p->second) {
 		//try in children...
 		if (alsoCheckInChildren) {
-			QPtrListIterator<KexiActionProxy> it( m_sharedActionChildren );
+			Q3PtrListIterator<KexiActionProxy> it( m_sharedActionChildren );
 			for( ; it.current(); ++it ) {
 				if (it.current()->activateSharedAction( action_name, alsoCheckInChildren ))
 					return true;
@@ -215,12 +218,12 @@ KAction* KexiActionProxy::sharedAction(const char* action_name)
 
 bool KexiActionProxy::isSupported(const char* action_name) const
 {
-	QPair<QSignal*,bool> *p = m_signals[action_name];
+	QPair<Q3Signal*,bool> *p = m_signals[action_name];
 	if (!p) {
 		//not supported explicity - try in children...
 		if (m_focusedChild)
 			return m_focusedChild->isSupported(action_name);
-		QPtrListIterator<KexiActionProxy> it( m_sharedActionChildren );
+		Q3PtrListIterator<KexiActionProxy> it( m_sharedActionChildren );
 		for( ; it.current(); ++it ) {
 			if (it.current()->isSupported(action_name))
 				return true;
@@ -232,13 +235,13 @@ bool KexiActionProxy::isSupported(const char* action_name) const
 
 bool KexiActionProxy::isAvailable(const char* action_name, bool alsoCheckInChildren) const
 {
-	QPair<QSignal*,bool> *p = m_signals[action_name];
+	QPair<Q3Signal*,bool> *p = m_signals[action_name];
 	if (!p) {
 		//not supported explicity - try in children...
 		if (alsoCheckInChildren) {
 			if (m_focusedChild)
 				return m_focusedChild->isAvailable(action_name, alsoCheckInChildren);
-			QPtrListIterator<KexiActionProxy> it( m_sharedActionChildren );
+			Q3PtrListIterator<KexiActionProxy> it( m_sharedActionChildren );
 			for( ; it.current(); ++it ) {
 				if (it.current()->isSupported(action_name))
 					return it.current()->isAvailable(action_name, alsoCheckInChildren);
@@ -252,7 +255,7 @@ bool KexiActionProxy::isAvailable(const char* action_name, bool alsoCheckInChild
 
 void KexiActionProxy::setAvailable(const char* action_name, bool set)
 {
-	QPair<QSignal*,bool> *p = m_signals[action_name];
+	QPair<Q3Signal*,bool> *p = m_signals[action_name];
 	if (!p)
 		return;
 	p->second = set;

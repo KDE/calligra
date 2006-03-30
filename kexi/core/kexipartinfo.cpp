@@ -21,6 +21,8 @@
 #include "kexipartinfo_p.h"
 
 #include <kexidb/global.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 using namespace KexiPart;
 
@@ -74,7 +76,7 @@ Info::~Info()
 
 QString Info::groupName() const { return d->groupName; }
 
-QCString Info::mimeType() const { return d->mimeType; }
+Q3CString Info::mimeType() const { return d->mimeType; }
 
 QString Info::itemIcon() const { return d->itemIcon; }
 
@@ -121,7 +123,7 @@ bool Info::isPrintingSuppored() const
 
 //--------------
 
-QCString KexiPart::nameForCreateAction(const Info& info)
+Q3CString KexiPart::nameForCreateAction(const Info& info)
 {
 	return (info.objectName()+"part_create").latin1();
 }

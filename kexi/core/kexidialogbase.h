@@ -26,12 +26,15 @@
 #include "kexi.h"
 #include "kexipart.h"
 
-#include <qguardedptr.h>
+#include <qpointer.h>
+//Added by qt3to4:
+#include <QEvent>
+#include <QCloseEvent>
 
 #include <k3mdichildview.h>
 #include <kxmlguiclient.h>
 
-class QWidgetStack;
+class Q3WidgetStack;
 class KexiMainWindow;
 class KexiViewBase;
 class KActionCollection;
@@ -273,7 +276,7 @@ class KEXICORE_EXPORT KexiDialogBase :
 		int m_openedViewModes;
 		int m_currentViewMode;
 
-		inline QWidgetStack * stack() const { return m_stack; }
+		inline Q3WidgetStack * stack() const { return m_stack; }
 
 		void dirtyChanged();
 #if 0
@@ -314,7 +317,7 @@ class KEXICORE_EXPORT KexiDialogBase :
 		int m_id;
 		QPointer<KexiPart::Part> m_part;
 		KexiPart::Item *m_item;
-		QWidgetStack *m_stack;
+		Q3WidgetStack *m_stack;
 		QString m_origCaption; //!< helper
 		KexiDB::SchemaData* m_schemaData;
 		KexiViewBase *m_newlySelectedView; //!< Used in dirty(), temporary set in switchToViewMode()

@@ -20,7 +20,7 @@
 #ifndef KEXI_H
 #define KEXI_H
 
-#include <qguardedptr.h>
+#include <qpointer.h>
 #include <qfont.h>
 
 #include <kexi_version.h>

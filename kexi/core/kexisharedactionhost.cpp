@@ -26,6 +26,8 @@
 
 #include <kiconloader.h>
 #include <kdebug.h>
+//Added by qt3to4:
+#include <Q3PtrList>
 
 KexiSharedActionHostPrivate::KexiSharedActionHostPrivate(KexiSharedActionHost *h)
 : QObject(0,"KexiSharedActionHostPrivate")
@@ -156,7 +158,7 @@ void KexiSharedActionHost::invalidateSharedActions(QObject *o)
 		KexiVolatileActionData *va = d->volatileActions[ a ];
 		if (va != 0) {
 			if (p && p->isSupported(a->name())) {
-				QPtrList<KAction> actions_list;
+				Q3PtrList<KAction> actions_list;
 				actions_list.append( a );
 				if (!va->plugged) {
 					va->plugged=true;

@@ -22,12 +22,14 @@
 #include "kexipartinfo_p.h"
 #include "kexipartitem.h"
 #include "kexi.h"
+//Added by qt3to4:
+#include <Q3CString>
 
 using namespace KexiPart;
 
 //------------------------------
 
-StaticInfo::StaticInfo(const QCString& mimeType, const QString& itemIcon, const QString& objectName)
+StaticInfo::StaticInfo(const Q3CString& mimeType, const QString& itemIcon, const QString& objectName)
  : Info()
 {
 	d->mimeType = mimeType;
@@ -41,7 +43,7 @@ StaticInfo::~StaticInfo()
 
 //------------------------------
 
-StaticPart::StaticPart(const QCString& mimeType, const QString& itemIcon, const QString& objectName)
+StaticPart::StaticPart(const Q3CString& mimeType, const QString& itemIcon, const QString& objectName)
  : Part(&Kexi::partManager(), new StaticInfo(mimeType, itemIcon, objectName))
 {
 	Kexi::partManager().insertStaticPart(this);

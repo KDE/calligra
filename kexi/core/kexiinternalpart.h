@@ -22,7 +22,7 @@
 #define KEXIINTERNALPART_H
 
 #include <qobject.h>
-#include <qguardedptr.h>
+#include <qpointer.h>
 #include <qvariant.h>
 
 class KexiMainWindow;

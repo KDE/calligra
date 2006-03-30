@@ -20,18 +20,21 @@
 #ifndef KEXIACTIONPROXY_H
 #define KEXIACTIONPROXY_H
 
-#include <qguardedptr.h>
-#include <qasciidict.h>
+#include <qpointer.h>
+#include <q3asciidict.h>
 #include <qobject.h>
 #include <qpair.h>
-#include <qptrlist.h>
+#include <q3ptrlist.h>
+//Added by qt3to4:
+#include <Q3ValueList>
+#include <Q3CString>
 
 #include <kaction.h>
 
 #include "kexiproject.h"
 #include "kexisharedactionhost.h"
 
-class QSignal;
+class Q3Signal;
 class KAction;
 class KXMLGUIClient;
 class KAction_setEnabled_Helper;
@@ -65,7 +68,7 @@ class KEXICORE_EXPORT KexiSharedActionConnector
 		void plugSharedActionToExternalGUI(const char *action_name, KXMLGUIClient *client);
 
 		void plugSharedActionsToExternalGUI(
-			const QValueList<QCString>& action_names, KXMLGUIClient *client);
+			const Q3ValueList<Q3CString>& action_names, KXMLGUIClient *client);
 
 		KexiActionProxy* m_proxy;
 		QObject *m_object;
@@ -128,7 +131,7 @@ class KEXICORE_EXPORT KexiActionProxy
 		void plugSharedActionToExternalGUI(const char *action_name, KXMLGUIClient *client);
 
 		void plugSharedActionsToExternalGUI(
-			const QValueList<QCString>& action_names, KXMLGUIClient *client);
+			const Q3ValueList<Q3CString>& action_names, KXMLGUIClient *client);
 
 		/*! Unplugs action named \a action_name from a widget \a w.
 		 \sa plugSharedAction(const char *action_name, QWidget* w) */
@@ -161,11 +164,11 @@ class KEXICORE_EXPORT KexiActionProxy
 
 		KexiSharedActionHost *m_host;
 		QPointer<QObject> m_receiver;
-		QAsciiDict< QPair<QSignal*,bool> > m_signals;
+		Q3AsciiDict< QPair<Q3Signal*,bool> > m_signals;
 
-		QPtrList<KexiActionProxy> m_sharedActionChildren;
+		Q3PtrList<KexiActionProxy> m_sharedActionChildren;
 
-		QPtrList<KAction> m_alternativeActions;
+		Q3PtrList<KAction> m_alternativeActions;
 
 		KexiActionProxy* m_actionProxyParent;
 

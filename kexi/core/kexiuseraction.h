@@ -10,7 +10,7 @@ namespace KexiDB
 	class Cursor;
 }
 class KexiMainWindow;
-typedef QValueVector<QVariant> Arguments;
+typedef Q3ValueVector<QVariant> Arguments;
 
 /*! action that can be defined by a user for a special scope e.g. main, form ...
     the actions can have some predefined \ref Methods which are described in \ref KexiUserActionMethod

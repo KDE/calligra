@@ -23,6 +23,8 @@
 
 #include <qobject.h>
 #include <qmap.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 #include <kexiutils/tristate.h>
 #include "kexi.h"
@@ -143,7 +145,7 @@ class KEXICORE_EXPORT Part : public QObject
 		 The name is valid identifier - contains latin1 lowercase characters only.
 		 @todo move this to Info class when the name could be moved as localized property 
 		 to service's .desktop file. */
-		QCString instanceName() const;
+		Q3CString instanceName() const;
 
 		/*! i18n'd instance name usable for displaying in gui as object's caption.
 		 @todo move this to Info class when the name could be moved as localized property 
@@ -187,7 +189,7 @@ class KEXICORE_EXPORT Part : public QObject
 		 a part does not offer a message for such \a englishMessage.
 		 This is used e.g. in KexiMainWindowImpl::closeDialog().
 		 */
-		virtual QString i18nMessage(const QCString& englishMessage, 
+		virtual QString i18nMessage(const Q3CString& englishMessage, 
 			KexiDialogBase* dlg) const;
 
 	signals: 
@@ -287,7 +289,7 @@ class KEXICORE_EXPORT Part : public QObject
 
 		Info *m_info;
 		GUIClient *m_guiClient;
-		QIntDict<GUIClient> m_instanceGuiClients;
+		Q3IntDict<GUIClient> m_instanceGuiClients;
 		KexiMainWindow* m_mainWin;
 		Kexi::ObjectStatus m_status;
 

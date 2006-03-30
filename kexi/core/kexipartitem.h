@@ -22,8 +22,10 @@
 #define KEXIPROJECTPARTITEM_H
 
 #include <qobject.h>
-#include <qintdict.h>
-#include <qptrlist.h>
+#include <q3intdict.h>
+#include <q3ptrlist.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 namespace KexiDB
 {
@@ -53,8 +55,8 @@ class KEXICORE_EXPORT Item
 		int identifier() const { return m_id; }
 		void setIdentifier(int id) { m_id = id; }
 
-		QCString mimeType() const { return m_mime; }
-		void setMimeType(const QCString &mime) { m_mime = mime; }
+		Q3CString mimeType() const { return m_mime; }
+		void setMimeType(const Q3CString &mime) { m_mime = mime; }
 
 		QString name() const { return m_name; }
 		void setName(const QString &name) { m_name = name; }
@@ -82,7 +84,7 @@ class KEXICORE_EXPORT Item
 		inline QString captionOrName() const { return m_caption.isEmpty() ? m_name : m_caption; }
 
 	private:
-		QCString m_mime;
+		Q3CString m_mime;
 		QString m_name;
 		QString m_caption;
 		QString m_desc;
@@ -90,9 +92,9 @@ class KEXICORE_EXPORT Item
 		bool m_neverSaved : 1;
 };
 
-typedef QIntDict<KexiPart::Item> ItemDict;
-typedef QIntDictIterator<KexiPart::Item> ItemDictIterator;
-typedef QPtrListIterator<KexiPart::Item> ItemListIterator;
+typedef Q3IntDict<KexiPart::Item> ItemDict;
+typedef Q3IntDictIterator<KexiPart::Item> ItemDictIterator;
+typedef Q3PtrListIterator<KexiPart::Item> ItemListIterator;
 
 /*! 
  @short Part item list with reimplemented compareItems() method.
@@ -100,11 +102,11 @@ typedef QPtrListIterator<KexiPart::Item> ItemListIterator;
  Such a list is returend by KexiProject::getSortedItems(KexiPart::ItemList& list, KexiPart::Info *i);
  so you can call sort() on the list to sort it by item name. 
 */
-class KEXICORE_EXPORT ItemList : public QPtrList<KexiPart::Item> {
+class KEXICORE_EXPORT ItemList : public Q3PtrList<KexiPart::Item> {
 	public:
 		ItemList() {}
 	protected:
-		virtual int compareItems( QPtrCollection::Item item1, QPtrCollection::Item item2 ) {
+		virtual int compareItems( Q3PtrCollection::Item item1, Q3PtrCollection::Item item2 ) {
 			return QString::compare(
 				static_cast<KexiPart::Item*>(item1)->name(), 
 				static_cast<KexiPart::Item*>(item2)->name());

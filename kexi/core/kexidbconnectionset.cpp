@@ -37,7 +37,7 @@ public:
 	}
 	KexiDB::ConnectionData::List list;
 	QMap<KexiDB::ConnectionData*, QString> filenamesForData;
-	QDict<KexiDB::ConnectionData> dataForFilenames;
+	Q3Dict<KexiDB::ConnectionData> dataForFilenames;
 	int maxid;
 };
 

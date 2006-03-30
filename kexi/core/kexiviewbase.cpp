@@ -29,6 +29,9 @@
 #include <kexiutils/utils.h>
 
 #include <kdebug.h>
+//Added by qt3to4:
+#include <QEvent>
+#include <QCloseEvent>
 
 KexiViewBase::KexiViewBase(KexiMainWindow *mainWin, QWidget *parent, const char *name)
  : QWidget(parent, name)
@@ -313,7 +316,7 @@ void KexiViewBase::updateActions(bool activated)
 {
 	//do nothing here
 	//do the same for children :)
- 	for (QPtrListIterator<KexiViewBase> it(m_children); it.current(); ++it) {
+ 	for (Q3PtrListIterator<KexiViewBase> it(m_children); it.current(); ++it) {
 		it.current()->updateActions(activated);
 	}
 }

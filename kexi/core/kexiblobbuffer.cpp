@@ -24,6 +24,8 @@
 #include <qfile.h>
 #include <qfileinfo.h>
 #include <qbuffer.h>
+//Added by qt3to4:
+#include <QPixmap>
 
 #include <kdebug.h>
 #include <kstaticdeleter.h>
@@ -48,9 +50,9 @@ class KexiBLOBBuffer::Private
 		}
 		Id_t maxId; //!< Used to compute maximal recently used identifier for unstored BLOB
 //! @todo will be changed to QHash<quint64, Item>
-		QIntDict<Item> inMemoryItems; //!< for unstored BLOBs
-		QIntDict<Item> storedItems; //!< for stored items
-		QDict<Item> itemsByURL;
+		Q3IntDict<Item> inMemoryItems; //!< for unstored BLOBs
+		Q3IntDict<Item> storedItems; //!< for stored items
+		Q3Dict<Item> itemsByURL;
 		QPointer<KexiDB::Connection> conn;
 };
 

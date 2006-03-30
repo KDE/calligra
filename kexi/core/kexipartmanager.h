@@ -22,11 +22,13 @@
 #define KEXIPARTMANAGER_H
 
 #include <qobject.h>
-#include <qdict.h>
-#include <qasciidict.h>
-#include <qintdict.h>
-#include <qvaluelist.h>
-#include <qptrlist.h>
+#include <q3dict.h>
+#include <q3asciidict.h>
+#include <q3intdict.h>
+#include <q3valuelist.h>
+#include <q3ptrlist.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 #include <kservice.h>
 
@@ -48,16 +50,16 @@ namespace KexiPart
 	struct Missing
 	{
 		QString name;
-		QCString mime;
+		Q3CString mime;
 		QString url;
 	};
 
-	typedef QAsciiDict<Info> PartInfoDict;
-	typedef QDictIterator<Info> PartInfoDictIterator;
-	typedef QValueList<Missing> MissingList;
-	typedef QPtrList<Info> PartInfoList;
-	typedef QPtrListIterator<Info> PartInfoListIterator;
-	typedef QIntDict<Part> PartDict;
+	typedef Q3AsciiDict<Info> PartInfoDict;
+	typedef Q3DictIterator<Info> PartInfoDictIterator;
+	typedef Q3ValueList<Missing> MissingList;
+	typedef Q3PtrList<Info> PartInfoList;
+	typedef Q3PtrListIterator<Info> PartInfoListIterator;
+	typedef Q3IntDict<Part> PartDict;
 //	typedef QPtrList<DataSource> DataSourceList;
 
 /**

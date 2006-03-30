@@ -25,6 +25,10 @@
 #include <kexidb/schemadata.h>
 
 #include <qdatetime.h>
+//Added by qt3to4:
+#include <Q3ValueList>
+#include <Q3CString>
+#include <Q3PtrList>
 
 class KexiProjectDataPrivate;
 
@@ -39,8 +43,8 @@ class KexiProjectDataPrivate;
 class KEXICORE_EXPORT KexiProjectData : public QObject, public KexiDB::SchemaData
 {
 	public:
-		typedef QPtrList<KexiProjectData> List;
-		typedef QMap<QCString,QString> ObjectInfo;
+		typedef Q3PtrList<KexiProjectData> List;
+		typedef QMap<Q3CString,QString> ObjectInfo;
 		
 		KexiProjectData();
 
@@ -82,7 +86,7 @@ class KEXICORE_EXPORT KexiProjectData : public QObject, public KexiDB::SchemaDat
 
 		/*! objects to open on startup (come from command line "-open" option)
 		 It's public for convenience */
-		QValueList<ObjectInfo> autoopenObjects;
+		Q3ValueList<ObjectInfo> autoopenObjects;
 
 		/*! @internal
 		 Format version used when saving the data to a shortcut file.

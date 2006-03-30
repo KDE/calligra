@@ -20,15 +20,18 @@
 
 #include "kexidragobjects.h"
 
-#include <qcstring.h>
+#include <q3cstring.h>
 #include <qdatastream.h>
+//Added by qt3to4:
+#include <QDragMoveEvent>
+#include <QDropEvent>
 #include <kdebug.h>
 
 /// implementation of KexiFieldDrag
 
 KexiFieldDrag::KexiFieldDrag(const QString& sourceMimeType, const QString& sourceName, 
 	const QString& field, QWidget *parent, const char *name)
- : QStoredDrag("kexi/field", parent, name)
+ : Q3StoredDrag("kexi/field", parent, name)
 {
 	QByteArray data;
 	QDataStream stream1( &data,QIODevice::WriteOnly);
@@ -39,7 +42,7 @@ KexiFieldDrag::KexiFieldDrag(const QString& sourceMimeType, const QString& sourc
 
 KexiFieldDrag::KexiFieldDrag(const QString& sourceMimeType, const QString& sourceName, 
 	const QStringList& fields, QWidget *parent, const char *name)
- : QStoredDrag((fields.count() > 1) ? "kexi/fields" : "kexi/field", parent, name)
+ : Q3StoredDrag((fields.count() > 1) ? "kexi/fields" : "kexi/field", parent, name)
 {
 	QByteArray data;
 	QDataStream stream1( &data,QIODevice::WriteOnly);
@@ -117,7 +120,7 @@ KexiFieldDrag::decodeMultiple( QDropEvent* e, QString& sourceMimeType,
 
 KexiDataProviderDrag::KexiDataProviderDrag(const QString& sourceMimeType, const QString& sourceName,
 	QWidget *parent, const char *name)
- : QStoredDrag("kexi/dataprovider", parent, name)
+ : Q3StoredDrag("kexi/dataprovider", parent, name)
 {
 	QByteArray data;
 	QDataStream stream1( &data,QIODevice::WriteOnly);
@@ -136,7 +139,7 @@ KexiDataProviderDrag::canDecode(QDragMoveEvent *e)
 bool
 KexiDataProviderDrag::decode( QDropEvent* e, QString& sourceMimeType, QString& sourceName)
 {
-	QCString tmp;
+	Q3CString tmp;
 	QByteArray payload = e->data("kexidataprovider");
 	if(payload.size())
 	{

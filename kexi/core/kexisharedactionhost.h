@@ -20,8 +20,8 @@
 #ifndef KEXISHAREDACTIONHOST_H
 #define KEXISHAREDACTIONHOST_H
 
-#include <qguardedptr.h>
-#include <qasciidict.h>
+#include <qpointer.h>
+#include <q3asciidict.h>
 #include <qobject.h>
 #include <qpair.h>
 

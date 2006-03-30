@@ -22,7 +22,7 @@
 
 #include <qvariant.h>
 #include <qwidget.h>
-#include <qguardedptr.h>
+#include <qpointer.h>
 
 class KexiDataItemInterface;
 namespace KexiDB {

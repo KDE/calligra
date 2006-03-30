@@ -22,6 +22,8 @@
 #define KEXIPARTINFO_H
 
 #include "kexipartmanager.h"
+//Added by qt3to4:
+#include <Q3CString>
 
 class KexiMainWindowImpl;
 class KexiProject;
@@ -51,7 +53,7 @@ class KEXICORE_EXPORT Info
 		/**
 		 * @return the internal mime type of this part
 		 */
-		QCString mimeType() const;
+		Q3CString mimeType() const;
 
 //		/**
 //		 * @return the icon for groups
@@ -147,7 +149,7 @@ class KEXICORE_EXPORT Info
 /*! \return "create" KAction's name for part defined by \a info. 
  The result is like "tablepart_create". Used in Part::createGUIClients() 
  and KexiBrowser. */
-KEXICORE_EXPORT QCString nameForCreateAction(const Info& info);
+KEXICORE_EXPORT Q3CString nameForCreateAction(const Info& info);
 
 }
 

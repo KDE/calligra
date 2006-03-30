@@ -21,7 +21,7 @@
 #define KEXISHAREDACTIONHOST_P_H
 
 #include <qobject.h>
-#include <qptrdict.h>
+#include <q3ptrdict.h>
 #include <qsignalmapper.h>
 
 #include <kmainwindow.h>
@@ -50,12 +50,12 @@ class KEXICORE_EXPORT KexiSharedActionHostPrivate : public QObject
 		void slotAction(const QString& act_id);
 
 	public:
-		QPtrDict<KexiActionProxy> actionProxies;
+		Q3PtrDict<KexiActionProxy> actionProxies;
 		KMainWindow *mainWin;
 		KActionPtrList sharedActions;
 		QSignalMapper actionMapper;
-		QPtrDict<KexiVolatileActionData> volatileActions;
-		QAsciiDict<QWidget> enablers;
+		Q3PtrDict<KexiVolatileActionData> volatileActions;
+		Q3AsciiDict<QWidget> enablers;
 
 		KexiSharedActionHost *host;
 };

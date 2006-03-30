@@ -21,6 +21,10 @@
 #define KEXIVIEWBASE_H
 
 #include <qwidget.h>
+//Added by qt3to4:
+#include <QEvent>
+#include <QCloseEvent>
+#include <Q3PtrList>
 
 #include "kexiactionproxy.h"
 
@@ -267,7 +271,7 @@ class KEXICORE_EXPORT KexiViewBase : public QWidget, public KexiActionProxy
 		 Can be useful when single class is used for more than one view (e.g. KexiDBForm). */
 		int m_viewMode;
 
-		QPtrList<KexiViewBase> m_children;
+		Q3PtrList<KexiViewBase> m_children;
 
 		bool m_dirty : 1;
 

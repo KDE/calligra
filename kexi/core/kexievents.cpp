@@ -18,9 +18,11 @@
 */
 
 #include "kexievents.h"
+//Added by qt3to4:
+#include <Q3CString>
 
-Event::Event(QObject *sender, const QCString &signal,
-  QObject *receiver, const QCString &slot)
+Event::Event(QObject *sender, const Q3CString &signal,
+  QObject *receiver, const Q3CString &slot)
 {
 	m_sender = sender;
 	m_receiver = receiver;
@@ -28,8 +30,8 @@ Event::Event(QObject *sender, const QCString &signal,
 	m_signal = signal;
 }
 
-Event::Event(QObject *sender, const QCString &signal,
-  const QCString &functionName)
+Event::Event(QObject *sender, const Q3CString &signal,
+  const Q3CString &functionName)
 {
 	m_sender = sender;
 	m_signal = signal;
@@ -44,14 +46,14 @@ EventList::addEvent(Event *event)
 }
 
 void
-EventList::addEvent(QObject *sender, const QCString &signal, QObject *receiver, const QCString &slot)
+EventList::addEvent(QObject *sender, const Q3CString &signal, QObject *receiver, const Q3CString &slot)
 {
 	Event *ev = new Event(sender, signal, receiver, slot);
 	append(ev);
 }
 
 void
-EventList::addEvent(QObject *sender, const QCString &signal, const QCString &function)
+EventList::addEvent(QObject *sender, const Q3CString &signal, const Q3CString &function)
 {
 	Event *ev = new Event(sender, signal, function);
 	append(ev);

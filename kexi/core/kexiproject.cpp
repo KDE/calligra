@@ -21,6 +21,8 @@
 #include <qfile.h>
 #include <qapplication.h>
 #include <qdom.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 #include <kmimetype.h>
 #include <kdebug.h>
@@ -79,9 +81,9 @@ class KexiProject::Private
 		QString error_title;
 
 		//! a cache for item() method, indexed by project part's ids
-		QIntDict<KexiPart::ItemDict> itemDictsCache;
+		Q3IntDict<KexiPart::ItemDict> itemDictsCache;
 
-		QPtrDict<KexiPart::Item> unstoredItems;
+		Q3PtrDict<KexiPart::Item> unstoredItems;
 		int tempPartItemID_Counter; //!< helper for getting unique 
 		                              //!< temporary identifiers for unstored items
 		KexiDB::Parser* sqlParser;
@@ -551,7 +553,7 @@ KexiProject::items(KexiPart::Info *i)
 }
 
 KexiPart::ItemDict*
-KexiProject::itemsForMimeType(const QCString &mimeType)
+KexiProject::itemsForMimeType(const Q3CString &mimeType)
 {
 	KexiPart::Info *info = Kexi::partManager().infoForMimeType(mimeType);
 	return items(info);
@@ -569,7 +571,7 @@ KexiProject::getSortedItems(KexiPart::ItemList& list, KexiPart::Info *i)
 }
 
 void
-KexiProject::getSortedItemsForMimeType(KexiPart::ItemList& list, const QCString &mimeType)
+KexiProject::getSortedItemsForMimeType(KexiPart::ItemList& list, const Q3CString &mimeType)
 {
 	KexiPart::Info *info = Kexi::partManager().infoForMimeType(mimeType);
 	getSortedItems(list, info);
@@ -589,7 +591,7 @@ KexiProject::addStoredItem(KexiPart::Info *info, KexiPart::Item *item)
 }
 
 KexiPart::Item*
-KexiProject::itemForMimeType(const QCString &mimeType, const QString &name)
+KexiProject::itemForMimeType(const Q3CString &mimeType, const QString &name)
 {
 	KexiPart::ItemDict *dict = itemsForMimeType(mimeType);
 	if (!dict)
@@ -620,7 +622,7 @@ KexiPart::Item*
 KexiProject::item(int identifier)
 {
 	KexiPart::ItemDict *dict;
-	for (QIntDictIterator<KexiPart::ItemDict> it(d->itemDictsCache); (dict = it.current()); ++it) {
+	for (Q3IntDictIterator<KexiPart::ItemDict> it(d->itemDictsCache); (dict = it.current()); ++it) {
 		KexiPart::Item *item = dict->find(identifier);
 		if (item)
 			return item;
@@ -698,7 +700,7 @@ KexiDialogBase* KexiProject::openObject(KexiMainWindow *wnd, KexiPart::Item& ite
 	return dlg;
 }
 
-KexiDialogBase* KexiProject::openObject(KexiMainWindow *wnd, const QCString &mimeType, 
+KexiDialogBase* KexiProject::openObject(KexiMainWindow *wnd, const Q3CString &mimeType, 
 	const QString& name, int viewMode)
 {
 	KexiPart::Item *it = itemForMimeType(mimeType, name);
@@ -796,7 +798,7 @@ bool KexiProject::renameObject( KexiMainWindow *wnd, KexiPart::Item& item, const
 		setError(d->connection);
 		return false;
 	}
-	QCString oldName( item.name().latin1() );
+	Q3CString oldName( item.name().latin1() );
 	item.setName( newName );
 	emit itemRenamed(item, oldName);
 	return true;
@@ -828,7 +830,7 @@ KexiPart::Item* KexiProject::createPartItem(KexiPart::Info *info, const QString&
 	}
 	base_name = KexiUtils::string2Identifier(base_name).lower();
 	KexiPart::ItemDictIterator it(*dict);
-	QPtrDictIterator<KexiPart::Item> itUnstored(d->unstoredItems);
+	Q3PtrDictIterator<KexiPart::Item> itUnstored(d->unstoredItems);
 	do {
 		new_name = base_name;
 		if (n>=1)

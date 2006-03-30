@@ -24,8 +24,10 @@
 #include "kexiviewbase.h"
 #include "keximainwindow.h"
 
-#include <qasciidict.h>
+#include <q3asciidict.h>
 #include <qdialog.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 #include <kdebug.h>
 #include <klibloader.h>
@@ -48,8 +50,8 @@ class KexiInternalPartManager
 		{
 			KexiInternalPart *part = m_parts[partName];
 			if (!part) {
-				QCString fullname("kexihandler_");
-				fullname += QCString(partName).lower();
+				Q3CString fullname("kexihandler_");
+				fullname += Q3CString(partName).lower();
 				part = KLibLoader::createInstance<KexiInternalPart>(
 					fullname, 0, fullname);
 				if (!part) {
@@ -64,7 +66,7 @@ class KexiInternalPartManager
 	
 	private:
 		
-		QAsciiDict<KexiInternalPart> m_parts;
+		Q3AsciiDict<KexiInternalPart> m_parts;
 };
 
 KexiInternalPartManager internalPartManager;

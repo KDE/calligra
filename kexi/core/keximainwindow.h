@@ -22,7 +22,10 @@
 #define KEXIMAINWINDOW_H
 
 #include <qmap.h>
-#include <qintdict.h>
+#include <q3intdict.h>
+//Added by qt3to4:
+#include <Q3PopupMenu>
+#include <Q3CString>
 
 #include <k3mdimainfrm.h>
 #include <kexiutils/tristate.h>
@@ -55,7 +58,7 @@ class KEXICORE_EXPORT KexiMainWindow : public KMdiMainFrm, public KexiSharedActi
 		/*! Registers dialog \a dlg for watching and adds it to the main window's stack. */
 		virtual void registerChild(KexiDialogBase *dlg) = 0;
 
-		virtual QPopupMenu* findPopupMenu(const char *popupName) = 0;
+		virtual Q3PopupMenu* findPopupMenu(const char *popupName) = 0;
 
 		/*! Generates ID for private "document" like Relations window.
 		 Private IDs are negative numbers (while ID regular part instance's IDs are >0)
@@ -87,7 +90,7 @@ class KEXICORE_EXPORT KexiMainWindow : public KMdiMainFrm, public KexiSharedActi
 			bool &openingCancelled, QMap<QString,QString>* staticObjectArgs = 0) = 0;
 
 		//! For convenience
-		virtual KexiDialogBase * openObject(const QCString& mime, const QString& name, 
+		virtual KexiDialogBase * openObject(const Q3CString& mime, const QString& name, 
 			int viewMode, bool &openingCancelled, QMap<QString,QString>* staticObjectArgs = 0) = 0;
 
 		/*! Called to accept property butter editing. */
@@ -137,10 +140,10 @@ class KEXICORE_EXPORT KexiMainWindow : public KMdiMainFrm, public KexiSharedActi
 		/*! Highlights object of mime \a mime and name \a name.
 		 This can be done in the Project Navigator or so. 
 		 If a window for the object is opened (in any mode), it should be raised. */
-		virtual void highlightObject(const QCString& mime, const QCString& name) = 0;
+		virtual void highlightObject(const Q3CString& mime, const Q3CString& name) = 0;
 
 	protected slots:
-		virtual void slotObjectRenamed(const KexiPart::Item &item, const QCString& oldName) = 0;
+		virtual void slotObjectRenamed(const KexiPart::Item &item, const Q3CString& oldName) = 0;
 
 };
 

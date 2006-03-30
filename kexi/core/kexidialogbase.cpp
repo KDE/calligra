@@ -33,8 +33,12 @@
 #include <kexidb/utils.h>
 #include <kexiutils/utils.h>
 
-#include <qwidgetstack.h>
-#include <qobjectlist.h>
+#include <q3widgetstack.h>
+#include <qobject.h>
+//Added by qt3to4:
+#include <Q3VBoxLayout>
+#include <QEvent>
+#include <QCloseEvent>
 
 #include <kdebug.h>
 #include <kapplication.h>
@@ -57,8 +61,8 @@ KexiDialogBase::KexiDialogBase(KexiMainWindow *parent, const QString &caption)
 	m_newlySelectedView = 0;
 	m_creatingViewsMode = -1;
 
-	QVBoxLayout *lyr = new QVBoxLayout(this);
-	m_stack = new QWidgetStack(this, "stack");
+	Q3VBoxLayout *lyr = new Q3VBoxLayout(this);
+	m_stack = new Q3WidgetStack(this, "stack");
 	lyr->addWidget(m_stack);
 
 #ifdef KEXI_NO_CTXT_HELP

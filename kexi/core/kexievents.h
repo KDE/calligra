@@ -20,8 +20,10 @@
 #ifndef KFORMDESIGNEREVENTS_H
 #define KFORMDESIGNEREVENTS_H
 
-#include <qvaluelist.h>
-#include <qguardedptr.h>
+#include <q3valuelist.h>
+#include <qpointer.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 class QDomNode;
 class QObject;
@@ -38,10 +40,10 @@ class QObject;
 class KEXICORE_EXPORT Event
 {
 	public:
-		Event(QObject *sender, const QCString &signal,
-			QObject *receiver, const QCString &slot);
-		Event(QObject *sender, const QCString &signal,
-			const QCString &functionName);
+		Event(QObject *sender, const Q3CString &signal,
+			QObject *receiver, const Q3CString &slot);
+		Event(QObject *sender, const Q3CString &signal,
+			const Q3CString &functionName);
 		Event() : m_type(Slot) {;}
 		~Event() {;}
 
@@ -51,23 +53,23 @@ class KEXICORE_EXPORT Event
 
 		QObject*  sender() const { return m_sender; }
 		QObject*  receiver() const { return m_receiver; }
-		QCString  signal() const { return m_signal; }
-		QCString  slot() const { return m_slot; }
+		Q3CString  signal() const { return m_signal; }
+		Q3CString  slot() const { return m_slot; }
 
 		void  setSender(QObject *o) { m_sender = o; }
 		void  setReceiver(QObject *o) { m_receiver = o; }
-		void  setSignal(const QCString &s) { m_signal = s; }
-		void  setSlot(const QCString &s) { m_slot = s; }
+		void  setSignal(const Q3CString &s) { m_signal = s; }
+		void  setSlot(const Q3CString &s) { m_slot = s; }
 
 	protected:
 		QPointer<QObject> m_sender;
-		QCString m_signal;
+		Q3CString m_signal;
 		QPointer<QObject> m_receiver;
-		QCString m_slot;
+		Q3CString m_slot;
 		int  m_type;
 };
 
-class KEXICORE_EXPORT EventList : protected QValueList<Event*>
+class KEXICORE_EXPORT EventList : protected Q3ValueList<Event*>
 {
 	public:
 		EventList() {;}
@@ -76,8 +78,8 @@ class KEXICORE_EXPORT EventList : protected QValueList<Event*>
 		/*! Adds an event in list. Other overload are available, so that
 		 other classes don't have to use Event class in simple cases. */
 		void addEvent(Event *event);
-		void addEvent(QObject *sender, const QCString &signal, QObject *receiver, const QCString &slot);
-		void addEvent(QObject *sender, const QCString &signal, const QCString &action);
+		void addEvent(QObject *sender, const Q3CString &signal, QObject *receiver, const Q3CString &slot);
+		void addEvent(QObject *sender, const Q3CString &signal, const Q3CString &action);
 		/*! Removes the Event \a event from the FormScript's list. */
 		void  removeEvent(Event *event);
 
@@ -90,9 +92,9 @@ class KEXICORE_EXPORT EventList : protected QValueList<Event*>
 		void  removeAllEventsForObject(QObject *object);
 
 		// make some QValueList function accessible by other classes
-		QValueListConstIterator<Event*>  constBegin() const { return QValueList<Event*>::constBegin(); } 
-		QValueListConstIterator<Event*>  constEnd() const { return QValueList<Event*>::constEnd(); } 
-		bool  isEmpty() const { return QValueList<Event*>::isEmpty(); }
+		Q3ValueListConstIterator<Event*>  constBegin() const { return Q3ValueList<Event*>::constBegin(); } 
+		Q3ValueListConstIterator<Event*>  constEnd() const { return Q3ValueList<Event*>::constEnd(); } 
+		bool  isEmpty() const { return Q3ValueList<Event*>::isEmpty(); }
 };
 
 
