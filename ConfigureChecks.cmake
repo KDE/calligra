@@ -51,6 +51,13 @@ else(CARBON_FOUND)
 	set(HAVE_CARBON 0)
 endif(CARBON_FOUND)
 
+if(OPENEXR_FOUND)
+	set(HAVE_OPENEXR 1)
+else(OPENEXR_FOUND)	
+	set(HAVE_OPENEXR 0)
+endif(OPENEXR_FOUND)	
+
+
 #now check for dlfcn.h using the cmake supplied CHECK_include_FILE() macro
 # If definitions like -D_GNU_SOURCE are needed for these checks they
 # should be added to _KDE4_PLATFORM_DEFINITIONS when it is originally
@@ -82,7 +89,7 @@ check_include_files(ndir.h HAVE_NDIR_H)
 check_include_files(sys/dir.h HAVE_SYS_NDIR_H)
 check_include_files(sys/ndir.h HAVE_SYS_NDIR_H)
 check_include_files(sys/param.h HAVE_SYS_PARAM_H)
-
+check_include_files(dirent.h HAVE_DIRENT_H)
 check_function_exists(_NSGetEnviron   HAVE_NSGETENVIRON)
 check_function_exists(initgroups HAVE_INITGROUPS)
 check_function_exists(setenv     HAVE_SETENV)

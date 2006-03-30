@@ -18,7 +18,7 @@
 
 /* Define to 1 if you have the <dirent.h> header file, and it defines `DIR'.
    */
-#define HAVE_DIRENT_H 1
+#cmakedefine HAVE_DIRENT_H 1
 
 /* Define to 1 if you have the <dlfcn.h> header file. */
 #cmakedefine HAVE_DLFCN_H 1
@@ -62,8 +62,6 @@
 /* Define if you have libjpeg */
 #cmakedefine HAVE_LIBJPEG 1
 
-/* If we are going to use libkspell2 for spell-checking */
-#define HAVE_LIBKSPELL2 1
 
 /* Define if you have libpng */
 #cmakedefine HAVE_LIBPNG 1
@@ -100,7 +98,7 @@
 /* #undef HAVE_OLD_GETMAGICKINFOLIST */
 
 /* Defines if your system has the OpenEXR library */
-#define HAVE_OPENEXR 1
+#cmakedefine HAVE_OPENEXR 1
 
 /* Define to 1 if you have the <paper.h> header file. */
 /* #undef HAVE_PAPER_H */
