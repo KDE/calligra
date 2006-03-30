@@ -15,7 +15,7 @@ kde4_add_plugin(asciiimport WITH_PREFIX ${asciiimport_PART_SRCS})
 
 kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} asciiimport )
 
-target_link_libraries(asciiimport  ${KDE4_KDECORE_LIBS} )
+target_link_libraries(asciiimport  ${KDE4_KDEUI_LIBS} kofficecore)
 
 install_targets(${LIB_INSTALL_DIR}/kde4 asciiimport )
 
@@ -32,7 +32,7 @@ kde4_add_plugin(asciiexport WITH_PREFIX ${asciiexport_PART_SRCS})
 
 kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} asciiexport )
 
-target_link_libraries(asciiexport  ${KDE4_KDECORE_LIBS} )
+target_link_libraries(asciiexport  ${KDE4_KDEUI_LIBS} kofficecore)
 
 install_targets(${LIB_INSTALL_DIR}/kde4 asciiexport )
 
