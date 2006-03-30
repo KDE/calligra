@@ -39,8 +39,8 @@ void KexiDBIntSpinBox::setInvalidState( const QString& displayText )
 	setEnabled(false);
 	setReadOnly(true);
 //! @todo move this to KexiDataItemInterface::setInvalidStateInternal() ?
-	if (focusPolicy() & TabFocus)
-		setFocusPolicy(QWidget::ClickFocus);
+	if (focusPolicy() & Qt::TabFocus)
+		setFocusPolicy(Qt::ClickFocus);
 	setSpecialValueText(displayText);
 	KIntSpinBox::setValue(minValue());
 }

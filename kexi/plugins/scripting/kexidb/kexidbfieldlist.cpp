@@ -24,6 +24,8 @@
 #include <api/exception.h>
 
 #include <kdebug.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 using namespace Kross::KexiDB;
 
@@ -79,7 +81,7 @@ Kross::Api::Object::Ptr KexiDBFieldList::field(Kross::Api::List::Ptr args)
 
 Kross::Api::Object::Ptr KexiDBFieldList::fields(Kross::Api::List::Ptr)
 {
-    QValueList<Object::Ptr> list;
+    Q3ValueList<Object::Ptr> list;
     ::KexiDB::Field::ListIterator it( *m_fieldlist->fields() );
     for(; it.current(); ++it)
         list.append( new KexiDBField(it.current()) );
@@ -141,8 +143,8 @@ Kross::Api::Object::Ptr KexiDBFieldList::setFields(Kross::Api::List::Ptr args)
 Kross::Api::Object::Ptr KexiDBFieldList::subList(Kross::Api::List::Ptr args)
 {
     QStringList sl;
-    QValueList<QVariant> list = Kross::Api::Variant::toList( args->item(0) );
-    for(QValueList<QVariant>::Iterator it = list.begin(); it != list.end(); ++it)
+    Q3ValueList<QVariant> list = Kross::Api::Variant::toList( args->item(0) );
+    for(Q3ValueList<QVariant>::Iterator it = list.begin(); it != list.end(); ++it)
         sl.append( (*it).toString() );
     ::KexiDB::FieldList* fl = m_fieldlist->subList(sl);
     return fl ? new Kross::KexiDB::KexiDBFieldList(fl) : 0;

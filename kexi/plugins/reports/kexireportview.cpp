@@ -36,6 +36,9 @@
 
 #include "kexireportform.h"
 #include <utils/kexirecordnavigator.h>
+//Added by qt3to4:
+#include <Q3HBoxLayout>
+#include <QResizeEvent>
 
 #define NO_DSWIZARD
 
@@ -85,7 +88,7 @@ KexiReportView::KexiReportView(KexiMainWindow *win, QWidget *parent, const char 
  : KexiViewBase(win, parent, name), m_propertySet(0), m_conn(conn)
  , m_resizeMode(KexiReportView::ResizeDefault)
 {
-	QHBoxLayout *l = new QHBoxLayout(this);
+	Q3HBoxLayout *l = new Q3HBoxLayout(this);
 	l->setAutoAdd(true);
 
 	m_scrollView = new KexiReportScrollView(this, viewMode()==Kexi::DataViewMode);
@@ -461,7 +464,7 @@ KexiReportView::show()
 	//	if (resizeMode() == KexiFormView::ResizeAuto)
 	if (viewMode()==Kexi::DataViewMode) {
 		if (resizeMode() == ResizeAuto)
-			m_scrollView->setResizePolicy(QScrollView::AutoOneFit);
+			m_scrollView->setResizePolicy(Q3ScrollView::AutoOneFit);
 	}
 }
 

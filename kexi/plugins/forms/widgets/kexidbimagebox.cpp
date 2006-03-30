@@ -28,8 +28,11 @@
 #include <qtooltip.h>
 #include <qimage.h>
 #include <qbuffer.h>
-#include <qfiledialog.h>
+#include <q3filedialog.h>
 #include <qpainter.h>
+//Added by qt3to4:
+#include <QPaintEvent>
+#include <QContextMenuEvent>
 
 #include <kdebug.h>
 #include <kmenu.h>
@@ -67,11 +70,11 @@ class KexiDBImageBox::Button : public QToolButton
 		~Button() {}
 		virtual void drawButton( QPainter *p ) {
 			QToolButton::drawButton(p);
-			QStyle::SFlags arrowFlags = QStyle::Style_Default;
+			QStyle::State arrowFlags = QStyle::State_None;
 			if (isDown())
-				arrowFlags |= QStyle::Style_Down;
+				arrowFlags |= QStyle::State_DownArrow;
 			if (isEnabled())
-				arrowFlags |= QStyle::Style_Enabled;
+				arrowFlags |= QStyle::State_Enabled;
 			style().drawPrimitive(QStyle::PE_ArrowDown, p,
 				QRect((width()-7)/2, height()-9, 7, 7), colorGroup(),
 				arrowFlags, QStyleOption() );
@@ -81,7 +84,7 @@ class KexiDBImageBox::Button : public QToolButton
 /////////
 
 KexiDBImageBox::KexiDBImageBox( bool designMode, QWidget *parent, const char *name )
-	: QWidget( parent, name, WNoAutoErase )
+	: QWidget( parent, name, Qt::WNoAutoErase )
 	, KexiFormDataItemInterface()
 	, m_actionCollection(this)
 	, m_alignment(Qt::AlignLeft|Qt::AlignTop)
@@ -311,7 +314,7 @@ void KexiDBImageBox::insertFromFile()
 
 #ifdef Q_WS_WIN
 	QString recentDir;
-	QString fileName = QFileDialog::getOpenFileName(
+	QString fileName = Q3FileDialog::getOpenFileName(
 		KFileDialog::getStartURL(":LastVisitedImagePath", recentDir).path(), 
 		convertKFileDialogFilterToQFileDialogFilter(KImageIO::pattern(KImageIO::Reading)), 
 		this, 0, i18n("Insert Image From File"));
@@ -387,7 +390,7 @@ void KexiDBImageBox::saveAs()
 #ifdef Q_WS_WIN
 	QString recentDir;
 
-	QString fileName = QFileDialog::getSaveFileName(
+	QString fileName = Q3FileDialog::getSaveFileName(
 		KFileDialog::getStartURL(":LastVisitedImagePath", recentDir).path()
 		+"/"+m_data.originalFileName(), 
 		convertKFileDialogFilterToQFileDialogFilter(KImageIO::pattern(KImageIO::Writing)), 
@@ -660,7 +663,7 @@ void KexiDBImageBox::paintEvent( QPaintEvent*pe )
 			if (m_scaledContents) {
 				if (m_keepAspectRatio) {
 					QImage img(pixmap().convertToImage());
-					img = img.smoothScale(width(), height(), QImage::ScaleMin);
+					img = img.smoothScale(width(), height(), Qt::KeepAspectRatio);
 					QPoint pos(0,0);
 					if (img.width()<width()) {
 						int hAlign = QApplication::horizontalAlignment( m_alignment );

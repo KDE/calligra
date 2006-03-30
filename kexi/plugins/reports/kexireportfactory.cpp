@@ -16,8 +16,12 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
 */
-#include <qpopupmenu.h>
-#include <qvaluevector.h>
+#include <q3popupmenu.h>
+#include <q3valuevector.h>
+//Added by qt3to4:
+#include <QLabel>
+#include <Q3ValueList>
+#include <Q3CString>
 
 #include <kgenericfactory.h>
 #include <klocale.h>
@@ -93,7 +97,7 @@ KexiReportFactory::name()
 }
 
 QWidget*
-KexiReportFactory::createWidget(const QCString &c, QWidget *p, const char *n, 
+KexiReportFactory::createWidget(const Q3CString &c, QWidget *p, const char *n, 
 	KFormDesigner::Container *container, int options)
 {
 	Q_UNUSED(options);
@@ -114,8 +118,8 @@ KexiReportFactory::createWidget(const QCString &c, QWidget *p, const char *n,
 }
 
 bool
-KexiReportFactory::createMenuActions(const QCString &classname, QWidget *w, 
-	QPopupMenu *menu,	KFormDesigner::Container *container)
+KexiReportFactory::createMenuActions(const Q3CString &classname, QWidget *w, 
+	Q3PopupMenu *menu,	KFormDesigner::Container *container)
 {
 	Q_UNUSED(w);
 	Q_UNUSED(container);
@@ -128,7 +132,7 @@ KexiReportFactory::createMenuActions(const QCString &classname, QWidget *w,
 }
 
 bool
-KexiReportFactory::startEditing(const QCString &c, QWidget *w, KFormDesigner::Container *container)
+KexiReportFactory::startEditing(const Q3CString &c, QWidget *w, KFormDesigner::Container *container)
 {
 	m_container = container;
 
@@ -146,7 +150,7 @@ KexiReportFactory::startEditing(const QCString &c, QWidget *w, KFormDesigner::Co
 }
 
 bool
-KexiReportFactory::isPropertyVisibleInternal(const QCString &classname, QWidget *w, const QCString &property, bool isTopLevel)
+KexiReportFactory::isPropertyVisibleInternal(const Q3CString &classname, QWidget *w, const Q3CString &property, bool isTopLevel)
 {
 	if(classname == "Label") {
 		if(property == "pixmap")
@@ -160,10 +164,10 @@ KexiReportFactory::isPropertyVisibleInternal(const QCString &classname, QWidget 
 	return WidgetFactory::isPropertyVisibleInternal(classname, w, property, isTopLevel);
 }
 
-QValueList<QCString>
-KexiReportFactory::autoSaveProperties(const QCString &classname)
+Q3ValueList<Q3CString>
+KexiReportFactory::autoSaveProperties(const Q3CString &classname)
 {
-	QValueList<QCString> l;
+	Q3ValueList<Q3CString> l;
 
 	if(classname == "Label")
 		l << "text";
@@ -200,7 +204,7 @@ KexiReportFactory::resizeEditor(QWidget *widget, const QCString &)
 void
 KexiReportFactory::editText()
 {
-	QCString classname = m_widget->className();
+	Q3CString classname = m_widget->className();
 	QString text;
 
 	if(classname == "Label")
@@ -216,7 +220,7 @@ KexiReportFactory::editText()
 }
 
 bool
-KexiReportFactory::previewWidget(const QCString &, QWidget *, KFormDesigner::Container *)
+KexiReportFactory::previewWidget(const Q3CString &, QWidget *, KFormDesigner::Container *)
 {
 	return false;
 }

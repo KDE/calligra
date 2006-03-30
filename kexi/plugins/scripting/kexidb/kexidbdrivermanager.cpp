@@ -25,7 +25,7 @@
 
 #include <api/exception.h>
 
-#include <qguardedptr.h>
+#include <qpointer.h>
 #include <kdebug.h>
 #include <kmimetype.h>
 

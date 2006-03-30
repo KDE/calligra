@@ -23,6 +23,8 @@
 
 #include <kexiviewbase.h>
 #include "kexiquerypart.h"
+//Added by qt3to4:
+#include <QEvent>
 
 class KexiQueryDesignerSQLEditor;
 class KexiQueryDesignerSQLViewPrivate;

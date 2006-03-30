@@ -22,7 +22,10 @@
 #define KexiDBDateEdit_H
 
 #include "kexiformdataiteminterface.h"
-#include <qdatetimeedit.h>
+#include <q3datetimeedit.h>
+//Added by qt3to4:
+#include <QEvent>
+#include <Q3CString>
 
 class KMenu;
 class KDatePicker;
@@ -33,7 +36,7 @@ class KEXIFORMUTILS_EXPORT KexiDBDateEdit : public QWidget, public KexiFormDataI
 {
 	Q_OBJECT
 	Q_PROPERTY(QString dataSource READ dataSource WRITE setDataSource DESIGNABLE true)
-	Q_PROPERTY(QCString dataSourceMimeType READ dataSourceMimeType WRITE setDataSourceMimeType DESIGNABLE true)
+	Q_PROPERTY(Q3CString dataSourceMimeType READ dataSourceMimeType WRITE setDataSourceMimeType DESIGNABLE true)
 	// properties copied from QDateEdit
 	Q_ENUMS( Order )
 	Q_PROPERTY( Order order READ order WRITE setOrder DESIGNABLE true)
@@ -44,13 +47,13 @@ class KEXIFORMUTILS_EXPORT KexiDBDateEdit : public QWidget, public KexiFormDataI
 	Q_PROPERTY( bool readOnly READ isReadOnly WRITE setReadOnly DESIGNABLE true )
 
 	public:
-		enum Order { DMY = QDateEdit::DMY, MDY = QDateEdit::MDY, YMD = QDateEdit::YMD,  YDM = QDateEdit::YDM };
+		enum Order { DMY = Q3DateEdit::DMY, MDY = Q3DateEdit::MDY, YMD = Q3DateEdit::YMD,  YDM = Q3DateEdit::YDM };
 
 		KexiDBDateEdit(const QDate &date, QWidget *parent, const char *name=0);
 		virtual ~KexiDBDateEdit();
 
 		inline QString dataSource() const { return KexiFormDataItemInterface::dataSource(); }
-		inline QCString dataSourceMimeType() const { return KexiFormDataItemInterface::dataSourceMimeType(); }
+		inline Q3CString dataSourceMimeType() const { return KexiFormDataItemInterface::dataSourceMimeType(); }
 		virtual QVariant value();
 		virtual void setInvalidState( const QString& displayText );
 
@@ -78,7 +81,7 @@ class KEXIFORMUTILS_EXPORT KexiDBDateEdit : public QWidget, public KexiFormDataI
 
 		// property functions
 		inline QDate date() const { return m_edit->date(); }
-		inline void setOrder(Order order) { m_edit->setOrder( (QDateEdit::Order) order); }
+		inline void setOrder(Order order) { m_edit->setOrder( (Q3DateEdit::Order) order); }
 		inline Order order() const { return (Order)m_edit->order(); }
 		inline void setAutoAdvance( bool advance ) { m_edit->setAutoAdvance(advance); }
 		inline bool autoAdvance() const { return m_edit->autoAdvance(); }
@@ -92,7 +95,7 @@ class KEXIFORMUTILS_EXPORT KexiDBDateEdit : public QWidget, public KexiFormDataI
 
 	public slots:
 		inline void setDataSource(const QString &ds) { KexiFormDataItemInterface::setDataSource(ds); }
-		inline void setDataSourceMimeType(const QCString &ds) { KexiFormDataItemInterface::setDataSourceMimeType(ds); }
+		inline void setDataSourceMimeType(const Q3CString &ds) { KexiFormDataItemInterface::setDataSourceMimeType(ds); }
 		inline void setDate(const QDate& date)  { m_edit->setDate(date); }
 		virtual void setReadOnly(bool set);
 
@@ -107,7 +110,7 @@ class KEXIFORMUTILS_EXPORT KexiDBDateEdit : public QWidget, public KexiFormDataI
 
 	private:
 		KDatePicker *m_datePicker;
-		QDateEdit *m_edit;
+		Q3DateEdit *m_edit;
 		KMenu *m_datePickerPopupMenu;
 		QDateTimeEditor *m_dte_date;
 		bool m_invalidState : 1;

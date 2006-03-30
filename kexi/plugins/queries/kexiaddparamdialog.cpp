@@ -20,7 +20,7 @@
 #include <klocale.h>
 #include <kcombobox.h>
 #include <klineedit.h>
-#include <qvbox.h>
+#include <q3vbox.h>
 #include <kexidataprovider.h>
 #include "kexiaddparamdialog.h"
 #include "kexiaddparamdialog.moc"

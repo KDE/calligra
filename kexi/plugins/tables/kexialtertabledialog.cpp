@@ -22,6 +22,8 @@
 #include <qlayout.h>
 #include <qlabel.h>
 #include <qsplitter.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 #include <kiconloader.h>
 #include <kdebug.h>
@@ -140,9 +142,9 @@ KexiAlterTableDialog::KexiAlterTableDialog(KexiMainWindow *win, QWidget *parent,
 
 #ifdef KEXI_NO_BLOB_FIELDS
 //! @todo remove this later
-	QValueVector<QString> types(KexiDB::Field::LastTypeGroup-1); //don't show last type (BLOB)
+	Q3ValueVector<QString> types(KexiDB::Field::LastTypeGroup-1); //don't show last type (BLOB)
 #else
-	QValueVector<QString> types(KexiDB::Field::LastTypeGroup);
+	Q3ValueVector<QString> types(KexiDB::Field::LastTypeGroup);
 #endif
 	d->maxTypeNameTextWidth = 0;
 	QFontMetrics fm(font());
@@ -790,7 +792,7 @@ void KexiAlterTableDialog::updateActions()
 
 void KexiAlterTableDialog::slotPropertyChanged(KoProperty::Set& set, KoProperty::Property& property)
 {
-	const QCString pname = property.name();
+	const Q3CString pname = property.name();
 	kexipluginsdbg << "KexiAlterTableDialog::slotPropertyChanged(): " << pname << " = " << property.value() << endl;
 	if (pname=="primaryKey" && d->slotPropertyChanged_primaryQt::Key_enabled) {
 		d->slotPropertyChanged_primaryQt::Key_enabled = false;
@@ -943,7 +945,7 @@ tristate KexiAlterTableDialog::buildSchema(KexiDB::TableSchema &schema)
 	KoProperty::Set *b = 0;
 	bool no_fields = true;
 	int i;
-	QDict<char> names(101, false);
+	Q3Dict<char> names(101, false);
 	char dummy;
 	for (i=0;i<(int)d->sets->size();i++) {
 		b = d->sets->at(i);

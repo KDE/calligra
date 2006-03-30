@@ -21,11 +21,14 @@
 #define KexiDBTextWidgetInterface_H
 
 #include <widget/utils/kexidisplayutils.h>
+//Added by qt3to4:
+#include <Q3Frame>
+#include <QEvent>
 
 namespace KexiDB {
 	class QueryColumnInfo;
 }
-class QFrame;
+class Q3Frame;
 
 //! Interface for a few text editor's features
 class KEXIFORMUTILS_EXPORT KexiDBTextWidgetInterface
@@ -39,7 +42,7 @@ class KEXIFORMUTILS_EXPORT KexiDBTextWidgetInterface
 			delete m_autonumberDisplayParameters;
 		}
 		void setColumnInfo(KexiDB::QueryColumnInfo* cinfo, QWidget *w);
-		void paintEvent( QFrame *w, bool textIsEmpty, int alignment, bool hasFocus );
+		void paintEvent( Q3Frame *w, bool textIsEmpty, int alignment, bool hasFocus );
 		void event( QEvent * e, QWidget *w, bool textIsEmpty );
 
 		//! parameters for displaying autonumber sign

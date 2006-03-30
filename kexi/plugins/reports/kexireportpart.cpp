@@ -40,6 +40,8 @@
 
 #include "kexireportview.h"
 #include "kexireportpart.h"
+//Added by qt3to4:
+#include <Q3CString>
 
 KFormDesigner::WidgetLibrary* KexiReportPart::static_reportsLibrary = 0L;
 
@@ -116,7 +118,7 @@ KexiReportPart::createView(QWidget *parent, KexiDialogBase* dialog,
 }
 
 QString
-KexiReportPart::i18nMessage(const QCString& englishMessage, KexiDialogBase* dlg) const
+KexiReportPart::i18nMessage(const Q3CString& englishMessage, KexiDialogBase* dlg) const
 {
 	Q_UNUSED(dlg);
 	if (englishMessage=="Design of object \"%1\" has been modified.")

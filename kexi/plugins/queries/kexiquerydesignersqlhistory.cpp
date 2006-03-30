@@ -21,6 +21,8 @@
 #include <qpainter.h>
 #include <qclipboard.h>
 #include <qregexp.h>
+//Added by qt3to4:
+#include <QMouseEvent>
 
 #include <kmenu.h>
 #include <klocale.h>
@@ -32,9 +34,9 @@
 #include "kexiquerydesignersqlhistory.h"
 
 KexiQueryDesignerSQLHistory::KexiQueryDesignerSQLHistory(QWidget *parent, const char *name)
- : QScrollView(parent, name)
+ : Q3ScrollView(parent, name)
 {
-	viewport()->setPaletteBackgroundColor(white);
+	viewport()->setPaletteBackgroundColor(Qt::white);
 
 	m_selected = 0;
 	m_history = new History();
@@ -74,7 +76,7 @@ KexiQueryDesignerSQLHistory::contentsMousePressEvent(QMouseEvent * e)
 	int y = 0;
 	HistoryEntry *popupHistory = 0;
 	int pos;
-	for(QPtrListIterator<HistoryEntry> it(*m_history); it.current(); ++it)
+	for(Q3PtrListIterator<HistoryEntry> it(*m_history); it.current(); ++it)
 	{
 		if(it.current()->isSelected())
 		{
@@ -340,7 +342,7 @@ HistoryEntry::highlight(const QColorGroup &cg)
 
 	kDebug() << "HistoryEntry::highlight() text:" << text << endl;
 //	m_formated = new QSimpleRichText(text, QFont("courier", 8));
-	m_formated = new QSimpleRichText(text, KGlobalSettings::fixedFont());
+	m_formated = new Q3SimpleRichText(text, KGlobalSettings::fixedFont());
 
 }
 

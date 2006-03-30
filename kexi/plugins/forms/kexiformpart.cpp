@@ -51,6 +51,8 @@
 #include "kexiformmanager.h"
 #include "kexiformpart.h"
 #include "kexidatasourcepage.h"
+//Added by qt3to4:
+#include <Q3CString>
 
 //! @todo #define KEXI_SHOW_SPLITTER_WIDGET
 
@@ -105,8 +107,8 @@ KexiFormPart::KexiFormPart(QObject *parent, const char *name, const QStringList 
 		formManager, supportedFactoryGroups);
 	static_formsLibrary->setAdvancedPropertiesVisible(false);
 
-	connect(KFormDesigner::FormManager::self()->propertySet(), SIGNAL(widgetPropertyChanged(QWidget *, const QCString &, const QVariant&)),
-		this, SLOT(slotPropertyChanged(QWidget *, const QCString &, const QVariant&)));
+	connect(KFormDesigner::FormManager::self()->propertySet(), SIGNAL(widgetPropertyChanged(QWidget *, const Q3CString &, const QVariant&)),
+		this, SLOT(slotPropertyChanged(QWidget *, const Q3CString &, const QVariant&)));
 	connect(KFormDesigner::FormManager::self(), SIGNAL(autoTabStopsSet(KFormDesigner::Form*,bool)),
 		this, SLOT(slotAutoTabStopsSet(KFormDesigner::Form*,bool)));
 }
@@ -154,7 +156,7 @@ void KexiFormPart::initPartActions()
 void KexiFormPart::initInstanceActions()
 {
 #ifdef KEXI_SHOW_DEBUG_ACTIONS
-	new KAction(i18n("Show Form UI Code"), "compfile", CTRL+Qt::Key_U, KFormDesigner::FormManager::self(), SLOT(showFormUICode()),
+	new KAction(i18n("Show Form UI Code"), "compfile", Qt::CTRL+Qt::Key_U, KFormDesigner::FormManager::self(), SLOT(showFormUICode()),
 		actionCollectionForMode(Kexi::DesignViewMode), "show_form_ui");
 #endif
 
@@ -423,7 +425,7 @@ void KexiFormPart::slotAssignAction()
 }
 
 QString
-KexiFormPart::i18nMessage(const QCString& englishMessage, KexiDialogBase* dlg) const
+KexiFormPart::i18nMessage(const Q3CString& englishMessage, KexiDialogBase* dlg) const
 {
 	Q_UNUSED(dlg);
 	if (englishMessage=="Design of object \"%1\" has been modified.")
@@ -435,7 +437,7 @@ KexiFormPart::i18nMessage(const QCString& englishMessage, KexiDialogBase* dlg) c
 }
 
 void
-KexiFormPart::slotPropertyChanged(QWidget *w, const QCString &name, const QVariant &value)
+KexiFormPart::slotPropertyChanged(QWidget *w, const Q3CString &name, const QVariant &value)
 {
 	Q_UNUSED( w );
 
@@ -470,10 +472,10 @@ void KexiFormPart::setupCustomPropertyPanelTabs(KTabWidget *tab, KexiMainWindow*
 		d->objectTreeView = new KFormDesigner::ObjectTreeView(0, "KexiFormPart:ObjectTreeView");
 		KFormDesigner::FormManager::self()->setObjectTreeView(d->objectTreeView); //important: assign to manager
 		d->dataSourcePage = new KexiDataSourcePage(0, "dataSourcePage");
-		connect(d->dataSourcePage, SIGNAL(jumpToObjectRequested(const QCString&, const QCString&)),
-			mainWin, SLOT(highlightObject(const QCString&, const QCString&)));
-		connect(d->dataSourcePage, SIGNAL(formDataSourceChanged(const QCString&, const QCString&)),
-			KFormDesigner::FormManager::self(), SLOT(setFormDataSource(const QCString&, const QCString&)));
+		connect(d->dataSourcePage, SIGNAL(jumpToObjectRequested(const Q3CString&, const Q3CString&)),
+			mainWin, SLOT(highlightObject(const Q3CString&, const Q3CString&)));
+		connect(d->dataSourcePage, SIGNAL(formDataSourceChanged(const Q3CString&, const Q3CString&)),
+			KFormDesigner::FormManager::self(), SLOT(setFormDataSource(const Q3CString&, const Q3CString&)));
 		connect(d->dataSourcePage, SIGNAL(dataSourceFieldOrExpressionChanged(const QString&, const QString&, KexiDB::Field::Type)),
 			KFormDesigner::FormManager::self(), SLOT(setDataSourceFieldOrExpression(const QString&, const QString&, KexiDB::Field::Type)));
 		connect(d->dataSourcePage, SIGNAL(insertAutoFields(const QString&, const QString&, const QStringList&)), 

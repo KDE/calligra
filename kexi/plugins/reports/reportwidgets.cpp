@@ -17,6 +17,11 @@
  * Boston, MA 02110-1301, USA.
 */
 #include <qpainter.h>
+//Added by qt3to4:
+#include <QPixmap>
+#include <QLabel>
+#include <Q3Frame>
+#include <QPaintEvent>
 
 #include <form.h>
 #include <formIO.h>
@@ -31,7 +36,7 @@
 Label::Label(const QString &text, QWidget *parent, const char *name)
 : QLabel(text, parent, name)
 {
-	setPaletteBackgroundColor(white);
+	setPaletteBackgroundColor(Qt::white);
 }
 
 ////////////////////////////////////////////////////////////////////
@@ -43,7 +48,7 @@ ReportLine::ReportLine(QWidget *parent, const char *name)
 	m_lineWidth = 1;
 	m_capStyle = (CapStyle)Qt::FlatCap;
 	m_color = paletteForegroundColor();
-	setPaletteBackgroundColor(white);
+	setPaletteBackgroundColor(Qt::white);
 }
 
 ReportLine::ReportLineStyle
@@ -118,7 +123,7 @@ PicLabel::PicLabel(const QPixmap &pix, QWidget *parent, const char *name)
 {
 	setPixmap(pix);
 	setScaledContents(false);
-	setPaletteBackgroundColor(white);
+	setPaletteBackgroundColor(Qt::white);
 }
 
 bool
@@ -132,10 +137,10 @@ PicLabel::setProperty(const char *name, const QVariant &value)
 ////////////////////////////////////////////////////////////////////
 
 KexiSubReport::KexiSubReport(QWidget *parent, const char *name)
-: QScrollView(parent, name), m_form(0), m_widget(0)
+: Q3ScrollView(parent, name), m_form(0), m_widget(0)
 {
-	setFrameStyle(QFrame::Plain | QFrame::Box);
-	viewport()->setPaletteBackgroundColor(white);
+	setFrameStyle(Q3Frame::Plain | Q3Frame::Box);
+	viewport()->setPaletteBackgroundColor(Qt::white);
 }
 
 void

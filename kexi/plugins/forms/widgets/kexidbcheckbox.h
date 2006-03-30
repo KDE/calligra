@@ -23,20 +23,22 @@
 
 #include "kexiformdataiteminterface.h"
 #include <qcheckbox.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 //! A db-aware check box
 class KEXIFORMUTILS_EXPORT KexiDBCheckBox : public QCheckBox, public KexiFormDataItemInterface
 {
 	Q_OBJECT
 	Q_PROPERTY(QString dataSource READ dataSource WRITE setDataSource DESIGNABLE true)
-	Q_PROPERTY(QCString dataSourceMimeType READ dataSourceMimeType WRITE setDataSourceMimeType DESIGNABLE true)
+	Q_PROPERTY(Q3CString dataSourceMimeType READ dataSourceMimeType WRITE setDataSourceMimeType DESIGNABLE true)
 
 	public:
 		KexiDBCheckBox(const QString &text, QWidget *parent, const char *name=0);
 		virtual ~KexiDBCheckBox();
 
 		inline QString dataSource() const { return KexiFormDataItemInterface::dataSource(); }
-		inline QCString dataSourceMimeType() const { return KexiFormDataItemInterface::dataSourceMimeType(); }
+		inline Q3CString dataSourceMimeType() const { return KexiFormDataItemInterface::dataSourceMimeType(); }
 		virtual QVariant value();
 		virtual void setInvalidState( const QString& displayText );
 
@@ -64,7 +66,7 @@ class KEXIFORMUTILS_EXPORT KexiDBCheckBox : public QCheckBox, public KexiFormDat
 
 	public slots:
 		inline void setDataSource(const QString &ds) { KexiFormDataItemInterface::setDataSource(ds); }
-		inline void setDataSourceMimeType(const QCString &ds) { KexiFormDataItemInterface::setDataSourceMimeType(ds); }
+		inline void setDataSourceMimeType(const Q3CString &ds) { KexiFormDataItemInterface::setDataSourceMimeType(ds); }
 		void slotStateChanged(int state);
 
 	protected:

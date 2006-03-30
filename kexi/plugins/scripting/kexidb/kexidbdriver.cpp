@@ -23,8 +23,8 @@
 #include "kexidbconnection.h"
 #include "kexidbconnectiondata.h"
 
-#include <qvaluelist.h>
-#include <qptrlist.h>
+#include <q3valuelist.h>
+#include <q3ptrlist.h>
 #include <kdebug.h>
 
 #include <kexidb/connection.h>
@@ -95,7 +95,7 @@ KexiDBDriver::KexiDBDriver(::KexiDB::Driver* driver)
 
     // Return a list of KexiDBConnection objects.
     this->addProxyFunction< 
-        Kross::Api::ProxyValue< Kross::Api::ListT<Kross::KexiDB::KexiDBConnection, ::KexiDB::Connection>, const QPtrList< ::KexiDB::Connection> > >
+        Kross::Api::ProxyValue< Kross::Api::ListT<Kross::KexiDB::KexiDBConnection, ::KexiDB::Connection>, const Q3PtrList< ::KexiDB::Connection> > >
         ("connectionsList", driver, &::KexiDB::Driver::connectionsList );
 }
 

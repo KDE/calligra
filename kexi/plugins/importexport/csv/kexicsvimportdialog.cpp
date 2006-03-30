@@ -25,7 +25,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <qbuttongroup.h>
+#include <q3buttongroup.h>
 #include <qcheckbox.h>
 #include <qclipboard.h>
 #include <qlabel.h>
@@ -33,13 +33,23 @@
 #include <qmime.h>
 #include <qpushbutton.h>
 #include <qradiobutton.h>
-#include <qtable.h>
+#include <q3table.h>
 #include <qlayout.h>
-#include <qfiledialog.h>
+#include <q3filedialog.h>
 #include <qpainter.h>
 #include <qtextcodec.h>
 #include <qtimer.h>
 #include <qfontmetrics.h>
+//Added by qt3to4:
+#include <Q3VBoxLayout>
+#include <Q3Frame>
+#include <QKeyEvent>
+#include <QEvent>
+#include <QTextStream>
+#include <Q3GridLayout>
+#include <Q3CString>
+#include <Q3ValueList>
+#include <QPixmap>
 
 #include <kapplication.h>
 #include <kdebug.h>
@@ -98,11 +108,11 @@
 #define _FP_NUMBER_TYPE 255 //_NUMBER_TYPE variant
 #define MAX_COLUMNS 100 //max 100 columns is reasonable
 
-class KexiCSVImportDialogTable : public QTable
+class KexiCSVImportDialogTable : public Q3Table
 {
 public:
 	KexiCSVImportDialogTable( QWidget * parent = 0, const char * name = 0 )
-	: QTable(parent, name) {
+	: Q3Table(parent, name) {
 		f = font();
 		f.setBold(true);
 	}
@@ -111,11 +121,11 @@ public:
 			p->setFont(f);
 		else
 			p->setFont(font());
-		QTable::paintCell(p, row, col, cr, selected, cg);
+		Q3Table::paintCell(p, row, col, cr, selected, cg);
 	}
 	virtual void setColumnWidth( int col, int w ) {
 		//make columns a bit wider
-		QTable::setColumnWidth( col, w + 16 );
+		Q3Table::setColumnWidth( col, w + 16 );
 	}
 	QFont f;
 };
@@ -190,7 +200,7 @@ KexiCSVImportDialog::KexiCSVImportDialog( Mode mode, KexiMainWindow* mainWin,
 	m_file = 0;
 	m_inputStream = 0;
 	
-	QVBoxLayout *lyr = new QVBoxLayout(plainPage(), 0, KDialogBase::spacingHint(), "lyr");
+	Q3VBoxLayout *lyr = new Q3VBoxLayout(plainPage(), 0, KDialogBase::spacingHint(), "lyr");
 
 	m_infoLbl = new KexiCSVInfoLabel(
 		m_mode==File ? i18n("Preview of data from file:")
@@ -199,8 +209,8 @@ KexiCSVImportDialog::KexiCSVImportDialog( Mode mode, KexiMainWindow* mainWin,
 	);
 	lyr->addWidget( m_infoLbl );
 
-	QWidget* page = new QFrame( plainPage(), "page" );
-	QGridLayout *glyr= new QGridLayout( page, 4, 5, 0, KDialogBase::spacingHint(), "glyr");
+	QWidget* page = new Q3Frame( plainPage(), "page" );
+	Q3GridLayout *glyr= new Q3GridLayout( page, 4, 5, 0, KDialogBase::spacingHint(), "glyr");
 	lyr->addWidget( page );
 
 	// Delimiter: comma, semicolon, tab, space, other
@@ -301,7 +311,7 @@ if ( m_mode == Clipboard )
 #ifdef Q_WS_WIN
 		//! @todo remove
 		QString recentDir = KGlobalSettings::documentPath();
-		m_fname = QFileDialog::getOpenFileName( 
+		m_fname = Q3FileDialog::getOpenFileName( 
 			KFileDialog::getStartURL(":CSVImportExport", recentDir).path(),
 			KexiUtils::fileDialogFilterStrings(mimetypes, false),
 			page, "KexiCSVImportDialog", i18n("Open CSV Data File"));
@@ -326,7 +336,7 @@ if ( m_mode == Clipboard )
 		}
 	}
 	else if (m_mode == Clipboard) {
-		QCString subtype("plain");
+		Q3CString subtype("plain");
 		m_data = QApplication::clipboard()->text(subtype, QClipboard::Clipboard);
 /* debug
 		for (int i=0;QApplication::clipboard()->data(QClipboard::Clipboard)->format(i);i++)
@@ -353,7 +363,7 @@ if ( m_mode == Clipboard )
 	}
 	updateRowCountInfo();
 
-	m_table->setSelectionMode(QTable::NoSelection);
+	m_table->setSelectionMode(Q3Table::NoSelection);
 
 	connect(m_formatCombo, SIGNAL(activated(int)),
 	  this, SLOT(formatChanged(int)));
@@ -827,10 +837,10 @@ void KexiCSVImportDialog::updateColumnText(int col)
 	m_table->horizontalHeader()->adjustHeaderSize();
 
 	//check uniqueness
-	QValueList<int> *list = m_uniquenessTest[col];
+	Q3ValueList<int> *list = m_uniquenessTest[col];
 	if (m_primaryKeyColumn==-1 && list && !list->isEmpty()) {
 		qHeapSort(*list);
-		QValueList<int>::ConstIterator it=list->constBegin();
+		Q3ValueList<int>::ConstIterator it=list->constBegin();
 		int prevValue = *it;
 		++it;
 		for(; it!=list->constEnd() && prevValue!=(*it); ++it)
@@ -929,10 +939,10 @@ void KexiCSVImportDialog::detectTypeAndUniqueness(int row, int col, const QStrin
 		//default: text type (already set)
 	}
 	//check uniqueness for this value
-	QValueList<int> *list = m_uniquenessTest[col];
+	Q3ValueList<int> *list = m_uniquenessTest[col];
 	if (row==1 && (!list || !list->isEmpty()) && !text.isEmpty() && _NUMBER_TYPE == m_detectedTypes[col]) {
 		if (!list) {
-			list = new QValueList<int>();
+			list = new Q3ValueList<int>();
 			m_uniquenessTest.insert(col, list);
 		}
 		list->append( intValue );

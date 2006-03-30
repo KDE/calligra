@@ -24,6 +24,8 @@
 #include <kexi.h>
 #include <kexipart.h>
 #include <kexidialogbase.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 namespace KFormDesigner
 {
@@ -66,7 +68,7 @@ class KEXIREPORTUTILS_EXPORT KexiReportPart : public KexiPart::Part
 				int resizeMode; //!< form's window's resize mode -one of KexiFormView::ResizeMode items
 		};
 
-		virtual QString i18nMessage(const QCString& englishMessage, 
+		virtual QString i18nMessage(const Q3CString& englishMessage, 
 			KexiDialogBase* dlg) const;
 
 	protected:

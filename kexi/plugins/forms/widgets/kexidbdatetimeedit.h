@@ -22,7 +22,10 @@
 #define KexiDBDateTimeEdit_H
 
 #include "kexiformdataiteminterface.h"
-#include <qdatetimeedit.h>
+#include <q3datetimeedit.h>
+//Added by qt3to4:
+#include <QEvent>
+#include <Q3CString>
 
 class KDatePicker;
 class QDateTimeEditor;
@@ -33,7 +36,7 @@ class KEXIFORMUTILS_EXPORT KexiDBDateTimeEdit : public QWidget, public KexiFormD
 {
 	Q_OBJECT
 	Q_PROPERTY(QString dataSource READ dataSource WRITE setDataSource DESIGNABLE true)
-	Q_PROPERTY(QCString dataSourceMimeType READ dataSourceMimeType WRITE setDataSourceMimeType DESIGNABLE true)
+	Q_PROPERTY(Q3CString dataSourceMimeType READ dataSourceMimeType WRITE setDataSourceMimeType DESIGNABLE true)
 	// properties copied from QDateTimeEdit
 	Q_PROPERTY( QDateTime dateTime READ dateTime WRITE setDateTime )
 	Q_PROPERTY( bool readOnly READ isReadOnly WRITE setReadOnly DESIGNABLE true )
@@ -45,7 +48,7 @@ class KEXIFORMUTILS_EXPORT KexiDBDateTimeEdit : public QWidget, public KexiFormD
 		virtual ~KexiDBDateTimeEdit();
 
 		inline QString dataSource() const { return KexiFormDataItemInterface::dataSource(); }
-		inline QCString dataSourceMimeType() const { return KexiFormDataItemInterface::dataSourceMimeType(); }
+		inline Q3CString dataSourceMimeType() const { return KexiFormDataItemInterface::dataSourceMimeType(); }
 		virtual QVariant value();
 		virtual void setInvalidState( const QString& displayText );
 
@@ -79,7 +82,7 @@ class KEXIFORMUTILS_EXPORT KexiDBDateTimeEdit : public QWidget, public KexiFormD
 
 	public slots:
 		inline void setDataSource(const QString &ds) { KexiFormDataItemInterface::setDataSource(ds); }
-		inline void setDataSourceMimeType(const QCString &ds) { KexiFormDataItemInterface::setDataSourceMimeType(ds); }
+		inline void setDataSourceMimeType(const Q3CString &ds) { KexiFormDataItemInterface::setDataSourceMimeType(ds); }
 		void setDateTime(const QDateTime &dt);
 		virtual void setReadOnly(bool set);
 
@@ -94,8 +97,8 @@ class KEXIFORMUTILS_EXPORT KexiDBDateTimeEdit : public QWidget, public KexiFormD
 
 	private:
 		KDatePicker *m_datePicker;
-		QDateEdit* m_dateEdit;
-		QTimeEdit* m_timeEdit;
+		Q3DateEdit* m_dateEdit;
+		Q3TimeEdit* m_timeEdit;
 		QDateTimeEditor *m_dte_date, *m_dte_time;
 		KMenu *m_datePickerPopupMenu;
 		bool m_invalidState : 1;

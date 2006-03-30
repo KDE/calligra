@@ -21,11 +21,11 @@
 #include "kexidynamicqueryparameterdialog.h"
 #include "kexidynamicqueryparameterdialog.moc"
 
-#include <qvbox.h>
+#include <q3vbox.h>
 #include <klocale.h>
 #include <kdebug.h>
 #include <qlineedit.h>
-#include <qobjectlist.h>
+#include <qobject.h>
 
 KexiDynamicQueryParameterDialog::KexiDynamicQueryParameterDialog(QWidget *parent,
 	KexiDataProvider::Parameters *values, const KexiDataProvider::ParameterList &list):
@@ -34,7 +34,7 @@ KexiDynamicQueryParameterDialog::KexiDynamicQueryParameterDialog(QWidget *parent
 {
 	m_values=values;
 	int y;
-	m_mainView=new QVBox(this);
+	m_mainView=new Q3VBox(this);
 
 	for (KexiDataProvider::ParameterList::const_iterator it=list.begin();
 		it!=list.end();++it) {

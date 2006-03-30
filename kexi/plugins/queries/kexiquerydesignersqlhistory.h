@@ -21,13 +21,15 @@
 #ifndef KEXIQUERYDESIGNERSQLHISTORY_H
 #define KEXIQUERYDESIGNERSQLHISTORY_H
 
-#include <qscrollview.h>
+#include <q3scrollview.h>
 #include <qdatetime.h>
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 #include <qmap.h>
-#include <qsimplerichtext.h>
+#include <q3simplerichtext.h>
+//Added by qt3to4:
+#include <QMouseEvent>
 
-class QSimpleRichText;
+class Q3SimpleRichText;
 class KMenu;
 
 class HistoryEntry
@@ -51,15 +53,15 @@ class HistoryEntry
 		QTime	m_execTime;
 		QString	m_statement;
 		QString m_error;
-		QSimpleRichText	*m_formated;
+		Q3SimpleRichText	*m_formated;
 
 		int	m_y;
 		bool	m_selected;
 };
 
-typedef QPtrList<HistoryEntry> History;
+typedef Q3PtrList<HistoryEntry> History;
 
-class KexiQueryDesignerSQLHistory : public QScrollView
+class KexiQueryDesignerSQLHistory : public Q3ScrollView
 {
 	Q_OBJECT
 

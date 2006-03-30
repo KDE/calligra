@@ -21,6 +21,10 @@
 #include "kexidbdateedit.h"
 #include <qlayout.h>
 #include <qtoolbutton.h>
+//Added by qt3to4:
+#include <Q3HBoxLayout>
+#include <QKeyEvent>
+#include <QEvent>
 #include <kmenu.h>
 #include <kdatepicker.h>
 #include <kdatetable.h>
@@ -35,7 +39,7 @@ KexiDBDateEdit::KexiDBDateEdit(const QDate &date, QWidget *parent, const char *n
 	m_cleared = false;
 	m_readOnly = false;
 
-	m_edit = new QDateEdit(date, this);
+	m_edit = new Q3DateEdit(date, this);
 	m_edit->setAutoAdvance(true);
 	m_edit->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::MinimumExpanding);
 	connect( m_edit, SIGNAL(valueChanged(const QDate&)), this, SLOT(slotValueChanged(const QDate&)) );
@@ -64,7 +68,7 @@ KexiDBDateEdit::KexiDBDateEdit(const QDate &date, QWidget *parent, const char *n
 	m_datePickerPopupMenu->insertItem(m_datePicker);
 	btn->setPopup(m_datePickerPopupMenu);
 
-	QHBoxLayout* layout = new QHBoxLayout(this);
+	Q3HBoxLayout* layout = new Q3HBoxLayout(this);
 	layout->addWidget(m_edit, 1);
 	layout->addWidget(btn, 0);
 
@@ -81,8 +85,8 @@ void KexiDBDateEdit::setInvalidState( const QString& )
 	setReadOnly(true);
 	m_invalidState = true;
 //! @todo move this to KexiDataItemInterface::setInvalidStateInternal() ?
-	if (focusPolicy() & TabFocus)
-		setFocusPolicy(QWidget::ClickFocus);
+	if (focusPolicy() & Qt::TabFocus)
+		setFocusPolicy(Qt::ClickFocus);
 }
 
 void

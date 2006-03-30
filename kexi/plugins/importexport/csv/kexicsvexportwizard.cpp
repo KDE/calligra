@@ -31,8 +31,14 @@
 #include <widget/kexicharencodingcombobox.h>
 
 #include <qcheckbox.h>
-#include <qgroupbox.h>
+#include <q3groupbox.h>
 #include <qclipboard.h>
+//Added by qt3to4:
+#include <Q3CString>
+#include <QTextStream>
+#include <Q3GridLayout>
+#include <QLabel>
+#include <Q3HBoxLayout>
 #include <kapplication.h>
 #include <klocale.h>
 #include <kiconloader.h>
@@ -123,7 +129,7 @@ KexiCSVExportWizard::KexiCSVExportWizard( const Options& options,
 
 	// 2. Export options
 	m_exportOptionsPage = new QWidget(this, "m_exportOptionsPage");
-	QGridLayout *exportOptionsLyr = new QGridLayout( m_exportOptionsPage, 6, 3, 
+	Q3GridLayout *exportOptionsLyr = new Q3GridLayout( m_exportOptionsPage, 6, 3, 
 		KDialogBase::marginHint(), KDialogBase::spacingHint(), "exportOptionsLyr");
 	m_infoLblFrom = new KexiCSVInfoLabel( infoLblFromText, m_exportOptionsPage );
 	KexiPart::Info *partInfo = Kexi::partManager().infoForMimeType(
@@ -148,13 +154,13 @@ KexiCSVExportWizard::KexiCSVExportWizard( const Options& options,
 	m_showOptionsButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
 
 	// -<options section>
-	m_exportOptionsSection = new QGroupBox(1, Vertical, i18n("Options"), m_exportOptionsPage, 
+	m_exportOptionsSection = new Q3GroupBox(1, Vertical, i18n("Options"), m_exportOptionsPage, 
 		"m_exportOptionsSection");
 	m_exportOptionsSection->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
 	exportOptionsLyr->addMultiCellWidget(m_exportOptionsSection, 3, 3, 0, 1);
 	QWidget *exportOptionsSectionWidget 
 		= new QWidget(m_exportOptionsSection, "exportOptionsSectionWidget");
-	QGridLayout *exportOptionsSectionLyr = new QGridLayout( exportOptionsSectionWidget, 5, 2, 
+	Q3GridLayout *exportOptionsSectionLyr = new Q3GridLayout( exportOptionsSectionWidget, 5, 2, 
 		0, KDialogBase::spacingHint(), "exportOptionsLyr");
 
 	// -delimiter
@@ -167,7 +173,7 @@ KexiCSVExportWizard::KexiCSVExportWizard( const Options& options,
 
 	// -text quote
 	QWidget *textQuoteWidget = new QWidget(exportOptionsSectionWidget);
-	QHBoxLayout *textQuoteLyr = new QHBoxLayout(textQuoteWidget);
+	Q3HBoxLayout *textQuoteLyr = new Q3HBoxLayout(textQuoteWidget);
 	exportOptionsSectionLyr->addWidget(textQuoteWidget, 1, 1);
 	m_textQuote = new KexiCSVTextQuoteComboBox( textQuoteWidget );
 	m_textQuote->setTextQuote(defaultTextQuote());
@@ -350,15 +356,15 @@ void KexiCSVExportWizard::slotShowOptionsButtonClicked()
 	}
 }
 
-void KexiCSVExportWizard::layOutButtonRow( QHBoxLayout * layout )
+void KexiCSVExportWizard::layOutButtonRow( Q3HBoxLayout * layout )
 {
-	QWizard::layOutButtonRow( layout );
+	Q3Wizard::layOutButtonRow( layout );
 
 	//find the last sublayout
 	QLayout *l = 0;
 	for (QLayoutIterator lit( layout->iterator() ); lit.current(); ++lit)
 		l = lit.current()->layout();
-	if (dynamic_cast<QBoxLayout*>(l)) {
+	if (dynamic_cast<Q3BoxLayout*>(l)) {
 		if (!m_defaultsBtn) {
 			m_defaultsBtn = new KPushButton(i18n("Defaults"), this);
 			QWidget::setTabOrder(backButton(), m_defaultsBtn);
@@ -366,7 +372,7 @@ void KexiCSVExportWizard::layOutButtonRow( QHBoxLayout * layout )
 		}
 		if (!m_exportOptionsSection->isVisible())
 			m_defaultsBtn->hide();
-		dynamic_cast<QBoxLayout*>(l)->insertWidget(0, m_defaultsBtn);
+		dynamic_cast<Q3BoxLayout*>(l)->insertWidget(0, m_defaultsBtn);
 	}
 }
 
@@ -442,10 +448,10 @@ bool KexiCSVExportWizard::exportData()
 
 	// 0. Cache information
 	const uint fieldsCount = fields.count();
-	const QCString delimiter( m_delimiterWidget->delimiter().left(1).latin1() );
+	const Q3CString delimiter( m_delimiterWidget->delimiter().left(1).latin1() );
 	const bool hasTextQuote = !m_textQuote->textQuote().isEmpty();
-	const QCString textQuote( m_textQuote->textQuote().left(1).latin1() );
-	const QCString escapedTextQuote( textQuote + textQuote );
+	const Q3CString textQuote( m_textQuote->textQuote().left(1).latin1() );
+	const Q3CString escapedTextQuote( textQuote + textQuote );
 	//cache for faster checks
 	bool *isText = new bool[fieldsCount]; 
 	bool *isDateTime = new bool[fieldsCount]; 

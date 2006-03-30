@@ -31,8 +31,12 @@
 
 #include <qbitmap.h>
 #include <qlabel.h>
-#include <qheader.h>
-#include <qvbox.h>
+#include <q3header.h>
+#include <q3vbox.h>
+//Added by qt3to4:
+#include <QPixmap>
+#include <Q3HBoxLayout>
+#include <Q3CString>
 
 typedef KListViewItemTemplate<QString> ActionSelectorDialogListItem;
 
@@ -42,7 +46,7 @@ public:
 	ActionsListView(QWidget* parent, KexiActionSelectionDialog* dialog)
 		: K3ListView(parent, "actionslistview")
 	{
-		setResizeMode(QListView::LastColumn);
+		setResizeMode(Q3ListView::LastColumn);
 		addColumn("");
 		header()->hide();
 
@@ -51,7 +55,7 @@ public:
 		bmpNoIcon.fill(Qt::color0);
 		noIcon.setMask(bmpNoIcon);
 
-		QListViewItem *pitem = 0;
+		Q3ListViewItem *pitem = 0;
 		KActionPtrList sharedActions( dialog->mainWin()->allActions() ); //sharedActions() );
 		foreach (KActionPtrList::ConstIterator, it, sharedActions) {
 			//! @todo set invisible pixmap box if actual pixmap is null
@@ -76,7 +80,7 @@ public:
 	ScriptsListView(QWidget* parent, KexiActionSelectionDialog* dialog)
 		: K3ListView(parent, "scriptslistview")
 	{
-		setResizeMode(QListView::LastColumn);
+		setResizeMode(Q3ListView::LastColumn);
 		addColumn("");
 		header()->hide();
 
@@ -107,7 +111,7 @@ public:
 	KexiMainWindow* mainWin;
 	K3ListView* kactionListView;
 	K3ListView* scriptListView;
-	QVBox *mainbox;
+	Q3VBox *mainbox;
 	QString currentActionName;
 	KexiActionSelectionDialogPrivate() 
 		: kactionListView(0), scriptListView(0) 
@@ -124,7 +128,7 @@ public:
 //-------------------------------------
 
 KexiActionSelectionDialog::KexiActionSelectionDialog(KexiMainWindow* mainWin, QWidget *parent, 
-	const QString& _currentActionName, const QCString& actionWidgetName)
+	const QString& _currentActionName, const Q3CString& actionWidgetName)
 
 	: KDialogBase(parent, "actionSelectorDialog", true, i18n("Assigning Action to Command Button"), 
 		KDialogBase::Ok | KDialogBase::Cancel )
@@ -140,7 +144,7 @@ KexiActionSelectionDialog::KexiActionSelectionDialog(KexiMainWindow* mainWin, QW
 	lbl->setAlignment(Qt::AlignTop|Qt::AlignLeft|Qt::TextWordWrap);
 
 	QWidget *w = new QWidget(box);
-	QHBoxLayout *lyr = new QHBoxLayout(w, 0, KDialogBase::spacingHint());
+	Q3HBoxLayout *lyr = new Q3HBoxLayout(w, 0, KDialogBase::spacingHint());
 	QComboBox* combobox = new QComboBox(w);
 	combobox->insertItem( i18n("No Action") );
 	combobox->insertItem( i18n("Application") );
@@ -156,7 +160,7 @@ KexiActionSelectionDialog::KexiActionSelectionDialog(KexiMainWindow* mainWin, QW
 		combobox->insertItem( i18n("Scripts") );
 	}
 	
-	d->mainbox = new QVBox(box);
+	d->mainbox = new Q3VBox(box);
 	box->setStretchFactor(d->mainbox, 1);
 
 	resize(400, 500);
@@ -232,7 +236,7 @@ QString KexiActionSelectionDialog::currentActionName() const
 
 void KexiActionSelectionDialog::slotOk()
 {
-	QListViewItem *item = 
+	Q3ListViewItem *item = 
 		(d->kactionListView && d->kactionListView->isVisible()) ? d->kactionListView->selectedItem() : 0;
 	if (!item)
 		item = (d->scriptListView && d->scriptListView->isVisible()) ? d->scriptListView->selectedItem() : 0;

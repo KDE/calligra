@@ -21,11 +21,11 @@
 #ifndef KexiDBSubForm_H
 #define KexiDBSubForm_H
 
-#include <qscrollview.h>
+#include <q3scrollview.h>
 #include <formeditor/form.h>
 
 //! A form embedded as a widget inside other form
-class KEXIFORMUTILS_EXPORT KexiDBSubForm : public QScrollView
+class KEXIFORMUTILS_EXPORT KexiDBSubForm : public Q3ScrollView
 {
 	Q_OBJECT
 	Q_PROPERTY(QString formName READ formName WRITE setFormName DESIGNABLE true)

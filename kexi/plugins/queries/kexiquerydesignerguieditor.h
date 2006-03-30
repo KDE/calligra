@@ -21,8 +21,12 @@
 #ifndef KEXIQUERYDESIGNERGUIEDITOR_H
 #define KEXIQUERYDESIGNERGUIEDITOR_H
 
-#include <qguardedptr.h>
+#include <qpointer.h>
 #include <qsplitter.h>
+//Added by qt3to4:
+#include <QDragMoveEvent>
+#include <Q3CString>
+#include <QDropEvent>
 
 #include <kexiviewbase.h>
 #include "kexiquerypart.h"
@@ -113,7 +117,7 @@ class KexiQueryDesignerGuiEditor : public KexiViewBase
 		KexiDB::BaseExpr* parseExpressionString(const QString& fullString, int& token,
 			bool allowRelationalOperator);
 
-		QCString generateUniqueAlias() const;
+		Q3CString generateUniqueAlias() const;
 		void updatePropertiesVisibility(KoProperty::Set& buf);
 
 	protected slots:
@@ -156,7 +160,7 @@ class KexiQueryDesignerGuiEditor : public KexiViewBase
 //		void slotObjectCreated(const QCString &mime, const QCString& name);
 		void slotNewItemStored(KexiPart::Item&);
 		void slotItemRemoved(const KexiPart::Item& item);
-		void slotItemRenamed(const KexiPart::Item& item, const QCString& oldName);
+		void slotItemRenamed(const KexiPart::Item& item, const Q3CString& oldName);
 
 	private:
 		KexiQueryDesignerGuiEditorPrivate *d;

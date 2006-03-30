@@ -23,7 +23,7 @@
 #define KEXIFORMPART_H
 
 #include <qdom.h>
-#include <qcstring.h>
+#include <q3cstring.h>
 
 #include <kexi.h>
 #include <kexipart.h>
@@ -73,7 +73,7 @@ class KEXIFORMUTILS_EXPORT KexiFormPart : public KexiPart::Part
 				int resizeMode; //!< form's window's resize mode -one of KexiFormView::ResizeMode items
 		};
 
-		virtual QString i18nMessage(const QCString& englishMessage, 
+		virtual QString i18nMessage(const Q3CString& englishMessage, 
 			KexiDialogBase* dlg) const;
 
 	protected:
@@ -91,7 +91,7 @@ class KEXIFORMUTILS_EXPORT KexiFormPart : public KexiPart::Part
 	protected slots:
 		void slotAutoTabStopsSet(KFormDesigner::Form *form, bool set);
 		void slotAssignAction();
-		void slotPropertyChanged(QWidget *widget, const QCString &name, const QVariant &value);
+		void slotPropertyChanged(QWidget *widget, const Q3CString &name, const QVariant &value);
 
 	private:
 		class Private;

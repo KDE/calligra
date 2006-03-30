@@ -41,8 +41,8 @@ void KexiDBCheckBox::setInvalidState( const QString& displayText )
 	setState(NoChange);
 	m_invalidState = true;
 //! @todo move this to KexiDataItemInterface::setInvalidStateInternal() ?
-	if (focusPolicy() & TabFocus)
-		setFocusPolicy(QWidget::ClickFocus);
+	if (focusPolicy() & Qt::TabFocus)
+		setFocusPolicy(Qt::ClickFocus);
 	setText(displayText);
 }
 

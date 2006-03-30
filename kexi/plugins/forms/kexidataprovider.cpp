@@ -20,7 +20,9 @@
 #include "kexidataprovider.h"
 
 #include <qwidget.h>
-#include <qobjectlist.h>
+#include <qobject.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -57,7 +59,7 @@ void KexiFormDataProvider::setMainDataSourceWidget(QWidget* mainWidget)
 	QObjectList *l = m_mainWidget->queryList( "QWidget" );
 	QObjectListIt it( *l );
 	QObject *obj;
-	QDict<char> tmpSources;
+	Q3Dict<char> tmpSources;
 	for ( ; (obj = it.current()) != 0; ++it ) {
 		if (!dynamic_cast<KexiFormDataItemInterface*>(obj))
 			continue;
@@ -81,7 +83,7 @@ void KexiFormDataProvider::setMainDataSourceWidget(QWidget* mainWidget)
 	delete l;
 	//now we've got a set (unique list) of field names in tmpSources
 	//remember it in m_usedDataSources
-	for (QDictIterator<char> it(tmpSources); it.current(); ++it) {
+	for (Q3DictIterator<char> it(tmpSources); it.current(); ++it) {
 		m_usedDataSources += it.currentKey();
 	}
 }
@@ -105,7 +107,7 @@ void KexiFormDataProvider::fillDuplicatedDataItems(
 		//so we can later check if an item is duplicated with a cost of o(1)
 		QMap<KexiDB::Field*,int> tmpDuplicatedItems;
 		QMapIterator<KexiDB::Field*,int> it_dup;
-		for (QPtrListIterator<KexiFormDataItemInterface> it(m_dataItems); it.current(); ++it) {
+		for (Q3PtrListIterator<KexiFormDataItemInterface> it(m_dataItems); it.current(); ++it) {
 			it_dup = tmpDuplicatedItems.find( it.current()->columnInfo()->field );
 			uint count;
 			if (it_dup==tmpDuplicatedItems.end())
@@ -114,7 +116,7 @@ void KexiFormDataProvider::fillDuplicatedDataItems(
 				count = it_dup.data();
 			tmpDuplicatedItems.insert( it.current()->columnInfo()->field, ++count );
 		}
-		m_duplicatedItems = new QPtrDict<char>(101);
+		m_duplicatedItems = new Q3PtrDict<char>(101);
 		for (it_dup = tmpDuplicatedItems.begin(); it_dup!=tmpDuplicatedItems.end(); ++it_dup) {
 			if (it_dup.data() > 1) {
 				m_duplicatedItems->insert( it_dup.key(), (char*)1 );
@@ -124,7 +126,7 @@ void KexiFormDataProvider::fillDuplicatedDataItems(
 		}
 	}
 	if (m_duplicatedItems->find( item->columnInfo()->field )) {
-		for (QPtrListIterator<KexiFormDataItemInterface> it(m_dataItems); it.current(); ++it) {
+		for (Q3PtrListIterator<KexiFormDataItemInterface> it(m_dataItems); it.current(); ++it) {
 			if (it.current()!=item && item->columnInfo()->field == it.current()->columnInfo()->field) {
 				kexipluginsdbg << "- setting value for item '" 
 					<< dynamic_cast<QObject*>(it.current())->name() << " == " << value.toString() << endl;
@@ -144,7 +146,7 @@ bool KexiFormDataProvider::cursorAtNewRow()
 	return false;
 }
 
-void KexiFormDataProvider::invalidateDataSources( const QValueList<uint>& invalidSources,
+void KexiFormDataProvider::invalidateDataSources( const Q3ValueList<uint>& invalidSources,
  KexiDB::QuerySchema* query)
 {
 	//fill m_fieldNumbersForDataItems mapping from data item to field number
@@ -158,7 +160,7 @@ void KexiFormDataProvider::invalidateDataSources( const QValueList<uint>& invali
 		for (QMapConstIterator<KexiDB::QueryColumnInfo*,int> it = fieldsOrder.constBegin(); it!=fieldsOrder.constEnd(); ++it) {
 			kexipluginsdbg << "query->fieldsOrder()[ " << it.key()->field->name() << " ] = " << it.data() << endl;
 		}
-		for (QPtrListIterator<KexiFormDataItemInterface> it(m_dataItems); it.current(); ++it) {
+		for (Q3PtrListIterator<KexiFormDataItemInterface> it(m_dataItems); it.current(); ++it) {
 			KexiFormDataItemInterface *item = it.current();
 			KexiDB::QueryColumnInfo* ci = query->columnInfo( it.current()->dataSource() );
 			int index = ci ? query->fieldsOrder()[ ci ] : -1;
@@ -177,7 +179,7 @@ void KexiFormDataProvider::invalidateDataSources( const QValueList<uint>& invali
 	}
 
 	//in 'newIndices' let's collect new indices for every data source
-	foreach(QValueList<uint>::ConstIterator, it, invalidSources) {
+	foreach(Q3ValueList<uint>::ConstIterator, it, invalidSources) {
 		//all previous indices have corresponding data source
 //		for (; i < (*it); i++) {
 //			newIndices[i] = number++;
@@ -218,7 +220,7 @@ void KexiFormDataProvider::invalidateDataSources( const QValueList<uint>& invali
 //	m_fieldNumbersForDataItems = newFieldNumbersForDataItems;
 
 	//update data sources set (some of them may be removed)
-	QDict<char> tmpUsedDataSources(1013);
+	Q3Dict<char> tmpUsedDataSources(1013);
 
 	if (query)
 		query->debug();
@@ -228,7 +230,7 @@ void KexiFormDataProvider::invalidateDataSources( const QValueList<uint>& invali
 	//	 << m_dataItems.count() << "," << query->fieldCount() << ")" << endl;
 	//}
 	//i = 0;
-	foreach_list(QPtrListIterator<KexiFormDataItemInterface>, it, m_dataItems) {
+	foreach_list(Q3PtrListIterator<KexiFormDataItemInterface>, it, m_dataItems) {
 		KexiFormDataItemInterface * item = it.current();
 		uint fieldNumber = m_fieldNumbersForDataItems[ item ];
 		if (query) {
@@ -242,7 +244,7 @@ void KexiFormDataProvider::invalidateDataSources( const QValueList<uint>& invali
 		tmpUsedDataSources.replace( it.current()->dataSource().lower(), (char*)1 );
 	}
 	m_usedDataSources.clear();
-	foreach_list(QDictIterator<char>, it, tmpUsedDataSources) {
+	foreach_list(Q3DictIterator<char>, it, tmpUsedDataSources) {
 		m_usedDataSources += it.currentKey();
 	}
 }

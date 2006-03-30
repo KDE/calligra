@@ -32,6 +32,8 @@
 #include <kdebug.h>
 
 #include <kexidb/transaction.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 using namespace Kross::KexiDB;
 
@@ -281,10 +283,10 @@ Kross::Api::Object::Ptr KexiDBConnection::queryStringList(Kross::Api::List::Ptr 
 
 Kross::Api::Object::Ptr KexiDBConnection::querySingleRecord(Kross::Api::List::Ptr args)
 {
-    QValueVector<QVariant> list;
+    Q3ValueVector<QVariant> list;
     if(connection()->querySingleRecord(Kross::Api::Variant::toString(args->item(0)), list)) {
-        QValueList<QVariant> l; //FIXME isn't there a better/faster way to deal with QValueVector<QVariant> => QVariant ?!
-        for(QValueVector<QVariant>::Iterator it = list.begin(); it != list.end(); ++it)
+        Q3ValueList<QVariant> l; //FIXME isn't there a better/faster way to deal with QValueVector<QVariant> => QVariant ?!
+        for(Q3ValueVector<QVariant>::Iterator it = list.begin(); it != list.end(); ++it)
             l.append(*it);
         return new Kross::Api::Variant(l);
     }
@@ -293,7 +295,7 @@ Kross::Api::Object::Ptr KexiDBConnection::querySingleRecord(Kross::Api::List::Pt
 
 Kross::Api::Object::Ptr KexiDBConnection::insertRecord(Kross::Api::List::Ptr args)
 {
-    QValueList<QVariant> values = Kross::Api::Variant::toList(args->item(1));
+    Q3ValueList<QVariant> values = Kross::Api::Variant::toList(args->item(1));
     /*
     kDebug()<<"Kross::KexiDB::KexiDBConnection::insertRecord()"<<endl;
     for(QValueList<QVariant>::Iterator it = values.begin(); it != values.end(); ++it)
@@ -436,9 +438,9 @@ Kross::Api::Object::Ptr KexiDBConnection::setDefaultTransaction(Kross::Api::List
 
 Kross::Api::Object::Ptr KexiDBConnection::transactions(Kross::Api::List::Ptr)
 {
-    QValueList<Kross::Api::Object::Ptr> l;
-    QValueList< ::KexiDB::Transaction > list = connection()->transactions();
-    for(QValueList< ::KexiDB::Transaction >::Iterator it = list.begin(); it != list.end(); ++it)
+    Q3ValueList<Kross::Api::Object::Ptr> l;
+    Q3ValueList< ::KexiDB::Transaction > list = connection()->transactions();
+    for(Q3ValueList< ::KexiDB::Transaction >::Iterator it = list.begin(); it != list.end(); ++it)
         l.append( new KexiDBTransaction(this, *it) );
     return new Kross::Api::List(l);
 }

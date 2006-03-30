@@ -36,6 +36,9 @@
 #include <kexidb/connection.h>
 #include <kexidb/cursor.h>
 #include <kexidialogbase.h>
+//Added by qt3to4:
+#include <Q3CString>
+#include <Q3PtrList>
 
 
 KexiTablePart::KexiTablePart(QObject *parent, const char *name, const QStringList &l)
@@ -156,13 +159,13 @@ KexiTablePart::dataSource()
 tristate KexiTablePart::askForClosingObjectsUsingTableSchema(QWidget *parent, KexiDB::Connection& conn, 
 	KexiDB::TableSchema& table, const QString& msg)
 {
-	QPtrList<KexiDB::Connection::TableSchemaChangeListenerInterface>* listeners
+	Q3PtrList<KexiDB::Connection::TableSchemaChangeListenerInterface>* listeners
 		= conn.tableSchemaChangeListeners(table);
 	if (!listeners || listeners->isEmpty())
 		return true;
 	
 	QString openedObjectsStr = "<ul>";
-	for (QPtrListIterator<KexiDB::Connection::TableSchemaChangeListenerInterface> it(*listeners);
+	for (Q3PtrListIterator<KexiDB::Connection::TableSchemaChangeListenerInterface> it(*listeners);
 		it.current(); ++it)	{
 			openedObjectsStr += QString("<li>%1</li>").arg(it.current()->listenerInfoString);
 	}
@@ -185,7 +188,7 @@ tristate KexiTablePart::askForClosingObjectsUsingTableSchema(QWidget *parent, Ke
 }
 
 QString
-KexiTablePart::i18nMessage(const QCString& englishMessage, KexiDialogBase* dlg) const
+KexiTablePart::i18nMessage(const Q3CString& englishMessage, KexiDialogBase* dlg) const
 {
 	if (englishMessage=="Design of object \"%1\" has been modified.")
 		return i18n("Design of table \"%1\" has been modified.");

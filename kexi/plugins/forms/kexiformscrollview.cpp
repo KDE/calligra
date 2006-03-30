@@ -28,6 +28,8 @@
 #include <widget/utils/kexirecordmarker.h>
 
 #include <kmenu.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 KexiFormScrollView::KexiFormScrollView(QWidget *parent, bool preview)
  : KexiScrollView(parent, preview)
@@ -372,7 +374,7 @@ void KexiFormScrollView::slotRowInserted(KexiTableItem *item, uint row, bool rep
 	//! @todo
 }
 
-void KexiFormScrollView::slotRowsDeleted( const QValueList<int> & )
+void KexiFormScrollView::slotRowsDeleted( const Q3ValueList<int> & )
 {
 	//! @todo
 }
@@ -399,16 +401,16 @@ int KexiFormScrollView::columns() const
 bool KexiFormScrollView::columnEditable(int col)
 {
 	kexipluginsdbg << "KexiFormScrollView::columnEditable(" << col << ")" << endl;
-	foreach_list (QPtrListIterator<KexiFormDataItemInterface>, it, m_dataItems) {
+	foreach_list (Q3PtrListIterator<KexiFormDataItemInterface>, it, m_dataItems) {
 		kexipluginsdbg << (dynamic_cast<QWidget*>(it.current()) ? dynamic_cast<QWidget*>(it.current())->name() : "" ) 
 			<< " " << it.current()->dataSource() << endl;
 	}
 	kexipluginsdbg << "-- focus widgets --" << endl;
-	foreach_list (QPtrListIterator<QWidget>, it, *dbFormWidget()->orderedFocusWidgets()) {
+	foreach_list (Q3PtrListIterator<QWidget>, it, *dbFormWidget()->orderedFocusWidgets()) {
 		kexipluginsdbg << it.current()->name() << endl;
 	}
 	kexipluginsdbg << "-- data-aware widgets --" << endl;
-	foreach_list (QPtrListIterator<QWidget>, it, *dbFormWidget()->orderedDataAwareWidgets()) {
+	foreach_list (Q3PtrListIterator<QWidget>, it, *dbFormWidget()->orderedDataAwareWidgets()) {
 		kexipluginsdbg << it.current()->name() << endl;
 	}
 
@@ -479,7 +481,7 @@ void KexiFormScrollView::cancelEditor()
 
 void KexiFormScrollView::updateAfterCancelRowEdit()
 {
-	for (QPtrListIterator<KexiFormDataItemInterface> it(m_dataItems); it.current(); ++it) {
+	for (Q3PtrListIterator<KexiFormDataItemInterface> it(m_dataItems); it.current(); ++it) {
 		it.current()->undoChanges();
 	}
 	recordNavigator()->showEditingIndicator(false);

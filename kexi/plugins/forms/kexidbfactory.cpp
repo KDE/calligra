@@ -18,11 +18,15 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <qpopupmenu.h>
-#include <qscrollview.h>
+#include <q3popupmenu.h>
+#include <q3scrollview.h>
 #include <qcursor.h>
 #include <qpainter.h>
 #include <qstyle.h>
+//Added by qt3to4:
+#include <QLabel>
+#include <Q3ValueList>
+#include <Q3CString>
 
 #include <kgenericfactory.h>
 #include <klocale.h>
@@ -313,7 +317,7 @@ KexiDBFactory::~KexiDBFactory()
 }
 
 QWidget*
-KexiDBFactory::createWidget(const QCString &c, QWidget *p, const char *n, 
+KexiDBFactory::createWidget(const Q3CString &c, QWidget *p, const char *n, 
 	KFormDesigner::Container *container, int options)
 {
 	kexipluginsdbg << "KexiDBFactory::createWidget() " << this << endl;
@@ -372,7 +376,7 @@ KexiDBFactory::createWidget(const QCString &c, QWidget *p, const char *n,
 }
 
 bool
-KexiDBFactory::createMenuActions(const QCString &classname, QWidget *w, QPopupMenu *menu,
+KexiDBFactory::createMenuActions(const Q3CString &classname, QWidget *w, Q3PopupMenu *menu,
 		   KFormDesigner::Container *)
 {
 	if(classname == "QPushButton" || classname == "KPushButton" || classname == "KexiPushButton")
@@ -413,7 +417,7 @@ KexiDBFactory::createCustomActions(KActionCollection* col)
 }
 
 bool
-KexiDBFactory::startEditing(const QCString &classname, QWidget *w, KFormDesigner::Container *container)
+KexiDBFactory::startEditing(const Q3CString &classname, QWidget *w, KFormDesigner::Container *container)
 {
 	m_container = container;
 	if(classname == "KexiDBLineEdit")
@@ -506,13 +510,13 @@ KexiDBFactory::startEditing(const QCString &classname, QWidget *w, KFormDesigner
 }
 
 bool
-KexiDBFactory::previewWidget(const QCString &, QWidget *, KFormDesigner::Container *)
+KexiDBFactory::previewWidget(const Q3CString &, QWidget *, KFormDesigner::Container *)
 {
 	return false;
 }
 
 bool
-KexiDBFactory::clearWidgetContent(const QCString & /*classname*/, QWidget *w)
+KexiDBFactory::clearWidgetContent(const Q3CString & /*classname*/, QWidget *w)
 {
 //! @todo this code should not be copied here but
 //! just inherited StdWidgetFactory::clearWidgetContent() should be called
@@ -522,10 +526,10 @@ KexiDBFactory::clearWidgetContent(const QCString & /*classname*/, QWidget *w)
 	return true;
 }
 
-QValueList<QCString>
-KexiDBFactory::autoSaveProperties(const QCString & /*classname*/)
+Q3ValueList<Q3CString>
+KexiDBFactory::autoSaveProperties(const Q3CString & /*classname*/)
 {
-	QValueList<QCString> lst;
+	Q3ValueList<Q3CString> lst;
 //	if(classname == "KexiDBSubForm")
 		//lst << "formName";
 //	if(classname == "KexiDBLineEdit")
@@ -536,8 +540,8 @@ KexiDBFactory::autoSaveProperties(const QCString & /*classname*/)
 }
 
 bool
-KexiDBFactory::isPropertyVisibleInternal(const QCString& classname, QWidget *w,
-	const QCString& property, bool isTopLevel)
+KexiDBFactory::isPropertyVisibleInternal(const Q3CString& classname, QWidget *w,
+	const Q3CString& property, bool isTopLevel)
 {
 	//general
 	if (property=="dataSource" || property=="dataSourceMimeType") {
@@ -604,7 +608,7 @@ KexiDBFactory::changeText(const QString &text)
 		return false;
 	if (!form->selectedWidget())
 		return false;
-	QCString n( form->selectedWidget()->className() );
+	Q3CString n( form->selectedWidget()->className() );
 //	QWidget *w = WidgetFactory::widget();
 	if(n == "KexiDBAutoField") {
 		changeProperty("caption", text, form);
@@ -615,7 +619,7 @@ KexiDBFactory::changeText(const QString &text)
 }
 
 void
-KexiDBFactory::resizeEditor(QWidget *editor, QWidget *w, const QCString &classname)
+KexiDBFactory::resizeEditor(QWidget *editor, QWidget *w, const Q3CString &classname)
 {
 	//QSize s = widget->size();
 	//QPoint p = widget->pos();

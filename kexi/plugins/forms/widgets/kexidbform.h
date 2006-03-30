@@ -22,6 +22,13 @@
 #define KEXIDBFORM_H
 
 #include <qpixmap.h>
+//Added by qt3to4:
+#include <Q3ValueList>
+#include <QDragMoveEvent>
+#include <QEvent>
+#include <Q3CString>
+#include <QDropEvent>
+#include <Q3PtrList>
 
 #include <formeditor/form.h>
 #include "../kexiformdataiteminterface.h"
@@ -50,7 +57,7 @@ class KEXIFORMUTILS_EXPORT KexiDBForm :
 {
 	Q_OBJECT
 	Q_PROPERTY(QString dataSource READ dataSource WRITE setDataSource DESIGNABLE true)
-	Q_PROPERTY(QCString dataSourceMimeType READ dataSourceMimeType WRITE setDataSourceMimeType DESIGNABLE true)
+	Q_PROPERTY(Q3CString dataSourceMimeType READ dataSourceMimeType WRITE setDataSourceMimeType DESIGNABLE true)
 	Q_PROPERTY(bool autoTabStops READ autoTabStops WRITE setAutoTabStops DESIGNABLE true)
 	//original "size" property is not designable, so here's a custom (not storable) replacement
 	Q_PROPERTY( QSize sizeInternal READ sizeInternal WRITE resizeInternal DESIGNABLE true STORED false )
@@ -61,7 +68,7 @@ class KEXIFORMUTILS_EXPORT KexiDBForm :
 		KexiDataAwareObjectInterface* dataAwareObject() const;
 
 		inline QString dataSource() const { return KexiFormDataItemInterface::dataSource(); }
-		inline QCString dataSourceMimeType() const { return KexiFormDataItemInterface::dataSourceMimeType(); }
+		inline Q3CString dataSourceMimeType() const { return KexiFormDataItemInterface::dataSourceMimeType(); }
 
 		//! no effect
 		QVariant value() { return QVariant(); }
@@ -69,7 +76,7 @@ class KEXIFORMUTILS_EXPORT KexiDBForm :
 		virtual void setInvalidState( const QString& displayText );
 
 		virtual void drawRect(const QRect& r, int type);
-		virtual void drawRects(const QValueList<QRect> &list, int type);
+		virtual void drawRects(const Q3ValueList<QRect> &list, int type);
 		virtual void initBuffer();
 		virtual void clearForm();
 		virtual void highlightWidgets(QWidget *from, QWidget *to/*, const QPoint &p*/);
@@ -78,9 +85,9 @@ class KEXIFORMUTILS_EXPORT KexiDBForm :
 
 		bool autoTabStops() const;
 
-		QPtrList<QWidget>* orderedFocusWidgets() const;
+		Q3PtrList<QWidget>* orderedFocusWidgets() const;
 
-		QPtrList<QWidget>* orderedDataAwareWidgets() const;
+		Q3PtrList<QWidget>* orderedDataAwareWidgets() const;
 		
 		int indexForDataItem( KexiDataItemInterface* item ) const;
 
@@ -105,7 +112,7 @@ class KEXIFORMUTILS_EXPORT KexiDBForm :
 	public slots:
 		void setAutoTabStops(bool set);
 		inline void setDataSource(const QString &ds) { KexiFormDataItemInterface::setDataSource(ds); }
-		inline void setDataSourceMimeType(const QCString &ds) { KexiFormDataItemInterface::setDataSourceMimeType(ds); }
+		inline void setDataSourceMimeType(const Q3CString &ds) { KexiFormDataItemInterface::setDataSourceMimeType(ds); }
 
 		//! @internal for sizeInternal property
 		QSize sizeInternal() const { return KexiDBFormBase::size(); }

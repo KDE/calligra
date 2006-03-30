@@ -23,6 +23,11 @@
 
 #include "kexiformdataiteminterface.h"
 #include <qwidget.h>
+//Added by qt3to4:
+#include <QContextMenuEvent>
+#include <QPixmap>
+#include <Q3CString>
+#include <QPaintEvent>
 #include <kactioncollection.h>
 #include <kexiblobbuffer.h>
 #include <qtimer.h>
@@ -34,7 +39,7 @@ class KEXIFORMUTILS_EXPORT KexiDBImageBox : public QWidget, public KexiFormDataI
 {
 	Q_OBJECT
 	Q_PROPERTY( QString dataSource READ dataSource WRITE setDataSource )
-	Q_PROPERTY( QCString dataSourceMimeType READ dataSourceMimeType WRITE setDataSourceMimeType )
+	Q_PROPERTY( Q3CString dataSourceMimeType READ dataSourceMimeType WRITE setDataSourceMimeType )
 	Q_PROPERTY( bool readOnly READ isReadOnly WRITE setReadOnly )
 //	Q_PROPERTY( QPixmap pixmap READ pixmap WRITE setPixmap )
 //	Q_PROPERTY( QByteArray pixmapData READ pixmapData WRITE setPixmapData )
@@ -50,7 +55,7 @@ class KEXIFORMUTILS_EXPORT KexiDBImageBox : public QWidget, public KexiFormDataI
 		virtual ~KexiDBImageBox();
 
 		inline QString dataSource() const { return KexiFormDataItemInterface::dataSource(); }
-		inline QCString dataSourceMimeType() const { return KexiFormDataItemInterface::dataSourceMimeType(); }
+		inline Q3CString dataSourceMimeType() const { return KexiFormDataItemInterface::dataSourceMimeType(); }
 
 		virtual QVariant value(); // { return m_value.data(); }
 
@@ -108,7 +113,7 @@ class KEXIFORMUTILS_EXPORT KexiDBImageBox : public QWidget, public KexiFormDataI
 		//! Sets the datasource to \a ds
 		virtual void setDataSource( const QString &ds );
 
-		inline void setDataSourceMimeType(const QCString &ds) { KexiFormDataItemInterface::setDataSourceMimeType(ds); }
+		inline void setDataSourceMimeType(const Q3CString &ds) { KexiFormDataItemInterface::setDataSourceMimeType(ds); }
 
 		virtual void setReadOnly(bool set);
 

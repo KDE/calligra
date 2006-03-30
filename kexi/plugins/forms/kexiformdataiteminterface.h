@@ -22,6 +22,8 @@
 
 #include <kexidataiteminterface.h>
 #include <qwidget.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 namespace KexiDB {
 	class Field;
@@ -46,12 +48,12 @@ class KEXIFORMUTILS_EXPORT KexiFormDataItemInterface : public KexiDataItemInterf
 		 Data source mime type means here types like "kexi/table" or "kexi/query"
 		 in.the data source is set to object (as within form or subform) or is empty
 		 if the data source is set to table field or query column. */
-		inline QCString dataSourceMimeType() const { return m_dataSourceMimeType; }
+		inline Q3CString dataSourceMimeType() const { return m_dataSourceMimeType; }
 
 		/*! Sets the mime type of the data source for this widget.
 		 Data source usually means here a "kexi/table" or "kexi/query".
 		 @see dataSourceMimeType() */
-		inline void setDataSourceMimeType(const QCString &ds) { m_dataSourceMimeType = ds; }
+		inline void setDataSourceMimeType(const Q3CString &ds) { m_dataSourceMimeType = ds; }
 
 		/*! Convenience function: casts this item to a QWidget.
 		 Can return 0 if the item is not a QWidget-derived object. */
@@ -89,7 +91,7 @@ class KEXIFORMUTILS_EXPORT KexiFormDataItemInterface : public KexiDataItemInterf
 
 	protected:
 		QString m_dataSource;
-		QCString m_dataSourceMimeType;
+		Q3CString m_dataSourceMimeType;
 		KexiDB::QueryColumnInfo* m_columnInfo;
 
 	friend class KexiDBAutoField;

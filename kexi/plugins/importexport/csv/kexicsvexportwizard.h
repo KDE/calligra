@@ -21,9 +21,11 @@
 #define KEXI_CSVEXPORTEIZARD_H
 
 #include <k3wizard.h>
+//Added by qt3to4:
+#include <Q3HBoxLayout>
 
 class QCheckBox;
-class QGroupBox;
+class Q3GroupBox;
 class KPushButton;
 class KexiMainWindow;
 class KexiStartupFileDialog;
@@ -71,7 +73,7 @@ class KexiCSVExportWizard : public K3Wizard
 
 	protected:
 		//! reimplemented to add "Defaults" button on the left hand
-		virtual void layOutButtonRow( QHBoxLayout * layout );
+		virtual void layOutButtonRow( Q3HBoxLayout * layout );
 
 		//! Exporting, returns false on failure.
 		bool exportData();
@@ -111,7 +113,7 @@ class KexiCSVExportWizard : public K3Wizard
 		QWidget* m_exportOptionsPage;
 		KPushButton *m_showOptionsButton;
 		KPushButton *m_defaultsBtn;
-		QGroupBox* m_exportOptionsSection;
+		Q3GroupBox* m_exportOptionsSection;
 		KexiCSVInfoLabel *m_infoLblFrom, *m_infoLblTo;
 		KexiCSVDelimiterWidget* m_delimiterWidget;
 		KexiCSVTextQuoteComboBox* m_textQuote;

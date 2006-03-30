@@ -19,11 +19,20 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <qobjectlist.h>
+#include <qobject.h>
 #include <qpainter.h>
 #include <qcursor.h>
 #include <qapplication.h>
 #include <qfocusdata.h>
+//Added by qt3to4:
+#include <QPixmap>
+#include <QFocusEvent>
+#include <Q3PtrList>
+#include <QEvent>
+#include <QKeyEvent>
+#include <QDragMoveEvent>
+#include <QDropEvent>
+#include <Q3ValueList>
 
 #include <kdebug.h>
 
@@ -47,11 +56,11 @@ class KexiDBForm::Private
 		}
 		KexiDataAwareObjectInterface* dataAwareObject;
 		//! ordered list of focusable widgets (can be both data-widgets or buttons, etc.)
-		QPtrList<QWidget> orderedFocusWidgets; 
+		Q3PtrList<QWidget> orderedFocusWidgets; 
 		//! ordered list of data-aware widgets
-		QPtrList<QWidget> orderedDataAwareWidgets;
+		Q3PtrList<QWidget> orderedDataAwareWidgets;
 		QMap<KexiDataItemInterface*, uint> indicesForDataAwareWidgets; //!< a subset of orderedFocusWidgets mapped to indices
-		QPtrListIterator<QWidget> orderedFocusWidgetsIterator;
+		Q3PtrListIterator<QWidget> orderedFocusWidgetsIterator;
 		QPixmap buffer; //!< stores grabbed entire form's area for redraw
 		QRect prev_rect; //!< previously selected rectangle
 		bool autoTabStops : 1;
@@ -101,13 +110,13 @@ static void repaintAll(QWidget *w)
 void
 KexiDBForm::drawRect(const QRect& r, int type)
 {
-	QValueList<QRect> l;
+	Q3ValueList<QRect> l;
 	l.append(r);
 	drawRects(l, type);
 }
 
 void
-KexiDBForm::drawRects(const QValueList<QRect> &list, int type)
+KexiDBForm::drawRects(const Q3ValueList<QRect> &list, int type)
 {
 	QPainter p;
 	p.begin(this, true);
@@ -119,16 +128,16 @@ KexiDBForm::drawRects(const QValueList<QRect> &list, int type)
 		p.drawPixmap( QPoint(d->prev_rect.x()-2, d->prev_rect.y()-2), d->buffer, 
 			QRect(d->prev_rect.x()-2, d->prev_rect.y()-2, d->prev_rect.width()+4, d->prev_rect.height()+4));
 	}
-	p.setBrush(QBrush::NoBrush);
+	p.setBrush(Qt::NoBrush);
 	if(type == 1) // selection rect
-		p.setPen(QPen(white, 1, Qt::DotLine));
+		p.setPen(QPen(Qt::white, 1, Qt::DotLine));
 	else if(type == 2) // insert rect
-		p.setPen(QPen(white, 2));
+		p.setPen(QPen(Qt::white, 2));
 	p.setRasterOp(XorROP);
 
 	d->prev_rect = QRect();
-	QValueList<QRect>::ConstIterator endIt = list.constEnd();
-	for(QValueList<QRect>::ConstIterator it = list.constBegin(); it != endIt; ++it) {
+	Q3ValueList<QRect>::ConstIterator endIt = list.constEnd();
+	for(Q3ValueList<QRect>::ConstIterator it = list.constBegin(); it != endIt; ++it) {
 		p.drawRect(*it);
 		if (d->prev_rect.isValid())
 			d->prev_rect = d->prev_rect.unite(*it);
@@ -253,12 +262,12 @@ void KexiDBForm::setAutoTabStops(bool set)
 	d->autoTabStops = set;
 }
 
-QPtrList<QWidget>* KexiDBForm::orderedFocusWidgets() const
+Q3PtrList<QWidget>* KexiDBForm::orderedFocusWidgets() const
 {
 	return &d->orderedFocusWidgets;
 }
 
-QPtrList<QWidget>* KexiDBForm::orderedDataAwareWidgets() const
+Q3PtrList<QWidget>* KexiDBForm::orderedDataAwareWidgets() const
 {
 	return &d->orderedDataAwareWidgets;
 }
@@ -272,7 +281,7 @@ void KexiDBForm::updateTabStopsOrder(KFormDesigner::Form* form)
 //	if (d->orderedFocusWidgets.isEmpty()) {
 		//generate a new list
 		for (KFormDesigner::ObjectTreeListIterator it(form->tabStopsIterator()); it.current(); ++it) {
-			if (it.current()->widget()->focusPolicy() & QWidget::TabFocus) {
+			if (it.current()->widget()->focusPolicy() & Qt::TabFocus) {
 				//this widget has tab focus:
 				it.current()->widget()->installEventFilter(this);
 				//also filter events for data-aware children of this widget (i.e. KexiDBAutoField's editors)
@@ -325,8 +334,8 @@ void KexiDBForm::updateTabStopsOrder(KFormDesigner::Form* form)
 
 void KexiDBForm::updateTabStopsOrder()
 {
-	for (QPtrListIterator<QWidget> it( d->orderedFocusWidgets ); it.current();) {
-		if (! (it.current()->focusPolicy() & QWidget::TabFocus))
+	for (Q3PtrListIterator<QWidget> it( d->orderedFocusWidgets ); it.current();) {
+		if (! (it.current()->focusPolicy() & Qt::TabFocus))
 			d->orderedFocusWidgets.remove( it.current() );
 		else
 			++it;

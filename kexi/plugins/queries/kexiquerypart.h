@@ -22,6 +22,8 @@
 #define KEXIQUERYPART_H
 
 #include <qmap.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 #include <kexidialogbase.h>
 #include <kexipart.h>
@@ -91,7 +93,7 @@ class KexiQueryPart : public KexiPart::Part
 				KexiDB::QuerySchema *m_query;
 		};
 
-		virtual QString i18nMessage(const QCString& englishMessage, 
+		virtual QString i18nMessage(const Q3CString& englishMessage, 
 			KexiDialogBase* dlg) const;
 
 		/*! Renames stored data pointed by \a item to \a newName. 

@@ -28,27 +28,35 @@
 #ifndef KEXI_CSVDIALOG_H
 #define KEXI_CSVDIALOG_H
 
-#include <qvaluevector.h>
-#include <qvaluelist.h>
-#include <qptrvector.h>
+#include <q3valuevector.h>
+#include <q3valuelist.h>
+#include <q3ptrvector.h>
 #include <qregexp.h>
 #include <qbitarray.h>
+//Added by qt3to4:
+#include <QPixmap>
+#include <QTextStream>
+#include <Q3GridLayout>
+#include <QEvent>
+#include <QLabel>
+#include <Q3HBoxLayout>
+#include <Q3VBoxLayout>
 
 #include <kdialogbase.h>
 
 #include <kexiutils/tristate.h>
 #include <kexidb/connection.h>
 
-class QVBoxLayout;
-class QHBoxLayout;
-class QGridLayout;
-class QButtonGroup;
+class Q3VBoxLayout;
+class Q3HBoxLayout;
+class Q3GridLayout;
+class Q3ButtonGroup;
 class QCheckBox;
 class QLabel;
 class QLineEdit;
 class QPushButton;
 class QRadioButton;
-class QTable;
+class Q3Table;
 class QFile;
 class KComboBox;
 class KIntSpinBox;
@@ -97,9 +105,9 @@ class KexiCSVImportDialog : public KDialogBase
 
 
  private:
-  QGridLayout* MyDialogLayout;
-  QHBoxLayout* Layout1;
-  QTable* m_table;
+  Q3GridLayout* MyDialogLayout;
+  Q3HBoxLayout* Layout1;
+  Q3Table* m_table;
   KexiCSVDelimiterWidget* m_delimiterWidget;
   QString m_formatComboText;
   QLabel* m_formatLabel;
@@ -141,14 +149,14 @@ class KexiCSVImportDialog : public KDialogBase
 
 	//! vector of detected types, 0==text (the default), 1==number, 2==date
 //! @todo more types
-	QValueVector<int> m_detectedTypes;
+	Q3ValueVector<int> m_detectedTypes;
 
 	//! m_detectedUniqueColumns[i]==true means that i-th column has unique values
 	//! (only for numeric type)
-	QPtrVector< QValueList<int> > m_uniquenessTest;
+	Q3PtrVector< Q3ValueList<int> > m_uniquenessTest;
 
 	QRegExp m_dateRegExp1, m_dateRegExp2, m_timeRegExp1, m_timeRegExp2, m_fpNumberRegExp;
-	QValueVector<QString> m_typeNames, m_columnNames;
+	Q3ValueVector<QString> m_typeNames, m_columnNames;
 	QBitArray m_changedColumnNames;
 	bool m_columnsAdjusted : 1; //only once
 	bool m_1stRowForFieldNamesDetected : 1; //!< used to force rerun fillTable() after 1st row
@@ -167,7 +175,7 @@ class KexiCSVImportDialog : public KDialogBase
 	KexiDB::Connection *m_conn; //!< (temp) database connection used for importing
 	KexiDB::TableSchema *m_destinationTableSchema;  //!< (temp) dest. table schema used for importing
 	KexiDB::PreparedStatement::Ptr m_importingStatement;
-	QValueList<QVariant> m_dbRowBuffer; //!< (temp) used for importing
+	Q3ValueList<QVariant> m_dbRowBuffer; //!< (temp) used for importing
 	bool m_implicitPrimaryKeyAdded; //! (temp) used for importing
 
  private slots:

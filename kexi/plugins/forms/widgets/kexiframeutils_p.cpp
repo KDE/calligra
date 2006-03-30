@@ -1,3 +1,5 @@
+//Added by qt3to4:
+#include <Q3Frame>
 /* This file is part of the KDE project
    Copyright (C) 2005 Jaroslaw Staniek <js@iidea.pl>
 
@@ -22,11 +24,11 @@
 //! @todo add more frame types
 void ClassName::drawFrame( QPainter *p )
 {
-	if (frameShape() == QFrame::Box) {
+	if (frameShape() == Q3Frame::Box) {
 		if ( frameShadow() == Plain )
 			qDrawPlainRect( p, frameRect(), d->frameColor, lineWidth() );
 		else
-			qDrawShadeRect( p, frameRect(), colorGroup(), frameShadow() == QFrame::Sunken, 
+			qDrawShadeRect( p, frameRect(), colorGroup(), frameShadow() == Q3Frame::Sunken, 
 				lineWidth(), midLineWidth() );
 	}
 	else {

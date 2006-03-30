@@ -21,7 +21,10 @@
 #define KEXIREPORTWIDGETS_H
 
 #include <qlabel.h>
-#include <qscrollview.h>
+#include <q3scrollview.h>
+//Added by qt3to4:
+#include <QPixmap>
+#include <QPaintEvent>
 
 namespace KFormDesigner {
 	class Form;
@@ -31,7 +34,7 @@ namespace KFormDesigner {
 using KFormDesigner::Form;
 
 //! A form embedded as a widget inside other form
-class KexiSubReport : public QScrollView
+class KexiSubReport : public Q3ScrollView
 {
 	Q_OBJECT
 	Q_PROPERTY(QString reportName READ reportName WRITE setReportName DESIGNABLE true);

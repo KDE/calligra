@@ -22,6 +22,10 @@
 
 #include <qtoolbutton.h>
 #include <qlayout.h>
+//Added by qt3to4:
+#include <QKeyEvent>
+#include <QEvent>
+#include <Q3HBoxLayout>
 #include <kmenu.h>
 #include <kdatepicker.h>
 #include <kdatetable.h>
@@ -34,7 +38,7 @@ KexiDBDateTimeEdit::KexiDBDateTimeEdit(const QDateTime &datetime, QWidget *paren
 	m_cleared = false;
 	m_readOnly = false;
 
-	m_dateEdit = new QDateEdit(datetime.date(), this);
+	m_dateEdit = new Q3DateEdit(datetime.date(), this);
 	m_dateEdit->setAutoAdvance(true);
 	m_dateEdit->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::MinimumExpanding);
 //	m_dateEdit->setFixedWidth( QFontMetrics(m_dateEdit->font()).width("8888-88-88___") );
@@ -46,7 +50,7 @@ KexiDBDateTimeEdit::KexiDBDateTimeEdit(const QDateTime &datetime, QWidget *paren
 	btn->setFixedWidth( QFontMetrics(btn->font()).width(" ... ") );
 	btn->setPopupDelay(1); //1 ms
 
-	m_timeEdit = new QTimeEdit(datetime.time(), this);;
+	m_timeEdit = new Q3TimeEdit(datetime.time(), this);;
 	m_timeEdit->setAutoAdvance(true);
 	m_timeEdit->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::MinimumExpanding);
 	connect(m_timeEdit, SIGNAL(valueChanged(const QTime&)), this, SLOT(slotValueChanged()));
@@ -71,7 +75,7 @@ KexiDBDateTimeEdit::KexiDBDateTimeEdit(const QDateTime &datetime, QWidget *paren
 	m_datePickerPopupMenu->insertItem(m_datePicker);
 	btn->setPopup(m_datePickerPopupMenu);
 
-	QHBoxLayout* layout = new QHBoxLayout(this);
+	Q3HBoxLayout* layout = new Q3HBoxLayout(this);
 	layout->addWidget(m_dateEdit, 0);
 	layout->addWidget(btn, 0);
 	layout->addWidget(m_timeEdit, 0);
@@ -90,8 +94,8 @@ void KexiDBDateTimeEdit::setInvalidState(const QString & /*! @todo paint this te
 	setReadOnly(true);
 	m_invalidState = true;
 //! @todo move this to KexiDataItemInterface::setInvalidStateInternal() ?
-	if (focusPolicy() & TabFocus)
-		setFocusPolicy(QWidget::ClickFocus);
+	if (focusPolicy() & Qt::TabFocus)
+		setFocusPolicy(Qt::ClickFocus);
 }
 
 void

@@ -34,6 +34,8 @@
 #include "kexiqueryview.h"
 #include "kexiquerydesignerguieditor.h"
 #include "kexiquerydesignersql.h"
+//Added by qt3to4:
+#include <Q3CString>
 
 //------------------------------------------------
 
@@ -83,8 +85,8 @@ KexiQueryPart::createView(QWidget *parent, KexiDialogBase* dialog, KexiPart::Ite
 			view, SLOT(slotNewItemStored(KexiPart::Item&)));
 		connect(prj, SIGNAL(itemRemoved(const KexiPart::Item&)),
 			view, SLOT(slotItemRemoved(const KexiPart::Item&)));
-		connect(prj, SIGNAL(itemRenamed(const KexiPart::Item&, const QCString&)),
-			view, SLOT(slotItemRenamed(const KexiPart::Item&, const QCString&)));
+		connect(prj, SIGNAL(itemRenamed(const KexiPart::Item&, const Q3CString&)),
+			view, SLOT(slotItemRenamed(const KexiPart::Item&, const Q3CString&)));
 
 //		connect(dialog->mainWin()->project(), SIGNAL(tableCreated(KexiDB::TableSchema&)),
 //			view, SLOT(slotTableCreated(KexiDB::TableSchema&)));
@@ -191,7 +193,7 @@ KexiQueryPart::loadSchemaData(KexiDialogBase *dlg, const KexiDB::SchemaData& sda
 	return query;
 }
 
-QString KexiQueryPart::i18nMessage(const QCString& englishMessage, KexiDialogBase* dlg) const
+QString KexiQueryPart::i18nMessage(const Q3CString& englishMessage, KexiDialogBase* dlg) const
 {
 	Q_UNUSED(dlg);
 	if (englishMessage=="Design of object \"%1\" has been modified.")

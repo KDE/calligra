@@ -21,6 +21,8 @@
 #define KEXIACTIONSELECTIONDIALOG_H
 
 #include <kdialogbase.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 class KexiMainWindow;
 class K3ListView;
@@ -31,7 +33,7 @@ class KEXIFORMUTILS_EXPORT KexiActionSelectionDialog : public KDialogBase
 
 	public:
 		KexiActionSelectionDialog(KexiMainWindow* mainWin, QWidget *parent, 
-			const QString& currentActionName, const QCString& actionWidgetName);
+			const QString& currentActionName, const Q3CString& actionWidgetName);
 		~KexiActionSelectionDialog();
 
 		/*! \return selected action name or empty string 

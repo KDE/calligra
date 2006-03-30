@@ -24,6 +24,9 @@
 #include "kexiformdataiteminterface.h"
 #include "kexidbtextwidgetinterface.h"
 #include <ktextedit.h>
+//Added by qt3to4:
+#include <Q3CString>
+#include <QPaintEvent>
 
 //! Multiline edit widget for Kexi forms
 class KEXIFORMUTILS_EXPORT KexiDBTextEdit :
@@ -33,14 +36,14 @@ class KEXIFORMUTILS_EXPORT KexiDBTextEdit :
 {
 	Q_OBJECT
 	Q_PROPERTY(QString dataSource READ dataSource WRITE setDataSource DESIGNABLE true)
-	Q_PROPERTY(QCString dataSourceMimeType READ dataSourceMimeType WRITE setDataSourceMimeType DESIGNABLE true)
+	Q_PROPERTY(Q3CString dataSourceMimeType READ dataSourceMimeType WRITE setDataSourceMimeType DESIGNABLE true)
 
 	public:
 		KexiDBTextEdit(QWidget *parent, const char *name=0);
 		virtual ~KexiDBTextEdit();
 
 		inline QString dataSource() const { return KexiFormDataItemInterface::dataSource(); }
-		inline QCString dataSourceMimeType() const { return KexiFormDataItemInterface::dataSourceMimeType(); }
+		inline Q3CString dataSourceMimeType() const { return KexiFormDataItemInterface::dataSourceMimeType(); }
 		virtual QVariant value();
 		virtual void setInvalidState( const QString& displayText );
 
@@ -68,7 +71,7 @@ class KEXIFORMUTILS_EXPORT KexiDBTextEdit :
 
 	public slots:
 		inline void setDataSource(const QString &ds) { KexiFormDataItemInterface::setDataSource(ds); }
-		inline void setDataSourceMimeType(const QCString &ds) { KexiFormDataItemInterface::setDataSourceMimeType(ds); }
+		inline void setDataSourceMimeType(const Q3CString &ds) { KexiFormDataItemInterface::setDataSourceMimeType(ds); }
 
 	protected slots:
 		void slotTextChanged();

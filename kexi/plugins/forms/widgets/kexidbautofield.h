@@ -23,11 +23,14 @@
 #define KEXIDBAUTOFIELD_H
 
 #include <qwidget.h>
+//Added by qt3to4:
+#include <QLabel>
+#include <Q3CString>
 #include <kexidb/field.h>
 #include <formeditor/container.h>
 #include "kexiformdataiteminterface.h"
 
-class QBoxLayout;
+class Q3BoxLayout;
 class QLabel;
 
 //! Universal "Auto Field" widget for Kexi forms
@@ -42,7 +45,7 @@ class KEXIFORMUTILS_EXPORT KexiDBAutoField :
 	Q_OVERRIDE(QString caption READ caption WRITE setCaption DESIGNABLE true)
 	Q_PROPERTY(bool autoCaption READ hasAutoCaption WRITE setAutoCaption DESIGNABLE true)
 	Q_PROPERTY(QString dataSource READ dataSource WRITE setDataSource DESIGNABLE true)
-	Q_PROPERTY(QCString dataSourceMimeType READ dataSourceMimeType WRITE setDataSourceMimeType DESIGNABLE true)
+	Q_PROPERTY(Q3CString dataSourceMimeType READ dataSourceMimeType WRITE setDataSourceMimeType DESIGNABLE true)
 	Q_PROPERTY(LabelPosition labelPosition READ labelPosition WRITE setLabelPosition DESIGNABLE true)
 	Q_PROPERTY(WidgetType widgetType READ widgetType WRITE setWidgetType DESIGNABLE true)
 	/*internal, for design time only*/
@@ -61,9 +64,9 @@ class KEXIFORMUTILS_EXPORT KexiDBAutoField :
 		virtual ~KexiDBAutoField();
 
 		inline QString dataSource() const { return KexiFormDataItemInterface::dataSource(); }
-		inline QCString dataSourceMimeType() const { return KexiFormDataItemInterface::dataSourceMimeType(); }
+		inline Q3CString dataSourceMimeType() const { return KexiFormDataItemInterface::dataSourceMimeType(); }
 		virtual void setDataSource( const QString &ds );
-		virtual void setDataSourceMimeType(const QCString &ds) { KexiFormDataItemInterface::setDataSourceMimeType(ds); }
+		virtual void setDataSourceMimeType(const Q3CString &ds) { KexiFormDataItemInterface::setDataSourceMimeType(ds); }
 		virtual void setColumnInfo(KexiDB::QueryColumnInfo* cinfo);
 
 		virtual void setInvalidState(const QString& text);
@@ -115,7 +118,7 @@ class KEXIFORMUTILS_EXPORT KexiDBAutoField :
 		QString fieldCaptionInternal() const { return m_fieldCaptionInternal; }
 
 		virtual QSize sizeHint() const;
-		virtual void setFocusPolicy ( FocusPolicy policy );
+		virtual void setFocusPolicy ( Qt::FocusPolicy policy );
 
 	protected:
 		virtual void setValueInternal(const QVariant&add, bool removeOld);
@@ -134,7 +137,7 @@ class KEXIFORMUTILS_EXPORT KexiDBAutoField :
 		                         //!< of widgetTypeForFieldType() if widgetTypeForFieldType is Auto
 		WidgetType  m_widgetType_property; //!< provides widget type or Auto
 		LabelPosition  m_lblPosition;
-		QBoxLayout  *m_layout;
+		Q3BoxLayout  *m_layout;
 		QLabel  *m_label;
 		QWidget *m_editor;
 		QString  m_caption;

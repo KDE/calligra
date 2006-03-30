@@ -24,6 +24,12 @@
 #include <qpainter.h>
 #include <qdom.h>
 #include <qregexp.h>
+//Added by qt3to4:
+#include <Q3CString>
+#include <QDragMoveEvent>
+#include <QDropEvent>
+#include <Q3ValueList>
+#include <Q3VBoxLayout>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -100,7 +106,7 @@ public:
 	 This information is cached and entirely refreshed on updateColumnsData().
 	 The dict is filled with (char*)1 values (doesn't matter what it is);
 	*/
-	QDict<char> fieldColumnIdentifiers;
+	Q3Dict<char> fieldColumnIdentifiers;
 
 	KexiDataAwarePropertySet* sets;
 	KexiTableItem *droppedNewItem;
@@ -138,7 +144,7 @@ KexiQueryDesignerGuiEditor::KexiQueryDesignerGuiEditor(
 	initTableColumns();
 	initTableRows();
 
-	QValueList<int> c;
+	Q3ValueList<int> c;
 	c << COLUMN_ID_COLUMN << COLUMN_ID_TABLE << COLUMN_ID_CRITERIA;
 	if (d->dataTable->tableView()/*sanity*/) {
 		d->dataTable->tableView()->maximizeColumnsWidth( c );
@@ -158,7 +164,7 @@ KexiQueryDesignerGuiEditor::KexiQueryDesignerGuiEditor(
 	connect(d->relations, SIGNAL(aboutConnectionRemove(KexiRelationViewConnection*)),
 		this, SLOT(slotAboutConnectionRemove(KexiRelationViewConnection*)));
 
-	QVBoxLayout *l = new QVBoxLayout(this);
+	Q3VBoxLayout *l = new Q3VBoxLayout(this);
 	l->addWidget(d->spl);
 
 	addChildView(d->relations);
@@ -167,7 +173,7 @@ KexiQueryDesignerGuiEditor::KexiQueryDesignerGuiEditor(
 	d->relations->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
 	d->head->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
 	updateGeometry();
-	d->spl->setSizes(QValueList<int>()<< 800<<400);
+	d->spl->setSizes(Q3ValueList<int>()<< 800<<400);
 }
 
 KexiQueryDesignerGuiEditor::~KexiQueryDesignerGuiEditor()
@@ -199,7 +205,7 @@ KexiQueryDesignerGuiEditor::initTableColumns()
 #ifndef KEXI_NO_QUERY_TOTALS
 	KexiTableViewColumn *col4 = new KexiTableViewColumn("totals", KexiDB::Field::Enum, i18n("Totals"),
 		i18n("Describes a way of computing totals for a given field or expression."));
-	QValueVector<QString> totalsTypes;
+	Q3ValueVector<QString> totalsTypes;
 	totalsTypes.append( i18n("Group by") );
 	totalsTypes.append( i18n("Sum") );
 	totalsTypes.append( i18n("Average") );
@@ -250,7 +256,7 @@ void KexiQueryDesignerGuiEditor::updateColumnsData()
 	qHeapSort( sortedTableNames );
 
 	//several tables can be hidden now, so remove rows for these tables
-	QValueList<int> rowsToDelete;
+	Q3ValueList<int> rowsToDelete;
 	for (int r = 0; r<(int)d->sets->size(); r++) {
 		KoProperty::Set *set = d->sets->at(r);
 		if (set) {
@@ -368,7 +374,7 @@ KexiQueryDesignerGuiEditor::buildSchema(QString *errMsg)
 				fieldAndTableName.prepend(tableName+".");
 			bool fieldVisible = (*set)["visible"].value().toBool();
 			QString criteriaStr = (*set)["criteria"].value().toString();
-			QCString alias = (*set)["alias"].value().toCString();
+			Q3CString alias = (*set)["alias"].value().toCString();
 			if (!criteriaStr.isEmpty()) {
 				int token;
 				KexiDB::BaseExpr *criteriaExpr = parseExpressionString(criteriaStr, token, true/*allowRelationalOperator*/);
@@ -692,7 +698,7 @@ void KexiQueryDesignerGuiEditor::showFieldsOrRelationsForQueryInternal(
 	//2. Collect information about criterias
 	// --this must be top level chain of AND's
 	// --this will also show joins as: [table1.]field1 = [table2.]field2
-	QDict<KexiDB::BaseExpr> criterias(101, false);
+	Q3Dict<KexiDB::BaseExpr> criterias(101, false);
 	KexiDB::BaseExpr* e = query->whereExpression();
 	KexiDB::BaseExpr* eItem = 0;
 	while (e) {
@@ -760,7 +766,7 @@ void KexiQueryDesignerGuiEditor::showFieldsOrRelationsForQueryInternal(
 	//3. show fields
 	uint row_num = 0;
 	KexiDB::Field *field;
-	QPtrDict<char> usedCriterias(101); // <-- used criterias will be saved here 
+	Q3PtrDict<char> usedCriterias(101); // <-- used criterias will be saved here 
 	                                   //     so in step 4. we will be able to add 
 	                                   //     remaining invisible columns with criterias
 	for (KexiDB::Field::ListIterator it(*query->fields()); 
@@ -833,7 +839,7 @@ void KexiQueryDesignerGuiEditor::showFieldsOrRelationsForQueryInternal(
 
 	//4. Show fields for unused criterias (with "Visible" column set to false)
 	KexiDB::BaseExpr *criteriaArgument; // <-- contains field or table.field
-	for (QDictIterator<KexiDB::BaseExpr> it(criterias); (criteriaArgument = it.current()); ++it) {
+	for (Q3DictIterator<KexiDB::BaseExpr> it(criterias); (criteriaArgument = it.current()); ++it) {
 		if (usedCriterias[it.current()])
 			continue;
 		//unused: append a new row
@@ -1087,17 +1093,17 @@ void KexiQueryDesignerGuiEditor::slotTableHidden(KexiDB::TableSchema & /*t*/)
 }
 
 /*! @internal generates smallest unique alias */
-QCString KexiQueryDesignerGuiEditor::generateUniqueAlias() const
+Q3CString KexiQueryDesignerGuiEditor::generateUniqueAlias() const
 {
 //TODO: add option for using non-i18n'd "expr" prefix?
-	const QCString expStr 
+	const Q3CString expStr 
 		= i18n("short for 'expression' word (only latin letters, please)", "expr").latin1();
 //TODO: optimization: cache it?
-	QAsciiDict<char> aliases(101);
+	Q3AsciiDict<char> aliases(101);
 	for (int r = 0; r<(int)d->sets->size(); r++) {
 		KoProperty::Set *set = d->sets->at(r);
 		if (set) {
-			const QCString a = (*set)["alias"].value().toCString().lower();
+			const Q3CString a = (*set)["alias"].value().toCString().lower();
 			if (!a.isEmpty())
 				aliases.insert(a,(char*)1);
 		}
@@ -1252,7 +1258,7 @@ void KexiQueryDesignerGuiEditor::slotBeforeCellChanged(KexiTableItem *item, int 
 			QString fieldId( newValue.toString().trimmed() ); //tmp, can look like "table.field"
 			QString fieldName; //"field" part of "table.field" or expression string
 			QString tableName; //empty for expressions
-			QCString alias;
+			Q3CString alias;
 			QString columnValueForExpr; //for setting pretty printed "alias: expr" in 1st column
 			const bool isExpression = !d->fieldColumnIdentifiers[fieldId];
 			if (isExpression) {
@@ -1558,7 +1564,7 @@ void KexiQueryDesignerGuiEditor::setFocus()
 
 void KexiQueryDesignerGuiEditor::slotPropertyChanged(KoProperty::Set& set, KoProperty::Property& property)
 {
-	const QCString& pname = property.name();
+	const Q3CString& pname = property.name();
 /*
  * TODO (js) use KexiProperty::setValidator(QString) when implemented as described in TODO #60
  */
@@ -1594,7 +1600,7 @@ void KexiQueryDesignerGuiEditor::slotItemRemoved(const KexiPart::Item& item)
 	d->relations->objectDeleted(item.mimeType(), item.name().latin1());
 }
 
-void KexiQueryDesignerGuiEditor::slotItemRenamed(const KexiPart::Item& item, const QCString& oldName)
+void KexiQueryDesignerGuiEditor::slotItemRenamed(const KexiPart::Item& item, const Q3CString& oldName)
 {
 	d->relations->objectRenamed(item.mimeType(), oldName, item.name().latin1());
 }

@@ -23,7 +23,7 @@
 #define KEXISCRIPTPART_H
 
 #include <qdom.h>
-#include <qcstring.h>
+#include <q3cstring.h>
 
 #include <kexi.h>
 #include <kexipart.h>
@@ -61,7 +61,7 @@ class KexiScriptPart : public KexiPart::Part
         /**
          * \return the i18n message for the passed \p englishMessage string.
          */
-        virtual QString i18nMessage(const QCString& englishMessage) const;
+        virtual QString i18nMessage(const Q3CString& englishMessage) const;
 
     protected:
 

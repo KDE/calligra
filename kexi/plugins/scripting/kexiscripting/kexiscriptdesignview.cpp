@@ -33,7 +33,9 @@
 #include <qtimer.h>
 #include <qdatetime.h>
 #include <qdom.h>
-#include <qstylesheet.h>
+#include <q3stylesheet.h>
+//Added by qt3to4:
+#include <Q3HBoxLayout>
 #include <ktextbrowser.h>
 #include <kdebug.h>
 
@@ -69,7 +71,7 @@ KexiScriptDesignView::KexiScriptDesignView(KexiMainWindow *mainWin, QWidget *par
 
     QSplitter* splitter = new QSplitter(this);
     splitter->setOrientation(Vertical);
-    QHBoxLayout* layout = new QHBoxLayout(this);
+    Q3HBoxLayout* layout = new Q3HBoxLayout(this);
     layout->addWidget(splitter);
 
     d->editor = new KexiScriptEditor(mainWin, splitter, "ScriptEditor");
@@ -79,7 +81,7 @@ KexiScriptDesignView::KexiScriptDesignView(KexiMainWindow *mainWin, QWidget *par
 
     d->statusbrowser = new KTextBrowser(splitter, "ScriptStatusBrowser");
     d->statusbrowser->setReadOnly(true);
-    d->statusbrowser->setTextFormat(QTextBrowser::RichText);
+    d->statusbrowser->setTextFormat(Q3TextBrowser::RichText);
     //d->browser->setWordWrap(QTextEdit::WidgetWidth);
     d->statusbrowser->installEventFilter(this);
     splitter->setResizeMode(d->statusbrowser, QSplitter::KeepSize);
@@ -210,10 +212,10 @@ void KexiScriptDesignView::execute()
     d->scriptaction->activate();
     if( d->scriptaction->hadException() ) {
         QString errormessage = d->scriptaction->getException()->getError();
-        d->statusbrowser->append(QString("<b>%2</b><br>").arg(QStyleSheet::escape(errormessage)) );
+        d->statusbrowser->append(QString("<b>%2</b><br>").arg(Q3StyleSheet::escape(errormessage)) );
 
         QString tracedetails = d->scriptaction->getException()->getTrace();
-        d->statusbrowser->append( QStyleSheet::escape(tracedetails) );
+        d->statusbrowser->append( Q3StyleSheet::escape(tracedetails) );
 
         long lineno = d->scriptaction->getException()->getLineNo();
         if(lineno >= 0)

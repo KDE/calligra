@@ -22,6 +22,10 @@
 #define KEXIFORMVIEW_H
 
 #include <qtimer.h>
+//Added by qt3to4:
+#include <QDragMoveEvent>
+#include <QResizeEvent>
+#include <QDropEvent>
 
 #include <kexiviewbase.h>
 #include <widget/kexidataawareview.h>

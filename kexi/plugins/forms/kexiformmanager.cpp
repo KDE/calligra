@@ -34,6 +34,8 @@
 #include <koproperty/set.h>
 #include <koproperty/property.h>
 #include <widget/kexicustompropertyfactory.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 KexiFormManager::KexiFormManager(KexiPart::Part *parent, const char* name)
  : KFormDesigner::FormManager(parent, 
@@ -57,7 +59,7 @@ KAction* KexiFormManager::action( const char* name )
 	KActionCollection *col = m_part->actionCollectionForMode(Kexi::DesignViewMode);
 	if (!col)
 		return 0;
-	QCString n( translateName( name ).latin1() );
+	Q3CString n( translateName( name ).latin1() );
 	KAction *a = col->action(n);
 	if (a)
 		return a;
@@ -96,7 +98,7 @@ void KexiFormManager::enableAction( const char* name, bool enable )
 	formViewWidget->setAvailable(translateName( name ).latin1(), enable);
 }
 
-void KexiFormManager::setFormDataSource(const QCString& mime, const QCString& name)
+void KexiFormManager::setFormDataSource(const Q3CString& mime, const Q3CString& name)
 {
 	if (!activeForm())
 		return;
@@ -106,10 +108,10 @@ void KexiFormManager::setFormDataSource(const QCString& mime, const QCString& na
 
 //	setPropertyValueInDesignMode(formWidget, "dataSource", name);
 
-	QCString oldDataSourceMimeType( formWidget->dataSourceMimeType() );
-	QCString oldDataSource( formWidget->dataSource().latin1() );
+	Q3CString oldDataSourceMimeType( formWidget->dataSourceMimeType() );
+	Q3CString oldDataSource( formWidget->dataSource().latin1() );
 	if (mime!=oldDataSourceMimeType || name!=oldDataSource) {
-		QMap<QCString, QVariant> propValues;
+		QMap<Q3CString, QVariant> propValues;
 		propValues.insert("dataSource", name);
 		propValues.insert("dataSourceMimeType", mime);
 		KFormDesigner::CommandGroup *group 
@@ -202,13 +204,13 @@ void KexiFormManager::slotHistoryCommandExecuted()
 			KexiDBForm* formWidget = dynamic_cast<KexiDBForm*>(activeForm()->widget());
 			if (!formWidget)
 				return;
-			QPtrListIterator<KCommand> it(group->commands());
+			Q3PtrListIterator<KCommand> it(group->commands());
 			const KFormDesigner::PropertyCommand* pc1 = dynamic_cast<const KFormDesigner::PropertyCommand*>(it.current());
 			++it;
 			const KFormDesigner::PropertyCommand* pc2 = dynamic_cast<const KFormDesigner::PropertyCommand*>(it.current());
 			if (pc1 && pc2 && pc1->property()=="dataSource" && pc2->property()=="dataSourceMimeType") {
-				const QMap<QCString, QVariant>::const_iterator it1( pc1->oldValues().constBegin() );
-				const QMap<QCString, QVariant>::const_iterator it2( pc2->oldValues().constBegin() );
+				const QMap<Q3CString, QVariant>::const_iterator it1( pc1->oldValues().constBegin() );
+				const QMap<Q3CString, QVariant>::const_iterator it2( pc2->oldValues().constBegin() );
 				if (it1.key()==formWidget->name() && it2.key()==formWidget->name())
 					static_cast<KexiFormPart*>(m_part)->dataSourcePage()->setDataSource(
 						formWidget->dataSourceMimeType(), formWidget->dataSource().latin1());

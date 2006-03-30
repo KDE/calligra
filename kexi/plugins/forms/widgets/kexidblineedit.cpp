@@ -25,6 +25,9 @@
 #include <kexiutils/utils.h>
 #include <kexidb/queryschema.h>
 #include <kexiutils/utils.h>
+//Added by qt3to4:
+#include <QEvent>
+#include <QPaintEvent>
 
 KexiDBLineEdit::KexiDBLineEdit(QWidget *parent, const char *name)
  : KLineEdit(parent, name)
@@ -44,8 +47,8 @@ void KexiDBLineEdit::setInvalidState( const QString& displayText )
 {
 	setReadOnly(true);
 //! @todo move this to KexiDataItemInterface::setInvalidStateInternal() ?
-	if (focusPolicy() & TabFocus)
-		setFocusPolicy(QWidget::ClickFocus);
+	if (focusPolicy() & Qt::TabFocus)
+		setFocusPolicy(Qt::ClickFocus);
 	setText(displayText);
 }
 

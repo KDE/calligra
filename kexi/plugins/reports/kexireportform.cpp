@@ -18,9 +18,12 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <qobjectlist.h>
+#include <qobject.h>
 #include <qpainter.h>
 #include <qcursor.h>
+//Added by qt3to4:
+#include <QPixmap>
+#include <Q3ValueList>
 
 #include <kdebug.h>
 
@@ -32,7 +35,7 @@ KexiReportForm::KexiReportForm(QWidget *parent, const char *name/*, KexiDB::Conn
 	//m_conn = conn;
 	kexipluginsdbg << "KexiReportForm::KexiReportForm(): " << endl;
 	setCursor(QCursor(Qt::ArrowCursor)); //to avoid keeping Size cursor when moving from form's boundaries
-	setBackgroundColor(white);
+	setBackgroundColor(Qt::white);
 }
 
 KexiReportForm::~KexiReportForm()
@@ -54,13 +57,13 @@ static void repaintAll(QWidget *w)
 void
 KexiReportForm::drawRect(const QRect& r, int type)
 {
-	QValueList<QRect> l;
+	Q3ValueList<QRect> l;
 	l.append(r);
 	drawRects(l, type);
 }
 
 void
-KexiReportForm::drawRects(const QValueList<QRect> &list, int type)
+KexiReportForm::drawRects(const Q3ValueList<QRect> &list, int type)
 {
 	QPainter p;
 	p.begin(this, true);
@@ -71,16 +74,16 @@ KexiReportForm::drawRects(const QValueList<QRect> &list, int type)
 		//redraw prev. selection's rectangle
 		p.drawPixmap( QPoint(prev_rect.x()-2, prev_rect.y()-2), buffer, QRect(prev_rect.x()-2, prev_rect.y()-2, prev_rect.width()+4, prev_rect.height()+4));
 	}
-	p.setBrush(QBrush::NoBrush);
+	p.setBrush(Qt::NoBrush);
 	if(type == 1) // selection rect
-		p.setPen(QPen(white, 1, Qt::DotLine));
+		p.setPen(QPen(Qt::white, 1, Qt::DotLine));
 	else if(type == 2) // insert rect
-		p.setPen(QPen(white, 2));
+		p.setPen(QPen(Qt::white, 2));
 	p.setRasterOp(XorROP);
 
 	prev_rect = QRect();
-	QValueList<QRect>::ConstIterator endIt = list.constEnd();
-	for(QValueList<QRect>::ConstIterator it = list.constBegin(); it != endIt; ++it) {
+	Q3ValueList<QRect>::ConstIterator endIt = list.constEnd();
+	for(Q3ValueList<QRect>::ConstIterator it = list.constBegin(); it != endIt; ++it) {
 		p.drawRect(*it);
 		prev_rect = prev_rect.unite(*it);
 	}

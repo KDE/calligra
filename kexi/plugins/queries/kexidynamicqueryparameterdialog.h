@@ -24,7 +24,7 @@
 #include <kdialogbase.h>
 #include <kexidataprovider.h>
 
-class QVBox;
+class Q3VBox;
 
 class KexiDynamicQueryParameterDialog : public KDialogBase
 {
@@ -37,7 +37,7 @@ protected:
 	virtual void slotOk();
 private:
 //temporary only. Later a different widget will be used
-	QVBox *m_mainView;
+	Q3VBox *m_mainView;
 	KexiDataProvider::Parameters *m_values;
 
 };

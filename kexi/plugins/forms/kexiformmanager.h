@@ -22,6 +22,8 @@
 
 #include <formmanager.h>
 #include <kexipart.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 class KCommand;
 class KexiFormView;
@@ -41,7 +43,7 @@ class KEXIFORMUTILS_EXPORT KexiFormManager : public KFormDesigner::FormManager
 
 	public slots:
 		//! Receives signal from KexiDataSourcePage about changed form's data source
-		void setFormDataSource(const QCString& mime, const QCString& name);
+		void setFormDataSource(const Q3CString& mime, const Q3CString& name);
 
 		/*! Receives signal from KexiDataSourcePage about changed widget's data source.
 		 This is because we couldn't pass objects like KexiDB::QueryColumnInfo.

@@ -36,6 +36,9 @@
 #include <kexidialogbase.h>
 #include <kconfig.h>
 #include <kdebug.h>
+//Added by qt3to4:
+#include <Q3PopupMenu>
+#include <Q3CString>
 
 /// \internal
 class KexiScriptPart::Private
@@ -159,7 +162,7 @@ void KexiScriptPart::initPartActions()
 			// Add the KAction's provided by the ScriptGUIClient to the
 			// KexiMainWindow.
 			//FIXME: fix+use createSharedPartAction() whyever it doesn't work as expected right now...
-			QPopupMenu* popup = m_mainWin->findPopupMenu("tools");
+			Q3PopupMenu* popup = m_mainWin->findPopupMenu("tools");
 			if(popup) {
 				KAction* execscriptaction = d->scriptguiclient->action("executescriptfile");
 				if(execscriptaction)
@@ -217,7 +220,7 @@ KexiViewBase* KexiScriptPart::createView(QWidget *parent, KexiDialogBase* dialog
 	return 0;
 }
 
-QString KexiScriptPart::i18nMessage(const QCString& englishMessage) const
+QString KexiScriptPart::i18nMessage(const Q3CString& englishMessage) const
 {
 	if (englishMessage=="Design of object \"%1\" has been modified.")
 		return i18n("Design of script \"%1\" has been modified.");

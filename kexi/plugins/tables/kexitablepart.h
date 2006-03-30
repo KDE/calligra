@@ -28,6 +28,8 @@
 //#include <kexipartdatasource.h>
 #include <kexipartitem.h>
 #include <kexidb/fieldlist.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 class KexiMainWin;
 //class KexiTableDataSource;
@@ -61,7 +63,7 @@ class KexiTablePart : public KexiPart::Part
 			QWidget *parent, KexiDB::Connection& conn, 
 			KexiDB::TableSchema& table, const QString& msg);
 
-		virtual QString i18nMessage(const QCString& englishMessage, 
+		virtual QString i18nMessage(const Q3CString& englishMessage, 
 			KexiDialogBase* dlg) const;
 
 	protected:

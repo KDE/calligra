@@ -21,6 +21,8 @@
 #include "kexidbtextedit.h"
 
 #include <kexidb/queryschema.h>
+//Added by qt3to4:
+#include <QPaintEvent>
 
 KexiDBTextEdit::KexiDBTextEdit(QWidget *parent, const char *name)
  : KTextEdit(parent, name)
@@ -38,8 +40,8 @@ void KexiDBTextEdit::setInvalidState( const QString& displayText )
 {
 	setReadOnly(true);
 //! @todo move this to KexiDataItemInterface::setInvalidStateInternal() ?
-	if (focusPolicy() & TabFocus)
-		setFocusPolicy(QWidget::ClickFocus);
+	if (focusPolicy() & Qt::TabFocus)
+		setFocusPolicy(Qt::ClickFocus);
 	setText(displayText);
 }
 

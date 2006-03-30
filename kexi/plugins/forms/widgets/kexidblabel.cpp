@@ -25,6 +25,12 @@
 #include <qdrawutil.h>
 #include <qapplication.h>
 #include <qtimer.h>
+//Added by qt3to4:
+#include <QPaintEvent>
+#include <Q3Frame>
+#include <QLabel>
+#include <QShowEvent>
+#include <QResizeEvent>
 
 #include <kdebug.h>
 #include <kimageeffect.h>
@@ -395,7 +401,7 @@ class KexiDBLabel::Private
 
 //=========================================================
 
-KexiDBLabel::KexiDBLabel( QWidget *parent, const char *name, WFlags f )
+KexiDBLabel::KexiDBLabel( QWidget *parent, const char *name, Qt::WFlags f )
 	: QLabel( parent, name, f )
 	, KexiDBTextWidgetInterface()
 	, KexiFormDataItemInterface()
@@ -404,7 +410,7 @@ KexiDBLabel::KexiDBLabel( QWidget *parent, const char *name, WFlags f )
 	init();
 }
 
-KexiDBLabel::KexiDBLabel( const QString& text, QWidget *parent, const char *name, WFlags f )
+KexiDBLabel::KexiDBLabel( const QString& text, QWidget *parent, const char *name, Qt::WFlags f )
 	: QLabel( parent, name, f )
 	, KexiDBTextWidgetInterface()
 	, KexiFormDataItemInterface()
@@ -618,7 +624,7 @@ void KexiDBLabel::setPaletteForegroundColor ( const QColor& color )
 void KexiDBLabel::frameChanged() {
 	d->pixmapDirty = true;
 	d->internalLabel->updateFrame();
-	QFrame::frameChanged();
+	Q3Frame::frameChanged();
 }
 
 void KexiDBLabel::showEvent( QShowEvent* e ) {

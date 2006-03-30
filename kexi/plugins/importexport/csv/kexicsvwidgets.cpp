@@ -22,6 +22,10 @@
 #include <qdir.h>
 #include <qlabel.h>
 #include <qlayout.h>
+//Added by qt3to4:
+#include <Q3VBoxLayout>
+#include <Q3HBoxLayout>
+#include <Q3Frame>
 
 #include <klocale.h>
 #include <klineedit.h>
@@ -37,10 +41,10 @@ KexiCSVDelimiterWidget::KexiCSVDelimiterWidget( bool lineEditOnBottom, QWidget *
  , m_availableDelimiters(KEXICSV_OTHER_DELIMITER_INDEX)
 
 {
-	QBoxLayout *lyr = 
+	Q3BoxLayout *lyr = 
 		lineEditOnBottom ? 
-		(QBoxLayout *)new QVBoxLayout( this, 0, KDialogBase::spacingHint() )
-		: (QBoxLayout *)new QHBoxLayout( this, 0, KDialogBase::spacingHint() );
+		(Q3BoxLayout *)new Q3VBoxLayout( this, 0, KDialogBase::spacingHint() )
+		: (Q3BoxLayout *)new Q3HBoxLayout( this, 0, KDialogBase::spacingHint() );
 
 	m_availableDelimiters[0]=KEXICSV_DEFAULT_FILE_DELIMITER;
 	m_availableDelimiters[1]=";";
@@ -106,7 +110,7 @@ void KexiCSVDelimiterWidget::slotDelimiterLineEditTextChanged( const QString & )
 
 void KexiCSVDelimiterWidget::setDelimiter(const QString& delimiter)
 {
-	QValueVector<QString>::ConstIterator it = m_availableDelimiters.constBegin();
+	Q3ValueVector<QString>::ConstIterator it = m_availableDelimiters.constBegin();
 	int index = 0;
 	for (; it != m_availableDelimiters.constEnd(); ++it, index++) {
 		if (*it == delimiter) {
@@ -151,8 +155,8 @@ void KexiCSVTextQuoteComboBox::setTextQuote(const QString& textQuote)
 KexiCSVInfoLabel::KexiCSVInfoLabel( const QString& labelText, QWidget* parent )
  : QWidget(parent, "KexiCSVInfoLabel")
 {
-	QVBoxLayout *vbox = new QVBoxLayout( this, 0, KDialogBase::spacingHint() );
-	QHBoxLayout *hbox = new QHBoxLayout( this );
+	Q3VBoxLayout *vbox = new Q3VBoxLayout( this, 0, KDialogBase::spacingHint() );
+	Q3HBoxLayout *hbox = new Q3HBoxLayout( this );
 	vbox->addLayout(hbox);
 	m_leftLabel = new QLabel(labelText, this);
 	m_leftLabel->setMinimumWidth(130);
@@ -167,15 +171,15 @@ KexiCSVInfoLabel::KexiCSVInfoLabel( const QString& labelText, QWidget* parent )
 	m_fnameLbl->setTextFormat(Qt::PlainText);
 	m_fnameLbl->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
 	m_fnameLbl->setLineWidth(1);
-	m_fnameLbl->setFrameStyle(QFrame::Box);
+	m_fnameLbl->setFrameStyle(Q3Frame::Box);
 	m_fnameLbl->setAlignment(Qt::AlignVCenter | Qt::AlignLeft | Qt::TextWordWrap);
 	hbox->addSpacing(5);
 	hbox->addWidget(m_iconLbl);
 	hbox->addWidget(m_fnameLbl, 0, Qt::AlignVCenter | Qt::AlignLeft | Qt::TextWordWrap);
 
-	m_separator = new QFrame(this);
-	m_separator->setFrameShape(QFrame::HLine);
-	m_separator->setFrameShadow(QFrame::Sunken);
+	m_separator = new Q3Frame(this);
+	m_separator->setFrameShape(Q3Frame::HLine);
+	m_separator->setFrameShadow(Q3Frame::Sunken);
 	vbox->addWidget(m_separator);
 }
 

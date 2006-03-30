@@ -23,6 +23,8 @@
 
 #include <qwidget.h>
 #include <qpixmap.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 #include <formeditor/form.h>
 
@@ -41,7 +43,7 @@ class KEXIREPORTUTILS_EXPORT KexiReportForm : public QWidget, public KFormDesign
 		void showRecordNavigator(bool s) { m_nav = s; }*/
 
 		virtual void drawRect(const QRect& r, int type);
-		virtual void drawRects(const QValueList<QRect> &list, int type);
+		virtual void drawRects(const Q3ValueList<QRect> &list, int type);
 		virtual void initBuffer();
 		virtual void clearForm();
 		virtual void highlightWidgets(QWidget *from, QWidget *to/*, const QPoint &p*/);

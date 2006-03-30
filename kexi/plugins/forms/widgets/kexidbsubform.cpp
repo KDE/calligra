@@ -28,11 +28,13 @@
 #include <formeditor/utils.h>
 #include <formeditor/container.h>
 #include <formeditor/formmanager.h>
+//Added by qt3to4:
+#include <Q3Frame>
 
 KexiDBSubForm::KexiDBSubForm(KFormDesigner::Form *parentForm, QWidget *parent, const char *name)
-: QScrollView(parent, name), m_parentForm(parentForm), m_form(0), m_widget(0)
+: Q3ScrollView(parent, name), m_parentForm(parentForm), m_form(0), m_widget(0)
 {
-	setFrameStyle(QFrame::WinPanel | QFrame::Sunken);
+	setFrameStyle(Q3Frame::WinPanel | Q3Frame::Sunken);
 	viewport()->setPaletteBackgroundColor(colorGroup().mid());
 }
 /*

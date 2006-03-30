@@ -22,7 +22,12 @@
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qtooltip.h>
-#include <qheader.h>
+#include <q3header.h>
+//Added by qt3to4:
+#include <Q3VBoxLayout>
+#include <Q3HBoxLayout>
+#include <Q3Frame>
+#include <Q3CString>
 
 #include <kiconloader.h>
 #include <klocale.h>
@@ -45,7 +50,7 @@ KexiDataSourcePage::KexiDataSourcePage(QWidget *parent, const char *name)
  : QWidget(parent, name)
  , m_insideClearDataSourceSelection(false)
 {
-	QVBoxLayout *vlyr = new QVBoxLayout(this);
+	Q3VBoxLayout *vlyr = new Q3VBoxLayout(this);
 	m_objectInfoLabel = new KexiObjectInfoLabel(this, "KexiObjectInfoLabel");
 	vlyr->addWidget(m_objectInfoLabel);
 
@@ -58,7 +63,7 @@ KexiDataSourcePage::KexiDataSourcePage(QWidget *parent, const char *name)
 	vlyr->addWidget(m_noDataSourceAvailableLabel);
 
 	//Widget's Data Source
-	QHBoxLayout *hlyr = new QHBoxLayout(vlyr);
+	Q3HBoxLayout *hlyr = new Q3HBoxLayout(vlyr);
 #if 0
 //! @todo unhide this when expression work
 //	m_widgetDSLabel = new QLabel(i18n("Table Field, Query Field or Expression", "Source field or expression:"), this);
@@ -68,7 +73,7 @@ KexiDataSourcePage::KexiDataSourcePage(QWidget *parent, const char *name)
 	m_widgetDSLabel->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
 	m_widgetDSLabel->setMargin(2);
 	m_widgetDSLabel->setMinimumHeight(IconSize(K3Icon::Small)+4);
-	m_widgetDSLabel->setAlignment(AlignLeft|AlignBottom);
+	m_widgetDSLabel->setAlignment(Qt::AlignLeft|Qt::AlignBottom);
 	hlyr->addWidget(m_widgetDSLabel);
 
 	m_clearWidgetDSButton = new QToolButton(this, "clearWidgetDSButton");
@@ -86,18 +91,18 @@ KexiDataSourcePage::KexiDataSourcePage(QWidget *parent, const char *name)
 
 	vlyr->addSpacing(8);
 
-	m_dataSourceSeparator = new QFrame(this);
-	m_dataSourceSeparator->setFrameShape(QFrame::HLine);
-	m_dataSourceSeparator->setFrameShadow(QFrame::Sunken);
+	m_dataSourceSeparator = new Q3Frame(this);
+	m_dataSourceSeparator->setFrameShape(Q3Frame::HLine);
+	m_dataSourceSeparator->setFrameShadow(Q3Frame::Sunken);
 	vlyr->addWidget(m_dataSourceSeparator);
 
 	//Form's Data Source
-	hlyr = new QHBoxLayout(vlyr);
+	hlyr = new Q3HBoxLayout(vlyr);
 	m_dataSourceLabel = new QLabel(i18n("Form's data source:"), this);
 	m_dataSourceLabel->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
 	m_dataSourceLabel->setMargin(2);
 	m_dataSourceLabel->setMinimumHeight(IconSize(K3Icon::Small)+4);
-	m_dataSourceLabel->setAlignment(AlignLeft|AlignBottom);
+	m_dataSourceLabel->setAlignment(Qt::AlignLeft|Qt::AlignBottom);
 	hlyr->addWidget(m_dataSourceLabel);
 
 	m_gotoButton = new QToolButton(this, "gotoButton");
@@ -131,14 +136,14 @@ KexiDataSourcePage::KexiDataSourcePage(QWidget *parent, const char *name)
 	vlyr->addStretch();
 #else
 	vlyr->addSpacing(8);
-	QFrame *separator = new QFrame(this);
-	separator->setFrameShape(QFrame::HLine);
-	separator->setFrameShadow(QFrame::Sunken);
+	Q3Frame *separator = new Q3Frame(this);
+	separator->setFrameShape(Q3Frame::HLine);
+	separator->setFrameShadow(Q3Frame::Sunken);
 	vlyr->addWidget(separator);
 
 	//helper info
 //! @todo allow to hide such helpers by adding global option
-	hlyr = new QHBoxLayout(vlyr);
+	hlyr = new Q3HBoxLayout(vlyr);
 	m_mousePointerLabel = new QLabel(this);
 	hlyr->addWidget(m_mousePointerLabel);
 	m_mousePointerLabel->setPixmap( SmallIcon("mouse_pointer") );
@@ -149,7 +154,7 @@ KexiDataSourcePage::KexiDataSourcePage(QWidget *parent, const char *name)
 
 	//Available Fields
 	vlyr->addSpacing(4);
-	hlyr = new QHBoxLayout(vlyr);
+	hlyr = new Q3HBoxLayout(vlyr);
 	m_availableFieldsLabel = new QLabel(i18n("Available fields:"), this);
 	m_availableFieldsLabel->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
 	m_availableFieldsLabel->setMargin(2);
@@ -158,7 +163,7 @@ KexiDataSourcePage::KexiDataSourcePage(QWidget *parent, const char *name)
 
 	m_addField = new QToolButton(this, "addFieldButton");
 	m_addField->setUsesTextLabel(true);
-	m_addField->setTextPosition(QToolButton::Right);
+	m_addField->setTextPosition(QToolButton::BesideIcon);
 	m_addField->setTextLabel(i18n("Insert selected field into form", "Insert"));
 	m_addField->setIconSet(SmallIconSet("add_field"));
 	m_addField->setMinimumHeight(m_availableFieldsLabel->minimumHeight());
@@ -224,9 +229,9 @@ void KexiDataSourcePage::clearWidgetDataSourceSelection()
 
 void KexiDataSourcePage::slotGotoSelected()
 {
-	QCString mime = m_dataSourceCombo->selectedMimeType();
+	Q3CString mime = m_dataSourceCombo->selectedMimeType();
 	if (mime=="kexi/table" || mime=="kexi/query") {
-		QCString name = m_dataSourceCombo->selectedName();
+		Q3CString name = m_dataSourceCombo->selectedName();
 		if (name.isEmpty())
 			return;
 		emit jumpToObjectRequested(mime, name);
@@ -239,7 +244,7 @@ void KexiDataSourcePage::slotInsertSelectedFields()
 	if (!m_fieldListView->schema())
 		return;
 	QStringList selectedFields;
-	for (QListViewItemIterator it(m_fieldListView); it.current(); ++it) {
+	for (Q3ListViewItemIterator it(m_fieldListView); it.current(); ++it) {
 		if (it.current()->isSelected()) {
 //! @todo what about query fields/aliases? it.current()->text(0) can be not enough
 			selectedFields.append(it.current()->text(0));
@@ -271,9 +276,9 @@ void KexiDataSourcePage::slotDataSourceSelected()
 {
 	if (!m_dataSourceCombo->project())
 		return;
-	QCString mime = m_dataSourceCombo->selectedMimeType();
+	Q3CString mime = m_dataSourceCombo->selectedMimeType();
 	bool dataSourceFound = false;
-	QCString name = m_dataSourceCombo->selectedName();
+	Q3CString name = m_dataSourceCombo->selectedName();
 	if ((mime=="kexi/table" || mime=="kexi/query") && !name.isEmpty()) {
 		KexiDB::TableOrQuerySchema *tableOrQuery = new KexiDB::TableOrQuerySchema(
 			m_dataSourceCombo->project()->dbConnection(), name, mime=="kexi/table");
@@ -327,16 +332,16 @@ void KexiDataSourcePage::slotFieldSelected()
 	);
 }
 
-void KexiDataSourcePage::setDataSource(const QCString& mimeType, const QCString& name)
+void KexiDataSourcePage::setDataSource(const Q3CString& mimeType, const Q3CString& name)
 {
 	m_dataSourceCombo->setDataSource(mimeType, name);
 }
 
 void KexiDataSourcePage::assignPropertySet(KoProperty::Set* propertySet)
 {
-	QCString objectClassName;
+	Q3CString objectClassName;
 	if (propertySet) {
-		QCString objectName, iconName;
+		Q3CString objectName, iconName;
 		QString objectClassString;
 		if (propertySet->contains("name"))
 			objectName = (*propertySet)["name"].value().toCString();
@@ -369,7 +374,7 @@ void KexiDataSourcePage::assignPropertySet(KoProperty::Set* propertySet)
 
 	if (!isForm) {
 		//this is a widget
-		QCString dataSource;
+		Q3CString dataSource;
 		if (hasDataSourceProperty) {
 			if (propertySet)
 				dataSource = (*propertySet)["dataSource"].value().toCString();
@@ -414,7 +419,7 @@ void KexiDataSourcePage::slotFieldListViewSelectionChanged()
 {
 #ifndef KEXI_NO_AUTOFIELD_WIDGET
 	//update "add field" button's state
-	for (QListViewItemIterator it(m_fieldListView); it.current(); ++it) {
+	for (Q3ListViewItemIterator it(m_fieldListView); it.current(); ++it) {
 		if (it.current()->isSelected()) {
 			m_addField->setEnabled(true);
 			return;

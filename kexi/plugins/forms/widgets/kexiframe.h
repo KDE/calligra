@@ -20,10 +20,10 @@
 #ifndef KexiFrame_H
 #define KexiFrame_H
 
-#include <qframe.h>
+#include <q3frame.h>
 
 //! Push Button widget for Kexi forms
-class KEXIFORMUTILS_EXPORT KexiFrame : public QFrame
+class KEXIFORMUTILS_EXPORT KexiFrame : public Q3Frame
 {
 	Q_OBJECT
 	Q_PROPERTY( QColor frameColor READ frameColor WRITE setFrameColor DESIGNABLE true )

@@ -21,7 +21,10 @@
 #define KEXIFORMDATAPROVIDER_H
 
 #include "kexiformdataiteminterface.h"
-#include <qptrdict.h>
+#include <q3ptrdict.h>
+//Added by qt3to4:
+#include <Q3ValueList>
+#include <Q3PtrList>
 
 class KexiTableItem;
 namespace KexiDB {
@@ -53,7 +56,7 @@ class KEXIFORMUTILS_EXPORT KexiFormDataProvider : public KexiDataItemChangesList
 
 		QStringList usedDataSources() const { return m_usedDataSources; }
 
-		QPtrList<KexiFormDataItemInterface>& dataItems() { return m_dataItems; }
+		Q3PtrList<KexiFormDataItemInterface>& dataItems() { return m_dataItems; }
 
 		/*! Fills data items with appropriate data fetched from \a cursor. */
 		void fillDataItems(KexiTableItem& row);// KexiDB::Cursor& cursor);
@@ -72,7 +75,7 @@ class KEXIFORMUTILS_EXPORT KexiFormDataProvider : public KexiDataItemChangesList
 		 \a invalidSources is the list of data sources that should 
 		 be ommited for fillDataItems(). 
 		 Used by KexiFormView::initDataSource(). */
-		void invalidateDataSources( const QValueList<uint>& invalidSources, 
+		void invalidateDataSources( const Q3ValueList<uint>& invalidSources, 
 			KexiDB::QuerySchema* query = 0 );
 
 		/*! Fills the same data provided by \a value to every data item (other than \a item) 
@@ -82,9 +85,9 @@ class KEXIFORMUTILS_EXPORT KexiFormDataProvider : public KexiDataItemChangesList
 
 	protected:
 		QWidget *m_mainWidget;
-		QPtrDict<char> *m_duplicatedItems;
+		Q3PtrDict<char> *m_duplicatedItems;
 		typedef QMap<KexiFormDataItemInterface*,uint> KexiFormDataItemInterfaceToIntMap;
-		QPtrList<KexiFormDataItemInterface> m_dataItems;
+		Q3PtrList<KexiFormDataItemInterface> m_dataItems;
 		QStringList m_usedDataSources;
 		KexiFormDataItemInterfaceToIntMap m_fieldNumbersForDataItems;
 };

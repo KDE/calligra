@@ -21,6 +21,8 @@
 
 #include "core/kexipart.h"
 #include "core/kexipartitem.h"
+//Added by qt3to4:
+#include <Q3CString>
 //#include "core/kexiproject.h"
 
 using namespace Kross::KexiApp;
@@ -33,9 +35,9 @@ KexiAppPartItem::KexiAppPartItem(KexiPart::Item* item)
     this->addProxyFunction< Kross::Api::ProxyValue<Kross::Api::Variant,void>, Kross::Api::ProxyValue<Kross::Api::Variant,int> >
         ("setIdentifier", item, &::KexiPart::Item::setIdentifier );
 
-    this->addProxyFunction< Kross::Api::ProxyValue<Kross::Api::Variant,QCString> >
+    this->addProxyFunction< Kross::Api::ProxyValue<Kross::Api::Variant,Q3CString> >
         ("mimeType", item, &::KexiPart::Item::mimeType );
-    this->addProxyFunction< Kross::Api::ProxyValue<Kross::Api::Variant,void>, Kross::Api::ProxyValue<Kross::Api::Variant,QCString> >
+    this->addProxyFunction< Kross::Api::ProxyValue<Kross::Api::Variant,void>, Kross::Api::ProxyValue<Kross::Api::Variant,Q3CString> >
         ("setMimeType", item, &::KexiPart::Item::setMimeType );
 
     this->addProxyFunction< Kross::Api::ProxyValue<Kross::Api::Variant,QString> >

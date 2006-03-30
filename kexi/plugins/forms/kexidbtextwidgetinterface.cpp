@@ -21,8 +21,10 @@
 #include "kexiformdataiteminterface.h"
 #include <kexidb/queryschema.h>
 #include <kexiutils/utils.h>
-#include <qframe.h>
+#include <q3frame.h>
 #include <qpainter.h>
+//Added by qt3to4:
+#include <QEvent>
 
 void KexiDBTextWidgetInterface::setColumnInfo(KexiDB::QueryColumnInfo* cinfo, QWidget *w)
 {
@@ -33,7 +35,7 @@ void KexiDBTextWidgetInterface::setColumnInfo(KexiDB::QueryColumnInfo* cinfo, QW
 	}
 }
 
-void KexiDBTextWidgetInterface::paintEvent( QFrame *w, bool textIsEmpty, int alignment, bool hasFocus  )
+void KexiDBTextWidgetInterface::paintEvent( Q3Frame *w, bool textIsEmpty, int alignment, bool hasFocus  )
 {
 	KexiFormDataItemInterface *dataItemIface = dynamic_cast<KexiFormDataItemInterface*>(w);
 	if (dataItemIface && dataItemIface->columnInfo() && dataItemIface->columnInfo()->field->isAutoIncrement()

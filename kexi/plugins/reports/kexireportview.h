@@ -21,8 +21,10 @@
 #ifndef KEXIREPORTVIEW_H
 #define KEXIREPORTVIEW_H
 
-#include <qscrollview.h>
+#include <q3scrollview.h>
 #include <qtimer.h>
+//Added by qt3to4:
+#include <QResizeEvent>
 
 #include <kexiviewbase.h>
 

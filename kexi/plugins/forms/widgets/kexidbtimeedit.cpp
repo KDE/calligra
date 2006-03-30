@@ -28,7 +28,7 @@
 #include <kexiutils/utils.h>
 
 KexiDBTimeEdit::KexiDBTimeEdit(const QTime &time, QWidget *parent, const char *name)
- : QTimeEdit(time, parent, name), KexiFormDataItemInterface()
+ : Q3TimeEdit(time, parent, name), KexiFormDataItemInterface()
 {
 	m_invalidState = false;
 	setAutoAdvance(true);
@@ -53,8 +53,8 @@ void KexiDBTimeEdit::setInvalidState( const QString&)
 	setReadOnly(true);
 	m_invalidState = true;
 //! @todo move this to KexiDataItemInterface::setInvalidStateInternal() ?
-	if (focusPolicy() & TabFocus)
-		setFocusPolicy(QWidget::ClickFocus);
+	if (focusPolicy() & Qt::TabFocus)
+		setFocusPolicy(Qt::ClickFocus);
 }
 
 void
@@ -63,7 +63,7 @@ KexiDBTimeEdit::setEnabled(bool enabled)
 	 // prevent the user from reenabling the widget when it is in invalid state
 	if(enabled && m_invalidState)
 		return;
-	QTimeEdit::setEnabled(enabled);
+	Q3TimeEdit::setEnabled(enabled);
 }
 
 void KexiDBTimeEdit::setValueInternal(const QVariant &add, bool removeOld)

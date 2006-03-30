@@ -20,8 +20,17 @@
 
 #include "kexiformview.h"
 
-#include <qobjectlist.h>
+#include <qobject.h>
 #include <qfileinfo.h>
+//Added by qt3to4:
+#include <Q3CString>
+#include <QFocusEvent>
+#include <QDragMoveEvent>
+#include <QEvent>
+#include <QDropEvent>
+#include <Q3ValueList>
+#include <Q3HBoxLayout>
+#include <QResizeEvent>
 
 #include <formeditor/form.h>
 #include <formeditor/formIO.h>
@@ -69,7 +78,7 @@ KexiFormView::KexiFormView(KexiMainWindow *mainWin, QWidget *parent,
 {
 	m_delayedFormContentsResizeOnShow = 0;
 
-	QHBoxLayout *l = new QHBoxLayout(this);
+	Q3HBoxLayout *l = new Q3HBoxLayout(this);
 	l->setAutoAdd(true);
 
 	m_scrollView = new KexiFormScrollView(this, viewMode()==Kexi::DataViewMode);
@@ -305,7 +314,7 @@ KexiFormView::loadForm()
 	//-inherit data types
 	//(this data has not been stored in the form)
 	QString dataSourceString( m_dbform->dataSource() );
-	QCString dataSourceMimeTypeString( m_dbform->dataSourceMimeType() );
+	Q3CString dataSourceMimeTypeString( m_dbform->dataSourceMimeType() );
 	KexiDB::Connection *conn = parentDialog()->mainWin()->project()->dbConnection();
 	KexiDB::TableOrQuerySchema tableOrQuery(
 		conn, dataSourceString.latin1(), dataSourceMimeTypeString=="kexi/table");
@@ -438,7 +447,7 @@ KexiFormView::afterSwitchFrom(int mode)
 				QFocusEvent::resetReason();
 			//}
 
-			QPtrListIterator<QWidget> it(*m_dbform->orderedFocusWidgets());
+			Q3PtrListIterator<QWidget> it(*m_dbform->orderedFocusWidgets());
 			for (;it.current(); ++it) {
 				KexiFormDataItemInterface *iface = dynamic_cast<KexiFormDataItemInterface*>(it.current());
 				if (iface)
@@ -477,7 +486,7 @@ void KexiFormView::initDataSource()
 {
 	deleteQuery();
 	QString dataSourceString( m_dbform->dataSource() );
-	QCString dataSourceMimeTypeString( m_dbform->dataSourceMimeType() );
+	Q3CString dataSourceMimeTypeString( m_dbform->dataSourceMimeType() );
 //! @todo also handle anonymous (not stored) queries provided as statements here
 	bool ok = !dataSourceString.isEmpty();
 
@@ -531,7 +540,7 @@ void KexiFormView::initDataSource()
 		}
 	}
 
-	QValueList<uint> invalidSources;
+	Q3ValueList<uint> invalidSources;
 	if (ok) {
 		KexiDB::IndexSchema *pkey = tableSchema ? tableSchema->primaryKey() : 0;
 		if (pkey) {
@@ -924,7 +933,7 @@ KexiFormView::show()
 	//	if (resizeMode() == KexiFormView::ResizeAuto)
 	if (viewMode()==Kexi::DataViewMode) {
 		if (resizeMode() == KexiFormView::ResizeAuto)
-			m_scrollView->setResizePolicy(QScrollView::AutoOneFit);
+			m_scrollView->setResizePolicy(Q3ScrollView::AutoOneFit);
 	}
 }
 
@@ -941,7 +950,7 @@ void
 KexiFormView::updateDataSourcePage()
 {
 	if (viewMode()==Kexi::DesignViewMode) {
-		QCString dataSourceMimeType, dataSource;
+		Q3CString dataSourceMimeType, dataSource;
 		KFormDesigner::WidgetPropertySet *set = KFormDesigner::FormManager::self()->propertySet();
 		if (set->contains("dataSourceMimeType"))
 			dataSourceMimeType = (*set)["dataSourceMimeType"].value().toCString();
@@ -1035,7 +1044,7 @@ KexiFormView::insertAutoFields(const QString& sourceMimeType, const QString& sou
 //#if 0
 		KFormDesigner::CommandGroup *subGroup 
 			= new KFormDesigner::CommandGroup("", KFormDesigner::FormManager::self()->propertySet());
-		QMap<QCString, QVariant> propValues;
+		QMap<Q3CString, QVariant> propValues;
 		propValues.insert("dataSource", column->aliasOrName());
 		propValues.insert("fieldTypeInternal", (int)column->field->type());
 		propValues.insert("fieldCaptionInternal", column->captionOrAliasOrName());

@@ -20,7 +20,7 @@
 #include "kexiformeventhandler.h"
 
 #include <qwidget.h>
-#include <qobjectlist.h>
+#include <qobject.h>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -72,7 +72,7 @@ void KexiFormEventHandler::setMainWidgetForEventHandling(KexiMainWindow *mainWin
 	QObjectList *l = m_mainWidget->queryList( "KexiPushButton" );
 	QObjectListIt it( *l );
 	QObject *obj;
-	QDict<char> tmpSources;
+	Q3Dict<char> tmpSources;
 	for ( ; (obj = it.current()) != 0; ++it ) {
 		QString actionName = obj->property("onClickAction").toString();
 		if(actionName.isEmpty())

@@ -28,6 +28,8 @@
 #include <widget/utils/kexirecordnavigator.h>
 #include <widget/utils/kexisharedactionclient.h>
 #include <widget/tableview/kexidataawareobjectiface.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 //! @short KexiFormScrollView class provides a widget for displaying data in a form view
 /*! This class also implements:
@@ -146,7 +148,7 @@ class KEXIFORMUTILS_EXPORT KexiFormScrollView :
 		//! Like above, not db-aware version
 		virtual void slotRowInserted(KexiTableItem *item, uint row, bool repaint);
 
-		virtual void slotRowsDeleted( const QValueList<int> & );
+		virtual void slotRowsDeleted( const Q3ValueList<int> & );
 
 		virtual void slotDataDestroying() { KexiDataAwareObjectInterface::slotDataDestroying(); }
 

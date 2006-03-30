@@ -24,6 +24,8 @@
 #include <kiconloader.h>
 
 #include <qlayout.h>
+//Added by qt3to4:
+#include <Q3VBoxLayout>
 
 #include <kexidb/connection.h>
 
@@ -46,7 +48,7 @@ KexiRelationMainDlg::KexiRelationMainDlg(KexiMainWindow *mainWin, QWidget *paren
 	addActionProxyChild( m_rel );
 //	addActionProxyChild( m_view->relationView() );
 	
-	QVBoxLayout *g = new QVBoxLayout(this);
+	Q3VBoxLayout *g = new Q3VBoxLayout(this);
 	g->addWidget(m_rel);
 
 	//show all tables
