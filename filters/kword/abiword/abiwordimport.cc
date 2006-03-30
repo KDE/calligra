@@ -1834,7 +1834,7 @@ KoFilter::ConversionStatus ABIWORDImport::convert( const QByteArray& from, const
     }
     delete in;
 
-    Q3CString strOut;
+    QByteArray strOut;
     KoStoreDevice* out;
 
     kDebug(30506) << "Creating documentinfo.xml" << endl;
@@ -1847,7 +1847,7 @@ KoFilter::ConversionStatus ABIWORDImport::convert( const QByteArray& from, const
     }
 
     //Write the document information!
-    strOut=handler.getDocInfo().toCString(); // UTF-8
+    strOut=handler.getDocInfo().toString(); // UTF-8
     // WARNING: we cannot use KoStore::write(const QByteArray&) because it writes an extra NULL character at the end.
     out->write(strOut,strOut.length());
 
@@ -1861,7 +1861,7 @@ KoFilter::ConversionStatus ABIWORDImport::convert( const QByteArray& from, const
     }
 
     //Write the document!
-    strOut=handler.getDocument().toCString(); // UTF-8
+    strOut=handler.getDocument().toString(); // UTF-8
     // WARNING: we cannot use KoStore::write(const QByteArray&) because it writes an extra NULL character at the end.
     out->write(strOut,strOut.length());
 
