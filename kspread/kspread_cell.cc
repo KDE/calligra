@@ -2207,7 +2207,7 @@ void Cell::paintCell( const KoRect   &rect, QPainter & painter,
     selected = selected && !( markerArea.contains( cellRef ) );
 
     // Don't draw any selection at all when printing.
-    if ( painter.device()->isExtDev() || !drawCursor )
+    if ( dynamic_cast<QPrinter*>(painter.device()) || !drawCursor )
       selected = false;
   }
 
@@ -2290,7 +2290,7 @@ void Cell::paintCell( const KoRect   &rect, QPainter & painter,
 
   // If we print pages, then we disable clipping, otherwise borders are
   // cut in the middle at the page borders.
-  if ( painter.device()->isExtDev() )
+  if ( dynamic_cast<QPrinter*>(painter.device()) )
     painter.setClipping( false );
 
   // Paint the borders if this cell is not part of another merged cell.
@@ -2304,7 +2304,7 @@ void Cell::paintCell( const KoRect   &rect, QPainter & painter,
   }
 
   // Turn clipping back on.
-  if ( painter.device()->isExtDev() )
+  if ( dynamic_cast<QPrinter*>(painter.device()) )
     painter.setClipping( true );
 
   // 5. Paint diagonal lines and page borders.
@@ -2318,12 +2318,12 @@ void Cell::paintCell( const KoRect   &rect, QPainter & painter,
   if ( !isObscured() ) {
 
     // 6a. Paint possible comment indicator.
-    if ( !painter.device()->isExtDev()
+    if ( !dynamic_cast<QPrinter*>(painter.device())
    || format()->sheet()->print()->printCommentIndicator() )
       paintCommentIndicator( painter, cellRect, cellRef, backgroundColor );
 
     // 6b. Paint possible formula indicator.
-    if ( !painter.device()->isExtDev()
+    if ( !dynamic_cast<QPrinter*>(painter.device())
    || format()->sheet()->print()->printFormulaIndicator() )
       paintFormulaIndicator( painter, cellRect, backgroundColor );
 
@@ -2343,7 +2343,7 @@ void Cell::paintCell( const KoRect   &rect, QPainter & painter,
     //  b) something indicates that the text should not be painted
     //  c) the sheet is protected and the cell is hidden.
     if ( !d->strOutText.isEmpty()
-   && ( !painter.device()->isExtDev()
+   && ( !dynamic_cast<QPrinter*>(painter.device())
         || !format()->getDontprintText( cellRef.x(), cellRef.y() ) )
    && !( format()->sheet()->isProtected()
          && format()->isHideAll( cellRef.x(), cellRef.y() ) ) )
@@ -2356,7 +2356,7 @@ void Cell::paintCell( const KoRect   &rect, QPainter & painter,
   //    cells, then paint the obscuring cell(s).  Otherwise don't do
   //    anything so that we don't cause an infinite loop.
   if ( isObscured() && paintingObscured == 0 &&
-       !( sheetDir == Sheet::RightToLeft && painter.device()->isExtDev() ) )
+       !( sheetDir == Sheet::RightToLeft && dynamic_cast<QPrinter*>(painter.device()) ) )
   {
 
     //kDebug(36001) << "painting cells that obscure " << name() << endl;
@@ -2677,7 +2677,7 @@ void Cell::paintBackground( QPainter& painter, const KoRect &cellRect,
     QColor bg( backgroundColor );
 
     // Handle printers separately.
-    if ( !painter.device()->isExtDev() ) {
+    if ( !dynamic_cast<QPrinter*>(painter.device()) ) {
       if ( bg.isValid() )
         painter.setBackgroundColor( bg );
       else
@@ -2696,7 +2696,7 @@ void Cell::paintBackground( QPainter& painter, const KoRect &cellRect,
   }
 
   // Erase the background of the cell.
-  if ( !painter.device()->isExtDev() )
+  if ( !dynamic_cast<QPrinter*>(painter.device()) )
     painter.eraseRect( zoomedCellRect );
 
   // Get a background brush
@@ -2745,7 +2745,7 @@ void Cell::paintDefaultBorders( QPainter& painter, const KoRect &rect,
   Doc* doc = sheet()->doc();
 
   Sheet::LayoutDirection sheetDir =  format()->sheet()->layoutDirection();
-  bool paintingToExternalDevice = painter.device()->isExtDev();
+  bool paintingToExternalDevice = dynamic_cast<QPrinter*>(painter.device());
 
   // Each cell is responsible for drawing it's top and left portions
   // of the "default" grid. --Or not drawing it if it shouldn't be
@@ -2902,7 +2902,7 @@ void Cell::paintDefaultBorders( QPainter& painter, const KoRect &rect,
 
     // If we are on paper printout, we limit the length of the lines.
     // On paper, we always have full cells, on screen not.
-    if ( painter.device()->isExtDev() )     {
+    if ( dynamic_cast<QPrinter*>(painter.device()) )     {
       if ( sheetDir == Sheet::RightToLeft )
         painter.drawLine( doc->zoomItX( qMax( rect.left(),   cellRect.x() ) ),
                           doc->zoomItY( qMax( rect.top(),    cellRect.y() + dt ) ),
@@ -2949,7 +2949,7 @@ void Cell::paintDefaultBorders( QPainter& painter, const KoRect &rect,
 
     // If we are on paper printout, we limit the length of the lines.
     // On paper, we always have full cells, on screen not.
-    if ( painter.device()->isExtDev() ) {
+    if ( dynamic_cast<QPrinter*>(painter.device()) ) {
       painter.drawLine( doc->zoomItX( qMax( rect.left(),   cellRect.x() + dl ) ),
                         doc->zoomItY( qMax( rect.top(),    cellRect.bottom() ) ),
                         doc->zoomItX( qMin( rect.right(),  cellRect.right() - dr ) ),
@@ -2980,7 +2980,7 @@ void Cell::paintCommentIndicator( QPainter& painter,
        && cellRect.width() > 10.0
        && cellRect.height() > 10.0
        && ( sheet()->print()->printCommentIndicator()
-           || ( !painter.device()->isExtDev() && sheet()->getShowCommentIndicator() ) ) ) {
+           || ( !dynamic_cast<QPrinter*>(painter.device()) && sheet()->getShowCommentIndicator() ) ) ) {
     QColor penColor = Qt::red;
 
     // If background has high red part, switch to blue.
@@ -3077,7 +3077,7 @@ void Cell::paintMoreTextIndicator( QPainter& painter,
   // Show a red triangle when it's not possible to write all text in cell.
   // Don't print the red triangle if we're printing.
   if( testFlag( Flag_CellTooShortX ) &&
-      !painter.device()->isExtDev() &&
+      !dynamic_cast<QPrinter*>(painter.device()) &&
       cellRect.height() > 4.0  &&
       cellRect.width()  > 4.0 )
   {
@@ -3134,7 +3134,7 @@ void Cell::paintText( QPainter& painter,
 
   // Resolve the text color if invalid (=default).
   if ( !textColorPrint.isValid() ) {
-    if ( painter.device()->isExtDev() )
+    if ( dynamic_cast<QPrinter*>(painter.device()) )
       textColorPrint = Qt::black;
     else
       textColorPrint = QApplication::palette().active().text();
@@ -3420,7 +3420,7 @@ void Cell::paintPageBorders( QPainter& painter,
            bool paintBorderBottom )
 {
   // Not screen?  Return immediately.
-  if ( painter.device()->isExtDev() )
+  if ( dynamic_cast<QPrinter*>(painter.device()) )
     return;
 
   if ( ! format()->sheet()->isShowPageBorders() )
@@ -3582,7 +3582,7 @@ void Cell::paintCellBorders( QPainter& painter, const KoRect& rect,
 
     // If we are on paper printout, we limit the length of the lines.
     // On paper, we always have full cells, on screen not.
-    if ( painter.device()->isExtDev() ) {
+    if ( dynamic_cast<QPrinter*>(painter.device()) ) {
       // FIXME: There is probably Cut&Paste bugs here as well as below.
       //        The qMin/qMax and left/right pairs don't really make sense.
       //
@@ -3629,7 +3629,7 @@ void Cell::paintCellBorders( QPainter& painter, const KoRect& rect,
 
     // If we are on paper printout, we limit the length of the lines.
     // On paper, we always have full cells, on screen not.
-    if ( painter.device()->isExtDev() ) {
+    if ( dynamic_cast<QPrinter*>(painter.device()) ) {
       if ( sheetDir == Sheet::RightToLeft )
         painter.drawLine( qMax( zrect_left, zcellRect_left ),
                           qMax( zrect_top, zcellRect_top - top ),
@@ -3670,7 +3670,7 @@ void Cell::paintCellBorders( QPainter& painter, const KoRect& rect,
 
     // If we are on paper printout, we limit the length of the lines.
     // On paper, we always have full cells, on screen not.
-    if ( painter.device()->isExtDev() ) {
+    if ( dynamic_cast<QPrinter*>(painter.device()) ) {
       if ( zcellRect_top >= zrect_top + top_penWidth / 2)
   painter.drawLine( qMax( zrect_left,   zcellRect_left ),
         zcellRect_top,
@@ -3692,7 +3692,7 @@ void Cell::paintCellBorders( QPainter& painter, const KoRect& rect,
 
     // If we are on paper printout, we limit the length of the lines.
     // On paper, we always have full cells, on screen not.
-    if ( painter.device()->isExtDev() ) {
+    if ( dynamic_cast<QPrinter*>(painter.device()) ) {
       if ( zcellRect_bottom <= zrect_bottom + bottom_penWidth / 2)
   painter.drawLine( qMax( zrect_left,   zcellRect_left ),
         zcellRect_bottom,
@@ -3764,7 +3764,7 @@ void Cell::paintCellBorders( QPainter& painter, const KoRect& rect,
     painter.setPen( vert_pen );
     // If we are on paper printout, we limit the length of the lines.
     // On paper, we always have full cells, on screen not.
-    if ( painter.device()->isExtDev() ) {
+    if ( dynamic_cast<QPrinter*>(painter.device()) ) {
       if ( sheetDir == Sheet::RightToLeft )
         painter.drawLine( qMax( zrect_left, zcellRect_right ),
                           qMax( zrect_top, zcellRect_top ),
@@ -3814,7 +3814,7 @@ void Cell::paintCellBorders( QPainter& painter, const KoRect& rect,
     painter.setPen( vert_pen );
     //If we are on paper printout, we limit the length of the lines
     //On paper, we always have full cells, on screen not
-    if ( painter.device()->isExtDev() ) {
+    if ( dynamic_cast<QPrinter*>(painter.device()) ) {
       if ( sheetDir == Sheet::RightToLeft )
         painter.drawLine( qMax( zrect_left, zcellRect_left ),
                           qMax( zrect_top, zcellRect_top ),
@@ -3867,7 +3867,7 @@ void Cell::paintCellBorders( QPainter& painter, const KoRect& rect,
       painter.setPen( vert_pen );
       // If we are on paper printout, we limit the length of the lines.
       // On paper, we always have full cells, on screen not.
-      if ( painter.device()->isExtDev() ) {
+      if ( dynamic_cast<QPrinter*>(painter.device()) ) {
         if ( sheetDir == Sheet::RightToLeft )
           painter.drawLine( qMax( zrect_left, zcellRect_right ),
                             qMax( zrect_top, zcellRect_bottom - bottom ),
@@ -3919,7 +3919,7 @@ void Cell::paintCellBorders( QPainter& painter, const KoRect& rect,
       painter.setPen( vert_pen );
       // If we are on paper printout, we limit the length of the lines.
       // On paper, we always have full cells, on screen not.
-      if ( painter.device()->isExtDev() )      {
+      if ( dynamic_cast<QPrinter*>(painter.device()) )      {
         if ( sheetDir == Sheet::RightToLeft )
           painter.drawLine( qMax( zrect_left, zcellRect_left ),
                             qMax( zrect_top, zcellRect_bottom - bottom ),
