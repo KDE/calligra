@@ -283,7 +283,7 @@ Canvas::Canvas (View *_view)
   setAcceptDrops( true );
   setInputMethodEnabled( true ); // ensure using the InputMethod
 
-  setWFlags(Qt::WNoAutoErase);
+  setWindowFlags(Qt::WNoAutoErase);
 }
 
 Canvas::~Canvas()
@@ -383,9 +383,7 @@ bool Canvas::eventFilter( QObject *o, QEvent *e )
     }
     break;
   }
-  case QEvent::InputMethodStart:
-  case QEvent::InputMethodCompose:
-  case QEvent::InputMethodEnd:
+  case QEvent::InputMethod:
   {
       //QIMEvent * imev = static_cast<QIMEvent *>(e);
       //processIMEvent( imev );
@@ -1284,7 +1282,7 @@ void Canvas::processLeftClickAnchor()
         	}
 	}
 
-	new KRun(d->anchor);
+	new KRun(d->anchor, this);
     }
     else
     {
@@ -4339,7 +4337,7 @@ void Canvas::paintHighlightedRanges(QPainter& painter, const KoRect& /*viewRect*
 
 
     QBrush sizeGripBrush( colors[(index) % colors.size()] ); // (*it)->color());
-		QPen   sizeGripPen(Qt::white);
+		QPen sizeGripPen( Qt::white );
 
 		painter.setPen(sizeGripPen);
 		painter.setBrush(sizeGripBrush);
@@ -4628,7 +4626,6 @@ VBorder::VBorder( QWidget *_parent, Canvas *_canvas, View *_view)
   m_pCanvas = _canvas;
   m_lSize = 0L;
 
-  setBackgroundMode( PaletteButton );
   setMouseTracking( true );
   m_bResize = false;
   m_bSelection = false;
@@ -4961,13 +4958,13 @@ void VBorder::mouseMoveEvent( QMouseEvent * _ev )
            ev_PosY <= y + h + unzoomedPixel &&
            !( sheet->rowFormat( tmpRow )->isHide() && tmpRow == 1 ) )
       {
-        setCursor( splitVCursor );
+        setCursor( Qt::splitVCursor );
         return;
       }
       y += h;
       tmpRow++;
     }
-    setCursor( arrowCursor );
+    setCursor( Qt::arrowCursor );
   }
 }
 
@@ -5184,7 +5181,6 @@ HBorder::HBorder( QWidget *_parent, Canvas *_canvas,View *_view )
   m_pView = _view;
   m_pCanvas = _canvas;
   m_lSize = 0L;
-  setBackgroundMode( PaletteButton );
   setMouseTracking( true );
   m_bResize = false;
   m_bSelection = false;
@@ -5611,12 +5607,12 @@ void HBorder::mouseMoveEvent( QMouseEvent * _ev )
              ev_PosX <= x + w + unzoomedPixel &&
              !( sheet->columnFormat( tmpCol )->isHide() && tmpCol == 0 ) )
         {
-          setCursor( splitHCursor );
+          setCursor( Qt::splitHCursor );
           return;
         }
         x += w;
       }
-      setCursor( arrowCursor );
+      setCursor( Qt::arrowCursor );
     }
     else
     {
@@ -5631,13 +5627,13 @@ void HBorder::mouseMoveEvent( QMouseEvent * _ev )
              ev_PosX <= x + w + unzoomedPixel &&
              !( sheet->columnFormat( tmpCol )->isHide() && tmpCol == 1 ) )
         {
-          setCursor( splitHCursor );
+          setCursor( Qt::splitHCursor );
           return;
         }
         x += w;
         tmpCol++;
       }
-      setCursor( arrowCursor );
+      setCursor( Qt::arrowCursor );
     }
   }
 }
@@ -5784,7 +5780,6 @@ void HBorder::paintEvent( QPaintEvent* _ev )
   QPainter painter( this );
   QPen pen( Qt::black, 1 );
   painter.setPen( pen );
-  painter.setBackgroundColor( white );
 
   painter.setClipRect( _ev->rect() );
 
