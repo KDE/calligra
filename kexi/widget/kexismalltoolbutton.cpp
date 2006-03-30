@@ -20,7 +20,7 @@
 #include "kexismalltoolbutton.h"
 
 #include <qtooltip.h>
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
 #include <qstyle.h>
 
 #include <kiconloader.h>
@@ -65,7 +65,7 @@ void KexiSmallToolButton::updateAction()
 	update(m_action->text(), m_action->iconSet(K3Icon::Small));
 	setAccel(m_action->shortcut());
 	this->setToolTip( m_action->toolTip());
-	QWhatsThis::add(this, m_action->whatsThis());
+	Q3WhatsThis::add(this, m_action->whatsThis());
 }
 
 void KexiSmallToolButton::init()
@@ -88,7 +88,7 @@ void KexiSmallToolButton::update(const QString& text, const QIcon& iconSet, bool
 	else {
 		width += QFontMetrics(font()).width(text+" ");
 		setUsesTextLabel(true);
-		setTextPosition(QToolButton::Right);
+		setTextPosition(QToolButton::BesideIcon);
 		QToolButton::setTextLabel(text, tipToo);
 	}
 	if (!iconSet.isNull()) {
@@ -119,11 +119,11 @@ void KexiSmallToolButton::drawButton( QPainter *_painter )
 {
 	QToolButton::drawButton(_painter);
 	if (QToolButton::popup()) {
-		QStyle::SFlags arrowFlags = QStyle::Style_Default;
+		QStyle::State arrowFlags = QStyle::State_None;
 		if (isDown())
-			arrowFlags |= QStyle::Style_Down;
+			arrowFlags |= QStyle::State_DownArrow;
 		if (isEnabled())
-			arrowFlags |= QStyle::Style_Enabled;
+			arrowFlags |= QStyle::State_Enabled;
 		style().drawPrimitive(QStyle::PE_ArrowDown, _painter,
 			QRect(width()-7, height()-7, 5, 5), colorGroup(),
 			arrowFlags, QStyleOption() );

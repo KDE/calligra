@@ -23,6 +23,9 @@
 
 //#include "kexiviewbase.h"
 #include <qwidget.h>
+//Added by qt3to4:
+#include <QLabel>
+#include <Q3CString>
 
 class QLabel;
 class KexiMainWindow;
@@ -39,17 +42,17 @@ class KEXIEXTWIDGETS_EXPORT KexiObjectInfoLabel : public QWidget
 		KexiObjectInfoLabel(QWidget* parent, const char* name = 0);
 		~KexiObjectInfoLabel();
 
-		void setObjectClassIcon(const QCString& name);
-		QCString objectClassIcon() const { return m_classIcon; }
+		void setObjectClassIcon(const Q3CString& name);
+		Q3CString objectClassIcon() const { return m_classIcon; }
 		void setObjectClassName(const QString& name);
 		QString objectClassName() const { return m_className; }
-		void setObjectName(const QCString& name);
-		QCString objectName() const { return m_objectName; }
+		void setObjectName(const Q3CString& name);
+		Q3CString objectName() const { return m_objectName; }
 	protected:
 		void updateName();
 
 		QString m_className;
-		QCString m_classIcon, m_objectName;
+		Q3CString m_classIcon, m_objectName;
 		QLabel *m_objectIconLabel, *m_objectNameLabel;
 };
 

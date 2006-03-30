@@ -29,11 +29,15 @@
 
 #include <qlayout.h>
 #include <qlabel.h>
+//Added by qt3to4:
+#include <Q3VBoxLayout>
+#include <Q3HBoxLayout>
+#include <Q3CString>
 
 KexiObjectInfoLabel::KexiObjectInfoLabel(QWidget* parent, const char* name)
  : QWidget(parent, name)
 {
-	QHBoxLayout *hlyr = new QHBoxLayout(this);
+	Q3HBoxLayout *hlyr = new Q3HBoxLayout(this);
 	m_objectIconLabel = new QLabel(this);
 	m_objectIconLabel->setMargin(2);
 	setFixedHeight( IconSize(K3Icon::Small) + 2 + 2 );
@@ -48,7 +52,7 @@ KexiObjectInfoLabel::~KexiObjectInfoLabel()
 {
 }
 
-void KexiObjectInfoLabel::setObjectClassIcon(const QCString& name)
+void KexiObjectInfoLabel::setObjectClassIcon(const Q3CString& name)
 {
 	m_classIcon = name;
 	if (m_classIcon.isEmpty())
@@ -64,7 +68,7 @@ void KexiObjectInfoLabel::setObjectClassName(const QString& name)
 	updateName();
 }
 
-void KexiObjectInfoLabel::setObjectName(const QCString& name)
+void KexiObjectInfoLabel::setObjectName(const Q3CString& name)
 {
 	m_objectName = name;
 	updateName();
@@ -104,7 +108,7 @@ KexiPropertyEditorView::KexiPropertyEditorView(KexiMainWindow *mainWin, QWidget*
 	//TODO: set a nice icon
 	setIcon(*mainWin->icon());
 
-	QVBoxLayout *lyr = new QVBoxLayout(this);
+	Q3VBoxLayout *lyr = new Q3VBoxLayout(this);
 
 	//add object class info
 	d->objectInfoLabel = new KexiObjectInfoLabel(this, "KexiObjectInfoLabel");
@@ -166,7 +170,7 @@ void KexiPropertyEditorView::slotPropertySetChanged(KoProperty::Set* set)
 {
 	//update information about selected object
 	QString className;
-	QCString iconName, objectName;
+	Q3CString iconName, objectName;
 	if (set) {
 		if (set->contains("this:classString"))
 			className = (*set)["this:classString"].value().toString();

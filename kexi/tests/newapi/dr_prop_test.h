@@ -1,8 +1,11 @@
+//Added by qt3to4:
+#include <Q3ValueList>
+#include <Q3CString>
 int drPropTest()
 {
-	QValueList<QCString> names = driver->propertyNames();
+	Q3ValueList<Q3CString> names = driver->propertyNames();
 	kDebug() << QString("%1 properties found:").arg(names.count()) << endl;
-	for (QValueList<QCString>::ConstIterator it = names.constBegin(); it!=names.constEnd(); ++it) {
+	for (Q3ValueList<Q3CString>::ConstIterator it = names.constBegin(); it!=names.constEnd(); ++it) {
 		kDebug() << " - " << (*it) << ":" 
 			<< " caption=\"" << driver->propertyCaption(*it) << "\""
 			<< " type=" << driver->propertyValue(*it).typeName() 

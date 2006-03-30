@@ -22,6 +22,8 @@
 
 #include <qlayout.h>
 #include <qlabel.h>
+//Added by qt3to4:
+#include <Q3VBoxLayout>
 
 #include <kiconloader.h>
 #include <klocale.h>
@@ -82,7 +84,7 @@ void KexiDataTable::init()
 	connect(m_view, SIGNAL(rowEditTerminated(int)), this, SLOT(slotUpdateRowActions(int)));
 	connect(m_view, SIGNAL(reloadActions()), this, SLOT(reloadActions()));
 
-	QVBoxLayout *box = new QVBoxLayout(this);
+	Q3VBoxLayout *box = new Q3VBoxLayout(this);
 	box->addWidget(m_view);
 
 	//resize to preferred size

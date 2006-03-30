@@ -23,8 +23,8 @@
 #include <qdialog.h>
 
 class QPushButton;
-class QListView;
-class QListViewItem;
+class Q3ListView;
+class Q3ListViewItem;
 class KexiProject;
 
 class KEXIEXTWIDGETS_EXPORT KexiFilterDlg : public QDialog
@@ -40,10 +40,10 @@ class KEXIEXTWIDGETS_EXPORT KexiFilterDlg : public QDialog
 		void		setupCatalog(const QString &mime);
 
 	protected slots:
-		void		insert(QListViewItem *);
+		void		insert(Q3ListViewItem *);
 
 	protected:
-		QListView	*m_catalog;
+		Q3ListView	*m_catalog;
 		KexiProject	*m_project;
 };
 

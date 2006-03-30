@@ -23,6 +23,11 @@
 #include <qstringlist.h>
 #include <qtoolbutton.h>
 #include <qdom.h>
+//Added by qt3to4:
+#include <Q3GridLayout>
+#include <Q3Frame>
+#include <Q3HBoxLayout>
+#include <Q3VBoxLayout>
 
 #include <kapplication.h>
 #include <kiconloader.h>
@@ -153,8 +158,8 @@ PixmapCollection::load(QDomNode node)
 LoadIconDialog::LoadIconDialog(QWidget *parent)
 : KDialogBase(parent, "loadicon_dialog", true, i18n("Load KDE Icon by Name"), Ok|Cancel, Ok, false)
 {
-	QFrame *frame = makeMainWidget();
-	QGridLayout *l = new QGridLayout(frame, 2, 3, 0, 6);
+	Q3Frame *frame = makeMainWidget();
+	Q3GridLayout *l = new Q3GridLayout(frame, 2, 3, 0, 6);
 
 	// Name input
 	QLabel *name = new QLabel(i18n("&Name:"), frame);
@@ -235,12 +240,12 @@ PixmapCollectionEditor::PixmapCollectionEditor(PixmapCollection *collection, QWi
 	i18n("Edit Pixmap Collection: %1").arg(collection->collectionName()), Close, Close, false)
 {
 	m_collection = collection;
-	QFrame *frame = makeMainWidget();
-	QHBoxLayout *l = new QHBoxLayout(frame, 0, 6);
+	Q3Frame *frame = makeMainWidget();
+	Q3HBoxLayout *l = new Q3HBoxLayout(frame, 0, 6);
 	setInitialSize(QSize(400, 200), true);
 
 	//// Setup the icon toolbar /////////////////
-	QVBoxLayout *vlayout = new QVBoxLayout(l, 3);
+	Q3VBoxLayout *vlayout = new Q3VBoxLayout(l, 3);
 	QToolButton *newItemPath = new QToolButton(frame);
 	newItemPath->setIconSet(BarIconSet("fileopen"));
 	newItemPath->setTextLabel(i18n("&Add File"), true);
@@ -266,12 +271,12 @@ PixmapCollectionEditor::PixmapCollectionEditor(PixmapCollection *collection, QWi
 	// Setup the iconView
 	m_iconView = new K3IconView(frame, "pixcollection_iconView");
 	m_iconView->resize(100,100);
-	m_iconView->setArrangement(QIconView::LeftToRight);
+	m_iconView->setArrangement(Q3IconView::LeftToRight);
 	m_iconView->setAutoArrange(true);
 	m_iconView->setMode(K3IconView::Select);
 	l->addWidget(m_iconView);
-	connect(m_iconView, SIGNAL(contextMenuRequested(QIconViewItem*, const QPoint&)), this, SLOT(displayMenu(QIconViewItem*, const QPoint&)));
-	connect(m_iconView, SIGNAL(itemRenamed(QIconViewItem*, const QString &)), this, SLOT(renameCollectionItem(QIconViewItem*, const QString&)));
+	connect(m_iconView, SIGNAL(contextMenuRequested(Q3IconViewItem*, const QPoint&)), this, SLOT(displayMenu(Q3IconViewItem*, const QPoint&)));
+	connect(m_iconView, SIGNAL(itemRenamed(Q3IconViewItem*, const QString &)), this, SLOT(renameCollectionItem(Q3IconViewItem*, const QString&)));
 
 	PixmapMap::ConstIterator it;
 	PixmapMap::ConstIterator endIt = collection->m_pixmaps.end();
@@ -306,7 +311,7 @@ PixmapCollectionEditor::newItemByPath()
 void
 PixmapCollectionEditor::removeItem()
 {
-	QIconViewItem *item = m_iconView->currentItem();
+	Q3IconViewItem *item = m_iconView->currentItem();
 	if( !item )
 	  return;
 
@@ -343,12 +348,12 @@ PixmapCollectionEditor::getPixmap(const QString &name)
 
 	KPixmapIO io;
 	QImage image = io.convertToImage(pixmap);
-	pixmap = io.convertToPixmap(image.scale(48, 48, QImage::ScaleMin));
+	pixmap = io.convertToPixmap(image.scale(48, 48, Qt::KeepAspectRatio));
 	return pixmap;
 }
 
 void
-PixmapCollectionEditor::renameCollectionItem(QIconViewItem *it, const QString &name)
+PixmapCollectionEditor::renameCollectionItem(Q3IconViewItem *it, const QString &name)
 {
 	PixmapIconViewItem *item = static_cast<PixmapIconViewItem*>(it);
 	if(!m_collection->m_pixmaps.contains(item->name()))
@@ -362,7 +367,7 @@ PixmapCollectionEditor::renameCollectionItem(QIconViewItem *it, const QString &n
 }
 
 void
-PixmapCollectionEditor::displayMenu(QIconViewItem *it, const QPoint &p)
+PixmapCollectionEditor::displayMenu(Q3IconViewItem *it, const QPoint &p)
 {
 	if(!it) return;
 	KMenu *menu = new KMenu();
@@ -381,7 +386,7 @@ PixmapCollectionChooser::PixmapCollectionChooser(PixmapCollection *collection, c
 
 	m_iconView = new K3IconView(this, "pixchooser_iconView");
 	setMainWidget(m_iconView);
-	m_iconView->setArrangement(QIconView::LeftToRight);
+	m_iconView->setArrangement(Q3IconView::LeftToRight);
 	m_iconView->setAutoArrange(true);
 	m_iconView->setMode(K3IconView::Select);
 
@@ -390,7 +395,7 @@ PixmapCollectionChooser::PixmapCollectionChooser(PixmapCollection *collection, c
 	for(it = collection->m_pixmaps.constBegin(); it != endIt; ++it)
 		new PixmapIconViewItem(m_iconView, it.key(), getPixmap(it.key()));
 
-	QIconViewItem *item = m_iconView->findItem(selectedItem, Qt::ExactMatch);
+	Q3IconViewItem *item = m_iconView->findItem(selectedItem, Qt::ExactMatch);
 	if(item && !selectedItem.isEmpty())
 		m_iconView->setCurrentItem(item);
 }
@@ -420,7 +425,7 @@ PixmapCollectionChooser::getPixmap(const QString &name)
 	// We scale the pixmap down to 48x48 to fit in the iconView
 	KPixmapIO io;
 	QImage image = io.convertToImage(pixmap);
-	pixmap = io.convertToPixmap(image.scale(48, 48, QImage::ScaleMin));
+	pixmap = io.convertToPixmap(image.scale(48, 48, Qt::KeepAspectRatio));
 	return pixmap;
 }
 

@@ -37,6 +37,8 @@
 #include <klocale.h>
 
 #include <qapplication.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 unsigned short KexiTableViewData::charTable[]=
 {
@@ -243,7 +245,7 @@ KexiTableViewData::KexiTableViewData(KexiDB::Cursor *c)
 }
 
 KexiTableViewData::KexiTableViewData(
-	const QValueList<QVariant> &keys, const QValueList<QVariant> &values,
+	const Q3ValueList<QVariant> &keys, const Q3ValueList<QVariant> &values,
 	KexiDB::Field::Type keyType, KexiDB::Field::Type valueType)
 	: QObject()
 	, KexiTableViewDataBase()
@@ -254,7 +256,7 @@ KexiTableViewData::KexiTableViewData(
 KexiTableViewData::KexiTableViewData(
 	KexiDB::Field::Type keyType, KexiDB::Field::Type valueType)
 {
-	const QValueList<QVariant> empty;
+	const Q3ValueList<QVariant> empty;
 	init(empty, empty, keyType, valueType);
 }
 
@@ -265,7 +267,7 @@ KexiTableViewData::~KexiTableViewData()
 }
 
 void KexiTableViewData::init(
-	const QValueList<QVariant> &keys, const QValueList<QVariant> &values,
+	const Q3ValueList<QVariant> &keys, const Q3ValueList<QVariant> &values,
 	KexiDB::Field::Type keyType, KexiDB::Field::Type valueType)
 {
 	init();
@@ -280,8 +282,8 @@ void KexiTableViewData::init(
 	addColumn(valueColumn);
 
 	uint cnt = qMin(keys.count(), values.count());
-	QValueList<QVariant>::ConstIterator it_keys = keys.constBegin();
-	QValueList<QVariant>::ConstIterator it_values = values.constBegin();
+	Q3ValueList<QVariant>::ConstIterator it_keys = keys.constBegin();
+	Q3ValueList<QVariant>::ConstIterator it_values = values.constBegin();
 	for (;cnt>0;++it_keys, ++it_values, cnt--) {
 		KexiTableItem *item = new KexiTableItem(2);
 		(*item)[0] = (*it_keys);
@@ -731,7 +733,7 @@ bool KexiTableViewData::deleteRow(KexiTableItem& item, bool repaint)
 	return true;
 }
 
-void KexiTableViewData::deleteRows( const QValueList<int> &rowsToDelete, bool repaint )
+void KexiTableViewData::deleteRows( const Q3ValueList<int> &rowsToDelete, bool repaint )
 {
 	Q_UNUSED( repaint );
 
@@ -739,7 +741,7 @@ void KexiTableViewData::deleteRows( const QValueList<int> &rowsToDelete, bool re
 		return;
 	int last_r=0;
 	first();
-	for (QValueList<int>::ConstIterator r_it = rowsToDelete.constBegin(); r_it!=rowsToDelete.constEnd(); ++r_it) {
+	for (Q3ValueList<int>::ConstIterator r_it = rowsToDelete.constBegin(); r_it!=rowsToDelete.constEnd(); ++r_it) {
 		for (; last_r<(*r_it); last_r++) {
 			next();
 		}

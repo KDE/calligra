@@ -19,8 +19,8 @@
 
 #include "kexicelleditorfactory.h"
 
-#include <qptrdict.h>
-#include <qintdict.h>
+#include <q3ptrdict.h>
+#include <q3intdict.h>
 
 #include <kexidb/indexschema.h>
 #include <kexidb/tableschema.h>
@@ -78,9 +78,9 @@ class KexiCellEditorFactoryPrivate
 			return items_by_type[ key( KexiDB::Field::InvalidType, QString::null ) ];
 		}
 
-		QPtrDict<KexiCellEditorFactoryItem> items; //!< list of editor factory items (for later destroy)
+		Q3PtrDict<KexiCellEditorFactoryItem> items; //!< list of editor factory items (for later destroy)
 
-		QDict<KexiCellEditorFactoryItem> items_by_type; //!< editor factory items accessed by a key
+		Q3Dict<KexiCellEditorFactoryItem> items_by_type; //!< editor factory items accessed by a key
 };
 
 KexiCellEditorFactoryPrivate static_KexiCellEditorFactory;
@@ -101,7 +101,7 @@ void KexiCellEditorFactory::registerItem( KexiCellEditorFactoryItem& item, uint 
 	static_KexiCellEditorFactory.registerItem( item, type, subType );
 }
 
-KexiTableEdit* KexiCellEditorFactory::createEditor(KexiTableViewColumn &column, QScrollView* parent)
+KexiTableEdit* KexiCellEditorFactory::createEditor(KexiTableViewColumn &column, Q3ScrollView* parent)
 {
 	KexiTableViewData *rel_data = column.relatedData();
 	KexiCellEditorFactoryItem *item = 0;

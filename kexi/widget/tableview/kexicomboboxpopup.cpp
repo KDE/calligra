@@ -28,6 +28,9 @@
 
 #include <qlayout.h>
 #include <qevent.h>
+//Added by qt3to4:
+#include <Q3Frame>
+#include <QKeyEvent>
 
 //! @internal
 class KexiComboBoxPopupPrivate
@@ -91,7 +94,7 @@ const int KexiComboBoxPopup::defaultMaxRows = 8;
 
 
 KexiComboBoxPopup::KexiComboBoxPopup(QWidget* parent, KexiDB::Field &f)
- : QFrame( parent, "KexiComboBoxPopup", WType_Popup )
+ : Q3Frame( parent, "KexiComboBoxPopup", Qt::WType_Popup )
 {
 	init();
 	//setup tv data
@@ -99,7 +102,7 @@ KexiComboBoxPopup::KexiComboBoxPopup(QWidget* parent, KexiDB::Field &f)
 }
 
 KexiComboBoxPopup::KexiComboBoxPopup(QWidget* parent, KexiTableViewColumn &column)
- : QFrame( parent, "KexiComboBoxPopup", WType_Popup )
+ : Q3Frame( parent, "KexiComboBoxPopup", Qt::WType_Popup )
 {
 	init();
 	//setup tv data
@@ -141,7 +144,7 @@ void KexiComboBoxPopup::setData(KexiDB::Field &f)
 	KexiTableViewData *data = new KexiTableViewData();
 //	data->setReadOnly( true );
 	data->addColumn( new KexiTableViewColumn( *d->int_f ) );
-	QValueVector<QString> hints = f.enumHints();
+	Q3ValueVector<QString> hints = f.enumHints();
 	for(uint i=0; i < hints.size(); i++) {
 		KexiTableItem *item = data->createItem();//new KexiTableItem(1);
 		(*item)[0]=QVariant(hints[i]);
@@ -203,7 +206,7 @@ void KexiComboBoxPopup::resize( int w, int h )
 //	hide();
 	d->tv->move(1,1);
 	d->tv->resize( w-2, h-2 );
-	QFrame::resize(w,h);
+	Q3Frame::resize(w,h);
 	update();
 	updateGeometry();
 //	show();
@@ -238,8 +241,8 @@ bool KexiComboBoxPopup::eventFilter( QObject *o, QEvent *e )
 		if (e->type()==QEvent::KeyPress) {
 			QKeyEvent *ke = static_cast<QKeyEvent*>(e);
 			const int k = ke->key();
-			if ((ke->state()==NoButton && (k==Qt::Key_Escape || k==Qt::Key_F4))
-				|| (ke->state()==AltButton && k==Qt::Key_Up))
+			if ((ke->state()==Qt::NoButton && (k==Qt::Key_Escape || k==Qt::Key_F4))
+				|| (ke->state()==Qt::AltModifier && k==Qt::Key_Up))
 			{
 				hide();
 				emit cancelled();
@@ -247,7 +250,7 @@ bool KexiComboBoxPopup::eventFilter( QObject *o, QEvent *e )
 			}
 		}
 	}
-	return QFrame::eventFilter( o, e );
+	return Q3Frame::eventFilter( o, e );
 }
 
 void KexiComboBoxPopup::slotDataReloadRequested()

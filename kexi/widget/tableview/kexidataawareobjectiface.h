@@ -27,8 +27,10 @@
 #ifndef KEXIDATAAWAREOBJECTINTERFACE_H
 #define KEXIDATAAWAREOBJECTINTERFACE_H
 
-#include <qguardedptr.h>
+#include <qpointer.h>
 #include <qlabel.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 #include <kdebug.h>
 #include "kexitableviewdata.h"
@@ -569,7 +571,7 @@ class KEXIDATATABLE_EXPORT KexiDataAwareObjectInterface
 		//! Like above, not db-aware version
 		virtual void slotRowInserted(KexiTableItem *item, uint row, bool repaint);
 
-		virtual void slotRowsDeleted( const QValueList<int> & ) {}
+		virtual void slotRowsDeleted( const Q3ValueList<int> & ) {}
 
 		//! for sanity checks (return true if m_data is present; else: outputs warning)
 		inline bool hasData() const;

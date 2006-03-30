@@ -24,7 +24,12 @@
 #include <keximainwindow.h>
 
 #include <qlayout.h>
-#include <qframe.h>
+#include <q3frame.h>
+//Added by qt3to4:
+#include <Q3VBoxLayout>
+#include <Q3ValueList>
+#include <Q3CString>
+#include <Q3PopupMenu>
 #include <klocale.h>
 #include <kdebug.h>
 
@@ -62,7 +67,7 @@ public:
 		plugSharedAction("edit_redo", SLOT(redo()));
                 plugSharedAction("edit_select_all", SLOT(selectAll()));
 #else
-		QValueList<QCString> actions;
+		Q3ValueList<Q3CString> actions;
 		actions << "edit_cut" << "edit_copy" << "edit_paste" << "edit_clear"
 			<< "edit_undo" << "edit_redo" << "edit_select_all";
 		plugSharedActionsToExternalGUI(actions, dynamic_cast<KXMLGUIClient*>(obj));
@@ -85,7 +90,7 @@ KexiEditor::KexiEditor(KexiMainWindow *mainWin, QWidget *parent, const char *nam
 	: KexiViewBase(mainWin, parent, name)
 	, d(new KexiEditorPrivate())
 {
-	QVBoxLayout *layout = new QVBoxLayout(this);
+	Q3VBoxLayout *layout = new Q3VBoxLayout(this);
 #ifdef KTEXTEDIT_BASED_SQL_EDITOR
 	d->view = new KTextEdit( "", QString::null, this, "kexi_editor" );
 	//adjust font
@@ -96,10 +101,10 @@ KexiEditor::KexiEditor(KexiMainWindow *mainWin, QWidget *parent, const char *nam
 	d->view->setFont( f );
 	d->view->setCheckSpellingEnabled(false);
 #else
-	QFrame *fr = new QFrame(this);
-	fr->setFrameStyle(QFrame::Sunken|QFrame::WinPanel);
+	Q3Frame *fr = new Q3Frame(this);
+	fr->setFrameStyle(Q3Frame::Sunken|Q3Frame::WinPanel);
 	layout->addWidget(fr);
-	layout = new QVBoxLayout(fr);
+	layout = new Q3VBoxLayout(fr);
 	layout->setMargin( 2 );
 
 	d->doc =  KTextEditor::EditorChooser::createDocument(fr);
@@ -109,7 +114,7 @@ KexiEditor::KexiEditor(KexiMainWindow *mainWin, QWidget *parent, const char *nam
 
 	KTextEditor::PopupMenuInterface *popupInt = dynamic_cast<KTextEditor::PopupMenuInterface*>( d->view );
         if(popupInt) {
-            QPopupMenu *pop = (QPopupMenu*) mainWin->factory()->container("edit", mainWin);
+            Q3PopupMenu *pop = (Q3PopupMenu*) mainWin->factory()->container("edit", mainWin);
             if(pop) {
                 //plugSharedAction("edit_undo", pop);
                 popupInt->installPopup(pop);

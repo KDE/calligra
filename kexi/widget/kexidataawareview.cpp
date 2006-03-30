@@ -23,6 +23,8 @@
 #include <utils/kexisharedactionclient.h>
 
 #include <qlayout.h>
+//Added by qt3to4:
+#include <Q3VBoxLayout>
 
 #include <kmenu.h>
 
@@ -54,7 +56,7 @@ void KexiDataAwareView::init( QWidget* viewWidget, KexiSharedActionClient* actio
 		m_dataAwareObject->connectReloadActionsSignal(this, SLOT(reloadActions()));
 	}
 
-	QVBoxLayout *box = new QVBoxLayout(this);
+	Q3VBoxLayout *box = new Q3VBoxLayout(this);
 	box->addWidget(m_internalView);
 
 	setMinimumSize(m_internalView->minimumSizeHint().width(), 

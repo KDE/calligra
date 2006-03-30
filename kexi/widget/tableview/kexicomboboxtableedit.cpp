@@ -22,6 +22,10 @@
 #include <qstyle.h>
 #include <qwindowsstyle.h>
 #include <qpainter.h>
+//Added by qt3to4:
+#include <QKeyEvent>
+#include <QEvent>
+#include <QMouseEvent>
 
 #include "kexicomboboxtableedit.h"
 #include "kexicomboboxpopup.h"
@@ -47,9 +51,9 @@ class KDownArrowPushButton : public KPushButton
 		 * Reimplemented from @ref QPushButton. */
 		virtual void drawButton(QPainter *p) {
 //			QStyle::PrimitiveElement e = QStyle::PE_ArrowDown;
-			int flags = QStyle::Style_Enabled | QStyle::Style_HasFocus;
+			int flags = QStyle::State_Enabled | QStyle::State_HasFocus;
 			if (isDown())
-				flags |= QStyle::Style_Down;
+				flags |= QStyle::State_DownArrow;
 
 			KPushButton::drawButton(p);
 
@@ -111,7 +115,7 @@ public:
 
 //======================================================
 
-KexiComboBoxTableEdit::KexiComboBoxTableEdit(KexiTableViewColumn &column, QScrollView *parent)
+KexiComboBoxTableEdit::KexiComboBoxTableEdit(KexiTableViewColumn &column, Q3ScrollView *parent)
  : KexiInputTableEdit(column, parent)
  , d(new Private())
 {
@@ -644,7 +648,7 @@ void KexiComboBoxTableEdit::updateTextForHighlightedRow()
 
 int KexiComboBoxTableEdit::widthForValue( QVariant &val, QFontMetrics &fm )
 {
-	QValueVector<QString> hints = field()->enumHints();
+	Q3ValueVector<QString> hints = field()->enumHints();
 	bool ok;
 	int idx = val.toInt(&ok);
 	if (!ok || idx < 0 || idx > int(hints.size()-1))
@@ -691,7 +695,7 @@ KexiComboBoxEditorFactoryItem::~KexiComboBoxEditorFactoryItem()
 }
 
 KexiTableEdit* KexiComboBoxEditorFactoryItem::createEditor(
-	KexiTableViewColumn &column, QScrollView* parent)
+	KexiTableViewColumn &column, Q3ScrollView* parent)
 {
 	return new KexiComboBoxTableEdit(column, parent);
 }

@@ -20,16 +20,21 @@
 #include <qapplication.h>
 #include <qbitmap.h>
 #include <qimage.h>
-#include <qobjectlist.h>
+#include <qobject.h>
 #include <qpainter.h>
 #include <qstyle.h>
+//Added by qt3to4:
+#include <QPixmap>
+#include <QEvent>
+#include <QPaintEvent>
+#include <QChildEvent>
 
 #include <kimageeffect.h>
 #include <kpixmap.h>
 
 #include "kexigradientwidget.h"
 
-KexiGradientWidget::KexiGradientWidget( QWidget *parent, const char *name, WFlags f )
+KexiGradientWidget::KexiGradientWidget( QWidget *parent, const char *name, Qt::WFlags f )
 	: QWidget( parent, name, f ), p_displayMode( NoGradient ),
 	p_gradientType( VerticalGradient ),
 	p_color1( Qt::white ), p_color2( Qt::blue ), p_currentChild( 0 ),
@@ -223,7 +228,7 @@ bool KexiGradientWidget::eventFilter( QObject* object, QEvent* event ) {
 	Manage list of child-widgets.
 	*/
 	if ( object == this ) {
-		if ( event->type() == QEvent::ChildInserted ) {
+		if ( event->type() == QEvent::ChildAdded ) {
 			child = dynamic_cast<QWidget*>( dynamic_cast<QChildEvent*>( event )->child() );
 			if ( isValidChildWidget( child ) == false ) {
 				return false;

@@ -20,7 +20,7 @@
 #ifndef KEXISHAREDACTIONCLIENT_H
 #define KEXISHAREDACTIONCLIENT_H
 
-#include <qasciidict.h>
+#include <q3asciidict.h>
 
 class KAction;
 
@@ -42,7 +42,7 @@ class KEXIGUIUTILS_EXPORT KexiSharedActionClient
 
 	protected:
 		//! Actions pluged for this widget using plugSharedAction(), available by name.
-		QAsciiDict<KAction> m_sharedActions;
+		Q3AsciiDict<KAction> m_sharedActions;
 };
 
 #endif

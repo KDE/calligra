@@ -21,8 +21,12 @@
 #ifndef KEXISCROLLVIEW_H
 #define KEXISCROLLVIEW_H
 
-#include <qscrollview.h>
+#include <q3scrollview.h>
 #include <qtimer.h>
+//Added by qt3to4:
+#include <QMouseEvent>
+#include <QPixmap>
+#include <QEvent>
 
 class QColor;
 class QFont;
@@ -31,7 +35,7 @@ class KexiRecordNavigator;
 //! The scrollview which includes KexiDBForm
 /*! It allows to resize its m_widget, following snapToGrid setting. 
  Its contents is resized so the widget can always be resized. */
-class KEXIEXTWIDGETS_EXPORT KexiScrollView : public QScrollView
+class KEXIEXTWIDGETS_EXPORT KexiScrollView : public Q3ScrollView
 {
 	Q_OBJECT
 
@@ -81,7 +85,7 @@ class KEXIEXTWIDGETS_EXPORT KexiScrollView : public QScrollView
 		QColor m_helpColor;
 		QTimer m_delayedResize;
 		//! for refreshContentsSizeLater()
-		QScrollView::ScrollBarMode m_vsmode, m_hsmode;
+		Q3ScrollView::ScrollBarMode m_vsmode, m_hsmode;
 		bool m_snapToGrid : 1;
 		bool m_preview : 1;
 		bool m_smodeSet : 1;

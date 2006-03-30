@@ -21,7 +21,7 @@
 #define KEXIFLOWLAYOUT_H
 
 #include <qlayout.h>
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 
 class KEXIGUIUTILS_EXPORT KexiFlowLayout : public QLayout
 {
@@ -34,10 +34,10 @@ class KEXIGUIUTILS_EXPORT KexiFlowLayout : public QLayout
 
 		/*! \return the widgets in the order of the layout,
 		 ie as it is stored in m_list. You must delete the list after using it. */
-		QPtrList<QWidget>* widgetList() const;
+		Q3PtrList<QWidget>* widgetList() const;
 
 		/*! Sets layout's orientation to \a orientation. Default orientation is Vertical. */
-		void  setOrientation(Orientation orientation) { m_orientation = orientation; }
+		void  setOrientation(Qt::Orientation orientation) { m_orientation = orientation; }
 
 		/*! \return layout's orientation. */
 		Qt::Orientation orientation() const { return m_orientation; }
@@ -65,7 +65,7 @@ class KEXIGUIUTILS_EXPORT KexiFlowLayout : public QLayout
 		int doVerticalLayout(const QRect&, bool testonly = false);
 
 	private:
-		QPtrList<QLayoutItem> m_list;
+		Q3PtrList<QLayoutItem> m_list;
 		int m_cached_width;
 		int m_cached_hfw;
 		bool m_justify;

@@ -22,8 +22,8 @@
 
 #include "kexiutils_export.h"
 
-#include <qguardedptr.h>
-#include <qobjectlist.h>
+#include <qpointer.h>
+#include <qobject.h>
 #include <kmimetype.h>
 class QColor;
 
@@ -93,7 +93,7 @@ namespace KexiUtils
 	{
 		public:
 			WaitCursor(bool noDelay = false);
-			~WaitCursor();
+			~Qt::WaitCursor();
 	};
 
 	/*! \return filter string in QFileDialog format for a mime type pointed by \a mime
@@ -160,7 +160,7 @@ namespace KexiUtils
 //! a widget that must be instantiated by hand.
 //! This macro inserts a widget \a what into a frame \a where.
 #define GLUE_WIDGET(what, where) \
-	{ QVBoxLayout *lyr = new QVBoxLayout(where); \
+	{ Q3VBoxLayout *lyr = new Q3VBoxLayout(where); \
 	  lyr->addWidget(what); }
 
 

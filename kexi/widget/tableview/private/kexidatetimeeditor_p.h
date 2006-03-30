@@ -9,6 +9,8 @@
 #define KEXIDATETIMEEDITOR_P_H
 
 #include <qglobal.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 #ifdef Q_WS_WIN
 # define QDateTimeEditor_HACK 1
@@ -21,7 +23,7 @@
 
 class QTextParagraph;
 class QTextCursor;
-class QDateTimeEditBase;
+class Q3DateTimeEditBase;
 class QNumberSection;
 class QDateTimeEditorPrivate;
 
@@ -35,7 +37,7 @@ public:
 	bool setFocusSection( int s );
 
 private:
-	QDateTimeEditBase* cw;
+	Q3DateTimeEditBase* cw;
 	QDateTimeEditorPrivate* d;
 };
 
@@ -72,7 +74,7 @@ private:
 	QTextCursor *cursor;
 	QSize sz;
 	int focusSec;
-	QValueList< QNumberSection > sections;
+	Q3ValueList< QNumberSection > sections;
 	QString sep;
 	int offset;
 };

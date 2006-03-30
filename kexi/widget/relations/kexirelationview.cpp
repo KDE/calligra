@@ -23,12 +23,16 @@
 #include <qstringlist.h>
 #include <qlayout.h>
 #include <qlabel.h>
-#include <qheader.h>
+#include <q3header.h>
 #include <qevent.h>
 #include <qpainter.h>
 #include <qstyle.h>
 #include <qlineedit.h>
-#include <qpopupmenu.h>
+#include <q3popupmenu.h>
+//Added by qt3to4:
+#include <QMouseEvent>
+#include <Q3Frame>
+#include <QKeyEvent>
 
 #include <klocale.h>
 #include <kaction.h>
@@ -46,19 +50,19 @@
 #include <kexi.h>
 
 KexiRelationView::KexiRelationView(QWidget *parent, const char *name)
- : QScrollView(parent, name, WStaticContents)
+ : Q3ScrollView(parent, name, Qt::WStaticContents)
 {
 //	m_relation=relation;
 //	m_relation->incUsageCount();
 	m_selectedConnection = 0;
 	m_readOnly=false;
 	m_focusedTableView = 0;
-	setFrameStyle(QFrame::WinPanel | QFrame::Sunken);
+	setFrameStyle(Q3Frame::WinPanel | Q3Frame::Sunken);
 
 //	connect(relation, SIGNAL(relationListUpdated(QObject *)), this, SLOT(slotListUpdate(QObject *)));
 
 	viewport()->setPaletteBackgroundColor(colorGroup().mid());
-	setFocusPolicy(WheelFocus);
+	setFocusPolicy(Qt::WheelFocus);
 	setResizePolicy(Manual);
 /*MOVED TO KexiRelationDialog
 	//actions
@@ -173,7 +177,7 @@ KexiRelationView::addTable(KexiDB::TableSchema *t, const QRect &rect)
 	if(m_tables.count() > 0)
 	{
 		int place = -10;
-		QDictIterator<KexiRelationViewTableContainer> it(m_tables);
+		Q3DictIterator<KexiRelationViewTableContainer> it(m_tables);
 		for(; it.current(); ++it)
 		{
 			int right = (*it)->x() + (*it)->width();
@@ -467,7 +471,7 @@ void
 KexiRelationView::stretchExpandSize()
 {
 	int max_x=-1, max_y=-1;
-	QDictIterator<KexiRelationViewTableContainer> it(m_tables);
+	Q3DictIterator<KexiRelationViewTableContainer> it(m_tables);
 	for (;it.current(); ++it) {
 		if (it.current()->right()>max_x)
 			max_x = it.current()->right();
@@ -531,7 +535,7 @@ KexiRelationView::hideTable(KexiRelationViewTableContainer* tableView)
 /*! @todo what about query? */
 	KexiDB::TableSchema *ts = tableView->schema()->table();
 	//for all connections: find and remove all connected with this table
-	QPtrListIterator<KexiRelationViewConnection> it(m_connectionViews);
+	Q3PtrListIterator<KexiRelationViewConnection> it(m_connectionViews);
 	for (;it.current();) {
 		if (it.current()->masterTable() == tableView 
 			|| it.current()->detailsTable() == tableView)
@@ -586,7 +590,7 @@ void KexiRelationView::slotTableViewGotFocus()
 
 QSize KexiRelationView::sizeHint() const
 {
-	return QSize(QScrollView::sizeHint());//.width(), 600);
+	return QSize(Q3ScrollView::sizeHint());//.width(), 600);
 }
 
 void KexiRelationView::clear()

@@ -21,6 +21,8 @@
 #include "utils_p.h"
 
 #include <qregexp.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 #include <kdebug.h>
 #include <kcursor.h>
@@ -178,7 +180,7 @@ QMap<QString,QString> KexiUtils::deserializeMap(const QByteArray& array)
 QMap<QString,QString> KexiUtils::deserializeMap(const QString& string)
 {
 	const uint size = string.length();
-	QCString cstr(string.latin1());
+	Q3CString cstr(string.latin1());
 	QByteArray array( size );
 	for (uint i=0; i<size; i++) {
 		array[i] = char(string[i].unicode()-1);

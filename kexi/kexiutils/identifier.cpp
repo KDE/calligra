@@ -20,7 +20,9 @@
 
 #include "identifier.h"
 #include <kstaticdeleter.h>
-#include <qdict.h>
+#include <q3dict.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 using namespace KexiUtils;
 
@@ -154,8 +156,8 @@ static const char* string2Identifier_table[] = {
 };
 
 //! used for O(1) character transformations in char2Identifier()
-static KStaticDeleter< QDict<QCString> > string2Identifier_deleter;
-static QDict<QCString>* string2Identifier_dict = 0;
+static KStaticDeleter< Q3Dict<Q3CString> > string2Identifier_deleter;
+static Q3Dict<Q3CString>* string2Identifier_dict = 0;
 
 inline QString char2Identifier(const QChar& c)
 {
@@ -164,14 +166,14 @@ inline QString char2Identifier(const QChar& c)
 	else {
 		if (!string2Identifier_dict) {
 			//build dictionary for later use
-			string2Identifier_deleter.setObject( string2Identifier_dict, new QDict<QCString>(1009) );
+			string2Identifier_deleter.setObject( string2Identifier_dict, new Q3Dict<Q3CString>(1009) );
 			string2Identifier_dict->setAutoDelete(true);
 			for (const char **p = string2Identifier_table; *p; p+=2) {
 				string2Identifier_dict->replace( /* replace, not insert because there may be duplicates */
-					QString::fromUtf8(*p), new QCString(*(p+1)) );
+					QString::fromUtf8(*p), new Q3CString(*(p+1)) );
 			}
 		}
-		const QCString *fixedChar = string2Identifier_dict->find(c);
+		const Q3CString *fixedChar = string2Identifier_dict->find(c);
 		if (fixedChar)
 			return *fixedChar;
 	}
@@ -232,7 +234,7 @@ QValidator::State IdentifierValidator::validate( QString& input, int& pos ) cons
 		input += "_";
 	if((uint)pos>input.length())
 		pos=input.length();
-	return input.isEmpty() ? Valid : Acceptable;
+	return input.isEmpty() ? QValidator::Intermediate : Acceptable;
 }
 
 Validator::Result IdentifierValidator::internalCheck(

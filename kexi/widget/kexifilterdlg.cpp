@@ -17,11 +17,14 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <qlistview.h>
+#include <q3listview.h>
 #include <qpushbutton.h>
 #include <qlayout.h>
-#include <qheader.h>
+#include <q3header.h>
 #include <qstringlist.h>
+//Added by qt3to4:
+#include <Q3HBoxLayout>
+#include <Q3GridLayout>
 
 #include "kexiproject.h"
 #include "kexiprojecthandler.h"
@@ -35,7 +38,7 @@ KexiFilterDlg::KexiFilterDlg(KexiProject *project, QWidget *parent, const char *
 {
 	m_project = project;
 
-	QHBoxLayout *lbraces = new QHBoxLayout(0, 0, 4);
+	Q3HBoxLayout *lbraces = new Q3HBoxLayout(0, 0, 4);
 
 	QPushButton *bsBO = createMiniButton("[");
 	QPushButton *bBO = createMiniButton("(");
@@ -46,7 +49,7 @@ KexiFilterDlg::KexiFilterDlg(KexiProject *project, QWidget *parent, const char *
 	lbraces->addWidget(bBC);
 	lbraces->addWidget(bsBC);
 
-	QHBoxLayout *lcond = new QHBoxLayout(0, 0, 4);
+	Q3HBoxLayout *lcond = new Q3HBoxLayout(0, 0, 4);
 	QPushButton *blt = createMiniButton("<");
 	QPushButton *beq = createMiniButton("=");
 	QPushButton *bgt = createMiniButton(">");
@@ -56,7 +59,7 @@ KexiFilterDlg::KexiFilterDlg(KexiProject *project, QWidget *parent, const char *
 	lcond->addWidget(bgt);
 	lcond->addWidget(bp);
 
-	QHBoxLayout *lbool = new QHBoxLayout(0, 0, 4);
+	Q3HBoxLayout *lbool = new Q3HBoxLayout(0, 0, 4);
 	QPushButton *bAnd = new QPushButton("AND", this);
 	bAnd->setFlat(true);
 	QPushButton *bOr = new QPushButton("OR", this);
@@ -67,7 +70,7 @@ KexiFilterDlg::KexiFilterDlg(KexiProject *project, QWidget *parent, const char *
 	lbool->addWidget(bAnd);
 	lbool->addWidget(bOr);
 
-	m_catalog = new QListView(this);
+	m_catalog = new Q3ListView(this);
 	m_catalog->addColumn("a");
 	m_catalog->header()->hide();
 
@@ -75,7 +78,7 @@ KexiFilterDlg::KexiFilterDlg(KexiProject *project, QWidget *parent, const char *
 
 	setupCatalog(QString("kexi/table"));
 
-	QGridLayout *g = new QGridLayout(this);
+	Q3GridLayout *g = new Q3GridLayout(this);
 	g->setSpacing(6);
 	g->addMultiCellWidget(e,		0, 0, 0, 2);
 	g->addItem(lbraces,			1, 0);
@@ -104,13 +107,13 @@ KexiFilterDlg::setupCatalog(const QStringList &mimes)
 		KexiProjectHandler *h = m_project->handlerForMime(*it);
 		if(h)
 		{
-			QListViewItem *base = new QListViewItem(m_catalog, h->name());
+			Q3ListViewItem *base = new Q3ListViewItem(m_catalog, h->name());
 			base->setPixmap(0, h->groupPixmap());
 
-			QDictIterator<KexiProjectHandlerItem> iit(*h->items()); // See QDictIterator
+			Q3DictIterator<KexiProjectHandlerItem> iit(*h->items()); // See QDictIterator
 			for(; iit.current(); ++iit )
 			{
-				QListViewItem *bi = new QListViewItem(base, iit.current()->name());
+				Q3ListViewItem *bi = new Q3ListViewItem(base, iit.current()->name());
 				bi->setPixmap(0, h->itemPixmap());
 
 				KexiDataProvider *prov=KEXIDATAPROVIDER(h);
@@ -119,7 +122,7 @@ KexiFilterDlg::setupCatalog(const QStringList &mimes)
 					QStringList fields = prov->fields(0, iit.current()->identifier());
 					for(QStringList::Iterator fit = fields.begin(); fit != fields.end(); ++fit)
 					{
-						QListViewItem *bif = new QListViewItem(bi, (*fit));
+						Q3ListViewItem *bif = new Q3ListViewItem(bi, (*fit));
 					}
 				}
 			}
@@ -136,7 +139,7 @@ KexiFilterDlg::setupCatalog(const QString &mime)
 }
 
 void
-KexiFilterDlg::insert(QListViewItem *)
+KexiFilterDlg::insert(Q3ListViewItem *)
 {
 }
 

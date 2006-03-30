@@ -21,16 +21,20 @@
 #ifndef KEXIRELATIONVIEW_H
 #define KEXIRELATIONVIEW_H
 
-#include <qguardedptr.h>
-#include <qscrollview.h>
-#include <qptrlist.h>
-#include <qdict.h>
+#include <qpointer.h>
+#include <q3scrollview.h>
+#include <q3ptrlist.h>
+#include <q3dict.h>
+//Added by qt3to4:
+#include <QMouseEvent>
+#include <Q3Frame>
+#include <QKeyEvent>
 
 #include <kexidb/tableschema.h>
 
 #include "kexirelationviewconnection.h"
 
-class QFrame;
+class Q3Frame;
 
 class KexiRelationViewTable;
 class KexiRelationViewTableContainer;
@@ -43,10 +47,10 @@ namespace KexiDB
 	class Connection;
 }
 
-typedef QDict<KexiRelationViewTableContainer> TablesDict;
-typedef QDictIterator<KexiRelationViewTableContainer> TablesDictIterator;
-typedef QPtrList<KexiRelationViewConnection> ConnectionList;
-typedef QPtrListIterator<KexiRelationViewConnection> ConnectionListIterator;
+typedef Q3Dict<KexiRelationViewTableContainer> TablesDict;
+typedef Q3DictIterator<KexiRelationViewTableContainer> TablesDictIterator;
+typedef Q3PtrList<KexiRelationViewConnection> ConnectionList;
+typedef Q3PtrListIterator<KexiRelationViewConnection> ConnectionListIterator;
 
 struct SourceConnection
 {
@@ -65,7 +69,7 @@ struct SourceConnection
  The class is for displaying only - retrieving data and updating data on the backend side is implemented 
  in KexiRelationWidget, and more specifically in: Kexi Relation Part and Kexi Query Part.
 */
-class KEXIRELATIONSVIEW_EXPORT KexiRelationView : public QScrollView
+class KEXIRELATIONSVIEW_EXPORT KexiRelationView : public Q3ScrollView
 {
 	Q_OBJECT
 

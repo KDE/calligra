@@ -20,13 +20,15 @@
 #include "kexiflowlayout.h"
 
 #include <kdebug.h>
+//Added by qt3to4:
+#include <Q3PtrList>
 
 /// Iterator class
 
 class KexiFlowLayoutIterator : public QGLayoutIterator
 {
 	public:
-		KexiFlowLayoutIterator( QPtrList<QLayoutItem> *list )
+		KexiFlowLayoutIterator( Q3PtrList<QLayoutItem> *list )
 		  : m_idx(0), m_list( list )
 		{}
 		uint count() const;
@@ -36,7 +38,7 @@ class KexiFlowLayoutIterator : public QGLayoutIterator
 
 	private:
 		int m_idx;
-		QPtrList<QLayoutItem> *m_list;
+		Q3PtrList<QLayoutItem> *m_list;
 };
 
 uint
@@ -69,7 +71,7 @@ KexiFlowLayoutIterator::takeCurrent()
 KexiFlowLayout::KexiFlowLayout(QWidget *parent, int border, int space, const char *name)
  : QLayout(parent, border, space, name)
 {
-	m_orientation = Horizontal;
+	m_orientation = Qt::Horizontal;
 	m_justify = false;
 	m_cached_width = 0;
 }
@@ -77,7 +79,7 @@ KexiFlowLayout::KexiFlowLayout(QWidget *parent, int border, int space, const cha
 KexiFlowLayout::KexiFlowLayout(QLayout* parent, int space, const char *name)
  : QLayout( parent, space, name )
 {
-	m_orientation = Horizontal;
+	m_orientation = Qt::Horizontal;
 	m_justify = false;
 	m_cached_width = 0;
 }
@@ -85,7 +87,7 @@ KexiFlowLayout::KexiFlowLayout(QLayout* parent, int space, const char *name)
 KexiFlowLayout::KexiFlowLayout(int space, const char *name)
  : QLayout(space, name)
  {
-	m_orientation = Horizontal;
+	m_orientation = Qt::Horizontal;
 	m_justify = false;
 	m_cached_width = 0;
  }
@@ -104,7 +106,7 @@ KexiFlowLayout::addItem(QLayoutItem *item)
 void
 KexiFlowLayout::addSpacing(int size)
 {
-	if (m_orientation == Horizontal)
+	if (m_orientation == Qt::Horizontal)
 		addItem( new QSpacerItem( size, 0, QSizePolicy::Fixed, QSizePolicy::Minimum ) );
 	else
 		addItem( new QSpacerItem( 0, size, QSizePolicy::Minimum, QSizePolicy::Fixed ) );
@@ -116,11 +118,11 @@ KexiFlowLayout::iterator()
 	return QLayoutIterator( new KexiFlowLayoutIterator(&m_list) );
 }
 
-QPtrList<QWidget>*
+Q3PtrList<QWidget>*
 KexiFlowLayout::widgetList() const
 {
-	QPtrList<QWidget> *list = new QPtrList<QWidget>();
-	for (QPtrListIterator<QLayoutItem> it(m_list); it.current(); ++it) {
+	Q3PtrList<QWidget> *list = new Q3PtrList<QWidget>();
+	for (Q3PtrListIterator<QLayoutItem> it(m_list); it.current(); ++it) {
 		if(it.current()->widget())
 			list->append(it.current()->widget());
 	}
@@ -145,7 +147,7 @@ KexiFlowLayout::isEmpty()
 bool
 KexiFlowLayout::hasHeightForWidth() const
 {
-	return (m_orientation == Horizontal);
+	return (m_orientation == Qt::Horizontal);
 }
 
 int
@@ -192,7 +194,7 @@ KexiFlowLayout::minimumSize() const
 QSizePolicy::ExpandData
 KexiFlowLayout::expanding() const
 {
-	if(m_orientation == Vertical)
+	if(m_orientation == Qt::Vertical)
 		return QSizePolicy::Vertically;
 	else
 		return QSizePolicy::Horizontally;
@@ -202,7 +204,7 @@ void
 KexiFlowLayout::setGeometry(const QRect &r)
 {
 	QLayout::setGeometry(r);
-	if(m_orientation == Horizontal)
+	if(m_orientation == Qt::Horizontal)
 		doHorizontalLayout(r);
 	else
 		doVerticalLayout(r);
@@ -211,7 +213,7 @@ KexiFlowLayout::setGeometry(const QRect &r)
 int
 KexiFlowLayout::simulateLayout(const QRect &r)
 {
-	if(m_orientation == Horizontal)
+	if(m_orientation == Qt::Horizontal)
 		return doHorizontalLayout(r, true);
 	else
 		return doVerticalLayout(r, true);
@@ -225,8 +227,8 @@ KexiFlowLayout::doHorizontalLayout(const QRect &r, bool testOnly)
 	int h = 0; // height of this line
 	int availableSpace = r.width() + spacing();
 	int expandingWidgets=0; // number of widgets in the line with QSizePolicy == Expanding
-	QPtrListIterator<QLayoutItem> it(m_list);
-	QPtrList<QLayoutItem> currentLine;
+	Q3PtrListIterator<QLayoutItem> it(m_list);
+	Q3PtrList<QLayoutItem> currentLine;
 	QLayoutItem *o;
 	QSize minSize, sizeHint(20, 20);
 	int minSizeHeight = 0 - spacing();
@@ -241,7 +243,7 @@ KexiFlowLayout::doHorizontalLayout(const QRect &r, bool testOnly)
 		QSize oSizeHint = o->sizeHint(); // we cache these ones because it can take a while to get it (eg for child layouts)
 		if ((x + oSizeHint.width()) > r.right() && h > 0) {
 			// do the layout of current line
-			QPtrListIterator<QLayoutItem> it2(currentLine);
+			Q3PtrListIterator<QLayoutItem> it2(currentLine);
 			QLayoutItem *item;
 			int wx = r.x();
 			int sizeHintWidth = 0 -spacing(), minSizeWidth=0 - spacing(), lineMinHeight=0;
@@ -293,7 +295,7 @@ KexiFlowLayout::doHorizontalLayout(const QRect &r, bool testOnly)
 	}
 
 	// don't forget to layout the last line
-	QPtrListIterator<QLayoutItem> it2(currentLine);
+	Q3PtrListIterator<QLayoutItem> it2(currentLine);
 	QLayoutItem *item;
 	int wx = r.x();
 	int sizeHintWidth = 0 -spacing(), minSizeWidth=0 - spacing(), lineMinHeight=0;
@@ -342,8 +344,8 @@ KexiFlowLayout::doVerticalLayout(const QRect &r, bool testOnly)
 	int w = 0; // width of this line
 	int availableSpace = r.height() + spacing();
 	int expandingWidgets=0; // number of widgets in the line with QSizePolicy == Expanding
-	QPtrListIterator<QLayoutItem> it(m_list);
-	QPtrList<QLayoutItem> currentLine;
+	Q3PtrListIterator<QLayoutItem> it(m_list);
+	Q3PtrList<QLayoutItem> currentLine;
 	QLayoutItem *o;
 	QSize minSize, sizeHint(20, 20);
 	int minSizeWidth = 0 - spacing();
@@ -357,7 +359,7 @@ KexiFlowLayout::doVerticalLayout(const QRect &r, bool testOnly)
 		QSize oSizeHint = o->sizeHint(); // we cache these ones because it can take a while to get it (eg for child layouts)
 		if (y + oSizeHint.height() > r.bottom() && w > 0) {
 			// do the layout of current line
-			QPtrListIterator<QLayoutItem> it2(currentLine);
+			Q3PtrListIterator<QLayoutItem> it2(currentLine);
 			QLayoutItem *item;
 			int wy = r.y();
 			int sizeHintHeight = 0 - spacing(), minSizeHeight = 0 - spacing(), colMinWidth=0;
@@ -409,7 +411,7 @@ KexiFlowLayout::doVerticalLayout(const QRect &r, bool testOnly)
 	}
 
 	// don't forget to layout the last line
-	QPtrListIterator<QLayoutItem> it2(currentLine);
+	Q3PtrListIterator<QLayoutItem> it2(currentLine);
 	QLayoutItem *item;
 	int wy = r.y();
 	int sizeHintHeight = 0 - spacing(), minSizeHeight = 0 - spacing(), colMinWidth=0;

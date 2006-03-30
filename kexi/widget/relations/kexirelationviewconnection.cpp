@@ -22,7 +22,7 @@
 #include <qpixmap.h>
 #include <qcolor.h>
 #include <qapplication.h>
-#include <qpointarray.h>
+#include <q3pointarray.h>
 
 #include <kdebug.h>
 
@@ -88,7 +88,7 @@ KexiRelationViewConnection::drawConnection(QPainter *p)
 	{
 		//det. side
 		p->drawLine(rx - sideNCharWidth, ry, rx, ry);
-		QPointArray pa(3);
+		Q3PointArray pa(3);
 		pa.setPoint(0, rx - 4, ry - 3);
 		pa.setPoint(1, rx - 4, ry + 3);
 		pa.setPoint(2, rx - 1, ry);
@@ -130,7 +130,7 @@ KexiRelationViewConnection::drawConnection(QPainter *p)
 
 		//det. side
 		p->drawLine(lx, ry, lx + sideNCharWidth, ry);
-		QPointArray pa(3);
+		Q3PointArray pa(3);
 		pa.setPoint(0, lx + 3, ry - 3);
 		pa.setPoint(1, lx + 3, ry + 3);
 		pa.setPoint(2, lx, ry);

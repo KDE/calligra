@@ -23,8 +23,10 @@
 #include <qobject.h>
 #include <qmap.h>
 #include <qpair.h>
-#include <qintdict.h>
+#include <q3intdict.h>
 #include <qtoolbutton.h>
+//Added by qt3to4:
+#include <QPixmap>
 
 #include <kicontheme.h>
 #include <kdialogbase.h>
@@ -90,13 +92,13 @@ class KEXIEXTWIDGETS_EXPORT PixmapCollectionEditor : public KDialogBase
 		void newItemByName();
 		void removeItem();
 		void renameItem();
-		void renameCollectionItem(QIconViewItem *item, const QString &name);
-		void displayMenu(QIconViewItem *item, const QPoint &p);
+		void renameCollectionItem(Q3IconViewItem *item, const QString &name);
+		void displayMenu(Q3IconViewItem *item, const QPoint &p);
 
 	private:
 		enum { BNewItemPath = 101, BNewItemName, BDelItem};
 		K3IconView  *m_iconView;
-		QIntDict<QToolButton>  m_buttons;
+		Q3IntDict<QToolButton>  m_buttons;
 		PixmapCollection  *m_collection;
 };
 

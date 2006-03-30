@@ -24,7 +24,10 @@
 #include <kexidataiteminterface.h>
 
 #include <qvariant.h>
-#include <qscrollview.h>
+#include <q3scrollview.h>
+//Added by qt3to4:
+#include <QKeyEvent>
+#include <QEvent>
 
 #include "kexitableviewdata.h"
 
@@ -40,7 +43,7 @@ class KEXIDATATABLE_EXPORT KexiTableEdit : public QWidget, public KexiDataItemIn
 	Q_OBJECT
 
 	public:
-		KexiTableEdit(KexiTableViewColumn &column, QScrollView* parent = 0, const char* name = 0);
+		KexiTableEdit(KexiTableViewColumn &column, Q3ScrollView* parent = 0, const char* name = 0);
 
 		virtual ~KexiTableEdit();
 
@@ -143,7 +146,7 @@ class KEXIDATATABLE_EXPORT KexiTableEdit : public QWidget, public KexiDataItemIn
 		KexiTableViewColumn *m_column;
 		int m_leftMargin;
 		int m_rightMargin;
-		QScrollView* m_scrollView;
+		Q3ScrollView* m_scrollView;
 
 	private:
 		QWidget* m_view;
@@ -158,7 +161,7 @@ class KEXIDATATABLE_EXPORT KexiTableEdit : public QWidget, public KexiDataItemIn
 			virtual ~factoryclassname(); \
 	\
 		protected: \
-			virtual KexiTableEdit* createEditor(KexiTableViewColumn &column, QScrollView* parent = 0); \
+			virtual KexiTableEdit* createEditor(KexiTableViewColumn &column, Q3ScrollView* parent = 0); \
 	};
 
 //! Implementation of cell editor factory
@@ -171,7 +174,7 @@ factoryclassname::~factoryclassname() \
 {} \
 \
 KexiTableEdit* factoryclassname::createEditor( \
-	KexiTableViewColumn &column, QScrollView* parent) \
+	KexiTableViewColumn &column, Q3ScrollView* parent) \
 { \
 	return new itemclassname(column, parent); \
 }

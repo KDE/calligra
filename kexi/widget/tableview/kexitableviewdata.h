@@ -25,11 +25,13 @@
 #ifndef KEXITABLEVIEWDATA_H
 #define KEXITABLEVIEWDATA_H
 
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 #include <qvariant.h>
-#include <qvaluevector.h>
+#include <q3valuevector.h>
 #include <qstring.h>
 #include <qobject.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 #include "kexitableitem.h"
 
@@ -51,8 +53,8 @@ class KexiTableViewData;
 /*! Single column definition. */
 class KEXIDATATABLE_EXPORT KexiTableViewColumn {
 	public:
-		typedef QPtrList<KexiTableViewColumn> List;
-		typedef QPtrListIterator<KexiTableViewColumn> ListIterator;
+		typedef Q3PtrList<KexiTableViewColumn> List;
+		typedef Q3PtrListIterator<KexiTableViewColumn> ListIterator;
 
 		/*! Not db-aware ctor. if \a owner is true, the field \a will be owned by this column,
 		 so you shouldn't care about destroying this field. */
@@ -185,7 +187,7 @@ class KEXIDATATABLE_EXPORT KexiTableViewColumn {
 /*! List of column definitions. */
 //typedef QValueVector<KexiTableViewColumn> KexiTableViewColumnList;
 
-typedef QPtrList<KexiTableItem> KexiTableViewDataBase;
+typedef Q3PtrList<KexiTableItem> KexiTableViewDataBase;
 
 /*! Reimplements QPtrList to allow configurable sorting and more.
 	Original author: Till Busch.
@@ -196,7 +198,7 @@ class KEXIDATATABLE_EXPORT KexiTableViewData : public QObject, protected KexiTab
 	Q_OBJECT
 
 public: 
-	typedef QPtrListIterator<KexiTableItem> Iterator;
+	typedef Q3PtrListIterator<KexiTableItem> Iterator;
 
 	//! not db-aware version
 	KexiTableViewData();
@@ -214,7 +216,7 @@ public:
 	 @param valueType a type for values
 	*/
 	KexiTableViewData(
-		const QValueList<QVariant> &keys, const QValueList<QVariant> &values,
+		const Q3ValueList<QVariant> &keys, const Q3ValueList<QVariant> &values,
 		KexiDB::Field::Type keyType = KexiDB::Field::Text, 
 		KexiDB::Field::Type valueType = KexiDB::Field::Text);
 
@@ -335,7 +337,7 @@ public:
 
 	/*! Deletes rows (by number) passed with \a rowsToDelete. 
 	 Currently, this method is only for non data-aware tables. */
-	void deleteRows( const QValueList<int> &rowsToDelete, bool repaint = false );
+	void deleteRows( const Q3ValueList<int> &rowsToDelete, bool repaint = false );
 
 	/*! Deletes all rows. Works either for db-aware and non db-aware tables.
 	 Column's definition is not changed.
@@ -433,7 +435,7 @@ signals:
 	void rowDeleted(); 
 
 	//! Rows have been deleted
-	void rowsDeleted( const QValueList<int> &rowsToDelete );
+	void rowsDeleted( const Q3ValueList<int> &rowsToDelete );
 
 	//! Displayed data needs to be reloaded in all presenters.
 	void reloadRequested();
@@ -443,7 +445,7 @@ signals:
 protected:
 	void init();
 	void init(
-		const QValueList<QVariant> &keys, const QValueList<QVariant> &values,
+		const Q3ValueList<QVariant> &keys, const Q3ValueList<QVariant> &values,
 		KexiDB::Field::Type keyType, KexiDB::Field::Type valueType);
 
 	virtual int compareItems(Item item1, Item item2);
@@ -473,7 +475,7 @@ protected:
 	KexiDB::ResultInfo m_result;
 
 	uint m_visibleColumnsCount;
-	QValueVector<int> m_visibleColumnsIDs, m_globalColumnsIDs;
+	Q3ValueVector<int> m_visibleColumnsIDs, m_globalColumnsIDs;
 
 	bool m_readOnly : 1;
 	bool m_insertingEnabled : 1;

@@ -23,7 +23,14 @@
 #include <qlabel.h>
 #include <qvalidator.h>
 #include <qtooltip.h>
-#include <qscrollview.h>
+#include <q3scrollview.h>
+//Added by qt3to4:
+#include <QPixmap>
+#include <QFocusEvent>
+#include <QKeyEvent>
+#include <QEvent>
+#include <Q3Frame>
+#include <Q3HBoxLayout>
 
 #include <klocale.h>
 #include <kiconloader.h>
@@ -44,7 +51,7 @@ class KexiRecordNavigatorPrivate
 		{
 		}
 		KexiRecordNavigatorHandler *handler;
-		QHBoxLayout *lyr;
+		Q3HBoxLayout *lyr;
 
 		QLabel *editingIndicatorLabel;
 		bool editingIndicatorEnabled : 1;
@@ -64,15 +71,15 @@ KexiRecordNavigatorHandler::~KexiRecordNavigatorHandler()
 //--------------------------------------------------
 
 KexiRecordNavigator::KexiRecordNavigator(QWidget *parent, int leftMargin, const char *name)
- : QFrame(parent, name)
+ : Q3Frame(parent, name)
  , m_view(0)
  , m_isInsertingEnabled(true)
  , d( new KexiRecordNavigatorPrivate() )
 {
 	if (parent->inherits("QScrollView"))
-		setParentView( dynamic_cast<QScrollView*>(parent) );
-	setFrameStyle(QFrame::NoFrame);
-	d->lyr = new QHBoxLayout(this,0,0,"nav_lyr");
+		setParentView( dynamic_cast<Q3ScrollView*>(parent) );
+	setFrameStyle(Q3Frame::NoFrame);
+	d->lyr = new Q3HBoxLayout(this,0,0,"nav_lyr");
 
 	m_textLabel = new QLabel(this);
 	d->lyr->addWidget( m_textLabel  );
@@ -86,13 +93,13 @@ KexiRecordNavigator::KexiRecordNavigator(QWidget *parent, int leftMargin, const 
 
 	d->lyr->addWidget( m_navBtnFirst = new QToolButton(this) );
 	m_navBtnFirst->setFixedWidth(bw);
-	m_navBtnFirst->setFocusPolicy(NoFocus);
+	m_navBtnFirst->setFocusPolicy(Qt::NoFocus);
 	m_navBtnFirst->setIconSet( SmallIconSet("navigator_first") );
 	m_navBtnFirst->setToolTip( i18n("First row"));
 	
 	d->lyr->addWidget( m_navBtnPrev = new QToolButton(this) );
 	m_navBtnPrev->setFixedWidth(bw);
-	m_navBtnPrev->setFocusPolicy(NoFocus);
+	m_navBtnPrev->setFocusPolicy(Qt::NoFocus);
 	m_navBtnPrev->setIconSet( SmallIconSet("navigator_prev") );
 	m_navBtnPrev->setAutoRepeat(true);
 	m_navBtnPrev->setToolTip( i18n("Previous row"));
@@ -100,8 +107,8 @@ KexiRecordNavigator::KexiRecordNavigator(QWidget *parent, int leftMargin, const 
 	d->lyr->addSpacing( 6 );
 	
 	d->lyr->addWidget( m_navRecordNumber = new KLineEdit(this) );
-	m_navRecordNumber->setAlignment(AlignRight | AlignVCenter);
-	m_navRecordNumber->setFocusPolicy(ClickFocus);
+	m_navRecordNumber->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
+	m_navRecordNumber->setFocusPolicy(Qt::ClickFocus);
 	m_navRecordNumber->installEventFilter(this);
 //	m_navRowNumber->setFixedWidth(fw);
 	m_navRecordNumberValidator = new QIntValidator(1, INT_MAX, this);
@@ -114,16 +121,16 @@ KexiRecordNavigator::KexiRecordNavigator(QWidget *parent, int leftMargin, const 
 	lbl_of->setMaximumWidth(fm.width(lbl_of->text())+8);
 	lbl_of->setReadOnly(true);
 	lbl_of->setLineWidth(0);
-	lbl_of->setFocusPolicy(NoFocus);
-	lbl_of->setAlignment(AlignCenter);
+	lbl_of->setFocusPolicy(Qt::NoFocus);
+	lbl_of->setAlignment(Qt::AlignCenter);
 	d->lyr->addWidget( lbl_of );
 	
 	d->lyr->addWidget( m_navRecordCount = new KLineEdit(this) );
 	m_navRecordCount->setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Preferred);
 	m_navRecordCount->setReadOnly(true);
 	m_navRecordCount->setLineWidth(0);
-	m_navRecordCount->setFocusPolicy(NoFocus);
-	m_navRecordCount->setAlignment(AlignLeft | AlignVCenter);
+	m_navRecordCount->setFocusPolicy(Qt::NoFocus);
+	m_navRecordCount->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
 	m_navRecordCount->setToolTip( i18n("Number of rows"));
 
 	lbl_of->setFont(f);
@@ -133,21 +140,21 @@ KexiRecordNavigator::KexiRecordNavigator(QWidget *parent, int leftMargin, const 
 
 	d->lyr->addWidget( m_navBtnNext = new QToolButton(this) );
 	m_navBtnNext->setFixedWidth(bw);
-	m_navBtnNext->setFocusPolicy(NoFocus);
+	m_navBtnNext->setFocusPolicy(Qt::NoFocus);
 	m_navBtnNext->setIconSet( SmallIconSet("navigator_next") );
 	m_navBtnNext->setAutoRepeat(true);
 	m_navBtnNext->setToolTip( i18n("Next row"));
 	
 	d->lyr->addWidget( m_navBtnLast = new QToolButton(this) );
 	m_navBtnLast->setFixedWidth(bw);
-	m_navBtnLast->setFocusPolicy(NoFocus);
+	m_navBtnLast->setFocusPolicy(Qt::NoFocus);
 	m_navBtnLast->setIconSet( SmallIconSet("navigator_last") );
 	m_navBtnLast->setToolTip( i18n("Last row"));
 	
 	d->lyr->addSpacing( 6 );
 	d->lyr->addWidget( m_navBtnNew = new QToolButton(this) );
 	m_navBtnNew->setFixedWidth(bw);
-	m_navBtnNew->setFocusPolicy(NoFocus);
+	m_navBtnNew->setFocusPolicy(Qt::NoFocus);
 	m_navBtnNew->setIconSet( SmallIconSet("navigator_new") );
 	m_navBtnNew->setToolTip( i18n("New row"));
 	m_navBtnNext->setEnabled(isInsertingEnabled());
@@ -183,7 +190,7 @@ void KexiRecordNavigator::setInsertingEnabled(bool set)
 
 void KexiRecordNavigator::setEnabled( bool set )
 {
-	QFrame::setEnabled(set);
+	Q3Frame::setEnabled(set);
 	if (set && !m_isInsertingEnabled)
 		m_navBtnNew->setEnabled( false );
 }
@@ -324,14 +331,14 @@ uint KexiRecordNavigator::recordCount() const
 	return r;
 }
 
-void KexiRecordNavigator::setParentView(QScrollView *view)
+void KexiRecordNavigator::setParentView(Q3ScrollView *view)
 {
 	m_view = view;
 }
 
 void KexiRecordNavigator::updateGeometry(int leftMargin)
 {
-	QFrame::updateGeometry();
+	Q3Frame::updateGeometry();
 	if (m_view) {
 		int navWidth;
 		if (m_view->horizontalScrollBar()->isVisible()) {

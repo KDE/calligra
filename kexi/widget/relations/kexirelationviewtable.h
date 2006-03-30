@@ -21,9 +21,13 @@
 #ifndef KEXIRELATIONVIEWTABLE_H
 #define KEXIRELATIONVIEWTABLE_H
 
-#include <qframe.h>
+#include <q3frame.h>
 #include <qstringlist.h>
 #include <qlabel.h>
+//Added by qt3to4:
+#include <QMouseEvent>
+#include <QEvent>
+#include <QDropEvent>
 #include <k3listview.h>
 
 #include <widget/kexifieldlistview.h>
@@ -37,7 +41,7 @@ namespace KexiDB
 	class TableOrQuerySchema;
 }
 
-class KEXIRELATIONSVIEW_EXPORT KexiRelationViewTableContainer : public QFrame
+class KEXIRELATIONSVIEW_EXPORT KexiRelationViewTableContainer : public Q3Frame
 {
 	Q_OBJECT
 
@@ -69,7 +73,7 @@ class KEXIRELATIONSVIEW_EXPORT KexiRelationViewTableContainer : public QFrame
 
 	protected slots:
 		void moved();
-		void slotContextMenu(K3ListView *lv, QListViewItem *i, const QPoint& p);
+		void slotContextMenu(K3ListView *lv, Q3ListViewItem *i, const QPoint& p);
 
 	protected:
 //		KexiDB::TableSchema *m_table;
@@ -117,7 +121,7 @@ class KEXIRELATIONSVIEW_EXPORT KexiRelationViewTable : public KexiFieldListView
 		virtual void contentsMousePressEvent( QMouseEvent * e );
 		virtual bool acceptDrag(QDropEvent *e) const;
 //moved		virtual QDragObject *dragObject();
-		virtual QRect drawItemHighlighter(QPainter *painter, QListViewItem *item); 
+		virtual QRect drawItemHighlighter(QPainter *painter, Q3ListViewItem *item); 
 
 	private:
 //		QStringList m_fieldList;

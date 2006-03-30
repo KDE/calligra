@@ -20,11 +20,13 @@
 #ifndef KEXITABLEHEADER_H
 #define KEXITABLEHEADER_H
 
-#include <qheader.h>
+#include <q3header.h>
+//Added by qt3to4:
+#include <QPaintEvent>
 
 class QPainter;
 
-class KEXIDATATABLE_EXPORT KexiTableHeader : public QHeader
+class KEXIDATATABLE_EXPORT KexiTableHeader : public Q3Header
 {
 	Q_OBJECT
 

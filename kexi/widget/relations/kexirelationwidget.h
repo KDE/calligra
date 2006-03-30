@@ -25,12 +25,14 @@
 //#include "kexiactionproxy.h"
 #include "kexiviewbase.h"
 #include "kexirelationview.h"
+//Added by qt3to4:
+#include <Q3CString>
 
 class KComboBox;
 class KPushButton;
 class KMenu;
 class KAction;
-class QListViewItem;
+class Q3ListViewItem;
 
 class KexiMainWindow;
 
@@ -62,9 +64,9 @@ class KEXIRELATIONSVIEW_EXPORT KexiRelationWidget : public KexiViewBase
 		virtual QSize sizeHint() const;
 
 		/*! Used to add newly created object information to the combo box. */
-		void objectCreated(const QCString &mime, const QCString& name);
-		void objectDeleted(const QCString &mime, const QCString& name);
-		void objectRenamed(const QCString &mime, const QCString& name, const QCString& newName);
+		void objectCreated(const Q3CString &mime, const Q3CString& name);
+		void objectDeleted(const Q3CString &mime, const Q3CString& name);
+		void objectRenamed(const Q3CString &mime, const Q3CString& name, const Q3CString& newName);
 
 	signals:
 		void tableAdded(KexiDB::TableSchema& t);
@@ -105,7 +107,7 @@ class KEXIRELATIONSVIEW_EXPORT KexiRelationWidget : public KexiViewBase
 		void designSelectedTable();
 		void slotTableHidden(KexiDB::TableSchema &table);
 		void aboutToShowPopupMenu();
-		void slotTableFieldDoubleClicked(QListViewItem *i,const QPoint&,int);
+		void slotTableFieldDoubleClicked(Q3ListViewItem *i,const QPoint&,int);
 
 	protected:
 		/*! executes popup menu at \a pos, or, 

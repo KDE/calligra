@@ -29,6 +29,9 @@
 #include <qpixmap.h>
 #include <qpainter.h>
 #include <qimage.h>
+//Added by qt3to4:
+#include <Q3PointArray>
+#include <QPaintEvent>
 
 #include <kdebug.h>
 #include <kstaticdeleter.h>
@@ -172,8 +175,8 @@ void KexiRecordMarker::paintEvent(QPaintEvent *e)
 		QRect r(0, y, width(), m_rowHeight);
 		p.drawRect(r);
 		style().drawPrimitive( QStyle::PE_HeaderSection, &p, r,
-			colorGroup(), QStyle::Style_Raised |
-			(isEnabled() ? QStyle::Style_Enabled : 0));
+			colorGroup(), QStyle::State_Raised |
+			(isEnabled() ? QStyle::State_Enabled : 0));
 	}
 	if (m_editRow!=-1 && m_editRow >= first && m_editRow <= (last/*+1 for insert row*/)) {
 		//show pen when editing
@@ -187,7 +190,7 @@ void KexiRecordMarker::paintEvent(QPaintEvent *e)
 	{
 		//show marker
 		p.setBrush(colorGroup().foreground());
-		QPointArray points(3);
+		Q3PointArray points(3);
 		int ofs = m_rowHeight / 4;
 		int ofs2 = (width() - ofs) / 2 -1;
 		int pos = ((m_rowHeight*m_currentRow)-m_offset)-ofs/2+2;

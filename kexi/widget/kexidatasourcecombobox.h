@@ -21,6 +21,8 @@
 #define KEXIDATASOURCECOMBOBOX_H
 
 #include <kcombobox.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 class KexiProject;
 namespace KexiPart {
@@ -41,18 +43,18 @@ class KEXIEXTWIDGETS_EXPORT KexiDataSourceComboBox : public KComboBox
 
 		KexiProject* project() const;
 
-		QCString selectedMimeType() const;
-		QCString selectedName() const;
+		Q3CString selectedMimeType() const;
+		Q3CString selectedName() const;
 		/*! \return index of item of mime type \a mimeType and name \a name.
 		 Returs -1 of no such item exists. */
-		int findItem(const QCString& mimeType, const QCString& name);
+		int findItem(const Q3CString& mimeType, const Q3CString& name);
 
 	public slots:
 		void setProject(KexiProject *prj);
 
 		/*! Selects item for data source described by \a mimeType and \a name.
 		 If \a mimeType is empty, either "kexi/table" and "kexi/query" are tried. */
-		void setDataSource(const QCString& mimeType, const QCString& name);
+		void setDataSource(const Q3CString& mimeType, const Q3CString& name);
 
 	signals:
 		void dataSourceSelected();
@@ -60,7 +62,7 @@ class KEXIEXTWIDGETS_EXPORT KexiDataSourceComboBox : public KComboBox
 	protected slots:
 		void slotNewItemStored(KexiPart::Item& item);
 		void slotItemRemoved(const KexiPart::Item& item);
-		void slotItemRenamed(const KexiPart::Item& item, const QCString& oldName);
+		void slotItemRenamed(const KexiPart::Item& item, const Q3CString& oldName);
 		void slotActivated( int index );
 
 	protected:

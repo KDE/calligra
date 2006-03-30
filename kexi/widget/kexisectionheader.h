@@ -21,6 +21,8 @@
 #define KEXISECTIONHEADER_H
 
 #include <qwidget.h>
+//Added by qt3to4:
+#include <QEvent>
 
 class KexiSectionHeaderPrivate;
 
@@ -28,7 +30,7 @@ class KEXIEXTWIDGETS_EXPORT KexiSectionHeader : public QWidget
 {
 	Q_OBJECT
 	public:
-		KexiSectionHeader(const QString &caption, Orientation o, 
+		KexiSectionHeader(const QString &caption, Qt::Orientation o, 
 			QWidget* parent = 0, const char * name = 0 );
 
 		virtual ~KexiSectionHeader();

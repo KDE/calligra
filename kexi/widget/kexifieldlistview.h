@@ -20,7 +20,7 @@
 #ifndef KEXIFIELDLISTVIEW_H
 #define KEXIFIELDLISTVIEW_H
 
-#include <qframe.h>
+#include <q3frame.h>
 #include <qpixmap.h>
 #include <k3listview.h>
 
@@ -56,7 +56,7 @@ class KEXIEXTWIDGETS_EXPORT KexiFieldListView : public K3ListView
 //		virtual QSize sizeHint();
 
 	protected:
-		virtual QDragObject *dragObject();
+		virtual Q3DragObject *dragObject();
 
 		KexiDB::TableOrQuerySchema* m_schema;
 		QPixmap m_keyIcon; //!< a small "primary key" icon for 0-th column

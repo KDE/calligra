@@ -33,7 +33,7 @@
 #include <qpoint.h>
 #include <qlayout.h>
 #include <qtoolbutton.h>
-#include <qdatetimeedit.h>
+#include <q3datetimeedit.h>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -46,7 +46,7 @@
 
 #include <kexiutils/utils.h>
 
-KexiDateTimeTableEdit::KexiDateTimeTableEdit(KexiTableViewColumn &column, QScrollView *parent)
+KexiDateTimeTableEdit::KexiDateTimeTableEdit(KexiTableViewColumn &column, Q3ScrollView *parent)
  : KexiInputTableEdit(column, parent)
 {
 	setName("KexiDateTimeTableEdit");
@@ -100,7 +100,7 @@ void KexiDateTimeTableEdit::setupContents( QPainter *p, bool focused, QVariant v
 	if (val.toDateTime().isValid())
 		txt = m_dateFormatter.dateToString(val.toDateTime().date()) + " " 
 			+ m_timeFormatter.timeToString(val.toDateTime().time());
-	align |= AlignLeft;
+	align |= Qt::AlignLeft;
 }
 
 bool KexiDateTimeTableEdit::valueIsNull()

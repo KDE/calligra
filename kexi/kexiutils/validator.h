@@ -25,6 +25,9 @@
 #include <qvalidator.h>
 #include <qvariant.h>
 #include <qstring.h>
+//Added by qt3to4:
+#include <Q3ValueList>
+#include <Q3PtrList>
 
 #include <klocale.h>
 
@@ -142,8 +145,8 @@ class KEXIUTILS_EXPORT MultiValidator : public Validator
 
 
 	protected:
-		QPtrList<Validator> m_ownedSubValidators;
-		QValueList<Validator*> m_subValidators;
+		Q3PtrList<Validator> m_ownedSubValidators;
+		Q3ValueList<Validator*> m_subValidators;
 };
 
 }

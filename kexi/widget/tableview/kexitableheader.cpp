@@ -19,13 +19,15 @@
 
 #include <qpainter.h>
 #include <qregion.h>
+//Added by qt3to4:
+#include <QPaintEvent>
 
 #include <kdebug.h>
 
 #include "kexitableheader.h"
 
 KexiTableHeader::KexiTableHeader(QWidget *parent, const char *name)
- : QHeader(parent, name)
+ : Q3Header(parent, name)
 {
 	m_currentRow = -1;
 	m_insertRow = -1;
@@ -40,7 +42,7 @@ KexiTableHeader::paintEvent(QPaintEvent *e)
 {
     QPainter p(this);
     p.setPen(colorGroup().buttonText());
-    int pos = orientation() == Horizontal
+    int pos = orientation() == Qt::Horizontal
 		     ? e->rect().left()
 		     : e->rect().top();
     int id = mapToIndex( sectionAt( pos + offset() ) );
@@ -59,8 +61,8 @@ KexiTableHeader::paintEvent(QPaintEvent *e)
 	
 	paintSection( &p, i, r );
 	p.restore();
-	if ( orientation() == Horizontal && r. right() >= e->rect().right() ||
-	     orientation() == Vertical && r. bottom() >= e->rect().bottom() )
+	if ( orientation() == Qt::Horizontal && r. right() >= e->rect().right() ||
+	     orientation() == Qt::Vertical && r. bottom() >= e->rect().bottom() )
 	    return;
     }
     if ( !reg.isEmpty() )
@@ -80,11 +82,11 @@ KexiTableHeader::paintSectionLabel(QPainter *p, int index, const QRect & fr)
 			p->drawLine(i + 4, pos - h + 2 + i, i + 4, pos - 2 - i);
 		}
 
-		QHeader::paintSectionLabel(p, index, fr);
+		Q3Header::paintSectionLabel(p, index, fr);
 	}
 	else
 	{
-		QHeader::paintSectionLabel(p, index, fr);
+		Q3Header::paintSectionLabel(p, index, fr);
 	}
 }
 

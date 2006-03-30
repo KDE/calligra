@@ -22,7 +22,7 @@
 #define KEXIRELATIONVIEWCONNECTION_H
 
 #include <qstring.h>
-#include <qguardedptr.h>
+#include <qpointer.h>
 
 class QPainter;
 class KexiRelationViewTableContainer;

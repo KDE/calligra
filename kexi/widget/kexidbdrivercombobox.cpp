@@ -19,7 +19,7 @@
 
 #include "kexidbdrivercombobox.h"
 
-#include <qlistbox.h>
+#include <q3listbox.h>
 
 #include <kiconloader.h>
 

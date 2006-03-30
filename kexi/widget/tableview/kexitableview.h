@@ -30,11 +30,23 @@
 //we want to have kde-support:
 #define USE_KDE
 
-#include <qscrollview.h>
+#include <q3scrollview.h>
 #include <qtimer.h>
 #include <qvariant.h>
-#include <qptrlist.h>
-#include <qheader.h>
+#include <q3ptrlist.h>
+#include <q3header.h>
+//Added by qt3to4:
+#include <Q3CString>
+#include <QFocusEvent>
+#include <QDragLeaveEvent>
+#include <QDragMoveEvent>
+#include <QEvent>
+#include <QKeyEvent>
+#include <QDropEvent>
+#include <Q3ValueList>
+#include <QShowEvent>
+#include <QResizeEvent>
+#include <QMouseEvent>
 
 #include <kdebug.h>
 
@@ -66,7 +78,7 @@ namespace KexiDB {
 /*! @see KexiFormScrollView
 */
 class KEXIDATATABLE_EXPORT KexiTableView :
-	public QScrollView,
+	public Q3ScrollView,
 	public KexiRecordNavigatorHandler,
 	public KexiSharedActionClient,
 	public KexiDataAwareObjectInterface
@@ -272,7 +284,7 @@ public slots:
 	 header has maximum overall width. Each selected column's width will be increased 
 	 by the same value. Does nothing if \a columnList is empty or there is no free space 
 	 to resize columns. If this table view is not visible, resizing will be performed on showing. */
-	void maximizeColumnsWidth( const QValueList<int> &columnList );
+	void maximizeColumnsWidth( const Q3ValueList<int> &columnList );
 
 	/*! Adjusts the size of the sections to fit the size of the horizontal header 
 	 as completely as possible. Only sections for which column stretch is enabled will be resized.
@@ -391,7 +403,7 @@ protected slots:
 
 	virtual void slotDataDestroying() { KexiDataAwareObjectInterface::slotDataDestroying(); }
 
-	virtual void slotRowsDeleted( const QValueList<int> & ); 
+	virtual void slotRowsDeleted( const Q3ValueList<int> & ); 
 
 	//! updates display after many rows deletion
 	void slotColumnWidthChanged( int col, int os, int ns );
@@ -522,7 +534,7 @@ protected:
 	 given action's shortcut - false is returned (beause action is already performed at main 
 	 window's level).
 	*/
-	bool shortCutPressed( QKeyEvent *e, const QCString &action_name );
+	bool shortCutPressed( QKeyEvent *e, const Q3CString &action_name );
 
 #if 0 //we have now KexiActionProxy
 	/*! Updates visibility/accesibility of popup menu items,
@@ -600,7 +612,7 @@ protected:
 
  \todo react on indexChange ( int section, int fromIndex, int toIndex ) signal
 */
-class KEXIDATATABLE_EXPORT TableViewHeader : public QHeader
+class KEXIDATATABLE_EXPORT TableViewHeader : public Q3Header
 {
 	Q_OBJECT
 

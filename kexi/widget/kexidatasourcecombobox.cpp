@@ -32,6 +32,9 @@
 #include <kexipartitem.h>
 
 #include <kexidb/connection.h>
+//Added by qt3to4:
+#include <QPixmap>
+#include <Q3CString>
 
 #ifdef KEXI_SHOW_UNIMPLEMENTED
 #define ADD_DEFINEQUERY_ROW
@@ -105,8 +108,8 @@ void KexiDataSourceComboBox::setProject(KexiProject *prj)
 		this, SLOT(slotNewItemStored(KexiPart::Item&)));
 	connect(d->prj, SIGNAL(itemRemoved(const KexiPart::Item&)),
 		this, SLOT(slotItemRemoved(const KexiPart::Item&)));
-	connect(d->prj, SIGNAL(itemRenamed(const KexiPart::Item&, const QCString&)),
-		this, SLOT(slotItemRenamed(const KexiPart::Item&, const QCString&)));
+	connect(d->prj, SIGNAL(itemRenamed(const KexiPart::Item&, const Q3CString&)),
+		this, SLOT(slotItemRenamed(const KexiPart::Item&, const Q3CString&)));
 
 	KexiDB::Connection *conn = d->prj->dbConnection();
 	if (!conn)
@@ -148,7 +151,7 @@ void KexiDataSourceComboBox::setProject(KexiProject *prj)
 	setCurrentItem(0);
 }
 
-void KexiDataSourceComboBox::setDataSource(const QCString& mimeType, const QCString& name)
+void KexiDataSourceComboBox::setDataSource(const Q3CString& mimeType, const Q3CString& name)
 {
 	if (name.isEmpty()) {
 		clearEdit();
@@ -157,7 +160,7 @@ void KexiDataSourceComboBox::setDataSource(const QCString& mimeType, const QCStr
 		return;
 	}
 
-	QCString mt(mimeType);
+	Q3CString mt(mimeType);
 	if (mimeType.isEmpty())
 		mt="kexi/table";
 	int i = findItem(mt, name);
@@ -195,7 +198,7 @@ void KexiDataSourceComboBox::slotNewItemStored(KexiPart::Item& item)
 	}
 }
 
-int KexiDataSourceComboBox::findItem(const QCString& mimeType, const QCString& name)
+int KexiDataSourceComboBox::findItem(const Q3CString& mimeType, const Q3CString& name)
 {
 	int i, end;
 	if (mimeType=="kexi/table") {
@@ -265,7 +268,7 @@ void KexiDataSourceComboBox::slotItemRemoved(const KexiPart::Item& item)
 	}*/
 }
 
-void KexiDataSourceComboBox::slotItemRenamed(const KexiPart::Item& item, const QCString& oldName)
+void KexiDataSourceComboBox::slotItemRenamed(const KexiPart::Item& item, const Q3CString& oldName)
 {
 	const int i = findItem(item.mimeType(), oldName);
 	if (i==-1)
@@ -301,7 +304,7 @@ void KexiDataSourceComboBox::slotActivated( int index )
 		emit dataSourceSelected();
 }
 
-QCString KexiDataSourceComboBox::selectedMimeType() const
+Q3CString KexiDataSourceComboBox::selectedMimeType() const
 {
 	const int index = currentItem();
 	if (index >= d->firstTableIndex() && index < (int)d->firstQueryIndex())
@@ -311,7 +314,7 @@ QCString KexiDataSourceComboBox::selectedMimeType() const
 	return 0;
 }
 
-QCString KexiDataSourceComboBox::selectedName() const
+Q3CString KexiDataSourceComboBox::selectedName() const
 {
 	const int index = currentItem();
 	if (index >= d->firstTableIndex() && index < count())

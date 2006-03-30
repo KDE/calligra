@@ -20,7 +20,7 @@
 #ifndef kopagelayoutsize_h
 #define kopagelayoutsize_h
 
-#include <qgroupbox.h>
+#include <q3groupbox.h>
 #include <KoGlobal.h>
 #include <KoUnit.h>
 #include <kdialogbase.h>
@@ -91,7 +91,7 @@ protected:
     KoUnitDoubleSpinBox *ebrTop;
     KoUnitDoubleSpinBox *ebrBottom;
     KoPagePreview *pgPreview;
-    QButtonGroup *m_orientGroup;
+    Q3ButtonGroup *m_orientGroup;
 
 protected slots:
     void formatChanged( int );

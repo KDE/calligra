@@ -27,6 +27,9 @@
 #include <qlayout.h>
 #include <qtimer.h>
 #include <qpainter.h>
+//Added by qt3to4:
+#include <Q3HBoxLayout>
+#include <QPaintEvent>
 
 #include <kglobal.h>
 #include <klocale.h>
@@ -57,7 +60,7 @@ class MyLineEdit : public KLineEdit
 //======================================================
 
 //KexiInputTableEdit::KexiInputTableEdit(KexiDB::Field &f, QScrollView *parent, const char* name)
-KexiInputTableEdit::KexiInputTableEdit(KexiTableViewColumn &column, QScrollView *parent)
+KexiInputTableEdit::KexiInputTableEdit(KexiTableViewColumn &column, Q3ScrollView *parent)
  : KexiTableEdit(column, parent, "KexiInputTableEdit")
 {
 //	m_type = f.type(); //copied because the rest of code uses m_type
@@ -84,7 +87,7 @@ void KexiInputTableEdit::init()
 
 	if (!align_right) {
 		//create layer for internal editor
-		QHBoxLayout *lyr = new QHBoxLayout(this);
+		Q3HBoxLayout *lyr = new Q3HBoxLayout(this);
 		lyr->addSpacing(4);
 		lyr->setAutoAdd(true);
 	}
@@ -93,7 +96,7 @@ void KexiInputTableEdit::init()
 	m_lineedit = new MyLineEdit(this, "KexiInputTableEdit-KLineEdit");
 	setViewWidget(m_lineedit);
 	if (align_right)
-		m_lineedit->setAlignment(AlignRight);
+		m_lineedit->setAlignment(Qt::AlignRight);
 //	m_cview->setFrame(false);
 //	m_cview->setFrameStyle( QFrame::Plain | QFrame::Box );
 //	m_cview->setLineWidth( 1 );
@@ -123,7 +126,7 @@ void KexiInputTableEdit::setValueInternal(const QVariant& add_, bool removeOld)
 				m_cview->setText(ov);
 		}
 		else if (	case QVariant::UInt:
-				m_cview->setAlignment(AlignRight);
+				m_cview->setAlignment(Qt::AlignRight);
 				if(ov == "1" || ov == "2" || ov == "3" || ov == "4" || ov == "5" || ov == "6" || ov == "7" || ov == "8" || ov == "9" || ov == "0")
 					m_cview->setText(ov);
 				if(ov == "=")

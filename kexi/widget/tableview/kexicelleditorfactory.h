@@ -21,7 +21,7 @@
 #define KEXICELLEDITORFACTORY_H
 
 #include <qvariant.h>
-#include <qscrollview.h>
+#include <q3scrollview.h>
 
 #include <kexidb/field.h>
 
@@ -51,7 +51,7 @@ class KexiCellEditorFactory
 		static KexiCellEditorFactoryItem* item( uint type, const QString& subType = QString::null );
 
 //		static KexiTableEdit* createEditor(KexiDB::Field &f, QScrollView* parent = 0);
-		static KexiTableEdit* createEditor(KexiTableViewColumn &column, QScrollView* parent = 0);
+		static KexiTableEdit* createEditor(KexiTableViewColumn &column, Q3ScrollView* parent = 0);
 };
 
 class KexiCellEditorFactoryItem
@@ -62,7 +62,7 @@ class KexiCellEditorFactoryItem
 
 	protected:
 //		virtual KexiTableEdit* createEditor(KexiDB::Field &f, QScrollView* parent = 0) = 0;
-		virtual KexiTableEdit* createEditor(KexiTableViewColumn &column, QScrollView* parent = 0) = 0;
+		virtual KexiTableEdit* createEditor(KexiTableViewColumn &column, Q3ScrollView* parent = 0) = 0;
 	
 	friend class KexiCellEditorFactory;
 };

@@ -21,22 +21,24 @@
 #ifndef _KEXIBLOBTABLEEDIT_H_
 #define _KEXIBLOBTABLEEDIT_H_
 
-#include <qcstring.h>
-#include <qcache.h>
+#include <q3cstring.h>
+#include <q3cache.h>
+//Added by qt3to4:
+#include <QPixmap>
 
 #include "kexitableedit.h"
 #include "kexicelleditorfactory.h"
 
 class KTempFile;
 class KProcess;
-class QTextEdit;
+class Q3TextEdit;
 
 class KexiBlobTableEdit : public KexiTableEdit
 {
 	Q_OBJECT
 	public:
 //		KexiBlobTableEdit(KexiDB::Field &f, QScrollView *parent=0);
-		KexiBlobTableEdit(KexiTableViewColumn &column, QScrollView *parent=0);
+		KexiBlobTableEdit(KexiTableViewColumn &column, Q3ScrollView *parent=0);
 		virtual ~KexiBlobTableEdit();
 
 		bool valueIsNull();
@@ -65,7 +67,7 @@ class KexiBlobTableEdit : public KexiTableEdit
 
 		KTempFile* m_tempFile;
 		KProcess* m_proc;
-		QTextEdit *m_content;
+		Q3TextEdit *m_content;
 };
 
 KEXI_DECLARE_CELLEDITOR_FACTORY_ITEM(KexiBlobEditorFactoryItem)
@@ -80,7 +82,7 @@ KEXI_DECLARE_CELLEDITOR_FACTORY_ITEM(KexiBlobEditorFactoryItem)
 class KEXIDATATABLE_EXPORT KexiKIconTableEdit : public KexiTableEdit
 {
 	public:
-		KexiKIconTableEdit(KexiTableViewColumn &column, QScrollView *parent=0);
+		KexiKIconTableEdit(KexiTableViewColumn &column, Q3ScrollView *parent=0);
 
 		virtual ~KexiKIconTableEdit();
 
@@ -112,7 +114,7 @@ class KEXIDATATABLE_EXPORT KexiKIconTableEdit : public KexiTableEdit
 		//! We've no editor widget that would store current value, so we do this here
 		QVariant m_currentValue;
 
-		QCache<QPixmap> m_pixmapCache;
+		Q3Cache<QPixmap> m_pixmapCache;
 };
 
 KEXI_DECLARE_CELLEDITOR_FACTORY_ITEM(KexiKIconTableEditorFactoryItem)

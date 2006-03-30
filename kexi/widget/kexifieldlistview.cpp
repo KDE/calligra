@@ -19,7 +19,7 @@
 
 #include "kexifieldlistview.h"
 
-#include <qheader.h>
+#include <q3header.h>
 #include <qlayout.h>
 #include <qlabel.h>
 #include <qpushbutton.h>
@@ -28,6 +28,8 @@
 #include <qapplication.h>
 #include <qbitmap.h>
 #include <qstyle.h>
+//Added by qt3to4:
+#include <QPixmap>
 
 #include <kdebug.h>
 #include <kiconloader.h>
@@ -61,8 +63,8 @@ KexiFieldListView::KexiFieldListView(QWidget *parent, const char *name, int opti
 	if (m_options & ShowDataTypes)
 		addColumn(i18n("Data Type"));
 	if (m_options & AllowMultiSelection)
-		setSelectionMode(QListView::Extended);
-	setResizeMode(QListView::LastColumn);
+		setSelectionMode(Q3ListView::Extended);
+	setResizeMode(Q3ListView::LastColumn);
 //	header()->hide();
 	setSorting(-1, true); // disable sorting
 	setDragEnabled(true);
@@ -134,10 +136,10 @@ void KexiFieldListView::setReadOnly(bool b)
 }
 #endif
 
-QDragObject* KexiFieldListView::dragObject()
+Q3DragObject* KexiFieldListView::dragObject()
 {
 	QStringList selectedFields;
-	for (QListViewItemIterator it(this); it.current(); ++it) {
+	for (Q3ListViewItemIterator it(this); it.current(); ++it) {
 		if (it.current()->isSelected()) {
 //! @todo what about query fields/aliases? it.current()->text(1) can be not enough
 			selectedFields.append(it.current()->text(0));

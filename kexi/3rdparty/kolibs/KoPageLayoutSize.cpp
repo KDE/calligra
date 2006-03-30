@@ -29,21 +29,25 @@
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qradiobutton.h>
-#include <qhbox.h>
+#include <q3hbox.h>
 #include <qvgroupbox.h>
 #include <qhbuttongroup.h>
+//Added by qt3to4:
+#include <QPixmap>
+#include <Q3HBoxLayout>
+#include <Q3GridLayout>
 
 KoPageLayoutSize::KoPageLayoutSize(QWidget *parent, const KoPageLayout& layout, KoUnit::Unit unit,const KoColumns& columns,  bool unitChooser, bool enableBorders)
     : QWidget(parent) {
     m_layout = layout;
     m_unit = unit;
 
-    QGridLayout *grid1 = new QGridLayout( this, 5, 2, 0, KDialog::spacingHint() );
+    Q3GridLayout *grid1 = new Q3GridLayout( this, 5, 2, 0, KDialog::spacingHint() );
     if ( unitChooser ) {
         // ------------- unit _______________
         QWidget* unitFrame = new QWidget( this );
         grid1->addWidget( unitFrame, 0, 0, Qt::AlignLeft );
-        QBoxLayout* unitLayout = new QHBoxLayout( unitFrame, KDialog::marginHint(), KDialog::spacingHint() );
+        Q3BoxLayout* unitLayout = new Q3HBoxLayout( unitFrame, KDialog::marginHint(), KDialog::spacingHint() );
 
         // label unit
         QLabel *lpgUnit = new QLabel( i18n( "Unit:" ), unitFrame );
@@ -68,7 +72,7 @@ KoPageLayoutSize::KoPageLayoutSize(QWidget *parent, const KoPageLayout& layout, 
     QVGroupBox *formatFrame = new QVGroupBox( i18n( "Page Size" ), this );
     grid1->addWidget( formatFrame, 1, 0 );
 
-    QHBox *formatPageSize = new QHBox( formatFrame );
+    Q3HBox *formatPageSize = new Q3HBox( formatFrame );
     formatPageSize->setSpacing( KDialog::spacingHint() );
 
     // label page size
@@ -83,7 +87,7 @@ KoPageLayoutSize::KoPageLayoutSize(QWidget *parent, const KoPageLayout& layout, 
     // spacer
     formatPageSize->setStretchFactor( new QWidget( formatPageSize ), 10 );
 
-    QHBox *formatCustomSize = new QHBox( formatFrame );
+    Q3HBox *formatCustomSize = new Q3HBox( formatFrame );
     formatCustomSize->setSpacing( KDialog::spacingHint() );
 
     // label width
@@ -107,7 +111,7 @@ KoPageLayoutSize::KoPageLayoutSize(QWidget *parent, const KoPageLayout& layout, 
     connect( epgHeight, SIGNAL( valueChangedPt(double ) ), this, SLOT( heightChanged(double) ) );
 
     // --------------- orientation ---------------
-    m_orientGroup = new QHButtonGroup( i18n( "Orientation" ), this );
+    m_orientGroup = new Q3HButtonGroup( i18n( "Orientation" ), this );
     m_orientGroup->setInsideSpacing( KDialog::spacingHint() );
     grid1->addWidget( m_orientGroup, 2, 0 );
 
@@ -129,7 +133,7 @@ KoPageLayoutSize::KoPageLayoutSize(QWidget *parent, const KoPageLayout& layout, 
     marginsFrame->setMargin( KDialog::marginHint() );
     grid1->addWidget( marginsFrame, 3, 0 );
 
-    QGridLayout *marginsLayout = new QGridLayout( marginsFrame->layout(), 3, 3,
+    Q3GridLayout *marginsLayout = new Q3GridLayout( marginsFrame->layout(), 3, 3,
        KDialog::spacingHint() );
 
     // left margin

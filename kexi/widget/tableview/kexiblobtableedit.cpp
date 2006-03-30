@@ -24,8 +24,8 @@
 
 #include <qdatastream.h>
 #include <qfile.h>
-#include <qpopupmenu.h>
-#include <qtextedit.h>
+#include <q3popupmenu.h>
+#include <q3textedit.h>
 #include <qlayout.h>
 #include <qstatusbar.h>
 #include <qlabel.h>
@@ -51,7 +51,7 @@
 
 
 //KexiBlobTableEdit::KexiBlobTableEdit(KexiDB::Field &f, QScrollView *parent)
-KexiBlobTableEdit::KexiBlobTableEdit(KexiTableViewColumn &column, QScrollView *parent)
+KexiBlobTableEdit::KexiBlobTableEdit(KexiTableViewColumn &column, Q3ScrollView *parent)
  : KexiTableEdit(column, parent,"KexiBlobTableEdit")
 {
 	m_proc = 0;
@@ -250,7 +250,7 @@ KexiBlobTableEdit::openWith()
 void
 KexiBlobTableEdit::menu()
 {
-	QPopupMenu* menu = new QPopupMenu(this, "BLOB Menu");
+	Q3PopupMenu* menu = new Q3PopupMenu(this, "BLOB Menu");
 
 	menu->insertItem(i18n("Open"), this, SLOT(open()));
 	menu->insertItem(i18n("Open With..."), this, SLOT(openWith()));
@@ -317,7 +317,7 @@ KexiBlobEditorFactoryItem::~KexiBlobEditorFactoryItem()
 }
 
 KexiTableEdit* KexiBlobEditorFactoryItem::createEditor(
-	KexiTableViewColumn & /*column*/, QScrollView* /*parent*/)
+	KexiTableViewColumn & /*column*/, Q3ScrollView* /*parent*/)
 {
 //! @todo js: enable when KexiBlobTableEdit will be stable again!
 //DISABLED
@@ -330,7 +330,7 @@ KexiTableEdit* KexiBlobEditorFactoryItem::createEditor(
 //This class is temporarily here:
 
 
-KexiKIconTableEdit::KexiKIconTableEdit(KexiTableViewColumn &column, QScrollView *parent)
+KexiKIconTableEdit::KexiKIconTableEdit(KexiTableViewColumn &column, Q3ScrollView *parent)
  : KexiTableEdit(column, parent, "KexiKIconTableEdit")
  , m_pixmapCache(17, 17, false)
 {

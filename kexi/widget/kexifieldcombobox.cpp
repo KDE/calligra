@@ -19,7 +19,7 @@
 
 #include "kexifieldcombobox.h"
 
-#include <qheader.h>
+#include <q3header.h>
 #include <qlayout.h>
 #include <qlabel.h>
 #include <qpushbutton.h>
@@ -28,7 +28,10 @@
 #include <qapplication.h>
 #include <qbitmap.h>
 #include <qstyle.h>
-#include <qlistbox.h>
+#include <q3listbox.h>
+//Added by qt3to4:
+#include <QPixmap>
+#include <Q3CString>
 
 #include <kdebug.h>
 #include <kiconloader.h>
@@ -59,9 +62,9 @@ class KexiFieldComboBox::Private
 		QPointer<KexiProject> prj;
 //		KexiDB::TableOrQuerySchema* schema;
 		QPixmap keyIcon, noIcon;
-		QCString tableOrQueryName;
+		Q3CString tableOrQueryName;
 		QString fieldOrExpression;
-		QMap<QCString, QString> captions;
+		QMap<Q3CString, QString> captions;
 		bool table;
 };
 
@@ -99,7 +102,7 @@ void KexiFieldComboBox::setProject(KexiProject *prj)
 	setTableOrQuery("", true);
 }
 
-void KexiFieldComboBox::setTableOrQuery(const QCString& name, bool table)
+void KexiFieldComboBox::setTableOrQuery(const Q3CString& name, bool table)
 {
 	d->tableOrQueryName = name;
 	d->table = table;
@@ -134,7 +137,7 @@ void KexiFieldComboBox::setTableOrQuery(const QCString& name, bool table)
 	setFieldOrExpression(d->fieldOrExpression);
 }
 
-QCString KexiFieldComboBox::setTableOrQueryName() const
+Q3CString KexiFieldComboBox::setTableOrQueryName() const
 {
 	return d->tableOrQueryName;
 }
@@ -144,7 +147,7 @@ void KexiFieldComboBox::setFieldOrExpression(const QString& string)
 	const QString name(string); //string.trimmed().lower());
 	const int pos = name.find('.');
 	if (pos!=-1) {
-		QCString objectName = name.left(pos).latin1();
+		Q3CString objectName = name.left(pos).latin1();
 		if (d->tableOrQueryName!=objectName) {
 			d->fieldOrExpression = name;
 			setCurrentItem(0);
@@ -158,7 +161,7 @@ void KexiFieldComboBox::setFieldOrExpression(const QString& string)
 	else
 		d->fieldOrExpression = name;
 
-	QListBoxItem *item = listBox()->findItem(d->fieldOrExpression);
+	Q3ListBoxItem *item = listBox()->findItem(d->fieldOrExpression);
 	if (!item) {
 		setCurrentItem(0);
 		setCurrentText(d->fieldOrExpression);

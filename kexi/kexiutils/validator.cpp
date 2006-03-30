@@ -18,6 +18,8 @@
 */
 
 #include "validator.h"
+//Added by qt3to4:
+#include <Q3ValueList>
 
 using namespace KexiUtils;
 
@@ -85,7 +87,7 @@ QValidator::State MultiValidator::validate( QString & input, int & pos ) const
 	if (m_subValidators.isEmpty())
 		return Invalid;
 	State s;
-	QValueList<Validator*>::const_iterator it;
+	Q3ValueList<Validator*>::const_iterator it;
 	for ( it=m_subValidators.constBegin(); it!=m_subValidators.constEnd(); ++it) {
 		s = (*it)->validate(input, pos);
 		if (s==Intermediate || s==Invalid)
@@ -96,7 +98,7 @@ QValidator::State MultiValidator::validate( QString & input, int & pos ) const
 
 void MultiValidator::fixup ( QString & input ) const
 {
-	QValueList<Validator*>::const_iterator it;
+	Q3ValueList<Validator*>::const_iterator it;
 	for ( it=m_subValidators.constBegin(); it!=m_subValidators.constEnd(); ++it) {
 		(*it)->fixup(input);
 	}
@@ -110,7 +112,7 @@ Validator::Result MultiValidator::internalCheck(
 		return Error;
 	Result r;
 	bool warning = false;
-	QValueList<Validator*>::const_iterator it;
+	Q3ValueList<Validator*>::const_iterator it;
 	for ( it=m_subValidators.begin(); it!=m_subValidators.end(); ++it) {
 		r = (*it)->internalCheck(valueName, v, message, details);
 		if (r==Error)

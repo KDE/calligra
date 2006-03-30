@@ -23,16 +23,18 @@
 
 #include <qlabel.h>
 #include <qlayout.h>
-#include <qhbox.h>
+#include <q3hbox.h>
 #include <qtooltip.h>
+//Added by qt3to4:
+#include <QEvent>
 
 #include <kiconloader.h>
 #include <kpushbutton.h>
 
-class BoxLayout : public QBoxLayout
+class BoxLayout : public Q3BoxLayout
 {
 	public:
-		BoxLayout( KexiSectionHeader* parent, Direction d, int margin = 0, 
+		BoxLayout( KexiSectionHeader* parent, Qt::Orientation d, int margin = 0, 
 			int spacing = -1, const char * name = 0 );
 		virtual void addItem( QLayoutItem * item );
 		QPointer<KexiViewBase> view;
@@ -51,19 +53,19 @@ class KexiSectionHeaderPrivate
 		Qt::Orientation orientation;
 		QLabel *lbl;
 		BoxLayout *lyr;
-		QHBox *lbl_b;
+		Q3HBox *lbl_b;
 };
 
 //==========================
 
-KexiSectionHeader::KexiSectionHeader(const QString &caption, Orientation o, QWidget* parent, const char * name )
+KexiSectionHeader::KexiSectionHeader(const QString &caption, Qt::Orientation o, QWidget* parent, const char * name )
 	: QWidget(parent, name)
 	, d( new KexiSectionHeaderPrivate() )
 {
 	d->orientation = o;
-	d->lyr = new BoxLayout( this, d->orientation==Vertical ? QBoxLayout::TopToBottom : QBoxLayout::LeftToRight );
+	d->lyr = new BoxLayout( this, d->orientation==Qt::Vertical ? Q3BoxLayout::TopToBottom : Q3BoxLayout::LeftToRight );
 	d->lyr->setAutoAdd(true);
-	d->lbl_b = new QHBox(this);
+	d->lbl_b = new Q3HBox(this);
 	d->lbl = new QLabel(QString(" ")+caption, d->lbl_b);
 	d->lbl->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred);
 	d->lbl->installEventFilter(this);
@@ -81,7 +83,7 @@ void KexiSectionHeader::addButton(const QString& icon, const QString& toolTip,
 {
 	KPushButton *btn = new KPushButton(d->lbl_b);
 	btn->setFlat(true);
-	btn->setFocusPolicy(NoFocus);
+	btn->setFocusPolicy(Qt::NoFocus);
 	btn->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
 	if (receiver && member) {
 		connect(btn, SIGNAL(clicked()), receiver, member);
@@ -137,14 +139,14 @@ QSize KexiSectionHeader::sizeHint() const
 
 //======================
 
-BoxLayout::BoxLayout( KexiSectionHeader* parent, Direction d, int margin, int spacing, const char * name )
- : QBoxLayout(parent, d, margin, spacing, name )
+BoxLayout::BoxLayout( KexiSectionHeader* parent, Qt::Orientation d, int margin, int spacing, const char * name )
+ : Q3BoxLayout(parent, d, margin, spacing, name )
 {
 }
 
 void BoxLayout::addItem( QLayoutItem * item )
 {
-	QBoxLayout::addItem( item );
+	Q3BoxLayout::addItem( item );
 	if (item->widget()) {
 		item->widget()->installEventFilter( mainWidget() );
 		if (item->widget()->inherits("KexiViewBase")) {

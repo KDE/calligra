@@ -29,7 +29,7 @@
 #include <kglobalsettings.h>
 
 
-KexiBoolTableEdit::KexiBoolTableEdit(KexiTableViewColumn &column, QScrollView *parent)
+KexiBoolTableEdit::KexiBoolTableEdit(KexiTableViewColumn &column, Q3ScrollView *parent)
  : KexiTableEdit(column, parent, "KexiBoolTableEdit")
 {
 	init();
@@ -139,7 +139,7 @@ KexiBoolEditorFactoryItem::~KexiBoolEditorFactoryItem()
 }
 
 KexiTableEdit* KexiBoolEditorFactoryItem::createEditor(
-	KexiTableViewColumn &column, QScrollView* parent)
+	KexiTableViewColumn &column, Q3ScrollView* parent)
 {
 	return new KexiBoolTableEdit(column, parent);
 }

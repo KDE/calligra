@@ -22,9 +22,14 @@
 #include "kexirelationwidget.h"
 
 #include <qlayout.h>
-#include <qlistbox.h>
+#include <q3listbox.h>
 #include <qpushbutton.h>
 #include <qtimer.h>
+//Added by qt3to4:
+#include <Q3HBoxLayout>
+#include <QLabel>
+#include <Q3GridLayout>
+#include <Q3CString>
 
 #include <kcombobox.h>
 #include <klocale.h>
@@ -48,8 +53,8 @@ KexiRelationWidget::KexiRelationWidget(KexiMainWindow *win, QWidget *parent,
 {
 	m_conn = m_win->project()->dbConnection();
 
-	QHBoxLayout *hlyr = new QHBoxLayout(0);
-	QGridLayout *g = new QGridLayout(this);
+	Q3HBoxLayout *hlyr = new Q3HBoxLayout(0);
+	Q3GridLayout *g = new Q3GridLayout(this);
 	g->addLayout( hlyr, 0, 0 );
 
 	m_tableCombo = new KComboBox(this, "tables_combo");
@@ -169,8 +174,8 @@ KexiRelationWidget::addTable(KexiDB::TableSchema *t, const QRect &rect)
 	KexiRelationViewTableContainer *c = m_relationView->addTable(t, rect);
 	if (!c)
 		return;
-	connect(c->tableView(), SIGNAL(doubleClicked(QListViewItem*,const QPoint&,int)),
-		this, SLOT(slotTableFieldDoubleClicked(QListViewItem*,const QPoint&,int)));
+	connect(c->tableView(), SIGNAL(doubleClicked(Q3ListViewItem*,const QPoint&,int)),
+		this, SLOT(slotTableFieldDoubleClicked(Q3ListViewItem*,const QPoint&,int)));
 	kDebug() << "KexiRelationWidget::slotAddTable(): adding table " << t->name() << endl;
 
 	const QString tname = t->name().lower();
@@ -339,7 +344,7 @@ void KexiRelationWidget::aboutToShowPopupMenu()
 }
 
 void
-KexiRelationWidget::slotTableFieldDoubleClicked(QListViewItem *i,const QPoint&,int)
+KexiRelationWidget::slotTableFieldDoubleClicked(Q3ListViewItem *i,const QPoint&,int)
 {
 	if (!sender()->isA("KexiRelationViewTable"))
 		return;
@@ -370,7 +375,7 @@ KexiRelationWidget::fillTablesCombo()
 }
 
 void
-KexiRelationWidget::objectCreated(const QCString &mime, const QCString& name)
+KexiRelationWidget::objectCreated(const Q3CString &mime, const Q3CString& name)
 {
 	if (mime=="kexi/table" || mime=="kexi/query") {
 //! @todo query?
@@ -380,7 +385,7 @@ KexiRelationWidget::objectCreated(const QCString &mime, const QCString& name)
 }
 
 void
-KexiRelationWidget::objectDeleted(const QCString &mime, const QCString& name)
+KexiRelationWidget::objectDeleted(const Q3CString &mime, const Q3CString& name)
 {
 	if (mime=="kexi/table" || mime=="kexi/query") {
 		QString strName(name);
@@ -401,7 +406,7 @@ KexiRelationWidget::objectDeleted(const QCString &mime, const QCString& name)
 }
 
 void
-KexiRelationWidget::objectRenamed(const QCString &mime, const QCString& name, const QCString& newName)
+KexiRelationWidget::objectRenamed(const Q3CString &mime, const Q3CString& name, const Q3CString& newName)
 {
 	if (mime=="kexi/table" || mime=="kexi/query") {
 		QString strName(name);

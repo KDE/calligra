@@ -27,7 +27,7 @@
 
 #include <qstring.h>
 #include <qdatetime.h>
-#include <qvaluevector.h>
+#include <q3valuevector.h>
 #include <qvariant.h>
 
 #include <kexidb/connection.h>

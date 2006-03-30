@@ -20,11 +20,13 @@
 #ifndef KEXIDATAAWAREPROPERTYSET_H
 #define KEXIDATAAWAREPROPERTYSET_H
 
-#include <qguardedptr.h>
-#include <qptrvector.h>
+#include <qpointer.h>
+#include <q3ptrvector.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 #include <koproperty/set.h>
 
-typedef QPtrVector<KoProperty::Set> SetVector;
+typedef Q3PtrVector<KoProperty::Set> SetVector;
 
 class KexiViewBase;
 class KexiTableItem;
@@ -114,7 +116,7 @@ class KEXIDATATABLE_EXPORT KexiDataAwarePropertySet : public QObject
 		void slotRowDeleted();
 
 		//! Called on multiple rows delete in a tableview.
-		void slotRowsDeleted( const QValueList<int> &rows );
+		void slotRowsDeleted( const Q3ValueList<int> &rows );
 
 		//! Called on \a row insertion in a tableview.
 		void slotRowInserted(KexiTableItem* item, uint row, bool repaint);

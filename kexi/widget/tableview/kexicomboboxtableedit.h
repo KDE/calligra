@@ -23,6 +23,9 @@
 
 #include "kexidb/field.h"
 #include "kexiinputtableedit.h"
+//Added by qt3to4:
+#include <QKeyEvent>
+#include <QEvent>
 
 class KPushButton;
 class KLineEdit;
@@ -38,7 +41,7 @@ class KexiComboBoxTableEdit : public KexiInputTableEdit
 	Q_OBJECT
 
 	public:
-		KexiComboBoxTableEdit(KexiTableViewColumn &column, QScrollView *parent=0);
+		KexiComboBoxTableEdit(KexiTableViewColumn &column, Q3ScrollView *parent=0);
 		virtual ~KexiComboBoxTableEdit();
 
 		//! Note: Generally in current implementation this is integer > 0; may be null if no value is set

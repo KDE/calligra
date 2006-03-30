@@ -24,6 +24,8 @@
 
 #include <qlayout.h>
 #include <qpushbutton.h>
+//Added by qt3to4:
+#include <Q3VBoxLayout>
 #include <kdebug.h>
 #include <kcmdlineargs.h>
 #include <kapplication.h>
@@ -54,7 +56,7 @@ int main(int argc, char** argv)
 
   // Set up a combo box and a quit widget in a new container
   QWidget* vbox = new QWidget();
-  QVBoxLayout* vbLayout = new QVBoxLayout(vbox);
+  Q3VBoxLayout* vbLayout = new Q3VBoxLayout(vbox);
 
   KexiDBDriverComboBox* all = new KexiDBDriverComboBox(drvs, true, vbox);
   KexiDBDriverComboBox* srvOnly = new KexiDBDriverComboBox(drvs, false, vbox);

@@ -23,12 +23,15 @@
 
 #include <koproperty/property.h>
 #include <kexiviewbase.h>
+//Added by qt3to4:
+#include <Q3ValueList>
+#include <Q3CString>
 
 #define MAX_FIELDS 101 //nice prime number (default buffer vector size)
 
 KexiDataAwarePropertySet::KexiDataAwarePropertySet(KexiViewBase *view,
 	KexiDataAwareObjectInterface* dataObject)
- : QObject( view, QCString(view->name())+"KexiDataAwarePropertySet" )
+ : QObject( view, Q3CString(view->name())+"KexiDataAwarePropertySet" )
  , m_view(view)
  , m_dataObject(dataObject)
  , m_row(-99)
@@ -62,8 +65,8 @@ void KexiDataAwarePropertySet::slotDataSet( KexiTableViewData *data )
 	m_currentTVData = data;
 	if (!m_currentTVData.isNull()) {
 		connect(m_currentTVData, SIGNAL(rowDeleted()), this, SLOT(slotRowDeleted()));
-		connect(m_currentTVData, SIGNAL(rowsDeleted( const QValueList<int> & )),
-			this, SLOT(slotRowsDeleted( const QValueList<int> & )));
+		connect(m_currentTVData, SIGNAL(rowsDeleted( const Q3ValueList<int> & )),
+			this, SLOT(slotRowsDeleted( const Q3ValueList<int> & )));
 		connect(m_currentTVData, SIGNAL(rowInserted(KexiTableItem*,uint,bool)),
 			this, SLOT(slotRowInserted(KexiTableItem*,uint,bool)));
 		connect(m_currentTVData, SIGNAL(reloadRequested()),
@@ -165,14 +168,14 @@ void KexiDataAwarePropertySet::slotRowDeleted()
 	emit rowDeleted();
 }
 
-void KexiDataAwarePropertySet::slotRowsDeleted( const QValueList<int> &rows )
+void KexiDataAwarePropertySet::slotRowsDeleted( const Q3ValueList<int> &rows )
 {
 	//let's move most buffers up & delete unwanted
 	m_sets.setAutoDelete(false);//to avoid auto deleting in insert()
 	const int orig_size = size();
 	int prev_r = -1;
 	int num_removed = 0, cur_r = -1;
-	for (QValueList<int>::ConstIterator r_it = rows.constBegin(); r_it!=rows.constEnd() && *r_it < orig_size; ++r_it) {
+	for (Q3ValueList<int>::ConstIterator r_it = rows.constBegin(); r_it!=rows.constEnd() && *r_it < orig_size; ++r_it) {
 		cur_r = *r_it;// - num_removed;
 		if (prev_r>=0) {
 //			kDebug() << "move " << prev_r+num_removed-1 << ".." << cur_r-1 << " to " << prev_r+num_removed-1 << ".." << cur_r-2 << endl;

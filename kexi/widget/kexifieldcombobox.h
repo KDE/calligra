@@ -21,6 +21,8 @@
 #define KEXIFIELDCOMBOBOX_H
 
 #include <qpixmap.h>
+//Added by qt3to4:
+#include <Q3CString>
 #include <kcombobox.h>
 
 namespace KexiDB {
@@ -47,8 +49,8 @@ class KEXIEXTWIDGETS_EXPORT KexiFieldComboBox : public KComboBox
 
 	public slots:
 		void setProject(KexiProject *prj);
-		void setTableOrQuery(const QCString& name, bool table);
-		QCString setTableOrQueryName() const;
+		void setTableOrQuery(const Q3CString& name, bool table);
+		Q3CString setTableOrQueryName() const;
 		void setFieldOrExpression(const QString& string);
 		QString fieldOrExpression() const;
 		QString fieldOrExpressionCaption() const;

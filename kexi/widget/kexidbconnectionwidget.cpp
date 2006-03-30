@@ -37,14 +37,17 @@
 
 #include <qlabel.h>
 #include <qcheckbox.h>
-#include <qbuttongroup.h>
-#include <qwidgetstack.h>
+#include <q3buttongroup.h>
+#include <q3widgetstack.h>
 #include <qlayout.h>
-#include <qvbox.h>
+#include <q3vbox.h>
 #include <qtooltip.h>
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
 #include <qthread.h>
 #include <qradiobutton.h>
+//Added by qt3to4:
+#include <Q3VBoxLayout>
+#include <Q3HBoxLayout>
 
 //! @todo reenable this when implemented
 #define NO_LOAD_DB_LIST
@@ -70,7 +73,7 @@ KexiDBConnectionWidget::KexiDBConnectionWidget( QWidget* parent,  const char* na
 {
 	iconLabel->setPixmap(DesktopIcon("network"));
 
-	QVBoxLayout *driversComboLyr = new QVBoxLayout(frmEngine);
+	Q3VBoxLayout *driversComboLyr = new Q3VBoxLayout(frmEngine);
 	m_driversCombo = new KexiDBDriverComboBox(Kexi::driverManager().driversInfo(), false,
 		frmEngine, "drivers combo");
 	lblEngine->setBuddy( m_driversCombo );
@@ -82,10 +85,10 @@ KexiDBConnectionWidget::KexiDBConnectionWidget( QWidget* parent,  const char* na
 #endif
 	btnLoadDBList->setIconSet(SmallIconSet("reload"));
 	btnLoadDBList->setToolTip( i18n("Load database list from the server"));
-	QWhatsThis::add(btnLoadDBList, 
+	Q3WhatsThis::add(btnLoadDBList, 
 		i18n("Loads database list from the server, so you can select one using the \"Name\" combo box."));
 
-	QHBoxLayout *hbox = new QHBoxLayout(frmBottom);
+	Q3HBoxLayout *hbox = new Q3HBoxLayout(frmBottom);
 	hbox->addStretch(2);
 	d->btnSaveChanges = new KPushButton(KGuiItem(i18n("Save Changes"), "filesave", 
 		i18n("Save all changes made to this connection information"),

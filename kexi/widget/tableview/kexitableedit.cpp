@@ -23,13 +23,16 @@
 
 #include <qpalette.h>
 #include <qpainter.h>
+//Added by qt3to4:
+#include <QKeyEvent>
+#include <QEvent>
 
 #include <kglobal.h>
 #include <klocale.h>
 #include <kdebug.h>
 
 //KexiTableEdit::KexiTableEdit(KexiDB::Field &f, QScrollView* parent, const char* name)
-KexiTableEdit::KexiTableEdit(KexiTableViewColumn &column, QScrollView* parent, const char* name)
+KexiTableEdit::KexiTableEdit(KexiTableViewColumn &column, Q3ScrollView* parent, const char* name)
 : QWidget(parent->viewport(), name)
 , m_column(&column)
 // ,m_field(&f)
@@ -148,7 +151,7 @@ void KexiTableEdit::setupContents( QPainter * /*p*/, bool /*focused*/, QVariant 
 		if (!val.isNull())
 			txt = KGlobal::locale()->formatNumber(val.toDouble());
 		w -= 6;
-		align |= AlignRight;
+		align |= Qt::AlignRight;
 	}
 	else if (m_column->field()->isIntegerType()) {
 		qint64 num = val.toLongLong();
@@ -158,7 +161,7 @@ void KexiTableEdit::setupContents( QPainter * /*p*/, bool /*focused*/, QVariant 
 		x = 0;
 #endif*/
 		w -= 6;
-		align |= AlignRight;
+		align |= Qt::AlignRight;
 		if (!val.isNull())
 			txt = QString::number(num);
 	}
@@ -208,7 +211,7 @@ else if (m_field->type() == KexiDB::Field::Date) { //todo: datetime & time
 			txt = val.toString();
 		}
 //		}
-		align |= AlignLeft;
+		align |= Qt::AlignLeft;
 	}
 }
 

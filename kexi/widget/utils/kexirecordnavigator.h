@@ -21,11 +21,14 @@
 #ifndef KEXIRECORDNAVIGATOR_H
 #define KEXIRECORDNAVIGATOR_H
 
-#include <qframe.h>
+#include <q3frame.h>
+//Added by qt3to4:
+#include <QLabel>
+#include <QEvent>
 
 class QToolButton;
 class QIntValidator;
-class QScrollView;
+class Q3ScrollView;
 class QScrollBar;
 class QLabel;
 class KLineEdit;
@@ -59,7 +62,7 @@ class KEXIGUIUTILS_EXPORT KexiRecordNavigatorHandler
     Note that using this way, you can allow to exist more than one navigator widget 
     connected with your data-aware object (don't matter if this is sane).
  */
-class KEXIGUIUTILS_EXPORT KexiRecordNavigator : public QFrame
+class KEXIGUIUTILS_EXPORT KexiRecordNavigator : public Q3Frame
 {
 	Q_OBJECT
 
@@ -67,7 +70,7 @@ class KEXIGUIUTILS_EXPORT KexiRecordNavigator : public QFrame
 		KexiRecordNavigator(QWidget *parent, int leftMargin = 0, const char *name=0);
 		virtual ~KexiRecordNavigator();
 
-		void setParentView(QScrollView *view);
+		void setParentView(Q3ScrollView *view);
 
 		/*! Sets record navigator handler. This allows to react 
 		 on actions performed within navigator and vice versa. */
@@ -167,7 +170,7 @@ class KEXIGUIUTILS_EXPORT KexiRecordNavigator : public QFrame
 		KLineEdit *m_navRecordCount; //!< readonly counter
 		uint m_nav1DigitWidth;
 //		uint m_recordCount;
-		QScrollView *m_view;
+		Q3ScrollView *m_view;
 		bool m_isInsertingEnabled : 1;
 
 		KexiRecordNavigatorPrivate *d;

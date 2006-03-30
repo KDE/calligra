@@ -82,7 +82,7 @@ class KEXIDATATABLE_EXPORT KexiTimeTableEdit : public KexiInputTableEdit
 	Q_OBJECT
 
 	public:
-		KexiTimeTableEdit(KexiTableViewColumn &column, QScrollView *parent=0);
+		KexiTimeTableEdit(KexiTableViewColumn &column, Q3ScrollView *parent=0);
 		virtual ~KexiTimeTableEdit();
 		virtual void setupContents( QPainter *p, bool focused, QVariant val, 
 			QString &txt, int &align, int &x, int &y_offset, int &w, int &h );

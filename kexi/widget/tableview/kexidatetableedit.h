@@ -22,7 +22,7 @@
 #ifndef KEXIDATETABLEEDIT_H
 #define KEXIDATETABLEEDIT_H
 
-#include <qdatetimeedit.h>
+#include <q3datetimeedit.h>
 
 #include "kexiinputtableedit.h"
 
@@ -57,7 +57,7 @@ class KEXIDATATABLE_EXPORT KexiDateFormatter
 		QString m_inputMask;
 
 		//! Order of date sections
-		QDateEdit::Order m_order;
+		Q3DateEdit::Order m_order;
 
 		//! 4 or 2 digits
 		bool m_longYear;
@@ -84,7 +84,7 @@ class KEXIDATATABLE_EXPORT KexiDateTableEdit : public KexiInputTableEdit
 	Q_OBJECT
 
 	public:
-		KexiDateTableEdit(KexiTableViewColumn &column, QScrollView *parent=0);
+		KexiDateTableEdit(KexiTableViewColumn &column, Q3ScrollView *parent=0);
 		virtual ~KexiDateTableEdit();
 		virtual void setupContents( QPainter *p, bool focused, QVariant val, 
 			QString &txt, int &align, int &x, int &y_offset, int &w, int &h );

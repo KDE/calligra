@@ -36,7 +36,11 @@
 #include <qevent.h>
 #include <qtimer.h>
 #include <qvalidator.h>
-#include <qasciidict.h>
+#include <q3asciidict.h>
+//Added by qt3to4:
+#include <QPixmap>
+#include <QLabel>
+#include <Q3ValueList>
 
 #include <kpushbutton.h>
 
@@ -77,7 +81,7 @@ class KexiTableViewPrivate
 //moved	KexiTableEdit *pEditor;
 
 	//! editors: one for each column (indexed by KexiTableViewColumn)
-	QPtrDict<KexiTableEdit> editors;
+	Q3PtrDict<KexiTableEdit> editors;
 
 	int rowHeight;
 
@@ -232,7 +236,7 @@ class KexiTableViewPrivate
 //moved	int rowWillBeDeleted;
 
 	//! Used by delayed mode of maximizeColumnsWidth() 
-	QValueList<int> maximizeColumnsWidthOnShow;
+	Q3ValueList<int> maximizeColumnsWidthOnShow;
 
 	/*! Used for delayed call of ensureCellVisible() after show().
 	 It's equal to (-1,-1) if ensureCellVisible() shouldn't e called. */

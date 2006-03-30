@@ -20,7 +20,7 @@
 
 #include <stdlib.h>
 
-#include <qheader.h>
+#include <q3header.h>
 #include <qlayout.h>
 #include <qlabel.h>
 #include <qpushbutton.h>
@@ -29,6 +29,12 @@
 #include <qapplication.h>
 #include <qbitmap.h>
 #include <qstyle.h>
+//Added by qt3to4:
+#include <QEvent>
+#include <Q3Frame>
+#include <QDropEvent>
+#include <Q3VBoxLayout>
+#include <QMouseEvent>
 
 #include <kdebug.h>
 #include <kiconloader.h>
@@ -44,7 +50,7 @@
 
 KexiRelationViewTableContainer::KexiRelationViewTableContainer(
 	KexiRelationView *parent, KexiDB::TableOrQuerySchema *schema)
- : QFrame(parent,"KexiRelationViewTableContainer" )
+ : Q3Frame(parent,"KexiRelationViewTableContainer" )
 // , m_table(t)
  , m_parent(parent)
 //	, m_mousePressed(false)
@@ -54,9 +60,9 @@ KexiRelationViewTableContainer::KexiRelationViewTableContainer(
 //js:	resize(100, 150);
 	//setMouseTracking(true);
 
-	setFrameStyle( QFrame::WinPanel | QFrame::Raised );
+	setFrameStyle( Q3Frame::WinPanel | Q3Frame::Raised );
 
-	QVBoxLayout *lyr = new QVBoxLayout(this,4,1); //js: using Q*BoxLayout is a good idea
+	Q3VBoxLayout *lyr = new Q3VBoxLayout(this,4,1); //js: using Q*BoxLayout is a good idea
 
 	m_tableHeader = new KexiRelationViewTableContainerHeader(schema->name(), this);
 
@@ -75,8 +81,8 @@ KexiRelationViewTableContainer::KexiRelationViewTableContainer(
 //	m_tableView->resize( m_tableView->sizeHint() );
 	lyr->addWidget(m_tableView, 0);
 	connect(m_tableView, SIGNAL(tableScrolling()), this, SLOT(moved()));
-	connect(m_tableView, SIGNAL(contextMenu(K3ListView*, QListViewItem*, const QPoint&)),
-		this, SLOT(slotContextMenu(K3ListView*, QListViewItem*, const QPoint&)));
+	connect(m_tableView, SIGNAL(contextMenu(K3ListView*, Q3ListViewItem*, const QPoint&)),
+		this, SLOT(slotContextMenu(K3ListView*, Q3ListViewItem*, const QPoint&)));
 }
 
 KexiRelationViewTableContainer::~KexiRelationViewTableContainer()
@@ -88,7 +94,7 @@ KexiDB::TableOrQuerySchema* KexiRelationViewTableContainer::schema() const
 	return m_tableView->schema();
 }
 
-void KexiRelationViewTableContainer::slotContextMenu(K3ListView *, QListViewItem *, const QPoint &p)
+void KexiRelationViewTableContainer::slotContextMenu(K3ListView *, Q3ListViewItem *, const QPoint &p)
 {
 //	m_parent->executePopup(p);
 	emit contextMenuRequest( p );
@@ -299,7 +305,7 @@ KexiRelationViewTable::KexiRelationViewTable(KexiDB::TableOrQuerySchema* tableOr
 	setSchema(tableOrQuerySchema);
 	header()->hide();
 
-	connect(this, SIGNAL(dropped(QDropEvent *, QListViewItem *)), this, SLOT(slotDropped(QDropEvent *)));
+	connect(this, SIGNAL(dropped(QDropEvent *, Q3ListViewItem *)), this, SLOT(slotDropped(QDropEvent *)));
 	connect(this, SIGNAL(contentsMoving(int, int)), this, SLOT(slotContentsMoving(int,int)));
 //	connect(this, SIGNAL(doubleClicked(QListViewItem*,const QPoint&,int)),
 //		this, SLOT(slotItemDoubleClicked(QListViewItem*,const QPoint&,int)));
@@ -340,7 +346,7 @@ void KexiRelationViewTable::setReadOnly(bool b)
 int
 KexiRelationViewTable::globalY(const QString &item)
 {
-	QListViewItem *i = findItem(item, 0);
+	Q3ListViewItem *i = findItem(item, 0);
 	if(i)
 	{
 		int y=itemRect(i).y() + (itemRect(i).height() / 2);
@@ -353,7 +359,7 @@ bool
 KexiRelationViewTable::acceptDrag(QDropEvent *ev) const
 {
 //	kDebug() << "KexiRelationViewTable::acceptDrag()" << endl;
-	QListViewItem *receiver = itemAt(ev->pos());
+	Q3ListViewItem *receiver = itemAt(ev->pos());
 	if (!receiver || !KexiFieldDrag::canDecodeSingle(ev))
 		return false;
 	QString sourceMimeType;
@@ -373,7 +379,7 @@ KexiRelationViewTable::acceptDrag(QDropEvent *ev) const
 void
 KexiRelationViewTable::slotDropped(QDropEvent *ev)
 {
-	QListViewItem *recever = itemAt(ev->pos());
+	Q3ListViewItem *recever = itemAt(ev->pos());
 	if (!recever || !KexiFieldDrag::canDecodeSingle(ev)) {
 		ev->ignore();
 		return;
@@ -417,11 +423,11 @@ void KexiRelationViewTable::contentsMousePressEvent(QMouseEvent *ev)
 //		static_cast<KexiRelationView*>(parentWidget())->executePopup(ev->pos());
 }
 
-QRect KexiRelationViewTable::drawItemHighlighter(QPainter *painter, QListViewItem *item)
+QRect KexiRelationViewTable::drawItemHighlighter(QPainter *painter, Q3ListViewItem *item)
 {
 	if (painter) {
 		style().drawPrimitive(QStyle::PE_FocusRect, painter, itemRect(item), colorGroup(),
-			QStyle::Style_FocusAtBorder);
+			QStyle::State_FocusAtBorder);
 	}
 	return itemRect(item);
 }
@@ -435,7 +441,7 @@ QRect KexiRelationViewTable::drawItemHighlighter(QPainter *painter, QListViewIte
 
 #if 0
 KexiRelationViewTableItem::KexiRelationViewTableItem(
-	QListView *parent, QListViewItem *after, QString key, QString field)
+	Q3ListView *parent, Q3ListViewItem *after, QString key, QString field)
 	: K3ListViewItem(parent, after, key, field)
 {
 }

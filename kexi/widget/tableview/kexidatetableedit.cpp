@@ -33,7 +33,7 @@
 #include <qpoint.h>
 #include <qlayout.h>
 #include <qtoolbutton.h>
-#include <qdatetimeedit.h>
+#include <q3datetimeedit.h>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -87,13 +87,13 @@ KexiDateFormatter::KexiDateFormatter()
 		}
 		ok = (yearpos>=0 && monthpos>=0 && daypos>=0);
 	}
-	m_order = QDateEdit::YMD; //default
+	m_order = Q3DateEdit::YMD; //default
 	if (ok) {
 		if (yearpos<monthpos && monthpos<daypos) {
 			//will be set in "default: YMD"
 		}
 		else if (yearpos<daypos && daypos<monthpos) {
-			m_order = QDateEdit::YDM;
+			m_order = Q3DateEdit::YDM;
 //! @todo use QRegExp (to replace %Y by %1, etc.) instead of hardcoded "%1%299%399" 
 //!       because df may contain also other characters
 			m_inputMask = QString("%1%299%399").arg(yearMask).arg(m_separator).arg(m_separator);
@@ -103,7 +103,7 @@ KexiDateFormatter::KexiDateFormatter()
 			m_monthpos = m_daypos+2+separatorLen;
 		}
 		else if (daypos<monthpos && monthpos<yearpos) {
-			m_order = QDateEdit::DMY;
+			m_order = Q3DateEdit::DMY;
 			m_inputMask = QString("99%199%2%3").arg(m_separator).arg(m_separator).arg(yearMask);
 			m_qtFormat = dayDateFormat+m_separator+monthDateFormat+m_separator+yearDateFormat;
 			m_daypos = 0;
@@ -111,7 +111,7 @@ KexiDateFormatter::KexiDateFormatter()
 			m_yearpos = m_monthpos+2+separatorLen;
 		}
 		else if (monthpos<daypos && daypos<yearpos) {
-			m_order = QDateEdit::MDY;
+			m_order = Q3DateEdit::MDY;
 			m_inputMask = QString("99%199%2%3").arg(m_separator).arg(m_separator).arg(yearMask);
 			m_qtFormat = monthDateFormat+m_separator+dayDateFormat+m_separator+yearDateFormat;
 			m_monthpos = 0;
@@ -121,7 +121,7 @@ KexiDateFormatter::KexiDateFormatter()
 		else
 			ok = false;
 	}
-	if (!ok || m_order == QDateEdit::YMD) {//default: YMD
+	if (!ok || m_order == Q3DateEdit::YMD) {//default: YMD
 		m_inputMask = QString("%1%299%399").arg(yearMask).arg(m_separator).arg(m_separator);
 		m_qtFormat = yearDateFormat+m_separator+monthDateFormat+m_separator+dayDateFormat;
 		m_yearpos = 0;
@@ -169,7 +169,7 @@ QString KexiDateFormatter::dateToString( const QDate& date ) const
 
 //------------------------------------------------
 
-KexiDateTableEdit::KexiDateTableEdit(KexiTableViewColumn &column, QScrollView *parent)
+KexiDateTableEdit::KexiDateTableEdit(KexiTableViewColumn &column, Q3ScrollView *parent)
  : KexiInputTableEdit(column, parent)
 {
 	setName("KexiDateTableEdit");
@@ -213,7 +213,7 @@ void KexiDateTableEdit::setupContents( QPainter *p, bool focused, QVariant val,
 	if (val.toDate().isValid())
 		txt = m_formatter.dateToString(val.toDate());
 //		txt = val.toDate().toString(Qt::LocalDate);
-	align |= AlignLeft;
+	align |= Qt::AlignLeft;
 }
 
 bool KexiDateTableEdit::valueIsNull()

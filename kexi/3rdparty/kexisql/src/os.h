@@ -124,7 +124,7 @@
 #include <winbase.h>
   typedef struct OsFile OsFile;
   struct OsFile {
-    HANDLE h;               /* Handle for accessing the file */
+    Qt::HANDLE h;               /* Handle for accessing the file */
     int locked;             /* 0: unlocked, <0: write lock, >0: read lock */
   };
 # if defined(_MSC_VER) || defined(__BORLANDC__)

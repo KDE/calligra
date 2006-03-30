@@ -22,6 +22,12 @@
 
 #include <qtimer.h>
 #include <qwidget.h>
+//Added by qt3to4:
+#include <QPixmap>
+#include <QResizeEvent>
+#include <QEvent>
+#include <QPaintEvent>
+#include <Q3PtrList>
 
 #include <kimageeffect.h>
 #include <kpixmap.h>
@@ -34,7 +40,7 @@ A simple QWidget that can use different types of gradients as the background.
 @author Christian Nitschkowski
 */
 class KEXIGUIUTILS_EXPORT KexiGradientWidget : public QWidget {
-	typedef QPtrList<QWidget> WidgetList;
+	typedef Q3PtrList<QWidget> WidgetList;
 
 	Q_OBJECT
 	Q_PROPERTY(DisplayMode displayMode READ displayMode WRITE setDisplayMode DESIGNABLE true)
@@ -69,7 +75,7 @@ class KEXIGUIUTILS_EXPORT KexiGradientWidget : public QWidget {
 			EllipticGradient = KImageEffect::EllipticGradient
 		};
 
-		KexiGradientWidget( QWidget *parent = 0, const char *name = 0, WFlags f = 0 );
+		KexiGradientWidget( QWidget *parent = 0, const char *name = 0, Qt::WFlags f = 0 );
 
 		virtual ~KexiGradientWidget();
 

@@ -27,21 +27,21 @@ template<class type>
 class KListViewItemTemplate : public K3ListViewItem
 {
 	public:
-		KListViewItemTemplate(type _data, QListView *parent)
+		KListViewItemTemplate(type _data, Q3ListView *parent)
 		 : K3ListViewItem(parent), data(_data) {}
-		KListViewItemTemplate(type _data, QListViewItem *parent)
+		KListViewItemTemplate(type _data, Q3ListViewItem *parent)
 		 : K3ListViewItem(parent), data(_data) {}
-		KListViewItemTemplate(type _data, QListView *parent, QListViewItem *after)
+		KListViewItemTemplate(type _data, Q3ListView *parent, Q3ListViewItem *after)
 		 : K3ListViewItem(parent, after), data(_data) {}
-		KListViewItemTemplate(type _data, QListViewItem *parent, QListViewItem *after)
+		KListViewItemTemplate(type _data, Q3ListViewItem *parent, Q3ListViewItem *after)
 		 : K3ListViewItem(parent, after), data(_data) {}
-		KListViewItemTemplate(type _data, QListView *parent, QString label1, QString label2=QString::null, QString label3=QString::null, QString label4=QString::null, QString label5=QString::null, QString label6=QString::null, QString label7=QString::null, QString label8=QString::null)
+		KListViewItemTemplate(type _data, Q3ListView *parent, QString label1, QString label2=QString::null, QString label3=QString::null, QString label4=QString::null, QString label5=QString::null, QString label6=QString::null, QString label7=QString::null, QString label8=QString::null)
 		 : K3ListViewItem(parent, label1, label2, label3, label4, label5, label6, label7, label8), data(_data) {}
-		KListViewItemTemplate(type _data, QListViewItem *parent, QString label1, QString label2=QString::null, QString label3=QString::null, QString label4=QString::null, QString label5=QString::null, QString label6=QString::null, QString label7=QString::null, QString label8=QString::null)
+		KListViewItemTemplate(type _data, Q3ListViewItem *parent, QString label1, QString label2=QString::null, QString label3=QString::null, QString label4=QString::null, QString label5=QString::null, QString label6=QString::null, QString label7=QString::null, QString label8=QString::null)
 		 : K3ListViewItem(parent, label1, label2, label3, label4, label5, label6, label7, label8), data(_data) {}
-		KListViewItemTemplate(type _data, QListView *parent, QListViewItem *after, QString label1, QString label2=QString::null, QString label3=QString::null, QString label4=QString::null, QString label5=QString::null, QString label6=QString::null, QString label7=QString::null, QString label8=QString::null)
+		KListViewItemTemplate(type _data, Q3ListView *parent, Q3ListViewItem *after, QString label1, QString label2=QString::null, QString label3=QString::null, QString label4=QString::null, QString label5=QString::null, QString label6=QString::null, QString label7=QString::null, QString label8=QString::null)
 		 : K3ListViewItem(parent, after, label1, label2, label3, label4, label5, label6, label7, label8), data(_data) {}
-		KListViewItemTemplate(type _data, QListViewItem *parent, QListViewItem *after, QString label1, QString label2=QString::null, QString label3=QString::null, QString label4=QString::null, QString label5=QString::null, QString label6=QString::null, QString label7=QString::null, QString label8=QString::null)
+		KListViewItemTemplate(type _data, Q3ListViewItem *parent, Q3ListViewItem *after, QString label1, QString label2=QString::null, QString label3=QString::null, QString label4=QString::null, QString label5=QString::null, QString label6=QString::null, QString label7=QString::null, QString label8=QString::null)
 		 : K3ListViewItem(parent, after, label1, label2, label3, label4, label5, label6, label7, label8), data(_data) {}
 		
 		type data;

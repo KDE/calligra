@@ -20,9 +20,13 @@
 #include "kexiscrollview.h"
 
 #include <qcursor.h>
-#include <qobjectlist.h>
+#include <qobject.h>
 #include <qpainter.h>
 #include <qpixmap.h>
+//Added by qt3to4:
+#include <QEvent>
+#include <Q3Frame>
+#include <QMouseEvent>
 
 #include <kdebug.h>
 #include <kstaticdeleter.h>
@@ -45,13 +49,13 @@ static KStaticDeleter<KexiScrollViewData> KexiScrollView_data_deleter;
 KexiScrollViewData* KexiScrollView_data = 0;
 
 KexiScrollView::KexiScrollView(QWidget *parent, bool preview)
- : QScrollView(parent, "kexiscrollview", WStaticContents)
+ : Q3ScrollView(parent, "kexiscrollview", Qt::WStaticContents)
  , m_widget(0)
  , m_helpFont(font())
  , m_preview(preview)
  , m_scrollViewNavPanel(0)
 {
-	setFrameStyle(QFrame::WinPanel | QFrame::Sunken);
+	setFrameStyle(Q3Frame::WinPanel | Q3Frame::Sunken);
 	viewport()->setPaletteBackgroundColor(colorGroup().mid());
 	QColor fc = palette().active().foreground(),
 		bc = viewport()->paletteBackgroundColor();
@@ -60,7 +64,7 @@ KexiScrollView::KexiScrollView(QWidget *parent, bool preview)
 //		(fc.blue()+bc.blue()*2)/3);
 	m_helpFont.setPointSize( m_helpFont.pointSize() * 3 );
 
-	setFocusPolicy(WheelFocus);
+	setFocusPolicy(Qt::WheelFocus);
 
 	//initial resize mode is always manual;
 	//will be changed on show(), if needed
@@ -127,9 +131,9 @@ KexiScrollView::refreshContentsSizeLater(bool horizontal, bool vertical)
 		m_hsmode = hScrollBarMode();
 	}
 //	if (vertical)
-		setVScrollBarMode(QScrollView::AlwaysOff);
+		setVScrollBarMode(Q3ScrollView::AlwaysOff);
 	//if (horizontal)
-		setHScrollBarMode(QScrollView::AlwaysOff);
+		setHScrollBarMode(Q3ScrollView::AlwaysOff);
 	updateScrollBars();
 	m_delayedResize.start( 100, true );
 }
@@ -263,7 +267,7 @@ KexiScrollView::contentsMouseMoveEvent(QMouseEvent *ev)
 		delete list;
 
 		int neww = -1, newh;
-		if(cursor().shape() == QCursor::SizeHorCursor)
+		if(cursor().shape() == Qt::SizeHorCursor)
 		{
 			if(m_snapToGrid)
 				neww = int( float(tmpx) / float(m_gridSize) + 0.5 ) * m_gridSize;
@@ -271,7 +275,7 @@ KexiScrollView::contentsMouseMoveEvent(QMouseEvent *ev)
 				neww = tmpx;
 			newh = m_widget->height();
 		}
-		else if(cursor().shape() == QCursor::SizeVerCursor)
+		else if(cursor().shape() == Qt::SizeVerCursor)
 		{
 			neww = m_widget->width();
 			if(m_snapToGrid)
@@ -279,7 +283,7 @@ KexiScrollView::contentsMouseMoveEvent(QMouseEvent *ev)
 			else
 				newh = tmpy;
 		}
-		else if(cursor().shape() == QCursor::SizeFDiagCursor)
+		else if(cursor().shape() == Qt::SizeFDiagCursor)
 		{
 			if(m_snapToGrid) {
 				neww = int( float(tmpx) / float(m_gridSize) + 0.5 ) * m_gridSize;
@@ -304,11 +308,11 @@ KexiScrollView::contentsMouseMoveEvent(QMouseEvent *ev)
 		QRect r3(m_widget->width(), m_widget->height(), 4, 4); // bottom-right corner
 
 		if(r.contains(p))
-			setCursor(QCursor::SizeHorCursor);
+			setCursor(Qt::SizeHorCursor);
 		else if(r2.contains(p))
-			setCursor(QCursor::SizeVerCursor);
+			setCursor(Qt::SizeVerCursor);
 		else if(r3.contains(p))
-			setCursor(QCursor::SizeFDiagCursor);
+			setCursor(Qt::SizeFDiagCursor);
 		else
 			unsetCursor();
 	}
@@ -337,7 +341,7 @@ KexiScrollView::setupPixmapBuffer(QPixmap& pixmap, const QString& text, int line
 void
 KexiScrollView::drawContents( QPainter * p, int clipx, int clipy, int clipw, int cliph ) 
 {
-	QScrollView::drawContents(p, clipx, clipy, clipw, cliph);
+	Q3ScrollView::drawContents(p, clipx, clipy, clipw, cliph);
 	if (m_widget) {
 		if(m_preview || !m_outerAreaVisible)
 			return;

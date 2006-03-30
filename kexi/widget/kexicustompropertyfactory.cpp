@@ -22,6 +22,8 @@
 #include <kexiutils/identifier.h>
 
 #include <koproperty/customproperty.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 using namespace KoProperty;
 
@@ -103,7 +105,7 @@ void KexiCustomPropertyFactory::init()
 
 	// register custom editors and properties
 	KexiCustomPropertyFactory *factory = new KexiCustomPropertyFactory(KoProperty::FactoryManager::self());
-	QValueList<int> types;
+	Q3ValueList<int> types;
 	types << KexiCustomPropertyFactory::PixmapId << KexiCustomPropertyFactory::Identifier;
 	KoProperty::FactoryManager::self()->registerFactoryForProperties(types, factory);
 	KoProperty::FactoryManager::self()->registerFactoryForEditors(types, factory);

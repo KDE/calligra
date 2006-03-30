@@ -32,7 +32,7 @@ class KEXIDATATABLE_EXPORT KexiBoolTableEdit : public KexiTableEdit
 	Q_OBJECT
 
 	public:
-		KexiBoolTableEdit(KexiTableViewColumn &column, QScrollView *parent=0);
+		KexiBoolTableEdit(KexiTableViewColumn &column, Q3ScrollView *parent=0);
 
 		virtual ~KexiBoolTableEdit();
 

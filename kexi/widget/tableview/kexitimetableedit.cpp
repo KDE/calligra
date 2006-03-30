@@ -31,7 +31,7 @@
 #include <qpoint.h>
 #include <qlayout.h>
 #include <qtoolbutton.h>
-#include <qdatetimeedit.h>
+#include <q3datetimeedit.h>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -174,7 +174,7 @@ QTime KexiTimeFormatter::stringToTime( const QString& str )
 
 //------------------------------------------------
 
-KexiTimeTableEdit::KexiTimeTableEdit(KexiTableViewColumn &column, QScrollView *parent)
+KexiTimeTableEdit::KexiTimeTableEdit(KexiTableViewColumn &column, Q3ScrollView *parent)
  : KexiInputTableEdit(column, parent)
 {
 	setName("KexiTimeTableEdit");
@@ -222,7 +222,7 @@ void KexiTimeTableEdit::setupContents( QPainter *p, bool focused, QVariant val,
 #endif
 	if (!val.isNull() && val.canCast(QVariant::Time))
 		txt = m_formatter.timeToString(val.toTime());
-	align |= AlignLeft;
+	align |= Qt::AlignLeft;
 }
 
 bool KexiTimeTableEdit::valueIsNull()

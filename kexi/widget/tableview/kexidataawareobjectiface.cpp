@@ -26,9 +26,12 @@
 
 #include "kexidataawareobjectiface.h"
 
-#include <qscrollview.h>
+#include <q3scrollview.h>
 #include <qlabel.h>
 #include <qtooltip.h>
+//Added by qt3to4:
+#include <Q3ValueList>
+#include <Q3Frame>
 
 #include <kexi.h>
 #include <kexiutils/validator.h>
@@ -141,8 +144,8 @@ void KexiDataAwareObjectInterface::setData( KexiTableViewData *data, bool owner 
 		connectToReloadDataSlot(m_data, SIGNAL(reloadRequested()));
 		if (dynamic_cast<QObject*>(this)) {
 			QObject::connect(m_data, SIGNAL(destroying()), dynamic_cast<QObject*>(this), SLOT(slotDataDestroying()));
-			QObject::connect(m_data, SIGNAL(rowsDeleted( const QValueList<int> & )), 
-				dynamic_cast<QObject*>(this), SLOT(slotRowsDeleted( const QValueList<int> & )));
+			QObject::connect(m_data, SIGNAL(rowsDeleted( const Q3ValueList<int> & )), 
+				dynamic_cast<QObject*>(this), SLOT(slotRowsDeleted( const Q3ValueList<int> & )));
 			QObject::connect(m_data, SIGNAL(aboutToDeleteRow(KexiTableItem&,KexiDB::ResultInfo*,bool)),
 				dynamic_cast<QObject*>(this), SLOT(slotAboutToDeleteRow(KexiTableItem&,KexiDB::ResultInfo*,bool)));
 			QObject::connect(m_data, SIGNAL(rowDeleted()), dynamic_cast<QObject*>(this), SLOT(slotRowDeleted()));
@@ -866,7 +869,7 @@ bool KexiDataAwareObjectInterface::acceptEditor()
 			//used e.g. for date or time values - the value can be null but not necessary invalid
 			res = Validator::Error;
 			editCurrentCellAgain = true;
-			QWidget *par = dynamic_cast<QScrollView*>(this) ? dynamic_cast<QScrollView*>(this)->viewport() :
+			QWidget *par = dynamic_cast<Q3ScrollView*>(this) ? dynamic_cast<Q3ScrollView*>(this)->viewport() :
 					dynamic_cast<QWidget*>(this);
 			QWidget *edit = dynamic_cast<QWidget*>(m_editor);
 			if (par && edit) {
@@ -883,11 +886,11 @@ bool KexiDataAwareObjectInterface::acceptEditor()
 					QColorGroup cg(pal.active());
 					cg.setColor(QColorGroup::Foreground, Qt::red);
 					pal.setActive(cg);
-					m_errorMessagePopup->setFocusPolicy(QWidget::NoFocus);
+					m_errorMessagePopup->setFocusPolicy(Qt::NoFocus);
 					m_errorMessagePopup->setPalette(pal);
 					m_errorMessagePopup->setMargin(2);
 					m_errorMessagePopup->setAutoMask( FALSE );
-					m_errorMessagePopup->setFrameStyle( QFrame::Plain | QFrame::Box );
+					m_errorMessagePopup->setFrameStyle( Q3Frame::Plain | Q3Frame::Box );
 					m_errorMessagePopup->setLineWidth( 2 );
 					m_errorMessagePopup->setAlignment( Qt::AlignLeft | Qt::AlignTop );
 					m_errorMessagePopup->setIndent(0);

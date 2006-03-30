@@ -20,7 +20,9 @@
 #ifndef KEXICOMBOBOXPOPUP_H
 #define KEXICOMBOBOXPOPUP_H
 
-#include <qframe.h>
+#include <q3frame.h>
+//Added by qt3to4:
+#include <QEvent>
 
 class KexiComboBoxPopupPrivate;
 class KexiTableView;
@@ -32,7 +34,7 @@ namespace KexiDB {
 }
 
 //! Internal class for displaying popup table view 
-class KexiComboBoxPopup : public QFrame
+class KexiComboBoxPopup : public Q3Frame
 {
 	Q_OBJECT
 	public:
