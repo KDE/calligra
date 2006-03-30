@@ -65,7 +65,7 @@ IndexSchema::~IndexSchema()
 	 So, we need to detach all these relationships from details-side, corresponding indices.
 	*/
 
-	QPtrListIterator<Relationship> it(m_master_owned_rels);
+	Q3PtrListIterator<Relationship> it(m_master_owned_rels);
 	for (;it.current();++it) {
 		if (it.current()->detailsIndex()) {
 			it.current()->detailsIndex()->detachRelationship(it.current());

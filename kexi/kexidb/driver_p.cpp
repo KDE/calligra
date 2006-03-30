@@ -19,14 +19,14 @@
 */
 
 #include <kdebug.h>
-#include <qdict.h>
-#include <qvaluevector.h>
+#include <q3dict.h>
+#include <q3valuevector.h>
 #include "driver_p.h"
 
 using namespace KexiDB;
 
 namespace KexiDB {
-	QAsciiDict<bool>* DriverPrivate::kexiSQLDict = 0;
+	Q3AsciiDict<bool>* DriverPrivate::kexiSQLDict = 0;
 	
 	/*! QAsciiDict keys need to be a pointer to *something*.  Used
 	    for SQL keyword dictionaries
@@ -100,18 +100,18 @@ void DriverPrivate::initKexiKeywords() {
 	//   case sensitive flag (false)
 	//   copy strings (false)
 	if(!kexiSQLDict) {
-		kexiSQLDict = new QAsciiDict<bool>(79, false, false);
+		kexiSQLDict = new Q3AsciiDict<bool>(79, false, false);
 		initKeywords(kexiSQLKeywords, *kexiSQLDict);
 	}
 }
 
 void DriverPrivate::initDriverKeywords(const char* keywords[], int hashSize) {
-	driverSQLDict = new QAsciiDict<bool>(hashSize, false, false);
+	driverSQLDict = new Q3AsciiDict<bool>(hashSize, false, false);
 	initKeywords(keywords, *driverSQLDict);
 }
 
 void DriverPrivate::initKeywords(const char* keywords[], 
-    QAsciiDict<bool>& dict) {
+    Q3AsciiDict<bool>& dict) {
 	for(int i = 0; keywords[i] != 0; i++) {
 		dict.insert(keywords[i], &_dummy);
 	}

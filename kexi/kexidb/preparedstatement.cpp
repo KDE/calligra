@@ -22,6 +22,8 @@
 #include <kexidb/connection.h>
 #include <kexidb/connection_p.h>
 #include <kdebug.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 using namespace KexiDB;
 
@@ -42,9 +44,9 @@ PreparedStatement::~PreparedStatement()
 	delete m_whereFields;
 }
 
-QCString PreparedStatement::generateStatementString()
+Q3CString PreparedStatement::generateStatementString()
 {
-	QCString s(1024);
+	Q3CString s(1024);
 	if (m_type == SelectStatement) {
 //! @todo only tables and trivial queries supported for select...
 		s = "SELECT ";
@@ -82,7 +84,7 @@ QCString PreparedStatement::generateStatementString()
 	else if (m_type == InsertStatement && dynamic_cast<TableSchema*>(m_fields)) {
 //! @todo only tables supported for insert; what about views?
 			
-		s = QCString("INSERT INTO ")+dynamic_cast<TableSchema*>(m_fields)->name().latin1()
+		s = Q3CString("INSERT INTO ")+dynamic_cast<TableSchema*>(m_fields)->name().latin1()
 			+" VALUES (";
 		bool first = true;
 //		for (Field::ListIterator it(m_fields->fieldsIterator()); it.current(); ++it) {

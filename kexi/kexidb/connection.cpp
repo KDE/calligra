@@ -40,7 +40,10 @@
 
 #include <qdir.h>
 #include <qfileinfo.h>
-#include <qguardedptr.h>
+#include <qpointer.h>
+//Added by qt3to4:
+#include <Q3PtrList>
+#include <Q3ValueList>
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -98,13 +101,13 @@ class ConnectionPrivate
 		that is started without specifing transaction context, will be performed
 		in the context of this transaction. */
 		Transaction default_trans;
-		QValueList<Transaction> transactions;
+		Q3ValueList<Transaction> transactions;
 
-		QPtrDict< QPtrList<Connection::TableSchemaChangeListenerInterface> > tableSchemaChangeListeners;
+		Q3PtrDict< Q3PtrList<Connection::TableSchemaChangeListenerInterface> > tableSchemaChangeListeners;
 
 		//! Used in Connection::setQuerySchemaObsolete( const QString& queryName )
 		//! to collect obsolete queries. THese are deleted on connection deleting.
-		QPtrList<QuerySchema> obsoleteQueries;
+		Q3PtrList<QuerySchema> obsoleteQueries;
 
 		//! Version information for this connection.
 		int versionMajor;
@@ -456,7 +459,7 @@ bool Connection::createDatabase( const QString &dbName )
 		return false;
 
 	//-physically create system tables
-	for (QPtrDictIterator<TableSchema> it(m_kexiDBSystemTables); it.current(); ++it) {
+	for (Q3PtrDictIterator<TableSchema> it(m_kexiDBSystemTables); it.current(); ++it) {
 		if (!drv_createTable( it.current()->name() ))
  			createDatabase_ERROR;
 	}
@@ -591,7 +594,7 @@ bool Connection::closeDatabase()
 /*! \todo (js) add CLEVER algorithm here for nested transactions */
 	if (m_driver->transactionsSupported()) {
 		//rollback all transactions
-		QValueList<Transaction>::ConstIterator it;
+		Q3ValueList<Transaction>::ConstIterator it;
 		d->dont_remove_transactions=true; //lock!
 		for (it=d->transactions.constBegin(); it!= d->transactions.constEnd(); ++it) {
 			if (!rollbackTransaction(*it)) {//rollback as much as you can, don't stop on prev. errors
@@ -787,14 +790,14 @@ DatabaseProperties& Connection::databaseProperties()
 	return *d->dbProperties;
 }
 
-QValueList<int> Connection::queryIds()
+Q3ValueList<int> Connection::queryIds()
 {
 	return objectIds(KexiDB::QueryObjectType);
 }
 
-QValueList<int> Connection::objectIds(int objType)
+Q3ValueList<int> Connection::objectIds(int objType)
 {
-	QValueList<int> list;
+	Q3ValueList<int> list;
 
 	if (!checkIsDatabaseUsed())
 		return list;
@@ -941,7 +944,7 @@ C_INS_REC_ALL
 #undef C_INS_REC
 #undef C_INS_REC_ALL
 
-bool Connection::insertRecord(TableSchema &tableSchema, QValueList<QVariant>& values)
+bool Connection::insertRecord(TableSchema &tableSchema, Q3ValueList<QVariant>& values)
 {
 // Each SQL identifier needs to be escaped in the generated query.
 	Field::List *fields = tableSchema.fields();
@@ -949,7 +952,7 @@ bool Connection::insertRecord(TableSchema &tableSchema, QValueList<QVariant>& va
 //	QString s_val;
 //	s_val.reserve(4096);
 	m_sql = QString::null;
-	QValueList<QVariant>::ConstIterator it = values.constBegin();
+	Q3ValueList<QVariant>::ConstIterator it = values.constBegin();
 //	int i=0;
 	while (f && (it!=values.end())) {
 		if (m_sql.isEmpty())
@@ -969,7 +972,7 @@ bool Connection::insertRecord(TableSchema &tableSchema, QValueList<QVariant>& va
 	return executeSQL(m_sql);
 }
 
-bool Connection::insertRecord(FieldList& fields, QValueList<QVariant>& values)
+bool Connection::insertRecord(FieldList& fields, Q3ValueList<QVariant>& values)
 {
 // Each SQL identifier needs to be escaped in the generated query.
 	Field::List *flist = fields.fields();
@@ -979,7 +982,7 @@ bool Connection::insertRecord(FieldList& fields, QValueList<QVariant>& values)
 //	QString s_val;
 //	s_val.reserve(4096);
 	m_sql = QString::null;
-	QValueList<QVariant>::ConstIterator it = values.constBegin();
+	Q3ValueList<QVariant>::ConstIterator it = values.constBegin();
 //	int i=0;
 	while (f && (it!=values.constEnd())) {
 		if (m_sql.isEmpty())
@@ -1113,7 +1116,7 @@ QString Connection::selectStatement( KexiDB::QuerySchema& querySchema,
 			s_where += QString::fromLatin1(" AND ");
 		Field::Pair *pair;
 		QString s_where_sub;
-		for (QPtrListIterator<Field::Pair> p_it(*rel->fieldPairs()); (pair = p_it.current()); ++p_it) {
+		for (Q3PtrListIterator<Field::Pair> p_it(*rel->fieldPairs()); (pair = p_it.current()); ++p_it) {
 			if (!s_where_sub.isEmpty())
 				s_where_sub += QString::fromLatin1(" AND ");
 			s_where_sub += (
@@ -1314,7 +1317,7 @@ bool Connection::createTable( KexiDB::TableSchema* tableSchema, bool replaceExis
 		Field *f = fields->first();
 		int order = 0;
 		while (f) {
-			QValueList<QVariant> vals;
+			Q3ValueList<QVariant> vals;
 			vals
 			<< QVariant(tableSchema->id())//obj_id)
 			<< QVariant(f->type())
@@ -1857,7 +1860,7 @@ void Connection::setDefaultTransaction(const Transaction& trans)
 	d->default_trans = trans;
 }
 
-const QValueList<Transaction>& Connection::transactions()
+const Q3ValueList<Transaction>& Connection::transactions()
 {
 	return d->transactions;
 }
@@ -2612,7 +2615,7 @@ bool Connection::updateRow(QuerySchema &query, RowData& data, RowEditBuffer& buf
 			m_driver->valueToSQL(it.key()->field,it.data()));
 	}
 	if (pkey) {
-		QValueVector<int> pkeyFieldsOrder = query.pkeyFieldsOrder();
+		Q3ValueVector<int> pkeyFieldsOrder = query.pkeyFieldsOrder();
 		KexiDBDbg << pkey->fieldCount() << " ? " << query.pkeyFieldsCount() << endl;
 		if (pkey->fieldCount() != query.pkeyFieldsCount()) { //sanity check
 			KexiDBWarn << " -- NO ENTIRE MASTER TABLE's PKEY SPECIFIED!" << endl;
@@ -2700,7 +2703,7 @@ bool Connection::insertRow(QuerySchema &query, RowData& data, RowEditBuffer& buf
 			return false;
 		}
 		if (pkey) {
-			QValueVector<int> pkeyFieldsOrder = query.pkeyFieldsOrder();
+			Q3ValueVector<int> pkeyFieldsOrder = query.pkeyFieldsOrder();
 //			KexiDBDbg << pkey->fieldCount() << " ? " << query.pkeyFieldsCount() << endl;
 			if (pkey->fieldCount() != query.pkeyFieldsCount()) { //sanity check
 				KexiDBWarn << " -- NO ENTIRE MASTER TABLE's PKEY SPECIFIED!" << endl;
@@ -2835,7 +2838,7 @@ bool Connection::deleteRow(QuerySchema &query, RowData& data, bool useROWID)
 	sqlwhere.reserve(1024);
 
 	if (pkey) {
-		QValueVector<int> pkeyFieldsOrder = query.pkeyFieldsOrder();
+		Q3ValueVector<int> pkeyFieldsOrder = query.pkeyFieldsOrder();
 		KexiDBDbg << pkey->fieldCount() << " ? " << query.pkeyFieldsCount() << endl;
 		if (pkey->fieldCount() != query.pkeyFieldsCount()) { //sanity check
 			KexiDBWarn << " -- NO ENTIRE MASTER TABLE's PKEY SPECIFIED!" << endl;
@@ -2898,9 +2901,9 @@ bool Connection::deleteAllRows(QuerySchema &query)
 void Connection::registerForTableSchemaChanges(TableSchemaChangeListenerInterface& listener,
 	TableSchema &schema)
 {
-	QPtrList<TableSchemaChangeListenerInterface>* listeners = d->tableSchemaChangeListeners[&schema];
+	Q3PtrList<TableSchemaChangeListenerInterface>* listeners = d->tableSchemaChangeListeners[&schema];
 	if (!listeners) {
-		listeners = new QPtrList<TableSchemaChangeListenerInterface>();
+		listeners = new Q3PtrList<TableSchemaChangeListenerInterface>();
 		d->tableSchemaChangeListeners.insert(&schema, listeners);
 	}
 //TODO: inefficient
@@ -2911,7 +2914,7 @@ void Connection::registerForTableSchemaChanges(TableSchemaChangeListenerInterfac
 void Connection::unregisterForTableSchemaChanges(TableSchemaChangeListenerInterface& listener,
 	TableSchema &schema)
 {
-	QPtrList<TableSchemaChangeListenerInterface>* listeners = d->tableSchemaChangeListeners[&schema];
+	Q3PtrList<TableSchemaChangeListenerInterface>* listeners = d->tableSchemaChangeListeners[&schema];
 	if (!listeners)
 		return;
 //TODO: inefficient
@@ -2920,7 +2923,7 @@ void Connection::unregisterForTableSchemaChanges(TableSchemaChangeListenerInterf
 
 void Connection::unregisterForTablesSchemaChanges(TableSchemaChangeListenerInterface& listener)
 {
-	for (QPtrDictIterator< QPtrList<TableSchemaChangeListenerInterface> > it(d->tableSchemaChangeListeners);
+	for (Q3PtrDictIterator< Q3PtrList<TableSchemaChangeListenerInterface> > it(d->tableSchemaChangeListeners);
 		it.current(); ++it)
 	{
 		if (-1!=it.current()->find(&listener))
@@ -2928,7 +2931,7 @@ void Connection::unregisterForTablesSchemaChanges(TableSchemaChangeListenerInter
 	}
 }
 
-QPtrList<Connection::TableSchemaChangeListenerInterface>*
+Q3PtrList<Connection::TableSchemaChangeListenerInterface>*
 Connection::tableSchemaChangeListeners(TableSchema& tableSchema) const
 {
 	KexiDBDbg << d->tableSchemaChangeListeners.count() << endl;
@@ -2937,13 +2940,13 @@ Connection::tableSchemaChangeListeners(TableSchema& tableSchema) const
 
 tristate Connection::closeAllTableSchemaChangeListeners(TableSchema& tableSchema)
 {
-	QPtrList<Connection::TableSchemaChangeListenerInterface> *listeners = d->tableSchemaChangeListeners[&tableSchema];
+	Q3PtrList<Connection::TableSchemaChangeListenerInterface> *listeners = d->tableSchemaChangeListeners[&tableSchema];
 	if (!listeners)
 		return true;
-	QPtrListIterator<KexiDB::Connection::TableSchemaChangeListenerInterface> tmpListeners(*listeners); //safer copy
+	Q3PtrListIterator<KexiDB::Connection::TableSchemaChangeListenerInterface> tmpListeners(*listeners); //safer copy
 	tristate res = true;
 	//try to close every window
-	for (QPtrListIterator<KexiDB::Connection::TableSchemaChangeListenerInterface> it(tmpListeners);
+	for (Q3PtrListIterator<KexiDB::Connection::TableSchemaChangeListenerInterface> it(tmpListeners);
 		it.current() && res==true; ++it)
 	{
 		res = it.current()->closeListener();

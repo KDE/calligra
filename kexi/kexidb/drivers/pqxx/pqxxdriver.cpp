@@ -25,6 +25,8 @@
 #include <string>
 
 #include <kdebug.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 using namespace KexiDB;
 
@@ -137,9 +139,9 @@ QString pqxxSqlDriver::escapeString( const QString& str) const
 
 //==================================================================================
 //
-QCString pqxxSqlDriver::escapeString( const QCString& str) const
+Q3CString pqxxSqlDriver::escapeString( const Q3CString& str) const
 {
-    return QCString(pqxx::Quote(QString(str).ascii()).c_str());
+    return Q3CString(pqxx::Quote(QString(str).ascii()).c_str());
 }
 
 //==================================================================================
@@ -150,8 +152,8 @@ QString pqxxSqlDriver::drv_escapeIdentifier( const QString& str) const {
 
 //==================================================================================
 //
-QCString pqxxSqlDriver::drv_escapeIdentifier( const QCString& str) const {
-	return QCString(str).replace( '"', "\"\"" );
+Q3CString pqxxSqlDriver::drv_escapeIdentifier( const Q3CString& str) const {
+	return Q3CString(str).replace( '"', "\"\"" );
 }
 
 //==================================================================================

@@ -22,8 +22,8 @@
 
 #include <qstring.h>
 #include <qvariant.h>
-#include <qptrvector.h>
-#include <qvaluevector.h>
+#include <q3ptrvector.h>
+#include <q3valuevector.h>
 
 #include <kexidb/connection.h>
 #include <kexidb/object.h>

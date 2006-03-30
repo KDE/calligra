@@ -27,9 +27,11 @@
 #include <qstring.h>
 #include <qvariant.h>
 #include <qmap.h>
-#include <qptrdict.h>
-#include <qasciidict.h>
-#include <qvaluevector.h>
+#include <q3ptrdict.h>
+#include <q3asciidict.h>
+#include <q3valuevector.h>
+//Added by qt3to4:
+#include <Q3CString>
 #include <kgenericfactory.h>
 #include "connection.h"
 
@@ -143,7 +145,7 @@ class DriverPrivate
 		DriverPrivate();
 		virtual ~DriverPrivate();
 
-		QPtrDict<Connection> connections;
+		Q3PtrDict<Connection> connections;
 
 //(js)now QObject::name() is reused:
 //		/*! The name equal to the service name (X-Kexi-DriverName) 
@@ -184,17 +186,17 @@ class DriverPrivate
 		int features;
 
 		//! real type names for this engine
-		QValueVector<QString> typeNames;
+		Q3ValueVector<QString> typeNames;
 
 		/*! Driver properties dictionary (indexed by name), 
 		 useful for presenting properties to the user. 
 		 Set available properties here in driver implementation. */
-		QMap<QCString,QVariant> properties;
+		QMap<Q3CString,QVariant> properties;
 
 		/*! i18n'd captions for properties. You do not need 
 		 to set predefined properties' caption in driver implementation 
 		 -it's done automatically. */
-		QMap<QCString,QString> propertyCaptions;
+		QMap<Q3CString,QString> propertyCaptions;
 
 	/*! Kexi SQL keywords that need to be escaped if used as an identifier (e.g.
 	    for a table or column name).  These keywords will be escaped by the
@@ -202,7 +204,7 @@ class DriverPrivate
 	    UI consistency and to allow DB migration without changing the queries.
 	    \sa DriverPrivate::initKexiKeywords(), KexiDB::kexiSQLKeywords.
 	*/
-	static QAsciiDict<bool>* kexiSQLDict;
+	static Q3AsciiDict<bool>* kexiSQLDict;
 	static const char *kexiSQLKeywords[];
 	
 	/*! Driver-specific SQL keywords that need to be escaped if used as an
@@ -214,7 +216,7 @@ class DriverPrivate
 	
 	    \sa DriverBehaviour::SQL_KEYWORDS.
 	*/	
-	QAsciiDict<bool>* driverSQLDict;
+	Q3AsciiDict<bool>* driverSQLDict;
 	
 	/*! Initialise the dictionary of Kexi SQL keywords used for escaping. */
 	void initKexiKeywords();
@@ -229,7 +231,7 @@ class DriverPrivate
 		void initInternalProperties();
 	
 	private:
-		void initKeywords(const char* keywords[], QAsciiDict<bool>& dict);
+		void initKeywords(const char* keywords[], Q3AsciiDict<bool>& dict);
 	
 	friend class DriverManagerInternal;
 };

@@ -29,6 +29,8 @@
 #include <klocale.h>
 
 #include <qdatetime.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 #include <assert.h>
 
@@ -376,7 +378,7 @@ Field::setDefaultValue(const QVariant& def)
 }
 
 bool
-Field::setDefaultValue(const QCString& def)
+Field::setDefaultValue(const Q3CString& def)
 {
 	if (def.isNull()) {
 		m_defaultValue = QVariant();
@@ -614,7 +616,7 @@ void Field::setExpression(KexiDB::BaseExpr *expr)
 	str2num.insert(str, type)
 
 Field::FieldTypeNames::FieldTypeNames()
- : QValueVector<QString>()
+ : Q3ValueVector<QString>()
  , m_initialized(false)
 {
 }
@@ -645,7 +647,7 @@ void Field::FieldTypeNames::init()
 //-------------------------------------------------------
 
 Field::FieldTypeGroupNames::FieldTypeGroupNames()
- : QValueVector<QString>()
+ : Q3ValueVector<QString>()
  , m_initialized(false)
 {
 }

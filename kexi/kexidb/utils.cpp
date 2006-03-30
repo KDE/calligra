@@ -23,6 +23,8 @@
 
 #include <qmap.h>
 #include <qthread.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -182,7 +184,7 @@ int KexiDB::idForObjectName( Connection &conn, const QString& objName, int objTy
 
 //-----------------------------------------
 
-TableOrQuerySchema::TableOrQuerySchema(Connection *conn, const QCString& name, bool table)
+TableOrQuerySchema::TableOrQuerySchema(Connection *conn, const Q3CString& name, bool table)
  : m_name(name)
  , m_table(table ? conn->tableSchema(QString(name)) : 0)
  , m_query(table ? 0 : conn->querySchema(QString(name)))
@@ -241,7 +243,7 @@ const QueryColumnInfo::Vector TableOrQuerySchema::columns(bool unique)
 	return QueryColumnInfo::Vector();
 }
 
-QCString TableOrQuerySchema::name() const
+Q3CString TableOrQuerySchema::name() const
 {
 	if (m_table)
 		return m_table->name().latin1();

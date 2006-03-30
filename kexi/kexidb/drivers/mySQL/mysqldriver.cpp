@@ -28,7 +28,9 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 
 #include <qvariant.h>
 #include <qfile.h>
-#include <qdict.h>
+#include <q3dict.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 #include <kgenericfactory.h>
 #include <kdebug.h>
@@ -184,16 +186,16 @@ QString MySqlDriver::escapeBLOB(const QByteArray& array) const
 	return escapeBLOBInternal(array, BLOB_ESCAPING_TYPE_USE_0x);
 }
 
-QCString MySqlDriver::escapeString(const QCString& str) const
+Q3CString MySqlDriver::escapeString(const Q3CString& str) const
 {
 //! @todo optimize using mysql_real_escape_string()?
 //! see http://dev.mysql.com/doc/refman/5.0/en/string-syntax.html
 
-	return QCString("'")+QCString(str)
+	return Q3CString("'")+Q3CString(str)
 		.replace( '\\', "\\\\" )
 		.replace( '\'', "\\''" )
 		.replace( '"', "\\\"" )
-		+ QCString("'");
+		+ Q3CString("'");
 }
 
 /*! Add back-ticks to an identifier, and replace any back-ticks within
@@ -203,8 +205,8 @@ QString MySqlDriver::drv_escapeIdentifier( const QString& str) const {
 	return QString(str).replace('`', "'");
 }
 
-QCString MySqlDriver::drv_escapeIdentifier( const QCString& str) const {
-	return QCString(str).replace('`', "'");
+Q3CString MySqlDriver::drv_escapeIdentifier( const Q3CString& str) const {
+	return Q3CString(str).replace('`', "'");
 }
 
 #include "mysqldriver.moc"

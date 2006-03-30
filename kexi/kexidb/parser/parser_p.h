@@ -20,9 +20,9 @@
 #ifndef KEXIDB_PARSER_P_H
 #define KEXIDB_PARSER_P_H
 
-#include <qvaluelist.h>
-#include <qdict.h>
-#include <qasciicache.h>
+#include <q3valuelist.h>
+#include <q3dict.h>
+#include <q3asciicache.h>
 #include <qstring.h>
 
 #include <kexidb/queryschema.h>
@@ -48,7 +48,7 @@ class ParserPrivate
 		Connection *db;
 		QString statement;
 		ParserError error;
-		QAsciiCache<char> reservedKeywords;
+		Q3AsciiCache<char> reservedKeywords;
 		bool initialized : 1;
 };
 
@@ -61,7 +61,7 @@ class ParseInfo
 		~ParseInfo();
 
 		//! collects positions of tables/aliases with the same names
-		QDict< QValueList<int> > repeatedTablesAndAliases;
+		Q3Dict< Q3ValueList<int> > repeatedTablesAndAliases;
 
 		QString errMsg, errDescr; //helpers
 		QuerySchema *querySchema;

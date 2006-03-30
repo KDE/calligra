@@ -33,8 +33,10 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-#include <qptrvector.h>
+#include <q3ptrvector.h>
 #include <qdatetime.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 using namespace KexiDB;
 
@@ -84,7 +86,7 @@ class KexiDB::SQLiteCursorData : public SQLiteConnectionInternal
 		}
 #endif*/
 
-		QCString st;
+		Q3CString st;
 		//for sqlite:
 //		sqlite_struct *data; //! taken from SQLiteConnection
 #ifdef SQLITE2
@@ -121,7 +123,7 @@ class KexiDB::SQLiteCursorData : public SQLiteConnectionInternal
 		const char **prev_colname;*/
 		
 		uint cols_pointers_mem_size; //! size of record's array of pointers to values
-		QPtrVector<const char*> records;//! buffer data
+		Q3PtrVector<const char*> records;//! buffer data
 //#ifdef SQLITE3
 //		bool rowDataReadyToFetch : 1;
 //#endif
@@ -467,14 +469,14 @@ void SQLiteCursor::storeCurrentRow(RowData &data) const
 			data[i] = QVariant( *col ); //only latin1
 # endif
 		else if (f && f->isFPNumericType())
-			data[i] = QVariant( QCString(*col).toDouble() );
+			data[i] = QVariant( Q3CString(*col).toDouble() );
 		else {
 			switch (f ? f->type() : Field::Integer/*ROWINFO*/) {
 //todo: use short, etc.
 			case Field::Byte:
 			case Field::ShortInteger:
 			case Field::Integer:
-				data[i] = QVariant( QCString(*col).toInt() );
+				data[i] = QVariant( Q3CString(*col).toInt() );
 			case Field::BigInteger:
 				data[i] = QVariant( QString::fromLatin1(*col).toLongLong() );
 			case Field::Boolean:
@@ -516,11 +518,11 @@ QVariant SQLiteCursor::value(uint i)
 #ifdef SQLITE2
 	//from most to least frequently used types:
 	if (i==m_fieldCount || f && f->isIntegerType())
-		return QVariant( QCString(d->curr_coldata[i]).toInt() );
+		return QVariant( Q3CString(d->curr_coldata[i]).toInt() );
 	if (!f || f->isTextType())
 		return QVariant( d->curr_coldata[i] );
 	else if (f->isFPNumericType())
-		return QVariant( QCString(d->curr_coldata[i]).toDouble() );
+		return QVariant( Q3CString(d->curr_coldata[i]).toDouble() );
 
 	return QVariant( d->curr_coldata[i] ); //default
 #else

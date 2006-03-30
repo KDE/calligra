@@ -21,6 +21,8 @@
 
 #include <kdebug.h>
 #include <assert.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 using namespace KexiDB;
 
@@ -93,7 +95,7 @@ bool SQLitePreparedStatement::execute()
 	else
 		assert(0); //impl. error
 
-	for (QValueListConstIterator<QVariant> it = m_args.constBegin(); 
+	for (Q3ValueListConstIterator<QVariant> it = m_args.constBegin(); 
 		(field = itFields.current()); ++it, ++itFields, arg++)
 	{
 		if (it==m_args.constEnd() || (*it).isNull()) {//no value to bind or the value is null: bind NULL
@@ -106,7 +108,7 @@ bool SQLitePreparedStatement::execute()
 		}
 		if (field->isTextType()) {
 			//! @todo optimize: make a static copy so SQLITE_STATIC can be used
-			QCString utf8String((*it).toString().utf8());
+			Q3CString utf8String((*it).toString().utf8());
 			res = sqlite3_bind_text(prepared_st_handle, arg, 
 				(const char*)utf8String, utf8String.length(), SQLITE_TRANSIENT /*??*/);
 			if (SQLITE_OK != res) {

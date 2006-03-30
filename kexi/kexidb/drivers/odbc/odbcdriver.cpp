@@ -21,7 +21,7 @@
 #include <qfile.h>
 #include <qdir.h>
 #include <qstring.h>
-#include <qcstring.h>
+#include <q3cstring.h>
 
 //KDE Includes
 #include <kdebug.h>
@@ -99,7 +99,7 @@ QString ODBCDriver::escapeString( const QString& str ) const
 	return str;
 }
 
-QCString ODBCDriver::escapeString( const QCString& str ) const
+Q3CString ODBCDriver::escapeString( const Q3CString& str ) const
 {
 	return str;
 }

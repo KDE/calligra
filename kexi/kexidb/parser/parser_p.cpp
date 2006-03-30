@@ -24,6 +24,10 @@
 #include <klocale.h>
 
 #include <qregexp.h>
+//Added by qt3to4:
+#include <Q3ValueList>
+#include <Q3CString>
+#include <Q3PtrList>
 
 #include <assert.h>
 
@@ -32,7 +36,7 @@ using namespace KexiDB;
 Parser *parser;
 Field *field;
 //bool requiresTable;
-QPtrList<Field> fieldList;
+Q3PtrList<Field> fieldList;
 int current = 0;
 QString ctoken = "";
 
@@ -309,9 +313,9 @@ bool addColumn( ParseInfo& parseInfo, BaseExpr* columnExpr )
 		TableSchema *ts = parseInfo.querySchema->table( tableName );
 		if (ts) {//table.fieldname
 			//check if "table" is covered by an alias
-			const QValueList<int> tPositions = parseInfo.querySchema->tablePositions(tableName);
-			QValueList<int>::ConstIterator it = tPositions.constBegin();
-			QCString tableAlias;
+			const Q3ValueList<int> tPositions = parseInfo.querySchema->tablePositions(tableName);
+			Q3ValueList<int>::ConstIterator it = tPositions.constBegin();
+			Q3CString tableAlias;
 			bool covered = true;
 			for (; it!=tPositions.constEnd() && covered; ++it) {
 				tableAlias = parseInfo.querySchema->tableAlias(*it);
@@ -341,7 +345,7 @@ bool addColumn( ParseInfo& parseInfo, BaseExpr* columnExpr )
 
 
 		if (ts) {
-			QValueList<int> *positionsList = repeatedTablesAndAliases[ tableName ];
+			Q3ValueList<int> *positionsList = repeatedTablesAndAliases[ tableName ];
 			if (!positionsList) {
 				IMPL_ERROR(tableName + "." + fieldName + ", !positionsList ");
 				return false;
@@ -362,7 +366,7 @@ bool addColumn( ParseInfo& parseInfo, BaseExpr* columnExpr )
 					// check if table or alias is used twice and both have the same column
 					// (so the column is ambiguous)
 					int numberOfTheSameFields = 0;
-					for (QValueList<int>::iterator it = positionsList->begin();
+					for (Q3ValueList<int>::iterator it = positionsList->begin();
 						it!=positionsList->end();++it)
 					{
 						TableSchema *otherTS = parseInfo.querySchema->tables()->at(*it);
@@ -417,7 +421,7 @@ QuerySchema* parseSelect(
 		for (int i=0; i<tablesList->args(); i++, columnNum++) {
 			BaseExpr *e = tablesList->arg(i);
 			VariableExpr* t_e = 0;
-			QCString aliasString;
+			Q3CString aliasString;
 			if (e->exprClass() == KexiDBExpr_SpecialBinary) {
 				BinaryExpr* t_with_alias = e->toBinary();
 				assert(t_with_alias);
@@ -431,7 +435,7 @@ QuerySchema* parseSelect(
 				t_e = e->toVariable();
 			}
 			assert(t_e);
-			QCString tname = t_e->name.latin1();
+			Q3CString tname = t_e->name.latin1();
 			TableSchema *s = parser->db()->tableSchema(tname);
 			if(!s) {
 				setError(//i18n("Field List Error"), 
@@ -440,7 +444,7 @@ QuerySchema* parseSelect(
 				CLEANUP;
 				return 0;
 			}
-			QCString tableOrAliasName;
+			Q3CString tableOrAliasName;
 			if (!aliasString.isEmpty()) {
 				tableOrAliasName = aliasString;
 //				KexiDBDbg << "- add alias for table: " << aliasString << endl;
@@ -449,14 +453,14 @@ QuerySchema* parseSelect(
 			}
 			// 1. collect information about first repeated table name or alias
 			//    (potential ambiguity)
-			QValueList<int> *list = parseInfo.repeatedTablesAndAliases[tableOrAliasName];
+			Q3ValueList<int> *list = parseInfo.repeatedTablesAndAliases[tableOrAliasName];
 			if (list) {
 				//another table/alias with the same name
 				list->append( i );
 //				KexiDBDbg << "- another table/alias with name: " << tableOrAliasName << endl;
 			}
 			else {
-				list = new QValueList<int>();
+				list = new Q3ValueList<int>();
 				list->append( i );
 				parseInfo.repeatedTablesAndAliases.insert( tableOrAliasName, list );
 //				KexiDBDbg << "- first table/alias with name: " << tableOrAliasName << endl;

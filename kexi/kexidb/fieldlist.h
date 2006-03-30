@@ -20,8 +20,8 @@
 #ifndef KEXIDB_FIELDLIST_H
 #define KEXIDB_FIELDLIST_H
 
-#include <qvaluelist.h>
-#include <qdict.h>
+#include <q3valuelist.h>
+#include <q3dict.h>
 #include <qstring.h>
 
 #include <kexidb/field.h>
@@ -139,7 +139,7 @@ class KEXI_DB_EXPORT FieldList
 
 	protected:
 		Field::List m_fields;
-		QDict<Field> m_fields_by_name; //!< Fields collected by name. Unused by QuerySchema.
+		Q3Dict<Field> m_fields_by_name; //!< Fields collected by name. Unused by QuerySchema.
 		Field::List *m_autoinc_fields;
 	
 	private:

@@ -22,7 +22,7 @@
 
 #include <qobject.h>
 #include <qstring.h>
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 
 namespace KexiDB {
 
@@ -160,8 +160,8 @@ class ConnectionDataBase
 class KEXI_DB_EXPORT ConnectionData : public QObject, public ConnectionDataBase
 {
 	public:
-		typedef QPtrList<ConnectionData> List;
-		typedef QPtrListIterator<ConnectionData> ListIterator;
+		typedef Q3PtrList<ConnectionData> List;
+		typedef Q3PtrListIterator<ConnectionData> ListIterator;
 
 		ConnectionData();
 

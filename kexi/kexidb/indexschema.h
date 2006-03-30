@@ -20,8 +20,10 @@
 #ifndef KEXIDB_INDEX_H
 #define KEXIDB_INDEX_H
 
-#include <qvaluelist.h>
+#include <q3valuelist.h>
 #include <qstring.h>
+//Added by qt3to4:
+#include <Q3PtrList>
 
 #include <kexidb/fieldlist.h>
 #include <kexidb/schemadata.h>
@@ -43,8 +45,8 @@ class Relationship;
 class KEXI_DB_EXPORT IndexSchema : public FieldList, public SchemaData
 {
 	public:
-		typedef QPtrList<IndexSchema> List;
-		typedef QPtrListIterator<IndexSchema> ListIterator;
+		typedef Q3PtrList<IndexSchema> List;
+		typedef Q3PtrListIterator<IndexSchema> ListIterator;
 
 		/*! Constructs empty index schema object 
 		 that is assigned to \a table, and will be owned by this table.

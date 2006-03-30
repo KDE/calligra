@@ -28,6 +28,8 @@
 #include <kdebug.h>
 
 #include <migration/pqxx/pg_type.h>
+//Added by qt3to4:
+#include <Q3CString>
 using namespace KexiDB;
 
 
@@ -140,7 +142,7 @@ bool pqxxSqlCursor::drv_open()
 		return false;
 	}
 		
-	QCString cur_name;
+	Q3CString cur_name;
 	//Set up a transaction
 	try
 	{

@@ -22,8 +22,10 @@
 
 //Kexi Includes
 #include <kexidb/driver.h>
+//Added by qt3to4:
+#include <Q3CString>
 
-class QCString;
+class Q3CString;
 class QString;
 
 namespace KexiDB
@@ -61,7 +63,7 @@ class KEXI_DB_EXPORT ODBCDriver : public Driver
 		virtual bool isSystemFieldName( const QString& name ) const;
 		
 		virtual QString escapeString( const QString& str ) const;
-		virtual QCString escapeString( const QCString& str ) const;
+		virtual Q3CString escapeString( const Q3CString& str ) const;
 
 	protected:
 		virtual Connection *drv_createConnection( ConnectionData &conn_data );

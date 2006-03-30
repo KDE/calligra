@@ -21,6 +21,8 @@
 #define KEXIDB_DRIVER_SQLITE_H
 
 #include <qstringlist.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 #include <kexidb/driver.h>
 
@@ -52,14 +54,14 @@ class SQLiteDriver : public Driver
 
 		//! Escape a string for use as a value
 		virtual QString escapeString(const QString& str) const;
-		virtual QCString escapeString(const QCString& str) const;
+		virtual Q3CString escapeString(const Q3CString& str) const;
 
 		//! Escape BLOB value \a array
 		virtual QString escapeBLOB(const QByteArray& array) const;
 
 	protected:
 		virtual QString drv_escapeIdentifier( const QString& str) const;
-		virtual QCString drv_escapeIdentifier( const QCString& str) const;
+		virtual Q3CString drv_escapeIdentifier( const Q3CString& str) const;
 		virtual Connection *drv_createConnection( ConnectionData &conn_data );
 
 		/*! \return true if \a n is a system field name; 

@@ -143,7 +143,7 @@ bool MySqlPreparedStatement::execute()
 	else
 		assert(0); //impl. error
 
-	for (QValueListConstIterator<QVariant> it = m_args.constBegin(); 
+	for (Q3ValueListConstIterator<QVariant> it = m_args.constBegin(); 
 		(field = itFields.current()) && arg < m_realParamCount; ++it, ++itFields, arg++)
 	{
 		if (it==m_args.constEnd() || (*it).isNull()) {//no value to bind or the value is null: bind NULL

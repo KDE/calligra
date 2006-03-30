@@ -22,7 +22,7 @@
 
 #include <kexiutils/validator.h>
 #include <qstring.h>
-#include <qguardedptr.h>
+#include <qpointer.h>
 
 namespace KexiDB {
 

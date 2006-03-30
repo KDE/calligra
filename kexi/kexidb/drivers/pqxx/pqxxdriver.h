@@ -21,6 +21,8 @@
 #define KEXIDB_DRIVER_PQXX_H
 
 #include <qstringlist.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 #include <kexidb/driver.h>
 
@@ -45,7 +47,7 @@ class pqxxSqlDriver : public Driver
 
 		//! Escape a string for use as a value
 		virtual QString escapeString( const QString& str) const;
-		virtual QCString escapeString( const QCString& str) const;
+		virtual Q3CString escapeString( const Q3CString& str) const;
 		virtual QString sqlTypeName(int id_t, int p=0) const;
 
 		//! Escape BLOB value \a array
@@ -53,7 +55,7 @@ class pqxxSqlDriver : public Driver
 
 	protected:
 		virtual QString drv_escapeIdentifier( const QString& str) const;
-		virtual QCString drv_escapeIdentifier( const QCString& str) const;
+		virtual Q3CString drv_escapeIdentifier( const Q3CString& str) const;
 		virtual Connection *drv_createConnection( ConnectionData &conn_data );
 		virtual bool drv_isSystemFieldName( const QString& n )const;
 

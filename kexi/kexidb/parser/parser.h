@@ -22,7 +22,7 @@
 #define KEXIDBPARSER_H
 
 #include <qobject.h>
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 
 #include <kexidb/field.h>
 #include <kexidb/expression.h>

@@ -21,8 +21,10 @@
 #ifndef KEXIDB_UTILS_H
 #define KEXIDB_UTILS_H
 
-#include <qvaluelist.h>
+#include <q3valuelist.h>
 #include <qvariant.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 #include <kexidb/connection.h>
 #include <kexidb/driver.h>
@@ -76,7 +78,7 @@ namespace KexiDB
 		return conn.executeSQL("INSERT INTO " + table->name() + " (" + keyname + "," + valname + ") VALUES (" + conn.driver()->valueToSQL( Field::Text, QVariant(keyval) ) + "," + conn.driver()->valueToSQL( ftype, val) + ")");
 	}
 
-	typedef QValueList<uint> TypeGroupList;
+	typedef Q3ValueList<uint> TypeGroupList;
 
 	/*! \return list of types for type group \a typeGroup. */
 	KEXI_DB_EXPORT const TypeGroupList typesForGroup(KexiDB::Field::TypeGroup typeGroup);
@@ -137,7 +139,7 @@ namespace KexiDB
 		public:
 			//! Creates a new TableOrQuerySchema variant object, retrieving table or query schema
 			//! using \a conn connection and \a name.
-			TableOrQuerySchema(Connection *conn, const QCString& name, bool table);
+			TableOrQuerySchema(Connection *conn, const Q3CString& name, bool table);
 
 			//! Creates a new TableOrQuerySchema variant object. \a tableOrQuery must be of 
 			//! class TableSchema or QuerySchema.
@@ -157,7 +159,7 @@ namespace KexiDB
 			TableSchema* table() const { return m_table; }
 
 			//! \return name of a query or table
-			QCString name() const;
+			Q3CString name() const;
 
 			//! \return caption (if present) or name of the table/query
 			QString captionOrName() const;
@@ -183,7 +185,7 @@ namespace KexiDB
 			void debug();
 
 		protected:
-			QCString m_name; //!< the name is kept here because m_table and m_table can be 0
+			Q3CString m_name; //!< the name is kept here because m_table and m_table can be 0
 			                 //! and we still want name() and acptionOrName() work.
 			TableSchema* m_table;
 			QuerySchema* m_query;

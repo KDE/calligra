@@ -25,6 +25,8 @@
 #include <klocale.h>
 #include <kdebug.h>
 #include <limits.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 #define BOOL bool
 
@@ -118,9 +120,9 @@ QVariant MySqlCursor::value(uint pos) {
 	if (!f || f->isTextType())
 		return QVariant( QString::fromUtf8((const char*)d->mysqlrow[pos]) );
 	else if (f->isIntegerType())
-		return QVariant( QCString((const char*)d->mysqlrow[pos]).toInt() );
+		return QVariant( Q3CString((const char*)d->mysqlrow[pos]).toInt() );
 	else if (f->isFPNumericType())
-		return QVariant( QCString((const char*)d->mysqlrow[pos]).toDouble() );
+		return QVariant( Q3CString((const char*)d->mysqlrow[pos]).toDouble() );
 
 	//default
 	return QVariant(QString::fromUtf8((const char*)d->mysqlrow[pos]));

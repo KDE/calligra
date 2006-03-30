@@ -18,7 +18,7 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
 */
 
-#include <qcstring.h>
+#include <q3cstring.h>
 #include <qstring.h>
 #include <qstringlist.h>
 #include <qfile.h>
@@ -75,7 +75,7 @@ bool MySqlConnectionInternal::db_connect(const KexiDB::ConnectionData& data)
 		return false;
 
 	KexiDBDrvDbg << "MySqlConnectionInternal::connect()" << endl;
-	QCString localSocket;
+	Q3CString localSocket;
 	QString hostName = data.hostName;
 	if (hostName.isEmpty() || hostName.lower()=="localhost") {
 		if (data.useLocalSocketFile) {
@@ -141,7 +141,7 @@ bool MySqlConnectionInternal::useDatabase(const QString &dbName) {
 bool MySqlConnectionInternal::executeSQL(const QString& statement) {
 //	KexiDBDrvDbg << "MySqlConnectionInternal::executeSQL: "
 //	             << statement << endl;
-	QCString queryStr=statement.utf8();
+	Q3CString queryStr=statement.utf8();
 	const char *query=queryStr;
 	if(mysql_real_query(mysql, query, strlen(query)) == 0)
 	{

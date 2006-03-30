@@ -25,8 +25,11 @@
 #include <qvariant.h>
 #include <qstring.h>
 #include <qpair.h>
-#include <qvaluevector.h>
-#include <qptrvector.h>
+#include <q3valuevector.h>
+#include <q3ptrvector.h>
+//Added by qt3to4:
+#include <Q3CString>
+#include <Q3PtrList>
 #include "kexidb/kexidb_export.h"
 namespace KexiDB {
 
@@ -72,11 +75,11 @@ class BaseExpr;
 class KEXI_DB_EXPORT Field
 {
 	public:
-		typedef QPtrList<Field> List; //!< list of fields 
-		typedef QPtrVector<Field> Vector; //!< vector of fields 
-		typedef QPtrListIterator<Field> ListIterator; //!< iterator for list of fields 
+		typedef Q3PtrList<Field> List; //!< list of fields 
+		typedef Q3PtrVector<Field> Vector; //!< vector of fields 
+		typedef Q3PtrListIterator<Field> ListIterator; //!< iterator for list of fields 
 		typedef QPair<Field*,Field*> Pair; //!< fields pair
-		typedef QPtrList<Pair> PairList; //!< list of fields pair
+		typedef Q3PtrList<Pair> PairList; //!< list of fields pair
 
 		/*! Unified (most common used) types of fields. */
 		enum Type
@@ -399,7 +402,7 @@ class KEXI_DB_EXPORT Field
 			Decoding errors are detected (value is strictly checked against field type) 
 			- if one is encountered, default value is cleared (defaultValue()==QVariant()). 
 			\return true if given value was valid for field type. */
-		bool setDefaultValue(const QCString& def);
+		bool setDefaultValue(const Q3CString& def);
 
 		/*! Sets auto increment flag. Only available to set true, 
 		 if isAutoIncrementAllowed() is true. */
@@ -496,10 +499,10 @@ class KEXI_DB_EXPORT Field
 
 //<TMP>
 		/*! \return the hints for enum fields. */
-		QValueVector<QString> enumHints() const { return m_hints; }
+		Q3ValueVector<QString> enumHints() const { return m_hints; }
 		QString enumHint(uint num) { return (num < m_hints.size()) ? m_hints.at(num) : QString::null; }
 		/*! sets the hint for enum fields */
-		void setEnumHints(const QValueVector<QString> &l) { m_hints = l; }
+		void setEnumHints(const Q3ValueVector<QString> &l) { m_hints = l; }
 //</TMP>
 
 	protected:
@@ -519,11 +522,11 @@ class KEXI_DB_EXPORT Field
 		QString m_caption;
 		QString m_desc;
 		uint m_width;
-		QValueVector<QString> m_hints;
+		Q3ValueVector<QString> m_hints;
 
 		KexiDB::BaseExpr *m_expr;
 
-		class KEXI_DB_EXPORT FieldTypeNames : public QValueVector<QString> {
+		class KEXI_DB_EXPORT FieldTypeNames : public Q3ValueVector<QString> {
 			public:
 				FieldTypeNames();
 				void init();
@@ -531,7 +534,7 @@ class KEXI_DB_EXPORT Field
 			protected:
 				bool m_initialized : 1;
 		};
-		class KEXI_DB_EXPORT FieldTypeGroupNames : public QValueVector<QString> {
+		class KEXI_DB_EXPORT FieldTypeGroupNames : public Q3ValueVector<QString> {
 			public: 
 				FieldTypeGroupNames();
 				void init();

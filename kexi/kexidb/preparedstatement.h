@@ -21,6 +21,9 @@
 #define KEXIDB_PREPAREDSTATEMENT_H
 
 #include <qvariant.h>
+//Added by qt3to4:
+#include <Q3ValueList>
+#include <Q3CString>
 #include <ksharedptr.h>
 
 #include "field.h"
@@ -103,11 +106,11 @@ class KEXI_DB_EXPORT PreparedStatement : public KShared
 
 	protected:
 //! @todo is this portable across backends?
-		QCString generateStatementString();
+		Q3CString generateStatementString();
 
 		StatementType m_type;
 		FieldList *m_fields;
-		QValueList<QVariant> m_args;
+		Q3ValueList<QVariant> m_args;
 		QStringList* m_where;
 		Field::List* m_whereFields;
 };

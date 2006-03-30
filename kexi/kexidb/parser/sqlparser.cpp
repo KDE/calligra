@@ -381,8 +381,8 @@
 #include <qobject.h>
 #include <kdebug.h>
 #include <klocale.h>
-#include <qptrlist.h>
-#include <qcstring.h>
+#include <q3ptrlist.h>
+#include <q3cstring.h>
 
 #include <connection.h>
 #include <queryschema.h>

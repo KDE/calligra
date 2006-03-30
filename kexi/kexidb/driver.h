@@ -22,7 +22,11 @@
 
 #include <qobject.h>
 #include <qdatetime.h>
-#include <qdict.h>
+#include <q3dict.h>
+//Added by qt3to4:
+#include <Q3ValueList>
+#include <Q3CString>
+#include <Q3PtrList>
 
 #include <kexidb/object.h>
 #include <kexidb/field.h>
@@ -116,7 +120,7 @@ class KEXI_DB_EXPORT Driver : public QObject, public KexiDB::Object
 		Connection *createConnection( ConnectionData &conn_data, int options = 0 );
 
 		/*! \return List of created connections. */
-		const QPtrList<Connection> connectionsList() const;
+		const Q3PtrList<Connection> connectionsList() const;
 
 //		/*! \return a name equal to the service name (X-Kexi-DriverName) 
 //		 stored in given service .desktop file. */
@@ -242,7 +246,7 @@ class KEXI_DB_EXPORT Driver : public QObject, public KexiDB::Object
 		/*! This is overloaded version of escapeString( const QString& str )
 		 to be implemented in the same way.
 		*/
-		virtual QCString escapeString( const QCString& str ) const = 0;
+		virtual Q3CString escapeString( const Q3CString& str ) const = 0;
 		
 		/*! Driver-specific SQL BLOB value escaping.
 		 Implement escaping for any character like " or ' and \\0 as your 
@@ -266,19 +270,19 @@ class KEXI_DB_EXPORT Driver : public QObject, public KexiDB::Object
 		QString escapeIdentifier( const QString& str, 
 			int options = EscapeDriver|EscapeAsNecessary) const;
 
-		QCString escapeIdentifier( const QCString& str, 
+		Q3CString escapeIdentifier( const Q3CString& str, 
 			int options = EscapeDriver|EscapeAsNecessary) const;
 
 		//! \return property value for \a propeName available for this driver. 
 		//! If there's no such property defined for driver, Null QVariant value is returned.
-		QVariant propertyValue( const QCString& propName ) const;
+		QVariant propertyValue( const Q3CString& propName ) const;
 
 		//! \return translated property caption for \a propeName. 
 		//! If there's no such property defined for driver, empty string value is returned.
-		QString propertyCaption( const QCString& propName ) const;
+		QString propertyCaption( const Q3CString& propName ) const;
 
 		//! \return a list of property names available for this driver.
-		QValueList<QCString> propertyNames() const;
+		Q3ValueList<Q3CString> propertyNames() const;
 
 	protected:
 		/*! Used by DriverManager. 
@@ -312,7 +316,7 @@ class KEXI_DB_EXPORT Driver : public QObject, public KexiDB::Object
 		/*! This is overloaded version of drv_escapeIdentifier( const QString& str )
 		 to be implemented in the same way.
 		*/
-		virtual QCString drv_escapeIdentifier( const QCString& str ) const = 0;
+		virtual Q3CString drv_escapeIdentifier( const Q3CString& str ) const = 0;
 		
 		/*! \return true if \a n is a system field's name, build-in system 
 		 field that cannot be used or created by a user,

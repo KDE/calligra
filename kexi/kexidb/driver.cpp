@@ -27,6 +27,10 @@
 #include "connectiondata.h"
 
 #include <qfileinfo.h>
+//Added by qt3to4:
+#include <Q3ValueList>
+#include <Q3CString>
+#include <Q3PtrList>
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -38,7 +42,7 @@ using namespace KexiDB;
 
 /*! used when we do not have Driver instance yet,
  or when we cannot get one */
-QValueVector<QString> dflt_typeNames;
+Q3ValueVector<QString> dflt_typeNames;
 
 
 //---------------------------------------------
@@ -81,7 +85,7 @@ Driver::~Driver()
 {
 	DriverManagerInternal::self()->aboutDelete( this );
 //	KexiDBDbg << "Driver::~Driver()" << endl;
-	QPtrDictIterator<Connection> it( d->connections );
+	Q3PtrDictIterator<Connection> it( d->connections );
 	Connection *conn;
 	while ( (conn = it.toFirst()) ) {
 		delete conn;
@@ -115,10 +119,10 @@ bool Driver::isValid()
 	return true;
 }
 
-const QPtrList<Connection> Driver::connectionsList() const
+const Q3PtrList<Connection> Driver::connectionsList() const
 {
-	QPtrList<Connection> clist;
-	QPtrDictIterator<Connection> it( d->connections );
+	Q3PtrList<Connection> clist;
+	Q3PtrDictIterator<Connection> it( d->connections );
 	for( ; it.current(); ++it )
 		clist.append( &(*it) );
 	return clist;
@@ -267,30 +271,30 @@ QString Driver::valueToSQL( uint ftype, const QVariant& v ) const
 	return QString::null;
 }
 
-QVariant Driver::propertyValue( const QCString& propName ) const
+QVariant Driver::propertyValue( const Q3CString& propName ) const
 {
 	return d->properties[propName.lower()];
 }
 
-QString Driver::propertyCaption( const QCString& propName ) const
+QString Driver::propertyCaption( const Q3CString& propName ) const
 {
 	return d->propertyCaptions[propName.lower()];
 }
 
-QValueList<QCString> Driver::propertyNames() const
+Q3ValueList<Q3CString> Driver::propertyNames() const
 {
-	QValueList<QCString> names = d->properties.keys();
+	Q3ValueList<Q3CString> names = d->properties.keys();
 	qHeapSort(names);
 	return names;
 }
 
 QString Driver::escapeIdentifier(const QString& str, int options) const
 {
-	QCString cstr = str.latin1();
+	Q3CString cstr = str.latin1();
 	return QString(escapeIdentifier(cstr, options));
 }
 
-QCString Driver::escapeIdentifier(const QCString& str, int options) const
+Q3CString Driver::escapeIdentifier(const Q3CString& str, int options) const
 {
 	bool needOuterQuotes = false;
 
@@ -318,7 +322,7 @@ QCString Driver::escapeIdentifier(const QCString& str, int options) const
 
 	if(needOuterQuotes && (options & EscapeKexi)) {
 		const char quote = '"';
-		return quote + QCString(str).replace( quote, "\"\"" ) + quote;
+		return quote + Q3CString(str).replace( quote, "\"\"" ) + quote;
 	}
 	else if (needOuterQuotes) {
 		const char quote = beh->QUOTATION_MARKS_FOR_IDENTIFIER.latin1();

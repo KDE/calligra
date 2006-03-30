@@ -22,7 +22,7 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 
 #include <qvariant.h>
 #include <qfile.h>
-#include <qdict.h>
+#include <q3dict.h>
 
 #include <kgenericfactory.h>
 #include <kdebug.h>
