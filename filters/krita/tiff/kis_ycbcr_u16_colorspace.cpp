@@ -18,6 +18,7 @@
  */
 
 #include "kis_ycbcr_u16_colorspace.h"
+#include "kis_ycbcr_colorspace.h"
 
 #include <qimage.h>
 
@@ -25,10 +26,6 @@
 
 #include <kis_integer_maths.h>
 
-namespace {
-    const Q_INT32 MAX_CHANNEL_YCbCr = 3;
-    const Q_INT32 MAX_CHANNEL_YCbCrA = 4;
-}
 
 KisYCbCrU16ColorSpace::KisYCbCrU16ColorSpace(KisColorSpaceFactoryRegistry* parent, KisProfile* p)
     : KisU16BaseColorSpace(KisID("YCbCrAU16", "YCbCr (16-bit integer/channel)"), TYPE_YCbCr_16, icSigYCbCrData, parent, p)

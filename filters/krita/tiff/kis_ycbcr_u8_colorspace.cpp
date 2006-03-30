@@ -18,17 +18,13 @@
  */
 
 #include "kis_ycbcr_u8_colorspace.h"
+#include "kis_ycbcr_colorspace.h"
 
 #include <qimage.h>
 
 #include <klocale.h>
 
 #include <kis_integer_maths.h>
-
-namespace {
-    const Q_INT32 MAX_CHANNEL_YCbCr_U8 = 3;
-    const Q_INT32 MAX_CHANNEL_YCbCrA_U8 = 4;
-}
 
 KisYCbCrU8ColorSpace::KisYCbCrU8ColorSpace(KisColorSpaceFactoryRegistry* parent, KisProfile* p)
     : KisU8BaseColorSpace(KisID("YCbCrAU8", "YCbCr (8-bit integer/channel)"), TYPE_YCbCr_8, icSigYCbCrData, parent, p)
