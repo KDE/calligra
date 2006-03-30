@@ -142,7 +142,7 @@ void XSLTExportDia::chooseSlot()
     if ( _currentFile.isLocalFile() && QFile::exists( _currentFile.path() ) )
         dir = QFileInfo( _currentFile.path() ).absoluteFilePath();
 
-    KFileDialog *dialog = new KFileDialog(dir, QString::null, 0L, "file dialog", true);
+    KFileDialog *dialog = new KFileDialog(dir, QString::null, 0L);
     dialog->setCaption( i18n("Open Document") );
     dialog->setMimeFilter( KoFilterManager::mimeFilter( _format, KoFilterManager::Export ) );
     KUrl u;
