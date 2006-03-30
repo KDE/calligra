@@ -2381,7 +2381,8 @@ bool KWTextFrameSet::createNewPageAndNewFrame( KoTextParag* lastFormatted, int /
         }
 
         KWPage *page = m_doc->appendPage();
-        m_doc->afterInsertPage( page->pageNumber() );
+        if (  !m_doc->isLoading() )
+            m_doc->afterInsertPage( page->pageNumber() );
         kDebug(32002) << "now frames count=" << m_frames.count() << endl;
     }
 
