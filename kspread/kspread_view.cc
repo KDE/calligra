@@ -83,6 +83,7 @@
 #include <kparts/partmanager.h>
 #include <k3listview.h>
 #include <kpushbutton.h>
+#include <kxmlguifactory.h>
 
 // KOffice includes
 #include <tkcoloractions.h>
@@ -4108,7 +4109,7 @@ void View::paste()
   {
     canvasWidget()->deselectAllObjects();
     Q3CString returnedTypeMime = "application/vnd.oasis.opendocument.spreadsheet";
-    const QByteArray arr = data->encodedData( returnedTypeMime );
+    QByteArray arr = data->encodedData( returnedTypeMime );
     if( arr.isEmpty() )
       return;
     QBuffer buffer( &arr );
@@ -7414,7 +7415,7 @@ void View::initialiseMarkerFromSheet( Sheet *_sheet, const QPoint &point )
 
 QPoint View::markerFromSheet( Sheet *_sheet ) const
 {
-    QMapIterator<Sheet*, QPoint> it2 = d->savedMarkers.find(_sheet);
+    QMap<Sheet*, QPoint>::Iterator it2 = d->savedMarkers.find(_sheet);
     QPoint newMarker = (it2 == d->savedMarkers.end()) ? QPoint(1,1) : *it2;
     return newMarker;
 }
