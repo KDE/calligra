@@ -296,15 +296,15 @@ public:
     }
     /// Overloaded version of addProperty that takes a char*, usually for "..."
     void addProperty( const QString& propName, const char* propValue, PropertyType type = DefaultType ) {
-        m_properties[type].insert( propName, QString::fromUtf8( propValue ), type );
+        m_properties[type].insert( propName, QString::fromUtf8( propValue ) );
     }
     /// Overloaded version of addProperty that converts an int to a string
     void addProperty( const QString& propName, int propValue, PropertyType type = DefaultType ) {
-        m_properties[type].insert( propName, QString::number( propValue ), type );
+        m_properties[type].insert( propName, QString::number( propValue ) );
     }
     /// Overloaded version of addProperty that converts a bool to a string (false/true)
     void addProperty( const QString& propName, bool propValue, PropertyType type = DefaultType ) {
-        m_properties[type].insert( propName, propValue ? "true" : "false", type );
+        m_properties[type].insert( propName, propValue ? "true" : "false" );
     }
 
     /**
