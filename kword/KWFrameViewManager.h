@@ -22,7 +22,7 @@
 #include <q3valuelist.h>
 #include <q3valuevector.h>
 #include <defs.h>
-
+#include <QPointer>
 class KWDocument;
 class KWFrame;
 class KWFrameSet;
@@ -35,7 +35,6 @@ class KWFrameView;
 class KoPoint;
 class KoRect;
 
-class QPointer;
 class QRegion;
 
 /**
