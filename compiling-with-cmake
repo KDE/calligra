@@ -1,0 +1,19 @@
+Compiling KOffice with cmake
+
+We use the snapshop of kdelibs4, for the time being.
+The url is:
+
+svn.kde.org/home/kde/branches/work/kdelibs4_snapshot
+
+Make sure this has compiled and installed completely; especially
+the $kdedir/share/apps/modules/cmake directory must be installed
+
+It is sufficient to set PATH and LD_LIBRARY_PATH to the location
+of your kde4 library installation to compile: running is more
+demanding.
+
+then type
+
+cmake .
+
+in the toplevel dir and after that, make
