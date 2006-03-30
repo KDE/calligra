@@ -167,7 +167,7 @@ kde4_automoc(${kspread_KDEINIT_SRCS})
 
 kde4_add_kdeinit_executable( kspread ${kspread_KDEINIT_SRCS})
 
-target_link_libraries(kdeinit_kspread  ${KDE4_KDECORE_LIBS} )
+target_link_libraries(kdeinit_kspread  ${KDE4_KDECORE_LIBS} kofficecore )
 
 install_targets(${LIB_INSTALL_DIR} kdeinit_kspread )
 
