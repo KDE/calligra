@@ -524,11 +524,7 @@ void KPrBackGround::drawBackPix( QPainter *_painter, const QSize& ext, const QRe
         // NOTE: make all multiplications before any division
         double w = _origSize.width();
         w *= ext.width();
-#if KDE_IS_VERSION(3,1,90)
         QRect desk = KGlobalSettings::desktopGeometry(kapp->activeWindow());
-#else
-        QRect desk = QApplication::desktop()->screenGeometry();
-#endif
         w /= desk.width();
         double h = _origSize.height();
         h *= ext.height();

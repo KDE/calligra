@@ -227,11 +227,7 @@ void XSLTImportDia::okSlot()
 		while(_recentList.size() > 0)
 		{
 			kDebug() << "save : " << _recentList.first() << endl;
-#if KDE_IS_VERSION(3,1,3)
 			_config->writePathEntry( QString("Recent%1").arg(i), _recentList.first());
-#else
-			_config->writeEntry( QString("Recent%1").arg(i), _recentList.first());
-#endif
 			_recentList.pop_front();
 			i = i + 1;
 		}

@@ -99,9 +99,7 @@ KexiNewProjectWizard::KexiNewProjectWizard(KexiDBConnectionSet& conn_set,
 	m_prjtype_sel = new KexiNewPrjTypeSelector(this, "KexiNewPrjTypeSelector");
 //	lv_types = new K3ListView(m_prjtype_sel, "types listview");
 //	m_prjtype_sel->lv_types->setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Minimum, 0, 2));
-#if KDE_IS_VERSION(3,3,9)
 	m_prjtype_sel->lv_types->setShadeSortColumn(false);
-#endif
 	m_prjtype_sel->lv_types->header()->hide();
 	m_prjtype_sel->lv_types->setSorting(-1);
 	m_prjtype_sel->lv_types->setAlternateBackground(QColor()); //disable altering

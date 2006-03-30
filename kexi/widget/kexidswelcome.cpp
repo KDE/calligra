@@ -57,10 +57,8 @@ KexiDSWelcome::KexiDSWelcome(KexiDataSourceWizard *parent)
 void
 KexiDSWelcome::setUseWizard(bool use)
 {
-#if KDE_IS_VERSION(3,1,9) && !defined(Q_WS_WIN)
+#if !defined(Q_WS_WIN)
 	bool useIcons = KGlobalSettings::showIconsOnPushButtons();
-#else
-	bool useIcons = true;
 #endif
 	if(use)
 	{

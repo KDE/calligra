@@ -355,9 +355,7 @@ DoubleListViewBase::DoubleListViewBase(QWidget *parent, bool description)
     m_masterList->setSelectionMode(Q3ListView::NoSelection);
     m_masterList->setItemMargin(2);
     m_masterList->setRootIsDecorated(true);
-#if KDE_IS_VERSION(3,3,9)
     m_masterList->setShadeSortColumn(false);
-#endif
     m_masterList->setSortColumn(-1); // Disable sort!!
     m_masterList->addColumn(i18n("Name"));
     m_masterList->addColumn(i18n("Total"));

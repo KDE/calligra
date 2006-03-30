@@ -483,22 +483,16 @@ void KivioView::setupActions()
 
   showPageMargins = new KToggleAction( i18n("Show Page Margins"), "view_margins", 0, actionCollection(), "showPageMargins" );
   connect( showPageMargins, SIGNAL(toggled(bool)), SLOT(togglePageMargins(bool)));
-#if KDE_IS_VERSION(3,2,90)
   showPageMargins->setCheckedState(i18n("Hide Page Margins"));
-#endif
 
   showRulers = new KToggleAction( i18n("Show Rulers"), "view_ruler", 0, actionCollection(), "showRulers" );
   connect( showRulers, SIGNAL(toggled(bool)), SLOT(toggleShowRulers(bool)));
-#if KDE_IS_VERSION(3,2,90)
   showRulers->setCheckedState(i18n("Hide Rulers"));
-#endif
 
   // Grid actions
   showGrid = new KToggleAction( i18n("Show Grid"), "view_grid", 0, actionCollection(), "showGrid" );
   connect( showGrid, SIGNAL(toggled(bool)), SLOT(toggleShowGrid(bool)));
-#if KDE_IS_VERSION(3,2,90)
   showGrid->setCheckedState(i18n("Hide Grid"));
-#endif
 
   KToggleAction* snapGrid = new KToggleAction( i18n("Snap Grid"), "view_grid", 0, actionCollection(), "snapGrid" );
   connect( snapGrid, SIGNAL(toggled(bool)), SLOT(toggleSnapGrid(bool)));
@@ -1706,11 +1700,7 @@ void KivioView::addStencilFromSpawner( KivioStencilSpawner *pSpawner, double x, 
     pStencil->setPosition( x, y );
 
     // Use default properties if we held ctrl down
-#if KDE_IS_VERSION(3, 4, 0)
     if(kapp->keyboardMouseState() & Qt::ControlModifier) {
-#else
-    if(KApplication::keyboardModifiers() & KApplication::ControlModifier) {
-#endif
       pStencil->setFGColor(m_setFGColor->color());
       pStencil->setBGColor(m_setBGColor->color());
       QFont f = m_setFontFamily->font();

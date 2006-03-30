@@ -215,7 +215,7 @@ LoadIconDialog::changeIconSize(int index)
 		//case 1: size = K3Icon::SizeSmallMedium; break;
 		case 1: size = K3Icon::SizeMedium; break;
 		case 2: size = K3Icon::SizeLarge; break;
-#if !defined(Q_WS_WIN) && KDE_IS_VERSION(3,1,9)
+#if !defined(Q_WS_WIN) 
 		case 3: size = K3Icon::SizeHuge; break;
 #endif
 		default:;

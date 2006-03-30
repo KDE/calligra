@@ -250,11 +250,7 @@ void KPrWebPresentation::saveConfig()
     cfg.writeEntry( "BackColor", backColor );
     cfg.writeEntry( "TitleColor", titleColor );
     cfg.writeEntry( "TextColor", textColor );
-#if KDE_IS_VERSION(3,1,3)
     cfg.writePathEntry( "Path", path );
-#else
-    cfg.writeEntry( "Path", path );
-#endif
     cfg.writeEntry( "XML", xml );
     cfg.writeEntry( "WriteHeader", m_bWriteHeader );
     cfg.writeEntry( "WriteFooter", m_bWriteFooter );

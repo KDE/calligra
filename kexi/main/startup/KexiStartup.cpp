@@ -51,9 +51,7 @@
 
 #include <unistd.h>
 
-#if KDE_IS_VERSION(3,1,9)
 # include <kuser.h>
-#endif
 
 #include <q3cstring.h>
 #include <qapplication.h>

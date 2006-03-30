@@ -727,9 +727,7 @@ void KexiMainWindowImpl::initActions()
 #ifndef KEXI_NO_CTXT_HELP
 	d->action_show_helper = new KToggleAction(i18n("Show Context Help"), "", Qt::CTRL + Qt::Key_H,
 	 actionCollection(), "options_show_contexthelp");
-#if KDE_IS_VERSION(3,2,90)
 	d->action_show_helper->setCheckedState(i18n("Hide Context Help"));
-#endif
 #endif
 
 #ifdef KEXI_FORMS_SUPPORT
@@ -1788,7 +1786,7 @@ KexiMainWindowImpl::storeWindowConfiguration(KConfig *config)
 	config->setGroup("MainWindow");
 	QString dockGrp;
 
-#if KDE_IS_VERSION(3,1,9) && !defined(Q_WS_WIN)
+#if !defined(Q_WS_WIN)
 	if (kapp->sessionSaving())
 		dockGrp=config->group()+"-Docking";
 	else

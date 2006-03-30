@@ -32,9 +32,7 @@
 
 KexiNewStuff::KexiNewStuff(QWidget *parent)
  : KNewStuff( "kexi/template"
-#if KDE_IS_VERSION(3,3,0)
 	, "http://download.kde.org/khotnewstuff/kexi-providers.xml"
-#endif
 	, parent)
 {
 	// Prevent GHNS to deny downloading a second time. If GHNS

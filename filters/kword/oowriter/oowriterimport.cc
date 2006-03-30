@@ -49,9 +49,6 @@
 #include <KoRect.h>
 #include <KoDom.h>
 
-#if ! KDE_IS_VERSION(3,1,90)
-# include <kdebugclasses.h>
-#endif
 
 typedef KGenericFactory<OoWriterImport, KoFilter> OoWriterImportFactory;
 K_EXPORT_COMPONENT_FACTORY( liboowriterimport, OoWriterImportFactory(  "kofficefilters" ) )

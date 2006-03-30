@@ -966,9 +966,7 @@ KarbonView::initActions()
 
 	m_showPageMargins = new KToggleAction( i18n("Show Page Margins"), "view_margins", 0, actionCollection(), "view_show_margins" );
 	connect( m_showPageMargins, SIGNAL(toggled(bool)), SLOT(togglePageMargins(bool)));
-#if KDE_IS_VERSION(3,2,90)
 	m_showPageMargins->setCheckedState(i18n("Hide Page Margins"));
-#endif
 
 	// No need for the other actions in read-only (embedded) mode
 	if( !shell() )
@@ -1071,15 +1069,11 @@ KarbonView::initActions()
 		actionCollection(), "object_distribute_vertical_top" );
 
 	m_showRulerAction = new KToggleAction( i18n( "Show Rulers" ), 0, this, SLOT( showRuler() ), actionCollection(), "view_show_ruler" );
-#if KDE_IS_VERSION(3,2,90)
 	m_showRulerAction->setCheckedState(i18n("Hide Rulers"));
-#endif
 	m_showRulerAction->setToolTip( i18n( "Shows or hides rulers" ) );
 	m_showRulerAction->setChecked( false );
 	m_showGridAction = new KToggleAction( i18n( "Show Grid" ), "view_grid", this, SLOT( showGrid() ), actionCollection(), "view_show_grid" );
-#if KDE_IS_VERSION(3,2,90)
 	m_showGridAction->setCheckedState(i18n("Hide Grid"));
-#endif
 	m_showGridAction->setToolTip( i18n( "Shows or hides grid" ) );
 	//m_showGridAction->setChecked( true );
 	m_snapGridAction = new KToggleAction( i18n( "Snap to Grid" ), 0, this, SLOT( snapToGrid() ), actionCollection(), "view_snap_to_grid" );

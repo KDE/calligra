@@ -177,9 +177,7 @@ ReportView::ReportView(View *view, QWidget *parent)
 {
     //kDebug()<<k_funcinfo<<endl;
     m_reportList = new K3ListView(this);
-#if KDE_IS_VERSION(3,3,9)
     m_reportList->setShadeSortColumn(false);
-#endif
     m_reportList->addColumn(i18n("Report Template"));
     m_reportList->header()->setStretchEnabled(true, 0);
     m_reportList->header()->setSortIndicator(0);
