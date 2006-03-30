@@ -939,7 +939,7 @@ APPLIXSPREADImport::readColormap (QTextStream &stream,  Q3PtrList<t_mycolor> &mc
          kDebug()<<"  ->  "<< mystr<<endl;
 
        // Count the number of  whitespaces
-       contcount = mystr.contains (' ');
+       contcount = mystr.count (' ');
        kDebug()<< "contcount: "<< contcount<<endl;
        contcount -= 5;
 
@@ -1211,34 +1211,34 @@ APPLIXSPREADImport::transPenFormat (QString it, int *PenWidth, int *PenStyle)
    if       ( it[1] == '1' )
    {
      *PenWidth = 1;
-     *Qt::PenStyle = 1;
+     *PenStyle = 1;
    }
 
    else if  ( it[1] == '2' )
    {
      *PenWidth = 2;
-     *Qt::PenStyle = 1;
+     *PenStyle = 1;
    }
 
    else if  ( it[1] == '3' )
    {
      *PenWidth = 3;
-     *Qt::PenStyle = 1;
+     *PenStyle = 1;
    }
 
    else if  ( it[1] == '4' )
    {
      *PenWidth = 1;
-     *Qt::PenStyle = 3;
+     *PenStyle = 3;
    }
 
    else if  ( it[1] == '5' )
    {
      *PenWidth = 5;
-     *Qt::PenStyle = 1;
+     *PenStyle = 1;
    }
 
-   printf ("frame (w:%d - s:%d) \n", *PenWidth, *Qt::PenStyle);
+   printf ("frame (w:%d - s:%d) \n", *PenWidth, *PenStyle);
 }
 
 
