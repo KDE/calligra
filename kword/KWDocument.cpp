@@ -1728,7 +1728,7 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
     return true;
 }
 
-void KWDocument::endOfLoading()
+void KWDocument::endOfLoading() // called by both oasis and oldxml
 {
     // insert pages
     double maxBottom = 0;
@@ -2418,6 +2418,8 @@ bool KWDocument::completeLoading( KoStore *store )
 
     // This computes the number of pages (from the frames)
     // for the first time (and adds footers/headers/footnotes etc.)
+    // ## Note: with OASIS the frame loading appends pages as necessary,
+    // so maybe we don't need to calculate the pages from the frames anymore.
     recalcFrames();
 
     // Fix z orders on older documents
