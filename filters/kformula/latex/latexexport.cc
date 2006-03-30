@@ -49,7 +49,7 @@ LATEXExport::LATEXExport( KoFilter */*parent*/, const char */*name*/, const QStr
 }
 
 
-KoFilter::ConversionStatus LATEXExport::convert( const Q3CString& from, const Q3CString& to )
+KoFilter::ConversionStatus LATEXExport::convert( const QByteArray& from, const QByteArray& to )
 {
     if ( to != "text/x-tex" || from != "application/x-kformula" )
         return KoFilter::NotImplemented;

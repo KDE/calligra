@@ -69,7 +69,7 @@ OoImpressImport::~OoImpressImport()
     m_animations.clear();
 }
 
-KoFilter::ConversionStatus OoImpressImport::convert( Q3CString const & from, Q3CString const & to )
+KoFilter::ConversionStatus OoImpressImport::convert( QByteArray const & from, QByteArray const & to )
 {
     kDebug(30518) << "Entering Ooimpress Import filter: " << from << " - " << to << endl;
 

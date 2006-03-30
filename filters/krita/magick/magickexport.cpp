@@ -41,7 +41,7 @@ MagickExport::~MagickExport()
 {
 }
 
-KoFilter::ConversionStatus MagickExport::convert(const Q3CString& from, const Q3CString& to)
+KoFilter::ConversionStatus MagickExport::convert(const QByteArray& from, const QByteArray& to)
 {
     kDebug(41008) << "magick export! From: " << from << ", To: " << to << "\n";
     

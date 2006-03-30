@@ -57,8 +57,8 @@ K_EXPORT_COMPONENT_FACTORY(libpdfimport, PdfImportFactory())
 PdfImport::PdfImport(KoFilter *, const char *, const QStringList&)
 {}
 
-KoFilter::ConversionStatus PdfImport::convert(const Q3CString& from,
-                                              const Q3CString& to)
+KoFilter::ConversionStatus PdfImport::convert(const QByteArray& from,
+                                              const QByteArray& to)
 {
     // check for proper conversion
     if ( to!="application/x-kword" || from!="application/pdf" )

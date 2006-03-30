@@ -45,7 +45,7 @@ WMFImport::~WMFImport()
 {
 }
 
-KoFilter::ConversionStatus WMFImport::convert( const Q3CString& from, const Q3CString& to )
+KoFilter::ConversionStatus WMFImport::convert( const QByteArray& from, const QByteArray& to )
 {
     if( to != "application/x-karbon" || from != "image/x-wmf" )
     return KoFilter::NotImplemented;

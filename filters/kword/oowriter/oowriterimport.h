@@ -40,7 +40,7 @@ public:
     OoWriterImport( KoFilter * parent, const char * name, const QStringList & );
     virtual ~OoWriterImport();
 
-    virtual KoFilter::ConversionStatus convert( Q3CString const & from, Q3CString const & to );
+    virtual KoFilter::ConversionStatus convert( QByteArray const & from, QByteArray const & to );
 
 private:
     void prepareDocument( QDomDocument& mainDocument, QDomElement& framesetsElem );

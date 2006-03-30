@@ -1347,7 +1347,7 @@ MSWriteImport::~MSWriteImport ()
 	delete m_device;
 }
 
-KoFilter::ConversionStatus MSWriteImport::convert (const Q3CString &from, const Q3CString &to)
+KoFilter::ConversionStatus MSWriteImport::convert (const QByteArray &from, const QByteArray &to)
 {
 	kDebug (30509) << "MSWriteImport $Date$ using LibMSWrite "
 			  				<< MSWrite::Version << endl;

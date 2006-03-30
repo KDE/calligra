@@ -103,7 +103,7 @@ ExcelImport::~ExcelImport()
   delete d;
 }
 
-KoFilter::ConversionStatus ExcelImport::convert( const Q3CString& from, const Q3CString& to )
+KoFilter::ConversionStatus ExcelImport::convert( const QByteArray& from, const QByteArray& to )
 {
   if ( from != "application/msexcel" )
     return KoFilter::NotImplemented; 

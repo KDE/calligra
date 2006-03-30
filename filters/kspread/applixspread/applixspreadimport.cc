@@ -58,7 +58,7 @@ QString APPLIXSPREADImport::nextLine( QTextStream & stream )
     return s;
 }
 
-KoFilter::ConversionStatus APPLIXSPREADImport::convert( const Q3CString& from, const Q3CString& to )
+KoFilter::ConversionStatus APPLIXSPREADImport::convert( const QByteArray& from, const QByteArray& to )
 {
 
     if (to != "application/x-kspread" || from != "application/x-applixspread")

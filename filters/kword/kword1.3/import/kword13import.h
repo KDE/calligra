@@ -38,7 +38,7 @@ public:
     KWord13Import(KoFilter *parent, const char *name, const QStringList &);
     virtual ~KWord13Import() {}
 
-    virtual KoFilter::ConversionStatus convert( const Q3CString& from, const Q3CString& to );
+    virtual KoFilter::ConversionStatus convert( const QByteArray& from, const QByteArray& to );
 protected:
     bool parseInfo( QIODevice* io, KWord13Document& kwordDocument );
     bool parseRoot( QIODevice* io, KWord13Document& kwordDocument );

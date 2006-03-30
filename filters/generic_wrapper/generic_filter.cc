@@ -43,7 +43,7 @@ GenericFilter::GenericFilter(KoFilter *, const char *, const QStringList&) :
     KoFilter() {
 }
 
-KoFilter::ConversionStatus GenericFilter::convert( const Q3CString &from, const Q3CString &to )
+KoFilter::ConversionStatus GenericFilter::convert( const QByteArray &from, const QByteArray &to )
 {
 
     //find the right script to use

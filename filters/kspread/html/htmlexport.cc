@@ -79,7 +79,7 @@ const QString strGt  ("&gt;");
 
 // The reason why we use the KoDocument* approach and not the QDomDocument
 // approach is because we don't want to export formulas but values !
-KoFilter::ConversionStatus HTMLExport::convert( const Q3CString& from, const Q3CString& to )
+KoFilter::ConversionStatus HTMLExport::convert( const QByteArray& from, const QByteArray& to )
 {
     if(to!="text/html" || from!="application/x-kspread")
     {

@@ -147,8 +147,8 @@ WMLExport::WMLExport( KoFilter *, const char *, const QStringList& ):
 {
 }
 
-KoFilter::ConversionStatus WMLExport::convert( const Q3CString& from, 
-  const Q3CString& to )
+KoFilter::ConversionStatus WMLExport::convert( const QByteArray& from, 
+  const QByteArray& to )
 {
   // check for proper conversion
   if( to!= "text/vnd.wap.wml" || from != "application/x-kword" )

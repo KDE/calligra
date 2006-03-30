@@ -42,7 +42,7 @@ AsciiExportDialog :: AsciiExportDialog(QWidget* parent)
 
     QStringList encodings;
     encodings << i18n( "Descriptive encoding name", "Recommended ( %1 )" ).arg( "UTF-8" );
-    encodings << i18n( "Descriptive encoding name", "Locale ( %1 )" ).arg( QTextCodec::codecForLocale()->name() );
+    encodings << i18n( "Descriptive encoding name", "Locale ( %1 )" ).arg( QString(QTextCodec::codecForLocale()->name()) );
     encodings += KGlobal::charsets()->descriptiveEncodingNames();
     // Add a few non-standard encodings, which might be useful for text files
     const QString description(i18n("Descriptive encoding name","Other ( %1 )"));

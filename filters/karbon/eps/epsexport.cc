@@ -90,7 +90,7 @@ EpsExport::EpsExport( KoFilter*, const char*, const QStringList& )
 }
 
 KoFilter::ConversionStatus
-EpsExport::convert( const Q3CString& from, const Q3CString& to )
+EpsExport::convert( const QByteArray& from, const QByteArray& to )
 {
 	if ( to != "image/x-eps" || from != "application/x-karbon" )
 	{

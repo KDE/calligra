@@ -35,7 +35,7 @@ public:
     PdfImport(KoFilter *parent, const char *name, const QStringList&);
 
     KoFilter::ConversionStatus
-    convert(const Q3CString& from, const Q3CString& to);
+    convert(const QByteArray& from, const QByteArray& to);
 
 private:
     void treatInfoDocument();

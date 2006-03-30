@@ -29,7 +29,7 @@ class KisJPEGImport : public KoFilter {
         KisJPEGImport(KoFilter *parent, const char *name, const QStringList&);
         virtual ~KisJPEGImport();
     public:
-        virtual KoFilter::ConversionStatus convert(const Q3CString& from, const Q3CString& to);
+        virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
 };
 
 #endif

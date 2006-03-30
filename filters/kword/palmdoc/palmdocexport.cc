@@ -117,8 +117,8 @@ PalmDocExport::PalmDocExport( KoFilter *, const char *, const QStringList& ):
 {
 }
 
-KoFilter::ConversionStatus PalmDocExport::convert( const Q3CString& from, 
-  const Q3CString& to )
+KoFilter::ConversionStatus PalmDocExport::convert( const QByteArray& from, 
+  const QByteArray& to )
 {
   // check for proper conversion
   if( to!= "application/vnd.palm" || from != "application/x-kword" )

@@ -49,7 +49,7 @@ MathMLExport::MathMLExport( KoFilter */*parent*/, const char */*name*/, const QS
 }
 
 
-KoFilter::ConversionStatus MathMLExport::convert( const Q3CString& from, const Q3CString& to )
+KoFilter::ConversionStatus MathMLExport::convert( const QByteArray& from, const QByteArray& to )
 {
     if ( to != "application/mathml+xml" || from != "application/x-kformula" )
         return KoFilter::NotImplemented;

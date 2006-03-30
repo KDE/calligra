@@ -104,7 +104,7 @@ KisRawImport::~KisRawImport()
     delete m_process;
 }
 
-KoFilter::ConversionStatus KisRawImport::convert(const Q3CString& from, const Q3CString& to)
+KoFilter::ConversionStatus KisRawImport::convert(const QByteArray& from, const QByteArray& to)
 {
     if (from != "image/x-raw" || to != "application/x-krita") {
         return KoFilter::NotImplemented;

@@ -38,7 +38,7 @@ XSLTImport::XSLTImport(KoFilter *, const char *, const QStringList&) :
                      KoFilter() {
 }
 
-KoFilter::ConversionStatus XSLTImport::convert( const Q3CString&, const Q3CString& to )
+KoFilter::ConversionStatus XSLTImport::convert( const QByteArray&, const QByteArray& to )
 {
     QString config;
 

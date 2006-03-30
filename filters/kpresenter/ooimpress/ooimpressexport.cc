@@ -56,8 +56,8 @@ OoImpressExport::~OoImpressExport()
     delete m_storeinp;
 }
 
-KoFilter::ConversionStatus OoImpressExport::convert( const Q3CString & from,
-                                                     const Q3CString & to )
+KoFilter::ConversionStatus OoImpressExport::convert( const QByteArray & from,
+                                                     const QByteArray & to )
 {
     kDebug(30518) << "Entering Ooimpress Export filter: " << from << " - " << to << endl;
 

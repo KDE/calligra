@@ -63,7 +63,7 @@ typedef enum _EEnv EEnv;
  * This class tells about a paragraph and its contents. For example,
  * a list, a title and the format for the paragraph.
  */
-class Layout: public Qt::TextFormat
+class Layout: public TextFormat
 {
 	QString      _name;
 	QString      _following;

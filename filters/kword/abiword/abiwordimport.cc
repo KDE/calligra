@@ -1759,7 +1759,7 @@ ABIWORDImport::ABIWORDImport(KoFilter */*parent*/, const char */*name*/, const Q
                      KoFilter() {
 }
 
-KoFilter::ConversionStatus ABIWORDImport::convert( const Q3CString& from, const Q3CString& to )
+KoFilter::ConversionStatus ABIWORDImport::convert( const QByteArray& from, const QByteArray& to )
 {
     if ((to != "application/x-kword") || (from != "application/x-abiword"))
         return KoFilter::NotImplemented;

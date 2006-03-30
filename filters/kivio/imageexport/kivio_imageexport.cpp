@@ -55,7 +55,7 @@ ImageExport::ImageExport(KoFilter *, const char *, const QStringList&)
 {
 }
 
-KoFilter::ConversionStatus ImageExport::convert(const Q3CString& from, const Q3CString& to)
+KoFilter::ConversionStatus ImageExport::convert(const QByteArray& from, const QByteArray& to)
 {
   if(from != "application/x-kivio") {
     return KoFilter::BadMimeType;

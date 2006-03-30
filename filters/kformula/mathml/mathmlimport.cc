@@ -46,7 +46,7 @@ MathMLImport::MathMLImport(KoFilter *, const char *, const QStringList&)
 {
 }
 
-KoFilter::ConversionStatus MathMLImport::convert( const Q3CString& from, const Q3CString& to )
+KoFilter::ConversionStatus MathMLImport::convert( const QByteArray& from, const QByteArray& to )
 {
     kDebug( KFormula::DEBUGID ) << "From: " << from << endl;
     kDebug( KFormula::DEBUGID ) << "To:   " << to << endl;

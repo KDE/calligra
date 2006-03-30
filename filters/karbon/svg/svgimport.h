@@ -46,7 +46,7 @@ public:
 	SvgImport(KoFilter *parent, const char *name, const QStringList&);
 	virtual ~SvgImport();
 
-	virtual KoFilter::ConversionStatus convert(const Q3CString& from, const Q3CString& to);
+	virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
 
 protected:
 	class GradientHelper

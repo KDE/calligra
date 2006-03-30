@@ -254,7 +254,7 @@ public:
      * @param to the mimetype for KWord
      * @return true if the document was successfully converted
      */
-    virtual KoFilter::ConversionStatus convert( const Q3CString& from, const Q3CString& to );
+    virtual KoFilter::ConversionStatus convert( const QByteArray& from, const QByteArray& to );
 
     /**
      * Skip the keyword, as we do not need to do anything with it

@@ -63,7 +63,7 @@ XAMLExport::XAMLExport( KoFilter*, const char*, const QStringList& )
 }
 
 KoFilter::ConversionStatus
-XAMLExport::convert( const Q3CString& from, const Q3CString& to )
+XAMLExport::convert( const QByteArray& from, const QByteArray& to )
 {
 	// TODO: ???
 	if ( to != "image/wvg+xml" || from != "application/x-karbon" )

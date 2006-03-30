@@ -41,7 +41,7 @@ HTMLImport::HTMLImport(KoFilter *, const char*, const QStringList &) :
 // 123
 }
 
-KoFilter::ConversionStatus HTMLImport::convert( const Q3CString& from, const Q3CString& to )
+KoFilter::ConversionStatus HTMLImport::convert( const QByteArray& from, const QByteArray& to )
 {
 	if(to!="application/x-kword" || from!="text/html")
 		return KoFilter::NotImplemented;

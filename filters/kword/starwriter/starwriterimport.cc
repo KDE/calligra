@@ -60,7 +60,7 @@ StarWriterImport::~StarWriterImport()
 {
 }
 
-KoFilter::ConversionStatus StarWriterImport::convert(const Q3CString& from, const Q3CString& to)
+KoFilter::ConversionStatus StarWriterImport::convert(const QByteArray& from, const QByteArray& to)
 {
     // Check for proper conversion
     // When 4.x is supported, use also: || (from != "application/x-starwriter")

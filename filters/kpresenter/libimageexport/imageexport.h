@@ -34,7 +34,7 @@ public:
     ImageExport(KoFilter *parent, const char *name, const QStringList&);
     virtual ~ImageExport();
 
-    virtual KoFilter::ConversionStatus convert(const Q3CString& from, const Q3CString& to);
+    virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
     virtual bool extraImageAttribute() { return true;};
     virtual bool saveImage( QString fileName) = 0;
     virtual const char* exportFormat() = 0;

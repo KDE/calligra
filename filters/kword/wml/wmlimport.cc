@@ -233,7 +233,7 @@ void WMLConverter::parse( const char* filename )
 
 }
 
-KoFilter::ConversionStatus WMLImport::convert( const Q3CString& from, const Q3CString& to )
+KoFilter::ConversionStatus WMLImport::convert( const QByteArray& from, const QByteArray& to )
 {
   // check for proper conversion
   if( to!= "application/x-kword" || from != "text/vnd.wap.wml" )

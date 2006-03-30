@@ -106,7 +106,7 @@ bool KWord13Import::postParse( KoStore* store, KWord13Document& doc )
     return post.postParse( store, doc );
 }
 
-KoFilter::ConversionStatus KWord13Import::convert( const Q3CString& from, const Q3CString& to )
+KoFilter::ConversionStatus KWord13Import::convert( const QByteArray& from, const QByteArray& to )
 {
     if ( to != "application/vnd.oasis.opendocument.text"
         || from != "application/x-kword" )

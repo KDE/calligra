@@ -53,7 +53,7 @@ XcfExport::XcfExport( KoFilter*, const char*, const QStringList& )
 }
 
 KoFilter::ConversionStatus
-XcfExport::convert( const Q3CString& from, const Q3CString& to )
+XcfExport::convert( const QByteArray& from, const QByteArray& to )
 {
 	if( to != "image/x-xcf-gimp" || from != "application/x-karbon" )
 	{

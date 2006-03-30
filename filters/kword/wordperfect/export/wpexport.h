@@ -36,7 +36,7 @@ class WPExport : public KoFilter
 
     virtual ~WPExport() {}
 
-    virtual KoFilter::ConversionStatus convert( const Q3CString& from, const Q3CString& to );
+    virtual KoFilter::ConversionStatus convert( const QByteArray& from, const QByteArray& to );
 };
 
 #endif // __WPEXPORT_H

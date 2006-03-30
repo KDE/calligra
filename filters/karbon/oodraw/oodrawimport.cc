@@ -65,7 +65,7 @@ OoDrawImport::~OoDrawImport()
 {
 }
 
-KoFilter::ConversionStatus OoDrawImport::convert( Q3CString const & from, Q3CString const & to )
+KoFilter::ConversionStatus OoDrawImport::convert( QByteArray const & from, QByteArray const & to )
 {
     kDebug() << "Entering Oodraw Import filter: " << from << " - " << to << endl;
 

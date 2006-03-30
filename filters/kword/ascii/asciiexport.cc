@@ -437,7 +437,7 @@ ASCIIExport::ASCIIExport(KoFilter*, const char*, const QStringList&)
 {
 }
 
-KoFilter::ConversionStatus ASCIIExport::convert(const Q3CString& from, const Q3CString& to)
+KoFilter::ConversionStatus ASCIIExport::convert(const QByteArray& from, const QByteArray& to)
 {
     if (to != "text/plain" || from != "application/x-kword")
     {

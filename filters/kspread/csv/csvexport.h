@@ -39,7 +39,7 @@ class CSVExport : public KoFilter
   CSVExport(KoFilter * parent, const char * name, const QStringList &);
   virtual ~CSVExport() {}
 
-  virtual KoFilter::ConversionStatus convert( const Q3CString & from, const Q3CString & to );
+  virtual KoFilter::ConversionStatus convert( const QByteArray & from, const QByteArray & to );
 
   private:
   QString exportCSVCell( KSpread::Sheet const * const sheet, int col, int row, QChar const & textQuote );

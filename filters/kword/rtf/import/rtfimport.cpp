@@ -311,7 +311,7 @@ RTFImport::RTFImport( KoFilter *, const char *, const QStringList& )
     fnnum=0;
 }
 
-KoFilter::ConversionStatus RTFImport::convert( const Q3CString& from, const Q3CString& to )
+KoFilter::ConversionStatus RTFImport::convert( const QByteArray& from, const QByteArray& to )
 {
     // This filter only supports RTF to KWord conversion
     if ((from != "text/rtf") || (to != "application/x-kword"))

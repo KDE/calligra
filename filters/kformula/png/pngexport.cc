@@ -48,7 +48,7 @@ PNGExport::PNGExport( KoFilter */*parent*/, const char */*name*/, const QStringL
 }
 
 
-KoFilter::ConversionStatus PNGExport::convert( const Q3CString& from, const Q3CString& to )
+KoFilter::ConversionStatus PNGExport::convert( const QByteArray& from, const QByteArray& to )
 {
     if ( to != "image/png" || from != "application/x-kformula" )
         return KoFilter::NotImplemented;

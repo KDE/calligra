@@ -49,7 +49,7 @@ class Document: public XmlParser
 		Q3PtrList<Element> _formulas;
 		Q3PtrList<Element> _corps;
 		Q3PtrList<Element> _pixmaps;
-		Q3PtrList<Qt::Key> _keys;
+		Q3PtrList<Key> _keys;
 
 		ListTable      _tables;
 		//QPtrList<Element> _parts;

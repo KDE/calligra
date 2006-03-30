@@ -41,7 +41,7 @@ public:
 	XcfExport( KoFilter* parent, const char* name, const QStringList& );
 	virtual ~XcfExport() {}
 
-	virtual KoFilter::ConversionStatus convert( const Q3CString& from, const Q3CString& to );
+	virtual KoFilter::ConversionStatus convert( const QByteArray& from, const QByteArray& to );
 
 	virtual void visitVDocument( VDocument& document );
 	virtual void visitVLayer( VLayer& layer );

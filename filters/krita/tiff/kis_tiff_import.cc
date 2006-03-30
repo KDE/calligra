@@ -43,7 +43,7 @@ KisTIFFImport::~KisTIFFImport()
 {
 }
 
-KoFilter::ConversionStatus KisTIFFImport::convert(const Q3CString&, const Q3CString& to)
+KoFilter::ConversionStatus KisTIFFImport::convert(const QByteArray&, const QByteArray& to)
 {
     kDebug(41008) << "Importing using TIFFImport!\n";
 

@@ -54,7 +54,7 @@ OOWRITERExport::OOWRITERExport(KoFilter */*parent*/, const char */*name*/, const
                      KoFilter() {
 }
 
-KoFilter::ConversionStatus OOWRITERExport::convert( const Q3CString& from, const Q3CString& to )
+KoFilter::ConversionStatus OOWRITERExport::convert( const QByteArray& from, const QByteArray& to )
 {
     if ( to != "application/vnd.sun.xml.writer" || from != "application/x-kword" )
     {

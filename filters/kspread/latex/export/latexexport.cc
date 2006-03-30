@@ -37,7 +37,7 @@ LATEXExport::LATEXExport(KoFilter *, const char *, const QStringList&) :
                      KoFilter() {
 }
 
-KoFilter::ConversionStatus LATEXExport::convert( const Q3CString& from, const Q3CString& to )
+KoFilter::ConversionStatus LATEXExport::convert( const QByteArray& from, const QByteArray& to )
 {
     QString config;
 

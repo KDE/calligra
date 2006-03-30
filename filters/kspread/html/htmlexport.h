@@ -40,7 +40,7 @@ public:
     HTMLExport(KoFilter *parent, const char*name, const QStringList&);
     virtual ~HTMLExport();
 
-    virtual KoFilter::ConversionStatus convert( const Q3CString& from, const Q3CString& to );
+    virtual KoFilter::ConversionStatus convert( const QByteArray& from, const QByteArray& to );
   private:
     /** Writes the top of the page in HTML to @par str */
     void openPage( KSpread::Sheet *sheet,KoDocument *document, QString &str);

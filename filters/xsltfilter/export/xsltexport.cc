@@ -42,7 +42,7 @@ XSLTExport::XSLTExport(KoFilter *, const char *, const QStringList&) :
                      KoFilter() {
 }
 
-KoFilter::ConversionStatus XSLTExport::convert( const Q3CString& from, const Q3CString&)
+KoFilter::ConversionStatus XSLTExport::convert( const QByteArray& from, const QByteArray&)
 {
     if(from != "application/x-kword" &&
        from != "application/x-kontour" && from != "application/x-kspread" &&

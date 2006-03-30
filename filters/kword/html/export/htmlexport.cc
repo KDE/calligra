@@ -63,7 +63,7 @@ HTMLExport::HTMLExport(KoFilter *, const char *, const QStringList &) :
                      KoFilter() {
 }
 
-KoFilter::ConversionStatus HTMLExport::convert( const Q3CString& from, const Q3CString& to )
+KoFilter::ConversionStatus HTMLExport::convert( const QByteArray& from, const QByteArray& to )
 {
     if ((from != "application/x-kword") || (to != "text/html"))
     {

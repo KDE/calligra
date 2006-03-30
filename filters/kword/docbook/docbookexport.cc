@@ -785,7 +785,7 @@ bool DocBookWorker::doFullDocumentInfo ( const KWEFDocumentInfo &docInfo )
 }
 
 
-KoFilter::ConversionStatus DocBookExport::convert( const Q3CString& from, const Q3CString& to )
+KoFilter::ConversionStatus DocBookExport::convert( const QByteArray& from, const QByteArray& to )
 {
 #if 0
     kError (30507) << "to = " << to << ", from = " << from << endl;

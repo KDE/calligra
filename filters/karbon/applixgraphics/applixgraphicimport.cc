@@ -135,7 +135,7 @@ APPLIXGRAPHICImport::APPLIXGRAPHICImport (KoFilter *, const char *, const QStrin
  *                                                                            *
  *                                                                            *
  ******************************************************************************/
-KoFilter::ConversionStatus APPLIXGRAPHICImport::convert( const Q3CString& from, const Q3CString& to )
+KoFilter::ConversionStatus APPLIXGRAPHICImport::convert( const QByteArray& from, const QByteArray& to )
 {
 
     // Check MIME Types

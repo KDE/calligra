@@ -183,8 +183,8 @@ AmiProExport::AmiProExport( KoFilter *, const char *, const QStringList& ):
 }
 
 KoFilter::ConversionStatus 
-AmiProExport::convert( const Q3CString& from, 
-  const Q3CString& to )
+AmiProExport::convert( const QByteArray& from, 
+  const QByteArray& to )
 {
   // check for proper conversion
   if( to!= "application/x-amipro" || from != "application/x-kword" )

@@ -43,7 +43,7 @@ MagickImport::~MagickImport()
 {
 }
 
-KoFilter::ConversionStatus MagickImport::convert(const Q3CString&, const Q3CString& to)
+KoFilter::ConversionStatus MagickImport::convert(const QByteArray&, const QByteArray& to)
 {
     kDebug(41008) << "Importing using MagickImport!\n";
 

@@ -85,8 +85,8 @@ OpenCalcExport::OpenCalcExport( KoFilter *, const char *, const QStringList & )
 {
 }
 
-KoFilter::ConversionStatus OpenCalcExport::convert( const Q3CString & from,
-                                                    const Q3CString & to )
+KoFilter::ConversionStatus OpenCalcExport::convert( const QByteArray & from,
+                                                    const QByteArray & to )
 {
   /* later...
      KSpreadLeader  * leader = new KSpreadLeader( m_chain );

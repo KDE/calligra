@@ -43,7 +43,7 @@ KisJPEGImport::~KisJPEGImport()
 {
 }
 
-KoFilter::ConversionStatus KisJPEGImport::convert(const Q3CString&, const Q3CString& to)
+KoFilter::ConversionStatus KisJPEGImport::convert(const QByteArray&, const QByteArray& to)
 {
     kDebug(41008) << "Importing using JPEGImport!\n";
 

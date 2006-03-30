@@ -1228,7 +1228,7 @@ ABIWORDExport::ABIWORDExport(KoFilter */*parent*/, const char */*name*/, const Q
                      KoFilter() {
 }
 
-KoFilter::ConversionStatus ABIWORDExport::convert( const Q3CString& from, const Q3CString& to )
+KoFilter::ConversionStatus ABIWORDExport::convert( const QByteArray& from, const QByteArray& to )
 {
     if ( to != "application/x-abiword" || from != "application/x-kword" )
     {

@@ -82,7 +82,7 @@ static inline unsigned long readU16( const void* p )
 
 }
 
-KoFilter::ConversionStatus HancomWordImport::convert( const Q3CString& from, const Q3CString& to )
+KoFilter::ConversionStatus HancomWordImport::convert( const QByteArray& from, const QByteArray& to )
 {
   if ( from != "application/x-hancomword" )
     return KoFilter::NotImplemented; 

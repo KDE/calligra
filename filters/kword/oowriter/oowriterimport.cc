@@ -72,7 +72,7 @@ OoWriterImport::~OoWriterImport()
 {
 }
 
-KoFilter::ConversionStatus OoWriterImport::convert( Q3CString const & from, Q3CString const & to )
+KoFilter::ConversionStatus OoWriterImport::convert( QByteArray const & from, QByteArray const & to )
 {
     kDebug(30518) << "Entering Oowriter Import filter: " << from << " - " << to << endl;
 

@@ -58,7 +58,7 @@ EpsImport::~EpsImport()
 }
 
 KoFilter::ConversionStatus
-EpsImport::convert( const Q3CString& from, const Q3CString& to )
+EpsImport::convert( const QByteArray& from, const QByteArray& to )
 {
 	if(
 		to != "application/illustrator" ||

@@ -70,7 +70,7 @@ SvgExport::SvgExport( KoFilter*, const char*, const QStringList& )
 }
 
 KoFilter::ConversionStatus
-SvgExport::convert( const Q3CString& from, const Q3CString& to )
+SvgExport::convert( const QByteArray& from, const QByteArray& to )
 {
 	if ( to != "image/svg+xml" || from != "application/x-karbon" )
 	{

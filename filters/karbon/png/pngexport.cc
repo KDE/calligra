@@ -48,7 +48,7 @@ PngExport::PngExport( KoFilter*, const char*, const QStringList& )
 }
 
 KoFilter::ConversionStatus
-PngExport::convert( const Q3CString& from, const Q3CString& to )
+PngExport::convert( const QByteArray& from, const QByteArray& to )
 {
 	if ( to != "image/png" || from != "application/x-karbon" )
 	{

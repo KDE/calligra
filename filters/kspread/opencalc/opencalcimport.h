@@ -48,7 +48,7 @@ class OpenCalcImport : public KoFilter
   OpenCalcImport( KoFilter * parent, const char * name, const QStringList & );
   virtual ~OpenCalcImport();
 
-  virtual KoFilter::ConversionStatus convert( Q3CString const & from, Q3CString const & to );
+  virtual KoFilter::ConversionStatus convert( QByteArray const & from, QByteArray const & to );
 
 
  private:

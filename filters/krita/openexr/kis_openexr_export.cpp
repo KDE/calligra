@@ -60,7 +60,7 @@ KisOpenEXRExport::~KisOpenEXRExport()
 {
 }
 
-KoFilter::ConversionStatus KisOpenEXRExport::convert(const Q3CString& from, const Q3CString& to)
+KoFilter::ConversionStatus KisOpenEXRExport::convert(const QByteArray& from, const QByteArray& to)
 {
     if (to != "image/x-exr" || from != "application/x-krita") {
         return KoFilter::NotImplemented;

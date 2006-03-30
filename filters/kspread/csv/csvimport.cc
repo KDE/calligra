@@ -60,7 +60,7 @@ CSVFilter::CSVFilter(KoFilter *, const char*, const QStringList&) :
                      KoFilter() {
 }
 
-KoFilter::ConversionStatus CSVFilter::convert( const Q3CString& from, const Q3CString& to )
+KoFilter::ConversionStatus CSVFilter::convert( const QByteArray& from, const QByteArray& to )
 {
     QString file( m_chain->inputFile() );
     KoDocument* document = m_chain->outputDocument();

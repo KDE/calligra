@@ -47,7 +47,7 @@ class WPImport : public KoFilter
 
     virtual ~WPImport() {}
 
-    virtual KoFilter::ConversionStatus convert( const Q3CString& from, const Q3CString& to );
+    virtual KoFilter::ConversionStatus convert( const QByteArray& from, const QByteArray& to );
 
 };
 #endif // __WPIMPORT_H

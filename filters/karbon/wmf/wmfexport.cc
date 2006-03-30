@@ -59,7 +59,7 @@ WmfExport::~WmfExport()
 {
 }
 
-KoFilter::ConversionStatus WmfExport::convert( const Q3CString& from, const Q3CString& to )
+KoFilter::ConversionStatus WmfExport::convert( const QByteArray& from, const QByteArray& to )
 {
     if( to != "image/x-wmf" || from != "application/x-karbon" ) {
         return KoFilter::NotImplemented;

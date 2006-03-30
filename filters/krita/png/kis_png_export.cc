@@ -49,7 +49,7 @@ KisPNGExport::~KisPNGExport()
 {
 }
 
-KoFilter::ConversionStatus KisPNGExport::convert(const Q3CString& from, const Q3CString& to)
+KoFilter::ConversionStatus KisPNGExport::convert(const QByteArray& from, const QByteArray& to)
 {
     kDebug(41008) << "Png export! From: " << from << ", To: " << to << "\n";
     

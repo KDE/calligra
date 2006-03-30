@@ -48,7 +48,7 @@ SvgExport::~SvgExport()
 
 
 KoFilter::ConversionStatus
-SvgExport::convert(const Q3CString& from, const Q3CString& to)
+SvgExport::convert(const QByteArray& from, const QByteArray& to)
 {
     // Check for proper conversion.
     if ( from != "application/x-kchart" || to != "image/svg+xml" )

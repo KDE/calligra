@@ -80,7 +80,7 @@ PowerPointImport::~PowerPointImport()
   delete d;
 }
 
-KoFilter::ConversionStatus PowerPointImport::convert( const Q3CString& from, const Q3CString& to )
+KoFilter::ConversionStatus PowerPointImport::convert( const QByteArray& from, const QByteArray& to )
 {
   if ( from != "application/mspowerpoint" )
     return KoFilter::NotImplemented; 

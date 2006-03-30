@@ -2737,7 +2737,7 @@ int OpenCalcImport::readMetaData()
   return result;
 }
 
-KoFilter::ConversionStatus OpenCalcImport::convert( Q3CString const & from, Q3CString const & to )
+KoFilter::ConversionStatus OpenCalcImport::convert( QByteArray const & from, QByteArray const & to )
 {
   kDebug(30518) << "Entering OpenCalc Import filter: " << from << " - " << to << endl;
 

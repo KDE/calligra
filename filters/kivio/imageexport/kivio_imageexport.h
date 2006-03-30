@@ -33,7 +33,7 @@ class ImageExport : public KoFilter
   public:
     ImageExport(KoFilter *, const char *, const QStringList&);
 
-    virtual KoFilter::ConversionStatus convert(const Q3CString& from, const Q3CString& to);
+    virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
 };
 
 }

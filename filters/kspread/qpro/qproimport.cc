@@ -98,7 +98,7 @@ QpImport::InitTableName(int pIdx, QString& pResult)
    }
 }
 
-KoFilter::ConversionStatus QpImport::convert( const Q3CString& from, const Q3CString& to )
+KoFilter::ConversionStatus QpImport::convert( const QByteArray& from, const QByteArray& to )
 {
     bool bSuccess=true;
 

@@ -52,7 +52,7 @@ KontourImport::~KontourImport()
 
 }
 
-KoFilter::ConversionStatus KontourImport::convert(const Q3CString& from, const Q3CString& to)
+KoFilter::ConversionStatus KontourImport::convert(const QByteArray& from, const QByteArray& to)
 {
 	// check for proper conversion
 	if ( to != "application/x-karbon" || ( from != "application/x-kontour" && from != "application/x-killustrator") )

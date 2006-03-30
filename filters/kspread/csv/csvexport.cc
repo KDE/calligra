@@ -110,7 +110,7 @@ QString CSVExport::exportCSVCell( Sheet const * const sheet, int col, int row, Q
 
 // The reason why we use the KoDocument* approach and not the QDomDocument
 // approach is because we don't want to export formulas but values !
-KoFilter::ConversionStatus CSVExport::convert( const Q3CString & from, const Q3CString & to )
+KoFilter::ConversionStatus CSVExport::convert( const QByteArray & from, const QByteArray & to )
 {
   kDebug(30501) << "CSVExport::convert" << endl;
   KoDocument* document = m_chain->inputDocument();

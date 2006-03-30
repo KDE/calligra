@@ -401,7 +401,7 @@ Element* Document::searchFootnote(QString footnote)
 
 }
 
-Qt::Key* Document::searchKey(QString keyName)
+Key* Document::searchKey(QString keyName)
 {
 	Key* key = _keys.first();
 	while(key != 0)

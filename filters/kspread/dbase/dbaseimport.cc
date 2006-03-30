@@ -50,7 +50,7 @@ DBaseImport::DBaseImport ( QObject*, const char*, const QStringList& )
 {
 }
 
-KoFilter::ConversionStatus DBaseImport::convert( const Q3CString& from, const Q3CString& to )
+KoFilter::ConversionStatus DBaseImport::convert( const QByteArray& from, const QByteArray& to )
 {
   if (to != "application/x-kspread" || from != "application/x-dbase")
     return KoFilter::NotImplemented;

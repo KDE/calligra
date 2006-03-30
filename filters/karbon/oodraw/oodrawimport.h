@@ -44,7 +44,7 @@ public:
     OoDrawImport( KoFilter *parent, const char *name, const QStringList & );
     virtual ~OoDrawImport();
 
-    virtual KoFilter::ConversionStatus convert( Q3CString const & from, Q3CString const & to );
+    virtual KoFilter::ConversionStatus convert( QByteArray const & from, QByteArray const & to );
 
 private:
 	void createDocumentInfo( QDomDocument &docinfo );

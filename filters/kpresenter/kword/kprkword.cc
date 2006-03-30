@@ -43,7 +43,7 @@ KprKword::KprKword(KoFilter *, const char *, const QStringList&) :
 // This filter can act as an import filter for KWord and as an export
 // filter for KPresenter (isn't our architecture really nice ? :)
 // This is why we use the file-to-file method, not a QDomDoc one.
-KoFilter::ConversionStatus KprKword::convert( const Q3CString& from, const Q3CString& to )
+KoFilter::ConversionStatus KprKword::convert( const QByteArray& from, const QByteArray& to )
 {
     if(to!="application/x-kword" || from!="application/x-kpresenter")
         return KoFilter::NotImplemented;

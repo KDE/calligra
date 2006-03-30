@@ -48,7 +48,7 @@ MSODImport::~MSODImport()
 {
 }
 
-KoFilter::ConversionStatus MSODImport::convert( const Q3CString& from, const Q3CString& to )
+KoFilter::ConversionStatus MSODImport::convert( const QByteArray& from, const QByteArray& to )
 {
     if (to != "application/x-karbon" || from != "image/x-msod")
         return KoFilter::NotImplemented;

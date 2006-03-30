@@ -45,7 +45,7 @@ ImageExport::~ImageExport()
 
 
 KoFilter::ConversionStatus
-ImageExport::convert(const Q3CString& from, const Q3CString& to)
+ImageExport::convert(const QByteArray& from, const QByteArray& to)
 {
     KoDocument * document = m_chain->inputDocument();
 

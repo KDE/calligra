@@ -32,7 +32,7 @@ public:
 	MSWriteExport (KoFilter *parent, const char *name, const QStringList &);
 	virtual ~MSWriteExport ();
 
-	KoFilter::ConversionStatus convert (const Q3CString &from, const Q3CString &to);
+	KoFilter::ConversionStatus convert (const QByteArray &from, const QByteArray &to);
 };
 
 #endif // MSWRITEEXPORT_H

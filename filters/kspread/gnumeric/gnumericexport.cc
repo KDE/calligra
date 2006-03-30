@@ -941,7 +941,7 @@ void GNUMERICExport::addSummaryItem(QDomDocument gnumeric_doc, QDomElement summa
 
 // The reason why we use the KoDocument* approach and not the QDomDocument
 // approach is because we don't want to export formulas but values !
-KoFilter::ConversionStatus GNUMERICExport::convert( const Q3CString& from, const Q3CString& to )
+KoFilter::ConversionStatus GNUMERICExport::convert( const QByteArray& from, const QByteArray& to )
 {
     kDebug(30521) << "Exporting GNUmeric" << endl;
 

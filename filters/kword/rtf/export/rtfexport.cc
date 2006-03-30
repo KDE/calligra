@@ -59,7 +59,7 @@ RTFExport::RTFExport(KoFilter *, const char *, const QStringList &) :
                      KoFilter() {
 }
 
-KoFilter::ConversionStatus RTFExport::convert( const Q3CString& from, const Q3CString& to )
+KoFilter::ConversionStatus RTFExport::convert( const QByteArray& from, const QByteArray& to )
 {
     if ((from != "application/x-kword") || (to != "text/rtf"))
     {

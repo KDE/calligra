@@ -43,7 +43,7 @@ MSWordImport::~MSWordImport()
 {
 }
 
-KoFilter::ConversionStatus MSWordImport::convert( const Q3CString& from, const Q3CString& to )
+KoFilter::ConversionStatus MSWordImport::convert( const QByteArray& from, const QByteArray& to )
 {
     // check for proper conversion
     if ( to != "application/x-kword" || from != "application/msword" )

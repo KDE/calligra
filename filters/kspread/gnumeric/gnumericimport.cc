@@ -1824,7 +1824,7 @@ void GNUMERICFilter::setStyleInfo(QDomNode * sheet, Sheet * table)
   */
 
 
-KoFilter::ConversionStatus GNUMERICFilter::convert( const Q3CString & from, const Q3CString & to )
+KoFilter::ConversionStatus GNUMERICFilter::convert( const QByteArray & from, const QByteArray & to )
 {
     dateInit();
     bool bSuccess=true;

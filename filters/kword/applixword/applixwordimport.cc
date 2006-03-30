@@ -88,7 +88,7 @@ APPLIXWORDImport::nextLine (QTextStream & stream)
  *                                                                            *
  *                                                                            *
  ******************************************************************************/
-KoFilter::ConversionStatus APPLIXWORDImport::convert( const Q3CString& from, const Q3CString& to )
+KoFilter::ConversionStatus APPLIXWORDImport::convert( const QByteArray& from, const QByteArray& to )
 {
 
     if (to!="application/x-kword" || from!="application/x-applixword")

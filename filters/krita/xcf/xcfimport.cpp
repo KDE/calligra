@@ -41,7 +41,7 @@ XCFImport::~XCFImport()
 {
 }
 
-KoFilter::ConversionStatus XCFImport::convert(const Q3CString&, const Q3CString& to)
+KoFilter::ConversionStatus XCFImport::convert(const QByteArray&, const QByteArray& to)
 {
     kDebug(41008) << "Importing using XCFImport!\n";
 

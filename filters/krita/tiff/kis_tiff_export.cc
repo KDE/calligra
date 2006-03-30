@@ -51,7 +51,7 @@ KisTIFFExport::~KisTIFFExport()
 {
 }
 
-KoFilter::ConversionStatus KisTIFFExport::convert(const Q3CString& from, const Q3CString& to)
+KoFilter::ConversionStatus KisTIFFExport::convert(const QByteArray& from, const QByteArray& to)
 {
     kDebug(41008) << "Tiff export! From: " << from << ", To: " << to << "\n";
     

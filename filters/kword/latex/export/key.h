@@ -70,7 +70,7 @@ class Key: public XmlParser
 		 *
 		 * The destructor must remove the list of little zones.
 		 */
-		virtual ~Qt::Key();
+		virtual ~Key();
 
 		/**
 		 * Accessors

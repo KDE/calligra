@@ -197,7 +197,7 @@ void ASCIIImport::prepareDocument(QDomDocument& mainDocument, QDomElement& mainF
 
 }
 
-KoFilter::ConversionStatus ASCIIImport::convert( const Q3CString& from, const Q3CString& to )
+KoFilter::ConversionStatus ASCIIImport::convert( const QByteArray& from, const QByteArray& to )
 {
     if (to!="application/x-kword" || from!="text/plain")
         return KoFilter::NotImplemented;

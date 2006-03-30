@@ -57,7 +57,7 @@ AiImport::~AiImport()
 }
 
 KoFilter::ConversionStatus
-AiImport::convert( const Q3CString& from, const Q3CString& to )
+AiImport::convert( const QByteArray& from, const QByteArray& to )
 {
 	if ( from != "application/illustrator" || to != "application/x-karbon" )
 	{

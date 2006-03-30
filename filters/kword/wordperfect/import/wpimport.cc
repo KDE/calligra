@@ -267,7 +267,7 @@ WPImport::WPImport( KoFilter *, const char *, const QStringList& ):  KoFilter()
 {
 }
 
-KoFilter::ConversionStatus WPImport::convert( const Q3CString& from, const Q3CString& to )
+KoFilter::ConversionStatus WPImport::convert( const QByteArray& from, const QByteArray& to )
 {
   // check for proper conversion
   if( to!= "application/x-kword" || from != "application/wordperfect" )
