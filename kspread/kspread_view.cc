@@ -291,7 +291,7 @@ public:
     void adjustActions( Sheet* sheet, Cell* cell );
     void adjustWorkbookActions( bool mode );
     void updateButton( Cell *cell, int column, int row);
-    Q3Button* newIconButton( const char *_file, bool _kbutton = false, QWidget *_parent = 0L );
+    QAbstractButton* newIconButton( const char *_file, bool _kbutton = false, QWidget *_parent = 0L );
 
     PropertyEditor *m_propertyEditor;
 
@@ -508,12 +508,12 @@ void View::Private::initActions()
       view, SLOT( strikeOut( bool ) ) );
 
   actions->selectFont = new KFontAction( i18n("Select Font..."),
-      0, ac, "selectFont" );
+      ac, "selectFont" );
   QObject::connect( actions->selectFont, SIGNAL( activated( const QString& ) ),
       view, SLOT( fontSelected( const QString& ) ) );
 
   actions->selectFontSize = new KFontSizeAction( i18n("Select Font Size"),
-      0, ac, "selectFontSize" );
+      ac, "selectFontSize" );
   QObject::connect( actions->selectFontSize, SIGNAL( fontSizeChanged( int ) ),
       view, SLOT( fontSizeSelected( int ) ) );
 
@@ -528,46 +528,42 @@ void View::Private::initActions()
       ac, "textColor",true );
   actions->textColor->setDefaultColor(QColor());
 
-  actions->alignLeft = new KToggleAction( i18n("Align Left"), "text_left",
-      0, ac, "left");
+  QActionGroup* groupAlign = new QActionGroup( view );
+  actions->alignLeft = new KToggleAction( "text_left", i18n("Align Left"),
+      ac, "left", groupAlign );
   QObject::connect( actions->alignLeft, SIGNAL( toggled( bool ) ),
       view, SLOT( alignLeft( bool ) ) );
-  actions->alignLeft->setExclusiveGroup( "Align" );
   actions->alignLeft->setToolTip(i18n("Left justify the cell contents"));
 
-  actions->alignCenter = new KToggleAction( i18n("Align Center"), "text_center",
-      0, ac, "center");
+  actions->alignCenter = new KToggleAction( "text_center", i18n("Align Center"),
+      ac, "center", groupAlign );
   QObject::connect( actions->alignCenter, SIGNAL( toggled( bool ) ),
       view, SLOT( alignCenter( bool ) ) );
-  actions->alignCenter->setExclusiveGroup( "Align" );
   actions->alignCenter->setToolTip(i18n("Center the cell contents"));
 
-  actions->alignRight = new KToggleAction( i18n("Align Right"), "text_right",
-      0, ac, "right");
+  actions->alignRight = new KToggleAction( "text_right", i18n("Align Right"),
+      ac, "right", groupAlign );
   QObject::connect( actions->alignRight, SIGNAL( toggled( bool ) ),
       view, SLOT( alignRight( bool ) ) );
-  actions->alignRight->setExclusiveGroup( "Align" );
   actions->alignRight->setToolTip(i18n("Right justify the cell contents"));
 
-  actions->alignTop = new KToggleAction( i18n("Align Top"), "text_top",
-      0, ac, "top");
+  QActionGroup* groupPos = new QActionGroup( view );
+  actions->alignTop = new KToggleAction( "text_top", i18n("Align Top"),
+      ac, "top", groupPos );
   QObject::connect( actions->alignTop, SIGNAL( toggled( bool ) ),
       view, SLOT( alignTop( bool ) ) );
-  actions->alignTop->setExclusiveGroup( "Pos" );
   actions->alignTop->setToolTip(i18n("Align cell contents along the top of the cell"));
 
-  actions->alignMiddle = new KToggleAction( i18n("Align Middle"), "middle",
-      0, ac, "middle");
+  actions->alignMiddle = new KToggleAction( "middle", i18n("Align Middle"),
+      ac, "middle", groupPos );
   QObject::connect( actions->alignMiddle, SIGNAL( toggled( bool ) ),
       view, SLOT( alignMiddle( bool ) ) );
-  actions->alignMiddle->setExclusiveGroup( "Pos" );
   actions->alignMiddle->setToolTip(i18n("Align cell contents centered in the cell"));
 
-  actions->alignBottom = new KToggleAction( i18n("Align Bottom"), "text_bottom",
-      0, ac, "bottom");
+  actions->alignBottom = new KToggleAction( "text_bottom", i18n("Align Bottom"),
+      ac, "bottom", groupPos );
   QObject::connect( actions->alignBottom, SIGNAL( toggled( bool ) ),
       view, SLOT( alignBottom( bool ) ) );
-  actions->alignBottom->setExclusiveGroup( "Pos" );
   actions->alignBottom->setToolTip(i18n("Align cell contents along the bottom of the cell"));
 
   actions->wrapText = new KToggleAction( i18n("Wrap Text"), "multirow",
@@ -670,7 +666,7 @@ void View::Private::initActions()
   actions->borderColor->setToolTip( i18n( "Select a new border color" ) );
 
   actions->selectStyle = new KSelectAction( i18n( "St&yle" ),
-      0, ac, "stylemenu" );
+      ac, "stylemenu" );
   actions->selectStyle->setToolTip( i18n( "Apply a predefined style to the selected cells" ) );
   QObject::connect( actions->selectStyle, SIGNAL( activated( const QString & ) ),
       view, SLOT( styleSelected( const QString & ) ) );
@@ -931,7 +927,7 @@ void View::Private::initActions()
   actions->definePrintRange->setToolTip(i18n("Define the print range in the current sheet"));
 
   actions->showPageBorders = new KToggleAction( i18n("Show Page Borders"),
-      0, ac, "showPageBorders");
+      ac, "showPageBorders");
   actions->showPageBorders->setCheckedState(i18n("Hide Page Borders"));
   QObject::connect( actions->showPageBorders, SIGNAL( toggled( bool ) ),
       view, SLOT( togglePageBorders( bool ) ) );
@@ -946,13 +942,13 @@ void View::Private::initActions()
   actions->recalcWorkbook->setToolTip(i18n("Recalculate the value of every cell in all worksheets"));
 
   actions->protectSheet = new KToggleAction( i18n( "Protect &Sheet..." ),
-      0, ac, "protectSheet" );
+      ac, "protectSheet" );
   actions->protectSheet->setToolTip( i18n( "Protect the sheet from being modified" ) );
   QObject::connect( actions->protectSheet, SIGNAL( toggled( bool ) ),
       view, SLOT( toggleProtectSheet( bool ) ) );
 
   actions->protectDoc = new KToggleAction( i18n( "Protect &Document..." ),
-      0, ac, "protectDoc" );
+      ac, "protectDoc" );
   actions->protectDoc->setToolTip( i18n( "Protect the document from being modified" ) );
   QObject::connect( actions->protectDoc, SIGNAL( toggled( bool ) ),
       view, SLOT( toggleProtectDoc( bool ) ) );
@@ -1009,7 +1005,7 @@ void View::Private::initActions()
   actions->spellChecking->setToolTip(i18n("Check the spelling"));
 
   actions->formulaSelection = new KSelectAction(i18n("Formula Selection"),
-      0, ac, "formulaSelection");
+      ac, "formulaSelection");
   actions->formulaSelection->setToolTip(i18n("Insert a function"));
   QStringList lst;
   lst.append( "SUM");
@@ -1081,21 +1077,21 @@ void View::Private::initActions()
   // -- settings actions --
 
   actions->showStatusBar = new KToggleAction( i18n("Show Status Bar"),
-      0, ac, "showStatusBar" );
+      ac, "showStatusBar" );
   actions->showStatusBar->setCheckedState(i18n("Hide Status Bar"));
   QObject::connect( actions->showStatusBar, SIGNAL( toggled( bool ) ),
       view, SLOT( showStatusBar( bool ) ) );
   actions->showStatusBar->setToolTip(i18n("Show the status bar"));
 
   actions->showTabBar = new KToggleAction( i18n("Show Tab Bar"),
-      0, ac, "showTabBar" );
+      ac, "showTabBar" );
   actions->showTabBar->setCheckedState(i18n("Hide Tab Bar"));
   QObject::connect( actions->showTabBar, SIGNAL( toggled( bool ) ),
       view, SLOT( showTabBar( bool ) ) );
   actions->showTabBar->setToolTip(i18n("Show the tab bar"));
 
   actions->showFormulaBar = new KToggleAction( i18n("Show Formula Bar"),
-      0, ac, "showFormulaBar" );
+      ac, "showFormulaBar" );
   actions->showFormulaBar->setCheckedState(i18n("Hide Formula Bar"));
   QObject::connect( actions->showFormulaBar, SIGNAL( toggled( bool ) ),
       view, SLOT( showFormulaBar( bool ) ) );
@@ -1107,46 +1103,40 @@ void View::Private::initActions()
 
   // -- running calculation actions --
 
-  actions->calcNone = new KToggleAction( i18n("None"), 0, ac, "menu_none");
+  QActionGroup* groupCalc = new QActionGroup( view );
+  actions->calcNone = new KToggleAction( i18n("None"), ac, "menu_none", groupCalc );
   QObject::connect( actions->calcNone, SIGNAL( toggled( bool ) ),
       view, SLOT( menuCalc( bool ) ) );
-  actions->calcNone->setExclusiveGroup( "Calc" );
   actions->calcNone->setToolTip(i18n("No calculation"));
 
-  actions->calcSum = new KToggleAction( i18n("Sum"), 0, ac, "menu_sum");
+  actions->calcSum = new KToggleAction( i18n("Sum"), ac, "menu_sum", groupCalc );
   QObject::connect( actions->calcSum, SIGNAL( toggled( bool ) ),
       view, SLOT( menuCalc( bool ) ) );
-  actions->calcSum->setExclusiveGroup( "Calc" );
   actions->calcSum->setToolTip(i18n("Calculate using sum"));
 
-  actions->calcMin = new KToggleAction( i18n("Min"), 0, ac, "menu_min");
+  actions->calcMin = new KToggleAction( i18n("Min"), ac, "menu_min", groupCalc );
   QObject::connect( actions->calcMin, SIGNAL( toggled( bool ) ),
       view, SLOT( menuCalc( bool ) ) );
-  actions->calcMin->setExclusiveGroup( "Calc" );
   actions->calcMin->setToolTip(i18n("Calculate using minimum"));
 
-  actions->calcMax = new KToggleAction( i18n("Max"), 0, ac, "menu_max");
+  actions->calcMax = new KToggleAction( i18n("Max"), ac, "menu_max", groupCalc );
   QObject::connect( actions->calcMax, SIGNAL( toggled( bool ) ),
       view, SLOT( menuCalc( bool ) ) );
-  actions->calcMax->setExclusiveGroup( "Calc" );
   actions->calcMax->setToolTip(i18n("Calculate using maximum"));
 
-  actions->calcAverage = new KToggleAction( i18n("Average"), 0, ac, "menu_average");
+  actions->calcAverage = new KToggleAction( i18n("Average"), ac, "menu_average", groupCalc );
   QObject::connect( actions->calcAverage, SIGNAL( toggled( bool ) ),
       view, SLOT( menuCalc( bool ) ) );
-  actions->calcAverage->setExclusiveGroup( "Calc" );
   actions->calcAverage->setToolTip(i18n("Calculate using average"));
 
-  actions->calcCount = new KToggleAction( i18n("Count"), 0, ac, "menu_count");
+  actions->calcCount = new KToggleAction( i18n("Count"), ac, "menu_count", groupCalc );
   QObject::connect( actions->calcCount, SIGNAL( toggled( bool ) ),
       view, SLOT( menuCalc( bool ) ) );
-  actions->calcCount->setExclusiveGroup( "Calc" );
   actions->calcCount->setToolTip(i18n("Calculate using the count"));
 
-  actions->calcCountA = new KToggleAction( i18n("CountA"), 0, ac, "menu_counta");
+  actions->calcCountA = new KToggleAction( i18n("CountA"), ac, "menu_counta", groupCalc );
   QObject::connect( actions->calcCountA, SIGNAL( toggled( bool ) ),
       view, SLOT( menuCalc( bool ) ) );
-  actions->calcCountA->setExclusiveGroup( "Calc" );
   actions->calcCountA->setToolTip(i18n("Calculate using the countA"));
 
   // -- special action, only for developers --
@@ -1396,7 +1386,7 @@ void View::Private::updateButton( Cell *cell, int column, int row)
       adjustActions( activeSheet, cell );
 }
 
-Q3Button* View::Private::newIconButton( const char *_file, bool _kbutton, QWidget *_parent )
+QAbstractButton* View::Private::newIconButton( const char *_file, bool _kbutton, QWidget *_parent )
 {
   if ( _parent == 0L )
     _parent = view;
