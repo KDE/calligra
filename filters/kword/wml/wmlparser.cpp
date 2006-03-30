@@ -406,7 +406,7 @@ WMLFormat& WMLFormat::operator=( const WMLFormat& f )
 // paragraph layout info
 WMLLayout::WMLLayout()
 {
-  align = Qt::DockLeft;
+  align = Left;
 }
 
 void WMLLayout::assign( const WMLLayout& l )

@@ -13,7 +13,7 @@ kde4_add_plugin(wmlimport WITH_PREFIX ${wmlimport_PART_SRCS})
 
 kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} wmlimport )
 
-target_link_libraries(wmlimport  ${KDE4_KDECORE_LIBS} )
+target_link_libraries(wmlimport  ${KDE4_KDECORE_LIBS} kofficecore kwordexportfilters)
 
 install_targets(${LIB_INSTALL_DIR}/kde4 wmlimport )
 
@@ -28,7 +28,7 @@ kde4_add_plugin(wmlexport WITH_PREFIX ${wmlexport_PART_SRCS})
 
 kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} wmlexport )
 
-target_link_libraries(wmlexport  ${KDE4_KDECORE_LIBS} )
+target_link_libraries(wmlexport  ${KDE4_KDECORE_LIBS} kwordexportfilters kofficecore )
 
 install_targets(${LIB_INSTALL_DIR}/kde4 wmlexport )
 

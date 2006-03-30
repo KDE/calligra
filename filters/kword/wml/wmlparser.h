@@ -39,7 +39,7 @@ class WMLFormat
 class WMLLayout
 {
   public:
-    enum { Qt::DockLeft, Center, Qt::DockRight } align;
+    enum { Left, Center, Right } align;
     WMLLayout();
     WMLLayout( const WMLLayout& );
     WMLLayout& operator=( const WMLLayout& );
