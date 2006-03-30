@@ -132,8 +132,8 @@ void PNGExportDia::heightChanged( int height )
 void PNGExportDia::percentWidthChanged( double percent )
 {
     disconnectAll();
-    percent = qMin( percent, 1000 );
-    percent = qMax( percent, 10 );
+    percent = qMin( percent, 1000.0 );
+    percent = qMax( percent, 10.0 );
     int width = static_cast<int>( realWidth*percent/100. );
     widthEdit->setValue(  width  );
     if ( proportional->isChecked() ) {
@@ -147,8 +147,8 @@ void PNGExportDia::percentWidthChanged( double percent )
 void PNGExportDia::percentHeightChanged( double percent )
 {
     disconnectAll();
-    percent = qMin( percent, 1000 );
-    percent = qMax( percent, 10 );
+    percent = qMin( percent, 1000.0 );
+    percent = qMax( percent, 10.0);
     if ( proportional->isChecked() ) {
         int width = static_cast<int>( realWidth*percent/100. );
         widthEdit->setValue(  width  );
@@ -208,7 +208,7 @@ void PNGExportDia::setupGUI()
     percWidthEdit = new KDoubleNumInput( page );
     percHeightEdit = new KDoubleNumInput( page );
 
-    Q3GridLayout* layout2 = new Q3GridLayout;
+    Q3GridLayout* layout2 = new Q3GridLayout(page);
     layout2->addWidget( percWidthEdit, 0, 1 );
     layout2->addWidget( percHeightEdit, 1, 1 );
     layout2->addWidget( percentHeight, 1, 0 );

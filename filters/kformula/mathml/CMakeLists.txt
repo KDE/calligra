@@ -13,7 +13,7 @@ kde4_add_plugin(kfomathmlexport WITH_PREFIX ${kfomathmlexport_PART_SRCS})
 
 kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kfomathmlexport )
 
-target_link_libraries(kfomathmlexport  ${KDE4_KDECORE_LIBS} )
+target_link_libraries(kfomathmlexport  ${KDE4_KDECORE_LIBS} kofficecore kformulalib)
 
 install_targets(${LIB_INSTALL_DIR}/kde4 kfomathmlexport )
 
@@ -28,7 +28,7 @@ kde4_add_plugin(kfomathmlimport WITH_PREFIX ${kfomathmlimport_PART_SRCS})
 
 kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kfomathmlimport )
 
-target_link_libraries(kfomathmlimport  ${KDE4_KDECORE_LIBS} )
+target_link_libraries(kfomathmlimport  ${KDE4_KDECORE_LIBS} kofficecore kformulalib )
 
 install_targets(${LIB_INSTALL_DIR}/kde4 kfomathmlimport )
 
