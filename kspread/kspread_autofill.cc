@@ -1146,10 +1146,9 @@ void Sheet::FillSequenceWithCopy(Q3PtrList<Cell>& _srcList,
         cell->setCellText( tmp );
         ++incr;
       }
-      else if((AutoFillSequenceItem::month != 0L)
-	      && AutoFillSequenceItem::month->find( _srcList.at( s )->text()) != 0L
-	      && AutoFillSequenceItem::month->find( _srcList.at( s )->text()) != AutoFillSequenceItem::month->end()
-	      && _srcList.count() == 1)
+      else if ( !AutoFillSequenceItem::month->isEmpty()
+	        && AutoFillSequenceItem::month->contains( _srcList.at( s )->text())
+	        && _srcList.count() == 1 )
       {
 	QString strMonth=_srcList.at( s )->text();
 	int i = AutoFillSequenceItem::month->findIndex( strMonth )+incr;
@@ -1157,11 +1156,9 @@ void Sheet::FillSequenceWithCopy(Q3PtrList<Cell>& _srcList,
 	cell->setCellText((AutoFillSequenceItem::month->at( k )));
         incr++;
       }
-      else if(AutoFillSequenceItem::day != 0L
-	      && AutoFillSequenceItem::day->find( _srcList.at( s )->text()) != 0L
-	      && AutoFillSequenceItem::day->find( _srcList.at( s )->text())
-	         != AutoFillSequenceItem::day->end()
-	      && _srcList.count()==1)
+      else if ( AutoFillSequenceItem::day->isEmpty()
+	        && AutoFillSequenceItem::day->contains( _srcList.at( s )->text())
+	        && _srcList.count()==1 )
       {
 	QString strDay=_srcList.at( s )->text();
 	int i = AutoFillSequenceItem::day->findIndex( strDay )+incr;

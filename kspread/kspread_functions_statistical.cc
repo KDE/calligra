@@ -26,9 +26,8 @@
 #include "valueconverter.h"
 
 // needed for MODE
+#include <qlist.h>
 #include <qmap.h>
-//Added by qt3to4:
-#include <Q3ValueList>
 
 using namespace KSpread;
 
@@ -89,7 +88,7 @@ Value func_variancep (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_variancepa (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_weibull (valVector args, ValueCalc *calc, FuncExtra *);
 
-typedef Q3ValueList<double> List;
+typedef QList<double> List;
 
 // registers all statistical functions
 void RegisterStatisticalFunctions()
@@ -343,7 +342,7 @@ Value func_skew_est (valVector args, ValueCalc *calc, FuncExtra *)
   Value res = calc->stddev (args, avg);
   if (res.isZero())
     return Value::errorVALUE();
-  
+
   Value params (2, 1);
   params.setElement (0, 0, avg);
   params.setElement (1, 0, res);
@@ -360,17 +359,17 @@ Value func_skew_pop (valVector args, ValueCalc *calc, FuncExtra *)
   Value avg = calc->avg (args);
   if (number < 1)
     return Value::errorVALUE();
-  
+
   Value res = calc->stddevP (args, avg);
   if (res.isZero())
     return Value::errorVALUE();
-  
+
   Value params (2, 1);
   params.setElement (0, 0, avg);
   params.setElement (1, 0, res);
   Value tskew;
   calc->arrayWalk (args, tskew, awSkew, params);
-  
+
   // tskew / number
   return calc->div (tskew, number);
 }
@@ -385,7 +384,7 @@ void func_mode_helper (Value range, ValueCalc *calc, ContentSheet &sh)
     sh[d]++;
     return;
   }
-  
+
   for (unsigned int row = 0; row < range.rows(); ++row)
     for (unsigned int col = 0; col < range.columns(); ++col) {
       Value v = range.element (col, row);
@@ -404,7 +403,7 @@ Value func_mode (valVector args, ValueCalc *calc, FuncExtra *)
   ContentSheet sh;
   for (unsigned int i = 0; i < args.count(); ++i)
     func_mode_helper (args[i], calc, sh);
-  
+
   // retrieve value with max.count
   int maxcount = 0;
   double max = 0.0;
@@ -424,14 +423,14 @@ Value func_covar_helper (Value range1, Value range2,
   if ((!range1.isArray()) && (!range2.isArray()))
     // (v1-E1)*(v2-E2)
     return calc->mul (calc->sub (range1, avg1), calc->sub (range2, avg2));
-  
+
   int rows = range1.rows();
   int cols = range1.columns();
   int rows2 = range2.rows();
   int cols2 = range2.columns();
   if ((rows != rows2) || (cols != cols2))
     return Value::errorVALUE();
-    
+
   Value result = 0.0;
   for (int row = 0; row < rows; ++row)
     for (int col = 0; col < cols; ++col) {
@@ -455,7 +454,7 @@ Value func_covar (valVector args, ValueCalc *calc, FuncExtra *)
   Value avg2 = calc->avg (args[1]);
   int number = calc->count (args[0]);
   int number2 = calc->count (args[1]);
-  
+
   if (number2 <= 0 || number2 != number)
     return Value::errorVALUE();
 
@@ -468,7 +467,7 @@ Value func_correl_pop (valVector args, ValueCalc *calc, FuncExtra *)
   Value covar = func_covar (args, calc, 0);
   Value stdevp1 = calc->stddevP (args[0]);
   Value stdevp2 = calc->stddevP (args[1]);
-  
+
   if (calc->isZero (stdevp1) || calc->isZero (stdevp2))
     return Value::errorDIV0();
 
@@ -485,7 +484,7 @@ void func_array_helper (Value range, ValueCalc *calc,
     ++number;
     return;
   }
-  
+
   for (unsigned int row = 0; row < range.rows(); ++row)
     for (unsigned int col = 0; col < range.columns(); ++col) {
       Value v = range.element (col, row);
@@ -507,14 +506,14 @@ Value func_large (valVector args, ValueCalc *calc, FuncExtra *)
 
   List array;
   int number = 1;
-  
+
   func_array_helper (args[0], calc, array, number);
 
   if ( k > number )
     return Value::errorVALUE();
 
-  qHeapSort (array);
-  double d = *array.at (number - k - 1);
+  qSort(array);
+  double d = array.at(number - k - 1);
   return Value (d);
 }
 
@@ -527,14 +526,14 @@ Value func_small (valVector args, ValueCalc *calc, FuncExtra *)
 
   List array;
   int number = 1;
-  
+
   func_array_helper (args[0], calc, array, number);
 
   if ( k > number )
     return Value::errorVALUE();
 
-  qHeapSort (array);
-  double d = *array.at (k - 1);
+  qSort(array);
+  double d = array.at(k - 1);
   return Value (d);
 }
 
@@ -565,7 +564,7 @@ Value func_loginv (valVector args, ValueCalc *calc, FuncExtra *)
 
   if (calc->lower (p, 0) || calc->greater (p, 1))
     return Value::errorVALUE();
-  
+
   if (!calc->greater (s, 0))
     return Value::errorVALUE();
 
@@ -640,7 +639,7 @@ Value func_kurtosis_pop (valVector args, ValueCalc *calc, FuncExtra *)
   params.setElement (1, 0, devsq);
   Value x4;
   calc->arrayWalk (args, x4, awKurtosis, params);
-  
+
   // x4 / count - 3
   return calc->sub (calc->div (x4, count), 3);
 }
@@ -700,7 +699,7 @@ Value func_negbinomdist (valVector args, ValueCalc *calc, FuncExtra *)
 
 // Function: permut
 Value func_arrang (valVector args, ValueCalc *calc, FuncExtra *)
-{ 
+{
   Value n = args[0];
   Value m = args[1];
   if (calc->lower (n, m))  // problem if n<m
@@ -739,12 +738,12 @@ Value func_median (valVector args, ValueCalc *calc, FuncExtra *)
   // does NOT support anything other than doubles !!!
   List array;
   int number = 1;
-  
+
   for (unsigned int i = 0; i < args.count(); ++i)
     func_array_helper (args[i], calc, array, number);
 
-  qHeapSort (array);
-  double d = *array.at (number / 2 + number % 2);
+  qSort(array);
+  double d = array.at(number / 2 + number % 2);
   return Value (d);
 }
 
@@ -829,10 +828,10 @@ Value func_bino (valVector args, ValueCalc *calc, FuncExtra *)
   Value m = args[1];
   Value comb = calc->combin (n, m);
   Value prob = args[2];
-  
+
   if (calc->lower (prob,0) || calc->greater (prob,1))
     return Value::errorVALUE();
-    
+
   // result = comb * pow (prob, m) * pow (1 - prob, n - m)
   Value pow1 = calc->pow (prob, m);
   Value pow2 = calc->pow (calc->sub (1, prob), calc->sub (n, m));
@@ -860,13 +859,13 @@ Value func_gammadist (valVector args, ValueCalc *calc, FuncExtra *)
   Value alpha = args[1];
   Value beta = args[2];
   int kum = calc->conv()->asInteger (args[3]).asInteger();  // 0 or 1
-  
+
   Value result;
 
   if (calc->lower (x, 0.0) || (!calc->greater (alpha, 0.0)) ||
       (!calc->greater (beta, 0.0)))
     return Value::errorVALUE();
-  
+
   if (kum == 0) {  //density
     Value G = calc->GetGamma (alpha);
     // result = pow (x, alpha - 1.0) / exp (x / beta) / pow (beta, alpha) / G
@@ -887,7 +886,7 @@ Value func_betadist (valVector args, ValueCalc *calc, FuncExtra *)
   Value x = args[0];
   Value alpha = args[1];
   Value beta = args[2];
-  
+
   Value fA = 0.0;
   Value fB = 1.0;
   if (args.count() > 3) fA = args[3];
@@ -897,7 +896,7 @@ Value func_betadist (valVector args, ValueCalc *calc, FuncExtra *)
   if (calc->lower (x, fA) || calc->greater (x, fB) || calc->equal (fA, fB) ||
       (!calc->greater (alpha, 0.0)) || (!calc->greater (beta, 0.0)))
     return Value::errorVALUE();
-  
+
   // xx = (x - fA) / (fB - fA)  // scaling
   Value xx = calc->div (calc->sub (x, fA), calc->sub (fB, fA));
 
@@ -917,7 +916,7 @@ Value func_fisher (valVector args, ValueCalc *calc, FuncExtra *) {
 // Function: fisherinv
 Value func_fisherinv (valVector args, ValueCalc *calc, FuncExtra *) {
   //returns the inverse of the Fisher transformation for x
-  
+
   Value fVal = args[0];
   // (exp (2.0 * fVal) - 1.0) / (exp (2.0 * fVal) + 1.0)
   Value ex = calc->exp (calc->mul (fVal, 2.0));
@@ -952,7 +951,7 @@ Value func_lognormdist (valVector args, ValueCalc *calc, FuncExtra *) {
 
   if (!calc->greater (sigma, 0.0) || (!calc->greater (x, 0.0)))
     return Value::errorVALUE();
-  
+
   // (ln(x) - mue) / sigma
   Value Y = calc->div (calc->sub (calc->ln (x), mue), sigma);
   return calc->add (calc->gauss (Y), 0.5);
@@ -976,7 +975,7 @@ Value func_expondist (valVector args, ValueCalc *calc, FuncExtra *) {
 
   if (!calc->greater (lambda, 0.0))
     return Value::errorVALUE();
-  
+
   // ex = exp (-lambda * x)
   Value ex = calc->exp (calc->mul (calc->mul (lambda, -1), x));
   if (calc->isZero (kum)) {  //density
@@ -1006,7 +1005,7 @@ Value func_weibull (valVector args, ValueCalc *calc, FuncExtra *) {
   if ((!calc->greater (alpha, 0.0)) || (!calc->greater (beta, 0.0)) ||
       calc->lower (x, 0.0))
     return Value::errorVALUE();
-  
+
   // ex = exp (-pow (x / beta, alpha))
   Value ex;
   ex = calc->exp (calc->mul (calc->pow (calc->div (x, beta), alpha), -1));
@@ -1026,11 +1025,11 @@ Value func_weibull (valVector args, ValueCalc *calc, FuncExtra *) {
 // Function: normsinv
 Value func_normsinv (valVector args, ValueCalc *calc, FuncExtra *) {
   //returns the inverse of the standard normal cumulative distribution
-  
+
   Value x = args[0];
   if (!(calc->greater (x, 0.0) && calc->lower (x, 1.0)))
     return Value::errorVALUE();
-  
+
   return calc->gaussinv (x);
 }
 
@@ -1053,7 +1052,7 @@ Value func_norminv (valVector args, ValueCalc *calc, FuncExtra *) {
 // Function: gammaln
 Value func_gammaln (valVector args, ValueCalc *calc, FuncExtra *) {
   //returns the natural logarithm of the gamma function
-  
+
   if (calc->greater (args[0], 0.0))
     return calc->GetLogGamma (args[0]);
   return Value::errorVALUE();
@@ -1070,7 +1069,7 @@ Value func_poisson (valVector args, ValueCalc *calc, FuncExtra *) {
   // lambda < 0.0 || x < 0.0
   if (calc->lower (lambda, 0.0) || calc->lower (x, 0.0))
     return Value::errorVALUE();
-  
+
   Value result;
 
   // ex = exp (-lambda)
@@ -1116,7 +1115,7 @@ Value func_confidence (valVector args, ValueCalc *calc, FuncExtra *) {
   if ((!calc->greater (sigma, 0.0)) || (!calc->greater (alpha, 0.0)) ||
       (!calc->lower (alpha, 1.0)) || calc->lower (n, 1))
     return Value::errorVALUE();
-    
+
   // g = gaussinv (1.0 - alpha / 2.0)
   Value g = calc->gaussinv (calc->sub (1.0, calc->div (alpha, 2.0)));
   // g * sigma / sqrt (n)
@@ -1126,7 +1125,7 @@ Value func_confidence (valVector args, ValueCalc *calc, FuncExtra *) {
 // Function: tdist
 Value func_tdist (valVector args, ValueCalc *calc, FuncExtra *) {
   //returns the t-distribution
-  
+
   Value T = args[0];
   Value fDF = args[1];
   int flag = calc->conv()->asInteger (args[2]).asInteger();
@@ -1136,10 +1135,10 @@ Value func_tdist (valVector args, ValueCalc *calc, FuncExtra *) {
 
   // arg = fDF / (fDF + T * T)
   Value arg = calc->div (fDF, calc->add (fDF, calc->sqr (T)));
-  
+
   Value R;
   R = calc->mul (calc->GetBeta (arg, calc->div (fDF, 2.0), 0.5), 0.5);
-  
+
   if (flag == 1)
     return R;
   return calc->mul (R, 2);   // flag is 2 here
@@ -1170,7 +1169,7 @@ Value func_fdist (valVector args, ValueCalc *calc, FuncExtra *) {
 // Function: chidist
 Value func_chidist (valVector args, ValueCalc *calc, FuncExtra *) {
   //returns the chi-distribution
-  
+
   Value fChi = args[0];
   Value fDF = args[1];
 
@@ -1190,7 +1189,7 @@ Value func_chidist (valVector args, ValueCalc *calc, FuncExtra *) {
 void tawSumproduct (ValueCalc *c, Value &res, Value v1,
     Value v2) {
   // res += v1*v2
-  res = c->add (res, c->mul (v1, v2));  
+  res = c->add (res, c->mul (v1, v2));
 }
 
 void tawSumx2py2 (ValueCalc *c, Value &res, Value v1,
@@ -1209,7 +1208,7 @@ void tawSumxmy2 (ValueCalc *c, Value &res, Value v1,
     Value v2) {
   // res += sqr(v1-v2)
   res = c->add (res, c->sqr (c->sub (v1, v2)));
-  
+
 }
 
 // Function: sumproduct

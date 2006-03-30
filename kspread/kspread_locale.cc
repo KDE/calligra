@@ -7,7 +7,7 @@ using namespace KSpread;
 Locale::Locale()
 	: KLocale("kspread")
 {
-	insertCatalogue("koffice");
+	insertCatalog("koffice");
 }
 
 void Locale::load( const QDomElement& element )
