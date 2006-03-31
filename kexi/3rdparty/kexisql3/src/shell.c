@@ -80,7 +80,6 @@ static char *Argv0;
 static char mainPrompt[20];     /* First line prompt. default: "sqlite> "*/
 static char continuePrompt[20]; /* Continuation prompt. default: "   ...> " */
 
-
 /*
 ** Determines if a string is a number of not.
 */
@@ -1580,6 +1579,9 @@ static const char zOptions[] =
   "   -list                set output mode to 'list'\n"
   "   -separator 'x'       set output field separator (|)\n"
   "   -nullvalue 'text'    set text string for NULL values\n"
+  "   -verbose-vacuum      set VACUUM to verbose, interactive mode\n"
+  "                         so it is possible to get progress info\n"
+  "                         and abort the process\n"
   "   -version             show SQLite version\n"
   "   -help                show this text, also show dot-commands\n"
 ;
@@ -1696,6 +1698,8 @@ int main(int argc, char **argv){
       data.showHeader = 0;
     }else if( strcmp(z,"-echo")==0 ){
       data.echoOn = 1;
+    }else if( strcmp(z,"-verbose-vacuum")==0 ){ /*(jstaniek)*/
+      sqlite_set_verbose_vacuum(1);
     }else if( strcmp(z,"-version")==0 ){
       printf("%s\n", sqlite3_libversion());
       return 1;
@@ -1730,7 +1734,7 @@ int main(int argc, char **argv){
       char *zHome;
       char *zHistory = 0;
       printf(
-        "SQLite version %s (bundled with Kexi)\n"
+        "SQLite version %s (customized, bundled with Kexi)\n"
         "Enter \".help\" for instructions\n",
         sqlite3_libversion()
       );

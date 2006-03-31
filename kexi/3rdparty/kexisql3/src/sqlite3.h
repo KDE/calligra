@@ -1164,6 +1164,12 @@ int sqlite3_rekey(
 */
 extern const char *sqlite3_temp_directory;
 
+/* (jstaniek) used in vacuum.c, set==1 sets VACUUM to verbose, 
+** interactive mode, so it is possible to get progress info and abort 
+** the process. Usable for GUI apps.
+*/
+void sqlite_set_verbose_vacuum(int set);
+
 #ifdef __cplusplus
 }  /* End of the 'extern "C"' block */
 #endif
