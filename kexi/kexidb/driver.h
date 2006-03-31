@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003-2004 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2006 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -31,6 +31,7 @@ class KService;
 
 namespace KexiDB {
 
+class AdminTools;
 class Connection;
 class ConnectionData;
 class ConnectionInternal;
@@ -78,20 +79,22 @@ class KEXI_DB_EXPORT Driver : public QObject, public KexiDB::Object
 		/*! Features supported by driver (sum of few Features enum items). */
 		enum Features {
 			NoFeatures = 0,
-			//! if single trasactions are only supported
+			//! single trasactions are only supported
 			SingleTransactions = 1,   
-			//! if multiple concurent trasactions are supported
+			//! multiple concurent trasactions are supported
 			//! (this implies !SingleTransactions)
 			MultipleTransactions = 2, 
 //(js) NOT YET IN USE:
-			/*! if nested trasactions are supported
+			/*! nested trasactions are supported
 			 (this should imply !SingleTransactions and MultipleTransactions) */
 			NestedTransactions = 4,
-			/*! if forward moving is supported for cursors
+			/*! forward moving is supported for cursors
 			 (if not available, no cursors available at all) */
 			CursorForward = 8, 
-			/*! if backward moving is supported for cursors (this implies CursorForward) */
+			/*! backward moving is supported for cursors (this implies CursorForward) */
 			CursorBackward = (CursorForward+16),
+			/*! compacting database supported (aka VACUUM) */
+			CompactingDatabaseSupported = 32,
 			//-- temporary options: can be removed later, use at your own risk --
 			/*! If set, actions related to transactions will be silently bypassed
 			 with success. Set this if your driver does not support transactions at all
@@ -181,7 +184,12 @@ class KEXI_DB_EXPORT Driver : public QObject, public KexiDB::Object
 		/*! \return true if transaction are supported (single or 
 		 multiple). */
 		bool transactionsSupported() const;
-		
+
+		/*! \return admin tools object providing a number of database administration 
+		 tools for the driver. Tools availablility varies from driver to driver. 
+		 You can check it using features().  */
+		AdminTools& adminTools() const;
+
 		/*! SQL-implementation-dependent name of given type */
 		virtual QString sqlTypeName(int id_t, int p=0) const;
 
@@ -320,6 +328,15 @@ class KEXI_DB_EXPORT Driver : public QObject, public KexiDB::Object
 		 a given driver implementation. For implementation.*/
 		virtual bool drv_isSystemFieldName( const QString& n ) const = 0;
 		
+		/* Creates admin tools object providing a number of database administration 
+		 tools for the driver. This is called once per driver.
+
+		 Note for driver developers: Reimplement this method by returning 
+		 KexiDB::AdminTools-derived object. Default implementation creates 
+		 empty admin tools. 
+		 @see adminTools() */
+		virtual AdminTools* drv_createAdminTools() const;
+
 		/*! \return connection \a conn , do not deletes it nor affect.
 		 Returns 0 if \a conn is not owned by this driver.
 		 After this, you are owner of \a conn object, so you should

@@ -8,7 +8,7 @@ INCLUDES = -I$(top_srcdir)/kexi/3rdparty/kexisql3/src -I$(srcdir)/../..  \
 kexidb_sqlite3driver_la_METASOURCES = AUTO
 
 kexidb_sqlite3driver_la_SOURCES = sqliteconnection.cpp sqlitedriver.cpp sqlitecursor.cpp \
-sqlitekeywords.cpp sqlitepreparedstatement.cpp
+sqlitekeywords.cpp sqlitepreparedstatement.cpp sqliteadmin.cpp
 
 kexidb_sqlite3driver_la_LIBADD = $(LIB_KPARTS) $(LIB_QT) \
  $(top_builddir)/kexi/3rdparty/kexisql3/src/libkexisql3.la \

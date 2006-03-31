@@ -59,6 +59,7 @@
 #include <kexidb/utils.h>
 #include <kexidb/cursor.h>
 #include <kexidb/dbobjectnamevalidator.h>
+#include <kexidb/admin.h>
 #include <kexiutils/utils.h>
 
 //#include "projectsettingsui.h"
@@ -123,10 +124,6 @@
 //temporary fix to manage layout
 #include "ksplitter.h"
 #define KDOCKWIDGET_P 1
-
-//#ifndef KEXI_NO_MIGRATION
-//#include "migration/importwizard.h"
-//#endif
 
 #ifndef KEXI_NO_FEEDBACK_AGENT
 #ifdef FEEDBACK_INCLUDE
@@ -489,17 +486,19 @@ void KexiMainWindowImpl::initActions()
 #else
 	d->action_project_relations = d->dummy_action;
 #endif
-#ifndef KEXI_NO_MIGRATION
 	d->action_tools_data_migration = new KAction(
 		i18n("&Import Database..."), "database_import", 0,
 		this, SLOT(slotToolsProjectMigration()), actionCollection(), "tools_import_project");
 	d->action_tools_data_migration->setToolTip(i18n("Import entire database as a Kexi Project"));
 	d->action_tools_data_migration->setWhatsThis(i18n("Imports entire database as a Kexi Project."));
-#else
-	d->action_tools_data_migration = d->dummy_action;
-#endif
 
-#ifndef KEXI_NO_CSV_IMPORT
+	d->action_tools_compact_database = new KAction(
+		i18n("&Compact Database..."), "", 0,
+		this, SLOT(slotToolsCompactDatabase()), actionCollection(), "tools_compact_database");
+	d->action_tools_compact_database->setToolTip(i18n("Compact the current database project"));
+	d->action_tools_compact_database->setWhatsThis(
+		i18n("Compacts the current database project, so it will take less space and work faster."));
+
 	d->action_project_import_data_table = new KAction(
 		i18n("Import->Table Data From File...", "Table Data From &File..."),
 		"table"/*! @todo: change to "file_import" or so*/,
@@ -507,9 +506,7 @@ void KexiMainWindowImpl::initActions()
 		"project_import_data_table");
 	d->action_project_import_data_table->setToolTip(i18n("Import table data from a file"));
 	d->action_project_import_data_table->setWhatsThis(i18n("Imports table data from a file."));
-#else
-	d->action_project_import_data_table = d->dummy_action;
-#endif
+
 	d->action_project_export_data_table = new KAction(i18n("Export->Table or Query Data to File...", 
 		"Table or Query Data to &File..."),
 		"table"/*! @todo: change to "file_export" or so*/,
@@ -551,7 +548,6 @@ void KexiMainWindowImpl::initActions()
 	d->action_edit_copy = createSharedAction( KStdAction::Copy, "edit_copy");
 	d->action_edit_paste = createSharedAction( KStdAction::Paste, "edit_paste");
 
-#ifndef KEXI_NO_CSV_IMPORT
 	d->action_edit_paste_special_data_table = 
 		new KAction(i18n("Paste Special->As Data &Table...", "As Data &Table..."),
 		"table", 0, this, SLOT(slotEditPasteSpecialDataTable()),
@@ -560,9 +556,7 @@ void KexiMainWindowImpl::initActions()
 		i18n("Paste clipboard data as a table"));
 	d->action_edit_paste_special_data_table->setWhatsThis(
 		i18n("Pastes clipboard data to a table."));
-#else
-	d->action_edit_paste_special_data_table = d->dummy_action;
-#endif
+
 	d->action_edit_copy_special_data_table =
 		new KAction(i18n("Copy Special->Table or Query Data...", 
 			"Table or Query As Data Table..."),
@@ -873,9 +867,10 @@ void KexiMainWindowImpl::invalidateProjectWideActions()
 		d->createMenu->setEnabled(d->prj);
 
 	//TOOLS MENU
-//#ifndef KEXI_NO_MIGRATION
-//	d->action_tools_data_migration->setEnabled(d->prj);
-//#endif
+	// "compact db" supported if there's no db or the current db supports compacting and is opened r/w:
+	d->action_tools_compact_database->setEnabled( 
+		!d->prj || !readOnly && d->prj && d->prj->dbConnection() 
+		&& (d->prj->dbConnection()->driver()->features() & KexiDB::Driver::CompactingDatabaseSupported) );
 
 	//WINDOW MENU
 	if (d->action_window_next) {
@@ -2636,102 +2631,6 @@ void KexiMainWindowImpl::slotViewTextMode()
 	switchToViewMode(Kexi::TextViewMode);
 }
 
-/*
-void
-KexiMainWindowImpl::showSorryMessage(const QString &title, const QString &details)
-{
-	showMessage(KMessageBox::Sorry, title, details);
-}
-
-void
-KexiMainWindowImpl::showErrorMessage(const QString &title, const QString &details)
-{
-	showMessage(KMessageBox::Error, title, details);
-}
-
-void
-KexiMainWindowImpl::showMessage(KMessageBox::DialogType dlgType,
-	const QString &title, const QString &details)
-{
-	if (d->disableErrorMessages)
-		return;
-	QString msg = title;
-	if (title.isEmpty())
-		msg = i18n("Unknown error");
-	msg = "<qt><p>"+msg+"</p>";
-	if (!details.isEmpty()) {
-		switch (dlgType) {
-		case KMessageBox::Error:
-			KMessageBox::detailedError(this, msg, details);
-			break;
-		default:
-			KMessageBox::detailedSorry(this, msg, details);
-		}
-	}
-	else {
-		KMessageBox::messageBox(this, dlgType, msg);
-	}
-}
-
-void
-KexiMainWindowImpl::showErrorMessage(const QString &msg, KexiDB::Object *obj)
-{
-	QString _msg = msg;
-	if (!obj) {
-		showErrorMessage(_msg);
-		return;
-	}
-	QString details;
-	KexiDB::getHTMLErrorMesage(obj, _msg, details);
-	showErrorMessage(_msg, details);
-}
-
-void KexiMainWindowImpl::showErrorMessage(const QString &msg, const QString &details, KexiDB::Object *obj)
-{
-	QString _msg = msg;
-	if (!obj) {
-		showErrorMessage(_msg, details);
-		return;
-	}
-	QString _details;
-	KexiDB::getHTMLErrorMesage(obj, _msg, _details);
-	showErrorMessage(_msg, _details);
-}
-
-void
-KexiMainWindowImpl::showErrorMessage(Kexi::ObjectStatus *status)
-{
-	showErrorMessage("", status);
-}
-
-void
-KexiMainWindowImpl::showErrorMessage(const QString &message, Kexi::ObjectStatus *status)
-{
-	if (status && status->error()) {
-		QString msg = message;
-		if (msg.isEmpty()) {
-			msg = status->message;
-			status->message = status->description;
-			status->description = "";
-		}
-		QString desc;
-		if (!status->message.isEmpty()) {
-			if (status->description.isEmpty()) {
-				desc = status->message;
-			} else {
-				msg += (QString("<br><br>") + status->message);
-				desc = status->description;
-			}
-		}
-		showErrorMessage(message, desc, status->dbObject());
-	}
-	else {
-		showErrorMessage(message);
-	}
-	status->clearStatus();
-}
-*/
-
 void KexiMainWindowImpl::closeWindow(KMdiChildView *pWnd, bool layoutTaskBar)
 {
 	if (d->insideCloseDialog && dynamic_cast<KexiDialogBase *>(pWnd)) {
@@ -3843,10 +3742,27 @@ void KexiMainWindowImpl::slotToolsProjectMigration()
 	showProjectMigrationWizard(QString::null, QString::null);
 }
 
+void KexiMainWindowImpl::slotToolsCompactDatabase()
+{
+	if (!d->prj) {
+		//todo
+		return;
+	}
+	else {
+		//sanity
+		if ( !(d->prj && d->prj->dbConnection() 
+			&& (d->prj->dbConnection()->driver()->features() & KexiDB::Driver::CompactingDatabaseSupported) ))
+			return;
+	}
+
+	if (!d->prj->dbConnection()->driver()->adminTools().vacuum(*d->prj->dbConnection())) {
+		//todo: errmsg
+	}
+}
+
 tristate KexiMainWindowImpl::showProjectMigrationWizard(
 	const QString& mimeType, const QString& databaseName, const KexiDB::ConnectionData *cdata)
 {
-#ifndef KEXI_NO_MIGRATION
 	//pass arguments
 	QMap<QString,QString> args;
 	args.insert("mimeType", mimeType);
@@ -3889,12 +3805,10 @@ tristate KexiMainWindowImpl::showProjectMigrationWizard(
 //		return openProject(destinationFileName, 0);
 	}
 	return true;
-#endif
 }
 
 void KexiMainWindowImpl::slotProjectImportDataTable()
 {
-#ifndef KEXI_NO_CSV_IMPORT
 	QMap<QString,QString> args;
 	args.insert("sourceType", "file");
 	QDialog *dlg = KexiInternalPart::createModalDialogInstance(
@@ -3903,7 +3817,6 @@ void KexiMainWindowImpl::slotProjectImportDataTable()
 		return; //error msg has been shown by KexiInternalPart
 	dlg->exec();
 	delete dlg;
-#endif
 }
 
 void KexiMainWindowImpl::exportItemAsDataTable(KexiPart::Item* item)
@@ -4092,7 +4005,6 @@ void KexiMainWindowImpl::slotEditCopySpecialDataTable()
 
 void KexiMainWindowImpl::slotEditPasteSpecialDataTable()
 {
-#ifndef KEXI_NO_CSV_IMPORT
 	QMap<QString,QString> args;
 	args.insert("sourceType", "clipboard");
 	QDialog *dlg = KexiInternalPart::createModalDialogInstance(
@@ -4101,7 +4013,6 @@ void KexiMainWindowImpl::slotEditPasteSpecialDataTable()
 		return; //error msg has been shown by KexiInternalPart
 	dlg->exec();
 	delete dlg;
-#endif
 }
 
 void KexiMainWindowImpl::addWindow( KMdiChildView* pView, int flags )

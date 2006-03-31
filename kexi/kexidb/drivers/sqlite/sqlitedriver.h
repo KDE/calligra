@@ -61,6 +61,7 @@ class SQLiteDriver : public Driver
 		virtual QString drv_escapeIdentifier( const QString& str) const;
 		virtual QCString drv_escapeIdentifier( const QCString& str) const;
 		virtual Connection *drv_createConnection( ConnectionData &conn_data );
+		virtual AdminTools* drv_createAdminTools() const;
 
 		/*! \return true if \a n is a system field name; 
 			for this driver fields with name equal "_ROWID_" 

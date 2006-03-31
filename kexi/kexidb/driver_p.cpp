@@ -42,6 +42,7 @@ DriverPrivate::DriverPrivate()
 {
 	kexiSQLDict = 0;
 	driverSQLDict = 0;
+	adminTools = 0;
 
 	properties["client_library_version"] = "";
 	propertyCaptions["client_library_version"] =
@@ -89,8 +90,10 @@ void DriverPrivate::initInternalProperties()
 	  i18n("KexiDB driver version");
 }
 
-DriverPrivate::~DriverPrivate() {
+DriverPrivate::~DriverPrivate()
+{
 	delete driverSQLDict;
+	delete adminTools;
 }
 
 
@@ -117,3 +120,10 @@ void DriverPrivate::initKeywords(const char* keywords[],
 	}
 }
 
+AdminTools::Private::Private()
+{
+}
+
+AdminTools::Private::~Private()
+{
+}

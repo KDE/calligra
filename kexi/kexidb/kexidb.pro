@@ -16,6 +16,7 @@ object.cpp \
 drivermanager.cpp \
 driver.cpp \
 driver_p.cpp \
+admin.cpp \
 connectiondata.cpp \
 connection.cpp \
 utils.cpp \

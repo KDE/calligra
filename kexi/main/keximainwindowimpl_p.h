@@ -385,7 +385,7 @@ void updatePropEditorDockWidthInfo() {
 		KAction *action_format_font;
 
 		//! tools menu
-		KAction *action_tools_data_migration;
+		KAction *action_tools_data_migration, *action_tools_compact_database;
 		KActionMenu *action_tools_scripts;
 
 		//! window menu

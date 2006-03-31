@@ -101,8 +101,8 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow, public KexiGUI
 
 		/*! Reimplemented */
 		virtual void readProperties(KConfig *config);
-    	virtual void saveProperties(KConfig *config);
-    	virtual void saveGlobalProperties( KConfig* sessionConfig );
+		virtual void saveProperties(KConfig *config);
+		virtual void saveGlobalProperties( KConfig* sessionConfig );
 
 	public slots:
 		/*! Inherited from KMdiMainFrm: we need to do some tasks before child is closed.
@@ -381,6 +381,7 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow, public KexiGUI
 		void slotConfigureKeys();
 		void slotConfigureToolbars();
 		void slotToolsProjectMigration();
+		void slotToolsCompactDatabase();
 
 		/// TMP: Display a dialog to download db examples from internet
 		void slotGetNewStuff();

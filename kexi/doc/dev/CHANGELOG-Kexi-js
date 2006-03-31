@@ -9,6 +9,13 @@
 For most important commits use: CCMAIL:kexi-devel@kde.org
 Use CCMAIL:###-done@bugs.kde.org
 
+2006-03-29
+Main Window
+- "Compact Database" admin action added
+KexiDB
+- API version increased to 1.8
+- "Compact Database" implemented for SQLite3 databases
+
 2006-03-28
 Startup
 - --readonly command line option added
