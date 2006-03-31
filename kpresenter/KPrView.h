@@ -78,7 +78,6 @@ class KoTextZoomHandler;
 class KCommand;
 class KMacroCommand;
 class KFontSizeAction;
-class KColorAction;
 class KSelectAction;
 class KFontAction;
 class KoParagCounter;

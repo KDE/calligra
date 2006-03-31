@@ -93,7 +93,6 @@
 #include <KoPageLayoutDia.h>
 #include <KoRuler.h>
 #include <KoTemplateCreateDia.h>
-#include <kcoloractions.h>
 #include <tkcoloractions.h>
 #include <kaction.h>
 #include <qspinbox.h>
