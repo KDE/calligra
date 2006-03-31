@@ -1768,6 +1768,7 @@ void CalculateProjectCmd::execute() {
     } else {
         //kdDebug()<<k_funcinfo<<" redo"<<endl;
         newSchedule->setDeleted(false);
+        m_node.setCurrentSchedulePtr(newSchedule);
     }
     setCommandType(0);
 }
