@@ -23,7 +23,7 @@
 #include <qobject.h>
 #include <qstring.h>
 
-#include <tristate.h>
+#include <kexiutils/tristate.h>
 
 class QProcess;
 class KTempFile;

@@ -163,6 +163,8 @@ bool SQLiteConnection::drv_useDatabase( const QString &dbName, bool *cancelled,
 	Q_UNUSED(dbName);
 //	KexiDBDrvDbg << "drv_useDatabase(): " << m_data->fileName() << endl;
 #ifdef SQLITE2
+	Q_UNUSED(cancelled);
+	Q_UNUSED(msgHandler);
 	d->data = sqlite_open( QFile::encodeName( m_data->fileName() ), 0/*mode: unused*/, 
 		&d->errmsg_p );
 	d->storeResult();
