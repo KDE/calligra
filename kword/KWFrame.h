@@ -210,6 +210,7 @@ public:
 
     QBrush backgroundColor() const { return m_backgroundColor; }
     void setBackgroundColor( const QBrush &_color );
+    bool isTransparent() const { return m_backgroundColor.style() != Qt::SolidPattern; }
 
     KoRect innerRect() const;
 

@@ -173,16 +173,19 @@ void KWFrameSet::createEmptyRegion( const QRect & crect, QRegion & emptyRegion, 
     //kDebug(32001) << "KWFrameSet::createEmptyRegion " << name() << endl;
     for (Q3PtrListIterator<KWFrame> frameIt = frameIterator(); frameIt.current(); ++frameIt )
     {
-        QRect outerRect( viewMode->normalToView( frameIt.current()->outerRect(viewMode) ) );
-        //kDebug(32001) << "KWFrameSet::createEmptyRegion outerRect=" << outerRect << " crect=" << crect << endl;
-        outerRect &= crect; // This is important, to avoid calling subtract with a Y difference > 65536
-        if ( !outerRect.isEmpty() )
+        if ( !frameIt.current()->isTransparent() )
         {
-            emptyRegion = emptyRegion.subtract( outerRect );
-            //kDebug(32001) << "KWFrameSet::createEmptyRegion emptyRegion now: " << endl; DEBUGREGION( emptyRegion );
+            QRect outerRect( viewMode->normalToView( frameIt.current()->outerRect(viewMode) ) );
+            //kDebug(32001) << "KWFrameSet::createEmptyRegion outerRect=" << outerRect << " crect=" << crect << endl;
+            outerRect &= crect; // This is important, to avoid calling subtract with a Y difference > 65536
+            if ( !outerRect.isEmpty() )
+            {
+                emptyRegion = emptyRegion.subtract( outerRect );
+                //kDebug(32001) << "KWFrameSet::createEmptyRegion emptyRegion now: " << endl; DEBUGREGION( emptyRegion );
+            }
+            if ( crect.bottom() + paperHeight < outerRect.top() )
+                return; // Ok, we're far below the crect, abort.
         }
-        if ( crect.bottom() + paperHeight < outerRect.top() )
-            return; // Ok, we're far below the crect, abort.
     }
 }
 
@@ -776,7 +779,7 @@ void KWFrameSet::drawFrame( KWFrame *frame, QPainter *painter, const QRect &fcre
 
     if ( drawUnderlyingFrames && frame && frame->frameStack()) {
         Q3ValueList<KWFrame*> below = frame->frameStack()->framesBelow();
-        if(!below.isEmpty() )
+        if ( !below.isEmpty() )
         {
             // Double-buffering - not when printing
             QPainter* doubleBufPainter = painter;
@@ -841,6 +844,11 @@ void KWFrameSet::drawFrame( KWFrame *frame, QPainter *painter, const QRect &fcre
                 delete doubleBufPainter;
             }
             return; // done! :)
+        }
+        else
+        {
+            // nothing below? paint a bg color then
+            frameColorGroup.setBrush( QColorGroup::Base, m_doc->defaultBgColor( painter ) );
         }
     }
     if ( frame && (frame->paddingLeft() || frame->paddingTop() ||
