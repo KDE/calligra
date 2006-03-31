@@ -304,10 +304,10 @@ bool Project::load(QDomElement &element) {
     }
     s = element.attribute("start-time");
     if (!s.isEmpty())
-        m_constraintStartTime = QDateTime::fromString(s);
+        m_constraintStartTime = DateTime::fromString(s);
     s = element.attribute("end-time");
     if (!s.isEmpty())
-        m_constraintEndTime = QDateTime::fromString(s);
+        m_constraintEndTime = DateTime::fromString(s);
     
     // Load the project children
     // Must do these first
@@ -468,8 +468,8 @@ void Project::save(QDomElement &element)  const {
     //me.setAttribute("baselined",(int)m_baselined); FIXME: Removed for this release  
 
     me.setAttribute("scheduling",constraintToString());    
-    me.setAttribute("start-time", m_constraintStartTime.toString());
-    me.setAttribute("end-time", m_constraintEndTime.toString());
+    me.setAttribute("start-time", m_constraintStartTime.toString(Qt::ISODate));
+    me.setAttribute("end-time", m_constraintEndTime.toString(Qt::ISODate));
     
     m_accounts.save(me);
     

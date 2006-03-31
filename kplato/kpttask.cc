@@ -285,8 +285,8 @@ void Task::save(QDomElement &element)  const {
     me.setAttribute("description", m_description);
 
     me.setAttribute("scheduling",constraintToString());
-    me.setAttribute("constraint-starttime",m_constraintStartTime.toString());
-    me.setAttribute("constraint-endtime",m_constraintEndTime.toString());    
+    me.setAttribute("constraint-starttime",m_constraintStartTime.toString(Qt::ISODate));
+    me.setAttribute("constraint-endtime",m_constraintEndTime.toString(Qt::ISODate));    
 
     me.setAttribute("startup-cost", m_startupCost);
     me.setAttribute("shutdown-cost", m_shutdownCost);
@@ -299,8 +299,8 @@ void Task::save(QDomElement &element)  const {
     me.appendChild(el);
     el.setAttribute("started", m_progress.started);
     el.setAttribute("finished", m_progress.finished);
-    el.setAttribute("startTime", m_progress.startTime.toString());
-    el.setAttribute("finishTime", m_progress.finishTime.toString());
+    el.setAttribute("startTime", m_progress.startTime.toString(Qt::ISODate));
+    el.setAttribute("finishTime", m_progress.finishTime.toString(Qt::ISODate));
     el.setAttribute("percent-finished", m_progress.percentFinished);
     el.setAttribute("remaining-effort", m_progress.remainingEffort.toString());
     el.setAttribute("performed-effort", m_progress.totalPerformed.toString());
