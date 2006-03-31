@@ -567,8 +567,7 @@ void KWTextFrameSet::drawFrame( KWFrame *theFrame, QPainter *painter, const QRec
     // In theory this code should be in kwFrameSet, but currently only text frames obey m_backgroundColor.
     if ( theFrame )
     {
-        bool transparent = theFrame->backgroundColor().style() != Qt::SolidPattern;
-        drawUnderlyingFrames &= transparent;
+        drawUnderlyingFrames &= theFrame->isTransparent();
     }
     KWFrameSet::drawFrame( theFrame, painter, fcrect, crect, translationOffset, settingsFrame, cg, onlyChanged, resetChanged, edit, viewMode, drawUnderlyingFrames );
 }
