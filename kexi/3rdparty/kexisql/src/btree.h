@@ -129,7 +129,7 @@ int sqliteRbtreeOpen(const char *zFilename, int mode, int nPg, Btree **ppBtree);
 #define sqliteBtreePrevious(pCur, pRes)   (btCOps(pCur)->Previous(pCur, pRes))
 #define sqliteBtreeKeySize(pCur, pSize)   (btCOps(pCur)->KeySize(pCur, pSize) )
 #define sqliteBtreeKey(pCur, offset, amt, zBuf)\
-                (btCOps(pCur)->Qt::Key(pCur, offset, amt, zBuf))
+                (btCOps(pCur)->Key(pCur, offset, amt, zBuf))
 #define sqliteBtreeKeyCompare(pCur, pKey, nKey, nIgnore, pRes)\
                 (btCOps(pCur)->KeyCompare(pCur, pKey, nKey, nIgnore, pRes))
 #define sqliteBtreeDataSize(pCur, pSize)  (btCOps(pCur)->DataSize(pCur, pSize))
