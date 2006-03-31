@@ -26,7 +26,7 @@
 #include "karbon_view.h"
 #include "karbon_part.h"
 #include "vtoolcontroller.h"
-#include "KoContextCelp.h"
+#include "KoContextHelp.h"
 #include "vtool.h"
 #include "vtool.moc"
 

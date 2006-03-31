@@ -40,7 +40,7 @@
 #include <kstatusbar.h>
 #include <kfiledialog.h>
 #include <kstdaction.h>
-#include <KoContextCelp.h>
+#include <KoContextHelp.h>
 #include <KoUnitWidgets.h>
 #include <KoPageLayoutDia.h>
 #include <vruler.h>
