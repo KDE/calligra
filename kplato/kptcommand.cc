@@ -1797,6 +1797,7 @@ void RecalculateProjectCmd::execute() {
         m_node.calculate(newSchedule);
     } else {
         newSchedule->setDeleted(false);
+        m_node.setCurrentSchedulePtr(newSchedule);
         //kdDebug()<<k_funcinfo<<newSchedule->typeToString()<<" redo"<<endl;
     }
     setCommandType(0);
