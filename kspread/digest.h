@@ -41,15 +41,15 @@
  ************************************************************************/
 
 #ifndef _DIGEST_
-#define _DIGEST_ 
+#define _DIGEST_
 
-#include <q3cstring.h>
+#include <qbytearray.h>
 #include <qstring.h>
 
 class SHA1
 {
  public:
-  static bool getHash( QString const & text, Q3CString & hash );
+  static bool getHash( QString const & text, QByteArray & hash );
 };
 
 #endif

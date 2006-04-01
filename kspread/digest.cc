@@ -44,8 +44,6 @@
 #include "digest.h"
 #include <kdebug.h>
 #include <kcodecs.h>
-//Added by qt3to4:
-#include <Q3CString>
 
 typedef unsigned char sal_uInt8;
 typedef unsigned short sal_uInt16;
@@ -278,7 +276,7 @@ static void __rtl_digest_swapLong (sal_uInt32 *pData, sal_uInt32 nDatLen)
  *======================================================================*/
 /*
  * rtl_digest_create.
- 
+
 rtlDigest rtl_digest_create (rtlDigestAlgorithm Algorithm)
 {
 	rtlDigest Digest = (rtlDigest)NULL;
@@ -308,7 +306,7 @@ rtlDigest rtl_digest_create (rtlDigestAlgorithm Algorithm)
 			Digest = rtl_digest_createHMAC_SHA1();
 			break;
 
-                default: // rtl_Digest_AlgorithmInvalid 
+                default: // rtl_Digest_AlgorithmInvalid
 			break;
 	}
 	return Digest;
@@ -316,7 +314,7 @@ rtlDigest rtl_digest_create (rtlDigestAlgorithm Algorithm)
 
 
 // rtl_digest_queryAlgorithm.
- 
+
 rtlDigestAlgorithm rtl_digest_queryAlgorithm (rtlDigest Digest)
 {
 	Digest_Impl *pImpl = (Digest_Impl *)Digest;
@@ -592,7 +590,7 @@ static void __rtl_digest_endSHA (DigestContextSHA *ctx)
 		0x80, 0x00, 0x00, 0x00
 	};
 	register const sal_uInt8 *p = end;
-	
+
 	register sal_uInt32 *X;
 	register int         i;
 
@@ -652,7 +650,7 @@ static const Digest_Impl __rtl_digest_SHA_1 = { rtl_Digest_AlgorithmSHA1,
                                                 0,
                                                 rtl_digest_destroySHA1,
                                                 rtl_digest_updateSHA1,
-                                                rtl_digest_getSHA1 
+                                                rtl_digest_getSHA1
 };
 
 /*
@@ -765,7 +763,7 @@ rtlDigestError rtl_digest_updateSHA1 (
 
 #ifndef WORDS_BIGENDIAN
 		__rtl_digest_swapLong (ctx->m_pData, DIGEST_LBLOCK_SHA);
-#endif 
+#endif
 
 		__rtl_digest_updateSHA (ctx);
 	}
@@ -830,11 +828,11 @@ void rtl_digest_destroySHA1 (rtlDigest Digest)
  *
  *======================================================================*/
 
-bool SHA1::getHash( QString const & text, Q3CString & hash )
+bool SHA1::getHash( QString const & text, QByteArray & hash )
 {
   rtlDigest aDigest     = rtl_digest_createSHA1();
   rtlDigestError aError = rtl_digest_updateSHA1( aDigest, text.unicode(), text.length() * sizeof(QChar) );
-  
+
   if ( aError == rtl_Digest_E_None )
   {
     Q3CString digest;
@@ -842,14 +840,14 @@ bool SHA1::getHash( QString const & text, Q3CString & hash )
     digest.fill( '\0', RTL_DIGEST_LENGTH_SHA1 );
 
     aError = rtl_digest_getSHA1( aDigest, (unsigned char *) digest.data(), RTL_DIGEST_LENGTH_SHA1 );
-    
+
     if (aError != rtl_Digest_E_None)
       return false;
-    
+
     hash = digest;
 
     return true;
   }
-  
+
   return false;
 }
