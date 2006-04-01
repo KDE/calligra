@@ -53,7 +53,8 @@ enum ObjectTypes {
 	ReportObjectType = 4,
 	ScriptObjectType = 5,
 	WebObjectType = 6,
-	LastObjectType = 6, //ALWAYS UPDATE THIS
+	MacroObjectType = 7,
+	LastObjectType = 7, //ALWAYS UPDATE THIS
 
 	UserObjectType = 100 //external types
 };

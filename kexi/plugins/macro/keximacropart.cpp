@@ -17,6 +17,7 @@
 
 #include "keximacropart.h"
 
+#include "lib/manager.h"
 //#include "kexiviewbase.h"
 //#include "keximainwindow.h"
 //#include "kexiproject.h"
@@ -32,14 +33,37 @@
 class KexiMacroPart::Private
 {
 	public:
+
+		/**
+		* The @a KoMacro::Manager instace used to access the
+		* KoMacro Framework.
+		*/
+		KoMacro::Manager* const manager;
+
+		/**
+		* Constructor.
+		*/
+		Private()
+			: manager(0)
+		{
+		}
+
+		/**
+		* Destructor.
+		*/
+		~Private()
+		{
+			delete manager;
+		}
+
 };
 
 KexiMacroPart::KexiMacroPart(QObject *parent, const char *name, const QStringList &l)
 	: KexiPart::Part(parent, name, l)
 	, d( new Private() )
 {
-	// REGISTERED ID:
-	//m_registeredPartID = (int)KexiPart::ScriptObjectType;
+	//registered ID
+	m_registeredPartID = (int)KexiPart::MacroObjectType;
 
 	m_names["instanceName"] 
 		= i18n("Translate this word using only lowercase alphanumeric characters (a..z, 0..9). "
@@ -47,6 +71,8 @@ KexiMacroPart::KexiMacroPart(QObject *parent, const char *name, const QStringLis
 		"If you cannot use latin characters in your language, use english word.", 
 		"macro");
 	m_names["instanceCaption"] = i18n("Macro");
+
+	//supported viewmodes
 	m_supportedViewModes = Kexi::DesignViewMode;
 }
 
@@ -55,7 +81,7 @@ KexiMacroPart::~KexiMacroPart()
 	delete d;
 }
 
-KAction* KexiMacroPart::action(const QString& scripturi, QObject*)
+KAction* KexiMacroPart::action(const QString&, QObject*)
 {
 	///\todo
 	return 0;
@@ -63,14 +89,15 @@ KAction* KexiMacroPart::action(const QString& scripturi, QObject*)
 
 void KexiMacroPart::initPartActions()
 {
+    d->manager = new KoMacro::Manager(m_mainWin);
 }
 
 void KexiMacroPart::initInstanceActions()
 {
-	//createSharedAction(Kexi::DesignViewMode, i18n("Execute Script"), "exec", 0, "script_execute");
+	//createSharedAction(Kexi::DesignViewMode, i18n("Execute Macro"), "exec", 0, "script_execute");
 }
 
-KexiViewBase* KexiMacroPart::createView(QWidget *parent, KexiDialogBase* dialog, KexiPart::Item& item, int viewMode, QMap<QString,QString>*)
+KexiViewBase* KexiMacroPart::createView(QWidget* /*parent*/, KexiDialogBase* /*dialog*/, KexiPart::Item& /*item*/, int /*viewMode*/, QMap<QString,QString>*)
 {
 /*
 	QString partname = item.name();
