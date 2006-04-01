@@ -835,7 +835,7 @@ bool SHA1::getHash( QString const & text, QByteArray & hash )
 
   if ( aError == rtl_Digest_E_None )
   {
-    Q3CString digest;
+    QByteArray digest;
     digest.resize( RTL_DIGEST_LENGTH_SHA1 + 1 );
     digest.fill( '\0', RTL_DIGEST_LENGTH_SHA1 );
 
