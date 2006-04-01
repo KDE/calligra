@@ -147,7 +147,7 @@ bool MetaProxy::connectSignal(const QObject* sender, const char * signal)
 	d->slotlist.append(slotname);
 	setSlots(d->slotlist);
 
-	connect(sender, signal, QString("%1%2").arg(SLOT_CODE).arg(slotname).ascii());
+	connect(sender, signal, QString("%1%2").arg(1).arg(slotname).ascii());
 	return true;
 }
 

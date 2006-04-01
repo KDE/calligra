@@ -268,7 +268,7 @@ void CommonTests::testFunction()
 	KOMACROTEST_XASSERT((int) receivermetaobject.data(), 0);
 	
 	//create KoMacro-MetaMethod from receiverObject
-	KoMacro::MetaMethod::Ptr receivermetamethod = receivermetaobject->slot( func->slot() );
+	KoMacro::MetaMethod::Ptr receivermetamethod = receivermetaobject->slot( func->slot().latin1() );
 	//check that receivermetamethod.data is not null
 	KOMACROTEST_XASSERT((int) receivermetamethod.data(), 0);
 

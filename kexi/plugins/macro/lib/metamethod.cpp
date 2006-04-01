@@ -347,11 +347,11 @@ Variable::Ptr MetaMethod::invoke(Variable::List arguments)
 	try {
 		switch( d->type ) {
 			case Signal: {
-				int index = d->object->indexOfSignal( d->signature );
+				int index = d->object->indexOfSignal( d->signature.latin1() );
 				obj->qt_emit(index, qu);
 			} break;
 			case Slot: {
-				int index = d->object->indexOfSlot( d->signature );
+				int index = d->object->indexOfSlot( d->signature.latin1() );
 				obj->qt_invoke(index, qu);
 			} break;
 			default: {

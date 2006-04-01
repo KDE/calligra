@@ -130,7 +130,7 @@ void MetaParameter::setSignatureArgument(const QString& signatureargument)
 		setVariantType( QVariant::Invalid );
 	}
 	
-	QVariant::Type type = QVariant::nameToType(argument);
+	QVariant::Type type = argument.isNull() ? QVariant::Invalid : QVariant::nameToType(argument.latin1());
 	if (type != QVariant::Invalid) {
 		setVariantType( type );
 	}

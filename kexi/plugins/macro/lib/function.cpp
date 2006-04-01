@@ -85,7 +85,8 @@ Function::Function(Manager* const manager, const QDomElement& element)
 
 	// each function points to a receiver and a slot.
 	d->receiver = element.attribute("receiver");
-	d->slot = QObject::normalizeSignalSlot( element.attribute("slot") );
+	QString slot = element.attribute("slot");
+	d->slot = QObject::normalizeSignalSlot( slot.isNull() ? "" : slot.latin1() );
 
 	// Iterate through the list of child-nodes. The child-nodes provides us e.g.
 	// optional arguments.
@@ -138,7 +139,11 @@ MetaObject::Ptr Function::receiverObject()
 		QStringList::Iterator it = list.begin();
 		QObject* object = manager()->object( *it );
 		for(++it; object && it != list.end(); ++it) {
-			object = object->child( *it );
+			if((*it).isNull()) {
+				object = 0;
+				break;
+			}
+			object = object->child( (*it).latin1() );
 		}
 		if(! object) {
 			throw Exception(
@@ -207,7 +212,7 @@ void Function::activate(Context::Ptr context)
 		MetaObject::Ptr metaobject = receiverObject();
 		//kdDebug() << "Function::activate(Context::Ptr) metaobject: " << metaobject.data() << endl;
 		Variable::Ptr returnvalue = metaobject->invokeMethod(
-			metaobject->indexOfSlot( d->slot ), // the index of the slot which should be invoked.
+			metaobject->indexOfSlot( d->slot.isNull() ? "" : d->slot.latin1() ), // the index of the slot which should be invoked.
 			variables // the optional list of passed arguments
 		);
 		//kdDebug() << "Function::activate(Context::Ptr)  return" << endl;

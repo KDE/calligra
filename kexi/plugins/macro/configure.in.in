@@ -1,0 +1,11 @@
+# Check for kunittest
+AC_MSG_CHECKING([for kunittest])
+
+have_kunittest_header="no"
+KDE_CHECK_HEADER(kunittest/tester.h, have_kunittest_header="yes", , )
+AM_CONDITIONAL(include_kunittest, test "$have_kunittest_header" = "yes")
+
+have_kunittestgui_header="no"
+KDE_CHECK_HEADER(kunittest/runnergui.h, have_kunittestgui_header="yes", , )
+AM_CONDITIONAL(include_kunittestgui, test "$have_kunittestgui_header" = "yes")
+

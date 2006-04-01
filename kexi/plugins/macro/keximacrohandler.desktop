@@ -1,0 +1,19 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=Service
+ServiceTypes=Kexi/Handler
+
+GenericName=Macros
+GenericName[de]=Makros
+
+Name=Macros
+Name[de]=Makros
+
+X-KDE-Library=kexihandler_macro
+X-KDE-ParentApp=kexi
+X-Kexi-PartVersion=2
+X-Kexi-TypeName=macro
+X-Kexi-TypeMime=kexi/macro
+X-Kexi-ItemIcon=macro
+X-Kexi-SupportsDataExport=false
+X-Kexi-SupportsPrinting=false
