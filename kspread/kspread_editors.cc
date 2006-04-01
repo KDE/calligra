@@ -543,7 +543,7 @@ CellEditor::CellEditor( Cell* _cell, Canvas* _parent, bool captureAllKeyEvents, 
   setFocusProxy( d->textEdit );
 
   connect( d->textEdit, SIGNAL( cursorPositionChanged(int,int) ), this, SLOT (slotCursorPositionChanged(int,int)));
-  connect( d->textEdit, SIGNAL( cursorPositionChanged(QTextCursor*) ), this, SLOT (slotTextCursorChanged(QTextCursor*)));
+  connect( d->textEdit, SIGNAL( cursorPositionChanged() ), this, SLOT (slotTextCursorChanged()));
   connect( d->textEdit, SIGNAL( textChanged() ), this, SLOT( slotTextChanged() ) );
 
 // connect( d->textEdit, SIGNAL(completionModeChanged( KGlobalSettings::Completion )),this,SLOT (slotCompletionModeChanged(KGlobalSettings::Completion)));
@@ -792,16 +792,9 @@ void CellEditor::slotCursorPositionChanged(int /* para */, int pos)
   }
 }
 
-void CellEditor::slotTextCursorChanged(QTextCursor* cursor)
+void CellEditor::slotTextCursorChanged()
 {
-  QTextStringChar *chr = cursor->paragraph()->at( cursor->index() );
-  int h = cursor->paragraph()->lineHeightOfChar( cursor->index() );
-  int x = cursor->paragraph()->rect().x() + chr->x;
-  int y, dummy;
-  cursor->paragraph()->lineHeightOfChar( cursor->index(), &dummy, &y );
-  y += cursor->paragraph()->rect().y();
-
-  d->globalCursorPos = d->textEdit->mapToGlobal( d->textEdit-> contentsToViewport( QPoint( x, y + h ) ) );
+  d->globalCursorPos = d->textEdit->mapToGlobal( d->textEdit->cursorRect().topLeft() );
 }
 
 void CellEditor::cut()
