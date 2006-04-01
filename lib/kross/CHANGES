@@ -5,4 +5,5 @@
 * Python: Added unittest
 
 1.5
-* Ruby: fix crash cause of invalid rNode.
+* Ruby: Fix 124649: libruby-devel lost when build
+* Ruby: Fix crash cause of invalid rNode.
