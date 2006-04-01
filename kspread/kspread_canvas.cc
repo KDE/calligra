@@ -279,7 +279,6 @@ Canvas::Canvas (View *_view)
   }
   setFocus();
   installEventFilter( this );
-  (void)new ToolTip( this );
   setAcceptDrops( true );
   setInputMethodEnabled( true ); // ensure using the InputMethod
 
@@ -388,6 +387,11 @@ bool Canvas::eventFilter( QObject *o, QEvent *e )
       //QIMEvent * imev = static_cast<QIMEvent *>(e);
       //processIMEvent( imev );
       //break;
+  }
+  case QEvent::ToolTip:
+  {
+    QHelpEvent* helpEvent = static_cast<QHelpEvent*>( e );
+    showToolTip( helpEvent->pos() );
   }
   default:
     break;
@@ -5960,16 +5964,6 @@ void HBorder::focusOutEvent( QFocusEvent* )
     m_bMousePressed = false;
 }
 
-/****************************************************************
- *
- * ToolTip
- *
- ****************************************************************/
-
-ToolTip::ToolTip( Canvas* canvas )
-    : QToolTip( canvas ), m_canvas( canvas )
-{
-}
 
 // find the label for the tip
 // this is a hack of course, because it's not available from QToolTip
@@ -5984,26 +5978,26 @@ QLabel *tip_findLabel()
     return 0;
 }
 
-void ToolTip::maybeTip( const QPoint& p )
+void Canvas::showToolTip( const QPoint& p )
 {
-    Sheet *sheet = m_canvas->activeSheet();
+    Sheet *sheet = activeSheet();
     if ( !sheet )
         return;
 
     // Over which cell is the mouse ?
     double ypos, xpos;
-    double dwidth = m_canvas->doc()->unzoomItX( m_canvas->width() );
+    double dwidth = doc()->unzoomItX( width() );
     int col;
     if ( sheet->layoutDirection()==Sheet::RightToLeft )
-      col = sheet->leftColumn( (dwidth - m_canvas->doc()->unzoomItX( p.x() ) +
-                                              m_canvas->xOffset()), xpos );
+      col = sheet->leftColumn( (dwidth - doc()->unzoomItX( p.x() ) +
+                                              xOffset()), xpos );
     else
-      col = sheet->leftColumn( (m_canvas->doc()->unzoomItX( p.x() ) +
-                                     m_canvas->xOffset()), xpos );
+      col = sheet->leftColumn( (doc()->unzoomItX( p.x() ) +
+                                     xOffset()), xpos );
 
 
-    int row = sheet->topRow( (m_canvas->doc()->unzoomItY( p.y() ) +
-                                   m_canvas->yOffset()), ypos );
+    int row = sheet->topRow( (doc()->unzoomItY( p.y() ) +
+                                   yOffset()), ypos );
 
     Cell* cell = sheet->visibleCellAt( col, row );
     if ( !cell )
@@ -6080,22 +6074,22 @@ void ToolTip::maybeTip( const QPoint& p )
 
     if ( sheet->layoutDirection()==Sheet::RightToLeft )
     {
-      KoRect unzoomedMarker( dwidth - u - xpos + m_canvas->xOffset(),
-                             ypos - m_canvas->yOffset(),
+      KoRect unzoomedMarker( dwidth - u - xpos + xOffset(),
+                             ypos - yOffset(),
                              u,
                              v );
 
-      marker = m_canvas->doc()->zoomRect( unzoomedMarker );
+      marker = doc()->zoomRect( unzoomedMarker );
       insideMarker = marker.contains( p );
     }
     else
     {
-      KoRect unzoomedMarker( xpos - m_canvas->xOffset(),
-                             ypos - m_canvas->yOffset(),
+      KoRect unzoomedMarker( xpos - xOffset(),
+                             ypos - yOffset(),
                              u,
                              v );
 
-      marker = m_canvas->doc()->zoomRect( unzoomedMarker );
+      marker = doc()->zoomRect( unzoomedMarker );
       insideMarker = marker.contains( p );
     }
 
@@ -6115,7 +6109,7 @@ void ToolTip::maybeTip( const QPoint& p )
     // Wrap the text if too long
     if( tipText.length() > 16 )
     {
-        QFontMetrics fm = tipLabel? tipLabel->fontMetrics() : m_canvas->fontMetrics();
+        QFontMetrics fm = tipLabel? tipLabel->fontMetrics() : fontMetrics();
         QRect r( 0, 0, 200, -1 );
         KWordWrap* wrap = KWordWrap::formatText( fm, r, 0, tipText );
         tipText = wrap->wrappedString();
@@ -6123,7 +6117,7 @@ void ToolTip::maybeTip( const QPoint& p )
     }
 
     // Now we shows the tip
-    tip( marker, tipText );
+    QToolTip::showText( marker.bottomRight(), tipText, this );
 
     // Here we try to find the tip label again
     // Reason: the previous tip_findLabel might fail if no tip has ever shown yet

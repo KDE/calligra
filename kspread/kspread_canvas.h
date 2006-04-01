@@ -343,7 +343,7 @@ public:
     /**
      * @brief Display object above the other objects in editiong mode
      *
-     * This is used to bring a single slected object to front, so it is easier 
+     * This is used to bring a single slected object to front, so it is easier
      * to modify.
      *
      * @param object which should be displayed above the other objects
@@ -356,7 +356,7 @@ public:
     /**
      * @brief Get the list of objects in the order they should be displayed.
      *
-     * This takes into acount the object set in raiseObject so that it is 
+     * This takes into acount the object set in raiseObject so that it is
      * the last one in the list returned (the one that is displayed above all
      * the others).
      *
@@ -404,7 +404,7 @@ protected:
     virtual void dragLeaveEvent(QDragLeaveEvent * _ev);
 
     /**
-     * Checks to see if there is a size grip for a highlight range at a given position. 
+     * Checks to see if there is a size grip for a highlight range at a given position.
      * Note that both X and Y coordinates are UNZOOMED.  To translate from a zoomed coordinate (eg. position of a mouse event) to
      * an unzoomed coordinate, use Doc::unzoomItX and Doc::unzoomItY.  The document object
      * can be accessed via view()->doc()
@@ -433,12 +433,12 @@ private:
 
     /**
      * Returns the area of the document currently visible in a painter's
-     * window, calculated by taking the painter's window() property and 
+     * window, calculated by taking the painter's window() property and
      * translating it by the current x and y offset of the Canvas (taking
      * the zoom level into account)
      */
     QRect painterWindowGeometry( const QPainter& painter ) const;
-    
+
     /**
      * Enables clipping and removes the areas on the canvas widget occupied by embedded objects from
      * the clip region.  This ensures that subsequent drawing operations using the given painter
@@ -449,11 +449,11 @@ private:
     /**
      * Returns the range of cells which appear in the specified area of the Canvas widget
      * For example, cellsInArea( QRect(0,0,width(),height()) ) returns a range containing all visible cells
-     * 
-     * @param area The area (in pixels) on the Canvas widget 
+     *
+     * @param area The area (in pixels) on the Canvas widget
      */
     QRect cellsInArea( const QRect area ) const;
-    
+
     /**
      * Paints the children
      */
@@ -492,9 +492,9 @@ private:
   *
   */
   void sheetAreaToVisibleRect( const QRect& sheetArea,
-			       KoRect& visibleRect ); 
+			       KoRect& visibleRect );
 
-  /** 
+  /**
   * Calculates the physical region on the canvas widget occupied by a range of cells on
   * the currently active sheet.
   * Unlike @see sheetAreaToVisibleRect , scrolling the view does not affect sheetAreaToRect.
@@ -573,6 +573,12 @@ private:
    * @param changedRegion the cell region to be set as dirty
    */
   void setSelectionChangePaintDirty(Sheet* sheet, const Region& changedRegion);
+
+  /**
+   * Determines the cell at @p point and shows its tooltip.
+   * @param point the position for which a tooltip is requested
+   */
+  void showToolTip( const QPoint& point );
 
 private:
   class Private;
@@ -715,26 +721,6 @@ private:
      * True when the mouse button is pressed
      */
     bool m_bMousePressed;
-};
-
-
-
-/**
- * Tooltip, which displays the comment and cell content, when it's too short
- */
-class ToolTip : public QToolTip
-{
-public:
-    ToolTip( Canvas* canvas );
-
-protected:
-    /**
-     * @reimp
-     */
-    void maybeTip( const QPoint& p );
-
-private:
-    Canvas* m_canvas;
 };
 
 } // namespace KSpread
