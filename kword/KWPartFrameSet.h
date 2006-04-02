@@ -155,11 +155,13 @@ public:
     KWDocument* parent()const
     { return m_pKWordDoc; }
 
+    virtual void setDocument( KoDocument *doc, const QRect &geometry );
+
     void setPartFrameSet( KWPartFrameSet* fs ) { m_partFrameSet = fs; }
     KWPartFrameSet * partFrameSet() const { return m_partFrameSet; }
-    //virtual KoDocument* hitTest( const QPoint& p, const QWMatrix& _matrix = QWMatrix() );
+    virtual KoDocument* hitTest( const QPoint& p, const QWMatrix& _matrix = QWMatrix() );
 
-protected:
+private:
     KWDocument *m_pKWordDoc;
     KWPartFrameSet *m_partFrameSet;
 };

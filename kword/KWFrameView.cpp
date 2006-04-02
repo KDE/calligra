@@ -72,7 +72,7 @@ bool KWFrameView::contains(const KoPoint &point, bool fuzzy) const {
 }
 
 bool KWFrameView::hit(const KoPoint &point, bool fuzzy , bool borderOnly) const {
-//kdDebug() << "hit " << point << " " << fuzzy << ", " << borderOnly << endl;
+    //kdDebug() << "hit " << point << " " << fuzzy << ", " << borderOnly << endl;
     double hs = 0, vs =0;
     if(fuzzy) {
         hs = HORIZONTAL_SNAP;
@@ -100,12 +100,11 @@ bool KWFrameView::hit(const KoPoint &point, bool fuzzy , bool borderOnly) const 
 }
 
 MouseMeaning KWFrameView::mouseMeaning( const KoPoint &point, int keyState ) {
-//kdDebug() << "KWFrameView::mouseMeaning" << point << endl;
     if(isBorderHit(point)) {
         MouseMeaning mm = m_policy->mouseMeaningOnBorder(point, keyState);
-        if(mm != MEANING_NONE && frame()->frameSet()->isProtectSize() ||
+        if(mm != MEANING_NONE && ( frame()->frameSet()->isProtectSize() ||
                 frame()->frameSet()->isMainFrameset() || frame()->frameSet()->isAHeader() ||
-                frame()->frameSet()->isAFooter())
+                frame()->frameSet()->isAFooter() ))
             mm = MEANING_FORBIDDEN;
         return mm;
     }
@@ -318,11 +317,12 @@ PartFramePolicy::PartFramePolicy(KWFrameView *view) : FramePolicy (view) {
 MouseMeaning PartFramePolicy::mouseMeaning( const KoPoint &point, int keyState ) {
     Q_UNUSED(point);
     // Clicking on a selected part frame, but not on its border -> either resize or "activate part"
-    if( keyState & Qt::ControlButton )
-        return MEANING_MOUSE_SELECT;
+    if( keyState & Qt::ControlButton ) {
+        return m_view->selected() ? MEANING_MOUSE_MOVE : MEANING_MOUSE_SELECT;
+    }
     if ( m_view->selected() )
         return MEANING_ACTIVATE_PART;
-    return MEANING_NONE;
+    return MEANING_MOUSE_SELECT;
 }
 QPopupMenu* PartFramePolicy::createPopup( const KoPoint &point, KWView *view ) {
     Q_UNUSED(point);
