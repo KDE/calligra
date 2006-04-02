@@ -50,9 +50,12 @@ KoDocumentEntry::KoDocumentEntry( KService::Ptr service )
 
 KoDocument* KoDocumentEntry::createDoc( KoDocument* parent, const char* name ) const
 {
+    // TODO use KParts::ComponentFactory::createInstanceFromService( m_service )
+    // to get better error handling.
     KLibFactory* factory = KLibLoader::self()->factory( QFile::encodeName(m_service->library()) );
 
     if( !factory ) {
+        m_createDocErrorMessage = KLibLoader::self()->lastErrorMessage();
         kdWarning(30003) << KLibLoader::self()->lastErrorMessage() << endl;
         return 0;
     }
@@ -67,6 +70,8 @@ KoDocument* KoDocumentEntry::createDoc( KoDocument* parent, const char* name ) c
 
     if ( !obj || !obj->inherits( "KoDocument" ) )
     {
+        // TODO
+        //  m_createDocErrorMessage = i18n( "Document could not be created" );
         delete obj;
         return 0;
     }
@@ -102,7 +107,7 @@ KoDocumentEntry KoDocumentEntry::queryByMimeType( const QString & mimetype )
     }
   }
 
-  return vec[0];
+  return KoDocumentEntry( vec[0] );
 }
 
 QValueList<KoDocumentEntry> KoDocumentEntry::query( const QString & _constr )

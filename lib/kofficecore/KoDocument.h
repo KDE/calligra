@@ -291,7 +291,7 @@ public:
     void setConfirmNonNativeSave( const bool exporting, const bool on );
 
     virtual bool wantExportConfirmation() const;
-    
+
     /**
      * Sets the error message to be shown to the user (use i18n()!)
      * when loading or saving fails.
@@ -373,6 +373,10 @@ public:
      *  @return Pointer to the document under the mouse at that position
      */
     virtual KoDocument *hitTest( const QPoint &pos, const QWMatrix& matrix = QWMatrix() );
+    /// Temporary API for accessing the view that calls hitTest.
+    /// Will be passed to hitTest() in 2.x.
+    /// Only call this from within hitTest()!
+    KoView* hitTestView();
 
     /**
      *  Paints the whole document into the given painter object.

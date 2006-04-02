@@ -636,10 +636,11 @@ KoDocument* KoFilterChain::createDocument( const QCString& mimeType )
     {
         kdError( 30500 ) << "Couldn't find a part that can handle mimetype " << mimeType << endl;
     }
-    
-    KoDocument* doc = entry.createDoc(); /*entries.first().createDoc();*/
+
+    KoDocument* doc = entry.createDoc();
     if ( !doc ) {
-        kdError( 30500 ) << "Couldn't create the document" << endl;
+        QString errorMsg = entry.createDocErrorMessage();
+        kdError( 30500 ) << "Couldn't create the document: " << errorMsg << endl;
         return 0;
     }
     return doc;

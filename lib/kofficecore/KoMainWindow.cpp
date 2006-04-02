@@ -484,7 +484,7 @@ void KoMainWindow::reloadRecentFileList()
 KoDocument* KoMainWindow::createDoc() const
 {
     KoDocumentEntry entry = KoDocumentEntry( KoDocument::readNativeService() );
-    return entry.createDoc();
+    return entry.createDoc(); // no error handling, but how could it fail when it worked once before?
 }
 
 void KoMainWindow::updateCaption()
