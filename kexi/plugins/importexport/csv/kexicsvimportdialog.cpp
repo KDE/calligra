@@ -452,6 +452,7 @@ bool KexiCSVImportDialog::openData()
 		return true;
 
 	delete m_inputStream;
+	m_inputStream = 0;
 	if (m_file) {
 		m_file->close();
 		delete m_file;
