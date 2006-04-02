@@ -201,9 +201,6 @@
 /* build Kexi scripting GUI plugin */
 /* #undef KEXI_SCRIPTS_SUPPORT */
 
-/* The correct header */
-#define LCMS_HEADER <lcms.h>
-
 /* Name of package */
 #define PACKAGE "koffice"
 

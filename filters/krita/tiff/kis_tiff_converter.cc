@@ -22,7 +22,7 @@
 #include <stdio.h>
 
 #include <config.h>
-#include LCMS_HEADER
+#include <lcms.h>
 
 #include <qfile.h>
 
