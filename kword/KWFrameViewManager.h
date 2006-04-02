@@ -41,9 +41,11 @@ class QRegion;
  * Class that knows about all the (visible) frames in the document and will act as
  * a manager between the GUI code and the data objects to couple any GUI action to the
  * right frame.
+ * There is one KWFrameViewManager per view (stored in KWCanvas).
+ *
  * All coordinates used in this object are point (pt) based, i.e. the same as in KWFrame. Any
  * coordinates in pixels should first be converted in the KoZoomHandler (in KWord
- * thats the KWDocument)
+ * that's the KWDocument)
  */
 class KWFrameViewManager : public QObject {
     Q_OBJECT
@@ -203,8 +205,6 @@ private:
 
     /// make sure the caches for pages and frame-hit positions is uptodate.
     void recalculateFrameCache();
-    /// return the KWFrameView for a specific frame
-    KWFrameView *getViewFor(KWFrame *frame);
 
     /**
      * Returns a sorted list of KWFrameView objects that represents frames present at @p point
@@ -220,7 +220,7 @@ private:
     static bool compareFrameViewZOrder(KWFrameView *f1, KWFrameView *f2);
 
 private:
-    Q3ValueList<KWFrameView*> m_frames;
+    Q3ValueList<KWFrameView*> m_frames; // TODO QHash<KWFrame*,KWFrameView*>
     Q3ValueList<KWFramesListener*> m_framesListener;
     Q3ValueList<FrameEvent*> m_frameEvents;
     bool m_queueRequested, m_blockEvents;

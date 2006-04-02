@@ -22,7 +22,9 @@
 #include "KWDocument.h"
 #include "KWCommand.h"
 #include "KWordPartFrameSetIface.h"
-//#include "KWordPartFrameSetEditIface.h"
+#include "KWFrameViewManager.h"
+#include "KWFrameView.h"
+#include "KWViewMode.h"
 
 #include <KoOasisContext.h>
 #include <KoXmlWriter.h>
@@ -319,12 +321,12 @@ void KWPartFrameSet::storeInternal()
 /******************************************************************/
 
 KWDocumentChild::KWDocumentChild( KWDocument *_wdoc, const QRect& _rect, KoDocument *_doc )
-    : KoDocumentChild( _wdoc, _doc, _rect ), m_partFrameSet( 0L )
+    : KoDocumentChild( _wdoc, _doc, _rect ), m_partFrameSet( 0 )
 {
 }
 
 KWDocumentChild::KWDocumentChild( KWDocument *_wdoc )
-    : KoDocumentChild( _wdoc ), m_partFrameSet( 0L )
+    : KoDocumentChild( _wdoc ), m_partFrameSet( 0 )
 {
 }
 
@@ -332,31 +334,38 @@ KWDocumentChild::~KWDocumentChild()
 {
 }
 
-// DF: why was this commented out?
-#if 0
-KoDocument* KWDocumentChild::hitTest( const QPoint& p, const QMatrix& _matrix )
+void KWDocumentChild::setDocument( KoDocument *doc, const QRect &geometry )
+{
+    // When hitTest returns true, we want to activate the part right away.
+    // PartManager supports selecting parts, but not in a doc/view separated way.
+    doc->setSelectable( false );
+    KoDocumentChild::setDocument( doc, geometry );
+}
+
+KoDocument* KWDocumentChild::hitTest( const QPoint& p, KoView* view, const QMatrix& _matrix )
 {
     Q_ASSERT( m_partFrameSet );
-    if ( isDeleted() ) {
-        //kDebug() << k_funcinfo << "is deleted!" << endl;
-        return 0L;
-    }
-    // Only activate when it's already selected.
-    if ( !m_partFrameSet->frame(0)->isSelected() ) {
-        //kDebug() << k_funcinfo << " is not selected" << endl;
-        return 0L;
-    }
-    // And only if CTRL isn't pressed.
-#if KDE_IS_VERSION( 3, 4, 0 )
-    if ( kapp->keyboardMouseState() & Qt::ControlModifier )
+    if ( isDeleted() || !document() ) {
         return 0;
-#else
-    if ( kapp->keyboardModifiers() & KApplication::ControlModifier )
-        return 0;
-#endif
+    }
 
-    return KoDocumentChild::hitTest( p, _matrix );
+    int keyState = qApp->keyboardModifiers();
+
+    // Only activate when it's already selected, and when not clicking on the border.
+    // KWFrameView and the part frame policy have that logic already.
+    KWView* kwView = ::qobject_cast<KWView *>( view );
+    Q_ASSERT( kwView );
+    if ( kwView ) {
+        KWFrame* frame = m_partFrameSet->frame(0);
+        KWFrameView* frameView = kwView->frameViewManager()->view( frame );
+        Q_ASSERT( frameView );
+        MouseMeaning mouseMeaning = frameView->mouseMeaning( KoPoint( p ), keyState );
+        if ( mouseMeaning != MEANING_ACTIVATE_PART ) {
+            return 0;
+        }
+    }
+
+    return document()->hitTest( p, view, _matrix );
 }
-#endif
 
 #include "KWPartFrameSet.moc"

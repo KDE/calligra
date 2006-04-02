@@ -40,6 +40,7 @@ class FramePolicy {
 public:
     /** Constructor */
     FramePolicy(KWFrameView *view);
+    virtual ~FramePolicy() {}
     /**
      * Return the MouseMeaning enum value for the parent view.
      * @param point the point where the mouse is hovering.

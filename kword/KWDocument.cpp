@@ -3842,7 +3842,8 @@ KWDocumentChild* KWDocument::createChildDoc( const KoRect& rect, KoDocument* chi
 
 KWPartFrameSet* KWDocument::insertObject( const KoRect& rect, KoDocumentEntry& e, QWidget* parentWidget )
 {
-    KoDocument* doc = e.createDoc( this );
+    QString errorMsg;
+    KoDocument* doc = e.createDoc( &errorMsg, this );
     if ( !doc )
         return 0;
     if ( !doc->showEmbedInitDialog( parentWidget )  )

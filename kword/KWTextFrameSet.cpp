@@ -681,10 +681,8 @@ void KWTextFrameSet::drawFrameContents( KWFrame *theFrame, QPainter *painter, co
     {
         // This is drawing code, so we convert everything to pixels
         int docHeight = textDocument()->lastParag()->pixelRect(m_doc).bottom() + 1;
-        //QRect frameRect = m_doc->zoomRect( (theFrame->innerRect()) );
-
         QSize availSize = viewMode->availableSizeForText( this );
-        QRect blank( 0, docHeight, availSize.width(), availSize.height() /*+ frameRect.height() ?? */ - docHeight );
+        QRect blank( 0, docHeight, availSize.width(), availSize.height() - docHeight );
         //kDebug(32002) << this << " Blank area: " << blank << endl;
         painter->fillRect( blank, cg.brush( QColorGroup::Base ) );
         // for debugging :)
