@@ -741,6 +741,12 @@ void KexiMainWindowImpl::initActions()
 	Kexi::tempShowReports() = false;
 #endif
 
+#ifdef KEXI_MACROS_SUPPORT
+	Kexi::tempShowMacros() = true;
+#else
+	Kexi::tempShowMacros() = false;
+#endif
+
 #ifdef KEXI_SCRIPTS_SUPPORT
 	Kexi::tempShowScripts() = true;
 #else
@@ -3638,6 +3644,7 @@ KexiMainWindowImpl::initFinalMode(KexiProjectData *projectData)
 //TODO
 	Kexi::tempShowForms() = true;
 	Kexi::tempShowReports() = true;
+	Kexi::tempShowMacros() = true;
 	Kexi::tempShowScripts() = true;
 	if(!projectData)
 		return false;

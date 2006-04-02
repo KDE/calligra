@@ -16,6 +16,7 @@
 */
 
 #include "keximacropart.h"
+#include "keximacrodesignview.h"
 
 #include "lib/manager.h"
 //#include "kexiviewbase.h"
@@ -38,7 +39,7 @@ class KexiMacroPart::Private
 		* The @a KoMacro::Manager instace used to access the
 		* KoMacro Framework.
 		*/
-		KoMacro::Manager* const manager;
+		KoMacro::Manager* manager;
 
 		/**
 		* Constructor.
@@ -62,6 +63,8 @@ KexiMacroPart::KexiMacroPart(QObject *parent, const char *name, const QStringLis
 	: KexiPart::Part(parent, name, l)
 	, d( new Private() )
 {
+	kdDebug() << "KexiMacroPart::KexiMacroPart() Ctor" << endl;
+
 	//registered ID
 	m_registeredPartID = (int)KexiPart::MacroObjectType;
 
@@ -78,46 +81,55 @@ KexiMacroPart::KexiMacroPart(QObject *parent, const char *name, const QStringLis
 
 KexiMacroPart::~KexiMacroPart()
 {
+	kdDebug() << "KexiMacroPart::~KexiMacroPart() Dtor" << endl;
 	delete d;
 }
 
 KAction* KexiMacroPart::action(const QString&, QObject*)
 {
+	kdDebug() << "KexiMacroPart::action()" << endl;
 	///\todo
 	return 0;
 }
 
 void KexiMacroPart::initPartActions()
 {
-    d->manager = new KoMacro::Manager(m_mainWin);
+	kdDebug() << "KexiMacroPart::initPartActions()" << endl;
+	d->manager = new KoMacro::Manager(m_mainWin);
 }
 
 void KexiMacroPart::initInstanceActions()
 {
+	kdDebug() << "KexiMacroPart::initInstanceActions()" << endl;
 	//createSharedAction(Kexi::DesignViewMode, i18n("Execute Macro"), "exec", 0, "script_execute");
 }
 
-KexiViewBase* KexiMacroPart::createView(QWidget* /*parent*/, KexiDialogBase* /*dialog*/, KexiPart::Item& /*item*/, int /*viewMode*/, QMap<QString,QString>*)
+KexiViewBase* KexiMacroPart::createView(QWidget* parent, KexiDialogBase* dialog, KexiPart::Item& item, int viewMode, QMap<QString,QString>*)
 {
-/*
+	kdDebug() << "KexiMacroPart::createView()" << endl;
+
 	QString partname = item.name();
-	if( ! partname.isNull() ) {
+	if(! partname.isNull()) {
 		KexiMainWindow *win = dialog->mainWin();
-		if(!win || !win->project() || !win->project()->dbConnection())
+		if(!win || !win->project() || !win->project()->dbConnection()) {
 			return 0;
-		if(viewMode == Kexi::DesignViewMode)
-			return new KexiScriptDesignView(win, parent, scriptaction);
+		}
+		if(viewMode == Kexi::DesignViewMode) {
+			return new KexiMacroDesignView(win, parent);
+		}
 	}
-*/
+
 	return 0;
 }
 
 QString KexiMacroPart::i18nMessage(const QCString& englishMessage) const
 {
-	if (englishMessage=="Design of object \"%1\" has been modified.")
+	if(englishMessage=="Design of object \"%1\" has been modified.") {
 		return i18n("Design of macro \"%1\" has been modified.");
-	if (englishMessage=="Object \"%1\" already exists.")
+	}
+	if(englishMessage=="Object \"%1\" already exists.") {
 		return i18n("Macro \"%1\" already exists.");
+	}
 	return englishMessage;
 }
 

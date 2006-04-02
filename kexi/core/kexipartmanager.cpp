@@ -76,6 +76,8 @@ Manager::lookup()
 			continue;
 		if (!Kexi::tempShowReports() && mime=="kexi/report")
 			continue;
+		if (!Kexi::tempShowMacros() && mime=="kexi/macro")
+			continue;
 		if (!Kexi::tempShowScripts() && mime=="kexi/script")
 			continue;
 //</TEMP>

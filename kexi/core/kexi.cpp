@@ -122,6 +122,14 @@ bool& Kexi::tempShowReports() {
 	return _tempShowReports;
 }
 
+bool _tempShowMacros = true;
+bool& Kexi::tempShowMacros() {
+#ifndef KEXI_MACROS_SUPPORT
+	_tempShowMacros = false; 
+#endif
+	return _tempShowMacros;
+}
+
 bool _tempShowScripts = true;
 bool& Kexi::tempShowScripts() { 
 #ifndef KEXI_SCRIPTS_SUPPORT
