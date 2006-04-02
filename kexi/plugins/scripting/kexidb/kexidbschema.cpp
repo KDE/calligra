@@ -22,6 +22,7 @@
 #include "kexidbfieldlist.h"
 
 #include <qregexp.h>
+#include <kdebug.h>
 
 #include <api/variant.h>
 
@@ -217,7 +218,7 @@ Kross::Api::Object::Ptr KexiDBQuerySchema::setWhereExpression(Kross::Api::List::
         }
     }
     catch(Kross::Api::Exception::Ptr e) {
-        kdWarning() << "Exception in Kross::KexiDB::KexiDBQuerySchema::setWhereExpression: " << e->toString() << endl;
+        Kross::krosswarning("Exception in Kross::KexiDB::KexiDBQuerySchema::setWhereExpression: ");
         static_cast< ::KexiDB::QuerySchema* >(m_schema)->setWhereExpression(oldexpr); // fallback
         return new Kross::Api::Variant(QVariant(false,0));
     }
