@@ -13,6 +13,7 @@ icon_ICON = button test_it database database_import widgets form_edit \
 	form form_newobj \
 	script script_newobj \
 	report report_newobj \
+	macro macro_newobj \
 	label calculation calculations key navigator_prev navigator_next navigator_first navigator_last \
 	navigator_new check combo groupbox line line_vertical line_horizontal listbox listview progress \
 	radio slider spin mouse_pointer widgetstack dateedit datetimeedit timeedit textedit \
