@@ -126,6 +126,7 @@ public:
     KoViewWrapperWidget *m_wrapperWidget;
     KoDocumentIface * m_dcopObject;
     KoDocumentInfo *m_docInfo;
+    KoView* hitTestView;
 
     KoUnit::Unit m_unit;
 
@@ -688,16 +689,24 @@ KParts::Part *KoDocument::hitTest( QWidget *widget, const QPoint &globalPos )
     for (; it.current(); ++it )
         if ( static_cast<QWidget *>(it.current()) == widget )
         {
-            QPoint canvasPos( it.current()->canvas()->mapFromGlobal( globalPos ) );
-            canvasPos.rx() += it.current()->canvasXOffset();
-            canvasPos.ry() += it.current()->canvasYOffset();
+            KoView* view = it.current();
+            d->hitTestView = view; // koffice-1.x hack
+            QPoint canvasPos( view->canvas()->mapFromGlobal( globalPos ) );
+            canvasPos.rx() += view->canvasXOffset();
+            canvasPos.ry() += view->canvasYOffset();
 
-            KParts::Part *part = it.current()->hitTest( canvasPos );
+            KParts::Part *part = view->hitTest( canvasPos );
+            d->hitTestView = 0;
             if ( part )
                 return part;
         }
 
     return 0L;
+}
+
+KoView* KoDocument::hitTestView()
+{
+    return d->hitTestView;
 }
 
 KoDocument* KoDocument::hitTest( const QPoint &pos, const QWMatrix &matrix )
