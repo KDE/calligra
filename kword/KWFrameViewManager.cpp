@@ -283,14 +283,14 @@ QCursor KWFrameViewManager::mouseCursor( const KoPoint &point, int keyState ) co
     }
 
     if(view == 0)
-        return QCursor(); // default cursor !?!?
+        return QCursor(); // default arrow shape
 
     KWFrameSet*frameSet = view->frame()->frameSet();
     switch ( meaning ) {
         case MEANING_NONE:
             return Qt::ibeamCursor; // default cursor in margins
         case MEANING_MOUSE_INSIDE:
-            return QCursor(); // default cursor !?!?
+            return QCursor(); // default arrow shape
         case MEANING_MOUSE_INSIDE_TEXT:
             return Qt::ibeamCursor;
         case MEANING_MOUSE_OVER_LINK:
@@ -336,7 +336,7 @@ QCursor KWFrameViewManager::mouseCursor( const KoPoint &point, int keyState ) co
         case MEANING_FORBIDDEN:
             return KCursor::handCursor();
     }
-    return QCursor(); // default cursor !?!?
+    return QCursor(); // default arrow shape
 }
 
 MouseMeaning KWFrameViewManager::mouseMeaning( const KoPoint &point, int keyState) const {
@@ -395,13 +395,13 @@ void KWFrameViewManager::showPopup( const KoPoint &point, KWView *view, int keyS
 
 void KWFrameViewManager::selectFrames(const KoPoint &point, int keyState, bool leftClick) {
     MouseMeaning mm = mouseMeaning(point, keyState);
-    bool multiSelect = mm == MEANING_MOUSE_SELECT || keyState & Qt::ControlButton ;
+    bool multiSelect = mm == MEANING_MOUSE_SELECT || ( keyState & Qt::ControlButton );
     SelectionType se = frameOnTop;
     if(leftClick && multiSelect)
         se = nextUnselected;
     KWFrameView *toBeSelected = view(point, se, !multiSelect);
     //kdDebug() << "KWFrameViewManager::selectFrames" << point << " got: " << toBeSelected << endl;
-    if(toBeSelected == 0 || !multiSelect || keyState & Qt::ShiftButton &&
+    if(toBeSelected == 0 || !multiSelect || ( keyState & Qt::ShiftButton ) &&
         !(leftClick && (mm == MEANING_TOPLEFT || mm == MEANING_TOPRIGHT || mm == MEANING_TOP ||
         mm == MEANING_LEFT || mm == MEANING_RIGHT || mm == MEANING_MOUSE_MOVE ||
         mm == MEANING_BOTTOMLEFT || mm == MEANING_BOTTOM || mm == MEANING_BOTTOMRIGHT))) {
