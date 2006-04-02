@@ -87,7 +87,7 @@ ScriptContainer::ScriptContainer(const QString& name)
     : MainModule(name)
     , d( new ScriptContainerPrivate() ) // initialize d-pointer class
 {
-    kdDebug() << QString("ScriptContainer::ScriptContainer() Ctor name='%1'").arg(name) << endl;
+    krossdebug( QString("ScriptContainer::ScriptContainer() Ctor name='%1'").arg(name) );
 
     d->script = 0;
     d->name = name;
@@ -95,13 +95,13 @@ ScriptContainer::ScriptContainer(const QString& name)
 
 ScriptContainer::~ScriptContainer()
 {
-    kdDebug() << QString("ScriptContainer::~ScriptContainer() Dtor name='%1'").arg(d->name) << endl;
+    krossdebug( QString("ScriptContainer::~ScriptContainer() Dtor name='%1'").arg(d->name) );
 
     finalize();
     delete d;
 }
 
-const QString& ScriptContainer::getName() const
+QString ScriptContainer::getName() const
 {
     return d->name;
 }
@@ -111,7 +111,7 @@ void ScriptContainer::setName(const QString& name)
     d->name = name;
 }
 
-const QString& ScriptContainer::getCode() const
+QString ScriptContainer::getCode() const
 {
     return d->code;
 }
@@ -122,7 +122,7 @@ void ScriptContainer::setCode(const QString& code)
     d->code = code;
 }
 
-const QString& ScriptContainer::getInterpreterName() const
+QString ScriptContainer::getInterpreterName() const
 {
     return d->interpretername;
 }
@@ -133,7 +133,7 @@ void ScriptContainer::setInterpreterName(const QString& interpretername)
     d->interpretername = interpretername;
 }
 
-const QString& ScriptContainer::getFile() const
+QString ScriptContainer::getFile() const
 {
     return d->scriptfile;
 }
@@ -149,7 +149,7 @@ QMap<QString, QVariant>& ScriptContainer::getOptions()
     return d->options;
 }
 
-const QVariant& ScriptContainer::getOption(const QString name, QVariant defaultvalue, bool /*recursive*/)
+QVariant ScriptContainer::getOption(const QString name, QVariant defaultvalue, bool /*recursive*/)
 {
     if(d->options.contains(name))
         return d->options[name];
@@ -164,8 +164,8 @@ bool ScriptContainer::setOption(const QString name, const QVariant& value)
         if(info->hasOption(name)) {
             d->options.replace(name, value);
             return true;
-        } else kdWarning() << QString("Kross::Api::ScriptContainer::setOption(%1, %2): No such option").arg(name).arg(value.toString()) << endl;
-    } else kdWarning() << QString("Kross::Api::ScriptContainer::setOption(%1, %2): No such interpreterinfo").arg(name).arg(value.toString()) << endl;
+        } else krosswarning( QString("Kross::Api::ScriptContainer::setOption(%1, %2): No such option").arg(name).arg(value.toString()) );
+    } else krosswarning( QString("Kross::Api::ScriptContainer::setOption(%1, %2): No such interpreterinfo").arg(name).arg(value.toString()) );
     return false;
 }
 
@@ -216,7 +216,7 @@ Object::Ptr ScriptContainer::callFunction(const QString& functionname, List::Ptr
     return r;
 }
 
-const QStringList ScriptContainer::getClassNames()
+QStringList ScriptContainer::getClassNames()
 {
     return d->script ? d->script->getClassNames() : QStringList(); //FIXME init before if needed?
 }
@@ -244,7 +244,7 @@ bool ScriptContainer::initialize()
     finalize();
 
     if(! d->scriptfile.isNull()) {
-        kdDebug() << QString("Kross::Api::ScriptContainer::initialize() file=%1").arg(d->scriptfile) << endl;
+        krossdebug( QString("Kross::Api::ScriptContainer::initialize() file=%1").arg(d->scriptfile) );
 
         if(d->interpretername.isNull()) {
             d->interpretername = Manager::scriptManager()->getInterpreternameForFile( d->scriptfile );

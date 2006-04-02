@@ -23,7 +23,6 @@
 #include <qstring.h>
 #include <qvaluelist.h>
 #include <qintdict.h>
-#include <kdebug.h>
 
 #include "object.h"
 #include "value.h"
@@ -44,11 +43,11 @@ namespace Kross { namespace Api {
              */
             typedef KSharedPtr<List> Ptr;
 
-operator QStringList () {
-//QValueList<Object::Ptr> getValue()
-kdDebug()<<"999999999999 ..........................."<<endl;
-return QStringList();
-}
+            operator QStringList () {
+                //QValueList<Object::Ptr> getValue()
+                krossdebug("999999999999 ...........................");
+                return QStringList();
+            }
 
             /**
              * Constructor.

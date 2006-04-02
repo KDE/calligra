@@ -1,9 +1,10 @@
 == Kross CHANGES ==
 
 1.6
-* Integrated ProxyFunction's
-* Python: Added unittest
+* Added krossdebug and krosswarning.
+* Integrated ProxyFunction's.
+* Python: Added unittest.
 
 1.5
-* Ruby: Fix 124649: libruby-devel lost when build
+* Ruby: Fix 124649: libruby-devel lost when build.
 * Ruby: Fix crash cause of invalid rNode.

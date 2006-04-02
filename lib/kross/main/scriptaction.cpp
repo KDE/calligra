@@ -27,7 +27,6 @@
 #include <kurl.h>
 #include <kstandarddirs.h>
 #include <kmimetype.h>
-#include <kdebug.h>
 
 using namespace Kross::Api;
 
@@ -88,8 +87,6 @@ ScriptAction::ScriptAction(const QString& file)
     , Kross::Api::ScriptContainer(file)
     , d( new ScriptActionPrivate() ) // initialize d-pointer class
 {
-    //kdDebug() << QString("Kross::Api::ScriptAction::ScriptAction(const char*, const QString&) name='%1' text='%2'").arg(name).arg(text) << endl;
-
     KURL url(file);
     if(url.isLocalFile()) {
         setFile(file);
@@ -109,8 +106,6 @@ ScriptAction::ScriptAction(const QString& scriptconfigfile, const QDomElement& e
     , Kross::Api::ScriptContainer()
     , d( new ScriptActionPrivate() ) // initialize d-pointer class
 {
-    //kdDebug() << "Kross::Api::ScriptAction::ScriptAction(const QDomElement&)" << endl;
-
     QString name = element.attribute("name");
     QString text = element.attribute("text");
     QString description = element.attribute("description");
@@ -174,7 +169,6 @@ ScriptAction::ScriptAction(const QString& scriptconfigfile, const QDomElement& e
 
 ScriptAction::~ScriptAction()
 {
-    //kdDebug() << QString("Kross::Api::ScriptAction::~ScriptAction() name='%1' text='%2'").arg(name()).arg(text()) << endl;
     detachAll();
     delete d;
 }

@@ -83,7 +83,7 @@ namespace Kross { namespace Api {
              *
              * \return Name of this object.
              */
-            const QString& getName() const;
+            const QString getName() const;
 
             /**
              * Return the class name. This could be something

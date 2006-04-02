@@ -33,7 +33,6 @@
 #include <qstring.h>
 #include <qvaluelist.h>
 #include <qmap.h>
-#include <kdebug.h>
 
 namespace Kross { namespace Api {
 
@@ -208,13 +207,13 @@ namespace Kross { namespace Api {
             virtual Object::Ptr call(const QString& name, List::Ptr arguments)
             {
 #ifdef KROSS_API_EVENT_CALL_DEBUG
-                kdDebug() << QString("Event::call() name='%1' getName()='%2'").arg(name).arg(getName()) << endl;
+                krossdebug( QString("Event::call() name='%1' getName()='%2'").arg(name).arg(getName()) );
 #endif
 
                 Function* function = m_functions[name];
                 if(function) {
 #ifdef KROSS_API_EVENT_CALL_DEBUG
-                    kdDebug() << QString("Event::call() name='%1' is a builtin function.").arg(name) << endl;
+                    krossdebug( QString("Event::call() name='%1' is a builtin function.").arg(name) );
 #endif
                     return function->call(arguments);
                 }

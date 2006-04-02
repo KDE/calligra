@@ -21,7 +21,6 @@
 #include "list.h"
 
 #include <klocale.h>
-#include <kdebug.h>
 
 using namespace Kross::Api;
 

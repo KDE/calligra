@@ -24,7 +24,6 @@
 //#include <qvaluelist.h>
 //#include <qmap.h>
 #include <qobject.h>
-#include <kdebug.h>
 
 //#include "../main/krossconfig.h"
 #include "object.h"
@@ -80,7 +79,7 @@ namespace Kross { namespace Api {
             /*
             virtual Object::Ptr call(const QString& name, List::Ptr arguments)
             {
-                kdDebug() << QString("Class::call(%1)").arg(name) << endl;
+                krossdebug( QString("Class::call(%1)").arg(name) );
                 return Event<T>::call(name, arguments);
             }
             */

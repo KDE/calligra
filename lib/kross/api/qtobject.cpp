@@ -121,14 +121,14 @@ QUObject* QtObject::toQUObject(const QString& signature, List::Ptr arguments)
 
 //QString t;
 //for(int j=0; j<argcount; j++) t += "'" + Variant::toString(arguments->item(j)) + "' ";
-//kdDebug()<<"1 --------------------- ("<<argcount<<"): "<<t<<endl;
+//krossdebug( QString("1 ---------------------: (%1) %2").arg(argcount).arg(t) );
 
     // Fill parameters.
     uint argcount = arguments ? arguments->count() : 0;
     for(uint i = 0; i < paramcount; i++) {
         if(paramlist[i].find("QString") >= 0) {
             const QString s = (argcount > i) ? Variant::toString(arguments->item(i)) : QString::null;
-            //kdDebug()<<"EventSlot::toQUObject s="<<s<<endl;
+            //krossdebug(QString("EventSlot::toQUObject s=%1").arg(s));
             static_QUType_QString.set( &(uo[i + 1]), s );
         }
         //TODO handle int, long, char*, QStringList, etc.
@@ -137,22 +137,19 @@ QUObject* QtObject::toQUObject(const QString& signature, List::Ptr arguments)
         }
     }
 
-//kdDebug()<<"2 --------------------- "<<endl;
     return uo;
 }
 
 Kross::Api::Object::Ptr QtObject::propertyNames(Kross::Api::List::Ptr)
 {
     return new Kross::Api::Variant(
-        QStringList::fromStrList(m_object->metaObject()->propertyNames(false)),
-        "Kross::Api::QtObject::propertyNames::Variant::StringList");
+        QStringList::fromStrList(m_object->metaObject()->propertyNames(false)));
 }
 
 Kross::Api::Object::Ptr QtObject::hasProperty(Kross::Api::List::Ptr args)
 {
     return new Kross::Api::Variant(
-        m_object->metaObject()->findProperty(Kross::Api::Variant::toString(args->item(0)).latin1(), false),
-        "Kross::Api::QtObject::hasProperty::Variant::Bool");
+        m_object->metaObject()->findProperty(Kross::Api::Variant::toString(args->item(0)).latin1(), false));
 }
 
 Kross::Api::Object::Ptr QtObject::getProperty(Kross::Api::List::Ptr args)
@@ -160,7 +157,7 @@ Kross::Api::Object::Ptr QtObject::getProperty(Kross::Api::List::Ptr args)
     QVariant variant = m_object->property(Kross::Api::Variant::toString(args->item(0)).latin1());
     if(variant.type() == QVariant::Invalid)
         return 0;
-    return new Kross::Api::Variant(variant, "Kross::Api::QtObject::getProperty::Variant");
+    return new Kross::Api::Variant(variant);
 }
 
 Kross::Api::Object::Ptr QtObject::setProperty(Kross::Api::List::Ptr args)
@@ -169,15 +166,13 @@ Kross::Api::Object::Ptr QtObject::setProperty(Kross::Api::List::Ptr args)
            m_object->setProperty(
                Kross::Api::Variant::toString(args->item(0)).latin1(),
                Kross::Api::Variant::toVariant(args->item(1))
-           ),
-           "Kross::Api::QtObject::setProperty::Variant::Bool");
+           ));
 }
 
 Kross::Api::Object::Ptr QtObject::slotNames(Kross::Api::List::Ptr)
 {
     return new Kross::Api::Variant(
-           QStringList::fromStrList(m_object->metaObject()->slotNames(false)),
-           "Kross::Api::QtObject::slotNames::Variant::StringList");
+           QStringList::fromStrList(m_object->metaObject()->slotNames(false)));
 }
 
 Kross::Api::Object::Ptr QtObject::hasSlot(Kross::Api::List::Ptr args)
@@ -185,8 +180,7 @@ Kross::Api::Object::Ptr QtObject::hasSlot(Kross::Api::List::Ptr args)
     return new Kross::Api::Variant(
            bool(m_object->metaObject()->slotNames(false).find(
                Kross::Api::Variant::toString(args->item(0)).latin1()
-           ) != -1),
-           "Kross::Api::QtObject::hasSlot::Variant::Bool");
+           ) != -1));
 }
 
 Kross::Api::Object::Ptr QtObject::callSlot(Kross::Api::List::Ptr args)
@@ -201,14 +195,13 @@ Kross::Api::Object::Ptr QtObject::callSlot(Kross::Api::List::Ptr args)
     m_object->qt_invoke(slotid, uo);
     delete [] uo;
 
-    return new Variant(true, "Kross::Api::QtObject::Bool");
+    return new Variant(true);
 }
 
 Kross::Api::Object::Ptr QtObject::signalNames(Kross::Api::List::Ptr)
 {
     return new Kross::Api::Variant(
-           QStringList::fromStrList(m_object->metaObject()->signalNames(false)),
-           "Kross::Api::QtObject::signalNames::Variant::StringList");
+           QStringList::fromStrList(m_object->metaObject()->signalNames(false)));
 }
 
 Kross::Api::Object::Ptr QtObject::hasSignal(Kross::Api::List::Ptr args)
@@ -216,8 +209,7 @@ Kross::Api::Object::Ptr QtObject::hasSignal(Kross::Api::List::Ptr args)
     return new Kross::Api::Variant(
            bool(m_object->metaObject()->signalNames(false).find(
                Kross::Api::Variant::toString(args->item(0)).latin1()
-           ) != -1),
-           "Kross::Api::QtObject::hasSignal::Variant::Bool");
+           ) != -1));
 }
 
 Kross::Api::Object::Ptr QtObject::emitSignal(Kross::Api::List::Ptr args)
@@ -246,8 +238,7 @@ Kross::Api::Object::Ptr QtObject::connectSignal(Kross::Api::List::Ptr args)
     const char* slotsig = slotsignatur.latin1();
 
     return new Kross::Api::Variant(
-           QObject::connect(m_object, signalsig, o, slotsig),
-           "Kross::Api::QtObject::connect::Bool");
+           QObject::connect(m_object, signalsig, o, slotsig));
 }
 
 Kross::Api::Object::Ptr QtObject::disconnectSignal(Kross::Api::List::Ptr)

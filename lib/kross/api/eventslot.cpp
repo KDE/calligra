@@ -46,7 +46,7 @@ const QString EventSlot::getClassName() const
 Object::Ptr EventSlot::call(const QString& /*name*/, List::Ptr arguments)
 {
 #ifdef KROSS_API_EVENTSLOT_CALL_DEBUG
-    kdDebug() << QString("EventSlot::call() name=%1 m_slot=%2 arguments=%3").arg(name).arg(m_slot).arg(arguments->toString()) << endl;
+    krossdebug( QString("EventSlot::call() name=%1 m_slot=%2 arguments=%3").arg(name).arg(m_slot).arg(arguments->toString()) );
 #endif
 
     QString n = m_slot; //TODO name; //Variant::toString(args->item(0));
@@ -72,7 +72,7 @@ QCString EventSlot::getSlot(const QCString& signal)
     int startpos = signature.find("(");
     int endpos = signature.findRev(")");
     if(startpos < 0 || startpos > endpos) {
-        kdWarning() << QString("EventSlot::getSlot(%1) Invalid signal.").arg(signal) << endl;
+        krosswarning( QString("EventSlot::getSlot(%1) Invalid signal.").arg(signal) );
         return QCString();
     }
     QString signalname = signature.left(startpos);
@@ -83,20 +83,21 @@ QCString EventSlot::getSlot(const QCString& signal)
     QMetaObject* mo = metaObject();
     int slotid = mo->findSlot(slot, false);
     if(slotid < 0) {
-        kdDebug() << QString("EventSlot::getSlot(%1) No such slot '%2' avaiable.").arg(signal).arg(slot) << endl;
+        krossdebug( QString("EventSlot::getSlot(%1) No such slot '%2' avaiable.").arg(signal).arg(slot) );
         return QCString();
     }
 
     const QMetaData* md = mo->slot(slotid, false);
     if(md->access != QMetaData::Public) {
-        kdDebug() << QString("EventSlot::getSlot(%1) The slot '%2' is not public.").arg(signal).arg(slot) << endl;
+        krossdebug( QString("EventSlot::getSlot(%1) The slot '%2' is not public.").arg(signal).arg(slot) );
         return QCString();
     }
 
 //QMember* member = md->member;
 //const QUMethod *method = md->method;
 
-    kdDebug()<<"signal="<<signal<<" slot="<<slot<<" slotid="<<slotid<<" params="<<params<<" md->name="<<md->name<<endl;
+    krossdebug( QString("signal=%1 slot=%2 slotid=%3 params=%4 mdname=%5")
+        .arg(signal).arg(slot).arg(slotid).arg(params).arg(md->name) );
     return QCString("1" + slot); // Emulate the SLOT(...) macro by adding as first char a "1".
 }
 
@@ -113,7 +114,7 @@ bool EventSlot::connect(EventManager* eventmanager, QObject* senderobj, const QC
         EventSlot* eventslot = create(eventmanager);
         eventslot->connect(eventmanager, senderobj, signal, function, slot);
         m_slots.append(eventslot);
-        kdDebug() << QString("EventSlot::connect(%1, %2, %3) added child EventSlot !!!").arg(senderobj->name()).arg(signal).arg(function) << endl;
+        krossdebug( QString("EventSlot::connect(%1, %2, %3) added child EventSlot !!!").arg(senderobj->name()).arg(signal).arg(function) );
     }
     else {
         m_sender = senderobj;
@@ -121,10 +122,10 @@ bool EventSlot::connect(EventManager* eventmanager, QObject* senderobj, const QC
         m_function = function;
         m_slot = myslot;
         if(! QObject::connect((QObject*)senderobj, signal, this, myslot)) {
-            kdDebug() << QString("EventSlot::connect(%1, %2, %3) failed.").arg(senderobj->name()).arg(signal).arg(function) << endl;
+            krossdebug( QString("EventSlot::connect(%1, %2, %3) failed.").arg(senderobj->name()).arg(signal).arg(function) );
             return false;
         }
-        kdDebug() << QString("EventSlot::connect(%1, %2, %3) successfully connected.").arg(senderobj->name()).arg(signal).arg(function) << endl;
+        krossdebug( QString("EventSlot::connect(%1, %2, %3) successfully connected.").arg(senderobj->name()).arg(signal).arg(function) );
     }
     return true;
 }
@@ -142,8 +143,8 @@ bool EventSlot::disconnect()
 
 void EventSlot::call(const QVariant& variant)
 {
-    kdDebug() << QString("EventSlot::call() sender='%1' signal='%2' function='%3'")
-                 .arg(m_sender->name()).arg(m_signal).arg(m_function) << endl;
+    krossdebug( QString("EventSlot::call() sender='%1' signal='%2' function='%3'")
+                 .arg(m_sender->name()).arg(m_signal).arg(m_function) );
 
     Kross::Api::List* arglist = 0;
 
@@ -158,7 +159,7 @@ void EventSlot::call(const QVariant& variant)
     }
     catch(Exception& e) {
         //TODO add hadError(), getError() and setError()
-        kdDebug() << QString("EXCEPTION in EventSlot::call('%1') type='%2' description='%3'").arg(variant.toString()).arg(e.type()).arg(e.description()) << endl;
+        krossdebug( QString("EXCEPTION in EventSlot::call('%1') type='%2' description='%3'").arg(variant.toString()).arg(e.type()).arg(e.description()) );
     }
 }
 

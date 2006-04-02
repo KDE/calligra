@@ -20,8 +20,6 @@
 #include "testplugin.h"
 #include "testobject.h"
 
-#include <kdebug.h>
-
 /************************************************************************
  * TestPluginObject
  */

@@ -33,7 +33,6 @@
 #include <kpopupmenu.h>
 #include <kmenubar.h>
 #include <kstandarddirs.h>
-#include <kdebug.h>
 
 TestWindow::TestWindow(const QString& interpretername, const QString& scriptcode)
     : KMainWindow()
@@ -52,9 +51,9 @@ TestWindow::TestWindow(const QString& interpretername, const QString& scriptcode
     QString file = KGlobal::dirs()->findResource("appdata", "testscripting.rc");
     if(file.isNull())
         file = QDir(QDir::currentDirPath()).filePath("testscripting.rc");
-    else kdDebug()<<"-------------------------222222"<<endl;
+    else krossdebug("-------------------------222222");
 
-    kdDebug()<<"XML-file: "<<file<<endl;
+    krossdebug(QString("XML-file: %1").arg(file));
     m_scriptextension->setXMLFile(file);
 
     //menuFile->insertSeparator();
@@ -100,11 +99,11 @@ void TestWindow::execute()
     m_scriptcontainer->setCode(m_codeedit->text());
     Kross::Api::Object::Ptr result = m_scriptcontainer->execute();
     if(m_scriptcontainer->hadException()) {
-        kdDebug() << "EXCEPTION => " << m_scriptcontainer->getException()->toString() << endl;
+        krossdebug( QString("EXCEPTION => %1").arg(m_scriptcontainer->getException()->toString());
     }
     else {
         QString s = result ? result->toString() : QString::null;
-        kdDebug() << "DONE => " << s << endl;
+        krossdebug( QString("DONE => %1").arg(s) );
     }
 }
 

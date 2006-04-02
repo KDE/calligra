@@ -46,7 +46,7 @@ const QString EventSignal::getClassName() const
 Object::Ptr EventSignal::call(const QString& /*name*/, KSharedPtr<List> arguments)
 {
 #ifdef KROSS_API_EVENTSIGNAL_CALL_DEBUG
-    kdDebug() << QString("EventSignal::call() name=%1 m_signal=%2 arguments=%3").arg(name).arg(m_signal).arg(arguments->toString()) << endl;
+    krossdebug( QString("EventSignal::call() name=%1 m_signal=%2 arguments=%3").arg(name).arg(m_signal).arg(arguments->toString()) );
 #endif
 
     QString n = m_signal;

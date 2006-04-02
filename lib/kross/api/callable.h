@@ -28,7 +28,6 @@
 #include <qstring.h>
 #include <qvaluelist.h>
 #include <ksharedptr.h>
-#include <kdebug.h>
 
 namespace Kross { namespace Api {
 

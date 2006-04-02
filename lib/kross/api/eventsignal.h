@@ -27,7 +27,6 @@
 //#include <qsignalmapper.h>
 //#include <qguardedptr.h>
 #include <qobject.h>
-//#include <kdebug.h>
 #include <ksharedptr.h>
 
 #include "event.h"

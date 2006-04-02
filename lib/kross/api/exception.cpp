@@ -21,7 +21,6 @@
 
 //#include <qstring.h>
 //#include <ksharedptr.h>
-#include <kdebug.h>
 
 using namespace Kross::Api;
 
@@ -30,7 +29,7 @@ Exception::Exception(const QString& error, long lineno, Object::Ptr parent)
     , m_error(error)
     , m_lineno(lineno)
 {
-    kdWarning() << QString("Kross::Api::Exception error='%1' lineno='%3'").arg(m_error).arg(m_lineno) << endl;
+    krosswarning( QString("Kross::Api::Exception error='%1' lineno='%3'").arg(m_error).arg(m_lineno) );
 }
 
 Exception::~Exception()
@@ -49,12 +48,12 @@ const QString Exception::toString()
         : QString("Exception: %1").arg(m_error);
 }
 
-const QString& Exception::getError() const
+const QString Exception::getError() const
 {
     return m_error;
 }
 
-const QString& Exception::getTrace() const
+const QString Exception::getTrace() const
 {
     return m_trace;
 }

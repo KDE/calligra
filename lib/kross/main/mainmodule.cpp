@@ -19,8 +19,6 @@
 
 #include "mainmodule.h"
 
-#include <kdebug.h>
-
 using namespace Kross::Api;
 
 namespace Kross { namespace Api {
@@ -79,7 +77,7 @@ EventSignal::Ptr MainModule::addSignal(const QString& name, QObject* sender, QCS
 {
     EventSignal* event = new EventSignal(name, this, sender, signal);
     if(! addChild(event)) {
-        kdWarning() << QString("Failed to add signal name='%1' signature='%2'").arg(name).arg(signal) << endl;
+        krosswarning( QString("Failed to add signal name='%1' signature='%2'").arg(name).arg(signal) );
         return 0;
     }
     return event;
@@ -89,7 +87,7 @@ EventSlot::Ptr MainModule::addSlot(const QString& name, QObject* receiver, QCStr
 {
     EventSlot* event = new EventSlot(name, this, receiver, slot);
     if(! addChild(event)) {
-        kdWarning() << QString("Failed to add slot name='%1' signature='%2'").arg(name).arg(slot) << endl;
+        krosswarning( QString("Failed to add slot name='%1' signature='%2'").arg(name).arg(slot) );
         delete event;
         return 0;
     }
@@ -100,7 +98,7 @@ QtObject::Ptr MainModule::addQObject(QObject* object, const QString& name)
 {
     QtObject* qtobject = new QtObject(this, object, name);
     if(! addChild(qtobject)) {
-        kdWarning() << QString("Failed to add QObject name='%1'").arg(object->name()) << endl;
+        krosswarning( QString("Failed to add QObject name='%1'").arg(object->name()) );
         delete qtobject;
         return 0;
     }
@@ -111,7 +109,7 @@ EventAction::Ptr MainModule::addKAction(KAction* action, const QString& name)
 {
     EventAction* event = new EventAction(name, this, action);
     if(! addChild(event)) {
-        kdWarning() << QString("Failed to add KAction name='%1'").arg(action->name()) << endl;
+        krosswarning( QString("Failed to add KAction name='%1'").arg(action->name()) );
         delete event;
         return 0;
     }

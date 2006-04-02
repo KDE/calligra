@@ -264,7 +264,7 @@ void WdgScriptsManager::slotInstallScript()
         return;
 
     if(! d->m_scripguiclient->installScriptPackage( filedialog->selectedURL().path() )) {
-        kdWarning() << "Failed to install scriptpackage" << endl;
+        krosswarning("Failed to install scriptpackage");
         return;
     }
 
@@ -294,7 +294,7 @@ void WdgScriptsManager::slotUninstallScript()
     }
 
     if(! d->m_scripguiclient->uninstallScriptPackage(packagepath)) {
-        kdWarning() << "Failed to uninstall scriptpackage" << endl;
+        krosswarning("Failed to uninstall scriptpackage");
         return;
     }
 

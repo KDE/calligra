@@ -52,7 +52,7 @@ const QString EventAction::getClassName() const
 /*
 Object::Ptr EventAction::call(const QString& name, KSharedPtr<List> arguments)
 {
-    kdDebug() << QString("=============> EventAction::call() name=%1 arguments=%2").arg(name).arg(arguments->toString()) << endl;
+    krossdebug( QString("=============> EventAction::call() name=%1 arguments=%2").arg(name).arg(arguments->toString()) );
     //TODO
     return 0;
 }
@@ -60,7 +60,7 @@ Object::Ptr EventAction::call(const QString& name, KSharedPtr<List> arguments)
 
 Object::Ptr EventAction::getText(List::Ptr)
 {
-    return new Variant(m_action->text(), "Kross::Api::EventAction::getText::String");
+    return new Variant(m_action->text());
 }
 
 Object::Ptr EventAction::setText(List::Ptr args)
@@ -71,7 +71,7 @@ Object::Ptr EventAction::setText(List::Ptr args)
 
 Object::Ptr EventAction::isEnabled(List::Ptr)
 {
-    return new Variant(m_action->isEnabled(), "Kross::Api::EventAction::isEnabled::Bool");
+    return new Variant(m_action->isEnabled());
 }
 
 Object::Ptr EventAction::setEnabled(List::Ptr args)

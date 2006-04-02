@@ -21,8 +21,6 @@
 #include "pythoninterpreter.h"
 #include "pythonmodule.h"
 
-#include <kdebug.h>
-
 using namespace Kross::Python;
 
 PythonSecurity::PythonSecurity(PythonInterpreter* interpreter)
@@ -87,7 +85,7 @@ void PythonSecurity::initRestrictedPython()
         if(! pyrun)
             throw Py::Exception();
 
-        kdDebug()<<"!!!!!!!!!!!!!! PythonSecurity::PythonSecurity SUCCESS !!!!!!!!!!!!!!!!!"<<endl;
+        krossdebug("PythonSecurity::PythonSecurity SUCCESSFULLY LOADED");
     }
     catch(Py::Exception& e) {
         QString err = Py::value(e).as_string().c_str();
@@ -98,17 +96,17 @@ void PythonSecurity::initRestrictedPython()
 
 Py::Object PythonSecurity::_getattr_(const Py::Tuple& args)
 {
-    kdDebug() << "PythonSecurity::_getattr_" << endl;
+    krossdebug("PythonSecurity::_getattr_");
     for(uint i = 0; i < args.size(); i++) {
         Py::Object o = args[i];
-        kdDebug()<<o.as_string().c_str()<<endl;
+        krossdebug( o.as_string().c_str() );
     }
     return Py::None();
 }
 
 PyObject* PythonSecurity::compile_restricted(const QString& source, const QString& filename, const QString& mode)
 {
-    kdDebug()<<"PythonSecurity::compile_restricted"<<endl;
+    krossdebug("PythonSecurity::compile_restricted");
     if(! m_pymodule)
         initRestrictedPython(); // throws exception if failed
 
@@ -140,22 +138,19 @@ PyObject* PythonSecurity::compile_restricted(const QString& source, const QStrin
             throw Py::Exception();
 
         /*
-        kdDebug()<<"$---------------------------------------------------"<<endl;
         Py::List ml = mainmoduledict;
         for(Py::List::size_type mi = 0; mi < ml.length(); ++mi) {
-            kdDebug() << QString("-------------------") << endl;
-            kdDebug() << QString("dir() = %1").arg( ml[mi].str().as_string().c_str() ) << endl;
-            //kdDebug() << QString("dir().dir() = %1").arg( Py::Object(ml[mi]).dir().as_string().c_str() ) << endl;
+            krossdebug( QString("dir() = %1").arg( ml[mi].str().as_string().c_str() ) );
+            //krossdebug( QString("dir().dir() = %1").arg( Py::Object(ml[mi]).dir().as_string().c_str() ) );
         }
-        kdDebug()<<"$---------------------------------------------------"<<endl;
         */
 
         Py::Object code(pycode);
-        kdDebug()<< code.as_string().c_str() << " callable=" << PyCallable_Check(code.ptr()) << endl;
+        krossdebug( QString("%1 callable=%2").arg(code.as_string().c_str()).arg(PyCallable_Check(code.ptr())) );
         Py::List l = code.dir();
         for(Py::List::size_type i = 0; i < l.length(); ++i) {
-            kdDebug() << QString("dir() = %1").arg( l[i].str().as_string().c_str() ) << endl;
-            //kdDebug() << QString("dir().dir() = %1").arg( Py::Object(l[i]).dir().as_string().c_str() ) << endl;
+            krossdebug( QString("dir() = %1").arg( l[i].str().as_string().c_str() ) );
+            //krossdebug( QString("dir().dir() = %1").arg( Py::Object(l[i]).dir().as_string().c_str() ) );
         }
 
         return pycode;

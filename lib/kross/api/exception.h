@@ -81,13 +81,13 @@ namespace Kross { namespace Api {
             /**
              * \return the error message.
              */
-            const QString& getError() const;
+            const QString getError() const;
 
             /**
              * \return a more detailed tracemessage or QString::null if
              * there is no trace avaiable.
              */
-            const QString& getTrace() const;
+            const QString getTrace() const;
 
             /**
              * Set a more detailed tracemessage.

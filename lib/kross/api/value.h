@@ -22,7 +22,6 @@
 
 #include <qstring.h>
 #include <qvariant.h>
-//#include <kdebug.h>
 
 #include "object.h"
 

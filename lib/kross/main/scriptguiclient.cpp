@@ -32,7 +32,6 @@
 #include <kurl.h>
 #include <ktar.h>
 #include <kstandarddirs.h>
-#include <kdebug.h>
 
 #include <kio/netaccess.h>
 
@@ -69,7 +68,7 @@ ScriptGUIClient::ScriptGUIClient(KXMLGUIClient* guiclient, QWidget* parent)
     , KXMLGUIClient( guiclient )
     , d( new ScriptGUIClientPrivate() ) // initialize d-pointer class
 {
-    kdDebug() << QString("ScriptGUIClient::ScriptGUIClient() Ctor") << endl;
+    krossdebug( QString("ScriptGUIClient::ScriptGUIClient() Ctor") );
 
     d->guiclient = guiclient;
     d->parent = parent;
@@ -95,7 +94,7 @@ ScriptGUIClient::ScriptGUIClient(KXMLGUIClient* guiclient, QWidget* parent)
 
 ScriptGUIClient::~ScriptGUIClient()
 {
-    kdDebug() << QString("ScriptGUIClient::~ScriptGUIClient() Dtor") << endl;
+    krossdebug( QString("ScriptGUIClient::~ScriptGUIClient() Dtor") );
     for(QMap<QString, ScriptActionCollection*>::Iterator it = d->collections.begin(); it != d->collections.end(); ++it)
         delete it.data();
     delete d;
@@ -148,7 +147,7 @@ void ScriptGUIClient::reloadInstalledScripts()
 
 bool ScriptGUIClient::installScriptPackage(const QString& scriptpackagefile)
 {
-    kdDebug() << QString("Install script package: %1").arg(scriptpackagefile) << endl;
+    krossdebug( QString("Install script package: %1").arg(scriptpackagefile) );
     KTar archive( scriptpackagefile );
     if(! archive.open(IO_ReadOnly)) {
         KMessageBox::sorry(0, i18n("Could not read the package \"%1\".").arg(scriptpackagefile));
@@ -159,7 +158,7 @@ bool ScriptGUIClient::installScriptPackage(const QString& scriptpackagefile)
     QString destination = KGlobal::dirs()->saveLocation("data", partname + "/scripts/", true);
     //QString destination = KGlobal::dirs()->saveLocation("appdata", "scripts", true);
     if(destination.isNull()) {
-        kdWarning() << "ScriptGUIClient::installScriptPackage() Failed to determinate location where the scriptpackage should be installed to!" << endl;
+        krosswarning("ScriptGUIClient::installScriptPackage() Failed to determinate location where the scriptpackage should be installed to!");
         return false;
     }
 
@@ -178,7 +177,7 @@ bool ScriptGUIClient::installScriptPackage(const QString& scriptpackagefile)
         }
     }
 
-    kdDebug() << QString("Copy script-package to destination directory: %1").arg(destination) << endl;
+    krossdebug( QString("Copy script-package to destination directory: %1").arg(destination) );
     const KArchiveDirectory* archivedir = archive.directory();
     archivedir->copyTo(destination, true);
 
@@ -198,18 +197,18 @@ bool ScriptGUIClient::uninstallScriptPackage(const QString& scriptpackagepath)
 
 bool ScriptGUIClient::loadScriptConfigFile(const QString& scriptconfigfile)
 {
-    kdDebug() << "ScriptGUIClient::loadScriptConfig file=" << scriptconfigfile << endl;
+    krossdebug( QString("ScriptGUIClient::loadScriptConfig file=%1").arg(scriptconfigfile) );
 
     QDomDocument domdoc;
     QFile file(scriptconfigfile);
     if(! file.open(IO_ReadOnly)) {
-        kdWarning() << "ScriptGUIClient::loadScriptConfig(): Failed to read scriptconfigfile: " << scriptconfigfile << endl;
+        krosswarning( QString("ScriptGUIClient::loadScriptConfig(): Failed to read scriptconfigfile: %1").arg(scriptconfigfile) );
         return false;
     }
     bool ok = domdoc.setContent(&file);
     file.close();
     if(! ok) {
-        kdWarning() << "ScriptGUIClient::loadScriptConfig(): Failed to parse scriptconfigfile: " << scriptconfigfile << endl;
+        krosswarning( QString("ScriptGUIClient::loadScriptConfig(): Failed to parse scriptconfigfile: %1").arg(scriptconfigfile) );
         return false;
     }
 
@@ -245,7 +244,7 @@ bool ScriptGUIClient::loadScriptConfigDocument(const QString& scriptconfigfile, 
                 else {
                     // else just print a warning and fall through (so, install the action
                     // and don't care any longer of the duplicated name)...
-                    kdWarning() << QString("Kross::Api::ScriptGUIClient::loadScriptConfigDocument: There exists already a scriptaction with name \"%1\". Added anyway...").arg(action->name()) << endl;
+                    krosswarning( QString("Kross::Api::ScriptGUIClient::loadScriptConfigDocument: There exists already a scriptaction with name \"%1\". Added anyway...").arg(action->name()) );
                 }
             }
             installedcollection->attach( action );
@@ -354,7 +353,7 @@ bool ScriptGUIClient::executeScriptFile()
 
 bool ScriptGUIClient::executeScriptFile(const QString& file)
 {
-    kdDebug() << QString("Kross::Api::ScriptGUIClient::executeScriptFile() file='%1'").arg(file) << endl;
+    krossdebug( QString("Kross::Api::ScriptGUIClient::executeScriptFile() file='%1'").arg(file) );
 
     ScriptAction::Ptr action = new ScriptAction(file);
     return executeScriptAction(action);
