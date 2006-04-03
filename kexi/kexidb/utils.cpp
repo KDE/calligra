@@ -153,7 +153,7 @@ void KexiDB::getHTMLErrorMesage(Object* obj, QString& msg, QString &details)
 		details += (QString("<p><b><nobr>")+i18n("Server result number:")+"</nobr></b><br>"+QString::number(serverResult));
 	}
 
-	if (!details.startsWith("<qt>")) {
+	if (!details.isEmpty() && !details.startsWith("<qt>")) {
 		if (details.startsWith("<p>"))
 			details = QString::fromLatin1("<qt>")+details;
 		else
