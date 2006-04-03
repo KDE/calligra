@@ -91,9 +91,9 @@ KexiScriptDesignView::KexiScriptDesignView(KexiMainWindow *mainWin, QWidget *par
     loadData();
 
     d->properties = new KoProperty::Set(this, "KexiScripting");
-    updateProperties();
 
-    d->editor->initialize( d->scriptaction );
+    // To schedule the initialize fixes a crasher in Kate.
+    QTimer::singleShot(50, this, SLOT( initialize() ));
 }
 
 KexiScriptDesignView::~KexiScriptDesignView()
@@ -104,6 +104,12 @@ KexiScriptDesignView::~KexiScriptDesignView()
 Kross::Api::ScriptAction* KexiScriptDesignView::scriptAction() const
 {
     return d->scriptaction;
+}
+
+void KexiScriptDesignView::initialize()
+{
+    updateProperties();
+    d->editor->initialize( d->scriptaction );
 }
 
 void KexiScriptDesignView::updateProperties()

@@ -91,6 +91,11 @@ class KexiScriptDesignView : public KexiViewBase
     private slots:
 
         /**
+         * Deferred initialization.
+         */
+        void initialize();
+
+        /**
          * Handle changes in the property editor.
          */
         void slotPropertyChanged(KoProperty::Set& set, KoProperty::Property& property);

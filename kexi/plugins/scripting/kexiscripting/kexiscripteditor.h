@@ -50,6 +50,12 @@ class KexiScriptEditor : public KexiEditor
         virtual ~KexiScriptEditor();
 
         /**
+         * \returns true if this editor is already initialized (\a initialize was
+         * called) else false is returned.
+         */
+        bool isInitialized() const;
+
+        /**
          * Initializes the editor. Call this if you like to start
          * with a clear editor instance. Thinks like the language
          * highlighter will be reset, undo/redo are cleared and
