@@ -3,7 +3,7 @@ if compile_kexi_reports_plugin
 endif
 
 if compile_kexi_macros_plugin
-  MACRODIR=macro
+  MACRODIR=macros
 endif
 
 if compile_kross
