@@ -15,7 +15,7 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include "keximacrodesignview.h"
+#include "keximacrotextview.h"
 
 //#include <qlayout.h>
 //#include <qsplitter.h>
@@ -23,7 +23,7 @@
 //#include <qdatetime.h>
 #include <qdom.h>
 //#include <qstylesheet.h>
-//#include <ktextbrowser.h>
+#include <ktextedit.h>
 #include <kdebug.h>
 
 #include <kexidialogbase.h>
@@ -35,7 +35,7 @@
 * \internal d-pointer class to be more flexible on future extension of the
 * functionality without to much risk to break the binary compatibility.
 */
-class KexiMacroDesignView::Private
+class KexiMacroTextView::Private
 {
 	public:
 
@@ -46,35 +46,51 @@ class KexiMacroDesignView::Private
 		::KoMacro::Manager* const manager;
 
 		/**
+		* The Editor used to display and edit the XML text.
+		*/
+		KTextEdit* editor;
+
+		/**
 		* Constructor.
 		*
 		* \param m The passed \a KoMacro::Manager instance our
 		*        \a manager points to.
 		*/
-		Private(::KoMacro::Manager* const m)
+		explicit Private(::KoMacro::Manager* const m)
 			: manager(m)
 		{
 		}
 
 };
 
-KexiMacroDesignView::KexiMacroDesignView(KexiMainWindow *mainwin, QWidget *parent, ::KoMacro::Manager* const manager)
-	: KexiViewBase(mainwin, parent, "KexiMacroDesignView")
+KexiMacroTextView::KexiMacroTextView(KexiMainWindow *mainwin, QWidget *parent, ::KoMacro::Manager* const manager)
+	: KexiViewBase(mainwin, parent, "KexiMacroTextView")
 	, d( new Private(manager) )
 {
+	QHBoxLayout* layout = new QHBoxLayout(this);
+	d->editor = new KTextEdit(this);
+	layout->addWidget(d->editor);
+
 	loadData();
+
+	connect(d->editor, SIGNAL(textChanged()), this, SLOT(editorChanged()));
 }
 
-KexiMacroDesignView::~KexiMacroDesignView()
+KexiMacroTextView::~KexiMacroTextView()
 {
 	delete d;
 }
 
-bool KexiMacroDesignView::loadData()
+void KexiMacroTextView::editorChanged()
+{
+	setDirty(true);
+}
+
+bool KexiMacroTextView::loadData()
 {
 	QString data;
 	if(! loadDataBlock(data)) {
-		kexipluginsdbg << "KexiMacroDesignView::loadData(): no DataBlock" << endl;
+		kexipluginsdbg << "KexiMacroTextView::loadData(): no DataBlock" << endl;
 		return false;
 	}
 
@@ -86,26 +102,27 @@ bool KexiMacroDesignView::loadData()
 	bool parsed = domdoc.setContent(data, false, &errmsg, &errline, &errcol);
 
 	if(! parsed) {
-		kexipluginsdbg << "KexiMacroDesignView::loadData() XML parsing error line: " << errline << " col: " << errcol << " message: " << errmsg << endl;
+		kexipluginsdbg << "KexiMacroTextView::loadData() XML parsing error line: " << errline << " col: " << errcol << " message: " << errmsg << endl;
 		return false;
 	}
 
-	/*
-	QDomElement scriptelem = domdoc.namedItem("script").toElement();
-	if(scriptelem.isNull()) {
-		kexipluginsdbg << "KexiMacroDesignView::loadData(): script domelement is null" << endl;
+	QDomElement macroelem = domdoc.namedItem("macro").toElement();
+	if(macroelem.isNull()) {
+		kexipluginsdbg << "KexiMacroTextView::loadData(): macro domelement is null" << endl;
 		return false;
 	}
-	QString interpretername = scriptelem.attribute("language");
-	*/
+
+	//QString s = macroelem.attribute("myattr");
+
+	d->editor->setText( macroelem.text() );
 
 	return true;
 }
 
-KexiDB::SchemaData* KexiMacroDesignView::storeNewData(const KexiDB::SchemaData& sdata, bool &cancel)
+KexiDB::SchemaData* KexiMacroTextView::storeNewData(const KexiDB::SchemaData& sdata, bool &cancel)
 {
 	KexiDB::SchemaData *s = KexiViewBase::storeNewData(sdata, cancel);
-	kexipluginsdbg << "KexiMacroDesignView::storeNewData(): new id:" << s->id() << endl;
+	kexipluginsdbg << "KexiMacroTextView::storeNewData(): new id:" << s->id() << endl;
 
 	if(!s || cancel) {
 		delete s;
@@ -113,7 +130,7 @@ KexiDB::SchemaData* KexiMacroDesignView::storeNewData(const KexiDB::SchemaData& 
 	}
 
 	if(! storeData()) {
-		kdWarning() << "KexiMacroDesignView::storeNewData Failed to store the data." << endl;
+		kdWarning() << "KexiMacroTextView::storeNewData Failed to store the data." << endl;
 		//failure: remove object's schema data to avoid garbage
 		KexiDB::Connection *conn = parentDialog()->mainWin()->project()->dbConnection();
 		conn->removeObject( s->id() );
@@ -124,22 +141,21 @@ KexiDB::SchemaData* KexiMacroDesignView::storeNewData(const KexiDB::SchemaData& 
 	return s;
 }
 
-tristate KexiMacroDesignView::storeData(bool /*dontAsk*/)
+tristate KexiMacroTextView::storeData(bool /*dontAsk*/)
 {
 	kexipluginsdbg << "KexiMacroDesignView::storeData(): " << parentDialog()->partItem()->name() << " [" << parentDialog()->id() << "]" << endl;
 
 	QDomDocument domdoc("macro");
-	/*
-	QDomElement scriptelem = domdoc.createElement("script");
-	domdoc.appendChild(scriptelem);
-	scriptelem.setAttribute("language", language);
-	scriptelem.setAttribute(it.key(), it.data().toString());
-	QDomText scriptcode = domdoc.createTextNode(d->scriptaction->getCode());
-	scriptelem.appendChild(scriptcode);
-	*/
+	QDomElement macroelem = domdoc.createElement("macro");
+	domdoc.appendChild(macroelem);
+
+	//macroelem.setAttribute("myattr", s);
+
+	QDomText elemtext = domdoc.createTextNode( d->editor->text() );
+	macroelem.appendChild(elemtext);
 
 	return storeDataBlock( domdoc.toString() );
 }
 
-#include "keximacrodesignview.moc"
+#include "keximacrotextview.moc"
 

@@ -18,8 +18,7 @@
 #ifndef KEXIMACROPART_H
 #define KEXIMACROPART_H
 
-#include <qdom.h>
-#include <qcstring.h>
+//#include <qcstring.h>
 
 #include <kexi.h>
 #include <kexipart.h>

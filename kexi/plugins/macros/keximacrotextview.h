@@ -15,8 +15,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KEXIMACRODESIGNVIEW_H
-#define KEXIMACRODESIGNVIEW_H
+#ifndef KEXIMACROTEXTVIEW_H
+#define KEXIMACROTEXTVIEW_H
 
 #include <kexiviewbase.h>
 
@@ -29,10 +29,10 @@ namespace KoMacro {
 }
 
 /**
- * The KexiScriptDesignView implements \a KexiViewBase to provide
- * a KexiView instance for Macros.
+ * The KexiMacroTextView implements \a KexiViewBase to provide
+ * the XML document of a Macro.
  */
-class KexiMacroDesignView : public KexiViewBase
+class KexiMacroTextView : public KexiViewBase
 {
 		Q_OBJECT
 	public:
@@ -46,12 +46,12 @@ class KexiMacroDesignView : public KexiViewBase
 		* \param manager The \a KoMacro::Manager instance used to access the
 		*        Macro Framework.
 		*/
-		KexiMacroDesignView(KexiMainWindow *mainwin, QWidget *parent, ::KoMacro::Manager* const manager);
+		KexiMacroTextView(KexiMainWindow *mainwin, QWidget *parent, ::KoMacro::Manager* const manager);
 
 		/**
 		* Destructor.
 		*/
-		virtual ~KexiMacroDesignView();
+		virtual ~KexiMacroTextView();
 
 		/**
 		* Try to call \a storeData with new data we like to store. On
@@ -70,6 +70,13 @@ class KexiMacroDesignView : public KexiViewBase
 		* currently used \a KexiDB::SchemaData instance.
 		*/
 		virtual tristate storeData(bool dontAsk = false);
+
+	private slots:
+
+		/**
+		* This slot got called if the text of the editor changed.
+		*/
+		void editorChanged();
 
 	private:
 		/// \internal d-pointer class.

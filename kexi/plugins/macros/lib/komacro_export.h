@@ -32,6 +32,8 @@
 # define KDE_EXPORT
 #endif
 
-#define KOMACRO_EXPORT KDE_EXPORT
+#ifndef KOMACRO_EXPORT
+# define KOMACRO_EXPORT KDE_EXPORT
+#endif
 
 #endif

@@ -159,7 +159,7 @@
 #ifndef KOMACRO_EXPORT
 # ifdef MAKE_KOMACRO_LIB
 #  define KOMACRO_EXPORT KDE_EXPORT
-# elif KDE_MAKE_LIB
+# elif defined(KDE_MAKE_LIB)
 #  define KOMACRO_EXPORT KDE_IMPORT
 # else
 #  define KOMACRO_EXPORT

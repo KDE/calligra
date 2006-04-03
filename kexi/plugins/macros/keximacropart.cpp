@@ -17,12 +17,13 @@
 
 #include "keximacropart.h"
 #include "keximacrodesignview.h"
+#include "keximacrotextview.h"
 
-#include "lib/manager.h"
 //#include "kexiviewbase.h"
 //#include "keximainwindow.h"
 //#include "kexiproject.h"
 
+#include <qdom.h>
 #include <kgenericfactory.h>
 #include <kexipartitem.h>
 //#include <kxmlguiclient.h>
@@ -30,7 +31,12 @@
 //#include <kconfig.h>
 //#include <kdebug.h>
 
-/// \internal
+#include "lib/manager.h"
+
+/**
+* \internal d-pointer class to be more flexible on future extension of the
+* functionality without to much risk to break the binary compatibility.
+*/
 class KexiMacroPart::Private
 {
 	public:
@@ -68,15 +74,18 @@ KexiMacroPart::KexiMacroPart(QObject *parent, const char *name, const QStringLis
 	//registered ID
 	m_registeredPartID = (int)KexiPart::MacroObjectType;
 
+	//name of the instance.
 	m_names["instanceName"] 
 		= i18n("Translate this word using only lowercase alphanumeric characters (a..z, 0..9). "
 		"Use '_' character instead of spaces. First character should be a..z character. "
 		"If you cannot use latin characters in your language, use english word.", 
 		"macro");
+
+	//describing caption
 	m_names["instanceCaption"] = i18n("Macro");
 
 	//supported viewmodes
-	m_supportedViewModes = Kexi::DesignViewMode;
+	m_supportedViewModes = Kexi::DesignViewMode | Kexi::TextViewMode;
 }
 
 KexiMacroPart::~KexiMacroPart()
@@ -111,11 +120,13 @@ KexiViewBase* KexiMacroPart::createView(QWidget* parent, KexiDialogBase* dialog,
 	QString partname = item.name();
 	if(! partname.isNull()) {
 		KexiMainWindow *win = dialog->mainWin();
-		if(!win || !win->project() || !win->project()->dbConnection()) {
-			return 0;
-		}
-		if(viewMode == Kexi::DesignViewMode) {
-			return new KexiMacroDesignView(win, parent);
+		if(win && win->project() && win->project()->dbConnection()) {
+			if(viewMode == Kexi::DesignViewMode) {
+				return new KexiMacroDesignView(win, parent, d->manager);
+			}
+			if(viewMode == Kexi::TextViewMode) {
+				return new KexiMacroTextView(win, parent, d->manager);
+			}
 		}
 	}
 

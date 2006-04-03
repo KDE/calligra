@@ -9,7 +9,7 @@ SUBDIRS = lib $(TESTSDIR) .
 kde_module_LTLIBRARIES = kexihandler_macro.la
 
 kexihandler_macro_la_SOURCES = \
-    keximacropart.cpp keximacrodesignview.cpp
+    keximacropart.cpp keximacrodesignview.cpp keximacrotextview.cpp
 
 kexihandler_macro_la_LDFLAGS = \
     $(KDE_PLUGIN) -module -no-undefined -Wnounresolved $(all_libraries) $(VER_INFO)
@@ -30,4 +30,4 @@ services_DATA=keximacrohandler.desktop
 
 METASOURCES = AUTO
 
-noinst_HEADERS = keximacropart.h keximacrodesignview.h
+noinst_HEADERS = keximacropart.h keximacrodesignview.h keximacrotextview.h
