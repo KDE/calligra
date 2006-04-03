@@ -861,7 +861,7 @@ Value func_ddb (valVector args, ValueCalc *calc, FuncExtra *)
   double salvage = calc->conv()->asFloat (args[1]).asFloat();
   double life = calc->conv()->asFloat (args[2]).asFloat();
   double period = calc->conv()->asFloat (args[3]).asFloat();
-  double factor = 12;
+  double factor = 2;
   if (args.count() == 5)
     factor = calc->conv()->asFloat (args[4]).asFloat();
   
