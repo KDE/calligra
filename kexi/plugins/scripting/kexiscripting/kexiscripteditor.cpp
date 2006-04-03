@@ -38,6 +38,7 @@ class KexiScriptEditor::Private
 {
     public:
         Kross::Api::ScriptAction* scriptaction;
+        Private() : scriptaction(0) {}
 };
 
 KexiScriptEditor::KexiScriptEditor(KexiMainWindow *mainWin, QWidget *parent, const char *name)
@@ -49,6 +50,11 @@ KexiScriptEditor::KexiScriptEditor(KexiMainWindow *mainWin, QWidget *parent, con
 KexiScriptEditor::~KexiScriptEditor()
 {
     delete d;
+}
+
+bool KexiScriptEditor::isInitialized() const
+{
+    return d->scriptaction != 0;
 }
 
 void KexiScriptEditor::initialize(Kross::Api::ScriptAction* scriptaction)
