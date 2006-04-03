@@ -155,6 +155,17 @@
 # endif
 #endif
 
+/* temporary */
+#ifndef KOMACRO_EXPORT
+# ifdef MAKE_KOMACRO_LIB
+#  define KOMACRO_EXPORT KDE_EXPORT
+# elif KDE_MAKE_LIB
+#  define KOMACRO_EXPORT KDE_IMPORT
+# else
+#  define KOMACRO_EXPORT
+# endif
+#endif
+
 /* additional default options */
 #ifndef KEXI_NO_CTXT_HELP
 # define KEXI_NO_CTXT_HELP
