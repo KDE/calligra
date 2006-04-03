@@ -1,7 +1,7 @@
 #MIN_CONFIG(3.3)
 
 # Remember to synchronize the version number with the file koffice/lib/kofficecore/kofficeversion.h
-AM_INIT_AUTOMAKE(koffice, "1.4.98")
+AM_INIT_AUTOMAKE(koffice, "1.5.0")
 
 CXXFLAGS="$CXXFLAGS $KDE_DEFAULT_CXXFLAGS"
 
