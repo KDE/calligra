@@ -83,7 +83,8 @@ UString Cell::name() const
 
 UString Cell::name( unsigned column, unsigned row )
 {
-  return columnLabel( column ) + UString::from( row );  
+	// column=0, row=0 is "A1"
+  return columnLabel( column ) + UString::from( row + 1 );  
 }
 
 UString Cell::columnLabel() const
