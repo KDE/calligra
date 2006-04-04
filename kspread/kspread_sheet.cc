@@ -2056,6 +2056,8 @@ void Sheet::setSeries( const QPoint &_marker, double start, double end, double s
     }
     undoRegion.setRight( _marker.x() );
     undoRegion.setBottom( y - 1 );
+
+    checkRangeVBorder( undoRegion.bottom() );
   }
   else if(mode == Row)
   {
@@ -2075,6 +2077,8 @@ void Sheet::setSeries( const QPoint &_marker, double start, double end, double s
     }
     undoRegion.setBottom( _marker.y() );
     undoRegion.setRight( x - 1 );
+
+    checkRangeHBorder( undoRegion.right() );
   }
 
   kdDebug() << "Saving undo information" << endl;
@@ -2088,6 +2092,8 @@ void Sheet::setSeries( const QPoint &_marker, double start, double end, double s
 
   kdDebug() << "Saving undo information done" << endl;
 
+  setRegionPaintDirty( undoRegion );
+  
   x = _marker.x();
   y = _marker.y();
 
@@ -2242,7 +2248,6 @@ void Sheet::setSeries( const QPoint &_marker, double start, double end, double s
     }
   }
 
-  setRegionPaintDirty( undoRegion );
 
   //  doc()->emitEndOperation();
   emit sig_updateView( this );
@@ -7878,11 +7883,12 @@ void Sheet::insertCell( Cell *_cell )
 
   d->cells.insert( _cell, _cell->column(), _cell->row() );
 
-  if ( d->scrollBarUpdates )
+  //Not sure why this is here 
+  /*if ( d->scrollBarUpdates )
   {
     checkRangeHBorder ( _cell->column() );
     checkRangeVBorder ( _cell->row() );
-  }
+  }*/
 }
 
 void Sheet::insertColumnFormat( ColumnFormat *l )
