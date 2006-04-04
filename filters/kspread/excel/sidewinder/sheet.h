@@ -54,6 +54,7 @@ public:
   // return cell at specified column and row
   // automatically create the cell if previously there is no cell there
   // return NULL if no cell there _and_ autoCreate is false
+  // first column (A) is 0, first row is 0
   Cell* cell( unsigned column, unsigned row, bool autoCreate = true );
 
   Column* column( unsigned index, bool autoCreate = true );
