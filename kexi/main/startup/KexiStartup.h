@@ -85,8 +85,9 @@ class KEXIMAIN_EXPORT KexiStartupHandler
 			ThisIsAProjectFile = 2, //!< a hint, forces detection of the file as a project file
 			ThisIsAShortcutToAProjectFile = 4, //!< a hint, forces detection of the file 
 			                                   //!< as a shortcut to a project file
-			ThisIsAShortcutToAConnectionData = 8 //!< a hint, forces detection of the file 
-			                                     //!< as a shortcut to a connection data
+			ThisIsAShortcutToAConnectionData = 8, //!< a hint, forces detection of the file 
+			                                      //!< as a shortcut to a connection data
+			SkipMessages = 16 //!< do not display error or warning messages
 		};
 
 		/*! Used for opening existing file-based projects. 
@@ -101,7 +102,8 @@ class KEXIMAIN_EXPORT KexiStartupHandler
 		 - "connection" if the file looks like a connection data file.
 
 		 \a parent is passed as a parent for potential error message boxes.
-		 \a driverName is a preferred driver name. */
+		 \a driverName is a preferred driver name. 
+		 \a options should be a combination of DetectDriverForFileOptions enum values. */
 		static tristate detectActionForFile( 
 			KexiStartupData::Import& detectedImportAction, QString& detectedDriverName,
 			const QString& _suggestedDriverName, 

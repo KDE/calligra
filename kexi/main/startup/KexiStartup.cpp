@@ -737,11 +737,12 @@ tristate KexiStartupHandler::detectActionForFile(
 	detectedDriverName = QString::null;
 	QFileInfo finfo(dbFileName);
 	if (dbFileName.isEmpty() || !finfo.isReadable()) {
-		KMessageBox::sorry(parent, i18n("<p>Could not open project.</p>")
-			+i18n("<p>The file <nobr>\"%1\"</nobr> does not exist or is not readable.</p>")
-			.arg(QDir::convertSeparators(dbFileName))
-			+i18n("Check the file's permissions and whether it is already opened "
-			"and locked by another application."));
+		if (!(options & SkipMessages))
+			KMessageBox::sorry(parent, i18n("<p>Could not open project.</p>")
+				+i18n("<p>The file <nobr>\"%1\"</nobr> does not exist or is not readable.</p>")
+				.arg(QDir::convertSeparators(dbFileName))
+				+i18n("Check the file's permissions and whether it is already opened "
+				"and locked by another application."));
 		return false;
 	}
 
@@ -768,11 +769,12 @@ tristate KexiStartupHandler::detectActionForFile(
 		QFile f(dbFileName);
 		if (!f.open(IO_ReadOnly)) {
 			// BTW: similar error msg is provided in SQLiteConnection::drv_useDatabase()
-			KMessageBox::sorry(parent, i18n("<p>Could not open project.</p>")
-				+i18n("<p>The file <nobr>\"%1\"</nobr> is not readable.</p>")
-				.arg(QDir::convertSeparators(dbFileName))
-				+i18n("Check the file's permissions and whether it is already opened "
-					"and locked by another application."));
+			if (!(options & SkipMessages))
+				KMessageBox::sorry(parent, i18n("<p>Could not open project.</p>")
+					+i18n("<p>The file <nobr>\"%1\"</nobr> is not readable.</p>")
+					.arg(QDir::convertSeparators(dbFileName))
+					+i18n("Check the file's permissions and whether it is already opened "
+						"and locked by another application."));
 			return false;
 		}
 	}
@@ -790,8 +792,8 @@ tristate KexiStartupHandler::detectActionForFile(
 	//! X-KexiSupportedMimeTypes [strlist] property
 	if (ptr.data()) {
 		if (mimename=="application/x-msaccess") {
-			if (KMessageBox::Yes != KMessageBox::questionYesNo(parent, i18n(
-				"\"%1\" is an external file of type:\n\"%2\".\n"
+			if ((options & SkipMessages) || KMessageBox::Yes != KMessageBox::questionYesNo(
+				parent, i18n("\"%1\" is an external file of type:\n\"%2\".\n"
 				"Do you want to import the file as a Kexi project?")
 				.arg(QDir::convertSeparators(dbFileName)).arg(ptr.data()->comment()),
 				i18n("Open External File"), KGuiItem(i18n("Import...")), KStdGuiItem::cancel() ) )
@@ -813,12 +815,14 @@ tristate KexiStartupHandler::detectActionForFile(
 //@todo What about trying to reuse KOFFICE FILTER CHAINS here?
 	bool useDetectedDriver = suggestedDriverName.isEmpty() || suggestedDriverName.lower()==detectedDriverName.lower();
 	if (!useDetectedDriver) {
-		int res = KMessageBox::warningYesNoCancel(parent, i18n(
-			"The project file \"%1\" is recognized as compatible with \"%2\" database driver, "
-			"while you have asked for \"%3\" database driver to be used.\n"
-			"Do you want to use \"%4\" database driver?")
-			.arg(QDir::convertSeparators(dbFileName))
-			.arg(tmpDriverName).arg(suggestedDriverName).arg(tmpDriverName));
+		int res = KMessageBox::Yes;
+		if (!(options & SkipMessages))
+			res = KMessageBox::warningYesNoCancel(parent, i18n(
+			 "The project file \"%1\" is recognized as compatible with \"%2\" database driver, "
+			 "while you have asked for \"%3\" database driver to be used.\n"
+			 "Do you want to use \"%4\" database driver?")
+			 .arg(QDir::convertSeparators(dbFileName))
+			 .arg(tmpDriverName).arg(suggestedDriverName).arg(tmpDriverName));
 		if (KMessageBox::Yes == res)
 			useDetectedDriver = true;
 		else if (KMessageBox::Cancel == res)
@@ -833,7 +837,7 @@ tristate KexiStartupHandler::detectActionForFile(
 //	kdDebug() << "KexiStartupHandler::detectActionForFile(): driver name: " << detectedDriverName << endl;
 //hardcoded for convenience:
 	const QString newFileFormat = "SQLite3";
-	if (!(options & DontConvert) 
+	if (!(options & DontConvert || options & SkipMessages) 
 		&& detectedDriverName.lower()=="sqlite2" && detectedDriverName.lower()!=suggestedDriverName.lower()
 		&& KMessageBox::Yes == KMessageBox::questionYesNo(parent, i18n(
 			"Previous version of database file format (\"%1\") is detected in the \"%2\" "
@@ -862,16 +866,17 @@ tristate KexiStartupHandler::detectActionForFile(
 			possibleProblemsInfoMsg.prepend(QString::fromLatin1("<p>")+i18n("Possible problems:"));
 			possibleProblemsInfoMsg += QString::fromLatin1("</p>");
 		}
-		KMessageBox::detailedSorry(parent, 
-			i18n( "The file \"%1\" is not recognized as being supported by Kexi.")
-				.arg(QDir::convertSeparators(dbFileName)),
-			QString::fromLatin1("<p>")
-			+i18n("Database driver for this file type not found.\nDetected MIME type: %1")
-				.arg(mimename)
-			+(ptr.data()->comment().isEmpty() 
-				? QString::fromLatin1(".") : QString::fromLatin1(" (%1).").arg(ptr.data()->comment()))
-			+QString::fromLatin1("</p>")
-			+possibleProblemsInfoMsg);
+		if (!(options & SkipMessages))
+			KMessageBox::detailedSorry(parent, 
+				i18n( "The file \"%1\" is not recognized as being supported by Kexi.")
+					.arg(QDir::convertSeparators(dbFileName)),
+				QString::fromLatin1("<p>")
+				+i18n("Database driver for this file type not found.\nDetected MIME type: %1")
+					.arg(mimename)
+				+(ptr.data()->comment().isEmpty() 
+					? QString::fromLatin1(".") : QString::fromLatin1(" (%1).").arg(ptr.data()->comment()))
+				+QString::fromLatin1("</p>")
+				+possibleProblemsInfoMsg);
 		return false;
 	}
 	return true;

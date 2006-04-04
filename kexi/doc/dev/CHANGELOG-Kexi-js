@@ -9,6 +9,14 @@
 For most important commits use: CCMAIL:kexi-devel@kde.org
 Use CCMAIL:###-done@bugs.kde.org
 
+2006-04-04
+CSV Import
+- possible crash fixed after switching character encoding
+1.0/2.0: ported
+Main Window
+- "Compact Database": now closing the current project is required; 
+  if there's no project is opened, user is asked for picking one
+
 2006-03-29
 Main Window
 - "Compact Database" admin action added

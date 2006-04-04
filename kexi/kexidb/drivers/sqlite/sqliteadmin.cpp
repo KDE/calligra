@@ -17,8 +17,11 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#include <qdir.h>
+
 #include "sqliteadmin.h"
-#include "driver_p.h"
+#include <kexidb/drivermanager.h>
+#include <kexidb/driver_p.h>
 
 #ifndef SQLITE2
 # include "sqlitevacuum.h"
@@ -33,25 +36,27 @@ SQLiteAdminTools::~SQLiteAdminTools()
 {
 }
 
-bool SQLiteAdminTools::vacuum(KexiDB::Connection& conn)
+bool SQLiteAdminTools::vacuum(const KexiDB::ConnectionData& data, const QString& databaseName)
 {
-#ifndef SQLITE2
-	const bool wasConnected = conn.isConnected();
-	if (wasConnected) {
-		if (!conn.disconnect())
-			return false;
-	}
-	SQLiteVacuum vacuum(conn.data()->fileName());
-	tristate result = vacuum.run();
-	if (wasConnected) {
-		if (!conn.connect())
-			return false;
-		if (!conn.useDatabase(conn.data()->dbFileName()))
-			return false;
-	}
-	return result || ~result;
-#else
+	clearError();
+#ifdef SQLITE2
 	return false;
+#else
+	KexiDB::DriverManager manager;
+	KexiDB::Driver *drv = manager.driver(data.driverName);
+	QString title( i18n("Could not compact database \"%1\".").arg(QDir::convertSeparators(databaseName)) );
+	if (!drv) {
+		setError(&manager, title);
+		return false;
+	}
+	SQLiteVacuum vacuum(databaseName);
+	tristate result = vacuum.run();
+	if (!result) {
+		setError(title);
+		return false;
+	}
+	else //success or cancelled
+		return true;
 #endif
 }
 

@@ -30,7 +30,7 @@ class SQLiteAdminTools : public KexiDB::AdminTools
 		virtual ~SQLiteAdminTools();
 
 		/*! Performs vacuum (compacting) for connection \a conn. */
-		virtual bool vacuum(KexiDB::Connection& conn);
+		virtual bool vacuum(const KexiDB::ConnectionData& data, const QString& databaseName);
 };
 
 #endif

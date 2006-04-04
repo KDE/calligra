@@ -359,7 +359,8 @@ void KexiMainWindowImpl::switchToIDEAlMode(bool showMessage)
 		}
 		else {
 			KMessageBox::information(this,
-				i18n("User interface mode will be switched to IDEAl at next %1 application startup.").arg(KEXI_APP_NAME));
+				i18n("User interface mode will be switched to IDEAl at next %1 application startup.")
+				.arg(KEXI_APP_NAME));
 			//delayed
 			d->mdiModeToSwitchAfterRestart = KMdi::IDEAlMode;
 		}
@@ -385,7 +386,8 @@ void KexiMainWindowImpl::switchToChildframeMode(bool showMessage)
 		}
 		else {
 			KMessageBox::information(this,
-				i18n("User interface mode will be switched to Childframe at next %1 application startup.").arg(KEXI_APP_NAME));
+				i18n("User interface mode will be switched to Childframe at next %1 application startup.")
+				.arg(KEXI_APP_NAME));
 			//delayed
 			d->mdiModeToSwitchAfterRestart = KMdi::ChildframeMode;
 		}
@@ -1020,97 +1022,99 @@ void KexiMainWindowImpl::slotAutoOpenObjectsLater()
 {
 	QString not_found_msg;
 	//ok, now open "autoopen: objects
-	for (QValueList<KexiProjectData::ObjectInfo>::ConstIterator it = 
-			d->prj->data()->autoopenObjects.constBegin();
-		it != d->prj->data()->autoopenObjects.constEnd(); ++it )
-	{
-		KexiProjectData::ObjectInfo info = *it;
-		KexiPart::Info *i = Kexi::partManager().infoForMimeType( 
-			QCString("kexi/")+info["type"].lower().latin1() );
-		if (!i) {
-			not_found_msg += "<li>";
-			if (!info["name"].isEmpty())
-				not_found_msg += (QString("\"") + info["name"] + "\" - ");
-			if (info["action"]=="new")
-				not_found_msg += i18n("cannot create object - unknown object type \"%1\"")
-					.arg(info["type"]);
-			else
-				not_found_msg += i18n("unknown object type \"%1\"").arg(info["type"]);
-			not_found_msg += internalReason(&Kexi::partManager())+"<br></li>";
-			continue;
-		}
-		// * NEW
-		if (info["action"]=="new") {
-			if (!newObject( i )) {
+	if (d->prj) {
+		for (QValueList<KexiProjectData::ObjectInfo>::ConstIterator it = 
+				d->prj->data()->autoopenObjects.constBegin();
+			it != d->prj->data()->autoopenObjects.constEnd(); ++it )
+		{
+			KexiProjectData::ObjectInfo info = *it;
+			KexiPart::Info *i = Kexi::partManager().infoForMimeType( 
+				QCString("kexi/")+info["type"].lower().latin1() );
+			if (!i) {
 				not_found_msg += "<li>";
-				not_found_msg += (i18n("cannot create object of type \"%1\"").arg(info["type"])+
-					internalReason(d->prj)+"<br></li>");
+				if (!info["name"].isEmpty())
+					not_found_msg += (QString("\"") + info["name"] + "\" - ");
+				if (info["action"]=="new")
+					not_found_msg += i18n("cannot create object - unknown object type \"%1\"")
+						.arg(info["type"]);
+				else
+					not_found_msg += i18n("unknown object type \"%1\"").arg(info["type"]);
+				not_found_msg += internalReason(&Kexi::partManager())+"<br></li>";
+				continue;
+			}
+			// * NEW
+			if (info["action"]=="new") {
+				if (!newObject( i )) {
+					not_found_msg += "<li>";
+					not_found_msg += (i18n("cannot create object of type \"%1\"").arg(info["type"])+
+						internalReason(d->prj)+"<br></li>");
+				}
+				else
+					d->wasAutoOpen = true;
+				continue;
+			}
+
+			KexiPart::Item *item = d->prj->item(i, info["name"]);
+
+			if (!item) {
+				not_found_msg += "<li>";
+				QString taskName;
+				if (info["action"]=="print-preview")
+					taskName = i18n("making print preview for");
+				else if (info["action"]=="print")
+					taskName = i18n("printing");
+				else 
+					taskName = i18n("opening");
+
+				not_found_msg += (QString("<li>")+ taskName + " \"" + info["name"] + "\" - ");
+				if ("table"==info["type"].lower())
+					not_found_msg += i18n("table not found");
+				else if ("query"==info["type"].lower())
+					not_found_msg += i18n("query not found");
+				else
+					not_found_msg += i18n("object not found");
+				not_found_msg += (internalReason(d->prj)+"<br></li>");
+				continue;
+			}
+			// * PRINT, PRINT PREVIEW
+			if (info["action"]=="print") {
+				tristate res = printItem(item);
+				if (false == res) {
+					not_found_msg += "<li>";
+					not_found_msg += ( QString("<li>\"")+ info["name"] + "\" - " + i18n("cannot print object")+
+					internalReason(d->prj)+"<br></li>" );
+				}
+				continue;
+			}
+			else if (info["action"]=="print-preview") {
+				tristate res = printPreviewForItem(item);
+				if (false == res) {
+					not_found_msg += "<li>";
+					not_found_msg += ( QString("<li>\"")+ info["name"] + "\" - " + i18n("cannot make print preview of object")+
+					internalReason(d->prj)+"<br></li>" );
+				}
+				continue;
+			}
+
+			int viewMode;
+			if (info["action"]=="open")
+				viewMode = Kexi::DataViewMode;
+			else if (info["action"]=="design")
+				viewMode = Kexi::DesignViewMode;
+			else if (info["action"]=="edittext")
+				viewMode = Kexi::TextViewMode;
+			else
+				continue; //sanity
+			bool openingCancelled;
+			if (!openObject(item, viewMode, openingCancelled) && !openingCancelled) {
+				not_found_msg += "<li>";
+				not_found_msg += ( QString("<li>\"")+ info["name"] + "\" - " + i18n("cannot open object")+
+					internalReason(d->prj)+"<br></li>" );
+				continue;
 			}
 			else
 				d->wasAutoOpen = true;
-			continue;
 		}
-
-		KexiPart::Item *item = d->prj->item(i, info["name"]);
-
-		if (!item) {
-			not_found_msg += "<li>";
-			QString taskName;
-			if (info["action"]=="print-preview")
-				taskName = i18n("making print preview for");
-			else if (info["action"]=="print")
-				taskName = i18n("printing");
-			else 
-				taskName = i18n("opening");
-
-			not_found_msg += (QString("<li>")+ taskName + " \"" + info["name"] + "\" - ");
-			if ("table"==info["type"].lower())
-				not_found_msg += i18n("table not found");
-			else if ("query"==info["type"].lower())
-				not_found_msg += i18n("query not found");
-			else
-				not_found_msg += i18n("object not found");
-			not_found_msg += (internalReason(d->prj)+"<br></li>");
-			continue;
-		}
-		// * PRINT, PRINT PREVIEW
-		if (info["action"]=="print") {
-			tristate res = printItem(item);
-			if (false == res) {
-				not_found_msg += "<li>";
-				not_found_msg += ( QString("<li>\"")+ info["name"] + "\" - " + i18n("cannot print object")+
-				internalReason(d->prj)+"<br></li>" );
-			}
-			continue;
-		}
-		else if (info["action"]=="print-preview") {
-			tristate res = printPreviewForItem(item);
-			if (false == res) {
-				not_found_msg += "<li>";
-				not_found_msg += ( QString("<li>\"")+ info["name"] + "\" - " + i18n("cannot make print preview of object")+
-				internalReason(d->prj)+"<br></li>" );
-			}
-			continue;
-		}
-
-		int viewMode;
-		if (info["action"]=="open")
-			viewMode = Kexi::DataViewMode;
-		else if (info["action"]=="design")
-			viewMode = Kexi::DesignViewMode;
-		else if (info["action"]=="edittext")
-			viewMode = Kexi::TextViewMode;
-		else
-			continue; //sanity
-		bool openingCancelled;
-		if (!openObject(item, viewMode, openingCancelled) && !openingCancelled) {
-			not_found_msg += "<li>";
-			not_found_msg += ( QString("<li>\"")+ info["name"] + "\" - " + i18n("cannot open object")+
-				internalReason(d->prj)+"<br></li>" );
-			continue;
-		}
-		else
-			d->wasAutoOpen = true;
 	}
 	enableMessages( true );
 //	d->disableErrorMessages = false;
@@ -3751,19 +3755,69 @@ void KexiMainWindowImpl::slotToolsProjectMigration()
 
 void KexiMainWindowImpl::slotToolsCompactDatabase()
 {
+	KexiProjectData *data = 0;
+	KexiDB::Driver *drv = 0;
+	const bool projectWasOpened = d->prj;
+
 	if (!d->prj) {
-		//todo
-		return;
+		KexiStartupDialog dlg(
+			KexiStartupDialog::OpenExisting, 0, Kexi::connset(), Kexi::recentProjects(),
+			this, "KexiOpenDialog");
+
+		if (dlg.exec()!=QDialog::Accepted)
+			return;
+
+		if (dlg.selectedExistingFile().isEmpty()) {
+//! @todo add support for server based if needed?
+			return;
+		}
+		KexiDB::ConnectionData cdata;
+		cdata.setFileName( dlg.selectedExistingFile() );
+		
+		//detect driver name for the selected file
+		KexiStartupData::Import detectedImportAction;
+		tristate res = KexiStartupHandler::detectActionForFile( 
+			detectedImportAction, cdata.driverName,
+			"" /*suggestedDriverName*/, cdata.fileName(), 0,
+			KexiStartupHandler::SkipMessages | KexiStartupHandler::ThisIsAProjectFile 
+			| KexiStartupHandler::DontConvert);
+
+		if (true==res && !detectedImportAction)
+			drv = Kexi::driverManager().driver( cdata.driverName );
+		if (!drv || !(drv->features() & KexiDB::Driver::CompactingDatabaseSupported)) {
+			KMessageBox::information(this, "<qt>"+
+				i18n("Compacting database file <nobr>\"%1\"</nobr> is not supported.")
+				.arg(QDir::convertSeparators(cdata.fileName())));
+			return;
+		}
+		data = new KexiProjectData( cdata, cdata.fileName() );
 	}
 	else {
 		//sanity
 		if ( !(d->prj && d->prj->dbConnection() 
 			&& (d->prj->dbConnection()->driver()->features() & KexiDB::Driver::CompactingDatabaseSupported) ))
 			return;
+
+		if (KMessageBox::Continue != KMessageBox::warningContinueCancel(this,
+				i18n("The current project has to be closed before compacting the database. "
+				 "It will be open again after compacting.\n\nDo you want to continue?")))
+			return;
+
+		data = new KexiProjectData(*d->prj->data()); // a copy
+		drv = d->prj->dbConnection()->driver();
+		const tristate res = closeProject();
+		if (~res || !res)
+			return;
 	}
 
-	if (!d->prj->dbConnection()->driver()->adminTools().vacuum(*d->prj->dbConnection())) {
-		//todo: errmsg
+	if (!drv->adminTools().vacuum(*data->connectionData(), data->databaseName())) {
+		//err msg
+		showErrorMessage( &drv->adminTools() );
+	}
+
+	if (data && projectWasOpened) {
+		openProject(*data);
+		delete data;
 	}
 }
 

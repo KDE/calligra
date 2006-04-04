@@ -25,6 +25,7 @@
 namespace KexiDB
 {
 class Connection;
+class ConnectionData;
 
 //! @short An interface containing a set of tools for database administration
 /*! Can be implemented in database drivers. @see Driver::adminTools
@@ -35,15 +36,16 @@ class KEXI_DB_EXPORT AdminTools : public Object
 		AdminTools();
 		virtual ~AdminTools();
 
-		/*! Performs vacuum (compacting) for connection \a conn. 
-		 Can be implemented this method for your driver.
-		 Note: in most cases the database should not have active transactions.
+		/*! Performs vacuum (compacting) for connection \a data. 
+		 Can be implemented for your driver.
+		 Note: in most cases the database should not be opened.
 
 		 Currently it is implemented for SQLite drivers.
 
 		 \return true on success, false on failure 
 		 (then you can get error status from the AdminTools object). */
-		virtual bool vacuum(Connection& conn);
+		virtual bool vacuum(const ConnectionData& data, const QString& databaseName);
+		//virtual bool vacuum(Connection& conn);
 
 	protected:
 		class Private;

@@ -33,9 +33,10 @@ AdminTools::~AdminTools()
 	delete d;
 }
 
-bool AdminTools::vacuum(Connection& conn)
+bool AdminTools::vacuum(const ConnectionData& data, const QString& databaseName)
 {
-	Q_UNUSED(conn);
+	Q_UNUSED(data);
+	Q_UNUSED(databaseName);
+	clearError();
 	return false;
 }
-
