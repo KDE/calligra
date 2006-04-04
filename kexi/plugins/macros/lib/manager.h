@@ -34,6 +34,7 @@ namespace KoMacro {
 
 	// Forward declarations.
 	class Action;
+	class Macro;
 
 	/**
 	* The Manager class acts as window-wide manager for macros.
@@ -94,6 +95,48 @@ namespace KoMacro {
 			KXMLGUIClient* const guiClient() const;
 
 			/**
+			* \return true if we carry a \a Macro with the
+			* defined \p macroname .
+			*/
+			bool hasMacro(const QString& macroname);
+
+			/**
+			* \return the \a Macro defined with \p macroname
+			* or NULL if we don't have such a \a Macro.
+			*/
+			KSharedPtr<Macro> getMacro(const QString& macroname);
+
+			/**
+			* Add a new \a Macro to the list of known macros. If
+			* there exists already a \a Macro instance with the
+			* defined \p macroname then the already existing one
+			* will be replace.
+			*
+			* \param macroname The name the \a Macro will be
+			*        accessible as.
+			* \param macro The \a Macro instance.
+			*/
+			void addMacro(const QString& macroname, KSharedPtr<Macro> macro);
+
+			/**
+			* Remove the \a Macro defined with \p macroname . If
+			* we don't know about a \a Macro with that \p macroname
+			* nothing happens.
+			*/
+			void removeMacro(const QString& macroname);
+
+			/**
+			* Factory function to create a new \a Macro instances.
+			* The returned new \a Macro instance will not be added
+			* to the list of known macros. Use \a addMacro if you
+			* like to attach the returned new \a Macro to this
+			* \a Manager instance.
+			*/
+			KSharedPtr<Macro> createMacro(const QString& macroname);
+
+
+
+			/**
 			* Factory method to create @a Action instances from the
 			* defined @p element .
 			*
@@ -101,8 +144,12 @@ namespace KoMacro {
 			* be used to create the @a Action instance.
 			* @return A new @a Action instance or NULL if the
 			* defined @p element is not valid.
+			*
+			* @deprecated Move to common XMLReader/XMLWriter classes.
 			*/
 			KSharedPtr<Action> createAction(const QDomElement& element);
+
+
 
 			/**
 			* Publish the passed QObject @p object. Those object will

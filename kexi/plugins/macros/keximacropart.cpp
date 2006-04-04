@@ -32,6 +32,7 @@
 //#include <kdebug.h>
 
 #include "lib/manager.h"
+#include "lib/macro.h"
 
 /**
 * \internal d-pointer class to be more flexible on future extension of the
@@ -115,17 +116,24 @@ void KexiMacroPart::initInstanceActions()
 
 KexiViewBase* KexiMacroPart::createView(QWidget* parent, KexiDialogBase* dialog, KexiPart::Item& item, int viewMode, QMap<QString,QString>*)
 {
-	kdDebug() << "KexiMacroPart::createView()" << endl;
-
 	QString partname = item.name();
+	kdDebug() << "KexiMacroPart::createView() partname=" << partname << endl;
+
+	KoMacro::Macro::Ptr macro = d->manager->getMacro(partname);
+	if(! macro) {
+		// If we don't have a macro with that name yet, create one that
+		// will be remembered for later.
+		macro = d->manager->createMacro(partname);
+	}
+
 	if(! partname.isNull()) {
 		KexiMainWindow *win = dialog->mainWin();
 		if(win && win->project() && win->project()->dbConnection()) {
 			if(viewMode == Kexi::DesignViewMode) {
-				return new KexiMacroDesignView(win, parent, d->manager);
+				return new KexiMacroDesignView(win, parent, macro);
 			}
 			if(viewMode == Kexi::TextViewMode) {
-				return new KexiMacroTextView(win, parent, d->manager);
+				return new KexiMacroTextView(win, parent, macro);
 			}
 		}
 	}

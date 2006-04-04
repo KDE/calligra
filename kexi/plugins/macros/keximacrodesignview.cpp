@@ -29,7 +29,7 @@
 #include <kexidialogbase.h>
 #include <kexidb/connection.h>
 
-#include "lib/manager.h"
+#include "lib/macro.h"
 
 /**
 * \internal d-pointer class to be more flexible on future extension of the
@@ -43,7 +43,7 @@ class KexiMacroDesignView::Private
 		* The \a KoMacro::Manager instance used to access the
 		* Macro Framework.
 		*/
-		::KoMacro::Manager* const manager;
+		::KoMacro::Macro::Ptr const macro;
 
 		/**
 		* Constructor.
@@ -51,16 +51,16 @@ class KexiMacroDesignView::Private
 		* \param m The passed \a KoMacro::Manager instance our
 		*        \a manager points to.
 		*/
-		Private(::KoMacro::Manager* const m)
-			: manager(m)
+		Private(::KoMacro::Macro* const m)
+			: macro(m)
 		{
 		}
 
 };
 
-KexiMacroDesignView::KexiMacroDesignView(KexiMainWindow *mainwin, QWidget *parent, ::KoMacro::Manager* const manager)
+KexiMacroDesignView::KexiMacroDesignView(KexiMainWindow *mainwin, QWidget *parent, ::KoMacro::Macro* const macro)
 	: KexiViewBase(mainwin, parent, "KexiMacroDesignView")
-	, d( new Private(manager) )
+	, d( new Private(macro) )
 {
 	loadData();
 }
@@ -68,6 +68,19 @@ KexiMacroDesignView::KexiMacroDesignView(KexiMainWindow *mainwin, QWidget *paren
 KexiMacroDesignView::~KexiMacroDesignView()
 {
 	delete d;
+}
+
+tristate KexiMacroDesignView::beforeSwitchTo(int mode, bool& dontstore)
+{
+	kexipluginsdbg << "KexiMacroDesignView::beforeSwitchTo mode=" << mode << endl;
+	Q_UNUSED(dontstore);
+	return true;
+}
+
+tristate KexiMacroDesignView::afterSwitchFrom(int mode)
+{
+	kexipluginsdbg << "KexiMacroDesignView::afterSwitchFrom mode=" << mode << endl;
+	return true;
 }
 
 bool KexiMacroDesignView::loadData()

@@ -29,7 +29,7 @@
 #include <kexidialogbase.h>
 #include <kexidb/connection.h>
 
-#include "lib/manager.h"
+#include "lib/macro.h"
 
 /**
 * \internal d-pointer class to be more flexible on future extension of the
@@ -43,7 +43,7 @@ class KexiMacroTextView::Private
 		* The \a KoMacro::Manager instance used to access the
 		* Macro Framework.
 		*/
-		::KoMacro::Manager* const manager;
+		::KoMacro::Macro::Ptr const macro;
 
 		/**
 		* The Editor used to display and edit the XML text.
@@ -53,19 +53,18 @@ class KexiMacroTextView::Private
 		/**
 		* Constructor.
 		*
-		* \param m The passed \a KoMacro::Manager instance our
-		*        \a manager points to.
+		* \param macro The \a KoMacro::Macro instance.
 		*/
-		explicit Private(::KoMacro::Manager* const m)
-			: manager(m)
+		explicit Private(::KoMacro::Macro* const m)
+			: macro(m)
 		{
 		}
 
 };
 
-KexiMacroTextView::KexiMacroTextView(KexiMainWindow *mainwin, QWidget *parent, ::KoMacro::Manager* const manager)
+KexiMacroTextView::KexiMacroTextView(KexiMainWindow *mainwin, QWidget *parent, ::KoMacro::Macro* const macro)
 	: KexiViewBase(mainwin, parent, "KexiMacroTextView")
-	, d( new Private(manager) )
+	, d( new Private(macro) )
 {
 	QHBoxLayout* layout = new QHBoxLayout(this);
 	d->editor = new KTextEdit(this);
@@ -79,6 +78,19 @@ KexiMacroTextView::KexiMacroTextView(KexiMainWindow *mainwin, QWidget *parent, :
 KexiMacroTextView::~KexiMacroTextView()
 {
 	delete d;
+}
+
+tristate KexiMacroTextView::beforeSwitchTo(int mode, bool& dontstore)
+{
+	kexipluginsdbg << "KexiMacroTextView::beforeSwitchTo mode=" << mode << endl;
+	Q_UNUSED(dontstore);
+	return true;
+}
+
+tristate KexiMacroTextView::afterSwitchFrom(int mode)
+{
+	kexipluginsdbg << "KexiMacroTextView::afterSwitchFrom mode=" << mode << endl;
+	return true;
 }
 
 void KexiMacroTextView::editorChanged()

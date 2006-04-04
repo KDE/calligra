@@ -42,6 +42,8 @@ namespace KoMacro {
 		public:
 			KXMLGUIClient* const xmlguiclient;
 
+			QMap<QString, Macro::Ptr> macros;
+
 			QMap<QString, QGuardedPtr<QObject> > objects;
 
 			Private(KXMLGUIClient* const xmlguiclient)
@@ -76,6 +78,34 @@ KXMLGUIClient* const Manager::guiClient() const
 {
 	return d->xmlguiclient;
 }
+
+bool Manager::hasMacro(const QString& macroname)
+{
+	return d->macros.contains(macroname);
+}
+
+Macro::Ptr Manager::getMacro(const QString& macroname)
+{
+	return d->macros[macroname];
+}
+
+void Manager::addMacro(const QString& macroname, Macro::Ptr macro)
+{
+	d->macros.replace(macroname, macro);
+}
+
+void Manager::removeMacro(const QString& macroname)
+{
+	d->macros.remove(macroname);
+}
+
+Macro::Ptr Manager::createMacro(const QString& macroname)
+{
+	Macro::Ptr macro = Macro::Ptr( new Macro(this) );
+	return macro;
+}
+
+
 
 Action::Ptr Manager::createAction(const QDomElement& element)
 {

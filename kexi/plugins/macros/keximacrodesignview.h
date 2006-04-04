@@ -25,7 +25,7 @@
 
 // Forward declaration.
 namespace KoMacro {
-	class Manager;
+	class Macro;
 }
 
 /**
@@ -43,10 +43,9 @@ class KexiMacroDesignView : public KexiViewBase
 		* \param mainwin The \a KexiMainWindow instance this \a KexiViewBase
 		*        belongs to.
 		* \param parent The parent widget this widget should be displayed in.
-		* \param manager The \a KoMacro::Manager instance used to access the
-		*        Macro Framework.
+		* \param macro The \a KoMacro::Macro instance this view is for.
 		*/
-		KexiMacroDesignView(KexiMainWindow *mainwin, QWidget *parent, ::KoMacro::Manager* const manager);
+		KexiMacroDesignView(KexiMainWindow *mainwin, QWidget *parent, ::KoMacro::Macro* const macro);
 
 		/**
 		* Destructor.
@@ -70,6 +69,40 @@ class KexiMacroDesignView : public KexiViewBase
 		* currently used \a KexiDB::SchemaData instance.
 		*/
 		virtual tristate storeData(bool dontAsk = false);
+
+	protected:
+
+		/**
+		* Called by \a KexiDialogBase::switchToViewMode() right before dialog
+		* is switched to new mode.
+		*
+		* \param mode The viewmode to which should be switched. This
+		*        could be either Kexi::DataViewMode, Kexi::DesignViewMode
+		*        or Kexi::TextViewMode.
+		* \param donstore This call-by-reference boolean value defines
+		*        if \a storeData should be called for the old but still
+		*        selected viewmode. Set \a dontstore to true (it's false
+		*        by default) if you want to avoid data storing.
+		* \return true if you accept or false if a error occupied and view
+		*         shouldn't change. If there is no error but switching 
+		*         should be just cancelled (probably after showing some 
+		*         info messages), you need to return cancelled.
+		*/
+		virtual tristate beforeSwitchTo(int mode, bool& dontstore);
+
+		/**
+		* Called by \a KexiDialogBase::switchToViewMode() right after dialog
+		* is switched to new mode.
+		*
+		* \param mode The viewmode to which we switched. This could
+		*        be either Kexi::DataViewMode, Kexi::DesignViewMode
+		*        or Kexi::TextViewMode.
+		* \return true if you accept or false if a error occupied and view
+		*         shouldn't change. If there is no error but switching
+		*         should be just cancelled (probably after showing
+		*         some info messages), you need to return cancelled.
+		*/
+		virtual tristate afterSwitchFrom(int mode);
 
 	private:
 		/// \internal d-pointer class.
