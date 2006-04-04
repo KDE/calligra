@@ -1150,8 +1150,8 @@ UString FormulaToken::area( unsigned row, unsigned col ) const
   }
 
   UString result;
-  result.append( UString("[") );  // OpenDocument format
-  
+
+// normal use
   if( !col1Relative )
     result.append( UString("$") );
   result.append( Cell::columnLabel( col1Ref ) );  
@@ -1165,8 +1165,6 @@ UString FormulaToken::area( unsigned row, unsigned col ) const
   if( !row2Relative )
     result.append( UString("$") );
   result.append( UString::from( row2Ref+1 ) );  
-  
-  result.append( UString("]") );// OpenDocument format
 
   return result;  
 }
@@ -1210,19 +1208,42 @@ UString FormulaToken::ref( unsigned row, unsigned col ) const
 
   UString result;
 
-  result.append( UString("[") );  // OpenDocument format
-  
   if( !colRelative )
     result.append( UString("$") );
   result.append( Cell::columnLabel( colRef ) );  
   if( !rowRelative )
     result.append( UString("$") );
   result.append( UString::from( rowRef+1 ) );  
-  
-  result.append( UString("]") );// OpenDocument format
 
   return result;  
 }
+
+// only when id is Matrix
+unsigned FormulaToken::refRow() const
+{
+  // FIXME check data size !
+  unsigned char buf[2];
+
+  buf[0] = d->data[0];
+  buf[1] = d->data[1];
+  unsigned ref = readU16(buf);
+
+  return ref;
+}
+
+// only when id is Matrix
+unsigned FormulaToken::refColumn() const
+{
+  // FIXME check data size !
+  unsigned char buf[2];
+
+  buf[0] = d->data[2];
+  buf[1] = d->data[3];
+  unsigned ref = readU16(buf);
+
+  return ref;
+}
+
 
 std::ostream& Swinder::operator<<( std::ostream& s,  Swinder::FormulaToken token )
 {
@@ -3743,6 +3764,10 @@ void SSTRecord::setData( unsigned size, const unsigned char* data )
     offset += es.size();
   }
 
+  // safety, add null string if we can't read all of the rest
+  while( d->strings.size() < d->count )
+	  d->strings.push_back( UString() );
+
   
   // sanity check, adjust to safer condition
   if( d->count < d->strings.size() )
@@ -4472,7 +4497,7 @@ bool ExcelReader::load( Workbook* workbook, const char* filename )
   POLE::Storage storage( filename );
   if( !storage.open() )
   {
-    std::cerr << "Cannot open " << filename << std::endl;
+    //std::cerr << "Cannot open " << filename << std::endl;
     return false;
   }
   
@@ -4488,7 +4513,7 @@ bool ExcelReader::load( Workbook* workbook, const char* filename )
   
   if( stream->fail() )
   {
-    std::cerr << filename << " is not Excel workbook" << std::endl;
+    //std::cerr << filename << " is not Excel workbook" << std::endl;
     delete stream;
     return false;
   }
@@ -4886,8 +4911,14 @@ void ExcelReader::handleFormula( FormulaRecord* record )
   unsigned xfIndex = record->xfIndex();
   Value value = record->result();
   
-  UString formula = decodeFormula( row, column, record->tokens() );
-  
+#if 1
+  // this gives the formula in OpenDocument format, e.g. "=SUM([A1]; [A2])
+  UString formula = decodeFormula( row, column, record->tokens(), true );
+#else
+  // this gives the formula in standard Excel format, e.g. "=SUM(A1, A2)
+  UString formula = decodeFormula( row, column, record->tokens(), true );
+#endif
+
   Cell* cell = d->activeSheet->cell( column, row, true );
   if( cell )
   {
@@ -5547,14 +5578,18 @@ void mergeTokens( UStringStack* stack, int count, UString mergeString )
 {
   if( !stack ) return;
   if( !stack->size() ) return;
+  if( count < 1 ) return;
   
   UString s1, s2;
 	
   while(count)
   {
 	count--;
-    
-    UString last = (*stack)[ stack->size()-1 ];
+
+        // sanity check
+	if(stack->size() == 0) break;
+
+    UString last = stack->at( stack->size()-1 );
     UString tmp = last;
     tmp.append( s1 );
     s1 = tmp;
@@ -5586,9 +5621,14 @@ void dumpStack( std::vector<UString> stack )
 }
 #endif
 
-UString ExcelReader::decodeFormula( unsigned row, unsigned col, const FormulaTokens& tokens )
+UString ExcelReader::decodeFormula( unsigned row, unsigned col, 
+  const FormulaTokens& tokens, bool openDocumentFormat )
 {
   UStringStack stack;
+  
+  UString argumentSeparator(",");
+  if( openDocumentFormat )
+    argumentSeparator = UString(";");
   
   for( unsigned c=0; c < tokens.size(); c++ )
   {
@@ -5663,6 +5703,7 @@ UString ExcelReader::decodeFormula( unsigned row, unsigned col, const FormulaTok
         break;
       
       case FormulaToken::UPlus:
+		if(stack.size() > 1)
         {
           UString str( "+" );
           str.append( stack[ stack.size()-1 ] );
@@ -5671,6 +5712,7 @@ UString ExcelReader::decodeFormula( unsigned row, unsigned col, const FormulaTok
         break;
     
       case FormulaToken::UMinus:  
+		if(stack.size() > 1)
         {
           UString str( "-" );
           str.append( stack[ stack.size()-1 ] );
@@ -5725,16 +5767,32 @@ UString ExcelReader::decodeFormula( unsigned row, unsigned col, const FormulaTok
         break;
       
       case FormulaToken::Ref:
-        stack.push_back( token.ref( row, col ) );
+        {
+        	UString refName;
+        	if( openDocumentFormat )
+        	  refName = UString("[");
+        	refName.append( token.ref( row, col ) );
+        	if( openDocumentFormat )
+        	  refName.append(UString("]"));
+          stack.push_back( refName );
+        }
         break;
       
       case FormulaToken::Area:
-        stack.push_back( token.area( row, col ) );
+        {
+        	UString areaName;
+        	if( openDocumentFormat )
+        	  areaName = UString("[");
+        	areaName.append( token.area( row, col ) );
+        	if( openDocumentFormat )
+        	  areaName.append(UString("]"));
+          stack.push_back( areaName);
+        }
         break;
 
       case FormulaToken::Function:
         {
-          mergeTokens( &stack, token.functionParams(), UString(";") );
+          mergeTokens( &stack, token.functionParams(), argumentSeparator );
           if( stack.size() )
           {
             UString str( token.functionName() ? token.functionName() : "??" );
@@ -5749,7 +5807,7 @@ UString ExcelReader::decodeFormula( unsigned row, unsigned col, const FormulaTok
       case FormulaToken::FunctionVar:
         if( token.functionIndex() != 255 )
         {
-          mergeTokens( &stack, token.functionParams(), UString(";") );
+          mergeTokens( &stack, token.functionParams(), argumentSeparator );
           if( stack.size() )
           {
             UString str;
@@ -5764,7 +5822,7 @@ UString ExcelReader::decodeFormula( unsigned row, unsigned col, const FormulaTok
         else
         {
           unsigned count = token.functionParams()-1;
-          mergeTokens( &stack, count, UString(";") );
+          mergeTokens( &stack, count, argumentSeparator );
           if( stack.size() )
           {
             UString str;
@@ -5779,7 +5837,7 @@ UString ExcelReader::decodeFormula( unsigned row, unsigned col, const FormulaTok
       case FormulaToken::Attr:
         if( token.attr() & 0x10 )  // SUM
         {
-          mergeTokens( &stack, 1, UString(";") );
+          mergeTokens( &stack, 1, argumentSeparator );
           if( stack.size() )
           {
             UString str( "SUM" );
@@ -5796,6 +5854,14 @@ UString ExcelReader::decodeFormula( unsigned row, unsigned col, const FormulaTok
         if( token.nameIndex() <= d->nameTable.size() )
           stack.push_back( d->nameTable[ token.nameIndex()-1 ] );
         break;
+
+	  case FormulaToken::Matrix:
+		  {
+			  int row = token.refRow();
+			  int col = token.refColumn();
+			  //std::cout << "row is " << row << " col is " << col << std::endl;
+		  }
+		  break;
 
       case FormulaToken::NatFormula:
       case FormulaToken::Sheet:
@@ -5818,7 +5884,8 @@ UString ExcelReader::decodeFormula( unsigned row, unsigned col, const FormulaTok
       case FormulaToken::AreaErr3d:
       default:
         // FIXME handle this !
-        stack.push_back( UString("Unknown") );
+        stack.push_back( UString("UnknownToken") );
+		//std::cout << "UnknownToken ID=" << token.id() << std::endl;
         break;
     };
 
