@@ -54,6 +54,15 @@ public:
     DateTime &operator+=(const Duration &duration);
     DateTime &operator-=(const Duration &duration);
 
+    static DateTime fromString(const QString dts) {
+        QDateTime dt;
+        if (dts.isEmpty())
+            return DateTime();
+        dt = QDateTime::fromString(dts, Qt::ISODate);
+        if (dt.isValid())
+            return DateTime(dt);
+        return DateTime(QDateTime::fromString(dts));
+    }
 private:
 
     Duration duration(const DateTime &dt) const;
