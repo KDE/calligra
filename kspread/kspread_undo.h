@@ -25,6 +25,7 @@
 #include <qrect.h>
 #include <qptrlist.h>
 #include <qvaluelist.h>
+#include <qmap.h>
 
 #include <KoUnit.h>
 #include <KoPageLayout.h>
@@ -464,11 +465,11 @@ public:
     virtual void redo();
 
 protected:
-    void createList( QValueList<textOfCell> &list, Sheet* sheet );
+    void createList( QMap<QPoint,QString> &list, Sheet* sheet );
 
     Region m_region;
-    QValueList<textOfCell> m_lstTextCell;
-    QValueList<textOfCell> m_lstRedoTextCell;
+    QMap<QPoint,QString> m_lstTextCell;
+    QMap<QPoint,QString> m_lstRedoTextCell;
     QString m_sheetName;
 };
 

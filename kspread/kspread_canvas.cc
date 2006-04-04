@@ -323,21 +323,21 @@ double Canvas::yOffset() const
 void Canvas::setXOffset( double _xOffset )
 {
   d->xOffset = _xOffset;
-  kdDebug(36001) << "setXOffset(): XOffset before scrollToCell: "
-		 << d->xOffset << endl;
+ //kdDebug(36001) << "setXOffset(): XOffset before scrollToCell: "
+ //		 << d->xOffset << endl;
   scrollToCell( marker() );
-  kdDebug(36001) << "setXOffset(): XOffset after scrollToCell: "
-		 << d->xOffset << endl;
+ // kdDebug(36001) << "setXOffset(): XOffset after scrollToCell: "
+ //		 << d->xOffset << endl;
 }
 
 void Canvas::setYOffset( double _yOffset )
 {
   d->yOffset = _yOffset;
-  kdDebug(36001) << "setyOffset(): YOffset before scrollToCell: "
-		 << d->yOffset << endl;
+  //kdDebug(36001) << "setyOffset(): YOffset before scrollToCell: "
+  //		 << d->yOffset << endl;
   scrollToCell( marker() );
-  kdDebug(36001) << "setYOffset(): YOffset after scrollToCell: "
-		 << d->yOffset << endl;
+  //kdDebug(36001) << "setYOffset(): YOffset after scrollToCell: "
+  //		 << d->yOffset << endl;
 }
 
 const QPen& Canvas::defaultGridPen() const
@@ -622,9 +622,9 @@ void Canvas::scrollToCell(QPoint location) const
   if (sheet == NULL)
     return;
 
-  kdDebug(36001) << "------------------------------------------------" << endl;
-  kdDebug(36001) << "scrollToCell(): at location [" << location.x() << ","
-  		 << location.y() << "]" << endl;
+ // kdDebug(36001) << "------------------------------------------------" << endl;
+ // kdDebug(36001) << "scrollToCell(): at location [" << location.x() << ","
+ // 		 << location.y() << "]" << endl;
 
   /* we don't need this cell ptr, but this call is necessary to update the
      scroll bar correctly.  I don't like having that as part of the cellAt function
@@ -636,8 +636,8 @@ void Canvas::scrollToCell(QPoint location) const
   double  unzoomedWidth  = d->view->doc()->unzoomItX( width() );
   double  unzoomedHeight = d->view->doc()->unzoomItY( height() );
 
-  kdDebug(36001) << "Unzoomed view size: [" << unzoomedWidth << ","
-		 << unzoomedHeight << "]" << endl;
+  //kdDebug(36001) << "Unzoomed view size: [" << unzoomedWidth << ","
+ //		 << unzoomedHeight << "]" << endl;
 
   // xpos is the position of the cell in the current window in unzoomed
   // document coordinates.
@@ -648,12 +648,12 @@ void Canvas::scrollToCell(QPoint location) const
     xpos = unzoomedWidth - sheet->dblColumnPos( location.x() ) + xOffset();
   double ypos = sheet->dblRowPos( location.y() ) - yOffset();
 
-  kdDebug(36001) << "Position: [" << xpos << "," << ypos << "]" << endl;
+  //kdDebug(36001) << "Position: [" << xpos << "," << ypos << "]" << endl;
 
   double minY = 40.0;
   double maxY = unzoomedHeight - 40.0;
-  kdDebug(36001) << "Canvas::scrollToCell : height=" << height() << endl;
-  kdDebug(36001) << "Canvas::scrollToCell : width=" << width() << endl;
+  //kdDebug(36001) << "Canvas::scrollToCell : height=" << height() << endl;
+  //kdDebug(36001) << "Canvas::scrollToCell : width=" << width() << endl;
 
   if ( sheet->layoutDirection()==Sheet::RightToLeft ) {
     // Right to left sheet.
@@ -688,7 +688,7 @@ void Canvas::scrollToCell(QPoint location) const
     double minX = 100.0; // less than that, we scroll
     double maxX = unzoomedWidth - 100.0; // more than that, we scroll
 
-    kdDebug() << "ltr: XPos: " << xpos << ", min: " << minX << ", maxX: " << maxX << endl;
+   // kdDebug() << "ltr: XPos: " << xpos << ", min: " << minX << ", maxX: " << maxX << endl;
 
     // Do we need to scroll left?
     if ( xpos < minX )
