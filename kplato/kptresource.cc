@@ -353,10 +353,10 @@ bool Resource::load(QDomElement &element) {
     m_units = element.attribute("units", "100").toInt();
     s = element.attribute("available-from");
     if (s != "")
-        m_availableFrom = QDateTime::fromString(s);
+        m_availableFrom = DateTime::fromString(s);
     s = element.attribute("available-until");
     if (s != "")
-        m_availableUntil = QDateTime::fromString(s);
+        m_availableUntil = DateTime::fromString(s);
         
     cost.normalRate = KGlobal::locale()->readMoney(element.attribute("normal-rate"));
     cost.overtimeRate = KGlobal::locale()->readMoney(element.attribute("overtime-rate"));
@@ -376,8 +376,8 @@ void Resource::save(QDomElement &element) const {
     me.setAttribute("email", m_email);
     me.setAttribute("type", typeToString());
     me.setAttribute("units", m_units);
-    me.setAttribute("available-from", m_availableFrom.toString());
-    me.setAttribute("available-until", m_availableUntil.toString());
+    me.setAttribute("available-from", m_availableFrom.toString(Qt::ISODate));
+    me.setAttribute("available-until", m_availableUntil.toString(Qt::ISODate));
     me.setAttribute("normal-rate", KGlobal::locale()->formatMoney(cost.normalRate));
     me.setAttribute("overtime-rate", KGlobal::locale()->formatMoney(cost.overtimeRate));
 }

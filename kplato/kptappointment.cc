@@ -97,8 +97,8 @@ void AppointmentInterval::saveXML(QDomElement &element) const {
     QDomElement me = element.ownerDocument().createElement("interval");
     element.appendChild(me);
 
-    me.setAttribute("start", m_start.toString());
-    me.setAttribute("end", m_end.toString());
+    me.setAttribute("start", m_start.toString(Qt::ISODate));
+    me.setAttribute("end", m_end.toString(Qt::ISODate));
     me.setAttribute("load", m_load);
 }
 

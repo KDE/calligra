@@ -93,9 +93,11 @@ bool CalendarDay::load(QDomElement &element) {
         return false;
     //kDebug()<<k_funcinfo<<" state="<<m_state<<endl;
     QString s = element.attribute("date");
-    if (s != "")
-        m_date = QDate::fromString(s);
-        
+    if (s != "") {
+        m_date = QDate::fromString(s, Qt::ISODate);
+        if (!m_date.isValid())
+            m_date = QDate::fromString(s);
+    }
     clearIntervals();
     QDomNodeList list = element.childNodes();
     for (unsigned int i=0; i<list.count(); ++i) {
@@ -121,7 +123,7 @@ void CalendarDay::save(QDomElement &element) const {
     if (m_state == Map::None)
         return;
     if (m_date.isValid()) {
-        element.setAttribute("date", m_date.toString());
+        element.setAttribute("date", m_date.toString(Qt::ISODate));
     }
     element.setAttribute("state", m_state);
     if (m_workingIntervals.count() == 0)

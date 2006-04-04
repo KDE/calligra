@@ -425,17 +425,17 @@ void NodeSchedule::saveXML(QDomElement &element) const {
     saveCommonXML(sch);
     
     if (earliestStart.isValid())
-        sch.setAttribute("earlieststart",earliestStart.toString());
+        sch.setAttribute("earlieststart",earliestStart.toString(Qt::ISODate));
     if (latestFinish.isValid())
-        sch.setAttribute("latestfinish",latestFinish.toString());
+        sch.setAttribute("latestfinish",latestFinish.toString(Qt::ISODate));
     if (startTime.isValid())
-        sch.setAttribute("start",startTime.toString());
+        sch.setAttribute("start",startTime.toString(Qt::ISODate));
     if (endTime.isValid())
-        sch.setAttribute("end",endTime.toString());
+        sch.setAttribute("end",endTime.toString(Qt::ISODate));
     if (workStartTime.isValid())
-        sch.setAttribute("start-work", workStartTime.toString());
+        sch.setAttribute("start-work", workStartTime.toString(Qt::ISODate));
     if (workEndTime.isValid())
-        sch.setAttribute("end-work", workEndTime.toString());
+        sch.setAttribute("end-work", workEndTime.toString(Qt::ISODate));
     
     sch.setAttribute("duration",duration.toString());
 
@@ -602,8 +602,8 @@ bool MainSchedule::loadXML(const QDomElement &sch, Project &project) {
 void MainSchedule::saveXML(QDomElement &element) const {
     saveCommonXML(element);
     
-    element.setAttribute("start",startTime.toString());
-    element.setAttribute("end",endTime.toString());
+    element.setAttribute("start",startTime.toString(Qt::ISODate));
+    element.setAttribute("end",endTime.toString(Qt::ISODate));
 }
 
 #ifndef NDEBUG
