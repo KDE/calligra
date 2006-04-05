@@ -466,6 +466,7 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow, public KexiGUI
 		Private *d;
 
 	friend class KexiDialogBase;
+	friend class Private;
 };
 
 #endif
