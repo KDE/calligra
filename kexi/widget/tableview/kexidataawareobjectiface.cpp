@@ -211,7 +211,7 @@ void KexiDataAwareObjectInterface::initDataContents()
 				}
 			}
 		}
-		setCursorPosition(curRow, curCol);
+		setCursorPosition(curRow, curCol, true/*force*/);
 	}
 	ensureCellVisible(m_curRow, m_curCol);
 //	updateRowCountInfo();
