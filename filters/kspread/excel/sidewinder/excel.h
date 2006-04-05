@@ -180,6 +180,10 @@ public:
   // only when id is NameX
   unsigned nameIndex() const;
 
+  // only when id is Matrix
+  unsigned refRow() const;
+  unsigned refColumn() const;
+
 private:
   class Private;
   Private *d;  
@@ -3121,7 +3125,8 @@ private:
   Color convertColor( unsigned colorIndex );
   FormatFont convertFont( unsigned fontIndex );
   Format convertFormat( unsigned xfIndex );
-  UString decodeFormula( unsigned row, unsigned col, const FormulaTokens& tokens );
+  UString decodeFormula( unsigned row, unsigned col, 
+    const FormulaTokens& tokens, bool openDocumentFormat=false );
   
   // no copy or assign
   ExcelReader( const ExcelReader& );
