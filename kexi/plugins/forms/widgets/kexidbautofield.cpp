@@ -31,9 +31,9 @@
 #include "kexidbcheckbox.h"
 #include "kexidbdateedit.h"
 #include "kexidbdatetimeedit.h"
-#include "kexidbdoublespinbox.h"
 #include "kexidbimagebox.h"
-#include "kexidbintspinbox.h"
+//#include "kexidbintspinbox.h"
+//#include "kexidbdoublespinbox.h"
 #include "kexidblabel.h"
 #include "kexidblineedit.h"
 #include "kexidbtextedit.h"
@@ -112,7 +112,10 @@ KexiDBAutoField::createEditor()
 		delete m_editor;
 
 	switch( m_widgetType ) {
-		case Text: case Enum: //! \todo using kexitableview combo box editor when it's ready
+		case Text:
+		case Enum: //! @todo using kexitableview combo box editor when it's ready
+		case Double: //! @todo setup validator
+		case Integer: //! @todo setup validator
 			m_editor = new KexiDBLineEdit( this );
 			connect( m_editor, SIGNAL( textChanged( const QString& ) ), this, SLOT( slotValueChanged() ) );
 			break;
@@ -137,14 +140,14 @@ KexiDBAutoField::createEditor()
 			m_editor = new KexiDBTimeEdit(QTime::currentTime(), this);
 			connect( m_editor, SIGNAL( valueChanged( const QTime& ) ), this, SLOT( slotValueChanged() ) );
 			break;
-		case Double:
+/*		case Double:
 			m_editor = new KexiDBDoubleSpinBox(this);
 			connect( m_editor, SIGNAL( valueChanged(double) ), this, SLOT( slotValueChanged() ) );
 			break;
 		case Integer:
 			m_editor = new KexiDBIntSpinBox(this);
 			connect( m_editor, SIGNAL(valueChanged(int)), this, SLOT( slotValueChanged() ) );
-			break;
+			break;*/
 		case Image:
 			m_editor = new KexiDBImageBox(m_designMode, this);
 			connect( m_editor, SIGNAL(valueChanged()), this, SLOT( slotValueChanged() ) );
@@ -168,6 +171,7 @@ KexiDBAutoField::createEditor()
 		else {//if focusPolicy is not changed at top level, inherit it from editor
 			QWidget::setFocusPolicy(m_editor->focusPolicy());
 		}
+		setFocusProxy(m_editor); //ok?
 //		KFormDesigner::installRecursiveEventFilter(m_editor, this);
 	}
 

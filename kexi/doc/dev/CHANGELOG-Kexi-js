@@ -9,6 +9,20 @@
 For most important commits use: CCMAIL:kexi-devel@kde.org
 Use CCMAIL:###-done@bugs.kde.org
 
+TODO:
+- inform Raphael about koffice.org/1.5/ url, give him the php code
+
+2006-04-05
+Form Designer
+- KexiDBDoubleSpinBox and KexiDBIntSpinBox replaced line edit with validator because
+  of problems with handling null data and signalling changes. 
+  (there's no backward compatibility problems as these two widgets were used internally 
+  in the AutoField data widget)
+- fixed saving data changes made within auto field widgets
+- fixed support for tab/backtab key within auto field widgets
+- fixed problem when sometimes form was not filled with data after change of the design
+1.0/2.0: ported
+
 2006-04-04
 CSV Import
 - possible crash fixed after switching character encoding
@@ -16,6 +30,9 @@ CSV Import
 Main Window
 - "Compact Database": now closing the current project is required; 
   if there's no project is opened, user is asked for picking one
+Property Editor
+- possible crash fixed when bool editor's state is quickly switched
+1.0/2.0: ported
 
 2006-03-29
 Main Window
@@ -33,7 +50,8 @@ TableView
 
 TODO: merge trunk with revision 523723
 
-~~~~~~~~~~~~~~~~ 1.0 rc1 (with KOffice 1.5) ~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~ 1.0 stable (with KOffice 1.5)  ~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~ 1.0 rc1 (with KOffice 1.5 rc1) ~~~~~~~~~~~~~~~~
 
 2006-03-20
 KexiDB

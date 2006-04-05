@@ -828,3 +828,6 @@ TODO:
 Import
 - error "BLOB/TEXT column 'isbn' used in key specification without a key length"
   when importing books.mdb into a mysql db
+
+Forms:
+- after setting "auto" tab order, we need to close and open the form to get tab stops to work properly

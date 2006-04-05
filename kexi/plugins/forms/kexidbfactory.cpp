@@ -51,9 +51,9 @@
 #include "widgets/kexidbcheckbox.h"
 #include "widgets/kexidbdateedit.h"
 #include "widgets/kexidbdatetimeedit.h"
-#include "widgets/kexidbdoublespinbox.h"
 #include "widgets/kexidbimagebox.h"
-#include "widgets/kexidbintspinbox.h"
+//#include "widgets/kexidbdoublespinbox.h"
+//#include "widgets/kexidbintspinbox.h"
 #include "widgets/kexiframe.h"
 #include "widgets/kexidblabel.h"
 #include "widgets/kexidblineedit.h"
@@ -232,7 +232,7 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const char *name, const QStringLis
 	wDateTime->setDescription(i18n("A widget to input and display a date and time"));
 	addClass(wDateTime);
 
-	KexiDataAwareWidgetInfo *wIntSpinBox = new KexiDataAwareWidgetInfo(this, "stdwidgets", "KIntSpinBox");
+/*	KexiDataAwareWidgetInfo *wIntSpinBox = new KexiDataAwareWidgetInfo(this, "stdwidgets", "KIntSpinBox");
 	wIntSpinBox->setPixmap("spin");
 	wIntSpinBox->setClassName("KexiDBIntSpinBox");
 	wIntSpinBox->addAlternateClassName("QSpinBox", true);
@@ -251,7 +251,7 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const char *name, const QStringLis
 	wDoubleSpinBox->setNamePrefix(
 		i18n("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "dblSpinBox"));
 	wDoubleSpinBox->setDescription(i18n("A spin box widget to input and display floating-point numbers"));
-	addClass(wDoubleSpinBox);
+	addClass(wDoubleSpinBox);*/
 
 	// inherited
 	wi = new KFormDesigner::WidgetInfo(
@@ -361,10 +361,10 @@ KexiDBFactory::createWidget(const QCString &c, QWidget *p, const char *n,
 		w = new KexiDBDateEdit(QDate::currentDate(), p, n);
 	else if(c == "KexiDBDateTimeEdit")
 		w = new KexiDBDateTimeEdit(QDateTime::currentDateTime(), p, n);
-	else if(c == "KexiDBIntSpinBox")
-		w = new KexiDBIntSpinBox(p, n);
-	else if(c == "KexiDBDoubleSpinBox")
-		w = new KexiDBDoubleSpinBox(p, n);
+//	else if(c == "KexiDBIntSpinBox")
+//		w = new KexiDBIntSpinBox(p, n);
+//	else if(c == "KexiDBDoubleSpinBox")
+//		w = new KexiDBDoubleSpinBox(p, n);
 	else if(c == "KPushButton" || c == "KexiPushButton")
 		w = new KexiPushButton(text, p, n);
 
@@ -479,7 +479,7 @@ KexiDBFactory::startEditing(const QCString &classname, QWidget *w, KFormDesigner
 		return true;
 	}
 	else if( (classname == "KexiDBDateEdit") || (classname == "KexiDBDateTimeEdit") || (classname == "KexiDBTimeEdit")
-			|| (classname == "KexiDBIntSpinBox") || (classname == "KexiDBDoubleSpinBox") ) {
+			/*|| (classname == "KexiDBIntSpinBox") || (classname == "KexiDBDoubleSpinBox")*/ ) {
 		disableFilter(w, container);
 		return true;
 	}
