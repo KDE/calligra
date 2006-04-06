@@ -646,7 +646,7 @@ void KexiMainWindowImpl::initActions()
 	d->action_data_cancel_row_changes->setWhatsThis(i18n("Cancels changes made to currently selected table row."));
 	setActionVolatile( d->action_data_cancel_row_changes, true );
 
-	d->action_data_execute = createSharedAction(i18n("&Execute"), "exec", 0 , "data_execute");
+	d->action_data_execute = createSharedAction(i18n("&Execute"), "player_play", 0 , "data_execute");
 	//d->action_data_execute->setToolTip(i18n("")); //TODO
 	//d->action_data_execute->setWhatsThis(i18n("")); //TODO
 
