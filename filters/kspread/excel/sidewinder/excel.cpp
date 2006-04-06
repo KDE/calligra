@@ -5589,7 +5589,7 @@ void mergeTokens( UStringStack* stack, int count, UString mergeString )
         // sanity check
 	if(stack->size() == 0) break;
 
-    UString last = stack->at( stack->size()-1 );
+    UString last = (*stack)[ stack->size()-1 ];
     UString tmp = last;
     tmp.append( s1 );
     s1 = tmp;
