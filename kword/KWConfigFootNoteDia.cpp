@@ -113,8 +113,8 @@ void KWConfigFootNoteDia::setupTab3()
 
     Q3GridLayout *layout = new Q3GridLayout( 0, 1, 1, 0, KDialog::spacingHint());
 
-    spWidth = new KoUnitDoubleSpinBox(page, 0, 5, 0.5, 1.0, m_doc->unit(), 1);
-    spWidth->setValue( m_doc->footNoteSeparatorLineWidth());
+    spWidth = new KoUnitDoubleSpinBox(page, 0, 5, 0.5, m_doc->footNoteSeparatorLineWidth(), m_doc->unit(), 1);
+
     layout->addWidget( spWidth, 1, 1 );
 
     spLength = new KIntNumInput( page, "spLength" );
