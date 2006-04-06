@@ -69,6 +69,6 @@ X-Kexi-PartVersion=2
 X-Kexi-TypeName=script
 X-Kexi-TypeMime=kexi/script
 X-Kexi-ItemIcon=script
+X-Kexi-SupportsExecution=true
 X-Kexi-SupportsDataExport=false
 X-Kexi-SupportsPrinting=false
-X-Kexi-SupportsExecution=true

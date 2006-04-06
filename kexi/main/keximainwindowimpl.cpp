@@ -878,6 +878,9 @@ void KexiMainWindowImpl::invalidateProjectWideActions()
 	if (d->createMenu)
 		d->createMenu->setEnabled(d->prj);
 
+	// DATA MENU
+	//d->action_data_execute->setEnabled( d->curDialog && d->curDialog->part()->info()->isExecuteSupported() );
+
 	//TOOLS MENU
 	// "compact db" supported if there's no db or the current db supports compacting and is opened r/w:
 	d->action_tools_compact_database->setEnabled( 
@@ -1304,6 +1307,8 @@ KexiMainWindowImpl::initNavigator()
 			this,SLOT(removeObject(KexiPart::Item*)));
 		connect(d->nav,SIGNAL(renameItem(KexiPart::Item*,const QString&, bool&)),
 			this,SLOT(renameObject(KexiPart::Item*,const QString&, bool&)));
+		connect(d->nav,SIGNAL(executeItem(KexiPart::Item*)),
+			this,SLOT(executeItem(KexiPart::Item*)));
 		connect(d->nav,SIGNAL(exportItemAsDataTable(KexiPart::Item*)),
 			this,SLOT(exportItemAsDataTable(KexiPart::Item*)));
 		connect(d->nav,SIGNAL(printItem( KexiPart::Item* )),
@@ -3870,6 +3875,19 @@ tristate KexiMainWindowImpl::showProjectMigrationWizard(
 //		return openProject(destinationFileName, 0);
 	}
 	return true;
+}
+
+void KexiMainWindowImpl::executeItem(KexiPart::Item* item)
+{
+	if (! item)
+		return;
+	KexiPart::Info *info = Kexi::partManager().infoForMimeType( item->mimeType() );
+	if ( (! info) || (! info->isExecuteSupported()) )
+		return;
+	KexiPart::Part *part = Kexi::partManager().part(info);
+	if (! part)
+		return;
+	part->action( item->name() );
 }
 
 void KexiMainWindowImpl::slotProjectImportDataTable()
