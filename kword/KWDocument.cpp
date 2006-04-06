@@ -193,10 +193,6 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widname, QObject* pare
 
     m_footNoteSeparatorLinePos=SLP_LEFT;
 
-    m_iFootNoteSeparatorLineLength = 20; // 20%, i.e. 1/5th
-    m_footNoteSeparatorLineWidth = 2.0;
-    m_footNoteSeparatorLineType = SLT_SOLID;
-
     m_viewFormattingChars = false;
 
     m_viewFormattingEndParag = true;
@@ -1410,6 +1406,10 @@ void KWDocument::clear()
     m_pageColumns.ptColumnSpacing = m_defaultColumnSpacing;
     m_bHasEndNotes = false;
 
+    m_iFootNoteSeparatorLineLength = 20; // 20%, i.e. 1/5th
+    m_footNoteSeparatorLineWidth = 0.5; // like in OOo
+    m_footNoteSeparatorLineType = SLT_SOLID;
+
     m_lstFrameSet.clear();
 
     m_varColl->clear();
@@ -1536,7 +1536,8 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
         hf.ptFooterBodySpacing  = getAttribute( paper, "spFootBody", 0.0 );
         hf.ptFootNoteBodySpacing  = getAttribute( paper, "spFootNoteBody", 10.0 );
         m_iFootNoteSeparatorLineLength = getAttribute( paper, "slFootNoteLength", 20);
-        m_footNoteSeparatorLineWidth = getAttribute( paper, "slFootNoteWidth",2.0);
+        if ( paper.hasAttribute( "slFootNoteWidth" ) )
+            m_footNoteSeparatorLineWidth = paper.attribute( "slFootNoteWidth" ).toDouble();
         m_footNoteSeparatorLineType = static_cast<SeparatorLineLineType>(getAttribute( paper, "slFootNoteType",0));
 
         if ( paper.hasAttribute("slFootNotePosition"))
