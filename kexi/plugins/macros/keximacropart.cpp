@@ -95,11 +95,11 @@ KexiMacroPart::~KexiMacroPart()
 	delete d;
 }
 
-KAction* KexiMacroPart::action(const QString&, QObject*)
+bool KexiMacroPart::execute(KexiPart::Item*)
 {
-	kdDebug() << "KexiMacroPart::action()" << endl;
+	kdDebug() << "KexiMacroPart::execute()" << endl;
 	///\todo
-	return 0;
+	return true;
 }
 
 void KexiMacroPart::initPartActions()

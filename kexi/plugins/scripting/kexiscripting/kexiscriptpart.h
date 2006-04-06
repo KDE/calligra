@@ -53,10 +53,10 @@ class KexiScriptPart : public KexiPart::Part
         virtual ~KexiScriptPart();
 
         /**
-         * Implementation of the KexiPart::Part::action method used to
-         * provide scripts as KAction's to the outside world.
+         * Implementation of the \a KexiPart::Part::execute method used to
+         * execute the passed \p item instance.
          */
-        virtual KAction* action(const QString& scripturi, QObject* object = 0);
+        virtual bool execute(KexiPart::Item* item);
 
         /**
          * \return the i18n message for the passed \p englishMessage string.

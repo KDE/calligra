@@ -68,17 +68,23 @@ KexiScriptPart::~KexiScriptPart()
 	delete d;
 }
 
-KAction* KexiScriptPart::action(const QString& scripturi, QObject*)
+bool KexiScriptPart::execute(KexiPart::Item* item)
 {
+	if(! item) {
+		kdWarning() << "KexiScriptPart::execute: Invalid item." << endl;
+		return false;
+	}
+
+/*
 	if(! m_mainWin) {
-		kdWarning() << "KexiScriptPart::action(KURL,QObject*) KexiMainWindow undefined." << endl;
-		return 0;
+		kdWarning() << "KexiScriptPart::execute: KexiMainWindow undefined." << endl;
+		return false;
 	}
 
 	KexiProject* project = m_mainWin->project();
 	if(! project) {
-		kdWarning() << "KexiScriptPart::action(KURL,QObject*) No project loaded." << endl;
-		return 0;
+		kdWarning() << "KexiScriptPart::execute: No project loaded." << endl;
+		return false;
 	}
 
 	KexiPart::ItemDict* itemdict = project->items( info() );
@@ -99,11 +105,7 @@ KAction* KexiScriptPart::action(const QString& scripturi, QObject*)
 			break;
 		}
 	}
-
-	if(! item) {
-		kdWarning() << QString("KexiScriptPart::action(KURL,QObject*) No such item: \"%1\"").arg(scripturi) << endl;
-		return 0;
-	}
+*/
 
 	//m_mainWin->openObject(item, Kexi::DesignViewMode, &map);
 
@@ -111,8 +113,8 @@ KAction* KexiScriptPart::action(const QString& scripturi, QObject*)
 	dialog->setId( item->identifier() );
 	KexiScriptDesignView* view = dynamic_cast<KexiScriptDesignView*>( createView(dialog, dialog, *item, Kexi::DesignViewMode) );
 	if(! view) {
-		kdWarning() << "KexiScriptPart::action(KURL,QObject*) Failed to create a view." << endl;
-		return 0;
+		kdWarning() << "KexiScriptPart::execute: Failed to create a view." << endl;
+		return false;
 	}
 
 	Kross::Api::ScriptAction* scriptaction = view->scriptAction();
@@ -138,7 +140,7 @@ KAction* KexiScriptPart::action(const QString& scripturi, QObject*)
 	}
 
 	view->deleteLater(); // not needed any longer.
-	return 0;
+	return true;
 }
 
 void KexiScriptPart::initPartActions()

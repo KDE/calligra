@@ -3879,15 +3879,12 @@ tristate KexiMainWindowImpl::showProjectMigrationWizard(
 
 void KexiMainWindowImpl::executeItem(KexiPart::Item* item)
 {
-	if (! item)
-		return;
-	KexiPart::Info *info = Kexi::partManager().infoForMimeType( item->mimeType() );
+	KexiPart::Info *info = item ? Kexi::partManager().infoForMimeType(item->mimeType()) : 0;
 	if ( (! info) || (! info->isExecuteSupported()) )
 		return;
 	KexiPart::Part *part = Kexi::partManager().part(info);
-	if (! part)
-		return;
-	part->action( item->name() );
+	if (part)
+		part->execute(item);
 }
 
 void KexiMainWindowImpl::slotProjectImportDataTable()
