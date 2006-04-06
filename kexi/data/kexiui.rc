@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="kexi" version="142">
+<kpartgui name="kexi" version="143">
 <MenuBar>
   <Menu name="file" noMerge="0">
     <text>&amp;Project</text>
@@ -102,6 +102,7 @@
       <Action name="data_sort_az"/>
       <Action name="data_sort_za"/>
     </Menu>
+    <Action name="data_execute"/>
   </Menu>
 
   <Merge/>

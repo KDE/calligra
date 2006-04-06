@@ -380,6 +380,7 @@ void updatePropEditorDockWidthInfo() {
 		//! data menu
 		KAction *action_data_save_row;
 		KAction *action_data_cancel_row_changes;
+		KAction *action_data_execute;
 
 		//! format menu
 		KAction *action_format_font;

@@ -71,3 +71,4 @@ X-Kexi-TypeMime=kexi/script
 X-Kexi-ItemIcon=script
 X-Kexi-SupportsDataExport=false
 X-Kexi-SupportsPrinting=false
+X-Kexi-SupportsExecution=true

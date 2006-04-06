@@ -111,7 +111,7 @@ void KexiMacroPart::initPartActions()
 void KexiMacroPart::initInstanceActions()
 {
 	kdDebug() << "KexiMacroPart::initInstanceActions()" << endl;
-	//createSharedAction(Kexi::DesignViewMode, i18n("Execute Macro"), "exec", 0, "script_execute");
+	//createSharedAction(Kexi::DesignViewMode, i18n("Execute Macro"), "exec", 0, "data_execute");
 }
 
 KexiViewBase* KexiMacroPart::createView(QWidget* parent, KexiDialogBase* dialog, KexiPart::Item& item, int viewMode, QMap<QString,QString>*)

@@ -96,12 +96,18 @@ class KEXICORE_EXPORT Info
 		/**
 		 * \return true if the part supports data exporting.
 		 */
-		bool isDataExportSuppored() const;
+		bool isDataExportSupported() const;
 
 		/**
 		 * \return true if the part supports data printing.
 		 */
-		bool isPrintingSuppored() const;
+		bool isPrintingSupported() const;
+
+		/**
+		 * \return true if the part supports execution. This is as
+		 * example the case for the Macro and the Scripting plugins.
+		 */
+		bool isExecuteSupported() const;
 
 	protected:
 		/**

@@ -646,6 +646,10 @@ void KexiMainWindowImpl::initActions()
 	d->action_data_cancel_row_changes->setWhatsThis(i18n("Cancels changes made to currently selected table row."));
 	setActionVolatile( d->action_data_cancel_row_changes, true );
 
+	d->action_data_execute = createSharedAction(i18n("&Execute"), "exec", 0 , "data_execute");
+	//d->action_data_execute->setToolTip(i18n("")); //TODO
+	//d->action_data_execute->setWhatsThis(i18n("")); //TODO
+
 	action = createSharedAction(i18n("&Filter"), "filter", 0, "data_filter");
 	setActionVolatile( action, true );
 //	action->setToolTip(i18n("")); //todo
@@ -831,11 +835,11 @@ void KexiMainWindowImpl::invalidateProjectWideActions()
 	d->action_project_relations->setEnabled(d->prj);
 	d->action_project_import_data_table->setEnabled(d->prj && !readOnly);
 	d->action_project_export_data_table->setEnabled( 
-		d->curDialog && d->curDialog->part()->info()->isDataExportSuppored() 
+		d->curDialog && d->curDialog->part()->info()->isDataExportSupported() 
 		&& !d->curDialog->neverSaved() );
 
 	const bool printingActionsEnabled = 
-		d->curDialog && d->curDialog->part()->info()->isPrintingSuppored()
+		d->curDialog && d->curDialog->part()->info()->isPrintingSupported()
 		&& !d->curDialog->neverSaved();
 	d->action_project_print->setEnabled( printingActionsEnabled );
 	d->action_project_print_preview->setEnabled( printingActionsEnabled );
@@ -849,7 +853,7 @@ void KexiMainWindowImpl::invalidateProjectWideActions()
 	if (d->curDialog && d->curDialog->currentViewMode()==Kexi::DataViewMode) {
 		KexiPart::Info *activePartInfo = d->curDialog->part()->info();
 		d->action_edit_copy_special_data_table->setEnabled(
-			activePartInfo ? activePartInfo->isDataExportSuppored() : false );
+			activePartInfo ? activePartInfo->isDataExportSupported() : false );
 	}
 	else
 		d->action_edit_copy_special_data_table->setEnabled( false );
@@ -3950,7 +3954,7 @@ tristate KexiMainWindowImpl::printActionForItem(KexiPart::Item* item, PrintActio
 	if (!item)
 		return false;
 	KexiPart::Info *info = Kexi::partManager().infoForMimeType( item->mimeType() );
-	if (!info->isPrintingSuppored())
+	if (!info->isPrintingSupported())
 		return false;
 
 	KexiDialogBase *printingDialog = d->pageSetupDialogs[ item->identifier() ];

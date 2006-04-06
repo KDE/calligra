@@ -364,11 +364,11 @@ KexiBrowser::slotSelectionChanged(QListViewItem* i)
 	m_itemPopup->setItemVisible(m_openAction_id, m_openAction->isEnabled());
 	m_itemPopup->setItemVisible(m_designAction_id, m_designAction->isEnabled());
 	m_itemPopup->setItemVisible(m_editTextAction_id, part && m_editTextAction->isEnabled());
-	m_itemPopup->setItemVisible(m_exportActionMenu_id, gotitem && it->info()->isDataExportSuppored());
-	m_itemPopup->setItemVisible(m_exportActionMenu_id_sep, gotitem && it->info()->isDataExportSuppored());
-	m_itemPopup->setItemVisible(m_printAction_id, gotitem && it->info()->isPrintingSuppored());
-	m_itemPopup->setItemVisible(m_pageSetupAction_id, gotitem && it->info()->isPrintingSuppored());
-	m_itemPopup->setItemVisible(m_pageSetupAction_id_sep, gotitem && it->info()->isPrintingSuppored());
+	m_itemPopup->setItemVisible(m_exportActionMenu_id, gotitem && it->info()->isDataExportSupported());
+	m_itemPopup->setItemVisible(m_exportActionMenu_id_sep, gotitem && it->info()->isDataExportSupported());
+	m_itemPopup->setItemVisible(m_printAction_id, gotitem && it->info()->isPrintingSupported());
+	m_itemPopup->setItemVisible(m_pageSetupAction_id, gotitem && it->info()->isPrintingSupported());
+	m_itemPopup->setItemVisible(m_pageSetupAction_id_sep, gotitem && it->info()->isPrintingSupported());
 
 	if (m_prevSelectedPart != part) {
 		m_prevSelectedPart = part;

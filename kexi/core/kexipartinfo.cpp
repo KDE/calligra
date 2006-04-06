@@ -107,15 +107,21 @@ bool Info::isIdStoredInPartDatabase() const
 	return d->idStoredInPartDatabase;
 }
 
-bool Info::isDataExportSuppored() const
+bool Info::isDataExportSupported() const
 {
 	QVariant val = d->ptr ? d->ptr->property("X-Kexi-SupportsDataExport") : QVariant();
 	return val.isValid() ? val.toBool() : false;
 }
 
-bool Info::isPrintingSuppored() const
+bool Info::isPrintingSupported() const
 {
 	QVariant val = d->ptr ? d->ptr->property("X-Kexi-SupportsPrinting") : QVariant();
+	return val.isValid() ? val.toBool() : false;
+}
+
+bool Info::isExecuteSupported() const
+{
+	QVariant val = d->ptr ? d->ptr->property("X-Kexi-SupportsExecution") : QVariant();
 	return val.isValid() ? val.toBool() : false;
 }
 
