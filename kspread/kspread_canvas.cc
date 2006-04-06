@@ -6069,7 +6069,7 @@ void ToolTip::maybeTip( const QPoint& p )
     int row = sheet->topRow( (m_canvas->doc()->unzoomItY( p.y() ) +
                                    m_canvas->yOffset()), ypos );
 
-    Cell* cell = sheet->visibleCellAt( col, row );
+    const Cell* cell = sheet->visibleCellAt( col, row );
     if ( !cell )
         return;
 
@@ -6083,44 +6083,31 @@ void ToolTip::maybeTip( const QPoint& p )
     //  - cell comment
     //  - hyperlink
     QString tipText;
+    QString comment = cell->format()->comment( col, row );
 
     // If cell is too small, show the content
     if ( cell->testFlag( Cell::Flag_CellTooShortX ) ||
          cell->testFlag( Cell::Flag_CellTooShortY ) )
     {
         tipText = cell->strOutText();
-
-        //Add 2 extra lines and a text, when both should be in the tooltip
-        QString comment = cell->format()->comment( col, row );
-        if ( !comment.isEmpty() )
-            comment = "\n\n" + i18n("Comment:") + "\n" + comment;
-
-        tipText += comment;
-    }
-
-    // Show comment, if any
-    if( tipText.isEmpty() )
-    {
-      tipText = cell->format()->comment( col, row );
     }
 
     // Show hyperlink, if any
-    if( tipText.isEmpty() )
+    if ( tipText.isEmpty() )
     {
-        tipText = cell->link();
+      tipText = cell->link();
     }
 
     // Nothing to display, bail out
-    if( tipText.isEmpty() )
+    if ( tipText.isEmpty() && comment.isEmpty() )
       return;
 
     // Cut if the tip is ridiculously long
-    unsigned maxLen = 256;
-    if(tipText.length() > maxLen )
+    const unsigned maxLen = 256;
+    if ( tipText.length() > maxLen )
         tipText = tipText.left(maxLen).append("...");
 
     // Determine position and width of the current cell.
-    cell = sheet->cellAt( col, row );
     double u = cell->dblWidth( col );
     double v = cell->dblHeight( row );
 
@@ -6128,8 +6115,8 @@ void ToolTip::maybeTip( const QPoint& p )
     if ( cell->isObscured() && cell->isPartOfMerged() )
     {
       cell = cell->obscuringCells().first();
-      int moveX = cell->column();
-      int moveY = cell->row();
+      const int moveX = cell->column();
+      const int moveY = cell->row();
 
       // Use the obscuring cells dimensions
       u = cell->dblWidth( moveX );
@@ -6164,7 +6151,7 @@ void ToolTip::maybeTip( const QPoint& p )
     }
 
     // No use if mouse is somewhere else
-    if( !insideMarker )
+    if ( !insideMarker )
         return;
 
     // Find the tipLabel
@@ -6173,17 +6160,38 @@ void ToolTip::maybeTip( const QPoint& p )
 
     // Ensure that it is plain text
     // Not funny if (intentional or not) <a> appears as hyperlink
-    if( tipLabel )
+    if ( tipLabel )
          tipLabel->setTextFormat( Qt::PlainText );
 
+    QFontMetrics fm = tipLabel ? tipLabel->fontMetrics() : m_canvas->fontMetrics();
+    const QRect r( 0, 0, 200, -1 );
     // Wrap the text if too long
-    if( tipText.length() > 16 )
+    if ( tipText.length() > 16 )
     {
-        QFontMetrics fm = tipLabel? tipLabel->fontMetrics() : m_canvas->fontMetrics();
-        QRect r( 0, 0, 200, -1 );
         KWordWrap* wrap = KWordWrap::formatText( fm, r, 0, tipText );
         tipText = wrap->wrappedString();
         delete wrap;
+    }
+    // Wrap the comment if too long
+    if ( comment.length() > 16 )
+    {
+      KWordWrap* wrap = KWordWrap::formatText( fm, r, 0, comment );
+      comment = wrap->wrappedString();
+      delete wrap;
+    }
+
+    // Show comment, if any
+    if ( tipText.isEmpty() )
+    {
+      tipText = comment;
+    }
+    else if ( !comment.isEmpty() )
+    {
+      //Add 2 extra lines and a text, when both should be in the tooltip
+      if ( !comment.isEmpty() )
+        comment = "\n\n" + i18n("Comment:") + "\n" + comment;
+
+      tipText += comment;
     }
 
     // Now we shows the tip
@@ -6191,7 +6199,7 @@ void ToolTip::maybeTip( const QPoint& p )
 
     // Here we try to find the tip label again
     // Reason: the previous tip_findLabel might fail if no tip has ever shown yet
-    if( !tipLabel )
+    if ( !tipLabel )
     {
       tipLabel = tip_findLabel();
       if( tipLabel )
