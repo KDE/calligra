@@ -91,10 +91,12 @@ namespace {
                 return "CMYK16";
             }
         }
+#ifdef HAVE_MAGICK6
         else if (type == LABColorspace) {
             kdDebug(41008) << "Lab!\n";
             return "LABA";
         }
+#endif
         else if (type == RGBColorspace || type == sRGBColorspace || type == TransparentColorspace) {
             if (imageDepth == 8)
                 return "RGBA";
@@ -110,7 +112,9 @@ namespace {
         if ( cs->id() == KisID("GRAYA") || cs->id() == KisID("GRAYA16") ) return GRAYColorspace;
         if ( cs->id() == KisID("RGBA") || cs->id() == KisID("RGBA16") ) return RGBColorspace;
         if ( cs->id() == KisID("CMYK") || cs->id() == KisID("CMYK16") ) return CMYKColorspace;
+#ifdef HAVE_MAGICK6
         if ( cs->id() == KisID("LABA") ) return LABColorspace;
+#endif
 
         kdDebug(41008) << "Cannot export images in " + cs->id().name() + " yet.\n";
         return RGBColorspace;
@@ -500,6 +504,7 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KURL& uri, bool isB
                         }
                     }
                 }
+#ifdef HAVE_MAGICK6
                 else if (colorspaceType == LABColorspace) {
                     while(! hiter.isDone())
                     {
@@ -514,6 +519,7 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KURL& uri, bool isB
                         ++hiter;
                     }
                 }
+#endif
                 else if (colorspaceType == RGBColorspace ||
                              colorspaceType == sRGBColorspace ||
                              colorspaceType == TransparentColorspace)
