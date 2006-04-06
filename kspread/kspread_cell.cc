@@ -1626,12 +1626,11 @@ void Cell::setOutputText()
 
 void Cell::offsetAlign( int _col, int _row )
 {
-  int     a;
+  int       a;
   Style::VAlign  ay;
-  int     tmpAngle;
-  bool    tmpVerticalText;
-  bool    tmpMultiRow;
-  int     tmpTopBorderWidth = effTopBorderPen( _col, _row ).width();
+  int       tmpAngle;
+  bool      tmpVerticalText;
+  bool      tmpMultiRow;
 
   if ( d->hasExtra()
        && d->extra()->conditions
@@ -1683,133 +1682,180 @@ void Cell::offsetAlign( int _col, int _row )
     if ( d->extra()->extraYCells )  h = d->extra()->extraHeight;
   }
 
+  const double effTop = BORDER_SPACE + 0.5 * effTopBorderPen( _col, _row ).width();
+  const double effBottom = h - BORDER_SPACE - 0.5 * effBottomBorderPen( _col, _row ).width();
+
   // Calculate d->textY based on the vertical alignment and a few
   // other inputs.
-  switch( ay ) {
+  switch( ay )
+  {
   case Style::Top:
+  {
     if ( tmpAngle == 0 )
-      d->textY = tmpTopBorderWidth + BORDER_SPACE
-  + (double) d->fmAscent / format()->sheet()->doc()->zoomedResolutionY();
+    {
+      d->textY = effTop + (double) d->fmAscent / format()->sheet()->doc()->zoomedResolutionY();
+    }
     else if ( tmpAngle < 0 )
-      d->textY = tmpTopBorderWidth + BORDER_SPACE;
+    {
+      d->textY = effTop;
+    }
     else
-      d->textY = tmpTopBorderWidth + BORDER_SPACE
-  + ( (double)d->fmAscent * cos( tmpAngle * M_PI / 180 )
-      / format()->sheet()->doc()->zoomedResolutionY() );
-    break;
-
-  case Style::Bottom:
-    if ( !tmpVerticalText && !tmpMultiRow && !tmpAngle ) {
-      d->textY = h - BORDER_SPACE - effBottomBorderPen( _col, _row ).width();
-    }
-    else if ( tmpAngle != 0 ) {
-      if ( h - BORDER_SPACE - d->textHeight
-     - effBottomBorderPen( _col, _row ).width() > 0 )
-      {
-  if ( tmpAngle < 0 )
-    d->textY = h - BORDER_SPACE - d->textHeight
-      - effBottomBorderPen( _col, _row ).width();
-  else
-    d->textY = h - BORDER_SPACE - d->textHeight
-      - effBottomBorderPen( _col, _row ).width()
-      + ( (double) d->fmAscent * cos( tmpAngle * M_PI / 180 )
-    / format()->sheet()->doc()->zoomedResolutionY() );
-      }
-      else if ( tmpAngle < 0 )
-  d->textY = tmpTopBorderWidth + BORDER_SPACE ;
-      else
-  d->textY = tmpTopBorderWidth + BORDER_SPACE
-    + ( (double) d->fmAscent * cos( tmpAngle * M_PI / 180 )
-        / format()->sheet()->doc()->zoomedResolutionY() );
-    }
-    else if ( tmpMultiRow ) {
-      int tmpline = d->hasExtra() ? d->extra()->nbLines : 0;
-      if ( tmpline > 1 )
-  tmpline--;  //number of extra lines
-
-      if ( h - BORDER_SPACE - d->textHeight * d->extra()->nbLines
-     - effBottomBorderPen( _col, _row ).width() > 0 )
-  d->textY = h - BORDER_SPACE - d->textHeight * tmpline
-    - effBottomBorderPen( _col, _row ).width();
-      else
-  d->textY = tmpTopBorderWidth + BORDER_SPACE
-    + (double) d->fmAscent / format()->sheet()->doc()->zoomedResolutionY();
-    }
-    else {
-      if ( h - BORDER_SPACE - d->textHeight
-     - effBottomBorderPen( _col, _row ).width() > 0 )
-  d->textY = h - BORDER_SPACE - d->textHeight
-    - effBottomBorderPen( _col, _row ).width()
-    + (double)d->fmAscent / format()->sheet()->doc()->zoomedResolutionY();
-      else
-  d->textY = tmpTopBorderWidth + BORDER_SPACE
-    + (double) d->fmAscent / format()->sheet()->doc()->zoomedResolutionY();
-    }
-    break;
-
-  case Style::Middle:
-  case Style::VAlignUndefined:
-    if ( !tmpVerticalText && !tmpMultiRow && !tmpAngle ) {
-      d->textY = ( h - d->textHeight ) / 2
-  + (double) d->fmAscent / format()->sheet()->doc()->zoomedResolutionY();
-    }
-    else if ( tmpAngle != 0 ) {
-      if ( h - d->textHeight > 0 ) {
-  if ( tmpAngle < 0 )
-    d->textY = ( h - d->textHeight ) / 2 ;
-  else
-    d->textY = ( h - d->textHeight ) / 2 +
-      (double) d->fmAscent * cos( tmpAngle * M_PI / 180 ) /
-      format()->sheet()->doc()->zoomedResolutionY();
-      }
-      else {
-  if ( tmpAngle < 0 )
-    d->textY = tmpTopBorderWidth + BORDER_SPACE;
-  else
-    d->textY = tmpTopBorderWidth + BORDER_SPACE
-      + ( (double)d->fmAscent * cos( tmpAngle * M_PI / 180 )
-    / format()->sheet()->doc()->zoomedResolutionY() );
-      }
-    }
-    else if ( tmpMultiRow ) {
-      int tmpline = d->hasExtra() ? d->extra()->nbLines : 0;
-      if ( tmpline == 0 )
-  tmpline = 1;
-
-      if ( h - d->textHeight * tmpline > 0 )
-  d->textY = ( h - d->textHeight * tmpline ) / 2
-    + (double) d->fmAscent / format()->sheet()->doc()->zoomedResolutionY();
-      else
-  d->textY = tmpTopBorderWidth + BORDER_SPACE
-    + (double) d->fmAscent / format()->sheet()->doc()->zoomedResolutionY();
-    }
-    else {
-      if ( h - d->textHeight > 0 )
-  d->textY = ( h - d->textHeight ) / 2
-    + (double)d->fmAscent / format()->sheet()->doc()->zoomedResolutionY();
-      else
-  d->textY = tmpTopBorderWidth + BORDER_SPACE
-    + (double)d->fmAscent / format()->sheet()->doc()->zoomedResolutionY();
+    {
+      d->textY = effTop
+               + (double) d->fmAscent * cos( tmpAngle * M_PI / 180 ) / format()->sheet()->doc()->zoomedResolutionY();
     }
     break;
   }
+  case Style::Bottom:
+  {
+    if ( !tmpVerticalText && !tmpMultiRow && !tmpAngle )
+    {
+      d->textY = effBottom;
+    }
+    else if ( tmpAngle != 0 )
+    {
+      // Is enough place available?
+      if ( effBottom - effTop - d->textHeight > 0 )
+      {
+        if ( tmpAngle < 0 )
+        {
+          d->textY = effBottom - d->textHeight;
+        }
+        else
+        {
+          d->textY = effBottom - d->textHeight
+                   + ( (double) d->fmAscent * cos( tmpAngle * M_PI / 180 ) / format()->sheet()->doc()->zoomedResolutionY() );
+        }
+      }
+      else
+      {
+        if ( tmpAngle < 0 )
+        {
+          d->textY = effTop;
+        }
+        else
+        {
+          d->textY = effTop
+                  + ( (double) d->fmAscent * cos( tmpAngle * M_PI / 180 )
+                  / format()->sheet()->doc()->zoomedResolutionY() );
+        }
+      }
+    }
+    else if ( tmpMultiRow && !tmpVerticalText )
+    {
+      // Is enough place available?
+      if ( effBottom - effTop - d->textHeight > 0 )
+      {
+        d->textY = effBottom - d->textHeight
+                 + (double)d->fmAscent / format()->sheet()->doc()->zoomedResolutionY();
+      }
+      else
+      {
+        d->textY = effTop
+                 + (double) d->fmAscent / format()->sheet()->doc()->zoomedResolutionY();
+      }
+    }
+    else
+    {
+      // Is enough place available?
+      if ( effBottom - effTop - d->textHeight > 0 )
+      {
+        d->textY = effBottom - d->textHeight
+                 + (double)d->fmAscent / format()->sheet()->doc()->zoomedResolutionY();
+      }
+      else
+      {
+        d->textY = effTop
+                 + (double) d->fmAscent / format()->sheet()->doc()->zoomedResolutionY();
+      }
+    }
+    break;
+  }
+  case Style::Middle:
+  case Style::VAlignUndefined:
+  {
+    if ( !tmpVerticalText && !tmpMultiRow && !tmpAngle )
+    {
+      d->textY = ( h - d->textHeight ) / 2
+               + (double) d->fmAscent / format()->sheet()->doc()->zoomedResolutionY();
+    }
+    else if ( tmpAngle != 0 )
+    {
+      // Is enough place available?
+      if ( effBottom - effTop - d->textHeight > 0 )
+      {
+        if ( tmpAngle < 0 )
+        {
+          d->textY = ( h - d->textHeight ) / 2;
+        }
+        else
+        {
+          d->textY = ( h - d->textHeight ) / 2
+                   + (double) d->fmAscent * cos( tmpAngle * M_PI / 180 ) / format()->sheet()->doc()->zoomedResolutionY();
+        }
+      }
+      else
+      {
+        if ( tmpAngle < 0 )
+        {
+          d->textY = effTop;
+        }
+        else
+        {
+          d->textY = effTop
+                   + ( (double)d->fmAscent * cos( tmpAngle * M_PI / 180 ) / format()->sheet()->doc()->zoomedResolutionY() );
+        }
+      }
+    }
+    else if ( tmpMultiRow && !tmpVerticalText )
+    {
+      // Is enough place available?
+      if ( effBottom - effTop - d->textHeight > 0 )
+      {
+        d->textY = ( h - d->textHeight ) / 2
+                 + (double) d->fmAscent / format()->sheet()->doc()->zoomedResolutionY();
+      }
+      else
+      {
+        d->textY = effTop
+                 + (double) d->fmAscent / format()->sheet()->doc()->zoomedResolutionY();
+      }
+    }
+    else
+    {
+      // Is enough place available?
+      if ( effBottom - effTop - d->textHeight > 0 )
+      {
+        d->textY = ( h - d->textHeight ) / 2
+                 + (double) d->fmAscent / format()->sheet()->doc()->zoomedResolutionY();
+      }
+      else
+        d->textY = effTop
+                 + (double)d->fmAscent / format()->sheet()->doc()->zoomedResolutionY();
+    }
+    break;
+  }
+  }
 
   a = effAlignX();
-  if ( format()->sheet()->getShowFormula()
-       && !( format()->sheet()->isProtected() && format()->isHideFormula( _col, _row ) ) )
+  if ( format()->sheet()->getShowFormula() &&
+       !( format()->sheet()->isProtected() && format()->isHideFormula( _col, _row ) ) )
+  {
     a = Style::Left;
+  }
 
   // Calculate d->textX based on alignment and textwidth.
   switch ( a ) {
   case Style::Left:
-    d->textX = effLeftBorderPen( _col, _row ).width() + BORDER_SPACE;
+    d->textX = 0.5 * effLeftBorderPen( _col, _row ).width() + BORDER_SPACE;
     break;
   case Style::Right:
-    d->textX = ( w - BORDER_SPACE - d->textWidth
-     - effRightBorderPen( _col, _row ).width() );
+    d->textX = w - BORDER_SPACE - d->textWidth
+             - 0.5 * effRightBorderPen( _col, _row ).width();
     break;
   case Style::Center:
-    d->textX = ( w - d->textWidth ) / 2;
+    d->textX = 0.5 * ( w - BORDER_SPACE - d->textWidth -
+                       0.5 * effRightBorderPen( _col, _row ).width() );
     break;
   }
 }
