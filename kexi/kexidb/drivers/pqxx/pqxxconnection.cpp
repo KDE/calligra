@@ -136,7 +136,7 @@ bool pqxxSqlConnection::drv_createDatabase( const QString &dbName )
 {
 	KexiDBDrvDbg << "pqxxSqlConnection::drv_createDatabase: " << dbName << endl;
 
-	if (executeSQL("CREATE DATABASE " + escapeName(dbName)))
+	if (executeSQL("CREATE DATABASE " + escapeName(dbName) + " TEMPLATE template0"))
 		return true;
 
 	return false;
