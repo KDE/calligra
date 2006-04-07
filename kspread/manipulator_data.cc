@@ -39,7 +39,7 @@ AbstractDataManipulator::~AbstractDataManipulator ()
 
 bool AbstractDataManipulator::process (Element* element)
 {
-  QRect range = element->rect().normalize();
+  QRect range = element->rect().normalized();
   for (int col = range.left(); col <= range.right(); ++col)
     for (int row = range.top(); row <= range.bottom(); ++row) {
       Value val;
@@ -59,7 +59,7 @@ bool AbstractDataManipulator::process (Element* element)
         if (parse)
           text = val.asString();
       }
-      
+
       // we have the data - set it !
       if (parse) {
         Cell *cell = m_sheet->nonDefaultCell (col, row);
@@ -81,11 +81,11 @@ bool AbstractDataManipulator::preProcessing ()
 {
   // not the first run - data already stored ...
   if (!m_firstrun) return true;
-  
+
   Region::Iterator endOfList(cells().end());
   for (Region::Iterator it = cells().begin(); it != endOfList; ++it)
   {
-    QRect range = (*it)->rect().normalize();
+    QRect range = (*it)->rect().normalized();
     for (int col = range.left(); col <= range.right(); ++col)
       for (int row = range.top(); row <= range.bottom(); ++row)
       {
@@ -93,7 +93,7 @@ bool AbstractDataManipulator::preProcessing ()
         if (cell != m_sheet->defaultCell())  // non-default cell - remember it
         {
           ADMStorage st;
-          
+
           if (cell->isFormula())
             st.text = cell->text();
           st.val = m_sheet->value (col, row);
@@ -123,7 +123,7 @@ Value DataManipulator::newValue (Element *element, int col, int row,
   *parsing = m_parsing;
   if (m_format != No_format)
     *formatType = m_format;
-  QRect range = element->rect().normalize();
+  QRect range = element->rect().normalized();
   int colidx = range.left() - col;
   int rowidx = range.top() - row;
   return data.element (colidx, rowidx);
@@ -142,10 +142,10 @@ Value ArrayFormulaManipulator::newValue (Element *element, int col, int row,
                                  bool *parsing, FormatType *)
 {
   *parsing = true;
-  QRect range = element->rect().normalize();
+  QRect range = element->rect().normalized();
   int colidx = col - range.left();
   int rowidx = row - range.top();
-  
+
   // fill in the cells ... top-left one gets the formula, the rest gets =INDEX
   // TODO: also fill in information about cells being a part of a range for GUI
   if (colidx || rowidx) {
@@ -170,13 +170,13 @@ bool ProtectedCheck::check ()
 {
   if (!m_sheet->isProtected())
     return false;
-  
+
   bool prot = false;
   Region::Iterator endOfList(cells().end());
   for (Region::Iterator it = cells().begin(); it != endOfList; ++it)
   {
     Region::Element *element = *it;
-    QRect range = element->rect().normalize();
+    QRect range = element->rect().normalized();
 
     for (int col = range.left(); col <= range.right(); ++col)
     {

@@ -929,7 +929,7 @@ void UndoCellFormat::copyFormat(Q3ValueList<layoutCell> & list,
   Region::ConstIterator endOfList(m_region.constEnd());
   for (Region::ConstIterator it = m_region.constBegin(); it != endOfList; ++it)
   {
-    QRect range = (*it)->rect().normalize();
+    QRect range = (*it)->rect().normalized();
   int bottom = range.bottom();
   int right  = range.right();
 
@@ -1112,7 +1112,7 @@ void UndoCellFormat::undo()
   Region::ConstIterator endOfList(m_region.constEnd());
   for (Region::ConstIterator it = m_region.constBegin(); it != endOfList; ++it)
   {
-    QRect range = (*it)->rect().normalize();
+    QRect range = (*it)->rect().normalized();
   if( util_isColumnSelected( range ) )
   {
     Q3ValueList<layoutColumn>::Iterator it2;
@@ -1160,7 +1160,7 @@ void UndoCellFormat::redo()
   Region::ConstIterator endOfList(m_region.constEnd());
   for (Region::ConstIterator it = m_region.constBegin(); it != endOfList; ++it)
   {
-    QRect range = (*it)->rect().normalize();
+    QRect range = (*it)->rect().normalized();
   if ( util_isColumnSelected( range ) )
   {
     Q3ValueList<layoutColumn>::Iterator it2;
@@ -1511,7 +1511,7 @@ void UndoDelete::createListCell( Q3CString &listCell,Q3ValueList<columnSize> &li
     Region::ConstIterator endOfList = m_region.constEnd();
     for (Region::ConstIterator it = m_region.constBegin(); it != endOfList; ++it)
     {
-      QRect range = (*it)->rect().normalize();
+      QRect range = (*it)->rect().normalized();
       // copy column(s)
       if ((*it)->isColumn())
     {
@@ -1757,7 +1757,7 @@ void UndoResizeColRow::createList( Q3ValueList<columnSize> &listCol,Q3ValueList<
     Region::ConstIterator endOfList(m_region.constEnd());
     for (Region::ConstIterator it = m_region.constBegin(); it != endOfList; ++it)
     {
-      QRect m_rctRect = (*it)->rect().normalize();
+      QRect m_rctRect = (*it)->rect().normalized();
 
     if( util_isColumnSelected( m_rctRect ) ) // entire column(s)
     {
@@ -1833,7 +1833,7 @@ void UndoResizeColRow::undo()
     Region::ConstIterator endOfList(m_region.constEnd());
     for (Region::ConstIterator it = m_region.constBegin(); it != endOfList; ++it)
     {
-      QRect m_rctRect = (*it)->rect().normalize();
+      QRect m_rctRect = (*it)->rect().normalized();
 
     if( util_isColumnSelected( m_rctRect ) ) // complete column(s)
     {
@@ -1884,7 +1884,7 @@ void UndoResizeColRow::redo()
     Region::ConstIterator endOfList(m_region.constEnd());
     for (Region::ConstIterator it = m_region.constBegin(); it != endOfList; ++it)
     {
-      QRect m_rctRect = (*it)->rect().normalize();
+      QRect m_rctRect = (*it)->rect().normalized();
 
     if( util_isColumnSelected( m_rctRect ) ) // complete column(s)
     {
@@ -1949,7 +1949,7 @@ void UndoChangeAreaTextCell::createList( Q3ValueList<textOfCell> &list, Sheet* s
   Region::ConstIterator endOfList(m_region.constEnd());
   for (Region::ConstIterator it = m_region.constBegin(); it != endOfList; ++it)
   {
-    QRect m_rctRect = (*it)->rect().normalize();
+    QRect m_rctRect = (*it)->rect().normalized();
     int bottom = m_rctRect.bottom();
     int right  = m_rctRect.right();
 
@@ -2035,7 +2035,7 @@ void UndoChangeAreaTextCell::undo()
     Region::ConstIterator endOfList(m_region.constEnd());
     for (Region::ConstIterator it = m_region.constBegin(); it != endOfList; ++it)
     {
-      QRect m_rctRect = (*it)->rect().normalize();
+      QRect m_rctRect = (*it)->rect().normalized();
 
     if ( !util_isRowSelected( m_rctRect )
          && !util_isColumnSelected( m_rctRect ) )
@@ -2090,7 +2090,7 @@ void UndoChangeAreaTextCell::redo()
     Region::ConstIterator endOfList(m_region.constEnd());
     for (Region::ConstIterator it = m_region.constBegin(); it != endOfList; ++it)
     {
-      QRect m_rctRect = (*it)->rect().normalize();
+      QRect m_rctRect = (*it)->rect().normalized();
 
     if ( !util_isRowSelected( m_rctRect )
          && !util_isColumnSelected( m_rctRect ) )
@@ -2594,7 +2594,7 @@ void UndoCellPaste::createListCell(Q3CString& listCell,
   {
     int nbCol = 0;
     int nbRow = 0;
-    QRect range = (*it)->rect().normalize();
+    QRect range = (*it)->rect().normalized();
     if ((*it)->isColumn())
     {
       nbCol = range.width();
@@ -2672,7 +2672,7 @@ void UndoCellPaste::undo()
   Region::ConstIterator endOfList = m_region.constEnd();
   for (Region::ConstIterator it = --m_region.constEnd(); it != endOfList; --it)
   {
-    QRect range = (*it)->rect().normalize();
+    QRect range = (*it)->rect().normalized();
 
     if ((*it)->isColumn())
     {
@@ -2765,7 +2765,7 @@ void UndoCellPaste::redo()
   Region::ConstIterator endOfList = m_region.constEnd();
   for (Region::ConstIterator it = m_region.constBegin(); it != endOfList; ++it)
   {
-    QRect range = (*it)->rect().normalize();
+    QRect range = (*it)->rect().normalized();
 
     if ((*it)->isColumn())
     {

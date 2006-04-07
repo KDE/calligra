@@ -288,7 +288,7 @@ void Selection::initialize(const Region& region, Sheet* sheet)
     range->setColor(d->colors[cells().size() % d->colors.size()]);
   }
 
-  QPoint topLeft(cells().last()->rect().normalize().topLeft());
+  QPoint topLeft(cells().last()->rect().normalized().topLeft());
   Cell* cell = d->view->activeSheet()->cellAt(topLeft);
   if (cell->isObscured() && cell->isPartOfMerged())
   {
@@ -296,7 +296,7 @@ void Selection::initialize(const Region& region, Sheet* sheet)
     topLeft = QPoint(cell->column(), cell->row());
   }
 
-  QPoint bottomRight(cells().last()->rect().normalize().bottomRight());
+  QPoint bottomRight(cells().last()->rect().normalized().bottomRight());
   cell = d->view->activeSheet()->cellAt(bottomRight);
   if (cell->isObscured() && cell->isPartOfMerged())
   {
@@ -360,7 +360,7 @@ void Selection::update(const QPoint& point)
     return;
   }
 
-  QRect area1 = (*d->activeElement)->rect().normalize();
+  QRect area1 = (*d->activeElement)->rect().normalized();
   QRect newRange = extendToMergedAreas(QRect(d->anchor, topLeft));
 
   Element* oldElement = *d->activeElement;
@@ -380,7 +380,7 @@ void Selection::update(const QPoint& point)
     d->activeElement--;
   }
 
-  QRect area2 = (*d->activeElement)->rect().normalize();
+  QRect area2 = (*d->activeElement)->rect().normalized();
   Region changedRegion;
 
   bool newLeft   = area1.left() != area2.left();
@@ -564,12 +564,12 @@ void Selection::extend(const QRect& range, Sheet* sheet)
   Element* element;
   if (d->multipleSelection)
   {
-    d->activeElement = insert(++d->activeElement, extendToMergedAreas(QRect(topLeft, bottomRight)).normalize(), sheet, false);
+    d->activeElement = insert(++d->activeElement, extendToMergedAreas(QRect(topLeft, bottomRight)).normalized(), sheet, false);
     element = *d->activeElement;
   }
   else
   {
-    element = add(extendToMergedAreas(QRect(topLeft, bottomRight)).normalize(), sheet);
+    element = add(extendToMergedAreas(QRect(topLeft, bottomRight)).normalized(), sheet);
     d->activeElement = --cells().end();
   }
   if (element && element->type() == Element::Point)
@@ -825,13 +825,13 @@ const Q3ValueList<QColor>& Selection::colors() const
 
 QRect Selection::lastRange(bool extend) const
 {
-  QRect selection = QRect(d->anchor, d->marker).normalize();
+  QRect selection = QRect(d->anchor, d->marker).normalized();
   return extend ? extendToMergedAreas(selection) : selection;
 }
 
 QRect Selection::selection(bool extend) const
 {
-  QRect selection = QRect(d->anchor, d->marker).normalize();
+  QRect selection = QRect(d->anchor, d->marker).normalized();
   return extend ? extendToMergedAreas(selection) : selection;
 }
 
@@ -840,7 +840,7 @@ QRect Selection::extendToMergedAreas(QRect area) const
   if (!d->view->activeSheet())
 	  return area;
 
-  area = area.normalize(); // TODO Stefan: avoid this
+  area = area.normalized(); // TODO Stefan: avoid this
   const Cell *cell = d->view->activeSheet()->cellAt(area.left(), area.top());
 
   if( Region::Range(area).isColumn() || Region::Range(area).isRow() )

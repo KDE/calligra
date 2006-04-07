@@ -510,9 +510,9 @@ int doPreScan( QString & format, QString const & formatBack, KLocale const * con
           --l; --i;
         }
         else
-          if ( ( format[ i + 1].lower() != 's' )
-               && ( format[ i + 1].lower() != 'm' )
-               && ( format[ i + 1].lower() != 'h' ) )
+          if ( ( format[ i + 1].toLower() != 's' )
+               && ( format[ i + 1].toLower() != 'm' )
+               && ( format[ i + 1].toLower() != 'h' ) )
           {
             // strange!
 
@@ -807,13 +807,13 @@ int doPreScan( QString & format, QString const & formatBack, KLocale const * con
      case 'a':
       if ( type == TimeDate || type == Unknown )
       {
-        if ( ( i + 1 < l ) && ( format[i + 1].lower() == 'm' ) )
+        if ( ( i + 1 < l ) && ( format[i + 1].toLower() == 'm' ) )
         {
           g_convertionInfo.ampm = true;
           ++i;
           if ( ( i + 3 < l ) && ( format[i + 1] == '/' )
-               && ( format[i + 2].lower() == 'p' )
-               && ( format[i + 3].lower() == 'm' ) )
+               && ( format[i + 2].toLower() == 'p' )
+               && ( format[i + 3].toLower() == 'm' ) )
           {
             i += 3;
           }
@@ -839,7 +839,7 @@ int doPreScan( QString & format, QString const & formatBack, KLocale const * con
      case 'p':
       if ( type == TimeDate || type == Unknown )
       {
-        if ( ( i + 1 < l ) && ( format[i + 1].lower() == 'm' ) )
+        if ( ( i + 1 < l ) && ( format[i + 1].toLower() == 'm' ) )
         {
           g_convertionInfo.ampm = true;
           i += 1;
@@ -1455,7 +1455,7 @@ void createDateTime( QString & result, Value const & value,
   int l = (int) data->format.length();
   while ( i < l )
   {
-    switch( data->format[i].lower().toLatin1() )
+    switch( data->format[i].toLower().toLatin1() )
     {
      case '"':
       ++i;
@@ -1553,8 +1553,8 @@ void createDateTime( QString & result, Value const & value,
       {
         ++i;
         if ( data->format[i + 1] == '/'
-             && data->format[i + 2].lower() == 'p'
-             && data->format[i + 3].lower() == 'm' )
+             && data->format[i + 2].toLower() == 'p'
+             && data->format[i + 3].toLower() == 'm' )
           i += 3;
 
         appendAMPM( result, value );

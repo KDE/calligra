@@ -101,7 +101,7 @@ void RegisterTextFunctions()
   repo->add (f);
   f = new Function ("VALUE", func_value);
   repo->add (f);
-  
+
   // other functions
   f = new Function ("COMPARE", func_compare);
   f->setParamCount (3);
@@ -170,14 +170,14 @@ Value func_clean (valVector args, ValueCalc *calc, FuncExtra *)
   QChar   c;
   int     i;
   int     l = str.length();
-  
+
   for (i = 0; i < l; ++i)
   {
     c = str[i];
     if (c.isPrint())
       result += c;
   }
-  
+
   return Value (result);
 }
 
@@ -201,7 +201,7 @@ Value func_compare (valVector args, ValueCalc *calc, FuncExtra *)
   QString s2 = calc->conv()->asString (args[1]).asString();
 
   if (!exact)
-    result = s1.lower().localeAwareCompare(s2.lower());
+    result = s1.toLower().localeAwareCompare(s2.toLower());
   else
     result = s1.localeAwareCompare(s2);
 
@@ -230,7 +230,7 @@ Value func_concatenate (valVector args, ValueCalc *calc, FuncExtra *)
   QString tmp;
   for (unsigned int i = 0; i < args.count(); ++i)
     func_concatenate_helper (args[i], calc, tmp);
-  
+
   return Value (tmp);
 }
 
@@ -240,10 +240,10 @@ Value func_dollar (valVector args, ValueCalc *calc, FuncExtra *)
   // ValueConverter doesn't support money directly, hence we need to
   // use the locale. This code has the same effect as the output
   // of ValueFormatter for money format.
-  
+
   // This function converts data to double/int, hence it won't support
   // larger precision.
-  
+
   double value = calc->conv()->asFloat (args[0]).asFloat();
   int precision = 2;
   if (args.count() == 2)
@@ -251,10 +251,10 @@ Value func_dollar (valVector args, ValueCalc *calc, FuncExtra *)
 
   // do round, because formatMoney doesn't
   value = floor (value * pow (10.0, precision) + 0.5) / pow (10.0, precision);
-  
+
   KLocale *locale = calc->conv()->locale();
   QString s = locale->formatMoney (value, locale->currencySymbol(), precision);
-  
+
   return Value (s);
 }
 
@@ -339,7 +339,7 @@ Value func_left (valVector args, ValueCalc *calc, FuncExtra *)
   int nb = 1;
   if (args.count() == 2)
     nb = calc->conv()->asInteger (args[1]).asInteger();
-  
+
   return Value (str.left (nb));
 }
 
@@ -353,7 +353,7 @@ Value func_len (valVector args, ValueCalc *calc, FuncExtra *)
 // Function: LOWER
 Value func_lower (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  return Value (calc->conv()->asString (args[0]).asString().lower());
+  return Value (calc->conv()->asString (args[0]).asString().toLower());
 }
 
 // Function: MID
@@ -364,7 +364,7 @@ Value func_mid (valVector args, ValueCalc *calc, FuncExtra *)
   uint len = 0xffffffff;
   if (args.count() == 3)
     len = (uint) calc->conv()->asInteger (args[2]).asInteger();
-  
+
   // Excel compatible
   pos--;
 
@@ -374,8 +374,8 @@ Value func_mid (valVector args, ValueCalc *calc, FuncExtra *)
 // Function: PROPER
 Value func_proper (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QString str = calc->conv()->asString (args[0]).asString().lower();
-    
+  QString str = calc->conv()->asString (args[0]).asString().toLower();
+
   QChar f;
   bool  first = true;
 
@@ -409,7 +409,7 @@ Value func_regexp (valVector args, ValueCalc *calc, FuncExtra *)
   QRegExp exp (calc->conv()->asString (args[1]).asString());
   if (!exp.isValid ())
     return Value::errorVALUE();
-  
+
   QString s = calc->conv()->asString (args[0]).asString();
   QString defText;
   if (args.count() > 2)
@@ -421,7 +421,7 @@ Value func_regexp (valVector args, ValueCalc *calc, FuncExtra *)
     return Value::errorVALUE();
 
   QString returnValue;
-  
+
   int pos = exp.search (s);
   if (pos == -1)
     returnValue = defText;
@@ -438,7 +438,7 @@ Value func_regexpre (valVector args, ValueCalc *calc, FuncExtra *)
   QRegExp exp (calc->conv()->asString (args[1]).asString());
   if (!exp.isValid ())
     return Value::errorVALUE();
-  
+
   QString s = calc->conv()->asString (args[0]).asString();
   QString str = calc->conv()->asString (args[2]).asString();
 
@@ -460,9 +460,9 @@ Value func_replace (valVector args, ValueCalc *calc, FuncExtra *)
   int pos = calc->conv()->asInteger (args[1]).asInteger();
   int len = calc->conv()->asInteger (args[2]).asInteger();
   QString new_text = calc->conv()->asString (args[3]).asString();
-  
+
   if (pos < 0) pos = 0;
-  
+
   QString result = text.replace (pos-1, len, new_text);
   return Value (result);
 }
@@ -472,7 +472,7 @@ Value func_rept (valVector args, ValueCalc *calc, FuncExtra *)
 {
   QString s = calc->conv()->asString (args[0]).asString();
   int nb = calc->conv()->asInteger (args[1]).asInteger();
-  
+
   QString result;
   for (int i = 0; i < nb; i++) result += s;
   return Value (result);
@@ -485,7 +485,7 @@ Value func_right (valVector args, ValueCalc *calc, FuncExtra *)
   int nb = 1;
   if (args.count() == 2)
     nb = calc->conv()->asInteger (args[1]).asInteger();
-  
+
   return Value (str.right (nb));
 }
 
@@ -557,7 +557,7 @@ Value func_substitute (valVector args, ValueCalc *calc, FuncExtra *)
     num = calc->conv()->asInteger (args[3]).asInteger();
     all = false;
   }
-  
+
   QString text = calc->conv()->asString (args[0]).asString();
   QString old_text = calc->conv()->asString (args[1]).asString();
   QString new_text = calc->conv()->asString (args[2]).asString();
@@ -603,13 +603,13 @@ Value func_toggle (valVector args, ValueCalc *calc, FuncExtra *)
   for (i = 0; i < l; ++i)
   {
     QChar c = str[i];
-    QChar lc = c.lower();
+    QChar lc = c.toLower();
     QChar uc = c.upper();
 
     if (c == lc) // it is in lowercase
       str[i] = c.upper();
     else if (c == uc) // it is in uppercase
-      str[i] = c.lower();
+      str[i] = c.toLower();
   }
 
   return Value (str);

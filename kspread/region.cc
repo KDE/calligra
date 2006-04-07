@@ -259,7 +259,7 @@ Region::Element* Region::add(const QPoint& point, Sheet* sheet)
 
 Region::Element* Region::add(const QRect& range, Sheet* sheet)
 {
-  if (range.normalize().width() == 0 || range.normalize().height() == 0)
+  if (range.normalized().width() == 0 || range.normalized().height() == 0)
   {
     return 0;
   }
@@ -303,7 +303,7 @@ void Region::sub(const QRect& range)
   for (Iterator it = d->cells.begin(); it != endOfList; ++it)
   {
     Element *element = *it;
-    if (element->rect().normalize() == range.normalize())
+    if (element->rect().normalized() == range.normalized())
     {
       delete element;
       d->cells.remove(element);
@@ -346,7 +346,7 @@ Region::Element* Region::eor(const QPoint& point, Sheet* sheet)
     containsPoint = true;
     int x = point.x();
     int y = point.y();
-    QRect fullRange = (*it)->rect().normalize();
+    QRect fullRange = (*it)->rect().normalized();
     delete *it;
     it = cells().remove(it);
 
@@ -430,7 +430,7 @@ Region::Iterator Region::insert(Region::Iterator pos, const QPoint& point, Sheet
     }
 /*    else
     {
-      neighbour = element->rect().normalize();
+      neighbour = element->rect().normalized();
       neighbour.setTopLeft(neighbour.topLeft() - QPoint(1,1));
       neighbour.setBottomRight(neighbour.bottomRight() + QPoint(1,1));
       if (neighbour.contains(point))
@@ -501,7 +501,7 @@ bool Region::isColumnAffected(uint col) const
   for (ConstIterator it = d->cells.constBegin(); it != endOfList; ++it)
   {
     Element *element = *it;
-    QRect normalizedRegion = element->rect().normalize();
+    QRect normalizedRegion = element->rect().normalized();
     if ((int)col >= normalizedRegion.left() && (int)col <= normalizedRegion.right())
     {
       return true;
@@ -516,7 +516,7 @@ bool Region::isRowAffected(uint row) const
   for (ConstIterator it = d->cells.constBegin(); it != endOfList; ++it)
   {
     Element *element = *it;
-    QRect normalizedRegion = element->rect().normalize();
+    QRect normalizedRegion = element->rect().normalized();
     if ((int)row >= normalizedRegion.top() && (int)row <= normalizedRegion.bottom())
     {
       return true;
@@ -531,7 +531,7 @@ bool Region::isColumnSelected(uint col) const
   for (ConstIterator it = d->cells.constBegin(); it != endOfList; ++it)
   {
     Element *element = *it;
-    QRect region = element->rect().normalize();
+    QRect region = element->rect().normalized();
     if ((col == 0 || ((int)col >= region.left() && (int)col <= region.right())) &&
          region.top() == 1 && region.bottom() == KS_rowMax)
     {
@@ -547,7 +547,7 @@ bool Region::isRowSelected(uint row) const
   for (ConstIterator it = d->cells.constBegin(); it != endOfList; ++it)
   {
     Element *element = *it;
-    QRect region = element->rect().normalize();
+    QRect region = element->rect().normalized();
     if ((row == 0 || ((int)row >= region.top() && (int)row <= region.bottom())) &&
          region.left() == 1 && region.right() == KS_colMax)
     {
@@ -563,7 +563,7 @@ bool Region::isColumnOrRowSelected() const
   for (ConstIterator it = d->cells.constBegin(); it != endOfList; ++it)
   {
     Element *element = *it;
-    QRect region = element->rect().normalize();
+    QRect region = element->rect().normalized();
     if ((region.top() == 1 && region.bottom() == KS_rowMax) ||
         (region.left() == 1 && region.right() == KS_colMax))
     {
@@ -618,7 +618,7 @@ QRect Region::boundingRect() const
   Region::ConstIterator endOfList = cells().constEnd();
   for (Region::ConstIterator it = cells().constBegin(); it != endOfList; ++it)
   {
-    QRect range = (*it)->rect().normalize();
+    QRect range = (*it)->rect().normalized();
     if (range.left() < left)
     {
       left = range.left();
@@ -948,12 +948,12 @@ QString Region::Range::name(Sheet* originSheet) const
 
 bool Region::Range::contains(const QPoint& point) const
 {
-  return m_range.normalize().contains(point);
+  return m_range.normalized().contains(point);
 }
 
 bool Region::Range::contains(const QRect& range) const
 {
-  return m_range.normalize().contains(range.normalize());
+  return m_range.normalized().contains(range.normalized());
 }
 
 } // namespace KSpread

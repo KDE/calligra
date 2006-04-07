@@ -1304,7 +1304,7 @@ bool Canvas::highlightRangeSizeGripAt(double x, double y)
   {
     // TODO Stefan: adapt to Selection::selectionHandleArea
     KoRect visibleRect;
-    sheetAreaToRect((*it)->rect().normalize(), visibleRect);
+    sheetAreaToRect((*it)->rect().normalized(), visibleRect);
 
     QPoint bottomRight((int) visibleRect.right(), (int) visibleRect.bottom());
     QRect handle( ( (int) bottomRight.x() - 6 ),
@@ -2926,7 +2926,7 @@ bool Canvas::formatKeyPress( QKeyEvent * _ev )
   Region::ConstIterator end(selectionInfo()->constEnd());
   for (Region::ConstIterator it = selectionInfo()->constBegin(); it != end; ++it)
   {
-    QRect rect = (*it)->rect().normalize();
+    QRect rect = (*it)->rect().normalized();
 
   int right  = rect.right();
   int bottom = rect.bottom();
@@ -4303,7 +4303,7 @@ void Canvas::paintHighlightedRanges(QPainter& painter, const KoRect& /*viewRect*
       continue;
     }
 
-    QRect region = (*it)->rect().normalize();
+    QRect region = (*it)->rect().normalized();
 
 		//double positions[4];
 		//bool paintSides[4];
@@ -4364,12 +4364,12 @@ void Canvas::paintNormalMarker(QPainter& painter, const KoRect &viewRect)
 	if (!selectionInfo()->activeElement())
 			return;
 
-	QRect range=selectionInfo()->activeElement()->rect().normalize();
+	QRect range=selectionInfo()->activeElement()->rect().normalized();
 
   	double positions[4];
   	bool paintSides[4];
 
-    bool current = QRect(selectionInfo()->anchor(), selectionInfo()->marker()).normalize() == range;
+    bool current = QRect(selectionInfo()->anchor(), selectionInfo()->marker()).normalized() == range;
     QPen pen( Qt::black, 2 );
     painter.setPen( pen );
 

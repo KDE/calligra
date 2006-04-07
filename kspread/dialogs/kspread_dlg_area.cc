@@ -74,7 +74,7 @@ void AreaDialog::slotOk()
   QString tmp(m_areaName->text());
   if( !tmp.isEmpty() )
   {
-    tmp = tmp.lower();
+    tmp = tmp.toLower();
 
     QRect rect( m_pView->selectionInfo()->selection() );
     bool newName = true;

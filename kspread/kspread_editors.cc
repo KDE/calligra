@@ -626,7 +626,7 @@ void CellEditor::triggerFunctionAutoComplete()
 
   // single perfect match, no need to give choices
   if( choices.count()==1 )
-    if( choices[0].lower() == id.lower() )
+    if( choices[0].toLower() == id.toLower() )
       return;
 
   // present the user with completion choices
@@ -1318,7 +1318,7 @@ void LocationEditWidget::slotActivateItem()
 bool LocationEditWidget::activateItem()
 {
     QString ltext = text();
-    QString tmp = ltext.lower();
+    QString tmp = ltext.toLower();
     Q3ValueList<Reference>::Iterator it;
     Q3ValueList<Reference> area = m_pView->doc()->listArea();
     for ( it = area.begin(); it != area.end(); ++it )
@@ -1363,7 +1363,7 @@ bool LocationEditWidget::activateItem()
             Sheet * t = m_pView->activeSheet();
             // set area name on current selection/cell
 
-            m_pView->doc()->addAreaName(rect, ltext.lower(), t->sheetName());
+            m_pView->doc()->addAreaName(rect, ltext.toLower(), t->sheetName());
         }
 
         if (!validName)

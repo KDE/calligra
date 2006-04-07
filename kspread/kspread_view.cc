@@ -1351,7 +1351,7 @@ void View::Private::updateButton( Cell *cell, int column, int row)
     KFontChooser::getFontList( fontList, 0 );
     QString fontFamily = cell->format()->textFontFamily( column,row );
     for ( QStringList::Iterator it = fontList.begin(); it != fontList.end(); ++it )
-      if ((*it).lower() == fontFamily.lower())
+      if ((*it).toLower() == fontFamily.toLower())
       {
         actions->selectFont->setFont( fontFamily );
         break;

@@ -531,11 +531,11 @@ Range::Range(const QString & str, Map * map,
 
   //try to parse as named area
   bool gotNamed = false;
-  QString tmp = str.lower();
+  QString tmp = str.toLower();
   Q3ValueList < Reference >::Iterator it;
   Q3ValueList < Reference > area = map->doc()->listArea();
   for (it = area.begin(); it != area.end(); ++it) {
-    if ((*it).ref_name.lower() == tmp) {
+    if ((*it).ref_name.toLower() == tmp) {
       // success - such named area exists
       _range = (*it).rect;
       _sheet = map->findSheet((*it).sheet_name);

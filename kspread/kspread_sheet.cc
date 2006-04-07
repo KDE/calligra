@@ -1574,7 +1574,7 @@ Sheet::SelectionType Sheet::workOnCells( Selection* selectionInfo, CellWorker & 
   for (Region::ConstIterator it = selectionInfo->constBegin(); it != endOfList; ++it)
   {
     // see what is selected; if nothing, take marker position
-    QRect range = (*it)->rect().normalize();
+    QRect range = (*it)->rect().normalized();
 
   int top = range.top();
   int left = range.left();
@@ -1790,7 +1790,7 @@ struct SetSelectionUpperLowerWorker : public Sheet::CellWorker {
     {
   cell->setDisplayDirtyFlag();
   if ( _type == -1 )
-      cell->setCellText( (cell->text().lower()));
+      cell->setCellText( (cell->text().toLower()));
   else if ( _type == 1 )
       cell->setCellText( (cell->text().upper()));
   cell->clearDisplayDirtyFlag();
@@ -4081,7 +4081,7 @@ bool Sheet::areaIsEmpty(const Region& region, TestType _type)
   Region::ConstIterator endOfList = region.constEnd();
   for (Region::ConstIterator it = region.constBegin(); it != endOfList; ++it)
   {
-    QRect range = (*it)->rect().normalize();
+    QRect range = (*it)->rect().normalized();
     // Complete rows selected ?
     if ((*it)->isRow())
     {
@@ -4815,7 +4815,7 @@ void Sheet::setConditional( Selection* selectionInfo,
   Region::ConstIterator endOfList = selectionInfo->constEnd();
   for (Region::ConstIterator it = selectionInfo->constBegin(); it != endOfList; ++it)
   {
-    QRect range = (*it)->rect().normalize();
+    QRect range = (*it)->rect().normalized();
 
     int l = range.left();
     int r = range.right();
@@ -5543,7 +5543,7 @@ void Sheet::deleteCells(const Region& region)
   Region::ConstIterator endOfList = region.constEnd();
   for (Region::ConstIterator it = region.constBegin(); it != endOfList; ++it)
   {
-    QRect range = (*it)->rect().normalize();
+    QRect range = (*it)->rect().normalized();
 
     int right  = range.right();
     int left   = range.left();
@@ -5613,7 +5613,7 @@ void Sheet::deleteSelection( Selection* selectionInfo, bool undo )
   Region::ConstIterator endOfList = selectionInfo->constEnd();
   for (Region::ConstIterator it = selectionInfo->constBegin(); it != endOfList; ++it)
   {
-    QRect range = (*it)->rect().normalize();
+    QRect range = (*it)->rect().normalized();
 
     // Entire rows selected ?
     if ( util_isRowSelected(range) )
@@ -5668,7 +5668,7 @@ void Sheet::refreshView( const Region& region )
   Region::ConstIterator endOfList = region.constEnd();
   for (Region::ConstIterator it = region.constBegin(); it != endOfList; ++it)
   {
-    QRect range = (*it)->rect().normalize();
+    QRect range = (*it)->rect().normalized();
     // TODO: don't go through all cells when refreshing!
     QRect tmp(range);
     Cell * c = d->cells.firstCell();
@@ -5777,7 +5777,7 @@ QDomDocument Sheet::saveCellRegion(const Region& region, bool copy, bool era)
   Region::ConstIterator endOfList = region.constEnd();
   for (Region::ConstIterator it = region.constBegin(); it != endOfList; ++it)
   {
-    QRect range = (*it)->rect().normalize();
+    QRect range = (*it)->rect().normalized();
 
     //
     // Entire rows selected?

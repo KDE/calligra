@@ -162,31 +162,31 @@ QString DocIface::moveToValue()const
 
 void DocIface::setMoveToValue(const QString & move)
 {
-    if ( move.lower()=="bottom" )
+    if ( move.toLower()=="bottom" )
         doc->setMoveToValue(Bottom);
-    else if ( move.lower()=="top" )
+    else if ( move.toLower()=="top" )
         doc->setMoveToValue(Top);
-    else if ( move.lower()=="left" )
+    else if ( move.toLower()=="left" )
         doc->setMoveToValue(Left);
-    else if ( move.lower()=="right" )
+    else if ( move.toLower()=="right" )
         doc->setMoveToValue(Right);
-    else if ( move.lower()=="bottomfirst" )
+    else if ( move.toLower()=="bottomfirst" )
         doc->setMoveToValue(BottomFirst);
 }
 
 void DocIface::setTypeOfCalc( const QString & calc )
 {
-    if ( calc.lower()=="sum")
+    if ( calc.toLower()=="sum")
         doc->setTypeOfCalc(SumOfNumber );
-    else if ( calc.lower()=="min")
+    else if ( calc.toLower()=="min")
         doc->setTypeOfCalc( Min );
-    else if ( calc.lower()=="max")
+    else if ( calc.toLower()=="max")
         doc->setTypeOfCalc(Max );
-    else if ( calc.lower()=="average")
+    else if ( calc.toLower()=="average")
         doc->setTypeOfCalc(Average );
-    else if ( calc.lower()=="count")
+    else if ( calc.toLower()=="count")
         doc->setTypeOfCalc(Count );
-    else if ( calc.lower()=="none")
+    else if ( calc.toLower()=="none")
         doc->setTypeOfCalc(NoneCalc );
     else
         kDebug()<<"Error in setTypeOfCalc( const QString & calc ) :"<<calc<<endl;

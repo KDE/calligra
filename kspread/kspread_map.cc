@@ -394,7 +394,7 @@ Sheet* Map::findSheet( const QString & _name )
 
     for ( t = m_lstSheets.first(); t != 0L; t = m_lstSheets.next() )
     {
-	    if ( _name.lower() == t->sheetName().lower() )
+	    if ( _name.toLower() == t->sheetName().toLower() )
             return t;
     }
 

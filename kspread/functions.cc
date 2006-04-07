@@ -126,9 +126,9 @@ Value Function::exec (valVector args, ValueCalc *calc, FuncExtra *extra)
     }
 
   if( !d->ptr ) return Value::errorVALUE();
-  
+
   // perform the actual array expansion if need be
-  
+
   if (mustExpandArray) {
     // compute number of rows/cols of the result
     int rows = 0;
@@ -152,7 +152,7 @@ Value Function::exec (valVector args, ValueCalc *calc, FuncExtra *extra)
           vals[i] = args[i].isArray() ?
               args[i].element (col % c, row % r): args[i];
         }
-        
+
         // execute the function on each element
         res.setElement (col, row, exec (vals, calc, extra));
       }
@@ -187,11 +187,11 @@ FunctionRepository* FunctionRepository::self()
   if( !s_self )
   {
     kDebug() << "Creating function repository" << endl;
-  
+
     fr_sd.setObject( s_self, new FunctionRepository() );
-  
+
     kDebug() << "Registering functions" << endl;
-    
+
     // register all existing functions
     RegisterConversionFunctions();
     RegisterDatabaseFunctions();
@@ -205,27 +205,27 @@ FunctionRepository* FunctionRepository::self()
     RegisterStatisticalFunctions();
     RegisterTextFunctions();
     RegisterTrigFunctions();
-  
+
     kDebug() << "Functions registered, loading descriptions" << endl;
-  
+
     // find all XML description files
     QStringList files = Factory::global()->dirs()->findAllResources
         ("extensions", "*.xml", TRUE);
-    
+
     // load desc/help from XML file
     for( QStringList::Iterator it = files.begin(); it != files.end(); ++it )
       s_self->loadFile (*it);
-  
+
     kDebug() << "All ok, repository ready" << endl;
 
-  }    
+  }
   return s_self;
 }
 
 FunctionRepository::FunctionRepository()
 {
   d = new Private;
-  
+
   d->functions.setAutoDelete( true );
   d->funcs.setAutoDelete( true );
 }
@@ -262,7 +262,7 @@ QStringList FunctionRepository::functionNames( const QString& group )
     if (group.isNull() || (it.current()->group() == group))
       lst.append (it.current()->name());
   }
-  
+
   lst.sort();
   return lst;
 }
@@ -290,7 +290,7 @@ void FunctionRepository::loadFile (const QString& filename)
       group = i18n (e.namedItem ("GroupName").toElement().text().utf8());
       m_groups.append( group );
       m_groups.sort();
-    
+
       QDomNode n2 = e.firstChild();
       for (; !n2.isNull(); n2 = n2.nextSibling())
       {
@@ -392,7 +392,7 @@ FunctionParameter::FunctionParameter (const QDomElement& element)
         m_type = toType( e.text() );
         if ( e.hasAttribute( "range" ))
         {
-          if (e.attribute("range").lower() == "true")
+          if (e.attribute("range").toLower() == "true")
             m_range = TRUE;
         }
       }

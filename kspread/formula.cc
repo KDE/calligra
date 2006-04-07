@@ -239,7 +239,7 @@ Token& Token::operator=( const Token& token )
 bool Token::asBoolean() const
 {
   if( !isBoolean() ) return false;
-  return m_text.lower() == "true";
+  return m_text.toLower() == "true";
   // FIXME check also for i18n version
 }
 
@@ -606,7 +606,7 @@ Tokens Formula::scan( const QString& expr, KLocale* locale ) const
              const Q3ValueList<Reference> areas = d->sheet->doc()->listArea();
              Q3ValueList<Reference>::const_iterator it;
              for (it = areas.begin(); it != areas.end(); ++it) {
-               if ((*it).ref_name.lower() == tokenText.lower()) {
+               if ((*it).ref_name.toLower() == tokenText.toLower()) {
                  // we got a named area
                  tokens.append (Token (Token::Range, tokenText, tokenStart));
                  gotNamed = true;
@@ -706,11 +706,11 @@ Tokens Formula::scan( const QString& expr, KLocale* locale ) const
            bool gotNamed = false;
            // check for named areas ...
            if (d->sheet) {
-	     QString txt = tokenText.mid(1, tokenText.length() - 2).lower();
+	     QString txt = tokenText.mid(1, tokenText.length() - 2).toLower();
              const Q3ValueList<Reference> areas = d->sheet->doc()->listArea();
              Q3ValueList<Reference>::const_iterator it;
              for (it = areas.begin(); it != areas.end(); ++it) {
-               if ((*it).ref_name.lower() == txt) {
+               if ((*it).ref_name.toLower() == txt) {
                  // we got a named area
                  tokens.append (Token (Token::Range, tokenText, tokenStart));
                  gotNamed = true;

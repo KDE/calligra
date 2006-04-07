@@ -110,7 +110,7 @@ void RegisterInformationFunctions()
 // Function: INFO
 Value func_info (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QString type = calc->conv()->asString (args[0]).asString().lower();
+  QString type = calc->conv()->asString (args[0]).asString().toLower();
 
   if (type == "directory")
     return Value (QDir::currentPath());
@@ -268,7 +268,7 @@ Value func_type (valVector args, ValueCalc *, FuncExtra *)
     return Value (4);
   if (args[0].isError())
     return Value (16);
-  
+
   // something else ?
   return Value (0);
 }

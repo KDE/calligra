@@ -113,8 +113,8 @@ int getFieldIndex (ValueCalc *calc, Value fieldName,
   QString fn = fieldName.asString();
   int cols = database.columns ();
   for (int i = 0; i < cols; ++i)
-    if (fn.lower() ==
-        calc->conv()->asString (database.element (i, 0)).asString().lower())
+    if (fn.toLower() ==
+        calc->conv()->asString (database.element (i, 0)).asString().toLower())
     return i;
   return -1;
 }

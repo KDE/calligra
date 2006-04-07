@@ -181,16 +181,16 @@ Value ValueParser::tryParseBool (const QString& str, bool *ok)
   Value val;
   if (ok) *ok = false;
 
-  const QString& lowerStr = str.lower();
+  const QString& lowerStr = str.toLower();
 
   if ((lowerStr == "true") ||
-      (lowerStr == parserLocale->translate("true").lower()))
+      (lowerStr == parserLocale->translate("true").toLower()))
   {
     val.setValue (true);
     if (ok) *ok = true;
   }
   else if ((lowerStr == "false") ||
-      (lowerStr == parserLocale->translate("false").lower()))
+      (lowerStr == parserLocale->translate("false").toLower()))
   {
     val.setValue (false);
     if (ok) *ok = true;
@@ -476,7 +476,7 @@ QDateTime ValueParser::readTime (const QString & intstr, bool withSeconds,
     bool *ok, bool & duration)
 {
   duration = false;
-  QString str = intstr.simplified().lower();
+  QString str = intstr.simplified().toLower();
   QString format = parserLocale->timeFormat().simplified();
   if ( !withSeconds )
   {
@@ -523,7 +523,7 @@ QDateTime ValueParser::readTime (const QString & intstr, bool withSeconds,
      case 'p':
       {
         QString s;
-        s = parserLocale->translate("pm").lower();
+        s = parserLocale->translate("pm").toLower();
         int len = s.length();
         if (str.mid(strpos, len) == s)
         {
@@ -532,7 +532,7 @@ QDateTime ValueParser::readTime (const QString & intstr, bool withSeconds,
         }
         else
         {
-          s = parserLocale->translate("am").lower();
+          s = parserLocale->translate("am").toLower();
           len = s.length();
           if (str.mid(strpos, len) == s)
           {

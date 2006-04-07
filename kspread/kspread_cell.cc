@@ -5742,7 +5742,7 @@ bool Cell::loadOasis( const QDomElement& element , KoOasisLoadingContext& oasisC
         kDebug()<<"  value-type: " << valuetype << endl;
         if( valuetype == "boolean" )
         {
-          QString val = element.attributeNS( KoXmlNS::office, "boolean-value", QString::null ).lower();
+          QString val = element.attributeNS( KoXmlNS::office, "boolean-value", QString::null ).toLower();
             if( ( val == "true" ) || ( val == "false" ) )
             {
                 bool value = val == "true";
@@ -6774,7 +6774,7 @@ bool Cell::loadCellData(const QDomElement & text, Paste::Operation op )
       // boolean ?
       if( dataType == "Bool" )
       {
-        bool val = (t.lower() == "true");
+        bool val = (t.toLower() == "true");
         setCellValue (val);
       }
 
@@ -7118,7 +7118,7 @@ bool Cell::operator > ( const Cell & cell ) const
       if ( Map::respectCase )
           return value().asString().compare(cell.value().asString()) > 0;
       else
-          return ( value().asString() ).lower().compare(cell.value().asString().lower()) > 0;
+          return ( value().asString() ).toLower().compare(cell.value().asString().toLower()) > 0;
   }
 }
 
@@ -7156,7 +7156,7 @@ bool Cell::operator < ( const Cell & cell ) const
       if ( Map::respectCase )
           return value().asString().compare(cell.value().asString()) < 0;
       else
-          return ( value().asString() ).lower().compare(cell.value().asString().lower()) < 0;
+          return ( value().asString() ).toLower().compare(cell.value().asString().toLower()) < 0;
   }
 }
 
