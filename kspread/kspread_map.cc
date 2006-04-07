@@ -80,7 +80,7 @@ Sheet* Map::createSheet()
 {
   QString s( i18n("Sheet%1") );
   s = s.arg( tableId++ );
-  Sheet *t = new Sheet ( this, s , s.utf8());
+  Sheet *t = new Sheet ( this, s , s.toUtf8());
   t->setSheetName( s, true ); // huh? (Werner)
   return t;
 }
@@ -277,7 +277,7 @@ bool Map::loadOasis( const QDomElement& body, KoOasisLoadingContext& oasisContex
         if ( body.hasAttributeNS( KoXmlNS::table, "protection-key" ) )
         {
             QString p = body.attributeNS( KoXmlNS::table, "protection-key", QString::null );
-            Q3CString str( p.latin1() );
+            Q3CString str( p.toLatin1() );
             passwd = KCodecs::base64Decode( str );
         }
         m_strPassword = passwd;
@@ -365,7 +365,7 @@ bool Map::loadXML( const QDomElement& mymap )
 
     if ( passwd.length() > 0 )
     {
-      Q3CString str( passwd.latin1() );
+      Q3CString str( passwd.toLatin1() );
       m_strPassword = KCodecs::base64Decode( str );
     }
     else

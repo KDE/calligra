@@ -246,7 +246,7 @@ void QtCalculator::EnterDigit(int data)
 
     QString string;
     string.setNum(data);
-    strcat(display_str, string.latin1());
+    strcat(display_str, string.toLatin1());
     DISPLAY_AMOUNT = (CALCAMNT) strtod(display_str,0);
     UpdateDisplay();
     return;
@@ -588,7 +588,7 @@ void QtCalculator::EnterNegate()
         display_str[pos+1] = '+';
       else{
         string.insert(pos +1,'-');
-        strncpy(display_str,string.latin1(),DSP_SIZE);
+        strncpy(display_str,string.toLatin1(),DSP_SIZE);
       }
     }
     DISPLAY_AMOUNT = (CALCAMNT)strtod(display_str,0);

@@ -25,7 +25,7 @@
 #include <kspread_value.h>
 
 #define CHECK(x,y)  check(__FILE__,__LINE__,#x,x,y)
-#define CHECK_DATE(d,x) check(__FILE__,__LINE__,d->asDate().toString().latin1(),d->asFloat(),x)
+#define CHECK_DATE(d,x) check(__FILE__,__LINE__,d->asDate().toString().toLatin1(),d->asFloat(),x)
 
 using namespace KSpread;
 
@@ -39,7 +39,7 @@ QString ValueTester::name()
 }
 
 template<typename T>
-void ValueTester::check( const char *file, int line, const char* msg, const T& result, 
+void ValueTester::check( const char *file, int line, const char* msg, const T& result,
   const T& expected )
 {
   testCount++;
@@ -81,7 +81,7 @@ void ValueTester::run()
 
   Value* v1;
   Value* v2;
-  
+
   // empty value
   v1 = new Value();
   CHECK( v1->type(), Value::Empty );
@@ -96,7 +96,7 @@ void ValueTester::run()
   CHECK( v1->type(), Value::Boolean );
   CHECK( v1->asBoolean(), true );
   delete v1;
-  
+
   // boolean value (false)
   v1 = new Value( false );
   CHECK( v1->type(), Value::Boolean );
@@ -120,7 +120,7 @@ void ValueTester::run()
   CHECK( v1->isNumber(), true );
   CHECK( v1->asInteger(), (long)14 );
   delete v1;
-  
+
   // floating-point value
   v1 = new Value( M_PI );
   CHECK( v1->type(), Value::Float );
@@ -134,7 +134,7 @@ void ValueTester::run()
   CHECK( v1->isNumber(), true );
   CHECK( v1->asFloat(), 14.03 );
   delete v1;
-  
+
   // string value
   v1 = new Value( QString("Ailinon" ) );
   CHECK( v1->type(), Value::String );
@@ -164,8 +164,8 @@ void ValueTester::run()
     v1->setValue( dv1 );
     CHECK_DATE(v1,serialNo);
     date_error = v1->asFloat() != serialNo;
-  } 
-  
+  }
+
   // time value
   v1 = new Value();
   v1->setValue( QTime( 0, 0, 0 ) );
@@ -204,28 +204,28 @@ void ValueTester::run()
   }
   CHECK( msec_error, 0 );
   delete v1;
-  
-    
+
+
   // TODO error values
-  
+
   // TODO compare values
   // TODO add, sub, mul, div values
   // TODO pow
-  
+
   // array
   v1 = new Value( 10, 3 ); // 10 columns, 3 rows
   CHECK( v1->type(), Value::Array );
   CHECK( v1->columns(), (unsigned)10 );
   CHECK( v1->rows(), (unsigned)3 );
   delete v1;
-  
+
   // check empty value in array
   v1 = new Value( 1, 1 );
   CHECK( v1->type(), Value::Array );
   v2 = new Value( v1->element( 0, 0 ) );
   CHECK( v2->type(), Value::Empty );
   delete v1;
-  
+
   // fill simple 1x1 array
   v1 = new Value( 1, 1 );
   CHECK( v1->type(), Value::Array );
@@ -237,7 +237,7 @@ void ValueTester::run()
   CHECK( v2->asFloat(), 14.3 );
   delete v2;
   delete v1;
-  
+
   // stress test, array of 1000x1000
   v1 = new Value( 1000, 1000 );
   CHECK( v1->type(), Value::Array );
@@ -259,7 +259,7 @@ void ValueTester::run()
   }
   CHECK( array_error, (int)0 );
   delete v1;
-  
+
   // assignment of array value
   v1 = new Value( 1, 1 );
   CHECK( v1->type(), Value::Array );
@@ -271,7 +271,7 @@ void ValueTester::run()
   CHECK( v1->asFloat(), 14.3 );
   delete v1;
   delete v2;
-    
+
   // copy value
   v1 = new Value();
   v1->setValue( 14.3 );
@@ -282,7 +282,7 @@ void ValueTester::run()
   CHECK( v2->asFloat(), 14.3 );
   delete v1;
   delete v2;
-  
+
   // value assignment
   v1 = new Value( 14.3 );
   v2 = new Value( true );
@@ -293,7 +293,7 @@ void ValueTester::run()
   CHECK( v2->asFloat(), 14.3 );
   delete v1;
   delete v2;
-  
+
   // verify detachment
   v1 = new Value( 14.3 );
   v2 = new Value( *v1 );

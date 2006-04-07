@@ -46,7 +46,7 @@ StyleManager::~StyleManager()
 
   while ( iter != end )
   {
-    delete iter.data();
+    delete iter.value();
 
     ++iter;
   }
@@ -64,7 +64,7 @@ void StyleManager::saveOasis( KoGenStyles &mainStyles )
     while ( iter != end )
     {
         kDebug() << "Saving style" << endl;
-        CustomStyle * styleData = iter.data();
+        CustomStyle * styleData = iter.value();
 
         KoGenStyle customStyle = KoGenStyle( Doc::STYLE_CELL_USER, "table-cell" );
         styleData->saveOasis( customStyle, mainStyles );
@@ -123,7 +123,7 @@ void StyleManager::loadOasisStyleTemplate( KoOasisStyles& oasisStyles )
     Styles::iterator end  = m_styles.end();
     while ( iter != end )
     {
-        CustomStyle * styleData = iter.data();
+        CustomStyle * styleData = iter.value();
 
         if ( !styleData->parent() && !styleData->parentName().isNull() )
             styleData->setParent( m_styles[ styleData->parentName() ] );
@@ -146,7 +146,7 @@ QDomElement StyleManager::save( QDomDocument & doc )
   while ( iter != end )
   {
     kDebug() << "Saving style" << endl;
-    CustomStyle * styleData = iter.data();
+    CustomStyle * styleData = iter.value();
 
     styleData->save( doc, styles );
 
@@ -200,7 +200,7 @@ bool StyleManager::loadXML( QDomElement const & styles )
 
   while ( iter != end )
   {
-    CustomStyle * styleData = iter.data();
+    CustomStyle * styleData = iter.value();
 
     if ( !styleData->parent() && !styleData->parentName().isNull() )
       styleData->setParent( m_styles[ styleData->parentName() ] );
@@ -240,7 +240,7 @@ CustomStyle * StyleManager::style( QString const & name ) const
   Styles::const_iterator iter( m_styles.find( name ) );
 
   if ( iter != m_styles.end() )
-    return iter.data();
+    return iter.value();
 
   if ( name == "Default" )
     return m_defaultStyle;
@@ -257,8 +257,8 @@ void StyleManager::takeStyle( CustomStyle * style )
 
   while ( iter != end )
   {
-    if ( iter.data()->parent() == style )
-      iter.data()->setParent( parent );
+    if ( iter.value()->parent() == style )
+      iter.value()->setParent( parent );
 
     ++iter;
   }
@@ -293,7 +293,7 @@ bool StyleManager::validateStyleName( QString const & name, CustomStyle * style 
 
   while ( iter != end )
   {
-    if ( iter.key() == name && iter.data() != style )
+    if ( iter.key() == name && iter.value() != style )
       return false;
 
     ++iter;
@@ -309,8 +309,8 @@ void StyleManager::changeName( QString const & oldName, QString const & newName 
 
   while ( iter != end )
   {
-    if ( iter.data()->parentName() == oldName )
-      iter.data()->refreshParentName();
+    if ( iter.value()->parentName() == oldName )
+      iter.value()->refreshParentName();
 
     ++iter;
   }
@@ -318,7 +318,7 @@ void StyleManager::changeName( QString const & oldName, QString const & newName 
   iter = m_styles.find( oldName );
   if ( iter != end )
   {
-    CustomStyle * s = iter.data();
+    CustomStyle * s = iter.value();
     m_styles.erase( iter );
     m_styles[newName] = s;
   }

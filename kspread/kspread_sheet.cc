@@ -6468,7 +6468,7 @@ bool Sheet::loadOasis( const QDomElement& sheetElement, KoOasisLoadingContext& o
         if ( sheetElement.hasAttributeNS( KoXmlNS::table, "protection-key" ) )
         {
             QString p = sheetElement.attributeNS( KoXmlNS::table, "protection-key", QString::null );
-            Q3CString str( p.latin1() );
+            Q3CString str( p.toLatin1() );
             kDebug(30518) << "Decoding password: " << str << endl;
             passwd = KCodecs::base64Decode( str );
         }
@@ -7551,7 +7551,7 @@ bool Sheet::loadXML( const QDomElement& sheet )
     d->name = testName;
 
     kDebug(36001)<<"Sheet::loadXML: table name="<<d->name<<endl;
-    setName(d->name.utf8());
+    setName(d->name.toUtf8());
     (dynamic_cast<SheetIface*>(dcopObject()))->sheetNameHasChanged();
 
     if( sheet.hasAttribute( "grid" ) )
@@ -7821,7 +7821,7 @@ bool Sheet::loadXML( const QDomElement& sheet )
 
       if ( passwd.length() > 0 )
       {
-        Q3CString str( passwd.latin1() );
+        Q3CString str( passwd.toLatin1() );
         d->password = KCodecs::base64Decode( str );
       }
       else
@@ -8266,7 +8266,7 @@ bool Sheet::setSheetName( const QString& name, bool init, bool /*makeUndo*/ )
     doc()->changeAreaSheetName( old_name, name );
     emit sig_nameChanged( this, old_name );
 
-    setName(name.utf8());
+    setName(name.toUtf8());
     (dynamic_cast<SheetIface*>(dcopObject()))->sheetNameHasChanged();
 
     return true;

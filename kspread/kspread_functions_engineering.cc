@@ -188,7 +188,7 @@ Value func_base (valVector args, ValueCalc *calc, FuncExtra *)
     base = calc->conv()->asInteger (args[1]).asInteger();
   if (args.count() == 3)
     prec = calc->conv()->asInteger (args[2]).asInteger();
-    
+
   if ((base < 2) || (base > 36))
     return Value::errorVALUE();
   if (prec < 0) prec = 2;
@@ -333,7 +333,7 @@ static double kspread_convert_prefix( QMap<QString,double> map, QString& unit )
   }
 
   // check for possible prefix
-  char prefix = unit[0].latin1();
+  char prefix = unit[0].toLatin1();
   if( prefixMap.contains( prefix ) )
   {
     unit.remove( 0, 1 );
@@ -513,7 +513,7 @@ static bool kspread_convert_power( const QString& fromUnit,
   {
     powerMap[ "W" ]   = 1.0; // Watt (the reference)
     powerMap[ "HP" ]  = 1.341022e-3; // Horsepower
-    powerMap[ "PS" ]  = 1.359622e-3; // Pferdestärke (German)
+    powerMap[ "PS" ]  = 1.359622e-3; // Pferdestï¿½ke (German)
   }
 
   QString fromU = fromUnit;
@@ -956,7 +956,7 @@ Value func_imsum (valVector args, ValueCalc *calc, FuncExtra *)
 {
   Value result;
   calc->arrayWalk (args, result, awImSum, 0);
-  
+
   bool ok;
   QString res = calc->conv()->asString (result).asString();
   double val=KGlobal::locale()->readNumber(res, &ok);
@@ -970,7 +970,7 @@ Value func_imsub (valVector args, ValueCalc *calc, FuncExtra *)
 {
   Value result;
   calc->arrayWalk (args, result, awImSub, 0);
-  
+
   bool ok;
   QString res = calc->conv()->asString (result).asString();
   double val=KGlobal::locale()->readNumber(res, &ok);
@@ -984,7 +984,7 @@ Value func_improduct (valVector args, ValueCalc *calc, FuncExtra *)
 {
   Value result;
   calc->arrayWalk (args, result, awImMul, 0);
-  
+
   bool ok;
   QString res = calc->conv()->asString (result).asString();
   double val=KGlobal::locale()->readNumber(res, &ok);
@@ -998,7 +998,7 @@ Value func_imdiv (valVector args, ValueCalc *calc, FuncExtra *)
 {
   Value result;
   calc->arrayWalk (args, result, awImDiv, 0);
-  
+
   bool ok;
   QString res = calc->conv()->asString (result).asString();
   double val=KGlobal::locale()->readNumber(res, &ok);
@@ -1024,7 +1024,7 @@ Value func_imconjugate (valVector args, ValueCalc *calc, FuncExtra *)
   double result=KGlobal::locale()->readNumber(tmp, &ok);
   if(ok)
     return Value (result);
-  
+
   return Value (tmp);
 }
 
@@ -1082,7 +1082,7 @@ Value func_imcos (valVector args, ValueCalc *calc, FuncExtra *)
   double result=KGlobal::locale()->readNumber(tmp, &ok);
   if(ok)
     return Value (result);
-  
+
   return Value (tmp);
 }
 
@@ -1106,7 +1106,7 @@ Value func_imsin (valVector args, ValueCalc *calc, FuncExtra *)
   double result=KGlobal::locale()->readNumber(tmp, &ok);
   if(ok)
     return Value (result);
-  
+
   return Value (tmp);
 }
 
@@ -1130,7 +1130,7 @@ Value func_imln (valVector args, ValueCalc *calc, FuncExtra *)
   double result=KGlobal::locale()->readNumber(tmp, &ok);
   if(ok)
     return Value (result);
-  
+
   return Value (tmp);
 }
 
@@ -1154,7 +1154,7 @@ Value func_imexp (valVector args, ValueCalc *calc, FuncExtra *)
   double result=KGlobal::locale()->readNumber(tmp, &ok);
   if(ok)
     return Value (result);
-  
+
   return Value (tmp);
 }
 
@@ -1180,7 +1180,7 @@ Value func_imsqrt (valVector args, ValueCalc *calc, FuncExtra *)
   double result=KGlobal::locale()->readNumber(tmp, &ok);
   if(ok)
     return Value (result);
-  
+
   return Value (tmp);
 }
 
@@ -1208,7 +1208,7 @@ Value func_impower (valVector args, ValueCalc *calc, FuncExtra *)
   double result=KGlobal::locale()->readNumber(tmp, &ok);
   if(ok)
     return Value (result);
-  
+
   return Value (tmp);
 }
 
@@ -1219,7 +1219,7 @@ Value func_delta (valVector args, ValueCalc *calc, FuncExtra *)
   Value val2 = 0.0;
   if (args.count() == 2)
     val2 = args[1];
-  
+
   return Value (calc->approxEqual (val1, val2) ? 1 : 0);
 }
 
@@ -1246,7 +1246,7 @@ Value func_gestep (valVector args, ValueCalc *calc, FuncExtra *)
   Value y = 0.0;
   if (args.count() == 2)
     y = args[1];
-  
+
   int result = 0;
   if (calc->greater (x, y) || calc->approxEqual (x, y))
     result = 1;

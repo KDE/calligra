@@ -146,9 +146,9 @@ bool Calculator::eventFilter( QObject*, QEvent* ev )
         }
 
         // Multiple cells selected ?
-        m_calc->setData( event->rect(), event->sheet().latin1() );
+        m_calc->setData( event->rect(), event->sheet().toLatin1() );
         QString str = util_rangeName( sheet, event->rect() );
-        m_calc->setLabel( str.latin1() );
+        m_calc->setLabel( str.toLatin1() );
 
         return FALSE;
     }

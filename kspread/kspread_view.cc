@@ -3200,7 +3200,7 @@ void View::fontSelected( const QString & _font )
 
   doc()->emitBeginOperation(false);
   if ( d->activeSheet != 0L )
-    d->activeSheet->setSelectionFont( d->selection, _font.latin1() );
+    d->activeSheet->setSelectionFont( d->selection, _font.toLatin1() );
 
   // Dont leave the focus in the toolbars combo box ...
   if ( d->canvas->editor() )

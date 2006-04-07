@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   
+
    Copyright 2004 Ariya Hidayat <ariya@kde.org>
    Copyright 2003 David Faure <faure@kde.org>
    Copyright 2001 Philipp Mueller <philipp.mueller@gmx.de>
@@ -21,7 +21,7 @@
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
-   
+
 */
 
 #include "KSpreadAppIface.h"
@@ -51,7 +51,7 @@ DCOPRef AppIface::createDoc()
 DCOPRef AppIface::createDoc( const QString& name )
 {
     // ######### Torben: Check for duplicate names here
-    Doc* doc = new Doc( 0, name.latin1() );
+    Doc* doc = new Doc( 0, name.toLatin1() );
     doc->initDoc( KoDocument::InitDocEmpty, 0 );
 
     return DCOPRef( kapp->dcopClient()->appId(), doc->dcopObject()->objId() );

@@ -66,9 +66,9 @@ int KSpread::util_decodeColumnLabelText( const QString &_col )
     {
         counterColumn = (int) pow(26.0 , static_cast<int>(_col.length() - i - 1));
         if( _col[i] >= 'A' && _col[i] <= 'Z' )
-            col += counterColumn * ( _col[i].latin1() - 'A' + 1);  // okay here (Werner)
+            col += counterColumn * ( _col[i].toLatin1() - 'A' + 1);  // okay here (Werner)
         else if( _col[i] >= 'a' && _col[i] <= 'z' )
-            col += counterColumn * ( _col[i].latin1() - 'A' - offset + 1 );
+            col += counterColumn * ( _col[i].toLatin1() - 'A' - offset + 1 );
         else
             kDebug(36001) << "util_decodeColumnLabelText: Wrong characters in label text for col:'" << _col << "'" << endl;
     }
@@ -972,7 +972,7 @@ QPen KSpread::convertOasisStringToPen( const QString &border )
     //code from koborder, for the moment kspread doesn't use koborder
     // ## isn't it faster to use QStringList::split than parse it 3 times?
     QString _width = border.section(' ', 0, 0);
-    Q3CString _style = border.section(' ', 1, 1).latin1();
+    Q3CString _style = border.section(' ', 1, 1).toLatin1();
     QString _color = border.section(' ', 2, 2);
 
     pen.setWidth( ( int )( KoUnit::parseValue( _width, 1.0 ) ) );

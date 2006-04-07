@@ -170,7 +170,7 @@ DCOPRef SheetIface::cell( int x, int y )
     if ( y == 0 )
         y = 1;
 
-    Q3CString str = objId() + '/' + Cell::name( x, y ).latin1();
+    Q3CString str = objId() + '/' + Cell::name( x, y ).toLatin1();
 
     return DCOPRef( kapp->dcopClient()->appId(), str );
 }
@@ -179,7 +179,7 @@ DCOPRef SheetIface::cell( const QString& name )
 {
     Q3CString str = objId();
     str += "/";
-    str += name.latin1();
+    str += name.toLatin1();
 
     return DCOPRef( kapp->dcopClient()->appId(), str );
 }

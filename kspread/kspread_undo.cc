@@ -266,7 +266,7 @@ UndoRemoveColumn::UndoRemoveColumn( Doc *_doc, Sheet *_sheet, int _column,int _n
     // data in a QCString in a way that
     // QCString::length() == QCString().size().
     // This allows us to treat the QCString like a QByteArray later on.
-    m_data = buffer.utf8();
+    m_data = buffer.toUtf8();
     int len = m_data.length();
     char tmp = m_data[ len - 1 ];
     m_data.resize( len );
@@ -385,13 +385,13 @@ UndoRemoveRow::UndoRemoveRow( Doc *_doc, Sheet *_sheet, int _row,int _nbRow) :
     // data in a QCString in a way that
     // QCString::length() == QCString().size().
     // This allows us to treat the QCString like a QByteArray later on.
-    m_data = buffer.utf8();
+    m_data = buffer.toUtf8();
     int len = m_data.length();
     char tmp = m_data[ len - 1 ];
     m_data.resize( len );
     *( m_data.data() + len - 1 ) = tmp;
 
-    // printf("UNDO {{{%s}}}\n", buffer.latin1() );
+    // printf("UNDO {{{%s}}}\n", buffer.toLatin1() );
     // printf("UNDO2 %i bytes, length %i {{{%s}}}\n", m_data.length(), m_data.size(), (const char*)m_data );
     // printf("length=%i, size=%i", m_data.length(), m_data.size() );
     // printf("Last characters are %i %i %i\n", (int)m_data[ m_data.size() - 3 ],
@@ -1557,7 +1557,7 @@ void UndoDelete::createListCell( Q3CString &listCell,Q3ValueList<columnSize> &li
     // data in a QCString in a way that
     // QCString::length() == QCString().size().
     // This allows us to treat the QCString like a QByteArray later on.
-    listCell = buffer.utf8();
+    listCell = buffer.toUtf8();
     int len = listCell.length();
     char tmp = listCell[ len - 1 ];
     listCell.resize( len );
@@ -1674,7 +1674,7 @@ void UndoDragDrop::saveCellRect( Q3CString & cells, Sheet * sheet,
     QTextStream str( &buffer, QIODevice::WriteOnly );
     str << doc;
 
-    cells = buffer.utf8();
+    cells = buffer.toUtf8();
     int len = cells.length();
     char tmp = cells[ len - 1 ];
     cells.resize( len );
@@ -2220,7 +2220,7 @@ void UndoAutofill::createListCell( Q3CString &list, Sheet* sheet )
     // data in a QCString in a way that
     // QCString::length() == QCString().size().
     // This allows us to treat the QCString like a QByteArray later on.
-    list = buffer.utf8();
+    list = buffer.toUtf8();
     int len = list.length();
     char tmp = list[ len - 1 ];
     list.resize( len );
@@ -2377,7 +2377,7 @@ UndoRemoveCellRow::UndoRemoveCellRow( Doc *_doc, Sheet *_sheet, const QRect &rec
     // data in a QCString in a way that
     // QCString::length() == QCString().size().
     // This allows us to treat the QCString like a QByteArray later on.
-    m_data = buffer.utf8();
+    m_data = buffer.toUtf8();
     int len = m_data.length();
     char tmp = m_data[ len - 1 ];
     m_data.resize( len );
@@ -2436,7 +2436,7 @@ UndoRemoveCellCol::UndoRemoveCellCol( Doc *_doc, Sheet *_sheet, const QRect &_re
     // data in a QCString in a way that
     // QCString::length() == QCString().size().
     // This allows us to treat the QCString like a QByteArray later on.
-    m_data = buffer.utf8();
+    m_data = buffer.toUtf8();
     int len = m_data.length();
     char tmp = m_data[ len - 1 ];
     m_data.resize( len );
@@ -2506,7 +2506,7 @@ void UndoConditional::createListCell( Q3CString &list, Sheet* sheet )
     // data in a QCString in a way that
     // QCString::length() == QCString().size().
     // This allows us to treat the QCString like a QByteArray later on.
-    list = buffer.utf8();
+    list = buffer.toUtf8();
     int len = list.length();
     char tmp = list[ len - 1 ];
     list.resize( len );
@@ -2648,7 +2648,7 @@ void UndoCellPaste::createListCell(Q3CString& listCell,
   // data in a QCString in a way that
   // QCString::length() == QCString().size().
   // This allows us to treat the QCString like a QByteArray later on.
-  listCell = buffer.utf8();
+  listCell = buffer.toUtf8();
   int len = listCell.length();
   char tmp = listCell[ len - 1 ];
   listCell.resize( len );
