@@ -1044,15 +1044,6 @@ void View::slotChanged()
 void View::slotUpdate(bool calculate)
 {
     //kDebug()<<k_funcinfo<<"calculate="<<calculate<<endl;
-    if (m_currentEstimateType == Effort::Use_Expected) {
-        m_estlabel->setText(i18n("Expected"));
-    } else if (m_currentEstimateType == Effort::Use_Optimistic) {
-        m_estlabel->setText(i18n("Optimistic"));
-    } else if (m_currentEstimateType == Effort::Use_Pessimistic) {
-        m_estlabel->setText(i18n("Pessimistic"));
-    } else {
-        m_estlabel->setText("");
-    }
     if (calculate)
         projectCalculate();
         
@@ -1251,16 +1242,21 @@ void View::setScheduleActionsEnabled() {
     actionViewExpected->setEnabled(getProject().findSchedule(Schedule::Expected));
     actionViewOptimistic->setEnabled(getProject().findSchedule(Schedule::Optimistic));
     actionViewPessimistic->setEnabled(getProject().findSchedule(Schedule::Pessimistic));
-    Schedule *ns = getProject().currentSchedule();
-    if (ns == 0) {
+    if (getProject().notScheduled()) {
+        m_estlabel->setText(i18n("Not scheduled"));
         return;
     }
-    if (ns->type() == Schedule::Expected)
+    Schedule *ns = getProject().currentSchedule();
+    if (ns->type() == Schedule::Expected) {
         actionViewExpected->setChecked(true);
-    else if (ns->type() == Schedule::Optimistic)
+        m_estlabel->setText(i18n("Expected"));
+    } else if (ns->type() == Schedule::Optimistic) {
         actionViewOptimistic->setChecked(true);
-    else if (ns->type() == Schedule::Pessimistic)
+        m_estlabel->setText(i18n("Optimistic"));
+    } else if (ns->type() == Schedule::Pessimistic) {
         actionViewPessimistic->setChecked(true);
+        m_estlabel->setText(i18n("Pessimistic"));
+    }
 }
 
 
