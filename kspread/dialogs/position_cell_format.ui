@@ -35,8 +35,8 @@
                 <string>Horizontal</string>
             </property>
             <property name="whatsThis" stdset="0">
-                <string>&lt;qt&gt;Set the content position horizontally in the cell. 
-&lt;b&gt;Standard&lt;/b&gt; is default and is set from the format you choose. 
+                <string>&lt;qt&gt;Set the content position horizontally in the cell.
+&lt;b&gt;Standard&lt;/b&gt; is default and is set from the format you choose.
 &lt;b&gt;Left&lt;/b&gt; means the content will be displayed on the left of the cell.
 &lt;b&gt;Center&lt;/b&gt; means the content will be in the center horizontally in the cell.
 &lt;b&gt;Right&lt;/b&gt; means the content of the cell will be displayed on the right of the cell.&lt;/qt&gt;</string>
@@ -97,10 +97,10 @@
                 <string>Vertical</string>
             </property>
             <property name="whatsThis" stdset="0">
-                <string>Set the content position vertically in the cell. 
+                <string>&lt;qt&gt;Set the content position vertically in the cell.
 &lt;b&gt;Top&lt;/b&gt; means the content will be displayed on top of the cell.
 &lt;b&gt;Middle&lt;/b&gt; means the content will be in the middle vertically in the cell.
-&lt;b&gt;Bottom&lt;/b&gt; means the content of the cell will be displayed at the bottom of the cell.</string>
+&lt;b&gt;Bottom&lt;/b&gt; means the content of the cell will be displayed at the bottom of the cell.&lt;/qt&gt;</string>
             </property>
             <vbox>
                 <property name="name">
@@ -193,7 +193,7 @@
                 <string>Text Option</string>
             </property>
             <property name="whatsThis" stdset="0">
-                <string>This is only available when the rotation is 0°. 
+                <string>This is only available when the rotation is 0°.
 Wrap text wraps the text so it fits in the previous cell size. If this is not checked, the text will stay on one line and the cell size will be adjusted to contain the text.
 Vertical text puts your text vertically.</string>
             </property>
