@@ -361,7 +361,9 @@ KexiProject *KexiMigrate::createProject(Kexi::ObjectStatus* result)
 			//don't delete prj, otherwise eror message will be deleted			delete prj;
 			return prj;
 		}
-		updateProgress((Q_ULLONG)NUM_OF_ROWS_PER_CREATE_TABLE);
+		if(drv_progressSupported()) {
+			updateProgress((Q_ULLONG)NUM_OF_ROWS_PER_CREATE_TABLE);
+		}
 	}
 	if (!tg.commit()) {
 		prj->dbConnection()->dropDatabase(m_migrateData->destination->databaseName());
