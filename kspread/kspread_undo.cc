@@ -31,7 +31,6 @@
 
 #include "kspread_undo.h"
 //Added by qt3to4:
-#include <Q3ValueList>
 #include <QTextStream>
 #include <Q3CString>
 
@@ -223,7 +222,7 @@ void UndoInsertRemoveAction::saveFormulaReference( Sheet *_sheet,
 
 void UndoInsertRemoveAction::undoFormulaReference()
 {
-    Q3ValueList<FormulaOfCell>::iterator it;
+    QLinkedList<FormulaOfCell>::iterator it;
     for ( it = m_lstFormulaCells.begin(); it != m_lstFormulaCells.end(); ++it )
     {
         Sheet* sheet = doc()->map()->findSheet( (*it).sheetName() );
@@ -913,12 +912,12 @@ UndoCellFormat::UndoCellFormat( Doc * _doc,
   copyFormat( m_lstFormats, m_lstColFormats, m_lstRowFormats, _sheet );
 }
 
-void UndoCellFormat::copyFormat(Q3ValueList<layoutCell> & list,
-                                       Q3ValueList<layoutColumn> & listCol,
-                                       Q3ValueList<layoutRow> & listRow,
+void UndoCellFormat::copyFormat(QLinkedList<layoutCell> & list,
+                                       QLinkedList<layoutColumn> & listCol,
+                                       QLinkedList<layoutRow> & listRow,
                                        Sheet * sheet )
 {
-    Q3ValueList<layoutCell>::Iterator it2;
+    QLinkedList<layoutCell>::Iterator it2;
   for ( it2 = list.begin(); it2 != list.end(); ++it2 )
   {
       delete (*it2).l;
@@ -1058,7 +1057,7 @@ void UndoCellFormat::copyFormat(Q3ValueList<layoutCell> & list,
 
 UndoCellFormat::~UndoCellFormat()
 {
-    Q3ValueList<layoutCell>::Iterator it2;
+    QLinkedList<layoutCell>::Iterator it2;
     for ( it2 = m_lstFormats.begin(); it2 != m_lstFormats.end(); ++it2 )
     {
         delete (*it2).l;
@@ -1071,7 +1070,7 @@ UndoCellFormat::~UndoCellFormat()
     }
     m_lstRedoFormats.clear();
 
-    Q3ValueList<layoutColumn>::Iterator it3;
+    QLinkedList<layoutColumn>::Iterator it3;
     for ( it3 = m_lstColFormats.begin(); it3 != m_lstColFormats.end(); ++it3 )
     {
         delete (*it3).l;
@@ -1084,7 +1083,7 @@ UndoCellFormat::~UndoCellFormat()
     }
     m_lstRedoColFormats.clear();
 
-    Q3ValueList<layoutRow>::Iterator it4;
+    QLinkedList<layoutRow>::Iterator it4;
     for ( it4 = m_lstRowFormats.begin(); it4 != m_lstRowFormats.end(); ++it4 )
     {
         delete (*it4).l;
@@ -1115,7 +1114,7 @@ void UndoCellFormat::undo()
     QRect range = (*it)->rect().normalized();
   if( util_isColumnSelected( range ) )
   {
-    Q3ValueList<layoutColumn>::Iterator it2;
+    QLinkedList<layoutColumn>::Iterator it2;
     for ( it2 = m_lstColFormats.begin(); it2 != m_lstColFormats.end(); ++it2 )
     {
       ColumnFormat * col = sheet->nonDefaultColumnFormat( (*it2).col );
@@ -1124,7 +1123,7 @@ void UndoCellFormat::undo()
   }
   else if( util_isRowSelected( range ) )
   {
-    Q3ValueList<layoutRow>::Iterator it2;
+    QLinkedList<layoutRow>::Iterator it2;
     for ( it2 = m_lstRowFormats.begin(); it2 != m_lstRowFormats.end(); ++it2 )
     {
       RowFormat * row = sheet->nonDefaultRowFormat( (*it2).row );
@@ -1132,7 +1131,7 @@ void UndoCellFormat::undo()
     }
   }
 
-  Q3ValueList<layoutCell>::Iterator it2;
+  QLinkedList<layoutCell>::Iterator it2;
   for ( it2 = m_lstFormats.begin(); it2 != m_lstFormats.end(); ++it2 )
   {
     Cell *cell = sheet->nonDefaultCell( (*it2).col,(*it2).row );
@@ -1163,7 +1162,7 @@ void UndoCellFormat::redo()
     QRect range = (*it)->rect().normalized();
   if ( util_isColumnSelected( range ) )
   {
-    Q3ValueList<layoutColumn>::Iterator it2;
+    QLinkedList<layoutColumn>::Iterator it2;
     for ( it2 = m_lstRedoColFormats.begin(); it2 != m_lstRedoColFormats.end(); ++it2 )
     {
       ColumnFormat * col = sheet->nonDefaultColumnFormat( (*it2).col );
@@ -1172,7 +1171,7 @@ void UndoCellFormat::redo()
   }
   else if( util_isRowSelected( range ) )
   {
-    Q3ValueList<layoutRow>::Iterator it2;
+    QLinkedList<layoutRow>::Iterator it2;
     for ( it2 = m_lstRedoRowFormats.begin(); it2 != m_lstRedoRowFormats.end(); ++it2 )
     {
       RowFormat * row = sheet->nonDefaultRowFormat( (*it2).row );
@@ -1180,7 +1179,7 @@ void UndoCellFormat::redo()
     }
   }
 
-  Q3ValueList<layoutCell>::Iterator it2;
+  QLinkedList<layoutCell>::Iterator it2;
   for ( it2 = m_lstRedoFormats.begin(); it2 != m_lstRedoFormats.end(); ++it2 )
   {
     Cell * cell = sheet->nonDefaultCell( (*it2).col,(*it2).row );
@@ -1246,10 +1245,10 @@ UndoSort::UndoSort( Doc * _doc, Sheet * _sheet, const QRect & _selection ) :
   copyAll( m_lstFormats, m_lstColFormats, m_lstRowFormats, _sheet );
 }
 
-void UndoSort::copyAll(Q3ValueList<layoutTextCell> & list, Q3ValueList<layoutColumn> & listCol,
-                              Q3ValueList<layoutRow> & listRow, Sheet * sheet )
+void UndoSort::copyAll(QLinkedList<layoutTextCell> & list, QLinkedList<layoutColumn> & listCol,
+                              QLinkedList<layoutRow> & listRow, Sheet * sheet )
 {
-  Q3ValueList<layoutTextCell>::Iterator it2;
+  QLinkedList<layoutTextCell>::Iterator it2;
   for ( it2 = list.begin(); it2 != list.end(); ++it2 )
   {
       delete (*it2).l;
@@ -1338,7 +1337,7 @@ void UndoSort::copyAll(Q3ValueList<layoutTextCell> & list, Q3ValueList<layoutCol
 
 UndoSort::~UndoSort()
 {
-    Q3ValueList<layoutTextCell>::Iterator it2;
+    QLinkedList<layoutTextCell>::Iterator it2;
     for ( it2 = m_lstFormats.begin(); it2 != m_lstFormats.end(); ++it2 )
     {
         delete (*it2).l;
@@ -1351,7 +1350,7 @@ UndoSort::~UndoSort()
     }
     m_lstRedoFormats.clear();
 
-    Q3ValueList<layoutColumn>::Iterator it3;
+    QLinkedList<layoutColumn>::Iterator it3;
     for ( it3 = m_lstColFormats.begin(); it3 != m_lstColFormats.end(); ++it3 )
     {
         delete (*it3).l;
@@ -1364,7 +1363,7 @@ UndoSort::~UndoSort()
     }
     m_lstRedoColFormats.clear();
 
-    Q3ValueList<layoutRow>::Iterator it4;
+    QLinkedList<layoutRow>::Iterator it4;
     for ( it4 = m_lstRowFormats.begin(); it4 != m_lstRowFormats.end(); ++it4 )
     {
         delete (*it4).l;
@@ -1393,7 +1392,7 @@ void UndoSort::undo()
 
   if ( util_isColumnSelected( m_rctRect ) )
   {
-    Q3ValueList<layoutColumn>::Iterator it2;
+    QLinkedList<layoutColumn>::Iterator it2;
     for ( it2 = m_lstColFormats.begin(); it2 != m_lstColFormats.end(); ++it2 )
     {
       ColumnFormat * col = sheet->nonDefaultColumnFormat( (*it2).col );
@@ -1402,7 +1401,7 @@ void UndoSort::undo()
   }
   else if( util_isRowSelected( m_rctRect ) )
   {
-    Q3ValueList<layoutRow>::Iterator it2;
+    QLinkedList<layoutRow>::Iterator it2;
     for ( it2 = m_lstRowFormats.begin(); it2 != m_lstRowFormats.end(); ++it2 )
     {
       RowFormat *row= sheet->nonDefaultRowFormat( (*it2).row );
@@ -1410,7 +1409,7 @@ void UndoSort::undo()
     }
   }
 
-  Q3ValueList<layoutTextCell>::Iterator it2;
+  QLinkedList<layoutTextCell>::Iterator it2;
   for ( it2 = m_lstFormats.begin(); it2 != m_lstFormats.end(); ++it2 )
   {
     Cell *cell = sheet->nonDefaultCell( (*it2).col,(*it2).row );
@@ -1445,7 +1444,7 @@ void UndoSort::redo()
 
     if( util_isColumnSelected( m_rctRect ) )
     {
-      Q3ValueList<layoutColumn>::Iterator it2;
+      QLinkedList<layoutColumn>::Iterator it2;
       for ( it2 = m_lstRedoColFormats.begin(); it2 != m_lstRedoColFormats.end(); ++it2 )
       {
         ColumnFormat *col= sheet->nonDefaultColumnFormat( (*it2).col );
@@ -1454,7 +1453,7 @@ void UndoSort::redo()
     }
     else if( util_isRowSelected( m_rctRect ) )
     {
-      Q3ValueList<layoutRow>::Iterator it2;
+      QLinkedList<layoutRow>::Iterator it2;
       for ( it2 = m_lstRedoRowFormats.begin(); it2 != m_lstRedoRowFormats.end(); ++it2 )
       {
         RowFormat *row= sheet->nonDefaultRowFormat( (*it2).row );
@@ -1462,7 +1461,7 @@ void UndoSort::redo()
       }
     }
 
-    Q3ValueList<layoutTextCell>::Iterator it2;
+    QLinkedList<layoutTextCell>::Iterator it2;
     for ( it2 = m_lstRedoFormats.begin(); it2 != m_lstRedoFormats.end(); ++it2 )
     {
       Cell *cell = sheet->nonDefaultCell( (*it2).col,(*it2).row );
@@ -1504,7 +1503,7 @@ UndoDelete::~UndoDelete()
 {
 }
 
-void UndoDelete::createListCell( Q3CString &listCell,Q3ValueList<columnSize> &listCol,Q3ValueList<rowSize> &listRow, Sheet* sheet )
+void UndoDelete::createListCell( Q3CString &listCell,QLinkedList<columnSize> &listCol,QLinkedList<rowSize> &listRow, Sheet* sheet )
 {
     listRow.clear();
     listCol.clear();
@@ -1576,7 +1575,7 @@ void UndoDelete::undo()
     doc()->emitBeginOperation();
 
     {
-        Q3ValueList<columnSize>::Iterator it2;
+        QLinkedList<columnSize>::Iterator it2;
         for ( it2 = m_lstColumn.begin(); it2 != m_lstColumn.end(); ++it2 )
         {
            ColumnFormat *cl=sheet->nonDefaultColumnFormat((*it2).columnNumber);
@@ -1585,7 +1584,7 @@ void UndoDelete::undo()
     }
 
     {
-        Q3ValueList<rowSize>::Iterator it2;
+        QLinkedList<rowSize>::Iterator it2;
         for ( it2 = m_lstRow.begin(); it2 != m_lstRow.end(); ++it2 )
         {
            RowFormat *rw=sheet->nonDefaultRowFormat((*it2).rowNumber);
@@ -1612,7 +1611,7 @@ void UndoDelete::redo()
     doc()->emitBeginOperation();
 
     {
-        Q3ValueList<columnSize>::Iterator it2;
+        QLinkedList<columnSize>::Iterator it2;
         for ( it2 = m_lstRedoColumn.begin(); it2 != m_lstRedoColumn.end(); ++it2 )
         {
            ColumnFormat *cl=sheet->nonDefaultColumnFormat((*it2).columnNumber);
@@ -1621,7 +1620,7 @@ void UndoDelete::redo()
     }
 
     {
-        Q3ValueList<rowSize>::Iterator it2;
+        QLinkedList<rowSize>::Iterator it2;
         for ( it2 = m_lstRedoRow.begin(); it2 != m_lstRedoRow.end(); ++it2 )
         {
            RowFormat *rw=sheet->nonDefaultRowFormat((*it2).rowNumber);
@@ -1750,7 +1749,7 @@ UndoResizeColRow::UndoResizeColRow( Doc *_doc, Sheet *_sheet, const Region &_sel
   createList( m_lstColumn,m_lstRow, _sheet );
 }
 
-void UndoResizeColRow::createList( Q3ValueList<columnSize> &listCol,Q3ValueList<rowSize> &listRow, Sheet* sheet )
+void UndoResizeColRow::createList( QLinkedList<columnSize> &listCol,QLinkedList<rowSize> &listRow, Sheet* sheet )
 {
     listCol.clear();
     listRow.clear();
@@ -1837,7 +1836,7 @@ void UndoResizeColRow::undo()
 
     if( util_isColumnSelected( m_rctRect ) ) // complete column(s)
     {
-    Q3ValueList<columnSize>::Iterator it2;
+    QLinkedList<columnSize>::Iterator it2;
     for ( it2 = m_lstColumn.begin(); it2 != m_lstColumn.end(); ++it2 )
         {
            ColumnFormat *cl=sheet->columnFormat((*it2).columnNumber);
@@ -1846,7 +1845,7 @@ void UndoResizeColRow::undo()
     }
     else if( util_isRowSelected( m_rctRect ) ) // complete row(s)
     {
-    Q3ValueList<rowSize>::Iterator it2;
+    QLinkedList<rowSize>::Iterator it2;
     for ( it2 = m_lstRow.begin(); it2 != m_lstRow.end(); ++it2 )
         {
            RowFormat *rw=sheet->rowFormat((*it2).rowNumber);
@@ -1855,13 +1854,13 @@ void UndoResizeColRow::undo()
     }
     else // row and column
     {
-    Q3ValueList<columnSize>::Iterator it2;
+    QLinkedList<columnSize>::Iterator it2;
     for ( it2 = m_lstColumn.begin(); it2 != m_lstColumn.end(); ++it2 )
         {
            ColumnFormat *cl=sheet->columnFormat((*it2).columnNumber);
            cl->setDblWidth((*it2).columnWidth);
         }
-    Q3ValueList<rowSize>::Iterator it1;
+    QLinkedList<rowSize>::Iterator it1;
     for ( it1 = m_lstRow.begin(); it1 != m_lstRow.end(); ++it1 )
         {
            RowFormat *rw=sheet->rowFormat((*it1).rowNumber);
@@ -1888,7 +1887,7 @@ void UndoResizeColRow::redo()
 
     if( util_isColumnSelected( m_rctRect ) ) // complete column(s)
     {
-    Q3ValueList<columnSize>::Iterator it2;
+    QLinkedList<columnSize>::Iterator it2;
     for ( it2 = m_lstRedoColumn.begin(); it2 != m_lstRedoColumn.end(); ++it2 )
         {
            ColumnFormat *cl=sheet->columnFormat((*it2).columnNumber);
@@ -1897,7 +1896,7 @@ void UndoResizeColRow::redo()
     }
     else if( util_isRowSelected( m_rctRect ) ) // complete row(s)
     {
-    Q3ValueList<rowSize>::Iterator it2;
+    QLinkedList<rowSize>::Iterator it2;
     for ( it2 = m_lstRedoRow.begin(); it2 != m_lstRedoRow.end(); ++it2 )
         {
            RowFormat *rw=sheet->rowFormat((*it2).rowNumber);
@@ -1906,13 +1905,13 @@ void UndoResizeColRow::redo()
     }
     else // row and column
     {
-    Q3ValueList<columnSize>::Iterator it2;
+    QLinkedList<columnSize>::Iterator it2;
     for ( it2 = m_lstRedoColumn.begin(); it2 != m_lstRedoColumn.end(); ++it2 )
         {
            ColumnFormat *cl=sheet->columnFormat((*it2).columnNumber);
            cl->setDblWidth((*it2).columnWidth);
         }
-    Q3ValueList<rowSize>::Iterator it1;
+    QLinkedList<rowSize>::Iterator it1;
     for ( it1 = m_lstRedoRow.begin(); it1 != m_lstRedoRow.end(); ++it1 )
         {
            RowFormat *rw=sheet->rowFormat((*it1).rowNumber);
@@ -1942,7 +1941,7 @@ UndoChangeAreaTextCell::UndoChangeAreaTextCell( Doc *_doc, Sheet *_sheet, const 
   createList( m_lstTextCell, _sheet );
 }
 
-void UndoChangeAreaTextCell::createList( Q3ValueList<textOfCell> &list, Sheet* sheet )
+void UndoChangeAreaTextCell::createList( QLinkedList<textOfCell> &list, Sheet* sheet )
 {
   list.clear();
 
@@ -2045,7 +2044,7 @@ void UndoChangeAreaTextCell::undo()
         {
           Cell* cell = sheet->nonDefaultCell( x, y );
           bool found = false;
-          Q3ValueList<textOfCell>::Iterator it;
+          QLinkedList<textOfCell>::Iterator it;
           for( it = m_lstTextCell.begin(); it != m_lstTextCell.end(); ++it )
             if ( (*it).col == x && (*it).row == y && !found )
             {
@@ -2059,7 +2058,7 @@ void UndoChangeAreaTextCell::undo()
     }
     else
     {
-      Q3ValueList<textOfCell>::Iterator it2;
+      QLinkedList<textOfCell>::Iterator it2;
       for ( it2 = m_lstTextCell.begin(); it2 != m_lstTextCell.end(); ++it2 )
       {
         Cell *cell = sheet->nonDefaultCell( (*it2).col, (*it2).row );
@@ -2100,7 +2099,7 @@ void UndoChangeAreaTextCell::redo()
         {
           Cell* cell = sheet->nonDefaultCell( x, y );
           bool found = false;
-          Q3ValueList<textOfCell>::Iterator it;
+          QLinkedList<textOfCell>::Iterator it;
           for( it = m_lstRedoTextCell.begin(); it != m_lstRedoTextCell.end(); ++it )
             if ( (*it).col == x && (*it).row == y && !found )
             {
@@ -2114,7 +2113,7 @@ void UndoChangeAreaTextCell::redo()
     }
     else
     {
-      Q3ValueList<textOfCell>::Iterator it2;
+      QLinkedList<textOfCell>::Iterator it2;
       for ( it2 = m_lstRedoTextCell.begin(); it2 != m_lstRedoTextCell.end(); ++it2 )
       {
         Cell *cell = sheet->nonDefaultCell( (*it2).col, (*it2).row );
@@ -2582,8 +2581,8 @@ UndoCellPaste::~UndoCellPaste()
 }
 
 void UndoCellPaste::createListCell(Q3CString& listCell,
-                                   Q3ValueList<columnSize>& listCol,
-                                   Q3ValueList<rowSize>& listRow,
+                                   QLinkedList<columnSize>& listCol,
+                                   QLinkedList<rowSize>& listRow,
                                    Sheet* sheet)
 {
   listCol.clear();
@@ -2681,7 +2680,7 @@ void UndoCellPaste::undo()
       uint width = range.width();
       if (!b_insert)
       {
-        Q3ValueList<columnSize>::Iterator it2;
+        QLinkedList<columnSize>::Iterator it2;
         for ( it2 = m_lstColumn.begin(); it2 != m_lstColumn.end(); ++it2 )
         {
           ColumnFormat *cl=sheet->nonDefaultColumnFormat((*it2).columnNumber);
@@ -2701,7 +2700,7 @@ void UndoCellPaste::undo()
       uint height = range.height();
       if (!b_insert)
       {
-        Q3ValueList<rowSize>::Iterator it2;
+        QLinkedList<rowSize>::Iterator it2;
         for ( it2 = m_lstRow.begin(); it2 != m_lstRow.end(); ++it2 )
         {
           RowFormat *rw=sheet->nonDefaultRowFormat((*it2).rowNumber);
@@ -2775,7 +2774,7 @@ void UndoCellPaste::redo()
         numCols += width;
         sheet->insertColumn(xshift + 1, width - 1, false);
       }
-      Q3ValueList<columnSize>::Iterator it2;
+      QLinkedList<columnSize>::Iterator it2;
       for ( it2 = m_lstRedoColumn.begin(); it2 != m_lstRedoColumn.end(); ++it2 )
       {
         ColumnFormat *cl=sheet->nonDefaultColumnFormat((*it2).columnNumber);
@@ -2790,7 +2789,7 @@ void UndoCellPaste::redo()
         numRows += height;
         sheet->insertRow(yshift + 1, height - 1);
       }
-      Q3ValueList<rowSize>::Iterator it2;
+      QLinkedList<rowSize>::Iterator it2;
       for ( it2 = m_lstRedoRow.begin(); it2 != m_lstRedoRow.end(); ++it2 )
       {
         RowFormat *rw=sheet->nonDefaultRowFormat((*it2).rowNumber);
@@ -2854,7 +2853,7 @@ UndoStyleCell::~UndoStyleCell()
 {
 }
 
-void UndoStyleCell::createListCell( Q3ValueList<styleCell> &listCell, Sheet* sheet )
+void UndoStyleCell::createListCell( QLinkedList<styleCell> &listCell, Sheet* sheet )
 {
   int bottom = m_selection.bottom();
   int right  = m_selection.right();
@@ -2923,7 +2922,7 @@ void UndoStyleCell::undo()
     doc()->emitBeginOperation();
 
 
-    Q3ValueList<styleCell>::Iterator it2;
+    QLinkedList<styleCell>::Iterator it2;
     for ( it2 = m_lstStyleCell.begin(); it2 != m_lstStyleCell.end(); ++it2 )
       {
 	sheet->nonDefaultCell( (*it2).col, (*it2).row);
@@ -2944,7 +2943,7 @@ void UndoStyleCell::redo()
     doc()->undoLock();
     doc()->emitBeginOperation();
 
-    Q3ValueList<styleCell>::Iterator it2;
+    QLinkedList<styleCell>::Iterator it2;
     for ( it2 = m_lstRedoStyleCell.begin(); it2 != m_lstRedoStyleCell.end(); ++it2 )
       {
 	sheet->nonDefaultCell( (*it2).col, (*it2).row);

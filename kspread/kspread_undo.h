@@ -20,11 +20,12 @@
 #ifndef __kspread_undo_h__
 #define __kspread_undo_h__
 
-#include <q3ptrstack.h>
-#include <qstring.h>
+#include <qlinkedlist.h>
 #include <qrect.h>
+#include <qstring.h>
+
 #include <q3ptrlist.h>
-#include <q3valuelist.h>
+#include <q3ptrstack.h>
 //Added by qt3to4:
 #include <Q3CString>
 
@@ -157,7 +158,7 @@ public:
 
 protected:
     void undoFormulaReference();
-    Q3ValueList<FormulaOfCell> m_lstFormulaCells;
+    QLinkedList<FormulaOfCell> m_lstFormulaCells;
 };
 
 class UndoRemoveColumn : public UndoInsertRemoveAction
@@ -230,69 +231,69 @@ protected:
 class UndoHideColumn : public UndoAction
 {
 public:
-    UndoHideColumn( Doc *_doc, Sheet *_sheet, int _column,int _nbCol=0, Q3ValueList<int>listCol=Q3ValueList<int>() );
+    UndoHideColumn( Doc *_doc, Sheet *_sheet, int _column,int _nbCol=0, QLinkedList<int>listCol=QLinkedList<int>() );
     virtual ~UndoHideColumn();
 
     virtual void undo();
     virtual void redo();
-    void createList( Q3ValueList<int>&list,Sheet *_tab );
+    void createList( QLinkedList<int>&list,Sheet *_tab );
 
 protected:
     QString m_sheetName;
     int m_iColumn;
     int m_iNbCol;
-    Q3ValueList<int> listCol;
+    QLinkedList<int> listCol;
 };
 
 class UndoHideRow : public UndoAction
 {
 public:
-    UndoHideRow( Doc *_doc, Sheet *_sheet, int _column,int _nbCol=0, Q3ValueList<int>_listRow=Q3ValueList<int>() );
+    UndoHideRow( Doc *_doc, Sheet *_sheet, int _column,int _nbCol=0, QLinkedList<int>_listRow=QLinkedList<int>() );
     virtual ~UndoHideRow();
 
     virtual void undo();
     virtual void redo();
 protected:
-    void createList( Q3ValueList<int>&list,Sheet *_tab );
+    void createList( QLinkedList<int>&list,Sheet *_tab );
 
     QString m_sheetName;
     int m_iRow;
     int m_iNbRow;
-    Q3ValueList<int> listRow;
+    QLinkedList<int> listRow;
 };
 
 class UndoShowColumn : public UndoAction
 {
 public:
-    UndoShowColumn( Doc *_doc, Sheet *_sheet, int _column,int _nbCol=0, Q3ValueList<int>_list=Q3ValueList<int>() );
+    UndoShowColumn( Doc *_doc, Sheet *_sheet, int _column,int _nbCol=0, QLinkedList<int>_list=QLinkedList<int>() );
     virtual ~UndoShowColumn();
 
     virtual void undo();
     virtual void redo();
 protected:
-    void createList( Q3ValueList<int>&list,Sheet *_tab );
+    void createList( QLinkedList<int>&list,Sheet *_tab );
 
     QString m_sheetName;
     int m_iColumn;
     int m_iNbCol;
-    Q3ValueList<int> listCol;
+    QLinkedList<int> listCol;
 };
 
 class UndoShowRow : public UndoAction
 {
 public:
-    UndoShowRow( Doc *_doc, Sheet *_sheet, int _column,int _nbCol=0, Q3ValueList<int>list=Q3ValueList<int>() );
+    UndoShowRow( Doc *_doc, Sheet *_sheet, int _column,int _nbCol=0, QLinkedList<int>list=QLinkedList<int>() );
     virtual ~UndoShowRow();
 
     virtual void undo();
     virtual void redo();
 
 protected:
-    void createList( Q3ValueList<int>&list,Sheet *_tab );
+    void createList( QLinkedList<int>&list,Sheet *_tab );
     QString m_sheetName;
     int m_iRow;
     int m_iNbRow;
-    Q3ValueList<int> listRow;
+    QLinkedList<int> listRow;
 };
 
 
@@ -363,15 +364,15 @@ public:
     virtual void redo();
 
 protected:
-    void copyFormat( Q3ValueList<layoutCell> &list,Q3ValueList<layoutColumn> &listCol,Q3ValueList<layoutRow> &listRow, Sheet* sheet );
+    void copyFormat( QLinkedList<layoutCell> &list,QLinkedList<layoutColumn> &listCol,QLinkedList<layoutRow> &listRow, Sheet* sheet );
 
     Region m_region;
-    Q3ValueList<layoutCell> m_lstFormats;
-    Q3ValueList<layoutCell> m_lstRedoFormats;
-    Q3ValueList<layoutColumn> m_lstColFormats;
-    Q3ValueList<layoutColumn> m_lstRedoColFormats;
-    Q3ValueList<layoutRow> m_lstRowFormats;
-    Q3ValueList<layoutRow> m_lstRedoRowFormats;
+    QLinkedList<layoutCell> m_lstFormats;
+    QLinkedList<layoutCell> m_lstRedoFormats;
+    QLinkedList<layoutColumn> m_lstColFormats;
+    QLinkedList<layoutColumn> m_lstRedoColFormats;
+    QLinkedList<layoutRow> m_lstRowFormats;
+    QLinkedList<layoutRow> m_lstRedoRowFormats;
 
     QString m_sheetName;
 };
@@ -402,15 +403,15 @@ public:
     virtual void redo();
 
 protected:
-    void createListCell( Q3CString &listCell,Q3ValueList<columnSize> &listCol,Q3ValueList<rowSize> &listRow, Sheet* sheet );
+    void createListCell( Q3CString &listCell,QLinkedList<columnSize> &listCol,QLinkedList<rowSize> &listRow, Sheet* sheet );
 
     Region m_region;
     Q3CString m_data;
     Q3CString m_dataRedo;
-    Q3ValueList<columnSize> m_lstColumn;
-    Q3ValueList<columnSize> m_lstRedoColumn;
-    Q3ValueList<rowSize> m_lstRow;
-    Q3ValueList<rowSize> m_lstRedoRow;
+    QLinkedList<columnSize> m_lstColumn;
+    QLinkedList<columnSize> m_lstRedoColumn;
+    QLinkedList<rowSize> m_lstRow;
+    QLinkedList<rowSize> m_lstRedoRow;
     QString m_sheetName;
 };
 
@@ -446,13 +447,13 @@ public:
     virtual void redo();
 
 protected:
-    void createList( Q3ValueList<columnSize> &listCol,Q3ValueList<rowSize> &listRow, Sheet* sheet );
+    void createList( QLinkedList<columnSize> &listCol,QLinkedList<rowSize> &listRow, Sheet* sheet );
 
     Region m_region;
-    Q3ValueList<columnSize> m_lstColumn;
-    Q3ValueList<columnSize> m_lstRedoColumn;
-    Q3ValueList<rowSize> m_lstRow;
-    Q3ValueList<rowSize> m_lstRedoRow;
+    QLinkedList<columnSize> m_lstColumn;
+    QLinkedList<columnSize> m_lstRedoColumn;
+    QLinkedList<rowSize> m_lstRow;
+    QLinkedList<rowSize> m_lstRedoRow;
     QString m_sheetName;
 };
 
@@ -466,11 +467,11 @@ public:
     virtual void redo();
 
 protected:
-    void createList( Q3ValueList<textOfCell> &list, Sheet* sheet );
+    void createList( QLinkedList<textOfCell> &list, Sheet* sheet );
 
     Region m_region;
-    Q3ValueList<textOfCell> m_lstTextCell;
-    Q3ValueList<textOfCell> m_lstRedoTextCell;
+    QLinkedList<textOfCell> m_lstTextCell;
+    QLinkedList<textOfCell> m_lstRedoTextCell;
     QString m_sheetName;
 };
 
@@ -484,16 +485,16 @@ public:
     virtual void redo();
 
 protected:
-    void copyAll( Q3ValueList<layoutTextCell> & list, Q3ValueList<layoutColumn> & listCol,
-                  Q3ValueList<layoutRow> & listRow, Sheet * sheet );
+    void copyAll( QLinkedList<layoutTextCell> & list, QLinkedList<layoutColumn> & listCol,
+                  QLinkedList<layoutRow> & listRow, Sheet * sheet );
 
     QRect m_rctRect;
-    Q3ValueList<layoutTextCell> m_lstFormats;
-    Q3ValueList<layoutTextCell> m_lstRedoFormats;
-    Q3ValueList<layoutColumn> m_lstColFormats;
-    Q3ValueList<layoutColumn> m_lstRedoColFormats;
-    Q3ValueList<layoutRow> m_lstRowFormats;
-    Q3ValueList<layoutRow> m_lstRedoRowFormats;
+    QLinkedList<layoutTextCell> m_lstFormats;
+    QLinkedList<layoutTextCell> m_lstRedoFormats;
+    QLinkedList<layoutColumn> m_lstColFormats;
+    QLinkedList<layoutColumn> m_lstRedoColFormats;
+    QLinkedList<layoutRow> m_lstRowFormats;
+    QLinkedList<layoutRow> m_lstRedoRowFormats;
 
     QString m_sheetName;
 };
@@ -620,15 +621,15 @@ public:
     virtual void redo();
 
 protected:
-    void createListCell( Q3CString &listCell,Q3ValueList<columnSize> &listCol,Q3ValueList<rowSize> &listRow, Sheet* sheet );
+    void createListCell( Q3CString &listCell,QLinkedList<columnSize> &listCol,QLinkedList<rowSize> &listRow, Sheet* sheet );
 
     Region m_region;
     Q3CString m_data;
     Q3CString m_dataRedo;
-    Q3ValueList<columnSize> m_lstColumn;
-    Q3ValueList<columnSize> m_lstRedoColumn;
-    Q3ValueList<rowSize> m_lstRow;
-    Q3ValueList<rowSize> m_lstRedoRow;
+    QLinkedList<columnSize> m_lstColumn;
+    QLinkedList<columnSize> m_lstRedoColumn;
+    QLinkedList<rowSize> m_lstRow;
+    QLinkedList<rowSize> m_lstRedoRow;
     int xshift;
     int yshift;
     bool  b_insert;
@@ -647,10 +648,10 @@ public:
     virtual void redo();
 
 protected:
-    void createListCell( Q3ValueList<styleCell> &listCell, Sheet* sheet );
+    void createListCell( QLinkedList<styleCell> &listCell, Sheet* sheet );
     QRect m_selection;
-    Q3ValueList<styleCell> m_lstStyleCell;
-    Q3ValueList<styleCell> m_lstRedoStyleCell;
+    QLinkedList<styleCell> m_lstStyleCell;
+    QLinkedList<styleCell> m_lstRedoStyleCell;
     QString m_sheetName;
 };
 
