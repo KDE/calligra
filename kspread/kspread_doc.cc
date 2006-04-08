@@ -129,7 +129,7 @@ public:
 
   Q3PtrList<Plugin> plugins;
 
-  Q3ValueList<Reference> refs;
+  QList<Reference> refs;
   KCompletion listCompletion;
 
   int numOperations;
@@ -496,7 +496,7 @@ void Doc::changePageBorderColor( const QColor  & _color)
   d->pageBorderColor = _color;
 }
 
-const Q3ValueList<Reference>  &Doc::listArea()
+const QList<Reference>  &Doc::listArea()
 {
   return d->refs;
 }
@@ -1895,7 +1895,7 @@ void Doc::addAreaName(const QRect &_rect,const QString & name,const QString & sh
 
 void Doc::removeArea( const QString & name)
 {
-    Q3ValueList<Reference>::Iterator it2;
+    QList<Reference>::Iterator it2;
     for ( it2 = d->refs.begin(); it2 != d->refs.end(); ++it2 )
     {
         if((*it2).ref_name==name)
@@ -1909,7 +1909,7 @@ void Doc::removeArea( const QString & name)
 
 void Doc::changeAreaSheetName(const QString & oldName,const QString & sheetName)
 {
-  Q3ValueList<Reference>::Iterator it2;
+  QList<Reference>::Iterator it2;
   for ( it2 = d->refs.begin(); it2 != d->refs.end(); ++it2 )
         {
         if((*it2).sheet_name==oldName)
@@ -1919,7 +1919,7 @@ void Doc::changeAreaSheetName(const QString & oldName,const QString & sheetName)
 
 QRect Doc::getRectArea(const QString  &_sheetName)
 {
-  Q3ValueList<Reference>::Iterator it2;
+  QList<Reference>::Iterator it2;
   for ( it2 = d->refs.begin(); it2 != d->refs.end(); ++it2 )
         {
         if((*it2).ref_name==_sheetName)
@@ -1933,7 +1933,7 @@ QRect Doc::getRectArea(const QString  &_sheetName)
 QDomElement Doc::saveAreaName( QDomDocument& doc )
 {
    QDomElement element = doc.createElement( "areaname" );
-   Q3ValueList<Reference>::Iterator it2;
+   QList<Reference>::Iterator it2;
    for ( it2 = d->refs.begin(); it2 != d->refs.end(); ++it2 )
    {
         QDomElement e = doc.createElement("reference");
@@ -1987,7 +1987,7 @@ void Doc::saveOasisAreaName( KoXmlWriter & xmlWriter )
     if ( listArea().count()>0 )
     {
         xmlWriter.startElement( "table:named-expressions" );
-        Q3ValueList<Reference>::Iterator it;
+        QList<Reference>::Iterator it;
         for ( it = d->refs.begin(); it != d->refs.end(); ++it )
         {
             xmlWriter.startElement( "table:named-range" );

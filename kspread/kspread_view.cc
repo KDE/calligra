@@ -3751,8 +3751,8 @@ void View::slotSheetRemoved( Sheet *_t )
   else
     d->activeSheet = 0L;
 
-  Q3ValueList<Reference>::Iterator it;
-  Q3ValueList<Reference> area=doc()->listArea();
+  QList<Reference>::Iterator it;
+  QList<Reference> area=doc()->listArea();
   for ( it = area.begin(); it != area.end(); ++it )
   {
     //remove Area Name when sheet target is removed

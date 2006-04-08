@@ -509,7 +509,7 @@ public:
   virtual DCOPObject* dcopObject();
 
   void addAreaName(const QRect &_rect,const QString & name,const QString & sheetName);
-  const Q3ValueList<Reference>  & listArea();
+  const QList<Reference>  & listArea();
   void removeArea( const QString &name);
   KCompletion & completion();
   void addStringCompletion(const QString & stringCompletion);

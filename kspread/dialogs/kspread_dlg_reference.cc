@@ -24,7 +24,6 @@
 */
 
 
-
 #include "kspread_dlg_reference.h"
 #include "kspread_canvas.h"
 #include "kspread_doc.h"
@@ -39,12 +38,12 @@
 #include <qcombobox.h>
 #include <qlabel.h>
 #include <qlineedit.h>
+#include <qlist.h>
 #include <qpushbutton.h>
 #include <qlayout.h>
 //Added by qt3to4:
 #include <Q3GridLayout>
 #include <Q3PtrList>
-#include <Q3ValueList>
 #include <Q3HBoxLayout>
 #include <Q3VBoxLayout>
 #include <Q3ListBox>
@@ -92,8 +91,8 @@ reference::reference( View* parent, const char* name )
       sheetName.append( it2.current()->sheetName());
   }
 
-  Q3ValueList<Reference>::Iterator it;
-  Q3ValueList<Reference> area = m_pView->doc()->listArea();
+  QList<Reference>::Iterator it;
+  QList<Reference> area = m_pView->doc()->listArea();
   for ( it = area.begin(); it != area.end(); ++it )
   {
     text = (*it).ref_name;
@@ -124,8 +123,8 @@ reference::reference( View* parent, const char* name )
 void reference::displayAreaValues(QString const & areaName)
 {
   QString tmpName;
-  Q3ValueList<Reference>::Iterator it;
-  Q3ValueList<Reference> area( m_pView->doc()->listArea() );
+  QList<Reference>::Iterator it;
+  QList<Reference> area( m_pView->doc()->listArea() );
   for ( it = area.begin(); it != area.end(); ++it )
   {
     if ((*it).ref_name == areaName)
@@ -175,8 +174,8 @@ void reference::slotRemove()
     /*
       m_list->clear();
       QString text;
-      QValueList<Reference>::Iterator it;
-      QValueList<Reference> area=m_pView->doc()->listArea();
+      QList<Reference>::Iterator it;
+      QList<Reference> area=m_pView->doc()->listArea();
       for ( it = area.begin(); it != area.end(); ++it )
       {
       text=(*it).ref_name;
@@ -227,7 +226,7 @@ void reference::slotOk()
   {
     int index = m_list->currentItem();
     text = m_list->text(index);
-    Q3ValueList<Reference> area = m_pView->doc()->listArea();
+    QList<Reference> area = m_pView->doc()->listArea();
 
     if (m_pView->activeSheet()->sheetName() != area[ index ].sheet_name)
     {
@@ -315,8 +314,8 @@ EditAreaName::EditAreaName( View * parent,
   }
 
   QString tmpName;
-  Q3ValueList<Reference>::Iterator it;
-  Q3ValueList<Reference> area(m_pView->doc()->listArea());
+  QList<Reference>::Iterator it;
+  QList<Reference> area(m_pView->doc()->listArea());
   for ( it = area.begin(); it != area.end(); ++it )
   {
     if ((*it).ref_name == areaname)

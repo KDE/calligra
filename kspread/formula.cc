@@ -603,8 +603,8 @@ Tokens Formula::scan( const QString& expr, KLocale* locale ) const
            bool gotNamed = false;
            // check for named areas ...
            if (d->sheet) {
-             const Q3ValueList<Reference> areas = d->sheet->doc()->listArea();
-             Q3ValueList<Reference>::const_iterator it;
+             const QList<Reference> areas = d->sheet->doc()->listArea();
+             QList<Reference>::const_iterator it;
              for (it = areas.begin(); it != areas.end(); ++it) {
                if ((*it).ref_name.toLower() == tokenText.toLower()) {
                  // we got a named area
@@ -707,8 +707,8 @@ Tokens Formula::scan( const QString& expr, KLocale* locale ) const
            // check for named areas ...
            if (d->sheet) {
 	     QString txt = tokenText.mid(1, tokenText.length() - 2).toLower();
-             const Q3ValueList<Reference> areas = d->sheet->doc()->listArea();
-             Q3ValueList<Reference>::const_iterator it;
+             const QList<Reference> areas = d->sheet->doc()->listArea();
+             QList<Reference>::const_iterator it;
              for (it = areas.begin(); it != areas.end(); ++it) {
                if ((*it).ref_name.toLower() == txt) {
                  // we got a named area

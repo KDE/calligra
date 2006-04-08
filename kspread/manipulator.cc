@@ -20,8 +20,6 @@
 #include <float.h>
 
 #include <qcolor.h>
-//Added by qt3to4:
-#include <Q3ValueList>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -248,7 +246,7 @@ FormatManipulator::FormatManipulator()
 
 FormatManipulator::~FormatManipulator()
 {
-  Q3ValueList<layoutCell>::Iterator it2;
+  QLinkedList<layoutCell>::Iterator it2;
   for ( it2 = m_lstFormats.begin(); it2 != m_lstFormats.end(); ++it2 )
   {
     delete (*it2).l;
@@ -261,7 +259,7 @@ FormatManipulator::~FormatManipulator()
   }
   m_lstRedoFormats.clear();
 
-  Q3ValueList<layoutColumn>::Iterator it3;
+  QLinkedList<layoutColumn>::Iterator it3;
   for ( it3 = m_lstColFormats.begin(); it3 != m_lstColFormats.end(); ++it3 )
   {
     delete (*it3).l;
@@ -274,7 +272,7 @@ FormatManipulator::~FormatManipulator()
   }
   m_lstRedoColFormats.clear();
 
-  Q3ValueList<layoutRow>::Iterator it4;
+  QLinkedList<layoutRow>::Iterator it4;
   for ( it4 = m_lstRowFormats.begin(); it4 != m_lstRowFormats.end(); ++it4 )
   {
     delete (*it4).l;
@@ -389,7 +387,7 @@ bool FormatManipulator::process (Element *element)
   {  // undoing
     if( element->isColumn() )
     {
-      Q3ValueList<layoutColumn>::Iterator it2;
+      QLinkedList<layoutColumn>::Iterator it2;
       for ( it2 = m_lstColFormats.begin(); it2 != m_lstColFormats.end(); ++it2 )
       {
         ColumnFormat * col = m_sheet->nonDefaultColumnFormat( (*it2).col );
@@ -398,7 +396,7 @@ bool FormatManipulator::process (Element *element)
     }
     else if( element->isRow() )
     {
-      Q3ValueList<layoutRow>::Iterator it2;
+      QLinkedList<layoutRow>::Iterator it2;
       for ( it2 = m_lstRowFormats.begin(); it2 != m_lstRowFormats.end(); ++it2 )
       {
         RowFormat * row = m_sheet->nonDefaultRowFormat( (*it2).row );
@@ -406,7 +404,7 @@ bool FormatManipulator::process (Element *element)
       }
     }
 
-    Q3ValueList<layoutCell>::Iterator it2;
+    QLinkedList<layoutCell>::Iterator it2;
     for ( it2 = m_lstFormats.begin(); it2 != m_lstFormats.end(); ++it2 )
     {
       Cell *cell = m_sheet->nonDefaultCell( (*it2).col,(*it2).row );
@@ -419,12 +417,12 @@ bool FormatManipulator::process (Element *element)
   return true;
 }
 
-void FormatManipulator::copyFormat(Q3ValueList<layoutCell> & list,
-                                   Q3ValueList<layoutColumn> & listCol,
-                                   Q3ValueList<layoutRow> & listRow)
+void FormatManipulator::copyFormat(QLinkedList<layoutCell> & list,
+                                   QLinkedList<layoutColumn> & listCol,
+                                   QLinkedList<layoutRow> & listRow)
 {
-  Q3ValueList<layoutCell>::Iterator end = list.end();
-  for (Q3ValueList<layoutCell>::Iterator it2 = list.begin(); it2 != end; ++it2)
+  QLinkedList<layoutCell>::Iterator end = list.end();
+  for (QLinkedList<layoutCell>::Iterator it2 = list.begin(); it2 != end; ++it2)
   {
       delete (*it2).l;
   }

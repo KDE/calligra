@@ -1249,8 +1249,8 @@ ComboboxLocationEditWidget::ComboboxLocationEditWidget( QWidget * _parent,
     setLineEdit( m_locationWidget );
     insertItem( "" );
 
-    Q3ValueList<Reference>::Iterator it;
-    Q3ValueList<Reference> area = _view->doc()->listArea();
+    QList<Reference>::Iterator it;
+    QList<Reference> area = _view->doc()->listArea();
     for ( it = area.begin(); it != area.end(); ++it )
         slotAddAreaName( (*it).ref_name);
     connect( this, SIGNAL( activated ( const QString & ) ), m_locationWidget, SLOT( slotActivateItem() ) );
@@ -1319,8 +1319,8 @@ bool LocationEditWidget::activateItem()
 {
     QString ltext = text();
     QString tmp = ltext.toLower();
-    Q3ValueList<Reference>::Iterator it;
-    Q3ValueList<Reference> area = m_pView->doc()->listArea();
+    QList<Reference>::Iterator it;
+    QList<Reference> area = m_pView->doc()->listArea();
     for ( it = area.begin(); it != area.end(); ++it )
     {
         if ((*it).ref_name == tmp)

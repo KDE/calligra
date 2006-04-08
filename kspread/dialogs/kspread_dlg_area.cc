@@ -78,8 +78,8 @@ void AreaDialog::slotOk()
 
     QRect rect( m_pView->selectionInfo()->selection() );
     bool newName = true;
-    Q3ValueList<Reference>::Iterator it;
-    Q3ValueList<Reference> area = m_pView->doc()->listArea();
+    QList<Reference>::Iterator it;
+    QList<Reference> area = m_pView->doc()->listArea();
     for ( it = area.begin(); it != area.end(); ++it )
     {
       if(tmp == (*it).ref_name)

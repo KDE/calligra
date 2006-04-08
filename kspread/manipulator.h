@@ -21,9 +21,9 @@
 #ifndef KSPREAD_MANIPULATOR
 #define KSPREAD_MANIPULATOR
 
+#include <qlinkedlist.h>
 #include <qrect.h>
 #include <qstring.h>
-#include <q3valuelist.h>
 
 #include <kcommand.h>
 #include <klocale.h>
@@ -48,12 +48,12 @@ class Sheet;
 //   int col;
 //   Format *l;
 // };
-// 
+//
 // struct layoutColumn {
 //   int col;
 //   ColumnFormat *l;
 // };
-// 
+//
 // struct layoutRow {
 //   int row;
 //   RowFormat *l;
@@ -177,9 +177,9 @@ protected:
   virtual bool preProcessing();
   virtual bool process(Element*);
 
-  void copyFormat(Q3ValueList<layoutCell> &list,
-                  Q3ValueList<layoutColumn> &listCol,
-                  Q3ValueList<layoutRow> &listRow);
+  void copyFormat(QLinkedList<layoutCell> &list,
+                  QLinkedList<layoutColumn> &listCol,
+                  QLinkedList<layoutRow> &listRow);
   bool testCondition(RowFormat*);
   void doWork(Format*, bool isTop, bool isBottom, bool isLeft, bool isRight);
   void prepareCell(Cell*);
@@ -188,12 +188,12 @@ private:
   quint32 m_properties;
 
   // TODO Stefan: find a more elegant way to store the format
-  Q3ValueList<layoutCell> m_lstFormats;
-  Q3ValueList<layoutCell> m_lstRedoFormats;
-  Q3ValueList<layoutColumn> m_lstColFormats;
-  Q3ValueList<layoutColumn> m_lstRedoColFormats;
-  Q3ValueList<layoutRow> m_lstRowFormats;
-  Q3ValueList<layoutRow> m_lstRedoRowFormats;
+  QLinkedList<layoutCell> m_lstFormats;
+  QLinkedList<layoutCell> m_lstRedoFormats;
+  QLinkedList<layoutColumn> m_lstColFormats;
+  QLinkedList<layoutColumn> m_lstRedoColFormats;
+  QLinkedList<layoutRow> m_lstRowFormats;
+  QLinkedList<layoutRow> m_lstRedoRowFormats;
 
   // SetSelectionFontWorker
   // SetSelectionSizeWorker
