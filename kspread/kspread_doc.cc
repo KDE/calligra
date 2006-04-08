@@ -1749,7 +1749,7 @@ void Doc::PaintRegion(QPainter &painter, const KoRect &viewRegion,
   int regionLeft   = paintRegion.left();
   int regionTop    = paintRegion.top();
 
-  Q3ValueList<QPoint>  mergedCellsPainted;
+  QLinkedList<QPoint>  mergedCellsPainted;
   for ( int y = regionTop;
         y <= regionBottom && dblCurrentCellPos.y() <= viewRegion.bottom();
         ++y )

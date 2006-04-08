@@ -615,7 +615,7 @@ void Cell::copyFormat( const Cell* cell )
     if ( cell->format()->currencyInfo( c ) )
       format()->setCurrency( c );*/
 
-    Q3ValueList<Conditional> conditionList = cell->conditionList();
+    QLinkedList<Conditional> conditionList = cell->conditionList();
     if (d->hasExtra())
       delete d->extra()->conditions;
     if ( cell->d->hasExtra() && cell->d->extra()->conditions )
@@ -2140,7 +2140,7 @@ void Cell::paintCell( const KoRect   &rect, QPainter & painter,
           int paintBorder,
           QPen & rightPen, QPen & bottomPen,
           QPen & leftPen,  QPen & topPen,
-          Q3ValueList<QPoint> &mergedCellsPainted,
+          QLinkedList<QPoint> &mergedCellsPainted,
           bool drawCursor )
 {
   bool paintBorderRight  = paintBorder & Border_Right;
@@ -2413,7 +2413,7 @@ void Cell::paintCell( const KoRect   &rect, QPainter & painter,
     // itself gets changed during a call of obscuringCell->paintCell
     // (this happens e.g. when there is an updateDepend)
     if (d->hasExtra()) {
-      Q3ValueList<QPoint>           listPoints;
+      QLinkedList<QPoint>           listPoints;
       QLinkedList<Cell*>::iterator  it = d->extra()->obscuringCells.begin();
       QLinkedList<Cell*>::iterator  end = d->extra()->obscuringCells.end();
       for ( ; it != end; ++it ) {
@@ -2422,8 +2422,8 @@ void Cell::paintCell( const KoRect   &rect, QPainter & painter,
         listPoints.append( QPoint( obscuringCell->column(), obscuringCell->row() ) );
       }
 
-      Q3ValueList<QPoint>::iterator  it1  = listPoints.begin();
-      Q3ValueList<QPoint>::iterator  end1 = listPoints.end();
+      QLinkedList<QPoint>::iterator  it1  = listPoints.begin();
+      QLinkedList<QPoint>::iterator  end1 = listPoints.end();
       for ( ; it1 != end1; ++it1 ) {
         QPoint obscuringCellRef = *it1;
 
@@ -2593,7 +2593,7 @@ void Cell::paintObscuredCells(const KoRect& rect, QPainter& painter,
             bool _paintBorderTop,
             QPen & rightPen, QPen & _bottomPen,
             QPen & leftPen,  QPen & _topPen,
-            Q3ValueList<QPoint> &mergedCellsPainted)
+            QLinkedList<QPoint> &mergedCellsPainted)
 {
   // If there are no obscured cells, return.
   if ( !extraXCells() && !extraYCells() )
@@ -7166,18 +7166,18 @@ QRect Cell::cellRect()
   return QRect(QPoint(d->column, d->row), QPoint(d->column, d->row));
 }
 
-Q3ValueList<Conditional> Cell::conditionList() const
+QLinkedList<Conditional> Cell::conditionList() const
 {
   if ( !d->hasExtra() || !d->extra()->conditions )
   {
-    Q3ValueList<Conditional> emptyList;
+    QLinkedList<Conditional> emptyList;
     return emptyList;
   }
 
   return d->extra()->conditions->conditionList();
 }
 
-void Cell::setConditionList( const Q3ValueList<Conditional> & newList )
+void Cell::setConditionList( const QLinkedList<Conditional> & newList )
 {
   if (d->hasExtra())
     delete d->extra()->conditions;

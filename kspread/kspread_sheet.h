@@ -731,7 +731,7 @@ public:
     void borderRight( Selection* selectionInfo, const QColor &_color );
 
     void setConditional( Selection* selectionInfo,
-       Q3ValueList<Conditional> const & newConditions );
+       QLinkedList<Conditional> const & newConditions );
 
     void setValidity( Selection* selectionInfo, KSpread::Validity tmp );
 

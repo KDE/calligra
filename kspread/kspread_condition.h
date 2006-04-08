@@ -95,12 +95,12 @@ class Conditions
   /**
    * Retrieve the current list of conditions we're checking
    */
-  Q3ValueList<Conditional> conditionList() const;
+  QLinkedList<Conditional> conditionList() const;
 
   /**
    * Replace the current list of conditions with this new one
    */
-  void setConditionList( const Q3ValueList<Conditional> & list );
+  void setConditionList( const QLinkedList<Conditional> & list );
 
   /**
    * Saves the conditions to a DOM tree structure.
@@ -136,7 +136,7 @@ class Conditions
 
 
   const Cell * m_cell;
-  Q3ValueList<Conditional> m_condList;
+  QLinkedList<Conditional> m_condList;
   Style * m_matchedStyle;
 };
 

@@ -340,7 +340,7 @@ public:
                     QPen & bottomPen,
                     QPen & leftPen,
                     QPen & topPen,
-		    Q3ValueList<QPoint> &mergedCellsPainted,
+		    QLinkedList<QPoint> &mergedCellsPainted,
                     bool drawCursor = true );
 
 
@@ -787,12 +787,12 @@ public:
     /**
      * Gets a copy of the list of current conditions
      */
-    Q3ValueList<Conditional> conditionList() const;
+    QLinkedList<Conditional> conditionList() const;
 
     /**
      * Replace the old set of conditions with a new one
      */
-    void setConditionList(const Q3ValueList<Conditional> &newList);
+    void setConditionList(const QLinkedList<Conditional> &newList);
 
     Validity * getValidity( int newStruct = -1 );
 
@@ -1014,7 +1014,7 @@ private:
                              bool paintBorderLeft, bool paintBorderTop,
                              QPen & rightPen, QPen & bottomPen,
                              QPen & leftPen, QPen & topPen,
-			     Q3ValueList<QPoint> &mergedCellsPainted );
+			     QLinkedList<QPoint> &mergedCellsPainted );
     void paintCellDiagonalLines( QPainter& painter, const KoRect &cellRect,
                                  const QPoint &cellRef );
 

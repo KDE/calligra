@@ -310,13 +310,13 @@ ConditionalDialog::ConditionalDialog( View * parent, const char * name,
 
 void ConditionalDialog::init()
 {
-  Q3ValueList<Conditional> conditionList;
-  Q3ValueList<Conditional> otherList;
+  QLinkedList<Conditional> conditionList;
+  QLinkedList<Conditional> otherList;
   bool found;
   int numCondition;
 
-  Q3ValueList<Conditional>::iterator it1;
-  Q3ValueList<Conditional>::iterator it2;
+  QLinkedList<Conditional>::iterator it1;
+  QLinkedList<Conditional>::iterator it2;
 
   Cell * obj = m_view->activeSheet()->cellAt( m_marker.left(),
                                                      m_marker.top() );
@@ -660,7 +660,7 @@ void ConditionalDialog::slotOk()
   m_view->doc()->emitBeginOperation( false );
   StyleManager * manager = m_view->doc()->styleManager();
 
-  Q3ValueList<Conditional> newList;
+  QLinkedList<Conditional> newList;
 
   Conditional newCondition;
 

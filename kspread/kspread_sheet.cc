@@ -4048,7 +4048,7 @@ void Sheet::swapCells( int x1, int y1, int x2, int y2, bool cpFormat )
     ref1->format()->setIndent( ref2->format()->getIndent( ref2->column(), ref2->row() ) );
     ref2->format()->setIndent( ind );
 
-    Q3ValueList<Conditional> conditionList = ref1->conditionList();
+    QLinkedList<Conditional> conditionList = ref1->conditionList();
     ref1->setConditionList(ref2->conditionList());
     ref2->setConditionList(conditionList);
 
@@ -4643,7 +4643,7 @@ struct ClearConditionalSelectionWorker : public Sheet::CellWorker
   }
   void doWork( Cell* cell, bool, int, int )
   {
-    Q3ValueList<Conditional> emptyList;
+    QLinkedList<Conditional> emptyList;
     cell->setConditionList(emptyList);
   }
 };
@@ -4778,8 +4778,8 @@ void Sheet::defaultSelection( Selection* selectionInfo )
 
 struct SetConditionalWorker : public Sheet::CellWorker
 {
-  Q3ValueList<Conditional> conditionList;
-  SetConditionalWorker( Q3ValueList<Conditional> _tmp ) :
+  QLinkedList<Conditional> conditionList;
+  SetConditionalWorker( QLinkedList<Conditional> _tmp ) :
     Sheet::CellWorker( ), conditionList( _tmp ) { }
 
   class UndoAction* createUndoAction( Doc* doc,
@@ -4804,7 +4804,7 @@ struct SetConditionalWorker : public Sheet::CellWorker
 };
 
 void Sheet::setConditional( Selection* selectionInfo,
-                                   Q3ValueList<Conditional> const & newConditions)
+                                   QLinkedList<Conditional> const & newConditions)
 {
   if ( !doc()->undoLocked() )
   {

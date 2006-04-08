@@ -4065,7 +4065,7 @@ void Canvas::paintUpdates()
   kDebug(36001) << "painting dirty cells " << endl;
 #endif
 
-  Q3ValueList<QPoint>  mergedCellsPainted;
+  QLinkedList<QPoint>  mergedCellsPainted;
   for ( x = range.left(); x <= right; ++x )
   {
     for ( y = range.top(); y <= bottom; ++y )

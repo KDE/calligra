@@ -194,7 +194,7 @@ bool SheetPrint::pageNeedsPrinting( QRect& page_range )
                // filled = true;
 
     //Page empty, but maybe children on it?
-    
+
         QRect intView = QRect( QPoint( m_pDoc->zoomItX( m_pSheet->dblColumnPos( page_range.left() ) ),
                                        m_pDoc->zoomItY( m_pSheet->dblRowPos( page_range.top() ) ) ),
                                QPoint( m_pDoc->zoomItX( m_pSheet->dblColumnPos( page_range.right() ) +
@@ -212,7 +212,7 @@ bool SheetPrint::pageNeedsPrinting( QRect& page_range )
 	    }
 		//filled = true;
         }
-    
+
 
     //Page has no visible content on it, so we don't need to paint it
     return false;
@@ -456,7 +456,7 @@ void SheetPrint::printRect( QPainter& painter, const KoPoint& topLeft,
                           + m_pSheet->rowFormat( y )->dblHeight() );
     KoRect rect( topLeft, bottomRight );
 
-    Q3ValueList<QPoint> mergedCellsPainted;
+    QLinkedList<QPoint> mergedCellsPainted;
     for ( int y = regionTop; y <= regionBottom; ++y )
     {
         row_lay = m_pSheet->rowFormat( y );
@@ -548,13 +548,13 @@ void SheetPrint::printRect( QPainter& painter, const KoPoint& topLeft,
                 if ( cell->effTopBorderValue( x, y ) < m_pSheet->cellAt( x, y - 1 )->effBottomBorderValue( x, y - 1 ) )
                   topPen = m_pSheet->cellAt( x, y - 1 )->effBottomBorderPen( x, y - 1 );
               }
-	      
+
 	      int paintBorder=Cell::Border_None;
 	      if (paintBordersLeft) paintBorder |= Cell::Border_Left;
 	      if (paintBordersRight) paintBorder |= Cell::Border_Right;
 	      if (paintBordersTop) paintBorder |= Cell::Border_Top;
 	      if (paintBordersBottom) paintBorder |= Cell::Border_Bottom;
-	      
+
 	      QPen highlightPen;
 
             if ( m_pSheet->layoutDirection()==Sheet::RightToLeft )
@@ -597,7 +597,7 @@ void SheetPrint::printRect( QPainter& painter, const KoPoint& topLeft,
 
           KoRect const bound = obj->geometry();
           QRect zoomedBound = m_pDoc->zoomRect( KoRect(bound.left(), bound.top(),
-              bound.width(), 
+              bound.width(),
               bound.height() ) );
 #if 1
 //         kDebug(36001)  << "printRect(): Bounding rect of view: " << view
@@ -1414,34 +1414,34 @@ void SheetPrint::calculateZoomForPageLimitX()
     QRect printRange = cellsPrintRange();
     updateNewPageX( m_pSheet->rightColumn( m_pSheet->dblColumnPos( printRange.right() ) + prinsheetWidthPts() ) );
     int currentPages = pagesX( printRange );
-    
+
     if (currentPages <= m_iPageLimitX)
         return;
-    
+
     //calculating a factor for scaling the zoom down makes it lots faster
     double factor = (double)m_iPageLimitX/(double)currentPages +
                     1-(double)currentPages/((double)currentPages+1); //add possible error;
     kDebug() << "Calculated factor for scaling m_dZoom: " << factor << endl;
     m_dZoom = m_dZoom*factor;
-    
+
     kDebug() << "New exact zoom: " << m_dZoom << endl;
-    
+
     if (m_dZoom < 0.01)
         m_dZoom = 0.01;
     if (m_dZoom > 1.0)
         m_dZoom = 1.0;
-    
+
     m_dZoom = (((int)(m_dZoom*100 + 0.5))/100.0);
-    
+
     kDebug() << "New rounded zoom: " << m_dZoom << endl;
-    
+
     updatePrintRepeatColumnsWidth();
     updateNewPageListX( 0 );
     updateNewPageX( m_pSheet->rightColumn( m_pSheet->dblColumnPos( printRange.right() ) + prinsheetWidthPts() ) );
     currentPages = pagesX( printRange );
-    
+
     kDebug() << "Number of pages with this zoom: " << currentPages << endl;
-    
+
     while( ( currentPages > m_iPageLimitX ) && ( m_dZoom > 0.01 ) )
     {
         m_dZoom -= 0.01;
@@ -1476,33 +1476,33 @@ void SheetPrint::calculateZoomForPageLimitY()
     QRect printRange = cellsPrintRange();
     updateNewPageY( m_pSheet->bottomRow( m_pSheet->dblRowPos( printRange.bottom() ) + prinsheetHeightPts() ) );
     int currentPages = pagesY( printRange );
-    
+
     if (currentPages <= m_iPageLimitY)
         return;
-    
+
     double factor = (double)m_iPageLimitY/(double)currentPages +
                     1-(double)currentPages/((double)currentPages+1); //add possible error
     kDebug() << "Calculated factor for scaling m_dZoom: " << factor << endl;
     m_dZoom = m_dZoom*factor;
-    
+
     kDebug() << "New exact zoom: " << m_dZoom << endl;
-    
+
     if (m_dZoom < 0.01)
         m_dZoom = 0.01;
     if (m_dZoom > 1.0)
         m_dZoom = 1.0;
-    
+
     m_dZoom = (((int)(m_dZoom*100 + 0.5))/100.0);
-    
+
     kDebug() << "New rounded zoom: " << m_dZoom << endl;
-    
+
     updatePrintRepeatRowsHeight();
     updateNewPageListY( 0 );
     updateNewPageY( m_pSheet->bottomRow( m_pSheet->dblRowPos( printRange.bottom() ) + prinsheetHeightPts() ) );
     currentPages = pagesY( printRange );
-    
+
     kDebug() << "Number of pages with this zoom: " << currentPages << endl;
-    
+
     while( ( currentPages > m_iPageLimitY ) && ( m_dZoom > 0.01 ) )
     {
         m_dZoom -= 0.01;
