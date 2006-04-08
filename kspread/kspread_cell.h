@@ -686,7 +686,7 @@ public:
     /**
      * @return the obscuring cell list (might be empty)
      */
-    Q3ValueList<Cell*> obscuringCells() const;
+    QLinkedList<Cell*> obscuringCells() const;
 
     void clearObscuringCells();
 

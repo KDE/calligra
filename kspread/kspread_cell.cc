@@ -142,7 +142,7 @@ public:
   // FIXME (comment): If the list consists of more than one obscuring
   //                  element, then is there an order between them that
   //                  is important?
-  Q3ValueList<Cell*> obscuringCells;
+  QLinkedList<Cell*> obscuringCells;
 
   // If non-NULL, contains a pointer to a condition or a validity test.
   Conditions  *conditions;
@@ -766,8 +766,8 @@ void Cell::setLayoutDirtyFlag( bool format )
     if (!d->hasExtra())
       return;
 
-    Q3ValueList<Cell*>::iterator it  = d->extra()->obscuringCells.begin();
-    Q3ValueList<Cell*>::iterator end = d->extra()->obscuringCells.end();
+    QLinkedList<Cell*>::iterator it  = d->extra()->obscuringCells.begin();
+    QLinkedList<Cell*>::iterator end = d->extra()->obscuringCells.end();
     for ( ; it != end; ++it ) {
       (*it)->setLayoutDirtyFlag( format );
     }
@@ -842,8 +842,8 @@ bool Cell::isPartOfMerged() const
   if (!d->hasExtra())
     return false;
 
-  Q3ValueList<Cell*>::const_iterator it = d->extra()->obscuringCells.begin();
-  Q3ValueList<Cell*>::const_iterator end = d->extra()->obscuringCells.end();
+  QLinkedList<Cell*>::const_iterator it = d->extra()->obscuringCells.begin();
+  QLinkedList<Cell*>::const_iterator end = d->extra()->obscuringCells.end();
   for ( ; it != end; ++it ) {
     Cell *cell = *it;
 
@@ -882,8 +882,8 @@ Cell *Cell::ultimateObscuringCell() const
     return d->extra()->obscuringCells.first();
 
 #if 0
-  Q3ValueList<Cell*>::const_iterator it = d->extra()->obscuringCells.begin();
-  Q3ValueList<Cell*>::const_iterator end = d->extra()->obscuringCells.end();
+  QLinkedList<Cell*>::const_iterator it = d->extra()->obscuringCells.begin();
+  QLinkedList<Cell*>::const_iterator end = d->extra()->obscuringCells.end();
   for ( ; it != end; ++it ) {
     Cell *cell = *it;
 
@@ -903,11 +903,11 @@ Cell *Cell::ultimateObscuringCell() const
 }
 
 
-Q3ValueList<Cell*> Cell::obscuringCells() const
+QLinkedList<Cell*> Cell::obscuringCells() const
 {
   if (!d->hasExtra())
   {
-    Q3ValueList<Cell*> empty;
+    QLinkedList<Cell*> empty;
     return empty;
   }
   return d->extra()->obscuringCells;
@@ -924,7 +924,7 @@ void Cell::obscure( Cell *cell, bool isForcing )
 {
   if (d->hasExtra())
   {
-    d->extra()->obscuringCells.remove( cell ); // removes *all* occurrences
+    d->extra()->obscuringCells.removeAll( cell ); // removes *all* occurrences
     cell->clearObscuringCells();
   }
   if ( isForcing )
@@ -942,7 +942,7 @@ void Cell::obscure( Cell *cell, bool isForcing )
 void Cell::unobscure( Cell * cell )
 {
   if (d->hasExtra())
-    d->extra()->obscuringCells.remove( cell );
+    d->extra()->obscuringCells.removeAll( cell );
   setFlag( Flag_LayoutDirty );
   format()->sheet()->setRegionPaintDirty( cellRect() );
 }
@@ -2414,8 +2414,8 @@ void Cell::paintCell( const KoRect   &rect, QPainter & painter,
     // (this happens e.g. when there is an updateDepend)
     if (d->hasExtra()) {
       Q3ValueList<QPoint>           listPoints;
-      Q3ValueList<Cell*>::iterator  it = d->extra()->obscuringCells.begin();
-      Q3ValueList<Cell*>::iterator  end = d->extra()->obscuringCells.end();
+      QLinkedList<Cell*>::iterator  it = d->extra()->obscuringCells.begin();
+      QLinkedList<Cell*>::iterator  end = d->extra()->obscuringCells.end();
       for ( ; it != end; ++it ) {
         Cell *obscuringCell = *it;
 
@@ -2818,8 +2818,8 @@ void Cell::paintDefaultBorders( QPainter& painter, const KoRect &rect,
 
   // If there are extra cells, there might be more conditions.
   if (d->hasExtra()) {
-    Q3ValueList<Cell*>::const_iterator it  = d->extra()->obscuringCells.begin();
-    Q3ValueList<Cell*>::const_iterator end = d->extra()->obscuringCells.end();
+    QLinkedList<Cell*>::const_iterator it  = d->extra()->obscuringCells.begin();
+    QLinkedList<Cell*>::const_iterator end = d->extra()->obscuringCells.end();
     for ( ; it != end; ++it ) {
       Cell *cell = *it;
 
@@ -3580,8 +3580,8 @@ void Cell::paintCellBorders( QPainter& painter, const KoRect& rect,
   // paintBottom = paintBottom && ( d->extra()->extraYCells() == 0 );
 
   if (d->hasExtra()) {
-    Q3ValueList<Cell*>::const_iterator it  = d->extra()->obscuringCells.begin();
-    Q3ValueList<Cell*>::const_iterator end = d->extra()->obscuringCells.end();
+    QLinkedList<Cell*>::const_iterator it  = d->extra()->obscuringCells.begin();
+    QLinkedList<Cell*>::const_iterator end = d->extra()->obscuringCells.end();
     for ( ; it != end; ++it ) {
       Cell* cell = *it;
 
@@ -5129,7 +5129,7 @@ void Cell::checkTextInput()
       (!d->strText.isEmpty()))
   {
     QString str = value().asString();
-    setValue( Value( str[0].toUpper() + str.right( str.length()-1 ) ) );
+    setValue( Value( str[0].upper() + str.right( str.length()-1 ) ) );
   }
 }
 
