@@ -1176,7 +1176,7 @@ void DatabaseDialog::sheetViewClicked( Q3ListViewItem * )
 //   if ( item )
 //   {
 //     QCheckListItem * i = (QCheckListItem *) item;
-//     i->setOn( !i->isChecked() );
+//     i->setChecked( !i->isChecked() );
 //   }
 //   kDebug() << "clicked" << endl;
 }

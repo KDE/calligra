@@ -738,210 +738,210 @@ void QtCalculator::keyPressEvent( QKeyEvent *e ){
 
   case Qt::Key_PageDown:
      key_pressed = TRUE;
-     pbAC->setOn(TRUE);
+     pbAC->setChecked(TRUE);
      break;
   case Qt::Key_PageUp:
      key_pressed = TRUE;
-     pbClear->setOn(TRUE);
+     pbClear->setChecked(TRUE);
      break;
 
   case Qt::Key_H:
      key_pressed = TRUE;
-     pbhyp->setOn(TRUE);
+     pbhyp->setChecked(TRUE);
      break;
   case Qt::Key_I:
      key_pressed = TRUE;
-     pbinv->setOn(TRUE);
+     pbinv->setChecked(TRUE);
      break;
   case Qt::Key_A:
      key_pressed = TRUE;
-     pbA->setOn(TRUE);
+     pbA->setChecked(TRUE);
 
      break;
   case Qt::Key_E:
      key_pressed = TRUE;
     if (current_base == NB_HEX)
-     pbE->setOn(TRUE);
+     pbE->setChecked(TRUE);
     else
-     pbEE->setOn(TRUE);
+     pbEE->setChecked(TRUE);
      break;
   case Qt::Key_Escape:
      key_pressed = TRUE;
-     pbClear->setOn(TRUE);
+     pbClear->setChecked(TRUE);
      break;
   case Qt::Key_Delete:
      key_pressed = TRUE;
-     pbAC->setOn(TRUE);
+     pbAC->setChecked(TRUE);
      break;
   case Qt::Key_S:
      key_pressed = TRUE;
-     pbSin->setOn(TRUE);
+     pbSin->setChecked(TRUE);
      break;
   case Qt::Key_Backslash:
      key_pressed = TRUE;
-     pbplusminus->setOn(TRUE);
+     pbplusminus->setChecked(TRUE);
      break;
   case Qt::Key_B:
      key_pressed = TRUE;
-     pbB->setOn(TRUE);
+     pbB->setChecked(TRUE);
      break;
   case Qt::Key_7:
      key_pressed = TRUE;
-     pb7->setOn(TRUE);
+     pb7->setChecked(TRUE);
      break;
   case Qt::Key_8:
      key_pressed = TRUE;
-     pb8->setOn(TRUE);
+     pb8->setChecked(TRUE);
      break;
   case Qt::Key_9:
      key_pressed = TRUE;
-     pb9->setOn(TRUE);
+     pb9->setChecked(TRUE);
      break;
   case Qt::Key_ParenLeft:
      key_pressed = TRUE;
-     pbparenopen->setOn(TRUE);
+     pbparenopen->setChecked(TRUE);
      break;
   case Qt::Key_ParenRight:
      key_pressed = TRUE;
-     pbparenclose->setOn(TRUE);
+     pbparenclose->setChecked(TRUE);
      break;
   case Qt::Key_Ampersand:
      key_pressed = TRUE;
-     pband->setOn(TRUE);
+     pband->setChecked(TRUE);
      break;
   case Qt::Key_C:
      key_pressed = TRUE;
     if (current_base == NB_HEX)
-     pbC->setOn(TRUE);
+     pbC->setChecked(TRUE);
     else
-     pbCos->setOn(TRUE);
+     pbCos->setChecked(TRUE);
      break;
   case Qt::Key_4:
      key_pressed = TRUE;
-     pb4->setOn(TRUE);
+     pb4->setChecked(TRUE);
      break;
   case Qt::Key_5:
      key_pressed = TRUE;
-     pb5->setOn(TRUE);
+     pb5->setChecked(TRUE);
      break;
   case Qt::Key_6:
      key_pressed = TRUE;
-     pb6->setOn(TRUE);
+     pb6->setChecked(TRUE);
      break;
   case Qt::Key_Asterisk:
      key_pressed = TRUE;
-     pbX->setOn(TRUE);
+     pbX->setChecked(TRUE);
      break;
   case Qt::Key_Slash:
      key_pressed = TRUE;
-     pbdivision->setOn(TRUE);
+     pbdivision->setChecked(TRUE);
      break;
   case Qt::Key_O:
      key_pressed = TRUE;
-     pbor->setOn(TRUE);
+     pbor->setChecked(TRUE);
      break;
   case Qt::Key_T:
      key_pressed = TRUE;
-     pbTan->setOn(TRUE);
+     pbTan->setChecked(TRUE);
      break;
   case Qt::Key_Exclam:
      key_pressed = TRUE;
-     pbfactorial->setOn(TRUE);
+     pbfactorial->setChecked(TRUE);
      break;
   case Qt::Key_D:
      key_pressed = TRUE;
      if(kcalcdefaults.style == 0)
-       pbD->setOn(TRUE); // trig mode
+       pbD->setChecked(TRUE); // trig mode
      else
-       pblog->setOn(TRUE); // stat mode
+       pblog->setChecked(TRUE); // stat mode
     break;
   case Qt::Key_1:
      key_pressed = TRUE;
-     pb1->setOn(TRUE);
+     pb1->setChecked(TRUE);
      break;
   case Qt::Key_2:
      key_pressed = TRUE;
-     pb2->setOn(TRUE);
+     pb2->setChecked(TRUE);
      break;
   case Qt::Key_3:
      key_pressed = TRUE;
-     pb3->setOn(TRUE);
+     pb3->setChecked(TRUE);
      break;
   case Qt::Key_Plus:
      key_pressed = TRUE;
-     pbplus->setOn(TRUE);
+     pbplus->setChecked(TRUE);
      break;
   case Qt::Key_Minus:
      key_pressed = TRUE;
-     pbminus->setOn(TRUE);
+     pbminus->setChecked(TRUE);
      break;
   case Qt::Key_Less:
      key_pressed = TRUE;
-     pbshift->setOn(TRUE);
+     pbshift->setChecked(TRUE);
      break;
   case Qt::Key_N:
      key_pressed = TRUE;
-     pbln->setOn(TRUE);
+     pbln->setChecked(TRUE);
      break;
   case Qt::Key_L:
      key_pressed = TRUE;
-     pblog->setOn(TRUE);
+     pblog->setChecked(TRUE);
      break;
   case Qt::Key_AsciiCircum:
      key_pressed = TRUE;
-     pbpower->setOn(TRUE);
+     pbpower->setChecked(TRUE);
      break;
   case Qt::Key_F:
      key_pressed = TRUE;
-     pbF->setOn(TRUE);
+     pbF->setChecked(TRUE);
      break;
   case Qt::Key_Period:
      key_pressed = TRUE;
-     pbperiod->setOn(TRUE);
+     pbperiod->setChecked(TRUE);
      break;
   case Qt::Key_Comma:
      key_pressed = TRUE;
-     pbperiod->setOn(TRUE);
+     pbperiod->setChecked(TRUE);
      break;
   case Qt::Key_0:
      key_pressed = TRUE;
-     pb0->setOn(TRUE);
+     pb0->setChecked(TRUE);
      break;
      case Qt::Key_Equal:
      key_pressed = TRUE;
-     pbequal->setOn(TRUE);
+     pbequal->setChecked(TRUE);
      break;
   case Qt::Key_Return:
      key_pressed = TRUE;
-     pbequal->setOn(TRUE);
+     pbequal->setChecked(TRUE);
      break;
   case Qt::Key_Enter:
      key_pressed = TRUE;
-     pbequal->setOn(TRUE);
+     pbequal->setChecked(TRUE);
      break;
   case Qt::Key_Percent:
      key_pressed = TRUE;
-     pbpercent->setOn(TRUE);
+     pbpercent->setChecked(TRUE);
      break;
   case Qt::Key_AsciiTilde:
      key_pressed = TRUE;
-     pbnegate->setOn(TRUE);
+     pbnegate->setChecked(TRUE);
      break;
   case Qt::Key_Colon:
      key_pressed = TRUE;
-     pbmod->setOn(TRUE);
+     pbmod->setChecked(TRUE);
      break;
   case Qt::Key_BracketLeft:
      key_pressed = TRUE;
-     pbsquare->setOn(TRUE);
+     pbsquare->setChecked(TRUE);
      break;
  case Qt::Key_Backspace:
      key_pressed = TRUE;
-     pbAC->setOn(TRUE);
+     pbAC->setChecked(TRUE);
      break;
   case Qt::Key_R:
      key_pressed = TRUE;
-     pbreci->setOn(TRUE);
+     pbreci->setChecked(TRUE);
      break;
   }
 }
@@ -951,209 +951,209 @@ void QtCalculator::keyReleaseEvent( QKeyEvent *e ){
 
   case Qt::Key_PageDown:
      key_pressed = FALSE;
-     pbAC->setOn(FALSE);
+     pbAC->setChecked(FALSE);
      break;
   case Qt::Key_PageUp:
      key_pressed = FALSE;
-     pbClear->setOn(FALSE);
+     pbClear->setChecked(FALSE);
      break;
 
   case Qt::Key_H:
     key_pressed = FALSE;
-     pbhyp->setOn(FALSE);
+     pbhyp->setChecked(FALSE);
      break;
   case Qt::Key_I:
     key_pressed = FALSE;
-     pbinv->setOn(FALSE);
+     pbinv->setChecked(FALSE);
      break;
   case Qt::Key_A:
     key_pressed = FALSE;
-     pbA->setOn(FALSE);
+     pbA->setChecked(FALSE);
      break;
   case Qt::Key_E:
     key_pressed = FALSE;
     if (current_base == NB_HEX)
-     pbE->setOn(FALSE);
+     pbE->setChecked(FALSE);
     else
-     pbEE->setOn(FALSE);
+     pbEE->setChecked(FALSE);
      break;
   case Qt::Key_Escape:
     key_pressed = FALSE;
-     pbClear->setOn(FALSE);
+     pbClear->setChecked(FALSE);
      break;
   case Qt::Key_Delete:
     key_pressed = FALSE;
-     pbAC->setOn(FALSE);
+     pbAC->setChecked(FALSE);
      break;
   case Qt::Key_S:
     key_pressed = FALSE;
-     pbSin->setOn(FALSE);
+     pbSin->setChecked(FALSE);
      break;
   case Qt::Key_Backslash:
     key_pressed = FALSE;
-     pbplusminus->setOn(FALSE);
+     pbplusminus->setChecked(FALSE);
      break;
   case Qt::Key_B:
     key_pressed = FALSE;
-     pbB->setOn(FALSE);
+     pbB->setChecked(FALSE);
      break;
   case Qt::Key_7:
     key_pressed = FALSE;
-     pb7->setOn(FALSE);
+     pb7->setChecked(FALSE);
      break;
   case Qt::Key_8:
     key_pressed = FALSE;
-     pb8->setOn(FALSE);
+     pb8->setChecked(FALSE);
      break;
   case Qt::Key_9:
     key_pressed = FALSE;
-     pb9->setOn(FALSE);
+     pb9->setChecked(FALSE);
      break;
   case Qt::Key_ParenLeft:
     key_pressed = FALSE;
-     pbparenopen->setOn(FALSE);
+     pbparenopen->setChecked(FALSE);
      break;
   case Qt::Key_ParenRight:
     key_pressed = FALSE;
-     pbparenclose->setOn(FALSE);
+     pbparenclose->setChecked(FALSE);
      break;
   case Qt::Key_Ampersand:
     key_pressed = FALSE;
-     pband->setOn(FALSE);
+     pband->setChecked(FALSE);
      break;
   case Qt::Key_C:
     key_pressed = FALSE;
     if (current_base == NB_HEX)
-     pbC->setOn(FALSE);
+     pbC->setChecked(FALSE);
     else
-     pbCos->setOn(FALSE);
+     pbCos->setChecked(FALSE);
      break;
   case Qt::Key_4:
     key_pressed = FALSE;
-     pb4->setOn(FALSE);
+     pb4->setChecked(FALSE);
      break;
   case Qt::Key_5:
     key_pressed = FALSE;
-     pb5->setOn(FALSE);
+     pb5->setChecked(FALSE);
      break;
   case Qt::Key_6:
     key_pressed = FALSE;
-     pb6->setOn(FALSE);
+     pb6->setChecked(FALSE);
      break;
   case Qt::Key_Asterisk:
     key_pressed = FALSE;
-     pbX->setOn(FALSE);
+     pbX->setChecked(FALSE);
      break;
   case Qt::Key_Slash:
     key_pressed = FALSE;
-     pbdivision->setOn(FALSE);
+     pbdivision->setChecked(FALSE);
      break;
   case Qt::Key_O:
     key_pressed = FALSE;
-     pbor->setOn(FALSE);
+     pbor->setChecked(FALSE);
      break;
   case Qt::Key_T:
     key_pressed = FALSE;
-     pbTan->setOn(FALSE);
+     pbTan->setChecked(FALSE);
      break;
   case Qt::Key_Exclam:
     key_pressed = FALSE;
-     pbfactorial->setOn(FALSE);
+     pbfactorial->setChecked(FALSE);
      break;
   case Qt::Key_D:
     key_pressed = FALSE;
     if(kcalcdefaults.style == 0)
-      pbD->setOn(FALSE); // trig mode
+      pbD->setChecked(FALSE); // trig mode
     else
-      pblog->setOn(FALSE);// stat mode
+      pblog->setChecked(FALSE);// stat mode
      break;
   case Qt::Key_1:
     key_pressed = FALSE;
-     pb1->setOn(FALSE);
+     pb1->setChecked(FALSE);
      break;
   case Qt::Key_2:
     key_pressed = FALSE;
-     pb2->setOn(FALSE);
+     pb2->setChecked(FALSE);
      break;
   case Qt::Key_3:
     key_pressed = FALSE;
-     pb3->setOn(FALSE);
+     pb3->setChecked(FALSE);
      break;
   case Qt::Key_Plus:
     key_pressed = FALSE;
-     pbplus->setOn(FALSE);
+     pbplus->setChecked(FALSE);
      break;
   case Qt::Key_Minus:
     key_pressed = FALSE;
-     pbminus->setOn(FALSE);
+     pbminus->setChecked(FALSE);
      break;
   case Qt::Key_Less:
     key_pressed = FALSE;
-     pbshift->setOn(FALSE);
+     pbshift->setChecked(FALSE);
      break;
   case Qt::Key_N:
     key_pressed = FALSE;
-     pbln->setOn(FALSE);
+     pbln->setChecked(FALSE);
      break;
   case Qt::Key_L:
     key_pressed = FALSE;
-     pblog->setOn(FALSE);
+     pblog->setChecked(FALSE);
      break;
   case Qt::Key_AsciiCircum:
     key_pressed = FALSE;
-     pbpower->setOn(FALSE);
+     pbpower->setChecked(FALSE);
      break;
   case Qt::Key_F:
     key_pressed = FALSE;
-     pbF->setOn(FALSE);
+     pbF->setChecked(FALSE);
      break;
   case Qt::Key_Period:
     key_pressed = FALSE;
-     pbperiod->setOn(FALSE);
+     pbperiod->setChecked(FALSE);
      break;
   case Qt::Key_Comma:
     key_pressed = FALSE;
-     pbperiod->setOn(FALSE);
+     pbperiod->setChecked(FALSE);
      break;
   case Qt::Key_0:
     key_pressed = FALSE;
-     pb0->setOn(FALSE);
+     pb0->setChecked(FALSE);
      break;
   case Qt::Key_Equal:
     key_pressed = FALSE;
-     pbequal->setOn(FALSE);
+     pbequal->setChecked(FALSE);
      break;
   case Qt::Key_Return:
     key_pressed = FALSE;
-     pbequal->setOn(FALSE);
+     pbequal->setChecked(FALSE);
      break;
   case Qt::Key_Enter:
      key_pressed = FALSE;
-     pbequal->setOn(FALSE);
+     pbequal->setChecked(FALSE);
      break;
   case Qt::Key_Percent:
     key_pressed = FALSE;
-     pbpercent->setOn(FALSE);
+     pbpercent->setChecked(FALSE);
      break;
   case Qt::Key_AsciiTilde:
     key_pressed = FALSE;
-     pbnegate->setOn(FALSE);
+     pbnegate->setChecked(FALSE);
      break;
   case Qt::Key_Colon:
     key_pressed = FALSE;
-     pbmod->setOn(FALSE);
+     pbmod->setChecked(FALSE);
      break;
   case Qt::Key_BracketLeft:
      key_pressed = FALSE;
-     pbsquare->setOn(FALSE);
+     pbsquare->setChecked(FALSE);
      break;
   case Qt::Key_Backspace:
      key_pressed = FALSE;
-     pbAC->setOn(FALSE);
+     pbAC->setChecked(FALSE);
      break;
   case Qt::Key_R:
      key_pressed = FALSE;
-     pbreci->setOn(FALSE);
+     pbreci->setChecked(FALSE);
      break;
   }
 
@@ -1169,293 +1169,293 @@ void QtCalculator::EEtoggled(bool myboolean){
   if(myboolean)
     EE();
   if(pbEE->isChecked() && (!key_pressed))
-    pbEE->setOn(FALSE);
+    pbEE->setChecked(FALSE);
 }
 
 void QtCalculator::pbinvtoggled(bool myboolean){
   if(myboolean)
     SetInverse();
   if(pbinv->isChecked() && (!key_pressed))
-    pbinv->setOn(FALSE);
+    pbinv->setChecked(FALSE);
 }
 
 void QtCalculator::pbhyptoggled(bool myboolean){
   if(myboolean)
     EnterHyp();
   if(pbhyp->isChecked() && (!key_pressed))
-    pbhyp->setOn(FALSE);
+    pbhyp->setChecked(FALSE);
 }
 void QtCalculator::pbMRtoggled(bool myboolean){
   if(myboolean)
     MR();
   if(pbMR->isChecked() && (!key_pressed))
-    pbMR->setOn(FALSE);
+    pbMR->setChecked(FALSE);
 }
 
 void QtCalculator::pbAtoggled(bool myboolean){
   if(myboolean)
     buttonA();
     if(pbA->isChecked() && (!key_pressed))
-   pbA->setOn(FALSE);
+   pbA->setChecked(FALSE);
 }
 
 void QtCalculator::pbSintoggled(bool myboolean){
   if(myboolean)
     ExecSin();
   if(pbSin->isChecked() && (!key_pressed))
-    pbSin->setOn(FALSE);
+    pbSin->setChecked(FALSE);
 }
 void QtCalculator::pbplusminustoggled(bool myboolean){
   if(myboolean)
     EnterNegate();
   if(pbplusminus->isChecked() && (!key_pressed))
-    pbplusminus->setOn(FALSE);
+    pbplusminus->setChecked(FALSE);
 }
 void QtCalculator::pbMplusminustoggled(bool myboolean){
   if(myboolean)
     Mplusminus();
   if(pbMplusminus->isChecked() && (!key_pressed))
-    pbMplusminus->setOn(FALSE);
+    pbMplusminus->setChecked(FALSE);
 }
 void QtCalculator::pbBtoggled(bool myboolean){
   if(myboolean)
     buttonB();
   if(pbB->isChecked() && (!key_pressed))
-    pbB->setOn(FALSE);
+    pbB->setChecked(FALSE);
 }
 void QtCalculator::pbCostoggled(bool myboolean){
   if(myboolean)
     ExecCos();
   if(pbCos->isChecked() && (!key_pressed))
-    pbCos->setOn(FALSE);
+    pbCos->setChecked(FALSE);
 }
 void QtCalculator::pbrecitoggled(bool myboolean){
   if(myboolean)
     EnterRecip();
   if(pbreci->isChecked() && (!key_pressed))
-    pbreci->setOn(FALSE);
+    pbreci->setChecked(FALSE);
 }
 void QtCalculator::pbCtoggled(bool myboolean){
   if(myboolean)
     buttonC();
   if(pbC->isChecked() && (!key_pressed))
-    pbC->setOn(FALSE);
+    pbC->setChecked(FALSE);
 }
 void QtCalculator::pbTantoggled(bool myboolean){
   if(myboolean)
     ExecTan();
   if(pbTan->isChecked() && (!key_pressed))
-    pbTan->setOn(FALSE);
+    pbTan->setChecked(FALSE);
 }
 void QtCalculator::pbfactorialtoggled(bool myboolean){
   if(myboolean)
     EnterFactorial();
   if(pbfactorial->isChecked() && (!key_pressed))
-    pbfactorial->setOn(FALSE);
+    pbfactorial->setChecked(FALSE);
 }
 void QtCalculator::pbDtoggled(bool myboolean){
   if(myboolean)
     buttonD();
   if(pbD->isChecked() && (!key_pressed))
-    pbD->setOn(FALSE);
+    pbD->setChecked(FALSE);
 }
 void QtCalculator::pblogtoggled(bool myboolean){
   if(myboolean)
    EnterLogr();
   if(pblog->isChecked() && (!key_pressed))
-    pblog->setOn(FALSE);
+    pblog->setChecked(FALSE);
 }
 void QtCalculator::pbsquaretoggled(bool myboolean){
   if(myboolean)
     EnterSquare();
   if(pbsquare->isChecked() && (!key_pressed))
-    pbsquare->setOn(FALSE);
+    pbsquare->setChecked(FALSE);
 }
 void QtCalculator::pbEtoggled(bool myboolean){
   if(myboolean)
     buttonE();
   if(pbE->isChecked() && (!key_pressed))
-    pbE->setOn(FALSE);
+    pbE->setChecked(FALSE);
 }
 void QtCalculator::pblntoggled(bool myboolean){
   if(myboolean)
     EnterLogn();
   if(pbln->isChecked() && (!key_pressed))
-    pbln->setOn(FALSE);
+    pbln->setChecked(FALSE);
 }
 void QtCalculator::pbpowertoggled(bool myboolean){
   if(myboolean)
     Power();
   if(pbpower->isChecked() && (!key_pressed))
-    pbpower->setOn(FALSE);
+    pbpower->setChecked(FALSE);
 }
 void QtCalculator::pbFtoggled(bool myboolean){
   if(myboolean)
     buttonF();
   if(pbF->isChecked() && (!key_pressed))
-    pbF->setOn(FALSE);
+    pbF->setChecked(FALSE);
 }
 void QtCalculator::pbMCtoggled(bool myboolean){
   if(myboolean)
     MC();
   if(pbMC->isChecked() && (!key_pressed))
-    pbMC->setOn(FALSE);
+    pbMC->setChecked(FALSE);
 }
 void QtCalculator::pbCleartoggled(bool myboolean){
   if(myboolean)
     Clear();
   if(pbClear->isChecked() && (!key_pressed))
-    pbClear->setOn(FALSE);
+    pbClear->setChecked(FALSE);
 }
 void QtCalculator::pbACtoggled(bool myboolean){
   if(myboolean)
     ClearAll();
   if(pbAC->isChecked() && (!key_pressed))
-    pbAC->setOn(FALSE);
+    pbAC->setChecked(FALSE);
 }
 void QtCalculator::pb7toggled(bool myboolean){
   if(myboolean)
     button7();
   if(pb7->isChecked() && (!key_pressed))
-    pb7->setOn(FALSE);
+    pb7->setChecked(FALSE);
 }
 void QtCalculator::pb8toggled(bool myboolean){
   if(myboolean)
     button8();
   if(pb8->isChecked() && (!key_pressed))
-    pb8->setOn(FALSE);
+    pb8->setChecked(FALSE);
 }
 void QtCalculator::pb9toggled(bool myboolean){
   if(myboolean)
     button9();
   if(pb9->isChecked() && (!key_pressed))
-    pb9->setOn(FALSE);
+    pb9->setChecked(FALSE);
 }
 void QtCalculator::pbparenopentoggled(bool myboolean){
   if(myboolean)
     EnterOpenParen();
   if(pbparenopen->isChecked() && (!key_pressed))
-    pbparenopen->setOn(FALSE);
+    pbparenopen->setChecked(FALSE);
 }
 void QtCalculator::pbparenclosetoggled(bool myboolean){
   if(myboolean)
     EnterCloseParen();
   if(pbparenclose->isChecked() && (!key_pressed))
-    pbparenclose->setOn(FALSE);
+    pbparenclose->setChecked(FALSE);
 }
 void QtCalculator::pbandtoggled(bool myboolean){
   if(myboolean)
     And();
   if(pband->isChecked() && (!key_pressed))
-    pband->setOn(FALSE);
+    pband->setChecked(FALSE);
 }
 void QtCalculator::pb4toggled(bool myboolean){
   if(myboolean)
     button4();
   if(pb4->isChecked() && (!key_pressed))
-    pb4->setOn(FALSE);
+    pb4->setChecked(FALSE);
 }
 void QtCalculator::pb5toggled(bool myboolean){
   if(myboolean)
     button5();
   if(pb5->isChecked() && (!key_pressed))
-    pb5->setOn(FALSE);
+    pb5->setChecked(FALSE);
 }
 void QtCalculator::pb6toggled(bool myboolean){
   if(myboolean)
     button6();
   if(pb6->isChecked() && (!key_pressed))
-    pb6->setOn(FALSE);
+    pb6->setChecked(FALSE);
 }
 void QtCalculator::pbXtoggled(bool myboolean){
   if(myboolean)
     Multiply();
   if(pbX->isChecked() && (!key_pressed))
-    pbX->setOn(FALSE);
+    pbX->setChecked(FALSE);
 }
 void QtCalculator::pbdivisiontoggled(bool myboolean){
   if(myboolean)
     Divide();
   if(pbdivision->isChecked() && (!key_pressed))
-    pbdivision->setOn(FALSE);
+    pbdivision->setChecked(FALSE);
 }
 void QtCalculator::pbortoggled(bool myboolean){
   if(myboolean)
     Or();
   if(pbor->isChecked() && (!key_pressed))
-    pbor->setOn(FALSE);
+    pbor->setChecked(FALSE);
 }
 void QtCalculator::pb1toggled(bool myboolean){
   if(myboolean)
     button1();
   if(pb1->isChecked() && (!key_pressed))
-    pb1->setOn(FALSE);
+    pb1->setChecked(FALSE);
 }
 void QtCalculator::pb2toggled(bool myboolean){
   if(myboolean)
     button2();
   if(pb2->isChecked() && (!key_pressed))
-    pb2->setOn(FALSE);
+    pb2->setChecked(FALSE);
 }
 void QtCalculator::pb3toggled(bool myboolean){
   if(myboolean)
     button3();
   if(pb3->isChecked() && (!key_pressed))
-    pb3->setOn(FALSE);
+    pb3->setChecked(FALSE);
 }
 void QtCalculator::pbplustoggled(bool myboolean){
   if(myboolean)
     Plus();
   if(pbplus->isChecked() && (!key_pressed))
-    pbplus->setOn(FALSE);
+    pbplus->setChecked(FALSE);
 }
 void QtCalculator::pbminustoggled(bool myboolean){
   if(myboolean)
     Minus();
   if(pbminus->isChecked() && (!key_pressed))
-    pbminus->setOn(FALSE);
+    pbminus->setChecked(FALSE);
 }
 void QtCalculator::pbshifttoggled(bool myboolean){
   if(myboolean)
     Shift();
   if(pbshift->isChecked() && (!key_pressed))
-    pbshift->setOn(FALSE);
+    pbshift->setChecked(FALSE);
 }
 void QtCalculator::pbperiodtoggled(bool myboolean){
   if(myboolean)
     EnterDecimal();
   if(pbperiod->isChecked() && (!key_pressed))
-    pbperiod->setOn(FALSE);
+    pbperiod->setChecked(FALSE);
 }
 void QtCalculator::pb0toggled(bool myboolean){
   if(myboolean)
     button0();
   if(pb0->isChecked() && (!key_pressed))
-    pb0->setOn(FALSE);
+    pb0->setChecked(FALSE);
 }
 void QtCalculator::pbequaltoggled(bool myboolean){
   if(myboolean)
     EnterEqual();
   if(pbequal->isChecked() && (!key_pressed))
-    pbequal->setOn(FALSE);
+    pbequal->setChecked(FALSE);
 }
 void QtCalculator::pbpercenttoggled(bool myboolean){
   if(myboolean)
     EnterPercent();
   if(pbpercent->isChecked() && (!key_pressed))
-    pbpercent->setOn(FALSE);
+    pbpercent->setChecked(FALSE);
 }
 void QtCalculator::pbnegatetoggled(bool myboolean){
   if(myboolean)
     EnterNotCmp();
   if(pbnegate->isChecked() && (!key_pressed))
-    pbnegate->setOn(FALSE);
+    pbnegate->setChecked(FALSE);
 }
 void QtCalculator::pbmodtoggled(bool myboolean)  {
   if(myboolean)
     Mod();
   if(pbmod->isChecked() && (!key_pressed))
-    pbmod->setOn(FALSE);
+    pbmod->setChecked(FALSE);
 }
 
 void QtCalculator::configclicked(){

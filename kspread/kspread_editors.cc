@@ -1167,7 +1167,7 @@ bool CellEditor::eventFilter( QObject* o, QEvent* e )
     if ( e->type() == QEvent::KeyPress || e->type() == QEvent::KeyRelease )
     {
         QKeyEvent* k = (QKeyEvent*)e;
-        if ( !( k->state() & Qt::ShiftModifier )|| canvas()->chooseMode())
+        if ( !( k->modifiers() & Qt::ShiftModifier )|| canvas()->chooseMode())
         {
           //If the user presses the return key to finish editing this cell, choose mode must be turned off first
           //otherwise it will merely select a different cell
@@ -1382,7 +1382,7 @@ void LocationEditWidget::keyPressEvent( QKeyEvent * _ev )
 {
     // Do not handle special keys and accelerators. This is
     // done by QLineEdit.
-    if ( _ev->state() & ( Qt::AltModifier | Qt::ControlModifier ) )
+    if ( _ev->modifiers() & ( Qt::AltModifier | Qt::ControlModifier ) )
     {
         QLineEdit::keyPressEvent( _ev );
         // Never allow that keys are passed on to the parent.
@@ -1492,8 +1492,8 @@ void EditWidget::slotDoneEdit()
 void EditWidget::keyPressEvent ( QKeyEvent* _ev )
 {
     // Dont handle special keys and accelerators, except Enter ones
-    if (( ( _ev->state() & ( Qt::AltModifier | Qt::ControlModifier ) )
-         || ( _ev->state() & Qt::ShiftModifier )
+    if (( ( _ev->modifiers() & ( Qt::AltModifier | Qt::ControlModifier ) )
+         || ( _ev->modifiers() & Qt::ShiftModifier )
          || ( _ev->key() == Qt::Key_Shift )
          || ( _ev->key() == Qt::Key_Control ) )
       && (_ev->key() != Qt::Key_Return) && (_ev->key() != Qt::Key_Enter))
@@ -1525,8 +1525,8 @@ void EditWidget::keyPressEvent ( QKeyEvent* _ev )
       // This is why we call slotDoneEdit now, instead of sending
       // to the canvas.
       //QApplication::sendEvent( m_pCanvas, _ev );
-      isArray = (_ev->state() & Qt::AltModifier) &&
-          (_ev->state() & Qt::ControlModifier);
+      isArray = (_ev->modifiers() & Qt::AltModifier) &&
+          (_ev->modifiers() & Qt::ControlModifier);
       slotDoneEdit();
       m_pCanvas->view()->updateEditWidget();
       _ev->accept();

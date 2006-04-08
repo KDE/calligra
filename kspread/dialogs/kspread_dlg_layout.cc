@@ -2529,13 +2529,13 @@ BorderButton::BorderButton( QWidget *parent, const char *_name ) : QPushButton(p
   penWidth = 1;
   penColor = colorGroup().text();
   setToggleButton( true );
-  setOn( false);
+  setChecked( false);
   setChanged(false);
 }
 void BorderButton::mousePressEvent( QMouseEvent * )
 {
 
-  this->setOn(!isChecked());
+  this->setChecked(!isChecked());
   emit clicked( this );
 }
 
@@ -2549,7 +2549,7 @@ void BorderButton::setUndefined()
 
 void BorderButton::unselect()
 {
-  setOn(false);
+  setChecked(false);
   setPenWidth(1);
   setPenStyle(Qt::NoPen);
   setColor( colorGroup().text() );
@@ -2838,7 +2838,7 @@ void CellFormatPageBorder::InitializeBorderButtons()
         borderButtons[i]->setPenStyle(dlg->borders[i].style );
         borderButtons[i]->setPenWidth(dlg->borders[i].width);
         borderButtons[i]->setColor(dlg->borders[i].color);
-        borderButtons[i]->setOn(true);
+        borderButtons[i]->setChecked(true);
       }
       else
       {
@@ -3163,7 +3163,7 @@ void CellFormatPageBorder::preselect( BorderButton *_p )
   BorderButton* outline = shortcutButtons[BorderShortcutType_Outline];
   BorderButton* all = shortcutButtons[BorderShortcutType_All];
 
-  _p->setOn(false);
+  _p->setChecked(false);
   if (_p == remove)
   {
     for (int i=BorderType_Top; i < BorderType_END; i++)
@@ -3176,22 +3176,22 @@ void CellFormatPageBorder::preselect( BorderButton *_p )
   }
   if (_p==outline)
   {
-    top->setOn(true);
+    top->setChecked(true);
     top->setPenWidth(preview->getPenWidth());
     top->setPenStyle(preview->getPenStyle());
     top->setColor( currentColor );
     top->setChanged(true);
-    bottom->setOn(true);
+    bottom->setChecked(true);
     bottom->setPenWidth(preview->getPenWidth());
     bottom->setPenStyle(preview->getPenStyle());
     bottom->setColor( currentColor );
     bottom->setChanged(true);
-    left->setOn(true);
+    left->setChecked(true);
     left->setPenWidth(preview->getPenWidth());
     left->setPenStyle(preview->getPenStyle());
     left->setColor( currentColor );
     left->setChanged(true);
-    right->setOn(true);
+    right->setChecked(true);
     right->setPenWidth(preview->getPenWidth());
     right->setPenStyle(preview->getPenStyle());
     right->setColor( currentColor );
@@ -3201,7 +3201,7 @@ void CellFormatPageBorder::preselect( BorderButton *_p )
   {
     if (dlg->oneRow==false)
     {
-      horizontal->setOn(true);
+      horizontal->setChecked(true);
       horizontal->setPenWidth(preview->getPenWidth());
       horizontal->setPenStyle(preview->getPenStyle());
       horizontal->setColor( currentColor );
@@ -3209,7 +3209,7 @@ void CellFormatPageBorder::preselect( BorderButton *_p )
     }
     if (dlg->oneCol==false)
     {
-      vertical->setOn(true);
+      vertical->setChecked(true);
       vertical->setPenWidth(preview->getPenWidth());
       vertical->setPenStyle(preview->getPenStyle());
       vertical->setColor( currentColor );
@@ -3335,7 +3335,7 @@ void CellFormatPageBorder::invertState(BorderButton *_p)
   }
   else
   {
-    _p->setOn(true);
+    _p->setChecked(true);
     _p->setPenWidth(preview->getPenWidth());
     _p->setPenStyle(preview->getPenStyle());
     _p->setColor( currentColor );

@@ -906,7 +906,7 @@ void Canvas::mouseMoveEvent( QMouseEvent * _ev )
         d->m_moveStartPoint = objectRect( false ).topLeft();
         d->m_isMoving = true;
       }
-      moveObjectsByMouse( docPoint, _ev->state() & Qt::AltModifier || _ev->state() & Qt::ControlModifier );
+      moveObjectsByMouse( docPoint, _ev->modifiers() & Qt::AltModifier || _ev->state() & Qt::ControlModifier );
     }
     else if ( d->m_resizeObject )
     {
@@ -914,7 +914,7 @@ void Canvas::mouseMoveEvent( QMouseEvent * _ev )
         d->m_isResizing = true;
 
       bool keepRatio = d->m_resizeObject->isKeepRatio();
-      if ( _ev->state() & Qt::AltModifier )
+      if ( _ev->modifiers() & Qt::AltModifier )
       {
         keepRatio = true;
       }
@@ -1337,9 +1337,9 @@ void Canvas::mousePressEvent( QMouseEvent * _ev )
     if ( obj )
     {
        // use ctrl + Button to select / deselect object
-      if ( _ev->state() & Qt::ControlModifier && obj->isSelected() )
+      if ( _ev->modifiers() & Qt::ControlModifier && obj->isSelected() )
         deselectObject( obj );
-      else if ( _ev->state() & Qt::ControlModifier )
+      else if ( _ev->modifiers() & Qt::ControlModifier )
       {
         if ( d->modType == MT_NONE)
           return;
@@ -1382,7 +1382,7 @@ void Canvas::mousePressEvent( QMouseEvent * _ev )
     else
     {
       d->modType = MT_NONE;
-      if ( !( _ev->state() & Qt::ShiftModifier ) && !( _ev->state() & Qt::ControlModifier ) )
+      if ( !( _ev->modifiers() & Qt::ShiftModifier ) && !( _ev->state() & Qt::ControlModifier ) )
         deselectAllObjects();
     }
   }
@@ -1491,7 +1491,7 @@ void Canvas::mousePressEvent( QMouseEvent * _ev )
   //  kDebug() << "Clicked in cell " << col << ", " << row << endl;
 
   // Extending an existing selection with the shift button ?
-  if ((_ev->state() & Qt::ShiftModifier) &&
+  if ((_ev->modifiers() & Qt::ShiftModifier) &&
       d->view->koDocument()->isReadWrite() &&
       !selectionInfo()->isColumnOrRowSelected())
   {
@@ -1518,7 +1518,7 @@ void Canvas::mousePressEvent( QMouseEvent * _ev )
         processLeftClickAnchor();
       }
 #ifdef NONCONTIGUOUSSELECTION
-      else if ( _ev->state() & Qt::ControlModifier )
+      else if ( _ev->modifiers() & Qt::ControlModifier )
       {
         if (d->chooseCell)
         {
@@ -2040,8 +2040,8 @@ QRect Canvas::moveDirection( KSpread::MoveTo direction, bool extendSelection )
 void Canvas::processEnterKey(QKeyEvent* event)
 {
   // array is true, if ctrl+alt are pressed
-  bool array = (event->state() & Qt::AltModifier) &&
-      (event->state() & Qt::ControlModifier);
+  bool array = (event->modifiers() & Qt::AltModifier) &&
+      (event->modifiers() & Qt::ControlModifier);
 
   /* save changes to the current editor */
   if (!d->chooseCell)
@@ -2055,7 +2055,7 @@ void Canvas::processEnterKey(QKeyEvent* event)
   KSpread::MoveTo direction = d->view->doc()->getMoveToValue();
 
   //if shift Button clicked inverse move direction
-  if (event->state() & Qt::ShiftModifier)
+  if (event->modifiers() & Qt::ShiftModifier)
   {
     switch( direction )
     {
@@ -2097,7 +2097,7 @@ void Canvas::processArrowKey( QKeyEvent *event)
   }
 
   KSpread::MoveTo direction = Bottom;
-  bool makingSelection = event->state() & Qt::ShiftModifier;
+  bool makingSelection = event->modifiers() & Qt::ShiftModifier;
 
   switch (event->key())
   {
@@ -2204,7 +2204,7 @@ void Canvas::processEscapeKey(QKeyEvent * event)
 
 bool Canvas::processHomeKey(QKeyEvent* event)
 {
-  bool makingSelection = event->state() & Qt::ShiftModifier;
+  bool makingSelection = event->modifiers() & Qt::ShiftModifier;
   Sheet* sheet = activeSheet();
 
   if ( d->cellEditor )
@@ -2226,7 +2226,7 @@ bool Canvas::processHomeKey(QKeyEvent* event)
        We might want to change to that behavior.
     */
 
-    if (event->state() & Qt::ControlModifier)
+    if (event->modifiers() & Qt::ControlModifier)
     {
       /* ctrl + Home will always just send us to location (1,1) */
       destination = QPoint( 1, 1 );
@@ -2267,7 +2267,7 @@ bool Canvas::processHomeKey(QKeyEvent* event)
 
 bool Canvas::processEndKey( QKeyEvent *event )
 {
-  bool makingSelection = event->state() & Qt::ShiftModifier;
+  bool makingSelection = event->modifiers() & Qt::ShiftModifier;
   Sheet* sheet = activeSheet();
   Cell* cell = NULL;
   QPoint marker = d->chooseCell ? choice()->marker() : selectionInfo()->marker();
@@ -2313,7 +2313,7 @@ bool Canvas::processEndKey( QKeyEvent *event )
 
 bool Canvas::processPriorKey(QKeyEvent *event)
 {
-  bool makingSelection = event->state() & Qt::ShiftModifier;
+  bool makingSelection = event->modifiers() & Qt::ShiftModifier;
   if (!d->chooseCell)
   {
     deleteEditor( true );
@@ -2341,7 +2341,7 @@ bool Canvas::processPriorKey(QKeyEvent *event)
 
 bool Canvas::processNextKey(QKeyEvent *event)
 {
-  bool makingSelection = event->state() & Qt::ShiftModifier;
+  bool makingSelection = event->modifiers() & Qt::ShiftModifier;
 
   if (!d->chooseCell)
   {
@@ -2445,7 +2445,7 @@ void Canvas::processOtherKey(QKeyEvent *event)
 
 bool Canvas::processControlArrowKey( QKeyEvent *event )
 {
-  bool makingSelection = event->state() & Qt::ShiftModifier;
+  bool makingSelection = event->modifiers() & Qt::ShiftModifier;
 
   Sheet* sheet = activeSheet();
   Cell* cell = NULL;
@@ -2770,7 +2770,7 @@ void Canvas::keyPressEvent ( QKeyEvent * _ev )
     return;
 
   // Dont handle the remaining special keys.
-  if ( _ev->state() & ( Qt::AltModifier | Qt::ControlModifier ) &&
+  if ( _ev->modifiers() & ( Qt::AltModifier | Qt::ControlModifier ) &&
        (_ev->key() != Qt::Key_Down) &&
        (_ev->key() != Qt::Key_Up) &&
        (_ev->key() != Qt::Key_Right) &&
@@ -2810,7 +2810,7 @@ void Canvas::keyPressEvent ( QKeyEvent * _ev )
    case Qt::Key_Right:
    case Qt::Key_Tab: /* a tab behaves just like a right/left arrow */
    case Qt::Key_Backtab:  /* and so does Shift+Tab */
-    if (_ev->state() & Qt::ControlModifier)
+    if (_ev->modifiers() & Qt::ControlModifier)
     {
       if ( !processControlArrowKey( _ev ) )
         return;
@@ -2902,7 +2902,7 @@ void Canvas::processIMEvent( QIMEvent * event )
 
 bool Canvas::formatKeyPress( QKeyEvent * _ev )
 {
-  if (!(_ev->state() & Qt::ControlModifier ))
+  if (!(_ev->modifiers() & Qt::ControlModifier ))
     return false;
 
   int key = _ev->key();
@@ -4729,13 +4729,13 @@ void VBorder::mousePressEvent( QMouseEvent * _ev )
       QPoint newMarker( 1, hit_row );
       QPoint newAnchor( KS_colMax, hit_row );
 #ifdef NONCONTIGUOUSSELECTION
-      if (_ev->state() == Qt::ControlModifier)
+      if (_ev->modifiers() == Qt::ControlModifier)
       {
         m_pView->selectionInfo()->extend(QRect(newAnchor, newMarker));
       }
       else
 #endif
-      if (_ev->state() == Qt::ShiftModifier)
+      if (_ev->modifiers() == Qt::ShiftModifier)
       {
         m_pView->selectionInfo()->update(newMarker);
       }
@@ -5344,13 +5344,13 @@ void HBorder::mousePressEvent( QMouseEvent * _ev )
       QPoint newMarker( hit_col, 1 );
       QPoint newAnchor( hit_col, KS_rowMax );
 #ifdef NONCONTIGUOUSSELECTION
-      if (_ev->state() == Qt::ControlModifier)
+      if (_ev->modifiers() == Qt::ControlModifier)
       {
         m_pView->selectionInfo()->extend(QRect(newAnchor, newMarker));
       }
       else
 #endif
-      if (_ev->state() == Qt::ShiftModifier)
+      if (_ev->modifiers() == Qt::ShiftModifier)
       {
         m_pView->selectionInfo()->update(newMarker);
       }

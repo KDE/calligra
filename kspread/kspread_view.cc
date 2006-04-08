@@ -5415,15 +5415,15 @@ void View::lastSheet()
 void View::keyPressEvent ( QKeyEvent* _ev )
 {
   // Dont eat accelerators
-  if ( _ev->state() & ( Qt::AltModifier | Qt::ControlModifier ) )
+  if ( _ev->modifiers() & ( Qt::AltModifier | Qt::ControlModifier ) )
   {
-    if ( _ev->state() & ( Qt::ControlModifier ) )
+    if ( _ev->modifiers() & ( Qt::ControlModifier ) )
     {
       switch( _ev->key() )
       {
 #ifndef NDEBUG
        case Qt::Key_V: // Ctrl+Shift+V to show debug (similar to KWord)
-        if ( _ev->state() & Qt::ShiftModifier )
+        if ( _ev->modifiers() & Qt::ShiftModifier )
           d->activeSheet->printDebug();
 #endif
        default:
