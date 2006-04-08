@@ -161,5 +161,16 @@ QString pqxxSqlDriver::escapeBLOB(const QByteArray& array) const
 	return escapeBLOBInternal(array, BLOB_ESCAPING_TYPE_USE_OCTAL);
 }
 
+QString pqxxSqlDriver::valueToSQL( uint ftype, const QVariant& v ) const
+{
+	if (ftype==Field::Boolean) {
+		// use SQL compliant TRUE or FALSE as described here
+		// http://www.postgresql.org/docs/8.0/interactive/datatype-boolean.html
+		// 1 or 0 does not work
+		return v.toInt()==0 ? QString::fromLatin1("FALSE") : QString::fromLatin1("TRUE");
+	}
+	return Driver::valueToSQL(ftype, v);
+}
+
 
 #include "pqxxdriver.moc"
