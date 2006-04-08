@@ -53,6 +53,11 @@ class pqxxSqlDriver : public Driver
 		//! Escape BLOB value \a array
 		virtual QString escapeBLOB(const QByteArray& array) const;
 
+		/*! Escapes and converts value \a v (for type \a ftype) 
+		 to string representation required by SQL commands.
+		 Reimplemented for boolean type only to use SQL compliant TRUE or FALSE */
+		virtual QString valueToSQL( uint ftype, const QVariant& v ) const;
+
 	protected:
 		virtual QString drv_escapeIdentifier( const QString& str) const;
 		virtual Q3CString drv_escapeIdentifier( const Q3CString& str) const;
