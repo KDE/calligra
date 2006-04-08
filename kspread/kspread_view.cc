@@ -2796,9 +2796,9 @@ void View::updateReadWrite( bool readwrite )
     // d->okButton->setEnabled( readwrite );
   d->editWidget->setEnabled( readwrite );
 
-  Q3ValueList<KAction*> actions = actionCollection()->actions();
-  Q3ValueList<KAction*>::ConstIterator aIt = actions.begin();
-  Q3ValueList<KAction*>::ConstIterator aEnd = actions.end();
+  QList<KAction*> actions = actionCollection()->actions();
+  QList<KAction*>::ConstIterator aIt = actions.begin();
+  QList<KAction*>::ConstIterator aEnd = actions.end();
   for (; aIt != aEnd; ++aIt )
     (*aIt)->setEnabled( readwrite );
 

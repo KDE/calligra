@@ -144,7 +144,7 @@ public:
   /**
    * Returns list of all documents.
    */
-  static Q3ValueList<Doc*> documents();
+  static QLinkedList<Doc*> documents();
 
   /**
    * Returns the MIME type of KSpread document.

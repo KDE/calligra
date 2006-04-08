@@ -108,7 +108,7 @@ public:
 
   Sheet *activeSheet;
     KSPLoadingInfo *m_loadingInfo;
-  static Q3ValueList<Doc*> s_docs;
+  static QLinkedList<Doc*> s_docs;
   static int s_docId;
 
   DCOPObject* dcop;
@@ -170,7 +170,7 @@ public:
  *
  *****************************************************************************/
 
-Q3ValueList<Doc*> Doc::Private::s_docs;
+QLinkedList<Doc*> Doc::Private::s_docs;
 int Doc::Private::s_docId = 0;
 
 #define deleteLoadingInfo() { \
@@ -261,7 +261,7 @@ Doc::~Doc()
     saveConfig();
 
   delete d->dcop;
-  d->s_docs.remove( this );
+  d->s_docs.removeAll( this );
 
   kDebug(36001) << "alive 1" << endl;
 
@@ -280,7 +280,7 @@ Doc::~Doc()
   delete d;
 }
 
-Q3ValueList<Doc*> Doc::documents()
+QLinkedList<Doc*> Doc::documents()
 {
   return Private::s_docs;
 }

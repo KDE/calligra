@@ -476,12 +476,12 @@ private:
     /**
      * Returns the iterator for the column in the newPage list for columns
      */
-    Q3ValueList<PrintNewPageEntry>::iterator findNewPageColumn( int col );
+    QLinkedList<PrintNewPageEntry>::iterator findNewPageColumn( int col );
 
     /**
      * Returns the iterator for the row in the newPage list for rows
      */
-    Q3ValueList<PrintNewPageEntry>::iterator findNewPageRow( int row );
+    QLinkedList<PrintNewPageEntry>::iterator findNewPageRow( int row );
 
     /**
      * Replaces macros like <name>, <file>, <date> etc. in the string and
@@ -636,12 +636,12 @@ private:
     /**
      * Stores the new page columns
      */
-     Q3ValueList<PrintNewPageEntry> m_lnewPageListX;
+     QLinkedList<PrintNewPageEntry> m_lnewPageListX;
 
     /**
      * Stores the new page columns
      */
-     Q3ValueList<PrintNewPageEntry> m_lnewPageListY;
+     QLinkedList<PrintNewPageEntry> m_lnewPageListY;
 
     /**
      * Stores internally the maximum column that was checked already
