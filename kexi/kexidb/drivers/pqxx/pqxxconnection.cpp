@@ -285,7 +285,7 @@ bool pqxxSqlConnection::drv_executeSQL( const QString& statement )
 	{
 		//If an error ocurred then put the error description into _dbError
 		d->errmsg = QString::fromUtf8( e.what() );
-		KexiDBDrvDbg << "pqxxSqlConnection::drv_executeSQL:exception - " << e.what() << endl;
+		KexiDBDrvDbg << "pqxxSqlConnection::drv_executeSQL:exception - " << e.what() << " Statement: " << statement << endl;
 	}
 	catch(...)
 	{

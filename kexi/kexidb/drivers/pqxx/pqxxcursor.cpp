@@ -290,6 +290,10 @@ QVariant pqxxSqlCursor::pValue(uint pos)const
 		{
 			return QVariant((*m_res)[at()][pos].as(double()));
 		}
+		else if (f->type() == KexiDB::Field::Boolean)
+		{
+			return QVariant((*m_res)[at()][pos].as(bool()));
+		}
 		else if (f->typeGroup() == Field::BLOBGroup)
 		{
 //			pqxx::result::field r = (*m_res)[at()][pos];
@@ -303,7 +307,7 @@ QVariant pqxxSqlCursor::pValue(uint pos)const
 		switch((*m_res)[at()][pos].type())
 		{
 			case BOOLOID:
-				return QVariant((*m_res)[at()][pos].c_str()); //TODO check formatting
+				return QVariant((*m_res)[at()][pos].as(bool()));
 			case INT2OID:
 			case INT4OID:
 			case INT8OID:
