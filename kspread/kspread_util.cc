@@ -1149,7 +1149,7 @@ QString KSpread::Oasis::decodeFormula(const QString& expr, const KLocale* locale
          ++i;
        }
        // exponent ?
-       else if( ch.upper() == 'E' )
+       else if( ch.toUpper() == 'E' )
        {
          result.append( 'E' );
          ++i;

@@ -181,7 +181,7 @@ Value func_roman (valVector args, ValueCalc *calc, FuncExtra *)
 // return < 0 if invalid
 int func_arabic_helper (QChar c)
 {
-  switch (c.upper().unicode())
+  switch (c.toUpper().unicode())
   {
     case 'M': return 1000;
     case 'D': return 500;

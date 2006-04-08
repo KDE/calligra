@@ -72,7 +72,7 @@ void GotoDialog::slotOk()
     m_pView->doc()->emitBeginOperation( false );
 
     QString tmp_upper;
-    tmp_upper=m_nameCell->text().upper();
+    tmp_upper=m_nameCell->text().toUpper();
     Region region(m_pView, tmp_upper);
     if ( region.isValid() )
     {

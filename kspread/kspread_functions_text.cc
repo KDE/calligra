@@ -387,7 +387,7 @@ Value func_proper (valVector args, ValueCalc *calc, FuncExtra *)
       if (f.isNumber())
         continue;
 
-      f = f.upper();
+      f = f.toUpper();
 
       str[i] = f;
       first = false;
@@ -496,7 +496,7 @@ Value func_rot (valVector args, ValueCalc *calc, FuncExtra *)
 
   for( unsigned i=0; i<text.length(); i++ )
   {
-    unsigned c = text[i].upper().unicode();
+    unsigned c = text[i].toUpper().unicode();
     if( ( c >= 'A' ) && ( c <= 'M' ) )
       text[i] = QChar( text[i].unicode() + 13);
     if( ( c >= 'N' ) && ( c <= 'Z' ) )
@@ -604,10 +604,10 @@ Value func_toggle (valVector args, ValueCalc *calc, FuncExtra *)
   {
     QChar c = str[i];
     QChar lc = c.toLower();
-    QChar uc = c.upper();
+    QChar uc = c.toUpper();
 
     if (c == lc) // it is in lowercase
-      str[i] = c.upper();
+      str[i] = c.toUpper();
     else if (c == uc) // it is in uppercase
       str[i] = c.toLower();
   }
@@ -625,7 +625,7 @@ Value func_trim (valVector args, ValueCalc *calc, FuncExtra *)
 // Function: UPPER
 Value func_upper (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  return Value (calc->conv()->asString (args[0]).asString().upper());
+  return Value (calc->conv()->asString (args[0]).asString().toUpper());
 }
 
 // Function: VALUE

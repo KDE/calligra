@@ -738,7 +738,7 @@ Value ValueCalc::base (const Value &val, int base, int prec)
     }
   }
 
-  return Value (result.upper());
+  return Value (result.toUpper());
 }
 
 Value ValueCalc::fromBase (const Value &val, int base)

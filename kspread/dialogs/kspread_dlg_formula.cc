@@ -269,7 +269,7 @@ void FormulaDialog::slotPressReturn()
 
 void FormulaDialog::slotSearchText(const QString &_text)
 {
-    QString result = listFunct.makeCompletion( _text.upper() );
+    QString result = listFunct.makeCompletion( _text.toUpper() );
     if( !result.isNull() )
         functions->setCurrentItem( functions->index( functions->findItem( result ) ) );
 }
@@ -463,7 +463,7 @@ QString FormulaDialog::createParameter( const QString& _text, int param )
 		Q_UNUSED( tmp );
 
 		//In case of number or boolean return _text, else return value as KSpread_String
-		if ( isNumber || _text.upper() =="FALSE" || _text.upper() == "TRUE" )
+		if ( isNumber || _text.toUpper() =="FALSE" || _text.toUpper() == "TRUE" )
 			return _text;
 	}
     case KSpread_String:
@@ -750,7 +750,7 @@ void FormulaDialog::slotActivated( const QString& category )
 
     QStringList upperList;
     for ( QStringList::Iterator it = lst.begin(); it != lst.end();++it )
-      upperList.append((*it).upper());
+      upperList.append((*it).toUpper());
 
     listFunct.setItems( upperList );
 

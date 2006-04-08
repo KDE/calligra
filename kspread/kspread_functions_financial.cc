@@ -885,7 +885,7 @@ Value func_ddb (valVector args, ValueCalc *calc, FuncExtra *)
 // Function: EURO
 Value func_euro (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QString currency = calc->conv()->asString (args[0]).asString().upper();
+  QString currency = calc->conv()->asString (args[0]).asString().toUpper();
   double result = -1;
 
   if( currency == "ATS" ) result = 13.7603;  // Austria

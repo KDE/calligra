@@ -5129,7 +5129,7 @@ void Cell::checkTextInput()
       (!d->strText.isEmpty()))
   {
     QString str = value().asString();
-    setValue( Value( str[0].upper() + str.right( str.length()-1 ) ) );
+    setValue( Value( str[0].toUpper() + str.right( str.length()-1 ) ) );
   }
 }
 

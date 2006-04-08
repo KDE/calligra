@@ -239,17 +239,17 @@ FunctionRepository::~FunctionRepository()
 void FunctionRepository::add( Function* function )
 {
   if( !function ) return;
-  d->functions.insert( function->name().upper(), function );
+  d->functions.insert( function->name().toUpper(), function );
 }
 
 Function *FunctionRepository::function (const QString& name)
 {
-  return d->functions.find (name.upper());
+  return d->functions.find (name.toUpper());
 }
 
 FunctionDescription *FunctionRepository::functionInfo (const QString& name)
 {
-  return d->funcs.find (name.upper());
+  return d->funcs.find (name.toUpper());
 }
 
 // returns names of function in certain group

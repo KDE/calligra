@@ -1792,7 +1792,7 @@ struct SetSelectionUpperLowerWorker : public Sheet::CellWorker {
   if ( _type == -1 )
       cell->setCellText( (cell->text().toLower()));
   else if ( _type == 1 )
-      cell->setCellText( (cell->text().upper()));
+      cell->setCellText( (cell->text().toUpper()));
   cell->clearDisplayDirtyFlag();
     }
 };
@@ -1826,7 +1826,7 @@ struct SetSelectionFirstLetterUpperWorker : public Sheet::CellWorker
   cell->setDisplayDirtyFlag();
   QString tmp = cell->text();
   int len = tmp.length();
-  cell->setCellText( (tmp.at(0).upper()+tmp.right(len-1)) );
+  cell->setCellText( (tmp.at(0).toUpper()+tmp.right(len-1)) );
   cell->clearDisplayDirtyFlag();
     }
 };

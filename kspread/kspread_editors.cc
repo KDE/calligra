@@ -1337,9 +1337,9 @@ bool LocationEditWidget::activateItem()
     // Sheet1!a1 -> Sheet1!A2
     int pos = ltext.find('!');
     if ( pos !=- 1 )
-        tmp = ltext.left(pos)+ltext.mid(pos).upper();
+        tmp = ltext.left(pos)+ltext.mid(pos).toUpper();
     else
-        tmp = ltext.upper();
+        tmp = ltext.toUpper();
 
     // Selection entered in location widget
     if ( ltext.contains( ':' ) )

@@ -746,7 +746,7 @@ Tokens Formula::scan( const QString& expr, KLocale* locale ) const
        }
 
        // exponent ?
-       else if( ch.upper() == 'E' )
+       else if( ch.toUpper() == 'E' )
        {
          tokenText.append( 'E' );
          i++;
@@ -768,7 +768,7 @@ Tokens Formula::scan( const QString& expr, KLocale* locale ) const
        if( ch.isDigit() ) tokenText.append( ex[i++] );
 
        // exponent ?
-       else if( ch.upper() == 'E' )
+       else if( ch.toUpper() == 'E' )
        {
          tokenText.append( 'E' );
          i++;
