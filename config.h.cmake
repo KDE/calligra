@@ -44,9 +44,6 @@
 /* Define if you have isinf */
 #define HAVE_FUNC_ISINF 1
 
-/* Defines if you have GL (Mesa, OpenGL, ...) */
-#define HAVE_GL 1
-
 /* Define to 1 if you have the <ieeefp.h> header file. */
 #cmakedefine HAVE_IEEEFP_H 1
 
@@ -185,9 +182,6 @@
 
 /* Defines if your system has the wv2 library */
 /* #undef HAVE_WV2 */
-
-/* Define if you have the X11 Input Extension */
-#define HAVE_XINPUTEXT 1
 
 /* Suffix for lib directories */
 #define KDELIBSUFF "${KDELIBSUFF}"
