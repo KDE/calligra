@@ -94,10 +94,10 @@ int GeneralProperty::getGeneralPropertyChange() const
 
     if ( m_ui->protect->state() != QCheckBox::NoChange )
     {
-        if ( ( m_ui->protect->isOn() ? STATE_ON : STATE_OFF ) != m_generalValue.m_protect )
+        if ( ( m_ui->protect->isChecked() ? STATE_ON : STATE_OFF ) != m_generalValue.m_protect )
             flags |= Protect;
 
-        if ( !m_ui->protect->isOn() )
+        if ( !m_ui->protect->isChecked() )
         {
             KoRect rect = getRect();
             if ( m_generalValue.m_rect.left() != rect.left() )
@@ -113,7 +113,7 @@ int GeneralProperty::getGeneralPropertyChange() const
     }
 
     if ( m_ui->keepRatio->state() != QCheckBox::NoChange
-         && ( m_ui->keepRatio->isOn() ? STATE_ON : STATE_OFF ) != m_generalValue.m_keepRatio )
+         && ( m_ui->keepRatio->isChecked() ? STATE_ON : STATE_OFF ) != m_generalValue.m_keepRatio )
     {
         flags |= KeepRatio;
     }
@@ -126,8 +126,8 @@ GeneralProperty::GeneralValue GeneralProperty::getGeneralValue() const
 {
     GeneralValue generalValue;
     generalValue.m_name = m_ui->nameInput->isEnabled() ? m_ui->nameInput->text() : QString();
-    generalValue.m_protect = m_ui->protect->isOn() ? STATE_ON : STATE_OFF;
-    generalValue.m_keepRatio = m_ui->keepRatio->isOn() ? STATE_ON : STATE_OFF;
+    generalValue.m_protect = m_ui->protect->isChecked() ? STATE_ON : STATE_OFF;
+    generalValue.m_keepRatio = m_ui->keepRatio->isChecked() ? STATE_ON : STATE_OFF;
     generalValue.m_rect = getRect();
     return generalValue;
 }
@@ -141,10 +141,10 @@ void GeneralProperty::apply()
         m_generalValue.m_name = m_ui->nameInput->text();
 
     if ( flags & Protect )
-        m_generalValue.m_protect = m_ui->protect->isOn() ? STATE_ON : STATE_OFF;
+        m_generalValue.m_protect = m_ui->protect->isChecked() ? STATE_ON : STATE_OFF;
 
     if ( flags & KeepRatio )
-        m_generalValue.m_keepRatio = m_ui->keepRatio->isOn() ? STATE_ON : STATE_OFF;
+        m_generalValue.m_keepRatio = m_ui->keepRatio->isChecked() ? STATE_ON : STATE_OFF;
 
     // get the values to the actual rect
     m_generalValue.m_rect = getRect();

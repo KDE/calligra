@@ -1168,293 +1168,293 @@ void QtCalculator::EEtoggled(bool myboolean){
 
   if(myboolean)
     EE();
-  if(pbEE->isOn() && (!key_pressed))
+  if(pbEE->isChecked() && (!key_pressed))
     pbEE->setOn(FALSE);
 }
 
 void QtCalculator::pbinvtoggled(bool myboolean){
   if(myboolean)
     SetInverse();
-  if(pbinv->isOn() && (!key_pressed))
+  if(pbinv->isChecked() && (!key_pressed))
     pbinv->setOn(FALSE);
 }
 
 void QtCalculator::pbhyptoggled(bool myboolean){
   if(myboolean)
     EnterHyp();
-  if(pbhyp->isOn() && (!key_pressed))
+  if(pbhyp->isChecked() && (!key_pressed))
     pbhyp->setOn(FALSE);
 }
 void QtCalculator::pbMRtoggled(bool myboolean){
   if(myboolean)
     MR();
-  if(pbMR->isOn() && (!key_pressed))
+  if(pbMR->isChecked() && (!key_pressed))
     pbMR->setOn(FALSE);
 }
 
 void QtCalculator::pbAtoggled(bool myboolean){
   if(myboolean)
     buttonA();
-    if(pbA->isOn() && (!key_pressed))
+    if(pbA->isChecked() && (!key_pressed))
    pbA->setOn(FALSE);
 }
 
 void QtCalculator::pbSintoggled(bool myboolean){
   if(myboolean)
     ExecSin();
-  if(pbSin->isOn() && (!key_pressed))
+  if(pbSin->isChecked() && (!key_pressed))
     pbSin->setOn(FALSE);
 }
 void QtCalculator::pbplusminustoggled(bool myboolean){
   if(myboolean)
     EnterNegate();
-  if(pbplusminus->isOn() && (!key_pressed))
+  if(pbplusminus->isChecked() && (!key_pressed))
     pbplusminus->setOn(FALSE);
 }
 void QtCalculator::pbMplusminustoggled(bool myboolean){
   if(myboolean)
     Mplusminus();
-  if(pbMplusminus->isOn() && (!key_pressed))
+  if(pbMplusminus->isChecked() && (!key_pressed))
     pbMplusminus->setOn(FALSE);
 }
 void QtCalculator::pbBtoggled(bool myboolean){
   if(myboolean)
     buttonB();
-  if(pbB->isOn() && (!key_pressed))
+  if(pbB->isChecked() && (!key_pressed))
     pbB->setOn(FALSE);
 }
 void QtCalculator::pbCostoggled(bool myboolean){
   if(myboolean)
     ExecCos();
-  if(pbCos->isOn() && (!key_pressed))
+  if(pbCos->isChecked() && (!key_pressed))
     pbCos->setOn(FALSE);
 }
 void QtCalculator::pbrecitoggled(bool myboolean){
   if(myboolean)
     EnterRecip();
-  if(pbreci->isOn() && (!key_pressed))
+  if(pbreci->isChecked() && (!key_pressed))
     pbreci->setOn(FALSE);
 }
 void QtCalculator::pbCtoggled(bool myboolean){
   if(myboolean)
     buttonC();
-  if(pbC->isOn() && (!key_pressed))
+  if(pbC->isChecked() && (!key_pressed))
     pbC->setOn(FALSE);
 }
 void QtCalculator::pbTantoggled(bool myboolean){
   if(myboolean)
     ExecTan();
-  if(pbTan->isOn() && (!key_pressed))
+  if(pbTan->isChecked() && (!key_pressed))
     pbTan->setOn(FALSE);
 }
 void QtCalculator::pbfactorialtoggled(bool myboolean){
   if(myboolean)
     EnterFactorial();
-  if(pbfactorial->isOn() && (!key_pressed))
+  if(pbfactorial->isChecked() && (!key_pressed))
     pbfactorial->setOn(FALSE);
 }
 void QtCalculator::pbDtoggled(bool myboolean){
   if(myboolean)
     buttonD();
-  if(pbD->isOn() && (!key_pressed))
+  if(pbD->isChecked() && (!key_pressed))
     pbD->setOn(FALSE);
 }
 void QtCalculator::pblogtoggled(bool myboolean){
   if(myboolean)
    EnterLogr();
-  if(pblog->isOn() && (!key_pressed))
+  if(pblog->isChecked() && (!key_pressed))
     pblog->setOn(FALSE);
 }
 void QtCalculator::pbsquaretoggled(bool myboolean){
   if(myboolean)
     EnterSquare();
-  if(pbsquare->isOn() && (!key_pressed))
+  if(pbsquare->isChecked() && (!key_pressed))
     pbsquare->setOn(FALSE);
 }
 void QtCalculator::pbEtoggled(bool myboolean){
   if(myboolean)
     buttonE();
-  if(pbE->isOn() && (!key_pressed))
+  if(pbE->isChecked() && (!key_pressed))
     pbE->setOn(FALSE);
 }
 void QtCalculator::pblntoggled(bool myboolean){
   if(myboolean)
     EnterLogn();
-  if(pbln->isOn() && (!key_pressed))
+  if(pbln->isChecked() && (!key_pressed))
     pbln->setOn(FALSE);
 }
 void QtCalculator::pbpowertoggled(bool myboolean){
   if(myboolean)
     Power();
-  if(pbpower->isOn() && (!key_pressed))
+  if(pbpower->isChecked() && (!key_pressed))
     pbpower->setOn(FALSE);
 }
 void QtCalculator::pbFtoggled(bool myboolean){
   if(myboolean)
     buttonF();
-  if(pbF->isOn() && (!key_pressed))
+  if(pbF->isChecked() && (!key_pressed))
     pbF->setOn(FALSE);
 }
 void QtCalculator::pbMCtoggled(bool myboolean){
   if(myboolean)
     MC();
-  if(pbMC->isOn() && (!key_pressed))
+  if(pbMC->isChecked() && (!key_pressed))
     pbMC->setOn(FALSE);
 }
 void QtCalculator::pbCleartoggled(bool myboolean){
   if(myboolean)
     Clear();
-  if(pbClear->isOn() && (!key_pressed))
+  if(pbClear->isChecked() && (!key_pressed))
     pbClear->setOn(FALSE);
 }
 void QtCalculator::pbACtoggled(bool myboolean){
   if(myboolean)
     ClearAll();
-  if(pbAC->isOn() && (!key_pressed))
+  if(pbAC->isChecked() && (!key_pressed))
     pbAC->setOn(FALSE);
 }
 void QtCalculator::pb7toggled(bool myboolean){
   if(myboolean)
     button7();
-  if(pb7->isOn() && (!key_pressed))
+  if(pb7->isChecked() && (!key_pressed))
     pb7->setOn(FALSE);
 }
 void QtCalculator::pb8toggled(bool myboolean){
   if(myboolean)
     button8();
-  if(pb8->isOn() && (!key_pressed))
+  if(pb8->isChecked() && (!key_pressed))
     pb8->setOn(FALSE);
 }
 void QtCalculator::pb9toggled(bool myboolean){
   if(myboolean)
     button9();
-  if(pb9->isOn() && (!key_pressed))
+  if(pb9->isChecked() && (!key_pressed))
     pb9->setOn(FALSE);
 }
 void QtCalculator::pbparenopentoggled(bool myboolean){
   if(myboolean)
     EnterOpenParen();
-  if(pbparenopen->isOn() && (!key_pressed))
+  if(pbparenopen->isChecked() && (!key_pressed))
     pbparenopen->setOn(FALSE);
 }
 void QtCalculator::pbparenclosetoggled(bool myboolean){
   if(myboolean)
     EnterCloseParen();
-  if(pbparenclose->isOn() && (!key_pressed))
+  if(pbparenclose->isChecked() && (!key_pressed))
     pbparenclose->setOn(FALSE);
 }
 void QtCalculator::pbandtoggled(bool myboolean){
   if(myboolean)
     And();
-  if(pband->isOn() && (!key_pressed))
+  if(pband->isChecked() && (!key_pressed))
     pband->setOn(FALSE);
 }
 void QtCalculator::pb4toggled(bool myboolean){
   if(myboolean)
     button4();
-  if(pb4->isOn() && (!key_pressed))
+  if(pb4->isChecked() && (!key_pressed))
     pb4->setOn(FALSE);
 }
 void QtCalculator::pb5toggled(bool myboolean){
   if(myboolean)
     button5();
-  if(pb5->isOn() && (!key_pressed))
+  if(pb5->isChecked() && (!key_pressed))
     pb5->setOn(FALSE);
 }
 void QtCalculator::pb6toggled(bool myboolean){
   if(myboolean)
     button6();
-  if(pb6->isOn() && (!key_pressed))
+  if(pb6->isChecked() && (!key_pressed))
     pb6->setOn(FALSE);
 }
 void QtCalculator::pbXtoggled(bool myboolean){
   if(myboolean)
     Multiply();
-  if(pbX->isOn() && (!key_pressed))
+  if(pbX->isChecked() && (!key_pressed))
     pbX->setOn(FALSE);
 }
 void QtCalculator::pbdivisiontoggled(bool myboolean){
   if(myboolean)
     Divide();
-  if(pbdivision->isOn() && (!key_pressed))
+  if(pbdivision->isChecked() && (!key_pressed))
     pbdivision->setOn(FALSE);
 }
 void QtCalculator::pbortoggled(bool myboolean){
   if(myboolean)
     Or();
-  if(pbor->isOn() && (!key_pressed))
+  if(pbor->isChecked() && (!key_pressed))
     pbor->setOn(FALSE);
 }
 void QtCalculator::pb1toggled(bool myboolean){
   if(myboolean)
     button1();
-  if(pb1->isOn() && (!key_pressed))
+  if(pb1->isChecked() && (!key_pressed))
     pb1->setOn(FALSE);
 }
 void QtCalculator::pb2toggled(bool myboolean){
   if(myboolean)
     button2();
-  if(pb2->isOn() && (!key_pressed))
+  if(pb2->isChecked() && (!key_pressed))
     pb2->setOn(FALSE);
 }
 void QtCalculator::pb3toggled(bool myboolean){
   if(myboolean)
     button3();
-  if(pb3->isOn() && (!key_pressed))
+  if(pb3->isChecked() && (!key_pressed))
     pb3->setOn(FALSE);
 }
 void QtCalculator::pbplustoggled(bool myboolean){
   if(myboolean)
     Plus();
-  if(pbplus->isOn() && (!key_pressed))
+  if(pbplus->isChecked() && (!key_pressed))
     pbplus->setOn(FALSE);
 }
 void QtCalculator::pbminustoggled(bool myboolean){
   if(myboolean)
     Minus();
-  if(pbminus->isOn() && (!key_pressed))
+  if(pbminus->isChecked() && (!key_pressed))
     pbminus->setOn(FALSE);
 }
 void QtCalculator::pbshifttoggled(bool myboolean){
   if(myboolean)
     Shift();
-  if(pbshift->isOn() && (!key_pressed))
+  if(pbshift->isChecked() && (!key_pressed))
     pbshift->setOn(FALSE);
 }
 void QtCalculator::pbperiodtoggled(bool myboolean){
   if(myboolean)
     EnterDecimal();
-  if(pbperiod->isOn() && (!key_pressed))
+  if(pbperiod->isChecked() && (!key_pressed))
     pbperiod->setOn(FALSE);
 }
 void QtCalculator::pb0toggled(bool myboolean){
   if(myboolean)
     button0();
-  if(pb0->isOn() && (!key_pressed))
+  if(pb0->isChecked() && (!key_pressed))
     pb0->setOn(FALSE);
 }
 void QtCalculator::pbequaltoggled(bool myboolean){
   if(myboolean)
     EnterEqual();
-  if(pbequal->isOn() && (!key_pressed))
+  if(pbequal->isChecked() && (!key_pressed))
     pbequal->setOn(FALSE);
 }
 void QtCalculator::pbpercenttoggled(bool myboolean){
   if(myboolean)
     EnterPercent();
-  if(pbpercent->isOn() && (!key_pressed))
+  if(pbpercent->isChecked() && (!key_pressed))
     pbpercent->setOn(FALSE);
 }
 void QtCalculator::pbnegatetoggled(bool myboolean){
   if(myboolean)
     EnterNotCmp();
-  if(pbnegate->isOn() && (!key_pressed))
+  if(pbnegate->isChecked() && (!key_pressed))
     pbnegate->setOn(FALSE);
 }
 void QtCalculator::pbmodtoggled(bool myboolean)  {
   if(myboolean)
     Mod();
-  if(pbmod->isOn() && (!key_pressed))
+  if(pbmod->isChecked() && (!key_pressed))
     pbmod->setOn(FALSE);
 }
 

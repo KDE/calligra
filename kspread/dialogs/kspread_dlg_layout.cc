@@ -2535,7 +2535,7 @@ BorderButton::BorderButton( QWidget *parent, const char *_name ) : QPushButton(p
 void BorderButton::mousePressEvent( QMouseEvent * )
 {
 
-  this->setOn(!isOn());
+  this->setOn(!isChecked());
   emit clicked( this );
 }
 
@@ -3168,7 +3168,7 @@ void CellFormatPageBorder::preselect( BorderButton *_p )
   {
     for (int i=BorderType_Top; i < BorderType_END; i++)
     {
-      if (borderButtons[i]->isOn())
+      if (borderButtons[i]->isChecked())
       {
         borderButtons[i]->unselect();
       }
@@ -3223,7 +3223,7 @@ void CellFormatPageBorder::changeState( BorderButton *_p)
 {
   _p->setChanged(true);
 
-  if (_p->isOn())
+  if (_p->isChecked())
   {
     _p->setPenWidth(preview->getPenWidth());
     _p->setPenStyle(preview->getPenStyle());
@@ -3329,7 +3329,7 @@ void CellFormatPageBorder::draw()
 
 void CellFormatPageBorder::invertState(BorderButton *_p)
 {
-  if (_p->isOn())
+  if (_p->isChecked())
   {
     _p->unselect();
   }
@@ -3359,7 +3359,7 @@ void CellFormatPageBorder::slotPressEvent(QMouseEvent *_ev)
     if (((top->getPenWidth()!=preview->getPenWidth()) ||
         (top->getColor()!=currentColor) ||
         (top->getPenStyle()!=preview->getPenStyle()))
-       && top->isOn())
+       && top->isChecked())
     {
       top->setPenWidth(preview->getPenWidth());
       top->setPenStyle(preview->getPenStyle());
@@ -3376,7 +3376,7 @@ void CellFormatPageBorder::slotPressEvent(QMouseEvent *_ev)
     if (((bottom->getPenWidth()!=preview->getPenWidth()) ||
         (bottom->getColor()!=currentColor) ||
         (bottom->getPenStyle()!=preview->getPenStyle()))
-       && bottom->isOn())
+       && bottom->isChecked())
     {
       bottom->setPenWidth(preview->getPenWidth());
       bottom->setPenStyle(preview->getPenStyle());
@@ -3393,7 +3393,7 @@ void CellFormatPageBorder::slotPressEvent(QMouseEvent *_ev)
     if (((left->getPenWidth()!=preview->getPenWidth()) ||
         (left->getColor()!=currentColor) ||
         (left->getPenStyle()!=preview->getPenStyle()))
-       && left->isOn())
+       && left->isChecked())
     {
       left->setPenWidth(preview->getPenWidth());
       left->setPenStyle(preview->getPenStyle());
@@ -3410,7 +3410,7 @@ void CellFormatPageBorder::slotPressEvent(QMouseEvent *_ev)
     if (((right->getPenWidth()!=preview->getPenWidth()) ||
         (right->getColor()!=currentColor) ||
         (right->getPenStyle()!=preview->getPenStyle()))
-       && right->isOn())
+       && right->isChecked())
     {
       right->setPenWidth(preview->getPenWidth());
       right->setPenStyle(preview->getPenStyle());
@@ -3444,7 +3444,7 @@ if (rect.contains(QPoint(_ev->x(),_ev->y())))
       if (((vertical->getPenWidth()!=preview->getPenWidth()) ||
           (vertical->getColor()!=currentColor) ||
           (vertical->getPenStyle()!=preview->getPenStyle()))
-         && vertical->isOn())
+         && vertical->isChecked())
       {
         vertical->setPenWidth(preview->getPenWidth());
         vertical->setPenStyle(preview->getPenStyle());
@@ -3464,7 +3464,7 @@ if (rect.contains(QPoint(_ev->x(),_ev->y())))
       if (((horizontal->getPenWidth()!=preview->getPenWidth()) ||
           (horizontal->getColor()!=currentColor) ||
           (horizontal->getPenStyle()!=preview->getPenStyle()))
-         && horizontal->isOn())
+         && horizontal->isChecked())
       {
         horizontal->setPenWidth(preview->getPenWidth());
         horizontal->setPenStyle(preview->getPenStyle());

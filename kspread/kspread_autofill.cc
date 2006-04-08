@@ -893,24 +893,24 @@ bool Sheet::FillSequenceWithInterval(Q3PtrList<Cell>& _srcList,
 
 	if (cellValue.type() == QVariant::Double)
         	if (down)
-            		cellValue = cellValue.asDouble() + currentDiff.asDouble();
+            		cellValue = cellValue.toDouble() + currentDiff.asDouble();
           	else
-            		cellValue = cellValue.asDouble() -  currentDiff.asDouble();
+            		cellValue = cellValue.toDouble() -  currentDiff.asDouble();
 	else
 		if (down)
-			cellValue = cellValue.asInt() + currentDiff.asInt();
+			cellValue = cellValue.toInt() + currentDiff.asInt();
 		else
-			cellValue = cellValue.asInt() - currentDiff.asInt();
+			cellValue = cellValue.toInt() - currentDiff.asInt();
 
 	if ( type == AutoFillSequenceItem::TIME)
 	{
-		Value timeValue = doc()->converter()->asTime( Value(cellValue.asInt()) );
+		Value timeValue = doc()->converter()->asTime( Value(cellValue.toInt()) );
 		Value stringValue = doc()->converter()->asString( timeValue );
 		dest->setCellText( stringValue.asString() );
 	}
 	else if ( type == AutoFillSequenceItem::DATE)
 	{
-		Value dateValue = doc()->converter()->asDate( Value(cellValue.asInt()) );
+		Value dateValue = doc()->converter()->asDate( Value(cellValue.toInt()) );
 		Value stringValue = doc()->converter()->asString( dateValue );
 		dest->setCellText( stringValue.asString() );
 	}
