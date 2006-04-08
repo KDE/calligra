@@ -125,7 +125,7 @@ void FormulaEditorHighlighter::highlightBlock( const QString& text )
   uint oldRangeCount = d->rangeCount;
 
   d->rangeCount = 0;
-  Q3ValueList<QColor> colors = d->canvas->choice()->colors();
+  QList<QColor> colors = d->canvas->choice()->colors();
   Q3ValueList<Range> alreadyFoundRanges;
 
   for (uint i = 0; i < d->tokens.count(); ++i)

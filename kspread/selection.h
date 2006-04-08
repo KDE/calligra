@@ -162,7 +162,7 @@ public:
   QRect lastRange(bool extend = true) const;
   QRect extendToMergedAreas(QRect area) const;
 
-  const Q3ValueList<QColor>& colors() const;
+  const QList<QColor>& colors() const;
 
   // TODO Stefan #2: replace this
   QRect selection(bool extend = true) const;

@@ -75,7 +75,7 @@ public:
   QPoint anchor;
   QPoint cursor;
   QPoint marker;
-  Q3ValueList<QColor> colors;
+  QList<QColor> colors;
 
   bool multipleSelection : 1;
 
@@ -818,7 +818,7 @@ void Selection::setMultipleSelection(bool state)
   d->multipleSelection = state;
 }
 
-const Q3ValueList<QColor>& Selection::colors() const
+const QList<QColor>& Selection::colors() const
 {
   return d->colors;
 }

@@ -4290,7 +4290,7 @@ void Canvas::paintChildren( QPainter& painter, QMatrix& /*matrix*/ )
 
 void Canvas::paintHighlightedRanges(QPainter& painter, const KoRect& /*viewRect*/)
 {
-  Q3ValueList<QColor> colors = choice()->colors();
+  QList<QColor> colors = choice()->colors();
   QBrush nullBrush;
   int index = 0;
   Region::ConstIterator end(choice()->constEnd());
