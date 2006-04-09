@@ -436,7 +436,7 @@ public:
     enum KgpType { ProtectSize, KeepRatio};
     GeometryPropertiesCommand( const QString &name, Q3PtrList<EmbeddedObject> &objects,
                                   bool newValue, KgpType type, Doc *_doc );
-    GeometryPropertiesCommand( const QString &name, Q3ValueList<bool> &lst, Q3PtrList<EmbeddedObject> &objects,
+    GeometryPropertiesCommand( const QString &name, QList<bool> &lst, Q3PtrList<EmbeddedObject> &objects,
                                   bool newValue, KgpType type, Doc *_doc );
     ~GeometryPropertiesCommand();
 
@@ -444,7 +444,7 @@ public:
     virtual void unexecute();
 
 protected:
-    Q3ValueList<bool> m_oldValue;
+    QList<bool> m_oldValue;
     Q3PtrList<EmbeddedObject> m_objects;
     bool m_newValue;
     KgpType m_type;

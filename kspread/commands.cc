@@ -843,7 +843,7 @@ GeometryPropertiesCommand::GeometryPropertiesCommand( const QString &name, Q3Ptr
     }
 }
 
-GeometryPropertiesCommand::GeometryPropertiesCommand( const QString &name, Q3ValueList<bool> &lst,
+GeometryPropertiesCommand::GeometryPropertiesCommand( const QString &name, QList<bool> &lst,
                                                             Q3PtrList<EmbeddedObject> &objects, bool newValue,
                                                             KgpType type, Doc *_doc)
 : KNamedCommand( name )
@@ -888,12 +888,12 @@ void GeometryPropertiesCommand::unexecute()
         obj = m_objects.at( i );
         if ( m_type == ProtectSize )
         {
-            obj->setProtect( *m_oldValue.at(i) );
+            obj->setProtect( m_oldValue.at(i) );
             if ( obj->isSelected() )
                 m_doc->repaint( obj );
         }
         else if ( m_type == KeepRatio)
-            obj->setKeepRatio( *m_oldValue.at(i) );
+            obj->setKeepRatio( m_oldValue.at(i) );
     }
 }
 
