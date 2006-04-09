@@ -62,7 +62,7 @@ QMap<QString,DCOPRef> AppIface::documents()
     QMap<QString,DCOPRef> map;
 
     QList<Doc*> lst = Doc::documents();
-    Q3ValueListIterator<Doc*> it = lst.begin();
+    QList<Doc*>::ConstIterator it = lst.begin();
     for( ; it != lst.end(); ++it )
     {
 	map[ QString( (*it)->name() ) ] =
@@ -75,7 +75,7 @@ QMap<QString,DCOPRef> AppIface::documents()
 DCOPRef AppIface::document( const QString& name )
 {
     QList<Doc*> lst = Doc::documents();
-    Q3ValueListIterator<Doc*> it = lst.begin();
+    QList<Doc*>::ConstIterator it = lst.begin();
     for( ; it != lst.end(); ++it )
 	if ( name == (*it)->name() )
 	    return DCOPRef( kapp->dcopClient()->appId(), (*it)->dcopObject()->objId() );

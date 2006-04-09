@@ -4845,7 +4845,7 @@ void VBorder::mouseReleaseEvent( QMouseEvent * _ev )
 
             int i;
             RowFormat * row;
-            Q3ValueList<int>hiddenRows;
+            QList<int> hiddenRows;
 
             for ( i = rect.top(); i <= rect.bottom(); ++i )
             {
@@ -5469,7 +5469,7 @@ void HBorder::mouseReleaseEvent( QMouseEvent * _ev )
 
             int i;
             ColumnFormat * col;
-            Q3ValueList<int>hiddenCols;
+            QList<int> hiddenCols;
 
             for ( i = rect.left(); i <= rect.right(); ++i )
             {

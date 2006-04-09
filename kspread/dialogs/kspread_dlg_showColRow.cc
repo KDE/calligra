@@ -78,7 +78,7 @@ ShowColRow::ShowColRow( View* parent, const char* name, Type _type )
 	      listInt.append(col->column());
 	  }
         qHeapSort(listInt);
-        Q3ValueList<int>::Iterator it;
+        QList<int>::Iterator it;
         for( it = listInt.begin(); it != listInt.end(); ++it )
 	  {
 	    if(!showColNumber)
@@ -100,7 +100,7 @@ ShowColRow::ShowColRow( View* parent, const char* name, Type _type )
 	      listInt.append(row->row());
 	  }
         qHeapSort(listInt);
-        Q3ValueList<int>::Iterator it;
+        QList<int>::Iterator it;
         for( it = listInt.begin(); it != listInt.end(); ++it )
 	  listRow+=i18n("Row: %1").arg(text.setNum(*it));
 
@@ -132,11 +132,11 @@ void ShowColRow::slotOk()
     {
       if (typeShow == Column)
       {
-        region.add(QRect(*listInt.at(i), 1, 1, KS_rowMax));
+        region.add(QRect(listInt.at(i), 1, 1, KS_rowMax));
       }
       if (typeShow == Row)
       {
-        region.add(QRect(1, *listInt.at(i), KS_colMax, 1));
+        region.add(QRect(1, listInt.at(i), KS_colMax, 1));
       }
     }
   }

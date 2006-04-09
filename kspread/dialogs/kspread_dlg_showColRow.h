@@ -48,7 +48,7 @@ protected:
   View* m_pView;
   Q3ListBox * list;
   Type typeShow;
-  Q3ValueList<int> listInt;
+  QList<int> listInt;
 };
 
 } // namespace KSpread
