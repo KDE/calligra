@@ -195,7 +195,7 @@ KexiTablePart::i18nMessage(const QCString& englishMessage, KexiDialogBase* dlg) 
 
 	if (dlg->currentViewMode()==Kexi::DesignViewMode && !dlg->neverSaved()
 		&& englishMessage==":additional message before saving design")
-		return i18n("Note: Any data in this table will be removed upon design's saving.");
+		return i18n("Warning! Any data in this table will be removed upon design's saving!");
 
 	return englishMessage;
 }
