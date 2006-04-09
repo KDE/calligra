@@ -28,9 +28,11 @@
 
 #include <kexidialogbase.h>
 #include <kexidb/connection.h>
+#include <kexidb/error.h>
 
 #include <widget/tableview/kexitableview.h>
 #include <widget/tableview/kexitableviewdata.h>
+#include <widget/tableview/kexitableitem.h>
 
 #include <koproperty/set.h>
 #include <koproperty/property.h>
@@ -76,6 +78,7 @@ class KexiMacroDesignView::Private
 		*/
 		Private(::KoMacro::Macro* const m)
 			: macro(m)
+			, properties(0)
 		{
 		}
 
@@ -85,63 +88,10 @@ KexiMacroDesignView::KexiMacroDesignView(KexiMainWindow *mainwin, QWidget *paren
 	: KexiViewBase(mainwin, parent, "KexiMacroDesignView")
 	, d( new Private(macro) )
 {
-	{
-		d->tabledata = new KexiTableViewData();
-		//d->tabledata->setReadOnly(true); // set read-only
-		//d->tabledata->setValidator(); // set the value-validator
-		d->tabledata->setSorting(-1); // disable sorting
+	initTable();
+	updateProperties();
 
-		QStringList list;
-		list<<"a"<<"b";
-		d->tabledata->addColumn( new KexiTableViewColumn(
-			"action", // name/identifier
-			KexiDB::Field::Enum, // fieldtype
-			KexiDB::Field::NoConstraints, // constraints
-			KexiDB::Field::NoOptions, // options
-			0, // length
-			0, // precision
-			QVariant(list), // defaultValue
-			i18n("Action"), // caption
-			QString::null, // description
-			0 // width
-		) );
-
-		d->tabledata->addColumn( new KexiTableViewColumn(
-			"comment", // name/identifier
-			KexiDB::Field::Text, // fieldtype
-			KexiDB::Field::NoConstraints, // constraints
-			KexiDB::Field::NoOptions, // options
-			0, // length
-			0, // precision
-			QVariant(), // defaultValue
-			i18n("Comment"), // caption
-			QString::null, // description
-			0 // width
-		) );
-	}
-
-	{
-		QHBoxLayout* layout = new QHBoxLayout(this);
-		d->tableview = new KexiMacroTableView(d->tabledata, this);
-		layout->addWidget(d->tableview);
-	}
-
-	{
-		d->properties = new KoProperty::Set(this, "KexiMacro");
-
-		QStringList actions;
-		actions<<""<<"Open Table"<<"Close Table"<<"Open Query"<<"Close Query"<<"Open Form"<<"Close Form"<<"Execute Script"<<"Execute Macro";
-		KoProperty::Property::ListData* proplist = new KoProperty::Property::ListData(actions, actions);
-        	KoProperty::Property* prop = new KoProperty::Property(
-			"action", // name
-			proplist, // ListData
-			"", // value
-			i18n("Action"), // caption
-			QString::null, // description
-			KoProperty::List // type
-		);
-		d->properties->addProperty(prop);
-	}
+	plugSharedAction( "data_execute", this, SLOT(execute()) );
 
 	loadData();
 }
@@ -149,6 +99,125 @@ KexiMacroDesignView::KexiMacroDesignView(KexiMainWindow *mainwin, QWidget *paren
 KexiMacroDesignView::~KexiMacroDesignView()
 {
 	delete d;
+}
+
+void KexiMacroDesignView::initTable()
+{
+	d->tabledata = new KexiTableViewData();
+	//d->tabledata->setReadOnly(true); // set read-only
+	//d->tabledata->setValidator(); // set the value-validator
+	d->tabledata->setSorting(-1); // disable sorting
+
+	KexiTableViewColumn* actioncol = new KexiTableViewColumn(
+		"action", // name/identifier
+		KexiDB::Field::Enum, // fieldtype
+		KexiDB::Field::NoConstraints, // constraints
+		KexiDB::Field::NoOptions, // options
+		0, // length
+		0, // precision
+		QVariant(), // defaultValue
+		i18n("Action"), // caption
+		QString::null, // description
+		0 // width
+	);
+	d->tabledata->addColumn(actioncol);
+	QValueVector<QString> items;
+	items.append("");
+	items.append("Application");
+	items.append("Open Object");
+	items.append("Close Object");
+	items.append("Execute");
+	actioncol->field()->setEnumHints(items);
+
+	d->tabledata->addColumn( new KexiTableViewColumn(
+		"comment", // name/identifier
+		KexiDB::Field::Text, // fieldtype
+		KexiDB::Field::NoConstraints, // constraints
+		KexiDB::Field::NoOptions, // options
+		0, // length
+		0, // precision
+		QVariant(), // defaultValue
+		i18n("Comment"), // caption
+		QString::null, // description
+		0 // width
+	) );
+
+	connect(d->tabledata, SIGNAL(aboutToChangeCell(KexiTableItem*,int,QVariant&,KexiDB::ResultInfo*)),
+		this, SLOT(beforeCellChanged(KexiTableItem*,int,QVariant&,KexiDB::ResultInfo*)));
+	connect(d->tabledata, SIGNAL(rowUpdated(KexiTableItem*)),
+		this, SLOT(rowUpdated(KexiTableItem*)));
+	connect(d->tabledata, SIGNAL(aboutToInsertRow(KexiTableItem*,KexiDB::ResultInfo*,bool)),
+		this, SLOT(aboutToInsertRow(KexiTableItem*,KexiDB::ResultInfo*,bool)));
+	connect(d->tabledata, SIGNAL(aboutToDeleteRow(KexiTableItem&,KexiDB::ResultInfo*,bool)),
+		this, SLOT(aboutToDeleteRow(KexiTableItem&,KexiDB::ResultInfo*,bool)));
+
+	QHBoxLayout* layout = new QHBoxLayout(this);
+	d->tableview = new KexiMacroTableView(d->tabledata, this);
+	layout->addWidget(d->tableview);
+}
+
+void KexiMacroDesignView::updateProperties(int nr)
+{
+	if(d->properties) {
+		delete d->properties;
+	}
+	d->properties = new KoProperty::Set(this, "KexiMacro");
+
+	switch(nr) {
+		case 1: { // Application
+			QStringList actionname, actiontext;
+			const KActionPtrList& actionlist = parentDialog()->mainWin()->actionCollection()->actions();
+			KActionPtrList::ConstIterator it( actionlist.begin() );
+			for(; it != actionlist.end(); ++it) {
+				actionname.append( (*it)->name() );
+				actiontext.append( (*it)->text().replace("&","") );
+			}
+			KoProperty::Property::ListData* proplist = new KoProperty::Property::ListData(actionname, actiontext);
+			KoProperty::Property* prop = new KoProperty::Property(
+				"action", // name
+				proplist, // ListData
+				"", // value
+				i18n("Action"), // caption
+				QString::null, // description
+				KoProperty::List // type
+			);
+			d->properties->addProperty(prop);
+		} break;
+		case 2: { // Open Object
+			QStringList objects;
+			objects << "Table" << "Query" << "Form" << "Script";
+			KoProperty::Property::ListData* proplist = new KoProperty::Property::ListData(objects, objects);
+			KoProperty::Property* objprop = new KoProperty::Property(
+				"object", // name
+				proplist, // ListData
+				"Table", // value
+				i18n("Object"), // caption
+				QString::null, // description
+				KoProperty::List // type
+			);
+			d->properties->addProperty(objprop);
+
+			KoProperty::Property* nameprop = new KoProperty::Property(
+				"name", // name
+				"", // value
+				i18n("Name"), // caption
+				QString::null, // description
+				KoProperty::Auto // type
+			);
+			d->properties->addProperty(nameprop);
+		} break;
+		case 3: { // Close Object
+		} break;
+		case 4: { // Execute
+		} break;
+		default: {
+		} break;
+	}
+
+	propertySetSwitched();
+
+	connect(d->properties, SIGNAL(propertyChanged(KoProperty::Set&, KoProperty::Property&)),
+		this, SLOT(propertyChanged(KoProperty::Set&, KoProperty::Property&)));
 }
 
 tristate KexiMacroDesignView::beforeSwitchTo(int mode, bool& dontstore)
@@ -238,6 +307,50 @@ tristate KexiMacroDesignView::storeData(bool /*dontAsk*/)
 	*/
 
 	return storeDataBlock( domdoc.toString() );
+}
+
+void KexiMacroDesignView::execute()
+{
+	kdDebug() << "KexiMacroDesignView::execute" << endl;
+}
+
+void KexiMacroDesignView::beforeCellChanged(KexiTableItem* item, int colnum, QVariant& newvalue, KexiDB::ResultInfo* result)
+{
+	Q_UNUSED(item);
+	Q_UNUSED(colnum);
+	Q_UNUSED(newvalue);
+	Q_UNUSED(result);
+	int value = newvalue.toInt();
+	kdDebug() << "KexiMacroDesignView::beforeCellChanged colnum=" << colnum << " newvalue=" << value << endl;
+	updateProperties(value);
+}
+
+void KexiMacroDesignView::rowUpdated(KexiTableItem* item)
+{
+	Q_UNUSED(item);
+	setDirty();
+	kdDebug() << "KexiMacroDesignView::rowUpdated" << endl;
+}
+
+void KexiMacroDesignView::aboutToInsertRow(KexiTableItem* item, KexiDB::ResultInfo* result, bool)
+{
+	Q_UNUSED(item);
+	Q_UNUSED(result);
+	kdDebug() << "KexiMacroDesignView::aboutToInsertRow" << endl;
+}
+
+void KexiMacroDesignView::aboutToDeleteRow(KexiTableItem& item, KexiDB::ResultInfo* result, bool)
+{
+	Q_UNUSED(item);
+	Q_UNUSED(result);
+	kdDebug() << "KexiMacroDesignView::aboutToDeleteRow" << endl;
+}
+
+void KexiMacroDesignView::propertyChanged(KoProperty::Set& set, KoProperty::Property& prop)
+{
+	Q_UNUSED(set);
+	Q_UNUSED(prop);
+	kdDebug() << "KexiMacroDesignView::propertyChanged" << endl;
 }
 
 #include "keximacrodesignview.moc"

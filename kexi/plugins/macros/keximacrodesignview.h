@@ -20,13 +20,17 @@
 
 #include <kexiviewbase.h>
 
-//#include <koproperty/set.h>
-//#include <koproperty/property.h>
-
-// Forward declaration.
+// Forward declarations.
 namespace KoMacro {
 	class Macro;
 }
+namespace KoProperty {
+	class Property;
+}
+namespace KexiDB {
+	class ResultInfo;
+}
+class KexiTableItem;
 
 /**
  * The KexiScriptDesignView implements \a KexiViewBase to provide
@@ -109,11 +113,56 @@ class KexiMacroDesignView : public KexiViewBase
 		*/
 		virtual tristate afterSwitchFrom(int mode);
 
+	private slots:
+
+		/**
+		* This slot will be invoked if Kexi's menuitem Data=>Execute
+		* got executed.
+		*/
+		void execute();
+
+		/**
+		* Called before a cell changed in the internaly used
+		* \a KexiTableView .
+		*/
+		void beforeCellChanged(KexiTableItem*, int, QVariant&, KexiDB::ResultInfo*);
+
+		/**
+		* Called if the passed \p item got updated.
+		*/
+		void rowUpdated(KexiTableItem* item);
+
+		/**
+		* Called if a row should be inserted.
+		*/
+		void aboutToInsertRow(KexiTableItem*, KexiDB::ResultInfo*, bool);
+
+		/**
+		* Called if a row should be deleted.
+		*/
+		void aboutToDeleteRow(KexiTableItem&, KexiDB::ResultInfo*, bool);
+
+		/**
+		* Called if a property in the \a KoProperty got changed.
+		*/
+		void propertyChanged(KoProperty::Set&, KoProperty::Property&);
+
 	private:
 		/// \internal d-pointer class.
 		class Private;
 		/// \internal d-pointer instance.
 		Private* const d;
+
+		/**
+		* Initialize the \a KexiTableView we use internaly to
+		* display the content of a \a KoMacro::Macro .
+		*/
+		void initTable();
+
+		/**
+		 * Update the \a KoProperty::Set properties.
+		 */
+		void updateProperties(int nr = 0);
 
 		/**
 		* Load the data from XML source and fill the internally
