@@ -142,7 +142,7 @@ public:
   // FIXME (comment): If the list consists of more than one obscuring
   //                  element, then is there an order between them that
   //                  is important?
-  QLinkedList<Cell*> obscuringCells;
+  QList<Cell*> obscuringCells;
 
   // If non-NULL, contains a pointer to a condition or a validity test.
   Conditions  *conditions;
@@ -766,8 +766,8 @@ void Cell::setLayoutDirtyFlag( bool format )
     if (!d->hasExtra())
       return;
 
-    QLinkedList<Cell*>::iterator it  = d->extra()->obscuringCells.begin();
-    QLinkedList<Cell*>::iterator end = d->extra()->obscuringCells.end();
+    QList<Cell*>::iterator it  = d->extra()->obscuringCells.begin();
+    QList<Cell*>::iterator end = d->extra()->obscuringCells.end();
     for ( ; it != end; ++it ) {
       (*it)->setLayoutDirtyFlag( format );
     }
@@ -842,8 +842,8 @@ bool Cell::isPartOfMerged() const
   if (!d->hasExtra())
     return false;
 
-  QLinkedList<Cell*>::const_iterator it = d->extra()->obscuringCells.begin();
-  QLinkedList<Cell*>::const_iterator end = d->extra()->obscuringCells.end();
+  QList<Cell*>::const_iterator it = d->extra()->obscuringCells.begin();
+  QList<Cell*>::const_iterator end = d->extra()->obscuringCells.end();
   for ( ; it != end; ++it ) {
     Cell *cell = *it;
 
@@ -882,8 +882,8 @@ Cell *Cell::ultimateObscuringCell() const
     return d->extra()->obscuringCells.first();
 
 #if 0
-  QLinkedList<Cell*>::const_iterator it = d->extra()->obscuringCells.begin();
-  QLinkedList<Cell*>::const_iterator end = d->extra()->obscuringCells.end();
+  QList<Cell*>::const_iterator it = d->extra()->obscuringCells.begin();
+  QList<Cell*>::const_iterator end = d->extra()->obscuringCells.end();
   for ( ; it != end; ++it ) {
     Cell *cell = *it;
 
@@ -903,11 +903,11 @@ Cell *Cell::ultimateObscuringCell() const
 }
 
 
-QLinkedList<Cell*> Cell::obscuringCells() const
+QList<Cell*> Cell::obscuringCells() const
 {
   if (!d->hasExtra())
   {
-    QLinkedList<Cell*> empty;
+    QList<Cell*> empty;
     return empty;
   }
   return d->extra()->obscuringCells;
@@ -2414,8 +2414,8 @@ void Cell::paintCell( const KoRect   &rect, QPainter & painter,
     // (this happens e.g. when there is an updateDepend)
     if (d->hasExtra()) {
       QLinkedList<QPoint>           listPoints;
-      QLinkedList<Cell*>::iterator  it = d->extra()->obscuringCells.begin();
-      QLinkedList<Cell*>::iterator  end = d->extra()->obscuringCells.end();
+      QList<Cell*>::iterator  it = d->extra()->obscuringCells.begin();
+      QList<Cell*>::iterator  end = d->extra()->obscuringCells.end();
       for ( ; it != end; ++it ) {
         Cell *obscuringCell = *it;
 
@@ -2818,8 +2818,8 @@ void Cell::paintDefaultBorders( QPainter& painter, const KoRect &rect,
 
   // If there are extra cells, there might be more conditions.
   if (d->hasExtra()) {
-    QLinkedList<Cell*>::const_iterator it  = d->extra()->obscuringCells.begin();
-    QLinkedList<Cell*>::const_iterator end = d->extra()->obscuringCells.end();
+    QList<Cell*>::const_iterator it  = d->extra()->obscuringCells.begin();
+    QList<Cell*>::const_iterator end = d->extra()->obscuringCells.end();
     for ( ; it != end; ++it ) {
       Cell *cell = *it;
 
@@ -3580,8 +3580,8 @@ void Cell::paintCellBorders( QPainter& painter, const KoRect& rect,
   // paintBottom = paintBottom && ( d->extra()->extraYCells() == 0 );
 
   if (d->hasExtra()) {
-    QLinkedList<Cell*>::const_iterator it  = d->extra()->obscuringCells.begin();
-    QLinkedList<Cell*>::const_iterator end = d->extra()->obscuringCells.end();
+    QList<Cell*>::const_iterator it  = d->extra()->obscuringCells.begin();
+    QList<Cell*>::const_iterator end = d->extra()->obscuringCells.end();
     for ( ; it != end; ++it ) {
       Cell* cell = *it;
 

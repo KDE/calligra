@@ -108,7 +108,7 @@ public:
 
   Sheet *activeSheet;
     KSPLoadingInfo *m_loadingInfo;
-  static QLinkedList<Doc*> s_docs;
+  static QList<Doc*> s_docs;
   static int s_docId;
 
   DCOPObject* dcop;
@@ -170,7 +170,7 @@ public:
  *
  *****************************************************************************/
 
-QLinkedList<Doc*> Doc::Private::s_docs;
+QList<Doc*> Doc::Private::s_docs;
 int Doc::Private::s_docId = 0;
 
 #define deleteLoadingInfo() { \
@@ -280,7 +280,7 @@ Doc::~Doc()
   delete d;
 }
 
-QLinkedList<Doc*> Doc::documents()
+QList<Doc*> Doc::documents()
 {
   return Private::s_docs;
 }
