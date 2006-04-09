@@ -1582,7 +1582,7 @@ void KPSheetSelectPage::moveTop()
   //this creates a temporary new list (selected first, then rest)
   // which replaces the existing one, to avoid the need of an additional sort column
 
-  Q3ValueList<Q3ListViewItem*> newlist;
+  QList<Q3ListViewItem*> newlist;
   Q3ListViewItem* item = gui->ListViewSelected->firstChild();
   Q3ListViewItem* nextitem = NULL;
 //   kDebug() << "Filling new list with selected items first" << endl;
@@ -1612,7 +1612,7 @@ void KPSheetSelectPage::moveTop()
 
 //   kDebug() << "Refill the view with the correctly ordered list" << endl;
   //the view is empty now, refill in correct order (reversed!!)
-  Q3ValueList<Q3ListViewItem*>::iterator it;
+  QList<Q3ListViewItem*>::iterator it;
   for (it = newlist.begin(); it != newlist.end(); ++it)
   {
 //     kDebug() << " adding " << (*it)->text(0) << endl;
@@ -1625,7 +1625,7 @@ void KPSheetSelectPage::moveUp()
   //this creates a temporary new list
   // which replaces the existing one, to avoid the need of an additional sort column
 
-  Q3ValueList<Q3ListViewItem*> newlist;
+  QList<Q3ListViewItem*> newlist;
   Q3ListViewItem* item = gui->ListViewSelected->firstChild();
   Q3ListViewItem* nextitem = NULL;
   while (item)
@@ -1649,7 +1649,7 @@ void KPSheetSelectPage::moveUp()
 
 //   kDebug() << "Refill the view with the correctly ordered list" << endl;
   //the view is empty now, refill in correct order (reversed!!)
-  Q3ValueList<Q3ListViewItem*>::iterator it;
+  QList<Q3ListViewItem*>::iterator it;
   for (it = newlist.begin(); it != newlist.end(); ++it)
   {
 //     kDebug() << " adding " << (*it)->text(0) << endl;
@@ -1687,7 +1687,7 @@ void KPSheetSelectPage::moveBottom()
   //this creates a temporary new list (unselected first, then rest)
   // which replaces the existing one, to avoid the need of an additional sort column
 
-  Q3ValueList<Q3ListViewItem*> newlist;
+  QList<Q3ListViewItem*> newlist;
   Q3ListViewItem* item = gui->ListViewSelected->firstChild();
   Q3ListViewItem* nextitem = NULL;
 //   kDebug() << "Filling new list with unselected items first" << endl;
@@ -1717,7 +1717,7 @@ void KPSheetSelectPage::moveBottom()
 
 //   kDebug() << "Refill the view with the correctly ordered list" << endl;
   //the view is empty now, refill in correct order (reversed!!)
-  Q3ValueList<Q3ListViewItem*>::iterator it;
+  QList<Q3ListViewItem*>::iterator it;
   for (it = newlist.begin(); it != newlist.end(); ++it)
   {
 //     kDebug() << " adding " << (*it)->text(0) << endl;
