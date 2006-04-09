@@ -567,10 +567,11 @@ tristate KexiAlterTableDialog::beforeSwitchTo(int mode, bool &dontStore)
 
 //			KexiDB::Connection *conn = mainWin()->project()->dbConnection();
 			bool emptyTable;
-			int r = KMessageBox::questionYesNoCancel(this,
+			int r = KMessageBox::warningYesNoCancel(this,
 				i18n("Saving changes for existing table design is now required.")
 				+"\n"+messageForSavingChanges(emptyTable), QString::null,
-				KStdGuiItem::save(), KStdGuiItem::discard());
+				KStdGuiItem::save(), KStdGuiItem::discard(), QString::null, 
+				KMessageBox::Notify|KMessageBox::Dangerous);
 			if (r == KMessageBox::Cancel)
 				res = cancelled;
 			else
