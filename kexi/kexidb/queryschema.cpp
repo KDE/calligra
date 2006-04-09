@@ -293,8 +293,14 @@ QuerySchema::QuerySchema(TableSchema* tableSchema)
 	m_name = d->masterTable->name();
 	//inherit caption from a table
 	m_caption = d->masterTable->caption();
-	//add all fields of the table as asterisk:
-	addField( new QueryAsterisk(this) );
+	
+//replaced by explicit field list: //add all fields of the table as asterisk:
+//replaced by explicit field list:	addField( new QueryAsterisk(this) );
+
+	// add explicit field list to avoid problems (e.g. with fields added outside of Kexi):
+	for (Field::ListIterator it( d->masterTable->fieldsIterator() ); it.current(); ++it) {
+		addField( it.current() );
+	}
 }
 
 QuerySchema::~QuerySchema()

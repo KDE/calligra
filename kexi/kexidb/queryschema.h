@@ -82,8 +82,12 @@ class KEXI_DB_EXPORT QuerySchema : public FieldList, public SchemaData
 
 		/*! Creates query schema object that is equivalent to "SELECT * FROM table" 
 		 sql command. Schema of \a table is used to contruct this query -- 
-		 it is defined just by defining "all-tables query asterisk" (see QueryAsterisk)
-		 item. Properties such as the name and caption of the query are inherited 
+		 it is defined just adding all the fields to the query in natural order.
+		 To avoid problems (e.g. with fields added outside of Kexi using ALTER TABLE) 
+		 we do not use "all-tables query asterisk" (see QueryAsterisk) item to achieve 
+		 this effect. 
+
+		 Properties such as the name and caption of the query are inherited 
 		 from table schema.
 
 		 We consider that query schema based on \a table is not (a least yet) stored 

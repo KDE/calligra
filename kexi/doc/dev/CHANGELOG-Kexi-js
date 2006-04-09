@@ -12,6 +12,25 @@ Use CCMAIL:###-done@bugs.kde.org
 TODO:
 - inform Raphael about koffice.org/1.5/ url, give him the php code
 
+2006-04-10
+KexiDB
+- QuerySchema(TableSchema* tableSchema) ctor:
+  To avoid problems (e.g. with fields added outside of Kexi using ALTER TABLE) 
+  we do not use "all-tables query asterisk" (see QueryAsterisk) item 
+  but instead we add all the fields explicity. 
+- PostgreSQL driver: fixed crash when a new field has been added to existing 
+  table outside of Kexi
+
+2006-04-08
+KexiDB
+- use SQL-compliant TRUE and FALSE constants for PostgreSQL 
+  (1 and 0 are unsupported)
+0.9/1.0/2.0: ported
+
+2006-04-07
+Table View & Form View
+- "invalid data warning" tool tip improved and reused for kexi forms
+
 2006-04-05
 Form Designer
 - KexiDBDoubleSpinBox and KexiDBIntSpinBox replaced line edit with validator because
