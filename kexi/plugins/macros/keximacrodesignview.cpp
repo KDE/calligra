@@ -29,7 +29,26 @@
 #include <kexidialogbase.h>
 #include <kexidb/connection.h>
 
+#include <widget/tableview/kexitableview.h>
+#include <widget/tableview/kexitableviewdata.h>
+
+#include <koproperty/set.h>
+#include <koproperty/property.h>
+
 #include "lib/macro.h"
+
+class KexiMacroTableView : public KexiTableView
+{
+	public:
+		KexiMacroTableView(KexiTableViewData* data, QWidget* parent)
+			: KexiTableView(data, parent)
+		{
+		}
+
+		virtual ~KexiMacroTableView()
+		{
+		}
+};
 
 /**
 * \internal d-pointer class to be more flexible on future extension of the
@@ -44,6 +63,10 @@ class KexiMacroDesignView::Private
 		* Macro Framework.
 		*/
 		::KoMacro::Macro::Ptr const macro;
+
+		KexiMacroTableView* tableview;
+		KexiTableViewData* tabledata;
+		KoProperty::Set* properties;
 
 		/**
 		* Constructor.
@@ -62,6 +85,64 @@ KexiMacroDesignView::KexiMacroDesignView(KexiMainWindow *mainwin, QWidget *paren
 	: KexiViewBase(mainwin, parent, "KexiMacroDesignView")
 	, d( new Private(macro) )
 {
+	{
+		d->tabledata = new KexiTableViewData();
+		//d->tabledata->setReadOnly(true); // set read-only
+		//d->tabledata->setValidator(); // set the value-validator
+		d->tabledata->setSorting(-1); // disable sorting
+
+		QStringList list;
+		list<<"a"<<"b";
+		d->tabledata->addColumn( new KexiTableViewColumn(
+			"action", // name/identifier
+			KexiDB::Field::Enum, // fieldtype
+			KexiDB::Field::NoConstraints, // constraints
+			KexiDB::Field::NoOptions, // options
+			0, // length
+			0, // precision
+			QVariant(list), // defaultValue
+			i18n("Action"), // caption
+			QString::null, // description
+			0 // width
+		) );
+
+		d->tabledata->addColumn( new KexiTableViewColumn(
+			"comment", // name/identifier
+			KexiDB::Field::Text, // fieldtype
+			KexiDB::Field::NoConstraints, // constraints
+			KexiDB::Field::NoOptions, // options
+			0, // length
+			0, // precision
+			QVariant(), // defaultValue
+			i18n("Comment"), // caption
+			QString::null, // description
+			0 // width
+		) );
+	}
+
+	{
+		QHBoxLayout* layout = new QHBoxLayout(this);
+		d->tableview = new KexiMacroTableView(d->tabledata, this);
+		layout->addWidget(d->tableview);
+	}
+
+	{
+		d->properties = new KoProperty::Set(this, "KexiMacro");
+
+		QStringList actions;
+		actions<<""<<"Open Table"<<"Close Table"<<"Open Query"<<"Close Query"<<"Open Form"<<"Close Form"<<"Execute Script"<<"Execute Macro";
+		KoProperty::Property::ListData* proplist = new KoProperty::Property::ListData(actions, actions);
+        	KoProperty::Property* prop = new KoProperty::Property(
+			"action", // name
+			proplist, // ListData
+			"", // value
+			i18n("Action"), // caption
+			QString::null, // description
+			KoProperty::List // type
+		);
+		d->properties->addProperty(prop);
+	}
+
 	loadData();
 }
 
@@ -81,6 +162,11 @@ tristate KexiMacroDesignView::afterSwitchFrom(int mode)
 {
 	kexipluginsdbg << "KexiMacroDesignView::afterSwitchFrom mode=" << mode << endl;
 	return true;
+}
+
+KoProperty::Set* KexiMacroDesignView::propertySet()
+{
+	return d->properties;
 }
 
 bool KexiMacroDesignView::loadData()

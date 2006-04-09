@@ -53,6 +53,11 @@ class KexiMacroDesignView : public KexiViewBase
 		virtual ~KexiMacroDesignView();
 
 		/**
+		* \return the \a KoProperty::Set properties this view provides.
+		*/
+		virtual KoProperty::Set* propertySet();
+
+		/**
 		* Try to call \a storeData with new data we like to store. On
 		* success the matching \a KexiDB::SchemaData is returned.
 		*
