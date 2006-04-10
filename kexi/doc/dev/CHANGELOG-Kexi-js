@@ -28,6 +28,7 @@ Table Designer
 2.0: ported
 Forms Designer
 - fixed possible crash when switching to data view mode unbound autofield widgets
+- while in data mode, do not display "(unbound)" text for unbound autofield widgets
 
 2006-04-08
 KexiDB

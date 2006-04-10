@@ -451,7 +451,10 @@ KexiDBAutoField::changeText(const QString &text, bool beautify)
 	QString realText;
 	bool unbound = false;
 	if (m_autoCaption && (m_widgetType==Auto || dataSource().isEmpty())) {
-		realText = QString::fromLatin1(name())+" "+i18n("Unbound Auto Field", " (unbound)");
+		if (m_designMode)
+			realText = QString::fromLatin1(name())+" "+i18n("Unbound Auto Field", " (unbound)");
+		else
+			realText = QString::null;
 		unbound = true;
 	}
 	else {

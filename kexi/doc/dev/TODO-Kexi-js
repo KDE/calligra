@@ -757,7 +757,6 @@ MDB Migration:
    http://www.agata.org.br/us/index.php?file=thanks.php
 
 AUTOFIELD:
-- for data mode do not display (unbounded) text
 - copy/paste doesn't preserve caption text (maybe caption should be copied 
   to from QueryColumnInfo to a property)
 

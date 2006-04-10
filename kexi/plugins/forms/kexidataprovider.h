@@ -87,6 +87,7 @@ class KEXIFORMUTILS_EXPORT KexiFormDataProvider : public KexiDataItemChangesList
 		QPtrList<KexiFormDataItemInterface> m_dataItems;
 		QStringList m_usedDataSources;
 		KexiFormDataItemInterfaceToIntMap m_fieldNumbersForDataItems;
+		bool m_disableFillDuplicatedDataItems;
 };
 
 #endif
