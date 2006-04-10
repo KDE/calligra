@@ -26,6 +26,8 @@ Table Designer
 - More intrusive warning when altering table design
 1.0: ported (except the message)
 2.0: ported
+Forms Designer
+- fixed possible crash when switching to data view mode unbound autofield widgets
 
 2006-04-08
 KexiDB
@@ -1919,4 +1921,2593 @@ Parser:
 - ER004 supported
 
 2004-10-09
-Kexi 
+Kexi Startup
+- ksqlite2to3 script added for unices. It's used instead of two QProcesses.
+- ksqlite2:  -verbose-dump added for ksqlite2to3
+
+2004-10-06
+3rd Party
+- kexisql migrated to SQLite 3.0.7 (new kexisql3/ directory added);
+  former libkexisql is now libkexisql2 (updated to 2.8.15, by the way)
+KexiDB Drivers
+- "SQLite3" driver introduced. "SQLite" driver is now removed; 
+  use "SQLite2" driver for comaptibility.
+KexiDB
+- static QString Driver::defaultFileBasedDriverMimeType()
+  and static QString Driver::defaultFileBasedDriverName() added,
+	so let's don't compare driver names against "sqlite" string when looking for default.
+Startup
+- sqlite version is now autodetected on startup
+- sqlite2 to sqlite3 format autoconversion added (with progress dialog)
+
+2004-10-04
+- command line options added: --user (-u), --port, 
+   --host (-h), --password, --local-socket
+- password can be now entered using dialog, if it's a server-based conn.
+
+2004-10-01..02
+Kexi Startup
+- server-based (mysql, postgresql) projects are now available from command line 
+  (usable since gui is not yet ready): 
+  --createdb, --dropdb, --dbdriver command line options added
+- db creation and dropping from command line works without starting entire gui
+  see http://www.kexi-project.org/wiki/wikiview/index.php?CommandLineOptions
+Core
+- KexiMessageHandler introduced: receives messages e.g. from KexiProject
+- KexiGUIMessageHandler added
+KexiDB
+- improved error handling
+MySQL Driver
+- MySqlConnectionInternal added (like for SQLite)
+General
+- KMessageBox::warning**() used instead of question**() for dangerous messages.
+- 'tristate' helper class introduced. This reduces a need for adding 
+   bool& cancelled parameters.
+- tristate class used where possible instead of 'bool& cancel' params
+
+2004-09-29
+2004-09-30
+SQL Parser highly improved
+- reduce/reduce conflicts solved: operators in expressions have now 9 valid precedence levels
+- expressions are now parsed quite well: e.g. identifier checking is recursive
+- better debugging
+- ParseInfo introduced: Data used on parsing
+- invalid use of reserver keywords are now detected: 
+  '"KEYWORD" is reserved keyword: identifier was expected' message is now returned
+  instead of dumb "syntax error"
+KexiDB
+- Field: expressions are better supported
+- Connection: expressions are visible in selectStatement()
+
+2004-09-28
+KexiDB
+- Field: documentation added
+Kexi
+- ConstIterators used where possible
+
+2004-09-27
+SQL Parser
+- ER102, ER103, OK104 SQL Issues resolved (see statements.txt)
+- several bugfixes
+
+2004-09-17
+KexiDB 
+- Connection::selectStatement(): alias is used insetead of table name, 
+  if available
+- QuerySchema: 'index' term replaced by 'position' ; insertField(), addField() 
+   overloads added allowing tables binding by position; addTable() now allows 
+	 to specify table alias; tablePositionForAlias(), tablePositions() added;
+	 many docs and examples added
+SQL Parser
+- many improvements and checks:
+	-- ERR: there's no "persons" table in this query (alias "p" covers it)
+	select persons.id from persons p;
+	-- alias "p" for table "persons" is used
+	select p.id from persons p;
+	-- multiple aliases for the same table
+	select persons.id from persons, persons p, persons p2
+
+
+2004-09-15..16
+SQL Parser
+- select statements are now parser in more functional way, instead
+  of using global pointers. This enables nested statements in the future.
+- field alias support fixed
+- table alias support added
+KexiDB 
+- (API CHANGED) QuerySchema: 
+--"Field" in isFieldVisible(), setFieldVisible() renamed to "Column"
+--alias() renamed to columnAlias(), and so on
+--Table aliases are now supported: tableAlias() added, and so on
+--QueryFieldInfo class renamed to QueryColumnInfo
+
+2004-09-14
+TableView
+- hack added for KDownArrowPushButton for drawing with thinkeramik style. 
+- convenient ctor added for KexiTableViewData
+KexiDB
+- Driver::escapeIdentifier() : "" are only added if there is a space inside the name.
+  This keeps SQL statements more readable, especially in SQL View.
+-	DriverBehaviour::QUOTATION_MARKS_FOR_IDENTIFIER added
+- Driver::drv_escapeIdentifier() added:
+	This method is used by escapeIdentifier().
+	Implement escaping for any character like " or ' as your 
+	database engine requires. Do not append or prepend any quotation 
+	marks characters - it is automatically done by escapeIdentifier() using
+	DriverBehaviour::QUOTATION_MARKS_FOR_IDENTIFIER.
+Parser
+- tokens like '123abc' are now reported as invalid by lexer to parser
+
+
+2004-08-25
+Core
+- KexiSharedActionHost::invalidateSharedActions(QObject *o)
+	if o is not KexiDialogBase or its child,
+	only invalidate actions if these come from mainwindow's KActionCollection
+	(thus part-actions are untouched when the focus is e.g. in the Property Editor.
+- KexiViewBase::setDirty() -do not signal 'dirty' flag's changes if no change
+- ObjectStatus now also stores related KexiDB::Obeject's, for more verbose errors
+KexiDB
+- Field::isAutoIncrementEnabled() added + some checks for 'autoincrement' flag
+- fixed saving SQL statements for possible later error messages. 
+  Object class now also better handles previous server error messages and numbers.
+- KexiDB::getHTMLErrorMesage() improved, it's more verbose in certain cases
+- Driver::escapeIdentifier() added; used in Connection in every place 
+  where SQL statements are generated. Thanks to Martin Ellis.
+CC_MAIL: m.a.ellis@ncl.ac.uk
+TableView
+- "yes" button for "do you want to delete row?" dlg has "Delete row" text 
+  (as KDE HIG requires)
+- cell-cursor's is position not reset after initDataContents() on show()
+  if it was set before KexiTableView widget showing.
+Table Designer
+- many validations added related to primary key and autonumber properties
+- On table creation (or altering), if there is no primary key, user is asked 
+  if it should be added (automatically). 
+  Useful setting "dont show this again" added for this as well.
+
+
+2004-08-24
+Table View
+- redraw fixed -very special case: If you're during editing a new row, and click 
+ on last (empty) row, and your newly entered row has no data in its cells,
+ (what ends up with cancelRowEdit()), cursor is now moved one line up.
+- unknown, non-printable key events are not ignored now, but passed to superclass;
+  this e.g. fixes blocking ESC key in dialogs
+- fixed setting cursor on row removing
+Kexi Properties, Property Editor
+- icon added as optional property member
+Form Designer
+- Connection editor implementation cleaned a bit (bug #44)
+Table Designer
+- "autonumber" property is now visible
+- icons added to propertybuffer
+Form Module
+- kexidbwidgets.so ported to win32
+
+2004-08-23
+Table Designer
+- fixed code because of new column has been prepended
+KexiDB
+- KexiDB::Field::Type defaultTypeForGroup(KexiDB::Field::TypeGroup typeGroup)
+  added and used in Table Designer.
+- KexiDB::idForObjectName() convenience function added
+Table View
+- fixed methods for 'visible' flag in KexiTableViewColumn
+
+2004-08-21
+Table View
+- Key_Left, Key_Right now by default behaves like Key_BackTab, Key_Tab
+- KexiTableViewData::deleteRows(): refresh is requested only 
+  if at least one row has been removed. This also magically fixed 
+  a bug with missing vheaders in the Query Designer :)
+Main Window
+- opening object: if object is already opened but in other view, 
+  its activated and switchToViewMode() is simply called. 
+  This fixes switching GUIClient for "design" action called from the Navigator.
+- Kexi::ViewMode is repaced with int type in most places 
+  to ease future extensibility.
+
+2004-08-20
+KexiDB, Table View
+- Kexi now supports and shows autonumber (sequences) column, see
+  http://www.iidea.pl/~js/kexi/shots/beta5/unicode_chars_and_autonumber.png
+Table View
+- autoincremented field can be omitted (left as null or empty)
+  if we're inserting a new row
+- fixed displaying "autonumber" cell on row inserting
+- row editing is accepted on sorting
+- on failed sorting, sort indicator is reverted
+- Key_Tab, Key_BackTab work again; 
+  skipping to next/previous row added
+- when the user doubleclicks on the edge (handle) 
+   of horizontal header's section, column's width 
+   is adjusted to widest cell size
+Table Designer
+- before switching to design view, row editing is accepted 
+Main
+- PropertyEditor/FontSize setting is now stored
+
+2004-08-19
+KexiDB
+- DriverPrivate added to avoid binary incompatibilities
+- driver (QCString keys, QVariant values) properties added
+  (some prdefined properties added as well)
+Table View
+- optimizations in KexiTableViewData::saveRow()
+New API Tests
+- "dr_prop" test added
+SQLITE Driver
+- Kexi file driver now supports UTF8 storage for text fields
+Shared Actions
+- data_sort_az, data_sort_za, data_filter actions are now shared & volatile,
+ KexiTableView and KexiDataTable now use these
+
+2004-08-17..18
+Core
+- added KexiViewBase::setAvailable() overload. This one and sharedAction()
+  now call parent's method, when needed.
+- Shared actions: some fixes for plugging/unplugging
+KexiBrowser
+- "rename" action is now shared as "edit_edititem" action
+KexiTableView
+- "start edit" action (for F2/Enter key) is now shared 
+  as "edit_edititem" action
+- KexiKIconTableEdit introduced: Cell editor for displaying kde icon 
+  (using icon name provided as string).
+- TableViewHeader (inherits QHeader) introduced: supports tooltips 
+  when needed (for column description of if column is not wide enough)
+KexiTableView ComboBox
+- QStyle primitives are better used for drawing combo button
+- button is depressed after popup hidding
+Table Designer
+- "tablepart_toggle_pkey" shared action added for design view
+- "Not empty" field's property is now called "Allow Zero Size" 
+  (and has opposite meaning)
+- 1st column with "key" icon (for pkey) added (using KexiKIconTableEdit)
+KexiDB
+- QString Field::subType() added
+- QuerySchema::autoIncrementFields() fixed (caused crash sometimes)
+
+2004-08-06
+Table Designer
+- some rules added: e.g. setting 'indexed' property to false clears 'primaryKey';
+  setting 'primaryKey' to true sets 'indexed', 'unique', etc. to true
+Core
+- KexiPropery, KexiProperyBuffer: some operators added, operator [QCString] now
+  returns KexiPropery, convenient operator = (QVariant) added; KexiPropery::null added
+TODO: KexiProperty: add support for positive integers, "Auto" values e.g. for integer ==0
+ like defined in QSpinBox. Reuse this in PropIntSpinBox.
+
+2004-08-05
+PropertyEditor
+- Bool Editor: toggle button has now without ugly focus (space key still works)
+- KexiPropertySubEditor:setWidget() focus proxy is set only if the widget has 
+  non-zero focus policy.
+- [+][-] branch box is better positioned; treeStepSize is now narrower
+- font size is decreased to a reasonable minimum
+Core
+- generateIconSetWithStar() not used, static icons added insted (icon cache was confused)
+MainWindow
+- right dock width is now stored in config file
+
+2004-08-04
+MySQL Driver
+- introduced again! thanks to Martin Ellis
+CC_MAIL: m.a.ellis@ncl.ac.uk
+KexiDB
+- alterTable() added (now only drops and recreates table)
+- createTable() 'zombie' rows from 'kexi__fields' table is removed for safety 
+- Connection::storeObjectSchemaData() identifier is not obtained if 
+  it's already provided
+- DriverManagerInternal::aboutDelete() added: called from Driver dtor
+  (because sometimes KLibrary is destroyed before DriverManagerInternal)
+- DriverBehaviour::ROW_ID_FIELD_RETURNS_LAST_AUTOINCREMENTED_VALUE added
+	 True if the value (fetched from field (or function) 
+	 defined by ROW_ID_FIELD_NAME member) is EXACTLY the value if autoincremented field,
+	 not just an implicit (internal) row number. Default value is false.
+	 --used in Connection::lastInsertedAutoIncValue()
+Table Designer
+- saving changes to tables works now (data is just dropped, though);
+  user is warned about this, when needed
+- DataTable view is updated after saving table's design
+- temporary data added; KexiAlterTable_DataView implemented
+  (this fixes lack of updating datatable view after schema changes)
+
+2004-07-28..2004-08-03
+KexiDB
+- ProjectDB FORMAT CHANGED (remains backward compatible):
+- kexi__query* tables removed (to complicated, not needed since we 
+  are primarily using kexi__objectdata and xml)
+- Driver::IgnoreTransactions flag added: transactions are silently bypassed,
+  (temporary, useful for current mysql driver implemntation)
+- Query Schema: QueryFieldInfo introduced:
+  "select a as one, a as two from table" is now possible
+  (two different aliases for the same field); 
+  this also maintains field visibility.
+- Most needed expression classes added (BaseExpr-derived)
+- most debugs removed
+- more debugString() methods added for few classes
+- FieldList: removeField(), insertField() (at position) implemented
+	addField() now uses insertField()
+KexiDB/parser
+- 'bison -dv' used instead of yacc
+- single-char tokens are now used as chars: symbols are dropped for better 
+	code readability
+- more safe and readable code: $$ is now used instead of changing global variables
+- realType added
+- loadDataBlock(), storeDataBlock(), removeDataBlock() moved to Connection class
+- Connection::querySchema() methods now use parser
+- Connection::createTable() now also allows table replacing
+- Connection::storeObjectSchemaData() now reuses schema's id if > 0
+NEWAPI Test
+- now KCmdLineOptions are used, see README
+- "parser" test added
+KexiTableView
+- KexiTableViewPropertyBuffer: a fix for maintaining `dirty' flag
+- updates for QueryFieldInfo
+- compiler warnings removed
+Core, Widget, Plugins
+- updates for QueryFieldInfo
+- compiler warnings removed
+
+2004-07-24
+Form Designer
+- added icons for ajust/align icons
+
+2004-07-23
+Core
+- KexiViewBase::removeDataBlock() and KexiDialogBase::removeDataBlock() added.
+- more error messages added
+Main
+- Startup dialog re-enabled
+KexiDB
+- Utils: most smaller functions are now inline
+- optimizations:
+  * Connection::querySingleRecord(), querySingleString():
+    " LIMIT 1" is added to the statement
+  * Connection::resultExists(): "SELECT 1 FROM (<statement>) LIMIT 1" 
+     statement is executed
+  * Connection::resultCount() added: "SELECT COUNT() FROM (<statement>)" 
+     statement is executed
+- Cursor::open(): sets error message when needed
+Query Designer
+- KexiQueryView: shows error on failed execution
+
+2004-07-22
+Main
+- Kexi Browser: "create new" action added to browser's mini-toolbar;
+  icons for particular "create" actions are generated in a funny way
+- "project_new" and "project_open" actions removed from the main toolbar
+
+2004-07-20..21
+Kexi Browser
+- "rename object" action added (inline editor uses IdentifierValidator)
+- popup menu for group nodes now have a title
+Core
+- KexiProject, KexiPart supports object renaming
+- KexiProject::removeObject() and KexiProject::renameObject() 
+  now operate within transaction.
+- KexiProject: more error mesages added.
+KexiDB
+- Connection::drv_executeSQL() is now protected. Connection::executeSQL() public
+  method added which remembers last executed sql statement for better error handling.
+Main
+- KexiBrowser: After item's successful rename, it's resorted, 
+  and if it's dialog is opened, it's caption is updated as well.
+
+2004-07-19
+Kexi
+- We've now --final-mode and --design-mode CL-options for completness.
+KexiCore, KexiMain
+- KexiStartupHandler introduced: handles startup actions, that 
+ are new performed independently from Main Window's stuff. 
+ We're now prepared to having 'startup mode' 
+ database's property, which can be overriden by --final-* CL-options.
+Form Designer
+- A small fix to reduce widget flickering on resizing: 
+  when we're dragging left, top-left or top
+  handle, both size and position of widget changes. We're now hiding 
+  the widget and showing it again after transformation.
+
+2004-07-16
+Form Designer
+- some strings fixed
+
+===================== Kexi 0.1 Beta 4 "FireDuck" =====================
+
+2004-07-15
+Forms
+- form's initial sizeHint is now hardcoded to (400,300), will be fixed later
+Query Designer
+- saving existing queries work in SQL View
+Core
+- after successful storeData() or storeNewData(): 'dirty' flag is cleared 
+  for _every_ dialog's view
+
+2004-07-14
+Kexi
+- polish translation updated (also for KFormDesigner)
+Core
+- "current mode" member is now reverted if afterSwitchFrom() failed
+- removed one (I hope unnecessary?) shared-action invalidation
+- storeNewData() and storeData() new have 'bool &cancel' parameter
+Query Designer
+- storing and mode switching fixed
+- KexiQueryDesignerSQLView::storeNewData():
+    we won't store query layout: it is recreated 'by hand' in GUI Query Editor
+Table Designer
+- temporary behaviour: altering data is cancelled
+- fixed switching between Data and Design view
+
+2004-07-12..13
+KexiDB
+- Connection: selectStatement(): "SELECT FROM ..." queries (ie. without columns) 
+  are allowed (needed for desiger); omitting "FROM" allowed
+KexiDB/Parser
+- "SELECT FROM " rule added
+Core
+- KexiPart::Part::openInstance(): now virtual KexiDialogBase::loadSchemaData() is called
+ what allows to reimplement stored schema data loading (reimpelemnted for queries)
+- KexiDialogBase::dirty() now is true if any view is dirty
+KexiTableView
+- If ensureCellVisible() is called before table view is visible, it's (col,row) arguments are
+ stored and ensureCellVisible() is called just after show event. This fixes invalid scrolling.
+Query editor, Table Editor
+- storage/ loading/ view switching/ dirty flag updating - improved
+
+2004-07-10
+TableView
+- "edit_delete" action is disabled for read-only tables
+
+2004-07-09
+KexiDB
+- It's possible to define relationships for QuerySchema 
+  (with Relationship objects)
+- Connection: optimization: QString::reserve() used 
+   before generationg SQL statements
+- Connection::selectStatement() now generates joining rules 
+  (i.e. relationships using WHERE)
+Query Designer
+- joins defined by GUI are now visible in SQL View
+
+2004-07-08
+Query Designer
+- switching between design modes improved
+- on generating sql from GUI: "*" added if no fields are picked
+KexiMainWindow
+- neverending-story: actions availability updating fixed
+TableView
+- KexiTableViewPropertyBuffer: all buffers are cleared when view's 
+   data is cleared (using clear())
+Relation Widget
+- view clearing supported
+Core
+- KexiViewBase: 'dirty' flag is now better signaled to a dialog
+KexiDB/SQL Parser
+- lexer: USER_DEFINED_NAME now accepts also [0-9] (after 1st char)
+- optional ';' is allowed at the end of top level statement
+- dummy table is removed from query after parsing
+
+2004-07-07
+Core
+- KexiDialogBase: Never Ending Story: Shared actions are invalidated on activate()
+- ObjectStatus general purpose class introduced. KexiDialogBase now uses this 
+  to indicate errors.
+- KexiPart::Part: if newly opened dialog (KexiDialogBase) cannot display 1st view, it's closed 
+ (via close()) and error message is set up
+- KexiPart, KexiProject: 
+  const Kexi::ObjectStatus& lastOperationStatus() added for not-kexidb errors
+KexiMainWindow
+- formpart is now available by default; menu for switching it off is hidden
+- more errors taken from KexiProject are friendly displayed :)
+Query GUI Editor
+- saved layout (etc.) is loaded in afterSwitchFrom() for mode==Kexi::NoViewMode, 
+  instead of doing it in the ctor
+SQL View
+- switching to other views improved: msgbox is displayed for invalid sql texts
+- Intelligence Built In: we're doing our best to avoid regenerate the same 
+query from almost unchanged sql text
+
+2004-07-02..05
+XMLGUI
+- Tools menu added
+- undo/redo global actions added
+- tolbar setup consistent with ui_standards.rc and incoming katepart
+Main Window
+- hack: `window' menu moved right before settings menu
+Widgets
+- KexiSectionHeader: adding buttons connected to actions allowed on the right hand
+- Relation View: saved table widgets' geometries are better setup on loading 
+  (fix for differences between font sizes on differens computers)
+- SQL Editor: better integration with katepart's actions using new shared action's API
+Core
+- KexiDialogBase now has activate(), deactivate() handlers, 
+  KexiViewBase::updateActions(bool activated) is called for a current view
+- Workaround found for integrating katepart's actions with Kexi's shared actions:
+   - katepart KXMLGUIClient's KActions are now pluggable to KexiActionProxy
+   - KXMLGUIClient's KAction::enabled(bool) signals are now automatically mapped 
+      to KexiActionProxy::setAvailable(bool)
+<TODO>: introduce KexiSharedXMLGUIClient class: 
+  ctor: KexiSharedXMLGUIClient(KexiSharedActionHost *host, KXMLGUIClient *client).
+  A single instance is created for particular xml file (eg. katepartui.rc) and inserted
+  int KexiMainWindow's internal dictionary. This GUI client will be attached when needed 
+  (ie. when given KexiViewBase object that is activated asks for this) and detached 
+  when not needed. 
+  showOnlyActions(QCStringList) - declares custom action list that will only be available
+  In any time, no KActions will be created if these already are available globally 
+  within KexiMainWindow.
+</TODO>
+SQL View
+- history behaviour reverted to previous
+- added "clear history" and "select this query text" buttons in KexiSectionHeader
+- added popup menu with above actions
+
+2004-07-01
+SQL View
+- kate part now better integrates its actions with kexi menus/toolbars
+TODO fix it: actions, shortcuts
+- 'Tools' menu added, 'Window' menu is now repositioned before 'settings' menu
+
+2004-06-30
+SQL View
+- fully implemented history/status mode switching
+- both modes work with "check SQL" action
+Core
+- KexiViewBase::updateActions() virt. method added for convenience
+
+2004-06-28
+KexiCore
+- KexiViewBase now knows own view mode
+SQL Parser, SQL View
+- fixed error handling (syntax error is only set when no detailed error is known)
+- on error: fixed jumping to proper character (even where are more lines and tabulators)
+- status label's height is properly increased, when needed
+- jumping to proper character impelmented also for QT_ONLY_SQL_EDITOR
+- fixed crash for parsing empty SQL string
+Main Window
+- removed redundant MDI Mode option from View menu
+Core
+- some docs added
+- KexiSharedActionHost::createSharedAction() : subclassName arg added
+
+2004-06-25
+KexiCore
+- fixed switching for other mode 
+  (formpart behaviour was really weird because of that)
+
+2004-06-24
+KexiCore
+- Some doxygen docs added.
+- Fixed activeView() when we're just switched to other view in KexiDialogBase
+Widgets
+- SQL Editor: now properly emits signal about text changes.
+- SQL Editor: now has QT_ONLY_SQL_EDITOR compile-time option (both modes works on win32)
+Utils
+- Kexi::setWaitCursor(), Kexi::removeWaitCursor() -for delayed cursors added (eg. user on view opening)
+KexiMain
+- --edittext [<object_type>:]<object_name> C.L. option added:
+  like --open, but the object will\nbe opened in Text Mode
+KexiDB
+- Parser::query() public function added; select() is now internal
+SQL Editor
+- CTRL+Return shortcut; added information what to do to validate query text
+
+2004-06-23
+KexiCore
+- Fixed focusing previously selected dialog after Kexi main window's activation
+- KatePart is working on win32 as well
+
+2004-06-21
+KexiActionProxy
+- activateSharedAction(), isAvailable() now have alsoCheckInChildren arg.
+KexiDialogBase
+- actions availability is invalidated on view switching
+KexiPart::Part
+- proper integration with SharedActionHost
+- actions creating simplified with Part::createSharedAction()
+- finally: initPartActions() and initInstanceActions() 
+   replaced with single call of initActions(). 
+   createSharedPartAction() and createSharedAction() added
+Parts
+- all parts code updated for API changes
+
+2004-06-19
+KexiTableView
+- added checks if column is >=0 (this avoid crashes)
+FormDesigner
+- TabStopDialog: 
+  * was badly implemented: exec() in ctor. exec() moved from ctor to 
+    TabStopDialog::exec(Form*) method
+  * fixed crash: QVBoxLayout was added twice! 1st via ctor, 2nd view QLayout::addLayout()
+    --removed 1st
+Query Designer
+- kexiquerypartinstui.rc added and some actions
+Core
+- sql parser is now allocated in KexiProject
+KexiDB
+- docs greatly improved, thx Martin!
+- UNSIGNED INT -> INT UNSIGNED
+
+2004-06-18
+Query Designer
+- SQL Editor: added KexiSectionHeader
+- KexiQueryDesignerSQLView -> KexiQueryDesignerSQL
+- KexiQueryDesignerSQLEditor: now inherits KexiViewBase
+- Double clicking on table's field in Relation View allows to auto-add this field
+- KexiQueryDocument no longer used, similar KexiQueryPart::TempData is used
+- switching to SQL View working again
+- added warning when switching to dataview with empty design
+KexiTableView
+- Editor's focus position is updated (moved down) 
+  when new row is inserted above current row
+KexiDialogBase
+- returning without failure when KexiViewBase::beforeSwitchTo() 
+  returned cancel==true and success==false
+
+2004-06-17
+KexiTableView
+- Combobox's button is now in "toggle" mode; popping up is now better hidden/shown
+KexiViewBase
+- storeNewData(), storeDataBlock() simplified; parts code updated for this change
+Query Designer
+- relations widget: geometries for tables and connection lines are now stored
+- 'dirty' flag better updated
+
+
+2004-06-15
+2004-06-16
+TableView, Alter Table
+- Table Cell Editor's Focus is cleared on slotRefreshRequested()
+- fixed columns recreating on data resetting for a table
+TableView
+- fixed inserting row (empty or dropped)
+- dropping indicator line is now painted with XOR mode
+- more intuitive dragging and dropping rows: dropping on bottom 1/3 row's area means 
+  dropping below this row
+- dropping after the last row is now possible
+- KexiTableViewData and KexiTableViewPropertyBuffer now supports multiple 
+  rows deletion with cost O(n). KexiTableView is updated properly for this action.
+Alter Table
+- afted hiding table, rows (and prop. buffers) that are connected with it are deleted
+
+2004-06-14
+Core/Parts
+- For all parts: Instance GUI Clients are now splitted for per-view 
+  GUI clients (switched on view switching) and common GUI client 
+  (not switched within given dialog).
+
+2004-06-10
+2004-06-12
+KFormDesigner
+- rectangle on widget inserting, resize handles and grid's dots:
+   are now painted in white XORed color on top of all other widgets
+- fixed widget raising to top on clicking: also container members 
+   are raised (eg. for tab widget)
+- more guarded ptrs added; fixed crash on ObjectTree destruction
+- selection rectangle is drawn unclipped now, on top of all widgets
+
+2004-06-09
+KexiTableViewPropertyBuffer:
+- slots' connections fixed
+KFormDesigner, Kexi Forms
+- "pointer" action: better icon added (from Karbon); action moved to "widgets" toolbar/menu
+- all "widgets" actions and "pointer" action are mutually exclusive
+
+
+2004-05-15
+KexiDB:
+- fixed bug: Connection::resultExists() now properly closes temp. cursor
+
+===================== Kexi 0.1 Beta 3 "United Europe" =====================
+
+2004-05-08
+Form Designer: Extra widgets
+- fixes for kde3.1 compatibility
+- implicit deleting is cleaner than explicit
+
+2004-05-06
+Main Window
+- Messages are displayed on failed switching to othe view.
+Lucijan's stuff
+- Compile fixes, will be backported
+
+2004-05-03
+Kexi Main Window
+- Dialog dictionary is properly cleared on project close (fixed possible crash)
+- Not stored dialogs are properly removed from a dictionary
+Kexi Startup
+- fixed possible crash due to deleting not owned connection data, deep copy is now performed
+
+2004-05-01
+KexiDB
+- QuerySchema: 'visible' field's property is now assigned to possition, not to field pointer,
+   because the same field can be added more than one time to a query
+- Connection::selectStatement(): only visible fields are shown
+Query Designer
+- executing (switching to data view mode) is working again!
+
+2004-04-30
+TableView:
+- dropdown button position properly updated when scrollview's x-offset is non-0
+Kexi Forms
+- toolbar moved from 'part-wide' area to 'part-instance' area
+Reationships/Query Editor
+- master/detail sides of the realtionship are swapped when correction is needed
+KexiViewBase
+- added possibility of disable data storing on view switching; for some cases
+
+[INFOSYSTEM 2004]
+
+~~~~~~~~~~~~~~~~ beta3 pre2 ~~~~~~~~~~~~~~~~
+
+2004-04-16
+Kexi Core
+- introduced KexiDialogTempData
+TODO: make KexiQueryDocument inherit KexiDialogTempData
+- added 'Settings->Other->Enable Forms' menu switch (off by default)
+Global
+- version: beta3 pre2
+- updated readme_en
+- Kexi backported to KDE3.1 and Qt3.1.1
+KexiDB
+- setting length is only available for Text fields
+Kexi Alter Table
+- 'length' property is set to 0 on changing type from Text to any other, and set to default (200)
+   otherwise
+
+2004-04-15
+Kexi Main
+- KexiNameWidget, KexiNameDialog: caption is now not required; geometry fixed
+- Ugly bug fixed: active window sometimes changed to 
+   other on menu clicking or leaving dialog's focus (because KexiTableView had NoFocus policy)
+
+2004-04-14..15
+Table Views
+- insertEmptyRow() improved
+- KexiTableViewPropertyBuffer introduced
+- cell editors that have no editor widgets: current internal value is now displayed
+- KexiDataTableView: fixed columns double initializing
+Cell Editors
+- Boolean cells are now treated as other types: validation and edit buffering works
+- Boolean cell editor moved to separate KexiBoolTableEdit class
+- Enter key also toggles boolean editor's value
+- clickedOnContents() added -allows to toggle value without using 
+   editor widget (used in boolean cells)
+- hasFocusableWidget() added -allows cell editors that have no editor widgets (e.g. boolean type)
+Query Designer
+- many functional improvements
+- property editor is now used, like in Alter Table Dialog (with KexiTableViewPropertyBuffer)
+KexiDB
+- Connection::useDatabase(): fix for non-sqlite dbases:
+   we're not checking for database inconsistencies when using temporary database.
+- SQLite cursor: added decoding for boolean values
+TODO: move this decoding somewhere to generic functions
+- Connection::useDatabase() : kexiCompatible param. added to allow using native dbases
+
+2004-04-13
+Forms
+- linkage fixes for win32
+- some null-checks added
+- widget deletion is now delayed (because of problems with qt/win32 events)
+Table Views
+- KexiTableView::maximizeColumnsWidth() added
+Relations Editor
+- Combo box is updated on table hidding
+- popup menu titles added 
+Query Designer
+- columns' data is better updated
+
+2004-04-06..08
+KexiDB
+	- Reference class renamed to Relationship, documentation improved
+	- QuerySchema: added 'field visibility' flag
+Table Views
+	- added 'column visibility' flag, inherited from QuerySchema's 'field visibility'
+	- many sanity checks added usable when data is destroyed
+	- added possibility of disabling vertical scrollbar's tooltip
+	- table can be refreshed if data model changed outside of this table
+Combobox Table Columns
+	- key-based related data in columns added as an option (still of Field::Enum type)
+	- flickering removed when popping up for the first time
+Query Designer
+	- table of fields ('field' and 'table' columns) is updated a bit on table adding;
+	  not finished though
+
+2004-04-05
+Kexi Alter Table
+	- fixed possible crash when the view is initialized with no table schema specified 
+	  (ie. for designing a new table)
+	- a pointer to table schema is updated after creating a new table
+	- compilter warnings removed
+KexiDB
+	- names and docs in Reference class improved
+	- Connection: major versions of database and kexidb is are compared on useDatabase(): 
+	  errors are presented if needed
+
+2004-04-02
+KexiDialogBase
+	- beforeSwitchTo(int mode, bool &cancelled) is called also on newly created view
+
+2004-03-29..2004-04-01
+Kexi Query Designer Editor
+	- KexiSectionHeader class introduced
+	- section's size hind fixed
+Relations widget
+	- asterisks added to table boxes
+	- asterisks are not drag&drop enabled
+	- hiding tables implemented (connections are removable as well)
+Table View
+	- Temporary FIX: BLOB editors are disabled 
+	 (in KexiBlobEditorFactoryItem::createEditor()) because of unstability.
+TODO: reenable this
+	- setData(): when the same data object is passed, tableview is just refreshed
+	- setDropsAtRowEnabled() added; row-droping-indicator implemented
+	- KexiTableView::editor(): only if ignoreMissingEditor is false (the default),
+	 and editor cannot be instantiated, current row editing (if present) is cancelled.
+	 Thus: Now it's possible to edit data for tables where there are cells 
+	 that have no valid editors (yet?), such as BLOB now.
+	- paintCell(): if there is no editor defined, just a focus box is displayed,
+	  filled with additional grayed diagonal pattern
+Table View Editors
+	- clicking on date table popup selects current date
+	- QScrollView is passed on editors creation instead of QWidget
+	- QScrollView::moveChild() is used for moving external widgets, instead of QWidget::move()
+	- fixed uninitialized leftMargin value for FP-Number editor (on win32)
+Alter Table Dialog
+	- Temporary: 'defaultValue' property hidden- we'll show this after we 
+	  get properly working editor for QVariant
+Kexi
+	- Welcome screen now uses html 'welcome_<locale>' fiels.
+	  These are Temporary! Do Not Translate!
+Kexi Core
+	- KexiPartManager is now KexiDB::Object-derived; error texts are set now
+	- Action Proxies: child focus is better handled 
+	- KexiViewBase: focus change tracking and actions updating improved
+
+2004-03-27
+Form Editor
+	- buggy deleting fixed: ResizeHandleSet::Dict defined, we're using that instead 
+	  of not-fully-defined QDict<ResizeHandleSet>
+Kexi
+	- added 'Welcome' screen with hot informations for our users
+
+~~~~~~~~~~~~~~~~ beta3 pre1 ~~~~~~~~~~~~~~~~
+
+2004-03-26
+	- pl translate updated
+	- some I18N_NOOP turned to i18n
+	- fixed crash on Relationships window closing due to lack of Part Item
+KexiTableView
+	- "dontAskBeforeDeleteRow" config key is better
+	- after removing a row, all rows below are updated
+	- repaint of bottom few pixels (empty) area fixed when scrolling and resizing
+Kexi
+	- "-new <object_type>" CLI option added: "Start new object design of type <object_type>"
+	   (also convenient for everyday tests)
+Main Window
+	- MDI mode is now stored and restored
+	- fixed problems with property dock window when using IDEAl mode
+KMDI
+	- Fixed memory leak & crash: 
+	  Tab/IDEAl mode: mdiview was never destroyed but just moved out of the tab widget
+	- KMdiChildFrm: Mouse button press filtering is checked against every client's child, 
+	  not just client
+TODO: backport this to qextmdi???
+
+
+2004-03-25
+KexiTableView
+	- adjustColumnWidthToContents(-1) now mean that all columns' width is adjusted
+	- after calling adjustColumnWidthToContents(), editor width is updated, if needed
+	- setSpreadsheetMode() added
+KexiQueryDesignerGuiEditor
+	- spreadsheet-like mode set
+	- more columns added: totals & sum
+
+2004-03-24
+Main Window
+	- Wrong behaviour fixed:
+	 after switching to other MDI mode, pointer to current dialog needs to be updated
+	 (property editor was empty)
+	- previous 'view mode' toggle action is checked back properly after cancelled switch
+Table View
+	- fixed editing initializing with 'removeOld' mode
+Alter Table Dialog
+	- Temporary workaround:
+	 if data is dirty and table schema was saved before --user is asked 
+	 for discarding changes.
+	- switching to Data Mode is cancelled if current design is empty (never saved and !dirty)
+KexiDialogBase
+	- switchToViewMode() has now option for cancelling switching 
+	 (if user is able to cancel in any case)
+	- switchToViewMode() calls saveObject() on main window before switching, if needed
+	- KexiViewBase::afterSwitchFrom() and beforeSwitchTo() have now bool &cancelled
+		 parameter that allows to gently cancel switching 
+		 (probably after showing some info messages)
+
+2004-03-23
+2004-03-24
+Core, Main Window
+	- Volatile Actions introduced
+	- Menu updating and focusing fixed
+Kexi TableView, Kexi Table Data
+	- Empty row inserting implemented
+Kexi Alter Table
+	- Empty row inserting action added
+
+2004-03-22
+Main Window
+	- when toggling to other view mode (using radio action) failed, action for 
+	  previous mode is toggled back.
+
+2004-03-19
+2004-03-20
+KEXIDB:
+	<KEXIDB FORMAT CHANGED TO 1.2>
+	- 'kexi__objectdata' table introduced: contains object's data, such as form's xml def
+		SCHEMA: table kexi__objectdata
+			o_id integer REFERENCES kexi__objects(o_id),
+			o_data BLOB,
+			o_sub_id varchar(200)
+	</KEXIDB FORMAT CHANGED TO 1.2>
+
+	- Field::typeForString(typeString) Field::typeGroupForString(typeGroupString) added
+	- Connection::querySingleString() and Connection::resultExists() added
+	- KexiDB::sqlWhere() utility function added
+Alter Table Dialog
+	- Saving field types FIXED
+CORE:
+	- KexiDialogBase::storeDataBlock() added
+Table View
+	- fixed row's painting for empty table that have only row "for inserting"
+	- vertical record marker: fixed painting during inserting 1st row
+	- function for inserting an empty row above the cursor added (not finished yet)
+CORE:
+	- Shared Actions: unplugSharedAction(action_name, widget) added
+Main window:
+	- "Insert empty row" shared action added
+	- Shared actions are updated on switching between dialog view modes
+
+2004-03-17
+	-KexiProperty: fix for fix :) changes from null string to "" string (or vice-versa) are ignored
+	-Kexi Property editor receives signal KexiPropertyBuffer::propertyReset()
+	 (called from KexiProperty::resetValue()) so property is property visually reseted 
+	 even on calling resetValue() either by clicking "reset" button or by hand.
+
+2004-03-13
+	-KexiProperty: changes from null string to "" string (or vice-versa) are ignored
+
+2004-03-12
+Table View
+	-Combo box editor: cursorAtEnd() and cursorAtStart() are just used 
+	 from KexiInputTableEdit
+	-Some debug disabled
+	-setColumnWidth() added
+Alter Table Dialog
+	-now KexiDataTable is inherited instead of using KexiTableView internally.
+	 Thus we have actions like 'row deleting' available.
+	-on table schema saving: checking for duplicated field names is now case insensitive
+	-convenient width set for 'type' column
+Kexi Data Table widget
+	-Added ctor for not-db-aware version; docs updated
+Kexi Core
+	-string2identifier(): fixed bug for strings started from not alphanumeric char
+	-New validator added: KexiDBObjectNameValidator for checking 
+	 for 'kexi__' name violations
+	-KexiMultiValidator added
+Main Window
+	-KexiNameWidget now uses multivalidator, so it's easy to add additional validations
+	-above is used with KexiDBObjectNameValidator to check for violating 'kexidb__' names
+KexiDB
+	-Driver::isKexiDBSystemObjectName() static function added; isSystemObjectName() 
+	 uses this now by default
+
+2004-03-11
+Main Window
+	-fix: object's name and caption entered by user is used to create this object
+	-brand new objects have changed part item id --this is updated in main window's
+	  structs as well
+	-in removeObject(): if object's dialog is opened -it's quietly closed before removing
+	-added check/hack to avoid inf. recursion between removeObject() and closeDialog()
+	-crash fixed: on dialog closing, it's properly removed from dictionary.
+Kexi Dialogs
+	-'neverSaved' flag is cleared on first successful saving
+	-active view is 0 on its parent dialog destruction
+	-Dialog's docID is not just id, and inherits part item's (KexiPart::Item) identifier
+Alter Table Dialog
+	-'name' and 'description' properties are updated on change
+	-on table schema saving, user is warned about: 1) duplicated field names
+	  2) not added fields at all; 3) fields without names
+Table View:
+	-'removeOld' flag is passed from TV to initializer, so given editor's implementation 
+	 can decide what to do
+
+2004-03-10
+Table View
+	-Combo box editor: after new row selecting (not hightlighting) editing is accepted
+	-setFilteringEnabled() added
+KexiDB::Field
+	-forgotten: Byte is numeric type, of course
+Alter Table Dialog
+	-anyway, subtype property is always created (may be needed later)
+	-subtype is properly opdated on type (group) changing
+Properties
+	-fixed possible crash
+	-KexiProperty: now it's possible to change a list of values (in case 
+	 of property of type 'list')
+KexiViewBase
+	-propertyBufferReloaded() added -called whenever current 
+	 property buffer is changed that few properties are now visible 
+	 and/or few other are invisible
+	
+2004-03-09
+Main Window : some top level polishing
+	-most tooltips/what's this  added for actions
+	-'save' action now works int the current dialog context
+	-message about more not impelmented features added
+	-proper quitting and project closing
+	-KMainWindow::queryExit() and queryClose() impelmented instad of closeEvent()
+	-"Create" menu is disabled when no project is loaded
+	-On last dialog closing, guiclient is removed (so dead toolbar are hidden now)
+	-Main Window: dock windows are disabled on project closing, for sanity
+	-some fixes for mime data (QString -> QCString)
+	-part manager's part lookup can be called only once now 
+	  (refreshing will be impl. one day)
+	-dock windows (navigator and propeditor) are properly handled on closing/reopening projects
+	-opening project after closing fixed
+	-caption is updated on dialog data saving; after saving brand new data, 
+	 item is added to the navigator
+Property Editor
+	-fixed crash on changing invisible properties
+Alter Table Dialog
+	-creating new tables works partially
+
+2004-03-08
+Table View
+	-'acceptsRowEditAfterCellAccepting' flag added
+Main Window
+	-closeDialog(), saveObject(), closeProject() methods have now 'cancelled'
+	 parameter, so they can tell you if user just cancelled operation or there was 
+	 rather a real error.
+	-Duplicate names are checked on new object saving; user is prompted for unique name.
+	-On dialog closing: 'Dirty' flag is cleared when user discards dialog saving
+KexiDB::Field
+	-Connection::findObjectSchemaData() added for looking for objects by type and name
+	-INDEXED flag added to KexiDB::Field (now you can declare field to be indexed 
+	 even without any constraint)
+	-More implied rules added for methods like setPrimaryKey()
+	-More docs added
+Alter Table Dialog
+	-most missing field properties are now visible in property editor
+	-Creating new table: table schema is (almost) created using current buffers' state
+
+2004-03-06
+2004-03-05
+KexiDB
+	-'helpText' for SchemaData and Field members renamed to 'description'
+	-KEXIDB METADATA FORMAT CHANGED (to 1.1): 
+	  helpText renamed to description in kexi__objects table
+	-Connection::storeObjectSchemaData() added -can be reused mostly for object storage 
+Core
+	-string2Identifier(): now created identifier is forced to lowercase
+Kexi Parts
+	-part item's and part info's 'mime' is now of QCString type
+	-structures like items dicts are now case insensitive QAsciiDict
+Kexi Dialogs
+	-storeData() and storeNewData() methods added
+	-currently used KexiDB::SchemaData object is pointed by KexiDialogBase 
+	 (useful for data saving)
+Kexi Views
+	-storeData() and storeNewData() methods added; called by parent dialog
+Kexi Project
+	-now keeps a list of never-stored part items (on 1st saving, a given 
+	 item is moved to a list of regular part items)
+	-createObject() -generic method for initiating object creation on the backend; 
+	 updates item's data when necessary, etc.
+Kexi Properties
+	-QCString is used for property name instead of QString
+	-structure like properties dict (in the buffer) is now case insensitive QAsciiDict
+KexiMainWindow
+	-saveObject() added, KexiNameDialog is used for prompting for object name and caption
+	-user is asked for object saving on dialog closing (and thus on app closing as well)
+Kexi Alter Table
+	-storeNewObject() and storeObject() implementation started
+Main
+	-KexiNameWidget and KexiNameDialog utility classes 
+	 (for entering both names and caption names) implemented
+
+2004-03-04
+Main Window
+	-Both on window close and application close: User is prompted for saving 
+	 unsaved data for each "dirty" dialog. Pressing "Cancel" 
+	 -cancels application closing.
+	-only stored objects are added to the Navigator
+	-few methods move to protected
+	-graphical notification about 'dirty'==unsaved data ("*" sign at the right hand) 
+	 added to the names on captions, taskbar and navigator
+	-API for saving kexi dialog's data added, plugged to the main window
+Kexi Dialogs
+	-currently not only dialog is activated when focus come to any of its children,
+	 but also when any children is clicked.
+	-KexiViews have now 'dirty' flag and parent KexiDialog reuses that
+
+2004-03-03
+2004-03-02
+Kexi Dialog / View 
+	-fixed internal view's focusing: on click on a view, dialog is activated
+	-focus cell is now grayed for disabled table views, not for unfocused
+KexiDB
+	-"kexi__parts" table is now filled with default (required) parts info
+	  automatically in Connection::createDatabase(), not somewhere outside
+TODO: add version info?
+Main Window
+	-Part type name removed MDI Taskbar buttons' captions, to save some space
+	-User is now asked for saving object data on dialog closing (if it's dirty)
+	-Not stored objects are removed from memory and gui completely, 
+	 if user won't let to save them
+	-Not stored objects (part instances) have now identifiers < than -1
+Kexi Views/Dialogs
+	-"dirty" and "neverSaved" flags added
+Parts / Kexi Project
+	-so-called "unstoredItems" introduced, so they can initially exist in memory only 
+	 and user may want to give up, not saving them
+Table View
+	-Fixed focus-stealing from editor problem
+
+2004-02-27
+Kexi Property Editor, Kexi Property Framework
+	-propertyChanged() signal is received from assigned property buffer, 
+	 and values are visually updated (including children)
+	-changeProperty() code (for checking for changes)
+	 moved from buffer to property setValue to avoid mistakes in class usage
+	-property editor class now has a dict of all items, based on its names
+	-each KexiProperty now has a pointer to its buffer, ans uses it to emit 
+	 signals on value changes
+	-fixed crash on moveEditor() when called from ctor
+	-KexiPropertyEditor is safely updated right before PropertyBuffer destroying
+Kexi Validator
+	-allows to define whether empty values are ok or not
+Alter Table Dialog:
+	-'name' and 'type' columns can be empty now (that just means the row is empty)
+	-buffer and 'type' column is cleared when 'name' column is cleared
+	-row deleting works (buffer is destroyed as well)
+Table View's Data
+	-aboutToDeleteRow() signal is emited before row deleting and rowDeleted() -after
+Table View
+	-contents size is updated after row deleting
+	
+
+2004-02-26
+Kexi Property Editor
+	-leaveTheSpaceForRevertButton introduced for subeditor class.
+	 This removes confucion when user clicks on a spinbox arrow and it suddenly
+	 moves left.
+	-parent item is updated on children updates
+	-editor position is updated when user collapses or expands a property node
+	-resetting composed property value also resets all children
+Kexi Property Framework
+	-testiong for property change: for date and datetime types we're now comparing 
+	 values using strings, because there can be miliseconds difference in a time;
+	 strings comparison fixed for null strings
+	-resetValue() added to KexiProperty for convenience
+	-for composed properties (like Rect):
+	  * changing property child updates parent value
+	  * setting property unchanged (eg. on resetting) updates parent's 'changed' flag
+	-QSizePolicy-type property helper improved
+	-setValue() renamed to setChildValue() to remove messy overload
+
+2004-02-24
+Table View:
+	-KexiTableViewData is now QObject-derived
+	-signals like aboutToChangeCell() or rowChanged() moved from KexiTableView
+	 to KexiTableViewData, so it'll be easier to reuse KexiTableViewData 
+	 with a forms, and easier to share common data object between views.
+	-It's now allowed to call acceptRowEdit() from inside of cell-accept handlers
+		e.g.: KexiTableViewData::aboutToChangeCell() signal
+	 (no infinite recursion is preformed but instead: the row is saved after
+		cell's acception).
+KexiDB:
+	-ResultInfo introduced
+	-getHTMLErrorMesage() utility method introduced
+	-Cursor: now pointer to connection is guarded
+	-Connection, Cursor: error status is cleared before performing update/delete/insert
+	-Connection::recentSQLString() added (useful for debugging and on-screen 
+		error messages
+	-Connection: further error message fixes
+Alter Table Dialog:
+	-after 'name' field is entered, 'type' column as automatically filled
+	-"newrow" property is added for each new buffer to indicate for later processing
+	 that these buffers are for newly added fields
+Properties are now indexed using case insensitive names.
+
+2004-02-22
+KexiDB:
+-copy constructors added for classes: table schema, field list, index schema, field 
+Alter Table Dialog:
+-all changes are made to the deep copy of the table, not to the original
+
+TODO: KEXIDB: copy constructors: also copy references of the index schema
+
+2004-02-21
+Main Window:
+	-buffer in the property editor is properly cleared when current dialog is changed 
+	 or there is no dialog
+Table View:
+	-clearSelection() and field(int) methods added
+	-on row deleting: cursor is moved up only if we're deleted the last row 
+		and row-inserting is not enabled
+	-fixed selecting row after no row was selected
+	-messagees are displayed on failed row updating/inserting
+	-CONSTRAINTS: illegal null/empty fields are checked on updating/inserting
+	(msg boxes are used if required)
+	-the cursor is moved to faulty cell's value on record update/insert error
+Combo box editor:
+	-selection on the popup table view is cleared then no test is entered
+	-up/down/left/right key presing leaves the lineedit if there is no 
+		line selected on the popup table
+	-improved editing convenience
+KexiDB:
+	-isEmptyValue() generic function added for checking if a value of QVariant 
+	is empty but not null
+Alter Table Dialog:
+	-"data type" column declared as NOT EMPTY
+
+
+2004-02-20
+KexiDB::Field:
+-setNonEmpty() fixed
+-NOT EMPTY constraint is now implied by PRIMARY KEY constraint
+Table View:
+-on a table cell edit accepting: violating of the following:
+--NOT NULL or NOT EMPTY constraints
+--validation rules (using attached KexiValidator)
+ so LATER this may be also used for forms
+--from-editor value getting errors (d->pEditor->value())
+..is now signaled using message box
+Alter Table Dialog:
+-"field name" field acts like a primary key
+
+2004-02-19
+KFormEditor lib: 
+-ported to win32
+-some sanity checks added
+
+2004-02-18
+KexiPropertyEditor: 
+-font editor item: description text moved to kexiproperty::format(); added weight & italic info
+-new method of column sorting: instead ascending - default order,
+ instead descending - alpha order
+- "revert to original value" button is automatically shown when property value is changed 
+ and becames hidden when the value is reverted to original value
+KexiTableView: added new signals: 
+-for checking validity of curent cell, before changing
+-for checking validity of curent row, before updating
+-for checking validity of a new row, before inserting
+In a case when checking for validity failed, row edititing/inserting 
+(or cell updating) is cancelled --> editor is not removed
+- KexiPropertyBuffer: clear() reimplemented for proper clearing the data
+- KexiValidator class introduced
+KexiTableView: 
+-acceptEditor() returns bool, so now it's checked if we can proceed with cursor moving, etc.
+-KexiValidator is used to check whether cell editing should be accepted or not.
+Alter Table Dialog:
+-hidden "name" property added, ident. validator is now used
+-added KexiDB::RowEditBuffer* argument to aboutToUpdate and aboutToInsert signals
+
+2004-02-17
+- KexiDB::typeStringsForGroup() ustility function added
+- KexiDB::Field: array of field type names fixed
+Kexi Property Framework improved:
+- properties can be nested, e.g. for Rect type there are automatically 
+   created two properties: x and y
+- pointer to a parent property is kept, if present
+- all data is stored in KexiProperty and KexiPropertyBuffer, not just in GUI objects
+- editoritem text for composed values (like Rectangle) now displayed properly
+- reverting to default works properly for properties of type 'list' 
+- By default, sorting is disabled (properties are in order of insert time)
+- KexiPropertyEditor: fixed value changes for prop. children
+
+2004-02-12
+- typeName() added to KexiPropertyBuffer
+- typeString(), typeGroupString() added to KexiDB::Field
+- KexiDB Utils: typeNamesForGroup() and typesForGroup() utility functions added
+- KexiPropertyEditorList crash fixed for StringList type
+
+2004-02-10
+- Property editor is now used globally in Kexi (property buffer's change comes from active KexiView)
+- Alter Table Dialog connected to global property editor
+- Kexi Main Window: removed unused code
+- Action for Focusing Property editor (alt+2) added
+- KexiProperty and KexiPropertyBuffer classes moved to core/ 
+   from widget/propertyeditor
+- KexiProperty has now oldValue() and changed() methods -- usable 
+   since we've global property editor
+
+2004-02-09
+--design command-line option added, especially useful for developers
+main window:
+- dock/layout/geometries settings are stored/restored (a bit better, not complete though)
+- table view: update width of a combobox popup on editor's resizing
+
+2004-02-08
+- libkeximain introduced (by splitting libkexicore)
+Main Window settings:
+- main window size stored and restored before showing
+- "maximized childframes" setting stored/restored
+
+2004-02-04
+Table view:
+  -Generic Cell Editor Framework introduced
+  -selection background painting moved to editor's implementation
+  -for row-selection mode: Home/End keys always move to the 1st/last row
+  -page up/page down actions added as methods
+
+ComboBox Editor improoved:
+
+-we're completely dropping use of regular combobox
+-new layout: a lineedit + dropdown button + popup tableview, when needed
+-methods used (and few added) for tableview to enable adjusting 
+  it for use it as dropdown tv:
+--hidden vtoolbar
+--hidden header (on user demand, and automatically, when only one 
+  column is visible in the dropdown tv
+--hidden the context menu
+--hidden the record navigator
+--added and used a method for selecting entire row, not just a cell
+--tv's recordset made readonly, disable inserting
+--sorting disabled
+
+
+Property Editor: 
+  pointer to current editor is now guarded, fixed crash (on sorting) 
+  due to uninitialized member
+
+2004-01-29
+-KexiDB: crash fixed for records buffering, when a value is NULL 
+(for some targets strdup crashes on NULLs)
+-KexiDB: i18n'd names for datatype groups added, just like datatype names.
+ This will be used eg. in Alter Table Dialog
+
+2004-01-28
+- Main Window: toggle actions are checked off before disabling
+
+- Table View: 
+  -fixed size of Vertical header's item (record marker) used in Table View 
+   (now also works ok with Windows style)
+  -don't paint contents of edited cell - painted editor is enough
+  -methods added for showing/hiding vertical and horizontal header
+  -framework for showing cell's focus depending on editor type added to cell 
+   editor (eg. dropdown btn for combobox)
+
+- Main Window:
+	Fixed problem with autoincremented identifier in kexi__object
+	table on ObjectCreation for some backends
+	lucijan: what about using kexiDB API, not hardcoding?
+
+2004-01-27
+- Combo box editor
+  -key events fixed
+
+2004-01-26
+- Table View:
+	-KexiCellEditorFactory and KexiCellEditorFactoryItem introduced for generalized cell 
+	 editor creation and cell painting
+	-now, we don't try to recreate cell editors but store one editor instance for every
+	 column and just show/hide/move it when needed
+	-column width is now adjustable with adjustColumnWidthToContents() and stretchable with
+	  setColumnStretchEnabled()
+
+
+===================== Kexi 0.1 Beta 2 "Warsaw By Night" =====================
+
+2004-01-20
+- kmdi captions fix backported to kexi_compat
+- kexistartupfiledialog: we're using paths unstead urls now for better compat.
+
+2004-01-19
+RESIZING HELL RESOLVED
+- KexiDialogBase resizing fixed for maximize state: only resize a dialog if it is in normal state
+- KexiMainWindow: for dialogs in normal state: decrease dialog's height if it exceeds area contents
+- KexiViewBase: 
+   -preferred size hint introduced;
+   -parentDialog() convenience method added for getting view's dialog parent.
+
+- KexiDB::Connection:
+  -tableNames() return only tables that have valid names
+  -the same for any other objects
+- actions in 'Create' menu work
+- PropertyEditor has cell borders' color like this used in table view
+- closing() signal added to KexiViewBase - it works like in KexiDialogBase.
+  Effect: table view's data is saved on closing if editing is in progress
+
+- table view, kexidb: after row inserting, autoincremented fields have displayed values
+- query removing works
+- KexiMainWindow: shared actions are disabled when no proxy is available
+
+2004-01-17
+- KexiDialogBase: minimum height fixed: added height of its caption
+- KexiTableView: repainting of bottom contents FINALLY FIXED
+- ALTER TABLE Dialog impl. started
+- query part: crashes removed when no sql string defined for query; by default "visible" column is true
+- relation view: 
+   -for global db relations -all tables are shown (will be customized later)
+   -open table/design table actions fixed
+- bool Kexi::isIdentifier(QString) added for convenience
+- KexiDB: Tables and queries with invalid names (that are not valid identifiers) are skipped on lookup
+- KexiProject: The same for any objects and KexiProject level
+
+2004-01-14
+CORE API CHANGED:
+- Kexi Dialogs : view modes functionality added -- KexiViewBase, and integrated with KexiMainWindow 
+   and KexiDialogBase
+- KexiDockBase removed because if KexiViewBase existence
+- If a dialog is already opened in given mode and user have dbl-clicked on the Navigator, 
+  the dialog is not switched to other mode
+
+- InternalParts and dialogs without multiple modes FIXED
+- KexiTableView: when cursor is moved down and navigator covers the cursor's area, 
+ area is scrolled up.
+
+2004-01-13
+KexiActionProxy:
+ -	isSupported(const char* action_name) added -returns true, if action is supported by the proxy
+ -	isAvailable() now lookups also in the childrens actions, if actual action proxy does 
+  	 not support a given action
+- Relation View:
+	some action availability updates
+
+- more icon sizes added: state_sql, table; state_text added for future "text view" mode
+
+- KexiMainWindow: actions are invalidated more accurate on dialogs switching/closing
+- KexiDialogBase: added flags t ocheck if given dialog's implementation accepts given view mode
+  (data/design/sql modes)
+- Kexi::ViewMode introduced - view modes for kexi dialogs (i.e. data/design/sql)
+
+2004-01-12
+- Relation View:
+  - tables focusing fixed
+  - actions 'remove table', 'remove relation' work (not impl)
+  - "relation view" widget extracted and moved from relations/ plugin to widget/relations/
+   (because it's used also in queries)
+  - KexiRelationDialog renamed to KexiRelationWidget to avoid mistakes
+  - actions moved from KexiRelationView up to KexiRelationDialog (simplicity)
+  - added new actions: "open table", "design table"
+- KexiActionProxy:
+	new plugSharedAction() overload added for easy creating alternative action names. 
+
+2004-01-10
+- KexiDB::Field::isIntegerType() added. Now It's easier to detect if a field is integer.
+- Fixed loading and saving values of type Float or Double in database tables.
+- Row updating/inserting: Fixed converting decimal symbol from locale back to db backend format
+
+2004-01-09
+- PartManager: Parts are sorted using definition stored in kexirc 
+  (code taken from the old API)
+- .ui files can be now translated
+
+2004-01-08
+- KexiInternalPart introduced (as generalized KexiRelationPart): 
+  produces internal Kexi dialogs and widgets ON DEMAND
+  (so: KexiRelationPart is removed)
+- Kexi Relations (widget and dialog) is now produced by KexiInternalPart
+- Tables in relation view: sizes fixed
+
+2004-01-07
+- Build fixes for gcc2.95 on kde3.1
+- Relations View: connection and viewtable focusing fixed and some actions added
+
+2004-01-06
+- KexiTableView: 
+  -rowEditStarted(int) signal is emitted when row editing is started
+    (for updating or inserting)
+  -rowEditTerminated(int) emmited when row editing is terminated 
+    (no matter if accepted or not)
+  -proper availability updates for "edit_delete_row" (disabled when tv is
+   readonly) and "data_save_row" (enabled only on row editing)
+- KexiDialogBase/KexiPart : fixed caption icons setting for dialogs created by
+  parts
+- Shared Actions:
+  - KexiSharedActionHost introduced - it's "action sharing" functionality   extracted from KexiMainWindow.
+  - global default KexiSharedActionHost added for convenience
+  - KexiActionProxy now uses KexiSharedActionHost as it's host instead of explicity pointed KexiMainWindow
+  - on destruction, KexiSharedAction object is taken out of its KexiSharedActionHost 
+  - int KexiMainWindow::generatePrivateDocID() added, so we can use this when we want to get unique doc id 
+e.g. for KexiDialogBase.
+  - generatePrivateDocID() is used in Relations dialog
+
+- KexiMainWindow: fixed bug in virtual function
+- KexiSharedActionHost: fixed behaviour on destruction
+
+-KMDI:
+  -caption's icon is resized on setIcon() when needed
+  -default icon changed to SmallIcon("filenew"), 
+   if not found - filenew.xpm is used
+
+2004-01-05
+- QueryAsterisk: 
+  -setTable() added - a must for parser to work
+  -debug improoved
+- Connection: dropTable() added
+- Query Part ported to win32
+- KexiBrowser: nice title added for popup under part item
+- KexiTableView: 
+  -navigator showing/hiding implemented
+  -cursor setting a bit fixed for empty view
+  -cell's text has now proper color for read-only column
+- KMDI: fixed bad QWidget filter lookup and unsafe identifier hiding in childview's eventfilter
+- kexipropertyeditor ported to win32, kexiproperty and kexipropertybuffer moved from core
+
+2004-01-04
+- KexiActionProxy: "action" term in methods substituted by more readable: "sharedAction"
+- some actions (in browser) marked as KEXI_UNFINISHED
+- KexiMainWindow: KStdActions are now also acceptable as shared actions
+- copy/cut/paste actions are shared now; added to edit menu
+- "relations" action reintroduced
+- closing() convenient signal added to KexiDialogBase
+- on Table closing - any edits that are in progress are accepted (thx to lucijan for report)
+- KexiTableView: 
+  -fixed crash while counting minimum size for columnless tableview
+  -preventing from crash when no data is set before constructing is finished
+- KexiProject: openObject() and removeObject() added so we will be able to catch kexidb errors
+
+- KexiPart items are now removable! (both from GUI and db backend)
+- Kexi Browser is items are removed if required
+- KexiDialog: now has itemIcon() possible for reimpl. and Kexi Relation View reimpl this, since 
+  it has no KexiPart
+- Kexi Relation View: small crash fixed
+
+2004-01-03
+- KexiDB, core:
+	-ConnectionData and KexiProjectData now inherit QObject 
+	 (useful for QGuardedPtr, sharing and for notifications about changes)
+	-project_caption, project_desc properties are now created and stored in projects
+	-some utility functions added in kexidb/utils.cpp
+- KexiMainWindow: application's caption now also contain current project's caption (or name)
+  (this also works ok for maximized windows)
+- mysql driver reenabled (may not work correctly)
+
+- ConnectionData
+  -conflict with QObject fixed
+  -"name" member is now: "connName"
+
+2004-01-02
+- table view:
+	-in key event - we give up with executing actions that are shared with main window, because
+	these actions are executed at main window's level. These actions are declared using 
+plugSharedAction().
+	-row deleting works
+	-rows number is updated in tv navigator after row deletion
+- actions: MSA-like "Delete Record" substituted by "Delete Row"
+
+TODO: show posible errors (as well as for INSERTs and UPDATEs)!!!
+
+
+2003-12-30
+** Many cleanups and behavioral fixes
+- KexiMainWindow: 
+  -focusing fixed again (now menubar doesn't grab move focus from navigator)
+  -shared action set is now simplified, generalized
+  -getlogin() used at least on win32, cause lack of KUser :)
+- KexiDockBase added as a base for docked widgets hat offer shared actions. 
+  Now it is a pair with KexiDialogBase class (both inherit KexiActionProxy).
+- "Data" menu entry introduced
+- KexiTableView:
+  -added action for current cell removing
+  -added popup menu
+  -cell focus-marker is not grayed when popup menu is executed
+  -Key_Space pressing fixed
+  -added possibility for plugging shared actions to table view (using plugSharedAction()),
+   e.g. "data_save_row" action, so shortcuts are properly handled
+  -deleting row while new row is edited just cancels editing
+  -vscrollbar tooltip is not visible when corliing is dont using keyboard instead of a mouse
+  -stranger's key events (e.g. pressing up arrow in navigator's line edit) 
+   aren't processed by table view (in keyPressEvent())
+
+2003-12-22
+- KexiTableView most keyboard events are now only accesible without key modifiers (eg. CTRL+Key_Up now 
+doesn't work)
+
+2003-12-21
+- KexiActionProxy introduced
+- New terms introduced: part's gui client and part instance's gui client. 
+  The latter is removed from main window's guifactory when part instance is deactivated 
+  e.g. "Filter" action of tablepart is hidden when needed),
+  while the former is premanent in main window (e.g. "New Table" action is always visible).
+
+- KexiMainWindow: 
+  -dockwidgets' (like e.g. browser) focusing on main window's activate/deactivate 
+   and on menu bar popups - fixed.
+  -removed toolbar item's fileckering when we're closing one kexidialog and another kexidialog 
+   of the same type (guiclient) has to be activated (solution: guiclients are removed not 
+   on kexidialog closing but before activating another, it new activated dialog has different client.
+
+- Global Action availability updates: 1) KexiMainWindow updates its actions on dialog switching, 
+  or even on focusing dockwidget, like e.g. browser; 2) from dialog point of view - when required, 
+  action availiability (true/false) is signalled from currently focused dialog to main window
+- Browser: popup menu re-added, (there is also example how to plug 
+  both custom and global actions to the popup)
+- Opening part instances in design mode prepared (openInstance())
+
+2003-12-20
+- KexiDialogBase remembers its creator (a KexiPart::Part object)
+- KMdiChildFrm's icon is scaled when needed (e.g. when detached/attached)
+
+- KexiPart's classes: some methods are now protected
+- Toolbar buttons are now flicker-free, because gui clients are now attached 
+   to parts instead of part instances
+
+
+2003-12-19
+- KexiDB::Field:
+  -many properties of type int are now of type uint
+  -WIDTH property added
+  -NOTEMPTY property added
+  -canBeEmpty(), typeGroup(), isDateTimeType() added
+
+- KexiDBTableViewColumn merged with KexiTableViewColumn, now column properties are always reused 
+  from KexiDB::Field's properties
+
+- KexiTableView: full handling of NULL or EMPTY values on editor accepting, e.g.:
+   * cells are displayed as empty EVEN for numeric types, if null values are allowed
+   * cell value is forced to NULL if empty values are not allowed (e.g.: for numeric types)
+
+- Updating with NULL values fixed, and it's done only when needed.
+- KexiTableView editors: pressing "left arrow" key at begginning of cell's text moves 
+  to cell on the left hand; the same for end of text+right arrow key
+
+- Finally: new row inserting works (no data integrity checking or warnings added though).
+
+- KexiTableView: cells: fixed displaying of text (and text selection) longer than cell's width
+- KexiDB: 
+	-escapeString() and valueToSQL() moved from Connection to Driver
+	-escaping ' and " chars fixed
+
+2003-12-18
+2003-12-17
+2003-12-16
+2003-12-15
+- tableview: changes in keys behaviour: 
+  -Ctrl+home moves to 1st row, Ctrl+end - to last row,
+   Home -to 1st col., End -to last col.
+   Ctrl+Shift+home moves to 1st row and col, Ctrl+Shift+end - to last row and col,
+  -Key_BackTab is also used to navigate cells
+  -row editing improoved: buffer containing changes for current 
+    edited row introduced (KexiDB::RowEditBuffer)
+- tableview cell editors / items:
+  -KexiTableItem simply inherits from KexiDB::RowData
+  -Tab and Shift+tab, Up, Down, Home, End, etc. keys work also when cell editor is visible
+- FINALLY: row editing fully working: data is updated @ the backend using KexiDB
+
+- keximainwindow:
+  -Tab key pressed on navigator activates current child window
+  -Mainwindow's caption now contains (for Childframe Mode) child window's caption 
+   as the prefix if the child is attached and maximized. This works well with attaching/detaching 
+   and deactivating child windows.
+
+- KMdiChildArea: 2x crash fix for childframe mode
+  -when KMdiChildArea::setTopChild(0) is called and m_pZ is empty, pMaximizedChild is 0
+  -in KMdiChildArea::manageChild(), first - we need to take old references to childwindow 
+   that is added to m_pZ (crash reproduction: detach one childwindow, attach it, detach again)
+
+-KexiDB:
+ -IndexSchema's pkey retrieving for loaded project -fixed
+ -RowEditBuffer class introduced
+ -Object::debugError() shows more error info
+ -Connection::updateRow() and Cursor::updateRow() inttroduced for row updating
+ -some metods goes inline
+ -expanded list (obtained from QuerySchema::fieldsExpanded()) 
+    of Cursor's all query fields is cached within cursor
+ -FieldList - fields lookup is now case insensitive
+ -results of QuerySchema::fieldsExpanded() is cached inside QuerySchema
+ -QuerySchema::pkeyFieldsOrder(), QuerySchema::fieldsOrder() methods introduced (results are cached)
+
+-Drivers:
+ -SQLite driver updated for current API
+ -MySQL driver just compiles
+
+
+2003-12-13
+- browser: focusing fixed: doesn't lose focus when clicked
+
+2003-12-12
+- added caching to KexiProject::items() and KexiPartInfo
+- objects lookup-and-opening functionality moved from navigator (KexiBrowser) to keximainwindow
+- "-open" CLO reintroduced
+- KexiMainWindow: error messaging generalized a bit
+- KexiTableView - editors API and behaviour improoved
+
+- KexiPart::Part objects are cached
+- pointers to KexiPart::Item are used instead of values
+- KexiStartupFileDialog's file selection works on win32
+
+
+2003-12-11
+- Cursor::movePrev() impl. updated
+- DriverManager: result names are available for KParts::ComponentFactory::ComponentLoadingError errors
+
+- Detached KexiDialogBase windows now have proper icons
+- KexiTableView:
+  - size hint and minimum size hint fixed
+	- better widths for text fields in navigator
+	- cell redrawing & colors fixed
+- KexiDataTable: size hint and minimum size hint is reused from KexiTableView
+- Some fixes for KMDI taskbar
+- KexiInputTableEdit:
+	- fixed adding first char on starting edit
+	- numeric field == 0 is cleared on edit
+- KexiDialogBase, KexiPart::Part: creating part instances and registering generalized
+- KexiMainWindow: foxusing improoved, added action for focusing navigator
+- KexiMainWindow: members moved to d-pointer
+- KexiPart::GUIClient is created by KexiPart on demand, if GUI window available
+
+2003-12-10
+- KexiMainWindow: 
+  * "show navigator" action is auto-handled by kmdi
+  * fixed : pointer to current xmlgui is now cleared before closing kexidialog
+- KexiTableView::paintRow() fixed crash when col number was ==-1
+
+2003-12-08
+- Kexi MainWindows' settings are now stored and restored:
+  - toolbars, docks positions
+  - MDI mode
+  - added workaround for TaskBar positioning problem
+
+2003-12-06
+- sources synced with win32 target, again
+- Kexi:: singletons are now accessed via functions, eg. Kexi::connset()
+
+2003-12-03
+- KMDI modes enabled
+- KexiStatusBar introduced
+
+2003-11-30
+- KexiDB::Field::isFPNumericType() added
+- KexiTableView now entirely uses KexiDB::Field::Type for types checking, not QVariant
+- KexiTableView::paintCell() simplified
+
+2003-11-28
+- KexiStartupDialog: existing file opening fixed (problem with autocompletion);
+   "accept" aborting when no filename entered
+- some minor fixes and TODOs
+   
+2003-11-25
+Finally commited again
+General:
+- PostgreSQL-based projects: tables are now visible in Kexi
+- KexiProjectSelectorWidget for "projectopen" action reused with KexiProjectSelectorDialog
+- most KexiDB errors are connected to message boxes, even driver loading failures
+
+- after unsuccessfull Cursor::moveFirst() eof() and bof() now return true
+- '..' substituted with ".." for message strings
+
+- pqxx driver: 
+  - cursor's internal transaction is now destroyed on error in drv_open()
+  - cursor's internal transaction has an unique name for easy debugging
+ 
+- Kexi::detectProjectData() added for detecting file type both on startup and after
+    filename is selected in Kexi's file dialog
+- KexiPart::Manager is now shared between project sessions
+- KexiPart:: classes' implementation a bit refreshed
+- QValidator and helper functions for identifiers added
+
+- Main Window:
+  - "Open Existing Project" action works both for file- and server-based projects
+  - "New Project" action works both for file- and server-based projects
+  - above actions now work also after startup, from toolbar
+
+- KexiPart::dbAvailable signal not needed since openProject() function returns boolean
+
+- KexiStartupDialog:
+  - KexiConnSelectorWidget reused
+  - if single page is configured, no tabs are visible, 
+    so KexiStartupDialog is reused for projectopen and projectnew actions
+
+- KexiStartupFileDialog introduced as embeddable widget, 
+    reusable for different file types (e.g. .kexi and .kexis)
+- KexiNewProjectWizard introduced for creating empty projects (both file and server based)
+    it will be also reused for "project templates wizards"
+  
+2003-11-24
+2003-11-23
+- KexiDB: Connection::databaseExists() now works correctly with file-based drivers
+	- just file existence is checked
+
+- KexiDB::Connection 
+   - creating or dropping system database is not permitted
+   - databaseExists(): full file paths are compared for file-based drivers
+- KexiDB::Driver i18n fix, thanks for Malcolm Hunter
+CCMAIL: malcolm.hunter@gmx.co.uk
+
+- KexiPart::Manager is now shared
+- KexiPart::  classes' implementation a bit refreshed
+
+TODO: keep ownership properly in KexiPart namespace!!!!!!
+
+
+2003-11-22
+2003-11-21
+- drivermanager cleanup hack
+- some improovements in kexidb clases
+- KexiDB:
+  - Driver::isSystemDatabaseName() added
+  - some methods converted to const
+  - Connection::databaseNames() now has parameter for skipping system database names
+  - Driver::isValid()
+    - now checks driver's major version and compares against kexidb library major version
+    - now is called on createConnection() instead of Connection::connect() so errors 
+	  can be catch earlier
+  - KEXIDB_DRIVER (like Q_OBJECT) in driver.h and KEXIDB_DRIVER_INFO in driver_p.h macros 
+    introduced for ease driver development and decrease error count
+  
+
+2003-11-19
+- KexiNewProjectWizard added
+- KexiStartupFileDialog convenient KFileDialog subclass added/reused
+   
+2003-11-17
+- KexiDB: buffered cursors: the first record was shown 2 times
+- KexiDB::Connection: some internal query fixes
+- newapi tests: -buffered-cursors switch added, non-internal cursor for all tests
+   are now unbuffered by default; fixed buggy behaviour on nonsuccessful t.v. test
+   
+2003-11-15
+- small compiler issues fixed in pqxxconnection
+   
+2003-11-14
+- Field: inlines fixed for newer compilers
+- DriverManagerInternal::slotAppQuits() used to destroy all drivers
+  on QApplication quit, so even if there are DriverManager's static
+  instances that are destroyed on program "static destruction", 
+  drivers are not kept after QApplication death.
+
+2003-11-12
+2003-11-13
+- Kexi startup procedure for both files and db connections introduced
+- startup dialog integrated
+- projectdata redesigned
+- menu items improoved, polished; e.g. Changed "File" menu entry to "Database"
+- ConnectionData:
+  -added id for connectiondata
+  -some const added
+
+2003-11-10
+- added global kexi version info, like in koffice
+- configure.in.in: added checking for qextmdi if required
+
+2003-11-07
+2003-11-06
+2003-11-05
+- KexiTableView: 
+ - Navigation bar added
+ - cell's focus indicator frame is now also visible after focusout
+ - before entering to  edit mode, we ensure that current cell is visible
+ - vscrollbar tooltip added
+- Cursor: some members made private or protected
+- Cursor: m_beforeFirst is probably not needed anymore; m_at==0 is enough
+- Field: isNumericType(), isTextType() added, etc.;  
+   type names are now i18n'd in an array;
+   some methods inlined
+
+TODO: void KexiTableView::cancelRowEdit() still dont repaint properly!!
+TODO: update on lostfocus
+
+- SQLiteConnection:: sqlite_freemem() used to free error message when needed;
+	do the same for SQLiteCursor
+- serverResult(), etc. methods aded also to Cursor class, so finer grained error 
+  info is available
+
+  
+2003-11-04
+- Documentation added for few newer and older methods.
+
+2003-10-31
+- KexiDB::Cursor: many code like drv_getNextRecord() moved from SQLiteCursor down 
+  to Cursor class
+
+2003-10-29
+2003-10-30
+- KexiStartupDialog added. Now, although it is project-and-connection-oriented, 
+   it is designed to be still consistent with conventional document-driver startup 
+   dialogs used for other KOffice apps.
+- KexiProjectSelectorWidget introduced
+- KexiProjectData structure added
+- KexiProjectSet structure added
+- Test for new KexiStartupDialog. Code written here will be reused for
+  "fileopen" and "filenew" Kexi actions.
+
+2003-10-28
+- KexiStartupDialog introduced
+- KexiDB::ConnectionData: now offers (optional) driverName info
+- KexiDB::Driver::Info (short usefull structure) is now offered by DriverManager
+- ConnectionData::localSocketFileName optional attribute added
+ 
+2003-10-23
+- new icons for few kexi-specific contexts;
+- most icons are installed into Kexi app dir
+
+2003-10-22
+- KexiTableView: 
+ - sorting works again
+ - before sorting, row editing is cancelled
+ - better "ensure visible" code when scrolling on small area
+ - inserting rows code completed
+ - vheader repaint fixed
+
+2003-10-21
+- tests/newapi : Now all test types accept <db_name>
+- KexiTableView: 
+ - page down key also move cursor to "insert row" if one is present
+ - double clicking on cell (opening cell editor) fixed
+ - fixed cell's repaint when autoscroll is performed after clicking cell at different row
+ - sorting by column enabled, full set of methods added for this
+ - new feature: empty row is appended right after start of editing new row (like in MSA), 
+ to allow user to move to a next row
+- KexiDB driver services' properties updated:
+   - X-Kexi-DriverType=[File|Network]
+   - and X-Kexi-FileDBDriverMime (for file-based drivers only; 
+      for sqlite it is: application/x-sqlite)
+   -MimeType property removed
+- startup speed improoved: drivers lookup in KexiDB::DriverManager is now on demand.
+- Driver name now reuses QObject::name()
+- Connection::lastInsertedAutoIncValue() introduced
+
+2003-10-19
+- Connection::useTemporaryDatabaseIfNeeded() now is also reused 
+  for databaseExists() and databaseNames(), so these methods work when engine 
+  needs used any database before asking for info
+- ConnectionPrivate::m_skip_databaseExists_check_in_useDatabase used
+	to avoid endless recursion between useDatabase() and databaseExists()
+	when useTemporaryDatabaseIfNeeded() is working
+- Connection::setupKexiDBSystemSchema() added check to prevent creating 
+ system tables schema more that once per connection
+
+- Connection: reomved default values from useDatabase() and createDatabase()
+	because this might be confusing to use first-found database name here; (thanks piggz!)
+- FieldList: cached string == comma-separated list of fields added
+- Connection: valueToSQL() overload added, insertRecord() overload added so we can omit 
+	some fields from inserting; this is also internally used when kexi__* tables are 
+	filled what improoves backward compatibility
+- FieldList now offers lookup by field name, list of field names, it can create 
+  subLists, usable to define list of fields for data inserting
+- fixed compiler-dependent bug in insertRecord()
+
+2003-10-18  
+- Connection:
+  - useTemporaryDatabaseIfNeeded() added - Because some engines need to have
+   opened any database before executing administrative sql statements 
+   like "create database" or "drop database",
+   this method is used to use appropriate, existing database for this connection.
+  - above method is now used in createDatabase() and dropDatabase() if needed.
+  - QString anyAvailableDatabaseName() - returns name of any (e.g. first found) 
+   database for this connection, eg. "template1" for PostgreSQL.
+  - DriverBehaviour::ALWAYS_AVAILABLE_DATABASE_NAME added when hardcoded value 
+   for above is enough.
+  - setAvailableDatabaseName(const QString& dbName) - This is option that e.g. 
+   application that make use of KexiDB library can set to tune connection 
+   behaviour when it need to temporary connect to any database
+   in the server to do some work (e.g. DROP DATABASE).
+ - Connection cleaning up bug fixed a bit.
+ - Naming Conventions document added
+ - drv_isDatabaseUsed() introduced for additional state-checks
+
+2003-10-17
+- Driver developers should not change values of several important Connection
+  class members, so these are now private.
+
+2003-10-16
+- KexiTableView:
+ - maany repainting, updating, resizing improoved, code simplifications
+ - editing row session introduced: edits for the same row is not accepted until move to another row
+  This allows multiple fields editing before row editing accept.
+
+2003-10-15
+- missing QuerySchema::addAsterisk(QueryAsterisk *asterisk) added
+- KexiTableView headers and cells repainting improoved
+- for mysql driver: beh->ROW_ID_FIELD_NAME="_ROWID", is this ok?
+
+2003-10-14
+- DriverBehaviour::ROW_ID_FIELD_NAME added
+- bool Driver::isValid() invented, it is so clever that obsolete or bad driver 
+ can not be easily harmfull for application.
+- KexiTableView and KexiDataTableView reimplemented for new KexiDB API.
+- few classes renamed, e.g. KexiTableViewData is here now instead KexiTableList
+- KexiTableViewData is now mostly data structure, special rows like "inserter" will be handled 
+ by KexiTableView code. 
+- KexiDataTableView now uses Cursor (a bit not efficient yet).
+
+2003-10-13
+- Cursor has now two ways for definition: 1) use raw statement 2) use QuerySchema
+- Conenction: prepareQuery() accepting QuerySchema overload added 
+- TableSchema::query() convenience function added
+- tableview: QuerySchema is now used a bit
+- QuerySchema(TableSchema* tableSchema) is created by defining 
+ "all-tables query asterisk" (see QueryAsterisk) item. 
+- Connection: implemented and selectStatement() replaced queryStatement() because 
+ not only "select" queries will be implemented.
+- QuerySchema::fieldsExpanded() convenient function added to expand query asterisks
+- KexiDataTableView uses QuerySchema even smarter
+- kexi/kexidb/tests moved to kexi/ to avoid curcular deps
+
+2003-10-12
+- Connection::isDatabaseUsed() fixed
+- Connection: isConnected() is substituted with isDatabaseUsed() in some cases
+	and checkIsDatabaseUsed() is substituted with checkConnected() in many cases.
+- kexidb/tests/newapi tableview now uses KexiDataTableView
+- Connection:: many overloads like queryStatement( KexiDB::QuerySchema& querySchema ) or
+   executeQuery( QuerySchema& query, uint cursor_options = 0 ) added
+- KexiDataTableView: simplified: setDataSet() -> setData(); record -> cursor
+
+2003-10-11
+- Transaction::isNull() fixed 
+- now tables creation seems to be ok ('tests/newapi sqlite tables' works)
+- sources synced again with win32 target
+- kexidb/parser and kexidb/tests/parser ported to win32
+- KexiDB::Expression introduced
+- isSystemObjectName() now checks for "kexi__" prefixes
+- checks on create table: if name is not system, if table is not empty, if fields are not system
+- KexiDB::Reference introduced
+- KexiDB::IndexSchema now contains informations about multiple related Reference objects
+- kexidb/tests/newapi : now tests are functions, so can be called as subtests if needed;
+   gui tests group added; tableview gui test introduced
+
+2003-10-10
+- FIX: creating kexidb system tables schema objects on useDatabase()
+- KexiDB::Object::debugError() added for convenience
+- Object: serverErrorMsg(), serverResult(), serverResultName(),
+	drv_clearServerResult() added
+- virtual Q_ULLONG Connection::drv_lastInsertRowID() added - returns unique
+   identifier of last inserted row. 
+- DriverBehaviour::AUTO_INCREMENT_FIELD_OPTION added; autoinc field's option is now 
+	used in "CREATE TABLE" statement building; bool SPECIAL_AUTO_INCREMENT_DEF added
+- fixed crash on mass transactions closing during closeDatabase()
+- added tables creation subtest to kexidb/tests/newapi
+- SQLite* classes: last operation's result is now stored for later checking
+
+2003-10-09
+KexiDB::Connection: 
+- "select * from ..." substituted by "select <field name(s)> from ..."
+  where possible, so after future kexi_* tables change it will still work.
+- list of internally used kexi__* tables available with new static method
+- bool TableSchema::isKexiDBSystem() added for tables that are internal for KexiDB
+- bool SchemaData::isNative() added for objects that are native, ie. not contain additional
+   metadata information.
+
+- Connection::destroy() instead of Connection::disconnect() should be called 
+  from xxxxConnection subclasses.
+- ~TableSchema calls Connection::removeMe() so it is removed from tables list if needed
+- ordering in Field object added
+- quite hacky and thus effective insertRecord() overloads added
+- some schema is added to kexi__* tables on createTable()
+  
+2003-10-07
+- KexiDB::QueryAsterisk class introduced to define select queries with asterisks, like
+ "staff.*" in "SELECT staff.*, cars.model from staff, cars WHERE staff.car = cars.number"
+ (1st ttype) or "*" in "SELECT * from staff, cars WHERE staff.car = cars.number" (2nd type)
+- Query schemas storage added
+- using include path returned by 'mysql_config --mysql_config' as 
+  is instead of eating mysql suffix
+- Transaction::null and isNull() added
+- Connection: Simulated AutoCommit feature implemented,
+   createTable() added - it uses autocommit if enabled.
+- Driver: DriverBehaviour member added - Detailed definition 
+  of driver's default behaviour.
+
+2003-10-06
+-KexiDB::QuerySchema: 
+ - field aliases added and checking if there is alias
+ - list of tables used in query added
+ - debug() updated
+
+2003-10-05
+-KexiDB:: 
+ - fields() now offered by fieldlist
+ - Field::Field( ) args order fixed (compiler didn't complain..)
+ - TableSchema: primary idx setting added
+ - TableSchema: autogenerated indices are added implicity on addField()
+ - IndexSchema: unique flag added, primary flag is now dependend on this
+
+2003-10-04
+-KexiDB:: addedd better access to creating schemas
+
+2003-10-03
+-KexiDB:: API extended for db transactions
+ - Transaction is now implicity shared container for storing transaction handle,
+    TransactionData is used as internal driver-dependent storage
+ - former Transaction class is now TransactionGuard
+ - "default transaction" added to Conenction
+ - SingleTransactions, MultipleTransactions and NestedTransactions added to KexiDB::Driver::Features
+ - autoCommit option added to Connection (can use both driver-specific feature ans simulate),
+    (not fully implemented yet)
+ - active transactions are rolled back on database close
+ - heavily commented :)
+ - index.* moved to indexschema.*
+ 
+2003-10-02
+-KexiDB::
+ - IndexSchema now inherits also from SchemaData (its additional 
+    properties will be used at least in gui)
+ - IndexSchema now points to a table that contains it, not connection
+ - fixed owning rules for FieldList: not only TableSchema owns its fileds,
+ 	while QuerySchema, IndexSchema not
+ - more methods moved to const 
+ - QueryData offers now information about its parent table 
+
+ - some record inserting introduced in Connection
+ - yet more methods moved to const 
+ - KexiDB version info added (both as functions and defines)
+ - global definitions file added
+
+2003-10-01
+-KexiDB::
+ - Table and query schemas now can be looked up using its id or name using Connection::tableSchema()
+	and Connection::querySchema()
+ - Connection::querySingleRecord() added for easy retrieval single (first) record 
+	from query's result set
+ - Cursor::storeCurrentRecord(RecordData &data) added: Puts current record's data into data
+ 	(makes a deep copy).
+ - update after moving query.*, table.* file to queryschema.*, tableschema.*
+ - Cursor buffering-related members moved from SQLiteCursor to Cursor
+ - Cursor::moveFirst() fixed for buffered cursors - reopen() is now not needed
+ - SQLiteCursor::drv_getNextRecord() we don't try to fetch records when 
+    we know that buffer is already fully loaded.
+- Uff, It is first time since ~3 moths I can see kexi main window after kexiDB change
+
+2003-09-28
+- KexiDB:
+  - Table, Query and Index classes renamed to TableSchema, QuerySchema and IndexSchema
+  - query schemas storage introduced
+  - kexi__table 'system table' renamed to kexi__objects and for it now will be used for 
+  storing also other types of objects, eg. queries. Some properties added to this table.
+  - kexi__querydata added for query schemas
+  - kexi__db added for storing database properties, e.g. kexidb version
+
+2003-09-26
+- new kexidb/newapi test added: dbcreation
+- KexiDB::Connection::databaseExists() has now arg. that allows ignoring error messages (deflt)
+- params for createDatabase() and useDatabase() are now optional for more convenient 
+   use file-based drivers
+
+2003-09-24
+bool buffering_completed added to SQLiteCursor: true if we have already all
+ records stored in the buffer
+
+2003-09-18
+- Buffered KexiDB::Cursor type introduced, for this type KexiDB::Cursor::isBuferred() is true;
+	this is "test" implementation for SQLiteConnection only [INCOMPLETE]. 
+	Cursor options introduced (Cursor::options()). Cursor's buffered flag if one these options.
+	Options are now optional parameters both for protected Coursor's constructor and for 
+	Conenction::executeQuery() and Conenction::prepareQuery()
+- virtual bool Connection::drv_databaseExists( const QString &dbName ) added for optional 
+	reimplementation. It is a pair with drv_getDatabasesList(), both are used in databaseExists() now.
+	See comments for details.
+- Connection::useDatabase(dbName) now do not allows dbName that do not exists, 
+	while for single-db-per-connection-engines (eg. file-based engines) Connection::databaseExists()
+	returns true only for single db name (eventually URL).
+- for file drivers: file existence checks moved to databaseExists()
+- in Conenction::useDatabase(dbName): closeDatabase() is called before other database should be used, 
+	if there already was opened database.
+- Connection::drv_getDatabasesList() has now default implementation that returns empty list.
+- sources in drivers/mySQL/ updated just to work with kexidb API changes
+- Connection::drv_databaseExists(dbName) is now by default just checking if dbName 
+	is on the db names list
+- Some code for bufering added - forward moving with buffered cursors looks
+	better.
+
+2003-09-17
+- KexiDB::Query introduced: Table::name() and Query::name() moved to FieldList.
+- Field::ListIterator FieldList::fieldsIterator(), Field::FieldList::debug() and clear() added
+- ERR_CURSOR_RECORD_FETCHING added
+
+TODO: add 
+-static cursor types
+-scrollable cursor types
+
+2003-09-16
+- KexiDB::DriverManager: driver names accepted by KexiDB::DriverManager::driver(name) 
+   and KexiDB::DriverManager::serviceInfo(name) methods are now case insensitive.
+- 3rdparty/kexisql: added files needed by win32 target
+- removed kexidb/drivers/sqlite/driver directory: now we include sqlite.h from 3rdparty/kexisql/src/
+- MySqlDriver's service name is "kexidb_mysqldriver", export macro is KEXIDB_MYSQL_DRIVER_EXPORT;
+  win32 compilation fixed.
+
+2003-09-15
+- KexiDB::Cursor:
+  - movePrev(), bof() added;
+  - drv_getRecord() splitted to drv_getNextRecord(), drv_getPrevRecord()
+  - fieldCount() added, not fully works yet
+  - on open() we have always bof()==true and eof()==false
+  - simplification: now bof() is computed as m_at==0
+  - we are internally counting records from 1 and externally from 0
+     (what is visible using at()).
+  - m_at and thus at() has now Q_LLONG type
+
+2003-09-14
+- KexiDB::Object::setErrorMsg renamed to setError
+- KexiDB::DriverManager is now just a container for one reference 
+  to Internal Library's Driver Manager, so all you are expected to do is to remember
+  about deleting KexiDB::DriverManager instance in your app.
+  You can create many KexiDB::DriverManager objects.
+- KexiDB lib now handles automatic deletion of drivers after last 
+  KexiDB::DriverManager object deletion (thus refcount==0).
+- tests/newapi now looks more simply at the end of main.cpp file :)
+TODO: do the same with DriverManager as Driver
+- KexiDB::Connection::tableSchema() updated for new KexiDB::Connection::executeQuery() semantic.
+- DriverManager::self() no longer needed
+TODO: add fieldCount() to Cursor
+
+2003-09-13
+KexiDB:
+- Connection::prepareQuery() added for creating not opened cursors.
+- Connection::executeQuery() now automatically opens the query with created cursor.
+- Connection::destroy() convenient method added for obligatory use 
+  in Conenction subclasses' dctors. destroy() just disconnets() and takes the Connection 
+  object out of parent (Driver).
+- SQLiteConnection updated for above requirements
+- cursors and tabledefs are now deleted not in ~Connection but 
+   on every Connection::disconnect().
+- kexidb/tests/newapi also compiles with qmake and runs on unix
+TODO: add auto removing Drivers on DriverManager deletion.
+
+2003-09-12
+Great day for KexiDB in cvs:
+- Old KexiDB moved with actual Kexi version to non-default old_db_api branch.
+- Current (HEAD) now contains new kexidb/ dir for with API
+- kexidb/tests/ added to cvs with one 'newapi' test
+
+2003-09-11
+- Index::List and Field::List are now QPrrList<Field>, so Field objects are now stored as a pointers, 
+	no as a values. These are owned by Table objects.
+
+2003-09-10
+- Html Doxygen-generated docs for KexiDB module configured
+- KexiDB::Index introduced - definition of single table index (1 or multi-field)
+- KexiDB::FieldList introduced - list of fields; base class for KexiDB::Index, KexiDB::Table
+TODO: add KexiDB::Query and use this object eg. as argument for Cursor* Connection::executeQuery()
+
+2003-09-09
+kexidb:
+- Every Connection object stores cursors opened with it. On Connection destruction, 
+	cursors are deleted automatically. The same with table schemas within Connection object.
+	QPtrDict is used for storing cursor objects.
+- Every Driver object stores connection using QPtrDict, not QPtrList.
+- Driver::isSystemObjectName(), Driver::isSystemFieldName() are case insensitive.
+
+TODO: PROPOSAL: add compile-time option for kexidb to be kde-independent. 
+	This could be quite easy.
+
+2003-09-08
+kexidb:
+- QStringList Driver::systemNames() is now bool Driver isSystemObjectName() 
+		-- Checks system object names, 
+		eg. build-in system tables that cannot be used by user,
+		and in most cases user even shouldn't see these. Specific for 
+		a given driver implementation.
+		For SQLITE driver system object names are these with prefix "sqlite_"
+- QStringList isSystemFieldName( n ) added: return true if n is a system field names, 
+		build-in system fields that cannot be used by user,
+		and in most cases user even shouldn't see this. Specific for 
+		a given driver implementation. 
+		For SQLITE driver this has one system field name: "_ROWID_" (see CHANGELOG-Kexi-SQLITE).
+- QString Connection::valueToSQL( const Field::Type ftype, QVariant& v )
+		added for encoding values for sql queries
+- Connection::createTableStatement(): unique, default and not null flags are now added.
+
+TODO: also fields with UNIQUE flags should cause KexiDB::Table to have appropriate KexiDB::Index
+
+2003-09-06
+- new KexiDB is stored in "kexidb" subdir, old api in "kexiDB", on win32 in "kexidb_old"
+-	virtual QString escapeString(const QString& str)
+	virtual QCString escapeString(const QCString& str) added for Connection
+- Field::setDefaultValue(const QCString& d) added. Default values are stored in 'f_default Text'
+	field of kexi__fields table and are string-encoded there.
+
+2003-09-04
+- kexidb CHANGES FROM JOWENN: No ; after namespac, some d Pointers,
+		littlebit different includes, littlebit modified destructors 
+
+2003-09-01
+	KexiDB::
+	-	Cursor:: moveFirst(), moveLast(), moveNext(), eof(), at(), QVariant value(int i)
+TODO: Cursor::value(int i) should use schema information to convert types of values
+			(now all values are strings)
+	-	Connection::tableSchema() - returns schema of given table retrieved 
+			using connection's system kexi__* tables
+	-	Connection::deleteCursor()
+	-	Driver::sqlTypeName(int id_t) - returns sql type name for given driver
+	-	static QString Driver::defaultSQLTypeName(int id_t) - returns sql type name for given 
+driver
+			(usable when we do not have Driver instance yet)
+	-	Table::debug()
+TODO: add default value storage
+
+2003-08-29
+- KexiDB::Cursor class, Cursor* KexiDB::Connection::executeQuery(statement) creates cursor
+- KexiDB::Connection::drv_executeSQL(): executes query \a statement, but without returning resulting 
+		rows (used mostly for functional queries).
+
+2003-08-28
+- KexiDB::Transaction helper class introduced, transaction-related methods added for KexiDB::Connection.
+- drv_createTable() and createTableStatement() moved up to KexiDB::Connection
+
+2003-08-27
+- KexiDB::Table, KexiDB::Field classes introduced. 
+	New DB-storage design started: kexi__table, kexi__fields system tables 
+	(for db schema storage).
+
+2003-07-28
+- KexiDataTableView::tableSize() removed (wasn't this unnecessary?)
+
+2003-07-26
+- KexiRelationViewTableContainer: width is now based on maximum width of
+the field name or header name. 
+- KexiDataTable do not stores members  like KexiDB or KexiDBRecordSet bu
+uses these from KexiDataTableView.
+
+2003-07-25
+- KexiDialogBase now also inherits from KXMLGUIClient for easy actions management.
+	Do not make KXMLGUIClient subclass but just call setXMLFile() in KexiDialogBase:: subclasses' ctor
+	and add actions to KexiDialogBase::actionColection().
+- KexiRelationDialog:
+	- now uses KXMLGUIClient to better utilize its actions
+	- right-click context menus fully works
+	- 'hide selected table', 'open selected table' actions added (unimpl.), kexirelationsview.rc 
+added.
+- Main Kexi menu bar little more standarized: 'Edit' menu added, 'View' menu moved just after Edit menu.
+TODO: implement selected table hiding
+TODO: implement selected table opening
+TODO: add drag from browser
+
+2003-07-24
+- --open command line option added for automatic opening objects at startup, this will help in our 
+	testing (see 'kexi --help' or main.cpp for details).
+- KexiDialogBase got sizeHint() now that make it fit to qworkspace if it is a in-workspace window.
+- virtual QString KexiProjectHandler::groupName() added that offers store plurar form of part name,
+	while name() offers singular form.
+- KexiRelationViewTable: 
+	- list items (fields) without icons are aligned using transparent icons;
+	- moving TableViews back from outside of scroll view area automatically shrinks scroll view's 
+	area to smallest possible size
+	- field that we drag over now is highlighted
+TODO: fix KListView::viewportPaintEvent() like in KexiRelationViewTable::drawItemHighlighter()
+      and commit to cvs (kdeui)
+- KexiRelationViewTableContainer got now focus/unfocus/z-order functionality. Colors of table headers 
+	are consistent with focusing and OS settings
+TODO: fix connection lines painting
+
+2003-07-23
+- KexiTableView:
+	- KexiTableViewPrivate d-pointer added with "kexitableview_p.h", "kexitableview_p.cpp"
+	- Fixed repainting empty areas (background) in KexiTableView: QColorGroup::Base color is used.
+	- editableOnDoubleClick(), setEmptyAreaColor() added
+	- For Qt::Key_Menu key, context menu is show below the current cell, if available.
+- KexiDialogBase reorganized. Now it offers more generic properties and functionality, 
+	so subclasses can be more cleanly written and consistent with API and behaviour.
+- Relations window is registered with 'kexi/relations' id, 
+	while relations window embedded in query designer has id 'kexi/query/<query_name>/relations'
+TODO: implement sizeHint() for KexiDialogBase subclasses
+TODO: make open, create, delete and edit functions in KexiProjectHandlerProxy subclasses more generic
+
+2003-07-22
+- scrollbars enabled in KexiWorkspaceMDI
+
+2003-07-21
+- Kexi project 'kexi_doc' icon added, on win32 it is added to kexi.exe resources (id=1) and registered for 
+	.kexi extension on installation.
+TODO: add "New document" (empty or from template) command-line option, so it can be registered 
+	as "shell/new" in HKCR registry key on win32.
+TODO: like above: "Print" and "Print to"
+
+2003-07-18
+- " " prepended to Project Browsers' list items' texts for better look (maybe add this feature 
+	to KListView or make its generic subclass?)
+- Some fixes with text positioning in tableview cells: float and date type y-offset, 
+	date type editor frames removed
+TODO: maybe optionally use KDateWidget (this needs to extend and improve this class)?
+	QDateEdit is good enough (but this need to follow date format for locale or settings 
+	using QDateEdit::Order, etc.).
+TODO: fix KDatePicker (in kdeui): accepting with Return key or dblclick, and setting focus.
+- KexiTableEdit has now QColorGroup::Base (usually: white) background
+- KexiInputTableEdit has now some space on the left, so strings look better.
+TODO: add default hint for columns widths, based on type of field 
+
+2003-07-17
+- actions for Form, Kugar, Relations, Script Parts updated using KexiPartItemAction,
+	KexiProjectHandlerProxy::groupContextMenu() and itemContextMenu()
+	like in Tables and Queries' Parts
+- kexikugarhandlerui.rc moved to kexi/data/
+- 'Other Licenses' submenu made in 'Help' menu, 'Report Generator Licensing' 
+	entry moved here from Kugar Part's popup menu
+TODO: move this submenu after 'Error report' Entry (requires changes to koffice_shell.rc).
+- kexirc added
+- added option for KexiBrowserItem to be sorted in FIFO order (top level items - by default,
+	others are sorted in alpha order). Visible Parts' order is now specified (by library name)
+	in the Kexi's main config file "kexirc" ([Parts]/Order), because KTrader sorts parts 
+	by name in aplha order. Unspecified Parts are appended at the end of list.
+	This order setting is loaded and used on parts loading (KexiProject::loadHandlers()).
+
+2003-07-16
+- fixed registering (registerAs) for query designer's windows, 
+	query from project browser removing fixed
+- project browser's groups items (tables, queries,..) are now non-selectable 
+	as these are rather special constant containers
+- added convenient hidden(), shown() signals to KexiDialogBase
+- added KexiDialogBase::plugToggleAction(KToggleAction *toggle_action) for syncing window
+	visibility with toggle action's state
+
+2003-07-15
+- Kexi/win32 synced with cvs again after plugins/ rearrangement.
+- New Kexi icon updated for win32
+- menubar and popupmenu entries in Query Part merged using KexiPartItemAction (new KAction subclass);
+  The same for Tables Part. KexiPartPopupMenu now collaborates with KexiPartItemAction to reuse its
+	action's information (avoid redundancy).
+TODO: add delete_item action icon (equal "button_cancel" in crystalsvg) to the koffice/actions icons
+TODO: like above, add "script" icon to kexi/actions ("moc_src" is used)
+
+2003-07-01
+- Some table view text positions painting fixes for x11, for dbl and int type, editor's position fixed.
+TODO: add left margin for cells' text (at least for x11)
+
+2003-06-28
+- Project Wizard: fixed align for big picture, some widgets availability fixes, 
+big picture moved to KexiCreateProjectPage superclass.
+- KEXI_ADD_EXAMPLE_ENGINES compile-time option added: if set, example engines will be added 
+	to the drivers list in the Project wizard
+
+2003-06-22
+- Alter Table Window: info about not implemented rows removal added for KEXI_NO_UNFINISHED option
+  Redundant label with table name removed from top of the window.
+  Double click in KexiTableView reenabled.
+  PropertyEditor and KexiTableView size hints little fixed.
+- KexiTableView: now clicking outside of a grid do not activates any cell;
+   (crash fixed) sorting disabled while in-cell editor is visible
+- "Project properties" function disabled for KEXI_NO_UNFINISHED option
+
+2003-06-21
+- automatically set focus inside Alter Table Window and show cursor
+- fixed crash on entering data in 2nd, 3rd, etc. columns in table added during current session
+  (table def struct wasn't created for new table)
+
+2003-06-17
+([JK] - fix proposed by Jakub Kubica)
+[JK]- (in kofficecore): KoMainWindow::KoMainWindow: KStdAction::configureToolbars disabled:
+TODO: enable this when configure window will work
+[JK]- "Settings>Configure Kexi" action temporary disabled for KEXI_NO_UNFINISHED option
+TODO: reenable this!
+[JK]- "Save password" in authorization page of the Project wizard removed for KEXI_NO_UNFINISHED option
+TODO: reenable this!
+- <ActionList name="toolbarlist"> line removed from koffice_shell.rc (this removed redundant actions)
+[JK]- now, after failed db connection Project wizard do not allow moving to DB selection page
+- now it's not allowed to close alter table window for a table that do not contain fields
+  (message box is displayed then). The same is when user try to delete table (without fields) 
+	that is currently opened 
+TODO: allow the user to give up and delete this table
+
+
+2003-06-15
+- when KEXI_NO_UNFINISHED option is set, msgbox information is presented for unimplemented actions
+- kexidb: added information about if database (given by name) is considered as system db
+- projectwizard: only non-system databases are visible on the db list; db icon added
+- propertyeditor in altertable window has narrower 2nd column
+
+2003-06-14
+- inserting queries into list fixed
+- added KEXI_NO_FILTER_DLG compile-time option for incomplete filter dialog in query editor
+- added KEXI_NO_UNFINISHED compile-time option for disabling unfinished features
+- KexiTableView::DeletionPolicy is now (mostly) used for choose KexiTableView deletion method
+TODO: KexiTableView::AskDelete flag is not implemented
+TODO: do the same with KexiTableView::AdditionPolicy 
+- auto popup menu is added for KexiTableView when KexiTableView::DeletionPolicy != NoDelete
+	or the same is for KexiTableView::AdditionPolicy, so no more external (e.g. in KexiDataTable)
+	popup menu creation is required for just addition and deletion actions.
+- fixed row deletion in query designer's table view
+- fixed subwindows sizes: now these are resized to the workspace size
+- tableview's cells text positioning fixed, synced with editors, cells size fixed,
+  numeric cells' editors are now right-aligned
+
+2003-06-13
+- Fixed crash on altering newly created table
+- (temporary fix) MySqlRecord is now always set to r-w mode
+TODO: MySqlRecord: get readonly flag from the database
+TODO: IMPORTANT: Kaxi must automatically add primary key it is not added by user,
+  or at least propose this for user before saving altered table. If given table does not conatin
+	a PK, then it will be readonly.(or at least removing given row wont be possible if this row 
+	is duplicated)
+	CURRENT STATE: removing rows works only for table having PK
+- data table window's caption fixed
+- Control+Delete shortcut added for current record removing
+- fixed removing vertical header item after current record removing
+- KexiTableEdit now uses layout for proper displaying its Editor
+TODO: KexiTableEdit shouldnt have subwidget like KLineEdit but its subclasses should
+	inherit also from given editor widget (eg. from KLineEdit)
+TODO: KexiTableView's vertical header isn't updated after several actions
+- windows now have icons == KexiProjectHandler::itemPixmap()
+- normal size for relations dialog's combobox 
+TODO: change method for adding tables to relations
+- KexiDialogBase subclasses now registers to view with 
+	identifier == KexiProjectHandlerItem::fullIdentifier(), not caption or title
+- KexiRelationDialog is now registered to view as "kexi/relations", 
+	so relations window is unique per view
+TODO: disable altering when the same table is opened for data viewing
+- avoid opening both alter view and data view for the same table
+- avoid creating multiple tables with the same name
+TODO: other objects too: move this to common method
+TODO: avoid creating/altering table with no fields
+	
+2003-06-12
+- Table View Editor keyboard actions fixed, double type validating fixed,
+	fixed Enter, Delete keys, added F2 key, disabled non-printable unused keys
+TODO: use QValidator everywhere here!
+- after opening KexiDataTable focus is set inside automatically
+
+2003-06-11
+- Kexi objects have now titles - user-visible text instead low-level names
+
+2003-06-09
+- calling KexiView::finalizeInit() moved to KexiProject, actions for toggling
+dock windows visiblity fixed, simplified code
+- some icons, actions fixed
+- KexiProjectHandlerItem redesign
+
+2003-06-05
+- relation view's fixes and redesign
+
+2003-06-04
+- projectWizard: double click on dbases list opens selected db
+- navigator: KEXI_NO_MULTI_TABS option added for disable showing redundant tabs
+
+2003-05-28
+- fixed problem with project window's increased width while clicking on the
+  tabs; multitabbar fonts improvements; code cleanups
+
+2003-05-27
+- i18n-pl finished for ui and servicenames
+- kexi can load and save documents
+
+2003-05-17
+- kexi has icon on win32
+- kexi installer
+
+2003-05-08
+- kexi cvs merge:
+  KPath removed (qt/win32 will be patched instead)
+- libkexifilters added
+- core/kexisettings, core/kexiworkspaceSDI kexiDB/kexidbupdaterecord ported
+
+2003-04-28
+- fresh cvs and win32 version merge
+- kexifilter added
+
+2003-04-22
+- partial (example) polish l18n for GUI
+
+2003-04-15
+- keximysqlinterface lib. ported
+- updated servicetypes/kexidbdriver.desktop installed
+- mysqlinterface.desktop removed: valid is keximysqlinterface.desktop
+
+2003-04-12
+- libraries ported: kexipart kexihandler_form kexihandler_query kexihandler_relation
+    kexihandler_table kexiprojectwizard
+
+- Kexi running with projectwizard (no db avaliable although)
+
+2003-04-07
+- now Kexi has visible menu, toolbar and 'welcome' dialog
+
+2003-04-02
+- application's start process is simply hacked inside main() instead of inside KoApplication::start()
+  so, Kexi application running on screen for the first time on win32
+
+2003-04-01
+- kexi runs but is invisible
+
+2003-03-31
+- KEXI_NO_PRINT=1 (temporary) disables printing functionality
+- kexiDB/kexidb.h: KexiDBDriver *m_currentDriver moved from public slots section to private
+- kexicore and kexidb libs ported
+- kexi at least now compiles (but crashes)
+
+2003-03-28
+- first touch on Kexi sources for porting
+

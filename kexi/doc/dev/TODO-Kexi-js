@@ -818,9 +818,6 @@ TODO:
 TODO: entering table/query name by hand doesn't work in 'form data source' combo
 
 TODO:
-- add --readonly option
-
-TODO:
 - if you place e.g. a label in a container like a tabwidget and doubleclick it to edit the content, 
   the label jumps around. ccpasteur said he fixed it last year ;)
 - only change bg color of tab widget, not its outer area; fix changing tabs bg color
