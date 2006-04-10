@@ -208,7 +208,7 @@ class TableInfo {
 
         int tableCellsSelected() { return m_selected; }
         int amountRowsSelected() { return m_rows.count(); }
-        bool amountColumnsSelected() { return m_columns.count(); }
+        int amountColumnsSelected() { return m_columns.count(); }
         bool oneCellSelected() { return m_oneCellSelected; }
         bool protectContentEnabled() { return m_protectContent; }
         QValueList<uint> selectedRows() { return m_rows; }
