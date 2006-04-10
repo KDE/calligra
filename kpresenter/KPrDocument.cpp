@@ -131,7 +131,9 @@ KPrChild::~KPrChild()
 
 KoDocument *KPrChild::hitTest( const QPoint &, const QWMatrix & )
 {
-    return 0L;
+    // hitTest functionality is disabled because kpresenter handles activation
+    // of embedded parts by itself. See KPrPartObject::activate().
+    return 0;
 }
 
 KPrDocument::KPrDocument( QWidget *parentWidget, const char *widgetName, QObject* parent, const char* name,
@@ -1034,7 +1036,7 @@ bool KPrDocument::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
 //save page
 
     QMap<QString, int> pageNames;
-    
+
     if ( !_duplicatePage )
     {
         m_masterPage->saveOasisPage( store, stickyTmpWriter, 0, savingContext, indexObj, partIndexObj, manifestWriter, pageNames );
@@ -1048,7 +1050,7 @@ bool KPrDocument::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
         }
 
     }
-    
+
     if ( saveOnlyPage != -1 )
     {
         m_pageList.at( saveOnlyPage )->saveOasisPage( store, contentTmpWriter, ( saveOnlyPage+1 ), savingContext, indexObj, partIndexObj , manifestWriter, pageNames );
@@ -1457,7 +1459,7 @@ void KPrDocument::saveOasisPresentationCustomSlideShow( KoXmlWriter &contentTmpW
     //<presentation:show presentation:name="New Custom Slide Show" presentation:pages="page1,page1,page1,page1,page1"/>
 }
 
-void KPrDocument::saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyles, QFile* masterStyles, 
+void KPrDocument::saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyles, QFile* masterStyles,
                                            KoSavingContext & savingContext, SaveFlag saveFlag ) const
 {
     KoStoreDevice stylesDev( store );
@@ -1838,7 +1840,7 @@ void KPrDocument::loadOasisObject( KPrPage * newpage, QDomNode & drawPage, KoOas
                         else
                             newpage->appendObject(kppixmapobject);
                         break;
-                    } 
+                    }
                     else if ( localName == "object" )
                     {
                         KPrChild *ch = new KPrChild( this );
@@ -3236,7 +3238,7 @@ void KPrDocument::loadUsedSoundFileFromStore( KoStore *_store, QStringList _list
             }
 
             _store->close();
-            delete data;
+            delete[] data;
         }
         else {
             kdDebug( 33001 ) << "Found this( " << soundFile << " ) file on disk" << endl;
