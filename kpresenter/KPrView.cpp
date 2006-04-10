@@ -19,7 +19,7 @@
 */
 
 #include <kprinter.h>
-#include <kaccel.h>
+
 #include <kglobalsettings.h>
 #include <qpainter.h>
 #include <qscrollbar.h>
