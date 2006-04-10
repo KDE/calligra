@@ -20,9 +20,9 @@
 #include "commontests.h"
 #include "testobject.h"
 
-#include "../lib/manager.h"
 #include "../lib/action.h"
 #include "../lib/function.h"
+#include "../lib/manager.h"
 #include "../lib/macro.h"
 #include "../lib/variable.h"
 #include "../lib/metaobject.h"
@@ -121,12 +121,6 @@ namespace KoMacroTest {
 			KXMLGUIClient* xmlguiclient;
 
 			/**
-			* The @a KoMacro::Manager instace created on @a setUp()
-			* and used to access the KoMacro-framework.
-			*/
-			KoMacro::Manager* manager;
-
-			/**
 			* An @a TestObject instance used internaly to test
 			* handling and communication with from QObject
 			* inheritated instances.
@@ -138,7 +132,6 @@ namespace KoMacroTest {
 			*/
 			Private()
 				: xmlguiclient(0)
-				, manager(0)
 				, testobject(0)
 			{
 			}
@@ -154,7 +147,6 @@ CommonTests::CommonTests()
 
 CommonTests::~CommonTests()
 {
-	delete d->manager;
 	delete d->xmlguiclient;
 	delete d;
 }
@@ -162,16 +154,15 @@ CommonTests::~CommonTests()
 void CommonTests::setUp()
 {
 	d->xmlguiclient = new KXMLGUIClient();
-	d->manager = new KoMacro::Manager( d->xmlguiclient );
-	
+	::KoMacro::Manager::init( d->xmlguiclient );
+
 	d->testobject = new TestObject( this );
-	d->manager->publishObject("TestObject", d->testobject);
+	::KoMacro::Manager::self()->publishObject("TestObject", d->testobject);
 }
 
 void CommonTests::tearDown()
 {
 	delete d->testobject;
-	delete d->manager;
 	delete d->xmlguiclient;
 }
 
@@ -180,9 +171,9 @@ void CommonTests::testManager()
 	kdDebug()<<"===================== testManager() ======================" << endl;
 
 	//check if manager-guiClient equals xmlguiclient
-	KOMACROTEST_ASSERT( d->manager->guiClient(), d->xmlguiclient );
+	KOMACROTEST_ASSERT( ::KoMacro::Manager::self()->guiClient(), d->xmlguiclient );
 	//check if manger-object equals testobject
-	KOMACROTEST_ASSERT( dynamic_cast<TestObject*>( (QObject*)d->manager->object("TestObject") ), d->testobject );
+	KOMACROTEST_ASSERT( dynamic_cast<TestObject*>( (QObject*)::KoMacro::Manager::self()->object("TestObject") ), d->testobject );
 }
 
 void CommonTests::testAction()
@@ -201,7 +192,7 @@ void CommonTests::testAction()
 	domdocument.setContent(xml);
 	
 	//create an KomacroAction  with our data, and put it into a KSharedPtr
-	KSharedPtr<KoMacro::Action> actionptr = d->manager->createAction( domdocument.documentElement() );
+	KSharedPtr<KoMacro::Action> actionptr = ::KoMacro::Manager::self()->createAction( domdocument.documentElement() );
 	//check that actionptr is not null
 	KOMACROTEST_XASSERT((int) actionptr.data(), 0);
 
@@ -243,7 +234,7 @@ void CommonTests::testFunction()
 	));
 
 	//create an KomacroFunction  with our data, and put it into a KSharedPtr
-	KSharedPtr<KoMacro::Action> functionptr = d->manager->createAction( domdocument.documentElement() );
+	KSharedPtr<KoMacro::Action> functionptr = ::KoMacro::Manager::self()->createAction( domdocument.documentElement() );
 	//cast KSharedPtr to KoMacro-"Function"
 	KoMacro::Function* func = dynamic_cast<KoMacro::Function*>( functionptr.data() );
 		//check that function is not null
@@ -344,7 +335,7 @@ void CommonTests::testIntFunction()
 	));
 
 	//create an KomacroFunction  with our data, and put it into a KSharedPtr
-	KSharedPtr<KoMacro::Action> functionptr = d->manager->createAction( domdocument.documentElement() );
+	KSharedPtr<KoMacro::Action> functionptr = ::KoMacro::Manager::self()->createAction( domdocument.documentElement() );
 	//Cast data to function
 	KoMacro::Function* func = dynamic_cast<KoMacro::Function*>( functionptr.data() );
 		//check that it is not null
@@ -371,7 +362,7 @@ void CommonTests::testDoubleFunction()
 	));
 
 	//create an KomacroFunction  with our data, and put it into a KSharedPtr
-	KSharedPtr<KoMacro::Action> functionptr = d->manager->createAction( domdocument.documentElement() );
+	KSharedPtr<KoMacro::Action> functionptr = ::KoMacro::Manager::self()->createAction( domdocument.documentElement() );
 	//Cast data to function
 	KoMacro::Function* func = dynamic_cast<KoMacro::Function*>( functionptr.data() );
 		//check that it is not null
@@ -397,7 +388,7 @@ void CommonTests::testQStringFunction()
 	));
 
 	//create an KomacroFunction with our data, and put it into a KSharedPtr
-	KSharedPtr<KoMacro::Action> functionptr = d->manager->createAction( domdocument.documentElement() );
+	KSharedPtr<KoMacro::Action> functionptr = ::KoMacro::Manager::self()->createAction( domdocument.documentElement() );
 	//Cast data to function
 	KoMacro::Function* func = dynamic_cast<KoMacro::Function*>( functionptr.data() );
 		//check that it is not null
@@ -425,7 +416,7 @@ void CommonTests::testMacro()
 	));
 
 	//create Macro
-	KSharedPtr<KoMacro::Action> macroptr = d->manager->createAction( domdocument.documentElement() );
+	KSharedPtr<KoMacro::Action> macroptr = ::KoMacro::Manager::self()->createAction( domdocument.documentElement() );
 	//cast data to Macro
 	KoMacro::Macro* macro = dynamic_cast<KoMacro::Macro*>( macroptr.data() );
 		//check that it is not null
@@ -479,12 +470,12 @@ void CommonTests::testMacro()
 	myfunc->activate();
 	
 	//create another macro
-	KSharedPtr<KoMacro::Action> yanActionptr1 = d->manager->createAction( domdocument.documentElement() );
+	KSharedPtr<KoMacro::Action> yanActionptr1 = ::KoMacro::Manager::self()->createAction( domdocument.documentElement() );
 	//cast data as macro
 	KoMacro::Macro* yanMacro = dynamic_cast<KoMacro::Macro*>( yanActionptr1.data() );	
 	//create two more macros
-	KSharedPtr<KoMacro::Action> yanActionptr2 = d->manager->createAction( domdocument.documentElement() );
-	KSharedPtr<KoMacro::Action> yanActionptr3 = d->manager->createAction( domdocument.documentElement() );
+	KSharedPtr<KoMacro::Action> yanActionptr2 = ::KoMacro::Manager::self()->createAction( domdocument.documentElement() );
+	KSharedPtr<KoMacro::Action> yanActionptr3 = ::KoMacro::Manager::self()->createAction( domdocument.documentElement() );
 	
 	//check that they aren?t null
 	KOMACROTEST_XASSERT((int) yanActionptr1.data(), 0);
@@ -546,7 +537,7 @@ void CommonTests::testDom() {
 		"</function>"
 	));
 	//create functiom
-	KSharedPtr<KoMacro::Action> macroptr = d->manager->createAction( domdocument.documentElement() );
+	KSharedPtr<KoMacro::Action> macroptr = ::KoMacro::Manager::self()->createAction( domdocument.documentElement() );
 	//try to execute function and catch exception
 	KOMACROTEST_ASSERTEXCEPTION(KoMacro::Exception&, macroptr->activate());
 
@@ -558,7 +549,7 @@ void CommonTests::testDom() {
 		"</function>"
 	));
 	//create function
-	macroptr = d->manager->createAction( domdocument.documentElement() );
+	macroptr = ::KoMacro::Manager::self()->createAction( domdocument.documentElement() );
 	//try to execute function and catch exception
 	KOMACROTEST_ASSERTEXCEPTION(KoMacro::Exception&, macroptr->activate());
 
@@ -571,7 +562,7 @@ void CommonTests::testDom() {
 		"</function>"
 	));
 	//create function
-	macroptr = d->manager->createAction( domdocument.documentElement() );
+	macroptr = ::KoMacro::Manager::self()->createAction( domdocument.documentElement() );
 	//try to execute function and catch exception
 	KOMACROTEST_ASSERTEXCEPTION(KoMacro::Exception&, macroptr->activate());
 
@@ -584,7 +575,7 @@ void CommonTests::testDom() {
 		"</NoFunction>"
 	));
 	//try to create function and catch exception
-	KOMACROTEST_ASSERTEXCEPTION(KoMacro::Exception&, macroptr = d->manager->createAction( domdocument.documentElement() ));
+	KOMACROTEST_ASSERTEXCEPTION(KoMacro::Exception&, macroptr = ::KoMacro::Manager::self()->createAction( domdocument.documentElement() ));
 	
 	//create empty function
 	domdocument.setContent(QString(
@@ -595,7 +586,7 @@ void CommonTests::testDom() {
 		"</function>"
 	));
 	//create function
-	macroptr = d->manager->createAction( domdocument.documentElement() );
+	macroptr = ::KoMacro::Manager::self()->createAction( domdocument.documentElement() );
 	//try to execute function and catch exception
 	KOMACROTEST_ASSERTEXCEPTION(KoMacro::Exception&, macroptr->activate());
 
@@ -606,7 +597,7 @@ void CommonTests::testDom() {
 		"</function>"
 	));
 	//create function
-	macroptr = d->manager->createAction( domdocument.documentElement() );
+	macroptr = ::KoMacro::Manager::self()->createAction( domdocument.documentElement() );
 	//try to execute function and catch exception
 	KOMACROTEST_ASSERTEXCEPTION(KoMacro::Exception&, macroptr->activate());
 }
@@ -628,7 +619,7 @@ void CommonTests::testVariables()
 	));
 
 	//cretae an macro
-	KSharedPtr<KoMacro::Action> macroptr = d->manager->createAction( domdocument.documentElement() );
+	KSharedPtr<KoMacro::Action> macroptr = ::KoMacro::Manager::self()->createAction( domdocument.documentElement() );
 	//cast data to macro
 	KoMacro::Macro* macro = dynamic_cast<KoMacro::Macro*>( macroptr.data() );
 		//check that it is not null

@@ -41,9 +41,7 @@ namespace KoMacro {
 	{
 		public:
 			KXMLGUIClient* const xmlguiclient;
-
 			QMap<QString, Macro::Ptr> macros;
-
 			QMap<QString, QGuardedPtr<QObject> > objects;
 
 			Private(KXMLGUIClient* const xmlguiclient)
@@ -52,16 +50,36 @@ namespace KoMacro {
 			}
 	};
 
+	/// Pointer to our static singleton.
+	static ::KoMacro::Manager* _self = 0;
+
+	/// Automatically deletes our singleton on termination.
+	static KStaticDeleter< ::KoMacro::Manager > _manager;
+
+}
+
+void Manager::init(KXMLGUIClient* xmlguiclient)
+{
+	if(! _self) {
+		::KoMacro::Manager* manager = new ::KoMacro::Manager(xmlguiclient);
+		_manager.setObject(_self, manager);
+	}
+	else {
+		throw Exception("Already initialized.", "KoMacro::Manager::init()");
+	}
+}
+
+Manager* Manager::self()
+{
+	return _self;
 }
 
 Manager::Manager(KXMLGUIClient* const xmlguiclient)
 	: d( new Private(xmlguiclient) ) // create the private d-pointer instance.
 {
-	QObject* obj = dynamic_cast<QObject*>( xmlguiclient );
+	QObject* obj = dynamic_cast<QObject*>(xmlguiclient);
 	if(obj) {
-		QString name = obj->name();
-		kdDebug() << QString("Manager::Manager() publishing KXMLGUIClient-object '%1'").arg(name) << endl;
-		d->objects.replace(name, obj);
+		d->objects.replace(obj->name(), obj);
 	}
 
 	//TESTCASE
@@ -101,6 +119,7 @@ void Manager::removeMacro(const QString& macroname)
 
 Macro::Ptr Manager::createMacro(const QString& macroname)
 {
+	Q_UNUSED(macroname);
 	Macro::Ptr macro = Macro::Ptr( new Macro(this) );
 	return macro;
 }

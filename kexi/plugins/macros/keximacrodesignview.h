@@ -122,6 +122,11 @@ class KexiMacroDesignView : public KexiViewBase
 		void execute();
 
 		/**
+		* Called if an \a KexiTableItem item got selected.
+		*/
+		void itemSelected(KexiTableItem*);
+
+		/**
 		* Called before a cell changed in the internaly used
 		* \a KexiTableView .
 		*/
@@ -160,9 +165,19 @@ class KexiMacroDesignView : public KexiViewBase
 		void initTable();
 
 		/**
+		* Initialize the data.
+		*/
+		void initData();
+
+		/**
+		 * Initialize the \a KoProperty::Set properties.
+		 */
+		void initProperties();
+
+		/**
 		 * Update the \a KoProperty::Set properties.
 		 */
-		void updateProperties(int nr = 0);
+		void updateProperties(int type);
 
 		/**
 		* Load the data from XML source and fill the internally

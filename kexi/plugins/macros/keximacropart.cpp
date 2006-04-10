@@ -43,16 +43,9 @@ class KexiMacroPart::Private
 	public:
 
 		/**
-		* The @a KoMacro::Manager instace used to access the
-		* KoMacro Framework.
-		*/
-		KoMacro::Manager* manager;
-
-		/**
 		* Constructor.
 		*/
 		Private()
-			: manager(0)
 		{
 		}
 
@@ -61,7 +54,6 @@ class KexiMacroPart::Private
 		*/
 		~Private()
 		{
-			delete manager;
 		}
 
 };
@@ -105,7 +97,7 @@ bool KexiMacroPart::execute(KexiPart::Item*)
 void KexiMacroPart::initPartActions()
 {
 	kdDebug() << "KexiMacroPart::initPartActions()" << endl;
-	d->manager = new KoMacro::Manager(m_mainWin);
+	::KoMacro::Manager::init( m_mainWin );
 }
 
 void KexiMacroPart::initInstanceActions()
@@ -119,11 +111,11 @@ KexiViewBase* KexiMacroPart::createView(QWidget* parent, KexiDialogBase* dialog,
 	QString partname = item.name();
 	kdDebug() << "KexiMacroPart::createView() partname=" << partname << endl;
 
-	KoMacro::Macro::Ptr macro = d->manager->getMacro(partname);
+	KoMacro::Macro::Ptr macro = ::KoMacro::Manager::self()->getMacro(partname);
 	if(! macro) {
 		// If we don't have a macro with that name yet, create one that
 		// will be remembered for later.
-		macro = d->manager->createMacro(partname);
+		macro = ::KoMacro::Manager::self()->createMacro(partname);
 	}
 
 	if(! partname.isNull()) {

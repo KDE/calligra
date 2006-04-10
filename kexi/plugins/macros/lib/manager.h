@@ -24,6 +24,7 @@
 #include <qguardedptr.h>
 #include <ksharedptr.h>
 #include <kxmlguiclient.h>
+#include <kstaticdeleter.h>
 
 #include "komacro_export.h"
 
@@ -73,7 +74,8 @@ namespace KoMacro {
 	*/
 	class KOMACRO_EXPORT Manager
 	{
-		public:
+			friend class KStaticDeleter< ::KoMacro::Manager >;
+		private:
 
 			/**
 			* Constructor.
@@ -87,6 +89,22 @@ namespace KoMacro {
 			* Destructor.
 			*/
 			virtual ~Manager();
+
+		public:
+
+			/**
+			* Initialize this \a Manager singleton. This function
+			* needs to be called exactly once to initialize the
+			* \a Manager singleton before \a self() got used.
+			*/
+			static void init(KXMLGUIClient* xmlguiclient);
+
+			/**
+			* @return a pointer to a Manager singleton-instance. The
+			* static method \a init() needs to be called exactly once
+			* before calling this method else we may return NULL .
+			*/
+			static Manager* self();
 
 			/**
 			* @return the KXMLGUIClient instance this @a Manager is
