@@ -216,14 +216,14 @@ class TableInfo {
             }
         }
 
-        int tableCellsSelected() { return m_selected; }
-        int amountRowsSelected() { return m_rows.count(); }
-        bool amountColumnsSelected() { return m_columns.count(); }
-        bool oneCellSelected() { return m_oneCellSelected; }
-        bool protectContentEnabled() { return m_protectContent; }
-        Q3ValueList<uint> selectedRows() { return m_rows; }
-        Q3ValueList<uint> selectedColumns() { return m_columns; }
-        KWTableFrameSet::Cell *firstSelectedCell() { return m_cell; }
+        int tableCellsSelected() const { return m_selected; }
+        int amountRowsSelected() const { return m_rows.count(); }
+        int amountColumnsSelected() const { return m_columns.count(); }
+        bool oneCellSelected() const { return m_oneCellSelected; }
+        bool protectContentEnabled() const { return m_protectContent; }
+        Q3ValueList<uint> selectedRows() const { return m_rows; }
+        Q3ValueList<uint> selectedColumns() const { return m_columns; }
+        KWTableFrameSet::Cell *firstSelectedCell() const { return m_cell; }
     private:
         //QValueList<KWFrameView*> m_views;
         bool m_oneCellSelected, m_selected, m_protectContent;
