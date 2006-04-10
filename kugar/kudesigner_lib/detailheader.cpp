@@ -37,7 +37,7 @@ DetailHeader::DetailHeader( int x, int y, int width, int height, int level, Canv
 void DetailHeader::draw( QPainter &painter )
 {
     QString str = QString( "%1 %2" ).arg( i18n( "Detail Header" ) ).arg( props[ "Level" ].value().toInt() );
-    painter.drawText( rect(), AlignVCenter | AlignLeft, str );
+    painter.drawText( rect(), Qt::AlignVCenter | Qt::AlignLeft, str );
     Band::draw( painter );
 }
 

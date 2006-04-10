@@ -1,5 +1,7 @@
 kde4_header()
 
+include_directories( ${CMAKE_SOURCE_DIR}/libs/ )
+
 set(libkudesignercommon_SRCS 
 	${CMAKE_SOURCE_DIR}/kugar/kudesigner_lib/band.cpp 
 	${CMAKE_SOURCE_DIR}/kugar/kudesigner_lib/box.cpp 

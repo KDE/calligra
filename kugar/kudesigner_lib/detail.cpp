@@ -40,7 +40,7 @@ Detail::Detail( int x, int y, int width, int height, int level, Canvas *canvas )
 void Detail::draw( QPainter &painter )
 {
     QString str = QString( "%1 %2" ).arg( i18n( "Detail" ) ).arg( props[ "Level" ].value().toInt() );
-    painter.drawText( rect(), AlignVCenter | AlignLeft, str );
+    painter.drawText( rect(), Qt::AlignVCenter | Qt::AlignLeft, str );
     Band::draw( painter );
 }
 
