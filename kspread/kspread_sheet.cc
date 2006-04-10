@@ -1229,6 +1229,7 @@ void Sheet::recalc()
 
 void Sheet::recalc( bool force )
 {
+  ElapsedTime et( "Recalculating " + d->name, ElapsedTime::PrintOnlyTime );
   //  emitBeginOperation(true);
   //  setRegionPaintDirty(QRect(QPoint(1,1), QPoint(KS_colMax, KS_rowMax)));
   setCalcDirtyFlag();
@@ -1268,7 +1269,7 @@ void Sheet::recalc( bool force )
     // some debug output to get some idea how damn slow this is ...
     if (cur*100/count != percent) {
       percent = cur*100/count;
-      kdDebug() << "Recalc: " << percent << "%" << endl;
+//       kdDebug() << "Recalc: " << percent << "%" << endl;
     }
   }
 
@@ -2093,7 +2094,7 @@ void Sheet::setSeries( const QPoint &_marker, double start, double end, double s
   kdDebug() << "Saving undo information done" << endl;
 
   setRegionPaintDirty( undoRegion );
-  
+
   x = _marker.x();
   y = _marker.y();
 
@@ -5267,9 +5268,9 @@ bool Sheet::loadSelection(const QDomDocument& doc, const QRect& pasteArea,
         // Clear the existing columns
         int col = e.attribute("column").toInt();
         int width = e.attribute("count").toInt();
-        for ( int i = col; i < col + width; ++i )
+        if (!insert)
         {
-            if (!insert)
+            for ( int i = col; i < col + width; ++i )
             {
                 d->cells.clearColumn( _xshift + i );
                 d->columns.removeElement( _xshift + i );
@@ -5294,14 +5295,14 @@ bool Sheet::loadSelection(const QDomDocument& doc, const QRect& pasteArea,
     // entire rows given
     if (e.tagName() == "rows" && !isProtected())
     {
-      _xshift = 0;
+        _xshift = 0;
 
         // Clear the existing rows
         int row = e.attribute("row").toInt();
         int height = e.attribute("count").toInt();
-        for( int i = row; i < row + height; ++i )
+        if ( !insert )
         {
-          if (!insert)
+          for( int i = row; i < row + height; ++i )
           {
             d->cells.clearRow( _yshift + i );
             d->rows.removeElement( _yshift + i );
@@ -5417,7 +5418,8 @@ void Sheet::loadSelectionUndo(const QDomDocument& d, const QRect& loadArea,
 
   uint numCols = 0;
   uint numRows = 0;
-  Region region; // to store the current data, therefore shifted
+
+  Region region;
   for (QDomNode n = root.firstChild(); !n.isNull(); n = n.nextSibling())
   {
     QDomElement e = n.toElement(); // "columns", "rows" or "cell"
@@ -5428,7 +5430,7 @@ void Sheet::loadSelectionUndo(const QDomDocument& d, const QRect& loadArea,
       int width = e.attribute("count").toInt();
       for (int coff = 0; col + coff <= pasteWidth; coff += columnsInClpbrd)
       {
-        uint overlap = QMAX(0, (col + coff + width) - pasteWidth);
+        uint overlap = QMAX(0, (col - 1 + coff + width) - pasteWidth);
         uint effWidth = width - overlap;
         region.add(QRect(_xshift + col + coff, 1, effWidth, KS_rowMax));
         numCols += effWidth;
@@ -5441,7 +5443,7 @@ void Sheet::loadSelectionUndo(const QDomDocument& d, const QRect& loadArea,
       int height = e.attribute("count").toInt();
       for (int roff = 0; row + roff <= pasteHeight; roff += rowsInClpbrd)
       {
-        uint overlap = QMAX(0, (row + roff + height) - pasteHeight);
+        uint overlap = QMAX(0, (row - 1 + roff + height) - pasteHeight);
         uint effHeight = height - overlap;
         region.add(QRect(1, _yshift + row + roff, KS_colMax, effHeight));
         numRows += effHeight;
@@ -5471,28 +5473,27 @@ void Sheet::loadSelectionUndo(const QDomDocument& d, const QRect& loadArea,
   if (insert)
   {
     QRect rect = region.boundingRect();
-    if (insertTo == -1 || (insertTo == 0 && numRows == 0))
+    // shift cells to the right
+    if (insertTo == -1 && numCols == 0 && numRows == 0)
     {
-      rect.setWidth(rect.width() - numCols);
+      rect.setWidth(rect.width());
       shiftRow(rect, false);
     }
-    else if (insertTo == 1 || (insertTo == 0 && numCols == 0))
+    // shift cells to the bottom
+    else if (insertTo == 1 && numCols == 0 && numRows == 0)
     {
-      rect.setHeight(rect.height() - numRows);
-      shiftColumn(rect, false);
+      rect.setHeight(rect.height());
+      shiftColumn( rect, false );
     }
-
-    for (QDomNode n = root.firstChild(); !n.isNull(); n = n.nextSibling())
+    // insert columns
+    else if (insertTo == 0 && numCols == 0 && numRows > 0)
     {
-      QDomElement e = n.toElement(); // "columns", "rows" or "cell"
-      if (e.tagName() == "columns")
-      {
-        insertColumn(_xshift+1, e.attribute("count").toInt()-1, false);
-      }
-      else if (e.tagName() == "rows")
-      {
-        insertRow(_yshift+1, e.attribute("count").toInt()-1, false);
-      }
+      insertRow(rect.top(), rect.height() - 1, false);
+    }
+    // insert rows
+    else if (insertTo == 0 && numCols > 0 && numRows == 0)
+    {
+      insertColumn(rect.left(), rect.width() - 1, false);
     }
   }
 }
@@ -7883,7 +7884,7 @@ void Sheet::insertCell( Cell *_cell )
 
   d->cells.insert( _cell, _cell->column(), _cell->row() );
 
-  //Not sure why this is here 
+  //Not sure why this is here
   /*if ( d->scrollBarUpdates )
   {
     checkRangeHBorder ( _cell->column() );
