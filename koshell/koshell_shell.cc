@@ -200,13 +200,20 @@ bool KoShellWindow::openDocumentInternal( const KURL &url, KoDocument* )
   recentAction()->addURL( url );
 
   KoDocument* newdoc = m_documentEntry.createDoc();
+  if ( !newdoc ) {
+      if ( tmpFile ) {
+        tmpFile->unlink();
+        delete tmpFile;
+      }
+      return false;
+  }
 
   connect(newdoc, SIGNAL(sigProgress(int)), this, SLOT(slotProgress(int)));
   connect(newdoc, SIGNAL(completed()), this, SLOT(slotKSLoadCompleted()));
   connect(newdoc, SIGNAL(canceled( const QString & )), this, SLOT(slotKSLoadCanceled( const QString & )));
   newdoc->addShell( this ); // used by openURL
   bool openRet = (!isImporting ()) ? newdoc->openURL(tmpUrl) : newdoc->import(tmpUrl);
-  if ( !newdoc || !openRet )
+  if ( !openRet )
   {
       newdoc->removeShell(this);
       delete newdoc;
