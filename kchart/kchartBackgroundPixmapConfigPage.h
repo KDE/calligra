@@ -22,7 +22,6 @@
 
 #include <qwidget.h>
 #include <qpixmap.h>
-#include <qvgroupbox.h>
 
 class QSpinBox;
 class QRadioButton;
@@ -30,6 +29,7 @@ class QComboBox;
 class QPixmap;
 class Q3ListBox;
 class KColorButton;
+class Q3GroupBox;
 
 namespace KChart
 {
@@ -68,7 +68,7 @@ private:
     Q3ListBox *regionList;
 #endif
     KColorButton* _backgroundCB;
-    QVGroupBox* right;
+    Q3GroupBox* right;
 };
 
 }  //KChart namespace

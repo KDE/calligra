@@ -78,7 +78,7 @@ KChartParameter3dConfigPage::KChartParameter3dConfigPage( KChartParams* params,
   tmpLabel->resize( tmpLabel->sizeHint() );
   grid1->addWidget(tmpLabel,3,0);
 
-  depth=new KDoubleNumInput(0, gb);
+  depth=new KDoubleNumInput(gb);
   depth->setWhatsThis( i18n("You can set here the depth of the 3D effect from 0 to 2. 0 will give you no depth at all.\nDefault is 1."));
   depth->resize(100,depth->sizeHint().height());
   grid1->addWidget(depth,3,1);

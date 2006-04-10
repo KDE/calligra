@@ -26,16 +26,15 @@
 #include <klocale.h>
 #include <kiconloader.h>
 #include <kdebug.h>
-#include <qvbuttongroup.h>
 #include <qradiobutton.h>
 #include <qspinbox.h>
 #include <qlabel.h>
-#include <qhgroupbox.h>
 #include <qlayout.h>
 
 
 //Added by qt3to4:
 #include <Q3HBoxLayout>
+#include <Q3VButtonGroup>
 #include <kvbox.h>
 
 #include "kchart_params.h"
@@ -63,7 +62,7 @@ KChartHiloSubTypeChartPage::KChartHiloSubTypeChartPage( KChartParams* params,
     connect( subtypeBG, SIGNAL( clicked( int ) ),
              this, SLOT( slotChangeSubType( int ) ) );
 
-    QHGroupBox* exampleGB = new Q3GroupBox(1, Qt::Vertical, i18n( "Example" ), this );
+    Q3GroupBox* exampleGB = new Q3GroupBox(1, Qt::Vertical, i18n( "Example" ), this );
     exampleGB->setWhatsThis( i18n("Preview the sub-type you choose."));
     toplevel->addWidget( exampleGB, 2 );
     exampleLA = new QLabel( exampleGB );
@@ -142,7 +141,7 @@ KChartAreaSubTypeChartPage::KChartAreaSubTypeChartPage( KChartParams* params,
     connect( subtypeBG, SIGNAL( clicked( int ) ),
              this, SLOT( slotChangeSubType( int ) ) );
 
-    QHGroupBox* exampleGB = new Q3GroupBox(1, Qt::Vertical, i18n( "Example" ), this );
+    Q3GroupBox* exampleGB = new Q3GroupBox(1, Qt::Vertical, i18n( "Example" ), this );
     exampleGB->setWhatsThis( i18n("Preview the sub-type you choose."));
     toplevel->addWidget( exampleGB, 2 );
     exampleLA = new QLabel( exampleGB );
@@ -233,7 +232,7 @@ KChartBarSubTypeChartPage::KChartBarSubTypeChartPage( KChartParams* params,
     new QLabel( "", left);
     left->setStretchFactor( left, 1 );
 
-    QHGroupBox* exampleGB = new Q3GroupBox(1, Qt::Vertical, i18n( "Example" ), this );
+    Q3GroupBox* exampleGB = new Q3GroupBox(1, Qt::Vertical, i18n( "Example" ), this );
     exampleGB->setWhatsThis( i18n("Preview the sub-type you choose."));
     toplevel->addWidget( exampleGB, 2 );
     exampleLA = new QLabel( exampleGB );
@@ -316,7 +315,7 @@ KChartLineSubTypeChartPage::KChartLineSubTypeChartPage( KChartParams* params,
     connect( subtypeBG, SIGNAL( clicked( int ) ),
              this, SLOT( slotChangeSubType( int ) ) );
 
-    QHGroupBox* exampleGB = new Q3GroupBox(1, Qt::Vertical, i18n( "Example" ), this );
+    Q3GroupBox* exampleGB = new Q3GroupBox(1, Qt::Vertical, i18n( "Example" ), this );
     exampleGB->setWhatsThis( i18n("Preview the sub-type you choose."));
     toplevel->addWidget( exampleGB, 2 );
     exampleLA = new QLabel( exampleGB );
@@ -395,7 +394,7 @@ KChartPolarSubTypeChartPage::KChartPolarSubTypeChartPage( KChartParams* params,
     connect( subtypeBG, SIGNAL( clicked( int ) ),
              this, SLOT( slotChangeSubType( int ) ) );
 
-    QHGroupBox* exampleGB = new Q3GroupBox(1, Qt::Vertical, i18n( "Example" ), this );
+    Q3GroupBox* exampleGB = new Q3GroupBox(1, Qt::Vertical, i18n( "Example" ), this );
     exampleGB->setWhatsThis( i18n("Preview the sub-type you choose."));
     toplevel->addWidget( exampleGB, 2 );
     exampleLA = new QLabel( exampleGB );
