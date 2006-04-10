@@ -331,7 +331,7 @@ bool KoTextFormatterCore::format()
         // Wrapping at end of line - one big if :)
         if (
              // Check if should break (i.e. we are after the max X for the end of the line)
-             ( /*wrapAtColumn() == -1 &&*/ x + ww > availableWidth &&
+             ( ( /*wrapAtColumn() == -1 &&*/ x + ww > availableWidth &&
                ( lastBreak != -1 || settings->allowBreakInWords() ) )
 
              // Allow two breakable chars next to each other (e.g. '  ') but not more
@@ -349,8 +349,9 @@ bool KoTextFormatterCore::format()
              // Hmm, it doesn't really do so. To be continued...
              /////////// && ( firstChar != c )
 
+             )
              // Or maybe we simply encountered a '\n'
-             || lastChr->c == '\n' && parag->isNewLinesAllowed() && lastBreak > -1 )
+             || ( lastChr && lastChr->c == '\n' && parag->isNewLinesAllowed() && lastBreak > -1 ) )
         {
 #ifdef DEBUG_FORMATTER
             kdDebug(32500) << "BREAKING" << endl;
