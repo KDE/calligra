@@ -28,9 +28,9 @@
 #define KEXIDATAAWAREOBJECTINTERFACE_H
 
 #include <qguardedptr.h>
-#include <qlabel.h>
 
 #include <kdebug.h>
+#include <widget/utils/kexiarrowtip.h>
 #include "kexitableviewdata.h"
 
 class QObject;
@@ -708,7 +708,7 @@ class KEXIDATATABLE_EXPORT KexiDataAwareObjectInterface
 		int m_rowWillBeDeleted;
 
 		/*! Displays passive error popup label used when invalid data has been entered. */
-		QGuardedPtr<QLabel> m_errorMessagePopup;
+		QGuardedPtr<KexiArrowTip> m_errorMessagePopup;
 };
 
 inline bool KexiDataAwareObjectInterface::hasData() const

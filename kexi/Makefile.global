@@ -12,7 +12,7 @@ $(USE_EXCEPTIONS) $(KEXI_OPTIONS)
 KDE_CXXFLAGS += -include $(top_srcdir)/kexi/kexi_global.h
 
 # temporary:
-KDE_CXXFLAGS += -DKEXI_NO_AUTOFIELD_WIDGET
+##KDE_CXXFLAGS += -DKEXI_NO_AUTOFIELD_WIDGET
 
 # temporary unless cursor works properly in the Designer
 KDE_CXXFLAGS += -DKEXI_NO_CURSOR_PROPERTY

@@ -22,56 +22,8 @@
 #ifndef KEXIDATETABLEEDIT_H
 #define KEXIDATETABLEEDIT_H
 
-#include <qdatetimeedit.h>
-
 #include "kexiinputtableedit.h"
-
-//! @short Date formatter used by KexiDateTableEdit and KexiDateTimeTableEdit
-class KEXIDATATABLE_EXPORT KexiDateFormatter
-{
-	public:
-		//! Creates new formatter with KDE setting for "short date"
-		KexiDateFormatter();
-
-		//! Creates new formatter with given settings
-//! @todo		KexiDateFormatter(... settings ...);
-
-		~KexiDateFormatter();
-
-		//! converts string \a str to date using predefined settings
-		//! \return invalid date if the conversion is impossible
-		QDate stringToDate( const QString& str ) const;
-
-		//! converts \a date to string using predefined settings
-		//! \return null string if \a date is invalid
-		QString dateToString( const QDate& date ) const;
-
-		//! \return Input mask generated using the formatter settings. 
-		//! Can be used in QLineEdit::setInputMask().
-		QString inputMask() const { return m_inputMask; }
-
-		QString separator() const { return m_separator; }
-
-	protected:
-		//! Input mask generated using the formatter settings. Can be used in QLineEdit::setInputMask().
-		QString m_inputMask;
-
-		//! Order of date sections
-		QDateEdit::Order m_order;
-
-		//! 4 or 2 digits
-		bool m_longYear;
-
-		bool m_monthWithLeadingZero, m_dayWithLeadingZero;
-
-		//! Date format used in dateToString()
-		QString m_qtFormat;
-
-		//! Used in stringToDate() to convert string back to QDate
-		int m_yearpos, m_monthpos, m_daypos;
-
-		QString m_separator;
-};
+#include <widget/utils/kexidatetimeformatter.h>
 
 /*! @short Editor class for Date type.
  It is a replacement QDateEdit due to usability problems: 

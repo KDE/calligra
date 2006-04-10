@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2005 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2004-2005 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2004-2006 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -30,6 +30,8 @@ KexiDBLineEdit::KexiDBLineEdit(QWidget *parent, const char *name)
  : KLineEdit(parent, name)
  , KexiDBTextWidgetInterface()
  , KexiFormDataItemInterface()
+ , m_dateFormatter(0)
+ , m_timeFormatter(0)
 // , m_autonumberDisplayParameters(0)
 {
 	connect(this, SIGNAL(textChanged(const QString&)), this, SLOT(slotTextChanged(const QString&)));
@@ -37,6 +39,8 @@ KexiDBLineEdit::KexiDBLineEdit(QWidget *parent, const char *name)
 
 KexiDBLineEdit::~KexiDBLineEdit()
 {
+	delete m_dateFormatter;
+	delete m_timeFormatter;
 //	delete m_autonumberDisplayParameters;
 }
 
@@ -51,20 +55,71 @@ void KexiDBLineEdit::setInvalidState( const QString& displayText )
 
 void KexiDBLineEdit::setValueInternal(const QVariant& add, bool removeOld)
 {
-	if (m_columnInfo && m_columnInfo->field->type()==KexiDB::Field::Boolean) {
-//! @todo temporary solution for booleans!
-		setText( add.toBool() ? "1" : "0" );
+	if (removeOld && m_columnInfo) {
+		const KexiDB::Field::Type t = m_columnInfo->field->type();
+		if (t == KexiDB::Field::Boolean) {
+			//! @todo temporary solution for booleans!
+			setText( add.toBool() ? "1" : "0" );
+			return;
+		}
+		else if (t == KexiDB::Field::Date) {
+			setText( dateFormatter()->dateToString( m_origValue.toDate() ) );
+			setCursorPosition(0); //ok?
+			return;
+		}
+		else if (t == KexiDB::Field::Time) {
+//			if (removeOld) {
+		//new time entering... just fill the line edit
+//		QString add(add_.toString());
+//		m_lineedit->setText(add);
+//		m_lineedit->setCursorPosition(add.length());
+			setText( 
+				timeFormatter()->timeToString( 
+					//hack to avoid converting null variant to valid QTime(0,0,0)
+					m_origValue.isValid() ? m_origValue.toTime() : QTime(99,0,0) 
+				)
+			);
+			setCursorPosition(0); //ok?
+			return;
+		}
+		else if (t == KexiDB::Field::DateTime) {
+			if (m_origValue.isValid()) {
+				setText(
+					dateFormatter()->dateToString( m_origValue.toDateTime().date() ) + " " +
+					timeFormatter()->timeToString( m_origValue.toDateTime().time() )
+				);
+			}
+			else {
+				setText( QString::null );
+			}
+			setCursorPosition(0); //ok?
+			return;
+		}
 	}
-	else {
-		if (removeOld)
-			setText( add.toString() );
-		else
-			setText( m_origValue.toString() + add.toString() );
-	}
+	if (removeOld)
+		setText( add.toString() );
+	else
+		setText( m_origValue.toString() + add.toString() );
 }
 
 QVariant KexiDBLineEdit::value()
 {
+	const KexiDB::Field::Type t = m_columnInfo->field->type();
+	if (t == KexiDB::Field::Boolean) {
+		//! @todo temporary solution for booleans!
+		return text() == "1" ? QVariant(true,1) : QVariant(false,0);
+	}
+	else if (t == KexiDB::Field::Date) {
+		return dateFormatter()->stringToVariant( text() );
+	}
+	if (t == KexiDB::Field::Time) {
+		return timeFormatter()->stringToVariant( text() );
+	}
+	if (t == KexiDB::Field::DateTime) {
+		return stringToDateTime(*dateFormatter(), *timeFormatter(), text());
+	}
+//! @todo more data types!
+
 	return text();
 }
 
@@ -75,12 +130,46 @@ void KexiDBLineEdit::slotTextChanged(const QString&)
 
 bool KexiDBLineEdit::valueIsNull()
 {
-	return text().isNull();
+	return valueIsEmpty(); //ok??? text().isNull();
 }
 
 bool KexiDBLineEdit::valueIsEmpty()
 {
+	if (text().isEmpty())
+		return true;
+
+	if (m_columnInfo) {
+		const KexiDB::Field::Type t = m_columnInfo->field->type();
+		if (t == KexiDB::Field::Date)
+			return dateFormatter()->isEmpty( text() );
+		else if (t == KexiDB::Field::Time)
+			return timeFormatter()->isEmpty( text() );
+		else if (t == KexiDB::Field::Time)
+			return dateTimeIsEmpty( *dateFormatter(), *timeFormatter(), text() );
+	}
+
+//! @todo
 	return text().isEmpty();
+}
+
+bool KexiDBLineEdit::valueIsValid()
+{
+	if (!m_columnInfo)
+		return true;
+//! @todo fix for fields with "required" property = true
+	if (valueIsEmpty()/*ok?*/)
+		return true;
+
+	const KexiDB::Field::Type t = m_columnInfo->field->type();
+	if (t == KexiDB::Field::Date)
+		return dateFormatter()->stringToVariant( text() ).isValid();
+	else if (t == KexiDB::Field::Time)
+		return timeFormatter()->stringToVariant( text() ).isValid();
+	else if (t == KexiDB::Field::DateTime)
+		return dateTimeIsValid( *dateFormatter(), *timeFormatter(), text() );
+
+//! @todo
+	return true;
 }
 
 bool KexiDBLineEdit::isReadOnly() const
@@ -107,6 +196,7 @@ void KexiDBLineEdit::clear()
 {
 	setText(QString::null);
 }
+
 
 void KexiDBLineEdit::setColumnInfo(KexiDB::QueryColumnInfo* cinfo)
 {
@@ -161,13 +251,19 @@ void KexiDBLineEdit::setColumnInfo(KexiDB::QueryColumnInfo* cinfo)
 		setValidator( validator );
 	}
 	else if (t==KexiDB::Field::Date) {
-//! @todo use KDateWidget
-		QValidator *validator = new KDateValidator(this);
-		setValidator( validator );
+//! @todo use KDateWidget?
+//		QValidator *validator = new KDateValidator(this);
+//		setValidator( validator );
+		setInputMask( dateFormatter()->inputMask() );
 	}
 	else if (t==KexiDB::Field::Time) {
 //! @todo use KTimeWidget
-		setInputMask("00:00:00");
+//		setInputMask("00:00:00");
+		setInputMask( timeFormatter()->inputMask() );
+	}
+	else if (t==KexiDB::Field::DateTime) {
+		setInputMask( 
+			dateTimeInputMask( *dateFormatter(), *timeFormatter() ) );
 	}
 	else if (t==KexiDB::Field::Boolean) {
 //! @todo temporary solution for booleans!

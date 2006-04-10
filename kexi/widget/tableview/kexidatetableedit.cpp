@@ -46,128 +46,6 @@
 
 #include <kexiutils/utils.h>
 
-KexiDateFormatter::KexiDateFormatter()
-{
-	// use "short date" format system settings
-//! @todo allow to override the format using column property and/or global app settings
-	QString df( KGlobal::locale()->dateFormatShort() );
-	if (df.length()>2)
-		m_separator = df.mid(2,1);
-	else
-		m_separator = "-";
-	const int separatorLen = m_separator.length();
-	QString yearMask("9999");
-	QString yearDateFormat("yyyy"), 
-		monthDateFormat("MM"), 
-		dayDateFormat("dd"); //for setting up m_dateFormat
-	bool ok = df.length()>=8;
-	int yearpos, monthpos, daypos; //result of df.find()
-	if (ok) {//look at % variables
-//! @todo more variables are possible here, see void KLocale::setDateFormatShort() docs
-//!       http://developer.kde.org/documentation/library/3.5-api/kdelibs-apidocs/kdecore/html/classKLocale.html#a59
-		yearpos = df.find("%y", 0, false); //&y or %y
-		m_longYear = !(yearpos>=0 && df.mid(yearpos+1, 1)=="y"); 
-		if (!m_longYear) {
-			yearMask = "99";
-			yearDateFormat = "yy";
-		}
-		monthpos = df.find("%m", 0, true); //%m or %n
-		m_monthWithLeadingZero = true;
-		if (monthpos<0) {
-			monthpos = df.find("%n", 0, false);
-			m_monthWithLeadingZero = false;
-			monthDateFormat = "M";
-		}
-		daypos = df.find("%d", 0, true);//%d or %e
-		m_dayWithLeadingZero = true;
-		if (daypos<0) {
-			daypos = df.find("%e", 0, false);
-			m_dayWithLeadingZero = false;
-			dayDateFormat = "d";
-		}
-		ok = (yearpos>=0 && monthpos>=0 && daypos>=0);
-	}
-	m_order = QDateEdit::YMD; //default
-	if (ok) {
-		if (yearpos<monthpos && monthpos<daypos) {
-			//will be set in "default: YMD"
-		}
-		else if (yearpos<daypos && daypos<monthpos) {
-			m_order = QDateEdit::YDM;
-//! @todo use QRegExp (to replace %Y by %1, etc.) instead of hardcoded "%1%299%399" 
-//!       because df may contain also other characters
-			m_inputMask = QString("%1%299%399").arg(yearMask).arg(m_separator).arg(m_separator);
-			m_qtFormat = yearDateFormat+m_separator+dayDateFormat+m_separator+monthDateFormat;
-			m_yearpos = 0;
-			m_daypos = yearMask.length()+separatorLen;
-			m_monthpos = m_daypos+2+separatorLen;
-		}
-		else if (daypos<monthpos && monthpos<yearpos) {
-			m_order = QDateEdit::DMY;
-			m_inputMask = QString("99%199%2%3").arg(m_separator).arg(m_separator).arg(yearMask);
-			m_qtFormat = dayDateFormat+m_separator+monthDateFormat+m_separator+yearDateFormat;
-			m_daypos = 0;
-			m_monthpos = 2+separatorLen;
-			m_yearpos = m_monthpos+2+separatorLen;
-		}
-		else if (monthpos<daypos && daypos<yearpos) {
-			m_order = QDateEdit::MDY;
-			m_inputMask = QString("99%199%2%3").arg(m_separator).arg(m_separator).arg(yearMask);
-			m_qtFormat = monthDateFormat+m_separator+dayDateFormat+m_separator+yearDateFormat;
-			m_monthpos = 0;
-			m_daypos = 2+separatorLen;
-			m_yearpos = m_daypos+2+separatorLen;
-		}
-		else
-			ok = false;
-	}
-	if (!ok || m_order == QDateEdit::YMD) {//default: YMD
-		m_inputMask = QString("%1%299%399").arg(yearMask).arg(m_separator).arg(m_separator);
-		m_qtFormat = yearDateFormat+m_separator+monthDateFormat+m_separator+dayDateFormat;
-		m_yearpos = 0;
-		m_monthpos = yearMask.length()+separatorLen;
-		m_daypos = m_monthpos+2+separatorLen;
-	}
-	m_inputMask += ";_";
-}
-
-KexiDateFormatter::~KexiDateFormatter()
-{
-}
-
-QDate KexiDateFormatter::stringToDate( const QString& str ) const
-{
-	bool ok = true;
-	int year = str.mid(m_yearpos, m_longYear ? 4 : 2).toInt(&ok);
-	if (!ok)
-		return QDate();
-	if (year < 30) {//2000..2029
-		year = 2000 + year;
-	}
-	else if (year < 100) {//1930..1999
-		year = 1900 + year;
-	}
-
-	int month = str.mid(m_monthpos, 2).toInt(&ok);
-	if (!ok)
-		return QDate();
-
-	int day = str.mid(m_daypos, 2).toInt(&ok);
-	if (!ok)
-		return QDate();
-
-	QDate date(year, month, day);
-	if (!date.isValid())
-		return QDate();
-	return date;
-}
-
-QString KexiDateFormatter::dateToString( const QDate& date ) const
-{
-	return date.toString(m_qtFormat);
-}
-
-//------------------------------------------------
 
 KexiDateTableEdit::KexiDateTableEdit(KexiTableViewColumn &column, QScrollView *parent)
  : KexiInputTableEdit(column, parent)
@@ -218,7 +96,8 @@ void KexiDateTableEdit::setupContents( QPainter *p, bool focused, QVariant val,
 
 bool KexiDateTableEdit::valueIsNull()
 {
-	if (m_lineedit->text().replace(m_formatter.separator(),"").stripWhiteSpace().isEmpty())
+//	if (m_lineedit->text().replace(m_formatter.separator(),"").stripWhiteSpace().isEmpty())
+	if (m_formatter.isEmpty(m_lineedit->text())) //empty date is null
 		return true;
 	return dateValue().isNull();
 }
@@ -235,9 +114,12 @@ QDate KexiDateTableEdit::dateValue() const
 
 QVariant KexiDateTableEdit::value()
 {
-	if (m_lineedit->text().replace(m_formatter.separator(),"").stripWhiteSpace().isEmpty())
-		return QVariant();
-	return dateValue();
+	return m_formatter.stringToVariant( m_lineedit->text() );
+
+//	if (m_lineedit->text().replace(m_formatter.separator(),"").stripWhiteSpace().isEmpty())
+//		return QVariant();
+//	return dateValue();
+
 //	ok = true;
 //todo	return QVariant(m_edit->date());
 	//todo use conversion from string
@@ -245,7 +127,8 @@ QVariant KexiDateTableEdit::value()
 
 bool KexiDateTableEdit::valueIsValid()
 {
-	if (m_lineedit->text().replace(m_formatter.separator(),"").stripWhiteSpace().isEmpty()) //empty date is valid
+//	if (m_lineedit->text().replace(m_formatter.separator(),"").stripWhiteSpace().isEmpty()) //empty date is valid
+	if (m_formatter.isEmpty(m_lineedit->text())) //empty date is valid
 		return true;
 	return m_formatter.stringToDate( m_lineedit->text() ).isValid();
 }

@@ -49,8 +49,6 @@
 #include "kexiformview.h"
 #include "widgets/kexidbautofield.h"
 #include "widgets/kexidbcheckbox.h"
-#include "widgets/kexidbdateedit.h"
-#include "widgets/kexidbdatetimeedit.h"
 #include "widgets/kexidbimagebox.h"
 //#include "widgets/kexidbdoublespinbox.h"
 //#include "widgets/kexidbintspinbox.h"
@@ -58,7 +56,6 @@
 #include "widgets/kexidblabel.h"
 #include "widgets/kexidblineedit.h"
 #include "widgets/kexidbtextedit.h"
-#include "widgets/kexidbtimeedit.h"
 #include "widgets/kexipushbutton.h"
 #include "widgets/kexidbform.h"
 #include "widgets/kexidbsubform.h"
@@ -187,6 +184,7 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const char *name, const QStringLis
 	addClass(wFieldEdit);
 #endif
 
+/*
 #if KDE_VERSION >= KDE_MAKE_VERSION(3,1,9)
 	KexiDataAwareWidgetInfo *wDate = new KexiDataAwareWidgetInfo(this, "stdwidgets", "KDateWidget");
 #else
@@ -194,8 +192,8 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const char *name, const QStringLis
 #endif
 	wDate->setPixmap("dateedit");
 	wDate->setClassName("KexiDBDateEdit");
-	wDate->addAlternateClassName("QDateEdit", true/*override*/);
-	wDate->addAlternateClassName("KDateWidget", true/*override*/);
+	wDate->addAlternateClassName("QDateEdit", true);//override
+	wDate->addAlternateClassName("KDateWidget", true);//override
 	wDate->setName(i18n("Date Widget"));
 	wDate->setNamePrefix(
 		i18n("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "dateWidget"));
@@ -209,8 +207,8 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const char *name, const QStringLis
 #endif
 	wTime->setPixmap("timeedit");
 	wTime->setClassName("KexiDBTimeEdit");
-	wTime->addAlternateClassName("QTimeEdit", true/*override*/);
-	wTime->addAlternateClassName("KTimeWidget", true/*override*/);
+	wTime->addAlternateClassName("QTimeEdit", true);//override
+	wTime->addAlternateClassName("KTimeWidget", true);//override
 	wTime->setName(i18n("Time Widget"));
 	wTime->setNamePrefix(
 		i18n("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "timeWidget"));
@@ -224,13 +222,14 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const char *name, const QStringLis
 #endif
 	wDateTime->setPixmap("datetimeedit");
 	wDateTime->setClassName("KexiDBDateTimeEdit");
-	wDateTime->addAlternateClassName("QDateTimeEdit", true/*override*/);
-	wDateTime->addAlternateClassName("KDateTimeWidget", true/*override*/);
+	wDateTime->addAlternateClassName("QDateTimeEdit", true);//override
+	wDateTime->addAlternateClassName("KDateTimeWidget", true);//override
 	wDateTime->setName(i18n("Date/Time Widget"));
 	wDateTime->setNamePrefix(
 		i18n("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "dateTimeWidget"));
 	wDateTime->setDescription(i18n("A widget to input and display a date and time"));
 	addClass(wDateTime);
+*/
 
 /*	KexiDataAwareWidgetInfo *wIntSpinBox = new KexiDataAwareWidgetInfo(this, "stdwidgets", "KIntSpinBox");
 	wIntSpinBox->setPixmap("spin");
@@ -355,12 +354,12 @@ KexiDBFactory::createWidget(const QCString &c, QWidget *p, const char *n,
 #endif
 	else if(c == "KexiDBCheckBox")
 		w = new KexiDBCheckBox(text, p, n);
-	else if(c == "KexiDBTimeEdit")
+/*	else if(c == "KexiDBTimeEdit")
 		w = new KexiDBTimeEdit(QTime::currentTime(), p, n);
 	else if(c == "KexiDBDateEdit")
 		w = new KexiDBDateEdit(QDate::currentDate(), p, n);
 	else if(c == "KexiDBDateTimeEdit")
-		w = new KexiDBDateTimeEdit(QDateTime::currentDateTime(), p, n);
+		w = new KexiDBDateTimeEdit(QDateTime::currentDateTime(), p, n);*/
 //	else if(c == "KexiDBIntSpinBox")
 //		w = new KexiDBIntSpinBox(p, n);
 //	else if(c == "KexiDBDoubleSpinBox")
@@ -478,11 +477,13 @@ KexiDBFactory::startEditing(const QCString &classname, QWidget *w, KFormDesigner
 		}
 		return true;
 	}
+#if 0
 	else if( (classname == "KexiDBDateEdit") || (classname == "KexiDBDateTimeEdit") || (classname == "KexiDBTimeEdit")
 			/*|| (classname == "KexiDBIntSpinBox") || (classname == "KexiDBDoubleSpinBox")*/ ) {
 		disableFilter(w, container);
 		return true;
 	}
+#endif
 	else if(classname == "KexiDBAutoField") {
 		if(static_cast<KexiDBAutoField*>(w)->hasAutoCaption())
 			return false; // caption is auto, abort editing

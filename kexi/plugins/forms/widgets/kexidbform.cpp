@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Lucijan Busch <lucijan@kde.org>
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2005 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2005-2006 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -362,6 +362,8 @@ bool KexiDBForm::eventFilter( QObject * watched, QEvent * e )
 			const bool backtab = ((ke->state() == Qt::NoButton || ke->state() == Qt::ShiftButton) && ke->key() == Qt::Key_Backtab)
 				|| (ke->state() == Qt::ShiftButton && ke->key() == Qt::Key_Tab);
 
+								
+
 			if (tab || backtab) {
 				//the watched widget can be a subwidget of a real widget, e.g. autofield: find it
 				QWidget* realWidget = static_cast<QWidget*>(watched);
@@ -394,8 +396,11 @@ bool KexiDBForm::eventFilter( QObject * watched, QEvent * e )
 					//focus event's reason is QFocusEvent::Tab
 					QWidget *widgetToFocus = d->orderedFocusWidgetsIterator.current();
 					widgetToFocus = widgetToFocus->focusProxy();
-					SET_FOCUS_USING_REASON(d->orderedFocusWidgetsIterator.current(), QFocusEvent::Tab);
-					kexipluginsdbg << "focusing " << d->orderedFocusWidgetsIterator.current()->name() << endl;
+					if (d->dataAwareObject->acceptEditor()) {//try to accept this will validate the current 
+						                                       //input (if any)
+						SET_FOCUS_USING_REASON(d->orderedFocusWidgetsIterator.current(), QFocusEvent::Tab);
+						kexipluginsdbg << "focusing " << d->orderedFocusWidgetsIterator.current()->name() << endl;
+					}
 					return true;
 				} else if (backtab) {
 					if (d->orderedFocusWidgets.last() && realWidget == d->orderedFocusWidgets.first()) {
@@ -406,9 +411,12 @@ bool KexiDBForm::eventFilter( QObject * watched, QEvent * e )
 					}
 					else
 						return true; //ignore
-					//set focus, see above note
-					SET_FOCUS_USING_REASON(d->orderedFocusWidgetsIterator.current(), QFocusEvent::Backtab);
-					kexipluginsdbg << "focusing " << d->orderedFocusWidgetsIterator.current()->name() << endl;
+					if (d->dataAwareObject->acceptEditor()) {//try to accept this will validate the current 
+						                                       //input (if any)
+						//set focus, see above note
+						SET_FOCUS_USING_REASON(d->orderedFocusWidgetsIterator.current(), QFocusEvent::Backtab);
+						kexipluginsdbg << "focusing " << d->orderedFocusWidgetsIterator.current()->name() << endl;
+					}
 					return true;
 				}
 			}

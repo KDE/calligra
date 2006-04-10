@@ -53,9 +53,8 @@ KexiDateTimeTableEdit::KexiDateTimeTableEdit(KexiTableViewColumn &column, QScrol
 
 //! @todo add QValidator so time like "99:88:77" cannot be even entered
 
-	QString mask(m_dateFormatter.inputMask());
-	mask.truncate(m_dateFormatter.inputMask().length()-2);
-	m_lineedit->setInputMask( mask + " " + m_timeFormatter.inputMask() );
+	m_lineedit->setInputMask( 
+		dateTimeInputMask( m_dateFormatter, m_timeFormatter ) );
 }
 
 KexiDateTimeTableEdit::~KexiDateTimeTableEdit()
@@ -107,7 +106,7 @@ bool KexiDateTimeTableEdit::valueIsNull()
 {
 	if (textIsEmpty())
 		return true;
-	return !dateTimeValue().isValid();
+	return !stringToDateTime(m_dateFormatter, m_timeFormatter, m_lineedit->text()).isValid();
 }
 
 bool KexiDateTimeTableEdit::valueIsEmpty()
@@ -115,11 +114,12 @@ bool KexiDateTimeTableEdit::valueIsEmpty()
 	return valueIsNull();//js OK? TODO (nonsense?)
 }
 
+/* moved to kexidattimeformatter.cpp
 QDateTime KexiDateTimeTableEdit::dateTimeValue()
 {
 	QString s = m_lineedit->text().stripWhiteSpace();
 	const int timepos = s.find(" ");
-	const bool emptyTime = timepos >= 0 && s.mid(timepos+1).replace(':',"").stripWhiteSpace().isEmpty();
+	const bool emptyTime = timepos >= 0 && m_timeFormatter.isEmpty(s.mid(timepos+1)); //.replace(':',"").stripWhiteSpace().isEmpty();
 	if (emptyTime)
 		s = s.left(timepos);
 	if (timepos>0 && !emptyTime) {
@@ -134,35 +134,23 @@ QDateTime KexiDateTimeTableEdit::dateTimeValue()
 			QTime(0,0,0)
 		);
 	}
-}
+}*/
 
 QVariant KexiDateTimeTableEdit::value()
 {
 	if (textIsEmpty())
 		return QVariant();
-	return dateTimeValue();
+	return stringToDateTime(m_dateFormatter, m_timeFormatter, m_lineedit->text());
 }
 
 bool KexiDateTimeTableEdit::valueIsValid()
 {
-	QString s(m_lineedit->text());
-	int timepos = s.find(" ");
-	const bool emptyTime = timepos >= 0 && s.mid(timepos+1).replace(':',"").stripWhiteSpace().isEmpty();
-	if (timepos >= 0 && s.left(timepos).replace(m_dateFormatter.separator(), "").stripWhiteSpace().isEmpty()
-		&& emptyTime)
-		//empty date/time is valid
-		return true;
-	return timepos>=0 && m_dateFormatter.stringToDate( s.left(timepos) ).isValid()
-		&& (emptyTime /*date without time is also valid*/ || m_timeFormatter.stringToTime( s.mid(timepos+1) ).isValid());
+	return dateTimeIsValid( m_dateFormatter, m_timeFormatter, m_lineedit->text() );
 }
 
 bool KexiDateTimeTableEdit::textIsEmpty() const
 {
-	QString s(m_lineedit->text());
-	int timepos = s.find(" ");
-	const bool emptyTime = timepos >= 0 && s.mid(timepos+1).replace(':',"").stripWhiteSpace().isEmpty();
-	return (timepos >= 0 && s.left(timepos).replace(m_dateFormatter.separator(), "").stripWhiteSpace().isEmpty()
-		&& emptyTime);
+	return dateTimeIsEmpty( m_dateFormatter, m_timeFormatter, m_lineedit->text() );
 }
 
 KEXI_CELLEDITOR_FACTORY_ITEM_IMPL(KexiDateTimeEditorFactoryItem, KexiDateTimeTableEdit)

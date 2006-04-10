@@ -643,7 +643,7 @@ void KexiDataAwareObjectInterface::setCursorPosition(int row, int col/*=-1*/, bo
 
 bool KexiDataAwareObjectInterface::acceptRowEdit()
 {
-	if (!m_rowEditing)
+	if (!m_rowEditing || /*sanity*/!m_data->rowEditBuffer())
 		return true;
 	if (m_inside_acceptEditor) {
 		m_internal_acceptsRowEditAfterCellAccepting = true;
@@ -875,10 +875,14 @@ bool KexiDataAwareObjectInterface::acceptEditor()
 //! @todo also use for other error messages
 				if (!m_errorMessagePopup) {
 //					m_errorMessagePopup->close();
-					m_errorMessagePopup = new QLabel(i18n("Error: %1").arg(m_editor->columnInfo()->field->typeName())+"?", 
+					m_errorMessagePopup = new KexiArrowTip(
+						i18n("Error: %1").arg(m_editor->columnInfo()->field->typeName())+"?", 
+						dynamic_cast<QWidget*>(this));
+
+/*					m_errorMessagePopup = new QLabel(i18n("Error: %1").arg(m_editor->columnInfo()->field->typeName())+"?", 
 						dynamic_cast<QWidget*>(this), 0,
-					Qt::WStyle_Customize | Qt::WType_Popup | Qt::WStyle_NoBorder 
-					| Qt::WX11BypassWM | Qt::WDestructiveClose);
+						Qt::WStyle_Customize | Qt::WType_Popup | Qt::WStyle_NoBorder 
+						| Qt::WX11BypassWM | Qt::WDestructiveClose);
 					QPalette pal( QToolTip::palette() );
 					QColorGroup cg(pal.active());
 					cg.setColor(QColorGroup::Foreground, Qt::red);
@@ -892,12 +896,14 @@ bool KexiDataAwareObjectInterface::acceptEditor()
 					m_errorMessagePopup->setAlignment( Qt::AlignAuto | Qt::AlignTop );
 					m_errorMessagePopup->setIndent(0);
 					m_errorMessagePopup->polish();
-					m_errorMessagePopup->adjustSize();
+					m_errorMessagePopup->adjustSize();*/
 					m_errorMessagePopup->move( 
 						par->mapToGlobal(edit->pos()) + 
 						QPoint(
-							(m_verticalHeader ? m_verticalHeader->width() : 0),
-							edit->height() + 5) );
+							6,
+//							(m_verticalHeader ? m_verticalHeader->width() : 0),
+							edit->height() + 0) );
+
 					m_errorMessagePopup->show();
 				}
 				m_editor->setFocus();
