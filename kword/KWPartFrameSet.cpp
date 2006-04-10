@@ -101,7 +101,8 @@ void KWPartFrameSet::drawFrameContents( KWFrame* frame, QPainter * painter, cons
     {
         if ( !m_child || !m_child->document() )
         {
-            kDebug(32001) << "KWPartFrameSet::drawFrameContents " << this << " aborting. child=" << m_child << " child->document()=" << m_child->document() << endl;
+            kDebug(32001) << "KWPartFrameSet::drawFrameContents " << this << " aborting. child=" << m_child
+                << " child->document()=" << (m_child?m_child->document():0) << endl;
             return;
         }
 
