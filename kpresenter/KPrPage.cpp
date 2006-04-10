@@ -908,7 +908,7 @@ void KPrPage::appendObjects( const QValueList<KPrObject *> &objects )
         if ( rx.search( objectName ) != -1 && rx.numCaptures() == 2 ) 
         {
             int id = rx.cap( 2 ).toInt();
-            if ( usedPageNames[rx.cap( 1 )] < id );
+            if ( usedPageNames[rx.cap( 1 )] < id )
             {
                 usedPageNames[rx.cap( 1 )] = id;
             }
@@ -1447,7 +1447,8 @@ void KPrPage::insertClosedLine( const KoPointArray &points, const KoRect &r, con
 
 KPrPartObject* KPrPage::insertObject( const KoRect& _rect, KoDocumentEntry& _e )
 {
-    KoDocument* doc = _e.createDoc( m_doc );
+    QString errorMsg;
+    KoDocument* doc = _e.createDoc( &errorMsg, m_doc );
     if ( !doc )
         return NULL;
 
