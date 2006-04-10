@@ -406,14 +406,14 @@ void KPrPage::loadOasis(KoOasisContext & context )
                 else
                     pef=PEF_STRIPS_RIGHT_UP;
             }
-            else if (effect=="fade-from-lowerright") 
+            else if (effect=="fade-from-lowerright")
             {   // PEF_COVER_LEFT_UP
                 if ( additionalEffect.isEmpty() )
                     pef=PEF_COVER_LEFT_UP;
                 else
                     pef=PEF_STRIPS_LEFT_UP;
             }
-            else if (effect=="fade-from-upperleft") 
+            else if (effect=="fade-from-upperleft")
             {   // PEF_COVER_RIGHT_DOWN
                 if ( additionalEffect.isEmpty() )
                     pef=PEF_COVER_RIGHT_DOWN;
@@ -529,7 +529,7 @@ QString KPrPage::oasisNamePage( int posPage ) const
     return  ( m_manualTitle.isEmpty() ?  QString( "page%1" ).arg( posPage ) : m_manualTitle );
 }
 
-bool KPrPage::saveOasisPage( KoStore *store, KoXmlWriter &xmlWriter, int posPage, KoSavingContext& context, 
+bool KPrPage::saveOasisPage( KoStore *store, KoXmlWriter &xmlWriter, int posPage, KoSavingContext& context,
                              int & indexObj, int &partIndexObj, KoXmlWriter* manifestWriter, QMap<QString, int> &pageNames ) const
 {
     if ( isMasterPage() )
@@ -603,7 +603,7 @@ QString KPrPage::saveOasisPageStyle( KoStore *, KoGenStyles& mainStyles ) const
             QString additionalTransition = saveOasisAdditionalPageEffect();
             if ( !additionalTransition.isEmpty() )
             {
-                stylepageauto.addProperty( "koffice:additional-transition-style", additionalTransition );    
+                stylepageauto.addProperty( "koffice:additional-transition-style", additionalTransition );
             }
         }
         stylepageauto.addProperty( "presentation:display-header", hasHeader());
@@ -898,17 +898,17 @@ void KPrPage::appendObjects( const QValueList<KPrObject *> &objects )
 {
     QMap <QString, int> usedPageNames;
     QPtrListIterator<KPrObject> it( m_objectList );
-    // find the biggest number 
+    // find the biggest number
     for ( ; it.current() ; ++it )
     {
         QString objectName( it.current()->getObjectName() );
 
         QRegExp rx( "(.*) \\((\\d{1,})\\)$" );
         rx.setMinimal( true );
-        if ( rx.search( objectName ) != -1 && rx.numCaptures() == 2 ) 
+        if ( rx.search( objectName ) != -1 && rx.numCaptures() == 2 )
         {
             int id = rx.cap( 2 ).toInt();
-            if ( usedPageNames[rx.cap( 1 )] < id );
+            if ( usedPageNames[rx.cap( 1 )] < id )
             {
                 usedPageNames[rx.cap( 1 )] = id;
             }
@@ -924,7 +924,7 @@ void KPrPage::appendObjects( const QValueList<KPrObject *> &objects )
     {
         QString objectName( ( *oIt )->getObjectName() );
         QRegExp rx( " \\(\\d{1,}\\)$" );
-        if ( rx.search( objectName ) != -1 ) 
+        if ( rx.search( objectName ) != -1 )
         {
             objectName.remove( rx );
         }
@@ -1461,8 +1461,6 @@ KPrPartObject* KPrPage::insertObject( const KoRect& _rect, KoDocumentEntry& _e )
 
     KPrPartObject *kppartobject = new KPrPartObject( ch );
     insertObject( i18n( "Embed Object" ), kppartobject, _rect );
-
-    QWidget::connect(ch, SIGNAL(changed(KoChild *)), kppartobject, SLOT(slot_changed(KoChild *)) );
 
     //emit sig_insertObject( ch, kppartobject );
     m_doc->repaint( false );
@@ -2330,9 +2328,9 @@ KPrObject* KPrPage::getObjectAt( const KoPoint &pos, bool withoutProtected ) con
     QPtrListIterator<KPrObject> it( m_objectList );
     KPrObject *o = it.toLast();
     while ( o ) {
-        if ( o != m_doc->footer() || 
-             o != m_doc->header() || 
-             ( m_bHasFooter && o == m_doc->footer() ) || 
+        if ( o != m_doc->footer() ||
+             o != m_doc->header() ||
+             ( m_bHasFooter && o == m_doc->footer() ) ||
              ( m_bHasHeader && o == m_doc->header() ) )
         {
             if ( o->contains( pos ) && !( o->isProtect() && withoutProtected ) )
