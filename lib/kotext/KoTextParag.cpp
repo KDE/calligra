@@ -231,7 +231,7 @@ void KoTextParag::join( KoTextParag *s )
     append( s->str->toString(), TRUE );
 
     for ( int i = 0; i < s->length(); ++i ) {
-	if ( !doc || doc->useFormatCollection() ) {
+	if ( doc->useFormatCollection() ) {
 	    s->str->at( i ).format()->addRef();
 	    str->setFormat( i + start, s->str->at( i ).format(), TRUE );
 	}
