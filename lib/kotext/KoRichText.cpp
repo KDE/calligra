@@ -199,7 +199,7 @@ KoTextCursor *KoTextDocDeleteCommand::unexecute( KoTextCursor *c )
     while ( s ) {
 	s->format();
 	s->setChanged( TRUE );
-	if ( s == c->parag() )
+	if ( c && s == c->parag() )
 	    break;
 	s = s->next();
     }
