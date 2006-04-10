@@ -2675,9 +2675,6 @@ void UndoCellPaste::undo()
 
     if ((*it)->isColumn())
     {
-      yshift = 0;
-      uint col = range.left();
-      uint width = range.width();
       if (!b_insert)
       {
         QLinkedList<columnSize>::Iterator it2;
@@ -2689,15 +2686,11 @@ void UndoCellPaste::undo()
       }
       else
       {
-        numCols += width;
-        sheet->removeColumn(col, width - 1, false);
+        numCols += range.width();
       }
     }
     else if ((*it)->isRow())
     {
-      xshift = 0;
-      uint row = range.top();
-      uint height = range.height();
       if (!b_insert)
       {
         QLinkedList<rowSize>::Iterator it2;
@@ -2709,8 +2702,7 @@ void UndoCellPaste::undo()
       }
       else
       {
-        numRows += height;
-        sheet->removeRow(row, height - 1);
+        numRows += range.height();
       }
     }
 
@@ -2723,17 +2715,27 @@ void UndoCellPaste::undo()
   if (b_insert) // with insertion
   {
     QRect rect = m_region.boundingRect();
-    if (m_iInsertTo == -1 || (m_iInsertTo == 0 && numRows == 0))
+    if (m_iInsertTo == -1 && numCols == 0 && numRows == 0)
     {
       // substract already removed columns
-      rect.setWidth(rect.width() - numCols);
+      rect.setWidth(rect.width());
       sheet->unshiftRow(rect);
     }
-    else if (m_iInsertTo == 1 || (m_iInsertTo == 0 && numCols == 0))
+    else if (m_iInsertTo == 1 && numCols == 0 && numRows == 0)
     {
       // substract already removed rows
-      rect.setHeight(rect.height() - numRows);
+      rect.setHeight(rect.height());
       sheet->unshiftColumn(rect);
+    }
+    // delete columns
+    else if (m_iInsertTo == 0 && numCols == 0 && numRows > 0)
+    {
+      sheet->removeRow(rect.top(), rect.height() - 1, false);
+    }
+    // delete rows
+    else if (m_iInsertTo == 0 && numCols > 0 && numRows == 0)
+    {
+      sheet->removeColumn(rect.left(), rect.width() - 1, false);
     }
   }
   else // without insertion
@@ -2761,40 +2763,18 @@ void UndoCellPaste::redo()
   uint numCols = 0;
   uint numRows = 0;
 
-  Region::ConstIterator endOfList = m_region.constEnd();
+  Region::ConstIterator endOfList(m_region.constEnd());
   for (Region::ConstIterator it = m_region.constBegin(); it != endOfList; ++it)
   {
     QRect range = (*it)->rect().normalized();
 
     if ((*it)->isColumn())
     {
-      int width = range.width();
-      if (b_insert)
-      {
-        numCols += width;
-        sheet->insertColumn(xshift + 1, width - 1, false);
-      }
-      QLinkedList<columnSize>::Iterator it2;
-      for ( it2 = m_lstRedoColumn.begin(); it2 != m_lstRedoColumn.end(); ++it2 )
-      {
-        ColumnFormat *cl=sheet->nonDefaultColumnFormat((*it2).columnNumber);
-        cl->setDblWidth((*it2).columnWidth);
-      }
+      numCols += range.width();
     }
     else if ((*it)->isRow())
     {
-      int height = range.height();
-      if (b_insert)
-      {
-        numRows += height;
-        sheet->insertRow(yshift + 1, height - 1);
-      }
-      QLinkedList<rowSize>::Iterator it2;
-      for ( it2 = m_lstRedoRow.begin(); it2 != m_lstRedoRow.end(); ++it2 )
-      {
-        RowFormat *rw=sheet->nonDefaultRowFormat((*it2).rowNumber);
-        rw->setDblHeight((*it2).rowHeight);
-      }
+      numRows += range.height();
     }
     else
     {
@@ -2808,17 +2788,49 @@ void UndoCellPaste::redo()
   if (b_insert)
   {
     QRect rect = m_region.boundingRect();
-    if (m_iInsertTo == -1 || (m_iInsertTo == 0 && numRows == 0))
+    if (m_iInsertTo == -1 && numCols == 0 && numRows == 0)
     {
-      rect.setWidth(rect.width() - numCols);
+      rect.setWidth(rect.width());
       sheet->shiftRow(rect);
     }
-    else if (m_iInsertTo == 1 || (m_iInsertTo == 0 && numCols == 0))
+    else if (m_iInsertTo == 1 && numCols == 0 && numRows == 0)
     {
-      rect.setHeight(rect.height() - numRows);
+      rect.setHeight(rect.height());
       sheet->shiftColumn(rect);
     }
+    // insert columns
+    else if (m_iInsertTo == 0 && numCols == 0 && numRows > 0)
+    {
+      sheet->insertRow(rect.top(), rect.height() - 1, false);
+    }
+    // insert rows
+    else if (m_iInsertTo == 0 && numCols > 0 && numRows == 0)
+    {
+      sheet->insertColumn(rect.left(), rect.width() - 1, false);
+    }
   }
+
+  for (Region::ConstIterator it = m_region.constBegin(); it != endOfList; ++it)
+  {
+    if ((*it)->isColumn())
+    {
+      QLinkedList<columnSize>::Iterator it2;
+      for ( it2 = m_lstRedoColumn.begin(); it2 != m_lstRedoColumn.end(); ++it2 )
+      {
+        ColumnFormat *cl=sheet->nonDefaultColumnFormat((*it2).columnNumber);
+        cl->setDblWidth((*it2).columnWidth);
+      }
+    }
+    else if ((*it)->isRow())
+    {
+      QLinkedList<rowSize>::Iterator it2;
+      for ( it2 = m_lstRedoRow.begin(); it2 != m_lstRedoRow.end(); ++it2 )
+      {
+        RowFormat *rw=sheet->nonDefaultRowFormat((*it2).rowNumber);
+        rw->setDblHeight((*it2).rowHeight);
+      }
+    }
+  } // for (Region::...
 
   sheet->paste( m_dataRedo, m_region.boundingRect() );
 

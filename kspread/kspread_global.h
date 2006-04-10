@@ -32,16 +32,18 @@ namespace KSpread
 class ElapsedTime
 {
  public:
+  enum OutputMode { Default, PrintOnlyTime };
   ElapsedTime()
   {
     m_time.start();
   }
 
-  ElapsedTime( QString const & name )
+  ElapsedTime( QString const & name, OutputMode mode = Default )
     : m_name( name )
   {
     m_time.start();
-    kDebug() << "*** (" << name << ")... Starting measuring... " << endl;
+    if ( mode != PrintOnlyTime )
+      kDebug() << "*** (" << name << ")... Starting measuring... " << endl;
   }
 
   ~ElapsedTime()
