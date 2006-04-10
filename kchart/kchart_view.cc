@@ -95,44 +95,43 @@ KChartView::KChartView( KChartPart* part, QWidget* parent, const char* name )
     m_chartbars = new KToggleAction( i18n("&Bar"), "chart_bar_3d", 0, this,
                                      SLOT( barsChart() ), actionCollection(),
                                      "barschart");
-    m_chartbars->setExclusiveGroup( "charttypes" );
-    m_chartbars->setChecked( true );
+    QActionGroup *charttypes = new QActionGroup( this );
+	charttypes->addAction(m_chartbars);
 
     m_chartline = new KToggleAction( i18n("&Line"), "chart_line", 0, this,
                                      SLOT( lineChart() ), actionCollection(),
                                      "linechart");
-    m_chartline->setExclusiveGroup( "charttypes" );
-
+	charttypes->addAction(m_chartline);
+	
     m_chartareas = new KToggleAction( i18n("&Area"), "chart_area", 0, this,
                                       SLOT( areasChart() ), actionCollection(),
                                       "areaschart");
-    m_chartareas->setExclusiveGroup( "charttypes" );
-
+	charttypes->addAction(m_chartareas);
+	
     m_charthilo = new KToggleAction( i18n("&HiLo"), "chart_hilo", 0, this,
                                      SLOT( hiLoChart() ), actionCollection(),
                                      "hilochart");
-    m_charthilo->setExclusiveGroup( "charttypes" );
-
+	charttypes->addAction(m_charthilo);
+	
     m_chartbw = new KToggleAction( i18n("Bo&x && Whiskers"), "chart_boxwhisker", 0, this,
                                      SLOT( bwChart() ), actionCollection(),
                                      "bwchart");
-    m_chartbw->setExclusiveGroup( "charttypes" );
-
+	charttypes->addAction(m_chartbw);
+	
     m_chartpie = new KToggleAction( i18n("&Pie"), "chart_pie", 0, this,
                                     SLOT( pieChart() ), actionCollection(),
                                     "piechart");
-    m_chartpie->setExclusiveGroup( "charttypes" );
+    charttypes->addAction(m_chartpie);
 
     m_chartring = new KToggleAction( i18n("&Ring"), "chart_ring", 0, this,
                                      SLOT( ringChart() ), actionCollection(),
                                      "ringchart");
-    m_chartring->setExclusiveGroup( "charttypes" );
-
-    m_chartpolar = new KToggleAction( i18n("&Polar"), "chart_polar", 0, this,
+	charttypes->addAction(m_chartring);
+    
+	m_chartpolar = new KToggleAction( i18n("&Polar"), "chart_polar", 0, this,
                                      SLOT( polarChart() ), actionCollection(),
                                      "polarchart");
-    m_chartpolar->setExclusiveGroup( "charttypes" );
-
+	charttypes->addAction(m_chartpolar);
     // Configuration KActions
     m_colorConfig = new KAction( i18n( "&Colors..." ), 0,
                             this, SLOT( slotConfigColor() ),
