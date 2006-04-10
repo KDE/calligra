@@ -2014,8 +2014,11 @@ KCommand *KoTextObject::changeCaseOfText(KoTextCursor *cursor,KoChangeCaseDia::T
             macroCmd->addCommand( changeCaseOfTextParag(0, p->length() - 1, _type, cursor, p ) );
             p = p->next();
         }
-        int endIndex = QMIN( p->length() - 1, end.index() );
-        macroCmd->addCommand( changeCaseOfTextParag(0, endIndex, _type, cursor, end.parag() ));
+        if ( p )
+        {
+            int endIndex = QMIN( p->length() - 1, end.index() );
+            macroCmd->addCommand( changeCaseOfTextParag(0, endIndex, _type, cursor, end.parag() ));
+        }
     }
     formatMore( 2 );
     emit repaintChanged( this );
