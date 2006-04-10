@@ -631,8 +631,8 @@ bool Calendar::load(QDomElement &element) {
                             removeDay(d);
                             kWarning()<<k_funcinfo<<m_name<<" Load calendarDay - Date already exists"<<endl;
                         }
+                        addDay(day);
                     }
-                    addDay(day);
                 } else {
                     delete day;
                     kError()<<k_funcinfo<<"Failed to load calendarDay"<<endl;
