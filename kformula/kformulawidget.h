@@ -21,11 +21,10 @@
 #ifndef KFORMULAWIDGET_H
 #define KFORMULAWIDGET_H
 
-#include <qdom.h>
-#include <qpixmap.h>
-#include <qpoint.h>
-#include <qwidget.h>
-//Added by qt3to4:
+#include <QDom>
+#include <QPixmap>
+#include <QPoint>
+#include <QWidget>
 #include <QMouseEvent>
 #include <QFocusEvent>
 #include <QKeyEvent>
@@ -50,7 +49,7 @@ class KFormulaWidget : public QWidget {
     Q_OBJECT
 
 public:
-    KFormulaWidget(KFormula::Container*, QWidget* parent=0, const char* name=0, Qt::WFlags f=0);
+    KFormulaWidget( KFormula::Container*, QWidget* parent=0, const char* name=0, Qt::WFlags f=0 );
     ~KFormulaWidget();
 
 

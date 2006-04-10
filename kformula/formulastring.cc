@@ -17,16 +17,15 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <qlabel.h>
-#include <qlayout.h>
-#include <qstringlist.h>
-#include <q3textedit.h>
-#include <qtooltip.h>
-#include <qvariant.h>
+#include <QLabel>
+#include <QStringList>
+#include <QTextEdit>
+#include <QToolTip>
+#include <QVariant>
+#include <QVBoxLayout>
+#include <QHBoxLayout>
+
 #include <q3whatsthis.h>
-//Added by qt3to4:
-#include <Q3VBoxLayout>
-#include <Q3HBoxLayout>
 
 #include <kapplication.h>
 #include <kmessagebox.h>
@@ -46,77 +45,81 @@ FormulaString::FormulaString( KFormulaPartView* parent, const char* name, bool m
 	setName( "FormulaString" );
     resize( 511, 282 );
     setCaption( i18n( "Formula String" ) );
-    setSizeGripEnabled( TRUE );
-    Q3VBoxLayout* FormulaStringLayout = new Q3VBoxLayout( this, 11, 6, "FormulaStringLayout");
+    setSizeGripEnabled( true );
+    
+    m_widgetLayout = new QVBoxLayout( this );
+    m_buttonLayout = new QHBoxLayout( this );
+    m_textEdit = new QTextEdit( this, "textEdit" );
+    m_position = new QLabel( this, "position" );
+    m_btnHelp = new KPushButton( KStdGuiItem::help(), this, "btnHelp" );
+    m_btnOk = new KPushButton( KStdGuiItem::ok(), this, "btnOk" );
+    m_btnCancel = new KPushButton( KStdGuiItem::cancel(), this, "btnCancel" );
+    
+    m_buttonLayout->addWidget( m_btnHelp );
+    m_buttonLayout->addSpacing( 100 );
+    m_buttonLayout->addWidget( m_btnOk );
+    m_buttonLayout->addWidget( m_btnCancel );
+    
+    m_widgetLayout->addWidget( m_textEdit );
+    m_widgetLayout->addWidget( m_position );
+    m_widgetLayout->addLayout( m_buttonLayout );
+    setLayout( m_widgetLayout );
 
-    textWidget = new Q3TextEdit( this, "textWidget" );
-    FormulaStringLayout->addWidget( textWidget );
-
-    Q3HBoxLayout* Layout2 = new Q3HBoxLayout( 0, 0, 6, "Layout2");
-    QSpacerItem* spacer = new QSpacerItem( 20, 20, QSizePolicy::Expanding, QSizePolicy::Minimum );
-    Layout2->addItem( spacer );
-
-    position = new QLabel( this, "position" );
-    position->setText( trUtf8( "1:1" ) );
-    Layout2->addWidget( position );
-    FormulaStringLayout->addLayout( Layout2 );
-
-    Q3HBoxLayout* Layout1 = new Q3HBoxLayout( 0, 0, 6, "Layout1");
-
-    buttonHelp = new KPushButton( KStdGuiItem::help(), this, "buttonHelp" );
-    buttonHelp->setAccel( 4144 );
-    buttonHelp->setAutoDefault( TRUE );
-    Layout1->addWidget( buttonHelp );
-    spacer = new QSpacerItem( 20, 20, QSizePolicy::Expanding, QSizePolicy::Minimum );
-    Layout1->addItem( spacer );
-
-    buttonOk = new KPushButton( KStdGuiItem::ok(), this, "buttonOk" );
-    buttonOk->setAccel( 0 );
-    buttonOk->setAutoDefault( TRUE );
-    buttonOk->setDefault( TRUE );
-    Layout1->addWidget( buttonOk );
-
-    buttonCancel = new KPushButton( KStdGuiItem::cancel(), this, "buttonCancel" );
-    buttonCancel->setAccel( 0 );
-    buttonCancel->setAutoDefault( TRUE );
-    Layout1->addWidget( buttonCancel );
-    FormulaStringLayout->addLayout( Layout1 );
+    m_position->setText( trUtf8( "1:1" ) );
+    m_btnHelp->setAccel( 4144 );
+    m_btnHelp->setAutoDefault( true );
+    m_btnOk->setAccel( 0 );
+    m_btnOk->setAutoDefault( true );
+    m_btnOk->setDefault( true );
+    m_btnCancel->setAccel( 0 );
+    m_btnCancel->setAutoDefault( true );
 
     // signals and slots connections
-    connect( buttonOk, SIGNAL( clicked() ), this, SLOT( accept() ) );
-    connect( buttonCancel, SIGNAL( clicked() ), this, SLOT( reject() ) );
-    connect( buttonHelp, SIGNAL(clicked() ), this, SLOT( helpButtonClicked() ) );
-    connect( textWidget, SIGNAL( cursorPositionChanged( int, int ) ),
-             this, SLOT( cursorPositionChanged( int, int ) ) );
+    connect( m_btnOk, SIGNAL( clicked() ), this, SLOT( accept() ) );
+    connect( m_btnCancel, SIGNAL( clicked() ), this, SLOT( reject() ) );
+    connect( m_btnHelp, SIGNAL(clicked() ), this, SLOT( helpButtonClicked() ) );
+    connect( m_textEdit, SIGNAL( cursorPositionChanged() ),
+             this, SLOT( cursorPositionChanged() ) );
 }
 
-/*
- *  Destroys the object and frees any allocated resources
- */
 FormulaString::~FormulaString()
 {
-    // no need to delete child widgets, Qt does it all for us
+  delete m_textEdit;
+  delete m_btnHelp;
+  delete m_btnOk;
+  delete m_btnCancel;
+  delete m_position;
+  delete m_buttonLayout;
+  delete m_widgetLayout;
 }
 
 void FormulaString::accept()
 {
-    QStringList errorList = view->readFormulaString( textWidget->text() );
-    if ( errorList.count() == 0 ) {
-        QDialog::accept();
-    }
-    else {
-        KMessageBox::sorry( this, errorList.join( "\n" ), i18n( "Parser Error" ) );
-    }
+  QStringList errorList = view->readFormulaString( m_textEdit->toPlainText() );
+  if ( errorList.count() == 0 )
+  {
+    QDialog::accept();
+  }
+  else
+  {
+    KMessageBox::sorry( this, errorList.join( "\n" ), i18n( "Parser Error" ) );
+  }
 }
 
 void FormulaString::helpButtonClicked()
 {
-  KToolInvocation::invokeHelp( "formula-strings", "kformula" );
+    KToolInvocation::invokeHelp( "formula-strings", "kformula" );
 }
 
-void FormulaString::cursorPositionChanged( int para, int pos )
+void FormulaString::cursorPositionChanged()
 {
-    position->setText( QString( "%1:%2" ).arg( para+1 ).arg( pos+1 ) );
+//    m_textEdit->	
+//    m_position->setText( QString( "%1:%2" ).arg( para+1 ).arg( pos+1 ) );
+}
+
+void FormulaString::setEditText( const QString& text )
+{
+    m_textEdit->setPlainText( text );
 }
 
 #include "formulastring.moc"

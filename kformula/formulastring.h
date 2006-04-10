@@ -20,20 +20,13 @@
 #ifndef FORMULASTRING_H
 #define FORMULASTRING_H
 
-#include <qvariant.h>
-#include <qdialog.h>
-//Added by qt3to4:
-#include <Q3VBoxLayout>
-#include <Q3HBoxLayout>
-#include <QLabel>
-#include <Q3GridLayout>
+#include <QDialog>
 
-class Q3GridLayout;
-class Q3HBoxLayout;
 class QLabel;
 class QPushButton;
-class Q3TextEdit;
-class Q3VBoxLayout;
+class QTextEdit;
+class QVBoxLayout;
+class QHBoxLayout;
 
 class KFormulaPartView;
 
@@ -41,25 +34,33 @@ class FormulaString : public QDialog
 {
     Q_OBJECT
 
-public:
+  public:
+    /** The constructor */
     FormulaString( KFormulaPartView* parent = 0, const char* name = 0, bool modal = FALSE, Qt::WFlags fl = 0 );
+
+    /** The destructor */
     ~FormulaString();
 
-    Q3TextEdit* textWidget;
-    QPushButton* buttonHelp;
-    QPushButton* buttonOk;
-    QPushButton* buttonCancel;
-    QLabel* position;
+    /**
+     * Set the @p text to be displayed in m_textEdit
+     * @param text the text to be displayed
+     */
+    void setEditText( const QString& text );
 
-protected slots:
-
+  protected slots:
     virtual void accept ();
     void helpButtonClicked();
+    void cursorPositionChanged();
 
-    void cursorPositionChanged ( int para, int pos );
-
-private:
+  private:
     KFormulaPartView* view;
+    QTextEdit* m_textEdit;
+    QVBoxLayout* m_widgetLayout;
+    QHBoxLayout* m_btnLayout;
+    QPushButton* m_btnHelp;
+    QPushButton* m_btnOk;
+    QPushButton* m_btnCancel;
+    QLabel* m_position;
 };
 
 #endif // FORMULASTRING_H

@@ -1,7 +1,3 @@
-//Added by qt3to4:
-#include <QFocusEvent>
-#include <QResizeEvent>
-#include <QPaintEvent>
 /* This file is part of the KDE project
    Copyright (C) 2001 Andrea Rizzi <rizzi@kde.org>
 	              Ulrich Kuettler <ulrich.kuettler@mailbox.tu-dresden.de>
@@ -25,53 +21,91 @@
 #ifndef __kformula_view_h__
 #define __kformula_view_h__
 
+#include <KoView.h>
+#include <QStringList>
+#include <QFocusEvent>
+#include <QResizeEvent>
+#include <QPaintEvent>
+
 class KAction;
 class KFormulaDoc;
 class KFormulaPartView;
 class KFormulaWidget;
 class KSelectAction;
 class QPaintEvent;
-class Q3ScrollView;
+class QScrollArea;
 class DCOPObject;
 
 namespace KFormula {
     class View;
 }
 
-#include <KoView.h>
-#include <q3ptrlist.h>
-#include <qstringlist.h>
 
 /**
- * The parts view.
+ * @short The parts view
+ * @version
  */
 class KFormulaPartView : public KoView
 {
     Q_OBJECT
 
-public:
-    KFormulaPartView(KFormulaDoc* _doc, QWidget* _parent=0, const char* _name=0);
+  public:
+    /**
+     * The constructor
+     * @param _doc a pointer to the associated KFormulaDoc
+     * @param _parent a pointer to the view's parent
+     * @param _name the view's name
+     */
+    KFormulaPartView( KFormulaDoc* _doc, QWidget* _parent=0, const char* _name=0 );
+
+    /**
+     * A virtual destructor
+     */
     virtual ~KFormulaPartView();
+
+    /**
+     * Use this function to obtain the DCOPObject
+     * @¦retur na pointer to the DCOPObject
+     */
     virtual DCOPObject* dcopObject();
 
+    /**
+     * Setup the printer to use
+     * @param printer a reference to the KPrinter to use
+     */
     virtual void setupPrinter( KPrinter &printer );
+
+    /**
+     * Prints the view using the @p printer
+     * @param printer the printer to use
+     */
     virtual void print( KPrinter &printer );
 
+    /**
+     * Use this function to obtain the associated KFormulaDoc
+     * @return a pointer to the KFormulaDoc
+     */
     KFormulaDoc* document() const { return m_pDoc; }
 
+    
     const KFormula::View* formulaView() const;
     KFormula::View* formulaView();
 
+    /**
+     * Parse the @p text into the DOM tree
+     * @param text the text to parse
+     * @result a QStringList with the errors
+     */
     QStringList readFormulaString( QString text );
 
-protected:
+  protected:
 
-    virtual void resizeEvent(QResizeEvent* _ev);
-    virtual void focusInEvent(QFocusEvent*);
+    virtual void resizeEvent( QResizeEvent* _ev );
+    virtual void focusInEvent( QFocusEvent* );
 
-    virtual void updateReadWrite(bool);
+    virtual void updateReadWrite( bool );
 
-protected slots:
+  protected slots:
 
     void configure();
     void cursorChanged(bool visible, bool selecting);
@@ -92,7 +126,7 @@ private:
 
     KFormulaDoc *m_pDoc;
     KFormulaWidget* formulaWidget;
-    Q3ScrollView* scrollview;
+    QScrollArea* m_scrollArea;
 
     KAction* cutAction;
     KAction* copyAction;

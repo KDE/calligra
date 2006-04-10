@@ -1,6 +1,3 @@
-//Added by qt3to4:
-#include <QFocusEvent>
-#include <QResizeEvent>
 /* This file is part of the KDE project
    Copyright (C) 2001 Andrea Rizzi <rizzi@kde.org>
 	              Ulrich Kuettler <ulrich.kuettler@mailbox.tu-dresden.de>
@@ -23,10 +20,14 @@
 
 class KPrinter;
 
-#include <qpainter.h>
+#include <QPainter>
 #include <q3popupmenu.h>
 #include <q3textedit.h>
-#include <qtimer.h>
+#include <QTimer>
+#include <QScrollArea>
+//Added by qt3to4:
+#include <QFocusEvent>
+#include <QResizeEvent>
 
 #include <kaction.h>
 #include <kdebug.h>
@@ -63,13 +64,14 @@ KFormulaPartView::KFormulaPartView(KFormulaDoc* _doc, QWidget* _parent, const ch
     m_dcop = 0;
     dcopObject(); // build it
 
-    scrollview = new Q3ScrollView(this, "scrollview");
-    formulaWidget = new KFormulaWidget(_doc->getFormula(), scrollview->viewport(), "formulaWidget");
-    scrollview->addChild(formulaWidget);
+    formulaWidget = new KFormulaWidget( _doc->getFormula(), this, "formulaWidget" );
 
-    scrollview->viewport()->setFocusProxy( scrollview );
-    scrollview->viewport()->setFocusPolicy( WheelFocus );
-    scrollview->setFocusPolicy( NoFocus );
+    m_scrollArea = new QScrollArea( this, "scrollarea" );
+    m_scrollArea->setWiget( formulaWidget );
+
+//    scrollview->viewport()->setFocusProxy( scrollview );
+//    scrollview->viewport()->setFocusPolicy( WheelFocus );
+//    scrollview->setFocusPolicy( NoFocus );
     formulaWidget->setFocus();
 
     // Nice parts start in read only mode.
@@ -254,10 +256,8 @@ void KFormulaPartView::cursorChanged(bool visible, bool selecting)
 void KFormulaPartView::formulaString()
 {
     FormulaString dia( this );
-    dia.textWidget->setText( document()->getFormula()->formulaString() );
-    if ( dia.exec() ) {
-        // How lovely.
-    }
+    dia.setEditText( document()->getFormula()->formulaString() );
+    dia.exec()
 }
 
 void KFormulaPartView::sizeSelected( int size )
