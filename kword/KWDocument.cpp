@@ -741,6 +741,7 @@ void KWDocument::recalcFrames( int fromPage, int toPage /*-1 for all*/, uint fla
                 if ( isFooterVisible() ) {
                     evenFooter = dynamic_cast<KWTextFrameSet*>( fs );
                 } else { fs->setVisible( false ); fs->deleteAllCopies(); }
+                break;
             case KWFrameSet::FI_FOOTNOTE: {
                 KWFootNoteFrameSet* fnfs = dynamic_cast<KWFootNoteFrameSet *>(fs);
                 if ( fnfs && fnfs->isVisible() ) // not visible is when the footnote has been deleted
@@ -4609,6 +4610,7 @@ void KWDocument::deleteFrame( KWFrame * frame )
         break;
     case FT_CLIPART:
         kdError(32001) << "FT_CLIPART used! (in KWDocument::deleteFrame)" << endl;
+        break;
     case FT_PICTURE:
         cmdName=i18n("Delete Picture Frame");
         docItem=Pictures;
