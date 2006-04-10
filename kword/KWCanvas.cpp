@@ -455,7 +455,7 @@ void KWCanvas::contentsMousePressEvent( QMouseEvent *e )
 
             KWFrame * frame = view ? view->frame() : 0L;
             KWFrameSet * fs = frame ? frame->frameSet() : 0L;
-            if(fs->groupmanager())
+            if ( fs && fs->groupmanager() )
                 fs = fs->groupmanager();
             bool emitChanged = false;
             if ( fs )
