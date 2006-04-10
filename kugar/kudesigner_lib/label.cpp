@@ -110,30 +110,30 @@ int Label::getTextAlignment()
     switch ( props[ "HAlignment" ].value().toInt() )
     {
     case 0:
-        result = AlignLeft;
+        result = Qt::AlignLeft;
         break;
     case 1:
-        result = AlignHCenter;
+        result = Qt::AlignHCenter;
         break;
     case 2:
-        result = AlignRight;
+        result = Qt::AlignRight;
         break;
     default:
-        result = AlignHCenter;
+        result = Qt::AlignHCenter;
     }
     switch ( props[ "VAlignment" ].value().toInt() )
     {
     case 0:
-        result = result | AlignTop;
+        result = result | Qt::AlignTop;
         break;
     case 1:
-        result = result | AlignVCenter;
+        result = result | Qt::AlignVCenter;
         break;
     case 2:
-        result = result | AlignBottom;
+        result = result | Qt::AlignBottom;
         break;
     default:
-        result = result | AlignVCenter;
+        result = result | Qt::AlignVCenter;
     }
     return result;
 }
@@ -143,13 +143,13 @@ int Label::getTextWrap()
     switch ( props[ "WordWrap" ].value().toInt() )
     {
     case 0:
-        return SingleLine;
+        return Qt::SingleLine;
         break;
     case 1:
-        return WordBreak;
+        return Qt::WordBreak;
         break;
     default:
-        return SingleLine;
+        return Qt::SingleLine;
     }
 }
 
@@ -168,26 +168,26 @@ QPen Label::getPenForText()
 
 QPen Label::getPenForShape()
 {
-    PenStyle style = SolidLine;
+		Qt::PenStyle style = Qt::SolidLine;
     switch ( props[ "BorderStyle" ].value().toInt() )
     {
     case 0:
-        style = NoPen;
+        style = Qt::NoPen;
         break;
     case 1:
-        style = SolidLine;
+        style = Qt::SolidLine;
         break;
     case 2:
-        style = DashLine;
+        style = Qt::DashLine;
         break;
     case 3:
-        style = DotLine;
+        style = Qt::DotLine;
         break;
     case 4:
-        style = DashDotLine;
+        style = Qt::DashDotLine;
         break;
     case 5:
-        style = DashDotDotLine;
+        style = Qt::DashDotDotLine;
         break;
     }
     return QPen( QColor( props[ "BorderColor" ].value().toColor() ),
@@ -211,7 +211,7 @@ void Label::draw( QPainter &painter )
 
     //draw border and background
     painter.setBrush( getBrush() );
-    painter.setPen( NoPen );
+    painter.setPen( Qt::NoPen );
     painter.drawRect( rect() );
     painter.setPen( getPenForShape() );
     if ( props[ "DrawLeft" ].value().toBool() )

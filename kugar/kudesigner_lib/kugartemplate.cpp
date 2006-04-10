@@ -141,11 +141,10 @@ void KugarTemplate::draw( QPainter &painter )
                ( int ) y() + height() - props[ "BottomMargin" ].value().toInt() );
     QPoint p4( ( int ) x() + width() - props[ "RightMargin" ].value().toInt(),
                ( int ) ( y() + props[ "TopMargin" ].value().toInt() ) );
-    painter.moveTo( p1 );
-    painter.lineTo( p2 );
-    painter.lineTo( p3 );
-    painter.lineTo( p4 );
-    painter.lineTo( p1 );
+    painter.drawLine(p1,p2);
+    painter.drawLine(p2,p3);
+	painter.drawLine(p3,p4);
+	painter.drawLine(p4,p1);
     /*    painter.drawRect((int)(x()+props["LeftMargin"].first.toInt()),
             (int)(y()+props["TopMargin"].first.toInt()),
             width() - props["LeftMargin"].first.toInt() - props["RightMargin"].first.toInt(),
