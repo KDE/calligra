@@ -217,8 +217,11 @@ void KexiDataSourcePage::clearDataSourceSelection()
 
 void KexiDataSourcePage::clearWidgetDataSourceSelection()
 {
-	if (!m_sourceFieldCombo->currentText().isEmpty())
+	if (!m_sourceFieldCombo->currentText().isEmpty()) {
 		m_sourceFieldCombo->setCurrentText("");
+		m_sourceFieldCombo->setFieldOrExpression(QString::null);
+		slotFieldSelected();
+	}
 	m_clearWidgetDSButton->setEnabled(false);
 }
 

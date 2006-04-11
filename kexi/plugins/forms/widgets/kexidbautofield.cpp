@@ -105,8 +105,11 @@ KexiDBAutoField::setWidgetType(WidgetType type)
 void
 KexiDBAutoField::createEditor()
 {
-	if(m_editor)
-		delete m_editor;
+	if(m_editor) {
+		QWidget *e = m_editor;
+		m_editor = 0;
+		delete e;
+	}
 
 	switch( m_widgetType ) {
 		case Text:
@@ -183,8 +186,9 @@ KexiDBAutoField::setLabelPosition(LabelPosition position)
 {
 	m_lblPosition = position;
 	if(m_layout) {
-		delete m_layout;
+		QBoxLayout *lyr = m_layout;
 		m_layout = 0;
+		delete lyr;
 	}
 
 	if(m_editor)

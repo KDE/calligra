@@ -20,8 +20,10 @@
 
 #include "kexidblineedit.h"
 
+#include <kdebug.h>
 #include <knumvalidator.h>
 #include <kdatetbl.h>
+
 #include <kexiutils/utils.h>
 #include <kexidb/queryschema.h>
 #include <kexiutils/utils.h>
