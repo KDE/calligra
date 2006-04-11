@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2004 Dag Andersen <danders@get2net.dk>
+   Copyright (C) 2004 - 2006 Dag Andersen <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -22,11 +22,14 @@
 
 #include <qpushbutton.h>
 #include <qcombobox.h>
+#include <qheader.h>
 #include <qlabel.h>
 #include <qlineedit.h>
 #include <qdatetimeedit.h>
 #include <qdatetime.h>
 #include <qlistview.h>
+#include <qpair.h>
+#include <qdatetime.h>
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -34,32 +37,19 @@
 namespace KPlato
 {
 
-IntervalEdit::IntervalEdit(const QPtrList<QPair<QTime, QTime> > &intervals, QWidget *parent, const char *name)
-    : KDialogBase( Swallow, i18n("Edit Interval"), Ok|Cancel, Ok, parent, name, true, true)
+IntervalEdit::IntervalEdit(QWidget *parent, const char *name)
+    : IntervalEditImpl(parent)
 {
     //kdDebug()<<k_funcinfo<<endl;
-    dia = new IntervalEditImpl(intervals, this);
 
-    setMainWidget(dia);
-    enableButtonOK(false);
-
-    connect(dia, SIGNAL(obligatedFieldsFilled(bool) ), SLOT(enableButtonOK(bool)));
-    connect(dia, SIGNAL(enableButtonOk(bool)), SLOT(enableButtonOK(bool)));
 }
 
-QPtrList<QPair<QTime, QTime> > IntervalEdit::intervals() const {
-    return dia->intervals();
-}
-
-
-IntervalEditImpl::IntervalEditImpl(const QPtrList<QPair<QTime, QTime> > &intervals, QWidget *parent)
+//--------------------------------------------
+IntervalEditImpl::IntervalEditImpl(QWidget *parent)
     : IntervalEditBase(parent) {
 
+    intervalList->header()->setStretchEnabled(true);
     intervalList->setSortColumn(0);
-    QPtrListIterator<QPair<QTime, QTime> > it = intervals;
-    for (; it.current(); ++it) {
-        new IntervalItem(intervalList, it.current()->first, it.current()->second);
-    }
 
     connect(bClear, SIGNAL(clicked()), SLOT(slotClearClicked()));
     connect(bAddInterval, SIGNAL(clicked()), SLOT(slotAddIntervalClicked()));
@@ -67,22 +57,16 @@ IntervalEditImpl::IntervalEditImpl(const QPtrList<QPair<QTime, QTime> > &interva
 
 }
 
-
-void IntervalEditImpl::slotEnableButtonOk(bool on) {
-    emit enableButtonOk(on);
-}
-
-void IntervalEditImpl::slotCheckAllFieldsFilled() {
-    emit obligatedFieldsFilled(true); //FIXME
-}
-
 void IntervalEditImpl::slotClearClicked() {
+    bool c = intervalList->firstChild() != 0;
     intervalList->clear();
+    if (c)
+        emit changed();
 }
 
 void IntervalEditImpl::slotAddIntervalClicked() {
     new IntervalItem(intervalList, startTime->time(), endTime->time());
-    slotEnableButtonOk(true);
+    emit changed();
 }
 
 void IntervalEditImpl::slotIntervalSelectionChanged(QListViewItem *item) {
@@ -102,6 +86,14 @@ QPtrList<QPair<QTime, QTime> > IntervalEditImpl::intervals() const {
             l.append(new QPair<QTime, QTime>(item->interval().first, item->interval().second));
     }
     return l;
+}
+
+void IntervalEditImpl::setIntervals(const QPtrList<QPair<QTime, QTime> > &intervals) const {
+    intervalList->clear();
+    QPtrListIterator<QPair<QTime, QTime> > it =intervals;
+    for (; it.current(); ++it) {
+        new IntervalItem(intervalList, it.current()->first, it.current()->second);
+    }
 }
 
 }  //KPlato namespace

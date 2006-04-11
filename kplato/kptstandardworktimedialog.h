@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2004 Dag Andersen <danders@get2net.dk>
+   Copyright (C) 2004 - 2006 Dag Andersen <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -34,6 +34,7 @@ namespace KPlato
 
 class Project;
 class Part;
+class IntervalEditImpl;
 
 class StandardWorktimeDialogImpl : public StandardWorktimeDialogBase {
     Q_OBJECT
@@ -54,7 +55,11 @@ private slots:
     void slotMonthChanged(double);
     void slotWeekChanged(double);
     void slotDayChanged(double);
-    
+    void slotIntervalChanged();
+    void slotApplyClicked();
+    void slotEnableButtonApply(bool);
+    void slotWeekdaySelected();
+    void slotStateChanged(int);
 signals:
     void obligatedFieldsFilled(bool yes);
     void enableButtonOk(bool);
@@ -65,6 +70,7 @@ private:
     double m_month;
     double m_week;
     double m_day;
+    IntervalEditImpl *m_intervalEdit;
 };
 
 class StandardWorktimeDialog : public KDialogBase {

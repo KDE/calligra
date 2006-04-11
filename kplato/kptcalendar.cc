@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003 - 2005 Dag Andersen <danders@get2net.dk>
+   Copyright (C) 2003 - 2006 Dag Andersen <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -929,6 +929,7 @@ StandardWorktime::StandardWorktime(StandardWorktime *worktime) {
         m_month = worktime->durationMonth();
         m_week = worktime->durationWeek();
         m_day = worktime->durationDay();
+        m_calendar = new Calendar(*(worktime->calendar()));
     } else {
         init();
     }
@@ -939,11 +940,20 @@ StandardWorktime::~StandardWorktime() {
 }
 
 void StandardWorktime::init() {
-    // Some temporary sane default values
+    // Some sane default values
     m_year = Duration(0, 1760, 0);
     m_month = Duration(0, 176, 0);
     m_week = Duration(0, 40, 0);
     m_day = Duration(0, 8, 0);
+    m_calendar = new Calendar;
+    m_calendar->setName(i18n("Base"));
+    QPair<QTime, QTime> t = QPair<QTime, QTime>(QTime(8,0,0), QTime(16,0,0));
+    for (int i=0; i < 5; ++i) {
+        m_calendar->weekday(i)->addInterval(t);
+        m_calendar->weekday(i)->setState(Map::Working);
+    }
+    m_calendar->weekday(5)->setState(Map::NonWorking);
+    m_calendar->weekday(6)->setState(Map::NonWorking);
 }
 
 bool StandardWorktime::load(QDomElement &element) {
@@ -952,6 +962,18 @@ bool StandardWorktime::load(QDomElement &element) {
     m_month = Duration::fromString(element.attribute("month"), Duration::Format_Hour); 
     m_week = Duration::fromString(element.attribute("week"), Duration::Format_Hour); 
     m_day = Duration::fromString(element.attribute("day"), Duration::Format_Hour); 
+    
+    QDomNodeList list = element.childNodes();
+    for (unsigned int i=0; i<list.count(); ++i) {
+        if (list.item(i).isElement()) {
+            QDomElement e = list.item(i).toElement();
+            if (e.tagName() == "calendar") {
+                delete m_calendar;
+                m_calendar = new Calendar;
+                m_calendar->load(e);
+            }
+        }
+    }
     return true;
 }
 
@@ -963,6 +985,8 @@ void StandardWorktime::save(QDomElement &element) const {
     me.setAttribute("month", m_month.toString(Duration::Format_Hour));
     me.setAttribute("week", m_week.toString(Duration::Format_Hour));
     me.setAttribute("day", m_day.toString(Duration::Format_Hour));
+    
+    m_calendar->save(me);
 }
 
 #ifndef NDEBUG

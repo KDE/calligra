@@ -2,6 +2,7 @@
    Copyright (C) 1998, 1999, 2000 Torben Weis <weis@kde.org>
    Copyright (C) 2004, 2005 Dag Andersen <danders@get2net.dk>
    Copyright (C) 2006 Raphael Langerhorst <raphael.langerhorst@kdemail.net>
+   Copyright (C) 2006 Dag Andersen <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -42,7 +43,7 @@
 #include <KoCommandHistory.h>
 #include <KoGlobal.h>
 
-#define CURRENT_SYNTAX_VERSION "0.3"
+#define CURRENT_SYNTAX_VERSION "0.4"
 
 namespace KPlato
 {

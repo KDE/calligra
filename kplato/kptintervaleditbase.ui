@@ -10,7 +10,7 @@
             <x>0</x>
             <y>0</y>
             <width>278</width>
-            <height>248</height>
+            <height>237</height>
         </rect>
     </property>
     <property name="caption">
@@ -41,6 +41,9 @@
             <property name="focusPolicy">
                 <enum>NoFocus</enum>
             </property>
+            <property name="showSortIndicator">
+                <bool>true</bool>
+            </property>
             <property name="resizeMode">
                 <enum>AllColumns</enum>
             </property>
@@ -53,51 +56,15 @@
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
-                <widget class="QLayoutWidget">
+                <widget class="QTimeEdit">
                     <property name="name">
-                        <cstring>layout4</cstring>
+                        <cstring>startTime</cstring>
                     </property>
-                    <hbox>
-                        <property name="name">
-                            <cstring>unnamed</cstring>
-                        </property>
-                        <widget class="QLabel">
-                            <property name="name">
-                                <cstring>textLabel1</cstring>
-                            </property>
-                            <property name="text">
-                                <string>From:</string>
-                            </property>
-                        </widget>
-                        <widget class="QTimeEdit">
-                            <property name="name">
-                                <cstring>startTime</cstring>
-                            </property>
-                        </widget>
-                    </hbox>
                 </widget>
-                <widget class="QLayoutWidget">
+                <widget class="QTimeEdit">
                     <property name="name">
-                        <cstring>layout5</cstring>
+                        <cstring>endTime</cstring>
                     </property>
-                    <hbox>
-                        <property name="name">
-                            <cstring>unnamed</cstring>
-                        </property>
-                        <widget class="QLabel">
-                            <property name="name">
-                                <cstring>textLabel2</cstring>
-                            </property>
-                            <property name="text">
-                                <string>To:</string>
-                            </property>
-                        </widget>
-                        <widget class="QTimeEdit">
-                            <property name="name">
-                                <cstring>endTime</cstring>
-                            </property>
-                        </widget>
-                    </hbox>
                 </widget>
             </hbox>
         </widget>

@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2001 Thomas zander <zander@kde.org>
-   Copyright (C) 2004, 2005 Dag Andersen <danders@get2net.dk>
+   Copyright (C) 2004 - 2006 Dag Andersen <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -45,7 +45,6 @@ namespace KPlato
 Project::Project(Node *parent)
     : Node(parent),
       m_accounts(*this),
-      m_defaultCalendar(0),
       m_baselined(false) {
     //kdDebug()<<k_funcinfo<<"("<<this<<")"<<endl;
     m_constraint = Node::MustStartOn;
@@ -924,10 +923,6 @@ void Project::setStandardWorktime(StandardWorktime * worktime) {
         delete m_standardWorktime; 
         m_standardWorktime = worktime; 
     }
-}
-
-void Project::setDefaultCalendar(Calendar *cal) {
-    m_defaultCalendar = cal;
 }
 
 bool Project::legalToLink(Node *par, Node *child) {
