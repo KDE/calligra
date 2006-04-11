@@ -925,7 +925,7 @@ bool KoDocument::saveExternalChildren()
     {
         if ( !ch->isDeleted() )
         {
-            KWDocument* doc = ch->document();
+            KoDocument* doc = ch->document();
             if ( doc && doc->isStoredExtern() && doc->isModified() )
             {
                 kdDebug(30003)<<" save external doc='"<<url().url()<<"'"<<endl;
