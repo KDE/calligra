@@ -116,8 +116,8 @@ KWCanvas::KWCanvas(const QString& viewMode, QWidget *parent, KWDocument *d, KWGU
 
     viewport()->setFocusProxy( this );
     viewport()->setFocusPolicy( WheelFocus );
-    setFocus();
     setInputMethodEnabled( true );
+    setFocus();
     viewport()->installEventFilter( this );
     installEventFilter( this );
     KCursor::setAutoHideCursor( this, true, true );
