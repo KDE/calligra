@@ -295,7 +295,7 @@ KoMainWindow::KoMainWindow( KInstance *instance, const char* name )
         const int deskWidth = KGlobalSettings::desktopGeometry(this).width();
         if (deskWidth > 1100) // very big desktop ?
             resize( 1000, 800 );
-        if (deskWidth > 850) // big desktop ?
+        else if (deskWidth > 850) // big desktop ?
             resize( 800, 600 );
         else // small (800x600, 640x480) desktop
             resize( 600, 400 );
