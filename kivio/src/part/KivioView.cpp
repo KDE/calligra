@@ -28,4 +28,9 @@ KivioView::~KivioView()
 {
 }
 
+void KivioView::updateReadWrite(bool readwrite)
+{
+  Q_UNUSED(readwrite);
+}
+
 #include "KivioView.moc"

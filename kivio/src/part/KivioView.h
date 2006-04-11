@@ -29,6 +29,8 @@ class KivioView : public KoView
   public:
     KivioView(KoDocument* document, QWidget* parent, const char* name);
     ~KivioView();
+
+    virtual void updateReadWrite(bool readwrite);
 };
 
 #endif

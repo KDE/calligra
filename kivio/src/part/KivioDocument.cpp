@@ -19,6 +19,8 @@
 
 #include "KivioDocument.h"
 
+#include "KivioView.h"
+
 KivioDocument::KivioDocument(QWidget* parentWidget, const char* widgetName, QObject* parent,
               const char* name, bool singleViewMode)
   : KoDocument(parentWidget, widgetName, parent, name, singleViewMode)
@@ -32,23 +34,43 @@ KivioDocument::~KivioDocument()
 void KivioDocument::paintContent(QPainter &painter, const QRect &rect, bool transparent,
                             double zoomX, double zoomY)
 {
+  Q_UNUSED(painter);
+  Q_UNUSED(rect);
+  Q_UNUSED(transparent);
+  Q_UNUSED(zoomX);
+  Q_UNUSED(zoomY);
 }
 
 bool KivioDocument::loadXML(QIODevice* device, const QDomDocument& doc)
 {
+  Q_UNUSED(device);
+  Q_UNUSED(doc);
+
+  return true;
 }
 
 bool KivioDocument::loadOasis(const QDomDocument& doc, KoOasisStyles& oasisStyles,
                         const QDomDocument& settings, KoStore* store)
 {
+  Q_UNUSED(doc);
+  Q_UNUSED(oasisStyles);
+  Q_UNUSED(settings);
+  Q_UNUSED(store);
+
+  return true;
 }
 
 bool KivioDocument::saveOasis(KoStore* store, KoXmlWriter* manifestWriter)
 {
+  Q_UNUSED(store);
+  Q_UNUSED(manifestWriter);
+
+  return true;
 }
 
 KoView* KivioDocument::createViewInstance(QWidget* parent, const char* name)
 {
+  return new KivioView(this, parent, name);
 }
 
 #include "KivioDocument.moc"

@@ -48,7 +48,7 @@ target_link_libraries(kivio kdeinit_kivio)
 install_targets(/bin kivio)
 
 ### desktop files ###
-#install_files(${SERVICES_INSTALL_DIR} FILES  kiviopart.desktop)
-#install_files(${XDG_APPS_DIR} FILES  kivio.desktop)
+install_files(${SERVICES_INSTALL_DIR} FILES  kiviopart.desktop)
+install_files(${XDG_APPS_DIR} FILES  kivio.desktop)
 
 kde4_footer()
