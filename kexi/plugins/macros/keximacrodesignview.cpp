@@ -45,6 +45,10 @@
 
 #include "lib/macro.h"
 
+//! constants used to name columns instead of hardcoding indices
+#define COLUMN_ID_NAME 0
+#define COLUMN_ID_DESC 1
+
 class KexiMacroTableView : public KexiTableView
 {
 	public:
@@ -162,6 +166,7 @@ void KexiMacroDesignView::initTable()
 	QHBoxLayout* layout = new QHBoxLayout(this);
 	d->tableview = new KexiMacroTableView(d->tabledata, this);
 	d->tableview->setSpreadSheetMode();
+	d->tableview->setColumnStretchEnabled( true, COLUMN_ID_DESC ); //last column occupies the rest of the area
 	layout->addWidget(d->tableview);
 }
 
@@ -173,6 +178,8 @@ void KexiMacroDesignView::initData()
 	for (int i=0; i<50; i++) { // rows...
 		d->tabledata->append( d->tabledata->createItem() );
 	}
+	//set data for our spreadsheet: this will clear our sets
+	d->tableview->setData(d->tabledata);
 }
 
 void KexiMacroDesignView::initProperties()
