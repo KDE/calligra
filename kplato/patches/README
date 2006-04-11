@@ -1,0 +1,4 @@
+Put the patches in this directory that are not ported to trunk yet,
+to avoid messing up the kde4 port.
+Note that the patches will most likely be against 1.6, 
+so they need to be ported to kde4 before applied.
