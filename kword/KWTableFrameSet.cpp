@@ -2707,6 +2707,24 @@ void KWTableFrameSetEdit::keyReleaseEvent( QKeyEvent * e )
         m_currentCell->keyReleaseEvent( e );
 }
 
+void KWTableFrameSetEdit::imStartEvent( QIMEvent* e )
+{
+    if ( m_currentCell )
+        m_currentCell->imStartEvent( e );
+}
+
+void KWTableFrameSetEdit::imComposeEvent( QIMEvent* e )
+{
+    if ( m_currentCell )
+        m_currentCell->imComposeEvent( e );
+}
+
+void KWTableFrameSetEdit::imEndEvent( QIMEvent* e )
+{
+    if ( m_currentCell )
+        m_currentCell->imEndEvent( e );
+}
+
 void KWTableFrameSetEdit::dragMoveEvent( QDragMoveEvent * e, const QPoint &n, const KoPoint &d )
 {
     kDebug(32004)<<"m_currentCell :"<<m_currentCell<<endl;
