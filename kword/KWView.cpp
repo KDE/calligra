@@ -1958,8 +1958,10 @@ void KWView::showFormat( const KoTextFormat &currentFormat )
 {
     // update the gui with the current format.
     //kdDebug() << "KWView::setFormat font family=" << currentFormat.font().family() << endl;
-    m_actionFormatFontFamily->setFont( currentFormat.font().family() );
-    m_actionFormatFontSize->setFontSize( currentFormat.pointSize() );
+    if (m_actionFormatFontFamily->font() != currentFormat.font().family())
+        m_actionFormatFontFamily->setFont( currentFormat.font().family() );
+    if (m_actionFormatFontSize->fontSize() != currentFormat.pointSize())
+        m_actionFormatFontSize->setFontSize( currentFormat.pointSize() );
     m_actionFormatBold->setChecked( currentFormat.font().bold());
     m_actionFormatItalic->setChecked( currentFormat.font().italic() );
     m_actionFormatUnderline->setChecked( currentFormat.underline());
