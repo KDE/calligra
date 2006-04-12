@@ -44,15 +44,19 @@ QStringList csvMimeTypes();
 class KexiCSVInfoLabel : public QWidget
 {
 	public:
-		/* Sets up a new info label with following parts:
-		 - \a labelText label with text like "Preview of data from file:"
-		 - \a fileName (active) label that can contain a filename or be empty.
-		 If \a setIconForFilename is true, icon will be set using a pixmap get 
-		 from a mime type for \a fileName. */
+		/* Sets up a new info label \a labelText label with text like "Preview of data from file:".
+		 setFileName() can be used to display filename and setCommentAfterFileName() to display 
+		 additional comment.
+
+		 The widget's layout can look like this:
+
+		 \pre [icon] [labeltext] [filename] [comment]
+		*/
 		KexiCSVInfoLabel( const QString& labelText, QWidget* parent );
 
 		void setFileName( const QString& fileName );
 		void setLabelText( const QString& text );
+		void setCommentText( const QString& text );
 //		void setIconForFileName();
 
 		//! sets icon pixmap to \a iconName. Used wher setIconForFilename was false in ctor.
@@ -60,11 +64,12 @@ class KexiCSVInfoLabel : public QWidget
 
 		QLabel* leftLabel() const { return m_leftLabel; }
 		KActiveLabel* fileNameLabel() const { return m_fnameLbl; }
+		KActiveLabel* commentLabel() const { return m_commentLbl; }
 		Q3Frame* separator() const { return m_separator; }
 
 	protected:
 		QLabel *m_leftLabel, *m_iconLbl;
-		KActiveLabel *m_fnameLbl;
+		KActiveLabel *m_fnameLbl, *m_commentLbl;
 		Q3Frame* m_separator;
 };
 

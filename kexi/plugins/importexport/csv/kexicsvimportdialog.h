@@ -164,6 +164,7 @@ class KexiCSVImportDialog : public KDialogBase
 	bool m_blockUserEvents : 1;
 	int m_primaryKeyColumn; //!< index of column with PK assigned (-1 if none)
 	int m_maximumRowsForPreview;
+	int m_maximumBytesForPreview;
 	QPixmap m_pkIcon;
 	QString m_fname;
 	QFile* m_file;
@@ -176,7 +177,9 @@ class KexiCSVImportDialog : public KDialogBase
 	KexiDB::TableSchema *m_destinationTableSchema;  //!< (temp) dest. table schema used for importing
 	KexiDB::PreparedStatement::Ptr m_importingStatement;
 	Q3ValueList<QVariant> m_dbRowBuffer; //!< (temp) used for importing
-	bool m_implicitPrimaryKeyAdded; //! (temp) used for importing
+	bool m_implicitPrimaryKeyAdded; //!< (temp) used for importing
+	bool m_allRowsLoadedInPreview; //!< we need to know whether all rows were loaded or it's just a partial data preview
+	bool m_stoppedAt_MAX_BYTES_TO_PREVIEW; //!< used to compute m_allRowsLoadedInPreview
 
  private slots:
   void fillTable();

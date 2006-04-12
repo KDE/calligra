@@ -50,6 +50,7 @@
 #include <Q3CString>
 #include <Q3ValueList>
 #include <QPixmap>
+#include <QToolTip>
 
 #include <kapplication.h>
 #include <kdebug.h>
@@ -62,6 +63,7 @@
 #include <kcharsets.h>
 #include <knuminput.h>
 #include <kprogressbar.h>
+#include <kactivelabel.h>
 
 #include <kexiutils/identifier.h>
 #include <kexiutils/utils.h>
@@ -106,7 +108,8 @@
 //extra:
 #define _NO_TYPE_YET -1 //allows to accept a number of empty cells, before something non-empty
 #define _FP_NUMBER_TYPE 255 //_NUMBER_TYPE variant
-#define MAX_COLUMNS 100 //max 100 columns is reasonable
+#define MAX_ROWS_TO_PREVIEW 100 //max 100 rows is reasonable
+#define MAX_BYTES_TO_PREVIEW 10240 //max 10KB is reasonable
 
 class KexiCSVImportDialogTable : public Q3Table
 {
@@ -173,7 +176,9 @@ KexiCSVImportDialog::KexiCSVImportDialog( Mode mode, KexiMainWindow* mainWin,
 	m_primaryKeyColumn(-1),
 	m_dialogCancelled(false),
 	m_conn(0),
-	m_destinationTableSchema(0)
+	m_destinationTableSchema(0),
+	m_allRowsLoadedInPreview(false),
+	m_stoppedAt_MAX_BYTES_TO_PREVIEW(false)
 {
 	setWFlags(getWFlags() | Qt::WStyle_Maximize | Qt::WStyle_SysMenu);
 	hide();
@@ -187,7 +192,8 @@ KexiCSVImportDialog::KexiCSVImportDialog( Mode mode, KexiMainWindow* mainWin,
 	m_typeNames[4] = i18n("date/time");
 
 	KGlobal::config()->setGroup("ImportExport");
-	m_maximumRowsForPreview = KGlobal::config()->readNumEntry("MaximumRowsForPreviewInImportDialog", MAX_COLUMNS);
+	m_maximumRowsForPreview = kapp->config()->readNumEntry("MaximumRowsForPreviewInImportDialog", MAX_ROWS_TO_PREVIEW);
+	m_maximumBytesForPreview = kapp->config()->readNumEntry("MaximumBytesForPreviewInImportDialog", MAX_BYTES_TO_PREVIEW);
 
 	m_pkIcon = SmallIcon("key");
 
@@ -361,7 +367,7 @@ if ( m_mode == Clipboard )
 	if (m_mode==Clipboard) {
 		m_infoLbl->setIcon("editpaste");
 	}
-	updateRowCountInfo();
+	//updateRowCountInfo();
 
 	m_table->setSelectionMode(Q3Table::NoSelection);
 
@@ -549,15 +555,16 @@ void KexiCSVImportDialog::fillTable()
 		m_table->setPixmap(0, m_primaryKeyColumn, m_pkIcon);
 
 	const int count = qMax(0, m_table->numRows()-1+m_startline);
-	const bool allRowsLoaded = count < m_maximumRowsForPreview;
-	if (allRowsLoaded) {
+	m_allRowsLoadedInPreview = count < m_maximumRowsForPreview && !m_stoppedAt_MAX_BYTES_TO_PREVIEW;
+	if (m_allRowsLoadedInPreview) {
 		m_startAtLineSpinBox->setMaxValue(count);
 		m_startAtLineSpinBox->setValue(m_startline+1);
 	}
 	m_startAtLineLabel->setText(i18n( "Start at line%1:").arg(
-			allRowsLoaded ? QString(" (1-%1)").arg(count)
+			m_allRowsLoadedInPreview ? QString(" (1-%1)").arg(count)
 			: QString::null //we do not know what's real count
 	));
+	updateRowCountInfo();
 
 	m_blockUserEvents = false;
 	repaint();
@@ -591,14 +598,16 @@ tristate KexiCSVImportDialog::loadRows(QString &field, int &row, int &column, in
 				m_inputStream->setCodec(codec); //QTextCodec::codecForName("CP1250"));
 		}
 	}
+	m_stoppedAt_MAX_BYTES_TO_PREVIEW = false;
 	int progressStep = 0;
 	if (m_importingProgressDlg)
 		progressStep = qMax( 1, m_importingProgressDlg->progressBar()->totalSteps()/200 );
 	int offset = 0;
 	for (;!m_inputStream->atEnd(); offset++)
 	{
-		if (column >= m_maximumRowsForPreview)
-			return true;
+//disabled: this breaks wide spreadsheets
+//	if (column >= m_maximumRowsForPreview)
+//		return true;
 
 		if (m_importingProgressDlg && ((offset % progressStep) < 5)) {
 			//update progr. bar dlg on final exporting
@@ -767,13 +776,13 @@ tristate KexiCSVImportDialog::loadRows(QString &field, int &row, int &column, in
 			lastCharDelimiter = false;
 
 		if (nextRow) {
-			nextRow = false;
 			if (!inGUI && row==1 && m_1stRowForFieldNames->isChecked()) {
 				// do not save to the database 1st row if it contains column names
 				m_importingStatement->clearArguments();
 			}
 			else if (!saveRow(inGUI))
 				return false;
+	
 			++row;
 		}
 
@@ -811,6 +820,15 @@ tristate KexiCSVImportDialog::loadRows(QString &field, int &row, int &column, in
 			kexipluginsdbg << "KexiCSVImportDialog::fillTable() loading stopped at row #" 
 				<< m_maximumRowsForPreview << endl;
 			break;
+		}
+		if (nextRow) {
+			nextRow = false;
+			//additional speedup: stop processing now if too many bytes were loaded for preview
+			kexipluginsdbg << offset << endl;
+			if (inGUI && offset >= m_maximumBytesForPreview && row >= 2) {
+				m_stoppedAt_MAX_BYTES_TO_PREVIEW = true;
+				return true;
+			}
 		}
 	}
 	return true;
@@ -1501,8 +1519,17 @@ void KexiCSVImportDialog::slotPrimaryKeyFieldToggled(bool on)
 
 void KexiCSVImportDialog::updateRowCountInfo()
 {
-//! @todo infoLbl->setFileName( m_fname + " " + i18n("row count", "(rows: %1)").arg(10);
 	m_infoLbl->setFileName( m_fname );
+	if (m_allRowsLoadedInPreview) {
+		m_infoLbl->setCommentText( 
+			i18n("row count", "(rows: %1)").arg( m_table->numRows()-1+m_startline ) );
+		QToolTip::remove( m_infoLbl );
+	}
+	else {
+		m_infoLbl->setCommentText( 
+			i18n("row count", "(rows: more than %1)").arg( m_table->numRows()-1+m_startline ) );
+		QToolTip::add( m_infoLbl->commentLabel(), i18n("Not all rows are visible on this preview") );
+	}
 }
 
 #include "kexicsvimportdialog.moc"
