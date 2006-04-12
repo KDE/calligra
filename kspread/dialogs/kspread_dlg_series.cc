@@ -45,7 +45,7 @@
 #include <qradiobutton.h>
 #include <qcheckbox.h>
 #include <qlineedit.h>
-#include <q3whatsthis.h>
+
 #include <knuminput.h>
 
 using namespace KSpread;
@@ -64,20 +64,20 @@ SeriesDlg::SeriesDlg( View* parent, const char* name,const QPoint &_marker)
   Q3ButtonGroup* gb1 = new Q3ButtonGroup( 2, Qt::Vertical,
     i18n("Insert Values"), page );
   column = new QRadioButton( i18n("Vertical"), gb1 );
-  Q3WhatsThis::add(column, i18n("Insert the series vertically, one below the other") );
+  column->setWhatsThis( i18n("Insert the series vertically, one below the other") );
   row = new QRadioButton( i18n("Horizontal"), gb1 );
-  Q3WhatsThis::add(row, i18n("Insert the series horizontally, from left to right") );
+  row->setWhatsThis( i18n("Insert the series horizontally, from left to right") );
 
   column->setChecked(true);
 
   Q3ButtonGroup* gb2 = new Q3ButtonGroup( 2, Qt::Vertical,
     i18n("Type"), page );
   linear = new QRadioButton( i18n("Linear (2,4,6,...)"), gb2 );
-  Q3WhatsThis::add(linear, i18n("Generate a series from 'start' to 'end' and for each step add "
+  linear->setWhatsThis( i18n("Generate a series from 'start' to 'end' and for each step add "
      "the value provided in step. This creates a series where each value "
      "is 'step' larger than the value before it.") );
   geometric = new QRadioButton( i18n("Geometric (2,4,8,...)"), gb2 );
-  Q3WhatsThis::add(geometric, i18n("Generate a series from 'start' to 'end' and for each step multiply "
+  geometric->setWhatsThis( i18n("Generate a series from 'start' to 'end' and for each step multiply "
      "the value with the value provided in step. Using a step of 5 produces a list like: "
       "5, 25, 125, 625 since 5 multiplied by 5 (step) equals 25, and that multiplied by 5 equals 125, "
       "which multiplied by the same step-value of 5 equals 625.") );
