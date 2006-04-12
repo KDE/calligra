@@ -33,7 +33,6 @@
 #include <qregexp.h>
 //Added by qt3to4:
 #include <Q3PtrList>
-#include <Q3MemArray>
 
 #include <kconfig.h>
 #include <kdebug.h>
@@ -70,7 +69,7 @@ AutoFillDeltaSequence::AutoFillDeltaSequence( AutoFillSequence *_first, AutoFill
     return;
   }
 
-  m_sequence = new Q3MemArray<double> ( _first->count() );
+  m_sequence = new QVector<double> ( _first->count() );
 
   AutoFillSequenceItem *item = _first->getFirst();
   AutoFillSequenceItem *item2 = _next->getFirst();

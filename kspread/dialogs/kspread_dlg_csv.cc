@@ -31,9 +31,9 @@
 #include <qradiobutton.h>
 #include <q3table.h>
 #include <qlayout.h>
+#include <QVector>
 //Added by qt3to4:
 #include <QTextStream>
-#include <Q3MemArray>
 #include <Q3GridLayout>
 
 #include <kapplication.h>
@@ -652,7 +652,7 @@ void CSVDialog::accept()
   int left = m_targetRect.left();
   int top  = m_targetRect.top();
 
-  Q3MemArray<double> widths( numCols );
+  QVector<double> widths( numCols );
   for ( i = 0; i < numCols; ++i )
   {
     ColumnFormat * c  = sheet->nonDefaultColumnFormat( left + i );

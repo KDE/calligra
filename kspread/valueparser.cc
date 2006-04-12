@@ -184,13 +184,13 @@ Value ValueParser::tryParseBool (const QString& str, bool *ok)
   const QString& lowerStr = str.toLower();
 
   if ((lowerStr == "true") ||
-      (lowerStr == parserLocale->translate("true").toLower()))
+       (lowerStr == ki18n("true").toString(parserLocale).toLower()))
   {
     val.setValue (true);
     if (ok) *ok = true;
   }
   else if ((lowerStr == "false") ||
-      (lowerStr == parserLocale->translate("false").toLower()))
+      (lowerStr == ki18n("false").toString(parserLocale).toLower()))
   {
     val.setValue (false);
     if (ok) *ok = true;
@@ -433,8 +433,8 @@ Value ValueParser::tryParseTime (const QString& str, bool *ok)
     QTime tm;
     if (parserLocale->use12Clock())
     {
-      QString stringPm = parserLocale->translate("pm");
-      QString stringAm = parserLocale->translate("am");
+      QString stringPm = ki18n("pm").toString(parserLocale);
+      QString stringAm = ki18n("am").toString(parserLocale);
       int pos=0;
       if((pos=str.indexOf(stringPm))!=-1)
       {
@@ -522,8 +522,7 @@ QDateTime ValueParser::readTime (const QString & intstr, bool withSeconds,
     {
      case 'p':
       {
-        QString s;
-        s = parserLocale->translate("pm").toLower();
+        QString s(ki18n("pm").toString(parserLocale).toLower());
         int len = s.length();
         if (str.mid(strpos, len) == s)
         {
@@ -532,7 +531,7 @@ QDateTime ValueParser::readTime (const QString & intstr, bool withSeconds,
         }
         else
         {
-          s = parserLocale->translate("am").toLower();
+          s = ki18n("am").toString(parserLocale).toLower();
           len = s.length();
           if (str.mid(strpos, len) == s)
           {

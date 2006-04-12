@@ -1,12 +1,12 @@
 /* This file is part of the KDE project
-   
+
    Copyright 2003 Ariya Hidayat <ariya@kde.org>
    Copyright 2002 Norbert Andres <nandres@web.de>
    Copyright 2001-2002 Laurent Montel <montel@kde.org>
    Copyright 2001 David Faure <faure@kde.org>
    Copyright 2000 Werner Trobin <trobin@kde.org>
    Copyright 1998-1999 Torben Weis <weis@kde.org>
-   
+
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
@@ -27,7 +27,7 @@
 #define __kspread_autofill_h__
 
 #include <qdatetime.h>
-#include <q3memarray.h>
+#include <QVector>
 #include <qstring.h>
 #include <q3ptrlist.h>
 #include <qstringlist.h>
@@ -104,13 +104,13 @@ public:
 
     bool equals( AutoFillDeltaSequence *_delta );
 
-    Q3MemArray<double>* getSequence() { return m_sequence; }
+    QVector<double>* getSequence() { return m_sequence; }
 
     double getItemDelta( int _pos );
 
 protected:
     bool m_ok;
-    Q3MemArray<double>* m_sequence;
+    QVector<double>* m_sequence;
 };
 
 } // namespace KSpread

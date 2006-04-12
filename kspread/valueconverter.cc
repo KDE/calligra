@@ -166,8 +166,8 @@ Value ValueConverter::asString (const Value &value) const
       val = QString();
     break;
     case Value::Boolean:
-      val.setValue (value.asBoolean() ? parser->locale()->translate ("True") :
-          parser->locale()->translate ("False"));
+      val.setValue (value.asBoolean() ? ki18n("True").toString(parser->locale()) :
+        ki18n("False").toString(parser->locale()));
     break;
     case Value::Integer:
     {

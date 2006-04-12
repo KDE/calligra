@@ -22,7 +22,7 @@
 #include <qcheckbox.h>
 #include <qcombobox.h>
 #include <q3listview.h>
-#include <q3memarray.h>
+#include <QVector>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -59,7 +59,7 @@ SubtotalDialog::~SubtotalDialog()
 void SubtotalDialog::slotOk()
 {
   int numOfCols = m_selection.width();
-  Q3MemArray<int> columns( numOfCols );
+  QVector<int> columns( numOfCols );
 
   int n = 0;
   bool empty = true;
