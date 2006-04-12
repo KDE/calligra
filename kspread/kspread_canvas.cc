@@ -5085,7 +5085,7 @@ void VBorder::paintEvent( QPaintEvent* _ev )
   QColor highlightColor = View::highlightColor();
   QPen pen( Qt::black, 1 );
   painter.setPen( pen );
-  // painter.setBackgroundColor( colorGroup().base() );
+  // painter.setBackgroundColor( QColorGroup(palette()).base() );
 
   // painter.eraseRect( _ev->rect() );
 
@@ -5136,7 +5136,7 @@ void VBorder::paintEvent( QPaintEvent* _ev )
     }
     else
     {
-      QColor c = colorGroup().background();
+      QColor c = QColorGroup(palette()).background();
       QBrush fill( c );
       qDrawPlainRect ( &painter, 0, zoomedYPos, width, height+1, c.dark(150),
            1, &fill );
@@ -5146,10 +5146,10 @@ void VBorder::paintEvent( QPaintEvent* _ev )
 
     // Reset painter
     painter.setFont( normalFont );
-    painter.setPen( colorGroup().text() );
+    painter.setPen( QColorGroup(palette()).text() );
 
     if ( selected )
-      painter.setPen( colorGroup().highlightedText() );
+      painter.setPen( QColorGroup(palette()).highlightedText() );
     else if ( highlighted )
       painter.setFont( boldFont );
 
@@ -5854,7 +5854,7 @@ void HBorder::paintEvent( QPaintEvent* _ev )
       }
       else
       {
-        QColor c = colorGroup().background();
+        QColor c = QColorGroup(palette()).background();
         QBrush fill( c );
         qDrawPlainRect ( &painter, zoomedXPos, 0, width+1, height, c.dark(150),
            1, &fill );
@@ -5862,10 +5862,10 @@ void HBorder::paintEvent( QPaintEvent* _ev )
 
       // Reset painter
       painter.setFont( normalFont );
-      painter.setPen( colorGroup().text() );
+      painter.setPen( QColorGroup(palette()).text() );
 
       if ( selected )
-        painter.setPen( colorGroup().highlightedText() );
+        painter.setPen( QColorGroup(palette()).highlightedText() );
       else if ( highlighted )
         painter.setFont( boldFont );
       if ( !m_pView->activeSheet()->getShowColumnNumber() )
@@ -5917,7 +5917,7 @@ void HBorder::paintEvent( QPaintEvent* _ev )
       }
       else
       {
-        QColor c = colorGroup().background();
+        QColor c = QColorGroup(palette()).background();
         QBrush fill( c );
         qDrawPlainRect ( &painter, zoomedXPos, 0, width+1, height, c.dark(150),
            1, &fill );
@@ -5925,10 +5925,10 @@ void HBorder::paintEvent( QPaintEvent* _ev )
 
       // Reset painter
       painter.setFont( normalFont );
-      painter.setPen( colorGroup().text() );
+      painter.setPen( QColorGroup(palette()).text() );
 
       if ( selected )
-        painter.setPen( colorGroup().highlightedText() );
+        painter.setPen( QColorGroup(palette()).highlightedText() );
       else if ( highlighted )
         painter.setFont( boldFont );
       if ( !m_pView->activeSheet()->getShowColumnNumber() )

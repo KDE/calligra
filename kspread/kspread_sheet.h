@@ -1020,8 +1020,6 @@ public:
 
     void changeChildGeometry( EmbeddedKOfficeObject *_child, const KoRect& _geometry );
 
-    const QColorGroup& colorGroup() { return widget()->colorGroup(); }
-
     int id() const;
 
     /**

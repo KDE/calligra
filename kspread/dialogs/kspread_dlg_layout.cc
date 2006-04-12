@@ -84,7 +84,7 @@ PatternSelect::PatternSelect( QWidget *parent, const char * )
 {
     penStyle = Qt::NoPen;
     penWidth = 1;
-    penColor = colorGroup().text();
+    penColor = QColorGroup(palette()).text();
     selected = false;
     undefined = false;
 }
@@ -2172,10 +2172,10 @@ void CellFormatPageFont::setCombos()
  if ( dlg->bTextColor )
    textColor = dlg->textColor;
  else
-   textColor = colorGroup().text();
+   textColor = QColorGroup(palette()).text();
 
  if ( !textColor.isValid() )
-   textColor =colorGroup().text();
+   textColor =QColorGroup(palette()).text();
 
  textColorButton->setColor( textColor );
 
@@ -2527,7 +2527,7 @@ BorderButton::BorderButton( QWidget *parent, const char *_name ) : QPushButton(p
 {
   penStyle = Qt::NoPen;
   penWidth = 1;
-  penColor = colorGroup().text();
+  penColor = QColorGroup(palette()).text();
   setToggleButton( true );
   setChecked( false);
   setChanged(false);
@@ -2543,7 +2543,7 @@ void BorderButton::setUndefined()
 {
  setPenStyle(Qt::SolidLine );
  setPenWidth(1);
- setColor(colorGroup().midlight());
+ setColor(QColorGroup(palette()).midlight());
 }
 
 
@@ -2552,7 +2552,7 @@ void BorderButton::unselect()
   setChecked(false);
   setPenWidth(1);
   setPenStyle(Qt::NoPen);
-  setColor( colorGroup().text() );
+  setColor( QColorGroup(palette()).text() );
   setChanged(true);
 }
 
@@ -2580,7 +2580,7 @@ void Border::paintEvent( QPaintEvent *_ev )
   QPen pen;
   QPainter painter;
   painter.begin( this );
-  pen=QPen( colorGroup().midlight(),2,Qt::SolidLine);
+  pen=QPen( QColorGroup(palette()).midlight(),2,Qt::SolidLine);
   painter.setPen( pen );
 
   painter.drawLine( OFFSETX-5, OFFSETY, OFFSETX , OFFSETY );
@@ -2682,7 +2682,7 @@ void CellFormatPageBorder::InitializeGrids()
 
   area=new Border(tmpQGroupBox,"area",dlg->oneCol,dlg->oneRow);
   grid2->addWidget(area,2,4,1,3);
-  area->setBackgroundColor( colorGroup().base() );
+  area->setBackgroundColor( QColorGroup(palette()).base() );
 
   /* initailize the buttons that are in this box */
   for (int i=BorderType_Top; i < BorderType_END; i++)
@@ -2798,7 +2798,7 @@ void CellFormatPageBorder::InitializeGrids()
   style->insertItem(paintFormatPixmap(Qt::DashDotLine),2 );
   style->insertItem(paintFormatPixmap(Qt::DashDotDotLine),3  );
   style->insertItem(paintFormatPixmap(Qt::SolidLine),4);
-  style->setBackgroundColor( colorGroup().background() );
+  style->setBackgroundColor( QColorGroup(palette()).background() );
 
   grid2->addItem(grid3,6,6,0,1);
   grid->addWidget(tmpQGroupBox,0,3,1,1);
@@ -2963,9 +2963,9 @@ QPixmap CellFormatPageBorder::paintFormatPixmap(Qt::PenStyle _style)
   QPixmap pixmap( style->width(), 14 );
   QPainter painter;
   QPen pen;
-  pen=QPen( colorGroup().text(),1,_style);
+  pen=QPen( QColorGroup(palette()).text(),1,_style);
   painter.begin( &pixmap );
-  painter.fillRect( 0, 0, style->width(), 14, colorGroup().background() );
+  painter.fillRect( 0, 0, style->width(), 14, QColorGroup(palette()).background() );
   painter.setPen( pen );
   painter.drawLine( 0, 7, style->width(), 7 );
   painter.end();
@@ -3233,7 +3233,7 @@ void CellFormatPageBorder::changeState( BorderButton *_p)
   {
     _p->setPenWidth(1);
     _p->setPenStyle(Qt::NoPen);
-    _p->setColor( colorGroup().text() );
+    _p->setColor( QColorGroup(palette()).text() );
   }
 
  area->repaint();
@@ -3650,10 +3650,10 @@ CellFormatPagePattern::CellFormatPagePattern( QWidget* parent, CellFormatDialog 
     if ( dlg->bBgColor )
         bgColor = dlg->bgColor;
     else
-        bgColor = colorGroup().base();
+        bgColor = QColorGroup(palette()).base();
 
     if (!bgColor.isValid())
-        bgColor = colorGroup().base();
+        bgColor = QColorGroup(palette()).base();
 
     bgColorButton->setColor( bgColor );
     connect( bgColorButton, SIGNAL( changed( const QColor & ) ),
@@ -3748,8 +3748,8 @@ CellFormatPagePattern::CellFormatPagePattern( QWidget* parent, CellFormatDialog 
 void CellFormatPagePattern::slotNotAnyColor()
 {
   b_notAnyColor = true;
-  bgColorButton->setColor( colorGroup().base() );
-  current->setBackgroundColor( colorGroup().base() );
+  bgColorButton->setColor( QColorGroup(palette()).base() );
+  current->setBackgroundColor( QColorGroup(palette()).base() );
 }
 
 void CellFormatPagePattern::slotSetBackgroundColor( const QColor &_color )
