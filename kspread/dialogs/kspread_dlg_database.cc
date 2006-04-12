@@ -737,10 +737,9 @@ bool DatabaseDialog::databaseDoNext()
         return false;
       }
 
-      unsigned int i;
       m_sheetView->clear();
 
-      for ( i = 0; i < sheetList.size(); ++i )
+      for ( int i = 0; i < sheetList.size(); ++i )
       {
         Q3CheckListItem * item = new Q3CheckListItem( m_sheetView, sheetList[i],
                                                     Q3CheckListItem::CheckBox );

@@ -49,7 +49,7 @@ void RegisterConversionFunctions()
 {
   FunctionRepository* repo = FunctionRepository::self();
   Function *f;
-  
+
   f = new Function ("ARABIC", func_arabic);
   repo->add (f);
   f = new Function ("CARX", func_carx);
@@ -144,7 +144,7 @@ Value func_sexdec (valVector args, ValueCalc *calc, FuncExtra *)
     Value time = calc->conv()->asTime (args[0]);
     return calc->mul (calc->conv()->asFloat (time), 24);
   }
-  
+
   // convert h/m/s to number of hours
   Value h = args[0];
   Value m = args[1];
@@ -220,8 +220,8 @@ Value func_arabic (valVector args, ValueCalc *calc, FuncExtra *)
 void func_a2c_helper (ValueCalc *calc, QString &s, Value val)
 {
   if (val.isArray()) {
-    for (unsigned int row = 0; row < val.rows(); ++row)
-      for (unsigned int col = 0; col < val.columns(); ++col)
+    for (int row = 0; row < val.rows(); ++row)
+      for (int col = 0; col < val.columns(); ++col)
         func_a2c_helper (calc, s, val.element (col, row));
   } else {
     int v = calc->conv()->asInteger (val).asInteger();

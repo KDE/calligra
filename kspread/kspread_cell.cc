@@ -1948,7 +1948,7 @@ void Cell::textSize( QPainter &_paint )
   else {
     // Vertical text.
     int width = 0;
-    for ( unsigned int i = 0; i < d->strOutText.length(); i++ )
+    for ( int i = 0; i < d->strOutText.length(); i++ )
       width = qMax( width, fm.width( d->strOutText.at( i ) ) );
 
     d->textWidth  = format()->sheet()->doc()->unzoomItX( width );
@@ -6705,7 +6705,7 @@ bool Cell::loadCellData(const QDomElement & text, Paste::Operation op )
       QString tag;
       QString qml_link;
 
-      for( unsigned i = 1; i < t.length(); i++ )
+      for( int i = 1; i < t.length(); i++ )
       {
         QChar ch = t[i];
         if( ch == '<' )

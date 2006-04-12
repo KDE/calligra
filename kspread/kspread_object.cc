@@ -459,8 +459,8 @@ void EmbeddedKOfficeObject::draw( QPainter *_painter )
   //{
   	_painter->translate( xOffset , yOffset );
 
-  	new_geometry.moveBy(  xOffset , yOffset );
-  	new_geometry.moveBy( -_painter->window().x(), -_painter->window().y() );
+  	new_geometry.translate(  xOffset , yOffset );
+  	new_geometry.translate( -_painter->window().x(), -_painter->window().y() );
   //}
 
   _painter->setClipRect( zoomedBound );
@@ -526,7 +526,7 @@ void EmbeddedKOfficeObject::updateChildGeometry()
 //     kDebug() << "         _canvas->xOffset()*_canvas->doc()->zoomedResolutionX():" << _canvas->xOffset() * _canvas->doc()->zoomedResolutionX() << endl;
 //     kDebug() << "_canvas->yOffset():" << _canvas->yOffset() << endl;
 //     kDebug() << "         _canvas->yOffset()*_canvas->doc()->zoomedResolutionY():" << _canvas->yOffset() * _canvas->doc()->zoomedResolutionY() << endl;
-//     r.moveBy( -_canvas->xOffset() / _canvas->doc()->zoomedResolutionX() , -_canvas->yOffset() / _canvas->doc()->zoomedResolutionY() );
+//     r.translate( -_canvas->xOffset() / _canvas->doc()->zoomedResolutionX() , -_canvas->yOffset() / _canvas->doc()->zoomedResolutionY() );
 //   }
 //   embeddedObject()->setGeometry( r , true );
 }

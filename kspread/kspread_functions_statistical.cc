@@ -401,7 +401,7 @@ Value func_mode (valVector args, ValueCalc *calc, FuncExtra *)
 {
   // does NOT support anything other than doubles !!!
   ContentSheet sh;
-  for (unsigned int i = 0; i < args.count(); ++i)
+  for (int i = 0; i < args.count(); ++i)
     func_mode_helper (args[i], calc, sh);
 
   // retrieve value with max.count
@@ -739,7 +739,7 @@ Value func_median (valVector args, ValueCalc *calc, FuncExtra *)
   List array;
   int number = 1;
 
-  for (unsigned int i = 0; i < args.count(); ++i)
+  for (int i = 0; i < args.count(); ++i)
     func_array_helper (args[i], calc, array, number);
 
   qSort(array);

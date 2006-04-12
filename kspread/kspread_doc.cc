@@ -1707,7 +1707,7 @@ void Doc::paintCellRegions(QPainter& painter, const QRect &viewRect,
   QRect cellRegion;
   KoRect unzoomedViewRect = unzoomRect( viewRect );
 
-  for (unsigned int i=0; i < cellRegions.size(); i++) {
+  for (int i=0; i < cellRegions.size(); i++) {
     cellRegion = cellRegions[i];
 
     PaintRegion(painter, unzoomedViewRect, view, cellRegion, sheet);
@@ -2335,7 +2335,7 @@ void Doc::repaint( const KoRect& rect )
     Canvas* canvas = ((View*)it.current())->canvasWidget();
 
     r = zoomRect( rect );
-    r.moveBy( (int)( -canvas->xOffset()*zoomedResolutionX() ) ,
+    r.translate( (int)( -canvas->xOffset()*zoomedResolutionX() ) ,
                         (int)( -canvas->yOffset() *zoomedResolutionY()) );
     canvas->update( r );
   }

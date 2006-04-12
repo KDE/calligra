@@ -6129,8 +6129,8 @@ KCommand *Sheet::moveObject(View *_view, double diffx, double diffy)
             KoRect geometry = it.current()->geometry();
             geometry.moveBy( -canvas->xOffset(), -canvas->yOffset() );
             QRect br = doc()->zoomRect( geometry/*it.current()->geometry()*/ );
-            br.moveBy( doc()->zoomItX( diffx ), doc()->zoomItY( diffy ) );
-            br.moveBy( doc()->zoomItX( -canvas->xOffset() ), doc()->zoomItY( -canvas->yOffset() ) );
+            br.translate( doc()->zoomItX( diffx ), doc()->zoomItY( diffy ) );
+            br.translate( doc()->zoomItX( -canvas->xOffset() ), doc()->zoomItY( -canvas->yOffset() ) );
             canvas->repaint( br ); // Previous position
             canvas->repaintObject( it.current() ); // New position
             createCommand=true;

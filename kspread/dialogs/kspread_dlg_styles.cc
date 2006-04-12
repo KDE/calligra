@@ -110,9 +110,8 @@ void StyleDlg::fillComboBox()
 
   StyleManager::Styles::const_iterator iter = m_styleManager->m_styles.begin();
   StyleManager::Styles::const_iterator end  = m_styleManager->m_styles.end();
-  uint count = m_styleManager->m_styles.count() + 1;
 
-  while ( entries.count() != count )
+  while ( entries.count() != m_styleManager->m_styles.count() + 1 )
   {
     if ( entries.find( iter.data() ) == entries.end() )
     {

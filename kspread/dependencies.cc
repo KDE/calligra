@@ -657,7 +657,7 @@ RangeList DependencyList::computeDependencies (const Point &cell) const
     return RangeList();
 
   RangeList rl;
-  for( unsigned i = 0; i < tokens.count(); i++ )
+  for( int i = 0; i < tokens.count(); i++ )
   {
     Token token = tokens[i];
     Token::Type tokenType = token.type();

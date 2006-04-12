@@ -451,7 +451,7 @@ Value func_kproduct (valVector args, ValueCalc *calc, FuncExtra *)
 Value func_div (valVector args, ValueCalc *calc, FuncExtra *)
 {
   Value val = args[0];
-  for (unsigned int i = 1; i < args.count(); ++i)
+  for (int i = 1; i < args.count(); ++i)
   {
     val = calc->div (val, args[i]);
     if (val.isError())
@@ -791,7 +791,7 @@ Value func_counta (valVector args, ValueCalc *calc, FuncExtra *)
 Value func_countblank (valVector args, ValueCalc *, FuncExtra *)
 {
   int cnt = 0;
-  for (unsigned int i = 0; i < args.count(); ++i)
+  for (int i = 0; i < args.count(); ++i)
     if (args[i].isArray()) {
       int rows = args[i].rows();
       int cols = args[i].columns();
@@ -844,8 +844,8 @@ static Value func_gcd_helper(const Value &val, ValueCalc *calc)
   Value res = 0;
   if (!val.isArray ())
     return val;
-  for (unsigned int row = 0; row < val.rows(); ++row)
-    for (unsigned int col = 0; col < val.columns(); ++col)
+  for (int row = 0; row < val.rows(); ++row)
+    for (int col = 0; col < val.columns(); ++col)
     {
       Value v = val.element (col, row);
       if (v.isArray ())
@@ -859,7 +859,7 @@ static Value func_gcd_helper(const Value &val, ValueCalc *calc)
 Value func_gcd (valVector args, ValueCalc *calc, FuncExtra *)
 {
   Value result = 0;
-  for (unsigned int i = 0; i < args.count(); ++i)
+  for (int i = 0; i < args.count(); ++i)
     if (args[i].isArray())
       result = calc->gcd (result, func_gcd_helper (args[i], calc));
     else
@@ -887,7 +887,7 @@ static Value func_lcm_helper(const Value &val, ValueCalc *calc)
 Value func_lcm (valVector args, ValueCalc *calc, FuncExtra *)
 {
   Value result = 0;
-  for (unsigned int i = 0; i < args.count(); ++i)
+  for (int i = 0; i < args.count(); ++i)
     if (args[i].isArray())
       result = calc->lcm (result, func_lcm_helper (args[i], calc));
     else

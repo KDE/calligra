@@ -103,7 +103,7 @@ bool AutoFillDeltaSequence::equals( AutoFillDeltaSequence *_delta )
   if ( m_sequence->size() != _delta->getSequence()->size() )
     return false;
 
-  for ( unsigned int i = 0; i < m_sequence->size(); i++ )
+  for ( int i = 0; i < m_sequence->size(); i++ )
   {
     if ( m_sequence->at( i ) != _delta->getSequence()->at( i ) )
       return false;

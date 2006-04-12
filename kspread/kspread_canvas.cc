@@ -1031,7 +1031,7 @@ void Canvas::mouseMoveEvent( QMouseEvent * _ev )
       QRect zoomedBound = doc()->zoomRect( KoRect(bound.left(), bound.top(),
       bound.width(),
       bound.height() ) );
-      zoomedBound.moveBy( (int)(-xOffset() * doc()->zoomedResolutionX() ), (int)(-yOffset() * doc()->zoomedResolutionY() ));
+      zoomedBound.translate( (int)(-xOffset() * doc()->zoomedResolutionX() ), (int)(-yOffset() * doc()->zoomedResolutionY() ));
       setCursor( obj->getCursor( p, d->modType, zoomedBound ) );
       return;
     }
@@ -2168,7 +2168,7 @@ void Canvas::processEscapeKey(QKeyEvent * event)
       {
         QRect oldBoundingRect = doc()->zoomRect( d->m_resizeObject->geometry()/*getRepaintRect()*/);
         d->m_resizeObject->setGeometry( d->m_rectBeforeResize );
-        oldBoundingRect.moveBy( (int)( -xOffset()*doc()->zoomedResolutionX() ) ,
+        oldBoundingRect.translate( (int)( -xOffset()*doc()->zoomedResolutionX() ) ,
                             (int)( -yOffset() * doc()->zoomedResolutionY()) );
 
         activeSheet()->setRegionPaintDirty( oldBoundingRect );
@@ -3247,7 +3247,7 @@ KSpread::EmbeddedObject *Canvas::getObject( const QPoint &pos, Sheet *_sheet )
         QRect zoomedBound = doc()->zoomRect( KoRect(bound.left(), bound.top(),
                                 bound.width(),
                                 bound.height() ) );
-        zoomedBound.moveBy( (int)( -xOffset() * doc()->zoomedResolutionX() ), (int)( -yOffset() * doc()->zoomedResolutionY() ) );
+        zoomedBound.translate( (int)( -xOffset() * doc()->zoomedResolutionX() ), (int)( -yOffset() * doc()->zoomedResolutionY() ) );
          if ( zoomedBound.contains( p ) )
               return itObject.current();
     }
@@ -3786,7 +3786,7 @@ void Canvas::repaintObject( EmbeddedObject *obj )
 {
 	//Calculate where the object appears on the canvas widget and then repaint that part of the widget
 	QRect canvasRelativeGeometry = doc()->zoomRect( obj->geometry() );
-	canvasRelativeGeometry.moveBy( (int)( -xOffset()*doc()->zoomedResolutionX() ) ,
+	canvasRelativeGeometry.translate( (int)( -xOffset()*doc()->zoomedResolutionX() ) ,
 			   			(int)( -yOffset() * doc()->zoomedResolutionY()) );
 
     update( canvasRelativeGeometry );
@@ -3988,7 +3988,7 @@ QRect Canvas::cellsInArea( const QRect area ) const
 {
 	KoRect unzoomedRect = d->view->doc()->unzoomRect( area );
 
-       	unzoomedRect.moveBy( (int)xOffset(), (int)yOffset() );
+       	unzoomedRect.translate( (int)xOffset(), (int)yOffset() );
 
   	double tmp;
   	int left_col = activeSheet()->leftColumn( unzoomedRect.left(), tmp );
@@ -4039,7 +4039,7 @@ void Canvas::paintUpdates()
   clipoutChildren( painter );
 
   KoRect unzoomedRect = d->view->doc()->unzoomRect( QRect( 0, 0, width(), height() ) );
-  // unzoomedRect.moveBy( xOffset(), yOffset() );
+  // unzoomedRect.translate( xOffset(), yOffset() );
 
 
   /* paint any visible cell that has the paintDirty flag */
@@ -4219,7 +4219,7 @@ void Canvas::clipoutChildren( QPainter& painter ) const
 
 	//The clipping region is given in device coordinates
 	//so subtract the current offset (scroll position) of the canvas
-	childGeometry.moveBy( (int)horizontalOffset , (int)verticalOffset );
+	childGeometry.translate( (int)horizontalOffset , (int)verticalOffset );
 
 	if (painter.window().intersects(childGeometry))
 		rgn -= childGeometry;
@@ -4235,7 +4235,7 @@ QRect Canvas::painterWindowGeometry( const QPainter& painter ) const
 {
   QRect zoomedWindowGeometry = painter.window();
 
-  zoomedWindowGeometry.moveBy( (int)( xOffset() * doc()->zoomedResolutionX() ) , (int)( yOffset() * doc()->zoomedResolutionY() ) );
+  zoomedWindowGeometry.translate( (int)( xOffset() * doc()->zoomedResolutionX() ) , (int)( yOffset() * doc()->zoomedResolutionY() ) );
 
 	return zoomedWindowGeometry;
 }
@@ -4263,7 +4263,7 @@ void Canvas::paintChildren( QPainter& painter, QMatrix& /*matrix*/ )
 	    //if one or more of the cells underneath the object has been marked as 'dirty'.
 
 	   QRect canvasRelativeGeometry = zoomedObjectGeometry;
-	   canvasRelativeGeometry.moveBy( (int)( -xOffset()*doc()->zoomedResolutionX() ) ,
+	   canvasRelativeGeometry.translate( (int)( -xOffset()*doc()->zoomedResolutionX() ) ,
 			   			(int)( -yOffset() * doc()->zoomedResolutionY()) );
 
 	   const QRect cellsUnderObject=cellsInArea( canvasRelativeGeometry );
@@ -6033,7 +6033,7 @@ void Canvas::showToolTip( const QPoint& p )
       return;
 
     // Cut if the tip is ridiculously long
-    const unsigned maxLen = 256;
+    const int maxLen = 256;
     if ( tipText.length() > maxLen )
         tipText = tipText.left(maxLen).append("...");
 
