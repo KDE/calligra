@@ -81,8 +81,18 @@ class KEXICORE_EXPORT KexiProjectData : public QObject, public KexiDB::SchemaDat
 
 		QDateTime lastOpened() const;
 		void setLastOpened(const QDateTime& lastOpened);
+
 		QString description() const;
 		void setDescription(const QString& desc);
+
+		/*! If \a set is true, sets readonly flag for this data, so any connection opened for the project will 
+		 be readonly. Change this flag before using this data in KexiProject instance, 
+		 otherwise you will need to reopen the project. */
+		void setReadOnly(bool set);
+
+		/*! \return readonly flag. False by default.
+		 @see setReadOnly() */
+		bool isReadOnly() const;
 
 		/*! objects to open on startup (come from command line "-open" option)
 		 It's public for convenience */

@@ -169,9 +169,11 @@ class KEXICORE_EXPORT KexiDataItemInterface
 		 It is the case for KexiDBFieldEdit widget (see KexiDBFieldEdit::createEditor()). Use with care.
 		 signalValueChanged() method will check this pointer, and if it's not 0, 
 		 m_parentDataItemInterface->signalValueChanged() is called, so a changes can be signalled at higher level. */
-		void setParentDataItemInterface(KexiDataItemInterface* parentDataItemInterface) {
-			m_parentDataItemInterface = parentDataItemInterface;
-		}
+		void setParentDataItemInterface(KexiDataItemInterface* parentDataItemInterface);
+
+		/*! \return a pointer to a Parent Data Item Interface. 
+		 @see setParentDataItemInterface() */
+		inline KexiDataItemInterface* parentInterface() const { return m_parentDataItemInterface; }
 
 	protected:
 		/*! Initializes this editor with \a add value, which should be somewhat added to the current

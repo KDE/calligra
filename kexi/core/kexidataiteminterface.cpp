@@ -104,3 +104,8 @@ bool KexiDataItemInterface::valueIsValid()
 {
 	return true;
 }
+
+void KexiDataItemInterface::setParentDataItemInterface(KexiDataItemInterface* parentDataItemInterface)
+{
+	m_parentDataItemInterface = parentDataItemInterface;
+}

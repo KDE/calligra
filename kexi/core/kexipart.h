@@ -55,7 +55,8 @@ enum ObjectTypes {
 	ReportObjectType = 4,
 	ScriptObjectType = 5,
 	WebObjectType = 6,
-	LastObjectType = 6, //ALWAYS UPDATE THIS
+	MacroObjectType = 7,
+	LastObjectType = 7, //ALWAYS UPDATE THIS
 
 	UserObjectType = 100 //external types
 };
@@ -73,17 +74,13 @@ class KEXICORE_EXPORT Part : public QObject
 		/*! Destructor. */
 		virtual ~Part();
 
-		/*! Query a KAction from the Part. This method is used to provide a
-		common way for Parts to provide there own KActrion's on the fly. This
-		method extends the normal KXMLGUIClient::action(const char*)
-		functionality cause the Part is able to provide the KAction
-		on the fly depending on the passed arguments.
+		/*! Try to execute the passed \a KexiPart::Item \p item and
+		return true on success else false.
 		@todo THIS IS EXPERIMENTAL STUFF and used only on the ScriptPart-plugin.
 		*/
-		virtual KAction* action(const QString& actionuri, QObject* object = 0) {
-			Q_UNUSED(actionuri);
-			Q_UNUSED(object);
-			return 0;
+		virtual bool execute(KexiPart::Item* item) {
+			Q_UNUSED(item);
+			return false;
 		}
 
 		/*! \return supported modes for dialogs created by this part, ie. a combination

@@ -76,6 +76,9 @@ namespace Kexi
 	KEXICORE_EXPORT bool& tempShowReports(); 
 
 	//! false by default, flag loaded on main window startup
+	KEXICORE_EXPORT bool& tempShowMacros();
+
+	//! false by default, flag loaded on main window startup
 	KEXICORE_EXPORT bool& tempShowScripts(); 
 
 	/*! A global setting for minimal readable font.

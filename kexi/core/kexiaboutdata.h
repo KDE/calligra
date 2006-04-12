@@ -72,6 +72,7 @@ KAboutData *newKexiAboutData()
 	aboutData->addCredit("Daniel Molkentin",I18N_NOOP("Initial design improvements"),  "molkentin@kde.org");
 	aboutData->addCredit("Kristof Borrey", I18N_NOOP("Icons and user interface research"), "kristof.borrey@skynet.be");
 	aboutData->addCredit("Tomas Krassnig", I18N_NOOP("Coffee sponsoring"), "tkrass05@hak1.at");
+	aboutData->addCredit("Paweł Wirecki / OpenOffice Polska", I18N_NOOP("Numerous bug reports, usability tests, technical support"), "");
 	aboutData->setTranslator(I18N_NOOP("_: NAME OF TRANSLATORS\nYour names"), I18N_NOOP("_: EMAIL OF TRANSLATORS\nYour emails"));
 #if defined(CUSTOM_VERSION) && defined(Q_WS_WIN)
 	aboutData->setProgramLogo(KEXI_APP_LOGO);
