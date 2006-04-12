@@ -2390,7 +2390,7 @@ bool Sheet::shiftRow( const QRect &rect,bool makeUndo )
     {
         for(int i = rect.top(); i <= rect.bottom(); i++ )
             it.current()->changeNameCellRef( QPoint( rect.left(), i ), false,
-                                             Sheet::ColumnInsert, name(),
+                                             Sheet::ColumnInsert, objectName(),
                                              ( rect.right() - rect.left() + 1),
                                              undo);
     }
@@ -2428,7 +2428,7 @@ bool Sheet::shiftColumn( const QRect& rect,bool makeUndo )
     {
         for(int i=rect.left();i<=rect.right();i++)
             it.current()->changeNameCellRef( QPoint( i, rect.top() ), false,
-                                             Sheet::RowInsert, name(),
+                                             Sheet::RowInsert, objectName(),
                                              ( rect.bottom() - rect.top() + 1 ),
                                              undo );
     }
@@ -2461,7 +2461,7 @@ void Sheet::unshiftColumn( const QRect & rect,bool makeUndo )
     for( ; it.current(); ++it )
         for(int i=rect.left();i<=rect.right();i++)
                 it.current()->changeNameCellRef( QPoint( i, rect.top() ), false,
-                                                 Sheet::RowRemove, name(),
+                                                 Sheet::RowRemove, objectName(),
                                                  ( rect.bottom() - rect.top() + 1 ),
                                                  undo );
 
@@ -2491,7 +2491,7 @@ void Sheet::unshiftRow( const QRect & rect,bool makeUndo )
     for( ; it.current(); ++it )
         for(int i=rect.top();i<=rect.bottom();i++)
                 it.current()->changeNameCellRef( QPoint( rect.left(), i ), false,
-                                                 Sheet::ColumnRemove, name(),
+                                                 Sheet::ColumnRemove, objectName(),
                                                  ( rect.right() - rect.left() + 1 ),
                                                  undo);
 
@@ -2529,7 +2529,7 @@ bool Sheet::insertColumn( int col, int nbCol, bool makeUndo )
     Q3PtrListIterator<Sheet> it( workbook()->sheetList() );
     for( ; it.current(); ++it )
         it.current()->changeNameCellRef( QPoint( col, 1 ), true,
-                                         Sheet::ColumnInsert, name(),
+                                         Sheet::ColumnInsert, objectName(),
                                          nbCol + 1, undo );
 
     //update print settings
@@ -2572,7 +2572,7 @@ bool Sheet::insertRow( int row, int nbRow, bool makeUndo )
     Q3PtrListIterator<Sheet> it( workbook()->sheetList() );
     for( ; it.current(); ++it )
         it.current()->changeNameCellRef( QPoint( 1, row ), true,
-                                         Sheet::RowInsert, name(),
+                                         Sheet::RowInsert, objectName(),
                                          nbRow + 1, undo );
 
     //update print settings
@@ -2611,7 +2611,7 @@ void Sheet::removeColumn( int col, int nbCol, bool makeUndo )
     Q3PtrListIterator<Sheet> it( workbook()->sheetList() );
     for( ; it.current(); ++it )
         it.current()->changeNameCellRef( QPoint( col, 1 ), true,
-                                         Sheet::ColumnRemove, name(),
+                                         Sheet::ColumnRemove, objectName(),
                                          nbCol + 1, undo );
 
     //update print settings
@@ -2648,7 +2648,7 @@ void Sheet::removeRow( int row, int nbRow, bool makeUndo )
     Q3PtrListIterator<Sheet> it( workbook()->sheetList() );
     for( ; it.current(); ++it )
         it.current()->changeNameCellRef( QPoint( 1, row ), true,
-                                         Sheet::RowRemove, name(),
+                                         Sheet::RowRemove, objectName(),
                                          nbRow + 1, undo );
 
     //update print settings
@@ -2775,7 +2775,7 @@ void Sheet::changeNameCellRef( const QPoint & pos, bool fullRowOrColumn,
                                       ChangeRef ref, QString tabname, int nbCol,
                                       UndoInsertRemoveAction * undo )
 {
-  bool correctDefaultSheetName = (tabname == name()); // for cells without sheet ref (eg "A1")
+  bool correctDefaultSheetName = (tabname == objectName()); // for cells without sheet ref (eg "A1")
   Cell* c = d->cells.firstCell();
   for( ;c; c = c->nextCell() )
   {
