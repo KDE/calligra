@@ -583,6 +583,10 @@ void FormulaToken::setData( unsigned size, const unsigned char* data )
 
 Value FormulaToken::value() const
 {
+  // sentinel
+  if(d->data.size() == 0)
+	  return Value::empty();
+
   Value result;
 
   unsigned char* buf;
@@ -1171,20 +1175,27 @@ UString FormulaToken::area( unsigned row, unsigned col ) const
 
 UString FormulaToken::ref( unsigned row, unsigned col ) const
 {
-  // FIXME check data size !
+	// sanity check
+	if(id() != Ref) 
+	if(id() != Ref3d) 
+		return UString::null;
+
+	// FIXME check data size !
   // FIXME handle shared formula
   unsigned char buf[2];
   int rowRef, colRef;
   bool rowRelative, colRelative;
 
+
   if( version() == Excel97 )
   {
-    buf[0] = d->data[0];
-    buf[1] = d->data[1];
+    int ofs = (id() == Ref) ? 0 : 2;
+    buf[0] = d->data[ofs];
+    buf[1] = d->data[ofs+1];
     rowRef = readU16( buf );
 
-    buf[0] = d->data[2];
-    buf[1] = d->data[3];
+    buf[0] = d->data[ofs+2];
+    buf[1] = d->data[ofs+3];
     colRef = readU16( buf );
 
     rowRelative = colRef & 0x8000;
@@ -1193,11 +1204,12 @@ UString FormulaToken::ref( unsigned row, unsigned col ) const
   }
   else
   {
-    buf[0] = d->data[0];
-    buf[1] = d->data[1];
+    int ofs = (id() == Ref) ? 0 : 14;
+    buf[0] = d->data[ofs];
+    buf[1] = d->data[ofs+1];
     rowRef = readU16( buf );
 
-    buf[0] = d->data[2];
+    buf[0] = d->data[ofs+2];
     buf[1] = 0;
     colRef = readU16( buf );
 
@@ -1216,6 +1228,21 @@ UString FormulaToken::ref( unsigned row, unsigned col ) const
   result.append( UString::from( rowRef+1 ) );  
 
   return result;  
+}
+
+// only when id is Ref3d
+unsigned FormulaToken::externSheetRef() const
+{
+	if(version() >= Excel97)
+	if(d->data.size() == 6)
+	{
+		unsigned char buf[2];
+		buf[0] = d->data[0];
+		buf[1] = d->data[1];
+		return readU16(buf);
+	}
+
+	return 0; // FIXME is this safe?
 }
 
 // only when id is Matrix
@@ -1428,6 +1455,9 @@ Record* Record::create( unsigned type )
   if( type == ExternNameRecord::id )
     record = new ExternNameRecord();
     
+  if( type == ExternSheetRecord::id )
+    record = new ExternSheetRecord();
+    
   else if( type == FilepassRecord::id )
     record = new FilepassRecord();
     
@@ -1490,6 +1520,9 @@ Record* Record::create( unsigned type )
   
   else if( type == StringRecord::id )
     record = new StringRecord();
+  
+  else if( type == SupbookRecord::id )
+    record = new SupbookRecord();
   
   else if( type == XFRecord::id )
     record = new XFRecord();
@@ -2319,6 +2352,113 @@ void ExternNameRecord::setData( unsigned size, const unsigned char* data )
 
 void ExternNameRecord::dump( std::ostream& out ) const
 {
+}
+
+// ========== EXTERNSHEET ========== 
+
+const unsigned int ExternSheetRecord::id = 0x0017;
+
+class ExternSheetRecord::Private
+{
+public:
+	typedef struct 
+	{ 
+		unsigned index; 
+		unsigned first; 
+		unsigned last ;
+	} ExternSheetRef;
+	std::vector<ExternSheetRef> refs;
+	UString refName;
+};
+
+ExternSheetRecord::ExternSheetRecord()
+{
+	d = new Private;
+}
+
+ExternSheetRecord::~ExternSheetRecord()
+{
+	delete d;
+}
+
+unsigned ExternSheetRecord::count() const
+{
+	return d->refs.size();
+}
+
+unsigned ExternSheetRecord::refIndex(unsigned i) const
+{
+	if(i >= d->refs.size()) return 0;
+	return d->refs[i].index;
+}
+
+unsigned ExternSheetRecord::firstSheet(unsigned i) const
+{
+	if(i >= d->refs.size()) return 0;
+	return d->refs[i].first;
+}
+
+unsigned ExternSheetRecord::lastSheet(unsigned i) const
+{
+	if(i >= d->refs.size()) return 0;
+	return d->refs[i].last;
+}
+
+UString ExternSheetRecord::refName() const
+{
+	return d->refName;
+}
+
+void ExternSheetRecord::setData( unsigned size, const unsigned char* data )
+{
+	d->refs.clear();
+	d->refName = UString::null;
+
+	// sanity
+	if(size < 2) return;
+
+	if(version() >= Excel97)
+	{
+		// don't really trust this
+		unsigned c = readU16(data);
+
+		unsigned ofs = 2;
+		for(unsigned i = 0; i < c; i++, ofs+=6)
+		{
+			// sanity check
+			if(ofs + 6 > size) break;
+
+			ExternSheetRecord::Private::ExternSheetRef ref;
+			ref.index = readU16(data+ofs);
+			ref.first = readU16(data+ofs+2);
+			ref.last = readU16(data+ofs+4);
+
+			d->refs.push_back(ref);
+		}
+	}
+	else
+	{
+		unsigned char dtype = data[1];
+		unsigned dlen = (unsigned) data[0];
+
+		if(dtype == 3)
+		{
+			UString url;
+			for(int i = 0; i < dlen; i++)
+			{
+				if(i + 2 > size) break;
+				unsigned char ch = data[i + 2];
+				if(ch >= 32)
+					url.append(UString(UChar(ch)));
+			}
+			d->refName = url;
+		}
+	}
+}
+
+void ExternSheetRecord::dump( std::ostream& out ) const
+{
+  out << "EXTERNSHEET" << std::endl;
 }
 
 // ========== FILEPASS ========== 
@@ -3846,6 +3986,75 @@ void StringRecord::dump( std::ostream& out ) const
   out << "             String : " << ustring() << std::endl;
 }
 
+// ========== SUPBOOK ==========
+
+const unsigned int SupbookRecord::id = 0x01ae;
+
+class SupbookRecord::Private
+{
+public:
+	SupbookRecord::ReferenceType type;
+};
+
+SupbookRecord::SupbookRecord()
+{
+	d = new Private;
+	d->type = UnknownRef;
+}
+
+SupbookRecord::~SupbookRecord()
+{
+}
+
+SupbookRecord::ReferenceType SupbookRecord::referenceType() const
+{
+	return d->type;
+}
+
+void SupbookRecord::setReferenceType(SupbookRecord::ReferenceType type)
+{
+	d->type = type;
+}
+
+void SupbookRecord::setData( unsigned size, const unsigned char* data )
+{
+	setReferenceType(UnknownRef);
+
+	if( version() >= Excel97 )
+	{
+		// check for add-in function or internal ref first
+		if(size == 4)
+		{
+			unsigned id1 = readU16(data);
+			unsigned id2 = readU16(data+2);
+			if((id1 == 1) && (id2 == 0x3a01))
+				setReferenceType(AddInRef);
+
+			// check for internal reference
+			if((id1 > 0) && (id2 == 0x0401))
+				setReferenceType(InternalRef);
+		}
+
+		// check for object (DDE/OLE) link
+		if(referenceType() == UnknownRef)
+		if(size > 2)
+		{
+			unsigned id1 = readU16(data);
+			if(id1 == 0)
+				setReferenceType(ObjectLink);
+		}
+
+		// no match, must be external ref
+		if(referenceType() == UnknownRef)
+			setReferenceType(ExternalRef);
+	}
+}
+
+void SupbookRecord::dump( std::ostream& out ) const
+{
+  out << "SUPBOOK" << std::endl;
+}
+
 
 // ========== TOPMARGIN ==========
 
@@ -4417,6 +4626,14 @@ void XFRecord::dump( std::ostream& out ) const
 //          ExcelReader
 //=============================================
 
+struct ExcelReaderExternalWorkbook
+{
+	bool addin;
+	bool external;
+	bool internal;
+	bool objectLink;
+};
+
 class ExcelReader::Private
 {
 public:
@@ -4458,6 +4675,12 @@ public:
 
   // for NAME and EXTERNNAME
   std::vector<UString> nameTable;
+
+  // for SUPBOOK
+  std::vector<ExcelReaderExternalWorkbook> externalWorkbooks;
+
+  // for EXTERNSHEET
+  std::vector<UString> sheetRefs;
 };
 
 ExcelReader::ExcelReader()
@@ -4469,9 +4692,10 @@ ExcelReader::ExcelReader()
   d->formulaCell = 0;
   
   d->passwordProtected = false;
-  
+
   // initialize palette
-  static const char *const default_palette[64-8] =	// default palette for all but the first 8 colors
+  // default palette for all but the first 8 colors
+  static const char *const default_palette[64-8] =	
   {
 	  "#000000", "#ffffff", "#ff0000", "#00ff00", "#0000ff", "#ffff00", "#ff00ff",
 	  "#00ffff", "#800000", "#008000", "#000080", "#808000", "#800080", "#008080",
@@ -4683,6 +4907,8 @@ void ExcelReader::handleRecord( Record* record )
       handleColInfo( static_cast<ColInfoRecord*>( record ) ); break;
     case ExternNameRecord::id: 
       handleExternName( static_cast<ExternNameRecord*>( record ) ); break;
+    case ExternSheetRecord::id: 
+      handleExternSheet( static_cast<ExternSheetRecord*>( record ) ); break;
     case FilepassRecord::id: 
       handleFilepass( static_cast<FilepassRecord*>( record ) ); break;
     case FormatRecord::id: 
@@ -4725,6 +4951,8 @@ void ExcelReader::handleRecord( Record* record )
       handleSST( static_cast<SSTRecord*>( record ) ); break;
     case StringRecord::id: 
       handleString( static_cast<StringRecord*>( record ) ); break;
+    case SupbookRecord::id: 
+      handleSupbook( static_cast<SupbookRecord*>( record ) ); break;
     case TopMarginRecord::id: 
       handleTopMargin( static_cast<TopMarginRecord*>( record ) ); break;
     case XFRecord::id: 
@@ -4938,6 +5166,37 @@ void ExcelReader::handleExternName( ExternNameRecord* record )
   if( !record ) return;
 
   d->nameTable.push_back( record->externName() );
+}
+
+void ExcelReader::handleExternSheet( ExternSheetRecord* record )
+{
+  if( !record ) return;
+
+  if(record->version() >= Excel97)
+	for(unsigned i = 0; i < record->count(); i++)
+	{
+		UString decodedRef;
+
+		unsigned index = record->refIndex(i);
+		unsigned first = record->firstSheet(i);
+		unsigned last = record->lastSheet(i);
+
+		if(index < d->externalWorkbooks.size())
+		{
+			// handle reference to own workbook
+			if(d->externalWorkbooks[index].internal)
+			if(first < d->workbook->sheetCount())
+				decodedRef = d->workbook->sheet(first)->name();
+
+			// add-in? let's (re)use # marker as in Excel 95
+			if(d->externalWorkbooks[index].addin)
+				decodedRef = UString("#");
+		}
+
+		d->sheetRefs.push_back(decodedRef);
+	}
+  else
+	  d->sheetRefs.push_back(record->refName());
 }
 
 void ExcelReader::handleFilepass( FilepassRecord* record )
@@ -5279,6 +5538,18 @@ void ExcelReader::handleString( StringRecord* record )
   d->formulaCell->setValue( record->value() );
   
   d->formulaCell = 0;
+}
+
+void ExcelReader::handleSupbook( SupbookRecord* record )
+{
+  if( !record ) return;
+  
+  ExcelReaderExternalWorkbook ext;
+  ext.addin = record->referenceType() == SupbookRecord::AddInRef;
+  ext.internal = record->referenceType() == SupbookRecord::InternalRef;
+  ext.external = record->referenceType() == SupbookRecord::ExternalRef;
+  ext.objectLink = record->referenceType() == SupbookRecord::ObjectLink;
+  d->externalWorkbooks.push_back(ext);
 }
 
 void ExcelReader::handleTopMargin( TopMarginRecord* record )
@@ -5778,7 +6049,36 @@ UString ExcelReader::decodeFormula( unsigned row, unsigned col,
         }
         break;
       
-      case FormulaToken::Area:
+      case FormulaToken::Ref3d:
+        {
+			UString cellName = token.ref(row, col);
+			UString sheetName = d->sheetRefs[token.externSheetRef()];
+			if(sheetName.isEmpty())
+				sheetName = UString("?");
+
+        	UString refName;
+
+			// OpenDocument example: [Sheet1.B1]
+        	if( openDocumentFormat )
+			{
+        	refName = UString("[");
+			refName.append( sheetName );
+        	refName.append(UString("."));
+			refName.append( cellName );
+        	refName.append(UString("]"));
+			}
+			else
+			{
+			refName = sheetName;
+			refName.append(UString("!"));
+			refName.append(cellName);
+			}
+
+			stack.push_back( refName );
+        }
+		break;
+
+	  case FormulaToken::Area:
         {
         	UString areaName;
         	if( openDocumentFormat )
@@ -5878,7 +6178,6 @@ UString ExcelReader::decodeFormula( unsigned row, unsigned col,
       case FormulaToken::AreaN:
       case FormulaToken::MemAreaN:
       case FormulaToken::MemNoMemN:
-      case FormulaToken::Ref3d:
       case FormulaToken::Area3d:
       case FormulaToken::RefErr3d:
       case FormulaToken::AreaErr3d:
