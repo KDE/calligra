@@ -124,7 +124,7 @@ KWTextFrameSet::KWTextFrameSet( KWDocument *_doc, const QString & name )
     else
         m_name = name;
 
-    QObject::setName( m_name.utf8() ); // store name in the QObject, for DCOP users
+    QObject::setName( m_name.toUtf8() ); // store name in the QObject, for DCOP users
     init();
 }
 
@@ -143,7 +143,7 @@ KWTextFrameSet::KWTextFrameSet( KWDocument* doc, const QDomElement& tag, KoOasis
 KWTextFrameSet::KWTextFrameSet( const QString &name ) : KWFrameSet(0) {
     m_name = name;
 
-    QObject::setName( m_name.utf8() ); // store name in the QObject, for DCOP users
+    QObject::setName( m_name.toUtf8() ); // store name in the QObject, for DCOP users
     m_currentViewMode = 0L;
     m_currentDrawnFrame = 0L;
     m_lastTextDocHeight = 0;
@@ -167,7 +167,7 @@ void KWTextFrameSet::init()
         textdoc->setTabStops( m_doc->ptToLayoutUnitPixX( m_doc->tabStopValue() ));
 
     m_textobj = new KoTextObject( textdoc, m_doc->styleCollection()->findStyle( "Standard" ),
-                                  this, (m_name+"-textobj").utf8() );
+                                  this, (m_name+"-textobj").toUtf8() );
     m_doc->backSpeller()->registerNewTextObject( m_textobj );
     connect( m_textobj, SIGNAL( availableHeightNeeded() ),
              SLOT( slotAvailableHeightNeeded() ) );

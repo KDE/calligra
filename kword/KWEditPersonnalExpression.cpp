@@ -219,7 +219,7 @@ void KWEditPersonnalExpression::init(const QString& filename )
             if ( e.tagName() == "Type" )
             {
                 list.clear();
-                group = i18n( e.namedItem( "TypeName" ).toElement().text().utf8() );
+                group = i18n( e.namedItem( "TypeName" ).toElement().text().toUtf8() );
 
                 QDomNode n2 = e.firstChild();
                 for( ; !n2.isNull(); n2 = n2.nextSibling() )
@@ -230,7 +230,7 @@ void KWEditPersonnalExpression::init(const QString& filename )
                         QDomElement e2 = n2.toElement();
                         if ( e2.tagName() == "Expression" )
                         {
-                            QString text = i18n( e2.namedItem( "Text" ).toElement().text().utf8() );
+                            QString text = i18n( e2.namedItem( "Text" ).toElement().text().toUtf8() );
                             list<<text;
                         }
                     }

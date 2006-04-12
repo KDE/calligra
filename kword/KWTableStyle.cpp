@@ -97,7 +97,7 @@ KWTableStyle::KWTableStyle( QDomElement & parentElem, KWDocument *_doc, int /*do
     QDomElement element = parentElem.namedItem( "NAME" ).toElement();
     if ( ( !element.isNull() ) && ( element.hasAttribute("value") ) ) {
         m_name = element.attribute( "value" );
-        m_displayName = i18n( "Style name", m_name.utf8() );
+        m_displayName = i18n( "Style name", m_name.toUtf8() );
     } else
         kWarning() << "No NAME tag in table style!" << endl;
 

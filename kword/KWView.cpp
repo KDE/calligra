@@ -1482,7 +1482,7 @@ void KWView::createExpressionActions( KActionMenu * parentMenu,const QString& fi
             if ( e.tagName() == "Type" )
             {
                 expressionExist =true;
-                QString group = i18n( e.namedItem( "TypeName" ).toElement().text().utf8() );
+                QString group = i18n( e.namedItem( "TypeName" ).toElement().text().toUtf8() );
                 KActionMenu * subMenu = new KActionMenu( group, actionCollection() );
                 parentMenu->insert( subMenu );
 
@@ -1495,7 +1495,7 @@ void KWView::createExpressionActions( KActionMenu * parentMenu,const QString& fi
                         QDomElement e2 = n2.toElement();
                         if ( e2.tagName() == "Expression" )
                         {
-                            QString text = i18n( e2.namedItem( "Text" ).toElement().text().utf8() );
+                            QString text = i18n( e2.namedItem( "Text" ).toElement().text().toUtf8() );
                             KAction * act = new KAction( text, 0, this, SLOT( insertExpression() ),
                                                          actionCollection(),
                                                          QString("expression-action_%1").arg(i).latin1() );
@@ -2197,7 +2197,7 @@ void KWView::showStyle( const QString & styleName )
         // Select style in combo
         m_actionFormatStyle->setCurrentItem( pos );
         // Check the appropriate action among the m_actionFormatStyleMenu actions
-        KToggleAction* act = dynamic_cast<KToggleAction *>(actionCollection()->action(style->name().utf8()));
+        KToggleAction* act = dynamic_cast<KToggleAction *>(actionCollection()->action(style->name().toUtf8()));
         if ( act )
             act->setChecked( true );
     }
@@ -2246,7 +2246,7 @@ void KWView::updateStyleList()
             QString name = PARAGSTYLE_ACTION_PREFIX + style->name();
             KToggleAction* act = new KToggleAction( (*it),
                                      shortCuts[name], this, SLOT( slotStyleSelected() ),
-                                     actionCollection(), name.utf8() );
+                                     actionCollection(), name.toUtf8() );
             act->setGroup( "styleList" );
             act->setExclusiveGroup( "styleListAction" );
             act->setToolTip( i18n( "Apply a paragraph style" ) );
@@ -2312,7 +2312,7 @@ void KWView::updateFrameStyleList()
             KToggleAction* act = new KToggleAction( (*it),
                                                     shortCuts[name], // KDE4: use value()
                                                     this, SLOT( slotFrameStyleSelected() ),
-                                                    actionCollection(), name.utf8() /*KDE4: remove conversion*/ );
+                                                    actionCollection(), name.toUtf8() /*KDE4: remove conversion*/ );
             act->setGroup( "frameStyleList" );
             act->setExclusiveGroup( "frameStyleList" );
             act->setToolTip( i18n( "Apply a frame style" ) );
@@ -2362,7 +2362,7 @@ void KWView::updateTableStyleList()
             QString name = TABLESTYLE_ACTION_PREFIX + style->name();
             KToggleAction* act = new KToggleAction( (*it),
                                      shortCuts[name], this, SLOT( slotTableStyleSelected() ),
-                                     actionCollection(), name.utf8() );
+                                     actionCollection(), name.toUtf8() );
             act->setExclusiveGroup( "tableStyleList" );
             act->setGroup( "tableStyleList" );
             act->setToolTip( i18n( "Apply a table style" ) );
@@ -4604,7 +4604,7 @@ void KWView::frameStyleSelected( KWFrameStyle *sty )
     const int pos = m_doc->frameStyleCollection()->indexOf( sty );
     Q_ASSERT( pos >= 0 );
     m_actionFrameStyle->setCurrentItem( pos );
-    KToggleAction* act = dynamic_cast<KToggleAction *>(actionCollection()->action( sty->name().utf8() ));
+    KToggleAction* act = dynamic_cast<KToggleAction *>(actionCollection()->action( sty->name().toUtf8() ));
     if ( act )
         act->setChecked( true );
 }
@@ -4673,7 +4673,7 @@ void KWView::tableStyleSelected( KWTableStyle *sty )
     // Adjust GUI
     int pos = m_doc->tableStyleCollection()->indexOf( sty );
     m_actionTableStyle->setCurrentItem( pos );
-    KToggleAction* act = dynamic_cast<KToggleAction *>(actionCollection()->action( sty->name().utf8() ));
+    KToggleAction* act = dynamic_cast<KToggleAction *>(actionCollection()->action( sty->name().toUtf8() ));
     if ( act )
         act->setChecked( true );
 }
@@ -7322,7 +7322,7 @@ void KWView::addPersonalExpression()
             if ( e.tagName() == "Type" )
             {
                 list.clear();
-                group = i18n( e.namedItem( "TypeName" ).toElement().text().utf8() );
+                group = i18n( e.namedItem( "TypeName" ).toElement().text().toUtf8() );
 
                 QDomNode n2 = e.firstChild();
                 for( ; !n2.isNull(); n2 = n2.nextSibling() )
@@ -7333,7 +7333,7 @@ void KWView::addPersonalExpression()
                         QDomElement e2 = n2.toElement();
                         if ( e2.tagName() == "Expression" )
                         {
-                            QString text = i18n( e2.namedItem( "Text" ).toElement().text().utf8() );
+                            QString text = i18n( e2.namedItem( "Text" ).toElement().text().toUtf8() );
                             list<<text;
                         }
                     }
