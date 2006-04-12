@@ -613,8 +613,8 @@ bool Swinder::operator==(const UString& s1, const UString& s2)
 
 bool Swinder::operator==(const UString& s1, const char *s2)
 {
-  if (s2 == 0L && s1.isNull())
-    return true;
+  if (s2 == 0L)
+    return s1.isNull();
 
   if (s1.length() != static_cast<int>( strlen(s2) ))
     return false;
