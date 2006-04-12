@@ -165,13 +165,22 @@ KexiCSVInfoLabel::KexiCSVInfoLabel( const QString& labelText, QWidget* parent )
 	m_fnameLbl = new KActiveLabel(this);
 	m_fnameLbl->setFocusPolicy(NoFocus);
 	m_fnameLbl->setTextFormat(Qt::PlainText);
-	m_fnameLbl->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
+	m_fnameLbl->setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding,1,0));
 	m_fnameLbl->setLineWidth(1);
 	m_fnameLbl->setFrameStyle(QFrame::Box);
 	m_fnameLbl->setAlignment(Qt::AlignVCenter | Qt::AlignLeft | Qt::WordBreak);
 	hbox->addSpacing(5);
 	hbox->addWidget(m_iconLbl);
-	hbox->addWidget(m_fnameLbl, 0, Qt::AlignVCenter | Qt::AlignLeft | Qt::WordBreak);
+	hbox->addWidget(m_fnameLbl, 1, Qt::AlignVCenter | Qt::AlignLeft | Qt::WordBreak);
+	hbox->addSpacing(10);
+	m_commentLbl = new KActiveLabel(this);
+	m_commentLbl->setFocusPolicy(NoFocus);
+	m_commentLbl->setTextFormat(Qt::PlainText);
+	m_commentLbl->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
+	m_commentLbl->setLineWidth(1);
+	m_commentLbl->setFrameStyle(QFrame::Box);
+	m_commentLbl->setAlignment(Qt::AlignVCenter | Qt::AlignLeft | Qt::WordBreak);
+	hbox->addWidget(m_commentLbl, 0, Qt::AlignVCenter | Qt::AlignRight | Qt::WordBreak);
 
 	m_separator = new QFrame(this);
 	m_separator->setFrameShape(QFrame::HLine);
@@ -199,6 +208,11 @@ void KexiCSVInfoLabel::setLabelText( const QString& text )
 void KexiCSVInfoLabel::setIcon(const QString& iconName)
 {
 	m_iconLbl->setPixmap( DesktopIcon(iconName) );
+}
+
+void KexiCSVInfoLabel::setCommentText( const QString& text )
+{
+	m_commentLbl->setText(text);
 }
 
 //----------------------------------------------------
