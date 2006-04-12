@@ -468,6 +468,12 @@ public:
    */
   bool isLoading() const;
 
+  /**
+     Prevents painting. Useful when importing data.
+   * @param status switch the painting on/off
+   */
+  void doNotPaint(bool status);
+
   virtual void paintContent( QPainter & painter, const QRect & rect, bool transparent = false,
                              double zoomX = 1.0, double zoomY = 1.0 );
   void paintContent( QPainter & painter, const QRect & rect, bool transparent,

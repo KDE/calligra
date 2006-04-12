@@ -480,8 +480,14 @@ int Doc::syntaxVersion() const
 
 bool Doc::isLoading() const
 {
-  return d->isLoading;
+  return d->isLoading || KoDocument::isLoading();
 }
+
+void Doc::doNotPaint(bool status)
+{
+  d->isLoading = status;
+}
+
 
 QColor Doc::pageBorderColor() const
 {

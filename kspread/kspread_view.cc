@@ -4850,8 +4850,10 @@ void View::insertFromDatabase()
     return;
     }
 
+    doc()->doNotPaint( true );
     DatabaseDialog dlg(this, rect, "DatabaseDialog");
     dlg.exec();
+    doc()->doNotPaint( false );
 #endif
 }
 
@@ -4859,19 +4861,21 @@ void View::insertFromTextfile()
 {
     d->canvas->closeEditor();
     //KMessageBox::information( this, "Not implemented yet, work in progress...");
-
+    doc()->doNotPaint( true );
     CSVDialog dialog( this, "CSVDialog", d->selection->selection(), CSVDialog::File );
     if( !dialog.cancelled() )
       dialog.exec();
+    doc()->doNotPaint( false );
 }
 
 void View::insertFromClipboard()
 {
     d->canvas->closeEditor();
-
+    doc()->doNotPaint( true );
     CSVDialog dialog( this, "CSVDialog", d->selection->selection(), CSVDialog::Clipboard );
     if( !dialog.cancelled() )
       dialog.exec();
+    doc()->doNotPaint( false );
 }
 
 void View::setupPrinter( KPrinter &prt )
