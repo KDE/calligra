@@ -348,7 +348,7 @@ Region::Element* Region::eor(const QPoint& point, Sheet* sheet)
     int y = point.y();
     QRect fullRange = (*it)->rect().normalized();
     delete *it;
-    it = cells().remove(it);
+    it = cells().erase(it);
 
     // top range
     int left = fullRange.left();
@@ -481,7 +481,7 @@ Region::Iterator Region::insert(Region::Iterator pos, const QRect& range, Sheet*
     else if (range.contains((*it)->rect()))
     {
       delete *it;
-      it = d->cells.remove(it);
+      it = d->cells.erase(it);
       continue;
     }
     ++it;
@@ -603,7 +603,7 @@ bool Region::isEmpty() const
 void Region::clear()
 {
   Iterator end(d->cells.end());
-  for (Iterator it = d->cells.begin(); it != end; it = d->cells.remove(it))
+  for (Iterator it = d->cells.begin(); it != end; it = d->cells.erase(it))
   {
     delete *it;
   }

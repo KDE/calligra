@@ -365,7 +365,7 @@ void Selection::update(const QPoint& point)
 
   Element* oldElement = *d->activeElement;
   // returns iterator to the next element or end
-  Iterator it = cells().remove(d->activeElement);
+  Iterator it = cells().erase(d->activeElement);
   delete oldElement;
   // returns iterator to the new element (before 'it') or 'it'
   d->activeElement = insert(it, newRange, sheet, d->multipleSelection);
@@ -761,7 +761,7 @@ void Selection::clearSubRegion()
   {
 /*    kDebug() << (*it)->name() << endl;*/
     delete *it;
-    it = cells().remove(it);
+    it = cells().erase(it);
   }
   d->activeSubRegionLength = 0;
   d->activeElement = it;

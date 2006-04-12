@@ -5528,14 +5528,14 @@ void View::refreshView()
 
   d->tabBar->setReadOnly( !doc()->isReadWrite() || doc()->map()->isProtected() );
 
-  d->toolWidget->setShown( doc()->showFormulaBar() );
+  d->toolWidget->setVisible( doc()->showFormulaBar() );
   d->editWidget->showEditWidget( doc()->showFormulaBar() );
-  d->hBorderWidget->setShown( doc()->showColumnHeader() );
-  d->vBorderWidget->setShown( doc()->showRowHeader() );
-  d->vertScrollBar->setShown( doc()->showVerticalScrollBar() );
-  d->horzScrollBar->setShown( doc()->showHorizontalScrollBar() );
-  d->tabBar->setShown( doc()->showTabBar() );
-  if ( statusBar() ) statusBar()->setShown( doc()->showStatusBar() );
+  d->hBorderWidget->setVisible( doc()->showColumnHeader() );
+  d->vBorderWidget->setVisible( doc()->showRowHeader() );
+  d->vertScrollBar->setVisible( doc()->showVerticalScrollBar() );
+  d->horzScrollBar->setVisible( doc()->showHorizontalScrollBar() );
+  d->tabBar->setVisible( doc()->showTabBar() );
+  if ( statusBar() ) statusBar()->setVisible( doc()->showStatusBar() );
 
   d->canvas->updatePosWidget();
 
@@ -5655,7 +5655,7 @@ void View::popupColumnMenu( const QPoint & _point )
       Region::ConstIterator endOfList = d->selection->constEnd();
       for (Region::ConstIterator it = d->selection->constBegin(); it != endOfList; ++it)
       {
-        QRect range = (*it)->rect().normalize();
+        QRect range = (*it)->rect().normalized();
         int col;
         for (col = range.left(); col < range.right(); ++col)
         {
@@ -5750,7 +5750,7 @@ void View::popupRowMenu( const QPoint & _point )
       Region::ConstIterator endOfList = d->selection->constEnd();
       for (Region::ConstIterator it = d->selection->constBegin(); it != endOfList; ++it)
       {
-        QRect range = (*it)->rect().normalize();
+        QRect range = (*it)->rect().normalized();
         int row;
         for (row = range.top(); row < range.bottom(); ++row)
         {
