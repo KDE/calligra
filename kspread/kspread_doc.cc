@@ -2216,7 +2216,7 @@ void Doc::takeSheet( Sheet * sheet )
 
 void Doc::addIgnoreWordAll( const QString & word)
 {
-    if( d->spellListIgnoreAll.findIndex( word )==-1)
+    if (d->spellListIgnoreAll.indexOf(word) == -1)
         d->spellListIgnoreAll.append( word );
 }
 

@@ -3254,8 +3254,8 @@ void Sheet::sortByRow( const QRect &area, int key1, int key2, int key3,
 
       if ( firstKey )
       {
-        int i1 = firstKey->findIndex( cell2->text() );
-        int i2 = firstKey->findIndex( bestCell->text() );
+        int i1 = firstKey->indexOf( cell2->text() );
+        int i2 = firstKey->indexOf( bestCell->text() );
 
         if ( i1 != -1 && i2 != -1 )
         {
@@ -3610,8 +3610,8 @@ void Sheet::sortByColumn( const QRect &area, int key1, int key2, int key3,
 
       if ( firstKey )
       {
-        int i1 = firstKey->findIndex( cell2->text() );
-        int i2 = firstKey->findIndex( bestCell->text() );
+        int i1 = firstKey->indexOf( cell2->text() );
+        int i2 = firstKey->indexOf( bestCell->text() );
 
         if ( i1 != -1 && i2 != -1 )
         {

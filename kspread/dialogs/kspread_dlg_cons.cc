@@ -389,7 +389,7 @@ void ConsolidateDialog::slotOk()
 	if ( c )
 	{
 	  QString s = c->value().asString();
-	  if ( !s.isEmpty() && lst.find( s ) == lst.end() )
+	  if ( !s.isEmpty() && lst.indexOf( s ) == -1 )
 	    lst.append( s );
 	}
       }
@@ -472,7 +472,7 @@ void ConsolidateDialog::slotOk()
 	if ( c )
 	{
 	  QString s = c->value().asString();
-	  if ( !s.isEmpty() && cols.find( s ) == cols.end() )
+	  if ( !s.isEmpty() && cols.indexOf( s ) == -1 )
 	    cols.append( s );
 	}
       }
@@ -492,7 +492,7 @@ void ConsolidateDialog::slotOk()
 	if ( c )
 	{
 	  QString s = c->value().asString();
-	  if ( !s.isEmpty() && rows.find( s ) == rows.end() )
+	  if ( !s.isEmpty() && rows.indexOf( s ) == -1 )
 	    rows.append( s );
 	}
       }

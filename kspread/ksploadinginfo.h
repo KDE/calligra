@@ -31,7 +31,7 @@ public:
     KSPLoadingInfo() { m_loadTemplate = false;}
     ~KSPLoadingInfo() {}
     void addWordInAreaList( const QString & word) { m_areaNamed.append( word ); }
-    bool findWordInAreaList(const QString & word) const { return (m_areaNamed.find( word ) != m_areaNamed.end());}
+    bool findWordInAreaList(const QString & word) const { return (m_areaNamed.indexOf( word ) != -1);}
     void appendValidation( const QString &name, const QDomElement &element){ m_validationList.insert( name, element);}
     QDomElement validation( const QString &name) { return m_validationList[name];}
 

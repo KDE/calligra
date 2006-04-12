@@ -56,7 +56,7 @@ FindOption::FindOption( QWidget *parent)
     QStringList lst;
     lst << i18n( "Cell Values" );
     lst << i18n( "Comments" );
-    m_searchIn->insertStringList( lst );
+    m_searchIn->insertItems( 0, lst );
 
     comboLayout = new Q3HBoxLayout( m_findExtension );
     label = new QLabel( i18n( "Search direction:" ), m_findExtension );
@@ -69,7 +69,7 @@ FindOption::FindOption( QWidget *parent)
     lst.clear();
     lst << i18n( "Across then Down" );
     lst << i18n( "Down then Across" );
-    m_searchDirection->insertStringList( lst );
+    m_searchDirection->insertItems( 0, lst );
 
     m_findExtension->hide();
     emit adjustSize();
@@ -77,7 +77,7 @@ FindOption::FindOption( QWidget *parent)
 
 FindOption::searchTypeValue FindOption::searchType() const
 {
-    int pos = m_searchIn->currentItem();
+    int pos = m_searchIn->currentIndex();
     if ( pos == 0 )
         return Value;
     else if ( pos == 1 )

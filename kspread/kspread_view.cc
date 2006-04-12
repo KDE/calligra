@@ -3996,7 +3996,7 @@ void View::hideSheet()
   }
 
   QStringList vs = doc()->map()->visibleSheets();
-  int i = vs.findIndex( d->activeSheet->tableName() ) - 1;
+  int i = vs.indexOf( d->activeSheet->tableName() ) - 1;
   if( i < 0 ) i = 1;
   QString sn = vs[i];
 
@@ -5825,7 +5825,7 @@ void View::slotListChoosePopupMenu( )
       {
         if ( c->value().isString() && c->text() != tmp && !c->text().isEmpty() )
         {
-          if ( itemList.findIndex( c->text() ) == -1 )
+          if ( itemList.indexOf( c->text() ) == -1 )
             itemList.append(c->text());
         }
       }
@@ -5843,7 +5843,7 @@ void View::slotListChoosePopupMenu( )
        {
    if (c->isString() && c->text()!=tmp && !c->text().isEmpty())
      {
-       if (itemList.findIndex(c->text())==-1)
+       if (itemList.indexOf(c->text())==-1)
                  itemList.append(c->text());
      }
 

@@ -795,7 +795,7 @@ else
                 double val;
                 QString tmpStr;
 
-                if((pos2=tmp.findRev('+'))!=-1 && pos2!=0)
+                if((pos2=tmp.lastIndexOf('+'))!=-1 && pos2!=0)
                         {
                         if((pos1-pos2)==1)
                                 {
@@ -811,7 +811,7 @@ else
                                 return val;
                                 }
                         }
-                else if( (pos2=tmp.findRev('-'))!=-1&& pos2!=0)
+                else if( (pos2=tmp.lastIndexOf('-'))!=-1&& pos2!=0)
                         {
                         if((pos1-pos2)==1)
                                 {
@@ -868,7 +868,7 @@ if((pos1=tmp.indexOf('i'))==-1)
         }
 else
         { //15-xi
-        if((pos2=tmp.findRev('-'))!=-1 && pos2!=0)
+        if((pos2=tmp.lastIndexOf('-'))!=-1 && pos2!=0)
                 {
                 tmpStr=tmp.left(pos2);
                 val=KGlobal::locale()->readNumber(tmpStr, &ok);
@@ -876,7 +876,7 @@ else
                         val=0;
                 return val;
                 } //15+xi
-        else if((pos2=tmp.findRev('+'))!=-1)
+        else if((pos2=tmp.lastIndexOf('+'))!=-1)
                 {
                 tmpStr=tmp.left(pos2);
                 val=KGlobal::locale()->readNumber(tmpStr, &ok);
