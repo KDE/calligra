@@ -21,8 +21,6 @@
 #include <time.h>
 
 #include <qfile.h>
-//Added by qt3to4:
-#include <Q3CString>
 
 #include <kcodecs.h>
 #include <ktempfile.h>
@@ -71,7 +69,7 @@ Doc* Map::doc() const
   return m_doc;
 }
 
-void Map::setProtected( Q3CString const & passwd )
+void Map::setProtected( QByteArray const & passwd )
 {
   m_strPassword = passwd;
 }
@@ -196,7 +194,7 @@ bool Map::saveOasis( KoXmlWriter & xmlWriter, KoGenStyles & mainStyles, KoStore 
     if ( !m_strPassword.isEmpty() )
     {
         xmlWriter.addAttribute("table:structure-protected", "true" );
-        Q3CString str = KCodecs::base64Encode( m_strPassword );
+        QByteArray str = KCodecs::base64Encode( m_strPassword );
         xmlWriter.addAttribute("table:protection-key", QString( str.data() ) );/* FIXME !!!!*/
     }
 
@@ -251,7 +249,7 @@ QDomElement Map::save( QDomDocument& doc )
   {
     if ( m_strPassword.size() > 0 )
     {
-      Q3CString str = KCodecs::base64Encode( m_strPassword );
+      QByteArray str = KCodecs::base64Encode( m_strPassword );
       mymap.setAttribute( "protected", QString( str.data() ) );
     }
     else
@@ -273,11 +271,11 @@ bool Map::loadOasis( const QDomElement& body, KoOasisLoadingContext& oasisContex
 {
     if ( body.hasAttributeNS( KoXmlNS::table, "structure-protected" ) )
     {
-        Q3CString passwd( "" );
+        QByteArray passwd( "" );
         if ( body.hasAttributeNS( KoXmlNS::table, "protection-key" ) )
         {
             QString p = body.attributeNS( KoXmlNS::table, "protection-key", QString::null );
-            Q3CString str( p.toLatin1() );
+            QByteArray str( p.toLatin1() );
             passwd = KCodecs::base64Decode( str );
         }
         m_strPassword = passwd;
@@ -365,11 +363,11 @@ bool Map::loadXML( const QDomElement& mymap )
 
     if ( passwd.length() > 0 )
     {
-      Q3CString str( passwd.toLatin1() );
+      QByteArray str( passwd.toLatin1() );
       m_strPassword = KCodecs::base64Decode( str );
     }
     else
-      m_strPassword = Q3CString( "" );
+      m_strPassword = QByteArray( "" );
   }
 
   if (!activeSheet.isEmpty())

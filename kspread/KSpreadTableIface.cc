@@ -40,8 +40,6 @@
 #include "region.h"
 
 #include "KSpreadTableIface.h"
-//Added by qt3to4:
-#include <Q3CString>
 
 using namespace KSpread;
 
@@ -54,19 +52,19 @@ using namespace KSpread;
 class KSpread::CellProxy : public DCOPObjectProxy
 {
 public:
-    CellProxy( Sheet* sheet, const Q3CString& prefix );
+    CellProxy( Sheet* sheet, const QByteArray& prefix );
     ~CellProxy();
 
     virtual bool process( const DCOPCString& obj, const DCOPCString& fun, const QByteArray& data,
                           DCOPCString& replyType, QByteArray &replyData );
 
 private:
-    Q3CString m_prefix;
+    QByteArray m_prefix;
     CellIface* m_cell;
     Sheet* m_sheet;
 };
 
-KSpread::CellProxy::CellProxy( Sheet* sheet, const Q3CString& prefix )
+KSpread::CellProxy::CellProxy( Sheet* sheet, const QByteArray& prefix )
     : DCOPObjectProxy(), m_prefix( prefix )
 {
     m_cell = new CellIface;
@@ -145,7 +143,7 @@ void SheetIface::sheetNameHasChanged() {
 	   setObjId(ident);
 
            delete m_proxy;
-           Q3CString str = objId();
+           DCOPCString str = objId();
            str += "/";
 	   kDebug(36001)<<"SheetIface::tableNameHasChanged(): new DCOP-ID:"<<objId()<<endl;
            m_proxy = new CellProxy( m_sheet, str );
@@ -170,14 +168,14 @@ DCOPRef SheetIface::cell( int x, int y )
     if ( y == 0 )
         y = 1;
 
-    Q3CString str = objId() + '/' + Cell::name( x, y ).toLatin1();
+    DCOPCString str = objId() + '/' + Cell::name( x, y ).toLatin1();
 
     return DCOPRef( kapp->dcopClient()->appId(), str );
 }
 
 DCOPRef SheetIface::cell( const QString& name )
 {
-    Q3CString str = objId();
+    DCOPCString str = objId();
     str += "/";
     str += name.toLatin1();
 
@@ -232,8 +230,8 @@ int SheetIface::maxRow() const
     return m_sheet->maxRow();
 }
 
-bool SheetIface::processDynamic( const Q3CString& fun, const QByteArray&/*data*/,
-                                        Q3CString& replyType, QByteArray &replyData )
+bool SheetIface::processDynamic( const DCOPCString& fun, const QByteArray&/*data*/,
+                                        DCOPCString& replyType, QByteArray &replyData )
 {
     kDebug(36001) << "Calling '" << fun.data() << "'" << endl;
     // Does the name follow the pattern "foobar()" ?
@@ -249,7 +247,7 @@ bool SheetIface::processDynamic( const Q3CString& fun, const QByteArray&/*data*/
     if ( !p.isValid() )
         return false;
 
-    Q3CString str = objId() + "/" + fun.left( len - 2 );
+    DCOPCString str = objId() + "/" + fun.left( len - 2 );
 
     replyType = "DCOPRef";
     QDataStream out( &replyData,QIODevice::WriteOnly );

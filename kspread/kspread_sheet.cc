@@ -40,7 +40,6 @@
 #include <qmap.h>
 //Added by qt3to4:
 #include <QTextStream>
-#include <Q3CString>
 #include <Q3ValueList>
 #include <Q3PtrList>
 #include <QPixmap>
@@ -281,7 +280,7 @@ public:
   bool hide;
 
   // password of protected sheet
-  Q3CString password;
+  QByteArray password;
 
 
   bool showGrid;
@@ -420,7 +419,7 @@ Sheet::Sheet (Map* map,
   // Get a unique name so that we can offer scripting
   if ( !_name )
   {
-      Q3CString s;
+      QByteArray s;
       s.sprintf("Sheet%i", s_id );
       QObject::setName( s.data() );
   }
@@ -667,7 +666,7 @@ Value Sheet::valueRange (int col1, int row1,
   return d->cells.valueRange (col1, row1, col2, row2);
 }
 
-void Sheet::password( Q3CString & passwd ) const
+void Sheet::password( QByteArray & passwd ) const
 {
     passwd = d->password;
 }
@@ -677,12 +676,12 @@ bool Sheet::isProtected() const
     return !d->password.isNull();
 }
 
-void Sheet::setProtected( Q3CString const & passwd )
+void Sheet::setProtected( QByteArray const & passwd )
 {
   d->password = passwd;
 }
 
-bool Sheet::checkPassword( Q3CString const & passwd ) const
+bool Sheet::checkPassword( QByteArray const & passwd ) const
 {
     return ( passwd == d->password );
 }
@@ -5919,7 +5918,7 @@ QDomElement Sheet::saveXML( QDomDocument& dd )
     {
       if ( d->password.size() > 0 )
       {
-        Q3CString str = KCodecs::base64Encode( d->password );
+        QByteArray str = KCodecs::base64Encode( d->password );
         sheet.setAttribute( "protected", QString( str.data() ) );
       }
       else
@@ -6465,11 +6464,11 @@ bool Sheet::loadOasis( const QDomElement& sheetElement, KoOasisLoadingContext& o
 
     if ( sheetElement.attributeNS( KoXmlNS::table, "protected", QString::null ) == "true" )
     {
-        Q3CString passwd( "" );
+        QByteArray passwd( "" );
         if ( sheetElement.hasAttributeNS( KoXmlNS::table, "protection-key" ) )
         {
             QString p = sheetElement.attributeNS( KoXmlNS::table, "protection-key", QString::null );
-            Q3CString str( p.toLatin1() );
+            QByteArray str( p.toLatin1() );
             kDebug(30518) << "Decoding password: " << str << endl;
             passwd = KCodecs::base64Decode( str );
         }
@@ -7244,7 +7243,7 @@ bool Sheet::saveOasis( KoXmlWriter & xmlWriter, KoGenStyles &mainStyles, GenVali
     if ( !d->password.isEmpty() )
     {
         xmlWriter.addAttribute("table:protected", "true" );
-        Q3CString str = KCodecs::base64Encode( d->password );
+        QByteArray str = KCodecs::base64Encode( d->password );
         xmlWriter.addAttribute("table:protection-key", QString( str.data() ) );/* FIXME !!!!*/
     }
     QRect _printRange = d->print->printRange();
@@ -7822,11 +7821,11 @@ bool Sheet::loadXML( const QDomElement& sheet )
 
       if ( passwd.length() > 0 )
       {
-        Q3CString str( passwd.toLatin1() );
+        QByteArray str( passwd.toLatin1() );
         d->password = KCodecs::base64Decode( str );
       }
       else
-        d->password = Q3CString( "" );
+        d->password = QByteArray( "" );
     }
 
     return true;

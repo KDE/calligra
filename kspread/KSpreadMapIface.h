@@ -24,7 +24,6 @@
 #include <qstringlist.h>
 #include <q3valuelist.h>
 //Added by qt3to4:
-#include <Q3CString>
 
 #include <dcopobject.h>
 #include <dcopref.h>
@@ -40,8 +39,8 @@ class MapIface : virtual public DCOPObject
 public:
     MapIface( Map* );
 
-    virtual bool processDynamic(const Q3CString &fun, const QByteArray &data,
-				Q3CString& replyType, QByteArray &replyData);
+    virtual bool processDynamic(const DCOPCString &fun, const QByteArray &data,
+				DCOPCString& replyType, QByteArray &replyData);
 
 k_dcop:
     virtual DCOPRef sheet( const QString& name );

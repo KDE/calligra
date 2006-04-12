@@ -31,7 +31,6 @@
 #include <qrect.h>
 #include <qwidget.h>
 //Added by qt3to4:
-#include <Q3CString>
 #include <QPixmap>
 #include <Q3PointArray>
 #include <Q3ValueList>
@@ -323,10 +322,10 @@ public:
      */
     bool isRightToLeft() const;
 
-    void password( Q3CString & passwd ) const ;
+    void password( QByteArray & passwd ) const ;
     bool isProtected() const;
-    void setProtected( Q3CString const & passwd );
-    bool checkPassword( Q3CString const & passwd ) const;
+    void setProtected( QByteArray const & passwd );
+    bool checkPassword( QByteArray const & passwd ) const;
 
     void setDefaultHeight( double height );
     void setDefaultWidth( double width );

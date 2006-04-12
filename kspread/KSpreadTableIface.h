@@ -31,8 +31,6 @@
 
 #include <qrect.h>
 #include <qstring.h>
-//Added by qt3to4:
-#include <Q3CString>
 
 namespace KSpread
 {
@@ -46,8 +44,8 @@ public:
     SheetIface( Sheet* );
     ~SheetIface();
 
-    bool processDynamic( const Q3CString& fun, const QByteArray& data,
-			 Q3CString& replyType, QByteArray &replyData );
+    bool processDynamic( const DCOPCString& fun, const QByteArray& data,
+			 DCOPCString& replyType, QByteArray &replyData );
 
     void sheetNameHasChanged();
 k_dcop:
@@ -106,7 +104,7 @@ k_dcop:
 private:
     Sheet* m_sheet;
     CellProxy* m_proxy;
-    Q3CString ident;
+    QByteArray ident;
 };
 
 } // namespace KSpread

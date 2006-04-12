@@ -83,10 +83,10 @@ public:
 
   bool saveChildren( KoStore* _store );
 
-  void password( Q3CString & passwd ) const { passwd = m_strPassword; }
+  void password( QByteArray & passwd ) const { passwd = m_strPassword; }
   bool isProtected() const { return !m_strPassword.isNull(); }
-  void setProtected( Q3CString const & passwd );
-  bool checkPassword( Q3CString const & passwd ) const { return ( passwd == m_strPassword ); }
+  void setProtected( QByteArray const & passwd );
+  bool checkPassword( QByteArray const & passwd ) const { return ( passwd == m_strPassword ); }
 
   /**
    * The sheet named @p _from is being moved to the sheet @p _to.
@@ -189,7 +189,7 @@ private:
   /**
    * Password to protect the map from being changed.
    */
-  Q3CString m_strPassword;
+  QByteArray m_strPassword;
   /**
    * Set from the XML
    */

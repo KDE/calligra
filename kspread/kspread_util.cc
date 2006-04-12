@@ -23,7 +23,6 @@
 #include <qregexp.h>
 //Added by qt3to4:
 #include <Q3ValueList>
-#include <Q3CString>
 
 #include <kdebug.h>
 
@@ -972,7 +971,7 @@ QPen KSpread::convertOasisStringToPen( const QString &border )
     //code from koborder, for the moment kspread doesn't use koborder
     // ## isn't it faster to use QStringList::split than parse it 3 times?
     QString _width = border.section(' ', 0, 0);
-    Q3CString _style = border.section(' ', 1, 1).toLatin1();
+    QByteArray _style = border.section(' ', 1, 1).toLatin1();
     QString _color = border.section(' ', 2, 2);
 
     pen.setWidth( ( int )( KoUnit::parseValue( _width, 1.0 ) ) );

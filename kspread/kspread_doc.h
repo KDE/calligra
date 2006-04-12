@@ -34,8 +34,6 @@
 #include <qrect.h>
 #include <qstring.h>
 #include <q3valuelist.h>
-//Added by qt3to4:
-#include <Q3CString>
 #include <Q3PtrList>
 
 #include <kcompletion.h>
@@ -149,7 +147,7 @@ public:
   /**
    * Returns the MIME type of KSpread document.
    */
-  virtual Q3CString mimeType() const { return MIME_TYPE; }
+  virtual QByteArray mimeType() const { return MIME_TYPE; }
 
   KLocale *locale () const;
   Map *map () const;

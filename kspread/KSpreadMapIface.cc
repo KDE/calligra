@@ -33,7 +33,6 @@
 #include "KSpreadMapIface.h"
 //Added by qt3to4:
 #include <Q3ValueList>
-#include <Q3CString>
 #include <Q3PtrList>
 
 using namespace KSpread;
@@ -107,8 +106,8 @@ DCOPRef MapIface::insertSheet( const QString& name )
     return sheet( name );
 }
 
-bool MapIface::processDynamic(const Q3CString &fun, const QByteArray &/*data*/,
-                                     Q3CString& replyType, QByteArray &replyData)
+bool MapIface::processDynamic(const DCOPCString &fun, const QByteArray &/*data*/,
+                                     DCOPCString& replyType, QByteArray &replyData)
 {
     // Does the name follow the pattern "foobar()" ?
     uint len = fun.length();
