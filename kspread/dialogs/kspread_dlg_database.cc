@@ -952,18 +952,18 @@ QString DatabaseDialog::getWhereCondition(QString const & column,
 QString DatabaseDialog::exchangeWildcards(QString const & value)
 {
   QString str(value);
-  int p = str.find('*');
+  int p = str.indexOf('*');
   while ( p > -1 )
   {
     str = str.replace( p, 1, "%" );
-    p = str.find('*');
+    p = str.indexOf('*');
   }
 
-  p = str.find('?');
+  p = str.indexOf('?');
   while ( p > -1 )
   {
     str = str.replace( p, 1, "_" );
-    p = str.find('?');
+    p = str.indexOf('?');
   }
   return str;
 }
@@ -972,8 +972,8 @@ bool DatabaseDialog::optionsDoNext()
 {
   if ( m_operator_1->currentItem() == 4 )
   {
-    if ( ( m_operatorValue_1->text().find('*') != -1 )
-         || ( m_operatorValue_1->text().find('?') != -1 ) )
+    if ( ( m_operatorValue_1->text().indexOf('*') != -1 )
+         || ( m_operatorValue_1->text().indexOf('?') != -1 ) )
     {
       // xgettext: no-c-format
       int res = KMessageBox::warningYesNo( this, i18n("'*' or '?' are not valid wildcards in SQL. "
@@ -986,8 +986,8 @@ bool DatabaseDialog::optionsDoNext()
 
   if ( m_operator_2->currentItem() == 4 )
   {
-    if ( ( m_operatorValue_2->text().find('*') != -1 )
-         || ( m_operatorValue_2->text().find('?') != -1 ) )
+    if ( ( m_operatorValue_2->text().indexOf('*') != -1 )
+         || ( m_operatorValue_2->text().indexOf('?') != -1 ) )
     {
       // xgettext: no-c-format
       int res = KMessageBox::warningYesNo( this, i18n("'*' or '?' are not valid wildcards in SQL. "
@@ -1000,8 +1000,8 @@ bool DatabaseDialog::optionsDoNext()
 
   if ( m_operator_3->currentItem() == 4 )
   {
-    if ( ( m_operatorValue_3->text().find('*') != -1 )
-         || ( m_operatorValue_3->text().find('?') != -1 ) )
+    if ( ( m_operatorValue_3->text().indexOf('*') != -1 )
+         || ( m_operatorValue_3->text().indexOf('?') != -1 ) )
     {
       // xgettext: no-c-format
       int res = KMessageBox::warningYesNo( this, i18n("'*' or '?' are not valid wildcards in SQL. "

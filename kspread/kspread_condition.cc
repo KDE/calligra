@@ -490,33 +490,33 @@ void Conditions::loadOasisConditionValue( const QString &styleCondition, Conditi
 void Conditions::loadOasisCondition( QString &valExpression, Conditional &newCondition )
 {
     QString value;
-    if (valExpression.find( "<=" )==0 )
+    if (valExpression.indexOf( "<=" )==0 )
     {
         value = valExpression.remove( 0,2 );
         newCondition.cond = Conditional::InferiorEqual;
     }
-    else if (valExpression.find( ">=" )==0 )
+    else if (valExpression.indexOf( ">=" )==0 )
     {
         value = valExpression.remove( 0,2 );
         newCondition.cond = Conditional::SuperiorEqual;
     }
-    else if (valExpression.find( "!=" )==0 )
+    else if (valExpression.indexOf( "!=" )==0 )
     {
         //add Differentto attribute
         value = valExpression.remove( 0,2 );
         newCondition.cond = Conditional::DifferentTo;
     }
-    else if ( valExpression.find( "<" )==0 )
+    else if ( valExpression.indexOf( "<" )==0 )
     {
         value = valExpression.remove( 0,1 );
         newCondition.cond = Conditional::Inferior;
     }
-    else if(valExpression.find( ">" )==0 )
+    else if(valExpression.indexOf( ">" )==0 )
     {
         value = valExpression.remove( 0,1 );
         newCondition.cond = Conditional::Superior;
     }
-    else if (valExpression.find( "=" )==0 )
+    else if (valExpression.indexOf( "=" )==0 )
     {
         value = valExpression.remove( 0,1 );
         newCondition.cond = Conditional::Equal;

@@ -1174,7 +1174,7 @@ void SheetPrint::setPaperLayout( float _leftBorder, float _topBorder,
     QString paper( _paper );
     if ( paper[0].isDigit() ) // Custom format
     {
-        const int i = paper.find( 'x' );
+        const int i = paper.indexOf( 'x' );
         if ( i < 0 )
         {
             // We have nothing useful, so assume ISO A4
@@ -1220,7 +1220,7 @@ QLinkedList<PrintNewPageEntry>::iterator SheetPrint::findNewPageColumn( int col 
     }
     return it;
 //                QValueList<PrintNewPageEntry>::iterator it;
-//                it = m_lnewPageListX.find( startCol );
+//                it = m_lnewPageListX.indexOf( startCol );
 }
 
 QLinkedList<PrintNewPageEntry>::iterator SheetPrint::findNewPageRow( int row )
@@ -1309,34 +1309,34 @@ QString SheetPrint::completeHeading( const QString &_data, int _page, const QStr
 
     tmp = _data;
     int pos = 0;
-    while ( ( pos = tmp.find( "<page>", pos ) ) != -1 )
+    while ( ( pos = tmp.indexOf( "<page>", pos ) ) != -1 )
         tmp.replace( pos, 6, page );
     pos = 0;
-    while ( ( pos = tmp.find( "<pages>", pos ) ) != -1 )
+    while ( ( pos = tmp.indexOf( "<pages>", pos ) ) != -1 )
         tmp.replace( pos, 7, pages );
     pos = 0;
-    while ( ( pos = tmp.find( "<file>", pos ) ) != -1 )
+    while ( ( pos = tmp.indexOf( "<file>", pos ) ) != -1 )
         tmp.replace( pos, 6, pathFileName );
     pos = 0;
-    while ( ( pos = tmp.find( "<name>", pos ) ) != -1 )
+    while ( ( pos = tmp.indexOf( "<name>", pos ) ) != -1 )
         tmp.replace( pos, 6, fileName );
     pos = 0;
-    while ( ( pos = tmp.find( "<time>", pos ) ) != -1 )
+    while ( ( pos = tmp.indexOf( "<time>", pos ) ) != -1 )
         tmp.replace( pos, 6, t );
     pos = 0;
-    while ( ( pos = tmp.find( "<date>", pos ) ) != -1 )
+    while ( ( pos = tmp.indexOf( "<date>", pos ) ) != -1 )
         tmp.replace( pos, 6, d );
     pos = 0;
-    while ( ( pos = tmp.find( "<author>", pos ) ) != -1 )
+    while ( ( pos = tmp.indexOf( "<author>", pos ) ) != -1 )
         tmp.replace( pos, 8, full_name );
     pos = 0;
-    while ( ( pos = tmp.find( "<email>", pos ) ) != -1 )
+    while ( ( pos = tmp.indexOf( "<email>", pos ) ) != -1 )
         tmp.replace( pos, 7, email_addr );
     pos = 0;
-    while ( ( pos = tmp.find( "<org>", pos ) ) != -1 )
+    while ( ( pos = tmp.indexOf( "<org>", pos ) ) != -1 )
         tmp.replace( pos, 5, organization );
     pos = 0;
-    while ( ( pos = tmp.find( "<sheet>", pos ) ) != -1 )
+    while ( ( pos = tmp.indexOf( "<sheet>", pos ) ) != -1 )
         tmp.replace( pos, 7, ta );
 
     return tmp;

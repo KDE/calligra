@@ -69,7 +69,7 @@ Region::Region(View* view, const QString& string, Sheet* sheet)
   QStringList::ConstIterator end = substrings.constEnd();
   for (QStringList::ConstIterator it = substrings.constBegin(); it != end; ++it)
   {
-    int delimiterPos = (*it).find(':');
+    int delimiterPos = (*it).indexOf(':');
     if (delimiterPos > -1)
     {
       // range
@@ -694,7 +694,7 @@ void Region::operator=(const Region& other)
 Sheet* Region::filterSheetName(QString& sRegion)
 {
   Sheet* sheet = 0;
-  int delimiterPos = sRegion.find( '!' );
+  int delimiterPos = sRegion.indexOf( '!' );
   if (delimiterPos > -1)
   {
     QString sheetName = sRegion.left(delimiterPos);
@@ -804,7 +804,7 @@ Region::Point::Point(const QString& sCell)
     //default is error
     int x = -1;
     //search for the first character != text
-    int result = string.find( QRegExp("[^A-Za-z]+"), p );
+    int result = string.indexOf( QRegExp("[^A-Za-z]+"), p );
 
     //get the colomn number for the character between actual position and the first non text charakter
     if ( result != -1 )
@@ -913,7 +913,7 @@ Region::Range::Range(const QString& sRange)
   : Region::Element(),
       m_range()
 {
-    int delimiterPos = sRange.find(':');
+    int delimiterPos = sRange.indexOf(':');
     if (delimiterPos == -1)
     {
         return;

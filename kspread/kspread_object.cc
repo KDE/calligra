@@ -623,7 +623,7 @@ bool EmbeddedChart::saveOasisObjectAttributes( KSpreadOasisSaveContext &sc ) con
 
     QRect dataArea = m_pBinding->dataArea();
     QString rangeName = util_rangeName( dataArea);
-    rangeName.insert( rangeName.find(':') +1, sheet()->sheetName() + "." );
+    rangeName.insert( rangeName.indexOf(':') +1, sheet()->sheetName() + "." );
     rangeName.prepend( sheet()->sheetName() + "." );
     sc.xmlWriter.addAttribute( "draw:notify-on-update-of-ranges", rangeName );
 
@@ -1051,9 +1051,9 @@ void EmbeddedPictureObject::loadOasis(const QDomElement &element, KoOasisLoading
 //                 _fileName=e.attribute("filename");
 //             if ( !_fileName.isEmpty() )
 //             {
-//                 if ( int _envVarB = _fileName.find( '$' ) >= 0 )
+//                 if ( int _envVarB = _fileName.indexOf( '$' ) >= 0 )
 //                 {
-//                     int _envVarE = _fileName.find( '/', _envVarB );
+//                     int _envVarE = _fileName.indexOf( '/', _envVarB );
 //                     // ### FIXME: it should be QString::local8Bit instead of QFile::encodeName, shouldn't it?
 //                     QString path = getenv( QFile::encodeName(_fileName.mid( _envVarB, _envVarE-_envVarB )) );
 //                     _fileName.replace( _envVarB-1, _envVarE-_envVarB+1, path );

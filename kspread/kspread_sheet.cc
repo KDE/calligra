@@ -2309,7 +2309,7 @@ void Sheet::refreshRemoveAreaName(const QString & _areaName)
   {
     if ( c->isFormula() )
     {
-      if (c->text().find(tmp) != -1)
+      if (c->text().indexOf(tmp) != -1)
       {
         if ( !c->makeFormula() )
           kError(36001) << "ERROR: Syntax ERROR" << endl;
@@ -2326,7 +2326,7 @@ void Sheet::refreshChangeAreaName(const QString & _areaName)
   {
     if ( c->isFormula() )
     {
-      if (c->text().find(tmp) != -1)
+      if (c->text().indexOf(tmp) != -1)
       {
         if ( !c->makeFormula() )
           kError(36001) << "ERROR: Syntax ERROR" << endl;
@@ -2347,7 +2347,7 @@ void Sheet::changeCellTabName( QString const & old_name, QString const & new_nam
     {
         if( c->isFormula() )
         {
-            if(c->text().find(old_name)!=-1)
+            if(c->text().indexOf(old_name)!=-1)
             {
                 int nb = c->text().count( old_name + "!" );
                 QString tmp = old_name + "!";
@@ -2356,7 +2356,7 @@ void Sheet::changeCellTabName( QString const & old_name, QString const & new_nam
 
                 for( int i=0; i<nb; i++ )
                 {
-                    int pos = tmp.find( old_name + "!" );
+                    int pos = tmp.indexOf( old_name + "!" );
                     tmp.replace( pos, len, new_name + "!" );
                 }
                 c->setCellText(tmp);
@@ -5171,7 +5171,7 @@ void Sheet::pasteTextPlain( QString &_text, QRect pasteArea)
   {
     int p = 0;
 
-    p = tmp.find('\n');
+    p = tmp.indexOf('\n');
 
     if (p < 0)
       p = tmp.length();
@@ -6311,7 +6311,7 @@ bool Sheet::loadSheetStyleFormat( QDomElement *style )
 
 void Sheet::replaceMacro( QString & text, const QString & old, const QString & newS )
 {
-  int n = text.find( old );
+  int n = text.indexOf( old );
   if ( n != -1 )
     text = text.replace( n, old.length(), newS );
 }

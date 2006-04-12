@@ -1332,7 +1332,7 @@ void Cell::makeLayout( QPainter &_painter, int _col, int _row )
     // Break the line at appropriate places, i.e. spaces, if
     // necessary.  This means to change the spaces where breaks occur
     // into newlines.
-    if ( o.find(' ') != -1 )
+    if ( o.indexOf(' ') != -1 )
     {
       d->strOutText = "";
 
@@ -1348,8 +1348,8 @@ void Cell::makeLayout( QPainter &_painter, int _col, int _row )
 
       do {
 
-        breakpos = o.find( ' ', breakpos );
-        int linefeed = o.find( '\n', pos1 );
+        breakpos = o.indexOf( ' ', breakpos );
+        int linefeed = o.indexOf( '\n', pos1 );
 
 //         kDebug() << "start: " << start << "; breakpos: " << breakpos << "; pos1: " << pos1 << "; linefeed: " << linefeed << endl;
 
@@ -1392,7 +1392,7 @@ void Cell::makeLayout( QPainter &_painter, int _col, int _row )
         }
 
         breakpos++;
-      } while( o.find( ' ', breakpos ) != -1 );
+      } while( o.indexOf( ' ', breakpos ) != -1 );
     }
     else
     {
@@ -1412,7 +1412,7 @@ void Cell::makeLayout( QPainter &_painter, int _col, int _row )
     int      pos = 0;
     d->textWidth = 0.0;
     do {
-      i = d->strOutText.find( "\n", pos );
+      i = d->strOutText.indexOf( "\n", pos );
 
       if ( i == -1 )
   t = d->strOutText.mid( pos, d->strOutText.length() - pos );
@@ -3389,7 +3389,7 @@ void Cell::paintText( QPainter& painter,
     double dy = 0.0;
     QFontMetrics fm = painter.fontMetrics();
     do {
-      i = d->strOutText.find( "\n", pos );
+      i = d->strOutText.indexOf( "\n", pos );
       if ( i == -1 )
         t = d->strOutText.mid( pos, d->strOutText.length() - pos );
       else {
@@ -4546,19 +4546,19 @@ void Cell::incPrecision()
 
   if ( tmpPreci == -1 )
   {
-    int pos = d->strOutText.find(decimal_point);
+    int pos = d->strOutText.indexOf(decimal_point);
     if ( pos == -1 )
-        pos = d->strOutText.find('.');
+        pos = d->strOutText.indexOf('.');
     if ( pos == -1 )
       format()->setPrecision(1);
     else
     {
       int start = 0;
-      if ( d->strOutText.find('%') != -1 )
+      if ( d->strOutText.indexOf('%') != -1 )
         start = 2;
-      else if ( d->strOutText.find(locale()->currencySymbol()) == ((int)(d->strOutText.length()-locale()->currencySymbol().length())) )
+      else if ( d->strOutText.indexOf(locale()->currencySymbol()) == ((int)(d->strOutText.length()-locale()->currencySymbol().length())) )
         start = locale()->currencySymbol().length() + 1;
-      else if ( (start=d->strOutText.find('E')) != -1 )
+      else if ( (start=d->strOutText.indexOf('E')) != -1 )
         start = d->strOutText.length() - start;
 
       //kDebug(36001) << "start=" << start << " pos=" << pos << " length=" << d->strOutText.length() << endl;
@@ -4582,13 +4582,13 @@ void Cell::decPrecision()
 //  kDebug(36001) << "decPrecision: tmpPreci = " << tmpPreci << endl;
   if ( format()->precision(column(),row()) == -1 )
   {
-    int pos = d->strOutText.find( decimal_point );
+    int pos = d->strOutText.indexOf( decimal_point );
     int start = 0;
-    if ( d->strOutText.find('%') != -1 )
+    if ( d->strOutText.indexOf('%') != -1 )
         start = 2;
-    else if ( d->strOutText.find(locale()->currencySymbol()) == ((int)(d->strOutText.length()-locale()->currencySymbol().length())) )
+    else if ( d->strOutText.indexOf(locale()->currencySymbol()) == ((int)(d->strOutText.length()-locale()->currencySymbol().length())) )
         start = locale()->currencySymbol().length() + 1;
-    else if ( (start = d->strOutText.find('E')) != -1 )
+    else if ( (start = d->strOutText.indexOf('E')) != -1 )
         start = d->strOutText.length() - start;
     else
         start = 0;
@@ -5796,13 +5796,13 @@ bool Cell::loadOasis( const QDomElement& element , KoOasisLoadingContext& oasisC
             int year = 0, month = 0, day = 0;
             bool ok = false;
 
-            int p1 = value.find( '-' );
+            int p1 = value.indexOf( '-' );
             if ( p1 > 0 )
                 year  = value.left( p1 ).toInt( &ok );
 
             kDebug() << "year: " << value.left( p1 ) << endl;
 
-            int p2 = value.find( '-', ++p1 );
+            int p2 = value.indexOf( '-', ++p1 );
 
             if ( ok )
                 month = value.mid( p1, p2 - p1  ).toInt( &ok );
@@ -6275,33 +6275,33 @@ void Cell::loadOasisValidationValue( const QStringList &listVal )
 void Cell::loadOasisValidationCondition( QString &valExpression )
 {
     QString value;
-    if (valExpression.find( "<=" )==0 )
+    if (valExpression.indexOf( "<=" )==0 )
     {
         value = valExpression.remove( 0,2 );
         d->extra()->validity->m_cond = Conditional::InferiorEqual;
     }
-    else if (valExpression.find( ">=" )==0 )
+    else if (valExpression.indexOf( ">=" )==0 )
     {
         value = valExpression.remove( 0,2 );
         d->extra()->validity->m_cond = Conditional::SuperiorEqual;
     }
-    else if (valExpression.find( "!=" )==0 )
+    else if (valExpression.indexOf( "!=" )==0 )
     {
         //add Differentto attribute
         value = valExpression.remove( 0,2 );
         d->extra()->validity->m_cond = Conditional::DifferentTo;
     }
-    else if ( valExpression.find( "<" )==0 )
+    else if ( valExpression.indexOf( "<" )==0 )
     {
         value = valExpression.remove( 0,1 );
         d->extra()->validity->m_cond = Conditional::Inferior;
     }
-    else if(valExpression.find( ">" )==0 )
+    else if(valExpression.indexOf( ">" )==0 )
     {
         value = valExpression.remove( 0,1 );
         d->extra()->validity->m_cond = Conditional::Superior;
     }
-    else if (valExpression.find( "=" )==0 )
+    else if (valExpression.indexOf( "=" )==0 )
     {
         value = valExpression.remove( 0,1 );
         d->extra()->validity->m_cond = Conditional::Equal;
@@ -6623,9 +6623,9 @@ bool Cell::load( const QDomElement & cell, int _xshift, int _yshift,
             setValue ( dd );
           else
           {
-            int pos   = t.find( '/' );
+            int pos   = t.indexOf( '/' );
             int year  = t.mid( 0, pos ).toInt();
-            int pos1  = t.find( '/', pos + 1 );
+            int pos1  = t.indexOf( '/', pos + 1 );
             int month = t.mid( pos + 1, ( ( pos1 - 1 ) - pos ) ).toInt();
             int day   = t.right( t.length() - pos1 - 1 ).toInt();
             QDate date( year, month, day );
@@ -6647,9 +6647,9 @@ bool Cell::load( const QDomElement & cell, int _xshift, int _yshift,
             int minutes = -1;
             int second  = -1;
             int pos, pos1;
-            pos   = t.find( ':' );
+            pos   = t.indexOf( ':' );
             hours = t.mid( 0, pos ).toInt();
-            pos1  = t.find( ':', pos + 1 );
+            pos1  = t.indexOf( ':', pos + 1 );
             minutes = t.mid( pos + 1, ( ( pos1 - 1 ) - pos ) ).toInt();
             second  = t.right( t.length() - pos1 - 1 ).toInt();
             QTime time( hours, minutes, second );
@@ -6795,7 +6795,7 @@ bool Cell::loadCellData(const QDomElement & text, Paste::Operation op )
 
         /* KLocale::formatNumber requires the precision we want to return.
         */
-        int precision = t.length() - t.find('.') - 1;
+        int precision = t.length() - t.indexOf('.') - 1;
 
   if ( formatType() == Percentage_format )
         {
@@ -6819,9 +6819,9 @@ bool Cell::loadCellData(const QDomElement & text, Paste::Operation op )
       // date ?
       else if( dataType == "Date" )
       {
-        int pos = t.find('/');
+        int pos = t.indexOf('/');
         int year = t.mid(0,pos).toInt();
-        int pos1 = t.find('/',pos+1);
+        int pos1 = t.indexOf('/',pos+1);
         int month = t.mid(pos+1,((pos1-1)-pos)).toInt();
         int day = t.right(t.length()-pos1-1).toInt();
         setValue( QDate(year,month,day) );
@@ -6841,9 +6841,9 @@ bool Cell::loadCellData(const QDomElement & text, Paste::Operation op )
         int minutes = -1;
         int second = -1;
         int pos, pos1;
-        pos = t.find(':');
+        pos = t.indexOf(':');
         hours = t.mid(0,pos).toInt();
-        pos1 = t.find(':',pos+1);
+        pos1 = t.indexOf(':',pos+1);
         minutes = t.mid(pos+1,((pos1-1)-pos)).toInt();
         second = t.right(t.length()-pos1-1).toInt();
         setValue( QTime(hours,minutes,second) );
@@ -6890,9 +6890,9 @@ QTime Cell::toTime(const QDomElement &element)
     int minutes = -1;
     int second = -1;
     int pos, pos1;
-    pos = t.find(':');
+    pos = t.indexOf(':');
     hours = t.mid(0,pos).toInt();
-    pos1 = t.find(':',pos+1);
+    pos1 = t.indexOf(':',pos+1);
     minutes = t.mid(pos+1,((pos1-1)-pos)).toInt();
     second = t.right(t.length()-pos1-1).toInt();
     setValue( Value( QTime(hours,minutes,second)) );
@@ -6907,9 +6907,9 @@ QDate Cell::toDate(const QDomElement &element)
     int year = -1;
     int month = -1;
     int day = -1;
-    pos = t.find('/');
+    pos = t.indexOf('/');
     year = t.mid(0,pos).toInt();
-    pos1 = t.find('/',pos+1);
+    pos1 = t.indexOf('/',pos+1);
     month = t.mid(pos+1,((pos1-1)-pos)).toInt();
     day = t.right(t.length()-pos1-1).toInt();
     setValue( Value( QDate(year,month,day) ) );

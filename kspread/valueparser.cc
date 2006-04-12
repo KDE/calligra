@@ -202,7 +202,7 @@ Value ValueParser::tryParseBool (const QString& str, bool *ok)
 double ValueParser::readNumber(const QString &_str, bool * ok, bool * isInt)
 {
   QString str = _str.trimmed();
-  bool neg = str.find(parserLocale->negativeSign()) == 0;
+  bool neg = str.indexOf(parserLocale->negativeSign()) == 0;
   if (neg)
 	str.remove( 0, parserLocale->negativeSign().length() );
 
@@ -212,7 +212,7 @@ double ValueParser::readNumber(const QString &_str, bool * ok, bool * isInt)
   QString exponentialPart;
   int EPos;
 
-  EPos = str.find('E', 0, false);
+  EPos = str.indexOf('E', 0, Qt::CaseInsensitive);
 
   if (EPos != -1)
   {
@@ -220,7 +220,7 @@ double ValueParser::readNumber(const QString &_str, bool * ok, bool * isInt)
     str = str.left(EPos);
   }
 
-  int pos = str.find(parserLocale->decimalSymbol());
+  int pos = str.indexOf(parserLocale->decimalSymbol());
   QString major;
   QString minor;
   if ( pos == -1 )
@@ -238,7 +238,7 @@ double ValueParser::readNumber(const QString &_str, bool * ok, bool * isInt)
   // Remove thousand separators
   int thlen = parserLocale->thousandsSeparator().length();
   int lastpos = 0;
-  while ( ( pos = major.find( parserLocale->thousandsSeparator() ) ) > 0 )
+  while ( ( pos = major.indexOf( parserLocale->thousandsSeparator() ) ) > 0 )
   {
     // e.g. 12,,345,,678,,922 Acceptable positions (from the end) are 5, 10, 15... i.e. (3+thlen)*N
     int fromEnd = major.length() - pos;
@@ -342,7 +342,7 @@ Value ValueParser::tryParseDate (const QString& str, bool *ok)
     // If the year is in the middle, say %m-%Y/%d, we'll remove the sep.
     // before it (%m/%d).
     QString fmt = parserLocale->dateFormatShort();
-    int yearPos = fmt.find ("%Y", 0, false);
+    int yearPos = fmt.indexOf("%Y", 0, Qt::CaseInsensitive);
     if ( yearPos > -1 )
     {
       if ( yearPos == 0 )
@@ -436,7 +436,7 @@ Value ValueParser::tryParseTime (const QString& str, bool *ok)
       QString stringPm = parserLocale->translate("pm");
       QString stringAm = parserLocale->translate("am");
       int pos=0;
-      if((pos=str.find(stringPm))!=-1)
+      if((pos=str.indexOf(stringPm))!=-1)
       {
           QString tmp=str.mid(0,str.length()-stringPm.length());
           tmp=tmp.simplified();
@@ -444,7 +444,7 @@ Value ValueParser::tryParseTime (const QString& str, bool *ok)
           if (!valid)
               tm = parserLocale->readTime(tmp+":00 "+stringPm, &valid);
       }
-      else if((pos=str.find(stringAm))!=-1)
+      else if((pos=str.indexOf(stringAm))!=-1)
       {
           QString tmp = str.mid(0,str.length()-stringAm.length());
           tmp = tmp.simplified();
@@ -480,7 +480,7 @@ QDateTime ValueParser::readTime (const QString & intstr, bool withSeconds,
   QString format = parserLocale->timeFormat().simplified();
   if ( !withSeconds )
   {
-    int n = format.find("%S");
+    int n = format.indexOf("%S");
     format = format.left( n - 1 );
   }
 

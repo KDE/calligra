@@ -3355,15 +3355,15 @@ Currency::Currency(QString const & code, currencyFormat format)
   if ( format == Gnumeric )
   {
     // I use QChar(c,r) here so that this file can be opened in any encoding...
-    if ( code.find( QChar( 172, 32 ) ) != -1 )      // Euro sign
+    if ( code.indexOf( QChar( 172, 32 ) ) != -1 )      // Euro sign
       m_code = QChar( 172, 32 );
-    else if ( code.find( QChar( 163, 0 ) ) != -1 )  // Pound sign
+    else if ( code.indexOf( QChar( 163, 0 ) ) != -1 )  // Pound sign
       m_code = QChar( 163, 0 );
-    else if ( code.find( QChar( 165, 0 ) ) != -1 )  // Yen sign
+    else if ( code.indexOf( QChar( 165, 0 ) ) != -1 )  // Yen sign
       m_code = QChar( 165, 0 );
     else if ( code[0] == '[' && code[1] == '$' )
     {
-      int n = code.find(']');
+      int n = code.indexOf(']');
       if (n != -1)
       {
         m_code = code.mid( 2, n - 2 );
@@ -3373,7 +3373,7 @@ Currency::Currency(QString const & code, currencyFormat format)
         m_type = 0;
       }
     }
-    else if ( code.find( '$' ) != -1 )
+    else if ( code.indexOf( '$' ) != -1 )
       m_code = "$";
   } // end gnumeric
 }

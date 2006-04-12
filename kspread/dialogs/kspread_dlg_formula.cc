@@ -477,7 +477,7 @@ QString FormulaDialog::createParameter( const QString& _text, int param )
 		QString tmp = _text;
 		int pos;
 		int start = 1;
-		while( ( pos = tmp.find( '"', start ) ) != -1 )
+		while( ( pos = tmp.indexOf( '"', start ) ) != -1 )
 		{
 		  if (tmp[pos - 1] != '\\')
 		    tmp.replace( pos, 1, "\\\"" );
@@ -501,7 +501,7 @@ QString FormulaDialog::createParameter( const QString& _text, int param )
 		    QString tmp = _text;
 		    int pos;
 		    int start = 1;
-		    while( ( pos = tmp.find( '"', start ) ) != -1 )
+		    while( ( pos = tmp.indexOf( '"', start ) ) != -1 )
 		    {
   		        if (tmp[pos - 1] != '\\')
 			  tmp.replace( pos, 1, "\\\"" );

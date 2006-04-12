@@ -6808,11 +6808,11 @@ void View::slotRename()
       i18n("Change Sheet Name") );
 
     newName = newName.simplified();
-    int n = newName.find('-');
+    int n = newName.indexOf('-');
     if ( n > -1 ) newName[n] = '_';
-    n = newName.find('!');
+    n = newName.indexOf('!');
     if ( n > -1 ) newName[n] = '_';
-    n = newName.find('$');
+    n = newName.indexOf('$');
     if ( n > -1 ) newName[n] = '_';
 
     newName = KInputDialog::getText( i18n("Rename Sheet"),i18n("Enter name:"), newName, &ok, this );

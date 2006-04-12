@@ -1335,7 +1335,7 @@ bool LocationEditWidget::activateItem()
 
     // Set the cell component to uppercase:
     // Sheet1!a1 -> Sheet1!A2
-    int pos = ltext.find('!');
+    int pos = ltext.indexOf('!');
     if ( pos !=- 1 )
         tmp = ltext.left(pos)+ltext.mid(pos).toUpper();
     else

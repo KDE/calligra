@@ -208,18 +208,18 @@ FormatType ValueFormatter::determineFormatting (const Value &value,
 
 void ValueFormatter::removeTrailingZeros (QString &str, QChar decimal_point)
 {
-  if (str.find (decimal_point) < 0)
+  if (str.indexOf(decimal_point) < 0)
     //no decimal point -> nothing to do
     return;
 
   int start = 0;
   int cslen = converter->locale()->currencySymbol().length();
-  if (str.find ('%') != -1)
+  if (str.indexOf('%') != -1)
     start = 2;
-  else if (str.find (converter->locale()->currencySymbol()) ==
+  else if (str.indexOf(converter->locale()->currencySymbol()) ==
       ((int) (str.length() - cslen)))
     start = cslen + 1;
-  else if ((start = str.find ('E')) != -1)
+  else if ((start = str.indexOf('E')) != -1)
     start = str.length() - start;
   else
     start = 0;
@@ -320,7 +320,7 @@ QString ValueFormatter::createNumberFormat ( double value, int precision,
     case Scientific_format:
       decimal_point = converter->locale()->decimalSymbol()[0];
       localizedNumber = QString::number (value, 'E', p);
-      if ((pos = localizedNumber.find ('.')) != -1)
+      if ((pos = localizedNumber.indexOf('.')) != -1)
         localizedNumber = localizedNumber.replace (pos, 1, decimal_point);
       break;
     default :

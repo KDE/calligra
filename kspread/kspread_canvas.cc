@@ -586,7 +586,7 @@ void Canvas::validateSelection()
                 QString t;
                 do
                 {
-                    i = message.find( "\n", pos );
+                    i = message.indexOf( "\n", pos );
                     if ( i == -1 )
                         t = message.mid( pos, message.length() - pos );
                     else
@@ -1262,7 +1262,7 @@ void Canvas::processClickSelectionHandle( QMouseEvent *event )
 void Canvas::processLeftClickAnchor()
 {
     bool isRefLink = localReferenceAnchor( d->anchor );
-    bool isLocalLink = (d->anchor.find("file:") == 0);
+    bool isLocalLink = (d->anchor.indexOf("file:") == 0);
     if ( !isRefLink )
     {
 	QString type=KMimeType::findByURL(d->anchor, 0, isLocalLink)->name();

@@ -334,7 +334,7 @@ void PaperLayout::slotOk()
       else
       {
         bool error = true;
-        int first = tmpPrintRange.find(":");
+        int first = tmpPrintRange.indexOf(":");
         if ( ( first != -1 ) && ( (int)tmpPrintRange.length() > first ) )
         {
             Point point1 ( tmpPrintRange.left( first ) );
@@ -362,7 +362,7 @@ void PaperLayout::slotOk()
       else
       {
         bool error = true;
-        int first = tmpRepeatCols.find(":");
+        int first = tmpRepeatCols.indexOf(":");
         if ( ( first != -1 ) && ( (int)tmpRepeatCols.length() > first ) )
         {
             int col1 = util_decodeColumnLabelText( tmpRepeatCols.left( first ) );
@@ -388,7 +388,7 @@ void PaperLayout::slotOk()
       else
       {
         bool error = true;
-        int first = tmpRepeatRows.find(":");
+        int first = tmpRepeatRows.indexOf(":");
         if ( ( first != -1 ) && ( (int)tmpRepeatRows.length() > first ) )
         {
             int row1 = tmpRepeatRows.left( first ).toInt();

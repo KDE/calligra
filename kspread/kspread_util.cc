@@ -250,7 +250,7 @@ void Point::init(const QString & _str)
     }
 
     QString str( _str );
-    int n = _str.find( '!' );
+    int n = _str.indexOf( '!' );
     if ( n != -1 )
     {
       _sheetName = _str.left( n );
@@ -286,7 +286,7 @@ void Point::init(const QString & _str)
     //default is error
     int x = -1;
     //search for the first character != text
-    int result = str.find( QRegExp("[^A-Za-z]+"), p );
+    int result = str.indexOf( QRegExp("[^A-Za-z]+"), p );
 
     //get the colomn number for the character between actual position and the first non text charakter
     if ( result != -1 )
@@ -383,7 +383,7 @@ Point::Point( const QString & str, Map * map,
 {
 
     uint p = 0;
-    int p2 = str.find( '!' );
+    int p2 = str.indexOf( '!' );
     if ( p2 != -1 )
     {
         _sheetName = str.left( p2++ );
@@ -466,7 +466,7 @@ Range::Range(const QString & _str)
     _range.setLeft(-1);
     _sheet = 0;
 
-    int p = _str.find(':');
+    int p = _str.indexOf(':');
  //   if (p == -1)
  // return;
 
@@ -556,7 +556,7 @@ Range::Range(const QString & str, Map * map,
     _sheet = 0;
 
     int p = 0;
-    int p2 = str.find('!');
+    int p2 = str.indexOf('!');
     if (p2 != -1)
     {
       _sheetName = str.left(p2++);
@@ -576,7 +576,7 @@ Range::Range(const QString & str, Map * map,
       _sheet = sheet;
 
 
-    int p3 = str.find(':', p);
+    int p3 = str.indexOf(':', p);
     if (p3 == -1)
   return;
 
@@ -605,7 +605,7 @@ QString Range::toString() const
 
   //Insert $ characters to show fixed parts of range
 
-  int pos=result.find("!")+1;
+  int pos=result.indexOf("!")+1;
   Q_ASSERT(pos != -1);
 
   if (_leftFixed)
@@ -618,7 +618,7 @@ QString Range::toString() const
     result.insert(pos+Cell::columnName(_range.left()).length(),'$');
   }
 
-  pos=result.find(":")+1;
+  pos=result.indexOf(":")+1;
   Q_ASSERT(pos != -1);
 
   if (_rightFixed)
@@ -1002,10 +1002,10 @@ QPen KSpread::convertOasisStringToPen( const QString &border )
 //Return true when it's a reference to cell from sheet.
 bool KSpread::localReferenceAnchor( const QString &_ref )
 {
-    bool isLocalRef = (_ref.find("http://") != 0 &&
-                       _ref.find("mailto:") != 0 &&
-                       _ref.find("ftp://") != 0  &&
-                       _ref.find("file:") != 0 );
+    bool isLocalRef = (_ref.indexOf("http://") != 0 &&
+                       _ref.indexOf("mailto:") != 0 &&
+                       _ref.indexOf("ftp://") != 0  &&
+                       _ref.indexOf("file:") != 0 );
     return isLocalRef;
 }
 

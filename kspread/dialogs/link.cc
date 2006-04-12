@@ -167,23 +167,23 @@ QString LinkDialog::link() const
         case 0:  
           str = d->internetLink->text();  
           if( !str.isEmpty() )
-          if( str.find( "http://" )==-1 )
-          if( str.find( "https://" )==-1 )
-          if( str.find( "ftp://" )==-1 )
+          if( str.indexOf( "http://" )==-1 )
+          if( str.indexOf( "https://" )==-1 )
+          if( str.indexOf( "ftp://" )==-1 )
               str.prepend( "http://" );
           break;
           
         case 1:  
            str = d->mailLink->text(); 
            if( !str.isEmpty() )
-           if( str.find( "mailto:" )==-1 )
+           if( str.indexOf( "mailto:" )==-1 )
                str.prepend( "mailto:" );
            break;
            
         case 2:  
            str = d->fileLink->lineEdit()->text(); 
            if( !str.isEmpty() )
-           if( str.find( "file:/" )==-1 )
+           if( str.indexOf( "file:/" )==-1 )
                str.prepend( "file://" );
            break;
            

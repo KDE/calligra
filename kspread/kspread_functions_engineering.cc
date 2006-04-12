@@ -751,7 +751,7 @@ Value func_complex (valVector args, ValueCalc *calc, FuncExtra *)
 static double imag_complexe(QString str, bool &ok)
 {
 QString tmp=str;
-if(tmp.find('i')==-1)
+if(tmp.indexOf('i')==-1)
         {  //not a complex
         ok=true;
         return 0;
@@ -766,12 +766,12 @@ else  if( tmp.length()==2 )
         {
         //-i,+i,
         int pos1;
-        if((pos1=tmp.find('+'))!=-1&& pos1==0)
+        if((pos1=tmp.indexOf('+'))!=-1&& pos1==0)
                 {
                 ok=true;
                 return 1;
                 }
-        else if( (pos1=tmp.find('-'))!=-1 && pos1==0 )
+        else if( (pos1=tmp.indexOf('-'))!=-1 && pos1==0 )
                 {
                 ok=true;
                 return -1;
@@ -790,7 +790,7 @@ else  if( tmp.length()==2 )
 else
         {//12+12i
         int pos1,pos2;
-        if((pos1=tmp.find('i'))!=-1)
+        if((pos1=tmp.indexOf('i'))!=-1)
                 {
                 double val;
                 QString tmpStr;
@@ -859,7 +859,7 @@ double val;
 int pos1,pos2;
 QString tmp=str;
 QString tmpStr;
-if((pos1=tmp.find('i'))==-1)
+if((pos1=tmp.indexOf('i'))==-1)
         { //12.5
         val=KGlobal::locale()->readNumber(tmp, &ok);
         if(!ok)

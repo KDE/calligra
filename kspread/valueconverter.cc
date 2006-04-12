@@ -197,7 +197,7 @@ Value ValueConverter::asString (const Value &value) const
         //convert the number, change decimal point from English to local
         s = QString::number (value.asFloat(), 'g', 10);
         decimal_point = parser->locale()->decimalSymbol()[0];
-        if (!decimal_point.isNull() && ((pos = s.find ('.')) != -1))
+        if (!decimal_point.isNull() && ((pos = s.indexOf('.')) != -1))
           s = s.replace (pos, 1, decimal_point);
         if (fmt == Value::fmt_Percent)
           s += " %";

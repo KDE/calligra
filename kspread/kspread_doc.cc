@@ -2029,11 +2029,11 @@ void Doc::loadOasisAreaName( const QDomElement& body )
 
             range = Oasis::decodeFormula( range );
 
-            if ( range.find( ':' ) == -1 )
+            if ( range.indexOf( ':' ) == -1 )
             {
                 Point p( range );
 
-                int n = range.find( '!' );
+                int n = range.indexOf( '!' );
                 if ( n > 0 )
                     range = range + ":" + range.right( range.length() - n - 1);
 

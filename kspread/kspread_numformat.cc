@@ -338,7 +338,7 @@ void parseNegativePart( QString & format, int i,
       g_convertionInfo.negBr = true;
       break;
      case '[':
-      if ( format.find( "[red]", i, false ) == i )
+       if ( format.indexOf( "[red]", i, Qt::CaseInsensitive ) == i )
       {
         g_convertionInfo.negRed = true;
         i += 5;
@@ -370,12 +370,12 @@ void parseNegativePart( QString & format, int i,
     }
   }
 
-  int p = g_convertionInfo.postfix.find( '"' );
+  int p = g_convertionInfo.postfix.indexOf( '"' );
   while ( p != -1 )
   {
     g_convertionInfo.postfix.remove( p, 1 );
 
-    p = g_convertionInfo.postfix.find( '"', p );
+    p = g_convertionInfo.postfix.indexOf( '"', p );
   }
 }
 
@@ -935,7 +935,7 @@ void createNumber( QString & result, Value const & value,
 
   result = QString::number( nnum, 'f', prec );
 
-  int pos = result.find( '.' );
+  int pos = result.indexOf( '.' );
   if ( pos >= 0 )
   {
     result = result.replace( pos, 1, g_dcSymbol );
@@ -1168,13 +1168,13 @@ void createScientific( QString & result, Value const & value,
 
   result = QString::number( nnum, 'E', data->rightReq + data->rightOpt );
 
-  int pos = result.find( '.' );
+  int pos = result.indexOf( '.' );
   if ( pos >= 0 )
   {
     result = result.replace( pos, 1, g_dcSymbol );
     if ( data->rightOpt > 0 )
     {
-      int i   = result.find( 'E', pos, false ) - 1;
+      int i   = result.indexOf( 'E', pos, Qt::CaseInsensitive ) - 1;
       int n   = result.length() - data->rightOpt;
 
       if ( i > 0 )

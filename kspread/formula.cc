@@ -270,7 +270,7 @@ Token::Op Token::asOperator() const
 QString Token::sheetName() const
 {
   if( !isCell() && !isRange() ) return QString::null;
-  int i = m_text.find( '!' );
+  int i = m_text.indexOf( '!' );
   if( i < 0 ) return QString();
   QString sheet = m_text.left( i );
   if( sheet[0] == QChar(39) )

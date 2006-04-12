@@ -950,7 +950,7 @@ Selection::Point::Point(const QString& string)
   }
 
   //search for the first character != text
-  int result = string.find( QRegExp("[^A-Za-z]+"), p );
+  int result = string.indexOf( QRegExp("[^A-Za-z]+"), p );
   if (string[result] == '$')
   {
     m_rowFixed = true;
@@ -984,7 +984,7 @@ Selection::Range::Range(const QString& string)
     return;
   }
 
-  int delimiterPos = string.find(':');
+  int delimiterPos = string.indexOf(':');
   if (delimiterPos == -1)
   {
     return;

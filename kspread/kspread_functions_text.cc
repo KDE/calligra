@@ -282,7 +282,7 @@ Value func_find (valVector args, ValueCalc *calc, FuncExtra *)
   if (start_num <= 0) return Value::errorVALUE();
   if (start_num > (int)within_text.length()) return Value::errorVALUE();
 
-  int pos = within_text.find (find_text, start_num - 1);
+  int pos = within_text.indexOf(find_text, start_num - 1);
   if( pos < 0 ) return Value::errorNA();
 
   return Value (pos + 1);
@@ -319,7 +319,7 @@ Value func_fixed (valVector args, ValueCalc *calc, FuncExtra *)
   bool neg = number < 0;
   result = QString::number( neg ? -number:number, 'f', decimals );
 
-  int pos = result.find('.');
+  int pos = result.indexOf('.');
   if (pos == -1) pos = result.length();
     else result.replace(pos, 1, locale->decimalSymbol());
   if( !no_commas )
@@ -521,7 +521,7 @@ Value func_search (valVector args, ValueCalc *calc, FuncExtra *)
 
   // use globbing feature of QRegExp
   QRegExp regex( find_text, false, true );
-  int pos = within_text.find( regex, start_num-1 );
+  int pos = within_text.indexOf( regex, start_num-1 );
   if( pos < 0 ) return Value::errorNA();
 
   return Value (pos + 1);
@@ -567,12 +567,12 @@ Value func_substitute (valVector args, ValueCalc *calc, FuncExtra *)
 
   QString result = text;
 
-  int p = result.find (old_text);
+  int p = result.indexOf(old_text);
   while ((p != -1) && (num > 0))
   {
     result.replace( p, old_text.length(), new_text );
     // find another location, starting straight after the replaced text
-    p = result.find (old_text, p + new_text.length());
+    p = result.indexOf(old_text, p + new_text.length());
     if( !all ) num--;
   }
 

@@ -206,7 +206,7 @@ void SubtotalDialog::removeSubtotalLines()
         continue;
 
       text = cell->text();
-      if ( text.find( "SUBTOTAL" ) != -1 )
+      if ( text.indexOf( "SUBTOTAL" ) != -1 )
       {
         containsSubtotal = true;
         break;
