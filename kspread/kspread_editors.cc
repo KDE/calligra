@@ -151,7 +151,7 @@ void FormulaEditorHighlighter::highlightBlock( const QString& text )
                 alreadyFoundRanges.append(newRange);
                 d->rangeCount++;
             }
-            setFormat(token.pos() + 1, token.text().length(), colors[ alreadyFoundRanges.indexOf(newRange) % colors.size()] );
+            setFormat(token.pos() + 1, token.text().length(), colors[ alreadyFoundRanges.find(newRange) % colors.size()] );
         }
         break;
       case Token::Boolean:     // True, False (also i18n-ized)

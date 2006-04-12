@@ -212,7 +212,7 @@ void PaperLayout::initScaleOptions( QWidget * tab, Q3VBoxLayout * vbox )
     {
         if ( string == (QString) m_cZoom->text(i) )
         {
-            m_cZoom->setCurrentItem( i );
+            m_cZoom->setCurrentIndex( i );
             break;
         }
     }
@@ -239,9 +239,9 @@ void PaperLayout::initScaleOptions( QWidget * tab, Q3VBoxLayout * vbox )
     m_cLimitPagesX->insertStringList( lstX );
 
     if ( print->pageLimitX() <= 20 )
-        m_cLimitPagesX->setCurrentItem( print->pageLimitX() );
+        m_cLimitPagesX->setCurrentIndex( print->pageLimitX() );
     else
-        m_cLimitPagesX->setCurrentItem( 21 );
+        m_cLimitPagesX->setCurrentIndex( 21 );
 
     QLabel *pLimitPagesY = new QLabel ( i18n("Y:"), zoomGroup );
     grid->addWidget( pLimitPagesY, 1, 3 );
@@ -262,9 +262,9 @@ void PaperLayout::initScaleOptions( QWidget * tab, Q3VBoxLayout * vbox )
     m_cLimitPagesY->insertStringList( lstY );
 
     if ( print->pageLimitY() <= 20 )
-        m_cLimitPagesY->setCurrentItem( print->pageLimitY() );
+        m_cLimitPagesY->setCurrentIndex( print->pageLimitY() );
     else
-        m_cLimitPagesY->setCurrentItem( 21 );
+        m_cLimitPagesY->setCurrentIndex( 21 );
 
     if ( print->pageLimitY() != 0 || print->pageLimitX() != 0 )
     {

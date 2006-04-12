@@ -153,7 +153,7 @@ void ConsolidateDialog::slotOk()
 
   QString function;
 
-  switch( m_pFunction->currentItem() )
+  switch( m_pFunction->currentIndex() )
   {
     case Sum:      function = "SUM"; break;
     case Average:  function = "AVERAGE"; break;

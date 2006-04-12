@@ -78,7 +78,7 @@ DlgValidity::DlgValidity(View* parent,const char* name , const QRect &_marker )
   listType+=i18n("Text Length");
   listType+=i18n("List");
   chooseType->insertStringList(listType);
-  chooseType->setCurrentItem(0);
+  chooseType->setCurrentIndex(0);
 
   allowEmptyCell = new QCheckBox( i18n( "Allow blanks" ), tmpQButtonGroup );
   grid1->addWidget(allowEmptyCell,1,0);
@@ -99,7 +99,7 @@ DlgValidity::DlgValidity(View* parent,const char* name , const QRect &_marker )
   list+=i18n("different from");
   list+=i18n("different to");
   choose->insertStringList(list);
-  choose->setCurrentItem(0);
+  choose->setCurrentIndex(0);
 
   edit1 = new QLabel( tmpQButtonGroup, "Label_3" );
   edit1->setText(i18n("Minimum:" ));
@@ -171,7 +171,7 @@ DlgValidity::DlgValidity(View* parent,const char* name , const QRect &_marker )
   list2+=i18n("Warning");
   list2+=i18n("Information");
   chooseAction->insertStringList(list2);
-  chooseAction->setCurrentItem(0);
+  chooseAction->setCurrentIndex(0);
   tmpQLabel = new QLabel( tmpQButtonGroup, "Label_6" );
   tmpQLabel->setText(i18n("Title:" ));
   grid2->addWidget(tmpQLabel,2,0);
@@ -278,7 +278,7 @@ void DlgValidity::changeIndexType(int _index)
         choose->setEnabled(true);
         val_min->setValidator( new KFloatValidator( val_min ) );
         val_max->setValidator( new KFloatValidator( val_max ) );
-        if( choose->currentItem()<=4)
+        if( choose->currentIndex()<=4)
         {
             edit1->setText(i18n("Number:"));
             edit2->setText("");
@@ -300,7 +300,7 @@ void DlgValidity::changeIndexType(int _index)
         choose->setEnabled(true);
         val_min->setValidator( new KIntValidator( val_min ) );
         val_max->setValidator( new KIntValidator( val_max ) );
-        if( choose->currentItem()<=4)
+        if( choose->currentIndex()<=4)
         {
             edit1->setText(i18n("Number:"));
             edit2->setText("");
@@ -334,7 +334,7 @@ void DlgValidity::changeIndexType(int _index)
 
         val_min->clearValidator();
         val_max->clearValidator();
-        if( choose->currentItem()<=4)
+        if( choose->currentIndex()<=4)
         {
             edit1->setText(i18n("Date:"));
             edit2->setText("");
@@ -355,7 +355,7 @@ void DlgValidity::changeIndexType(int _index)
         choose->setEnabled(true);
         val_min->clearValidator();
         val_max->clearValidator();
-        if( choose->currentItem()<=4)
+        if( choose->currentIndex()<=4)
         {
             edit1->setText(i18n("Time:"));
             edit2->setText("");
@@ -385,14 +385,14 @@ void DlgValidity::changeIndexCond(int _index)
    case 3:
    case 4:
     val_max->setEnabled(false);
-    if(chooseType->currentItem()==1 ||chooseType->currentItem()==2
-       ||chooseType->currentItem()==6)
+    if(chooseType->currentIndex()==1 ||chooseType->currentIndex()==2
+       ||chooseType->currentIndex()==6)
       edit1->setText(i18n("Number:"));
-    else if( chooseType->currentItem()==3)
+    else if( chooseType->currentIndex()==3)
       edit1->setText("");
-    else if( chooseType->currentItem()==4)
+    else if( chooseType->currentIndex()==4)
       edit1->setText(i18n("Date:"));
-    else if( chooseType->currentItem()==5)
+    else if( chooseType->currentIndex()==5)
       edit1->setText(i18n("Time:"));
     edit2->setText("");
     edit2->setEnabled(false);
@@ -402,23 +402,23 @@ void DlgValidity::changeIndexCond(int _index)
     val_max->setEnabled(true);
     edit2->setEnabled(true);
     edit1->setEnabled(true);
-    if(chooseType->currentItem()==1 || chooseType->currentItem()==2
-       || chooseType->currentItem()==6)
+    if(chooseType->currentIndex()==1 || chooseType->currentIndex()==2
+       || chooseType->currentIndex()==6)
     {
       edit1->setText(i18n("Minimum:" ));
       edit2->setText(i18n("Maximum:" ));
     }
-    else if(chooseType->currentItem()==3)
+    else if(chooseType->currentIndex()==3)
     {
       edit1->setText("");
       edit2->setText("");
     }
-    else if(chooseType->currentItem()==4)
+    else if(chooseType->currentIndex()==4)
     {
       edit1->setText(i18n("Date minimum:"));
       edit2->setText(i18n("Date maximum:"));
     }
-    else if(chooseType->currentItem()==5)
+    else if(chooseType->currentIndex()==5)
     {
       edit1->setText(i18n("Time minimum:"));
       edit2->setText(i18n("Time maximum:"));
@@ -439,44 +439,44 @@ void DlgValidity::init()
     switch( tmpValidity->m_restriction)
     {
      case Restriction::None:
-      chooseType->setCurrentItem(0);
+      chooseType->setCurrentIndex(0);
       break;
      case Restriction::Number:
-      chooseType->setCurrentItem(1);
+      chooseType->setCurrentIndex(1);
       if(tmpValidity->m_cond >=5 )
         val_max->setText(tmp.setNum(tmpValidity->valMax));
       val_min->setText(tmp.setNum(tmpValidity->valMin));
       break;
      case Restriction::Integer:
-      chooseType->setCurrentItem(2);
+      chooseType->setCurrentIndex(2);
       if(tmpValidity->m_cond >=5 )
         val_max->setText(tmp.setNum(tmpValidity->valMax));
       val_min->setText(tmp.setNum(tmpValidity->valMin));
       break;
      case Restriction::TextLength:
-      chooseType->setCurrentItem(6);
+      chooseType->setCurrentIndex(6);
       if(tmpValidity->m_cond >=5 )
         val_max->setText(tmp.setNum(tmpValidity->valMax));
       val_min->setText(tmp.setNum(tmpValidity->valMin));
       break;
      case Restriction::Text:
-      chooseType->setCurrentItem(3);
+      chooseType->setCurrentIndex(3);
       break;
      case Restriction::Date:
-      chooseType->setCurrentItem(4);
+      chooseType->setCurrentIndex(4);
       val_min->setText(m_pView->doc()->locale()->formatDate(tmpValidity->dateMin,true));
       if(tmpValidity->m_cond >=5 )
         val_max->setText(m_pView->doc()->locale()->formatDate(tmpValidity->dateMax,true));
       break;
      case Restriction::Time:
-      chooseType->setCurrentItem(5);
+      chooseType->setCurrentIndex(5);
       val_min->setText(m_pView->doc()->locale()->formatTime(tmpValidity->timeMin,true));
       if(tmpValidity->m_cond >=5 )
         val_max->setText(m_pView->doc()->locale()->formatTime(tmpValidity->timeMax,true));
       break;
      case Restriction::List:
      {
-         chooseType->setCurrentItem(7);
+         chooseType->setCurrentIndex(7);
          QStringList lst =tmpValidity->listValidity;
          QString tmp;
          for ( QStringList::Iterator it = lst.begin(); it != lst.end(); ++it ) {
@@ -486,52 +486,52 @@ void DlgValidity::init()
      }
       break;
      default :
-      chooseType->setCurrentItem(0);
+      chooseType->setCurrentIndex(0);
       break;
     }
     switch (tmpValidity->m_action)
     {
       case Action::Stop:
-      chooseAction->setCurrentItem(0);
+      chooseAction->setCurrentIndex(0);
       break;
       case Action::Warning:
-      chooseAction->setCurrentItem(1);
+      chooseAction->setCurrentIndex(1);
       break;
       case Action::Information:
-      chooseAction->setCurrentItem(2);
+      chooseAction->setCurrentIndex(2);
       break;
      default :
-      chooseAction->setCurrentItem(0);
+      chooseAction->setCurrentIndex(0);
       break;
     }
     switch ( tmpValidity->m_cond )
     {
       case Conditional::Equal:
-      choose->setCurrentItem(0);
+      choose->setCurrentIndex(0);
       break;
       case Conditional::Superior:
-      choose->setCurrentItem(1);
+      choose->setCurrentIndex(1);
       break;
       case Conditional::Inferior:
-      choose->setCurrentItem(2);
+      choose->setCurrentIndex(2);
       break;
       case Conditional::SuperiorEqual:
-      choose->setCurrentItem(3);
+      choose->setCurrentIndex(3);
       break;
       case Conditional::InferiorEqual:
-      choose->setCurrentItem(4);
+      choose->setCurrentIndex(4);
       break;
       case Conditional::Between:
-      choose->setCurrentItem(5);
+      choose->setCurrentIndex(5);
       break;
       case Conditional::Different:
-      choose->setCurrentItem(6);
+      choose->setCurrentIndex(6);
       break;
       case Conditional::DifferentTo:
-      choose->setCurrentItem(7);
+      choose->setCurrentIndex(7);
       break;
      default :
-      choose->setCurrentItem(0);
+      choose->setCurrentIndex(0);
       break;
     }
     displayMessage->setChecked( tmpValidity->displayMessage );
@@ -540,8 +540,8 @@ void DlgValidity::init()
     messageHelp->setText( tmpValidity->messageInfo );
     displayHelp->setChecked( tmpValidity->displayValidationInformation );
   }
-  changeIndexType(chooseType->currentItem()) ;
-  changeIndexCond(choose->currentItem()) ;
+  changeIndexType(chooseType->currentIndex()) ;
+  changeIndexCond(choose->currentIndex()) ;
 }
 
 void DlgValidity::clearAllPressed()
@@ -552,9 +552,9 @@ void DlgValidity::clearAllPressed()
   title->setText("");
   displayMessage->setChecked( true );
   allowEmptyCell->setChecked( false );
-  choose->setCurrentItem(0);
-  chooseType->setCurrentItem(0);
-  chooseAction->setCurrentItem(0);
+  choose->setCurrentIndex(0);
+  chooseType->setCurrentIndex(0);
+  chooseAction->setCurrentIndex(0);
   changeIndexType(0);
   changeIndexCond(0);
   messageHelp->setText("" );
@@ -565,7 +565,7 @@ void DlgValidity::clearAllPressed()
 
 void DlgValidity::OkPressed()
 {
-  if( chooseType->currentItem()==1)
+  if( chooseType->currentIndex()==1)
   {
     bool ok;
     val_min->text().toDouble(&ok);
@@ -576,14 +576,14 @@ void DlgValidity::OkPressed()
       return;
     }
     val_max->text().toDouble(&ok);
-    if(! ok && choose->currentItem() >=5 && choose->currentItem()< 7)
+    if(! ok && choose->currentIndex() >=5 && choose->currentIndex()< 7)
     {
       KMessageBox::error( this , i18n("This is not a valid value."),i18n("Error"));
       val_max->setText("");
       return;
     }
   }
-  else if( chooseType->currentItem()==2 || chooseType->currentItem()==6)
+  else if( chooseType->currentIndex()==2 || chooseType->currentIndex()==6)
   {
     bool ok;
     val_min->text().toInt(&ok);
@@ -594,14 +594,14 @@ void DlgValidity::OkPressed()
       return;
     }
     val_max->text().toInt(&ok);
-    if(! ok && choose->currentItem() >=5 && choose->currentItem()< 7)
+    if(! ok && choose->currentIndex() >=5 && choose->currentIndex()< 7)
     {
       KMessageBox::error( this , i18n("This is not a valid value."),i18n("Error"));
       val_max->setText("");
       return;
     }
   }
-  else  if(  chooseType->currentItem()==5)
+  else  if(  chooseType->currentIndex()==5)
   {
     if(! m_pView->doc()->locale()->readTime(val_min->text()).isValid())
     {
@@ -609,14 +609,14 @@ void DlgValidity::OkPressed()
       val_min->setText("");
       return;
     }
-    if(! m_pView->doc()->locale()->readTime(val_max->text()).isValid() && choose->currentItem()  >=5)
+    if(! m_pView->doc()->locale()->readTime(val_max->text()).isValid() && choose->currentIndex()  >=5)
     {
       KMessageBox::error( this , i18n("This is not a valid time."),i18n("Error"));
       val_max->setText("");
       return;
     }
   }
-  else  if(  chooseType->currentItem()==4)
+  else  if(  chooseType->currentIndex()==4)
   {
     if(! m_pView->doc()->locale()->readDate(val_min->text()).isValid())
     {
@@ -624,19 +624,19 @@ void DlgValidity::OkPressed()
       val_min->setText("");
       return;
     }
-    if(! m_pView->doc()->locale()->readDate(val_max->text()).isValid() && choose->currentItem()  >=5 )
+    if(! m_pView->doc()->locale()->readDate(val_max->text()).isValid() && choose->currentIndex()  >=5 )
     {
       KMessageBox::error( this , i18n("This is not a valid date."),i18n("Error"));
       val_max->setText("");
       return;
     }
   }
-  else if ( chooseType->currentItem()==7 )
+  else if ( chooseType->currentIndex()==7 )
   {
       //Nothing
   }
 
-  if( chooseType->currentItem()==0)
+  if( chooseType->currentIndex()==0)
   {//no validity
     result.m_restriction=Restriction::None;
     result.m_action=Action::Stop;
@@ -652,7 +652,7 @@ void DlgValidity::OkPressed()
   }
   else
   {
-    switch( chooseType->currentItem())
+    switch( chooseType->currentIndex())
     {
      case 0:
       result.m_restriction=Restriction::None;
@@ -682,7 +682,7 @@ void DlgValidity::OkPressed()
      default :
       break;
     }
-    switch (chooseAction->currentItem())
+    switch (chooseAction->currentIndex())
     {
      case 0:
        result.m_action=Action::Stop;
@@ -696,7 +696,7 @@ void DlgValidity::OkPressed()
      default :
       break;
     }
-    switch ( choose->currentItem())
+    switch ( choose->currentIndex())
     {
      case 0:
        result.m_cond=Conditional::Equal;
@@ -734,9 +734,9 @@ void DlgValidity::OkPressed()
     result.dateMin=QDate(0,0,0);
     result.dateMax=QDate(0,0,0);
 
-    if( chooseType->currentItem()==1)
+    if( chooseType->currentIndex()==1)
     {
-      if(choose->currentItem()  <5)
+      if(choose->currentIndex()  <5)
       {
         result.valMin=val_min->text().toDouble();
       }
@@ -746,9 +746,9 @@ void DlgValidity::OkPressed()
         result.valMax=qMax(val_max->text().toDouble(),val_min->text().toDouble());
       }
     }
-    else if( chooseType->currentItem()==2 || chooseType->currentItem()==6)
+    else if( chooseType->currentIndex()==2 || chooseType->currentIndex()==6)
     {
-      if(choose->currentItem()  <5)
+      if(choose->currentIndex()  <5)
       {
         result.valMin=val_min->text().toInt();
       }
@@ -758,9 +758,9 @@ void DlgValidity::OkPressed()
         result.valMax=qMax(val_max->text().toInt(),val_min->text().toInt());
       }
     }
-    else  if(  chooseType->currentItem()==4)
+    else  if(  chooseType->currentIndex()==4)
     {
-      if(choose->currentItem()  <5)
+      if(choose->currentIndex()  <5)
       {
         result.dateMin=m_pView->doc()->locale()->readDate(val_min->text());
       }
@@ -778,9 +778,9 @@ void DlgValidity::OkPressed()
         }
       }
     }
-    else  if(  chooseType->currentItem()==5)
+    else  if(  chooseType->currentIndex()==5)
     {
-      if(choose->currentItem()  <5)
+      if(choose->currentIndex()  <5)
       {
         result.timeMin=m_pView->doc()->locale()->readTime(val_min->text());
       }
@@ -798,7 +798,7 @@ void DlgValidity::OkPressed()
         }
       }
     }
-    else if ( chooseType->currentItem()==7 )
+    else if ( chooseType->currentIndex()==7 )
     {
         result.listValidity=QStringList::split( "\n", validityList->text() );
     }

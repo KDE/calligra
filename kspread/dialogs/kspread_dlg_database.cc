@@ -970,7 +970,7 @@ QString DatabaseDialog::exchangeWildcards(QString const & value)
 
 bool DatabaseDialog::optionsDoNext()
 {
-  if ( m_operator_1->currentItem() == 4 )
+  if ( m_operator_1->currentIndex() == 4 )
   {
     if ( ( m_operatorValue_1->text().indexOf('*') != -1 )
          || ( m_operatorValue_1->text().indexOf('?') != -1 ) )
@@ -984,7 +984,7 @@ bool DatabaseDialog::optionsDoNext()
     }
   }
 
-  if ( m_operator_2->currentItem() == 4 )
+  if ( m_operator_2->currentIndex() == 4 )
   {
     if ( ( m_operatorValue_2->text().indexOf('*') != -1 )
          || ( m_operatorValue_2->text().indexOf('?') != -1 ) )
@@ -998,7 +998,7 @@ bool DatabaseDialog::optionsDoNext()
     }
   }
 
-  if ( m_operator_3->currentItem() == 4 )
+  if ( m_operator_3->currentIndex() == 4 )
   {
     if ( ( m_operatorValue_3->text().indexOf('*') != -1 )
          || ( m_operatorValue_3->text().indexOf('?') != -1 ) )
@@ -1052,7 +1052,7 @@ bool DatabaseDialog::optionsDoNext()
   {
     query += getWhereCondition(m_columns_1->currentText(),
                                m_operatorValue_1->text(),
-                               m_operator_1->currentItem());
+                               m_operator_1->currentIndex());
     added = true;
   }
 
@@ -1063,7 +1063,7 @@ bool DatabaseDialog::optionsDoNext()
 
     query += getWhereCondition(m_columns_2->currentText(),
                                m_operatorValue_2->text(),
-                               m_operator_2->currentItem());
+                               m_operator_2->currentIndex());
     added = true;
   }
 
@@ -1074,29 +1074,29 @@ bool DatabaseDialog::optionsDoNext()
 
     query += getWhereCondition(m_columns_3->currentText(),
                                m_operatorValue_3->text(),
-                               m_operator_3->currentItem());
+                               m_operator_3->currentIndex());
   }
 
-  if ( (m_columnsSort_1->currentItem() != 0)
-       || (m_columnsSort_2->currentItem() != 0) )
+  if ( (m_columnsSort_1->currentIndex() != 0)
+       || (m_columnsSort_2->currentIndex() != 0) )
   {
     query += "\nORDER BY ";
     bool added = false;
-    if ( m_columnsSort_1->currentItem() != 0 )
+    if ( m_columnsSort_1->currentIndex() != 0 )
     {
       added = true;
       query += m_columnsSort_1->currentText();
-      if ( m_sortMode_1->currentItem() == 1 )
+      if ( m_sortMode_1->currentIndex() == 1 )
         query += " DESC ";
     }
 
-    if ( m_columnsSort_2->currentItem() != 0 )
+    if ( m_columnsSort_2->currentIndex() != 0 )
     {
       if ( added )
         query += ", ";
 
       query += m_columnsSort_2->currentText();
-      if ( m_sortMode_2->currentItem() == 1 )
+      if ( m_sortMode_2->currentIndex() == 1 )
         query += " DESC ";
     }
   }

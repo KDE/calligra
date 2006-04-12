@@ -1237,22 +1237,22 @@ CellFormatPageFloat::CellFormatPageFloat( QWidget* parent, CellFormatDialog *_dl
       ++index;
     }
 
-    currency->setCurrentItem( 0 );
+    currency->setCurrentIndex( 0 );
     currency->hide();
     currencyLabel->hide();
 
     if ( !dlg->bFloatFormat || !dlg->bFloatColor )
-        format->setCurrentItem( 5 );
+        format->setCurrentIndex( 5 );
     else if ( dlg->floatFormat == Style::OnlyNegSigned && dlg->floatColor == Style::AllBlack )
-        format->setCurrentItem( 0 );
+        format->setCurrentIndex( 0 );
     else if ( dlg->floatFormat == Style::OnlyNegSigned && dlg->floatColor == Style::NegRed )
-        format->setCurrentItem( 1 );
+        format->setCurrentIndex( 1 );
     else if ( dlg->floatFormat == Style::AlwaysUnsigned && dlg->floatColor == Style::NegRed )
-        format->setCurrentItem( 2 );
+        format->setCurrentIndex( 2 );
     else if ( dlg->floatFormat == Style::AlwaysSigned && dlg->floatColor == Style::AllBlack )
-        format->setCurrentItem( 3 );
+        format->setCurrentIndex( 3 );
     else if ( dlg->floatFormat == Style::AlwaysSigned && dlg->floatColor == Style::NegRed )
-        format->setCurrentItem( 4 );
+        format->setCurrentIndex( 4 );
     layout->addWidget(box);
 
     cellFormatType=dlg->formatType;
@@ -1586,7 +1586,7 @@ void CellFormatPageFloat::init()
 
 void CellFormatPageFloat::currencyChanged(const QString &)
 {
-  int index = currency->currentItem();
+  int index = currency->currentIndex();
   if (index > 0)
     ++index;
   dlg->cCurrency.symbol = Currency::getDisplaySymbol(index);
@@ -1689,7 +1689,7 @@ void CellFormatPageFloat::makeformat()
   updateFormatType();
   QColor color;
   Style::FloatFormat floatFormat;
-  switch( format->currentItem() )
+  switch( format->currentIndex() )
   {
     case 0:
       floatFormat = Style::OnlyNegSigned;
@@ -1749,7 +1749,7 @@ void CellFormatPageFloat::apply( CustomStyle * style )
 
   if ( m_bFormatColorChanged )
   {
-    switch( format->currentItem() )
+    switch( format->currentIndex() )
     {
      case 0:
       style->changeFloatFormat( Style::OnlyNegSigned );
@@ -1779,7 +1779,7 @@ void CellFormatPageFloat::apply( CustomStyle * style )
     if ( money->isChecked() )
     {
       Style::Currency cur;
-      int index = currency->currentItem();
+      int index = currency->currentIndex();
       if (index == 0)
       {
         if ( currency->currentText() == i18n( "Automatic" ) )
@@ -1826,7 +1826,7 @@ void CellFormatPageFloat::apply(FormatManipulator* _obj)
 
   if (m_bFormatColorChanged)
   {
-    switch( format->currentItem() )
+    switch( format->currentIndex() )
       {
       case 0:
         _obj->setFloatFormat( Style::OnlyNegSigned );
@@ -1856,7 +1856,7 @@ void CellFormatPageFloat::apply(FormatManipulator* _obj)
     if (money->isChecked())
     {
       Style::Currency cur;
-      int index = currency->currentItem();
+      int index = currency->currentIndex();
       if (index == 0)
       {
         if ( currency->currentText() == i18n( "Automatic" ) )
@@ -2052,7 +2052,7 @@ void CellFormatPageFont::apply( CustomStyle * style )
   if ( !bTextColorUndefined && textColor != dlg->textColor )
     style->changeTextColor( textColor );
 
-  if ( ( size_combo->currentItem() != 0 )
+  if ( ( size_combo->currentIndex() != 0 )
        && ( dlg->textFontSize != selFont.pointSize() ) )
     style->changeFontSize( selFont.pointSize() );
 
@@ -2062,12 +2062,12 @@ void CellFormatPageFont::apply( CustomStyle * style )
 
   uint flags = 0;
 
-  if ( weight_combo->currentItem() != 0 && selFont.bold() )
+  if ( weight_combo->currentIndex() != 0 && selFont.bold() )
     flags |= Style::FBold;
   else
     flags &= ~(uint) Style::FBold;
 
-  if ( style_combo->currentItem() != 0 && selFont.italic() )
+  if ( style_combo->currentIndex() != 0 && selFont.italic() )
     flags |= Style::FItalic;
   else
     flags &= ~(uint) Style::FItalic;
@@ -2091,14 +2091,14 @@ void CellFormatPageFont::apply(FormatManipulator* _obj)
     _obj->setTextColor( textColor );
   if (fontChanged)
   {
-    if ( ( size_combo->currentItem() != 0 )
+    if ( ( size_combo->currentIndex() != 0 )
          && ( dlg->textFontSize != selFont.pointSize() ) )
       _obj->setFontSize( selFont.pointSize() );
     if ( ( selFont.family() != dlg->textFontFamily ) && ( !family_combo->currentText().isEmpty() ) )
       _obj->setFontFamily( selFont.family() );
-    if ( weight_combo->currentItem() != 0 )
+    if ( weight_combo->currentIndex() != 0 )
       _obj->setFontBold( selFont.bold() );
-    if ( style_combo->currentItem() != 0 )
+    if ( style_combo->currentIndex() != 0 )
       _obj->setFontItalic( selFont.italic() );
     _obj->setFontStrike( strike->isChecked() );
     _obj->setFontUnderline(underline->isChecked() );
@@ -2191,7 +2191,7 @@ void CellFormatPageFont::setCombos()
 
      for (int i = 0; i < number_of_entries ; i++){
          if ( string == (QString) combo->text(i)){
-             combo->setCurrentItem(i);
+             combo->setCurrentIndex(i);
              found = true;
              // kDebug(36001) << "Found Size " << string.data() << " setting to item " i << endl;
              break;
@@ -2199,32 +2199,32 @@ void CellFormatPageFont::setCombos()
      }
  }
  else
-     combo->setCurrentItem( 0 );
+     combo->setCurrentIndex( 0 );
 
  if ( !dlg->bTextFontBold )
-     weight_combo->setCurrentItem(0);
+     weight_combo->setCurrentIndex(0);
  else if ( dlg->textFontBold )
  {
      selFont.setBold( dlg->textFontBold );
-     weight_combo->setCurrentItem(2);
+     weight_combo->setCurrentIndex(2);
  }
  else
  {
      selFont.setBold( dlg->textFontBold );
-     weight_combo->setCurrentItem(1);
+     weight_combo->setCurrentIndex(1);
  }
 
  if ( !dlg->bTextFontItalic )
-     weight_combo->setCurrentItem(0);
+     weight_combo->setCurrentIndex(0);
  else if ( dlg->textFontItalic )
  {
      selFont.setItalic( dlg->textFontItalic );
-     style_combo->setCurrentItem(2);
+     style_combo->setCurrentIndex(2);
  }
  else
  {
      selFont.setItalic( dlg->textFontItalic );
-     style_combo->setCurrentItem(1);
+     style_combo->setCurrentIndex(1);
  }
 }
 
@@ -2789,7 +2789,7 @@ void CellFormatPageBorder::InitializeGrids()
     tmp=tmp.setNum(i);
     size->insertItem(tmp);
   }
-  size->setCurrentItem(1);
+  size->setCurrentIndex(1);
 
   style=new QComboBox(tmpQGroupBox);
   grid3->addWidget(style,1,0);
@@ -2924,7 +2924,7 @@ void CellFormatPageBorder::slotChangeStyle(const QString &)
 
 void CellFormatPageBorder::slotChangeStyle(int)
 {
-  int index = style->currentItem();
+  int index = style->currentIndex();
   QString tmp;
   int penSize = size->currentText().toInt();
   if ( !penSize)
