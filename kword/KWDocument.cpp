@@ -1126,7 +1126,7 @@ bool KWDocument::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles,
         KWTextFrameSet *fs = new KWTextFrameSet( this, i18n( "Main Text Frameset" ) );
         m_lstFrameSet.append( fs ); // don't use addFrameSet here. We'll call finalize() once and for all in completeLoading
         fs->loadOasisContent( body, context );
-        KWFrame* frame = new KWFrame( fs, 29, 42, 798-29, 566-42 );
+        KWFrame* frame = new KWFrame( fs, 29, 42, 566-29, 798-42 );
         frame->setFrameBehavior( KWFrame::AutoCreateNewFrame );
         frame->setNewFrameBehavior( KWFrame::Reconnect );
         fs->addFrame( frame );
