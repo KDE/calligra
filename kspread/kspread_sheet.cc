@@ -3165,9 +3165,9 @@ void Sheet::sortByRow( const QRect &area, int key1, int key2, int key3,
         if ( !c->isEmpty() )
         {
           if ( col > r.right() )
-            r.rRight() = col;
+            r.setRight(col);
           if ( col < r.left() )
-            r.rLeft() = col;
+            r.setLeft(col);
         }
         c = getNextCellRight( col, row );
       }
@@ -3508,9 +3508,9 @@ void Sheet::sortByColumn( const QRect &area, int key1, int key2, int key3,
         if ( !c->isEmpty() )
         {
           if ( row > r.bottom() )
-            r.rBottom() = row;
+            r.setBottom(row);
           if ( row < r.top() )
-            r.rTop() = row;
+            r.setTop(row);
         }
         c = getNextCellDown( col, row );
       }
