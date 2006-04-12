@@ -100,7 +100,7 @@ ConsolidateDialog::ConsolidateDialog( View* parent, const char* name )
   tmpQLabel->setText( i18n("&Entered references:") );
 
   m_pRefs = new Q3ListBox( page );
-  grid1->addMultiCellWidget( m_pRefs,5,8,0,0);
+  grid1->addWidget( m_pRefs,5,8,0,0);
   tmpQLabel->setBuddy(m_pRefs);
 
   m_pRow = new QCheckBox( i18n("&Description in row"), page );

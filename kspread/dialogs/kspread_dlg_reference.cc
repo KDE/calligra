@@ -274,7 +274,7 @@ EditAreaName::EditAreaName( View * parent,
                                           QSizePolicy::Minimum );
   Layout1->addItem( spacer );
 
-  EditAreaNameLayout->addMultiCellLayout( Layout1, 3, 3, 0, 1 );
+  EditAreaNameLayout->addLayout( Layout1, 3, 3, 0, 1 );
 
   QLabel * TextLabel4 = new QLabel( page, "TextLabel4" );
   TextLabel4->setText( i18n( "Cells:" ) );

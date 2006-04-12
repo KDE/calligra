@@ -127,7 +127,7 @@ GoalSeekDialog::GoalSeekDialog( View * parent,  QPoint const & marker,
   QSpacerItem* spacer = new QSpacerItem( 20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding );
   Layout5->addItem( spacer );
 
-  GoalSeekDialogLayout->addMultiCellLayout( Layout5, 0, 1, 1, 1 );
+  GoalSeekDialogLayout->addLayout( Layout5, 0, 1, 1, 1 );
 
   m_resultFrame = new Q3Frame( this, "m_resultFrame" );
   m_resultFrame->setFrameShape( Q3Frame::StyledPanel );
@@ -159,7 +159,7 @@ GoalSeekDialog::GoalSeekDialog( View * parent,  QPoint const & marker,
   m_resultText->setText( "Goal seeking with cell <cell> found <a | no> solution:" );
   m_resultText->setAlignment( int( Qt::TextWordWrap | Qt::AlignVCenter ) );
 
-  m_resultFrameLayout->addMultiCellWidget( m_resultText, 0, 0, 0, 1 );
+  m_resultFrameLayout->addWidget( m_resultText, 0, 0, 0, 1 );
 
   //  GoalSeekDialogLayout->addWidget( m_resultFrame, 1, 0 );
 

@@ -74,7 +74,7 @@ TestRunner::TestRunner():
   layout->addWidget( d->runButton, 0, 3 );
 
   d->logView = new QTextEdit( mainWidget );
-  layout->addMultiCellWidget( d->logView, 2, 2, 0, 3 );
+  layout->addWidget( d->logView, 2, 2, 0, 3 );
   d->logView->setTextFormat( Qt::LogText );
 
   QObject::connect( d->runButton, SIGNAL( clicked() ), this, SLOT( runTest() ) );

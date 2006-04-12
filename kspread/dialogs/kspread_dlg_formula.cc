@@ -113,12 +113,12 @@ FormulaDialog::FormulaDialog( View* parent, const char* name,const QString& form
     grid1->addWidget( selectFunction, 3, 0 );
 
     result = new QLineEdit( page );
-    grid1->addMultiCellWidget( result, 4, 4, 0, 1 );
+    grid1->addWidget( result, 4, 4, 0, 1 );
 
     m_tabwidget = new QTabWidget( page );
     QSizePolicy sp2( QSizePolicy::Expanding, QSizePolicy::Expanding );
     m_tabwidget->setSizePolicy( sp2 );
-    grid1->addMultiCellWidget( m_tabwidget, 0, 2, 1, 1 );
+    grid1->addWidget( m_tabwidget, 0, 2, 1, 1 );
 
     m_browser = new Q3TextBrowser( m_tabwidget );
     m_browser->setMinimumWidth( 300 );

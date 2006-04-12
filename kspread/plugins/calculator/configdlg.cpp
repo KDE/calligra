@@ -138,7 +138,7 @@ ConfigDlg::ConfigDlg(QWidget *parent, const char *name, DefStruct *defstruct)
 
 
   stylegroup = new Q3ButtonGroup(box,"stylegroup");
-  grid1->addMultiCellWidget(stylegroup,5,7,0,1);
+  grid1->addWidget(stylegroup,5,7,0,1);
   stylegroup->setFrameStyle(Q3Frame::NoFrame);
 
   Q3GridLayout *grid2 = new Q3GridLayout(stylegroup,2,2,KDialog::marginHint(), KDialog::spacingHint());

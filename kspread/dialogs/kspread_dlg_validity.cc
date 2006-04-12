@@ -141,7 +141,7 @@ DlgValidity::DlgValidity(View* parent,const char* name , const QRect &_marker )
   grid1->addColSpacing( 0, edit2->width() );
 
   validityList = new Q3TextEdit( tmpQButtonGroup );
-  grid1->addMultiCellWidget(validityList,2, 4,1, 1);
+  grid1->addWidget(validityList,2, 4,1, 1);
 
   validityLabelList = new QLabel( tmpQButtonGroup, "Label_Label_List" );
   validityLabelList->setText(i18n("Entries:" ));
@@ -158,7 +158,7 @@ DlgValidity::DlgValidity(View* parent,const char* name , const QRect &_marker )
 
   displayMessage = new QCheckBox(i18n( "Show error message when invalid values are entered" ),tmpQButtonGroup );
   displayMessage->setChecked( true );
-  grid2->addMultiCellWidget(displayMessage,0, 0,0, 1);
+  grid2->addWidget(displayMessage,0, 0,0, 1);
 
   tmpQLabel = new QLabel( tmpQButtonGroup, "Label_5" );
   tmpQLabel->setText(i18n("Action:" ));
@@ -184,7 +184,7 @@ DlgValidity::DlgValidity(View* parent,const char* name , const QRect &_marker )
   grid2->addWidget(tmpQLabel,3,0);
 
   message =new Q3TextEdit( tmpQButtonGroup);
-  grid2->addMultiCellWidget(message,3, 4,1, 1);
+  grid2->addWidget(message,3, 4,1, 1);
   lay1->addWidget(tmpQButtonGroup);
   message->setTextFormat( Qt::PlainText );
 
@@ -199,7 +199,7 @@ DlgValidity::DlgValidity(View* parent,const char* name , const QRect &_marker )
 
   displayHelp = new QCheckBox(i18n( "Show input help when cell is selected" ),tmpQButtonGroup );
   displayMessage->setChecked( false );
-  grid3->addMultiCellWidget(displayHelp,0, 0,0, 1);
+  grid3->addWidget(displayHelp,0, 0,0, 1);
 
   tmpQLabel = new QLabel( tmpQButtonGroup, "Label_6" );
   tmpQLabel->setText(i18n("Title:" ));
@@ -213,7 +213,7 @@ DlgValidity::DlgValidity(View* parent,const char* name , const QRect &_marker )
   grid3->addWidget(tmpQLabel,3,0);
 
   messageHelp =new Q3TextEdit( tmpQButtonGroup);
-  grid3->addMultiCellWidget(messageHelp,3, 4,1, 1);
+  grid3->addWidget(messageHelp,3, 4,1, 1);
   lay1->addWidget(tmpQButtonGroup);
   messageHelp->setTextFormat( Qt::PlainText );
 

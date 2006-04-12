@@ -87,7 +87,7 @@ CSVDialog::CSVDialog( View * parent, const char * name, QRect const & rect, Mode
   m_sheet->setNumRows( 0 );
   m_sheet->setNumCols( 0 );
 
-  MyDialogLayout->addMultiCellWidget( m_sheet, 3, 3, 0, 3 );
+  MyDialogLayout->addWidget( m_sheet, 3, 3, 0, 3 );
 
   // Delimiter: comma, semicolon, tab, space, other
   m_delimiterBox = new Q3ButtonGroup( page, "m_delimiterBox" );
@@ -98,12 +98,12 @@ CSVDialog::CSVDialog( View * parent, const char * name, QRect const & rect, Mode
   m_delimiterBox->layout()->setMargin( KDialog::marginHint() );
   m_delimiterBoxLayout = new Q3GridLayout( m_delimiterBox->layout() );
   m_delimiterBoxLayout->setAlignment( Qt::AlignTop );
-  MyDialogLayout->addMultiCellWidget( m_delimiterBox, 0, 2, 0, 0 );
+  MyDialogLayout->addWidget( m_delimiterBox, 0, 2, 0, 0 );
 
   m_ignoreDuplicates = new QCheckBox( page, "m_ignoreDuplicates" );
   m_ignoreDuplicates->setText( i18n( "Ignore duplicate delimiters" ) );
 
-  MyDialogLayout->addMultiCellWidget( m_ignoreDuplicates, 2, 2, 2, 3 );
+  MyDialogLayout->addWidget( m_ignoreDuplicates, 2, 2, 2, 3 );
 
   m_radioComma = new QRadioButton( m_delimiterBox, "m_radioComma" );
   m_radioComma->setText( i18n( "Comma" ) );
@@ -141,11 +141,11 @@ CSVDialog::CSVDialog( View * parent, const char * name, QRect const & rect, Mode
   m_formatBox->layout()->setMargin( KDialog::marginHint() );
   m_formatBoxLayout = new Q3GridLayout( m_formatBox->layout() );
   m_formatBoxLayout->setAlignment( Qt::AlignTop );
-  MyDialogLayout->addMultiCellWidget( m_formatBox, 0, 2, 1, 1 );
+  MyDialogLayout->addWidget( m_formatBox, 0, 2, 1, 1 );
 
   m_radioNumber = new QRadioButton( m_formatBox, "m_radioNumber" );
   m_radioNumber->setText( i18n( "Number" ) );
-  m_formatBoxLayout->addMultiCellWidget( m_radioNumber, 1, 1, 0, 1 );
+  m_formatBoxLayout->addWidget( m_radioNumber, 1, 1, 0, 1 );
 
   m_radioText = new QRadioButton( m_formatBox, "m_radioText" );
   m_radioText->setText( i18n( "Text" ) );
@@ -154,7 +154,7 @@ CSVDialog::CSVDialog( View * parent, const char * name, QRect const & rect, Mode
 
   m_radioCurrency = new QRadioButton( m_formatBox, "m_radioCurrency" );
   m_radioCurrency->setText( i18n( "Currency" ) );
-  m_formatBoxLayout->addMultiCellWidget( m_radioCurrency, 0, 0, 1, 2 );
+  m_formatBoxLayout->addWidget( m_radioCurrency, 0, 0, 1, 2 );
 
   m_radioDate = new QRadioButton( m_formatBox, "m_radioDate" );
   m_radioDate->setText( i18n( "Date" ) );

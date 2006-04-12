@@ -1992,12 +1992,12 @@ void View::initView()
 
     d->viewLayout->setColStretch( 1, 10 );
     d->viewLayout->setRowStretch( 2, 10 );
-    d->viewLayout->addMultiCellWidget( d->toolWidget, 0, 0, 0, 2 );
-    d->viewLayout->addMultiCellWidget( d->hBorderWidget, 1, 1, 1, 2 );
+    d->viewLayout->addWidget( d->toolWidget, 0, 0, 0, 2 );
+    d->viewLayout->addWidget( d->hBorderWidget, 1, 1, 1, 2 );
     d->viewLayout->addWidget( d->vBorderWidget, 2, 0 );
     d->viewLayout->addWidget( d->canvas, 2, 1 );
     d->viewLayout->addWidget( d->vertScrollBar, 2, 2 );
-    d->viewLayout->addMultiCellWidget( bottomPart, 3, 3, 0, 2 );
+    d->viewLayout->addWidget( bottomPart, 3, 3, 0, 2 );
 
     KStatusBar * sb = statusBar();
     Q_ASSERT(sb);

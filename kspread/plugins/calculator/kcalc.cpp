@@ -1483,7 +1483,7 @@ void QtCalculator::configclicked(){
 
   box->setTitle(i18n("About"));
   grid1->addWidget(label,0,1);
-  grid1->addMultiCellWidget(label2,2,2,0,1);
+  grid1->addWidget(label2,2,2,0,1);
 
   QString labelstring = "KCalc "KCALCVERSION"\n"\
     "Bernd Johannes Wuebben\n"\

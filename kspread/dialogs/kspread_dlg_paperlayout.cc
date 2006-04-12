@@ -192,7 +192,7 @@ void PaperLayout::initScaleOptions( QWidget * tab, Q3VBoxLayout * vbox )
     grid->addWidget( m_rScalingZoom, 0, 0 );
 
     m_cZoom = new QComboBox( true, zoomGroup, "Zoom" );
-    grid->addMultiCellWidget( m_cZoom, 0, 0, 1, 5, Qt::AlignLeft );
+    grid->addWidget( m_cZoom, 0, 0, 1, 5, Qt::AlignLeft );
 
     QStringList lst;
     for( int i = 5; i < 500; i += 5 )

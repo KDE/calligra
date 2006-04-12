@@ -269,11 +269,11 @@ DatabaseDialog::DatabaseDialog( View * parent, QRect const & rect, const char * 
   m_andBox->setText( i18n( "Match all of the following (AND)" ) );
   m_andBox->setChecked( true );
 
-  optionsFrameLayout->addMultiCellWidget( m_andBox, 0, 0, 0, 2 );
+  optionsFrameLayout->addWidget( m_andBox, 0, 0, 0, 2 );
 
   m_orBox = new QRadioButton( optionsFrame, "m_orBox" );
   m_orBox->setText( i18n( "Match any of the following (OR)" ) );
-  optionsFrameLayout->addMultiCellWidget( m_orBox, 1, 1, 0, 2 );
+  optionsFrameLayout->addWidget( m_orBox, 1, 1, 0, 2 );
 
   m_operatorValue_1 = new QLineEdit( optionsFrame, "m_operatorValue" );
   optionsFrameLayout->addWidget( m_operatorValue_1, 2, 2 );
