@@ -421,7 +421,7 @@ Sheet::Sheet (Map* map,
   {
       QByteArray s;
       s.sprintf("Sheet%i", s_id );
-      QObject::setName( s.data() );
+      QObject::setObjectName( s.data() );
   }
   d->print = new SheetPrint( this );
 
@@ -7551,7 +7551,7 @@ bool Sheet::loadXML( const QDomElement& sheet )
     d->name = testName;
 
     kDebug(36001)<<"Sheet::loadXML: table name="<<d->name<<endl;
-    setName(d->name.toUtf8());
+    setObjectName(d->name.toUtf8());
     (dynamic_cast<SheetIface*>(dcopObject()))->sheetNameHasChanged();
 
     if( sheet.hasAttribute( "grid" ) )
@@ -8266,7 +8266,7 @@ bool Sheet::setSheetName( const QString& name, bool init, bool /*makeUndo*/ )
     doc()->changeAreaSheetName( old_name, name );
     emit sig_nameChanged( this, old_name );
 
-    setName(name.toUtf8());
+    setObjectName(name.toUtf8());
     (dynamic_cast<SheetIface*>(dcopObject()))->sheetNameHasChanged();
 
     return true;
