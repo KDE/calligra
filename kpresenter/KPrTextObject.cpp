@@ -835,7 +835,7 @@ void KPrTextObject::loadVariable( QValueList<QDomElement> & listVariable,KoTextP
             if (typeElem.hasAttribute( "correct" ))
                 correct = typeElem.attribute("correct").toInt();
             kDebug(33001) << "loadKTextObject variable type=" << type << " key=" << key << endl;
-            KoVariableFormat * varFormat = key.isEmpty() ? 0 : m_doc->variableFormatCollection()->format( key.latin1() );
+            KoVariableFormat * varFormat = key.isEmpty() ? 0 : m_doc->variableFormatCollection()->format( key.toLatin1() );
             // If varFormat is 0 (no key specified), the default format will be used.
             KoVariable * var =m_doc->getVariableCollection()->createVariable( type, -1, m_doc->variableFormatCollection(),
                                                                               varFormat, lastParag->textDocument(),
@@ -1402,7 +1402,7 @@ void KPrTextObject::drawCursor( QPainter *p, KoTextCursor *cursor, bool cursorVi
         qMax(0, iPoint.x() - 5), // negative values create problems
         iPoint.y(), clip.width(), clip.height(),
         pix, cg, m_doc->zoomHandler(),
-        cursorVisible, cursor, FALSE /*resetChanged*/, drawingFlags );
+        cursorVisible, cursor, false /*resetChanged*/, drawingFlags );
 
     if ( wasChanged )      // Maybe we have more changes to draw, than those in the small cliprect
         cursor->parag()->setLineChanged( oldLineChanged ); // -1 = all

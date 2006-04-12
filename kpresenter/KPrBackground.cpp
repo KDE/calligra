@@ -450,7 +450,7 @@ void KPrBackGround::load( const QDomElement &element )
                 KoPictureKey key( _fileName );
                 backPicture.clear();
                 backPicture.setKey(key);
-                QByteArray rawData=_data.utf8(); // XPM is normally ASCII, therefore UTF-8
+                QByteArray rawData=_data.toUtf8(); // XPM is normally ASCII, therefore UTF-8
                 rawData[rawData.size()-1]=char(10); // Replace the NULL character by a LINE FEED
                 QBuffer buffer(rawData);
                 backPicture.loadXpm(&buffer);

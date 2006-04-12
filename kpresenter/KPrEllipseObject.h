@@ -57,7 +57,7 @@ protected:
     virtual bool saveOasisObjectAttributes( KPOasisSaveContext &sc ) const;
 
     virtual void paint( QPainter *_painter,KoTextZoomHandler *_zoomHandler,
-                        int /* pageNum */, bool drawingShadow, bool drawContour = FALSE );
+                        int /* pageNum */, bool drawingShadow, bool drawContour = false );
 
 };
 

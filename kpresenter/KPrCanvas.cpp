@@ -205,7 +205,7 @@ void KPrCanvas::scrollY( int y )
 bool KPrCanvas::eventFilter( QObject *o, QEvent *e )
 {
     if ( !o || !e )
-        return TRUE;
+        return true;
     if ( m_currentTextObjectView  )
         KCursor::autoHideEventFilter( o, e );
     switch ( e->type() )
@@ -213,11 +213,11 @@ bool KPrCanvas::eventFilter( QObject *o, QEvent *e )
     case QEvent::FocusIn:
         if ( m_currentTextObjectView )
             m_currentTextObjectView->focusInEvent();
-        return TRUE;
+        return true;
     case QEvent::FocusOut:
         if ( m_currentTextObjectView  )
             m_currentTextObjectView->focusOutEvent();
-        return TRUE;
+        return true;
     case QEvent::KeyPress:
     {
         QKeyEvent * keyev = static_cast<QKeyEvent *>(e);
@@ -271,7 +271,7 @@ bool KPrCanvas::eventFilter( QObject *o, QEvent *e )
 
 bool KPrCanvas::focusNextPrevChild( bool )
 {
-    return TRUE; // Don't allow to go out of the canvas widget by pressing "Tab"
+    return true; // Don't allow to go out of the canvas widget by pressing "Tab"
 }
 
 void KPrCanvas::paintEvent( QPaintEvent* paintEvent )
@@ -1167,7 +1167,7 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
 
     switch ( toolEditMode ) {
     case TEM_MOUSE: {
-        drawContour = FALSE;
+        drawContour = false;
         switch ( modType ) {
         case MT_NONE: {
             if ( drawRubber ) {
@@ -1253,7 +1253,7 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
         }
         break;
     case TEM_ZOOM:{
-        drawContour = FALSE;
+        drawContour = false;
         if( modType == MT_NONE && drawRubber )
         {
             QPainter p;
@@ -1277,7 +1277,7 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
         }
     }break;
     case TEM_ROTATE: {
-        drawContour = FALSE;
+        drawContour = false;
         if ( !m_rotateObject )
             break;
         if ( m_angleBeforeRotate != m_rotateObject->getAngle() ) {
@@ -1459,7 +1459,7 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
         } else if ( mousePressed ) {
             switch ( toolEditMode ) {
             case TEM_MOUSE: {
-                drawContour = TRUE;
+                drawContour = true;
                 if ( modType == MT_NONE ) {
                     if ( drawRubber )
                     {
@@ -1522,7 +1522,7 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
             case TEM_ROTATE: {
                 if ( m_rotateObject )
                 {
-                    drawContour = TRUE;
+                    drawContour = true;
                     // angle to mouse pos
                     double angle = KoPoint::getAngle( m_rotateCenter, docPoint );
                     // angle to start of mouse pos
@@ -4448,7 +4448,7 @@ void KPrCanvas::setTextBackground( KPrTextObject */*obj*/ )
 #if 0
     QPixmap pix( m_activePage->getZoomPageRect().size() );
     QPainter painter( &pix );
-    m_activePage->background()->drawBackground( &painter, FALSE );
+    m_activePage->background()->drawBackground( &painter, false );
     QPixmap bpix( obj->getSize().toQSize() ); // ## zoom it !
     bitBlt( &bpix, 0, 0, &pix, obj->getOrig().x(), obj->getOrig().y() -
             m_activePage->getZoomPageRect().height() * ( m_view->getCurrPgNum() - 1 ), bpix.width(), bpix.height() );

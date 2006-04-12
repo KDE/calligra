@@ -374,7 +374,7 @@ KPrView::KPrView( KPrDocument* _doc, QWidget *_parent, const char *_name )
     }
 
 
-    setAcceptDrops( TRUE );
+    setAcceptDrops( true );
 }
 
 DCOPObject* KPrView::dcopObject()
@@ -649,15 +649,15 @@ void KPrView::editDelPage()
 
 void KPrView::insertPage()
 {
-    InsertPageDia dia( this, 0, TRUE );
+    InsertPageDia dia( this, 0, true );
 #if COPYOASISFORMAT
     QString templ = locateLocal( "data", "kpresenter/default.oop" );
 #else
     QString templ = locateLocal( "data", "kpresenter/default.kpr" );
 #endif
     if ( !QFile::exists( templ ) ) {
-        dia.radioDifferent->setChecked( TRUE );
-        dia.radioDefault->setEnabled( FALSE );
+        dia.radioDifferent->setChecked( true );
+        dia.radioDefault->setEnabled( false );
     }
     if ( dia.exec() != QDialog::Accepted )
         return;
@@ -740,7 +740,7 @@ void KPrView::savePicture( const QString& oldName, KoPicture& picture)
     QStringList mimetypes;
     mimetypes << mimetype;
 
-    KFileDialog fd( oldFile, QString::null, this, 0, TRUE );
+    KFileDialog fd( oldFile, QString::null, this, 0, true );
     fd.setMimeFilter( mimetypes );
     fd.setCaption(i18n("Save Picture"));
     fd.setOperationMode(KFileDialog::Saving);
@@ -1487,7 +1487,7 @@ void KPrView::startScreenPres( int pgNum /*1-based*/ )
         vert->setEnabled( false );
         horz->setEnabled( false );
         m_bShowGUI = false;
-        m_canvas->reparent( ( QWidget* )0L, 0, QPoint( 0, 0 ), FALSE );
+        m_canvas->reparent( ( QWidget* )0L, 0, QPoint( 0, 0 ), false );
         m_canvas->setPaletteBackgroundColor( Qt::white );
         m_canvas->showFullScreen();
         m_canvas->setFocusPolicy( Qt::StrongFocus );
@@ -2130,7 +2130,7 @@ void KPrView::createGUI()
     if ( sidebar )
     {
         sidebar->outline()->setCurrentItem( sidebar->outline()->firstChild() );
-        sidebar->outline()->setSelected( sidebar->outline()->firstChild(), TRUE );
+        sidebar->outline()->setSelected( sidebar->outline()->firstChild(), true );
         KConfig *config=KGlobal::config();
         config->setGroup("Global");
         if(!config->readBoolEntry("Sidebar", true)) {
@@ -2497,7 +2497,7 @@ void KPrView::setupActions()
         // This approach allows to edit toolbars and extract separate actions from this menu
         KToggleAction* act = new KToggleAction( styleIt.current()->name(), /*TODO icon,*/
                                                 0, this, SLOT( slotCounterStyleSelected() ),
-                                                actionCollection(), QString("counterstyle_%1").arg( styleIt.current()->style() ).latin1() );
+                                                actionCollection(), QString("counterstyle_%1").arg( styleIt.current()->style() ).toLatin1() );
         act->setExclusiveGroup( "counterstyle" );
         // Add to the right menu: both for "none", bullet for bullets, numbers otherwise
         if ( styleIt.current()->style() == KoParagCounter::STYLE_NONE ) {
@@ -3655,12 +3655,12 @@ void KPrView::setupScrollbars()
     horz->setValue(horz->minValue());
     pgNext = new QToolButton( pageBase );
     pgNext->setPixmap( QPixmap( pagedown_xpm ) );
-    pgNext->setAutoRepeat( TRUE );
+    pgNext->setAutoRepeat( true );
     pgNext->setToolTip( i18n( "Next slide" ) );
     connect( pgNext, SIGNAL( clicked() ), this, SLOT( nextPage() ) );
     pgPrev = new QToolButton( pageBase );
     pgPrev->setPixmap( QPixmap( pageup_xpm ) );
-    pgPrev->setAutoRepeat( TRUE );
+    pgPrev->setAutoRepeat( true );
     pgPrev->setToolTip( i18n( "Previous slide" ) );
     connect( pgPrev, SIGNAL( clicked() ), this, SLOT( prevPage() ) );
 }
@@ -3746,7 +3746,7 @@ void KPrView::skipToPage( int num )
     //(Laurent) deselect object when we change page.
     //otherwise you can change object properties on other page
     deSelectAllObjects();
-    m_pKPresenterDoc->repaint( FALSE );
+    m_pKPresenterDoc->repaint( false );
 
     m_pKPresenterDoc->displayActivePage( page );
 }
@@ -3952,11 +3952,11 @@ void KPrView::updateSideBar()
 {
     if ( sidebar )
     {
-        sidebar->blockSignals( TRUE );
+        sidebar->blockSignals( true );
         sidebar->thumbBar()->uptodate = false;
         sidebar->outline()->rebuildItems();
         sidebar->thumbBar()->rebuildItems();
-        sidebar->blockSignals( FALSE );
+        sidebar->blockSignals( false );
     }
 }
 
@@ -3971,9 +3971,9 @@ void KPrView::addSideBarItem( int pos )
 {
     if ( sidebar )
     {
-        sidebar->blockSignals( TRUE );
+        sidebar->blockSignals( false );
         sidebar->addItem( pos );
-        sidebar->blockSignals( FALSE );
+        sidebar->blockSignals( false );
     }
 }
 
@@ -3981,9 +3981,9 @@ void KPrView::moveSideBarItem( int oldPos, int newPos )
 {
     if ( sidebar )
     {
-        sidebar->blockSignals( TRUE );
+        sidebar->blockSignals( true );
         sidebar->moveItem( oldPos, newPos );
-        sidebar->blockSignals( FALSE );
+        sidebar->blockSignals( false );
     }
 }
 
@@ -3991,9 +3991,9 @@ void KPrView::removeSideBarItem( int pos )
 {
     if ( sidebar )
     {
-        sidebar->blockSignals( TRUE );
+        sidebar->blockSignals( true );
         sidebar->removeItem( pos );
-        sidebar->blockSignals( FALSE );
+        sidebar->blockSignals( false );
     }
 }
 
@@ -4526,7 +4526,7 @@ void KPrView::spellCheckerRemoveHighlight()
     }
     KPrTextView *edit=m_canvas->currentTextObjectView();
     if (edit)
-        edit->drawCursor( TRUE );
+        edit->drawCursor( true );
 }
 
 
@@ -4620,7 +4620,7 @@ void KPrView::showCounter( KoParagCounter &c )
     QString styleStr("counterstyle_");
     styleStr += QString::number( c.style() );
     //kDebug(33001) << "KWView::showCounter styleStr=" << styleStr << endl;
-    KToggleAction* act = static_cast<KToggleAction *>( actionCollection()->action( styleStr.latin1() ) );
+    KToggleAction* act = static_cast<KToggleAction *>( actionCollection()->action( styleStr.toLatin1() ) );
     Q_ASSERT( act );
     if ( act )
         act->setChecked( true );
@@ -4780,7 +4780,7 @@ void KPrView::refreshCustomMenu()
             if ( !lst.contains( varName) )
             {
                 lst.append( varName );
-                QCString name = QString("custom-action_%1").arg(i).latin1();
+                QCString name = QString("custom-action_%1").arg(i).toLatin1();
                 act = new KAction( varName, shortCuts[varName], this,
                                    SLOT( insertCustomVariable() ), actionCollection(), name );
 
@@ -4795,7 +4795,7 @@ void KPrView::refreshCustomMenu()
         actionInsertCustom->popupMenu()->insertSeparator();
 
     act = new KAction( i18n("New..."), 0, this, SLOT( insertNewCustomVariable() ), actionCollection(),
-                       QString("custom-action_%1").arg(i).latin1() );
+                       QString("custom-action_%1").arg(i).toLatin1() );
     act->setGroup( "custom-variable-action" );
     actionInsertCustom->insert( act );
 
@@ -5388,7 +5388,7 @@ void KPrView::updateStyleList()
             QString name = "paragstyle_" + style->name();
             KToggleAction* act = new KToggleAction( (*it),
                                      shortCuts[name], this, SLOT( slotStyleSelected() ),
-                                     actionCollection(), name.utf8() );
+                                     actionCollection(), name.toUtf8() );
             act->setGroup( "styleList" );
             act->setExclusiveGroup( "styleListAction" );
             act->setToolTip( i18n( "Apply a paragraph style" ) );
@@ -6048,7 +6048,7 @@ void KPrView::autoSpellCheck()
 
 void KPrView::insertFile(  )
 {
-    KFileDialog fd( QString::null, QString::null, this, 0, TRUE );
+    KFileDialog fd( QString::null, QString::null, this, 0, true );
     QStringList filter;
     filter<<"application/x-kpresenter";
     filter<<"application/vnd.oasis.opendocument.presentation";

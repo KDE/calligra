@@ -254,7 +254,7 @@ KPrDocument::KPrDocument( QWidget *parentWidget, const char *widgetName, QObject
 
     objStartY = 0;
     _presPen = QPen( red, 3, SolidLine );
-    ignoreSticky = TRUE;
+    ignoreSticky = true;
 
     m_gridColor=Qt::black;
 
@@ -1389,7 +1389,7 @@ void KPrDocument::loadOasisPresentationCustomSlideShow( QDomNode &settingsDoc )
     for ( QDomNode element = settingsDoc.firstChild(); !element.isNull(); element = element.nextSibling() )
     {
         QDomElement e = element.toElement();
-        QCString tagName = e.tagName().latin1();
+        QCString tagName = e.tagName().toLatin1();
         //kDebug()<<" tagName :"<<tagName<<endl;
         if ( tagName == "show" && e.namespaceURI() == KoXmlNS::presentation )
         {
@@ -1556,7 +1556,7 @@ bool KPrDocument::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyles,
     QTime dt;
     dt.start();
     m_loadingInfo = new KPrLoadingInfo;
-    ignoreSticky = FALSE;
+    ignoreSticky = false;
     emit sigProgress( 0 );
 
     lastObj = -1;
@@ -1759,7 +1759,7 @@ bool KPrDocument::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyles,
     if (!settings.isNull() && _clean /*don't load settings when we copy/paste a page*/)
         loadOasisPresentationSettings( settings );
 
-    ignoreSticky = TRUE;
+    ignoreSticky = true;
     kDebug()<<" _clean :"<<_clean<<endl;
     if(_clean)
     {
@@ -2119,7 +2119,7 @@ int KPrDocument::createPresentationAnimation(const QDomElement& element, int ord
     for ( QDomNode n = element.firstChild(); !n.isNull(); n = n.nextSibling() )
     {
         QDomElement e = n.toElement();
-        QCString tagName = e.tagName().latin1();
+        QCString tagName = e.tagName().toLatin1();
         if ( ! tagName.isEmpty() ) // only tags that open
         {
             const bool isPresentationNS = e.namespaceURI() == KoXmlNS::presentation;
@@ -2186,7 +2186,7 @@ bool KPrDocument::loadXML( QIODevice * dev, const QDomDocument& doc )
     dt.start();
     m_loadingInfo = new KPrLoadingInfo( true );
 
-    ignoreSticky = FALSE;
+    ignoreSticky = false;
     bool b=false;
     QDomElement docelem = doc.documentElement();
     const int syntaxVersion = docelem.attribute( "syntaxVersion" ).toInt();
@@ -2231,7 +2231,7 @@ bool KPrDocument::loadXML( QIODevice * dev, const QDomDocument& doc )
                             << "  Line: " << errorLine << " Column: " << errorColumn << endl
                             << "  Message: " << errorMsg << endl;
             setErrorMessage( i18n( "parsing error in the main document (converted from an old KPresenter format) at line %1, column %2\nError message: %3" )
-                             .arg( errorLine ).arg( errorColumn ).arg( i18n ( errorMsg.utf8() ) ) );
+                             .arg( errorLine ).arg( errorColumn ).arg( i18n ( errorMsg.toUtf8() ) ) );
             return false;
         }
         b = loadXML( newdoc );
@@ -2239,7 +2239,7 @@ bool KPrDocument::loadXML( QIODevice * dev, const QDomDocument& doc )
     else
         b = loadXML( doc );
 
-    ignoreSticky = TRUE;
+    ignoreSticky = true;
 
     if(_clean)
     {
@@ -2603,7 +2603,7 @@ bool KPrDocument::loadXML( const QDomDocument &doc )
             }
         } else if(elem.tagName()=="PRESSLIDES") {
             if(elem.hasAttribute("value") && elem.attribute("value").toInt()==0)
-                allSlides = TRUE;
+                allSlides = true;
         } else if ( elem.tagName()=="DEFAULTCUSTOMSLIDESHOWNAME" ) {
             if(elem.hasAttribute("name") )
                 m_presentationName=elem.attribute( "name" );
@@ -3952,7 +3952,7 @@ void KPrDocument::pastePage( const QMimeSource * data, int pgnum )
     KUrl::List lst;
     if ( KURLDrag::decode( data, lst ) && !lst.isEmpty() )
     {
-        insertNewPage(i18n("Paste Slide"),  pgnum, IP_BEFORE, FALSE, lst.first().path() );
+        insertNewPage(i18n("Paste Slide"),  pgnum, IP_BEFORE, false, lst.first().path() );
         //selectPage( pgnum, true /* should be part of the file ? */ );
     }
 }

@@ -42,7 +42,7 @@ public:
     virtual QString getTypeString() const { return i18n("Embedded Object"); }
 
     virtual void draw( QPainter *_painter, KoTextZoomHandler *_zoomhandler,
-                       int pageNum, SelectionMode selectionMode, bool drawContour = FALSE );
+                       int pageNum, SelectionMode selectionMode, bool drawContour = false );
 
     void activate( QWidget *_widget );
     void deactivate();
@@ -60,7 +60,7 @@ protected:
 
     void updateChildGeometry();
     virtual void paint( QPainter *_painter,KoTextZoomHandler*_zoomHandler,
-                        int /* pageNum */, bool drawingShadow, bool drawContour = FALSE );
+                        int /* pageNum */, bool drawingShadow, bool drawContour = false );
 
     bool _enableDrawing;
     KPrChild *child;

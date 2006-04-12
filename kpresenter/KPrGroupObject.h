@@ -73,7 +73,7 @@ public:
     virtual void loadOasisGroupObject( KPrDocument *doc, KPrPage * newpage, QDomNode &element, KoOasisContext & context, KPrLoadingInfo *info);
 
     virtual void draw( QPainter *_painter, KoTextZoomHandler *_zoomhandler,
-                       int pageNum, SelectionMode selectionMode, bool drawContour = FALSE );
+                       int pageNum, SelectionMode selectionMode, bool drawContour = false );
 
     void addObjects( KPrObject * obj );
 

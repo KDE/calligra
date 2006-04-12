@@ -61,10 +61,10 @@ bool KoPointArray::putPoints( int index, int nPoints, double firstx, double firs
     va_list ap;
     if ( index + nPoints > (int)size() ) {  // extend array
         if ( !resize(index + nPoints) )
-            return FALSE;
+            return false;
     }
     if ( nPoints <= 0 )
-        return TRUE;
+        return true;
     setPoint( index, firstx, firsty );      // set first point
     int i = index + 1;
     double x, y;
@@ -76,7 +76,7 @@ bool KoPointArray::putPoints( int index, int nPoints, double firstx, double firs
         setPoint( i++, x, y );
     }
     va_end( ap );
-    return TRUE;
+    return true;
 }
 
 void split(const double *p, double *l, double *r)

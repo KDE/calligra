@@ -73,7 +73,7 @@ KPrInsertHelpLineDia::KPrInsertHelpLineDia( QWidget *parent, const KoRect & _pag
     setCaption( i18n("Add New Help Line") );
     KVBox *page = makeVBoxMainWidget();
     QButtonGroup *group = new QButtonGroup( 1, QGroupBox::Horizontal,i18n("Orientation"), page );
-    group->setRadioButtonExclusive( TRUE );
+    group->setRadioButtonExclusive( true );
     group->layout();
     m_rbHoriz = new QRadioButton( i18n("Horizontal"), group );
     m_rbVert = new QRadioButton( i18n("Vertical"), group );

@@ -266,7 +266,7 @@ void KPrThumbBar::setCurrentPage( int pg )
         if ( it->text().toInt() - 1 == pg ) {
             blockSignals( true );
             setCurrentItem( it );
-            setSelected( it, FALSE ); // to avoid the blue "selected"-mark
+            setSelected( it, false ); // to avoid the blue "selected"-mark
             ensureItemVisible(it);
             refreshItems();
             blockSignals( false );
@@ -284,7 +284,7 @@ QRect KPrThumbBar::tip(const QPoint &pos, QString &title)
     int pagenr =  item->index();
     title = m_doc->pageList().at(pagenr)->pageTitle();
 
-    QRect r = item->pixmapRect(FALSE);
+    QRect r = item->pixmapRect(false);
     r = QRect(contentsToViewport(QPoint(r.x(), r.y())), QSize(r.width(), r.height()));
     return r;
 }

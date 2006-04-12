@@ -240,7 +240,7 @@ public:
 
     // the main drawing method.
     virtual void draw( QPainter *_painter, KoTextZoomHandler*_zoomHandler,
-                       int /*pageNum*/, SelectionMode selectionMode, bool drawContour = FALSE );
+                       int /*pageNum*/, SelectionMode selectionMode, bool drawContour = false );
 
     /**
      * @brief Check if point lies in rect of object
@@ -421,7 +421,7 @@ public:
     virtual double load(const QDomElement &element);
     virtual void loadOasis(const QDomElement &element, KoOasisContext & context, KPrLoadingInfo *info);
     virtual void draw( QPainter *_painter, KoTextZoomHandler*_zoomHandler,
-                       int pageNum, SelectionMode selectionMode, bool drawContour = FALSE );
+                       int pageNum, SelectionMode selectionMode, bool drawContour = false );
     virtual void saveOasisStrokeElement( KoGenStyles& mainStyles, KoGenStyle &styleobjectauto ) const;
     QString saveOasisStrokeStyle( KoGenStyles& mainStyles ) const;
 
@@ -472,7 +472,7 @@ protected:
      * This method isn't pure virtual because some objects implement draw() directly.
      */
     virtual void paint( QPainter* /* painter */, KoTextZoomHandler* /* zoomHandler */,
-                        int /* pageNum */, bool drawingShadow, bool /* drawContour */ =  FALSE );
+                        int /* pageNum */, bool drawingShadow, bool /* drawContour */ =  false );
     KoPen pen;
 };
 
@@ -522,7 +522,7 @@ public:
     virtual double load(const QDomElement &element);
     virtual void loadOasis(const QDomElement &element, KoOasisContext & context, KPrLoadingInfo *info);
     virtual void draw( QPainter *_painter, KoTextZoomHandler*_zoomHandler,
-                       int pageNum, SelectionMode selectionMode, bool drawContour = FALSE );
+                       int pageNum, SelectionMode selectionMode, bool drawContour = false );
 
     virtual void flip(bool horizontal );
 

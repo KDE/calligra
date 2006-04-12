@@ -47,7 +47,7 @@ KPrImportStyleDia::~KPrImportStyleDia()
 
 void KPrImportStyleDia::loadFile()
 {
-    KFileDialog fd( QString::null, QString::null, 0, 0, TRUE );
+    KFileDialog fd( QString::null, QString::null, 0, 0, true );
     QStringList lst = "application/x-kpresenter";
 #if 0 //For the future
     lst << "application/vnd.oasis.opendocument.presentation";
