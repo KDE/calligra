@@ -24,12 +24,11 @@
 #include "KWDocument.h"
 //Added by qt3to4:
 #include <Q3ValueList>
-#include <Q3CString>
 
 KWOasisSaver::KWOasisSaver( KWDocument* doc )
     : m_doc( doc )
 {
-    const Q3CString mimeType = selectionMimeType();
+    const QByteArray mimeType = selectionMimeType();
     m_store = KoStore::createStore( &m_buffer, KoStore::Write, mimeType );
     Q_ASSERT( m_store );
     Q_ASSERT( !m_store->bad() );

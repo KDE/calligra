@@ -19,10 +19,8 @@
 
 #include <dcopobject.h>
 #include "KWordMailMergeDatabaseIface.h"
-//Added by qt3to4:
-#include <Q3CString>
 
-KWordMailMergeDatabaseIface::KWordMailMergeDatabaseIface(const Q3CString &name)
+KWordMailMergeDatabaseIface::KWordMailMergeDatabaseIface(const DCOPCString &name)
     :DCOPObject(name)
 {
 }

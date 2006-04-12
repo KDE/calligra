@@ -88,7 +88,6 @@
 #include <qtimer.h>
 #include <qbuffer.h>
 //Added by qt3to4:
-#include <Q3CString>
 #include <Q3ValueList>
 #include <Q3PtrList>
 #include <QPixmap>
@@ -2998,7 +2997,7 @@ Q3DragObject* KWDocument::dragSelectedPrivate( QWidget *parent, const Q3ValueLis
 {
     // We'll create a store (ZIP format) in memory
     QBuffer buffer;
-    Q3CString mimeType = KWOasisSaver::selectionMimeType();
+    QByteArray mimeType = KWOasisSaver::selectionMimeType();
     KoStore* store = KoStore::createStore( &buffer, KoStore::Write, mimeType );
     Q_ASSERT( store );
     Q_ASSERT( !store->bad() );
