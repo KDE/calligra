@@ -99,15 +99,14 @@ void XMLHandler::toMacro(QDomElement element)
 
 QDomElement XMLHandler::toXML()
 {
-	/*
-	QDomElement dom = new QDomElement();
+	QDomDocument document;
+	QDomElement macroelem = document.createElement("macro");
 	QValueList<Action::Ptr> children = d->macro->children();
-	QValueList<Action::Ptr>::Iterator childIt = children.begin();
-	for(;childIt != children.end(); childIt++) {
-		QDomElement domChild = new QDomElement();
-		domChild = childIt;
+	QValueList<Action::Ptr>::Iterator childit = children.begin();
+	for(;childit != children.end(); childit++) {
+		QDomElement actionelem = document.createElement("action");
+		macroelem.appendChild(actionelem);
 	}
-	*/
-	return QDomElement();
+	return macroelem;
 }
 

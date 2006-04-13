@@ -110,6 +110,9 @@ namespace KoMacro {
 			*/
 			void connectSignal(const QObject* sender, const char* signal);
 
+			QDomElement toXML();
+			//bool toMacro(QDomElement element);
+
 		public slots:
 
 			/**

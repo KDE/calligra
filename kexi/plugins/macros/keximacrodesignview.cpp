@@ -82,7 +82,7 @@ class KexiMacroDesignView::Private
 		* The \a KoMacro::Manager instance used to access the
 		* Macro Framework.
 		*/
-		::KoMacro::Macro::Ptr const macro;
+		::KoMacro::Macro::Ptr macro;
 
 		/**
 		* The \a KexiMacroTableView used to display the actions
@@ -363,9 +363,12 @@ tristate KexiMacroDesignView::storeData(bool /*dontAsk*/)
 	kexipluginsdbg << "KexiMacroDesignView::storeData(): " << parentDialog()->partItem()->name() << " [" << parentDialog()->id() << "]" << endl;
 
 	QDomDocument domdoc("macros");
-	QDomElement macroelem = domdoc.createElement("macro");
+	QDomElement macroelem = d->macro->toXML();
 	domdoc.appendChild(macroelem);
 
+	/*
+	QDomElement macroelem = domdoc.createElement("macro");
+	domdoc.appendChild(macroelem);
 	for(KexiTableViewData::Iterator it = d->tabledata->iterator(); it.current(); ++it) {
 		KexiTableItem* item = it.current();
 		if(! item->at(0).isNull()) {
@@ -378,6 +381,8 @@ tristate KexiMacroDesignView::storeData(bool /*dontAsk*/)
 			}
 		}
 	}
+	QString xml = domdoc.toString();
+	*/
 
 	QString xml = domdoc.toString();
 	kdDebug() << QString("KexiMacroDesignView::storeData\n%1").arg(xml) << endl;

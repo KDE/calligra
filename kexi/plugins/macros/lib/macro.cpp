@@ -21,6 +21,7 @@
 #include "manager.h"
 #include "context.h"
 #include "variable.h"
+#include "xmlhandler.h"
 
 #include "metaproxy.h"
 
@@ -50,6 +51,18 @@ namespace KoMacro {
 			* @a Macro instance.
 			*/
 			QValueList<Action::Ptr> actionlist;
+
+			XMLHandler* xmlhandler;
+
+			Private()
+				: xmlhandler(0)
+			{
+			}
+
+			~Private()
+			{
+				delete xmlhandler;
+			}
 
 	};
 
@@ -84,7 +97,6 @@ Macro::Macro(Manager* const manager, const QDomElement& element)
 Macro::~Macro()
 {
 	//kdDebug() << "Macro::~Macro()" << endl;
-
 	// destroy the private d-pointer instance.
 	delete d;
 }
@@ -126,6 +138,14 @@ void Macro::connectSignal(const QObject* sender, const char* signal)
 			 this,SLOT(activate(QValueList< KSharedPtr<Variable> >)) );
 
 	//TODO d->proxies.append( metaproxy );
+}
+
+QDomElement Macro::toXML()
+{
+	if(! d->xmlhandler) {
+		d->xmlhandler = new XMLHandler(this);
+	}
+	return d->xmlhandler->toXML();
 }
 
 void Macro::activate()

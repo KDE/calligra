@@ -17,12 +17,7 @@
 
 #include "keximacrotextview.h"
 
-//#include <qlayout.h>
-//#include <qsplitter.h>
-//#include <qtimer.h>
-//#include <qdatetime.h>
 #include <qdom.h>
-#include <qstylesheet.h>
 #include <ktextedit.h>
 #include <kdebug.h>
 
@@ -68,6 +63,7 @@ KexiMacroTextView::KexiMacroTextView(KexiMainWindow *mainwin, QWidget *parent, :
 {
 	QHBoxLayout* layout = new QHBoxLayout(this);
 	d->editor = new KTextEdit(this);
+	d->editor->setTextFormat(Qt::PlainText);
 	layout->addWidget(d->editor);
 
 	loadData();
@@ -90,6 +86,9 @@ tristate KexiMacroTextView::beforeSwitchTo(int mode, bool& dontstore)
 tristate KexiMacroTextView::afterSwitchFrom(int mode)
 {
 	kexipluginsdbg << "KexiMacroTextView::afterSwitchFrom mode=" << mode << endl;
+	if(mode > 0) { // reload if we switched from another mode
+		loadData();
+	}
 	return true;
 }
 
@@ -125,7 +124,7 @@ bool KexiMacroTextView::loadData()
 	*/
 
 	kdDebug() << QString("KexiMacroTextView::loadData()\n%1").arg(data) << endl;
-	d->editor->setText( QStyleSheet::escape(data) );
+	d->editor->setText(data);
 	return true;
 }
 
