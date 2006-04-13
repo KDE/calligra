@@ -38,7 +38,7 @@ class KexiMacroTextView::Private
 		* The \a KoMacro::Manager instance used to access the
 		* Macro Framework.
 		*/
-		::KoMacro::Macro::Ptr const macro;
+		::KoMacro::Macro::Ptr macro;
 
 		/**
 		* The Editor used to display and edit the XML text.
@@ -66,8 +66,6 @@ KexiMacroTextView::KexiMacroTextView(KexiMainWindow *mainwin, QWidget *parent, :
 	d->editor->setTextFormat(Qt::PlainText);
 	layout->addWidget(d->editor);
 
-	loadData();
-
 	connect(d->editor, SIGNAL(textChanged()), this, SLOT(editorChanged()));
 }
 
@@ -86,9 +84,7 @@ tristate KexiMacroTextView::beforeSwitchTo(int mode, bool& dontstore)
 tristate KexiMacroTextView::afterSwitchFrom(int mode)
 {
 	kexipluginsdbg << "KexiMacroTextView::afterSwitchFrom mode=" << mode << endl;
-	if(mode > 0) { // reload if we switched from another mode
-		loadData();
-	}
+	loadData(); // reload if we switched from another mode
 	return true;
 }
 
@@ -105,26 +101,11 @@ bool KexiMacroTextView::loadData()
 		return false;
 	}
 
-	/*
-	QString errmsg;
-	int errline;
-	int errcol;
-
-	QDomDocument domdoc;
-	bool parsed = domdoc.setContent(data, false, &errmsg, &errline, &errcol);
-
-	if(! parsed) {
-		kexipluginsdbg << "KexiMacroTextView::loadData() XML parsing error line: " << errline << " col: " << errcol << " message: " << errmsg << endl;
-		return false;
-	}
-
-	QString xml = domdoc.toString();
-	kdDebug() << QString("KexiMacroTextView::loadData()\n%1").arg(xml) << endl;
-	d->editor->setText(xml);
-	*/
-
 	kdDebug() << QString("KexiMacroTextView::loadData()\n%1").arg(data) << endl;
+	disconnect(d->editor, SIGNAL(textChanged()), this, SLOT(editorChanged()));
 	d->editor->setText(data);
+	setDirty(false);
+	connect(d->editor, SIGNAL(textChanged()), this, SLOT(editorChanged()));
 	return true;
 }
 

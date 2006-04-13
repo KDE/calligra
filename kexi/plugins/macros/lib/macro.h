@@ -29,7 +29,9 @@ class QDomElement;
 
 namespace KoMacro {
 
+	// Forward declarations.
 	class Manager;
+	class XMLHandler;
 
 	/**
 	* The Macro class implements all the action-handling.
@@ -110,8 +112,13 @@ namespace KoMacro {
 			*/
 			void connectSignal(const QObject* sender, const char* signal);
 
-			QDomElement toXML();
-			//bool toMacro(QDomElement element);
+			/**
+			* \return the \a XMLHandler instance for this \a Macro
+			* instance. This method always returns a valid
+			* \a XMLHandler instance. So, it's not needed to
+			* check for a NULL return-value.
+			*/
+			XMLHandler* xmlHandler();
 
 		public slots:
 

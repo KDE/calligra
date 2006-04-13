@@ -140,12 +140,12 @@ void Macro::connectSignal(const QObject* sender, const char* signal)
 	//TODO d->proxies.append( metaproxy );
 }
 
-QDomElement Macro::toXML()
+XMLHandler* Macro::xmlHandler()
 {
 	if(! d->xmlhandler) {
 		d->xmlhandler = new XMLHandler(this);
 	}
-	return d->xmlhandler->toXML();
+	return d->xmlhandler;
 }
 
 void Macro::activate()

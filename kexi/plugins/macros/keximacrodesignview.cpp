@@ -38,6 +38,7 @@
 #include <koproperty/property.h>
 
 #include "lib/macro.h"
+#include "lib/xmlhandler.h"
 
 //! constants used to name columns instead of hardcoding indices
 #define COLUMN_ID_NAME 0
@@ -136,8 +137,6 @@ KexiMacroDesignView::~KexiMacroDesignView()
 void KexiMacroDesignView::initTable()
 {
 	d->tabledata = new KexiTableViewData();
-	//d->tabledata->setReadOnly(true); // set read-only
-	//d->tabledata->setValidator(); // set the value-validator
 	d->tabledata->setSorting(-1); // disable sorting
 
 	KexiTableViewColumn* actioncol = new KexiTableViewColumn(
@@ -154,10 +153,10 @@ void KexiMacroDesignView::initTable()
 	);
 	d->tabledata->addColumn(actioncol);
 	QValueVector<QString> items;
-	items.append("");
+	items.append(""); // empty means no action
 	//items.append(i18n("Application"));
 	items.append(i18n("Open"));
-	items.append(i18n("Close"));
+	//items.append(i18n("Close"));
 	items.append(i18n("Execute"));
 	//items.append(i18n("Messagebox"));
 	//items.append(i18n("Inputbox"));
@@ -219,9 +218,14 @@ void KexiMacroDesignView::initProperties()
 
 void KexiMacroDesignView::updateProperties(int type)
 {
-	Q_UNUSED(type);
+	KoProperty::Set* set = propertySet();
+	if(! set) {
+		propertySetSwitched();
+		return;
+	}
+
+	switch(type) {
 /*
-	switch(nr) {
 		case 1: { // Application
 			QStringList actionname, actiontext;
 			const KActionPtrList& actionlist = parentDialog()->mainWin()->actionCollection()->actions();
@@ -231,20 +235,20 @@ void KexiMacroDesignView::updateProperties(int type)
 				actiontext.append( (*it)->text().replace("&","") );
 			}
 			KoProperty::Property::ListData* proplist = new KoProperty::Property::ListData(actionname, actiontext);
-			KoProperty::Property* prop = new KoProperty::Property(
-				"action", // name
-				proplist, // ListData
-				"", // value
-				i18n("Action"), // caption
-				QString::null, // description
-				KoProperty::List // type
-			);
+			KoProperty::Property* prop = new KoProperty::Property("action",proplist,"",i18n("Action"),QString::null,KoProperty::List);
 			d->properties->addProperty(prop);
 		} break;
-		case 2: { // Open Object
+*/
+		case 1: { // Open Object
+
+			KoProperty::Property* prop = new KoProperty::Property("this:classString", i18n("Open"));
+			prop->setVisible(false);
+			set->addProperty(prop);
+
 			KexiPart::PartInfoList* parts = Kexi::partManager().partInfoList();
 			//KexiProject* project = parentDialog()->mainWin()->project();
 			//if(project && project->isConnected())
+
 			QStringList objectnames, objecttexts;
 			for(KexiPart::PartInfoListIterator it(*parts); it.current(); ++it) {
 				KexiPart::Info* info = it.current();
@@ -253,35 +257,51 @@ void KexiMacroDesignView::updateProperties(int type)
 					objecttexts << info->groupName();
 				}
 			}
-			KoProperty::Property::ListData* proplist = new KoProperty::Property::ListData(objectnames, objecttexts);
 			KoProperty::Property* objprop = new KoProperty::Property(
 				"object", // name
-				proplist, // ListData
+				objectnames, objecttexts, // ListData
 				( objectnames.count() > 0 ? objectnames[0] : QVariant() ), // value
 				i18n("Object"), // caption
 				QString::null, // description
 				KoProperty::List // type
 			);
-			d->properties->addProperty(objprop);
+			set->addProperty(objprop);
+
+			QStringList viewnames, viewtexts;
+			viewnames << "data" << "design" << "text";
+			viewtexts << "Data View" << "Design View" << "Text View";
+			KoProperty::Property* viewprop = new KoProperty::Property(
+				"view", // name
+				viewnames, viewtexts, // ListData
+				( viewnames.count() > 0 ? viewnames[0] : QVariant() ), // value
+				i18n("View"), // caption
+				QString::null, // description
+				KoProperty::List // type
+			);
+			set->addProperty(viewprop);
+
 			KoProperty::Property* nameprop = new KoProperty::Property(
 				"name", // name
 				"", // value
 				i18n("Name"), // caption
 				QString::null, // description
-				KoProperty::Auto // type
+				KoProperty::String // type
 			);
-			d->properties->addProperty(nameprop);
+			set->addProperty(nameprop);
+
 		} break;
-		case 3: { // Close Object
+		/*
+		case 2: { // Execute
 		} break;
-		case 4: { // Execute
-		} break;
+		*/
 		default: {
+			d->propertyset->removeCurrentPropertySet();
 		} break;
 	}
-	connect(d->properties, SIGNAL(propertyChanged(KoProperty::Set&, KoProperty::Property&)),
+
+	connect(d->propertyset, SIGNAL(propertyChanged(KoProperty::Set&, KoProperty::Property&)),
 		this, SLOT(propertyChanged(KoProperty::Set&, KoProperty::Property&)));
-*/
+
 	propertySetSwitched();
 }
 
@@ -362,10 +382,6 @@ tristate KexiMacroDesignView::storeData(bool /*dontAsk*/)
 {
 	kexipluginsdbg << "KexiMacroDesignView::storeData(): " << parentDialog()->partItem()->name() << " [" << parentDialog()->id() << "]" << endl;
 
-	QDomDocument domdoc("macros");
-	QDomElement macroelem = d->macro->toXML();
-	domdoc.appendChild(macroelem);
-
 	/*
 	QDomElement macroelem = domdoc.createElement("macro");
 	domdoc.appendChild(macroelem);
@@ -384,6 +400,9 @@ tristate KexiMacroDesignView::storeData(bool /*dontAsk*/)
 	QString xml = domdoc.toString();
 	*/
 
+	QDomDocument domdoc("macros");
+	QDomElement macroelem = d->macro->xmlHandler()->toXML();
+	domdoc.appendChild(macroelem);
 	QString xml = domdoc.toString();
 	kdDebug() << QString("KexiMacroDesignView::storeData\n%1").arg(xml) << endl;
 	return storeDataBlock(xml);
@@ -402,22 +421,22 @@ void KexiMacroDesignView::itemSelected(KexiTableItem*)
 void KexiMacroDesignView::beforeCellChanged(KexiTableItem* item, int colnum, QVariant& newvalue, KexiDB::ResultInfo* result)
 {
 	Q_UNUSED(item);
-	Q_UNUSED(colnum);
-	Q_UNUSED(newvalue);
+	//Q_UNUSED(colnum);
 	Q_UNUSED(result);
 	kdDebug() << "KexiMacroDesignView::beforeCellChanged colnum=" << colnum << " newvalue=" << newvalue.toString() << endl;
 
-	if(! propertySet()) {
-		KoProperty::Set *set = new KoProperty::Set(d->propertyset, "typename");
-		KoProperty::Property* prop = new KoProperty::Property("this:classString", "blaaaa");
-		prop->setVisible(false);
-		set->addProperty(prop);
-
-		int row = d->tableview->currentRow();
-		d->propertyset->insert(row, set, true);
+	bool ok;
+	int type = newvalue.toInt(&ok);
+	if(! ok) { // invalid property-number
+		return;
 	}
 
-	updateProperties( newvalue.toInt() );
+	if(! propertySet()) {
+		KoProperty::Set *set = new KoProperty::Set(d->propertyset, "typename");
+		d->propertyset->insert(d->tableview->currentRow(), set, true);
+	}
+
+	updateProperties(type);
 	setDirty();
 }
 

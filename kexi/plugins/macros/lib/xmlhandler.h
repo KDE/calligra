@@ -31,7 +31,7 @@ class QDomElement;
 
 namespace KoMacro {
 
-	class XMLHandler {
+	class KOMACRO_EXPORT XMLHandler {
 		public:
 			/**
 			* Constructor to init a @a XMLHandler .
@@ -51,7 +51,7 @@ namespace KoMacro {
 			* @param element The @a QDomElement within
 			* the @a Macro.
 			*/
-			void toMacro(QDomElement element);
+			void fromXML(const QDomElement& element);
 
 
 			/**

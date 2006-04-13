@@ -157,6 +157,11 @@ MetaObject::Ptr Function::receiverObject()
 	return d->metaobject;
 }
 
+void Function::setReceiverObject(MetaObject::Ptr metaobject)
+{
+	d->metaobject = metaobject;
+}
+
 Variable::Ptr Function::returnValue() const
 {
 	return d->returnvalue;

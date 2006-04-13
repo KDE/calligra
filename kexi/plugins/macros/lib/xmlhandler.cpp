@@ -85,7 +85,7 @@ XMLHandler::~XMLHandler()
 	delete d;
 }
 
-void XMLHandler::toMacro(QDomElement element)
+void XMLHandler::fromXML(const QDomElement& element)
 {
 	Q_UNUSED(element);
 	/*

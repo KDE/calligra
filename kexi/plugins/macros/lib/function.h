@@ -98,7 +98,14 @@ namespace KoMacro {
 			* is no receiver object defined.
 			*/
 			MetaObject::Ptr receiverObject();
+
+			/**
+			* Set the receiver object to \p metaobject .
+			*/
+			void setReceiverObject(MetaObject::Ptr metaobject);
+
 			//MetaMethod::Ptr receiverMethod();
+			//void setReceiverMethod(MetaMethod::Ptr);
 
 		public slots:
 
