@@ -141,6 +141,7 @@ TODO: In Memory database/tables: how to load an sqlite file to be entirely fit i
    clever solution: "You could set the cache size as big as your database file (via pragma). 
    This should load all (used) data into memory. This is probably not a good solution 
    if your application does not run for a longer time. "
+TODO: add autovacuum support on SQLite db creation?
 </SQLITE>
 
 <RENAME_PROPOSALS>
@@ -756,7 +757,6 @@ MDB Migration:
    http://www.agata.org.br/us/index.php?file=thanks.php
 
 AUTOFIELD:
-- for data mode do not display (unbounded) text
 - copy/paste doesn't preserve caption text (maybe caption should be copied 
   to from QueryColumnInfo to a property)
 
@@ -770,6 +770,7 @@ CSV Import TODO:
 - switch from dialog to wizard; add filedlg widget as the 1st page
 - add better detection for CSV data with \t delimiters (needed for pasting from spreadsheets)
 - add option for storing import settings
+- always test using e.g. this file: http://cvs.sourceforge.net/viewcvs.py/*checkout*/wcuniverse/priv/units/units.csv
 
 CSV Export TODO:
 - add "Include row count as first column - include row number in the first 
@@ -817,17 +818,17 @@ TODO:
 TODO: entering table/query name by hand doesn't work in 'form data source' combo
 
 TODO:
-- add --readonly option
-
-TODO:
 - if you place e.g. a label in a container like a tabwidget and doubleclick it to edit the content, 
   the label jumps around. ccpasteur said he fixed it last year ;)
 - only change bg color of tab widget, not its outer area; fix changing tabs bg color
 
-HOT TODO:
-- ask for password when .kexis or .kexic file has no password defined
-- "save password" flag is not properly saved in .kexis or .kexic files
-
 Import
 - error "BLOB/TEXT column 'isbn' used in key specification without a key length"
   when importing books.mdb into a mysql db
+
+Forms:
+- after setting "auto" tab order, we need to close and open the form to get tab stops to work properly
+
+TODO: 
+- use KLineEdit::displayText() to get partially filled date or time values like 20__-__-__;
+  then use this for checking data validity (?)

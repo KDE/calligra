@@ -25,6 +25,7 @@
 #include "sqlitedriver.h"
 #include "sqliteconnection.h"
 #include "sqliteconnection_p.h"
+#include "sqliteadmin.h"
 
 #include <kdebug.h>
 //Added by qt3to4:
@@ -55,7 +56,11 @@ SQLiteDriver::SQLiteDriver( QObject *parent, const char *name, const QStringList
 {
 	d->isFileDriver = true;
 	d->isDBOpenedAfterCreate = true;
-	d->features = SingleTransactions | CursorForward;
+	d->features = SingleTransactions | CursorForward
+#ifndef SQLITE2
+		| CompactingDatabaseSupported;
+#endif
+	;
 	
 	//special method for autoincrement definition
 	beh->SPECIAL_AUTO_INCREMENT_DEF = true;
@@ -141,6 +146,15 @@ QString SQLiteDriver::drv_escapeIdentifier( const QString& str) const
 Q3CString SQLiteDriver::drv_escapeIdentifier( const Q3CString& str) const
 {
 	return Q3CString(str).replace( '"', "\"\"" );
+}
+
+AdminTools* SQLiteDriver::drv_createAdminTools() const
+{
+#ifdef SQLITE2
+	return new AdminTools(); //empty impl.
+#else
+	return new SQLiteAdminTools();
+#endif
 }
 
 #include "sqlitedriver.moc"

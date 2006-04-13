@@ -45,18 +45,37 @@ static int execSql(sqlite3 *db, const char *zSql){
   return sqlite3_finalize(pStmt);
 }
 
+/* (jstaniek) */
+extern int g_verbose_vacuum;
+
 /*
 ** Execute zSql on database db. The statement returns exactly
 ** one column. Execute this as SQL on the same database.
+**
+** (js: extension): if count > 0, "VACUUM: X%" string will 
+**                  be printed to stdout, so user (a human or calling application) 
+**                  can know the overall progress of the operation.
+**                  and the program will wait for a key press (followed by RETURN);
+**                  'q' key aborts the execution and any other key allows to proceed.
 */
-static int execExecSql(sqlite3 *db, const char *zSql){
+static int execExecSql(sqlite3 *db, const char *zSql, int count){
   sqlite3_stmt *pStmt;
-  int rc;
+  int rc, i;
+  char ch;
 
   rc = sqlite3_prepare(db, zSql, -1, &pStmt, 0);
   if( rc!=SQLITE_OK ) return rc;
 
-  while( SQLITE_ROW==sqlite3_step(pStmt) ){
+  for( i=0; SQLITE_ROW==sqlite3_step(pStmt); i++ ){
+    if (g_verbose_vacuum!=0 && count>0) {
+      fprintf(stdout, "VACUUM: %d%%\n", 100*(i+1)/count);
+      fflush(stdout);
+      fscanf(stdin, "%c", &ch);
+      if ('q'==ch) { /* quit */
+        sqlite3_finalize(pStmt);
+        return SQLITE_ABORT;
+      }
+    }
     rc = execSql(db, sqlite3_column_text(pStmt, 0));
     if( rc!=SQLITE_OK ){
       sqlite3_finalize(pStmt);
@@ -92,6 +111,8 @@ void sqlite3Vacuum(Parse *pParse, Token *pTableName){
 */
 int sqlite3RunVacuum(char **pzErrMsg, sqlite3 *db){
   int rc = SQLITE_OK;     /* Return code from service routines */
+  sqlite3_stmt *pStmt = 0;
+  int tables_count = 0;
 #if !defined(SQLITE_OMIT_VACUUM) || SQLITE_OMIT_VACUUM
   const char *zFilename;  /* full pathname of the database file */
   int nFilename;          /* number of characters  in zFilename[] */
@@ -176,9 +197,16 @@ int sqlite3RunVacuum(char **pzErrMsg, sqlite3 *db){
       "  FROM sqlite_master WHERE sql LIKE 'CREATE UNIQUE INDEX %'"
       "UNION ALL "
       "SELECT 'CREATE VIEW vacuum_db.' || substr(sql,13,100000000) "
-      "  FROM sqlite_master WHERE type='view'"
+      "  FROM sqlite_master WHERE type='view'", 0
   );
   if( rc!=SQLITE_OK ) goto end_of_vacuum;
+
+  /* (js) get # of tables so we can output progress.
+  */
+  rc = sqlite3_prepare(db, "SELECT count(name) FROM sqlite_master "
+      "WHERE type = 'table';", -1, &pStmt, 0);
+  if( rc!=SQLITE_OK || SQLITE_ROW!=sqlite3_step(pStmt)) goto end_of_vacuum;
+  tables_count = atoi( sqlite3_column_text(pStmt, 0) );
 
   /* Loop through the tables in the main database. For each, do
   ** an "INSERT INTO vacuum_db.xxx SELECT * FROM xxx;" to copy
@@ -188,7 +216,7 @@ int sqlite3RunVacuum(char **pzErrMsg, sqlite3 *db){
       "SELECT 'INSERT INTO vacuum_db.' || quote(name) "
       "|| ' SELECT * FROM ' || quote(name) || ';'"
       "FROM sqlite_master "
-      "WHERE type = 'table';"
+      "WHERE type = 'table';", tables_count
   );
   if( rc!=SQLITE_OK ) goto end_of_vacuum;
 
@@ -199,10 +227,9 @@ int sqlite3RunVacuum(char **pzErrMsg, sqlite3 *db){
   */
   rc = execExecSql(db, 
       "SELECT 'CREATE TRIGGER  vacuum_db.' || substr(sql, 16, 1000000) "
-      "FROM sqlite_master WHERE type='trigger'"
+      "FROM sqlite_master WHERE type='trigger'", 0
   );
   if( rc!=SQLITE_OK ) goto end_of_vacuum;
-
 
   /* At this point, unless the main db was completely empty, there is now a
   ** transaction open on the vacuum database, but not on the main database.

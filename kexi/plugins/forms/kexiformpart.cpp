@@ -391,7 +391,9 @@ void KexiFormPart::slotAutoTabStopsSet(KFormDesigner::Form *form, bool set)
 {
 	Q_UNUSED( form );
 
-	(*KFormDesigner::FormManager::self()->propertySet())["autoTabStops"].setValue(QVariant(set, 4));
+	KoProperty::Property &p = (*KFormDesigner::FormManager::self()->propertySet())["autoTabStops"];
+	if (!p.isNull())
+		p.setValue(QVariant(set, 4));
 }
 
 void KexiFormPart::slotAssignAction()

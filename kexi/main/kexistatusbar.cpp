@@ -49,11 +49,9 @@ KexiStatusBar::KexiStatusBar(QWidget *parent, const char *name)
 	m_msgID = id++;
 	insertItem("", m_msgID, 1, true);
 
-#ifdef KEXI_FUTURE_FEATURES
 	m_readOnlyID = id++;
-	insertFixedItem(futureI18n("Read only"), m_readOnlyID, true);
+	insertFixedItem(i18n("Read only"), m_readOnlyID, true);
 	setReadOnlyFlag(false);
-#endif
 
 // @todo
 //	connect(PartController::getInstance(), SIGNAL(activePartChanged(KParts::Part*)),
@@ -141,11 +139,7 @@ void KexiStatusBar::setCursorPosition(int line, int col)
 
 void KexiStatusBar::setReadOnlyFlag(bool readOnly)
 {
-#ifdef KEXI_FUTURE_FEATURES
-	changeItem(readOnly ? futureI18n("Read only") : QString::null, m_readOnlyID);
-#else
-	Q_UNUSED(readOnly);
-#endif
+	changeItem(readOnly ? i18n("Read only") : QString::null, m_readOnlyID);
 }
 
 #include "kexistatusbar.moc"

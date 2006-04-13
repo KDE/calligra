@@ -22,6 +22,7 @@
 #include "kexidbfieldlist.h"
 
 #include <qregexp.h>
+#include <kdebug.h>
 
 #include <api/variant.h>
 

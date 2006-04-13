@@ -53,7 +53,6 @@
 /* defined in a .pro file or 'KEXI_OPTIONS' env. variable */
 #else
 # define KEXI_SERVER_SUPPORT
-/* # define KEXI_NO_MIGRATION */
 #endif
 
 /* Might want to add GUI defines here if widgets are to be

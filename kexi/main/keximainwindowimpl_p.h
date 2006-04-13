@@ -383,12 +383,13 @@ void updatePropEditorDockWidthInfo() {
 		//! data menu
 		KAction *action_data_save_row;
 		KAction *action_data_cancel_row_changes;
+		KAction *action_data_execute;
 
 		//! format menu
 		KAction *action_format_font;
 
 		//! tools menu
-		KAction *action_tools_data_migration;
+		KAction *action_tools_data_migration, *action_tools_compact_database;
 		KActionMenu *action_tools_scripts;
 
 		//! window menu

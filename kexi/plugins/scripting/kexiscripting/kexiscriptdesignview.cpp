@@ -86,7 +86,7 @@ KexiScriptDesignView::KexiScriptDesignView(KexiMainWindow *mainWin, QWidget *par
     d->statusbrowser->installEventFilter(this);
     splitter->setResizeMode(d->statusbrowser, QSplitter::KeepSize);
 
-    plugSharedAction( "script_execute", this, SLOT(execute()) );
+    plugSharedAction( "data_execute", this, SLOT(execute()) );
     if(KexiEditor::isAdvancedEditor()) // the configeditor is only in advanced mode avaiable.
         plugSharedAction( "script_config_editor", d->editor, SLOT(slotConfigureEditor()) );
 

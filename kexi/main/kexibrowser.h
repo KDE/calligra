@@ -97,7 +97,9 @@ class KEXIMAIN_EXPORT KexiBrowser : public QWidget
 
 		void renameItem( KexiPart::Item *item, const QString& _newName, bool &succes );
 
-		void selectionChanged(KexiPart::Item* item);
+		void selectionChanged( KexiPart::Item* item );
+
+		void executeItem( KexiPart::Item* );
 
 		void exportItemAsDataTable( KexiPart::Item* );
 
@@ -124,6 +126,7 @@ class KEXIMAIN_EXPORT KexiBrowser : public QWidget
 		void slotCopy();
 		void slotPaste();
 		void slotRename();
+		void slotExecuteObject();
 		void slotExportAsDataTable();
 		void slotPrintItem();
 		void slotPageSetupForItem();
@@ -140,11 +143,13 @@ class KEXIMAIN_EXPORT KexiBrowser : public QWidget
 		KAction *m_deleteAction, *m_renameAction, 
 			*m_newObjectAction, // *m_newObjectToolbarAction,
 			*m_openAction, *m_designAction, *m_editTextAction,
+			*m_executeAction,
 			*m_dataExportAction, *m_printAction, *m_pageSetupAction;
 		KActionMenu* m_exportActionMenu;
 		KMenu* m_newObjectPopup;
 		int m_itemPopupTitle_id, m_partPopupTitle_id, 
 			m_openAction_id, m_designAction_id, m_editTextAction_id,
+			m_executeAction_id,
 			m_exportActionMenu_id, m_exportActionMenu_id_sep,
 			m_printAction_id, m_pageSetupAction_id, m_pageSetupAction_id_sep;
 

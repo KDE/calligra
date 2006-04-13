@@ -105,8 +105,8 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow, public KexiGUI
 
 		/*! Reimplemented */
 		virtual void readProperties(KConfig *config);
-    	virtual void saveProperties(KConfig *config);
-    	virtual void saveGlobalProperties( KConfig* sessionConfig );
+		virtual void saveProperties(KConfig *config);
+		virtual void saveGlobalProperties( KConfig* sessionConfig );
 
 	public slots:
 		/*! Inherited from KMdiMainFrm: we need to do some tasks before child is closed.
@@ -385,6 +385,7 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow, public KexiGUI
 		void slotConfigureKeys();
 		void slotConfigureToolbars();
 		void slotToolsProjectMigration();
+		void slotToolsCompactDatabase();
 
 		/// TMP: Display a dialog to download db examples from internet
 		void slotGetNewStuff();
@@ -430,6 +431,10 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow, public KexiGUI
 
 		//! Receives "selectionChanged()" signal from navigator to update some actions.
 		void slotPartItemSelectedInNavigator(KexiPart::Item* item);
+
+		/*! Receives the "executeItem()" signal from navigator to execute the as
+		parameter passed \a KexiPart::Item */
+		void executeItem(KexiPart::Item* item);
 
 		//! Shows "exports as data table" dialog for \a item.
 		void exportItemAsDataTable(KexiPart::Item* item);

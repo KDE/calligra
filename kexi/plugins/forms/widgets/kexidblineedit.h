@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2005 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2004-2005 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2004-2006 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -21,15 +21,23 @@
 #ifndef KexiDBLineEdit_H
 #define KexiDBLineEdit_H
 
-#include "kexiformdataiteminterface.h"
-#include "kexidbtextwidgetinterface.h"
-#include <klineedit.h>
 //Added by qt3to4:
 #include <QEvent>
 #include <Q3CString>
 #include <QPaintEvent>
+#include <klineedit.h>
 
-//! Line edit widget for Kexi forms
+#include "kexiformdataiteminterface.h"
+#include "kexidbtextwidgetinterface.h"
+#include <widget/utils/kexidatetimeformatter.h>
+
+class KexiDateFormatter;
+class KexiTimeFormatter;
+
+//! @short Line edit widget for Kexi forms
+/*! Handles many data types. User input is validated by using validators 
+ and/or input masks.
+*/
 class KEXIFORMUTILS_EXPORT KexiDBLineEdit :
 	public KLineEdit,
 	protected KexiDBTextWidgetInterface,
@@ -58,6 +66,9 @@ class KEXIFORMUTILS_EXPORT KexiDBLineEdit :
 		//! Used for checking if a given constraint within table or form is met.
 		virtual bool valueIsEmpty();
 
+		/*! \return true if the value is valid */
+		virtual bool valueIsValid();
+
 		/*! \return 'readOnly' flag for this widget. */
 		virtual bool isReadOnly() const;
 
@@ -81,6 +92,20 @@ class KEXIFORMUTILS_EXPORT KexiDBLineEdit :
 		virtual void paintEvent ( QPaintEvent * );
 		virtual void setValueInternal(const QVariant& add, bool removeOld);
 		virtual bool event ( QEvent * );
+
+		inline KexiDateFormatter* dateFormatter() {
+			return m_dateFormatter ? m_dateFormatter : m_dateFormatter = new KexiDateFormatter();
+		}
+
+		inline KexiTimeFormatter* timeFormatter() {
+			return m_timeFormatter ? m_timeFormatter : m_timeFormatter = new KexiTimeFormatter();
+		}
+
+		//! Used for date and date/time types
+		KexiDateFormatter* m_dateFormatter;
+
+		//! Used for time and date/time types
+		KexiTimeFormatter* m_timeFormatter;
 };
 
 #endif

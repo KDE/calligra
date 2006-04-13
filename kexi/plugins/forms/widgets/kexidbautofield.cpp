@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2005 Cedric Pasteur <cedric.pasteur@free.fr>
    Copyright (C) 2005 Christian Nitschkowski <segfault_ii@web.de>
-   Copyright (C) 2005 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2005-2006 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -29,15 +29,12 @@
 #include <klocale.h>
 
 #include "kexidbcheckbox.h"
-#include "kexidbdateedit.h"
-#include "kexidbdatetimeedit.h"
-#include "kexidbdoublespinbox.h"
 #include "kexidbimagebox.h"
-#include "kexidbintspinbox.h"
+//#include "kexidbintspinbox.h"
+//#include "kexidbdoublespinbox.h"
 #include "kexidblabel.h"
 #include "kexidblineedit.h"
 #include "kexidbtextedit.h"
-#include "kexidbtimeedit.h"
 #include "kexipushbutton.h"
 #include "kexidbform.h"
 
@@ -108,11 +105,20 @@ KexiDBAutoField::setWidgetType(WidgetType type)
 void
 KexiDBAutoField::createEditor()
 {
-	if(m_editor)
-		delete m_editor;
+	if(m_editor) {
+		QWidget *e = m_editor;
+		m_editor = 0;
+		delete e;
+	}
 
 	switch( m_widgetType ) {
-		case Text: case Enum: //! \todo using kexitableview combo box editor when it's ready
+		case Text:
+		case Enum: //! @todo using kexitableview combo box editor when it's ready
+		case Double: //! @todo setup validator
+		case Integer: //! @todo setup validator
+		case Date:
+		case Time:
+		case DateTime:
 			m_editor = new KexiDBLineEdit( this );
 			connect( m_editor, SIGNAL( textChanged( const QString& ) ), this, SLOT( slotValueChanged() ) );
 			break;
@@ -125,7 +131,7 @@ KexiDBAutoField::createEditor()
 			connect( m_editor, SIGNAL(stateChanged()), this, SLOT(slotValueChanged()));
 			break;
 		//! \todo create db-aware spinboxes, date, time edit, etc
-		case Date:
+/*		case Date:
 			m_editor = new KexiDBDateEdit(QDate::currentDate(), this);
 			connect( m_editor, SIGNAL( dateChanged(const QDate&) ), this, SLOT( slotValueChanged() ) );
 			break;
@@ -136,15 +142,15 @@ KexiDBAutoField::createEditor()
 		case Time:
 			m_editor = new KexiDBTimeEdit(QTime::currentTime(), this);
 			connect( m_editor, SIGNAL( valueChanged( const QTime& ) ), this, SLOT( slotValueChanged() ) );
-			break;
-		case Double:
+			break;*/
+/*		case Double:
 			m_editor = new KexiDBDoubleSpinBox(this);
 			connect( m_editor, SIGNAL( valueChanged(double) ), this, SLOT( slotValueChanged() ) );
 			break;
 		case Integer:
 			m_editor = new KexiDBIntSpinBox(this);
 			connect( m_editor, SIGNAL(valueChanged(int)), this, SLOT( slotValueChanged() ) );
-			break;
+			break;*/
 		case Image:
 			m_editor = new KexiDBImageBox(m_designMode, this);
 			connect( m_editor, SIGNAL(valueChanged()), this, SLOT( slotValueChanged() ) );
@@ -168,6 +174,7 @@ KexiDBAutoField::createEditor()
 		else {//if focusPolicy is not changed at top level, inherit it from editor
 			QWidget::setFocusPolicy(m_editor->focusPolicy());
 		}
+		setFocusProxy(m_editor); //ok?
 //		KFormDesigner::installRecursiveEventFilter(m_editor, this);
 	}
 
@@ -179,8 +186,9 @@ KexiDBAutoField::setLabelPosition(LabelPosition position)
 {
 	m_lblPosition = position;
 	if(m_layout) {
-		delete m_layout;
+		QBoxLayout *lyr = m_layout;
 		m_layout = 0;
+		delete lyr;
 	}
 
 	if(m_editor)
@@ -291,6 +299,16 @@ KexiDBAutoField::valueIsEmpty()
 	KexiFormDataItemInterface *iface = dynamic_cast<KexiFormDataItemInterface*>(m_editor);
 	if(iface)
 		return iface->valueIsEmpty();
+	return true;
+}
+
+bool
+KexiDBAutoField::valueIsValid()
+{
+	KexiFormDataItemInterface *iface = dynamic_cast<KexiFormDataItemInterface*>(m_editor);
+	if(iface)
+		return iface->valueIsValid();
+
 	return true;
 }
 
@@ -437,7 +455,10 @@ KexiDBAutoField::changeText(const QString &text, bool beautify)
 	QString realText;
 	bool unbound = false;
 	if (m_autoCaption && (m_widgetType==Auto || dataSource().isEmpty())) {
-		realText = QString::fromLatin1(name())+" "+i18n("Unbound Auto Field", " (unbound)");
+		if (m_designMode)
+			realText = QString::fromLatin1(name())+" "+i18n("Unbound Auto Field", " (unbound)");
+		else
+			realText = QString::null;
 		unbound = true;
 	}
 	else {

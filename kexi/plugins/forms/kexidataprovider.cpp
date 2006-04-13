@@ -38,6 +38,7 @@ KexiFormDataProvider::KexiFormDataProvider()
  : KexiDataItemChangesListener()
  , m_mainWidget(0)
  , m_duplicatedItems(0)
+ , m_disableFillDuplicatedDataItems(false)
 {
 }
 
@@ -61,7 +62,8 @@ void KexiFormDataProvider::setMainDataSourceWidget(QWidget* mainWidget)
 	QObject *obj;
 	Q3Dict<char> tmpSources;
 	for ( ; (obj = it.current()) != 0; ++it ) {
-		if (!dynamic_cast<KexiFormDataItemInterface*>(obj))
+		KexiFormDataItemInterface* const formDataItem = dynamic_cast<KexiFormDataItemInterface*>(obj);
+		if (!formDataItem)
 			continue;
 #if 0 //! @todo reenable when subform is moved to KexiDBForm
 		KexiDBForm *dbForm = KexiUtils::findParent<KexiDBForm>(obj, "KexiDBForm"); //form's surface...
@@ -72,12 +74,12 @@ void KexiFormDataProvider::setMainDataSourceWidget(QWidget* mainWidget)
 		if (KexiUtils::findParent<KexiDBForm>(obj, "KexiDBSubForm"))
 			continue;
 #endif
-		QString dataSource( dynamic_cast<KexiFormDataItemInterface*>(obj)->dataSource().lower() );
+		QString dataSource( formDataItem->dataSource().lower() );
 		if (dataSource.isEmpty())
 			continue;
 		kexipluginsdbg << obj->name() << endl;
-		m_dataItems.append( dynamic_cast<KexiFormDataItemInterface*>(obj) );
-		dynamic_cast<KexiFormDataItemInterface*>(obj)->installListener( this );
+		m_dataItems.append( formDataItem );
+		formDataItem->installListener( this );
 		tmpSources.replace( dataSource, (char*)1 );
 	}
 	delete l;
@@ -102,6 +104,8 @@ void KexiFormDataProvider::fillDataItems(KexiTableItem& row)
 void KexiFormDataProvider::fillDuplicatedDataItems(
 	KexiFormDataItemInterface* item, const QVariant& value)
 {
+	if (m_disableFillDuplicatedDataItems)
+		return;
 	if (!m_duplicatedItems) {
 		//build (once) a set of duplicated data items (having the same fields assigned)
 		//so we can later check if an item is duplicated with a cost of o(1)
@@ -230,6 +234,8 @@ void KexiFormDataProvider::invalidateDataSources( const Q3ValueList<uint>& inval
 	//	 << m_dataItems.count() << "," << query->fieldCount() << ")" << endl;
 	//}
 	//i = 0;
+	m_disableFillDuplicatedDataItems = true; // temporary disable fillDuplicatedDataItems()
+	                                         // because setColumnInfo() can activate it
 	foreach_list(Q3PtrListIterator<KexiFormDataItemInterface>, it, m_dataItems) {
 		KexiFormDataItemInterface * item = it.current();
 		uint fieldNumber = m_fieldNumbersForDataItems[ item ];
@@ -243,6 +249,7 @@ void KexiFormDataProvider::invalidateDataSources( const Q3ValueList<uint>& inval
 		}
 		tmpUsedDataSources.replace( it.current()->dataSource().lower(), (char*)1 );
 	}
+	m_disableFillDuplicatedDataItems = false;
 	m_usedDataSources.clear();
 	foreach_list(Q3DictIterator<char>, it, tmpUsedDataSources) {
 		m_usedDataSources += it.currentKey();

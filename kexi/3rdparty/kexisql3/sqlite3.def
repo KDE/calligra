@@ -90,3 +90,4 @@ sqlite3_value_text16le
 sqlite3_value_type
 sqlite3_vmprintf
 sqlite3_is_readonly
+sqlite_set_verbose_vacuum

@@ -25,6 +25,7 @@
 #include "drivermanager.h"
 #include "connection.h"
 #include "connectiondata.h"
+#include "admin.h"
 
 #include <qfileinfo.h>
 //Added by qt3to4:
@@ -151,6 +152,18 @@ int Driver::features() const
 
 bool Driver::transactionsSupported() const
 { return d->features & (SingleTransactions | MultipleTransactions); }
+
+AdminTools& Driver::adminTools() const
+{
+	if (!d->adminTools)
+		d->adminTools = drv_createAdminTools();
+	return *d->adminTools;
+}
+
+AdminTools* Driver::drv_createAdminTools() const
+{
+	return new AdminTools(); //empty impl.
+}
 
 QString Driver::sqlTypeName(int id_t, int /*p*/) const
 {

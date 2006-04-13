@@ -33,7 +33,9 @@
 //Added by qt3to4:
 #include <Q3CString>
 #include <kgenericfactory.h>
+
 #include "connection.h"
+#include "admin.h"
 
 class KService;
 
@@ -198,6 +200,9 @@ class DriverPrivate
 		 -it's done automatically. */
 		QMap<Q3CString,QString> propertyCaptions;
 
+		/*! Provides a number of database administration tools for the driver. */
+		AdminTools *adminTools;
+
 	/*! Kexi SQL keywords that need to be escaped if used as an identifier (e.g.
 	    for a table or column name).  These keywords will be escaped by the
 	    front-end, even if they are not recognised by the backend to provide
@@ -240,6 +245,13 @@ class DriverPrivate
 #define BLOB_ESCAPING_TYPE_USE_X     0 //!< escaping like X'abcd0', used by sqlite
 #define BLOB_ESCAPING_TYPE_USE_0x    1 //!< escaping like 0xabcd0, used by mysql
 #define BLOB_ESCAPING_TYPE_USE_OCTAL 2 //!< escaping like 'abcd\\000', used by pgsql
+
+class KEXI_DB_EXPORT AdminTools::Private
+{
+	public:
+		Private();
+		~Private();
+};
 
 }
 

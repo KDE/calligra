@@ -32,11 +32,11 @@
  use KexiDB::versionMajor() and KexiDB::versionMinor() instead to get real version.
 */
 #define KEXIDB_VERSION_MAJOR 1
-#define KEXIDB_VERSION_MINOR 7
+#define KEXIDB_VERSION_MINOR 8
 
 
 /*! \namespace KexiDB 
-\brief Kexi database backend drivers.
+\brief High-level database connectivity library with database backend drivers
 
 \section Framework
 DriverManager 

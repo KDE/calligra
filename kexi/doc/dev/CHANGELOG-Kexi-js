@@ -13,7 +13,93 @@ Use CCMAIL:###-done@bugs.kde.org
 TableView
 - boolean editor: only accept clicking on the [x] rect
 
-~~~~~~~~~~~~~~~~ 1.0 rc1 (with KOffice 1.5) ~~~~~~~~~~~~~~~~
+TODO:
+- inform Raphael about koffice.org/1.5/ url, give him the php code
+
+2006-04-12
+CSV Import
+- fixed problem with importing data with more than 100 columns (for default settings)
+1.0/2.0: ported
+- only the first 10KiB of data is loaded for the preview by default; can be adjusted 
+  by setting ImportExport/MaximumBytesForPreviewInImportDialog option in kexirc
+1.0/2.0: ported
+- display rows number on the top of the window
+2.0: ported
+
+2006-04-11
+Forms Designer
+- fixed prossible crash while clearing "data source" field name; 
+  now setting the autofield to unbound state works
+
+2006-04-10
+KexiDB
+- QuerySchema(TableSchema* tableSchema) ctor:
+  To avoid problems (e.g. with fields added outside of Kexi using ALTER TABLE) 
+  we do not use "all-tables query asterisk" (see QueryAsterisk) item 
+  but instead we add all the fields explicity. 
+0.9/1.0/2.0: ported
+- PostgreSQL driver: fixed crash when a new field has been added to existing 
+  table outside of Kexi
+0.9/1.0/2.0: ported
+Table Designer
+- More intrusive warning when altering table design
+1.0: ported (except the message)
+2.0: ported
+Forms Designer
+- fixed possible crash when switching to data view mode unbound autofield widgets
+- while in data mode, do not display "(unbound)" text for unbound autofield widgets
+
+2006-04-08
+KexiDB
+- use SQL-compliant TRUE and FALSE constants for PostgreSQL 
+  (1 and 0 are unsupported)
+0.9/1.0/2.0: ported
+
+2006-04-07
+Table View & Form View
+- "invalid data warning" tool tip improved and reused in Kexi forms
+- many fixes related to handling date, time and date/time values
+
+2006-04-05
+Form Designer
+- KexiDBDoubleSpinBox and KexiDBIntSpinBox replaced line edit with validator because
+  of problems with handling null data and signalling changes. 
+  (there's no backward compatibility problems as these two widgets were used internally 
+  in the AutoField data widget)
+- fixed saving data changes made within auto field widgets
+- fixed support for tab/backtab key within auto field widgets
+- fixed problem when sometimes form was not filled with data after change of the design
+1.0/2.0: ported
+
+2006-04-04
+CSV Import
+- possible crash fixed after switching character encoding
+1.0/2.0: ported
+Main Window
+- "Compact Database": now closing the current project is required; 
+  if there's no project is opened, user is asked for picking one
+Property Editor
+- possible crash fixed when bool editor's state is quickly switched
+1.0/2.0: ported
+
+2006-03-29
+Main Window
+- "Compact Database" admin action added
+KexiDB
+- API version increased to 1.8
+- "Compact Database" implemented for SQLite3 databases
+
+2006-03-28
+Startup
+- --readonly command line option added
+TableView
+- boolean editor: only accept clicking on the [x] rect
+1.0/2.0: ported
+
+TODO: merge trunk with revision 523723
+
+~~~~~~~~~~~~~~~~ 1.0 stable (with KOffice 1.5)  ~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~ 1.0 rc1 (with KOffice 1.5 rc1) ~~~~~~~~~~~~~~~~
 
 2006-03-20
 KexiDB

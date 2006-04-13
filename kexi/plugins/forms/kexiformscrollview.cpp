@@ -475,8 +475,11 @@ void KexiFormScrollView::cancelEditor()
 	if (!dynamic_cast<KexiFormDataItemInterface*>(m_editor))
 		return;
 
+	if (m_errorMessagePopup)
+		m_errorMessagePopup->close();
+
 	dynamic_cast<KexiFormDataItemInterface*>(m_editor)->undoChanges();
-	m_editor = 0;
+//not needed	m_editor = 0;
 }
 
 void KexiFormScrollView::updateAfterCancelRowEdit()

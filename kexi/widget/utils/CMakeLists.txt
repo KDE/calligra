@@ -11,7 +11,9 @@ set(kexiguiutils_LIB_SRCS
    kexigradientwidget.cpp 
    kexirecordmarker.cpp 
    kexidisplayutils.cpp 
-   kexiflowlayout.cpp )
+   kexiflowlayout.cpp
+   kexidatetimeformatter.cpp
+   kexiarrowtip.cpp )
 
 kde4_automoc(${kexiguiutils_LIB_SRCS})
 

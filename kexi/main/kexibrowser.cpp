@@ -170,6 +170,7 @@ KexiBrowser::KexiBrowser(KexiMainWindow *mainWin)
 	m_editTextAction->setWhatsThis(i18n("Opens selected object in the list in Text View"));
 	m_editTextAction->plug(m_itemPopup);
 	m_editTextAction_id = m_itemPopup->idAt(m_itemPopup->count()-1);
+
 	m_newObjectAction = new KAction("", "filenew", 0, this, SLOT(slotNewObject()), this, "new_object");
 	m_editTextAction->setToolTip(i18n("Open object in Text View"));
 	m_editTextAction->setWhatsThis(i18n("Opens selected object in the list in Text View"));
@@ -192,13 +193,20 @@ KexiBrowser::KexiBrowser(KexiMainWindow *mainWin)
 	buttons_flyr->add(m_deleteObjectToolButton);
 
 	m_itemPopup->insertSeparator();
+
 #ifdef KEXI_SHOW_UNIMPLEMENTED
 //todo	plugSharedAction("edit_cut", m_itemPopup);
 //todo	plugSharedAction("edit_copy", m_itemPopup);
 	m_itemPopup->insertSeparator();
 #endif
+
+	m_executeAction = new KAction(i18n("Execute"), "player_play", 0, this,
+		SLOT(slotExecuteObject()), this, "data_execute");
+	m_executeAction->plug(m_itemPopup);
+	m_executeAction_id = m_itemPopup->idAt(m_itemPopup->count()-1);
+
 	m_exportActionMenu = new KActionMenu(i18n("Export"));
-	m_dataExportAction = new KAction(i18n("Export->As Data &Table... ", "As Data &Table..."), 
+	m_dataExportAction = new KAction(i18n("Export->To File As Data &Table... ", "To &File As Data Table..."), 
 		"table", 0, this, SLOT(slotExportAsDataTable()), this, "exportAsDataTable");
 	m_dataExportAction->setWhatsThis(
 		i18n("Exports data from the currently selected table or query data to a file."));
@@ -370,11 +378,12 @@ KexiBrowser::slotSelectionChanged(Q3ListViewItem* i)
 	m_itemPopup->setItemVisible(m_openAction_id, m_openAction->isEnabled());
 	m_itemPopup->setItemVisible(m_designAction_id, m_designAction->isEnabled());
 	m_itemPopup->setItemVisible(m_editTextAction_id, part && m_editTextAction->isEnabled());
-	m_itemPopup->setItemVisible(m_exportActionMenu_id, gotitem && it->info()->isDataExportSuppored());
-	m_itemPopup->setItemVisible(m_exportActionMenu_id_sep, gotitem && it->info()->isDataExportSuppored());
-	m_itemPopup->setItemVisible(m_printAction_id, gotitem && it->info()->isPrintingSuppored());
-	m_itemPopup->setItemVisible(m_pageSetupAction_id, gotitem && it->info()->isPrintingSuppored());
-	m_itemPopup->setItemVisible(m_pageSetupAction_id_sep, gotitem && it->info()->isPrintingSuppored());
+	m_itemPopup->setItemVisible(m_executeAction_id, gotitem && it->info()->isExecuteSupported());
+	m_itemPopup->setItemVisible(m_exportActionMenu_id, gotitem && it->info()->isDataExportSupported());
+	m_itemPopup->setItemVisible(m_exportActionMenu_id_sep, gotitem && it->info()->isDataExportSupported());
+	m_itemPopup->setItemVisible(m_printAction_id, gotitem && it->info()->isPrintingSupported());
+	m_itemPopup->setItemVisible(m_pageSetupAction_id, gotitem && it->info()->isPrintingSupported());
+	m_itemPopup->setItemVisible(m_pageSetupAction_id_sep, gotitem && it->info()->isPrintingSupported());
 
 	if (m_prevSelectedPart != part) {
 		m_prevSelectedPart = part;
@@ -581,6 +590,13 @@ void KexiBrowser::slotNewObjectPopupAboutToShow()
 			}
 		}
 	}
+}
+
+void KexiBrowser::slotExecuteObject()
+{
+	KexiPart::Item* item = selectedPartItem();
+	if (item)
+		emit executeItem( item );
 }
 
 void KexiBrowser::slotExportAsDataTable()

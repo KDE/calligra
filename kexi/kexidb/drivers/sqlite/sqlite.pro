@@ -6,4 +6,5 @@ INCLUDEPATH += $(KEXI)/3rdparty/kexisql3/src
 
 TARGET		= kexidb_sqlite3driver$$KDELIBDEBUG
 
-SOURCES += sqlitekeywords.cpp
+SOURCES += sqlitekeywords.cpp \
+sqlitevacuum.cpp

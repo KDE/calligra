@@ -71,51 +71,19 @@ KexiScriptPart::~KexiScriptPart()
 	delete d;
 }
 
-KAction* KexiScriptPart::action(const QString& scripturi, QObject*)
+bool KexiScriptPart::execute(KexiPart::Item* item)
 {
-	if(! m_mainWin) {
-		kWarning() << "KexiScriptPart::action(KUrl,QObject*) KexiMainWindow undefined." << endl;
-		return 0;
-	}
-
-	KexiProject* project = m_mainWin->project();
-	if(! project) {
-		kWarning() << "KexiScriptPart::action(KUrl,QObject*) No project loaded." << endl;
-		return 0;
-	}
-
-	KexiPart::ItemDict* itemdict = project->items( info() );
-	if(! itemdict) {
-		kWarning() << "KexiScriptPart::action(KUrl,QObject*) Project has no Scripts-items." << endl;
-		return 0;
-	}
-
-	if(scripturi.isEmpty()) {
-		kWarning() << "KexiScriptPart::action(KUrl,QObject*) Filename is empty." << endl;
-		return 0;
-	}
-
-	KexiPart::Item* item = 0;
-	for(KexiPart::ItemDictIterator it(*itemdict); it.current(); ++it) {
-		if(it.current()->name() == scripturi) {
-			item = it.current();
-			break;
-		}
-	}
-
 	if(! item) {
-		kWarning() << QString("KexiScriptPart::action(KUrl,QObject*) No such item: \"%1\"").arg(scripturi) << endl;
-		return 0;
+		kWarning() << "KexiScriptPart::execute: Invalid item." << endl;
+		return false;
 	}
-
-	//m_mainWin->openObject(item, Kexi::DesignViewMode, &map);
 
 	KexiDialogBase* dialog = new KexiDialogBase(m_mainWin);
 	dialog->setId( item->identifier() );
 	KexiScriptDesignView* view = dynamic_cast<KexiScriptDesignView*>( createView(dialog, dialog, *item, Kexi::DesignViewMode) );
 	if(! view) {
-		kWarning() << "KexiScriptPart::action(KUrl,QObject*) Failed to create a view." << endl;
-		return 0;
+		kWarning() << "KexiScriptPart::execute: Failed to create a view." << endl;
+		return false;
 	}
 
 	Kross::Api::ScriptAction* scriptaction = view->scriptAction();
@@ -141,7 +109,7 @@ KAction* KexiScriptPart::action(const QString& scripturi, QObject*)
 	}
 
 	view->deleteLater(); // not needed any longer.
-	return 0;
+	return true;
 }
 
 void KexiScriptPart::initPartActions()
@@ -188,7 +156,7 @@ void KexiScriptPart::initPartActions()
 
 void KexiScriptPart::initInstanceActions()
 {
-	createSharedAction(Kexi::DesignViewMode, i18n("Execute Script"), "exec", 0, "script_execute");
+	//createSharedAction(Kexi::DesignViewMode, i18n("Execute Script"), "player_play", 0, "data_execute");
 	createSharedAction(Kexi::DesignViewMode, i18n("Configure Editor..."), "configure", 0, "script_config_editor");
 }
 

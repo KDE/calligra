@@ -16,6 +16,7 @@ object.cpp \
 drivermanager.cpp \
 driver.cpp \
 driver_p.cpp \
+admin.cpp \
 connectiondata.cpp \
 connection.cpp \
 utils.cpp \
@@ -40,6 +41,7 @@ parser/sqlparser.cpp \
 parser/sqlscanner.cpp \
 expression.cpp \
 keywords.cpp \
-preparedstatement.cpp
+preparedstatement.cpp \
+alter.cpp
 
 #HEADERS =

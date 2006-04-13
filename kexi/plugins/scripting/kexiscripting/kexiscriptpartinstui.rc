@@ -1,33 +1,10 @@
 <!DOCTYPE kpartgui>
-<kpartgui name="kexiscriptpartinst" version="8">
-	
-<!--
-	<MenuBar>
-		<Menu name="edit" noMerge="1">
-			<Separator/>
-			<Action name="executescriptfile2"/>
-			<Action name="scripts"/>
-			<Separator/>
-			<Action name="script_execute"/>
-			<Action name="script_config_editor"/>
-			<Separator/>
-		</Menu>
-	</MenuBar>
-	
-	<MenuBar>
-		<Menu name="tools" noMerge="0">
-			<Separator/>
-			<Action name="executescriptfile"/>
-			<Action name="scripts"/>
-			<Separator/>
-		</Menu>
-	</MenuBar>
-//-->
+<kpartgui name="kexiscriptpartinst" version="14">
 
-	<ToolBar name="design" fullWidth="false" noMerge="0">
-		<text>Design</text>
-		<Action name="script_execute"/>
-		<Action name="script_config_editor"/>
-	</ToolBar>
-	
+	<MenuBar>
+		<Menu name="settings" noMerge="1">
+			<Action name="script_config_editor"/>
+		</Menu>
+	</MenuBar>
+
 </kpartgui>

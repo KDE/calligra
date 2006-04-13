@@ -7,6 +7,7 @@ system( bash kmoc )
 SOURCES = \
 sqliteconnection.cpp \
 sqlitedriver.cpp \
+sqliteadmin.cpp \
 sqlitecursor.cpp \
 sqlitepreparedstatement.cpp
 

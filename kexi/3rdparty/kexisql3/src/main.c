@@ -25,6 +25,12 @@
 */
 const int sqlite3one = 1;
 
+/* (jstaniek) used by sqlite_set_verbose_vacuum and in vacuum.c */
+int g_verbose_vacuum = 0;
+void sqlite_set_verbose_vacuum(int set){
+  g_verbose_vacuum=set;
+}
+
 /*
 ** Fill the InitData structure with an error message that indicates
 ** that the database is corrupt.

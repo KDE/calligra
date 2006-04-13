@@ -1,9 +1,10 @@
 <!DOCTYPE kpartgui>
-<kpartgui name="kexiscriptpart" version="4">
+<kpartgui name="kexiscriptpart" version="10">
 
-<!-- ToolBar name="design" fullWidth="false" noMerge="0">
-   <text>Design</text>
-   <Action name="script_execute"/>
-</ToolBar -->
+	<MenuBar>
+		<Menu name="settings" noMerge="1">
+			<Action name="script_config_editor"/>
+		</Menu>
+	</MenuBar>
 
 </kpartgui>

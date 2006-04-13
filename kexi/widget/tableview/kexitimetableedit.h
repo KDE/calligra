@@ -20,56 +20,8 @@
 #ifndef KEXITIMETABLEEDIT_H
 #define KEXITIMETABLEEDIT_H
 
-#include <qregexp.h>
-
 #include "kexiinputtableedit.h"
-
-//! @short Time formatter used by KexiTimeTableEdit and KexiDateTimeTableEdit
-//! Following time formats are allowed: HH:MM:SS (24h), HH:MM (24h), HH:MM AM/PM (12h)
-//! Separator MUST be ":"
-class KEXIDATATABLE_EXPORT KexiTimeFormatter
-{
-	public:
-		//! Creates new formatter with KDE setting for time
-		KexiTimeFormatter();
-
-		//! Creates new formatter with given settings
-//! @todo		KexiDateFormatter(... settings ...);
-
-		~KexiTimeFormatter();
-
-		//! converts string \a str to time using predefined settings
-		//! \return invalid time if the conversion is impossible
-		QTime stringToTime( const QString& str );
-
-		//! converts \a time to string using predefined settings
-		//! \return null string if \a time is invalid
-		QString timeToString( const QTime& time ) const;
-
-		//! \return Input mask generated using the formatter settings. 
-		//! Can be used in QLineEdit::setInputMask().
-		QString inputMask() const { return m_inputMask; }
-
-	protected:
-		//! Input mask generated using the formatter settings. Can be used in QLineEdit::setInputMask().
-		QString m_inputMask;
-
-//		//! Order of date sections
-//		QDateEdit::Order m_order;
-
-		//! 12 or 12h
-		bool m_24h;
-
-		bool m_hoursWithLeadingZero;
-
-		//! Time format used in timeToString(). Notation from KLocale::setTimeFormat() is used.
-		QString m_outputFormat;
-
-		//! Used in stringToTime() to convert string back to QTime
-		int m_hourpos, m_minpos, m_secpos, m_ampmpos;
-
-		QRegExp m_hmsRegExp, m_hmRegExp;
-};
+#include <widget/utils/kexidatetimeformatter.h>
 
 /*! @short Editor class for Time type.
  It is a replacement QTimeEdit due to usability problems: 

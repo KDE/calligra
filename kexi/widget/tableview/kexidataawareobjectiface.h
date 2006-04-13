@@ -33,6 +33,7 @@
 #include <Q3ValueList>
 
 #include <kdebug.h>
+#include <widget/utils/kexiarrowtip.h>
 #include "kexitableviewdata.h"
 
 class QObject;

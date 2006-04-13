@@ -646,7 +646,7 @@ void KexiDataAwareObjectInterface::setCursorPosition(int row, int col/*=-1*/, bo
 
 bool KexiDataAwareObjectInterface::acceptRowEdit()
 {
-	if (!m_rowEditing)
+	if (!m_rowEditing || /*sanity*/!m_data->rowEditBuffer())
 		return true;
 	if (m_inside_acceptEditor) {
 		m_internal_acceptsRowEditAfterCellAccepting = true;
@@ -873,44 +873,18 @@ bool KexiDataAwareObjectInterface::acceptEditor()
 					dynamic_cast<QWidget*>(this);
 			QWidget *edit = dynamic_cast<QWidget*>(m_editor);
 			if (par && edit) {
-//! @todo move this to a separate class
 //! @todo allow displaying user-defined warning
 //! @todo also use for other error messages
 				if (!m_errorMessagePopup) {
 //					m_errorMessagePopup->close();
-					m_errorMessagePopup = new QLabel(i18n("Error: %1").arg(m_editor->columnInfo()->field->typeName())+"?", 
-						dynamic_cast<QWidget*>(this), 0,
-					Qt::WStyle_Customize | Qt::WType_Popup | Qt::WStyle_NoBorder 
-					| Qt::WX11BypassWM | Qt::WDestructiveClose);
-					QPalette pal( QToolTip::palette() );
-					QColorGroup cg(pal.active());
-					cg.setColor(QColorGroup::Foreground, Qt::red);
-					pal.setActive(cg);
-					m_errorMessagePopup->setFocusPolicy(Qt::NoFocus);
-					m_errorMessagePopup->setPalette(pal);
-					m_errorMessagePopup->setMargin(2);
-					m_errorMessagePopup->setAutoMask( FALSE );
-					m_errorMessagePopup->setFrameStyle( Q3Frame::Plain | Q3Frame::Box );
-					m_errorMessagePopup->setLineWidth( 2 );
-					m_errorMessagePopup->setAlignment( Qt::AlignLeft | Qt::AlignTop );
-					m_errorMessagePopup->setIndent(0);
-					m_errorMessagePopup->polish();
-					m_errorMessagePopup->adjustSize();
+					m_errorMessagePopup = new KexiArrowTip(
+						i18n("Error: %1").arg(m_editor->columnInfo()->field->typeName())+"?", 
+						dynamic_cast<QWidget*>(this));
 					m_errorMessagePopup->move( 
-						par->mapToGlobal(edit->pos()) + 
-						QPoint(
-							(m_verticalHeader ? m_verticalHeader->width() : 0),
-							edit->height() + 5) );
+						par->mapToGlobal(edit->pos()) + QPoint(6, edit->height() + 0) );
 					m_errorMessagePopup->show();
 				}
 				m_editor->setFocus();
-/*
-QWhatsThis::display( m_editor->columnInfo()->field->typeName() + " ?", 
-					par->mapToGlobal(edit->pos()) 
-					+ QPoint(
-						(m_verticalHeader ? m_verticalHeader->width() : 0) + 10,
-						edit->height() + 5),	par );
-						*/
 			}
 		}
 		else if (m_editor->valueIsNull()) {//null value entered

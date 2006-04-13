@@ -118,9 +118,13 @@ Group: ImportExport
 # Only used when StoreOptionsForCSVExportDialog option is true.
 -AddColumnNamesForExportingCSVFiles [string] (default: true)
 
-# Maximum number of rows taht can be displayed in iport dialog. 
+# Maximum number of rows that can be displayed in the CSV import dialog. 
 # Used to decrease memory consumption.
 -MaximumRowsForPreviewInImportDialog [int] (default: 100)
+
+# Maximum number of bytes that can be loaded to preview the data in the CSV
+# import dialog. Used to decrease memory consumption and speed up the GUI.
+-MaximumBytesForPreviewInImportDialog [int] (default: 10240)
 
 Group: Recent Dirs
 # A list of recently displayed directories in file dialogs related to CSV 

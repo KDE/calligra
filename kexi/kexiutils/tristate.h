@@ -159,6 +159,15 @@ public:
 	friend inline bool operator!=(bool boolValue, tristate tsValue);
 	friend inline bool operator!=(tristate tsValue, bool boolValue);
 
+	/**
+	 * \return text representation of the value: "true", "false" or "cancelled".
+	 */
+	QString toString() const {
+		if (m_value==False)
+			return QString::fromLatin1("false");
+		return m_value==True ? QString::fromLatin1("true") : QString::fromLatin1("cancelled");
+	}
+
 private:
 	/**
 	 * @internal

@@ -40,7 +40,7 @@ class ODBCDriverPrivate;
  * This is the ODBC Driver for Kexi.
  * @author Matt Rogers <matt.rogers@kdemail.net>
  */
-class KEXI_DB_EXPORT ODBCDriver : public Driver
+class ODBCDriver : public Driver
 {
 	Q_OBJECT
 	KEXIDB_DRIVER
