@@ -106,6 +106,7 @@ bool KexiMacroTextView::loadData()
 		return false;
 	}
 
+	/*
 	QString errmsg;
 	int errline;
 	int errcol;
@@ -118,16 +119,12 @@ bool KexiMacroTextView::loadData()
 		return false;
 	}
 
-	QDomElement macroelem = domdoc.namedItem("macro").toElement();
-	if(macroelem.isNull()) {
-		kexipluginsdbg << "KexiMacroTextView::loadData(): macro domelement is null" << endl;
-		return false;
-	}
+	QString xml = domdoc.toString();
+	kdDebug() << QString("KexiMacroTextView::loadData()\n%1").arg(xml) << endl;
+	d->editor->setText(xml);
+	*/
 
-	//QString s = macroelem.attribute("myattr");
-
-	d->editor->setText( macroelem.text() );
-
+	d->editor->setText(data);
 	return true;
 }
 
@@ -156,17 +153,7 @@ KexiDB::SchemaData* KexiMacroTextView::storeNewData(const KexiDB::SchemaData& sd
 tristate KexiMacroTextView::storeData(bool /*dontAsk*/)
 {
 	kexipluginsdbg << "KexiMacroDesignView::storeData(): " << parentDialog()->partItem()->name() << " [" << parentDialog()->id() << "]" << endl;
-
-	QDomDocument domdoc("macro");
-	QDomElement macroelem = domdoc.createElement("macro");
-	domdoc.appendChild(macroelem);
-
-	//macroelem.setAttribute("myattr", s);
-
-	QDomText elemtext = domdoc.createTextNode( d->editor->text() );
-	macroelem.appendChild(elemtext);
-
-	return storeDataBlock( domdoc.toString() );
+	return storeDataBlock( d->editor->text() );
 }
 
 #include "keximacrotextview.moc"

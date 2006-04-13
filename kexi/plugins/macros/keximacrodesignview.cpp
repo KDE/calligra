@@ -17,13 +17,7 @@
 
 #include "keximacrodesignview.h"
 
-//#include <qlayout.h>
-//#include <qsplitter.h>
-//#include <qtimer.h>
-//#include <qdatetime.h>
 #include <qdom.h>
-//#include <qstylesheet.h>
-//#include <ktextbrowser.h>
 #include <kdebug.h>
 
 #include <kexidialogbase.h>
@@ -49,14 +43,28 @@
 #define COLUMN_ID_NAME 0
 #define COLUMN_ID_DESC 1
 
+/**
+ * The \a KexiTableView implementation to display a list of actions
+ * a \a Macro provides.
+ */
 class KexiMacroTableView : public KexiTableView
 {
 	public:
+		/**
+		* Constructor.
+		*
+		* \param data The \a KexiTableViewData data-modell which
+		* contains the data this \a KexiTableView should display.
+		* \param parent The parent widget.
+		*/
 		KexiMacroTableView(KexiTableViewData* data, QWidget* parent)
 			: KexiTableView(data, parent)
 		{
 		}
 
+		/**
+		* Destructor.
+		*/
 		virtual ~KexiMacroTableView()
 		{
 		}
@@ -76,8 +84,22 @@ class KexiMacroDesignView::Private
 		*/
 		::KoMacro::Macro::Ptr const macro;
 
+		/**
+		* The \a KexiMacroTableView used to display the actions
+		* a \a Macro has.
+		*/
 		KexiMacroTableView* tableview;
+
+		/**
+		* The \a KexiTableViewData data-model for the
+		* \a KexiMacroTableView .
+		*/
 		KexiTableViewData* tabledata;
+
+		/**
+		* The \a KexiDataAwarePropertySet is used to display
+		* properties an action provides in the propertyview.
+		*/
 		KexiDataAwarePropertySet* propertyset;
 
 		/**
@@ -125,7 +147,7 @@ void KexiMacroDesignView::initTable()
 		KexiDB::Field::NoOptions, // options
 		0, // length
 		0, // precision
-		QVariant(), // defaultValue
+		QVariant(), // default value
 		i18n("Action"), // caption
 		QString::null, // description
 		0 // width
@@ -133,10 +155,14 @@ void KexiMacroDesignView::initTable()
 	d->tabledata->addColumn(actioncol);
 	QValueVector<QString> items;
 	items.append("");
-	items.append(i18n("Application"));
+	//items.append(i18n("Application"));
 	items.append(i18n("Open"));
 	items.append(i18n("Close"));
 	items.append(i18n("Execute"));
+	//items.append(i18n("Messagebox"));
+	//items.append(i18n("Inputbox"));
+	//items.append(i18n("Function"));
+	//items.append(i18n("Errorhandler"));
 	actioncol->field()->setEnumHints(items);
 
 	d->tabledata->addColumn( new KexiTableViewColumn(
@@ -146,7 +172,7 @@ void KexiMacroDesignView::initTable()
 		KexiDB::Field::NoOptions, // options
 		0, // length
 		0, // precision
-		QVariant(), // defaultValue
+		QVariant(), // default value
 		i18n("Comment"), // caption
 		QString::null, // description
 		0 // width
@@ -193,6 +219,7 @@ void KexiMacroDesignView::initProperties()
 
 void KexiMacroDesignView::updateProperties(int type)
 {
+	Q_UNUSED(type);
 /*
 	switch(nr) {
 		case 1: { // Application
@@ -296,14 +323,15 @@ bool KexiMacroDesignView::loadData()
 		return false;
 	}
 
-	/*
-	QDomElement scriptelem = domdoc.namedItem("script").toElement();
-	if(scriptelem.isNull()) {
-		kexipluginsdbg << "KexiMacroDesignView::loadData(): script domelement is null" << endl;
-		return false;
+	kdDebug() << QString("KexiMacroDesignView::loadData()\n%1").arg(domdoc.toString()) << endl;
+	QDomElement macroelem = domdoc.namedItem("macro").toElement();
+	if(macroelem.isNull()) {
+		kexipluginsdbg << "KexiMacroDesignView::loadData(): macro domelement is null" << endl;
+		//return false;
 	}
-	QString interpretername = scriptelem.attribute("language");
-	*/
+	else {
+		//QString interpretername = scriptelem.attribute("language");
+	}
 
 	return true;
 }
@@ -334,17 +362,26 @@ tristate KexiMacroDesignView::storeData(bool /*dontAsk*/)
 {
 	kexipluginsdbg << "KexiMacroDesignView::storeData(): " << parentDialog()->partItem()->name() << " [" << parentDialog()->id() << "]" << endl;
 
-	QDomDocument domdoc("macro");
-	/*
-	QDomElement scriptelem = domdoc.createElement("script");
-	domdoc.appendChild(scriptelem);
-	scriptelem.setAttribute("language", language);
-	scriptelem.setAttribute(it.key(), it.data().toString());
-	QDomText scriptcode = domdoc.createTextNode(d->scriptaction->getCode());
-	scriptelem.appendChild(scriptcode);
-	*/
+	QDomDocument domdoc("macros");
+	QDomElement macroelem = domdoc.createElement("macro");
+	domdoc.appendChild(macroelem);
 
-	return storeDataBlock( domdoc.toString() );
+	for(KexiTableViewData::Iterator it = d->tabledata->iterator(); it.current(); ++it) {
+		KexiTableItem* item = it.current();
+		if(! item->at(0).isNull()) {
+			bool ok;
+			int actionindex = item->at(0).toInt(&ok);
+			if(ok) {
+				QString s = QString("action%1").arg(actionindex); //TODO
+				QDomElement elem = domdoc.createElement(s);
+				macroelem.appendChild(elem);
+			}
+		}
+	}
+
+	QString xml = domdoc.toString();
+	kdDebug() << QString("KexiMacroDesignView::storeData\n%1").arg(xml) << endl;
+	return storeDataBlock(xml);
 }
 
 void KexiMacroDesignView::execute()
