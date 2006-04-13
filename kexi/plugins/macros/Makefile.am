@@ -1,7 +1,10 @@
 include $(top_srcdir)/kexi/Makefile.global
 
 if include_kunittest
-  TESTSDIR = tests
+
+  # Unittest is disabled per default.
+  # TESTSDIR = tests
+
 endif
 
 SUBDIRS = lib $(TESTSDIR) .

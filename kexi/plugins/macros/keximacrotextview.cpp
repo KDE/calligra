@@ -22,7 +22,7 @@
 //#include <qtimer.h>
 //#include <qdatetime.h>
 #include <qdom.h>
-//#include <qstylesheet.h>
+#include <qstylesheet.h>
 #include <ktextedit.h>
 #include <kdebug.h>
 
@@ -124,7 +124,8 @@ bool KexiMacroTextView::loadData()
 	d->editor->setText(xml);
 	*/
 
-	d->editor->setText(data);
+	kdDebug() << QString("KexiMacroTextView::loadData()\n%1").arg(data) << endl;
+	d->editor->setText( QStyleSheet::escape(data) );
 	return true;
 }
 
