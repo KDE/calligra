@@ -83,7 +83,7 @@ AutoFillDeltaSequence::AutoFillDeltaSequence( AutoFillSequence *_first, AutoFill
         m_ok = false;
         return;
       }
-    m_sequence->at( i++ ) = d;
+    m_sequence->insert( i++, d );
     item2 = _next->getNext();
     item = _first->getNext();
   }
@@ -167,7 +167,7 @@ AutoFillSequenceItem::AutoFillSequenceItem( const QString &_str )
         shortMonth->append( i18n("Feb") );
         shortMonth->append( i18n("Mar") );
         shortMonth->append( i18n("Apr") );
-        shortMonth->append( i18n("May short", "May") );
+        shortMonth->append( i18nc("May short", "May") );
         shortMonth->append( i18n("Jun") );
         shortMonth->append( i18n("Jul") );
         shortMonth->append( i18n("Aug") );
@@ -874,14 +874,14 @@ bool Sheet::FillSequenceWithInterval(Q3PtrList<Cell>& _srcList,
 
 	if (cellValue.type() == QVariant::Double)
         	if (down)
-            		cellValue = cellValue.toDouble() + currentDiff.asDouble();
+            		cellValue = cellValue.toDouble() + currentDiff.toDouble();
           	else
-            		cellValue = cellValue.toDouble() -  currentDiff.asDouble();
+            		cellValue = cellValue.toDouble() -  currentDiff.toDouble();
 	else
 		if (down)
-			cellValue = cellValue.toInt() + currentDiff.asInt();
+			cellValue = cellValue.toInt() + currentDiff.toInt();
 		else
-			cellValue = cellValue.toInt() - currentDiff.asInt();
+			cellValue = cellValue.toInt() - currentDiff.toInt();
 
 	if ( type == AutoFillSequenceItem::TIME)
 	{
@@ -896,7 +896,7 @@ bool Sheet::FillSequenceWithInterval(Q3PtrList<Cell>& _srcList,
 		dest->setCellText( stringValue.asString() );
 	}
 	else
-        	dest->setCellText( cellValue.asString() );
+        	dest->setCellText( cellValue.toString() );
 
 	dest->copyFormat( src );
 
@@ -1150,7 +1150,7 @@ void Sheet::FillSequenceWithCopy(Q3PtrList<Cell>& _srcList,
       else
       {
 	QRegExp number("(\\d+)");
-	int pos =number.search(_srcList.at( s )->text());
+	int pos =number.indexIn(_srcList.at( s )->text());
 	if( pos!=-1 )
 	{
 	  QString tmp=number.cap(1);

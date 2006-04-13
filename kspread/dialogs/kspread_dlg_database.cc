@@ -278,44 +278,46 @@ DatabaseDialog::DatabaseDialog( View * parent, QRect const & rect, const char * 
   m_operatorValue_1 = new QLineEdit( optionsFrame, "m_operatorValue" );
   optionsFrameLayout->addWidget( m_operatorValue_1, 2, 2 );
 
-  m_columns_2 = new QComboBox( FALSE, optionsFrame, "m_columns_2" );
+  m_columns_2 = new QComboBox(optionsFrame);
+  m_columns_2->setEditable(false);
+  m_columns_2->setObjectName("m_columns_2");
   optionsFrameLayout->addWidget( m_columns_2, 3, 0 );
 
   m_operatorValue_3 = new QLineEdit( optionsFrame, "m_operatorValue_3" );
   optionsFrameLayout->addWidget( m_operatorValue_3, 4, 2 );
 
   m_operator_1 = new QComboBox( FALSE, optionsFrame, "m_operator_1" );
-  m_operator_1->insertItem( i18n( "equals" ) );
-  m_operator_1->insertItem( i18n( "not equal" ) );
-  m_operator_1->insertItem( i18n( "in" ) );
-  m_operator_1->insertItem( i18n( "not in" ) );
-  m_operator_1->insertItem( i18n( "like" ) );
-  m_operator_1->insertItem( i18n( "greater" ) );
-  m_operator_1->insertItem( i18n( "lesser" ) );
-  m_operator_1->insertItem( i18n( "greater or equal" ) );
-  m_operator_1->insertItem( i18n( "less or equal" ) );
+  m_operator_1->insertItem( 0, i18n( "equals" ) );
+  m_operator_1->insertItem( 1, i18n( "not equal" ) );
+  m_operator_1->insertItem( 2, i18n( "in" ) );
+  m_operator_1->insertItem( 3, i18n( "not in" ) );
+  m_operator_1->insertItem( 4, i18n( "like" ) );
+  m_operator_1->insertItem( 5, i18n( "greater" ) );
+  m_operator_1->insertItem( 6, i18n( "lesser" ) );
+  m_operator_1->insertItem( 7, i18n( "greater or equal" ) );
+  m_operator_1->insertItem( 8, i18n( "less or equal" ) );
 
   optionsFrameLayout->addWidget( m_operator_1, 2, 1 );
 
   m_operator_2 = new QComboBox( FALSE, optionsFrame, "m_operator_2" );
-  m_operator_2->insertItem( i18n( "equals" ) );
-  m_operator_2->insertItem( i18n( "not equal" ) );
-  m_operator_2->insertItem( i18n( "in" ) );
-  m_operator_2->insertItem( i18n( "not in" ) );
-  m_operator_2->insertItem( i18n( "like" ) );
-  m_operator_2->insertItem( i18n( "greater" ) );
-  m_operator_2->insertItem( i18n( "lesser" ) );
+  m_operator_2->insertItem( 0, i18n( "equals" ) );
+  m_operator_2->insertItem( 1, i18n( "not equal" ) );
+  m_operator_2->insertItem( 2, i18n( "in" ) );
+  m_operator_2->insertItem( 3, i18n( "not in" ) );
+  m_operator_2->insertItem( 4, i18n( "like" ) );
+  m_operator_2->insertItem( 5, i18n( "greater" ) );
+  m_operator_2->insertItem( 6, i18n( "lesser" ) );
 
   optionsFrameLayout->addWidget( m_operator_2, 3, 1 );
 
   m_operator_3 = new QComboBox( FALSE, optionsFrame, "m_operator_3" );
-  m_operator_3->insertItem( i18n( "equals" ) );
-  m_operator_3->insertItem( i18n( "not equal" ) );
-  m_operator_3->insertItem( i18n( "in" ) );
-  m_operator_3->insertItem( i18n( "not in" ) );
-  m_operator_3->insertItem( i18n( "like" ) );
-  m_operator_3->insertItem( i18n( "greater" ) );
-  m_operator_3->insertItem( i18n( "lesser" ) );
+  m_operator_3->insertItem( 0, i18n( "equals" ) );
+  m_operator_3->insertItem( 1, i18n( "not equal" ) );
+  m_operator_3->insertItem( 2, i18n( "in" ) );
+  m_operator_3->insertItem( 3, i18n( "not in" ) );
+  m_operator_3->insertItem( 4, i18n( "like" ) );
+  m_operator_3->insertItem( 5, i18n( "greater" ) );
+  m_operator_3->insertItem( 6, i18n( "lesser" ) );
 
   optionsFrameLayout->addWidget( m_operator_3, 4, 1 );
 
@@ -336,8 +338,8 @@ DatabaseDialog::DatabaseDialog( View * parent, QRect const & rect, const char * 
   optionsFrameLayout->addWidget( m_columnsSort_1, 5, 1 );
 
   m_sortMode_1 = new QComboBox( false, optionsFrame, "m_sortMode_1" );
-  m_sortMode_1->insertItem( i18n( "Ascending" ) );
-  m_sortMode_1->insertItem( i18n( "Descending" ) );
+  m_sortMode_1->insertItem( 0, i18n( "Ascending" ) );
+  m_sortMode_1->insertItem( 1, i18n( "Descending" ) );
   optionsFrameLayout->addWidget( m_sortMode_1, 5, 2 );
 
   QLabel * TextLabel19_2 = new QLabel( optionsFrame, "TextLabel19_2" );
@@ -348,8 +350,8 @@ DatabaseDialog::DatabaseDialog( View * parent, QRect const & rect, const char * 
   optionsFrameLayout->addWidget( m_columnsSort_2, 6, 1 );
 
   m_sortMode_2 = new QComboBox( false, optionsFrame, "m_sortMode_2" );
-  m_sortMode_2->insertItem( i18n( "Ascending" ) );
-  m_sortMode_2->insertItem( i18n( "Descending" ) );
+  m_sortMode_2->insertItem( 0, i18n( "Ascending" ) );
+  m_sortMode_2->insertItem( 1, i18n( "Descending" ) );
 
   optionsFrameLayout->addWidget( m_sortMode_2, 6, 2 );
   QSpacerItem* spacer = new QSpacerItem( 20, 20, QSizePolicy::Expanding, QSizePolicy::Minimum );

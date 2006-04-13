@@ -1601,7 +1601,7 @@ void Canvas::startTheDrag()
   QBuffer buffer;
   buffer.open( QIODevice::WriteOnly );
   QTextStream str( &buffer );
-  str.setEncoding( QTextStream::UnicodeUTF8 );
+  str.setCodec( "UTF-8" );
   str << doc;
   buffer.close();
 

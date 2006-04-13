@@ -65,7 +65,7 @@ Region::Region(View* view, const QString& string, Sheet* sheet)
   {
     return;
   }
-  QStringList substrings = QStringList::split(';', string);
+  QStringList substrings = string.split(';');
   QStringList::ConstIterator end = substrings.constEnd();
   for (QStringList::ConstIterator it = substrings.constBegin(); it != end; ++it)
   {
@@ -290,7 +290,7 @@ void Region::sub(const QPoint& point)
     if (element->rect() == QRect(point,point))
     {
       delete element;
-      d->cells.remove(element);
+      d->cells.removeAll(element);
       break;
     }
   }
@@ -306,7 +306,7 @@ void Region::sub(const QRect& range)
     if (element->rect().normalized() == range.normalized())
     {
       delete element;
-      d->cells.remove(element);
+      d->cells.removeAll(element);
       break;
     }
   }

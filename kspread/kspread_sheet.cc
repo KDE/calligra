@@ -360,8 +360,9 @@ Sheet* Sheet::find( int _id )
 
 Sheet::Sheet (Map* map,
     const QString &sheetName, const char *_name )
-  : QObject( map, _name )
+  : QObject( map )
 {
+  setObjectName( _name );
   if ( s_mapSheets == 0L )
     s_mapSheets = new Q3IntDict<Sheet>;
   d = new Private;
@@ -4692,7 +4693,7 @@ void Sheet::fillSelection( Selection * selectionInfo, int direction )
   QBuffer buffer;
   buffer.open( QIODevice::WriteOnly );
   QTextStream str( &buffer );
-  str.setEncoding( QTextStream::UnicodeUTF8 );
+  str.setCode( "UTF-8" );
   str << doc;
   buffer.close();
 
@@ -4951,7 +4952,7 @@ struct SetWordSpellingWorker : public Sheet::CellWorker {
 void Sheet::setWordSpelling(Selection* selectionInfo,
                                    const QString _listWord )
 {
-    QStringList list = QStringList::split ( '\n', _listWord );
+    QStringList list = _listWord.split( '\n' );
     SetWordSpellingWorker w( list,  this );
     workOnCells( selectionInfo, w );
 }
@@ -5058,7 +5059,7 @@ void Sheet::copySelection( Selection* selectionInfo )
     QBuffer buffer;
     buffer.open( QIODevice::WriteOnly );
     QTextStream str( &buffer );
-    str.setEncoding( QTextStream::UnicodeUTF8 );
+    str.setCodec( "UTF-8" );
     str << doc;
     buffer.close();
 
@@ -5077,7 +5078,7 @@ void Sheet::cutSelection( Selection* selectionInfo )
     QBuffer buffer;
     buffer.open( QIODevice::WriteOnly );
     QTextStream str( &buffer );
-    str.setEncoding( QTextStream::UnicodeUTF8 );
+    str.setCodec( "UTF-8" );
     str << doc;
     buffer.close();
 
@@ -6209,7 +6210,7 @@ void Sheet::unifyObjectName( EmbeddedObject *object ) {
     while ( objectNameExists( object, list ) ) {
         count++;
         QRegExp rx( " \\(\\d{1,3}\\)$" );
-        if ( rx.search( objectName ) != -1 ) {
+        if ( rx.indexIn( objectName ) != -1 ) {
             objectName.remove( rx );
         }
         objectName += QString(" (%1)").arg( count );

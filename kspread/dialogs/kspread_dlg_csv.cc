@@ -310,7 +310,7 @@ void CSVDialog::fillSheet()
   }
 
   QTextStream inputStream(&m_data, QIODevice::ReadOnly);
-  inputStream.setEncoding(QTextStream::Locale);
+  inputStream.setCodec(QTextCodec::codecForLocale());
 
   while (!inputStream.atEnd())
   {
