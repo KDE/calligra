@@ -126,7 +126,7 @@ void FormulaEditorHighlighter::highlightBlock( const QString& text )
 
   d->rangeCount = 0;
   QList<QColor> colors = d->canvas->choice()->colors();
-  Q3ValueList<Range> alreadyFoundRanges;
+  QList<Range> alreadyFoundRanges;
 
   for (uint i = 0; i < d->tokens.count(); ++i)
   {
@@ -151,7 +151,7 @@ void FormulaEditorHighlighter::highlightBlock( const QString& text )
                 alreadyFoundRanges.append(newRange);
                 d->rangeCount++;
             }
-            setFormat(token.pos() + 1, token.text().length(), colors[ alreadyFoundRanges.find(newRange) % colors.size()] );
+            setFormat(token.pos() + 1, token.text().length(), colors[ alreadyFoundRanges.indexOf(newRange) % colors.size()] );
         }
         break;
       case Token::Boolean:     // True, False (also i18n-ized)

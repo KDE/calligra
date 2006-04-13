@@ -21,7 +21,7 @@
  *   ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR *
  *   OTHER DEALINGS IN THE SOFTWARE.                                       *
  ***************************************************************************/
- 
+
 #include <kspread_insertcalendardialog.h>
 
 #include <kdatepicker.h>
@@ -37,20 +37,20 @@ InsertCalendarDialog::InsertCalendarDialog(QWidget* parent, const char* name)
 : InsertCalendarDialogBase(parent,name)
 {
   this->m_datePicker = NULL;
-  
+
   //we start with a default calendar for the current month;
 
   QDate first_day_in_month = QDate::currentDate();
   first_day_in_month.setYMD(first_day_in_month.year(),first_day_in_month.month(),1);
-  
+
   QDate last_day_in_month(first_day_in_month.year(),first_day_in_month.month(),first_day_in_month.daysInMonth());
-  
+
   this->m_startDateWidget->setDate(first_day_in_month);
   this->m_endDateWidget->setDate(last_day_in_month);
-  
+
   connect(this->m_selectStartDateButton,SIGNAL(clicked()),this,SLOT(showStartDatePicker()));
   connect(this->m_selectEndDateButton,SIGNAL(clicked()),this,SLOT(showEndDatePicker()));
-  
+
   connect(this->m_insertButton,SIGNAL(clicked()),this,SLOT(accept()));
   connect(this->m_cancelButton,SIGNAL(clicked()),this,SLOT(reject()));
 }
@@ -65,20 +65,21 @@ bool InsertCalendarDialog::buildDatePickerFrame()
   {
     delete m_datePicker; //destroyed signal is connected to datePickerDeleted()
   }
-  
-  m_datePicker = new KDatePicker(NULL,"date picker");
-  
+
+  m_datePicker = new KDatePicker();
+  m_datePicker->setObjectName("date picker");
+
   Q_ASSERT(m_datePicker);
-  
+
   if (!m_datePicker)
     return false;
-  
+
   connect(m_datePicker,SIGNAL(destroyed()),this,SLOT(datePickerDeleted()));
-  
+
   m_datePicker->setCloseButton(true);
   m_datePicker->move(this->x()+this->width(),this->y());
   m_datePicker->show();
-  
+
   return true;
 }
 

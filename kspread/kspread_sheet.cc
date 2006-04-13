@@ -420,8 +420,7 @@ Sheet::Sheet (Map* map,
   // Get a unique name so that we can offer scripting
   if ( !_name )
   {
-      QByteArray s;
-      s.sprintf("Sheet%i", s_id );
+      QByteArray s("Sheet" + QByteArray::number(s_id));
       QObject::setObjectName( s.data() );
   }
   d->print = new SheetPrint( this );
@@ -4693,7 +4692,7 @@ void Sheet::fillSelection( Selection * selectionInfo, int direction )
   QBuffer buffer;
   buffer.open( QIODevice::WriteOnly );
   QTextStream str( &buffer );
-  str.setCode( "UTF-8" );
+  str.setCodec( "UTF-8" );
   str << doc;
   buffer.close();
 
@@ -7985,7 +7984,8 @@ bool Sheet::insertChart( const KoRect& _rect, KoDocumentEntry& _e, const QRect& 
 
     kDebug(36001) << "NOW FETCHING INTERFACE" << endl;
 
-    if ( !dd->initDoc(KoDocument::InitDocEmbedded) )
+#warning TODO KDE4 portage
+//     if ( !dd->initDoc(KoDocument::InitDocEmbedded) )
         return false;
 
     EmbeddedChart * ch = new EmbeddedChart( doc(), this, dd, _rect );
@@ -8011,13 +8011,15 @@ bool Sheet::insertChart( const KoRect& _rect, KoDocumentEntry& _e, const QRect& 
 
 bool Sheet::insertChild( const KoRect& _rect, KoDocumentEntry& _e )
 {
-    KoDocument* d = _e.createDoc( doc() );
+#warning TODO KDE4 portage
+    KoDocument* d ;//= _e.createDoc( doc() );
     if ( !d )
     {
         kDebug() << "Error inserting child!" << endl;
         return false;
     }
-    if ( !d->initDoc(KoDocument::InitDocEmbedded) )
+#warning TODO KDE4 portage
+//     if ( !d->initDoc(KoDocument::InitDocEmbedded) )
         return false;
 
     EmbeddedKOfficeObject* ch = new EmbeddedKOfficeObject( doc(), this, d, _rect );

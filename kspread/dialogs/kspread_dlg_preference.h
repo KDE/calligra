@@ -183,7 +183,7 @@ public:
   void slotDefault();
   void apply();
 private slots:
-  void screenReaderOptionChanged();
+  void screenReaderOptionChanged() {}
 private:
   KConfig* config;
   QCheckBox* m_cbSpeakPointerWidget;

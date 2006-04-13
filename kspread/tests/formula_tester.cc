@@ -66,9 +66,9 @@ static QString describeTokenCodes( const QString& tokenCodes )
   if( tokenCodes.isEmpty() )
     result = "(invalid)";
   else
-    for( unsigned i = 0; i < tokenCodes.length(); i++ )
+    for( int i = 0; i < tokenCodes.length(); i++ )
     {
-      switch( tokenCodes[i] )
+      switch( tokenCodes[i].unicode() )
       {
         case 'b': result.append( "Boolean" ); break;
         case 'i': result.append( "integer" ); break;

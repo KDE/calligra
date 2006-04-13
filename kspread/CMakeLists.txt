@@ -58,7 +58,17 @@ kde4_add_ui3_files(libdialogs_SRCS
 	${CMAKE_SOURCE_DIR}/kspread/dialogs/SheetSelectWidget.ui
 	)
 
-set(kspreadcommon_LIB_SRCS ${libdialogs_SRCS}
+
+set(libtests_SRCS
+	${CMAKE_SOURCE_DIR}/kspread/tests/tester.cc
+	${CMAKE_SOURCE_DIR}/kspread/tests/testrunner.cc
+	${CMAKE_SOURCE_DIR}/kspread/tests/value_tester.cc
+	${CMAKE_SOURCE_DIR}/kspread/tests/formula_tester.cc
+	${CMAKE_SOURCE_DIR}/kspread/tests/inspector.cc
+	)
+
+
+set(kspreadcommon_LIB_SRCS ${libdialogs_SRCS} ${libtests_SRCS}
    digest.cc
    commands.cc
    damages.cc
@@ -121,7 +131,8 @@ set(kspreadcommon_LIB_SRCS ${libdialogs_SRCS}
    manipulator.cc
    manipulator_data.cc
    kspread_generalProperty.cpp
-   kspread_propertyEditor.cpp )
+   kspread_propertyEditor.cpp
+)
 
 kde4_automoc(${kspreadcommon_LIB_SRCS})
 
@@ -138,7 +149,12 @@ kde4_add_dcop_skels(kspreadcommon_LIB_SRCS
 
 kde4_add_library(kspreadcommon SHARED ${kspreadcommon_LIB_SRCS})
 
-target_link_libraries(kspreadcommon  ${KDE4_KDECORE_LIBS} kochart dialogs tests kspell )
+target_link_libraries(kspreadcommon
+	${KDE4_KDECORE_LIBS}
+	${QT_QTSQL_LIBRARY}
+	kofficecore kofficeui kochart
+	kde3support
+	kspell2 )
 
 set_target_properties(kspreadcommon PROPERTIES VERSION 1.0.0 SOVERSION 1 )
 install_targets(${LIB_INSTALL_DIR} kspreadcommon )

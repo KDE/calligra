@@ -19,11 +19,11 @@
 
 #include "testrunner.h"
 
-#include <qapplication.h>
-#include <qdict.h>
-#include <qlabel.h>
-#include <qlayout.h>
-#include <qtextedit.h>
+#include <QApplication>
+#include <QGridLayout>
+#include <QHash>
+#include <QLabel>
+#include <QTextEdit>
 
 #include <kcombobox.h>
 #include <kdialogbase.h>
@@ -40,7 +40,7 @@ namespace KSpread
 class TestRunner::Private
 {
 public:
-  QDict<Tester> testers;
+  QHash<QString, Tester*> testers;
   KComboBox* testType;
   KPushButton* runButton;
   QTextEdit* logView;
@@ -89,8 +89,10 @@ TestRunner::TestRunner():
 
 TestRunner::~TestRunner()
 {
-  QDictIterator<Tester> it( d->testers );
-  for( ; it.current(); ++it ) delete it.current();
+  QHash<QString, Tester*>::Iterator it( d->testers.begin() );
+  QHash<QString, Tester*>::Iterator end( d->testers.end() );
+  for( ; it != end; ++it )
+    delete it.value();
   delete d;
 }
 
@@ -104,7 +106,7 @@ void TestRunner::addTester( Tester* tester )
 void TestRunner::runTest()
 {
   QString testName = d->testType->currentText();
-  Tester* tester = d->testers.find( testName );
+  Tester* tester = d->testers[ testName ];
   if( tester )
   {
     d->logView->clear();

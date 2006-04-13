@@ -19,9 +19,13 @@
 
 #include "inspector.h"
 
+#include <QFrame>
 #include <qlayout.h>
-#include <qlistview.h>
+#include <q3listview.h>
 #include <qtextstream.h>
+//Added by qt3to4:
+#include <Q3VBoxLayout>
+#include <Q3ValueList>
 
 #include <kdialogbase.h>
 
@@ -39,12 +43,12 @@ public:
   Cell* cell;
   Format* format;
   Sheet* sheet;
-  
-  QListView *cellView;
-  QListView *formatView;
-  QListView *sheetView;
-  QListView* depView;
-  
+
+  Q3ListView *cellView;
+  Q3ListView *formatView;
+  Q3ListView *sheetView;
+  Q3ListView* depView;
+
   void handleCell();
   void handleFormat();
   void handleSheet();
@@ -79,33 +83,33 @@ static QString dirAsString( Sheet::LayoutDirection dir )
 }
 
 void Inspector::Private::handleCell()
-{  
+{
   QString str;
-  
-  cellView->clear();
-  
-  new QListViewItem( cellView, "Column", QString::number( cell->column() ) );
-  new QListViewItem( cellView, "Row", QString::number( cell->row() ) );
-  new QListViewItem( cellView, "Name", cell->name() );
-  new QListViewItem( cellView, "Full Name", cell->fullName() );
 
-  new QListViewItem( cellView, "Default", boolAsString( cell->isDefault() ) );
-  new QListViewItem( cellView, "Empty", boolAsString( cell->isEmpty() ) );
-  new QListViewItem( cellView, "Formula", boolAsString( cell->isFormula() ) );
-  new QListViewItem( cellView, "Format Properties", longAsHexstring( static_cast<long>( cell->format()->propertiesMask() ) ) );
-  new QListViewItem( cellView, "Style Properties", longAsHexstring( static_cast<long>( cell->format()->style()->features() ) ) );
-  new QListViewItem( cellView, "Text", cell->text() );
-  new QListViewItem( cellView, "Text (Displayed)", 
+  cellView->clear();
+
+  new Q3ListViewItem( cellView, "Column", QString::number( cell->column() ) );
+  new Q3ListViewItem( cellView, "Row", QString::number( cell->row() ) );
+  new Q3ListViewItem( cellView, "Name", cell->name() );
+  new Q3ListViewItem( cellView, "Full Name", cell->fullName() );
+
+  new Q3ListViewItem( cellView, "Default", boolAsString( cell->isDefault() ) );
+  new Q3ListViewItem( cellView, "Empty", boolAsString( cell->isEmpty() ) );
+  new Q3ListViewItem( cellView, "Formula", boolAsString( cell->isFormula() ) );
+  new Q3ListViewItem( cellView, "Format Properties", longAsHexstring( static_cast<long>( cell->format()->propertiesMask() ) ) );
+  new Q3ListViewItem( cellView, "Style Properties", longAsHexstring( static_cast<long>( cell->format()->style()->features() ) ) );
+  new Q3ListViewItem( cellView, "Text", cell->text() );
+  new Q3ListViewItem( cellView, "Text (Displayed)",
 		     cell->strOutText().replace( QChar('\n'), "\\n" ) );
 
   QTextStream ts( &str, QIODevice::WriteOnly );
   ts << cell->value();
-  new QListViewItem( cellView, "Value", str );
+  new Q3ListViewItem( cellView, "Value", str );
 
-  new QListViewItem( cellView, "Link", cell->link() );
+  new Q3ListViewItem( cellView, "Link", cell->link() );
 
-  new QListViewItem( cellView, "Width", QString::number( cell->dblWidth() ) );
-  new QListViewItem( cellView, "Height", QString::number( cell->dblHeight() ) );
+  new Q3ListViewItem( cellView, "Width", QString::number( cell->dblWidth() ) );
+  new Q3ListViewItem( cellView, "Height", QString::number( cell->dblHeight() ) );
 }
 
 void Inspector::Private::handleFormat()
@@ -114,100 +118,100 @@ void Inspector::Private::handleFormat()
   int col = cell->column();
   int row = cell->row();
 
-  new QListViewItem( formatView, "Angle", QString::number( format->getAngle(col, row) ) );
-  new QListViewItem( formatView, "Multirow", boolAsString( format->multiRow(col, row) ) );
-  new QListViewItem( formatView, "Protected", format->hasProperty( Style::SVerticalText ) 
+  new Q3ListViewItem( formatView, "Angle", QString::number( format->getAngle(col, row) ) );
+  new Q3ListViewItem( formatView, "Multirow", boolAsString( format->multiRow(col, row) ) );
+  new Q3ListViewItem( formatView, "Protected", format->hasProperty( Style::SVerticalText )
     ? "Not specified" : boolAsString( format->isProtected(col, row) ) );
-  new QListViewItem( formatView, "Vertical Text", boolAsString( format->verticalText(col, row ) ) );
+  new Q3ListViewItem( formatView, "Vertical Text", boolAsString( format->verticalText(col, row ) ) );
 
   Style::Currency currrency;
   bool valid = format->currencyInfo(currrency);
-  new QListViewItem( formatView, "Currency symbol", valid ? currrency.symbol : "Invalid" );
+  new Q3ListViewItem( formatView, "Currency symbol", valid ? currrency.symbol : "Invalid" );
   bool ok = false;
   QString currencyType;
   if (valid)
     currencyType = Currency::getChooseString(currrency.type, ok);
-  new QListViewItem( formatView, "Currency type", valid && ok ? currencyType : "Invalid" );
+  new Q3ListViewItem( formatView, "Currency type", valid && ok ? currencyType : "Invalid" );
 }
 
 void Inspector::Private::handleSheet()
-{  
+{
   sheetView->clear();
-  
-  new QListViewItem( sheetView, "Name", sheet->sheetName() ) ;
-  new QListViewItem( sheetView, "Layout Direction", dirAsString( sheet->layoutDirection() ) );
+
+  new Q3ListViewItem( sheetView, "Name", sheet->sheetName() ) ;
+  new Q3ListViewItem( sheetView, "Layout Direction", dirAsString( sheet->layoutDirection() ) );
 }
 
 void Inspector::Private::handleDep()
-{  
+{
   Point cellPoint;
   cellPoint.setSheet(sheet);
   cellPoint.setRow( cell->row() );
   cellPoint.setColumn( cell->column() );
-  
+
   DependencyManager* manager = sheet->dependencies();
-  QValueList<Point> deps = manager->getDependants( cellPoint );
-  
+  Q3ValueList<Point> deps = manager->getDependants( cellPoint );
+
   depView->clear();
   for( unsigned i = 0; i < deps.count(); i++ )
   {
     QString k1, k2;
-    
+
     Point point = deps[i];
     int row = point.row();
     int column = point.column();
     k1 = Cell::fullName( point.sheet(), column, row );
-    
-    new QListViewItem( depView, k1, k2 );
+
+    new Q3ListViewItem( depView, k1, k2 );
   }
-  
+
 }
 
 Inspector::Inspector( Cell* cell ):
-  KDialogBase( KDialogBase::Tabbed, "Inspector", KDialogBase::Close, 
+  KDialogBase( KDialogBase::Tabbed, "Inspector", KDialogBase::Close,
   KDialogBase::Close )
 {
   d = new Private;
-  
+
   d->cell = cell;
   d->format = cell->format();
   d->sheet = cell->sheet();
-  
+
   QFrame* cellPage = addPage( QString("Cell") );
-  QVBoxLayout* cellLayout = new QVBoxLayout( cellPage, 0 );
-  d->cellView = new QListView( cellPage );
+  Q3VBoxLayout* cellLayout = new Q3VBoxLayout( cellPage, 0 );
+  d->cellView = new Q3ListView( cellPage );
   cellLayout->addWidget( d->cellView );
   d->cellView->addColumn( "Key", 150 );
   d->cellView->addColumn( "Value" );
-  
+
   QFrame* formatPage = addPage( QString("Format") );
-  QVBoxLayout* formatLayout = new QVBoxLayout( formatPage, 0 );
-  d->formatView = new QListView( formatPage );
+  Q3VBoxLayout* formatLayout = new Q3VBoxLayout( formatPage, 0 );
+  d->formatView = new Q3ListView( formatPage );
   formatLayout->addWidget( d->formatView );
   d->formatView->addColumn( "Key", 150 );
   d->formatView->addColumn( "Value" );
-  
+
   QFrame* sheetPage = addPage( QString("Sheet") );
-  QVBoxLayout* sheetLayout = new QVBoxLayout( sheetPage, 0 );
-  d->sheetView = new QListView( sheetPage );
+  Q3VBoxLayout* sheetLayout = new Q3VBoxLayout( sheetPage, 0 );
+  d->sheetView = new Q3ListView( sheetPage );
   sheetLayout->addWidget( d->sheetView );
   d->sheetView->addColumn( "Key", 150 );
   d->sheetView->addColumn( "Value" );
-  
+
   QFrame* depPage = addPage( QString("Dependencies") );
-  QVBoxLayout* depLayout = new QVBoxLayout( depPage, 0 );
-  d->depView = new QListView( depPage );
+  Q3VBoxLayout* depLayout = new Q3VBoxLayout( depPage, 0 );
+  d->depView = new Q3ListView( depPage );
   depLayout->addWidget( d->depView );
   d->depView->addColumn( "Cell", 150 );
   d->depView->addColumn( "Content" );
-  
+
   d->handleCell();
   d->handleFormat();
   d->handleSheet();
   d->handleDep();
-  
+
   resize( 350, 400 );
-}  
+}
 
 Inspector::~Inspector()
 {

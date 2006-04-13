@@ -217,7 +217,8 @@ Doc::Doc( QWidget *parentWidget, const char *widgetName, QObject* parent, const 
   d->numOperations = 1; // don't start repainting before the GUI is done...
 
   d->undoLocked = 0;
-  d->commandHistory = new KoCommandHistory( actionCollection() );
+#warning TODO KDE4 portage
+  d->commandHistory = 0;//new KoCommandHistory( actionCollection() );
   connect( d->commandHistory, SIGNAL( commandExecuted() ), SLOT( commandExecuted() ) );
   connect( d->commandHistory, SIGNAL( documentRestored() ), SLOT( documentRestored() ) );
 
@@ -1502,7 +1503,8 @@ void Doc::newZoomAndResolution( bool updateViews, bool /*forPrint*/ )
 void Doc::addCommand( KCommand* command )
 {
   if (undoLocked()) return;
-  d->commandHistory->addCommand( command, false );
+#warning TODO KDE4 portage
+//   d->commandHistory->addCommand( command, false );
   setModified( true );
 }
 
@@ -2354,8 +2356,9 @@ int Doc::undoRedoLimit() const
 
 void Doc::setUndoRedoLimit(int val)
 {
-  d->commandHistory->setUndoLimit(val);
-  d->commandHistory->setRedoLimit(val);
+#warning TODO KDE4 portage
+/*  d->commandHistory->setUndoLimit(val);
+  d->commandHistory->setRedoLimit(val);*/
 }
 
 void Doc::insertPixmapKey( KoPictureKey key )

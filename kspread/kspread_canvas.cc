@@ -3829,7 +3829,8 @@ void Canvas::copyOasisObjects()
         return;
     }
     delete store;
-
+#warning TODO KDE4 portage
+#if 0
     KMultipleDrag* multiDrag = new KMultipleDrag();
     if ( !plainText.isEmpty() )
         multiDrag->addDragObject( new Q3TextDrag( plainText, 0 ) );
@@ -3865,6 +3866,7 @@ void Canvas::copyOasisObjects()
 
     Q3DragObject *dragObject = multiDrag;
     QApplication::clipboard()->setData( dragObject, QClipboard::Clipboard );
+#endif
 }
 
 void Canvas::closeEditor()

@@ -871,8 +871,10 @@ void View::Private::initActions()
       0, view, SLOT( removeHyperlink() ), ac, "removeHyperlink" );
   actions->removeLink->setToolTip(i18n("Remove a link"));
 
-  actions->insertSpecialChar = new KAction( i18n( "S&pecial Character..." ), "char",
-      view, SLOT( insertSpecialChar() ), ac, "insertSpecialChar" );
+  actions->insertSpecialChar = new KAction( "char", i18n( "S&pecial Character..." ),
+                                            ac, "insertSpecialChar" );
+  QObject::connect( actions->insertSpecialChar, SIGNAL( toggled( bool ) ),
+                    view, SLOT( insertSpecialChar() ) );
   actions->insertSpecialChar->setToolTip( i18n( "Insert one or more symbols or letters not found on the keyboard" ) );
 
   actions->insertPart = new KoPartSelectAction( i18n("&Object"), "frame_query",
