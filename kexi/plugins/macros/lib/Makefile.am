@@ -12,6 +12,7 @@ libkomacro_la_SOURCES = \
     function.cpp \
     macro.cpp \
     context.cpp \
+    xmlhandler.cpp \
     manager.cpp
 
 KDE_CXXFLAGS = $(USE_EXCEPTIONS)
