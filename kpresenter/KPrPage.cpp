@@ -2326,17 +2326,23 @@ KPrObject * KPrPage::getCursor(const KoPoint &pos )
 KPrObject* KPrPage::getObjectAt( const KoPoint &pos, bool withoutProtected ) const
 {
     QPtrListIterator<KPrObject> it( m_objectList );
-    KPrObject *o = it.toLast();
-    while ( o ) {
-        if ( o != m_doc->footer() ||
-             o != m_doc->header() ||
-             ( m_bHasFooter && o == m_doc->footer() ) ||
-             ( m_bHasHeader && o == m_doc->header() ) )
-        {
-            if ( o->contains( pos ) && !( o->isProtect() && withoutProtected ) )
-                return o;
+    KPrObject *o = 0;
+    //tz Check first if there is a selected object at this pos!
+    for ( int i = 0; i < 2; ++i )
+    {
+        o = it.toLast();
+        while ( o ) {
+            if ( o != m_doc->footer() || 
+                 o != m_doc->header() || 
+                 ( m_bHasFooter && o == m_doc->footer() ) || 
+                 ( m_bHasHeader && o == m_doc->header() ) )
+            {
+                if ( ( o->isSelected() || i > 0 ) && 
+                       o->contains( pos ) && !( o->isProtect() && withoutProtected ) )
+                    return o;
+            }
+            o = --it;
         }
-        o = --it;
     }
     return 0L;
 }
