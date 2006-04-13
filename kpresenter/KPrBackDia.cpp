@@ -70,10 +70,10 @@ KPrBackDialog::KPrBackDialog( QWidget* parent, const char* name,
                   const QColor &backColor2, BCType _bcType,
                   const KoPicture &backPic,
                   BackView backPicView, bool _unbalanced,
-                  int _xfactor, int _yfactor, KPrPage *m_page )
+                  int _xfactor, int _yfactor, KPrPage *_page )
     : KDialogBase( parent, name, true, "",KDialogBase::Ok|KDialogBase::Apply|KDialogBase::Cancel|
                    KDialogBase::User1|KDialogBase::User2 ),
-      m_useMasterBackground( 0 ), m_picture(backPic),m_oldpicture(backPic)
+      m_useMasterBackground( 0 ), m_picture(backPic),m_oldpicture(backPic), m_page( _page )
 {
     lockUpdate = true;
 
@@ -309,24 +309,33 @@ void KPrBackDialog::updateConfiguration()
         color2Choose->setEnabled( true );
     }
 
-    picChanged = (getBackType() == BT_PICTURE);
-    preview->backGround()->setBackType( getBackType() );
-    preview->backGround()->setBackView( getBackView() );
-    preview->backGround()->setBackColor1( getBackColor1() );
-    preview->backGround()->setBackColor2( getBackColor2() );
-    preview->backGround()->setBackColorType( getBackColorType() );
-    preview->backGround()->setBackUnbalanced( getBackUnbalanced() );
-    preview->backGround()->setBackXFactor( getBackXFactor() );
-    preview->backGround()->setBackYFactor( getBackYFactor() );
-    if ( !m_picture.isNull() && picChanged )
-        preview->backGround()->setBackPicture( m_picture );
-    preview->backGround()->setBackType( getBackType() );
-    if ( preview->isVisible() && isVisible() ) {
-        preview->backGround()->reload(); // ### TODO: instead of reloading, load or remove the picture correctly.
+    if ( m_useMasterBackground && m_useMasterBackground->isChecked() )
+    {
+        kdDebug(33001) << "set backgound to master" << endl;
+        preview->backGround()->setBackGround( m_page->masterPage()->background()->getBackGround() );
         preview->repaint( true );
     }
+    else
+    {
+        picChanged = (getBackType() == BT_PICTURE);
+        preview->backGround()->setBackType( getBackType() );
+        preview->backGround()->setBackView( getBackView() );
+        preview->backGround()->setBackColor1( getBackColor1() );
+        preview->backGround()->setBackColor2( getBackColor2() );
+        preview->backGround()->setBackColorType( getBackColorType() );
+        preview->backGround()->setBackUnbalanced( getBackUnbalanced() );
+        preview->backGround()->setBackXFactor( getBackXFactor() );
+        preview->backGround()->setBackYFactor( getBackYFactor() );
+        if ( !m_picture.isNull() && picChanged )
+            preview->backGround()->setBackPicture( m_picture );
+        preview->backGround()->setBackType( getBackType() );
+        if ( preview->isVisible() && isVisible() ) {
+            preview->backGround()->reload(); // ### TODO: instead of reloading, load or remove the picture correctly.
+            preview->repaint( true );
+        }
 
-    picChanged  = false;
+        picChanged  = false;
+    }
 }
 
 BackType KPrBackDialog::getBackType() const
