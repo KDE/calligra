@@ -2794,11 +2794,8 @@ void KWView::deleteFrame( bool warning )
             {
                 int result = KMessageBox::warningContinueCancel(
                     this,
-                    i18n( "You are about to delete the last Frame of the "
-                          "Frameset '%1'. "
-                          "The contents of this Frameset will not appear "
-                          "anymore!\n"
-                          "Are you sure you want to do that?").arg(fs->name()),
+                    i18n("By deleting the last text frame (%1),\nthe text-contents will be lost.\n"
+                          "Delete anyway?").arg(fs->name()),
                     i18n("Delete Frame"), KStdGuiItem::del());
 
                 if (result != KMessageBox::Continue)
