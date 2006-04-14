@@ -70,7 +70,7 @@ KoFilter::ConversionStatus CSVFilter::convert( const QByteArray& from, const QBy
 
     kDebug(30501) << "here we go... " << document->className() << endl;
 
-    if ( !::qt_cast<const KSpread::Doc *>( document ) )
+    if ( !qobject_cast<const KSpread::Doc *>( document ) )
     {
       kWarning(30501) << "document isn't a KSpread::Doc but a " << document->className() << endl;
         return KoFilter::NotImplemented;

@@ -1,5 +1,10 @@
 kde4_header()
 
+include_directories(
+    ${KOTEXT_INCLUDES}
+    ${KOFFICEUI_INCLUDES}
+	)
+
 add_subdirectory( applixspread )
 add_subdirectory( csv )
 add_subdirectory( dbase )
