@@ -38,6 +38,8 @@
 #include <qbytearray.h>
 #include <qclipboard.h>
 #include <qcursor.h>
+#include <QGridLayout>
+#include <QHBoxLayout>
 #include <qlayout.h>
 #include <q3paintdevicemetrics.h>
 #include <qregexp.h>
@@ -52,11 +54,9 @@
 #include <QFrame>
 #include <QKeyEvent>
 #include <QEvent>
-#include <Q3GridLayout>
 #include <Q3ValueList>
 #include <Q3PtrList>
 #include <QPixmap>
-#include <Q3HBoxLayout>
 
 // KDE includes
 #include <dcopclient.h>
@@ -194,14 +194,14 @@ public:
     KStatusBarLabel* calcLabel;
 
     // formulabar, consists of:
-    Q3HBoxLayout* formulaBarLayout;
+    QHBoxLayout* formulaBarLayout;
     ComboboxLocationEditWidget *posWidget;
     QAbstractButton* formulaButton;
     QAbstractButton *okButton;
     QAbstractButton *cancelButton;
     KSpread::EditWidget *editWidget;
-    Q3GridLayout* viewLayout;
-    Q3HBoxLayout* tabScrollBarLayout;
+    QGridLayout* viewLayout;
+    QHBoxLayout* tabScrollBarLayout;
 
     // all UI actions
     ViewActions* actions;
@@ -1918,7 +1918,7 @@ Doc* View::doc() const
 
 void View::initView()
 {
-    d->viewLayout = new Q3GridLayout( this, 3, 4 );
+    d->viewLayout = new QGridLayout( this, 3, 4 );
 
     // Vert. Scroll Bar
     d->calcLabel  = 0;
@@ -1931,7 +1931,7 @@ void View::initView()
     // Edit Bar
     d->toolWidget = new QFrame( this );
 
-    d->formulaBarLayout = new Q3HBoxLayout( d->toolWidget );
+    d->formulaBarLayout = new QHBoxLayout( d->toolWidget );
     d->formulaBarLayout->setMargin( 4 );
     d->formulaBarLayout->addSpacing( 2 );
 
@@ -1973,7 +1973,7 @@ void View::initView()
     connect( this, SIGNAL( invalidated() ), d->canvas, SLOT( update() ) );
 
     QWidget* bottomPart = new QWidget( this );
-    d->tabScrollBarLayout = new Q3HBoxLayout( bottomPart );
+    d->tabScrollBarLayout = new QHBoxLayout( bottomPart );
     d->tabScrollBarLayout->setAutoAdd( true );
     d->tabBar = new KoTabBar( bottomPart );
     d->horzScrollBar = new QScrollBar( bottomPart, "ScrollBar_1" );
@@ -1994,12 +1994,12 @@ void View::initView()
 
     d->viewLayout->setColStretch( 1, 10 );
     d->viewLayout->setRowStretch( 2, 10 );
-    d->viewLayout->addWidget( d->toolWidget, 0, 0, 0, 2 );
+    d->viewLayout->addWidget( d->toolWidget, 0, 0, 1, 3 );
     d->viewLayout->addWidget( d->hBorderWidget, 1, 1, 1, 2 );
     d->viewLayout->addWidget( d->vBorderWidget, 2, 0 );
     d->viewLayout->addWidget( d->canvas, 2, 1 );
     d->viewLayout->addWidget( d->vertScrollBar, 2, 2 );
-    d->viewLayout->addWidget( bottomPart, 3, 3, 0, 2 );
+    d->viewLayout->addWidget( bottomPart, 3, 0, 1, 3 );
 
     KStatusBar * sb = statusBar();
     Q_ASSERT(sb);
