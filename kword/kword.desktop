@@ -66,7 +66,6 @@ GenericName[uz]=Матн процессори
 GenericName[wa]=Sicrijhaedje di tecses
 GenericName[zh_CN]=字处理
 GenericName[zh_TW]=文書處理
-Comment=Write text documents
 MimeType=application/vnd.oasis.opendocument.text;application/x-kword;application/msword;text/rtf;text/plain;application/x-mswrite
 Icon=kword
 X-KDE-NativeMimeType=application/vnd.oasis.opendocument.text
