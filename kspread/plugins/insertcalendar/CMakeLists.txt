@@ -1,6 +1,6 @@
 kde4_header()
 
-include_directories( ${CMAKE_SOURCE_DIR}/lib/koscript ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
+include_directories( ${KOFFICEUI_INCLUDES} ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
 
 
 ########### next target ###############

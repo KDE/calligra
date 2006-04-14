@@ -834,8 +834,8 @@ int Sheet::rightColumn( double _xpos, const Canvas *_canvas ) const
 
 QRect Sheet::visibleRect( Canvas const * const _canvas ) const
 {
-  int top    = 0;
-  int left   = 0;
+  int top    = 1;
+  int left   = 1;
 
   double x      = 0;
   double y      = 0;

@@ -3813,7 +3813,7 @@ void View::setActiveSheet( Sheet * _t, bool updateSheet )
     d->tabBar->setActiveTab( _t->sheetName() );
     d->vBorderWidget->repaint();
     d->hBorderWidget->repaint();
-    d->activeSheet->setRegionPaintDirty(QRect(QPoint(0,0), QPoint(KS_colMax, KS_rowMax)));
+    d->activeSheet->setRegionPaintDirty(QRect(QPoint(1,1), QPoint(KS_colMax, KS_rowMax)));
     d->canvas->slotMaxColumn( d->activeSheet->maxColumn() );
     d->canvas->slotMaxRow( d->activeSheet->maxRow() );
   }
@@ -5273,7 +5273,7 @@ void View::setZoom( int zoom, bool /*updateViews*/ )
   Q_ASSERT(d->activeSheet);
 
   if (d->activeSheet)  //this is 0 when viewing a document in konqueror!? (see Q_ASSERT above)
-    d->activeSheet->setRegionPaintDirty(QRect(QPoint(0,0), QPoint(KS_colMax, KS_rowMax)));
+    d->activeSheet->setRegionPaintDirty(QRect(QPoint(1,1), QPoint(KS_colMax, KS_rowMax)));
 
   doc()->refreshInterface();
   doc()->emitEndOperation();
@@ -7207,7 +7207,7 @@ void View::slotChildSelected( KoDocumentChild* /*ch*/ )
 
 
   doc()->emitBeginOperation( false );
-  d->activeSheet->setRegionPaintDirty(QRect(QPoint(0,0), QPoint(KS_colMax, KS_rowMax)));
+  d->activeSheet->setRegionPaintDirty(QRect(QPoint(1,1), QPoint(KS_colMax, KS_rowMax)));
 
   doc()->emitEndOperation();
   paintUpdates();
@@ -7228,7 +7228,7 @@ void View::slotChildUnselected( KoDocumentChild* )
 
 
   doc()->emitBeginOperation( false );
-  d->activeSheet->setRegionPaintDirty(QRect(QPoint(0,0), QPoint(KS_colMax, KS_rowMax)));
+  d->activeSheet->setRegionPaintDirty(QRect(QPoint(1,1), QPoint(KS_colMax, KS_rowMax)));
   doc()->emitEndOperation();
   paintUpdates();
 }
@@ -7467,7 +7467,7 @@ void View::handleDamages( const Q3ValueList<Damage*>& damages )
                     b = damagedSheet->nextCellBinding() )
                         b->cellChanged( 0 );
 
-                d->activeSheet->setRegionPaintDirty( QRect(QPoint(0,0),
+                d->activeSheet->setRegionPaintDirty( QRect(QPoint(1,1),
                     QPoint(KS_colMax, KS_rowMax)));
 
                 paintUpdates();

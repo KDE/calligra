@@ -38,8 +38,9 @@ class Region::Private
 {
 public:
   Private()
+    : view(0),
+      cells(QList<Element*>())
   {
-    view = 0;
   }
 
   View* view;
@@ -466,8 +467,7 @@ Region::Iterator Region::insert(Region::Iterator pos, const QRect& range, Sheet*
   bool containsRange = false;
 
   Iterator it( d->cells.begin() );
-  Iterator endOfList( d->cells.end() );
-  while ( it != endOfList )
+  while ( it != d->cells.end() )
   {
     if (sheet && sheet != (*it)->sheet())
     {
@@ -480,7 +480,7 @@ Region::Iterator Region::insert(Region::Iterator pos, const QRect& range, Sheet*
     }
     else if (range.contains((*it)->rect()))
     {
-      delete *it;
+      delete (*it);
       it = d->cells.erase(it);
       continue;
     }
