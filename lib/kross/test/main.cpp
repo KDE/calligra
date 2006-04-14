@@ -181,7 +181,7 @@ int main(int argc, char **argv)
         }
     }
     else {
-        krosswarning( QString("Failed to load scriptfile: %1").arg(scriptfilename) );
+        Kross::krosswarning( QString("Failed to load scriptfile: %1").arg(scriptfilename) );
         result = -1;
     }
 

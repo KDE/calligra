@@ -39,11 +39,11 @@ TestAction::~TestAction()
 
 void TestAction::activatedAction1()
 {
-    krossdebug("TestAction::activatedAction1()");
+    Kross::krossdebug("TestAction::activatedAction1()");
 }
 
 void TestAction::activatedAction2()
 {
-    krossdebug("TestAction::activatedAction2()");
+    Kross::krossdebug("TestAction::activatedAction2()");
 }
 
