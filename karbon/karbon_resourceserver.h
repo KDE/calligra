@@ -40,8 +40,9 @@ class VClipartIconItem;
 class VObject;
 
 
-class KARBONCOMMON_EXPORT KarbonResourceServer
+class KARBONCOMMON_EXPORT KarbonResourceServer : public QObject
 {
+	Q_OBJECT
 
 public:
 	KarbonResourceServer();
@@ -87,6 +88,10 @@ public:
 	void removeClipart( VClipartIconItem* clipartIcon );
 
 	QPixmap *cachePixmap( const QString &key, int group_or_size );
+
+signals:
+	void patternAdded( KoIconItem *pattern );
+	void patternRemoved( KoIconItem *pattern );
 
 protected:
 	const VPattern* loadPattern( const QString& filename );

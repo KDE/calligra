@@ -474,4 +474,9 @@ KoIconItem *KoPatternChooser::currentPattern()
     return chooser->currentItem();
 }
 
+void KoPatternChooser::removePattern( KoIconItem *pattern )
+{
+	chooser->removeItem( pattern );
+}
+
 #include "koIconChooser.moc"

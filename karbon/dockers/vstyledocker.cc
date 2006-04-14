@@ -84,6 +84,8 @@ VStyleDocker::VStyleDocker( KarbonPart* part, KarbonView* parent, const char* /*
 	pPatternChooser->setCaption( i18n( "Patterns" ) );
 
 	connect( pPatternChooser, SIGNAL(selected( KoIconItem * ) ), this, SLOT( slotItemSelected( KoIconItem * )));
+	connect( KarbonFactory::rServer(), SIGNAL( patternAdded( KoIconItem * )), pPatternChooser, SLOT( addPattern( KoIconItem * )));
+	connect( KarbonFactory::rServer(), SIGNAL( patternRemoved( KoIconItem * )), pPatternChooser, SLOT( removePattern( KoIconItem * )));
 	mTabWidget->addTab( pPatternChooser, i18n( "Patterns" ) );
 
 	//Clipart

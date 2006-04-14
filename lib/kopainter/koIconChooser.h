@@ -129,8 +129,11 @@ public:
 
   KoIconItem *currentPattern();
   void setCurrentPattern( KoIconItem * );
+
+public slots:
   void addPattern( KoIconItem * );
- 
+  void removePattern( KoIconItem * );
+
 private:
   KoIconChooser *chooser;
 

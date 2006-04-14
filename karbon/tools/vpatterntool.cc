@@ -330,8 +330,12 @@ VPatternTool::mouseButtonRelease()
 		if( showDialog() != QDialog::Accepted )
 			return;
 	}
-	else if( !m_optionsWidget->selectedPattern() )
+
+	if( !m_optionsWidget->selectedPattern() )
+	{
 		KMessageBox::error( 0L, i18n( "Please select a pattern." ), "" );
+		return;
+	}
 
 	bool strokeSelected = false;
 
@@ -353,7 +357,7 @@ VPatternTool::mouseButtonRelease()
 		}
 	}
 
-	VPattern m_pattern = *m_optionsWidget->selectedPattern();
+	m_pattern = *m_optionsWidget->selectedPattern();
 
 	// use the old pattern position
 	m_pattern.setOrigin( oldPattern.origin() );
