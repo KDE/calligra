@@ -103,7 +103,7 @@ kexi__objectdata
 //This table contains fields that are members of given kexi object.
 //Not all object types should be allowed, now allowed are tables and queries
 kexi__fields
-	o_id integer REFERENCES kexi__objects(o_id),
+	t_id integer REFERENCES kexi__objects(o_id),
 	f_type byte,
 	f_name varchar(200),
 	f_length integer,
