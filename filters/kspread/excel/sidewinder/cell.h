@@ -30,6 +30,9 @@ namespace Swinder
 class Workbook;
 class Sheet;
 
+// don't export this private class
+class CellPrivate;
+
 class Cell
 {
 public:
@@ -77,9 +80,7 @@ private:
   Cell( const Cell& );
   Cell& operator=( const Cell& );
   
-  class Private;
-  Private* d;
-
+  CellPrivate *d;
 };
 
 } // namespace Swinder
