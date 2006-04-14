@@ -39,6 +39,14 @@ static inline unsigned long readU16( const void* p )
   return ptr[0]+(ptr[1]<<8);
 }
 
+static inline int readI16( const void* p )
+{
+  const unsigned char* ptr = (const unsigned char*) p;
+  unsigned int v = ptr[0]+(ptr[1]<<8);
+  if(v > 32768) v -= 65536;
+  return v;
+}
+
 static inline unsigned long readU32( const void* p )
 {
   const unsigned char* ptr = (const unsigned char*) p;
@@ -555,7 +563,7 @@ unsigned FormulaToken::size() const
     
     case Ref3d:
     case RefErr3d:
-      s = (d->ver == Excel97) ? 6 : 27;
+      s = (d->ver == Excel97) ? 6 : 17;
       break;
       
     case Float:
@@ -1094,7 +1102,20 @@ unsigned FormulaToken::nameIndex() const
 
 UString FormulaToken::area( unsigned row, unsigned col ) const
 {
-  // FIXME check data size !
+	// sanity check
+	if(id() != Area) 
+	if(id() != Area3d) 
+		return UString::null;
+
+	// check data size
+	int minsize = 0;
+	if((id() == Area3d))
+		minsize = (version() == Excel97) ? 10 : 20;
+	else if(id() == Area) 
+		minsize = (version() == Excel97) ? 8 : 6;
+	if(d->data.size() < minsize)
+		return UString::null;
+
   unsigned char buf[2];
   int row1Ref, row2Ref, col1Ref, col2Ref;
   bool row1Relative, col1Relative;
@@ -1102,20 +1123,22 @@ UString FormulaToken::area( unsigned row, unsigned col ) const
 
   if( version() == Excel97 )
   {
-    buf[0] = d->data[0];
-    buf[1] = d->data[1];
+    int ofs = (id() == Area) ? 0 : 2;
+
+	buf[0] = d->data[ofs];
+    buf[1] = d->data[ofs+1];
     row1Ref = readU16( buf );
 
-    buf[0] = d->data[2];
-    buf[1] = d->data[3];
+    buf[0] = d->data[ofs+2];
+    buf[1] = d->data[ofs+3];
     row2Ref = readU16( buf );
 
-    buf[0] = d->data[4];
-    buf[1] = d->data[5];
+    buf[0] = d->data[ofs+4];
+    buf[1] = d->data[ofs+5];
     col1Ref = readU16( buf );
 
-    buf[0] = d->data[6];
-    buf[1] = d->data[7];
+    buf[0] = d->data[ofs+6];
+    buf[1] = d->data[ofs+7];
     col2Ref = readU16( buf );
 
     row1Relative = col1Ref & 0x8000;
@@ -1128,19 +1151,21 @@ UString FormulaToken::area( unsigned row, unsigned col ) const
   }
   else
   {
-    buf[0] = d->data[0];
-    buf[1] = d->data[1];
+    int ofs = (id() == Area) ? 0 : 14;
+
+    buf[0] = d->data[ofs];
+    buf[1] = d->data[ofs+1];
     row1Ref = readU16( buf );
 
-    buf[0] = d->data[2];
-    buf[1] = d->data[3];
+    buf[0] = d->data[ofs+2];
+    buf[1] = d->data[ofs+3];
     row2Ref = readU16( buf );
 
-    buf[0] = d->data[4];
+    buf[0] = d->data[ofs+4];
     buf[1] = 0;
     col1Ref = readU16( buf );
 
-    buf[0] = d->data[5];
+    buf[0] = d->data[ofs+5];
     buf[1] = 0;
     col2Ref = readU16( buf );
 
@@ -1186,7 +1211,6 @@ UString FormulaToken::ref( unsigned row, unsigned col ) const
   int rowRef, colRef;
   bool rowRelative, colRelative;
 
-
   if( version() == Excel97 )
   {
     int ofs = (id() == Ref) ? 0 : 2;
@@ -1218,28 +1242,42 @@ UString FormulaToken::ref( unsigned row, unsigned col ) const
     rowRef &= 0x3fff;
   }
 
+  // slower, but readable
   UString result;
-
   if( !colRelative )
     result.append( UString("$") );
   result.append( Cell::columnLabel( colRef ) );  
   if( !rowRelative )
     result.append( UString("$") );
   result.append( UString::from( rowRef+1 ) );  
-
+  
   return result;  
 }
 
-// only when id is Ref3d
+// only when id is Ref3d or Area3d
 unsigned FormulaToken::externSheetRef() const
 {
 	if(version() >= Excel97)
-	if(d->data.size() == 6)
 	{
 		unsigned char buf[2];
 		buf[0] = d->data[0];
 		buf[1] = d->data[1];
 		return readU16(buf);
+	}
+	else
+	{
+		unsigned char buf[2];
+		buf[0] = d->data[0];
+		buf[1] = d->data[1];
+		int index = readI16(buf);
+
+		// negative index means own workbook
+		if(index < 0)
+		{
+			// the real index (absolute value) is one-based
+			unsigned ref = -index - 1;
+			return ref;
+		}
 	}
 
 	return 0; // FIXME is this safe?
@@ -4004,6 +4042,7 @@ SupbookRecord::SupbookRecord()
 
 SupbookRecord::~SupbookRecord()
 {
+  delete d;
 }
 
 SupbookRecord::ReferenceType SupbookRecord::referenceType() const
@@ -5175,7 +5214,7 @@ void ExcelReader::handleExternSheet( ExternSheetRecord* record )
   if(record->version() >= Excel97)
 	for(unsigned i = 0; i < record->count(); i++)
 	{
-		UString decodedRef;
+		UString decodedRef("#REF");
 
 		unsigned index = record->refIndex(i);
 		unsigned first = record->firstSheet(i);
@@ -5196,7 +5235,10 @@ void ExcelReader::handleExternSheet( ExternSheetRecord* record )
 		d->sheetRefs.push_back(decodedRef);
 	}
   else
-	  d->sheetRefs.push_back(record->refName());
+  {
+	  UString ref = record->refName();
+	  d->sheetRefs.push_back(ref);
+  }
 }
 
 void ExcelReader::handleFilepass( FilepassRecord* record )
@@ -5860,7 +5902,7 @@ void mergeTokens( UStringStack* stack, int count, UString mergeString )
         // sanity check
 	if(stack->size() == 0) break;
 
-    UString last = (*stack)[ stack->size()-1 ];
+    UString last = stack->at( stack->size()-1 );
     UString tmp = last;
     tmp.append( s1 );
     s1 = tmp;
@@ -6051,27 +6093,32 @@ UString ExcelReader::decodeFormula( unsigned row, unsigned col,
       
       case FormulaToken::Ref3d:
         {
-			UString cellName = token.ref(row, col);
-			UString sheetName = d->sheetRefs[token.externSheetRef()];
-			if(sheetName.isEmpty())
-				sheetName = UString("?");
+			UString refName("#REF");
 
-        	UString refName;
+			unsigned sheetIndex = token.externSheetRef();
+			if(sheetIndex < d->sheetRefs.size())
+			{
+				UString cellName = token.ref(row, col);
+				UString sheetName = d->sheetRefs[sheetIndex];
 
-			// OpenDocument example: [Sheet1.B1]
-        	if( openDocumentFormat )
-			{
-        	refName = UString("[");
-			refName.append( sheetName );
-        	refName.append(UString("."));
-			refName.append( cellName );
-        	refName.append(UString("]"));
-			}
-			else
-			{
-			refName = sheetName;
-			refName.append(UString("!"));
-			refName.append(cellName);
+				// OpenDocument example: [Sheet1.B1]
+        		if( openDocumentFormat )
+				{
+        			refName = UString("[");
+					refName.append( sheetName );
+					if(!sheetName.isEmpty())
+        				refName.append(UString("."));
+					refName.append( cellName );
+        			refName.append(UString("]"));
+				}
+				else
+				{
+					refName = sheetName;
+					if(!sheetName.isEmpty())
+        				refName.append(UString("."));
+					refName.append(UString("!"));
+					refName.append(cellName);
+				}
 			}
 
 			stack.push_back( refName );
@@ -6090,7 +6137,40 @@ UString ExcelReader::decodeFormula( unsigned row, unsigned col,
         }
         break;
 
-      case FormulaToken::Function:
+      case FormulaToken::Area3d:
+        {
+			UString areaName("#REF");
+
+			unsigned sheetIndex = token.externSheetRef();
+			if(sheetIndex < d->sheetRefs.size())
+			{
+				UString rangeName = token.area(row, col);
+				UString sheetName = d->sheetRefs[sheetIndex];
+
+				// OpenDocument example: [Sheet1.B1:B3]
+        		if( openDocumentFormat )
+				{
+        			areaName = UString("[");
+					areaName.append( sheetName );
+					if(!sheetName.isEmpty())
+        				areaName.append(UString("."));
+					areaName.append( rangeName );
+        			areaName.append(UString("]"));
+				}
+				else
+				{
+					areaName = sheetName;
+					if(!sheetName.isEmpty())
+        				areaName.append(UString("."));
+					areaName.append(UString("!"));
+					areaName.append(rangeName);
+				}
+			}
+          stack.push_back( areaName);
+        }
+        break;
+
+	  case FormulaToken::Function:
         {
           mergeTokens( &stack, token.functionParams(), argumentSeparator );
           if( stack.size() )
@@ -6178,7 +6258,6 @@ UString ExcelReader::decodeFormula( unsigned row, unsigned col,
       case FormulaToken::AreaN:
       case FormulaToken::MemAreaN:
       case FormulaToken::MemNoMemN:
-      case FormulaToken::Area3d:
       case FormulaToken::RefErr3d:
       case FormulaToken::AreaErr3d:
       default:

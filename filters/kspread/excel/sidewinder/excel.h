@@ -171,11 +171,11 @@ public:
   // only when id is Ref or Ref3d
   UString ref( unsigned row, unsigned col ) const;
 
-  // only when id is Ref3d
-  unsigned externSheetRef() const;
-
-  // only when id is Area
+  // only when id is Area or Area3d
   UString area( unsigned row, unsigned col ) const;
+
+  // only when id is Ref3d or Area3d
+  unsigned externSheetRef() const;
 
   // only when id is Attr
   unsigned attr() const;
