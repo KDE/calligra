@@ -17,7 +17,6 @@
 
 #include "keximacrotextview.h"
 
-#include <qdom.h>
 #include <ktextedit.h>
 #include <kdebug.h>
 
@@ -35,31 +34,15 @@ class KexiMacroTextView::Private
 	public:
 
 		/**
-		* The \a KoMacro::Manager instance used to access the
-		* Macro Framework.
-		*/
-		::KoMacro::Macro::Ptr macro;
-
-		/**
 		* The Editor used to display and edit the XML text.
 		*/
 		KTextEdit* editor;
 
-		/**
-		* Constructor.
-		*
-		* \param macro The \a KoMacro::Macro instance.
-		*/
-		explicit Private(::KoMacro::Macro* const m)
-			: macro(m)
-		{
-		}
-
 };
 
 KexiMacroTextView::KexiMacroTextView(KexiMainWindow *mainwin, QWidget *parent, ::KoMacro::Macro* const macro)
-	: KexiViewBase(mainwin, parent, "KexiMacroTextView")
-	, d( new Private(macro) )
+	: KexiMacroView(mainwin, parent, macro, "KexiMacroTextView")
+	, d( new Private() )
 {
 	QHBoxLayout* layout = new QHBoxLayout(this);
 	d->editor = new KTextEdit(this);
@@ -72,20 +55,6 @@ KexiMacroTextView::KexiMacroTextView(KexiMainWindow *mainwin, QWidget *parent, :
 KexiMacroTextView::~KexiMacroTextView()
 {
 	delete d;
-}
-
-tristate KexiMacroTextView::beforeSwitchTo(int mode, bool& dontstore)
-{
-	kexipluginsdbg << "KexiMacroTextView::beforeSwitchTo mode=" << mode << endl;
-	Q_UNUSED(dontstore);
-	return true;
-}
-
-tristate KexiMacroTextView::afterSwitchFrom(int mode)
-{
-	kexipluginsdbg << "KexiMacroTextView::afterSwitchFrom mode=" << mode << endl;
-	loadData(); // reload if we switched from another mode
-	return true;
 }
 
 void KexiMacroTextView::editorChanged()
@@ -109,31 +78,9 @@ bool KexiMacroTextView::loadData()
 	return true;
 }
 
-KexiDB::SchemaData* KexiMacroTextView::storeNewData(const KexiDB::SchemaData& sdata, bool &cancel)
-{
-	KexiDB::SchemaData *s = KexiViewBase::storeNewData(sdata, cancel);
-	kexipluginsdbg << "KexiMacroTextView::storeNewData(): new id:" << s->id() << endl;
-
-	if(!s || cancel) {
-		delete s;
-		return 0;
-	}
-
-	if(! storeData()) {
-		kdWarning() << "KexiMacroTextView::storeNewData Failed to store the data." << endl;
-		//failure: remove object's schema data to avoid garbage
-		KexiDB::Connection *conn = parentDialog()->mainWin()->project()->dbConnection();
-		conn->removeObject( s->id() );
-		delete s;
-		return 0;
-	}
-
-	return s;
-}
-
 tristate KexiMacroTextView::storeData(bool /*dontAsk*/)
 {
-	kexipluginsdbg << "KexiMacroDesignView::storeData(): " << parentDialog()->partItem()->name() << " [" << parentDialog()->id() << "]" << endl;
+	kexipluginsdbg << "KexiMacroTextView::storeData(): " << parentDialog()->partItem()->name() << " [" << parentDialog()->id() << "]" << endl;
 	return storeDataBlock( d->editor->text() );
 }
 

@@ -18,10 +18,7 @@
 #ifndef KEXIMACROTEXTVIEW_H
 #define KEXIMACROTEXTVIEW_H
 
-#include <kexiviewbase.h>
-
-//#include <koproperty/set.h>
-//#include <koproperty/property.h>
+#include "keximacroview.h"
 
 // Forward declaration.
 namespace KoMacro {
@@ -29,10 +26,10 @@ namespace KoMacro {
 }
 
 /**
- * The KexiMacroTextView implements \a KexiViewBase to provide
- * the XML document of a Macro.
+ * The KexiMacroTextView implements \a KexiMacroView to provide
+ * a simple texteditor to edit the XML document of a Macro.
  */
-class KexiMacroTextView : public KexiViewBase
+class KexiMacroTextView : public KexiMacroView
 {
 		Q_OBJECT
 	public:
@@ -53,56 +50,15 @@ class KexiMacroTextView : public KexiViewBase
 		virtual ~KexiMacroTextView();
 
 		/**
-		* Try to call \a storeData with new data we like to store. On
-		* success the matching \a KexiDB::SchemaData is returned.
-		*
-		* \param sdata The source \a KexiDB::SchemaData instance.
-		* \param cancel Cancel on failure and don't try to clean
-		*       possible temporary created data up.
-		* \return The matching \a KexiDB::SchemaData instance or NULL
-		*        if storing failed.
+		* Load the data and display it in the editor.
 		*/
-		virtual KexiDB::SchemaData* storeNewData(const KexiDB::SchemaData& sdata, bool &cancel);
+		virtual bool loadData();
 
 		/**
 		* Try to store the modified data in the already opened and
 		* currently used \a KexiDB::SchemaData instance.
 		*/
 		virtual tristate storeData(bool dontAsk = false);
-
-	protected:
-
-		/**
-		* Called by KexiDialogBase::switchToViewMode() right before dialog
-		* is switched to new mode.
-		*
-		* \param mode The viewmode to which should be switched. This
-		*        could be either Kexi::DataViewMode, Kexi::DesignViewMode
-		*        or Kexi::TextViewMode.
-		* \param donstore This call-by-reference boolean value defines
-		*        if \a storeData should be called for the old but still
-		*        selected viewmode. Set \a dontstore to true (it's false
-		*        by default) if you want to avoid data storing.
-		* \return true if you accept or false if a error occupied and view
-		*         shouldn't change. If there is no error but switching 
-		*         should be just cancelled (probably after showing some 
-		*         info messages), you need to return cancelled.
-		*/
-		virtual tristate beforeSwitchTo(int mode, bool& dontstore);
-
-		/**
-		* Called by \a KexiDialogBase::switchToViewMode() right after dialog
-		* is switched to new mode.
-		*
-		* \param mode The viewmode to which we switched. This could
-		*        be either Kexi::DataViewMode, Kexi::DesignViewMode
-		*        or Kexi::TextViewMode.
-		* \return true if you accept or false if a error occupied and view
-		*         shouldn't change. If there is no error but switching
-		*         should be just cancelled (probably after showing
-		*         some info messages), you need to return cancelled.
-		*/
-		virtual tristate afterSwitchFrom(int mode);
 
 	private slots:
 
@@ -116,12 +72,6 @@ class KexiMacroTextView : public KexiViewBase
 		class Private;
 		/// \internal d-pointer instance.
 		Private* const d;
-
-		/**
-		* Load the data from XML source and fill the internally
-		* used \a Kross::Api::ScriptContainer instance.
-		*/
-		bool loadData();
 };
 
 #endif

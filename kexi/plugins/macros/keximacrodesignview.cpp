@@ -80,12 +80,6 @@ class KexiMacroDesignView::Private
 	public:
 
 		/**
-		* The \a KoMacro::Manager instance used to access the
-		* Macro Framework.
-		*/
-		::KoMacro::Macro::Ptr macro;
-
-		/**
 		* The \a KexiMacroTableView used to display the actions
 		* a \a Macro has.
 		*/
@@ -109,22 +103,18 @@ class KexiMacroDesignView::Private
 		* \param m The passed \a KoMacro::Manager instance our
 		*        \a manager points to.
 		*/
-		Private(::KoMacro::Macro* const m)
-			: macro(m)
-			, propertyset(0)
+		Private()
+			: propertyset(0)
 		{
 		}
 
 };
 
 KexiMacroDesignView::KexiMacroDesignView(KexiMainWindow *mainwin, QWidget *parent, ::KoMacro::Macro* const macro)
-	: KexiViewBase(mainwin, parent, "KexiMacroDesignView")
-	, d( new Private(macro) )
+	: KexiMacroView(mainwin, parent, macro, "KexiMacroDesignView")
+	, d( new Private() )
 {
 	initTable();
-	initData();
-
-	plugSharedAction( "data_execute", this, SLOT(execute()) );
 }
 
 KexiMacroDesignView::~KexiMacroDesignView()
@@ -189,11 +179,13 @@ void KexiMacroDesignView::initTable()
 	QHBoxLayout* layout = new QHBoxLayout(this);
 	d->tableview = new KexiMacroTableView(d->tabledata, this);
 	d->tableview->setSpreadSheetMode();
-	d->tableview->setColumnStretchEnabled( true, COLUMN_ID_DESC ); //last column occupies the rest of the area
+	//d->tableview->setColumnStretchEnabled( true, COLUMN_ID_DESC ); //last column occupies the rest of the area
 	layout->addWidget(d->tableview);
+
+	updateData();
 }
 
-void KexiMacroDesignView::initData()
+void KexiMacroDesignView::updateData()
 {
 	d->tabledata->deleteAllRows();
 	initProperties();
@@ -201,6 +193,9 @@ void KexiMacroDesignView::initData()
 	for (int i=0; i<50; i++) { // rows...
 		d->tabledata->append( d->tabledata->createItem() );
 	}
+
+	// we need to reset the stretch-column - this seems to be a bug in kexitableview
+	d->tableview->setColumnStretchEnabled( true, COLUMN_ID_DESC ); //last column occupies the rest of the area
 	//set data for our spreadsheet: this will clear our sets
 	d->tableview->setData(d->tabledata);
 }
@@ -303,110 +298,17 @@ void KexiMacroDesignView::updateProperties(int type)
 	propertySetSwitched();
 }
 
-tristate KexiMacroDesignView::beforeSwitchTo(int mode, bool& dontstore)
+bool KexiMacroDesignView::loadData()
 {
-	kexipluginsdbg << "KexiMacroDesignView::beforeSwitchTo mode=" << mode << endl;
-	Q_UNUSED(dontstore);
-	return true;
-}
-
-tristate KexiMacroDesignView::afterSwitchFrom(int mode)
-{
-	kexipluginsdbg << "KexiMacroDesignView::afterSwitchFrom mode=" << mode << endl;
-	loadData(); // reload the data
+	if(! KexiMacroView::loadData())
+		return false;
+	updateData(); // update the tableview's data.
 	return true;
 }
 
 KoProperty::Set* KexiMacroDesignView::propertySet()
 {
 	return d->propertyset ? d->propertyset->currentPropertySet() : 0;
-}
-
-bool KexiMacroDesignView::loadData()
-{
-	QString data;
-	if(! loadDataBlock(data)) {
-		kexipluginsdbg << "KexiMacroDesignView::loadData(): no DataBlock" << endl;
-		return false;
-	}
-
-	QString errmsg;
-	int errline;
-	int errcol;
-
-	QDomDocument domdoc;
-	bool parsed = domdoc.setContent(data, false, &errmsg, &errline, &errcol);
-
-	if(! parsed) {
-		kexipluginsdbg << "KexiMacroDesignView::loadData() XML parsing error line: " << errline << " col: " << errcol << " message: " << errmsg << endl;
-		return false;
-	}
-
-	kdDebug() << QString("KexiMacroDesignView::loadData()\n%1").arg(domdoc.toString()) << endl;
-	QDomElement macroelem = domdoc.namedItem("macro").toElement();
-	if(macroelem.isNull()) {
-		kexipluginsdbg << "KexiMacroDesignView::loadData(): macro domelement is null" << endl;
-		return false;
-	}
-		
-	return d->macro->xmlHandler()->fromXML(macroelem);
-}
-
-KexiDB::SchemaData* KexiMacroDesignView::storeNewData(const KexiDB::SchemaData& sdata, bool &cancel)
-{
-	KexiDB::SchemaData *s = KexiViewBase::storeNewData(sdata, cancel);
-	kexipluginsdbg << "KexiMacroDesignView::storeNewData(): new id:" << s->id() << endl;
-
-	if(!s || cancel) {
-		delete s;
-		return 0;
-	}
-
-	if(! storeData()) {
-		kdWarning() << "KexiMacroDesignView::storeNewData Failed to store the data." << endl;
-		//failure: remove object's schema data to avoid garbage
-		KexiDB::Connection *conn = parentDialog()->mainWin()->project()->dbConnection();
-		conn->removeObject( s->id() );
-		delete s;
-		return 0;
-	}
-
-	return s;
-}
-
-tristate KexiMacroDesignView::storeData(bool /*dontAsk*/)
-{
-	kexipluginsdbg << "KexiMacroDesignView::storeData(): " << parentDialog()->partItem()->name() << " [" << parentDialog()->id() << "]" << endl;
-
-	/*
-	QDomElement macroelem = domdoc.createElement("macro");
-	domdoc.appendChild(macroelem);
-	for(KexiTableViewData::Iterator it = d->tabledata->iterator(); it.current(); ++it) {
-		KexiTableItem* item = it.current();
-		if(! item->at(0).isNull()) {
-			bool ok;
-			int actionindex = item->at(0).toInt(&ok);
-			if(ok) {
-				QString s = QString("action%1").arg(actionindex); //TODO
-				QDomElement elem = domdoc.createElement(s);
-				macroelem.appendChild(elem);
-			}
-		}
-	}
-	QString xml = domdoc.toString();
-	*/
-
-	QDomDocument domdoc("macros");
-	QDomElement macroelem = d->macro->xmlHandler()->toXML();
-	domdoc.appendChild(macroelem);
-	QString xml = domdoc.toString();
-	kdDebug() << QString("KexiMacroDesignView::storeData\n%1").arg(xml) << endl;
-	return storeDataBlock(xml);
-}
-
-void KexiMacroDesignView::execute()
-{
-	kdDebug() << "KexiMacroDesignView::execute" << endl;
 }
 
 void KexiMacroDesignView::itemSelected(KexiTableItem*)
