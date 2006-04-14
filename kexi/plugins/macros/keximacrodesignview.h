@@ -118,14 +118,9 @@ class KexiMacroDesignView : public KexiMacroView
 		void updateData();
 
 		/**
-		 * Initialize the \a KoProperty::Set properties.
-		 */
-		void initProperties();
-
-		/**
 		 * Update the \a KoProperty::Set properties.
 		 */
-		void updateProperties(int type);
+		void updateProperties(int type = 0);
 };
 
 #endif

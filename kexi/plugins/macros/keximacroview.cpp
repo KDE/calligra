@@ -60,7 +60,7 @@ class KexiMacroView::Private
 };
 
 KexiMacroView::KexiMacroView(KexiMainWindow *mainwin, QWidget *parent, ::KoMacro::Macro* const macro, const char* name)
-	: KexiViewBase(mainwin, parent, name)
+	: KexiViewBase(mainwin, parent, (name ? name : "KexiMacroView"))
 	, d( new Private(macro) )
 {
 	plugSharedAction( "data_execute", this, SLOT(execute()) );
@@ -78,8 +78,7 @@ KexiMacroView::~KexiMacroView()
 
 tristate KexiMacroView::beforeSwitchTo(int mode, bool& dontstore)
 {
-	kexipluginsdbg << "KexiMacroView::beforeSwitchTo mode=" << mode << endl;
-	Q_UNUSED(dontstore);
+	kexipluginsdbg << "KexiMacroView::beforeSwitchTo mode=" << mode << " dontstore=" << dontstore << endl;
 	return true;
 }
 
@@ -110,10 +109,10 @@ bool KexiMacroView::loadData()
 		return false;
 	}
 
-	kdDebug() << QString("KexiMacroView::loadData()\n%1").arg(domdoc.toString()) << endl;
+	kexipluginsdbg << QString("KexiMacroView::loadData()\n%1").arg(domdoc.toString()) << endl;
 	QDomElement macroelem = domdoc.namedItem("macro").toElement();
 	if(macroelem.isNull()) {
-		kexipluginsdbg << "KexiMacroView::loadData(): macro domelement is null" << endl;
+		kexipluginsdbg << "KexiMacroView::loadData() Macro domelement is null" << endl;
 		return false;
 	}
 		
@@ -123,7 +122,7 @@ bool KexiMacroView::loadData()
 KexiDB::SchemaData* KexiMacroView::storeNewData(const KexiDB::SchemaData& sdata, bool &cancel)
 {
 	KexiDB::SchemaData *s = KexiViewBase::storeNewData(sdata, cancel);
-	kexipluginsdbg << "KexiMacroView::storeNewData(): new id:" << s->id() << endl;
+	kexipluginsdbg << "KexiMacroView::storeNewData() new id:" << s->id() << endl;
 
 	if(!s || cancel) {
 		delete s;
@@ -131,7 +130,7 @@ KexiDB::SchemaData* KexiMacroView::storeNewData(const KexiDB::SchemaData& sdata,
 	}
 
 	if(! storeData()) {
-		kdWarning() << "KexiMacroView::storeNewData Failed to store the data." << endl;
+		kexipluginsdbg << "KexiMacroView::storeNewData() Failed to store the data." << endl;
 		//failure: remove object's schema data to avoid garbage
 		KexiDB::Connection *conn = parentDialog()->mainWin()->project()->dbConnection();
 		conn->removeObject( s->id() );
@@ -144,8 +143,6 @@ KexiDB::SchemaData* KexiMacroView::storeNewData(const KexiDB::SchemaData& sdata,
 
 tristate KexiMacroView::storeData(bool /*dontAsk*/)
 {
-	kexipluginsdbg << "KexiMacroView::storeData(): " << parentDialog()->partItem()->name() << " [" << parentDialog()->id() << "]" << endl;
-
 	/*
 	QDomElement macroelem = domdoc.createElement("macro");
 	domdoc.appendChild(macroelem);
@@ -167,14 +164,14 @@ tristate KexiMacroView::storeData(bool /*dontAsk*/)
 	QDomDocument domdoc("macros");
 	QDomElement macroelem = d->macro->xmlHandler()->toXML();
 	domdoc.appendChild(macroelem);
-	QString xml = domdoc.toString();
-	kdDebug() << QString("KexiMacroView::storeData\n%1").arg(xml) << endl;
+	const QString xml = domdoc.toString();
+	const QString name = QString("%1 [%2]").arg(parentDialog()->partItem()->name()).arg(parentDialog()->id());
+	kexipluginsdbg << QString("KexiMacroView::storeData %1\n%2").arg(name).arg(xml) << endl;
 	return storeDataBlock(xml);
 }
 
 void KexiMacroView::execute()
 {
-	kdDebug() << "KexiMacroView::execute" << endl;
 	d->macro->activate();
 }
 

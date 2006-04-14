@@ -150,6 +150,8 @@ XMLHandler* Macro::xmlHandler()
 
 void Macro::activate()
 {
+	kdDebug() << "Macro::activate()" << endl;
+
 	Context::Ptr context = new Context(this);
 	//connect(context, SIGNAL(activated()), this, SIGNAL(activated()));
 	context->activate();

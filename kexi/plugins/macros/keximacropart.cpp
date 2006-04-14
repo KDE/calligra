@@ -16,6 +16,8 @@
 */
 
 #include "keximacropart.h"
+
+#include "keximacroview.h"
 #include "keximacrodesignview.h"
 #include "keximacrotextview.h"
 
@@ -87,10 +89,22 @@ KexiMacroPart::~KexiMacroPart()
 	delete d;
 }
 
-bool KexiMacroPart::execute(KexiPart::Item*)
+bool KexiMacroPart::execute(KexiPart::Item* item)
 {
-	kdDebug() << "KexiMacroPart::execute()" << endl;
-	///\todo
+	const QString itemname = item->name();
+	kdDebug() << "KexiMacroPart::execute() itemname=" << itemname << endl;
+	
+	KoMacro::Macro::Ptr macro = ::KoMacro::Manager::self()->getMacro(itemname);
+	if(! macro) {
+		//TODO move that functionality to KoMacro::Manager ?!
+		// If we don't have a macro with that name yet, create one that
+		// will be remembered for later.
+		macro = ::KoMacro::Manager::self()->createMacro(itemname);
+	}
+
+	KexiMacroView* view = new KexiMacroView(m_mainWin, m_mainWin, macro);
+	view->execute();
+	view->deleteLater();
 	return true;
 }
 
@@ -108,17 +122,17 @@ void KexiMacroPart::initInstanceActions()
 
 KexiViewBase* KexiMacroPart::createView(QWidget* parent, KexiDialogBase* dialog, KexiPart::Item& item, int viewMode, QMap<QString,QString>*)
 {
-	QString partname = item.name();
-	kdDebug() << "KexiMacroPart::createView() partname=" << partname << endl;
+	const QString itemname = item.name();
+	kdDebug() << "KexiMacroPart::createView() itemname=" << itemname << endl;
 
-	KoMacro::Macro::Ptr macro = ::KoMacro::Manager::self()->getMacro(partname);
-	if(! macro) {
-		// If we don't have a macro with that name yet, create one that
-		// will be remembered for later.
-		macro = ::KoMacro::Manager::self()->createMacro(partname);
-	}
+	if(! itemname.isNull()) {
+		KoMacro::Macro::Ptr macro = ::KoMacro::Manager::self()->getMacro(itemname);
+		if(! macro) {
+			// If we don't have a macro with that name yet, create one that
+			// will be remembered for later.
+			macro = ::KoMacro::Manager::self()->createMacro(itemname);
+		}
 
-	if(! partname.isNull()) {
 		KexiMainWindow *win = dialog->mainWin();
 		if(win && win->project() && win->project()->dbConnection()) {
 			if(viewMode == Kexi::DesignViewMode) {

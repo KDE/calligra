@@ -124,9 +124,11 @@ KexiMacroDesignView::~KexiMacroDesignView()
 
 void KexiMacroDesignView::initTable()
 {
+	// The table's data-model.
 	d->tabledata = new KexiTableViewData();
 	d->tabledata->setSorting(-1); // disable sorting
 
+	// Add the "Action" column.
 	KexiTableViewColumn* actioncol = new KexiTableViewColumn(
 		"action", // name/identifier
 		KexiDB::Field::Enum, // fieldtype
@@ -152,6 +154,7 @@ void KexiMacroDesignView::initTable()
 	//items.append(i18n("Errorhandler"));
 	actioncol->field()->setEnumHints(items);
 
+	// Add the "Comment" column.
 	d->tabledata->addColumn( new KexiTableViewColumn(
 		"comment", // name/identifier
 		KexiDB::Field::Text, // fieldtype
@@ -176,41 +179,47 @@ void KexiMacroDesignView::initTable()
 	connect(d->tabledata, SIGNAL(aboutToDeleteRow(KexiTableItem&,KexiDB::ResultInfo*,bool)),
 		this, SLOT(aboutToDeleteRow(KexiTableItem&,KexiDB::ResultInfo*,bool)));
 
+	// Create the tableview.
 	QHBoxLayout* layout = new QHBoxLayout(this);
 	d->tableview = new KexiMacroTableView(d->tabledata, this);
 	d->tableview->setSpreadSheetMode();
-	//d->tableview->setColumnStretchEnabled( true, COLUMN_ID_DESC ); //last column occupies the rest of the area
+	d->tableview->setColumnStretchEnabled( true, COLUMN_ID_DESC ); //last column occupies the rest of the area
 	layout->addWidget(d->tableview);
 
+	// Everything is ready. So, update the data now.
 	updateData();
 }
 
 void KexiMacroDesignView::updateData()
 {
-	d->tabledata->deleteAllRows();
-	initProperties();
+	d->tableview->blockSignals(true);
+	d->tabledata->blockSignals(true);
 
-	for (int i=0; i<50; i++) { // rows...
+	// Remove previous content
+	d->tabledata->deleteAllRows();
+	// Initialize the properties displayed in the propertyview.
+	updateProperties();
+	// Add the rows
+	for (int i=0; i<50; i++) {
 		d->tabledata->append( d->tabledata->createItem() );
 	}
-
-	// we need to reset the stretch-column - this seems to be a bug in kexitableview
-	d->tableview->setColumnStretchEnabled( true, COLUMN_ID_DESC ); //last column occupies the rest of the area
-	//set data for our spreadsheet: this will clear our sets
+	// set data for our spreadsheet: this will clear our sets
 	d->tableview->setData(d->tabledata);
+	// work around a bug in the KexiTableView where we lose the stretch-setting...
+	d->tableview->setColumnStretchEnabled( true, COLUMN_ID_DESC ); //last column occupies the rest of the area
+	
+	d->tableview->blockSignals(false);
+	d->tabledata->blockSignals(false);
 }
 
-void KexiMacroDesignView::initProperties()
+void KexiMacroDesignView::updateProperties(int type)
 {
 	if(! d->propertyset) {
 		d->propertyset = new KexiDataAwarePropertySet(this, d->tableview);
 		//connect(d->propertyset, SIGNAL(rowDeleted()), this, SLOT(updateActions()));
 		//connect(d->propertyset, SIGNAL(rowInserted()), this, SLOT(updateActions()));
 	}
-}
 
-void KexiMacroDesignView::updateProperties(int type)
-{
 	KoProperty::Set* set = propertySet();
 	if(! set) {
 		propertySetSwitched();

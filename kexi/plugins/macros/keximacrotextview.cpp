@@ -24,6 +24,7 @@
 #include <kexidb/connection.h>
 
 #include "lib/macro.h"
+#include "lib/xmlhandler.h"
 
 /**
 * \internal d-pointer class to be more flexible on future extension of the
@@ -71,16 +72,16 @@ bool KexiMacroTextView::loadData()
 	}
 
 	kdDebug() << QString("KexiMacroTextView::loadData()\n%1").arg(data) << endl;
-	disconnect(d->editor, SIGNAL(textChanged()), this, SLOT(editorChanged()));
+	//d->editor->blockSignals(true);
 	d->editor->setText(data);
+	//d->editor->blockSignals(false);
 	setDirty(false);
-	connect(d->editor, SIGNAL(textChanged()), this, SLOT(editorChanged()));
 	return true;
 }
 
 tristate KexiMacroTextView::storeData(bool /*dontAsk*/)
 {
-	kexipluginsdbg << "KexiMacroTextView::storeData(): " << parentDialog()->partItem()->name() << " [" << parentDialog()->id() << "]" << endl;
+	kexipluginsdbg << QString("KexiMacroTextView::storeData() %1 [%2]\n%3").arg(parentDialog()->partItem()->name()).arg(parentDialog()->id()).arg(d->editor->text()) << endl;
 	return storeDataBlock( d->editor->text() );
 }
 

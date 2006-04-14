@@ -115,7 +115,10 @@ void Context::setVariable(const QString& name, Variable::Ptr variable)
 //activate an action if there is one 
 void Context::activate()
 {
+	kdDebug() << "Context::activate()" << endl;
+
 	if(! d->action) {
+		kdDebug() << "Context::activate() no Action" << endl;
 		return;
 	}
 

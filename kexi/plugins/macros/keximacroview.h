@@ -52,7 +52,7 @@ class KexiMacroView : public KexiViewBase
 		* \param parent The parent widget this widget should be displayed in.
 		* \param macro The \a KoMacro::Macro instance this view is for.
 		*/
-		KexiMacroView(KexiMainWindow *mainwin, QWidget *parent, ::KoMacro::Macro* const macro, const char* name);
+		KexiMacroView(KexiMainWindow *mainwin, QWidget *parent, ::KoMacro::Macro* const macro, const char* name = 0);
 
 		/**
 		* Destructor.
@@ -88,6 +88,14 @@ class KexiMacroView : public KexiViewBase
 		*/
 		virtual tristate storeData(bool dontAsk = false);
 
+	public slots:
+
+		/**
+		* This slot will be invoked if Kexi's menuitem Data=>Execute
+		* got executed.
+		*/
+		void execute();
+
 	protected:
 
 		/**
@@ -121,14 +129,6 @@ class KexiMacroView : public KexiViewBase
 		*         some info messages), you need to return cancelled.
 		*/
 		virtual tristate afterSwitchFrom(int mode);
-
-	private slots:
-
-		/**
-		* This slot will be invoked if Kexi's menuitem Data=>Execute
-		* got executed.
-		*/
-		void execute();
 
 	private:
 		/// \internal d-pointer class.
