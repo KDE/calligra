@@ -32,7 +32,7 @@ kde4_add_plugin(kspreadlatexexport WITH_PREFIX ${kspreadlatexexport_PART_SRCS})
 
 kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kspreadlatexexport )
 
-target_link_libraries(kspreadlatexexport  ${KDE4_KDECORE_LIBS} )
+target_link_libraries(kspreadlatexexport  ${KDE4_KDEUI_LIBS} kstore kofficeui )
 
 install_targets(${LIB_INSTALL_DIR}/kde4 kspreadlatexexport )
 

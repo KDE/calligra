@@ -189,7 +189,7 @@ void HTMLExport::openPage( Sheet *sheet, KoDocument *document, QString &str )
   str += "<html>\n";
   str += "<head>\n";
   str += "<meta http-equiv=\"Content-Type\" ";
-  str += QString("content=\"text/html; charset=%1\">\n").arg( m_dialog->encoding()->mimeName() );
+  str += QString("content=\"text/html; charset=%1\">\n", QString(m_dialog->encoding()->mimeName() ));
   str += "<meta name=\"Generator\" ";
   str += "content=\"KSpread HTML Export Filter Version = ";
   str += KOFFICE_VERSION_STRING;
