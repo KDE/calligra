@@ -5,6 +5,9 @@
 * Integrated ProxyFunction's.
 * Python: Added unittest.
 
+1.5.1
+* Python: Fix compile with gcc 3.3.6
+
 1.5
 * Ruby: Fix 124649: libruby-devel lost when build.
 * Ruby: Fix crash cause of invalid rNode.
