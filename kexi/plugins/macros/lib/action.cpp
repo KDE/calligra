@@ -53,6 +53,12 @@ namespace KoMacro {
 			bool blocking;
 
 			/**
+			 * A list of @a Variable instances this @a Action
+			 * provides.
+			 */
+			Variable::List variables;
+
+			/**
 			* Cached QDomElement.
 			*/
 			QDomElement element;
@@ -127,6 +133,16 @@ bool Action::isBlocking() const
 void Action::setBlocking(bool blocking)
 {
 	d->blocking = blocking;
+}
+
+Variable::List Action::variables() const
+{
+	return d->variables;
+}
+
+void Action::setVariables(Variable::List variables)
+{
+	d->variables = variables;
 }
 
 const QDomElement Action::domElement() const

@@ -78,22 +78,6 @@ namespace KoMacro {
 			const QString slot() const;
 
 			/**
-			* @return the optional returnvalue @a Variable .
-			*/
-			Variable::Ptr returnValue() const;
-
-			/**
-			* Set the @p variable @a Variable as returnvalue.
-			*/
-			void setReturnValue(Variable::Ptr variable);
-
-			/**
-			* @return a list of optional @a Variable instances passed
-			* as function arguments on activation.
-			*/
-			Variable::List variables() const;
-
-			/**
 			* @return the @a MetaObject receiver object or NULL if there
 			* is no receiver object defined.
 			*/

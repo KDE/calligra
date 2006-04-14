@@ -31,8 +31,14 @@ class QDomElement;
 
 namespace KoMacro {
 
-	class KOMACRO_EXPORT XMLHandler {
+	/**
+	* The XMLHandler class manages the (un-)serialization of
+	* a @a Macro instance to/from XML.
+	*/
+	class KOMACRO_EXPORT XMLHandler
+	{
 		public:
+
 			/**
 			* Constructor to init a @a XMLHandler .
 			* @param macro The @a Macro instance which will
@@ -51,8 +57,7 @@ namespace KoMacro {
 			* @param element The @a QDomElement within
 			* the @a Macro.
 			*/
-			void fromXML(const QDomElement& element);
-
+			bool fromXML(const QDomElement& element);
 
 			/**
 			* Converts the macro to a @a QDomElement.
@@ -60,7 +65,6 @@ namespace KoMacro {
 			* the @a Macro.
 			*/
 			QDomElement toXML();
-
 
 		private:
 			/// @internal d-pointer class.

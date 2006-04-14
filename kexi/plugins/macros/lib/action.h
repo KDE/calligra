@@ -45,11 +45,11 @@ namespace KoMacro {
 	{
 			Q_OBJECT
 
-			/**
-			* Property to get and set the comment associated with this
-			* action.
-			*/
+			/// Property to get/set the comment-property.
 			Q_PROPERTY(QString comment READ comment WRITE setComment)
+
+			/// Property to get/set the blocking-property.
+			Q_PROPERTY(bool blocking READ isBlocking WRITE setBlocking)
 
 		public:
 
@@ -74,7 +74,8 @@ namespace KoMacro {
 			virtual ~Action();
 
 			/**
-			* @return the @a Manager instance this action is a child of.
+			* @return the @a Manager instance this action is a
+			* child of.
 			*/
 			Manager* const manager() const;
 
@@ -101,14 +102,30 @@ namespace KoMacro {
 			bool isBlocking() const;
 
 			/**
-			 * If \p blocking is true this Action will be executed synchron and
+			 * If @p blocking is true this Action will be executed synchron and
 			 * therefore blocking and if its false the execution is done
 			 * asynchron in a more nonblocking way.
 			 */
 			void setBlocking(bool blocking);
 
+			// do we need to have them accessible by an unique key?
+			//Variable::Ptr variable(const QString& name) const;
+			//void setVariable(const QString& name, Variable::Ptr) const;
+
+			/**
+			* @return the list of variables this @a Action provides.
+			*/
+			Variable::List variables() const;
+
+			/**
+			 * Set the list of variables this @a Action provides.
+			 */
+			void setVariables(Variable::List variables);
+
 			/**
 			* @return this instance as serialized QDomElement.
+			*
+			* @deprecated Use XMLHandler for such functionality.
 			*/
 			const QDomElement domElement() const;
 

@@ -25,12 +25,16 @@ using namespace KoMacro;
 
 namespace KoMacro {
 
+	/**
+	* @internal d-pointer class to be more flexible on future extension of the
+	* functionality without to much risk to break the binary compatibility.
+	*/
 	class XMLHandler::Private
 	{
 		public:
 
 			/**
-			* The \a Macro instance this \a XMLHandler
+			* The @a Macro instance this @a XMLHandler
 			* manages.
 			*/
 			Macro::Ptr macro;
@@ -38,8 +42,8 @@ namespace KoMacro {
 			/**
 			* Constructor.
 			*
-			* @param macro The \a Macro instance this
-			* \a XMLHandler manages.
+			* @param macro The @a Macro instance this
+			* @a XMLHandler manages.
 			*/
 			Private(Macro::Ptr macro)
 				: macro(macro)
@@ -52,7 +56,7 @@ namespace KoMacro {
 			* contains a valid userdefined
 			* @a Action, else returns NULL.
 			*/
-			Action* insertAction(QDomElement element)
+			Action* insertAction(const QDomElement& element)
 			{
 				Q_UNUSED(element);
 				/*
@@ -73,6 +77,7 @@ namespace KoMacro {
 				return 0;
 			}
 	};
+
 }
 
 XMLHandler::XMLHandler(Macro::Ptr macro)
@@ -85,7 +90,7 @@ XMLHandler::~XMLHandler()
 	delete d;
 }
 
-void XMLHandler::fromXML(const QDomElement& element)
+bool XMLHandler::fromXML(const QDomElement& element)
 {
 	Q_UNUSED(element);
 	/*
@@ -95,16 +100,30 @@ void XMLHandler::fromXML(const QDomElement& element)
 		node = node.nextSibling();
 	}
 	*/
+	return true;
 }
 
 QDomElement XMLHandler::toXML()
 {
+	// The QDomDocument provides us the functionality to create new QDomElement instances.
 	QDomDocument document;
+	// Create the Macro-QDomElement. This element will be returned.
 	QDomElement macroelem = document.createElement("macro");
+	// The children (aka actions) a Macro provides.
 	QValueList<Action::Ptr> children = d->macro->children();
+	// Create an iterator...
 	QValueList<Action::Ptr>::Iterator childit = children.begin();
+	// ...and iterate over the list of children the Macro provides.
 	for(;childit != children.end(); childit++) {
-		QDomElement actionelem = document.createElement("action");
+		Action::Ptr action = *childit;
+		// The name the action has is used as tagname.
+		const QString tagname = action->name();
+		// Create a new QDomElement...
+		QDomElement actionelem = document.createElement(tagname);
+
+		//TODO add action-specific attributes/child-nodes/etc.
+
+		// ...and append the new QDomElement as child to our Macro-QDomElement.
 		macroelem.appendChild(actionelem);
 	}
 	return macroelem;

@@ -125,8 +125,6 @@ KexiMacroDesignView::KexiMacroDesignView(KexiMainWindow *mainwin, QWidget *paren
 	initData();
 
 	plugSharedAction( "data_execute", this, SLOT(execute()) );
-
-	loadData();
 }
 
 KexiMacroDesignView::~KexiMacroDesignView()
@@ -315,6 +313,7 @@ tristate KexiMacroDesignView::beforeSwitchTo(int mode, bool& dontstore)
 tristate KexiMacroDesignView::afterSwitchFrom(int mode)
 {
 	kexipluginsdbg << "KexiMacroDesignView::afterSwitchFrom mode=" << mode << endl;
+	loadData(); // reload the data
 	return true;
 }
 
@@ -347,13 +346,10 @@ bool KexiMacroDesignView::loadData()
 	QDomElement macroelem = domdoc.namedItem("macro").toElement();
 	if(macroelem.isNull()) {
 		kexipluginsdbg << "KexiMacroDesignView::loadData(): macro domelement is null" << endl;
-		//return false;
+		return false;
 	}
-	else {
-		//QString interpretername = scriptelem.attribute("language");
-	}
-
-	return true;
+		
+	return d->macro->xmlHandler()->fromXML(macroelem);
 }
 
 KexiDB::SchemaData* KexiMacroDesignView::storeNewData(const KexiDB::SchemaData& sdata, bool &cancel)

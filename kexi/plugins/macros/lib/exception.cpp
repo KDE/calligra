@@ -19,6 +19,8 @@
 
 #include "exception.h"
 
+#include <kdebug.h>
+
 using namespace KoMacro;
 
 namespace KoMacro {
@@ -52,6 +54,7 @@ namespace KoMacro {
 Exception::Exception(const QString& errormessage, const QString& tracemessage)
 	: d( new Private(errormessage) ) // create the private d-pointer instance.
 {
+	kdDebug() << QString("Exception errormessage=\"%1\" tracemessage=\"%2\"").arg(errormessage).arg(tracemessage) << endl;
 	if(! tracemessage.isNull()) {
 		d->tracemessages.append(tracemessage);
 	}

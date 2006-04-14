@@ -178,7 +178,7 @@ QUObject* MetaMethod::toQUObject(Variable::List arguments)
 {
 	uint argsize = d->arguments.size();
 
-	if(arguments.size() < argsize) {
+	if(arguments.size() <= argsize) {
 		throw Exception(
 			QString("To less arguments for slot with siganture \"%1\"").arg(d->signature),
 			"KoMacro::MetaMethod::quobject"
@@ -193,14 +193,14 @@ QUObject* MetaMethod::toQUObject(Variable::List arguments)
 
 	for(uint i = 0; i < argsize; i++) {
 		MetaParameter::Ptr metaargument = d->arguments[i];
-		Variable::Ptr variable = arguments[i];
+		Variable::Ptr variable = arguments[i + 1];
 
-	if ( !variable ) {
-	 throw Exception(
-						QString("Variable is undefined !"),
-						"KoMacro::MetaMethod::quobject"
+		if ( !variable ) {
+	 		throw Exception(
+				QString("Variable is undefined !"),
+				"KoMacro::MetaMethod::quobject"
 			);
-	}
+		}
 	
 		if(metaargument->type() != variable->type()) {
 			throw Exception(
@@ -259,7 +259,7 @@ QUObject* MetaMethod::toQUObject(Variable::List arguments)
 			case Variable::TypeObject:  {
 				kdDebug() << "Variable::TypeObject" << endl;
 
-				const QObject* obj = arguments[i]->object();
+				const QObject* obj = arguments[i + 1]->object();
 				if(! obj) { //FIXME: move check to MetaParameter?!
 					throw Exception(
 						QString("No QObject !"),
@@ -336,15 +336,18 @@ Variable::List MetaMethod::toVariableList(QUObject* uo)
 Variable::Ptr MetaMethod::invoke(Variable::List arguments)
 {
 	kdDebug() << "Variable::Ptr MetaMethod::invoke(Variable::List arguments)" << endl; 
+
 	if(! d->object) {
 		throw Exception("MetaObject is undefined.", "KoMacro::MetaMethod::invoke(Variable::List)");
 	}
 
 	QObject* obj = d->object->object();
-	Variable::Ptr returnvalue = new Variable();
-	QUObject* qu = toQUObject(arguments);
+	Variable::Ptr returnvalue;
+	QUObject* qu = 0;
 
 	try {
+		qu = toQUObject(arguments);
+
 		switch( d->type ) {
 			case Signal: {
 				int index = d->object->indexOfSignal( d->signature.latin1() );
@@ -358,7 +361,6 @@ Variable::Ptr MetaMethod::invoke(Variable::List arguments)
 				throw Exception("Unknown type.", "KoMacro::MetaMethod::invoke(Variable::List)");
 			} break;
 		}
-
 		returnvalue = toVariable( &qu[0] );
 	}
 	catch(Exception& e) {
