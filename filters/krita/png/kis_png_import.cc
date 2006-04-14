@@ -63,7 +63,7 @@ KoFilter::ConversionStatus KisPNGImport::convert(const QByteArray&, const QByteA
 
     if (!filename.isEmpty()) {
     
-        KURL url;
+        KUrl url;
         url.setPath(filename);
 
         if (url.isEmpty())

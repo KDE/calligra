@@ -310,7 +310,7 @@ KisImageBuilder_Result KisPNGConverter::decode(const KUrl& uri)
         }
     }
 
-    KisPaintLayer* layer = new KisPaintLayer(m_img, m_img -> nextLayerName(), quint8_MAX);
+    KisPaintLayer* layer = new KisPaintLayer(m_img.data(), m_img -> nextLayerName(), quint8_MAX);
     for (png_uint_32 y = 0; y < height; y++) {
         KisHLineIterator it = layer -> paintDevice() -> createHLineIterator(0, y, width, true);
         switch(color_type)
@@ -396,7 +396,7 @@ KisImageBuilder_Result KisPNGConverter::decode(const KUrl& uri)
                 return KisImageBuilder_RESULT_UNSUPPORTED;
         }
     }
-    m_img->addLayer(layer, m_img->rootLayer(), 0);
+    m_img->addLayer(KisLayerSP(layer), m_img->rootLayer(), KisLayerSP(0));
 
     // Freeing memory
     png_destroy_read_struct(&png_ptr, &info_ptr, &end_info);
@@ -425,7 +425,7 @@ KisImageBuilder_Result KisPNGConverter::buildImage(const KUrl& uri)
     QString tmpFile;
 
     if (KIO::NetAccess::download(uri, tmpFile, qApp -> mainWidget())) {
-        KURL uriTF;
+        KUrl uriTF;
         uriTF.setPath( tmpFile );
         result = decode(uriTF);
         KIO::NetAccess::removeTempFile(tmpFile);
@@ -447,7 +447,7 @@ KisImageBuilder_Result KisPNGConverter::buildFile(const KUrl& uri, KisPaintLayer
     if (!layer)
         return KisImageBuilder_RESULT_INVALID_ARG;
 
-    KisImageSP img = layer -> image();
+    KisImageSP img = KisImageSP(layer -> image());
     if (!img)
         return KisImageBuilder_RESULT_EMPTY;
 

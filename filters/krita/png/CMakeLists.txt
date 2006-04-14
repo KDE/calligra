@@ -1,11 +1,9 @@
 kde4_header()
 
-include_directories( ${CMAKE_SOURCE_DIR}/krita ${CMAKE_SOURCE_DIR}/krita/core ${CMAKE_SOURCE_DIR}/krita/sdk ${CMAKE_SOURCE_DIR}/krita/core/tiles ${CMAKE_SOURCE_DIR}/krita/kritacolor ${CMAKE_SOURCE_DIR}/krita/ui ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
-
-
-########### next target ###############
-
-set(kritapngimport_PART_SRCS kis_png_import.cc kis_png_converter.cc )
+set(kritapngimport_PART_SRCS
+    kis_png_import.cc 
+    kis_png_converter.cc
+    )
 
 kde4_automoc(${kritapngimport_PART_SRCS})
 
@@ -13,14 +11,18 @@ kde4_add_plugin(kritapngimport WITH_PREFIX ${kritapngimport_PART_SRCS})
 
 kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritapngimport )
 
-target_link_libraries(kritapngimport  ${KDE4_KDECORE_LIBS} kritacommon png )
+include_directories(${PNG_INCLUDE_DIR})
+
+add_definitions(${PNG_DEFINITIONS} ${KDE4_ENABLE_EXCEPTIONS})
+
+target_link_libraries(kritapngimport  ${KDE4_KDECORE_LIBS} kritacommon ${PNG_LIBRARIES})
 
 install_targets(${LIB_INSTALL_DIR}/kde4 kritapngimport )
 
-
-########### next target ###############
-
-set(kritapngexport_PART_SRCS kis_png_export.cc kis_png_converter.cc )
+set(kritapngexport_PART_SRCS 
+    kis_png_export.cc 
+    kis_png_converter.cc
+    )
 
 kde4_automoc(${kritapngexport_PART_SRCS})
 
@@ -30,19 +32,14 @@ kde4_add_plugin(kritapngexport WITH_PREFIX ${kritapngexport_PART_SRCS})
 
 kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritapngexport )
 
-target_link_libraries(kritapngexport  ${KDE4_KDECORE_LIBS} kritacommon png )
+target_link_libraries(kritapngexport  ${KDE4_KDECORE_LIBS} kritacommon ${PNG_LIBRARIES})
 
 install_targets(${LIB_INSTALL_DIR}/kde4 kritapngexport )
-
-
-########### install files ###############
 
 install_files( ${SERVICES_INSTALL_DIR} FILES  krita_png_import.desktop krita_png_export.desktop )
 install_files( ${APPLNK_INSTALL_DIR}/Office FILES  krita_png.desktop )
 
 kde4_footer()
-
-
 
 #original Makefile.am contents follow:
 
