@@ -141,6 +141,9 @@ class StorageIO
     AllocTable* bbat;         // allocation table for big blocks
     AllocTable* sbat;         // allocation table for small blocks
     
+    int lastBlockIndex;         // last read, for simple caching
+    unsigned char* lastBlockData;
+    
     std::vector<unsigned long> sb_blocks; // blocks for "small" files
        
     std::list<Stream*> streams;
@@ -795,6 +798,9 @@ StorageIO::StorageIO( Storage* st, const char* fname )
   bbat = new AllocTable();
   sbat = new AllocTable();
   
+  lastBlockIndex = 0;
+  lastBlockData = 0;
+  
   filesize = 0;
   bbat->blockSize = 1 << header->b_shift;
   sbat->blockSize = 1 << header->s_shift;
@@ -803,6 +809,8 @@ StorageIO::StorageIO( Storage* st, const char* fname )
 StorageIO::~StorageIO()
 {
   if( opened ) close();
+  
+  delete lastBlockData;
   delete sbat;
   delete bbat;
   delete dirtree;
@@ -1010,19 +1018,46 @@ unsigned long StorageIO::loadBigBlocks( std::vector<unsigned long> blocks,
   return bytes;
 }
 
+// this will avoid reading the same big block from the disk
+#define POLE_CACHE_BLOCK
+
 unsigned long StorageIO::loadBigBlock( unsigned long block,
   unsigned char* data, unsigned long maxlen )
 {
   // sentinel
   if( !data ) return 0;
   if( !file.good() ) return 0;
-  
+
+#ifdef POLE_CACHE_BLOCK
+  // just before, we also did read this block
+  // so just reuse from cached data
+  if( block == lastBlockIndex )
+  if( lastBlockData) if( maxlen <= bbat->blockSize )
+  {
+    memcpy( data, lastBlockData, maxlen );
+    return maxlen;
+  }
+#endif
+    
   // wraps call for loadBigBlocks
   std::vector<unsigned long> blocks;
   blocks.resize( 1 );
-  blocks[ 0 ] = block;
+  blocks[0] = block;
   
-  return loadBigBlocks( blocks, data, maxlen );
+  unsigned long result = loadBigBlocks( blocks, data, maxlen );
+  
+#ifdef POLE_CACHE_BLOCK
+  // save cached data for future use
+  if(maxlen == bbat->blockSize )
+  {
+    if( !lastBlockData )
+      lastBlockData = new unsigned char[bbat->blockSize];
+    memcpy(lastBlockData, data, bbat->blockSize);
+    lastBlockIndex = block;
+  }
+#endif
+  
+  return result;
 }
 
 // return number of bytes which has been read
@@ -1172,9 +1207,10 @@ unsigned long StreamIO::read( unsigned long pos, unsigned char* data, unsigned l
   {
     // big file
     unsigned long index = pos / io->bbat->blockSize;
-    
+
+    // sanity check    
     if( index >= blocks.size() ) return 0;
-    
+
     unsigned char* buf = new unsigned char[ io->bbat->blockSize ];
     unsigned long offset = pos % io->bbat->blockSize;
     while( totalbytes < maxlen )
