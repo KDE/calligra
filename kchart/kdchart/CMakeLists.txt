@@ -42,7 +42,7 @@ kde4_automoc(${kdchart_LIB_SRCS})
 
 kde4_add_library(kdchart SHARED ${kdchart_LIB_SRCS})
 
-target_link_libraries(kdchart  ${KDE4_KDECORE_LIBS} )
+target_link_libraries(kdchart ${KDE4_KDECORE_LIBS} ${QT_QTXML_LIBRARY} )
 
 set_target_properties(kdchart PROPERTIES VERSION 1.0.0 SOVERSION 1 )
 install_targets(${LIB_INSTALL_DIR} kdchart )
@@ -50,7 +50,7 @@ install_targets(${LIB_INSTALL_DIR} kdchart )
 
 ########### install files ###############
 
-install_files( /include FILES  KDChartTableBase.h	 			KDChartListTable.h	 			KDChartVectorTable.h	 			KDChartTable.h		 			KDChartParams.h		 			KDFrameProfileSection.h	 			KDChartPropertySet.h	 			KDChartDataIntern.h	 			KDChartDataRegion.h	 			KDFrame.h		 			KDChartGlobal.h		 			KDChartWidget.h		 			KDChartCustomBox.h	 			KDChartEnums.h		 			KDChartTextPiece.h	 			KDChartAxisParams.h  			kdchart_export.h )
+install_files( /include FILES KDChartTableBase.h KDChartListTable.h KDChartVectorTable.h KDChartTable.h KDChartParams.h KDFrameProfileSection.h KDChartPropertySet.h KDChartDataIntern.h KDChartDataRegion.h KDFrame.h KDChartGlobal.h KDChartWidget.h KDChartCustomBox.h KDChartEnums.h KDChartTextPiece.h KDChartAxisParams.h kdchart_export.h )
 
 kde4_footer()
 
