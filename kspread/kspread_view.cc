@@ -5239,7 +5239,7 @@ void View::viewZoom( const QString & s )
 
   bool ok = false;
   QRegExp regexp("(\\d+)"); // "Captured" non-empty sequence of digits
-  regexp.search(s);
+  regexp.indexIn(s);
   int newZoom=regexp.cap(1).toInt(&ok);
   if ( !ok || newZoom < 10 ) //zoom should be valid and >10
     newZoom = oldZoom;

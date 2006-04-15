@@ -189,7 +189,7 @@ namespace NumFormat_Local
         return -1;
       }
 
-      f = iter.data();
+      f = iter.value();
       return f->type;
     }
 

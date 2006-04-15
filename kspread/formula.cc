@@ -593,7 +593,7 @@ Tokens Formula::scan( const QString& expr, KLocale* locale ) const
        {
          // check for cell reference,  e.g A1, VV123, ...
          QRegExp exp("(\\$?)([a-zA-Z]+)(\\$?)([0-9]+)$");
-         int n = exp.search( tokenText );
+         int n = exp.indexIn( tokenText );
          if( n >= 0 )
            state = InCell;
          else
@@ -640,7 +640,7 @@ Tokens Formula::scan( const QString& expr, KLocale* locale ) const
            else
                cell.prepend( tokenText[j] );
          QRegExp exp("(\\$?)([a-zA-Z]+)(\\$?)([0-9]+)$");
-         if( exp.search( cell ) != 0 )
+         if( exp.indexIn( cell ) != 0 )
          {
 
            // we're done with named area

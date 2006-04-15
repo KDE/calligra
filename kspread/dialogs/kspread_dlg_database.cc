@@ -622,7 +622,7 @@ void DatabaseDialog::accept()
   QRegExp couldModifyDB( "(^|[( \\s])(UPDATE|DELETE|INSERT|CREATE) ", false /* cs */ );
   QRegExp couldQueryDB( "(^|[( \\s])(SELECT) ", false /* cs */ );
 
-  if (couldModifyDB.search( queryStr ) != -1 || couldQueryDB.search ( queryStr ) == -1 )
+  if (couldModifyDB.indexIn( queryStr ) != -1 || couldQueryDB.indexIn( queryStr ) == -1 )
   {
     KMessageBox::error( this, i18n("You are not allowed to change data in the database.") );
     m_sqlQuery->setFocus();

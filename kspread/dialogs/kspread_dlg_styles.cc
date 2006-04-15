@@ -116,15 +116,15 @@ void StyleDlg::fillComboBox()
 
   while ( entries.count() != m_styleManager->m_styles.count() + 1 )
   {
-    if ( entries.find( iter.data() ) == entries.end() )
+    if ( entries.find( iter.value() ) == entries.end() )
     {
-      if ( iter.data()->parent() == 0 )
-        entries[iter.data()] = new K3ListViewItem( m_dlg->m_styleList, iter.data()->name() );
+      if ( iter.value()->parent() == 0 )
+        entries[iter.value()] = new K3ListViewItem( m_dlg->m_styleList, iter.value()->name() );
       else
       {
-        Map::const_iterator i = entries.find( iter.data()->parent() );
+        Map::const_iterator i = entries.find( iter.value()->parent() );
         if ( i != entries.end() )
-          entries[iter.data()] = new K3ListViewItem( i.data(), iter.data()->name() );
+          entries[iter.value()] = new K3ListViewItem( i.value(), iter.value()->name() );
       }
     }
 
@@ -156,7 +156,7 @@ void StyleDlg::slotDisplayMode( int mode )
 
   while ( iter != end )
   {
-    CustomStyle * styleData = iter.data();
+    CustomStyle * styleData = iter.value();
     if ( !styleData || styleData->name().isEmpty() )
     {
       ++iter;

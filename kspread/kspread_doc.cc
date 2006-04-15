@@ -574,7 +574,7 @@ QDomDocument Doc::saveXML()
     while ( iter != end )
     {
       // save data we loaded in the beginning and which has no owner back to file
-      spread.appendChild( iter.data() );
+      spread.appendChild( iter.value() );
       ++iter;
     }
 
@@ -1261,7 +1261,7 @@ bool Doc::docData( QString const & xmlTag, QDomElement & data )
   if ( iter == m_savedDocParts.end() )
     return false;
 
-  data = iter.data();
+  data = iter.value();
   m_savedDocParts.erase( iter );
 
   return true;

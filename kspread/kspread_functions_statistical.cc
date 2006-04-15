@@ -409,9 +409,9 @@ Value func_mode (valVector args, ValueCalc *calc, FuncExtra *)
   double max = 0.0;
   ContentSheet::iterator it;
   for (it = sh.begin(); it != sh.end(); ++it)
-    if (it.data() > maxcount) {
+    if (it.value() > maxcount) {
       max = it.key();
-      maxcount = it.data();
+      maxcount = it.value();
     }
   return Value (max);
 }

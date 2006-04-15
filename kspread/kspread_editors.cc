@@ -1082,7 +1082,7 @@ void CellEditor::handleKeyPressEvent( QKeyEvent * _ev )
       tmp =  d->textEdit->text().left( cur+i );
       tmp2 = d->textEdit->text().right( d->textEdit->text().length() - cur - i );
 
-      n = exp.search(tmp);
+      n = exp.indexIn(tmp);
       if( n >= 0 ) break;
     }
 

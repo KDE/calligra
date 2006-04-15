@@ -5565,7 +5565,7 @@ QString Cell::convertFormulaToOasisFormat( const QString & formula ) const
 {
     QString s;
     QRegExp exp("(\\$?)([a-zA-Z]+)(\\$?)([0-9]+)");
-    int n = exp.search( formula, 0 );
+    int n = exp.indexIn( formula, 0 );
     kDebug() << "Exp: " << formula << ", n: " << n << ", Length: " << formula.length()
               << ", Matched length: " << exp.matchedLength() << endl;
 
@@ -5579,7 +5579,7 @@ QString Cell::convertFormulaToOasisFormat( const QString & formula ) const
     {
         if ( ( n != -1 ) && ( n < i ) )
         {
-            n = exp.search( formula, i );
+            n = exp.indexIn( formula, i );
             kDebug() << "Exp: " << formula.right( l - i ) << ", n: " << n << endl;
         }
         if ( formula[i] == '"' )

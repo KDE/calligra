@@ -389,8 +389,8 @@ void DependencyList::removeDependencies (const Point &cell)
   // remove information about named area dependencies
   QMap<QString, QMap<Point, bool> >::iterator itr;
   for (itr = areaDeps.begin(); itr != areaDeps.end(); ++itr) {
-    if (itr.data().contains (cell))
-      itr.data().remove (cell);
+    if (itr.value().contains (cell))
+      itr.value().remove (cell);
   }
 
   // finally, remove the entry about this cell
