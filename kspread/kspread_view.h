@@ -86,33 +86,33 @@ class KPSheetSelectPage : public KPrintDialogPage
   public:
     KPSheetSelectPage( QWidget *parent = 0 );
 //     ~KPSheetSelectPage();
-    
+
 //     //reimplement virtual functions
     /**
      * @see printOptionPrefix()
      */
     void getOptions( QMap<QString,QString>& opts, bool incldef = false );
-    
+
     /**
      * @see printOptionPrefix()
      */
     void setOptions( const QMap<QString,QString>& opts );
-    
+
     /**
      * @return false if no sheet is selected for printing.
      */
     bool isValid( QString& msg );
-    
+
     /**
      * @return list of sheets that will be printed, in correct order.
      */
     QStringList selectedSheets();
-    
+
     /**
      * Removes all sheets from the list of selected sheets.
      */
     void clearSelection();
-    
+
     /**
      * The print order of the sheets is stored in the option map,
      * using a prefix plus the index of the sheet, like the following:
@@ -125,25 +125,25 @@ class KPSheetSelectPage : public KPrintDialogPage
      * @return the string that is used in the printoption for given index
      */
     static QString printOptionForIndex(unsigned int index);
-    
+
     /**
      * @param prt the printer from which the options should be read.
      * @return list of sheets to print in correct order configured for given printer.
      */
     static QStringList selectedSheets(KPrinter &prt);
-    
+
   public slots:
-    
+
     /**
      * Inserts given sheet to the list of available sheets.
      */
     void prependAvailableSheet(const QString& sheetname);
-    
+
     /**
      * Inserts given sheet to the list of sheets for printing at the top.
      */
     void prependSelectedSheet(const QString& sheetname);
-    
+
   protected slots:
 
     // The following slots just implement the code for the buttons
@@ -152,14 +152,14 @@ class KPSheetSelectPage : public KPrintDialogPage
     void select();
     void remove();
     void removeAll();
-    
+
     void moveTop();
     void moveUp();
     void moveDown();
     void moveBottom();
-    
+
   private:
-  
+
     /**
      * The widget used, includes two lists of sheet names and
      * buttons to move sheets between and within the lists.
@@ -332,7 +332,7 @@ public:
      * They will be repainted on the next call to paintUpdates()
      */
     void markSelectionAsDirty();
-     
+
     /**
      * Repaint any cell with the paintDirty flag that is visible in this view
      */
@@ -354,7 +354,7 @@ public:
     void saveCurrentSheetSelection();
 
     void deleteSelectedObjects();
-    
+
     /**
     * Returns the default color for highlighting cells and column / row headers
     */
@@ -513,7 +513,7 @@ public slots:
     void mergeCell();
     void mergeCellHorizontal();
     void mergeCellVertical();
-    
+
 
     /**
      * Breaks merged cell. Obviously this can be done only on merged cells.
@@ -589,7 +589,7 @@ public slots:
      */
     void popupTabBarMenu( const QPoint& );
 
-    void handleDamages( const Q3ValueList<Damage*>& damages );
+    void handleDamages( const QList<Damage*>& damages );
 
     void runInternalTests();
     void runInspector();
@@ -707,7 +707,7 @@ protected:
      *
      */
     KoPoint markerDocumentPosition();
-    
+
     /**
      * Activates the formula editor for the current cell.
      * This function is usually called if the user presses
@@ -736,7 +736,7 @@ private:
     void spellCleanup();
 
     Cell* nextFindValidCell( int col, int row );
-    
+
     friend class Private;
 };
 

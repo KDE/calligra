@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   
+
    Copyright 2002 Ariya Hidayat <ariya@kde.org>
    Copyright 2001 Laurent Montel <montel@kde.org>
    Copyright 2001 Philipp Mueller <philipp.mueller@gmx.de>
@@ -83,9 +83,9 @@ QStringList MapIface::sheetNames() const
     return names;
 }
 
-Q3ValueList<DCOPRef> MapIface::sheets()
+QList<DCOPRef> MapIface::sheets()
 {
-    Q3ValueList<DCOPRef> t;
+    QList<DCOPRef> t;
 
     Q3PtrList<Sheet>& lst = m_map->sheetList();
     Q3PtrListIterator<Sheet> it( lst );

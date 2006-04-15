@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   
+
    Copyright 1999-2000 Torben Weis <weis@kde.org>
 
    This library is free software; you can redistribute it and/or
@@ -47,7 +47,7 @@ k_dcop:
     virtual DCOPRef sheetByIndex( int index );
     virtual int sheetCount() const;
     virtual QStringList sheetNames() const;
-    virtual Q3ValueList<DCOPRef> sheets();
+    virtual QList<DCOPRef> sheets();
     virtual DCOPRef insertSheet( const QString& name );
 
 private:

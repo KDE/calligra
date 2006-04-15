@@ -26,8 +26,7 @@
 #include "kspread_sheet.h"
 
 #include <qmap.h>
-//Added by qt3to4:
-#include <Q3ValueList>
+#include <QLinkedList>
 
 //rows x cols in one cell-chunk; bigger values lead to slower updating
 //of range-dependencies, lower values will increase memory usage
@@ -110,7 +109,7 @@ class DependencyList {
   typedef QMap<Point, QLinkedList<Point> > CellDepsMap;
   CellDepsMap cellDeps;
   /** all range dependencies splitted into cell-chunks (TODO: describe) */
-  QMap<Point, Q3ValueList<RangeDependency> > rangeDeps;
+  QMap<Point, QLinkedList<RangeDependency> > rangeDeps;
   /** list of cells referencing a given named area */
   QMap<QString, QMap<Point, bool> > areaDeps;
 };
@@ -246,7 +245,7 @@ QLinkedList<Point> DependencyList::getDependants (const Point &cell)
   QLinkedList<Point> list = getCellDeps( cell );
   //next, append range dependencies
   Point leading = leadingCell (cell);
-  Q3ValueList<RangeDependency>::iterator it;
+  QLinkedList<RangeDependency>::iterator it;
   if (!rangeDeps.count (leading))
     return list;  //no range dependencies in this cell chunk -> nothing more to do
 
@@ -342,10 +341,12 @@ void DependencyList::removeDependencies (const Point &cell)
       continue;  //this should never happen
 
     //we no longer depend on this cell
-    QLinkedList<Point>::iterator cit;
-    cit = sh->dependencies()->deps->cellDeps[*it1].find (cell);
-    if (cit != sh->dependencies()->deps->cellDeps[*it1].end())
-      sh->dependencies()->deps->cellDeps[*it1].erase (cit);
+    QLinkedList<Point>& list = sh->dependencies()->deps->cellDeps[*it1];
+    QLinkedList<Point>::iterator cit = list.begin();
+    while (cit != list.end() && !(*cit == cell))
+      ++cit;
+    if (cit != list.end())
+      list.erase(cit);
   }
 
   //then range-dependencies are removed
@@ -370,7 +371,7 @@ void DependencyList::removeDependencies (const Point &cell)
 
     if (sh->dependencies()->deps->rangeDeps.contains (*it1))
     {
-      Q3ValueList<RangeDependency>::iterator it3;
+      QLinkedList<RangeDependency>::iterator it3;
       it3 = sh->dependencies()->deps->rangeDeps[*it1].begin();
       //erase all range dependencies of this cell in this cell-chunk
       while (it3 != sh->dependencies()->deps->rangeDeps[*it1].end())
@@ -476,9 +477,9 @@ void DependencyList::processRangeDependencies (const Point &cell)
   if (!rangeDeps.count (leading))
     return;  //no range dependencies in this cell chunk
 
-  const Q3ValueList<RangeDependency> rd = rangeDeps[leading];
+  const QLinkedList<RangeDependency> rd = rangeDeps[leading];
 
-  Q3ValueList<RangeDependency>::const_iterator it;
+  QLinkedList<RangeDependency>::const_iterator it;
   for (it = rd.begin(); it != rd.end(); ++it)
   {
     //process all range dependencies, and for each range including the modified cell,
@@ -529,7 +530,7 @@ void DependencyList::processRangeDependencies (const Range &range)
   {
     if (!rangeDeps.count (*it))
       continue;  //no range dependencies in this cell chunk
-    Q3ValueList<RangeDependency>::iterator it2;
+    QLinkedList<RangeDependency>::iterator it2;
     for (it2 = rangeDeps[*it].begin(); it2 != rangeDeps[*it].end(); ++it2)
     {
       //process all range dependencies, and for each range intersecting with our range,

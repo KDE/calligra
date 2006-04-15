@@ -134,7 +134,7 @@ public:
 
   int numOperations;
 
-  Q3ValueList<Damage*> damages;
+  QList<Damage*> damages;
 
   // document properties
   int syntaxVersion;
@@ -2261,7 +2261,7 @@ void Doc::addDamage( Damage* damage )
 void Doc::flushDamages()
 {
     emit damagesFlushed( d->damages );
-    Q3ValueList<Damage*>::Iterator it;
+    QList<Damage*>::Iterator it;
     for( it = d->damages.begin(); it != d->damages.end(); ++it )
       delete *it;
     d->damages.clear();

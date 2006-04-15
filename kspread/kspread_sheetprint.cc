@@ -37,7 +37,7 @@
 #include <qregexp.h>
 //Added by qt3to4:
 #include <QPixmap>
-#include <Q3ValueList>
+#include <QLinkedList>
 
 #include <pwd.h>
 #include <unistd.h>
@@ -254,12 +254,12 @@ bool SheetPrint::print( QPainter &painter, KPrinter *_printer )
 
     // Find out how many pages need printing
     // and which cells to print on which page.
-    Q3ValueList<QRect> page_list;  //contains the cols and rows of a page
-    Q3ValueList<KoRect> page_frame_list;  //contains the coordinate range of a page
-    Q3ValueList<KoPoint> page_frame_list_offset;  //contains the offset of the not repeated area
+    QLinkedList<QRect> page_list;  //contains the cols and rows of a page
+    QLinkedList<KoRect> page_frame_list;  //contains the coordinate range of a page
+    QLinkedList<KoPoint> page_frame_list_offset;  //contains the offset of the not repeated area
 
-    QLinkedList<PrintNewPageEntry>::iterator itX;
-    QLinkedList<PrintNewPageEntry>::iterator itY;
+    QList<PrintNewPageEntry>::iterator itX;
+    QList<PrintNewPageEntry>::iterator itY;
     for( itX = m_lnewPageListX.begin(); itX != m_lnewPageListX.end(); ++itX )
     {
         for( itY = m_lnewPageListY.begin(); itY != m_lnewPageListY.end(); ++itY )
@@ -329,9 +329,9 @@ bool SheetPrint::print( QPainter &painter, KPrinter *_printer )
         //
         // Print all pages in the list
         //
-        Q3ValueList<QRect>::Iterator it = page_list.begin();
-        Q3ValueList<KoRect>::Iterator fit = page_frame_list.begin();
-        Q3ValueList<KoPoint>::Iterator fito = page_frame_list_offset.begin();
+        QLinkedList<QRect>::Iterator it = page_list.begin();
+        QLinkedList<KoRect>::Iterator fit = page_frame_list.begin();
+        QLinkedList<KoPoint>::Iterator fito = page_frame_list_offset.begin();
 
         for( ; it != page_list.end(); ++it, ++fit, ++fito, ++pageNo )
         {
@@ -360,7 +360,7 @@ bool SheetPrint::print( QPainter &painter, KPrinter *_printer )
     }
     m_pSheet->setShowGrid( oldShowGrid );
 
-    Q3ValueList<PrintObject *>::iterator it;
+    QList<PrintObject *>::iterator it;
     for ( it = m_printObjects.begin(); it != m_printObjects.end(); ++it )
       delete (*it)->p;
     m_printObjects.clear();
@@ -584,7 +584,7 @@ void SheetPrint::printRect( QPainter& painter, const KoPoint& topLeft,
     //QPtrListIterator<KoDocumentChild> it( m_pDoc->children() );
     //QPtrListIterator<EmbeddedObject> itObject( m_pDoc->embeddedObjects() );
 
-    Q3ValueList<PrintObject *>::iterator itObject;
+    QList<PrintObject *>::iterator itObject;
     for ( itObject = m_printObjects.begin(); itObject != m_printObjects.end(); ++itObject ) {
           EmbeddedObject *obj = (*itObject)->obj;
 //        QString tmp=QString("Testing child %1/%2 %3/%4 against view %5/%6 %7/%8")
@@ -770,7 +770,7 @@ void SheetPrint::updateNewPageX( int _column )
                 m_lnewPageListX.append( col );
 
                 //Now store into the previous entry the enditem and the width
-                QLinkedList<PrintNewPageEntry>::iterator it;
+                QList<PrintNewPageEntry>::iterator it;
                 it = findNewPageColumn( startCol );
                 (*it).setEndItem( col - 1 );
                 (*it).setSize( x - m_pSheet->columnFormat( col )->dblWidth() );
@@ -886,7 +886,7 @@ void SheetPrint::updateNewPageY( int _row )
                 m_lnewPageListY.append( row );
 
                 //Now store into the previous entry the enditem and the width
-                QLinkedList<PrintNewPageEntry>::iterator it;
+                QList<PrintNewPageEntry>::iterator it;
                 it = findNewPageRow( startRow );
                 (*it).setEndItem( row - 1 );
                 (*it).setSize( y - m_pSheet->rowFormat( row )->dblHeight() );
@@ -936,7 +936,7 @@ void SheetPrint::updateNewPageListX( int _col )
     if ( _col < m_lnewPageListX.last().startItem() )
     {
         //Find the page entry for this column
-        QLinkedList<PrintNewPageEntry>::iterator it;
+        QList<PrintNewPageEntry>::iterator it;
         it = m_lnewPageListX.find( _col );
         while ( ( it == m_lnewPageListX.end() ) && _col > 0 )
         {
@@ -971,7 +971,7 @@ void SheetPrint::updateNewPageListY( int _row )
     if ( _row < m_lnewPageListY.last().startItem() )
     {
         //Find the page entry for this row
-        QLinkedList<PrintNewPageEntry>::iterator it;
+        QList<PrintNewPageEntry>::iterator it;
         it = m_lnewPageListY.find( _row );
         while ( ( it == m_lnewPageListY.end() ) && _row > 0 )
         {
@@ -1210,9 +1210,9 @@ void SheetPrint::calcPaperSize()
     }
 }
 
-QLinkedList<PrintNewPageEntry>::iterator SheetPrint::findNewPageColumn( int col )
+QList<PrintNewPageEntry>::iterator SheetPrint::findNewPageColumn( int col )
 {
-    QLinkedList<PrintNewPageEntry>::iterator it;
+    QList<PrintNewPageEntry>::iterator it;
     for( it = m_lnewPageListX.begin(); it != m_lnewPageListX.end(); ++it )
     {
         if( (*it).startItem() == col )
@@ -1223,9 +1223,9 @@ QLinkedList<PrintNewPageEntry>::iterator SheetPrint::findNewPageColumn( int col 
 //                it = m_lnewPageListX.indexOf( startCol );
 }
 
-QLinkedList<PrintNewPageEntry>::iterator SheetPrint::findNewPageRow( int row )
+QList<PrintNewPageEntry>::iterator SheetPrint::findNewPageRow( int row )
 {
-    QLinkedList<PrintNewPageEntry>::iterator it;
+    QList<PrintNewPageEntry>::iterator it;
     for( it = m_lnewPageListY.begin(); it != m_lnewPageListY.end(); ++it )
     {
         if( (*it).startItem() == row )

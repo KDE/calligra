@@ -651,7 +651,7 @@ signals:
   void sig_addAreaName( const QString & );
   void sig_removeAreaName( const QString & );
 
-  void damagesFlushed( const Q3ValueList<Damage*>& damages );
+  void damagesFlushed( const QList<Damage*>& damages );
 
 protected slots:
   void commandExecuted();

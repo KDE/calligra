@@ -1837,8 +1837,8 @@ View::View( QWidget *_parent, const char *_name,
 
     QObject::connect( doc(), SIGNAL( sig_removeAreaName( const QString & ) ), d->posWidget, SLOT( slotRemoveAreaName( const QString & ) ) );
 
-    QObject::connect( doc(), SIGNAL( damagesFlushed( const Q3ValueList<Damage*>& ) ),
-        this, SLOT( handleDamages( const Q3ValueList<Damage*>& ) ) );
+    QObject::connect( doc(), SIGNAL( damagesFlushed( const QList<Damage*>& ) ),
+        this, SLOT( handleDamages( const QList<Damage*>& ) ) );
 
     //KoView::setZoom( doc()->zoomedResolutionY() /* KoView only supports one zoom */ ); // initial value
     //when kspread is embedded into konqueror apply a zoom=100
@@ -7439,9 +7439,9 @@ void View::saveCurrentSheetSelection()
     }
 }
 
-void View::handleDamages( const Q3ValueList<Damage*>& damages )
+void View::handleDamages( const QList<Damage*>& damages )
 {
-    Q3ValueList<Damage*>::ConstIterator it;
+    QList<Damage*>::ConstIterator it;
     for( it = damages.begin(); it != damages.end(); ++it )
     {
         Damage* damage = *it;
