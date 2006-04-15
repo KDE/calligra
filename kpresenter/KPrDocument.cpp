@@ -2164,17 +2164,20 @@ int KPrDocument::createPresentationAnimation(const QDomElement& element, int ord
 
 void KPrDocument::fillStyleStack( const QDomElement& object, KoOasisContext & context, const char* family )
 {
+    // See OpenDoc 9.2.15 Common Drawing Shape Attributes
+    // presentation:style-name is allways family presentation
     if ( object.hasAttributeNS( KoXmlNS::presentation, "style-name" ))
     {
-        context.fillStyleStack( object, KoXmlNS::presentation, "style-name", family );
+        context.fillStyleStack( object, KoXmlNS::presentation, "style-name", "presentation" );
     }
     if ( object.hasAttributeNS( KoXmlNS::draw, "style-name" ) )
     {
         context.fillStyleStack( object, KoXmlNS::draw, "style-name", family );
     }
+    // draw:tex-style-name is allways family paragraph
     if ( object.hasAttributeNS( KoXmlNS::draw, "text-style-name" ) )
     {
-        context.fillStyleStack( object, KoXmlNS::draw, "text-style-name", family );
+        context.fillStyleStack( object, KoXmlNS::draw, "text-style-name", "paragraph" );
     }
     if ( object.hasAttributeNS( KoXmlNS::text, "style-name" ) )
     {
