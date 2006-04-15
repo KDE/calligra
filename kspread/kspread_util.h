@@ -244,8 +244,8 @@ TODO: use this as selection
 TODO: anything I forgot ;)
 */
 struct RangeList {
-  Q3ValueList<Point> cells;
-  Q3ValueList<Range> ranges;
+  QLinkedList<Point> cells;
+  QLinkedList<Range> ranges;
 };
 
 

@@ -69,7 +69,7 @@ class DependencyManager {
   /** get dependencies of a cell */
   RangeList getDependencies (const Point &cell);
   /** get cells depending on this cell, either through normal or range dependency */
-  Q3ValueList<Point> getDependants (const Point &cell);
+  QLinkedList<Point> getDependants (const Point &cell);
 protected:
   
   /** local d-pointer */

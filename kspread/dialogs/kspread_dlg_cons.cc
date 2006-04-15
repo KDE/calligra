@@ -167,7 +167,7 @@ void ConsolidateDialog::slotOk()
   }
 
   QStringList r = refs();
-  Q3ValueList<Range> ranges;
+  QLinkedList<Range> ranges;
   QStringList::Iterator s = r.begin();
   for( ; s != r.end(); ++s )
   {
@@ -195,7 +195,7 @@ void ConsolidateDialog::slotOk()
 
   // Check whether all ranges have same size
   Q_ASSERT( ranges.count() > 0 );
-  Q3ValueList<Range>::Iterator it = ranges.begin();
+  QLinkedList<Range>::Iterator it = ranges.begin();
   int w = (*it).range().right() - (*it).range().left() + 1;
   int h = (*it).range().bottom() - (*it).range().top() + 1;
   if ( w <= ( ( desc == D_BOTH || desc == D_COL ) ? 1 : 0 ) ||

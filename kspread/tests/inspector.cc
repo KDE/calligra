@@ -150,14 +150,15 @@ void Inspector::Private::handleDep()
   cellPoint.setColumn( cell->column() );
 
   DependencyManager* manager = sheet->dependencies();
-  Q3ValueList<Point> deps = manager->getDependants( cellPoint );
+  QLinkedList<Point> deps = manager->getDependants( cellPoint );
 
   depView->clear();
-  for( unsigned i = 0; i < deps.count(); i++ )
+  QLinkedList<Point>::ConstIterator end(deps.end());
+  for( QLinkedList<Point>::ConstIterator it(deps.begin()); it != end; ++it )
   {
     QString k1, k2;
 
-    Point point = deps[i];
+    Point point = *it;
     int row = point.row();
     int column = point.column();
     k1 = Cell::fullName( point.sheet(), column, row );
