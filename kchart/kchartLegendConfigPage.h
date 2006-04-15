@@ -26,6 +26,7 @@
 #include <qlayout.h>
 //Added by qt3to4:
 #include <Q3GridLayout>
+#include <Q3ButtonGroup>
 
 class QRadioButton;
 class QLineEdit;
@@ -59,7 +60,7 @@ private:
     KColorButton *legendTitleColor, *legendTextColor;
     QFont titleLegend, textLegend;
     QPushButton *titleLegendFontButton, *textLegendFontButton;
-    QCheckBox::ToggleState titleLegendIsRelative, textLegendIsRelative;
+	Qt::CheckState titleLegendIsRelative, textLegendIsRelative;
 
     QPushButton* addButton( Q3GridLayout* layout, Q3ButtonGroup* gb,
                             const QString &toolTipText, const QString &icon,

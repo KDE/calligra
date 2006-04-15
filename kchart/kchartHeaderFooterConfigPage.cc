@@ -113,23 +113,23 @@ void KChartHeaderFooterConfigPage::init()
 
     titleFont = _params->header1Font();
     titleFontIsRelative = _params->headerFooterFontUseRelSize(KDChartParams::HdFtPosHeader)
-                          ? Q3Button::On
-                          : Q3Button::Off;
-    if( Q3Button::On == titleFontIsRelative )
+                          ? Qt::Checked
+                          : Qt::Unchecked;
+    if( Qt::Checked == titleFontIsRelative )
         titleFont.setPointSize( _params->headerFooterFontRelSize(KDChartParams::HdFtPosHeader) );
 
     subtitleFont = _params->header2Font();
     subtitleFontIsRelative = _params->headerFooterFontUseRelSize(KDChartParams::HdFtPosHeader2)
-                          ? Q3Button::On
-                          : Q3Button::Off;
-    if( Q3Button::On == subtitleFontIsRelative )
+                          ? Qt::Checked
+                          : Qt::Unchecked;
+    if( Qt::Checked == subtitleFontIsRelative )
         subtitleFont.setPointSize( _params->headerFooterFontRelSize(KDChartParams::HdFtPosHeader2) );
 
     footerFont = _params->footerFont();
     footerFontIsRelative = _params->headerFooterFontUseRelSize(KDChartParams::HdFtPosFooter)
-                          ? Q3Button::On
-                          : Q3Button::Off;
-    if( Q3Button::On == footerFontIsRelative )
+                          ? Qt::Checked
+                          : Qt::Unchecked;
+    if( Qt::Checked == footerFontIsRelative )
         footerFont.setPointSize( _params->headerFooterFontRelSize(KDChartParams::HdFtPosFooter) );
 }
 
@@ -159,25 +159,25 @@ void KChartHeaderFooterConfigPage::apply()
 
 void KChartHeaderFooterConfigPage::changeTitleFont()
 {
-    Q3Button::ToggleState state = titleFontIsRelative;
+    Qt::CheckState state = titleFontIsRelative;
     if (    KFontDialog::getFont( titleFont,false,this, true,&state ) != QDialog::Rejected
-            && Q3Button::NoChange != state )
+            && Qt::PartiallyChecked != state )
         titleFontIsRelative = state;
 }
 
 void KChartHeaderFooterConfigPage::changeSubtitleFont()
 {
-    Q3Button::ToggleState state = subtitleFontIsRelative;
+    Qt::CheckState state = subtitleFontIsRelative;
     if (    KFontDialog::getFont( subtitleFont,false,this, true,&state ) != QDialog::Rejected
-            && Q3Button::NoChange != state )
+            && Qt::PartiallyChecked != state )
         subtitleFontIsRelative = state;
 }
 
 void KChartHeaderFooterConfigPage::changeFooterFont()
 {
-    Q3Button::ToggleState state = footerFontIsRelative;
+    Qt::CheckState state = footerFontIsRelative;
     if (    KFontDialog::getFont( footerFont,false,this, true,&state ) != QDialog::Rejected
-            && Q3Button::NoChange != state )
+            && Qt::PartiallyChecked != state )
         footerFontIsRelative = state;
 }
 

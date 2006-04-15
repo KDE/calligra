@@ -23,7 +23,7 @@ KChartWizardSetupDataPage::KChartWizardSetupDataPage( QWidget* parent,
   Q3ButtonGroup* tmpQGroupBox;
   tmpQGroupBox = new Q3ButtonGroup( this, "GroupBox_1" );
   tmpQGroupBox->setGeometry( 260, 10, 130, 80 );
-  tmpQGroupBox->setFrameStyle( 49 );
+  //tmpQGroupBox->setFrameStyle( 49 );
   tmpQGroupBox->setAlignment( 1 );
 
   datarow = new QRadioButton( this, "RadioButton_1" );

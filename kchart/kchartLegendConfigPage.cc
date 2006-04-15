@@ -188,32 +188,32 @@ void KChartLegendConfigPage::init()
 
     titleLegend = _params->legendTitleFont();
     titleLegendIsRelative = _params->legendTitleFontUseRelSize()
-                          ? QCheckBox::On
-                          : QCheckBox::Off;
-    if( QCheckBox::On == titleLegendIsRelative )
+                          ? Qt::Checked
+                          : Qt::Unchecked;
+    if( Qt::Checked == titleLegendIsRelative )
         titleLegend.setPointSize( _params->legendTitleFontRelSize() );
 
     textLegend=_params->legendFont();
     textLegendIsRelative = _params->legendFontUseRelSize()
-                         ? QCheckBox::On
-                         : QCheckBox::Off;
-    if( QCheckBox::On == textLegendIsRelative )
+                         ? Qt::Checked
+                         : Qt::Unchecked;
+    if( Qt::Checked == textLegendIsRelative )
         textLegend.setPointSize(_params->legendFontRelSize());
 }
 
 void KChartLegendConfigPage::changeTitleLegendFont()
 {
-    QCheckBox::ToggleState state = titleLegendIsRelative;
+		Qt::CheckState state = titleLegendIsRelative;
     if (    KFontDialog::getFont( titleLegend,false,this, true,&state ) != QDialog::Rejected
-         && QCheckBox::NoChange != state )
+         && Qt::PartiallyChecked != state )
         titleLegendIsRelative = state;
 }
 
 void KChartLegendConfigPage::changeTextLegendFont()
 {
-    QCheckBox::ToggleState state = textLegendIsRelative;
+   Qt::CheckState state = textLegendIsRelative;
     if (    KFontDialog::getFont( textLegend,false,this, true,&state ) != QDialog::Rejected
-         && QCheckBox::NoChange != state )
+         && Qt::PartiallyChecked != state )
         textLegendIsRelative = state;
 }
 
@@ -244,11 +244,11 @@ void KChartLegendConfigPage::apply()
     _params->setLegendTitleTextColor(legendTitleColor->color());
     _params->setLegendTextColor(legendTextColor->color());
 
-    _params->setLegendTitleFont(titleLegend, QCheckBox::Off == titleLegendIsRelative);
-    if( QCheckBox::On == titleLegendIsRelative )
+    _params->setLegendTitleFont(titleLegend, Qt::Unchecked == titleLegendIsRelative);
+    if( Qt::Checked == titleLegendIsRelative )
         _params->setLegendTitleFontRelSize(titleLegend.pointSize());
-    _params->setLegendFont(textLegend, QCheckBox::Off == textLegendIsRelative);
-    if( QCheckBox::On == textLegendIsRelative )
+    _params->setLegendFont(textLegend, Qt::Unchecked == textLegendIsRelative);
+    if( Qt::Checked == textLegendIsRelative )
         _params->setLegendFontRelSize(textLegend.pointSize());
 }
 

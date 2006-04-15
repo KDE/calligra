@@ -41,7 +41,7 @@ KChartWizardLabelsLegendPage::KChartWizardLabelsLegendPage( QWidget* parent, KCh
 
     Q3GroupBox* tmpQGroupBox;
     tmpQGroupBox = new Q3GroupBox( this, "GroupBox_1" );
-    tmpQGroupBox->setFrameStyle( 49 );
+    //tmpQGroupBox->setFrameStyle( 49 );
 
     Q3GridLayout *grid2 = new Q3GridLayout(tmpQGroupBox,4,4,KDialog::marginHint(), KDialog::spacingHint());
 

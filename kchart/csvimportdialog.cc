@@ -60,11 +60,11 @@ CSVImportDialog::CSVImportDialog(QWidget* parent, QByteArray& fileArray)
     kapp->restoreOverrideCursor();
 
     QStringList encodings;
-    encodings << i18n( "Descriptive encoding name", "Recommended ( %1 )" ).arg( "UTF-8" );
-    encodings << i18n( "Descriptive encoding name", "Locale ( %1 )" ).arg( QTextCodec::codecForLocale()->name() );
+    encodings << i18nc( "Descriptive encoding name", "Recommended ( %1 )" ,"UTF-8" );
+    encodings << i18nc( "Descriptive encoding name", "Locale ( %1 )" ,QString(QTextCodec::codecForLocale()->name() ));
     encodings += KGlobal::charsets()->descriptiveEncodingNames();
     // Add a few non-standard encodings, which might be useful for text files
-    const QString description(i18n("Descriptive encoding name","Other ( %1 )"));
+    const QString description(i18nc("Descriptive encoding name","Other ( %1 )"));
     encodings << description.arg("Apple Roman"); // Apple
     encodings << description.arg("IBM 850") << description.arg("IBM 866"); // MS DOS
     encodings << description.arg("CP 1258"); // Windows
@@ -189,7 +189,9 @@ void CSVImportDialog::fillTable( )
     inputStream.setCodec( m_codec );
 
     bool lastCharWasCr = false; // Last character was a Carriage Return
-    while (!inputStream.atEnd()) 
+#warning "kde4: port it"
+#if 0
+	while (!inputStream.atEnd()) 
     {
         inputStream >> x; // read one char
 
@@ -219,7 +221,6 @@ void CSVImportDialog::fillTable( )
 
         if ( column > maxColumn )
           maxColumn = column;
-
         switch (state)
         {
          case S_START :
@@ -358,7 +359,7 @@ void CSVImportDialog::fillTable( )
         if (x != m_delimiter)
           lastCharDelimiter = false;
     }
-
+#endif
     if ( !field.isEmpty() )
     {
       // the last line of the file had not any line end

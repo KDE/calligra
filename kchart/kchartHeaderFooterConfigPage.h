@@ -50,19 +50,19 @@ private:
     KColorButton *titleColorButton;
     QPushButton *titleFontButton;
     QFont titleFont;
-    Q3Button::ToggleState titleFontIsRelative;
+    Qt::CheckState titleFontIsRelative;
     
     QLineEdit *subtitleEdit;
     KColorButton *subtitleColorButton;	
     QPushButton *subtitleFontButton;
     QFont subtitleFont;
-    Q3Button::ToggleState subtitleFontIsRelative;
+    Qt::CheckState subtitleFontIsRelative;
 
     QLineEdit *footerEdit;
     KColorButton *footerColorButton;
     QPushButton *footerFontButton;
     QFont footerFont;
-    Q3Button::ToggleState footerFontIsRelative;
+	Qt::CheckState footerFontIsRelative;
 };
 
 }  //KChart namespace

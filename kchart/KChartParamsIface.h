@@ -25,7 +25,7 @@
 #include <dcopobject.h>
 #include <dcopref.h>
 #include <qstring.h>
-
+#include <QSize>
 namespace KChart
 {
 

@@ -37,7 +37,7 @@ namespace KChart
 {
 
  KChartPrinterDlg::KChartPrinterDlg( QWidget *parent, const char *name )
-  : KPrintDialogPage( parent, name )
+  : KPrintDialogPage( parent )
 {
   setTitle( i18n( "KChart Options" ) );
   Q3VBoxLayout *layout = new Q3VBoxLayout( this );
@@ -45,13 +45,13 @@ namespace KChart
   layout->setSpacing( KDialog::spacingHint() );
   txtSizex = new KIntNumInput(this );
   txtSizex->setSuffix("%");
-  txtSizex->setMinValue(1);
-  txtSizex->setMaxValue(100);
+  txtSizex->setMinimum(1);
+  txtSizex->setMaximum(100);
   txtSizex->setValue(100);
   txtSizey = new KIntNumInput(this );
   txtSizey->setSuffix("%");
-  txtSizey->setMinValue(1);
-  txtSizey->setMaxValue(100);
+  txtSizey->setMinimum(1);
+  txtSizey->setMaximum(100);
   txtSizey->setValue(100);
   
   layout->addWidget( new QLabel(i18n("Print Size"), this) );

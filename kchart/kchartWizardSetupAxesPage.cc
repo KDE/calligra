@@ -38,7 +38,7 @@ KChartWizardSetupAxesPage::KChartWizardSetupAxesPage( QWidget* parent,
 
     Q3GroupBox* tmpQGroupBox;
     tmpQGroupBox = new Q3GroupBox( this, "GroupBox_1" );
-    tmpQGroupBox->setFrameStyle( 49 );
+    //tmpQGroupBox->setFrameStyle( 49 );
 
     Q3GridLayout *grid2 = new Q3GridLayout(tmpQGroupBox,3,2,KDialog::marginHint(), KDialog::spacingHint());
 
@@ -76,7 +76,7 @@ KChartWizardSetupAxesPage::KChartWizardSetupAxesPage( QWidget* parent,
 
 
     tmpQGroupBox = new Q3GroupBox( this, "GroupBox_2" );
-    tmpQGroupBox->setFrameStyle( 49 );
+    //tmpQGroupBox->setFrameStyle( 49 );
 
     grid2 = new Q3GridLayout(tmpQGroupBox,3,2,KDialog::marginHint(), KDialog::spacingHint());
 
@@ -107,7 +107,7 @@ KChartWizardSetupAxesPage::KChartWizardSetupAxesPage( QWidget* parent,
     grid1->addWidget(tmpQGroupBox,0,1);
 
     tmpQGroupBox = new Q3GroupBox( this, "GroupBox_3" );
-    tmpQGroupBox->setFrameStyle( 49 );
+    //tmpQGroupBox->setFrameStyle( 49 );
 
     grid2 = new Q3GridLayout(tmpQGroupBox,3,2,KDialog::marginHint(), KDialog::spacingHint());
 
@@ -147,7 +147,7 @@ KChartWizardSetupAxesPage::KChartWizardSetupAxesPage( QWidget* parent,
     tmpQGroupBox->setEnabled(false);
 
     tmpQGroupBox = new Q3GroupBox( this, "GroupBox_3" );
-    tmpQGroupBox->setFrameStyle( 49 );
+    //tmpQGroupBox->setFrameStyle( 49 );
 
     grid2 = new Q3GridLayout(tmpQGroupBox,3,2,KDialog::marginHint(), KDialog::spacingHint());
 

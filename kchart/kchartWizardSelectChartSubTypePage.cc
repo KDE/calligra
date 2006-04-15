@@ -45,7 +45,7 @@ KChartWizardSelectChartSubTypePage::KChartWizardSelectChartSubTypePage( QWidget*
     lay1->setMargin( KDialog::marginHint() );
     lay1->setSpacing( KDialog::spacingHint() );
 
-    Q3ButtonGroup *grp = new Q3ButtonGroup( 1, Q3GroupBox::Horizontal, 
+    Q3ButtonGroup *grp = new Q3ButtonGroup( 1, Qt::Horizontal, 
 					  i18n( "Chart Sub Type" ), this );
     grp->setRadioButtonExclusive( true );
     grp->layout();

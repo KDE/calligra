@@ -10,7 +10,6 @@
 #include <qlineedit.h>
 #include <q3listbox.h>
 #include <q3buttongroup.h>
-#include <qvbuttongroup.h>
 #include <qpushbutton.h>
 #include <qradiobutton.h>
 #include <qlineedit.h>

@@ -58,7 +58,7 @@ kde4_add_dcop_skels(kchartcommon_LIB_SRCS KChartViewIface.h KChartParamsIface.h 
 
 kde4_add_library(kchartcommon SHARED ${kchartcommon_LIB_SRCS})
 
-target_link_libraries(kchartcommon  ${KDE4_KDECORE_LIBS} kochart kofficeui kdchart )
+target_link_libraries(kchartcommon  ${KDE4_KDE3SUPPORT_LIBS} kochart kofficeui kdchart )
 
 set_target_properties(kchartcommon PROPERTIES VERSION 2.0.0 SOVERSION 2 )
 install_targets(${LIB_INSTALL_DIR} kchartcommon )

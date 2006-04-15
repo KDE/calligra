@@ -76,6 +76,8 @@ void kchartDataSpinBox::stepDown()
 
 bool kchartDataSpinBox::eventFilter( QObject *obj, QEvent *ev )
 {
+#warning "kde4 : port it :!!!!"
+#if 0
     if ( obj == editor() ) {
         if ( ev->type() == QEvent::FocusOut ) {
             //kDebug() << "Focus out" << endl;
@@ -87,7 +89,7 @@ bool kchartDataSpinBox::eventFilter( QObject *obj, QEvent *ev )
                 emit valueChangedSpecial( value() );
         }
     }
- 
+#endif
     // Pass the event on to the parent class.
     return QSpinBox::eventFilter( obj, ev );
 }
