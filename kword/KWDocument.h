@@ -193,8 +193,11 @@ public:
     virtual QPixmap generatePreview( const QSize &size );
 
     /**
+     * Document wide version of KWFrameSet::createEmptyRegion
      * @param emptyRegion The region is modified to subtract the areas painted, thus
      *                    allowing the caller to determine which areas remain to be painted.
+     * @param crect the cliprect; only parts inside this rect are of interrest to us
+     * @param viewMode For coordinate conversion, always set.
      */
     void createEmptyRegion( const QRect & crect, QRegion & emptyRegion, KWViewMode * viewMode );
     /**
@@ -299,7 +302,9 @@ public:
 
     QString uniqueFramesetName( const QString& oldName );
     /**
-     * @param copyFootNote ...
+     * @param topElem the DOM element that contains the OASIS document
+     * @param macroCmd for undo/redo purposes, pass this if you want to undo the paste later
+     * @param copyFootNote ???
      * @param dontCreateFootNote true when we copy footnote into an other frameset than mainFrameSet => footnote is removed !
      * @param selectFrames if true, pasted frames are auto-selected. Set to false when loading from a file etc.
      */
@@ -455,7 +460,12 @@ public:
     void setFooterVisible( bool f );
     bool hasEndNotes() const;
 
-    /// @param flags see KWFrameLayout
+    /**
+     * Recalculate and (re)position the main frame and header/footers.
+     * @param fromPage the start pagenumber to do the recalculation on.
+     * @param toPage the last page that will be recalulated
+     * @param flags see KWFrameLayout
+     */
     void recalcFrames( int fromPage = 0, int toPage = -1, uint flags = 0 );
 
     KoHFType headerType() const { return m_pageHeaderFooter.header; }
@@ -862,6 +872,8 @@ protected:
      * @param picture must be set when saveFlag==SaveSelected.
      *        It returns the selected picture, when exactly one picture was selected.
      * @param fs the text frameset, which must be set when saveFlag==SaveSelected.
+     * @param selectedFrames a list of the selected frames to save. This has to be passed since
+     *        selection is per view, not per document.
      */
     bool saveOasisHelper( KoStore* store, KoXmlWriter* manifestWriter, SaveFlag saveFlag,
                     const Q3ValueList<KWFrameView*> &selectedFrames,

@@ -42,7 +42,6 @@ public:
     /**
      * Constructor for the ok-to-delete dialog.
      * @param parent the parent widget
-     * @param name the internal name for the widget
      * @param table the table the rows or columns are to be deleted from
      * @param type the type of dialog this should become, either deleteRow or deleteColumn
      * @param remove a list of all the rows or columns that should be deleted.

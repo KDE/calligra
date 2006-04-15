@@ -38,6 +38,7 @@ public:
 
     /**
      * @param _path the name of the old file
+     * @param parent the parent widget
      * @return the loaded picture (Picture is null if cancelled.)
      */
     static KoPicture selectPictureDia( const QString & _path, QWidget* parent );
