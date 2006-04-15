@@ -491,18 +491,11 @@ public:
    * @param view the view of the region -- may be NULL but no selection markers
    *        can be passed in that case.
    *
-   * @param cellRegions a list of rectangles indicating the cell ranges needing
-   *                    painted.
-   *
-   * @param sheet the sheet which the cells in cellRegions come from
-   *
-   * @param drawCursor whether or not to draw the selection rectangle and the choose
-   *                   marker
+   * @param region a list of rectangles indicating the cell ranges needing
+   *               painted.
    */
   void paintCellRegions(QPainter& painter, const QRect &viewRect,
-                        View* view,
-                        Q3ValueList<QRect> cellRegions,
-                        const Sheet* sheet, bool drawCursor);
+                        View* view, const Region& region);
 
   virtual DCOPObject* dcopObject();
 

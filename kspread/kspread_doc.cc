@@ -1639,13 +1639,12 @@ void Doc::paintContent( QPainter& painter, const QRect& rect, bool /*transparent
     painter.setPen( pen );
 
     /* Update the entire visible area. */
-    Q3ValueList<QRect>  cellAreaList;
-    cellAreaList.append( QRect( left_col,
-                                top_row,
-                                right_col - left_col + 1,
-                                bottom_row - top_row + 1) );
+    Region region;
+    region.add( QRect( left_col, top_row,
+                       right_col - left_col + 1,
+                       bottom_row - top_row + 1), sheet );
 
-    paintCellRegions(painter, rect, NULL, cellAreaList, sheet, drawCursor);
+    paintCellRegions(painter, rect, NULL, region);
 }
 
 void Doc::paintUpdates()
@@ -1671,8 +1670,7 @@ void Doc::paintUpdates()
 
 void Doc::paintCellRegions(QPainter& painter, const QRect &viewRect,
 			   View* view,
-			   Q3ValueList<QRect> cellRegions,
-			   const Sheet* sheet, bool /*drawCursor*/)
+			   const Region& region)
 {
   //
   // Clip away children
@@ -1709,10 +1707,12 @@ void Doc::paintCellRegions(QPainter& painter, const QRect &viewRect,
   QRect cellRegion;
   KoRect unzoomedViewRect = unzoomRect( viewRect );
 
-  for (int i=0; i < cellRegions.size(); i++) {
-    cellRegion = cellRegions[i];
+  Region::ConstIterator endOfList(region.constEnd());
+  for (Region::ConstIterator it = region.constBegin(); it != endOfList; ++it)
+  {
+    cellRegion = (*it)->rect().normalized();
 
-    PaintRegion(painter, unzoomedViewRect, view, cellRegion, sheet);
+    PaintRegion(painter, unzoomedViewRect, view, cellRegion, (*it)->sheet());
   }
 }
 
