@@ -7,7 +7,7 @@ add_subdirectory( reports )
 add_subdirectory( toolbar )
 add_subdirectory( tests )
 
-include_directories(${KOTEXT_INCLUDES} ${CMAKE_SOURCE_DIR}/kdgantt ${CMAKE_SOURCE_DIR}/kugar/lib   )
+include_directories(${KOTEXT_INCLUDES} ${KOFFICEUI_INCLUDES} ${CMAKE_SOURCE_DIR}/kdgantt ${CMAKE_SOURCE_DIR}/kugar/lib   )
 
 
 set(libkplatopart_SRCS 
