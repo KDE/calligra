@@ -469,7 +469,7 @@ void Conditions::loadOasisConditionValue( const QString &styleCondition, Conditi
     {
         val = val.remove( "cell-content-is-between(" );
         val = val.remove( ")" );
-        QStringList listVal = QStringList::split( "," , val );
+        QStringList listVal = val.split( ",", QString::SkipEmptyParts );
         loadOasisValidationValue( listVal, newCondition );
         newCondition.cond = Conditional::Between;
     }
@@ -477,7 +477,7 @@ void Conditions::loadOasisConditionValue( const QString &styleCondition, Conditi
     {
         val = val.remove( "cell-content-is-not-between(" );
         val = val.remove( ")" );
-        QStringList listVal = QStringList::split( ",", val );
+        QStringList listVal = val.split( ",", QString::SkipEmptyParts );
         loadOasisValidationValue( listVal,newCondition );
         newCondition.cond = Conditional::Different;
     }

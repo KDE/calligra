@@ -63,7 +63,7 @@ QMap<QString,DCOPRef> AppIface::documents()
     QList<Doc*>::ConstIterator it = lst.begin();
     for( ; it != lst.end(); ++it )
     {
-	map[ QString( (*it)->name() ) ] =
+      map[ QString( (*it)->objectName() ) ] =
 	 DCOPRef( kapp->dcopClient()->appId(), (*it)->dcopObject()->objId() );
     }
 
@@ -75,7 +75,7 @@ DCOPRef AppIface::document( const QString& name )
     QList<Doc*> lst = Doc::documents();
     QList<Doc*>::ConstIterator it = lst.begin();
     for( ; it != lst.end(); ++it )
-	if ( name == (*it)->name() )
+      if ( name == (*it)->objectName() )
 	    return DCOPRef( kapp->dcopClient()->appId(), (*it)->dcopObject()->objId() );
 
     return DCOPRef();

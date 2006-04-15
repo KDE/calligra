@@ -806,7 +806,7 @@ void DlgValidity::OkPressed()
     }
     else if ( chooseType->currentIndex()==7 )
     {
-        result.listValidity=QStringList::split( "\n", validityList->text() );
+      result.listValidity = validityList->text().split( "\n", QString::SkipEmptyParts );
     }
   }
   result.displayMessage = displayMessage->isChecked();

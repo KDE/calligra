@@ -132,7 +132,7 @@ void SheetIface::sheetNameHasChanged() {
   ident.resize(1);
   QObject *currentObj = m_sheet;
     while (currentObj != 0L) {
-        ident.prepend( currentObj->name() );
+        ident.prepend( currentObj->objectName().toUtf8() );
         ident.prepend("/");
         currentObj = currentObj->parent();
     }

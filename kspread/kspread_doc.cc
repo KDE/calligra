@@ -847,7 +847,7 @@ void Doc::loadOasisIgnoreList( const KoOasisSettings& settings )
     {
         const QString ignorelist = configurationSettings.parseConfigItemString( "SpellCheckerIgnoreList" );
         //kDebug()<<" ignorelist :"<<ignorelist<<endl;
-        d->spellListIgnoreAll = QStringList::split( ',', ignorelist );
+        d->spellListIgnoreAll = ignorelist.split( ',', QString::SkipEmptyParts );
     }
 }
 

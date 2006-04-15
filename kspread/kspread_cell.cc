@@ -5356,7 +5356,7 @@ void Cell::saveOasisAnnotation( KoXmlWriter &xmlwriter )
     {
         //<office:annotation draw:style-name="gr1" draw:text-style-name="P1" svg:width="2.899cm" svg:height="2.691cm" svg:x="2.858cm" svg:y="0.001cm" draw:caption-point-x="-2.858cm" draw:caption-point-y="-0.001cm">
         xmlwriter.startElement( "office:annotation" );
-        QStringList text = QStringList::split( "\n", *format()->comment() );
+        QStringList text = format()->comment()->split( "\n", QString::SkipEmptyParts );
         for ( QStringList::Iterator it = text.begin(); it != text.end(); ++it ) {
             xmlwriter.startElement( "text:p" );
             xmlwriter.addTextNode( *it );
@@ -6092,7 +6092,7 @@ void Cell::loadOasisValidation( const QString& validationName )
             valExpression = valExpression.remove( "oooc:cell-content-text-length-is-between(" );
             kDebug()<<" valExpression :"<<valExpression<<endl;
             valExpression = valExpression.remove( ")" );
-            QStringList listVal = QStringList::split( ",", valExpression );
+            QStringList listVal = valExpression.split( ",", QString::SkipEmptyParts );
             loadOasisValidationValue( listVal );
         }
         else if ( valExpression.contains( "cell-content-text-length-is-not-between" ) )
@@ -6103,7 +6103,7 @@ void Cell::loadOasisValidation( const QString& validationName )
             kDebug()<<" valExpression :"<<valExpression<<endl;
             valExpression = valExpression.remove( ")" );
             kDebug()<<" valExpression :"<<valExpression<<endl;
-            QStringList listVal = QStringList::split( ",", valExpression );
+            QStringList listVal = valExpression.split( ",", QString::SkipEmptyParts );
             loadOasisValidationValue( listVal );
         }
         else if ( valExpression.contains( "cell-content-is-in-list(" ) )
@@ -6112,7 +6112,7 @@ void Cell::loadOasisValidation( const QString& validationName )
             valExpression = valExpression.remove( "oooc:cell-content-is-in-list(" );
             kDebug()<<" valExpression :"<<valExpression<<endl;
             valExpression = valExpression.remove( ")" );
-            d->extra()->validity->listValidity = QStringList::split( ";", valExpression );
+            d->extra()->validity->listValidity = valExpression.split( ";",  QString::SkipEmptyParts );
 
         }
         //TrueFunction ::= cell-content-is-whole-number() | cell-content-is-decimal-number() | cell-content-is-date() | cell-content-is-time()
@@ -6151,7 +6151,7 @@ void Cell::loadOasisValidation( const QString& validationName )
             {
                 valExpression = valExpression.remove( "cell-content-is-between(" );
                 valExpression = valExpression.remove( ")" );
-                QStringList listVal = QStringList::split( "," , valExpression );
+                QStringList listVal = valExpression.split( ",", QString::SkipEmptyParts );
                 loadOasisValidationValue( listVal );
                 d->extra()->validity->m_cond = Conditional::Between;
             }
@@ -6159,7 +6159,7 @@ void Cell::loadOasisValidation( const QString& validationName )
             {
                 valExpression = valExpression.remove( "cell-content-is-not-between(" );
                 valExpression = valExpression.remove( ")" );
-                QStringList listVal = QStringList::split( ",", valExpression );
+                QStringList listVal = valExpression.split( ",", QString::SkipEmptyParts );
                 loadOasisValidationValue( listVal );
                 d->extra()->validity->m_cond = Conditional::Different;
             }
@@ -6489,7 +6489,7 @@ bool Cell::load( const QDomElement & cell, int _xshift, int _yshift,
           }
           if ( param.hasAttribute("listvalidity") )
           {
-              d->extra()->validity->listValidity=QStringList::split(";", param.attribute("listvalidity") );
+            d->extra()->validity->listValidity = param.attribute("listvalidity").split(";", QString::SkipEmptyParts );
           }
         }
         QDomElement inputTitle = validity.namedItem( "inputtitle" ).toElement();

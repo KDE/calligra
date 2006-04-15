@@ -60,7 +60,7 @@ DCOPRef MapIface::sheetByIndex( int index )
         return DCOPRef();
     }
 
-    kDebug(36001) << "+++++++ Returning table " << t->QObject::name() << endl;
+    kDebug(36001) << "+++++++ Returning table " << t->QObject::objectName() << endl;
 
     return DCOPRef( kapp->dcopClient()->appId(), t->dcopObject()->objId() );
 }
@@ -77,7 +77,7 @@ QStringList MapIface::sheetNames() const
     Q3PtrList<Sheet>& lst = m_map->sheetList();
     Q3PtrListIterator<Sheet> it( lst );
     for( ; it.current(); ++it )
-        names.append( it.current()->name() );
+      names.append( it.current()->objectName() );
 
     return names;
 }

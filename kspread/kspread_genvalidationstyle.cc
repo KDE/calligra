@@ -44,7 +44,7 @@ QString GenValidationStyles::lookup( const GenValidationStyle& style )
         m_names.insert( styleName, true );
         it = m_styles.insert( style, styleName );
     }
-    return it.data();
+    return it.value();
 }
 
 QString GenValidationStyles::makeUniqueName( const QString& base ) const
@@ -67,7 +67,7 @@ void GenValidationStyles::writeStyle( KoXmlWriter& writer )
         for ( it = m_styles.begin(); it != m_styles.end(); ++it )
         {
             writer.startElement( "table:content-validation" );
-            writer.addAttribute( "table:name", it.data() );
+            writer.addAttribute( "table:name", it.value() );
             writer.addAttribute( "table:allow-empty-cell", it.key().allowEmptyCell );
             writer.addAttribute( "table:condition", it.key().condition );
 
@@ -75,7 +75,7 @@ void GenValidationStyles::writeStyle( KoXmlWriter& writer )
             writer.addAttribute( "table:title", it.key().title );
             writer.addAttribute( "table:display", it.key().displayValidationInformation );
 
-            QStringList text = QStringList::split( "\n", it.key().messageInfo );
+            QStringList text = it.key().messageInfo.split( "\n", QString::SkipEmptyParts );
             for ( QStringList::Iterator it2 = text.begin(); it2 != text.end(); ++it2 ) {
                 writer.startElement( "text:p" );
                 writer.addTextNode( *it2 );
@@ -88,7 +88,7 @@ void GenValidationStyles::writeStyle( KoXmlWriter& writer )
 
             writer.addAttribute("table:title", it.key().titleInfo);
             writer.addAttribute("table:display", it.key().displayMessage);
-            text = QStringList::split( "\n", it.key().message );
+            text = it.key().message.split( "\n", QString::SkipEmptyParts );
             for ( QStringList::Iterator it3 = text.begin(); it3 != text.end(); ++it3 ) {
                 writer.startElement( "text:p" );
                 writer.addTextNode( *it3 );

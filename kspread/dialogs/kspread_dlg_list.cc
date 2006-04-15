@@ -186,7 +186,7 @@ void ListDialog::slotDoubleClicked(Q3ListBoxItem *)
         return;
     QString tmp=list->currentText();
     entryList->setText("");
-    QStringList result=result.split(", ",tmp);
+    QStringList result = tmp.split(", ", QString::SkipEmptyParts);
     int index=0;
     for ( QStringList::Iterator it = result.begin(); it != result.end();++it )
         {
@@ -265,7 +265,7 @@ void ListDialog::slotOk()
         //don't save the two first line
         for(unsigned int i=2;i<list->count();i++)
         {
-            QStringList tmp=result.split(", ",list->text(i));
+          QStringList tmp = list->text(i).split(", ", QString::SkipEmptyParts);
             if ( !tmp.isEmpty() )
             {
                 result+=tmp;
