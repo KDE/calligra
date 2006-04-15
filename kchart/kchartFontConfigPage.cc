@@ -141,7 +141,7 @@ void KChartFontConfigPage::initList()
 void KChartFontConfigPage::changeLabelFont()
 {
     QFont                 *font = 0;
-    QCheckBox::ToggleState  *state = 0;
+	Qt::CheckState  *state = 0;
     bool                   diffAxes = false;
 
     if (m_list->currentText()==i18n("X-Title")) {
@@ -168,10 +168,10 @@ void KChartFontConfigPage::changeLabelFont()
     if ( diffAxes ) {
         QFont newFont;
         int flags = 0;
-        QCheckBox::ToggleState newState
+		Qt::CheckState newState
             = (xAxisIsRelative == yAxisIsRelative)
-            ? (xAxisIsRelative ? QCheckBox::On : QCheckBox::Off)
-            : QCheckBox::NoChange;
+            ? (xAxisIsRelative ? Qt::Checked : Qt::Unchecked )
+            : Qt::PartiallyChecked;
         if (KFontDialog::getFontDiff( newFont,
                                       flags,
                                       false,
@@ -204,7 +204,7 @@ void KChartFontConfigPage::changeLabelFont()
             // if( KFontChooser::CharsetList & flags ) {
             // }
 
-            if ( QCheckBox::NoChange != newState ) {
+            if ( Qt::PartiallyChecked != newState ) {
                 xAxisIsRelative = newState;
                 yAxisIsRelative = newState;
             }
@@ -212,14 +212,14 @@ void KChartFontConfigPage::changeLabelFont()
     }
     else if ( font && state ) {
         QFont newFont( *font );
-        QCheckBox::ToggleState newState = *state;
+		Qt::CheckState newState = *state;
         if (KFontDialog::getFont( newFont,
                                   false,
                                   this,
                                   true,
                                   &newState ) != QDialog::Rejected) {
             *font = newFont;
-            if ( QCheckBox::NoChange != newState )
+            if ( Qt::PartiallyChecked!= newState )
                 *state = newState;
         }
     }
@@ -237,16 +237,16 @@ void KChartFontConfigPage::init()
 
     xAxis           = bottomparms.axisLabelsFont();
     xAxisIsRelative = bottomparms.axisLabelsFontUseRelSize() 
-	? QCheckBox::On : QCheckBox::Off;
+	? Qt::Checked : Qt::Unchecked;
 
-    if ( QCheckBox::On == xAxisIsRelative )
+    if ( Qt::Checked == xAxisIsRelative )
         xAxis.setPointSize( bottomparms.axisLabelsFontRelSize() );
 
     yAxis = leftparms.axisLabelsFont();
     yAxisIsRelative = leftparms.axisLabelsFontUseRelSize()
-	? QCheckBox::On : QCheckBox::Off;
+	? Qt::Checked : Qt::Unchecked;
 
-    if ( QCheckBox::On == yAxisIsRelative )
+    if ( Qt::Checked == yAxisIsRelative )
         yAxis.setPointSize( leftparms.axisLabelsFontRelSize() );
     // PENDING(khz) Add support for the other 6 possible axes
 
@@ -277,19 +277,19 @@ void KChartFontConfigPage::apply()
     KDChartAxisParams  bottomparms;
     bottomparms = m_params->axisParams( KDChartAxisParams::AxisPosBottom );
 
-    leftparms.setAxisLabelsFont( yAxis, QCheckBox::Off == yAxisIsRelative );
-    if ( QCheckBox::On == yAxisIsRelative )
+    leftparms.setAxisLabelsFont( yAxis, Qt::Unchecked == yAxisIsRelative );
+    if ( Qt::Checked == yAxisIsRelative )
         leftparms.setAxisLabelsFontRelSize( yAxis.pointSize() );
 
     // PENDING(khz) change right axis handling
     // use left axis settings for the right axis as well
     //   (this must be changed, khz 14.12.2001)
-    rightparms.setAxisLabelsFont( yAxis, QCheckBox::Off == yAxisIsRelative );
-    if ( QCheckBox::On == yAxisIsRelative )
+    rightparms.setAxisLabelsFont( yAxis, Qt::Unchecked == yAxisIsRelative );
+    if ( Qt::Checked == yAxisIsRelative )
         rightparms.setAxisLabelsFontRelSize( yAxis.pointSize() );
 
-    bottomparms.setAxisLabelsFont( xAxis, QCheckBox::Off == xAxisIsRelative );
-    if ( QCheckBox::On == xAxisIsRelative )
+    bottomparms.setAxisLabelsFont( xAxis, Qt::Unchecked == xAxisIsRelative );
+    if ( Qt::Checked == xAxisIsRelative )
         bottomparms.setAxisLabelsFontRelSize( xAxis.pointSize() );
     // PENDING(khz) Add support for the other 6 possible axes
 

@@ -22,7 +22,7 @@
 
 #include <qwidget.h>
 #include <q3button.h>
-
+#include <QCheckBox>
 #include "kchartcolorarray.h"
 
 #include "koChart.h"
@@ -66,12 +66,12 @@ private:
     QFont label;
 
     // Old stuff.  Remove?
-    QCheckBox::ToggleState xTitleIsRelative;
-    QCheckBox::ToggleState yTitleIsRelative;
-    QCheckBox::ToggleState labelIsRelative;
-    QCheckBox::ToggleState yAxisIsRelative;
-    QCheckBox::ToggleState xAxisIsRelative;
-    QCheckBox::ToggleState legendIsRelative;
+	Qt::CheckState xTitleIsRelative;
+	Qt::CheckState yTitleIsRelative;
+	Qt::CheckState labelIsRelative;
+	Qt::CheckState yAxisIsRelative;
+	Qt::CheckState xAxisIsRelative;
+	Qt::CheckState legendIsRelative;
     KDChartTableData *data;
 };
 
