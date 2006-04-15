@@ -102,11 +102,11 @@ public:
   bool dirty;
   bool valid;
   QString expression;
-  Q3ValueVector<Opcode> codes;
-  Q3ValueVector<Value> constants;
+  QVector<Opcode> codes;
+  QVector<Value> constants;
 };
 
-class TokenStack : public Q3ValueVector<Token>
+class TokenStack : public QVector<Token>
 {
 public:
   TokenStack();
@@ -308,7 +308,7 @@ QString Token::description() const
     TokenStack
  **********************/
 
-TokenStack::TokenStack(): Q3ValueVector<Token>()
+TokenStack::TokenStack(): QVector<Token>()
 {
   topIndex = 0;
   ensureSpace();
@@ -327,7 +327,7 @@ unsigned TokenStack::itemCount() const
 void TokenStack::push( const Token& token )
 {
   ensureSpace();
-  at( topIndex++ ) = token;
+  insert( topIndex++, token );
 }
 
 Token TokenStack::pop()
@@ -1165,7 +1165,7 @@ Value Formula::eval() const
   unsigned index;
   Value val1, val2;
   QString c;
-  Q3ValueVector<Value> args;
+  QVector<Value> args;
 
   Sheet *sheet = 0;
   ValueParser* parser = 0;

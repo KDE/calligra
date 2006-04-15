@@ -35,14 +35,14 @@ class Sheet;
 class Value;
 class ValueCalc;
 
-typedef Q3ValueVector<Value> valVector;
+typedef QVector<Value> valVector;
 
 struct rangeInfo {
   int col1, col2, row1, row2;
 };
 struct FuncExtra {
   // here we'll add all the extras a function may need
-  Q3ValueVector<rangeInfo> ranges;
+  QVector<rangeInfo> ranges;
   Sheet *sheet;
   int myrow, mycol;
 };

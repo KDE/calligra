@@ -218,10 +218,10 @@ class Token
  * Class Tokens represents array of tokens.
  *
  */
-class Tokens: public Q3ValueVector<Token>
+class Tokens: public QVector<Token>
 {
 public:
-  Tokens(): Q3ValueVector<Token>(), m_valid(true) {};
+  Tokens(): QVector<Token>(), m_valid(true) {};
   bool valid() const { return m_valid; }
   void setValid( bool v ){ m_valid = v; }
 protected:

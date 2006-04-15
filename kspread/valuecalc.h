@@ -199,12 +199,12 @@ class ValueCalc {
       arrayWalkFunc func, Value param);
   /** Walk the array in function-like style.
   This method is here to avoid duplication in function handlers. */
-  void arrayWalk (Q3ValueVector<Value> &range, Value &res,
+  void arrayWalk (QVector<Value> &range, Value &res,
       arrayWalkFunc func, Value param);
   void twoArrayWalk (const Value &a1, const Value &a2,
       Value &res, arrayWalkFunc func);
-  void twoArrayWalk (Q3ValueVector<Value> &a1,
-      Q3ValueVector<Value> &a2, Value &res, arrayWalkFunc func);
+  void twoArrayWalk (QVector<Value> &a1,
+      QVector<Value> &a2, Value &res, arrayWalkFunc func);
   arrayWalkFunc awFunc (const QString &name);
   void registerAwFunc (const QString &name, arrayWalkFunc func);
 
@@ -229,18 +229,18 @@ class ValueCalc {
       bool full = true);
   
   /** range functions using value lists */
-  Value sum (Q3ValueVector<Value> range, bool full = true);
-  int count (Q3ValueVector<Value> range, bool full = true);
-  Value avg (Q3ValueVector<Value> range, bool full = true);
-  Value max (Q3ValueVector<Value> range, bool full = true);
-  Value min (Q3ValueVector<Value> range, bool full = true);
-  Value product (Q3ValueVector<Value> range, Value init,
+  Value sum (QVector<Value> range, bool full = true);
+  int count (QVector<Value> range, bool full = true);
+  Value avg (QVector<Value> range, bool full = true);
+  Value max (QVector<Value> range, bool full = true);
+  Value min (QVector<Value> range, bool full = true);
+  Value product (QVector<Value> range, Value init,
       bool full = true);
-  Value stddev (Q3ValueVector<Value> range, bool full = true);
-  Value stddev (Q3ValueVector<Value> range, Value avg,
+  Value stddev (QVector<Value> range, bool full = true);
+  Value stddev (QVector<Value> range, Value avg,
       bool full = true);
-  Value stddevP (Q3ValueVector<Value> range, bool full = true);
-  Value stddevP (Q3ValueVector<Value> range, Value avg,
+  Value stddevP (QVector<Value> range, bool full = true);
+  Value stddevP (QVector<Value> range, Value avg,
       bool full = true);
 
   /**

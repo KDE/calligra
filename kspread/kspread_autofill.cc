@@ -730,8 +730,8 @@ bool Sheet::FillSequenceWithInterval(Q3PtrList<Cell>& _srcList,
   {
     AutoFillSequenceItem::Type type;
 
-    Q3ValueVector< QVariant > tmp( _seqList.count() );  /*= new QValueList< QVariant > ( _seqList.count() )*/;
-    Q3ValueVector< QVariant > diff( _seqList.count() ); /*= new QValueList< QVariant > ( _seqList.count() )*/;
+    QVector< QVariant > tmp( _seqList.count() );  /*= new QValueList< QVariant > ( _seqList.count() )*/;
+    QVector< QVariant > diff( _seqList.count() ); /*= new QValueList< QVariant > ( _seqList.count() )*/;
     int p = -1;
     int count = 0;
     int tmpcount = 0;

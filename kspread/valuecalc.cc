@@ -1557,7 +1557,7 @@ void ValueCalc::arrayWalk (const Value &range,
     }
 }
 
-void ValueCalc::arrayWalk (Q3ValueVector<Value> &range,
+void ValueCalc::arrayWalk (QVector<Value> &range,
     Value &res, arrayWalkFunc func, Value param)
 {
   if (res.isError()) return;
@@ -1598,8 +1598,8 @@ void ValueCalc::twoArrayWalk (const Value &a1, const Value &a2,
     }
 }
 
-void ValueCalc::twoArrayWalk (Q3ValueVector<Value> &a1,
-    Q3ValueVector<Value> &a2, Value &res, arrayWalkFunc func)
+void ValueCalc::twoArrayWalk (QVector<Value> &a1,
+    QVector<Value> &a2, Value &res, arrayWalkFunc func)
 {
   if (res.isError()) return;
   if (a1.count() != a2.count()) {
@@ -1631,7 +1631,7 @@ Value ValueCalc::sum (const Value &range, bool full)
   return res;
 }
 
-Value ValueCalc::sum (Q3ValueVector<Value> range, bool full)
+Value ValueCalc::sum (QVector<Value> range, bool full)
 {
   Value res;
   arrayWalk (range, res, awFunc (full ? "suma" : "sum"), 0);
@@ -1686,7 +1686,7 @@ int ValueCalc::count (const Value &range, bool full)
   return converter->asInteger (res).asInteger ();
 }
 
-int ValueCalc::count (Q3ValueVector<Value> range, bool full)
+int ValueCalc::count (QVector<Value> range, bool full)
 {
   Value res = 0;
   arrayWalk (range, res, awFunc (full ? "counta" : "count"), 0);
@@ -1729,7 +1729,7 @@ Value ValueCalc::avg (const Value &range, bool full)
   return Value (0.0);
 }
 
-Value ValueCalc::avg (Q3ValueVector<Value> range, bool full)
+Value ValueCalc::avg (QVector<Value> range, bool full)
 {
   int cnt = count (range, full);
   if (cnt)
@@ -1744,7 +1744,7 @@ Value ValueCalc::max (const Value &range, bool full)
   return res;
 }
 
-Value ValueCalc::max (Q3ValueVector<Value> range, bool full)
+Value ValueCalc::max (QVector<Value> range, bool full)
 {
   Value res;
   arrayWalk (range, res, awFunc (full ? "maxa" : "max"), 0);
@@ -1758,7 +1758,7 @@ Value ValueCalc::min (const Value &range, bool full)
   return res;
 }
 
-Value ValueCalc::min (Q3ValueVector<Value> range, bool full)
+Value ValueCalc::min (QVector<Value> range, bool full)
 {
   Value res;
   arrayWalk (range, res, awFunc (full ? "mina" : "min"), 0);
@@ -1779,7 +1779,7 @@ Value ValueCalc::product (const Value &range, Value init,
   return res;
 }
 
-Value ValueCalc::product (Q3ValueVector<Value> range,
+Value ValueCalc::product (QVector<Value> range,
     Value init, bool full)
 {
   Value res = init;
@@ -1807,12 +1807,12 @@ Value ValueCalc::stddev (const Value &range, Value avg,
   return sqrt (div (res, cnt-1));
 }
 
-Value ValueCalc::stddev (Q3ValueVector<Value> range, bool full)
+Value ValueCalc::stddev (QVector<Value> range, bool full)
 {
   return stddev (range, avg (range, full), full);
 }
 
-Value ValueCalc::stddev (Q3ValueVector<Value> range,
+Value ValueCalc::stddev (QVector<Value> range,
     Value avg, bool full)
 {
   Value res;
@@ -1835,12 +1835,12 @@ Value ValueCalc::stddevP (const Value &range, Value avg,
   return sqrt (div (res, cnt));
 }
 
-Value ValueCalc::stddevP (Q3ValueVector<Value> range, bool full)
+Value ValueCalc::stddevP (QVector<Value> range, bool full)
 {
   return stddevP (range, avg (range, full), full);
 }
 
-Value ValueCalc::stddevP (Q3ValueVector<Value> range,
+Value ValueCalc::stddevP (QVector<Value> range,
     Value avg, bool full)
 {
   Value res;
