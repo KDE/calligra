@@ -43,7 +43,7 @@
 #include <QFocusEvent>
 #include <QDragLeaveEvent>
 #include <QPaintEvent>
-#include <Q3PtrList>
+#include <QList>
 #include <QKeyEvent>
 #include <QDragMoveEvent>
 #include <QEvent>
@@ -362,7 +362,7 @@ public:
      *
      * @return List of objects
      */
-    void displayObjectList( Q3PtrList<EmbeddedObject> &list );
+    void displayObjectList( QList<EmbeddedObject*> &list );
 
     KoRect objectRect( bool all ) const;
 

@@ -25,15 +25,16 @@
 #include <qclipboard.h>
 #include <q3dragobject.h>
 #include <q3intdict.h>
+#include <QList>
 #include <QLinkedList>
 #include <q3memarray.h>
 #include <qpen.h>
-#include <q3ptrlist.h>
 #include <qrect.h>
 #include <qwidget.h>
 //Added by qt3to4:
 #include <QPixmap>
 #include <Q3PointArray>
+#include <Q3PtrList>
 #include <Q3Dict>
 
 #include <KoDocument.h>
@@ -278,7 +279,7 @@ public:
      *
      * @return list of selected objets.
      */
-    Q3PtrList<EmbeddedObject> getSelectedObjects();
+    QList<EmbeddedObject*> getSelectedObjects();
 
 
     /**
@@ -1374,7 +1375,7 @@ private:
     void checkCellContent(Cell * cell1, Cell * cell2, int & ret);
     int  adjustColumnHelper(Cell * c, int _col, int _row);
     void checkContentDirection( QString const & name );
-    bool objectNameExists( EmbeddedObject *object, Q3PtrList<EmbeddedObject> &list );
+    bool objectNameExists( EmbeddedObject *object, QList<EmbeddedObject*> &list );
 
     class Private;
     Private* d;

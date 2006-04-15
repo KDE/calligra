@@ -4067,14 +4067,13 @@ void View::cutSelection()
     doc()->emitEndOperation();
 
     KMacroCommand * macroCommand = 0L;
-    Q3PtrListIterator<EmbeddedObject> it( doc()->embeddedObjects() );
-    for ( ; it.current() ; ++it )
+    foreach ( EmbeddedObject* object, doc()->embeddedObjects() )
     {
-      if ( it.current()->sheet() == canvasWidget()->activeSheet() && it.current()->isSelected() )
+      if ( object->sheet() == canvasWidget()->activeSheet() && object->isSelected() )
       {
         if( !macroCommand )
           macroCommand = new KMacroCommand( i18n( "Cut Objects" ) );
-        RemoveObjectCommand *cmd = new RemoveObjectCommand( it.current(), true );
+        RemoveObjectCommand *cmd = new RemoveObjectCommand( object, true );
         macroCommand->addCommand( cmd );
       }
     }
@@ -6079,15 +6078,14 @@ void View::deleteSelection()
 void View::deleteSelectedObjects()
 {
   KMacroCommand * macroCommand = 0L;
-  Q3PtrListIterator<EmbeddedObject> it( doc()->embeddedObjects() );
-  for ( ; it.current() ; ++it )
+  foreach ( EmbeddedObject* object, doc()->embeddedObjects() )
   {
-    if ( it.current()->sheet() == canvasWidget()->activeSheet() && it.current()->isSelected() )
+    if ( object->sheet() == canvasWidget()->activeSheet() && object->isSelected() )
     {
      // d->activeSheet->setRegionPaintDirty( it.
       if( !macroCommand )
         macroCommand = new KMacroCommand( i18n( "Remove Object" ) );
-      RemoveObjectCommand *cmd = new RemoveObjectCommand( it.current() );
+      RemoveObjectCommand *cmd = new RemoveObjectCommand( object );
       macroCommand->addCommand( cmd );
     }
   }

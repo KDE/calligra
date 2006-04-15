@@ -278,10 +278,9 @@ KCommand * PropertyEditor::getCommand()
                     macro = new KMacroCommand( i18n( "Apply Properties" ) );
                 }
 
-                Q3PtrListIterator<EmbeddedObject> it( m_objects );
-                for ( ; it.current(); ++it )
+                foreach ( EmbeddedObject* object, m_objects )
                 {
-                    KoRect oldRect = it.current()->geometry()/*getRect()*/;
+                    KoRect oldRect = object->geometry()/*getRect()*/;
                     KoRect newRect = oldRect;
 
                     if ( change & GeneralProperty::Left )
@@ -296,7 +295,7 @@ KCommand * PropertyEditor::getCommand()
                     if ( change & GeneralProperty::Height )
                         newRect.setHeight( generalValue.m_rect.height() );
 
-                    KCommand *cmd = new ChangeObjectGeometryCommand(   it.current(),  newRect.topLeft() - oldRect.topLeft(),
+                    KCommand *cmd = new ChangeObjectGeometryCommand(   object,  newRect.topLeft() - oldRect.topLeft(),
                                                     newRect.size() - oldRect.size() );
 
                     macro->addCommand( cmd );
@@ -440,20 +439,20 @@ GeneralProperty::GeneralValue PropertyEditor::getGeneralValue()
     bool keepRatio = false;
     generalValue.m_keepRatio = STATE_OFF;
 
-    Q3PtrListIterator<EmbeddedObject> it( m_objects );
-    if ( it.current() )
+    foreach ( EmbeddedObject* object, m_objects )
     {
-        protect = it.current()->isProtect();
+        protect = object->isProtect();
         generalValue.m_protect = protect ? STATE_ON : STATE_OFF;
-        keepRatio = it.current()->isKeepRatio();
+        keepRatio = object->isKeepRatio();
         generalValue.m_keepRatio = keepRatio ? STATE_ON : STATE_OFF;
-        generalValue.m_rect = it.current()->geometry()/*getRect()*/;
-        ++it;
+        generalValue.m_rect = object->geometry()/*getRect()*/;
     }
 
-    for ( ; it.current(); ++it )
+#warning Why is this here? Before the conversion to Qt4 it was never processed.
+#if 0
+    foreach ( EmbeddedObject* object, m_objects )
     {
-        if ( protect != it.current()->isProtect() )
+        if ( protect != object->isProtect() )
         {
             generalValue.m_protect = STATE_UNDEF;
             if ( generalValue.m_keepRatio == STATE_UNDEF )
@@ -462,7 +461,7 @@ GeneralProperty::GeneralValue PropertyEditor::getGeneralValue()
             }
         }
 
-        if ( keepRatio != it.current()->isKeepRatio() )
+        if ( keepRatio != object->isKeepRatio() )
         {
             generalValue.m_keepRatio = STATE_UNDEF;
             if ( generalValue.m_protect == STATE_UNDEF )
@@ -471,7 +470,7 @@ GeneralProperty::GeneralValue PropertyEditor::getGeneralValue()
             }
         }
     }
-
+#endif
     return generalValue;
 }
 

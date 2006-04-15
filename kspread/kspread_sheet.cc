@@ -33,6 +33,8 @@
 #include <qclipboard.h>
 #include <qlabel.h>
 #include <qlayout.h>
+#include <QList>
+#include <QLinkedList>
 #include <qlineedit.h>
 #include <q3picture.h>
 #include <qregexp.h>
@@ -379,7 +381,6 @@ Sheet::Sheet (Map* map,
   d->name = sheetName;
 
   dcopObject();
-  d->cellBindings.setAutoDelete( false );
 
   // m_lstChildren.setAutoDelete( true );
 
@@ -770,10 +771,9 @@ int Sheet::numSelected() const
 {
     int num = 0;
 
-    Q3PtrListIterator<EmbeddedObject> it(  d->workbook->doc()->embeddedObjects() );
-    for ( ; it.current() ; ++it )
+    foreach ( EmbeddedObject* object, d->workbook->doc()->embeddedObjects() )
     {
-        if( it.current()->sheet() == this && it.current()->isSelected() )
+        if( object->sheet() == this && object->isSelected() )
             num++;
     }
 
@@ -6060,12 +6060,11 @@ QDomElement Sheet::saveXML( QDomDocument& dd )
         }
     }
 
-    Q3PtrListIterator<EmbeddedObject>  chl = doc()->embeddedObjects();
-    for( ; chl.current(); ++chl )
+    foreach ( EmbeddedObject* object,doc()->embeddedObjects() )
     {
-       if ( chl.current()->sheet() == this )
+       if ( object->sheet() == this )
        {
-         QDomElement e = chl.current()->save( dd );
+         QDomElement e = object->save( dd );
 
          if ( e.isNull() )
            return QDomElement();
@@ -6081,16 +6080,15 @@ bool Sheet::isLoading()
 }
 
 
-Q3PtrList<EmbeddedObject> Sheet::getSelectedObjects()
+QList<EmbeddedObject*> Sheet::getSelectedObjects()
 {
-    Q3PtrList<EmbeddedObject> objects;
-    Q3PtrListIterator<EmbeddedObject> it = doc()->embeddedObjects();
-    for ( ; it.current() ; ++it )
+    QList<EmbeddedObject*> objects;
+    foreach ( EmbeddedObject* object, d->workbook->doc()->embeddedObjects() )
     {
-        if( it.current()->isSelected()
-            && it.current()->sheet() == this )
+        if( object->isSelected()
+            && object->sheet() == this )
         {
-            objects.append( it.current() );
+            objects.append( object );
         }
     }
      return objects;
@@ -6100,12 +6098,11 @@ KoRect Sheet::getRealRect( bool all )
 {
     KoRect rect;
 
-    Q3PtrListIterator<EmbeddedObject> it( doc()->embeddedObjects() );
-    for ( ; it.current() ; ++it )
+    foreach ( EmbeddedObject* object, d->workbook->doc()->embeddedObjects() )
     {
 
-        if ( all || ( it.current()->isSelected() && ! it.current()->isProtect() ) )
-            rect |= it.current()->geometry();
+        if ( all || ( object->isSelected() && ! object->isProtect() ) )
+            rect |= object->geometry();
     }
 
     return rect;
@@ -6117,21 +6114,19 @@ KCommand *Sheet::moveObject(View *_view, double diffx, double diffy)
     bool createCommand=false;
     MoveObjectByCmd *moveByCmd=0L;
     Canvas * canvas = _view->canvasWidget();
-    Q3PtrList<EmbeddedObject> _objects;
-    _objects.setAutoDelete( false );
-    Q3PtrListIterator<EmbeddedObject> it( doc()->embeddedObjects()/*m_objectList*/ );
-    for ( ; it.current() ; ++it )
+    QList<EmbeddedObject*> _objects;
+    foreach ( EmbeddedObject* object, d->workbook->doc()->embeddedObjects() )
     {
-        if ( it.current()->isSelected() && !it.current()->isProtect())
+        if ( object->isSelected() && !object->isProtect())
         {
-            _objects.append( it.current() );
-            KoRect geometry = it.current()->geometry();
+            _objects.append( object );
+            KoRect geometry = object->geometry();
             geometry.moveBy( -canvas->xOffset(), -canvas->yOffset() );
-            QRect br = doc()->zoomRect( geometry/*it.current()->geometry()*/ );
+            QRect br = doc()->zoomRect( geometry/*object->geometry()*/ );
             br.translate( doc()->zoomItX( diffx ), doc()->zoomItY( diffy ) );
             br.translate( doc()->zoomItX( -canvas->xOffset() ), doc()->zoomItY( -canvas->yOffset() ) );
             canvas->repaint( br ); // Previous position
-            canvas->repaintObject( it.current() ); // New position
+            canvas->repaintObject( object ); // New position
             createCommand=true;
         }
     }
@@ -6146,28 +6141,26 @@ KCommand *Sheet::moveObject(View *_view, double diffx, double diffy)
 
 KCommand *Sheet::moveObject(View *_view,const KoPoint &_move,bool key)
 {
-    Q3PtrList<EmbeddedObject> _objects;
-    _objects.setAutoDelete( false );
+    QList<EmbeddedObject*> _objects;
     MoveObjectByCmd *moveByCmd=0L;
     Canvas * canvas = _view->canvasWidget();
-    Q3PtrListIterator<EmbeddedObject> it( doc()->embeddedObjects()/*m_objectList*/ );
-    for ( ; it.current() ; ++it )
+    foreach ( EmbeddedObject* object, d->workbook->doc()->embeddedObjects() )
     {
-        if ( it.current()->isSelected() && !it.current()->isProtect()) {
+        if ( object->isSelected() && !object->isProtect()) {
 
-            KoRect geometry = it.current()->geometry();
+            KoRect geometry = object->geometry();
             geometry.moveBy( -canvas->xOffset(), -canvas->yOffset() );
             QRect oldBoundingRect = doc()->zoomRect( geometry );
 
 
-            KoRect r = it.current()->geometry();
+            KoRect r = object->geometry();
             r.moveBy( _move.x(), _move.y() );
 
-            it.current()->setGeometry( r );
-            _objects.append( it.current() );
+            object->setGeometry( r );
+            _objects.append( object );
 
             canvas->repaint( oldBoundingRect );
-            canvas->repaintObject( it.current() );
+            canvas->repaintObject( object );
         }
     }
 
@@ -6182,13 +6175,12 @@ KCommand *Sheet::moveObject(View *_view,const KoPoint &_move,bool key)
 /*
  * Check if object name already exists.
  */
-bool Sheet::objectNameExists( EmbeddedObject *object, Q3PtrList<EmbeddedObject> &list ) {
-    Q3PtrListIterator<EmbeddedObject> it( list );
-
-    for ( it.toFirst(); it.current(); ++it ) {
+bool Sheet::objectNameExists( EmbeddedObject *object, QList<EmbeddedObject*> &list )
+{
+    foreach ( EmbeddedObject* object, list ) {
         // object name can exist in current object.
-        if ( it.current()->getObjectName() == object->getObjectName() &&
-             it.current() != object ) {
+        if ( object->getObjectName() == object->getObjectName() &&
+             object != object ) {
             return true;
         }
     }
@@ -6201,7 +6193,7 @@ void Sheet::unifyObjectName( EmbeddedObject *object ) {
     }
     QString objectName( object->getObjectName() );
 
-    Q3PtrList<EmbeddedObject> list( doc()->embeddedObjects() );
+    QList<EmbeddedObject*> list( doc()->embeddedObjects() );
 
     int count = 1;
 
@@ -7833,13 +7825,12 @@ bool Sheet::loadXML( const QDomElement& sheet )
 
 bool Sheet::loadChildren( KoStore* _store )
 {
-    Q3PtrListIterator<EmbeddedObject> it( doc()->embeddedObjects() );
-    for( ; it.current(); ++it )
+    foreach ( EmbeddedObject* object, doc()->embeddedObjects() )
     {
-        if ( it.current()->sheet() == this && ( it.current()->getType() == OBJECT_KOFFICE_PART || it.current()->getType() == OBJECT_CHART ) )
+        if ( object->sheet() == this && ( object->getType() == OBJECT_KOFFICE_PART || object->getType() == OBJECT_CHART ) )
         {
             kDebug() << "KSpreadSheet::loadChildren" << endl;
-            if ( !dynamic_cast<EmbeddedKOfficeObject*>( it.current() )->embeddedObject()->loadDocument( _store ) )
+            if ( !dynamic_cast<EmbeddedKOfficeObject*>( object )->embeddedObject()->loadDocument( _store ) )
                 return false;
         }
     }
@@ -8109,13 +8100,12 @@ bool Sheet::saveChildren( KoStore* _store, const QString &_path )
 {
     int i = 0;
 
-    Q3PtrListIterator<EmbeddedObject> it( doc()->embeddedObjects() );
-    for( ; it.current(); ++it )
+    foreach ( EmbeddedObject* object, doc()->embeddedObjects() )
     {
-        if ( it.current()->sheet() == this && ( it.current()->getType() == OBJECT_KOFFICE_PART || it.current()->getType() == OBJECT_CHART ) )
+        if ( object->sheet() == this && ( object->getType() == OBJECT_KOFFICE_PART || object->getType() == OBJECT_CHART ) )
         {
             QString path = QString( "%1/%2" ).arg( _path ).arg( i++ );
-            if ( !dynamic_cast<EmbeddedKOfficeObject*>( it.current() )->embeddedObject()->document()->saveToStore( _store, path ) )
+            if ( !dynamic_cast<EmbeddedKOfficeObject*>( object )->embeddedObject()->document()->saveToStore( _store, path ) )
                 return false;
         }
     }
@@ -8130,17 +8120,16 @@ bool Sheet::saveOasisObjects( KoStore */*store*/, KoXmlWriter &xmlWriter, KoGenS
 
   bool objectFound = false; // object on this sheet?
   EmbeddedObject::KSpreadOasisSaveContext sc( xmlWriter, mainStyles, indexObj, partIndexObj );
-  Q3PtrListIterator<EmbeddedObject> it( doc()->embeddedObjects() );
-  for( ; it.current(); ++it )
+  foreach ( EmbeddedObject* object, doc()->embeddedObjects() )
   {
-    if ( it.current()->sheet() == this && ( doc()->savingWholeDocument() || it.current()->isSelected() ) )
+    if ( object->sheet() == this && ( doc()->savingWholeDocument() || object->isSelected() ) )
     {
       if ( !objectFound )
       {
         xmlWriter.startElement( "table:shapes" );
         objectFound = true;
       }
-      if ( !it.current()->saveOasisObject(sc)  )
+      if ( !object->saveOasisObject(sc)  )
       {
         xmlWriter.endElement();
         return false;

@@ -38,7 +38,6 @@
 #include <qfont.h>
 #include <qpair.h>
 //Added by qt3to4:
-#include <Q3PtrList>
 #include <Q3ValueList>
 
 #include <kstandarddirs.h>
@@ -127,7 +126,7 @@ public:
 
   QColor pageBorderColor;
 
-  Q3PtrList<Plugin> plugins;
+  QList<Plugin*> plugins;
 
   QList<Reference> refs;
   KCompletion listCompletion;
@@ -158,7 +157,7 @@ public:
     bool configLoadFromFile:1;
   QStringList spellListIgnoreAll;
   /// list of all objects
-  Q3PtrList<EmbeddedObject> m_embeddedObjects;
+  QList<EmbeddedObject*> embeddedObjects;
   KoPictureCollection m_pictureCollection;
   Q3ValueList<KoPictureKey> usedPictures;
   bool m_savingWholeDocument;
@@ -202,8 +201,6 @@ Doc::Doc( QWidget *parentWidget, const char *widgetName, QObject* parent, const 
   QFont f( KoGlobal::defaultFont() );
   Format::setGlobalRowHeight( f.pointSizeFloat() + 3 );
   Format::setGlobalColWidth( ( f.pointSizeFloat() + 3 ) * 5 );
-
-  d->plugins.setAutoDelete( false );
 
   d->delayCalculation = false;
 
@@ -586,8 +583,7 @@ QDomDocument Doc::saveXML()
     defaults.setAttribute( "col-width", Format::globalColWidth() );
     spread.appendChild( defaults );
 
-    Plugin * plugin = d->plugins.first();
-    for ( ; plugin != 0; plugin = d->plugins.next() )
+    foreach ( Plugin* plugin, d->plugins )
     {
       QDomElement data( plugin->saveXML( doc ) );
       if ( !data.isNull() )
@@ -802,12 +798,11 @@ bool Doc::saveOasisHelper( KoStore* store, KoXmlWriter* manifestWriter, SaveFlag
 
     if ( saveFlag == SaveSelected )
     {
-      Q3PtrListIterator<EmbeddedObject> it(embeddedObjects() );
-      for( ; it.current(); ++it )
+      foreach ( EmbeddedObject* object, d->embeddedObjects )
       {
-        if ( it.current()->getType() != OBJECT_CHART  && it.current()->getType() != OBJECT_KOFFICE_PART )
+        if ( object->getType() != OBJECT_CHART  && object->getType() != OBJECT_KOFFICE_PART )
           continue;
-        KoDocumentChild *embedded = dynamic_cast<EmbeddedKOfficeObject *>(it.current() )->embeddedObject();
+        KoDocumentChild *embedded = dynamic_cast<EmbeddedKOfficeObject *>(object )->embeddedObject();
             //NOTE: If an application's .desktop file lies about opendocument support (ie. it indicates that it has
             //a native OASIS mime type, when it doesn't, this causes a crash when trying to reload and paint
             //the object, since it won't have an associated document.
@@ -2290,12 +2285,12 @@ void Doc::insertObject( EmbeddedObject * obj )
     default:
       ;
   }
-  d->m_embeddedObjects.append( obj );
+  d->embeddedObjects.append( obj );
 }
 
-Q3PtrList<EmbeddedObject>& Doc::embeddedObjects()
+QList<EmbeddedObject*>& Doc::embeddedObjects()
 {
-    return d->m_embeddedObjects;
+    return d->embeddedObjects;
 }
 
 KoPictureCollection *Doc::pictureCollection()
@@ -2370,11 +2365,10 @@ void Doc::insertPixmapKey( KoPictureKey key )
 void Doc::makeUsedPixmapList()
 {
     d->usedPictures.clear();
-    Q3PtrListIterator<EmbeddedObject> it( d->m_embeddedObjects );
-    for ( ; it.current() ; ++it )
+    foreach ( EmbeddedObject* object, d->embeddedObjects )
     {
-        if( it.current()->getType() == OBJECT_PICTURE && ( d->m_savingWholeDocument || it.current()->isSelected() ) )
-            insertPixmapKey( static_cast<EmbeddedPictureObject*>( it.current() )->getKey() );
+        if( object->getType() == OBJECT_PICTURE && ( d->m_savingWholeDocument || object->isSelected() ) )
+            insertPixmapKey( static_cast<EmbeddedPictureObject*>( object )->getKey() );
     }
 }
 

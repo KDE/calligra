@@ -289,29 +289,28 @@ bool SheetPrint::print( QPainter &painter, KPrinter *_printer )
 
 
     //Cache all object so they only need to be repainted once.
-    Q3PtrListIterator<EmbeddedObject> itObject( m_pDoc->embeddedObjects() );
-    for ( ; itObject.current(); ++itObject )
+    foreach ( EmbeddedObject* object, m_pDoc->embeddedObjects() )
     {
-      EmbeddedObject *obj = itObject.current();
+      EmbeddedObject *obj = object;
       if ( obj->sheet() != m_pSheet ||
            !( (( obj->getType() == OBJECT_KOFFICE_PART || obj->getType() == OBJECT_PICTURE ) && m_bPrintObjects) ||
            ( obj->getType() == OBJECT_CHART && m_bPrintCharts ) ) )
         continue;
 
-      QRect zoomRect = m_pDoc->zoomRect( itObject.current()->geometry() );
+      QRect zoomRect = m_pDoc->zoomRect( object->geometry() );
       QPixmap *p = new QPixmap( zoomRect.size() );
       QPainter painter(p);
       painter.fillRect( p->rect(), QColor("white") );
       painter.translate( -zoomRect.x(), -zoomRect.y() ); //we cant to paint at (0,0)
-      bool const isSelected = itObject.current()->isSelected();
-      itObject.current()->setSelected( false );
-      itObject.current()->draw( &painter );
+      bool const isSelected = object->isSelected();
+      object->setSelected( false );
+      object->draw( &painter );
       painter.end();
-      itObject.current()->setSelected( isSelected );
+      object->setSelected( isSelected );
 
       PrintObject *po = new PrintObject();
       m_printObjects.append( po );
-      po->obj = itObject.current();
+      po->obj = object;
       po->p = p;
     }
 

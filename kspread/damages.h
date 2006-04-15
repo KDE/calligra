@@ -28,7 +28,8 @@ class Sheet;
 class Damage
 {
   public:
-  
+    virtual ~Damage() {}
+
     typedef enum
     {
       Nothing = 0,
@@ -45,15 +46,15 @@ class Damage
 class CellDamage : public Damage
 {
   public:
-  
+
     CellDamage( KSpread::Cell* cell );
-    
+
     virtual ~CellDamage();
-    
+
     virtual Type type() const { return Damage::Cell; }
-    
+
     KSpread::Cell* cell();
-    
+
   private:
     class Private;
     Private *d;
@@ -62,7 +63,7 @@ class CellDamage : public Damage
 class SheetDamage : public Damage
 {
   public:
-  
+
     enum
     {
       None = 0,
@@ -71,17 +72,17 @@ class SheetDamage : public Damage
       Hidden,
       Shown
     };
-    
+
     SheetDamage( KSpread::Sheet* sheet, int action );
-    
+
     virtual ~SheetDamage();
-  
+
     virtual Type type() const { return Damage::Sheet; }
-    
+
     KSpread::Sheet* sheet() const;
-    
+
     int action() const;
-    
+
   private:
     class Private;
     Private *d;

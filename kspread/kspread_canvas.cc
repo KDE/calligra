@@ -68,7 +68,7 @@
 #include <QDragLeaveEvent>
 #include <QWheelEvent>
 #include <QDropEvent>
-#include <Q3PtrList>
+#include <QList>
 #include <QPixmap>
 
 #include <kcursor.h>
@@ -3237,18 +3237,17 @@ KSpread::EmbeddedObject *Canvas::getObject( const QPoint &pos, Sheet *_sheet )
   QPoint const p ( (int) pos.x() ,
               (int) pos.y() );
 
-  Q3PtrListIterator<EmbeddedObject> itObject( doc()->embeddedObjects() );
-  for( ; itObject.current(); ++itObject )
+  foreach ( EmbeddedObject* object, doc()->embeddedObjects() )
   {
-    if ( itObject.current()->sheet() == _sheet )
+    if ( object->sheet() == _sheet )
     {
-        KoRect const bound = ( itObject.current() )->geometry();
+        KoRect const bound = ( object )->geometry();
         QRect zoomedBound = doc()->zoomRect( KoRect(bound.left(), bound.top(),
                                 bound.width(),
                                 bound.height() ) );
         zoomedBound.translate( (int)( -xOffset() * doc()->zoomedResolutionX() ), (int)( -yOffset() * doc()->zoomedResolutionY() ) );
          if ( zoomedBound.contains( p ) )
-              return itObject.current();
+              return object;
     }
   }
   return 0;
@@ -3279,11 +3278,10 @@ void Canvas::deselectObject( EmbeddedObject *obj )
 
 void Canvas::selectAllObjects()
 {
-  Q3PtrListIterator<EmbeddedObject> it( doc()->embeddedObjects() );
-  for ( ; it.current() ; ++it )
+  foreach ( EmbeddedObject* object, doc()->embeddedObjects() )
   {
-    if ( it.current()->sheet() == activeSheet() )
-      it.current()->setSelected( true );
+    if ( object->sheet() == activeSheet() )
+      object->setSelected( true );
   }
 
    d->mouseSelectedObject = true;
@@ -3297,9 +3295,8 @@ void Canvas::deselectAllObjects()
 
   //lowerObject();
 
-  Q3PtrListIterator<EmbeddedObject> it( doc()->embeddedObjects() );
-  for ( ; it.current() ; ++it )
-      deselectObject( it.current() );
+  foreach ( EmbeddedObject* object, doc()->embeddedObjects() )
+      deselectObject( object );
 
    d->mouseSelectedObject = false;
 //   emit objectSelectedChanged();
@@ -3579,19 +3576,18 @@ void Canvas::lowerObject()
     d->m_objectDisplayAbove = 0;
 }
 
-void Canvas::displayObjectList( Q3PtrList<EmbeddedObject> &list )
+void Canvas::displayObjectList( QList<EmbeddedObject*> &list )
 {
   list = doc()->embeddedObjects();
-  list.setAutoDelete( false );
 
     if ( d->m_objectDisplayAbove )
     {
         // it can happen that the object is no longer there e.g. when
         // the insert of the object is undone
-        int pos = doc()->embeddedObjects().findRef( d->m_objectDisplayAbove );
+        int pos = doc()->embeddedObjects().indexOf( d->m_objectDisplayAbove );
         if ( pos != -1 && d->m_objectDisplayAbove->isSelected() )
         {
-            list.take( pos );
+            list.removeAt( pos );
             list.append( d->m_objectDisplayAbove );
         }
         else
@@ -3841,19 +3837,19 @@ void Canvas::copyOasisObjects()
     multiDrag->addDragObject( storeDrag );
 
     //save the objects as pictures too so that other programs can access them
-    Q3PtrListIterator<EmbeddedObject> itObject( doc()->embeddedObjects() );
+    QList<EmbeddedObject*>::Iterator itObject( doc()->embeddedObjects() );
     itObject.toFirst();
-    if ( itObject.current() )
+    if ( object )
     {
       KoRect kr = objectRect(false);
       QRect r( kr.toQRect() );
       QPixmap pixmap( r.width(), r.height() );
       pixmap.fill( "white" );
       QPainter p(&pixmap);
-      for( ; itObject.current(); ++itObject )
+      foreach ( EmbeddedObject* object, doc()->embeddedObjects() )
       {
-        if ( itObject.current()->isSelected() )
-          p.drawPixmap( itObject.current()->geometry().toQRect().left() - r.left(), itObject.current()->geometry().toQRect().top() - r.top(), itObject.current()->toPixmap( 1.0 , 1.0 ) );
+        if ( object->isSelected() )
+          p.drawPixmap( object->geometry().toQRect().left() - r.left(), object->geometry().toQRect().top() - r.top(), object->toPixmap( 1.0 , 1.0 ) );
       }
       p.end();
       if (!pixmap.isNull())
@@ -4211,12 +4207,11 @@ void Canvas::clipoutChildren( QPainter& painter ) const
   const double horizontalOffset = -xOffset() * doc()->zoomedResolutionX();
   const double verticalOffset = -yOffset() * doc()->zoomedResolutionY();
 
-  Q3PtrListIterator<EmbeddedObject> itObject( doc()->embeddedObjects() );
-  for( ; itObject.current(); ++itObject )
+  foreach ( EmbeddedObject* object, doc()->embeddedObjects() )
   {
-    if ( ( itObject.current() )->sheet() == activeSheet() )
+    if ( ( object )->sheet() == activeSheet() )
     {
-	QRect childGeometry = doc()->zoomRect( itObject.current()->geometry());
+	QRect childGeometry = doc()->zoomRect( object->geometry());
 
 	//The clipping region is given in device coordinates
 	//so subtract the current offset (scroll position) of the canvas
@@ -4225,7 +4220,7 @@ void Canvas::clipoutChildren( QPainter& painter ) const
 	if (painter.window().intersects(childGeometry))
 		rgn -= childGeometry;
 
-      //painter.fillRect( doc()->zoomRect( itObject.current()->geometry() ), QColor("red" ) );
+      //painter.fillRect( doc()->zoomRect( object->geometry() ), QColor("red" ) );
     }
   }
 
@@ -4243,9 +4238,7 @@ QRect Canvas::painterWindowGeometry( const QPainter& painter ) const
 
 void Canvas::paintChildren( QPainter& painter, QMatrix& /*matrix*/ )
 {
-  Q3PtrListIterator<EmbeddedObject> itObject( doc()->embeddedObjects() );
-  itObject.toFirst();
-  if ( !itObject.current() )
+  if ( doc()->embeddedObjects().isEmpty() )
     return;
 
   painter.save();
@@ -4254,10 +4247,10 @@ void Canvas::paintChildren( QPainter& painter, QMatrix& /*matrix*/ )
   const QRect zoomedWindowGeometry = painterWindowGeometry( painter );
   const Sheet* sheet = activeSheet();
 
-  for( ; itObject.current(); ++itObject )
+  foreach ( EmbeddedObject* object, doc()->embeddedObjects() )
   {
-    QRect const zoomedObjectGeometry = doc()->zoomRect( itObject.current()->geometry() );
-    if ( ( itObject.current() )->sheet() == activeSheet() &&
+    QRect const zoomedObjectGeometry = doc()->zoomRect( object->geometry() );
+    if ( ( object )->sheet() == activeSheet() &&
            zoomedWindowGeometry.intersects( zoomedObjectGeometry ) )
     {
 	    //To prevent unnecessary redrawing of the embedded object, we only repaint
@@ -4283,7 +4276,7 @@ void Canvas::paintChildren( QPainter& painter, QMatrix& /*matrix*/ )
 	   }
 
        	  if ( redraw )
-      		itObject.current()->draw( &painter );
+      		object->draw( &painter );
     }
   }
   painter.restore();

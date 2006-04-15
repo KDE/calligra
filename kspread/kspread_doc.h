@@ -28,13 +28,12 @@
 #ifndef KSPREAD_DOC
 #define KSPREAD_DOC
 
+#include <QList>
 #include <qmap.h>
 #include <qobject.h>
 #include <qpainter.h>
 #include <qrect.h>
 #include <qstring.h>
-#include <QList>
-#include <Q3PtrList>
 
 #include <kcompletion.h>
 
@@ -517,7 +516,7 @@ public:
     /**
     * @return the list of all embedded objects (charts, pictures and koffice objects) Use insertObject to add an object to the list.
     */
-  Q3PtrList<EmbeddedObject>& embeddedObjects();
+  QList<EmbeddedObject*>& embeddedObjects();
   KoPictureCollection *pictureCollection();
 
   void initConfig();

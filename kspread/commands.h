@@ -24,8 +24,6 @@
 #include <QList>
 #include <QRect>
 #include <QString>
-//Added by qt3to4:
-#include <Q3PtrList>
 
 #include <KoPageLayout.h>
 #include <KoQueryTrader.h>
@@ -435,9 +433,9 @@ class GeometryPropertiesCommand : public KNamedCommand
 {
 public:
     enum KgpType { ProtectSize, KeepRatio};
-    GeometryPropertiesCommand( const QString &name, Q3PtrList<EmbeddedObject> &objects,
+    GeometryPropertiesCommand( const QString &name, QList<EmbeddedObject*> &objects,
                                   bool newValue, KgpType type, Doc *_doc );
-    GeometryPropertiesCommand( const QString &name, QList<bool> &lst, Q3PtrList<EmbeddedObject> &objects,
+    GeometryPropertiesCommand( const QString &name, QList<bool> &lst, QList<EmbeddedObject*> &objects,
                                   bool newValue, KgpType type, Doc *_doc );
     ~GeometryPropertiesCommand();
 
@@ -446,7 +444,7 @@ public:
 
 protected:
     QList<bool> m_oldValue;
-    Q3PtrList<EmbeddedObject> m_objects;
+    QList<EmbeddedObject*> m_objects;
     bool m_newValue;
     KgpType m_type;
     Doc *m_doc;
@@ -455,7 +453,7 @@ protected:
 class MoveObjectByCmd : public KNamedCommand
 {
 public:
-    MoveObjectByCmd( const QString &_name, const KoPoint &_diff, Q3PtrList<EmbeddedObject> &_objects,
+    MoveObjectByCmd( const QString &_name, const KoPoint &_diff, QList<EmbeddedObject*> &_objects,
                Doc *_doc, Sheet *m_page );
     ~MoveObjectByCmd();
 
@@ -465,7 +463,7 @@ public:
 protected:
 
     KoPoint diff;
-    Q3PtrList<EmbeddedObject> objects;
+    QList<EmbeddedObject*> objects;
     Doc *doc;
     Sheet *m_page;
 };

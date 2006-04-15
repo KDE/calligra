@@ -21,8 +21,8 @@
 #define PROPERTYEDITOR_H
 
 #include <q3tabdialog.h>
-//Added by qt3to4:
-#include <Q3PtrList>
+#include <QList>
+
 #include <kspread_generalProperty.h>
 
 class KCommand;
@@ -70,7 +70,7 @@ private:
 
     Sheet *m_page;
     Doc *m_doc;
-    Q3PtrList<EmbeddedObject> m_objects;
+    QList<EmbeddedObject*> m_objects;
 
 //     KPrPenStyleWidget *m_penProperty;
 //     KPrBrushProperty *m_brushProperty;

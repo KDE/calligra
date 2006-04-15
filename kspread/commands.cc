@@ -29,8 +29,6 @@
 #include "kspread_util.h"
 
 #include "kspread_sheetprint.h"
-//Added by qt3to4:
-#include <Q3PtrList>
 
 using namespace KSpread;
 
@@ -659,7 +657,7 @@ void RemoveObjectCommand::execute()
 //       partManager()->setSelectedPart( 0 );
 //       doc()->emitEndOperation( d->activeSheet->visibleRect( d->canvas ) );
 
-  doc->embeddedObjects().removeRef( obj );
+  doc->embeddedObjects().removeAll( obj );
   if ( obj->getType() == OBJECT_CHART ||  obj->getType()== OBJECT_KOFFICE_PART)
   {
     EmbeddedKOfficeObject *eko = dynamic_cast<EmbeddedKOfficeObject *>(obj);
@@ -780,7 +778,7 @@ void InsertObjectCommand::unexecute()
   if ( !obj )
     return;
 
-  canvas->doc()->embeddedObjects().removeRef( obj );
+  canvas->doc()->embeddedObjects().removeAll( obj );
   obj->setSelected( false );
   canvas->doc()->repaint( obj );
 
@@ -823,7 +821,7 @@ void RenameNameObjectCommand::unexecute()
 //     doc->updateSideBarItem( m_page );
 }
 
-GeometryPropertiesCommand::GeometryPropertiesCommand( const QString &name, Q3PtrList<EmbeddedObject> &objects,
+GeometryPropertiesCommand::GeometryPropertiesCommand( const QString &name, QList<EmbeddedObject*> &objects,
                                                             bool newValue, KgpType type, Doc *_doc )
 : KNamedCommand( name )
 , m_objects( objects )
@@ -831,19 +829,18 @@ GeometryPropertiesCommand::GeometryPropertiesCommand( const QString &name, Q3Ptr
 , m_type( type )
     , m_doc( _doc )
 {
-    Q3PtrListIterator<EmbeddedObject> it( m_objects );
-    for ( ; it.current() ; ++it )
+    foreach ( EmbeddedObject* object, m_objects )
     {
-        it.current()->incCmdRef();
+        object->incCmdRef();
         if ( m_type == ProtectSize )
-            m_oldValue.append( it.current()->isProtect() );
+            m_oldValue.append( object->isProtect() );
         else if ( m_type == KeepRatio)
-            m_oldValue.append( it.current()->isKeepRatio() );
+            m_oldValue.append( object->isKeepRatio() );
     }
 }
 
 GeometryPropertiesCommand::GeometryPropertiesCommand( const QString &name, QList<bool> &lst,
-                                                            Q3PtrList<EmbeddedObject> &objects, bool newValue,
+                                                            QList<EmbeddedObject*> &objects, bool newValue,
                                                             KgpType type, Doc *_doc)
 : KNamedCommand( name )
 , m_oldValue( lst )
@@ -852,31 +849,28 @@ GeometryPropertiesCommand::GeometryPropertiesCommand( const QString &name, QList
 , m_type( type )
 , m_doc ( _doc )
 {
-    Q3PtrListIterator<EmbeddedObject> it( m_objects );
-    for ( ; it.current() ; ++it )
-        it.current()->incCmdRef();
+    foreach ( EmbeddedObject* object, m_objects )
+      object->incCmdRef();
 }
 
 GeometryPropertiesCommand::~GeometryPropertiesCommand()
 {
-    Q3PtrListIterator<EmbeddedObject> it( m_objects );
-    for ( ; it.current() ; ++it )
-        it.current()->decCmdRef();
+    foreach ( EmbeddedObject* object, m_objects )
+        object->decCmdRef();
 }
 
 void GeometryPropertiesCommand::execute()
 {
-    Q3PtrListIterator<EmbeddedObject> it( m_objects );
-    for ( ; it.current() ; ++it )
+    foreach ( EmbeddedObject* object, m_objects )
     {
         if ( m_type == ProtectSize )
         {
-            it.current()->setProtect( m_newValue );
-            if ( it.current()->isSelected() )
-                m_doc->repaint( it.current() );
+            object->setProtect( m_newValue );
+            if ( object->isSelected() )
+                m_doc->repaint( object );
         }
         else if ( m_type == KeepRatio)
-            it.current()->setKeepRatio( m_newValue );
+            object->setKeepRatio( m_newValue );
     }
 }
 
@@ -896,25 +890,23 @@ void GeometryPropertiesCommand::unexecute()
     }
 }
 
-MoveObjectByCmd::MoveObjectByCmd( const QString &_name, const KoPoint &_diff, Q3PtrList<EmbeddedObject> &_objects,
-                      Doc *_doc,Sheet *_page )
+MoveObjectByCmd::MoveObjectByCmd( const QString &_name, const KoPoint &_diff,
+                                  QList<EmbeddedObject*> &_objects,
+                                  Doc *_doc, Sheet *_page )
     : KNamedCommand( _name ), diff( _diff ), objects( _objects )
 {
-    objects.setAutoDelete( false );
     doc = _doc;
     m_page=_page;
-    Q3PtrListIterator<EmbeddedObject> it( objects );
-    for ( ; it.current() ; ++it )
+    foreach ( EmbeddedObject* object, objects )
     {
-        it.current()->incCmdRef();
+        object->incCmdRef();
     }
 }
 
 MoveObjectByCmd::~MoveObjectByCmd()
 {
-    Q3PtrListIterator<EmbeddedObject> it( objects );
-    for ( ; it.current() ; ++it )
-        it.current()->decCmdRef();
+    foreach ( EmbeddedObject* object, objects )
+        object->decCmdRef();
 }
 
 void MoveObjectByCmd::execute()
