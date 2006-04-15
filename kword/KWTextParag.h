@@ -42,7 +42,7 @@ typedef KoParagLayout KWParagLayout;
 class KWTextParag : public KoTextParag
 {
 public:
-    KWTextParag( KoTextDocument *d, KoTextParag *pr = 0, KoTextParag *nx = 0, bool updateIds = TRUE )
+    KWTextParag( KoTextDocument *d, KoTextParag *pr = 0, KoTextParag *nx = 0, bool updateIds = true )
         : KoTextParag( d, pr, nx, updateIds ) { }
     ~KWTextParag() { }
 

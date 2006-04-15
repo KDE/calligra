@@ -123,7 +123,7 @@ void KWTableDia::setupTab1( int rows, int cols, CellSize wid, CellSize hei, bool
         lHei = new QLabel( i18n( "Cell heights:" ), tab1 );
         grid->addWidget( lHei, 4, 0 );
 
-        cHei = new QComboBox( FALSE, tab1 );
+        cHei = new QComboBox( false, tab1 );
         cHei->insertItem( i18n( "Automatic" ) );
         cHei->insertItem( i18n( "Manual" ) );
         cHei->setCurrentItem( (int)hei );
@@ -132,7 +132,7 @@ void KWTableDia::setupTab1( int rows, int cols, CellSize wid, CellSize hei, bool
         lWid = new QLabel( i18n( "Cell widths:" ), tab1 );
         grid->addWidget( lWid, 6, 0 );
 
-        cWid = new QComboBox( FALSE, tab1 );
+        cWid = new QComboBox( false, tab1 );
         cWid->insertItem( i18n( "Automatic" ) );
         cWid->insertItem( i18n( "Manual" ) );
         cWid->setCurrentItem( (int)wid );

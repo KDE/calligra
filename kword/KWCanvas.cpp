@@ -115,10 +115,10 @@ KWCanvas::KWCanvas(const QString& viewMode, QWidget *parent, KWDocument *d, KWGU
     m_temporaryStatusBarTextShown = false;
 
     viewport()->setBackgroundMode( Qt::PaletteBase );
-    viewport()->setAcceptDrops( TRUE );
+    viewport()->setAcceptDrops( true );
 
-    setKeyCompression( TRUE );
-    viewport()->setMouseTracking( TRUE );
+    setKeyCompression( true );
+    viewport()->setMouseTracking( true );
 
     m_scrollTimer = new QTimer( this );
     connect( m_scrollTimer, SIGNAL( timeout() ),
@@ -413,7 +413,7 @@ void KWCanvas::mpCreatePixmap( const QPoint& normalPoint, bool noGrid  )
         }
         emit docStructChanged(Pictures);
         if ( !m_doc->showGrid() && m_doc->snapToGrid() )
-          repaintContents( FALSE ); //draw the grid over the whole canvas
+          repaintContents( false ); //draw the grid over the whole canvas
     }
 }
 
@@ -822,7 +822,7 @@ void KWCanvas::contentsMouseMoveEvent( QMouseEvent *e )
                         m_currentTable->resizeColumn( m_rowColResized, docPoint.x() );
                     // Repaint only the changed rects (oldRect U newRect)
                     QRect newRect( m_viewMode->normalToView( m_doc->zoomRect( m_currentTable->boundingRect() ) ) );
-                    repaintContents( QRegion(oldRect).unite(newRect).boundingRect(), FALSE );
+                    repaintContents( QRegion(oldRect).unite(newRect).boundingRect(), false );
                 }
                 else if (m_interactionPolicy) {
                     m_interactionPolicy->handleMouseMove(e->state(),
@@ -1137,7 +1137,7 @@ void KWCanvas::contentsMouseReleaseEvent( QMouseEvent * e )
         }
 
         if ( old_mouseMove != MM_EDIT && !m_doc->showGrid() && m_doc->snapToGrid() )
-          repaintContents( FALSE ); //draw the grid over the whole canvas
+          repaintContents( false ); //draw the grid over the whole canvas
         m_mousePressed = false;
     }
 }
@@ -1411,7 +1411,7 @@ void KWCanvas::setMouseMode( MouseMode newMouseMode )
 
         m_mouseMode = newMouseMode;
         if ( !m_doc->showGrid() && m_doc->snapToGrid() )
-          repaintContents( FALSE ); //draw the grid over the whole canvas
+          repaintContents( false ); //draw the grid over the whole canvas
     }
     else
         m_mouseMode = newMouseMode;
@@ -1776,11 +1776,11 @@ bool KWCanvas::eventFilter( QObject *o, QEvent *e )
                 // Activate this code (and in focusNextPreviousChild() to allow Shift+Tab
                 // out of document window.  Disabled because it conflicts with Shift+Tab inside a table.
                 // else if ( keyev->key() == Qt::Key_Backtab )
-                //    return FALSE;
+                //    return false;
                 else if ( keyev->key() == KGlobalSettings::contextMenuKey() ) {
                     // The popups are not available in readonly mode, since the GUI isn't built...
-                    if(!m_doc->isReadWrite()) return TRUE;
-                    if (m_mouseMode != MM_EDIT) return TRUE;
+                    if(!m_doc->isReadWrite()) return true;
+                    if (m_mouseMode != MM_EDIT) return true;
                     KoPoint docPoint = m_doc->unzoomPoint( QCursor::pos() );
 
                     if ( viewMode()->type()=="ModeText") {
@@ -1802,9 +1802,9 @@ bool KWCanvas::eventFilter( QObject *o, QEvent *e )
                     // around before they click or hit Enter.
                     if (m_frameInline)
                         m_lastCaretPos = caretPos();
-                    if (m_lastCaretPos.isNull()) return TRUE;
+                    if (m_lastCaretPos.isNull()) return true;
                     int page = m_doc->pageManager()->pageNumber(m_lastCaretPos);
-                    if(page == -1) return TRUE;
+                    if(page == -1) return true;
                     QPoint normalPoint = m_doc->zoomPoint(m_lastCaretPos);
                     // Coordinate is at the very top of the caret.  In the case of an
                     // inline frame, adjust slightly down and to the right in order
@@ -1860,7 +1860,7 @@ bool KWCanvas::eventFilter( QObject *o, QEvent *e )
                     }
                     else
                         m_currentFrameSetEdit->keyPressEvent( keyev );
-                    return TRUE;
+                    return true;
                 }
 
                 // Because of the dependency on the control key, we need to update the mouse cursor here
@@ -1889,7 +1889,7 @@ bool KWCanvas::eventFilter( QObject *o, QEvent *e )
                 if ( m_currentFrameSetEdit && m_mouseMode == MM_EDIT && m_doc->isReadWrite() && !m_printing )
                 {
                     m_currentFrameSetEdit->keyReleaseEvent( keyev );
-                    return TRUE;
+                    return true;
                 }
             }
                 break;
@@ -1921,9 +1921,9 @@ bool KWCanvas::eventFilter( QObject *o, QEvent *e )
 bool KWCanvas::focusNextPrevChild( bool next)
 {
     Q_UNUSED(next);
-    return TRUE; // Don't allow to go out of the canvas widget by pressing "Tab"
+    return true; // Don't allow to go out of the canvas widget by pressing "Tab"
     // Don't allow to go out of the canvas widget by pressing Tab, but do allow Shift+Tab.
-    // if (next) return TRUE;
+    // if (next) return true;
     // return QWidget::focusNextPrevChild( next );
 }
 
@@ -2365,7 +2365,7 @@ void FrameMovePolicy::handleMouseMove(Qt::ButtonState keyState, const KoPoint &p
       kDebug() << " point.x()=" << point.x() << endl; */
 
     Q3PtrList<KWTableFrameSet> tablesMoved;
-    tablesMoved.setAutoDelete( FALSE );
+    tablesMoved.setAutoDelete( false );
     QRegion repaintRegion;
     KoPoint _move=m_boundingRect.topLeft() - oldBoundingRect.topLeft();
 

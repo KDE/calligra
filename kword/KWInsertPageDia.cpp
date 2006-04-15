@@ -28,17 +28,17 @@
 #include <q3vbox.h>
 
 KWInsertPageDia::KWInsertPageDia( QWidget *parent, const char* name )
-    : KDialogBase( parent, name,TRUE,i18n("Insert Page"),Ok|Cancel )
+    : KDialogBase( parent, name, true, i18n("Insert Page"), Ok|Cancel )
 {
     KVBox *page = makeVBoxMainWidget();
 
     Q3ButtonGroup *grp = new Q3ButtonGroup( 1, Qt::Horizontal, i18n( "Insert Page" ),page );
-    grp->setRadioButtonExclusive( TRUE );
+    grp->setRadioButtonExclusive( true );
     grp->layout();
     m_after = new QRadioButton( i18n("After"), grp );
     m_before = new QRadioButton( i18n("Before"), grp );
 
-    grp->setRadioButtonExclusive( TRUE );
+    grp->setRadioButtonExclusive( true );
     m_after->setChecked( true );
     resize( 200, 150 );
     setFocus();

@@ -46,7 +46,7 @@ public:
 
     ~KWTextDocument();
 
-    virtual KoTextParag * createParag( KoTextDocument *d, KoTextParag *pr = 0, KoTextParag *nx = 0, bool updateIds = TRUE );
+    virtual KoTextParag * createParag( KoTextDocument *d, KoTextParag *pr = 0, KoTextParag *nx = 0, bool updateIds = true );
 
     /** Return the text frameset in which this document is.
      * Note that this can be 0L (e.g. for paragraphs in the paragdia preview) */

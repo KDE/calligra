@@ -28,17 +28,17 @@
 #include <q3vbox.h>
 
 KWSortDia::KWSortDia( QWidget *parent, const char* name )
-    : KDialogBase( parent, name,TRUE,i18n("Sort Text"),Ok|Cancel )
+    : KDialogBase( parent, name, true, i18n("Sort Text"), Ok|Cancel )
 {
     KVBox *page = makeVBoxMainWidget();
 
     Q3ButtonGroup *grp = new Q3ButtonGroup( 1, Q3GroupBox::Horizontal, i18n( "Sort" ),page );
-    grp->setRadioButtonExclusive( TRUE );
+    grp->setRadioButtonExclusive( true );
     grp->layout();
     m_increase = new QRadioButton( i18n("Increase"), grp );
     m_decrease = new QRadioButton( i18n("Decrease"), grp );
 
-    grp->setRadioButtonExclusive( TRUE );
+    grp->setRadioButtonExclusive( true );
     m_increase->setChecked( true );
     resize( 200, 150 );
     setFocus();

@@ -817,7 +817,7 @@ void KWTextFrameSet::drawCursor( QPainter *p, KoTextCursor *cursor, bool cursorV
                 qMax(0, iPoint.x() - 5), // negative values create problems
                 iPoint.y(), clip.width(), clip.height(),
                 pix, cg, m_doc, // TODO view's zoom handler
-                cursorVisible, cursor, FALSE /*resetChanged*/, drawingFlags );
+                cursorVisible, cursor, false /*resetChanged*/, drawingFlags );
 
             if ( wasChanged )      // Maybe we have more changes to draw, than those in the small cliprect
                 parag->setLineChanged( oldLineChanged ); // -1 = all
@@ -1551,7 +1551,7 @@ KWFrame * KWTextFrameSet::internalToDocument( const KoPoint &relPoint, KoPoint &
     int n2 = len - 1;
     double internalY = 0.0;
     int mid = 0;
-    bool found = FALSE;
+    bool found = false;
     while ( n1 <= n2 ) {
         double res;
         mid = (n1 + n2)/2;
@@ -3518,7 +3518,7 @@ void KWTextFrameSetEdit::mousePressEvent( QMouseEvent *e, const QPoint &, const 
         if ( addParag )
             frameSet()->kWordDocument()->setModified(true );
     }
-    // else mightStartDrag = FALSE; necessary?
+    // else mightStartDrag = false; necessary?
 
     if ( e->button() != Qt::LeftButton )
         return;

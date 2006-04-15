@@ -866,7 +866,7 @@ void KWFrameDia::setupTab3(){ // TAB Frameset
         item->setText( 1, fs->name() );
         amount++;
         if( m_frame && m_frame->frameSet() == fs ) {
-            m_lFrameSList->setSelected(item, TRUE );
+            m_lFrameSList->setSelected(item, true );
             m_oldFrameSetName = fs->name();
             m_rExistingFrameset->setChecked(true);
         }

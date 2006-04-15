@@ -152,7 +152,7 @@ KoPicture KWInsertPicDia::selectPictureDia( const QString & _path, QWidget* pare
     QStringList mimetypes ( KImageIO::mimeTypes( KImageIO::Reading ) );
     mimetypes += KoPictureFilePreview::clipartMimeTypes();
 
-    KFileDialog fd( _path, QString::null, parent, 0, TRUE );
+    KFileDialog fd( _path, QString::null, parent, 0, true );
     fd.setMimeFilter( mimetypes );
     fd.setCaption(i18n("Choose Picture"));
     return selectPicture( fd, parent );

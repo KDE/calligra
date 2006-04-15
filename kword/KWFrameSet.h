@@ -75,7 +75,7 @@ public:
     virtual FrameSetType type() const { return FT_BASE; }
 
     virtual void addTextFrameSets( Q3PtrList<KWTextFrameSet> & /*lst*/, bool /*onlyReadWrite*/ = false ) {};
-    virtual bool ownLine() const { return FALSE;}
+    virtual bool ownLine() const { return false;}
 
     /** The different types of textFramesets (that TEXT is important here!)
      * FI_BODY = normal text frames.<br>

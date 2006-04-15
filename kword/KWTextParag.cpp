@@ -595,7 +595,7 @@ void KWTextParag::load( QDomElement &attributes )
         //kDebug() << "KWTextParag::load '" << element.text() << "'" << endl;
         append( element.text() );
         // Apply default format - this should be automatic !!
-        setFormat( 0, string()->length(), paragFormat(), TRUE );
+        setFormat( 0, string()->length(), paragFormat(), true );
     }
 
     if ( attributes.attribute( "toc" ) == "true" )

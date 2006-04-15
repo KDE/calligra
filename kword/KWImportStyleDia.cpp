@@ -52,7 +52,7 @@ KWImportStyleDia::~KWImportStyleDia()
 
 void KWImportStyleDia::loadFile()
 {
-    KFileDialog fd( QString::null, QString::null, 0, 0, TRUE );
+    KFileDialog fd( QString::null, QString::null, 0, 0, true );
     QStringList lst = "application/x-kword";
 #if 0
     lst << "application/vnd.oasis.opendocument.text";
@@ -208,7 +208,7 @@ QString KWImportFrameTableStyleDia::generateStyleName( const QString & templateN
 
 void KWImportFrameTableStyleDia::loadFile()
 {
-    KFileDialog fd( QString::null, QString::null, 0, 0, TRUE );
+    KFileDialog fd( QString::null, QString::null, 0, 0, true );
     QStringList lst = "application/x-kword";
 #if 0
     lst << "application/vnd.oasis.opendocument.text";

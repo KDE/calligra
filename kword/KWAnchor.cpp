@@ -300,9 +300,9 @@ void KWAnchor::saveOasis( KoXmlWriter& writer, KoSavingContext& context ) const
 bool KWAnchor::ownLine() const
 {
     if ( m_deleted )
-        return FALSE;
+        return false;
 
     if ( m_frameset)
         return m_frameset->ownLine();
-    return FALSE;
+    return false;
 }

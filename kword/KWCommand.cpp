@@ -125,7 +125,7 @@ KoTextCursor * KWPasteTextCommand::execute( KoTextCursor *c )
             {
                 // Create new parag
                 // Lowlevel method:
-                c->splitAndInsertEmptyParag( FALSE, TRUE );
+                c->splitAndInsertEmptyParag( false, true );
                 // Highlevel method:
                 //c->insert( "\n", true );
             }
@@ -163,7 +163,7 @@ KoTextCursor * KWPasteTextCommand::execute( KoTextCursor *c )
                     KoTextFormat * defaultFormat = doc->formatCollection()->format( &f );
                     // Last paragraph (i.e. only one in all) : some of the text might be from before the paste
                     int endIndex = (item == count-1) ? c->index() : parag->string()->length() - 1;
-                    parag->setFormat( m_idx, endIndex - m_idx, defaultFormat, TRUE );
+                    parag->setFormat( m_idx, endIndex - m_idx, defaultFormat, true );
                 }
             }
 
@@ -180,11 +180,11 @@ KoTextCursor * KWPasteTextCommand::execute( KoTextCursor *c )
             // Last paragraph: some of the text might be from before the paste
             int len = (item == count-1) ? c->index() : parag->string()->length();
             // Apply default format
-            parag->setFormat( 0, len, parag->paragFormat(), TRUE );
+            parag->setFormat( 0, len, parag->paragFormat(), true );
             parag->loadFormatting( paragElem, 0, (textFs->isMainFrameset()) );
         }
         parag->invalidate(0); // the formatting will be done by caller (either KWTextFrameSet::pasteOasis or KoTextObject::undo/redo)
-        parag->setChanged( TRUE );
+        parag->setChanged( true );
         parag = static_cast<KWTextParag *>(parag->next());
         //kDebug() << "KWPasteTextCommand::execute going to next parag: " << parag << endl;
     }

@@ -280,8 +280,8 @@ KWView::KWView( const QString& viewMode, QWidget *parent, const char *name, KWDo
     QObject::connect( this, SIGNAL( embeddImage( const QString & ) ),
                       this, SLOT( slotEmbedImage( const QString & ) ) );
 
-    setKeyCompression( TRUE );
-    setAcceptDrops( TRUE );
+    setKeyCompression( true );
+    setAcceptDrops( true );
 
     setupActions();
 
@@ -511,7 +511,7 @@ void KWView::initGui()
     m_gui->canvasWidget()->setMouseMode( m_gui->canvasWidget()->mouseMode() );
 
     bool editingFormula = dynamic_cast<KWFormulaFrameSetEdit *>( m_gui->canvasWidget()->currentFrameSetEdit() ) != 0;
-    //showFormulaToolbar( FALSE ); // not called, to avoid creating the formula-document if not necessary
+    //showFormulaToolbar( false ); // not called, to avoid creating the formula-document if not necessary
     if(shell())
         shell()->showToolbar( "formula_toolbar", editingFormula );
 
@@ -939,7 +939,7 @@ void KWView::setupActions()
                                        this, SLOT( textAlignLeft() ),
                                        actionCollection(), "format_alignleft" );
     m_actionFormatAlignLeft->setExclusiveGroup( "align" );
-    m_actionFormatAlignLeft->setChecked( TRUE );
+    m_actionFormatAlignLeft->setChecked( true );
     m_actionFormatAlignCenter = new KToggleAction( i18n( "Align &Center" ), "text_center", Qt::CTRL + Qt::ALT + Qt::Key_C,
                                          this, SLOT( textAlignCenter() ),
                                          actionCollection(), "format_aligncenter" );
@@ -1455,7 +1455,7 @@ void KWView::loadexpressionActions( KActionMenu * parentMenu)
         }
     }
 
-    //QStringList files = KWFactory::instance()->dirs()->findAllResources( "expression", "*.xml", TRUE );
+    //QStringList files = KWFactory::instance()->dirs()->findAllResources( "expression", "*.xml", true );
     int i = 0;
     int nbFile = 0;
     for( QStringList::Iterator it = files.begin(); it != files.end(); ++it,nbFile++ )
@@ -1839,22 +1839,22 @@ void KWView::print( KPrinter &prt )
     //kDebug() << "KWView::print metrics: " << metrics.logicalDpiX() << "," << metrics.logicalDpiY() << endl;
     //kDebug() << "x11AppDPI: " << KoGlobal::dpiX() << "," << KoGlobal::dpiY() << endl;
 
-    bool serialLetter = FALSE;
+    bool serialLetter = false;
 
     Q3PtrList<KoVariable> vars = m_doc->variableCollection()->getVariables();
     KoVariable *v = 0;
     for ( v = vars.first(); v; v = vars.next() ) {
         if ( v->type() == VT_MAILMERGE ) {
-            serialLetter = TRUE;
+            serialLetter = true;
             break;
         }
     }
 
-    if ( !m_doc->mailMergeDataBase() ) serialLetter=FALSE;
+    if ( !m_doc->mailMergeDataBase() ) serialLetter=false;
     else
     {
         m_doc->mailMergeDataBase()->refresh(false);
-        if (m_doc->mailMergeDataBase()->getNumRecords() == 0 )  serialLetter = FALSE;
+        if (m_doc->mailMergeDataBase()->getNumRecords() == 0 )  serialLetter = false;
     }
 
     //float left_margin = 0.0;
@@ -2025,16 +2025,16 @@ void KWView::showAlign( int align ) {
             kWarning() << k_funcinfo << "shouldn't be called with AlignAuto" << endl;
             // fallthrough
         case Qt::AlignLeft:
-            m_actionFormatAlignLeft->setChecked( TRUE );
+            m_actionFormatAlignLeft->setChecked( true );
             break;
         case Qt::AlignHCenter:
-            m_actionFormatAlignCenter->setChecked( TRUE );
+            m_actionFormatAlignCenter->setChecked( true );
             break;
         case Qt::AlignRight:
-            m_actionFormatAlignRight->setChecked( TRUE );
+            m_actionFormatAlignRight->setChecked( true );
             break;
         case Qt::AlignJustify:
-            m_actionFormatAlignBlock->setChecked( TRUE );
+            m_actionFormatAlignBlock->setChecked( true );
             break;
     }
 }
@@ -2043,18 +2043,18 @@ void KWView::showSpacing( int spacing ) {
   switch ( spacing )
   {
     case KoParagLayout::LS_SINGLE:
-      m_actionFormatSpacingSingle->setChecked( TRUE );
+      m_actionFormatSpacingSingle->setChecked( true );
       break;
     case KoParagLayout::LS_ONEANDHALF:
-      m_actionFormatSpacingOneAndHalf->setChecked( TRUE );
+      m_actionFormatSpacingOneAndHalf->setChecked( true );
       break;
     case KoParagLayout::LS_DOUBLE:
-      m_actionFormatSpacingDouble->setChecked( TRUE );
+      m_actionFormatSpacingDouble->setChecked( true );
       break;
     default:
-      m_actionFormatSpacingSingle->setChecked( FALSE );
-      m_actionFormatSpacingOneAndHalf->setChecked( FALSE );
-      m_actionFormatSpacingDouble->setChecked( FALSE );
+      m_actionFormatSpacingSingle->setChecked( false );
+      m_actionFormatSpacingOneAndHalf->setChecked( false );
+      m_actionFormatSpacingDouble->setChecked( false );
   }
 }
 
@@ -2183,10 +2183,10 @@ void KWView::showMouseMode( int mouseMode )
         break;
     }
 
-    m_actionTableJoinCells->setEnabled( FALSE );
-    m_actionTableSplitCells->setEnabled( FALSE );
+    m_actionTableJoinCells->setEnabled( false );
+    m_actionTableSplitCells->setEnabled( false );
     m_actionTableProtectCells->setEnabled( false );
-    m_actionFormatFrameSet->setEnabled(FALSE);
+    m_actionFormatFrameSet->setEnabled(false);
     m_actionTablePropertiesMenu->setEnabled( false );
     m_actionConvertTableToText->setEnabled( false );
 }
@@ -2927,7 +2927,7 @@ void KWView::editMailMergeDataBase()
     KWMailMergeEditor *dia = new KWMailMergeEditor( this, m_doc->mailMergeDataBase() );
     dia->exec();
     // Don't know if we really need this so it's commented out (SL)
-    // m_gui->canvasWidget()->repaintAll( FALSE );
+    // m_gui->canvasWidget()->repaintAll( false );
     delete dia;
 #endif
 }
@@ -5690,7 +5690,7 @@ void KWView::spellCheckerRemoveHighlight()
     }
     KWTextFrameSetEdit * edit = currentTextEdit();
     if (edit)
-        edit->drawCursor( TRUE );
+        edit->drawCursor( true );
 }
 
 void KWView::spellAddAutoCorrect (const QString & originalword, const QString & newword)
@@ -6042,7 +6042,7 @@ void KWView::setViewFrameBorders(bool b)
 
 bool KWView::doubleClickActivation() const
 {
-    return TRUE;
+    return true;
 }
 
 QWidget* KWView::canvas() const
@@ -6117,7 +6117,7 @@ void KWView::savePicture()
         kDebug() << "Picture has mime type: " << mimetype << endl;
         QStringList mimetypes;
         mimetypes << mimetype;
-        KFileDialog fd( oldFile, QString::null, this, 0, TRUE );
+        KFileDialog fd( oldFile, QString::null, this, 0, true );
         fd.setMimeFilter( mimetypes );
         fd.setCaption(i18n("Save Picture"));
         fd.setOperationMode(KFileDialog::Saving);
@@ -6733,7 +6733,7 @@ void KWView::docStructDelete()
 
 void KWView::insertFile()
 {
-    KFileDialog fd( QString::null, QString::null, this, 0, TRUE );
+    KFileDialog fd( QString::null, QString::null, this, 0, true );
     fd.setMimeFilter( "application/x-kword" );
     fd.setCaption(i18n("Insert File"));
     KUrl url;
@@ -7639,8 +7639,8 @@ KWGUI::KWGUI( const QString& viewMode, QWidget *parent, KWView *daView )
     connect( m_horRuler, SIGNAL( tabListChanged( const KoTabulatorList & ) ), m_view,
              SLOT( tabListChanged( const KoTabulatorList & ) ) );
 
-    setKeyCompression( TRUE );
-    setAcceptDrops( TRUE );
+    setKeyCompression( true );
+    setAcceptDrops( true );
     setFocusPolicy( Qt::NoFocus );
 }
 

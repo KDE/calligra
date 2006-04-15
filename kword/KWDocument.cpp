@@ -506,7 +506,7 @@ bool KWDocument::initDoc(InitDocFlags flags, QWidget* parentWidget)
     m_pageHeaderFooter.ptFooterBodySpacing = 10;
     m_pageHeaderFooter.ptFootNoteBodySpacing = 10;
 
-    bool ok = FALSE;
+    bool ok = false;
 
     if ( isEmbedded() )
     {
@@ -516,7 +516,7 @@ bool KWDocument::initDoc(InitDocFlags flags, QWidget* parentWidget)
       if ( !ok )
         showLoadingErrorDialog();
       setEmpty();
-      setModified( FALSE );
+      setModified( false );
       return ok;
     }
     else if (flags==KoDocument::InitDocEmpty)
@@ -527,7 +527,7 @@ bool KWDocument::initDoc(InitDocFlags flags, QWidget* parentWidget)
         if ( !ok )
             showLoadingErrorDialog();
         setEmpty();
-        setModified( FALSE );
+        setModified( false );
         return ok;
     }
 
@@ -561,7 +561,7 @@ bool KWDocument::initDoc(InitDocFlags flags, QWidget* parentWidget)
             showLoadingErrorDialog();
         setEmpty();
     }
-    setModified( FALSE );
+    setModified( false );
     return ok;
 }
 
@@ -609,7 +609,7 @@ void KWDocument::initEmpty()
     if ( !ok )
         showLoadingErrorDialog();
     resetURL();
-    setModified( FALSE );
+    setModified( false );
     setEmpty();
 }
 
@@ -999,10 +999,10 @@ bool KWDocument::loadChildren( KoStore *store )
     Q3PtrListIterator<KoDocumentChild> it( children() );
     for( ; it.current(); ++it ) {
         if ( !it.current()->loadDocument( store ) )
-            return FALSE;
+            return false;
     }
 
-    return TRUE;
+    return true;
 }
 
 void KWDocument::loadPictureMap ( QDomElement& domElement )
@@ -3674,7 +3674,7 @@ Q3ValueList<KoPictureKey> KWDocument::savePictureList()
 bool KWDocument::completeSaving( KoStore *store )
 {
     if ( !store )
-        return TRUE;
+        return true;
 
     QString u = KUrl( url() ).path();
 
@@ -3852,7 +3852,7 @@ KWPartFrameSet* KWDocument::insertObject( const KoRect& rect, KoDocumentEntry& e
         return 0;
 
     KWDocumentChild* ch = createChildDoc( rect, doc );
-    setModified( TRUE );
+    setModified( true );
 
     KWPartFrameSet *frameset = new KWPartFrameSet( this, ch, QString::null );
     KWFrame *frame = new KWFrame(frameset, rect.x(), rect.y(), rect.width(), rect.height() );
