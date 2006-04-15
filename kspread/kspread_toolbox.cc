@@ -26,7 +26,7 @@
 #include <qspinbox.h>
 #include <qobject.h>
 //Added by qt3to4:
-#include <Q3VBoxLayout>
+#include <QVBoxLayout>
 #include <QMouseEvent>
 #include <QChildEvent>
 
@@ -40,7 +40,9 @@ ToolBox::ToolBox( QWidget* parent, const char* name )
     setFrameShape( Panel );
     setFrameShadow( Raised );
 
-    m_layout = new Q3VBoxLayout( this, 2, 2 );
+    m_layout = new QVBoxLayout( this );
+    m_layout->setMargin(2);
+    m_layout->setSpacing(2);
     // m_layout->addSpacing( 12 );
 }
 

@@ -5553,16 +5553,16 @@ void View::refreshView()
   if ((sheetDir == Sheet::LeftToRight && !interfaceIsRTL) ||
       (sheetDir == Sheet::RightToLeft && interfaceIsRTL))
   {
-    d->formulaBarLayout->setDirection( Q3BoxLayout::LeftToRight );
+    d->formulaBarLayout->setDirection( QBoxLayout::LeftToRight );
     d->viewLayout->setOrigin( Qt::TopLeftCorner );
-    d->tabScrollBarLayout->setDirection( Q3BoxLayout::LeftToRight );
+    d->tabScrollBarLayout->setDirection( QBoxLayout::LeftToRight );
     d->tabBar->setReverseLayout( interfaceIsRTL );
   }
   else
   {
-    d->formulaBarLayout->setDirection( Q3BoxLayout::RightToLeft );
+    d->formulaBarLayout->setDirection( QBoxLayout::RightToLeft );
     d->viewLayout->setOrigin( Qt::TopRightCorner );
-    d->tabScrollBarLayout->setDirection( Q3BoxLayout::RightToLeft );
+    d->tabScrollBarLayout->setDirection( QBoxLayout::RightToLeft );
     d->tabBar->setReverseLayout( !interfaceIsRTL );
   }
 

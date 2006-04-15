@@ -25,7 +25,7 @@
 #include <qlabel.h>
 #include <qlayout.h>
 //Added by qt3to4:
-#include <Q3VBoxLayout>
+#include <QVBoxLayout>
 
 #include <klineedit.h>
 
@@ -46,7 +46,9 @@ GotoDialog::GotoDialog( View* parent, const char* name )
   m_pView = parent;
   QWidget *page = new QWidget( this );
   setMainWidget(page);
-  Q3VBoxLayout *lay1 = new Q3VBoxLayout( page, 0, spacingHint() );
+  QVBoxLayout *lay1 = new QVBoxLayout( page );
+  lay1->setMargin(KDialogBase::marginHint());
+  lay1->setSpacing(KDialogBase::spacingHint());
 
   QLabel *label = new QLabel(i18n("Enter cell:"), page);
   lay1->addWidget(label);

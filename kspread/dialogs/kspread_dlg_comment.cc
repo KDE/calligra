@@ -2,7 +2,7 @@
    Copyright (C) 2003 Norbert Andres <nandres@web.de>
              (C) 2002 Ariya Hidayat <ariya@kde.org>
              (C) 2002 Philipp Mueller <philipp.mueller@gmx.de>
-             (C) 1999-2002 Laurent Montel <montel@kde.org> 
+             (C) 1999-2002 Laurent Montel <montel@kde.org>
              (C) 1998-1999 Torben Weis <weis@kde.org>
 
    This library is free software; you can redistribute it and/or
@@ -25,7 +25,7 @@
 #include <qpushbutton.h>
 #include <qlayout.h>
 //Added by qt3to4:
-#include <Q3VBoxLayout>
+#include <QVBoxLayout>
 
 #include <klocale.h>
 #include <kbuttonbox.h>
@@ -47,7 +47,9 @@ CommentDialog::CommentDialog( View* parent, const char* name,const QPoint &_mark
     marker= _marker;
     QWidget *page = new QWidget( this );
     setMainWidget(page);
-    Q3VBoxLayout *lay1 = new Q3VBoxLayout( page, 0, spacingHint() );
+    QVBoxLayout *lay1 = new QVBoxLayout( page );
+    lay1->setMargin(KDialogBase::marginHint());
+    lay1->setSpacing(KDialogBase::spacingHint());
 
     multiLine = new Q3MultiLineEdit( page );
     lay1->addWidget(multiLine);

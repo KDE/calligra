@@ -55,8 +55,8 @@
 #include <qwidget.h>
 //Added by qt3to4:
 #include <Q3GridLayout>
-#include <Q3HBoxLayout>
-#include <Q3VBoxLayout>
+#include <QHBoxLayout>
+#include <QVBoxLayout>
 
 using namespace KSpread;
 
@@ -86,8 +86,10 @@ DatabaseDialog::DatabaseDialog( View * parent, QRect const & rect, const char * 
   QFrame * Frame5 = new QFrame( m_database, "Frame5" );
 // ###  Frame5->setFrameShape( QFrame::MShape );
 // ###  Frame5->setFrameShadow( QFrame::MShadow );
-  Q3VBoxLayout * Frame5Layout = new Q3VBoxLayout( Frame5, 11, 6, "Frame5Layout");
-
+  QVBoxLayout * Frame5Layout = new QVBoxLayout( Frame5 );
+  Frame5Layout->setObjectName("Frame5Layout");
+  Frame5Layout->setMargin(11);
+  Frame5Layout->setSpacing(6);
 
   QFrame * Frame16 = new QFrame( Frame5, "Frame16" );
   Frame16->setFrameShape( QFrame::NoFrame );
@@ -170,7 +172,10 @@ DatabaseDialog::DatabaseDialog( View * parent, QRect const & rect, const char * 
 // ###  Frame5_2->setFrameShadow( QFrame::MShadow );
   Q3GridLayout * Frame5_2Layout = new Q3GridLayout( Frame5_2, 1, 1, 11, 6, "Frame5_2Layout");
 
-  Q3HBoxLayout * Layout21 = new Q3HBoxLayout( 0, 0, 6, "Layout21");
+  QHBoxLayout * Layout21 = new QHBoxLayout();
+  Layout21->setMargin(0);
+  Layout21->setSpacing(6);
+  Layout21->setObjectName("Layout21");
 
   //  QLabel * TextLabel12_2 = new QLabel( Frame5_2, "TextLabel12_2" );
   //  TextLabel12_2->setText( i18n( "Database:" ) );

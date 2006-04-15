@@ -25,7 +25,7 @@
 #include <qlayout.h>
 #include <qlineedit.h>
 //Added by qt3to4:
-#include <Q3VBoxLayout>
+#include <QVBoxLayout>
 
 #include <knuminput.h>
 #include <klocale.h>
@@ -40,7 +40,7 @@ GeneralProperty::GeneralProperty( QWidget *parent, const char *name, GeneralValu
 , m_generalValue( generalValue )
 , m_unit( unit )
 {
-    Q3VBoxLayout *layout = new Q3VBoxLayout( this );
+    QVBoxLayout *layout = new QVBoxLayout( this );
     layout->addWidget( m_ui = new KoGeneralPropertyUI( this ) );
 
     QSpacerItem* spacer = new QSpacerItem( 20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding );

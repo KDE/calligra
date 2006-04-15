@@ -24,7 +24,7 @@
 #include <q3listview.h>
 #include <qtextstream.h>
 //Added by qt3to4:
-#include <Q3VBoxLayout>
+#include <QVBoxLayout>
 #include <Q3ValueList>
 
 #include <kdialogbase.h>
@@ -178,28 +178,36 @@ Inspector::Inspector( Cell* cell ):
   d->sheet = cell->sheet();
 
   QFrame* cellPage = addPage( QString("Cell") );
-  Q3VBoxLayout* cellLayout = new Q3VBoxLayout( cellPage, 0 );
+  QVBoxLayout* cellLayout = new QVBoxLayout( cellPage );
+  cellLayout->setMargin(KDialogBase::marginHint());
+  cellLayout->setSpacing(KDialogBase::spacingHint());
   d->cellView = new Q3ListView( cellPage );
   cellLayout->addWidget( d->cellView );
   d->cellView->addColumn( "Key", 150 );
   d->cellView->addColumn( "Value" );
 
   QFrame* formatPage = addPage( QString("Format") );
-  Q3VBoxLayout* formatLayout = new Q3VBoxLayout( formatPage, 0 );
+  QVBoxLayout* formatLayout = new QVBoxLayout( formatPage );
+  formatLayout->setMargin(KDialogBase::marginHint());
+  formatLayout->setSpacing(KDialogBase::spacingHint());
   d->formatView = new Q3ListView( formatPage );
   formatLayout->addWidget( d->formatView );
   d->formatView->addColumn( "Key", 150 );
   d->formatView->addColumn( "Value" );
 
   QFrame* sheetPage = addPage( QString("Sheet") );
-  Q3VBoxLayout* sheetLayout = new Q3VBoxLayout( sheetPage, 0 );
+  QVBoxLayout* sheetLayout = new QVBoxLayout( sheetPage );
+  sheetLayout->setMargin(KDialogBase::marginHint());
+  sheetLayout->setSpacing(KDialogBase::spacingHint());
   d->sheetView = new Q3ListView( sheetPage );
   sheetLayout->addWidget( d->sheetView );
   d->sheetView->addColumn( "Key", 150 );
   d->sheetView->addColumn( "Value" );
 
   QFrame* depPage = addPage( QString("Dependencies") );
-  Q3VBoxLayout* depLayout = new Q3VBoxLayout( depPage, 0 );
+  QVBoxLayout* depLayout = new QVBoxLayout( depPage );
+  depLayout->setMargin(KDialogBase::marginHint());
+  depLayout->setSpacing(KDialogBase::spacingHint());
   d->depView = new Q3ListView( depPage );
   depLayout->addWidget( d->depView );
   d->depView->addColumn( "Cell", 150 );

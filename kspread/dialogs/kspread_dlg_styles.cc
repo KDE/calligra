@@ -22,7 +22,7 @@
 #include <qlayout.h>
 #include <qmap.h>
 //Added by qt3to4:
-#include <Q3VBoxLayout>
+#include <QVBoxLayout>
 
 #include <kcombobox.h>
 #include <kdebug.h>
@@ -44,7 +44,10 @@ using namespace KSpread;
 StyleWidget::StyleWidget( QWidget * parent, const char * name, Qt::WFlags fl )
   : QWidget( parent, name, fl )
 {
-  Q3VBoxLayout * layout = new Q3VBoxLayout( this, 11, 6, "layout");
+  QVBoxLayout * layout = new QVBoxLayout( this );
+  layout->setObjectName("layout");
+  layout->setMargin(11);
+  layout->setSpacing(6);
 
   m_styleList = new K3ListView( this);
   m_styleList->addColumn( i18n( "Styles" ) );

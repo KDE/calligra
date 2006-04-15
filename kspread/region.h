@@ -340,7 +340,6 @@ public:
 
   virtual QString name(Sheet* = 0) const { return QString(""); }
   virtual QRect rect() const { return QRect(); }
-  virtual const QColor& color() const { return QColor(Qt::black); }
 
   Sheet* sheet() const { return m_sheet; }
   void setSheet(Sheet* sheet) { m_sheet = sheet; }

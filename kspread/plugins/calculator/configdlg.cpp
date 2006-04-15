@@ -31,7 +31,7 @@
 #include <kdialog.h>
 #include <qlayout.h>
 //Added by qt3to4:
-#include <Q3VBoxLayout>
+#include <QVBoxLayout>
 #include <QLabel>
 #include <Q3GridLayout>
 #include <Q3Frame>
@@ -48,7 +48,7 @@ ConfigDlg::ConfigDlg(QWidget *parent, const char *name, DefStruct *defstruct)
 {
   defst = defstruct;
 
-  Q3VBoxLayout *lay1 = new Q3VBoxLayout( this );
+  QVBoxLayout *lay1 = new QVBoxLayout( this );
   lay1->setMargin( KDialog::marginHint() );
   lay1->setSpacing( KDialog::spacingHint() );
 

@@ -25,13 +25,13 @@
 
 #include <kdialogbase.h>
 //Added by qt3to4:
-#include <Q3VBoxLayout>
-#include <Q3HBoxLayout>
+#include <QVBoxLayout>
+#include <QHBoxLayout>
 #include <QLabel>
 #include <Q3GridLayout>
 
-class Q3VBoxLayout;
-class Q3HBoxLayout;
+class QVBoxLayout;
+class QHBoxLayout;
 class Q3GridLayout;
 class Q3ButtonGroup;
 class QComboBox;
@@ -80,7 +80,7 @@ class CSVDialog : public KDialogBase
   View* m_pView;
 
   Q3GridLayout* MyDialogLayout;
-  Q3HBoxLayout* Layout1;
+  QHBoxLayout* Layout1;
   Q3GridLayout* m_delimiterBoxLayout;
   Q3GridLayout* m_formatBoxLayout;
   Q3Table* m_sheet;

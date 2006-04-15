@@ -31,7 +31,7 @@
 #include <qlayout.h>
 #include <q3buttongroup.h>
 //Added by qt3to4:
-#include <Q3VBoxLayout>
+#include <QVBoxLayout>
 #include <Q3GridLayout>
 #include <Q3Frame>
 #include <knumvalidator.h>
@@ -54,7 +54,9 @@ DlgValidity::DlgValidity(View* parent,const char* name , const QRect &_marker )
   m_pView=parent;
   marker=_marker;
   QFrame *page1 = addPage(i18n("&Values"));
-  Q3VBoxLayout *lay1 = new Q3VBoxLayout( page1, KDialogBase::marginHint(), KDialogBase::spacingHint() );
+  QVBoxLayout *lay1 = new QVBoxLayout( page1 );
+  lay1->setMargin(KDialogBase::marginHint());
+  lay1->setSpacing(KDialogBase::spacingHint());
 
   Q3GroupBox* tmpQButtonGroup;
   tmpQButtonGroup = new Q3GroupBox( 0, Qt::Vertical, i18n("Validity Criteria"), page1, "ButtonGroup_1" );
@@ -149,7 +151,9 @@ DlgValidity::DlgValidity(View* parent,const char* name , const QRect &_marker )
 
   QFrame *page2 = addPage(i18n("&Error Alert"));
 
-  lay1 = new Q3VBoxLayout( page2, KDialogBase::marginHint(), KDialogBase::spacingHint() );
+  lay1 = new QVBoxLayout( page2 );
+  lay1->setMargin(KDialogBase::marginHint());
+  lay1->setSpacing(KDialogBase::spacingHint());
 
   tmpQButtonGroup = new Q3ButtonGroup( 0, Qt::Vertical, i18n("Contents"), page2, "ButtonGroup_2" );
   tmpQButtonGroup->layout()->setSpacing(KDialog::spacingHint());
@@ -189,7 +193,9 @@ DlgValidity::DlgValidity(View* parent,const char* name , const QRect &_marker )
   message->setTextFormat( Qt::PlainText );
 
   QFrame *page3 = addPage(i18n("Input Help"));
-  lay1 = new Q3VBoxLayout( page3, KDialogBase::marginHint(), KDialogBase::spacingHint() );
+  lay1 = new QVBoxLayout( page3 );
+  lay1->setMargin(KDialogBase::marginHint());
+  lay1->setSpacing(KDialogBase::spacingHint());
 
   tmpQButtonGroup = new Q3ButtonGroup( 0, Qt::Vertical, i18n("Contents"), page3, "ButtonGroup_2" );
   tmpQButtonGroup->layout()->setSpacing(KDialog::spacingHint());

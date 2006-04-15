@@ -44,8 +44,8 @@
 //Added by qt3to4:
 #include <Q3GridLayout>
 #include <Q3PtrList>
-#include <Q3HBoxLayout>
-#include <Q3VBoxLayout>
+#include <QHBoxLayout>
+#include <QVBoxLayout>
 #include <Q3ListBox>
 #include <kbuttonbox.h>
 #include <kmessagebox.h>
@@ -60,7 +60,7 @@ reference::reference( View* parent, const char* name )
   : QDialog( parent, name,TRUE )
 {
   m_pView = parent;
-  Q3VBoxLayout *lay1 = new Q3VBoxLayout( this );
+  QVBoxLayout *lay1 = new QVBoxLayout( this );
   lay1->setMargin( KDialog::marginHint() );
   lay1->setSpacing( KDialog::spacingHint() );
   m_list = new Q3ListBox(this);
@@ -269,7 +269,10 @@ EditAreaName::EditAreaName( View * parent,
   Q3GridLayout * EditAreaNameLayout
     = new Q3GridLayout( page, 1, 1, 11, 6, "EditAreaNameLayout");
 
-  Q3HBoxLayout * Layout1 = new Q3HBoxLayout( 0, 0, 6, "Layout1");
+  QHBoxLayout * Layout1 = new QHBoxLayout();
+  Layout1->setObjectName("Layout1");
+  Layout1->setMargin(0);
+  Layout1->setSpacing(6);
   QSpacerItem * spacer = new QSpacerItem( 0, 0, QSizePolicy::Expanding,
                                           QSizePolicy::Minimum );
   Layout1->addItem( spacer );

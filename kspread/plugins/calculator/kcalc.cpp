@@ -37,8 +37,8 @@
 #include <QKeyEvent>
 #include <Q3Frame>
 #include <QLabel>
-#include <Q3HBoxLayout>
-#include <Q3VBoxLayout>
+#include <QHBoxLayout>
+#include <QVBoxLayout>
 #include <kapplication.h>
 #include <kglobalsettings.h>
 #include <qstyle.h>
@@ -386,14 +386,15 @@ QtCalculator :: QtCalculator( Calculator *_corba, QWidget *parent, const char *n
     Q3GridLayout *largeBtnLayout = new Q3GridLayout(mLargePage, 5, 6, 0,
                                                   mInternalSpacing);
 
-    Q3HBoxLayout *topLayout		= new Q3HBoxLayout();
-    Q3HBoxLayout *radioLayout	= new Q3HBoxLayout();
-    Q3HBoxLayout *btnLayout		= new Q3HBoxLayout();
-    Q3HBoxLayout *statusLayout	= new Q3HBoxLayout();
+    QHBoxLayout *topLayout		= new QHBoxLayout();
+    QHBoxLayout *radioLayout	= new QHBoxLayout();
+    QHBoxLayout *btnLayout		= new QHBoxLayout();
+    QHBoxLayout *statusLayout	= new QHBoxLayout();
 
     // bring them all together
-    Q3VBoxLayout *mainLayout = new Q3VBoxLayout(this, mInternalSpacing,
-                                              mInternalSpacing );
+    QVBoxLayout *mainLayout = new QVBoxLayout(this);
+    mainLayout->setMargin(mInternalSpacing);
+    mainLayout->setSpacing(mInternalSpacing);
 
     mainLayout->addLayout(topLayout );
     mainLayout->addLayout(radioLayout, 1);
@@ -1470,7 +1471,7 @@ void QtCalculator::configclicked(){
   tabdialog->setOKButton(i18n("&OK"));
 
   QWidget *about = new QWidget(tabdialog,"about");
-  Q3VBoxLayout *lay1 = new Q3VBoxLayout( about );
+  QVBoxLayout *lay1 = new QVBoxLayout( about );
   lay1->setMargin( KDialog::marginHint() );
   lay1->setSpacing( KDialog::spacingHint() );
 

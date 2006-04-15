@@ -23,7 +23,7 @@
 #include <qlabel.h>
 #include <qlayout.h>
 //Added by qt3to4:
-#include <Q3VBoxLayout>
+#include <QVBoxLayout>
 #include <Q3ValueList>
 #include <Q3ListBox>
 #include <klocale.h>
@@ -47,7 +47,9 @@ ShowColRow::ShowColRow( View* parent, const char* name, Type _type )
 
   QWidget *page = new QWidget( this );
   setMainWidget(page);
-  Q3VBoxLayout *lay1 = new Q3VBoxLayout( page, 0, spacingHint() );
+  QVBoxLayout *lay1 = new QVBoxLayout( page );
+  lay1->setMargin(KDialogBase::marginHint());
+  lay1->setSpacing(KDialogBase::spacingHint());
 
   QLabel *label = new QLabel( page );
 

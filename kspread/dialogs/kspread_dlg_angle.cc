@@ -3,7 +3,7 @@
              (C) 2002 Philipp Mueller <philipp.mueller@gmx.de>
              (C) 2002 Ariya Hidayat <ariya@kde.org>
              (C) 1999-2002 Laurent Montel <montel@kde.org>
-             (C) 1998-1999 Torben Weis <weis@kde.org> 
+             (C) 1998-1999 Torben Weis <weis@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -24,7 +24,7 @@
 #include <qlayout.h>
 #include <qpushbutton.h>
 //Added by qt3to4:
-#include <Q3VBoxLayout>
+#include <QVBoxLayout>
 
 #include <kbuttonbox.h>
 #include <kdebug.h>
@@ -49,7 +49,9 @@ AngleDialog::AngleDialog(View* parent, const char* name, const QPoint &_marker)
   QWidget *page = new QWidget( this );
   setMainWidget(page);
 
-  Q3VBoxLayout *lay = new Q3VBoxLayout( page, 0, spacingHint() );
+  QVBoxLayout *lay = new QVBoxLayout( page );
+  lay->setMargin(0);
+  lay->setSpacing(spacingHint());
   m_pAngle = new KIntNumInput( page );
   m_pAngle->setRange( -90, 90, 1 );
   m_pAngle->setLabel( i18n("Angle:") );

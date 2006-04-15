@@ -28,8 +28,8 @@
 #include <Q3GridLayout>
 #include <Q3Frame>
 #include <QLabel>
-#include <Q3HBoxLayout>
-#include <Q3VBoxLayout>
+#include <QHBoxLayout>
+#include <QVBoxLayout>
 
 #include <k3wizard.h>
 
@@ -40,11 +40,11 @@ class Q3GridLayout;
 class QLabel;
 class QLineEdit;
 class Q3ListViewItem;
-class Q3HBoxLayout;
+class QHBoxLayout;
 class QRadioButton;
 class QSqlDatabase;
 class Q3TextEdit;
-class Q3VBoxLayout;
+class QVBoxLayout;
 class QWidget;
 
 class K3ListView;

@@ -80,8 +80,8 @@ public:
   bool multipleSelection : 1;
 
   Selection::Iterator activeElement;
-  uint activeSubRegionStart;
-  uint activeSubRegionLength;
+  int activeSubRegionStart;
+  int activeSubRegionLength;
 };
 
 /***************************************************************************
@@ -714,7 +714,7 @@ void Selection::setActiveElement(const QPoint& point)
   }
 }
 
-void Selection::setActiveElement(uint pos)
+void Selection::setActiveElement(int pos)
 {
   if (pos >= cells().count())
   {

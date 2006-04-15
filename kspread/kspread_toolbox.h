@@ -23,11 +23,11 @@
 #include <qframe.h>
 #include <qpoint.h>
 //Added by qt3to4:
-#include <Q3VBoxLayout>
+#include <QVBoxLayout>
 #include <QMouseEvent>
 #include <QChildEvent>
 #include <koffice_export.h>
-class Q3VBoxLayout;
+class QVBoxLayout;
 class QSpinBox;
 
 class KoDocumentChild;
@@ -51,7 +51,7 @@ protected:
     void mouseMoveEvent( QMouseEvent* ev );
 
 private:
-    Q3VBoxLayout* m_layout;
+    QVBoxLayout* m_layout;
     QPoint m_mousePos;
     QPoint m_startPos;
 };

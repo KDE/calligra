@@ -29,7 +29,7 @@
 #include <qlabel.h>
 #include <qpushbutton.h>
 //Added by qt3to4:
-#include <Q3VBoxLayout>
+#include <QVBoxLayout>
 #include <QPixmap>
 
 #include <kbuttonbox.h>
@@ -60,7 +60,9 @@ FormatDialog::FormatDialog( View* view, const char* name )
     m_view = view;
     QWidget *page = new QWidget( this );
     setMainWidget(page);
-    Q3VBoxLayout *vbox = new Q3VBoxLayout( page, 0, spacingHint() );
+    QVBoxLayout *vbox = new QVBoxLayout( page );
+    vbox->setMargin(KDialogBase::marginHint());
+    vbox->setSpacing(KDialogBase::spacingHint());
 
     QLabel *toplabel = new QLabel( i18n("Select the sheet style to apply:"), page );
     m_combo = new QComboBox( page );
@@ -75,7 +77,7 @@ FormatDialog::FormatDialog( View* view, const char* name )
 
     QStringList::Iterator it = lst.begin();
     for( ; it != lst.end(); ++it )
-    {	    
+    {
 	KSimpleConfig cfg( *it, TRUE );
 	cfg.setGroup( "Sheet-Style" );
 
@@ -103,18 +105,18 @@ FormatDialog::~FormatDialog()
 }
 
 void FormatDialog::slotActivated( int index )
-{ 
+{
 	enableButtonOK(true);
-	
+
     QString img = Factory::global()->dirs()->findResource( "sheet-styles", m_entries[ index ].image );
     if ( img.isEmpty() )
     {
 	QString str( i18n( "Could not find image %1." ) );
 	str = str.arg( m_entries[ index ].image );
-	KMessageBox::error( this, str ); 
-	
+	KMessageBox::error( this, str );
+
 	enableButtonOK(false);
-	
+
 	return;
     }
 
@@ -124,9 +126,9 @@ void FormatDialog::slotActivated( int index )
 	QString str( i18n( "Could not load image %1." ) );
 	str = str.arg( img );
 	KMessageBox::error( this,str );
-	
+
 	enableButtonOK(false);
-	
+
 	return;
     }
 
@@ -135,7 +137,7 @@ void FormatDialog::slotActivated( int index )
 
 void FormatDialog::slotOk()
 {
-  
+
     m_view->doc()->emitBeginOperation( false );
 
     QString xml = Factory::global()->dirs()->findResource( "sheet-styles", m_entries[ m_combo->currentItem() ].xml );

@@ -3,7 +3,7 @@
              (C) 2002 Philipp Mueller <philipp.mueller@gmx.de>
              (C) 2002 John Dailey <dailey@vt.edu>
              (C) 2000-2002 Laurent Montel <montel@kde.org>
-   
+
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
@@ -22,7 +22,7 @@
 
 #include <qlayout.h>
 //Added by qt3to4:
-#include <Q3VBoxLayout>
+#include <QVBoxLayout>
 #include <klocale.h>
 #include <kbuttonbox.h>
 #include <q3buttongroup.h>
@@ -47,7 +47,9 @@ PasteInsertDialog::PasteInsertDialog( View* parent, const char* name,const QRect
 
   QWidget *page = new QWidget( this );
   setMainWidget(page);
-  Q3VBoxLayout *lay1 = new Q3VBoxLayout( page, 0, spacingHint() );
+  QVBoxLayout *lay1 = new QVBoxLayout( page );
+  lay1->setMargin(KDialogBase::marginHint());
+  lay1->setSpacing(KDialogBase::spacingHint());
 
   Q3ButtonGroup *grp = new Q3ButtonGroup( 1, Qt::Horizontal, i18n("Insert"),page);
   grp->setRadioButtonExclusive( TRUE );

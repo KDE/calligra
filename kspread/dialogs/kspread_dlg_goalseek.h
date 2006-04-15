@@ -30,8 +30,8 @@
 #include <qpoint.h>
 #include <qrect.h>
 //Added by qt3to4:
-#include <Q3VBoxLayout>
-#include <Q3HBoxLayout>
+#include <QVBoxLayout>
+#include <QHBoxLayout>
 #include <QLabel>
 #include <Q3GridLayout>
 #include <Q3Frame>
@@ -40,11 +40,11 @@
 
 class Q3Frame;
 class Q3GridLayout;
-class Q3HBoxLayout;
+class QHBoxLayout;
 class QLabel;
 class QLineEdit;
 class QPushButton;
-class Q3VBoxLayout;
+class QVBoxLayout;
 
 namespace KSpread
 {

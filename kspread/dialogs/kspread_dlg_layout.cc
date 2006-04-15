@@ -45,7 +45,7 @@
 //Added by qt3to4:
 #include <QPaintEvent>
 #include <QMouseEvent>
-#include <Q3VBoxLayout>
+#include <QVBoxLayout>
 #include <Q3GridLayout>
 #include <QPixmap>
 
@@ -1090,7 +1090,9 @@ CellFormatPageFloat::CellFormatPageFloat( QWidget* parent, CellFormatDialog *_dl
   : QWidget ( parent ),
     dlg( _dlg )
 {
-    Q3VBoxLayout* layout = new Q3VBoxLayout( this, 6,10 );
+    QVBoxLayout* layout = new QVBoxLayout( this );
+    layout->setMargin(6);
+    layout->setSpacing(10);
 
     Q3ButtonGroup *grp = new Q3ButtonGroup( i18n("Format"),this);
     Q3GridLayout *grid = new Q3GridLayout(grp,11,2,KDialog::marginHint(), KDialog::spacingHint());

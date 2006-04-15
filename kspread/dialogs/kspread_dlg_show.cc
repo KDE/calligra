@@ -24,7 +24,7 @@
 
 #include <qlayout.h>
 //Added by qt3to4:
-#include <Q3VBoxLayout>
+#include <QVBoxLayout>
 #include <klocale.h>
 #include <q3listbox.h>
 #include <qlabel.h>
@@ -46,7 +46,9 @@ ShowDialog::ShowDialog( View* parent, const char* name )
   m_pView = parent;
   QWidget *page = new QWidget( this );
   setMainWidget(page);
-  Q3VBoxLayout *lay1 = new Q3VBoxLayout( page, 0, spacingHint() );
+  QVBoxLayout *lay1 = new QVBoxLayout( page );
+  lay1->setMargin(0);
+  lay1->setSpacing(spacingHint());
 
   QLabel *label = new QLabel( i18n("Select hidden sheets to show:"), page );
   lay1->addWidget( label );

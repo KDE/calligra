@@ -24,7 +24,7 @@
 #include <q3buttongroup.h>
 #include <qradiobutton.h>
 //Added by qt3to4:
-#include <Q3VBoxLayout>
+#include <QVBoxLayout>
 
 #include <klocale.h>
 
@@ -44,7 +44,9 @@ SpecialDialog::SpecialDialog( View* parent, const char* name )
     m_pView = parent;
     QWidget *page = new QWidget( this );
     setMainWidget(page);
-    Q3VBoxLayout *lay1 = new Q3VBoxLayout( page, 0, spacingHint() );
+    QVBoxLayout *lay1 = new QVBoxLayout( page );
+    lay1->setMargin(0);
+    lay1->setSpacing(spacingHint());
 
     Q3ButtonGroup *grp = new Q3ButtonGroup( 1, Qt::Horizontal, i18n( "Paste What" ),page );
     grp->setRadioButtonExclusive( TRUE );

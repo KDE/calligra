@@ -28,8 +28,8 @@
 #include <qlabel.h>
 #include <qlayout.h>
 //Added by qt3to4:
-#include <Q3VBoxLayout>
-#include <Q3HBoxLayout>
+#include <QVBoxLayout>
+#include <QHBoxLayout>
 
 #include <knuminput.h>
 
@@ -58,8 +58,10 @@ ResizeRow::ResizeRow( View* parent, const char* name )
     QWidget *page = new QWidget( this );
     setMainWidget( page );
 
-    Q3VBoxLayout *vLay = new Q3VBoxLayout( page, 0, spacingHint() );
-    Q3HBoxLayout *hLay = new Q3HBoxLayout( vLay );
+    QVBoxLayout *vLay = new QVBoxLayout( page );
+    vLay->setMargin(KDialogBase::marginHint());
+    vLay->setSpacing(KDialogBase::spacingHint());
+    QHBoxLayout *hLay = new QHBoxLayout( vLay );
 
     QRect selection( m_pView->selectionInfo()->selection() );
     RowFormat* rl = m_pView->activeSheet()->rowFormat( selection.top() );
@@ -120,8 +122,10 @@ ResizeColumn::ResizeColumn( View* parent, const char* name )
     QWidget *page = new QWidget( this );
     setMainWidget(page);
 
-    Q3VBoxLayout *vLay = new Q3VBoxLayout( page, 0, spacingHint() );
-    Q3HBoxLayout *hLay = new Q3HBoxLayout( vLay );
+    QVBoxLayout *vLay = new QVBoxLayout( page );
+    vLay->setMargin(KDialogBase::marginHint());
+    vLay->setSpacing(KDialogBase::spacingHint());
+    QHBoxLayout *hLay = new QHBoxLayout( vLay );
 
     QRect selection( m_pView->selectionInfo()->selection() );
     ColumnFormat* cl = m_pView->activeSheet()->columnFormat( selection.left() );

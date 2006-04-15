@@ -126,7 +126,7 @@ public:
   /**
    * Sets the @p number 'th element as active
    */
-  void setActiveElement(uint number);
+  void setActiveElement(int number);
   /**
    * @return the active element
    */

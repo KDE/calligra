@@ -29,7 +29,7 @@
 //Added by qt3to4:
 #include <QCloseEvent>
 #include <Q3GridLayout>
-#include <Q3VBoxLayout>
+#include <QVBoxLayout>
 
 #include "kspread_dlg_formula.h"
 #include "kspread_canvas.h"
@@ -127,7 +127,9 @@ FormulaDialog::FormulaDialog( View* parent, const char* name,const QString& form
     int index = m_tabwidget->currentPageIndex();
 
     m_input = new QWidget( m_tabwidget );
-    Q3VBoxLayout *grid2 = new Q3VBoxLayout( m_input, KDialog::marginHint(), KDialog::spacingHint() );
+    QVBoxLayout *grid2 = new QVBoxLayout( m_input );
+    grid2->setMargin(KDialog::marginHint());
+    grid2->setSpacing(KDialog::spacingHint());
 
     // grid2->setResizeMode (QLayout::Minimum);
 
@@ -680,25 +682,25 @@ void FormulaDialog::slotSelected( const QString& function )
       m_browser->setText (i18n ("Description is not available."));
       return;
     }
-  
+
     if( functions->currentItem() !=- 1 )
         selectFunction->setEnabled( TRUE );
-  
+
     // Lock
     refresh_result = false;
-  
+
     m_funcName = function;
     m_desc = desc;
-  
+
     // Set the help text
     m_browser->setText( m_desc->toQML() );
     m_browser->setContentsPos( 0, 0 );
-  
+
     m_focus=0;
-  
+
     m_tabwidget->setCurrentPage( 0 );
     m_tabwidget->setTabEnabled( m_input, FALSE );
-  
+
     // Unlock
     refresh_result=true;
 }

@@ -43,7 +43,7 @@
 #include <QCloseEvent>
 #include <Q3GridLayout>
 #include <QEvent>
-#include <Q3VBoxLayout>
+#include <QVBoxLayout>
 
 #include <kapplication.h>
 #include <kdebug.h>
@@ -73,7 +73,9 @@ void PaperLayout::initTab()
     SheetPrint* print = m_pSheet->print();
 
     QWidget *tab = addPage(i18n( "Options" ));
-    Q3VBoxLayout *vbox = new Q3VBoxLayout( tab, KDialog::marginHint(), KDialog::spacingHint() );
+    QVBoxLayout *vbox = new QVBoxLayout( tab );
+    vbox->setMargin(KDialog::marginHint());
+    vbox->setSpacing(KDialog::spacingHint());
 
     pApplyToAll = new QCheckBox ( i18n( "&Apply to all sheets" ), tab );
     pApplyToAll->setChecked( print->printGrid() );
@@ -91,7 +93,7 @@ void PaperLayout::initTab()
     vbox->addStretch( 1 );
 }
 
-void PaperLayout::initGeneralOptions( QWidget * tab, Q3VBoxLayout * vbox )
+void PaperLayout::initGeneralOptions( QWidget * tab, QVBoxLayout * vbox )
 {
     SheetPrint* print = m_pSheet->print();
 
@@ -126,7 +128,7 @@ void PaperLayout::initGeneralOptions( QWidget * tab, Q3VBoxLayout * vbox )
     vbox->addWidget( group );
 }
 
-void PaperLayout::initRanges( QWidget * tab, Q3VBoxLayout * vbox )
+void PaperLayout::initRanges( QWidget * tab, QVBoxLayout * vbox )
 {
     SheetPrint* print = m_pSheet->print();
 
@@ -177,7 +179,7 @@ void PaperLayout::initRanges( QWidget * tab, Q3VBoxLayout * vbox )
     grid->addRowSpacing( 2, eRepeatCols->height() );
 }
 
-void PaperLayout::initScaleOptions( QWidget * tab, Q3VBoxLayout * vbox )
+void PaperLayout::initScaleOptions( QWidget * tab, QVBoxLayout * vbox )
 {
     SheetPrint* print = m_pSheet->print();
 

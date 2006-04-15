@@ -50,7 +50,7 @@
 #include <qvariant.h>
 #include <q3whatsthis.h>
 //Added by qt3to4:
-#include <Q3VBoxLayout>
+#include <QVBoxLayout>
 #include <Q3GridLayout>
 #include <QEvent>
 #include <QCloseEvent>
@@ -111,7 +111,10 @@ GoalSeekDialog::GoalSeekDialog( View * parent,  QPoint const & marker,
   m_startFrameLayout->addWidget( TextLabel3, 0, 0 );
   GoalSeekDialogLayout->addWidget( m_startFrame, 0, 0 );
 
-  Q3VBoxLayout * Layout5 = new Q3VBoxLayout( 0, 0, 6, "Layout5");
+  QVBoxLayout * Layout5 = new QVBoxLayout();
+  Layout5->setObjectName("Layout5");
+  Layout5->setMargin(0);
+  Layout5->setSpacing(6);
 
   m_buttonOk = new QPushButton( this, "m_buttonOk" );
   m_buttonOk->setText( i18n( "&Start" ) );

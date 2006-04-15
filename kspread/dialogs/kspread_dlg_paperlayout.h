@@ -26,7 +26,7 @@
 #include <kdialogbase.h>
 #include <KoPageLayoutDia.h>
 //Added by qt3to4:
-#include <Q3VBoxLayout>
+#include <QVBoxLayout>
 #include <QEvent>
 #include <QCloseEvent>
 
@@ -68,9 +68,9 @@ private slots:
     void slotChoosePageLimit( int index );
 
 private:
-  void initGeneralOptions( QWidget * tab, Q3VBoxLayout * vbox );
-  void initRanges( QWidget * tab, Q3VBoxLayout * vbox );
-  void initScaleOptions( QWidget * tab, Q3VBoxLayout * vbox );
+  void initGeneralOptions( QWidget * tab, QVBoxLayout * vbox );
+  void initRanges( QWidget * tab, QVBoxLayout * vbox );
+  void initScaleOptions( QWidget * tab, QVBoxLayout * vbox );
 
   Sheet * m_pSheet;
   View  * m_pView;
