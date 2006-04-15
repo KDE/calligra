@@ -2,7 +2,7 @@ kde4_header()
 project(kformula)
 add_subdirectory( pics )
 
-
+include_directories(${KFORMULA_INCLUDES})
 
 
 ########### next target ###############
