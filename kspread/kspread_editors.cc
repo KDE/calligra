@@ -42,7 +42,7 @@
 #include <QFocusEvent>
 #include <QKeyEvent>
 #include <QEvent>
-#include <Q3Frame>
+#include <QFrame>
 #include <QInputMethodEvent>
 #include <QResizeEvent>
 #warning "kde4: I think that it's not a good idea to use private class"
@@ -322,14 +322,14 @@ QObject( editor )
   d->hintLabel = 0;
 
   d->completionPopup = new Q3VBox( editor->topLevelWidget(), 0, Qt::WType_Popup );
-  d->completionPopup->setFrameStyle( Q3Frame::Box | Q3Frame::Plain );
+  d->completionPopup->setFrameStyle( QFrame::Box | QFrame::Plain );
   d->completionPopup->setLineWidth( 1 );
   d->completionPopup->installEventFilter( this );
   d->completionPopup->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Minimum);
 
   d->completionListBox = new KListBox( d->completionPopup );
   d->completionPopup->setFocusProxy( d->completionListBox );
-  d->completionListBox->setFrameStyle( Q3Frame::NoFrame );
+  d->completionListBox->setFrameStyle( QFrame::NoFrame );
   d->completionListBox->setVariableWidth( true );
   d->completionListBox->installEventFilter( this );
   connect( d->completionListBox, SIGNAL(selected(const QString&)), this,
@@ -339,7 +339,7 @@ QObject( editor )
 
   d->hintLabel = new QLabel( 0, "autocalc", Qt::WStyle_StaysOnTop |
     Qt::WStyle_Customize | Qt::WStyle_NoBorder | Qt::WStyle_Tool |  Qt::WX11BypassWM );
-  d->hintLabel->setFrameStyle( Q3Frame::Plain | Q3Frame::Box );
+  d->hintLabel->setFrameStyle( QFrame::Plain | QFrame::Box );
   d->hintLabel->setPalette( QToolTip::palette() );
   d->hintLabel->hide();
 }
@@ -515,7 +515,7 @@ CellEditor::CellEditor( Cell* _cell, Canvas* _parent, bool captureAllKeyEvents, 
 
   d->textEdit->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
   d->textEdit->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-  d->textEdit->setFrameStyle(Q3Frame::NoFrame);
+  d->textEdit->setFrameStyle(QFrame::NoFrame);
   d->textEdit->setLineWidth(0);
   d->textEdit->installEventFilter( this );
 

@@ -34,11 +34,11 @@
 #include <QHBoxLayout>
 #include <QLabel>
 #include <QGridLayout>
-#include <Q3Frame>
+#include <QFrame>
 #include <QEvent>
 #include <QCloseEvent>
 
-class Q3Frame;
+class QFrame;
 class QGridLayout;
 class QHBoxLayout;
 class QLabel;
@@ -91,13 +91,13 @@ class GoalSeekDialog : public KDialog
   QString       m_oldText;
   QString       m_sheetName;
 
-  Q3Frame      * m_startFrame;
+  QFrame      * m_startFrame;
   QLineEdit   * m_targetValueEdit;
   QLineEdit   * m_targetEdit;
   QLineEdit   * m_sourceEdit;
   QPushButton * m_buttonOk;
   QPushButton * m_buttonCancel;
-  Q3Frame      * m_resultFrame;
+  QFrame      * m_resultFrame;
   QLabel      * m_newValueDesc;
   QLabel      * m_currentValueLabel;
   QLabel      * m_newValue;

@@ -35,7 +35,7 @@
 #include <QGridLayout>
 #include <Q3PtrList>
 #include <QKeyEvent>
-#include <Q3Frame>
+#include <QFrame>
 #include <QLabel>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
@@ -89,7 +89,7 @@ QtCalculator :: QtCalculator( Calculator *_corba, QWidget *parent, const char *n
 
     // Create the display
     calc_display = new DLabel( this, "display" );
-    calc_display->setFrameStyle( Q3Frame::WinPanel | Q3Frame::Sunken );
+    calc_display->setFrameStyle( QFrame::WinPanel | QFrame::Sunken );
     calc_display->setAlignment( Qt::AlignRight|Qt::AlignVCenter );
     calc_display->setFocus();
     calc_display->setFocusPolicy( Qt::StrongFocus );
@@ -98,18 +98,18 @@ QtCalculator :: QtCalculator( Calculator *_corba, QWidget *parent, const char *n
 
     statusINVLabel = new QLabel( this, "INV" );
     Q_CHECK_PTR( statusINVLabel );
-    statusINVLabel->setFrameStyle( Q3Frame::Panel | Q3Frame::Sunken );
+    statusINVLabel->setFrameStyle( QFrame::Panel | QFrame::Sunken );
     statusINVLabel->setAlignment( Qt::AlignCenter );
     statusINVLabel->setText("NORM");
 
     statusHYPLabel = new QLabel( this, "HYP" );
     Q_CHECK_PTR( statusHYPLabel );
-    statusHYPLabel->setFrameStyle( Q3Frame::Panel | Q3Frame::Sunken );
+    statusHYPLabel->setFrameStyle( QFrame::Panel | QFrame::Sunken );
     statusHYPLabel->setAlignment( Qt::AlignCenter );
 
     statusERRORLabel = new QLabel( this, "ERROR" );
     Q_CHECK_PTR( statusERRORLabel );
-    statusERRORLabel->setFrameStyle( Q3Frame::Panel | Q3Frame::Sunken );
+    statusERRORLabel->setFrameStyle( QFrame::Panel | QFrame::Sunken );
     statusERRORLabel->setAlignment( Qt::AlignLeft|Qt::AlignVCenter );
 
     // create angle button group

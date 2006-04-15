@@ -38,7 +38,7 @@
 //Added by qt3to4:
 #include <QPixmap>
 #include <QPaintEvent>
-#include <Q3Frame>
+#include <QFrame>
 #include <QLabel>
 #include <QMouseEvent>
 #include <knuminput.h>
@@ -64,7 +64,7 @@ class QTime;
 class QLabel;
 class QWidget;
 class KLineEdit;
-class Q3Frame;
+class QFrame;
 class Q3ListBox;
 class QCheckBox;
 class KColorButton;
@@ -101,7 +101,7 @@ enum BorderShortcutType
   BorderShortcutType_END
 };
 
-class PatternSelect : public Q3Frame
+class PatternSelect : public QFrame
 {
     Q_OBJECT
 public:
@@ -283,7 +283,7 @@ protected:
 
 
 
-class Border : public Q3Frame
+class Border : public QFrame
 {
     Q_OBJECT
 public:
@@ -381,7 +381,7 @@ private:
   void applyDiagonalOutline(FormatManipulator* obj);
 };
 
-class BrushSelect : public Q3Frame
+class BrushSelect : public QFrame
 {
     Q_OBJECT
 public:

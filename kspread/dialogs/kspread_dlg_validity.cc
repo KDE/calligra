@@ -33,7 +33,7 @@
 //Added by qt3to4:
 #include <QVBoxLayout>
 #include <QGridLayout>
-#include <Q3Frame>
+#include <QFrame>
 #include <knumvalidator.h>
 #include <kdebug.h>
 #include <kmessagebox.h>

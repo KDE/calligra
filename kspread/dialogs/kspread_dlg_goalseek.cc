@@ -81,9 +81,9 @@ GoalSeekDialog::GoalSeekDialog( View * parent,  QPoint const & marker,
 
   GoalSeekDialogLayout = new QGridLayout( this, 1, 1, 11, 6, "GoalSeekDialogLayout");
 
-  m_startFrame = new Q3Frame( this, "m_startFrame" );
-  m_startFrame->setFrameShape( Q3Frame::StyledPanel );
-  m_startFrame->setFrameShadow( Q3Frame::Raised );
+  m_startFrame = new QFrame( this, "m_startFrame" );
+  m_startFrame->setFrameShape( QFrame::StyledPanel );
+  m_startFrame->setFrameShadow( QFrame::Raised );
   m_startFrameLayout = new QGridLayout( m_startFrame, 1, 1, 11, 6, "m_startFrameLayout");
 
   QLabel * TextLabel4 = new QLabel( m_startFrame, "TextLabel4" );
@@ -132,9 +132,9 @@ GoalSeekDialog::GoalSeekDialog( View * parent,  QPoint const & marker,
 
   GoalSeekDialogLayout->addLayout( Layout5, 0, 1, 1, 1 );
 
-  m_resultFrame = new Q3Frame( this, "m_resultFrame" );
-  m_resultFrame->setFrameShape( Q3Frame::StyledPanel );
-  m_resultFrame->setFrameShadow( Q3Frame::Raised );
+  m_resultFrame = new QFrame( this, "m_resultFrame" );
+  m_resultFrame->setFrameShape( QFrame::StyledPanel );
+  m_resultFrame->setFrameShadow( QFrame::Raised );
   m_resultFrame->setMinimumWidth( 350 );
   m_resultFrameLayout = new QGridLayout( m_resultFrame, 1, 1, 11, 6, "m_resultFrameLayout");
 

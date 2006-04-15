@@ -34,7 +34,7 @@
 #include <QVBoxLayout>
 #include <QLabel>
 #include <QGridLayout>
-#include <Q3Frame>
+#include <QFrame>
 
 // Undefine HAVE_LONG_DOUBLE for Beta 4 since RedHat 5.0 comes with a borken
 // glibc
@@ -139,7 +139,7 @@ ConfigDlg::ConfigDlg(QWidget *parent, const char *name, DefStruct *defstruct)
 
   stylegroup = new Q3ButtonGroup(box,"stylegroup");
   grid1->addWidget(stylegroup,5,7,0,1);
-  stylegroup->setFrameStyle(Q3Frame::NoFrame);
+  stylegroup->setFrameStyle(QFrame::NoFrame);
 
   QGridLayout *grid2 = new QGridLayout(stylegroup);
   grid2->setMargin(KDialog::marginHint());

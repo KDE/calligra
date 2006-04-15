@@ -80,7 +80,7 @@ using namespace KSpread;
  ***************************************************************************/
 
 PatternSelect::PatternSelect( QWidget *parent, const char * )
-  : Q3Frame( parent )
+  : QFrame( parent )
 {
     penStyle = Qt::NoPen;
     penWidth = 1;
@@ -104,7 +104,7 @@ void PatternSelect::setUndefined()
 
 void PatternSelect::paintEvent( QPaintEvent *_ev )
 {
-    Q3Frame::paintEvent( _ev );
+    QFrame::paintEvent( _ev );
 
     QPainter painter( this );
 
@@ -132,7 +132,7 @@ void PatternSelect::slotUnselect()
     selected = false;
 
     setLineWidth( 1 );
-    setFrameStyle( Q3Frame::Panel | Q3Frame::Sunken );
+    setFrameStyle( QFrame::Panel | QFrame::Sunken );
     repaint();
 }
 
@@ -141,7 +141,7 @@ void PatternSelect::slotSelect()
     selected = true;
 
     setLineWidth( 2 );
-    setFrameStyle( Q3Frame::Panel | Q3Frame::Plain );
+    setFrameStyle( QFrame::Panel | QFrame::Plain );
     repaint();
 }
 
@@ -2582,7 +2582,7 @@ void BorderButton::unselect()
  ***************************************************************************/
 
 Border::Border( QWidget *parent, const char *_name,bool _oneCol, bool _oneRow )
-    : Q3Frame( parent, _name )
+    : QFrame( parent, _name )
 {
   oneCol=_oneCol;
   oneRow=_oneRow;
@@ -2593,7 +2593,7 @@ Border::Border( QWidget *parent, const char *_name,bool _oneCol, bool _oneRow )
 #define OFFSETY 5
 void Border::paintEvent( QPaintEvent *_ev )
 {
-  Q3Frame::paintEvent( _ev );
+  QFrame::paintEvent( _ev );
   QPen pen;
   QPainter painter;
   painter.begin( this );
@@ -2762,7 +2762,7 @@ void CellFormatPageBorder::InitializeGrids()
   /* now set up the group box with the pattern selector */
   tmpQGroupBox = new Q3GroupBox( this, "GroupBox_10" );
 #warning "kde4 port it"
-  //tmpQGroupBox->setFrameStyle( Q3Frame::Box | Q3Frame::Sunken );
+  //tmpQGroupBox->setFrameStyle( QFrame::Box | QFrame::Sunken );
   tmpQGroupBox->setTitle( i18n("Pattern") );
   tmpQGroupBox->setAlignment( Qt::AlignLeft );
 
@@ -2778,7 +2778,7 @@ void CellFormatPageBorder::InitializeGrids()
     name[7] = '0' + (i+1) / 10;
     name[8] = '0' + (i+1) % 10;
     pattern[i] = new PatternSelect( tmpQGroupBox, name );
-    pattern[i]->setFrameStyle( Q3Frame::Panel | Q3Frame::Sunken );
+    pattern[i]->setFrameStyle( QFrame::Panel | QFrame::Sunken );
     grid2->addWidget(pattern[i], i % 5 + 1, i / 5);
     /* this puts them in the pattern:
        1  6
@@ -3510,7 +3510,7 @@ if (rect.contains(QPoint(_ev->x(),_ev->y())))
  *
  ***************************************************************************/
 
-BrushSelect::BrushSelect( QWidget *parent, const char * ) : Q3Frame( parent )
+BrushSelect::BrushSelect( QWidget *parent, const char * ) : QFrame( parent )
 {
     brushStyle = Qt::NoBrush;
     brushColor = Qt::red;
@@ -3527,7 +3527,7 @@ void BrushSelect::setPattern( const QColor &_color,Qt::BrushStyle _style )
 
 void BrushSelect::paintEvent( QPaintEvent *_ev )
 {
-    Q3Frame::paintEvent( _ev );
+    QFrame::paintEvent( _ev );
 
     QPainter painter;
     QBrush brush(brushColor,brushStyle);
@@ -3550,7 +3550,7 @@ void BrushSelect::slotUnselect()
     selected = false;
 
     setLineWidth( 1 );
-    setFrameStyle( Q3Frame::Panel | Q3Frame::Sunken );
+    setFrameStyle( QFrame::Panel | QFrame::Sunken );
     repaint();
 }
 
@@ -3559,7 +3559,7 @@ void BrushSelect::slotSelect()
     selected = true;
 
     setLineWidth( 2 );
-    setFrameStyle( Q3Frame::Panel | Q3Frame::Plain );
+    setFrameStyle( QFrame::Panel | QFrame::Plain );
     repaint();
 }
 
@@ -3590,63 +3590,63 @@ CellFormatPagePattern::CellFormatPagePattern( QWidget* parent, CellFormatDialog 
 
 
     brush1 = new BrushSelect( tmpQGroupBox, "Frame_1" );
-    brush1->setFrameStyle( Q3Frame::Panel | Q3Frame::Sunken );
+    brush1->setFrameStyle( QFrame::Panel | QFrame::Sunken );
     grid2->addWidget(brush1,1,0);
 
     brush2 = new BrushSelect( tmpQGroupBox, "Frame_2" );
-    brush2->setFrameStyle( Q3Frame::Panel | Q3Frame::Sunken );
+    brush2->setFrameStyle( QFrame::Panel | QFrame::Sunken );
     grid2->addWidget(brush2,1,1);
 
     brush3 = new BrushSelect( tmpQGroupBox, "Frame_3" );
-    brush3->setFrameStyle( Q3Frame::Panel | Q3Frame::Sunken );
+    brush3->setFrameStyle( QFrame::Panel | QFrame::Sunken );
     grid2->addWidget(brush3,1,2);
 
     brush4 = new BrushSelect( tmpQGroupBox, "Frame_4" );
-    brush4->setFrameStyle( Q3Frame::Panel | Q3Frame::Sunken );
+    brush4->setFrameStyle( QFrame::Panel | QFrame::Sunken );
     grid2->addWidget(brush4,2,0);
 
     brush5 = new BrushSelect( tmpQGroupBox, "Frame_5" );
-    brush5->setFrameStyle( Q3Frame::Panel | Q3Frame::Sunken );
+    brush5->setFrameStyle( QFrame::Panel | QFrame::Sunken );
     grid2->addWidget(brush5,2,1);
 
     brush6 = new BrushSelect( tmpQGroupBox, "Frame_6" );
-    brush6->setFrameStyle( Q3Frame::Panel | Q3Frame::Sunken );
+    brush6->setFrameStyle( QFrame::Panel | QFrame::Sunken );
     grid2->addWidget(brush6,2,2);
 
     brush7 = new BrushSelect( tmpQGroupBox, "Frame_7" );
-    brush7->setFrameStyle( Q3Frame::Panel | Q3Frame::Sunken );
+    brush7->setFrameStyle( QFrame::Panel | QFrame::Sunken );
     grid2->addWidget(brush7,3,0);
 
     brush8 = new BrushSelect( tmpQGroupBox, "Frame_8" );
-    brush8->setFrameStyle( Q3Frame::Panel | Q3Frame::Sunken );
+    brush8->setFrameStyle( QFrame::Panel | QFrame::Sunken );
     grid2->addWidget(brush8,3,1);
 
     brush9 = new BrushSelect( tmpQGroupBox, "Frame_9" );
-    brush9->setFrameStyle( Q3Frame::Panel | Q3Frame::Sunken );
+    brush9->setFrameStyle( QFrame::Panel | QFrame::Sunken );
     grid2->addWidget(brush9,3,2);
 
     brush10 = new BrushSelect( tmpQGroupBox, "Frame_10" );
-    brush10->setFrameStyle( Q3Frame::Panel | Q3Frame::Sunken );
+    brush10->setFrameStyle( QFrame::Panel | QFrame::Sunken );
     grid2->addWidget(brush10,4,0);
 
     brush11 = new BrushSelect( tmpQGroupBox, "Frame_11" );
-    brush11->setFrameStyle( Q3Frame::Panel | Q3Frame::Sunken );
+    brush11->setFrameStyle( QFrame::Panel | QFrame::Sunken );
     grid2->addWidget(brush11,4,1);
 
     brush12 = new BrushSelect( tmpQGroupBox, "Frame_12" );
-    brush12->setFrameStyle( Q3Frame::Panel | Q3Frame::Sunken );
+    brush12->setFrameStyle( QFrame::Panel | QFrame::Sunken );
     grid2->addWidget(brush12,4,2);
 
     brush13 = new BrushSelect( tmpQGroupBox, "Frame_13" );
-    brush13->setFrameStyle( Q3Frame::Panel | Q3Frame::Sunken );
+    brush13->setFrameStyle( QFrame::Panel | QFrame::Sunken );
     grid2->addWidget(brush13,5,0);
 
     brush14 = new BrushSelect( tmpQGroupBox, "Frame_14" );
-    brush14->setFrameStyle( Q3Frame::Panel | Q3Frame::Sunken );
+    brush14->setFrameStyle( QFrame::Panel | QFrame::Sunken );
     grid2->addWidget(brush14,5,1);
 
     brush15 = new BrushSelect( tmpQGroupBox, "Frame_15" );
-    brush15->setFrameStyle( Q3Frame::Panel | Q3Frame::Sunken );
+    brush15->setFrameStyle( QFrame::Panel | QFrame::Sunken );
     grid2->addWidget(brush15,5,2);
 
     QGridLayout *grid3 = new QGridLayout( 1, 2 );
@@ -3695,7 +3695,7 @@ CellFormatPagePattern::CellFormatPagePattern( QWidget* parent, CellFormatDialog 
     tmpQGroupBox = new Q3GroupBox( this, "GroupBox1" );
     tmpQGroupBox->setTitle( i18n("Preview") );
 #warning "kde4: port it"
-    //tmpQGroupBox->setFrameStyle( Q3Frame::Box | Q3Frame::Sunken );
+    //tmpQGroupBox->setFrameStyle( QFrame::Box | QFrame::Sunken );
     tmpQGroupBox->setAlignment( Qt::AlignLeft );
 
     grid2 = new QGridLayout(tmpQGroupBox,2,1,KDialog::marginHint(), KDialog::spacingHint());
@@ -3703,7 +3703,7 @@ CellFormatPagePattern::CellFormatPagePattern( QWidget* parent, CellFormatDialog 
     grid2->addRowSpacing( 0, fHeight/2 ); // groupbox title
 
     current = new BrushSelect( tmpQGroupBox, "Current" );
-    current->setFrameStyle( Q3Frame::Panel | Q3Frame::Sunken );
+    current->setFrameStyle( QFrame::Panel | QFrame::Sunken );
     grid2->addWidget(current,1,0);
     grid->addWidget( tmpQGroupBox,4,0);
 
