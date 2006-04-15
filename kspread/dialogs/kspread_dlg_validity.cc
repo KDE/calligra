@@ -124,23 +124,23 @@ DlgValidity::DlgValidity(View* parent,const char* name , const QRect &_marker )
   //A bit ugly to apply text always, but I couldn't get a label->QFontMetrix.boundingRect("text").width()
   //to give mew the correct results - Philipp
   edit2->setText( i18n( "Date:" ) );
-  grid1->addColSpacing( 0, edit2->width() );
+  grid1->addItem(new QSpacerItem( edit2->width(), 0), 0, 0 );
   edit2->setText( i18n( "Date minimum:" ) );
-  grid1->addColSpacing( 0, edit2->width() );
+  grid1->addItem(new QSpacerItem( edit2->width(), 0), 0, 0 );
   edit2->setText( i18n( "Date maximum:" ) );
-  grid1->addColSpacing( 0, edit2->width() );
+  grid1->addItem(new QSpacerItem( edit2->width(), 0), 0, 0 );
   edit2->setText( i18n( "Time:" ) );
-  grid1->addColSpacing( 0, edit2->width() );
+  grid1->addItem(new QSpacerItem( edit2->width(), 0), 0, 0 );
   edit2->setText( i18n( "Time minimum:" ) );
-  grid1->addColSpacing( 0, edit2->width() );
+  grid1->addItem(new QSpacerItem( edit2->width(), 0), 0, 0 );
   edit2->setText( i18n( "Time maximum:" ) );
-  grid1->addColSpacing( 0, edit2->width() );
+  grid1->addItem(new QSpacerItem( edit2->width(), 0), 0, 0 );
   edit2->setText( i18n( "Minimum:" ) );
-  grid1->addColSpacing( 0, edit2->width() );
+  grid1->addItem(new QSpacerItem( edit2->width(), 0), 0, 0 );
   edit2->setText( i18n( "Maximum:" ) );
-  grid1->addColSpacing( 0, edit2->width() );
+  grid1->addItem(new QSpacerItem( edit2->width(), 0), 0, 0 );
   edit2->setText( i18n( "Number:" ) );
-  grid1->addColSpacing( 0, edit2->width() );
+  grid1->addItem(new QSpacerItem( edit2->width(), 0), 0, 0 );
 
   validityList = new Q3TextEdit( tmpQButtonGroup );
   grid1->addWidget(validityList,2, 4,1, 1);

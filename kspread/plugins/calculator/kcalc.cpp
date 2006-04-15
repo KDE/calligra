@@ -476,11 +476,11 @@ QtCalculator :: QtCalculator( Calculator *_corba, QWidget *parent, const char *n
     largeBtnLayout->addWidget(pbnegate, 4, 4);
     largeBtnLayout->addWidget(pbmod, 4, 5);
 
-    largeBtnLayout->addColSpacing(0,10);
-    largeBtnLayout->addColSpacing(1,10);
-    largeBtnLayout->addColSpacing(2,10);
-    largeBtnLayout->addColSpacing(3,10);
-    largeBtnLayout->addColSpacing(4,10);
+    largeBtnLayout->addItem(new QSpacerItem( 10 , 0), 0, 0 );
+    largeBtnLayout->addItem(new QSpacerItem( 10 , 0), 0, 1 );
+    largeBtnLayout->addItem(new QSpacerItem( 10 , 0), 0, 2 );
+    largeBtnLayout->addItem(new QSpacerItem( 10 , 0), 0, 3 );
+    largeBtnLayout->addItem(new QSpacerItem( 10 , 0), 0, 4 );
     topLayout->addWidget(pb);
     topLayout->addWidget(calc_display, 10);
 

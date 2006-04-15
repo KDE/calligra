@@ -105,7 +105,7 @@ SortDialog::SortDialog( View * parent,  const char * name,
 
 //----------------
 
-  page1Layout->addRowSpacing(2,10);
+  page1Layout->addItem(new QSpacerItem( 0, 10 ), 2, 0 );
 
 
   Q3GroupBox * sort1Box = new Q3GroupBox( m_page1, "sort1Box" );

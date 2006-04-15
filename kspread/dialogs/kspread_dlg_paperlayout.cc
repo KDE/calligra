@@ -166,19 +166,19 @@ void PaperLayout::initRanges( QWidget * tab, QVBoxLayout * vbox )
                               QString().setNum( print->printRepeatRows().second ) );
     grid->addWidget( eRepeatRows, 2, 1 );
 
-    grid->addColSpacing( 0, pPrintRange->width() );
-    grid->addColSpacing( 0, pRepeatRows->width() );
-    grid->addColSpacing( 0, pRepeatCols->width() );
-    grid->addColSpacing( 1, ePrintRange->width() );
-    grid->addColSpacing( 1, eRepeatRows->width() );
-    grid->addColSpacing( 1, eRepeatCols->width() );
+    grid->addItem(new QSpacerItem(pPrintRange->width(), 0), 0, 0);
+    grid->addItem(new QSpacerItem(pRepeatRows->width(), 0), 0, 0);
+    grid->addItem(new QSpacerItem(pRepeatCols->width(), 0), 0, 0);
+    grid->addItem(new QSpacerItem(ePrintRange->width(), 0), 0, 1);
+    grid->addItem(new QSpacerItem(eRepeatRows->width(), 0), 0, 1);
+    grid->addItem(new QSpacerItem(eRepeatCols->width(), 0), 0, 1);
 
-    grid->addRowSpacing( 0, pPrintRange->height() );
-    grid->addRowSpacing( 0, ePrintRange->height() );
-    grid->addRowSpacing( 1, pRepeatRows->height() );
-    grid->addRowSpacing( 1, eRepeatRows->height() );
-    grid->addRowSpacing( 2, pRepeatCols->height() );
-    grid->addRowSpacing( 2, eRepeatCols->height() );
+    grid->addItem(new QSpacerItem(0, pPrintRange->height()), 0, 0);
+    grid->addItem(new QSpacerItem(0, ePrintRange->height()), 0, 0);
+    grid->addItem(new QSpacerItem(0, pRepeatRows->height()), 1, 0);
+    grid->addItem(new QSpacerItem(0, eRepeatRows->height()), 1, 0);
+    grid->addItem(new QSpacerItem(0, pRepeatCols->height()), 2, 0);
+    grid->addItem(new QSpacerItem(0, eRepeatCols->height()), 2, 0);
 }
 
 void PaperLayout::initScaleOptions( QWidget * tab, QVBoxLayout * vbox )

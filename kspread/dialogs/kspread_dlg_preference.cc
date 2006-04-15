@@ -789,7 +789,7 @@ configureLayoutPage::configureLayoutPage( View* _view,KVBox *box , char *name )
   tmpQGroupBox->layout()->setMargin(KDialog::marginHint());
 
   QGridLayout *grid1 = new QGridLayout(tmpQGroupBox->layout());
-  grid1->addRowSpacing( 0, KDialog::marginHint()  );
+  grid1->addItem(new QSpacerItem( 0, KDialog::marginHint() ), 0, 0 );
   grid1->setRowStretch( 7, 10 );
 
   config = Factory::global()->config();
