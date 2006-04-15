@@ -3209,7 +3209,8 @@ void KWDocument::saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyle
         buffer.close();
 
         if ( m_pageColumns.columns > 1 ) {
-            buffer.setBuffer( QByteArray() ); // clear data
+			QByteArray tmp;
+            buffer.setBuffer( &tmp ); // clear data
             buffer.open( QIODevice::WriteOnly );
             KoXmlWriter columnsTmpWriter( &buffer );  // TODO pass indentation level
             columnsTmpWriter.startElement( "style:columns" );
