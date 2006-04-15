@@ -1,17 +1,23 @@
 kde4_header()
 
-include_directories( ${CMAKE_SOURCE_DIR}/kchart ${CMAKE_SOURCE_DIR}/kchart/kdchart ${CMAKE_SOURCE_DIR}/interfaces ${CMAKE_SOURCE_DIR}/filters/libdialogfilter ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
+include_directories( 
+	${CMAKE_SOURCE_DIR}/kchart 
+	${CMAKE_SOURCE_DIR}/kchart/kdchart 
+	${CMAKE_SOURCE_DIR}/interfaces 
+	${CMAKE_SOURCE_DIR}/filters/libdialogfilter 
+	${KDE4_INCLUDE_DIR} 
+	${QT_INCLUDES}  )
 
 
 ########### next target ###############
 
-set(kchartimageexport_LIB_SRCS imageexport.cpp )
+set(kchartimageexport_LIB_SRCS imageexport.cpp ${libdialogfilter_SRCS})
 
 kde4_automoc(${kchartimageexport_LIB_SRCS})
 
 kde4_add_library(kchartimageexport SHARED ${kchartimageexport_LIB_SRCS})
 
-target_link_libraries(kchartimageexport  ${KDE4_KDECORE_LIBS} kchartcommon dialogfilter )
+target_link_libraries(kchartimageexport  ${KDE4_KDECORE_LIBS} kchartcommon)
 
 set_target_properties(kchartimageexport PROPERTIES VERSION 4.0.0 SOVERSION 4 )
 install_targets(${LIB_INSTALL_DIR} kchartimageexport )

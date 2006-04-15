@@ -5,7 +5,7 @@ include_directories( ${CMAKE_SOURCE_DIR}/kchart ${CMAKE_SOURCE_DIR}/kchart/kdcha
 
 ########### next target ###############
 
-set(kchartjpegexport_PART_SRCS jpegexport.cpp )
+set(kchartjpegexport_PART_SRCS jpegexport.cpp ${libdialogfilter_SRCS})
 
 kde4_automoc(${kchartjpegexport_PART_SRCS})
 
@@ -13,7 +13,7 @@ kde4_add_plugin(kchartjpegexport WITH_PREFIX ${kchartjpegexport_PART_SRCS})
 
 kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kchartjpegexport )
 
-target_link_libraries(kchartjpegexport  ${KDE4_KDECORE_LIBS} kchartcommon kchartimageexport dialogfilter )
+target_link_libraries(kchartjpegexport  ${KDE4_KDECORE_LIBS} kchartcommon kchartimageexport  )
 
 install_targets(${LIB_INSTALL_DIR}/kde4 kchartjpegexport )
 
