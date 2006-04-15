@@ -2320,8 +2320,7 @@ void KWTableFrameSet::printDebug() {
 KWTableFrameSet::Cell::Cell( KWTableFrameSet *table, unsigned int row, unsigned int col, const QString &/*name*/ ) :
     KWTextFrameSet( table->m_doc,
                     // Generate frameset name from table_name+row+col
-                    i18n("Hello dear translator :), 1 is the table name, 2 and 3 are row and column", "%1 Cell %2,%3")
-                    .arg( table->name() ).arg(row).arg(col) )
+                    i18nc("Hello dear translator :), 1 is the table name, 2 and 3 are row and column", "%1 Cell %2,%3", table->name() , row, col) )
 {
     m_row = row;
     m_col = col;
