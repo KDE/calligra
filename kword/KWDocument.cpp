@@ -3181,7 +3181,7 @@ void KWDocument::saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyle
 
         footnoteSepTmpWriter.addAttribute( "style:adjustment", tmp );
         footnoteSepTmpWriter.addAttributePt( "style:width", m_footNoteSeparatorLineWidth );
-        footnoteSepTmpWriter.addAttribute( "style:rel-width", QString::number( footNoteSeparatorLineLength() ) + "%" );
+        footnoteSepTmpWriter.addAttribute( "style:rel-width", QString::number( footNoteSeparatorLineLength() ) + '%' );
         switch( m_footNoteSeparatorLineType )
         {
         case SLT_SOLID:

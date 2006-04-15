@@ -1849,13 +1849,13 @@ void KWTextFrameSet::saveOasis( KoXmlWriter& writer, KoSavingContext& context, b
     QString lastFrameName = name();
     frame->startOasisFrame( writer, context.mainStyles(), lastFrameName );
 
-    QString nextFrameName = name() + "-";
+    QString nextFrameName = name() + '-';
 
     writer.startElement( "draw:text-box" );
     if ( frame->frameBehavior() == KWFrame::AutoExtendFrame )
         writer.addAttributePt( "fo:min-height", frame->minimumFrameHeight() );
     if ( m_frames.count() > 1 && saveFrames )
-        writer.addAttribute( "draw:chain-next-name", nextFrameName + "2" );
+        writer.addAttribute( "draw:chain-next-name", nextFrameName + '2' );
     saveOasisContent( writer, context );
     writer.endElement(); // draw:text-box
     writer.endElement(); // draw:frame

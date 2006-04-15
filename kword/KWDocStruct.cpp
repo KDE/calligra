@@ -242,7 +242,7 @@ void KWDocStructTextFrameItem::setupTextParags()
         QString name = text.left(20);
         KoParagCounter* tmpCounter = parag->counter();
         if (tmpCounter)
-            name.prepend(tmpCounter->text(parag) + " ");
+            name.prepend(tmpCounter->text(parag) + ' ');
         KWDocStructParagItem* child = findTextParagItem(parag);
         if (child)
             child->setText(0, name);
