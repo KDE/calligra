@@ -336,8 +336,7 @@ Region::Element* Region::eor(const QPoint& point, Sheet* sheet)
   bool containsPoint = false;
 
   Iterator it = cells().begin();
-  Iterator endOfList = cells().end();
-  while (it != endOfList)
+  while (it != cells().end())
   {
     if (!(*it)->contains(point))
     {
@@ -602,8 +601,7 @@ bool Region::isEmpty() const
 
 void Region::clear()
 {
-  Iterator end(d->cells.end());
-  for (Iterator it = d->cells.begin(); it != end; it = d->cells.erase(it))
+  for (Iterator it = d->cells.begin(); it != d->cells.end(); it = d->cells.erase(it))
   {
     delete *it;
   }

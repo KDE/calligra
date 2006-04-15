@@ -28,8 +28,7 @@
 #include <q3frame.h>
 #include <qlabel.h>
 #include <qlayout.h>
-//Added by qt3to4:
-#include <Q3VBoxLayout>
+#include <QVBoxLayout>
 
 #include <kdesktopfile.h>
 #include <kdialogbase.h>
@@ -70,7 +69,9 @@ LinkDialog::LinkDialog( QWidget*, const char* )
     // link for web or ftp
     d->internetPage = addPage( i18n( "Internet" ), QString::null,
         BarIcon( "html",K3Icon::SizeMedium ) );
-    Q3VBoxLayout* iLayout = new Q3VBoxLayout( d->internetPage, marginHint(), spacingHint() );
+    QVBoxLayout* iLayout = new QVBoxLayout( d->internetPage );
+    iLayout->setMargin( marginHint() );
+    iLayout->setSpacing( spacingHint() );
     iLayout->addWidget( new QLabel( i18n("Text to display:" ), d->internetPage ) );
     d->internetText = new KLineEdit( d->internetPage );
     iLayout->addWidget( d->internetText );
@@ -84,7 +85,9 @@ LinkDialog::LinkDialog( QWidget*, const char* )
     // link for e-mail
     d->mailPage = addPage( i18n( "Mail" ), QString::null,
         BarIcon( "mail_generic",K3Icon::SizeMedium ) );
-    Q3VBoxLayout* mLayout = new Q3VBoxLayout( d->mailPage, marginHint(), spacingHint() );
+    QVBoxLayout* mLayout = new QVBoxLayout( d->mailPage );
+    mLayout->setMargin( marginHint() );
+    mLayout->setSpacing( spacingHint() );
     mLayout->addWidget( new QLabel( i18n("Text to display:" ), d->mailPage ) );
     d->mailText = new KLineEdit( d->mailPage );
     mLayout->addWidget( d->mailText );
@@ -98,7 +101,9 @@ LinkDialog::LinkDialog( QWidget*, const char* )
     // link for external file
     d->filePage = addPage( i18n( "File" ), QString::null,
         BarIcon( "filenew",K3Icon::SizeMedium ) );
-    Q3VBoxLayout* fLayout = new Q3VBoxLayout( d->filePage, marginHint(), spacingHint() );
+    QVBoxLayout* fLayout = new QVBoxLayout( d->filePage );
+    fLayout->setMargin( marginHint() );
+    fLayout->setSpacing( spacingHint() );
     fLayout->addWidget( new QLabel( i18n("Text to display:" ), d->filePage ) );
     d->fileText = new KLineEdit( d->filePage );
     fLayout->addWidget( d->fileText );
@@ -117,23 +122,26 @@ LinkDialog::LinkDialog( QWidget*, const char* )
 
 
     // populate recent files
+    int index = 0;
     QStringList fileList = KRecentDocument::recentDocuments();
     for( QStringList::ConstIterator it = fileList.begin();it != fileList.end(); ++it )
     {
         KDesktopFile f(*it, true /* read only */);
         if ( !f.readURL().isEmpty() )
-            recentFile->insertItem( f.readURL() );
+            recentFile->insertItem( index++, f.readURL() );
     }
     if( recentFile->count()==0 )
     {
-        recentFile->insertItem( i18n("No Entries") );
+        recentFile->insertItem( 0, i18n("No Entries") );
         recentFile->setEnabled( false );
     }
 
     // link to another cell
     d->cellPage =  addPage( i18n( "Cell" ), QString::null,
         BarIcon( "misc",K3Icon::SizeMedium ) );
-    Q3VBoxLayout* cLayout = new Q3VBoxLayout( d->cellPage, marginHint(), spacingHint() );
+    QVBoxLayout* cLayout = new QVBoxLayout( d->cellPage );
+    cLayout->setSpacing( spacingHint() );
+    cLayout->addWidget( new QLabel( i18n("Text to display:" ), d->filePage ) );
     cLayout->addWidget( new QLabel( i18n("Text to display:" ), d->cellPage ) );
     d->cellText = new KLineEdit( d->cellPage );
     cLayout->addWidget( d->cellText );
