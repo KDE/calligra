@@ -21,9 +21,8 @@
 #ifndef KSPREAD_MAP_IFACE_H
 #define KSPREAD_MAP_IFACE_H
 
-#include <qstringlist.h>
-#include <q3valuelist.h>
-//Added by qt3to4:
+#include <QList>
+#include <QStringList>
 
 #include <dcopobject.h>
 #include <dcopref.h>

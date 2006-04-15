@@ -23,7 +23,7 @@
 #define __kspread_condition_h__
 
 #include <qdom.h>
-#include <q3valuelist.h>
+#include <QLinkedList>
 
 #include <koffice_export.h>
 

@@ -22,10 +22,9 @@
 #ifndef KSPREAD_FUNCTIONS
 #define KSPREAD_FUNCTIONS
 
-#include <qstringlist.h>
-#include <q3valuevector.h>
-//Added by qt3to4:
-#include <Q3ValueList>
+#include <QList>
+#include <QStringList>
+#include <QVector>
 
 class QDomElement;
 
@@ -72,7 +71,7 @@ public:
   QString helpText() const;
   void setHelpText( const QString& text );
   Value exec (valVector args, ValueCalc *calc, FuncExtra *extra = 0);
-  
+
 private:
   class Private;
   Private* d;
@@ -86,11 +85,11 @@ public:
   FunctionParameter();
   FunctionParameter( const FunctionParameter& param );
   FunctionParameter( const QDomElement& element );
-  
+
   QString helpText() const { return m_help; }
   ParameterType type() const { return m_type; }
   bool hasRange() const { return m_range; }
-    
+
 private:
   QString m_help;
   ParameterType m_type;
@@ -103,22 +102,22 @@ public:
   FunctionDescription();
   FunctionDescription (const QDomElement& element);
   FunctionDescription (const FunctionDescription& desc);
-  
+
   const QStringList& examples() { return m_examples; }
   const QStringList& syntax() { return m_syntax; }
   const QStringList& related() { return m_related; }
   const QStringList& helpText() const { return m_help; }
   QString name() const { return m_name; }
   ParameterType type() const { return m_type; }
-  
+
   int params() const { return m_params.count(); }
   FunctionParameter& param( int i ) { return m_params[ i ]; }
-  
+
   void setGroup( const QString& g ) { m_group = g; }
   QString group() const { return m_group; }
-  
+
   QString toQML() const;
-    
+
 private:
   QString m_group;
   QStringList m_examples;
@@ -127,7 +126,7 @@ private:
   QStringList m_help;
   QString m_name;
   ParameterType m_type;
-  Q3ValueList<FunctionParameter> m_params;
+  QList<FunctionParameter> m_params;
 };
 
 class FunctionRepository
@@ -135,20 +134,20 @@ class FunctionRepository
 public:
   FunctionRepository();
   ~FunctionRepository();
-    
+
   static FunctionRepository *self();
-    
+
   void add (Function *function);
-  
+
   Function *function (const QString& name);
 
   FunctionDescription *functionInfo (const QString& name);
 
   /** return functions within a group, or all if no group given */
   QStringList functionNames (const QString& group = QString::null);
-    
+
   const QStringList &groups () const { return m_groups; }
-    
+
 private:
 
   class Private;
@@ -158,9 +157,9 @@ private:
 
   /** loads function descriptions from a XML file */
   void loadFile (const QString& filename);
-  
+
   QStringList m_groups;
-  
+
   // no copy or assign
   FunctionRepository( const FunctionRepository& );
   FunctionRepository& operator=( const FunctionRepository& );

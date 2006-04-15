@@ -25,6 +25,7 @@
 #include <qclipboard.h>
 #include <q3dragobject.h>
 #include <q3intdict.h>
+#include <QLinkedList>
 #include <q3memarray.h>
 #include <qpen.h>
 #include <q3ptrlist.h>
@@ -33,7 +34,6 @@
 //Added by qt3to4:
 #include <QPixmap>
 #include <Q3PointArray>
-#include <Q3ValueList>
 #include <Q3Dict>
 
 #include <KoDocument.h>

@@ -20,7 +20,7 @@
 #ifndef __kspread_undo_h__
 #define __kspread_undo_h__
 
-#include <qlinkedlist.h>
+#include <QLinkedList>
 #include <qrect.h>
 #include <qstring.h>
 

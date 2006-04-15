@@ -24,7 +24,6 @@
 #include <qlayout.h>
 //Added by qt3to4:
 #include <QVBoxLayout>
-#include <Q3ValueList>
 #include <Q3ListBox>
 #include <klocale.h>
 #include <q3tl.h>

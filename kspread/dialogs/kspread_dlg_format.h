@@ -6,7 +6,7 @@
              (C) 2000-2002 Laurent Montel <montel@kde.org>
              (C) 2000 Werner Trobin <trobin@kde.org>
              (C) 1998-2000 Torben Weis <weis@kde.org>
-             
+
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
@@ -28,7 +28,7 @@
 
 #include <kdialogbase.h>
 #include <qstring.h>
-#include <q3valuelist.h>
+#include <qlist.h>
 #include <qcolor.h>
 #include <qpen.h>
 #include <qfont.h>
@@ -73,7 +73,7 @@ private:
 	QString config;
 	QString name;
     };
-    Q3ValueList<Entry> m_entries;
+    QList<Entry> m_entries;
 
     Format* m_cells[ 16 ];
 };

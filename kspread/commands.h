@@ -21,14 +21,15 @@
 #ifndef KSPREAD_COMMANDS
 #define KSPREAD_COMMANDS
 
+#include <QList>
+#include <QRect>
+#include <QString>
+//Added by qt3to4:
+#include <Q3PtrList>
+
 #include <KoPageLayout.h>
 #include <KoQueryTrader.h>
 #include <KoUnit.h>
-#include <qrect.h>
-#include <qstring.h>
-//Added by qt3to4:
-#include <Q3ValueList>
-#include <Q3PtrList>
 
 #include <kcommand.h>
 

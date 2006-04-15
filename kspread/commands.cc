@@ -30,7 +30,6 @@
 
 #include "kspread_sheetprint.h"
 //Added by qt3to4:
-#include <Q3ValueList>
 #include <Q3PtrList>
 
 using namespace KSpread;

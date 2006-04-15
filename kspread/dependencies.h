@@ -20,7 +20,7 @@
 #ifndef KSPREAD_DEPENDENCIES
 #define KSPREAD_DEPENDENCIES
 
-#include <q3valuelist.h>
+#include <QLinkedList>
 
 #include "kspread_util.h"
 
@@ -52,10 +52,10 @@ class DependencyManager {
    DependencyManager (Sheet *s);
   /** destructor */
   ~DependencyManager ();
- 
+
   /** clear all data */
   void reset ();
-  
+
   /** handle the fact that cell's contents have changed */
   void cellChanged (const Point &cell);
   /** handle the fact that a range has been changed */
@@ -71,7 +71,7 @@ class DependencyManager {
   /** get cells depending on this cell, either through normal or range dependency */
   QLinkedList<Point> getDependants (const Point &cell);
 protected:
-  
+
   /** local d-pointer */
   DependencyList *deps;
   friend class DependencyList;

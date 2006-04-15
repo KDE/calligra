@@ -46,8 +46,6 @@ struct Condition
   Type     type;
 };
 
-typedef Q3ValueList<Condition> ConditionList;
-
 typedef void (*arrayWalkFunc) (ValueCalc *, Value &result,
     Value val, Value param);
 
@@ -71,7 +69,7 @@ class ValueCalc {
   ValueCalc (ValueConverter* c);
 
   ValueConverter *conv () { return converter; };
-  
+
   // some functions need access to the document
   void setDoc (Doc *d) { _doc = d; };
   Doc *doc () { return _doc; };
@@ -116,7 +114,7 @@ class ValueCalc {
   Value roundDown (const Value &a, int digits = 0);
   Value roundUp (const Value &a, int digits = 0);
   Value round (const Value &a, int digits = 0);
-  
+
   /** logarithms and exponentials */
   Value log (const Value &number, const Value &base);
   Value log (const Value &number, double base = 10);
@@ -126,11 +124,11 @@ class ValueCalc {
   /** constants */
   Value pi ();
   Value eps ();
- 
+
   /** random number from <0.0, range) */
   Value random (double range = 1.0);
   Value random (Value range);
-  
+
   /** some computational functions */
   Value fact (const Value &which);
   Value fact (const Value &which, const Value &end);
@@ -142,7 +140,7 @@ class ValueCalc {
   /** combinations */
   Value combin (int n, int k);
   Value combin (Value n, Value k);
-  
+
   /** greatest common divisor */
   Value gcd (const Value &a, const Value &b);
   /** lowest common multiplicator */
@@ -189,11 +187,11 @@ class ValueCalc {
   Value besselj (Value v, Value x);
   Value besselk (Value v, Value x);
   Value besseln (Value v, Value x);
-  
+
   /** error functions (see: man erf) */
   Value erf (Value x);
   Value erfc (Value x);
-  
+
   /** array/range walking */
   void arrayWalk (const Value &range, Value &res,
       arrayWalkFunc func, Value param);
@@ -227,7 +225,7 @@ class ValueCalc {
   Value stddevP (const Value &range, bool full = true);
   Value stddevP (const Value &range, Value avg,
       bool full = true);
-  
+
   /** range functions using value lists */
   Value sum (QVector<Value> range, bool full = true);
   int count (QVector<Value> range, bool full = true);
@@ -248,8 +246,8 @@ class ValueCalc {
     It sets the condition's type and value.
   */
   void getCond (Condition &cond, Value val);
-  
-  /**  
+
+  /**
     Returns true if value d matches the condition cond, built with getCond().
     Otherwise, it returns false.
   */
@@ -259,9 +257,9 @@ class ValueCalc {
   ValueConverter* converter;
   /** return result formatting, based on these two values */
   Value::Format format (Value::Format a, Value::Format b);
-  
+
   Doc *_doc;
-  
+
   /** registered array-walk functions */
   std::map<QString, arrayWalkFunc> awFuncs;
 };

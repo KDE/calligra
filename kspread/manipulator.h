@@ -21,7 +21,7 @@
 #ifndef KSPREAD_MANIPULATOR
 #define KSPREAD_MANIPULATOR
 
-#include <qlinkedlist.h>
+#include <QLinkedList>
 #include <qrect.h>
 #include <qstring.h>
 

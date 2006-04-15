@@ -49,7 +49,6 @@
 #include <qregexp.h>
 //Added by qt3to4:
 #include <Q3PointArray>
-#include <Q3ValueList>
 
 #include "kspread_canvas.h"
 #include "kspread_condition.h"

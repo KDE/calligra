@@ -26,8 +26,6 @@
 #include <qdom.h>
 #include <qfile.h>
 #include <q3valuevector.h>
-//Added by qt3to4:
-#include <Q3ValueList>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -486,7 +484,7 @@ QString FunctionDescription::toQML() const
   if ( !m_params.isEmpty() )
   {
     text += i18n("<h2>Parameters</h2><ul>");
-    Q3ValueList<FunctionParameter>::ConstIterator it = m_params.begin();
+    QList<FunctionParameter>::ConstIterator it = m_params.begin();
     for( ; it != m_params.end(); ++it )
     {
       text += i18n("<li><b>Comment:</b> ");

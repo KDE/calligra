@@ -21,9 +21,9 @@
 #ifndef KSPREAD_SELECTION
 #define KSPREAD_SELECTION
 
-#include <qobject.h>
-//Added by qt3to4:
-#include <Q3ValueList>
+#include <QColor>
+#include <QList>
+#include <QObject>
 
 #include <kdebug.h>
 

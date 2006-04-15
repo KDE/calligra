@@ -21,10 +21,9 @@
 #ifndef __kspread_sheetprint_h__
 #define __kspread_sheetprint_h__
 
-#include <qobject.h>
-//Added by qt3to4:
+#include <QList>
+#include <QObject>
 #include <QPixmap>
-#include <Q3ValueList>
 
 #include <koffice_export.h>
 #include <KoUnit.h>

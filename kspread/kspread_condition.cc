@@ -35,8 +35,6 @@
 #include <kdebug.h>
 #include <qdom.h>
 #include <qbuffer.h>
-//Added by qt3to4:
-#include <Q3ValueList>
 
 #include "kspread_condition.h"
 
@@ -114,7 +112,7 @@ bool Conditions::currentCondition( Conditional & condition )
 
 	if ( (*it).styleName )
 		kDebug()<<"*it :"<<  *( ( *it ).styleName ) <<endl;
-    	
+
 	kDebug()<<"*it style :"<<(  *it ).style <<endl;
 
 

@@ -34,11 +34,12 @@
 #ifndef KSPREAD_CELL
 #define KSPREAD_CELL
 
-#include <qpainter.h>
+#include <QDate>
+#include <QLinkedList>
+#include <QList>
+#include <QPainter>
+
 #include <q3ptrlist.h>
-#include <qdatetime.h>
-//Added by qt3to4:
-#include <Q3ValueList>
 
 #include "kspread_condition.h"
 

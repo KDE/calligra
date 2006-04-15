@@ -35,7 +35,6 @@
 #include <qpushbutton.h>
 //Added by qt3to4:
 #include <QGridLayout>
-#include <Q3ValueList>
 #include <QCloseEvent>
 #include <Q3ListBox>
 #include <kpushbutton.h>
@@ -520,7 +519,7 @@ void ConsolidateDialog::slotOk()
     }
 
     // Fill the list with all interesting cells
-    Q3ValueList<st_cell> lst;
+    QLinkedList<st_cell> lst;
     it = ranges.begin();
     for( ; it != ranges.end(); ++it )
     {
@@ -579,7 +578,7 @@ void ConsolidateDialog::slotOk()
       {
 	int count = 0;
         QString formula = "=" + function + "(";
-	Q3ValueList<st_cell>::Iterator lit = lst.begin();
+	QLinkedList<st_cell>::Iterator lit = lst.begin();
 	for( ; lit != lst.end(); ++lit )
 	{
 	  if ( (*lit).xdesc == *xdesc && (*lit).ydesc == *ydesc )

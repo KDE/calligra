@@ -23,7 +23,7 @@
 #ifndef __kspread_dlg_showColRow__
 #define __kspread_dlg_showColRow__
 
-#include <q3valuelist.h>
+#include <QList>
 
 #include <kdialogbase.h>
 

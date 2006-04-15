@@ -33,7 +33,7 @@
 #include <qpainter.h>
 #include <qrect.h>
 #include <qstring.h>
-#include <q3valuelist.h>
+#include <QList>
 #include <Q3PtrList>
 
 #include <kcompletion.h>

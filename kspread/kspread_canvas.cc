@@ -66,7 +66,6 @@
 #include <QDragMoveEvent>
 #include <Q3CString>
 #include <QDragLeaveEvent>
-#include <Q3ValueList>
 #include <QWheelEvent>
 #include <QDropEvent>
 #include <Q3PtrList>

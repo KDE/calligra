@@ -38,8 +38,6 @@
 #include <qstring.h>
 #include <q3valuevector.h>
 #include <q3valuestack.h>
-//Added by qt3to4:
-#include <Q3ValueList>
 #include <QTextStream>
 
 #include <klocale.h>

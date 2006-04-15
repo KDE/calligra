@@ -20,10 +20,9 @@
 #ifndef KSPREAD_REGION
 #define KSPREAD_REGION
 
-#include <qcolor.h>
-#include <qlist.h>
-#include <qrect.h>
-#include <qstring.h>
+#include <QList>
+#include <QRect>
+#include <QString>
 
 #include <kdebug.h>
 
