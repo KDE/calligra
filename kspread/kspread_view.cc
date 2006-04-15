@@ -1918,7 +1918,9 @@ Doc* View::doc() const
 
 void View::initView()
 {
-    d->viewLayout = new QGridLayout( this, 3, 4 );
+    d->viewLayout = new QGridLayout( this );
+    d->viewLayout->setMargin(0);
+    d->viewLayout->setSpacing(0);
 
     // Vert. Scroll Bar
     d->calcLabel  = 0;

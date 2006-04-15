@@ -42,7 +42,7 @@
 #include <qpushbutton.h>
 #include <qlayout.h>
 //Added by qt3to4:
-#include <Q3GridLayout>
+#include <QGridLayout>
 #include <Q3PtrList>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
@@ -266,8 +266,8 @@ EditAreaName::EditAreaName( View * parent,
   QWidget * page = new QWidget( this );
   setMainWidget(page);
 
-  Q3GridLayout * EditAreaNameLayout
-    = new Q3GridLayout( page, 1, 1, 11, 6, "EditAreaNameLayout");
+  QGridLayout * EditAreaNameLayout
+    = new QGridLayout( page, 1, 1, 11, 6, "EditAreaNameLayout");
 
   QHBoxLayout * Layout1 = new QHBoxLayout();
   Layout1->setObjectName("Layout1");

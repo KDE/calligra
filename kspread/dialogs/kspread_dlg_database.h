@@ -25,7 +25,7 @@
 #include <qdialog.h>
 #include <qrect.h>
 //Added by qt3to4:
-#include <Q3GridLayout>
+#include <QGridLayout>
 #include <Q3Frame>
 #include <QLabel>
 #include <QHBoxLayout>
@@ -36,7 +36,7 @@
 class QCheckBox;
 class QComboBox;
 class Q3Frame;
-class Q3GridLayout;
+class QGridLayout;
 class QLabel;
 class QLineEdit;
 class Q3ListViewItem;
@@ -80,11 +80,11 @@ class DatabaseDialog : public K3Wizard
   void next();
   void back();
 
-  Q3GridLayout  * m_databaseLayout;
-  Q3GridLayout  * m_sheetLayout;
-  Q3GridLayout  * m_columnsLayout;
-  Q3GridLayout  * m_optionsLayout;
-  Q3GridLayout  * m_resultLayout;
+  QGridLayout  * m_databaseLayout;
+  QGridLayout  * m_sheetLayout;
+  QGridLayout  * m_columnsLayout;
+  QGridLayout  * m_optionsLayout;
+  QGridLayout  * m_resultLayout;
 
  private:
   int            m_currentPage;

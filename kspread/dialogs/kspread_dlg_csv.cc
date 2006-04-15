@@ -34,7 +34,7 @@
 #include <QVector>
 //Added by qt3to4:
 #include <QTextStream>
-#include <Q3GridLayout>
+#include <QGridLayout>
 
 #include <kapplication.h>
 #include <kdebug.h>
@@ -72,8 +72,10 @@ CSVDialog::CSVDialog( View * parent, const char * name, QRect const & rect, Mode
 
   QWidget* page = new QWidget( this );
   setMainWidget( page );
-  //  MyDialogLayout = new QGridLayout( page, 4, 4, marginHint(), spacingHint(), "MyDialogLayout");
-  MyDialogLayout = new Q3GridLayout( page, 1, 1, 11, 6, "MyDialogLayout");
+  MyDialogLayout = new QGridLayout( page );
+  MyDialogLayout->setObjectName("MyDialogLayout");
+  MyDialogLayout->setMargin(11);
+  MyDialogLayout->setSpacing(6);
 
   // Limit the range
   int column = m_targetRect.left();
@@ -96,7 +98,7 @@ CSVDialog::CSVDialog( View * parent, const char * name, QRect const & rect, Mode
   m_delimiterBox->setColumnLayout(0, Qt::Vertical );
   m_delimiterBox->layout()->setSpacing( KDialog::spacingHint() );
   m_delimiterBox->layout()->setMargin( KDialog::marginHint() );
-  m_delimiterBoxLayout = new Q3GridLayout( m_delimiterBox->layout() );
+  m_delimiterBoxLayout = new QGridLayout( m_delimiterBox->layout() );
   m_delimiterBoxLayout->setAlignment( Qt::AlignTop );
   MyDialogLayout->addWidget( m_delimiterBox, 0, 2, 0, 0 );
 
@@ -139,7 +141,7 @@ CSVDialog::CSVDialog( View * parent, const char * name, QRect const & rect, Mode
   m_formatBox->setColumnLayout(0, Qt::Vertical );
   m_formatBox->layout()->setSpacing( KDialog::spacingHint() );
   m_formatBox->layout()->setMargin( KDialog::marginHint() );
-  m_formatBoxLayout = new Q3GridLayout( m_formatBox->layout() );
+  m_formatBoxLayout = new QGridLayout( m_formatBox->layout() );
   m_formatBoxLayout->setAlignment( Qt::AlignTop );
   MyDialogLayout->addWidget( m_formatBox, 0, 2, 1, 1 );
 

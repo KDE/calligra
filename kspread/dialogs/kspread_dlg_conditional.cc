@@ -45,7 +45,7 @@
 #include <qlabel.h>
 #include <qlayout.h>
 //Added by qt3to4:
-#include <Q3GridLayout>
+#include <QGridLayout>
 #include <Q3ValueList>
 
 using namespace KSpread;
@@ -53,13 +53,16 @@ using namespace KSpread;
 ConditionalWidget::ConditionalWidget( QWidget* parent, const char* name, Qt::WFlags fl )
     : QWidget( parent, name, fl )
 {
-  Q3GridLayout * Form1Layout = new Q3GridLayout( this, 1, 1, 11, 6, "Form1Layout");
+  QGridLayout * Form1Layout = new QGridLayout( this );
+  Form1Layout->setObjectName("Form1Layout");
+  Form1Layout->setMargin(11);
+  Form1Layout->setSpacing(6);
 
   Q3GroupBox * groupBox1_3 = new Q3GroupBox( this, "groupBox1_3" );
   groupBox1_3->setColumnLayout(0, Qt::Vertical );
   groupBox1_3->layout()->setSpacing( KDialog::spacingHint() );
   groupBox1_3->layout()->setMargin( KDialog::marginHint() );
-  Q3GridLayout * groupBox1_3Layout = new Q3GridLayout( groupBox1_3->layout() );
+  QGridLayout * groupBox1_3Layout = new QGridLayout( groupBox1_3->layout() );
   groupBox1_3Layout->setAlignment( Qt::AlignTop );
 
   QLabel * textLabel1_3 = new QLabel( groupBox1_3, "textLabel1_3" );
@@ -97,7 +100,7 @@ ConditionalWidget::ConditionalWidget( QWidget* parent, const char* name, Qt::WFl
   groupBox1_2->layout()->setSpacing( KDialog::spacingHint() );
   groupBox1_2->layout()->setMargin( KDialog::marginHint() );
 
-  Q3GridLayout * groupBox1_2Layout = new Q3GridLayout( groupBox1_2->layout() );
+  QGridLayout * groupBox1_2Layout = new QGridLayout( groupBox1_2->layout() );
   groupBox1_2Layout->setAlignment( Qt::AlignTop );
 
   QLabel * textLabel1_2 = new QLabel( groupBox1_2, "textLabel1_2" );
@@ -115,7 +118,7 @@ ConditionalWidget::ConditionalWidget( QWidget* parent, const char* name, Qt::WFl
 
   m_firstValue_2 = new KLineEdit( groupBox1_2 );
   m_firstValue_2->setObjectName("m_firstValue_2" );
-  
+
   m_firstValue_2->setEnabled( false );
   groupBox1_2Layout->addWidget( m_firstValue_2, 0, 2 );
 
@@ -136,7 +139,7 @@ ConditionalWidget::ConditionalWidget( QWidget* parent, const char* name, Qt::WFl
   groupBox1_1->layout()->setSpacing( KDialog::spacingHint() );
   groupBox1_1->layout()->setMargin( KDialog::marginHint() );
 
-  Q3GridLayout * groupBox1_1Layout = new Q3GridLayout( groupBox1_1->layout() );
+  QGridLayout * groupBox1_1Layout = new QGridLayout( groupBox1_1->layout() );
   groupBox1_1Layout->setAlignment( Qt::AlignTop );
 
   QLabel * textLabel1_1 = new QLabel( groupBox1_1, "textLabel1_2_2" );

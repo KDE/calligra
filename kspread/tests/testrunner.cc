@@ -58,7 +58,9 @@ TestRunner::TestRunner():
   d = new Private;
 
   QFrame* mainWidget = plainPage();
-  QGridLayout* layout = new QGridLayout( mainWidget, 3, 4, marginHint(), spacingHint() );
+  QGridLayout* layout = new QGridLayout( mainWidget );
+  layout->setMargin(KDialog::marginHint());
+  layout->setSpacing(KDialog::spacingHint());
   setMinimumSize( 360, 230 );
 
   QLabel* typeLabel = new QLabel( "Type of Test:", mainWidget );

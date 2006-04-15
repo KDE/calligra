@@ -27,7 +27,7 @@
 #include <kinstance.h>
 #include <qpushbutton.h>
 //Added by qt3to4:
-#include <Q3GridLayout>
+#include <QGridLayout>
 
 #include <kbuttonbox.h>
 #include <kconfig.h>
@@ -48,7 +48,9 @@ ListDialog::ListDialog( QWidget* parent, const char* name )
   QWidget* page = new QWidget( this );
   setMainWidget( page );
 
-  Q3GridLayout *grid1 = new Q3GridLayout( page,10,3,KDialog::marginHint(), KDialog::spacingHint());
+  QGridLayout *grid1 = new QGridLayout(page);
+  grid1->setMargin(KDialog::marginHint());
+  grid1->setSpacing(KDialog::spacingHint());
 
   QLabel *lab=new QLabel(page);
   lab->setText(i18n("List:" ));

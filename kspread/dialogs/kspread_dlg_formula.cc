@@ -28,7 +28,7 @@
 #include <qtabwidget.h>
 //Added by qt3to4:
 #include <QCloseEvent>
-#include <Q3GridLayout>
+#include <QGridLayout>
 #include <QVBoxLayout>
 
 #include "kspread_dlg_formula.h"
@@ -88,7 +88,9 @@ FormulaDialog::FormulaDialog( View* parent, const char* name,const QString& form
     QWidget *page = new QWidget( this );
     setMainWidget(page);
 
-    Q3GridLayout *grid1 = new Q3GridLayout(page,11,2,KDialog::marginHint(), KDialog::spacingHint());
+    QGridLayout *grid1 = new QGridLayout(page);
+    grid1->setMargin(KDialog::marginHint());
+    grid1->setSpacing(KDialog::spacingHint());
 
     searchFunct = new KLineEdit(page);
     QSizePolicy sp3( QSizePolicy::Preferred, QSizePolicy::Fixed );

@@ -33,7 +33,7 @@
 #include <qlayout.h>
 //Added by qt3to4:
 #include <QHBoxLayout>
-#include <Q3GridLayout>
+#include <QGridLayout>
 #include <klocale.h>
 #include <qlabel.h>
 
@@ -86,7 +86,7 @@ SeriesDlg::SeriesDlg( View* parent, const char* name,const QPoint &_marker)
 
   Q3GroupBox* gb = new Q3GroupBox( 1, Qt::Vertical, i18n("Parameters"), page );
   QWidget *params = new QWidget( gb );
-  Q3GridLayout *params_layout = new Q3GridLayout( params, 3, 2 );
+  QGridLayout *params_layout = new QGridLayout( params );
   params_layout->setSpacing( spacingHint() );
   params_layout->setAutoAdd( true );
 

@@ -41,7 +41,7 @@
 //#include <qhgroupbox.h>
 //Added by qt3to4:
 #include <QCloseEvent>
-#include <Q3GridLayout>
+#include <QGridLayout>
 #include <QEvent>
 #include <QVBoxLayout>
 
@@ -98,7 +98,7 @@ void PaperLayout::initGeneralOptions( QWidget * tab, QVBoxLayout * vbox )
     SheetPrint* print = m_pSheet->print();
 
     Q3GroupBox *group = new Q3GroupBox( i18n("General Options"), tab );
-    Q3GridLayout *l = new Q3GridLayout( group, 2, 3 );
+    QGridLayout *l = new QGridLayout( group );
 
     pPrintGrid = new QCheckBox ( i18n("Print &grid"), group );
     pPrintGrid->setChecked( print->printGrid() );
@@ -136,7 +136,9 @@ void PaperLayout::initRanges( QWidget * tab, QVBoxLayout * vbox )
     rangeGroup->setColumnLayout( 0, Qt::Vertical );
     vbox->addWidget( rangeGroup );
 
-    Q3GridLayout *grid = new Q3GridLayout( rangeGroup->layout(), 3, 2, KDialog::spacingHint() );
+    QGridLayout *grid = new QGridLayout( rangeGroup->layout() );
+    grid->setMargin(KDialog::marginHint());
+    grid->setSpacing(KDialog::spacingHint());
 
     QLabel *pPrintRange = new QLabel ( i18n("Print range:"), rangeGroup );
     grid->addWidget( pPrintRange, 0, 0 );
@@ -187,8 +189,9 @@ void PaperLayout::initScaleOptions( QWidget * tab, QVBoxLayout * vbox )
     zoomGroup->setColumnLayout( 0, Qt::Vertical );
     vbox->addWidget( zoomGroup );
 
-    Q3GridLayout *grid = new Q3GridLayout( zoomGroup->layout(), 2, 6,
-                                         KDialog::spacingHint() );
+    QGridLayout *grid = new QGridLayout( zoomGroup->layout() );
+    grid->setMargin(KDialog::marginHint());
+    grid->setSpacing(KDialog::spacingHint());
 
     m_rScalingZoom = new QRadioButton ( i18n("Zoom:"), zoomGroup );
     grid->addWidget( m_rScalingZoom, 0, 0 );

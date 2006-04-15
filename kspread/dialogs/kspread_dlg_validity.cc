@@ -32,7 +32,7 @@
 #include <q3buttongroup.h>
 //Added by qt3to4:
 #include <QVBoxLayout>
-#include <Q3GridLayout>
+#include <QGridLayout>
 #include <Q3Frame>
 #include <knumvalidator.h>
 #include <kdebug.h>
@@ -62,7 +62,7 @@ DlgValidity::DlgValidity(View* parent,const char* name , const QRect &_marker )
   tmpQButtonGroup = new Q3GroupBox( 0, Qt::Vertical, i18n("Validity Criteria"), page1, "ButtonGroup_1" );
   tmpQButtonGroup->layout()->setSpacing(KDialog::spacingHint());
   tmpQButtonGroup->layout()->setMargin(KDialog::marginHint());
-  Q3GridLayout *grid1 = new Q3GridLayout(tmpQButtonGroup->layout(),4,2);
+  QGridLayout *grid1 = new QGridLayout(tmpQButtonGroup->layout());
 
   QLabel *tmpQLabel = new QLabel( tmpQButtonGroup, "Label_1" );
   tmpQLabel->setText(i18n("Allow:" ));
@@ -158,7 +158,7 @@ DlgValidity::DlgValidity(View* parent,const char* name , const QRect &_marker )
   tmpQButtonGroup = new Q3ButtonGroup( 0, Qt::Vertical, i18n("Contents"), page2, "ButtonGroup_2" );
   tmpQButtonGroup->layout()->setSpacing(KDialog::spacingHint());
   tmpQButtonGroup->layout()->setMargin(KDialog::marginHint());
-  Q3GridLayout *grid2 = new Q3GridLayout(tmpQButtonGroup->layout(),5,2);
+  QGridLayout *grid2 = new QGridLayout(tmpQButtonGroup->layout());
 
   displayMessage = new QCheckBox(i18n( "Show error message when invalid values are entered" ),tmpQButtonGroup );
   displayMessage->setChecked( true );
@@ -201,7 +201,7 @@ DlgValidity::DlgValidity(View* parent,const char* name , const QRect &_marker )
   tmpQButtonGroup->layout()->setSpacing(KDialog::spacingHint());
   tmpQButtonGroup->layout()->setMargin(KDialog::marginHint());
 
-  Q3GridLayout *grid3 = new Q3GridLayout(tmpQButtonGroup->layout(),5,2);
+  QGridLayout *grid3 = new QGridLayout(tmpQButtonGroup->layout());
 
   displayHelp = new QCheckBox(i18n( "Show input help when cell is selected" ),tmpQButtonGroup );
   displayMessage->setChecked( false );

@@ -33,7 +33,7 @@
 //Added by qt3to4:
 #include <QVBoxLayout>
 #include <QLabel>
-#include <Q3GridLayout>
+#include <QGridLayout>
 #include <Q3Frame>
 
 // Undefine HAVE_LONG_DOUBLE for Beta 4 since RedHat 5.0 comes with a borken
@@ -56,7 +56,7 @@ ConfigDlg::ConfigDlg(QWidget *parent, const char *name, DefStruct *defstruct)
   box->layout()->setSpacing(KDialog::spacingHint());
   box->layout()->setMargin(KDialog::marginHint());
 
-  Q3GridLayout *grid1 = new Q3GridLayout(box->layout(),8,2);
+  QGridLayout *grid1 = new QGridLayout(box->layout());
   label1 = new QLabel(box);
   label1->setText(i18n("Foreground color:"));
   grid1->addWidget(label1,0,0);
@@ -141,7 +141,9 @@ ConfigDlg::ConfigDlg(QWidget *parent, const char *name, DefStruct *defstruct)
   grid1->addWidget(stylegroup,5,7,0,1);
   stylegroup->setFrameStyle(Q3Frame::NoFrame);
 
-  Q3GridLayout *grid2 = new Q3GridLayout(stylegroup,2,2,KDialog::marginHint(), KDialog::spacingHint());
+  QGridLayout *grid2 = new QGridLayout(stylegroup);
+  grid2->setMargin(KDialog::marginHint());
+  grid2->setSpacing(KDialog::spacingHint());
 
   trigstyle = new QRadioButton(i18n("Trigonometry mode"),stylegroup,"trigstyle");
   grid2->addWidget(trigstyle,0,0);

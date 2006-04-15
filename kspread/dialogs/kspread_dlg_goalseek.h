@@ -33,13 +33,13 @@
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QLabel>
-#include <Q3GridLayout>
+#include <QGridLayout>
 #include <Q3Frame>
 #include <QEvent>
 #include <QCloseEvent>
 
 class Q3Frame;
-class Q3GridLayout;
+class QGridLayout;
 class QHBoxLayout;
 class QLabel;
 class QLineEdit;
@@ -75,9 +75,9 @@ class GoalSeekDialog : public KDialog
  protected:
   virtual void closeEvent ( QCloseEvent * );
 
-  Q3GridLayout * GoalSeekDialogLayout;
-  Q3GridLayout * m_startFrameLayout;
-  Q3GridLayout * m_resultFrameLayout;
+  QGridLayout * GoalSeekDialogLayout;
+  QGridLayout * m_startFrameLayout;
+  QGridLayout * m_resultFrameLayout;
 
  private:
   View * m_pView;

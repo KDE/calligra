@@ -34,7 +34,7 @@
 #include <qlayout.h>
 #include <qpushbutton.h>
 //Added by qt3to4:
-#include <Q3GridLayout>
+#include <QGridLayout>
 #include <Q3ValueList>
 #include <QCloseEvent>
 #include <Q3ListBox>
@@ -67,7 +67,7 @@ ConsolidateDialog::ConsolidateDialog( View* parent, const char* name )
   QWidget* page = new QWidget( this );
   setMainWidget( page );
 
-  Q3GridLayout *grid1 = new Q3GridLayout( page, 12, 2, marginHint(), spacingHint() );
+  QGridLayout *grid1 = new QGridLayout( page, 12, 2, marginHint(), spacingHint() );
 
   QLabel* tmpQLabel;
   tmpQLabel = new QLabel( page, "Label_1" );

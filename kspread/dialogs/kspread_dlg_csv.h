@@ -28,11 +28,11 @@
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QLabel>
-#include <Q3GridLayout>
+#include <QGridLayout>
 
 class QVBoxLayout;
 class QHBoxLayout;
-class Q3GridLayout;
+class QGridLayout;
 class Q3ButtonGroup;
 class QComboBox;
 class QCheckBox;
@@ -79,10 +79,10 @@ class CSVDialog : public KDialogBase
  private:
   View* m_pView;
 
-  Q3GridLayout* MyDialogLayout;
+  QGridLayout* MyDialogLayout;
   QHBoxLayout* Layout1;
-  Q3GridLayout* m_delimiterBoxLayout;
-  Q3GridLayout* m_formatBoxLayout;
+  QGridLayout* m_delimiterBoxLayout;
+  QGridLayout* m_formatBoxLayout;
   Q3Table* m_sheet;
   Q3ButtonGroup* m_delimiterBox;
   QRadioButton* m_radioComma;

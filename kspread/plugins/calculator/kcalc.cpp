@@ -32,7 +32,7 @@
 //Added by qt3to4:
 #include <QPixmap>
 #include <QCloseEvent>
-#include <Q3GridLayout>
+#include <QGridLayout>
 #include <Q3PtrList>
 #include <QKeyEvent>
 #include <Q3Frame>
@@ -381,10 +381,12 @@ QtCalculator :: QtCalculator( Calculator *_corba, QWidget *parent, const char *n
     connect( pbmod, SIGNAL(toggled(bool)), SLOT(pbmodtoggled(bool)));
     pbmod->setToggleButton(TRUE);
 
-    Q3GridLayout *smallBtnLayout = new Q3GridLayout(mSmallPage, 6, 3, 0,
-                                                  mInternalSpacing);
-    Q3GridLayout *largeBtnLayout = new Q3GridLayout(mLargePage, 5, 6, 0,
-                                                  mInternalSpacing);
+    QGridLayout *smallBtnLayout = new QGridLayout(mSmallPage);
+    smallBtnLayout->setMargin(0);
+    smallBtnLayout->setSpacing(mInternalSpacing);
+    QGridLayout *largeBtnLayout = new QGridLayout(mLargePage);
+    largeBtnLayout->setMargin(0);
+    largeBtnLayout->setSpacing(mInternalSpacing);
 
     QHBoxLayout *topLayout		= new QHBoxLayout();
     QHBoxLayout *radioLayout	= new QHBoxLayout();
@@ -1478,7 +1480,7 @@ void QtCalculator::configclicked(){
   Q3GroupBox *box = new Q3GroupBox(0,Qt::Vertical,about,"box");
   box->layout()->setSpacing(KDialog::spacingHint());
   box->layout()->setMargin(KDialog::marginHint());
-  Q3GridLayout *grid1 = new Q3GridLayout(box->layout(),2,2);
+  QGridLayout *grid1 = new QGridLayout(box->layout());
   QLabel  *label = new QLabel(box,"label");
   QLabel  *label2 = new QLabel(box,"label2");
 

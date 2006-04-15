@@ -33,7 +33,7 @@
 #include <qscrollbar.h>
 
 //Added by qt3to4:
-#include <Q3GridLayout>
+#include <QGridLayout>
 #include <QLabel>
 
 #include <kconfig.h>
@@ -788,7 +788,7 @@ configureLayoutPage::configureLayoutPage( View* _view,KVBox *box , char *name )
   tmpQGroupBox->layout()->setSpacing(KDialog::spacingHint());
   tmpQGroupBox->layout()->setMargin(KDialog::marginHint());
 
-  Q3GridLayout *grid1 = new Q3GridLayout(tmpQGroupBox->layout(),8,1);
+  QGridLayout *grid1 = new QGridLayout(tmpQGroupBox->layout());
   grid1->addRowSpacing( 0, KDialog::marginHint()  );
   grid1->setRowStretch( 7, 10 );
 

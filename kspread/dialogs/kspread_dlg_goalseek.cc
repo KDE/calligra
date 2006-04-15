@@ -51,7 +51,7 @@
 #include <q3whatsthis.h>
 //Added by qt3to4:
 #include <QVBoxLayout>
-#include <Q3GridLayout>
+#include <QGridLayout>
 #include <QEvent>
 #include <QCloseEvent>
 
@@ -79,12 +79,12 @@ GoalSeekDialog::GoalSeekDialog( View * parent,  QPoint const & marker,
   setCaption( i18n( "Goal Seek" ) );
   setSizeGripEnabled( true );
 
-  GoalSeekDialogLayout = new Q3GridLayout( this, 1, 1, 11, 6, "GoalSeekDialogLayout");
+  GoalSeekDialogLayout = new QGridLayout( this, 1, 1, 11, 6, "GoalSeekDialogLayout");
 
   m_startFrame = new Q3Frame( this, "m_startFrame" );
   m_startFrame->setFrameShape( Q3Frame::StyledPanel );
   m_startFrame->setFrameShadow( Q3Frame::Raised );
-  m_startFrameLayout = new Q3GridLayout( m_startFrame, 1, 1, 11, 6, "m_startFrameLayout");
+  m_startFrameLayout = new QGridLayout( m_startFrame, 1, 1, 11, 6, "m_startFrameLayout");
 
   QLabel * TextLabel4 = new QLabel( m_startFrame, "TextLabel4" );
   TextLabel4->setText( i18n( "To value:" ) );
@@ -136,7 +136,7 @@ GoalSeekDialog::GoalSeekDialog( View * parent,  QPoint const & marker,
   m_resultFrame->setFrameShape( Q3Frame::StyledPanel );
   m_resultFrame->setFrameShadow( Q3Frame::Raised );
   m_resultFrame->setMinimumWidth( 350 );
-  m_resultFrameLayout = new Q3GridLayout( m_resultFrame, 1, 1, 11, 6, "m_resultFrameLayout");
+  m_resultFrameLayout = new QGridLayout( m_resultFrame, 1, 1, 11, 6, "m_resultFrameLayout");
 
   m_currentValueLabel = new QLabel( m_resultFrame, "m_currentValueLabel" );
   m_currentValueLabel->setText( i18n( "Current value:" ) );
