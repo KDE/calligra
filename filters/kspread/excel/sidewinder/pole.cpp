@@ -141,7 +141,7 @@ class StorageIO
     AllocTable* bbat;         // allocation table for big blocks
     AllocTable* sbat;         // allocation table for small blocks
     
-    int lastBlockIndex;         // last read, for simple caching
+    unsigned long lastBlockIndex;         // last read, for simple caching
     unsigned char* lastBlockData;
     
     std::vector<unsigned long> sb_blocks; // blocks for "small" files
@@ -810,7 +810,7 @@ StorageIO::~StorageIO()
 {
   if( opened ) close();
   
-  delete lastBlockData;
+  delete [] lastBlockData;
   delete sbat;
   delete bbat;
   delete dirtree;
