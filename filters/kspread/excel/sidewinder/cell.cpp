@@ -34,15 +34,17 @@ public:
   Sheet* sheet;
   unsigned column;  
   unsigned row;     
-  Value value;
   UString formula;
-  Format format;
+  Value value;
+  Format* format;
+  int formatIndex;
   unsigned columnSpan;
   unsigned rowSpan;
 
   static UString columnNames[256];
 
-  CellPrivate(unsigned column, unsigned row);  
+  CellPrivate(Sheet* s, unsigned column, unsigned row);  
+  ~CellPrivate() { delete format; }
 };
 
 }
@@ -52,14 +54,14 @@ using namespace Swinder;
 UString CellPrivate::columnNames[256];
 
   
-CellPrivate::CellPrivate(unsigned c, unsigned r):
-sheet(0), column(c), row(r), columnSpan(0), rowSpan(0)
+CellPrivate::CellPrivate(Sheet* s, unsigned c, unsigned r):
+sheet(s), column(c), row(r), format(0), formatIndex(-1), columnSpan(0), rowSpan(0)
 {
 }
 
 Cell::Cell( Sheet* sheet, unsigned column, unsigned row )
 {
-  d = new CellPrivate(column, row);
+  d = new CellPrivate(sheet, column, row);
 }
 
 Cell::~Cell()
@@ -149,7 +151,7 @@ UString Cell::columnLabel( unsigned column )
   return label;
 }
 
-Value Cell::value() const
+const Value& Cell::value() const
 {
   return d->value;
 }
@@ -159,7 +161,7 @@ void Cell::setValue( const Value& value )
   d->value = value;
 }
 
-UString Cell::formula() const
+const UString& Cell::formula() const
 {
   return d->formula;
 }
@@ -169,14 +171,30 @@ void Cell::setFormula( const UString& formula )
   d->formula = formula;
 }
 
+int Cell::formatIndex() const
+{
+  return d->formatIndex;
+}
+
+void Cell::setFormatIndex( int index )
+{
+  d->formatIndex = index;
+}
+
 Format Cell::format() const
 {
-  return d->format;
+  if(!d->format)
+    d->format = new Format();
+    
+  return Format(*d->format);
 }
 
 void Cell::setFormat( const Format& format )
 {
-  d->format = format;
+  if(!d->format)
+    d->format = new Format();
+    
+  (*d->format) = format;
 }
 
 unsigned Cell::columnSpan() const
