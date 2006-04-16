@@ -1,4 +1,5 @@
 kde4_header()
+project(kexi)
 
 add_subdirectory( 3rdparty )
 add_subdirectory( kexiutils )

@@ -1,5 +1,5 @@
 kde4_header()
-
+project(kugar)
 include_directories( ${CMAKE_SOURCE_DIR}/libs/ )
 
 set(libkudesignercommon_SRCS 

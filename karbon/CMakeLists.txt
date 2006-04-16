@@ -1,4 +1,5 @@
 kde4_header()
+project(karbon)
 
 add_subdirectory( commands )
 add_subdirectory( visitors )
