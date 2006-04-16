@@ -24,7 +24,6 @@
 #include <qlineedit.h>
 #include <qpaintdevice.h>
 #include <qrect.h>
-#include <qvbuttongroup.h>
 #include <qwidget.h>
 //Added by qt3to4:
 #include <Q3VBoxLayout>
@@ -88,10 +87,12 @@ void ExportSizeDia::setupGUI()
 
     QLabel* width = new QLabel( page, "width" );
     width->setText( i18n( "Width:" ) );
-    m_widthEdit = new KIntNumInput( page, "widthEdit" );
+    m_widthEdit = new KIntNumInput( page );
+	m_widthEdit->setObjectName("widthEdit" );
     QLabel* height = new QLabel( page, "height" );
     height->setText( i18n( "Height:" ) );
-    m_heightEdit = new KIntNumInput( page, "heightEdit" );
+    m_heightEdit = new KIntNumInput( page );
+	m_heightEdit->setObjectName("heightEdit" );
 
     mainLayout->addWidget( width,      1, 0 );
     mainLayout->addWidget( m_widthEdit,  1, 1 );
@@ -100,10 +101,12 @@ void ExportSizeDia::setupGUI()
 
     QLabel* percentWidth = new QLabel( page, "PercentWidth" );
     percentWidth->setText( i18n( "Width (%):" ) );
-    m_percWidthEdit = new KDoubleNumInput( page, "percWidthEdit" );
+    m_percWidthEdit = new KDoubleNumInput( page);
+	m_percWidthEdit->setObjectName("percWidthEdit" );
     QLabel* percentHeight = new QLabel( page, "PercentHeight" );
     percentHeight->setText( i18n( "Height (%):" ) );
-    m_percHeightEdit = new KDoubleNumInput( page, "percHeightEdit" );
+    m_percHeightEdit = new KDoubleNumInput( page);
+	m_percHeightEdit->setObjectName( "percHeightEdit" );
 
     mainLayout->addWidget( percentWidth,   3, 0 );
     mainLayout->addWidget( m_percHeightEdit, 3, 1 );
@@ -172,8 +175,8 @@ void ExportSizeDia::heightChanged( int height )
 void ExportSizeDia::percentWidthChanged( double percent )
 {
     disconnectAll();
-    percent = qMin( percent, 1000 );
-    percent = qMax( percent, 10 );
+    percent = qMin( percent, 1000.0 );
+    percent = qMax( percent, 10.0 );
     int width = static_cast<int>( m_realWidth * percent / 100. );
     m_widthEdit->setValue(  width  );
     if ( m_proportional->isChecked() ) {
@@ -188,8 +191,8 @@ void ExportSizeDia::percentWidthChanged( double percent )
 void ExportSizeDia::percentHeightChanged( double percent )
 {
     disconnectAll();
-    percent = qMin( percent, 1000 );
-    percent = qMax( percent, 10 );
+    percent = qMin( percent, 1000.0 );
+    percent = qMax( percent, 10.0 );
     if ( m_proportional->isChecked() ) {
         int width = static_cast<int>( m_realWidth * percent / 100. );
         m_widthEdit->setValue(  width  );
