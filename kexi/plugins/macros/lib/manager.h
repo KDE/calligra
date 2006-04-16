@@ -167,13 +167,24 @@ namespace KoMacro {
 			*/
 			KSharedPtr<Action> createAction(const QDomElement& element);
 
+			/**
+			* @return the @a Action which was published under the
+			* name @p name or returns an empty @a Action::Ptr object
+			* if there was no such @a Action published.
+			*/
+			KSharedPtr<Action> action(const QString& name) const;
 
+			/**
+			* Publish the @a Action @p action . The published @a Action
+			* will be accessible via it's unique name.
+			*/
+			void publishAction(KSharedPtr<Action> action);
 
 			/**
 			* Publish the passed QObject @p object. Those object will
 			* provide it's slots as callable functions.
 			*/
-			bool publishObject(const QString& name, QObject* object);
+			void publishObject(const QString& name, QObject* object);
 
 			/**
 			* @return the publish QObject defined with name @p name

@@ -102,6 +102,26 @@ namespace KoMacro {
 			virtual ~Variable();
 
 			/**
+			* @return the name this @a Variable has.
+			*/
+			QString name() const;
+
+			/**
+			* Set the name this @a Variable has.
+			*/
+			void setName(const QString& name);
+
+			/**
+			* @return the caption this @a Variable has.
+			*/
+			QString caption() const;
+
+			/**
+			* Set the caption this @a Variable has.
+			*/
+			void setCaption(const QString& caption);
+
+			/**
 			* Set the QObject @p object this variable has. A 
 			* previously remembered value will be overwritten and 
 			* the new type is a @a TypeObject .

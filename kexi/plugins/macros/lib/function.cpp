@@ -69,7 +69,7 @@ Function::Function(Manager* const manager, const QDomElement& element)
 	: Action(manager, element)
 	, d( new Private() ) // create the private d-pointer instance.
 {
-	//kdDebug() << "Function::Function()" << endl;
+	kdDebug() << "Function::Function()" << endl;
 
 	// each function points to a receiver and a slot.
 	d->receiver = element.attribute("receiver");
@@ -78,29 +78,29 @@ Function::Function(Manager* const manager, const QDomElement& element)
 
 	// Iterate through the list of child-nodes. The child-nodes provides us e.g.
 	// optional arguments.	
-	Variable::List variables;
-	Variable::Ptr returnvalue;
+	int argcounter = 1;
 	QDomNode node = element.firstChild();
 	while(! node.isNull()) {
 		QDomElement e = node.toElement(); // try to convert the node to an element.
 		if(! e.isNull()) { // be sure we have a valid element.
-
 			if(e.tagName() == "argument") { // an argument
 				// Append a new variable to our list of arguments.
-				variables.append( new Variable(e) ); // fill the list of arguments.
+				Variable* v = new Variable(e);
+				v->setName( QString::number(argcounter) );
+				this->setVariable(v);
+				argcounter++;
 			}
 			else if(e.tagName() == "return") { // the returnvalue
-				returnvalue = new Variable(e);
+				Variable* v = new Variable(e);
+				v->setName("0");
+				this->setVariable(v);
+				
 			}
 			//else throw Exception(QString("Invalid tagname '%1'").arg(e.tagName()), "KoMacro::Function::Function");
 
 		}
 		node = node.nextSibling();
 	}
-	// the returnvalue is always the first item in the variables-list!
-	variables.prepend(returnvalue);
-	// set the variables
-	this->setVariables(variables);
 }
 
 Function::~Function()
@@ -168,27 +168,30 @@ void Function::activate(Context::Ptr context)
 	try {
 		// First we build a list of variables passed to the invoke as arguments.
 		Variable::List variables;
-		Variable::List v = this->variables(); // cache the list for the iteration
-		for(Variable::List::Iterator it = v.begin(); it != v.end(); ++it) {
-			if(*it) {
-				// Look for variables.
-				if( (*it)->type() == MetaParameter::TypeVariant ) {
-					QString s = (*it)->toString();
-					if(s.startsWith("$")) {
-						// If the content is a variable we try to read the
-						// variable from the context.
-						Variable::Ptr v = context->variable(s);
-						/*if(!v) {
-							 throw Exception(QString("No such variable: %1").arg(s), "Function::activate");
-						}*/
-						variables.append(v);
-						continue; // variable successfully handled.
-					}
+		Variable::Map varmap = this->variables();
+		variables.append( varmap["0"] );
+
+		for(int i = 1; true; i++) {
+			Variable::Ptr var = varmap[ QString::number(i) ];
+			if(! var.data())
+				break;
+
+			// Look for variables.
+			if( var->type() == MetaParameter::TypeVariant ) {
+				QString s = var->toString();
+				if(s.startsWith("$")) {
+					// If the content is a variable we try to read the
+					// variable from the context.
+					Variable::Ptr v = context->variable(s);
+					/*if(!v) {
+						 throw Exception(QString("No such variable: %1").arg(s), "Function::activate");
+					}*/
+					variables.append(v);
+					continue; // variable successfully handled.
 				}
 			}
 
-			// append the variable.
-			variables.append( *it );
+			variables.append(var);
 		}
 
 		// Now invoke the method.
@@ -200,18 +203,19 @@ void Function::activate(Context::Ptr context)
 		);
 
 		// Look if the returnvalue is a variable.
-		Variable::Ptr rv = this->variables().first();
-		const QString rvname = rv ? rv->toString() : QString::null;
-		if(rvname.startsWith("$")) {
+		Variable::Ptr rv = this->variable("0");
+		const QString rvvalue = rv ? rv->toString() : QString::null;
+		if(rvvalue.startsWith("$")) {
 			// the returnvalue is a variable... so, just remember it in the context.
-			context->setVariable(rvname, returnvalue);
+			context->setVariable(rvvalue, returnvalue);
 		}
 		else {
 			// the first item in the list of variables is always the returnvalue.
-			this->variables().first() = returnvalue;
+//this->setVariable("0", returnvalue);
+			this->setVariable(returnvalue);
 		}
 
-		kdDebug() << "Function::activate(Context::Ptr) return=" << rvname << " value=" << returnvalue->toString() << endl;
+		kdDebug() << "Function::activate(Context::Ptr) return=" << rvvalue << " value=" << returnvalue->toString() << endl;
 		emit activated(); // job done.
 	}
 	catch(Exception& e) {

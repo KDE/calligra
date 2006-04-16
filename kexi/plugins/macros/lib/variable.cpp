@@ -35,6 +35,17 @@ namespace KoMacro {
 		public:
 
 			/**
+			 * The name this @a Variable has.
+			 */
+			QString name;
+
+			/**
+			 * The i18n-caption used for display purposes only
+			 * this @a Variable has.
+			 */
+			QString caption;
+
+			/**
 			* If @a Variable::Type is @a Variable::TypeVariant this QVariant
 			* holds the value else it's invalid.
 			*/
@@ -104,6 +115,26 @@ Variable::Variable(const QDomElement& element)
 Variable::~Variable()
 {
 	delete d;
+}
+
+QString Variable::name() const
+{
+	return d->name;
+}
+
+void Variable::setName(const QString& name)
+{
+	d->name = name;
+}
+
+QString Variable::caption() const
+{
+	return d->caption;
+}
+
+void Variable::setCaption(const QString& caption)
+{
+	d->caption = caption;
 }
 
 const QVariant Variable::variant() const

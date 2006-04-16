@@ -53,10 +53,10 @@ namespace KoMacro {
 			bool blocking;
 
 			/**
-			 * A list of @a Variable instances this @a Action
-			 * provides.
+			 * A map of @a Variable instances this @a Action
+			 * provides accessible by there QString name.
 			 */
-			Variable::List variables;
+			Variable::Map variables;
 
 			/**
 			* Cached QDomElement.
@@ -76,6 +76,15 @@ namespace KoMacro {
 
 }
 
+Action::Action()
+	: KAction()
+	, KShared()
+	, d( new Private(Manager::self()) ) // create the private d-pointer instance.
+		//TODO remove Manager references!
+{
+	kdDebug() << "Action::Action() Ctor" << endl;
+}
+
 Action::Action(Manager* const manager, const QDomElement& element)
 	: KAction()
 	, KShared()
@@ -93,7 +102,6 @@ Action::Action(Manager* const manager, const QDomElement& element)
 	//setToolTip( element.attribute("tooltip") );
 
 	d->element = element;
-
 	//kdDebug() << QString("Action::Action() name=\"%1\"").arg(name) << endl;
 }
 
@@ -135,14 +143,21 @@ void Action::setBlocking(bool blocking)
 	d->blocking = blocking;
 }
 
-Variable::List Action::variables() const
+Variable::Ptr Action::variable(const QString& name) const
+{
+	return d->variables[name];
+}
+
+Variable::Map Action::variables() const
 {
 	return d->variables;
 }
 
-void Action::setVariables(Variable::List variables)
+void Action::setVariable(Variable::Ptr variable)
 {
-	d->variables = variables;
+	const QString name = variable->name();
+	Q_ASSERT(! d->variables.contains(name));
+	d->variables.replace(name, variable);
 }
 
 const QDomElement Action::domElement() const

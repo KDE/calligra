@@ -213,6 +213,7 @@ void CommonTests::testAction()
 
 void CommonTests::testFunction()
 {
+/*
 	kdDebug()<<"===================== testFunction() ======================" << endl;
 	
 	//create a QDomDocument	
@@ -327,10 +328,12 @@ void CommonTests::testFunction()
 	//check returnvalue
 	//func->setReturnValue(new KoMacro::Variable("54321"));
 	//KOMACROTEST_ASSERT( func->returnValue()->toString(), QString("54321") );
+*/
 }
 
 void CommonTests::testIntFunction() 
 {
+/*
 	kdDebug()<<"===================== testIntFunction() ======================" << endl;
 
 	//create a QDomDocument	
@@ -354,10 +357,12 @@ void CommonTests::testIntFunction()
 	func->activate();
 	//Check returnvalue is same value we entered
 	//KOMACROTEST_ASSERT(func->returnValue()->toString(),QString("12345"));
+*/
 }
 
 void CommonTests::testDoubleFunction() 
 {
+/*
 	kdDebug()<<"===================== testDoubleFunction() ======================" << endl;
 
 	//create a QDomDocument		
@@ -381,10 +386,12 @@ void CommonTests::testDoubleFunction()
 	func->activate();
 	//Check returnvalue is same value we entered
 	//KOMACROTEST_ASSERT(func->returnValue()->toString(),QString("12.56"));
+*/
 }
 
 void CommonTests::testQStringFunction() 
 {
+/*
 	kdDebug()<<"===================== testQStringFunction() ======================" << endl;
 
 	//create a QDomDocument		
@@ -406,6 +413,7 @@ void CommonTests::testQStringFunction()
 	//execute the function		func->activate();
 	//Check returnvalue is same value we entered
 	//KOMACROTEST_ASSERT(func->returnValue()->toString(),QString("Some string"));
+*/
 }
 
 void CommonTests::testMacro()
@@ -420,7 +428,7 @@ void CommonTests::testMacro()
 		"<macro name=\"mymacro\" icon=\"myicon\" text=\"My Macro\" comment=\"Some comment to describe the Macro.\">"
 			"<action name=\"myaction\" text=\"My Action\" comment=\"Just some comment\" />"
 			"<function name=\"myfunc\" text=\"My Function\" comment=\"Describe what the function does\" receiver=\"TestObject\" slot=\"myslot(const QString &amp;)\">"
-	"<argument>The myfunc argument string</argument>"
+				"<argument>The myfunc argument string</argument>"
 			"</function>"
 		"</macro>"
 	));
@@ -429,9 +437,9 @@ void CommonTests::testMacro()
 	KSharedPtr<KoMacro::Action> macroptr = ::KoMacro::Manager::self()->createAction( domdocument.documentElement() );
 	//cast data to Macro
 	KoMacro::Macro* macro = dynamic_cast<KoMacro::Macro*>( macroptr.data() );
-		//check that it is not null
+	//check that it is not null
 	KOMACROTEST_XASSERT((int) macro, 0);
-		
+
 	//check that domeElement given to manager is the sam as in the macro
 	KOMACROTEST_ASSERT( macro->domElement(), domdocument.documentElement() );
 	//check the name

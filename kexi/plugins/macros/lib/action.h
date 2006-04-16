@@ -28,12 +28,13 @@
 // Forward declarations.
 class QDomElement;
 
+#include "manager.h"
 #include "context.h"
 
 namespace KoMacro {
 
 	// Forward declarations.
-	class Manager;
+	//class Manager;
 
 	/**
 	 * The Action class extendes KAction to implement some additional
@@ -60,11 +61,18 @@ namespace KoMacro {
 
 			/**
 			* Constructor.
+			*/
+			explicit Action();
+
+			/**
+			* Constructor.
 			*
 			* @param manager The @a Manager instance this @a Action
 			* belongs to.
 			* @param element The QDomElement used to fill the
 			* @a Action .
+			*
+			* @deprecated Use the Action() ctor above!
 			*/
 			Action(Manager* const manager, const QDomElement& element);
 
@@ -113,14 +121,22 @@ namespace KoMacro {
 			//void setVariable(const QString& name, Variable::Ptr) const;
 
 			/**
-			* @return the list of variables this @a Action provides.
+			* @return the variable @a Variable defined for the
+			* name @p name . If there exists no @a Variable with
+			* such a name, NULL is returned.
 			*/
-			Variable::List variables() const;
+			Variable::Ptr variable(const QString& name) const;
 
 			/**
-			 * Set the list of variables this @a Action provides.
+			* @return the map of variables this @a Action provides.
+			*/
+			Variable::Map variables() const;
+
+			/**
+			 * Append the @a Variable @p variable to list of variables
+			 * this @a Action provides.
 			 */
-			void setVariables(Variable::List variables);
+			void setVariable(Variable::Ptr variable);
 
 			/**
 			* @return this instance as serialized QDomElement.
@@ -152,6 +168,34 @@ namespace KoMacro {
 			class Private;
 			/// @internal d-pointer instance.
 			Private* const d;
+	};
+
+	template<class ACTIONIMPL>
+	class GenericAction : public Action
+	{
+		protected:
+
+			/**
+			* A list of @a Variable instances this @a Action
+			* provides.
+			*/
+			//Variable::List varlist;
+
+		public:
+
+			/**
+			* Constructor.
+			*/
+			GenericAction(const QString& name, Manager* const manager, const QDomElement& element)
+				: Action(manager, element)
+			{
+				// Set the name this Action will be reachable as.
+				setName(name);
+
+				// Publish this action.
+				manager->publishAction( Action::Ptr(this) );
+			}
+
 	};
 
 }

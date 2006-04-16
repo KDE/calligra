@@ -42,6 +42,7 @@ namespace KoMacro {
 		public:
 			KXMLGUIClient* const xmlguiclient;
 			QMap<QString, Macro::Ptr> macros;
+			QMap<QString, Action::Ptr > actions;
 			QMap<QString, QGuardedPtr<QObject> > objects;
 
 			Private(KXMLGUIClient* const xmlguiclient)
@@ -71,12 +72,14 @@ void Manager::init(KXMLGUIClient* xmlguiclient)
 
 Manager* Manager::self()
 {
+	//Q_ASSERT(_self);
 	return _self;
 }
 
 Manager::Manager(KXMLGUIClient* const xmlguiclient)
 	: d( new Private(xmlguiclient) ) // create the private d-pointer instance.
 {
+	kdDebug() << "Manager::Manager() Ctor" << endl;
 	QObject* obj = dynamic_cast<QObject*>(xmlguiclient);
 	if(obj) {
 		d->objects.replace(obj->name(), obj);
@@ -131,7 +134,7 @@ Action::Ptr Manager::createAction(const QDomElement& element)
 	Action* action = 0;
 	QString tagname = element.tagName();
 
-	//kdDebug() << QString("Manager::createAction() tagname=\"%1\"").arg(tagname) << endl;
+	kdDebug() << QString("Manager::createAction() tagname=\"%1\"").arg(tagname) << endl;
 
 	if(tagname == "action") {
 		action = new Action(this, element);
@@ -147,17 +150,25 @@ Action::Ptr Manager::createAction(const QDomElement& element)
 		kdWarning() << s << endl;
 		throw Exception(s, "KoMacro::Manager::createAction(const QDomElement&)");
 	}
-
+kdDebug() << "..4" << endl;
 	return action;
 }
 
-bool Manager::publishObject(const QString& name, QObject* object)
+Action::Ptr Manager::action(const QString& name) const
 {
-	if(d->objects.contains(name)) {
-		return false;
-	}
+	return d->actions[name];
+}
+
+void Manager::publishAction(Action::Ptr action)
+{
+	Q_ASSERT(! d->actions.contains(action->name()));
+	d->actions.replace(action->name(), action);
+}
+
+void Manager::publishObject(const QString& name, QObject* object)
+{
+	Q_ASSERT(! d->objects.contains(name));
 	d->objects.replace(name, object);
-	return true;
 }
 
 QGuardedPtr<QObject> Manager::object(const QString& name) const
