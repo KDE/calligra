@@ -78,7 +78,7 @@ KoFilter::ConversionStatus KisTIFFExport::convert(const QByteArray& from, const 
     
     if (filename.isEmpty()) return KoFilter::FileNotFound;
 
-    KURL url;
+    KUrl url;
     url.setPath(filename);
 
     KisImageSP img;
@@ -86,8 +86,8 @@ KoFilter::ConversionStatus KisTIFFExport::convert(const QByteArray& from, const 
     if(options.flatten)
     {
         img = new KisImage(0, output->currentImage()->width(), output->currentImage()->height(), output->currentImage()->colorSpace(), "");
-        KisPaintDeviceSP pd = new KisPaintDevice(*output->currentImage()->projection());
-        KisPaintLayerSP l = new KisPaintLayer(img, "projection", OPACITY_OPAQUE, pd);
+        KisPaintDeviceSP pd = KisPaintDeviceSP(new KisPaintDevice(*output->currentImage()->projection()));
+        KisPaintLayerSP l = KisPaintLayerSP(new KisPaintLayer(img, "projection", OPACITY_OPAQUE, pd));
         img->addLayer(l.data(), img->rootLayer(), 0);
     } else {
         img = output->currentImage();

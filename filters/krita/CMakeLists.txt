@@ -10,11 +10,11 @@ include_directories(${KRITA_INCLUDES})
 #add_subdirectory( raw )
 
 if(JPEG_FOUND)
-#	add_subdirectory(jpeg)
+	add_subdirectory(jpeg)
 endif(JPEG_FOUND)
 
 if(TIFF_FOUND)
-#	add_subdirectory(tiff)
+	add_subdirectory(tiff)
 endif(TIFF_FOUND)		
 
 if(PNG_FOUND)
