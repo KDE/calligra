@@ -153,6 +153,10 @@ public:
   
   void setFormat( const Format& f );
   
+  void setFormatIndex( int index );
+  
+  int formatIndex() const;
+  
   bool visible() const;
   
   void setVisible( bool v );
@@ -187,6 +191,10 @@ public:
   const Format& format() const;
   
   void setFormat( const Format& f );
+  
+  void setFormatIndex( int index );
+  
+  int formatIndex() const;
   
   bool visible() const;
   
