@@ -9,6 +9,7 @@ set(kivioprivate_LIB_SRCS
   KivioFactory.cpp
   KivioDocument.cpp
   KivioView.cpp
+  KivioCanvas.cpp
 )
 
 kde4_automoc(${kivioprivate_LIB_SRCS})

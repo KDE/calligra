@@ -17,33 +17,27 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KIVIOVIEW_H
-#define KIVIOVIEW_H
+#include "KivioCanvas.h"
 
-#include <KoView.h>
+#include <QPaintEvent>
+#include <QPainter>
 
-class KivioCanvas;
+#include "KivioView.h"
 
-class KivioView : public KoView
+KivioCanvas::KivioCanvas(KivioView* parent)
+  : QWidget(parent)
 {
-  Q_OBJECT
+}
 
-  public:
-    KivioView(KoDocument* document, QWidget* parent, const char* name);
-    ~KivioView();
+KivioCanvas::~KivioCanvas()
+{
+}
 
-    /// Returns the canvas widget.
-    KivioCanvas* canvasWidget() const;
-    virtual QWidget* canvas() const;
+void KivioCanvas::paintEvent(QPaintEvent* event)
+{
+  QPainter painter(this);
+  painter.setBrush(Qt::white);
+  painter.fillRect(event->rect(), Qt::white);
+}
 
-    virtual void updateReadWrite(bool readwrite);
-
-  protected:
-    /// Creates and initializes the GUI.
-    void initGUI();
-
-  private:
-    KivioCanvas* m_canvas;
-};
-
-#endif
+#include "KivioCanvas.moc"
