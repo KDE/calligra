@@ -1,5 +1,5 @@
 /* Swinder - Portable library for spreadsheet
-   Copyright (C) 2003 Ariya Hidayat <ariya@kde.org>
+   Copyright (C) 2003-2006 Ariya Hidayat <ariya@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -3174,6 +3174,8 @@ private:
   Private* d;
 };
 
+typedef std::vector<UString> UStringStack;
+
 
 class ExcelReader
 {
@@ -3227,6 +3229,9 @@ private:
   Format convertFormat( unsigned xfIndex );
   UString decodeFormula( unsigned row, unsigned col, 
     const FormulaTokens& tokens, bool openDocumentFormat=false );
+  
+  void mergeTokens( UStringStack* stack, int count, char mergeChar );
+  void mergeTokens( UStringStack* stack, int count, const char* mergeString );
   
   // no copy or assign
   ExcelReader( const ExcelReader& );
