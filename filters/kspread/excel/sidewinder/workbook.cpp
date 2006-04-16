@@ -20,9 +20,11 @@
 #include "workbook.h"
 #include "sheet.h"
 #include "excel.h"
+#include "format.h"
 
 #include <iostream>
 #include <vector>
+#include <map>
 
 using namespace Swinder;
 
@@ -32,6 +34,7 @@ public:
   std::vector<Sheet*> sheets;
   bool autoCalc;
   bool passwordProtected;
+  std::map<int,Format> formats;
 };
 
 Workbook::Workbook()
@@ -90,6 +93,16 @@ bool Workbook::autoCalc() const
 void Workbook::setAutoCalc( bool a )
 {
   d->autoCalc = a;
+}
+
+void Workbook::setFormat( int index, const Format& format )
+{
+  d->formats[index] = format;
+}
+
+const Format& Workbook::format( int index ) const
+{
+  return d->formats[index];
 }
 
 bool Workbook::isPasswordProtected() const

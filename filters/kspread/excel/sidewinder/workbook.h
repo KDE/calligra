@@ -20,6 +20,8 @@
 #ifndef SWINDER_WORKBOOK_H
 #define SWINDER_WORKBOOK_H
 
+#include "format.h"
+
 namespace Swinder
 {
 
@@ -81,6 +83,9 @@ public:
   
   bool isPasswordProtected() const;  
   void setPasswordProtected( bool p );
+  
+  void setFormat(int index, const Format& format);
+  const Format& format(int index) const;
   
 private:
   // no copy or assign
