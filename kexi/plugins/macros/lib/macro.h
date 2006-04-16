@@ -31,6 +31,7 @@ namespace KoMacro {
 
 	// Forward declarations.
 	class Manager;
+	class MacroItem;
 	class XMLHandler;
 
 	/**
@@ -56,14 +57,8 @@ namespace KoMacro {
 
 			/**
 			* Constructor.
-			*
-			* @param parent The parent QObject instance that takes care of
-			* freeing this @a Macro instance if needed.
-			* @param element the QDomElement that contains the serialized
-			* values and optional a list of serialized @a Action instances
-			* that are children of this @a Macro instance.
 			*/
-			explicit Macro(Manager* const manager, const QDomElement& element = QDomElement());
+			explicit Macro(const QString& name);
 
 			/**
 			* Destructor.
@@ -75,6 +70,28 @@ namespace KoMacro {
 			*/
 			virtual const QString toString() const;
 
+			/**
+			* @return the @a MacroItem identified with @p name
+			* which is a children of this @a Macro . If there
+			* exists no such @a MacroItem with that name, NULL
+			* is returned.
+			*/
+			MacroItem* item(const QString& name) const;
+
+			/**
+			* @return a list of @a MacroItem instances which
+			* are children of this @a Macro .
+			*/
+			QValueList<MacroItem*> items() const;
+
+			/**
+			* Add a new @a MacroItem to
+			*/
+			MacroItem* addItem(const QString& name);
+
+
+
+#if 0
 			/**
 			* Add an @a Action instance to the list of children this
 			* Macro has.
@@ -102,6 +119,7 @@ namespace KoMacro {
 			* has.
 			*/
 			QValueList<Action::Ptr> children() const;
+#endif
 
 			/**
 			* Connect the Qt signal @p signal of the QObject @p sender

@@ -122,13 +122,11 @@ void Manager::removeMacro(const QString& macroname)
 
 Macro::Ptr Manager::createMacro(const QString& macroname)
 {
-	Q_UNUSED(macroname);
-	Macro::Ptr macro = Macro::Ptr( new Macro(this) );
+	Macro::Ptr macro = Macro::Ptr( new Macro(macroname) );
 	return macro;
 }
 
-
-
+/*
 Action::Ptr Manager::createAction(const QDomElement& element)
 {
 	Action* action = 0;
@@ -137,22 +135,23 @@ Action::Ptr Manager::createAction(const QDomElement& element)
 	kdDebug() << QString("Manager::createAction() tagname=\"%1\"").arg(tagname) << endl;
 
 	if(tagname == "action") {
-		action = new Action(this, element);
+		action = new Action("_action_");
 	}
 	else if(tagname == "function") {
-		action = new Function(this, element);
+		action = new Function("_function_");
 	}
 	else if(tagname == "macro") {
-		action = new Macro(this, element);
+		action = new Macro("_macro_");
 	}
 	else {
 		QString s = QString("Manager::createAction() Invalid tagname \"%1\"").arg(tagname);
 		kdWarning() << s << endl;
 		throw Exception(s, "KoMacro::Manager::createAction(const QDomElement&)");
 	}
-kdDebug() << "..4" << endl;
+
 	return action;
 }
+*/
 
 Action::Ptr Manager::action(const QString& name) const
 {

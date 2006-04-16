@@ -37,9 +37,9 @@ namespace KoMacro {
 		public:
 
 			/**
-			* The @a Manager instance this action belongs to.
+			* The name this @a Action has.
 			*/
-			Manager* const manager;
+			QString name;
 
 			/**
 			* The comment the user is able to define for each action.
@@ -66,9 +66,8 @@ namespace KoMacro {
 			/**
 			* Constructor.
 			*/
-			Private(Manager* const manager)
-				: manager(manager)
-				, blocking(true)
+			Private()
+				: blocking(true)
 			{
 			}
 
@@ -76,21 +75,15 @@ namespace KoMacro {
 
 }
 
-Action::Action()
+Action::Action(const QString& name)
 	: KAction()
 	, KShared()
-	, d( new Private(Manager::self()) ) // create the private d-pointer instance.
-		//TODO remove Manager references!
+	, d( new Private() ) // create the private d-pointer instance.
 {
-	kdDebug() << "Action::Action() Ctor" << endl;
-}
+	kdDebug() << "Action::Action() name=" << name << endl;
+	d->name = name;
 
-Action::Action(Manager* const manager, const QDomElement& element)
-	: KAction()
-	, KShared()
-	, d( new Private(manager) ) // create the private d-pointer instance.
-{
-
+/*
 	// We need a QCString. XML is always utf8, right?
 	QCString name = element.attribute("name").utf8();
 	setName( name );
@@ -103,6 +96,7 @@ Action::Action(Manager* const manager, const QDomElement& element)
 
 	d->element = element;
 	//kdDebug() << QString("Action::Action() name=\"%1\"").arg(name) << endl;
+*/
 }
 
 Action::~Action()
@@ -113,14 +107,14 @@ Action::~Action()
 	delete d;
 }
 
-Manager* const Action::manager() const
-{
-	return d->manager;
-}
-
 const QString Action::toString() const
 {
 	return QString("Action:%1").arg(name());
+}
+
+const QString Action::name() const
+{
+	return d->name;
 }
 
 const QString Action::comment() const
@@ -169,7 +163,8 @@ void Action::activate()
 {
 	kdDebug() << "Action::activate() name=" << name() << " text=" << text() << endl;
 
-	KAction* action = d->manager->guiClient()->action( name() );
+	QCString s = name().isNull() ? "" : name().latin1();
+	KAction* action = Manager::self()->guiClient()->action(s);
 	if(action) {
 		action->activate();
 	}
@@ -184,7 +179,8 @@ void Action::activate(Context::Ptr /*context*/)
 {
 	kdDebug() << "Action::activate(Context*) name=" << name() << " text=" << text() << endl;
 
-	KAction* action = d->manager->guiClient()->action( name() );
+	QCString s = name().isNull() ? "" : name().latin1();
+	KAction* action = Manager::self()->guiClient()->action( s );
 	if(! action) {
 		throw Exception(
 			QString("No such action \"%1\"").arg(name()),

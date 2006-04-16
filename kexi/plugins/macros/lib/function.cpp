@@ -65,12 +65,12 @@ namespace KoMacro {
 
 }
 
-Function::Function(Manager* const manager, const QDomElement& element)
-	: Action(manager, element)
+Function::Function(const QString& name)
+	: Action(name)
 	, d( new Private() ) // create the private d-pointer instance.
 {
-	kdDebug() << "Function::Function()" << endl;
-
+	kdDebug() << "Function::Function() name=" << name << endl;
+/*
 	// each function points to a receiver and a slot.
 	d->receiver = element.attribute("receiver");
 	QString slot = element.attribute("slot");
@@ -101,6 +101,7 @@ Function::Function(Manager* const manager, const QDomElement& element)
 		}
 		node = node.nextSibling();
 	}
+*/
 }
 
 Function::~Function()
@@ -131,7 +132,7 @@ MetaObject::Ptr Function::receiverObject()
 	if(! d->metaobject) {
 		QStringList list = QStringList::split("/", d->receiver);
 		QStringList::Iterator it = list.begin();
-		QObject* object = manager()->object( *it );
+		QObject* object = Manager::self()->object( *it );
 		for(++it; object && it != list.end(); ++it) {
 			if((*it).isNull()) {
 				object = 0;
@@ -158,13 +159,13 @@ void Function::setReceiverObject(MetaObject::Ptr metaobject)
 
 void Function::activate()
 {
-	Context::Ptr context = new Context(this);
-	activate(context);
+	kdDebug() << "Function::activate()" << endl;
+	activate(0);
 }
 
 void Function::activate(Context::Ptr context)
 {
-	//  kdDebug() << "Function::activate(Context::Ptr) try" << endl;
+	kdDebug() << "Function::activate(Context::Ptr)" << endl;
 	try {
 		// First we build a list of variables passed to the invoke as arguments.
 		Variable::List variables;
@@ -179,7 +180,7 @@ void Function::activate(Context::Ptr context)
 			// Look for variables.
 			if( var->type() == MetaParameter::TypeVariant ) {
 				QString s = var->toString();
-				if(s.startsWith("$")) {
+				if(s.startsWith("$") && context.data()) {
 					// If the content is a variable we try to read the
 					// variable from the context.
 					Variable::Ptr v = context->variable(s);
@@ -205,7 +206,7 @@ void Function::activate(Context::Ptr context)
 		// Look if the returnvalue is a variable.
 		Variable::Ptr rv = this->variable("0");
 		const QString rvvalue = rv ? rv->toString() : QString::null;
-		if(rvvalue.startsWith("$")) {
+		if(rvvalue.startsWith("$") && context.data()) {
 			// the returnvalue is a variable... so, just remember it in the context.
 			context->setVariable(rvvalue, returnvalue);
 		}

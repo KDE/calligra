@@ -18,6 +18,7 @@
  ***************************************************************************/
 
 #include "macro.h"
+#include "macroitem.h"
 #include "manager.h"
 #include "context.h"
 #include "variable.h"
@@ -41,17 +42,19 @@ namespace KoMacro {
 		public:
 
 			/**
-			* A map of @a Action instances that are children of this
-			* @a Macro instance.
+			* A map of @a MacroItem instances accessible
+			* by there unique name.
 			*/
-			QMap<QString, Action::Ptr> actionmap;
+			QMap<QString, MacroItem*> itemmap;
 
 			/**
-			* A list of @a Action instances that are children of this
-			* @a Macro instance.
+			* A list of @a MacroItem instances.
 			*/
-			QValueList<Action::Ptr> actionlist;
+			QValueList<MacroItem*> itemlist;
 
+			/**
+			*
+			*/
 			XMLHandler* xmlhandler;
 
 			Private()
@@ -68,12 +71,13 @@ namespace KoMacro {
 
 }
 
-Macro::Macro(Manager* const manager, const QDomElement& element)
-	: Action(manager, element)
+Macro::Macro(const QString& name)
+	: Action(name)
 	, d( new Private() ) // create the private d-pointer instance.
 {
 	//kdDebug() << "Macro::Macro(Manager*, QDomElement&)" << endl;
 
+/*
 	// Iterate through the child nodes the passed DOM node has and build
 	// recursivly a Macro tree.
 	QDomNode node = element.firstChild();
@@ -92,6 +96,7 @@ Macro::Macro(Manager* const manager, const QDomElement& element)
 		}
 		node = node.nextSibling();
 	}
+*/
 }
 
 Macro::~Macro()
@@ -106,6 +111,25 @@ const QString Macro::toString() const
 	return QString("Macro:%1").arg(name());
 }
 
+MacroItem* Macro::item(const QString& name) const
+{
+	return d->itemmap[name];
+}
+
+QValueList<MacroItem*> Macro::items() const
+{
+	return d->itemlist;
+}
+
+MacroItem* Macro::addItem(const QString& name)
+{
+	MacroItem* item = new MacroItem(this);
+	d->itemmap.replace(name, item);
+	d->itemlist.append(item);
+	return item;
+}
+
+/*
 void Macro::addChild(Action::Ptr action)
 {
 	if(! d->actionmap.contains( action->name() ))
@@ -127,6 +151,7 @@ QValueList<Action::Ptr> Macro::children() const
 {
 	return d->actionlist;
 }
+*/
 
 void Macro::connectSignal(const QObject* sender, const char* signal)
 {

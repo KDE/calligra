@@ -62,19 +62,7 @@ namespace KoMacro {
 			/**
 			* Constructor.
 			*/
-			explicit Action();
-
-			/**
-			* Constructor.
-			*
-			* @param manager The @a Manager instance this @a Action
-			* belongs to.
-			* @param element The QDomElement used to fill the
-			* @a Action .
-			*
-			* @deprecated Use the Action() ctor above!
-			*/
-			Action(Manager* const manager, const QDomElement& element);
+			explicit Action(const QString& name);
 
 			/**
 			* Destructor.
@@ -82,16 +70,15 @@ namespace KoMacro {
 			virtual ~Action();
 
 			/**
-			* @return the @a Manager instance this action is a
-			* child of.
-			*/
-			Manager* const manager() const;
-
-			/**
 			* @return a string representation of the functionality
 			* this action provides.
 			*/
 			virtual const QString toString() const;
+
+			/**
+			* The name this @a Action has.
+			*/
+			const QString name() const;
 
 			/**
 			* @return the comment associated with this action.

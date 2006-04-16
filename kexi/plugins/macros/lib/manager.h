@@ -152,8 +152,7 @@ namespace KoMacro {
 			*/
 			KSharedPtr<Macro> createMacro(const QString& macroname);
 
-
-
+#if 0
 			/**
 			* Factory method to create @a Action instances from the
 			* defined @p element .
@@ -163,9 +162,10 @@ namespace KoMacro {
 			* @return A new @a Action instance or NULL if the
 			* defined @p element is not valid.
 			*
-			* @deprecated Move to common XMLReader/XMLWriter classes.
+			* @deprecated Moved to common XMLReader/XMLWriter classes. Use Macro::xmlHandler() !
 			*/
 			KSharedPtr<Action> createAction(const QDomElement& element);
+#endif
 
 			/**
 			* @return the @a Action which was published under the

@@ -29,6 +29,9 @@
 
 namespace KoMacro {
 
+	// Forward declarations.
+	class Variable;
+
 	/**
 	* Class to provide abstract methods for the undocumented 
 	* Qt3 QUObject-API functionality.
@@ -110,6 +113,13 @@ namespace KoMacro {
 			* Set the @a MetaParameter::Type this variable is.
 			*/
 			void setVariantType(QVariant::Type varianttype);
+
+			/**
+			* @return true if the passed @a Variable @p variable is
+			* valid for this @a MetaParameter . Valid means, that
+			* the variable has a castable type.
+			*/
+			bool validVariable(KSharedPtr<Variable> variable) const;
 
 		protected:
 

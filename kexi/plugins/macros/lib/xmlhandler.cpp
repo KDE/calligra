@@ -18,6 +18,8 @@
  ***************************************************************************/
 
 #include "xmlhandler.h"
+#include "macro.h"
+#include "macroitem.h"
 
 #include <qdom.h>
 
@@ -109,22 +111,31 @@ QDomElement XMLHandler::toXML()
 	QDomDocument document;
 	// Create the Macro-QDomElement. This element will be returned.
 	QDomElement macroelem = document.createElement("macro");
-	// The children (aka actions) a Macro provides.
-	QValueList<Action::Ptr> children = d->macro->children();
+	// The list of MacroItem-children a Macro provides.
+	QValueList<MacroItem*> items = d->macro->items();
 	// Create an iterator...
-	QValueList<Action::Ptr>::Iterator childit = children.begin();
+	QValueList<MacroItem*>::Iterator it = items.begin();
 	// ...and iterate over the list of children the Macro provides.
-	for(;childit != children.end(); childit++) {
-		Action::Ptr action = *childit;
-		// The name the action has is used as tagname.
-		const QString tagname = action->name();
-		// Create a new QDomElement...
-		QDomElement actionelem = document.createElement(tagname);
+	for(;it != items.end(); it++) {
+		// We are iterating over MacroItem instances.
+		MacroItem* item = *it;
 
-		//TODO add action-specific attributes/child-nodes/etc.
+		//TODO we should build the XML out of the MacroItem and only
+		//include an action if one is defined.
 
-		// ...and append the new QDomElement as child to our Macro-QDomElement.
-		macroelem.appendChild(actionelem);
+		// Each MacroItem could contain an action.
+		Action::Ptr action = item->action();
+		if(action.data()) {
+			// The name the action has is used as tagname.
+			const QString tagname = action->name();
+			// Create a new QDomElement...
+			QDomElement actionelem = document.createElement(tagname);
+
+			//TODO add action-specific attributes/child-nodes/etc.
+
+			// ...and append the new QDomElement as child to our Macro-QDomElement.
+			macroelem.appendChild(actionelem);
+		}
 	}
 	return macroelem;
 }

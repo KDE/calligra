@@ -10,6 +10,7 @@ libkomacro_la_SOURCES = \
     metaobject.cpp \
     action.cpp \
     function.cpp \
+    macroitem.cpp \
     macro.cpp \
     context.cpp \
     xmlhandler.cpp \

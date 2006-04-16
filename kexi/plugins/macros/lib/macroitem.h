@@ -1,7 +1,7 @@
 /***************************************************************************
  * This file is part of the KDE project
- * copyright (C) 2005 by Sebastian Sauer (mail@dipe.org)
- * copyright (C) 2006 by Bernd Steindorff (bernd@itii.de)
+ * copyright (C) 2006 by Sebastian Sauer (mail@dipe.org)
+ * copyright (C) 2006 by Sascha Kupper (kusato@kfnv.de)
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -17,55 +17,48 @@
  * Boston, MA 02110-1301, USA.
  ***************************************************************************/
 
-#ifndef KOMACRO_XMLHANDLER_H
-#define KOMACRO_XMLHANDLER_H
+#ifndef KOMACRO_MACROITEM_H
+#define KOMACRO_MACROITEM_H
 
-#include "komacro_export.h"
+#include <qobject.h>
 
+//#include <kaction.h>
 #include <ksharedptr.h>
 
-class QObject;
+// Forward declarations.
 class QDomElement;
+
+#include "action.h"
+#include "context.h"
 
 namespace KoMacro {
 
-	// Forward declarations.
-	class Macro;
+	// Forward-declarations.
+	//class Action;
 
-	/**
-	* The XMLHandler class manages the (un-)serialization of
-	* a @a Macro instance to/from XML.
-	*/
-	class KOMACRO_EXPORT XMLHandler
+	class KOMACRO_EXPORT MacroItem : public QObject
 	{
+			Q_OBJECT
 		public:
 
-			/**
-			* Constructor to init a @a XMLHandler .
-			* @param macro The @a Macro instance which will
-			* be managed.
-			*/
-			XMLHandler(KSharedPtr<Macro> macro);
+			MacroItem(QObject* parent);
+			~MacroItem();
 
-			/**
-			* Destructor to @a XMLHandler .
-			*/
-			~XMLHandler();
+			QString comment() const;
+			void setComment(const QString& comment);
 
-			/**
-			* Reads a given @a QDomElement, extracts given
-			* Actions into the managed Macro-Instance.
-			* @param element The @a QDomElement within
-			* the @a Macro.
-			*/
-			bool fromXML(const QDomElement& element);
+			KSharedPtr<Action> action() const;
+			void setAction(KSharedPtr<Action> action);
 
-			/**
-			* Converts the macro to a @a QDomElement.
-			* @return The resulten @a QDomElement from
-			* the @a Macro.
-			*/
-			QDomElement toXML();
+			KSharedPtr<Variable> variable(const QString& name) const;
+			QMap<QString, KSharedPtr<Variable> > variables() const;
+			bool setVariable(const QString& name, KSharedPtr<Variable> variable);
+
+		public slots:
+			void activate() {}
+
+		signals:
+			void updated(QStringList ids);
 
 		private:
 			/// @internal d-pointer class.
@@ -73,6 +66,7 @@ namespace KoMacro {
 			/// @internal d-pointer instance.
 			Private* const d;
 	};
+
 }
 
 #endif

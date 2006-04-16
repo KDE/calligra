@@ -50,12 +50,9 @@ namespace KoMacro {
 			/**
 			* Constructor.
 			*
-			* @param manager The @a Manager instance this @a Function
-			* belongs to.
-			* @param element The QDomElement used to fill the
-			* @a Function .
+			* @param name The name this @a Function has.
 			*/
-			Function(Manager* const manager, const QDomElement& element);
+			Function(const QString& name);
 
 			/**
 			* Destructor.

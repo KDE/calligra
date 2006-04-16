@@ -20,6 +20,7 @@
 #include "context.h"
 #include "action.h"
 #include "macro.h"
+#include "macroitem.h"
 
 //#include <qtimer.h>
 #include <kdebug.h>
@@ -39,19 +40,19 @@ namespace KoMacro {
 			/**
 			* The @a Macro instance that owns this @a Context .
 			*/
-			Action::Ptr action;
+			Macro::Ptr macro;
 
 			/**
 			* List of @a Action instances that are children of the
 			* macro.
 			*/
-			QValueList<Action::Ptr> children;
+			QValueList<MacroItem*> items;
 
 			/**
 			* The iterator pointing to the @a Action instance that should
 			* be executed next.
 			*/
-			QValueList<Action::Ptr>::Iterator childit;
+			QValueList<MacroItem*>::Iterator itemit;
 
 			/**
 			* Map of all @a Variable instance that are defined within this
@@ -63,20 +64,16 @@ namespace KoMacro {
 
 }
 //Construktor with initialization of our d-pointer
-Context::Context(Action::Ptr action)
+Context::Context(Macro::Ptr macro)
 	: QObject()
 	, d( new Private() ) // create the private d-pointer instance.
 {
-	d->action = action;
-
-	//creat a Macro
-	Macro* macro = dynamic_cast<Macro*>( action.data() );
-	if(macro) {
-		//set d-pointer children to macro children
-	d->children = macro->children();
+	// remember the macro
+	d->macro = macro;
+	//set d-pointer children to macro children
+	d->items = macro->items();
 	//set d-pointer iterator on first child
-		d->childit = d->children.begin();
-	}
+	d->itemit = d->items.begin();
 }
 
 Context::~Context()
@@ -93,7 +90,7 @@ bool Context::hasVariable(const QString& name) const
 //return variable with name or throw an exception if none is found
 Variable::Ptr Context::variable(const QString& name) const
 {
-		if (! d->variables.contains(name)) {
+	if (! d->variables.contains(name)) {
 		throw Exception(QString("Variable name='%1' does not exist.").arg(name), QString("Komacro::Context::variable"));
 	}
 	return d->variables[name];
@@ -116,43 +113,49 @@ void Context::setVariable(const QString& name, Variable::Ptr variable)
 void Context::activate()
 {
 	kdDebug() << "Context::activate()" << endl;
+	//Q_ASSIGN(d->macro);
 
-	if(! d->action) {
-		kdDebug() << "Context::activate() no Action" << endl;
+	//check if the iterator reached the end.
+	if(d->itemit == d->items.end()) {
+		//if that's the case, just don't execute. Note, that this makes
+		//Context a one-execution only container.
 		return;
 	}
 
-	//cast macro from internal d-pointer
-	Macro* macro = dynamic_cast<Macro*>( d->action.data() );
-	//it really is a macro
-	if(macro) {
-	//walk trough children
-		if(d->childit != d->children.end()) {
-			//fetch an action
-			Action* action = (*d->childit).data();
-			//increment iterator
-			++d->childit;
-			if(! action) {
-				return; //abort if there stays no action.
-			}
-			if(action->isBlocking()) { // execution should be done synchron/blocking
-				//activate the action
-				action->activate(this);
-				//recursive call ourself to handle the next action.
-				activate();
-			}
-			else { // execution should be done asynchron/nonblocking
-				//connect action activated signal to our activate slot.
-				connect(action, SIGNAL(activated()), this, SLOT(activate()));
-				//QTimer::singleShot(1000, action, SLOT(activate())); //testcase
-				//activate the action
-				action->activate(this);
-			}
-		}
+	//fetch the MacroItem we like to handle.
+	MacroItem* item = (*d->itemit);
+
+	//increment iterator
+	++d->itemit;
+
+	//check if we really got a valid MacroItem
+	if(! item) {
+		kdWarning() << "Context::activate() MacroItem is NULL" << endl;
+		return;
 	}
-	//no macro just activate our d-pointer action
-	else {
-		d->action->activate();
+
+	//fetch the Action, the MacroItem points to.
+	Action* action = item->action();
+	
+	//skip the MacroItem if it doesn't point to a valid Action
+	if(! action) {
+		kdDebug() << "Context::activate() Skipping empty MacroItem" << endl;
+		activate();
+		return;
+	}
+
+	if(action->isBlocking()) { // execution should be done synchron/blocking
+		//activate the action
+		action->activate(this);
+		//recursive call ourself to handle the next action.
+		activate();
+	}
+	else { // execution should be done asynchron/nonblocking
+		//connect action activated signal to our activate slot.
+		connect(action, SIGNAL(activated()), this, SLOT(activate()));
+		//QTimer::singleShot(1000, action, SLOT(activate())); //testcase
+		//activate the action
+		action->activate(this);
 	}
 }
 

@@ -19,6 +19,7 @@
 
 #include "metaparameter.h"
 #include "exception.h"
+#include "variable.h"
 
 #include <kdebug.h>
 
@@ -137,4 +138,12 @@ void MetaParameter::setSignatureArgument(const QString& signatureargument)
 	else {
 		setType( TypeObject );
 	}
+}
+
+bool MetaParameter::validVariable(Variable::Ptr variable) const
+{
+	if( type() != variable->type() ) {
+		return false;
+	}
+	return true;
 }

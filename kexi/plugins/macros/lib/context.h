@@ -29,6 +29,7 @@
 namespace KoMacro {
 
 	// Forward declaration.
+	class Macro;
 	class Action;
 
 	/**
@@ -51,11 +52,9 @@ namespace KoMacro {
 			/**
 			* Constructor.
 			* 
-			* @param action The @a Action this @a Context belongs to. This
-			* should be normaly a @a Macro instance but may also be a
-			* @a Function or a @a Action .
+			* @param macro The @a Macro this @a Context belongs to.
 			*/
-			explicit Context(KSharedPtr<Action> action);
+			explicit Context(KSharedPtr<Macro> macro);
 
 			/**
 			* Destructor.
