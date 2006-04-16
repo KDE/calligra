@@ -1,7 +1,7 @@
-// -*- c-basic-offset: 2 -*-
 /*
  *  This file is part of the KDE libraries
  *  Copyright (C) 1999-2000 Harri Porten (porten@kde.org)
+ *  Copyright (C) 2006 Ariya Hidayat (ariya@kde.org)
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -16,7 +16,7 @@
  *  You should have received a copy of the GNU Library General Public License
  *  along with this library; see the file COPYING.LIB.  If not, write to
  *  the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+ *  Boston, MA 02110-1301, USA.
  */
 
 #ifndef SWINDER_USTRING_H_
@@ -190,8 +190,10 @@ namespace Swinder {
       friend class UString;
       friend bool operator==(const UString&, const UString&);
       static Rep *create(UChar *d, int l);
+      static Rep *create(UChar *d, int l, int c);
       inline UChar *data() const { return dat; }
       inline int length() const { return len; }
+      inline int capacity() const { return cap; }
 
       inline void ref() { rc++; }
       inline int deref() { return --rc; }
@@ -199,6 +201,7 @@ namespace Swinder {
       UChar *dat;
       int len;
       int rc;
+      int cap;
       static Rep null;
     };
 
@@ -257,7 +260,36 @@ namespace Swinder {
      * Append another string.
      */
     UString &append(const UString &);
-
+    /**
+     * Append a character
+     */
+    UString &append(UChar c);
+    /**
+     * Append zero-terminated string.
+     */
+    UString &append(const char*);
+    /**
+     * Append a single character
+     */
+    UString &append(char c);
+    
+    /**
+     * Prepend another string.
+     */
+    UString &prepend(const UString &);
+    /**
+     * Prepend a character
+     */
+    UString &prepend(UChar c);
+    /**
+     * Prepend zero-terminated string.
+     */
+    UString &prepend(const char*);
+    /**
+     * Prepend a single character
+     */
+    UString &prepend(char c);
+    
     /**
      * @return The string converted to the 8-bit string type @ref CString().
      */
@@ -308,6 +340,21 @@ namespace Swinder {
      * @return The length of the string.
      */
     int length() const { return rep->length(); }
+    
+    /**
+     * Truncates the string to n. Nothing happens if n > length().
+     */
+    void truncate(int n);
+    
+    /**
+     * @return The reserved capacity of the string.
+     */
+    int capacity() const { return rep->capacity(); }
+    /**
+     * Reserves room for the string, useful to speed up append().
+     */
+    void reserve(int r);
+    
     /**
      * Const character at specified position.
      */

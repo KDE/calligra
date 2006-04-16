@@ -1,7 +1,7 @@
-// -*- c-basic-offset: 2 -*-
 /*
  *  This file is part of the KDE libraries
  *  Copyright (C) 1999-2000 Harri Porten (porten@kde.org)
+ *  Copyright (C) 2006 Ariya Hidayat (ariya@kde.org)
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -16,7 +16,7 @@
  *  You should have received a copy of the GNU Library General Public License
  *  along with this library; see the file COPYING.LIB.  If not, write to
  *  the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+ *  Boston, MA 02110-1301, USA.
  */
 
 #include "ustring.h"
@@ -211,7 +211,7 @@ bool Swinder::operator==(const Swinder::CString& c1, const Swinder::CString& c2)
 }
 
 UChar UChar::null;
-UString::Rep UString::Rep::null = { 0, 0, 1 };
+UString::Rep UString::Rep::null = { 0, 0, 1, 0 };
 UString UString::null;
 static char *statBuffer = 0L;
 
@@ -268,6 +268,18 @@ UString::Rep *UString::Rep::create(UChar *d, int l)
   Rep *r = new Rep;
   r->dat = d;
   r->len = l;
+  r->cap = l;
+  r->rc = 1;
+
+  return r;
+}
+
+UString::Rep *UString::Rep::create(UChar *d, int l, int c)
+{
+  Rep *r = new Rep;
+  r->dat = d;
+  r->len = l;
+  r->cap = c;
   r->rc = 1;
 
   return r;
@@ -327,6 +339,7 @@ UString::~UString()
   release();
 }
 
+#if 0
 UString UString::from(int i)
 {
   char buf[40];
@@ -334,6 +347,29 @@ UString UString::from(int i)
 
   return UString(buf);
 }
+#else
+// FIXME check the limits !
+UString UString::from(int i)
+{
+  char digits[] = "0123456789";
+  char buf[40];
+  buf[39] = '\0';
+  int k = 38;
+  if(i==0)
+    buf[k--] = '0';
+  else  
+  {
+    bool neg = (i < 0);
+    if(neg) i = -i;
+    for(; i > 0; i/=10) 
+      buf[k--] = digits[i%10];
+    if(neg)
+      buf[k--] = '-';  
+  }
+
+  return UString(buf+k+1);
+}
+#endif
 
 UString UString::from(unsigned int u)
 {
@@ -368,17 +404,161 @@ UString UString::from(double d)
   return UString(buf);
 }
 
+void UString::truncate(int n)
+{
+  if((n >= 0) && (n < length()))
+  {
+    detach();
+    rep->len = n;
+  }
+}
+
+void UString::reserve(int r)
+{
+  if(r > length())
+  {
+    int l = length();
+    UChar* n = allocateChars( r );
+    memcpy(n, data(), l * sizeof(UChar));
+    release();
+    rep = Rep::create(n, l, r); 
+  }
+}
+
 UString &UString::append(const UString &t)
 {
-  int l = length();
-  UChar *n = allocateChars( l+t.length() );
-  memcpy(n, data(), l * sizeof(UChar));
-  memcpy(n+l, t.data(), t.length() * sizeof(UChar));
-  release();
-  rep = Rep::create(n, l + t.length());
+  int tl = t.length();
+  if(tl > 0)
+  {
+    detach();
+    int l = length();
+    
+    // no space, we have to reallocate first
+    if(capacity() < tl + l)
+      reserve(tl +l);
+      
+    UChar *dd = rep->data();
+    memcpy(dd+l, t.data(), tl * sizeof(UChar));
+    rep->len += tl;
+  }
 
   return *this;
 }
+
+UString &UString::append(const char* s)
+{
+  int tl = strlen(s);
+  if(tl > 0)
+  {
+    detach();
+    int l = length();
+    
+    // no space, we have to reallocate first
+    if(capacity() < tl + l)
+      reserve(tl +l);
+
+    // copy each character        
+    UChar *dd = rep->data();
+    for (int i = 0; i < tl; i++)
+      dd[l+i].uc = static_cast<unsigned char>( s[i] );
+    rep->len += tl;
+  }
+
+  return *this;
+}
+
+UString &UString::append(UChar c)
+{
+  detach();
+  int l = length();
+  
+  // we need to reallocate
+  // in case another append follows, so let's reserve()
+  // this avoids subsequent expensive reallocation
+  if(capacity() < l + 1)
+    reserve(l + 8);
+  
+  UChar *dd = rep->data();
+  dd[l] = c;
+  rep->len++;
+
+  return *this;
+}
+
+UString &UString::append(char c)
+{
+  return append( UChar((unsigned short)c) );
+}
+
+
+UString &UString::prepend(const UString &t)
+{
+  int tl = t.length();
+  if(tl > 0)
+  {
+    int l = length();
+    
+    // no space, we have to reallocate first
+    if(capacity() < tl + l)
+      reserve(tl +l);
+
+    // shift the string, then place the new string      
+    UChar *dd = rep->data();
+    for(int i = l-1; i >= 0; i--)
+      dd[i+tl] = dd[i];
+    memcpy(dd, t.data(), tl * sizeof(UChar));
+    rep->len += tl;
+  }
+
+  return *this;
+}
+
+UString &UString::prepend(const char* s)
+{
+  int tl = strlen(s);
+  if(tl > 0)
+  {
+    int l = length();
+    
+    // no space, we have to reallocate first
+    if(capacity() < tl + l)
+      reserve(tl +l);
+
+    // shift the string, then copy each new character        
+    UChar *dd = rep->data();
+    for(int i = l-1; i >= 0; i--)
+      dd[i+tl] = dd[i];
+    for(int j = 0; j < tl; j++)
+      dd[j].uc = static_cast<unsigned char>( s[j] );
+    rep->len += tl;
+  }
+
+  return *this;
+}
+
+UString &UString::prepend(UChar c)
+{
+  int l = length();
+  
+  // we need to reallocate and reserve
+  // see also append(UChar c) function
+  if(capacity() < l + 1)
+    reserve(l + 8);
+  
+  UChar *dd = rep->data();
+  for(int i = l-1; i >= 0; i--)
+    dd[i+1] = dd[i];
+  dd[0] = c;
+  rep->len++;
+
+  return *this;
+}
+
+UString &UString::prepend(char c)
+{
+  return prepend( UChar((unsigned short)c) );
+}
+
 
 CString UString::cstring() const
 {
@@ -586,11 +766,12 @@ void UString::attach(Rep *r)
 void UString::detach()
 {
   if (rep->rc > 1) {
+    int c = capacity();
     int l = length();
-    UChar *n = allocateChars( l );
+    UChar *n = allocateChars( c );
     memcpy(n, data(), l * sizeof(UChar));
     release();
-    rep = Rep::create(n, l);
+    rep = Rep::create(n, l, c);
   }
 }
 
