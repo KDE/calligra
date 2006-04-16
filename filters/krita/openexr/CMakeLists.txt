@@ -1,6 +1,16 @@
 kde4_header()
 
-
+include_directories(
+	${OPENEXR_INCLUDE_DIR}
+	${CMAKE_SOURCE_DIR}/krita
+	${CMAKE_SOURCE_DIR}/krita/core/
+	${CMAKE_SOURCE_DIR}/krita/sdk/
+	${CMAKE_SOURCE_DIR}/krita/core/tiles/
+	${CMAKE_SOURCE_DIR}/krita/kritacolor/
+	${CMAKE_SOURCE_DIR}/krita/ui/
+	${CMAKE_SOURCE_DIR}/krita/colorspaces/rgb_f32/
+	${CMAKE_SOURCE_DIR}/krita/colorspaces/rgb_f16half/
+	)
 
 
 ########### next target ###############
@@ -13,7 +23,7 @@ kde4_add_plugin(krita_openexr_import WITH_PREFIX ${krita_openexr_import_PART_SRC
 
 kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} krita_openexr_import )
 
-target_link_libraries(krita_openexr_import  ${KDE4_KDECORE_LIBS} kritacommon krita_rgb_f32 krita_rgb_f16half )
+target_link_libraries(krita_openexr_import  ${KDE4_KDECORE_LIBS} kritacommon krita_rgb_f32 krita_rgb_f16half ${OPENEXR_LIBRARIES} )
 
 install_targets(${LIB_INSTALL_DIR}/kde4 krita_openexr_import )
 
@@ -28,7 +38,7 @@ kde4_add_plugin(krita_openexr_export WITH_PREFIX ${krita_openexr_export_PART_SRC
 
 kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} krita_openexr_export )
 
-target_link_libraries(krita_openexr_export  ${KDE4_KDECORE_LIBS} kritacommon krita_rgb_f32 krita_rgb_f16half )
+target_link_libraries(krita_openexr_export  ${KDE4_KDECORE_LIBS} kritacommon krita_rgb_f32 krita_rgb_f16half ${OPENEXR_LIBRARIES})
 
 install_targets(${LIB_INSTALL_DIR}/kde4 krita_openexr_export )
 

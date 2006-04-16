@@ -81,7 +81,7 @@ KoFilter::ConversionStatus KisOpenEXRExport::convert(const QByteArray& from, con
         return KoFilter::FileNotFound;
     }
 
-    KisImageSP img = new KisImage(*doc -> currentImage());
+    KisImageSP img = KisImageSP(new KisImage(*doc -> currentImage()));
     Q_CHECK_PTR(img);
 
     // Don't store this information in the document's undo adapter
@@ -90,7 +90,7 @@ KoFilter::ConversionStatus KisOpenEXRExport::convert(const QByteArray& from, con
 
     img -> flatten();
 
-    KisPaintLayerSP layer = dynamic_cast<KisPaintLayer*>(img->activeLayer().data());
+    KisPaintLayerSP layer = KisPaintLayerSP(dynamic_cast<KisPaintLayer*>(img->activeLayer().data()));
     Q_ASSERT(layer);
     
     doc -> undoAdapter() -> setUndo(undo);

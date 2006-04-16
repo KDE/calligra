@@ -109,15 +109,15 @@ KoFilter::ConversionStatus KisOpenEXRImport::convert(const QByteArray& from, con
 
     doc -> undoAdapter() -> setUndo(false);
 
-    KisImageSP image = new KisImage(doc->undoAdapter(), imageWidth, imageHeight, cs, imageName);
+    KisImageSP image = KisImageSP(new KisImage(doc->undoAdapter(), imageWidth, imageHeight, cs, imageName));
 
-    if (image == 0) {
+    if (!image) {
         return KoFilter::CreationError;
     }
 
-    KisPaintLayerSP layer = dynamic_cast<KisPaintLayer*>(image->newLayer(image -> nextLayerName(), OPACITY_OPAQUE).data());
+    KisPaintLayerSP layer = KisPaintLayerSP(dynamic_cast<KisPaintLayer*>(image->newLayer(image -> nextLayerName(), OPACITY_OPAQUE).data()));
 
-    if (layer == 0) {
+    if (!layer) {
         return KoFilter::CreationError;
     }
 

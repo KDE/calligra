@@ -22,7 +22,7 @@ if(PNG_FOUND)
 endif(PNG_FOUND)
 
 if(OPENEXR_FOUND)
-#	add_subdirectory(openexr)
+	add_subdirectory(openexr)
 endif(OPENEXR_FOUND)
 
 message(STATUS "${CMAKE_CURRENT_SOURCE_DIR}: skipped subdir $(IMAGEMAGICK_SUBDIR)")
