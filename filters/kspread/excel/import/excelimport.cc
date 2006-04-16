@@ -31,6 +31,7 @@
 #include <qcstring.h>
 #include <qdatetime.h>
 #include <qfile.h>
+#include <qmap.h>
 #include <qstring.h>
 #include <qtextstream.h>
 
@@ -74,8 +75,11 @@ public:
   int sheetFormatIndex;
   int columnFormatIndex;
   int rowFormatIndex;
-  int cellFormatIndex;
-  int valueFormatIndex;
+
+  QMap<int,bool> styleFormats;
+  QMap<int,bool> isPercentageStyle;
+  QMap<int,bool> isDateStyle;
+  QMap<int,bool> isTimeStyle;
   
   void processWorkbookForBody( Workbook* workbook, KoXmlWriter* xmlWriter );
   void processWorkbookForStyle( Workbook* workbook, KoXmlWriter* xmlWriter );
@@ -87,7 +91,7 @@ public:
   void processRowForStyle( Row* row, int repeat, KoXmlWriter* xmlWriter );
   void processCellForBody( Cell* cell, KoXmlWriter* xmlWriter );
   void processCellForStyle( Cell* cell, KoXmlWriter* xmlWriter );
-  void processFormat( Format* format, KoXmlWriter* xmlWriter );
+  void processFormat( const Format* format, KoXmlWriter* xmlWriter );
   void processValueFormat( QString valueFormat, QString refName, KoXmlWriter* xmlWriter );
 };
 
@@ -114,6 +118,9 @@ KoFilter::ConversionStatus ExcelImport::convert( const QCString& from, const QCS
   d->inputFile = m_chain->inputFile();
   d->outputFile = m_chain->outputFile();
 
+  QTime time;
+  time.start();
+
   // open inputFile
   d->workbook = new Swinder::Workbook;
   if( !d->workbook->load( d->inputFile.local8Bit() ) )
@@ -130,6 +137,9 @@ KoFilter::ConversionStatus ExcelImport::convert( const QCString& from, const QCS
     return KoFilter::PasswordProtected;
   }
   
+  kdDebug(30511) << "File " << d->inputFile << " loaded. Time: " << time.elapsed() << " ms " << endl;
+  time.restart();
+
   // create output store
   KoStore* storeout;
   storeout = KoStore::createStore( d->outputFile, KoStore::Write, 
@@ -150,8 +160,6 @@ KoFilter::ConversionStatus ExcelImport::convert( const QCString& from, const QCS
   d->sheetFormatIndex = 1;
   d->columnFormatIndex = 1;
   d->rowFormatIndex = 1;
-  d->cellFormatIndex = 1;
-  d->valueFormatIndex = 1;
   if ( !d->createStyles( &oasisStore ) ) 
   {
     kdWarning() << "Couldn't open the file 'styles.xml'." << endl;
@@ -164,8 +172,6 @@ KoFilter::ConversionStatus ExcelImport::convert( const QCString& from, const QCS
   d->sheetFormatIndex = 1;
   d->columnFormatIndex = 1;
   d->rowFormatIndex = 1;
-  d->cellFormatIndex = 1;
-  d->valueFormatIndex = 1;
   if ( !d->createContent( &oasisStore ) )
   {
     kdWarning() << "Couldn't open the file 'content.xml'." << endl;
@@ -183,12 +189,15 @@ KoFilter::ConversionStatus ExcelImport::convert( const QCString& from, const QCS
     return KoFilter::CreationError;
   }
 
+  kdDebug(30511) << "Converted to " << d->outputFile << ". Time: " << time.elapsed() << " ms " << endl;
+
   // we are done!
   delete d->workbook;
   delete storeout;
   d->inputFile = QString::null;
   d->outputFile = QString::null;
   d->workbook = 0;
+
 
   return KoFilter::OK;
 }
@@ -216,8 +225,6 @@ bool ExcelImport::Private::createContent( KoOasisStore* store )
   sheetFormatIndex = 1;
   columnFormatIndex = 1;
   rowFormatIndex = 1;
-  cellFormatIndex = 1;
-  valueFormatIndex = 1;
   
   // office:automatic-styles
   contentWriter->startElement( "office:automatic-styles" );
@@ -228,8 +235,6 @@ bool ExcelImport::Private::createContent( KoOasisStore* store )
   sheetFormatIndex = 1;
   columnFormatIndex = 1;
   rowFormatIndex = 1;
-  cellFormatIndex = 1;
-  valueFormatIndex = 1;
   
   // office:body
   bodyWriter->startElement( "office:body" );
@@ -360,7 +365,7 @@ void ExcelImport::Private::processSheetForBody( Sheet* sheet, KoXmlWriter* xmlWr
         if( !nextColumn ) break;
         if( column->width() != nextColumn->width() ) break;
         if( column->visible() != nextColumn->visible() ) break;
-        if( column->format() != nextColumn->format() ) break;
+        if( column->formatIndex() != nextColumn->formatIndex() ) break;
         cj++;
       }
       
@@ -416,7 +421,7 @@ void ExcelImport::Private::processSheetForStyle( Sheet* sheet, KoXmlWriter* xmlW
         if( !nextColumn ) break;
         if( column->width() != nextColumn->width() ) break;
         if( column->visible() != nextColumn->visible() ) break;
-        if( column->format() != nextColumn->format() ) break;
+        if( column->formatIndex() != nextColumn->formatIndex() ) break;
         cj++;
       }
       
@@ -481,8 +486,11 @@ void ExcelImport::Private::processRowForBody( Row* row, int /*repeat*/, KoXmlWri
   
   // find the column of the rightmost cell (if any)
   int lastCol = -1;
-  for( unsigned i = 0; i <= row->sheet()->maxColumn(); i++ )
-    if( row->sheet()->cell( i, row->index(), false ) ) lastCol = i;
+  Sheet* sheet= row->sheet();
+  unsigned rowIndex = row->index();
+  for( unsigned i = 0; i <= sheet->maxColumn(); i++ )
+    if( sheet->cell( i, rowIndex, false ) ) 
+      lastCol = i;
   
   xmlWriter->startElement( "table:table-row" );
   xmlWriter->addAttribute( "table:visibility", row->visible() ? "visible" : "collapse" );  
@@ -491,7 +499,7 @@ void ExcelImport::Private::processRowForBody( Row* row, int /*repeat*/, KoXmlWri
   
   for( int i = 0; i <= lastCol; i++ )
   {
-    Cell* cell = row->sheet()->cell( i, row->index(), false );
+    Cell* cell = sheet->cell( i, rowIndex, false );
     if( cell )
       processCellForBody( cell, xmlWriter );
     else
@@ -513,8 +521,11 @@ void ExcelImport::Private::processRowForStyle( Row* row, int repeat, KoXmlWriter
 
   // find the column of the rightmost cell (if any)
   int lastCol = -1;
-  for( unsigned i = 0; i <= row->sheet()->maxColumn(); i++ )
-    if( row->sheet()->cell( i, row->index(), false ) ) lastCol = i;
+  Sheet* sheet= row->sheet();
+  unsigned rowIndex = row->index();
+  for( unsigned i = 0; i <= sheet->maxColumn(); i++ )
+    if( sheet->cell( i, rowIndex, false ) ) 
+      lastCol = i;
   
   xmlWriter->startElement( "style:style" );
   xmlWriter->addAttribute( "style:family", "table-row" );  
@@ -531,20 +542,20 @@ void ExcelImport::Private::processRowForStyle( Row* row, int repeat, KoXmlWriter
 
   for( int i = 0; i <= lastCol; i++ )
   {
-    Cell* cell = row->sheet()->cell( i, row->index(), false );
+    Cell* cell = sheet->cell( i, rowIndex, false );
     if( cell )
       processCellForStyle( cell, xmlWriter );
   }
 }
 
-static bool isPercentageFormat( QString valueFormat )
+static bool isPercentageFormat( const QString& valueFormat )
 {
   if( valueFormat.isEmpty() ) return false;
   if( valueFormat.length() < 1 ) return false;
   return valueFormat[valueFormat.length()-1] == QChar('%');
 }
 
-static bool isDateFormat( QString valueFormat )
+static bool isDateFormat( const QString& valueFormat )
 {
   QString vfu = valueFormat.upper();
   
@@ -576,7 +587,7 @@ static bool isDateFormat( QString valueFormat )
   return false;
 }
 
-static bool isTimeFormat( QString valueFormat )
+static bool isTimeFormat( const QString& valueFormat )
 {
   QString vf = valueFormat;
   
@@ -617,16 +628,21 @@ void ExcelImport::Private::processCellForBody( Cell* cell, KoXmlWriter* xmlWrite
 {
   if( !cell ) return;
   if( !xmlWriter ) return;
+
+  int formatIndex = cell->formatIndex();
   
+  QString styleName("ce");
+  styleName.append( QString::number( formatIndex ) );
   xmlWriter->startElement( "table:table-cell" );
-  xmlWriter->addAttribute( "table:style-name", QString("ce%1").arg(cellFormatIndex) );  
-  cellFormatIndex++;
-  
-  QString formula = string( cell->formula() ).string();
-  if( !formula.isEmpty() )
+  xmlWriter->addAttribute( "table:style-name", styleName );  
+
+  if( !cell->formula().isEmpty() )
+  {
+    QString formula = string( cell->formula() ).string();
     xmlWriter->addAttribute( "table:formula", formula.prepend("=") );
-  
-  Value value = cell->value();
+  }
+
+  const Value& value = cell->value();
   
   if( value.isBoolean() )
   {
@@ -635,36 +651,24 @@ void ExcelImport::Private::processCellForBody( Cell* cell, KoXmlWriter* xmlWrite
   }
   else if( value.isFloat() || value.isInteger() )
   {
-    QString valueFormat = string( cell->format().valueFormat() ).string();
-    
-    bool handled = false;
-    
-    if( isPercentageFormat( valueFormat ) )
+    if( isPercentageStyle[formatIndex] )
     {
-      handled = true;
       xmlWriter->addAttribute( "office:value-type", "percentage" );
       xmlWriter->addAttribute( "office:value", QString::number( value.asFloat(), 'g', 15 ) );
     }
-    
-    if( isDateFormat( valueFormat ) )
+    else if( isDateStyle[formatIndex] )
     {
-      handled = true;
-      QString dateValue = convertDate( value.asFloat() );
       xmlWriter->addAttribute( "office:value-type", "date" );
-      xmlWriter->addAttribute( "office:date-value", dateValue );
+      xmlWriter->addAttribute( "office:date-value", convertDate( value.asFloat() ) );
     }
-    
-    if( isTimeFormat( valueFormat ) )
+    else if( isTimeStyle[formatIndex] )
     {
-      handled = true;
-      QString timeValue = convertTime( value.asFloat() );
       xmlWriter->addAttribute( "office:value-type", "time" );
-      xmlWriter->addAttribute( "office:time-value", timeValue );
+      xmlWriter->addAttribute( "office:time-value", convertTime( value.asFloat() ) );
     }
-    
-    // fallback
-    if( !handled )
+    else
     {
+      // fallback, just write as normal number
       xmlWriter->addAttribute( "office:value-type", "float" );
       xmlWriter->addAttribute( "office:value", QString::number( value.asFloat(), 'g', 15 ) );
     }
@@ -688,32 +692,36 @@ void ExcelImport::Private::processCellForStyle( Cell* cell, KoXmlWriter* xmlWrit
 {
   if( !cell ) return;
   if( !xmlWriter ) return;
-  
-  // TODO optimize with hash table
-  Format format = cell->format();
-  
-  // handle data format, e.g. number style
-  QString refName;
-  QString valueFormat = string( format.valueFormat() ).string();
-  if( valueFormat != QString("General") )
+
+  // only IF automatic style for this format has not been already created yet
+  if( !styleFormats.contains( cell->formatIndex() ) ) 
   {
-    refName = QString("N%1").arg(valueFormatIndex);
-    valueFormatIndex++; 
-    processValueFormat( valueFormat, refName, xmlWriter );
+    styleFormats[ cell->formatIndex() ] = true;
+
+    const Format& format = cell->sheet()->workbook()->format( cell->formatIndex() );  
+    
+    // handle data format, e.g. number style
+    QString refName;
+    QString valueFormat = string( format.valueFormat() ).string();
+    if( valueFormat != QString("General") )
+      processValueFormat( valueFormat, QString("N%1").arg( cell->formatIndex() ), xmlWriter );
+
+    // later for writing the value
+    isPercentageStyle[ cell->formatIndex() ] = isPercentageFormat( valueFormat );
+    isDateStyle[ cell->formatIndex() ] = isDateFormat( valueFormat );
+    isTimeStyle[ cell->formatIndex() ] = isTimeFormat( valueFormat );
+  
+    // now the real table-cell  
+    xmlWriter->startElement( "style:style" );
+    xmlWriter->addAttribute( "style:family", "table-cell" );  
+    xmlWriter->addAttribute( "style:name", QString("ce%1").arg( cell->formatIndex() ) );  
+    if( !refName.isEmpty() )
+      xmlWriter->addAttribute( "style:data-style-name", refName );  
+    
+    processFormat( &format, xmlWriter );
+    
+    xmlWriter->endElement();  // style:style
   }
-
-  // now the real table-cell  
-  xmlWriter->startElement( "style:style" );
-  xmlWriter->addAttribute( "style:family", "table-cell" );  
-  xmlWriter->addAttribute( "style:name", QString("ce%1").arg(cellFormatIndex) );  
-  cellFormatIndex++;
-  if( !refName.isEmpty() )
-    xmlWriter->addAttribute( "style:data-style-name", refName );  
-  
-  processFormat( &format, xmlWriter );
-  
-  xmlWriter->endElement();  // style:style
-
 }
 
 QString convertColor( const Color& color )
@@ -742,15 +750,15 @@ QString convertBorder( const Pen& pen )
   return result + convertColor( pen.color );
 }
 
-void ExcelImport::Private::processFormat( Format* format, KoXmlWriter* xmlWriter )
+void ExcelImport::Private::processFormat( const Format* format, KoXmlWriter* xmlWriter )
 {
   if( !format ) return;
   if( !xmlWriter ) return;
   
-  FormatFont font = format->font();
-  FormatAlignment align = format->alignment();
-  FormatBackground back = format->background();
-  FormatBorders borders = format->borders();
+  const FormatFont& font = format->font();
+  const FormatAlignment& align = format->alignment();
+  const FormatBackground& back = format->background();
+  const FormatBorders& borders = format->borders();
   
   if( !font.isNull() )
   {
