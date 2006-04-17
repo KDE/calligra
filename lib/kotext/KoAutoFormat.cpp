@@ -1468,10 +1468,51 @@ KCommand *KoAutoFormat::doTypographicQuotes( KoTextCursor* textEditCursor, KoTex
     textdoc->setSelectionEnd( KoTextDocument::HighlightSelection, &cursor );
 
     // Need to determine if we want a starting or ending quote.
-    // I see two solutions: either simply alternate, or depend on leading space.
-    // MSWord does the latter afaics...
+    // we use a starting quote in three cases:
+    //   1. if the previous character is a space
+    //   2. if the previous character is some kind of opening punctuation (e.g., "(", "[", or "{")
+    //      a. and the character before that is not an opening quote (so that we get quotations of single characters
+    //         right)
+    //  3. if the previous character is an opening quote (so that we get nested quotations right)
+    //      a. and the character before that is not an opening quote (so that we get quotations of single characters
+    //         right)
+    //      b. and the previous quote of a different kind (so that we get empty quotations right)
     QString replacement;
-    if ( index > 0 && !parag->at( index - 1 )->c.isSpace() )
+    bool ending = true;
+
+    if( index > 0 )
+    {
+	QChar::Category c1 = parag->at( index - 1 )->c.category();
+
+	// case 1 and 2
+	if ( c1 == QChar::Separator_Space || c1 == QChar::Separator_Line || c1 == QChar::Separator_Paragraph ||
+	    c1 == QChar::Punctuation_Open )
+	    ending = false;
+
+	// case 3
+	if ( c1 == QChar::Punctuation_InitialQuote )
+	{
+	    QChar openingQuote;
+
+	    if( doubleQuotes )
+		openingQuote = m_typographicDoubleQuotes.begin;
+            else
+		openingQuote = m_typographicSimpleQuotes.begin;
+
+	    // case 3b
+	    if( parag->at( index - 1 )->c != openingQuote )
+		ending = false;
+	}
+    }
+
+    // cases 2a and 3a
+    if( index > 1 && !ending )
+    {
+	QChar::Category c2 = parag->at( index - 2 )->c.category();
+	ending = (c2 == QChar::Punctuation_InitialQuote);
+    }
+
+    if( ending )
     {
         if( doubleQuotes )
             replacement = m_typographicDoubleQuotes.end;
