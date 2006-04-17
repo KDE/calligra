@@ -23,6 +23,7 @@
 #include <KoView.h>
 
 class KivioCanvas;
+class QScrollBar;
 
 class KivioView : public KoView
 {
@@ -44,6 +45,8 @@ class KivioView : public KoView
 
   private:
     KivioCanvas* m_canvas;
+    QScrollBar* m_scrollBarX;
+    QScrollBar* m_scrollBarY;
 };
 
 #endif

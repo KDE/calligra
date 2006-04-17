@@ -19,7 +19,8 @@
 
 #include "KivioView.h"
 
-#include <QVBoxLayout>
+#include <QGridLayout>
+#include <QScrollBar>
 
 #include "KivioCanvas.h"
 
@@ -50,12 +51,23 @@ void KivioView::updateReadWrite(bool readwrite)
 
 void KivioView::initGUI()
 {
-  QVBoxLayout* layout = new QVBoxLayout(this);
+  QGridLayout* layout = new QGridLayout(this);
   layout->setSpacing(0);
   layout->setMargin(0);
   setLayout(layout);
   m_canvas = new KivioCanvas(this);
-  layout->addWidget(m_canvas);
+  m_scrollBarX = new QScrollBar(Qt::Horizontal, this);
+  m_scrollBarX->setMaximum(m_canvas->pageWidth() - m_canvas->width());
+  m_scrollBarX->setPageStep(m_canvas->width());
+  connect(m_scrollBarX, SIGNAL(valueChanged(int)), m_canvas, SLOT(setOffsetX(int)));
+  m_scrollBarY = new QScrollBar(Qt::Vertical, this);
+  m_scrollBarY->setMaximum(m_canvas->pageHeight() - m_canvas->height());
+  m_scrollBarY->setPageStep(m_canvas->height());
+  connect(m_scrollBarY, SIGNAL(valueChanged(int)), m_canvas, SLOT(setOffsetY(int)));
+
+  layout->addWidget(m_canvas, 0, 0);
+  layout->addWidget(m_scrollBarY, 0, 1);
+  layout->addWidget(m_scrollBarX, 1, 0);
 }
 
 #include "KivioView.moc"

@@ -33,8 +33,28 @@ class KivioCanvas : public QWidget
     KivioCanvas(KivioView* parent);
     ~KivioCanvas();
 
+    /// The offset from the left
+    int offsetX() const;
+    /// The offset from the top
+    int offsetY() const;
+
+    /// The zoomed width of the page displayed
+    int pageWidth() const;
+    /// The zoomed height of the page displayed
+    int pageHeight() const;
+
+  public slots:
+    /// Set the offset from the left to @p offset
+    void setOffsetX(int offset);
+    /// Set the offset from the top to @p offset
+    void setOffsetY(int offset);
+
   protected:
     virtual void paintEvent(QPaintEvent* event);
+
+  private:
+    int m_offsetX;
+    int m_offsetY;
 };
 
 #endif
