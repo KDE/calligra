@@ -683,8 +683,6 @@ void ExcelImport::Private::processCellForBody( Cell* cell, KoXmlWriter* xmlWrite
     xmlWriter->endElement(); //  text:p 
   }
   
-  // TODO: handle formula
-  
   xmlWriter->endElement(); //  table:table-cell 
 }
 
@@ -702,14 +700,19 @@ void ExcelImport::Private::processCellForStyle( Cell* cell, KoXmlWriter* xmlWrit
     
     // handle data format, e.g. number style
     QString refName;
-    QString valueFormat = string( format.valueFormat() ).string();
-    if( valueFormat != QString("General") )
-      processValueFormat( valueFormat, QString("N%1").arg( cell->formatIndex() ), xmlWriter );
+    const UString& valueFormat = format.valueFormat();
+    if( !valueFormat.isEmpty() )
+    {
+      refName = QString("N%1").arg(cell->formatIndex());
+      QString numformat = string( valueFormat ).string();
+      processValueFormat( numformat, refName, xmlWriter );
+    }
 
     // later for writing the value
-    isPercentageStyle[ cell->formatIndex() ] = isPercentageFormat( valueFormat );
-    isDateStyle[ cell->formatIndex() ] = isDateFormat( valueFormat );
-    isTimeStyle[ cell->formatIndex() ] = isTimeFormat( valueFormat );
+    QString numformat = string( valueFormat ).string();
+    isPercentageStyle[ cell->formatIndex() ] = isPercentageFormat( numformat );
+    isDateStyle[ cell->formatIndex() ] = isDateFormat( numformat );
+    isTimeStyle[ cell->formatIndex() ] = isTimeFormat( numformat );
   
     // now the real table-cell  
     xmlWriter->startElement( "style:style" );
