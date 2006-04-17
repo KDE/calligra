@@ -665,7 +665,7 @@ void Format::setBackground( const FormatBackground& background )
   d->background = background;
 }
 
-UString Format::valueFormat() const
+const UString& Format::valueFormat() const
 {
   return d->valueFormat;
 }

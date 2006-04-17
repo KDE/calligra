@@ -703,7 +703,7 @@ public:
   void setBorders( const FormatBorders& border );
   
   /**
-   * Retursn a reference to the background information of this format.
+   * Returns a reference to the background information of this format.
    */
   FormatBackground& background() const;
   
@@ -715,7 +715,7 @@ public:
   /**
    * Returns the formatting string to display the value of this format.
    */
-  UString valueFormat() const;
+  const UString& valueFormat() const;
   
   /**
    * Sets the new formatting string to display the value of this format.

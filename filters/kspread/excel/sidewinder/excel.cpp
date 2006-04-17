@@ -2802,7 +2802,6 @@ FormatRecord::FormatRecord():
 {
   d = new FormatRecord::Private;
   d->index = 0;
-  d->formatString = "General";
 }
 
 FormatRecord::~FormatRecord()
@@ -4771,7 +4770,7 @@ ExcelReader::ExcelReader()
     UString valueFormat;
     switch(format)
     {
-      case  0:  valueFormat = "General"; break;
+      case  0:  break;
       case  1:  valueFormat = "0"; break;
       case  2:  valueFormat = "0.00"; break;
       case  3:  valueFormat = "#,##0"; break;
@@ -5093,8 +5092,6 @@ bool ExcelReader::load( Workbook* workbook, const char* filename )
     const XFRecord& xf = d->xfTable[i];
   
     UString valueFormat = d->formatsTable[xf.formatIndex()];
-    if( valueFormat.isEmpty() )
-      valueFormat = "General";
     format.setValueFormat( valueFormat );
       
     format.setFont( convertFont( xf.fontIndex() ) );
@@ -5911,8 +5908,6 @@ Format ExcelReader::convertFormat( unsigned xfIndex )
   XFRecord xf = d->xfTable[ xfIndex ];
   
   UString valueFormat = d->formatsTable[xf.formatIndex()];
-  if( valueFormat.isEmpty() )
-    valueFormat = "General";
   format.setValueFormat( valueFormat );
     
   format.setFont( convertFont( xf.fontIndex() ) );
@@ -6184,7 +6179,7 @@ UString ExcelReader::decodeFormula( unsigned row, unsigned col,
         	if( openDocumentFormat )
           { 
         	  refName.prepend('[');
-            refName.append('[');
+            refName.append(']');
           }
           stack.push_back( refName );
         }
@@ -6231,7 +6226,7 @@ UString ExcelReader::decodeFormula( unsigned row, unsigned col,
         	if( openDocumentFormat )
           {
             areaName.prepend('[');
-            areaName.append('[');
+            areaName.append(']');
           } 
           stack.push_back( areaName);
         }
