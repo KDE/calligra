@@ -266,8 +266,8 @@ void KexiCSVExportWizard::showPage ( QWidget * page )
 		else
 			text += i18n("(columns: %1)").arg(columns);
 		m_infoLblFrom->setLabelText(text);
-		m_infoLblFrom->fileNameLabel()->setFixedHeight( 
-			QFontMetrics(m_infoLblFrom->fileNameLabel()->font()).height() * 2 );
+		QFontMetrics fm(m_infoLblFrom->fileNameLabel()->font());
+		m_infoLblFrom->fileNameLabel()->setFixedHeight( fm.height() * 2 + fm.lineSpacing() );
 		if (m_defaultsBtn)
 			m_defaultsBtn->show();
 	}
