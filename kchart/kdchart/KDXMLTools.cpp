@@ -589,7 +589,7 @@ namespace KDXML {
     {
         bool ok = true;
         QString family;
-        int pointSize, weight;
+        int pointSize = 9, weight;
         bool italic;
         int charSet;
         QDomNode node = element.firstChild();
@@ -616,7 +616,7 @@ namespace KDXML {
 
         if( ok ) {
             font.setFamily( family );
-            font.setPointSize( pointSize );
+            font.setPointSize( qMax(pointSize,1) ); //Force to use a qfont size > 0
             font.setWeight( weight );
             font.setItalic( italic );
 #if COMPAT_QT_VERSION < 0x030000

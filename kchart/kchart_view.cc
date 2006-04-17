@@ -7,9 +7,8 @@
 #include <qfile.h>
 #include <qpainter.h>
 #include <qcursor.h>
-#include <q3popupmenu.h>
+#include <QMenu>
 #include <q3paintdevicemetrics.h>
-#include <q3cstring.h> // For QByteArray
 //Added by qt3to4:
 #include <QMouseEvent>
 #include <QPixmap>
@@ -550,7 +549,7 @@ void KChartView::mousePressEvent ( QMouseEvent *e )
     if (!koDocument()->isReadWrite() || !factory())
         return;
     if ( e->button() == Qt::RightButton )
-        ((Q3PopupMenu*)factory()->container("action_popup",this))->popup(QCursor::pos());
+        ((QMenu*)factory()->container("action_popup",this))->popup(QCursor::pos());
 }
 
 
