@@ -5757,6 +5757,12 @@ bool Cell::loadOasis( const QDomElement& element , KoOasisLoadingContext& oasisC
             if ( !isFormula )
                 if( ok )
                     setValue( value );
+
+            if ( !isFormula && d->strText.isEmpty())
+            {
+                QString str = locale()->formatNumber( value, 15 );
+                setCellText( str );
+            }
         }
 
         // currency value
@@ -5775,11 +5781,20 @@ bool Cell::loadOasis( const QDomElement& element , KoOasisLoadingContext& oasisC
         else if( valuetype == "percentage" )
         {
             bool ok = false;
-            double value = element.attributeNS( KoXmlNS::office, "value", QString::null ).toDouble( &ok );
+            double v = element.attributeNS( KoXmlNS::office, "value", QString::null ).toDouble( &ok );
             if( ok )
             {
-                if ( !isFormula )
-                    setValue( value );
+                Value value;
+                value.setValue (v);
+                value.setFormat (Value::fmt_Percent);
+                setValue( value );
+
+                if ( !isFormula && d->strText.isEmpty())
+                {
+                    QString str = locale()->formatNumber( v, 15 );
+                    setCellText( str );
+                }
+
                 format()->setFormatType (Percentage_format);
             }
         }
