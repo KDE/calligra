@@ -50,7 +50,7 @@
 #include <qsizepolicy.h>
 //Added by qt3to4:
 #include <QResizeEvent>
-#include <Q3PopupMenu>
+#include <QMenu>
 #include <QFrame>
 #include <QKeyEvent>
 #include <QEvent>
@@ -7304,7 +7304,7 @@ void View::statusBarClicked(int _id)
   if ( _id == 0 ) //menu calc
   {
     QPoint mousepos = QCursor::pos();
-    ((Q3PopupMenu*)factory()->container( "calc_popup" , this ) )->popup( mousepos );
+    ((QMenu*)factory()->container( "calc_popup" , this ) )->popup( mousepos );
   }
 }
 
@@ -7504,7 +7504,7 @@ void View::popupTabBarMenu( const QPoint & _point )
       d->actions->hideSheet->setEnabled( false );
       d->actions->removeSheet->setEnabled( false );
     }
-    static_cast<Q3PopupMenu*>(factory()->container("menupage_popup",this))->popup(_point);
+    static_cast<QMenu*>(factory()->container("menupage_popup",this))->popup(_point);
   }
 }
 

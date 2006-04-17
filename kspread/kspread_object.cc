@@ -1398,8 +1398,8 @@ QPixmap EmbeddedPictureObject::changePictureSettings( QPixmap _tmpPixmap )
         if ( depth == 1 || depth == 8 ) {
             for ( int i = 0; i < _tmpImage.numColors(); ++i ) {
                 QRgb rgb = _tmpImage.color( i );
-                int Qt::gray = qGray( rgb );
-                rgb = qRgb( Qt::gray, Qt::gray, Qt::gray );
+                int gray = qGray( rgb );
+                rgb = qRgb( gray, gray, gray );
                 _tmpImage.setColor( i, rgb );
             }
         }
@@ -1413,8 +1413,8 @@ QPixmap EmbeddedPictureObject::changePictureSettings( QPixmap _tmpPixmap )
                 for ( _y = 0; _y < _height; ++_y ) {
                     if ( _tmpImage.valid( _x, _y ) ) {
                         QRgb rgb = _tmpImage.pixel( _x, _y );
-                        int Qt::gray = qGray( rgb );
-                        rgb = qRgb( Qt::gray, Qt::gray, Qt::gray );
+                        int gray = qGray( rgb );
+                        rgb = qRgb( gray, gray, gray );
                         _tmpImage.setPixel( _x, _y, rgb );
                     }
                 }
