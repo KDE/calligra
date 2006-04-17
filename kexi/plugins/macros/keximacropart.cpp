@@ -35,6 +35,7 @@
 
 #include "lib/manager.h"
 #include "lib/macro.h"
+#include "lib/action.h"
 
 /**
 * \internal d-pointer class to be more flexible on future extension of the
@@ -108,10 +109,26 @@ bool KexiMacroPart::execute(KexiPart::Item* item)
 	return true;
 }
 
+//################## testcase
+class KexiTestAction : public KoMacro::GenericAction<KexiTestAction>
+{
+	public:
+		KexiTestAction()
+			: KoMacro::GenericAction<KexiTestAction>("kexitestaction")
+		{
+			setText("Kexi Test Action");
+
+			addVariable("myvar1","My Var 1",QVariant(QString("myvalue1")));
+			addVariable("myvar2","My Var 2",QVariant(QString("myvalue2")));
+		}
+};
+
 void KexiMacroPart::initPartActions()
 {
 	kdDebug() << "KexiMacroPart::initPartActions()" << endl;
+
 	::KoMacro::Manager::init( m_mainWin );
+	new KexiTestAction;
 }
 
 void KexiMacroPart::initInstanceActions()

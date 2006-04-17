@@ -147,9 +147,8 @@ Variable::Map Action::variables() const
 	return d->variables;
 }
 
-void Action::setVariable(Variable::Ptr variable)
+void Action::setVariable(const QString& name, Variable::Ptr variable)
 {
-	const QString name = variable->name();
 	Q_ASSERT(! d->variables.contains(name));
 	d->variables.replace(name, variable);
 }

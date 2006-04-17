@@ -175,6 +175,16 @@ namespace KoMacro {
 			KSharedPtr<Action> action(const QString& name) const;
 
 			/**
+			* @return a map of all published actions.
+			*/
+			QMap<QString, KSharedPtr<Action> > actions() const;
+
+			/**
+			* @return a list of all published actions.
+			*/
+			QStringList actionNames() const;
+
+			/**
 			* Publish the @a Action @p action . The published @a Action
 			* will be accessible via it's unique name.
 			*/

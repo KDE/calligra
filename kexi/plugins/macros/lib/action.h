@@ -58,6 +58,11 @@ namespace KoMacro {
 			* Shared pointer to implement reference-counting.
 			*/
 			typedef KSharedPtr<Action> Ptr;
+			
+			/**
+			* Shared pointer to implement reference-counting.
+			*/
+			typedef QMap<QString, KSharedPtr<Action> > Map;
 
 			/**
 			* Constructor.
@@ -123,7 +128,7 @@ namespace KoMacro {
 			 * Append the @a Variable @p variable to list of variables
 			 * this @a Action provides.
 			 */
-			void setVariable(Variable::Ptr variable);
+			void setVariable(const QString& name, Variable::Ptr variable);
 
 			/**
 			* @return this instance as serialized QDomElement.
@@ -162,25 +167,27 @@ namespace KoMacro {
 	{
 		protected:
 
-			/**
-			* A list of @a Variable instances this @a Action
-			* provides.
-			*/
 			//Variable::List varlist;
 
+			void addVariable(const QString& name, const QString& caption, const QVariant& value)
+			{
+				KoMacro::Variable* v = new KoMacro::Variable(value);
+				v->setCaption(caption);
+				setVariable(name, v);
+			}
+
 		public:
+
+			//typedef ACTIONIMPL action_type;
 
 			/**
 			* Constructor.
 			*/
-			GenericAction(const QString& name, Manager* const manager, const QDomElement& element)
-				: Action(manager, element)
+			GenericAction<ACTIONIMPL>(const QString& name)
+				: Action(name)
 			{
-				// Set the name this Action will be reachable as.
-				setName(name);
-
 				// Publish this action.
-				manager->publishAction( Action::Ptr(this) );
+				Manager::self()->publishAction( Action::Ptr(this) );
 			}
 
 	};

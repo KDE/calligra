@@ -145,13 +145,20 @@ void KexiMacroDesignView::initTable()
 	QValueVector<QString> items;
 	items.append(""); // empty means no action
 	//items.append(i18n("Application"));
-	items.append(i18n("Open"));
+//items.append(i18n("Open"));
 	//items.append(i18n("Close"));
-	items.append(i18n("Execute"));
+//items.append(i18n("Execute"));
 	//items.append(i18n("Messagebox"));
 	//items.append(i18n("Inputbox"));
 	//items.append(i18n("Function"));
 	//items.append(i18n("Errorhandler"));
+
+	QStringList actionnames = KoMacro::Manager::self()->actionNames();
+	for(QStringList::Iterator it = actionnames.begin(); it != actionnames.end(); ++it) {
+		KoMacro::Action::Ptr action = KoMacro::Manager::self()->action(*it);
+		items.append( action->text() );
+	}
+
 	actioncol->field()->setEnumHints(items);
 
 	// Add the "Comment" column.
@@ -212,12 +219,31 @@ void KexiMacroDesignView::updateData()
 	d->tabledata->blockSignals(false);
 }
 
-void KexiMacroDesignView::updateProperties(int type)
+void KexiMacroDesignView::updateProperties()
 {
 	if(! d->propertyset) {
 		d->propertyset = new KexiDataAwarePropertySet(this, d->tableview);
 		//connect(d->propertyset, SIGNAL(rowDeleted()), this, SLOT(updateActions()));
 		//connect(d->propertyset, SIGNAL(rowInserted()), this, SLOT(updateActions()));
+
+		connect(d->propertyset, SIGNAL(propertyChanged(KoProperty::Set&, KoProperty::Property&)),
+			this, SLOT(propertyChanged(KoProperty::Set&, KoProperty::Property&)));
+	}
+	//propertySetSwitched();
+}
+
+void KexiMacroDesignView::setAction(const QString& actionname)
+{
+	KoMacro::Action::Ptr action = KoMacro::Manager::self()->action(actionname);
+	if(! action.data()) {
+		d->propertyset->removeCurrentPropertySet();
+		propertySetSwitched();
+		return;
+	}
+
+	if(! propertySet()) {
+		KoProperty::Set *set = new KoProperty::Set(d->propertyset, actionname);
+		d->propertyset->insert(d->tableview->currentRow(), set, true);
 	}
 
 	KoProperty::Set* set = propertySet();
@@ -226,6 +252,27 @@ void KexiMacroDesignView::updateProperties(int type)
 		return;
 	}
 
+	KoProperty::Property* prop = new KoProperty::Property("this:classString", action->text());
+	prop->setVisible(false);
+	set->addProperty(prop);
+
+	KoMacro::Variable::Map varmap = action->variables();
+	for(KoMacro::Variable::Map::Iterator it = varmap.begin(); it != varmap.end(); ++it) {
+		KoMacro::Variable::Ptr v = it.data();
+		kdDebug() << "KexiMacroDesignView::setAction type=" << QVariant::typeToName( v->variant().type() ) << " value=" << v->variant().toString() << endl;
+		KoProperty::Property* p = new KoProperty::Property(
+			it.key().latin1(), //v->name().latin1(), // name
+			0, // ListData
+			v->variant(), // value
+			v->caption(), // caption
+			action->comment(), // description
+			KoProperty::String // auto-detect type
+		);
+		//TODO why KoProperty::Auto doesn't detect the QString?
+		set->addProperty(p);
+	}
+
+#if 0
 	switch(type) {
 /*
 		case 1: { // Application
@@ -300,9 +347,7 @@ void KexiMacroDesignView::updateProperties(int type)
 			d->propertyset->removeCurrentPropertySet();
 		} break;
 	}
-
-	connect(d->propertyset, SIGNAL(propertyChanged(KoProperty::Set&, KoProperty::Property&)),
-		this, SLOT(propertyChanged(KoProperty::Set&, KoProperty::Property&)));
+#endif
 
 	propertySetSwitched();
 }
@@ -332,18 +377,16 @@ void KexiMacroDesignView::beforeCellChanged(KexiTableItem* item, int colnum, QVa
 	Q_UNUSED(result);
 	kdDebug() << "KexiMacroDesignView::beforeCellChanged colnum=" << colnum << " newvalue=" << newvalue.toString() << endl;
 
+	QString actionname;
+
 	bool ok;
-	int type = newvalue.toInt(&ok);
-	if(! ok) { // invalid property-number
-		return;
+	int selectedindex = newvalue.toInt(&ok);
+	if(ok && selectedindex > 0) {
+		QStringList actionnames = KoMacro::Manager::self()->actionNames();
+		actionname = actionnames[ selectedindex + 1 ]; // first item is empty
 	}
 
-	if(! propertySet()) {
-		KoProperty::Set *set = new KoProperty::Set(d->propertyset, "typename");
-		d->propertyset->insert(d->tableview->currentRow(), set, true);
-	}
-
-	updateProperties(type);
+	setAction( actionname );
 	setDirty();
 }
 

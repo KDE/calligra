@@ -35,7 +35,9 @@ namespace KoMacro {
 	class XMLHandler;
 
 	/**
-	* The Macro class implements all the action-handling.
+	* The Macro class implements all the action-handling. Internaly the
+	* Macro provides a collection of @a MacroItem instances which each
+	* of them points to an @a Action instance.
 	*/
 	class KOMACRO_EXPORT Macro : public Action
 	{
@@ -57,6 +59,9 @@ namespace KoMacro {
 
 			/**
 			* Constructor.
+			*
+			* @param name The internal name this @a Macro has. This
+			* name will be used as unique identifier.
 			*/
 			explicit Macro(const QString& name);
 
@@ -98,6 +103,8 @@ namespace KoMacro {
 			* 
 			* @param action The @a Action instance which should be added as
 			* child of this @a Macro .
+			*
+			* @deprecated Use MacroItem's
 			*/
 			void addChild(Action::Ptr action);
 
@@ -105,18 +112,24 @@ namespace KoMacro {
 			* @return Returns true if there is at least one @a Action
 			* instance that is a child of this @a Macro instance. If
 			* that is not the case false got returned.
+			*
+			* @deprecated Use MacroItem's
 			*/
 			bool hasChildren() const;
 
 			/**
 			 * @return the @a Action defined with \p name or NULL if
 			 * this @a macro has no child with that name.
+			 *
+			 * @deprecated Use MacroItem's
 			 */
 			Action::Ptr child(const QString& name) const;
 
 			/**
 			* @return Returns a list of @a Action children this Macro
 			* has.
+			*
+			* @deprecated Use MacroItem's
 			*/
 			QValueList<Action::Ptr> children() const;
 #endif

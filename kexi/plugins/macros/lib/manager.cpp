@@ -42,7 +42,10 @@ namespace KoMacro {
 		public:
 			KXMLGUIClient* const xmlguiclient;
 			QMap<QString, Macro::Ptr> macros;
+
+			QStringList actionnames;
 			QMap<QString, Action::Ptr > actions;
+
 			QMap<QString, QGuardedPtr<QObject> > objects;
 
 			Private(KXMLGUIClient* const xmlguiclient)
@@ -158,10 +161,23 @@ Action::Ptr Manager::action(const QString& name) const
 	return d->actions[name];
 }
 
+Action::Map Manager::actions() const
+{
+	return d->actions;
+}
+
+QStringList Manager::actionNames() const
+{
+	return d->actionnames;
+}
+
 void Manager::publishAction(Action::Ptr action)
 {
-	Q_ASSERT(! d->actions.contains(action->name()));
-	d->actions.replace(action->name(), action);
+	const QString name = action->name();
+	if(! d->actions.contains(name)) {
+		d->actionnames.append(name);
+	}
+	d->actions.replace(name, action);
 }
 
 void Manager::publishObject(const QString& name, QObject* object)

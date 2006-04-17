@@ -120,7 +120,9 @@ class KexiMacroDesignView : public KexiMacroView
 		/**
 		 * Update the \a KoProperty::Set properties.
 		 */
-		void updateProperties(int type = 0);
+		void updateProperties();
+
+		void setAction(const QString& actionname);
 };
 
 #endif

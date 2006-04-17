@@ -36,22 +36,75 @@ namespace KoMacro {
 	// Forward-declarations.
 	//class Action;
 
+	/**
+	* The MacroItem class is an item in a @a Macro and represents one
+	* single execution step. Each MacroItem points to 0..1 @a Action
+	* instances which implement the execution. So, the MacroItem provides
+	* a simple state-pattern on the one hand (depending on the for this
+	* MacroItem choosen @a Action implementation) and holds the by the
+	* user defined modifications like e.g. the comment on the other hand.
+	*/
 	class KOMACRO_EXPORT MacroItem : public QObject
 	{
 			Q_OBJECT
 		public:
 
+			/**
+			* Constructor.
+			*
+			* @param parent The parent QObject. We use the
+			* QObject garbage-collector mechanism. So, if the
+			* parent got deleted, this instance will be
+			* automaticly deleted too.
+			*/
 			MacroItem(QObject* parent);
+
+			/**
+			* Destructor.
+			*/
 			~MacroItem();
 
+			/**
+			* @return the comment defined by the user for
+			* this @a MacroItem .
+			*/
 			QString comment() const;
+
+			/**
+			* Set the comment defined by the user for this
+			* @a MacroItem .
+			*/
 			void setComment(const QString& comment);
 
+			/**
+			* @return the @a Action this @a MacroItem points
+			* to. This method will return NULL if there is
+			* no @a Action defined yet else the returned
+			* @a Action will be used to implement the execution.
+			*/
 			KSharedPtr<Action> action() const;
+
+			/**
+			* Set the @a Action this @a MacroItem points to.
+			*/
 			void setAction(KSharedPtr<Action> action);
 
+			/**
+			* @return the @a Variable instance identified with
+			* the name @p name . If this @a MacroItem doesn't
+			* have a @a Variable with that name NULL is returned.
+			*/
 			KSharedPtr<Variable> variable(const QString& name) const;
+
+			/**
+			* @return a map of @a Variable instances.
+			*/
 			QMap<QString, KSharedPtr<Variable> > variables() const;
+
+			/**
+			* Set the @a Variable @p variable with the variablename
+			* @p name .
+			*/
 			bool setVariable(const QString& name, KSharedPtr<Variable> variable);
 
 		public slots:

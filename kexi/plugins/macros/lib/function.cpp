@@ -213,7 +213,7 @@ void Function::activate(Context::Ptr context)
 		else {
 			// the first item in the list of variables is always the returnvalue.
 //this->setVariable("0", returnvalue);
-			this->setVariable(returnvalue);
+			this->setVariable("0", returnvalue);
 		}
 
 		kdDebug() << "Function::activate(Context::Ptr) return=" << rvvalue << " value=" << returnvalue->toString() << endl;
