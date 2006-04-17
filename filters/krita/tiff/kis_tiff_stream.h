@@ -69,7 +69,7 @@ class TIFFStreamContigAbove32 : public TIFFStreamContigBase {
 class TIFFStreamSeperate : public TIFFStreamBase {
     public:
         TIFFStreamSeperate( uint8** srcs, uint8 nb_samples ,uint16 depth, uint32* lineSize);
-        ~TIFFStreamSeperate();
+        virtual ~TIFFStreamSeperate();
         virtual uint32 nextValue();
         virtual void restart();
         virtual void moveToLine(uint32 lineNumber);

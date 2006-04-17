@@ -344,7 +344,7 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory( TIFF* image)
             m_img->resize(newwidth, newheight, false);
         }
     }
-    KisPaintLayer* layer = new KisPaintLayer(m_img, m_img -> nextLayerName(), quint8_MAX);
+    KisPaintLayer* layer = new KisPaintLayer(m_img.data(), m_img -> nextLayerName(), quint8_MAX);
     tdata_t buf = 0;
     tdata_t* ps_buf = 0; // used only for planar configuration seperated
     TIFFStreamBase* tiffstream;
@@ -577,7 +577,7 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory( TIFF* image)
         m_img->convertTo(dstCS);
     }
 
-    m_img->addLayer(layer, m_img->rootLayer(), 0);
+    m_img->addLayer(KisLayerSP(layer), m_img->rootLayer(), KisLayerSP(0));
     return KisImageBuilder_RESULT_OK;
 }
 
@@ -595,7 +595,7 @@ KisImageBuilder_Result KisTIFFConverter::buildImage(const KUrl& uri)
     QString tmpFile;
 
     if (KIO::NetAccess::download(uri, tmpFile, qApp -> mainWidget())) {
-        KURL uriTF;
+        KUrl uriTF;
         uriTF.setPath( tmpFile );
         result = decode(uriTF);
         KIO::NetAccess::removeTempFile(tmpFile);

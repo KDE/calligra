@@ -87,8 +87,8 @@ KoFilter::ConversionStatus KisTIFFExport::convert(const QByteArray& from, const 
     {
         img = new KisImage(0, output->currentImage()->width(), output->currentImage()->height(), output->currentImage()->colorSpace(), "");
         KisPaintDeviceSP pd = KisPaintDeviceSP(new KisPaintDevice(*output->currentImage()->projection()));
-        KisPaintLayerSP l = KisPaintLayerSP(new KisPaintLayer(img, "projection", OPACITY_OPAQUE, pd));
-        img->addLayer(l.data(), img->rootLayer(), 0);
+        KisPaintLayerSP l = KisPaintLayerSP(new KisPaintLayer(img.data(), "projection", OPACITY_OPAQUE, pd));
+        img->addLayer(KisLayerSP(l.data()), img->rootLayer(), KisLayerSP(0));
     } else {
         img = output->currentImage();
     }

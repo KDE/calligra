@@ -70,9 +70,9 @@ void KisYCbCrU16ColorSpace::fromQColor(const QColor& c, quint8 *dstU8, KisProfil
         KisYCbCrU16ColorSpace::fromQColor(c, dstU8, profile);
     } else {
         Pixel *dst = reinterpret_cast<Pixel *>(dstU8);
-        dst->Y = computeY( c.Qt::red(), c.Qt::green(), c.Qt::blue());
-        dst->Cb = computeCb( c.Qt::red(), c.Qt::green(), c.Qt::blue());
-        dst->Cr = computeCr( c.Qt::red(), c.Qt::green(), c.Qt::blue());
+        dst->Y = computeY( c.red(), c.green(), c.blue());
+        dst->Cb = computeCb( c.red(), c.green(), c.blue());
+        dst->Cr = computeCr( c.red(), c.green(), c.blue());
     }
 }
 
@@ -83,9 +83,9 @@ void KisYCbCrU16ColorSpace::fromQColor(const QColor& c, quint8 opacity, quint8 *
         KisYCbCrU16ColorSpace::fromQColor(c, opacity, dstU8, profile);
     } else {
         Pixel *dst = reinterpret_cast<Pixel *>(dstU8);
-        dst->Y = computeY( c.Qt::red(), c.Qt::green(), c.Qt::blue());
-        dst->Cb = computeCb( c.Qt::red(), c.Qt::green(), c.Qt::blue());
-        dst->Cr = computeCr( c.Qt::red(), c.Qt::green(), c.Qt::blue());
+        dst->Y = computeY( c.red(), c.green(), c.blue());
+        dst->Cb = computeCb( c.red(), c.green(), c.blue());
+        dst->Cr = computeCr( c.red(), c.green(), c.blue());
         dst->alpha = opacity;
     }
 }

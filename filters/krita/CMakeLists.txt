@@ -26,7 +26,6 @@ if(OPENEXR_FOUND)
 endif(OPENEXR_FOUND)
 
 message(STATUS "${CMAKE_CURRENT_SOURCE_DIR}: skipped subdir $(IMAGEMAGICK_SUBDIR)")
-message(STATUS "${CMAKE_CURRENT_SOURCE_DIR}: skipped subdir $(LIBKISEXIF)")
 
 kde4_footer()
 

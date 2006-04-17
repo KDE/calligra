@@ -124,6 +124,7 @@ class KisTIFFReaderBase {
         {
             
         }
+        virtual KisTIFFReaderBase::~KisTIFFReaderBase() {}
     public:
         /**
          * This function copy data from the tiff stream to the paint device starting at the given position.
@@ -183,7 +184,7 @@ class KisTIFFReaderTarget16bit : public KisTIFFReaderBase {
 
 class KisTIFFReaderFromPalette : public  KisTIFFReaderBase {
     public:
-        KisTIFFReaderFromPalette( KisPaintDeviceSP device, uint16 *red, uint16 *green, uint16 *blue, quint8* poses, int8 alphapos, uint8 sourceDepth, uint8 nbcolorssamples, uint8 extrasamplescount, cmsHTRANSFORM transformProfile, KisTIFFPostProcessor* postprocessor) : KisTIFFReaderBase(device, poses, alphapos, sourceDepth,  nbcolorssamples, extrasamplescount, transformProfile, postprocessor ), m_red(Qt::red), m_green(Qt::green), m_blue(Qt::blue)
+        KisTIFFReaderFromPalette( KisPaintDeviceSP device, uint16 *red, uint16 *green, uint16 *blue, quint8* poses, int8 alphapos, uint8 sourceDepth, uint8 nbcolorssamples, uint8 extrasamplescount, cmsHTRANSFORM transformProfile, KisTIFFPostProcessor* postprocessor) : KisTIFFReaderBase(device, poses, alphapos, sourceDepth,  nbcolorssamples, extrasamplescount, transformProfile, postprocessor ), m_red(red), m_green(green), m_blue(blue)
         {
             
         }

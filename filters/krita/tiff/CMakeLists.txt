@@ -1,11 +1,23 @@
 kde4_header()
 
-include_directories( ${CMAKE_SOURCE_DIR}/krita ${CMAKE_SOURCE_DIR}/krita/core ${CMAKE_SOURCE_DIR}/krita/sdk ${CMAKE_SOURCE_DIR}/krita/core/tiles ${CMAKE_SOURCE_DIR}/krita/kritacolor ${CMAKE_SOURCE_DIR}/krita/ui ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
+include_directories(${KRITA_INCLUDES})
 
+set(libkritatiffconverter_LIB_SRCS
+    kis_tiff_converter.cc
+    kis_tiff_stream.cc
+    kis_tiff_writer_visitor.cpp
+    kis_tiff_reader.cc
+    kis_ycbcr_u8_colorspace.cpp 
+    kis_tiff_ycbcr_reader.cc
+	kis_ycbcr_u16_colorspace.cpp
+    )
 
-########### next target ###############
+########## next target ###############
 
-set(kritatiffimport_PART_SRCS kis_tiff_import.cc )
+set(kritatiffimport_PART_SRCS
+    ${libkritatiffconverter_LIB_SRCS}
+    kis_tiff_import.cc 
+    )
 
 kde4_automoc(${kritatiffimport_PART_SRCS})
 
@@ -13,14 +25,18 @@ kde4_add_plugin(kritatiffimport WITH_PREFIX ${kritatiffimport_PART_SRCS})
 
 kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritatiffimport )
 
-target_link_libraries(kritatiffimport  ${KDE4_KDECORE_LIBS} kritacommon kritatiffconverter tiff )
+target_link_libraries(kritatiffimport kritacommon ${KDE4_KDECORE_LIBS} tiff)
 
 install_targets(${LIB_INSTALL_DIR}/kde4 kritatiffimport )
 
 
 ########### next target ###############
 
-set(kritatiffexport_PART_SRCS kis_tiff_export.cc kis_dlg_options_tiff.cpp )
+set(kritatiffexport_PART_SRCS 
+    ${libkritatiffconverter_LIB_SRCS}
+    kis_tiff_export.cc 
+    kis_dlg_options_tiff.cpp
+    )
 
 kde4_automoc(${kritatiffexport_PART_SRCS})
 
@@ -30,7 +46,7 @@ kde4_add_plugin(kritatiffexport WITH_PREFIX ${kritatiffexport_PART_SRCS})
 
 kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritatiffexport )
 
-target_link_libraries(kritatiffexport  ${KDE4_KDECORE_LIBS} kritacommon kritatiffconverter tiff )
+target_link_libraries(kritatiffexport kritacommon ${KDE4_KDECORE_LIBS} tiff)
 
 install_targets(${LIB_INSTALL_DIR}/kde4 kritatiffexport )
 
