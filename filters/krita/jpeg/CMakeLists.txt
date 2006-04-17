@@ -1,14 +1,21 @@
 kde4_header()
 
-include_directories( ${CMAKE_SOURCE_DIR}/krita ${CMAKE_SOURCE_DIR}/krita/core ${CMAKE_SOURCE_DIR}/krita/sdk ${CMAKE_SOURCE_DIR}/krita/core/tiles ${CMAKE_SOURCE_DIR}/krita/kritacolor ${CMAKE_SOURCE_DIR}/krita/ui ${CMAKE_SOURCE_DIR}/filters/krita/libkisexif ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
+include_directories(${CMAKE_SOURCE_DIR}/filters/krita/libkisexif ${KRITA_INCLUDES})
 
+set(libkisexif_LIB_SRCS
+    ${CMAKE_SOURCE_DIR}/filters/krita/libkisexif/kis_exif_io.cpp
+    )
 
-########### next target ###############
+set(libkritaconverter_LIB_SRCS
+    kis_jpeg_converter.cc
+    iccjpeg.c
+    ${libkisexif_LIB_SRCS}
+    )
 
-
-########### next target ###############
-
-set(kritajpegimport_PART_SRCS kis_jpeg_import.cc )
+set(kritajpegimport_PART_SRCS 
+    kis_jpeg_import.cc
+    ${libkritaconverter_LIB_SRCS}
+    )
 
 kde4_automoc(${kritajpegimport_PART_SRCS})
 
@@ -16,14 +23,16 @@ kde4_add_plugin(kritajpegimport WITH_PREFIX ${kritajpegimport_PART_SRCS})
 
 kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritajpegimport )
 
-target_link_libraries(kritajpegimport  ${KDE4_KDECORE_LIBS} kritacommon kritaconverter jpeg exif )
+target_link_libraries(kritajpegimport kritacommon ${KDE4_KDECORE_LIBS} jpeg exif)
 
 install_targets(${LIB_INSTALL_DIR}/kde4 kritajpegimport )
 
-
 ########### next target ###############
 
-set(kritajpegexport_PART_SRCS kis_jpeg_export.cc )
+set(kritajpegexport_PART_SRCS 
+    kis_jpeg_export.cc
+    ${libkritaconverter_LIB_SRCS}
+    )
 
 kde4_automoc(${kritajpegexport_PART_SRCS})
 
@@ -33,7 +42,7 @@ kde4_add_plugin(kritajpegexport WITH_PREFIX ${kritajpegexport_PART_SRCS})
 
 kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritajpegexport )
 
-target_link_libraries(kritajpegexport  ${KDE4_KDECORE_LIBS} kritacommon kritaconverter jpeg exif )
+target_link_libraries(kritajpegexport kritacommon ${KDE4_KDECORE_LIBS} jpeg exif)
 
 install_targets(${LIB_INSTALL_DIR}/kde4 kritajpegexport )
 
@@ -44,7 +53,6 @@ install_files( ${SERVICES_INSTALL_DIR} FILES  krita_jpeg_import.desktop krita_jp
 install_files( ${APPLNK_INSTALL_DIR}/Office FILES  krita_jpeg.desktop )
 
 kde4_footer()
-
 
 
 #original Makefile.am contents follow:

@@ -193,11 +193,11 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KUrl& uri)
         Q_CHECK_PTR(m_img);
         if(profile && !profile->isSuitableForOutput())
         {
-            m_img -> addAnnotation( new KisAnnotation( profile->productName(), "", profile_rawdata) );
+            m_img -> addAnnotation( KisAnnotationSP(new KisAnnotation( profile->productName(), "", profile_rawdata)) );
         }
     }
 
-    KisPaintLayerSP layer = new KisPaintLayer(m_img, m_img -> nextLayerName(), quint8_MAX);
+    KisPaintLayerSP layer = KisPaintLayerSP(new KisPaintLayer(m_img.data(), m_img -> nextLayerName(), quint8_MAX));
     
     // Read exif information if any
     
@@ -247,7 +247,7 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KUrl& uri)
         }
     }
     
-    m_img->addLayer(layer.data(), m_img->rootLayer(), 0);
+    m_img->addLayer(KisLayerSP(layer.data()), m_img->rootLayer(), KisLayerSP(0));
     
     // Read exif informations
 
@@ -331,7 +331,7 @@ KisImageBuilder_Result KisJPEGConverter::buildImage(const KUrl& uri)
     QString tmpFile;
 
     if (KIO::NetAccess::download(uri, tmpFile, qApp -> mainWidget())) {
-        KURL uriTF;
+        KUrl uriTF;
         uriTF.setPath( tmpFile );
         result = decode(uriTF);
         KIO::NetAccess::removeTempFile(tmpFile);
@@ -352,7 +352,7 @@ KisImageBuilder_Result KisJPEGConverter::buildFile(const KUrl& uri, KisPaintLaye
     if (!layer)
         return KisImageBuilder_RESULT_INVALID_ARG;
 
-    KisImageSP img = layer -> image();
+    KisImageSP img = KisImageSP(layer -> image());
     if (!img)
         return KisImageBuilder_RESULT_EMPTY;
 
