@@ -51,7 +51,7 @@ public:
     KWInsertPicPreview( QWidget *parent )
         : Q3ScrollView( parent )
     {
-        viewport()->setBackgroundMode( PaletteBase );
+        viewport()->setBackgroundMode( Qt::PaletteBase );
         setMinimumSize( 300, 200 );
     }
 
@@ -152,7 +152,7 @@ KoPicture KWInsertPicDia::selectPictureDia( const QString & _path, QWidget* pare
     QStringList mimetypes ( KImageIO::mimeTypes( KImageIO::Reading ) );
     mimetypes += KoPictureFilePreview::clipartMimeTypes();
 
-    KFileDialog fd( _path, QString::null, parent, 0, true );
+    KFileDialog fd( _path, QString::null, parent );
     fd.setMimeFilter( mimetypes );
     fd.setCaption(i18n("Choose Picture"));
     return selectPicture( fd, parent );

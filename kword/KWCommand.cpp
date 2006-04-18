@@ -271,7 +271,7 @@ KoTextCursor * KWOasisPasteCommand::execute( KoTextCursor *c )
 
     KWTextDocument * textdoc = static_cast<KWTextDocument *>(doc);
 
-    QBuffer buffer( m_data );
+    QBuffer buffer( &m_data );
 
     KoStore * store = KoStore::createStore( &buffer, KoStore::Read );
     KWDocument* kwdoc = textdoc->textFrameSet()->kWordDocument();

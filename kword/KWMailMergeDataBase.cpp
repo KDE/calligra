@@ -24,7 +24,8 @@
 #include "KWMailMergeDataBase.moc"
 #include <KoCustomVariablesDia.h>
 #include "defs.h"
-
+#include <Q3ListBox>
+#include <QComboBox>
 #include <klocale.h>
 #include <kdebug.h>
 #include <kstdaction.h>

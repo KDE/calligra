@@ -22,10 +22,10 @@
 
 #include <kdialogbase.h>
 #include <qmap.h>
+#include <Q3ListBox>
 
 class QPushButton;
 class QComboBox;
-class Q3ListBox;
 class QLineEdit;
 
 class KWEditPersonnalExpression : public KDialogBase

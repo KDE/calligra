@@ -31,6 +31,7 @@
 #include <qlineedit.h>
 #include <qlabel.h>
 #include <qlayout.h>
+#include <Q3GroupBox>
 //Added by qt3to4:
 #include <Q3GridLayout>
 #include <Q3HBoxLayout>
@@ -359,7 +360,7 @@ void KWEditPersonnalExpression::saveFile()
             }
         }
     }
-    QByteArray s = doc.toCString();
+    QByteArray s = doc.toByteArray();
 
     QFile file( locateLocal("data","kword/expression/perso.xml") );
     if ( !file.open( QIODevice::WriteOnly ) )

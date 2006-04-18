@@ -1,7 +1,3 @@
-//Added by qt3to4:
-#include <Q3VBoxLayout>
-#include <QLabel>
-#include <Q3Frame>
 /* This file is part of the KOffice project
  * Copyright (C) 2005 Thomas Zander <zander@kde.org>
  *
@@ -28,6 +24,10 @@ class KWDocument;
 class Q3VBoxLayout;
 class QTabWidget;
 class QLabel;
+//Added by qt3to4:
+#include <Q3VBoxLayout>
+#include <QLabel>
+#include <Q3Frame>
 
 #include <defs.h>
 #include <kdialogbase.h>

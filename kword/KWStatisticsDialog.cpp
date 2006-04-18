@@ -30,6 +30,7 @@
 #include <Q3VBoxLayout>
 #include <Q3GridLayout>
 #include <Q3Frame>
+#include <Q3GroupBox>
 
 KWStatisticsDialog::KWStatisticsDialog( QWidget *parent, KWDocument *document )
     : KDialogBase(parent, "statistics", true, i18n("Statistics"),KDialogBase::Ok, KDialogBase::Ok, false )
