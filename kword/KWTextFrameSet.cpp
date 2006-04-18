@@ -3157,7 +3157,7 @@ void KWTextFrameSetEdit::slotFrameDeleted( KWFrame *frm )
 
 void KWTextFrameSetEdit::paste()
 {
-    QMimeSource *data = QApplication::clipboard()->data();
+    QMimeSource *data = QApplication::clipboard()->data(QClipboard::Clipboard);
     int provides = KWView::checkClipboard( data );
     pasteData( data, provides, false );
 }
@@ -3219,7 +3219,7 @@ void KWTextFrameSetEdit::copy()
 {
     if ( textDocument()->hasSelection( KoTextDocument::Standard ) ) {
         Q3DragObject *drag = newDrag( 0 );
-        QApplication::clipboard()->setData( drag );
+        QApplication::clipboard()->setData( drag, QClipboard::Clipboard );
     }
 }
 

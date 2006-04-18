@@ -229,7 +229,7 @@ void KWCanvas::print( QPainter *painter, KPrinter *printer )
     // Use page list specified in kdeprint dialogbox
     Q3ValueList<int> pageList = printer->pageList();
     Q3ProgressDialog progress( i18n( "Printing..." ), i18n( "Cancel" ),
-                              pageList.count() + 1, this );
+                              pageList.count() + 1, this, 0, false, 0 );
     int j = 0;
     progress.setProgress( 0 );
     Q3ValueList<int>::Iterator it = pageList.begin();
@@ -440,7 +440,7 @@ void KWCanvas::contentsMousePressEvent( QMouseEvent *e )
     {
         if(! viewMode()->hasFrames() ) { // for the text mode we just forward the click to the text
             // first, make clicks left of text be on the border;
-            docPoint = KoPoint(qMax(0, docPoint.x()), qMax(0, docPoint.y()));
+            docPoint = KoPoint(qMax(0.0, docPoint.x()), qMax(0.0, docPoint.y()));
             if ( m_currentFrameSetEdit )
                 m_currentFrameSetEdit->mousePressEvent( e, normalPoint, docPoint );
             break;
@@ -553,9 +553,7 @@ void KWCanvas::contentsMousePressEvent( QMouseEvent *e )
     if ( e->button() == Qt::MidButton ) {
         if ( m_doc->isReadWrite() && m_currentFrameSetEdit && m_mouseMode == MM_EDIT )
         {
-            QApplication::clipboard()->setSelectionMode( true );
             m_currentFrameSetEdit->paste();
-            QApplication::clipboard()->setSelectionMode( false );
         }
     }
     else if ( e->button() == Qt::RightButton ) {
