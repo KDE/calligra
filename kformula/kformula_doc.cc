@@ -64,7 +64,7 @@ KFormulaDoc::KFormulaDoc(QWidget *parentWidget, const char *widgetName, QObject*
     setInstance(KFormulaFactory::global(), false);
     //kDebug(39001) << "General Settings" << endl;
 
-    history = new KoCommandHistory( actionCollection() );
+    history = new KCommandHistory( actionCollection() );
     wrapper = new KFormula::DocumentWrapper( KGlobal::config(),
                                              actionCollection(),
                                              history );
