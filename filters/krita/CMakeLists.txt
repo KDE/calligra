@@ -7,7 +7,7 @@ macro_optional_find_package(JPEG)
 
 include_directories(${KRITA_INCLUDES})
 
-#add_subdirectory( raw )
+add_subdirectory( raw )
 
 if(JPEG_FOUND)
 	add_subdirectory(jpeg)
