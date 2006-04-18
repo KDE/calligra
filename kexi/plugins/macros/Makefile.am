@@ -7,7 +7,7 @@ if include_kunittest
 
 endif
 
-SUBDIRS = lib $(TESTSDIR) .
+SUBDIRS = lib .
 
 kde_module_LTLIBRARIES = kexihandler_macro.la
 
