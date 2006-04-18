@@ -15,7 +15,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} karbon_whirlpinchplugin )
 
 target_link_libraries(karbon_whirlpinchplugin  ${KDE4_KDECORE_LIBS} ${KDE4_KPARTS_LIBS} kopainter karboncommon )
 
-install_targets(${LIB_INSTALL_DIR}/kde4 karbon_whirlpinchplugin )
+install_targets(${PLUGIN_INSTALL_DIR} karbon_whirlpinchplugin )
 
 
 ########### install files ###############

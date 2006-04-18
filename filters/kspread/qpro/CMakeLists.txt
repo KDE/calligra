@@ -17,7 +17,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} qproimport )
 
 target_link_libraries(qproimport  ${KDE4_KDECORE_LIBS} kspreadcommon qpro )
 
-install_targets(${LIB_INSTALL_DIR}/kde4 qproimport )
+install_targets(${PLUGIN_INSTALL_DIR} qproimport )
 
 
 ########### install files ###############

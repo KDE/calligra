@@ -19,7 +19,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kwmailmerge_classic )
 
 target_link_libraries(kwmailmerge_classic  ${KDE4_KDECORE_LIBS} kwmailmerge_interface ${KDE4_KDEUI_LIBS} kotext )
 
-install_targets(${LIB_INSTALL_DIR}/kde4 kwmailmerge_classic )
+install_targets(${PLUGIN_INSTALL_DIR} kwmailmerge_classic )
 
 
 ########### install files ###############

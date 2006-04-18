@@ -23,7 +23,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kspreadcalc )
 
 target_link_libraries(kspreadcalc  ${KDE4_KDECORE_LIBS} kspreadcommon )
 
-install_targets(${LIB_INSTALL_DIR}/kde4 kspreadcalc )
+install_targets(${PLUGIN_INSTALL_DIR} kspreadcalc )
 
 
 ########### install files ###############

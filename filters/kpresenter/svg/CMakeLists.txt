@@ -15,7 +15,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kpresentersvgexport )
 
 target_link_libraries(kpresentersvgexport  ${KDE4_KDECORE_LIBS} kpresenterprivate )
 
-install_targets(${LIB_INSTALL_DIR}/kde4 kpresentersvgexport )
+install_targets(${PLUGIN_INSTALL_DIR} kpresentersvgexport )
 
 
 ########### install files ###############

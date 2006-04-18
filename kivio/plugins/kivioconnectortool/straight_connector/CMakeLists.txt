@@ -15,7 +15,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} straight_connector )
 
 target_link_libraries(straight_connector  ${KDE4_KDECORE_LIBS} kopainter kiviocommon )
 
-install_targets(${LIB_INSTALL_DIR}/kde4 straight_connector )
+install_targets(${PLUGIN_INSTALL_DIR} straight_connector )
 
 
 ########### install files ###############

@@ -21,7 +21,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kexidb_pqxxsqldriver )
 
 target_link_libraries(kexidb_pqxxsqldriver  ${KDE4_KDECORE_LIBS} ${KDE4_KPARTS_LIBS} pqxx kexidb )
 
-install_targets(${LIB_INSTALL_DIR}/kde4 kexidb_pqxxsqldriver )
+install_targets(${PLUGIN_INSTALL_DIR} kexidb_pqxxsqldriver )
 
 
 ########### install files ###############

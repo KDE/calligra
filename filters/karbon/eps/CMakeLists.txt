@@ -15,7 +15,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} karbonepsexport )
 
 target_link_libraries(karbonepsexport  ${KDE4_KDECORE_LIBS} kofficeui karboncommon )
 
-install_targets(${LIB_INSTALL_DIR}/kde4 karbonepsexport )
+install_targets(${PLUGIN_INSTALL_DIR} karbonepsexport )
 
 
 ########### next target ###############
@@ -30,7 +30,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} karbonepsimport )
 
 target_link_libraries(karbonepsimport  ${KDE4_KDECORE_LIBS} kofficeui )
 
-install_targets(${LIB_INSTALL_DIR}/kde4 karbonepsimport )
+install_targets(${PLUGIN_INSTALL_DIR} karbonepsimport )
 
 
 ########### install files ###############

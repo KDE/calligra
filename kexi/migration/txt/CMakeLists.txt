@@ -15,7 +15,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} keximigrate_txtmigrate )
 
 target_link_libraries(keximigrate_txtmigrate  ${KDE4_KDECORE_LIBS} ${KDE4_KPARTS_LIBS} keximigrate )
 
-install_targets(${LIB_INSTALL_DIR}/kde4 keximigrate_txtmigrate )
+install_targets(${PLUGIN_INSTALL_DIR} keximigrate_txtmigrate )
 
 
 ########### install files ###############

@@ -15,7 +15,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} starwriterimport )
 
 target_link_libraries(starwriterimport  ${KDE4_KDECORE_LIBS} )
 
-install_targets(${LIB_INSTALL_DIR}/kde4 starwriterimport )
+install_targets(${PLUGIN_INSTALL_DIR} starwriterimport )
 
 
 ########### install files ###############

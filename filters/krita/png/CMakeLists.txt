@@ -17,7 +17,7 @@ add_definitions(${PNG_DEFINITIONS} ${KDE4_ENABLE_EXCEPTIONS})
 
 target_link_libraries(kritapngimport  ${KDE4_KDECORE_LIBS} kritacommon ${PNG_LIBRARIES})
 
-install_targets(${LIB_INSTALL_DIR}/kde4 kritapngimport )
+install_targets(${PLUGIN_INSTALL_DIR} kritapngimport )
 
 set(kritapngexport_PART_SRCS 
     kis_png_export.cc 
@@ -34,7 +34,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritapngexport )
 
 target_link_libraries(kritapngexport  ${KDE4_KDECORE_LIBS} kritacommon ${PNG_LIBRARIES})
 
-install_targets(${LIB_INSTALL_DIR}/kde4 kritapngexport )
+install_targets(${PLUGIN_INSTALL_DIR} kritapngexport )
 
 install_files( ${SERVICES_INSTALL_DIR} FILES  krita_png_import.desktop krita_png_export.desktop )
 install_files( ${APPLNK_INSTALL_DIR}/Office FILES  krita_png.desktop )

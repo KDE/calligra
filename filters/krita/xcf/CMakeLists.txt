@@ -17,7 +17,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritaxcfimport )
 
 target_link_libraries(kritaxcfimport  ${KDE4_KDECORE_LIBS} kritacommon )
 
-install_targets(${LIB_INSTALL_DIR}/kde4 kritaxcfimport )
+install_targets(${PLUGIN_INSTALL_DIR} kritaxcfimport )
 
 
 ########### next target ###############
@@ -32,7 +32,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritaxcfexport )
 
 target_link_libraries(kritaxcfexport  ${KDE4_KDECORE_LIBS} kritacommon )
 
-install_targets(${LIB_INSTALL_DIR}/kde4 kritaxcfexport )
+install_targets(${PLUGIN_INSTALL_DIR} kritaxcfexport )
 
 
 ########### install files ###############

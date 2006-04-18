@@ -20,7 +20,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} latexgenerator )
 
 target_link_libraries(latexgenerator  ${KDE4_KDECORE_LIBS} )
 
-install_targets(${LIB_INSTALL_DIR}/kde4 latexgenerator )
+install_targets(${PLUGIN_INSTALL_DIR} latexgenerator )
 
 
 ########### install files ###############

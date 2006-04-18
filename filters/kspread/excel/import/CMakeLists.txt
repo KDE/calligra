@@ -15,7 +15,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} excelimport )
 
 target_link_libraries(excelimport  ${KDE4_KDECORE_LIBS} sidewinder )
 
-install_targets(${LIB_INSTALL_DIR}/kde4 excelimport )
+install_targets(${PLUGIN_INSTALL_DIR} excelimport )
 
 
 ########### install files ###############

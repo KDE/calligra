@@ -33,7 +33,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kudesignerpart )
 
 target_link_libraries(kudesignerpart  ${KDE4_KDECORE_LIBS} kudesignercore kofficeui ${KDE4_KPARTS_LIBS} kofficecore )
 
-install_targets(${LIB_INSTALL_DIR}/kde4 kudesignerpart )
+install_targets(${PLUGIN_INSTALL_DIR} kudesignerpart )
 
 
 ########### next target ###############

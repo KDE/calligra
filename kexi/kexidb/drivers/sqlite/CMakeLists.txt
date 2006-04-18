@@ -20,7 +20,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kexidb_sqlite3driver )
 
 target_link_libraries(kexidb_sqlite3driver  ${KDE4_KDECORE_LIBS} ${KDE4_KPARTS_LIBS} kexisql3 kexidb kexidbparser )
 
-install_targets(${LIB_INSTALL_DIR}/kde4 kexidb_sqlite3driver )
+install_targets(${PLUGIN_INSTALL_DIR} kexidb_sqlite3driver )
 
 
 ########### install files ###############

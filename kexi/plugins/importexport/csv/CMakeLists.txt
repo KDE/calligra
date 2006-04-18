@@ -20,7 +20,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kexihandler_csv_importexport )
 
 target_link_libraries(kexihandler_csv_importexport  ${KDE4_KDECORE_LIBS} kexicore keximigrate )
 
-install_targets(${LIB_INSTALL_DIR}/kde4 kexihandler_csv_importexport )
+install_targets(${PLUGIN_INSTALL_DIR} kexihandler_csv_importexport )
 
 
 ########### install files ###############

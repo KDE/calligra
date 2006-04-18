@@ -24,7 +24,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} mswriteimport )
 
 target_link_libraries(mswriteimport  ${KDE4_KDECORE_LIBS} )
 
-install_targets(${LIB_INSTALL_DIR}/kde4 mswriteimport )
+install_targets(${PLUGIN_INSTALL_DIR} mswriteimport )
 
 
 ########### next target ###############
@@ -45,7 +45,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} mswriteexport )
 
 target_link_libraries(mswriteexport  ${KDE4_KDECORE_LIBS} kowmf kwordexportfilters )
 
-install_targets(${LIB_INSTALL_DIR}/kde4 mswriteexport )
+install_targets(${PLUGIN_INSTALL_DIR} mswriteexport )
 
 
 ########### install files ###############

@@ -15,7 +15,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kformdesigner_kdev_part )
 
 target_link_libraries(kformdesigner_kdev_part  ${KDE4_KDECORE_LIBS} kformdesigner kinterfacedesigner )
 
-install_targets(${LIB_INSTALL_DIR}/kde4 kformdesigner_kdev_part )
+install_targets(${PLUGIN_INSTALL_DIR} kformdesigner_kdev_part )
 
 
 ########### install files ###############

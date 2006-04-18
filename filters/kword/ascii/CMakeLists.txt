@@ -17,7 +17,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} asciiimport )
 
 target_link_libraries(asciiimport  ${KDE4_KDEUI_LIBS} kofficecore kwordexportfilters)
 
-install_targets(${LIB_INSTALL_DIR}/kde4 asciiimport )
+install_targets(${PLUGIN_INSTALL_DIR} asciiimport )
 
 
 ########### next target ###############
@@ -34,7 +34,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} asciiexport )
 
 target_link_libraries(asciiexport  ${KDE4_KDEUI_LIBS} kofficecore kwordexportfilters)
 
-install_targets(${LIB_INSTALL_DIR}/kde4 asciiexport )
+install_targets(${PLUGIN_INSTALL_DIR} asciiexport )
 
 
 ########### install files ###############

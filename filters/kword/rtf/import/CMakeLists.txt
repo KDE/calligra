@@ -15,7 +15,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} rtfimport )
 
 target_link_libraries(rtfimport  ${KDE4_KDECORE_LIBS} )
 
-install_targets(${LIB_INSTALL_DIR}/kde4 rtfimport )
+install_targets(${PLUGIN_INSTALL_DIR} rtfimport )
 
 
 ########### install files ###############

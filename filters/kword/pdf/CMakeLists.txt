@@ -26,7 +26,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} pdfimport )
 
 target_link_libraries(pdfimport  ${KDE4_KDECORE_LIBS} kofficecore xpdf goo )
 
-install_targets(${LIB_INSTALL_DIR}/kde4 pdfimport )
+install_targets(${PLUGIN_INSTALL_DIR} pdfimport )
 
 
 ########### install files ###############

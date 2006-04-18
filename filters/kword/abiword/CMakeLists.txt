@@ -20,7 +20,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} abiwordimport )
 
 target_link_libraries(abiwordimport  ${KDE4_KDECORE_LIBS} kwordexportfilters)
 
-install_targets(${LIB_INSTALL_DIR}/kde4 abiwordimport )
+install_targets(${PLUGIN_INSTALL_DIR} abiwordimport )
 
 
 ########### next target ###############
@@ -35,7 +35,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} abiwordexport )
 
 target_link_libraries(abiwordexport  ${KDE4_KDECORE_LIBS} kwordexportfilters)
 
-install_targets(${LIB_INSTALL_DIR}/kde4 abiwordexport )
+install_targets(${PLUGIN_INSTALL_DIR} abiwordexport )
 
 
 ########### install files ###############

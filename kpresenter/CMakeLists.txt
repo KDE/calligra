@@ -163,7 +163,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kpresenterpart )
 
 target_link_libraries(kpresenterpart  ${KDE4_KDECORE_LIBS} kpresenterprivate )
 
-install_targets(${LIB_INSTALL_DIR}/kde4 kpresenterpart )
+install_targets(${PLUGIN_INSTALL_DIR} kpresenterpart )
 
 
 ########### next target ###############

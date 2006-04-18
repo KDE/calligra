@@ -15,7 +15,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kwmailmerge_kspread )
 
 target_link_libraries(kwmailmerge_kspread  ${KDE4_KDECORE_LIBS} kwmailmerge_interface kspreadcommon ${KDE4_KDEUI_LIBS} )
 
-install_targets(${LIB_INSTALL_DIR}/kde4 kwmailmerge_kspread )
+install_targets(${PLUGIN_INSTALL_DIR} kwmailmerge_kspread )
 
 
 ########### install files ###############

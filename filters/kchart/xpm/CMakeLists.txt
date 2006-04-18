@@ -15,7 +15,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kchartxpmexport )
 
 target_link_libraries(kchartxpmexport  ${KDE4_KDECORE_LIBS} kchartcommon kchartimageexport  )
 
-install_targets(${LIB_INSTALL_DIR}/kde4 kchartxpmexport )
+install_targets(${PLUGIN_INSTALL_DIR} kchartxpmexport )
 
 
 ########### install files ###############

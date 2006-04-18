@@ -15,7 +15,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} wmlimport )
 
 target_link_libraries(wmlimport  ${KDE4_KDECORE_LIBS} kofficecore kwordexportfilters)
 
-install_targets(${LIB_INSTALL_DIR}/kde4 wmlimport )
+install_targets(${PLUGIN_INSTALL_DIR} wmlimport )
 
 
 ########### next target ###############
@@ -30,7 +30,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} wmlexport )
 
 target_link_libraries(wmlexport  ${KDE4_KDECORE_LIBS} kwordexportfilters kofficecore )
 
-install_targets(${LIB_INSTALL_DIR}/kde4 wmlexport )
+install_targets(${PLUGIN_INSTALL_DIR} wmlexport )
 
 
 ########### install files ###############

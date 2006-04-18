@@ -15,7 +15,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} palmdocimport )
 
 target_link_libraries(palmdocimport  ${KDE4_KDECORE_LIBS} )
 
-install_targets(${LIB_INSTALL_DIR}/kde4 palmdocimport )
+install_targets(${PLUGIN_INSTALL_DIR} palmdocimport )
 
 
 ########### next target ###############
@@ -30,7 +30,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} palmdocexport )
 
 target_link_libraries(palmdocexport  ${KDE4_KDECORE_LIBS} )
 
-install_targets(${LIB_INSTALL_DIR}/kde4 palmdocexport )
+install_targets(${PLUGIN_INSTALL_DIR} palmdocexport )
 
 
 ########### install files ###############

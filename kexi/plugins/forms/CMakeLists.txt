@@ -17,7 +17,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kexihandler_form )
 
 target_link_libraries(kexihandler_form  ${KDE4_KDECORE_LIBS} kexicore kexiguiutils kexidatatable kexiextendedwidgets kformdesigner koproperty kexiformutils )
 
-install_targets(${LIB_INSTALL_DIR}/kde4 kexihandler_form )
+install_targets(${PLUGIN_INSTALL_DIR} kexihandler_form )
 
 
 ########### next target ###############
@@ -32,7 +32,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kformdesigner_kexidbwidgets )
 
 target_link_libraries(kformdesigner_kexidbwidgets  ${KDE4_KDECORE_LIBS} kformdesigner kexiformutils )
 
-install_targets(${LIB_INSTALL_DIR}/kde4 kformdesigner_kexidbwidgets )
+install_targets(${PLUGIN_INSTALL_DIR} kformdesigner_kexidbwidgets )
 
 
 ########### next target ###############

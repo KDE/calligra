@@ -15,7 +15,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} wpexport )
 
 target_link_libraries(wpexport  ${KDE4_KDECORE_LIBS} kwordexportfilters )
 
-install_targets(${LIB_INSTALL_DIR}/kde4 wpexport )
+install_targets(${PLUGIN_INSTALL_DIR} wpexport )
 
 
 ########### install files ###############

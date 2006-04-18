@@ -15,7 +15,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kfolatexexport )
 
 target_link_libraries(kfolatexexport  ${KDE4_KDECORE_LIBS} kofficecore kformulalib )
 
-install_targets(${LIB_INSTALL_DIR}/kde4 kfolatexexport )
+install_targets(${PLUGIN_INSTALL_DIR} kfolatexexport )
 
 
 ########### install files ###############

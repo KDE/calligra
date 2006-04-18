@@ -15,7 +15,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} thesaurustool )
 
 target_link_libraries(thesaurustool  ${KDE4_KIO_LIBS} )
 
-install_targets(${LIB_INSTALL_DIR}/kde4 thesaurustool )
+install_targets(${PLUGIN_INSTALL_DIR} thesaurustool )
 
 
 ########### install files ###############

@@ -21,7 +21,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} csvimport )
 
 target_link_libraries(csvimport  ${KDE4_KDECORE_LIBS} kspreadcommon )
 
-install_targets(${LIB_INSTALL_DIR}/kde4 csvimport )
+install_targets(${PLUGIN_INSTALL_DIR} csvimport )
 
 
 ########### next target ###############
@@ -38,7 +38,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} csvexport )
 
 target_link_libraries(csvexport  ${KDE4_KDECORE_LIBS} kspreadcommon )
 
-install_targets(${LIB_INSTALL_DIR}/kde4 csvexport )
+install_targets(${PLUGIN_INSTALL_DIR} csvexport )
 
 
 ########### install files ###############

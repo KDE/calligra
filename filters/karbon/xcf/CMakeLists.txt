@@ -15,7 +15,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} karbonxcfexport )
 
 target_link_libraries(karbonxcfexport  ${KDE4_KDECORE_LIBS} kofficeui karboncommon )
 
-install_targets(${LIB_INSTALL_DIR}/kde4 karbonxcfexport )
+install_targets(${PLUGIN_INSTALL_DIR} karbonxcfexport )
 
 
 ########### install files ###############

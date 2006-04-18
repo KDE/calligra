@@ -15,7 +15,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kexihandler_report )
 
 target_link_libraries(kexihandler_report  ${KDE4_KDECORE_LIBS} kexicore kexiguiutils kexiextendedwidgets kformdesigner kexiformutils kexireportutils )
 
-install_targets(${LIB_INSTALL_DIR}/kde4 kexihandler_report )
+install_targets(${PLUGIN_INSTALL_DIR} kexihandler_report )
 
 
 ########### next target ###############
@@ -30,7 +30,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kexireportwidgets )
 
 target_link_libraries(kexireportwidgets  ${KDE4_KDECORE_LIBS} kformdesigner kexireportutils )
 
-install_targets(${LIB_INSTALL_DIR}/kde4 kexireportwidgets )
+install_targets(${PLUGIN_INSTALL_DIR} kexireportwidgets )
 
 
 ########### next target ###############

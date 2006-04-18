@@ -21,7 +21,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kexidb_mysqldriver )
 
 target_link_libraries(kexidb_mysqldriver  ${KDE4_KDECORE_LIBS} ${KDE4_KPARTS_LIBS} mysqlclient kexidb )
 
-install_targets(${LIB_INSTALL_DIR}/kde4 kexidb_mysqldriver )
+install_targets(${PLUGIN_INSTALL_DIR} kexidb_mysqldriver )
 
 
 ########### install files ###############

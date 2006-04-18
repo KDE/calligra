@@ -26,7 +26,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kwordpart )
 
 target_link_libraries(kwordpart  ${KDE4_KDECORE_LIBS} kwordprivate )
 
-install_targets(${LIB_INSTALL_DIR}/kde4 kwordpart )
+install_targets(${PLUGIN_INSTALL_DIR} kwordpart )
 
 
 ########### next target ###############

@@ -15,7 +15,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} keximigrate_mysql )
 
 target_link_libraries(keximigrate_mysql  ${KDE4_KDECORE_LIBS} ${KDE4_KPARTS_LIBS} keximigrate mysqlclient )
 
-install_targets(${LIB_INSTALL_DIR}/kde4 keximigrate_mysql )
+install_targets(${PLUGIN_INSTALL_DIR} keximigrate_mysql )
 
 
 ########### install files ###############

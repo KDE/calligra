@@ -15,7 +15,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} amiproimport )
 
 target_link_libraries(amiproimport  ${KDE4_KDECORE_LIBS} )
 
-install_targets(${LIB_INSTALL_DIR}/kde4 amiproimport )
+install_targets(${PLUGIN_INSTALL_DIR} amiproimport )
 
 
 ########### next target ###############
@@ -30,7 +30,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} amiproexport )
 
 target_link_libraries(amiproexport  ${KDE4_KDECORE_LIBS} )
 
-install_targets(${LIB_INSTALL_DIR}/kde4 amiproexport )
+install_targets(${PLUGIN_INSTALL_DIR} amiproexport )
 
 
 ########### install files ###############

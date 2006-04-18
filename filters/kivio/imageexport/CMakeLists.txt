@@ -17,7 +17,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kivioimageexport )
 
 target_link_libraries(kivioimageexport  ${KDE4_KDECORE_LIBS} kiviocommon )
 
-install_targets(${LIB_INSTALL_DIR}/kde4 kivioimageexport )
+install_targets(${PLUGIN_INSTALL_DIR} kivioimageexport )
 
 
 ########### install files ###############

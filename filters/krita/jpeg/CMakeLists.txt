@@ -25,7 +25,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritajpegimport )
 
 target_link_libraries(kritajpegimport kritacommon ${KDE4_KDECORE_LIBS} jpeg exif)
 
-install_targets(${LIB_INSTALL_DIR}/kde4 kritajpegimport )
+install_targets(${PLUGIN_INSTALL_DIR} kritajpegimport )
 
 ########### next target ###############
 
@@ -44,7 +44,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritajpegexport )
 
 target_link_libraries(kritajpegexport kritacommon ${KDE4_KDECORE_LIBS} jpeg exif)
 
-install_targets(${LIB_INSTALL_DIR}/kde4 kritajpegexport )
+install_targets(${PLUGIN_INSTALL_DIR} kritajpegexport )
 
 
 ########### install files ###############

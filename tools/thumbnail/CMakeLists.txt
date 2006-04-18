@@ -15,7 +15,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} clipartthumbnail )
 
 target_link_libraries(clipartthumbnail  ${KDE4_KDECORE_LIBS} kofficecore )
 
-install_targets(${LIB_INSTALL_DIR}/kde4 clipartthumbnail )
+install_targets(${PLUGIN_INSTALL_DIR} clipartthumbnail )
 
 
 ########### next target ###############
@@ -30,7 +30,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kofficethumbnail )
 
 target_link_libraries(kofficethumbnail  ${KDE4_KDECORE_LIBS} kofficecore )
 
-install_targets(${LIB_INSTALL_DIR}/kde4 kofficethumbnail )
+install_targets(${PLUGIN_INSTALL_DIR} kofficethumbnail )
 
 
 ########### install files ###############

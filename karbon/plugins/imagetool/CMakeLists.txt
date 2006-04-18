@@ -15,7 +15,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} karbon_imagetoolplugin )
 
 target_link_libraries(karbon_imagetoolplugin  ${KDE4_KDECORE_LIBS} ${KDE4_KPARTS_LIBS} kofficeui karboncommon )
 
-install_targets(${LIB_INSTALL_DIR}/kde4 karbon_imagetoolplugin )
+install_targets(${PLUGIN_INSTALL_DIR} karbon_imagetoolplugin )
 
 
 ########### install files ###############

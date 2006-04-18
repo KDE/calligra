@@ -15,7 +15,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} ooimpressimport )
 
 target_link_libraries(ooimpressimport  ${KDE4_KDECORE_LIBS} oofilter )
 
-install_targets(${LIB_INSTALL_DIR}/kde4 ooimpressimport )
+install_targets(${PLUGIN_INSTALL_DIR} ooimpressimport )
 
 
 ########### next target ###############
@@ -30,7 +30,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} ooimpressexport )
 
 target_link_libraries(ooimpressexport  ${KDE4_KDECORE_LIBS} oofilter )
 
-install_targets(${LIB_INSTALL_DIR}/kde4 ooimpressexport )
+install_targets(${PLUGIN_INSTALL_DIR} ooimpressexport )
 
 
 ########### install files ###############

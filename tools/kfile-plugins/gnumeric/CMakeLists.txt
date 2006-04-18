@@ -15,7 +15,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kfile_gnumeric )
 
 target_link_libraries(kfile_gnumeric  ${KDE4_KDECORE_LIBS} kofficecore )
 
-install_targets(${LIB_INSTALL_DIR}/kde4 kfile_gnumeric )
+install_targets(${PLUGIN_INSTALL_DIR} kfile_gnumeric )
 
 
 ########### install files ###############

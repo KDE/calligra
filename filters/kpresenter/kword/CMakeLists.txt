@@ -15,7 +15,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kprkword )
 
 target_link_libraries(kprkword  ${KDE4_KDECORE_LIBS} )
 
-install_targets(${LIB_INSTALL_DIR}/kde4 kprkword )
+install_targets(${PLUGIN_INSTALL_DIR} kprkword )
 
 
 ########### install files ###############

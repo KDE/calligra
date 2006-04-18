@@ -15,7 +15,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} rtfexport )
 
 target_link_libraries(rtfexport  ${KDE4_KDECORE_LIBS} kwordexportfilters )
 
-install_targets(${LIB_INSTALL_DIR}/kde4 rtfexport )
+install_targets(${PLUGIN_INSTALL_DIR} rtfexport )
 
 
 ########### install files ###############

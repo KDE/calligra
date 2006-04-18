@@ -15,7 +15,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kfopngexport )
 
 target_link_libraries(kfopngexport  ${KDE4_KDEUI_LIBS} kformulalib )
 
-install_targets(${LIB_INSTALL_DIR}/kde4 kfopngexport )
+install_targets(${PLUGIN_INSTALL_DIR} kfopngexport )
 
 
 ########### install files ###############

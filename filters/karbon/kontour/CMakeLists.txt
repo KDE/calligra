@@ -15,7 +15,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} karbonkontourimport )
 
 target_link_libraries(karbonkontourimport  ${KDE4_KDECORE_LIBS} karboncommon )
 
-install_targets(${LIB_INSTALL_DIR}/kde4 karbonkontourimport )
+install_targets(${PLUGIN_INSTALL_DIR} karbonkontourimport )
 
 
 ########### install files ###############

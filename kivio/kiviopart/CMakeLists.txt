@@ -74,7 +74,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kiviopart )
 
 target_link_libraries(kiviopart  ${KDE4_KDECORE_LIBS} kiviocommon )
 
-install_targets(${LIB_INSTALL_DIR}/kde4 kiviopart )
+install_targets(${PLUGIN_INSTALL_DIR} kiviopart )
 
 
 ########### next target ###############

@@ -17,7 +17,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kivioselecttool )
 
 target_link_libraries(kivioselecttool  ${KDE4_KDECORE_LIBS} kotext kopainter kiviocommon )
 
-install_targets(${LIB_INSTALL_DIR}/kde4 kivioselecttool )
+install_targets(${PLUGIN_INSTALL_DIR} kivioselecttool )
 
 
 ########### install files ###############

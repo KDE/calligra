@@ -15,7 +15,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritamagickimport )
 
 target_link_libraries(kritamagickimport  ${KDE4_KDECORE_LIBS} kritacommon )
 
-install_targets(${LIB_INSTALL_DIR}/kde4 kritamagickimport )
+install_targets(${PLUGIN_INSTALL_DIR} kritamagickimport )
 
 
 ########### next target ###############
@@ -30,7 +30,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritamagickexport )
 
 target_link_libraries(kritamagickexport  ${KDE4_KDECORE_LIBS} kritacommon )
 
-install_targets(${LIB_INSTALL_DIR}/kde4 kritamagickexport )
+install_targets(${PLUGIN_INSTALL_DIR} kritamagickexport )
 
 
 ########### install files ###############

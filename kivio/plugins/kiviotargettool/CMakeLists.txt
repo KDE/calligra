@@ -15,7 +15,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kiviotargettool )
 
 target_link_libraries(kiviotargettool  ${KDE4_KDECORE_LIBS} kotext kopainter kiviocommon )
 
-install_targets(${LIB_INSTALL_DIR}/kde4 kiviotargettool )
+install_targets(${PLUGIN_INSTALL_DIR} kiviotargettool )
 
 
 ########### install files ###############

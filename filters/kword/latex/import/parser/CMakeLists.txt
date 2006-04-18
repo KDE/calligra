@@ -25,7 +25,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} latexparser )
 
 target_link_libraries(latexparser  ${KDE4_KDECORE_LIBS} )
 
-install_targets(${LIB_INSTALL_DIR}/kde4 latexparser )
+install_targets(${PLUGIN_INSTALL_DIR} latexparser )
 
 
 ########### next target ###############

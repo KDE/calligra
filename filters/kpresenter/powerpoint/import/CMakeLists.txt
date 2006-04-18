@@ -15,7 +15,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} powerpointimport )
 
 target_link_libraries(powerpointimport  ${KDE4_KDECORE_LIBS} ppt )
 
-install_targets(${LIB_INSTALL_DIR}/kde4 powerpointimport )
+install_targets(${PLUGIN_INSTALL_DIR} powerpointimport )
 
 
 ########### install files ###############

@@ -15,7 +15,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} oodrawimport )
 
 target_link_libraries(oodrawimport  ${KDE4_KDECORE_LIBS} oofilter karboncommon )
 
-install_targets(${LIB_INSTALL_DIR}/kde4 oodrawimport )
+install_targets(${PLUGIN_INSTALL_DIR} oodrawimport )
 
 
 ########### install files ###############

@@ -15,7 +15,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} dbaseimport )
 
 target_link_libraries(dbaseimport  ${KDE4_KDECORE_LIBS} )
 
-install_targets(${LIB_INSTALL_DIR}/kde4 dbaseimport )
+install_targets(${PLUGIN_INSTALL_DIR} dbaseimport )
 
 
 ########### install files ###############

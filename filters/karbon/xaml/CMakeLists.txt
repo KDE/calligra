@@ -15,7 +15,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} karbonxamlexport )
 
 target_link_libraries(karbonxamlexport  ${KDE4_KDECORE_LIBS} kofficeui karboncommon )
 
-install_targets(${LIB_INSTALL_DIR}/kde4 karbonxamlexport )
+install_targets(${PLUGIN_INSTALL_DIR} karbonxamlexport )
 
 
 ########### next target ###############
@@ -30,7 +30,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} karbonxamlimport )
 
 target_link_libraries(karbonxamlimport  ${KDE4_KDECORE_LIBS} kofficeui karboncommon )
 
-install_targets(${LIB_INSTALL_DIR}/kde4 karbonxamlimport )
+install_targets(${PLUGIN_INSTALL_DIR} karbonxamlimport )
 
 
 ########### install files ###############

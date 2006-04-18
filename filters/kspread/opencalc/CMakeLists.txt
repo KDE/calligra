@@ -15,7 +15,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} opencalcimport )
 
 target_link_libraries(opencalcimport  ${KDE4_KDECORE_LIBS} kspreadcommon oofilter )
 
-install_targets(${LIB_INSTALL_DIR}/kde4 opencalcimport )
+install_targets(${PLUGIN_INSTALL_DIR} opencalcimport )
 
 
 ########### next target ###############
@@ -30,7 +30,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} opencalcexport )
 
 target_link_libraries(opencalcexport  ${KDE4_KDECORE_LIBS} kspreadcommon oofilter )
 
-install_targets(${LIB_INSTALL_DIR}/kde4 opencalcexport )
+install_targets(${PLUGIN_INSTALL_DIR} opencalcexport )
 
 
 ########### install files ###############

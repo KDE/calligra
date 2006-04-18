@@ -15,7 +15,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kfosvgexport )
 
 target_link_libraries(kfosvgexport  ${KDE4_KDECORE_LIBS} kofficecore kformulalib )
 
-install_targets(${LIB_INSTALL_DIR}/kde4 kfosvgexport )
+install_targets(${PLUGIN_INSTALL_DIR} kfosvgexport )
 
 
 ########### install files ###############

@@ -15,7 +15,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kexihandler_relation )
 
 target_link_libraries(kexihandler_relation  ${KDE4_KDECORE_LIBS} kexicore kexirelationsview )
 
-install_targets(${LIB_INSTALL_DIR}/kde4 kexihandler_relation )
+install_targets(${PLUGIN_INSTALL_DIR} kexihandler_relation )
 
 
 ########### install files ###############

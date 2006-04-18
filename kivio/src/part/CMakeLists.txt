@@ -32,7 +32,7 @@ kde4_install_libtool_file(${PLUGIN_INSTALL_DIR} kiviopart)
 
 target_link_libraries(kiviopart  ${KDE4_KDECORE_LIBS} kivioprivate)
 
-install_targets(${LIB_INSTALL_DIR}/kde4 kiviopart)
+install_targets(${PLUGIN_INSTALL_DIR} kiviopart)
 
 ### kdeinit kivio ###
 set(kivio_KDEINIT_SRCS main.cpp )

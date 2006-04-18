@@ -17,7 +17,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kwmailmerge_qtsqldb )
 
 target_link_libraries(kwmailmerge_qtsqldb  ${KDE4_KDECORE_LIBS} mailmergesqlcommon kwmailmerge_interface ${KDE4_KDEUI_LIBS} )
 
-install_targets(${LIB_INSTALL_DIR}/kde4 kwmailmerge_qtsqldb )
+install_targets(${PLUGIN_INSTALL_DIR} kwmailmerge_qtsqldb )
 
 
 ########### next target ###############
@@ -36,7 +36,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kwmailmerge_qtsqldb_power )
 
 target_link_libraries(kwmailmerge_qtsqldb_power  ${KDE4_KDECORE_LIBS} mailmergesqlcommon kwmailmerge_interface ${KDE4_KDEUI_LIBS} )
 
-install_targets(${LIB_INSTALL_DIR}/kde4 kwmailmerge_qtsqldb_power )
+install_targets(${PLUGIN_INSTALL_DIR} kwmailmerge_qtsqldb_power )
 
 
 ########### next target ###############

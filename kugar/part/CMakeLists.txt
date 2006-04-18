@@ -15,7 +15,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kugarpart )
 
 target_link_libraries(kugarpart  ${KDE4_KIO_LIBS} kugarlib ${KDE4_KPARTS_LIBS} ${KDE4_KDEPRINT_LIBS} kofficecore )
 
-install_targets(${LIB_INSTALL_DIR}/kde4 kugarpart )
+install_targets(${PLUGIN_INSTALL_DIR} kugarpart )
 
 
 ########### next target ###############

@@ -76,7 +76,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kchartpart )
 
 target_link_libraries(kchartpart  ${KDE4_KDECORE_LIBS} kchartcommon )
 
-install_targets(${LIB_INSTALL_DIR}/kde4 kchartpart )
+install_targets(${PLUGIN_INSTALL_DIR} kchartpart )
 
 
 ########### next target ###############

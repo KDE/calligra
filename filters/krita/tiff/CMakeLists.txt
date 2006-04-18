@@ -27,7 +27,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritatiffimport )
 
 target_link_libraries(kritatiffimport kritacommon ${KDE4_KDECORE_LIBS} tiff)
 
-install_targets(${LIB_INSTALL_DIR}/kde4 kritatiffimport )
+install_targets(${PLUGIN_INSTALL_DIR} kritatiffimport )
 
 
 ########### next target ###############
@@ -48,7 +48,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritatiffexport )
 
 target_link_libraries(kritatiffexport kritacommon ${KDE4_KDECORE_LIBS} tiff)
 
-install_targets(${LIB_INSTALL_DIR}/kde4 kritatiffexport )
+install_targets(${PLUGIN_INSTALL_DIR} kritatiffexport )
 
 
 ########### next target ###############

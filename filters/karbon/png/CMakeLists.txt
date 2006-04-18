@@ -15,7 +15,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} karbonpngexport )
 
 target_link_libraries(karbonpngexport  ${KDE4_KDECORE_LIBS} kofficeui karboncommon )
 
-install_targets(${LIB_INSTALL_DIR}/kde4 karbonpngexport )
+install_targets(${PLUGIN_INSTALL_DIR} karbonpngexport )
 
 
 ########### install files ###############

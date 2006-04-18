@@ -172,7 +172,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kspreadpart )
 
 target_link_libraries(kspreadpart  ${KDE4_KDECORE_LIBS} kspreadcommon )
 
-install_targets(${LIB_INSTALL_DIR}/kde4 kspreadpart )
+install_targets(${PLUGIN_INSTALL_DIR} kspreadpart )
 
 
 ########### next target ###############

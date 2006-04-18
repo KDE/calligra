@@ -15,7 +15,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} keximigrate_pqxx )
 
 target_link_libraries(keximigrate_pqxx  ${KDE4_KDECORE_LIBS} ${KDE4_KPARTS_LIBS} pqxx keximigrate )
 
-install_targets(${LIB_INSTALL_DIR}/kde4 keximigrate_pqxx )
+install_targets(${PLUGIN_INSTALL_DIR} keximigrate_pqxx )
 
 
 ########### install files ###############

@@ -15,7 +15,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kfomathmlexport )
 
 target_link_libraries(kfomathmlexport  ${KDE4_KDECORE_LIBS} kofficecore kformulalib)
 
-install_targets(${LIB_INSTALL_DIR}/kde4 kfomathmlexport )
+install_targets(${PLUGIN_INSTALL_DIR} kfomathmlexport )
 
 
 ########### next target ###############
@@ -30,7 +30,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kfomathmlimport )
 
 target_link_libraries(kfomathmlimport  ${KDE4_KDECORE_LIBS} kofficecore kformulalib )
 
-install_targets(${LIB_INSTALL_DIR}/kde4 kfomathmlimport )
+install_targets(${PLUGIN_INSTALL_DIR} kfomathmlimport )
 
 
 ########### install files ###############

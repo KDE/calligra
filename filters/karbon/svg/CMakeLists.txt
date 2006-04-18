@@ -15,7 +15,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} karbonsvgexport )
 
 target_link_libraries(karbonsvgexport  ${KDE4_KDECORE_LIBS} kofficeui karboncommon )
 
-install_targets(${LIB_INSTALL_DIR}/kde4 karbonsvgexport )
+install_targets(${PLUGIN_INSTALL_DIR} karbonsvgexport )
 
 
 ########### next target ###############
@@ -30,7 +30,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} karbonsvgimport )
 
 target_link_libraries(karbonsvgimport  ${KDE4_KDECORE_LIBS} kofficeui karboncommon )
 
-install_targets(${LIB_INSTALL_DIR}/kde4 karbonsvgimport )
+install_targets(${PLUGIN_INSTALL_DIR} karbonsvgimport )
 
 
 ########### install files ###############

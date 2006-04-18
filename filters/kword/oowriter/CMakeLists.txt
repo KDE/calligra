@@ -15,7 +15,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} oowriterimport )
 
 target_link_libraries(oowriterimport  ${KDE4_KDECORE_LIBS} oofilter common )
 
-install_targets(${LIB_INSTALL_DIR}/kde4 oowriterimport )
+install_targets(${PLUGIN_INSTALL_DIR} oowriterimport )
 
 
 ########### next target ###############
@@ -30,7 +30,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} oowriterexport )
 
 target_link_libraries(oowriterexport  ${KDE4_KDECORE_LIBS} kwordexportfilters common )
 
-install_targets(${LIB_INSTALL_DIR}/kde4 oowriterexport )
+install_targets(${PLUGIN_INSTALL_DIR} oowriterexport )
 
 
 ########### next target ###############

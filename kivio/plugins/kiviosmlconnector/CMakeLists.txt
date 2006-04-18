@@ -17,7 +17,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kiviosmlconnector )
 
 target_link_libraries(kiviosmlconnector  ${KDE4_KDECORE_LIBS} kopainter kiviocommon )
 
-install_targets(${LIB_INSTALL_DIR}/kde4 kiviosmlconnector )
+install_targets(${PLUGIN_INSTALL_DIR} kiviosmlconnector )
 
 
 ########### install files ###############

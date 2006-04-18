@@ -15,7 +15,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} karbon_flattenpathplugin )
 
 target_link_libraries(karbon_flattenpathplugin  ${KDE4_KDECORE_LIBS} ${KDE4_KPARTS_LIBS} kofficeui karboncommon )
 
-install_targets(${LIB_INSTALL_DIR}/kde4 karbon_flattenpathplugin )
+install_targets(${PLUGIN_INSTALL_DIR} karbon_flattenpathplugin )
 
 
 ########### install files ###############

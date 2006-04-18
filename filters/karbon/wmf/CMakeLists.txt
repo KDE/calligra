@@ -15,7 +15,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} wmfimport )
 
 target_link_libraries(wmfimport  ${KDE4_KDECORE_LIBS} kowmf karboncommon )
 
-install_targets(${LIB_INSTALL_DIR}/kde4 wmfimport )
+install_targets(${PLUGIN_INSTALL_DIR} wmfimport )
 
 
 ########### next target ###############
@@ -30,7 +30,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} wmfexport )
 
 target_link_libraries(wmfexport  ${KDE4_KDECORE_LIBS} kowmf karboncommon )
 
-install_targets(${LIB_INSTALL_DIR}/kde4 wmfexport )
+install_targets(${PLUGIN_INSTALL_DIR} wmfexport )
 
 
 ########### install files ###############

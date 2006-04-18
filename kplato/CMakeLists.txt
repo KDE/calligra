@@ -109,7 +109,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kplatopart )
 
 target_link_libraries(kplatopart  ${KDE4_KDECORE_LIBS}   )
 
-install_targets(${LIB_INSTALL_DIR}/kde4 kplatopart )
+install_targets(${PLUGIN_INSTALL_DIR} kplatopart )
 
 
 ########### next target ###############

@@ -23,7 +23,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} karbonaiimport )
 
 target_link_libraries(karbonaiimport  ${KDE4_KDECORE_LIBS} kofficeui karboncommon )
 
-install_targets(${LIB_INSTALL_DIR}/kde4 karbonaiimport )
+install_targets(${PLUGIN_INSTALL_DIR} karbonaiimport )
 
 
 ########### install files ###############

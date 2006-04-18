@@ -27,7 +27,7 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kformulapart )
 
 target_link_libraries(kformulapart  ${KDE4_KDECORE_LIBS} kofficeui kformula kotext )
 
-install_targets(${LIB_INSTALL_DIR}/kde4 kformulapart )
+install_targets(${PLUGIN_INSTALL_DIR} kformulapart )
 
 
 ########### next target ###############
