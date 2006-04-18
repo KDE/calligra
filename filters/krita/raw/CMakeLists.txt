@@ -9,7 +9,7 @@ set(krita_raw_import_PART_SRCS kis_raw_import.cpp )
 
 kde4_automoc(${krita_raw_import_PART_SRCS})
 
-kde4_add_ui3_files(krita_raw_import_PART_SRCS wdgrawimport.ui )
+kde4_add_ui_files(krita_raw_import_PART_SRCS wdgrawimport.ui )
 
 kde4_add_plugin(krita_raw_import WITH_PREFIX ${krita_raw_import_PART_SRCS})
 

@@ -58,15 +58,15 @@ KoFilter::ConversionStatus MagickExport::convert(const QByteArray& from, const Q
     
     if (filename.isEmpty()) return KoFilter::FileNotFound;
 
-    KURL url;
+    KUrl url;
     url.setPath(filename);
 
     KisImageSP img = output->currentImage();
 
     KisImageMagickConverter ib(output, output->undoAdapter());
 
-    KisPaintDeviceSP pd = new KisPaintDevice(*img->projection());
-    KisPaintLayerSP l = new KisPaintLayer(img, "projection", OPACITY_OPAQUE, pd);
+    KisPaintDeviceSP pd = KisPaintDeviceSP(new KisPaintDevice(*img->projection()));
+    KisPaintLayerSP l = KisPaintLayerSP(new KisPaintLayer(img.data(), "projection", OPACITY_OPAQUE, pd));
     
     vKisAnnotationSP_it beginIt = img->beginAnnotations();
     vKisAnnotationSP_it endIt = img->endAnnotations();

@@ -1,6 +1,6 @@
 kde4_header()
 
-include_directories( ${CMAKE_SOURCE_DIR}/krita ${CMAKE_SOURCE_DIR}/krita/core ${CMAKE_SOURCE_DIR}/krita/sdk ${CMAKE_SOURCE_DIR}/krita/core/tiles ${CMAKE_SOURCE_DIR}/krita/kritacolor ${CMAKE_SOURCE_DIR}/krita/ui ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
+include_directories(${IMAGEMAGICK_INCLUDE_DIR})
 
 
 ########### next target ###############
@@ -13,7 +13,7 @@ kde4_add_plugin(kritamagickimport WITH_PREFIX ${kritamagickimport_PART_SRCS})
 
 kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritamagickimport )
 
-target_link_libraries(kritamagickimport  ${KDE4_KDECORE_LIBS} kritacommon )
+target_link_libraries(kritamagickimport kritacommon ${KDE4_KDECORE_LIBS} ${IMAGEMAGICK_LIBRARIES})
 
 install_targets(${PLUGIN_INSTALL_DIR} kritamagickimport )
 
@@ -28,7 +28,7 @@ kde4_add_plugin(kritamagickexport WITH_PREFIX ${kritamagickexport_PART_SRCS})
 
 kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritamagickexport )
 
-target_link_libraries(kritamagickexport  ${KDE4_KDECORE_LIBS} kritacommon )
+target_link_libraries(kritamagickexport kritacommon ${KDE4_KDECORE_LIBS} ${IMAGEMAGICK_LIBRARIES})
 
 install_targets(${PLUGIN_INSTALL_DIR} kritamagickexport )
 

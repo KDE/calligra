@@ -55,7 +55,6 @@
 #include <KoDocument.h>
 #include <KoFilterChain.h>
 
-#include "imageviewer.h"
 #include "kis_config.h"
 #include "kis_cmb_idlist.h"
 #include "kis_types.h"
@@ -71,7 +70,6 @@
 #include "kis_abstract_colorspace.h"
 #include "kis_paint_device.h"
 #include "kis_paint_layer.h"
-#include "wdgrawimport.h"
 
 typedef KGenericFactory<KisRawImport, KoFilter> KisRawImportFactory;
 K_EXPORT_COMPONENT_FACTORY(libkrita_raw_import, KisRawImportFactory("kofficefilters"))
@@ -189,9 +187,9 @@ KoFilter::ConversionStatus KisRawImport::convert(const QByteArray& from, const Q
 
         getImageData(createArgumentList(false));
 
-        KisImageSP image = 0;
-        KisPaintLayerSP layer = 0;
-        KisPaintDeviceSP device = 0;
+        KisImageSP image = KisImageSP(0);
+        KisPaintLayerSP layer = KisPaintLayerSP(0);
+        KisPaintDeviceSP device = KisPaintDeviceSP(0);
 
         QApplication::restoreOverrideCursor();
 
@@ -214,14 +212,14 @@ KoFilter::ConversionStatus KisRawImport::convert(const QByteArray& from, const Q
             if (cs == 0) { kDebug() << "No CS\n"; return KoFilter::InternalError; }
 
             image = new KisImage(doc->undoAdapter(), img.width(), img.height(), cs, filename);
-            if (image == 0) return KoFilter::CreationError;
+            if (image.isNull()) return KoFilter::CreationError;
             image->blockSignals(true); // Don't send out signals while we're building the image
             
             layer = dynamic_cast<KisPaintLayer*>( image->newLayer(image -> nextLayerName(), OPACITY_OPAQUE).data() );
-            if (layer == 0) return KoFilter::CreationError;
+            if (layer.isNull()) return KoFilter::CreationError;
 
             device = layer->paintDevice();
-            if (device == 0) return KoFilter::CreationError;
+            if (device.isNull()) return KoFilter::CreationError;
 
             device->convertFromQImage(img, "");
 
@@ -252,13 +250,13 @@ KoFilter::ConversionStatus KisRawImport::convert(const QByteArray& from, const Q
             if (cs == 0) return KoFilter::InternalError;
 
             image = new KisImage( doc->undoAdapter(), sz.width(), sz.height(), cs, filename);
-            if (image == 0)return KoFilter::CreationError;
+            if (image.isNull())return KoFilter::CreationError;
 
             layer = dynamic_cast<KisPaintLayer*> (image->newLayer(image -> nextLayerName(), OPACITY_OPAQUE).data());
-            if (layer == 0) return KoFilter::CreationError;
+            if (layer.isNull()) return KoFilter::CreationError;
 
             device = layer->paintDevice();
-            if (device == 0) return KoFilter::CreationError;
+            if (device.isNull()) return KoFilter::CreationError;
 
             // Copy the colordata to the pixels
             int pos = 0;
@@ -430,7 +428,7 @@ void KisRawImport::getImageData( QStringList arguments )
     }
     while (process.isRunning()) {
         //kDebug(41008) << "Waiting...\n";
-        qApp->eventLoop()->processEvents(QEventLoop::ExcludeUserInput);
+        qApp->processEvents(QEventLoop::ExcludeUserInput);
         //process.wait(2);
     }
 
@@ -454,7 +452,7 @@ void KisRawImport::slotReceivedStdout(KProcess *, char *buffer, int buflen)
     //kDebug(41008) << "stdout received " << buflen << " bytes on stdout.\n";
     //kDebug(41008) << QString::fromAscii(buffer, buflen) << "\n";
     int oldSize = m_data->size();
-    m_data->resize(oldSize + buflen, Q3GArray::SpeedOptim);
+    m_data->resize(oldSize + buflen);
     memcpy(m_data->data() + oldSize, buffer, buflen);
 }
 

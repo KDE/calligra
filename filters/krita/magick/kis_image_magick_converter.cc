@@ -184,7 +184,7 @@ namespace {
             annotation = new KisAnnotation(QString(name), "", rawdata);
             Q_CHECK_PTR(annotation);
 
-            image -> addAnnotation(annotation);
+            image -> addAnnotation(KisAnnotationSP(annotation));
         }
 
         // Attributes, since we have no hint on if this is an attribute or a profile
@@ -209,7 +209,7 @@ namespace {
                     QString("krita_attribute:%1").arg(QString(attr -> key)), "", rawdata);
                 Q_CHECK_PTR(annotation);
 
-                image -> addAnnotation(annotation);
+                image -> addAnnotation(KisAnnotationSP(annotation));
 #if MagickLibVersion < 0x620
                 attr = attr -> next;
 #endif
@@ -428,14 +428,14 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KUrl& uri, bool isB
                 opacity = quint8_MAX - Downscale(QString(attr->value).toInt());
             }
 
-            KisPaintLayerSP layer = 0;
+            KisPaintLayerSP layer = KisPaintLayerSP(0);
 
             attr = GetImageAttribute(image, "[layer-name]");
             if (attr != 0) {
-                layer = new KisPaintLayer(m_img, attr->value, opacity);
+                layer = new KisPaintLayer(m_img.data(), attr->value, opacity);
             }
             else {
-                layer = new KisPaintLayer(m_img, m_img -> nextLayerName(), opacity);
+                layer = new KisPaintLayer(m_img.data(), m_img -> nextLayerName(), opacity);
             }
 
             Q_ASSERT(layer);
@@ -586,7 +586,7 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KUrl& uri, bool isB
                         return KisImageBuilder_RESULT_INTR;
                     }
                 }
-                m_img->addLayer(layer.data(), m_img->rootLayer());
+                m_img->addLayer(KisLayerSP(layer.data()), m_img->rootLayer());
                 layer->paintDevice()->move(x_offset, y_offset);
             }
 
@@ -615,7 +615,7 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KUrl& uri, bool isB
         QString tmpFile;
 
         if (KIO::NetAccess::download(uri, tmpFile, qApp -> mainWidget())) {
-            KURL uriTF;
+            KUrl uriTF;
             uriTF.setPath( tmpFile );
             result = decode(uriTF, false);
             KIO::NetAccess::removeTempFile(tmpFile);
@@ -646,7 +646,7 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KUrl& uri, bool isB
         if (!layer)
             return KisImageBuilder_RESULT_INVALID_ARG;
 
-        KisImageSP img = layer->image();
+        KisImageSP img = KisImageSP(layer->image());
         if (!img)
             return KisImageBuilder_RESULT_EMPTY;
 

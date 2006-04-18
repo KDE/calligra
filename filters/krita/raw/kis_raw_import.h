@@ -24,6 +24,17 @@
 //Added by qt3to4:
 #include <Q3CString>
 
+#include "imageviewer.h"
+#include "ui_wdgrawimport.h"
+
+class WdgRawImport : public QWidget, public Ui::WdgRawImport
+{
+    Q_OBJECT
+
+    public:
+        WdgRawImport(QWidget *parent) : QWidget(parent) { setupUi(this); }
+};
+
 class KProcess;
 class KDialogBase;
 class WdgRawImport;
