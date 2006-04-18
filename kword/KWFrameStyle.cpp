@@ -210,9 +210,9 @@ void KWFrameStyle::saveFrameStyle( QDomElement & parentElem )
 
     if(m_backgroundColor.color().isValid())
     {
-        parentElem.setAttribute( "red", m_backgroundColor.color().Qt::red() );
-        parentElem.setAttribute( "green", m_backgroundColor.color().Qt::green() );
-        parentElem.setAttribute( "blue", m_backgroundColor.color().Qt::blue() );
+        parentElem.setAttribute( "red", m_backgroundColor.color().red() );
+        parentElem.setAttribute( "green", m_backgroundColor.color().green() );
+        parentElem.setAttribute( "blue", m_backgroundColor.color().blue() );
     }
 }
 

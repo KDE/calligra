@@ -78,7 +78,7 @@ void KWDeleteDia::setupTab1() {
 
     QLabel *rc = new QLabel( message , tab1 );
     rc->resize( rc->sizeHint() );
-    rc->setAlignment( AlignLeft | AlignBottom );
+    rc->setAlignment( Qt::AlignLeft | Qt::AlignBottom );
     grid1->addWidget( rc, 1, 0 );
 }
 

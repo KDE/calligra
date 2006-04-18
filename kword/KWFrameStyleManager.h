@@ -28,12 +28,11 @@
 #include <Q3GridLayout>
 #include <QResizeEvent>
 #include <QPaintEvent>
-
+#include <Q3ListBox>
 
 class Q3GroupBox;
 class Q3GridLayout;
 class QLineEdit;
-class Q3ListBox;
 class QPushButton;
 class QTabWidget;
 class QWidget;
@@ -55,7 +54,7 @@ class KWFrameStylePreview : public QWidget
 public:
     KWFrameStylePreview( QWidget *parent )
         : QWidget( parent ), frameStyle( 0 ) {
-            setBackgroundColor( white );
+            setBackgroundColor( Qt::white );
         }
 
     void setFrameStyle(KWFrameStyle *_frameStyle);

@@ -62,22 +62,22 @@ void KWFrameStylePreview::paintEvent( QPaintEvent * )
 
     // 1: create borders
     if (frameStyle->topBorder().width()>0) {
-      p.setPen( KoBorder::borderPen(frameStyle->topBorder(), ptToPx( frameStyle->topBorder().width() ), black) ); // Top border
+      p.setPen( KoBorder::borderPen(frameStyle->topBorder(), ptToPx( frameStyle->topBorder().width() ), Qt::black) ); // Top border
       p.drawLine( 10 - int(frameStyle->leftBorder().width()/2), 10,
                   10 + wid + int(frameStyle->rightBorder().width()/2), 10 );
     }
     if (frameStyle->leftBorder().width()>0) {
-      p.setPen( KoBorder::borderPen(frameStyle->leftBorder(), ptToPx( frameStyle->leftBorder().width() ), black) ); // Left border
+      p.setPen( KoBorder::borderPen(frameStyle->leftBorder(), ptToPx( frameStyle->leftBorder().width() ), Qt::black) ); // Left border
       p.drawLine( 10, 10 - int(frameStyle->topBorder().width()/2),
                   10 , 10 + hei + int(frameStyle->bottomBorder().width()/2) );
     }
     if (frameStyle->bottomBorder().width()>0) {
-      p.setPen( KoBorder::borderPen(frameStyle->bottomBorder(), ptToPx( frameStyle->bottomBorder().width() ), black) ); // Bottom border
+      p.setPen( KoBorder::borderPen(frameStyle->bottomBorder(), ptToPx( frameStyle->bottomBorder().width() ), Qt::black) ); // Bottom border
       p.drawLine( 10 + wid + int(ceil(frameStyle->rightBorder().width()/2)), 10 + hei,
                   10 - int(frameStyle->leftBorder().width()/2), 10 + hei );
     }
     if (frameStyle->rightBorder().width()>0) {
-      p.setPen( KoBorder::borderPen(frameStyle->rightBorder(), ptToPx( frameStyle->rightBorder().width() ), black) ); // Right border
+      p.setPen( KoBorder::borderPen(frameStyle->rightBorder(), ptToPx( frameStyle->rightBorder().width() ), Qt::black) ); // Right border
       p.drawLine( 10 + wid, 10 - int(frameStyle->topBorder().width()/2) ,
                   10 + wid, 10 + hei + int(frameStyle->bottomBorder().width()/2) );
     }

@@ -58,7 +58,7 @@ void KWTablePreview::paintEvent( QPaintEvent * )
     QPainter p;
     p.begin( this );
 
-    p.setPen( QPen( black ) );
+    p.setPen( QPen( Qt::black ) );
 
     for ( int i = 0; i < rows; i++ )
     {
@@ -145,7 +145,7 @@ void KWTableDia::setupTab1( int rows, int cols, CellSize wid, CellSize hei, bool
 #endif
 
     preview = new KWTablePreview( tab1, rows, cols );
-    preview->setBackgroundColor( white );
+    preview->setBackgroundColor( Qt::white );
     grid->addMultiCellWidget( preview, 0, 8, 1, 1 );
 
     if ( m_useMode==NEW )
