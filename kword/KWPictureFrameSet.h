@@ -58,7 +58,7 @@ public:
     virtual void load( QDomElement &attributes, bool loadFrames = true );
     virtual void saveOasis( KoXmlWriter& writer, KoSavingContext& context, bool saveFrames ) const;
 
-    virtual void drawFrameContents( KWFrame * frame, QPainter *painter, const QRect & crect,
+    virtual void drawFrameContents( KWFrame * frame, QPainter *painter, const QRect & fcrect,
                                     const QColorGroup &cg, bool onlyChanged, bool resetChanged,
                                     KWFrameSetEdit * edit, KWViewMode *viewMode );
 
