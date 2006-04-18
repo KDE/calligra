@@ -54,7 +54,7 @@ class KoDocumentEntry;
 class QPainter;
 class KoAutoFormat;
 class KCommand;
-class KoCommandHistory;
+class KCommandHistory;
 class KoVariable;
 class KoVariableFormatCollection;
 class KWVariableCollection;
@@ -476,7 +476,7 @@ public:
 
     void addCommand( KCommand * cmd );
 
-    KoCommandHistory * commandHistory() const { return m_commandHistory; }
+    KCommandHistory * commandHistory() const { return m_commandHistory; }
     KoAutoFormat * autoFormat() const { return m_autoFormat; }
 
     /**
@@ -921,7 +921,7 @@ private:
 
     DCOPObject *dcop;
 
-    KoCommandHistory * m_commandHistory;
+    KCommandHistory * m_commandHistory;
     KoAutoFormat * m_autoFormat;
 
     // ===== Legacy loading stuff, remove when switching to OASIS =====

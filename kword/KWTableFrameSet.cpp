@@ -2706,19 +2706,19 @@ void KWTableFrameSetEdit::keyReleaseEvent( QKeyEvent * e )
         m_currentCell->keyReleaseEvent( e );
 }
 
-void KWTableFrameSetEdit::imStartEvent( QIMEvent* e )
+void KWTableFrameSetEdit::imStartEvent( QInputMethodEvent* e )
 {
     if ( m_currentCell )
         m_currentCell->imStartEvent( e );
 }
 
-void KWTableFrameSetEdit::imComposeEvent( QIMEvent* e )
+void KWTableFrameSetEdit::imComposeEvent( QInputMethodEvent* e )
 {
     if ( m_currentCell )
         m_currentCell->imComposeEvent( e );
 }
 
-void KWTableFrameSetEdit::imEndEvent( QIMEvent* e )
+void KWTableFrameSetEdit::imEndEvent( QInputMethodEvent* e )
 {
     if ( m_currentCell )
         m_currentCell->imEndEvent( e );

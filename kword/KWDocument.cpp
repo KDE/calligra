@@ -61,7 +61,7 @@
 #include <kformuladocument.h>
 #include <KoApplication.h>
 #include <KoOasisContext.h>
-#include <KoCommandHistory.h>
+#include <kcommand.h>
 #include <KoGenStyles.h>
 #include <KoStore.h>
 #include <KoStoreDrag.h>
@@ -104,10 +104,10 @@ static const char * CURRENT_DTD_VERSION = "1.2";
 /******************************************************************/
 /* Class: KWCommandHistory                                        */
 /******************************************************************/
-class KWCommandHistory : public KoCommandHistory
+class KWCommandHistory : public KCommandHistory
 {
 public:
-    KWCommandHistory( KWDocument * doc ) : KoCommandHistory( doc->actionCollection(),  true ), m_pDoc( doc ) {}
+    KWCommandHistory( KWDocument * doc ) : KCommandHistory( doc->actionCollection(),  true ), m_pDoc( doc ) {}
 public /*slots*/: // They are already slots in the parent. Running moc on the inherited class shouldn't be necessary AFAICS.
     virtual void undo();
     virtual void redo();
@@ -118,13 +118,13 @@ private:
 void KWCommandHistory::undo()
 {
     m_pDoc->clearUndoRedoInfos();
-    KoCommandHistory::undo();
+    KCommandHistory::undo();
 }
 
 void KWCommandHistory::redo()
 {
     m_pDoc->clearUndoRedoInfos();
-    KoCommandHistory::redo();
+    KCommandHistory::redo();
 }
 
 /******************************************************************/
@@ -2483,8 +2483,8 @@ void KWDocument::processPictureRequests()
 
 void KWDocument::processAnchorRequests()
 {
-    QMapIterator<QString, KWAnchorPosition> itanch = m_anchorRequests.begin();
-    for ( ; itanch != m_anchorRequests.end(); ++itanch )
+    QMapIterator<QString, KWAnchorPosition> itanch(m_anchorRequests);
+    for(; itanch.hasNext(); itanch.next())
     {
         QString fsname = itanch.key();
         if ( m_pasteFramesetsMap && m_pasteFramesetsMap->contains( fsname ) )
@@ -2493,7 +2493,7 @@ void KWDocument::processAnchorRequests()
         KWFrameSet * fs = frameSetByName( fsname );
         Q_ASSERT( fs );
         if ( fs )
-            fs->setAnchored( itanch.data().textfs, itanch.data().paragId, itanch.data().index, true, false /*don't repaint yet*/ );
+            fs->setAnchored( itanch.value().textfs, itanch.value().paragId, itanch.value().index, true, false /*don't repaint yet*/ );
     }
     m_anchorRequests.clear();
 }
@@ -2501,13 +2501,13 @@ void KWDocument::processAnchorRequests()
 bool KWDocument::processFootNoteRequests()
 {
     bool ret = false;
-    QMapIterator<QString, KWFootNoteVariable *> itvar = m_footnoteVarRequests.begin();
-    for ( ; itvar != m_footnoteVarRequests.end(); ++itvar )
+    QMapIterator<QString, KWFootNoteVariable *> itvar(m_footnoteVarRequests);
+    for ( ; itvar.hasNext(); itvar.next() )
     {
         QString fsname = itvar.key();
         if ( m_pasteFramesetsMap && m_pasteFramesetsMap->contains( fsname ) )
             fsname = (*m_pasteFramesetsMap)[ fsname ];
-        //kDebug(32001) << "KWDocument::processFootNoteRequests binding footnote var " << itvar.data() << " and frameset " << fsname << endl;
+        //kDebug(32001) << "KWDocument::processFootNoteRequests binding footnote var " << itvar.value() << " and frameset " << fsname << endl;
         KWFrameSet * fs = frameSetByName( fsname );
         Q_ASSERT( fs );
         if ( !fs ) // #104431
@@ -2517,8 +2517,8 @@ bool KWDocument::processFootNoteRequests()
         KWFootNoteFrameSet* fnfs = dynamic_cast<KWFootNoteFrameSet *>(fs);
         if ( fnfs )
         {
-            fnfs->setFootNoteVariable( itvar.data() );
-            itvar.data()->setFrameSet( fnfs );
+            fnfs->setFootNoteVariable( itvar.value() );
+            itvar.value()->setFrameSet( fnfs );
             ret = true;
         }
     }
@@ -3015,7 +3015,7 @@ Q3DragObject* KWDocument::dragSelectedPrivate( QWidget *parent, const Q3ValueLis
     }
 
     delete store;
-
+/* removed because I have no idea what the replacement of KMultipleDrag is...
     KMultipleDrag* multiDrag = new KMultipleDrag( parent );
     if ( !plainText.isEmpty() )
         multiDrag->addDragObject( new Q3TextDrag( plainText, 0 ) );
@@ -3026,6 +3026,8 @@ Q3DragObject* KWDocument::dragSelectedPrivate( QWidget *parent, const Q3ValueLis
     storeDrag->setEncodedData( buffer.buffer() );
     multiDrag->addDragObject( storeDrag );
     return multiDrag;
+*/
+return 0;
 }
 
 void KWDocument::saveSelectedFrames( KoXmlWriter& bodyWriter, KoSavingContext& savingContext, Q3ValueList<KoPictureKey>& pictureList, const Q3ValueList<KWFrameView*> &selectedFrames, QString* plainText ) const {
@@ -3826,7 +3828,7 @@ void KWDocument::createEmptyRegion( const QRect & crect, QRegion & emptyRegion, 
 void KWDocument::eraseEmptySpace( QPainter * painter, const QRegion & emptySpaceRegion, const QBrush & brush )
 {
     painter->save();
-    painter->setClipRegion( emptySpaceRegion, QPainter::CoordPainter );
+    painter->setClipRegion( emptySpaceRegion );
     painter->setPen( Qt::NoPen );
 
     //kDebug(32001) << "KWDocument::eraseEmptySpace emptySpaceRegion: " << emptySpaceRegion << endl;

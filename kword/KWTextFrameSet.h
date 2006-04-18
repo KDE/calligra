@@ -419,9 +419,9 @@ public:
     // Events forwarded by the canvas (when being in "edit" mode)
     virtual void keyPressEvent( QKeyEvent * );
     virtual void keyReleaseEvent( QKeyEvent * );
-    virtual void imStartEvent( QIMEvent * );
-    virtual void imComposeEvent( QIMEvent * );
-    virtual void imEndEvent( QIMEvent * );
+    virtual void imStartEvent( QInputMethodEvent * );
+    virtual void imComposeEvent( QInputMethodEvent * );
+    virtual void imEndEvent( QInputMethodEvent * );
     virtual void mousePressEvent( QMouseEvent *, const QPoint &, const KoPoint & );
     virtual void mouseMoveEvent( QMouseEvent *, const QPoint &, const KoPoint & ); // only called if button is pressed
     virtual void mouseReleaseEvent( QMouseEvent *, const QPoint &, const KoPoint & );
