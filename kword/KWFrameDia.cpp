@@ -43,7 +43,6 @@
 #include <qlineedit.h>
 #include <qcheckbox.h>
 #include <qcombobox.h>
-#include <qhbuttongroup.h>
 #include <qlabel.h>
 #include <qradiobutton.h>
 #include <q3listview.h>
@@ -540,7 +539,8 @@ void KWFrameDia::setupTab1(){ // TAB Frame Options
         m_sideGap->setMaxLength(6);
         m_sideGrid->addWidget(m_sideGap,2,1);
         m_sideAlign = new QComboBox (false,m_sideHeads);
-        m_sideAlign->setAutoResize(false);
+#warning "kde4: port it		"
+        //m_sideAlign->setAutoResize(false);
         m_sideAlign->insertItem ( i18n("Left"));
         m_sideAlign->insertItem ( i18n("Right"));
         m_sideAlign->insertItem ( i18n("Closest to Binding"));
@@ -664,13 +664,13 @@ void KWFrameDia::setupTab2() { // TAB Text Runaround
     Q3GridLayout *runSideLayout = new Q3GridLayout( m_runSideGroup->layout() );
     runSideLayout->setAlignment( Qt::AlignTop );
 
-    m_rRunLeft = new QRadioButton( i18n( "Run Around", "&Left" ), m_runSideGroup );
+    m_rRunLeft = new QRadioButton( i18nc( "Run Around", "&Left" ), m_runSideGroup );
     runSideLayout->addWidget( m_rRunLeft, 0, 0 /*1*/ );
 
-    m_rRunRight = new QRadioButton( i18n( "Run Around", "&Right" ), m_runSideGroup );
+    m_rRunRight = new QRadioButton( i18nc( "Run Around", "&Right" ), m_runSideGroup );
     runSideLayout->addWidget( m_rRunRight, 1, 0 /*1*/ );
 
-    m_rRunBiggest = new QRadioButton( i18n( "Run Around", "Lon&gest side" ), m_runSideGroup );
+    m_rRunBiggest = new QRadioButton( i18nc( "Run Around", "Lon&gest side" ), m_runSideGroup );
     runSideLayout->addWidget( m_rRunBiggest, 2, 0 /*1*/ );
 
 #if 0 // TODO icons!
@@ -1267,15 +1267,15 @@ void KWFrameDia::setupTab6() // Border style
     QLabel * lColor = new QLabel( i18n( "Co&lor:" ), m_tab6 );
     grid->addWidget( lColor, 4, 0 );
 
-    m_bColor = new KColorButton( black,
-                                black,
+    m_bColor = new KColorButton( Qt::black,
+                                Qt::black,
                                 m_tab6 );
 
     lColor->setBuddy( m_bColor );
     grid->addWidget( m_bColor, 5, 0 );
 
     Q3ButtonGroup * bb = new Q3HButtonGroup( m_tab6 );
-    bb->setFrameStyle(Q3Frame::NoFrame);
+    //bb->setFrameStyle(Q3Frame::NoFrame);
     m_bLeft = new QPushButton(bb);
     m_bLeft->setPixmap( BarIcon( "borderleft" ) );
     m_bLeft->setToggleButton( true );
@@ -1507,7 +1507,7 @@ void KWFrameDia::initBrush()
         m_overwriteColor->setChecked(allFramesSame);
     }
 
-    m_transparentCB->setChecked( m_newBrushStyle.style() == NoBrush );
+    m_transparentCB->setChecked( m_newBrushStyle.style() == Qt::NoBrush );
 
 #if 0
     switch ( m_newBrushStyle.style() )
@@ -1570,7 +1570,7 @@ QBrush KWFrameDia::frameBrushStyle() const
 {
     QBrush brush;
 
-    brush.setStyle( m_transparentCB->isChecked() ? NoBrush : SolidPattern );
+    brush.setStyle( m_transparentCB->isChecked() ? Qt::NoBrush : Qt::SolidPattern );
 
 #if 0
     switch ( brushStyle->currentItem() )
@@ -2082,12 +2082,12 @@ bool KWFrameDia::applyChanges()
     double uRight = 0.0;
     if(m_tab4) { // TAB Geometry
         if ( m_frame ) {
-            px = qMax( 0, m_sx->value() );
+            px = qMax( 0.0, m_sx->value() );
             int pageNum = m_doc->pageManager()->pageNumber(m_frame);
-            py = qMax( 0, m_sy->value() ) + m_doc->pageManager()->topOfPage(pageNum);
+            py = qMax( 0.0, m_sy->value() ) + m_doc->pageManager()->topOfPage(pageNum);
         }
-        pw = qMax( m_sw->value(), 0 );
-        ph = qMax( m_sh->value(), 0 );
+        pw = qMax( m_sw->value(), 0.0 );
+        ph = qMax( m_sh->value(), 0.0);
         if ( m_paddingConfigWidget )
         {
             uLeft = m_paddingConfigWidget->leftValue();

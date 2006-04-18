@@ -21,7 +21,7 @@
 #include "KWFootNoteDia.moc"
 
 #include <q3buttongroup.h>
-#include <q3vbox.h>
+#include <kvbox.h>
 #include <qradiobutton.h>
 //Added by qt3to4:
 #include <Q3GridLayout>
