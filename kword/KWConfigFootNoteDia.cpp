@@ -32,7 +32,6 @@
 
 #include <qradiobutton.h>
 
-#include <qvbuttongroup.h>
 #include <qlabel.h>
 #include <q3vbox.h>
 #include <qlayout.h>
@@ -90,13 +89,13 @@ void KWConfigFootNoteDia::setupTab3()
     positionLayout->setAlignment( Qt::AlignTop );
 
     // i18n context information necessary for gender considerations (e.g. in Polish)
-    rbPosLeft = new QRadioButton( i18n("Position", "Left"), positionGroupBox, "rbPosLeft" );
+    rbPosLeft = new QRadioButton( i18nc("Position", "Left"), positionGroupBox, "rbPosLeft" );
     positionLayout->addWidget( rbPosLeft );
 
-    rbPosCentered = new QRadioButton( i18n("Position", "Centered"), positionGroupBox, "rbPosCentered" );
+    rbPosCentered = new QRadioButton( i18nc("Position", "Centered"), positionGroupBox, "rbPosCentered" );
     positionLayout->addWidget( rbPosCentered );
 
-    rbPosRight = new QRadioButton( i18n("Position", "Right"), positionGroupBox, "rbPosRight" );
+    rbPosRight = new QRadioButton( i18nc("Position", "Right"), positionGroupBox, "rbPosRight" );
     positionLayout->addWidget( rbPosRight );
     pageLayout->addWidget( positionGroupBox );
     switch( m_doc->footNoteSeparatorLinePosition() ) {
@@ -117,7 +116,8 @@ void KWConfigFootNoteDia::setupTab3()
 
     layout->addWidget( spWidth, 1, 1 );
 
-    spLength = new KIntNumInput( page, "spLength" );
+    spLength = new KIntNumInput( page);
+	spLength->setObjectName( "spLength" );
     spLength->setRange( 1, 100, 1,false );
     spLength->setValue( m_doc->footNoteSeparatorLineLength());
     spLength->setSuffix(i18n(" %"));

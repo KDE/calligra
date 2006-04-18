@@ -44,7 +44,7 @@ void KWResizeTableDia::setupTab1(int resizeColumn) {
     KVBox *page = makeVBoxMainWidget();
     QLabel *rc = new QLabel( i18n( "Column:" ), page );
     rc->resize( rc->sizeHint() );
-    rc->setAlignment( AlignLeft | AlignBottom );
+    rc->setAlignment( Qt::AlignLeft | Qt::AlignBottom );
     m_value = new QSpinBox( 1, m_table->getColumns(), 1, page );
     m_value->resize( m_value->sizeHint() );
     m_value->setValue( resizeColumn );
