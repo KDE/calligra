@@ -124,7 +124,11 @@ namespace {
                 destDepth = 16;
                 return "CMYKA16";
             }
-        } else if(color_type == PHOTOMETRIC_CIELAB || color_type == PHOTOMETRIC_ICCLAB ) {
+        } else if(color_type == PHOTOMETRIC_CIELAB
+#ifdef PHOTOMETRIC_ICCLAB
+	          || color_type == PHOTOMETRIC_ICCLAB 
+#endif
+	         ) {
             destDepth = 16;
             if(nbchannels == 0) nbchannels = 3;
             extrasamplescount = nbchannels - 3; // FIX the extrasamples count in case of
@@ -376,12 +380,14 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory( TIFF* image)
             postprocessor = new KisTIFFPostProcessor(nbcolorsamples);
         }
         break;
+#ifdef PHOTOMETRIC_ICCLAB
         case PHOTOMETRIC_ICCLAB:
         {
             poses[0] = 0; poses[1] = 1; poses[2] = 2; poses[3] = 3;
             postprocessor = new KisTIFFPostProcessorICCLABtoCIELAB(nbcolorsamples);
         }
         break;
+#endif
         case PHOTOMETRIC_RGB:
         {
             poses[0] = 2; poses[1] = 1; poses[2] = 0; poses[3] = 3;

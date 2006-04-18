@@ -102,9 +102,11 @@ KisTIFFOptions KisDlgOptionsTIFF::options()
         case 3:
             options.compressionType = COMPRESSION_LZW;
             break;
+#ifdef COMPRESSION_JP2000
         case 4:
             options.compressionType = COMPRESSION_JP2000;
             break;
+#endif
         case 5:
             options.compressionType = COMPRESSION_CCITTRLE;
             break;
