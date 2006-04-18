@@ -114,7 +114,6 @@
 #include <kstdaccel.h>
 #include <kstdaction.h>
 #include <ktempfile.h>
-#include <kurldrag.h>
 #include <kdeversion.h>
 #include <kiconloader.h>
 
@@ -200,9 +199,9 @@ class TableInfo {
             m_oneCellSelected = amountSelected == 1;
             if(amountSelected == 0) return;
 
-            for(QMapIterator<KWTableFrameSet*, Q3ValueList<unsigned int> > iter = tableRows.begin();
-                    iter != tableRows.end(); ++iter) {
-                Q3ValueList<unsigned int> rows = iter.data();
+            for(QMapIterator<KWTableFrameSet*, Q3ValueList<unsigned int> > iter (tableRows);
+                    iter.hasNext(); iter.next()) {
+                Q3ValueList<unsigned int> rows = iter.value();
                 Q3ValueListIterator<unsigned int> rowsIter = rows.begin();
                 for(int x=0;rowsIter != rows.end(); ++rowsIter, x++)
                     if(*rowsIter == iter.key()->getColumns())
@@ -298,27 +297,27 @@ KWView::KWView( const QString& viewMode, QWidget *parent, const char *name, KWDo
     if ( KStatusBar* sb = statusBar() ) // No statusbar in e.g. konqueror
     {
         m_sbPageLabel = new KStatusBarLabel( QString::null, 0, sb );
-        m_sbPageLabel->setAlignment( AlignLeft | AlignVCenter );
+        m_sbPageLabel->setAlignment( Qt::AlignLeft | Qt::AlignVCenter );
         addStatusBarItem( m_sbPageLabel, 0 );
 
         m_sbModifiedLabel = new KStatusBarLabel( "   ", 0, sb );
-        m_sbModifiedLabel->setAlignment( AlignLeft | AlignVCenter );
+        m_sbModifiedLabel->setAlignment( Qt::AlignLeft | Qt::AlignVCenter );
         addStatusBarItem( m_sbModifiedLabel, 0 );
 
         m_sbFramesLabel = new KStatusBarLabel( QString::null, 0, sb );
-        m_sbFramesLabel->setAlignment( AlignLeft | AlignVCenter );
+        m_sbFramesLabel->setAlignment( Qt::AlignLeft | Qt::AlignVCenter );
         addStatusBarItem( m_sbFramesLabel, 1 );
 
         m_sbOverwriteLabel = new KStatusBarLabel( ' ' + i18n( "INSRT" ) + ' ', 0, sb );
-        m_sbOverwriteLabel->setAlignment( AlignHCenter | AlignVCenter );
+        m_sbOverwriteLabel->setAlignment( Qt::AlignHCenter | Qt::AlignVCenter );
         addStatusBarItem( m_sbOverwriteLabel, 0 );
 
         m_sbZoomLabel = new KStatusBarLabel( ' ' + QString::number( m_doc->zoom() ) + "% ", 0, sb );
-        m_sbZoomLabel->setAlignment( AlignHCenter | AlignVCenter );
+        m_sbZoomLabel->setAlignment( Qt::AlignHCenter | Qt::AlignVCenter );
         addStatusBarItem( m_sbZoomLabel, 0 );
 
         m_sbUnitLabel = new KStatusBarLabel( ' ' + KoUnit::unitDescription( m_doc->unit() ) + ' ', 0, sb );
-        m_sbUnitLabel->setAlignment( AlignHCenter | AlignVCenter );
+        m_sbUnitLabel->setAlignment( Qt::AlignHCenter | Qt::AlignVCenter );
         addStatusBarItem( m_sbUnitLabel, 0 );
     }
 
@@ -1810,7 +1809,7 @@ void KWView::print( KPrinter &prt )
 
 // Don't repaint behind the print dialog until we're done zooming/unzooming the doc
     m_gui->canvasWidget()->setUpdatesEnabled(false);
-    m_gui->canvasWidget()->viewport()->setCursor( waitCursor );
+    m_gui->canvasWidget()->viewport()->setCursor( Qt::waitCursor );
 
     prt.setFullPage( true );
 
@@ -1945,7 +1944,7 @@ void KWView::print( KPrinter &prt )
     kDebug() << "KWView::print zoom&res reset" << endl;
 
     m_gui->canvasWidget()->setUpdatesEnabled(true);
-    m_gui->canvasWidget()->viewport()->setCursor( ibeamCursor );
+    m_gui->canvasWidget()->viewport()->setCursor( Qt::ibeamCursor );
     m_doc->repaintAllViews();
 
     if ( displayFieldCode )
@@ -2021,7 +2020,7 @@ void KWView::showRulerIndent( double leftMargin, double firstLine, double rightM
 
 void KWView::showAlign( int align ) {
     switch ( align ) {
-        case Qt::AlignLeft: // In left-to-right mode it's align left. TODO: alignright if text->isRightToLeft()
+        case Qt::AlignAuto: // In left-to-right mode it's align left. TODO: alignright if text->isRightToLeft()
             kWarning() << k_funcinfo << "shouldn't be called with AlignAuto" << endl;
             // fallthrough
         case Qt::AlignLeft:
@@ -2447,10 +2446,10 @@ void KWView::pasteData( QMimeSource* data, bool drop )
             Q3CString returnedTypeMime = KoTextObject::providesOasis( data );
             if ( !returnedTypeMime.isEmpty() )
             {
-                const QByteArray arr = data->encodedData( returnedTypeMime );
+                QByteArray arr = data->encodedData( returnedTypeMime );
                 if( !arr.isEmpty() )
                 {
-                    QBuffer buffer( arr );
+                    QBuffer buffer( &arr );
                     KoStore * store = KoStore::createStore( &buffer, KoStore::Read );
                     KWOasisLoader oasisLoader( m_doc );
                     Q3ValueList<KWFrame *> frames = oasisLoader.insertOasisData( store, 0 /* no cursor */ );
@@ -2905,11 +2904,11 @@ void KWView::editCustomVars()
         {
             if(it.current()->type() == VT_CUSTOM )
             {
-                if(((KoCustomVariable*)it.current())->value()!=*(listOldCustomValue.at(i)))
+                if(((KoCustomVariable*)it.current())->value()!= listOldCustomValue.at(i))
                 {
                     if(!macroCommand)
                         macroCommand = new KMacroCommand( i18n( "Change Custom Variable" ) );
-                    KWChangeCustomVariableValue *cmd=new KWChangeCustomVariableValue(i18n( "Change Custom Variable" ),m_doc,*(listOldCustomValue.at(i)), ((KoCustomVariable*)it.current())->value() ,((KoCustomVariable*)it.current()));
+                    KWChangeCustomVariableValue *cmd=new KWChangeCustomVariableValue(i18n( "Change Custom Variable" ),m_doc,listOldCustomValue.at(i), ((KoCustomVariable*)it.current())->value() ,((KoCustomVariable*)it.current()));
                     macroCommand->addCommand(cmd);
                 }
                 i++;
@@ -3706,7 +3705,7 @@ void KWView::showParagraphDialog( int initialPage, double initialTabPos )
         delete m_paragDlg;
         bool showFrameEndOptions = !edit->frameSet()->isHeaderOrFooter() &&
                                    !edit->frameSet()->groupmanager();
-        m_paragDlg = new KoParagDia( this, "",
+        m_paragDlg = new KoParagDia( this,
                                      KoParagDia::PD_SPACING | KoParagDia::PD_ALIGN |
                                      KoParagDia::PD_DECORATION | KoParagDia::PD_NUMBERING |
                                      KoParagDia::PD_TABS,
@@ -4603,7 +4602,8 @@ void KWView::frameStyleSelected( KWFrameStyle *sty )
     const int pos = m_doc->frameStyleCollection()->indexOf( sty );
     Q_ASSERT( pos >= 0 );
     m_actionFrameStyle->setCurrentItem( pos );
-    KToggleAction* act = dynamic_cast<KToggleAction *>(actionCollection()->action( sty->name().toUtf8() ));
+    KToggleAction* act = dynamic_cast<KToggleAction *>(actionCollection()->action(
+                QString(sty->name().toUtf8()) ));
     if ( act )
         act->setChecked( true );
 }
@@ -4672,7 +4672,8 @@ void KWView::tableStyleSelected( KWTableStyle *sty )
     // Adjust GUI
     int pos = m_doc->tableStyleCollection()->indexOf( sty );
     m_actionTableStyle->setCurrentItem( pos );
-    KToggleAction* act = dynamic_cast<KToggleAction *>(actionCollection()->action( sty->name().toUtf8() ));
+    KToggleAction* act = dynamic_cast<KToggleAction *>(actionCollection()->action( 
+                QString(sty->name().toUtf8()) ));
     if ( act )
         act->setChecked( true );
 }
@@ -5215,7 +5216,7 @@ void KWView::textDecreaseIndent()
     KMacroCommand* macroCmd = 0L;
     for ( ; it.current() ; ++it )
     {
-        KCommand *cmd = it.current()->setMarginCommand( Q3StyleSheetItem::MarginLeft, qMax( newVal, 0 ) );
+        KCommand *cmd = it.current()->setMarginCommand( Q3StyleSheetItem::MarginLeft, qMax( newVal, 0.0 ) );
         if (cmd)
         {
             if ( !macroCmd )

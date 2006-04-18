@@ -728,7 +728,7 @@ void KWCanvas::mmCreate( const QPoint& normalPoint, bool noGrid ) // Mouse move 
     QPainter p;
     p.begin( viewport() );
     p.translate( -contentsX(), -contentsY() );
-    p.setRasterOp( NotROP );
+    //p.setRasterOp( NotROP );
     p.setPen( Qt::black );
     p.setBrush( Qt::NoBrush );
 
@@ -783,7 +783,7 @@ void KWCanvas::deleteMovingRect()
     QPainter p;
     p.begin( viewport() );
     p.translate( -contentsX(), -contentsY() );
-    p.setRasterOp( NotROP );
+    //p.setRasterOp( NotROP );
     p.setPen( Qt::black );
     p.setBrush( Qt::NoBrush );
     drawMovingRect( p );
@@ -1893,19 +1893,19 @@ bool KWCanvas::eventFilter( QObject *o, QEvent *e )
                 break;
             case QEvent::InputMethodStart:
             {
-                QIMEvent * imev = static_cast<QIMEvent *>(e);
+                QInputMethodEvent * imev = static_cast<QInputMethodEvent *>(e);
                 m_currentFrameSetEdit->imStartEvent( imev );
             }
                 break;
             case QEvent::InputMethodCompose:
             {
-                QIMEvent * imev = static_cast<QIMEvent *>(e);
+                QInputMethodEvent * imev = static_cast<QInputMethodEvent *>(e);
                 m_currentFrameSetEdit->imComposeEvent( imev );
             }
                 break;
             case QEvent::InputMethodEnd:
             {
-                QIMEvent * imev = static_cast<QIMEvent *>(e);
+                QInputMethodEvent * imev = static_cast<QInputMethodEvent *>(e);
                 m_currentFrameSetEdit->imEndEvent( imev );
             }
                 break;
