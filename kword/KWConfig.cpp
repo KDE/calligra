@@ -26,6 +26,7 @@
 #include <knumvalidator.h>
 #include <kfontdialog.h>
 #include <kdebug.h>
+#include <kinstance.h>
 
 #include <qcheckbox.h>
 #include <qlabel.h>
