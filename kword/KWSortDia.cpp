@@ -25,14 +25,14 @@
 #include <qradiobutton.h>
 #include <q3groupbox.h>
 #include <q3buttongroup.h>
-#include <q3vbox.h>
+#include <kvbox.h>
 
 KWSortDia::KWSortDia( QWidget *parent, const char* name )
     : KDialogBase( parent, name, true, i18n("Sort Text"), Ok|Cancel )
 {
     KVBox *page = makeVBoxMainWidget();
 
-    Q3ButtonGroup *grp = new Q3ButtonGroup( 1, Q3GroupBox::Horizontal, i18n( "Sort" ),page );
+    Q3ButtonGroup *grp = new Q3ButtonGroup( 1, Qt::Horizontal, i18n( "Sort" ),page );
     grp->setRadioButtonExclusive( true );
     grp->layout();
     m_increase = new QRadioButton( i18n("Increase"), grp );
