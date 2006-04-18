@@ -11,7 +11,7 @@ add_subdirectory( expression )
 add_subdirectory( data )
 add_subdirectory( tests )
 
-include_directories( ${KOTEXT_INCLUDES} ${CMAKE_SOURCE_DIR}/lib/kformula ${KOFFICEUI_INCLUDES} )
+include_directories( ${KOTEXT_INCLUDES} ${CMAKE_SOURCE_DIR}/libs/kformula ${KOFFICEUI_INCLUDES} )
 
 
 ########### next target ###############
