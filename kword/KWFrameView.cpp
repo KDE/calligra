@@ -145,7 +145,7 @@ void KWFrameView::paintFrameAttributes(QPainter *painter, const QRect &crect, KW
                 fs->isAHeader() || fs->isAFooter() || fs->isFloating();
         }
         void paint(QPainter *p, int x, int y) {
-            p->setPen( QPen( Qt::black, 1, QPen::SolidLine ) );
+            p->setPen( QPen( Qt::black, 1, Qt::SolidLine ) );
             p->setBrush( QApplication::palette().color( QPalette::Active, QColorGroup::Highlight ) );
             p->drawRect( x, y, GRIP_SIZE, GRIP_SIZE );
             if( readOnly ) { //protected frame

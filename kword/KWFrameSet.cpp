@@ -265,7 +265,7 @@ void KWFrameSet::drawFrameBorder( QPainter *painter, KWFrame *frame, KWFrame *se
     // ...except when printing, or embedded doc, or disabled.
     if ( !viewMode || !viewMode->drawFrameBorders() )
     {
-        viewSetting = NoPen;
+        viewSetting = Qt::NoPen;
         minBorder = 0;
     }
 
