@@ -45,14 +45,12 @@ class Paragraph
 		 * 
 		 * @param elt The root tree which contaisn an entire latex document.
 		 * 
-		 * @return <code>false/code> if the analyse failed.
+		 * @return <code>false</code> if the analyse failed.
 		 */
 		bool analyse(Q3PtrList<Element>* elt);
 
 		/**
 		 * Generate a kword document.
-		 *
-		 * @param store The kword document zip file.
 		 *
 		 * @return <code>true</code> if the generation success.
 		 */

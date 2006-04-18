@@ -47,6 +47,7 @@ public:
     /**
      * Adds a text node.
      * @param text the text to write into the document node
+     * @param codec the codec from the source document, to be used for encoding.
      */
     void addTextNode( const char *text, QTextCodec* codec );
     /**

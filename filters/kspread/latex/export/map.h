@@ -50,8 +50,6 @@ class Map: public XmlParser, Config
 		 * Constructors
 		 *
 		 * Creates a new instance of Map.
-		 *
-		 * @param Texte the text this paragraph is belonging to.
 		 */
 		Map();
 

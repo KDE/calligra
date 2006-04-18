@@ -259,7 +259,7 @@ namespace Swinder {
     UString &append(const UString &);
 
     /**
-     * @return The string converted to the 8-bit string type @ref CString().
+     * @return The string converted to the 8-bit string type CString().
      */
     CString cstring() const;
     /**

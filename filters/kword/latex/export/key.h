@@ -60,8 +60,6 @@ class Key: public XmlParser
 		 * Constructors
 		 *
 		 * Creates a new instance of Key.
-		 *
-		 * @param Text The text frame this paragraph is belonging to.
 		 */
 		Key(eKeyType);
 

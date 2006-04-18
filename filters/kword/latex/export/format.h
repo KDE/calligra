@@ -68,7 +68,7 @@ class Format: public XmlParser
 		 *
 		 * Creates a new instance of Format.
 		 *
-		 * @param Para the parent class of the format.
+		 * @param para the parent class of the format.
 		 */
 		Format(Para *para= 0): _id((EFormat) 0), _para(para)
 		{}

@@ -46,6 +46,7 @@ class Xml2LatexParser : public XmlParser
 		/**
 		 * @param in The document from kword.
 		 * @param fileOut Output latex filename.
+		 * @param config ???
 		 */
 		Xml2LatexParser(const KoStore* in, QString fileOut, Config* config);
 

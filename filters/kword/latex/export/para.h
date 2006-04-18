@@ -81,7 +81,7 @@ class Para: public Layout
 		 *
 		 * Creates a new instance of Para.
 		 *
-		 * @param Text The text frame this paragraph is belonging to.
+		 * @param textFrame The text frame this paragraph is belonging to.
 		 */
 		Para(TextFrame *textFrame = 0);
 

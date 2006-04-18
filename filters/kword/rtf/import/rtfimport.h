@@ -272,7 +272,7 @@ public:
     void setMacCodepage( RTFProperty * );
     /**
      * Set document codepage to CP1252
-     * @note Old RTF files have a \ansi keyword but no \ansicpg keyword
+     * @note Old RTF files have a \\ansi keyword but no \\ansicpg keyword
      */
     void setAnsiCodepage( RTFProperty * );
     /**
@@ -286,7 +286,6 @@ public:
     void setPcCodepage( RTFProperty * );
     /**
      * Sets the value of a boolean RTF property specified by token.
-     * @param property the property to set
      * @deprecated not portable, as it needs an out-of-specification use of offsetof
      */
     void setToggleProperty( RTFProperty * );
@@ -423,7 +422,7 @@ public:
     void parseBlipUid( RTFProperty* );
     /**
      * Parse recursive fields.
-     * @note The {\fldrslt ...} group will be used for
+     * @note The {\\fldrslt ...} group will be used for
      * unsupported and embedded fields.
      */
     void parseField( RTFProperty* );
@@ -507,6 +506,7 @@ public:
      *  Add a date/time field and split it for KWord
      * @param format format of the date/time
      * @param isDate is it a date field? (For the default format, if needed)
+     * @param fmt ???
      */
     void addDateTime( const QString& format, const bool isDate, RTFFormat& fmt );
     /**
@@ -567,7 +567,7 @@ public:
     QString inFileName; ///< File name of the source file.
 protected:
     QTextCodec* textCodec; ///< currently used QTextCodec by the RTF file
-    QTextCodec* utf8TextCodec; ///< QTextCodec for UTF-8 (used in \u)
+    QTextCodec* utf8TextCodec; ///< QTextCodec for UTF-8 (used in \\u)
     QMap<QString,int> debugUnknownKeywords;
     bool m_batch; ///< Should the filter system be in batch mode (i.e. non-interactive)
 };

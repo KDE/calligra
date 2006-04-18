@@ -44,7 +44,7 @@ class Document
 		 * 
 		 * @param elt The root tree which contaisn an entire latex document.
 		 * 
-		 * @return <code>false/code> if the analyse failed.
+		 * @return <code>false</code> if the analyse failed.
 		 */
 		bool analyse(Q3PtrList<Element>* elt);
 
@@ -65,9 +65,8 @@ class Document
 		/**
 		 * Copy the DOM tree in a file.
 		 *
-		 * @param out The doc store where to write the tree.
 		 * @param tree The tree to copy.
-		 * @param indent The tabulation to indent the XML tree.
+		 * @param store The KoStore that this doc is from
 		 */
 		void serialize(KoStore* store, QDomDocument tree);
 

@@ -43,7 +43,11 @@ public:
     bool prepare( KWord13Document& kwordDocument );
     bool generate( const QString& fileName, KWord13Document& kwordDocument );
 protected: // Generating phase
-    /// @param main Is it the main frameset?
+    /**
+     * @param writer output writer
+     * @param frameset the frameset to generate
+     * @param main true if this is the man frameset.
+     */
     void generateTextFrameset( KoXmlWriter& writer, KWordTextFrameset* frameset, bool main );
     void writeStylesXml( void );
     void writeContentXml( void );

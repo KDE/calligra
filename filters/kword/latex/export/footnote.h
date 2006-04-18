@@ -51,7 +51,7 @@ class Footnote: public Format
 		 *
 		 * Creates a new instances of Footnote.
 		 *
-		 * @param Para is the parent class
+		 * @param para is the parent class
 		 */
 		Footnote(Para* para = 0);
 		//Footnote(TextZone);

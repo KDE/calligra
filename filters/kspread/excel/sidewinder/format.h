@@ -58,7 +58,7 @@ public:
     { red = r; green = g; blue = b; }
   
   /**
-   * Creates a color based on given red, green and blue values, encoded as #RRGGBB in a string.
+   * Creates a color based on given red, green and blue values, encoded as \#RRGGBB in a string.
    */
   Color( const char* c )
     { std::sscanf(c, "#%2x%2x%2x", &red, &green, &blue); }

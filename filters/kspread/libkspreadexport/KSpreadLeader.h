@@ -50,7 +50,7 @@ public:
 	* Default constructor.
 	* Call setWorker() before starting to convert the KSpread document.
 	*
-	* @param the filter chain of the filter using the lib.
+	* @param filterChain the filter chain of the filter using the lib.
 	*/
 	Leader(KoFilterChain *filterChain);
 
@@ -58,8 +58,8 @@ public:
 	* This constructor set up the Worker at initialization.
 	* convert can be called right away after instanciation of the Leader.
 	*
-	* @param the filter chain of the filter using the lib.
-	* @param implementation of a class derived from KSpreadWorker.
+	* @param filterChain the filter chain of the filter using the lib.
+	* @param newWorker implementation of a class derived from KSpreadWorker.
 	*/
 	Leader(KoFilterChain *filterChain, KSpreadBaseWorker *newWorker);
 
@@ -87,7 +87,7 @@ public:
 	/**
 	* Set your own implementation of the Worker.
 	*
-	* @param implementation of a class derived from KSpreadWorker.
+	* @param newWorker implementation of a class derived from KSpreadWorker.
 	*/
 	void setWorker(KSpreadBaseWorker *newWorker);
 

@@ -237,11 +237,12 @@ namespace MSWrite
 		/**
 		 *
 		 * setCache specifies whether or not Device should start reading from
-		 * memory block specified by @param cache, instead of from user defined
+		 * memory block specified by cache, instead of from user defined
 		 * functions (which probably read from a file).
 		 *
-		 * setting @p cache to NULL stops the Device from reading from the
+		 * setting cache to NULL stops the Device from reading from the
 		 * last memory block specified.
+		 * @param cache points to the memory block
 		 *
 		 */
 		bool setCache (Byte *const cache)
