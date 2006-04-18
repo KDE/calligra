@@ -423,8 +423,9 @@ void KWFormulaFrameSetEdit::cut()
     formulaView->getDocument()->cut();
 }
 
-void KWFormulaFrameSetEdit::paste()
+void KWFormulaFrameSetEdit::paste(QClipboard::Mode mode)
 {
+    Q_UNUSED(mode);
     formulaView->getDocument()->paste();
 }
 

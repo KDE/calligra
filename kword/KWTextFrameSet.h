@@ -489,7 +489,7 @@ public slots:
     // Reimplemented from KWFrameSet and connected to KoTextView's signals
     virtual void cut();
     virtual void copy();
-    virtual void paste();
+    virtual void paste(QClipboard::Mode mode = QClipboard::Clipboard);
 
     // Reimplemented from KoTextView
     virtual void updateUI( bool updateFormat, bool force = false );

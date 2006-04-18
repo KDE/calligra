@@ -148,7 +148,7 @@ public:
     virtual void focusOutEvent();
     virtual void copy();
     virtual void cut();
-    virtual void paste();
+    virtual void paste(QClipboard::Mode mode = QClipboard::Clipboard);
     virtual void pasteData( QMimeSource* data, int provides, bool drop );
     virtual void selectAll();
 

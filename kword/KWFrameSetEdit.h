@@ -21,7 +21,8 @@
 #ifndef frame_set_edit_h
 #define frame_set_edit_h
 
-#include <qrect.h>
+#include <QRect>
+#include <QClipboard>
 //Added by qt3to4:
 #include <QDragEnterEvent>
 #include <QMouseEvent>
@@ -102,7 +103,11 @@ public:
     virtual void focusOutEvent() {}
     virtual void copy() {}
     virtual void cut() {}
-    virtual void paste() {}
+    /**
+     * Paste data from the clipboard to the FSe.
+     * @param mode use this mode to get data from the clipboard.
+     */
+    virtual void paste(QClipboard::Mode mode = QClipboard::Clipboard) {}
     virtual void selectAll() {}
     virtual void pasteData( QMimeSource* /*data*/, int /*provides*/, bool /*drop*/ ) {}
 
