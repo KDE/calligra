@@ -242,35 +242,35 @@ void KWStatisticsDialog::addBoxGeneral( Q3Frame *page, QLabel **resultLabel )
 
     // insert labels
     QLabel *label1 = new QLabel( i18n( "Number of pages:" ), box );
-    grid->addWidget( label1, 1, 0, 1 );
+    grid->addWidget( label1, 1, 0 );
     resultLabel[0] = new QLabel( "", box );
-    grid->addWidget( resultLabel[0], 1, 2, 2 );
+    grid->addWidget( resultLabel[0], 1, 2 );
 
     QLabel *label2 = new QLabel( i18n( "Number of frames:" ), box );
-    grid->addWidget( label2, 2, 0, 1 );
+    grid->addWidget( label2, 2, 0 );
     resultLabel[1] = new QLabel( "", box );
-    grid->addWidget( resultLabel[1], 2, 2, 2 );
+    grid->addWidget( resultLabel[1], 2, 2 );
 
     QLabel *label3 = new QLabel( i18n( "Number of pictures:" ), box );
-    grid->addWidget( label3, 3, 0, 1 );
+    grid->addWidget( label3, 3, 0 );
     resultLabel[2] = new QLabel( "", box );
-    grid->addWidget( resultLabel[2], 3, 2, 2 );
+    grid->addWidget( resultLabel[2], 3, 2 );
 
 
     QLabel *label4 = new QLabel( i18n( "Number of tables:" ), box );
-    grid->addWidget( label4, 4, 0, 1 );
+    grid->addWidget( label4, 4, 0);
     resultLabel[3] = new QLabel( "", box );
-    grid->addWidget( resultLabel[3], 4, 2, 2 );
+    grid->addWidget( resultLabel[3], 4, 2 );
 
     QLabel *label5 = new QLabel( i18n( "Number of embedded objects:" ), box );
-    grid->addWidget( label5, 5, 0, 1 );
+    grid->addWidget( label5, 5, 0);
     resultLabel[4] = new QLabel( "", box );
-    grid->addWidget( resultLabel[4], 5, 2, 2 );
+    grid->addWidget( resultLabel[4], 5, 2 );
 
     QLabel *label6 = new QLabel( i18n( "Number of formula frameset:" ), box );
-    grid->addWidget( label6, 6, 0, 1 );
+    grid->addWidget( label6, 6, 0 );
     resultLabel[5] = new QLabel( "", box );
-    grid->addWidget( resultLabel[5], 6, 2, 2 );
+    grid->addWidget( resultLabel[5], 6, 2);
 
     topLayout->addWidget( box );
 }
@@ -305,40 +305,40 @@ void KWStatisticsDialog::addBox( Q3Frame *page, QLabel **resultLabel, bool calcW
 
     // insert labels
     QLabel *label1 = new QLabel( i18n( "Characters including spaces:" ), box );
-    grid->addWidget( label1, 1, 0, 1 );
+    grid->addWidget( label1, 1, 0 );
     resultLabel[0] = new QLabel( "", box );
-    grid->addWidget( resultLabel[0], 1, 2, 2 );
+    grid->addWidget( resultLabel[0], 1, 2 );
 
     QLabel *label2 = new QLabel( i18n( "Characters without spaces:" ), box );
-    grid->addWidget( label2, 2, 0, 1 );
+    grid->addWidget( label2, 2, 0 );
     resultLabel[1] = new QLabel( "", box );
-    grid->addWidget( resultLabel[1], 2, 2, 2 );
+    grid->addWidget( resultLabel[1], 2, 2 );
 
     QLabel *label3 = new QLabel( i18n( "Syllables:" ), box );
-    grid->addWidget( label3, 3, 0, 1 );
+    grid->addWidget( label3, 3, 0 );
     resultLabel[2] = new QLabel( "", box );
-    grid->addWidget( resultLabel[2], 3, 2, 2 );
+    grid->addWidget( resultLabel[2], 3, 2 );
 
     QLabel *label4 = new QLabel( i18n( "Words:" ), box );
-    grid->addWidget( label4, 4, 0, 1 );
+    grid->addWidget( label4, 4, 0 );
     resultLabel[3] = new QLabel( "", box );
-    grid->addWidget( resultLabel[3], 4, 2, 2 );
+    grid->addWidget( resultLabel[3], 4, 2 );
 
     QLabel *label5 = new QLabel( i18n( "Sentences:" ), box );
-    grid->addWidget( label5, 5, 0, 1 );
+    grid->addWidget( label5, 5, 0 );
     resultLabel[4] = new QLabel( "", box );
-    grid->addWidget( resultLabel[4], 5, 2, 2 );
+    grid->addWidget( resultLabel[4], 5, 2 );
 
     QLabel *label6 = new QLabel( i18n( "Lines:" ), box );
-    grid->addWidget( label6, 6, 0, 1 );
+    grid->addWidget( label6, 6, 0 );
     resultLabel[5] = new QLabel( "", box );
-    grid->addWidget( resultLabel[5], 6, 2, 2 );
+    grid->addWidget( resultLabel[5], 6, 2 );
 
 
     QLabel *label7 = new QLabel( i18n( "Flesch reading ease:" ), box );
-    grid->addWidget( label7, 7, 0, 1 );
+    grid->addWidget( label7, 7, 0 );
     resultLabel[6] = new QLabel( init, box );
-    grid->addWidget( resultLabel[6], 7, 2, 2 );
+    grid->addWidget( resultLabel[6], 7, 2 );
 
     topLayout->addWidget( box );
 }
