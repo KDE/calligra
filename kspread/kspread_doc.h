@@ -41,10 +41,10 @@
 #include <KoZoomHandler.h>
 
 #include "kspread_global.h"
-
+#include <kcommand.h>
 class KCommand;
 
-class KoCommandHistory;
+class KCommandHistory;
 class KoGenStyles;
 class KoOasisSettings;
 class KoPicture;
@@ -197,9 +197,9 @@ public:
   /**
    * Returns the command history for the document. This is used
    * in View for updating the actions (i.e through
-   * signal KoCommandHistory::commandExecuted)
+   * signal KCommandHistory::commandExecuted)
    */
-  KoCommandHistory* commandHistory();
+  KCommandHistory* commandHistory();
 
   /**
    * Returns the name of the unit used to display margins.

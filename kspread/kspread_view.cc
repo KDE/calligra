@@ -89,7 +89,6 @@
 #include <tkcoloractions.h>
 #include <kdatatool.h>
 #include <KoCharSelectDia.h>
-#include <KoCommandHistory.h>
 #include <KoMainWindow.h>
 #include <KoOasisLoadingContext.h>
 #include <KoOasisStore.h>

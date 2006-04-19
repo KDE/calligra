@@ -48,7 +48,6 @@
 #include <ktempfile.h>
 
 #include <KoApplication.h>
-#include <KoCommandHistory.h>
 #include <KoDocumentInfo.h>
 #include <KoDom.h>
 #include <KoMainWindow.h>
@@ -118,7 +117,7 @@ public:
 
   // for undo/redo
   int undoLocked;
-  KoCommandHistory* commandHistory;
+  KCommandHistory* commandHistory;
 
   // true if loading is in process, otherwise false.
   // This flag is used to avoid updates etc. during loading.
@@ -1550,7 +1549,7 @@ bool Doc::undoLocked() const
   return (d->undoLocked > 0);
 }
 
-KoCommandHistory* Doc::commandHistory()
+KCommandHistory* Doc::commandHistory()
 {
   return d->commandHistory;
 }
