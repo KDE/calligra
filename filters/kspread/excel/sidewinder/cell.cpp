@@ -92,7 +92,7 @@ UString Cell::name() const
 UString Cell::name( unsigned column, unsigned row )
 {
 	// column=0, row=0 is "A1"
-  return columnLabel( column ) + UString::from( row + 1 );  
+  return columnLabel( column ) + UString::number( row + 1 );  
 }
 
 UString Cell::columnLabel() const
@@ -114,7 +114,7 @@ UString Cell::columnLabel( unsigned column )
     if(label.isEmpty())
     {
       for(unsigned c = 0; c < 26; c++)
-        CellPrivate::columnNames[c] = UString(UChar('A'+c));
+        CellPrivate::columnNames[c] = UString(UChar((char)'A'+c));
       for(unsigned d = 0; d < 256-26; d++)
       {
         char buf[3] = { 'A'+(d/26), 'A'+(d%26), 0};

@@ -35,6 +35,7 @@ public:
   bool autoCalc;
   bool passwordProtected;
   std::map<int,Format> formats;
+  int maxFormatIndex;
 };
 
 Workbook::Workbook()
@@ -42,6 +43,7 @@ Workbook::Workbook()
   d = new Workbook::Private();
   d->autoCalc = true;
   d->passwordProtected = false;
+  d->maxFormatIndex = 0;
 }
 
 Workbook::~Workbook()
@@ -85,6 +87,16 @@ Sheet* Workbook::sheet( unsigned index )
   return d->sheets[index];
 }
 
+int Workbook::indexOf( Sheet *s )
+{
+  if( s )
+    for( unsigned i = 0; i < sheetCount(); i++ )
+      if( d->sheets[i] == s )
+        return i;
+      
+  return -1;
+}
+
 bool Workbook::autoCalc() const
 {
   return d->autoCalc;
@@ -98,11 +110,18 @@ void Workbook::setAutoCalc( bool a )
 void Workbook::setFormat( int index, const Format& format )
 {
   d->formats[index] = format;
+  if (index > d->maxFormatIndex)
+    d->maxFormatIndex = index;
 }
 
 const Format& Workbook::format( int index ) const
 {
   return d->formats[index];
+}
+
+const int Workbook::maxFormatIndex() const
+{
+  return d->maxFormatIndex;
 }
 
 bool Workbook::isPasswordProtected() const
@@ -114,7 +133,3 @@ void Workbook::setPasswordProtected( bool p )
 {
   d->passwordProtected = p;
 }
-
-
-
-

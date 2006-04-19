@@ -1588,6 +1588,7 @@ class FormulaRecord : public Record, public CellInfo
 public:
 
   static const unsigned int id;
+  static const unsigned int idOld; // for Pocket Excel support
 
   unsigned int rtti(){
 	  return this->id;

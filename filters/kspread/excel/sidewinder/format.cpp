@@ -91,7 +91,7 @@ bool FormatFont::isNull() const
   return d->null;
 }
 
-UString FormatFont::fontFamily() const
+const UString& FormatFont::fontFamily() const
 {
   return d->fontFamily;
 }
@@ -277,6 +277,11 @@ FormatAlignment& FormatAlignment::assign( const FormatAlignment& align )
   d->indentLevel   = align.indentLevel();
   d->rotationAngle = align.rotationAngle();
   return *this;
+}
+
+bool FormatAlignment::isNull() const
+{
+  return d->null;
 }
 
 unsigned FormatAlignment::alignX() const
@@ -613,11 +618,6 @@ Format& Format::assign( const Format& f )
   d->valueFormat = f.valueFormat();
   d->background = f.background();
   return *this;
-}
-
-bool FormatAlignment::isNull() const
-{
-  return d->null;
 }
 
 bool Format::isNull() const

@@ -288,10 +288,7 @@ EString EString::fromUnicodeString( const void* p, bool longString, unsigned /* 
     str = UString();
     str.reserve(len);
     for( unsigned k=0; k<len; k++ )
-    {
-      unsigned uch = readU16( data + offset + k*2 );
-      str.append( UChar(uch) );
-    }
+      str.append( readU16( data + offset + k*2 ) );
   }
   
   EString result;
@@ -1191,14 +1188,14 @@ UString FormulaToken::area( unsigned row, unsigned col ) const
   result.append( Cell::columnLabel( col1Ref ) );  
   if( !row1Relative )
     result.append( '$' );
-  result.append( UString::from( row1Ref+1 ) );  
+  result.append( UString::number( row1Ref+1 ) );  
   result.append( ':' );
   if( !col2Relative )
     result.append( '$' );
   result.append( Cell::columnLabel( col2Ref ) );  
   if( !row2Relative )
     result.append( '$' );
-  result.append( UString::from( row2Ref+1 ) );  
+  result.append( UString::number( row2Ref+1 ) );  
 
   return result;  
 }
@@ -1259,7 +1256,7 @@ UString FormulaToken::ref( unsigned row, unsigned col ) const
   result.append( Cell::columnLabel( colRef ) );  
   if( !rowRelative )
     result.append('$');
-  result.append( UString::from( rowRef+1 ) );  
+  result.append( UString::number( rowRef+1 ) );  
   
   return result;  
 }
@@ -1521,6 +1518,9 @@ Record* Record::create( unsigned type )
   else if( type == FormulaRecord::id )
     record = new FormulaRecord();
     
+  else if( type == FormulaRecord::idOld )
+    record = new FormulaRecord();
+
   else if( type == HeaderRecord::id )
     record = new HeaderRecord();
     
@@ -2866,6 +2866,7 @@ void FormatRecord::dump( std::ostream& out ) const
 // ========== FORMULA ========== 
 
 const unsigned int FormulaRecord::id = 0x0006;
+const unsigned int FormulaRecord::idOld = 0x0206; // BIFF3, BIFF4 
 
 class FormulaRecord::Private
 {
@@ -2902,12 +2903,15 @@ FormulaTokens FormulaRecord::tokens() const
 
 void FormulaRecord::setData( unsigned size, const unsigned char* data )
 {
-  if( size < 20 ) return;
+  int formula_ofs = 20;
+  
+  // sanity check
+  if( size < formula_ofs ) return;
   
   setRow( readU16( data ) );
   setColumn( readU16( data+2 ) );
-  setXfIndex( readU16( data+4 ) );
   
+  setXfIndex( readU16( data+4 ) );
   if( readU16( data+12 ) != 0xffff )
   {
     // Floating-point 
@@ -2935,11 +2939,11 @@ void FormulaRecord::setData( unsigned size, const unsigned char* data )
     };
   }
   
-  unsigned formula_len = readU16( data+20 );
+  unsigned formula_len = readU16( data+formula_ofs );
   
   // reconstruct all tokens
   d->tokens.clear();
-  for( unsigned j = 22; j < size; )
+  for( unsigned j = formula_ofs+2; j < size; )
   {
     unsigned ptg = data[j++];
     ptg = ((ptg & 0x40) ? (ptg | 0x20) : ptg) & 0x3F;
@@ -5059,6 +5063,7 @@ bool ExcelReader::load( Workbook* workbook, const char* filename )
       std::cout << std::setfill('0') << std::setw(4) << std::hex << record->rtti();
       std::cout << " ";
       std::cout << std::dec;
+      std::cout << "(Pos: " << record->position() << ") ";
       record->dump( std::cout );
       std::cout << std::endl;
 #endif
@@ -5072,6 +5077,7 @@ bool ExcelReader::load( Workbook* workbook, const char* filename )
       std::cout << "Record 0x";
       std::cout << std::setfill('0') << std::setw(4) << std::hex << type;
       std::cout << std::dec;
+      std::cout << "(Pos: " << pos << ") ";
       std::cout << std::endl;
       std::cout << std::endl;
     }
@@ -6162,11 +6168,11 @@ UString ExcelReader::decodeFormula( unsigned row, unsigned col,
         break;
         
       case FormulaToken::Integer:
-        stack.push_back( UString::from( token.value().asInteger() ) );
+        stack.push_back( UString::number( token.value().asInteger() ) );
         break;
         
       case FormulaToken::Float:
-        stack.push_back( UString::from( token.value().asFloat() ) );
+        stack.push_back( UString::number( token.value().asFloat() ) );
         break;
         
       case FormulaToken::Array:

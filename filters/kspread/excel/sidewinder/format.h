@@ -162,7 +162,7 @@ public:
   /**
    * Returns the name of font family, e.g "Helvetica".
    */
-  UString fontFamily() const;
+  const UString& fontFamily() const;
   
   /**
    * Sets a new family for the font information.

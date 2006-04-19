@@ -71,6 +71,12 @@ public:
   Sheet* sheet( unsigned index );
   
   /*
+   * Returns the index (zero-based) of the specified sheet, or -1 if 
+   * the sheet is not inside the workbook.
+   */
+  int indexOf(Sheet *sheet);
+  
+  /*
    * Returns true if automatic calculation is enabled.
    */
   bool autoCalc() const;
@@ -86,6 +92,7 @@ public:
   
   void setFormat(int index, const Format& format);
   const Format& format(int index) const;
+  const int maxFormatIndex() const;
   
 private:
   // no copy or assign
