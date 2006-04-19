@@ -66,7 +66,7 @@ KFormulaPartView::KFormulaPartView(KFormulaDoc* _doc, QWidget* _parent, const ch
 
     formulaWidget = new KFormulaWidget( _doc->getFormula(), this, "formulaWidget" );
 
-    m_scrollArea = new QScrollArea( this, "scrollarea" );
+    m_scrollArea = new QScrollArea( this);
     m_scrollArea->setWiget( formulaWidget );
 
 //    scrollview->viewport()->setFocusProxy( scrollview );
@@ -116,7 +116,7 @@ KFormulaPartView::KFormulaPartView(KFormulaDoc* _doc, QWidget* _parent, const ch
 //                                               actionCollection(),"textfont");
 //     connect( actionElement_Text_Font, SIGNAL( activated( const QString& ) ), this, SLOT( fontSelected( const QString& ) ) );
 
-    KFontSizeAction* actionTextSize = new KFontSizeAction(i18n( "Size" ),0,
+    KFontSizeAction* actionTextSize = new KFontSizeAction(i18n( "Size" ),
                                                           actionCollection(),"formula_textsize");
     actionTextSize->setFontSize( m_pDoc->getFormula()->fontSize() );
 
