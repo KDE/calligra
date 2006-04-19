@@ -117,6 +117,7 @@
 #include <ktempfile.h>
 #include <kdeversion.h>
 #include <kiconloader.h>
+#include <kxmlguifactory.h>
 
 #include <qclipboard.h>
 #include <qapplication.h>
@@ -2016,9 +2017,6 @@ void KWView::showRulerIndent( double leftMargin, double firstLine, double rightM
 
 void KWView::showAlign( int align ) {
     switch ( align ) {
-        case Qt::AlignAuto: // In left-to-right mode it's align left. TODO: alignright if text->isRightToLeft()
-            kWarning() << k_funcinfo << "shouldn't be called with AlignAuto" << endl;
-            // fallthrough
         case Qt::AlignLeft:
             m_actionFormatAlignLeft->setChecked( true );
             break;
@@ -6114,7 +6112,7 @@ void KWView::savePicture()
         kDebug() << "Picture has mime type: " << mimetype << endl;
         QStringList mimetypes;
         mimetypes << mimetype;
-        KFileDialog fd( oldFile, QString::null, this, 0, true );
+        KFileDialog fd( oldFile, QString::null, this, 0 );
         fd.setMimeFilter( mimetypes );
         fd.setCaption(i18n("Save Picture"));
         fd.setOperationMode(KFileDialog::Saving);
@@ -6731,7 +6729,9 @@ void KWView::docStructDelete()
 void KWView::insertFile()
 {
     KFileDialog fd( QString::null, QString::null, this);
-    fd.setMimeFilter( "application/x-kword" );
+	QStringList lst;
+	lst<<"application/x-kword";
+    fd.setMimeFilter( lst );
     fd.setCaption(i18n("Insert File"));
     KUrl url;
     if ( fd.exec() != QDialog::Accepted )
@@ -7027,7 +7027,7 @@ void KWView::insertFile(const KUrl& url)
                 }
 
                 // insert paragraphs and inline framesets (we always have at least one paragraph)
-                KCommand *cmd = textFrameSet->pasteOasis( &insertionCursor, domDoc.toString(), true );
+                KCommand *cmd = textFrameSet->pasteOasis( &insertionCursor, domDoc.toByteArray(), true );
 
                 if ( cmd ) {
                     macroCmd->addCommand( cmd );
