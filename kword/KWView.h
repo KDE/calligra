@@ -136,7 +136,7 @@ public:
     /**
      * Returns the KWord global KSpell2 Broker object.
      */
-    KSpell2::Broker *broker() const;
+    KSpell2::Broker::Ptr broker() const;
 
     void setNoteType(NoteType nt, bool change=true);
 

@@ -2706,22 +2706,10 @@ void KWTableFrameSetEdit::keyReleaseEvent( QKeyEvent * e )
         m_currentCell->keyReleaseEvent( e );
 }
 
-void KWTableFrameSetEdit::imStartEvent( QInputMethodEvent* e )
+void KWTableFrameSetEdit::inputMethodEvent( QInputMethodEvent* e )
 {
     if ( m_currentCell )
-        m_currentCell->imStartEvent( e );
-}
-
-void KWTableFrameSetEdit::imComposeEvent( QInputMethodEvent* e )
-{
-    if ( m_currentCell )
-        m_currentCell->imComposeEvent( e );
-}
-
-void KWTableFrameSetEdit::imEndEvent( QInputMethodEvent* e )
-{
-    if ( m_currentCell )
-        m_currentCell->imEndEvent( e );
+        m_currentCell->inputMethodEvent( e );
 }
 
 void KWTableFrameSetEdit::dragMoveEvent( QDragMoveEvent * e, const QPoint &n, const KoPoint &d )

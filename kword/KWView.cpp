@@ -1430,8 +1430,8 @@ void KWView::loadexpressionActions( KActionMenu * parentMenu)
 {
     KActionPtrList lst = actionCollection()->actions("expression-action");
     Q3ValueList<KAction *> actions = lst;
-    Q3ValueList<KAction *>::ConstIterator it = lst.begin();
-    Q3ValueList<KAction *>::ConstIterator end = lst.end();
+    Q3ValueList<KAction *>::const_iterator it = lst.begin();
+    Q3ValueList<KAction *>::const_iterator end = lst.end();
     // Delete all actions but keep their shortcuts in mind
     QMap<QString, KShortcut> personalShortCuts;
     for (; it != end; ++it )
@@ -1535,7 +1535,7 @@ void KWView::addVariableActions( int type, const QStringList & texts,
         parentMenu->insert( subMenu );
         parentMenu = subMenu;
     }
-    QStringList::ConstIterator it = texts.begin();
+    QStringList::const_iterator it = texts.begin();
     for ( int i = 0; it != texts.end() ; ++it, ++i )
     {
         if ( !(*it).isEmpty() ) // in case of removed subtypes or placeholders
@@ -1559,8 +1559,8 @@ void KWView::refreshCustomMenu()
 {
     KActionPtrList lst2 = actionCollection()->actions("custom-variable-action");
     Q3ValueList<KAction *> actions = lst2;
-    Q3ValueList<KAction *>::ConstIterator it2 = lst2.begin();
-    Q3ValueList<KAction *>::ConstIterator end = lst2.end();
+    Q3ValueList<KAction *>::const_iterator it2 = lst2.begin();
+    Q3ValueList<KAction *>::const_iterator end = lst2.end();
     QMap<QString, KShortcut> shortCuts;
 
     for (; it2 != end; ++it2 )
@@ -2104,8 +2104,8 @@ void KWView::updateReadWrite( bool readwrite )
     Q3ValueList<KAction*> actions = actionCollection()->actions();
     // Also grab actions from the document
     actions += m_doc->actionCollection()->actions();
-    Q3ValueList<KAction*>::ConstIterator aIt = actions.begin();
-    Q3ValueList<KAction*>::ConstIterator aEnd = actions.end();
+    Q3ValueList<KAction*>::const_iterator aIt = actions.begin();
+    Q3ValueList<KAction*>::const_iterator aEnd = actions.end();
     for (; aIt != aEnd; ++aIt )
         (*aIt)->setEnabled( readwrite );
 
@@ -2229,8 +2229,8 @@ void KWView::updateStyleList()
 
     KActionPtrList lst2 = actionCollection()->actions("styleList");
     Q3ValueList<KAction *> actions = lst2;
-    Q3ValueList<KAction *>::ConstIterator it = lst2.begin();
-    const Q3ValueList<KAction *>::ConstIterator end = lst2.end();
+    Q3ValueList<KAction *>::const_iterator it = lst2.begin();
+    const Q3ValueList<KAction *>::const_iterator end = lst2.end();
     for (; it != end; ++it )
     {
         shortCuts.insert( QString::fromUtf8( (*it)->name() ), (*it)->shortcut() );
@@ -2293,8 +2293,8 @@ void KWView::updateFrameStyleList()
 
     KActionPtrList lst2 = actionCollection()->actions("frameStyleList");
     Q3ValueList<KAction *> actions = lst2;
-    Q3ValueList<KAction *>::ConstIterator it = lst2.begin();
-    Q3ValueList<KAction *>::ConstIterator end = lst2.end();
+    Q3ValueList<KAction *>::const_iterator it = lst2.begin();
+    Q3ValueList<KAction *>::const_iterator end = lst2.end();
     for (; it != end; ++it )
     {
         shortCuts.insert( QString::fromUtf8( (*it)->name() ), (*it)->shortcut() );
@@ -2344,8 +2344,8 @@ void KWView::updateTableStyleList()
     QMap<QString, KShortcut> shortCuts;
 
     Q3ValueList<KAction *> actions = actionCollection()->actions("tableStyleList");
-    Q3ValueList<KAction *>::ConstIterator it = actions.begin();
-    const Q3ValueList<KAction *>::ConstIterator end = actions.end();
+    Q3ValueList<KAction *>::const_iterator it = actions.begin();
+    const Q3ValueList<KAction *>::const_iterator end = actions.end();
     for (; it != end; ++it )
     {
         shortCuts.insert( QString::fromUtf8( (*it)->name() ), (*it)->shortcut() );
@@ -2454,7 +2454,7 @@ void KWView::pasteData( QMimeSource* data, bool drop )
                     KWOasisLoader oasisLoader( m_doc );
                     Q3ValueList<KWFrame *> frames = oasisLoader.insertOasisData( store, 0 /* no cursor */ );
                     delete store;
-                    Q3ValueList<KWFrame *>::ConstIterator it = frames.begin();
+                    Q3ValueList<KWFrame *>::const_iterator it = frames.begin();
                     KMacroCommand* macroCmd = 0L;
                     for ( ; it != frames.end() ; ++it )
                     {
@@ -3068,7 +3068,7 @@ void KWView::changeZoomMenu( int zoom )
         const QStringList itemsList ( m_actionViewZoom->items() );
         QRegExp regexp("(\\d+)"); // "Captured" non-empty sequence of digits
 
-        for (QStringList::ConstIterator it = itemsList.begin() ; it != itemsList.end() ; ++it)
+        for (QStringList::const_iterator it = itemsList.begin() ; it != itemsList.end() ; ++it)
         {
             regexp.search(*it);
             const int val=regexp.cap(1).toInt(&ok);
@@ -4672,7 +4672,7 @@ void KWView::tableStyleSelected( KWTableStyle *sty )
     // Adjust GUI
     int pos = m_doc->tableStyleCollection()->indexOf( sty );
     m_actionTableStyle->setCurrentItem( pos );
-    KToggleAction* act = dynamic_cast<KToggleAction *>(actionCollection()->action( 
+    KToggleAction* act = dynamic_cast<KToggleAction *>(actionCollection()->action(
                 QString(sty->name().toUtf8()) ));
     if ( act )
         act->setChecked( true );
@@ -4743,7 +4743,7 @@ Q3PtrList<KoTextFormatInterface> KWView::applicableTextInterfaces() const
             KWCollectFramesetsVisitor visitor;
             currentTextEdit()->textDocument()->visitSelection( KoTextDocument::Standard, &visitor ); //find all framesets in the selection
             const Q3ValueList<KWFrameSet *>& frameset = visitor.frameSets();
-            for ( Q3ValueList<KWFrameSet *>::ConstIterator it = frameset.begin(); it != frameset.end(); ++it )
+            for ( Q3ValueList<KWFrameSet *>::const_iterator it = frameset.begin(); it != frameset.end(); ++it )
             {
                 if ( (*it)->type() == FT_TABLE )
                 {
@@ -7443,8 +7443,8 @@ QList<KAction*> KWView::listOfResultOfCheckWord( const QString &word )
     const QStringList lst = dict->suggest( word );
     if ( !lst.contains( word ) )
     {
-        QStringList::ConstIterator it = lst.begin();
-        const QStringList::ConstIterator end = lst.end();
+        QStringList::const_iterator it = lst.begin();
+        const QStringList::const_iterator end = lst.end();
         for ( ; it != end ; ++it )
         {
             if ( !(*it).isEmpty() ) // in case of removed subtypes or placeholders
@@ -7488,7 +7488,7 @@ void KWView::slotChildActivated( bool a )
   KoView::slotChildActivated( a );
 }
 
-Broker *KWView::broker() const
+KSpell2::Broker::Ptr KWView::broker() const
 {
     return m_broker;
 }

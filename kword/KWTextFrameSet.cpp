@@ -3472,19 +3472,9 @@ void KWTextFrameSetEdit::keyReleaseEvent( QKeyEvent* e )
     textView()->handleKeyReleaseEvent( e );
 }
 
-void KWTextFrameSetEdit::imStartEvent( QInputMethodEvent* e )
+void KWTextFrameSetEdit::inputMethodEvent( QInputMethodEvent* e )
 {
-    textView()->handleImStartEvent( e );
-}
-
-void KWTextFrameSetEdit::imComposeEvent( QInputMethodEvent* e )
-{
-    textView()->handleImComposeEvent( e );
-}
-
-void KWTextFrameSetEdit::imEndEvent( QInputMethodEvent* e )
-{
-    textView()->handleImEndEvent( e );
+    textView()->handleInputMethodEvent( e );
 }
 
 void KWTextFrameSetEdit::mousePressEvent( QMouseEvent *e, const QPoint &, const KoPoint & dPoint )

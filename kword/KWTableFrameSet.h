@@ -715,9 +715,7 @@ public:
     // Forward all events to the current cell
     virtual void keyPressEvent( QKeyEvent * e );
     virtual void keyReleaseEvent( QKeyEvent * e );
-    virtual void imStartEvent( QInputMethodEvent* e );
-    virtual void imComposeEvent( QInputMethodEvent* e );
-    virtual void imEndEvent( QInputMethodEvent* e );
+    virtual void inputMethodEvent( QInputMethodEvent* e );
     virtual void mousePressEvent( QMouseEvent * e, const QPoint &, const KoPoint & );
     virtual void mouseMoveEvent( QMouseEvent * e, const QPoint & n, const KoPoint & d )
     { if ( m_currentCell ) m_currentCell->mouseMoveEvent( e, n, d ); }

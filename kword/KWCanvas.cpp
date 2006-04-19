@@ -1891,22 +1891,10 @@ bool KWCanvas::eventFilter( QObject *o, QEvent *e )
                 }
             }
                 break;
-            case QEvent::InputMethodStart:
+            case QEvent::InputMethod:
             {
                 QInputMethodEvent * imev = static_cast<QInputMethodEvent *>(e);
-                m_currentFrameSetEdit->imStartEvent( imev );
-            }
-                break;
-            case QEvent::InputMethodCompose:
-            {
-                QInputMethodEvent * imev = static_cast<QInputMethodEvent *>(e);
-                m_currentFrameSetEdit->imComposeEvent( imev );
-            }
-                break;
-            case QEvent::InputMethodEnd:
-            {
-                QInputMethodEvent * imev = static_cast<QInputMethodEvent *>(e);
-                m_currentFrameSetEdit->imEndEvent( imev );
+                m_currentFrameSetEdit->inputMethodEvent( imev );
             }
                 break;
             default:
@@ -1952,7 +1940,10 @@ void KWCanvas::printRTDebug( int info )
 
 void KWCanvas::setXimPosition( int x, int y, int w, int h )
 {
+#if 0 // TODO Qt4 PORTING
+    // the method doesn't exist at all anymore; is it still needed?
     QWidget::setMicroFocusHint( x - contentsX(), y - contentsY(), w, h );
+#endif
 }
 
 void KWCanvas::inlinePictureStarted()
