@@ -561,6 +561,10 @@ private:  // methods
 private: // variables
     KWDocument *m_doc;
 
+    QActionGroup* m_paragraphStyleActionGroup;
+    QActionGroup* m_frameStyleActionGroup;
+    QActionGroup* m_tableStyleActionGroup;
+
     KAction *m_actionFileStatistics;
     KAction *m_actionEditCut;
     KAction *m_actionEditCopy;

@@ -572,6 +572,13 @@ void KWView::initGUIButton()
 
 void KWView::setupActions()
 {
+    m_paragraphStyleActionGroup = new QActionGroup( this );
+    m_paragraphStyleActionGroup->setExclusive( true );
+    m_frameStyleActionGroup = new QActionGroup( this );
+    m_frameStyleActionGroup->setExclusive( true );
+    m_tableStyleActionGroup = new QActionGroup( this );
+    m_tableStyleActionGroup->setExclusive( true );
+
     // The actions here are grouped by menu, because this helps noticing
     // accelerator clashes.
 
@@ -650,20 +657,22 @@ void KWView::setupActions()
 
     if ( !m_doc->isEmbedded() ) {
 
+        QActionGroup* viewModeActionGroup = new QActionGroup( this );
+        viewModeActionGroup->setExclusive( true );
         m_actionViewTextMode = new KToggleAction( i18n( "Text Mode" ), 0,
                                                   this, SLOT( viewTextMode() ),
                                                   actionCollection(), "view_textmode" );
         m_actionViewTextMode->setToolTip( i18n( "Only show the text of the document" ) );
         m_actionViewTextMode->setWhatsThis( i18n( "Do not show any pictures, formatting or layout. KWord will display only the text for editing." ) );
 
-        m_actionViewTextMode->setExclusiveGroup( "viewmodes" );
+        m_actionViewTextMode->setActionGroup( viewModeActionGroup );
         m_actionViewPageMode = new KToggleAction( i18n( "&Page Mode" ), 0,
                                                   this, SLOT( viewPageMode() ),
                                                   actionCollection(), "view_pagemode" );
         m_actionViewPageMode->setWhatsThis( i18n( "Switch to page mode.<br><br> Page mode is designed to make editing your text easy.<br><br>This function is most frequently used to return to text editing after switching to preview mode." ) );
         m_actionViewPageMode->setToolTip( i18n( "Switch to page editing mode" ) );
 
-        m_actionViewPageMode->setExclusiveGroup( "viewmodes" );
+        m_actionViewPageMode->setActionGroup( viewModeActionGroup );
         m_actionViewPageMode->setChecked( true );
         m_actionViewPreviewMode = new KToggleAction( i18n( "Pre&view Mode" ), 0,
                                                      this, SLOT( viewPreviewMode() ),
@@ -671,7 +680,7 @@ void KWView::setupActions()
         m_actionViewPreviewMode->setWhatsThis( i18n( "Zoom out from your document to get a look at several pages of your document.<br><br>The number of pages per line can be customized." ) );
         m_actionViewPreviewMode->setToolTip( i18n( "Zoom out to a multiple page view" ) );
 
-        m_actionViewPreviewMode->setExclusiveGroup( "viewmodes" );
+        m_actionViewPreviewMode->setActionGroup( viewModeActionGroup );
     }
     else // no viewmode switching when embedded; at least "Page" makes no sense
     {
@@ -811,13 +820,15 @@ void KWView::setupActions()
                                             actionCollection(), "insert_expression" );
     loadexpressionActions( m_actionInsertExpression);
 
+    QActionGroup* toolsActionGroup = new QActionGroup( this );
+    toolsActionGroup->setExclusive( true );
     m_actionToolsCreateText = new KToggleAction( i18n( "Te&xt Frame" ), "frame_text", Qt::Key_F10 /*same as kpr*/,
                                                this, SLOT( toolsCreateText() ),
                                                actionCollection(), "tools_createtext" );
     m_actionToolsCreateText->setToolTip( i18n( "Create a new text frame" ) );
     m_actionToolsCreateText->setWhatsThis( i18n( "Create a new text frame." ) );
 
-    m_actionToolsCreateText->setExclusiveGroup( "tools" );
+    m_actionToolsCreateText->setActionGroup( toolsActionGroup );
     m_actionInsertFormula = new KAction( i18n( "For&mula" ), "frame_formula", Qt::Key_F4,
                                        this, SLOT( insertFormula() ),
                                        actionCollection(), "tools_formula" );
@@ -837,7 +848,7 @@ void KWView::setupActions()
                                               actionCollection(), "insert_picture" );
     m_actionToolsCreatePix->setToolTip( i18n( "Create a new frame for a picture" ) );
     m_actionToolsCreatePix->setWhatsThis( i18n( "Create a new frame for a picture or diagram." ) );
-    m_actionToolsCreatePix->setExclusiveGroup( "tools" );
+    m_actionToolsCreatePix->setActionGroup( toolsActionGroup );
 
     m_actionToolsCreatePart = new KoPartSelectAction( i18n( "&Object Frame" ), "frame_query",
                                                     this, SLOT( toolsPart() ),
@@ -939,45 +950,47 @@ void KWView::setupActions()
                                            this, SLOT( textStrikeOut() ),
                                            actionCollection(), "format_strike" );
 
+    QActionGroup* alignActionGroup = new QActionGroup( this );
+    alignActionGroup->setExclusive( true );
     m_actionFormatAlignLeft = new KToggleAction( i18n( "Align &Left" ), "text_left", Qt::CTRL + Qt::Key_L,
                                        this, SLOT( textAlignLeft() ),
                                        actionCollection(), "format_alignleft" );
-    m_actionFormatAlignLeft->setExclusiveGroup( "align" );
+    m_actionFormatAlignLeft->setActionGroup( alignActionGroup )
     m_actionFormatAlignLeft->setChecked( true );
     m_actionFormatAlignCenter = new KToggleAction( i18n( "Align &Center" ), "text_center", Qt::CTRL + Qt::ALT + Qt::Key_C,
                                          this, SLOT( textAlignCenter() ),
                                          actionCollection(), "format_aligncenter" );
-    m_actionFormatAlignCenter->setExclusiveGroup( "align" );
+    m_actionFormatAlignCenter->setActionGroup( alignActionGroup )
     m_actionFormatAlignRight = new KToggleAction( i18n( "Align &Right" ), "text_right", Qt::CTRL + Qt::ALT + Qt::Key_R,
                                         this, SLOT( textAlignRight() ),
                                         actionCollection(), "format_alignright" );
-    m_actionFormatAlignRight->setExclusiveGroup( "align" );
+    m_actionFormatAlignRight->setActionGroup( alignActionGroup )
     m_actionFormatAlignBlock = new KToggleAction( i18n( "Align &Block" ), "text_block", Qt::CTRL + Qt::Key_J,
                                         this, SLOT( textAlignBlock() ),
                                         actionCollection(), "format_alignblock" );
-    m_actionFormatAlignBlock->setExclusiveGroup( "align" );
+    m_actionFormatAlignBlock->setActionGroup( alignActionGroup )
 
+    QActionGroup* spacingActionGroup = new QActionGroup( this );
+    spacingActionGroup->setExclusive( true );
     m_actionFormatSpacingSingle = new KToggleAction( i18n( "Line Spacing &1" ), "spacesimple", Qt::CTRL + Qt::Key_1,
                                            this, SLOT( textSpacingSingle() ),
                                            actionCollection(), "format_spacingsingle" );
-    m_actionFormatSpacingSingle->setExclusiveGroup( "spacing" );
+    m_actionFormatSpacingSingle->setActionGroup( spacingActionGroup );
     m_actionFormatSpacingOneAndHalf = new KToggleAction( i18n( "Line Spacing 1.&5" ), "spacedouble", Qt::CTRL + Qt::Key_5,
                                        this, SLOT( textSpacingOneAndHalf() ),
                                        actionCollection(), "format_spacing15" );
-    m_actionFormatSpacingOneAndHalf->setExclusiveGroup( "spacing" );
+    m_actionFormatSpacingOneAndHalf->setActionGroup( spacingActionGroup );
     m_actionFormatSpacingDouble = new KToggleAction( i18n( "Line Spacing &2" ), "spacetriple", Qt::CTRL + Qt::Key_2,
                                            this, SLOT( textSpacingDouble() ),
                                            actionCollection(), "format_spacingdouble" );
-    m_actionFormatSpacingDouble->setExclusiveGroup( "spacing" );
+    m_actionFormatSpacingDouble->setActionGroup( spacingActionGroup );
 
     m_actionFormatSuper = new KToggleAction( i18n( "Superscript" ), "super", 0,
                                               this, SLOT( textSuperScript() ),
                                               actionCollection(), "format_super" );
-    //m_actionFormatSuper->setExclusiveGroup( "valign" );
     m_actionFormatSub = new KToggleAction( i18n( "Subscript" ), "sub", 0,
                                               this, SLOT( textSubScript() ),
                                               actionCollection(), "format_sub" );
-    //m_actionFormatSub->setExclusiveGroup( "valign" );
 
     m_actionFormatIncreaseIndent= new KAction( i18n( "Increase Indent" ),
             QApplication::isRightToLeft() ? "format_decreaseindent" : "format_increaseindent", 0,
@@ -1006,6 +1019,8 @@ void KWView::setupActions()
     m_actionFormatBullet = new KActionMenu( i18n( "Bullet" ),
                                           "unsortedList", actionCollection(), "format_bullet" );
     m_actionFormatBullet->setDelayed( false );
+    QActionGroup* counterStyleActionGroup = new QActionGroup( this );
+    counterStyleActionGroup->setExclusive( true );
     Q3PtrList<KoCounterStyleWidget::StyleRepresenter> stylesList;
     KoCounterStyleWidget::makeCounterRepresenterList( stylesList );
     Q3PtrListIterator<KoCounterStyleWidget::StyleRepresenter> styleIt( stylesList );
@@ -1015,7 +1030,7 @@ void KWView::setupActions()
         KToggleAction* act = new KToggleAction( styleIt.current()->name(), /*TODO icon,*/
                                                 0, this, SLOT( slotCounterStyleSelected() ),
                                                 actionCollection(), QString("counterstyle_%1").arg( styleIt.current()->style() ).latin1() );
-        act->setExclusiveGroup( "counterstyle" );
+        act->setActionGroup( counterStyleActionGroup );
         // Add to the right menu: both for "none", bullet for bullets, numbers otherwise
         if ( styleIt.current()->style() == KoParagCounter::STYLE_NONE ) {
             m_actionFormatBullet->insert( act );
@@ -2243,7 +2258,7 @@ void KWView::updateStyleList()
                                      shortCuts[name], this, SLOT( slotStyleSelected() ),
                                      actionCollection(), name.toUtf8() );
             act->setGroup( "styleList" );
-            act->setExclusiveGroup( "styleListAction" );
+            act->setActionGroup( m_paragraphStyleActionGroup );
             act->setToolTip( i18n( "Apply a paragraph style" ) );
             m_actionFormatStyleMenu->insert( act );
         }
@@ -2309,7 +2324,7 @@ void KWView::updateFrameStyleList()
                                                     this, SLOT( slotFrameStyleSelected() ),
                                                     actionCollection(), name.toUtf8() /*KDE4: remove conversion*/ );
             act->setGroup( "frameStyleList" );
-            act->setExclusiveGroup( "frameStyleList" );
+            act->setActionGroup( m_frameStyleActionGroup );
             act->setToolTip( i18n( "Apply a frame style" ) );
             m_actionFrameStyleMenu->insert( act );
         }
@@ -2358,7 +2373,7 @@ void KWView::updateTableStyleList()
             KToggleAction* act = new KToggleAction( (*it),
                                      shortCuts[name], this, SLOT( slotTableStyleSelected() ),
                                      actionCollection(), name.toUtf8() );
-            act->setExclusiveGroup( "tableStyleList" );
+            act->setActionGroup( m_tableStyleActionGroup );
             act->setGroup( "tableStyleList" );
             act->setToolTip( i18n( "Apply a table style" ) );
             m_actionTableStyleMenu->insert( act );
