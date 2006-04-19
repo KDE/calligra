@@ -6429,6 +6429,18 @@ bool Sheet::loadOasis( const QDomElement& sheetElement, KoOasisLoadingContext& o
                     loadColumnFormat( rowElement, oasisContext.oasisStyles(), indexCol , styleMap);
                     kDebug ()<<" table-column found : index column after "<< indexCol<<endl;
                 }
+                else if ( rowElement.localName() == "table-header-rows" )
+                {
+                  QDomNode headerRowNode = rowElement.firstChild();
+                  while ( !headerRowNode.isNull() )
+                  {
+                    // NOTE Handle header rows as ordinary ones
+                    //      as long as they're not supported.
+                    loadRowFormat( headerRowNode.toElement(), rowIndex,
+                                   oasisContext, /*rowNode.isNull() ,*/ styleMap );
+                    headerRowNode = headerRowNode.nextSibling();
+                  }
+                }
                 else if( rowElement.localName() == "table-row" )
                 {
                     kDebug()<<" table-row found :index row before "<<rowIndex<<endl;
