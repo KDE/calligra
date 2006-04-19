@@ -737,7 +737,7 @@ void KWFrameSet::drawFrameAndBorders( KWFrame *frame,
             if ( drawUnderlyingFrames )
                 reg = frameClipRegion( painter, frame, outerCRect, viewMode );
             else // false means we are being drawn _as_ an underlying frame, so no clipping!
-                reg = painter->transformed( outerCRect );
+                reg = painter->xForm( outerCRect );
             if ( !reg.isEmpty() )
             {
                 painter->save();
@@ -1083,7 +1083,7 @@ QRegion KWFrameSet::frameClipRegion( QPainter * painter, KWFrame *frame, const Q
                                      KWViewMode * viewMode )
 {
 //    KWDocument * doc = kWordDocument();
-    QRect rc = painter->transformed( crect );
+    QRect rc = painter->xForm( crect );
 #ifdef DEBUG_DRAW
     //kDebug(32002) << "KWFrameSet::frameClipRegion rc initially " << rc << endl;
 #endif
@@ -1114,7 +1114,7 @@ QRegion KWFrameSet::frameClipRegion( QPainter * painter, KWFrame *frame, const Q
         {
             KWFrame* frameOnTop = (*fIt);
             Q_ASSERT( frameOnTop->frameSet() );
-            QRect r = painter->transformed( viewMode->normalToView( frameOnTop->outerRect( viewMode ) ) );
+            QRect r = painter->xForm( viewMode->normalToView( frameOnTop->outerRect( viewMode ) ) );
 #ifdef DEBUG_DRAW
             //kDebug(32002) << "frameClipRegion subtract rect "<< r << endl;
 #endif
