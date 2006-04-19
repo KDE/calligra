@@ -407,7 +407,9 @@ Q3PopupMenu* TextFramePolicy::createPopup( const KoPoint &point, KWView *view ) 
     QList<KAction*> &actionList = view->dataToolActionList();
     QList<KAction*> &variableList = view->variableActionList();
 
+    qDeleteAll( actionList );
     actionList.clear();
+    qDeleteAll( variableList );
     variableList.clear();
 
     bool singleWord= false;

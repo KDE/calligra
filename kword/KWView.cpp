@@ -245,7 +245,7 @@ KWView::KWView( const QString& viewMode, QWidget *parent, const char *name, KWDo
     m_fsInline=0;
     m_spell.kospell = 0;
     m_spell.dlg = 0;
-    m_broker = Broker::openBroker( KSharedConfig::openConfig( "kwordrc" ) );
+    m_broker = Broker::openBroker( KSharedConfig::openConfig( "kwordrc" ) .data() /*TEMP - REMOVE*/ );
     m_spell.macroCmdSpellCheck=0L;
     m_spell.textIterator = 0L;
     m_currentPage = m_doc->pageManager()->page(m_doc->startPage());
@@ -258,8 +258,6 @@ KWView::KWView( const QString& viewMode, QWidget *parent, const char *name, KWDo
     m_tableSplit.columns = 1;
     m_tableSplit.rows = 1;
 
-    m_actionList.setAutoDelete( true );
-    m_variableActionList.setAutoDelete( true );
     // Default values.
     m_zoomViewModeNormal.m_zoom = m_doc->zoom();
     m_zoomViewModeNormal.m_zoomMode = m_doc->zoomMode();
@@ -421,6 +419,11 @@ KWView::KWView( const QString& viewMode, QWidget *parent, const char *name, KWDo
 
 KWView::~KWView()
 {
+    qDeleteAll( m_actionList );
+    m_actionList.clear();
+    qDeleteAll( m_variableActionList );
+    m_variableActionList.clear();
+
     delete m_tableActionList.first(); // the first one is the separator.
     clearSpellChecker();
 
