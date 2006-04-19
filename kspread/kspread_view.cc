@@ -100,6 +100,7 @@
 #include <KoTemplateCreateDia.h>
 #include <KoZoomAction.h>
 #include <ktoolinvocation.h>
+#include <Q3PopupMenu>
 
 // KSpread includes
 #include "commands.h"
