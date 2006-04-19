@@ -27,7 +27,7 @@
 #include <kfontdialog.h>
 #include <kdebug.h>
 #include <kinstance.h>
-
+#include <kvbox.h>
 #include <qcheckbox.h>
 #include <qlabel.h>
 
@@ -42,6 +42,7 @@
 #include <QPixmap>
 #include <Q3GridLayout>
 #include <Q3Frame>
+#include <Q3GroupBox>
 
 #include "KWConfig.h"
 #include "KWView.h"
@@ -240,7 +241,7 @@ ConfigureInterfacePage::ConfigureInterfacePage( KWView *view, KVBox *box, char *
     m_pView=view;
     config = KWFactory::instance()->config();
     Q3GroupBox * gbInterfaceGroup = new Q3GroupBox(1, Qt::Horizontal, i18n("Interface"), box, "GroupBox" );
-    gbInterfaceGroup->setMargin( KDialog::marginHint() );
+    //gbInterfaceGroup->setMargin( KDialog::marginHint() );
     gbInterfaceGroup->setInsideSpacing( KDialog::spacingHint() );
 
     double ptGridX=MM_TO_POINT(5.0 );
@@ -482,7 +483,7 @@ ConfigureMiscPage::ConfigureMiscPage( KWView *view, KVBox *box, char *name )
     m_pView=view;
     config = KWFactory::instance()->config();
     Q3GroupBox * gbMiscGroup = new Q3GroupBox(1, Qt::Horizontal, i18n("Misc"), box, "GroupBox" );
-    gbMiscGroup->setMargin( KDialog::marginHint() );
+    //gbMiscGroup->setMargin( KDialog::marginHint() );
     gbMiscGroup->setInsideSpacing( KDialog::spacingHint() );
 
     m_oldNbRedo=30;
@@ -535,7 +536,7 @@ ConfigureMiscPage::ConfigureMiscPage( KWView *view, KVBox *box, char *name )
                                             "Note that the selected formatting characters are only "
                                             "shown if formatting characters are enabled in general, "
                                             "which can be done from the View menu."));
-    gbViewFormatting->setMargin( KDialog::marginHint() );
+    //gbViewFormatting->setMargin( KDialog::marginHint() );
     gbViewFormatting->setInsideSpacing( KDialog::spacingHint() );
 
     m_oldFormattingEndParag = doc->viewFormattingEndParag();
@@ -766,7 +767,7 @@ ConfigureDefaultDocPage::ConfigureDefaultDocPage( KWView *view, KVBox *box, char
     m_autoHyphenation->setChecked( m_oldHyphenation );
 
     Q3GroupBox * gbDocumentSettings = new Q3GroupBox(1, Qt::Horizontal, i18n("Document Settings"), box );
-    gbDocumentSettings->setMargin( KDialog::marginHint() );
+    //gbDocumentSettings->setMargin( KDialog::marginHint() );
     gbDocumentSettings->setInsideSpacing( KDialog::spacingHint() );
 
     KHBox* hbAutoSave = new KHBox( gbDocumentSettings );
@@ -914,7 +915,8 @@ void ConfigureDefaultDocPage::slotDefault()
 void ConfigureDefaultDocPage::selectNewDefaultFont() {
     QStringList list;
     KFontChooser::getFontList(list, KFontChooser::SmoothScalableFonts);
-    KFontDialog dlg( (QWidget *)this->parent(), "Font Selector", false, true, list, true );
+    KFontDialog dlg( (QWidget *)this->parent(), false, true, list, true );
+	dlg.setObjectName("Font Selector");
     dlg.setFont(*font);
     int result = dlg.exec();
     if (KDialog::Accepted == result) {
@@ -942,7 +944,7 @@ ConfigurePathPage::ConfigurePathPage( KWView *view, KVBox *box, char *name )
     KWDocument * doc = m_pView->kWordDocument();
     config = KWFactory::instance()->config();
     Q3GroupBox * gbPathGroup = new Q3GroupBox(1, Qt::Horizontal, i18n("Path"), box, "GroupBox" );
-    gbPathGroup->setMargin( KDialog::marginHint() );
+    //gbPathGroup->setMargin( KDialog::marginHint() );
     gbPathGroup->setInsideSpacing( KDialog::spacingHint() );
 
     m_pPathView = new K3ListView( gbPathGroup );
