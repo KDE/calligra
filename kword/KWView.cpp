@@ -74,6 +74,7 @@
 #include <kformuladocument.h>
 #include <kformulamimesource.h>
 
+#include <QSplitter>
 #include <KoRichText.h>
 #include <KoAutoFormat.h>
 #include <KoAutoFormatDia.h>
@@ -1693,15 +1694,7 @@ void KWView::updateFrameStatusBarItem()
             KoUnit::Unit unit = m_doc->unit();
             QString unitName = m_doc->unitName();
             KWFrame * frame = frameViewManager()->selectedFrames()[0]->frame();
-            m_sbFramesLabel->setText( ' ' + i18n( "Statusbar info", "%1: %2, %3 - %4, %5 (width: %6, height: %7)" )
-                    .arg( frame->frameSet()->name() )
-                    .arg( KoUnit::toUserStringValue( frame->left(), unit ) )
-                    .arg( KoUnit::toUserStringValue( frame->top() - m_doc->pageManager()->topOfPage(
-                                m_doc->pageManager()->pageNumber(frame->rect()) ), unit) )
-                    .arg( KoUnit::toUserStringValue( frame->right(), unit ) )
-                    .arg( KoUnit::toUserStringValue( frame->bottom(), unit ) )
-                    .arg( KoUnit::toUserStringValue( frame->width(), unit ) )
-                    .arg( KoUnit::toUserStringValue( frame->height(), unit ) ) );
+            m_sbFramesLabel->setText( ' ' + i18nc( "Statusbar info", "%1: %2, %3 - %4, %5 (width: %6, height: %7)", frame->frameSet()->name(),  KoUnit::toUserStringValue( frame->left(), unit ), KoUnit::toUserStringValue( frame->top() - m_doc->pageManager()->topOfPage(m_doc->pageManager()->pageNumber(frame->rect()) ), unit) ), KoUnit::toUserStringValue( frame->right(), unit ), KoUnit::toUserStringValue( frame->bottom(), unit ) , KoUnit::toUserStringValue( frame->width(), unit ) ,KoUnit::toUserStringValue( frame->height(), unit ) );
         } else
             m_sbFramesLabel->setText( ' ' + i18n( "%1 frames selected" ).arg( nbFrame ) );
     }
@@ -6734,7 +6727,7 @@ void KWView::docStructDelete()
 
 void KWView::insertFile()
 {
-    KFileDialog fd( QString::null, QString::null, this, 0, true );
+    KFileDialog fd( QString::null, QString::null, this);
     fd.setMimeFilter( "application/x-kword" );
     fd.setCaption(i18n("Insert File"));
     KUrl url;
@@ -7031,7 +7024,7 @@ void KWView::insertFile(const KUrl& url)
                 }
 
                 // insert paragraphs and inline framesets (we always have at least one paragraph)
-                KCommand *cmd = textFrameSet->pasteOasis( &insertionCursor, domDoc.toCString(), true );
+                KCommand *cmd = textFrameSet->pasteOasis( &insertionCursor, domDoc.toString(), true );
 
                 if ( cmd ) {
                     macroCmd->addCommand( cmd );
@@ -7569,7 +7562,7 @@ void KWView::deleteSelectedFrames() {
 /* Class: KWGUI                                                */
 /******************************************************************/
 KWGUI::KWGUI( const QString& viewMode, QWidget *parent, KWView *daView )
-  : KHBox( parent, "" ),
+  : KHBox( parent),
     m_view ( daView )
 {
 
