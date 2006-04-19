@@ -24,6 +24,7 @@
 //Added by qt3to4:
 #include <QLabel>
 #include <kvbox.h>
+#include <Q3ListViewItem>
 
 namespace KFormula {
     class ConfigurePage;

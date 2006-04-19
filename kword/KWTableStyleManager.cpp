@@ -292,7 +292,7 @@ void KWTableStyleManager::setupMain()
     QLabel *nameLabel = new QLabel( main );
     nameLabel->setText( i18n( "Name:" ) );
     nameLabel->resize(nameLabel->sizeHint());
-    nameLabel->setAlignment( AlignRight | AlignVCenter );
+    nameLabel->setAlignment( Qt::AlignRight | Qt::AlignVCenter );
 
     mainLayout->addWidget( nameLabel, 0, 0 );
 

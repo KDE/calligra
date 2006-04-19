@@ -41,7 +41,7 @@ KWFrameStyleCollection::KWFrameStyleCollection()
 void KWFrameStyleCollection::saveOasis( KoGenStyles& mainStyles, KoSavingContext& savingContext ) const
 {
     if ( !isDefault() ) {
-        for ( Q3ValueList<KoUserStyle *>::const_iterator styleIt = m_styleList.begin(), styleEnd = m_styleList.end() ; styleIt != styleEnd ; ++styleIt )
+        for ( QList<KoUserStyle *>::const_iterator styleIt = m_styleList.begin(), styleEnd = m_styleList.end() ; styleIt != styleEnd ; ++styleIt )
         {
             KWFrameStyle* style = static_cast<KWFrameStyle *>( *styleIt );
             style->saveOasis( mainStyles, savingContext );
@@ -107,7 +107,7 @@ KWFrameStyle::KWFrameStyle( QDomElement & parentElem, int /*docVersion=2*/ )
     QDomElement element = parentElem.namedItem( "NAME" ).toElement();
     if ( ( !element.isNull() ) && ( element.hasAttribute("value") ) ) {
         m_name = element.attribute( "value" );
-        m_displayName = i18n( "Style name", m_name.toUtf8() );
+        m_displayName = i18nc( "Style name", m_name.toUtf8() );
     } else
         kWarning() << "No NAME tag in frame style!" << endl;
 

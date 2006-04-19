@@ -40,7 +40,7 @@ KWTableStyleCollection::KWTableStyleCollection()
 void KWTableStyleCollection::saveOasis( KoGenStyles& mainStyles, KoSavingContext& savingContext ) const
 {
     if ( !isDefault() ) {
-        for ( Q3ValueList<KoUserStyle *>::const_iterator styleIt = m_styleList.begin(), styleEnd = m_styleList.end() ; styleIt != styleEnd ; ++styleIt )
+        for ( QList<KoUserStyle *>::const_iterator styleIt = m_styleList.begin(), styleEnd = m_styleList.end() ; styleIt != styleEnd ; ++styleIt )
         {
             KWTableStyle* style = static_cast<KWTableStyle *>( *styleIt );
             style->saveOasis( mainStyles, savingContext );
@@ -97,7 +97,7 @@ KWTableStyle::KWTableStyle( QDomElement & parentElem, KWDocument *_doc, int /*do
     QDomElement element = parentElem.namedItem( "NAME" ).toElement();
     if ( ( !element.isNull() ) && ( element.hasAttribute("value") ) ) {
         m_name = element.attribute( "value" );
-        m_displayName = i18n( "Style name", m_name.toUtf8() );
+        m_displayName = i18nc( "Style name", m_name.toUtf8() );
     } else
         kWarning() << "No NAME tag in table style!" << endl;
 
