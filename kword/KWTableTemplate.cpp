@@ -250,7 +250,7 @@ void KWTableTemplate::operator=( const KWTableTemplate &rhs )
 
 QString KWTableTemplate::displayName() const
 {
-    return i18n( "Style name", name().toUtf8() );
+    return i18nc( "Style name", name().toUtf8() );
 }
 
 // TODO

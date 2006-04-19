@@ -44,7 +44,8 @@
 #include <qlayout.h>
 //Added by qt3to4:
 #include <Q3GridLayout>
-
+#include <Q3ListBox>
+#include <QApplication>
 #include <stdlib.h>
 #include <math.h>
 
@@ -227,28 +228,28 @@ void KWTableTemplatePreview::drawCell( QPainter *p, const KWTableStyle *ts, cons
 
     if (ts->frameStyle()->topBorder().width()>0) {
         p->setPen( KoBorder::borderPen(ts->frameStyle()->topBorder(),
-            int(ts->frameStyle()->topBorder().width()), black) ); // Top border
+            int(ts->frameStyle()->topBorder().width()), Qt::black) ); // Top border
 
         p->drawLine( 0, int( floor( ts->frameStyle()->topBorder().width()/2 ) ),
             int(wid + ts->frameStyle()->rightBorder().width()), int( floor( ts->frameStyle()->topBorder().width()/2 ) ) );
     }
     if (ts->frameStyle()->leftBorder().width()>0) {
         p->setPen( KoBorder::borderPen(ts->frameStyle()->leftBorder(),
-            int(ts->frameStyle()->leftBorder().width()), black) ); // Left border
+            int(ts->frameStyle()->leftBorder().width()), Qt::black) ); // Left border
 
         p->drawLine( int( floor( ts->frameStyle()->leftBorder().width()/2 ) ), 0,
             int( floor( ts->frameStyle()->leftBorder().width()/2 ) ), hei + int(ts->frameStyle()->bottomBorder().width()) );
     }
     if (ts->frameStyle()->bottomBorder().width()>0) {
         p->setPen( KoBorder::borderPen(ts->frameStyle()->bottomBorder(),
-            int(ts->frameStyle()->bottomBorder().width()), black) ); // Bottom border
+            int(ts->frameStyle()->bottomBorder().width()), Qt::black) ); // Bottom border
 
         p->drawLine( 0, hei+int( floor( ts->frameStyle()->bottomBorder().width()/2 ) ),
             int(wid + ts->frameStyle()->rightBorder().width()), hei + int( floor( ts->frameStyle()->bottomBorder().width()/2 ) ) );
     }
     if (ts->frameStyle()->rightBorder().width()>0) {
         p->setPen( KoBorder::borderPen(ts->frameStyle()->rightBorder(),
-            int(ts->frameStyle()->rightBorder().width()), black) ); // Right border
+            int(ts->frameStyle()->rightBorder().width()), Qt::black) ); // Right border
 
         p->drawLine( wid + int( floor( ts->frameStyle()->rightBorder().width()/2 ) ), 0,
             wid + int( floor( ts->frameStyle()->rightBorder().width()/2 ) ), hei + int(ts->frameStyle()->bottomBorder().width()) );
