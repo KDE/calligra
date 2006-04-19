@@ -757,7 +757,7 @@ void KWTextFrameSet::drawCursor( QPainter *p, KoTextCursor *cursor, bool cursorV
         if ( hasFrames ) {
             reg = frameClipRegion( p, theFrame, clip, m_currentViewMode );
             if ( !isFloating() ) // problem with multiparent inline frames
-                reg &= p->transformed( viewFrameRect );
+                reg &= p->xForm( viewFrameRect );
         }
 
         if ( !hasFrames || !reg.isEmpty() )
@@ -791,8 +791,8 @@ void KWTextFrameSet::drawCursor( QPainter *p, KoTextCursor *cursor, bool cursorV
                 cg.setBrush( QColorGroup::Base, bgBrush );
                 // color of cursor, the inverse of the frame background
                 QColor background = bgBrush.color();
-                cg.setColor(QColorGroup::Text, QColor( 255 - background.Qt::red(),
-                    255 - background.Qt::green(), 255 - background.Qt::blue()) );
+                cg.setColor(QColorGroup::Text, QColor( 255 - background.red(),
+                    255 - background.green(), 255 - background.blue()) );
             }
             else if(dynamic_cast<KWViewModeText *>(m_currentViewMode) != 0)
                 p->translate( KWViewModeText::OFFSET, 0 );
