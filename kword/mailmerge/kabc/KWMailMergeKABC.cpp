@@ -352,18 +352,18 @@ QString KWMailMergeKABC::getValue( const QString &name, int record ) const
         QString lat;
         QString longi;
         if(  geo.latitude()<0 )
-            lat = QString( i18n("%1 South") ).arg( -geo.latitude() );
+            lat =  i18n("%1 South", -geo.latitude() );
         else
-            lat = QString( i18n("%1 North") ).arg( geo.latitude() );
+            lat = i18n("%1 North", geo.latitude() );
 
         if(  geo.longitude()<0 )
             // There is something going wrong, because "W" is replaced by "q ".
             // Needs fix.
-            longi = QString( i18n("%1 West") ).arg( -geo.longitude() );
+            longi = i18n("%1 West",  -geo.longitude() );
         else
-            longi = QString( i18n("%1 East") ).arg( geo.longitude() );
+            longi =  i18n("%1 East", geo.longitude() );
 
-        return i18n( "Geographic coordinates", "%1, %2" ).arg ( lat, longi );
+        return i18nc( "Geographic coordinates", "%1, %2" , lat, longi );
     }
 
     if ( name == "Title" )
@@ -487,7 +487,7 @@ void KWMailMergeKABC::save( QDomDocument& doc, QDomElement& parent)
     QDomElement cont=doc.createElement(QString::fromLatin1("CONTENT"));
     parent.appendChild(cont);
 
-    Q3ValueList<QString>::ConstIterator it = _individualUIDs.begin();
+    QList<QString>::ConstIterator it = _individualUIDs.begin();
     for( ; it != _individualUIDs.end(); ++it )
     {
         QDomElement rec=doc.createElement(QString::fromLatin1("RECORD"));
