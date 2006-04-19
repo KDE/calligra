@@ -7436,9 +7436,9 @@ void KWView::deleteFrameSet( KWFrameSet * frameset)
     }
 }
 
-Q3PtrList<KAction> KWView::listOfResultOfCheckWord( const QString &word )
+QList<KAction*> KWView::listOfResultOfCheckWord( const QString &word )
 {
-    Q3PtrList<KAction> listAction;
+    QList<KAction*> listAction;
     DefaultDictionary *dict = m_broker->defaultDictionary();
     const QStringList lst = dict->suggest( word );
     if ( !lst.contains( word ) )

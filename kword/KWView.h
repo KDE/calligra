@@ -192,9 +192,9 @@ public:
 
     Q3PopupMenu * popupMenu( const QString& name );
 
-    Q3PtrList<KAction> &dataToolActionList() { return m_actionList; }
-    Q3PtrList<KAction> &variableActionList() { return m_variableActionList; }
-    Q3PtrList<KAction> &tableActions() { return m_tableActionList; }
+    QList<KAction*> &dataToolActionList() { return m_actionList; }
+    QList<KAction*> &variableActionList() { return m_variableActionList; }
+    QList<KAction*> &tableActions() { return m_tableActionList; }
 
     enum { // bitfield
         ProvidesImage = 1,
@@ -226,7 +226,7 @@ public:
 
     void deleteFrameSet( KWFrameSet *);
 
-    Q3PtrList<KAction> listOfResultOfCheckWord( const QString &word );
+    QList<KAction*> listOfResultOfCheckWord( const QString &word );
 
     int  tableSelectCell(const QString &tableName, uint row, uint col);
     void tableInsertRow(uint row, KWTableFrameSet *table = 0);
@@ -775,9 +775,9 @@ private: // variables
     KoSearchContext *m_searchEntry, *m_replaceEntry;
     KWFindReplace *m_findReplace;
 
-    Q3PtrList<KAction> m_actionList; // for the kodatatools
-    Q3PtrList<KAction> m_variableActionList;
-    Q3PtrList<KAction> m_tableActionList;
+    QList<KAction*> m_actionList; // for the kodatatools
+    QList<KAction*> m_variableActionList;
+    QList<KAction*> m_tableActionList;
 
     KWPage *m_currentPage; ///< current page number
 

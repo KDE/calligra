@@ -70,7 +70,7 @@ protected:
      * @param view the parent view widget
      * @param actionList the list of actions where the floating action should be added to
      */
-    void addFloatingAction(KWView *view, Q3PtrList<KAction> &actionList);
+    void addFloatingAction(KWView *view, QList<KAction*> &actionList);
 
     KWFrameView *m_view;
     KActionSeparator *m_separator;

@@ -180,7 +180,7 @@ FramePolicy::FramePolicy(KWFrameView *view) {
     m_separator = new KActionSeparator();
     m_view = view;
 }
-void FramePolicy::addFloatingAction(KWView *view, Q3PtrList<KAction> &actionList) {
+void FramePolicy::addFloatingAction(KWView *view, QList<KAction*> &actionList) {
     if(m_view->frame()->frameSet()->isMainFrameset())
         return;
     actionList.append(m_separator);
@@ -331,7 +331,7 @@ Q3PopupMenu* PartFramePolicy::createPopup( const KoPoint &point, KWView *view ) 
     KWPartFrameSet *part = static_cast<KWPartFrameSet *>(m_view->frame()->frameSet());
     KActionSeparator *separator=new KActionSeparator();
     KActionCollection *actionCollection = view->actionCollection();
-    Q3PtrList<KAction> actionList;
+    QList<KAction*> actionList;
     actionList.append(separator);
     if( !part->protectContent() ) {
         KToggleAction *action = dynamic_cast<KToggleAction*>(actionCollection->action("embedded_store_internal"));
@@ -371,7 +371,7 @@ Q3PopupMenu* TextFramePolicy::createPopup( const KoPoint &point, KWView *view ) 
         KWFrameSet *fs = m_view->frame()->frameSet();
         KActionSeparator *separator=new KActionSeparator();
         KActionCollection *actionCollection = view->actionCollection();
-        Q3PtrList<KAction> actionList;
+        QList<KAction*> actionList;
         if(fs->isHeaderOrFooter()) {
             actionList.append(separator);
             actionList.append(actionCollection->action("configure_headerfooter"));
@@ -404,8 +404,8 @@ Q3PopupMenu* TextFramePolicy::createPopup( const KoPoint &point, KWView *view ) 
     view->unplugActionList( "datatools_link" );
 
     // Those lists are stored in the KWView. Grab a ref to them.
-    Q3PtrList<KAction> &actionList = view->dataToolActionList();
-    Q3PtrList<KAction> &variableList = view->variableActionList();
+    QList<KAction*> &actionList = view->dataToolActionList();
+    QList<KAction*> &variableList = view->variableActionList();
 
     actionList.clear();
     variableList.clear();
@@ -445,7 +445,7 @@ Q3PopupMenu* TextFramePolicy::createPopup( const KoPoint &point, KWView *view ) 
         return view->popupMenu("footnote_popup");
     }
     if ( singleWord ) {
-        Q3PtrList<KAction> actionCheckSpellList = view->listOfResultOfCheckWord( word );
+        QList<KAction*> actionCheckSpellList = view->listOfResultOfCheckWord( word );
         if ( !actionCheckSpellList.isEmpty() ) {
             view->plugActionList( "spell_result_action", actionCheckSpellList );
             return view->popupMenu("text_popup_spell_with_result");
@@ -468,7 +468,7 @@ Q3PopupMenu* ImageFramePolicy::createPopup( const KoPoint &point, KWView *view )
     Q_UNUSED(point);
     KActionSeparator *separator=new KActionSeparator();
     KActionCollection *actionCollection = view->actionCollection();
-    Q3PtrList<KAction> actionList;
+    QList<KAction*> actionList;
     actionList.append(separator);
     KAction *action = actionCollection->action("change_picture");
     Q_ASSERT(action);
