@@ -900,29 +900,21 @@ void KWView::setupActions()
     m_actionFormatStylist->setToolTip( i18n( "Change attributes of styles" ) );
     m_actionFormatStylist->setWhatsThis( i18n( "Change font and paragraph attributes of styles.<p>Multiple styles can be changed using the dialog box." ) );
 
-    m_actionFormatFontSize = new KFontSizeAction( i18n( "Font Size" ), 0,
-                                              actionCollection(), "format_fontsize" );
+    m_actionFormatFontSize = new KFontSizeAction( i18n( "Font Size" ), actionCollection(), "format_fontsize" );
     connect( m_actionFormatFontSize, SIGNAL( fontSizeChanged( int ) ),
              this, SLOT( textSizeSelected( int ) ) );
 
     m_actionFontSizeIncrease = new KAction( i18n("Increase Font Size"), "fontsizeup", Qt::CTRL + Qt::Key_Greater, this, SLOT( increaseFontSize() ), actionCollection(), "increase_fontsize" );
     m_actionFontSizeDecrease = new KAction( i18n("Decrease Font Size"), "fontsizedown", Qt::CTRL + Qt::Key_Less, this, SLOT( decreaseFontSize() ), actionCollection(), "decrease_fontsize" );
 
-#ifdef KFONTACTION_HAS_CRITERIA_ARG
     m_actionFormatFontFamily = new KFontAction( KFontChooser::SmoothScalableFonts,
-                                              i18n( "Font Family" ), 0,
-                                              actionCollection(), "format_fontfamily" );
-#else
-    m_actionFormatFontFamily = new KFontAction( i18n( "Font Family" ), 0,
-                                              actionCollection(), "format_fontfamily" );
-#endif
+                                                //i18n( "Font Family" ),
+                                                actionCollection(), "format_fontfamily" );
     connect( m_actionFormatFontFamily, SIGNAL( activated( const QString & ) ),
              this, SLOT( textFontSelected( const QString & ) ) );
 
-    m_actionFormatStyleMenu = new KActionMenu( i18n( "St&yle" ), 0,
-                                           actionCollection(), "format_stylemenu" );
-    m_actionFormatStyle = new KSelectAction( i18n( "St&yle" ), 0,
-                                           actionCollection(), "format_style" );
+    m_actionFormatStyleMenu = new KActionMenu( i18n( "St&yle" ), actionCollection(), "format_stylemenu" );
+    m_actionFormatStyle = new KSelectAction( i18n( "St&yle" ), actionCollection(), "format_style" );
     // In fact, binding a key to this action will simply re-apply the current style. Why not.
     //m_actionFormatStyle->setShortcutConfigurable( false );
     connect( m_actionFormatStyle, SIGNAL( activated( int ) ),
@@ -955,20 +947,20 @@ void KWView::setupActions()
     m_actionFormatAlignLeft = new KToggleAction( i18n( "Align &Left" ), "text_left", Qt::CTRL + Qt::Key_L,
                                        this, SLOT( textAlignLeft() ),
                                        actionCollection(), "format_alignleft" );
-    m_actionFormatAlignLeft->setActionGroup( alignActionGroup )
+    m_actionFormatAlignLeft->setActionGroup( alignActionGroup );
     m_actionFormatAlignLeft->setChecked( true );
     m_actionFormatAlignCenter = new KToggleAction( i18n( "Align &Center" ), "text_center", Qt::CTRL + Qt::ALT + Qt::Key_C,
                                          this, SLOT( textAlignCenter() ),
                                          actionCollection(), "format_aligncenter" );
-    m_actionFormatAlignCenter->setActionGroup( alignActionGroup )
+    m_actionFormatAlignCenter->setActionGroup( alignActionGroup );
     m_actionFormatAlignRight = new KToggleAction( i18n( "Align &Right" ), "text_right", Qt::CTRL + Qt::ALT + Qt::Key_R,
                                         this, SLOT( textAlignRight() ),
                                         actionCollection(), "format_alignright" );
-    m_actionFormatAlignRight->setActionGroup( alignActionGroup )
+    m_actionFormatAlignRight->setActionGroup( alignActionGroup );
     m_actionFormatAlignBlock = new KToggleAction( i18n( "Align &Block" ), "text_block", Qt::CTRL + Qt::Key_J,
                                         this, SLOT( textAlignBlock() ),
                                         actionCollection(), "format_alignblock" );
-    m_actionFormatAlignBlock->setActionGroup( alignActionGroup )
+    m_actionFormatAlignBlock->setActionGroup( alignActionGroup );
 
     QActionGroup* spacingActionGroup = new QActionGroup( this );
     spacingActionGroup->setExclusive( true );
@@ -1013,11 +1005,9 @@ void KWView::setupActions()
     //                                          actionCollection(), "format_list" );
     //actionFormatList->setExclusiveGroup( "style" );
 
-    m_actionFormatNumber = new KActionMenu( i18n( "Number" ),
-                                          "enumList", actionCollection(), "format_number" );
+    m_actionFormatNumber = new KActionMenu( KIcon( "enumList" ), i18n( "Number" ), actionCollection(), "format_number" );
     m_actionFormatNumber->setDelayed( false );
-    m_actionFormatBullet = new KActionMenu( i18n( "Bullet" ),
-                                          "unsortedList", actionCollection(), "format_bullet" );
+    m_actionFormatBullet = new KActionMenu( KIcon( "unsortedList" ), i18n( "Bullet" ), actionCollection(), "format_bullet" );
     m_actionFormatBullet->setDelayed( false );
     QActionGroup* counterStyleActionGroup = new QActionGroup( this );
     counterStyleActionGroup->setExclusive( true );
@@ -1028,8 +1018,9 @@ void KWView::setupActions()
         // Dynamically create toggle-actions for each list style.
         // This approach allows to edit toolbars and extract separate actions from this menu
         KToggleAction* act = new KToggleAction( styleIt.current()->name(), /*TODO icon,*/
-                                                0, this, SLOT( slotCounterStyleSelected() ),
-                                                actionCollection(), QString("counterstyle_%1").arg( styleIt.current()->style() ).latin1() );
+                                                actionCollection(),
+                                                QString("counterstyle_%1").arg( styleIt.current()->style() ) );
+        connect( act, SIGNAL( triggered(bool) ), this, SLOT( slotCounterStyleSelected() ) );
         act->setActionGroup( counterStyleActionGroup );
         // Add to the right menu: both for "none", bullet for bullets, numbers otherwise
         if ( styleIt.current()->style() == KoParagCounter::STYLE_NONE ) {
@@ -1043,25 +1034,30 @@ void KWView::setupActions()
 
     // ---------------------------- frame toolbar actions
 
-    m_actionFrameStyleMenu = new KActionMenu( i18n( "Fra&mestyle" ), 0,
+    m_actionFrameStyleMenu = new KActionMenu( i18n( "Fra&mestyle" ),
                                            actionCollection(), "frame_stylemenu" );
-    m_actionFrameStyle = new KSelectAction( i18n( "Framest&yle" ), 0,
+    m_actionFrameStyle = new KSelectAction( i18n( "Framest&yle" ),
                                            actionCollection(), "frame_style" );
     connect( m_actionFrameStyle, SIGNAL( activated( int ) ),
              this, SLOT( frameStyleSelected( int ) ) );
     updateFrameStyleList();
-    m_actionBorderOutline = new KToggleAction( i18n( "Border Outline" ), "borderoutline",
-                            0, this, SLOT( borderOutline() ), actionCollection(), "border_outline" );
-    m_actionBorderLeft = new KToggleAction( i18n( "Border Left" ), "borderleft",
-                            0, this, SLOT( borderLeft() ), actionCollection(), "border_left" );
-    m_actionBorderRight = new KToggleAction( i18n( "Border Right" ), "borderright",
-                            0, this, SLOT( borderRight() ), actionCollection(), "border_right" );
-    m_actionBorderTop = new KToggleAction( i18n( "Border Top" ), "bordertop",
-                            0, this, SLOT( borderTop() ), actionCollection(), "border_top" );
-    m_actionBorderBottom = new KToggleAction( i18n( "Border Bottom" ), "borderbottom",
-                            0, this, SLOT( borderBottom() ),  actionCollection(), "border_bottom" );
+    m_actionBorderOutline = new KToggleAction( KIcon("borderoutline"), i18n( "Border Outline" ),
+                            actionCollection(), "border_outline" );
+    connect( m_actionBorderOutline, SIGNAL( triggered(bool) ), this, SLOT( borderOutline() ) );
+    m_actionBorderLeft = new KToggleAction( KIcon("borderleft"), i18n( "Border Left" ),
+                            actionCollection(), "border_left" );
+    connect( m_actionBorderLeft, SIGNAL( triggered(bool) ), this, SLOT( borderLeft() ) );
+    m_actionBorderRight = new KToggleAction( KIcon("borderright"), i18n( "Border Right" ),
+                            actionCollection(), "border_right" );
+    connect( m_actionBorderRight, SIGNAL( triggered(bool) ), this, SLOT( borderRight() ) );
+    m_actionBorderTop = new KToggleAction( KIcon("bordertop"), i18n( "Border Top" ),
+                            actionCollection(), "border_top" );
+    connect( m_actionBorderTop, SIGNAL( triggered(bool) ), this, SLOT( borderTop() ) );
+    m_actionBorderBottom = new KToggleAction( KIcon("borderbottom"), i18n( "Border Bottom" ),
+                            actionCollection(), "border_bottom" );
+    connect( m_actionBorderBottom, SIGNAL( triggered(bool) ), this, SLOT( borderBottom() ) );
     m_actionBorderStyle = new KSelectAction( i18n( "Border Style" ),
-                            0,  actionCollection(), "border_style" );
+                            actionCollection(), "border_style" );
 
     QStringList lst;
     lst << KoBorder::getStyle( KoBorder::SOLID );
@@ -1071,8 +1067,8 @@ void KWView::setupActions()
     lst << KoBorder::getStyle( KoBorder::DASH_DOT_DOT );
     lst << KoBorder::getStyle( KoBorder::DOUBLE_LINE );
     m_actionBorderStyle->setItems( lst );
-    m_actionBorderWidth = new KSelectAction( i18n( "Border Width" ), 0,
-                                                 actionCollection(), "border_width" );
+    m_actionBorderWidth = new KSelectAction( i18n( "Border Width" ),
+                                             actionCollection(), "border_width" );
     lst.clear();
     for ( unsigned int i = 1; i < 10; i++ )
         lst << QString::number( i );
@@ -1167,9 +1163,9 @@ void KWView::setupActions()
     m_actionTableStylist->setToolTip( i18n( "Change attributes of tablestyles" ) );
     m_actionTableStylist->setWhatsThis( i18n( "Change textstyle and framestyle of the tablestyles.<p>Multiple tablestyles can be changed using the dialog box." ) );
 
-    m_actionTableStyleMenu = new KActionMenu( i18n( "Table&style" ), 0,
+    m_actionTableStyleMenu = new KActionMenu( i18n( "Table&style" ),
                                            actionCollection(), "table_stylemenu" );
-    m_actionTableStyle = new KSelectAction( i18n( "Table&style" ), 0,
+    m_actionTableStyle = new KSelectAction( i18n( "Table&style" ),
                                            actionCollection(), "table_style" );
     connect( m_actionTableStyle, SIGNAL( activated( int ) ),
              this, SLOT( tableStyleSelected( int ) ) );
@@ -1448,10 +1444,9 @@ void KWView::updateGridButton()
 
 void KWView::loadexpressionActions( KActionMenu * parentMenu)
 {
-    KActionPtrList lst = actionCollection()->actions("expression-action");
-    Q3ValueList<KAction *> actions = lst;
-    Q3ValueList<KAction *>::const_iterator it = lst.begin();
-    Q3ValueList<KAction *>::const_iterator end = lst.end();
+    QList<KAction*>  lst = actionCollection()->actions("expression-action");
+    QList<KAction *>::const_iterator it = lst.begin();
+    const QList<KAction *>::const_iterator end = lst.end();
     // Delete all actions but keep their shortcuts in mind
     QMap<QString, KShortcut> personalShortCuts;
     for (; it != end; ++it )
@@ -1502,7 +1497,7 @@ void KWView::createExpressionActions( KActionMenu * parentMenu,const QString& fi
             {
                 expressionExist =true;
                 QString group = i18n( e.namedItem( "TypeName" ).toElement().text().toUtf8() );
-                KActionMenu * subMenu = new KActionMenu( group, actionCollection() );
+                KActionMenu * subMenu = new KActionMenu( group, actionCollection(), "expression_group_" + group );
                 parentMenu->insert( subMenu );
 
                 QDomNode n2 = e.firstChild();
@@ -1515,13 +1510,13 @@ void KWView::createExpressionActions( KActionMenu * parentMenu,const QString& fi
                         if ( e2.tagName() == "Expression" )
                         {
                             QString text = i18n( e2.namedItem( "Text" ).toElement().text().toUtf8() );
-                            KAction * act = new KAction( text, 0, this, SLOT( insertExpression() ),
-                                                         actionCollection(),
-                                                         QString("expression-action_%1").arg(i).latin1() );
+                            KAction * act = new KAction( text, actionCollection(),
+                                                         QString("expression-action_%1").arg(i) );
+                            connect( act, SIGNAL( toggled(bool) ), this, SLOT( insertExpression() ) );
                             if ( personalShortCut.contains(text) )
                                 act->setShortcut( personalShortCut[text] );
                             i++;
-                            act->setGroup("expression-action");
+                            //act->setGroup("expression-action");
                             subMenu->insert( act );
                         }
                     }
@@ -1551,7 +1546,7 @@ void KWView::addVariableActions( int type, const QStringList & texts,
     // For multiple items we create a submenu.
     if ( texts.count() > 1 && !menuText.isEmpty() )
     {
-        KActionMenu * subMenu = new KActionMenu( menuText, actionCollection() );
+        KActionMenu * subMenu = new KActionMenu( menuText, actionCollection(), "menu-variableactions-" + menuText );
         parentMenu->insert( subMenu );
         parentMenu = subMenu;
     }
@@ -1577,10 +1572,9 @@ void KWView::addVariableActions( int type, const QStringList & texts,
 
 void KWView::refreshCustomMenu()
 {
-    KActionPtrList lst2 = actionCollection()->actions("custom-variable-action");
-    Q3ValueList<KAction *> actions = lst2;
-    Q3ValueList<KAction *>::const_iterator it2 = lst2.begin();
-    Q3ValueList<KAction *>::const_iterator end = lst2.end();
+    QList<KAction *> lst2 = actionCollection()->actions("custom-variable-action");
+    QList<KAction *>::const_iterator it2 = lst2.begin();
+    const QList<KAction *>::const_iterator end = lst2.end();
     QMap<QString, KShortcut> shortCuts;
 
     for (; it2 != end; ++it2 )
@@ -1609,9 +1603,9 @@ void KWView::refreshCustomMenu()
             if ( !lst.contains( varName) )
             {
                  lst.append( varName );
-                 Q3CString name = QString("custom-action_%1").arg(i).latin1();
+                 QString name = QString("custom-action_%1").arg(i);
                  act = new KAction( varName, shortCuts[varName], this, SLOT( insertCustomVariable() ),actionCollection(), name );
-                 act->setGroup( "custom-variable-action" );
+                 //act->setGroup( "custom-variable-action" );
                  m_actionInsertCustom->insert( act );
                  i++;
             }
@@ -1621,9 +1615,10 @@ void KWView::refreshCustomMenu()
     if(state)
         m_actionInsertCustom->popupMenu()->insertSeparator();
 
-    act = new KAction( i18n("New..."), 0, this, SLOT( insertNewCustomVariable() ), actionCollection(),QString("custom-action_%1").arg(i).latin1());
-    act->setGroup( "custom-variable-action" );
-
+    act = new KAction( i18n("New..."), actionCollection(),
+                       QString("custom-action_%1").arg(i) );
+    connect( act, SIGNAL(triggered(bool)), this, SLOT( insertNewCustomVariable() ) );
+    //act->setGroup( "custom-variable-action" );
 
     m_actionEditCustomVarsEdit->setEnabled( state );
 
@@ -1713,12 +1708,19 @@ void KWView::updateFrameStatusBarItem()
             KoUnit::Unit unit = m_doc->unit();
             QString unitName = m_doc->unitName();
             KWFrame * frame = frameViewManager()->selectedFrames()[0]->frame();
-            m_sbFramesLabel->setText( ' ' + i18nc( "Statusbar info", "%1: %2, %3 - %4, %5 (width: %6, height: %7)", frame->frameSet()->name(),  KoUnit::toUserStringValue( frame->left(), unit ), KoUnit::toUserStringValue( frame->top() - m_doc->pageManager()->topOfPage(m_doc->pageManager()->pageNumber(frame->rect()) ), unit) ), KoUnit::toUserStringValue( frame->right(), unit ), KoUnit::toUserStringValue( frame->bottom(), unit ) , KoUnit::toUserStringValue( frame->width(), unit ) ,KoUnit::toUserStringValue( frame->height(), unit ) );
+            QString leftStr = KoUnit::toUserStringValue( frame->left(), unit );
+            QString topStr = KoUnit::toUserStringValue( frame->top() - m_doc->pageManager()->topOfPage(m_doc->pageManager()->pageNumber(frame->rect()) ), unit);
+            QString rightStr = KoUnit::toUserStringValue( frame->right(), unit );
+            QString bottomStr = KoUnit::toUserStringValue( frame->bottom(), unit );
+            QString widthStr = KoUnit::toUserStringValue( frame->width(), unit );
+            QString heightStr = KoUnit::toUserStringValue( frame->height(), unit );
+#warning re-enable at next kdelibs snapshot after 19/04/2006
+            //m_sbFramesLabel->setText( ' ' + i18nc( "Statusbar info", "%1: %2, %3 - %4, %5 (width: %6, height: %7)", frame->frameSet()->name(), leftStr, topStr, rightStr, bottomStr, widthStr, heightStr ) );
         } else
             m_sbFramesLabel->setText( ' ' + i18n( "%1 frames selected" ).arg( nbFrame ) );
     }
     else if ( sb && m_sbFramesLabel )
-        m_sbFramesLabel->setText( QString::null );
+        m_sbFramesLabel->setText( QString() );
 }
 
 void KWView::setTemporaryStatusBarText(const QString &text)
@@ -2071,7 +2073,7 @@ void KWView::showCounter( KoParagCounter &c )
     QString styleStr("counterstyle_");
     styleStr += QString::number( c.style() );
     //kDebug() << "KWView::showCounter styleStr=" << styleStr << endl;
-    KToggleAction* act = static_cast<KToggleAction *>( actionCollection()->action( styleStr.latin1() ) );
+    KToggleAction* act = static_cast<KToggleAction *>( actionCollection()->action( styleStr ) );
     Q_ASSERT( act );
     if ( act )
         act->setChecked( true );
@@ -2207,7 +2209,7 @@ void KWView::showStyle( const QString & styleName )
         // Select style in combo
         m_actionFormatStyle->setCurrentItem( pos );
         // Check the appropriate action among the m_actionFormatStyleMenu actions
-        KToggleAction* act = dynamic_cast<KToggleAction *>(actionCollection()->action(style->name().toUtf8()));
+        KToggleAction* act = dynamic_cast<KToggleAction *>(actionCollection()->action(style->name()));
         if ( act )
             act->setChecked( true );
     }
@@ -2236,13 +2238,12 @@ void KWView::updateStyleList()
     KAccelGen::generate( lst, lstWithAccels );
     QMap<QString, KShortcut> shortCuts;
 
-    KActionPtrList lst2 = actionCollection()->actions("styleList");
-    Q3ValueList<KAction *> actions = lst2;
-    Q3ValueList<KAction *>::const_iterator it = lst2.begin();
-    const Q3ValueList<KAction *>::const_iterator end = lst2.end();
+    QList<KAction *> lst2 = actionCollection()->actions("styleList");
+    QList<KAction *>::const_iterator it = lst2.begin();
+    const QList<KAction *>::const_iterator end = lst2.end();
     for (; it != end; ++it )
     {
-        shortCuts.insert( QString::fromUtf8( (*it)->name() ), (*it)->shortcut() );
+        shortCuts.insert( (*it)->name(), (*it)->shortcut() );
         m_actionFormatStyleMenu->remove( *it );
         delete *it;
     }
@@ -2256,8 +2257,8 @@ void KWView::updateStyleList()
             QString name = PARAGSTYLE_ACTION_PREFIX + style->name();
             KToggleAction* act = new KToggleAction( (*it),
                                      shortCuts[name], this, SLOT( slotStyleSelected() ),
-                                     actionCollection(), name.toUtf8() );
-            act->setGroup( "styleList" );
+                                     actionCollection(), name );
+            //act->setGroup( "styleList" );
             act->setActionGroup( m_paragraphStyleActionGroup );
             act->setToolTip( i18n( "Apply a paragraph style" ) );
             m_actionFormatStyleMenu->insert( act );
@@ -2270,7 +2271,7 @@ void KWView::updateStyleList()
 // Called when selecting a style in the Format / Style menu
 void KWView::slotStyleSelected()
 {
-    QString actionName = QString::fromUtf8(sender()->name());
+    QString actionName = sender()->objectName();
     const QString prefix = PARAGSTYLE_ACTION_PREFIX;
     if ( actionName.startsWith( prefix ) ) {
         actionName = actionName.mid( prefix.length() );
@@ -2300,13 +2301,12 @@ void KWView::updateFrameStyleList()
     QMap<QString, KShortcut> shortCuts; // style (internal) name -> shortcut
 
 
-    KActionPtrList lst2 = actionCollection()->actions("frameStyleList");
-    Q3ValueList<KAction *> actions = lst2;
-    Q3ValueList<KAction *>::const_iterator it = lst2.begin();
-    Q3ValueList<KAction *>::const_iterator end = lst2.end();
+    QList<KAction *> lst2 = actionCollection()->actions("frameStyleList");
+    QList<KAction *>::const_iterator it = lst2.begin();
+    const QList<KAction *>::const_iterator end = lst2.end();
     for (; it != end; ++it )
     {
-        shortCuts.insert( QString::fromUtf8( (*it)->name() ), (*it)->shortcut() );
+        shortCuts.insert( (*it)->objectName(), (*it)->shortcut() );
         m_actionFrameStyleMenu->remove( *it );
         delete *it;
     }
@@ -2320,10 +2320,10 @@ void KWView::updateFrameStyleList()
         {
             QString name = FRAMESTYLE_ACTION_PREFIX + style->name();
             KToggleAction* act = new KToggleAction( (*it),
-                                                    shortCuts[name], // KDE4: use value()
+                                                    shortCuts.value( name ),
                                                     this, SLOT( slotFrameStyleSelected() ),
-                                                    actionCollection(), name.toUtf8() /*KDE4: remove conversion*/ );
-            act->setGroup( "frameStyleList" );
+                                                    actionCollection(), name );
+            //act->setGroup( "frameStyleList" );
             act->setActionGroup( m_frameStyleActionGroup );
             act->setToolTip( i18n( "Apply a frame style" ) );
             m_actionFrameStyleMenu->insert( act );
@@ -2357,7 +2357,7 @@ void KWView::updateTableStyleList()
     const Q3ValueList<KAction *>::const_iterator end = actions.end();
     for (; it != end; ++it )
     {
-        shortCuts.insert( QString::fromUtf8( (*it)->name() ), (*it)->shortcut() );
+        shortCuts.insert( (*it)->objectName(), (*it)->shortcut() );
         m_actionTableStyleMenu->remove( *it );
         delete *it;
     }
@@ -2371,10 +2371,10 @@ void KWView::updateTableStyleList()
         {
             QString name = TABLESTYLE_ACTION_PREFIX + style->name();
             KToggleAction* act = new KToggleAction( (*it),
-                                     shortCuts[name], this, SLOT( slotTableStyleSelected() ),
-                                     actionCollection(), name.toUtf8() );
+                                     shortCuts.value( name ), this, SLOT( slotTableStyleSelected() ),
+                                     actionCollection(), name );
             act->setActionGroup( m_tableStyleActionGroup );
-            act->setGroup( "tableStyleList" );
+            //act->setGroup( "tableStyleList" );
             act->setToolTip( i18n( "Apply a table style" ) );
             m_actionTableStyleMenu->insert( act );
         }
@@ -2780,8 +2780,7 @@ void KWView::deleteFrame( bool warning )
                       "Doing so will delete all the text in the table.\n"
                       "Are you sure you want to do that?"),
                 i18n("Delete Table"), KStdGuiItem::del(),
-                "DeleteTableConfirmation",
-                true );
+                "DeleteTableConfirmation" );
             if (result != KMessageBox::Continue)
                 return;
             m_doc->deleteTable( fs->groupmanager() );
@@ -2822,8 +2821,7 @@ void KWView::deleteFrame( bool warning )
                 i18n("Do you want to delete this frame?"),
                 i18n("Delete Frame"),
                 KGuiItem(i18n("&Delete"),"editdelete"),
-                "DeleteLastFrameConfirmation",
-                true );
+                "DeleteLastFrameConfirmation" );
             if (result != KMessageBox::Continue)
                 return;
         }
@@ -2839,8 +2837,7 @@ void KWView::deleteFrame( bool warning )
                 i18n("Do you want to delete this frame?"),
                 i18n("Delete Frame"),
                 KGuiItem(i18n("&Delete"),"editdelete"),
-                "DeleteLastFrameConfirmation",
-                true );
+                "DeleteLastFrameConfirmation" );
             if (result != KMessageBox::Continue)
                 return;
         }
@@ -3455,7 +3452,7 @@ void KWView::displayFrameInlineInfo()
     KMessageBox::information(this,
                              i18n("Set cursor where you want to insert inline frame."),
                              i18n("Insert Inline Frame"),
-                             "SetCursorInsertInlineFrame",true);
+                             "SetCursorInsertInlineFrame");
 
     if ( statusBar() && m_sbFramesLabel )
         m_sbFramesLabel->setText( ' ' + i18n("Set cursor where you want to insert inline frame." ) );
@@ -4551,7 +4548,7 @@ void KWView::textStyleSelected( int index )
 // Slot is called when selecting a framestyle in the Frames / Framestyle menu
 void KWView::slotFrameStyleSelected()
 {
-    QString actionName = QString::fromUtf8(sender()->name());
+    QString actionName = sender()->objectName();
     const QString prefix = FRAMESTYLE_ACTION_PREFIX;
     if ( actionName.startsWith( prefix ) ) {
         actionName = actionName.mid( prefix.length() );
@@ -4611,8 +4608,7 @@ void KWView::frameStyleSelected( KWFrameStyle *sty )
     const int pos = m_doc->frameStyleCollection()->indexOf( sty );
     Q_ASSERT( pos >= 0 );
     m_actionFrameStyle->setCurrentItem( pos );
-    KToggleAction* act = dynamic_cast<KToggleAction *>(actionCollection()->action(
-                QString(sty->name().toUtf8()) ));
+    KToggleAction* act = dynamic_cast<KToggleAction *>(actionCollection()->action( sty->name() ) );
     if ( act )
         act->setChecked( true );
 }
@@ -4621,7 +4617,7 @@ void KWView::frameStyleSelected( KWFrameStyle *sty )
 // Called when selecting a tablestyle in the Table / Tablestyle menu
 void KWView::slotTableStyleSelected()
 {
-    QString actionName = QString::fromUtf8(sender()->name());
+    QString actionName = sender()->objectName();
     const QString prefix = TABLESTYLE_ACTION_PREFIX;
     if ( actionName.startsWith( prefix ) ) {
         actionName = actionName.mid( prefix.length() );
@@ -4681,8 +4677,7 @@ void KWView::tableStyleSelected( KWTableStyle *sty )
     // Adjust GUI
     int pos = m_doc->tableStyleCollection()->indexOf( sty );
     m_actionTableStyle->setCurrentItem( pos );
-    KToggleAction* act = dynamic_cast<KToggleAction *>(actionCollection()->action(
-                QString(sty->name().toUtf8()) ));
+    KToggleAction* act = dynamic_cast<KToggleAction *>(actionCollection()->action( sty->name() ) );
     if ( act )
         act->setChecked( true );
 }
@@ -5042,7 +5037,7 @@ void KWView::textSpacingDouble()
 
 void KWView::slotCounterStyleSelected()
 {
-    QString actionName = QString::fromLatin1(sender()->name());
+    QString actionName = sender()->objectName();
     QString styleStr = actionName.mid(13);
     //kDebug() << "KWView::slotCounterStyleSelected styleStr=" << styleStr << endl;
     KoParagCounter::Style style = (KoParagCounter::Style)(styleStr.toInt());
@@ -7358,10 +7353,10 @@ void KWView::addPersonalExpression()
     doc = QDomDocument( "KWordExpression" );
     QDomElement begin = doc.createElement( "KWordExpression" );
     doc.appendChild( begin );
-    QMapIterator<QString, QStringList> itPersonalExp = lstOfPersonalExp.find(i18n("Normal"));
+    QMap<QString, QStringList>::const_iterator itPersonalExp = lstOfPersonalExp.find(i18n("Normal"));
     if ( itPersonalExp != lstOfPersonalExp.end())
     {
-        list = itPersonalExp.data();
+        list = itPersonalExp.value();
         list<<newExpression;
         lstOfPersonalExp.replace( i18n("Normal"), list);
     }
@@ -7391,14 +7386,14 @@ void KWView::addPersonalExpression()
             text.appendChild( doc.createTextNode(list[i] ) );
         }
     }
-    Q3CString s = doc.toCString();
+    const QByteArray s = doc.toByteArray();
 
     if ( !file.open( QIODevice::WriteOnly ) )
     {
-        kDebug()<<"Error in addPersonalExpression()\n";
+        kDebug() << "Error in addPersonalExpression(), couldn't open " << tmp << " for writing" << endl;;
         return;
     }
-    file.write(s,s.length());
+    file.write( s );
     file.close();
     m_doc->refreshMenuExpression();
 }
@@ -7460,7 +7455,7 @@ QList<KAction*> KWView::listOfResultOfCheckWord( const QString &word )
         {
             if ( !(*it).isEmpty() ) // in case of removed subtypes or placeholders
             {
-                KAction * act = new KAction( *it );
+                KAction * act = new KAction( actionCollection(), *it );
                 connect( act, SIGNAL(activated()), this, SLOT(slotCorrectWord()) );
                 listAction.append( act );
             }
