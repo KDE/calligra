@@ -212,7 +212,7 @@ ConfigureSpellPage::ConfigureSpellPage( KWView *view, KVBox *box, char *name )
 {
     m_pView=view;
     config = KWFactory::instance()->config();
-    m_spellConfigWidget = new ConfigWidget( view->broker(), box );
+    m_spellConfigWidget = new ConfigWidget( view->broker().data() /*TEMPORARY*/, box );
     m_spellConfigWidget->setBackgroundCheckingButtonShown( true );
     m_spellConfigWidget->layout()->setMargin( 0 );
 }
@@ -377,20 +377,20 @@ void ConfigureInterfacePage::apply()
     bool updateView = false;
     if(valX!=doc->gridX())
     {
-        config->writeEntry( "GridX", valX, true, false, 'g', DBL_DIG /* 6 is not enough */ );
+        config->writeEntry( "GridX", valX );
         doc->setGridX(valX);
         updateView= true;
     }
     if(valY!=doc->gridY())
     {
-        config->writeEntry( "GridY", valY, true, false, 'g', DBL_DIG /* 6 is not enough */ );
+        config->writeEntry( "GridY", valY );
         doc->setGridY(valY);
         updateView= true;
     }
     double newIndent = indent->value();
     if( newIndent != doc->indentValue() )
     {
-        config->writeEntry( "Indent", newIndent, true, false, 'g', DBL_DIG /* 6 is not enough */ );
+        config->writeEntry( "Indent", newIndent );
         doc->setIndentValue( newIndent );
     }
     if(nbRecent!=oldNbRecentFiles)
@@ -684,7 +684,7 @@ ConfigureDefaultDocPage::ConfigureDefaultDocPage( KWView *view, KVBox *box, char
     KWDocument * doc = m_pView->kWordDocument();
     config = KWFactory::instance()->config();
     Q3GroupBox * gbDocumentDefaults = new Q3GroupBox(1, Qt::Horizontal, i18n("Document Defaults"), box, "GroupBox" );
-    gbDocumentDefaults->setMargin( KDialog::marginHint() );
+    //gbDocumentDefaults->setMargin( KDialog::marginHint() );
     gbDocumentDefaults->setInsideSpacing( KDialog::spacingHint() );
 
     double ptColumnSpacing=3;
@@ -810,7 +810,7 @@ ConfigureDefaultDocPage::ConfigureDefaultDocPage( KWView *view, KVBox *box, char
     m_oldTabStopWidth = doc->tabStopValue();
 
     Q3GroupBox * gbDocumentCursor = new Q3GroupBox(1, Qt::Horizontal, i18n("Cursor"), box );
-    gbDocumentCursor->setMargin( KDialog::marginHint() );
+    //gbDocumentCursor->setMargin( KDialog::marginHint() );
     gbDocumentCursor->setInsideSpacing( KDialog::spacingHint() );
 
     m_cursorInProtectedArea= new QCheckBox(i18n("Cursor in protected area"),gbDocumentCursor);
@@ -827,7 +827,7 @@ KCommand *ConfigureDefaultDocPage::apply()
     double colSpacing = m_columnSpacing->value();
     if ( colSpacing != doc->defaultColumnSpacing() )
     {
-        config->writeEntry( "ColumnSpacing", colSpacing , true, false, 'g', DBL_DIG );
+        config->writeEntry( "ColumnSpacing", colSpacing );
         doc->setDefaultColumnSpacing(colSpacing);
     }
     config->writeEntry("DefaultFont",font->toString());

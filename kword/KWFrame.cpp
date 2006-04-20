@@ -37,8 +37,6 @@
 #include <kdebug.h>
 
 #include <float.h> // for DBL_DIG
-//Added by qt3to4:
-#include <Q3CString>
 
 //#define DEBUG_DRAW
 
@@ -494,7 +492,7 @@ void KWFrame::loadCommonOasisProperties( KoOasisContext& context, KWFrameSet* fr
 
     // This attribute isn't part of the OASIS spec. Doesn't matter since it doesn't affect rendering
     // of existing documents, only editing (and only KWord has this kind of option until now).
-    const Q3CString frameBehaviorOnNewPage = styleStack.attributeNS( KoXmlNS::koffice, "frame-behavior-on-new-page" ).latin1();
+    const QByteArray frameBehaviorOnNewPage = styleStack.attributeNS( KoXmlNS::koffice, "frame-behavior-on-new-page" ).toLatin1();
     if ( frameBehaviorOnNewPage == "followup" )
         m_newFrameBehavior = Reconnect;
     else if ( frameBehaviorOnNewPage == "copy" )
@@ -512,7 +510,7 @@ void KWFrame::loadCommonOasisProperties( KoOasisContext& context, KWFrameSet* fr
 
     KWFrame::RunAround runAround = KWFrame::RA_BOUNDINGRECT;
     KWFrame::RunAroundSide runAroundSide = KWFrame::RA_BIGGEST;
-    const Q3CString oowrap = styleStack.attributeNS( KoXmlNS::style, "wrap" ).latin1();
+    const QByteArray oowrap = styleStack.attributeNS( KoXmlNS::style, "wrap" ).toLatin1();
     if ( oowrap == "none" )        // 'no wrap' means 'avoid horizontal space'
         runAround = KWFrame::RA_SKIP;
     else if ( oowrap == "left" )

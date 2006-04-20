@@ -50,6 +50,7 @@
 #include <QPaintEvent>
 #include <Q3PtrList>
 #include <q3tl.h>
+#include <q3intdict.h>
 
 /******************************************************************/
 /* Class: KWOrderedFrameSet                                       */
@@ -166,7 +167,10 @@ void KWDocStructParagItem::deleteItem()
     editItem();
     KWTextFrameSetEdit *edit = dynamic_cast<KWTextFrameSetEdit *>(gui()->canvasWidget()->currentFrameSetEdit());
     if (edit) {
+#warning TODO implement deleteParagraph
+#if 0 // doesn't exist!!!
         edit->textView()->deleteParagraph(m_parag);
+#endif
         doc()->refreshDocStructure(TextFrames | Tables);
     }
 }
@@ -187,7 +191,7 @@ KWDocStructTextFrameItem::KWDocStructTextFrameItem(Q3ListViewItem* parent, const
 {
 }
 
-KWDocStructTextFrameItem::KWDocStructTextFrameItem(Q3ListViewItem* parent, Q3ListViewItem* after, 
+KWDocStructTextFrameItem::KWDocStructTextFrameItem(Q3ListViewItem* parent, Q3ListViewItem* after,
     const QString& text, KWTextFrameSet* frameset, KWFrame* frame)
     : KWDocListViewItem(parent, after, text), m_frame(frame), m_frameset(frameset)
 {
@@ -586,7 +590,7 @@ void KWDocStructFormulaItem::selectItem()
 void KWDocStructFormulaItem::editItem()
 {
     // TODO: Formula has to be selected first to bring it into view. Bug?
-    selectItem(); 
+    selectItem();
     gui()->canvasWidget()->editFrameSet(m_form);
 
 }
@@ -1116,9 +1120,11 @@ KWDocStruct::KWDocStruct(QWidget* parent, KWDocument* doc, KWGUI* gui)
     m_layout = new Q3VBoxLayout( this );
 
     KToolBar* searchBar = new KToolBar( this );
-    searchBar->setFlat( true );
-    searchBar->setMovingEnabled( false );
+    //searchBar->setFlat( true );
+    //searchBar->setMovingEnabled( false );
 
+#warning finish porting ( KToolBarButton -> QToolButton, K3ListViewSearchLine )
+#if 0
     KToolBarButton* eraseButton = new KToolBarButton( "locationbar_erase", 0, searchBar );
     m_tree = new KWDocStructTree( this, doc, gui );
     m_tree->setAlternateBackground( KGlobalSettings::alternateBackgroundColor() );
@@ -1128,6 +1134,7 @@ KWDocStruct::KWDocStruct(QWidget* parent, KWDocument* doc, KWGUI* gui)
 
     m_layout->addWidget(searchBar);
     m_layout->addWidget(m_tree);
+#endif
     m_tree->setup();
     dirtyTreeTypes = 0;
 }

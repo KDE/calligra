@@ -303,11 +303,11 @@ void KWTableStyleManager::setupMain()
 
     QLabel *frameStyleLabel = new QLabel( adjustBox );
     frameStyleLabel->setText( i18n( "Framestyle:" ) );
-    frameStyleLabel->setAlignment( AlignRight | AlignVCenter );
+    frameStyleLabel->setAlignment( Qt::AlignRight | Qt::AlignVCenter );
 
     QLabel *styleLabel = new QLabel( adjustBox );
     styleLabel->setText( i18n( "Textstyle:" ) );
-    styleLabel->setAlignment( AlignRight | AlignVCenter );
+    styleLabel->setAlignment( Qt::AlignRight | Qt::AlignVCenter );
 
     m_frameStyle = new QComboBox( adjustBox );
     m_style = new QComboBox( adjustBox );
@@ -508,8 +508,8 @@ void KWTableStyleManager::moveUpStyle()
     int pos2 = m_styleOrder.findIndex( currentStyleName );
     if ( pos2 != -1 )
     {
-        m_styleOrder.remove( m_styleOrder.at(pos2) );
-        m_styleOrder.insert( m_styleOrder.at(pos2-1), currentStyleName );
+        m_styleOrder.removeAt( pos2 );
+        m_styleOrder.insert( pos2-1, currentStyleName );
     }
 
 
@@ -536,8 +536,8 @@ void KWTableStyleManager::moveDownStyle()
     int pos2 = m_styleOrder.findIndex( currentStyleName );
     if ( pos2 != -1 )
     {
-        m_styleOrder.remove( m_styleOrder.at(pos2) );
-        m_styleOrder.insert( m_styleOrder.at(pos2+1), currentStyleName );
+        m_styleOrder.removeAt( pos2 );
+        m_styleOrder.insert( pos2+1, currentStyleName );
     }
 
     int pos = m_stylesList->currentItem();
@@ -680,13 +680,13 @@ void KWTableStyleManager::updateAllStyleCombos()
     // Problems:
     // - 1. Count is the same, but the user has delete the same number as he added
     // - 2. Old name is not in new list, old index is wrong index in new list
-    if ( ( static_cast<unsigned int>(m_style->count())!=m_doc->styleCollection()->styleList().count() ) &&
-            ( m_style->listBox()->findItem( oldS ) ) ) {
-        oldSindex = m_style->listBox()->index( m_style->listBox()->findItem( oldS ) );
+    if ( ( m_style->count() != m_doc->styleCollection()->styleList().count() ) &&
+            ( m_style->findText( oldS ) != -1 ) ) {
+        oldSindex = m_style->findText( oldS );
     }
     if ( ( m_frameStyle->count() != m_doc->frameStyleCollection()->count() ) &&
-            ( m_frameStyle->listBox()->findItem( oldFS ) ) ) {
-        oldFSindex = m_frameStyle->listBox()->index( m_frameStyle->listBox()->findItem( oldFS ) );
+            ( m_frameStyle->findText( oldFS ) != -1 ) ) {
+        oldFSindex = m_frameStyle->findText( oldFS );
     }
 
     // Update the comboboxes

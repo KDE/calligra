@@ -262,7 +262,7 @@ void KWFrameStyleManager::addGeneralTab()
     QLabel *nameLabel = new QLabel( tab );
     nameLabel->setText( i18n( "Name:" ) );
     nameLabel->resize(nameLabel->sizeHint());
-    nameLabel->setAlignment( AlignRight | AlignVCenter );
+    nameLabel->setAlignment( Qt::AlignRight | Qt::AlignVCenter );
 
     tabLayout->addWidget( nameLabel, 0, 0 );
 
@@ -438,8 +438,8 @@ void KWFrameStyleManager::moveUpStyle()
     int pos2 = m_styleOrder.findIndex( currentStyleName );
     if ( pos2 > 0 ) // neither -1 nor 0
     {
-        m_styleOrder.remove( m_styleOrder.at(pos2));
-        m_styleOrder.insert( m_styleOrder.at(pos2-1), currentStyleName);
+        m_styleOrder.removeAt(pos2);
+        m_styleOrder.insert( pos2-1, currentStyleName);
     }
 
 
@@ -447,7 +447,7 @@ void KWFrameStyleManager::moveUpStyle()
     noSignals=true;
     m_stylesList->changeItem( m_stylesList->text ( pos-1 ),pos);
 
-    m_stylesList->changeItem( currentStyleName ,pos-1);
+    m_stylesList->changeItem( currentStyleName, pos-1);
 
     m_stylesList->setCurrentItem( m_stylesList->currentItem() );
     noSignals=false;
@@ -467,8 +467,8 @@ void KWFrameStyleManager::moveDownStyle()
     int pos2 = m_styleOrder.findIndex( currentStyleName );
     if ( pos2 != -1 )
     {
-        m_styleOrder.remove( m_styleOrder.at(pos2));
-        m_styleOrder.insert( m_styleOrder.at(pos2+1), currentStyleName);
+        m_styleOrder.removeAt( pos2 );
+        m_styleOrder.insert( pos2+1, currentStyleName);
     }
 
     pos=m_stylesList->currentItem();
@@ -575,7 +575,7 @@ KWFrameStyleBackgroundTab::KWFrameStyleBackgroundTab( QWidget * parent )
     : KWFrameStyleManagerTab( parent )
 {
     bgwidget = this;
-    m_backgroundColor.setStyle( SolidPattern );
+    m_backgroundColor.setStyle( Qt::SolidPattern );
 
     grid = new Q3GridLayout( bgwidget, 7, 2, KDialog::marginHint(), KDialog::spacingHint() );
 
