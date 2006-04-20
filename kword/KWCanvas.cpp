@@ -1942,7 +1942,7 @@ void KWCanvas::setXimPosition( int x, int y, int w, int h )
 {
 #if 0 // TODO Qt4 PORTING
     "This functionality has been replaced by subclassing
-    QWidget::inputMethodQuery, and then calling QWidget::update () when you
+    QWidget::inputMethodQuery, and then calling QWidget::updateMicroFocus() when you
     would previously have called QWidget::setMicroFocusHint( ... )"
 
     QWidget::setMicroFocusHint( x - contentsX(), y - contentsY(), w, h );
