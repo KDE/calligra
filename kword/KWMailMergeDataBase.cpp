@@ -383,7 +383,7 @@ int KWMailMergeChoosePluginDialog::currentPlugin() const
 
 void KWMailMergeChoosePluginDialog::pluginChanged( int pos )
 {
-  descriptionLabel->setText( (*pluginOffers.at( pos ))->comment() );
+  descriptionLabel->setText( pluginOffers.at( pos )->comment() );
 }
 
 /******************************************************************
@@ -496,7 +496,7 @@ void KWMailMergeConfigDialog::slotPreviewClicked()
     if (mw)
     {
         KAction *ac=mw->actionCollection()->action(KStdAction::stdName(KStdAction::PrintPreview));
-        if (ac) ac->activate();
+        if (ac) ac->trigger();
         else kWarning()<<"Toplevel doesn't provide a print preview action"<<endl;
     }
     else

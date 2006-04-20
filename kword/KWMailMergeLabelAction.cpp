@@ -27,6 +27,7 @@
 #include <kstyle.h>
 #include <kmenu.h>
 //Added by qt3to4:
+#include <QApplication>
 #include <QMouseEvent>
 #include <QDragEnterEvent>
 #include <QEvent>
@@ -74,6 +75,8 @@ protected:
         int h = fontMetrics().height();
         return QSize( w, h );
     }
+
+#if 0 // TODO QT4 PORTING
     void drawButton( QPainter * p )
     {
         // Draw the background
@@ -83,6 +86,7 @@ protected:
         style().drawControl( QStyle::CE_ToolButtonLabel, p, this, rect(), colorGroup(),
                              QStyle::Style_Enabled );
     }
+#endif
     void enterEvent( QEvent* ) {};
     void leaveEvent( QEvent* ) {};
 #if 0
