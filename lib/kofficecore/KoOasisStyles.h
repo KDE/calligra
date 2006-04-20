@@ -31,6 +31,16 @@ class QBrush;
 class KoGenStyle;
 class KoStyleStack;
 
+// FIXME this is to maintain binary compatibility of KoOasisStyles in 1.5.x
+// TODO merge with KoOasisStyles::NumericStyleFormat in KOffice 2.0
+struct KOFFICECORE_EXPORT KoOasisNumericFormat
+{
+  enum { Number, Scientific, Fraction, Currency, Percentage,
+         Date, Time, Boolean, Text } type;
+  int precision;
+  QString currencySymbol;
+};
+
 /**
  * Repository of styles used during loading of OASIS/OOo file
  */
@@ -104,11 +114,17 @@ public:
     /// Key: format name. Value:
     const DataFormatsMap& dataFormats() const { return m_dataFormats; }
 
+    typedef QMap<QString, KoOasisNumericFormat> NumericFormatsMap;
+    const NumericFormatsMap& numericFormats() const;
+
     static QString saveOasisDateStyle( KoGenStyles &mainStyles, const QString & _format, bool klocaleFormat );
     static QString saveOasisTimeStyle( KoGenStyles &mainStyles, const QString & _format, bool klocaleFormat );
     static QString saveOasisFractionStyle( KoGenStyles &mainStyles, const QString & _format, const QString &_prefix = QString::null , const QString &_suffix= QString::null );
     static QString saveOasisScientificStyle( KoGenStyles &mainStyles, const QString & _format, const QString &_prefix = QString::null , const QString &_suffix= QString::null );
+    static QString saveOasisNumberStyle( KoGenStyles &mainStyles, const QString & _format, const QString &_prefix = QString::null , const QString &_suffix= QString::null );
     static QString saveOasisPercentageStyle( KoGenStyles &mainStyles, const QString & _format, const QString &_prefix = QString::null , const QString &_suffix= QString::null );
+    /* NOTE The _prefix is argument is some kind of misused for the
+     *      currency symbol to preserve binary compatibility for the 1.5 series. */
     static QString saveOasisCurrencyStyle( KoGenStyles &mainStyles, const QString & _format, const QString &_prefix = QString::null , const QString &_suffix= QString::null );
     static QString saveOasisTextStyle( KoGenStyles &mainStyles, const QString & _format, const QString &_prefix = QString::null , const QString &_suffix= QString::null );
 

@@ -703,6 +703,12 @@ bool Doc::saveOasisHelper( KoStore* store, KoXmlWriter* manifestWriter, SaveFlag
         (*it).style->writeStyle( contentWriter, mainStyles, "style:style", (*it).name, "style:table-cell-properties" );
     }
 
+    styles = mainStyles.styles( KoGenStyle::STYLE_NUMERIC_NUMBER );
+    it = styles.begin();
+    for ( ; it != styles.end() ; ++it ) {
+      (*it).style->writeStyle( contentWriter, mainStyles, "number:number-style", (*it).name, 0 /*TODO ????*/  );
+    }
+
     //TODO FIXME !!!!
     styles = mainStyles.styles( KoGenStyle::STYLE_NUMERIC_DATE );
     it = styles.begin();
