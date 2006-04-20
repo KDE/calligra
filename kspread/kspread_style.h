@@ -161,7 +161,7 @@ public:
     static QString saveOasisStyleNumericCustom( KoGenStyles&mainStyles, FormatType _style );
     static QString saveOasisStyleNumericScientific( KoGenStyles&mainStyles, FormatType _style, const QString &_prefix, const QString _suffix, int _precision );
     static QString saveOasisStyleNumericPercentage( KoGenStyles&mainStyles, FormatType _style, int _precision );
-    static QString saveOasisStyleNumericMoney( KoGenStyles&mainStyles, FormatType _style, int _precision );
+    static QString saveOasisStyleNumericMoney( KoGenStyles&mainStyles, FormatType _style, const QString& symbol, int _precision );
     static QString saveOasisStyleNumericText( KoGenStyles&mainStyles, FormatType _style, int _precision );
     static QString saveOasisStyleNumericNumber( KoGenStyles&mainStyles, FormatType _style, int _precision );
 

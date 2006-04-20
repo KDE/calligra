@@ -5517,7 +5517,10 @@ void Cell::saveOasisValue (KoXmlWriter &xmlWriter)
     case Value::fmt_Number:
     {
       xmlWriter.addAttribute( "office:value-type", "float" );
-      xmlWriter.addAttribute( "office:value", QString::number( value().asFloat() ) );
+      if (value().isInteger())
+        xmlWriter.addAttribute( "office:value", QString::number( value().asInteger() ) );
+      else
+        xmlWriter.addAttribute( "office:value", QString::number( value().asFloat(), 'g', DBL_DIG ) );
       break;
     }
     case Value::fmt_Percent:
@@ -5530,9 +5533,10 @@ void Cell::saveOasisValue (KoXmlWriter &xmlWriter)
     case Value::fmt_Money:
     {
       xmlWriter.addAttribute( "office:value-type", "currency" );
-      // TODO: add code of currency
-      //xmlWriter.addAttribute( "tableoffice:currency",
-      // locale()->currencySymbol() );
+      Style::Currency currency;
+      format()->currencyInfo(currency);
+      xmlWriter.addAttribute( "office:currency",
+                              Currency::getCurrencyCode(currency.type) );
       xmlWriter.addAttribute( "office:value",
           QString::number( value().asFloat() ) );
       break;
@@ -5757,7 +5761,7 @@ bool Cell::loadOasis( const QDomElement& element , KoOasisLoadingContext& oasisC
             double value = element.attributeNS( KoXmlNS::office, "value", QString::null ).toDouble( &ok );
             if ( !isFormula )
                 if( ok )
-                    setValue( value );
+                    setCellValue( value );
 
             if ( !isFormula && d->strText.isEmpty())
             {
@@ -5770,13 +5774,29 @@ bool Cell::loadOasis( const QDomElement& element , KoOasisLoadingContext& oasisC
         else if( valuetype == "currency" )
         {
             bool ok = false;
+            double value = element.attributeNS( KoXmlNS::office, "value", QString::null ).toDouble( &ok );
+            if( ok )
+            {
+                if ( !isFormula )
+                    setCellValue( value );
+                if (element.hasAttributeNS( KoXmlNS::office, "currency" ) )
+                {
+                  Currency currency(element.attributeNS( KoXmlNS::office, "currency", QString::null ) );
+                  format()->setCurrency( currency.getIndex(), currency.getDisplayCode() );
+                }
+                format()->setFormatType (Money_format);
+            }
+        }
+        else if( valuetype == "percentage" )
+        {
+            bool ok = false;
             double v = element.attributeNS( KoXmlNS::office, "value", QString::null ).toDouble( &ok );
             if( ok )
             {
                 Value value;
                 value.setValue(v);
                 value.setFormat (Value::fmt_Percent);
-                setValue( value );
+                setCellValue( value );
 
                 if ( !isFormula && d->strText.isEmpty())
                 {
@@ -5784,18 +5804,6 @@ bool Cell::loadOasis( const QDomElement& element , KoOasisLoadingContext& oasisC
                     setCellText( str );
                 }
 
-                format()->setCurrency( 1, element.attributeNS( KoXmlNS::office, "currency", QString::null ) );
-                format()->setFormatType (Money_format);
-            }
-        }
-        else if( valuetype == "percentage" )
-        {
-            bool ok = false;
-            double value = element.attributeNS( KoXmlNS::office, "value", QString::null ).toDouble( &ok );
-            if( ok )
-            {
-                if ( !isFormula )
-                    setValue( value );
                 format()->setFormatType (Percentage_format);
             }
         }
@@ -5830,7 +5838,7 @@ bool Cell::loadOasis( const QDomElement& element , KoOasisLoadingContext& oasisC
 
             if ( ok )
             {
-                setValue( QDate( year, month, day ) );
+                setCellValue( QDate( year, month, day ) );
                 format()->setFormatType (ShortDate_format);
                 kDebug() << "Set QDate: " << year << " - " << month << " - " << day << endl;
             }
@@ -5875,7 +5883,7 @@ bool Cell::loadOasis( const QDomElement& element , KoOasisLoadingContext& oasisC
             {
                 // Value kval( timeToNum( hours, minutes, seconds ) );
                 // cell->setValue( kval );
-                setValue( QTime( hours % 24, minutes, seconds ) );
+                setCellValue( QTime( hours % 24, minutes, seconds ) );
                 format()->setFormatType (Time_format);
             }
         }
@@ -5886,7 +5894,7 @@ bool Cell::loadOasis( const QDomElement& element , KoOasisLoadingContext& oasisC
             {
                 //if there is not string-value entry don't overwrite value stored into <text:p>
                 value = element.attributeNS( KoXmlNS::office, "string-value", QString::null );
-                setValue( value );
+                setCellValue( value );
             }
             format()->setFormatType (Text_format);
         }
