@@ -1941,7 +1941,10 @@ void KWCanvas::printRTDebug( int info )
 void KWCanvas::setXimPosition( int x, int y, int w, int h )
 {
 #if 0 // TODO Qt4 PORTING
-    // the method doesn't exist at all anymore; is it still needed?
+    "This functionality has been replaced by subclassing
+    QWidget::inputMethodQuery, and then calling QWidget::update () when you
+    would previously have called QWidget::setMicroFocusHint( ... )"
+
     QWidget::setMicroFocusHint( x - contentsX(), y - contentsY(), w, h );
 #endif
 }
