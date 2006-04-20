@@ -1,6 +1,6 @@
 kde4_header()
 
-include_directories( ${CMAKE_SOURCE_DIR}/kexi/formeditor ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/scripting ${CMAKE_SOURCE_DIR}/kexi/core ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
+include_directories( ${CMAKE_SOURCE_DIR}/kexi/formeditor ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/scripting ${CMAKE_SOURCE_DIR}/kexi/core ${KDE4_INCLUDES}  )
 
 
 ########### next target ###############

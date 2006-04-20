@@ -41,13 +41,13 @@ namespace KexiUtils
 		return o==par;
 	}
 
-	//! \return parent object of \a o that inherits \a className or NULL if no such parent
+	//! \return parent object of \a o that is of type \a type or NULL if no such parent
 	template<class type>
-	inline type* findParent(QObject* o, const char* className)
+	inline type* findParent(QObject* o)
 	{
-		if (!o || !className || className[0]=='\0')
+		if (!o)
 			return 0;
-		while ( ((o=o->parent())) && !o->inherits(className) )
+		while ( ((o=o->parent())) && !::qt_cast<type *>(o) )
 			;
 		return static_cast<type*>(o);
 	}
@@ -55,13 +55,11 @@ namespace KexiUtils
 	//! \return first found child of \a o, that inherit \a className.
 	//! Returned pointer type is casted.
 	template<class type>
-	type* findFirstChild(QObject *o, const char* className)
+	type* findFirstChild(QObject *o)
 	{
-		if (!o || !className || className[0]=='\0')
+		if (!o)
 			return 0;
-		QObjectList *l = o->queryList( className );
-		QObjectListIt it( *l );
-		return static_cast<type*>(it.current());
+		return qFindChild<type>( o );
 	}
 
 	//! QDateTime - a hack needed because QVariant(QTime) has broken isNull()

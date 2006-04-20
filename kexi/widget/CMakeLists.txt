@@ -4,7 +4,7 @@ add_subdirectory( utils )
 add_subdirectory( tableview )
 add_subdirectory( relations )
 
-include_directories( ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/widget/tableview ${CMAKE_SOURCE_DIR}/kexi/core ${CMAKE_SOURCE_DIR}/lib/kofficecore ${CMAKE_SOURCE_DIR}/lib ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
+include_directories( ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/widget/tableview ${CMAKE_SOURCE_DIR}/kexi/core ${CMAKE_SOURCE_DIR}/lib/kofficecore ${CMAKE_SOURCE_DIR}/lib ${KDE4_INCLUDES}  )
 
 
 ########### next target ###############

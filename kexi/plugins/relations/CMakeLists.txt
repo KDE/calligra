@@ -1,6 +1,6 @@
 kde4_header()
 
-include_directories( ${CMAKE_SOURCE_DIR}/kexi/core ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/widget ${CMAKE_SOURCE_DIR}/kexi/widget/relations ${CMAKE_SOURCE_DIR}/kexi/tableview ${CMAKE_SOURCE_DIR}/kexi/kexidb ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
+include_directories( ${CMAKE_SOURCE_DIR}/kexi/core ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/widget ${CMAKE_SOURCE_DIR}/kexi/widget/relations ${CMAKE_SOURCE_DIR}/kexi/tableview ${CMAKE_SOURCE_DIR}/kexi/kexidb ${KDE4_INCLUDES}  )
 
 
 ########### next target ###############

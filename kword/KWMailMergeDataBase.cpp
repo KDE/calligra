@@ -144,10 +144,11 @@ KWMailMergeDataSource *KWMailMergeDataBase::openPluginFor(int type,int &version)
         KWMailMergeChoosePluginDialog *dia=new KWMailMergeChoosePluginDialog(pluginOffers);
         if (dia->exec()==QDialog::Accepted)
         {
-            QVariant verProp=(*(pluginOffers.at(dia->currentPlugin())))->property("X-KDE-PluginVersion");
-            version=verProp.toInt();
+            KService::Ptr service = pluginOffers.at( dia->currentPlugin() );
+            QVariant verProp = service->property("X-KDE-PluginVersion");
+            version = verProp.toInt();
 
-            ret=loadPlugin((*(pluginOffers.at(dia->currentPlugin())))->library());
+            ret = loadPlugin( service->library() );
         }
 
     }
@@ -254,9 +255,10 @@ bool KWMailMergeDataBase::askUserForConfirmationAndConfig(KWMailMergeDataSource 
         {
             if (plugin)
             {
-                if (KMessageBox::warningContinueCancel(par,
-                            i18n("Do you really want to replace the current datasource?"),
-                            QString::null,QString::null,QString::null,true)== KMessageBox::Cancel)
+                if (KMessageBox::warningContinueCancel(
+                        par,
+                        i18n("Do you really want to replace the current datasource?"))
+                    == KMessageBox::Cancel)
                 {
                     delete tmpPlugin;
                     tmpPlugin=0;
@@ -340,11 +342,11 @@ KWMailMergeChoosePluginDialog::KWMailMergeChoosePluginDialog( KTrader::OfferList
   Q3VBoxLayout *layout = new Q3VBoxLayout( back, 0, spacingHint() );
 
   QLabel *label = new QLabel( i18n( "&Available sources:" ), back );
-  chooser = new QComboBox( false, back );
+  chooser = new QComboBox( back );
   label->setBuddy( chooser );
   descriptionLabel = new QLabel( back );
   descriptionLabel->hide();
-  descriptionLabel->setAlignment( WordBreak );
+  descriptionLabel->setWordWrap( true );
   descriptionLabel->setFrameShape( Q3Frame::Box );
   descriptionLabel->setFrameShadow( Q3Frame::Sunken );
 

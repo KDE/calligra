@@ -2,7 +2,7 @@ kde4_header()
 
 add_subdirectory( widgets )
 
-include_directories( ${CMAKE_SOURCE_DIR}/kexi/core ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/widget/utils ${CMAKE_SOURCE_DIR}/kexi/widget ${CMAKE_SOURCE_DIR}/kexi/formeditor ${CMAKE_SOURCE_DIR}/lib ${CMAKE_SOURCE_DIR}/lib/koproperty ${CMAKE_SOURCE_DIR}/lib/kofficecore ${CMAKE_SOURCE_DIR}/kexi/widget/tableview/private ${CMAKE_SOURCE_DIR}/kexi/widget/tableview ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
+include_directories( ${CMAKE_SOURCE_DIR}/kexi/core ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/widget/utils ${CMAKE_SOURCE_DIR}/kexi/widget ${CMAKE_SOURCE_DIR}/kexi/formeditor ${CMAKE_SOURCE_DIR}/lib ${CMAKE_SOURCE_DIR}/lib/koproperty ${CMAKE_SOURCE_DIR}/lib/kofficecore ${CMAKE_SOURCE_DIR}/kexi/widget/tableview/private ${CMAKE_SOURCE_DIR}/kexi/widget/tableview ${KDE4_INCLUDES}  )
 
 
 ########### next target ###############

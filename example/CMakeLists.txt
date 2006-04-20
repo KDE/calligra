@@ -1,6 +1,6 @@
 kde4_header()
 
-
+include_directories( ${KOFFICEUI_INCLUDES} )
 
 
 ########### next target ###############

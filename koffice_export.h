@@ -23,14 +23,9 @@
 #ifndef _KOFFICE_EXPORT_H
 #define _KOFFICE_EXPORT_H
 
-#include <kdeversion.h>
+#include <kdemacros.h>
 
 #ifdef Q_WS_WIN
-
-/* workaround for KDElibs < 3.2 on !win32 */
-#ifndef KDE_EXPORT
-# define KDE_EXPORT
-#endif
 
 #ifndef KOFFICECORE_EXPORT
 # ifdef MAKE_KOFFICECORE_LIB
@@ -157,13 +152,10 @@
 #define KRITATOOL_EXPORT KDE_EXPORT
 #define KRITAPAINT_EXPORT KDE_EXPORT
 #define EXAMPLE_EXPORT KDE_EXPORT
+
 #else // not windows
 
-#if KDE_VERSION >= KDE_MAKE_VERSION(3,3,90)
 #define KOFFICE_EXPORT KDE_EXPORT
-#else
-#define KOFFICE_EXPORT
-#endif
 
 /* kdemacros is OK, we can use gcc visibility macros */
 #define KOFFICECORE_EXPORT KOFFICE_EXPORT
