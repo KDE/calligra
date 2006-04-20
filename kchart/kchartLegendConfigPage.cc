@@ -144,7 +144,7 @@ KChartLegendConfigPage::KChartLegendConfigPage( KChartParams* params,
 
   //it's not good but I don't know how
   //to reduce space
-  layout->addColSpacing( 1, 300 );
+  layout->addItem( new QSpacerItem( 300, 0 ), 0, 1 );
 }
 
 void KChartLegendConfigPage::init()

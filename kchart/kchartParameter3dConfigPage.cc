@@ -85,14 +85,14 @@ KChartParameter3dConfigPage::KChartParameter3dConfigPage( KChartParams* params,
   depth->setRange(0, 2.0, 0.1);
   
   gb->setAlignment(Qt::AlignLeft);
-  grid1->addColSpacing(0,depth->width());
-  grid1->addColSpacing(0,angle3d->width());
+  grid1->addItem( new QSpacerItem(depth->width(), 0 ), 0, 0 );
+  grid1->addItem( new QSpacerItem(angle3d->width(), 0 ), 0, 0 );
   grid1->setColStretch(2,1);
   grid1->setRowStretch(4,1);
 
   //it's not good but I don't know how
   //to reduce space
-  //layout->addColSpacing(1,300);
+  //layout->addItem( new QSpacerItem(300, 0 ), 0, 1 );
 }
 
 

@@ -187,9 +187,9 @@ KChartColorConfigPage::KChartColorConfigPage( KChartParams* params,
 // 	_dataCB[i] = new KColorButton( this );
 // 	_dataCB[i]->resize( _dataCB[i]->sizeHint() );
 // 	grid->addWidget( _dataCB[i], i, 3 );
-// 	grid->addRowSpacing(i,_textCB->height());
+// 	grid->addItem( new QSpacerItem( 0,_textCB->height()), i, 0 );
 // 	grid->setRowStretch(i,0);
-// 	grid->addColSpacing(2,dataLA->width() + 20);
+// 	grid->addItem( new QSpacerItem(dataLA->width() + 20, 0 ), 0, 2 );
 //     }
 }
 

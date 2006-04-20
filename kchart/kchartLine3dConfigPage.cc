@@ -95,15 +95,15 @@ KChartLine3dConfigPage::KChartLine3dConfigPage( KChartParams* params,
   depth->setRange(0,40, 0.1);
 #endif
 #if 0
-  grid1->addColSpacing(0,depth->width());
-  grid1->addColSpacing(0,angle3dX->width());
+  grid1->addItem( new QSpacerItem(depth->width(), 0 ), 0, 0 );
+  grid1->addItem( new QSpacerItem(angle3dX->width(), 0 ), 0, 0 );
 #endif
   grid1->setColStretch(2,1);
   grid1->setRowStretch(7,1);
   grid1->activate();
   //it's not good but I don't know how
   //to reduce space
-  //layout->addColSpacing(1,300);
+  //layout->addItem( new QSpacerItem(300, 0 ), 0, 1 );
 }
 
 void KChartLine3dConfigPage::slotChange3DParameter(bool b)

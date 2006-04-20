@@ -83,9 +83,9 @@ KChartPieConfigPage::KChartPieConfigPage( KChartParams* params,
     explose->resize(100, explose->sizeHint().height() );
     grid->addWidget( explose,5,1);
 
-    grid->addColSpacing(0,list->width());
-    grid->addColSpacing(2,list->width());
-    grid->addColSpacing(3,list->width());
+    grid->addItem( new QSpacerItem(list->width(), 0 ), 0, 0 );
+    grid->addItem( new QSpacerItem(list->width(), 0 ), 0, 2 );
+    grid->addItem( new QSpacerItem(list->width(), 0 ), 0, 3 );
 
 
     initList();

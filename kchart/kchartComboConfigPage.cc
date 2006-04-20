@@ -57,15 +57,15 @@ KChartComboPage::KChartComboPage( KChartParams* params,
     icap=new QRadioButton( i18n("Icap"), gb );
     grid1->addWidget(icap,3,0);
     gb->setAlignment(Qt::AlignLeft);
-    grid1->addColSpacing(0,diamond->width());
-    grid1->addColSpacing(0,closeconnected->width());
-    grid1->addColSpacing(0,connecting->width());
-    grid1->addColSpacing(0,icap->width());
+    grid1->addItem( new QSpacerItem(diamond->width(), 0 ), 0, 0 );
+    grid1->addItem( new QSpacerItem(closeconnected->width(), 0 ), 0, 0 );
+    grid1->addItem( new QSpacerItem(connecting->width(), 0 ), 0, 0 );
+    grid1->addItem( new QSpacerItem(icap->width(), 0 ), 0, 0 );
     grid1->setColStretch(0,1);
     grid1->activate();
     //it's not good but I don't know how
     //to reduce space
-    layout->addColSpacing(1,300);
+    layout->addItem( new QSpacerItem(300, 0 ), 0, 1 );
 }
 
 void KChartComboPage::init()
