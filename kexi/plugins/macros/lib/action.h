@@ -84,6 +84,11 @@ namespace KoMacro {
 			* The name this @a Action has.
 			*/
 			const QString name() const;
+			
+			/**
+			* Set the name of the @a Macro to @p name .
+			*/
+			void setName(const QString& name); 
 
 			/**
 			* @return the comment associated with this action.

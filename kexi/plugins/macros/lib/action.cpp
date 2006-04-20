@@ -117,6 +117,11 @@ const QString Action::name() const
 	return d->name;
 }
 
+void Action::setName(const QString& name)
+{
+	d->name = name;
+}
+
 const QString Action::comment() const
 {
 	return d->comment;

@@ -57,8 +57,9 @@ namespace KoMacro {
 			* Actions into the managed Macro-Instance.
 			* @param element The @a QDomElement within
 			* the @a Macro.
+			* @return Return true when parsing is successfull.
 			*/
-			bool fromXML(const QDomElement& element);
+			bool parseXML(const QDomElement& element);
 
 			/**
 			* Converts the macro to a @a QDomElement.

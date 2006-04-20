@@ -116,7 +116,7 @@ bool KexiMacroView::loadData()
 		return false;
 	}
 		
-	return d->macro->xmlHandler()->fromXML(macroelem);
+	return d->macro->xmlHandler()->parseXML(macroelem);
 }
 
 KexiDB::SchemaData* KexiMacroView::storeNewData(const KexiDB::SchemaData& sdata, bool &cancel)

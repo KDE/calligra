@@ -20,8 +20,10 @@
 #include "xmlhandler.h"
 #include "macro.h"
 #include "macroitem.h"
+#include "action.h"
 
 #include <qdom.h>
+#include <kdebug.h>
 
 using namespace KoMacro;
 
@@ -51,33 +53,6 @@ namespace KoMacro {
 				: macro(macro)
 			{
 			}
-
-			/**
-			* Parse an @a Action out of a given node
-			* @return Returns an @a Action, if the node
-			* contains a valid userdefined
-			* @a Action, else returns NULL.
-			*/
-			Action* insertAction(const QDomElement& element)
-			{
-				Q_UNUSED(element);
-				/*
-				QMap<QString, Action*> actionTypes = Manager::self().actionTypes();
-				Action* action = actionTypes[node.getAttribute("actiontype"));
-				// - subclasses of Action and let them parse
-				// - read properties of a node and fill them automaticly
-				// - factory in Action
-
-				// diff between predefined Action and in a Macro defined Actions
-				// - Action vs. ActionImpl
-				// - copy from Action
-				ActionImpl* ai = action->create();
-
-				action->activate(); // bzw. ai->activate()
-				return ai or action;
-				*/
-				return 0;
-			}
 	};
 
 }
@@ -92,16 +67,42 @@ XMLHandler::~XMLHandler()
 	delete d;
 }
 
-bool XMLHandler::fromXML(const QDomElement& element)
+bool XMLHandler::parseXML(const QDomElement& element)
 {
-	Q_UNUSED(element);
-	/*
-	Macro* macro = new Macro();
-	while (node.nextNode != null) {
-		macro->addChild(insertAction(node.toElement()));
+	// We expect a <macro> element.
+	if(element.tagName() != "macro") {
+		kdDebug() << QString("XMLHandler::parseXML() Invalid tagname \"%1\"").arg(element.tagName()) << endl;
+		return false;
+	}
+
+	// Set the name the macro should have.
+	d->macro->setName(element.attribute("name"));
+
+	// Iterate through the child nodes the passed QDomElement has and
+	// build the MacroItem's.
+	QDomNode node = element.firstChild();
+	while(! node.isNull()) {
+		// The tagname should be "item"
+		if(node.nodeName() == "item") {
+			// The node is an element.
+			QDomElement e = node.toElement();
+
+			// TODO do we need a name for MacroItem?
+
+			MacroItem* mi = d->macro->addItem(e.attribute("name"));
+			mi->setComment(e.attribute("comment"));
+
+			// Each MacroItem may point to an Action instance. We
+			// try to determinate this action now.
+			Action::Ptr action = Manager::self()->action(e.attribute("action"));
+			if(action.data()) {
+				mi->setAction(action);
+			}
+		}
+		// Fetch the next item.
 		node = node.nextSibling();
 	}
-	*/
+	// Job was done successfully.
 	return true;
 }
 
@@ -111,32 +112,45 @@ QDomElement XMLHandler::toXML()
 	QDomDocument document;
 	// Create the Macro-QDomElement. This element will be returned.
 	QDomElement macroelem = document.createElement("macro");
+	macroelem.setAttribute("name",d->macro->name());
 	// The list of MacroItem-children a Macro provides.
 	QValueList<MacroItem*> items = d->macro->items();
 	// Create an iterator...
-	QValueList<MacroItem*>::ConstIterator it, end( items.constEnd() );
+	QValueList<MacroItem*>::ConstIterator it(items.constBegin()), end(items.constEnd());
 	// ...and iterate over the list of children the Macro provides.
-	for( it = items.constBegin(); it != end; ++it) {
+	for(;it != end; it++) {
 		// We are iterating over MacroItem instances.
 		MacroItem* item = *it;
+		
+		QDomElement itemelem = document.createElement("item");
+		macroelem.appendChild(itemelem);
+		
+		// TODO macroitem shouldn't need a name
 
-		//TODO we should build the XML out of the MacroItem and only
-		//include an action if one is defined.
+		// Each MacroItem could have an optional comment.
+		const QString comment = item->comment();
+		if(! comment.isEmpty()) {
+			itemelem.setAttribute("comment", item->comment());
+		}
 
-		// Each MacroItem could contain an action.
-		Action::Ptr action = item->action();
+		// Each MacroItem could point to an Action provided by the Manager.
+		KoMacro::Action::Ptr action = item->action();
 		if(action.data()) {
-			// The name the action has is used as tagname.
-			const QString tagname = action->name();
-			// Create a new QDomElement...
-			QDomElement actionelem = document.createElement(tagname);
+			// Remember the name of the action.
+			itemelem.setAttribute("action", action->name());
 
-			//TODO add action-specific attributes/child-nodes/etc.
-
-			// ...and append the new QDomElement as child to our Macro-QDomElement.
-			macroelem.appendChild(actionelem);
+			// Each MacroItem could have a list of variables.
+			Variable::Map vmap = item->variables();
+			for(Variable::Map::Iterator vit = vmap.begin(); vit != vmap.end(); ++vit) {
+				// Create an own element for the variable. The tagname will be
+				// the name of the variable.
+				QDomElement varelement = document.createElement(vit.key());
+				// Remember the value as textnode.
+				varelement.appendChild(document.createTextNode(vit.data()->toString()));
+				// Add the new variable-element to our MacroItem.
+				itemelem.appendChild(varelement);
+			}
 		}
 	}
 	return macroelem;
 }
-
