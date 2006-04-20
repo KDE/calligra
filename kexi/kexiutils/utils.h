@@ -24,6 +24,7 @@
 
 #include <qpointer.h>
 #include <qobject.h>
+#include <QDateTime>
 #include <kmimetype.h>
 class QColor;
 
@@ -47,7 +48,7 @@ namespace KexiUtils
 	{
 		if (!o)
 			return 0;
-		while ( ((o=o->parent())) && !::qt_cast<type *>(o) )
+		while ( ((o=o->parent()) && !::qobject_cast<type *>(o) ) )
 			;
 		return static_cast<type*>(o);
 	}
@@ -91,7 +92,7 @@ namespace KexiUtils
 	{
 		public:
 			WaitCursor(bool noDelay = false);
-			~Qt::WaitCursor();
+			~WaitCursor();
 	};
 
 	/*! \return filter string in QFileDialog format for a mime type pointed by \a mime

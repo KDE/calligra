@@ -47,11 +47,11 @@ void DelayedCursorHandler::show() {
 DelayedCursorHandler _delayedCursorHandler;
 
 void KexiUtils::setWaitCursor(bool noDelay) {
-	if (kapp->guiEnabled())
+	if (qApp->type() != QApplication::Tty)
 		_delayedCursorHandler.start(noDelay);
 }
 void KexiUtils::removeWaitCursor() {
-	if (kapp->guiEnabled())
+	if (qApp->type() != QApplication::Tty)
 		_delayedCursorHandler.stop();
 }
 
@@ -69,7 +69,7 @@ WaitCursor::~WaitCursor()
 
 QString KexiUtils::fileDialogFilterString(const KMimeType::Ptr& mime, bool kdeFormat)
 {
-	if (mime==0)
+	if (mime.isNull())
 		return QString::null;
 
 	QString str;
@@ -164,7 +164,7 @@ void KexiUtils::serializeMap(const QMap<QString,QString>& map, QString& string)
 	string = QString::null;
 	string.reserve(size);
 	for (uint i=0; i<size; i++) {
-		string[i]=QChar(ushort(array[i]+1));
+		string[i]=QChar(ushort(array[i])+1);
 	}
 }
 
