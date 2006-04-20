@@ -52,6 +52,7 @@
 #include <kaction.h>
 #include <kdeversion.h>
 #include <kaboutdata.h>
+#include <kxmlguifactory.h>
 
 #include <KoQueryTrader.h>
 #include <KoDocumentInfo.h>
@@ -90,7 +91,7 @@ KoShellWindow::KoShellWindow()
   m_tabCloseButton->setIconSet( SmallIconSet( "tab_remove" ) );
   m_tabCloseButton->adjustSize();
   m_tabCloseButton->setToolTip( i18n("Close"));
-  m_pFrame->setCornerWidget( m_tabCloseButton, BottomRight );
+  m_pFrame->setCornerWidget( m_tabCloseButton, Qt::BottomRight );
   m_tabCloseButton->hide();
 
   Q3ValueList<KoDocumentEntry> lstComponents = KoDocumentEntry::query(false,QString());
@@ -99,7 +100,7 @@ KoShellWindow::KoShellWindow()
   // Get all available components
   for( ; it != lstComponents.end(); ++it )
   {
-      KService* service = (*it).service();
+      KService* service = (*it).service().data();
       if ( !service->genericName().isEmpty() )
       {
           id = m_pSidebar->insertItem(m_grpFile, service->icon(), service->genericName());
@@ -532,7 +533,7 @@ void KoShellWindow::slotFileNew()
 
 void KoShellWindow::slotFileOpen()
 {
-    KFileDialog *dialog=new KFileDialog(QString::null, QString::null, 0L, "file dialog", true);
+    KFileDialog *dialog=new KFileDialog(QString::null, QString::null, 0L);
     if (!isImporting())
         dialog->setCaption( i18n("Open Document") );
     else
@@ -676,17 +677,17 @@ void KoShellWindow::tab_contextMenu(QWidget * w,const QPoint &p)
 {
   KMenu menu;
   KIconLoader il;
-  int const mnuSave = menu.insertItem( il.loadIconSet( "filesave", K3Icon::Small ), i18n("Save") );
-  int const mnuClose = menu.insertItem( il.loadIcon( "fileclose", K3Icon::Small ), i18n("Close") );
+  QAction *mnuSave = menu.addAction( il.loadIconSet( "filesave", K3Icon::Small ), i18n("Save") );
+  QAction *mnuClose = menu.addAction( il.loadIcon( "fileclose", K3Icon::Small ), i18n("Close") );
   
   int tabnr = m_pFrame->indexOf( w );
   Page page = m_lstPages[tabnr];
   // disable save if there's nothing to save
   if ( !page.m_pDoc->isModified() )
-    menu.setItemEnabled( mnuSave, false );
+    mnuSave->setEnabled( false );
   
   // show menu
-  int const choice = menu.exec(p);
+  QAction *choice = menu.exec(p);
 
   if( choice == mnuClose )
   {
@@ -707,7 +708,8 @@ void KoShellWindow::tab_contextMenu(QWidget * w,const QPoint &p)
 void KoShellWindow::slotConfigureKeys()
 {
   KoView *view = rootView();
-  KKeyDialog dlg( this );
+  KKeyDialog dlg(KKeyChooser::AllActions,KKeyChooser::LetterShortcutsAllowed, this );
+  
   dlg.insert( actionCollection() );
   if ( view )
      dlg.insert( view->actionCollection() );

@@ -94,26 +94,30 @@ class EntryItem : public Q3ListBoxItem
  * Tooltip that changes text depending on the item it is above.
  * Compliments of "Practical Qt" by Dalheimer, Petersen et al.
  */
-class EntryItemToolTip : public QToolTip
+class EntryItemToolTip : public QWidget
 {
+Q_OBJECT
   public:
     EntryItemToolTip( Q3ListBox* parent )
-      : QToolTip( parent->viewport() ), mListBox( parent ) 
+      : mListBox( parent ) 
       {}
   protected:
-    void maybeTip( const QPoint& p ) {
-      // We only show tooltips when there are no texts shown
-      if ( KoShellSettings::sidePaneShowText() ) return;
-      if ( !mListBox ) return;
-      Q3ListBoxItem* item = mListBox->itemAt( p );
-      if ( !item ) return;
-      const QRect itemRect = mListBox->itemRect( item );
-      if ( !itemRect.isValid() ) return;
-
-      const EntryItem *entryItem = static_cast<EntryItem*>( item );
-      QString tipStr = entryItem->text();
-      tip( itemRect, tipStr );
-    }
+	bool event(QEvent *event) {
+			if (event->type() == QEvent::ToolTip) {
+					QHelpEvent *helpEvent = static_cast<QHelpEvent *>(event);
+					if ( KoShellSettings::sidePaneShowText() ) return false;
+					if ( !mListBox ) return false;
+					Q3ListBoxItem* item = mListBox->itemAt( helpEvent->pos() );
+					if ( !item ) return false;
+					const QRect itemRect = mListBox->itemRect( item );
+					if ( !itemRect.isValid() ) return false;
+					const EntryItem *entryItem = static_cast<EntryItem*>( item );
+					QString tipStr = entryItem->text();
+					QToolTip::showText ( helpEvent->pos(), tipStr ); 		
+					return true;
+			}
+			return false;
+	}
   private:
     Q3ListBox* mListBox;
 };
@@ -188,10 +192,10 @@ class IconSidePane :public KVBox
     IconViewMode sizeIntToEnum(int size) const;
     IconViewMode viewMode() { return mViewMode; }
     void setViewMode(int choice){mViewMode = sizeIntToEnum(choice);}
-    bool showText() { return mShowText; }
-    void toogleText(){mShowText=!mShowText;}
-    bool showIcons() { return mShowIcons; }
-    void toogleIcons(){mShowIcons=!mShowIcons;}
+    bool showText() { return m_bShowText; }
+    void toogleText(){m_bShowText=!m_bShowText;}
+    bool showIcons() { return m_bShowIcons; }
+    void toogleIcons(){m_bShowIcons=!m_bShowIcons;}
     Q3ButtonGroup *buttonGroup() { return m_buttongroup; }
     int minWidth();
     void resetWidth();
@@ -212,8 +216,9 @@ class IconSidePane :public KVBox
     KMenu *mPopupMenu;
 
     IconViewMode mViewMode;
-    bool mShowIcons;
-    bool mShowText;
+    bool m_bShowIcons;
+    bool m_bShowText;
+	QAction *mLargeIcons, *mNormalIcons, *mSmallIcons, *mShowText, *mShowIcons;
 };
 
 

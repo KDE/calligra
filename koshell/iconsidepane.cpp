@@ -254,7 +254,7 @@ bool Navigator::showIcons()
 void Navigator::mouseReleaseEvent(QMouseEvent *e)
 {
   KListBox::mouseReleaseEvent(e);
-  if ( e->button() != LeftButton || !mLeftMouseButtonPressed )
+  if ( e->button() != Qt::LeftButton || !mLeftMouseButtonPressed )
     return;
   if ( itemAt( e->pos() ) && executedItem == selectedItem() )
     emit itemSelected( currentItem() );
@@ -264,7 +264,7 @@ void Navigator::mouseReleaseEvent(QMouseEvent *e)
 
 void Navigator::mousePressEvent(QMouseEvent *e)
 {
-  if ( e->button() != LeftButton || itemAt( e->pos() ) == 0 )
+  if ( e->button() != Qt::LeftButton || itemAt( e->pos() ) == 0 )
   {
     mLeftMouseButtonPressed = false;
     if (e->button() == Qt::RightButton)
@@ -360,11 +360,12 @@ void Navigator::resizeEvent( QResizeEvent *event )
 
 void Navigator::slotShowRMBMenu( Q3ListBoxItem *, const QPoint &pos )
 {
-  int choice = mPopupMenu->exec( pos );
+  QAction *choice = mPopupMenu->exec( pos );
 
-  if ( choice == -1 )
+  if ( !choice  )
     return;
-
+#warning "kde4: port it"  
+#if 0
   mSidePane->resetWidth();
   if ( choice >= SmallIcons ) {
     mSidePane->setViewMode( mSidePane->sizeIntToEnum( choice ) );
@@ -403,6 +404,7 @@ void Navigator::slotShowRMBMenu( Q3ListBoxItem *, const QPoint &pos )
 //           mSidePane->buttonGroup()->show();
     }
   }
+#endif  
   calculateMinWidth();
   emit updateAllWidgets();
 }
@@ -410,8 +412,9 @@ void Navigator::slotShowRMBMenu( Q3ListBoxItem *, const QPoint &pos )
 // ************************************************
 
 IconSidePane::IconSidePane(QWidget *parent, const char *name )
-  : KVBox( parent, name )
+  : KVBox( parent )
 {
+  setObjectName(name);
   m_buttongroup = new Q3ButtonGroup(1, Qt::Horizontal, this);
   m_buttongroup->setExclusive(true);
   m_buttongroup->hide();
@@ -419,25 +422,42 @@ IconSidePane::IconSidePane(QWidget *parent, const char *name )
   mWidgetstack->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding));
   
   // setup the popup menu
-  mShowIcons = KoShellSettings::sidePaneShowIcons();
-  mShowText = KoShellSettings::sidePaneShowText();
+  m_bShowIcons = KoShellSettings::sidePaneShowIcons();
+  m_bShowText = KoShellSettings::sidePaneShowText();
   mViewMode = sizeIntToEnum( KoShellSettings::sidePaneIconSize() );
   mPopupMenu = new KMenu(0);
-  mPopupMenu->insertTitle( i18n( "Icon Size" ) );
-  mPopupMenu->insertItem( i18n( "Large" ), (int)LargeIcons );
-  mPopupMenu->setItemEnabled( (int)LargeIcons, mShowIcons );
-  mPopupMenu->insertItem( i18n( "Normal" ), (int)NormalIcons );
-  mPopupMenu->setItemEnabled( (int)NormalIcons, mShowIcons );
-  mPopupMenu->insertItem( i18n( "Small" ), (int)SmallIcons );
-  mPopupMenu->setItemEnabled( (int)SmallIcons, mShowIcons );
-  mPopupMenu->setItemChecked( (int)mViewMode, true );
+  mPopupMenu->setTitle( i18n( "Icon Size" ) );
+
+  mLargeIcons = mPopupMenu->addAction(i18n( "Large" ));
+  mLargeIcons->setEnabled( m_bShowIcons);
+ 
+  mNormalIcons = mPopupMenu->addAction(i18n( "Normal" ));
+  mNormalIcons->setEnabled(m_bShowIcons);
+  
+  mSmallIcons = mPopupMenu->addAction(i18n("Small"));
+  mSmallIcons->setEnabled(m_bShowIcons);
+  switch(KoShellSettings::sidePaneIconSize())
+  {
+    case LargeIcons:
+      mLargeIcons->setChecked(true);
+      break;
+    case NormalIcons:
+      mNormalIcons->setChecked(true);
+      break;
+    case SmallIcons:
+      mSmallIcons->setChecked(true);
+      break;
+  }
+  
   mPopupMenu->insertSeparator();
-  mPopupMenu->insertItem( i18n( "Show Icons" ), (int)ShowIcons );
-  mPopupMenu->setItemChecked( (int)ShowIcons, mShowIcons );
-  mPopupMenu->setItemEnabled( (int)ShowIcons, mShowText );
-  mPopupMenu->insertItem( i18n( "Show Text" ), (int)ShowText );
-  mPopupMenu->setItemChecked( (int)ShowText, mShowText );
-  mPopupMenu->setItemEnabled( (int)ShowText, mShowIcons );
+
+  mShowIcons = mPopupMenu->addAction(i18n( "Show Icons" ));
+  mShowIcons->setEnabled(m_bShowText);
+  mShowIcons->setChecked(mShowIcons);
+  mShowText = mPopupMenu->addAction(i18n( "Show Text" ));
+  mShowText->setEnabled(m_bShowIcons);
+  mShowText->setChecked(mShowText);
+  
   if ( !mShowText )
     m_buttongroup->hide();
 }

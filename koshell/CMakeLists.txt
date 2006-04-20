@@ -1,6 +1,6 @@
 kde4_header()
 project(koshell)
-
+include_directories(${KOFFICEUI_INCLUDES})
 
 
 ########### next target ###############
