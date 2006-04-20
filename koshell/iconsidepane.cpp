@@ -122,7 +122,7 @@ void EntryItem::paint( QPainter *p )
   reloadPixmap();
 
   Q3ListBox *box = listBox();
-  bool iconAboveText = ( navigator()->viewMode() > SmallIcons ) 
+  bool iconAboveText = ( navigator()->viewMode() > SmallIcons )
                      && navigator()->showIcons();
   int w = box->viewport()->width();
   int y = 2;
@@ -364,47 +364,8 @@ void Navigator::slotShowRMBMenu( Q3ListBoxItem *, const QPoint &pos )
 
   if ( !choice  )
     return;
-#warning "kde4: port it"  
-#if 0
   mSidePane->resetWidth();
-  if ( choice >= SmallIcons ) {
-    mSidePane->setViewMode( mSidePane->sizeIntToEnum( choice ) );
-    mPopupMenu->setItemChecked( (int)SmallIcons, false);
-    mPopupMenu->setItemChecked( (int)NormalIcons, false);
-    mPopupMenu->setItemChecked( (int)LargeIcons, false);
-    mPopupMenu->setItemChecked( mSidePane->viewMode(), true);
-    KoShellSettings::setSidePaneIconSize( choice );
-  }
-  else
-  {
-    // either icons or text were toggled
-    if ( choice == ShowIcons ) {
-        mSidePane->toogleIcons();
-        mPopupMenu->setItemChecked( (int)ShowIcons,  mSidePane->showIcons() );
-        mPopupMenu->setItemEnabled( (int)ShowText,  mSidePane->showIcons() );
-        mPopupMenu->setItemEnabled( (int)SmallIcons, mSidePane->showIcons());
-        mPopupMenu->setItemEnabled( (int)NormalIcons, mSidePane->showIcons());
-        mPopupMenu->setItemEnabled( (int)LargeIcons, mSidePane->showIcons());
-        KoShellSettings::setSidePaneShowIcons( mSidePane->showIcons() );
-
-        QToolTip::remove( this );
-    } else {
-        mSidePane->toogleText();
-        mSidePane->resetWidth();
-        mPopupMenu->setItemChecked( (int)ShowText,  mSidePane->showText() );
-        mPopupMenu->setItemEnabled( (int)ShowIcons,  mSidePane->showText() );
-        mPopupMenu->setItemEnabled( (int)SmallIcons, true);
-        mPopupMenu->setItemEnabled( (int)NormalIcons, true);
-        mPopupMenu->setItemEnabled( (int)LargeIcons, true);
-        KoShellSettings::setSidePaneShowText( mSidePane->showText() );
-        new EntryItemToolTip( this );
-//         if ( !mSidePane->showText() )
-//           mSidePane->buttonGroup()->hide();
-//         else
-//           mSidePane->buttonGroup()->show();
-    }
-  }
-#endif  
+  mSidePane->changeStateMenu( choice);
   calculateMinWidth();
   emit updateAllWidgets();
 }
@@ -420,7 +381,7 @@ IconSidePane::IconSidePane(QWidget *parent, const char *name )
   m_buttongroup->hide();
   mWidgetstack = new Q3WidgetStack(this);
   mWidgetstack->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding));
-  
+
   // setup the popup menu
   m_bShowIcons = KoShellSettings::sidePaneShowIcons();
   m_bShowText = KoShellSettings::sidePaneShowText();
@@ -430,10 +391,10 @@ IconSidePane::IconSidePane(QWidget *parent, const char *name )
 
   mLargeIcons = mPopupMenu->addAction(i18n( "Large" ));
   mLargeIcons->setEnabled( m_bShowIcons);
- 
+
   mNormalIcons = mPopupMenu->addAction(i18n( "Normal" ));
   mNormalIcons->setEnabled(m_bShowIcons);
-  
+
   mSmallIcons = mPopupMenu->addAction(i18n("Small"));
   mSmallIcons->setEnabled(m_bShowIcons);
   switch(KoShellSettings::sidePaneIconSize())
@@ -448,7 +409,7 @@ IconSidePane::IconSidePane(QWidget *parent, const char *name )
       mSmallIcons->setChecked(true);
       break;
   }
-  
+
   mPopupMenu->insertSeparator();
 
   mShowIcons = mPopupMenu->addAction(i18n( "Show Icons" ));
@@ -457,7 +418,7 @@ IconSidePane::IconSidePane(QWidget *parent, const char *name )
   mShowText = mPopupMenu->addAction(i18n( "Show Text" ));
   mShowText->setEnabled(m_bShowIcons);
   mShowText->setChecked(mShowText);
-  
+
   if ( !mShowText )
     m_buttongroup->hide();
 }
@@ -465,6 +426,54 @@ IconSidePane::IconSidePane(QWidget *parent, const char *name )
 IconSidePane::~IconSidePane()
 {
 }
+
+void IconSidePane::changeStateMenu( QAction *choice)
+{
+  if(choice == mSmallIcons )
+  {
+    mSmallIcons->setChecked(true);
+    mNormalIcons->setChecked(false);
+    mLargeIcons->setChecked(false);
+    KoShellSettings::setSidePaneIconSize( (int)SmallIcons );
+  }
+  else if(choice == mNormalIcons )
+  {
+    mSmallIcons->setChecked(false);
+    mNormalIcons->setChecked(true);
+    mLargeIcons->setChecked(false);
+    KoShellSettings::setSidePaneIconSize( (int)NormalIcons );
+  }
+  else if(choice == mLargeIcons )
+  {
+    mSmallIcons->setChecked(false);
+    mNormalIcons->setChecked(false);
+    mLargeIcons->setChecked(true);
+    KoShellSettings::setSidePaneIconSize((int)LargeIcons);
+   }
+  else if(choice == mShowIcons)
+  {
+    mSmallIcons->setEnabled(showIcons());
+    mNormalIcons->setEnabled(showIcons());
+    mLargeIcons->setEnabled(showIcons());
+    mShowText->setEnabled(showIcons());
+    mShowIcons->setChecked(showIcons());
+    toogleIcons();
+    QToolTip::remove( mCurrentNavigator );
+  }
+  else if(choice == mShowText )
+  {
+    toogleText();
+    resetWidth();
+    mSmallIcons->setEnabled(true);
+    mNormalIcons->setEnabled(true);
+    mLargeIcons->setEnabled(true);
+    mShowIcons->setEnabled(showText());
+    mShowText->setChecked(showText());
+    new EntryItemToolTip( mCurrentNavigator );
+    KoShellSettings::setSidePaneShowText( showText() );
+  }
+}
+
 
 int IconSidePane::insertItem(int _grp, const QString & _pix, const QString &_text)
 {

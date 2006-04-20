@@ -199,6 +199,7 @@ class IconSidePane :public KVBox
     Q3ButtonGroup *buttonGroup() { return m_buttongroup; }
     int minWidth();
     void resetWidth();
+    void changeStateMenu( QAction *_act);
 
   public slots:
     void itemSelected(int);
@@ -218,7 +219,7 @@ class IconSidePane :public KVBox
     IconViewMode mViewMode;
     bool m_bShowIcons;
     bool m_bShowText;
-	QAction *mLargeIcons, *mNormalIcons, *mSmallIcons, *mShowText, *mShowIcons;
+    QAction *mLargeIcons, *mNormalIcons, *mSmallIcons, *mShowText, *mShowIcons;
 };
 
 
