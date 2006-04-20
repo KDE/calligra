@@ -1,3 +1,6 @@
+#ifndef PARSER_TEST_H
+#define PARSER_TEST_H
+
 int parserTest(const char *st)
 {
 	int r = 0;
@@ -32,4 +35,6 @@ int parserTest(const char *st)
 	
 	return r;
 }
+
+#endif
 

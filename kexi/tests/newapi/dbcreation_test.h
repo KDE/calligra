@@ -1,3 +1,6 @@
+#ifndef DBCREATION_TEST_H 
+#define DBCREATION_TEST_H 
+
 int dbCreationTest()
 {
 	if (conn->databaseExists( db_name )) {
@@ -34,4 +37,6 @@ int dbCreationTest()
 //	}
 	return 0;
 }
+
+#endif
 

@@ -142,7 +142,8 @@ KexiComboBoxTableEdit::KexiComboBoxTableEdit(KexiTableViewColumn &column, Q3Scro
 //	m_combo->setEditable( true );
 //	m_combo->clear();
 //	m_combo->insertStringList(f.enumHints());
-//	for (QStringList::iterator it = f.enumHints().begin(); it!=f.enumHints().end(): ++it) {
+//	QStringList::ConstIterator it, end( f.enumHints().constEnd() );
+//	for ( it = f.enumHints().constBegin(); it != end; ++it) {
 //		if(!hints.at(i).isEmpty())
 //			m_combo->insertItem(hints.at(i));
 //	}

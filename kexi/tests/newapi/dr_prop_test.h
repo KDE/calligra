@@ -1,3 +1,6 @@
+#ifndef DR_PROP_TEST_H
+#define DR_PROP_TEST_H
+
 //Added by qt3to4:
 #include <Q3ValueList>
 #include <Q3CString>
@@ -17,4 +20,6 @@ int drPropTest()
 
 	return 0;
 }
+
+#endif
 

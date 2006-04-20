@@ -884,7 +884,8 @@ FormIO::readPropertyValue(QDomNode node, QObject *obj, const QString &name)
 		{
 			Q3StrList keys;
 			QStringList list = QStringList::split("|", text);
-			for(QStringList::iterator it = list.begin(); it != list.end(); ++it)
+			QStringList::ConstIterator it, end( list.constEnd() );
+			for( it = list.constBegin(); it != end; ++it)
 				keys.append((*it).latin1());
 
 			return QVariant(meta->keysToValue(keys));

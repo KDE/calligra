@@ -93,7 +93,7 @@ KexiReportFactory::~KexiReportFactory()
 QString
 KexiReportFactory::name()
 {
-	return("kexireportwidgets");
+	return "kexireportwidgets";
 }
 
 QWidget*

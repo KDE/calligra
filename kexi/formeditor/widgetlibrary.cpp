@@ -187,8 +187,8 @@ void
 WidgetLibrary::lookupFactories()
 {
 	KTrader::OfferList tlist = KTrader::self()->query("KFormDesigner/WidgetFactory");
-	KTrader::OfferList::Iterator it(tlist.begin());
-	for(; it != tlist.end(); ++it)
+	KTrader::OfferList::ConstIterator it, end( tlist.constEnd() );
+	for( it = tlist.constBegin(); it != end; ++it)
 	{
 		KService::Ptr ptr = (*it);
 		KService::Ptr* existingService = (d->services)[ptr->library().latin1()];

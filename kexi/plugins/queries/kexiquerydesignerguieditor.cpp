@@ -1537,7 +1537,7 @@ KexiQueryDesignerGuiEditor::createPropertySet( int row,
 	slist << "nosorting" << "ascending" << "descending";
 	nlist << i18n("None") << i18n("Ascending") << i18n("Descending");
 	set->addProperty(prop = new KoProperty::Property("sorting", 
-		slist, nlist, slist[0], i18n("Sorting")));
+		slist, nlist, *slist.at(0), i18n("Sorting")));
 #ifdef KEXI_NO_UNFINISHED
 	prop->setVisible(false);
 #endif

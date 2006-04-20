@@ -54,7 +54,7 @@ KexiStartupFileDialog::KexiStartupFileDialog(
 	if (layout())
 		layout()->setMargin(0);
 	setMinimumHeight(100);
-	setSizeGripEnabled ( FALSE );
+	setSizeGripEnabled ( false );
 
 	//dirty hack to customize filedialog view:
 	{

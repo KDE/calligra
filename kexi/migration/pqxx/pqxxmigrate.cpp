@@ -427,7 +427,8 @@ bool PqxxMigrate::drv_copyTable(const QString& srcTable, KexiDB::Connection *des
     for (int n=0; (stream >> R); ++n)
     {
         Q3ValueList<QVariant> vals = Q3ValueList<QVariant>();
-        for (std::vector<std::string>::const_iterator i = R.begin(); i != R.end(); ++i)
+        std::vector<std::string>::const_iterator i, end( R.end() );
+        for ( i = R.begin(); i != end; ++i)
         {
              QVariant var = QVariant((*i).c_str());
              vals << var;

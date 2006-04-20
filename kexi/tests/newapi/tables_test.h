@@ -1,3 +1,6 @@
+#ifndef TABLETEST_H
+#define TABLETEST_H
+
 int tablesTest()
 {
 	if (dbCreationTest()!=0)
@@ -90,4 +93,6 @@ int tablesTest()
 	
 	return 0;
 }
+
+#endif
 

@@ -19,6 +19,9 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#ifndef KEXICMDLINEARGS_H
+#define KEXICMDLINEARGS_H
+
 #include <kcmdlineargs.h>
 #include <klocale.h>
 
@@ -161,3 +164,6 @@ static KCmdLineOptions options[] =
   // INSERT YOUR COMMANDLINE OPTIONS HERE
   KCmdLineLastOption
 };
+
+#endif
+
