@@ -131,9 +131,9 @@ MetaObject::Ptr Function::receiverObject()
 {
 	if(! d->metaobject) {
 		QStringList list = QStringList::split("/", d->receiver);
-		QStringList::Iterator it = list.begin();
+		QStringList::ConstIterator it( list.constBegin() ), end( list.constEnd() ) ;
 		QObject* object = Manager::self()->object( *it );
-		for(++it; object && it != list.end(); ++it) {
+		for(++it; object && it != end; ++it) {
 			if((*it).isNull()) {
 				object = 0;
 				break;

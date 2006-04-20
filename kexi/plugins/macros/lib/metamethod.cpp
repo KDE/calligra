@@ -325,7 +325,8 @@ Variable::List MetaMethod::toVariableList(QUObject* uo)
 {
 	Variable::List list;
 
-	for(MetaParameter::List::Iterator it = d->arguments.begin(); it != d->arguments.end(); ++it) {
+	MetaParameter::List::ConstIterator it, end( d->arguments.constEnd() );
+	for( it = d->arguments.constBegin(); it != end; ++it) {
 		list.append( toVariable(uo) );
 		uo++;
 	}

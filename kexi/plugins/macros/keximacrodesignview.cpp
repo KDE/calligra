@@ -154,7 +154,8 @@ void KexiMacroDesignView::initTable()
 	//items.append(i18n("Errorhandler"));
 
 	QStringList actionnames = KoMacro::Manager::self()->actionNames();
-	for(QStringList::Iterator it = actionnames.begin(); it != actionnames.end(); ++it) {
+	QStringList::ConstIterator it, end( actionnames.constEnd() );
+	for( it = actionnames.constBegin(); it != end; ++it) {
 		KoMacro::Action::Ptr action = KoMacro::Manager::self()->action(*it);
 		items.append( action->text() );
 	}
@@ -257,7 +258,8 @@ void KexiMacroDesignView::setAction(const QString& actionname)
 	set->addProperty(prop);
 
 	KoMacro::Variable::Map varmap = action->variables();
-	for(KoMacro::Variable::Map::Iterator it = varmap.begin(); it != varmap.end(); ++it) {
+	KoMacro::Variable::Map::ConstIterator it, end( varmap.constEnd() );
+	for( it = varmap.constBegin(); it != end; ++it) {
 		KoMacro::Variable::Ptr v = it.data();
 		kdDebug() << "KexiMacroDesignView::setAction type=" << QVariant::typeToName( v->variant().type() ) << " value=" << v->variant().toString() << endl;
 		KoProperty::Property* p = new KoProperty::Property(
@@ -278,8 +280,8 @@ void KexiMacroDesignView::setAction(const QString& actionname)
 		case 1: { // Application
 			QStringList actionname, actiontext;
 			const KActionPtrList& actionlist = parentDialog()->mainWin()->actionCollection()->actions();
-			KActionPtrList::ConstIterator it( actionlist.begin() );
-			for(; it != actionlist.end(); ++it) {
+			KActionPtrList::ConstIterator it, end( actionlist.constEnd() );
+			for( it = actionlist.constBegin(); it != end; ++it) {
 				actionname.append( (*it)->name() );
 				actiontext.append( (*it)->text().replace("&","") );
 			}
@@ -309,7 +311,7 @@ void KexiMacroDesignView::setAction(const QString& actionname)
 			KoProperty::Property* objprop = new KoProperty::Property(
 				"object", // name
 				objectnames, objecttexts, // ListData
-				( objectnames.count() > 0 ? objectnames[0] : QVariant() ), // value
+				( objectnames.count() > 0 ? *objectnames.at(0) : QVariant() ), // value
 				i18n("Object"), // caption
 				QString::null, // description
 				KoProperty::List // type
@@ -322,7 +324,7 @@ void KexiMacroDesignView::setAction(const QString& actionname)
 			KoProperty::Property* viewprop = new KoProperty::Property(
 				"view", // name
 				viewnames, viewtexts, // ListData
-				( viewnames.count() > 0 ? viewnames[0] : QVariant() ), // value
+				( viewnames.count() > 0 ? *viewnames.at(0) : QVariant() ), // value
 				i18n("View"), // caption
 				QString::null, // description
 				KoProperty::List // type

@@ -55,7 +55,7 @@ KexiArrowTip::KexiArrowTip(const QString& text, QWidget* parent)
 	resize(sz);
 
 //	setMargin(2);
-	setAutoMask( FALSE );
+	setAutoMask( false );
 //	setFrameStyle( QFrame::Plain | QFrame::Box );
 //	setLineWidth( 2 );
 //	setAlignment( Qt::AlignAuto | Qt::AlignTop );

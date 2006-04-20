@@ -337,7 +337,8 @@ KexiRelationView::setReadOnly(bool b)
 	m_readOnly=b;
 //TODO
 //	invalidateActions();
-/*	for (TableList::iterator it=m_tables.begin();it!=m_tables.end();++it)
+/*	TableList::Iterator it, end( m_tables.end() );	
+ 	for ( it=m_tables.begin(); it != end; ++it)
 	{
 //		(*it)->setReadOnly(b);
 #ifndef Q_WS_WIN
@@ -356,7 +357,8 @@ KexiRelationView::slotListUpdate(QObject *)
 		RelationList rl = m_relation->projectRelations();
 		if(!rl.isEmpty())
 		{
-			for(RelationList::Iterator it = rl.begin(); it != rl.end(); it++)
+			RelationList::ConstIterator it, end( rl.constEnd() );
+			for( it = rl.begin(); it != end; ++it)
 			{
 				addConnection((*it), true);
 			}

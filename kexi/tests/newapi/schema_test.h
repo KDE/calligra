@@ -1,3 +1,6 @@
+#ifndef SCHEMA_TEST_H
+#define SCHEMA_TEST_H
+
 int schemaTest()
 {
 	if (!conn->useDatabase( db_name )) {
@@ -28,4 +31,6 @@ int schemaTest()
 	}*/
 	return 0;
 }
+
+#endif
 

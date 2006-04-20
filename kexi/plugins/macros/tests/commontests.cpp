@@ -268,7 +268,8 @@ void CommonTests::testFunction()
 	KoMacro::Variable::List funcvariables = func->variables();
 	//counter for hardcoded tests see below ...
 	uint i = 0;
-	for(KoMacro::Variable::List::Iterator it = funcvariables.begin(); it != funcvariables.end(); ++it) {
+	KoMacro::Variable::List::ConstIterator it, end( funcvariables.constEnd() );
+	for( it = funcvariables.constBegin(); it != end; ++it) {
 		kdDebug() << "VARIABLE => " << (*it ? (*it)->toString() : "<NULL>") << endl;
 		//hardcoded test:
 		// firstrun we have a QString, secondrun we have an int

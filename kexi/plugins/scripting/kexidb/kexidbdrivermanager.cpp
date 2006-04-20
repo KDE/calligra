@@ -123,7 +123,8 @@ Kross::Api::Object::Ptr KexiDBDriverManager::createConnectionDataByFile(Kross::A
         KConfig config(file, true, false);
         QString groupkey;
         QStringList groups(config.groupList());
-        for(QStringList::Iterator it = groups.begin(); it != groups.end(); ++it) {
+	QStringList::ConstIterator it, end( groups.constEnd() );
+        for( it = groups.constBegin(); it != end; ++it) {
             if((*it).lower()!="file information") {
                 groupkey = *it;
                 break;

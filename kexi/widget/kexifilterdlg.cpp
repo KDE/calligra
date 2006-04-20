@@ -99,7 +99,8 @@ KexiFilterDlg::setupCatalog(const QStringList &mimes)
 {
 	m_catalog->clear();
 	m_catalog->setRootIsDecorated(true);
-	for(QStringList::ConstIterator it = mimes.begin(); it != mimes.end(); ++it)
+	QStringList::ConstIterator it, end( mimes.constEnd() );
+	for( it = mimes.constBegin(); it != end; ++it)
 	{
 		KexiProjectHandler *h = m_project->handlerForMime(*it);
 		if(h)
@@ -117,7 +118,8 @@ KexiFilterDlg::setupCatalog(const QStringList &mimes)
 				if(prov)
 				{
 					QStringList fields = prov->fields(0, iit.current()->identifier());
-					for(QStringList::Iterator fit = fields.begin(); fit != fields.end(); ++fit)
+					QStringList::ConstIterator fit, end( fields.constEnd() );
+					for( fit = fields.constBegin(); fit != end; ++fit)
 					{
 						QListViewItem *bif = new QListViewItem(bi, (*fit));
 					}

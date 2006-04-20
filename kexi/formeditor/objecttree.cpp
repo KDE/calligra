@@ -115,7 +115,7 @@ ObjectTreeItem::setGridPos(int row, int col, int rowspan, int colspan)
 
 ObjectTreeItem::~ObjectTreeItem()
 {
-//	kdDebug() << "ObjectTreeItem deleted: " << this->name() << endl;
+//	kdDebug() << "ObjectTreeItem deleted: " << name() << endl;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////

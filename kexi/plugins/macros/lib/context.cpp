@@ -164,7 +164,8 @@ void Context::activate(Context::Ptr context)
 	// Merge the passed context into this context
 	Variable::Map variables = context->variables();
 	//copy variables
-	for(Variable::Map::Iterator it = variables.begin(); it != variables.end(); ++it)
+	Variable::Map::ConstIterator it, end( variables.constEnd() );
+	for( it = variables.constBegin(); it != end; ++it)
 		setVariable(it.key(), it.data());
 	
 	//activate copied context.

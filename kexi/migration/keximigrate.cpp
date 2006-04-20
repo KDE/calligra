@@ -457,31 +457,31 @@ KexiDB::Field::Type KexiMigrate::userType(const QString& fname)
                       types, 0, false);
 
 //! @todo use QMap<QCString, KexiDB::Field::Type> here!
-	if (res == types[0])
+	if (res == *types.at(0))
 		return KexiDB::Field::Byte;
-	else if (res == types[1])
+	else if (res == *types.at(1))
 		return KexiDB::Field::ShortInteger;
-	else if (res == types[2])
+	else if (res == *types.at(2))
 		return KexiDB::Field::Integer;
-	else if (res == types[3])
+	else if (res == *types.at(3))
 		return KexiDB::Field::BigInteger;
-	else if (res == types[4])
+	else if (res == *types.at(4))
 		return KexiDB::Field::Boolean;
-	else if (res == types[5])
+	else if (res == *types.at(5))
 		return KexiDB::Field::Date;
-	else if (res == types[6])
+	else if (res == *types.at(6))
 		return KexiDB::Field::DateTime;
-	else if (res == types[7])
+	else if (res == *types.at(7))
 		return KexiDB::Field::Time;
-	else if (res == types[8])
+	else if (res == *types.at(8))
 		return KexiDB::Field::Float;
-	else if (res == types[9])
+	else if (res == *types.at(9))
 		return KexiDB::Field::Double;
-	else if (res == types[10])
+	else if (res == *types.at(10))
 		return KexiDB::Field::Text;
-	else if (res == types[11])
+	else if (res == *types.at(11))
 		return KexiDB::Field::LongText;
-	else if (res == types[12])
+	else if (res == *types.at(12))
 		return KexiDB::Field::BLOB;
 	else
 		return KexiDB::Field::Text;

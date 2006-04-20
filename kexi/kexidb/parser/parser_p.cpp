@@ -117,8 +117,8 @@ void yyerror(const char *str)
 					pos = re.search(e, pos);
 					QStringList captured=re.capturedTexts();
 					if (captured.count()>=2) {
-//						KexiDBDbg << "**" << captured[1] << endl;
-//						KexiDBDbg << "**" << captured[2] << endl;
+//						KexiDBDbg << "**" << captured.at(1) << endl;
+//						KexiDBDbg << "**" << captured.at(2) << endl;
 					}
 				}
 					

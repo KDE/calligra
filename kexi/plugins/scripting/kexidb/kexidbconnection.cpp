@@ -284,7 +284,8 @@ Kross::Api::Object::Ptr KexiDBConnection::querySingleRecord(Kross::Api::List::Pt
     QValueVector<QVariant> list;
     if(connection()->querySingleRecord(Kross::Api::Variant::toString(args->item(0)), list)) {
         QValueList<QVariant> l; //FIXME isn't there a better/faster way to deal with QValueVector<QVariant> => QVariant ?!
-        for(QValueVector<QVariant>::Iterator it = list.begin(); it != list.end(); ++it)
+	QValueVector<QVariant>::ConstIterator it, end( list.constEnd() );
+        for( it = list.constBegin(); it != end; ++it)
             l.append(*it);
         return new Kross::Api::Variant(l);
     }
@@ -296,7 +297,8 @@ Kross::Api::Object::Ptr KexiDBConnection::insertRecord(Kross::Api::List::Ptr arg
     QValueList<QVariant> values = Kross::Api::Variant::toList(args->item(1));
     /*
     kdDebug()<<"Kross::KexiDB::KexiDBConnection::insertRecord()"<<endl;
-    for(QValueList<QVariant>::Iterator it = values.begin(); it != values.end(); ++it)
+    QValueList<QVariant>::ConstIterator it, end( values.constEnd() );
+    for( it = values.constBegin(); it != end; ++it)
         kdDebug()<<"  value="<< (*it).toString() << " type=" << (*it).typeName() << endl;
     */
 
@@ -438,7 +440,8 @@ Kross::Api::Object::Ptr KexiDBConnection::transactions(Kross::Api::List::Ptr)
 {
     QValueList<Kross::Api::Object::Ptr> l;
     QValueList< ::KexiDB::Transaction > list = connection()->transactions();
-    for(QValueList< ::KexiDB::Transaction >::Iterator it = list.begin(); it != list.end(); ++it)
+    QValueList< ::KexiDB::Transaction >::Iterator it, end( list.end() );
+    for( it = list.begin(); it != end; ++it)
         l.append( new KexiDBTransaction(this, *it) );
     return new Kross::Api::List(l);
 }

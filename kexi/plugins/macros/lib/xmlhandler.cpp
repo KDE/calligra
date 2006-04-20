@@ -114,9 +114,9 @@ QDomElement XMLHandler::toXML()
 	// The list of MacroItem-children a Macro provides.
 	QValueList<MacroItem*> items = d->macro->items();
 	// Create an iterator...
-	QValueList<MacroItem*>::Iterator it = items.begin();
+	QValueList<MacroItem*>::ConstIterator it, end( items.constEnd() );
 	// ...and iterate over the list of children the Macro provides.
-	for(;it != items.end(); it++) {
+	for( it = items.constBegin(); it != end; ++it) {
 		// We are iterating over MacroItem instances.
 		MacroItem* item = *it;
 

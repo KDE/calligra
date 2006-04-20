@@ -890,7 +890,7 @@ bool KexiDataAwareObjectInterface::acceptEditor()
 					m_errorMessagePopup->setFocusPolicy(QWidget::NoFocus);
 					m_errorMessagePopup->setPalette(pal);
 					m_errorMessagePopup->setMargin(2);
-					m_errorMessagePopup->setAutoMask( FALSE );
+					m_errorMessagePopup->setAutoMask( false );
 					m_errorMessagePopup->setFrameStyle( QFrame::Plain | QFrame::Box );
 					m_errorMessagePopup->setLineWidth( 2 );
 					m_errorMessagePopup->setAlignment( Qt::AlignAuto | Qt::AlignTop );

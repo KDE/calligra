@@ -142,7 +142,8 @@ Kross::Api::Object::Ptr KexiDBFieldList::subList(Kross::Api::List::Ptr args)
 {
     QStringList sl;
     QValueList<QVariant> list = Kross::Api::Variant::toList( args->item(0) );
-    for(QValueList<QVariant>::Iterator it = list.begin(); it != list.end(); ++it)
+    QValueList<QVariant>::ConstIterator it, end( list.constEnd() );
+    for( it = list.constBegin(); it != end; ++it)
         sl.append( (*it).toString() );
     ::KexiDB::FieldList* fl = m_fieldlist->subList(sl);
     return fl ? new Kross::KexiDB::KexiDBFieldList(fl) : 0;

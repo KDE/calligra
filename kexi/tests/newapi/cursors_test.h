@@ -1,3 +1,6 @@
+#ifndef CURSORS_TEST_H
+#define CURSORS_TEST_H
+
 int tablesTest();
 
 int cursorsTest()
@@ -33,4 +36,6 @@ int cursorsTest()
 
 	return 0;
 }
+
+#endif
 

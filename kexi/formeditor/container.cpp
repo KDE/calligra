@@ -159,7 +159,7 @@ Container::eventFilter(QObject *s, QEvent *e)
 
 			kdDebug() << "QEvent::MouseButtonPress sender object = " << s->name()
 				<< "of type " << s->className() << endl;
-			kdDebug() << "QEvent::MouseButtonPress this          = " << this->name() << endl;
+			kdDebug() << "QEvent::MouseButtonPress this          = " << name() << endl;
 
 			m_moving = static_cast<QWidget*>(s);
 			QMouseEvent *mev = static_cast<QMouseEvent*>(e);

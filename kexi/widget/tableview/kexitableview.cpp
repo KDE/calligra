@@ -1877,7 +1877,8 @@ void KexiTableView::contentsDragMoveEvent(QDragMoveEvent *e)
 	}
 	else
 		e->acceptAction(false);
-/*	for(QStringList::Iterator it = d->dropFilters.begin(); it != d->dropFilters.end(); it++)
+/*	QStringList::ConstIterator it, end( d->dropFilters.constEnd() ); 
+	for( it = d->dropFilters.constBegin(); it != end; it++)
 	{
 		if(e->provides((*it).latin1()))
 		{
@@ -1962,7 +1963,7 @@ void KexiTableView::slotColumnWidthChanged( int, int, int )
 	viewport()->setUpdatesEnabled(true);
 	if (contentsWidth() < w) {
 		updateContents(contentsX(), 0, viewport()->width(), contentsHeight());
-//		repaintContents( s.width(), 0, w - s.width() + 1, contentsHeight(), TRUE );
+//		repaintContents( s.width(), 0, w - s.width() + 1, contentsHeight(), true );
 	} 
 	else {
 	//	updateContents( columnPos(col), 0, contentsWidth(), contentsHeight() );
@@ -2332,13 +2333,13 @@ void KexiTableView::maximizeColumnsWidth( const QValueList<int> &columnList )
 	if (width() <= d->pTopHeader->headerWidth())
 		return;
 	//sort the list and make it unique
-	QValueList<int>::const_iterator it;
 	QValueList<int> cl, sortedList = columnList;
 	qHeapSort(sortedList);
 	int i=-999;
 
-	for (it=sortedList.constBegin(); it!=sortedList.end(); ++it) {
-		if (i!=(*it)) {
+	QValueList<int>::ConstIterator it, end( sortedList.constEnd() );
+	for ( it = sortedList.constBegin(); it != end; ++it) {
+		if (i != (*it)) {
 			cl += (*it);
 			i = (*it);
 		}
@@ -2347,7 +2348,8 @@ void KexiTableView::maximizeColumnsWidth( const QValueList<int> &columnList )
 	int sizeToAdd = (width() - d->pTopHeader->headerWidth()) / cl.count() - verticalHeader()->width();
 	if (sizeToAdd<=0)
 		return;
-	for (it=cl.constBegin(); it!=cl.end(); ++it) {
+	end = cl.constEnd();
+	for ( it = cl.constBegin(); it != end; ++it) {
 		int w = d->pTopHeader->sectionSize(*it);
 		if (w>0) {
 			d->pTopHeader->resizeSection(*it, w+sizeToAdd);

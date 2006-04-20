@@ -17,6 +17,9 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#ifndef TABLEVIEW_TEST_H
+#define TABLEVIEW_TEST_H
+
 #include <widget/kexidatatableview.h>
 #include <kexidb/cursor.h>
 
@@ -52,4 +55,6 @@ int tableViewTest()
 
 	return 0;
 }
+
+#endif
 

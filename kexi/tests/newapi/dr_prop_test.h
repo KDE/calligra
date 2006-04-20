@@ -1,3 +1,6 @@
+#ifndef DR_PROP_TEST_H
+#define DR_PROP_TEST_H
+
 int drPropTest()
 {
 	QValueList<QCString> names = driver->propertyNames();
@@ -14,4 +17,6 @@ int drPropTest()
 
 	return 0;
 }
+
+#endif
 

@@ -85,8 +85,8 @@ QValidator::State MultiValidator::validate( QString & input, int & pos ) const
 	if (m_subValidators.isEmpty())
 		return Invalid;
 	State s;
-	QValueList<Validator*>::const_iterator it;
-	for ( it=m_subValidators.constBegin(); it!=m_subValidators.constEnd(); ++it) {
+	QValueList<Validator*>::ConstIterator it, end( m_subValidators.constEnd() );
+	for ( it = m_subValidators.constBegin(); it != end; ++it) {
 		s = (*it)->validate(input, pos);
 		if (s==Intermediate || s==Invalid)
 			return s;
@@ -96,8 +96,8 @@ QValidator::State MultiValidator::validate( QString & input, int & pos ) const
 
 void MultiValidator::fixup ( QString & input ) const
 {
-	QValueList<Validator*>::const_iterator it;
-	for ( it=m_subValidators.constBegin(); it!=m_subValidators.constEnd(); ++it) {
+	QValueList<Validator*>::ConstIterator it, end( m_subValidators.constEnd() );
+	for ( it = m_subValidators.constBegin(); it != end; ++it) {
 		(*it)->fixup(input);
 	}
 }
@@ -110,8 +110,8 @@ Validator::Result MultiValidator::internalCheck(
 		return Error;
 	Result r;
 	bool warning = false;
-	QValueList<Validator*>::const_iterator it;
-	for ( it=m_subValidators.begin(); it!=m_subValidators.end(); ++it) {
+	QValueList<Validator*>::ConstIterator it, end( m_subValidators.end() );
+	for ( it=m_subValidators.begin(); it!=end; ++it) {
 		r = (*it)->internalCheck(valueName, v, message, details);
 		if (r==Error)
 			return Error;

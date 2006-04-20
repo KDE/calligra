@@ -123,8 +123,8 @@ void KexiScriptDesignView::updateProperties()
         // if interpreter isn't defined or invalid, try to fallback.
         QStringList list;
         list << "python" << "ruby";
-        QStringList::Iterator it( list.begin() );
-        while( (! info) && (it != list.end()) ) {
+        QStringList::ConstIterator it( list.constBegin() ), end( list.constEnd() );
+        while( (! info) && (it != end) ) {
             interpretername = (*it);
             info = manager->getInterpreterInfo(interpretername);
             if(info)
@@ -152,8 +152,8 @@ void KexiScriptDesignView::updateProperties()
         d->properties->addProperty(prop);
 
         Kross::Api::InterpreterInfo::Option::Map options = info->getOptions();
-        Kross::Api::InterpreterInfo::Option::Map::Iterator it( options.begin() );
-        for(; it != options.end(); ++it) {
+        Kross::Api::InterpreterInfo::Option::Map::ConstIterator it, end( options.constEnd() );
+        for( it = options.constBegin(); it != end; ++it) {
             Kross::Api::InterpreterInfo::Option* option = it.data();
             KoProperty::Property* prop = new KoProperty::Property(
                     it.key().latin1(), // name
@@ -263,8 +263,8 @@ bool KexiScriptDesignView::loadData()
         d->scriptaction->setInterpreterName(interpretername);
 
         Kross::Api::InterpreterInfo::Option::Map options = info->getOptions();
-        Kross::Api::InterpreterInfo::Option::Map::Iterator it = options.begin();
-        for(; it != options.end(); ++it) {
+        Kross::Api::InterpreterInfo::Option::Map::ConstIterator it, end = options.constEnd();
+        for( it = options.constBegin(); it != end; ++it) {
             QString value = scriptelem.attribute( it.data()->name );
             if(! value.isNull()) {
                 QVariant v(value);
@@ -316,7 +316,8 @@ tristate KexiScriptDesignView::storeData(bool /*dontAsk*/)
     if(info) {
         Kross::Api::InterpreterInfo::Option::Map defoptions = info->getOptions();
         QMap<QString, QVariant>& options = d->scriptaction->getOptions();
-        for(QMap<QString, QVariant>::Iterator it = options.begin(); it != options.end(); ++it) {
+	QMap<QString, QVariant>::ConstIterator it, end( options.constEnd() );
+        for( it = options.constBegin(); it != end; ++it) {
             if( defoptions.contains(it.key()) ) { // only remember options which the InterpreterInfo knows about...
                 scriptelem.setAttribute(it.key(), it.data().toString());
             }

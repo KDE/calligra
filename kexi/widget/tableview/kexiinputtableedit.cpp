@@ -252,7 +252,8 @@ kdDebug() << "KexiInputTableEdit::setRestrictedCompletion()" << endl;
 	m_cview->useGlobalKeyBindings();
 
 	QStringList newC;
-	for(QStringList::Iterator it = m_comp.begin(); it != m_comp.end(); ++it)
+	QStringList::ConstIterator it, end( m_comp.constEnd() );
+	for( it = m_comp.constBegin(); it != end; ++it)
 	{
 		if((*it).startsWith(m_cview->text()))
 			newC.append(*it);
