@@ -491,6 +491,13 @@ bool KHTMLReader::parse_table(DOM::Element e) {
  	int has_borders=false;
 	QColor bgcolor=parsecolor("#FFFFFF");
  	DOM::Element table_body=e.firstChild();
+	if(table_body.isNull()) {
+ 		// If the table_body is empty, we don't continue cause else
+ 		// KHTML will throw a DOM::DOMException if we try to access
+ 		// the null element.
+ 		return true;
+	}
+
  	if (!table_body.getAttribute("bgcolor").string().isEmpty())
  	       bgcolor=parsecolor(table_body.getAttribute("bgcolor").string());
  	if ((e.getAttribute("border").string().toInt() > 0))
