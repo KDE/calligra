@@ -23,6 +23,7 @@
 #include <q3asciidict.h>
 
 class KAction;
+#include <kexi_export.h>
 
 //! The KexiSharedActionClient is an interface using application-wide (shared) actions.
 /** See KexiTableView for example usage. 

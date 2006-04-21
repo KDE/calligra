@@ -25,6 +25,7 @@
 //Added by qt3to4:
 #include <QLabel>
 #include <QEvent>
+#include <kexi_export.h>
 
 class QToolButton;
 class QIntValidator;

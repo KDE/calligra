@@ -31,6 +31,7 @@
 
 #include <kimageeffect.h>
 #include <kpixmap.h>
+#include <kexi_export.h>
 
 #define REBUILD_DELAY 100
 

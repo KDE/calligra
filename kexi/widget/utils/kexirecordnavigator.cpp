@@ -120,7 +120,7 @@ KexiRecordNavigator::KexiRecordNavigator(QWidget *parent, int leftMargin, const 
 	lbl_of->setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Preferred);
 	lbl_of->setMaximumWidth(fm.width(lbl_of->text())+8);
 	lbl_of->setReadOnly(true);
-	lbl_of->setLineWidth(0);
+	//lbl_of->setLineWidth(0); // ### Qt4 TODO
 	lbl_of->setFocusPolicy(Qt::NoFocus);
 	lbl_of->setAlignment(Qt::AlignCenter);
 	d->lyr->addWidget( lbl_of );
@@ -128,7 +128,7 @@ KexiRecordNavigator::KexiRecordNavigator(QWidget *parent, int leftMargin, const 
 	d->lyr->addWidget( m_navRecordCount = new KLineEdit(this) );
 	m_navRecordCount->setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Preferred);
 	m_navRecordCount->setReadOnly(true);
-	m_navRecordCount->setLineWidth(0);
+	//m_navRecordCount->setLineWidth(0); // ### Qt4 TODO
 	m_navRecordCount->setFocusPolicy(Qt::NoFocus);
 	m_navRecordCount->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
 	m_navRecordCount->setToolTip( i18n("Number of rows"));
