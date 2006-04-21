@@ -1905,6 +1905,8 @@ CellFormatPageProtection::CellFormatPageProtection( QWidget* parent, CellFormatD
     m_dlg( _dlg )
 {
   setupUi(this);
+  connect(m_bHideAll, SIGNAL(toggled(bool)), m_bIsProtected, SLOT(setDisabled(bool)));
+  connect(m_bHideAll, SIGNAL(toggled(bool)), m_bHideFormula, SLOT(setDisabled(bool)));
 
   m_bDontPrint->setChecked( m_dlg->bDontPrintText );
   m_bHideAll->setChecked( m_dlg->bHideAll );
@@ -2257,6 +2259,8 @@ CellFormatPagePosition::CellFormatPagePosition( QWidget* parent, CellFormatDialo
     dlg( _dlg )
 {
     setupUi(this);
+    connect(angleRotation, SIGNAL(valueChanged(int)), spinBox3, SLOT(setValue(int)));
+    connect(spinBox3, SIGNAL(valueChanged(int)), angleRotation, SLOT(setValue(int)));
 
     if ( dlg->alignX == Style::Left )
         left->setChecked( true );
