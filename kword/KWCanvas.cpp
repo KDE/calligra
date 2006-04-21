@@ -1466,8 +1466,9 @@ void KWCanvas::insertPart( const KoDocumentEntry &entry )
 
 void KWCanvas::contentsDragEnterEvent( QDragEnterEvent *e )
 {
-    int provides = KWView::checkClipboard( e );
-    if ( ( provides & KWView::ProvidesImage ) || K3URLDrag::canDecode( e ) )
+    const QMimeData* mimeData = e->mimeData();
+    const int provides = KWView::checkClipboard( mimeData );
+    if ( ( provides & KWView::ProvidesImage ) || KUrl::List::canDecode( mimeData ) )
     {
         m_imageDrag = true;
         e->acceptAction();
@@ -1516,14 +1517,14 @@ void KWCanvas::contentsDropEvent( QDropEvent *e )
     QPoint normalPoint = m_viewMode->viewToNormal( e->pos() );
     KoPoint docPoint = m_doc->unzoomPoint( normalPoint );
 
-    if ( Q3ImageDrag::canDecode( e ) ) {
-        pasteImage( e, docPoint );
-    } else if ( K3URLDrag::canDecode( e ) ) {
+    const QMimeData* mimeData = e->mimeData();
+    if ( mimeData->hasImage() ) {
+        pasteImage( mimeData, docPoint );
+    } else if ( KUrl::List::canDecode( mimeData ) ) {
 
         // TODO ask (with a popupmenu) between inserting a link and inserting the contents
 
-        KUrl::List lst;
-        K3URLDrag::decode( e, lst );
+        const KUrl::List lst = KUrl::List::fromMimeData( mimeData );
 
         KUrl::List::ConstIterator it = lst.begin();
         for ( ; it != lst.end(); ++it ) {
@@ -1554,16 +1555,15 @@ void KWCanvas::contentsDropEvent( QDropEvent *e )
         if ( m_currentFrameSetEdit )
             m_currentFrameSetEdit->dropEvent( e, normalPoint, docPoint, m_gui->getView() );
         else
-            m_gui->getView()->pasteData( e, true );
+            m_gui->getView()->pasteData( mimeData, true );
     }
     m_mousePressed = false;
     m_imageDrag = false;
 }
 
-void KWCanvas::pasteImage( QMimeSource *e, const KoPoint &docPoint )
+void KWCanvas::pasteImage( QMimeData *mimeData, const KoPoint &docPoint )
 {
-    QImage i;
-    Q3ImageDrag::decode(e, i);
+    QImage i = mimeData->imageData().value<QImage>();
     KTempFile tmpFile( QString::null, ".png");
     tmpFile.setAutoDelete( true );
     i.save(tmpFile.name(), "PNG");

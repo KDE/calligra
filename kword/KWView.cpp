@@ -1744,8 +1744,8 @@ void KWView::clipboardDataChanged()
         m_actionEditPaste->setEnabled(true);
         return;
     }
-    QMimeSource *data = QApplication::clipboard()->data();
-    const int provides = checkClipboard( data );
+    QMimeData *mimeData = QApplication::clipboard()->mimeData();
+    const int provides = checkClipboard( mimeData );
     if ( provides & ( ProvidesImage | ProvidesOasis | ProvidesFormula ) )
         m_actionEditPaste->setEnabled( true );
     else
@@ -1755,33 +1755,17 @@ void KWView::clipboardDataChanged()
     }
 }
 
-int KWView::checkClipboard( QMimeSource *data )
+int KWView::checkClipboard( QMimeData *data )
 {
     int provides = 0;
-    Q3ValueList<Q3CString> formats;
-    const char* fmt;
-    for (int i=0; (fmt = data->format(i)); i++)
-        formats.append( Q3CString( fmt ) );
 
-#if 0 // not needed anymore
-    // QImageDrag::canDecode( data ) is very very slow in Qt 2 (n*m roundtrips)
-    // Workaround....
-    Q3StrList fileFormats = QImageIO::inputFormats();
-    for ( fileFormats.first() ; fileFormats.current() && !provides ; fileFormats.next() )
-    {
-        Q3CString format = fileFormats.current();
-        Q3CString type = "image/" + format.lower();
-        if ( ( formats.findIndex( type ) != -1 ) )
-            provides |= ProvidesImage;
-    }
-#endif
-    if ( Q3ImageDrag::canDecode( data ) )
+    if ( data->hasImage() )
         provides |= ProvidesImage;
-    if ( formats.findIndex( KFormula::MimeSource::selectionMimeType() ) != -1 )
+    if ( data->hasFormat( KFormula::MimeSource::selectionMimeType() ) )
         provides |= ProvidesFormula;
-    if ( formats.findIndex( "text/plain" ) != -1 )
+    if ( data->hasText() )
         provides |= ProvidesPlainText;
-    Q3CString returnedTypeMime = KoTextObject::providesOasis( data );
+    QString returnedTypeMime = KoTextObject::providesOasis( data );
     if ( !returnedTypeMime.isEmpty() )
         provides |= ProvidesOasis;
     //kDebug(32001) << "KWView::checkClipboard provides=" << provides << endl;
@@ -2409,24 +2393,24 @@ void KWView::editCopy()
 
 void KWView::editPaste()
 {
-    QMimeSource *data = QApplication::clipboard()->data();
-    pasteData( data, false );
+    QMimeData *mimeData = QApplication::clipboard()->mimeData();
+    pasteData( mimeData, false );
 }
 
 // paste or drop
-void KWView::pasteData( QMimeSource* data, bool drop )
+void KWView::pasteData( const QMimeData* mimeData, bool drop )
 {
-    int provides = checkClipboard( data );
+    int provides = checkClipboard( mimeData );
     Q_ASSERT( provides != 0 );
 
     // formula must be the first as a formula is also available as image
     if ( provides & ProvidesFormula ) {
         KWFrameSetEdit * edit = m_gui->canvasWidget()->currentFrameSetEdit();
         if ( edit && edit->frameSet()->type() == FT_FORMULA ) {
-            edit->pasteData( data, ProvidesFormula, drop );
+            edit->pasteData( mimeData, ProvidesFormula, drop );
         }
         else {
-            insertFormula( data );
+            insertFormula( mimeData );
         }
     }
     else // pasting text and/or frames
@@ -2445,18 +2429,18 @@ void KWView::pasteData( QMimeSource* data, bool drop )
             if ( result == list.first() )
             {
                 provides = ProvidesImage;
-                data = QApplication::clipboard()->data();
+                mimeData = QApplication::clipboard()->mimeData();
             }
         }
         KWTextFrameSetEdit * edit = currentTextEdit();
         if ( edit && ( provides & ProvidesPlainText ) ) {
-            edit->pasteData( data, provides, drop );
+            edit->pasteData( mimeData, provides, drop );
         } else if ( provides & ProvidesOasis ) {
             // Not editing a frameset? We can't paste plain text then... only entire frames.
-            Q3CString returnedTypeMime = KoTextObject::providesOasis( data );
+            QString returnedTypeMime = KoTextObject::providesOasis( mimeData );
             if ( !returnedTypeMime.isEmpty() )
             {
-                QByteArray arr = data->encodedData( returnedTypeMime );
+                QByteArray arr = mimeData->data( returnedTypeMime );
                 if( !arr.isEmpty() )
                 {
                     QBuffer buffer( &arr );
@@ -2490,7 +2474,7 @@ void KWView::pasteData( QMimeSource* data, bool drop )
         { // providesImage, must be after providesOasis
             KoPoint docPoint( m_currentPage->leftMargin(),
                     m_currentPage->offsetInDocument() + m_currentPage->topMargin());
-            m_gui->canvasWidget()->pasteImage( data, docPoint );
+            m_gui->canvasWidget()->pasteImage( mimeData, docPoint );
         }
     }
 }
@@ -4121,15 +4105,15 @@ void KWView::insertTable()
     delete tableDia;
 }
 
-void KWView::insertFormula( QMimeSource* source )
+void KWView::insertFormula( QMimeData* mimeData )
 {
     KWTextFrameSetEdit *edit = currentTextEdit();
     if (edit)
     {
         KWFormulaFrameSet *frameset = new KWFormulaFrameSet( m_doc, QString::null );
         m_doc->addFrameSet( frameset, false ); // done first since the frame number is stored in the undo/redo
-        if ( source ) {
-            QByteArray data = source->encodedData( KFormula::MimeSource::selectionMimeType() );
+        if ( mimeData ) {
+            const QByteArray data = mimeData->data( KFormula::MimeSource::selectionMimeType() );
             QDomDocument formula;
             formula.setContent( data );
             QDomElement formulaElem = formula.namedItem("KFORMULA").toElement();

@@ -429,7 +429,7 @@ void KWFormulaFrameSetEdit::paste(QClipboard::Mode mode)
     formulaView->getDocument()->paste();
 }
 
-void KWFormulaFrameSetEdit::pasteData( QMimeSource* /*data*/, int /*provides*/, bool )
+void KWFormulaFrameSetEdit::pasteData( const QMimeData* /*data*/, int /*provides*/, bool )
 {
     paste(); // TODO use data, for DnD
 }

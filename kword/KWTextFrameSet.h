@@ -473,8 +473,8 @@ public:
     /// Called by KWView when using the action
     void openLink();
 
-    void pasteData( QMimeSource* data, int provides, bool drop );
-    KCommand* pasteOasisCommand( QMimeSource* data );
+    void pasteData( const QMimeData* data, int provides, bool drop );
+    KCommand* pasteOasisCommand( const QMimeData* data );
 
     /**
      * Return the requested border of the paragraph that the cursor currently is in.

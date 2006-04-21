@@ -202,7 +202,7 @@ public:
         ProvidesOasis = 4,
         ProvidesFormula = 8
     };
-    static int checkClipboard( QMimeSource *data );
+    static int checkClipboard( QMimeData *data );
 
     bool insertInlinePicture();
 
@@ -234,7 +234,7 @@ public:
     int tableDeleteRow(const Q3ValueList<uint>& rows, KWTableFrameSet *table = 0);
     int tableDeleteCol(const Q3ValueList<uint>& cols, KWTableFrameSet *table = 0);
 
-    void pasteData( QMimeSource* data, bool drop );
+    void pasteData( const QMimeData* data, bool drop );
 
     KWFrameViewManager* frameViewManager() const;
 
@@ -293,7 +293,7 @@ public slots:
     void extraCreateTemplate();
 
     void toolsCreateText();
-    void insertFormula( QMimeSource* source=0 );
+    void insertFormula( QMimeData* source=0 );
     void toolsPart();
 
     void tableProperties();
@@ -450,7 +450,6 @@ public slots:
 
     // Document Structure Area popup menu.
     void docStructEdit();
-    void docStructSpeak();
     void docStructSelect();
     void docStructDelete();
     void docStructProperties();

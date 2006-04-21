@@ -4,7 +4,7 @@ add_subdirectory( kabc )
 add_subdirectory( kspread )
 
 message(STATUS "${CMAKE_CURRENT_SOURCE_DIR}: skipped subdir $(SQLDIRECTORY)")
-include_directories( ${CMAKE_SOURCE_DIR}/lib/kformula ${CMAKE_SOURCE_DIR}/kword ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
+include_directories( ${CMAKE_SOURCE_DIR}/lib/kformula ${CMAKE_SOURCE_DIR}/kword ${KOTEXT_INCLUDES} ${KOFFICEUI_INCLUDES} )
 
 
 ########### next target ###############

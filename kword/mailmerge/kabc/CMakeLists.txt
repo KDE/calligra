@@ -1,6 +1,6 @@
 kde4_header()
 
-include_directories( ${CMAKE_SOURCE_DIR}/lib/kformula ${CMAKE_SOURCE_DIR}/kword ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
+include_directories( ${CMAKE_SOURCE_DIR}/lib/kformula ${CMAKE_SOURCE_DIR}/kword ${KOTEXT_INCLUDES} ${KOFFICEUI_INCLUDES} )
 
 
 ########### next target ###############
@@ -15,7 +15,7 @@ kde4_add_plugin(kwmailmerge_kabc ${kwmailmerge_kabc_PART_SRCS})
 
 kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kwmailmerge_kabc )
 
-target_link_libraries(kwmailmerge_kabc  ${KDE4_KDECORE_LIBS} kwmailmerge_interface ${KDE4_KDEUI_LIBS} )
+target_link_libraries(kwmailmerge_kabc ${KDE4_KDEUI_LIBS} kwmailmerge_interface kabc )
 
 install_targets(${PLUGIN_INSTALL_DIR} kwmailmerge_kabc )
 

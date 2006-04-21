@@ -3157,12 +3157,12 @@ void KWTextFrameSetEdit::slotFrameDeleted( KWFrame *frm )
 
 void KWTextFrameSetEdit::paste(QClipboard::Mode mode)
 {
-    QMimeSource *data = QApplication::clipboard()->data(mode);
+    QMimeData *data = QApplication::clipboard()->mimeData(mode);
     int provides = KWView::checkClipboard( data );
     pasteData( data, provides, false );
 }
 
-void KWTextFrameSetEdit::pasteData( QMimeSource* data, int provides, bool drop )
+void KWTextFrameSetEdit::pasteData( const QMimeData* data, int provides, bool drop )
 {
     if ( provides & KWView::ProvidesOasis )
     {
@@ -3193,13 +3193,13 @@ void KWTextFrameSetEdit::pasteData( QMimeSource* data, int provides, bool drop )
     }
 }
 
-KCommand* KWTextFrameSetEdit::pasteOasisCommand( QMimeSource* data )
+KCommand* KWTextFrameSetEdit::pasteOasisCommand( const QMimeData* mimeData )
 {
     // Find which mimetype it was (could be oasis text, oasis presentation etc.)
-    Q3CString returnedTypeMime = KoTextObject::providesOasis( data );
+    QString returnedTypeMime = KoTextObject::providesOasis( mimeData );
     if ( !returnedTypeMime.isEmpty() )
     {
-        QByteArray arr = data->encodedData( returnedTypeMime );
+        QByteArray arr = mimeData->data( returnedTypeMime );
         Q_ASSERT( !arr.isEmpty() );
         if ( arr.size() )
             return textFrameSet()->pasteOasis( cursor(), arr, true );
@@ -3586,7 +3586,8 @@ void KWTextFrameSetEdit::mouseDoubleClickEvent( QMouseEvent *e, const QPoint &, 
 
 void KWTextFrameSetEdit::dragEnterEvent( QDragEnterEvent * e )
 {
-    int provides = KWView::checkClipboard( e );
+    const QMimeData* mimeData = e->mimeData();
+    int provides = KWView::checkClipboard( mimeData );
     if ( !frameSet()->kWordDocument()->isReadWrite() || provides == 0 )
     {
         e->ignore();
@@ -3597,7 +3598,8 @@ void KWTextFrameSetEdit::dragEnterEvent( QDragEnterEvent * e )
 
 void KWTextFrameSetEdit::dragMoveEvent( QDragMoveEvent * e, const QPoint &nPoint, const KoPoint & )
 {
-    int provides = KWView::checkClipboard( e );
+    const QMimeData* mimeData = e->mimeData();
+    int provides = KWView::checkClipboard( mimeData );
     if ( !frameSet()->kWordDocument()->isReadWrite() || provides == 0 )
     {
         e->ignore();
@@ -3625,7 +3627,8 @@ void KWTextFrameSetEdit::dragLeaveEvent( QDragLeaveEvent * )
 
 void KWTextFrameSetEdit::dropEvent( QDropEvent * e, const QPoint & nPoint, const KoPoint &, KWView* view )
 {
-    int provides = KWView::checkClipboard( e );
+    const QMimeData* mimeData = e->mimeData();
+    int provides = KWView::checkClipboard( mimeData );
     if ( frameSet()->kWordDocument()->isReadWrite() && provides )
     {
         e->acceptAction();
@@ -3650,7 +3653,7 @@ void KWTextFrameSetEdit::dropEvent( QDropEvent * e, const QPoint & nPoint, const
                 KMacroCommand* macroCmd = new KMacroCommand( i18n( "Move Text" ) );
                 macroCmd->addCommand(cmd);
 
-                cmd = pasteOasisCommand( e );
+                cmd = pasteOasisCommand( mimeData );
                 if ( cmd )
                     macroCmd->addCommand(cmd);
                 //relayout textframeset after a dnd otherwise autoextend
@@ -3667,7 +3670,7 @@ void KWTextFrameSetEdit::dropEvent( QDropEvent * e, const QPoint & nPoint, const
         }
 
         // The cursor is already correctly positioned, all we need to do is to "paste" the dropped data.
-        view->pasteData( e, true );
+        view->pasteData( mimeData, true );
     }
 }
 

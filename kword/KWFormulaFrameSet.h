@@ -149,7 +149,7 @@ public:
     virtual void copy();
     virtual void cut();
     virtual void paste(QClipboard::Mode mode = QClipboard::Clipboard);
-    virtual void pasteData( QMimeSource* data, int provides, bool drop );
+    virtual void pasteData( const QMimeData* data, int provides, bool drop );
     virtual void selectAll();
 
     /** Moves the cursor to the first position */

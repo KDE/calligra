@@ -46,7 +46,7 @@ class QDragMoveEvent;
 class QDropEvent;
 class QInputMethodEvent;
 class QKeyEvent;
-class QMimeSource;
+class QMimeData;
 class QMouseEvent;
 class QPainter;
 class QPoint;
@@ -107,7 +107,7 @@ public:
      */
     virtual void paste(QClipboard::Mode mode = QClipboard::Clipboard) {}
     virtual void selectAll() {}
-    virtual void pasteData( QMimeSource* /*data*/, int /*provides*/, bool /*drop*/ ) {}
+    virtual void pasteData( const QMimeData* /*data*/, int /*provides*/, bool /*drop*/ ) {}
 
 
     /// Called if the cursor tries to leave the frameset at its beginning.

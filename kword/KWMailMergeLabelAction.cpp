@@ -92,12 +92,12 @@ protected:
     void leaveEvent( QEvent* ) {};
 #if 0
     void dragEnterEvent( QDragEnterEvent *ev ) {
-        if ( m_mw && KURLDrag::canDecode( ev ) )
+        if ( m_mw && KURL::List::canDecode( ev->mimeData() ) )
             ev->acceptAction();
     }
     void dropEvent( QDropEvent* ev ) {
-        KUrl::List lst;
-        if ( m_mw && KURLDrag::decode( ev, lst ) ) {
+        KUrl::List lst = KUrl::List::fromMimeData( ev->mimeData() );
+        if ( m_mw && !lst.isEmpty() ) {
             m_mw->openURL( 0L, lst.first() );
         }
     }
