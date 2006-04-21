@@ -1,12 +1,12 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KSpread" version="30">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KSpread" version="31">
 <MenuBar>
  <Menu name="file"><text>&amp;File</text>
   <Separator/>
   <Action name="createTemplate"/>
  </Menu>
  <Menu name="Edit"><text>&amp;Edit</text>
-  <Action name="koffice_undo"/>
-  <Action name="koffice_redo"/>
+  <Action name="edit_undo"/>
+  <Action name="edit_redo"/>
   <Separator/>
   <Action name="cut"/>
   <Action name="copy"/>
@@ -18,7 +18,7 @@
         <Action name="fillRight"/>
         <Action name="fillUp"/>
         <Action name="fillLeft"/>
-  </Menu>      
+  </Menu>
   <Separator/>
   <Action name="edit_find"/>
   <Action name="edit_find_next"/>
@@ -52,7 +52,7 @@
  </Menu>
  <Menu name="Insert"><text>&amp;Insert</text>
   <Action name="menuInserteheet"/>
-  <Separator/>       
+  <Separator/>
   <Menu name="Comment"><text>Cell Commen&amp;t</text>
     <Action name="addmodifycomment"/>
     <Action name="showcomment"/>
@@ -63,7 +63,7 @@
   <Action name="series"/>
   <Action name="insertHyperlink"/>
   <Action name="insertSpecialChar"/>
-  <Separator/>       
+  <Separator/>
   <Action name="insertPart"/>
   <Action name="insertChart"/>
   <Action name="insertPicture"/>
@@ -72,7 +72,7 @@
     <Action name="insertFromDatabase"/>
     <Action name="insertFromTextfile"/>
     <Action name="insertFromClipboard"/>
-  </Menu>        
+  </Menu>
  </Menu>
  <Menu name="Format"><text>F&amp;ormat</text>
   <Action name="cellLayout"/>
@@ -105,9 +105,9 @@
   </Menu>
   <Separator/>
   <Action name="sheetFormat"/>
-  <Action name="styles"/>  
+  <Action name="styles"/>
   <Action name="stylemenu"/>
-  <Action name="createStyle"/>        
+  <Action name="createStyle"/>
   <Separator/>
   <Action name="paperLayout"/>
   <Menu name="Comment"><text>&amp;Print Range</text>
@@ -167,8 +167,8 @@
  <Action name="menu_sum"/>
 </Menu>
 <ToolBar fullWidth="true" name="editAndColumnAndSortAndPartToolBar"><text>Edit</text>
- <Action name="koffice_undo"/>
- <Action name="koffice_redo"/>
+ <Action name="edit_undo"/>
+ <Action name="edit_redo"/>
  <Separator/>
  <Action name="cut"/>
  <Action name="copy"/>
