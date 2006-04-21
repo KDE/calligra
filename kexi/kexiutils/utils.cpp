@@ -168,7 +168,7 @@ void KexiUtils::serializeMap(const QMap<QString,QString>& map, QString& string)
 	}
 }
 
-QMap<QString,QString> KexiUtils::deserializeMap(const QByteArray& array)
+QMap<QString,QString> KexiUtils::deserializeMap(QByteArray& array)
 {
 	QMap<QString,QString> map;
 	QDataStream ds( &array,QIODevice::ReadOnly);
@@ -201,13 +201,13 @@ QString KexiUtils::stringToFileName(const QString& string)
 
 void KexiUtils::simpleCrypt(QString& string)
 {
-	for (uint i=0; i<string.length(); i++)
+	for (int i=0; i<string.length(); i++)
 		string[i] = QChar( string[i].unicode() + 47 + i );
 }
 
 void KexiUtils::simpleDecrypt(QString& string)
 {
-	for (uint i=0; i<string.length(); i++)
+	for (int i=0; i<string.length(); i++)
 		string[i] = QChar( string[i].unicode() - 47 - i );
 }
 

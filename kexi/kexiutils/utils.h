@@ -131,7 +131,7 @@ namespace KexiUtils
 
 	/*! \return a map deserialized from a byte array \a array.
 	 \a array need to contain data previously serialized using KexiUtils::serializeMap(). */
-	KEXIUTILS_EXPORT QMap<QString,QString> deserializeMap(const QByteArray& array);
+	KEXIUTILS_EXPORT QMap<QString,QString> deserializeMap( QByteArray& array);
 
 	/*! \return a map deserialized from \a string.
 	 \a string need to contain data previously serialized using KexiUtils::serializeMap(). */
