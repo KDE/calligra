@@ -21,7 +21,6 @@
 #include "KWView.h"
 
 #include <klocale.h>
-#include <klineeditdlg.h>
 #include <kdebug.h>
 #include <kstandarddirs.h>
 

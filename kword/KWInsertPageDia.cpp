@@ -20,25 +20,26 @@
 
 
 #include "KWInsertPageDia.h"
+
+#include <kvbox.h>
 #include <klocale.h>
+
 #include <qradiobutton.h>
-#include <q3groupbox.h>
+#include <qgroupbox.h>
 #include <qlayout.h>
-#include <q3buttongroup.h>
-#include <q3vbox.h>
 
 KWInsertPageDia::KWInsertPageDia( QWidget *parent, const char* name )
     : KDialogBase( parent, name, true, i18n("Insert Page"), Ok|Cancel )
 {
     KVBox *page = makeVBoxMainWidget();
 
-    Q3ButtonGroup *grp = new Q3ButtonGroup( 1, Qt::Horizontal, i18n( "Insert Page" ),page );
-    grp->setRadioButtonExclusive( true );
-    grp->layout();
+    QGroupBox *grp = new QGroupBox( i18n( "Insert Page" ), page );
+    QHBoxLayout* grpLayout = new QHBoxLayout( grp );
     m_after = new QRadioButton( i18n("After"), grp );
+    grpLayout->addWidget( m_after );
     m_before = new QRadioButton( i18n("Before"), grp );
+    grpLayout->addWidget( m_before );
 
-    grp->setRadioButtonExclusive( true );
     m_after->setChecked( true );
     resize( 200, 150 );
     setFocus();

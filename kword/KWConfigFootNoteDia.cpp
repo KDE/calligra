@@ -80,22 +80,24 @@ void KWConfigFootNoteDia::setupTab3()
     page->setWhatsThis( comment);
     Q3VBoxLayout *pageLayout= new Q3VBoxLayout( page, 0, KDialog::spacingHint());
 
-    Q3ButtonGroup *positionGroupBox = new Q3ButtonGroup( i18n( "Position"), page );
+    QGroupBox *positionGroupBox = new QGroupBox( i18n( "Position"), page );
     comment= i18n ("The separator can be positioned horizontally by picking one "
         "of the three alignments.");
     positionGroupBox->setWhatsThis( comment);
-    positionGroupBox->setColumnLayout(0, Qt::Vertical );
-    Q3VBoxLayout *positionLayout = new Q3VBoxLayout( positionGroupBox->layout() );
+    QVBoxLayout *positionLayout = new QVBoxLayout( positionGroupBox );
     positionLayout->setAlignment( Qt::AlignTop );
 
     // i18n context information necessary for gender considerations (e.g. in Polish)
-    rbPosLeft = new QRadioButton( i18nc("Position", "Left"), positionGroupBox, "rbPosLeft" );
+    rbPosLeft = new QRadioButton( i18nc("Position", "Left"), positionGroupBox );
+    rbPosLeft->setObjectName( "rbPosLeft" );
     positionLayout->addWidget( rbPosLeft );
 
-    rbPosCentered = new QRadioButton( i18nc("Position", "Centered"), positionGroupBox, "rbPosCentered" );
+    rbPosCentered = new QRadioButton( i18nc("Position", "Centered"), positionGroupBox );
+    rbPosCentered->setObjectName( "rbPosCentered" );
     positionLayout->addWidget( rbPosCentered );
 
-    rbPosRight = new QRadioButton( i18nc("Position", "Right"), positionGroupBox, "rbPosRight" );
+    rbPosRight = new QRadioButton( i18nc("Position", "Right"), positionGroupBox );
+    rbPosRight->setObjectName( "rbPosRight" );
     positionLayout->addWidget( rbPosRight );
     pageLayout->addWidget( positionGroupBox );
     switch( m_doc->footNoteSeparatorLinePosition() ) {
