@@ -144,7 +144,7 @@ QColor KexiUtils::bleachedColor(const QColor& c, int factor)
 	return c2;
 }
 
-void KexiUtils::serializeMap(const QMap<QString,QString>& map, QByteArray& array)
+void KexiUtils::serializeMap(const QMap<QString,QString>& map, const QByteArray& array)
 {
 	QDataStream ds(array, IO_WriteOnly);
 	ds << map;

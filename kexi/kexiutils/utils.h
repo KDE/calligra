@@ -127,7 +127,7 @@ namespace KexiUtils
 
 	/*! Serializes \a map to \a array.
 	 KexiUtils::deserializeMap() can be used to deserialize this array back to map. */
-	KEXIUTILS_EXPORT void serializeMap(const QMap<QString,QString>& map, QByteArray& array);
+	KEXIUTILS_EXPORT void serializeMap(const QMap<QString,QString>& map, const QByteArray& array);
 	KEXIUTILS_EXPORT void serializeMap(const QMap<QString,QString>& map, QString& string);
 
 	/*! \return a map deserialized from a byte array \a array.
