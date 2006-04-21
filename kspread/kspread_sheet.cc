@@ -7216,7 +7216,6 @@ void Sheet::loadOasisSettings( const KoOasisSettings::NamedMap &settings )
     d->lcMode = items.parseConfigItemBool( "lcmode" );
     d->autoCalc = items.parseConfigItemBool( "autoCalc" );
     d->showColumnNumber = items.parseConfigItemBool( "ShowColumnNumber" );
-    d->firstLetterUpper = items.parseConfigItemBool( "FirstLetterUpper" );
 }
 
 void Sheet::saveOasisSettings( KoXmlWriter &settingsWriter, const QPoint& marker ) const
@@ -7239,7 +7238,6 @@ void Sheet::saveOasisSettings( KoXmlWriter &settingsWriter, const QPoint& marker
     settingsWriter.addConfigItem( "lcmode", d->lcMode );
     settingsWriter.addConfigItem( "autoCalc", d->autoCalc );
     settingsWriter.addConfigItem( "ShowColumnNumber", d->showColumnNumber );
-    settingsWriter.addConfigItem( "FirstLetterUpper", d->firstLetterUpper );
 }
 
 
