@@ -485,11 +485,6 @@ bool KHTMLReader::parse_table(DOM::Element e) {
 		return false;
 	}
 
-	int tableno=_writer->createTable();
- 	int nrow=0;
- 	int ncol=0;
- 	int has_borders=false;
-	QColor bgcolor=parsecolor("#FFFFFF");
  	DOM::Element table_body=e.firstChild();
 	if(table_body.isNull()) {
  		// If the table_body is empty, we don't continue cause else
@@ -497,6 +492,12 @@ bool KHTMLReader::parse_table(DOM::Element e) {
  		// the null element.
  		return true;
 	}
+
+	int tableno=_writer->createTable();
+ 	int nrow=0;
+ 	int ncol=0;
+ 	bool has_borders=false;
+	QColor bgcolor=parsecolor("#FFFFFF");
 
  	if (!table_body.getAttribute("bgcolor").string().isEmpty())
  	       bgcolor=parsecolor(table_body.getAttribute("bgcolor").string());
