@@ -994,9 +994,9 @@ public:
     void autofill( QRect &src, QRect &dest );
 
 
-    bool insertChild( const KoRect& _geometry, KoDocumentEntry& );
+    bool insertChild( const KoRect& _geometry, KoDocumentEntry&, QWidget* );
 
-    bool insertChart( const KoRect& _geometry, KoDocumentEntry&, const QRect& _data );
+    bool insertChart( const KoRect& _geometry, KoDocumentEntry&, const QRect& _data, QWidget* );
 
 
     /**

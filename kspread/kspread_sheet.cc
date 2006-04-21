@@ -7973,33 +7973,32 @@ void Sheet::emit_updateColumn( ColumnFormat *_format, int _column )
     _format->clearDisplayDirtyFlag();
 }
 
-bool Sheet::insertChart( const KoRect& _rect, KoDocumentEntry& _e, const QRect& _data )
+bool Sheet::insertChart( const KoRect& rect, KoDocumentEntry& documentEntry,
+                         const QRect& dataArea, QWidget* parentWidget )
 {
-    kDebug(36001) << "Creating document" << endl;
-    KoDocument* dd = _e.createDoc();
-    kDebug(36001) << "Created" << endl;
-    if ( !dd )
-        // Error message is already displayed, so just return
+    QString errorMsg; // TODO MESSAGE
+    KoDocument* document = documentEntry.createDoc( &errorMsg, doc() );
+    if ( !document )
+    {
+        kDebug() << "Error inserting chart!" << endl;
+        return false;
+    }
+
+    if ( !document->showEmbedInitDialog( parentWidget ) )
         return false;
 
-    kDebug(36001) << "NOW FETCHING INTERFACE" << endl;
-
-#warning TODO KDE4 portage
-//     if ( !dd->initDoc(KoDocument::InitDocEmbedded) )
-        return false;
-
-    EmbeddedChart * ch = new EmbeddedChart( doc(), this, dd, _rect );
-    ch->setDataArea( _data );
+    EmbeddedChart * ch = new EmbeddedChart( doc(), this, document, rect );
+    ch->setDataArea( dataArea );
     ch->update();
     ch->chart()->setCanChangeValue( false  );
 
     KoChart::WizardExtension * wiz = ch->chart()->wizardExtension();
 
     Range dataRange;
-    dataRange.setRange( _data );
+    dataRange.setRange( dataArea );
     dataRange.setSheet( this );
 
-    QString rangeString=dataRange.toString();
+    QString rangeString = dataRange.toString();
 
     if ( wiz )
         wiz->show( rangeString );
@@ -8009,20 +8008,20 @@ bool Sheet::insertChart( const KoRect& _rect, KoDocumentEntry& _e, const QRect& 
     return true;
 }
 
-bool Sheet::insertChild( const KoRect& _rect, KoDocumentEntry& _e )
+bool Sheet::insertChild( const KoRect& rect, KoDocumentEntry& documentEntry,
+                         QWidget* parentWidget )
 {
-#warning TODO KDE4 portage
-    KoDocument* d ;//= _e.createDoc( doc() );
-    if ( !d )
+    QString errorMsg; // TODO MESSAGE
+    KoDocument* document = documentEntry.createDoc( &errorMsg, doc() );
+    if ( !document )
     {
         kDebug() << "Error inserting child!" << endl;
         return false;
     }
-#warning TODO KDE4 portage
-//     if ( !d->initDoc(KoDocument::InitDocEmbedded) )
+    if ( !document->showEmbedInitDialog( parentWidget ) )
         return false;
 
-    EmbeddedKOfficeObject* ch = new EmbeddedKOfficeObject( doc(), this, d, _rect );
+    EmbeddedKOfficeObject* ch = new EmbeddedKOfficeObject( doc(), this, document, rect );
     insertObject( ch );
     return true;
 }

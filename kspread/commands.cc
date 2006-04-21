@@ -746,17 +746,17 @@ void InsertObjectCommand::execute()
     {
       case OBJECT_CHART:
       {
-        success = canvas->activeSheet()->insertChart( geometry, entry, data );
+        success = canvas->activeSheet()->insertChart( geometry, entry, data, canvas );
         break;
       }
       case OBJECT_KOFFICE_PART:
       {
-        success = canvas->activeSheet()->insertChild( geometry, entry );
+        success = canvas->activeSheet()->insertChild( geometry, entry, canvas );
         break;
       }
       case OBJECT_PICTURE:
       {
-        success = canvas->activeSheet()->insertPicture( geometry.topLeft() , file );
+        success = canvas->activeSheet()->insertPicture( geometry.topLeft(), file );
         break;
       }
       default:
