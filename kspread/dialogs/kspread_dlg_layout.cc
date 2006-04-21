@@ -1157,14 +1157,14 @@ CellFormatPageFloat::CellFormatPageFloat( QWidget* parent, CellFormatDialog *_dl
     exampleLabel->setWhatsThis( i18n( "This will display a preview of your choice so you can know what it does before clicking the OK button to validate it." ) );
     grid3->addWidget(exampleLabel,0,1);
 
-    grid->addWidget(box2,9,10,1,1);
+    grid->addWidget(box2,9,1,2,1);
 
     customFormatEdit = new QLineEdit( grp );
-    grid->addWidget( customFormatEdit, 1, 1, 1, 1 );
+    grid->addWidget( customFormatEdit, 0, 1 );
     customFormatEdit->setHidden( true );
 
     listFormat=new Q3ListBox(grp);
-    grid->addWidget(listFormat,2,7,1,1);
+    grid->addWidget(listFormat,1,1,8,1);
     listFormat->setWhatsThis( i18n( "Displays choices of format for the fraction, date or time formats." ) );
     layout->addWidget(grp);
 
@@ -1202,8 +1202,8 @@ CellFormatPageFloat::CellFormatPageFloat( QWidget* parent, CellFormatDialog *_dl
 
     tmpQLabel = new QLabel( box, "Label_2" );
     grid->addWidget(tmpQLabel,0,0);
-
     tmpQLabel->setText( i18n("Prefix:") );
+
     tmpQLabel = new QLabel( box, "Label_3" );
     grid->addWidget(tmpQLabel,1,0);
     tmpQLabel->setText( i18n("Precision:") );
@@ -2719,7 +2719,7 @@ void CellFormatPageBorder::InitializeGrids()
   grid2->addItem(new QSpacerItem( 0, fHeight/2 ), 0, 0 ); // groupbox title
 
   area=new Border(tmpQGroupBox,"area",dlg->oneCol,dlg->oneRow);
-  grid2->addWidget(area,2,4,1,3);
+  grid2->addWidget(area,2,1,3,3);
   area->setBackgroundColor( QColorGroup(palette()).base() );
 
   /* initailize the buttons that are in this box */
@@ -2732,7 +2732,7 @@ void CellFormatPageBorder::InitializeGrids()
                      borderButtonPositions[i][1]);
   }
 
-  grid->addWidget(tmpQGroupBox,0,2,0,0);
+  grid->addWidget(tmpQGroupBox,0,0,3,1);
 
   /* the remove, all, and outline border buttons are in a second box down
      below.*/
@@ -2774,7 +2774,7 @@ void CellFormatPageBorder::InitializeGrids()
     shortcutButtons[BorderShortcutType_All]->setEnabled(false);
   }
 
-  grid->addWidget(tmpQGroupBox,3,4,0,0);
+  grid->addWidget(tmpQGroupBox,3,0,2,1);
 
   /* now set up the group box with the pattern selector */
   tmpQGroupBox = new Q3GroupBox( this, "GroupBox_10" );
@@ -2840,8 +2840,8 @@ void CellFormatPageBorder::InitializeGrids()
   style->insertItem(paintFormatPixmap(Qt::SolidLine),4);
   style->setBackgroundColor( QColorGroup(palette()).background() );
 
-  grid2->addItem(grid3,6,6,0,1);
-  grid->addWidget(tmpQGroupBox,0,3,1,1);
+  grid2->addItem(grid3,6,0,1,2);
+  grid->addWidget(tmpQGroupBox,0,1,4,1);
 
   /* Now the preview box is put together */
   tmpQGroupBox = new Q3GroupBox(this, "GroupBox_4" );
@@ -3594,7 +3594,7 @@ CellFormatPagePattern::CellFormatPagePattern( QWidget* parent, CellFormatDialog 
 
     bBgColorUndefined = !dlg->bBgColor;
 
-    QGridLayout *grid = new QGridLayout(this,5,2,KDialog::marginHint(), KDialog::spacingHint());
+    QGridLayout *grid = new QGridLayout(this,5,1,KDialog::marginHint(), KDialog::spacingHint());
 
     Q3GroupBox* tmpQGroupBox;
     tmpQGroupBox = new Q3GroupBox( this, "GroupBox_20" );
@@ -3675,7 +3675,7 @@ CellFormatPagePattern::CellFormatPagePattern( QWidget* parent, CellFormatDialog 
     tmpQLabel->setText( i18n("Color:") );
     grid3->addWidget(tmpQLabel,0,0);
 
-    grid2->addItem(grid3,6,6,0,2);
+    grid2->addItem(grid3,6,0,1,3);
 
     grid3 = new QGridLayout( 1, 3 );
     grid3->setSpacing(KDialog::spacingHint());
@@ -3705,9 +3705,9 @@ CellFormatPagePattern::CellFormatPagePattern( QWidget* parent, CellFormatDialog 
              this, SLOT( slotNotAnyColor(  ) ) );
     b_notAnyColor=false;
 
-    grid2->addItem(grid3,7,7,0,2);
+    grid2->addItem(grid3,7,0,1,3);
 
-    grid->addWidget(tmpQGroupBox,0,3,0,0);
+    grid->addWidget(tmpQGroupBox,0,0,4,1);
 
     tmpQGroupBox = new Q3GroupBox( this, "GroupBox1" );
     tmpQGroupBox->setTitle( i18n("Preview") );
