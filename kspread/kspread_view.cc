@@ -482,57 +482,57 @@ void View::Private::initActions()
 
   actions->cellLayout = new KAction( KIcon( "cell_layout" ), i18n("Cell Format..."), ac, "cellLayout" );
   actions->cellLayout->setShortcut( Qt::CTRL+ Qt::ALT+ Qt::Key_F);
-  QObject::connect(actions->cellLayout, SIGNAL(toggled(bool)), view, SLOT( layoutDlg() ));
+  connect(actions->cellLayout, SIGNAL(triggered(bool)), view, SLOT( layoutDlg() ));
 
   actions->cellLayout->setToolTip( i18n("Set the cell formatting") );
 
   actions->actionExtraProperties = new KAction( KIcon( "penbrush" ), i18n( "&Properties" ), ac, "extra_properties" );
   actions->actionExtraProperties->setShortcut( 0);
-  QObject::connect(actions->actionExtraProperties, SIGNAL(toggled(bool)), view, SLOT( extraProperties() ));
+  connect(actions->actionExtraProperties, SIGNAL(triggered(bool)), view, SLOT( extraProperties() ));
 
 
   actions->defaultFormat = new KAction( i18n("Default"), ac, "default" );
   actions->defaultFormat->setShortcut( 0);
-  QObject::connect(actions->defaultFormat, SIGNAL(toggled(bool)),view, SLOT( defaultSelection() ));
+  connect(actions->defaultFormat, SIGNAL(triggered(bool)),view, SLOT( defaultSelection() ));
 
   actions->defaultFormat->setToolTip( i18n("Resets to the default format") );
 
   actions->bold = new KToggleAction( KIcon( "text_bold" ), i18n("Bold"), ac, "bold");
   actions->bold->setShortcut( Qt::CTRL+Qt::Key_B);
-  QObject::connect( actions->bold, SIGNAL( toggled( bool) ),
+  connect( actions->bold, SIGNAL( toggled( bool) ),
                     view, SLOT( bold( bool ) ) );
 
   actions->italic = new KToggleAction( KIcon( "text_italic" ), i18n("Italic"), ac, "italic");
   actions->italic->setShortcut( Qt::CTRL+Qt::Key_I);
-  QObject::connect( actions->italic, SIGNAL( toggled( bool) ),
+  connect( actions->italic, SIGNAL( toggled( bool) ),
                     view, SLOT( italic( bool ) ) );
 
   actions->underline = new KToggleAction( KIcon( "text_under" ), i18n("Underline"), ac, "underline");
   actions->underline->setShortcut( Qt::CTRL+Qt::Key_U);
-  QObject::connect( actions->underline, SIGNAL( toggled( bool) ),
+  connect( actions->underline, SIGNAL( toggled( bool) ),
                     view, SLOT( underline( bool ) ) );
 
   actions->strikeOut = new KToggleAction( KIcon( "text_strike" ), i18n("Strike Out"), ac, "strikeout");
   actions->strikeOut->setShortcut( 0);
-  QObject::connect( actions->strikeOut, SIGNAL( toggled( bool) ),
+  connect( actions->strikeOut, SIGNAL( toggled( bool) ),
                     view, SLOT( strikeOut( bool ) ) );
 
   actions->selectFont = new KFontAction( i18n("Select Font..."), ac, "selectFont" );
-  QObject::connect( actions->selectFont, SIGNAL( activated( const QString& ) ),
+  connect( actions->selectFont, SIGNAL( activated( const QString& ) ),
                     view, SLOT( fontSelected( const QString& ) ) );
 
   actions->selectFontSize = new KFontSizeAction( i18n("Select Font Size"), ac, "selectFontSize" );
-  QObject::connect( actions->selectFontSize, SIGNAL( fontSizeChanged( int ) ),
+  connect( actions->selectFontSize, SIGNAL( fontSizeChanged( int ) ),
                     view, SLOT( fontSizeSelected( int ) ) );
 
   actions->fontSizeUp = new KAction( KIcon( "fontsizeup" ), i18n("Increase Font Size"), ac,  "increaseFontSize" );
   actions->fontSizeUp->setShortcut( 0);
-  QObject::connect(actions->fontSizeUp, SIGNAL(toggled(bool)), view, SLOT( increaseFontSize() ));
+  connect(actions->fontSizeUp, SIGNAL(triggered(bool)), view, SLOT( increaseFontSize() ));
 
 
   actions->fontSizeDown = new KAction( KIcon( "fontsizedown" ), i18n("Decrease Font Size"), ac, "decreaseFontSize" );
   actions->fontSizeDown->setShortcut( 0);
-  QObject::connect(actions->fontSizeDown, SIGNAL(toggled(bool)), view, SLOT( decreaseFontSize() ));
+  connect(actions->fontSizeDown, SIGNAL(triggered(bool)), view, SLOT( decreaseFontSize() ));
 
 
   actions->textColor = new TKSelectColorAction( i18n("Text Color"), TKSelectColorAction::TextColor, view, SLOT( changeTextColor() ),
@@ -541,169 +541,169 @@ void View::Private::initActions()
 
   QActionGroup* groupAlign = new QActionGroup( view );
   actions->alignLeft = new KToggleAction( KIcon("text_left"), i18n("Align Left"), ac, "left", groupAlign );
-  QObject::connect( actions->alignLeft, SIGNAL( toggled( bool ) ),
+  connect( actions->alignLeft, SIGNAL( toggled( bool ) ),
                     view, SLOT( alignLeft( bool ) ) );
   actions->alignLeft->setToolTip(i18n("Left justify the cell contents"));
 
   actions->alignCenter = new KToggleAction( KIcon("text_center"), i18n("Align Center"), ac, "center", groupAlign );
-  QObject::connect( actions->alignCenter, SIGNAL( toggled( bool ) ),
+  connect( actions->alignCenter, SIGNAL( toggled( bool ) ),
                     view, SLOT( alignCenter( bool ) ) );
   actions->alignCenter->setToolTip(i18n("Center the cell contents"));
 
   actions->alignRight = new KToggleAction( KIcon("text_right"), i18n("Align Right"), ac, "right", groupAlign );
-  QObject::connect( actions->alignRight, SIGNAL( toggled( bool ) ),
+  connect( actions->alignRight, SIGNAL( toggled( bool ) ),
                     view, SLOT( alignRight( bool ) ) );
   actions->alignRight->setToolTip(i18n("Right justify the cell contents"));
 
   QActionGroup* groupPos = new QActionGroup( view );
   actions->alignTop = new KToggleAction( KIcon("text_top"), i18n("Align Top"), ac, "top", groupPos );
-  QObject::connect( actions->alignTop, SIGNAL( toggled( bool ) ),
+  connect( actions->alignTop, SIGNAL( toggled( bool ) ),
                     view, SLOT( alignTop( bool ) ) );
   actions->alignTop->setToolTip(i18n("Align cell contents along the top of the cell"));
 
   actions->alignMiddle = new KToggleAction( KIcon("middle"), i18n("Align Middle"), ac, "middle", groupPos );
-  QObject::connect( actions->alignMiddle, SIGNAL( toggled( bool ) ),
+  connect( actions->alignMiddle, SIGNAL( toggled( bool ) ),
                     view, SLOT( alignMiddle( bool ) ) );
   actions->alignMiddle->setToolTip(i18n("Align cell contents centered in the cell"));
 
   actions->alignBottom = new KToggleAction( KIcon("text_bottom"), i18n("Align Bottom"), ac, "bottom", groupPos );
-  QObject::connect( actions->alignBottom, SIGNAL( toggled( bool ) ),
+  connect( actions->alignBottom, SIGNAL( toggled( bool ) ),
                     view, SLOT( alignBottom( bool ) ) );
   actions->alignBottom->setToolTip(i18n("Align cell contents along the bottom of the cell"));
 
   actions->wrapText = new KToggleAction( KIcon( "multirow" ), i18n("Wrap Text"), ac, "multiRow" );
   actions->wrapText->setShortcut( 0);
-  QObject::connect( actions->wrapText, SIGNAL( toggled( bool ) ),
+  connect( actions->wrapText, SIGNAL( toggled( bool ) ),
                     view, SLOT( wrapText( bool ) ) );
   actions->wrapText->setToolTip(i18n("Make the cell text wrap onto multiple lines"));
 
   actions->verticalText = new KToggleAction( KIcon("vertical_text"  ), i18n("Vertical Text"),ac, "verticaltext" );
   actions->verticalText->setShortcut( 0 );
-  QObject::connect( actions->verticalText, SIGNAL( toggled( bool ) ),
+  connect( actions->verticalText, SIGNAL( toggled( bool ) ),
                     view, SLOT( verticalText( bool ) ) );
   actions->verticalText->setToolTip(i18n("Print cell contents vertically"));
 
   actions->increaseIndent = new KAction( KIcon( QApplication::isRightToLeft() ? "format_decreaseindent":"format_increaseindent" ), i18n("Increase Indent"), ac, "increaseindent" );
   actions->increaseIndent->setShortcut( 0);
-  QObject::connect(actions->increaseIndent, SIGNAL(toggled(bool)), view, SLOT( increaseIndent() ));
+  connect(actions->increaseIndent, SIGNAL(triggered(bool)), view, SLOT( increaseIndent() ));
 
   actions->increaseIndent->setToolTip(i18n("Increase the indentation"));
 
   actions->decreaseIndent = new KAction( KIcon( QApplication::isRightToLeft() ? "format_increaseindent" : "format_decreaseindent" ), i18n("Decrease Indent"), ac, "decreaseindent");
   actions->decreaseIndent->setShortcut( 0);
-  QObject::connect(actions->decreaseIndent, SIGNAL(toggled(bool)), view, SLOT( decreaseIndent() ));
+  connect(actions->decreaseIndent, SIGNAL(triggered(bool)), view, SLOT( decreaseIndent() ));
 
   actions->decreaseIndent->setToolTip(i18n("Decrease the indentation"));
 
   actions->changeAngle = new KAction( i18n("Change Angle..."), ac, "changeangle" );
   actions->changeAngle->setShortcut( 0);
-  QObject::connect(actions->changeAngle, SIGNAL(toggled(bool)),view, SLOT( changeAngle() ));
+  connect(actions->changeAngle, SIGNAL(triggered(bool)),view, SLOT( changeAngle() ));
 
   actions->changeAngle->setToolTip(i18n("Change the angle that cell contents are printed"));
 
   actions->percent = new KToggleAction( KIcon( "percent" ), i18n("Percent Format"), ac, "percent");
   actions->percent->setShortcut( 0);
-  QObject::connect( actions->percent, SIGNAL( toggled( bool ) ),
+  connect( actions->percent, SIGNAL( toggled( bool ) ),
                     view, SLOT( percent( bool ) ) );
   actions->percent->setToolTip(i18n("Set the cell formatting to look like a percentage"));
 
   actions->precplus = new KAction( KIcon( "prec_plus" ), i18n("Increase Precision"), ac, "precplus");
   actions->precplus->setShortcut( 0);
-  QObject::connect(actions->precplus, SIGNAL(toggled(bool)), view, SLOT( precisionPlus() ));
+  connect(actions->precplus, SIGNAL(triggered(bool)), view, SLOT( precisionPlus() ));
 
   actions->precplus->setToolTip(i18n("Increase the decimal precision shown onscreen"));
 
   actions->precminus = new KAction( KIcon( "prec_minus" ), i18n("Decrease Precision"), ac, "precminus");
   actions->precminus->setShortcut( 0);
-  QObject::connect(actions->precminus, SIGNAL(toggled(bool)), view, SLOT( precisionMinus() ));
+  connect(actions->precminus, SIGNAL(triggered(bool)), view, SLOT( precisionMinus() ));
 
   actions->precminus->setToolTip(i18n("Decrease the decimal precision shown onscreen"));
 
   actions->money = new KToggleAction( KIcon( "money" ), i18n("Money Format"), ac, "money");
   actions->money->setShortcut( 0);
-  QObject::connect( actions->money, SIGNAL( toggled( bool ) ),
+  connect( actions->money, SIGNAL( toggled( bool ) ),
                     view, SLOT( moneyFormat( bool ) ) );
   actions->money->setToolTip(i18n("Set the cell formatting to look like your local currency"));
 
   actions->upper = new KAction( KIcon( "fontsizeup" ), i18n("Upper Case"), ac, "upper" );
   actions->upper->setShortcut( 0);
-  QObject::connect(actions->upper, SIGNAL(toggled(bool)), view, SLOT( upper() ));
+  connect(actions->upper, SIGNAL(triggered(bool)), view, SLOT( upper() ));
 
   actions->upper->setToolTip(i18n("Convert all letters to upper case"));
 
   actions->lower = new KAction( KIcon( "fontsizedown" ), i18n("Lower Case"), ac, "lower" );
   actions->lower->setShortcut( 0);
-  QObject::connect(actions->lower, SIGNAL(toggled(bool)), view, SLOT( lower() ));
+  connect(actions->lower, SIGNAL(triggered(bool)), view, SLOT( lower() ));
 
   actions->lower->setToolTip(i18n("Convert all letters to lower case"));
 
   actions->firstLetterUpper = new KAction( KIcon("first_letter_upper" ), i18n("Convert First Letter to Upper Case"),ac, "firstletterupper" );
   actions->firstLetterUpper->setShortcut( 0);
-  QObject::connect(actions->firstLetterUpper, SIGNAL(toggled(bool)), view, SLOT( firstLetterUpper() ));
+  connect(actions->firstLetterUpper, SIGNAL(triggered(bool)), view, SLOT( firstLetterUpper() ));
 
   actions->firstLetterUpper->setToolTip(i18n("Capitalize the first letter"));
 
   actions->bgColor = new TKSelectColorAction( i18n("Background Color"),  TKSelectColorAction::FillColor, ac, "backgroundColor", true );
-  QObject::connect(actions->bgColor, SIGNAL( activated() ),
+  connect(actions->bgColor, SIGNAL( activated() ),
                    view, SLOT( changeBackgroundColor() ) );
   actions->bgColor->setDefaultColor(QColor());
   actions->bgColor->setToolTip(i18n("Set the background color"));
 
   actions->borderLeft = new KAction( KIcon( "border_left" ), i18n("Border Left"), ac, "borderLeft" );
   actions->borderLeft->setShortcut( 0);
-  QObject::connect(actions->borderLeft, SIGNAL(toggled(bool)), view, SLOT( borderLeft() ));
+  connect(actions->borderLeft, SIGNAL(triggered(bool)), view, SLOT( borderLeft() ));
 
   actions->borderLeft->setToolTip(i18n("Set a left border to the selected area"));
 
   actions->borderRight = new KAction( KIcon( "border_right" ), i18n("Border Right"), ac, "borderRight" );
   actions->borderRight->setShortcut( 0);
-  QObject::connect(actions->borderRight, SIGNAL(toggled(bool)), view, SLOT( borderRight() ));
+  connect(actions->borderRight, SIGNAL(triggered(bool)), view, SLOT( borderRight() ));
 
   actions->borderRight->setToolTip(i18n("Set a right border to the selected area"));
 
   actions->borderTop = new KAction( KIcon( "border_top" ), i18n("Border Top"), ac, "borderTop" );
   actions->borderTop->setShortcut( 0);
-  QObject::connect(actions->borderTop, SIGNAL(toggled(bool)), view, SLOT( borderTop() ));
+  connect(actions->borderTop, SIGNAL(triggered(bool)), view, SLOT( borderTop() ));
 
   actions->borderTop->setToolTip(i18n("Set a top border to the selected area"));
 
   actions->borderBottom = new KAction( KIcon( "border_bottom" ), i18n("Border Bottom"), ac, "borderBottom" );
   actions->borderBottom->setShortcut( 0);
-  QObject::connect(actions->borderBottom, SIGNAL(toggled(bool)), view, SLOT( borderBottom() ));
+  connect(actions->borderBottom, SIGNAL(triggered(bool)), view, SLOT( borderBottom() ));
 
   actions->borderBottom->setToolTip(i18n("Set a bottom border to the selected area"));
 
   actions->borderAll = new KAction( KIcon( "border_all" ), i18n("All Borders"), ac, "borderAll" );
   actions->borderAll->setShortcut( 0);
-  QObject::connect(actions->borderAll, SIGNAL(toggled(bool)), view, SLOT( borderAll() ));
+  connect(actions->borderAll, SIGNAL(triggered(bool)), view, SLOT( borderAll() ));
 
   actions->borderAll->setToolTip(i18n("Set a border around all cells in the selected area"));
 
   actions->borderRemove = new KAction( KIcon( "border_remove" ), i18n("Remove Borders"), ac, "borderRemove" );
   actions->borderRemove->setShortcut( 0);
-  QObject::connect(actions->borderRemove, SIGNAL(toggled(bool)), view, SLOT( borderRemove() ));
+  connect(actions->borderRemove, SIGNAL(triggered(bool)), view, SLOT( borderRemove() ));
 
   actions->borderRemove->setToolTip(i18n("Remove all borders in the selected area"));
 
   actions->borderOutline = new KAction( KIcon( ("border_outline") ), i18n("Border Outline"), ac, "borderOutline" );
   actions->borderOutline->setShortcut( 0);
-  QObject::connect(actions->borderOutline, SIGNAL(toggled(bool)), view, SLOT( borderOutline() ));
+  connect(actions->borderOutline, SIGNAL(triggered(bool)), view, SLOT( borderOutline() ));
 
   actions->borderOutline->setToolTip(i18n("Set a border to the outline of the selected area"));
 
   actions->borderColor = new TKSelectColorAction( i18n("Border Color"), TKSelectColorAction::LineColor, ac, "borderColor" );
-  QObject::connect( actions->borderColor, SIGNAL( activated() ),
+  connect( actions->borderColor, SIGNAL( activated() ),
                     view, SLOT( changeBorderColor() ) );
   actions->borderColor->setToolTip( i18n( "Select a new border color" ) );
 
   actions->selectStyle = new KSelectAction( i18n( "St&yle" ), ac, "stylemenu" );
   actions->selectStyle->setToolTip( i18n( "Apply a predefined style to the selected cells" ) );
-  QObject::connect( actions->selectStyle, SIGNAL( activated( const QString & ) ),
+  connect( actions->selectStyle, SIGNAL( activated( const QString & ) ),
                     view, SLOT( styleSelected( const QString & ) ) );
 
   actions->createStyle = new KAction( i18n( "Create Style From Cell..." ), ac, "createStyle" );
   actions->createStyle->setShortcut( 0);
-  QObject::connect(actions->createStyle, SIGNAL(toggled(bool)),view, SLOT( createStyleFromCell()));
+  connect(actions->createStyle, SIGNAL(triggered(bool)),view, SLOT( createStyleFromCell()));
 
   actions->createStyle->setToolTip( i18n( "Create a new style based on the currently selected cell" ) );
 
@@ -711,100 +711,100 @@ void View::Private::initActions()
 
   actions->editCell = new KAction( KIcon("cell_edit" ), i18n("Modify Cell"), ac, "editCell" );
   actions->editCell->setShortcut( Qt::CTRL+Qt::Key_M);
-  QObject::connect(actions->editCell, SIGNAL(toggled(bool)), view, SLOT( editCell() ));
+  connect(actions->editCell, SIGNAL(triggered(bool)), view, SLOT( editCell() ));
 
   actions->editCell->setToolTip(i18n("Edit the highlighted cell"));
 
   actions->insertCell = new KAction( KIcon( "insertcell" ), i18n("Insert Cells..."), ac, "insertCell" );
   actions->insertCell->setShortcut( 0);
-  QObject::connect(actions->insertCell, SIGNAL(toggled(bool)), view, SLOT( slotInsert() ));
+  connect(actions->insertCell, SIGNAL(triggered(bool)), view, SLOT( slotInsert() ));
 
   actions->insertCell->setToolTip(i18n("Insert a blank cell into the spreadsheet"));
 
   actions->removeCell = new KAction( KIcon( "removecell" ), i18n("Remove Cells..."), ac, "removeCell" );
   actions->removeCell->setShortcut( 0);
-  QObject::connect(actions->removeCell, SIGNAL(toggled(bool)), view, SLOT( slotRemove() ));
+  connect(actions->removeCell, SIGNAL(triggered(bool)), view, SLOT( slotRemove() ));
 
   actions->removeCell->setToolTip(i18n("Removes the current cell from the spreadsheet"));
 
   actions->deleteCell = new KAction( KIcon( "deletecell" ), i18n("Delete"), ac, "delete" );
   actions->deleteCell->setShortcut( 0);
-  QObject::connect(actions->deleteCell, SIGNAL(toggled(bool)), view, SLOT( deleteSelection() ));
+  connect(actions->deleteCell, SIGNAL(triggered(bool)), view, SLOT( deleteSelection() ));
 
   actions->deleteCell->setToolTip(i18n("Delete all contents and formatting of the current cell"));
 
   actions->mergeCell = new KToolBarPopupAction( KIcon( "mergecell" ), i18n("Merge Cells"), ac, "mergecell" );
   actions->deleteCell->setShortcut( 0);
-  QObject::connect(actions->deleteCell, SIGNAL(toggled(bool)), view, SLOT( mergeCell() ));
+  connect(actions->deleteCell, SIGNAL(triggered(bool)), view, SLOT( mergeCell() ));
   actions->mergeCell->setToolTip(i18n("Merge the selected region"));
   actions->mergeCell->plug( actions->mergeCell->popupMenu() );
 
   actions->mergeCellHorizontal = new KAction( KIcon("mergecell-horizontal" ), i18n("Merge Cells Horizontally"), ac, "mergecellHorizontal" );
   actions->mergeCellHorizontal->setShortcut( 0);
-  QObject::connect(actions->mergeCellHorizontal, SIGNAL(toggled(bool)), view, SLOT( mergeCellHorizontal() ));
+  connect(actions->mergeCellHorizontal, SIGNAL(triggered(bool)), view, SLOT( mergeCellHorizontal() ));
 
   actions->mergeCellHorizontal->setToolTip(i18n("Merge the selected region horizontally"));
   actions->mergeCellHorizontal->plug( actions->mergeCell->popupMenu() );
 
   actions->mergeCellVertical = new KAction( KIcon("mergecell-vertical" ), i18n("Merge Cells Vertically"), ac, "mergecellVertical" );
   actions->mergeCellVertical->setShortcut( 0);
-  QObject::connect(actions->mergeCellVertical, SIGNAL(toggled(bool)), view, SLOT( mergeCellVertical() ));
+  connect(actions->mergeCellVertical, SIGNAL(triggered(bool)), view, SLOT( mergeCellVertical() ));
 
   actions->mergeCellVertical->setToolTip(i18n("Merge the selected region vertically"));
   actions->mergeCellVertical->plug( actions->mergeCell->popupMenu() );
 
   actions->dissociateCell = new KAction( KIcon("dissociatecell" ), i18n("Dissociate Cells"), ac, "dissociatecell" );
   actions->dissociateCell->setShortcut( 0);
-  QObject::connect(actions->dissociateCell, SIGNAL(toggled(bool)), view, SLOT( dissociateCell() ));
+  connect(actions->dissociateCell, SIGNAL(triggered(bool)), view, SLOT( dissociateCell() ));
 
   actions->dissociateCell->setToolTip(i18n("Unmerge the selected region"));
 
   actions->clearText = new KAction( i18n("Text"), ac, "cleartext" );
   actions->clearText->setShortcut( 0);
-  QObject::connect(actions->clearText, SIGNAL(toggled(bool)),view, SLOT( clearTextSelection() ));
+  connect(actions->clearText, SIGNAL(triggered(bool)),view, SLOT( clearTextSelection() ));
 
   actions->clearText->setToolTip(i18n("Remove the contents of the current cell"));
 
   actions->conditional = new KAction( i18n("Conditional Cell Attributes..."), ac, "conditional" );
   actions->conditional->setShortcut( 0);
-  QObject::connect(actions->conditional, SIGNAL(toggled(bool)),view, SLOT( conditional() ));
+  connect(actions->conditional, SIGNAL(triggered(bool)),view, SLOT( conditional() ));
 
   actions->conditional->setToolTip(i18n("Set cell format based on certain conditions"));
 
 
   actions->clearConditional = new KAction( i18n("Conditional Cell Attributes"), ac, "clearconditional" );
   actions->clearConditional->setShortcut( 0);
-  QObject::connect(actions->clearConditional, SIGNAL(toggled(bool)),view, SLOT( clearConditionalSelection() ));
+  connect(actions->clearConditional, SIGNAL(triggered(bool)),view, SLOT( clearConditionalSelection() ));
 
   actions->clearConditional->setToolTip(i18n("Remove the conditional cell formatting"));
 
   actions->validity = new KAction( i18n("Validity..."), ac, "validity" );
   actions->validity->setShortcut( 0);
-  QObject::connect(actions->validity, SIGNAL(toggled(bool)),view, SLOT( validity() ));
+  connect(actions->validity, SIGNAL(triggered(bool)),view, SLOT( validity() ));
 
   actions->validity->setToolTip(i18n("Set tests to confirm cell data is valid"));
 
   actions->clearValidity = new KAction( i18n("Validity"), ac, "clearvalidity" );
   actions->clearValidity->setShortcut( 0);
-  QObject::connect(actions->clearValidity, SIGNAL(toggled(bool)),view, SLOT( clearValiditySelection() ));
+  connect(actions->clearValidity, SIGNAL(triggered(bool)),view, SLOT( clearValiditySelection() ));
 
   actions->clearValidity->setToolTip(i18n("Remove the validity tests on this cell"));
 
   actions->addModifyComment = new KAction( KIcon("comment" ), i18n("&Add/Modify Comment..."), ac, "addmodifycomment" );
   actions->addModifyComment->setShortcut( 0);
-  QObject::connect(actions->addModifyComment, SIGNAL(toggled(bool)), view, SLOT( addModifyComment() ));
+  connect(actions->addModifyComment, SIGNAL(triggered(bool)), view, SLOT( addModifyComment() ));
 
   actions->addModifyComment->setToolTip(i18n("Edit a comment for this cell"));
 
   actions->removeComment = new KAction( KIcon("removecomment" ), i18n("&Remove Comment"), ac, "removecomment" );
   actions->removeComment->setShortcut( 0);
-  QObject::connect(actions->removeComment, SIGNAL(toggled(bool)),  view, SLOT( removeComment() ));
+  connect(actions->removeComment, SIGNAL(triggered(bool)),  view, SLOT( removeComment() ));
 
   actions->removeComment->setToolTip(i18n("Remove this cell's comment"));
 
   actions->clearComment = new KAction( i18n("Comment"), ac, "clearcomment" );
   actions->clearComment->setShortcut( 0);
-  QObject::connect(actions->clearComment, SIGNAL(toggled(bool)),view, SLOT( clearCommentSelection() ));
+  connect(actions->clearComment, SIGNAL(triggered(bool)),view, SLOT( clearCommentSelection() ));
 
   actions->clearComment->setToolTip(i18n("Remove this cell's comment"));
 
@@ -812,184 +812,184 @@ void View::Private::initActions()
 
   actions->resizeColumn = new KAction( KIcon( "resizecol" ), i18n("Resize Column..."), ac, "resizeCol" );
   actions->resizeColumn->setShortcut( 0);
-  QObject::connect(actions->resizeColumn, SIGNAL(toggled(bool)), view, SLOT( resizeColumn() ));
+  connect(actions->resizeColumn, SIGNAL(triggered(bool)), view, SLOT( resizeColumn() ));
 
   actions->resizeColumn->setToolTip(i18n("Change the width of a column"));
 
   actions->insertColumn = new KAction( KIcon( "insert_table_col" ), i18n("Insert Columns"), ac, "insertColumn" );
   actions->insertColumn->setShortcut( 0);
-  QObject::connect(actions->insertColumn, SIGNAL(toggled(bool)), view, SLOT( insertColumn() ));
+  connect(actions->insertColumn, SIGNAL(triggered(bool)), view, SLOT( insertColumn() ));
 
   actions->insertColumn->setToolTip(i18n("Inserts a new column into the spreadsheet"));
 
   actions->deleteColumn = new KAction( KIcon( "delete_table_col" ), i18n("Delete Columns"), ac, "deleteColumn" );
   actions->deleteColumn->setShortcut( 0);
-  QObject::connect(actions->deleteColumn, SIGNAL(toggled(bool)), view, SLOT( deleteColumn() ));
+  connect(actions->deleteColumn, SIGNAL(triggered(bool)), view, SLOT( deleteColumn() ));
 
   actions->deleteColumn->setToolTip(i18n("Removes a column from the spreadsheet"));
 
   actions->hideColumn = new KAction( KIcon( "hide_table_column" ), i18n("Hide Columns"), ac, "hideColumn" );
   actions->hideColumn->setShortcut( 0);
-  QObject::connect(actions->hideColumn, SIGNAL(toggled(bool)), view, SLOT( hideColumn() ));
+  connect(actions->hideColumn, SIGNAL(triggered(bool)), view, SLOT( hideColumn() ));
 
   actions->hideColumn->setToolTip(i18n("Hide the column from view"));
 
   actions->showColumn = new KAction( KIcon( "show_table_column" ), i18n("Show Columns..."), ac, "showColumn" );
   actions->showColumn->setShortcut( 0);
-  QObject::connect(actions->showColumn, SIGNAL(toggled(bool)), view, SLOT( showColumn() ));
+  connect(actions->showColumn, SIGNAL(triggered(bool)), view, SLOT( showColumn() ));
 
   actions->showColumn->setToolTip(i18n("Show hidden columns"));
 
   actions->equalizeColumn = new KAction( KIcon( "adjustcol" ), i18n("Equalize Column"), ac, "equalizeCol" );
   actions->equalizeColumn->setShortcut( 0);
-  QObject::connect(actions->equalizeColumn, SIGNAL(toggled(bool)), view, SLOT( equalizeColumn() ));
+  connect(actions->equalizeColumn, SIGNAL(triggered(bool)), view, SLOT( equalizeColumn() ));
 
   actions->equalizeColumn->setToolTip(i18n("Resizes selected columns to be the same size"));
 
   actions->showSelColumns = new KAction( KIcon( "show_sheet_column" ), i18n("Show Columns"), ac, "showSelColumns" );
   actions->showSelColumns->setShortcut( 0);
-  QObject::connect(actions->showSelColumns, SIGNAL(toggled(bool)), view, SLOT( showSelColumns() ));
+  connect(actions->showSelColumns, SIGNAL(triggered(bool)), view, SLOT( showSelColumns() ));
 
   actions->showSelColumns->setToolTip(i18n("Show hidden columns in the selection"));
   actions->showSelColumns->setEnabled(false);
 
   actions->resizeRow = new KAction( KIcon( "resizerow" ), i18n("Resize Row..."), ac, "resizeRow" );
   actions->resizeRow->setShortcut( 0);
-  QObject::connect(actions->resizeRow, SIGNAL(toggled(bool)), view, SLOT( resizeRow() ));
+  connect(actions->resizeRow, SIGNAL(triggered(bool)), view, SLOT( resizeRow() ));
 
   actions->resizeRow->setToolTip(i18n("Change the height of a row"));
 
   actions->insertRow = new KAction( KIcon( "insert_table_row" ), i18n("Insert Rows"), ac, "insertRow" );
   actions->insertRow->setShortcut( 0);
-  QObject::connect(actions->insertRow, SIGNAL(toggled(bool)), view, SLOT( insertRow() ));
+  connect(actions->insertRow, SIGNAL(triggered(bool)), view, SLOT( insertRow() ));
 
   actions->insertRow->setToolTip(i18n("Inserts a new row into the spreadsheet"));
 
   actions->deleteRow = new KAction( KIcon( "delete_table_row" ), i18n("Delete Rows"), ac, "deleteRow" );
   actions->deleteRow->setShortcut( 0);
-  QObject::connect(actions->deleteRow, SIGNAL(toggled(bool)), view, SLOT( deleteRow() ));
+  connect(actions->deleteRow, SIGNAL(triggered(bool)), view, SLOT( deleteRow() ));
 
   actions->deleteRow->setToolTip(i18n("Removes a row from the spreadsheet"));
 
   actions->hideRow = new KAction( KIcon( "hide_table_row" ), i18n("Hide Rows"), ac, "hideRow" );
   actions->hideRow->setShortcut( 0);
-  QObject::connect(actions->hideRow, SIGNAL(toggled(bool)), view, SLOT( hideRow() ));
+  connect(actions->hideRow, SIGNAL(triggered(bool)), view, SLOT( hideRow() ));
 
   actions->hideRow->setToolTip(i18n("Hide a row from view"));
 
   actions->showRow = new KAction( KIcon( "show_table_row" ), i18n("Show Rows..."), ac, "showRow" );
   actions->showRow->setShortcut( 0);
-  QObject::connect(actions->showRow, SIGNAL(toggled(bool)), view, SLOT( showRow() ));
+  connect(actions->showRow, SIGNAL(triggered(bool)), view, SLOT( showRow() ));
 
   actions->showRow->setToolTip(i18n("Show hidden rows"));
 
   actions->equalizeRow = new KAction( KIcon( "adjustrow" ), i18n("Equalize Row"), ac, "equalizeRow" );
   actions->equalizeRow->setShortcut( 0);
-  QObject::connect(actions->equalizeRow, SIGNAL(toggled(bool)), view, SLOT( equalizeRow() ));
+  connect(actions->equalizeRow, SIGNAL(triggered(bool)), view, SLOT( equalizeRow() ));
 
   actions->equalizeRow->setToolTip(i18n("Resizes selected rows to be the same size"));
 
   actions->showSelRows = new KAction( KIcon( "show_table_row" ), i18n("Show Rows"), ac, "showSelRows" );
   actions->showSelRows->setShortcut( 0);
-  QObject::connect(actions->showSelRows, SIGNAL(toggled(bool)), view, SLOT( showSelRows() ));
+  connect(actions->showSelRows, SIGNAL(triggered(bool)), view, SLOT( showSelRows() ));
 
   actions->showSelRows->setEnabled(false);
   actions->showSelRows->setToolTip(i18n("Show hidden rows in the selection"));
 
   actions->adjust = new KAction( i18n("Adjust Row && Column"), ac, "adjust" );
   actions->adjust->setShortcut(0);
-  QObject::connect(actions->adjust, SIGNAL(toggled(bool)),view, SLOT( adjust() ));
+  connect(actions->adjust, SIGNAL(triggered(bool)),view, SLOT( adjust() ));
 
   actions->adjust->setToolTip(i18n("Adjusts row/column size so that the contents will fit"));
 
   // -- sheet/workbook actions --
   actions->sheetProperties = new KAction( i18n("Sheet Properties"), ac, "sheetProperties" );
   actions->sheetProperties->setShortcut(0);
-  QObject::connect(actions->sheetProperties, SIGNAL(toggled(bool)),view, SLOT( sheetProperties() ));
+  connect(actions->sheetProperties, SIGNAL(triggered(bool)),view, SLOT( sheetProperties() ));
 
   actions->sheetProperties->setToolTip(i18n("Modify current sheet's properties"));
 
   actions->insertSheet = new KAction( KIcon("inserttable" ), i18n("Insert Sheet"), ac, "insertSheet" );
   actions->insertSheet->setShortcut(      0);
-  QObject::connect(actions->insertSheet, SIGNAL(toggled(bool)), view, SLOT( insertSheet() ));
+  connect(actions->insertSheet, SIGNAL(triggered(bool)), view, SLOT( insertSheet() ));
 
   actions->insertSheet->setToolTip(i18n("Insert a new sheet"));
 
   // same action as insertSheet, but without 'insert' in the caption
   actions->menuInsertSheet = new KAction( KIcon("inserttable" ), i18n("&Sheet"), ac, "menuInsertSheet" );
   actions->menuInsertSheet->setShortcut(      0);
-  QObject::connect(actions->menuInsertSheet, SIGNAL(toggled(bool)), view, SLOT( insertSheet() ));
+  connect(actions->menuInsertSheet, SIGNAL(triggered(bool)), view, SLOT( insertSheet() ));
 
   actions->menuInsertSheet->setToolTip(i18n("Insert a new sheet"));
 
   actions->removeSheet = new KAction( KIcon( "delete_table" ), i18n("Remove Sheet"), ac, "removeSheet" );
   actions->removeSheet->setShortcut(      0);
-  QObject::connect(actions->removeSheet, SIGNAL(toggled(bool)), view, SLOT( removeSheet() ));
+  connect(actions->removeSheet, SIGNAL(triggered(bool)), view, SLOT( removeSheet() ));
 
   actions->removeSheet->setToolTip(i18n("Remove the active sheet"));
 
   actions->renameSheet = new KAction( i18n("Rename Sheet..."), ac, "renameSheet" );
   actions->renameSheet->setShortcut(      0);
-  QObject::connect(actions->renameSheet, SIGNAL(toggled(bool)),view, SLOT( slotRename() ));
+  connect(actions->renameSheet, SIGNAL(triggered(bool)),view, SLOT( slotRename() ));
 
   actions->renameSheet->setToolTip(i18n("Rename the active sheet"));
 
   actions->showSheet = new KAction(i18n("Show Sheet..."), ac, "showSheet" );
   actions->showSheet->setShortcut(      0);
-  QObject::connect(actions->showSheet, SIGNAL(toggled(bool)),view, SLOT( showSheet()));
+  connect(actions->showSheet, SIGNAL(triggered(bool)),view, SLOT( showSheet()));
 
   actions->showSheet->setToolTip(i18n("Show a hidden sheet"));
 
   actions->hideSheet = new KAction(i18n("Hide Sheet"), ac, "hideSheet" );
   actions->hideSheet->setShortcut(      0);
-  QObject::connect(actions->hideSheet, SIGNAL(toggled(bool)),view, SLOT( hideSheet() ));
+  connect(actions->hideSheet, SIGNAL(triggered(bool)),view, SLOT( hideSheet() ));
 
   actions->hideSheet->setToolTip(i18n("Hide the active sheet"));
 
   actions->autoFormat = new KAction( i18n("AutoFormat..."), ac, "sheetFormat" );
   actions->autoFormat->setShortcut(      0);
-  QObject::connect(actions->autoFormat, SIGNAL(toggled(bool)),view, SLOT( sheetFormat() ));
+  connect(actions->autoFormat, SIGNAL(triggered(bool)),view, SLOT( sheetFormat() ));
 
   actions->autoFormat->setToolTip(i18n("Set the worksheet formatting"));
 
   actions->areaName = new KAction( i18n("Area Name..."), ac, "areaname" );
   actions->areaName->setShortcut(      0);
-  QObject::connect(actions->areaName, SIGNAL(toggled(bool)),view, SLOT( setAreaName() ));
+  connect(actions->areaName, SIGNAL(triggered(bool)),view, SLOT( setAreaName() ));
 
   actions->areaName->setToolTip(i18n("Set a name for a region of the spreadsheet"));
 
   actions->showArea = new KAction( i18n("Show Area..."), ac, "showArea" );
   actions->showArea->setShortcut(      0);
-  QObject::connect(actions->showArea, SIGNAL(toggled(bool)),view, SLOT( showAreaName() ));
+  connect(actions->showArea, SIGNAL(triggered(bool)),view, SLOT( showAreaName() ));
 
   actions->showArea->setToolTip(i18n("Display a named area"));
 
   actions->insertFunction = new KAction( KIcon( "funct" ), i18n("&Function..."), ac, "insertMathExpr" );
   actions->insertFunction->setShortcut(      0);
-  QObject::connect(actions->insertFunction, SIGNAL(toggled(bool)), view, SLOT( insertMathExpr() ));
+  connect(actions->insertFunction, SIGNAL(triggered(bool)), view, SLOT( insertMathExpr() ));
 
   actions->insertFunction->setToolTip(i18n("Insert math expression"));
 
   actions->insertSeries = new KAction( KIcon("series" ), i18n("&Series..."), ac, "series");
   actions->insertSeries->setShortcut(      0);
-  QObject::connect(actions->insertSeries, SIGNAL(toggled(bool)), view, SLOT( insertSeries() ));
+  connect(actions->insertSeries, SIGNAL(triggered(bool)), view, SLOT( insertSeries() ));
 
   actions->insertSeries ->setToolTip(i18n("Insert a series"));
 
   actions->insertLink = new KAction( KIcon( "insert_link" ), i18n("&Link..."), ac, "insertHyperlink" );
   actions->insertLink->setShortcut(      0);
-  QObject::connect(actions->insertLink, SIGNAL(toggled(bool)), view, SLOT( insertHyperlink() ));
+  connect(actions->insertLink, SIGNAL(triggered(bool)), view, SLOT( insertHyperlink() ));
 
   actions->insertLink->setToolTip(i18n("Insert an Internet hyperlink"));
 
   actions->removeLink = new KAction( i18n("&Remove Link"), ac, "removeHyperlink" );
   actions->removeLink->setShortcut(      0);
-  QObject::connect(actions->removeLink, SIGNAL(toggled(bool)),view, SLOT( removeHyperlink() ));
+  connect(actions->removeLink, SIGNAL(triggered(bool)),view, SLOT( removeHyperlink() ));
 
   actions->removeLink->setToolTip(i18n("Remove a link"));
 
   actions->insertSpecialChar = new KAction( KIcon("char"), i18n( "S&pecial Character..." ), ac, "insertSpecialChar" );
-  QObject::connect( actions->insertSpecialChar, SIGNAL( toggled( bool ) ),
+  connect( actions->insertSpecialChar, SIGNAL( toggled( bool ) ),
                     view, SLOT( insertSpecialChar() ) );
   actions->insertSpecialChar->setToolTip( i18n( "Insert one or more symbols or letters not found on the keyboard" ) );
 
@@ -998,33 +998,33 @@ void View::Private::initActions()
 
   actions->insertChartFrame = new KToggleAction( KIcon( "insert_chart" ), i18n("&Chart"), ac, "insertChart" );
   actions->insertChartFrame->setShortcut(      0);
-  QObject::connect(actions->insertChartFrame, SIGNAL(toggled(bool)), view, SLOT( insertChart() ));
+  connect(actions->insertChartFrame, SIGNAL(triggered(bool)), view, SLOT( insertChart() ));
 
   actions->insertChartFrame->setToolTip(i18n("Insert a chart"));
 
   actions->insertPicture = new KAction( i18n("&Picture"), ac, "insertPicture" );
   actions->insertPicture->setShortcut(      0);
-  QObject::connect(actions->insertPicture, SIGNAL(toggled(bool)),view, SLOT( insertPicture() ));
+  connect(actions->insertPicture, SIGNAL(triggered(bool)),view, SLOT( insertPicture() ));
 
   actions->insertPicture->setToolTip(i18n("Insert a picture"));
 
 #ifndef QT_NO_SQL
   actions->insertFromDatabase = new KAction( i18n("From &Database..."),  ac, "insertFromDatabase");
 actions->insertFromDatabase->setShortcut(      0);
-QObject::connect(actions->insertFromDatabase, SIGNAL(toggled(bool)),view, SLOT( insertFromDatabase() ));
+connect(actions->insertFromDatabase, SIGNAL(triggered(bool)),view, SLOT( insertFromDatabase() ));
 
   actions->insertFromDatabase->setToolTip(i18n("Insert data from a SQL database"));
 #endif
 
   actions->insertFromTextfile = new KAction( i18n("From &Text File..."), ac, "insertFromTextfile");
 actions->insertFromTextfile->setShortcut(      0);
-QObject::connect(actions->insertFromTextfile, SIGNAL(toggled(bool)),view,  SLOT( insertFromTextfile() ));
+connect(actions->insertFromTextfile, SIGNAL(triggered(bool)),view,  SLOT( insertFromTextfile() ));
 
   actions->insertFromTextfile->setToolTip(i18n("Insert data from a text file to the current cursor position/selection"));
 
   actions->insertFromClipboard = new KAction( i18n("From &Clipboard..."), ac, "insertFromClipboard");
   actions->insertFromClipboard->setShortcut(      0);
-  QObject::connect(actions->insertFromClipboard, SIGNAL(toggled(bool)),view, SLOT( insertFromClipboard() ));
+  connect(actions->insertFromClipboard, SIGNAL(triggered(bool)),view, SLOT( insertFromClipboard() ));
 
   actions->insertFromClipboard->setToolTip(i18n("Insert CSV data from the clipboard to the current cursor position/selection"));
 
@@ -1035,66 +1035,66 @@ QObject::connect(actions->insertFromTextfile, SIGNAL(toggled(bool)),view,  SLOT(
 
   actions->sort = new KAction( i18n("&Sort..."), ac, "sort" );
   actions->sort->setShortcut(      0);
-  QObject::connect(actions->sort, SIGNAL(toggled(bool)),view, SLOT( sort() ));
+  connect(actions->sort, SIGNAL(triggered(bool)),view, SLOT( sort() ));
 
   actions->sort->setToolTip(i18n("Sort a group of cells"));
 
   actions->sortDec = new KAction( KIcon( "sort_decrease" ), i18n("Sort &Decreasing"), ac, "sortDec" );
   actions->sortDec->setShortcut(      0);
-  QObject::connect(actions->sortDec, SIGNAL(toggled(bool)), view, SLOT( sortDec() ));
+  connect(actions->sortDec, SIGNAL(triggered(bool)), view, SLOT( sortDec() ));
 
   actions->sortDec->setToolTip(i18n("Sort a group of cells in decreasing (last to first) order"));
 
   actions->sortInc = new KAction( KIcon( "sort_incr" ), i18n("Sort &Increasing"), ac, "sortInc" );
   actions->sortInc->setShortcut(      0);
-  QObject::connect(actions->sortInc, SIGNAL(toggled(bool)), view, SLOT( sortInc() ));
+  connect(actions->sortInc, SIGNAL(triggered(bool)), view, SLOT( sortInc() ));
 
   actions->sortInc->setToolTip(i18n("Sort a group of cells in ascending (first to last) order"));
 
   actions->paperLayout = new KAction( i18n("Page Layout..."), ac, "paperLayout" );
   actions->paperLayout->setShortcut(      0);
-  QObject::connect(actions->paperLayout, SIGNAL(toggled(bool)),view, SLOT( paperLayoutDlg() ));
+  connect(actions->paperLayout, SIGNAL(triggered(bool)),view, SLOT( paperLayoutDlg() ));
 
   actions->paperLayout->setToolTip(i18n("Specify the layout of the spreadsheet for a printout"));
 
   actions->definePrintRange = new KAction( i18n("Define Print Range"), ac, "definePrintRange" );
   actions->definePrintRange->setShortcut(      0);
-  QObject::connect(actions->definePrintRange, SIGNAL(toggled(bool)),view, SLOT( definePrintRange() ));
+  connect(actions->definePrintRange, SIGNAL(triggered(bool)),view, SLOT( definePrintRange() ));
 
   actions->definePrintRange->setToolTip(i18n("Define the print range in the current sheet"));
 
   actions->resetPrintRange = new KAction( i18n("Reset Print Range"), ac, "resetPrintRange" );
   actions->resetPrintRange->setShortcut(      0);
-  QObject::connect(actions->resetPrintRange, SIGNAL(toggled(bool)),view, SLOT( resetPrintRange() ));
+  connect(actions->resetPrintRange, SIGNAL(triggered(bool)),view, SLOT( resetPrintRange() ));
 
   actions->definePrintRange->setToolTip(i18n("Define the print range in the current sheet"));
 
   actions->showPageBorders = new KToggleAction( i18n("Show Page Borders"),      ac, "showPageBorders");
   actions->showPageBorders->setCheckedState(i18n("Hide Page Borders"));
-  QObject::connect( actions->showPageBorders, SIGNAL( toggled( bool ) ),
+  connect( actions->showPageBorders, SIGNAL( toggled( bool ) ),
                     view, SLOT( togglePageBorders( bool ) ) );
   actions->showPageBorders->setToolTip( i18n( "Show on the spreadsheet where the page borders will be" ) );
 
   actions->recalcWorksheet = new KAction( i18n("Recalculate Sheet"), ac, "RecalcWorkSheet" );
   actions->recalcWorksheet->setShortcut(      Qt::SHIFT + Qt::Key_F9);
-  QObject::connect(actions->recalcWorksheet, SIGNAL(toggled(bool)),view, SLOT( recalcWorkSheet() ));
+  connect(actions->recalcWorksheet, SIGNAL(triggered(bool)),view, SLOT( recalcWorkSheet() ));
 
   actions->recalcWorksheet->setToolTip(i18n("Recalculate the value of every cell in the current worksheet"));
 
   actions->recalcWorkbook = new KAction( i18n("Recalculate Document"), ac, "RecalcWorkBook" );
   actions->recalcWorkbook->setShortcut(      Qt::Key_F9);
-  QObject::connect(actions->recalcWorkbook, SIGNAL(toggled(bool)),view, SLOT( recalcWorkBook() ));
+  connect(actions->recalcWorkbook, SIGNAL(triggered(bool)),view, SLOT( recalcWorkBook() ));
 
   actions->recalcWorkbook->setToolTip(i18n("Recalculate the value of every cell in all worksheets"));
 
   actions->protectSheet = new KToggleAction( i18n( "Protect &Sheet..." ),      ac, "protectSheet" );
   actions->protectSheet->setToolTip( i18n( "Protect the sheet from being modified" ) );
-  QObject::connect( actions->protectSheet, SIGNAL( toggled( bool ) ),
+  connect( actions->protectSheet, SIGNAL( toggled( bool ) ),
                     view, SLOT( toggleProtectSheet( bool ) ) );
 
   actions->protectDoc = new KToggleAction( i18n( "Protect &Document..." ),      ac, "protectDoc" );
   actions->protectDoc->setToolTip( i18n( "Protect the document from being modified" ) );
-  QObject::connect( actions->protectDoc, SIGNAL( toggled( bool ) ),
+  connect( actions->protectDoc, SIGNAL( toggled( bool ) ),
                     view, SLOT( toggleProtectDoc( bool ) ) );
 
   // -- editing actions --
@@ -1110,13 +1110,13 @@ QObject::connect(actions->insertFromTextfile, SIGNAL(toggled(bool)),view,  SLOT(
 
   actions->specialPaste = new KAction( KIcon( "special_paste" ), i18n("Special Paste..."), ac, "specialPaste" );
   actions->specialPaste->setShortcut(      0);
-  QObject::connect(actions->specialPaste, SIGNAL(toggled(bool)), view, SLOT( specialPaste() ));
+  connect(actions->specialPaste, SIGNAL(triggered(bool)), view, SLOT( specialPaste() ));
 
   actions->specialPaste->setToolTip(i18n("Paste the contents of the clipboard with special options"));
 
   actions->insertCellCopy = new KAction( KIcon( "insertcellcopy" ), i18n("Paste with Insertion"), ac, "insertCellCopy" );
   actions->insertCellCopy->setShortcut(      0);
-  QObject::connect(actions->insertCellCopy, SIGNAL(toggled(bool)), view, SLOT( slotInsertCellCopy() ));
+  connect(actions->insertCellCopy, SIGNAL(triggered(bool)), view, SLOT( slotInsertCellCopy() ));
 
   actions->insertCellCopy->setToolTip(i18n("Inserts a cell from the clipboard into the spreadsheet"));
 
@@ -1128,35 +1128,35 @@ QObject::connect(actions->insertFromTextfile, SIGNAL(toggled(bool)),view,  SLOT(
 
   actions->fillRight = new KAction( KIcon( 0 ), i18n( "&Right" ), ac, "fillRight" );
   actions->fillRight->setShortcut( 0);
-  QObject::connect(actions->fillRight, SIGNAL(toggled(bool)), view, SLOT( fillRight() ));
+  connect(actions->fillRight, SIGNAL(triggered(bool)), view, SLOT( fillRight() ));
 
 
   actions->fillLeft = new KAction( KIcon( 0 ), i18n( "&Left" ), ac, "fillLeft" );
   actions->fillLeft->setShortcut( 0);
-  QObject::connect(actions->fillLeft, SIGNAL(toggled(bool)), view, SLOT( fillLeft() ));
+  connect(actions->fillLeft, SIGNAL(triggered(bool)), view, SLOT( fillLeft() ));
 
 
   actions->fillDown = new KAction( KIcon( 0 ), i18n( "&Down" ), ac, "fillDown" );
   actions->fillDown->setShortcut( 0);
-  QObject::connect(actions->fillDown, SIGNAL(toggled(bool)), view, SLOT( fillDown() ));
+  connect(actions->fillDown, SIGNAL(triggered(bool)), view, SLOT( fillDown() ));
 
 
   actions->fillUp = new KAction( KIcon( 0 ), i18n( "&Up" ), ac, "fillUp" );
   actions->fillUp->setShortcut( 0);
-  QObject::connect(actions->fillUp, SIGNAL(toggled(bool)), view, SLOT( fillUp() ));
+  connect(actions->fillUp, SIGNAL(triggered(bool)), view, SLOT( fillUp() ));
 
 
   // -- misc actions --
 
   actions->styleDialog = new KAction( i18n( "Style Manager" ), ac, "styles" );
   actions->styleDialog->setShortcut( 0);
-  QObject::connect(actions->styleDialog, SIGNAL(toggled(bool)),view, SLOT( styleDialog() ));
+  connect(actions->styleDialog, SIGNAL(triggered(bool)),view, SLOT( styleDialog() ));
 
   actions->styleDialog->setToolTip( i18n( "Edit and organize cell styles" ) );
 
   actions->autoSum = new KAction( KIcon( "black_sum" ), i18n("Autosum"), ac, "autoSum" );
   actions->autoSum->setShortcut( 0);
-  QObject::connect(actions->autoSum, SIGNAL(toggled(bool)), view, SLOT( autoSum() ));
+  connect(actions->autoSum, SIGNAL(triggered(bool)), view, SLOT( autoSum() ));
 
   actions->autoSum->setToolTip(i18n("Insert the 'sum' function"));
 
@@ -1176,51 +1176,51 @@ QObject::connect(actions->insertFromTextfile, SIGNAL(toggled(bool)),view,  SLOT(
   ((KSelectAction*) actions->formulaSelection)->setItems( lst );
   actions->formulaSelection->setComboWidth( 80 );
   actions->formulaSelection->setCurrentItem(0);
-  QObject::connect( actions->formulaSelection, SIGNAL( activated( const QString& ) ),
+  connect( actions->formulaSelection, SIGNAL( activated( const QString& ) ),
       view, SLOT( formulaSelection( const QString& ) ) );
 
   actions->viewZoom = new KoZoomAction( i18n( "Zoom" ), "viewmag", 0, ac, "view_zoom" );
-  QObject::connect( actions->viewZoom, SIGNAL( zoomChanged( const QString & ) ),
+  connect( actions->viewZoom, SIGNAL( zoomChanged( const QString & ) ),
       view, SLOT( viewZoom( const QString & ) ) );
 
   actions->consolidate = new KAction( i18n("&Consolidate..."), ac, "consolidate" );
   actions->consolidate->setShortcut( 0);
-  QObject::connect(actions->consolidate, SIGNAL(toggled(bool)),view, SLOT( consolidate() ));
+  connect(actions->consolidate, SIGNAL(triggered(bool)),view, SLOT( consolidate() ));
 
   actions->consolidate->setToolTip(i18n("Create a region of summary data from a group of similar regions"));
 
   actions->goalSeek = new KAction( i18n("&Goal Seek..."), ac, "goalSeek" );
   actions->goalSeek->setShortcut( 0);
-  QObject::connect(actions->goalSeek, SIGNAL(toggled(bool)),view, SLOT( goalSeek() ));
+  connect(actions->goalSeek, SIGNAL(triggered(bool)),view, SLOT( goalSeek() ));
 
   actions->goalSeek->setToolTip( i18n("Repeating calculation to find a specific value") );
 
   actions->subTotals = new KAction( i18n("&Subtotals..."), ac, "subtotals" );
   actions->subTotals->setShortcut(  0);
-  QObject::connect(actions->subTotals, SIGNAL(toggled(bool)),view, SLOT( subtotals() ));
+  connect(actions->subTotals, SIGNAL(triggered(bool)),view, SLOT( subtotals() ));
 
   actions->subTotals->setToolTip( i18n("Create different kind of subtotals to a list or database") );
 
   actions->textToColumns = new KAction( i18n("&Text to Columns..."), ac, "textToColumns" );
   actions->textToColumns->setShortcut( 0);
-  QObject::connect(actions->textToColumns, SIGNAL(toggled(bool)),view, SLOT( textToColumns() ));
+  connect(actions->textToColumns, SIGNAL(triggered(bool)),view, SLOT( textToColumns() ));
 
   actions->textToColumns->setToolTip( i18n("Expand the content of cells to multiple columns") );
 
   actions->multipleOperations = new KAction( i18n("&Multiple Operations..."), ac, "multipleOperations" );
   actions->multipleOperations->setShortcut( 0);
-  QObject::connect(actions->multipleOperations, SIGNAL(toggled(bool)),view, SLOT( multipleOperations() ));
+  connect(actions->multipleOperations, SIGNAL(triggered(bool)),view, SLOT( multipleOperations() ));
 
   actions->multipleOperations->setToolTip( i18n("Apply the same formula to various cells using different values for the parameter") );
 
   actions->createTemplate = new KAction( i18n( "&Create Template From Document..." ), ac, "createTemplate" );
   actions->createTemplate->setShortcut( 0);
-  QObject::connect(actions->createTemplate, SIGNAL(toggled(bool)),view, SLOT( createTemplate() ));
+  connect(actions->createTemplate, SIGNAL(triggered(bool)),view, SLOT( createTemplate() ));
 
 
   actions->customList = new KAction( i18n("Custom Lists..."), ac, "sortlist" );
   actions->customList->setShortcut( 0);
-  QObject::connect(actions->customList, SIGNAL(toggled(bool)),view, SLOT( sortList() ));
+  connect(actions->customList, SIGNAL(triggered(bool)),view, SLOT( sortList() ));
 
   actions->customList->setToolTip(i18n("Create custom lists for sorting or autofill"));
 
@@ -1228,31 +1228,31 @@ QObject::connect(actions->insertFromTextfile, SIGNAL(toggled(bool)),view,  SLOT(
 
   actions->gotoCell = new KAction( KIcon("goto" ), i18n("Goto Cell..."), ac, "gotoCell" );
   actions->gotoCell->setShortcut( 0);
-  QObject::connect(actions->gotoCell, SIGNAL(toggled(bool)), view, SLOT( gotoCell() ));
+  connect(actions->gotoCell, SIGNAL(triggered(bool)), view, SLOT( gotoCell() ));
 
   actions->gotoCell->setToolTip(i18n("Move to a particular cell"));
 
   actions->nextSheet = new KAction( KIcon( "forward" ), i18n("Next Sheet"), ac, "nextSheet");
   actions->nextSheet->setShortcut( Qt::CTRL+Qt::Key_PageDown);
-  QObject::connect(actions->nextSheet, SIGNAL(toggled(bool)), view, SLOT( nextSheet() ));
+  connect(actions->nextSheet, SIGNAL(triggered(bool)), view, SLOT( nextSheet() ));
 
   actions->nextSheet->setToolTip(i18n("Move to the next sheet"));
 
   actions->prevSheet = new KAction( KIcon( "back" ), i18n("Previous Sheet"), ac, "previousSheet");
   actions->prevSheet->setShortcut( Qt::CTRL+Qt::Key_PageUp);
-  QObject::connect(actions->prevSheet, SIGNAL(toggled(bool)), view, SLOT( previousSheet() ));
+  connect(actions->prevSheet, SIGNAL(triggered(bool)), view, SLOT( previousSheet() ));
 
   actions->prevSheet->setToolTip(i18n("Move to the previous sheet"));
 
   actions->firstSheet = new KAction( KIcon( "start" ), i18n("First Sheet"), ac, "firstSheet");
   actions->firstSheet->setShortcut( 0);
-  QObject::connect(actions->firstSheet, SIGNAL(toggled(bool)), view, SLOT( firstSheet() ));
+  connect(actions->firstSheet, SIGNAL(triggered(bool)), view, SLOT( firstSheet() ));
 
   actions->firstSheet->setToolTip(i18n("Move to the first sheet"));
 
   actions->lastSheet = new KAction( KIcon( "finish" ), i18n("Last Sheet"), ac, "lastSheet");
   actions->lastSheet->setShortcut( 0);
-  QObject::connect(actions->lastSheet, SIGNAL(toggled(bool)), view, SLOT( lastSheet() ));
+  connect(actions->lastSheet, SIGNAL(triggered(bool)), view, SLOT( lastSheet() ));
 
   actions->lastSheet->setToolTip(i18n("Move to the last sheet"));
 
@@ -1260,25 +1260,25 @@ QObject::connect(actions->insertFromTextfile, SIGNAL(toggled(bool)),view,  SLOT(
 
   actions->showStatusBar = new KToggleAction( i18n("Show Status Bar"), ac, "showStatusBar" );
   actions->showStatusBar->setCheckedState(i18n("Hide Status Bar"));
-  QObject::connect( actions->showStatusBar, SIGNAL( toggled( bool ) ),
+  connect( actions->showStatusBar, SIGNAL( toggled( bool ) ),
       view, SLOT( showStatusBar( bool ) ) );
   actions->showStatusBar->setToolTip(i18n("Show the status bar"));
 
   actions->showTabBar = new KToggleAction( i18n("Show Tab Bar"), ac, "showTabBar" );
   actions->showTabBar->setCheckedState(i18n("Hide Tab Bar"));
-  QObject::connect( actions->showTabBar, SIGNAL( toggled( bool ) ),
+  connect( actions->showTabBar, SIGNAL( toggled( bool ) ),
       view, SLOT( showTabBar( bool ) ) );
   actions->showTabBar->setToolTip(i18n("Show the tab bar"));
 
   actions->showFormulaBar = new KToggleAction( i18n("Show Formula Bar"), ac, "showFormulaBar" );
   actions->showFormulaBar->setCheckedState(i18n("Hide Formula Bar"));
-  QObject::connect( actions->showFormulaBar, SIGNAL( toggled( bool ) ),
+  connect( actions->showFormulaBar, SIGNAL( toggled( bool ) ),
       view, SLOT( showFormulaBar( bool ) ) );
   actions->showFormulaBar->setToolTip(i18n("Show the formula bar"));
 
   actions->preference = new KAction( KIcon("configure" ), i18n("Configure KSpread..."), ac, "preference" );
   actions->preference->setShortcut( 0);
-  QObject::connect(actions->preference, SIGNAL(toggled(bool)), view, SLOT( preference() ));
+  connect(actions->preference, SIGNAL(triggered(bool)), view, SLOT( preference() ));
 
   actions->preference->setToolTip(i18n("Set various KSpread options"));
 
@@ -1286,37 +1286,37 @@ QObject::connect(actions->insertFromTextfile, SIGNAL(toggled(bool)),view,  SLOT(
 
   QActionGroup* groupCalc = new QActionGroup( view );
   actions->calcNone = new KToggleAction( i18n("None"), ac, "menu_none", groupCalc );
-  QObject::connect( actions->calcNone, SIGNAL( toggled( bool ) ),
+  connect( actions->calcNone, SIGNAL( toggled( bool ) ),
       view, SLOT( menuCalc( bool ) ) );
   actions->calcNone->setToolTip(i18n("No calculation"));
 
   actions->calcSum = new KToggleAction( i18n("Sum"), ac, "menu_sum", groupCalc );
-  QObject::connect( actions->calcSum, SIGNAL( toggled( bool ) ),
+  connect( actions->calcSum, SIGNAL( toggled( bool ) ),
       view, SLOT( menuCalc( bool ) ) );
   actions->calcSum->setToolTip(i18n("Calculate using sum"));
 
   actions->calcMin = new KToggleAction( i18n("Min"), ac, "menu_min", groupCalc );
-  QObject::connect( actions->calcMin, SIGNAL( toggled( bool ) ),
+  connect( actions->calcMin, SIGNAL( toggled( bool ) ),
       view, SLOT( menuCalc( bool ) ) );
   actions->calcMin->setToolTip(i18n("Calculate using minimum"));
 
   actions->calcMax = new KToggleAction( i18n("Max"), ac, "menu_max", groupCalc );
-  QObject::connect( actions->calcMax, SIGNAL( toggled( bool ) ),
+  connect( actions->calcMax, SIGNAL( toggled( bool ) ),
       view, SLOT( menuCalc( bool ) ) );
   actions->calcMax->setToolTip(i18n("Calculate using maximum"));
 
   actions->calcAverage = new KToggleAction( i18n("Average"), ac, "menu_average", groupCalc );
-  QObject::connect( actions->calcAverage, SIGNAL( toggled( bool ) ),
+  connect( actions->calcAverage, SIGNAL( toggled( bool ) ),
       view, SLOT( menuCalc( bool ) ) );
   actions->calcAverage->setToolTip(i18n("Calculate using average"));
 
   actions->calcCount = new KToggleAction( i18n("Count"), ac, "menu_count", groupCalc );
-  QObject::connect( actions->calcCount, SIGNAL( toggled( bool ) ),
+  connect( actions->calcCount, SIGNAL( toggled( bool ) ),
       view, SLOT( menuCalc( bool ) ) );
   actions->calcCount->setToolTip(i18n("Calculate using the count"));
 
   actions->calcCountA = new KToggleAction( i18n("CountA"), ac, "menu_counta", groupCalc );
-  QObject::connect( actions->calcCountA, SIGNAL( toggled( bool ) ),
+  connect( actions->calcCountA, SIGNAL( toggled( bool ) ),
       view, SLOT( menuCalc( bool ) ) );
   actions->calcCountA->setToolTip(i18n("Calculate using the countA"));
 
@@ -1324,11 +1324,11 @@ QObject::connect(actions->insertFromTextfile, SIGNAL(toggled(bool)),view,  SLOT(
 
   actions->internalTests = new KAction( KIcon( "internalTests" ), i18n("Run Internal Tests..."), ac, "internalTests" );
   actions->internalTests->setShortcut( Qt::CTRL+ Qt::SHIFT + Qt::Key_T);
-  QObject::connect(actions->internalTests, SIGNAL(toggled(bool)), view, SLOT( runInternalTests() ));
+  connect(actions->internalTests, SIGNAL(triggered(bool)), view, SLOT( runInternalTests() ));
 
   actions->inspector = new KAction( KIcon( "inspector" ), i18n("Run Inspector..."), ac, "inspector" );
   actions->inspector->setShortcut( Qt::CTRL+ Qt::SHIFT + Qt::Key_I);
-  QObject::connect(actions->inspector, SIGNAL(toggled(bool)), view, SLOT( runInspector() ));
+  connect(actions->inspector, SIGNAL(triggered(bool)), view, SLOT( runInspector() ));
 
 
   m_propertyEditor = 0;
@@ -2013,17 +2013,17 @@ View::View( QWidget *_parent, const char *_name,
     connect( d->canvas, SIGNAL( objectSelectedChanged() ),
              this, SLOT( objectSelectedChanged() ) );
 
-    QObject::connect( doc()->map(), SIGNAL( sig_addSheet( Sheet* ) ), SLOT( slotAddSheet( Sheet* ) ) );
+    connect( doc()->map(), SIGNAL( sig_addSheet( Sheet* ) ), SLOT( slotAddSheet( Sheet* ) ) );
 
-    QObject::connect( doc(), SIGNAL( sig_refreshView(  ) ), this, SLOT( slotRefreshView() ) );
+    connect( doc(), SIGNAL( sig_refreshView(  ) ), this, SLOT( slotRefreshView() ) );
 
-    QObject::connect( doc(), SIGNAL( sig_refreshLocale() ), this, SLOT( refreshLocale()));
+    connect( doc(), SIGNAL( sig_refreshLocale() ), this, SLOT( refreshLocale()));
 
-    QObject::connect( doc(), SIGNAL( sig_addAreaName( const QString & ) ), d->posWidget, SLOT( slotAddAreaName( const QString & ) ) );
+    connect( doc(), SIGNAL( sig_addAreaName( const QString & ) ), d->posWidget, SLOT( slotAddAreaName( const QString & ) ) );
 
-    QObject::connect( doc(), SIGNAL( sig_removeAreaName( const QString & ) ), d->posWidget, SLOT( slotRemoveAreaName( const QString & ) ) );
+    connect( doc(), SIGNAL( sig_removeAreaName( const QString & ) ), d->posWidget, SLOT( slotRemoveAreaName( const QString & ) ) );
 
-    QObject::connect( doc(), SIGNAL( damagesFlushed( const QList<Damage*>& ) ),
+    connect( doc(), SIGNAL( damagesFlushed( const QList<Damage*>& ) ),
         this, SLOT( handleDamages( const QList<Damage*>& ) ) );
 
     //KoView::setZoom( doc()->zoomedResolutionY() /* KoView only supports one zoom */ ); // initial value
@@ -2172,12 +2172,12 @@ void View::initView()
     d->horzScrollBar->setLineStep(60); //just random guess based on what feels okay
     d->horzScrollBar->setPageStep(60);
 
-    QObject::connect( d->tabBar, SIGNAL( tabChanged( const QString& ) ), this, SLOT( changeSheet( const QString& ) ) );
-    QObject::connect( d->tabBar, SIGNAL( tabMoved( unsigned, unsigned ) ),
+    connect( d->tabBar, SIGNAL( tabChanged( const QString& ) ), this, SLOT( changeSheet( const QString& ) ) );
+    connect( d->tabBar, SIGNAL( tabMoved( unsigned, unsigned ) ),
       this, SLOT( moveSheet( unsigned, unsigned ) ) );
-    QObject::connect( d->tabBar, SIGNAL( contextMenu( const QPoint& ) ),
+    connect( d->tabBar, SIGNAL( contextMenu( const QPoint& ) ),
       this, SLOT( popupTabBarMenu( const QPoint& ) ) );
-    QObject::connect( d->tabBar, SIGNAL( doubleClicked() ),
+    connect( d->tabBar, SIGNAL( doubleClicked() ),
       this, SLOT( slotRename() ) );
 
     d->viewLayout->setColumnStretch( 1, 10 );
@@ -2197,8 +2197,8 @@ void View::initView()
         connect(d->calcLabel ,SIGNAL(itemPressed( int )),this,SLOT(statusBarClicked(int)));
 
     // signal slot
-    QObject::connect( d->vertScrollBar, SIGNAL( valueChanged(int) ), d->canvas, SLOT( slotScrollVert(int) ) );
-    QObject::connect( d->horzScrollBar, SIGNAL( valueChanged(int) ), d->canvas, SLOT( slotScrollHorz(int) ) );
+    connect( d->vertScrollBar, SIGNAL( valueChanged(int) ), d->canvas, SLOT( slotScrollVert(int) ) );
+    connect( d->horzScrollBar, SIGNAL( valueChanged(int) ), d->canvas, SLOT( slotScrollHorz(int) ) );
 
 }
 
@@ -2486,26 +2486,26 @@ void View::startKSpell()
   d->spell.kspell->setIgnoreUpperWords( doc()->dontCheckUpperWord() );
   d->spell.kspell->setIgnoreTitleCase( doc()->dontCheckTitleCase() );
 
-  QObject::connect( d->spell.kspell, SIGNAL( death() ),
+  connect( d->spell.kspell, SIGNAL( death() ),
                     this, SLOT( spellCheckerFinished() ) );
-  QObject::connect( d->spell.kspell, SIGNAL( misspelling( const QString &,
+  connect( d->spell.kspell, SIGNAL( misspelling( const QString &,
                                                          const QStringList &,
                                                          unsigned int) ),
                     this, SLOT( spellCheckerMisspelling( const QString &,
                                                          const QStringList &,
                                                          unsigned int) ) );
-  QObject::connect( d->spell.kspell, SIGNAL( corrected( const QString &,
+  connect( d->spell.kspell, SIGNAL( corrected( const QString &,
                                                        const QString &,
                                                        unsigned int) ),
                     this, SLOT( spellCheckerCorrected( const QString &,
                                                        const QString &,
                                                        unsigned int ) ) );
-  QObject::connect( d->spell.kspell, SIGNAL( done( const QString & ) ),
+  connect( d->spell.kspell, SIGNAL( done( const QString & ) ),
                     this, SLOT( spellCheckerDone( const QString & ) ) );
-  QObject::connect( d->spell.kspell, SIGNAL( ignoreall (const QString & ) ),
+  connect( d->spell.kspell, SIGNAL( ignoreall (const QString & ) ),
                     this, SLOT( spellCheckerIgnoreAll( const QString & ) ) );
 
-  QObject::connect( d->spell.kspell, SIGNAL( replaceall( const QString &  ,  const QString & )), this, SLOT( spellCheckerReplaceAll( const QString &  ,  const QString & )));
+  connect( d->spell.kspell, SIGNAL( replaceall( const QString &  ,  const QString & )), this, SLOT( spellCheckerReplaceAll( const QString &  ,  const QString & )));
 
 }
 
@@ -3893,31 +3893,31 @@ void View::addSheet( Sheet * _t )
   insertSheet( _t );
 
   // Connect some signals
-  QObject::connect( _t, SIGNAL( sig_refreshView() ), SLOT( slotRefreshView() ) );
-  QObject::connect( _t, SIGNAL( sig_updateView( Sheet* ) ), SLOT( slotUpdateView( Sheet* ) ) );
-  QObject::connect( _t->print(), SIGNAL( sig_updateView( Sheet* ) ), SLOT( slotUpdateView( Sheet* ) ) );
-  QObject::connect( _t, SIGNAL( sig_updateView( Sheet *, const Region& ) ),
+  connect( _t, SIGNAL( sig_refreshView() ), SLOT( slotRefreshView() ) );
+  connect( _t, SIGNAL( sig_updateView( Sheet* ) ), SLOT( slotUpdateView( Sheet* ) ) );
+  connect( _t->print(), SIGNAL( sig_updateView( Sheet* ) ), SLOT( slotUpdateView( Sheet* ) ) );
+  connect( _t, SIGNAL( sig_updateView( Sheet *, const Region& ) ),
                     SLOT( slotUpdateView( Sheet*, const Region& ) ) );
-  QObject::connect( _t, SIGNAL( sig_updateView( EmbeddedObject* )), SLOT( slotUpdateView( EmbeddedObject* ) ) );
+  connect( _t, SIGNAL( sig_updateView( EmbeddedObject* )), SLOT( slotUpdateView( EmbeddedObject* ) ) );
 
-  QObject::connect( _t, SIGNAL( sig_updateHBorder( Sheet * ) ),
+  connect( _t, SIGNAL( sig_updateHBorder( Sheet * ) ),
                     SLOT( slotUpdateHBorder( Sheet * ) ) );
-  QObject::connect( _t, SIGNAL( sig_updateVBorder( Sheet * ) ),
+  connect( _t, SIGNAL( sig_updateVBorder( Sheet * ) ),
                     SLOT( slotUpdateVBorder( Sheet * ) ) );
-  QObject::connect( _t, SIGNAL( sig_nameChanged( Sheet*, const QString& ) ),
+  connect( _t, SIGNAL( sig_nameChanged( Sheet*, const QString& ) ),
                     this, SLOT( slotSheetRenamed( Sheet*, const QString& ) ) );
-  QObject::connect( _t, SIGNAL( sig_SheetHidden( Sheet* ) ),
+  connect( _t, SIGNAL( sig_SheetHidden( Sheet* ) ),
                     this, SLOT( slotSheetHidden( Sheet* ) ) );
-  QObject::connect( _t, SIGNAL( sig_SheetShown( Sheet* ) ),
+  connect( _t, SIGNAL( sig_SheetShown( Sheet* ) ),
                     this, SLOT( slotSheetShown( Sheet* ) ) );
-  QObject::connect( _t, SIGNAL( sig_SheetRemoved( Sheet* ) ),
+  connect( _t, SIGNAL( sig_SheetRemoved( Sheet* ) ),
                     this, SLOT( slotSheetRemoved( Sheet* ) ) );
   // ########### Why do these signals not send a pointer to the sheet?
   // This will lead to bugs.
-  QObject::connect( _t, SIGNAL( sig_updateChildGeometry( EmbeddedKOfficeObject* ) ),
+  connect( _t, SIGNAL( sig_updateChildGeometry( EmbeddedKOfficeObject* ) ),
                     SLOT( slotUpdateChildGeometry( EmbeddedKOfficeObject* ) ) );
-  QObject::connect( _t, SIGNAL( sig_maxColumn( int ) ), d->canvas, SLOT( slotMaxColumn( int ) ) );
-  QObject::connect( _t, SIGNAL( sig_maxRow( int ) ), d->canvas, SLOT( slotMaxRow( int ) ) );
+  connect( _t, SIGNAL( sig_maxColumn( int ) ), d->canvas, SLOT( slotMaxColumn( int ) ) );
+  connect( _t, SIGNAL( sig_maxRow( int ) ), d->canvas, SLOT( slotMaxRow( int ) ) );
 
   if ( !d->loading )
     updateBorderButton();
@@ -5880,7 +5880,7 @@ void View::popupColumnMenu( const QPoint & _point )
       }
     }
 
-    QObject::connect( d->popupColumn, SIGNAL(activated( int ) ), this, SLOT( slotActivateTool( int ) ) );
+    connect( d->popupColumn, SIGNAL(activated( int ) ), this, SLOT( slotActivateTool( int ) ) );
 
     d->popupColumn->popup( _point );
 }
@@ -5975,7 +5975,7 @@ void View::popupRowMenu( const QPoint & _point )
       }
     }
 
-    QObject::connect( d->popupRow, SIGNAL( activated( int ) ), this, SLOT( slotActivateTool( int ) ) );
+    connect( d->popupRow, SIGNAL( activated( int ) ), this, SLOT( slotActivateTool( int ) ) );
     d->popupRow->popup( _point );
 }
 
@@ -6067,7 +6067,7 @@ void View::slotListChoosePopupMenu( )
   }
 
   d->popupListChoose->popup( p2 );
-  QObject::connect( d->popupListChoose, SIGNAL( activated( int ) ),
+  connect( d->popupListChoose, SIGNAL( activated( int ) ),
                     this, SLOT( slotItemSelected( int ) ) );
 }
 
@@ -6203,7 +6203,7 @@ void View::openPopupMenu( const QPoint & _point )
           }
         }
 
-        QObject::connect( d->popupMenu, SIGNAL( activated( int ) ), this, SLOT( slotActivateTool( int ) ) );
+        connect( d->popupMenu, SIGNAL( activated( int ) ), this, SLOT( slotActivateTool( int ) ) );
       }
     }
 
