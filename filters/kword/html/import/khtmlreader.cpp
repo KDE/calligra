@@ -480,7 +480,7 @@ bool KHTMLReader::parse_table(DOM::Element e) {
 		for (DOM::Node rows=e.firstChild().firstChild();!rows.isNull();rows=rows.nextSibling())
 			if (!rows.isNull() && rows.nodeName().string().lower() == "tr")
 				for (DOM::Node cols=rows.firstChild();!cols.isNull();cols=cols.nextSibling())
-					if (!cols.isNull() && cols.nodeName().string().lower() == "td")
+					if (!cols.isNull())
 						parseNode(cols);
 		return false;
 	}
@@ -516,7 +516,8 @@ bool KHTMLReader::parse_table(DOM::Element e) {
  		ncol=0;
  		for (DOM::Node colsnode=rows.firstChild();!colsnode.isNull();colsnode=colsnode.nextSibling()) {
  		        DOM::Element cols = colsnode;
- 		        if (!cols.isNull() && cols.nodeName().string().lower() == "td") {
+                        const QString nodename = cols.isNull() ? QString::null : cols.nodeName().string().lower();
+ 		        if (nodename == "td" || nodename == "th") {
  		             QColor bbgcolor=bgcolor;
 		 	    if (!cols.getAttribute("bgcolor").string().isEmpty())
  	       			bgcolor=parsecolor(cols.getAttribute("bgcolor").string());
