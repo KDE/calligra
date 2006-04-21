@@ -3,7 +3,8 @@ kde4_header()
 include_directories( 
 	${CMAKE_SOURCE_DIR}/kspread 
 	${CMAKE_SOURCE_DIR}/kword 
-        ${KOTEXT_INCLUDES} )
+	${KOTEXT_INCLUDES} 
+	${KOFFICEUI_INCLUDES} )
 
 
 ########### next target ###############
