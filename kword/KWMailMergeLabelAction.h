@@ -1,8 +1,8 @@
 /* This file is part of the KDE project
-  
+
    Copyright (C) 2002 Joseph Wenninger <jowenn@kde.org>
 
-   Large parts are taken from kdebase/konqueror/konq_actions.*  
+   Large parts are taken from kdebase/konqueror/konq_actions.*
    Copyright (C) 2000 Simon Hausmann <hausmann@kde.org>
 
    This library is free software; you can redistribute it and/or
@@ -27,18 +27,13 @@
 #include <kaction.h>
 #include <qtoolbutton.h>
 
-class KWMailMergeLabelAction : public KAction
+class KWMailMergeLabelAction : public KAction, public QActionWidgetFactory
 {
   Q_OBJECT
 public:
-  KWMailMergeLabelAction( const QString &text, int accel,
-                    QObject* receiver, const char* slot, QObject *parent = 0, const char *name = 0 );
+  KWMailMergeLabelAction( const QString &text, KActionCollection* parent, const QString& name );
 
-  virtual int plug( QWidget *widget, int index = -1 );
-  virtual void unplug( QWidget *widget );
-  QToolButton * label() { return m_label; }
-private:
-  QToolButton * m_label;
+  virtual QWidget* createToolBarWidget(QToolBar* parent);
 };
 
 #endif

@@ -26,18 +26,19 @@
 #include <KoMainWindow.h>
 #include <kstyle.h>
 #include <kmenu.h>
-//Added by qt3to4:
+
 #include <QApplication>
 #include <QMouseEvent>
 #include <QDragEnterEvent>
 #include <QEvent>
 #include <QDropEvent>
+#include <QToolBar>
 
 class MailMergeDraggableLabel : public QToolButton
 {
 public:
-    MailMergeDraggableLabel( KoMainWindow * mw, const QString & text, QWidget * parent = 0, const char * name = 0 )
-        : QToolButton( parent, name ), m_mw(mw)
+    MailMergeDraggableLabel( KoMainWindow * mw, const QString & text, QWidget * parent = 0 )
+        : QToolButton( parent ), m_mw(mw)
     {
         setText(text);
         setAcceptDrops(true);
@@ -91,12 +92,12 @@ protected:
     void leaveEvent( QEvent* ) {};
 #if 0
     void dragEnterEvent( QDragEnterEvent *ev ) {
-        if ( KURLDrag::canDecode( ev ) )
+        if ( m_mw && KURLDrag::canDecode( ev ) )
             ev->acceptAction();
     }
     void dropEvent( QDropEvent* ev ) {
         KUrl::List lst;
-        if ( KURLDrag::decode( ev, lst ) ) {
+        if ( m_mw && KURLDrag::decode( ev, lst ) ) {
             m_mw->openURL( 0L, lst.first() );
         }
     }
@@ -111,51 +112,13 @@ private:
 
 
 
-KWMailMergeLabelAction::KWMailMergeLabelAction( const QString &text, int accel,
-                    QObject* receiver, const char* slot, QObject *parent, const char *name )
-    : KAction( text, accel, receiver, slot, parent, name ), m_label( 0L )
+KWMailMergeLabelAction::KWMailMergeLabelAction( const QString &text, KActionCollection* parent, const QString& name )
+    : KAction( text, parent, name )
 {
 }
 
-int KWMailMergeLabelAction::plug( QWidget *widget, int index )
+QWidget* KWMailMergeLabelAction::createToolBarWidget(QToolBar* tb)
 {
-  //do not call the previous implementation here
-
-  if ( widget->inherits( "KToolBar" ) )
-  {
-    KToolBar *tb = (KToolBar *)widget;
-
-    int id = KAction::getToolButtonID();
-
-    m_label = new MailMergeDraggableLabel( static_cast<KoMainWindow*>(tb->mainWindow()), text(), widget );
-    tb->insertWidget( id, m_label->width(), m_label, index );
-
-    addContainer( tb, id );
-
-    connect( tb, SIGNAL( destroyed() ), this, SLOT( slotDestroyed() ) );
-
-    return containerCount() - 1;
-  }
-
-  return -1;
+    KoMainWindow* mw = qobject_cast<KoMainWindow *>( tb->parentWidget() );
+    return new MailMergeDraggableLabel( mw, text(), tb );
 }
-
-void KWMailMergeLabelAction::unplug( QWidget *widget )
-{
-  if ( widget->inherits( "KToolBar" ) )
-  {
-    KToolBar *bar = (KToolBar *)widget;
-
-    int idx = findContainer( bar );
-
-    if ( idx != -1 )
-    {
-      bar->removeItem( itemId( idx ) );
-      removeContainer( idx );
-    }
-
-    m_label = 0;
-    return;
-  }
-}
-

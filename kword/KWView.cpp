@@ -616,8 +616,9 @@ void KWView::setupActions()
                         actionCollection(), "edit_sldatabase" );
 
 
-    (void) new KWMailMergeLabelAction::KWMailMergeLabelAction( i18n("Drag Mail Merge Variable"), 0,
-                    this, SLOT(editMailMergeDataBase()), actionCollection(), "mailmerge_draglabel" );
+    KAction* mailMergeLabelAction = new KWMailMergeLabelAction::KWMailMergeLabelAction(
+        i18n("Drag Mail Merge Variable"), actionCollection(), "mailmerge_draglabel" );
+    connect( mailMergeLabelAction, SIGNAL( triggered(bool) ), this, SLOT(editMailMergeDataBase()) );
 
 //    (void) new KWMailMergeComboAction::KWMailMergeComboAction(i18n("Insert Mailmerge Var"),0,this,SLOT(JWJWJW()),actionCollection(),"mailmerge_varchooser");
 
