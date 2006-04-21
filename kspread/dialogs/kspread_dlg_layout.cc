@@ -1901,9 +1901,11 @@ void CellFormatPageFloat::apply(FormatManipulator* _obj)
  ***************************************************************************/
 
 CellFormatPageProtection::CellFormatPageProtection( QWidget* parent, CellFormatDialog * _dlg )
-  : ProtectionTab( parent ),
+  : QWidget( parent ),
     m_dlg( _dlg )
 {
+  setupUi(this);
+
   m_bDontPrint->setChecked( m_dlg->bDontPrintText );
   m_bHideAll->setChecked( m_dlg->bHideAll );
   m_bHideFormula->setChecked( m_dlg->bHideFormula );
@@ -1972,8 +1974,11 @@ void CellFormatPageProtection::apply(FormatManipulator* _obj)
  *
  ***************************************************************************/
 
-CellFormatPageFont::CellFormatPageFont( QWidget* parent, CellFormatDialog *_dlg ) : FontTab( parent )
+CellFormatPageFont::CellFormatPageFont( QWidget* parent, CellFormatDialog *_dlg )
+  : QWidget( parent )
 {
+  setupUi(this);
+
   dlg = _dlg;
 
   bTextColorUndefined = !dlg->bTextColor;
@@ -2248,9 +2253,11 @@ void CellFormatPageFont::setCombos()
  ***************************************************************************/
 
 CellFormatPagePosition::CellFormatPagePosition( QWidget* parent, CellFormatDialog *_dlg )
-  : PositionTab(parent ),
+  : QWidget(parent ),
     dlg( _dlg )
 {
+    setupUi(this);
+
     if ( dlg->alignX == Style::Left )
         left->setChecked( true );
     else if ( dlg->alignX == Style::Center )

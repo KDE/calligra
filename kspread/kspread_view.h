@@ -50,8 +50,6 @@ class QScrollBar;
 class KoDocumentEntry;
 class KoTabBar;
 
-class SheetSelectWidget;
-
 namespace KSpread
 {
 class Cell;
@@ -70,7 +68,7 @@ class View;
 class ComboboxLocationEditWidget;
 class EmbeddedKOfficeObject;
 class EmbeddedObject;
-
+class SheetSelectWidget;
 
 /**
  * \class KPSheetSelectPage

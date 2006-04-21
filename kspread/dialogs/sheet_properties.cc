@@ -25,19 +25,18 @@
 #include <klocale.h>
 #include <kvbox.h>
 #include "kspread_sheet.h"
-#include "sheet_properties_base.h"
 
 #include "sheet_properties.h"
 
 using namespace KSpread;
 
 SheetPropertiesDialog::SheetPropertiesDialog( QWidget* parent ):
-  KDialogBase( parent, "sheetPropertiesDialog", true, 
-  i18n("Sheet Properties"), 
+  KDialogBase( parent, "sheetPropertiesDialog", true,
+  i18n("Sheet Properties"),
   KDialogBase::Ok|KDialogBase::Cancel|KDialogBase::Default )
 {
   KVBox* mainWidget = makeVBoxMainWidget();
-  d = new SheetPropertiesBase( mainWidget );
+  m_widget = new SheetPropertiesWidget( mainWidget );
   QWidget* spacer = new QWidget( mainWidget );
   spacer->setSizePolicy( QSizePolicy::Fixed, QSizePolicy::Expanding );
   enableButtonSeparator( true );
@@ -45,7 +44,7 @@ SheetPropertiesDialog::SheetPropertiesDialog( QWidget* parent ):
 
 SheetPropertiesDialog::~SheetPropertiesDialog()
 {
-  delete d;
+  delete m_widget;
 }
 
 void SheetPropertiesDialog::slotDefault()
@@ -65,12 +64,12 @@ void SheetPropertiesDialog::slotDefault()
 
 Sheet::LayoutDirection SheetPropertiesDialog::layoutDirection() const
 {
-  if( d->directionComboBox->currentText() == i18n( "Left to Right" ) )
+  if( m_widget->directionComboBox->currentText() == i18n( "Left to Right" ) )
     return Sheet::LeftToRight;
-  
-  if( d->directionComboBox->currentText() == i18n( "Right to Left" ) )
+
+  if( m_widget->directionComboBox->currentText() == i18n( "Right to Left" ) )
     return Sheet::RightToLeft;
-  
+
   // fallback
   return Sheet::LeftToRight;
 }
@@ -80,10 +79,10 @@ void SheetPropertiesDialog::setLayoutDirection( Sheet::LayoutDirection dir )
   switch( dir )
   {
     case Sheet::LeftToRight:
-      d->directionComboBox->setCurrentText( i18n( "Left to Right" ) );
+      m_widget->directionComboBox->setCurrentText( i18n( "Left to Right" ) );
       break;
     case Sheet::RightToLeft:
-      d->directionComboBox->setCurrentText( i18n( "Right to Left" ) );
+      m_widget->directionComboBox->setCurrentText( i18n( "Right to Left" ) );
       break;
     default: break;
   };
@@ -91,102 +90,102 @@ void SheetPropertiesDialog::setLayoutDirection( Sheet::LayoutDirection dir )
 
 bool SheetPropertiesDialog::autoCalc() const
 {
-  return d->autoCalcCheckBox->isChecked();
+  return m_widget->autoCalcCheckBox->isChecked();
 }
 
 void SheetPropertiesDialog::setAutoCalc( bool b )
 {
-  d->autoCalcCheckBox->setChecked( b );
+  m_widget->autoCalcCheckBox->setChecked( b );
 }
 
 bool SheetPropertiesDialog::showGrid() const
 {
-  return d->showGridCheckBox->isChecked();
+  return m_widget->showGridCheckBox->isChecked();
 }
 
 void SheetPropertiesDialog::setShowGrid( bool b )
 {
-  d->showGridCheckBox->setChecked( b );
+  m_widget->showGridCheckBox->setChecked( b );
 }
 
 bool SheetPropertiesDialog::showPageBorders() const
 {
-  return d->showPageBordersCheckBox->isChecked();
+  return m_widget->showPageBordersCheckBox->isChecked();
 }
-    
+
 void SheetPropertiesDialog::setShowPageBorders( bool b )
 {
-  d->showPageBordersCheckBox->setChecked( b );
-}   
+  m_widget->showPageBordersCheckBox->setChecked( b );
+}
 
 bool SheetPropertiesDialog::showFormula() const
 {
-  return d->showFormulaCheckBox->isChecked();
+  return m_widget->showFormulaCheckBox->isChecked();
 }
-    
+
 void SheetPropertiesDialog::setShowFormula( bool b )
 {
-  d->showFormulaCheckBox->setChecked( b );
+  m_widget->showFormulaCheckBox->setChecked( b );
 }
-    
+
 bool SheetPropertiesDialog::hideZero() const
 {
-  return d->hideZeroCheckBox->isChecked();
+  return m_widget->hideZeroCheckBox->isChecked();
 }
-    
+
 void SheetPropertiesDialog::setHideZero( bool b )
 {
-  d->hideZeroCheckBox->setChecked( b );
+  m_widget->hideZeroCheckBox->setChecked( b );
 }
-    
+
 bool SheetPropertiesDialog::showFormulaIndicator() const
 {
-  return d->showFormulaIndicatorCheckBox->isChecked();
+  return m_widget->showFormulaIndicatorCheckBox->isChecked();
 }
-    
+
 void SheetPropertiesDialog::setShowFormulaIndicator( bool b )
 {
-  d->showFormulaIndicatorCheckBox->setChecked( b );
+  m_widget->showFormulaIndicatorCheckBox->setChecked( b );
 }
 
 bool SheetPropertiesDialog::showCommentIndicator() const
 {
-  return d->showCommentIndicatorCheckBox->isChecked();
+  return m_widget->showCommentIndicatorCheckBox->isChecked();
 }
-    
+
 void SheetPropertiesDialog::setShowCommentIndicator( bool b )
 {
-  d->showCommentIndicatorCheckBox->setChecked( b );
+  m_widget->showCommentIndicatorCheckBox->setChecked( b );
 }
-    
+
 bool SheetPropertiesDialog::columnAsNumber() const
 {
-  return d->showColumnAsNumbersCheckBox->isChecked();
+  return m_widget->showColumnAsNumbersCheckBox->isChecked();
 }
-    
+
 void SheetPropertiesDialog::setColumnAsNumber( bool b )
 {
-  d->showColumnAsNumbersCheckBox->setChecked( b );
+  m_widget->showColumnAsNumbersCheckBox->setChecked( b );
 }
-    
+
 bool SheetPropertiesDialog::lcMode() const
 {
-  return d->useLCModeCheckBox->isChecked();
+  return m_widget->useLCModeCheckBox->isChecked();
 }
-    
+
 void SheetPropertiesDialog::setLcMode( bool b )
 {
-  d->useLCModeCheckBox->setChecked( b );
-}    
-    
+  m_widget->useLCModeCheckBox->setChecked( b );
+}
+
 bool SheetPropertiesDialog::capitalizeFirstLetter() const
 {
-  return d->capitalizeFirstLetterCheckBox->isChecked();
+  return m_widget->capitalizeFirstLetterCheckBox->isChecked();
 }
-    
+
 void SheetPropertiesDialog::setCapitalizeFirstLetter( bool b )
 {
-  d->capitalizeFirstLetterCheckBox->setChecked( b );
-}    
-    
+  m_widget->capitalizeFirstLetterCheckBox->setChecked( b );
+}
+
 #include "sheet_properties.moc"

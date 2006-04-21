@@ -23,25 +23,32 @@
 #ifndef __kspread_dlg_subtotal__
 #define __kspread_dlg_subtotal__
 
-#include <kdialogbase.h>
-
 #include <qpoint.h>
 #include <qrect.h>
+
+#include <kdialogbase.h>
+
+#include "ui_kspreadsubtotal.h"
 
 class QLineEdit;
 
 namespace KSpread
 {
 class Sheet;
-class Subtotal;
 class View;
 
+class SubtotalWidget : public QWidget, public Ui::SubtotalWidget
+{
+ public:
+  SubtotalWidget(QWidget* parent) : QWidget(parent) { setupUi(this); }
+};
+
 class SubtotalDialog : public KDialogBase
-{ 
+{
   Q_OBJECT
 
  public:
-  SubtotalDialog( View * parent, QRect const & selection, 
+  SubtotalDialog( View * parent, QRect const & selection,
                       const char * name );
   ~SubtotalDialog();
 
@@ -54,15 +61,15 @@ class SubtotalDialog : public KDialogBase
   void slotUser1();
 
  private:
-  View  *    m_pView;
-  Sheet *    m_pSheet;
-  QRect             m_selection;
-  Subtotal * m_dialog;
+  View  *          m_pView;
+  Sheet *          m_pSheet;
+  QRect            m_selection;
+  SubtotalWidget * m_widget;
 
   void fillColumnBoxes();
   void fillFunctionBox();
   void removeSubtotalLines();
-  bool addSubtotal( int mainCol, int column, int row, int topRow, 
+  bool addSubtotal( int mainCol, int column, int row, int topRow,
                     bool addRow, QString const & text );
 };
 

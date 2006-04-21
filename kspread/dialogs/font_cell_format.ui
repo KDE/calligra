@@ -1,226 +1,215 @@
-<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
-<class>FontTab</class>
-<widget class="QDialog">
-    <property name="name">
-        <cstring>FontTab</cstring>
+<ui version="4.0" stdsetdef="1" >
+  <author>The KSpread Team &lt;koffice-devel@kde.org></author>
+  <comment>This file is part of the KDE project
+Copyright (C) 2006 The KSpread Team &lt;koffice-devel@kde.org>
+
+This library is free software; you can redistribute it and/or
+modify it under the terms of the GNU Library General Public
+License as published by the Free Software Foundation; either
+version 2 of the License, or (at your option) any later version.
+
+This library is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Library General Public License for more details.
+
+You should have received a copy of the GNU Library General Public
+License along with this library; see the file COPYING.LIB.  If not,
+write to the Free Software Foundation, Inc., 51 Franklin Street,
+Fifth Floor, Boston, MA 02110-1301, USA.</comment>
+  <exportmacro></exportmacro>
+  <class>KSpread::FontWidget</class>
+  <widget class="QWidget" name="FontWidget" >
+    <property name="geometry" >
+      <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>600</width>
+        <height>480</height>
+      </rect>
     </property>
-    <property name="geometry">
-        <rect>
-            <x>0</x>
-            <y>0</y>
-            <width>600</width>
-            <height>480</height>
-        </rect>
+    <property name="whatsThis" stdset="0" >
+      <string>You can select here the font style, size and color, including some additional options like underlined or striked out text for the current cell text. The lower part of the page gives a preview of the selected text format.
+The default font is set for all cells in the Format -> Style Manager menu with the currently used style.</string>
     </property>
-    <property name="whatsThis" stdset="0">
-        <string>You can select here the font style, size and color, including some additional options like underlined or striked out text for the current cell text. The lower part of the page gives a preview of the selected text format.
-The default font is set for all cells in the Format -&gt; Style Manager menu with the currently used style.</string>
-    </property>
-    <grid>
-        <property name="name">
-            <cstring>unnamed</cstring>
-        </property>
-        <widget class="QLayoutWidget" row="0" column="1">
-            <property name="name">
-                <cstring>layout1</cstring>
-            </property>
-            <grid>
-                <property name="name">
-                    <cstring>unnamed</cstring>
+    <layout class="QGridLayout" >
+      <item row="0" column="1" >
+        <layout class="QGridLayout" >
+          <property name="margin" >
+            <number>0</number>
+          </property>
+          <item row="0" column="1" >
+            <widget class="QComboBox" name="style_combo" >
+              <property name="insertPolicy" >
+                <enum>QComboBox::NoInsert</enum>
+              </property>
+              <property name="whatsThis" stdset="0" >
+                <string>Choose the style for your font for the currently selected cells. When you select several cells with different styles, the displayed style is set to Varying (No Change) and leaving it that way will keep all your current style settings for each cell. Changing to Roman for example will change all the selected cells style text to Roman.</string>
+              </property>
+              <item>
+                <property name="text" >
+                  <string>Varying (No Change)</string>
                 </property>
-                <widget class="QComboBox" row="0" column="1">
-                    <item>
-                        <property name="text">
-                            <string>Varying (No Change)</string>
-                        </property>
-                    </item>
-                    <item>
-                        <property name="text">
-                            <string>Roman</string>
-                        </property>
-                    </item>
-                    <item>
-                        <property name="text">
-                            <string>Italic</string>
-                        </property>
-                    </item>
-                    <property name="name">
-                        <cstring>style_combo</cstring>
-                    </property>
-                    <property name="insertPolicy">
-                        <enum>NoInsert</enum>
-                    </property>
-                    <property name="whatsThis" stdset="0">
-                        <string>Choose the style for your font for the currently selected cells. When you select several cells with different styles, the displayed style is set to Varying (No Change) and leaving it that way will keep all your current style settings for each cell. Changing to Roman for example will change all the selected cells style text to Roman.</string>
-                    </property>
-                </widget>
-                <widget class="QComboBox" row="2" column="1">
-                    <item>
-                        <property name="text">
-                            <string>Varying (No Change)</string>
-                        </property>
-                    </item>
-                    <item>
-                        <property name="text">
-                            <string>Normal</string>
-                        </property>
-                    </item>
-                    <item>
-                        <property name="text">
-                            <string>Bold</string>
-                        </property>
-                    </item>
-                    <property name="name">
-                        <cstring>weight_combo</cstring>
-                    </property>
-                    <property name="insertPolicy">
-                        <enum>NoInsert</enum>
-                    </property>
-                    <property name="whatsThis" stdset="0">
-                        <string>Choose the weight for your font for the currently selected cells. When you select several cells with different font weight, the displayed weight is set to Varying (No Change) and leaving it that way will keep all your current weight settings for each cell. Changing to Bold for example will change all the selected cells font weight to Bold.</string>
-                    </property>
-                </widget>
-                <widget class="QLabel" row="3" column="0">
-                    <property name="name">
-                        <cstring>textLabel4</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Color:</string>
-                    </property>
-                </widget>
-                <widget class="QCheckBox" row="4" column="0" rowspan="1" colspan="2">
-                    <property name="name">
-                        <cstring>underline</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Qt::TextUnderline</string>
-                    </property>
-                    <property name="whatsThis" stdset="0">
-                        <string>If this is checked, the current cell text wil be underlined.</string>
-                    </property>
-                </widget>
-                <widget class="QLabel" row="1" column="0">
-                    <property name="name">
-                        <cstring>textLabel2</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Size:</string>
-                    </property>
-                </widget>
-                <widget class="QLabel" row="2" column="0">
-                    <property name="name">
-                        <cstring>textLabel3</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Weight:</string>
-                    </property>
-                </widget>
-                <widget class="QLabel" row="0" column="0">
-                    <property name="name">
-                        <cstring>textLabel1</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Style:</string>
-                    </property>
-                </widget>
-                <widget class="KColorButton" row="3" column="1">
-                    <property name="name">
-                        <cstring>textColorButton</cstring>
-                    </property>
-                    <property name="text">
-                        <string></string>
-                    </property>
-                    <property name="whatsThis" stdset="0">
-                        <string>Choose the color for the current cell text. Clicking on the color bar will bring you the standard KDE Select Color dialog where you will be able to choose the new color.</string>
-                    </property>
-                </widget>
-                <widget class="QCheckBox" row="5" column="0" rowspan="1" colspan="2">
-                    <property name="name">
-                        <cstring>strike</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Strike out</string>
-                    </property>
-                    <property name="whatsThis" stdset="0">
-                        <string>This will strike out the current cell text if this is checked.</string>
-                    </property>
-                </widget>
-                <widget class="QComboBox" row="1" column="1">
-                    <property name="name">
-                        <cstring>size_combo</cstring>
-                    </property>
-                    <property name="editable">
-                        <bool>true</bool>
-                    </property>
-                    <property name="whatsThis" stdset="0">
-                        <string>Choose the style for your font for the currently selected cells. When you select several cells with different styles, the displayed style is set to Varying (No Change) and leaving it that way will keep all your current style settings for each cell. Changing to Roman for example will change all the selected cells style text to Roman.</string>
-                    </property>
-                </widget>
-            </grid>
-        </widget>
-        <spacer row="1" column="1">
-            <property name="name">
-                <cstring>spacer1</cstring>
-            </property>
-            <property name="orientation">
-                <enum>Qt::Vertical</enum>
-            </property>
-            <property name="sizeType">
-                <enum>Expanding</enum>
-            </property>
-            <property name="sizeHint">
-                <size>
-                    <width>20</width>
-                    <height>41</height>
-                </size>
-            </property>
+              </item>
+              <item>
+                <property name="text" >
+                  <string>Roman</string>
+                </property>
+              </item>
+              <item>
+                <property name="text" >
+                  <string>Italic</string>
+                </property>
+              </item>
+            </widget>
+          </item>
+          <item row="2" column="1" >
+            <widget class="QComboBox" name="weight_combo" >
+              <property name="insertPolicy" >
+                <enum>QComboBox::NoInsert</enum>
+              </property>
+              <property name="whatsThis" stdset="0" >
+                <string>Choose the weight for your font for the currently selected cells. When you select several cells with different font weight, the displayed weight is set to Varying (No Change) and leaving it that way will keep all your current weight settings for each cell. Changing to Bold for example will change all the selected cells font weight to Bold.</string>
+              </property>
+              <item>
+                <property name="text" >
+                  <string>Varying (No Change)</string>
+                </property>
+              </item>
+              <item>
+                <property name="text" >
+                  <string>Normal</string>
+                </property>
+              </item>
+              <item>
+                <property name="text" >
+                  <string>Bold</string>
+                </property>
+              </item>
+            </widget>
+          </item>
+          <item row="3" column="0" >
+            <widget class="QLabel" name="textLabel4" >
+              <property name="text" >
+                <string>Color:</string>
+              </property>
+            </widget>
+          </item>
+          <item rowspan="1" row="4" column="0" colspan="2" >
+            <widget class="QCheckBox" name="underline" >
+              <property name="text" >
+                <string>Qt::TextUnderline</string>
+              </property>
+              <property name="whatsThis" stdset="0" >
+                <string>If this is checked, the current cell text wil be underlined.</string>
+              </property>
+            </widget>
+          </item>
+          <item row="1" column="0" >
+            <widget class="QLabel" name="textLabel2" >
+              <property name="text" >
+                <string>Size:</string>
+              </property>
+            </widget>
+          </item>
+          <item row="2" column="0" >
+            <widget class="QLabel" name="textLabel3" >
+              <property name="text" >
+                <string>Weight:</string>
+              </property>
+            </widget>
+          </item>
+          <item row="0" column="0" >
+            <widget class="QLabel" name="textLabel1" >
+              <property name="text" >
+                <string>Style:</string>
+              </property>
+            </widget>
+          </item>
+          <item row="3" column="1" >
+            <widget class="KColorButton" name="textColorButton" >
+              <property name="text" >
+                <string/>
+              </property>
+              <property name="whatsThis" stdset="0" >
+                <string>Choose the color for the current cell text. Clicking on the color bar will bring you the standard KDE Select Color dialog where you will be able to choose the new color.</string>
+              </property>
+            </widget>
+          </item>
+          <item rowspan="1" row="5" column="0" colspan="2" >
+            <widget class="QCheckBox" name="strike" >
+              <property name="text" >
+                <string>Strike out</string>
+              </property>
+              <property name="whatsThis" stdset="0" >
+                <string>This will strike out the current cell text if this is checked.</string>
+              </property>
+            </widget>
+          </item>
+          <item row="1" column="1" >
+            <widget class="QComboBox" name="size_combo" >
+              <property name="editable" >
+                <bool>true</bool>
+              </property>
+              <property name="whatsThis" stdset="0" >
+                <string>Choose the style for your font for the currently selected cells. When you select several cells with different styles, the displayed style is set to Varying (No Change) and leaving it that way will keep all your current style settings for each cell. Changing to Roman for example will change all the selected cells style text to Roman.</string>
+              </property>
+            </widget>
+          </item>
+        </layout>
+      </item>
+      <item row="1" column="1" >
+        <spacer name="spacer1" >
+          <property name="sizeHint" >
+            <size>
+              <width>20</width>
+              <height>41</height>
+            </size>
+          </property>
+          <property name="sizeType" >
+            <enum>Expanding</enum>
+          </property>
+          <property name="orientation" >
+            <enum>Qt::Vertical</enum>
+          </property>
         </spacer>
-        <widget class="QListBox" row="0" column="0" rowspan="2" colspan="1">
-            <property name="name">
-                <cstring>family_combo</cstring>
-            </property>
-            <property name="whatsThis" stdset="0">
-                <string>This box lists all your available font families. Click on one family to set it in the current cell.</string>
-            </property>
+      </item>
+      <item rowspan="2" row="0" column="0" colspan="1" >
+        <widget class="Q3ListBox" name="family_combo" >
+          <property name="whatsThis" stdset="0" >
+            <string>This box lists all your available font families. Click on one family to set it in the current cell.</string>
+          </property>
         </widget>
-        <widget class="QGroupBox" row="2" column="0" rowspan="1" colspan="2">
-            <property name="name">
-                <cstring>groupBox1</cstring>
-            </property>
-            <property name="title">
-                <string>Preview</string>
-            </property>
-            <hbox>
-                <property name="name">
-                    <cstring>unnamed</cstring>
+      </item>
+      <item rowspan="1" row="2" column="0" colspan="2" >
+        <widget class="Q3GroupBox" name="groupBox1" >
+          <property name="title" >
+            <string>Preview</string>
+          </property>
+          <layout class="QHBoxLayout" >
+            <item>
+              <widget class="QLineEdit" name="example_label" >
+                <property name="sizePolicy" >
+                  <sizepolicy>
+                    <hsizetype>7</hsizetype>
+                    <vsizetype>3</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                  </sizepolicy>
                 </property>
-                <widget class="QLineEdit">
-                    <property name="name">
-                        <cstring>example_label</cstring>
-                    </property>
-                    <property name="sizePolicy">
-                        <sizepolicy>
-                            <hsizetype>7</hsizetype>
-                            <vsizetype>3</vsizetype>
-                            <horstretch>0</horstretch>
-                            <verstretch>0</verstretch>
-                        </sizepolicy>
-                    </property>
-                    <property name="alignment">
-                        <set>Qt::AlignHCenter</set>
-                    </property>
-                    <property name="whatsThis" stdset="0">
-                        <string>You can see a preview of the font you are choosing for the current cell.</string>
-                    </property>
-                </widget>
-            </hbox>
+                <property name="alignment" >
+                  <set>Qt::AlignHCenter</set>
+                </property>
+                <property name="whatsThis" stdset="0" >
+                  <string>You can see a preview of the font you are choosing for the current cell.</string>
+                </property>
+              </widget>
+            </item>
+          </layout>
         </widget>
-    </grid>
-</widget>
-<customwidgets>
-</customwidgets>
-<layoutdefaults spacing="6" margin="11"/>
-<includehints>
-    <includehint>kcolorbutton.h</includehint>
-</includehints>
-</UI>
+      </item>
+    </layout>
+  </widget>
+  <layoutdefault spacing="6" margin="11" />
+  <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
+</ui>

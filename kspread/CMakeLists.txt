@@ -49,7 +49,7 @@ set(libdialogs_SRCS
 )
 
 
-kde4_add_ui3_files(libdialogs_SRCS
+kde4_add_ui_files(libdialogs_SRCS
 	${CMAKE_SOURCE_DIR}/kspread/dialogs/kspreadsubtotal.ui
 	${CMAKE_SOURCE_DIR}/kspread/dialogs/sheet_properties_base.ui
 	${CMAKE_SOURCE_DIR}/kspread/dialogs/position_cell_format.ui

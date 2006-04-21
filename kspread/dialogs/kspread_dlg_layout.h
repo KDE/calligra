@@ -48,9 +48,9 @@
 #include "kspread_format.h"
 #include "kspread_doc.h"
 #include "kspread_value.h"
-#include "position_cell_format.h"
-#include "font_cell_format.h"
-#include "protection_cell_format.h"
+#include "ui_position_cell_format.h"
+#include "ui_font_cell_format.h"
+#include "ui_protection_cell_format.h"
 
 #include <qpushbutton.h>
 #include <qcheckbox.h>
@@ -167,7 +167,7 @@ class GeneralTab : public QWidget
 
 /**
  */
-class CellFormatPageFont : public FontTab
+class CellFormatPageFont : public QWidget, public Ui::FontWidget
 {
     Q_OBJECT
 public:
@@ -252,7 +252,7 @@ protected:
     bool m_bFormatColorChanged;
 };
 
-class CellFormatPagePosition : public PositionTab
+class CellFormatPagePosition : public QWidget, public Ui::PositionWidget
 {
     Q_OBJECT
 public:
@@ -454,7 +454,7 @@ protected:
     CellFormatDialog *dlg;
 };
 
-class CellFormatPageProtection : public ProtectionTab
+class CellFormatPageProtection : public QWidget, public Ui::ProtectionWidget
 {
   Q_OBJECT
 

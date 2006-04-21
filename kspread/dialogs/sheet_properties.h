@@ -21,12 +21,20 @@
 #define SHEET_PROPERTIES_DIALOG
 
 #include <qwidget.h>
+
 #include <kdialogbase.h>
+
 #include "kspread_sheet.h"
+#include "ui_sheet_properties_base.h"
 
 namespace KSpread
 {
-class SheetPropertiesBase;
+
+class SheetPropertiesWidget : public QWidget, public Ui::SheetPropertiesWidget
+{
+ public:
+  SheetPropertiesWidget(QWidget* parent) : QWidget(parent) { setupUi(this); }
+};
 
 class SheetPropertiesDialog : public KDialogBase
 {
@@ -39,9 +47,9 @@ public:
     ~SheetPropertiesDialog();
 
     virtual void slotDefault();
-    
+
     Sheet::LayoutDirection layoutDirection() const;
-    
+
     void setLayoutDirection( Sheet::LayoutDirection dir );
 
     bool autoCalc() const;
@@ -85,7 +93,7 @@ public:
     void setCapitalizeFirstLetter( bool b );
 
 private:
-    SheetPropertiesBase* d;
+    SheetPropertiesWidget* m_widget;
 };
 
 } // namespace
