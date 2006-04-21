@@ -2315,7 +2315,10 @@ CellFormatPagePosition::CellFormatPagePosition( QWidget* parent, CellFormatDialo
     if ( dlg->isRowSelected )
         width->setEnabled(false);
 
-    defaultWidth->setText(i18n("Default width (%1 %2)").arg(KoUnit::toUserValue(dlg->defaultWidthSize, dlg->getDoc()->unit()), 0, 'f', 2).arg(dlg->getDoc()->unitName()));
+    defaultWidth->setText(i18n("Default width (%1 %2)",
+                          QString::number(KoUnit::toUserValue(dlg->defaultWidthSize,
+                                          dlg->getDoc()->unit()), 'f', 2),
+                          dlg->getDoc()->unitName()));
     if ( dlg->isRowSelected )
         defaultWidth->setEnabled(false);
 
@@ -2332,7 +2335,10 @@ CellFormatPagePosition::CellFormatPagePosition( QWidget* parent, CellFormatDialo
     if ( dlg->isColumnSelected )
         height->setEnabled(false);
 
-    defaultHeight->setText(i18n("Default height (%1 %2)").arg(KoUnit::toUserValue(dlg->defaultHeightSize, dlg->getDoc()->unit()), 0, 'f', 2).arg(dlg->getDoc()->unitName())); //annma
+    defaultHeight->setText(i18n("Default height (%1 %2)",
+                           QString::number(KoUnit::toUserValue(dlg->defaultHeightSize,
+                                           dlg->getDoc()->unit()), 'f', 2),
+                           dlg->getDoc()->unitName()));
     if ( dlg->isColumnSelected )
         defaultHeight->setEnabled(false);
 
