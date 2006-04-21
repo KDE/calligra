@@ -32,12 +32,6 @@ Fifth Floor, Boston, MA 02110-1301, USA.</comment>
       <string>Subtotal</string>
     </property>
     <layout class="QGridLayout" >
-      <property name="margin" >
-        <number>11</number>
-      </property>
-      <property name="spacing" >
-        <number>6</number>
-      </property>
       <item row="0" column="0" >
         <widget class="QTabWidget" name="TabWidget2" >
           <property name="sizePolicy" >
@@ -53,12 +47,6 @@ Fifth Floor, Boston, MA 02110-1301, USA.</comment>
               <string>Subtotal</string>
             </attribute>
             <layout class="QGridLayout" >
-              <property name="margin" >
-                <number>11</number>
-              </property>
-              <property name="spacing" >
-                <number>6</number>
-              </property>
               <item row="3" column="0" >
                 <widget class="QComboBox" name="m_functionBox" />
               </item>
@@ -108,12 +96,6 @@ Fifth Floor, Boston, MA 02110-1301, USA.</comment>
               <string>Options</string>
             </attribute>
             <layout class="QGridLayout" >
-              <property name="margin" >
-                <number>11</number>
-              </property>
-              <property name="spacing" >
-                <number>6</number>
-              </property>
               <item row="0" column="0" >
                 <widget class="QCheckBox" name="m_replaceSubtotals" >
                   <property name="text" >
@@ -186,6 +168,9 @@ Fifth Floor, Boston, MA 02110-1301, USA.</comment>
       </item>
     </layout>
   </widget>
-  <layoutdefault spacing="6" margin="11" />
+  <layoutfunction spacing="KDialog::spacingHint" margin="KDialog::marginHint" />
   <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
+  <includes>
+    <include location="global">kdialog.h</include>
+  </includes>
 </ui>

@@ -32,36 +32,18 @@ Fifth Floor, Boston, MA 02110-1301, USA.</comment>
    <string>Form</string>
   </property>
   <layout class="QVBoxLayout" >
-   <property name="margin" >
-    <number>9</number>
-   </property>
-   <property name="spacing" >
-    <number>6</number>
-   </property>
    <item>
     <widget class="QGroupBox" name="groupBox" >
      <property name="title" >
       <string>Format</string>
      </property>
      <layout class="QGridLayout" >
-      <property name="margin" >
-       <number>9</number>
-      </property>
-      <property name="spacing" >
-       <number>6</number>
-      </property>
       <item rowspan="2" row="7" column="1" >
        <widget class="QGroupBox" name="groupBox_3" >
         <property name="title" >
          <string>Preview</string>
         </property>
         <layout class="QVBoxLayout" >
-         <property name="margin" >
-          <number>9</number>
-         </property>
-         <property name="spacing" >
-          <number>6</number>
-         </property>
          <item>
           <widget class="QLabel" name="label" >
            <property name="text" >
@@ -147,12 +129,6 @@ Fifth Floor, Boston, MA 02110-1301, USA.</comment>
       <string/>
      </property>
      <layout class="QGridLayout" >
-      <property name="margin" >
-       <number>9</number>
-      </property>
-      <property name="spacing" >
-       <number>6</number>
-      </property>
       <item row="1" column="3" >
        <widget class="QComboBox" name="comboBox_2" >
         <property name="sizePolicy" >
@@ -253,10 +229,11 @@ Fifth Floor, Boston, MA 02110-1301, USA.</comment>
    </item>
   </layout>
  </widget>
- <layoutdefault spacing="10" margin="0" />
- <layoutfunction spacing="KDialog::spacingHint()" margin="KDialog::marginHint()" />
- <pixmapfunction></pixmapfunction>
- <includes/>
+ <layoutfunction spacing="KDialog::spacingHint" margin="KDialog::marginHint" />
+ <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
+ <includes>
+   <include location="global">kdialog.h</include>
+ </includes>
  <resources/>
  <connections/>
 </ui>

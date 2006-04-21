@@ -29,9 +29,6 @@ Fifth Floor, Boston, MA 02110-1301, USA.</comment>
       </rect>
     </property>
     <layout class="QGridLayout" >
-      <property name="margin" >
-        <number>7</number>
-      </property>
       <item row="0" column="0" >
         <widget class="Q3ButtonGroup" name="horizontalGroup" >
           <property name="sizePolicy" >
@@ -43,7 +40,7 @@ Fifth Floor, Boston, MA 02110-1301, USA.</comment>
             </sizepolicy>
           </property>
           <property name="title" >
-            <string>Qt::Horizontal</string>
+            <string>Horizontal</string>
           </property>
           <property name="whatsThis" stdset="0" >
             <string>&lt;qt>Set the content position horizontally in the cell.
@@ -52,41 +49,34 @@ Fifth Floor, Boston, MA 02110-1301, USA.</comment>
 &lt;b>Center&lt;/b> means the content will be in the center horizontally in the cell.
 &lt;b>Right&lt;/b> means the content of the cell will be displayed on the right of the cell.&lt;/qt></string>
           </property>
-          <layout class="QHBoxLayout" >
-            <item>
+          <layout class="QGridLayout" >
+            <item row="1" column="0" >
               <widget class="QRadioButton" name="standard" >
                 <property name="text" >
                   <string>Standard</string>
                 </property>
               </widget>
             </item>
-            <item>
-              <layout class="QVBoxLayout" >
-                <property name="margin" >
-                  <number>0</number>
-                </property>
-                <item>
+            <item row="0" column="1" >
                   <widget class="QRadioButton" name="left" >
                     <property name="text" >
                       <string>Qt::DockLeft</string>
                     </property>
                   </widget>
                 </item>
-                <item>
-                  <widget class="QRadioButton" name="center" >
-                    <property name="text" >
-                      <string>Center</string>
-                    </property>
-                  </widget>
-                </item>
-                <item>
-                  <widget class="QRadioButton" name="right" >
-                    <property name="text" >
-                      <string>Qt::DockRight</string>
-                    </property>
-                  </widget>
-                </item>
-              </layout>
+            <item row="1" column="1" >
+              <widget class="QRadioButton" name="center" >
+                <property name="text" >
+                  <string>Center</string>
+                </property>
+              </widget>
+            </item>
+            <item row="2" column="1">
+              <widget class="QRadioButton" name="right" >
+                <property name="text" >
+                  <string>Qt::DockRight</string>
+                </property>
+              </widget>
             </item>
           </layout>
         </widget>
@@ -94,7 +84,7 @@ Fifth Floor, Boston, MA 02110-1301, USA.</comment>
       <item row="0" column="1" >
         <widget class="Q3ButtonGroup" name="buttonGroup2" >
           <property name="title" >
-            <string>Qt::Vertical</string>
+            <string>Vertical</string>
           </property>
           <property name="whatsThis" stdset="0" >
             <string>&lt;qt>Set the content position vertically in the cell.
@@ -240,9 +230,6 @@ When a merged cell is selected and when you uncheck this, then all cells come ba
           <layout class="QGridLayout" >
             <item row="0" column="1" >
               <layout class="QGridLayout" >
-                <property name="margin" >
-                  <number>0</number>
-                </property>
                 <item rowspan="1" row="1" column="0" colspan="3" >
                   <widget class="QCheckBox" name="defaultHeight" >
                     <property name="text" >
@@ -293,9 +280,6 @@ When a merged cell is selected and when you uncheck this, then all cells come ba
             </item>
             <item row="0" column="0" >
               <layout class="QGridLayout" >
-                <property name="margin" >
-                  <number>0</number>
-                </property>
                 <item rowspan="1" row="1" column="0" colspan="3" >
                   <widget class="QCheckBox" name="defaultWidth" >
                     <property name="text" >
@@ -349,6 +333,9 @@ When a merged cell is selected and when you uncheck this, then all cells come ba
       </item>
     </layout>
   </widget>
-  <layoutdefault spacing="6" margin="11" />
+  <layoutfunction spacing="KDialog::spacingHint" margin="KDialog::marginHint" />
   <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
+  <includes>
+   <include location="global">kdialog.h</include>
+  </includes>
 </ui>

@@ -63,9 +63,6 @@ Note that you can print it even if the cell is protected</string>
           <layout class="QGridLayout" >
             <item row="0" column="0" >
               <layout class="QVBoxLayout" >
-                <property name="margin" >
-                  <number>0</number>
-                </property>
                 <item>
                   <widget class="QCheckBox" name="m_bHideAll" >
                     <property name="text" >
@@ -78,9 +75,6 @@ Note that you can print it even if the cell is protected</string>
                 </item>
                 <item>
                   <layout class="QHBoxLayout" >
-                    <property name="margin" >
-                      <number>0</number>
-                    </property>
                     <item>
                       <spacer name="spacer3" >
                         <property name="sizeHint" >
@@ -114,9 +108,6 @@ Note that you can print it even if the cell is protected</string>
                 </item>
                 <item>
                   <layout class="QHBoxLayout" >
-                    <property name="margin" >
-                      <number>0</number>
-                    </property>
                     <item>
                       <spacer name="spacer4" >
                         <property name="sizeHint" >
@@ -152,6 +143,9 @@ Note that you can print it even if the cell is protected</string>
       </item>
     </layout>
   </widget>
-  <layoutdefault spacing="6" margin="11" />
+  <layoutfunction spacing="KDialog::spacingHint" margin="KDialog::marginHint" />
   <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
+  <includes>
+    <include location="global">kdialog.h</include>
+  </includes>
 </ui>

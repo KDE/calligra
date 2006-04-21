@@ -35,9 +35,6 @@ The default font is set for all cells in the Format -> Style Manager menu with t
     <layout class="QGridLayout" >
       <item row="0" column="1" >
         <layout class="QGridLayout" >
-          <property name="margin" >
-            <number>0</number>
-          </property>
           <item row="0" column="1" >
             <widget class="QComboBox" name="style_combo" >
               <property name="insertPolicy" >
@@ -210,6 +207,9 @@ The default font is set for all cells in the Format -> Style Manager menu with t
       </item>
     </layout>
   </widget>
-  <layoutdefault spacing="6" margin="11" />
+  <layoutfunction spacing="KDialog::spacingHint" margin="KDialog::marginHint" />
   <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
+  <includes>
+    <include location="global">kdialog.h</include>
+  </includes>
 </ui>

@@ -42,14 +42,8 @@ Fifth Floor, Boston, MA 02110-1301, USA.</comment>
     <layout class="QVBoxLayout" >
       <item>
         <layout class="QHBoxLayout" >
-          <property name="margin" >
-            <number>0</number>
-          </property>
           <item>
             <layout class="QHBoxLayout" >
-              <property name="margin" >
-                <number>0</number>
-              </property>
               <item>
                 <widget class="QLabel" name="textLabel1" >
                   <property name="text" >
@@ -112,9 +106,6 @@ Fifth Floor, Boston, MA 02110-1301, USA.</comment>
       </item>
       <item>
         <layout class="QGridLayout" >
-          <property name="margin" >
-            <number>0</number>
-          </property>
           <item row="4" column="1" >
             <widget class="QCheckBox" name="showCommentIndicatorCheckBox" >
               <property name="text" >
@@ -219,9 +210,11 @@ Fifth Floor, Boston, MA 02110-1301, USA.</comment>
       </item>
     </layout>
   </widget>
-  <layoutdefault spacing="6" margin="11" />
   <layoutfunction spacing="KDialog::spacingHint" margin="KDialog::marginHint" />
   <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
+  <includes>
+    <include location="global">kdialog.h</include>
+  </includes>
   <customwidgets>
     <customwidget>
       <class>KComboBox</class>
