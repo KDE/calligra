@@ -228,7 +228,7 @@ VDocumentTab::VDocumentTab( KarbonView* view, QWidget* parent )
 	layout->setMargin( 3 );
 	layout->setSpacing( 2 );
 	layout->addMultiCellWidget( m_documentPreview = new VDocumentPreview( m_view, this ), 0, 7, 2, 2 );
-	layout->addWidget( new QLabel( i18n( "Width:" ), this ), 0, 0 );
+	layout->addWidget( new QLabel( i18n( "document width", "Width:" ), this ), 0, 0 );
 	layout->addWidget( new QLabel( i18n( "Height:" ), this ), 1, 0 );
 	layout->addMultiCellWidget( frame = new QFrame( this ), 2, 2, 0, 1 );
 	frame->setFrameShape( QFrame::HLine );

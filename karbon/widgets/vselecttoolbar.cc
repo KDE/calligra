@@ -48,7 +48,7 @@ VSelectToolBar::VSelectToolBar( KarbonView *view, const char* name ) : KToolBar(
 	insertWidget( 3, m_y->width(), m_y );
 	
 	insertSeparator( 4 );
-	QLabel *w_label = new QLabel( i18n( "Width:" ), this, "kde toolbar widget" );
+	QLabel *w_label = new QLabel( i18n( "selection width", "Width:" ), this, "kde toolbar widget" );
 	insertWidget( 5, w_label->width(), w_label );
 	m_width = new KoUnitDoubleSpinBox( this, 0.0, 1000.0, 0.5 );
 	connect( m_width, SIGNAL( valueChanged( double ) ), this, SLOT( slotWidthChanged( double ) ) );

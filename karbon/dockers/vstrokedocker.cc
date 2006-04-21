@@ -48,7 +48,7 @@ VStrokeDocker::VStrokeDocker( KarbonPart* part, KarbonView* parent, const char* 
 
 	QGridLayout *mainLayout = new QGridLayout( this, 4, 2 );
 	
-	QLabel* widthLabel = new QLabel( i18n ( "Width:" ), this );
+	QLabel* widthLabel = new QLabel( i18n ( "stroke width", "Width:" ), this );
 	mainLayout->addWidget( widthLabel, 0, 0 );
 	// set min/max/step and value in points, then set actual unit
 	m_setLineWidth = new KoUnitDoubleSpinBox( this, 0.0, 1000.0, 0.5, 1.0, KoUnit::U_PT, 2 );

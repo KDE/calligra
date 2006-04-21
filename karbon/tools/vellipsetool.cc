@@ -47,7 +47,7 @@ VEllipseOptionsWidget::VEllipseOptionsWidget( KarbonPart *part, QWidget *parent,
 	connect( m_type, SIGNAL( activated( int ) ), this, SLOT( typeChanged( int ) ) );
 
 	// add width/height-input:
-	m_widthLabel = new QLabel( i18n( "Width:" ), group );
+	m_widthLabel = new QLabel( i18n( "object width", "Width:" ), group );
 	m_width = new KoUnitDoubleSpinBox( group, 0.0, 1000.0, 0.5, 100.0, KoUnit::U_MM );
 	m_heightLabel = new QLabel( i18n( "Height:" ), group );
 	m_height = new KoUnitDoubleSpinBox( group, 0.0, 1000.0, 0.5, 100.0, KoUnit::U_MM );
