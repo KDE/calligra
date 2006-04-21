@@ -63,3 +63,4 @@ Type=Application
 Icon=karbon
 X-KDE-NativeMimeType=application/x-karbon
 Categories=Qt;KDE;Office;X-KDE-More;
+Comment=Create scalable vector drawings
