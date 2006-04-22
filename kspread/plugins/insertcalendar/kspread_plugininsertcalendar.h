@@ -77,7 +77,7 @@ class KSPREAD_EXPORT PluginInsertCalendar : public KParts::Plugin
     /**
      * Constructor. This constructor is usable with KGenericFactory.
      */
-    PluginInsertCalendar( QObject *parent );
+    PluginInsertCalendar( QObject *parent, const char *name, const QStringList& args );
 
     /**
      * Virtual destructor.
