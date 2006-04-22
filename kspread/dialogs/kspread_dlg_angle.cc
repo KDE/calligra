@@ -41,7 +41,7 @@
 using namespace KSpread;
 
 AngleDialog::AngleDialog(View* parent, const char* name, const QPoint &_marker)
-	: KDialogBase( parent, name,TRUE,i18n("Change Angle" ), Ok|Cancel|Default )
+  : KDialogBase( KDialogBase::Tabbed, Qt::Dialog, parent, name,TRUE,i18n("Change Angle" ), Ok|Cancel|Default )
 {
   m_pView=parent;
   marker=_marker;

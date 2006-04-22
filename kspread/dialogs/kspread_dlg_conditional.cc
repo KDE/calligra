@@ -284,7 +284,7 @@ void ConditionalWidget::slotTextChanged3( const QString & text )
  */
 ConditionalDialog::ConditionalDialog( View * parent, const char * name,
                                               const QRect & marker )
-  : KDialogBase( parent, name, true, "", KDialogBase::Ok | KDialogBase::Cancel,
+  : KDialogBase( KDialogBase::Tabbed, Qt::Dialog, parent, name, true, "", KDialogBase::Ok | KDialogBase::Cancel,
                  KDialogBase::Ok, false ),
     m_view( parent ),
     m_dlg( new ConditionalWidget( this ) ),

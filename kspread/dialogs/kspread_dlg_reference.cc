@@ -254,7 +254,7 @@ void reference::slotCancel()
 EditAreaName::EditAreaName( View * parent,
                                           const char * name,
                                           QString const & areaname )
-    : KDialogBase( parent, name ,true,i18n( "Edit Area" ) , Ok|Cancel )
+  : KDialogBase( KDialogBase::Tabbed, Qt::Dialog, parent, name ,true,i18n( "Edit Area" ) , Ok|Cancel )
 {
   m_pView = parent;
 

@@ -75,7 +75,7 @@ StyleWidget::~StyleWidget()
 
 StyleDlg::StyleDlg( View * parent, StyleManager * manager,
                                   const char * name )
-  : KDialogBase( parent, name, true, "",
+  : KDialogBase( KDialogBase::Tabbed, Qt::Dialog, parent, name, true, "",
                  KDialogBase::Ok | KDialogBase::User1 | KDialogBase::User2 | KDialogBase::User3 | KDialogBase::Close,
                  KDialogBase::Ok, false, KGuiItem( i18n( "&New..." ) ), KGuiItem( i18n( "&Modify..." ) ), KGuiItem( i18n( "&Delete" ) ) ),
     m_view( parent ),

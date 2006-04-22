@@ -43,7 +43,7 @@
 using namespace KSpread;
 
 ListDialog::ListDialog( QWidget* parent, const char* name )
-	: KDialogBase( parent, name, true, i18n("Custom Lists"), Ok|Cancel )
+  : KDialogBase( KDialogBase::Tabbed, Qt::Dialog, parent, name, true, i18n("Custom Lists"), Ok|Cancel )
 {
   QWidget* page = new QWidget( this );
   setMainWidget( page );

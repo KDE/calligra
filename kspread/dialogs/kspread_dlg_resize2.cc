@@ -51,7 +51,7 @@
 using namespace KSpread;
 
 ResizeRow::ResizeRow( View* parent, const char* name )
-	: KDialogBase( parent, name, true, i18n("Resize Row"), Ok|Cancel|Default )
+  : KDialogBase( KDialogBase::Tabbed, Qt::Dialog, parent, name, true, i18n("Resize Row"), Ok|Cancel|Default )
 {
     m_pView = parent;
 
@@ -119,7 +119,7 @@ void ResizeRow::slotDefault()
 }
 
 ResizeColumn::ResizeColumn( View* parent, const char* name )
-	: KDialogBase( parent, name, true, i18n("Resize Column"), Ok|Cancel|Default )
+  : KDialogBase( KDialogBase::Tabbed, Qt::Dialog, parent, name, true, i18n("Resize Column"), Ok|Cancel|Default )
 {
     m_pView = parent;
 

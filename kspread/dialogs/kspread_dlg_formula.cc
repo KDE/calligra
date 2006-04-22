@@ -58,7 +58,7 @@
 using namespace KSpread;
 
 FormulaDialog::FormulaDialog( View* parent, const char* name,const QString& formulaName)
-    : KDialogBase( parent, name,false,i18n("Function"), Ok|Cancel )
+  : KDialogBase( KDialogBase::Tabbed, Qt::Dialog, parent, name,false,i18n("Function"), Ok|Cancel )
 {
 
   //setWFlags( Qt::WDestructiveClose );

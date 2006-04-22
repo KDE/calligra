@@ -40,7 +40,7 @@
 using namespace KSpread;
 
 AreaDialog::AreaDialog( View * parent, const char * name, const QPoint & _marker )
-  : KDialogBase( parent, name, TRUE, i18n("Area Name"), Ok | Cancel )
+  : KDialogBase( KDialogBase::Tabbed, Qt::Dialog, parent, name, TRUE, i18n("Area Name"), Ok | Cancel )
 {
   m_pView  = parent;
   m_marker = _marker;

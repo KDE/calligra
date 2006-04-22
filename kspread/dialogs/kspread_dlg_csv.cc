@@ -55,7 +55,7 @@
 using namespace KSpread;
 
 CSVDialog::CSVDialog( View * parent, const char * name, QRect const & rect, Mode mode)
-  : KDialogBase( parent, name, true, QString::null, Ok|Cancel ),
+  : KDialogBase( KDialogBase::Tabbed, Qt::Dialog, parent, name, true, QString::null, Ok|Cancel ),
     m_pView( parent ),
     m_cancelled( false ),
     m_adjustRows( 0 ),

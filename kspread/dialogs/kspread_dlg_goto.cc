@@ -41,7 +41,7 @@
 using namespace KSpread;
 
 GotoDialog::GotoDialog( View* parent, const char* name )
-	: KDialogBase( parent, name, TRUE, i18n("Goto Cell"), Ok|Cancel )
+  : KDialogBase( KDialogBase::Tabbed, Qt::Dialog, parent, name, TRUE, i18n("Goto Cell"), Ok|Cancel )
 {
   m_pView = parent;
   QWidget *page = new QWidget( this );

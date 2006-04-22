@@ -40,7 +40,7 @@
 using namespace KSpread;
 
 PasteInsertDialog::PasteInsertDialog( View* parent, const char* name,const QRect &_rect)
-	: KDialogBase( parent, name, TRUE,i18n("Paste Inserting Cells"),Ok|Cancel )
+  : KDialogBase( KDialogBase::Tabbed, Qt::Dialog, parent, name, TRUE,i18n("Paste Inserting Cells"),Ok|Cancel )
 {
   m_pView = parent;
   rect=_rect;

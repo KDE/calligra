@@ -59,7 +59,7 @@
 using namespace KSpread;
 
 ConsolidateDialog::ConsolidateDialog( View* parent, const char* name )
-	: KDialogBase( parent, name, false, i18n("Consolidate"), Ok|Cancel )
+  : KDialogBase( KDialogBase::Tabbed, Qt::Dialog, parent, name, false, i18n("Consolidate"), Ok|Cancel )
 {
   m_pView = parent;
 

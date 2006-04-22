@@ -45,7 +45,7 @@
 using namespace KSpread;
 
 InsertDialog::InsertDialog( View* parent, const char* name,const QRect &_rect,Mode _mode)
-	: KDialogBase( parent, name, TRUE,"",Ok|Cancel )
+  : KDialogBase( KDialogBase::Tabbed, Qt::Dialog, parent, name, TRUE,"",Ok|Cancel )
 {
   m_pView = parent;
   rect=_rect;

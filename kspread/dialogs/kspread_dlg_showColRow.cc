@@ -39,7 +39,7 @@
 using namespace KSpread;
 
 ShowColRow::ShowColRow( View* parent, const char* name, Type _type )
-	: KDialogBase( parent, name,TRUE,"",Ok|Cancel )
+  : KDialogBase( KDialogBase::Tabbed, Qt::Dialog, parent, name,TRUE,"",Ok|Cancel )
 {
   m_pView = parent;
   typeShow=_type;

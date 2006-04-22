@@ -31,7 +31,7 @@
 using namespace KSpread;
 
 SheetPropertiesDialog::SheetPropertiesDialog( QWidget* parent ):
-  KDialogBase( parent, "sheetPropertiesDialog", true,
+    KDialogBase( KDialogBase::Tabbed, Qt::Dialog, parent, "sheetPropertiesDialog", true,
   i18n("Sheet Properties"),
   KDialogBase::Ok|KDialogBase::Cancel|KDialogBase::Default )
 {

@@ -38,7 +38,7 @@
 using namespace KSpread;
 
 SubtotalDialog::SubtotalDialog( View * parent, QRect const & selection, const char * name )
-  : KDialogBase(parent, name, true, i18n( "Subtotals" ), Ok | Cancel | User1, Ok, true, KGuiItem(i18n( "Remove All" )) ),
+  : KDialogBase(KDialogBase::Tabbed, Qt::Dialog, parent, name, true, i18n( "Subtotals" ), Ok | Cancel | User1, Ok, true, KGuiItem(i18n( "Remove All" )) ),
     m_pView( parent ),
     m_pSheet( m_pView->activeSheet() ),
     m_selection( selection ),

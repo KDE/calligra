@@ -62,7 +62,7 @@ using namespace KSpread;
 
 SortDialog::SortDialog( View * parent,  const char * name,
                                 bool modal )
-    : KDialogBase( parent, name, modal,"Sort",Ok|Cancel ),
+  : KDialogBase( KDialogBase::Tabbed, Qt::Dialog, parent, name, modal,"Sort",Ok|Cancel ),
     m_pView( parent )
 {
   if ( !name )
@@ -336,7 +336,7 @@ void SortDialog::init()
       continue;
     m_outputSheet->insertItem( t->sheetName() );
   }
-  m_outputSheet->setCurrentText( m_pView->activeSheet()->sheetName() );*/
+  m_outputSheet->setItemText( m_pView->activeSheet()->sheetName() );*/
 
   QRect r = sourceArea();
   /*QString cellArea;
