@@ -53,14 +53,14 @@ class ValueFormatter {
 
   /** create a date format */
   QString dateFormat (const QDate &_date, FormatType fmtType);
-  
+
   /** create a time format */
   QString timeFormat (const QDateTime &_time, FormatType fmtType);
-  
+
  protected:
- 
+
   ValueConverter* converter;
- 
+
   /** determine the formatting type that should be used to format this value
   in a cell with a given format type */
   FormatType determineFormatting (const Value &value,
@@ -71,10 +71,10 @@ class ValueFormatter {
                               const QString& currencySymbol);
   QString createNumberFormat (double value, int precision, FormatType fmt,
       bool alwaysSigned, const QString& currencySymbol);
-  
+
   /** create a fraction format */
   QString fractionFormat (double value, FormatType fmtType);
-  
+
   QString errorFormat (Cell *cell);
 
   /** Remove trailing zeros and the decimal point if necessary
