@@ -95,17 +95,17 @@ DatabaseDialog::DatabaseDialog( View * parent, QRect const & rect, const char * 
   Frame16->setFrameShadow( QFrame::Plain );
   QGridLayout * Frame16Layout = new QGridLayout( Frame16, 1, 1, 11, 7, "Frame16Layout");
 
-  m_Type = new QLabel( Frame16, "m_Type" );
+  m_Type = new QLabel( Frame16 );
   m_Type->setText( i18n( "Type:" ) );
 
   Frame16Layout->addWidget( m_Type, 0, 0 );
 
-  QLabel * TextLabel4 = new QLabel( Frame16, "TextLabel4" );
+  QLabel * TextLabel4 = new QLabel( Frame16 );
   TextLabel4->setText( i18n( "User name:\n"
                                "(if necessary)" ) );
   Frame16Layout->addWidget( TextLabel4, 4, 0 );
 
-  QLabel * TextLabel2 = new QLabel( Frame16, "TextLabel2" );
+  QLabel * TextLabel2 = new QLabel( Frame16 );
   TextLabel2->setText( i18n( "Host:" ) );
   Frame16Layout->addWidget( TextLabel2, 2, 0 );
 
@@ -119,7 +119,7 @@ DatabaseDialog::DatabaseDialog( View * parent, QRect const & rect, const char * 
   m_host->setText("localhost");
   Frame16Layout->addWidget( m_host, 2, 1 );
 
-  QLabel * TextLabel3 = new QLabel( Frame16, "TextLabel3" );
+  QLabel * TextLabel3 = new QLabel( Frame16 );
   TextLabel3->setText( i18n( "Port:\n(if necessary)") );
   Frame16Layout->addWidget( TextLabel3, 3, 0 );
 
@@ -131,20 +131,20 @@ DatabaseDialog::DatabaseDialog( View * parent, QRect const & rect, const char * 
   m_port->setValidator( new KIntValidator( m_port ) );
   Frame16Layout->addWidget( m_port, 3, 1 );
 
-  QLabel * dbName = new QLabel( Frame16, "dbName" );
+  QLabel * dbName = new QLabel( Frame16 );
   dbName->setText( i18n( "Database name: ") );
   Frame16Layout->addWidget( dbName, 1, 0 );
 
   m_databaseName = new QLineEdit( Frame16, "m_databaseName" );
   Frame16Layout->addWidget( m_databaseName, 1, 1 );
 
-  QLabel * TextLabel5 = new QLabel( Frame16, "TextLabel5" );
+  QLabel * TextLabel5 = new QLabel( Frame16 );
   TextLabel5->setText( i18n( "Password:\n"
                                "(if necessary)" ) );
   Frame16Layout->addWidget( TextLabel5, 5, 0 );
   Frame5Layout->addWidget( Frame16 );
 
-  m_databaseStatus = new QLabel( Frame5, "m_databaseStatus" );
+  m_databaseStatus = new QLabel( Frame5 );
   m_databaseStatus->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)0, (QSizePolicy::SizeType)5, 0, 0, m_databaseStatus->sizePolicy().hasHeightForWidth() ) );
   m_databaseStatus->setMaximumSize( QSize( 32767, 30 ) );
   m_databaseStatus->setText( " " );
@@ -175,7 +175,7 @@ DatabaseDialog::DatabaseDialog( View * parent, QRect const & rect, const char * 
   Layout21->setMargin(0);
   Layout21->setSpacing(6);
 
-  //  QLabel * TextLabel12_2 = new QLabel( Frame5_2, "TextLabel12_2" );
+  //  QLabel * TextLabel12_2 = new QLabel( Frame5_2 );
   //  TextLabel12_2->setText( i18n( "Database:" ) );
   //  Layout21->addWidget( TextLabel12_2 );
 
@@ -188,11 +188,11 @@ DatabaseDialog::DatabaseDialog( View * parent, QRect const & rect, const char * 
 
   Frame5_2Layout->addLayout( Layout21, 0, 0 );
 
-  m_sheetStatus = new QLabel( Frame5_2, "m_tableStatus" );
+  m_sheetStatus = new QLabel( Frame5_2 );
   m_sheetStatus->setText( " " );
   Frame5_2Layout->addWidget( m_sheetStatus, 3, 0 );
 
-  m_SelectSheetLabel = new QLabel( Frame5_2, "m_SelectSheetLabel" );
+  m_SelectSheetLabel = new QLabel( Frame5_2 );
   m_SelectSheetLabel->setText( i18n( "Select tables:" ) );
   Frame5_2Layout->addWidget( m_SelectSheetLabel, 1, 0 );
 
@@ -221,7 +221,7 @@ DatabaseDialog::DatabaseDialog( View * parent, QRect const & rect, const char * 
 // ###  Frame5_2_2->setFrameShadow( QFrame::MShadow );
   QGridLayout * Frame5_2_2Layout = new QGridLayout( Frame5_2_2, 1, 1, 11, 6, "Frame5_2_2Layout");
 
-  QLabel * TextLabel11_2 = new QLabel( Frame5_2_2, "TextLabel11_2" );
+  QLabel * TextLabel11_2 = new QLabel( Frame5_2_2 );
   TextLabel11_2->setText( i18n( "Select columns:" ) );
 
   Frame5_2_2Layout->addWidget( TextLabel11_2, 0, 0 );
@@ -234,7 +234,7 @@ DatabaseDialog::DatabaseDialog( View * parent, QRect const & rect, const char * 
 
   Frame5_2_2Layout->addWidget( m_columnView, 1, 0 );
 
-  m_columnsStatus = new QLabel( Frame5_2_2, "m_columnsStatus" );
+  m_columnsStatus = new QLabel( Frame5_2_2 );
   m_columnsStatus->setText( " " );
   Frame5_2_2Layout->addWidget( m_columnsStatus, 2, 0 );
 
@@ -259,7 +259,7 @@ DatabaseDialog::DatabaseDialog( View * parent, QRect const & rect, const char * 
 // ###  optionsFrame->setFrameShadow( QFrame::MShadow );
   QGridLayout * optionsFrameLayout = new QGridLayout( optionsFrame, 1, 1, 11, 6, "optionsFrameLayout");
 
-  m_columns_1 = new QComboBox( false, optionsFrame, "m_columns_1" );
+  m_columns_1 = new QComboBox( optionsFrame );
   optionsFrameLayout->addWidget( m_columns_1, 2, 0 );
 
   m_operatorValue_2 = new QLineEdit( optionsFrame, "m_operatorValue_2" );
@@ -320,7 +320,7 @@ DatabaseDialog::DatabaseDialog( View * parent, QRect const & rect, const char * 
 
   optionsFrameLayout->addWidget( m_operator_3, 4, 1 );
 
-  m_columns_3 = new QComboBox( false, optionsFrame, "m_columns_3" );
+  m_columns_3 = new QComboBox( optionsFrame );
 
   optionsFrameLayout->addWidget( m_columns_3, 4, 0 );
 
@@ -329,26 +329,26 @@ DatabaseDialog::DatabaseDialog( View * parent, QRect const & rect, const char * 
 
   optionsFrameLayout->addWidget( m_distinct, 7, 2 );
 
-  QLabel * TextLabel19 = new QLabel( optionsFrame, "TextLabel19" );
+  QLabel * TextLabel19 = new QLabel( optionsFrame );
   TextLabel19->setText( i18n( "Sorted by" ) );
   optionsFrameLayout->addWidget( TextLabel19, 5, 0 );
 
-  m_columnsSort_1 = new QComboBox( false, optionsFrame, "m_columnsSort_1" );
+  m_columnsSort_1 = new QComboBox( optionsFrame );
   optionsFrameLayout->addWidget( m_columnsSort_1, 5, 1 );
 
-  m_sortMode_1 = new QComboBox( false, optionsFrame, "m_sortMode_1" );
+  m_sortMode_1 = new QComboBox( optionsFrame );
   m_sortMode_1->insertItem( 0, i18n( "Ascending" ) );
   m_sortMode_1->insertItem( 1, i18n( "Descending" ) );
   optionsFrameLayout->addWidget( m_sortMode_1, 5, 2 );
 
-  QLabel * TextLabel19_2 = new QLabel( optionsFrame, "TextLabel19_2" );
+  QLabel * TextLabel19_2 = new QLabel( optionsFrame );
   TextLabel19_2->setText( i18n( "Sorted by" ) );
   optionsFrameLayout->addWidget( TextLabel19_2, 6, 0 );
 
-  m_columnsSort_2 = new QComboBox( false, optionsFrame, "m_columnsSort_2" );
+  m_columnsSort_2 = new QComboBox( optionsFrame );
   optionsFrameLayout->addWidget( m_columnsSort_2, 6, 1 );
 
-  m_sortMode_2 = new QComboBox( false, optionsFrame, "m_sortMode_2" );
+  m_sortMode_2 = new QComboBox( optionsFrame );
   m_sortMode_2->insertItem( 0, i18n( "Ascending" ) );
   m_sortMode_2->insertItem( 1, i18n( "Descending" ) );
 
@@ -381,7 +381,7 @@ DatabaseDialog::DatabaseDialog( View * parent, QRect const & rect, const char * 
   Frame5_2_2_3Layout->setMargin(11);
   Frame5_2_2_3Layout->setSpacing(6);
 
-  QLabel * TextLabel17 = new QLabel( Frame5_2_2_3, "TextLabel17" );
+  QLabel * TextLabel17 = new QLabel( Frame5_2_2_3 );
   TextLabel17->setText( i18n( "SQL query:" ) );
   Frame5_2_2_3Layout->addWidget( TextLabel17, 0, 0 );
 

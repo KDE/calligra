@@ -170,7 +170,7 @@ GeneralTab::GeneralTab( QWidget* parent, CellFormatDialog * dlg )
   QGridLayout * groupBoxLayout = new QGridLayout( groupBox->layout() );
   groupBoxLayout->setAlignment( Qt::AlignTop );
 
-  QLabel * label1 = new QLabel( groupBox, "label1" );
+  QLabel * label1 = new QLabel( groupBox );
   label1->setText( i18n( "Name:" ) );
   groupBoxLayout->addWidget( label1, 0, 0 );
 
@@ -178,7 +178,7 @@ GeneralTab::GeneralTab( QWidget* parent, CellFormatDialog * dlg )
   m_nameEdit->setText( m_dlg->styleName );
   groupBoxLayout->addWidget( m_nameEdit, 0, 1 );
 
-  QLabel * label2 = new QLabel( groupBox, "label2" );
+  QLabel * label2 = new QLabel( groupBox );
   label2->setText( i18n( "Inherit style:" ) );
   groupBoxLayout->addWidget( label2, 1, 0 );
 
@@ -1190,17 +1190,17 @@ CellFormatPageFloat::CellFormatPageFloat( QWidget* parent, CellFormatDialog *_dl
     grid->addWidget(format,0,3);
 
     QLabel* tmpQLabel;
-    tmpQLabel = new QLabel( box, "Label_1" );
+    tmpQLabel = new QLabel( box );
     grid->addWidget(tmpQLabel,2,0);
     tmpQLabel->setText( i18n("Postfix:") );
 
     postfix->setText( dlg->postfix );
 
-    tmpQLabel = new QLabel( box, "Label_2" );
+    tmpQLabel = new QLabel( box );
     grid->addWidget(tmpQLabel,0,0);
     tmpQLabel->setText( i18n("Prefix:") );
 
-    tmpQLabel = new QLabel( box, "Label_3" );
+    tmpQLabel = new QLabel( box );
     grid->addWidget(tmpQLabel,1,0);
     tmpQLabel->setText( i18n("Precision:") );
 
@@ -1212,15 +1212,15 @@ CellFormatPageFloat::CellFormatPageFloat( QWidget* parent, CellFormatDialog *_dl
     format->insertItem( *_dlg->formatAlwaysSignedPixmap, 3 );
     format->insertItem( *_dlg->formatRedAlwaysSignedPixmap, 4 );
 
-    tmpQLabel = new QLabel( box, "Label_4" );
+    tmpQLabel = new QLabel( box );
     grid->addWidget(tmpQLabel, 0, 2);
     tmpQLabel->setText( i18n("Format:") );
 
-    currencyLabel = new QLabel( box, "LabelCurrency" );
+    currencyLabel = new QLabel( box );
     grid->addWidget(currencyLabel, 1, 2);
     currencyLabel->setText( i18n("Currency:") );
 
-    currency = new QComboBox( box, "ComboCurrency" );
+    currency = new QComboBox( box );
     grid->addWidget(currency, 1, 3);
 
     currency->insertItem( i18n("Automatic") );
@@ -2805,7 +2805,7 @@ void CellFormatPageBorder::InitializeGrids()
   color = new KColorButton ( tmpQGroupBox );
   grid2->addWidget(color,7,1);
 
-  QLabel *tmpQLabel = new QLabel( tmpQGroupBox, "Label_6" );
+  QLabel *tmpQLabel = new QLabel( tmpQGroupBox );
   tmpQLabel->setText( i18n("Color:") );
   grid2->addWidget(tmpQLabel,7,0);
 
@@ -2815,7 +2815,8 @@ void CellFormatPageBorder::InitializeGrids()
   grid3->addWidget(customize,0,0);
   connect( customize, SIGNAL( clicked()), SLOT(cutomize_chosen_slot()) );
 
-  size=new QComboBox(true,tmpQGroupBox);
+  size=new QComboBox(tmpQGroupBox);
+  size->setEditable(true);
   grid3->addWidget(size,1,1);
   size->setValidator(new KIntValidator( size ));
   QString tmp;
@@ -3665,7 +3666,7 @@ CellFormatPagePattern::CellFormatPagePattern( QWidget* parent, CellFormatDialog 
     color = new KColorButton ( tmpQGroupBox );
     grid3->addWidget(color,0,1);
 
-    QLabel *tmpQLabel = new QLabel( tmpQGroupBox, "Label_1" );
+    QLabel *tmpQLabel = new QLabel( tmpQGroupBox );
     tmpQLabel->setText( i18n("Color:") );
     grid3->addWidget(tmpQLabel,0,0);
 
@@ -3674,7 +3675,7 @@ CellFormatPagePattern::CellFormatPagePattern( QWidget* parent, CellFormatDialog 
     grid3 = new QGridLayout( 1, 3 );
     grid3->setSpacing(KDialog::spacingHint());
 
-    tmpQLabel = new QLabel( tmpQGroupBox, "Label_2" );
+    tmpQLabel = new QLabel( tmpQGroupBox );
     grid3->addWidget(tmpQLabel,0,0);
     tmpQLabel->setText( i18n("Background color:") );
 

@@ -196,7 +196,8 @@ void PaperLayout::initScaleOptions( QWidget * tab, QVBoxLayout * vbox )
     m_rScalingZoom = new QRadioButton ( i18n("Zoom:"), zoomGroup );
     grid->addWidget( m_rScalingZoom, 0, 0 );
 
-    m_cZoom = new QComboBox( true, zoomGroup, "Zoom" );
+    m_cZoom = new QComboBox( zoomGroup );
+    m_cZoom->setEditable(true);
     grid->addWidget( m_cZoom, 0, 0, 1, 5, Qt::AlignLeft );
 
     QStringList lst;
@@ -228,7 +229,8 @@ void PaperLayout::initScaleOptions( QWidget * tab, QVBoxLayout * vbox )
     QLabel *pLimitPagesX = new QLabel ( i18n("X:"), zoomGroup );
     grid->addWidget( pLimitPagesX, 1, 1 );
 
-    m_cLimitPagesX = new QComboBox( true, zoomGroup, "pagesX" );
+    m_cLimitPagesX = new QComboBox( zoomGroup );
+    m_cLimitPagesX->setEditable(true);
     grid->addWidget( m_cLimitPagesX, 1, 2 );
 
     QStringList lstX;
@@ -251,7 +253,8 @@ void PaperLayout::initScaleOptions( QWidget * tab, QVBoxLayout * vbox )
     QLabel *pLimitPagesY = new QLabel ( i18n("Y:"), zoomGroup );
     grid->addWidget( pLimitPagesY, 1, 3 );
 
-    m_cLimitPagesY = new QComboBox( true, zoomGroup, "pagesY" );
+    m_cLimitPagesY = new QComboBox( zoomGroup );
+    m_cLimitPagesY->setEditable(true);
     grid->addWidget( m_cLimitPagesY, 1, 4 );
 
     QStringList lstY;

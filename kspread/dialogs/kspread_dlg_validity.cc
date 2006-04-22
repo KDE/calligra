@@ -64,7 +64,7 @@ DlgValidity::DlgValidity(View* parent,const char* name , const QRect &_marker )
   tmpQButtonGroup->layout()->setMargin(KDialog::marginHint());
   QGridLayout *grid1 = new QGridLayout(tmpQButtonGroup->layout());
 
-  QLabel *tmpQLabel = new QLabel( tmpQButtonGroup, "Label_1" );
+  QLabel *tmpQLabel = new QLabel( tmpQButtonGroup );
   tmpQLabel->setText(i18n("Allow:" ));
   grid1->addWidget(tmpQLabel,0,0);
 
@@ -85,7 +85,7 @@ DlgValidity::DlgValidity(View* parent,const char* name , const QRect &_marker )
   allowEmptyCell = new QCheckBox( i18n( "Allow blanks" ), tmpQButtonGroup );
   grid1->addWidget(allowEmptyCell,1,0);
 
-  tmpQLabel = new QLabel( tmpQButtonGroup, "Label_2" );
+  tmpQLabel = new QLabel( tmpQButtonGroup );
   tmpQLabel->setText(i18n("Data:" ));
   grid1->addWidget(tmpQLabel,2,0);
 
@@ -103,7 +103,7 @@ DlgValidity::DlgValidity(View* parent,const char* name , const QRect &_marker )
   choose->insertItems( 0,list);
   choose->setCurrentIndex(0);
 
-  edit1 = new QLabel( tmpQButtonGroup, "Label_3" );
+  edit1 = new QLabel( tmpQButtonGroup );
   edit1->setText(i18n("Minimum:" ));
   grid1->addWidget(edit1,3,0);
 
@@ -111,7 +111,7 @@ DlgValidity::DlgValidity(View* parent,const char* name , const QRect &_marker )
   grid1->addWidget(val_min,3,1);
   val_min->setValidator( new KFloatValidator( val_min ) );
 
-  edit2 = new QLabel( tmpQButtonGroup, "Label_4" );
+  edit2 = new QLabel( tmpQButtonGroup );
   edit2->setText(i18n("Maximum:" ));
   grid1->addWidget(edit2,4,0);
 
@@ -145,7 +145,7 @@ DlgValidity::DlgValidity(View* parent,const char* name , const QRect &_marker )
   validityList = new Q3TextEdit( tmpQButtonGroup );
   grid1->addWidget(validityList,2, 4,1, 1);
 
-  validityLabelList = new QLabel( tmpQButtonGroup, "Label_Label_List" );
+  validityLabelList = new QLabel( tmpQButtonGroup );
   validityLabelList->setText(i18n("Entries:" ));
   grid1->addWidget(validityLabelList,2,0);
 
@@ -164,7 +164,7 @@ DlgValidity::DlgValidity(View* parent,const char* name , const QRect &_marker )
   displayMessage->setChecked( true );
   grid2->addWidget(displayMessage,0, 0,0, 1);
 
-  tmpQLabel = new QLabel( tmpQButtonGroup, "Label_5" );
+  tmpQLabel = new QLabel( tmpQButtonGroup );
   tmpQLabel->setText(i18n("Action:" ));
   grid2->addWidget(tmpQLabel,1,0);
 
@@ -176,14 +176,14 @@ DlgValidity::DlgValidity(View* parent,const char* name , const QRect &_marker )
   list2+=i18n("Information");
   chooseAction->insertItems( 0,list2);
   chooseAction->setCurrentIndex(0);
-  tmpQLabel = new QLabel( tmpQButtonGroup, "Label_6" );
+  tmpQLabel = new QLabel( tmpQButtonGroup );
   tmpQLabel->setText(i18n("Title:" ));
   grid2->addWidget(tmpQLabel,2,0);
 
   title=new QLineEdit(  tmpQButtonGroup);
   grid2->addWidget(title,2,1);
 
-  tmpQLabel = new QLabel( tmpQButtonGroup, "Label_7" );
+  tmpQLabel = new QLabel( tmpQButtonGroup );
   tmpQLabel->setText(i18n("Message:" ));
   grid2->addWidget(tmpQLabel,3,0);
 
@@ -207,14 +207,14 @@ DlgValidity::DlgValidity(View* parent,const char* name , const QRect &_marker )
   displayMessage->setChecked( false );
   grid3->addWidget(displayHelp,0, 0,0, 1);
 
-  tmpQLabel = new QLabel( tmpQButtonGroup, "Label_6" );
+  tmpQLabel = new QLabel( tmpQButtonGroup );
   tmpQLabel->setText(i18n("Title:" ));
   grid3->addWidget(tmpQLabel,2,0);
 
   titleHelp=new QLineEdit(  tmpQButtonGroup);
   grid3->addWidget(titleHelp,2,1);
 
-  tmpQLabel = new QLabel( tmpQButtonGroup, "Label_7" );
+  tmpQLabel = new QLabel( tmpQButtonGroup );
   tmpQLabel->setText(i18n("Message:" ));
   grid3->addWidget(tmpQLabel,3,0);
 

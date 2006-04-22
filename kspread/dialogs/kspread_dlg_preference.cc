@@ -153,12 +153,12 @@ parameterLocale::parameterLocale( View* _view, KVBox *box , char *name )
 
   KLocale* locale=_view->doc()->locale();
 
-  m_language=new QLabel( tmpQGroupBox,"label");
-  m_number=new QLabel( tmpQGroupBox,"label6");
-  m_date=new QLabel( tmpQGroupBox,"label1");
-  m_shortDate=new QLabel( tmpQGroupBox,"label5");
-  m_time=new QLabel( tmpQGroupBox,"label2");
-  m_money=new QLabel( tmpQGroupBox,"label3");
+  m_language=new QLabel( tmpQGroupBox );
+  m_number=new QLabel( tmpQGroupBox );
+  m_date=new QLabel( tmpQGroupBox );
+  m_shortDate=new QLabel( tmpQGroupBox );
+  m_time=new QLabel( tmpQGroupBox );
+  m_money=new QLabel( tmpQGroupBox );
 
   updateToMatchLocale(locale);
 

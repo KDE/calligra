@@ -117,10 +117,10 @@ SortDialog::SortDialog( View * parent,  const char * name,
   QHBoxLayout * sort1BoxLayout = new QHBoxLayout( sort1Box->layout() );
   sort1BoxLayout->setAlignment( Qt::AlignTop );
 
-  m_sortKey1 = new QComboBox( false, sort1Box, "m_sortKey1" );
+  m_sortKey1 = new QComboBox( sort1Box );
   sort1BoxLayout->addWidget( m_sortKey1 );
 
-  m_sortOrder1 = new QComboBox( false, sort1Box, "m_sortOrder1" );
+  m_sortOrder1 = new QComboBox( sort1Box );
   m_sortOrder1->insertItem( i18n( "Ascending" ) );
   m_sortOrder1->insertItem( i18n( "Descending" ) );
   sort1BoxLayout->addWidget( m_sortOrder1 );
@@ -136,11 +136,11 @@ SortDialog::SortDialog( View * parent,  const char * name,
   QHBoxLayout * sort2BoxLayout = new QHBoxLayout( sort2Box->layout() );
   sort2BoxLayout->setAlignment( Qt::AlignTop );
 
-  m_sortKey2 = new QComboBox( false, sort2Box, "m_sortKey2" );
+  m_sortKey2 = new QComboBox( sort2Box );
   m_sortKey2->insertItem( i18n( "None" ) );
   sort2BoxLayout->addWidget( m_sortKey2 );
 
-  m_sortOrder2 = new QComboBox( false, sort2Box, "m_sortOrder2" );
+  m_sortOrder2 = new QComboBox( sort2Box );
   m_sortOrder2->insertItem( i18n( "Ascending" ) );
   m_sortOrder2->insertItem( i18n( "Descending" ) );
   sort2BoxLayout->addWidget( m_sortOrder2 );
@@ -156,12 +156,12 @@ SortDialog::SortDialog( View * parent,  const char * name,
   QHBoxLayout * sort3BoxLayout = new QHBoxLayout( sort3Box->layout() );
   sort3BoxLayout->setAlignment( Qt::AlignTop );
 
-  m_sortKey3 = new QComboBox( false, sort3Box, "m_sortKey3" );
+  m_sortKey3 = new QComboBox( sort3Box );
   m_sortKey3->insertItem( i18n( "None" ) );
   m_sortKey3->setEnabled( false );
   sort3BoxLayout->addWidget( m_sortKey3 );
 
-  m_sortOrder3 = new QComboBox( false, sort3Box, "m_sortOrder3" );
+  m_sortOrder3 = new QComboBox( sort3Box );
   m_sortOrder3->insertItem( i18n( "Ascending" ) );
   m_sortOrder3->insertItem( i18n( "Descending" ) );
   m_sortOrder3->setEnabled( false );
@@ -189,7 +189,7 @@ SortDialog::SortDialog( View * parent,  const char * name,
   m_useCustomLists->setText( i18n( "&Use custom list" ) );
   firstKeyBoxLayout->addWidget( m_useCustomLists );
 
-  m_customList = new QComboBox( false, firstKeyBox, "m_customList" );
+  m_customList = new QComboBox( firstKeyBox );
   m_customList->setEnabled( false );
   m_customList->setMaximumSize( 230, 30 );
   firstKeyBoxLayout->addWidget( m_customList );
@@ -216,7 +216,7 @@ SortDialog::SortDialog( View * parent,  const char * name,
   destinationSheet->setText("Destination Sheet:");
   resultToBoxLayout->addWidget(destinationSheet);
 
-  m_outputSheet = new QComboBox( false, resultToBox, "m_outputSheet" );
+  m_outputSheet = new QComboBox( resultToBox );
   resultToBoxLayout->addWidget( m_outputSheet );
   QSpacerItem * spacer = new QSpacerItem( 20, 20, QSizePolicy::Expanding, QSizePolicy::Minimum );
   resultToBoxLayout->addItem( spacer );

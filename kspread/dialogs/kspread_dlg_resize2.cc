@@ -67,7 +67,7 @@ ResizeRow::ResizeRow( View* parent, const char* name )
     RowFormat* rl = m_pView->activeSheet()->rowFormat( selection.top() );
     rowHeight = rl->dblHeight();
 
-    QLabel * label1 = new QLabel( page, "label1" );
+    QLabel * label1 = new QLabel( page );
     label1->setText( i18n( "Height:" ) );
     hLay->addWidget( label1 );
 
@@ -135,7 +135,7 @@ ResizeColumn::ResizeColumn( View* parent, const char* name )
     ColumnFormat* cl = m_pView->activeSheet()->columnFormat( selection.left() );
     columnWidth = cl->dblWidth();
 
-    QLabel * label1 = new QLabel( page, "label1" );
+    QLabel * label1 = new QLabel( page );
     label1->setText( i18n( "Width:" ) );
     hLay->addWidget( label1 );
 

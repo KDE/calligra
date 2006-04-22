@@ -63,10 +63,10 @@ ConditionalWidget::ConditionalWidget( QWidget* parent, const char* name, Qt::WFl
   QGridLayout * groupBox1_3Layout = new QGridLayout( groupBox1_3->layout() );
   groupBox1_3Layout->setAlignment( Qt::AlignTop );
 
-  QLabel * textLabel1_3 = new QLabel( groupBox1_3, "textLabel1_3" );
+  QLabel * textLabel1_3 = new QLabel( groupBox1_3 );
   groupBox1_3Layout->addWidget( textLabel1_3, 0, 0 );
 
-  m_condition_3 = new QComboBox( false, groupBox1_3, "m_condition_3" );
+  m_condition_3 = new QComboBox( groupBox1_3 );
   groupBox1_3Layout->addWidget( m_condition_3, 0, 1 );
 
   m_firstValue_3 = new KLineEdit( groupBox1_3);
@@ -77,11 +77,11 @@ ConditionalWidget::ConditionalWidget( QWidget* parent, const char* name, Qt::WFl
   m_secondValue_3->setEnabled( false );
   groupBox1_3Layout->addWidget( m_secondValue_3, 0, 3 );
 
-  m_style_3 = new QComboBox( false, groupBox1_3, "m_style_3" );
+  m_style_3 = new QComboBox( groupBox1_3 );
   m_style_3->setEnabled( false );
   groupBox1_3Layout->addWidget( m_style_3, 1, 1 );
 
-  QLabel * textLabel2_3 = new QLabel( groupBox1_3, "textLabel2_3" );
+  QLabel * textLabel2_3 = new QLabel( groupBox1_3 );
   groupBox1_3Layout->addWidget( textLabel2_3, 1, 0 );
 
   QSpacerItem * spacer = new QSpacerItem( 41, 20, QSizePolicy::Expanding, QSizePolicy::Minimum );
@@ -99,16 +99,16 @@ ConditionalWidget::ConditionalWidget( QWidget* parent, const char* name, Qt::WFl
   QGridLayout * groupBox1_2Layout = new QGridLayout( groupBox1_2->layout() );
   groupBox1_2Layout->setAlignment( Qt::AlignTop );
 
-  QLabel * textLabel1_2 = new QLabel( groupBox1_2, "textLabel1_2" );
+  QLabel * textLabel1_2 = new QLabel( groupBox1_2 );
   groupBox1_2Layout->addWidget( textLabel1_2, 0, 0 );
 
-  QLabel * textLabel2_2 = new QLabel( groupBox1_2, "textLabel2_2" );
+  QLabel * textLabel2_2 = new QLabel( groupBox1_2 );
   groupBox1_2Layout->addWidget( textLabel2_2, 1, 0 );
 
-  m_condition_2 = new QComboBox( false, groupBox1_2, "m_condition_2" );
+  m_condition_2 = new QComboBox( groupBox1_2 );
   groupBox1_2Layout->addWidget( m_condition_2, 0, 1 );
 
-  m_style_2 = new QComboBox( false, groupBox1_2, "m_style_2" );
+  m_style_2 = new QComboBox( groupBox1_2 );
   m_style_2->setEnabled( false );
   groupBox1_2Layout->addWidget( m_style_2, 1, 1 );
 
@@ -136,16 +136,16 @@ ConditionalWidget::ConditionalWidget( QWidget* parent, const char* name, Qt::WFl
   QGridLayout * groupBox1_1Layout = new QGridLayout( groupBox1_1->layout() );
   groupBox1_1Layout->setAlignment( Qt::AlignTop );
 
-  QLabel * textLabel1_1 = new QLabel( groupBox1_1, "textLabel1_2_2" );
+  QLabel * textLabel1_1 = new QLabel( groupBox1_1 );
   groupBox1_1Layout->addWidget( textLabel1_1, 0, 0 );
 
-  QLabel * textLabel2_1 = new QLabel( groupBox1_1, "textLabel2_2_2" );
+  QLabel * textLabel2_1 = new QLabel( groupBox1_1 );
   groupBox1_1Layout->addWidget( textLabel2_1, 1, 0 );
 
-  m_condition_1 = new QComboBox( false, groupBox1_1, "m_condition_1" );
+  m_condition_1 = new QComboBox( groupBox1_1 );
   groupBox1_1Layout->addWidget( m_condition_1, 0, 1 );
 
-  m_style_1 = new QComboBox( false, groupBox1_1, "m_style_1" );
+  m_style_1 = new QComboBox( groupBox1_1 );
   m_style_1->setEnabled( false );
   groupBox1_1Layout->addWidget( m_style_1, 1, 1 );
 

@@ -86,7 +86,7 @@ GoalSeekDialog::GoalSeekDialog( View * parent,  QPoint const & marker,
   m_startFrame->setFrameShadow( QFrame::Raised );
   m_startFrameLayout = new QGridLayout( m_startFrame, 1, 1, 11, 6, "m_startFrameLayout");
 
-  QLabel * TextLabel4 = new QLabel( m_startFrame, "TextLabel4" );
+  QLabel * TextLabel4 = new QLabel( m_startFrame );
   TextLabel4->setText( i18n( "To value:" ) );
   m_startFrameLayout->addWidget( TextLabel4, 1, 0 );
 
@@ -100,12 +100,12 @@ GoalSeekDialog::GoalSeekDialog( View * parent,  QPoint const & marker,
   m_sourceEdit = new QLineEdit( m_startFrame, "m_sourceEdit" );
   m_startFrameLayout->addWidget( m_sourceEdit, 2, 1 );
 
-  QLabel * TextLabel5 = new QLabel( m_startFrame, "TextLabel5" );
+  QLabel * TextLabel5 = new QLabel( m_startFrame );
   TextLabel5->setText( i18n( "By changing cell:" ) );
 
   m_startFrameLayout->addWidget( TextLabel5, 2, 0 );
 
-  QLabel * TextLabel3 = new QLabel( m_startFrame, "TextLabel3" );
+  QLabel * TextLabel3 = new QLabel( m_startFrame );
   TextLabel3->setText( i18n( "Set cell:" ) );
 
   m_startFrameLayout->addWidget( TextLabel3, 0, 0 );
@@ -137,27 +137,27 @@ GoalSeekDialog::GoalSeekDialog( View * parent,  QPoint const & marker,
   m_resultFrame->setMinimumWidth( 350 );
   m_resultFrameLayout = new QGridLayout( m_resultFrame, 1, 1, 11, 6, "m_resultFrameLayout");
 
-  m_currentValueLabel = new QLabel( m_resultFrame, "m_currentValueLabel" );
+  m_currentValueLabel = new QLabel( m_resultFrame );
   m_currentValueLabel->setText( i18n( "Current value:" ) );
 
   m_resultFrameLayout->addWidget( m_currentValueLabel, 2, 0 );
 
-  m_newValueDesc = new QLabel( m_resultFrame, "m_newValueDesc" );
+  m_newValueDesc = new QLabel( m_resultFrame );
   m_newValueDesc->setText( i18n( "New value:" ) );
 
   m_resultFrameLayout->addWidget( m_newValueDesc, 1, 0 );
 
-  m_newValue = new QLabel( m_resultFrame, "m_newValue" );
+  m_newValue = new QLabel( m_resultFrame );
   m_newValue->setText( "m_targetValueEdit" );
 
   m_resultFrameLayout->addWidget( m_newValue, 1, 1 );
 
-  m_currentValue = new QLabel( m_resultFrame, "m_currentValue" );
+  m_currentValue = new QLabel( m_resultFrame );
   m_currentValue->setText( "m_currentValue" );
 
   m_resultFrameLayout->addWidget( m_currentValue, 2, 1 );
 
-  m_resultText = new QLabel( m_resultFrame, "m_resultText" );
+  m_resultText = new QLabel( m_resultFrame );
   m_resultText->setText( "Goal seeking with cell <cell> found <a | no> solution:" );
   m_resultText->setAlignment( int( Qt::TextWordWrap | Qt::AlignVCenter ) );
 

@@ -69,7 +69,7 @@ ConsolidateDialog::ConsolidateDialog( View* parent, const char* name )
   QGridLayout *grid1 = new QGridLayout( page, 12, 2, marginHint(), spacingHint() );
 
   QLabel* tmpQLabel;
-  tmpQLabel = new QLabel( page, "Label_1" );
+  tmpQLabel = new QLabel( page );
   grid1->addWidget(tmpQLabel,0,0);
   tmpQLabel->setText( i18n("&Function:") );
 
@@ -86,7 +86,7 @@ ConsolidateDialog::ConsolidateDialog( View* parent, const char* name )
   m_pFunction->insertItem( i18n("Standard Deviation"), StdDev );
   m_pFunction->insertItem( i18n("Variance"), Var );
 
-  tmpQLabel = new QLabel( page, "Label_1" );
+  tmpQLabel = new QLabel( page );
   tmpQLabel->setText( i18n("Re&ference:") );
   grid1->addWidget(tmpQLabel,2,0);
 
@@ -94,7 +94,7 @@ ConsolidateDialog::ConsolidateDialog( View* parent, const char* name )
   grid1->addWidget(m_pRef,3,0);
   tmpQLabel->setBuddy(m_pRef);
 
-  tmpQLabel = new QLabel( page, "Label_1" );
+  tmpQLabel = new QLabel( page );
   grid1->addWidget(tmpQLabel,4,0);
   tmpQLabel->setText( i18n("&Entered references:") );
 

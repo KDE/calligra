@@ -278,7 +278,7 @@ EditAreaName::EditAreaName( View * parent,
 
   EditAreaNameLayout->addLayout( Layout1, 3, 3, 0, 1 );
 
-  QLabel * TextLabel4 = new QLabel( page, "TextLabel4" );
+  QLabel * TextLabel4 = new QLabel( page );
   TextLabel4->setText( i18n( "Cells:" ) );
 
   EditAreaNameLayout->addWidget( TextLabel4, 2, 0 );
@@ -287,7 +287,7 @@ EditAreaName::EditAreaName( View * parent,
 
   EditAreaNameLayout->addWidget( m_area, 2, 1 );
 
-  QLabel * TextLabel1 = new QLabel( page, "TextLabel1" );
+  QLabel * TextLabel1 = new QLabel( page );
   TextLabel1->setText( i18n( "Sheet:" ) );
 
   EditAreaNameLayout->addWidget( TextLabel1, 1, 0 );
@@ -296,12 +296,12 @@ EditAreaName::EditAreaName( View * parent,
 
   EditAreaNameLayout->addWidget( m_sheets, 1, 1 );
 
-  QLabel * TextLabel2 = new QLabel( page, "TextLabel2" );
+  QLabel * TextLabel2 = new QLabel( page );
   TextLabel2->setText( i18n( "Area name:" ) );
 
   EditAreaNameLayout->addWidget( TextLabel2, 0, 0 );
 
-  m_areaName = new QLabel( page, "m_areaName" );
+  m_areaName = new QLabel( page );
   m_areaName->setText( areaname );
 
   EditAreaNameLayout->addWidget( m_areaName, 0, 1 );

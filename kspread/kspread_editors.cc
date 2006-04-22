@@ -337,7 +337,7 @@ QObject( editor )
   connect( d->completionListBox, SIGNAL(highlighted(const QString&)), this,
     SLOT(itemSelected(const QString&)) );
 
-  d->hintLabel = new QLabel( 0, "autocalc", Qt::WStyle_StaysOnTop |
+  d->hintLabel = new QLabel( 0,
     Qt::WStyle_Customize | Qt::WStyle_NoBorder | Qt::WStyle_Tool |  Qt::WX11BypassWM );
   d->hintLabel->setFrameStyle( QFrame::Plain | QFrame::Box );
   d->hintLabel->setPalette( QToolTip::palette() );
