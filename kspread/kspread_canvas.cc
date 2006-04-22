@@ -3666,20 +3666,8 @@ bool Canvas::createEditor( EditorType ed, bool addFocus, bool captureArrowKeys )
 {
   Sheet * sheet = activeSheet();
 
-  //Ensure that the choice always has a sheet associated
-  //with it.
-  //
-  //FIXME:  This really doesn't make sense.  The concept of
-  //the 'choice selection' having only one sheet is wrong - because
-  //different parts of the choice selection may be on different
-  //sheets (at least, this doesn't work at the moment, but it should
-  //do).  REVIEW after KSpread 1.5 has been released.
-  //
-  //This is a temporary workaround for now.  It fixes the problem
-  //where the editor would be hidden because the choice's sheet
-  //was not the active sheet.
-  if (!choice()->sheet())
-  	choice()->setSheet( activeSheet() );
+  // Set the starting sheet of the choice.
+  choice()->setSheet( activeSheet() );
 
   if ( !d->cellEditor )
   {
