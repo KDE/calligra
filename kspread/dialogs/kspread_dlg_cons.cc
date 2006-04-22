@@ -66,7 +66,9 @@ ConsolidateDialog::ConsolidateDialog( View* parent, const char* name )
   QWidget* page = new QWidget( this );
   setMainWidget( page );
 
-  QGridLayout *grid1 = new QGridLayout( page, 12, 2, marginHint(), spacingHint() );
+  QGridLayout *grid1 = new QGridLayout( page );
+  grid1->setMargin(KDialog::marginHint());
+  grid1->setSpacing(KDialog::spacingHint());
 
   QLabel* tmpQLabel;
   tmpQLabel = new QLabel( page );

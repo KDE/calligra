@@ -77,8 +77,9 @@ SortDialog::SortDialog( View * parent,  const char * name,
   m_tabWidget = new QTabWidget( page, "m_tabWidget" );
 
   m_page1 = new QWidget( m_tabWidget, "m_page1" );
-  QGridLayout * page1Layout
-    = new QGridLayout( m_page1, 1, 1, 11, 6, "page1Layout");
+  QGridLayout * page1Layout = new QGridLayout( m_page1 );
+  page1Layout->setMargin(KDialog::marginHint());
+  page1Layout->setSpacing(KDialog::spacingHint());
 
 //---------------- Sort Layout & Header Row/Column Toggle
 
@@ -174,7 +175,9 @@ SortDialog::SortDialog( View * parent,  const char * name,
   //---------------- options page
 
   m_page2 = new QWidget( m_tabWidget, "m_page2" );
-  QGridLayout * page2Layout = new QGridLayout( m_page2, 1, 1, 11, 6, "page2Layout");
+  QGridLayout * page2Layout = new QGridLayout( m_page2 );
+  page2Layout->setMargin(KDialog::marginHint());
+  page2Layout->setSpacing(KDialog::spacingHint());
   page2Layout->setAlignment(Qt::AlignTop);
 
   Q3GroupBox * firstKeyBox = new Q3GroupBox( m_page2, "firstKeyBox" );

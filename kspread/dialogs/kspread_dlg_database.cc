@@ -28,6 +28,7 @@
 #include "kspread_view.h"
 
 #include <kdebug.h>
+#include <kdialog.h>
 #include <k3listview.h>
 #include <klocale.h>
 #include <kmessagebox.h>
@@ -81,7 +82,9 @@ DatabaseDialog::DatabaseDialog( View * parent, QRect const & rect, const char * 
   // database page
 
   m_database = new QWidget( this, "m_database" );
-  m_databaseLayout = new QGridLayout( m_database, 1, 1, -1, -1, "m_databaseLayout");
+  m_databaseLayout = new QGridLayout( m_database );
+  m_databaseLayout->setMargin(KDialog::marginHint());
+  m_databaseLayout->setSpacing(KDialog::spacingHint());
 
   QFrame * Frame5 = new QFrame( m_database, "Frame5" );
 // ###  Frame5->setFrameShape( QFrame::MShape );
@@ -93,7 +96,9 @@ DatabaseDialog::DatabaseDialog( View * parent, QRect const & rect, const char * 
   QFrame * Frame16 = new QFrame( Frame5, "Frame16" );
   Frame16->setFrameShape( QFrame::NoFrame );
   Frame16->setFrameShadow( QFrame::Plain );
-  QGridLayout * Frame16Layout = new QGridLayout( Frame16, 1, 1, 11, 7, "Frame16Layout");
+  QGridLayout * Frame16Layout = new QGridLayout( Frame16 );
+  Frame16Layout->setMargin(KDialog::marginHint());
+  Frame16Layout->setSpacing(KDialog::spacingHint());
 
   m_Type = new QLabel( Frame16 );
   m_Type->setText( i18n( "Type:" ) );
@@ -164,12 +169,16 @@ DatabaseDialog::DatabaseDialog( View * parent, QRect const & rect, const char * 
   // new page
 
   m_sheet = new QWidget( this, "m_table" );
-  m_sheetLayout = new QGridLayout( m_sheet, 1, 1, 11, 6, "m_tableLayout");
+  m_sheetLayout = new QGridLayout( m_sheet );
+  m_sheetLayout->setMargin(KDialog::marginHint());
+  m_sheetLayout->setSpacing(KDialog::spacingHint());
 
   QFrame * Frame5_2 = new QFrame( m_sheet, "Frame5_2" );
 // ###  Frame5_2->setFrameShape( QFrame::MShape );
 // ###  Frame5_2->setFrameShadow( QFrame::MShadow );
-  QGridLayout * Frame5_2Layout = new QGridLayout( Frame5_2, 1, 1, 11, 6, "Frame5_2Layout");
+  QGridLayout * Frame5_2Layout = new QGridLayout( Frame5_2 );
+  Frame5_2Layout->setMargin(KDialog::marginHint());
+  Frame5_2Layout->setSpacing(KDialog::spacingHint());
 
   QHBoxLayout * Layout21 = new QHBoxLayout();
   Layout21->setMargin(0);
@@ -214,12 +223,16 @@ DatabaseDialog::DatabaseDialog( View * parent, QRect const & rect, const char * 
   addPage( m_sheet, i18n( "Sheets" ) );
 
   m_columns = new QWidget( this, "m_columns" );
-  m_columnsLayout = new QGridLayout( m_columns, 1, 1, 11, 6, "m_columnsLayout");
+  m_columnsLayout = new QGridLayout( m_columns );
+  m_columnsLayout->setMargin(KDialog::marginHint());
+  m_columnsLayout->setSpacing(KDialog::spacingHint());
 
   QFrame * Frame5_2_2 = new QFrame( m_columns, "Frame5_2_2" );
 // ###  Frame5_2_2->setFrameShape( QFrame::MShape );
 // ###  Frame5_2_2->setFrameShadow( QFrame::MShadow );
-  QGridLayout * Frame5_2_2Layout = new QGridLayout( Frame5_2_2, 1, 1, 11, 6, "Frame5_2_2Layout");
+  QGridLayout * Frame5_2_2Layout = new QGridLayout( Frame5_2_2 );
+  Frame5_2_2Layout->setMargin(KDialog::marginHint());
+  Frame5_2_2Layout->setSpacing(KDialog::spacingHint());
 
   QLabel * TextLabel11_2 = new QLabel( Frame5_2_2 );
   TextLabel11_2->setText( i18n( "Select columns:" ) );
@@ -252,12 +265,16 @@ DatabaseDialog::DatabaseDialog( View * parent, QRect const & rect, const char * 
   // options page
 
   m_options = new QWidget( this, "m_options" );
-  m_optionsLayout = new QGridLayout( m_options, 1, 1, 11, 6, "m_optionsLayout");
+  m_optionsLayout = new QGridLayout( m_options );
+  m_optionsLayout->setMargin(KDialog::marginHint());
+  m_optionsLayout->setSpacing(KDialog::spacingHint());
 
   QFrame * optionsFrame = new QFrame( m_options );
 // ###  optionsFrame->setFrameShape( QFrame::MShape );
 // ###  optionsFrame->setFrameShadow( QFrame::MShadow );
-  QGridLayout * optionsFrameLayout = new QGridLayout( optionsFrame, 1, 1, 11, 6, "optionsFrameLayout");
+  QGridLayout * optionsFrameLayout = new QGridLayout( optionsFrame );
+  optionsFrameLayout->setMargin(KDialog::marginHint());
+  optionsFrameLayout->setSpacing(KDialog::spacingHint());
 
   m_columns_1 = new QComboBox( optionsFrame );
   optionsFrameLayout->addWidget( m_columns_1, 2, 0 );
@@ -372,7 +389,9 @@ DatabaseDialog::DatabaseDialog( View * parent, QRect const & rect, const char * 
   // result page
 
   m_result = new QWidget( this, "m_result" );
-  m_resultLayout = new QGridLayout( m_result, 1, 1, 11, 6, "m_resultLayout");
+  m_resultLayout = new QGridLayout( m_result );
+  m_resultLayout->setMargin(KDialog::marginHint());
+  m_resultLayout->setSpacing(KDialog::spacingHint());
 
   QFrame * Frame5_2_2_3 = new QFrame( m_result );
 // ###  Frame5_2_2_3->setFrameShape( QFrame::MShape );

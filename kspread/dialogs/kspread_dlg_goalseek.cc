@@ -79,12 +79,16 @@ GoalSeekDialog::GoalSeekDialog( View * parent,  QPoint const & marker,
   setCaption( i18n( "Goal Seek" ) );
   setSizeGripEnabled( true );
 
-  GoalSeekDialogLayout = new QGridLayout( this, 1, 1, 11, 6, "GoalSeekDialogLayout");
+  GoalSeekDialogLayout = new QGridLayout( this );
+  GoalSeekDialogLayout->setMargin(KDialog::marginHint());
+  GoalSeekDialogLayout->setSpacing(KDialog::spacingHint());
 
   m_startFrame = new QFrame( this, "m_startFrame" );
   m_startFrame->setFrameShape( QFrame::StyledPanel );
   m_startFrame->setFrameShadow( QFrame::Raised );
-  m_startFrameLayout = new QGridLayout( m_startFrame, 1, 1, 11, 6, "m_startFrameLayout");
+  m_startFrameLayout = new QGridLayout( m_startFrame );
+  m_startFrameLayout->setMargin(KDialog::marginHint());
+  m_startFrameLayout->setSpacing(KDialog::spacingHint());
 
   QLabel * TextLabel4 = new QLabel( m_startFrame );
   TextLabel4->setText( i18n( "To value:" ) );
@@ -135,7 +139,9 @@ GoalSeekDialog::GoalSeekDialog( View * parent,  QPoint const & marker,
   m_resultFrame->setFrameShape( QFrame::StyledPanel );
   m_resultFrame->setFrameShadow( QFrame::Raised );
   m_resultFrame->setMinimumWidth( 350 );
-  m_resultFrameLayout = new QGridLayout( m_resultFrame, 1, 1, 11, 6, "m_resultFrameLayout");
+  m_resultFrameLayout = new QGridLayout( m_resultFrame );
+  m_resultFrameLayout->setMargin(KDialog::marginHint());
+  m_resultFrameLayout->setSpacing(KDialog::spacingHint());
 
   m_currentValueLabel = new QLabel( m_resultFrame );
   m_currentValueLabel->setText( i18n( "Current value:" ) );

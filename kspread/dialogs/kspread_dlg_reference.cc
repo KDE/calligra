@@ -266,8 +266,9 @@ EditAreaName::EditAreaName( View * parent,
   QWidget * page = new QWidget( this );
   setMainWidget(page);
 
-  QGridLayout * EditAreaNameLayout
-    = new QGridLayout( page, 1, 1, 11, 6, "EditAreaNameLayout");
+  QGridLayout * EditAreaNameLayout = new QGridLayout( page);
+  EditAreaNameLayout->setMargin(KDialog::marginHint());
+  EditAreaNameLayout->setSpacing(KDialog::spacingHint());
 
   QHBoxLayout * Layout1 = new QHBoxLayout();
   Layout1->setMargin(0);
