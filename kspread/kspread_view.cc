@@ -3145,6 +3145,7 @@ void View::autoSum()
   }
   else
   {
+    d->canvas->startChoose();
     d->canvas->editor()->setText( "=SUM()" );
     d->canvas->editor()->setCursorPosition( 5 );
   }
