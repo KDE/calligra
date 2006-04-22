@@ -681,7 +681,7 @@ Value func_multinomial (valVector args, ValueCalc *calc, FuncExtra *)
 {
   // (a+b+c)! / a!b!c!  (any number of params possible)
   Value num = 0, den = 1;
-  for (unsigned int i = 0; i < args.count(); ++i) {
+  for (int i = 0; i < args.count(); ++i) {
     num = calc->add (num, args[i]);
     den = calc->mul (den, calc->fact (args[i]));
   }
@@ -844,8 +844,8 @@ static Value func_gcd_helper(const Value &val, ValueCalc *calc)
   Value res = 0;
   if (!val.isArray ())
     return val;
-  for (int row = 0; row < val.rows(); ++row)
-    for (int col = 0; col < val.columns(); ++col)
+  for (uint row = 0; row < val.rows(); ++row)
+    for (uint col = 0; col < val.columns(); ++col)
     {
       Value v = val.element (col, row);
       if (v.isArray ())

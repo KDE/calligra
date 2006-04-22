@@ -2780,7 +2780,7 @@ void Sheet::changeNameCellRef( const QPoint & pos, bool fullRowOrColumn,
     if( c->isFormula() )
     {
       QString origText = c->text();
-      unsigned int i = 0;
+      int i = 0;
       bool error = false;
       QString newText;
 
@@ -5013,7 +5013,7 @@ QString Sheet::copyAsText( Selection* selectionInfo )
     unsigned left = selection.right();
     unsigned right = selection.left();
 
-    unsigned max = 1;
+    int max = 1;
     for( Cell *c = d->cells.firstCell();c; c = c->nextCell() )
     {
       if ( !c->isDefault() )
@@ -7523,7 +7523,7 @@ bool Sheet::loadXML( const QDomElement& sheet )
     {
       d->name.remove(0,1);
     }
-    for (unsigned int i=0; i < d->name.length(); i++)
+    for (int i=0; i < d->name.length(); i++)
     {
       if ( !(d->name[i].isLetterOrNumber() ||
              d->name[i] == ' ' || d->name[i] == '.' ||

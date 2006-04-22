@@ -155,7 +155,7 @@ ValueCalc::ValueCalc (ValueConverter* c): converter( c )
 {
   // initialize the random number generator
   srand (time (0));
-  
+
   // register array-walk functions
   registerAwFunc ("sum", awSum);
   registerAwFunc ("suma", awSumA);
@@ -178,7 +178,7 @@ Value ValueCalc::add (const Value &a, const Value &b)
   if (a.isError()) return a;
   if (b.isError()) return b;
   Value res;
-  if (a.isInteger() && b.isEmpty() || a.isEmpty() && b.isInteger() 
+  if (a.isInteger() && b.isEmpty() || a.isEmpty() && b.isInteger()
       || a.isInteger() && b.isInteger())
   {
     int aa, bb;
@@ -480,9 +480,9 @@ Value ValueCalc::roundDown (const Value &a, int digits)
   if (digits < 0)
     for (int i = 0; i < digits; ++i)
       val = div (val, 10);
-  
+
   val = Value (floor (converter->asFloat (val).asFloat()));
-  
+
   if (digits > 0)
     for (int i = 0; i < digits; ++i)
       val = div (val, 10);
@@ -502,9 +502,9 @@ Value ValueCalc::roundUp (const Value &a, int digits)
   if (digits < 0)
     for (int i = 0; i < digits; ++i)
       val = div (val, 10);
-  
+
   val = Value (ceil (converter->asFloat (val).asFloat()));
-  
+
   if (digits > 0)
     for (int i = 0; i < digits; ++i)
       val = div (val, 10);
@@ -643,7 +643,7 @@ Value ValueCalc::fact (int which, int end) {
   // no multiplication if val==end
   if (which == end)
     return Value (1);
-    
+
   return (mul (fact (which-1, end), which));
 }
 
@@ -653,7 +653,7 @@ Value ValueCalc::factDouble (int which)
     return Value (-1);
   if ((which == 0) || (which == 1))
     return Value (1);
-    
+
   return (mul (factDouble (which-2), which));
 }
 
@@ -687,10 +687,10 @@ Value ValueCalc::gcd (const Value &a, const Value &b)
   Value bb = round (b);
 
   if (approxEqual (aa, bb)) return aa;
-  
+
   if (aa.isZero()) return bb;
   if (bb.isZero()) return aa;
-  
+
 
   if (greater (aa, bb))
     return gcd (bb, mod (aa, bb));
@@ -704,10 +704,10 @@ Value ValueCalc::lcm (const Value &a, const Value &b)
   Value bb = round (b);
 
   if (approxEqual (aa, bb)) return aa;
-  
+
   if (aa.isZero()) return bb;
   if (bb.isZero()) return aa;
-  
+
   Value g = gcd (aa, bb);
   if (g.isZero())  // GCD is zero for some weird reason
     return mul (aa, bb);
@@ -910,7 +910,7 @@ Value ValueCalc::atgh (const Value &number)
 Value ValueCalc::phi (Value x)
 {
   Value constant (0.39894228040143268);
-  
+
   // constant * exp(-(x * x) / 2.0);
   Value x2neg = mul (sqr (x), -1);
   return mul (constant, exp (div (x2neg, 2.0)));
@@ -929,7 +929,7 @@ Value ValueCalc::gauss (Value xx)
 // this is a weird function
 {
   double x = converter->asFloat (xx).asFloat();
-  
+
   double t0[] =
     { 0.39894228040143268, -0.06649038006690545,  0.00997355701003582,
      -0.00118732821548045,  0.00011543468761616, -0.00000944465625950,
@@ -979,7 +979,7 @@ Value ValueCalc::gaussinv (Value xx)
 // this is a weird function
 {
   double x = converter->asFloat (xx).asFloat();
-  
+
   double q,t,z;
 
   q=x-0.5;
@@ -1206,7 +1206,7 @@ Value ValueCalc::GetGammaDist (Value _x, Value _alpha,
   double x = converter->asFloat (_x).asFloat();
   double alpha = converter->asFloat (_alpha).asFloat();
   double beta = converter->asFloat (_beta).asFloat();
-  
+
   if (x == 0.0)
     return Value (0.0);
 
@@ -1279,7 +1279,7 @@ Value ValueCalc::GetBeta (Value _x, Value _alpha,
   double x = converter->asFloat (_x).asFloat();
   double alpha = converter->asFloat (_alpha).asFloat();
   double beta = converter->asFloat (_beta).asFloat();
-    
+
   double fEps = 1.0E-8;
   bool bReflect;
   double cf, fA, fB;
@@ -1518,7 +1518,7 @@ Value ValueCalc::besseln (Value v, Value x)
 }
 
 // ------------------------------------------------------
-  
+
 Value ValueCalc::erf (Value x)
 {
   return Value (::erf (converter->asFloat (x).asFloat()));
@@ -1561,7 +1561,7 @@ void ValueCalc::arrayWalk (QVector<Value> &range,
     Value &res, arrayWalkFunc func, Value param)
 {
   if (res.isError()) return;
-  for (unsigned int i = 0; i < range.count(); ++i)
+  for (int i = 0; i < range.count(); ++i)
     arrayWalk (range[i], res, func, param);
 }
 
@@ -1606,7 +1606,7 @@ void ValueCalc::twoArrayWalk (QVector<Value> &a1,
     res = Value::errorVALUE();
     return;
   }
-  for (unsigned int i = 0; i < a1.count(); ++i)
+  for (int i = 0; i < a1.count(); ++i)
     twoArrayWalk (a1[i], a2[i], res, func);
 }
 
@@ -1668,7 +1668,7 @@ Value ValueCalc::sumIf (const Value &range,
       Value newcheck = v;
       if ((c < checkRange.columns()) && (r < checkRange.rows()))
         newcheck = checkRange.element (c, r);
-      
+
       if (v.isArray())
         res = add (res, sumIf (v, newcheck, cond));
       else
@@ -1710,7 +1710,7 @@ int ValueCalc::countIf (const Value &range, const Condition &cond)
     for (int c = 0; c < cols; c++)
     {
       Value v = range.element (c, r);
-      
+
       if (v.isArray())
         res += countIf (v, cond);
       else
@@ -1774,7 +1774,7 @@ Value ValueCalc::product (const Value &range, Value init,
     if (count (range, full) == 0)
       return init;
     res = 1.0;
-  }  
+  }
   arrayWalk (range, res, awFunc (full ? "proda" : "prod"), 0);
   return res;
 }
@@ -1788,7 +1788,7 @@ Value ValueCalc::product (QVector<Value> range,
     if (count (range, full) == 0)
       return init;
     res = 1.0;
-  }  
+  }
   arrayWalk (range, res, awFunc (full ? "proda" : "prod"), 0);
   return res;
 }
@@ -1937,23 +1937,23 @@ bool ValueCalc::matches (const Condition &cond, Value val)
       case isEqual:
       if (approxEqual (d, cond.value)) return true;
       break;
-  
+
       case isLess:
       if (d < cond.value) return true;
       break;
-  
+
       case isGreater:
       if (d > cond.value) return true;
       break;
-  
+
       case lessEqual:
       if (d <= cond.value) return true;
       break;
-  
+
       case greaterEqual:
       if (d >= cond.value) return true;
       break;
-  
+
       case notEqual:
       if (d != cond.value) return true;
       break;
@@ -1965,23 +1965,23 @@ bool ValueCalc::matches (const Condition &cond, Value val)
       case isEqual:
       if (d == cond.stringValue) return true;
       break;
-  
+
       case isLess:
       if (d < cond.stringValue) return true;
       break;
-  
+
       case isGreater:
       if (d > cond.stringValue) return true;
       break;
-  
+
       case lessEqual:
       if (d <= cond.stringValue) return true;
       break;
-  
+
       case greaterEqual:
       if (d >= cond.stringValue) return true;
       break;
-  
+
       case notEqual:
       if (d != cond.stringValue) return true;
       break;

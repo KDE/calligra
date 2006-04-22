@@ -128,7 +128,7 @@ void FormulaEditorHighlighter::highlightBlock( const QString& text )
   QList<QColor> colors = d->canvas->choice()->colors();
   QList<Range> alreadyFoundRanges;
 
-  for (uint i = 0; i < d->tokens.count(); ++i)
+  for (int i = 0; i < d->tokens.count(); ++i)
   {
     Token token = d->tokens[i];
     Token::Type type = token.type();
@@ -430,7 +430,7 @@ void FunctionCompletion::showCompletion( const QStringList &choices )
   if( !choices.count() ) return;
 
   d->completionListBox->clear();
-  for( unsigned i = 0; i < choices.count(); i++ )
+  for( int i = 0; i < choices.count(); i++ )
     new Q3ListBoxText( (Q3ListBox*)d->completionListBox, choices[i] );
   d->completionListBox->setCurrentItem( 0 );
 
@@ -616,7 +616,7 @@ void CellEditor::triggerFunctionAutoComplete()
   // find matches in function names
   QStringList fnames = KSpread::FunctionRepository::self()->functionNames();
   QStringList choices;
-  for( unsigned i=0; i<fnames.count(); i++ )
+  for( int i=0; i<fnames.count(); i++ )
     if( fnames[i].startsWith( id, false ) )
       choices.append( fnames[i] );
   choices.sort();
@@ -683,7 +683,7 @@ void CellEditor::slotCursorPositionChanged(int /* para */, int pos)
   Token::Type type;
   // search the current token
   // determine the subregion number, btw
-  for (uint i = 0; i < tokens.count(); ++i)
+  for (int i = 0; i < tokens.count(); ++i)
   {
     if (tokens[i].pos() >= pos - 1) // without '='
     {
@@ -764,7 +764,7 @@ void CellEditor::slotCursorPositionChanged(int /* para */, int pos)
       //colours.
       QLinkedList<Region> alreadyUsedRegions;
 
-      for (uint i = 0; i < tokens.count(); ++i)
+      for (int i = 0; i < tokens.count(); ++i)
       {
         Token token = tokens[i];
         Token::Type type = token.type();
@@ -953,7 +953,7 @@ bool CellEditor::checkChoice()
     else
     {
       Token token;
-      for (uint i = 0; i < tokens.count(); ++i)
+      for (int i = 0; i < tokens.count(); ++i)
       {
         if (tokens[i].pos() >= cur - 1) // without '='
         {
@@ -1216,7 +1216,7 @@ void CellEditor::setCursorToRange(uint pos)
   d->updatingChoice = true;
   uint counter = 0;
   Tokens tokens = d->highlighter->formulaTokens();
-  for (uint i = 0; i < tokens.count(); ++i)
+  for (int i = 0; i < tokens.count(); ++i)
   {
     Token token = tokens[i];
     Token::Type type = token.type();
@@ -1347,7 +1347,7 @@ bool LocationEditWidget::activateItem()
     {
       Region region(m_pView,tmp);
         bool validName = true;
-        for (unsigned int i = 0; i < ltext.length(); ++i)
+        for (int i = 0; i < ltext.length(); ++i)
         {
             if (!ltext[i].isLetter())
             {

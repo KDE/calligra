@@ -617,7 +617,7 @@ int ValueParser::readInt (const QString &str, uint &pos)
   if (!str.at(pos).isDigit())
     return -1;
   int result = 0;
-  for ( ; str.length() > pos && str.at(pos).isDigit(); pos++ )
+  for ( ; (uint) str.length() > pos && str.at(pos).isDigit(); pos++ )
   {
     result *= 10;
     result += str.at(pos).digitValue();

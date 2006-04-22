@@ -202,7 +202,7 @@ Value func_arabic (valVector args, ValueCalc *calc, FuncExtra *)
 
   int val = 0, lastd = 0, d = 0;
 
-  for (unsigned i = 0; i < roman.length(); i++) {
+  for (int i = 0; i < roman.length(); i++) {
     d = func_arabic_helper( roman[i] );
     if( d < 0 ) return Value::errorVALUE();
 
@@ -220,8 +220,8 @@ Value func_arabic (valVector args, ValueCalc *calc, FuncExtra *)
 void func_a2c_helper (ValueCalc *calc, QString &s, Value val)
 {
   if (val.isArray()) {
-    for (int row = 0; row < val.rows(); ++row)
-      for (int col = 0; col < val.columns(); ++col)
+    for (uint row = 0; row < val.rows(); ++row)
+      for (uint col = 0; col < val.columns(); ++col)
         func_a2c_helper (calc, s, val.element (col, row));
   } else {
     int v = calc->conv()->asInteger (val).asInteger();
@@ -235,7 +235,7 @@ void func_a2c_helper (ValueCalc *calc, QString &s, Value val)
 Value func_AsciiToChar (valVector args, ValueCalc *calc, FuncExtra *)
 {
   QString str;
-  for (unsigned int i = 0; i < args.count(); i++)
+  for (int i = 0; i < args.count(); i++)
     func_a2c_helper (calc, str, args[i]);
   return Value (str);
 }

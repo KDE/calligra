@@ -479,7 +479,7 @@ Tokens Formula::scan( const QString& expr, KLocale* locale ) const
 
   // initialize variables
   state = Start;
-  unsigned int i = 0;
+  int i = 0;
   QString ex = expr;
   QString tokenText;
   int tokenStart = 0;
@@ -851,7 +851,7 @@ void Formula::compile( const Tokens& tokens ) const
   Q3ValueStack<int> argStack;
   unsigned argCount = 1;
 
-  for( unsigned i = 0; i <= tokens.count(); i++ )
+  for( int i = 0; i <= tokens.count(); i++ )
   {
     // helper token: InvalidOp is end-of-formula
     Token token =  ( i < tokens.count() ) ? tokens[i] : Token( Token::Operator );
@@ -1202,7 +1202,7 @@ Value Formula::eval() const
   if( !d->valid )
     return Value::errorVALUE();
 
-  for( unsigned pc = 0; pc < d->codes.count(); pc++ )
+  for( int pc = 0; pc < d->codes.count(); pc++ )
   {
     Value ret;   // for the function caller
     Opcode& opcode = d->codes[pc];
@@ -1474,7 +1474,7 @@ QString Formula::dump() const
 #endif
 
   result.append("  Constants:\n");
-  for( unsigned c = 0; c < d->constants.count(); c++ )
+  for( int c = 0; c < d->constants.count(); c++ )
   {
     QString vtext;
     Value val = d->constants[c];
@@ -1488,7 +1488,7 @@ QString Formula::dump() const
 
   result.append("\n");
   result.append("  Code:\n");
-  for( unsigned i = 0; i < d->codes.count(); i++ )
+  for( int i = 0; i < d->codes.count(); i++ )
   {
     QString ctext;
     switch( d->codes[i].type )

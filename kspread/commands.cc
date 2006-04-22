@@ -877,7 +877,7 @@ void GeometryPropertiesCommand::execute()
 void GeometryPropertiesCommand::unexecute()
 {
     EmbeddedObject *obj = 0;
-    for ( unsigned int i = 0; i < m_objects.count(); ++i ) {
+    for ( int i = 0; i < m_objects.count(); ++i ) {
         obj = m_objects.at( i );
         if ( m_type == ProtectSize )
         {
@@ -913,7 +913,7 @@ void MoveObjectByCmd::execute()
 {
     QRect oldRect;
 
-    for ( unsigned int i = 0; i < objects.count(); i++ ) {
+    for ( int i = 0; i < objects.count(); i++ ) {
         doc->repaint( objects.at( i )->geometry() );
 
         KoRect r = objects.at( i )->geometry();
@@ -928,7 +928,7 @@ void MoveObjectByCmd::unexecute()
 {
     QRect oldRect;
 
-    for ( unsigned int i = 0; i < objects.count(); i++ ) {
+    for ( int i = 0; i < objects.count(); i++ ) {
         doc->repaint( objects.at( i )->geometry() );
 
         KoRect r = objects.at( i )->geometry();

@@ -59,7 +59,7 @@ int KSpread::util_decodeColumnLabelText( const QString &_col )
     int col = 0;
     int offset='a'-'A';
     int counterColumn = 0;
-    for ( uint i=0; i < _col.length(); i++ )
+    for ( int i=0; i < _col.length(); i++ )
     {
         counterColumn = (int) pow(26.0 , static_cast<int>(_col.length() - i - 1));
         if( _col[i] >= 'A' && _col[i] <= 'Z' )
@@ -763,7 +763,7 @@ bool KSpread::util_validateSheetName(const QString &name)
   {
     return false;
   }
-  for (unsigned int i = 0; i < name.length(); i++)
+  for (int i = 0; i < name.length(); i++)
   {
     if ( !(name[i].isLetterOrNumber() ||
            name[i] == ' ' || name[i] == '.' ||
@@ -1018,7 +1018,7 @@ QString KSpread::Oasis::decodeFormula(const QString& expr, const KLocale* locale
 
   // initialize variables
   state = Start;
-  unsigned int i = 0;
+  int i = 0;
   const QString ex = expr;
   QString result;
 

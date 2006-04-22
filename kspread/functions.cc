@@ -118,7 +118,7 @@ Value Function::exec (valVector args, ValueCalc *calc, FuncExtra *extra)
   // do we need to perform array expansion ?
   bool mustExpandArray = false;
   if (!d->acceptArray)
-    for (unsigned int i = 0; i < args.count(); ++i) {
+    for (int i = 0; i < args.count(); ++i) {
       if (args[i].isArray())
         mustExpandArray = true;
     }
@@ -131,7 +131,7 @@ Value Function::exec (valVector args, ValueCalc *calc, FuncExtra *extra)
     // compute number of rows/cols of the result
     int rows = 0;
     int cols = 0;
-    for (unsigned int i = 0; i < args.count(); ++i) {
+    for (int i = 0; i < args.count(); ++i) {
       int x = (args[i].type() == Value::Array) ? args[i].rows() : 1;
       if (x > rows) rows = x;
       x = (args[i].type() == Value::Array) ? args[i].columns() : 1;
@@ -144,7 +144,7 @@ Value Function::exec (valVector args, ValueCalc *calc, FuncExtra *extra)
       for (int col = 0; col < cols; ++col) {
         // fill in the parameter vector
         valVector vals (args.count());
-        for (unsigned int i = 0; i < args.count(); ++i) {
+        for (int i = 0; i < args.count(); ++i) {
           int r = args[i].rows();
           int c = args[i].columns();
           vals[i] = args[i].isArray() ?

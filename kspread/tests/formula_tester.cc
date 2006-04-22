@@ -98,7 +98,7 @@ void FormulaParserTester::checkParse( const char *file, int line, const char* ms
 
   QString resultCodes;
   if( tokens.valid() )
-    for( unsigned i = 0; i < tokens.count(); i++ )
+    for( int i = 0; i < tokens.count(); i++ )
       resultCodes.append( encodeTokenType( tokens[i] ) );
 
   if( resultCodes != tokenCodes )

@@ -3968,7 +3968,7 @@ void View::moveSheet( unsigned sheet, unsigned target )
 
     QStringList vs = doc()->map()->visibleSheets();
 
-    if( target >= vs.count() )
+    if( target >= (uint) vs.count() )
         doc()->map()->moveSheet( vs[ sheet ], vs[ vs.count()-1 ], false );
     else
         doc()->map()->moveSheet( vs[ sheet ], vs[ target ], true );

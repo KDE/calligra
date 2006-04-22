@@ -123,7 +123,7 @@ void TestRunner::runTest()
     {
       d->logView->append( QString( "%1 tests, <b>%2 failed.</b>").arg( tester->count() ).
         arg(  tester->failed() ) );
-      for( unsigned k = 0; k < errorList.count(); k++ )
+      for( int k = 0; k < errorList.count(); k++ )
         d->logView->append( errorList[k] );
     }
     else

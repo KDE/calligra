@@ -228,7 +228,7 @@ void func_concatenate_helper (Value val, ValueCalc *calc,
 Value func_concatenate (valVector args, ValueCalc *calc, FuncExtra *)
 {
   QString tmp;
-  for (unsigned int i = 0; i < args.count(); ++i)
+  for (int i = 0; i < args.count(); ++i)
     func_concatenate_helper (args[i], calc, tmp);
 
   return Value (tmp);
@@ -379,7 +379,7 @@ Value func_proper (valVector args, ValueCalc *calc, FuncExtra *)
   QChar f;
   bool  first = true;
 
-  for (unsigned int i = 0; i < str.length(); ++i)
+  for (int i = 0; i < str.length(); ++i)
   {
     if (first)
     {
@@ -494,7 +494,7 @@ Value func_rot (valVector args, ValueCalc *calc, FuncExtra *)
 {
   QString text = calc->conv()->asString (args[0]).asString();
 
-  for( unsigned i=0; i<text.length(); i++ )
+  for( int i=0; i<text.length(); i++ )
   {
     unsigned c = text[i].toUpper().unicode();
     if( ( c >= 'A' ) && ( c <= 'M' ) )
