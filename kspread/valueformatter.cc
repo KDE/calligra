@@ -68,12 +68,12 @@ QString ValueFormatter::formatText (const Value &value,
         floatFormat, prefix, postfix, currencySymbol);
 
   QString str;
-  
+
   //step 1: determine formatting that will be used
   fmtType = determineFormatting (value, fmtType);
-  
+
   //step 2: format the value !
-  
+
   //text
   if (fmtType == Text_format)
   {
@@ -81,15 +81,15 @@ QString ValueFormatter::formatText (const Value &value,
     if (!str.isEmpty() && str[0]=='\'' )
       str = str.mid(1);
   }
-  
+
   //date
   else if (formatIsDate (fmtType))
     str = dateFormat (value.asDate(), fmtType);
-    
+
   //time
   else if (formatIsTime (fmtType))
     str = timeFormat (value.asDateTime(), fmtType);
-    
+
   //fraction
   else if (formatIsFraction (fmtType))
     str = fractionFormat (value.asFloat(), fmtType);
@@ -147,7 +147,7 @@ FormatType ValueFormatter::determineFormatting (const Value &value,
   //same if we're supposed to display string, no matter what we actually got
   if (fmtType == Text_format)
     return Text_format;
-  
+
   //now, everything depends on whether the formatting is Generic or not
   if (fmtType == Generic_format)
   {
@@ -192,10 +192,10 @@ FormatType ValueFormatter::determineFormatting (const Value &value,
   {
     //we'll mostly want to use the given formatting, the only exception
     //being Boolean values
-    
+
     //TODO: is this correct? We may also want to convert bools to 1s and 0s
     //if we want to display a number...
-    
+
     //TODO: what to do about Custom formatting? We don't support it as of now,
     //  but we'll have it ... one day, that is ...
     if (value.isBoolean())
@@ -211,7 +211,7 @@ void ValueFormatter::removeTrailingZeros (QString &str, QChar decimal_point)
   if (str.find (decimal_point) < 0)
     //no decimal point -> nothing to do
     return;
-  
+
   int start = 0;
   int cslen = converter->locale()->currencySymbol().length();
   if (str.find ('%') != -1)
@@ -241,7 +241,7 @@ void ValueFormatter::removeTrailingZeros (QString &str, QChar decimal_point)
 }
 
 
-QString ValueFormatter::createNumberFormat ( long value, FormatType fmt, 
+QString ValueFormatter::createNumberFormat ( long value, FormatType fmt,
 	 bool alwaysSigned, const QString& currencySymbol)
 {
   QString number;
@@ -293,7 +293,7 @@ QString ValueFormatter::createNumberFormat ( double value, int precision,
   // this will avoid displaying negative zero, i.e "-0.0000"
   if( fabs( value ) < DBL_EPSILON ) value = 0.0;
 
-  // round the number, based on desired precision if not scientific is chosen 
+  // round the number, based on desired precision if not scientific is chosen
   //(scientific has relative precision)
   if( fmt != Scientific_format )
   {
@@ -424,11 +424,11 @@ QString ValueFormatter::fractionFormat (double value, FormatType fmtType)
     double inter2 = 1;
     double inter4, p,  q;
     inter4 = p = q = 0;
-    
+
     precision = pow(10.0, -index);
     numerator = val2;
     denominator = 1;
-    
+
     while (fabs(numerator/denominator - result) > precision) {
       val1 = (1 / (val1 - val2));
       val2 = rint(val1);
