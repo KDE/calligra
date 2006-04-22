@@ -2679,14 +2679,15 @@ void Cell::paintObscuredCells(const KoRect& rect, QPainter& painter,
 }
 
 
+//
 // Paint the background of this cell.
 //
-void Cell::paintBackground( QPainter& painter, const KoRect &cellRect,
-          const QPoint &cellRef, bool selected,
-          QColor &backgroundColor )
+void Cell::paintBackground( QPainter& painter, const KoRect& cellRect,
+                            const QPoint& cellRef, bool selected,
+                            QColor& backgroundColor )
 {
-  QColorGroup  defaultColorGroup = QApplication::palette().active();
-  QRect        zoomedCellRect    = sheet()->doc()->zoomRect( cellRect );
+  QColorGroup defaultColorGroup = QApplication::palette().active();
+  QRect       zoomedCellRect    = sheet()->doc()->zoomRect( cellRect );
 
   // If this is not the KS_rowMax and/or KS_colMax, then we reduce
   // width and/or height by one.  This is due to the fact that the
@@ -2694,69 +2695,53 @@ void Cell::paintBackground( QPainter& painter, const KoRect &cellRect,
   // the following cell.  Only in the case of KS_colMax/KS_rowMax we
   // need to draw even this pixel, as there isn't a following cell to
   // draw the background pixel.
-   if ( cellRef.x() != KS_colMax )
-     zoomedCellRect.setWidth( zoomedCellRect.width() - 1 );
-   if ( cellRef.y() != KS_rowMax )
-     zoomedCellRect.setHeight( zoomedCellRect.height() - 1 );
+  if ( cellRef.x() != KS_colMax )
+    zoomedCellRect.setWidth( zoomedCellRect.width() - 1 );
+  if ( cellRef.y() != KS_rowMax )
+    zoomedCellRect.setHeight( zoomedCellRect.height() - 1 );
 
-  // Determine the correct background color
-  if ( selected )
+  // Handle printers separately.
+  if ( dynamic_cast<QPrinter*>(painter.device()) )
   {
-    //If the cell's background color is too bright, use the default highlight color
-    //Otherwise use a lighter version of the cell's background color.
-    QColor c;
+    //bad hack but there is a qt bug
+    //so I can print backgroundcolor
+    QBrush brush( backgroundColor );
+    if ( !backgroundColor.isValid() )
+      brush.setColor( Qt::white );
 
-    int averageColor = (backgroundColor.red() + backgroundColor.green() + backgroundColor.blue()) / 3;
-
-    if (averageColor > 180)
-	if (averageColor > 225)
-       		c = View::highlightColor();
-    	else
-		c = backgroundColor.light( 115 ); //15% lighter
-    else
-       c = backgroundColor.light( 125 ); //25% lighter
-
-    painter.setBackgroundColor( c );
+    painter.fillRect( zoomedCellRect, brush );
+    return;
   }
-  else {
-    QColor bg( backgroundColor );
 
-    // Handle printers separately.
-    if ( !dynamic_cast<QPrinter*>(painter.device()) ) {
-      if ( bg.isValid() )
-        painter.setBackgroundColor( bg );
-      else
-        painter.setBackgroundColor( defaultColorGroup.base() );
-    }
-    else {
-      //bad hack but there is a qt bug
-      //so I can print backgroundcolor
-      QBrush bb( bg );
-      if ( !bg.isValid() )
-        bb.setColor( Qt::white );
-
-      painter.fillRect( zoomedCellRect, bb );
-      return;
-    }
-  }
+  if ( backgroundColor.isValid() )
+    painter.setBackgroundColor( backgroundColor );
+  else
+    painter.setBackgroundColor( defaultColorGroup.base() );
 
   // Erase the background of the cell.
-  if ( !dynamic_cast<QPrinter*>(painter.device()) )
-    painter.eraseRect( zoomedCellRect );
+  painter.eraseRect( zoomedCellRect );
 
   // Get a background brush
-  QBrush bb;
+  QBrush brush;
   if ( d->hasExtra()
        && d->extra()->conditions
        && d->extra()->conditions->matchedStyle()
        && d->extra()->conditions->matchedStyle()->hasFeature( Style::SBackgroundBrush, true ) )
-    bb = d->extra()->conditions->matchedStyle()->backGroundBrush();
+    brush = d->extra()->conditions->matchedStyle()->backGroundBrush();
   else
-    bb = backGroundBrush( cellRef.x(), cellRef.y() );
+    brush = backGroundBrush( cellRef.x(), cellRef.y() );
 
   // Draw background pattern if necessary.
-  if ( bb.style() != Qt::NoBrush )
-    painter.fillRect( zoomedCellRect, bb );
+  if ( brush.style() != Qt::NoBrush )
+    painter.fillRect( zoomedCellRect, brush );
+
+  // Draw alpha-blended selection
+  if ( selected )
+  {
+    QColor selectionColor( defaultColorGroup.highlight() );
+    selectionColor.setAlpha(127);
+    painter.fillRect( zoomedCellRect, selectionColor );
+  }
 
   backgroundColor = painter.backgroundColor();
 }

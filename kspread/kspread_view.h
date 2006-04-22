@@ -355,11 +355,6 @@ public:
 
     void deleteSelectedObjects();
 
-    /**
-    * Returns the default color for highlighting cells and column / row headers
-    */
-    static QColor highlightColor();
-
 public slots:
     /**
     * refresh view when you hide/show vertical scrollbar
