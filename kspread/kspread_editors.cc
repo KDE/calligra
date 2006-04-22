@@ -215,8 +215,8 @@ void FormulaEditorHighlighter::handleBrace( uint index )
         //there is another left brace to the right (in which case that should be highlighted instead as it
         //is the inner-most brace)
         if (distance==2)
-            if ( (index == d->tokens.count()-1) || ( d->tokens.at(index+1).asOperator() != Token::LeftPar) )
-          highlightBrace=true;
+          if ( (index == (uint)d->tokens.count()-1) || ( d->tokens.at(index+1).asOperator() != Token::LeftPar) )
+            highlightBrace=true;
 
   }
   else
@@ -483,7 +483,7 @@ public:
   bool updateChoice        : 1;
   bool updatingChoice      : 1;
 
-  uint length;
+  int length;
   uint fontLength;
   uint length_namecell;
   uint length_text;
@@ -554,7 +554,7 @@ CellEditor::CellEditor( Cell* _cell, Canvas* _parent, bool captureAllKeyEvents, 
 
   // set font size according to zoom factor
   QFont font( _cell->format()->font() );
-  font.setPointSizeFloat( 0.01 * _parent->doc()->zoom() * font.pointSizeFloat() );
+  font.setPointSizeF( 0.01 * _parent->doc()->zoom() * font.pointSizeF() );
   d->textEdit->setFont( font );
 
   if (d->fontLength == 0)
@@ -815,7 +815,7 @@ void CellEditor::copy()
 void CellEditor::setEditorFont(QFont const & font, bool updateSize)
 {
   QFont tmpFont( font );
-  tmpFont.setPointSizeFloat( 0.01 * canvas()->doc()->zoom() * tmpFont.pointSizeFloat() );
+  tmpFont.setPointSizeF( 0.01 * canvas()->doc()->zoom() * tmpFont.pointSizeF() );
   d->textEdit->setFont( tmpFont );
 
   if (updateSize)

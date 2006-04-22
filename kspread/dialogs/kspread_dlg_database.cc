@@ -438,7 +438,7 @@ DatabaseDialog::DatabaseDialog( View * parent, QRect const & rect, const char * 
 
   QStringList str = QSqlDatabase::drivers();
   m_driver->insertItem("");
-  m_driver->insertStringList( str );
+  m_driver->insertItems( 1, str );
 
 
   helpButton()->hide();
@@ -853,15 +853,15 @@ bool DatabaseDialog::columnsDoNext()
   m_columns_1->clear();
   m_columns_2->clear();
   m_columns_3->clear();
-  m_columns_1->insertStringList(columns);
-  m_columns_2->insertStringList(columns);
-  m_columns_3->insertStringList(columns);
+  m_columns_1->insertItems( 0,columns);
+  m_columns_2->insertItems( 0,columns);
+  m_columns_3->insertItems( 0,columns);
   m_columnsSort_1->clear();
   m_columnsSort_2->clear();
   m_columnsSort_1->insertItem( i18n("None") );
   m_columnsSort_2->insertItem( i18n("None") );
-  m_columnsSort_1->insertStringList(columns);
-  m_columnsSort_2->insertStringList(columns);
+  m_columnsSort_1->insertItems( 0,columns);
+  m_columnsSort_2->insertItems( 0,columns);
 
   setNextEnabled(m_options, true);
 

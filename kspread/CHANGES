@@ -8,7 +8,7 @@ Rewritten dependency handling
 Embedded picture/image inside workbook
 Improved and faster formula calculation
 Manual line break (wish #9881)
-Syntax highlight and function autocomplete for formula editing 
+Syntax highlight and function autocomplete for formula editing
 Custom sheet selection and ordering in print dialog
 
 Enhancements
@@ -16,7 +16,7 @@ Enhancements
 QWhatsThis help is available to various dialogs
 Updated dialog screenshot in the handbook
 Default autofill increment is set to 1 if only one cell is selected
-Sum button automatically selects a suitable cell range 	
+Sum button automatically selects a suitable cell range
 Percent operator in formula (wish #101217)
 Improved zoomed printouts (bug #115879)
 Use standard KDE font dialog in cell format dialog (bug #116991)
@@ -33,7 +33,7 @@ Bug Fixes
 #117435: Incorrect result from COUNTIF function
 #117252: Fix date (and time) increment for autofill
 #116903: Indentation setting is not correctly handled in preferences
-#116901: Unclear unit setting in preferences 
+#116901: Unclear unit setting in preferences
 #116702: Fix freeze with certain spreadsheet content
 #116546: Endless dependency calculation
 #116444: Fix cell protection

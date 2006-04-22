@@ -323,7 +323,7 @@ void SortDialog::init()
       tmp = "";
     }
   }
-  m_customList->insertStringList(lst);
+  m_customList->insertItems( 0,lst);
 
   /*QPtrList<Sheet> sheetList = m_pView->doc()->map()->sheetList();
   for (unsigned int c = 0; c < sheetList.count(); ++c)
@@ -478,11 +478,11 @@ void SortDialog::slotOrientationChanged(int id)
     m_sortKey1->clear();
     m_sortKey2->clear();
     m_sortKey3->clear();
-    m_sortKey1->insertStringList(m_listColumn);
+    m_sortKey1->insertItems( 0,m_listColumn);
     m_sortKey2->insertItem( i18n("None") );
-    m_sortKey2->insertStringList(m_listColumn);
+    m_sortKey2->insertItems( 0,m_listColumn);
     m_sortKey3->insertItem( i18n("None") );
-    m_sortKey3->insertStringList(m_listColumn);
+    m_sortKey3->insertItems( 0,m_listColumn);
     m_firstRowOrColHeader->setText( i18n( "&First row contains headers" ) );
     break;
 
@@ -490,11 +490,11 @@ void SortDialog::slotOrientationChanged(int id)
     m_sortKey1->clear();
     m_sortKey2->clear();
     m_sortKey3->clear();
-    m_sortKey1->insertStringList(m_listRow);
+    m_sortKey1->insertItems( 0,m_listRow);
     m_sortKey2->insertItem( i18n("None") );
-    m_sortKey2->insertStringList(m_listRow);
+    m_sortKey2->insertItems( 0,m_listRow);
     m_sortKey3->insertItem( i18n("None") );
-    m_sortKey3->insertStringList(m_listRow);
+    m_sortKey3->insertItems( 0,m_listRow);
     m_firstRowOrColHeader->setText( i18n( "&First column contains headers" ) );
 
     /*if (m_firstRowOrColHeader->isChecked())
@@ -723,11 +723,11 @@ void SortDialog::firstRowHeaderChanged( int /*state*/ )
     m_sortKey1->clear();
     m_sortKey2->clear();
     m_sortKey3->clear();
-    m_sortKey1->insertStringList( m_listRow );
+    m_sortKey1->insertItems( 0, m_listRow );
     m_sortKey2->insertItem( i18n("None") );
-    m_sortKey2->insertStringList( m_listRow );
+    m_sortKey2->insertItems( 0, m_listRow );
     m_sortKey3->insertItem( i18n("None") );
-    m_sortKey3->insertStringList( m_listRow );
+    m_sortKey3->insertItems( 0, m_listRow );
 
     m_sortKey1->setCurrentItem(++k1);
     m_sortKey2->setCurrentItem(++k2);

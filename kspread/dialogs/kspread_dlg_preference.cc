@@ -440,7 +440,7 @@ miscParameters::miscParameters( View* _view,KVBox *box, char *name )
   listType+=i18n("Popup");
   listType+=i18n("Automatic");
   listType+=i18n("Semi-Automatic");
-  typeCompletion->insertStringList(listType);
+  typeCompletion->insertItems( 0,listType);
   typeCompletion->setCurrentItem(0);
   comboChanged=false;
   connect(typeCompletion,SIGNAL(activated( const QString & )),this,SLOT(slotTextComboChanged(const QString &)));
@@ -454,7 +454,7 @@ miscParameters::miscParameters( View* _view,KVBox *box, char *name )
   listType+=i18n("Right");
   listType+=i18n("Left");
   listType+=i18n("Down, First Column");
-  typeOfMove->insertStringList(listType);
+  typeOfMove->insertItems( 0,listType);
   typeOfMove->setCurrentItem(0);
   typeOfMove->setWhatsThis( i18n( "When you have selected a cell, pressing the Enter key will move the cell cursor one cell left, right, up or down, as determined by this setting." ) );
 
@@ -470,7 +470,7 @@ miscParameters::miscParameters( View* _view,KVBox *box, char *name )
   listTypeCalc+=i18n("Count");
   listTypeCalc+=i18n("CountA");
   listTypeCalc+=i18n("None");
-  typeCalc->insertStringList(listTypeCalc);
+  typeCalc->insertItems( 0,listTypeCalc);
   typeCalc->setCurrentItem(0);
   typeCalc->setWhatsThis( i18n( "This drop down selection box can be used to choose the calculation performed by the Statusbar Summary  function." ) );
 
@@ -799,7 +799,7 @@ configureLayoutPage::configureLayoutPage( View* _view,KVBox *box , char *name )
 
   defaultSizePage=new QComboBox( tmpQGroupBox);
   label->setBuddy(defaultSizePage);
-  defaultSizePage->insertStringList( KoPageFormat::allFormats() );
+  defaultSizePage->insertItems( 0, KoPageFormat::allFormats() );
   defaultSizePage->setCurrentItem(1);
   defaultSizePage->setWhatsThis( i18n( "Choose the default page size for your worksheet among all the most common page sizes.\nNote that you can overwrite the page size for the current sheet using the Format -> Page Layout... dialog." ) );
   grid1->addWidget(defaultSizePage,1,0);
@@ -813,7 +813,7 @@ configureLayoutPage::configureLayoutPage( View* _view,KVBox *box , char *name )
   QStringList listType;
   listType+=i18n( "Portrait" );
   listType+=i18n( "Landscape" );
-  defaultOrientationPage->insertStringList(listType);
+  defaultOrientationPage->insertItems( 0,listType);
   defaultOrientationPage->setCurrentItem(0);
   defaultOrientationPage->setWhatsThis( i18n( "Choose the sheet orientation: portrait or lanscape.\nNote that you can overwrite the orientation for the current sheet using the Format -> Page Layout... dialog." ) );
   grid1->addWidget(defaultOrientationPage,3,0);
@@ -824,7 +824,7 @@ configureLayoutPage::configureLayoutPage( View* _view,KVBox *box , char *name )
   defaultUnit=new QComboBox( tmpQGroupBox);
   label->setBuddy(defaultUnit);
 
-  defaultUnit->insertStringList(KoUnit::listOfUnitName());
+  defaultUnit->insertItems( 0,KoUnit::listOfUnitName());
   defaultUnit->setCurrentItem(0);
   defaultUnit->setWhatsThis( i18n( "Choose the default unit that will be used in your sheet.\nNote that you can overwrite the unit for the current sheet using the Format -> Page Layout... dialog." ) );
   grid1->addWidget(defaultUnit,5,0);

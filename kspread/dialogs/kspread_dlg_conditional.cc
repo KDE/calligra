@@ -181,9 +181,9 @@ ConditionalWidget::ConditionalWidget( QWidget* parent, const char* name, Qt::WFl
   m_condition_1->clear();
   m_condition_2->clear();
   m_condition_3->clear();
-  m_condition_1->insertStringList( list );
-  m_condition_2->insertStringList( list );
-  m_condition_3->insertStringList( list );
+  m_condition_1->insertItems( 0, list );
+  m_condition_2->insertItems( 0, list );
+  m_condition_3->insertItems( 0, list );
 
   groupBox1_1->setTitle( i18n( "First Condition" ) );
   groupBox1_2->setTitle( i18n( "Second Condition" ) );
@@ -292,9 +292,9 @@ ConditionalDialog::ConditionalDialog( View * parent, const char * name,
 {
   QStringList list( m_view->doc()->styleManager()->styleNames() );
 
-  m_dlg->m_style_1->insertStringList( list );
-  m_dlg->m_style_2->insertStringList( list );
-  m_dlg->m_style_3->insertStringList( list );
+  m_dlg->m_style_1->insertItems( 0, list );
+  m_dlg->m_style_2->insertItems( 0, list );
+  m_dlg->m_style_3->insertItems( 0, list );
 
   setCaption( i18n( "Conditional Cell Attributes" ) );
   setButtonBoxOrientation( Qt::Vertical );

@@ -347,7 +347,7 @@ const Token& TokenStack::top( unsigned index )
 
 void TokenStack::ensureSpace()
 {
-  while( topIndex >= size() )
+  while( (int) topIndex >= size() )
     resize( size() + 10 );
 }
 
@@ -1160,7 +1160,7 @@ Value Formula::eval() const
 {
   Q3ValueStack<stackEntry> stack;
   stackEntry entry;
-  unsigned index;
+  int index;
   Value val1, val2;
   QString c;
   QVector<Value> args;

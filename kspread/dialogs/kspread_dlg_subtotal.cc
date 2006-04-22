@@ -269,7 +269,7 @@ void SubtotalDialog::fillFunctionBox()
     lst << i18n( "Sum" );
     lst << i18n( "Var" );
     lst << i18n( "VarP" );
-    m_widget->m_functionBox->insertStringList(lst);
+    m_widget->m_functionBox->insertItems(0, lst);
 }
 
 bool SubtotalDialog::addSubtotal( int mainCol, int column, int row, int topRow,

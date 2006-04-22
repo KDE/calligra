@@ -79,7 +79,7 @@ DlgValidity::DlgValidity(View* parent,const char* name , const QRect &_marker )
   listType+=i18n("Time");
   listType+=i18n("Text Length");
   listType+=i18n("List");
-  chooseType->insertStringList(listType);
+  chooseType->insertItems( 0,listType);
   chooseType->setCurrentIndex(0);
 
   allowEmptyCell = new QCheckBox( i18n( "Allow blanks" ), tmpQButtonGroup );
@@ -100,7 +100,7 @@ DlgValidity::DlgValidity(View* parent,const char* name , const QRect &_marker )
   list+=i18n("between");
   list+=i18n("different from");
   list+=i18n("different to");
-  choose->insertStringList(list);
+  choose->insertItems( 0,list);
   choose->setCurrentIndex(0);
 
   edit1 = new QLabel( tmpQButtonGroup, "Label_3" );
@@ -174,7 +174,7 @@ DlgValidity::DlgValidity(View* parent,const char* name , const QRect &_marker )
   list2+=i18n("Stop");
   list2+=i18n("Warning");
   list2+=i18n("Information");
-  chooseAction->insertStringList(list2);
+  chooseAction->insertItems( 0,list2);
   chooseAction->setCurrentIndex(0);
   tmpQLabel = new QLabel( tmpQButtonGroup, "Label_6" );
   tmpQLabel->setText(i18n("Title:" ));

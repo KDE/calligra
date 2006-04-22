@@ -187,7 +187,7 @@ GeneralTab::GeneralTab( QWidget* parent, CellFormatDialog * dlg )
   m_parentBox->insertItem( i18n( "<None>" ) );
   QStringList tmp = m_dlg->getStyleManager()->styleNames();
   tmp.remove( m_dlg->styleName );
-  m_parentBox->insertStringList( tmp );
+  m_parentBox->insertItems( 0, tmp );
 
   if ( m_dlg->getStyle()->parent() )
     m_parentBox->setCurrentText( m_dlg->getStyle()->parentName() );
@@ -1990,7 +1990,7 @@ CellFormatPageFont::CellFormatPageFont( QWidget* parent, CellFormatDialog *_dlg 
   tmpListFont = fontDataBase->families();
   delete fontDataBase;
 
-  family_combo->insertStringList( tmpListFont);
+  family_combo->insertStringList(tmpListFont);
   selFont = dlg->textFont;
 
    if ( dlg->bTextFontFamily )
@@ -2020,7 +2020,7 @@ CellFormatPageFont::CellFormatPageFont( QWidget* parent, CellFormatDialog *_dlg 
   for ( unsigned int i = 1; i < 100; ++i )
         lst.append( QString( "%1" ).arg( i ) );
 
-  size_combo->insertStringList( lst );
+  size_combo->insertItems( 0, lst );
 
 
   size_combo->setInsertPolicy(QComboBox::NoInsert);
@@ -2833,7 +2833,7 @@ void CellFormatPageBorder::InitializeGrids()
   style->insertItem(paintFormatPixmap(Qt::DashDotLine),2 );
   style->insertItem(paintFormatPixmap(Qt::DashDotDotLine),3  );
   style->insertItem(paintFormatPixmap(Qt::SolidLine),4);
-  style->setBackgroundColor( QColorGroup(palette()).background() );
+  style->setBackgroundColor( palette().window().color() );
 
   grid2->addItem(grid3,6,0,1,2);
   grid->addWidget(tmpQGroupBox,0,1,4,1);
@@ -2998,7 +2998,7 @@ QPixmap CellFormatPageBorder::paintFormatPixmap(Qt::PenStyle _style)
   QPixmap pixmap( style->width(), 14 );
   QPainter painter;
   QPen pen;
-  pen=QPen( QColorGroup(palette()).text(),1,_style);
+  pen=QPen( palette().text().color(), 1, _style );
   painter.begin( &pixmap );
   painter.fillRect( 0, 0, style->width(), 14, QColorGroup(palette()).background() );
   painter.setPen( pen );

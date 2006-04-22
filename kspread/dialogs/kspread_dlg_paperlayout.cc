@@ -209,7 +209,7 @@ void PaperLayout::initScaleOptions( QWidget * tab, QVBoxLayout * vbox )
             lst.append( QString( i18n( "%1%" ) ).arg( qRound( print->zoom() * 100 ) ) );
         }
     }
-    m_cZoom->insertStringList( lst );
+    m_cZoom->insertItems( 0, lst );
 
     int number_of_entries = m_cZoom->count();
     QString string = QString( i18n( "%1%" ) ).arg( qRound( print->zoom() * 100 ) );
@@ -241,7 +241,7 @@ void PaperLayout::initScaleOptions( QWidget * tab, QVBoxLayout * vbox )
     {
       lstX.append( QString( "%1" ).arg( print->pageLimitX() ) );
     }
-    m_cLimitPagesX->insertStringList( lstX );
+    m_cLimitPagesX->insertItems( 0, lstX );
 
     if ( print->pageLimitX() <= 20 )
         m_cLimitPagesX->setCurrentIndex( print->pageLimitX() );
@@ -264,7 +264,7 @@ void PaperLayout::initScaleOptions( QWidget * tab, QVBoxLayout * vbox )
     {
       lstY.append( QString( "%1" ).arg( print->pageLimitY() ) );
     }
-    m_cLimitPagesY->insertStringList( lstY );
+    m_cLimitPagesY->insertItems( 0, lstY );
 
     if ( print->pageLimitY() <= 20 )
         m_cLimitPagesY->setCurrentIndex( print->pageLimitY() );
