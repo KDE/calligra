@@ -158,12 +158,10 @@ GeneralTab::GeneralTab( QWidget* parent, CellFormatDialog * dlg )
     m_dlg( dlg )
 {
   QGridLayout * layout = new QGridLayout( this );
-  layout->setObjectName("layout");
   layout->setMargin(KDialog::marginHint());
   layout->setSpacing(KDialog::spacingHint());
 
   QGroupBox * groupBox = new QGroupBox( this );
-  groupBox->setObjectName( "groupBox1" );
 // ###  groupBox->setColumnLayout(0, Qt::Vertical );
   groupBox->setTitle( i18n( "Style" ) );
   groupBox->layout()->setSpacing( KDialog::spacingHint() );
@@ -177,7 +175,6 @@ GeneralTab::GeneralTab( QWidget* parent, CellFormatDialog * dlg )
   groupBoxLayout->addWidget( label1, 0, 0 );
 
   m_nameEdit = new KLineEdit( groupBox );
-  m_nameEdit->setObjectName( "m_nameEdit" );
   m_nameEdit->setText( m_dlg->styleName );
   groupBoxLayout->addWidget( m_nameEdit, 0, 1 );
 
@@ -186,7 +183,6 @@ GeneralTab::GeneralTab( QWidget* parent, CellFormatDialog * dlg )
   groupBoxLayout->addWidget( label2, 1, 0 );
 
   m_parentBox = new KComboBox( false, groupBox );
-  m_parentBox->setObjectName( "m_parentBox" );
   m_parentBox->clear();
   m_parentBox->insertItem( i18n( "<None>" ) );
   QStringList tmp = m_dlg->getStyleManager()->styleNames();
@@ -2807,7 +2803,6 @@ void CellFormatPageBorder::InitializeGrids()
   }
 
   color = new KColorButton ( tmpQGroupBox );
-  color->setObjectName( "PushButton_1" );
   grid2->addWidget(color,7,1);
 
   QLabel *tmpQLabel = new QLabel( tmpQGroupBox, "Label_6" );
@@ -3668,7 +3663,6 @@ CellFormatPagePattern::CellFormatPagePattern( QWidget* parent, CellFormatDialog 
 
     QGridLayout *grid3 = new QGridLayout( 1, 2 );
     color = new KColorButton ( tmpQGroupBox );
-    color->setObjectName( "ColorButton_1" );
     grid3->addWidget(color,0,1);
 
     QLabel *tmpQLabel = new QLabel( tmpQGroupBox, "Label_1" );
@@ -3685,7 +3679,6 @@ CellFormatPagePattern::CellFormatPagePattern( QWidget* parent, CellFormatDialog 
     tmpQLabel->setText( i18n("Background color:") );
 
     bgColorButton = new KColorButton( tmpQGroupBox );
-    bgColorButton->setObjectName( "ColorButton" );
     grid3->addWidget(bgColorButton,0,1);
     if ( dlg->bBgColor )
         bgColor = dlg->bgColor;

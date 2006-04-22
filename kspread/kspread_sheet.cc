@@ -359,8 +359,7 @@ Sheet* Sheet::find( int _id )
   return (*s_mapSheets)[ _id ];
 }
 
-Sheet::Sheet (Map* map,
-    const QString &sheetName, const char *_name )
+Sheet::Sheet( Map* map, const QString &sheetName, const char *_name )
   : QObject( map )
 {
   setObjectName( _name );

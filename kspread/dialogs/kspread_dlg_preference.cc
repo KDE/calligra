@@ -784,7 +784,6 @@ configureLayoutPage::configureLayoutPage( View* _view,KVBox *box , char *name )
   m_pView = _view;
 
   QGroupBox* tmpQGroupBox = new QGroupBox( i18n("Default Parameters"), box );
-  tmpQGroupBox->setObjectName( "GroupBox" );
   tmpQGroupBox->layout()->setSpacing(KDialog::spacingHint());
   tmpQGroupBox->layout()->setMargin(KDialog::marginHint());
 

@@ -87,7 +87,6 @@ DatabaseDialog::DatabaseDialog( View * parent, QRect const & rect, const char * 
 // ###  Frame5->setFrameShape( QFrame::MShape );
 // ###  Frame5->setFrameShadow( QFrame::MShadow );
   QVBoxLayout * Frame5Layout = new QVBoxLayout( Frame5 );
-  Frame5Layout->setObjectName("Frame5Layout");
   Frame5Layout->setMargin(11);
   Frame5Layout->setSpacing(6);
 
@@ -175,7 +174,6 @@ DatabaseDialog::DatabaseDialog( View * parent, QRect const & rect, const char * 
   QHBoxLayout * Layout21 = new QHBoxLayout();
   Layout21->setMargin(0);
   Layout21->setSpacing(6);
-  Layout21->setObjectName("Layout21");
 
   //  QLabel * TextLabel12_2 = new QLabel( Frame5_2, "TextLabel12_2" );
   //  TextLabel12_2->setText( i18n( "Database:" ) );
@@ -199,7 +197,6 @@ DatabaseDialog::DatabaseDialog( View * parent, QRect const & rect, const char * 
   Frame5_2Layout->addWidget( m_SelectSheetLabel, 1, 0 );
 
   m_sheetView = new K3ListView( Frame5_2 );
-  m_sheetView->setObjectName( "m_tableView" );
   m_sheetView->addColumn( i18n( "Sheet" ) );
   m_sheetView->setRootIsDecorated( FALSE );
 
@@ -230,7 +227,6 @@ DatabaseDialog::DatabaseDialog( View * parent, QRect const & rect, const char * 
   Frame5_2_2Layout->addWidget( TextLabel11_2, 0, 0 );
 
   m_columnView = new K3ListView( Frame5_2_2 );
-  m_columnView->setObjectName( "m_columnView" );
   m_columnView->addColumn( i18n( "Column" ) );
   m_columnView->addColumn( i18n( "Sheet" ) );
   m_columnView->addColumn( i18n( "Data Type" ) );
@@ -259,7 +255,6 @@ DatabaseDialog::DatabaseDialog( View * parent, QRect const & rect, const char * 
   m_optionsLayout = new QGridLayout( m_options, 1, 1, 11, 6, "m_optionsLayout");
 
   QFrame * optionsFrame = new QFrame( m_options );
-  optionsFrame->setObjectName( "optionsFrame" );
 // ###  optionsFrame->setFrameShape( QFrame::MShape );
 // ###  optionsFrame->setFrameShadow( QFrame::MShadow );
   QGridLayout * optionsFrameLayout = new QGridLayout( optionsFrame, 1, 1, 11, 6, "optionsFrameLayout");
@@ -285,7 +280,6 @@ DatabaseDialog::DatabaseDialog( View * parent, QRect const & rect, const char * 
 
   m_columns_2 = new QComboBox(optionsFrame);
   m_columns_2->setEditable(false);
-  m_columns_2->setObjectName("m_columns_2");
   optionsFrameLayout->addWidget( m_columns_2, 3, 0 );
 
   m_operatorValue_3 = new QLineEdit( optionsFrame, "m_operatorValue_3" );
@@ -381,11 +375,9 @@ DatabaseDialog::DatabaseDialog( View * parent, QRect const & rect, const char * 
   m_resultLayout = new QGridLayout( m_result, 1, 1, 11, 6, "m_resultLayout");
 
   QFrame * Frame5_2_2_3 = new QFrame( m_result );
-  Frame5_2_2_3->setObjectName( "Frame5_2_2_3" );
 // ###  Frame5_2_2_3->setFrameShape( QFrame::MShape );
 // ###  Frame5_2_2_3->setFrameShadow( QFrame::MShadow );
   QGridLayout * Frame5_2_2_3Layout = new QGridLayout( Frame5_2_2_3 );
-  Frame5_2_2_3Layout->setObjectName("Frame5_2_2_3Layout");
   Frame5_2_2_3Layout->setMargin(11);
   Frame5_2_2_3Layout->setSpacing(6);
 
@@ -400,7 +392,6 @@ DatabaseDialog::DatabaseDialog( View * parent, QRect const & rect, const char * 
   Frame12->setFrameShape( QFrame::StyledPanel );
   Frame12->setFrameShadow( QFrame::Raised );
   QGridLayout * Frame12Layout = new QGridLayout( Frame12 );
-  Frame12Layout->setObjectName("Frame12Layout");
   Frame12Layout->setMargin(11);
   Frame12Layout->setSpacing(6);
 

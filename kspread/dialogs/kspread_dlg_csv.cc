@@ -73,7 +73,6 @@ CSVDialog::CSVDialog( View * parent, const char * name, QRect const & rect, Mode
   QWidget* page = new QWidget( this );
   setMainWidget( page );
   MyDialogLayout = new QGridLayout( page );
-  MyDialogLayout->setObjectName("MyDialogLayout");
   MyDialogLayout->setMargin(11);
   MyDialogLayout->setSpacing(6);
 

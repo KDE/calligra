@@ -112,7 +112,6 @@ GoalSeekDialog::GoalSeekDialog( View * parent,  QPoint const & marker,
   GoalSeekDialogLayout->addWidget( m_startFrame, 0, 0 );
 
   QVBoxLayout * Layout5 = new QVBoxLayout();
-  Layout5->setObjectName("Layout5");
   Layout5->setMargin(0);
   Layout5->setSpacing(6);
 

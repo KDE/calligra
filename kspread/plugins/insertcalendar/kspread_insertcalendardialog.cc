@@ -67,7 +67,6 @@ bool InsertCalendarDialog::buildDatePickerFrame()
   }
 
   m_datePicker = new KDatePicker();
-  m_datePicker->setObjectName("date picker");
 
   Q_ASSERT(m_datePicker);
 

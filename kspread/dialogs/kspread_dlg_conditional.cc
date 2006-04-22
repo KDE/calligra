@@ -53,7 +53,6 @@ ConditionalWidget::ConditionalWidget( QWidget* parent, const char* name, Qt::WFl
     : QWidget( parent, name, fl )
 {
   QGridLayout * Form1Layout = new QGridLayout( this );
-  Form1Layout->setObjectName("Form1Layout");
   Form1Layout->setMargin(11);
   Form1Layout->setSpacing(6);
 
@@ -71,12 +70,10 @@ ConditionalWidget::ConditionalWidget( QWidget* parent, const char* name, Qt::WFl
   groupBox1_3Layout->addWidget( m_condition_3, 0, 1 );
 
   m_firstValue_3 = new KLineEdit( groupBox1_3);
-  m_firstValue_3->setObjectName("m_firstValue_3" );
   m_firstValue_3->setEnabled( false );
   groupBox1_3Layout->addWidget( m_firstValue_3, 0, 2 );
 
   m_secondValue_3 = new KLineEdit( groupBox1_3);
-  m_secondValue_3->setObjectName("m_secondValue_3" );
   m_secondValue_3->setEnabled( false );
   groupBox1_3Layout->addWidget( m_secondValue_3, 0, 3 );
 
@@ -116,13 +113,11 @@ ConditionalWidget::ConditionalWidget( QWidget* parent, const char* name, Qt::WFl
   groupBox1_2Layout->addWidget( m_style_2, 1, 1 );
 
   m_firstValue_2 = new KLineEdit( groupBox1_2 );
-  m_firstValue_2->setObjectName("m_firstValue_2" );
 
   m_firstValue_2->setEnabled( false );
   groupBox1_2Layout->addWidget( m_firstValue_2, 0, 2 );
 
   m_secondValue_2 = new KLineEdit( groupBox1_2);
-  m_secondValue_2->setObjectName("m_secondValue_2" );
   m_secondValue_2->setEnabled( false );
 
   groupBox1_2Layout->addWidget( m_secondValue_2, 0, 3 );
@@ -155,12 +150,10 @@ ConditionalWidget::ConditionalWidget( QWidget* parent, const char* name, Qt::WFl
   groupBox1_1Layout->addWidget( m_style_1, 1, 1 );
 
   m_firstValue_1 = new KLineEdit( groupBox1_1);
-  m_firstValue_1->setObjectName( "m_firstValue_1" );
   m_firstValue_1->setEnabled( false );
   groupBox1_1Layout->addWidget( m_firstValue_1, 0, 2 );
 
   m_secondValue_1 = new KLineEdit( groupBox1_1);
-  m_secondValue_1->setObjectName( "m_secondValue_1" );
   m_secondValue_1->setEnabled( false );
   groupBox1_1Layout->addWidget( m_secondValue_1, 0, 3 );
 

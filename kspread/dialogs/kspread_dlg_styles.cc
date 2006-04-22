@@ -45,7 +45,6 @@ StyleWidget::StyleWidget( QWidget * parent, const char * name, Qt::WFlags fl )
   : QWidget( parent, name, fl )
 {
   QVBoxLayout * layout = new QVBoxLayout( this );
-  layout->setObjectName("layout");
   layout->setMargin(11);
   layout->setSpacing(6);
 
@@ -55,7 +54,6 @@ StyleWidget::StyleWidget( QWidget * parent, const char * name, Qt::WFlags fl )
   layout->addWidget( m_styleList );
 
   m_displayBox = new KComboBox( FALSE, this );
-  m_displayBox->setObjectName( "m_displayBox" );
   layout->addWidget( m_displayBox );
 
   m_styleList->header()->setLabel( 0, i18n( "Styles" ) );

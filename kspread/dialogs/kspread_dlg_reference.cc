@@ -270,7 +270,6 @@ EditAreaName::EditAreaName( View * parent,
     = new QGridLayout( page, 1, 1, 11, 6, "EditAreaNameLayout");
 
   QHBoxLayout * Layout1 = new QHBoxLayout();
-  Layout1->setObjectName("Layout1");
   Layout1->setMargin(0);
   Layout1->setSpacing(6);
   QSpacerItem * spacer = new QSpacerItem( 0, 0, QSizePolicy::Expanding,

@@ -163,27 +163,27 @@ class EmbeddedObject
     virtual QDomElement save( QDomDocument& doc );
     virtual bool saveOasisObject( KSpreadOasisSaveContext &sc ) const;
     virtual void draw( QPainter *_painter );
-    
+
     /**
-     * Renders the embedded object to a pixmap and returns the result.  
+     * Renders the embedded object to a pixmap and returns the result.
      * This is a convenience function which calculates the necessary x and y zoom factors to render
      * the pixmap at the given size and calls toPixmap(double,double)
      *
      * @param size Specifies the desired size of the returned pixmap.
      */
     QPixmap toPixmap( QSize size );
-    
+
     /**
      * Renders the embedded object to a pixmap at 100% scale.  Equivalent to calling toPixmap( 1.0, 1.0 )
      */
     QPixmap toPixmap();
-    
+
     /**
-     * Renders the embedded object to a pixmap at the specified x and y scale and returns the result.  
+     * Renders the embedded object to a pixmap at the specified x and y scale and returns the result.
      */
     virtual QPixmap toPixmap( double xZoom , double yZoom );
-    
-    
+
+
     void paintSelection( QPainter *_painter, SelectionMode selectionMode );
     virtual QCursor getCursor( const QPoint &_point, ModifyType &_modType, QRect &geometry ) const;
 
@@ -218,7 +218,7 @@ class EmbeddedObject
      * @param yZoom This will be set to the required Y zoom factor
      */
     void calculateRequiredZoom( QSize desiredSize , double& xZoom, double& yZoom );
-    
+
     KoRect m_geometry;
     Sheet *m_sheet;
     Canvas *m_canvas;
@@ -259,7 +259,7 @@ class EmbeddedKOfficeObject : public EmbeddedObject
      * See EmbeddedObject::toPixmap(double,double)
      */
     virtual QPixmap toPixmap(double xZoom , double yZoom);
-    
+
     void activate( View *_view, Canvas *_canvas );
     void deactivate();
 
@@ -329,7 +329,7 @@ class EmbeddedPictureObject : public EmbeddedObject
     virtual void loadOasis(const QDomElement &element, KoOasisLoadingContext & context );
     QDomElement save( QDomDocument& doc );
     virtual void draw( QPainter *_painter );
-    
+
     /**
      * See EmbeddedObject::toPixmap(double,double)
      */

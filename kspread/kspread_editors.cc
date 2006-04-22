@@ -1244,7 +1244,6 @@ ComboboxLocationEditWidget::ComboboxLocationEditWidget( QWidget * _parent,
                                                       View * _view )
     : KComboBox( _parent)
 {
-	setObjectName("ComboboxLocationEditWidget" );
     m_locationWidget = new LocationEditWidget( _parent, _view );
     setLineEdit( m_locationWidget );
     insertItem( "" );
@@ -1289,7 +1288,6 @@ LocationEditWidget::LocationEditWidget( QWidget * _parent,
     : KLineEdit( _parent),
       m_pView(_view)
 {
-	setObjectName("LocationEditWidget" );
     setCompletionObject( &completionList,true );
     setCompletionMode(KGlobalSettings::CompletionAuto  );
 }
