@@ -101,7 +101,7 @@ CSVDialog::CSVDialog( View * parent, const char * name, QRect const & rect, Mode
   m_delimiterBoxLayout->setAlignment( Qt::AlignTop );
   MyDialogLayout->addWidget( m_delimiterBox, 0, 2, 0, 0 );
 
-  m_ignoreDuplicates = new QCheckBox( page, "m_ignoreDuplicates" );
+  m_ignoreDuplicates = new QCheckBox( page );
   m_ignoreDuplicates->setText( i18n( "Ignore duplicate delimiters" ) );
 
   MyDialogLayout->addWidget( m_ignoreDuplicates, 2, 2, 2, 3 );

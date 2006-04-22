@@ -1601,11 +1601,11 @@ void Doc::paintContent( QPainter& painter, const QRect& rect,
         d_zoom *= ( zoomX / m_zoomedResolutionX );
 
     // KSpread support zoom, therefore no need to scale with worldMatrix
-    QMatrix matrix = painter.worldMatrix();
+    QMatrix matrix = painter.matrix();
     matrix.setMatrix( 1, 0, 0, 1, matrix.dx(), matrix.dy() );
     QRect prect = rect;
-    prect.setWidth( (int) (prect.width() * painter.worldMatrix().m11()) );
-    prect.setHeight( (int) (prect.height() * painter.worldMatrix().m22()) );
+    prect.setWidth( (int) (prect.width() * painter.matrix().m11()) );
+    prect.setHeight( (int) (prect.height() * painter.matrix().m22()) );
     setZoomAndResolution( (int) ( d_zoom * 100 ), KoGlobal::dpiX(), KoGlobal::dpiY() );
     // paint the content, now zoom is correctly set
     kDebug(36001)<<"paintContent-------------------------------------\n";
@@ -1688,7 +1688,7 @@ void Doc::paintCellRegions(QPainter& painter, const QRect &viewRect,
                       - view->canvasWidget()->yOffset() );
   }
   else {
-    matrix = painter.worldMatrix();
+    matrix = painter.matrix();
   }
 
 //   QPtrListIterator<KoDocumentChild> it( children() );

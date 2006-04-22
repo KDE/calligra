@@ -81,7 +81,7 @@ DatabaseDialog::DatabaseDialog( View * parent, QRect const & rect, const char * 
 
   // database page
 
-  m_database = new QWidget( this, "m_database" );
+  m_database = new QWidget( this );
   m_databaseLayout = new QGridLayout( m_database );
   m_databaseLayout->setMargin(KDialog::marginHint());
   m_databaseLayout->setSpacing(KDialog::spacingHint());
@@ -168,7 +168,7 @@ DatabaseDialog::DatabaseDialog( View * parent, QRect const & rect, const char * 
 
   // new page
 
-  m_sheet = new QWidget( this, "m_table" );
+  m_sheet = new QWidget( this );
   m_sheetLayout = new QGridLayout( m_sheet );
   m_sheetLayout->setMargin(KDialog::marginHint());
   m_sheetLayout->setSpacing(KDialog::spacingHint());
@@ -222,7 +222,7 @@ DatabaseDialog::DatabaseDialog( View * parent, QRect const & rect, const char * 
   m_sheetLayout->addWidget( Frame17_2, 0, 0 );
   addPage( m_sheet, i18n( "Sheets" ) );
 
-  m_columns = new QWidget( this, "m_columns" );
+  m_columns = new QWidget( this );
   m_columnsLayout = new QGridLayout( m_columns );
   m_columnsLayout->setMargin(KDialog::marginHint());
   m_columnsLayout->setSpacing(KDialog::spacingHint());
@@ -264,7 +264,7 @@ DatabaseDialog::DatabaseDialog( View * parent, QRect const & rect, const char * 
 
   // options page
 
-  m_options = new QWidget( this, "m_options" );
+  m_options = new QWidget( this );
   m_optionsLayout = new QGridLayout( m_options );
   m_optionsLayout->setMargin(KDialog::marginHint());
   m_optionsLayout->setSpacing(KDialog::spacingHint());
@@ -341,7 +341,7 @@ DatabaseDialog::DatabaseDialog( View * parent, QRect const & rect, const char * 
 
   optionsFrameLayout->addWidget( m_columns_3, 4, 0 );
 
-  m_distinct = new QCheckBox( optionsFrame, "m_distinct" );
+  m_distinct = new QCheckBox( optionsFrame );
   m_distinct->setText( i18n( "Distinct" ) );
 
   optionsFrameLayout->addWidget( m_distinct, 7, 2 );
@@ -388,7 +388,7 @@ DatabaseDialog::DatabaseDialog( View * parent, QRect const & rect, const char * 
 
   // result page
 
-  m_result = new QWidget( this, "m_result" );
+  m_result = new QWidget( this );
   m_resultLayout = new QGridLayout( m_result );
   m_resultLayout->setMargin(KDialog::marginHint());
   m_resultLayout->setSpacing(KDialog::spacingHint());

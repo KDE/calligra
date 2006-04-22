@@ -76,7 +76,7 @@ SortDialog::SortDialog( View * parent,  const char * name,
 
   m_tabWidget = new QTabWidget( page, "m_tabWidget" );
 
-  m_page1 = new QWidget( m_tabWidget, "m_page1" );
+  m_page1 = new QWidget( m_tabWidget );
   QGridLayout * page1Layout = new QGridLayout( m_page1 );
   page1Layout->setMargin(KDialog::marginHint());
   page1Layout->setSpacing(KDialog::spacingHint());
@@ -99,7 +99,7 @@ SortDialog::SortDialog( View * parent,  const char * name,
   m_sortRow->setText( i18n( "Sort &Columns" ) );
 
   //First row / column contains header toggle
-  m_firstRowOrColHeader = new QCheckBox( layoutGroup, "m_copyLayout" );
+  m_firstRowOrColHeader = new QCheckBox( layoutGroup );
   //m_firstRowOrColHeader->setText( i18n( "&First row contains headers" ) );
   m_firstRowOrColHeader->setChecked(true);
   page1Layout->addWidget(layoutGroup,0,0);
@@ -174,7 +174,7 @@ SortDialog::SortDialog( View * parent,  const char * name,
 
   //---------------- options page
 
-  m_page2 = new QWidget( m_tabWidget, "m_page2" );
+  m_page2 = new QWidget( m_tabWidget );
   QGridLayout * page2Layout = new QGridLayout( m_page2 );
   page2Layout->setMargin(KDialog::marginHint());
   page2Layout->setSpacing(KDialog::spacingHint());
@@ -188,7 +188,7 @@ SortDialog::SortDialog( View * parent,  const char * name,
   QVBoxLayout * firstKeyBoxLayout = new QVBoxLayout( firstKeyBox->layout() );
   firstKeyBoxLayout->setAlignment( Qt::AlignTop );
 
-  m_useCustomLists = new QCheckBox( firstKeyBox, "m_useCustomLists_2" );
+  m_useCustomLists = new QCheckBox( firstKeyBox );
   m_useCustomLists->setText( i18n( "&Use custom list" ) );
   firstKeyBoxLayout->addWidget( m_useCustomLists );
 
@@ -244,12 +244,12 @@ SortDialog::SortDialog( View * parent,  const char * name,
   Layout1->addItem( spacer_2 );
 #endif
 
-  m_copyLayout = new QCheckBox( m_page2, "m_copyLayout" );
+  m_copyLayout = new QCheckBox( m_page2 );
   m_copyLayout->setText( i18n( "Copy cell &formatting (Borders, Colours, Text Style)" ) );
 
   page2Layout->addWidget( m_copyLayout, 1, 0 );
 
-  m_respectCase = new QCheckBox( m_page2, "m_copyLayout" );
+  m_respectCase = new QCheckBox( m_page2 );
   m_respectCase->setText( i18n( "Case sensitive sort" ) );
   m_respectCase->setChecked( true );
 

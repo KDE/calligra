@@ -1472,7 +1472,7 @@ void QtCalculator::configclicked(){
   tabdialog->setCancelButton( i18n("&Cancel") );
   tabdialog->setOKButton(i18n("&OK"));
 
-  QWidget *about = new QWidget(tabdialog,"about");
+  QWidget *about = new QWidget(tabdialog );
   QVBoxLayout *lay1 = new QVBoxLayout( about );
   lay1->setMargin( KDialog::marginHint() );
   lay1->setSpacing( KDialog::spacingHint() );
