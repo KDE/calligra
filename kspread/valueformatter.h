@@ -67,8 +67,6 @@ class ValueFormatter {
       FormatType fmtType);
 
   /** create a number format */
-  QString createNumberFormat (long value, FormatType fmt, bool alwaysSigned,
-                              const QString& currencySymbol);
   QString createNumberFormat (double value, int precision, FormatType fmt,
       bool alwaysSigned, const QString& currencySymbol);
 

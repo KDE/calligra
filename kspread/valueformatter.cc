@@ -95,21 +95,8 @@ QString ValueFormatter::formatText (const Value &value,
     str = fractionFormat (value.asFloat(), fmtType);
 
   //another
-  else if (value.isInteger())
-  {
-	long v = value.asInteger();
-	// Always unsigned ?
-    if ((floatFormat == Format::AlwaysUnsigned) && (v < 0))
-      v *= -1;
-    str = createNumberFormat (v, fmtType,
-        (floatFormat == Format::AlwaysSigned), currencySymbol);
-  }
   else
   {
-    QChar decimal_point = converter->locale()->decimalSymbol()[0];
-    if ( decimal_point.isNull() )
-      decimal_point = '.';
-
     //some cell parameters ...
     double v = converter->asFloat (value).asFloat();
 
@@ -124,7 +111,13 @@ QString ValueFormatter::formatText (const Value &value,
     // Remove trailing zeros and the decimal point if necessary
     // unless the number has no decimal point
     if (precision == -1)
+    {
+      QChar decimal_point = converter->locale()->decimalSymbol()[0];
+      if ( decimal_point.isNull() )
+        decimal_point = '.';
+
       removeTrailingZeros (str, decimal_point);
+    }
   }
 
   if (!prefix.isEmpty())
@@ -240,49 +233,13 @@ void ValueFormatter::removeTrailingZeros (QString &str, QChar decimal_point)
   }
 }
 
-
-QString ValueFormatter::createNumberFormat ( long value, FormatType fmt,
-	 bool alwaysSigned, const QString& currencySymbol)
-{
-  QString number;
-
-  //multiply value by 100 for percentage format
-  if (fmt == Percentage_format)
-    value *= 100;
-
-  switch (fmt)
-  {
-    case Number_format:
-    case Scientific_format:
-      number = QString::number(value);
-      break;
-    case Percentage_format:
-      number = QString::number(value) + " %";
-      break;
-    case Money_format:
-      number = converter->locale()->formatMoney (value, currencySymbol.isEmpty() ? converter->locale()->currencySymbol() : currencySymbol);
-      break;
-    default :
-      //other formatting?
-      // This happens with Custom_format...
-      kdDebug(36001)<<"Wrong usage of ValueFormatter::createNumberFormat fmt=" << fmt << "\n";
-      break;
-  }
-
-  //prepend positive sign if needed
-  if (alwaysSigned && value >= 0 )
-    if (converter->locale()->positiveSign().isEmpty())
-      number='+'+number;
-
-  return number;
-}
-
 QString ValueFormatter::createNumberFormat ( double value, int precision,
     FormatType fmt, bool alwaysSigned, const QString& currencySymbol)
 {
   // if precision is -1, ask for a huge number of decimals, we'll remove
   // the zeros later. Is 8 ok ?
-  int p = (precision == -1) ? 8 : precision;
+  // Stefan: No. Use maximum possible decimal precision (DBL_DIG) instead.
+  int p = (precision == -1) ? DBL_DIG : precision;
   QString localizedNumber;
   int pos = 0;
 
