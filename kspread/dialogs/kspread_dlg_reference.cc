@@ -284,7 +284,7 @@ EditAreaName::EditAreaName( View * parent,
 
   EditAreaNameLayout->addWidget( TextLabel4, 2, 0 );
 
-  m_area = new QLineEdit( page, "m_area" );
+  m_area = new QLineEdit( page );
 
   EditAreaNameLayout->addWidget( m_area, 2, 1 );
 

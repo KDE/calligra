@@ -1172,7 +1172,7 @@ CellFormatPageFloat::CellFormatPageFloat( QWidget* parent, CellFormatDialog *_dl
     grid->setMargin(KDialog::marginHint());
     grid->setSpacing(KDialog::spacingHint());
 
-    postfix = new QLineEdit( box, "LineEdit_1" );
+    postfix = new QLineEdit( box );
     postfix->setWhatsThis( i18n( "You can add here a Postfix such as a $HK symbol to the end of each cell content in the checked format." ) );
     grid->addWidget(postfix,2,1);
     precision = new KIntNumInput( dlg->precision, box, 10 );
@@ -1181,7 +1181,7 @@ CellFormatPageFloat::CellFormatPageFloat( QWidget* parent, CellFormatDialog *_dl
     precision->setWhatsThis( i18n( "You can control how many digits are displayed after the decimal point for numeric values. This can also be changed using the Increase precision or Decrease precision icons in the Format toolbar. " ) );
     grid->addWidget(precision,1,1);
 
-    prefix = new QLineEdit( box, "LineEdit_3" );
+    prefix = new QLineEdit( box );
     prefix->setWhatsThis( i18n( "You can add here a Prefix such as a $ symbol at the start of each cell content in the checked format." ) );
     grid->addWidget(prefix,0,1);
 

@@ -94,14 +94,14 @@ GoalSeekDialog::GoalSeekDialog( View * parent,  QPoint const & marker,
   TextLabel4->setText( i18n( "To value:" ) );
   m_startFrameLayout->addWidget( TextLabel4, 1, 0 );
 
-  m_targetValueEdit = new QLineEdit( m_startFrame, "m_targetValueEdit" );
+  m_targetValueEdit = new QLineEdit( m_startFrame );
   m_startFrameLayout->addWidget( m_targetValueEdit, 1, 1 );
 
-  m_targetEdit = new QLineEdit( m_startFrame, "m_targetEdit" );
+  m_targetEdit = new QLineEdit( m_startFrame );
   m_startFrameLayout->addWidget( m_targetEdit, 0, 1 );
   m_targetEdit->setText( Cell::name( marker.x(), marker.y() ) );
 
-  m_sourceEdit = new QLineEdit( m_startFrame, "m_sourceEdit" );
+  m_sourceEdit = new QLineEdit( m_startFrame );
   m_startFrameLayout->addWidget( m_sourceEdit, 2, 1 );
 
   QLabel * TextLabel5 = new QLabel( m_startFrame );

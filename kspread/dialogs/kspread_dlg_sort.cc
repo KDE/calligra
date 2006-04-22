@@ -92,10 +92,10 @@ SortDialog::SortDialog( View * parent,  const char * name,
   //orientationGroup->setMargin(0);
   orientationGroup->layout()->setMargin(0);
 
-  m_sortColumn = new QRadioButton( orientationGroup, "m_sortColumn" );
+  m_sortColumn = new QRadioButton( orientationGroup );
   m_sortColumn->setText( i18n( "Sort &Rows" ) );
 
-  m_sortRow = new QRadioButton( orientationGroup, "m_sortRow" );
+  m_sortRow = new QRadioButton( orientationGroup );
   m_sortRow->setText( i18n( "Sort &Columns" ) );
 
   //First row / column contains header toggle
@@ -228,7 +228,7 @@ SortDialog::SortDialog( View * parent,  const char * name,
   startingCellLabel->setText( i18n( "Destination Cell:" ) );
   resultToBoxLayout->addWidget( startingCellLabel );
 
-  m_outputCell = new QLineEdit( resultToBox, "m_outputCell" );
+  m_outputCell = new QLineEdit( resultToBox );
   m_outputCell->setMaximumSize( QSize( 60, 32767 ) );
   resultToBoxLayout->addWidget( m_outputCell );
 

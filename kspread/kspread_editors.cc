@@ -1435,7 +1435,7 @@ void LocationEditWidget::keyPressEvent( QKeyEvent * _ev )
 
 EditWidget::EditWidget( QWidget *_parent, Canvas *_canvas,
                         QAbstractButton *cancelButton, QAbstractButton *okButton )
-  : QLineEdit( _parent, "EditWidget" )
+  : QLineEdit( _parent )
 {
   m_pCanvas = _canvas;
   Q_ASSERT(m_pCanvas != NULL);

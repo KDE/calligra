@@ -106,28 +106,28 @@ CSVDialog::CSVDialog( View * parent, const char * name, QRect const & rect, Mode
 
   MyDialogLayout->addWidget( m_ignoreDuplicates, 2, 2, 2, 3 );
 
-  m_radioComma = new QRadioButton( m_delimiterBox, "m_radioComma" );
+  m_radioComma = new QRadioButton( m_delimiterBox );
   m_radioComma->setText( i18n( "Comma" ) );
   m_radioComma->setChecked( TRUE );
   m_delimiterBoxLayout->addWidget( m_radioComma, 0, 0 );
 
-  m_radioSemicolon = new QRadioButton( m_delimiterBox, "m_radioSemicolon" );
+  m_radioSemicolon = new QRadioButton( m_delimiterBox );
   m_radioSemicolon->setText( i18n( "Semicolon" ) );
   m_delimiterBoxLayout->addWidget( m_radioSemicolon, 0, 1 );
 
-  m_radioTab = new QRadioButton( m_delimiterBox, "m_radioTab" );
+  m_radioTab = new QRadioButton( m_delimiterBox );
   m_radioTab->setText( i18n( "Tabulator" ) );
   m_delimiterBoxLayout->addWidget( m_radioTab, 1, 0 );
 
-  m_radioSpace = new QRadioButton( m_delimiterBox, "m_radioSpace" );
+  m_radioSpace = new QRadioButton( m_delimiterBox );
   m_radioSpace->setText( i18n( "Space" ) );
   m_delimiterBoxLayout->addWidget( m_radioSpace, 1, 1 );
 
-  m_radioOther = new QRadioButton( m_delimiterBox, "m_radioOther" );
+  m_radioOther = new QRadioButton( m_delimiterBox );
   m_radioOther->setText( i18n( "Other" ) );
   m_delimiterBoxLayout->addWidget( m_radioOther, 0, 2 );
 
-  m_delimiterEdit = new QLineEdit( m_delimiterBox, "m_delimiterEdit" );
+  m_delimiterEdit = new QLineEdit( m_delimiterBox );
   m_delimiterEdit->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)0, (QSizePolicy::SizeType)0, 0, 0, m_delimiterEdit->sizePolicy().hasHeightForWidth() ) );
   m_delimiterEdit->setMaximumSize( QSize( 30, 32767 ) );
   m_delimiterBoxLayout->addWidget( m_delimiterEdit, 1, 2 );
@@ -144,20 +144,20 @@ CSVDialog::CSVDialog( View * parent, const char * name, QRect const & rect, Mode
   m_formatBoxLayout->setAlignment( Qt::AlignTop );
   MyDialogLayout->addWidget( m_formatBox, 0, 2, 1, 1 );
 
-  m_radioNumber = new QRadioButton( m_formatBox, "m_radioNumber" );
+  m_radioNumber = new QRadioButton( m_formatBox );
   m_radioNumber->setText( i18n( "Number" ) );
   m_formatBoxLayout->addWidget( m_radioNumber, 1, 1, 0, 1 );
 
-  m_radioText = new QRadioButton( m_formatBox, "m_radioText" );
+  m_radioText = new QRadioButton( m_formatBox );
   m_radioText->setText( i18n( "Text" ) );
   m_radioText->setChecked( TRUE );
   m_formatBoxLayout->addWidget( m_radioText, 0, 0 );
 
-  m_radioCurrency = new QRadioButton( m_formatBox, "m_radioCurrency" );
+  m_radioCurrency = new QRadioButton( m_formatBox );
   m_radioCurrency->setText( i18n( "Currency" ) );
   m_formatBoxLayout->addWidget( m_radioCurrency, 0, 0, 1, 2 );
 
-  m_radioDate = new QRadioButton( m_formatBox, "m_radioDate" );
+  m_radioDate = new QRadioButton( m_formatBox );
   m_radioDate->setText( i18n( "Date" ) );
   m_formatBoxLayout->addWidget( m_radioDate, 1, 2 );
 
