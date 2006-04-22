@@ -83,7 +83,7 @@ GoalSeekDialog::GoalSeekDialog( View * parent,  QPoint const & marker,
   GoalSeekDialogLayout->setMargin(KDialog::marginHint());
   GoalSeekDialogLayout->setSpacing(KDialog::spacingHint());
 
-  m_startFrame = new QFrame( this, "m_startFrame" );
+  m_startFrame = new QFrame( this );
   m_startFrame->setFrameShape( QFrame::StyledPanel );
   m_startFrame->setFrameShadow( QFrame::Raised );
   m_startFrameLayout = new QGridLayout( m_startFrame );
@@ -135,7 +135,7 @@ GoalSeekDialog::GoalSeekDialog( View * parent,  QPoint const & marker,
 
   GoalSeekDialogLayout->addLayout( Layout5, 0, 1, 1, 1 );
 
-  m_resultFrame = new QFrame( this, "m_resultFrame" );
+  m_resultFrame = new QFrame( this );
   m_resultFrame->setFrameShape( QFrame::StyledPanel );
   m_resultFrame->setFrameShadow( QFrame::Raised );
   m_resultFrame->setMinimumWidth( 350 );

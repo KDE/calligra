@@ -86,14 +86,14 @@ DatabaseDialog::DatabaseDialog( View * parent, QRect const & rect, const char * 
   m_databaseLayout->setMargin(KDialog::marginHint());
   m_databaseLayout->setSpacing(KDialog::spacingHint());
 
-  QFrame * Frame5 = new QFrame( m_database, "Frame5" );
+  QFrame * Frame5 = new QFrame( m_database );
 // ###  Frame5->setFrameShape( QFrame::MShape );
 // ###  Frame5->setFrameShadow( QFrame::MShadow );
   QVBoxLayout * Frame5Layout = new QVBoxLayout( Frame5 );
   Frame5Layout->setMargin(11);
   Frame5Layout->setSpacing(6);
 
-  QFrame * Frame16 = new QFrame( Frame5, "Frame16" );
+  QFrame * Frame16 = new QFrame( Frame5 );
   Frame16->setFrameShape( QFrame::NoFrame );
   Frame16->setFrameShadow( QFrame::Plain );
   QGridLayout * Frame16Layout = new QGridLayout( Frame16 );
@@ -157,7 +157,7 @@ DatabaseDialog::DatabaseDialog( View * parent, QRect const & rect, const char * 
 
   m_databaseLayout->addWidget( Frame5, 0, 1 );
 
-  QFrame * Frame17 = new QFrame( m_database, "Frame17" );
+  QFrame * Frame17 = new QFrame( m_database );
   Frame17->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)0, (QSizePolicy::SizeType)7, 0, 0, Frame17->sizePolicy().hasHeightForWidth() ) );
   Frame17->setMinimumSize( QSize( 111, 0 ) );
   Frame17->setFrameShape( QFrame::NoFrame );
@@ -173,7 +173,7 @@ DatabaseDialog::DatabaseDialog( View * parent, QRect const & rect, const char * 
   m_sheetLayout->setMargin(KDialog::marginHint());
   m_sheetLayout->setSpacing(KDialog::spacingHint());
 
-  QFrame * Frame5_2 = new QFrame( m_sheet, "Frame5_2" );
+  QFrame * Frame5_2 = new QFrame( m_sheet );
 // ###  Frame5_2->setFrameShape( QFrame::MShape );
 // ###  Frame5_2->setFrameShadow( QFrame::MShadow );
   QGridLayout * Frame5_2Layout = new QGridLayout( Frame5_2 );
@@ -213,7 +213,7 @@ DatabaseDialog::DatabaseDialog( View * parent, QRect const & rect, const char * 
 
   m_sheetLayout->addWidget( Frame5_2, 0, 1 );
 
-  QFrame * Frame17_2 = new QFrame( m_sheet, "Frame17_2" );
+  QFrame * Frame17_2 = new QFrame( m_sheet );
   Frame17_2->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)0, (QSizePolicy::SizeType)7, 0, 0, Frame17_2->sizePolicy().hasHeightForWidth() ) );
   Frame17_2->setMinimumSize( QSize( 111, 0 ) );
   Frame17_2->setFrameShape( QFrame::NoFrame );
@@ -227,7 +227,7 @@ DatabaseDialog::DatabaseDialog( View * parent, QRect const & rect, const char * 
   m_columnsLayout->setMargin(KDialog::marginHint());
   m_columnsLayout->setSpacing(KDialog::spacingHint());
 
-  QFrame * Frame5_2_2 = new QFrame( m_columns, "Frame5_2_2" );
+  QFrame * Frame5_2_2 = new QFrame( m_columns );
 // ###  Frame5_2_2->setFrameShape( QFrame::MShape );
 // ###  Frame5_2_2->setFrameShadow( QFrame::MShadow );
   QGridLayout * Frame5_2_2Layout = new QGridLayout( Frame5_2_2 );
@@ -253,7 +253,7 @@ DatabaseDialog::DatabaseDialog( View * parent, QRect const & rect, const char * 
 
   m_columnsLayout->addWidget( Frame5_2_2, 0, 1 );
 
-  QFrame * Frame17_3 = new QFrame( m_columns, "Frame17_3" );
+  QFrame * Frame17_3 = new QFrame( m_columns );
   Frame17_3->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)0, (QSizePolicy::SizeType)7, 0, 0, Frame17_3->sizePolicy().hasHeightForWidth() ) );
   Frame17_3->setMinimumSize( QSize( 111, 0 ) );
   Frame17_3->setFrameShape( QFrame::NoFrame );
@@ -377,7 +377,7 @@ DatabaseDialog::DatabaseDialog( View * parent, QRect const & rect, const char * 
 
   m_optionsLayout->addWidget( optionsFrame, 0, 1 );
 
-  QFrame * Frame17_4 = new QFrame( m_options, "Frame17_4" );
+  QFrame * Frame17_4 = new QFrame( m_options );
   Frame17_4->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)0, (QSizePolicy::SizeType)7, 0, 0, Frame17_4->sizePolicy().hasHeightForWidth() ) );
   Frame17_4->setMinimumSize( QSize( 111, 0 ) );
   Frame17_4->setFrameShape( QFrame::NoFrame );
@@ -407,7 +407,7 @@ DatabaseDialog::DatabaseDialog( View * parent, QRect const & rect, const char * 
   m_sqlQuery = new Q3TextEdit( Frame5_2_2_3, "m_sqlQuery" );
   Frame5_2_2_3Layout->addWidget( m_sqlQuery, 1, 0 );
 
-  QFrame * Frame12 = new QFrame( Frame5_2_2_3, "Frame12" );
+  QFrame * Frame12 = new QFrame( Frame5_2_2_3 );
   Frame12->setFrameShape( QFrame::StyledPanel );
   Frame12->setFrameShadow( QFrame::Raised );
   QGridLayout * Frame12Layout = new QGridLayout( Frame12 );
@@ -432,7 +432,7 @@ DatabaseDialog::DatabaseDialog( View * parent, QRect const & rect, const char * 
   Frame5_2_2_3Layout->addWidget( Frame12, 2, 0 );
   m_resultLayout->addWidget( Frame5_2_2_3, 0, 1 );
 
-  QFrame * Frame17_5 = new QFrame( m_result, "Frame17_5" );
+  QFrame * Frame17_5 = new QFrame( m_result );
   Frame17_5->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)0, (QSizePolicy::SizeType)7, 0, 0, Frame17_5->sizePolicy().hasHeightForWidth() ) );
   Frame17_5->setMinimumSize( QSize( 111, 0 ) );
   Frame17_5->setFrameShape( QFrame::NoFrame );
