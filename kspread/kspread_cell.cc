@@ -792,16 +792,15 @@ bool Cell::needsPrinting() const
   }
 
   // Background color or brush?
-  if ( format()->hasProperty( Style::SBackgroundBrush ) ) {
+  if ( format()->hasProperty( Style::SBackgroundBrush ) )
+  {
+    const QBrush& brush=backGroundBrush(column(),row());
 
-	const QBrush& brush=backGroundBrush(column(),row());
-
-	//Only brushes that are visible (ie. they have a brush style and are not white)
-	//need to be drawn
-	if ( (brush.style() != Qt::NoBrush) &&
-	     (brush.color() != Qt::white || brush.pixmap()) )
-		return true;
-
+    // Only brushes that are visible (ie. they have a brush style
+    // and are not white) need to be drawn
+    if ( (brush.style() != Qt::NoBrush) &&
+         (brush.color() != Qt::white || !brush.texture().isNull()) )
+      return true;
   }
 
   if ( format()->hasProperty( Style::SBackgroundColor ) ) {
@@ -1976,7 +1975,7 @@ void Cell::applyZoomedFont( QPainter &painter, int _col, int _row )
 
     // Other size?
     if ( s->hasFeature( Style::SFontSize, true ) )
-      tmpFont.setPointSizeFloat( s->fontSize() );
+      tmpFont.setPointSizeF( s->fontSize() );
 
     // Other attributes?
     if ( s->hasFeature( Style::SFontFlag, true ) ) {
@@ -2011,8 +2010,8 @@ void Cell::applyZoomedFont( QPainter &painter, int _col, int _row )
 #endif
 
   // Scale the font size according to the current zoom.
-  tmpFont.setPointSizeFloat( 0.01 * format()->sheet()->doc()->zoom()
-           * tmpFont.pointSizeFloat() );
+  tmpFont.setPointSizeF( 0.01 * format()->sheet()->doc()->zoom()
+           * tmpFont.pointSizeF() );
 
   painter.setFont( tmpFont );
 }
@@ -2686,7 +2685,6 @@ void Cell::paintBackground( QPainter& painter, const KoRect& cellRect,
                             const QPoint& cellRef, bool selected,
                             QColor& backgroundColor )
 {
-  QColorGroup defaultColorGroup = QApplication::palette().active();
   QRect       zoomedCellRect    = sheet()->doc()->zoomRect( cellRect );
 
   // If this is not the KS_rowMax and/or KS_colMax, then we reduce
@@ -2714,9 +2712,9 @@ void Cell::paintBackground( QPainter& painter, const KoRect& cellRect,
   }
 
   if ( backgroundColor.isValid() )
-    painter.setBackgroundColor( backgroundColor );
+    painter.setBackground( backgroundColor );
   else
-    painter.setBackgroundColor( defaultColorGroup.base() );
+    painter.setBackground( QApplication::palette().base().color() );
 
   // Erase the background of the cell.
   painter.eraseRect( zoomedCellRect );
@@ -2738,12 +2736,12 @@ void Cell::paintBackground( QPainter& painter, const KoRect& cellRect,
   // Draw alpha-blended selection
   if ( selected )
   {
-    QColor selectionColor( defaultColorGroup.highlight() );
-    selectionColor.setAlpha(127);
+    QColor selectionColor( QApplication::palette().highlight().color() );
+    selectionColor.setAlpha( 127 );
     painter.fillRect( zoomedCellRect, selectionColor );
   }
 
-  backgroundColor = painter.backgroundColor();
+  backgroundColor = painter.background().color();
 }
 
 
@@ -3159,7 +3157,6 @@ void Cell::paintText( QPainter& painter,
 
   ColumnFormat  *colFormat         = format()->sheet()->columnFormat( cellRef.x() );
 
-  QColorGroup    defaultColorGroup = QApplication::palette().active();
   QColor         textColorPrint    = effTextColor( cellRef.x(), cellRef.y() );
 
   // Resolve the text color if invalid (=default).
@@ -3167,7 +3164,7 @@ void Cell::paintText( QPainter& painter,
     if ( dynamic_cast<QPrinter*>(painter.device()) )
       textColorPrint = Qt::black;
     else
-      textColorPrint = QApplication::palette().active().text();
+      textColorPrint = QApplication::palette().text().color();
   }
 
   QPen tmpPen( textColorPrint );
@@ -3193,7 +3190,7 @@ void Cell::paintText( QPainter& painter,
 
   // Check for blue color, for hyperlink.
   if ( !link().isEmpty() ) {
-    tmpPen.setColor( QApplication::palette().active().link() );
+    tmpPen.setColor( QApplication::palette().link().color() );
     QFont f = painter.font();
     f.setUnderline( true );
     painter.setFont( f );
@@ -5113,7 +5110,7 @@ void Cell::checkTextInput()
       (!d->strText.isEmpty()))
   {
     QString str = value().asString();
-    setValue( Value( str[0].upper() + str.right( str.length()-1 ) ) );
+    setValue( Value( str[0].toUpper() + str.right( str.length()-1 ) ) );
   }
 }
 
@@ -6728,7 +6725,7 @@ bool Cell::loadCellData(const QDomElement & text, Paste::Operation op )
           if( inside_tag )
           {
             inside_tag = false;
-            if( tag.startsWith( "a href=\"", true ) )
+            if( tag.startsWith( "a href=\"", Qt::CaseSensitive ) )
             if( tag.endsWith( "\"" ) )
               qml_link = tag.mid( 8, tag.length()-9 );
             tag = QString::null;
