@@ -140,11 +140,11 @@ void FormatDialog::slotOk()
 
     m_view->doc()->emitBeginOperation( false );
 
-    QString xml = Factory::global()->dirs()->findResource( "sheet-styles", m_entries[ m_combo->currentItem() ].xml );
+    QString xml = Factory::global()->dirs()->findResource( "sheet-styles", m_entries[ m_combo->currentIndex() ].xml );
     if ( xml.isEmpty() )
     {
 	QString str( i18n( "Could not find sheet-style XML file '%1'." ) );
-	str = str.arg( m_entries[ m_combo->currentItem() ].xml );
+	str = str.arg( m_entries[ m_combo->currentIndex() ].xml );
 	KMessageBox::error( this, str );
 	return;
     }
@@ -158,7 +158,7 @@ void FormatDialog::slotOk()
     if ( !parseXML( doc ) )
     {
 	QString str( i18n( "Parsing error in sheet-style XML file %1." ) );
-	str = str.arg( m_entries[ m_combo->currentItem() ].xml );
+	str = str.arg( m_entries[ m_combo->currentIndex() ].xml );
 	KMessageBox::error( this, str );
 	return;
     }

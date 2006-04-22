@@ -88,7 +88,7 @@ FindOption::searchTypeValue FindOption::searchType() const
 
 FindOption::searchDirectionValue FindOption::searchDirection() const
 {
-    int pos = m_searchDirection->currentItem();
+    int pos = m_searchDirection->currentIndex();
     if ( pos == 0 )
         return Row;
     else if ( pos == 1 )

@@ -84,7 +84,7 @@ void SubtotalDialog::slotOk()
   if ( m_widget->m_replaceSubtotals->isChecked() )
     removeSubtotalLines();
 
-  int mainCol = left + m_widget->m_columnBox->currentItem();
+  int mainCol = left + m_widget->m_columnBox->currentIndex();
   int bottom = m_selection.bottom();
   int top    = m_selection.top();
   left       = m_selection.left();
@@ -295,7 +295,7 @@ bool SubtotalDialog::addSubtotal( int mainCol, int column, int row, int topRow,
   QString colName = Cell::columnName( column );
 
   QString formula("=SUBTOTAL(");
-  formula += QString::number( m_widget->m_functionBox->currentItem() + 1 );
+  formula += QString::number( m_widget->m_functionBox->currentIndex() + 1 );
   formula += "; ";
   formula += colName;
   formula += QString::number( topRow );

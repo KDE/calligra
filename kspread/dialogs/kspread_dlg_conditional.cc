@@ -461,27 +461,27 @@ void ConditionalDialog::init( Conditional const & tmp, int numCondition )
     break;
 
     case Conditional::Equal :
-    cb->setCurrentItem( 1 );
+    cb->setCurrentIndex( 1 );
     break;
 
     case Conditional::Superior :
-    cb->setCurrentItem( 2 );
+    cb->setCurrentIndex( 2 );
     break;
 
     case Conditional::Inferior :
-    cb->setCurrentItem( 3 );
+    cb->setCurrentIndex( 3 );
     break;
 
     case Conditional::SuperiorEqual :
-    cb->setCurrentItem( 4 );
+    cb->setCurrentIndex( 4 );
     break;
 
     case Conditional::InferiorEqual :
-    cb->setCurrentItem( 5 );
+    cb->setCurrentIndex( 5 );
     break;
 
     case Conditional::Between :
-    cb->setCurrentItem(6);
+    cb->setCurrentIndex(6);
 
     if ( tmp.strVal2 )
       kl2->setText( *tmp.strVal2 );
@@ -493,7 +493,7 @@ void ConditionalDialog::init( Conditional const & tmp, int numCondition )
     break;
 
     case Conditional::Different :
-    cb->setCurrentItem(7);
+    cb->setCurrentIndex(7);
     if ( tmp.strVal2 )
       kl2->setText( *tmp.strVal2 );
     else
@@ -503,7 +503,7 @@ void ConditionalDialog::init( Conditional const & tmp, int numCondition )
     }
     break;
     case Conditional::DifferentTo :
-    cb->setCurrentItem(8);
+    cb->setCurrentIndex(8);
     break;
   }
 
@@ -524,7 +524,7 @@ void ConditionalDialog::init( Conditional const & tmp, int numCondition )
 Conditional::Type ConditionalDialog::typeOfCondition( QComboBox const * const cb ) const
 {
   Conditional::Type result = Conditional::None;
-  switch( cb->currentItem() )
+  switch( cb->currentIndex() )
   {
    case 0 :
      result = Conditional::None;

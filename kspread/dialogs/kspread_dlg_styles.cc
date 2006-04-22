@@ -54,6 +54,7 @@ StyleWidget::StyleWidget( QWidget * parent, const char * name, Qt::WFlags fl )
   layout->addWidget( m_styleList );
 
   m_displayBox = new KComboBox( FALSE, this );
+  m_displayBox->setObjectName( "m_displayBox" );
   layout->addWidget( m_displayBox );
 
   m_styleList->header()->setLabel( 0, i18n( "Styles" ) );
@@ -255,7 +256,7 @@ void StyleDlg::slotUser1()
 
   m_styleManager->m_styles[ style->name() ] = style;
 
-  slotDisplayMode( m_dlg->m_displayBox->currentItem() );
+  slotDisplayMode( m_dlg->m_displayBox->currentIndex() );
 }
 
 void StyleDlg::slotUser2()
@@ -277,7 +278,7 @@ void StyleDlg::slotUser2()
     return;
 
   CellFormatDialog dlg( m_view, s, m_styleManager, m_view->doc() );
-  slotDisplayMode( m_dlg->m_displayBox->currentItem() );
+  slotDisplayMode( m_dlg->m_displayBox->currentIndex() );
 }
 
 void StyleDlg::slotUser3()
@@ -304,7 +305,7 @@ void StyleDlg::slotUser3()
   s->setType( Style::AUTO );
   m_styleManager->takeStyle( s );
 
-  slotDisplayMode( m_dlg->m_displayBox->currentItem() );
+  slotDisplayMode( m_dlg->m_displayBox->currentIndex() );
 }
 
 void StyleDlg::slotSelectionChanged( Q3ListViewItem * item )

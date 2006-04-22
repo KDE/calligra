@@ -441,7 +441,7 @@ miscParameters::miscParameters( View* _view,KVBox *box, char *name )
   listType+=i18n("Automatic");
   listType+=i18n("Semi-Automatic");
   typeCompletion->insertItems( 0,listType);
-  typeCompletion->setCurrentItem(0);
+  typeCompletion->setCurrentIndex(0);
   comboChanged=false;
   connect(typeCompletion,SIGNAL(activated( const QString & )),this,SLOT(slotTextComboChanged(const QString &)));
 
@@ -455,7 +455,7 @@ miscParameters::miscParameters( View* _view,KVBox *box, char *name )
   listType+=i18n("Left");
   listType+=i18n("Down, First Column");
   typeOfMove->insertItems( 0,listType);
-  typeOfMove->setCurrentItem(0);
+  typeOfMove->setCurrentIndex(0);
   typeOfMove->setWhatsThis( i18n( "When you have selected a cell, pressing the Enter key will move the cell cursor one cell left, right, up or down, as determined by this setting." ) );
 
   label=new QLabel(i18n("&Method of calc:"), tmpQGroupBox);
@@ -471,7 +471,7 @@ miscParameters::miscParameters( View* _view,KVBox *box, char *name )
   listTypeCalc+=i18n("CountA");
   listTypeCalc+=i18n("None");
   typeCalc->insertItems( 0,listTypeCalc);
-  typeCalc->setCurrentItem(0);
+  typeCalc->setCurrentIndex(0);
   typeCalc->setWhatsThis( i18n( "This drop down selection box can be used to choose the calculation performed by the Statusbar Summary  function." ) );
 
 //   valIndent = new KDoubleNumInput( _indent, tmpQGroupBox , 10.0 );
@@ -508,71 +508,71 @@ void miscParameters::initComboBox()
 switch(tmpCompletion )
         {
         case  KGlobalSettings::CompletionNone:
-                typeCompletion->setCurrentItem(0);
+                typeCompletion->setCurrentIndex(0);
                 break;
         case  KGlobalSettings::CompletionAuto:
-                typeCompletion->setCurrentItem(3);
+                typeCompletion->setCurrentIndex(3);
                 break;
         case  KGlobalSettings::CompletionMan:
-                typeCompletion->setCurrentItem(4);
+                typeCompletion->setCurrentIndex(4);
                 break;
         case  KGlobalSettings::CompletionShell:
-                typeCompletion->setCurrentItem(1);
+                typeCompletion->setCurrentIndex(1);
                 break;
         case  KGlobalSettings::CompletionPopup:
-                typeCompletion->setCurrentItem(2);
+                typeCompletion->setCurrentIndex(2);
                 break;
         default :
-                typeCompletion->setCurrentItem(0);
+                typeCompletion->setCurrentIndex(0);
                 break;
         }
 switch( m_pView->doc()->getMoveToValue( ))
         {
         case  Bottom:
-                typeOfMove->setCurrentItem(0);
+                typeOfMove->setCurrentIndex(0);
                 break;
         case  Left:
-                typeOfMove->setCurrentItem(3);
+                typeOfMove->setCurrentIndex(3);
                 break;
         case  Top:
-                typeOfMove->setCurrentItem(1);
+                typeOfMove->setCurrentIndex(1);
                 break;
         case  Right:
-                typeOfMove->setCurrentItem(2);
+                typeOfMove->setCurrentIndex(2);
                 break;
         case  BottomFirst:
-                typeOfMove->setCurrentItem(4);
+                typeOfMove->setCurrentIndex(4);
                 break;
         default :
-                typeOfMove->setCurrentItem(0);
+                typeOfMove->setCurrentIndex(0);
                 break;
         }
 
 switch( m_pView->doc()->getTypeOfCalc())
         {
         case  SumOfNumber:
-                typeCalc->setCurrentItem(0);
+                typeCalc->setCurrentIndex(0);
                 break;
         case  Min:
-                typeCalc->setCurrentItem(1);
+                typeCalc->setCurrentIndex(1);
                 break;
         case  Max:
-                typeCalc->setCurrentItem(2);
+                typeCalc->setCurrentIndex(2);
                 break;
         case  Average:
-                typeCalc->setCurrentItem(3);
+                typeCalc->setCurrentIndex(3);
                 break;
         case  Count:
-	        typeCalc->setCurrentItem(4);
+	        typeCalc->setCurrentIndex(4);
                 break;
         case  CountA:
-	        typeCalc->setCurrentItem(5);
+	        typeCalc->setCurrentIndex(5);
                 break;
         case  NoneCalc:
-	        typeCalc->setCurrentItem(6);
+	        typeCalc->setCurrentIndex(6);
                 break;
         default :
-                typeCalc->setCurrentItem(0);
+                typeCalc->setCurrentIndex(0);
                 break;
         }
 
@@ -582,10 +582,10 @@ void miscParameters::slotDefault()
 {
   m_undoRedoLimit->setValue(30);
   valIndent->setValue( KoUnit::toUserValue( 10.0, indentUnit) );
-  typeCompletion->setCurrentItem(3);
-  typeOfMove->setCurrentItem(0);
+  typeCompletion->setCurrentIndex(3);
+  typeOfMove->setCurrentIndex(0);
   msgError->setChecked(false);
-  typeCalc->setCurrentItem(0);
+  typeCalc->setCurrentIndex(0);
 }
 
 
@@ -605,7 +605,7 @@ void miscParameters::apply()
     config->setGroup( "Parameters" );
     KGlobalSettings::Completion tmpCompletion=KGlobalSettings::CompletionNone;
 
-    switch(typeCompletion->currentItem())
+    switch(typeCompletion->currentIndex())
     {
         case 0:
             tmpCompletion=KGlobalSettings::CompletionNone;
@@ -632,7 +632,7 @@ void miscParameters::apply()
     }
 
     KSpread::MoveTo tmpMoveTo=Bottom;
-    switch(typeOfMove->currentItem())
+    switch(typeOfMove->currentIndex())
     {
         case 0:
             tmpMoveTo=Bottom;
@@ -657,7 +657,7 @@ void miscParameters::apply()
     }
 
     MethodOfCalc tmpMethodCalc=SumOfNumber;
-    switch(typeCalc->currentItem())
+    switch(typeCalc->currentIndex())
     {
         case 0:
             tmpMethodCalc =SumOfNumber;
@@ -800,7 +800,7 @@ configureLayoutPage::configureLayoutPage( View* _view,KVBox *box , char *name )
   defaultSizePage=new QComboBox( tmpQGroupBox);
   label->setBuddy(defaultSizePage);
   defaultSizePage->insertItems( 0, KoPageFormat::allFormats() );
-  defaultSizePage->setCurrentItem(1);
+  defaultSizePage->setCurrentIndex(1);
   defaultSizePage->setWhatsThis( i18n( "Choose the default page size for your worksheet among all the most common page sizes.\nNote that you can overwrite the page size for the current sheet using the Format -> Page Layout... dialog." ) );
   grid1->addWidget(defaultSizePage,1,0);
 
@@ -814,7 +814,7 @@ configureLayoutPage::configureLayoutPage( View* _view,KVBox *box , char *name )
   listType+=i18n( "Portrait" );
   listType+=i18n( "Landscape" );
   defaultOrientationPage->insertItems( 0,listType);
-  defaultOrientationPage->setCurrentItem(0);
+  defaultOrientationPage->setCurrentIndex(0);
   defaultOrientationPage->setWhatsThis( i18n( "Choose the sheet orientation: portrait or lanscape.\nNote that you can overwrite the orientation for the current sheet using the Format -> Page Layout... dialog." ) );
   grid1->addWidget(defaultOrientationPage,3,0);
 
@@ -825,7 +825,7 @@ configureLayoutPage::configureLayoutPage( View* _view,KVBox *box , char *name )
   label->setBuddy(defaultUnit);
 
   defaultUnit->insertItems( 0,KoUnit::listOfUnitName());
-  defaultUnit->setCurrentItem(0);
+  defaultUnit->setCurrentIndex(0);
   defaultUnit->setWhatsThis( i18n( "Choose the default unit that will be used in your sheet.\nNote that you can overwrite the unit for the current sheet using the Format -> Page Layout... dialog." ) );
   grid1->addWidget(defaultUnit,5,0);
   initCombo();
@@ -834,9 +834,9 @@ configureLayoutPage::configureLayoutPage( View* _view,KVBox *box , char *name )
 
 void configureLayoutPage::slotDefault()
 {
-  defaultSizePage->setCurrentItem(1);
-  defaultOrientationPage->setCurrentItem(0);
-  defaultUnit->setCurrentItem(0);
+  defaultSizePage->setCurrentIndex(1);
+  defaultOrientationPage->setCurrentIndex(0);
+  defaultUnit->setCurrentIndex(0);
 }
 
 void configureLayoutPage::initCombo()
@@ -852,9 +852,9 @@ void configureLayoutPage::initCombo()
         unit=config->readNumEntry( "Default unit page" ,0);
     }
 
-    defaultUnit->setCurrentItem(m_pView->doc()->unit());
-    defaultSizePage->setCurrentItem(paper);
-    defaultOrientationPage->setCurrentItem(orientation);
+    defaultUnit->setCurrentIndex(m_pView->doc()->unit());
+    defaultSizePage->setCurrentIndex(paper);
+    defaultOrientationPage->setCurrentIndex(orientation);
 }
 
 
@@ -863,21 +863,21 @@ void configureLayoutPage::apply()
   m_pView->doc()->emitBeginOperation( false );
   config->setGroup( "KSpread Page Layout" );
 
-  if( paper != defaultSizePage->currentItem() )
+  if( paper != defaultSizePage->currentIndex() )
   {
-     unsigned int sizePage = defaultSizePage->currentItem();
+     unsigned int sizePage = defaultSizePage->currentIndex();
      config->writeEntry( "Default size page", sizePage );
      m_pView->activeSheet()->print()->setPaperFormat( (KoFormat)sizePage );
   }
-  if( orientation != defaultOrientationPage->currentItem() )
+  if( orientation != defaultOrientationPage->currentIndex() )
   {
-     unsigned int orientationPage = defaultOrientationPage->currentItem();
+     unsigned int orientationPage = defaultOrientationPage->currentIndex();
      config->writeEntry( "Default orientation page", orientationPage );
      m_pView->activeSheet()->print()->setPaperOrientation( (KoOrientation)orientationPage );
   }
-  if( unit != defaultUnit->currentItem() )
+  if( unit != defaultUnit->currentIndex() )
   {
-     unsigned int unitPage = defaultUnit->currentItem();
+     unsigned int unitPage = defaultUnit->currentIndex();
      config->writeEntry( "Default unit page", unitPage );
      m_pView->doc()->setUnit( (KoUnit::Unit)unitPage );
   }

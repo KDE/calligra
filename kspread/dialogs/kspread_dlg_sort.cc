@@ -499,9 +499,9 @@ void SortDialog::slotOrientationChanged(int id)
 
     /*if (m_firstRowOrColHeader->isChecked())
     {
-      int k1 = m_sortKey1->currentItem();
-      int k2 = m_sortKey2->currentItem();
-      int k3 = m_sortKey3->currentItem();
+      int k1 = m_sortKey1->currentIndex();
+      int k2 = m_sortKey2->currentIndex();
+      int k3 = m_sortKey3->currentIndex();
       m_sortKey1->removeItem( 0 );
       m_sortKey2->removeItem( 1 ); // because there is "None" in there
       m_sortKey3->removeItem( 1 );
@@ -599,28 +599,28 @@ void SortDialog::slotOk()
   Sheet::SortingOrder order2;
   Sheet::SortingOrder order3;
 
-  order1 = ( m_sortOrder1->currentItem() == 0 ? Sheet::Increase
+  order1 = ( m_sortOrder1->currentIndex() == 0 ? Sheet::Increase
              : Sheet::Decrease );
-  order2 = ( m_sortOrder2->currentItem() == 0 ? Sheet::Increase
+  order2 = ( m_sortOrder2->currentIndex() == 0 ? Sheet::Increase
              : Sheet::Decrease );
-  order3 = ( m_sortOrder3->currentItem() == 0 ? Sheet::Increase
+  order3 = ( m_sortOrder3->currentIndex() == 0 ? Sheet::Increase
              : Sheet::Decrease );
 
   if ( m_sortRow->isChecked() )
   {
-    key1 = m_sortKey1->currentItem() + sortArea.top();
-    if (m_sortKey2->currentItem() > 0)
-      key2 = m_sortKey2->currentItem() + sortArea.top() - 1; // cause there is "None"
-    if (m_sortKey3->currentItem() > 0)
-      key3 = m_sortKey3->currentItem() + sortArea.top() - 1; // cause there is "None"
+    key1 = m_sortKey1->currentIndex() + sortArea.top();
+    if (m_sortKey2->currentIndex() > 0)
+      key2 = m_sortKey2->currentIndex() + sortArea.top() - 1; // cause there is "None"
+    if (m_sortKey3->currentIndex() > 0)
+      key3 = m_sortKey3->currentIndex() + sortArea.top() - 1; // cause there is "None"
   }
   else
   {
-    key1 = m_sortKey1->currentItem() + sortArea.left();
-    if (m_sortKey2->currentItem() > 0)
-      key2 = m_sortKey2->currentItem() + sortArea.left() - 1; // cause there is "None"
-    if (m_sortKey3->currentItem() > 0)
-      key3 = m_sortKey3->currentItem() + sortArea.left() - 1; // cause there is "None"
+    key1 = m_sortKey1->currentIndex() + sortArea.left();
+    if (m_sortKey2->currentIndex() > 0)
+      key2 = m_sortKey2->currentIndex() + sortArea.left() - 1; // cause there is "None"
+    if (m_sortKey3->currentIndex() > 0)
+      key3 = m_sortKey3->currentIndex() + sortArea.left() - 1; // cause there is "None"
 
   }
   /*
@@ -717,9 +717,9 @@ void SortDialog::firstRowHeaderChanged( int /*state*/ )
 
   if (state == 0) // off
   {
-    int k1 = m_sortKey1->currentItem();
-    int k2 = m_sortKey2->currentItem();
-    int k3 = m_sortKey3->currentItem();
+    int k1 = m_sortKey1->currentIndex();
+    int k2 = m_sortKey2->currentIndex();
+    int k3 = m_sortKey3->currentIndex();
     m_sortKey1->clear();
     m_sortKey2->clear();
     m_sortKey3->clear();
@@ -735,9 +735,9 @@ void SortDialog::firstRowHeaderChanged( int /*state*/ )
   }
   else if (state == 2) // on
   {
-    int k1 = m_sortKey1->currentItem();
-    int k2 = m_sortKey2->currentItem();
-    int k3 = m_sortKey3->currentItem();
+    int k1 = m_sortKey1->currentIndex();
+    int k2 = m_sortKey2->currentIndex();
+    int k3 = m_sortKey3->currentIndex();
     m_sortKey1->removeItem( 0 );
     m_sortKey2->removeItem( 1 ); // because there is "None" in there
     m_sortKey3->removeItem( 1 );
