@@ -22,6 +22,7 @@
 
 // Forward declarations.
 namespace KoMacro {
+	class Action;
 	class Macro;
 	class MacroItem;
 }
@@ -108,22 +109,15 @@ class KexiMacroDesignView : public KexiMacroView
 		Private* const d;
 
 		/**
-		* Initialize the \a KexiTableView we use internaly to
-		* display the content of a \a KoMacro::Macro .
-		*/
-		void initTable();
-
-		/**
 		* Update the table's data.
 		*/
 		void updateData();
 
 		/**
-		 * Update the \a KoProperty::Set properties.
-		 */
-		void updateProperties();
-
-		void setAction(KSharedPtr<KoMacro::MacroItem> macroitem, const QString& actionname);
+		* Update the properties of the \a KoProperty::Set \p set at
+		* row-number \p row with the \a KoMacro::Action \p action .
+		*/
+		void updateProperties(int row, KoProperty::Set* set, KSharedPtr<KoMacro::Action> action);
 };
 
 #endif

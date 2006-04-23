@@ -115,16 +115,6 @@ KexiMacroDesignView::KexiMacroDesignView(KexiMainWindow *mainwin, QWidget *paren
 	: KexiMacroView(mainwin, parent, macro, "KexiMacroDesignView")
 	, d( new Private() )
 {
-	initTable();
-}
-
-KexiMacroDesignView::~KexiMacroDesignView()
-{
-	delete d;
-}
-
-void KexiMacroDesignView::initTable()
-{
 	// The table's data-model.
 	d->tabledata = new KexiTableViewData();
 	d->tabledata->setSorting(-1); // disable sorting
@@ -143,6 +133,7 @@ void KexiMacroDesignView::initTable()
 		0 // width
 	);
 	d->tabledata->addColumn(actioncol);
+
 	QValueVector<QString> items;
 	items.append(""); // empty means no action
 
@@ -187,8 +178,20 @@ void KexiMacroDesignView::initTable()
 	d->tableview->setColumnStretchEnabled( true, COLUMN_ID_COMMENT ); //last column occupies the rest of the area
 	layout->addWidget(d->tableview);
 
+	// Create the propertyset.
+	d->propertyset = new KexiDataAwarePropertySet(this, d->tableview);
+	//connect(d->propertyset, SIGNAL(rowDeleted()), this, SLOT(updateActions()));
+	//connect(d->propertyset, SIGNAL(rowInserted()), this, SLOT(updateActions()));
+	connect(d->propertyset, SIGNAL(propertyChanged(KoProperty::Set&, KoProperty::Property&)),
+		this, SLOT(propertyChanged(KoProperty::Set&, KoProperty::Property&)));
+
 	// Everything is ready. So, update the data now.
 	updateData();
+}
+
+KexiMacroDesignView::~KexiMacroDesignView()
+{
+	delete d;
 }
 
 void KexiMacroDesignView::updateData()
@@ -196,11 +199,10 @@ void KexiMacroDesignView::updateData()
 	//d->tableview->blockSignals(true);
 	//d->tabledata->blockSignals(true);
 
-	// Remove previous content
+	// Remove previous content of tabledata.
 	d->tabledata->deleteAllRows();
-
-	// Initialize the properties displayed in the propertyview.
-	updateProperties();
+	// Remove old property sets.
+	d->propertyset->clear();
 
 	// Add some empty rows
 	for (int i=0; i<50; i++) {
@@ -210,8 +212,8 @@ void KexiMacroDesignView::updateData()
 	// Set the MacroItem's
 	QStringList actionnames = KoMacro::Manager::self()->actionNames();
 	::KoMacro::MacroItem::List macroitems = macro()->items();
-	::KoMacro::MacroItem::List::Iterator it = macroitems.begin();
-	for(uint idx = 0; it != macroitems.end(); ++it, idx++) {
+	::KoMacro::MacroItem::List::ConstIterator it(macroitems.constBegin()), end(macroitems.constEnd());
+	for(uint idx = 0; it != end; ++it, idx++) {
 		KexiTableItem* tableitem = d->tabledata->at(idx);
 		if(! tableitem) {
 			// If there exists no such item, add it.
@@ -234,52 +236,44 @@ void KexiMacroDesignView::updateData()
 	// set data for our spreadsheet: this will clear our sets
 	d->tableview->setData(d->tabledata);
 
+	// Add the property sets.
+	it = macroitems.constBegin();
+	for(uint idx = 0; it != end; ++it, idx++) {
+		updateProperties(idx, 0, (*it)->action());
+	}
+
 	// work around a bug in the KexiTableView where we lose the stretch-setting...
 	d->tableview->setColumnStretchEnabled( true, COLUMN_ID_COMMENT ); //last column occupies the rest of the area
 
+	propertySetSwitched();
 	//d->tableview->blockSignals(false);
 	//d->tabledata->blockSignals(false);
 }
 
-void KexiMacroDesignView::updateProperties()
+void KexiMacroDesignView::updateProperties(int row, KoProperty::Set* set, KoMacro::Action::Ptr action)
 {
-	if(! d->propertyset) {
-		d->propertyset = new KexiDataAwarePropertySet(this, d->tableview);
-		//connect(d->propertyset, SIGNAL(rowDeleted()), this, SLOT(updateActions()));
-		//connect(d->propertyset, SIGNAL(rowInserted()), this, SLOT(updateActions()));
-
-		connect(d->propertyset, SIGNAL(propertyChanged(KoProperty::Set&, KoProperty::Property&)),
-			this, SLOT(propertyChanged(KoProperty::Set&, KoProperty::Property&)));
+	if(row < 0) {
+		return; // ignore invalid rows.
 	}
-	//propertySetSwitched();
-}
-
-void KexiMacroDesignView::setAction(KoMacro::MacroItem::Ptr macroitem, const QString& actionname)
-{
-	KoMacro::Action::Ptr action = KoMacro::Manager::self()->action(actionname);
-	macroitem->setAction(action);
 
 	if(! action.data()) {
-		d->propertyset->removeCurrentPropertySet();
-		propertySetSwitched();
-		return;
+		// don't display a propertyset if there is no action defined.
+		d->propertyset->remove(row);
+		return; // job done.
 	}
 
-	if(! propertySet()) {
-		KoProperty::Set *set = new KoProperty::Set(d->propertyset, actionname);
-		d->propertyset->insert(d->tableview->currentRow(), set, true);
-	}
-
-	KoProperty::Set* set = propertySet();
 	if(! set) {
-		propertySetSwitched();
-		return;
+		// if there exists no such propertyset yet, create one.
+		set = new KoProperty::Set(d->propertyset, action->name() + QString::number(row));
+		d->propertyset->insert(row, set, true);
 	}
 
+	// The caption.
 	KoProperty::Property* prop = new KoProperty::Property("this:classString", action->text());
 	prop->setVisible(false);
 	set->addProperty(prop);
 
+	// Display the list of variables.
 	KoMacro::Variable::Map varmap = action->variables();
 	KoMacro::Variable::Map::ConstIterator it, end( varmap.constEnd() );
 	for( it = varmap.constBegin(); it != end; ++it) {
@@ -296,8 +290,6 @@ void KexiMacroDesignView::setAction(KoMacro::MacroItem::Ptr macroitem, const QSt
 		//TODO why KoProperty::Auto doesn't detect the QString?
 		set->addProperty(p);
 	}
-
-	propertySetSwitched();
 }
 
 bool KexiMacroDesignView::loadData()
@@ -320,8 +312,6 @@ void KexiMacroDesignView::itemSelected(KexiTableItem*)
 
 void KexiMacroDesignView::beforeCellChanged(KexiTableItem* item, int colnum, QVariant& newvalue, KexiDB::ResultInfo* result)
 {
-	//Q_UNUSED(item);
-	//Q_UNUSED(colnum);
 	Q_UNUSED(result);
 	kdDebug() << "KexiMacroDesignView::beforeCellChanged() colnum=" << colnum << " newvalue=" << newvalue.toString() << endl;
 
@@ -332,7 +322,7 @@ void KexiMacroDesignView::beforeCellChanged(KexiTableItem* item, int colnum, QVa
 		return;
 	}
 
-	while(rowindex >= macro()->items().count()) {
+	for(int i = macro()->items().count(); i <= rowindex; i++) {
 		macro()->addItem( KoMacro::MacroItem::Ptr( new KoMacro::MacroItem() ) );
 	}
 	KoMacro::MacroItem::Ptr macroitem = macro()->items()[rowindex];
@@ -346,7 +336,10 @@ void KexiMacroDesignView::beforeCellChanged(KexiTableItem* item, int colnum, QVa
 				QStringList actionnames = KoMacro::Manager::self()->actionNames();
 				actionname = actionnames[ selectedindex - 1 ]; // first item is empty
 			}
-			setAction(macroitem, actionname);
+			KoMacro::Action::Ptr action = KoMacro::Manager::self()->action(actionname);
+			macroitem->setAction(action);
+			updateProperties(d->propertyset->currentRow(), propertySet(), action);
+			propertySetSwitched();
 		} break;
 		case COLUMN_ID_COMMENT: {
 			macroitem->setComment( newvalue.toString() );
@@ -359,31 +352,24 @@ void KexiMacroDesignView::beforeCellChanged(KexiTableItem* item, int colnum, QVa
 	setDirty();
 }
 
-void KexiMacroDesignView::rowUpdated(KexiTableItem* item)
+void KexiMacroDesignView::rowUpdated(KexiTableItem*)
 {
-	Q_UNUSED(item);
 	//setDirty();
 	kdDebug() << "KexiMacroDesignView::rowUpdated" << endl;
 }
 
-void KexiMacroDesignView::aboutToInsertRow(KexiTableItem* item, KexiDB::ResultInfo* result, bool)
+void KexiMacroDesignView::aboutToInsertRow(KexiTableItem*, KexiDB::ResultInfo*, bool)
 {
-	Q_UNUSED(item);
-	Q_UNUSED(result);
 	kdDebug() << "KexiMacroDesignView::aboutToInsertRow" << endl;
 }
 
-void KexiMacroDesignView::aboutToDeleteRow(KexiTableItem& item, KexiDB::ResultInfo* result, bool)
+void KexiMacroDesignView::aboutToDeleteRow(KexiTableItem&, KexiDB::ResultInfo*, bool)
 {
-	Q_UNUSED(item);
-	Q_UNUSED(result);
 	kdDebug() << "KexiMacroDesignView::aboutToDeleteRow" << endl;
 }
 
-void KexiMacroDesignView::propertyChanged(KoProperty::Set& set, KoProperty::Property& prop)
+void KexiMacroDesignView::propertyChanged(KoProperty::Set&, KoProperty::Property&)
 {
-	Q_UNUSED(set);
-	Q_UNUSED(prop);
 	//setDirty();
 	kdDebug() << "KexiMacroDesignView::propertyChanged" << endl;
 }

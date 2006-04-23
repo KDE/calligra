@@ -146,6 +146,11 @@ KoProperty::Set* KexiDataAwarePropertySet::currentPropertySet() const
 	return (m_dataObject->currentRow() >= 0) ? m_sets.at( m_dataObject->currentRow() ) : 0;
 }
 
+uint KexiDataAwarePropertySet::currentRow() const
+{
+	return m_dataObject->currentRow();
+}
+
 void KexiDataAwarePropertySet::slotRowDeleted()
 {
 	m_view->setDirty();
