@@ -13,7 +13,7 @@ kde4_add_plugin(amiproimport WITH_PREFIX ${amiproimport_PART_SRCS})
 
 kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} amiproimport )
 
-target_link_libraries(amiproimport  ${KDE4_KDECORE_LIBS} )
+target_link_libraries(amiproimport  ${KDE4_KDECORE_LIBS} kwordexportfilters)
 
 install_targets(${PLUGIN_INSTALL_DIR} amiproimport )
 
@@ -28,7 +28,7 @@ kde4_add_plugin(amiproexport WITH_PREFIX ${amiproexport_PART_SRCS})
 
 kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} amiproexport )
 
-target_link_libraries(amiproexport  ${KDE4_KDECORE_LIBS} )
+target_link_libraries(amiproexport  ${KDE4_KDECORE_LIBS} kwordexportfilters)
 
 install_targets(${PLUGIN_INSTALL_DIR} amiproexport )
 

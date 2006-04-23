@@ -277,7 +277,7 @@ KoFilter::ConversionStatus ASCIIImport::convert( const QByteArray& from, const Q
         in.close();
         return KoFilter::StorageCreationError;
     }
-    Q3CString cstr=mainDocument.toCString();
+    QByteArray cstr=mainDocument.toByteArray();
     // WARNING: we cannot use KoStore::write(const QByteArray&) because it gives an extra NULL character at the end.
     out->write(cstr,cstr.length());
     in.close();
@@ -314,7 +314,7 @@ void ASCIIImport::oldWayConvert(QTextStream& stream, QDomDocument& mainDocument,
             const int length = strLine.length();
             if (strLine.at(length-1) == '-')
                 // replace the hard hyphen - at line end by a soft hyphen
-                strLine.at(length-1)=QChar(173);
+                strLine[length-1]=QChar(173);
             else
                 strLine += ' '; // add space to end of line
 
@@ -1001,7 +1001,7 @@ QString ASCIIImport::readLine(QTextStream& textstream, bool& lastCharWasCr)
     while (!textstream.atEnd())
     {
         textstream >> ch; // Read one character
-        if (ch=="\n")
+        if (ch=='\n')
         {
             if (lastCharWasCr)
             {
@@ -1016,7 +1016,7 @@ QString ASCIIImport::readLine(QTextStream& textstream, bool& lastCharWasCr)
                 break;
             }
         }
-        else if (ch=="\r")
+        else if (ch=='\r')
         {
             // We have a Carriage Return, therefore we end the line
             lastCharWasCr=true;

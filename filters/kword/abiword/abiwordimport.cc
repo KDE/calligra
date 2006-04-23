@@ -529,7 +529,7 @@ bool StructureParser::StartElementImage(StackItem* stackItem, StackItem* stackCu
         kDebug(30506) << "Image: " << strDataId << endl;
     }
 
-    QString strPictureFrameName(i18n("Frameset name","Picture %1").arg(++m_pictureFrameNumber));
+    QString strPictureFrameName(i18nc("Frameset name","Picture %1").arg(++m_pictureFrameNumber));
 
     // Create the frame set of the image
 
@@ -1212,8 +1212,7 @@ bool StructureParser::StartElementCell(StackItem* stackItem, StackItem* stackCur
         stackItem->m_doubleArray[col+1] = stackItem->m_doubleArray[col] + 72; // Try 1 inch
     }
 
-    const QString frameName(i18n("Frameset name","Table %3, row %1, column %2")
-        .arg(row).arg(col).arg(stackCurrent->strTemp2)); // As the stack could be wrong, be careful and use the string as last!
+    const QString frameName(i18nc("Frameset name","Table %3, row %1, column %2",row,col,stackCurrent->strTemp2)); // As the stack could be wrong, be careful and use the string as last!
 
     // We need to create a frameset for the cell
     QDomElement framesetElement(mainDocument.createElement("FRAMESET"));
@@ -1639,9 +1638,7 @@ bool StructureParser::fatalError (const QXmlParseException& exception)
     kError(30506) << "XML parsing fatal error: line " << exception.lineNumber()
         << " col " << exception.columnNumber() << " message: " << exception.message() << endl;
     m_fatalerror=true;
-    KMessageBox::error(NULL, i18n("An error has occurred while parsing the AbiWord file.\nAt line: %1, column %2\nError message: %3")
-        .arg(exception.lineNumber()).arg(exception.columnNumber())
-        .arg( i18n( "QXml", exception.message().utf8() ) ),
+    KMessageBox::error(NULL, i18n("An error has occurred while parsing the AbiWord file.\nAt line: %1, column %2\nError message: %3",exception.lineNumber(),exception.columnNumber(), i18n( "QXml", exception.message() ) ),
         i18n("AbiWord Import Filter"),0);
     return false; // Stop parsing now, we do not need further errors.
 }
@@ -1706,7 +1703,7 @@ void StructureParser :: createDocument(void)
     mainFramesetElement.setAttribute("frameType",1);
     mainFramesetElement.setAttribute("frameInfo",0);
     mainFramesetElement.setAttribute("visible",1);
-    mainFramesetElement.setAttribute("name",i18n("Frameset name","Main Text Frameset"));
+    mainFramesetElement.setAttribute("name",i18nc("Frameset name","Main Text Frameset"));
     framesetsPluralElement.appendChild(mainFramesetElement);
 
     QDomElement frameElementOut=mainDocument.createElement("FRAME");
@@ -1827,7 +1824,7 @@ KoFilter::ConversionStatus ABIWORDImport::convert( const QByteArray& from, const
         if (!handler.wasFatalError())
         {
             // As the parsing was stopped for something else than a fatal error, we have not yet get an error message. (Can it really happen?)
-            KMessageBox::error(NULL, i18n("An error occurred during the load of the AbiWord file: %1").arg(from),
+            KMessageBox::error(NULL, i18n("An error occurred during the load of the AbiWord file: %1",QString(from)),
                 i18n("AbiWord Import Filter"),0);
         }
         return KoFilter::ParsingError;
@@ -1847,7 +1844,7 @@ KoFilter::ConversionStatus ABIWORDImport::convert( const QByteArray& from, const
     }
 
     //Write the document information!
-    strOut=handler.getDocInfo().toString(); // UTF-8
+    strOut=handler.getDocInfo().toByteArray(); // UTF-8
     // WARNING: we cannot use KoStore::write(const QByteArray&) because it writes an extra NULL character at the end.
     out->write(strOut,strOut.length());
 
@@ -1861,7 +1858,7 @@ KoFilter::ConversionStatus ABIWORDImport::convert( const QByteArray& from, const
     }
 
     //Write the document!
-    strOut=handler.getDocument().toString(); // UTF-8
+    strOut=handler.getDocument().toByteArray(); // UTF-8
     // WARNING: we cannot use KoStore::write(const QByteArray&) because it writes an extra NULL character at the end.
     out->write(strOut,strOut.length());
 

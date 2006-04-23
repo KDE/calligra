@@ -26,7 +26,7 @@
 
 QString getFootnoteFramesetName(const QString& id)
 {
-    return i18n("Frameset name","Footnote %1").arg(id);
+    return i18nc("Frameset name","Footnote %1",id);
 }
 
 static void InsertTimeVariable(QDomDocument& mainDocument,

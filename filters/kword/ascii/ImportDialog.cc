@@ -41,11 +41,11 @@ AsciiImportDialog :: AsciiImportDialog(QWidget* parent)
     kapp->restoreOverrideCursor();
 
     QStringList encodings;
-    encodings << i18n( "Descriptive encoding name", "Recommended ( %1 )" ).arg( "UTF-8" );
-    encodings << i18n( "Descriptive encoding name", "Locale ( %1 )" ).arg( QTextCodec::codecForLocale()->name() );
+    encodings << i18nc( "Descriptive encoding name", "Recommended ( %1 )" ).arg( "UTF-8" );
+    encodings << i18nc( "Descriptive encoding name", "Locale ( %1 )" ,QString(QTextCodec::codecForLocale()->name() ));
     encodings += KGlobal::charsets()->descriptiveEncodingNames();
     // Add a few non-standard encodings, which might be useful for text files
-    const QString description(i18n("Descriptive encoding name","Other ( %1 )"));
+    const QString description(i18nc("Descriptive encoding name","Other ( %1 )"));
     encodings << description.arg("Apple Roman"); // Apple 
     encodings << description.arg("IBM 850") << description.arg("IBM 866"); // MS DOS
     encodings << description.arg("CP 1258"); // Windows

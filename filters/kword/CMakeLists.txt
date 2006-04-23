@@ -1,6 +1,6 @@
 kde4_header()
 
-include_directories(${CMAKE_SOURCE_DIR}/filters/kword/libexport)
+include_directories(${CMAKE_SOURCE_DIR}/filters/kword/libexport ${KOFFICECORE_INCLUDES} )
 
 add_subdirectory( libexport )
 add_subdirectory( abiword )

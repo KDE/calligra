@@ -2,7 +2,6 @@ kde4_header()
 
 
 
-
 ########### next target ###############
 
 set(abiwordimport_PART_SRCS 

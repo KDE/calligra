@@ -28,7 +28,7 @@
 
 #include <KWEFStructures.h>
 #include <koffice_export.h>
-
+#include <QImage>
 class KWEFKWordLeader;
 
 /**

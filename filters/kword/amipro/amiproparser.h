@@ -43,7 +43,7 @@ class AmiProFormat
     QString fontFamily;
     float fontSize;
     QColor fontColor;
-    enum { Qt::DockLeft, Qt::DockRight, Center, Justified } align;
+    enum { Left, Right, Center, Justified } align;
     AmiProFormat();
     AmiProFormat( const AmiProFormat& );
     AmiProFormat& operator=( const AmiProFormat& );
