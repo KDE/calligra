@@ -102,7 +102,7 @@ void TestRunner::addTester( Tester* tester )
 {
   if( !tester ) return;
   d->testers.insert( tester->name(), tester );
-  d->testType->insertItem( tester->name() );
+  d->testType->insertItem( d->testType->count(), tester->name() );
 }
 
 void TestRunner::runTest()

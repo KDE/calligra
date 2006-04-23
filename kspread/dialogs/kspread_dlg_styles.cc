@@ -59,10 +59,10 @@ StyleWidget::StyleWidget( QWidget * parent, const char * name, Qt::WFlags fl )
 
   m_styleList->header()->setLabel( 0, i18n( "Styles" ) );
   m_displayBox->clear();
-  m_displayBox->insertItem( i18n( "All Styles" ) );
-  m_displayBox->insertItem( i18n( "Applied Styles" ) );
-  m_displayBox->insertItem( i18n( "Custom Styles" ) );
-  m_displayBox->insertItem( i18n( "Hierarchical" ) );
+  m_displayBox->insertItem(0, i18n( "All Styles" ) );
+  m_displayBox->insertItem(1, i18n( "Applied Styles" ) );
+  m_displayBox->insertItem(2, i18n( "Custom Styles" ) );
+  m_displayBox->insertItem(3, i18n( "Hierarchical" ) );
   connect( m_styleList, SIGNAL(doubleClicked ( Q3ListViewItem *)),this, SIGNAL( modifyStyle()));
   resize( QSize(446, 384).expandedTo(minimumSizeHint()) );
 }

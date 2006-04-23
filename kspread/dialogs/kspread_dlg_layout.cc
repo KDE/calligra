@@ -184,10 +184,10 @@ GeneralTab::GeneralTab( QWidget* parent, CellFormatDialog * dlg )
 
   m_parentBox = new KComboBox( false, groupBox );
   m_parentBox->clear();
-  m_parentBox->insertItem( i18n( "<None>" ) );
+  m_parentBox->insertItem( 0,i18n( "<None>" ) );
   QStringList tmp = m_dlg->getStyleManager()->styleNames();
   tmp.remove( m_dlg->styleName );
-  m_parentBox->insertItems( 0, tmp );
+  m_parentBox->insertItems( 1, tmp );
 
   if ( m_dlg->getStyle()->parent() )
     m_parentBox->setCurrentText( m_dlg->getStyle()->parentName() );
@@ -1206,11 +1206,11 @@ CellFormatPageFloat::CellFormatPageFloat( QWidget* parent, CellFormatDialog *_dl
 
     prefix->setText( dlg->prefix );
 
-    format->insertItem( *_dlg->formatOnlyNegSignedPixmap, 0 );
-    format->insertItem( *_dlg->formatRedOnlyNegSignedPixmap, 1 );
-    format->insertItem( *_dlg->formatRedNeverSignedPixmap, 2 );
-    format->insertItem( *_dlg->formatAlwaysSignedPixmap, 3 );
-    format->insertItem( *_dlg->formatRedAlwaysSignedPixmap, 4 );
+    format->insertItem(0, *_dlg->formatOnlyNegSignedPixmap, "" );
+    format->insertItem(1, *_dlg->formatRedOnlyNegSignedPixmap, "" );
+    format->insertItem(2, *_dlg->formatRedNeverSignedPixmap, "" );
+    format->insertItem(3, *_dlg->formatAlwaysSignedPixmap, "" );
+    format->insertItem(4, *_dlg->formatRedAlwaysSignedPixmap, "" );
 
     tmpQLabel = new QLabel( box );
     grid->addWidget(tmpQLabel, 0, 2);
@@ -1223,7 +1223,7 @@ CellFormatPageFloat::CellFormatPageFloat( QWidget* parent, CellFormatDialog *_dl
     currency = new QComboBox( box );
     grid->addWidget(currency, 1, 3);
 
-    currency->insertItem( i18n("Automatic") );
+    currency->insertItem( 0,i18n("Automatic") );
 
     int index = 2; //ignore first two in the list
     bool ok = true;
@@ -1234,7 +1234,7 @@ CellFormatPageFloat::CellFormatPageFloat( QWidget* parent, CellFormatDialog *_dl
       text = Currency::getChooseString( index, ok );
       if ( ok )
       {
-        currency->insertItem( text );
+        currency->insertItem( index-1, text );
       }
       else
       {
@@ -2000,7 +2000,7 @@ CellFormatPageFont::CellFormatPageFont( QWidget* parent, CellFormatDialog *_dlg 
 
         if ( !family_combo->findItem(dlg->textFontFamily))
                 {
-                family_combo->insertItem("",0);
+                family_combo->insertItem(0,"");
                 family_combo->setCurrentItem(0);
                 }
         else
@@ -2008,7 +2008,7 @@ CellFormatPageFont::CellFormatPageFont( QWidget* parent, CellFormatDialog *_dlg 
    }
    else
    {
-        family_combo->insertItem("",0);
+        family_combo->insertItem(0,"");
         family_combo->setCurrentItem(0);
    }
 
@@ -2827,17 +2827,17 @@ void CellFormatPageBorder::InitializeGrids()
   for ( int i=0;i<10;i++)
   {
     tmp=tmp.setNum(i);
-    size->insertItem(tmp);
+    size->insertItem(i,tmp);
   }
   size->setCurrentIndex(1);
 
   style=new QComboBox(tmpQGroupBox);
   grid3->addWidget(style,1,0);
-  style->insertItem(paintFormatPixmap(Qt::DotLine),0 );
-  style->insertItem(paintFormatPixmap(Qt::DashLine) ,1);
-  style->insertItem(paintFormatPixmap(Qt::DashDotLine),2 );
-  style->insertItem(paintFormatPixmap(Qt::DashDotDotLine),3  );
-  style->insertItem(paintFormatPixmap(Qt::SolidLine),4);
+  style->insertItem(0,paintFormatPixmap(Qt::DotLine), "");
+  style->insertItem(1,paintFormatPixmap(Qt::DashLine), "");
+  style->insertItem(2,paintFormatPixmap(Qt::DashDotLine), "");
+  style->insertItem(3,paintFormatPixmap(Qt::DashDotDotLine), "");
+  style->insertItem(4,paintFormatPixmap(Qt::SolidLine), "");
   style->setBackgroundColor( palette().window().color() );
 
   grid2->addItem(grid3,6,0,1,2);

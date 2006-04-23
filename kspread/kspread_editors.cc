@@ -1246,7 +1246,7 @@ ComboboxLocationEditWidget::ComboboxLocationEditWidget( QWidget * _parent,
 {
     m_locationWidget = new LocationEditWidget( _parent, _view );
     setLineEdit( m_locationWidget );
-    insertItem( "" );
+    insertItem( 0,"" );
 
     QList<Reference>::Iterator it;
     QList<Reference> area = _view->doc()->listArea();
@@ -1258,7 +1258,7 @@ ComboboxLocationEditWidget::ComboboxLocationEditWidget( QWidget * _parent,
 
 void ComboboxLocationEditWidget::slotAddAreaName( const QString &_name)
 {
-    insertItem( _name );
+    insertItem( count(), _name );
     m_locationWidget->addCompletionItem( _name );
 }
 
