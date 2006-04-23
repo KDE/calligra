@@ -44,11 +44,11 @@ QDomElement Tabulator::createElement(Data &data) const
 
 //-----------------------------------------------------------------------------
 Paragraph::Paragraph()
-    : type(Body), firstIndent(0), leftIndent(0), align(Qt::AlignLeft)
+    : type(Body), firstIndent(0), leftIndent(0), align(AlignLeft)
 {}
 
 Paragraph::Paragraph(TextLine *first, uint nbLines)
-    :  type(Body), firstIndent(0), leftIndent(0), align(Qt::AlignLeft)
+    :  type(Body), firstIndent(0), leftIndent(0), align(AlignLeft)
 {
     // fill line list
     TextLine *line = first;

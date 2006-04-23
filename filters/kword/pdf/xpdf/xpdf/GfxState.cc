@@ -1136,7 +1136,7 @@ GfxColorSpace *GfxPatternColorSpace::parse(Array *arr) {
 }
 
 void GfxPatternColorSpace::getGray(const GfxColor */*color*/, double *gray) const {
-  *Qt::gray = 0;
+  *gray = 0;
 }
 
 void GfxPatternColorSpace::getRGB(const GfxColor */*color*/, GfxRGB *rgb) const {

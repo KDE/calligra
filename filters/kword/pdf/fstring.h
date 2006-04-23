@@ -41,7 +41,7 @@ public:
     enum Alignment { Left = 0, Center, Right, Character };
     enum Filling { Blank = 0, Dots, Line, Dash, DashDot, DashDotDot };
 
-    Tabulator() : alignment(Qt::DockLeft) {}
+    Tabulator() : alignment(Left) {}
 
     QDomElement createElement(Data &data) const;
 
