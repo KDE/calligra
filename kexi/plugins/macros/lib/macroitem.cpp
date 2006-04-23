@@ -39,8 +39,9 @@ namespace KoMacro {
 
 }
 
-MacroItem::MacroItem(QObject* parent)
-	: QObject(parent)
+MacroItem::MacroItem()
+	: QObject()
+	, KShared()
 	, d( new Private() )
 {
 }
@@ -83,17 +84,15 @@ Variable::Map MacroItem::variables() const
 bool MacroItem::setVariable(const QString& name, Variable::Ptr variable)
 {
 	// First try to find the matching in the action defined variable.
-	Variable::Ptr vp = d->action->variable(name);
-	Variable* v = vp.data();
+	Variable* v = d->action->variable(name).data();
 	if(! v) {
 		/*
 		// The name isn't known, try to fallback to the name the variable defines.
 		v = d->action->variable( variable->name() );
 		if(! v.data()) {
 		*/
-			kdDebug() << QString("MacroItem::setVariable() No such variable \"%1\"").arg(name) << endl;
-			return false;
-		//}
+		kdDebug() << QString("MacroItem::setVariable() No such variable \"%1\"").arg(name) << endl;
+		return false;
 	}
 
 	// Check if the variable is valid.

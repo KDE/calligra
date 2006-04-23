@@ -22,7 +22,6 @@
 #include "manager.h"
 #include "context.h"
 #include "variable.h"
-#include "xmlhandler.h"
 
 #include "metaproxy.h"
 
@@ -42,30 +41,9 @@ namespace KoMacro {
 		public:
 
 			/**
-			* A map of @a MacroItem instances accessible
-			* by there unique name.
-			*/
-			QMap<QString, MacroItem*> itemmap;
-
-			/**
 			* A list of @a MacroItem instances.
 			*/
-			QValueList<MacroItem*> itemlist;
-
-			/**
-			*
-			*/
-			XMLHandler* xmlhandler;
-
-			Private()
-				: xmlhandler(0)
-			{
-			}
-
-			~Private()
-			{
-				delete xmlhandler;
-			}
+			QValueList<MacroItem::Ptr> itemlist;
 
 	};
 
@@ -73,35 +51,13 @@ namespace KoMacro {
 
 Macro::Macro(const QString& name)
 	: Action(name)
+	, XMLHandler(this)
 	, d( new Private() ) // create the private d-pointer instance.
 {
-	//kdDebug() << "Macro::Macro(Manager*, QDomElement&)" << endl;
-
-/*
-	// Iterate through the child nodes the passed DOM node has and build
-	// recursivly a Macro tree.
-	QDomNode node = element.firstChild();
-	while(! node.isNull()) {
-		QDomElement e = node.toElement(); // try to convert the node to an element.
-		if(! e.isNull()) { // be sure we have a valid element.
-
-			Action::Ptr action = manager->createAction(e);
-			if(action) {
-				addChild(action);
-			}
-			else {
-				kdWarning() << QString("Macro::Macro() Failed to create action for tag \"%1\"").arg(e.tagName()) << endl;
-			}
-
-		}
-		node = node.nextSibling();
-	}
-*/
 }
 
 Macro::~Macro()
 {
-	//kdDebug() << "Macro::~Macro()" << endl;
 	// destroy the private d-pointer instance.
 	delete d;
 }
@@ -111,47 +67,20 @@ const QString Macro::toString() const
 	return QString("Macro:%1").arg(name());
 }
 
-MacroItem* Macro::item(const QString& name) const
-{
-	return d->itemmap[name];
-}
-
-QValueList<MacroItem*> Macro::items() const
+QValueList<MacroItem::Ptr> Macro::items() const
 {
 	return d->itemlist;
 }
 
-MacroItem* Macro::addItem(const QString& name)
+void Macro::addItem(MacroItem::Ptr item)
 {
-	MacroItem* item = new MacroItem(this);
-	d->itemmap.replace(name, item);
 	d->itemlist.append(item);
-	return item;
 }
 
-/*
-void Macro::addChild(Action::Ptr action)
+void Macro::clearItems()
 {
-	if(! d->actionmap.contains( action->name() ))
-		d->actionlist.append( action );
-	d->actionmap.replace( action->name(), action );
+	d->itemlist.clear();
 }
-
-bool Macro::hasChildren() const
-{
-	return (! d->actionlist.empty());
-}
-
-Action::Ptr Macro::child(const QString& name) const
-{
-	return d->actionmap[name];
-}
-
-QValueList<Action::Ptr> Macro::children() const
-{
-	return d->actionlist;
-}
-*/
 
 void Macro::connectSignal(const QObject* sender, const char* signal)
 {
@@ -163,14 +92,6 @@ void Macro::connectSignal(const QObject* sender, const char* signal)
 			 this,SLOT(activate(QValueList< KSharedPtr<Variable> >)) );
 
 	//TODO d->proxies.append( metaproxy );
-}
-
-XMLHandler* Macro::xmlHandler()
-{
-	if(! d->xmlhandler) {
-		d->xmlhandler = new XMLHandler(this);
-	}
-	return d->xmlhandler;
 }
 
 void Macro::activate()

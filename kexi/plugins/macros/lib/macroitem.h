@@ -44,10 +44,22 @@ namespace KoMacro {
 	* MacroItem choosen @a Action implementation) and holds the by the
 	* user defined modifications like e.g. the comment on the other hand.
 	*/
-	class KOMACRO_EXPORT MacroItem : public QObject
+	class KOMACRO_EXPORT MacroItem
+		: public QObject
+		, public KShared
 	{
 			Q_OBJECT
 		public:
+
+			/**
+			* Shared pointer to implement reference-counting.
+			*/
+			typedef KSharedPtr<MacroItem> Ptr;
+
+			/**
+			* A list of \a MacroItem instances.
+			*/
+			typedef QValueList<MacroItem::Ptr> List;
 
 			/**
 			* Constructor.
@@ -57,7 +69,7 @@ namespace KoMacro {
 			* parent got deleted, this instance will be
 			* automaticly deleted too.
 			*/
-			MacroItem(QObject* parent);
+			explicit MacroItem();
 
 			/**
 			* Destructor.

@@ -23,6 +23,7 @@
 #include <qobject.h>
 
 #include "action.h"
+#include "xmlhandler.h"
 
 // Forward declarations.
 class QDomElement;
@@ -32,14 +33,15 @@ namespace KoMacro {
 	// Forward declarations.
 	class Manager;
 	class MacroItem;
-	class XMLHandler;
 
 	/**
 	* The Macro class implements all the action-handling. Internaly the
 	* Macro provides a collection of @a MacroItem instances which each
 	* of them points to an @a Action instance.
 	*/
-	class KOMACRO_EXPORT Macro : public Action
+	class KOMACRO_EXPORT Macro
+		: public Action
+		, public XMLHandler
 	{
 			Q_OBJECT
 
@@ -76,63 +78,21 @@ namespace KoMacro {
 			virtual const QString toString() const;
 
 			/**
-			* @return the @a MacroItem identified with @p name
-			* which is a children of this @a Macro . If there
-			* exists no such @a MacroItem with that name, NULL
-			* is returned.
-			*/
-			MacroItem* item(const QString& name) const;
-
-			/**
 			* @return a list of @a MacroItem instances which
 			* are children of this @a Macro .
 			*/
-			QValueList<MacroItem*> items() const;
+			QValueList< KSharedPtr<MacroItem> > items() const;
 
 			/**
-			* Add a new @a MacroItem to
+			* Add the @a MacroItem @p item to the list of items
+			* this @a Macro has.
 			*/
-			MacroItem* addItem(const QString& name);
+			void addItem(KSharedPtr<MacroItem> item);
 
-
-
-#if 0
 			/**
-			* Add an @a Action instance to the list of children this
-			* Macro has.
-			* 
-			* @param action The @a Action instance which should be added as
-			* child of this @a Macro .
-			*
-			* @deprecated Use MacroItem's
+			* Removes all @a MacroItem instances this @a Macro has.
 			*/
-			void addChild(Action::Ptr action);
-
-			/**
-			* @return Returns true if there is at least one @a Action
-			* instance that is a child of this @a Macro instance. If
-			* that is not the case false got returned.
-			*
-			* @deprecated Use MacroItem's
-			*/
-			bool hasChildren() const;
-
-			/**
-			 * @return the @a Action defined with \p name or NULL if
-			 * this @a macro has no child with that name.
-			 *
-			 * @deprecated Use MacroItem's
-			 */
-			Action::Ptr child(const QString& name) const;
-
-			/**
-			* @return Returns a list of @a Action children this Macro
-			* has.
-			*
-			* @deprecated Use MacroItem's
-			*/
-			QValueList<Action::Ptr> children() const;
-#endif
+			void clearItems();
 
 			/**
 			* Connect the Qt signal @p signal of the QObject @p sender
@@ -142,14 +102,6 @@ namespace KoMacro {
 			* activation @a Context .
 			*/
 			void connectSignal(const QObject* sender, const char* signal);
-
-			/**
-			* \return the \a XMLHandler instance for this \a Macro
-			* instance. This method always returns a valid
-			* \a XMLHandler instance. So, it's not needed to
-			* check for a NULL return-value.
-			*/
-			XMLHandler* xmlHandler();
 
 		public slots:
 

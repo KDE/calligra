@@ -23,6 +23,7 @@
 // Forward declarations.
 namespace KoMacro {
 	class Macro;
+	class MacroItem;
 }
 namespace KoProperty {
 	class Property;
@@ -122,7 +123,7 @@ class KexiMacroDesignView : public KexiMacroView
 		 */
 		void updateProperties();
 
-		void setAction(const QString& actionname);
+		void setAction(KSharedPtr<KoMacro::MacroItem> macroitem, const QString& actionname);
 };
 
 #endif

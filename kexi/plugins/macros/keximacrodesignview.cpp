@@ -38,11 +38,12 @@
 #include <koproperty/property.h>
 
 #include "lib/macro.h"
+#include "lib/macroitem.h"
 #include "lib/xmlhandler.h"
 
 //! constants used to name columns instead of hardcoding indices
-#define COLUMN_ID_NAME 0
-#define COLUMN_ID_DESC 1
+#define COLUMN_ID_ACTION 0
+#define COLUMN_ID_COMMENT 1
 
 /**
  * The \a KexiTableView implementation to display a list of actions
@@ -144,14 +145,6 @@ void KexiMacroDesignView::initTable()
 	d->tabledata->addColumn(actioncol);
 	QValueVector<QString> items;
 	items.append(""); // empty means no action
-	//items.append(i18n("Application"));
-//items.append(i18n("Open"));
-	//items.append(i18n("Close"));
-//items.append(i18n("Execute"));
-	//items.append(i18n("Messagebox"));
-	//items.append(i18n("Inputbox"));
-	//items.append(i18n("Function"));
-	//items.append(i18n("Errorhandler"));
 
 	QStringList actionnames = KoMacro::Manager::self()->actionNames();
 	QStringList::ConstIterator it, end( actionnames.constEnd() );
@@ -191,7 +184,7 @@ void KexiMacroDesignView::initTable()
 	QHBoxLayout* layout = new QHBoxLayout(this);
 	d->tableview = new KexiMacroTableView(d->tabledata, this);
 	d->tableview->setSpreadSheetMode();
-	d->tableview->setColumnStretchEnabled( true, COLUMN_ID_DESC ); //last column occupies the rest of the area
+	d->tableview->setColumnStretchEnabled( true, COLUMN_ID_COMMENT ); //last column occupies the rest of the area
 	layout->addWidget(d->tableview);
 
 	// Everything is ready. So, update the data now.
@@ -200,24 +193,52 @@ void KexiMacroDesignView::initTable()
 
 void KexiMacroDesignView::updateData()
 {
-	d->tableview->blockSignals(true);
-	d->tabledata->blockSignals(true);
+	//d->tableview->blockSignals(true);
+	//d->tabledata->blockSignals(true);
 
 	// Remove previous content
 	d->tabledata->deleteAllRows();
+
 	// Initialize the properties displayed in the propertyview.
 	updateProperties();
-	// Add the rows
+
+	// Add some empty rows
 	for (int i=0; i<50; i++) {
 		d->tabledata->append( d->tabledata->createItem() );
 	}
+
+	// Set the MacroItem's
+	QStringList actionnames = KoMacro::Manager::self()->actionNames();
+	::KoMacro::MacroItem::List macroitems = macro()->items();
+	::KoMacro::MacroItem::List::Iterator it = macroitems.begin();
+	for(uint idx = 0; it != macroitems.end(); ++it, idx++) {
+		KexiTableItem* tableitem = d->tabledata->at(idx);
+		if(! tableitem) {
+			// If there exists no such item, add it.
+			tableitem = d->tabledata->createItem();
+			d->tabledata->append(tableitem);
+		}
+		// Set the action-column.
+		::KoMacro::Action::Ptr action = (*it)->action();
+		if(action.data()) {
+			int i = actionnames.findIndex( action->name() );
+			if(i >= 0) {
+				tableitem->at(COLUMN_ID_ACTION) = i + 1;
+				//setAction(tableitem, action->name());
+			}
+		}
+		// Set the comment-column.
+		tableitem->at(COLUMN_ID_COMMENT) = (*it)->comment();
+	}
+
 	// set data for our spreadsheet: this will clear our sets
 	d->tableview->setData(d->tabledata);
+
 	// work around a bug in the KexiTableView where we lose the stretch-setting...
-	d->tableview->setColumnStretchEnabled( true, COLUMN_ID_DESC ); //last column occupies the rest of the area
-	
-	d->tableview->blockSignals(false);
-	d->tabledata->blockSignals(false);
+	d->tableview->setColumnStretchEnabled( true, COLUMN_ID_COMMENT ); //last column occupies the rest of the area
+
+	//d->tableview->blockSignals(false);
+	//d->tabledata->blockSignals(false);
 }
 
 void KexiMacroDesignView::updateProperties()
@@ -233,9 +254,11 @@ void KexiMacroDesignView::updateProperties()
 	//propertySetSwitched();
 }
 
-void KexiMacroDesignView::setAction(const QString& actionname)
+void KexiMacroDesignView::setAction(KoMacro::MacroItem::Ptr macroitem, const QString& actionname)
 {
 	KoMacro::Action::Ptr action = KoMacro::Manager::self()->action(actionname);
+	macroitem->setAction(action);
+
 	if(! action.data()) {
 		d->propertyset->removeCurrentPropertySet();
 		propertySetSwitched();
@@ -274,83 +297,6 @@ void KexiMacroDesignView::setAction(const QString& actionname)
 		set->addProperty(p);
 	}
 
-#if 0
-	switch(type) {
-/*
-		case 1: { // Application
-			QStringList actionname, actiontext;
-			const KActionPtrList& actionlist = parentDialog()->mainWin()->actionCollection()->actions();
-			KActionPtrList::ConstIterator it, end( actionlist.constEnd() );
-			for( it = actionlist.constBegin(); it != end; ++it) {
-				actionname.append( (*it)->name() );
-				actiontext.append( (*it)->text().replace("&","") );
-			}
-			KoProperty::Property::ListData* proplist = new KoProperty::Property::ListData(actionname, actiontext);
-			KoProperty::Property* prop = new KoProperty::Property("action",proplist,"",i18n("Action"),QString::null,KoProperty::List);
-			d->properties->addProperty(prop);
-		} break;
-*/
-		case 1: { // Open Object
-
-			KoProperty::Property* prop = new KoProperty::Property("this:classString", i18n("Open"));
-			prop->setVisible(false);
-			set->addProperty(prop);
-
-			KexiPart::PartInfoList* parts = Kexi::partManager().partInfoList();
-			//KexiProject* project = parentDialog()->mainWin()->project();
-			//if(project && project->isConnected())
-
-			QStringList objectnames, objecttexts;
-			for(KexiPart::PartInfoListIterator it(*parts); it.current(); ++it) {
-				KexiPart::Info* info = it.current();
-				if(info->isVisibleInNavigator()) {
-					objectnames << info->objectName();
-					objecttexts << info->groupName();
-				}
-			}
-			KoProperty::Property* objprop = new KoProperty::Property(
-				"object", // name
-				objectnames, objecttexts, // ListData
-				( objectnames.count() > 0 ? *objectnames.at(0) : QVariant() ), // value
-				i18n("Object"), // caption
-				QString::null, // description
-				KoProperty::List // type
-			);
-			set->addProperty(objprop);
-
-			QStringList viewnames, viewtexts;
-			viewnames << "data" << "design" << "text";
-			viewtexts << "Data View" << "Design View" << "Text View";
-			KoProperty::Property* viewprop = new KoProperty::Property(
-				"view", // name
-				viewnames, viewtexts, // ListData
-				( viewnames.count() > 0 ? *viewnames.at(0) : QVariant() ), // value
-				i18n("View"), // caption
-				QString::null, // description
-				KoProperty::List // type
-			);
-			set->addProperty(viewprop);
-
-			KoProperty::Property* nameprop = new KoProperty::Property(
-				"name", // name
-				"", // value
-				i18n("Name"), // caption
-				QString::null, // description
-				KoProperty::String // type
-			);
-			set->addProperty(nameprop);
-
-		} break;
-		/*
-		case 2: { // Execute
-		} break;
-		*/
-		default: {
-			d->propertyset->removeCurrentPropertySet();
-		} break;
-	}
-#endif
-
 	propertySetSwitched();
 }
 
@@ -374,21 +320,42 @@ void KexiMacroDesignView::itemSelected(KexiTableItem*)
 
 void KexiMacroDesignView::beforeCellChanged(KexiTableItem* item, int colnum, QVariant& newvalue, KexiDB::ResultInfo* result)
 {
-	Q_UNUSED(item);
+	//Q_UNUSED(item);
 	//Q_UNUSED(colnum);
 	Q_UNUSED(result);
-	kdDebug() << "KexiMacroDesignView::beforeCellChanged colnum=" << colnum << " newvalue=" << newvalue.toString() << endl;
+	kdDebug() << "KexiMacroDesignView::beforeCellChanged() colnum=" << colnum << " newvalue=" << newvalue.toString() << endl;
 
-	QString actionname;
-
-	bool ok;
-	int selectedindex = newvalue.toInt(&ok);
-	if(ok && selectedindex > 0) {
-		QStringList actionnames = KoMacro::Manager::self()->actionNames();
-		actionname = actionnames[ selectedindex + 1 ]; // first item is empty
+	//int index = d->tabledata->find(item);
+	int rowindex = d->tabledata->findRef(item);
+	if(rowindex < 0) {
+		kdWarning() << "KexiMacroDesignView::beforeCellChanged() No such item" << endl;
+		return;
 	}
 
-	setAction( actionname );
+	while(rowindex >= macro()->items().count()) {
+		macro()->addItem( KoMacro::MacroItem::Ptr( new KoMacro::MacroItem() ) );
+	}
+	KoMacro::MacroItem::Ptr macroitem = macro()->items()[rowindex];
+
+	switch(colnum) {
+		case COLUMN_ID_ACTION: {
+			QString actionname;
+			bool ok;
+			int selectedindex = newvalue.toInt(&ok);
+			if(ok && selectedindex > 0) {
+				QStringList actionnames = KoMacro::Manager::self()->actionNames();
+				actionname = actionnames[ selectedindex - 1 ]; // first item is empty
+			}
+			setAction(macroitem, actionname);
+		} break;
+		case COLUMN_ID_COMMENT: {
+			macroitem->setComment( newvalue.toString() );
+		} break;
+		default:
+			kdWarning() << "KexiMacroDesignView::beforeCellChanged() No such column number " << colnum << endl;
+			return;
+	}
+
 	setDirty();
 }
 

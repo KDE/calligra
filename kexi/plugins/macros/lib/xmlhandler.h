@@ -45,7 +45,7 @@ namespace KoMacro {
 			* @param macro The @a Macro instance which will
 			* be managed.
 			*/
-			XMLHandler(KSharedPtr<Macro> macro);
+			XMLHandler(Macro* const macro);
 
 			/**
 			* Destructor to @a XMLHandler .

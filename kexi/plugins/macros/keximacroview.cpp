@@ -116,16 +116,16 @@ bool KexiMacroView::loadData()
 		return false;
 	}
 		
-	return d->macro->xmlHandler()->parseXML(macroelem);
+	return d->macro->parseXML(macroelem);
 }
 
 KexiDB::SchemaData* KexiMacroView::storeNewData(const KexiDB::SchemaData& sdata, bool &cancel)
 {
-	KexiDB::SchemaData *s = KexiViewBase::storeNewData(sdata, cancel);
-	kexipluginsdbg << "KexiMacroView::storeNewData() new id:" << s->id() << endl;
+	KexiDB::SchemaData *schema = KexiViewBase::storeNewData(sdata, cancel);
+	kexipluginsdbg << "KexiMacroView::storeNewData() new id:" << schema->id() << endl;
 
-	if(!s || cancel) {
-		delete s;
+	if(!schema || cancel) {
+		delete schema;
 		return 0;
 	}
 
@@ -133,36 +133,18 @@ KexiDB::SchemaData* KexiMacroView::storeNewData(const KexiDB::SchemaData& sdata,
 		kexipluginsdbg << "KexiMacroView::storeNewData() Failed to store the data." << endl;
 		//failure: remove object's schema data to avoid garbage
 		KexiDB::Connection *conn = parentDialog()->mainWin()->project()->dbConnection();
-		conn->removeObject( s->id() );
-		delete s;
+		conn->removeObject( schema->id() );
+		delete schema;
 		return 0;
 	}
 
-	return s;
+	return schema;
 }
 
 tristate KexiMacroView::storeData(bool /*dontAsk*/)
 {
-	/*
-	QDomElement macroelem = domdoc.createElement("macro");
-	domdoc.appendChild(macroelem);
-	for(KexiTableViewData::Iterator it = d->tabledata->iterator(); it.current(); ++it) {
-		KexiTableItem* item = it.current();
-		if(! item->at(0).isNull()) {
-			bool ok;
-			int actionindex = item->at(0).toInt(&ok);
-			if(ok) {
-				QString s = QString("action%1").arg(actionindex); //TODO
-				QDomElement elem = domdoc.createElement(s);
-				macroelem.appendChild(elem);
-			}
-		}
-	}
-	QString xml = domdoc.toString();
-	*/
-
 	QDomDocument domdoc("macros");
-	QDomElement macroelem = d->macro->xmlHandler()->toXML();
+	QDomElement macroelem = d->macro->toXML();
 	domdoc.appendChild(macroelem);
 	const QString xml = domdoc.toString();
 	const QString name = QString("%1 [%2]").arg(parentDialog()->partItem()->name()).arg(parentDialog()->id());

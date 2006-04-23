@@ -46,13 +46,13 @@ namespace KoMacro {
 			* List of @a Action instances that are children of the
 			* macro.
 			*/
-			QValueList<MacroItem*> items;
+			QValueList<MacroItem::Ptr> items;
 
 			/**
 			* The iterator pointing to the @a Action instance that should
 			* be executed next.
 			*/
-			QValueList<MacroItem*>::Iterator itemit;
+			QValueList<MacroItem::Ptr>::Iterator itemit;
 
 			/**
 			* Map of all @a Variable instance that are defined within this
