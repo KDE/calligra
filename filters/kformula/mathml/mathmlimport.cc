@@ -86,7 +86,7 @@ KoFilter::ConversionStatus MathMLImport::convert( const QByteArray& from, const 
             << " In line: " << errorLine << ", column: " << errorColumn << endl
             << " Error message: " << errorMsg << endl;
         KMessageBox::error( 0, i18n( "Parsing error in MathML file %4 at line %1, column %2\nError message: %3" )
-                              .arg( errorLine ).arg( errorColumn ).arg( i18n ( "QXml", errorMsg.utf8() ).arg( filename ) ), i18n( "MathML Import Error" ) );
+                              .arg( errorLine ).arg( errorColumn ).arg( i18n ( "QXml", errorMsg ).arg( filename ) ), i18n( "MathML Import Error" ) );
         return KoFilter::WrongFormat;
     }
     f.close();
@@ -97,7 +97,7 @@ KoFilter::ConversionStatus MathMLImport::convert( const QByteArray& from, const 
 
     // taken from KoDocument::saveToStore
     KoStoreDevice dev( out );
-    const Q3CString s = doc->saveXML().toCString(); // utf8 already
+    const QByteArray s = doc->saveXML().toByteArray(); // utf8 already
     const int nwritten = dev.write( s.data(), s.size()-1 );
     if ( nwritten != (int)s.size()-1 ) {
         kWarning() << "wrote " << nwritten << "   - expected " << s.size()-1 << endl;
