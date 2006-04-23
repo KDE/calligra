@@ -25,7 +25,7 @@
 #ifndef KSPREAD_INSERTCALENDARDIALOG_H
 #define KSPREAD_INSERTCALENDARDIALOG_H
 
-#include <kspread_insertcalendardialogbase.h>
+#include <ui_kspread_insertcalendardialogbase.h>
 #include <koffice_export.h>
 
 #include <qdatetime.h>
@@ -35,7 +35,7 @@ class KDatePicker;
 namespace KSpread
 {
 
-class KSPREAD_EXPORT InsertCalendarDialog : public InsertCalendarDialogBase
+class KSPREAD_EXPORT InsertCalendarDialog : public QDialog, public Ui::InsertCalendarDialogBase
 {
   Q_OBJECT
 
@@ -55,7 +55,7 @@ class KSPREAD_EXPORT InsertCalendarDialog : public InsertCalendarDialogBase
      * The dates in the dialog initialize to a complete calendar for the
      * current month.
      */
-    InsertCalendarDialog(QWidget* parent = 0, const char* name = 0);
+    InsertCalendarDialog(QWidget* parent = 0);
 
     /**
      * Virtual destructor.

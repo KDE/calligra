@@ -9,7 +9,7 @@ set(kspreadinsertcalendar_PART_SRCS kspread_plugininsertcalendar.cc kspread_inse
 
 kde4_automoc(${kspreadinsertcalendar_PART_SRCS})
 
-kde4_add_ui3_files(kspreadinsertcalendar_PART_SRCS kspread_insertcalendardialogbase.ui )
+kde4_add_ui_files(kspreadinsertcalendar_PART_SRCS kspread_insertcalendardialogbase.ui )
 
 kde4_add_plugin(kspreadinsertcalendar WITH_PREFIX ${kspreadinsertcalendar_PART_SRCS})
 

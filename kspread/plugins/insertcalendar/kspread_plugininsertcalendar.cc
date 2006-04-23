@@ -73,8 +73,9 @@ PluginInsertCalendar::PluginInsertCalendar( QObject *parent, const char * /*name
 
     this->m_dialog = 0;
 
-    (void)new KAction( i18n("Insert Calendar..."), KShortcut::null(),
-                   this, SLOT( slotShowDialog() ), actionCollection(), "kspreadinsertcalendar");
+    KAction* insert = new KAction(i18n("Insert Calendar..."),
+                                  actionCollection(), "kspreadinsertcalendar");
+    connect( insert, SIGNAL(triggered(bool)), this, SLOT(slotShowDialog()) );
 }
 
 PluginInsertCalendar::~PluginInsertCalendar()

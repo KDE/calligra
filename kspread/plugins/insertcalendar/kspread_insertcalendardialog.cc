@@ -33,9 +33,10 @@
 namespace KSpread
 {
 
-InsertCalendarDialog::InsertCalendarDialog(QWidget* parent, const char* name)
-: InsertCalendarDialogBase(parent,name)
+InsertCalendarDialog::InsertCalendarDialog(QWidget* parent)
+  : QDialog(parent)
 {
+  setupUi(this);
   this->m_datePicker = 0;
 
   //we start with a default calendar for the current month;

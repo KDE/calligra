@@ -1,207 +1,177 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
-<class>KSpread::InsertCalendarDialogBase</class>
-<widget class="QDialog">
-    <property name="name">
-        <cstring>KSpread::InsertCalendarDialogBase</cstring>
+<ui version="4.0" stdsetdef="1" >
+  <author></author>
+  <comment></comment>
+  <exportmacro></exportmacro>
+  <class>KSpread::InsertCalendarDialogBase</class>
+  <widget class="QDialog" name="KSpread::InsertCalendarDialogBase" >
+    <property name="geometry" >
+      <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>429</width>
+        <height>237</height>
+      </rect>
     </property>
-    <property name="geometry">
-        <rect>
-            <x>0</x>
-            <y>0</y>
-            <width>429</width>
-            <height>237</height>
-        </rect>
+    <property name="windowTitle" >
+      <string>Insert Calendar</string>
     </property>
-    <property name="caption">
-        <string>Insert Calendar</string>
+    <property name="toolTip" stdset="0" >
+      <string/>
     </property>
-    <property name="toolTip" stdset="0">
-        <string></string>
+    <property name="whatsThis" stdset="0" >
+      <string comment="This what's this help applies for the entire dialog." >The Insert Calendar dialog lets you set the dates of the calendar you want to insert. When you have choosen the desired dates, simply press the Insert button to insert the calendar into the spreadsheet, starting at the cell you have currently selected.</string>
     </property>
-    <property name="whatsThis" stdset="0">
-        <string>The Insert Calendar dialog lets you set the dates of the calendar you want to insert. When you have choosen the desired dates, simply press the Insert button to insert the calendar into the spreadsheet, starting at the cell you have currently selected.</string>
-        <comment>This what's this help applies for the entire dialog.</comment>
-    </property>
-    <grid>
-        <property name="name">
-            <cstring>unnamed</cstring>
-        </property>
-        <widget class="QGroupBox" row="0" column="0" rowspan="1" colspan="2">
-            <property name="name">
-                <cstring>m_startDateGroupBox</cstring>
-            </property>
-            <property name="title">
-                <string>Start Date</string>
-            </property>
-            <property name="toolTip" stdset="0">
-                <string>Set the start date of the calendar you want to insert</string>
-            </property>
-            <property name="whatsThis" stdset="0">
-                <string>Here you can choose on which date your calendar should start. The selected date will be the first day of the inserted calendar. You can also choose a date from a calendar dialog by pressing Select Date.</string>
-            </property>
-            <grid>
-                <property name="name">
-                    <cstring>unnamed</cstring>
+    <layout class="QGridLayout" >
+      <item rowspan="1" row="0" column="0" colspan="2" >
+        <widget class="QGroupBox" name="m_startDateGroupBox" >
+          <property name="title" >
+            <string>Start Date</string>
+          </property>
+          <property name="toolTip" stdset="0" >
+            <string>Set the start date of the calendar you want to insert</string>
+          </property>
+          <property name="whatsThis" stdset="0" >
+            <string>Here you can choose on which date your calendar should start. The selected date will be the first day of the inserted calendar. You can also choose a date from a calendar dialog by pressing Select Date.</string>
+          </property>
+          <layout class="QGridLayout" >
+            <item row="0" column="0" >
+              <widget class="KDateWidget" name="m_startDateWidget" >
+                <property name="sizePolicy" >
+                  <sizepolicy>
+                    <hsizetype>5</hsizetype>
+                    <vsizetype>5</vsizetype>
+                    <horstretch>1</horstretch>
+                    <verstretch>0</verstretch>
+                  </sizepolicy>
                 </property>
-                <widget class="KDateWidget" row="0" column="0">
-                    <property name="name">
-                        <cstring>m_startDateWidget</cstring>
-                    </property>
-                    <property name="sizePolicy">
-                        <sizepolicy>
-                            <hsizetype>5</hsizetype>
-                            <vsizetype>5</vsizetype>
-                            <horstretch>1</horstretch>
-                            <verstretch>0</verstretch>
-                        </sizepolicy>
-                    </property>
-                </widget>
-                <widget class="QPushButton" row="0" column="1">
-                    <property name="name">
-                        <cstring>m_selectStartDateButton</cstring>
-                    </property>
-                    <property name="sizePolicy">
-                        <sizepolicy>
-                            <hsizetype>3</hsizetype>
-                            <vsizetype>0</vsizetype>
-                            <horstretch>1</horstretch>
-                            <verstretch>0</verstretch>
-                        </sizepolicy>
-                    </property>
-                    <property name="text">
-                        <string>Date Picker</string>
-                    </property>
-                    <property name="toolTip" stdset="0">
-                        <string>Use a graphical date picker to select a date</string>
-                    </property>
-                </widget>
-            </grid>
-        </widget>
-        <widget class="QGroupBox" row="1" column="0" rowspan="1" colspan="2">
-            <property name="name">
-                <cstring>m_endDateGroupBox</cstring>
-            </property>
-            <property name="frameShape">
-                <enum>QFrame::StyledPanel</enum>
-            </property>
-            <property name="frameShadow">
-                <enum>Sunken</enum>
-            </property>
-            <property name="title">
-                <string>End Date</string>
-            </property>
-            <property name="toolTip" stdset="0">
-                <string>Set the end date of the calendar you want to insert</string>
-            </property>
-            <property name="whatsThis" stdset="0">
-                <string>Here you can choose on which date your calendar should end. The selected date will be the last day of the inserted calendar. You can also choose a date from a calendar dialog by pressing Select Date.</string>
-            </property>
-            <grid>
-                <property name="name">
-                    <cstring>unnamed</cstring>
+              </widget>
+            </item>
+            <item row="0" column="1" >
+              <widget class="QPushButton" name="m_selectStartDateButton" >
+                <property name="sizePolicy" >
+                  <sizepolicy>
+                    <hsizetype>3</hsizetype>
+                    <vsizetype>0</vsizetype>
+                    <horstretch>1</horstretch>
+                    <verstretch>0</verstretch>
+                  </sizepolicy>
                 </property>
-                <widget class="KDateWidget" row="0" column="0">
-                    <property name="name">
-                        <cstring>m_endDateWidget</cstring>
-                    </property>
-                    <property name="sizePolicy">
-                        <sizepolicy>
-                            <hsizetype>5</hsizetype>
-                            <vsizetype>5</vsizetype>
-                            <horstretch>1</horstretch>
-                            <verstretch>0</verstretch>
-                        </sizepolicy>
-                    </property>
-                </widget>
-                <widget class="QPushButton" row="0" column="1">
-                    <property name="name">
-                        <cstring>m_selectEndDateButton</cstring>
-                    </property>
-                    <property name="sizePolicy">
-                        <sizepolicy>
-                            <hsizetype>3</hsizetype>
-                            <vsizetype>0</vsizetype>
-                            <horstretch>1</horstretch>
-                            <verstretch>0</verstretch>
-                        </sizepolicy>
-                    </property>
-                    <property name="text">
-                        <string>Date Picker</string>
-                    </property>
-                    <property name="toolTip" stdset="0">
-                        <string>Use a graphical date picker to select a date</string>
-                    </property>
-                </widget>
-            </grid>
+                <property name="text" >
+                  <string>Date Picker</string>
+                </property>
+                <property name="toolTip" stdset="0" >
+                  <string>Use a graphical date picker to select a date</string>
+                </property>
+              </widget>
+            </item>
+          </layout>
         </widget>
-        <spacer row="2" column="0" rowspan="1" colspan="2">
-            <property name="name">
-                <cstring>spacer1</cstring>
-            </property>
-            <property name="orientation">
-                <enum>Qt::Vertical</enum>
-            </property>
-            <property name="sizeType">
-                <enum>Expanding</enum>
-            </property>
-            <property name="sizeHint">
-                <size>
-                    <width>400</width>
-                    <height>19</height>
-                </size>
-            </property>
+      </item>
+      <item rowspan="1" row="1" column="0" colspan="2" >
+        <widget class="QGroupBox" name="m_endDateGroupBox" >
+          <property name="title" >
+            <string>End Date</string>
+          </property>
+          <property name="toolTip" stdset="0" >
+            <string>Set the end date of the calendar you want to insert</string>
+          </property>
+          <property name="whatsThis" stdset="0" >
+            <string>Here you can choose on which date your calendar should end. The selected date will be the last day of the inserted calendar. You can also choose a date from a calendar dialog by pressing Select Date.</string>
+          </property>
+          <layout class="QGridLayout" >
+            <item row="0" column="0" >
+              <widget class="KDateWidget" name="m_endDateWidget" >
+                <property name="sizePolicy" >
+                  <sizepolicy>
+                    <hsizetype>5</hsizetype>
+                    <vsizetype>5</vsizetype>
+                    <horstretch>1</horstretch>
+                    <verstretch>0</verstretch>
+                  </sizepolicy>
+                </property>
+              </widget>
+            </item>
+            <item row="0" column="1" >
+              <widget class="QPushButton" name="m_selectEndDateButton" >
+                <property name="sizePolicy" >
+                  <sizepolicy>
+                    <hsizetype>3</hsizetype>
+                    <vsizetype>0</vsizetype>
+                    <horstretch>1</horstretch>
+                    <verstretch>0</verstretch>
+                  </sizepolicy>
+                </property>
+                <property name="text" >
+                  <string>Date Picker</string>
+                </property>
+                <property name="toolTip" stdset="0" >
+                  <string>Use a graphical date picker to select a date</string>
+                </property>
+              </widget>
+            </item>
+          </layout>
+        </widget>
+      </item>
+      <item rowspan="1" row="2" column="0" colspan="2" >
+        <spacer name="spacer1" >
+          <property name="sizeHint" >
+            <size>
+              <width>400</width>
+              <height>19</height>
+            </size>
+          </property>
+          <property name="sizeType" >
+            <enum>Expanding</enum>
+          </property>
+          <property name="orientation" >
+            <enum>Qt::Vertical</enum>
+          </property>
         </spacer>
-        <widget class="QPushButton" row="3" column="0">
-            <property name="name">
-                <cstring>m_insertButton</cstring>
-            </property>
-            <property name="sizePolicy">
-                <sizepolicy>
-                    <hsizetype>7</hsizetype>
-                    <vsizetype>0</vsizetype>
-                    <horstretch>1</horstretch>
-                    <verstretch>0</verstretch>
-                </sizepolicy>
-            </property>
-            <property name="text">
-                <string>&amp;Insert</string>
-            </property>
-            <property name="toolTip" stdset="0">
-                <string>Insert the calendar at the currently selected cell</string>
-                <comment>Tooltip for the insert button of the insert calendar plugin</comment>
-            </property>
-            <property name="whatsThis" stdset="0">
-                <string>A new calendar will be inserted starting at the currently selected cell.</string>
-                <comment>What's this for the insert button of the insert calendar plugin</comment>
-            </property>
+      </item>
+      <item row="3" column="0" >
+        <widget class="QPushButton" name="m_insertButton" >
+          <property name="sizePolicy" >
+            <sizepolicy>
+              <hsizetype>7</hsizetype>
+              <vsizetype>0</vsizetype>
+              <horstretch>1</horstretch>
+              <verstretch>0</verstretch>
+            </sizepolicy>
+          </property>
+          <property name="text" >
+            <string>&amp;Insert</string>
+          </property>
+          <property name="toolTip" stdset="0" >
+            <string comment="Tooltip for the insert button of the insert calendar plugin" >Insert the calendar at the currently selected cell</string>
+          </property>
+          <property name="whatsThis" stdset="0" >
+            <string comment="What's this for the insert button of the insert calendar plugin" >A new calendar will be inserted starting at the currently selected cell.</string>
+          </property>
         </widget>
-        <widget class="QPushButton" row="3" column="1">
-            <property name="name">
-                <cstring>m_cancelButton</cstring>
-            </property>
-            <property name="sizePolicy">
-                <sizepolicy>
-                    <hsizetype>7</hsizetype>
-                    <vsizetype>0</vsizetype>
-                    <horstretch>1</horstretch>
-                    <verstretch>0</verstretch>
-                </sizepolicy>
-            </property>
-            <property name="text">
-                <string>&amp;Cancel</string>
-            </property>
-            <property name="toolTip" stdset="0">
-                <string>Don't insert a calendar</string>
-            </property>
-            <property name="whatsThis" stdset="0">
-                <string>Quits the dialog and does not insert a calendar. Use this to cancel this operation.</string>
-            </property>
+      </item>
+      <item row="3" column="1" >
+        <widget class="QPushButton" name="m_cancelButton" >
+          <property name="sizePolicy" >
+            <sizepolicy>
+              <hsizetype>7</hsizetype>
+              <vsizetype>0</vsizetype>
+              <horstretch>1</horstretch>
+              <verstretch>0</verstretch>
+            </sizepolicy>
+          </property>
+          <property name="text" >
+            <string>&amp;Cancel</string>
+          </property>
+          <property name="toolTip" stdset="0" >
+            <string>Don't insert a calendar</string>
+          </property>
+          <property name="whatsThis" stdset="0" >
+            <string>Quits the dialog and does not insert a calendar. Use this to cancel this operation.</string>
+          </property>
         </widget>
-    </grid>
-</widget>
-<layoutdefaults spacing="6" margin="11"/>
-<includehints>
-    <includehint>kdatewidget.h</includehint>
-    <includehint>kdatewidget.h</includehint>
-</includehints>
-</UI>
+      </item>
+    </layout>
+  </widget>
+  <layoutdefault spacing="6" margin="11" />
+  <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
+</ui>
