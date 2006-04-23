@@ -994,13 +994,13 @@ void EmbeddedPictureObject::loadOasis(const QDomElement &element, KoOasisLoading
     if ( !href.isEmpty() /*&& href[0] == '#'*/ )
     {
         QString strExtension;
-        const int result=href.findRev(".");
+        const int result=href.lastIndexOf(".");
         if (result>=0)
         {
             strExtension=href.mid(result+1); // As we are using KoPicture, the extension should be without the dot.
         }
         QString filename(href/*.mid(1)*/);
-        const KoPictureKey key(filename, QDateTime::currentDateTime(Qt::UTC));
+        const KoPictureKey key(filename, QDateTime::currentDateTime().toTimeSpec(Qt::UTC));
         image.setKey(key);
 
         KoStore* store = context.store();
@@ -1367,7 +1367,7 @@ QPixmap EmbeddedPictureObject::getOriginalPixmap()
 
 QPixmap EmbeddedPictureObject::changePictureSettings( QPixmap _tmpPixmap )
 {
-    QImage _tmpImage = _tmpPixmap.convertToImage();
+    QImage _tmpImage = _tmpPixmap.toImage();
 
     if (_tmpImage.isNull())
         return _tmpPixmap;
@@ -1383,7 +1383,7 @@ QPixmap EmbeddedPictureObject::changePictureSettings( QPixmap _tmpPixmap )
         _vertical = true;
     }
 
-    _tmpImage = _tmpImage.mirror( _horizontal, _vertical );
+    _tmpImage = _tmpImage.mirrored( _horizontal, _vertical );
 
     if ( depth != 0 ) {
         QImage tmpImg = _tmpImage.convertDepth( depth );
@@ -1559,7 +1559,7 @@ QPixmap EmbeddedPictureObject::changePictureSettings( QPixmap _tmpPixmap )
         break;
     }
 
-    _tmpPixmap.convertFromImage( _tmpImage );
+    _tmpPixmap.fromImage( _tmpImage );
 
     return _tmpPixmap;
 }

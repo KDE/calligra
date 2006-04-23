@@ -1185,7 +1185,7 @@ CellFormatPageFloat::CellFormatPageFloat( QWidget* parent, CellFormatDialog *_dl
     prefix->setWhatsThis( i18n( "You can add here a Prefix such as a $ symbol at the start of each cell content in the checked format." ) );
     grid->addWidget(prefix,0,1);
 
-    format = new QComboBox( box, "ListBox_1" );
+    format = new QComboBox( box );
     format->setWhatsThis( i18n( "You can choose whether positive values are displayed with a leading + sign and whether negative values are shown in red." ) );
     grid->addWidget(format,0,3);
 
@@ -3007,7 +3007,7 @@ QPixmap CellFormatPageBorder::paintFormatPixmap(Qt::PenStyle _style)
   QPen pen;
   pen=QPen( palette().text().color(), 1, _style );
   painter.begin( &pixmap );
-  painter.fillRect( 0, 0, style->width(), 14, QColorGroup(palette()).background() );
+  painter.fillRect( 0, 0, style->width(), 14, palette().window().color() );
   painter.setPen( pen );
   painter.drawLine( 0, 7, style->width(), 7 );
   painter.end();

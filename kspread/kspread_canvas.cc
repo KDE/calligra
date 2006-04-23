@@ -3840,7 +3840,7 @@ void Canvas::copyOasisObjects()
       p.end();
       if (!pixmap.isNull())
       {
-        Q3ImageDrag *imagedrag = new Q3ImageDrag( pixmap.convertToImage() );
+        Q3ImageDrag *imagedrag = new Q3ImageDrag( pixmap.toImage() );
         multiDrag->addDragObject( imagedrag );
       }
     }

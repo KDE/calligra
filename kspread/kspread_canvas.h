@@ -113,16 +113,11 @@ public:
      */
     enum MouseActions
     {
-      /** No mouse action (default) */
-      NoAction,
-      /** Marking action */
-      Mark,
-      /** Merging cell */
-      ResizeCell,
-      /** Autofilling */
-      AutoFill,
-      /** Resizing the selection */
-      ResizeSelection
+      NoAction,       /**< No mouse action (default) */
+      Mark,           /**< Marking action */
+      ResizeCell,     /**< Merging cell */
+      AutoFill,       /**< Autofilling */
+      ResizeSelection /**< Resizing the selection */
     };
     enum EditorType { CellEditor, EditWidget };
 

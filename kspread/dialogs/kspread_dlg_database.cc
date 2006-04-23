@@ -114,7 +114,7 @@ DatabaseDialog::DatabaseDialog( View * parent, QRect const & rect, const char * 
   TextLabel2->setText( i18n( "Host:" ) );
   Frame16Layout->addWidget( TextLabel2, 2, 0 );
 
-  m_driver = new QComboBox( false, Frame16, "m_driver" );
+  m_driver = new QComboBox( Frame16 );
   Frame16Layout->addWidget( m_driver, 0, 1 );
 
   m_username = new QLineEdit( Frame16 );
@@ -188,7 +188,7 @@ DatabaseDialog::DatabaseDialog( View * parent, QRect const & rect, const char * 
   //  TextLabel12_2->setText( i18n( "Database:" ) );
   //  Layout21->addWidget( TextLabel12_2 );
 
-  //  m_databaseList = new QComboBox( false, Frame5_2, "m_databaseList" );
+  //  m_databaseList = new QComboBox( Frame5_2 );
   //  Layout21->addWidget( m_databaseList );
 
   //  m_connectButton = new KPushButton( Frame5_2, "m_connectButton" );
@@ -302,7 +302,7 @@ DatabaseDialog::DatabaseDialog( View * parent, QRect const & rect, const char * 
   m_operatorValue_3 = new QLineEdit( optionsFrame );
   optionsFrameLayout->addWidget( m_operatorValue_3, 4, 2 );
 
-  m_operator_1 = new QComboBox( false, optionsFrame, "m_operator_1" );
+  m_operator_1 = new QComboBox( optionsFrame );
   m_operator_1->insertItem( 0, i18n( "equals" ) );
   m_operator_1->insertItem( 1, i18n( "not equal" ) );
   m_operator_1->insertItem( 2, i18n( "in" ) );
@@ -315,7 +315,7 @@ DatabaseDialog::DatabaseDialog( View * parent, QRect const & rect, const char * 
 
   optionsFrameLayout->addWidget( m_operator_1, 2, 1 );
 
-  m_operator_2 = new QComboBox( false, optionsFrame, "m_operator_2" );
+  m_operator_2 = new QComboBox( optionsFrame );
   m_operator_2->insertItem( 0, i18n( "equals" ) );
   m_operator_2->insertItem( 1, i18n( "not equal" ) );
   m_operator_2->insertItem( 2, i18n( "in" ) );
@@ -326,7 +326,7 @@ DatabaseDialog::DatabaseDialog( View * parent, QRect const & rect, const char * 
 
   optionsFrameLayout->addWidget( m_operator_2, 3, 1 );
 
-  m_operator_3 = new QComboBox( false, optionsFrame, "m_operator_3" );
+  m_operator_3 = new QComboBox( optionsFrame );
   m_operator_3->insertItem( 0, i18n( "equals" ) );
   m_operator_3->insertItem( 1, i18n( "not equal" ) );
   m_operator_3->insertItem( 2, i18n( "in" ) );
