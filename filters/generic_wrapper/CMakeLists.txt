@@ -1,5 +1,9 @@
 kde4_header()
 
+include_directories(
+    ${KOFFICECORE_INCLUDES}
+    )
+
 
 
 
