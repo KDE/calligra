@@ -42,7 +42,6 @@
 #include <qlabel.h>
 #include <qpushbutton.h>
 //Added by qt3to4:
-#include <Q3CString>
 #include <Q3Frame>
 #include <Q3VBoxLayout>
 #include <kvbox.h>
@@ -55,7 +54,7 @@
 
 KWMailMergeDataBase::KWMailMergeDataBase( KWDocument *doc_ )
     : QObject(doc_,doc_->dcopObject()->objId()+".MailMergeDataBase"),
-    KWordMailMergeDatabaseIface(Q3CString(doc_->dcopObject()->objId()+".MailMergeDataBase")),
+    KWordMailMergeDatabaseIface(DCOPCString(doc_->dcopObject()->objId()+".MailMergeDataBase")),
       m_version(0),
       doc( doc_ )
 {
@@ -276,7 +275,7 @@ bool KWMailMergeDataBase::askUserForConfirmationAndConfig(KWMailMergeDataSource 
             return false;
         }
     }
-    tmpPlugin->setObjId(Q3CString(objId()+".MailMergePlugin"));
+    tmpPlugin->setObjId(DCOPCString(objId()+".MailMergePlugin"));
     return true;
 }
 

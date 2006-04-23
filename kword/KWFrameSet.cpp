@@ -41,7 +41,6 @@
 #include <qapplication.h>
 //Added by qt3to4:
 #include <QPixmap>
-#include <Q3CString>
 #include <Q3PtrList>
 #include <Q3ValueList>
 
@@ -1237,7 +1236,7 @@ void KWFrameSet::printDebug()
     Q3PtrListIterator<KWFrame> frameIt = frameIterator();
     for ( unsigned int j = 0; frameIt.current(); ++frameIt, ++j ) {
         KWFrame * frame = frameIt.current();
-        Q3CString copy = frame->isCopy() ? "[copy]" : "";
+        QByteArray copy = frame->isCopy() ? "[copy]" : "";
         kDebug() << " +-- Frame " << j << " of "<< frameCount() << "    (" << frame << ")  " << copy << endl;
         printDebug( frame );
         kDebug() << "     Rectangle : " << frame->x() << "," << frame->y() << " " << frame->width() << "x" << frame->height() << endl;

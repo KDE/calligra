@@ -29,8 +29,6 @@
 #include <KoXmlWriter.h>
 #include <klocale.h>
 #include <kdebug.h>
-//Added by qt3to4:
-#include <Q3CString>
 
 //#define DEBUG_DRAW
 
@@ -184,7 +182,7 @@ void KWPictureFrameSet::loadOasis( const QDomElement& frame, const QDomElement& 
     QDomNode binaryData = KoDom::namedItemNS( tag, KoXmlNS::office, "binary-data" );
     if ( !binaryData.isNull() )
     {
-        Q3CString data = binaryData.toElement().text().latin1();
+        QByteArray data = binaryData.toElement().text().latin1();
         m_picture.loadFromBase64( data );
         key = KoPictureKey("nofile", QDateTime::currentDateTime(Qt::UTC));
         m_picture.setKey(key);

@@ -24,7 +24,6 @@
 #include <qdom.h>
 //Added by qt3to4:
 #include <QSqlError>
-#include <Q3CString>
 #include <kcombobox.h>
 #include <klineedit.h>
 #include <kpushbutton.h>
@@ -78,7 +77,7 @@ bool KWQtSqlSerialDataSourceBase::showConfigDialog(QWidget *par,int action)
 
 bool  KWQtSqlSerialDataSourceBase::openDatabase()
 {
-	Q3CString pwd;
+	QByteArray pwd;
 	QSqlDatabase::removeDatabase(DataBaseConnection);
         database=QSqlDatabase::addDatabase(driver,DataBaseConnection);
         if (database)

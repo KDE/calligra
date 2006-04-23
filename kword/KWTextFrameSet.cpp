@@ -70,7 +70,6 @@
 #include <Q3MemArray>
 #include <QKeyEvent>
 #include <QDragMoveEvent>
-#include <Q3CString>
 #include <QDragLeaveEvent>
 #include <Q3ValueList>
 #include <QDropEvent>

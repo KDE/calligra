@@ -37,7 +37,6 @@
 #include <klocale.h>
 //Added by qt3to4:
 #include <Q3ValueList>
-#include <Q3CString>
 #include <Q3MemArray>
 
 KWTextDocument::KWTextDocument( KWTextFrameSet * textfs, KoTextFormatCollection *fc, KoTextFormatter *formatter )
@@ -180,7 +179,7 @@ void KWTextDocument::loadOasisFootnote( const QDomElement& tag, KoOasisContext& 
     fs->createInitialFrame( 0 ); // we don't know the page number...
 
     // Parse contents into the frameset
-    const QDomElement bodyElem = KoDom::namedItemNS( tag, KoXmlNS::text, Q3CString( localName.latin1() ) + "-body" ).toElement();
+    const QDomElement bodyElem = KoDom::namedItemNS( tag, KoXmlNS::text, QByteArray( localName.latin1() ) + "-body" ).toElement();
     fs->loadOasisContent( bodyElem, context );
 }
 
