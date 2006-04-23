@@ -225,7 +225,7 @@ Doc::Doc( QWidget *parentWidget, const char *widgetName, QObject* parent, const 
   {
       QString tmp( "Document%1" );
       tmp = tmp.arg( d->s_docId++ );
-      setName( tmp.local8Bit());//tmp.toLatin1() );
+      setName( tmp.toLocal8Bit());//tmp.toLatin1() );
       dcopObject();
   }
   else

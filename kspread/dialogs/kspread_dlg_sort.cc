@@ -66,15 +66,15 @@ SortDialog::SortDialog( View * parent,  const char * name,
     m_pView( parent )
 {
   if ( !name )
-    setName( "SortDialog" );
+    setObjectName( "SortDialog" );
 
   resize( 528, 316 );
-  setCaption( i18n( "Sorting" ) );
+  setWindowTitle( i18n( "Sorting" ) );
   //setSizeGripEnabled( true );
 
   KVBox *page = makeVBoxMainWidget();
 
-  m_tabWidget = new QTabWidget( page, "m_tabWidget" );
+  m_tabWidget = new QTabWidget( page );
 
   m_page1 = new QWidget( m_tabWidget );
   QGridLayout * page1Layout = new QGridLayout( m_page1 );
@@ -122,8 +122,8 @@ SortDialog::SortDialog( View * parent,  const char * name,
   sort1BoxLayout->addWidget( m_sortKey1 );
 
   m_sortOrder1 = new QComboBox( sort1Box );
-  m_sortOrder1->insertItem( i18n( "Ascending" ) );
-  m_sortOrder1->insertItem( i18n( "Descending" ) );
+  m_sortOrder1->insertItem( 0,i18n( "Ascending" ) );
+  m_sortOrder1->insertItem( 1,i18n( "Descending" ) );
   sort1BoxLayout->addWidget( m_sortOrder1 );
 
   page1Layout->addWidget( sort1Box, 3, 0 );
@@ -138,12 +138,12 @@ SortDialog::SortDialog( View * parent,  const char * name,
   sort2BoxLayout->setAlignment( Qt::AlignTop );
 
   m_sortKey2 = new QComboBox( sort2Box );
-  m_sortKey2->insertItem( i18n( "None" ) );
+  m_sortKey2->insertItem( 0,i18n( "None" ) );
   sort2BoxLayout->addWidget( m_sortKey2 );
 
   m_sortOrder2 = new QComboBox( sort2Box );
-  m_sortOrder2->insertItem( i18n( "Ascending" ) );
-  m_sortOrder2->insertItem( i18n( "Descending" ) );
+  m_sortOrder2->insertItem( 0,i18n( "Ascending" ) );
+  m_sortOrder2->insertItem( 1,i18n( "Descending" ) );
   sort2BoxLayout->addWidget( m_sortOrder2 );
 
   page1Layout->addWidget( sort2Box, 4, 0 );
@@ -158,13 +158,13 @@ SortDialog::SortDialog( View * parent,  const char * name,
   sort3BoxLayout->setAlignment( Qt::AlignTop );
 
   m_sortKey3 = new QComboBox( sort3Box );
-  m_sortKey3->insertItem( i18n( "None" ) );
+  m_sortKey3->insertItem( 0,i18n( "None" ) );
   m_sortKey3->setEnabled( false );
   sort3BoxLayout->addWidget( m_sortKey3 );
 
   m_sortOrder3 = new QComboBox( sort3Box );
-  m_sortOrder3->insertItem( i18n( "Ascending" ) );
-  m_sortOrder3->insertItem( i18n( "Descending" ) );
+  m_sortOrder3->insertItem( 0,i18n( "Ascending" ) );
+  m_sortOrder3->insertItem( 1,i18n( "Descending" ) );
   m_sortOrder3->setEnabled( false );
   sort3BoxLayout->addWidget( m_sortOrder3 );
 
@@ -482,10 +482,10 @@ void SortDialog::slotOrientationChanged(int id)
     m_sortKey2->clear();
     m_sortKey3->clear();
     m_sortKey1->insertItems( 0,m_listColumn);
-    m_sortKey2->insertItem( i18n("None") );
-    m_sortKey2->insertItems( 0,m_listColumn);
-    m_sortKey3->insertItem( i18n("None") );
-    m_sortKey3->insertItems( 0,m_listColumn);
+    m_sortKey2->insertItem( 0,i18n("None") );
+    m_sortKey2->insertItems( 1,m_listColumn);
+    m_sortKey3->insertItem( 0,i18n("None") );
+    m_sortKey3->insertItems( 1,m_listColumn);
     m_firstRowOrColHeader->setText( i18n( "&First row contains headers" ) );
     break;
 
@@ -494,10 +494,10 @@ void SortDialog::slotOrientationChanged(int id)
     m_sortKey2->clear();
     m_sortKey3->clear();
     m_sortKey1->insertItems( 0,m_listRow);
-    m_sortKey2->insertItem( i18n("None") );
-    m_sortKey2->insertItems( 0,m_listRow);
-    m_sortKey3->insertItem( i18n("None") );
-    m_sortKey3->insertItems( 0,m_listRow);
+    m_sortKey2->insertItem( 0,i18n("None") );
+    m_sortKey2->insertItems( 1,m_listRow);
+    m_sortKey3->insertItem( 0,i18n("None") );
+    m_sortKey3->insertItems( 1,m_listRow);
     m_firstRowOrColHeader->setText( i18n( "&First column contains headers" ) );
 
     /*if (m_firstRowOrColHeader->isChecked())

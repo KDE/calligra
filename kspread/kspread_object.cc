@@ -1392,7 +1392,7 @@ QPixmap EmbeddedPictureObject::changePictureSettings( QPixmap _tmpPixmap )
     }
 
     if ( swapRGB )
-        _tmpImage = _tmpImage.swapRGB();
+        _tmpImage = _tmpImage.rgbSwapped();
 
     if ( grayscal ) {
         if ( depth == 1 || depth == 8 ) {

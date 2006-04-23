@@ -617,7 +617,7 @@ void CellEditor::triggerFunctionAutoComplete()
   QStringList fnames = KSpread::FunctionRepository::self()->functionNames();
   QStringList choices;
   for( int i=0; i<fnames.count(); i++ )
-    if( fnames[i].startsWith( id, false ) )
+    if( fnames[i].startsWith( id, Qt::CaseInsensitive ) )
       choices.append( fnames[i] );
   choices.sort();
 

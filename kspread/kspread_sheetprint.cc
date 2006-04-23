@@ -707,7 +707,7 @@ bool SheetPrint::isOnNewPageX( int _column )
     }
 
     //Now check if we find the column already in the list
-    if ( m_lnewPageListX.findIndex( _column ) != -1 )
+    if ( m_lnewPageListX.indexOf( _column ) != -1 )
     {
         if( _column > m_maxCheckedNewPageX )
             m_maxCheckedNewPageX = _column;
@@ -822,7 +822,7 @@ bool SheetPrint::isOnNewPageY( int _row )
     }
 
     //Now check if we find the row already in the list
-    if ( m_lnewPageListY.findIndex( _row ) != -1 )
+    if ( m_lnewPageListY.indexOf( _row ) != -1 )
     {
         if( _row > m_maxCheckedNewPageY )
             m_maxCheckedNewPageY = _row;

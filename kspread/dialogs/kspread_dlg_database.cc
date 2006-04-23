@@ -75,9 +75,9 @@ DatabaseDialog::DatabaseDialog( View * parent, QRect const & rect, const char * 
     m_dbConnection( 0 )
 {
   if ( !name )
-    setName( "DatabaseDialog" );
+    setObjectName( "DatabaseDialog" );
 
-  setCaption( i18n( "Insert Data From Database" ) );
+  setWindowTitle( i18n( "Insert Data From Database" ) );
 
   // database page
 
@@ -456,7 +456,7 @@ DatabaseDialog::DatabaseDialog( View * parent, QRect const & rect, const char * 
   connect( m_sheetView, SIGNAL( clicked( Q3ListViewItem * ) ), this, SLOT( sheetViewClicked( Q3ListViewItem * ) ) );
 
   QStringList str = QSqlDatabase::drivers();
-  m_driver->insertItem("");
+  m_driver->insertItem(0, "");
   m_driver->insertItems( 1, str );
 
 
@@ -877,10 +877,10 @@ bool DatabaseDialog::columnsDoNext()
   m_columns_3->insertItems( 0,columns);
   m_columnsSort_1->clear();
   m_columnsSort_2->clear();
-  m_columnsSort_1->insertItem( i18n("None") );
-  m_columnsSort_2->insertItem( i18n("None") );
-  m_columnsSort_1->insertItems( 0,columns);
-  m_columnsSort_2->insertItems( 0,columns);
+  m_columnsSort_1->insertItem( 0,i18n("None") );
+  m_columnsSort_2->insertItem( 0,i18n("None") );
+  m_columnsSort_1->insertItems( 1,columns);
+  m_columnsSort_2->insertItems( 2,columns);
 
   setNextEnabled(m_options, true);
 

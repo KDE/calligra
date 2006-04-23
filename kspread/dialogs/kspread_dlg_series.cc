@@ -88,16 +88,21 @@ SeriesDlg::SeriesDlg( View* parent, const char* name,const QPoint &_marker)
   QWidget *params = new QWidget( gb );
   QGridLayout *params_layout = new QGridLayout( params );
   params_layout->setSpacing( spacingHint() );
-  params_layout->setAutoAdd( true );
 
-  new QLabel( i18n( "Start value:" ), params );
+  QLabel* label = new QLabel( i18n( "Start value:" ), params );
+  params_layout->addWidget(label);
   start=new KDoubleNumInput(-999999.999, 999999.99, 0.0, params, 1.0, 3);
+  params_layout->addWidget(start);
 
-  new QLabel( i18n( "Stop value:" ), params );
+  label = new QLabel( i18n( "Stop value:" ), params );
+  params_layout->addWidget(label);
   end=new KDoubleNumInput(-999999.999, 999999.99, 0.0, params, 1.0, 3);
+  params_layout->addWidget(end);
 
-  new QLabel( i18n( "Step value:" ), params );
+  label = new QLabel( i18n( "Step value:" ), params );
+  params_layout->addWidget(label);
   step=new KDoubleNumInput(-999999.999, 999999.99, 0.0, params, 1.0, 3);
+  params_layout->addWidget(step);
 
   grid1->addWidget(gb);
 

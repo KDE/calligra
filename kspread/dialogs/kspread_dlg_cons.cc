@@ -79,14 +79,14 @@ ConsolidateDialog::ConsolidateDialog( View* parent, const char* name )
   grid1->addWidget(m_pFunction,1,0);
   tmpQLabel->setBuddy(m_pFunction);
 
-  m_pFunction->insertItem( i18n("Sum"), Sum );
-  m_pFunction->insertItem( i18n("Average"), Average );
-  m_pFunction->insertItem( i18n("Count"), Count );
-  m_pFunction->insertItem( i18n("Max"), Max );
-  m_pFunction->insertItem( i18n("Min"), Min );
-  m_pFunction->insertItem( i18n("Product"), Product );
-  m_pFunction->insertItem( i18n("Standard Deviation"), StdDev );
-  m_pFunction->insertItem( i18n("Variance"), Var );
+  m_pFunction->insertItem( Sum, i18n("Sum") );
+  m_pFunction->insertItem( Average, i18n("Average") );
+  m_pFunction->insertItem( Count, i18n("Count") );
+  m_pFunction->insertItem( Max, i18n("Max") );
+  m_pFunction->insertItem( Min, i18n("Min") );
+  m_pFunction->insertItem( Product, i18n("Product") );
+  m_pFunction->insertItem( StdDev, i18n("Standard Deviation") );
+  m_pFunction->insertItem( Var, i18n("Variance") );
 
   tmpQLabel = new QLabel( page );
   tmpQLabel->setText( i18n("Re&ference:") );

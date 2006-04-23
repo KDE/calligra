@@ -75,6 +75,7 @@ FormatDialog::FormatDialog( View* view, const char* name )
 
     QStringList lst = Factory::global()->dirs()->findAllResources( "sheet-styles", "*.ksts", true );
 
+    int index = 0;
     QStringList::Iterator it = lst.begin();
     for( ; it != lst.end(); ++it )
     {
@@ -89,7 +90,7 @@ FormatDialog::FormatDialog( View* view, const char* name )
 
 	m_entries.append( e );
 
-	m_combo->insertItem( e.name );
+	m_combo->insertItem( index++, e.name );
     }
 
     slotActivated( 0 );

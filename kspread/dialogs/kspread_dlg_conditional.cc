@@ -296,7 +296,7 @@ ConditionalDialog::ConditionalDialog( View * parent, const char * name,
   m_dlg->m_style_2->insertItems( 0, list );
   m_dlg->m_style_3->insertItems( 0, list );
 
-  setCaption( i18n( "Conditional Cell Attributes" ) );
+  setWindowTitle( i18n( "Conditional Cell Attributes" ) );
   setButtonBoxOrientation( Qt::Vertical );
   setMainWidget( m_dlg );
 

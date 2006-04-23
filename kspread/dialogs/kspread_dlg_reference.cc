@@ -313,7 +313,7 @@ EditAreaName::EditAreaName( View * parent,
     Sheet * t = sheetList.at(c);
     if (!t)
       continue;
-    m_sheets->insertItem( t->sheetName() );
+    m_sheets->insertItem( c, t->sheetName() );
   }
 
   QString tmpName;

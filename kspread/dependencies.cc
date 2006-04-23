@@ -566,7 +566,7 @@ void DependencyList::updateCell (const Point &cell) const
       c->testFlag (Cell::Flag_CircularCalculation))
   {
     kError(36001) << "ERROR: Circle, cell " << c->fullName() <<
-        ", in dep.manager for sheet " << sheet->name() << endl;
+        ", in dep.manager for sheet " << sheet->objectName() << endl;
     Value v;
     // don't set anything if the cell already has all these things set
     // this prevents endless loop for inter-sheet curcular dependencies,

@@ -134,7 +134,7 @@ CSVDialog::CSVDialog( View * parent, const char * name, QRect const & rect, Mode
 
 
   // Format: number, text, currency,
-  m_formatBox = new Q3ButtonGroup( page, "m_formatBox" );
+  m_formatBox = new Q3ButtonGroup( page );
   m_formatBox->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)1, (QSizePolicy::SizeType)1, 0, 0, m_formatBox->sizePolicy().hasHeightForWidth() ) );
   m_formatBox->setTitle( i18n( "Format" ) );
   m_formatBox->setColumnLayout(0, Qt::Vertical );
@@ -161,29 +161,29 @@ CSVDialog::CSVDialog( View * parent, const char * name, QRect const & rect, Mode
   m_radioDate->setText( i18n( "Date" ) );
   m_formatBoxLayout->addWidget( m_radioDate, 1, 2 );
 
-  m_comboLine = new QComboBox( false, page, "m_comboLine" );
-  m_comboLine->insertItem( i18n( "1" ) );
+  m_comboLine = new QComboBox( page );
+  m_comboLine->insertItem( 0, i18n( "1" ) );
   m_comboLine->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)1, (QSizePolicy::SizeType)0, 0, 0, m_comboLine->sizePolicy().hasHeightForWidth() ) );
 
   MyDialogLayout->addWidget( m_comboLine, 1, 3 );
 
-  m_comboQuote = new QComboBox( false, page, "m_comboQuote" );
-  m_comboQuote->insertItem( i18n( "\"" ) );
-  m_comboQuote->insertItem( i18n( "'" ) );
-  m_comboQuote->insertItem( i18n( "None" ) );
+  m_comboQuote = new QComboBox( page );
+  m_comboQuote->insertItem( 0, i18n( "\"" ) );
+  m_comboQuote->insertItem( 1, i18n( "'" ) );
+  m_comboQuote->insertItem( 2, i18n( "None" ) );
   m_comboQuote->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)1, (QSizePolicy::SizeType)0, 0, 0, m_comboQuote->sizePolicy().hasHeightForWidth() ) );
 
   MyDialogLayout->addWidget( m_comboQuote, 1, 2 );
   QSpacerItem* spacer_2 = new QSpacerItem( 0, 0, QSizePolicy::Minimum, QSizePolicy::Preferred );
   MyDialogLayout->addItem( spacer_2, 2, 3 );
 
-  TextLabel3 = new QLabel( page, "TextLabel3" );
+  TextLabel3 = new QLabel( page );
   TextLabel3->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)1, (QSizePolicy::SizeType)0, 0, 0, TextLabel3->sizePolicy().hasHeightForWidth() ) );
   TextLabel3->setText( i18n( "Start at line:" ) );
 
   MyDialogLayout->addWidget( TextLabel3, 0, 3 );
 
-  TextLabel2 = new QLabel( page, "TextLabel2" );
+  TextLabel2 = new QLabel( page );
   TextLabel2->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)1, (QSizePolicy::SizeType)0, 0, 0, TextLabel2->sizePolicy().hasHeightForWidth() ) );
   TextLabel2->setText( i18n( "Textquote:" ) );
 
@@ -480,7 +480,7 @@ void CSVDialog::fillComboBox()
 {
   m_comboLine->clear();
   for (int row = 0; row < m_sheet->numRows(); ++row)
-    m_comboLine->insertItem(QString::number(row + 1), row);
+    m_comboLine->insertItem(row, QString::number(row + 1));
 }
 
 void CSVDialog::setText(int row, int col, const QString& text)
