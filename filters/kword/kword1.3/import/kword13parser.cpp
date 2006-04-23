@@ -783,6 +783,7 @@ bool KWord13Parser :: characters ( const QString & ch )
 
     bool success=false;
 
+	QString tmp(ch);
     KWord13StackItem *stackItem = parserStack.current();
 
     if ( stackItem->elementType == KWord13TypeText )
@@ -804,17 +805,17 @@ bool KWord13Parser :: characters ( const QString & ch )
                 {
                     // Old KWord documents have a QChar(1) as anchor character
                     // So replace it with the anchor character of recent KWord versions
-                    ch[i]='#';
+                    tmp[i]='#';
                 }
                 else
                 {
-                    ch[i]='?';
+                    tmp[i]='?';
                     found = true;
                 }
             }
             if ( found )
                 kWarning(30520) << "Unexcepted control characters found in text!" << endl;
-            m_currentParagraph->appendText( ch );
+            m_currentParagraph->appendText( tmp );
             success = true;
         }
         else

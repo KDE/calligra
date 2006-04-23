@@ -932,7 +932,7 @@ bool KWord13OasisGenerator::generate ( const QString& fileName, KWord13Document&
 
     // Prepare manifest file - in memory (inspired by KoDocument::saveNativeFormat)
     QByteArray manifestData;
-    QBuffer manifestBuffer( manifestData );
+    QBuffer manifestBuffer( &manifestData );
     manifestBuffer.open( QIODevice::WriteOnly );
     m_manifestWriter = new KoXmlWriter( &manifestBuffer );
     m_manifestWriter->startDocument( "manifest:manifest" );
