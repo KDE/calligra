@@ -238,7 +238,7 @@ Driver* DriverManagerInternal::driver(const QString& name)
 //	KexiDBDbg << "drv="<<(long)drv <<endl;
 
 //	drv->setName(srv_name.latin1());
-	drv->d->service = ptr; //store info
+	drv->d->service = ptr.data(); //store info
 	drv->d->fileDBDriverMimeType = ptr->property("X-Kexi-FileDBDriverMime").toString();
 	drv->d->initInternalProperties();
 
@@ -358,7 +358,7 @@ KService::Ptr DriverManager::serviceInfo(const QString &name)
 {
 	if (!d_int->lookupDrivers()) {
 		setError(d_int);
-		return 0;
+		return KService::Ptr();
 	}
 	
 	clearError();
@@ -366,7 +366,7 @@ KService::Ptr DriverManager::serviceInfo(const QString &name)
 		return *d_int->m_services_lcase.find(name.lower());
 	} else {
 		setError(ERR_DRIVERMANAGER, i18n("No such driver service: \"%1\".").arg(name) );
-		return 0;
+		return KService::Ptr();
 	}
 }
 
