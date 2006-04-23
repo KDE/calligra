@@ -21,6 +21,7 @@
 #define KEXISHAREDACTIONCLIENT_H
 
 #include <qasciidict.h>
+#include <kexi_export.h>
 
 class KAction;
 

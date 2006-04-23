@@ -22,6 +22,7 @@
 #define KEXIRECORDNAVIGATOR_H
 
 #include <qframe.h>
+#include <kexi_export.h>
 
 class QToolButton;
 class QIntValidator;
