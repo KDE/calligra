@@ -68,6 +68,7 @@ class KEXIDATATABLE_EXPORT KexiDataAwarePropertySet : public QObject
 
 		uint size() const;
 		KoProperty::Set* currentPropertySet() const;
+		uint currentRow() const;
 		inline KoProperty::Set* at(uint row) const { return m_sets[row]; }
 
 		/*! \return buffer assigned for \a item or null it \a item has no
