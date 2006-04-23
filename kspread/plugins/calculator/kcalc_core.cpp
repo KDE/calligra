@@ -73,7 +73,7 @@ stack_ptr       top_type_stack[2] = { NULL, NULL };
 int             stack_next, stack_last;
 stack_item      process_stack[STACK_SIZE];
 
-int             inverse = FALSE;
+int             inverse = false;
 int             precedence_base = 0;
 num_base        current_base = NB_DECIMAL;
 int             input_limit = 0;
@@ -231,7 +231,7 @@ void QtCalculator::RefreshCalculator(void)
         InitStack();
         display_error = 0;
         DISPLAY_AMOUNT = 0L;
-        inverse = FALSE;
+        inverse = false;
         UpdateDisplay();
         last_input = DIGIT; // must set last to DIGIT after Update Display in order
                             // not to get a display holding e.g. 0.000
@@ -447,7 +447,7 @@ void QtCalculator::Or()
   eestate = false;
   if (inverse){
     EnterStackFunction(2);   // XOR
-    inverse = FALSE;
+    inverse = false;
   }
   else {
     EnterStackFunction(1);   // OR
@@ -469,7 +469,7 @@ void QtCalculator::Shift()
   last_input = OPERATION;
   if (inverse){
     EnterStackFunction(5);   // Rsh
-    inverse = FALSE;
+    inverse = false;
   }
   else {
     EnterStackFunction(4);   // Lsh
@@ -512,7 +512,7 @@ void QtCalculator::Mod()
   last_input = OPERATION;
   if (inverse){
     EnterStackFunction(13);   // InvMod
-    inverse = FALSE;
+    inverse = false;
   }
   else {
     EnterStackFunction(10);   // Mod
@@ -525,7 +525,7 @@ void QtCalculator::Power()
   last_input = OPERATION;
   if (inverse){
     EnterStackFunction(12);   // InvPower
-    inverse = FALSE;
+    inverse = false;
   }
   else {
     EnterStackFunction(11);   // Power
@@ -546,7 +546,7 @@ void QtCalculator::EnterStackFunction(int data)
         /*
         if (inverse ) {
           dummy = 3;
-          inverse = FALSE;
+          inverse = false;
         }
         else {
           dummy = 1;
@@ -647,7 +647,7 @@ void QtCalculator::EnterInt()
             }
         else {
           DISPLAY_AMOUNT = work_amount1;
-          inverse = FALSE;
+          inverse = false;
         }
 
         refresh_display = 1;
@@ -695,7 +695,7 @@ void QtCalculator::EnterSquare()
         else
                 DISPLAY_AMOUNT = SQRT(DISPLAY_AMOUNT);
         refresh_display = 1;
-        inverse = FALSE;
+        inverse = false;
         last_input = OPERATION;
         UpdateDisplay();
 
@@ -887,7 +887,7 @@ void QtCalculator::ComputeSin()
       DISPLAY_AMOUNT = ASINH( work_amount);
       if (errno == EDOM || errno == ERANGE)
         display_error = 1;
-      inverse = FALSE;       // reset the inverse flag
+      inverse = false;       // reset the inverse flag
     }
   }
   else {
@@ -924,7 +924,7 @@ void QtCalculator::ComputeSin()
       DISPLAY_AMOUNT = work_amount;
       if (errno == EDOM || errno == ERANGE)
         display_error = 1;
-      inverse = FALSE;          // reset the inverse flag
+      inverse = false;          // reset the inverse flag
     }
   }
 
@@ -1017,7 +1017,7 @@ void QtCalculator::ComputeCos()
       DISPLAY_AMOUNT = ACOSH( work_amount);
       if (errno == EDOM || errno == ERANGE)
         display_error = 1;
-      inverse = FALSE;       // reset the inverse flag
+      inverse = false;       // reset the inverse flag
     }
   }
   else {
@@ -1056,7 +1056,7 @@ void QtCalculator::ComputeCos()
 
       if (errno == EDOM || errno == ERANGE)
         display_error = 1;
-      inverse = FALSE;          // reset the inverse flag
+      inverse = false;          // reset the inverse flag
     }
   }
 
@@ -1142,7 +1142,7 @@ void QtCalculator::ComputeTan()
       DISPLAY_AMOUNT = ATANH( work_amount);
       if (errno == EDOM || errno == ERANGE)
         display_error = 1;
-      inverse = FALSE;       // reset the inverse flag
+      inverse = false;       // reset the inverse flag
     }
   }
   else {
@@ -1183,7 +1183,7 @@ void QtCalculator::ComputeTan()
 
       if (errno == EDOM || errno == ERANGE)
         display_error = 1;
-      inverse = FALSE;          // reset the inverse flag
+      inverse = false;          // reset the inverse flag
     }
   }
 
@@ -1261,7 +1261,7 @@ void QtCalculator::EnterLogr()
     } else if (inverse) {
       DISPLAY_AMOUNT = POW(10, DISPLAY_AMOUNT);
       refresh_display = 1;
-      inverse = FALSE;
+      inverse = false;
       UpdateDisplay();
     }
     break;
@@ -1313,7 +1313,7 @@ void QtCalculator::EnterLogn()
     } else if (inverse) {
       DISPLAY_AMOUNT = EXP(DISPLAY_AMOUNT);
       refresh_display = 1;
-      inverse =FALSE;
+      inverse =false;
       UpdateDisplay();
     }
     break;
@@ -1444,7 +1444,7 @@ void QtCalculator::EE()
 {
   if(inverse){
     DISPLAY_AMOUNT = pi;
-    inverse = FALSE;
+    inverse = false;
     UpdateDisplay();
   }
   else{
@@ -1479,7 +1479,7 @@ void QtCalculator::Mplusminus()
     memory_num += DISPLAY_AMOUNT;
   else {
     memory_num -= DISPLAY_AMOUNT;
-    inverse = FALSE;
+    inverse = false;
   }
 }
 

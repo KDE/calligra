@@ -39,7 +39,7 @@ struct arrayChunk {
     ptr = new Value* [c*r];
     for (int i = 0; i < c*r; ++i) ptr[i] = 0;
   }
-  
+
   ~arrayChunk () {
     if (!ptr) return;
     unsigned count = cols * rows;
@@ -52,7 +52,7 @@ struct arrayChunk {
   {
     operator=( ac );
   }
-  
+
   arrayChunk& operator= ( const arrayChunk& ac )
   {
     cols = ac.cols; rows = ac.rows;
@@ -65,7 +65,7 @@ struct arrayChunk {
         ptr[i] = 0;
     return *this;
   }
-  
+
   Value **ptr;
   unsigned cols, rows;
 };
@@ -80,20 +80,20 @@ public:
   unsigned columns;
   unsigned rows;
   unsigned chunkCols, chunkRows;
-  
+
   ValueArray(): chunks(0), columns(0), rows(0), chunkCols(0), chunkRows(0) {};
-  
+
   ~ValueArray()
-  { 
+  {
     clear();
   };
-   
+
   ValueArray( const ValueArray& va )
     : chunks(0), columns(0), rows(0), chunkCols(0), chunkRows(0)
   {
     operator=( va );
   }
-  
+
   ValueArray& operator= ( const ValueArray& va )
   {
     init( va.columns, va.rows );
@@ -105,7 +105,7 @@ public:
         chunks[i] = 0;
     return *this;
   }
-   
+
   void clear()
   {
     int c = columns / CHUNK_COLS;
@@ -121,7 +121,7 @@ public:
     chunks = 0;
     columns = rows = chunkCols = chunkRows = 0;
   }
-  
+
   void init( unsigned c, unsigned r )
   {
     if (chunks) clear();
@@ -137,13 +137,13 @@ public:
     for( unsigned i = 0; i < count; i++ )
       chunks[i] = 0;
   }
-  
+
   Value* at( unsigned c, unsigned r ) const
   {
     if( !chunks ) return 0;
     if( c >= columns ) return 0;
     if( r >= rows ) return 0;
-    
+
     int col = c / CHUNK_COLS;
     int row = r / CHUNK_ROWS;
     int cpos = c % CHUNK_COLS;
@@ -152,7 +152,7 @@ public:
     if (!chunk) return 0;
     return chunk->ptr[rpos * chunk->cols + cpos];
   };
-  
+
   void set( unsigned c, unsigned r, Value* v )
   {
     if (!chunks) return;
@@ -601,7 +601,7 @@ QDate Value::asDate() const
 
   int i = asInteger();
   dt = dt.addDays( i );
-  
+
   return dt;
 }
 
@@ -609,10 +609,10 @@ QDate Value::asDate() const
 QTime Value::asTime() const
 {
   QTime dt;
-  
+
   int i = asInteger();
   dt = dt.addMSecs(i) /*( f * 86400 * 1000  )*/;
-  
+
   return dt;
 }
 
@@ -767,62 +767,62 @@ bool Value::allowComparison( const Value& v ) const
 {
   Value::Type t1 = d->type;
   Value::Type t2 = v.type();
-  
+
   if( ( t1 == Empty ) && ( t2 == Empty ) ) return true;
   if( ( t1 == Empty ) && ( t2 == String ) ) return true;
-  
+
   if( ( t1 == Boolean ) && ( t2 == Boolean ) ) return true;
   if( ( t1 == Boolean ) && ( t2 == Integer ) ) return true;
   if( ( t1 == Boolean ) && ( t2 == Float ) ) return true;
   if( ( t1 == Boolean ) && ( t2 == String ) ) return true;
-    
+
   if( ( t1 == Integer ) && ( t2 == Boolean ) ) return true;
   if( ( t1 == Integer ) && ( t2 == Integer ) ) return true;
   if( ( t1 == Integer ) && ( t2 == Float ) ) return true;
   if( ( t1 == Integer ) && ( t2 == String ) ) return true;
-  
+
   if( ( t1 == Float ) && ( t2 == Boolean ) ) return true;
   if( ( t1 == Float ) && ( t2 == Integer ) ) return true;
   if( ( t1 == Float ) && ( t2 == Float ) ) return true;
   if( ( t1 == Float ) && ( t2 == String ) ) return true;
-  
+
   if( ( t1 == String ) && ( t2 == Empty ) ) return true;
   if( ( t1 == String ) && ( t2 == Boolean ) ) return true;
   if( ( t1 == String ) && ( t2 == Integer ) ) return true;
   if( ( t1 == String ) && ( t2 == Float ) ) return true;
   if( ( t1 == String ) && ( t2 == String ) ) return true;
-  
+
   // errors can be compared too ...
   if ((t1 == Error) && (t2 == Error)) return true;
-  
+
   return false;
 }
 
 // compare values. looks strange in order to be compatible with Excel
-int Value::compare( const Value& v ) const 
+int Value::compare( const Value& v ) const
 {
   Value::Type t1 = d->type;
   Value::Type t2 = v.type();
-  
+
   // errors always less than everything else
   if( ( t1 == Error ) && ( t2 != Error ) )
     return -1;
   if( ( t2 == Error ) && ( t1 != Error ) )
     return 1;
-    
-  // comparing errors only yields 0 if they are the same  
+
+  // comparing errors only yields 0 if they are the same
   if( ( t1 == Error ) && ( t2 == Error ) )
     return errorMessage() != v.errorMessage();
-  
+
   // empty == empty
   if( ( t1 == Empty ) && ( t2 == Empty ) )
     return 0;
-  
+
   // empty value is always less than string
   // (except when the string is empty)
   if( ( t1 == Empty ) && ( t2 == String ) )
     return( v.asString().isEmpty() ) ? 0 : -1;
-    
+
   // boolean vs boolean
   if( ( t1 == Boolean ) && ( t2 == Boolean ) )
   {
@@ -831,51 +831,51 @@ int Value::compare( const Value& v ) const
     if( p ) return q ? 0 : 1;
     else return q ? -1 : 0;
   }
-  
+
   // boolean is always greater than integer
   if( ( t1 == Boolean ) && ( t2 == Integer ) )
     return 1;
-  
+
   // boolean is always greater than float
   if( ( t1 == Boolean ) && ( t2 == Float ) )
     return 1;
-  
+
   // boolean is always greater than string
   if( ( t1 == Boolean ) && ( t2 == String ) )
     return 1;
-  
+
   // integer is always less than boolean
   if( ( t1 == Integer ) && ( t2 == Boolean ) )
     return -1;
-    
+
   // integer vs integer
   if( ( t1 == Integer ) && ( t2 == Integer ) )
   {
     long p = asInteger();
-    long q = v.asInteger();   
+    long q = v.asInteger();
     return ( p == q ) ? 0 : ( p < q ) ? -1 : 1;
-  }  
-  
+  }
+
   // integer vs float
   if( ( t1 == Integer ) && ( t2 == Float ) )
     return compare( asFloat(), v.asFloat() );
-  
+
   // integer is always less than string
   if( ( t1 == Integer ) && ( t2 == String ) )
     return -1;
-  
+
   // float is always less than boolean
   if( ( t1 == Float ) && ( t2 == Boolean ) )
     return -1;
-  
+
   // float vs integer
   if( ( t1 == Float ) && ( t2 == Integer ) )
     return compare( asFloat(), v.asFloat() );
-  
+
   // float vs float
   if( ( t1 == Float ) && ( t2 == Float ) )
     return compare( asFloat(), v.asFloat() );
-  
+
   // float is always less than string
   if( ( t1 == Float ) && ( t2 == String ) )
     return -1;
@@ -884,15 +884,15 @@ int Value::compare( const Value& v ) const
   // (except when the string is empty)
   if( ( t1 == String ) && ( t2 == Empty ) )
     return( asString().isEmpty() ) ? 0 : 1;
-  
+
   // string is always less than boolean
   if( ( t1 == String ) && ( t2 == Boolean ) )
     return -1;
-  
+
   // string is always greater than integer
   if( ( t1 == String ) && ( t2 == Integer ) )
     return 1;
-    
+
   // string is always greater than float
   if( ( t1 == String ) && ( t2 == Float ) )
     return 1;
@@ -923,7 +923,7 @@ bool Value::greater( const Value& v ) const
   return compare( v ) > 0;
 }
 
-QTextStream& operator<<( QTextStream& ts, Value::Type type ) 
+QTextStream& operator<<( QTextStream& ts, Value::Type type )
 {
   switch( type )
   {
@@ -939,30 +939,30 @@ QTextStream& operator<<( QTextStream& ts, Value::Type type )
   return ts;
 }
 
-QTextStream& operator<<( QTextStream& ts, Value value ) 
+QTextStream& operator<<( QTextStream& ts, Value value )
 {
   ts << value.type();
   switch( value.type() )
   {
     case Value::Empty:   break;
-    
-    case Value::Boolean: 
-      ts << ": "; 
-      if (value.asBoolean()) ts << "TRUE"; 
+
+    case Value::Boolean:
+      ts << ": ";
+      if (value.asBoolean()) ts << "TRUE";
       else ts << "FALSE"; break;
-      
-    case Value::Integer: 
+
+    case Value::Integer:
       ts << ": " << value.asInteger(); break;
-      
-    case Value::Float:   
+
+    case Value::Float:
       ts << ": " << value.asFloat(); break;
-      
-    case Value::String:  
+
+    case Value::String:
       ts << ": " << value.asString(); break;
-      
-    case Value::Error: 
+
+    case Value::Error:
       ts << "(" << value.errorMessage() << ")"; break;
-    
+
     default: break;
   }
   return ts;

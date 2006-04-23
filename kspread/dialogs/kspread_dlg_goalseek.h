@@ -59,7 +59,7 @@ class GoalSeekDialog : public KDialog
 
  public:
    GoalSeekDialog( View * parent, QPoint const & marker, const char * name = 0,
-                      bool modal = FALSE, Qt::WFlags fl = 0 );
+                      bool modal = false, Qt::WFlags fl = 0 );
    ~GoalSeekDialog();
 
   /**

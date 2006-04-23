@@ -358,7 +358,7 @@ class EmbeddedPictureObject : public EmbeddedObject
     //virtual void loadOasis(const QDomElement &element, KoOasisLoadingContext & context, KPRLoadingInfo *info);
 
 //     virtual void draw( QPainter *_painter, KoZoomHandler*_zoomHandler,
-//                        int /* page */, SelectionMode selectionMode, bool drawContour = FALSE );
+//                        int /* page */, SelectionMode selectionMode, bool drawContour = false );
 
     QPixmap getOriginalPixmap();
     PictureMirrorType getPictureMirrorType() const { return mirrorType; }

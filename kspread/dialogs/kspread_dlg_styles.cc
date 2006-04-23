@@ -53,7 +53,7 @@ StyleWidget::StyleWidget( QWidget * parent, const char * name, Qt::WFlags fl )
   m_styleList->setResizeMode( K3ListView::AllColumns );
   layout->addWidget( m_styleList );
 
-  m_displayBox = new KComboBox( FALSE, this );
+  m_displayBox = new KComboBox( false, this );
   m_displayBox->setObjectName( "m_displayBox" );
   layout->addWidget( m_displayBox );
 

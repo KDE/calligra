@@ -71,7 +71,7 @@ void ToolBox::setEnabled( bool enable )
 	    {
 		if ( child->isWidgetType() )
 	        {
-                    static_cast<QWidget*>(child)->setEnabled( FALSE );
+                    static_cast<QWidget*>(child)->setEnabled( false );
 		    // child->clearWState( WState_ForceDisabled );
 		}
 	    }

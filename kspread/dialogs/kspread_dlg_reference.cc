@@ -293,7 +293,7 @@ EditAreaName::EditAreaName( View * parent,
 
   EditAreaNameLayout->addWidget( TextLabel1, 1, 0 );
 
-  m_sheets = new QComboBox( FALSE, page, "m_sheets" );
+  m_sheets = new QComboBox( false, page, "m_sheets" );
 
   EditAreaNameLayout->addWidget( m_sheets, 1, 1 );
 

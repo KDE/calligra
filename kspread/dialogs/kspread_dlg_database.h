@@ -60,7 +60,7 @@ class DatabaseDialog : public K3Wizard
  public:
   enum PageId { eDatabase = 0, eSheets = 1, eColumns = 2, eOptions = 3, eResult = 4 };
 
-  DatabaseDialog( View * parent, QRect const & rect, const char * name = 0, bool modal = FALSE, Qt::WFlags fl = 0 );
+  DatabaseDialog( View * parent, QRect const & rect, const char * name = 0, bool modal = false, Qt::WFlags fl = 0 );
   virtual ~DatabaseDialog();
 
  private slots:

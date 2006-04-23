@@ -161,13 +161,13 @@ CSVDialog::CSVDialog( View * parent, const char * name, QRect const & rect, Mode
   m_radioDate->setText( i18n( "Date" ) );
   m_formatBoxLayout->addWidget( m_radioDate, 1, 2 );
 
-  m_comboLine = new QComboBox( FALSE, page, "m_comboLine" );
+  m_comboLine = new QComboBox( false, page, "m_comboLine" );
   m_comboLine->insertItem( i18n( "1" ) );
   m_comboLine->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)1, (QSizePolicy::SizeType)0, 0, 0, m_comboLine->sizePolicy().hasHeightForWidth() ) );
 
   MyDialogLayout->addWidget( m_comboLine, 1, 3 );
 
-  m_comboQuote = new QComboBox( FALSE, page, "m_comboQuote" );
+  m_comboQuote = new QComboBox( false, page, "m_comboQuote" );
   m_comboQuote->insertItem( i18n( "\"" ) );
   m_comboQuote->insertItem( i18n( "'" ) );
   m_comboQuote->insertItem( i18n( "None" ) );

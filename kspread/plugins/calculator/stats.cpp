@@ -31,7 +31,7 @@
 
 KStats::KStats(){
 
-  error_flag = FALSE;
+  error_flag = false;
   data.setAutoDelete(true);
 
 }
@@ -306,7 +306,7 @@ bool KStats::error(){
 
   bool value;
   value = error_flag;
-  error_flag = FALSE;
+  error_flag = false;
 
   return value;
 

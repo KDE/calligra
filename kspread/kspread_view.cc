@@ -5019,7 +5019,7 @@ void View::print( KPrinter &prt )
           continue;
         }
 
-        setActiveSheet(sheet,FALSE);
+        setActiveSheet(sheet,false);
 
         SheetPrint* print = d->activeSheet->print();
 

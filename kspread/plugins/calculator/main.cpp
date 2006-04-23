@@ -114,7 +114,7 @@ Calculator::~Calculator()
 bool Calculator::eventFilter( QObject*, QEvent* ev )
 {
     if ( !m_calc )
-        return FALSE;
+        return false;
 
     if ( SelectionChanged::test( ev ) )
     {
@@ -122,18 +122,18 @@ bool Calculator::eventFilter( QObject*, QEvent* ev )
 
         // Selection cleared ?
         if (!event->region().isValid())
-            return FALSE;
+            return false;
 
         Sheet* sheet = m_view->doc()->map()->findSheet( event->sheet() );
         if ( !sheet )
-            return FALSE;
+            return false;
 
         // A single cell selected ?
         if (event->region().isSingular())
         {
             Cell* cell = sheet->cellAt( event->rect().left(), event->rect().top(), false );
             if ( !cell )
-                return FALSE;
+                return false;
 
             double d;
             if ( cell->isEmpty() )
@@ -142,7 +142,7 @@ bool Calculator::eventFilter( QObject*, QEvent* ev )
                 d = cell->value().asFloat();
             m_calc->setValue( d );
 
-            return FALSE;
+            return false;
         }
 
         // Multiple cells selected ?
@@ -150,10 +150,10 @@ bool Calculator::eventFilter( QObject*, QEvent* ev )
         QString str = util_rangeName( sheet, event->rect() );
         m_calc->setLabel( str.toLatin1() );
 
-        return FALSE;
+        return false;
     }
 
-    return FALSE;
+    return false;
 }
 
 /***************************************************

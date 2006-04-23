@@ -116,7 +116,7 @@ public:
 
     void setPattern( const QColor &_color, int _width, Qt::PenStyle _style );
     void setUndefined();
-    void setDefined() { undefined = FALSE; repaint(); }
+    void setDefined() { undefined = false; repaint(); }
 
     bool isDefined() { return !undefined; }
 

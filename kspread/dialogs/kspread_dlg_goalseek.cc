@@ -217,12 +217,12 @@ bool GoalSeekDialog::eventFilter( QObject* obj, QEvent* ev )
   else if ( obj == m_sourceEdit && ev->type() == QEvent::FocusIn )
     m_focus = m_sourceEdit;
   else
-    return FALSE;
+    return false;
 
   if ( m_focus )
     m_pView->canvasWidget()->startChoose();
 
-  return FALSE;
+  return false;
 }
 
 void GoalSeekDialog::closeEvent ( QCloseEvent * e )

@@ -324,7 +324,7 @@ static ParameterType toType( const QString& type )
   return KSpread_Float;
 }
 
-static QString toString (ParameterType type, bool range = FALSE)
+static QString toString (ParameterType type, bool range = false)
 {
   if ( !range )
   {
@@ -363,7 +363,7 @@ static QString toString (ParameterType type, bool range = FALSE)
 FunctionParameter::FunctionParameter()
 {
   m_type = KSpread_Float;
-  m_range = FALSE;
+  m_range = false;
 }
 
 FunctionParameter::FunctionParameter (const FunctionParameter& param)
@@ -376,7 +376,7 @@ FunctionParameter::FunctionParameter (const FunctionParameter& param)
 FunctionParameter::FunctionParameter (const QDomElement& element)
 {
   m_type  = KSpread_Float;
-  m_range = FALSE;
+  m_range = false;
 
   QDomNode n = element.firstChild();
   for( ; !n.isNull(); n = n.nextSibling() )

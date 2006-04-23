@@ -168,7 +168,7 @@ FormulaDialog::FormulaDialog( View* parent, const char* name,const QString& form
     grid2->addStretch( 10 );
 
     m_tabwidget->addTab( m_input, i18n("&Parameters") );
-    m_tabwidget->setTabEnabled( m_input, FALSE );
+    m_tabwidget->setTabEnabled( m_input, false );
 
     m_tabwidget->setCurrentPage( index );
 
@@ -291,12 +291,12 @@ bool FormulaDialog::eventFilter( QObject* obj, QEvent* ev )
     else if ( obj == fiveElement && ev->type() == QEvent::FocusIn )
         m_focus = fiveElement;
     else
-        return FALSE;
+        return false;
 
     if ( m_focus )
         m_pView->canvasWidget()->startChoose();
 
-    return FALSE;
+    return false;
 }
 
 void FormulaDialog::slotOk()
@@ -407,12 +407,12 @@ QString FormulaDialog::createFormula()
     if(!firstElement->text().isEmpty() && count >= 1 )
     {
         tmp=tmp+createParameter(firstElement->text(), 0 );
-	first = FALSE;
+	first = false;
     }
 
     if(!secondElement->text().isEmpty() && count >= 2 )
     {
-	first = FALSE;
+	first = false;
 	if ( !first )
 	    tmp=tmp+";"+createParameter(secondElement->text(), 1 );
 	else
@@ -420,7 +420,7 @@ QString FormulaDialog::createFormula()
     }
     if(!thirdElement->text().isEmpty() && count >= 3 )
     {
-	first = FALSE;
+	first = false;
 	if ( !first )
 	    tmp=tmp+";"+createParameter(thirdElement->text(), 2 );
         else
@@ -428,7 +428,7 @@ QString FormulaDialog::createFormula()
     }
     if(!fourElement->text().isEmpty() && count >= 4 )
     {
-	first = FALSE;
+	first = false;
 	if ( !first )
 	    tmp=tmp+";"+createParameter(fourElement->text(), 3 );
         else
@@ -436,7 +436,7 @@ QString FormulaDialog::createFormula()
     }
     if(!fiveElement->text().isEmpty() && count >= 5 )
     {
-	first = FALSE;
+	first = false;
 	if ( !first )
 	    tmp=tmp+";"+createParameter(fiveElement->text(), 4 );
         else
@@ -701,7 +701,7 @@ void FormulaDialog::slotSelected( const QString& function )
     m_focus=0;
 
     m_tabwidget->setCurrentPage( 0 );
-    m_tabwidget->setTabEnabled( m_input, FALSE );
+    m_tabwidget->setTabEnabled( m_input, false );
 
     // Unlock
     refresh_result=true;
