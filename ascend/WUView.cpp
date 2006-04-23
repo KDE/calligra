@@ -87,11 +87,11 @@ void WUView::setupWriteUpGUI()
     // Add some GUI parts unique to WriteUP
 
     m_actionFormatBold = dynamic_cast<KToggleAction *> (actionCollection()->action("format_bold" ) );
-    m_actionFormatBold->setIcon( "hi48-action-format_bold_active" );
+    m_actionFormatBold->setIcon( KIcon("hi48-action-format_bold_active") );
     m_actionFormatItalic = dynamic_cast<KToggleAction *> (actionCollection()->action("format_italic" ) );
-    m_actionFormatItalic->setIcon( "hi48-action-format_italic_active" );
+    m_actionFormatItalic->setIcon( KIcon("hi48-action-format_italic_active") );
     m_actionFormatUnderline = dynamic_cast<KToggleAction *> (actionCollection()->action("format_underline" ) );
-    m_actionFormatUnderline->setIcon( "hi48-action-format_underline_active" );
+    m_actionFormatUnderline->setIcon( KIcon("hi48-action-format_underline_active") );
 
 #if 1
     m_toolBox = new KoToolBox(mainWindow(), "ToolBox", WUFactory::instance(),
