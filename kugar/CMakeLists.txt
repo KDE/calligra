@@ -1,6 +1,6 @@
 kde4_header()
 project(kugar)
-include_directories( ${CMAKE_SOURCE_DIR}/libs/ )
+include_directories( ${CMAKE_SOURCE_DIR}/libs/ ${KOFFICECORE_INCLUDES})
 
 set(libkudesignercommon_SRCS 
 	${CMAKE_SOURCE_DIR}/kugar/kudesigner_lib/band.cpp 
