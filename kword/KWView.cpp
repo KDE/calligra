@@ -130,7 +130,7 @@
 #include <qbuffer.h>
 //Added by qt3to4:
 #include <QResizeEvent>
-#include <Q3PopupMenu>
+#include <QMenu>
 #include <Q3StrList>
 #include <Q3GridLayout>
 #include <Q3CString>
@@ -5545,7 +5545,7 @@ void KWView::newRightIndent( double rightIndent)
         m_doc->addCommand(macroCmd);
 }
 
-Q3PopupMenu * KWView::popupMenu( const QString& name )
+QMenu * KWView::popupMenu( const QString& name )
 {
     // factory() is 0 when right-clicking on the kword document while
     // an embedded object is active. KoPartManager lets the click through,
@@ -5554,7 +5554,7 @@ Q3PopupMenu * KWView::popupMenu( const QString& name )
         partManager()->setActivePart( m_doc, this );
     Q_ASSERT( factory() );
     if ( factory() )
-        return ((Q3PopupMenu*)factory()->container( name, this ));
+        return ((QMenu*)factory()->container( name, this ));
     return 0;
 }
 
@@ -6682,7 +6682,7 @@ void KWView::openDocStructurePopupMenu( const QPoint &p, KWFrameSet *frameset, K
     m_actionDocStructDelete->setEnabled( (rw && !parag && !frameset->isMainFrameset() &&
         !frameset->isFootEndNote() && !frameset->isHeaderOrFooter()) );
 
-    Q3PopupMenu* popup = static_cast<Q3PopupMenu *>(factory()->container("docstruct_popup",this));
+    QMenu* popup = static_cast<QMenu *>(factory()->container("docstruct_popup",this));
     if ( popup )
         popup->exec(p);
 }

@@ -42,7 +42,7 @@
 //Added by qt3to4:
 #include <Q3ValueList>
 #include <QResizeEvent>
-#include <Q3PopupMenu>
+#include <QMenu>
 #include <Q3PtrList>
 
 class KWPage;
@@ -190,7 +190,7 @@ public:
 
     void deleteFrame(bool warning=true);
 
-    Q3PopupMenu * popupMenu( const QString& name );
+    QMenu * popupMenu( const QString& name );
 
     QList<KAction*> &dataToolActionList() { return m_actionList; }
     QList<KAction*> &variableActionList() { return m_variableActionList; }

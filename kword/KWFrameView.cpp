@@ -125,7 +125,7 @@ void KWFrameView::setSelected(bool selected, MouseMeaning selectPolicy) {
 void KWFrameView::showPopup( const KoPoint &point, KWView *view, const QPoint &popupPoint) const {
     view->unplugActionList( "tableactions" );
     view->unplugActionList( "frameset_type_action" );
-    Q3PopupMenu *popup = m_policy->createPopup(point, view);
+    QMenu *popup = m_policy->createPopup(point, view);
     Q_ASSERT(popup);
     popup->popup(popupPoint);
 }
@@ -250,7 +250,7 @@ MouseMeaning TableFramePolicy::mouseMeaning( const KoPoint &point, int keyState 
 
     return MEANING_MOUSE_INSIDE_TEXT;
 }
-Q3PopupMenu* TableFramePolicy::createPopup( const KoPoint &point, KWView *view ) {
+QMenu* TableFramePolicy::createPopup( const KoPoint &point, KWView *view ) {
     view->plugActionList( "tableactions", view->tableActions() );
     if( m_view->isBorderHit(point) )
         return view->popupMenu("frame_popup_table");
@@ -326,7 +326,7 @@ MouseMeaning PartFramePolicy::mouseMeaning( const KoPoint &point, int keyState )
         return MEANING_ACTIVATE_PART;
     return MEANING_MOUSE_SELECT;
 }
-Q3PopupMenu* PartFramePolicy::createPopup( const KoPoint &point, KWView *view ) {
+QMenu* PartFramePolicy::createPopup( const KoPoint &point, KWView *view ) {
     Q_UNUSED(point);
     KWPartFrameSet *part = static_cast<KWPartFrameSet *>(m_view->frame()->frameSet());
     KActionSeparator *separator=new KActionSeparator();
@@ -366,7 +366,7 @@ MouseMeaning TextFramePolicy::mouseMeaning( const KoPoint &point, int keyState )
     }
     return MEANING_MOUSE_INSIDE_TEXT;
 }
-Q3PopupMenu* TextFramePolicy::createPopup( const KoPoint &point, KWView *view ) {
+QMenu* TextFramePolicy::createPopup( const KoPoint &point, KWView *view ) {
     if( m_view->isBorderHit(point) ) {
         KWFrameSet *fs = m_view->frame()->frameSet();
         KActionSeparator *separator=new KActionSeparator();
@@ -466,7 +466,7 @@ MouseMeaning ImageFramePolicy::mouseMeaning( const KoPoint &point, int keyState 
     Q_UNUSED(keyState);
     return m_view->selected() ? MEANING_MOUSE_MOVE: MEANING_MOUSE_SELECT;
 }
-Q3PopupMenu* ImageFramePolicy::createPopup( const KoPoint &point, KWView *view ) {
+QMenu* ImageFramePolicy::createPopup( const KoPoint &point, KWView *view ) {
     Q_UNUSED(point);
     KActionSeparator *separator=new KActionSeparator();
     KActionCollection *actionCollection = view->actionCollection();
