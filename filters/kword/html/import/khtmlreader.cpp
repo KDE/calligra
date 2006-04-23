@@ -62,7 +62,7 @@ bool KHTMLReader::filter(KUrl url) {
 	}
 
 	//FIXME use synchronous IO instead of this hack if possible.
-	QWidget dummy(0,0,WType_Dialog | WShowModal);
+	QWidget dummy(0);//,0,WType_Dialog | WShowModal);
 	qt_enter_modal(&dummy);
 	qApp->enter_loop();
 	qt_leave_modal(&dummy);

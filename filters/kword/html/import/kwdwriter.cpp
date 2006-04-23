@@ -533,7 +533,7 @@ QDomElement KWDWriter::docroot() {
 }
 
 bool KWDWriter::writeDoc() {
-	Q3CString str=_doc->toCString();
+	QByteArray str=_doc->toByteArray();
 	kWarning(30503) << str << endl;
 
 	if (!_store->open("root")) {
@@ -546,7 +546,7 @@ bool KWDWriter::writeDoc() {
 	if (!_store->open("documentinfo.xml")) {
 		kWarning(30503) << "WARNING: unable to write out doc info. continuing anyway" << endl;
 	} else {
-		str=_docinfo->toCString();
+		str=_docinfo->toByteArray();
 		_store->write((const char *)str, str.length());
 		_store->close();
 	}

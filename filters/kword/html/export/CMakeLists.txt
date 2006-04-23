@@ -19,9 +19,9 @@ kde4_add_ui3_files(htmlexport_PART_SRCS ExportDialogUI.ui )
 
 kde4_add_plugin(htmlexport WITH_PREFIX ${htmlexport_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} htmlexport kwordexportfilters ${KDE4_KDEUI_LIBS} )
+kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} htmlexport )
 
-target_link_libraries(htmlexport  ${KDE4_KDECORE_LIBS} )
+target_link_libraries(htmlexport  ${KDE4_KDECORE_LIBS} kwordexportfilters ${KDE4_KDEUI_LIBS})
 
 install_targets(${PLUGIN_INSTALL_DIR} htmlexport )
 

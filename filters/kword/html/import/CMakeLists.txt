@@ -1,6 +1,6 @@
 kde4_header()
 
-
+include_directories(${KOTEXT_INCLUDES})
 
 
 ########### next target ###############
@@ -13,7 +13,7 @@ kde4_add_plugin(htmlimport WITH_PREFIX ${htmlimport_PART_SRCS})
 
 kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} htmlimport )
 
-target_link_libraries(htmlimport  ${KDE4_KDECORE_LIBS} )
+target_link_libraries(htmlimport  ${KDE4_KDECORE_LIBS} kotext khtml )
 
 install_targets(${PLUGIN_INSTALL_DIR} htmlimport )
 
