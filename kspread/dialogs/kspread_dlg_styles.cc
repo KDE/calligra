@@ -82,7 +82,7 @@ StyleDlg::StyleDlg( View * parent, StyleManager * manager,
     m_styleManager( manager ),
     m_dlg( new StyleWidget( this ) )
 {
-  setCaption( i18n( "Style Manager" ) );
+  setWindowTitle( i18n( "Style Manager" ) );
   setButtonBoxOrientation( Qt::Vertical );
   setMainWidget( m_dlg );
 

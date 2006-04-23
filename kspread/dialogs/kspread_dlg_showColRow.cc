@@ -53,11 +53,11 @@ ShowColRow::ShowColRow( View* parent, const char* name, Type _type )
   QLabel *label = new QLabel( page );
 
   if(_type==Column) {
-        setCaption( i18n("Show Columns") );
+    setWindowTitle( i18n("Show Columns") );
         label->setText(i18n("Select hidden columns to show:"));
   }
   else if(_type==Row) {
-        setCaption( i18n("Show Rows") );
+    setWindowTitle( i18n("Show Rows") );
         label->setText(i18n("Select hidden rows to show:"));
   }
 

@@ -66,7 +66,7 @@ reference::reference( View* parent, const char* name )
   m_list = new Q3ListBox(this);
   lay1->addWidget( m_list );
 
-  setCaption( i18n("Area Name") );
+  setWindowTitle( i18n("Area Name") );
 
   m_rangeName = new QLabel(this);
   lay1->addWidget(m_rangeName);
@@ -260,8 +260,7 @@ EditAreaName::EditAreaName( View * parent,
 
   resize( 350, 142 );
   setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)5,
-                              (QSizePolicy::SizeType)4, 0, 0,
-                              sizePolicy().hasHeightForWidth() ) );
+                              (QSizePolicy::SizeType)4 ) );
 
   QWidget * page = new QWidget( this );
   setMainWidget(page);

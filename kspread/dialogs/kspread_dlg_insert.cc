@@ -67,7 +67,7 @@ InsertDialog::InsertDialog( View* parent, const char* name,const QRect &_rect,Mo
     rb2 = new QRadioButton( i18n("Move towards bottom"), grp );
     rb3 = new QRadioButton( i18n("Insert rows"), grp );
     rb4 = new QRadioButton( i18n("Insert columns"), grp );
-    setCaption( i18n("Insert Cells") );
+    setWindowTitle( i18n("Insert Cells") );
   }
   else if(insRem==Remove)
   {
@@ -76,7 +76,7 @@ InsertDialog::InsertDialog( View* parent, const char* name,const QRect &_rect,Mo
     rb2 = new QRadioButton( i18n("Move towards top"), grp );
     rb3 = new QRadioButton( i18n("Remove rows"), grp );
     rb4 = new QRadioButton( i18n("Remove columns"), grp );
-    setCaption( i18n("Remove Cells") );
+    setWindowTitle( i18n("Remove Cells") );
   }
   else
     kDebug(36001) << "Error in kspread_dlg_InsertDialog" << endl;

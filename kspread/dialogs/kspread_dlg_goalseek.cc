@@ -76,7 +76,7 @@ GoalSeekDialog::GoalSeekDialog( View * parent,  QPoint const & marker,
     setName( "GoalSeekDialog" );
 
   resize( 458, 153 );
-  setCaption( i18n( "Goal Seek" ) );
+  setWindowTitle( i18n( "Goal Seek" ) );
   setSizeGripEnabled( true );
 
   GoalSeekDialogLayout = new QGridLayout( this );

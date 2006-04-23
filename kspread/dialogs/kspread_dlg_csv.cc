@@ -92,7 +92,7 @@ CSVDialog::CSVDialog( View * parent, const char * name, QRect const & rect, Mode
 
   // Delimiter: comma, semicolon, tab, space, other
   m_delimiterBox = new Q3ButtonGroup( page, "m_delimiterBox" );
-  m_delimiterBox->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)1, (QSizePolicy::SizeType)1, 0, 0, m_delimiterBox->sizePolicy().hasHeightForWidth() ) );
+  m_delimiterBox->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)1, (QSizePolicy::SizeType)1 ) );
   m_delimiterBox->setTitle( i18n( "Delimiter" ) );
   m_delimiterBox->setColumnLayout(0, Qt::Vertical );
   m_delimiterBox->layout()->setSpacing( KDialog::spacingHint() );
@@ -128,14 +128,14 @@ CSVDialog::CSVDialog( View * parent, const char * name, QRect const & rect, Mode
   m_delimiterBoxLayout->addWidget( m_radioOther, 0, 2 );
 
   m_delimiterEdit = new QLineEdit( m_delimiterBox );
-  m_delimiterEdit->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)0, (QSizePolicy::SizeType)0, 0, 0, m_delimiterEdit->sizePolicy().hasHeightForWidth() ) );
+  m_delimiterEdit->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)0, (QSizePolicy::SizeType)0 ) );
   m_delimiterEdit->setMaximumSize( QSize( 30, 32767 ) );
   m_delimiterBoxLayout->addWidget( m_delimiterEdit, 1, 2 );
 
 
   // Format: number, text, currency,
   m_formatBox = new Q3ButtonGroup( page );
-  m_formatBox->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)1, (QSizePolicy::SizeType)1, 0, 0, m_formatBox->sizePolicy().hasHeightForWidth() ) );
+  m_formatBox->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)1, (QSizePolicy::SizeType)1 ) );
   m_formatBox->setTitle( i18n( "Format" ) );
   m_formatBox->setColumnLayout(0, Qt::Vertical );
   m_formatBox->layout()->setSpacing( KDialog::spacingHint() );
@@ -163,7 +163,7 @@ CSVDialog::CSVDialog( View * parent, const char * name, QRect const & rect, Mode
 
   m_comboLine = new QComboBox( page );
   m_comboLine->insertItem( 0, i18n( "1" ) );
-  m_comboLine->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)1, (QSizePolicy::SizeType)0, 0, 0, m_comboLine->sizePolicy().hasHeightForWidth() ) );
+  m_comboLine->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)1, (QSizePolicy::SizeType)0 ) );
 
   MyDialogLayout->addWidget( m_comboLine, 1, 3 );
 
@@ -171,27 +171,27 @@ CSVDialog::CSVDialog( View * parent, const char * name, QRect const & rect, Mode
   m_comboQuote->insertItem( 0, i18n( "\"" ) );
   m_comboQuote->insertItem( 1, i18n( "'" ) );
   m_comboQuote->insertItem( 2, i18n( "None" ) );
-  m_comboQuote->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)1, (QSizePolicy::SizeType)0, 0, 0, m_comboQuote->sizePolicy().hasHeightForWidth() ) );
+  m_comboQuote->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)1, (QSizePolicy::SizeType)0 ) );
 
   MyDialogLayout->addWidget( m_comboQuote, 1, 2 );
   QSpacerItem* spacer_2 = new QSpacerItem( 0, 0, QSizePolicy::Minimum, QSizePolicy::Preferred );
   MyDialogLayout->addItem( spacer_2, 2, 3 );
 
   TextLabel3 = new QLabel( page );
-  TextLabel3->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)1, (QSizePolicy::SizeType)0, 0, 0, TextLabel3->sizePolicy().hasHeightForWidth() ) );
+  TextLabel3->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)1, (QSizePolicy::SizeType)0 ) );
   TextLabel3->setText( i18n( "Start at line:" ) );
 
   MyDialogLayout->addWidget( TextLabel3, 0, 3 );
 
   TextLabel2 = new QLabel( page );
-  TextLabel2->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)1, (QSizePolicy::SizeType)0, 0, 0, TextLabel2->sizePolicy().hasHeightForWidth() ) );
+  TextLabel2->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)1, (QSizePolicy::SizeType)0 ) );
   TextLabel2->setText( i18n( "Textquote:" ) );
 
   MyDialogLayout->addWidget( TextLabel2, 0, 2 );
 
   if ( m_mode == Clipboard )
   {
-    setCaption( i18n( "Inserting From Clipboard" ) );
+    setWindowTitle( i18n( "Inserting From Clipboard" ) );
     QMimeSource * mime = QApplication::clipboard()->data();
     if ( !mime )
     {
@@ -210,7 +210,7 @@ CSVDialog::CSVDialog( View * parent, const char * name, QRect const & rect, Mode
   }
   else if ( mode == File )
   {
-    setCaption( i18n( "Inserting Text File" ) );
+    setWindowTitle( i18n( "Inserting Text File" ) );
     QString file = KFileDialog::getOpenFileName(":",
                                                 "text/plain",
                                                 this);
@@ -236,7 +236,7 @@ CSVDialog::CSVDialog( View * parent, const char * name, QRect const & rect, Mode
   }
   else
   {
-    setCaption( i18n( "Text to Columns" ) );
+    setWindowTitle( i18n( "Text to Columns" ) );
     m_data = "";
     Cell  * cell;
     Sheet * sheet = m_pView->activeSheet();

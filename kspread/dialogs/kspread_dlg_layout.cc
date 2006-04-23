@@ -940,7 +940,7 @@ void CellFormatDialog::init()
   tab->setCancelButton( i18n( "&Cancel" ) );
   tab->setOkButton( i18n( "&OK" ) );
 
-  tab->setCaption( i18n( "Cell Format" ) );
+  tab->setWindowTitle( i18n( "Cell Format" ) );
 
   tab->adjustSize();
 
