@@ -1279,19 +1279,18 @@ QString SheetPrint::completeHeading( const QString &_data, int _page, const QStr
     if ( !_sheet.isEmpty() )
         ta = _sheet;
 
-    KoDocumentInfo * info = m_pDoc->documentInfo();
-    KoDocumentInfoAuthor * authorPage = static_cast<KoDocumentInfoAuthor *>(info->page( "author" ));
+    KoDocumentInfo* info = m_pDoc->documentInfo();
     QString full_name;
     QString email_addr;
     QString organization;
     QString tmp;
-    if ( !authorPage )
+    if ( !info )
         kWarning() << "Author information not found in Document Info !" << endl;
     else
     {
-        full_name = authorPage->fullName();
-        email_addr = authorPage->email();
-        organization = authorPage->company();
+        full_name = info->authorInfo( "creator" );
+        email_addr = info->authorInfo( "email" );
+        organization = info->authorInfo( "company" );
     }
 
     char hostname[80];

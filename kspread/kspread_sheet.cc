@@ -7125,30 +7125,26 @@ void Sheet::convertPart( const QString & part, KoXmlWriter & xmlWriter ) const
                 else if ( var == "<author>" )
                 {
                     Doc* sdoc = d->workbook->doc();
-                    KoDocumentInfo       * docInfo    = sdoc->documentInfo();
-                    KoDocumentInfoAuthor * authorPage = static_cast<KoDocumentInfoAuthor*>( docInfo->page( "author" ) );
+                    KoDocumentInfo* docInfo = sdoc->documentInfo();
 
-                    text += authorPage->fullName();
-
+                    text += docInfo->authorInfo( "creator" );
                     addText( text, xmlWriter );
                 }
                 else if ( var == "<email>" )
                 {
                     Doc* sdoc = d->workbook->doc();
-                    KoDocumentInfo       * docInfo    = sdoc->documentInfo();
-                    KoDocumentInfoAuthor * authorPage = static_cast<KoDocumentInfoAuthor*>( docInfo->page( "author" ) );
+                    KoDocumentInfo* docInfo = sdoc->documentInfo();
 
-                    text += authorPage->email();
+                    text += docInfo->authorInfo( "email" );
                     addText( text, xmlWriter );
 
                 }
                 else if ( var == "<org>" )
                 {
                     Doc* sdoc = d->workbook->doc();
-                    KoDocumentInfo       * docInfo    = sdoc->documentInfo();
-                    KoDocumentInfoAuthor * authorPage = static_cast<KoDocumentInfoAuthor*>( docInfo->page( "author" ) );
+                    KoDocumentInfo* docInfo    = sdoc->documentInfo();
 
-                    text += authorPage->company();
+                    text += docInfo->authorInfo( "company" );
                     addText( text, xmlWriter );
 
                 }

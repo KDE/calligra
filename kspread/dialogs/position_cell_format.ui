@@ -118,7 +118,7 @@ Fifth Floor, Boston, MA 02110-1301, USA.</comment>
         </widget>
       </item>
       <item row="1" column="1" >
-        <widget class="Q3GroupBox" name="groupBox4" >
+        <widget class="QGroupBox" name="groupBox4" >
           <property name="title" >
             <string>Rotation</string>
           </property>
@@ -162,7 +162,7 @@ Fifth Floor, Boston, MA 02110-1301, USA.</comment>
         </widget>
       </item>
       <item row="1" column="0" >
-        <widget class="Q3GroupBox" name="groupBox3" >
+        <widget class="QGroupBox" name="groupBox3" >
           <property name="title" >
             <string>Text Option</string>
           </property>
@@ -190,7 +190,7 @@ Qt::Vertical text puts your text vertically.</string>
         </widget>
       </item>
       <item row="2" column="1" >
-        <widget class="Q3GroupBox" name="indentGroup" >
+        <widget class="QGroupBox" name="indentGroup" >
           <property name="title" >
             <string>Indent</string>
           </property>
@@ -200,7 +200,7 @@ Qt::Vertical text puts your text vertically.</string>
         </widget>
       </item>
       <item row="2" column="0" >
-        <widget class="Q3GroupBox" name="groupBox5" >
+        <widget class="QGroupBox" name="groupBox5" >
           <property name="title" >
             <string>Merge Cells</string>
           </property>
@@ -220,7 +220,7 @@ When a merged cell is selected and when you uncheck this, then all cells come ba
         </widget>
       </item>
       <item rowspan="1" row="3" column="0" colspan="2" >
-        <widget class="Q3GroupBox" name="sizeCellGroup" >
+        <widget class="QGroupBox" name="sizeCellGroup" >
           <property name="title" >
             <string>Size of Cell</string>
           </property>
@@ -264,7 +264,7 @@ When a merged cell is selected and when you uncheck this, then all cells come ba
                   </widget>
                 </item>
                 <item row="0" column="1" >
-                  <widget class="Q3Frame" name="m_heightPanel" >
+                  <widget class="QFrame" name="m_heightPanel" >
                     <property name="frameShape" >
                       <enum>NoFrame</enum>
                     </property>
@@ -307,7 +307,7 @@ When a merged cell is selected and when you uncheck this, then all cells come ba
                   </spacer>
                 </item>
                 <item row="0" column="1" >
-                  <widget class="Q3Frame" name="m_widthPanel" >
+                  <widget class="QFrame" name="m_widthPanel" >
                     <property name="frameShape" >
                       <enum>NoFrame</enum>
                     </property>
