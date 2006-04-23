@@ -23,25 +23,23 @@
 #ifndef __main_h__
 #define __main_h__
 
-#include <qapplication.h>
-#include <qcombobox.h>
-#include <q3groupbox.h>
-#include <qlabel.h>
-#include <qlayout.h>
-#include <q3listbox.h>
+#include <QApplication>
+#include <QComboBox>
+#include <QGroupBox>
+#include <QLabel>
+#include <QListWidget>
 #include <qobject.h>
-#include <qregexp.h>
-#include <qstring.h>
-#include <qstringlist.h>
+#include <QRegExp>
+#include <QString>
+#include <QStringList>
 #include <q3tabdialog.h>
-#include <qtabwidget.h>
-#include <q3textbrowser.h>
-#include <qtooltip.h>
-#include <qwidget.h>
-#include <q3vbox.h>
+#include <QTabWidget>
+#include <QTextEdit>
+#include <QToolTip>
+#include <QWidget>
 //Added by qt3to4:
-#include <Q3VBoxLayout>
-#include <Q3Frame>
+#include <QVBoxLayout>
+#include <QFrame>
 
 #include <kapplication.h>
 #include <kcombobox.h>
@@ -76,13 +74,15 @@ public:
 protected slots:
     void slotChangeLanguage();
 
+    void slotEditReturnPressed();
     void slotFindTerm();
     void slotFindTerm(const QString &term, bool add_to_history = true);
+    void slotFindTermFromList(QListWidgetItem *item);
 
     void slotUpdateNavButtons();
     void slotGotoHistory(int index);
 
-    void slotSetReplaceTerm(Q3ListBoxItem *item);
+    void slotSetReplaceTerm(QListWidgetItem *item);
     void slotSetReplaceTerm(const QString &term);
 
     void slotBack();
@@ -130,12 +130,12 @@ protected:
     Mode m_mode;
 
     QFrame *m_page;
-    Q3VBoxLayout *m_top_layout;
+    QVBoxLayout *m_top_layout;
 
     KDialogBase *m_dialog;
     QTabWidget *m_tab;
-    Q3VBox *vbox;
-    Q3VBox *vbox2;
+    QWidget *vbox;
+    QWidget *vbox2;
 
     QToolButton *m_back;
     QToolButton *m_forward;
@@ -151,16 +151,16 @@ protected:
     QString m_data_file;
 
     // WordNet:
-    Q3TextBrowser *m_resultbox;
+    QTextEdit *m_resultbox;
     QComboBox *m_combobox;
 
     // Thesaurus:
-    Q3GroupBox *grpbox_syn;
-    Q3ListBox *m_thes_syn;
-    Q3GroupBox *grpbox_hyper;
-    Q3ListBox *m_thes_hyper;
-    Q3GroupBox *grpbox_hypo;
-    Q3ListBox *m_thes_hypo;
+    QGroupBox *grpbox_syn;
+    QListWidget *m_thes_syn;
+    QGroupBox *grpbox_hyper;
+    QListWidget *m_thes_hyper;
+    QGroupBox *grpbox_hypo;
+    QListWidget *m_thes_hypo;
 };
 
 #endif

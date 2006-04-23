@@ -42,13 +42,12 @@ NOT TODO:
 
 #include "main.h"
 
-#include <qfile.h>
-#include <qtoolbutton.h>
+#include <QFile>
+#include <QToolButton>
 //Added by qt3to4:
-#include <Q3CString>
 #include <QLabel>
-#include <Q3HBoxLayout>
-#include <Q3VBoxLayout>
+#include <QHBoxLayout>
+#include <QVBoxLayout>
 #include <kiconloader.h>
 #include <kfiledialog.h>
 #include <kdeversion.h>
@@ -90,11 +89,16 @@ Thesaurus::Thesaurus(QObject* parent, const char* name, const QStringList &)
     m_history_pos = 1;
     
     m_page = m_dialog->plainPage();
-    Q3VBoxLayout *m_top_layout = new Q3VBoxLayout(m_page, KDialog::marginHint(), KDialog::spacingHint());
+    QVBoxLayout *m_top_layout = new QVBoxLayout(m_page/*, KDialog::marginHint(), KDialog::spacingHint()*/);
+    m_top_layout->setMargin( KDialog::marginHint() );
+    m_top_layout->setSpacing( KDialog::spacingHint() );
 
-    Q3HBoxLayout *row1 = new Q3HBoxLayout(m_top_layout);
+    QHBoxLayout *row1 = new QHBoxLayout();
+    m_top_layout->addLayout( row1 );
     m_edit = new KHistoryCombo(m_page);
-    m_edit_label = new QLabel(m_edit, i18n("&Search for:"), m_page);
+    m_edit_label = new QLabel( i18n("&Search for:"), m_page);
+    m_edit_label->setBuddy( m_edit );
+
     m_search = new KPushButton(i18n("S&earch"), m_page);
     connect(m_search, SIGNAL(clicked()),
         this, SLOT(slotFindTerm()));
@@ -102,11 +106,11 @@ Thesaurus::Thesaurus(QObject* parent, const char* name, const QStringList &)
     row1->addWidget(m_edit, 1);
     row1->addWidget(m_search, 0);
     m_back = new QToolButton(m_page);
-    m_back->setIconSet(BarIconSet(QString::fromLatin1("back")));
+    m_back->setIcon(BarIconSet(QString::fromLatin1("back")));
     m_back->setToolTip( i18n("Back"));
     row1->addWidget(m_back, 0);
     m_forward = new QToolButton(m_page);
-    m_forward->setIconSet(BarIconSet(QString::fromLatin1("forward")));
+    m_forward->setIcon(BarIconSet(QString::fromLatin1("forward")));
     m_forward->setToolTip( i18n("Forward"));
     row1->addWidget(m_forward, 0);
     m_lang = new KPushButton(i18n("Change Language..."), m_page);
@@ -122,76 +126,99 @@ Thesaurus::Thesaurus(QObject* parent, const char* name, const QStringList &)
     //
     // Thesaurus Tab
     //
-    
-    vbox = new Q3VBox(m_tab);
+    vbox = new QWidget(m_tab);
     m_tab->addTab(vbox, i18n("&Thesaurus"));
-    vbox->setMargin(KDialog::marginHint());
-    vbox->setSpacing(KDialog::spacingHint());
-    
-    Q3HBox *hbox = new Q3HBox(vbox);
-    hbox->setSpacing(KDialog::spacingHint());
+    QVBoxLayout *l1 = new QVBoxLayout;
+    vbox->setLayout(l1);
+    l1->setMargin(KDialog::marginHint());
+    l1->setSpacing(KDialog::spacingHint());
 
-    grpbox_syn = new Q3GroupBox( 1, Qt::Horizontal, i18n("Synonyms"), hbox);
-    m_thes_syn = new Q3ListBox(grpbox_syn);
-    
-    grpbox_hyper = new Q3GroupBox( 1, Qt::Horizontal, i18n("More General Words"), hbox);
-    m_thes_hyper = new Q3ListBox(grpbox_hyper);
+    QWidget *hbox = new QWidget(vbox);
+    QHBoxLayout *l2 = new QHBoxLayout;
+    l2->setSpacing(KDialog::spacingHint());
 
-    grpbox_hypo = new Q3GroupBox( 1, Qt::Horizontal, i18n("More Specific Words"), hbox);
-    m_thes_hypo = new Q3ListBox(grpbox_hypo);
+    grpbox_syn = new QGroupBox( i18n("Synonyms"), hbox);
+    QHBoxLayout *l3 = new QHBoxLayout();
+    grpbox_syn->setLayout(l3);
+    m_thes_syn = new QListWidget(grpbox_syn);
+    l3->addWidget(m_thes_syn);
+
+    grpbox_hyper = new QGroupBox( i18n("More General Words"), hbox);
+    QHBoxLayout *l4 = new QHBoxLayout();
+    grpbox_hyper->setLayout(l4);
+    m_thes_hyper = new QListWidget(grpbox_hyper);
+    l4->addWidget(m_thes_hyper);
+
+    grpbox_hypo = new QGroupBox( i18n("More Specific Words"), hbox);
+    QHBoxLayout *l5 = new QHBoxLayout();
+    grpbox_hypo->setLayout(l5);
+    m_thes_hypo = new QListWidget(grpbox_hypo);
+    l5->addWidget(m_thes_hypo);
+
+    l2->addWidget(grpbox_syn);
+    l2->addWidget(grpbox_hyper);
+    l2->addWidget(grpbox_hypo);
+    l1->addLayout(l2);
 
     // single click -- keep display unambiguous by removing other selections:
     
-    connect(m_thes_syn, SIGNAL(clicked(Q3ListBoxItem *)), m_thes_hyper, SLOT(clearSelection()));
-    connect(m_thes_syn, SIGNAL(clicked(Q3ListBoxItem *)), m_thes_hypo, SLOT(clearSelection()));
-    connect(m_thes_syn, SIGNAL(selectionChanged(Q3ListBoxItem *)),
-        this, SLOT(slotSetReplaceTerm(Q3ListBoxItem *)));
+    connect(m_thes_syn, SIGNAL(itemClicked(QListWidgetItem *)), m_thes_hyper, SLOT(clearSelection()));
+    connect(m_thes_syn, SIGNAL(itemClicked(QListWidgetItem *)), m_thes_hypo, SLOT(clearSelection()));
+    connect(m_thes_syn, SIGNAL(itemSelectionChanged(QListWidgetItem *)),
+        this, SLOT(slotSetReplaceTerm(QListWidgetItem *)));
 
-    connect(m_thes_hyper, SIGNAL(clicked(Q3ListBoxItem *)), m_thes_syn, SLOT(clearSelection()));
-    connect(m_thes_hyper, SIGNAL(clicked(Q3ListBoxItem *)), m_thes_hypo, SLOT(clearSelection()));
-    connect(m_thes_hyper, SIGNAL(selectionChanged(Q3ListBoxItem *)),
-        this, SLOT(slotSetReplaceTerm(Q3ListBoxItem *)));
+    connect(m_thes_hyper, SIGNAL(itemClicked(QListWidgetItem *)), m_thes_syn, SLOT(clearSelection()));
+    connect(m_thes_hyper, SIGNAL(itemClicked(QListWidgetItem *)), m_thes_hypo, SLOT(clearSelection()));
+    connect(m_thes_hyper, SIGNAL(itemSelectionChanged(QListWidgetItem *)),
+        this, SLOT(slotSetReplaceTerm(QListWidgetItem *)));
 
-    connect(m_thes_hypo, SIGNAL(clicked(Q3ListBoxItem *)), m_thes_syn, SLOT(clearSelection()));
-    connect(m_thes_hypo, SIGNAL(clicked(Q3ListBoxItem *)), m_thes_hyper, SLOT(clearSelection()));
-    connect(m_thes_hypo, SIGNAL(selectionChanged(Q3ListBoxItem *)),
-        this, SLOT(slotSetReplaceTerm(Q3ListBoxItem *)));
+    connect(m_thes_hypo, SIGNAL(itemClicked(QListWidgetItem *)), m_thes_syn, SLOT(clearSelection()));
+    connect(m_thes_hypo, SIGNAL(itemClicked(QListWidgetItem *)), m_thes_hyper, SLOT(clearSelection()));
+    connect(m_thes_hypo, SIGNAL(itemSelectionChanged(QListWidgetItem *)),
+        this, SLOT(slotSetReplaceTerm(QListWidgetItem *)));
 
     // double click:
-    connect(m_thes_syn, SIGNAL(selected(const QString &)),
-        this, SLOT(slotFindTerm(const QString &)));
-    connect(m_thes_hyper, SIGNAL(selected(const QString &)),
-        this, SLOT(slotFindTerm(const QString &)));
-    connect(m_thes_hypo, SIGNAL(selected(const QString &)),
-        this, SLOT(slotFindTerm(const QString &)));
+    connect(m_thes_syn, SIGNAL(itemDoubleClicked(QListWidgetItem *)),
+        this, SLOT(slotFindTermFromList(QListWidgetItem *)));
+    connect(m_thes_hyper, SIGNAL(itemDoubleClicked(QListWidgetItem *)),
+        this, SLOT(slotFindTermFromList(QListWidgetItem *)));
+    connect(m_thes_hypo, SIGNAL(itemDoubleClicked(QListWidgetItem *)),
+        this, SLOT(slotFindTermFromList(QListWidgetItem *)));
 
     //
     // WordNet Tab
     //
 
-    vbox2 = new Q3VBox(m_tab);
+    vbox2 = new QWidget(m_tab);
+    QVBoxLayout *l6 = new QVBoxLayout();
+    vbox2->setLayout( l6 );
     m_tab->addTab(vbox2, i18n("&WordNet"));
-    vbox2->setMargin(KDialog::marginHint());    
-    vbox2->setSpacing(KDialog::spacingHint());    
+    l6->setMargin(KDialog::marginHint());
+    l6->setSpacing(KDialog::spacingHint());
 
     m_combobox = new QComboBox(vbox2);
     m_combobox->setEditable(false);
     connect(m_combobox, SIGNAL(activated(int)), this, SLOT(slotFindTerm()));
+    l6->addWidget( m_combobox );
 
-    m_resultbox = new Q3TextBrowser(vbox2);
-    m_resultbox->setTextFormat(Qt::RichText);
+    m_resultbox = new QTextEdit(vbox2);
+    m_resultbox->setReadOnly( true );
+//     m_resultbox->setTextFormat(Qt::RichText);
     // TODO?: m_resultbox->setMimeSourceFactory(...); to avoid warning
     connect(m_resultbox, SIGNAL(linkClicked(const QString &)),
         this, SLOT(slotFindTerm(const QString &)));
+    l6->addWidget( m_resultbox );
 
     // Connect for the history box
     m_edit->setTrapReturnKey(true);        // Do not use Return as default key...
-    connect(m_edit, SIGNAL(returnPressed(const QString&)), this, SLOT(slotFindTerm(const QString&)));
+    connect(m_edit, SIGNAL(returnPressed()), this, SLOT(slotEditReturnPressed()));
     connect(m_edit, SIGNAL(activated(int)), this, SLOT(slotGotoHistory(int)));
 
-    Q3HBoxLayout *row2 = new Q3HBoxLayout( m_top_layout );
+    QHBoxLayout *row2 = new QHBoxLayout( /*m_top_layout*/ );
+    m_top_layout->addLayout( row2 );
     m_replace = new KLineEdit(m_page);
-    m_replace_label = new QLabel(m_replace, i18n("&Replace with:"), m_page);
+    m_replace_label = new QLabel( i18n("&Replace with:"), m_page);
+    m_replace_label->setBuddy( m_replace );
     row2->addWidget(m_replace_label, 0);
     row2->addWidget(m_replace, 1);
 
@@ -307,7 +334,7 @@ void Thesaurus::setCaption()
 {
     KUrl url = KUrl();
     url.setPath(m_data_file);
-    m_dialog->setCaption(i18n("Related Words - %1").arg(url.fileName()));
+    m_dialog->setCaption(i18n("Related Words - %1" , url.fileName() ) );
 }
 
 // Enbale or disable back and forward button
@@ -329,7 +356,7 @@ void Thesaurus::slotUpdateNavButtons()
 void Thesaurus::slotGotoHistory(int index)
 {
     m_history_pos = m_edit->count() - index;
-    slotFindTerm(m_edit->text(index), false);
+    slotFindTerm(m_edit->itemText(index), false);
 }
 
 // Triggered when the back button is clicked.
@@ -337,8 +364,8 @@ void Thesaurus::slotBack()
 {
     m_history_pos--;
     int pos = m_edit->count() - m_history_pos;
-    m_edit->setCurrentItem(pos);
-    slotFindTerm(m_edit->text(pos), false);
+    m_edit->setCurrentIndex(pos);
+    slotFindTerm(m_edit->itemText(pos), false);
 }
 
 // Triggered when the forward button is clicked.
@@ -346,12 +373,12 @@ void Thesaurus::slotForward()
 {
     m_history_pos++;
     int pos = m_edit->count() - m_history_pos;
-    m_edit->setCurrentItem(pos);
-    slotFindTerm(m_edit->text(pos), false);
+    m_edit->setCurrentIndex(pos);
+    slotFindTerm(m_edit->itemText(pos), false);
 }
 
 // Triggered when a word is selected in the list box.
-void Thesaurus::slotSetReplaceTerm(Q3ListBoxItem *item)
+void Thesaurus::slotSetReplaceTerm(QListWidgetItem *item)
 {
     if( ! item )
         return;
@@ -365,13 +392,25 @@ void Thesaurus::slotSetReplaceTerm(const QString &term)
     }
 }
 
+
+void Thesaurus::slotEditReturnPressed()
+{
+    slotFindTerm( m_edit->currentText() );
+}
+
 // Triggered when Return is pressed.
 void Thesaurus::slotFindTerm()
 {
     findTerm(m_edit->currentText());
 }
 
-// Triggered when a word is clicked / a list item is double-clicked.
+// Triggered when a list item is double-clicked.
+void Thesaurus::slotFindTermFromList(QListWidgetItem *item)
+{
+    slotFindTerm( item->text() );
+}
+
+// Triggered when a word is clicked 
 void Thesaurus::slotFindTerm(const QString &term, bool add_to_history)
 {
     slotSetReplaceTerm(term);
@@ -379,9 +418,9 @@ void Thesaurus::slotFindTerm(const QString &term, bool add_to_history)
         (void) new KRun(KUrl(term),0L);
     } else {
         if( add_to_history ) {
-            m_edit->insertItem(term, 0);
+            m_edit->insertItem(0, term);
             m_history_pos = m_edit->count();
-            m_edit->setCurrentItem(0);
+            m_edit->setCurrentIndex(0);
         }
         slotUpdateNavButtons();
         findTerm(term);
@@ -434,7 +473,7 @@ void Thesaurus::thesExited(KProcess *)
 
     if( !m_thesproc_stderr.isEmpty() ) {
         KMessageBox::error(0, i18n("<b>Error:</b> Failed to execute grep. "
-          "Output:<br>%1").arg(m_thesproc_stderr));
+          "Output:<br>%1", m_thesproc_stderr) );
         QApplication::restoreOverrideCursor();
         return;
     }
@@ -445,38 +484,38 @@ void Thesaurus::thesExited(KProcess *)
     QStringList hyper;
     QStringList hypo;
 
-    QStringList lines = lines.split(QChar('\n'), m_thesproc_stdout, false);
+    QStringList lines = m_thesproc_stdout.split(QChar('\n'), QString::SkipEmptyParts  );
     for ( QStringList::Iterator it = lines.begin(); it != lines.end(); ++it ) {
         QString line = (*it);
         if( line.startsWith("  ") ) {  // ignore license (two spaces)
             continue;
         }
-        int sep_pos = line.find("#");
+        int sep_pos = line.indexOf("#");
         QString syn_part = line.left(sep_pos);
         QString hyper_part = line.right(line.length()-sep_pos-1);
-        QStringList syn_tmp = QStringList::split(QChar(';'), syn_part);
-        QStringList hyper_tmp = QStringList::split(QChar(';'), hyper_part);
-        if( syn_tmp.grep(search_term, false).size() > 0 ) {
+        QStringList syn_tmp = syn_part.split(QChar(';'), QString::SkipEmptyParts );
+        QStringList hyper_tmp = hyper_part.split(QChar(';'), QString::SkipEmptyParts);
+        if( syn_tmp.filter(search_term, Qt::CaseInsensitive).size() > 0 ) {
             // match on the left side of the '#' -- synonyms
             for ( QStringList::Iterator it2 = syn_tmp.begin(); it2 != syn_tmp.end(); ++it2 ) {
                 // add if it's not the term itself and if it's not yet in the list
                 QString term = (*it2);
-                if( term.lower() != search_term.lower() && syn.contains(term) == 0 ) {
+                if( term.toLower() != search_term.toLower() && syn.contains(term) == 0 ) {
                     syn.append(term);
                 }
             }
             for ( QStringList::Iterator it2 = hyper_tmp.begin(); it2 != hyper_tmp.end(); ++it2 ) {
                 QString term = (*it2);
-                if( term.lower() != search_term.lower() && hyper.contains(term) == 0 ) {
+                if( term.toLower() != search_term.toLower() && hyper.contains(term) == 0 ) {
                     hyper.append(term);
                 }
             }
         }
-        if( hyper_tmp.grep(search_term, false).size() > 0 ) {
+        if( hyper_tmp.filter(search_term, Qt::CaseInsensitive).size() > 0 ) {
             // match on the right side of the '#' -- hypernyms
             for ( QStringList::Iterator it2 = syn_tmp.begin(); it2 != syn_tmp.end(); ++it2 ) {
                 QString term = (*it2);
-                if( term.lower() != search_term && hypo.contains(term) == 0 ) {
+                if( term.toLower() != search_term && hypo.contains(term) == 0 ) {
                     hypo.append(term);
                 }
             }
@@ -486,30 +525,30 @@ void Thesaurus::thesExited(KProcess *)
     m_thes_syn->clear();
     if( syn.size() > 0 ) {
         syn = sortQStringList(syn);
-        m_thes_syn->insertStringList(syn);
+        m_thes_syn->addItems(syn);
         m_thes_syn->setEnabled(true);
     } else {
-        m_thes_syn->insertItem(m_no_match);
+        m_thes_syn->addItem( m_no_match);
         m_thes_syn->setEnabled(false);
     }
     
     m_thes_hyper->clear();
     if( hyper.size() > 0 ) {
         hyper = sortQStringList(hyper);
-        m_thes_hyper->insertStringList(hyper);
+        m_thes_hyper->addItems(hyper);
         m_thes_hyper->setEnabled(true);
     } else {
-        m_thes_hyper->insertItem(m_no_match);
+        m_thes_hyper->addItem(m_no_match);
         m_thes_hyper->setEnabled(false);
     }
 
     m_thes_hypo->clear();
     if( hypo.size() > 0 ) {
         hypo = sortQStringList(hypo);
-        m_thes_hypo->insertStringList(hypo);
+        m_thes_hypo->addItems(hypo);
         m_thes_hypo->setEnabled(true);
     } else {
-        m_thes_hypo->insertItem(m_no_match);
+        m_thes_hypo->addItem(m_no_match);
         m_thes_hypo->setEnabled(false);
     }
 
@@ -518,12 +557,12 @@ void Thesaurus::thesExited(KProcess *)
 
 void Thesaurus::receivedThesStdout(KProcess *, char *result, int len)
 {
-    m_thesproc_stdout += QString::fromLocal8Bit( Q3CString(result, len+1) );
+    m_thesproc_stdout += QString::fromLocal8Bit( QByteArray(result, len+1) );
 }
 
 void Thesaurus::receivedThesStderr(KProcess *, char *result, int len)
 {
-    m_thesproc_stderr += QString::fromLocal8Bit( Q3CString(result, len+1) );
+    m_thesproc_stderr += QString::fromLocal8Bit( QByteArray(result, len+1) );
 }
 
 
@@ -542,71 +581,71 @@ void Thesaurus::findTermWordnet(const QString &term)
     *m_wnproc << term;
 
     // get all results: nouns, verbs, adjectives, adverbs (see below for order):
-    if( m_combobox->currentItem() == 0 ) {
+    if( m_combobox->currentIndex() == 0 ) {
         *m_wnproc << "-synsn" << "-synsv" << "-synsa" << "-synsr";
         m_mode = other;
-    } else if( m_combobox->currentItem() == 1 ) {
+    } else if( m_combobox->currentIndex() == 1 ) {
         *m_wnproc << "-simsv";
         m_mode = other;
-    } else if( m_combobox->currentItem() == 2 ) {
+    } else if( m_combobox->currentIndex() == 2 ) {
         *m_wnproc << "-antsn" << "-antsv" << "-antsa" << "-antsr";
         m_mode = other;
-    } else if( m_combobox->currentItem() == 3 ) {
+    } else if( m_combobox->currentIndex() == 3 ) {
         *m_wnproc << "-hypon" << "-hypov";
         m_mode = other;
-    } else if( m_combobox->currentItem() == 4 ) {
+    } else if( m_combobox->currentIndex() == 4 ) {
         *m_wnproc << "-meron";
         m_mode = other;
-    } else if( m_combobox->currentItem() == 5 ) {
+    } else if( m_combobox->currentIndex() == 5 ) {
         *m_wnproc << "-holon";
         m_mode = other;
-    } else if( m_combobox->currentItem() == 6 ) {
+    } else if( m_combobox->currentIndex() == 6 ) {
         // e.g. "size -> large/small"
         *m_wnproc << "-attrn" << "-attra";
         m_mode = other;
-    } else if( m_combobox->currentItem() == 7 ) {
+    } else if( m_combobox->currentIndex() == 7 ) {
         // e.g. "kill -> die"
         *m_wnproc << "-causv";
         m_mode = other;
-    } else if( m_combobox->currentItem() == 8 ) {
+    } else if( m_combobox->currentIndex() == 8 ) {
         // e.g. "walk -> step"
         *m_wnproc << "-entav";
         m_mode = other;
-    } else if( m_combobox->currentItem() == 9 ) {
+    } else if( m_combobox->currentIndex() == 9 ) {
         *m_wnproc << "-famln" << "-famlv" << "-famla" << "-famlr";
         m_mode = other;
-    } else if( m_combobox->currentItem() == 10 ) {
+    } else if( m_combobox->currentIndex() == 10 ) {
         *m_wnproc << "-framv";
         m_mode = other;
-    } else if( m_combobox->currentItem() == 11 ) {
+    } else if( m_combobox->currentIndex() == 11 ) {
         *m_wnproc << "-grepn" << "-grepv" << "-grepa" << "-grepr";
         m_mode = grep;
-    } else if( m_combobox->currentItem() == 12 ) {
+    } else if( m_combobox->currentIndex() == 12 ) {
         *m_wnproc << "-over";
         m_mode = other;
     }
     *m_wnproc << "-g";    // "Display gloss"
 
-    int current = m_combobox->currentItem();    // remember current position
+    int current = m_combobox->currentIndex();    // remember current position
     m_combobox->clear();
     
     // warning: order matters!
     // 0:    
-    m_combobox->insertItem(i18n("Synonyms/Hypernyms - Ordered by Frequency"));
-    m_combobox->insertItem(i18n("Synonyms - Ordered by Similarity of Meaning (verbs only)"));
-    m_combobox->insertItem(i18n("Antonyms - Words with Opposite Meanings"));
-    m_combobox->insertItem(i18n("Hyponyms - ... is a (kind of) %1").arg(m_edit->currentText()));
-    m_combobox->insertItem(i18n("Meronyms - %1 has a ...").arg(m_edit->currentText()));
+    m_combobox->insertItem(-1, i18n("Synonyms/Hypernyms - Ordered by Frequency"));
+    m_combobox->insertItem(-1, i18n("Synonyms - Ordered by Similarity of Meaning (verbs only)"));
+    m_combobox->insertItem(-1, i18n("Antonyms - Words with Opposite Meanings"));
+    m_combobox->insertItem(-1, i18n("Hyponyms - ... is a (kind of) %1", m_edit->currentText()));
+    m_combobox->insertItem(-1, i18n("Meronyms - %1 has a ...", m_edit->currentText()));
     // 5:
-    m_combobox->insertItem(i18n("Holonyms - ... has a %1").arg(m_edit->currentText()));
-    m_combobox->insertItem(i18n("Attributes"));
-    m_combobox->insertItem(i18n("Cause To (for some verbs only)"));
-    m_combobox->insertItem(i18n("Verb Entailment (for some verbs only)"));
-    m_combobox->insertItem(i18n("Familiarity & Polysemy Count"));
+    m_combobox->insertItem(-1, i18n("Holonyms - ... has a %1", m_edit->currentText()));
+    m_combobox->insertItem(-1, i18n("Attributes"));
+    m_combobox->insertItem(-1, i18n("Cause To (for some verbs only)"));
+    m_combobox->insertItem(-1, i18n("Verb Entailment (for some verbs only)"));
+    m_combobox->insertItem(-1, i18n("Familiarity & Polysemy Count"));
     // 10:
-    m_combobox->insertItem(i18n("Verb Frames (examples of use)"));
-    m_combobox->insertItem(i18n("List of Compound Words"));
-    m_combobox->insertItem(i18n("Overview of Senses"));
+    m_combobox->insertItem(-1, i18n("Verb Frames (examples of use)"));
+    m_combobox->insertItem(-1, i18n("List of Compound Words"));
+    m_combobox->insertItem(-1, i18n("Overview of Senses"));
 
     /** NOT todo:
       * -Hypernym tree: layout is difficult, you can get the same information
@@ -624,7 +663,7 @@ void Thesaurus::findTermWordnet(const QString &term)
       * -nomn(n|v), e.g. deny -> denial, but this doesn't seem to work?
       */
 
-    m_combobox->setCurrentItem(current);    // reset previous position
+    m_combobox->setCurrentIndex(current);    // reset previous position
 
     if( m_wnproc->isRunning() ) {
         // should never happen
@@ -634,7 +673,7 @@ void Thesaurus::findTermWordnet(const QString &term)
     }
 
     if( !m_wnproc->start(KProcess::NotifyOnExit, KProcess::AllOutput) ) {
-        m_resultbox->setText(i18n("<b>Error:</b> Failed to execute WordNet program 'wn'. "
+        m_resultbox->setHtml(i18n("<b>Error:</b> Failed to execute WordNet program 'wn'. "
             "WordNet has to be installed on your computer if you want to use it, "
             "and 'wn' has to be in your PATH. "
             "You can get WordNet at <a href=\"http://www.cogsci.princeton.edu/~wn/\">"
@@ -652,17 +691,17 @@ void Thesaurus::wnExited(KProcess *)
 {
     
     if( !m_wnproc_stderr.isEmpty() ) {
-        m_resultbox->setText(i18n("<b>Error:</b> Failed to execute WordNet program 'wn'. "
-          "Output:<br>%1").arg(m_wnproc_stderr));
+        m_resultbox->setHtml(i18n("<b>Error:</b> Failed to execute WordNet program 'wn'. "
+          "Output:<br>%1", m_wnproc_stderr));
         QApplication::restoreOverrideCursor();
         return;
     }
 
     if( m_wnproc_stdout.isEmpty() ) {
-        m_resultbox->setText(i18n("No match for '%1'.").arg(m_edit->currentText()));
+        m_resultbox->setHtml(i18n("No match for '%1'.", m_edit->currentText()));
     } else {
         // render in a table, each line one row:
-        QStringList lines = lines.split(QChar('\n'), m_wnproc_stdout, false);
+        QStringList lines = m_wnproc_stdout.split(QChar('\n'), QString::SkipEmptyParts);
         QString result = "<qt><table>\n";
         // TODO in Qt > 3.01: try without the following line (it's necessary to ensure the
         // first column is really always quite small):
@@ -672,7 +711,7 @@ void Thesaurus::wnExited(KProcess *)
             QString l = (*it);
             // Remove some lines:
             QRegExp re("^\\d+( of \\d+)? senses? of \\w+");
-            if( re.search(l) != -1 ) {
+            if( re.indexIn(l) != -1 ) {
                 continue;
             }
             // Escape XML:
@@ -696,8 +735,8 @@ void Thesaurus::wnExited(KProcess *)
             ct++;
         }
         result += "\n</table></qt>\n";
-        m_resultbox->setText(result);
-        m_resultbox->setContentsPos(0,0);
+        m_resultbox->setHtml(result);
+//         m_resultbox->setContentsPos(0,0);
         //kDebug() << result << endl;
     }
     
@@ -706,12 +745,12 @@ void Thesaurus::wnExited(KProcess *)
 
 void Thesaurus::receivedWnStdout(KProcess *, char *result, int len)
 {
-    m_wnproc_stdout += QString::fromLocal8Bit( Q3CString(result, len+1) );
+    m_wnproc_stdout += QString::fromLocal8Bit( QByteArray(result, len+1) );
 }
 
 void Thesaurus::receivedWnStderr(KProcess *, char *result, int len)
 {
-    m_wnproc_stderr += QString::fromLocal8Bit( Q3CString(result, len+1) );
+    m_wnproc_stderr += QString::fromLocal8Bit( QByteArray(result, len+1) );
 }
 
 
@@ -730,13 +769,13 @@ QString Thesaurus::formatLine(QString l)
     QRegExp re;
 
     re.setPattern("^(\\d+\\.)(.*)$");
-    if( re.search(l) != -1 ) {
+    if( re.indexIn(l) != -1 ) {
         l = "<b>" +re.cap(1)+ "</b>" +re.cap(2);
         return l;
     } 
 
     re.setPattern("^.* of (noun|verb|adj|adv) .*");
-    if( re.search(l) != -1 ) {
+    if( re.indexIn(l) != -1 ) {
         l = "<font size=\"5\">" +re.cap()+ "</font>\n\n";
         return l;
     } 
@@ -747,17 +786,17 @@ QString Thesaurus::formatLine(QString l)
     }
 
     re.setPattern("^(Sense \\d+)");
-    if( re.search(l) != -1 ) {
+    if( re.indexIn(l) != -1 ) {
         l = "<b>" +re.cap()+ "</b>\n";
         return l;
     }
     
     re.setPattern("(.*)(Also See-&gt;)(.*)");
     // Example: first sense of verb "keep"
-    if( re.search(l) != -1 ) {
+    if( re.indexIn(l) != -1 ) {
         l = re.cap(1);
         l += re.cap(2);
-        QStringList links = links.split(QChar(';'), re.cap(3), false);
+        QStringList links = re.cap(3).split(QChar(';'), QString::SkipEmptyParts);
         for ( QStringList::Iterator it = links.begin(); it != links.end(); ++it ) {
             QString link = (*it);
             if( it != links.begin() ) {
@@ -772,12 +811,12 @@ QString Thesaurus::formatLine(QString l)
 
     re.setPattern("(.*)(=&gt;|HAS \\w+:|PART OF:)(.*) --");
     re.setMinimal(true);    // non-greedy
-    if( re.search(l) != -1 ) {
-        int dash_pos = l.find("--");
+    if( re.indexIn(l) != -1 ) {
+        int dash_pos = l.indexOf("--");
         QString line_end = l.mid(dash_pos+2, l.length()-dash_pos);
         l = re.cap(1);
         l += re.cap(2) + " ";
-        QStringList links = links.split(QChar(','), re.cap(3), false);
+        QStringList links = re.cap(3).split(QChar(','), QString::SkipEmptyParts);
         for ( QStringList::Iterator it = links.begin(); it != links.end(); ++it ) {
             QString link = (*it);
             if( it != links.begin() ) {
@@ -807,13 +846,13 @@ QStringList Thesaurus::sortQStringList(QStringList list)
     QMap<QString,QString> map_list;
     for ( QStringList::Iterator it = list.begin(); it != list.end(); ++it ) {
         QString str = *it;
-        map_list[str.lower()] = str;
+        map_list[str.toLower()] = str;
     }
     list.clear();
     QMap<QString,QString>::Iterator it;
     // Qt doc: "the items are alphabetically sorted [by key] when iterating over the map":
     for( it = map_list.begin(); it != map_list.end(); ++it ) {
-        list.append(it.data());
+        list.append(it.value());
     }
     return list;
 }
