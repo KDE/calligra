@@ -187,7 +187,7 @@ bool AmiProParser::process( const QString& filename )
     // leave [edoc]
     if( enter_new_section && ( old_section == "edoc" ) )
     {
-      parseParagraph( lines.join(" ") );
+      parseParagraph( QStringList(lines.join(" ")) );
       lines.clear();
     }
 
@@ -202,7 +202,7 @@ bool AmiProParser::process( const QString& filename )
     {
       if( line.isEmpty() ) 
       {
-         parseParagraph( lines );
+		 parseParagraph( QStringList(lines) );
          lines.clear(); 
       }
         lines.append( line );
@@ -224,7 +224,7 @@ bool AmiProParser::process( const QString& filename )
   }
 
   // in case left-over
-  if( lines.count() > 0 ) parseParagraph( lines.join( " " ) );
+  if( lines.count() > 0 ) parseParagraph( QStringList(lines.join( " " )) );
 
   processCloseDocument();
 

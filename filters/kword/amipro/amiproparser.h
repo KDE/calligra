@@ -64,7 +64,7 @@ class AmiProLayout
     bool bold, italic, underline;
     bool word_underline, double_underline;
     bool subscript, superscript, strikethrough;
-    Qt::AlignmentFlags align;
+	Qt::AlignmentFlag align;
     float linespace;
     float spaceBefore, spaceAfter;
     AmiProLayout();
@@ -84,7 +84,7 @@ class AmiProStyle
     bool bold, italic, underline;
     bool word_underline, double_underline;
     bool subscript, superscript, strikethrough;
-    Qt::AlignmentFlags align;
+    Qt::AlignmentFlag align;
     float linespace;
     float spaceBefore, spaceAfter;
     AmiProStyle();
