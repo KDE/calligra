@@ -1,6 +1,6 @@
 kde4_header()
 
-include_directories( 
+include_directories(
 	${CMAKE_SOURCE_DIR}/kchart 
 	${CMAKE_SOURCE_DIR}/kchart/kdchart 
 	${CMAKE_SOURCE_DIR}/interfaces 

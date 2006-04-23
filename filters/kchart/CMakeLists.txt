@@ -1,5 +1,9 @@
 kde4_header()
 
+include_directories(
+    ${KOFFICECORE_INCLUDES}
+	)
+
 add_subdirectory( libimageexport )
 add_subdirectory( bmp )
 add_subdirectory( jpeg )
