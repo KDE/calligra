@@ -121,7 +121,7 @@ QtCalculator :: QtCalculator( Calculator *_corba, QWidget *parent, const char *n
 
     anglebutton[0] = new QRadioButton( angle_group );
     anglebutton[0]->setText( "&Deg" )   ;
-    anglebutton[0]->setChecked(   TRUE);
+    anglebutton[0]->setChecked(   true);
     accel->connectItem( accel->insertItem(Qt::Key_D + Qt::ALT), this ,
                         SLOT(Deg_Selected()) );
 
@@ -155,7 +155,7 @@ QtCalculator :: QtCalculator( Calculator *_corba, QWidget *parent, const char *n
 
     basebutton[1] = new QRadioButton( base_group );
     basebutton[1]->setText( "D&ec" );
-    basebutton[1]->setChecked(TRUE);
+    basebutton[1]->setChecked(true);
     accel->connectItem( accel->insertItem(Qt::Key_E + Qt::ALT), this ,
                         SLOT(Dec_Selected()) );
 
@@ -183,203 +183,203 @@ QtCalculator :: QtCalculator( Calculator *_corba, QWidget *parent, const char *n
 
     pbhyp = new QPushButton("Hyp", mSmallPage, "hypbutton" );
     connect( pbhyp, SIGNAL(toggled(bool)), SLOT(pbhyptoggled(bool)));
-    pbhyp->setToggleButton(TRUE);
+    pbhyp->setToggleButton(true);
 
     pbinv = new QPushButton( "Inv", mSmallPage, "InverseButton" );
     connect( pbinv, SIGNAL(toggled(bool)), SLOT(pbinvtoggled(bool)));
-    pbinv->setToggleButton(TRUE);
+    pbinv->setToggleButton(true);
 
     pbA = new QPushButton("A",mSmallPage, "Abutton" );
     connect( pbA, SIGNAL(toggled(bool)), SLOT(pbAtoggled(bool)));
-    pbA->setToggleButton(TRUE);
+    pbA->setToggleButton(true);
 
     pbSin = new QPushButton("Sin",mSmallPage, "Sinbutton" );
     connect( pbSin, SIGNAL(toggled(bool)), SLOT(pbSintoggled(bool)));
-    pbSin->setToggleButton(TRUE);
+    pbSin->setToggleButton(true);
 
     pbplusminus = new QPushButton( "+/-", mSmallPage, "plusminusbutton" );
     connect( pbplusminus, SIGNAL(toggled(bool)), SLOT(pbplusminustoggled(bool)));
-    pbplusminus->setToggleButton(TRUE);
+    pbplusminus->setToggleButton(true);
     pbplusminus->setFont(buttonfont);
 
     pbB = new QPushButton("B", mSmallPage, "Bbutton" );
     connect( pbB, SIGNAL(toggled(bool)), SLOT(pbBtoggled(bool)));
-    pbB->setToggleButton(TRUE);
+    pbB->setToggleButton(true);
 
     pbCos = new QPushButton("Cos",mSmallPage, "Cosbutton" );
     pbCos->setText( "Cos" );
     connect( pbCos, SIGNAL(toggled(bool)), SLOT(pbCostoggled(bool)));
-    pbCos->setToggleButton(TRUE);
+    pbCos->setToggleButton(true);
 
 
     pbreci = new QPushButton("1/x",mSmallPage, "recibutton" );
     connect( pbreci, SIGNAL(toggled(bool)), SLOT(pbrecitoggled(bool)));
-    pbreci->setToggleButton(TRUE);
+    pbreci->setToggleButton(true);
 
     pbC = new QPushButton( "C", mSmallPage, "Cbutton" );
     connect( pbC, SIGNAL(toggled(bool)), SLOT(pbCtoggled(bool)));
-    pbC->setToggleButton(TRUE);
+    pbC->setToggleButton(true);
 
     pbTan = new QPushButton("Tan" ,mSmallPage,  "Tanbutton" );
     connect( pbTan, SIGNAL(toggled(bool)), SLOT(pbTantoggled(bool)));
-    pbTan->setToggleButton(TRUE);
+    pbTan->setToggleButton(true);
 
     pbfactorial = new QPushButton("x!",mSmallPage, "factorialbutton" );
     connect( pbfactorial, SIGNAL(toggled(bool)), SLOT(pbfactorialtoggled(bool)));
-    pbfactorial->setToggleButton(TRUE);
+    pbfactorial->setToggleButton(true);
 
     pbD = new QPushButton("D",mSmallPage,  "Dbutton" );
     connect( pbD, SIGNAL(toggled(bool)), SLOT(pbDtoggled(bool)));
-    pbD->setToggleButton(TRUE);
+    pbD->setToggleButton(true);
 
     pblog = new QPushButton("Log",mSmallPage, "logbutton" );
     connect( pblog, SIGNAL(toggled(bool)), SLOT(pblogtoggled(bool)));
-    pblog->setToggleButton(TRUE);
+    pblog->setToggleButton(true);
 
     pbsquare = new QPushButton( "x^2", mSmallPage,  "squarebutton" );
     connect( pbsquare, SIGNAL(toggled(bool)), SLOT(pbsquaretoggled(bool)));
-    pbsquare->setToggleButton(TRUE);
+    pbsquare->setToggleButton(true);
 
     pbE = new QPushButton("E",mSmallPage, "Ebutton" );
     connect( pbE, SIGNAL(toggled(bool)), SLOT(pbEtoggled(bool)));
-    pbE->setToggleButton(TRUE);
+    pbE->setToggleButton(true);
 
 
     pbln = new QPushButton( "Ln", mSmallPage, "lnbutton" );
     connect( pbln, SIGNAL(toggled(bool)), SLOT(pblntoggled(bool)));
-    pbln->setToggleButton(TRUE);
+    pbln->setToggleButton(true);
 
     pbpower = new QPushButton("x^y",mSmallPage,  "powerbutton" );
     connect( pbpower, SIGNAL(toggled(bool)), SLOT(pbpowertoggled(bool)));
-    pbpower->setToggleButton(TRUE);
+    pbpower->setToggleButton(true);
 
     pbF = new QPushButton("F",mSmallPage, "Fbutton" );
     connect( pbF, SIGNAL(toggled(bool)), SLOT(pbFtoggled(bool)));
-    pbF->setToggleButton(TRUE);
+    pbF->setToggleButton(true);
 
     pbEE = new QPushButton("EE",mLargePage,  "EEbutton" );
-    pbEE->setToggleButton(TRUE);
+    pbEE->setToggleButton(true);
     connect( pbEE, SIGNAL(toggled(bool)), SLOT(EEtoggled(bool)));
 
     pbMR = new QPushButton("MR",mLargePage,  "MRbutton" );
     connect( pbMR, SIGNAL(toggled(bool)), SLOT(pbMRtoggled(bool)));
-    pbMR->setToggleButton(TRUE);
+    pbMR->setToggleButton(true);
     pbMR->setFont(buttonfont);
 
     pbMplusminus = new QPushButton("M+-",mLargePage,  "Mplusminusbutton" );
     connect( pbMplusminus, SIGNAL(toggled(bool)), SLOT(pbMplusminustoggled(bool)));
-    pbMplusminus->setToggleButton(TRUE);
+    pbMplusminus->setToggleButton(true);
 
     pbMC = new QPushButton("MC",mLargePage,  "MCbutton" );
     connect( pbMC, SIGNAL(toggled(bool)), SLOT(pbMCtoggled(bool)));
-    pbMC->setToggleButton(TRUE);
+    pbMC->setToggleButton(true);
 
     pbClear = new QPushButton("C",mLargePage,  "Clearbutton" );
     connect( pbClear, SIGNAL(toggled(bool)), SLOT(pbCleartoggled(bool)));
-    pbClear->setToggleButton(TRUE);
+    pbClear->setToggleButton(true);
 
     pbAC = new QPushButton("AC", mLargePage,  "ACbutton" );
     connect( pbAC, SIGNAL(toggled(bool)), SLOT(pbACtoggled(bool)));
-    pbAC->setToggleButton(TRUE);
+    pbAC->setToggleButton(true);
 
     pb7 = new QPushButton("7",mLargePage, "7button" );
     connect( pb7, SIGNAL(toggled(bool)), SLOT(pb7toggled(bool)));
-    pb7->setToggleButton(TRUE);
+    pb7->setToggleButton(true);
 
     pb8 = new QPushButton("8",mLargePage, "8button" );
     connect( pb8, SIGNAL(toggled(bool)), SLOT(pb8toggled(bool)));
-    pb8->setToggleButton(TRUE);
+    pb8->setToggleButton(true);
 
     pb9 = new QPushButton("9",mLargePage,"9button" );
     connect( pb9, SIGNAL(toggled(bool)), SLOT(pb9toggled(bool)));
-    pb9->setToggleButton(TRUE);
+    pb9->setToggleButton(true);
 
     pbparenopen = new QPushButton("(",mLargePage,  "parenopenbutton" );
     connect( pbparenopen, SIGNAL(toggled(bool)), SLOT(pbparenopentoggled(bool)));
-    pbparenopen->setToggleButton(TRUE);
+    pbparenopen->setToggleButton(true);
 
     pbparenclose = new QPushButton(")",mLargePage, "parenclosebutton" );
     connect( pbparenclose, SIGNAL(toggled(bool)), SLOT(pbparenclosetoggled(bool)));
-    pbparenclose->setToggleButton(TRUE);
+    pbparenclose->setToggleButton(true);
 
     pband = new QPushButton("And",mLargePage, "andbutton" );
     connect( pband, SIGNAL(toggled(bool)), SLOT(pbandtoggled(bool)));
-    pband->setToggleButton(TRUE);
+    pband->setToggleButton(true);
     pband->setFont(buttonfont);
 
     pb4 = new QPushButton("4",mLargePage,  "4button" );
     connect( pb4, SIGNAL(toggled(bool)), SLOT(pb4toggled(bool)));
-    pb4->setToggleButton(TRUE);
+    pb4->setToggleButton(true);
 
     pb5 = new QPushButton("5",mLargePage,  "5button" );
     connect( pb5, SIGNAL(toggled(bool)), SLOT(pb5toggled(bool)));
-    pb5->setToggleButton(TRUE);
+    pb5->setToggleButton(true);
 
     pb6 = new QPushButton("6",mLargePage,  "6button" );
     connect( pb6, SIGNAL(toggled(bool)), SLOT(pb6toggled(bool)));
-    pb6->setToggleButton(TRUE);
+    pb6->setToggleButton(true);
 
     pbX = new QPushButton("X",mLargePage, "Multiplybutton" );
     connect( pbX, SIGNAL(toggled(bool)), SLOT(pbXtoggled(bool)));
-    pbX->setToggleButton(TRUE);
+    pbX->setToggleButton(true);
 
     pbdivision = new QPushButton("/",mLargePage,  "divisionbutton" );
     connect( pbdivision, SIGNAL(toggled(bool)), SLOT(pbdivisiontoggled(bool)));
-    pbdivision->setToggleButton(TRUE);
+    pbdivision->setToggleButton(true);
 
     pbor = new QPushButton("Or",mLargePage,  "orbutton" );
     connect( pbor, SIGNAL(toggled(bool)), SLOT(pbortoggled(bool)));
-    pbor->setToggleButton(TRUE);
+    pbor->setToggleButton(true);
 
     pb1 = new QPushButton("1",mLargePage,  "1button" );
     connect( pb1, SIGNAL(toggled(bool)), SLOT(pb1toggled(bool)));
-    pb1->setToggleButton(TRUE);
+    pb1->setToggleButton(true);
 
     pb2 = new QPushButton("2",mLargePage,  "2button" );
 
     connect( pb2, SIGNAL(toggled(bool)), SLOT(pb2toggled(bool)));
-    pb2->setToggleButton(TRUE);
+    pb2->setToggleButton(true);
 
     pb3 = new QPushButton("3",mLargePage,  "3button" );
     connect( pb3, SIGNAL(toggled(bool)), SLOT(pb3toggled(bool)));
-    pb3->setToggleButton(TRUE);
+    pb3->setToggleButton(true);
 
     pbplus = new QPushButton("+",mLargePage, "plusbutton" );
     connect( pbplus, SIGNAL(toggled(bool)), SLOT(pbplustoggled(bool)));
-    pbplus->setToggleButton(TRUE);
+    pbplus->setToggleButton(true);
 
 
     pbminus = new QPushButton("-",mLargePage,  "minusbutton" );
     connect( pbminus, SIGNAL(toggled(bool)), SLOT(pbminustoggled(bool)));
-    pbminus->setToggleButton(TRUE);
+    pbminus->setToggleButton(true);
 
     pbshift = new QPushButton("Lsh",mLargePage, "shiftbutton" );
     connect( pbshift, SIGNAL(toggled(bool)), SLOT(pbshifttoggled(bool)));
-    pbshift->setToggleButton(TRUE);
+    pbshift->setToggleButton(true);
 
     pbperiod = new QPushButton(".",mLargePage,  "periodbutton" );
     connect( pbperiod, SIGNAL(toggled(bool)), SLOT(pbperiodtoggled(bool)));
-    pbperiod->setToggleButton(TRUE);
+    pbperiod->setToggleButton(true);
 
     pb0 = new QPushButton("0",mLargePage,  "0button" );
     connect( pb0, SIGNAL(toggled(bool)), SLOT(pb0toggled(bool)));
-    pb0->setToggleButton(TRUE);
+    pb0->setToggleButton(true);
 
     pbequal = new QPushButton("=",mLargePage,  "equalbutton" );
     connect( pbequal, SIGNAL(toggled(bool)), SLOT(pbequaltoggled(bool)));
-    pbequal->setToggleButton(TRUE);
+    pbequal->setToggleButton(true);
 
     pbpercent = new QPushButton("%",mLargePage, "percentbutton" );
     connect( pbpercent, SIGNAL(toggled(bool)), SLOT(pbpercenttoggled(bool)));
-    pbpercent->setToggleButton(TRUE);
+    pbpercent->setToggleButton(true);
 
     pbnegate = new QPushButton("Cmp",mLargePage,  "OneComplementbutton" );
     connect( pbnegate, SIGNAL(toggled(bool)), SLOT(pbnegatetoggled(bool)));
-    pbnegate->setToggleButton(TRUE);
+    pbnegate->setToggleButton(true);
 
     pbmod = new QPushButton("Mod",mLargePage,  "modbutton" );
     connect( pbmod, SIGNAL(toggled(bool)), SLOT(pbmodtoggled(bool)));
-    pbmod->setToggleButton(TRUE);
+    pbmod->setToggleButton(true);
 
     QGridLayout *smallBtnLayout = new QGridLayout(mSmallPage);
     smallBtnLayout->setMargin(0);
@@ -644,7 +644,7 @@ void QtCalculator::exit()
 
 void QtCalculator::Hex_Selected()
 {
-  basebutton[0]->setChecked(TRUE);
+  basebutton[0]->setChecked(true);
   basebutton[1]->setChecked(FALSE);
   basebutton[2]->setChecked(FALSE);
   basebutton[3]->setChecked(FALSE);
@@ -655,7 +655,7 @@ void QtCalculator::Hex_Selected()
 void QtCalculator::Dec_Selected()
 {
   basebutton[0]->setChecked(FALSE);
-  basebutton[1]->setChecked(TRUE);
+  basebutton[1]->setChecked(true);
   basebutton[2]->setChecked(FALSE);
   basebutton[3]->setChecked(FALSE);
   SetDec();
@@ -666,7 +666,7 @@ void QtCalculator::Oct_Selected()
 {
   basebutton[0]->setChecked(FALSE);
   basebutton[1]->setChecked(FALSE);
-  basebutton[2]->setChecked(TRUE);
+  basebutton[2]->setChecked(true);
   basebutton[3]->setChecked(FALSE);
   SetOct();
 }
@@ -678,13 +678,13 @@ void QtCalculator::Bin_Selected()
   basebutton[0]->setChecked(FALSE);
   basebutton[1]->setChecked(FALSE);
   basebutton[2]->setChecked(FALSE);
-  basebutton[3]->setChecked(TRUE);
+  basebutton[3]->setChecked(true);
   SetBin();
 }
 
 void QtCalculator::Deg_Selected()
 {
-  anglebutton[0]->setChecked(TRUE);
+  anglebutton[0]->setChecked(true);
   anglebutton[1]->setChecked(FALSE);
   anglebutton[2]->setChecked(FALSE);
   SetDeg();
@@ -694,7 +694,7 @@ void QtCalculator::Deg_Selected()
 void QtCalculator::Rad_Selected()
 {
   anglebutton[0]->setChecked(FALSE);
-  anglebutton[1]->setChecked(TRUE);
+  anglebutton[1]->setChecked(true);
   anglebutton[2]->setChecked(FALSE);
   SetRad();
 
@@ -705,7 +705,7 @@ void QtCalculator::Gra_Selected()
 {
   anglebutton[0]->setChecked(FALSE);
   anglebutton[1]->setChecked(FALSE);
-  anglebutton[2]->setChecked(TRUE);
+  anglebutton[2]->setChecked(true);
   SetGra();
 }
 
@@ -740,211 +740,211 @@ void QtCalculator::keyPressEvent( QKeyEvent *e ){
      break;
 
   case Qt::Key_PageDown:
-     key_pressed = TRUE;
-     pbAC->setChecked(TRUE);
+     key_pressed = true;
+     pbAC->setChecked(true);
      break;
   case Qt::Key_PageUp:
-     key_pressed = TRUE;
-     pbClear->setChecked(TRUE);
+     key_pressed = true;
+     pbClear->setChecked(true);
      break;
 
   case Qt::Key_H:
-     key_pressed = TRUE;
-     pbhyp->setChecked(TRUE);
+     key_pressed = true;
+     pbhyp->setChecked(true);
      break;
   case Qt::Key_I:
-     key_pressed = TRUE;
-     pbinv->setChecked(TRUE);
+     key_pressed = true;
+     pbinv->setChecked(true);
      break;
   case Qt::Key_A:
-     key_pressed = TRUE;
-     pbA->setChecked(TRUE);
+     key_pressed = true;
+     pbA->setChecked(true);
 
      break;
   case Qt::Key_E:
-     key_pressed = TRUE;
+     key_pressed = true;
     if (current_base == NB_HEX)
-     pbE->setChecked(TRUE);
+     pbE->setChecked(true);
     else
-     pbEE->setChecked(TRUE);
+     pbEE->setChecked(true);
      break;
   case Qt::Key_Escape:
-     key_pressed = TRUE;
-     pbClear->setChecked(TRUE);
+     key_pressed = true;
+     pbClear->setChecked(true);
      break;
   case Qt::Key_Delete:
-     key_pressed = TRUE;
-     pbAC->setChecked(TRUE);
+     key_pressed = true;
+     pbAC->setChecked(true);
      break;
   case Qt::Key_S:
-     key_pressed = TRUE;
-     pbSin->setChecked(TRUE);
+     key_pressed = true;
+     pbSin->setChecked(true);
      break;
   case Qt::Key_Backslash:
-     key_pressed = TRUE;
-     pbplusminus->setChecked(TRUE);
+     key_pressed = true;
+     pbplusminus->setChecked(true);
      break;
   case Qt::Key_B:
-     key_pressed = TRUE;
-     pbB->setChecked(TRUE);
+     key_pressed = true;
+     pbB->setChecked(true);
      break;
   case Qt::Key_7:
-     key_pressed = TRUE;
-     pb7->setChecked(TRUE);
+     key_pressed = true;
+     pb7->setChecked(true);
      break;
   case Qt::Key_8:
-     key_pressed = TRUE;
-     pb8->setChecked(TRUE);
+     key_pressed = true;
+     pb8->setChecked(true);
      break;
   case Qt::Key_9:
-     key_pressed = TRUE;
-     pb9->setChecked(TRUE);
+     key_pressed = true;
+     pb9->setChecked(true);
      break;
   case Qt::Key_ParenLeft:
-     key_pressed = TRUE;
-     pbparenopen->setChecked(TRUE);
+     key_pressed = true;
+     pbparenopen->setChecked(true);
      break;
   case Qt::Key_ParenRight:
-     key_pressed = TRUE;
-     pbparenclose->setChecked(TRUE);
+     key_pressed = true;
+     pbparenclose->setChecked(true);
      break;
   case Qt::Key_Ampersand:
-     key_pressed = TRUE;
-     pband->setChecked(TRUE);
+     key_pressed = true;
+     pband->setChecked(true);
      break;
   case Qt::Key_C:
-     key_pressed = TRUE;
+     key_pressed = true;
     if (current_base == NB_HEX)
-     pbC->setChecked(TRUE);
+     pbC->setChecked(true);
     else
-     pbCos->setChecked(TRUE);
+     pbCos->setChecked(true);
      break;
   case Qt::Key_4:
-     key_pressed = TRUE;
-     pb4->setChecked(TRUE);
+     key_pressed = true;
+     pb4->setChecked(true);
      break;
   case Qt::Key_5:
-     key_pressed = TRUE;
-     pb5->setChecked(TRUE);
+     key_pressed = true;
+     pb5->setChecked(true);
      break;
   case Qt::Key_6:
-     key_pressed = TRUE;
-     pb6->setChecked(TRUE);
+     key_pressed = true;
+     pb6->setChecked(true);
      break;
   case Qt::Key_Asterisk:
-     key_pressed = TRUE;
-     pbX->setChecked(TRUE);
+     key_pressed = true;
+     pbX->setChecked(true);
      break;
   case Qt::Key_Slash:
-     key_pressed = TRUE;
-     pbdivision->setChecked(TRUE);
+     key_pressed = true;
+     pbdivision->setChecked(true);
      break;
   case Qt::Key_O:
-     key_pressed = TRUE;
-     pbor->setChecked(TRUE);
+     key_pressed = true;
+     pbor->setChecked(true);
      break;
   case Qt::Key_T:
-     key_pressed = TRUE;
-     pbTan->setChecked(TRUE);
+     key_pressed = true;
+     pbTan->setChecked(true);
      break;
   case Qt::Key_Exclam:
-     key_pressed = TRUE;
-     pbfactorial->setChecked(TRUE);
+     key_pressed = true;
+     pbfactorial->setChecked(true);
      break;
   case Qt::Key_D:
-     key_pressed = TRUE;
+     key_pressed = true;
      if(kcalcdefaults.style == 0)
-       pbD->setChecked(TRUE); // trig mode
+       pbD->setChecked(true); // trig mode
      else
-       pblog->setChecked(TRUE); // stat mode
+       pblog->setChecked(true); // stat mode
     break;
   case Qt::Key_1:
-     key_pressed = TRUE;
-     pb1->setChecked(TRUE);
+     key_pressed = true;
+     pb1->setChecked(true);
      break;
   case Qt::Key_2:
-     key_pressed = TRUE;
-     pb2->setChecked(TRUE);
+     key_pressed = true;
+     pb2->setChecked(true);
      break;
   case Qt::Key_3:
-     key_pressed = TRUE;
-     pb3->setChecked(TRUE);
+     key_pressed = true;
+     pb3->setChecked(true);
      break;
   case Qt::Key_Plus:
-     key_pressed = TRUE;
-     pbplus->setChecked(TRUE);
+     key_pressed = true;
+     pbplus->setChecked(true);
      break;
   case Qt::Key_Minus:
-     key_pressed = TRUE;
-     pbminus->setChecked(TRUE);
+     key_pressed = true;
+     pbminus->setChecked(true);
      break;
   case Qt::Key_Less:
-     key_pressed = TRUE;
-     pbshift->setChecked(TRUE);
+     key_pressed = true;
+     pbshift->setChecked(true);
      break;
   case Qt::Key_N:
-     key_pressed = TRUE;
-     pbln->setChecked(TRUE);
+     key_pressed = true;
+     pbln->setChecked(true);
      break;
   case Qt::Key_L:
-     key_pressed = TRUE;
-     pblog->setChecked(TRUE);
+     key_pressed = true;
+     pblog->setChecked(true);
      break;
   case Qt::Key_AsciiCircum:
-     key_pressed = TRUE;
-     pbpower->setChecked(TRUE);
+     key_pressed = true;
+     pbpower->setChecked(true);
      break;
   case Qt::Key_F:
-     key_pressed = TRUE;
-     pbF->setChecked(TRUE);
+     key_pressed = true;
+     pbF->setChecked(true);
      break;
   case Qt::Key_Period:
-     key_pressed = TRUE;
-     pbperiod->setChecked(TRUE);
+     key_pressed = true;
+     pbperiod->setChecked(true);
      break;
   case Qt::Key_Comma:
-     key_pressed = TRUE;
-     pbperiod->setChecked(TRUE);
+     key_pressed = true;
+     pbperiod->setChecked(true);
      break;
   case Qt::Key_0:
-     key_pressed = TRUE;
-     pb0->setChecked(TRUE);
+     key_pressed = true;
+     pb0->setChecked(true);
      break;
      case Qt::Key_Equal:
-     key_pressed = TRUE;
-     pbequal->setChecked(TRUE);
+     key_pressed = true;
+     pbequal->setChecked(true);
      break;
   case Qt::Key_Return:
-     key_pressed = TRUE;
-     pbequal->setChecked(TRUE);
+     key_pressed = true;
+     pbequal->setChecked(true);
      break;
   case Qt::Key_Enter:
-     key_pressed = TRUE;
-     pbequal->setChecked(TRUE);
+     key_pressed = true;
+     pbequal->setChecked(true);
      break;
   case Qt::Key_Percent:
-     key_pressed = TRUE;
-     pbpercent->setChecked(TRUE);
+     key_pressed = true;
+     pbpercent->setChecked(true);
      break;
   case Qt::Key_AsciiTilde:
-     key_pressed = TRUE;
-     pbnegate->setChecked(TRUE);
+     key_pressed = true;
+     pbnegate->setChecked(true);
      break;
   case Qt::Key_Colon:
-     key_pressed = TRUE;
-     pbmod->setChecked(TRUE);
+     key_pressed = true;
+     pbmod->setChecked(true);
      break;
   case Qt::Key_BracketLeft:
-     key_pressed = TRUE;
-     pbsquare->setChecked(TRUE);
+     key_pressed = true;
+     pbsquare->setChecked(true);
      break;
  case Qt::Key_Backspace:
-     key_pressed = TRUE;
-     pbAC->setChecked(TRUE);
+     key_pressed = true;
+     pbAC->setChecked(true);
      break;
   case Qt::Key_R:
-     key_pressed = TRUE;
-     pbreci->setChecked(TRUE);
+     key_pressed = true;
+     pbreci->setChecked(true);
      break;
   }
 }
@@ -1465,7 +1465,7 @@ void QtCalculator::configclicked(){
 
 
   Q3TabDialog * tabdialog;
-  tabdialog = new Q3TabDialog(0,"tabdialog",TRUE);
+  tabdialog = new Q3TabDialog(0,"tabdialog",true);
 
   tabdialog->setCaption( i18n("KCalc Configuration") );
   tabdialog->resize( 360, 390 );
@@ -1688,7 +1688,7 @@ void QtCalculator::clear_status_label(){
 void QtCalculator::setStatusLabel(const QString& string){
 
   statusERRORLabel->setText(string);
-  status_timer->start(3000,TRUE);
+  status_timer->start(3000,true);
 
 }
 

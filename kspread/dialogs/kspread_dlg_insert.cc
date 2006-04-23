@@ -45,7 +45,7 @@
 using namespace KSpread;
 
 InsertDialog::InsertDialog( View* parent, const char* name,const QRect &_rect,Mode _mode)
-  : KDialogBase( KDialogBase::Tabbed, Qt::Dialog, parent, name, TRUE,"",Ok|Cancel )
+  : KDialogBase( KDialogBase::Tabbed, Qt::Dialog, parent, name, true,"",Ok|Cancel )
 {
   m_pView = parent;
   rect=_rect;
@@ -58,7 +58,7 @@ InsertDialog::InsertDialog( View* parent, const char* name,const QRect &_rect,Mo
   lay1->setSpacing(KDialogBase::spacingHint());
 
   Q3ButtonGroup *grp = new Q3ButtonGroup( 1, Qt::Horizontal, i18n("Insert"),page);
-  grp->setRadioButtonExclusive( TRUE );
+  grp->setRadioButtonExclusive( true );
   grp->layout();
   lay1->addWidget(grp);
   if( insRem==Insert)

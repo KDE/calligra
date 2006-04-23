@@ -41,7 +41,7 @@
 using namespace KSpread;
 
 CommentDialog::CommentDialog( View* parent, const char* name,const QPoint &_marker)
-  : KDialogBase( KDialogBase::Tabbed, Qt::Dialog, parent, name,TRUE,i18n("Cell Comment"),Ok|Cancel )
+  : KDialogBase( KDialogBase::Tabbed, Qt::Dialog, parent, name,true,i18n("Cell Comment"),Ok|Cancel )
 {
     m_pView = parent;
     marker= _marker;

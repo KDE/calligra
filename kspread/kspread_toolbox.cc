@@ -56,14 +56,14 @@ void ToolBox::setEnabled( bool enable )
 	    foreach ( QObject* child, children )
 	    {
 		if ( child->isWidgetType() )
-                    static_cast<QWidget*>(child)->setEnabled( TRUE );
+                    static_cast<QWidget*>(child)->setEnabled( true );
 	    }
 	}
     }
     else
     {
 	if ( focusWidget() == this )
-	    focusNextPrevChild( TRUE );
+	    focusNextPrevChild( true );
         if ( !children().isEmpty() )
         {
             QList<QObject*> children( QObject::children() );

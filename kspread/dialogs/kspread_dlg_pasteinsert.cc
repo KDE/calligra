@@ -40,7 +40,7 @@
 using namespace KSpread;
 
 PasteInsertDialog::PasteInsertDialog( View* parent, const char* name,const QRect &_rect)
-  : KDialogBase( KDialogBase::Tabbed, Qt::Dialog, parent, name, TRUE,i18n("Paste Inserting Cells"),Ok|Cancel )
+  : KDialogBase( KDialogBase::Tabbed, Qt::Dialog, parent, name, true,i18n("Paste Inserting Cells"),Ok|Cancel )
 {
   m_pView = parent;
   rect=_rect;
@@ -52,7 +52,7 @@ PasteInsertDialog::PasteInsertDialog( View* parent, const char* name,const QRect
   lay1->setSpacing(KDialogBase::spacingHint());
 
   Q3ButtonGroup *grp = new Q3ButtonGroup( 1, Qt::Horizontal, i18n("Insert"),page);
-  grp->setRadioButtonExclusive( TRUE );
+  grp->setRadioButtonExclusive( true );
   grp->layout();
   lay1->addWidget(grp);
   rb1 = new QRadioButton( i18n("Move towards right"), grp );

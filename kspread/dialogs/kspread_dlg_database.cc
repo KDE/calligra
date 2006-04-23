@@ -426,7 +426,7 @@ DatabaseDialog::DatabaseDialog( View * parent, QRect const & rect, const char * 
 
   m_startingCell = new QRadioButton( Frame12 );
   m_startingCell->setText( i18n( "Starting in cell" ) );
-  m_startingCell->setChecked( TRUE );
+  m_startingCell->setChecked( true );
   Frame12Layout->addWidget( m_startingCell, 1, 0 );
 
   Frame5_2_2_3Layout->addWidget( Frame12, 2, 0 );

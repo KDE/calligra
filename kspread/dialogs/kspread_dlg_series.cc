@@ -51,7 +51,7 @@
 using namespace KSpread;
 
 SeriesDlg::SeriesDlg( View* parent, const char* name,const QPoint &_marker)
-  : KDialogBase( KDialogBase::Tabbed, Qt::Dialog, parent, name,TRUE,i18n("Series"),Ok|Cancel )
+  : KDialogBase( KDialogBase::Tabbed, Qt::Dialog, parent, name,true,i18n("Series"),Ok|Cancel )
 {
   m_pView = parent;
   marker=_marker;

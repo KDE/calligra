@@ -39,7 +39,7 @@
 using namespace KSpread;
 
 SpecialDialog::SpecialDialog( View* parent, const char* name )
-  : KDialogBase( KDialogBase::Tabbed, Qt::Dialog, parent, name, TRUE,i18n("Special Paste"),Ok|Cancel  )
+  : KDialogBase( KDialogBase::Tabbed, Qt::Dialog, parent, name, true,i18n("Special Paste"),Ok|Cancel  )
 {
     m_pView = parent;
     QWidget *page = new QWidget( this );
@@ -49,7 +49,7 @@ SpecialDialog::SpecialDialog( View* parent, const char* name )
     lay1->setSpacing(spacingHint());
 
     Q3ButtonGroup *grp = new Q3ButtonGroup( 1, Qt::Horizontal, i18n( "Paste What" ),page );
-    grp->setRadioButtonExclusive( TRUE );
+    grp->setRadioButtonExclusive( true );
     grp->layout();
     lay1->addWidget(grp);
     rb1 = new QRadioButton( i18n("Everything"), grp );
@@ -62,7 +62,7 @@ SpecialDialog::SpecialDialog( View* parent, const char* name )
     rb1->setChecked(true);
 
     grp = new Q3ButtonGroup( 1, Qt::Horizontal, i18n("Operation"),page);
-    grp->setRadioButtonExclusive( TRUE );
+    grp->setRadioButtonExclusive( true );
     grp->layout();
     lay1->addWidget(grp);
 

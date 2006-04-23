@@ -400,7 +400,7 @@ QString FormulaDialog::createFormula()
     if ( !m_desc )
 	return QString::null;
 
-    bool first = TRUE;
+    bool first = true;
 
     int count = m_desc->params();
 
@@ -578,7 +578,7 @@ void FormulaDialog::slotDoubleClicked( Q3ListBoxItem* item )
 
     // Dont change order of these function calls due to a bug in Qt 2.2
     m_browser->setText( m_desc->toQML() );
-    m_tabwidget->setTabEnabled( m_input, TRUE );
+    m_tabwidget->setTabEnabled( m_input, true );
     m_tabwidget->setCurrentPage( 1 );
 
     //
@@ -686,7 +686,7 @@ void FormulaDialog::slotSelected( const QString& function )
     }
 
     if( functions->currentItem() !=- 1 )
-        selectFunction->setEnabled( TRUE );
+        selectFunction->setEnabled( true );
 
     // Lock
     refresh_result = false;

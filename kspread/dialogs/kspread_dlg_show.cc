@@ -41,7 +41,7 @@
 using namespace KSpread;
 
 ShowDialog::ShowDialog( View* parent, const char* name )
-  : KDialogBase( KDialogBase::Tabbed, Qt::Dialog, parent, name,TRUE,i18n("Show Sheet"),Ok|Cancel )
+  : KDialogBase( KDialogBase::Tabbed, Qt::Dialog, parent, name,true,i18n("Show Sheet"),Ok|Cancel )
 {
   m_pView = parent;
   QWidget *page = new QWidget( this );

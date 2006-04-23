@@ -57,7 +57,7 @@
 using namespace KSpread;
 
 reference::reference( View* parent, const char* name )
-  : QDialog( parent, name,TRUE )
+  : QDialog( parent, name,true )
 {
   m_pView = parent;
   QVBoxLayout *lay1 = new QVBoxLayout( this );
@@ -79,7 +79,7 @@ reference::reference( View* parent, const char* name )
   m_pEdit = bb->addButton( i18n("&Edit...") );
   m_pOk = bb->addButton( KStdGuiItem::ok() );
   m_pCancel = bb->addButton( KStdGuiItem::cancel() );
-  m_pOk->setDefault( TRUE );
+  m_pOk->setDefault( true );
   bb->layout();
   lay1->addWidget( bb );
 

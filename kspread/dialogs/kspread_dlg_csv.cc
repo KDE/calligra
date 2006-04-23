@@ -68,7 +68,7 @@ CSVDialog::CSVDialog( View * parent, const char * name, QRect const & rect, Mode
   if ( !name )
     setName( "CSV" );
 
-  setSizeGripEnabled( TRUE );
+  setSizeGripEnabled( true );
 
   QWidget* page = new QWidget( this );
   setMainWidget( page );
@@ -108,7 +108,7 @@ CSVDialog::CSVDialog( View * parent, const char * name, QRect const & rect, Mode
 
   m_radioComma = new QRadioButton( m_delimiterBox );
   m_radioComma->setText( i18n( "Comma" ) );
-  m_radioComma->setChecked( TRUE );
+  m_radioComma->setChecked( true );
   m_delimiterBoxLayout->addWidget( m_radioComma, 0, 0 );
 
   m_radioSemicolon = new QRadioButton( m_delimiterBox );
@@ -150,7 +150,7 @@ CSVDialog::CSVDialog( View * parent, const char * name, QRect const & rect, Mode
 
   m_radioText = new QRadioButton( m_formatBox );
   m_radioText->setText( i18n( "Text" ) );
-  m_radioText->setChecked( TRUE );
+  m_radioText->setChecked( true );
   m_formatBoxLayout->addWidget( m_radioText, 0, 0 );
 
   m_radioCurrency = new QRadioButton( m_formatBox );

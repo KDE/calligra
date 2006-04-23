@@ -208,7 +208,7 @@ FunctionRepository* FunctionRepository::self()
 
     // find all XML description files
     QStringList files = Factory::global()->dirs()->findAllResources
-        ("extensions", "*.xml", TRUE);
+        ("extensions", "*.xml", true);
 
     // load desc/help from XML file
     for( QStringList::Iterator it = files.begin(); it != files.end(); ++it )
@@ -391,7 +391,7 @@ FunctionParameter::FunctionParameter (const QDomElement& element)
         if ( e.hasAttribute( "range" ))
         {
           if (e.attribute("range").toLower() == "true")
-            m_range = TRUE;
+            m_range = true;
         }
       }
     }

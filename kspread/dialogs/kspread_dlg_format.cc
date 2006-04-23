@@ -52,7 +52,7 @@
 using namespace KSpread;
 
 FormatDialog::FormatDialog( View* view, const char* name )
-    : KDialogBase( view, name, TRUE,i18n("Sheet Style"),Ok|Cancel )
+    : KDialogBase( view, name, true,i18n("Sheet Style"),Ok|Cancel )
 {
     for( int i = 0; i < 16; ++i )
 	m_cells[ i ] = 0;
@@ -73,12 +73,12 @@ FormatDialog::FormatDialog( View* view, const char* name )
     vbox->addWidget( m_label );
 
 
-    QStringList lst = Factory::global()->dirs()->findAllResources( "sheet-styles", "*.ksts", TRUE );
+    QStringList lst = Factory::global()->dirs()->findAllResources( "sheet-styles", "*.ksts", true );
 
     QStringList::Iterator it = lst.begin();
     for( ; it != lst.end(); ++it )
     {
-	KSimpleConfig cfg( *it, TRUE );
+	KSimpleConfig cfg( *it, true );
 	cfg.setGroup( "Sheet-Style" );
 
 	Entry e;
@@ -352,7 +352,7 @@ bool FormatDialog::parseXML( const QDomDocument& doc )
 	}
     }
 
-    return TRUE;
+    return true;
 }
 
 #include "kspread_dlg_format.moc"
