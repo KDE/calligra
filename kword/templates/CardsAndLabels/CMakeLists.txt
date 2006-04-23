@@ -5,8 +5,8 @@ kde4_header()
 
 ########### install files ###############
 
-install_files(  FILES  BusinessCards10.kwt LabelsL16.kwt )
-install_files(  FILES  .directory BusinessCards10.desktop LabelsL16.desktop )
+install_files( ${DATA_INSTALL_DIR}/kword/templates/CardsAndLabels/  FILES  BusinessCards10.kwt LabelsL16.kwt )
+install_files( ${DATA_INSTALL_DIR}/kword/templates/CardsAndLabels FILES  .directory BusinessCards10.desktop LabelsL16.desktop )
 install_files( ${DATA_INSTALL_DIR}/kword/icons FILES  )
 
 kde4_footer()
