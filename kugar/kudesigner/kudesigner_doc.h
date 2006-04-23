@@ -84,7 +84,7 @@ protected slots:
     void documentRestored();
 
 private:
-    KoCommandHistory *history;
+    KCommandHistory *history;
 
     Kudesigner::Canvas *docCanvas;
 
