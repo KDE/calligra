@@ -148,10 +148,10 @@ static QString AmiProLayoutAsXML( const AmiProLayout& layout )
     layout.underline|layout.word_underline ? "1" : "0";
 
   QString align;
-  align = layout.align==Qt::AlignLeft ? "left" :
-          layout.align==Qt::AlignRight ? "right" :
-          layout.align==Qt::AlignCenter ? "center" :
-          layout.align==Qt::AlignJustify ? "justify" :
+  align = layout.align==AlignLeft ? "left" :
+          layout.align==AlignRight ? "right" :
+          layout.align==AlignCenter ? "center" :
+          layout.align==AlignJustify ? "justify" :
           "left";
 
   QString offsets;
@@ -208,10 +208,10 @@ static QString AmiProStyleAsXML( const AmiProStyle& style )
     style.underline|style.word_underline ? "1" : "0";
 
   QString align;
-  align = style.align==Qt::AlignLeft ? "left" :
-          style.align==Qt::AlignRight ? "right" :
-          style.align==Qt::AlignCenter ? "center" :
-          style.align==Qt::AlignJustify ? "justify" :
+  align = style.align==AlignLeft ? "left" :
+          style.align==AlignRight ? "right" :
+          style.align==AlignCenter ? "center" :
+          style.align==AlignJustify ? "justify" :
           "left";
 
   QString linespacing;
