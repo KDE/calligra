@@ -22,9 +22,9 @@
 
 #include <KoTextDocument.h>
 //Added by qt3to4:
-#include <Q3ValueList>
+#include <QList>
 class KWFrameSet;
-template <class T> class Q3ValueList;
+template <class T> class QList;
 
 // This paragraph visitor collects the inline framesets (found via KWAnchor)
 // found in a text selection.
@@ -34,10 +34,10 @@ public:
     KWCollectFramesetsVisitor() : KoParagVisitor() {}
     virtual bool visit( KoTextParag *parag, int start, int end );
 
-    const Q3ValueList<KWFrameSet *>& frameSets() const { return m_framesets; }
+    const QList<KWFrameSet *>& frameSets() const { return m_framesets; }
 
 private:
-    Q3ValueList<KWFrameSet *> m_framesets;
+    QList<KWFrameSet *> m_framesets;
 };
 
 #endif /* KWORD_PARAGVISITORS_H */

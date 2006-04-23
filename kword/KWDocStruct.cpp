@@ -46,7 +46,7 @@
 #include <qlayout.h>
 //Added by qt3to4:
 #include <Q3VBoxLayout>
-#include <Q3ValueList>
+#include <QList>
 #include <QPaintEvent>
 #include <Q3PtrList>
 #include <q3tl.h>
@@ -770,7 +770,7 @@ void KWDocStructRootItem::setupTextFrameSets()
 
     // Build a list of framesets ordered by their screen position (top left corner).
     KWDocument* dok = doc();
-    Q3ValueList<KWOrderedFrameSet> orderedFrameSets;
+    QList<KWOrderedFrameSet> orderedFrameSets;
     for ( int i = dok->frameSetCount() - 1; i >= 0; i-- ) {
         KWFrameSet* frameset = dok->frameSet(i);
         if ( frameset->type() == FT_TEXT && frameset->frameSetInfo() == KWFrameSet::FI_BODY &&
@@ -851,7 +851,7 @@ void KWDocStructRootItem::setupTables()
 
     // Build a list of framesets ordered by their screen position (top left corner).
     KWDocument* dok = doc();
-    Q3ValueList<KWOrderedFrameSet> orderedFrameSets;
+    QList<KWOrderedFrameSet> orderedFrameSets;
     for ( int i = dok->frameSetCount() - 1; i >= 0; i-- ) {
         KWFrameSet* frameset = dok->frameSet(i);
         if ( frameset->type() == FT_TABLE)

@@ -28,7 +28,7 @@
 #include <dcopclient.h>
 #include "KWordFrameSetIface.h"
 //Added by qt3to4:
-#include <Q3ValueList>
+#include <QList>
 
 KWordFormulaFrameSetIface::KWordFormulaFrameSetIface( KWFormulaFrameSet *_frame )
     : KWordFrameSetIface( _frame)
@@ -41,7 +41,7 @@ DCOPRef KWordFormulaFrameSetIface::startEditing()
     if ( m_formulaFrame->isDeleted() )
         return DCOPRef();
     KWDocument *doc = m_formulaFrame->kWordDocument();
-    Q3ValueList<KWView *> views = doc->getAllViews();
+    QList<KWView *> views = doc->getAllViews();
     KWCanvas* canvas = views.first()->getGUI()->canvasWidget();
     canvas->editFrameSet( m_formulaFrame );
     return DCOPRef( kapp->dcopClient()->appId(),

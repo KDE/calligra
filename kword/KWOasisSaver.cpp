@@ -23,7 +23,7 @@
 #include <KoXmlWriter.h>
 #include "KWDocument.h"
 //Added by qt3to4:
-#include <Q3ValueList>
+#include <QList>
 
 KWOasisSaver::KWOasisSaver( KWDocument* doc )
     : m_doc( doc )
@@ -44,9 +44,9 @@ KWOasisSaver::KWOasisSaver( KWDocument* doc )
     bodyWriter->startElement( "office:text" );
 }
 
-void KWOasisSaver::saveParagraphs( const Q3ValueList<const KoTextParag *>& paragraphs )
+void KWOasisSaver::saveParagraphs( const QList<const KoTextParag *>& paragraphs )
 {
-    for ( Q3ValueList<const KoTextParag *>::const_iterator it = paragraphs.begin(),
+    for ( QList<const KoTextParag *>::const_iterator it = paragraphs.begin(),
                                                    end = paragraphs.end();
                   it != end ; ++it ) {
         saveParagraph( *it );
@@ -106,8 +106,8 @@ bool KWOasisSaver::finish()
 
 void KWOasisSaver::writeAutomaticStyles( KoXmlWriter& contentWriter, KoGenStyles& mainStyles, bool stylesDotXml )
 {
-    Q3ValueList<KoGenStyles::NamedStyle> styles = mainStyles.styles( KoGenStyle::STYLE_AUTO, stylesDotXml );
-    Q3ValueList<KoGenStyles::NamedStyle>::const_iterator it = styles.begin();
+    QList<KoGenStyles::NamedStyle> styles = mainStyles.styles( KoGenStyle::STYLE_AUTO, stylesDotXml );
+    QList<KoGenStyles::NamedStyle>::const_iterator it = styles.begin();
     for ( ; it != styles.end() ; ++it ) {
         (*it).style->writeStyle( &contentWriter, mainStyles, "style:style", (*it).name, "style:paragraph-properties" );
     }

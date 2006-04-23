@@ -49,9 +49,9 @@ KWOasisLoader::KWOasisLoader( KWDocument* doc )
 
 // Warning, this method has no undo/redo support, it is *called* by the undo/redo commands.
 // cursor is set when pasting into a textframesetedit (kwcommand), 0 otherwise.
-Q3ValueList<KWFrame *> KWOasisLoader::insertOasisData( KoStore* store, KoTextCursor* cursor )
+QList<KWFrame *> KWOasisLoader::insertOasisData( KoStore* store, KoTextCursor* cursor )
 {
-    Q3ValueList<KWFrame *> frames;
+    QList<KWFrame *> frames;
     if ( store->bad() || !store->hasFile( "content.xml" ) )
     {
         kError(32001) << "Invalid ZIP store in memory" << endl;

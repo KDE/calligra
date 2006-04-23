@@ -36,7 +36,7 @@
 #include <kglobalsettings.h>
 #include <klocale.h>
 //Added by qt3to4:
-#include <Q3ValueList>
+#include <QList>
 #include <Q3MemArray>
 
 KWTextDocument::KWTextDocument( KWTextFrameSet * textfs, KoTextFormatCollection *fc, KoTextFormatter *formatter )
@@ -67,7 +67,7 @@ KoTextParag * KWTextDocument::createParag( KoTextDocument *d, KoTextParag *pr, K
     return new KWTextParag( static_cast<KoTextDocument *>(d), static_cast<KoTextParag *>(pr), static_cast<KoTextParag *>(nx), updateIds );
 }
 
-KoTextDocCommand *KWTextDocument::deleteTextCommand( KoTextDocument *textdoc, int id, int index, const Q3MemArray<KoTextStringChar> & str, const CustomItemsMap & customItemsMap, const Q3ValueList<KoParagLayout> & oldParagLayouts )
+KoTextDocCommand *KWTextDocument::deleteTextCommand( KoTextDocument *textdoc, int id, int index, const Q3MemArray<KoTextStringChar> & str, const CustomItemsMap & customItemsMap, const QList<KoParagLayout> & oldParagLayouts )
 {
     //kDebug(32500)<<" KoTextDocument::deleteTextCommand************\n";
     return new KWTextDeleteCommand( textdoc, id, index, str, customItemsMap, oldParagLayouts );

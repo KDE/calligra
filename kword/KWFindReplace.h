@@ -25,7 +25,7 @@
 #include <qstring.h>
 #include <qstringlist.h>
 //Added by qt3to4:
-#include <Q3ValueList>
+#include <QList>
 #include <KoRichText.h>
 #include <KoTextObject.h>
 #include <KoTextView.h>
@@ -44,8 +44,8 @@ class KWFindReplace : public KoFindReplace
 {
     Q_OBJECT
 public:
-    KWFindReplace( KWCanvas * canvas, KoSearchDia * dialog, const Q3ValueList<KoTextObject *> & lstObjects, KWTextFrameSetEdit* textView );
-    KWFindReplace( KWCanvas * parent, KoReplaceDia * dialog, const Q3ValueList<KoTextObject *> & lstObjects, KWTextFrameSetEdit* textView );
+    KWFindReplace( KWCanvas * canvas, KoSearchDia * dialog, const QList<KoTextObject *> & lstObjects, KWTextFrameSetEdit* textView );
+    KWFindReplace( KWCanvas * parent, KoReplaceDia * dialog, const QList<KoTextObject *> & lstObjects, KWTextFrameSetEdit* textView );
     ~KWFindReplace();
 
     virtual void emitNewCommand(KCommand *);

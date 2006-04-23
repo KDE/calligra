@@ -28,7 +28,7 @@
 
 #include <dcopclient.h>
 //Added by qt3to4:
-#include <Q3ValueList>
+#include <QList>
 
 KWordViewIface::KWordViewIface( KWView *view_ )
     : KoViewIface( view_ )
@@ -244,7 +244,7 @@ void KWordViewIface::tableDeleteRow()
 
 int KWordViewIface::tableDeleteRow(uint row)
 {
-    Q3ValueList<uint> list;
+    QList<uint> list;
     list.append(row);
     return view->tableDeleteRow(list);
 }
@@ -256,7 +256,7 @@ void KWordViewIface::tableDeleteCol()
 
 int KWordViewIface::tableDeleteCol(uint col)
 {
-    Q3ValueList<uint> list;
+    QList<uint> list;
     list.append(col);
     return view->tableDeleteCol(list);
 }

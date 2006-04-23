@@ -25,7 +25,7 @@
 #include <KoXmlWriter.h>
 #include <kdebug.h>
 //Added by qt3to4:
-#include <Q3ValueList>
+#include <QList>
 
 //#define DEBUG_DRAWING
 
@@ -176,7 +176,7 @@ void KWAnchor::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, 
 
     KWFrameViewManager *fvm = 0;
     if(m_frameset->kWordDocument()) {
-        Q3ValueList<KWView *> views = m_frameset->kWordDocument()->getAllViews();
+        QList<KWView *> views = m_frameset->kWordDocument()->getAllViews();
         // Note that "views" is empty when the KWDocument is an (inactive) embedded document
         if ( !views.isEmpty() )
             fvm = views.first()->frameViewManager();

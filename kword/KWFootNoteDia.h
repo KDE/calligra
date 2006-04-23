@@ -24,7 +24,7 @@
 #include "defs.h" // for NoteType
 #include "KWVariable.h"
 //Added by qt3to4:
-#include <Q3ValueList>
+#include <QList>
 class QRadioButton;
 class QLineEdit;
 class KWDocument;
@@ -59,7 +59,7 @@ private:
     QRadioButton *m_rbEndNote;
     QLineEdit *m_footLine;
     KWDocument *m_doc;
-    Q3ValueList<QString> manualFootNotes;
+    QList<QString> manualFootNotes;
 };
 
 #endif

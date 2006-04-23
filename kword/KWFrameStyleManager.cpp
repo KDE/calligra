@@ -42,7 +42,7 @@
 #include <Q3GridLayout>
 #include <Q3PtrList>
 #include <Q3Frame>
-#include <Q3ValueList>
+#include <QList>
 #include <QResizeEvent>
 
 /******************************************************************/
@@ -189,8 +189,8 @@ void KWFrameStyleManager::setupWidget()
     numFrameStyles = collection->count();
     m_stylesList = new Q3ListBox( frame1, "stylesList" );
     m_stylesList->insertStringList( collection->displayNameList() );
-    const Q3ValueList<KoUserStyle*> styleList = collection->styleList();
-    for ( Q3ValueList<KoUserStyle *>::const_iterator it = styleList.begin(), end = styleList.end();
+    const QList<KoUserStyle*> styleList = collection->styleList();
+    for ( QList<KoUserStyle *>::const_iterator it = styleList.begin(), end = styleList.end();
           it != end ; ++it )
     {
         KWFrameStyle* style = static_cast<KWFrameStyle *>( *it );

@@ -29,7 +29,7 @@
 
 #include <kspell2/broker.h>
 //Added by qt3to4:
-#include <Q3ValueList>
+#include <QList>
 using namespace KSpell2;
 
 #include <kdebug.h>
@@ -51,7 +51,7 @@ KWBgSpellCheck::~KWBgSpellCheck()
 
 KoTextIterator *KWBgSpellCheck::createWholeDocIterator() const
 {
-    Q3ValueList<KoTextObject *> objects = m_doc->visibleTextObjects( 0 );
+    QList<KoTextObject *> objects = m_doc->visibleTextObjects( 0 );
 
     kDebug()<<"Number of visible text objects = "<< objects.count() << endl;
 

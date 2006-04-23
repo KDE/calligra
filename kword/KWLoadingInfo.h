@@ -50,7 +50,7 @@ public:
         int cursorEndIndex;
     };
 
-    typedef Q3ValueList<BookMark> BookMarkList;
+    typedef QList<BookMark> BookMarkList;
     BookMarkList bookMarkList;
 
     /// Bookmarks (OASIS XML). Only need to store bookmark starts, until hitting bookmark ends

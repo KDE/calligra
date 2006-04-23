@@ -21,7 +21,7 @@
 
 #include <qbuffer.h>
 //Added by qt3to4:
-#include <Q3ValueList>
+#include <QList>
 #include <KoGenStyles.h>
 #include <KoOasisStore.h>
 
@@ -30,7 +30,7 @@ class KoSavingContext;
 class KoXmlWriter;
 class KoTextParag;
 class KoStore;
-template <class T> class Q3ValueList;
+template <class T> class QList;
 
 /**
  *  This is used to save a bunch of paragraphs into a oasis store in memory,
@@ -46,7 +46,7 @@ public:
     ~KWOasisSaver();
 
     /// Save a list of paragraphs
-    void saveParagraphs( const Q3ValueList<const KoTextParag *>& paragraphs );
+    void saveParagraphs( const QList<const KoTextParag *>& paragraphs );
 
     /// Save a paragraph
     void saveParagraph( const KoTextParag* parag );

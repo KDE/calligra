@@ -29,16 +29,16 @@
 #include <KoSearchDia.h>
 #include "KWTextDocument.h"
 //Added by qt3to4:
-#include <Q3ValueList>
+#include <QList>
 //#include <KoTextDocument.h>
 
-KWFindReplace::KWFindReplace( KWCanvas * canvas, KoSearchDia * dialog, const Q3ValueList<KoTextObject *> & lstObjects, KWTextFrameSetEdit *textView)
+KWFindReplace::KWFindReplace( KWCanvas * canvas, KoSearchDia * dialog, const QList<KoTextObject *> & lstObjects, KWTextFrameSetEdit *textView)
     : KoFindReplace( canvas, dialog, lstObjects, textView )
 {
     m_canvas = canvas;
 }
 
-KWFindReplace::KWFindReplace( KWCanvas * canvas, KoReplaceDia * dialog, const Q3ValueList<KoTextObject *> & lstObjects, KWTextFrameSetEdit *textView )
+KWFindReplace::KWFindReplace( KWCanvas * canvas, KoReplaceDia * dialog, const QList<KoTextObject *> & lstObjects, KWTextFrameSetEdit *textView )
     : KoFindReplace( canvas, dialog, lstObjects, textView )
 {
     m_canvas = canvas;

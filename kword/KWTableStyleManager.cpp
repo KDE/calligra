@@ -45,7 +45,7 @@
 //Added by qt3to4:
 #include <Q3GridLayout>
 #include <Q3PtrList>
-#include <Q3ValueList>
+#include <QList>
 
 
 /******************************************************************/
@@ -226,9 +226,9 @@ void KWTableStyleManager::setupWidget()
     numTableStyles = collection->count();
     m_stylesList = new Q3ListBox( frame1, "stylesList" );
     m_stylesList->insertStringList( collection->displayNameList() );
-    const Q3ValueList<KoUserStyle*> styleList = collection->styleList();
+    const QList<KoUserStyle*> styleList = collection->styleList();
     Q_ASSERT( !styleList.isEmpty() );
-    for ( Q3ValueList<KoUserStyle *>::const_iterator it = styleList.begin(), end = styleList.end();
+    for ( QList<KoUserStyle *>::const_iterator it = styleList.begin(), end = styleList.end();
           it != end ; ++it )
     {
         KWTableStyle* style = static_cast<KWTableStyle *>( *it );

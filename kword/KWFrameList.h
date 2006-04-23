@@ -23,7 +23,7 @@
 #include <q3ptrlist.h>
 #include <q3valuevector.h>
 //Added by qt3to4:
-#include <Q3ValueList>
+#include <QList>
 
 class KWDocument;
 
@@ -43,12 +43,12 @@ public:
     /**
      * Fetches the frames below the frame this frameList is for.
      */
-    Q3ValueList<KWFrame *> framesBelow() const;
+    QList<KWFrame *> framesBelow() const;
 
     /**
      * Fetches the frames on top of the frame this frameList is for.
      */
-    Q3ValueList<KWFrame *> framesOnTop() const;
+    QList<KWFrame *> framesOnTop() const;
 
     /**
      * Update the z-ordering around the frame we host the framelist for.

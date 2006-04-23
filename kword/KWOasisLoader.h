@@ -1,5 +1,5 @@
 //Added by qt3to4:
-#include <Q3ValueList>
+#include <QList>
 /* This file is part of the KDE project
    Copyright (C) 2005 David Faure <faure@kde.org>
 
@@ -32,7 +32,7 @@ class KWFrame;
 class KoStore;
 class KoTextCursor;
 class KWDocument;
-template <class T> class Q3ValueList;
+template <class T> class QList;
 
 // KWDocument delegates to this class the loading of OASIS documents or fragments
 class KWOasisLoader
@@ -43,7 +43,7 @@ public:
     /// Insert everything from an oasis store - used when pasting
     /// (either text or entire frames)
     /// TODO: dontCreateFootNote
-    Q3ValueList<KWFrame *> insertOasisData( KoStore* store, KoTextCursor* cursor );
+    QList<KWFrame *> insertOasisData( KoStore* store, KoTextCursor* cursor );
 
     void loadOasisSettings( const QDomDocument&settingsDoc );
     void loadOasisHeaderFooter( const QDomElement& headerFooter, bool hasEvenOdd,

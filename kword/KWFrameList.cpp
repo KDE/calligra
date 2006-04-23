@@ -24,7 +24,7 @@
 #include "KWViewMode.h"
 #include "KWPageManager.h"
 //Added by qt3to4:
-#include <Q3ValueList>
+#include <QList>
 #include <Q3PtrList>
 
 //#define DEBUG_SPEED
@@ -36,8 +36,8 @@ KWFrameList::KWFrameList(KWDocument *doc, KWFrame *theFrame) {
     update();
 }
 
-Q3ValueList<KWFrame *> KWFrameList::framesBelow() const {
-    Q3ValueList<KWFrame *> frames;
+QList<KWFrame *> KWFrameList::framesBelow() const {
+    QList<KWFrame *> frames;
 //kDebug() << "framesBelow " << endl;
 
     // Copy until we find m_frame
@@ -48,9 +48,9 @@ Q3ValueList<KWFrame *> KWFrameList::framesBelow() const {
     return  frames;
 }
 
-Q3ValueList<KWFrame *> KWFrameList::framesOnTop() const {
+QList<KWFrame *> KWFrameList::framesOnTop() const {
 //kDebug() << "framesOnTop " << endl;
-    Q3ValueList<KWFrame *> frames;
+    QList<KWFrame *> frames;
 
     // Copy from m_frame to the end
     bool found = false;

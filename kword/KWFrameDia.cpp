@@ -55,7 +55,7 @@
 #include <Q3GridLayout>
 #include <Q3PtrList>
 #include <Q3Frame>
-#include <Q3ValueList>
+#include <QList>
 #include <Q3HBoxLayout>
 #include <Q3VBoxLayout>
 #include <QMouseEvent>
@@ -2161,8 +2161,8 @@ bool KWFrameDia::applyChanges()
                 if(!macroCmd)
                     macroCmd = new KMacroCommand( i18n("Make Frameset Inline") );
 
-                Q3ValueList<FrameIndex> frameindexList;
-                Q3ValueList<FrameMoveStruct> frameindexMove;
+                QList<FrameIndex> frameindexList;
+                QList<FrameMoveStruct> frameindexMove;
 
                 KoPoint oldPos = f->topLeft();
 

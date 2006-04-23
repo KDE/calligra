@@ -31,7 +31,7 @@
 #include <kdebug.h>
 #include <kcommand.h>
 //Added by qt3to4:
-#include <Q3ValueList>
+#include <QList>
 
 KWordTextFrameSetIface::KWordTextFrameSetIface( KWTextFrameSet *_frame )
     : KWordFrameSetIface( _frame)
@@ -44,7 +44,7 @@ DCOPRef KWordTextFrameSetIface::startEditing()
     if ( m_frametext->isDeleted() )
         return DCOPRef();
     KWDocument *doc=m_frametext->kWordDocument();
-    Q3ValueList<KWView *> views = doc->getAllViews();
+    QList<KWView *> views = doc->getAllViews();
     KWCanvas* canvas = views.first()->getGUI()->canvasWidget();
     canvas->editFrameSet(m_frametext, true);
     return DCOPRef( kapp->dcopClient()->appId(),
