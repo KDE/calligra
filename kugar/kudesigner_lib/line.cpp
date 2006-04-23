@@ -55,29 +55,30 @@ QString Line::getXml()
 
 QPen Line::getPenForShape()
 {
-    PenStyle style = SolidLine;
+	Qt::PenStyle style = Qt::SolidLine;
     switch ( props[ "Style" ].value().toInt() )
     {
     case 0:
-        style = NoPen;
+        style = Qt::NoPen;
         break;
     case 1:
-        style = SolidLine;
+        style = Qt::SolidLine;
         break;
     case 2:
-        style = DashLine;
+        style = Qt::DashLine;
         break;
     case 3:
-        style = DotLine;
+        style = Qt::DotLine;
         break;
     case 4:
-        style = DashDotLine;
+        style = Qt::DashDotLine;
         break;
     case 5:
-        style = DashDotDotLine;
+        style = Qt::DashDotDotLine;
         break;
-    }
-    return QPen( QColor( props[ "Color" ].value().toColor() ),
+   	}
+	QColor color = props[ "Color" ].value().value<QColor>();
+    return QPen( color,
                  props[ "Width" ].value().toInt(), style );
 }
 

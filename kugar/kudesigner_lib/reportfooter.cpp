@@ -43,7 +43,7 @@ ReportFooter::ReportFooter( int x, int y, int width, int height, Canvas *canvas 
 
 void ReportFooter::draw( QPainter &painter )
 {
-    painter.drawText( rect(), AlignVCenter | AlignLeft,
+    painter.drawText( rect(), Qt::AlignVCenter | Qt::AlignLeft,
                       i18n( "Report Footer" ) );
     Band::draw( painter );
 }

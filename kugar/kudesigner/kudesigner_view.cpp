@@ -92,7 +92,7 @@ KudesignerView::KudesignerView( KudesignerDoc* part, QWidget* parent, const char
     l->addWidget( m_view );
 
     m_view->viewport() ->setFocusProxy( m_view );
-    m_view->viewport() ->setFocusPolicy( WheelFocus );
+    m_view->viewport() ->setFocusPolicy( Qt::WheelFocus );
     m_view->setFocus();
 
     m_view->itemToInsert = 0;
@@ -208,26 +208,28 @@ void KudesignerView::initActions()
     sectionsDetailFooter = new KAction( i18n( "Detail Footer" ), "idf", 0, this,
                                         SLOT( slotAddDetailFooter() ), actionCollection(), "dfooter" );
 
-    itemsNothing = new KRadioAction( i18n( "Clear Selection" ), "frame_edit", 0, this,
+    itemsNothing = new KToggleAction( i18n( "Clear Selection" ), "frame_edit", 0, this,
                                      SLOT( slotAddItemNothing() ), actionCollection(), "nothing" );
-    itemsNothing->setExclusiveGroup( "itemsToolBar" );
     itemsNothing->setChecked( true );
-    itemsLabel = new KRadioAction( i18n( "Label" ), "frame_text", 0, this,
+    itemsLabel = new KToggleAction( i18n( "Label" ), "frame_text", 0, this,
                                    SLOT( slotAddItemLabel() ), actionCollection(), "label" );
-    itemsLabel->setExclusiveGroup( "itemsToolBar" );
-    itemsField = new KRadioAction( i18n( "Field" ), "frame_field", 0, this,
+    itemsField = new KToggleAction( i18n( "Field" ), "frame_field", 0, this,
                                    SLOT( slotAddItemField() ), actionCollection(), "field" );
-    itemsField->setExclusiveGroup( "itemsToolBar" );
-    itemsSpecial = new KRadioAction( i18n( "Special Field" ), "frame_query", 0, this,
+    itemsSpecial = new KToggleAction( i18n( "Special Field" ), "frame_query", 0, this,
                                      SLOT( slotAddItemSpecial() ), actionCollection(), "special" );
-    itemsSpecial->setExclusiveGroup( "itemsToolBar" );
-    itemsCalculated = new KRadioAction( i18n( "Calculated Field" ), "frame_formula", 0, this,
+    itemsCalculated = new KToggleAction( i18n( "Calculated Field" ), "frame_formula", 0, this,
                                         SLOT( slotAddItemCalculated() ), actionCollection(), "calcfield" );
-    itemsCalculated->setExclusiveGroup( "itemsToolBar" );
-    itemsLine = new KRadioAction( i18n( "Line" ), "frame_chart", 0, this,
+    itemsLine = new KToggleAction( i18n( "Line" ), "frame_chart", 0, this,
                                   SLOT( slotAddItemLine() ), actionCollection(), "line" );
-    itemsLine->setExclusiveGroup( "itemsToolBar" );
 
+	QActionGroup *group = new QActionGroup( this );
+    group->addAction( itemsNothing );
+	group->addAction( itemsLabel);
+	group->addAction( itemsField);
+	group->addAction( itemsSpecial );
+	group->addAction( itemsCalculated );
+	group->addAction( itemsLine );
+	
     gridActionLabel = new KWidgetAction( gridLabel, i18n( "Grid Label" ), 0, this,
                                          0, actionCollection(), "gridlabel" );
 

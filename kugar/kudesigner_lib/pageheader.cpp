@@ -42,7 +42,7 @@ PageHeader::PageHeader( int x, int y, int width, int height, Canvas *canvas ) :
 
 void PageHeader::draw( QPainter &painter )
 {
-    painter.drawText( rect(), AlignVCenter | AlignLeft,
+    painter.drawText( rect(), Qt::AlignVCenter | Qt::AlignLeft,
                       i18n( "Page Header" ) );
     Band::draw( painter );
 }

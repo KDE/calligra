@@ -38,8 +38,8 @@ class Q3DockWindow;
 class Q3ToolBar;
 
 class KAction;
-class KRadioAction;
 class KWidgetAction;
+class KToggleAction;
 
 class KudesignerDoc;
 
@@ -119,12 +119,12 @@ private:
     KAction* sectionsDetail;
     KAction* sectionsDetailFooter;
 
-    KRadioAction* itemsNothing;
-    KRadioAction* itemsLabel;
-    KRadioAction* itemsField;
-    KRadioAction* itemsSpecial;
-    KRadioAction* itemsCalculated;
-    KRadioAction* itemsLine;
+    KToggleAction* itemsNothing;
+    KToggleAction* itemsLabel;
+    KToggleAction* itemsField;
+    KToggleAction* itemsSpecial;
+    KToggleAction* itemsCalculated;
+    KToggleAction* itemsLine;
 
     KAction* cutAction;
     KAction* copyAction;

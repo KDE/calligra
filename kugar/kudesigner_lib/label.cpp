@@ -163,7 +163,8 @@ QFont Label::getFont()
 
 QPen Label::getPenForText()
 {
-    return QPen( QColor( props[ "ForegroundColor" ].value().toColor() ) );
+    QColor color = props[ "ForegroundColor" ].value().value<QColor>();
+	return QPen(color );
 }
 
 QPen Label::getPenForShape()
@@ -190,13 +191,16 @@ QPen Label::getPenForShape()
         style = Qt::DashDotDotLine;
         break;
     }
-    return QPen( QColor( props[ "BorderColor" ].value().toColor() ),
+
+	QColor color = props[ "BorderColor" ].value().value<QColor>();
+    return QPen( color ,
                  props[ "BorderWidth" ].value().toInt(), style );
 }
 
 QBrush Label::getBrush()
 {
-    return QBrush( QColor( props[ "BackgroundColor" ].value().toColor() ) );
+	QColor color = props[ "BackgroundColor" ].value().value<QColor>();
+    return QBrush( color );
 }
 
 void Label::draw( QPainter &painter )

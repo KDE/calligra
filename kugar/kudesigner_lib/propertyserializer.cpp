@@ -37,14 +37,15 @@ PropertySerializer::~PropertySerializer()
 QString PropertySerializer::toString( Property *prop )
 {
     QVariant val = prop->value();
+	QColor valColor = val.value<QColor>();
     switch ( prop->type() )
     {
     case KoProperty::Color:
-        return QString( "%1,%2,%3" ).arg( val.toColor().red() ).arg( val.toColor().green() ).arg( val.toColor().blue() );
+        return QString( "%1,%2,%3" ).arg( valColor.red() ).arg( valColor.green() ).arg( valColor.blue() );
     case KoProperty::Boolean:
         return val.toBool() ? "true" : "false";
     case KoProperty::Font:
-        return val.toFont().family();
+        return val.value<QFont>().family();
     default:
         return val.toString();
     }

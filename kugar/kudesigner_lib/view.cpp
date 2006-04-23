@@ -91,7 +91,7 @@ void SelectionRect::draw( QPainter & painter )
     //    painter.drawRect(rect());
     QPen pen( QColor( 0, 0, 0 ), 0, Qt::DotLine );
     painter.setPen( pen );
-    painter.setBrush( QBrush( NoBrush ) );
+    painter.setBrush( QBrush( Qt::NoBrush ) );
     painter.drawRect( rect() );
     //  QCanvasRectangle::draw(painter);
 }
@@ -333,7 +333,7 @@ void View::contentsMousePressEvent( QMouseEvent* e )
       */
     switch ( e->button() )
     {
-    case LeftButton:
+			case Qt::LeftButton:
         if ( itemToInsert )
         {
             //                qWarning("placing item");
@@ -367,7 +367,7 @@ void View::contentsMouseReleaseEvent( QMouseEvent* e )
 
     switch ( e->button() )
     {
-    case LeftButton:
+			case Qt::LeftButton:
         if ( selectionStarted )
             finishSelection();
         break;

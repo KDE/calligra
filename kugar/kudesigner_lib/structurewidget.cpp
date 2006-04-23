@@ -78,8 +78,9 @@ private:
 };
 
 StructureWidget::StructureWidget( QWidget* parent, const char* name )
-        : K3ListView( parent, name )
+        : K3ListView( parent )
 {
+	setObjectName(name);
     setFullWidth( true );
     addColumn( tr( "Report Structure" ) );
     setSorting( -1 );

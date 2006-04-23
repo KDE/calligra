@@ -42,7 +42,7 @@ ReportHeader::ReportHeader( int x, int y, int width, int height, Canvas *canvas 
 
 void ReportHeader::draw( QPainter &painter )
 {
-    painter.drawText( rect(), AlignVCenter | AlignLeft, i18n( "Report Header" ) );
+    painter.drawText( rect(), Qt::AlignVCenter | Qt::AlignLeft, i18n( "Report Header" ) );
     Band::draw( painter );
 }
 

@@ -21,7 +21,6 @@
 
 #include <KoDocument.h>
 #include <kcommand.h>
-#include <KoCommandHistory.h>
 #include "plugin.h"
 
 class Q3Canvas;

@@ -42,7 +42,7 @@ PageFooter::PageFooter( int x, int y, int width, int height, Canvas *canvas ) :
 
 void PageFooter::draw( QPainter &painter )
 {
-    painter.drawText( rect(), AlignVCenter | AlignLeft, i18n( "Page Footer" ) );
+    painter.drawText( rect(), Qt::AlignVCenter | Qt::AlignLeft, i18n( "Page Footer" ) );
     Band::draw( painter );
 }
 
