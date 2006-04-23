@@ -303,9 +303,9 @@ bool Font::format(QDomDocument &doc, QDomElement &f,
 
     if ( all || _color!=def._color ) {
         element = doc.createElement("COLOR");
-        element.setAttribute("red", _color.Qt::red());
-        element.setAttribute("green", _color.Qt::green());
-        element.setAttribute("blue", _color.Qt::blue());
+        element.setAttribute("red", _color.red());
+        element.setAttribute("green", _color.green());
+        element.setAttribute("blue", _color.blue());
         f.appendChild(element);
     }
 

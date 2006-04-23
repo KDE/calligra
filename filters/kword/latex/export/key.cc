@@ -36,7 +36,7 @@ Key::Key(eKeyType type): _type(type)
 /*******************************************/
 /* Destructor                              */
 /*******************************************/
-Key::~Qt::Key()
+Key::~Key()
 {
 	kDebug(30522) << "Destruction of a key." << endl;
 }

@@ -1210,9 +1210,9 @@ bool OOWriterWorker::makeTable( const FrameAnchor& anchor, const AnchorType anch
     // Be careful that while being similar the following 5 strings have different purposes
     const QString automaticTableStyle ( makeAutomaticStyleName( "Table", m_tableNumber ) ); // It also increases m_tableNumber
     const QString tableName( QString( "Table" ) + QString::number( m_tableNumber ) ); // m_tableNumber was already increased
-    const QString translatedName( i18n( "Object name", "Table %1").arg( m_tableNumber ) );
+    const QString translatedName( i18nc( "Object name", "Table %1", m_tableNumber ) );
     const QString automaticFrameStyle ( makeAutomaticStyleName( "TableFrame", m_textBoxNumber ) ); // It also increases m_textBoxNumber
-    const QString translatedFrameName( i18n( "Object name", "Table Frame %1").arg( m_textBoxNumber ) );
+    const QString translatedFrameName( i18nc( "Object name", "Table Frame %1", m_textBoxNumber ) );
 
     kDebug(30518) << "Processing table " << anchor.key.toString() << " => " << tableName << endl;
 
@@ -1589,7 +1589,7 @@ void OOWriterWorker::processNote( const VariableData& variable )
 
     // We try to use the document author's name as annotation author
     if ( m_docInfo.fullName.isEmpty() )
-        *m_streamOut << escapeOOText( i18n( "Pseudo-author for annotations", "KWord 1.3" ) );
+        *m_streamOut << escapeOOText( i18nc( "Pseudo-author for annotations", "KWord 1.3" ) );
     else
         *m_streamOut << escapeOOText( m_docInfo.fullName );
 
