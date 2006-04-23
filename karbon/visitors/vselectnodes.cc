@@ -60,10 +60,10 @@ VSelectNodes::visitVSubpath( VSubpath& path )
 					path.current()->selectPoint( 1, m_select );
 					setSuccess();
 				}
+				if( path.current()->prev() &&
+					path.current()->prev()->isSmooth() )
+						path.current()->selectPoint( 0, path.current()->prev()->knotIsSelected() );
 			}
-			if( path.current()->prev() &&
-				path.current()->prev()->isSmooth() )
-					path.current()->selectPoint( 0, path.current()->prev()->knotIsSelected() );
 
 			if( m_rect.contains( path.current()->knot() ) )
 			{

@@ -278,21 +278,22 @@ VSelectNodesTool::mouseDragRelease()
 		view()->part()->document().selection()->setState( VObject::selected );
 		VCommand *cmd;
 		QPtrList<VSegment> segments;
+		KoPoint _last = view()->canvasWidget()->snapToGrid( last() );
 		if( m_state == movingbezier1 || m_state == movingbezier2 )
 		{
 			KoRect selrect = calcSelRect( first() );
 			segments = view()->part()->document().selection()->getSegments( selrect );
 			cmd = new VTranslateBezierCmd( &view()->part()->document(), segments.at( 0 ),
-					qRound( ( last().x() - first().x() ) ),
-					qRound( ( last().y() - first().y() ) ),
+					qRound( ( _last.x() - first().x() ) ),
+					qRound( ( _last.y() - first().y() ) ),
 					m_state == movingbezier2 );
 		}
 		else
 		{
 			cmd = new VTranslatePointCmd(
 					&view()->part()->document(),
-					qRound( ( last().x() - first().x() ) ),
-					qRound( ( last().y() - first().y() ) ) );
+					qRound( ( _last.x() - first().x() ) ),
+					qRound( ( _last.y() - first().y() ) ) );
 		}
 		view()->part()->addCommand( cmd, true );
 		m_state = normal;
