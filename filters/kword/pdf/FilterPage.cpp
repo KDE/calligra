@@ -570,7 +570,7 @@ void Page::dump(const Paragraph &par)
         }
         if ( !flow.isEmpty() ) {
             QDomElement element = _data.createElement("FLOW");
-            element.setAttribute("align", flow.utf8());
+            element.setAttribute("align", flow);
             layouts.push_back(element);
         }
     }
