@@ -122,6 +122,10 @@ VPolygon::save( QDomElement& element ) const
 void
 VPolygon::saveOasis( KoStore *store, KoXmlWriter *docWriter, KoGenStyles &mainStyles, int &index ) const
 {
+	// do not save deleted objects
+	if( state() == deleted )
+		return;
+
 	docWriter->startElement( "draw:polygon" );
 
 	docWriter->addAttribute( "draw:points", m_points );

@@ -112,6 +112,10 @@ VPolyline::save( QDomElement& element ) const
 void
 VPolyline::saveOasis( KoStore *store, KoXmlWriter *docWriter, KoGenStyles &mainStyles, int &index ) const
 {
+	// do not save deleted objects
+	if( state() == deleted )
+		return;
+
 	docWriter->startElement( "draw:polyline" );
 
 	docWriter->addAttribute( "svg:points", m_points );
