@@ -1,6 +1,6 @@
 kde4_header()
 project(ascend)
-
+include_directories(${KOFFICECORE_INCLUDES} ${CMAKE_SOURCE_DIR}/kword/ ${KOTEXT_INCLUDES}) 
 
 
 ########### next target ###############

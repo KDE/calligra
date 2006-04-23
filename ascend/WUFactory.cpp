@@ -22,7 +22,7 @@
 #include "WUDocument.h"
 
 #include <kstandarddirs.h>
-
+#include <kinstance.h>
 #include <kiconloader.h>
 
 K_EXPORT_COMPONENT_FACTORY( libwriteup_part, WUFactory )
