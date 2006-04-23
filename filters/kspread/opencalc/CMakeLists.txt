@@ -5,7 +5,7 @@ include_directories( ${CMAKE_SOURCE_DIR}/kspread ${KDE4_INCLUDE_DIR} ${QT_INCLUD
 
 ########### next target ###############
 
-set(opencalcimport_PART_SRCS opencalcimport.cc )
+set(opencalcimport_PART_SRCS opencalcimport.cc ${liboofilter_SRCS} )
 
 kde4_automoc(${opencalcimport_PART_SRCS})
 
@@ -13,14 +13,14 @@ kde4_add_plugin(opencalcimport WITH_PREFIX ${opencalcimport_PART_SRCS})
 
 kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} opencalcimport )
 
-target_link_libraries(opencalcimport  ${KDE4_KDECORE_LIBS} kspreadcommon oofilter )
+target_link_libraries(opencalcimport  ${KDE4_KDECORE_LIBS} kspreadcommon  )
 
 install_targets(${PLUGIN_INSTALL_DIR} opencalcimport )
 
 
 ########### next target ###############
 
-set(opencalcexport_PART_SRCS opencalcexport.cc opencalcstyleexport.cc )
+set(opencalcexport_PART_SRCS opencalcexport.cc opencalcstyleexport.cc ${liboofilter_SRCS})
 
 kde4_automoc(${opencalcexport_PART_SRCS})
 
@@ -28,7 +28,7 @@ kde4_add_plugin(opencalcexport WITH_PREFIX ${opencalcexport_PART_SRCS})
 
 kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} opencalcexport )
 
-target_link_libraries(opencalcexport  ${KDE4_KDECORE_LIBS} kspreadcommon oofilter )
+target_link_libraries(opencalcexport  ${KDE4_KDECORE_LIBS} kspreadcommon  )
 
 install_targets(${PLUGIN_INSTALL_DIR} opencalcexport )
 

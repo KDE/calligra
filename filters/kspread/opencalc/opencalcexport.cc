@@ -106,7 +106,7 @@ KoFilter::ConversionStatus OpenCalcExport::convert( const QByteArray & from,
   if ( !document )
     return KoFilter::StupidError;
 
-  if (  !::qt_cast<const KSpread::Doc *>( document ) )
+  if (  !qobject_cast<const KSpread::Doc *>( document ) )
   {
     kWarning(30518) << "document isn't a KSpread::Doc but a "
                      << document->className() << endl;
@@ -254,7 +254,7 @@ bool OpenCalcExport::exportDocInfo( KoStore * store, const Doc* ksdoc )
   content.appendChild( officeMeta );
   meta.appendChild( content );
 
-  Q3CString doc( meta.toCString() );
+  QByteArray doc( meta.toByteArray() );
   kDebug(30518) << "Meta: " << doc << endl;
 
   store->write( doc, doc.length() );
@@ -346,7 +346,7 @@ bool OpenCalcExport::exportSettings( KoStore * store, const Doc * ksdoc )
 
   doc.appendChild( settings );
 
-  Q3CString f( doc.toCString() );
+  QByteArray f( doc.toByteArray() );
   kDebug(30518) << "Settings: " << (char const * ) f << endl;
 
   store->write( f, f.length() );
@@ -393,7 +393,7 @@ bool OpenCalcExport::exportContent( KoStore * store, const Doc * ksdoc )
 
   doc.appendChild( content );
 
-  Q3CString f( doc.toCString() );
+  QByteArray f( doc.toByteArray() );
   kDebug(30518) << "Content: " << (char const * ) f << endl;
 
   store->write( f, f.length() );
@@ -814,7 +814,7 @@ bool OpenCalcExport::exportStyles( KoStore * store, const Doc *ksdoc )
 
   doc.appendChild( content );
 
-  Q3CString f( doc.toCString() );
+  QByteArray f( doc.toByteArray() );
   kDebug(30518) << "Content: " << (char const * ) f << endl;
 
   store->write( f, f.length() );
@@ -1317,7 +1317,7 @@ bool OpenCalcExport::writeMetaFile( KoStore * store, uint filesWritten )
 
   meta.appendChild( content );
 
-  Q3CString doc( meta.toCString() );
+  QByteArray doc( meta.toByteArray() );
   kDebug(30518) << "Manifest: " << doc << endl;
 
   store->write( doc, doc.length() );
