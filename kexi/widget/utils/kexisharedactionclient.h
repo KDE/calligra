@@ -21,9 +21,9 @@
 #define KEXISHAREDACTIONCLIENT_H
 
 #include <qasciidict.h>
-#include <kexi_export.h>
 
 class KAction;
+#include <kexi_export.h>
 
 //! The KexiSharedActionClient is an interface using application-wide (shared) actions.
 /** See KexiTableView for example usage. 
