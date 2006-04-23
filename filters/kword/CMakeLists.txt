@@ -1,5 +1,7 @@
 kde4_header()
 
+macro_optional_find_package(WPD)
+
 include_directories(${CMAKE_SOURCE_DIR}/filters/kword/libexport ${KOFFICECORE_INCLUDES} )
 
 add_subdirectory( libexport )
@@ -18,7 +20,10 @@ add_subdirectory( palmdoc )
 add_subdirectory( pdf )
 add_subdirectory( rtf )
 add_subdirectory( wml )
-add_subdirectory( wordperfect )
+
+if(WPD_FOUND)
+	add_subdirectory( wordperfect )
+endif(WPD_FOUND)
 
 message(STATUS "${CMAKE_CURRENT_SOURCE_DIR}: skipped subdir $(MSWORD_SUBDIR)")
 
