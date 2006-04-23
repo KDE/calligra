@@ -138,8 +138,8 @@ class Navigator : public KListBox
     bool showText();
     bool showIcons();
     void calculateMinWidth();
-    bool leftMouseButtonPressed(){return mLeftMouseButtonPressed;}
-    int minWidth() { return mMinWidth; }
+    bool leftMouseButtonPressed() const {return mLeftMouseButtonPressed;}
+    int minWidth() const { return mMinWidth; }
     void resetWidth() { mMinWidth = 0; }
 
   signals:
@@ -190,11 +190,11 @@ class IconSidePane :public KVBox
     Navigator *group(int);
 
     IconViewMode sizeIntToEnum(int size) const;
-    IconViewMode viewMode() { return mViewMode; }
+    IconViewMode viewMode() const { return mViewMode; }
     void setViewMode(int choice){mViewMode = sizeIntToEnum(choice);}
-    bool showText() { return m_bShowText; }
+    bool showText() const { return m_bShowText; }
     void toogleText(){m_bShowText=!m_bShowText;}
-    bool showIcons() { return m_bShowIcons; }
+    bool showIcons() const { return m_bShowIcons; }
     void toogleIcons(){m_bShowIcons=!m_bShowIcons;}
     Q3ButtonGroup *buttonGroup() { return m_buttongroup; }
     int minWidth();
