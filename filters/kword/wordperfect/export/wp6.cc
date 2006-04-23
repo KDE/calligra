@@ -203,9 +203,9 @@ bool WPSixWorker::doFullParagraph(const QString& paraText,
        if( fgColor.isValid() )
        {
          quint8 wp_color[] = { 0xd4, 0x18, 16, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 16, 0, 0xd4 }; 
-         wp_color[7] = (quint8) fgColor.Qt::red();
-         wp_color[8] = (quint8) fgColor.Qt::green();
-         wp_color[9] = (quint8) fgColor.Qt::blue();
+         wp_color[7] = (quint8) fgColor.red();
+         wp_color[8] = (quint8) fgColor.green();
+         wp_color[9] = (quint8) fgColor.blue();
          output.writeRawBytes( (const char*)wp_color, 16 );
        }
 
@@ -213,7 +213,7 @@ bool WPSixWorker::doFullParagraph(const QString& paraText,
        if( bgColor.isValid() )
        {
          output << (quint8) 0xfb;
-         output << (quint8)bgColor.Qt::red() << (quint8)bgColor.Qt::green() << (quint8)bgColor.Qt::blue();
+         output << (quint8)bgColor.red() << (quint8)bgColor.green() << (quint8)bgColor.blue();
          output << (quint8) 100 << (quint8) 0xfb;
        }
 
@@ -228,7 +228,7 @@ bool WPSixWorker::doFullParagraph(const QString& paraText,
        if( bgColor.isValid() )
        {
          output << (quint8) 0xfc;
-         output << (quint8)bgColor.Qt::red() << (quint8)bgColor.Qt::green() << (quint8)bgColor.Qt::blue();
+         output << (quint8)bgColor.red() << (quint8)bgColor.green() << (quint8)bgColor.blue();
          output << (quint8) 100 << (quint8) 0xfc;
        }
     }

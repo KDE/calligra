@@ -1,6 +1,6 @@
 kde4_header()
 
-
+include_directories(${WPD_INCLUDE_DIR})
 
 
 ########### next target ###############
@@ -13,7 +13,7 @@ kde4_add_plugin(wpimport WITH_PREFIX ${wpimport_PART_SRCS})
 
 kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} wpimport )
 
-target_link_libraries(wpimport  ${KDE4_KDECORE_LIBS} )
+target_link_libraries(wpimport  ${KDE4_KDECORE_LIBS} kofficecore ${WPD_LIBRARIES} )
 
 install_targets(${PLUGIN_INSTALL_DIR} wpimport )
 

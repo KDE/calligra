@@ -193,9 +193,9 @@ bool WPFiveWorker::doFullParagraph(const QString& paraText,
        if( fgColor.isValid() )
        {
          quint8 wp_color[] = { 0xd1, 0, 10, 0, 0, 0, 0, 0, 0, 0, 10, 0, 0, 0xd1 };
-         wp_color[7] = (quint8) fgColor.Qt::red();
-         wp_color[8] = (quint8) fgColor.Qt::green();
-         wp_color[9] = (quint8) fgColor.Qt::blue();
+         wp_color[7] = (quint8) fgColor.red();
+         wp_color[8] = (quint8) fgColor.green();
+         wp_color[9] = (quint8) fgColor.blue();
          output.writeRawBytes( (const char*)wp_color, 14 );
        }
 
