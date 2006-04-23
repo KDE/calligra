@@ -557,14 +557,14 @@ void SheetPrint::printRect( QPainter& painter, const KoPoint& topLeft,
 	      QPen highlightPen;
 
             if ( m_pSheet->layoutDirection()==Sheet::RightToLeft )
-              cell->paintCell( rect, painter, NULL,
+              cell->paintCell( rect, painter, 0,
                                KoPoint( view.width() - xpos -
                                    col_lay->dblWidth(), ypos ), QPoint( x, y ),
                                paintBorder,
                                rightPen, bottomPen, leftPen, topPen,
 			       mergedCellsPainted);
             else
-              cell->paintCell( rect, painter, NULL,
+              cell->paintCell( rect, painter, 0,
                                KoPoint( xpos, ypos ), QPoint( x, y ),
                                paintBorder,
                                rightPen, bottomPen, leftPen, topPen,

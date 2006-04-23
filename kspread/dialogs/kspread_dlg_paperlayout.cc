@@ -65,7 +65,7 @@ PaperLayout::PaperLayout( QWidget * parent, const char * name,
     connect(view->selectionInfo(), SIGNAL(changed(const Region&)),
             this, SLOT(slotSelectionChanged()));
     qApp->installEventFilter( this );
-    m_focus= 0L;
+    m_focus= 0;
 }
 
 void PaperLayout::initTab()

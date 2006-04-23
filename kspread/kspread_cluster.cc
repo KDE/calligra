@@ -689,7 +689,7 @@ Cell* Cluster::getFirstCellColumn(int col) const
 {
   Cell* cell = lookup(col, 1);
 
-  if (cell == NULL)
+  if (cell == 0)
   {
     cell = getNextCellDown(col, 1);
   }
@@ -700,7 +700,7 @@ Cell* Cluster::getLastCellColumn(int col) const
 {
   Cell* cell = lookup(col, KS_rowMax);
 
-  if (cell == NULL)
+  if (cell == 0)
   {
     cell = getNextCellUp(col, KS_rowMax);
   }
@@ -711,7 +711,7 @@ Cell* Cluster::getFirstCellRow(int row) const
 {
   Cell* cell = lookup(1, row);
 
-  if (cell == NULL)
+  if (cell == 0)
   {
     cell = getNextCellRight(1, row);
   }
@@ -722,7 +722,7 @@ Cell* Cluster::getLastCellRow(int row) const
 {
   Cell* cell = lookup(KS_colMax, row);
 
-  if (cell == NULL)
+  if (cell == 0)
   {
     cell = getNextCellLeft(KS_colMax, row);
   }
@@ -738,13 +738,13 @@ Cell* Cluster::getNextCellUp(int col, int row) const
 
   while (cy >= 0)
   {
-    if ( m_cluster[ cy * KSPREAD_CLUSTER_LEVEL1 + cx ] != NULL )
+    if ( m_cluster[ cy * KSPREAD_CLUSTER_LEVEL1 + cx ] != 0 )
     {
       while (dy >= 0)
       {
 
         if ( m_cluster[ cy*KSPREAD_CLUSTER_LEVEL1 + cx]
-             [ dy*KSPREAD_CLUSTER_LEVEL2 + dx] != NULL )
+             [ dy*KSPREAD_CLUSTER_LEVEL2 + dx] != 0 )
         {
           return m_cluster[ cy*KSPREAD_CLUSTER_LEVEL1 + cx ]
             [ dy*KSPREAD_CLUSTER_LEVEL2 + dx];
@@ -755,7 +755,7 @@ Cell* Cluster::getNextCellUp(int col, int row) const
     cy--;
     dy = KSPREAD_CLUSTER_LEVEL2 - 1;
   }
-  return NULL;
+  return 0;
 }
 
 Cell* Cluster::getNextCellDown(int col, int row) const
@@ -767,13 +767,13 @@ Cell* Cluster::getNextCellDown(int col, int row) const
 
   while (cy < KSPREAD_CLUSTER_LEVEL1)
   {
-    if ( m_cluster[ cy * KSPREAD_CLUSTER_LEVEL1 + cx ] != NULL )
+    if ( m_cluster[ cy * KSPREAD_CLUSTER_LEVEL1 + cx ] != 0 )
     {
       while (dy < KSPREAD_CLUSTER_LEVEL2)
       {
 
         if ( m_cluster[ cy*KSPREAD_CLUSTER_LEVEL1 + cx]
-             [ dy*KSPREAD_CLUSTER_LEVEL2 + dx] != NULL )
+             [ dy*KSPREAD_CLUSTER_LEVEL2 + dx] != 0 )
         {
           return m_cluster[ cy*KSPREAD_CLUSTER_LEVEL1 + cx ]
             [ dy*KSPREAD_CLUSTER_LEVEL2 + dx];
@@ -784,7 +784,7 @@ Cell* Cluster::getNextCellDown(int col, int row) const
     cy++;
     dy = 0;
   }
-  return NULL;
+  return 0;
 }
 
 Cell* Cluster::getNextCellLeft(int col, int row) const
@@ -796,13 +796,13 @@ Cell* Cluster::getNextCellLeft(int col, int row) const
 
   while (cx >= 0)
   {
-    if ( m_cluster[ cy * KSPREAD_CLUSTER_LEVEL1 + cx ] != NULL )
+    if ( m_cluster[ cy * KSPREAD_CLUSTER_LEVEL1 + cx ] != 0 )
     {
       while (dx >= 0)
       {
 
         if ( m_cluster[ cy*KSPREAD_CLUSTER_LEVEL1 + cx]
-             [ dy*KSPREAD_CLUSTER_LEVEL2 + dx] != NULL )
+             [ dy*KSPREAD_CLUSTER_LEVEL2 + dx] != 0 )
         {
           return m_cluster[ cy*KSPREAD_CLUSTER_LEVEL1 + cx ]
             [ dy*KSPREAD_CLUSTER_LEVEL2 + dx];
@@ -813,7 +813,7 @@ Cell* Cluster::getNextCellLeft(int col, int row) const
     cx--;
     dx = KSPREAD_CLUSTER_LEVEL2 - 1;
   }
-  return NULL;
+  return 0;
 }
 
 Cell* Cluster::getNextCellRight(int col, int row) const
@@ -825,13 +825,13 @@ Cell* Cluster::getNextCellRight(int col, int row) const
 
   while (cx < KSPREAD_CLUSTER_LEVEL1)
   {
-    if ( m_cluster[ cy * KSPREAD_CLUSTER_LEVEL1 + cx ] != NULL )
+    if ( m_cluster[ cy * KSPREAD_CLUSTER_LEVEL1 + cx ] != 0 )
     {
       while (dx < KSPREAD_CLUSTER_LEVEL2)
       {
 
         if ( m_cluster[ cy*KSPREAD_CLUSTER_LEVEL1 + cx]
-             [ dy*KSPREAD_CLUSTER_LEVEL2 + dx] != NULL )
+             [ dy*KSPREAD_CLUSTER_LEVEL2 + dx] != 0 )
         {
           return m_cluster[ cy*KSPREAD_CLUSTER_LEVEL1 + cx ]
             [ dy*KSPREAD_CLUSTER_LEVEL2 + dx];
@@ -842,7 +842,7 @@ Cell* Cluster::getNextCellRight(int col, int row) const
     cx++;
     dx = 0;
   }
-  return NULL;
+  return 0;
 }
 
 /****************************************************

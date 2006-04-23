@@ -109,7 +109,7 @@ public:
      * Call this function if one of the cells covered by this binding ( @see #rect )
      * has changed. This will in turn force for example a chart to update.
      *
-     * @param _obj may by 0L. In this case all cells may have changed.
+     * @param _obj may by 0. In this case all cells may have changed.
      */
     virtual void cellChanged( Cell *_obj );
 
@@ -158,7 +158,7 @@ class TextDrag : public Q3TextDrag
     Q_OBJECT
 
 public:
-    TextDrag( QWidget * dragSource = 0L, const char * name = 0L );
+    TextDrag( QWidget * dragSource = 0, const char * name = 0L );
     virtual ~TextDrag();
 
     void setPlain( QString const & _plain ) { setText( _plain ); }
@@ -203,7 +203,7 @@ public:
 
     enum LayoutDirection { LeftToRight, RightToLeft };
 
-    Sheet ( Map* map, const QString &sheetName, const char *_name=0L );
+    Sheet ( Map* map, const QString &sheetName, const char *_name=0 );
     ~Sheet();
 
     virtual bool isEmpty( unsigned long int x, unsigned long int y ) const;
@@ -407,10 +407,10 @@ public:
     Value valueRange (int col1, int row1, int col2, int row2) const;
 
     QRect visibleRect( Canvas const * const _canvas ) const;
-    int topRow( double _ypos, double &_top, const Canvas *_canvas = 0L ) const;
-    int bottomRow( double _ypos, const Canvas *_canvas = 0L ) const;
-    int leftColumn( double _xpos, double &_left, const Canvas *_canvas = 0L ) const;
-    int rightColumn( double _xpos, const Canvas *_canvas = 0L ) const;
+    int topRow( double _ypos, double &_top, const Canvas *_canvas = 0 ) const;
+    int bottomRow( double _ypos, const Canvas *_canvas = 0 ) const;
+    int leftColumn( double _xpos, double &_left, const Canvas *_canvas = 0 ) const;
+    int rightColumn( double _xpos, const Canvas *_canvas = 0 ) const;
 
     /**
      * @return the left corner of the column as int.
@@ -419,7 +419,7 @@ public:
      *                coordinates. Otherwise the point (0|0) is in the upper
      *                left corner of the sheet.
      */
-    int columnPos( int _col, const Canvas *_canvas = 0L ) const;
+    int columnPos( int _col, const Canvas *_canvas = 0 ) const;
     /**
      * @return the left corner of the column as double.
      * Use this method, when you later calculate other positions depending on this one
@@ -429,7 +429,7 @@ public:
      *                coordinates. Otherwise the point (0|0) is in the upper
      *                left corner of the sheet.
      */
-    double dblColumnPos( int _col, const Canvas *_canvas = 0L ) const;
+    double dblColumnPos( int _col, const Canvas *_canvas = 0 ) const;
     /**
      * @return the top corner of the row as int.
      *
@@ -437,7 +437,7 @@ public:
      *                coordinates. Otherwise the point (0|0) is in the upper
      *                top corner of the sheet.
      */
-    int rowPos( int _row, const Canvas *_canvas = 0L ) const;
+    int rowPos( int _row, const Canvas *_canvas = 0 ) const;
     /**
      * @return the top corner of the row as double.
      * Use this method, when you later calculate other positions depending on this one
@@ -447,7 +447,7 @@ public:
      *                coordinates. Otherwise the point (0|0) is in the upper
      *                top corner of the sheet.
      */
-    double dblRowPos( int _row, const Canvas *_canvas = 0L ) const;
+    double dblRowPos( int _row, const Canvas *_canvas = 0 ) const;
 
     /**
      * @return the maximum size of the column range
@@ -538,7 +538,7 @@ public:
 
 
     void setSelectionFont( Selection* selectionInfo,
-                           const char *_font = 0L, int _size = -1,
+                           const char *_font = 0, int _size = -1,
                            signed char _bold = -1, signed char _italic = -1,
                            signed char _underline = -1,
                            signed char _strike = -1 );
@@ -1143,7 +1143,7 @@ public:
    *
    * @param col The column to get the first cell from
    *
-   * @return Returns a pointer to the cell, or NULL if there are no used cells
+   * @return Returns a pointer to the cell, or 0 if there are no used cells
    *         in this column
    */
   Cell* getFirstCellColumn(int col) const;
@@ -1154,7 +1154,7 @@ public:
    *
    * @param col The column to get the cell from
    *
-   * @return Returns a pointer to the cell, or NULL if there are no used cells
+   * @return Returns a pointer to the cell, or 0 if there are no used cells
    *         in this column
    */
   Cell* getLastCellColumn(int col) const;
@@ -1165,7 +1165,7 @@ public:
    *
    * @param row The row to get the first cell from
    *
-   * @return Returns a pointer to the cell, or NULL if there are no used cells
+   * @return Returns a pointer to the cell, or 0 if there are no used cells
    *         in this row
    */
   Cell* getFirstCellRow(int row) const;
@@ -1176,7 +1176,7 @@ public:
    *
    * @param row The row to get the last cell from
    *
-   * @return Returns a pointer to the cell, or NULL if there are no used cells
+   * @return Returns a pointer to the cell, or 0 if there are no used cells
    *         in this row
    */
   Cell* getLastCellRow(int row) const;
@@ -1188,7 +1188,7 @@ public:
    * @param col column to start looking through
    * @param row the row above which to start looking.
    *
-   * @return Returns the next used cell above this one, or NULL if there are none
+   * @return Returns the next used cell above this one, or 0 if there are none
    */
   Cell* getNextCellUp(int col, int row) const;
 
@@ -1199,7 +1199,7 @@ public:
    * @param col column to start looking through
    * @param row the row below which to start looking.
    *
-   * @return Returns the next used cell below this one, or NULL if there are none
+   * @return Returns the next used cell below this one, or 0 if there are none
    */
   Cell* getNextCellDown(int col, int row) const;
 
@@ -1210,7 +1210,7 @@ public:
    * @param col the column after which should be searched
    * @param row the row to search through
    *
-   * @return Returns the next used cell to the right of this one, or NULL if
+   * @return Returns the next used cell to the right of this one, or 0 if
    * there are none
    */
   Cell* getNextCellLeft(int col, int row) const;
@@ -1222,7 +1222,7 @@ public:
    * @param col the column before which should be searched
    * @param row the row to search through
    *
-   * @return Returns the next used cell to the left of this one, or NULL if
+   * @return Returns the next used cell to the left of this one, or 0 if
    * there are none
    */
   Cell* getNextCellRight(int col, int row) const;

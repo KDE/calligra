@@ -804,18 +804,18 @@ Cell* RangeIterator::next()
     return first();
   }
 
-  Cell* cell = NULL;
+  Cell* cell = 0;
   bool done = false;
 
-  while (cell == NULL && !done)
+  while (cell == 0 && !done)
   {
     cell = sheet->getNextCellRight(current.x(), current.y());
-    if (cell != NULL && cell->column() > range.right())
+    if (cell != 0 && cell->column() > range.right())
     {
-      cell = NULL;
+      cell = 0;
     }
 
-    if (cell == NULL)
+    if (cell == 0)
     {
       current.setX(range.left() - 1);
       current.setY(current.y() + 1);

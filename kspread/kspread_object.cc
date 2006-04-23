@@ -557,7 +557,7 @@ EmbeddedChart::~EmbeddedChart()
 
 void EmbeddedChart::setDataArea( const QRect& _data )
 {
-    if ( m_pBinding == 0L )
+    if ( m_pBinding == 0 )
         m_pBinding = new ChartBinding( m_sheet, _data, this );
     else
         m_pBinding->setDataArea( _data );
@@ -1069,7 +1069,7 @@ void EmbeddedPictureObject::loadOasis(const QDomElement &element, KoOasisLoading
 //                 image.clear();
 //                 image.setKey(key);
 //                 QByteArray rawData=_data.toUtf8(); // XPM is normally ASCII, therefore UTF-8
-//                 rawData[rawData.size()-1]=char(10); // Replace the NULL character by a LINE FEED
+//                 rawData[rawData.size()-1]=char(10); // Replace the 0 character by a LINE FEED
 //                 QBuffer buffer(rawData); // ### TODO: open?
 //                 image.loadXpm(&buffer);
 //             }

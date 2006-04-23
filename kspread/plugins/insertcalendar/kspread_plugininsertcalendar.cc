@@ -53,7 +53,7 @@ K_EXPORT_COMPONENT_FACTORY( libkspreadinsertcalendar,  InsertCalendarFactory("ks
 PluginInsertCalendar::PluginInsertCalendar( QObject *parent, const char * /*name*/, const QStringList& /*args*/ )
   : Plugin(parent)
 {
-    this->m_kspreadView = NULL;
+    this->m_kspreadView = 0;
     if (parent)
     {
       if (parent->inherits("KSpread::View"))
@@ -71,7 +71,7 @@ PluginInsertCalendar::PluginInsertCalendar( QObject *parent, const char * /*name
     }
 
 
-    this->m_dialog = NULL;
+    this->m_dialog = 0;
 
     (void)new KAction( i18n("Insert Calendar..."), KShortcut::null(),
                    this, SLOT( slotShowDialog() ), actionCollection(), "kspreadinsertcalendar");
@@ -101,7 +101,7 @@ void PluginInsertCalendar::slotShowDialog()
 {
   kDebug() << "slotShowDialog..." << endl;
 
-  if (this->m_dialog == NULL)
+  if (this->m_dialog == 0)
   {
     this->m_dialog = new InsertCalendarDialog();
 
@@ -126,31 +126,31 @@ void PluginInsertCalendar::slotInsertCalendar(const QDate &start, const QDate &e
 
   if (!document)
   {
-    KMessageBox::error(NULL,i18n("Can't insert calendar because no document is set!"),i18n("Error"));
+    KMessageBox::error(0,i18n("Can't insert calendar because no document is set!"),i18n("Error"));
     return;
   }
 
   if (end < start)
   {
-    KMessageBox::error(NULL,i18n("End date is before start date! Please make sure that end date comes after start date."),i18n("Error"));
+    KMessageBox::error(0,i18n("End date is before start date! Please make sure that end date comes after start date."),i18n("Error"));
     return;
   }
 
   if (start.daysTo(end) > 3652)
   {
-    KMessageBox::error(NULL,i18n("Calendars shouldn't be longer than 10 years. If you really need such long periods you need to split them up."),i18n("Error"));
+    KMessageBox::error(0,i18n("Calendars shouldn't be longer than 10 years. If you really need such long periods you need to split them up."),i18n("Error"));
     return;
   }
 
   if (start == end)
   {
-    if (KMessageBox::No == KMessageBox::warningYesNo(NULL,i18n("Start and end dates are equal! Only one day will be inserted, do you want to continue?"),i18n("Warning")))
+    if (KMessageBox::No == KMessageBox::warningYesNo(0,i18n("Start and end dates are equal! Only one day will be inserted, do you want to continue?"),i18n("Warning")))
       return;
   }
 
   if (start.daysTo(end)> 366)
   {
-     if (KMessageBox::No == KMessageBox::warningYesNo(NULL,i18n("Creating a calendar for a longer period than a year can take up a lot of space, do you want to continue?"),i18n("Warning")))
+     if (KMessageBox::No == KMessageBox::warningYesNo(0,i18n("Creating a calendar for a longer period than a year can take up a lot of space, do you want to continue?"),i18n("Warning")))
       return;
   }
 
@@ -177,7 +177,7 @@ void PluginInsertCalendar::slotInsertCalendar(const QDate &start, const QDate &e
 
   if (!sheet->areaIsEmpty(QRect(selection,QSize(sizeX,sizeY))))
   {
-    if (KMessageBox::No == KMessageBox::warningYesNo(NULL,i18n("The area where the calendar is inserted is NOT empty, are you sure you want to continue, overwriting existing data? If you choose No the area that would be required for the desired calendar will be selected so you can see what data would be overwritten."),i18n("Warning")))
+    if (KMessageBox::No == KMessageBox::warningYesNo(0,i18n("The area where the calendar is inserted is NOT empty, are you sure you want to continue, overwriting existing data? If you choose No the area that would be required for the desired calendar will be selected so you can see what data would be overwritten."),i18n("Warning")))
     {
       //select the area so the user knows what's in the way
       selection_info->initialize(QRect(selection.x(),selection.y(),sizeX,sizeY));//,sheet);

@@ -120,7 +120,7 @@ class Conditions
 
 
   /**
-   * returns the style that matches first (or NULL if no condition matches)
+   * returns the style that matches first (or 0 if no condition matches)
    */
   Style * matchedStyle() const { return m_matchedStyle; }
 

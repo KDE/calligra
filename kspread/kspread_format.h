@@ -458,14 +458,14 @@ public:
      *
      * @return the height in zoomed pixels as integer value.
      */
-    int height( const Canvas *_canvas = 0L ) const;
+    int height( const Canvas *_canvas = 0 ) const;
     /**
      * @param _canvas is needed to get information about the zooming factor.
      *
      * @return the height in zoomed pixels as double value.
      * Use this function, if you want to work with height without having rounding problems.
      */
-    double dblHeight( const Canvas *_canvas = 0L ) const;
+    double dblHeight( const Canvas *_canvas = 0 ) const;
     /**
      * @return the height in millimeters.
      */
@@ -476,7 +476,7 @@ public:
      * @param _h is calculated in display pixels as integer value. The function cares for zooming.
      * @param _canvas is needed to get information about the zooming factor.
      */
-    void setHeight( int _h, const Canvas *_canvas = 0L );
+    void setHeight( int _h, const Canvas *_canvas = 0 );
     /**
      * Sets the height to _h zoomed pixels.
      *
@@ -484,7 +484,7 @@ public:
      * Use this function when setting the height, to not get rounding problems.
      * @param _canvas is needed to get information about the zooming factor.
      */
-    void setDblHeight( double _h, const Canvas *_canvas = 0L );
+    void setDblHeight( double _h, const Canvas *_canvas = 0 );
     /**
      * Sets the height.
      *
@@ -595,7 +595,7 @@ public:
      *
      * @return the width in zoomed pixels as integer.
      */
-    int width( const Canvas *_canvas = 0L ) const;
+    int width( const Canvas *_canvas = 0 ) const;
     /**
      * @param _canvas is needed to get information about the zooming factor.
      *
@@ -603,7 +603,7 @@ public:
      * Use this function, if you want to use the width and later restore it back,
      * so you don't get rounding problems
      */
-    double dblWidth( const Canvas *_canvas = 0L ) const;
+    double dblWidth( const Canvas *_canvas = 0 ) const;
     /**
      * @return the width in millimeters.
      */
@@ -615,7 +615,7 @@ public:
      *           zooming.
      * @param _canvas is needed to get information about the zooming factor.
      */
-    void setWidth( int _w, const Canvas *_canvas = 0L );
+    void setWidth( int _w, const Canvas *_canvas = 0 );
     /**
      * Sets the width to _w zoomed pixels as double value.
      * Use this function to set the width without getting rounding problems.
@@ -624,7 +624,7 @@ public:
      *           zooming.
      * @param _canvas is needed to get information about the zooming factor.
      */
-    void setDblWidth( double _w, const Canvas *_canvas = 0L );
+    void setDblWidth( double _w, const Canvas *_canvas = 0 );
     /**
      * Sets the width.
      *

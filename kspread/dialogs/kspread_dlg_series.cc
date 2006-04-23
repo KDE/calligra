@@ -203,7 +203,7 @@ void SeriesDlg::slotOk()
   m_pSheet->setSeries( marker, dstart, dend, dstep, mode, type );
 
   Cell * cell = m_pSheet->cellAt( marker.x(), marker.y() );
-  if ( cell->text() != 0L )
+  if ( cell->text() != 0 )
     m_pView->editWidget()->setText( cell->text() );
   else
     m_pView->editWidget()->setText( "" );

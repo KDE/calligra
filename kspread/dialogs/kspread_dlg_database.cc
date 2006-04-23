@@ -72,7 +72,7 @@ DatabaseDialog::DatabaseDialog( View * parent, QRect const & rect, const char * 
     m_currentPage( eDatabase ),
     m_pView( parent ),
     m_targetRect( rect ),
-    m_dbConnection( 0L )
+    m_dbConnection( 0 )
 {
   if ( !name )
     setName( "DatabaseDialog" );

@@ -48,11 +48,11 @@
 
 using namespace KSpread;
 
-QStringList *AutoFillSequenceItem::month = 0L;
-QStringList *AutoFillSequenceItem::shortMonth = 0L;
-QStringList *AutoFillSequenceItem::day = 0L;
-QStringList *AutoFillSequenceItem::shortDay = 0L;
-QStringList *AutoFillSequenceItem::other = 0L;
+QStringList *AutoFillSequenceItem::month = 0;
+QStringList *AutoFillSequenceItem::shortMonth = 0;
+QStringList *AutoFillSequenceItem::day = 0;
+QStringList *AutoFillSequenceItem::shortDay = 0;
+QStringList *AutoFillSequenceItem::other = 0;
 /**********************************************************************************
  *
  * AutoFillDeltaSequence
@@ -61,7 +61,7 @@ QStringList *AutoFillSequenceItem::other = 0L;
 
 AutoFillDeltaSequence::AutoFillDeltaSequence( AutoFillSequence *_first, AutoFillSequence *_next )
   : m_ok(true),
-    m_sequence(0L)
+    m_sequence(0)
 {
   if ( _first->count() != _next->count() )
   {
@@ -74,7 +74,7 @@ AutoFillDeltaSequence::AutoFillDeltaSequence( AutoFillSequence *_first, AutoFill
   AutoFillSequenceItem *item = _first->getFirst();
   AutoFillSequenceItem *item2 = _next->getFirst();
   int i = 0;
-  // for( item = _first->getFirst(); item != 0L && item2 != 0L; item = _first->getNext() );
+  // for( item = _first->getFirst(); item != 0 && item2 != 0L; item = _first->getNext() );
   for ( i = 0; i < _first->count(); i++ )
   {
     double d;
@@ -96,9 +96,9 @@ AutoFillDeltaSequence::~AutoFillDeltaSequence()
 
 bool AutoFillDeltaSequence::equals( AutoFillDeltaSequence *_delta )
 {
-  if ( m_sequence == 0L )
+  if ( m_sequence == 0 )
     return false;
-  if ( _delta->getSequence() == 0L )
+  if ( _delta->getSequence() == 0 )
     return false;
   if ( m_sequence->size() != _delta->getSequence()->size() )
     return false;
@@ -114,7 +114,7 @@ bool AutoFillDeltaSequence::equals( AutoFillDeltaSequence *_delta )
 
 double AutoFillDeltaSequence::getItemDelta( int _pos )
 {
-  if ( m_sequence == 0L )
+  if ( m_sequence == 0 )
     return 0.0;
 
   return m_sequence->at( _pos );
@@ -143,7 +143,7 @@ AutoFillSequenceItem::AutoFillSequenceItem( const QString &_str )
     m_String = _str;
     m_Type = STRING;
 
-    if ( month == 0L )
+    if ( month == 0 )
     {
         month = new QStringList();
         month->append( i18n("January") );
@@ -160,7 +160,7 @@ AutoFillSequenceItem::AutoFillSequenceItem( const QString &_str )
         month->append( i18n("December") );
     }
 
-    if ( shortMonth == 0L )
+    if ( shortMonth == 0 )
     {
         shortMonth = new QStringList();
         shortMonth->append( i18n("Jan") );
@@ -177,7 +177,7 @@ AutoFillSequenceItem::AutoFillSequenceItem( const QString &_str )
         shortMonth->append( i18n("Dec") );
     }
 
-    if ( day == 0L )
+    if ( day == 0 )
     {
         day = new QStringList();
         day->append( i18n("Monday") );
@@ -189,7 +189,7 @@ AutoFillSequenceItem::AutoFillSequenceItem( const QString &_str )
         day->append( i18n("Sunday") );
     }
 
-    if ( shortDay == 0L )
+    if ( shortDay == 0 )
     {
         shortDay = new QStringList();
         shortDay->append( i18n("Mon") );
@@ -201,7 +201,7 @@ AutoFillSequenceItem::AutoFillSequenceItem( const QString &_str )
         shortDay->append( i18n("Sun") );
     }
 
-    if( other==0L)
+    if( other==0)
       {
 	//	other=new QStringList();
 	KConfig *config = Factory::global()->config();
@@ -529,7 +529,7 @@ void AutoFillSequence::fillCell( Cell *src, Cell *dest, AutoFillDeltaSequence *d
     QString erg = "";
 
     // Special handling for formulas
-    if ( sequence.first() != 0L && sequence.first()->getType() == AutoFillSequenceItem::FORMULA )
+    if ( sequence.first() != 0 && sequence.first()->getType() == AutoFillSequenceItem::FORMULA )
     {
         QString f = dest->decodeFormula( sequence.first()->getString() );
         dest->setCellText( f );
@@ -541,12 +541,12 @@ void AutoFillSequence::fillCell( Cell *src, Cell *dest, AutoFillDeltaSequence *d
     int i = 0;
     if (down)
     {
-      for ( item = sequence.first(); item != 0L; item = sequence.next() )
+      for ( item = sequence.first(); item != 0; item = sequence.next() )
         erg += item->getSuccessor( _block, delta->getItemDelta( i++ ) );
     }
     else
     {
-      for ( item = sequence.first(); item != 0L; item = sequence.next() )
+      for ( item = sequence.first(); item != 0; item = sequence.next() )
         erg += item->getPredecessor( _block, delta->getItemDelta( i++ ) );
     }
 

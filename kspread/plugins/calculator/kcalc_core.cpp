@@ -68,8 +68,8 @@ extern Q3PtrList<CALCAMNT> temp_stack;
 last_input_type last_input;
 char            display_str[DSP_SIZE+1];
 
-stack_ptr       top_of_stack = NULL;
-stack_ptr       top_type_stack[2] = { NULL, NULL };
+stack_ptr       top_of_stack = 0;
+stack_ptr       top_type_stack[2] = { 0, 0 };
 int             stack_next, stack_last;
 stack_item      process_stack[STACK_SIZE];
 
@@ -98,7 +98,7 @@ CALCAMNT        memory_num = 0.0;
 int precedence[14] = { 0, 1, 2, 3, 4, 4, 5, 5, 6, 6, 6, 7, 7, 6 };
 
     int         adjust_op[14][3] = {
-                                {FUNC_NULL,     FUNC_NULL,     FUNC_NULL},
+                                {FUNC_0,     FUNC_0,     FUNC_0},
                                 {FUNC_OR,       FUNC_OR,       FUNC_XOR },
                                 {FUNC_XOR,      FUNC_XOR,      FUNC_XOR },
                                 {FUNC_AND,      FUNC_AND,      FUNC_AND },
@@ -132,7 +132,7 @@ int precedence[14] = { 0, 1, 2, 3, 4, 4, 5, 5, 6, 6, 6, 7, 7, 6 };
       "Integer Division"
     };
     */
-    Arith       Arith_ops[14] = { NULL,
+    Arith       Arith_ops[14] = { 0,
                                   ExecOr,
                                   ExecXor,
                                   ExecAnd,
@@ -145,12 +145,12 @@ int precedence[14] = { 0, 1, 2, 3, 4, 4, 5, 5, 6, 6, 6, 7, 7, 6 };
                                   ExecIntDiv
     };
 
-    Prcnt       Prcnt_ops[14] = { NULL,
-                                  NULL,
-                                  NULL,
-                                  NULL,
-                                  NULL,
-                                  NULL,
+    Prcnt       Prcnt_ops[14] = { 0,
+                                  0,
+                                  0,
+                                  0,
+                                  0,
+                                  0,
                                   ExecAddSubP,  ExecAddSubP,
                                   ExecMultiplyP,
                                   ExecDivideP, ExecDivideP,
@@ -183,7 +183,7 @@ void QtCalculator::InitializeCalculator(void) {
   fpe_trap.sa_flags = SA_RESTART;
 #endif
 
-  sigaction(SIGFPE, &fpe_trap, NULL);
+  sigaction(SIGFPE, &fpe_trap, 0);
 
   RefreshCalculator();
   pi = ASIN(1.0) * 2L;
@@ -194,7 +194,7 @@ void fpe_handler(int fpe_parm)
   (void) fpe_parm;
 
   display_error = 1;
-  DISPLAY_AMOUNT = 0L;
+  DISPLAY_AMOUNT = 0;
 
 }
 
@@ -218,7 +218,7 @@ void QtCalculator::setValue( double _value )
 void QtCalculator::setLabel( const char *_text )
 {
   last_input = DIGIT;
-  DISPLAY_AMOUNT = 0L;
+  DISPLAY_AMOUNT = 0;
   decimal_point = 0;
   refresh_display = 0;
   input_count = 0;
@@ -255,7 +255,7 @@ void QtCalculator::EnterDigit(int data)
 
   last_input = DIGIT;
   if (refresh_display) {
-    DISPLAY_AMOUNT = 0L;
+    DISPLAY_AMOUNT = 0;
     decimal_point = 0;
     refresh_display = 0;
     input_count = 0;
@@ -415,7 +415,7 @@ void QtCalculator::EnterDecimal()
 
   decimal_point = 1;
   if (refresh_display) {
-    DISPLAY_AMOUNT = 0L;
+    DISPLAY_AMOUNT = 0;
     refresh_display = 0;
     input_count = 0;
   }
@@ -432,7 +432,7 @@ void QtCalculator::EnterDecimal()
     // the last input wasn't a DIGIT so we are about to
     // input a new number in particular we neet do display a "0.".
 
-    DISPLAY_AMOUNT = 0L;
+    DISPLAY_AMOUNT = 0;
     refresh_display = 0;
     //    decimal_point = 1;
     //    input_count = 1;
@@ -1548,7 +1548,7 @@ void QtCalculator::Clear(){
   }
 
   if (!refresh_display) {
-    DISPLAY_AMOUNT = 0L;
+    DISPLAY_AMOUNT = 0;
     UpdateDisplay();
   }
 
@@ -1792,7 +1792,7 @@ int UpdateStack(int run_precedence)
         if (return_value &&
             percent_mode &&
             !display_error &&
-            Prcnt_ops[op_function] != NULL){
+            Prcnt_ops[op_function] != 0){
                 new_item.s_item_data.item_amount =
                         (Prcnt_ops[op_function])(left_op,
                                 right_op,
@@ -1943,7 +1943,7 @@ CALCAMNT ExecDivide(CALCAMNT left_op, CALCAMNT right_op)
   // printf("ExecDivide\n");
         if (right_op == 0) {
                 display_error = 1;
-                return 0L;
+                return 0;
         } else
                 return left_op / right_op;
 }
@@ -1955,7 +1955,7 @@ CALCAMNT ExecMod(CALCAMNT left_op, CALCAMNT right_op)
 
   if (right_op == 0) {
     display_error = 1;
-    return 0L;
+    return 0;
   } else {
 
     // x mod y should be the same as x mod -y, thus:
@@ -1979,7 +1979,7 @@ CALCAMNT ExecIntDiv(CALCAMNT left_op, CALCAMNT right_op)
   // printf("IndDiv\n");
         if (right_op == 0) {
                 display_error = 1;
-                return 0L;
+                return 0;
         } else {
                 MODF(left_op / right_op, &left_op);
                 return left_op;
@@ -2009,7 +2009,7 @@ CALCAMNT ExecPwrRoot(CALCAMNT left_op, CALCAMNT right_op)
        // printf("ExecPwrRoot  %g left_op, %g right_op\n", left_op, right_op);
         if (right_op == 0) {
                 display_error = 1;
-                return 0L;
+                return 0;
         }
         if (left_op < 0 && isoddint(right_op))
                 left_op = -1L * POW((-1L * left_op), (1L)/right_op);
@@ -2033,7 +2033,7 @@ CALCAMNT ExecAddSubP(CALCAMNT left_op, CALCAMNT right_op, CALCAMNT result)
                 display_error = 1;
                 return 0;
         } else
-                return (result * 100L) / right_op;
+                return (result * 100) / right_op;
 }
 
 CALCAMNT ExecMultiplyP(CALCAMNT left_op, CALCAMNT right_op, CALCAMNT result)
@@ -2042,7 +2042,7 @@ CALCAMNT ExecMultiplyP(CALCAMNT left_op, CALCAMNT right_op, CALCAMNT result)
   (void) left_op;
   (void) right_op;
 
-        return (result / 100L);
+        return (result / 100);
 }
 
 CALCAMNT ExecDivideP(CALCAMNT left_op, CALCAMNT right_op, CALCAMNT result)
@@ -2051,14 +2051,14 @@ CALCAMNT ExecDivideP(CALCAMNT left_op, CALCAMNT right_op, CALCAMNT result)
   (void) left_op;
   (void) right_op;
 
-        return (result * 100L);
+        return (result * 100);
 }
 
 CALCAMNT ExecPowerP(CALCAMNT left_op, CALCAMNT right_op, CALCAMNT result)
 {
   // printf("ExecPowerP\n");
   (void) result;
-        return ExecPower(left_op, (right_op / 100L));
+        return ExecPower(left_op, (right_op / 100));
 }
 
 CALCAMNT ExecPwrRootP(CALCAMNT left_op, CALCAMNT right_op, CALCAMNT result)
@@ -2070,7 +2070,7 @@ CALCAMNT ExecPwrRootP(CALCAMNT left_op, CALCAMNT right_op, CALCAMNT result)
                 display_error = 1;
                 return 0;
         } else
-                return ExecPower(left_op, (100L / right_op));
+                return ExecPower(left_op, (100 / right_op));
 }
 
 
@@ -2079,8 +2079,8 @@ stack_ptr AllocStackItem (void) {
 
         if (stack_next <= stack_last) {
 
-                process_stack[stack_next].prior_item = NULL;
-                process_stack[stack_next].prior_type = NULL;
+                process_stack[stack_next].prior_item = 0;
+                process_stack[stack_next].prior_type = 0;
                 return &process_stack[stack_next++];
         }
 
@@ -2130,7 +2130,7 @@ item_contents *PopStack(void)
          */
 
         static item_contents return_item;
-        item_contents *return_item_ptr = NULL;
+        item_contents *return_item_ptr = 0;
         stack_ptr return_stack_ptr;
 
         if ((return_stack_ptr = top_of_stack)) {
@@ -2153,7 +2153,7 @@ item_contents *TopOfStack(void)
          * Return the top item in the stack without removing
          */
 
-        item_contents *return_item_ptr = NULL;
+        item_contents *return_item_ptr = 0;
 
         if (top_of_stack) {
                 return_item_ptr = &top_of_stack->item_value;
@@ -2168,7 +2168,7 @@ item_contents *TopTypeStack(item_type rqstd_type)
          * Return the top item in the stack without removing
          */
 
-        item_contents *return_item_ptr = NULL;
+        item_contents *return_item_ptr = 0;
 
         if (top_type_stack[rqstd_type]) {
                 return_item_ptr = &top_type_stack[rqstd_type]->item_value;
@@ -2188,7 +2188,7 @@ void InitStack (void) {
 
         stack_next = 0;
         stack_last = STACK_SIZE - 1;
-        top_of_stack = top_type_stack[0] = top_type_stack[1] = NULL;
+        top_of_stack = top_type_stack[0] = top_type_stack[1] = 0;
 }
 
 

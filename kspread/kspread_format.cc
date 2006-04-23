@@ -2497,7 +2497,7 @@ RowFormat::RowFormat( Sheet * _sheet, int _row )
     m_iRow     = _row;
     m_bDefault = false;
     m_bHide    = false;
-    m_dcop     = 0L;
+    m_dcop     = 0;
 }
 
 RowFormat::~RowFormat()

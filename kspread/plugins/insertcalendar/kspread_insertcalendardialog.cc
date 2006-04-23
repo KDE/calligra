@@ -36,7 +36,7 @@ namespace KSpread
 InsertCalendarDialog::InsertCalendarDialog(QWidget* parent, const char* name)
 : InsertCalendarDialogBase(parent,name)
 {
-  this->m_datePicker = NULL;
+  this->m_datePicker = 0;
 
   //we start with a default calendar for the current month;
 
@@ -85,7 +85,7 @@ bool InsertCalendarDialog::buildDatePickerFrame()
 void InsertCalendarDialog::datePickerDeleted()
 {
   kDebug() << "date picker deleted" << endl;
-  m_datePicker = NULL;
+  m_datePicker = 0;
 }
 
 void InsertCalendarDialog::accept()

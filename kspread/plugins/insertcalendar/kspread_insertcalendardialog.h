@@ -78,7 +78,7 @@ class KSPREAD_EXPORT InsertCalendarDialog : public InsertCalendarDialogBase
   protected slots:
 
     /**
-     * Sets the currently active KDatePicker frame to NULL.
+     * Sets the currently active KDatePicker frame to 0.
      * It's expected that the date picker frame is deleted.
      * @see m_datePicker
      */

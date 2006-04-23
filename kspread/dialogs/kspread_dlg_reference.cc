@@ -187,7 +187,7 @@ void reference::slotRemove()
 
     Sheet *tbl;
 
-    for ( tbl = m_pView->doc()->map()->firstSheet(); tbl != 0L; tbl = m_pView->doc()->map()->nextSheet() )
+    for ( tbl = m_pView->doc()->map()->firstSheet(); tbl != 0; tbl = m_pView->doc()->map()->nextSheet() )
     {
       tbl->refreshRemoveAreaName(textRemove);
     }
@@ -363,7 +363,7 @@ void EditAreaName::slotOk()
 
   Sheet *sheet;
 
-  for ( sheet = m_pView->doc()->map()->firstSheet(); sheet != 0L;
+  for ( sheet = m_pView->doc()->map()->firstSheet(); sheet != 0;
         sheet = m_pView->doc()->map()->nextSheet() )
   {
     sheet->refreshChangeAreaName( m_areaName->text() );

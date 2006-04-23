@@ -487,7 +487,7 @@ public:
    * @param viewRect the document coordinates showing what is actually visible in
    *                 the screen
    *
-   * @param view the view of the region -- may be NULL but no selection markers
+   * @param view the view of the region -- may be 0 but no selection markers
    *        can be passed in that case.
    *
    * @param region a list of rectangles indicating the cell ranges needing

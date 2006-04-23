@@ -645,9 +645,9 @@ RangeList DependencyList::computeDependencies (const Point &cell) const
 
   Formula* f = c->formula();
   Q_ASSERT(f);
-  if (f==NULL)
+  if (f==0)
   {
-    kDebug() << "Cell at row " << cell.row() << ", col " << cell.column() << " marked as formula, but formula is NULL" << endl;
+    kDebug() << "Cell at row " << cell.row() << ", col " << cell.column() << " marked as formula, but formula is 0" << endl;
     return RangeList();
   }
 

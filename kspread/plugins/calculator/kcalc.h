@@ -93,10 +93,10 @@ using std::queue;
 #define		BOH_SIZE	16
 #define		DSP_SIZE	50 //25
 
-#define		DEG2RAD(x)	(((2L*pi)/360L)*x)
-#define		GRA2RAD(x)	((pi/200L)*x)
-#define		RAD2DEG(x)	((360L/(2L*pi))*x)
-#define		RAD2GRA(x)	((200L/pi)*x)
+#define		DEG2RAD(x)	(((2L*pi)/360)*x)
+#define		GRA2RAD(x)	((pi/200)*x)
+#define		RAD2DEG(x)	((360/(2L*pi))*x)
+#define		RAD2GRA(x)	((200/pi)*x)
 #define		POS_ZERO	 1e-19L	 /* What we consider zero is   */
 #define		NEG_ZERO	-1e-19L	 /* anything between these two */
 

@@ -348,13 +348,13 @@ public:
   KSpread::DependencyManager *dependencies;
 };
 
-int Sheet::s_id = 0L;
+int Sheet::s_id = 0;
 Q3IntDict<Sheet>* Sheet::s_mapSheets;
 
 Sheet* Sheet::find( int _id )
 {
   if ( !s_mapSheets )
-    return 0L;
+    return 0;
 
   return (*s_mapSheets)[ _id ];
 }
@@ -363,7 +363,7 @@ Sheet::Sheet( Map* map, const QString &sheetName, const char *_name )
   : QObject( map )
 {
   setObjectName( _name );
-  if ( s_mapSheets == 0L )
+  if ( s_mapSheets == 0 )
     s_mapSheets = new Q3IntDict<Sheet>;
   d = new Private;
 
@@ -617,7 +617,7 @@ const Format* Sheet::defaultFormat() const
 const ColumnFormat* Sheet::columnFormat( int _column ) const
 {
     const ColumnFormat *p = d->columns.lookup( _column );
-    if ( p != 0L )
+    if ( p != 0 )
         return p;
 
     return d->defaultColumnFormat;
@@ -626,7 +626,7 @@ const ColumnFormat* Sheet::columnFormat( int _column ) const
 ColumnFormat* Sheet::columnFormat( int _column )
 {
     ColumnFormat *p = d->columns.lookup( _column );
-    if ( p != 0L )
+    if ( p != 0 )
         return p;
 
     return d->defaultColumnFormat;
@@ -635,7 +635,7 @@ ColumnFormat* Sheet::columnFormat( int _column )
 const RowFormat* Sheet::rowFormat( int _row ) const
 {
     const RowFormat *p = d->rows.lookup( _row );
-    if ( p != 0L )
+    if ( p != 0 )
         return p;
 
     return d->defaultRowFormat;
@@ -644,7 +644,7 @@ const RowFormat* Sheet::rowFormat( int _row ) const
 RowFormat* Sheet::rowFormat( int _row )
 {
     RowFormat *p = d->rows.lookup( _row );
-    if ( p != 0L )
+    if ( p != 0 )
         return p;
 
     return d->defaultRowFormat;
@@ -1037,7 +1037,7 @@ ColumnFormat* Sheet::firstCol() const
 Cell* Sheet::cellAt( int _column, int _row ) const
 {
     Cell *p = d->cells.lookup( _column, _row );
-    if ( p != 0L )
+    if ( p != 0 )
         return p;
 
     return d->defaultCell;
@@ -1061,7 +1061,7 @@ Cell* Sheet::cellAt( int _column, int _row, bool _scrollbar_update )
   }
 
   Cell *p = d->cells.lookup( _column, _row );
-  if ( p != 0L )
+  if ( p != 0 )
     return p;
 
   return d->defaultCell;
@@ -1070,7 +1070,7 @@ Cell* Sheet::cellAt( int _column, int _row, bool _scrollbar_update )
 ColumnFormat* Sheet::nonDefaultColumnFormat( int _column, bool force_creation )
 {
     ColumnFormat *p = d->columns.lookup( _column );
-    if ( p != 0L || !force_creation )
+    if ( p != 0 || !force_creation )
         return p;
 
     p = new ColumnFormat( this, _column );
@@ -1085,7 +1085,7 @@ ColumnFormat* Sheet::nonDefaultColumnFormat( int _column, bool force_creation )
 RowFormat* Sheet::nonDefaultRowFormat( int _row, bool force_creation )
 {
     RowFormat *p = d->rows.lookup( _row );
-    if ( p != 0L || !force_creation )
+    if ( p != 0 || !force_creation )
         return p;
 
     p = new RowFormat( this, _row );
@@ -1107,7 +1107,7 @@ Cell* Sheet::nonDefaultCell( int _column, int _row,
   }
 
   Cell * p = d->cells.lookup( _column, _row );
-  if ( p != 0L )
+  if ( p != 0 )
     return p;
 
   Cell * cell = 0;
@@ -1437,7 +1437,7 @@ Sheet::SelectionType Sheet::workOnCells( const QPoint& _marker, CellWorker& work
     {
   UndoAction *undo = worker.createUndoAction( doc(), this, r );
         // test if the worker has an undo action
-        if ( undo != 0L )
+        if ( undo != 0 )
       doc()->addCommand( undo );
     }
 
@@ -2018,7 +2018,7 @@ void Sheet::setSeries( const QPoint &_marker, double start, double end, double s
            DBL_EPSILON) + 1;
   }
 
-  Cell * cell = NULL;
+  Cell * cell = 0;
 
   /* markers for the top-left corner of the undo region.  It'll probably
    * be the top left corner of where the series is, but if something in front
@@ -2744,15 +2744,15 @@ void Sheet::refreshChart(const QPoint & pos, bool fullRowOrColumn, ChangeRef ref
 
   //refresh chart when there is a chart and you remove
   //all cells
-  if (c == 0L)
+  if (c == 0)
   {
      CellBinding * bind;
-     for ( bind = firstCellBinding(); bind != 0L; bind = nextCellBinding() )
+     for ( bind = firstCellBinding(); bind != 0; bind = nextCellBinding() )
      {
        bind->cellChanged( 0 );
      }
      //    CellBinding * bind = firstCellBinding();
-     //    if ( bind != 0L )
+     //    if ( bind != 0 )
      //      bind->cellChanged( 0 );
   }
 
@@ -5060,7 +5060,7 @@ void Sheet::copySelection( Selection* selectionInfo )
     str << doc;
     buffer.close();
 
-    TextDrag * kd = new TextDrag( 0L );
+    TextDrag * kd = new TextDrag( 0 );
     kd->setPlain( copyAsText(selectionInfo) );
     kd->setKSpread( buffer.buffer() );
 
@@ -5079,7 +5079,7 @@ void Sheet::cutSelection( Selection* selectionInfo )
     str << doc;
     buffer.close();
 
-    TextDrag * kd = new TextDrag( 0L );
+    TextDrag * kd = new TextDrag( 0 );
     kd->setPlain( copyAsText(selectionInfo) );
     kd->setKSpread( buffer.buffer() );
 
@@ -5326,7 +5326,7 @@ bool Sheet::loadSelection(const QDomDocument& doc, const QRect& pasteArea,
 
     Cell* refreshCell = 0;
     Cell *cell;
-    Cell *cellBackup = NULL;
+    Cell *cellBackup = 0;
     if (e.tagName() == "cell")
     {
       int row = e.attribute( "row" ).toInt() + _yshift;
@@ -6111,7 +6111,7 @@ KoRect Sheet::getRealRect( bool all )
 KCommand *Sheet::moveObject(View *_view, double diffx, double diffy)
 {
     bool createCommand=false;
-    MoveObjectByCmd *moveByCmd=0L;
+    MoveObjectByCmd *moveByCmd=0;
     Canvas * canvas = _view->canvasWidget();
     QList<EmbeddedObject*> _objects;
     foreach ( EmbeddedObject* object, d->workbook->doc()->embeddedObjects() )
@@ -6141,7 +6141,7 @@ KCommand *Sheet::moveObject(View *_view, double diffx, double diffy)
 KCommand *Sheet::moveObject(View *_view,const KoPoint &_move,bool key)
 {
     QList<EmbeddedObject*> _objects;
-    MoveObjectByCmd *moveByCmd=0L;
+    MoveObjectByCmd *moveByCmd=0;
     Canvas * canvas = _view->canvasWidget();
     foreach ( EmbeddedObject* object, d->workbook->doc()->embeddedObjects() )
     {
@@ -7543,7 +7543,7 @@ bool Sheet::loadXML( const QDomElement& sheet )
 
     /* so we don't panic over finding ourself in the follwing test*/
     d->name = "";
-    while (workbook()->findSheet(testName) != NULL)
+    while (workbook()->findSheet(testName) != 0)
     {
       nameSuffix++;
       testName = baseName + '_' + QString::number(nameSuffix);
@@ -7874,7 +7874,7 @@ void Sheet::removeCellBinding( CellBinding *_bind )
 Sheet* Sheet::findSheet( const QString & _name )
 {
   if ( !workbook() )
-    return 0L;
+    return 0;
 
   return workbook()->findSheet( _name );
 }
@@ -8168,7 +8168,7 @@ Sheet::~Sheet()
     //you must reinit s_id otherwise there is not
     //the good name between map and sheet
     if( s_mapSheets->count()==0)
-      s_id=0L;
+      s_id=0;
 
     Cell* c = d->cells.firstCell();
     for( ; c; c = c->nextCell() )

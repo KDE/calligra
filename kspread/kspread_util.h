@@ -271,7 +271,7 @@ public:
 
   /**
    * @return the next allocated cell in the area after the previous one
-   * retrieved, or NULL if it was the last one.
+   * retrieved, or 0 if it was the last one.
    */
   Cell* next();
 private:

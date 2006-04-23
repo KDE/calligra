@@ -49,9 +49,9 @@ Factory::~Factory()
   delete s_aboutData;
   s_aboutData=0;
   delete s_global;
-  s_global = 0L;
+  s_global = 0;
   delete s_dcopObject;
-  s_dcopObject = 0L;
+  s_dcopObject = 0;
 }
 
 KParts::Part* Factory::createPartObject( QWidget *parentWidget, const char *widgetName, QObject* parent, const char* name, const char* classname, const QStringList & )

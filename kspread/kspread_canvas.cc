@@ -224,7 +224,7 @@ Canvas::Canvas (View *_view)
 
   d->cellEditor = 0;
   d->chooseCell = false;
-  d->validationInfo = 0L;
+  d->validationInfo = 0;
 
   QWidget::setFocusPolicy( Qt::StrongFocus );
 
@@ -256,7 +256,7 @@ Canvas::Canvas (View *_view)
   d->drawContour = false;
   d->modType = MT_NONE;
 
-  d->m_resizeObject = 0L;
+  d->m_resizeObject = 0;
   d->m_ratio = 0.0;
   d->m_isMoving = false;
   d->m_objectDisplayAbove = false;
@@ -614,13 +614,13 @@ void Canvas::validateSelection()
         else
         {
             delete d->validationInfo;
-            d->validationInfo = 0L;
+            d->validationInfo = 0;
         }
     }
     else
     {
         delete d->validationInfo;
-        d->validationInfo = 0L;
+        d->validationInfo = 0;
     }
 }
 
@@ -628,7 +628,7 @@ void Canvas::validateSelection()
 void Canvas::scrollToCell(QPoint location) const
 {
   Sheet* sheet = activeSheet();
-  if (sheet == NULL)
+  if (sheet == 0)
     return;
 
   kDebug(36001) << "------------------------------------------------" << endl;
@@ -739,7 +739,7 @@ void Canvas::slotScrollHorz( int _value )
 {
   Sheet * sheet = activeSheet();
 
-  if ( sheet == 0L )
+  if ( sheet == 0 )
     return;
 
   kDebug(36001) << "slotScrollHorz: value = " << _value << endl;
@@ -807,7 +807,7 @@ void Canvas::slotScrollHorz( int _value )
 
 void Canvas::slotScrollVert( int _value )
 {
-  if ( activeSheet() == 0L )
+  if ( activeSheet() == 0 )
     return;
 
   d->view->doc()->emitBeginOperation(false);
@@ -1958,8 +1958,8 @@ QRect Canvas::moveDirection( KSpread::MoveTo direction, bool extendSelection )
 
   /* how many cells must we move to get to the next cell? */
   int offset = 0;
-  RowFormat *rl = NULL;
-  ColumnFormat *cl = NULL;
+  RowFormat *rl = 0;
+  ColumnFormat *cl = 0;
   switch (direction)
     /* for each case, figure out how far away the next cell is and then keep
        going one row/col at a time after that until a visible row/col is found
@@ -2233,7 +2233,7 @@ bool Canvas::processHomeKey(QKeyEvent* event)
       QPoint marker = d->chooseCell ? choice()->marker() : selectionInfo()->marker();
 
       Cell * cell = sheet->getFirstCellRow(marker.y());
-      while (cell != NULL && cell->column() < marker.x() && cell->isEmpty())
+      while (cell != 0 && cell->column() < marker.x() && cell->isEmpty())
       {
         cell = sheet->getNextCellRight(cell->column(), cell->row());
       }
@@ -2266,7 +2266,7 @@ bool Canvas::processEndKey( QKeyEvent *event )
 {
   bool makingSelection = event->modifiers() & Qt::ShiftModifier;
   Sheet* sheet = activeSheet();
-  Cell* cell = NULL;
+  Cell* cell = 0;
   QPoint marker = d->chooseCell ? choice()->marker() : selectionInfo()->marker();
 
   // move to the last used cell in the row
@@ -2282,12 +2282,12 @@ bool Canvas::processEndKey( QKeyEvent *event )
     int col = 1;
 
     cell = sheet->getLastCellRow(marker.y());
-    while (cell != NULL && cell->column() > markerColumn() && cell->isEmpty())
+    while (cell != 0 && cell->column() > markerColumn() && cell->isEmpty())
     {
       cell = sheet->getNextCellLeft(cell->column(), cell->row());
     }
 
-    col = (cell == NULL) ? KS_colMax : cell->column();
+    col = (cell == 0) ? KS_colMax : cell->column();
 
     QPoint destination( col, marker.y() );
     if ( destination == marker )
@@ -2445,7 +2445,7 @@ bool Canvas::processControlArrowKey( QKeyEvent *event )
   bool makingSelection = event->modifiers() & Qt::ShiftModifier;
 
   Sheet* sheet = activeSheet();
-  Cell* cell = NULL;
+  Cell* cell = 0;
   Cell* lastCell;
   QPoint destination;
   bool searchThroughEmpty = true;
@@ -2462,12 +2462,12 @@ bool Canvas::processControlArrowKey( QKeyEvent *event )
    case Qt::Key_Up:
 
     cell = sheet->cellAt( marker.x(), marker.y() );
-    if ( (cell != NULL) && (!cell->isEmpty()) && (marker.y() != 1))
+    if ( (cell != 0) && (!cell->isEmpty()) && (marker.y() != 1))
     {
       lastCell = cell;
       row = marker.y()-1;
       cell = sheet->cellAt(cell->column(), row);
-      while ((cell != NULL) && (row > 0) && (!cell->isEmpty()) )
+      while ((cell != 0) && (row > 0) && (!cell->isEmpty()) )
       {
         if (!(sheet->rowFormat(cell->row())->isHide()))
         {
@@ -2484,14 +2484,14 @@ bool Canvas::processControlArrowKey( QKeyEvent *event )
     {
       cell = sheet->getNextCellUp(marker.x(), marker.y());
 
-      while ((cell != NULL) &&
+      while ((cell != 0) &&
             (cell->isEmpty() || (sheet->rowFormat(cell->row())->isHide())))
       {
         cell = sheet->getNextCellUp(cell->column(), cell->row());
       }
     }
 
-    if (cell == NULL)
+    if (cell == 0)
       row = 1;
     else
       row = cell->row();
@@ -2509,12 +2509,12 @@ bool Canvas::processControlArrowKey( QKeyEvent *event )
    case Qt::Key_Down:
 
     cell = sheet->cellAt( marker.x(), marker.y() );
-    if ( (cell != NULL) && (!cell->isEmpty()) && (marker.y() != KS_rowMax))
+    if ( (cell != 0) && (!cell->isEmpty()) && (marker.y() != KS_rowMax))
     {
       lastCell = cell;
       row = marker.y()+1;
       cell = sheet->cellAt(cell->column(), row);
-      while ((cell != NULL) && (row < KS_rowMax) && (!cell->isEmpty()) )
+      while ((cell != 0) && (row < KS_rowMax) && (!cell->isEmpty()) )
       {
         if (!(sheet->rowFormat(cell->row())->isHide()))
         {
@@ -2530,14 +2530,14 @@ bool Canvas::processControlArrowKey( QKeyEvent *event )
     {
       cell = sheet->getNextCellDown(marker.x(), marker.y());
 
-      while ((cell != NULL) &&
+      while ((cell != 0) &&
             (cell->isEmpty() || (sheet->rowFormat(cell->row())->isHide())))
       {
         cell = sheet->getNextCellDown(cell->column(), cell->row());
       }
     }
 
-    if (cell == NULL)
+    if (cell == 0)
       row = marker.y();
     else
       row = cell->row();
@@ -2557,12 +2557,12 @@ bool Canvas::processControlArrowKey( QKeyEvent *event )
   if ( sheet->layoutDirection()==Sheet::RightToLeft )
   {
     cell = sheet->cellAt( marker.x(), marker.y() );
-    if ( (cell != NULL) && (!cell->isEmpty()) && (marker.x() != KS_colMax))
+    if ( (cell != 0) && (!cell->isEmpty()) && (marker.x() != KS_colMax))
     {
       lastCell = cell;
       col = marker.x()+1;
       cell = sheet->cellAt(col, cell->row());
-      while ((cell != NULL) && (col < KS_colMax) && (!cell->isEmpty()) )
+      while ((cell != 0) && (col < KS_colMax) && (!cell->isEmpty()) )
       {
         if (!(sheet->columnFormat(cell->column())->isHide()))
         {
@@ -2578,14 +2578,14 @@ bool Canvas::processControlArrowKey( QKeyEvent *event )
     {
       cell = sheet->getNextCellRight(marker.x(), marker.y());
 
-      while ((cell != NULL) &&
+      while ((cell != 0) &&
             (cell->isEmpty() || (sheet->columnFormat(cell->column())->isHide())))
       {
         cell = sheet->getNextCellRight(cell->column(), cell->row());
       }
     }
 
-    if (cell == NULL)
+    if (cell == 0)
       col = marker.x();
     else
       col = cell->column();
@@ -2601,12 +2601,12 @@ bool Canvas::processControlArrowKey( QKeyEvent *event )
   else
   {
     cell = sheet->cellAt( marker.x(), marker.y() );
-    if ( (cell != NULL) && (!cell->isEmpty()) && (marker.x() != 1))
+    if ( (cell != 0) && (!cell->isEmpty()) && (marker.x() != 1))
     {
       lastCell = cell;
       col = marker.x()-1;
       cell = sheet->cellAt(col, cell->row());
-      while ((cell != NULL) && (col > 0) && (!cell->isEmpty()) )
+      while ((cell != 0) && (col > 0) && (!cell->isEmpty()) )
       {
         if (!(sheet->columnFormat(cell->column())->isHide()))
         {
@@ -2623,14 +2623,14 @@ bool Canvas::processControlArrowKey( QKeyEvent *event )
     {
       cell = sheet->getNextCellLeft(marker.x(), marker.y());
 
-      while ((cell != NULL) &&
+      while ((cell != 0) &&
             (cell->isEmpty() || (sheet->columnFormat(cell->column())->isHide())))
       {
         cell = sheet->getNextCellLeft(cell->column(), cell->row());
       }
     }
 
-    if (cell == NULL)
+    if (cell == 0)
       col = 1;
     else
       col = cell->column();
@@ -2651,12 +2651,12 @@ bool Canvas::processControlArrowKey( QKeyEvent *event )
   if ( sheet->layoutDirection()==Sheet::RightToLeft )
   {
     cell = sheet->cellAt( marker.x(), marker.y() );
-    if ( (cell != NULL) && (!cell->isEmpty()) && (marker.x() != 1))
+    if ( (cell != 0) && (!cell->isEmpty()) && (marker.x() != 1))
     {
       lastCell = cell;
       col = marker.x()-1;
       cell = sheet->cellAt(col, cell->row());
-      while ((cell != NULL) && (col > 0) && (!cell->isEmpty()) )
+      while ((cell != 0) && (col > 0) && (!cell->isEmpty()) )
       {
         if (!(sheet->columnFormat(cell->column())->isHide()))
         {
@@ -2673,14 +2673,14 @@ bool Canvas::processControlArrowKey( QKeyEvent *event )
     {
       cell = sheet->getNextCellLeft(marker.x(), marker.y());
 
-      while ((cell != NULL) &&
+      while ((cell != 0) &&
             (cell->isEmpty() || (sheet->columnFormat(cell->column())->isHide())))
       {
         cell = sheet->getNextCellLeft(cell->column(), cell->row());
       }
     }
 
-    if (cell == NULL)
+    if (cell == 0)
       col = 1;
     else
       col = cell->column();
@@ -2696,12 +2696,12 @@ bool Canvas::processControlArrowKey( QKeyEvent *event )
   else
   {
     cell = sheet->cellAt( marker.x(), marker.y() );
-    if ( (cell != NULL) && (!cell->isEmpty()) && (marker.x() != KS_colMax))
+    if ( (cell != 0) && (!cell->isEmpty()) && (marker.x() != KS_colMax))
     {
       lastCell = cell;
       col = marker.x()+1;
       cell = sheet->cellAt(col, cell->row());
-      while ((cell != NULL) && (col < KS_colMax) && (!cell->isEmpty()) )
+      while ((cell != 0) && (col < KS_colMax) && (!cell->isEmpty()) )
       {
         if (!(sheet->columnFormat(cell->column())->isHide()))
         {
@@ -2717,14 +2717,14 @@ bool Canvas::processControlArrowKey( QKeyEvent *event )
     {
       cell = sheet->getNextCellRight(marker.x(), marker.y());
 
-      while ((cell != NULL) &&
+      while ((cell != 0) &&
             (cell->isEmpty() || (sheet->columnFormat(cell->column())->isHide())))
       {
         cell = sheet->getNextCellRight(cell->column(), cell->row());
       }
     }
 
-    if (cell == NULL)
+    if (cell == 0)
       col = marker.x();
     else
       col = cell->column();
@@ -2908,7 +2908,7 @@ bool Canvas::formatKeyPress( QKeyEvent * _ev )
        && key != Qt::Key_NumberSign )
     return false;
 
-  Cell  * cell = 0L;
+  Cell  * cell = 0;
   Sheet * sheet = activeSheet();
 
   d->view->doc()->emitBeginOperation(false);
@@ -3552,7 +3552,7 @@ void Canvas::finishResizeObject( const QString &/*name*/, bool /*layout*/ )
     d->m_ratio = 0.0;
     d->m_isResizing = false;
     repaintObject( d->m_resizeObject );
-    d->m_resizeObject = NULL;
+    d->m_resizeObject = 0;
   }
 }
 
@@ -3998,7 +3998,7 @@ QRect Canvas::visibleCells() const
 
 void Canvas::paintUpdates()
 {
-  if (activeSheet() == NULL)
+  if (activeSheet() == 0)
     return;
 
   QPainter painter(this);
@@ -4027,7 +4027,7 @@ void Canvas::paintUpdates()
 
   /* paint any visible cell that has the paintDirty flag */
   QRect range = visibleCells();
-  Cell* cell = NULL;
+  Cell* cell = 0;
 
   double topPos = activeSheet()->dblRowPos(range.top());
   double leftPos = activeSheet()->dblColumnPos(range.left());
@@ -4608,7 +4608,7 @@ VBorder::VBorder( QWidget *_parent, Canvas *_canvas, View *_view)
 {
   m_pView = _view;
   m_pCanvas = _canvas;
-  m_lSize = 0L;
+  m_lSize = 0;
 
   setMouseTracking( true );
   m_bResize = false;
@@ -5172,7 +5172,7 @@ HBorder::HBorder( QWidget *_parent, Canvas *_canvas,View *_view )
 {
   m_pView = _view;
   m_pCanvas = _canvas;
-  m_lSize = 0L;
+  m_lSize = 0;
   setMouseTracking( true );
   m_bResize = false;
   m_bSelection = false;

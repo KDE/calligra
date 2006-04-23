@@ -173,14 +173,14 @@ int Doc::Private::s_docId = 0;
 
 #define deleteLoadingInfo() { \
         delete d->m_loadingInfo; \
-        d->m_loadingInfo = 0L; \
+        d->m_loadingInfo = 0; \
 }
 
 Doc::Doc( QWidget *parentWidget, const char *widgetName, QObject* parent, const char* name, bool singleViewMode )
   : KoDocument( parentWidget, widgetName, parent, name, singleViewMode )
 {
   d = new Private;
-  d->m_loadingInfo = 0L;
+  d->m_loadingInfo = 0;
 
   d->map = new Map( this, "Map" );
   d->locale = new Locale;
@@ -1586,7 +1586,7 @@ void Doc::paintContent( QPainter& painter, const QRect& rect,
     int oldZoom = m_zoom;
 
     // choose sheet: the first or the active
-    Sheet* sheet = 0L;
+    Sheet* sheet = 0;
     if ( !d->activeSheet )
         sheet = map()->firstSheet();
     else
@@ -1644,7 +1644,7 @@ void Doc::paintContent( QPainter& painter, const QRect& rect, bool /*transparent
                        right_col - left_col + 1,
                        bottom_row - top_row + 1), sheet );
 
-    paintCellRegions(painter, rect, NULL, region);
+    paintCellRegions(painter, rect, 0, region);
 }
 
 void Doc::paintUpdates()
@@ -1652,8 +1652,8 @@ void Doc::paintUpdates()
   //  ElapsedTime et( "Doc::paintUpdates" );
 
   Q3PtrListIterator<KoView> it( views() );
-  View  * view  = NULL;
-  Sheet * sheet = NULL;
+  View  * view  = 0;
+  Sheet * sheet = 0;
 
   for (; it.current(); ++it )
   {
@@ -1661,7 +1661,7 @@ void Doc::paintUpdates()
     view->paintUpdates();
   }
 
-  for (sheet = map()->firstSheet(); sheet != NULL;
+  for (sheet = map()->firstSheet(); sheet != 0;
        sheet = map()->nextSheet())
   {
     sheet->clearPaintDirtyData();
@@ -1729,14 +1729,14 @@ void Doc::PaintRegion(QPainter &painter, const KoRect &viewRegion,
     return;
 
   // Get the world coordinates of the upper left corner of the
-  // paintRegion The view is NULL, when paintRegion is called from
+  // paintRegion The view is 0, when paintRegion is called from
   // paintContent, which itself is only called, when we should paint
   // the output for INACTIVE embedded view.  If inactive embedded,
   // then there is no view and we alwas start at top/left, so the
   // offset is 0.
   //
   KoPoint  dblCorner;
-  if ( view == 0L ) //Most propably we are embedded and inactive, so no offset
+  if ( view == 0 ) //Most propably we are embedded and inactive, so no offset
     dblCorner = KoPoint( sheet->dblColumnPos( paintRegion.left() ),
 			 sheet->dblRowPos( paintRegion.top() ) );
   else
@@ -2128,7 +2128,7 @@ void Doc::emitBeginOperation(bool waitCursor)
     }
 
 //    /* just duplicate the current cursor on the stack, then */
-//  else if (QApplication::overrideCursor() != NULL)
+//  else if (QApplication::overrideCursor() != 0)
 //    {
 //        QApplication::setOverrideCursor(QApplication::overrideCursor()->shape());
 //    }

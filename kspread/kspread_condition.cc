@@ -79,7 +79,7 @@ Conditional& Conditional::operator=( const Conditional& d )
 Conditions::Conditions( const Cell * ownerCell )
   : m_cell( ownerCell ), m_matchedStyle( 0 )
 {
-  Q_ASSERT( ownerCell != NULL );
+  Q_ASSERT( ownerCell != 0 );
 }
 
 Conditions::~Conditions()

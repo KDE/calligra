@@ -295,7 +295,7 @@ public:
     void adjustActions( Sheet* sheet, Cell* cell );
     void adjustWorkbookActions( bool mode );
     void updateButton( Cell *cell, int column, int row);
-    QAbstractButton* newIconButton( const char *_file, bool _kbutton = false, QWidget *_parent = 0L );
+    QAbstractButton* newIconButton( const char *_file, bool _kbutton = false, QWidget *_parent = 0 );
 
     PropertyEditor *m_propertyEditor;
 
@@ -1452,7 +1452,7 @@ void View::Private::updateButton( Cell *cell, int column, int row)
 
 QAbstractButton* View::Private::newIconButton( const char *_file, bool _kbutton, QWidget *_parent )
 {
-  if ( _parent == 0L )
+  if ( _parent == 0 )
     _parent = view;
 
   if ( !_kbutton ) {
@@ -1628,7 +1628,7 @@ void KPSheetSelectPage::select()
 void KPSheetSelectPage::remove()
 {
   Q3ListViewItem* item = gui->ListViewSelected->firstChild();
-  Q3ListViewItem* nextitem = NULL;
+  Q3ListViewItem* nextitem = 0;
   while (item)
   {
     nextitem = item->nextSibling();
@@ -1651,7 +1651,7 @@ void KPSheetSelectPage::moveTop()
 
   QList<Q3ListViewItem*> newlist;
   Q3ListViewItem* item = gui->ListViewSelected->firstChild();
-  Q3ListViewItem* nextitem = NULL;
+  Q3ListViewItem* nextitem = 0;
 //   kDebug() << "Filling new list with selected items first" << endl;
   while (item)
   {
@@ -1694,7 +1694,7 @@ void KPSheetSelectPage::moveUp()
 
   QList<Q3ListViewItem*> newlist;
   Q3ListViewItem* item = gui->ListViewSelected->firstChild();
-  Q3ListViewItem* nextitem = NULL;
+  Q3ListViewItem* nextitem = 0;
   while (item)
   {
     nextitem = item->nextSibling();
@@ -1756,7 +1756,7 @@ void KPSheetSelectPage::moveBottom()
 
   QList<Q3ListViewItem*> newlist;
   Q3ListViewItem* item = gui->ListViewSelected->firstChild();
-  Q3ListViewItem* nextitem = NULL;
+  Q3ListViewItem* nextitem = 0;
 //   kDebug() << "Filling new list with unselected items first" << endl;
   while (item)
   {
@@ -1854,7 +1854,7 @@ View::View( QWidget *_parent, const char *_name,
     d->spell.spellEndCellY   = 0;
     d->spell.spellCheckSelection = false;
 
-    d->insertHandler = 0L;
+    d->insertHandler = 0;
     d->specialCharDlg = 0;
 
     setInstance( Factory::global() );
@@ -1942,7 +1942,7 @@ View::~View()
     delete d->spell.kspell;
 
     d->canvas->endChoose();
-    d->activeSheet = 0; // set the active sheet to 0L so that when during destruction
+    d->activeSheet = 0; // set the active sheet to 0 so that when during destruction
     // of embedded child documents possible repaints in Sheet are not
     // performed. The repains can happen if you delete an embedded document,
     // which leads to an regionInvalidated() signal emission in KoView, which calls
@@ -1960,7 +1960,7 @@ View::~View()
     delete d->dcop;
 
     delete d->insertHandler;
-    d->insertHandler = 0L;
+    d->insertHandler = 0;
 
     delete d->actions;
     delete d;
@@ -2270,7 +2270,7 @@ void View::recalcWorkBook()
   Sheet * tbl;
   doc()->emitBeginOperation( true );
   for ( tbl = doc()->map()->firstSheet();
-        tbl != 0L;
+        tbl != 0;
         tbl = doc()->map()->nextSheet() )
   {
    // bool b = tbl->getAutoCalc();
@@ -2287,7 +2287,7 @@ void View::refreshLocale()
   doc()->emitBeginOperation(true);
   Sheet *tbl;
   for ( tbl = doc()->map()->firstSheet();
-        tbl != 0L;
+        tbl != 0;
         tbl = doc()->map()->nextSheet() )
   {
     tbl->updateLocale();
@@ -2314,10 +2314,10 @@ void View::extraSpelling()
   if ( d->spell.kspell )
     return; // Already in progress
 
-  if (d->activeSheet == 0L)
+  if (d->activeSheet == 0)
     return;
 
-  d->spell.macroCmdSpellCheck = 0L;
+  d->spell.macroCmdSpellCheck = 0;
   d->spell.firstSpellSheet    = d->activeSheet;
   d->spell.currentSpellSheet  = d->spell.firstSpellSheet;
 
@@ -2340,7 +2340,7 @@ void View::extraSpelling()
     d->spell.spellEndCellX   = selection.right();
     d->spell.spellEndCellY   = selection.bottom();
     d->spell.spellCheckSelection = true;
-    d->spell.currentCell     = 0L;
+    d->spell.currentCell     = 0;
 
     // "-1" because X gets increased every time we go into spellCheckReady()
     d->spell.spellCurrCellX = d->spell.spellStartCellX - 1;
@@ -2491,10 +2491,10 @@ void View::spellCleanup()
 
   d->spell.kspell->cleanUp();
   delete d->spell.kspell;
-  d->spell.kspell            = 0L;
-  d->spell.firstSpellSheet   = 0L;
-  d->spell.currentSpellSheet = 0L;
-  d->spell.currentCell       = 0L;
+  d->spell.kspell            = 0;
+  d->spell.firstSpellSheet   = 0;
+  d->spell.currentSpellSheet = 0;
+  d->spell.currentCell       = 0;
   d->spell.replaceAll.clear();
 
 
@@ -2502,7 +2502,7 @@ void View::spellCleanup()
 
   if ( d->spell.macroCmdSpellCheck )
     doc()->addCommand( d->spell.macroCmdSpellCheck );
-  d->spell.macroCmdSpellCheck=0L;
+  d->spell.macroCmdSpellCheck=0;
 }
 
 
@@ -2615,7 +2615,7 @@ void View::spellCheckerDone( const QString & )
 
     d->spell.kspell->cleanUp();
     delete d->spell.kspell;
-    d->spell.kspell = 0L;
+    d->spell.kspell = 0;
 
     if ( result != KS_CANCEL && result != KS_STOP )
     {
@@ -2646,7 +2646,7 @@ void View::spellCheckerDone( const QString & )
     {
         doc()->addCommand( d->spell.macroCmdSpellCheck );
     }
-    d->spell.macroCmdSpellCheck=0L;
+    d->spell.macroCmdSpellCheck=0;
 }
 
 void View::spellCheckerFinished()
@@ -2657,7 +2657,7 @@ void View::spellCheckerFinished()
   KSpell::spellStatus status = d->spell.kspell->status();
   d->spell.kspell->cleanUp();
   delete d->spell.kspell;
-  d->spell.kspell = 0L;
+  d->spell.kspell = 0;
   d->spell.replaceAll.clear();
 
   bool kspellNotConfigured=false;
@@ -2677,7 +2677,7 @@ void View::spellCheckerFinished()
   {
       doc()->addCommand( d->spell.macroCmdSpellCheck );
   }
-  d->spell.macroCmdSpellCheck=0L;
+  d->spell.macroCmdSpellCheck=0;
 
 
   if (kspellNotConfigured)
@@ -2695,7 +2695,7 @@ void View::initialPosition()
     for( ; it.current(); ++it )
       addSheet( it.current() );
 
-    Sheet * tbl = 0L;
+    Sheet * tbl = 0;
     if ( doc()->isEmbedded() )
     {
         tbl = doc()->displaySheet();
@@ -3041,7 +3041,7 @@ void View::oszilloscope()
 
 void View::changeTextColor()
 {
-  if ( d->activeSheet != 0L )
+  if ( d->activeSheet != 0 )
   {
     doc()->emitBeginOperation(false);
     d->activeSheet->setSelectionTextColor( selectionInfo(), d->actions->textColor->color() );
@@ -3051,7 +3051,7 @@ void View::changeTextColor()
 
 void View::setSelectionTextColor(const QColor &txtColor)
 {
-  if (d->activeSheet != 0L)
+  if (d->activeSheet != 0)
   {
     doc()->emitBeginOperation(false);
     d->activeSheet->setSelectionTextColor( selectionInfo(), txtColor );
@@ -3063,7 +3063,7 @@ void View::setSelectionTextColor(const QColor &txtColor)
 
 void View::changeBackgroundColor()
 {
-  if ( d->activeSheet != 0L )
+  if ( d->activeSheet != 0 )
   {
     doc()->emitBeginOperation(false);
     d->activeSheet->setSelectionbgColor( selectionInfo(), d->actions->bgColor->color() );
@@ -3073,7 +3073,7 @@ void View::changeBackgroundColor()
 
 void View::setSelectionBackgroundColor(const QColor &bgColor)
 {
-  if (d->activeSheet != 0L)
+  if (d->activeSheet != 0)
   {
     doc()->emitBeginOperation(false);
     d->activeSheet->setSelectionbgColor( selectionInfo(), bgColor );
@@ -3083,7 +3083,7 @@ void View::setSelectionBackgroundColor(const QColor &bgColor)
 
 void View::changeBorderColor()
 {
-  if ( d->activeSheet != 0L )
+  if ( d->activeSheet != 0 )
   {
     doc()->emitBeginOperation(false);
     d->activeSheet->setSelectionBorderColor( selectionInfo(), d->actions->borderColor->color() );
@@ -3093,7 +3093,7 @@ void View::changeBorderColor()
 
 void View::setSelectionBorderColor(const QColor &bdColor)
 {
-  if (d->activeSheet != 0L)
+  if (d->activeSheet != 0)
   {
     doc()->emitBeginOperation(false);
     d->activeSheet->setSelectionBorderColor( selectionInfo(), bdColor );
@@ -3270,7 +3270,7 @@ void View::fontSelected( const QString & _font )
     return;
 
   doc()->emitBeginOperation(false);
-  if ( d->activeSheet != 0L )
+  if ( d->activeSheet != 0 )
     d->activeSheet->setSelectionFont( d->selection, _font.toLatin1() );
 
   // Dont leave the focus in the toolbars combo box ...
@@ -3299,7 +3299,7 @@ void View::increaseFontSize()
 
 void View::setSelectionFontSize( int size )
 {
-  if ( d->activeSheet != NULL )
+  if ( d->activeSheet != 0 )
   {
     d->activeSheet->setSelectionSize( selectionInfo(), size );
   }
@@ -3384,7 +3384,7 @@ void View::slotSpecialCharDlgClosed()
     disconnect( d->specialCharDlg, SIGNAL( finished() ),
                 this, SLOT( slotSpecialCharDlgClosed() ) );
     d->specialCharDlg->deleteLater();
-    d->specialCharDlg = 0L;
+    d->specialCharDlg = 0;
   }
 }
 
@@ -3406,7 +3406,7 @@ void View::slotSpecialChar( QChar c, const QString & _font )
 
 void View::insertMathExpr()
 {
-  if ( d->activeSheet == 0L )
+  if ( d->activeSheet == 0 )
     return;
 
   FormulaDialog * dlg = new FormulaDialog( this, "Function" );
@@ -3439,8 +3439,8 @@ void View::fontSizeSelected( int _size )
 
   doc()->emitBeginOperation( false );
 
-  if ( d->activeSheet != 0L )
-    d->activeSheet->setSelectionFont( selectionInfo(), 0L, _size );
+  if ( d->activeSheet != 0 )
+    d->activeSheet->setSelectionFont( selectionInfo(), 0, _size );
 
   // Dont leave the focus in the toolbars combo box ...
   if ( d->canvas->editor() )
@@ -3468,7 +3468,7 @@ void View::bold( bool b )
 
   int col = d->canvas->markerColumn();
   int row = d->canvas->markerRow();
-  d->activeSheet->setSelectionFont( selectionInfo(), 0L, -1, b );
+  d->activeSheet->setSelectionFont( selectionInfo(), 0, -1, b );
 
   if ( d->canvas->editor() )
   {
@@ -3492,7 +3492,7 @@ void View::underline( bool b )
   int col = d->canvas->markerColumn();
   int row = d->canvas->markerRow();
 
-  d->activeSheet->setSelectionFont( selectionInfo(), 0L, -1, -1, -1 ,b );
+  d->activeSheet->setSelectionFont( selectionInfo(), 0, -1, -1, -1 ,b );
   if ( d->canvas->editor() )
   {
     Cell * cell = d->activeSheet->cellAt( col, row );
@@ -3515,7 +3515,7 @@ void View::strikeOut( bool b )
   int col = d->canvas->markerColumn();
   int row = d->canvas->markerRow();
 
-  d->activeSheet->setSelectionFont( selectionInfo(), 0L, -1, -1, -1 ,-1, b );
+  d->activeSheet->setSelectionFont( selectionInfo(), 0, -1, -1, -1 ,-1, b );
   if ( d->canvas->editor() )
   {
     Cell * cell = d->activeSheet->cellAt( col, row );
@@ -3539,7 +3539,7 @@ void View::italic( bool b )
   int col = d->canvas->markerColumn();
   int row = d->canvas->markerRow();
 
-  d->activeSheet->setSelectionFont( selectionInfo(), 0L, -1, -1, b );
+  d->activeSheet->setSelectionFont( selectionInfo(), 0, -1, -1, b );
   if ( d->canvas->editor() )
   {
     Cell * cell = d->activeSheet->cellAt( col, row );
@@ -3600,7 +3600,7 @@ void View::sortDec()
 
 void View::borderBottom()
 {
-  if ( d->activeSheet != 0L )
+  if ( d->activeSheet != 0 )
   {
     doc()->emitBeginOperation( false );
 
@@ -3613,7 +3613,7 @@ void View::borderBottom()
 
 void View::setSelectionBottomBorderColor( const QColor & color )
 {
-  if ( d->activeSheet != 0L )
+  if ( d->activeSheet != 0 )
   {
     doc()->emitBeginOperation( false );
     d->activeSheet->borderBottom( selectionInfo(), color );
@@ -3625,7 +3625,7 @@ void View::setSelectionBottomBorderColor( const QColor & color )
 
 void View::borderRight()
 {
-  if ( d->activeSheet != 0L )
+  if ( d->activeSheet != 0 )
   {
     doc()->emitBeginOperation( false );
     if ( d->activeSheet->layoutDirection()==Sheet::RightToLeft )
@@ -3640,7 +3640,7 @@ void View::borderRight()
 
 void View::setSelectionRightBorderColor( const QColor & color )
 {
-  if ( d->activeSheet != 0L )
+  if ( d->activeSheet != 0 )
   {
     doc()->emitBeginOperation( false );
     if ( d->activeSheet->layoutDirection()==Sheet::RightToLeft )
@@ -3655,7 +3655,7 @@ void View::setSelectionRightBorderColor( const QColor & color )
 
 void View::borderLeft()
 {
-  if ( d->activeSheet != 0L )
+  if ( d->activeSheet != 0 )
   {
     doc()->emitBeginOperation( false );
     if ( d->activeSheet->layoutDirection()==Sheet::RightToLeft )
@@ -3670,7 +3670,7 @@ void View::borderLeft()
 
 void View::setSelectionLeftBorderColor( const QColor & color )
 {
-  if ( d->activeSheet != 0L )
+  if ( d->activeSheet != 0 )
   {
     doc()->emitBeginOperation( false );
     if ( d->activeSheet->layoutDirection()==Sheet::RightToLeft )
@@ -3685,7 +3685,7 @@ void View::setSelectionLeftBorderColor( const QColor & color )
 
 void View::borderTop()
 {
-  if ( d->activeSheet != 0L )
+  if ( d->activeSheet != 0 )
   {
     doc()->emitBeginOperation( false );
     d->activeSheet->borderTop( d->selection, d->actions->borderColor->color() );
@@ -3697,7 +3697,7 @@ void View::borderTop()
 
 void View::setSelectionTopBorderColor( const QColor & color )
 {
-  if ( d->activeSheet != 0L )
+  if ( d->activeSheet != 0 )
   {
     doc()->emitBeginOperation( false );
     d->activeSheet->borderTop( selectionInfo(), color );
@@ -3709,7 +3709,7 @@ void View::setSelectionTopBorderColor( const QColor & color )
 
 void View::borderOutline()
 {
-  if ( d->activeSheet != 0L )
+  if ( d->activeSheet != 0 )
   {
     doc()->emitBeginOperation( false );
     d->activeSheet->borderOutline( d->selection, d->actions->borderColor->color() );
@@ -3721,7 +3721,7 @@ void View::borderOutline()
 
 void View::setSelectionOutlineBorderColor( const QColor & color )
 {
-  if ( d->activeSheet != 0L )
+  if ( d->activeSheet != 0 )
   {
     doc()->emitBeginOperation( false );
     d->activeSheet->borderOutline( selectionInfo(), color );
@@ -3733,7 +3733,7 @@ void View::setSelectionOutlineBorderColor( const QColor & color )
 
 void View::borderAll()
 {
-  if ( d->activeSheet != 0L )
+  if ( d->activeSheet != 0 )
   {
     doc()->emitBeginOperation( false );
     d->activeSheet->borderAll( d->selection, d->actions->borderColor->color() );
@@ -3745,7 +3745,7 @@ void View::borderAll()
 
 void View::setSelectionAllBorderColor( const QColor & color )
 {
-  if ( d->activeSheet != 0L )
+  if ( d->activeSheet != 0 )
   {
     doc()->emitBeginOperation( false );
     d->activeSheet->borderAll( selectionInfo(), color );
@@ -3757,7 +3757,7 @@ void View::setSelectionAllBorderColor( const QColor & color )
 
 void View::borderRemove()
 {
-  if ( d->activeSheet != 0L )
+  if ( d->activeSheet != 0 )
   {
     doc()->emitBeginOperation(false);
     d->activeSheet->borderRemove( d->selection );
@@ -3820,7 +3820,7 @@ void View::slotSheetRemoved( Sheet *_t )
   if (doc()->map()->findSheet( doc()->map()->visibleSheets().first()))
     setActiveSheet( doc()->map()->findSheet( doc()->map()->visibleSheets().first() ));
   else
-    d->activeSheet = 0L;
+    d->activeSheet = 0;
 
   QList<Reference>::Iterator it;
   QList<Reference> area=doc()->listArea();
@@ -3834,7 +3834,7 @@ void View::slotSheetRemoved( Sheet *_t )
       //so you must recalc sheets when remove areaname
       Sheet * tbl;
 
-      for ( tbl = doc()->map()->firstSheet(); tbl != 0L; tbl = doc()->map()->nextSheet() )
+      for ( tbl = doc()->map()->firstSheet(); tbl != 0; tbl = doc()->map()->nextSheet() )
       {
         tbl->refreshRemoveAreaName((*it).ref_name);
       }
@@ -3849,7 +3849,7 @@ void View::removeAllSheets()
   doc()->emitBeginOperation(false);
   d->tabBar->clear();
 
-  setActiveSheet( 0L );
+  setActiveSheet( 0 );
 
   doc()->emitEndOperation();
 }
@@ -3867,7 +3867,7 @@ void View::setActiveSheet( Sheet * _t, bool updateSheet )
 
   d->activeSheet = _t;
 
-  if ( d->activeSheet == 0L )
+  if ( d->activeSheet == 0 )
   {
     doc()->emitEndOperation();
     return;
@@ -4133,7 +4133,7 @@ void View::cutSelection()
     markSelectionAsDirty();
     doc()->emitEndOperation();
 
-    KMacroCommand * macroCommand = 0L;
+    KMacroCommand * macroCommand = 0;
     foreach ( EmbeddedObject* object, doc()->embeddedObjects() )
     {
       if ( object->sheet() == canvasWidget()->activeSheet() && object->isSelected() )
@@ -4340,7 +4340,7 @@ void View::setSelectionAngle( int angle )
 {
   doc()->emitBeginOperation( false );
 
-  if ( d->activeSheet != NULL )
+  if ( d->activeSheet != 0 )
   {
     d->activeSheet->setSelectionAngle( selectionInfo(), angle );
     d->activeSheet->adjustArea(*selectionInfo());
@@ -4531,7 +4531,7 @@ void View::find()
     delete d->find;
     delete d->replace;
     d->find = new KFind( dlg.pattern(), dlg.options(), this );
-    d->replace = 0L;
+    d->replace = 0;
 
     d->searchInSheets.currentSheet = activeSheet();
     d->searchInSheets.firstSheet = d->searchInSheets.currentSheet;
@@ -4645,9 +4645,9 @@ Cell* View::nextFindValidCell( int col, int row )
 {
     Cell *cell = d->searchInSheets.currentSheet->cellAt( col, row );
     if ( cell->isDefault() || cell->isObscured() || cell->isFormula() )
-        cell = 0L;
+        cell = 0;
     if ( d->typeValue == FindOption::Note && cell && cell->format()->comment(col, row).isEmpty())
-        cell = 0L;
+        cell = 0;
     return cell;
 }
 
@@ -4657,7 +4657,7 @@ Cell* View::findNextCell()
     // but it doesn't seem to be easy to combine it with 'start a column d->find.x()'...
 
     Sheet* sheet = d->searchInSheets.currentSheet;
-    Cell* cell = 0L;
+    Cell* cell = 0;
     bool forw = ! ( d->findOptions & KFind::FindBackwards );
     int col = d->findPos.x();
     int row = d->findPos.y();
@@ -4752,7 +4752,7 @@ void View::replace()
 
     delete d->find;
     delete d->replace;
-    d->find = 0L;
+    d->find = 0;
     d->replace = new KReplace( dlg.pattern(), dlg.replacement(), dlg.options() );
     initFindReplace();
     connect(
@@ -4774,7 +4774,7 @@ void View::replace()
     // TODO - after a replacement only?
     Cell *cell = activeSheet()->cellAt( canvasWidget()->markerColumn(),
                                                canvasWidget()->markerRow() );
-    if ( cell->text() != 0L )
+    if ( cell->text() != 0 )
         d->editWidget->setText( cell->text() );
     else
         d->editWidget->setText( "" );
@@ -4784,7 +4784,7 @@ void View::replace()
 void View::slotHighlight( const QString &/*text*/, int /*matchingIndex*/, int /*matchedLength*/ )
 {
     d->selection->initialize( d->findPos );
-    KDialogBase *baseDialog=0L;
+    KDialogBase *baseDialog=0;
     if ( d->find )
         baseDialog = d->find->findNextDialog();
     else
@@ -5013,7 +5013,7 @@ void View::print( KPrinter &prt )
     {
         kDebug() << "  printing sheet " << *sheetlistiterator << endl;
         Sheet* sheet = doc()->map()->findSheet(*sheetlistiterator);
-        if (sheet == NULL)
+        if (sheet == 0)
         {
           kWarning() << i18n("Sheet %1 could not be found for printing").arg(*sheetlistiterator) << endl;
           continue;
@@ -5170,13 +5170,13 @@ void View::slotUpdateChildGeometry( EmbeddedKOfficeObject */*_child*/ )
     return;
 
   // Find frame for child
-  ChildFrame *f = 0L;
+  ChildFrame *f = 0;
   QPtrListIterator<ChildFrame> it( m_lstFrames );
   for ( ; it.current() && !f; ++it )
     if ( it.current()->child() == _child )
       f = it.current();
 
-  assert( f != 0L );
+  assert( f != 0 );
 
   // Are we already up to date ?
   if ( _child->geometry() == f->partGeometry() )
@@ -5393,7 +5393,7 @@ void View::addModifyComment()
 
 void View::setSelectionComment( QString comment )
 {
-  if ( d->activeSheet != NULL )
+  if ( d->activeSheet != 0 )
   {
     doc()->emitBeginOperation( false );
 
@@ -6144,7 +6144,7 @@ void View::deleteSelection()
 
 void View::deleteSelectedObjects()
 {
-  KMacroCommand * macroCommand = 0L;
+  KMacroCommand * macroCommand = 0;
   foreach ( EmbeddedObject* object, doc()->embeddedObjects() )
   {
     if ( object->sheet() == canvasWidget()->activeSheet() && object->isSelected() )
@@ -6503,7 +6503,7 @@ void View::wrapText( bool b )
   if ( d->toolbarLock )
     return;
 
-  if ( d->activeSheet != 0L )
+  if ( d->activeSheet != 0 )
   {
     doc()->emitBeginOperation( false );
     d->activeSheet->setSelectionMultiRow( selectionInfo(), b );
@@ -6516,7 +6516,7 @@ void View::alignLeft( bool b )
   if ( d->toolbarLock )
     return;
 
-  if ( d->activeSheet != 0L )
+  if ( d->activeSheet != 0 )
   {
     doc()->emitBeginOperation( false );
     if ( !b )
@@ -6536,7 +6536,7 @@ void View::alignRight( bool b )
   if ( d->toolbarLock )
     return;
 
-  if ( d->activeSheet != 0L )
+  if ( d->activeSheet != 0 )
   {
     doc()->emitBeginOperation( false );
     if ( !b )
@@ -6554,7 +6554,7 @@ void View::alignCenter( bool b )
   if ( d->toolbarLock )
     return;
 
-  if ( d->activeSheet != 0L )
+  if ( d->activeSheet != 0 )
   {
     doc()->emitBeginOperation( false );
     if ( !b )
@@ -6572,7 +6572,7 @@ void View::alignTop( bool b )
   if ( d->toolbarLock )
     return;
 
-  if ( d->activeSheet != 0L )
+  if ( d->activeSheet != 0 )
   {
     doc()->emitBeginOperation( false );
     if ( !b )
@@ -6590,7 +6590,7 @@ void View::alignBottom( bool b )
   if ( d->toolbarLock )
     return;
 
-  if ( d->activeSheet != 0L )
+  if ( d->activeSheet != 0 )
   {
     doc()->emitBeginOperation( false );
     if ( !b )
@@ -6608,7 +6608,7 @@ void View::alignMiddle( bool b )
   if ( d->toolbarLock )
     return;
 
-  if ( d->activeSheet != 0L )
+  if ( d->activeSheet != 0 )
   {
     doc()->emitBeginOperation( false );
     if ( !b )
@@ -6627,7 +6627,7 @@ void View::moneyFormat(bool b)
     return;
 
   doc()->emitBeginOperation( false );
-  if ( d->activeSheet != 0L )
+  if ( d->activeSheet != 0 )
     d->activeSheet->setSelectionMoneyFormat( selectionInfo(), b );
   updateEditWidget();
 
@@ -6710,7 +6710,7 @@ void View::precisionMinus()
 
 void View::setSelectionPrecision( int delta )
 {
-  if ( d->activeSheet != NULL )
+  if ( d->activeSheet != 0 )
   {
     doc()->emitBeginOperation( false );
     d->activeSheet->setSelectionPrecision( selectionInfo(), delta );
@@ -6726,7 +6726,7 @@ void View::percent( bool b )
     return;
 
   doc()->emitBeginOperation( false );
-  if ( d->activeSheet != 0L )
+  if ( d->activeSheet != 0 )
     d->activeSheet->setSelectionPercent( selectionInfo() ,b );
   updateEditWidget();
 
@@ -6792,7 +6792,7 @@ void View::zoomMinus()
 
   m_fZoom -= 0.25;
 
-  if ( d->activeSheet != 0L )
+  if ( d->activeSheet != 0 )
     d->activeSheet->setLayoutDirtyFlag();
 
   d->canvas->repaint();
@@ -6807,7 +6807,7 @@ void View::zoomPlus()
 
   m_fZoom += 0.25;
 
-  if ( d->activeSheet != 0L )
+  if ( d->activeSheet != 0 )
     d->activeSheet->setLayoutDirtyFlag();
 
   d->canvas->repaint();
@@ -6923,7 +6923,7 @@ void View::slotRename()
 
 void View::setText (const QString & _text, bool array)
 {
-  if ( d->activeSheet == 0L )
+  if ( d->activeSheet == 0 )
     return;
 
   if (array) {

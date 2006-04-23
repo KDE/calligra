@@ -279,7 +279,7 @@ static void __rtl_digest_swapLong (sal_uInt32 *pData, sal_uInt32 nDatLen)
 
 rtlDigest rtl_digest_create (rtlDigestAlgorithm Algorithm)
 {
-	rtlDigest Digest = (rtlDigest)NULL;
+	rtlDigest Digest = (rtlDigest)0;
 	switch (Algorithm)
 	{
 		case rtl_Digest_AlgorithmMD2:
@@ -692,7 +692,7 @@ rtlDigestError rtl_digest_SHA1 (
  */
 rtlDigest rtl_digest_createSHA1 (void)
 {
-	DigestSHA_Impl *pImpl = (DigestSHA_Impl*)NULL;
+	DigestSHA_Impl *pImpl = (DigestSHA_Impl*)0;
 	pImpl = RTL_DIGEST_CREATE(DigestSHA_Impl);
 	if (pImpl)
 	{
@@ -714,7 +714,7 @@ rtlDigestError rtl_digest_updateSHA1 (
 	DigestContextSHA *ctx;
 	sal_uInt32        len;
 
-	if ((pImpl == NULL) || (pData == NULL))
+	if ((pImpl == 0) || (pData == 0))
 		return rtl_Digest_E_Argument;
 
 	if (!(pImpl->m_digest.m_algorithm == rtl_Digest_AlgorithmSHA1))
@@ -785,7 +785,7 @@ rtlDigestError rtl_digest_getSHA1 (
 
 	DigestContextSHA *ctx;
 
-	if ((pImpl == NULL) || (pBuffer == NULL))
+	if ((pImpl == 0) || (pBuffer == 0))
 		return rtl_Digest_E_Argument;
 
 	if (!(pImpl->m_digest.m_algorithm == rtl_Digest_AlgorithmSHA1))

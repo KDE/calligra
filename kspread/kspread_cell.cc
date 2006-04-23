@@ -143,7 +143,7 @@ public:
   //                  is important?
   QList<Cell*> obscuringCells;
 
-  // If non-NULL, contains a pointer to a condition or a validity test.
+  // If non-0, contains a pointer to a condition or a validity test.
   Conditions  *conditions;
   Validity    *validity;
 
@@ -663,7 +663,7 @@ void Cell::defaultStyle()
   }
 
   delete d->extra()->validity;
-  d->extra()->validity = 0L;
+  d->extra()->validity = 0;
 }
 
 
@@ -2051,7 +2051,7 @@ bool Cell::makeFormula()
     {
       QString tmp(i18n("Error in cell %1\n\n"));
       tmp = tmp.arg( fullName() );
-      KMessageBox::error( (QWidget*)0L, tmp);
+      KMessageBox::error( (QWidget*)0, tmp);
     }
     setFlag(Flag_ParseError);
     Value v;
@@ -2069,7 +2069,7 @@ bool Cell::makeFormula()
 void Cell::clearFormula()
 {
   delete d->formula;
-  d->formula = 0L;
+  d->formula = 0;
 }
 
 bool Cell::calc(bool delay)
@@ -2240,7 +2240,7 @@ void Cell::paintCell( const KoRect   &rect, QPainter & painter,
   // that case, "selected" will be set to false even though the cell
   // itself really is selected.
   bool  selected = false;
-  if ( view != NULL ) {
+  if ( view != 0 ) {
     selected = view->selectionInfo()->contains( cellRef );
 
     // But the cell doesn't look selected if this is the marker cell.
@@ -4285,7 +4285,7 @@ void Cell::setTopBorderPen( const QPen& p )
 
 void Cell::setRightBorderPen( const QPen& p )
 {
-    Cell* cell = 0L;
+    Cell* cell = 0;
     if ( column() < KS_colMax )
         cell = format()->sheet()->cellAt( column() + 1, row() );
 
@@ -4298,7 +4298,7 @@ void Cell::setRightBorderPen( const QPen& p )
 
 void Cell::setBottomBorderPen( const QPen& p )
 {
-    Cell* cell = 0L;
+    Cell* cell = 0;
     if ( row() < KS_rowMax )
         cell = format()->sheet()->cellAt( column(), row() + 1 );
 
@@ -4884,27 +4884,27 @@ bool Cell::testValidity() const
         valid= true;
     }
 
-    if(!valid &&d->extra()->validity != NULL && d->extra()->validity->displayMessage)
+    if(!valid &&d->extra()->validity != 0 && d->extra()->validity->displayMessage)
     {
         switch (d->extra()->validity->m_action )
         {
           case Action::Stop:
-            KMessageBox::error((QWidget*)0L, d->extra()->validity->message,
+            KMessageBox::error((QWidget*)0, d->extra()->validity->message,
                                d->extra()->validity->title);
             break;
           case Action::Warning:
-            KMessageBox::warningYesNo((QWidget*)0L, d->extra()->validity->message,
+            KMessageBox::warningYesNo((QWidget*)0, d->extra()->validity->message,
                                       d->extra()->validity->title);
             break;
           case Action::Information:
-            KMessageBox::information((QWidget*)0L, d->extra()->validity->message,
+            KMessageBox::information((QWidget*)0, d->extra()->validity->message,
                                      d->extra()->validity->title);
             break;
         }
     }
     if (!d->hasExtra())
         return true;  //okay if there's no validity
-    return (valid || d->extra()->validity == NULL || d->extra()->validity->m_action != Action::Stop);
+    return (valid || d->extra()->validity == 0 || d->extra()->validity->m_action != Action::Stop);
 }
 
 FormatType Cell::formatType() const
@@ -4988,7 +4988,7 @@ bool Cell::updateChart(bool refresh)
     if ( d->row != 0 && d->column != 0 )
     {
         CellBinding *bind;
-        for ( bind = format()->sheet()->firstCellBinding(); bind != 0L; bind = format()->sheet()->nextCellBinding() )
+        for ( bind = format()->sheet()->firstCellBinding(); bind != 0; bind = format()->sheet()->nextCellBinding() )
         {
             if ( bind->contains( d->column, d->row ) )
             {

@@ -540,7 +540,7 @@ static void showEntry( QLineEdit* edit, QLabel* label,
     label->setText( desc->param( param ).helpText()+":" );
     label->show();
     ParameterType elementType = desc->param( param ).type();
-    KFloatValidator *validate=0L;
+    KFloatValidator *validate=0;
     switch( elementType )
     {
     case KSpread_String:

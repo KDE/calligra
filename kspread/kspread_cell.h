@@ -320,7 +320,7 @@ public:
      *
      * @param rect the portion of the canvas that is actually in view
      * @param painter the painter object to paint on
-     * @param view the view of this data.  This may be NULL, but no selection
+     * @param view the view of this data.  This may be 0, but no selection
      *        will be included with the painting.
      * @param coordinate coordinates on the painter where the top left corner
      *                    of the cell should be painted plus width and height
@@ -352,7 +352,7 @@ public:
      *
      * @return the width of this cell as int
      */
-    int width( int _col = -1, const Canvas *_canvas = 0L ) const;
+    int width( int _col = -1, const Canvas *_canvas = 0 ) const;
 
     /**
      * @param _row the row this cell is assumed to be in.
@@ -360,7 +360,7 @@ public:
      *
      * @return the height of this cell as int
      */
-    int height( int _row = -1, const Canvas *_canvas = 0L ) const;
+    int height( int _row = -1, const Canvas *_canvas = 0 ) const;
 
     /**
      * @param _canvas the canvas this cell is assumed to be in.
@@ -369,7 +369,7 @@ public:
      *
      * @return the width of this cell as double
      */
-    double dblWidth( int _col = -1, const Canvas *_canvas = 0L ) const;
+    double dblWidth( int _col = -1, const Canvas *_canvas = 0 ) const;
 
     /**
      * @param _row the row this cell is assumed to be in.
@@ -377,7 +377,7 @@ public:
      *
      * @return the height of this cell as double
      */
-    double dblHeight( int _row = -1, const Canvas *_canvas = 0L ) const;
+    double dblHeight( int _row = -1, const Canvas *_canvas = 0 ) const;
 
     /**
      * @return a QRect for this cell (i.e., a 1x1 rect).  @see zoomedCellRect

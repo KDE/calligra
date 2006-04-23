@@ -154,7 +154,7 @@ public:
    *
    * @param col The column to get the first cell from
    *
-   * @return Returns a pointer to the cell, or NULL if there are no used cells
+   * @return Returns a pointer to the cell, or 0 if there are no used cells
    *         in this column
    */
   Cell* getFirstCellColumn(int col) const;
@@ -165,7 +165,7 @@ public:
    *
    * @param col The column to get the cell from
    *
-   * @return Returns a pointer to the cell, or NULL if there are no used cells
+   * @return Returns a pointer to the cell, or 0 if there are no used cells
    *         in this column
    */
   Cell* getLastCellColumn(int col) const;
@@ -176,7 +176,7 @@ public:
    *
    * @param row The row to get the first cell from
    *
-   * @return Returns a pointer to the cell, or NULL if there are no used cells
+   * @return Returns a pointer to the cell, or 0 if there are no used cells
    *         in this row
    */
   Cell* getFirstCellRow(int row) const;
@@ -187,7 +187,7 @@ public:
    *
    * @param row The row to get the last cell from
    *
-   * @return Returns a pointer to the cell, or NULL if there are no used cells
+   * @return Returns a pointer to the cell, or 0 if there are no used cells
    *         in this row
    */
   Cell* getLastCellRow(int row) const;
@@ -199,7 +199,7 @@ public:
    * @param col column to start looking through
    * @param row the row above which to start looking.
    *
-   * @return Returns the next used cell above this one, or NULL if there are none
+   * @return Returns the next used cell above this one, or 0 if there are none
    */
   Cell* getNextCellUp(int col, int row) const;
 
@@ -210,7 +210,7 @@ public:
    * @param col column to start looking through
    * @param row the row below which to start looking.
    *
-   * @return Returns the next used cell below this one, or NULL if there are none
+   * @return Returns the next used cell below this one, or 0 if there are none
    */
   Cell* getNextCellDown(int col, int row) const;
 
@@ -221,7 +221,7 @@ public:
    * @param col the column after which should be searched
    * @param row the row to search through
    *
-   * @return Returns the next used cell to the right of this one, or NULL if
+   * @return Returns the next used cell to the right of this one, or 0 if
    * there are none
    */
   Cell* getNextCellRight(int col, int row) const;
@@ -233,7 +233,7 @@ public:
    * @param col the column before which should be searched
    * @param row the row to search through
    *
-   * @return Returns the next used cell to the left of this one, or NULL if
+   * @return Returns the next used cell to the left of this one, or 0 if
    * there are none
    */
   Cell* getNextCellLeft(int col, int row) const;

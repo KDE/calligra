@@ -389,13 +389,13 @@ Sheet* Map::findSheet( const QString & _name )
 {
     Sheet * t;
 
-    for ( t = m_lstSheets.first(); t != 0L; t = m_lstSheets.next() )
+    for ( t = m_lstSheets.first(); t != 0; t = m_lstSheets.next() )
     {
 	    if ( _name.toLower() == t->sheetName().toLower() )
             return t;
     }
 
-    return 0L;
+    return 0;
 }
 
 Sheet * Map::nextSheet( Sheet * currentSheet )
@@ -405,13 +405,13 @@ Sheet * Map::nextSheet( Sheet * currentSheet )
     if( currentSheet == m_lstSheets.last())
       return currentSheet;
 
-    for ( t = m_lstSheets.first(); t != 0L; t = m_lstSheets.next() )
+    for ( t = m_lstSheets.first(); t != 0; t = m_lstSheets.next() )
     {
         if ( t  == currentSheet )
             return m_lstSheets.next();
     }
 
-    return 0L;
+    return 0;
 }
 
 Sheet * Map::previousSheet( Sheet * currentSheet )
@@ -421,13 +421,13 @@ Sheet * Map::previousSheet( Sheet * currentSheet )
     if( currentSheet == m_lstSheets.first())
       return currentSheet;
 
-    for ( t = m_lstSheets.first(); t != 0L; t = m_lstSheets.next() )
+    for ( t = m_lstSheets.first(); t != 0; t = m_lstSheets.next() )
     {
         if ( t  == currentSheet )
             return m_lstSheets.prev();
     }
 
-    return 0L;
+    return 0;
 }
 
 bool Map::saveChildren( KoStore * _store )

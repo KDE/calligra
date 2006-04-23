@@ -218,7 +218,7 @@ void ListDialog::slotAdd()
   entryList->setText("");
   entryList->setEnabled(false);
   entryList->setFocus();
-  slotTextClicked(0L);
+  slotTextClicked(0);
   m_bChanged=true;
 }
 
@@ -276,10 +276,10 @@ void ListDialog::slotOk()
         config->writeEntry("Other list",result);
         //todo refresh AutoFillSequenceItem::other
         // I don't know how to do for the moment
-        if(AutoFillSequenceItem::other!=0L)
+        if(AutoFillSequenceItem::other!=0)
         {
             delete(AutoFillSequenceItem::other);
-            AutoFillSequenceItem::other=0L;
+            AutoFillSequenceItem::other=0;
         }
     }
     accept();

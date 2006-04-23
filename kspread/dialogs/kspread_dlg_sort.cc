@@ -597,7 +597,7 @@ void SortDialog::slotOk()
   int key1 = 1;
   int key2 = 0;
   int key3 = 0;
-  QStringList * firstKey = 0L;
+  QStringList * firstKey = 0;
   Sheet::SortingOrder order1;
   Sheet::SortingOrder order2;
   Sheet::SortingOrder order3;
@@ -693,7 +693,7 @@ void SortDialog::slotOk()
   }
 
   delete firstKey;
-  firstKey = 0L;
+  firstKey = 0;
 
   m_pView->slotUpdateView( m_pView->activeSheet() );
   accept();

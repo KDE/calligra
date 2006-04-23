@@ -486,13 +486,13 @@ CellFormatDialog::CellFormatDialog( View * _view, Sheet * _sheet )
   if ( isColumnSelected )
   {
     int y = 1;
-    Cell* cell = NULL;
+    Cell* cell = 0;
     for (int x = left;x <= right; x++)
     {
       ColumnFormat *obj = m_sheet->nonDefaultColumnFormat(x);
       initParameters( obj,x,y);
 
-      for (cell = m_sheet->getFirstCellColumn(x); cell != NULL;
+      for (cell = m_sheet->getFirstCellColumn(x); cell != 0;
            cell = m_sheet->getNextCellDown(cell->column(), cell->row()))
       {
         initParameters( cell->format(), x, cell->row());
@@ -503,13 +503,13 @@ CellFormatDialog::CellFormatDialog( View * _view, Sheet * _sheet )
   else if ( isRowSelected )
   {
     int x = 1;
-    Cell* c = NULL;
+    Cell* c = 0;
     for ( int y = top;y<=bottom;y++)
     {
       RowFormat *obj = m_sheet->nonDefaultRowFormat(y);
       initParameters( obj,x,y);
 
-      for (c = m_sheet->getFirstCellRow(y); c != NULL;
+      for (c = m_sheet->getFirstCellRow(y); c != 0;
            c = m_sheet->getNextCellRight(c->column(), c->row()) )
       {
         initParameters( c->format(), c->column(), c->row());
@@ -541,8 +541,8 @@ CellFormatDialog::CellFormatDialog( View * _view, Sheet * _sheet )
     ColumnFormat *obj=m_sheet->nonDefaultColumnFormat(left);
     checkBorderLeft( obj,left, y);
 
-    Cell* c = NULL;
-    for (c = m_sheet->getFirstCellColumn(left); c != NULL;
+    Cell* c = 0;
+    for (c = m_sheet->getFirstCellColumn(left); c != 0;
          c = m_sheet->getNextCellDown(c->column(), c->row()) )
     {
       checkBorderLeft(c->format(), c->column(), c->row());
@@ -551,8 +551,8 @@ CellFormatDialog::CellFormatDialog( View * _view, Sheet * _sheet )
 
     obj=m_sheet->nonDefaultColumnFormat(right);
     checkBorderRight(obj,right,y);
-    c = NULL;
-    for (c = m_sheet->getFirstCellColumn(right); c != NULL;
+    c = 0;
+    for (c = m_sheet->getFirstCellColumn(right); c != 0;
          c = m_sheet->getNextCellDown(c->column(), c->row()) )
     {
       checkBorderRight(c->format(), c->column(), c->row());
@@ -736,11 +736,11 @@ CellFormatDialog::~CellFormatDialog()
 
 void CellFormatDialog::initMembers()
 {
-  formatOnlyNegSignedPixmap    = 0L;
-  formatRedOnlyNegSignedPixmap = 0L;
-  formatRedNeverSignedPixmap   = 0L;
-  formatAlwaysSignedPixmap     = 0L;
-  formatRedAlwaysSignedPixmap  = 0L;
+  formatOnlyNegSignedPixmap    = 0;
+  formatRedOnlyNegSignedPixmap = 0;
+  formatRedNeverSignedPixmap   = 0;
+  formatAlwaysSignedPixmap     = 0;
+  formatRedAlwaysSignedPixmap  = 0;
 
   // We assume, that all other objects have the same values
   for ( int i = 0; i < BorderType_END; ++i )
@@ -897,7 +897,7 @@ void CellFormatDialog::init()
   QColorGroup colorGroup = QApplication::palette().active();
 
   // Did we initialize the bitmaps ?
-  if ( formatOnlyNegSignedPixmap == 0L )
+  if ( formatOnlyNegSignedPixmap == 0 )
   {
     QColor Qt::black = colorGroup.text(); // not necessarily black :)
     formatOnlyNegSignedPixmap    = paintFormatPixmap( "123.456", Qt::black, "-123.456", Qt::black );
@@ -907,7 +907,7 @@ void CellFormatDialog::init()
     formatRedAlwaysSignedPixmap  = paintFormatPixmap( "+123.456", Qt::black, "-123.456", Qt::red );
   }
 
-  tab = new Q3TabDialog( (QWidget*)m_pView, 0L, true );
+  tab = new Q3TabDialog( (QWidget*)m_pView, 0, true );
   //tab->setGeometry( tab->x(), tab->y(), 420, 400 );
 
   if ( m_style )
@@ -2679,7 +2679,7 @@ void CellFormatPageBorder::InitializeGrids()
   QGridLayout *grid = new QGridLayout(this);
   grid->setMargin(KDialog::marginHint());
   grid->setSpacing(KDialog::spacingHint());
-  QGridLayout *grid2 = NULL;
+  QGridLayout *grid2 = 0;
   QGroupBox* tmpQGroupBox = 0;
 
   /***********************/
@@ -3934,7 +3934,7 @@ void CellFormatPagePattern::slotUnselect2( BrushSelect *_p )
 
 void CellFormatPagePattern::apply( CustomStyle * style )
 {
-  if ( selectedBrush != 0L
+  if ( selectedBrush != 0
     && ( dlg->brushStyle != selectedBrush->getBrushStyle()
          || dlg->brushColor != selectedBrush->getBrushColor() ) )
     style->changeBackGroundBrush( QBrush( selectedBrush->getBrushColor(), selectedBrush->getBrushStyle() ) );
@@ -3951,7 +3951,7 @@ void CellFormatPagePattern::apply( CustomStyle * style )
 
 void CellFormatPagePattern::apply(FormatManipulator *_obj)
 {
-  if ( selectedBrush != 0L
+  if ( selectedBrush != 0
        && ( dlg->brushStyle != selectedBrush->getBrushStyle()
             || dlg->brushColor != selectedBrush->getBrushColor() ) )
     _obj->setBackgroundBrush( QBrush( selectedBrush->getBrushColor(), selectedBrush->getBrushStyle() ) );
