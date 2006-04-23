@@ -1744,7 +1744,7 @@ void KWView::clipboardDataChanged()
         m_actionEditPaste->setEnabled(true);
         return;
     }
-    QMimeData *mimeData = QApplication::clipboard()->mimeData();
+    const QMimeData *mimeData = QApplication::clipboard()->mimeData();
     const int provides = checkClipboard( mimeData );
     if ( provides & ( ProvidesImage | ProvidesOasis | ProvidesFormula ) )
         m_actionEditPaste->setEnabled( true );
@@ -1755,7 +1755,7 @@ void KWView::clipboardDataChanged()
     }
 }
 
-int KWView::checkClipboard( QMimeData *data )
+int KWView::checkClipboard( const QMimeData *data )
 {
     int provides = 0;
 
@@ -2393,7 +2393,7 @@ void KWView::editCopy()
 
 void KWView::editPaste()
 {
-    QMimeData *mimeData = QApplication::clipboard()->mimeData();
+    const QMimeData *mimeData = QApplication::clipboard()->mimeData();
     pasteData( mimeData, false );
 }
 
@@ -4105,7 +4105,7 @@ void KWView::insertTable()
     delete tableDia;
 }
 
-void KWView::insertFormula( QMimeData* mimeData )
+void KWView::insertFormula( const QMimeData* mimeData )
 {
     KWTextFrameSetEdit *edit = currentTextEdit();
     if (edit)

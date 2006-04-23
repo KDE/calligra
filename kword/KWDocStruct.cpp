@@ -778,7 +778,8 @@ void KWDocStructRootItem::setupTextFrameSets()
 
             orderedFrameSets.append(KWOrderedFrameSet(frameset));
     }
-    qHeapSort(orderedFrameSets);
+#warning "kde4: port it"
+    //qHeapSort(orderedFrameSets);
 
     // Build a list of frameset pointers from the sorted list.
     Q3PtrList<KWTextFrameSet> frameSetPtrs;
@@ -856,7 +857,8 @@ void KWDocStructRootItem::setupTables()
         if ( frameset->type() == FT_TABLE)
             orderedFrameSets.append(KWOrderedFrameSet(frameset));
     }
-    qHeapSort(orderedFrameSets);
+#warning "kde4: port it"
+    //qHeapSort(orderedFrameSets);
 
     // Build a list of table pointers from the sorted list.
     Q3PtrList<KWTableFrameSet> frameSetPtrs;

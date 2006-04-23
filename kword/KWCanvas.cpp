@@ -1561,7 +1561,7 @@ void KWCanvas::contentsDropEvent( QDropEvent *e )
     m_imageDrag = false;
 }
 
-void KWCanvas::pasteImage( QMimeData *mimeData, const KoPoint &docPoint )
+void KWCanvas::pasteImage( const QMimeData *mimeData, const KoPoint &docPoint )
 {
     QImage i = mimeData->imageData().value<QImage>();
     KTempFile tmpFile( QString::null, ".png");

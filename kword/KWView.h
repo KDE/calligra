@@ -202,7 +202,7 @@ public:
         ProvidesOasis = 4,
         ProvidesFormula = 8
     };
-    static int checkClipboard( QMimeData *data );
+    static int checkClipboard( const QMimeData *data );
 
     bool insertInlinePicture();
 
@@ -293,7 +293,7 @@ public slots:
     void extraCreateTemplate();
 
     void toolsCreateText();
-    void insertFormula( QMimeData* source=0 );
+    void insertFormula(  const QMimeData* source=0 );
     void toolsPart();
 
     void tableProperties();

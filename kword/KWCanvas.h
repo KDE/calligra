@@ -132,7 +132,7 @@ public:
     // makes the user draw the rect for inserting the picture
     void insertPicture( const KoPicture& newPicture, QSize pixmapSize, bool _keepRatio );
     void insertPart( const KoDocumentEntry &entry );
-    void pasteImage( QMimeData *e, const KoPoint &docPoint );
+    void pasteImage( const QMimeData *e, const KoPoint &docPoint );
     // insert a (non-inline) picture at the given position; used by dnd and dcop
     void insertPictureDirect( const KoPicture& picture, const KoPoint& pos, const QSize& sz = QSize() );
 

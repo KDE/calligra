@@ -3157,7 +3157,7 @@ void KWTextFrameSetEdit::slotFrameDeleted( KWFrame *frm )
 
 void KWTextFrameSetEdit::paste(QClipboard::Mode mode)
 {
-    QMimeData *data = QApplication::clipboard()->mimeData(mode);
+    const QMimeData *data = QApplication::clipboard()->mimeData(mode);
     int provides = KWView::checkClipboard( data );
     pasteData( data, provides, false );
 }

@@ -47,7 +47,7 @@ class KWOrderedFrameSet
 public:
     KWOrderedFrameSet(KWFrameSet* fs);
     KWOrderedFrameSet();    // default constructor
-    bool operator<( KWOrderedFrameSet ofs);
+    bool operator<(  KWOrderedFrameSet ofs);
     KWFrameSet* frameSet() { return m_frameset; }
 
 private:
