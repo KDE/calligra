@@ -2000,23 +2000,23 @@ void View::initView()
 
     d->formulaBarLayout = new QHBoxLayout( d->toolWidget );
     d->formulaBarLayout->setMargin( 4 );
-    d->formulaBarLayout->addSpacing( 2 );
+    d->formulaBarLayout->setSpacing( 0 );
 
     d->posWidget = new ComboboxLocationEditWidget( d->toolWidget, this );
     d->posWidget->setMinimumWidth( 100 );
     d->formulaBarLayout->addWidget( d->posWidget );
-    d->formulaBarLayout->addSpacing( 6 );
+    d->formulaBarLayout->addSpacing( 4 );
 
     d->formulaButton = d->newIconButton( "funct", true, d->toolWidget );
     d->formulaBarLayout->addWidget( d->formulaButton );
-    d->formulaBarLayout->addSpacing( 2 );
     connect( d->formulaButton, SIGNAL( clicked() ), SLOT( insertMathExpr() ) );
+    d->formulaBarLayout->addSpacing( 2 );
 
     d->cancelButton = d->newIconButton( "cancel", true, d->toolWidget );
     d->formulaBarLayout->addWidget( d->cancelButton );
     d->okButton = d->newIconButton( "ok", true, d->toolWidget );
     d->formulaBarLayout->addWidget( d->okButton );
-    d->formulaBarLayout->addSpacing( 6 );
+    d->formulaBarLayout->addSpacing( 4 );
 
     // The widget on which we display the sheet
     d->canvas = new Canvas( this );
@@ -2026,7 +2026,6 @@ void View::initView()
     d->editWidget = new EditWidget( d->toolWidget, d->canvas, d->cancelButton, d->okButton );
     d->editWidget->setFocusPolicy( Qt::StrongFocus );
     d->formulaBarLayout->addWidget( d->editWidget, 2 );
-    d->formulaBarLayout->addSpacing( 2 );
 
     d->canvas->setEditWidget( d->editWidget );
 
@@ -2041,6 +2040,8 @@ void View::initView()
 
     QWidget* bottomPart = new QWidget( this );
     d->tabScrollBarLayout = new QHBoxLayout( bottomPart );
+    d->tabScrollBarLayout->setMargin(0);
+    d->tabScrollBarLayout->setSpacing(0);
     d->tabBar = new KoTabBar( bottomPart );
     d->tabScrollBarLayout->addWidget( d->tabBar );
     d->horzScrollBar = new QScrollBar( bottomPart );
