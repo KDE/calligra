@@ -37,7 +37,7 @@
 /**
  * This class hold a zone of text with only one formating.
  */
-class TextZone: public Qt::TextFormat
+class TextZone: public TextFormat
 {
 	/* TEXT MARKUP */
 	QString _texte;
