@@ -37,23 +37,6 @@ class KWFrame;
 class KWFrameSet;
 class KWTextParag;
 
-/******************************************************************/
-/* Class: KWOrderedFrameSet                                       */
-/******************************************************************/
-
-/** Provides a way to sort framesets using a QValueList based on their top left corner. */
-class KWOrderedFrameSet
-{
-public:
-    KWOrderedFrameSet(KWFrameSet* fs);
-    KWOrderedFrameSet();    // default constructor
-    bool operator<(  KWOrderedFrameSet ofs);
-    KWFrameSet* frameSet() { return m_frameset; }
-
-private:
-    KWFrameSet* m_frameset;
-};
-
 class KWDocListViewItem : public K3ListViewItem
 {
 public:

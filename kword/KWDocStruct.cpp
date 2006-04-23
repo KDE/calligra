@@ -52,24 +52,13 @@
 #include <q3tl.h>
 #include <q3intdict.h>
 
-/******************************************************************/
-/* Class: KWOrderedFrameSet                                       */
-/******************************************************************/
-
-KWOrderedFrameSet::KWOrderedFrameSet(KWFrameSet* fs) :
-    m_frameset(fs) { }
-
-KWOrderedFrameSet::KWOrderedFrameSet() :
-    m_frameset(0) { }
-
-bool KWOrderedFrameSet::operator<( KWOrderedFrameSet ofs )
+static bool orderFrameSetByPosition( const KWFrameSet* lhs, const KWFrameSet* rhs )
 {
-    if (!m_frameset) return false;
-    KWFrame* frame1 = m_frameset->frame(0);
+    if (!lhs) return false;
+    KWFrame* frame1 = lhs->frame(0);
     if (!frame1) return false;
-    KWFrameSet* frameset2 = ofs.frameSet();
-    if (!frameset2) return false;
-    KWFrame* frame2 = frameset2->frame(0);
+    if (!rhs) return false;
+    KWFrame* frame2 = rhs->frame(0);
     if (!frame2) return false;
     KoPoint p1 = frame1->topLeft();
     KoPoint p2 = frame2->topLeft();
@@ -770,22 +759,21 @@ void KWDocStructRootItem::setupTextFrameSets()
 
     // Build a list of framesets ordered by their screen position (top left corner).
     KWDocument* dok = doc();
-    QList<KWOrderedFrameSet> orderedFrameSets;
+    QList<KWFrameSet*> orderedFrameSets;
     for ( int i = dok->frameSetCount() - 1; i >= 0; i-- ) {
         KWFrameSet* frameset = dok->frameSet(i);
         if ( frameset->type() == FT_TEXT && frameset->frameSetInfo() == KWFrameSet::FI_BODY &&
             !frameset->groupmanager() && frameset->frameCount()>0)
 
-            orderedFrameSets.append(KWOrderedFrameSet(frameset));
+            orderedFrameSets.append(frameset);
     }
-#warning "kde4: port it"
-    //qHeapSort(orderedFrameSets);
+    qSort(orderedFrameSets.begin(), orderedFrameSets.end(), orderFrameSetByPosition);
 
     // Build a list of frameset pointers from the sorted list.
     Q3PtrList<KWTextFrameSet> frameSetPtrs;
     frameSetPtrs.setAutoDelete(false);
     for ( uint i = 0; i < orderedFrameSets.count(); i++ )
-        frameSetPtrs.append(dynamic_cast<KWTextFrameSet *>(orderedFrameSets[i].frameSet()));
+        frameSetPtrs.append(dynamic_cast<KWTextFrameSet *>(orderedFrameSets[i]));
 
     // Remove deleted framesets from the listview.
     KWDocStructTextFrameSetItem* item = dynamic_cast<KWDocStructTextFrameSetItem *>(firstChild());
@@ -800,7 +788,7 @@ void KWDocStructRootItem::setupTextFrameSets()
     KWDocStructTextFrameSetItem* after = 0L;
     for ( uint i = 0; i < orderedFrameSets.count(); i++ )
     {
-        KWTextFrameSet* textFrameset = dynamic_cast<KWTextFrameSet *>(orderedFrameSets[i].frameSet());
+        KWTextFrameSet* textFrameset = dynamic_cast<KWTextFrameSet *>(orderedFrameSets[i]);
         item = findTextFrameSetItem(textFrameset);
         if (item)
             item->setText(0, textFrameset->name());
@@ -851,20 +839,19 @@ void KWDocStructRootItem::setupTables()
 
     // Build a list of framesets ordered by their screen position (top left corner).
     KWDocument* dok = doc();
-    QList<KWOrderedFrameSet> orderedFrameSets;
+    QList<KWFrameSet *> orderedFrameSets;
     for ( int i = dok->frameSetCount() - 1; i >= 0; i-- ) {
         KWFrameSet* frameset = dok->frameSet(i);
         if ( frameset->type() == FT_TABLE)
-            orderedFrameSets.append(KWOrderedFrameSet(frameset));
+            orderedFrameSets.append(frameset);
     }
-#warning "kde4: port it"
-    //qHeapSort(orderedFrameSets);
+    qSort(orderedFrameSets.begin(), orderedFrameSets.end(), orderFrameSetByPosition);
 
     // Build a list of table pointers from the sorted list.
     Q3PtrList<KWTableFrameSet> frameSetPtrs;
     frameSetPtrs.setAutoDelete(false);
     for ( uint i = 0; i < orderedFrameSets.count(); i++ )
-        frameSetPtrs.append(dynamic_cast<KWTableFrameSet *>(orderedFrameSets[i].frameSet()));
+        frameSetPtrs.append(dynamic_cast<KWTableFrameSet *>(orderedFrameSets[i]));
 
     // Remove deleted tables from the listview.
     KWDocStructTableItem* item = dynamic_cast<KWDocStructTableItem *>(firstChild());
@@ -879,7 +866,7 @@ void KWDocStructRootItem::setupTables()
     KWDocStructTableItem* after = 0L;
     for ( uint i = 0; i < orderedFrameSets.count(); i++ )
     {
-        KWTableFrameSet* tableFrameset = dynamic_cast<KWTableFrameSet *>(orderedFrameSets[i].frameSet());
+        KWTableFrameSet* tableFrameset = dynamic_cast<KWTableFrameSet *>(orderedFrameSets[i]);
         item = findTableItem(tableFrameset);
         if (item)
             item->setText(0, tableFrameset->name());
