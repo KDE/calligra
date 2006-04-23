@@ -39,6 +39,7 @@
 #include <Q3ValueList>
 #include <Q3CString>
 #include <Q3MemArray>
+#include <QBuffer>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -1401,7 +1402,8 @@ bool OOWriterWorker::makePicture( const FrameAnchor& anchor, const AnchorType an
     if ( anchorType == AnchorTextImage )
     {
         // Text image have no frameset, so the only size information is in the picture itself.
-        QBuffer buffer( image.copy() ); // Be more safe than sorry and do not allow shallow copy
+        QByteArray tmp(image);
+		QBuffer buffer( &tmp ); // Be more safe than sorry and do not allow shallow copy
         KoPicture pic;
         buffer.open( QIODevice::ReadOnly );
         if ( pic.load( &buffer, strExtension ) )

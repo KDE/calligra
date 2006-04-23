@@ -150,7 +150,7 @@ KoFilter::ConversionStatus OoWriterImport::convert( QByteArray const & from, QBy
     }
     else
     {
-        Q3CString cstr = mainDocument.toCString();
+        QByteArray cstr = mainDocument.toByteArray();
         kDebug(30518)<<" maindoc: " << cstr << endl;
         // WARNING: we cannot use KoStore::write(const QByteArray&) because it gives an extra NULL character at the end.
         out->write( cstr, cstr.length() );
@@ -163,7 +163,7 @@ KoFilter::ConversionStatus OoWriterImport::convert( QByteArray const & from, QBy
     out = m_chain->storageFile( "documentinfo.xml", KoStore::Write );
     if( out )
     {
-        Q3CString info = docinfo.toCString();
+        QByteArray info = docinfo.toByteArray();
         kDebug(30518)<<" info :"<<info<<endl;
         // WARNING: we cannot use KoStore::write(const QByteArray&) because it gives an extra NULL character at the end.
         out->write( info , info.length() );
@@ -1256,9 +1256,9 @@ void OoWriterImport::writeFormat( QDomDocument& doc, QDomElement& formats, int i
     if ( m_styleStack.hasAttributeNS( ooNS::fo, "color" ) ) { // 3.10.3
         QColor color( m_styleStack.attributeNS( ooNS::fo, "color" ) ); // #rrggbb format
         QDomElement colorElem( doc.createElement( "COLOR" ) );
-        colorElem.setAttribute( "red", color.Qt::red() );
-        colorElem.setAttribute( "blue", color.Qt::blue() );
-        colorElem.setAttribute( "green", color.Qt::green() );
+        colorElem.setAttribute( "red", color.red() );
+        colorElem.setAttribute( "blue", color.blue() );
+        colorElem.setAttribute( "green", color.green() );
         format.appendChild( colorElem );
     }
     if ( m_styleStack.hasAttributeNS( ooNS::fo, "font-family" )  // 3.10.9
@@ -1402,9 +1402,9 @@ void OoWriterImport::writeFormat( QDomDocument& doc, QDomElement& formats, int i
         QColor tmp = m_styleStack.attributeNS( ooNS::style, "text-background-color");
         if (tmp != "transparent")
         {
-            bgCol.setAttribute("red", tmp.Qt::red());
-            bgCol.setAttribute("green", tmp.Qt::green());
-            bgCol.setAttribute("blue", tmp.Qt::blue());
+            bgCol.setAttribute("red", tmp.red());
+            bgCol.setAttribute("green", tmp.green());
+            bgCol.setAttribute("blue", tmp.blue());
             format.appendChild(bgCol);
         }
     }
@@ -2302,8 +2302,7 @@ void OoWriterImport::parseInsideOfTable( QDomDocument &doc, const QDomElement& p
 
         if ( localName == "table-cell" ) // OOo SPEC 4.8.1 p267
         {
-            const QString frameName(i18n("Frameset name","Table %3, row %1, column %2")
-                .arg(row).arg(column).arg(tableName)); // The table name could have a % sequence, so use the table name as last!
+            const QString frameName(i18nc("Frameset name","Table %3, row %1, column %2",row,column,tableName)); // The table name could have a % sequence, so use the table name as last!
             kDebug(30518) << "Trying to create " << frameName << endl;
 
             // We need to create a frameset for the cell

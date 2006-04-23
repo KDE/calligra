@@ -30,12 +30,12 @@ QPair<int,QString> Conversion::importWrapping( const QString& oowrap )
 {
     if ( oowrap == "none" )
         // 'no wrap' means 'avoid horizontal space'
-        return qMakePair( 2, QString::null );
+        return qMakePair( 2, QString() );
     if ( oowrap == "left" || oowrap == "right" )
         // Left and right, no problem
         return qMakePair( 1, oowrap );
     if ( oowrap == "run-through" )
-        return qMakePair( 0, QString::null );
+        return qMakePair( 0, QString() );
     if ( oowrap == "biggest" ) // OASIS extension
         return qMakePair( 1, QString::fromLatin1( "biggest" ) );
 
