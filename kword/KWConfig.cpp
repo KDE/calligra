@@ -212,7 +212,7 @@ ConfigureSpellPage::ConfigureSpellPage( KWView *view, KVBox *box, char *name )
 {
     m_pView=view;
     config = KWFactory::instance()->config();
-    m_spellConfigWidget = new ConfigWidget( view->broker().data() /*TEMPORARY*/, box );
+    m_spellConfigWidget = new ConfigWidget( view->broker() /*TEMPORARY*/, box );
     m_spellConfigWidget->setBackgroundCheckingButtonShown( true );
     m_spellConfigWidget->layout()->setMargin( 0 );
 }

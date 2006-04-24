@@ -3561,11 +3561,10 @@ void KWView::insertComment()
         return;
     QString authorName;
     KoDocumentInfo * info = m_doc->documentInfo();
-    KoDocumentInfoAuthor * authorPage = static_cast<KoDocumentInfoAuthor *>(info->page( "author" ));
-    if ( !authorPage )
+    if ( !info )
         kWarning() << "Author information not found in documentInfo !" << endl;
     else
-        authorName = authorPage->fullName();
+        authorName =  info->authorInfo( "creator" );
 
     KoCommentDia *commentDia = new KoCommentDia( this, QString::null,authorName );
     if( commentDia->exec() )
@@ -6403,11 +6402,10 @@ void KWView::editComment()
         {
             QString authorName;
             KoDocumentInfo * info = m_doc->documentInfo();
-            KoDocumentInfoAuthor * authorPage = static_cast<KoDocumentInfoAuthor *>(info->page( "author" ));
-            if ( !authorPage )
+            if ( !info )
                 kWarning() << "Author information not found in documentInfo !" << endl;
             else
-                authorName = authorPage->fullName();
+                authorName = info->authorInfo( "creator" );
             QString oldValue = var->note();
             QString createDate = var->createdNote();
             KoCommentDia *commentDia = new KoCommentDia( this, oldValue, authorName, createDate);
