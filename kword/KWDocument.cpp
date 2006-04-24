@@ -325,7 +325,7 @@ void KWDocument::initConfig()
       // Default is false for spellcheck, but the spell-check config dialog
       // should write out "true" when the user configures spell checking.
       if ( isReadWrite() )
-          m_bgSpellCheck->setEnabled(config->readBoolEntry( "SpellCheck", false ));
+          m_bgSpellCheck->setEnabled(config->readEntry( "SpellCheck", false ));
       else
           m_bgSpellCheck->setEnabled( false );
   }
@@ -333,49 +333,49 @@ void KWDocument::initConfig()
   if(config->hasGroup("Interface" ) )
   {
       config->setGroup( "Interface" );
-      setGridY(qMax( config->readDoubleNumEntry("GridY",MM_TO_POINT(5.0) ), 0.1));
-      setGridX(qMax( config->readDoubleNumEntry("GridX",MM_TO_POINT(5.0) ), 0.1));
-      setCursorInProtectedArea( config->readBoolEntry( "cursorInProtectArea", true ));
+      setGridY(qMax( config->readEntry("GridY",MM_TO_POINT(5.0) ), 0.1));
+      setGridX(qMax( config->readEntry("GridX",MM_TO_POINT(5.0) ), 0.1));
+      setCursorInProtectedArea( config->readEntry( "cursorInProtectArea", true ));
       // Config-file value in mm, default 10 pt
-      double indent = config->readDoubleNumEntry("Indent", MM_TO_POINT(10.0) ) ;
+      double indent = config->readEntry("Indent", MM_TO_POINT(10.0) ) ;
       setIndentValue(indent);
-      setShowRuler(config->readBoolEntry("Rulers",true));
+      setShowRuler(config->readEntry("Rulers",true));
       int defaultAutoSave = KoDocument::defaultAutoSave()/60; // in minutes
-      setAutoSave(config->readNumEntry("AutoSave",defaultAutoSave)*60); // read key in minutes, call setAutoSave(seconds)
-      setBackupFile( config->readBoolEntry("BackupFile", true) );
+      setAutoSave(config->readEntry("AutoSave",defaultAutoSave)*60); // read key in minutes, call setAutoSave(seconds)
+      setBackupFile( config->readEntry("BackupFile", true) );
 
-      setNbPagePerRow(config->readNumEntry("nbPagePerRow",4));
-      m_maxRecentFiles = config->readNumEntry( "NbRecentFile", 10 );
+      setNbPagePerRow(config->readEntry("nbPagePerRow",4));
+      m_maxRecentFiles = config->readEntry( "NbRecentFile", 10 );
 
-      m_viewFormattingChars = config->readBoolEntry( "ViewFormattingChars", false );
-      m_viewFormattingBreak = config->readBoolEntry( "ViewFormattingBreaks", true );
-      m_viewFormattingSpace = config->readBoolEntry( "ViewFormattingSpace", true );
-      m_viewFormattingEndParag = config->readBoolEntry( "ViewFormattingEndParag", true );
-      m_viewFormattingTabs = config->readBoolEntry( "ViewFormattingTabs", true );
+      m_viewFormattingChars = config->readEntry( "ViewFormattingChars", false );
+      m_viewFormattingBreak = config->readEntry( "ViewFormattingBreaks", true );
+      m_viewFormattingSpace = config->readEntry( "ViewFormattingSpace", true );
+      m_viewFormattingEndParag = config->readEntry( "ViewFormattingEndParag", true );
+      m_viewFormattingTabs = config->readEntry( "ViewFormattingTabs", true );
 
-      m_viewFrameBorders = config->readBoolEntry( "ViewFrameBorders", true );
+      m_viewFrameBorders = config->readEntry( "ViewFrameBorders", true );
 
-      m_zoom = config->readNumEntry( "Zoom", 100 );
+      m_zoom = config->readEntry( "Zoom", 100 );
       m_zoomMode = static_cast<KoZoomMode::Mode> (
-              config->readNumEntry( "ZoomMode", KoZoomMode::ZOOM_CONSTANT )
+              config->readEntry( "ZoomMode", int(KoZoomMode::ZOOM_CONSTANT) )
       );
 
-      m_bShowDocStruct = config->readBoolEntry( "showDocStruct", true );
+      m_bShowDocStruct = config->readEntry( "showDocStruct", true );
       m_viewModeType = config->readEntry( "viewmode", "ModeNormal" );
-      setShowStatusBar( config->readBoolEntry( "ShowStatusBar" , true ) );
-      setAllowAutoFormat( config->readBoolEntry( "AllowAutoFormat" , true ) );
-      setShowScrollBar( config->readBoolEntry( "ShowScrollBar", true ) );
+      setShowStatusBar( config->readEntry( "ShowStatusBar" , true ) );
+      setAllowAutoFormat( config->readEntry( "AllowAutoFormat" , true ) );
+      setShowScrollBar( config->readEntry( "ShowScrollBar", true ) );
       if ( isEmbedded() )
           m_bShowDocStruct = false; // off by default for embedded docs, but still toggleable
-      m_pgUpDownMovesCaret = config->readBoolEntry( "PgUpDownMovesCaret", true );
-      m_bInsertDirectCursor= config->readBoolEntry( "InsertDirectCursor", false );
+      m_pgUpDownMovesCaret = config->readEntry( "PgUpDownMovesCaret", true );
+      m_bInsertDirectCursor= config->readEntry( "InsertDirectCursor", false );
       m_globalLanguage=config->readEntry("language", KGlobal::locale()->language());
-      m_bGlobalHyphenation=config->readBoolEntry("hyphenation", false);
+      m_bGlobalHyphenation=config->readEntry("hyphenation", false);
 
-      setShowGrid( config->readBoolEntry( "ShowGrid" , false ));
-      setSnapToGrid( config->readBoolEntry( "SnapToGrid", false ));
-      setGridX( config->readDoubleNumEntry( "ResolutionX", MM_TO_POINT( 5.0 ) ));
-      setGridY( config->readDoubleNumEntry( "ResolutionY", MM_TO_POINT( 5.0 ) ));
+      setShowGrid( config->readEntry( "ShowGrid" , false ));
+      setSnapToGrid( config->readEntry( "SnapToGrid", false ));
+      setGridX( config->readEntry( "ResolutionX", MM_TO_POINT( 5.0 ) ));
+      setGridY( config->readEntry( "ResolutionY", MM_TO_POINT( 5.0 ) ));
   }
   else
   {
@@ -386,12 +386,12 @@ void KWDocument::initConfig()
   if(config->hasGroup("Misc" ) )
   {
       config->setGroup( "Misc" );
-      undo=config->readNumEntry("UndoRedo",-1);
+      undo=config->readEntry("UndoRedo",-1);
 
       //load default unit setting - this is only used for new files (from templates) or empty files
       if ( config->hasKey( "Units" ) )
           setUnit( KoUnit::unit( config->readEntry("Units") ) );
-      m_defaultColumnSpacing = config->readDoubleNumEntry( "ColumnSpacing", 3.0 );
+      m_defaultColumnSpacing = config->readEntry( "ColumnSpacing", 3.0 );
   }
 
   if(undo!=-1)

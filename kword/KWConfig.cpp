@@ -256,14 +256,14 @@ ConfigureInterfacePage::ConfigureInterfacePage( KWView *view, KVBox *box, char *
     if( config->hasGroup("Interface") )
     {
         config->setGroup( "Interface" );
-        ptGridX=config->readDoubleNumEntry("GridX", ptGridX);
-        ptGridY=config->readDoubleNumEntry("GridY", ptGridY);
-        ptIndent = config->readDoubleNumEntry("Indent", ptIndent);
-        oldNbRecentFiles=config->readNumEntry("NbRecentFile", oldNbRecentFiles);
-        nbPagePerRow=config->readNumEntry("nbPagePerRow", nbPagePerRow);
-        oldShowStatusBar = config->readBoolEntry( "ShowStatusBar", true );
-        oldPgUpDownMovesCaret = config->readBoolEntry( "PgUpDownMovesCaret", false );
-        oldShowScrollBar = config->readBoolEntry("ShowScrollBar", true);
+        ptGridX=config->readEntry("GridX", ptGridX);
+        ptGridY=config->readEntry("GridY", ptGridY);
+        ptIndent = config->readEntry("Indent", ptIndent);
+        oldNbRecentFiles=config->readEntry("NbRecentFile", oldNbRecentFiles);
+        nbPagePerRow=config->readEntry("nbPagePerRow", nbPagePerRow);
+        oldShowStatusBar = config->readEntry( "ShowStatusBar", true );
+        oldPgUpDownMovesCaret = config->readEntry( "PgUpDownMovesCaret", false );
+        oldShowScrollBar = config->readEntry("ShowScrollBar", true);
     }
 
     KHBox *hbUnit = new KHBox(gbInterfaceGroup);
@@ -494,7 +494,7 @@ ConfigureMiscPage::ConfigureMiscPage( KWView *view, KVBox *box, char *name )
     if( config->hasGroup("Misc") )
     {
         config->setGroup( "Misc" );
-        m_oldNbRedo=config->readNumEntry("UndoRedo",m_oldNbRedo);
+        m_oldNbRedo=config->readEntry("UndoRedo",m_oldNbRedo);
     }
 
     KHBox* hbUndoRedo = new KHBox( gbMiscGroup );
@@ -692,7 +692,7 @@ ConfigureDefaultDocPage::ConfigureDefaultDocPage( KWView *view, KVBox *box, char
     if( config->hasGroup("Document defaults") )
     {
         config->setGroup( "Document defaults" );
-        ptColumnSpacing=config->readDoubleNumEntry("ColumnSpacing",ptColumnSpacing);
+        ptColumnSpacing=config->readEntry("ColumnSpacing",ptColumnSpacing);
         // loaded by kwdoc already defaultFont=config->readEntry("DefaultFont",defaultFont);
     }
 
@@ -741,9 +741,9 @@ ConfigureDefaultDocPage::ConfigureDefaultDocPage( KWView *view, KVBox *box, char
     if( config->hasGroup("Interface") )
     {
         config->setGroup( "Interface" );
-        oldAutoSaveValue=config->readNumEntry("AutoSave",oldAutoSaveValue);
+        oldAutoSaveValue=config->readEntry("AutoSave",oldAutoSaveValue);
         m_oldLanguage = config->readEntry( "language", m_oldLanguage);
-        m_oldHyphenation = config->readBoolEntry( "hyphenation", m_oldHyphenation);
+        m_oldHyphenation = config->readEntry( "hyphenation", m_oldHyphenation);
     }
 
 
@@ -784,7 +784,7 @@ ConfigureDefaultDocPage::ConfigureDefaultDocPage( KWView *view, KVBox *box, char
     if( config->hasGroup("Interface") )
     {
         config->setGroup( "Interface" );
-        m_oldBackupFile=config->readBoolEntry("BackupFile",m_oldBackupFile);
+        m_oldBackupFile=config->readEntry("BackupFile",m_oldBackupFile);
     }
 
     m_createBackupFile = new QCheckBox( i18n("Create backup file"), gbDocumentSettings);
