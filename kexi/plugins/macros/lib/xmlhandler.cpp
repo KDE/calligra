@@ -97,9 +97,6 @@ bool XMLHandler::parseXML(const QDomElement& element)
 			// Add the new item to our Macro.
 			d->macro->addItem( MacroItem::Ptr(item) );
 
-			// Set the comment
-			item->setComment(e.attribute("comment"));
-
 			// Each MacroItem may point to an Action instance. We
 			// try to determinate this action now and if it's defined
 			// and available, we set it.
@@ -107,6 +104,9 @@ bool XMLHandler::parseXML(const QDomElement& element)
 			if(action.data()) {
 				item->setAction(action);
 			}
+
+			// Set the comment
+			item->setComment(e.attribute("comment"));
 		}
 		// Fetch the next item.
 		node = node.nextSibling();
@@ -146,13 +146,6 @@ QDomElement XMLHandler::toXML()
 		// Each MacroItem will have an own node.
 		QDomElement itemelem = document.createElement("item");
 
-		// Each MacroItem could have an optional comment.
-		const QString comment = item->comment();
-		if(! comment.isEmpty()) {
-			append = true;
-			itemelem.setAttribute("comment", item->comment());
-		}
-
 		// Each MacroItem could point to an Action provided by the Manager.
 		const KoMacro::Action* action = item->action().data();
 		if(action) {
@@ -175,6 +168,13 @@ QDomElement XMLHandler::toXML()
 				// Add the new variable-element to our MacroItem.
 				itemelem.appendChild(varelement);
 			}
+		}
+
+		// Each MacroItem could have an optional comment.
+		const QString comment = item->comment();
+		if(! comment.isEmpty()) {
+			append = true;
+			itemelem.setAttribute("comment", item->comment());
 		}
 
 		// Check if we really need to remember the item.

@@ -113,17 +113,17 @@ bool KexiMacroPart::execute(KexiPart::Item* item)
 class KexiTestAction1 : public KoMacro::GenericAction<KexiTestAction1> {
 	public:
 		KexiTestAction1() : KoMacro::GenericAction<KexiTestAction1>("kexitestaction1") {
-			setText("Kexi Test Action 1");
-			addVariable("myvar11","My Var 1-1",QVariant(QString("myvalue1")));
-			addVariable("myvar12","My Var 1-2",QVariant(QString("myvalue2")));
+			setText("Kexi Action 1");
+			addVariable("myvar11","My Var 1-1",QVariant(QString("myvalue11")));
+			addVariable("myvar12","My Var 1-2",QVariant(QString("myvalue12")));
 		}
 };
 class KexiTestAction2 : public KoMacro::GenericAction<KexiTestAction2> {
 	public:
 		KexiTestAction2() : KoMacro::GenericAction<KexiTestAction2>("kexitestaction2") {
-			setText("Kexi Test Action 2");
-			addVariable("myvar21","My Var 2-1",QVariant(QString("myvalue1")));
-			addVariable("myvar22","My Var 2-2",QVariant(QString("myvalue2")));
+			setText("Kexi Action 2");
+			addVariable("myvar21","My Var 2-1",QVariant(QString("myvalue21")));
+			addVariable("myvar22","My Var 2-2",QVariant(QString("myvalue22")));
 		}
 };
 

@@ -246,6 +246,7 @@ void KexiMacroDesignView::updateData()
 	d->tableview->setColumnStretchEnabled( true, COLUMN_ID_COMMENT ); //last column occupies the rest of the area
 
 	propertySetSwitched();
+
 	//d->tableview->blockSignals(false);
 	//d->tabledata->blockSignals(false);
 }
@@ -262,9 +263,13 @@ void KexiMacroDesignView::updateProperties(int row, KoProperty::Set* set, KoMacr
 		return; // job done.
 	}
 
-	if(! set) {
+	if(set) {
+		// we need to clear old data before adding the new content.
+		set->clear();
+	}
+	else {
 		// if there exists no such propertyset yet, create one.
-		set = new KoProperty::Set(d->propertyset, action->name() + QString::number(row));
+		set = new KoProperty::Set(d->propertyset, action->name());
 		d->propertyset->insert(row, set, true);
 	}
 
@@ -278,7 +283,7 @@ void KexiMacroDesignView::updateProperties(int row, KoProperty::Set* set, KoMacr
 	KoMacro::Variable::Map::ConstIterator it, end( varmap.constEnd() );
 	for( it = varmap.constBegin(); it != end; ++it) {
 		KoMacro::Variable::Ptr v = it.data();
-		kdDebug() << "KexiMacroDesignView::setAction type=" << QVariant::typeToName( v->variant().type() ) << " value=" << v->variant().toString() << endl;
+		kdDebug() << "KexiMacroDesignView::updateProperties() type=" << QVariant::typeToName( v->variant().type() ) << " name=" << it.key() << " value=" << v->variant().toString() << endl;
 		KoProperty::Property* p = new KoProperty::Property(
 			it.key().latin1(), //v->name().latin1(), // name
 			0, // ListData
@@ -338,8 +343,9 @@ void KexiMacroDesignView::beforeCellChanged(KexiTableItem* item, int colnum, QVa
 			}
 			KoMacro::Action::Ptr action = KoMacro::Manager::self()->action(actionname);
 			macroitem->setAction(action);
-			updateProperties(d->propertyset->currentRow(), propertySet(), action);
-			propertySetSwitched();
+			updateProperties(d->propertyset->currentRow(), d->propertyset->currentPropertySet(), action);
+			//propertySetSwitched();
+			propertySetReloaded(true);
 		} break;
 		case COLUMN_ID_COMMENT: {
 			macroitem->setComment( newvalue.toString() );
@@ -354,8 +360,10 @@ void KexiMacroDesignView::beforeCellChanged(KexiTableItem* item, int colnum, QVa
 
 void KexiMacroDesignView::rowUpdated(KexiTableItem*)
 {
-	//setDirty();
 	kdDebug() << "KexiMacroDesignView::rowUpdated" << endl;
+	//propertySetSwitched();
+	//propertySetReloaded(true);
+	//setDirty();
 }
 
 void KexiMacroDesignView::aboutToInsertRow(KexiTableItem*, KexiDB::ResultInfo*, bool)
@@ -370,8 +378,9 @@ void KexiMacroDesignView::aboutToDeleteRow(KexiTableItem&, KexiDB::ResultInfo*, 
 
 void KexiMacroDesignView::propertyChanged(KoProperty::Set&, KoProperty::Property&)
 {
-	//setDirty();
 	kdDebug() << "KexiMacroDesignView::propertyChanged" << endl;
+	//propertySetSwitched();
+	//setDirty();
 }
 
 #include "keximacrodesignview.moc"
