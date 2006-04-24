@@ -5,8 +5,7 @@ Legend
 
 Status field
 
-----	No work has been done on this task yet.
---	No work has been done on this subtask yet.
+----	No work has been done on this (sub)task yet.
 DONE    Task is all done
 done    This subtask is done
 ****	This (sub)task cannot be fixed with the current technology.
@@ -106,7 +105,7 @@ Things not in bugzilla
   + Repeated rows and columns don't work if they don't start from     2 ----
     row/column 1.   Also it is not possible to enter just one
     row/column into the dialog, it always has to be a range (2:3).
-    - Make it possible to enter just one row/column into GUI, don't   2 --
+    - Make it possible to enter just one row/column into GUI, don't   2 ----
       force a range.
 
 
@@ -129,27 +128,47 @@ Things to do after the release of KOffice 1.4
   + If entire rows or columns are selected, then Data->"Insert cells"
     should be disabled.
 
-* OASIS file format
-  + Read OASIS							      1 LAUR
-  + Write OASIS							      1 LAUR
+* OpenDocument file format
+  see OASIS.txt							      1 ----
 
 * Internals (See also DESIGN.html)
-  + Use the new StyleCluster.					      1 RAPH
+  + Format Storage						      1 ----
     This would dramatically reduce memory consumption and allows
     styles for empty cells.
-    - Use new StyleCluster						--
-    - Remove old KSpreadFormat						--
+    - Use new Format Storage						----
+    - Remove old KSpreadFormat						----
 
-  + Speed up selection.						      1 RAPH
-    (probably improved with StyleCluster?)
-  + Non-continguous selection					      1 STEF
+  + Speed up selection.						      1 ----
+    (probably improved with Format Storage?)
+
+  + Non-continguous selection					      2 ----
+    Convert the operations to work on non-contiguous selections.
+    - InsertColumn							----
+    - InsertRow								----
+    - DeleteColumn							----
+    - DeleteRow								----
+    - SortInc								----
+    - SortDec								----
+
+  + Manipulators						      2 ----
+    Convert CellWorker/UndoActions/Commands to Manipulators.
+    - RemoveComment							----
+    - ClearText								----
+    - ClearValidity							----
+    - Validity								----
+    - Conditional							----
+    - Copy								----
+    - Delete								----
+    - Cut								----
+    - Paste								----
+    - Paste Special							----
+    - Paste with insertion						----
 
   + Rich text in cells.						      1 ----
 	Use KoText.
 
   + code cleanups to layout processing				      1 ----
-	(KSpreadCell::makeLayout/setCellText are nightmares!) (Tomas)
-	setCellText is no longer a nightmare, makeLayout still is ;)
+    - Refactor Cell::makeLayout() (~350 loc)				----
 
   + Evaluation of how best to increase floating point precision.      3 ----
 	Suggestion:  GnuMP.    (Tomas)
@@ -157,16 +176,17 @@ Things to do after the release of KOffice 1.4
 	ValueCalc, and nothing else, then modifying Value* to
 	support GnuMP.  The conversion step shall be done as a part
 	of converting to the new parser.
+
   + code cleanups						      3 ----
-    - Merge Cell::checkForNamedAreas(.) into Oasis::decodeFormula(.).
-    - Move Cell::convertFormulaToOasisFormat(..) to
-      Oasis::encodeFormula to reduce the size of kspread_cell.cc
+    - Merge Cell::checkForNamedAreas() into Oasis::decodeFormula().	----
+    - Move Cell::convertFormulaToOasisFormat() to			----
+      Oasis::encodeFormula() to reduce the size of kspread_cell.cc
       and to have encoding/decoding in one place.
-    - Check if all logic of Point and Range is materialized in Region.
+    - Check if all logic of Point and Range is materialized in Region.	----
       Replace all occurences of Point and Range by Region.
-    - All util_foo funtions that act on Point/Ranges should become
+    - All util_foo() functions that act on Point/Ranges should become	----
       static members of Region.
-    - Move all util_foo(..) functions to Util namespace and remove
+    - Move all util_foo() functions to 'Util' namespace and remove	----
       the prefix 'util_'.
     - Reduce amount of parameters for methods which takes many of
       them, e.g. Sheet::paste(). bools -> QFlags, static variables
@@ -183,41 +203,47 @@ Things to do after the release of KOffice 1.4
   + Insert manual page break					      2 ----
   + Split view							      1 ----
   + "Freeze/Unfreeze Panes"					      2 ----
-	Started but had some problems caused by the scrollbars, it
-	works, but not very nice (not committed (Norbert)).
-        Maybe not as important if we get split view to work correctly.
+    Started but had some problems caused by the scrollbars, it
+    works, but not very nice (not committed (Norbert)).
+    Maybe not as important if we get split view to work correctly.
 
-  + Matrix operations              2 ----
-     Some exist - multiply, determinant. Inverse not implemented.
+  + Matrix operations						      2 ----
+    - Determinant							----
+    - Dimension								----
+    - Inverse								----
+    - Minima/Maxima elements						----
+    - Multiply								----
+    - Norm								----
+    - Rank								----
+    - Transpose								----
 
   + Locked areas (for formulas with a matrix as result)		      2 TOMA
 
 * Major features (big effort)
   + Script, Script-Editor (like VBA in Excel)			      2 ----
+    - Suggestion: Kross
   + Tools->Auditing:						      2 ----
-    - Trace Precedents						      2 --
-    - Trace Dependants						      2 --
-    - Trace Error						      2 --
-    - Remove all arrows						      2 --
+    - Trace Precedents						      2 ----
+    - Trace Dependants						      2 ----
+    - Trace Error						      2 ----
+    - Remove all arrows						      2 ----
   + Pivot tables						      3 ----
+  + Scenarios							      3 ----
+    See [1], section 8.3.3 for details.
+
 
 Other things: (please add the things you are working on!)
-(I don't understand these.  Please enter them under the correct heading /Inge)
-
-- Scenarios
 
 
 Not yet sorted (will be entered into categories above)
 
 - Multible Operations (in Excel: "Data"->"Table") (Norbert)
-- Pivot tables
 - more chart types
 - background spell check (necessary to use kotext)
 - links to cells in other kspread files
 - much more formulas (financial, database...)
         String2Int, CurrentMonth, CurrentYear, CurrentDay
         See list below
-- Insert pictures (Add support for object into kspread)
 - Insert basic drawings, autoforms (necessary to create a share lib from kpresenter)
 - Insert widgets like buttons, drop down lists,... + having the possibily to
   define action if pressed, or selection changes,...
@@ -254,10 +280,8 @@ Norbert
 - solver (see gnumeric)  [isn't this done already?]
 + option: ignore duplicate deliminers in CSV import and Insert data from file/clipboard
 + CSV export dialog: define deliminers, Table(s), cell content in '"'
-+ more than one currency
 + enhance the Gnumeric import filter
 - sync the Gnumeric export filter
-+ Style support
 + StarCalc/OpenCalc import filter
 - StarCalc/OpenCalc filter for embedding/embedded objects
 + StarCalc/OpenCalc export filter
@@ -308,7 +332,6 @@ GROWTH
 INTERCEPT
 LINEST
 LOGEST
-PEARSON
 PERCENTILE
 PERCENTRANK
 PROB
@@ -414,30 +437,7 @@ IMTAN
 +ACOT
 
 
-***************************************************************************************
-
-Explanations to features:
-=========================
-
-Named areas:
-
-I would like to ask one thing about "Named areas". In Excel you can assign
-names to cells (you can do this in KSpread, too) like this:
-        A       B
-1       45      46
-2
-x=A1, y= B1
-
-Now, I would like to put
-"=x+y" in A2. This works with Excel but not in KSpread. But it is an important
-feature (I was told :-)
-So if you evaluate "=x+y", 'x' has be replaced by "A1" and 'y' by "B1"
-
-
-
-TODO-List:
-----------
-
+******************************************************************************
 Please everyone working on KSpread:
 
 Get yourself a copy of Excel 97 or 2000 and create
@@ -483,22 +483,8 @@ on my trading desk on Wall-Street.)
 Bernd <wuebben@kde.org>
 
 
-Improvement :
--------------
-- Add zoom (Bernd: Yes, this is important. KSpread is much to cluttered
-up at this point. you can hardly do any real work with it even on a
-17inch screen. Torben? Please?)
--create a script editor for execute script
- (Use KWrite)
 
-Bug fix :
----------
--and also bug fix :)
-
-<montel@kde.org>
-
-Torbens TODO-List:
-------------------
-- Write-Protect cells
-
-
+References:
+===========
+[1]	Open Document Format for Office Applications (OpenDocument) v1.0,
+	http://docs.oasis-open.org/office/v1.0

@@ -1,11 +1,189 @@
- 
-===========================================================
-  STATUS of OASIS support in KSpread
-===========================================================
+OpenDocument support in KSpread
+===============================
+
+Supported Features (OpenDocument's view)
+========================================
+
+Legend
+======
+Status field:
+DONE	Loading and saving have been implemented.
+----	No work has been done on this task yet.
+noop	feature not supported by KSpread yet
+R	loading implemented
+r	loading with minor issues (comment on next line)
+W	saving implemented
+w	saving with minor issues (comment on next line)
+
+Prio field:
+1	Important task.  Should definitely be fixed.
+2	Semi-important task.  Should be fixed if possible, but can be
+	moved to the next release
+3	Nice to have.  Should be fixed if there is time.
+
+
+Item								Prio	Status
+------------------------------------------------------------------------------
+8.1 Basic Table Model
+	8.1.1 Table Element
+		Table name						DONE
+		Table style						?
+		Protected						?
+		Print							?
+		Print Ranges						?
+	8.1.2 Table Row
+		Number Of Rows Repeated					DONE
+		Row style						DONE
+		Default cell style					?
+		Visibility						?
+	8.1.3 Table Cell
+		Number Of Cells Repeated				DONE
+		Spanned							?
+		Cell Style						DONE
+		Content Validation					?
+		Formula							DONE
+		Matrix							noop
+		Value Type						?
+		Current Numeric Value					?
+		Current Currency					?
+		Current Date Value					?
+		Current Time Value					?
+		Current Boolean Value					?
+		Current String Value					?
+		Protection						?
+8.2 Advanced Table Model
+	8.2.1 Column Description					?
+		Number of Columns Repeated				DONE
+		Column Style						DONE
+		Visibility						?
+		Default Cell Style					?
+	8.2.2 Header Columns						?
+	8.2.3 Columns Groups						?
+		Display							?
+	8.2.4 Header Rows						?
+	8.2.5 Row Groups						?
+		Display							?
+	8.2.6 Subtables							?
+8.3 Advance Tables
+	8.3.1 Table Cell References					DONE
+		see 8.1.3 Table Cell, Formula
+	8.3.2 Linked Tables						?
+		Mode							?
+		Table name						?
+		URL							?
+		Filter Name						?
+	8.3.3 Filter Options						?
+		Refresh Delay						?
+	8.3.4 Scenario Tables					3	noop
+		Scenario Ranges					3	noop
+		Is Active					3	noop
+		Display Border					3	noop
+		Border Color					3	noop
+		Copy Black					3	noop
+		Copy Styles					3	noop
+		Copy Formulas					3	noop
+		Comment						3	noop
+		Protected					3	noop
+	8.3.4 Shapes							?
+8.4 Advanced Table Cells
+	8.4.1 Linked Table Cells				3	noop
+		Name						3	noop
+		Last Size					3	noop
+		URL						3	noop
+		Filter Name					3	noop
+		Filter Options					3	noop
+		Refresh Delay					3	noop
+	8.4.2 Cell Annotation						?
+	8.4.3 Detective						3	noop
+	8.4.4 Detective Operation				3	noop
+		Name						3	noop
+		Index						3	noop
+	8.4.5 Highlighted Range					3	noop
+		Cell Range Address				3	noop
+		Direction					3	noop
+		Contains Error					3	noop
+		Marked Invalid					3	noop
+8.5 Spreadsheet Document Content
+	8.5.1 Document Protection					?
+	8.5.2 Calculation Settings					?
+		[...]
+	8.5.3 Table Content Validations)				?
+		[...]
+	8.5.4 Label Ranges					3	noop
+		[...]
+	8.5.5 Named Expressions
+		Named Range						?
+		Named Expression					?
+8.6 Database Ranges						3	noop
+	[...]
+8.7 Filters							3	noop
+	[...]
+8.8 Data Pilot Tables						3	noop
+	[...]
+8.9 Consolidation						3	noop
+	[...]
+8.10 DDE Links							3	noop
+	[...]
+8.11 Change Tracking 						2	----
+	[...]
+
+14.1 Table Cell Style Element
+	Style name							DONE
+	Display Name 							DONE
+	Style Family							DONE
+	Parent Style						1	rw
+		The display name instead of the style name is used.
+	List Style							noop
+	Automatically Update					3	noop
+	Data Style Name							?
+	Class							3	noop
+	14.1.1 Style Mappings						?
+		Condition						?
+		Applied Style						?
+		Base Cell Address					?
+14.2 Table Cell Default Style						DONE
+
+
+14.1 Table Style Element
+	Style name							DONE
+	Display Name 							noop
+	Style Family							DONE
+	Parent Style							noop
+	List Style							noop
+	Master Page Name						?
+	Automatically Update					3	noop
+14.2 Table Default Style					2	----
+
+
+14.1 Table Row Style Element
+	Style name							DONE
+	Display Name 							noop
+	Style Family							DONE
+	Parent Style							noop
+	List Style							noop
+	Automatically Update					3	noop
+14.2 Table Row Default Style					2	----
+
+
+14.1 Table Column Style Element
+	Style name							DONE
+	Display Name 							noop
+	Style Family							DONE
+	Parent Style							noop
+	List Style							noop
+	Automatically Update					3	noop
+14.2 Table Column Default Style					2	----
+
+
+
+==============================================================================
+
+Supported Features (KSpread's view)
+===================================
 
 *Legend*
-   [ ] Not implemented   
-   [x] Implemented   
+   [ ] Not implemented
+   [x] Implemented
    [!] Implemented, not fully compatible
 
 
@@ -32,7 +210,7 @@ Cell
 Format
    [x] Font family
    [x] Font size
-   [!] Numeric format 
+   [!] Numeric format
    [X] Borders
    [ ] Border shadow
    [X] Font color
@@ -47,7 +225,7 @@ Sheet
    [ ] Value highlighting
    [ ] Sheet tab color (Not supported by kspread)
 
-Document/Workbook   
+Document/Workbook
    [x] Active sheet
    [x] Header
    [x] Footer
@@ -57,7 +235,7 @@ Document/Workbook
    [x] Print setup
 
 View Settings
-         
+
 Formula (not supported yet)
 
 Configuration Settings
@@ -90,13 +268,13 @@ Configuration Settings
   REMARKS, INCOMPATIBILITIES, etc
 ===========================================================
 
-KSpread does not support rich text. Any cells/annotations which contain 
+KSpread does not support rich text. Any cells/annotations which contain
 rich text will be converted to simple plain text.
 
-Link may not fully compatible since KSpread can only link the whole cell, 
-not partial text. For example, if the text is "Visit the website" where only 
-the string "website" is a hyperlink to an URL, in KSpread the whole string 
-"Visit the website" becomes the link. Consequently, if the text contains 
+Link may not fully compatible since KSpread can only link the whole cell,
+not partial text. For example, if the text is "Visit the website" where only
+the string "website" is a hyperlink to an URL, in KSpread the whole string
+"Visit the website" becomes the link. Consequently, if the text contains
 two or more links, only the first link will be used.
 (I will fixe when we convert it to kotext)
 
@@ -124,11 +302,11 @@ Hyperlink (whole cell)
         <text:a xlink:href="http://www.koffice.org/">Visit KOffice website</text:a>
       </text:p>
     </table:table-cell>
-    
+
 Hyperlink (one word, rich text)
     <table:table-cell>
       <text:p>
-      This is a 
+      This is a
         <text:a xlink:href="http://www.kde.org/">link</text:a>
        to somewhere
       </text:p>
@@ -149,7 +327,7 @@ Multiline Text inside cell
     </table:table-cell>
 
 Merged cells
-     <table:table-cell table:style-name="ce2" office:value-type="string" 
+     <table:table-cell table:style-name="ce2" office:value-type="string"
      office:string-value="These A1:B1 are merged together" table:number-columns-spanned="2">
        <text:p>These A1:B1 are merged together</text:p>
      </table:table-cell>
@@ -172,23 +350,23 @@ Cell horizontal alignment: bottom
 
 Cell vertical alignment: top
     <style:style style:name="ce5" style:family="table-cell" style:parent-style-name="Default">
-      <style:table-cell-properties fo:text-align="center" 
-      style:text-align-source="fix" style:repeat-content="none" 
+      <style:table-cell-properties fo:text-align="center"
+      style:text-align-source="fix" style:repeat-content="none"
       fo:margin-left="0in" style:vertical-align="top"/>
     </style:style>
 
 Cell vertical alignment: middle
     <style:style style:name="ce6" style:family="table-cell" style:parent-style-name="Default">
-      <style:table-cell-properties fo:text-align="center" 
-      style:text-align-source="fix" style:repeat-content="none" 
+      <style:table-cell-properties fo:text-align="center"
+      style:text-align-source="fix" style:repeat-content="none"
       fo:margin-left="0in" style:vertical-align="middle"/>
     </style:style>
 
 
 Cell vertical alignment: bottom
     <style:style style:name="ce7" style:family="table-cell" style:parent-style-name="Default">
-      <style:table-cell-properties fo:text-align="center" 
-      style:text-align-source="fix" style:repeat-content="none" 
+      <style:table-cell-properties fo:text-align="center"
+      style:text-align-source="fix" style:repeat-content="none"
       fo:margin-left="0in" style:vertical-align="bottom"/>
     </style:style>
 
@@ -201,17 +379,17 @@ Cell vertical alignment: bottom
 
 Unprotected cell
     <style:style style:name="ce1" style:family="table-cell" style:parent-style-name="Default">
-      <style:table-cell-properties style:cell-protect="none" 
+      <style:table-cell-properties style:cell-protect="none"
       style:print-content="true"/>
     </style:style>
 
 Protected sheet
-    <table:table table:name="Sheet1" table:style-name="ta1" 
-    table:protected="true" table:protection-key="Fa52hNHBdTG7CgoGGStwsTuzHyI=" 
+    <table:table table:name="Sheet1" table:style-name="ta1"
+    table:protected="true" table:protection-key="Fa52hNHBdTG7CgoGGStwsTuzHyI="
     table:automatic-print-range="false">
     ....
     </table:table>
-    
+
 Repeate-header-rows:
         <table:table-header-rows>
           <table:table-row table:style-name="ro1">
@@ -237,4 +415,4 @@ Bug found:
 - duplicate cell area is not good.
 - Style is not save/load correctly
 - Cell format is not saving/loading
- 
+
