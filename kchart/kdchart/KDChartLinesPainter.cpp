@@ -267,7 +267,7 @@ void KDChartLinesPainter::specificPaintData( QPainter* painter,
         else
             zeroXAxisI = logHeight / 2.0 + _dataRect.y();
     } else
-        zeroXAxisI = ordinatePara->axisZeroLineStartY() - _dataRect.y();
+        zeroXAxisI = ordinatePara ? ordinatePara->axisZeroLineStartY() - _dataRect.y() : 0;
 
 
     // compute how to shift of the points in case we want them in the
