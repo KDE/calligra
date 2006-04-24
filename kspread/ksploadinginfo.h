@@ -20,6 +20,11 @@
 #ifndef KSPLOADINGINFO_H
 #define KSPLOADINGINFO_H
 
+#include <qpoint.h>
+#include <qstringlist.h>
+
+#include <KoPoint.h>
+
 namespace KSpread
 {
 class Sheet;
@@ -35,9 +40,25 @@ public:
     void appendValidation( const QString &name, const QDomElement &element){ m_validationList.insert( name, element);}
     QDomElement validation( const QString &name) { return m_validationList[name];}
 
-    //Use when we load ods file.
-    //Necessary to initialise kspread_view selection
-    void addMarkerSelection( Sheet *sheet, const QPoint & _point ) { m_markerSelection.insert( sheet, _point );}
+    /**
+     * @return the cursor positions
+     */
+    const QMap<Sheet*, QPoint>& cursorPositions() const { return m_cursorPositions; }
+
+    /**
+     * Stores the cursor position @p point for @p sheet .
+     */
+    void setCursorPosition( Sheet* sheet, const QPoint& point ) { m_cursorPositions.insert( sheet, point );}
+
+    /**
+     * @return scrolling offsets
+     */
+    const QMap<Sheet*, KoPoint>& scrollingOffsets() const { return m_scrollingOffsets; }
+
+    /**
+     * Stores the scrolling offset @p point for @p sheet .
+     */
+    void setScrollingOffset( Sheet* sheet, const KoPoint& point ) { m_scrollingOffsets.insert( sheet, point );}
 
     void setLoadTemplate( bool _b ) {
         m_loadTemplate = _b;
@@ -49,7 +70,8 @@ public:
 private:
     QStringList m_areaNamed;
     QMap<QString,QDomElement> m_validationList;
-    QMap<Sheet*, QPoint> m_markerSelection;
+    QMap<Sheet*, QPoint> m_cursorPositions;
+    QMap<Sheet*, KoPoint> m_scrollingOffsets;
     bool m_loadTemplate;
 };
 

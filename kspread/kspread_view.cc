@@ -93,6 +93,7 @@
 #include "damages.h"
 #include "digest.h"
 #include "inspector.h"
+#include "ksploadinginfo.h"
 #include "kspread_canvas.h"
 #include "kspread_editors.h"
 #include "kspread_events.h"
@@ -203,6 +204,7 @@ public:
     Selection* choice;
     QMap<Sheet*, QPoint> savedAnchors;
     QMap<Sheet*, QPoint> savedMarkers;
+    QMap<Sheet*, KoPoint> savedOffsets;
 
     // Find and Replace context. We remember the options and
     // the strings used previously.
@@ -282,6 +284,8 @@ public:
 
     PropertyEditor *m_propertyEditor;
 
+    // On timeout this will execute the status bar operation (e.g. SUM).
+    // This is delayed to speed up the selection.
     QTimer statusBarOpTimer;
 };
 
@@ -1741,7 +1745,7 @@ View::View( QWidget *_parent, const char *_name,
     d->activeSheet = 0;
 
     d->toolbarLock = false;
-    d->loading = false;
+    d->loading = true;
 
     d->selection = new Selection( this );
     d->choice = new Selection( this );
@@ -1844,10 +1848,13 @@ View::View( QWidget *_parent, const char *_name,
     // ## Might be wrong, if doc isn't loaded yet
     d->actions->selectStyle->setItems( d->doc->styleManager()->styleNames() );
 
-    // If doc was already loaded, initialize things
-    // Otherwise the doc will do it in completeLoading.
+    // Delay the setting of the initial position, because
+    // we have to wait for the widget to be shown. Otherwise,
+    // we get a wrong widget size.
+    // This is the last operation for the "View loading" process.
+    // The loading flag will be unset at its end.
     if ( !doc()->map()->sheetList().isEmpty() )
-        initialPosition();
+      QTimer::singleShot(50, this, SLOT(initialPosition()));
 
     connect (&d->statusBarOpTimer, SIGNAL(timeout()), this, SLOT(calcStatusBarOp()));
 }
@@ -2647,19 +2654,44 @@ void View::initialPosition()
 
     refreshView();
 
-    // Set the initial position for the marker as store in the XML file,
-    // (1,1) otherwise
-    int col = doc()->map()->initialMarkerColumn();
-    if ( col <= 0 )
-      col = 1;
-    int row = doc()->map()->initialMarkerRow();
-    if ( row <= 0 )
-      row = 1;
-    d->selection->initialize( QPoint(col, row) );
-
+    int col = 1;
+    int row = 1;
+    double offsetX = 0;
+    double offsetY = 0;
     // Set the initial X and Y offsets for the view.
-    d->canvas->setXOffset( doc()->map()->initialXOffset() );
-    d->canvas->setYOffset( doc()->map()->initialYOffset() );
+    if (KSPLoadingInfo* loadingInfo = doc()->loadingInfo())
+    {
+      kdDebug() << "View::initialPosition(): setting initial position" << endl;
+      d->savedAnchors = loadingInfo->cursorPositions();
+      d->savedMarkers = loadingInfo->cursorPositions();
+      d->savedOffsets = loadingInfo->scrollingOffsets();
+
+      QMapIterator<Sheet*, QPoint> it = d->savedMarkers.find(d->activeSheet);
+      QPoint cursor = (it == d->savedMarkers.end()) ? QPoint(1,1) : *it;
+      col = cursor.x();
+      row = cursor.y();
+
+      QMapIterator<Sheet*, KoPoint> it2 = d->savedOffsets.find(d->activeSheet);
+      KoPoint offset = (it2 == d->savedOffsets.end()) ? KoPoint() : *it2;
+      offsetX = offset.x();
+      offsetY = offset.y();
+    }
+    else
+    {
+      offsetX = doc()->map()->initialXOffset();
+      offsetY = doc()->map()->initialYOffset();
+      // Set the initial position for the marker as stored in the XML file,
+      // (1,1) otherwise
+      col = doc()->map()->initialMarkerColumn();
+      if ( col <= 0 )
+        col = 1;
+      row = doc()->map()->initialMarkerRow();
+      if ( row <= 0 )
+        row = 1;
+    }
+    d->canvas->setXOffset( offsetX );
+    d->canvas->setYOffset( offsetY );
+    d->selection->initialize( QPoint(col, row) );
 
     updateBorderButton();
     updateShowSheetMenu();
@@ -2686,13 +2718,15 @@ void View::initialPosition()
     activeSheet()->setRegionPaintDirty( vr );
     doc()->emitEndOperation( vr );
 
-    d->loading = true;
-
     if ( koDocument()->isReadWrite() )
       initConfig();
 
     d->adjustActions( !d->activeSheet->isProtected() );
     d->adjustWorkbookActions( !doc()->map()->isProtected() );
+
+    // finish the "View Loading" process
+    d->loading = false;
+    doc()->deleteLoadingInfo();
 }
 
 
@@ -3819,6 +3853,7 @@ void View::setActiveSheet( Sheet * _t, bool updateSheet )
   /* see if there was a previous selection on this other sheet */
   QMapIterator<Sheet*, QPoint> it = d->savedAnchors.find(d->activeSheet);
   QMapIterator<Sheet*, QPoint> it2 = d->savedMarkers.find(d->activeSheet);
+  QMapIterator<Sheet*, KoPoint> it3 = d->savedOffsets.find(d->activeSheet);
 
   // TODO Stefan: store the save markers/anchors in the Selection?
   QPoint newAnchor = (it == d->savedAnchors.end()) ? QPoint(1,1) : *it;
@@ -3829,6 +3864,11 @@ void View::setActiveSheet( Sheet * _t, bool updateSheet )
   d->selection->initialize(QRect(newMarker, newAnchor));
 
   d->canvas->scrollToCell(newMarker);
+  if (it3 != d->savedOffsets.end())
+  {
+    d->canvas->setXOffset((*it3).x());
+    d->canvas->setYOffset((*it3).y());
+  }
   calcStatusBarOp();
 
   doc()->emitEndOperation( d->activeSheet->visibleRect( d->canvas ) );
@@ -5561,12 +5601,10 @@ void View::refreshView()
     d->tabScrollBarLayout->setDirection( QBoxLayout::RightToLeft );
     d->tabBar->setReverseLayout( !interfaceIsRTL );
   }
-
 }
 
 void View::resizeEvent( QResizeEvent * )
 {
-  refreshView();
 }
 
 void View::popupChildMenu( KoChild* child, const QPoint& /*global_pos*/ )
@@ -7414,11 +7452,18 @@ void View::initialiseMarkerFromSheet( Sheet *_sheet, const QPoint &point )
     d->savedMarkers.replace( _sheet, point);
 }
 
-QPoint View::markerFromSheet( Sheet *_sheet ) const
+QPoint View::markerFromSheet( Sheet* sheet ) const
 {
-    QMapIterator<Sheet*, QPoint> it2 = d->savedMarkers.find(_sheet);
-    QPoint newMarker = (it2 == d->savedMarkers.end()) ? QPoint(1,1) : *it2;
+    QMapIterator<Sheet*, QPoint> it = d->savedMarkers.find(sheet);
+    QPoint newMarker = (it == d->savedMarkers.end()) ? QPoint(1,1) : *it;
     return newMarker;
+}
+
+KoPoint View::offsetFromSheet( Sheet* sheet ) const
+{
+  QMapIterator<Sheet*, KoPoint> it = d->savedOffsets.find(sheet);
+  KoPoint offset = (it == d->savedOffsets.end()) ? KoPoint() : *it;
+  return offset;
 }
 
 void View::saveCurrentSheetSelection()
@@ -7430,6 +7475,8 @@ void View::saveCurrentSheetSelection()
         kdDebug() << " Current scrollbar vert value: " << d->canvas->vertScrollBar()->value() << endl;
         kdDebug() << "Saving marker pos: " << d->selection->marker() << endl;
         d->savedMarkers.replace(d->activeSheet, d->selection->marker());
+        d->savedOffsets.replace(d->activeSheet, KoPoint(d->canvas->xOffset(),
+                                                        d->canvas->yOffset()));
     }
 }
 
