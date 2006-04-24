@@ -42,7 +42,7 @@
 #include "kudesigner_view.h"
 
 KudesignerDoc::KudesignerDoc( QWidget *parentWidget, const char *widgetName, QObject* parent, const char* name, bool singleViewMode )
-        : KoDocument( parentWidget, widgetName, parent, name, singleViewMode ), m_plugin( 0 ), m_propPos( Qt::DockRight ), m_modified( false )
+        : KoDocument( parentWidget, widgetName, parent, name, singleViewMode ), m_plugin( 0 ), m_propPos( Qt::RightDockWidgetArea ), m_modified( false )
 {
     setInstance( KudesignerFactory::global(), false );
     history = new KCommandHistory( actionCollection() );
@@ -211,12 +211,12 @@ KuDesignerPlugin *KudesignerDoc::plugin()
     return canvas() ->plugin();
 }
 
-Qt::ToolBarDock KudesignerDoc::propertyPosition()
+Qt::DockWidgetArea KudesignerDoc::propertyPosition()
 {
     return m_propPos;
 }
 
-void KudesignerDoc::setForcedPropertyEditorPosition( Qt::ToolBarDock d )
+void KudesignerDoc::setForcedPropertyEditorPosition( Qt::DockWidgetArea d )
 {
     m_propPos = d;
 }

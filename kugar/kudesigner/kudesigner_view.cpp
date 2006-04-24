@@ -38,7 +38,7 @@
 #include <Q3VBoxLayout>
 #include <QResizeEvent>
 #include <QPaintEvent>
-
+#include <QDockWidget>
 #include <kaction.h>
 #include <kstdaction.h>
 #include <klocale.h>
@@ -97,17 +97,19 @@ KudesignerView::KudesignerView( KudesignerDoc* part, QWidget* parent, const char
 
     m_view->itemToInsert = 0;
 
-    Q3DockWindow *dw1 = new Q3DockWindow( Q3DockWindow::OutsideDock, shell() );
-    Q3DockWindow *dw2 = new Q3DockWindow( Q3DockWindow::OutsideDock, shell() );
+    QDockWidget  *dw1 = new QDockWidget( shell() );
+    QDockWidget  *dw2 = new QDockWidget( shell() );
     m_structure = new Kudesigner::StructureWidget( dw1 );
     m_propertyEditor = new Editor( dw2 );
-    dw1->boxLayout() ->addWidget( m_structure, 1 );
+#warning "kde4: port it"
+#if 0    
+	dw1->boxLayout() ->addWidget( m_structure, 1 );
     dw2->boxLayout() ->addWidget( m_propertyEditor, 1 );
     dw1->setFixedExtentWidth( 400 );
     dw1->setResizeEnabled( true );
     dw2->setFixedExtentWidth( 400 );
     dw2->setResizeEnabled( true );
-
+#endif
     if ( m_doc->plugin() )
     {
         //                 connect( m_propertyEditor, SIGNAL(createPluggedInEditor(QWidget*&, Editor *, Property*, Box *)),
@@ -116,8 +118,8 @@ KudesignerView::KudesignerView( KudesignerDoc* part, QWidget* parent, const char
         kDebug() << "*************Property and plugin have been connected" << endl;
     }
 
-    shell() ->addDockWindow( dw1, m_doc->propertyPosition() );
-    shell() ->addDockWindow( dw2, m_doc->propertyPosition() );
+    shell() ->addDockWidget( m_doc->propertyPosition(),dw1 );
+    shell() ->addDockWidget( m_doc->propertyPosition(),dw2 );
 
     m_structure->setDocument( m_doc->canvas() );
 

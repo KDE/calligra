@@ -19,7 +19,7 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 #include "field.h"
 
 #include <klocale.h>
-#include <klineeditdlg.h>
+#include <kinputdialog.h>
 
 #include <kdebug.h>
 
@@ -93,7 +93,7 @@ void Field::fastProperty()
 {
     bool accepted;
     QString sValue = props[ "Field" ].value().toString();
-    QString sText = KLineEditDlg::getText( i18n( "Change Field" ),
+    QString sText = KInputDialog::getText( i18n( "Change Field" ),
                                            "Enter field name:", sValue , &accepted );
 
     if ( accepted )

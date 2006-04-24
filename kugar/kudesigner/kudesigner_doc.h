@@ -58,8 +58,8 @@ public:
 
     void loadPlugin( const QString& name );
     KuDesignerPlugin *plugin();
-    Dock propertyPosition();
-    void setForcedPropertyEditorPosition( Qt::ToolBarDock );
+	Qt::DockWidgetArea propertyPosition();
+    void setForcedPropertyEditorPosition( Qt::DockWidgetArea );
 
     void addCommand( KCommand *cmd );
 
@@ -89,7 +89,7 @@ private:
     Kudesigner::Canvas *docCanvas;
 
     KuDesignerPlugin *m_plugin;
-    Dock m_propPos;
+	Qt::DockWidgetArea m_propPos;
     bool m_modified;
 };
 

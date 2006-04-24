@@ -19,7 +19,7 @@
 #include "label.h"
 
 #include <klocale.h>
-#include <klineeditdlg.h>
+#include <kinputdialog.h>
 
 #include <qmap.h>
 #include <qpainter.h>
@@ -249,7 +249,7 @@ void Label::fastProperty()
 {
     bool accepted;
 
-    QString sText = KLineEditDlg::getText( i18n( "Change Label" ),
+    QString sText = KInputDialog::getText( i18n( "Change Label" ),
                                            "Enter label name:", props[ "Text" ].value().toString(),
                                            &accepted );
 
