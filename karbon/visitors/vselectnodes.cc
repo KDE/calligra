@@ -29,13 +29,14 @@ VSelectNodes::visitVSubpath( VSubpath& path )
 {
 	path.first();
 
-	// skip "begin":
-	while( path.current() )
+	VSegment *curr = path.current();
+
+	while( curr )
 	{
 		if( m_rect.isEmpty() )
 		{
-			for( int i = 0; i < path.current()->degree(); i++ )
-				path.current()->selectPoint( i, m_select );
+			for( int i = 0; i < curr->degree(); i++ )
+				curr->selectPoint( i, m_select );
 
 			setSuccess();
 		}
@@ -43,40 +44,43 @@ VSelectNodes::visitVSubpath( VSubpath& path )
 		{
 			if( m_exclusive )
 			{
-				for( int i = 0; i < path.current()->degree(); i++ )
-					path.current()->selectPoint( i, false );
+				for( int i = 0; i < curr->degree(); i++ )
+					curr->selectPoint( i, false );
 			}
 
-			if( path.current()->isCurve() )
+			if( curr->isCurve() )
 			{
-				if( m_rect.contains( path.current()->point( 0 ) ) )
+				if( m_rect.contains( curr->point( 0 ) ) )
 				{
-					path.current()->selectPoint( 0, m_select );
+					curr->selectPoint( 0, m_select );
 					setSuccess();
 				}
 
-				if( m_rect.contains( path.current()->point( 1 ) ) )
+				if( m_rect.contains( curr->point( 1 ) ) )
 				{
-					path.current()->selectPoint( 1, m_select );
+					curr->selectPoint( 1, m_select );
 					setSuccess();
 				}
-				if( path.current()->prev() &&
-					path.current()->prev()->isSmooth() )
-						path.current()->selectPoint( 0, path.current()->prev()->knotIsSelected() );
 			}
 
-			if( m_rect.contains( path.current()->knot() ) )
+			if( m_rect.contains( curr->knot() ) )
 			{
-				path.current()->selectKnot( m_select );
-				if( path.current()->isCurve() )
+				curr->selectKnot( m_select );
+				if( curr->isCurve() )
 				{
-					path.current()->selectPoint( 1, m_select );
+					curr->selectPoint( 1, m_select );
 				}
+				// select first bezier point of next segment if:
+				// - next segment is a curve and
+				// - next segment is smooth or the current segment is the first one
+				VSegment* next = curr->next();
+				if( next && next->isCurve() && ( curr->isSmooth() || curr == path.getFirst() ) )
+					next->selectPoint( 0, m_select );
 
 				setSuccess();
 			}
 		}
-		path.next();
+		curr = path.next();
 	}
 	// select first node as well
 	if( path.isClosed() && path.getLast()->knotIsSelected() )
