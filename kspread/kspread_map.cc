@@ -163,9 +163,8 @@ void Map::saveOasisSettings( KoXmlWriter &settingsWriter )
     {
         // save current sheet selection before to save marker, otherwise current pos is not saved
         view->saveCurrentSheetSelection();
-        Canvas * canvas = view->canvasWidget();
         //<config:config-item config:name="ActiveTable" config:type="string">Feuille1</config:config-item>
-        settingsWriter.addConfigItem( "ActiveTable",  canvas->activeSheet()->sheetName() );
+        settingsWriter.addConfigItem( "ActiveTable",  view->activeSheet()->sheetName() );
     }
 
     //<config:config-item-map-named config:name="Tables">
@@ -174,14 +173,18 @@ void Map::saveOasisSettings( KoXmlWriter &settingsWriter )
     Q3PtrListIterator<Sheet> it( m_lstSheets );
     for( ; it.current(); ++it )
     {
-        QPoint marker;
-        if ( view )
-        {
-            marker = view->markerFromSheet( *it );
-        }
         settingsWriter.startElement( "config:config-item-map-entry" );
         settingsWriter.addAttribute( "config:name", ( *it )->sheetName() );
-        it.current()->saveOasisSettings( settingsWriter, marker);
+        if ( view )
+        {
+          QPoint marker = view->markerFromSheet( *it );
+          KoPoint offset = view->offsetFromSheet( *it );
+          settingsWriter.addConfigItem( "CursorPositionX", marker.x() );
+          settingsWriter.addConfigItem( "CursorPositionY", marker.y() );
+          settingsWriter.addConfigItem( "xOffset", offset.x() );
+          settingsWriter.addConfigItem( "yOffset", offset.y() );
+        }
+        it.current()->saveOasisSettings( settingsWriter );
         settingsWriter.endElement();
     }
     settingsWriter.endElement();

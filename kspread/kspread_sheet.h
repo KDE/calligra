@@ -258,7 +258,7 @@ public:
 
     void loadOasisObjects( const QDomElement& e, KoOasisLoadingContext& oasisContext );
     void loadOasisSettings( const KoOasisSettings::NamedMap &settings );
-    void saveOasisSettings( KoXmlWriter &settingsWriter, const QPoint& marker ) const;
+    void saveOasisSettings( KoXmlWriter &settingsWriter ) const;
     void saveOasisPrintStyleLayout( KoGenStyle &style ) const;
 
     /**

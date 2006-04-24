@@ -171,11 +171,6 @@ public:
 QList<Doc*> Doc::Private::s_docs;
 int Doc::Private::s_docId = 0;
 
-#define deleteLoadingInfo() { \
-        delete d->m_loadingInfo; \
-        d->m_loadingInfo = 0; \
-}
-
 Doc::Doc( QWidget *parentWidget, const char *widgetName, QObject* parent, const char* name, bool singleViewMode )
   : KoDocument( parentWidget, widgetName, parent, name, singleViewMode )
 {
@@ -359,9 +354,11 @@ bool Doc::initDoc(InitDocFlags flags, QWidget* parentWidget)
         d->m_loadingInfo = new KSPLoadingInfo;
         d->m_loadingInfo->setLoadTemplate( true );
         bool ok = loadNativeFormat( f );
-        deleteLoadingInfo();
         if ( !ok )
+        {
             showLoadingErrorDialog();
+            deleteLoadingInfo();
+        }
         setEmpty();
         initConfig();
         return ok;
@@ -1011,7 +1008,6 @@ bool Doc::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles, const 
 
     //display loading time
     kDebug(36001) << "Loading took " << (float)(dt.elapsed()) / 1000.0 << " seconds" << endl;
-    deleteLoadingInfo();
     return true;
 }
 
@@ -2235,6 +2231,12 @@ void Doc::setDisplaySheet(Sheet *_sheet )
 KSPLoadingInfo * Doc::loadingInfo() const
 {
     return d->m_loadingInfo;
+}
+
+void Doc::deleteLoadingInfo()
+{
+    delete d->m_loadingInfo;
+    d->m_loadingInfo = 0;
 }
 
 Sheet * Doc::displaySheet() const

@@ -7194,9 +7194,11 @@ void Sheet::loadOasisSettings( const KoOasisSettings::NamedMap &settings )
 
     int cursorX = items.parseConfigItemInt( "CursorPositionX" );
     int cursorY = items.parseConfigItemInt( "CursorPositionY" );
+    doc()->loadingInfo()->setCursorPosition( this, QPoint( cursorX, cursorY ) );
 
-    doc()->loadingInfo()->addMarkerSelection( this, QPoint( cursorX, cursorY ) );
-    kDebug()<<"d->hideZero :"<<d->hideZero<<" d->showGrid :"<<d->showGrid<<" d->firstLetterUpper :"<<d->firstLetterUpper<<" cursorX :"<<cursorX<<" cursorY :"<<cursorY<< endl;
+    double offsetX = items.parseConfigItemDouble( "xOffset" );
+    double offsetY = items.parseConfigItemDouble( "yOffset" );
+    doc()->loadingInfo()->setScrollingOffset( this, KoPoint( offsetX, offsetY ) );
 
     d->showFormulaIndicator = items.parseConfigItemBool( "ShowFormulaIndicator" );
     d->showCommentIndicator = items.parseConfigItemBool( "ShowCommentIndicator" );
@@ -7206,20 +7208,13 @@ void Sheet::loadOasisSettings( const KoOasisSettings::NamedMap &settings )
     d->showColumnNumber = items.parseConfigItemBool( "ShowColumnNumber" );
 }
 
-void Sheet::saveOasisSettings( KoXmlWriter &settingsWriter, const QPoint& marker ) const
+void Sheet::saveOasisSettings( KoXmlWriter &settingsWriter ) const
 {
     //not into each page into oo spec
     settingsWriter.addConfigItem( "ShowZeroValues", d->hideZero );
     settingsWriter.addConfigItem( "ShowGrid", d->showGrid );
     //not define into oo spec
-
     settingsWriter.addConfigItem( "FirstLetterUpper", d->firstLetterUpper);
-
-    //<config:config-item config:name="CursorPositionX" config:type="int">3</config:config-item>
-    //<config:config-item config:name="CursorPositionY" config:type="int">34</config:config-item>
-    settingsWriter.addConfigItem( "CursorPositionX", marker.x() );
-    settingsWriter.addConfigItem( "CursorPositionY", marker.y() );
-
     settingsWriter.addConfigItem( "ShowFormulaIndicator", d->showFormulaIndicator );
     settingsWriter.addConfigItem( "ShowCommentIndicator", d->showCommentIndicator );
     settingsWriter.addConfigItem( "ShowPageBorders",d->showPageBorders );
@@ -7227,7 +7222,6 @@ void Sheet::saveOasisSettings( KoXmlWriter &settingsWriter, const QPoint& marker
     settingsWriter.addConfigItem( "autoCalc", d->autoCalc );
     settingsWriter.addConfigItem( "ShowColumnNumber", d->showColumnNumber );
 }
-
 
 bool Sheet::saveOasis( KoXmlWriter & xmlWriter, KoGenStyles &mainStyles, GenValidationStyles &valStyle, KoStore *store, KoXmlWriter* /*manifestWriter*/, int &indexObj, int &partIndexObj )
 {

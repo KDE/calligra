@@ -604,7 +604,17 @@ public:
 
     void setDisplaySheet(Sheet *_Sheet );
     Sheet * displaySheet() const;
-    KSPLoadingInfo * loadingInfo() const;
+
+    /**
+     * @return the loading info
+     */
+    KSPLoadingInfo* loadingInfo() const;
+
+    /**
+     * deletes the loading info after loading is complete
+     */
+    void deleteLoadingInfo();
+
   void increaseNumOperation();
   void decreaseNumOperation();
 

@@ -305,12 +305,6 @@ public:
 
     void initConfig();
 
-    /**
-     * Returns true if document is being loaded. It is useful to be checked for
-     * when doing view update.
-     */
-    bool isLoading() const;
-
 
     void initCalcMenu();
 
@@ -347,9 +341,19 @@ public:
 
     bool showSheet(const QString& sheetName);
 
-    QPoint markerFromSheet( Sheet *_sheet ) const;
-    /*
-     * Save current sheet selection. Call when we change sheet, or save in oasis format
+    /**
+     * @return marker for @p sheet
+     */
+    QPoint markerFromSheet( Sheet* sheet ) const;
+
+    /**
+     * @return scroll offset for @p sheet
+     */
+    KoPoint offsetFromSheet( Sheet* sheet ) const;
+
+    /**
+     * Save current sheet selection.
+     * Call when we change sheet, or before save in OpenDocument format.
      */
     void saveCurrentSheetSelection();
 
@@ -731,6 +735,12 @@ private:
     void spellCleanup();
 
     Cell* nextFindValidCell( int col, int row );
+
+    /**
+     * @return @c true if document is being loaded. It is useful to supress scrolling
+     * while the "View loading" process.
+     */
+    bool isLoading() const;
 
     friend class Private;
 };

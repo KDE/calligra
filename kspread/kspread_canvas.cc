@@ -329,21 +329,11 @@ double Canvas::yOffset() const
 void Canvas::setXOffset( double _xOffset )
 {
   d->xOffset = _xOffset;
-  kDebug(36001) << "setXOffset(): XOffset before scrollToCell: "
-		 << d->xOffset << endl;
-  scrollToCell( marker() );
-  kDebug(36001) << "setXOffset(): XOffset after scrollToCell: "
-		 << d->xOffset << endl;
 }
 
 void Canvas::setYOffset( double _yOffset )
 {
   d->yOffset = _yOffset;
-  kDebug(36001) << "setyOffset(): YOffset before scrollToCell: "
-		 << d->yOffset << endl;
-  scrollToCell( marker() );
-  kDebug(36001) << "setYOffset(): YOffset after scrollToCell: "
-		 << d->yOffset << endl;
 }
 
 const QPen& Canvas::defaultGridPen() const
@@ -631,6 +621,9 @@ void Canvas::scrollToCell(QPoint location) const
   if (sheet == 0)
     return;
 
+  if (d->view->isLoading())
+    return;
+
   kDebug(36001) << "------------------------------------------------" << endl;
   kDebug(36001) << "scrollToCell(): at location [" << location.x() << ","
   		 << location.y() << "]" << endl;
@@ -716,6 +709,7 @@ void Canvas::scrollToCell(QPoint location) const
       horzScrollBar()->setValue( d->view->doc()->zoomItX( horzScrollBarValue ) );
     }
   }
+//   kdDebug() << "ltr: YPos: " << ypos << ", min: " << minY << ", maxY: " << maxY << endl;
 
   // do we need to scroll up
   if ( ypos < minY )
