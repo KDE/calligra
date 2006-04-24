@@ -1900,9 +1900,7 @@ void Cell::textSize( QPainter &_paint )
       ay = format()->alignY( _col, _row );
 
     if ( style->hasFeature( Style::SFontFlag, true ) )
-      fontUnderlined = ( style->fontFlags()
-       // FIXME: Should be & (uint)...?
-       && (uint) Style::FUnderline );
+      fontUnderlined = ( style->fontFlags() & (uint) Style::FUnderline );
     else
       fontUnderlined = format()->textFontUnderline( _col, _row );
   }

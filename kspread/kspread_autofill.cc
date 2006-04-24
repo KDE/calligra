@@ -456,6 +456,7 @@ QString AutoFillSequenceItem::getPredecessor( int _no, double _delta )
       int k = j % day->count();
       erg = (day->at( k ));
     }
+    break;
    case SHORTDAY:
     {
       int i = shortDay->indexOf( m_String );

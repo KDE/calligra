@@ -124,7 +124,7 @@ void Manipulator::execute()
   Region::Iterator endOfList(cells().end());
   for (Region::Iterator it = cells().begin(); it != endOfList; ++it)
   {
-    successfully &= process(*it);
+    successfully = successfully && process(*it);
   }
 
   if (!successfully)

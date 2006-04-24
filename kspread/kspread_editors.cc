@@ -1167,7 +1167,7 @@ bool CellEditor::eventFilter( QObject* o, QEvent* e )
     if ( e->type() == QEvent::KeyPress || e->type() == QEvent::KeyRelease )
     {
         QKeyEvent* k = (QKeyEvent*)e;
-        if ( !( k->modifiers() & Qt::ShiftModifier )|| canvas()->chooseMode())
+        if ( !( k->modifiers() & Qt::ShiftModifier ) || canvas()->chooseMode())
         {
           //If the user presses the return key to finish editing this cell, choose mode must be turned off first
           //otherwise it will merely select a different cell

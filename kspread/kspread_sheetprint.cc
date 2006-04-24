@@ -437,7 +437,7 @@ void SheetPrint::printRect( QPainter& painter, const KoPoint& topLeft,
     RowFormat *row_lay;
     ColumnFormat *col_lay;
 
-    double xpos;
+    double xpos =  0;
     double ypos =  topLeft.y();
 
     int regionBottom = printRect.bottom();

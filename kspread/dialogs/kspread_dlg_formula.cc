@@ -470,6 +470,7 @@ QString FormulaDialog::createParameter( const QString& _text, int param )
 		if ( isNumber || _text.toUpper() =="FALSE" || _text.toUpper() == "TRUE" )
 			return _text;
 	}
+        // fall through
     case KSpread_String:
 	{
 	    // Does the text start with quotes?

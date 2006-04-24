@@ -1695,7 +1695,7 @@ void CellFormatPageFloat::makeformat()
 
   updateFormatType();
   QColor color;
-  Style::FloatFormat floatFormat;
+  Style::FloatFormat floatFormat = Style::OnlyNegSigned;
   switch( format->currentIndex() )
   {
     case 0:
