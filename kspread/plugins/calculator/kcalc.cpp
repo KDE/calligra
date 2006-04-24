@@ -1517,7 +1517,7 @@ void QtCalculator::configclicked(){
   // QPixmap pm( BarIcon( "kcalclogo" ) );
   QPixmap pm;
   QLabel *logo = new QLabel(box);
-  logo->setPixmap(pm);
+  logo->setIcon(pm);
   grid1->addWidget(logo,0,0);
   lay1->addWidget(box);
 

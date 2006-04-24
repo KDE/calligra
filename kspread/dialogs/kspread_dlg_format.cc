@@ -133,7 +133,7 @@ void FormatDialog::slotActivated( int index )
 	return;
     }
 
-    m_label->setPixmap( pix );
+    m_label->setIcon( pix );
 }
 
 void FormatDialog::slotOk()
