@@ -1034,7 +1034,7 @@ void configureTTSPage::apply()
 void configureTTSPage::screenReaderOptionChanged()
 {
     m_gbScreenReaderOptions->setEnabled(
-        m_cbSpeakPointerWidget->isChecked() | m_cbSpeakFocusWidget->isChecked());
+        m_cbSpeakPointerWidget->isChecked() || m_cbSpeakFocusWidget->isChecked());
     m_leAcceleratorPrefixWord->setEnabled(m_cbSpeakAccelerators->isChecked());
     m_lblAcceleratorPrefix->setEnabled(m_cbSpeakAccelerators->isChecked());
 }

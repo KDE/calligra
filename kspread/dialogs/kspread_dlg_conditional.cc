@@ -441,6 +441,8 @@ void ConditionalDialog::init( Conditional const & tmp, int numCondition )
     kl1 = m_dlg->m_firstValue_3;
     kl2 = m_dlg->m_secondValue_3;
     break;
+   default:
+    return;
   }
 
   if ( tmp.styleName )

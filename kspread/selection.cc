@@ -596,7 +596,8 @@ void Selection::extend(const Region& region)
   for (ConstIterator it = region.constBegin(); it != end; ++it)
   {
     Element *element = *it;
-    if (element && element->type() == Element::Point)
+    if (!element) continue;
+    if (element->type() == Element::Point)
     {
       Point* point = static_cast<Point*>(element);
       extend(point->pos(), element->sheet());
