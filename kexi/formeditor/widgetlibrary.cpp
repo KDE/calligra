@@ -68,6 +68,8 @@ class WidgetLibraryPrivate
 			advancedProperties.insert("backgroundMode", (char*)1);//this is rather useless
 			advancedProperties.insert("layout", (char*)1);// too large risk to break things
 			                                              // by providing this in propeditor
+			advancedProperties.insert("minimumSize", (char*)1);
+			advancedProperties.insert("maximumSize", (char*)1);
 #ifdef KEXI_NO_UNFINISHED
 /*! @todo reenable */
 			advancedProperties.insert("paletteBackgroundPixmap", (char*)1);
