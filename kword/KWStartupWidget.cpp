@@ -81,6 +81,7 @@ void KWStartupWidget::buttonClicked() {
     hf.ptFootNoteBodySpacing = 10.0;
     m_doc->setPageLayout( m_layout, m_columns, hf, false );
     m_doc->delayedRecalcFrames(1);
+    m_doc->setUnit(m_sizeWidget->unit());
 
     emit documentSelected();
 }

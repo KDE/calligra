@@ -60,6 +60,8 @@ public:
      */
     void setColumns(KoColumns &columns);
 
+    KoUnit::Unit unit() { return m_unit; }
+
 public slots:
     /**
      * Set a new unit for the widget updating the widgets.
