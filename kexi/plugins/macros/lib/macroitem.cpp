@@ -107,8 +107,14 @@ bool MacroItem::setVariable(const QString& name, Variable::Ptr variable)
 	// Notify the variable, that we updated it.
 	//v->updated(this);
 
-	//TODO emit updated(sl);
+	// set depending variables by asking the own action.
+	Variable::List list = d->action->notifyUpdated(variable);
+	Variable::List::ConstIterator it(list.constBegin()), end(list.constEnd());
+	for (; it != end; ++it) {
+		d->variables.replace((*it)->name(), *it);
+	}
 
+	//TODO emit updated(sl);
 	return true;
 }
 

@@ -1,4 +1,3 @@
-##lib_LTLIBRARIES = libkomacro.la
 noinst_LTLIBRARIES = libkomacro.la
 
 libkomacro_la_SOURCES = \

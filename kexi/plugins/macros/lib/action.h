@@ -30,6 +30,7 @@ class QDomElement;
 
 #include "manager.h"
 #include "context.h"
+#include "variable.h"
 
 namespace KoMacro {
 
@@ -147,6 +148,17 @@ namespace KoMacro {
 			*/
 			void setAction(const KAction* action);
 
+			/**
+			* This function is called, when a @a Variable provided by this
+			* @a Action is changed.
+			*/
+			virtual Variable::List notifyUpdated(Variable::Ptr variable) {
+				Q_UNUSED(variable);
+				// The default implementation does nothing.
+				// So, an empty list is returned.
+				return Variable::List();
+			}
+
 		public slots:
 
 			/**
@@ -177,6 +189,7 @@ namespace KoMacro {
 			void addVariable(const QString& name, const QString& caption, const QVariant& value)
 			{
 				KoMacro::Variable* v = new KoMacro::Variable(value);
+				v->setName(name);
 				v->setCaption(caption);
 				setVariable(name, v);
 			}

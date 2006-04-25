@@ -37,6 +37,8 @@
 #include "lib/macro.h"
 #include "lib/action.h"
 
+#include "kexiactions/openobject.h"
+
 /**
 * \internal d-pointer class to be more flexible on future extension of the
 * functionality without to much risk to break the binary compatibility.
@@ -92,20 +94,23 @@ KexiMacroPart::~KexiMacroPart()
 
 bool KexiMacroPart::execute(KexiPart::Item* item)
 {
-	const QString itemname = item->name();
-	kdDebug() << "KexiMacroPart::execute() itemname=" << itemname << endl;
-	
-	KoMacro::Macro::Ptr macro = ::KoMacro::Manager::self()->getMacro(itemname);
-	if(! macro) {
-		//TODO move that functionality to KoMacro::Manager ?!
-		// If we don't have a macro with that name yet, create one that
-		// will be remembered for later.
-		macro = ::KoMacro::Manager::self()->createMacro(itemname);
+	KexiDialogBase* dialog = new KexiDialogBase(m_mainWin);
+	dialog->setId( item->identifier() );
+	KexiMacroView* view = dynamic_cast<KexiMacroView*>( createView(dialog, dialog, *item, Kexi::DataViewMode) );
+	if(! view) {
+		kdWarning() << "KexiMacroPart::execute() Failed to create a view." << endl;
+		return false;
 	}
 
-	KexiMacroView* view = new KexiMacroView(m_mainWin, m_mainWin, macro);
+	KoMacro::Macro::Ptr macro = ::KoMacro::Manager::self()->getMacro( item->name() );
+	if(! macro) {
+		kdWarning() << "KexiMacroPart::execute() No such item " << item->name() << endl;
+		return false;
+	}
+
+	kdDebug() << "KexiMacroPart::execute() itemname=" << item->name() << endl;
 	view->execute();
-	view->deleteLater();
+	//view->deleteLater();
 	return true;
 }
 
@@ -113,7 +118,7 @@ bool KexiMacroPart::execute(KexiPart::Item* item)
 class KexiTestAction1 : public KoMacro::GenericAction<KexiTestAction1> {
 	public:
 		KexiTestAction1() : KoMacro::GenericAction<KexiTestAction1>("kexitestaction1") {
-			setText("Kexi Action 1");
+			setText("Test Action 1");
 			addVariable("myvar11","My Var 1-1",QVariant(QString("myvalue11")));
 			addVariable("myvar12","My Var 1-2",QVariant(QString("myvalue12")));
 		}
@@ -121,7 +126,7 @@ class KexiTestAction1 : public KoMacro::GenericAction<KexiTestAction1> {
 class KexiTestAction2 : public KoMacro::GenericAction<KexiTestAction2> {
 	public:
 		KexiTestAction2() : KoMacro::GenericAction<KexiTestAction2>("kexitestaction2") {
-			setText("Kexi Action 2");
+			setText("Test Action 2");
 			addVariable("myvar21","My Var 2-1",QVariant(QString("myvalue21")));
 			addVariable("myvar22","My Var 2-2",QVariant(QString("myvalue22")));
 		}
@@ -132,6 +137,7 @@ void KexiMacroPart::initPartActions()
 	kdDebug() << "KexiMacroPart::initPartActions()" << endl;
 
 	::KoMacro::Manager::init( m_mainWin );
+	new KexiMacro::OpenObject;
 	new KexiTestAction1;
 	new KexiTestAction2;
 }
@@ -150,9 +156,10 @@ KexiViewBase* KexiMacroPart::createView(QWidget* parent, KexiDialogBase* dialog,
 	if(! itemname.isNull()) {
 		KoMacro::Macro::Ptr macro = ::KoMacro::Manager::self()->getMacro(itemname);
 		if(! macro) {
-			// If we don't have a macro with that name yet, create one that
-			// will be remembered for later.
+			// If we don't have a macro with that name yet, create one.
 			macro = ::KoMacro::Manager::self()->createMacro(itemname);
+			// and remember the new macro for later usage.
+			::KoMacro::Manager::self()->addMacro(itemname, macro);
 		}
 
 		KexiMainWindow *win = dialog->mainWin();
@@ -163,9 +170,14 @@ KexiViewBase* KexiMacroPart::createView(QWidget* parent, KexiDialogBase* dialog,
 			if(viewMode == Kexi::TextViewMode) {
 				return new KexiMacroTextView(win, parent, macro);
 			}
+			if(viewMode == Kexi::DataViewMode) {
+				// Called if the macro should be executed.
+				return new KexiMacroView(win, parent, macro);
+			}
 		}
 	}
 
+	//kdDebug() << "KexiMacroPart::createView() No view available." << endl;
 	return 0;
 }
 

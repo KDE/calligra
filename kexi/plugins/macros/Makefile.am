@@ -7,7 +7,7 @@ if include_kunittest
 
 endif
 
-SUBDIRS = lib .
+SUBDIRS = lib kexiactions .
 
 kde_module_LTLIBRARIES = kexihandler_macro.la
 
@@ -18,7 +18,7 @@ kexihandler_macro_la_LDFLAGS = \
     $(KDE_PLUGIN) -module -no-undefined -Wnounresolved $(all_libraries) $(VER_INFO)
 
 kexihandler_macro_la_LIBADD = \
-    ./lib/libkomacro.la \
+    ./kexiactions/libkeximacroactions.la \
     $(top_builddir)/kexi/core/libkexicore.la \
     $(top_builddir)/kexi/widget/libkexiextendedwidgets.la \
     $(top_builddir)/lib/koproperty/libkoproperty.la
