@@ -182,8 +182,6 @@ KexiMacroDesignView::KexiMacroDesignView(KexiMainWindow *mainwin, QWidget *paren
 	d->propertyset = new KexiDataAwarePropertySet(this, d->tableview);
 	//connect(d->propertyset, SIGNAL(rowDeleted()), this, SLOT(updateActions()));
 	//connect(d->propertyset, SIGNAL(rowInserted()), this, SLOT(updateActions()));
-	connect(d->propertyset, SIGNAL(propertyChanged(KoProperty::Set&, KoProperty::Property&)),
-		this, SLOT(propertyChanged(KoProperty::Set&, KoProperty::Property&)));
 
 	// Everything is ready. So, update the data now.
 	updateData();
@@ -271,6 +269,8 @@ void KexiMacroDesignView::updateProperties(int row, KoProperty::Set* set, KoMacr
 		// if there exists no such propertyset yet, create one.
 		set = new KoProperty::Set(d->propertyset, action->name());
 		d->propertyset->insert(row, set, true);
+		connect(set, SIGNAL(propertyChanged(KoProperty::Set&, KoProperty::Property&)),
+		        this, SLOT(propertyChanged(KoProperty::Set&, KoProperty::Property&)));
 	}
 
 	// The caption.
