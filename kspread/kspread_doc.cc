@@ -290,7 +290,7 @@ bool Doc::initDoc(InitDocFlags flags, QWidget* parentWidget)
         if( config->hasGroup("Parameters" ))
         {
                 config->setGroup( "Parameters" );
-                _page=config->readNumEntry( "NbPage",1 ) ;
+                _page=config->readEntry( "NbPage",1 ) ;
         }
 
         for( int i=0; i<_page; i++ )
@@ -335,7 +335,7 @@ bool Doc::initDoc(InitDocFlags flags, QWidget* parentWidget)
   if( config->hasGroup("Parameters" ))
   {
     config->setGroup( "Parameters" );
-    _page=config->readNumEntry( "NbPage",1 ) ;
+    _page=config->readEntry( "NbPage",1 ) ;
   }
 
   for( int i=0; i<_page; i++ )
@@ -383,7 +383,7 @@ void Doc::initEmpty()
     if( config->hasGroup("Parameters" ))
     {
         config->setGroup( "Parameters" );
-        _page=config->readNumEntry( "NbPage",1 ) ;
+        _page=config->readEntry( "NbPage",1 ) ;
     }
 
     for( int i=0; i<_page; i++ )
@@ -448,12 +448,12 @@ void Doc::initConfig()
     if( config->hasGroup("KSpread Page Layout" ))
     {
       config->setGroup( "KSpread Page Layout" );
-      setUnit( (KoUnit::Unit)config->readNumEntry( "Default unit page" ,0));
+      setUnit( (KoUnit::Unit)config->readEntry( "Default unit page" ,0));
     }
     if( config->hasGroup("Parameters" ))
     {
         config->setGroup( "Parameters" );
-        m_zoom = config->readNumEntry( "Zoom", 100 );
+        m_zoom = config->readEntry( "Zoom", 100 );
     }
     else
       m_zoom = 100;
@@ -462,7 +462,7 @@ void Doc::initConfig()
     if(config->hasGroup("Misc" ) )
     {
         config->setGroup( "Misc" );
-        undo=config->readNumEntry("UndoRedo",-1);
+        undo=config->readEntry("UndoRedo",-1);
     }
     if(undo!=-1)
         setUndoRedoLimit(undo);
@@ -1421,16 +1421,16 @@ KSpellConfig * Doc::getKSpellConfig()
     	if( config->hasGroup("KSpell kspread" ) )
     	{
         	config->setGroup( "KSpell kspread" );
-        	ksconfig.setNoRootAffix(config->readNumEntry ("KSpell_NoRootAffix", 0));
-        	ksconfig.setRunTogether(config->readNumEntry ("KSpell_RunTogether", 0));
+        	ksconfig.setNoRootAffix(config->readEntry ("KSpell_NoRootAffix", 0));
+        	ksconfig.setRunTogether(config->readEntry ("KSpell_RunTogether", 0));
         	ksconfig.setDictionary(config->readEntry ("KSpell_Dictionary", ""));
-        	ksconfig.setDictFromList(config->readNumEntry ("KSpell_DictFromList", false));
-        	ksconfig.setEncoding(config->readNumEntry ("KSpell_Encoding", KS_E_ASCII));
-        	ksconfig.setClient(config->readNumEntry ("KSpell_Client", KS_CLIENT_ISPELL));
+        	ksconfig.setDictFromList(config->readEntry ("KSpell_DictFromList", false));
+        	ksconfig.setEncoding(config->readEntry ("KSpell_Encoding", int(KS_E_ASCII)));
+        	ksconfig.setClient(config->readEntry ("KSpell_Client", int(KS_CLIENT_ISPELL)));
         	setKSpellConfig(ksconfig);
 
-        	setDontCheckUpperWord(config->readBoolEntry("KSpell_IgnoreUppercaseWords", false));
-        	setDontCheckTitleCase(config->readBoolEntry("KSpell_IgnoreTitleCaseWords", false));
+        	setDontCheckUpperWord(config->readEntry("KSpell_IgnoreUppercaseWords", false));
+        	setDontCheckTitleCase(config->readEntry("KSpell_IgnoreTitleCaseWords", false));
     	}
     }
   return d->spellConfig;

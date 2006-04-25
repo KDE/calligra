@@ -2175,40 +2175,40 @@ void View::initConfig()
     {
         config->setGroup( "Parameters" );
         if ( !doc()->configLoadFromFile() )
-            doc()->setShowHorizontalScrollBar(config->readBoolEntry("Horiz ScrollBar",true));
+            doc()->setShowHorizontalScrollBar(config->readEntry("Horiz ScrollBar",true));
         if ( !doc()->configLoadFromFile() )
-            doc()->setShowVerticalScrollBar(config->readBoolEntry("Vert ScrollBar",true));
-        doc()->setShowColHeader(config->readBoolEntry("Column Header",true));
-        doc()->setShowRowHeader(config->readBoolEntry("Row Header",true));
+            doc()->setShowVerticalScrollBar(config->readEntry("Vert ScrollBar",true));
+        doc()->setShowColHeader(config->readEntry("Column Header",true));
+        doc()->setShowRowHeader(config->readEntry("Row Header",true));
         if ( !doc()->configLoadFromFile() )
-            doc()->setCompletionMode((KGlobalSettings::Completion)config->readNumEntry("Completion Mode",(int)(KGlobalSettings::CompletionAuto)));
-        doc()->setMoveToValue((KSpread::MoveTo)config->readNumEntry("Move",(int)(Bottom)));
+            doc()->setCompletionMode((KGlobalSettings::Completion)config->readEntry("Completion Mode",(int)(KGlobalSettings::CompletionAuto)));
+        doc()->setMoveToValue((KSpread::MoveTo)config->readEntry("Move",(int)(Bottom)));
         doc()->setIndentValue( config->readDoubleNumEntry( "Indent", 10.0 ) );
-        doc()->setTypeOfCalc((MethodOfCalc)config->readNumEntry("Method of Calc",(int)(SumOfNumber)));
+        doc()->setTypeOfCalc((MethodOfCalc)config->readEntry("Method of Calc",(int)(SumOfNumber)));
         if ( !doc()->configLoadFromFile() )
-            doc()->setShowTabBar(config->readBoolEntry("Tabbar",true));
+            doc()->setShowTabBar(config->readEntry("Tabbar",true));
 
-  doc()->setShowMessageError(config->readBoolEntry( "Msg error" ,false) );
+  doc()->setShowMessageError(config->readEntry( "Msg error" ,false) );
 
-  doc()->setShowFormulaBar(config->readBoolEntry("Formula bar",true));
-        doc()->setShowStatusBar(config->readBoolEntry("Status bar",true));
+  doc()->setShowFormulaBar(config->readEntry("Formula bar",true));
+        doc()->setShowStatusBar(config->readEntry("Status bar",true));
 
-        changeNbOfRecentFiles(config->readNumEntry("NbRecentFile",10));
+        changeNbOfRecentFiles(config->readEntry("NbRecentFile",10));
         //autosave value is stored as a minute.
         //but default value is stored as seconde.
-        doc()->setAutoSave(config->readNumEntry("AutoSave",KoDocument::defaultAutoSave()/60)*60);
-        doc()->setBackupFile( config->readBoolEntry("BackupFile",true));
+        doc()->setAutoSave(config->readEntry("AutoSave",KoDocument::defaultAutoSave()/60)*60);
+        doc()->setBackupFile( config->readEntry("BackupFile",true));
     }
 
    if (  config->hasGroup("KSpread Color" ) )
    {
      config->setGroup( "KSpread Color" );
      QColor _col(Qt::lightGray);
-     _col = config->readColorEntry("GridColor", &_col);
+     _col = config->readEntry("GridColor", _col);
      doc()->setGridColor(_col);
 
      QColor _pbCol(Qt::red);
-     _pbCol = config->readColorEntry("PageBorderColor", &_pbCol);
+     _pbCol = config->readEntry("PageBorderColor", _pbCol);
      doc()->changePageBorderColor(_pbCol);
    }
 
@@ -2219,10 +2219,10 @@ if ( config->hasGroup("KSpread Page Layout" ) )
    config->setGroup( "KSpread Page Layout" );
    if ( d->activeSheet->isEmpty())
      {
-  d->activeSheet->setPaperFormat((KoFormat)config->readNumEntry("Default size page",1));
+  d->activeSheet->setPaperFormat((KoFormat)config->readEntry("Default size page",1));
 
-  d->activeSheet->setPaperOrientation((KoOrientation)config->readNumEntry("Default orientation page",0));
-  d->activeSheet->setPaperUnit((KoUnit::Unit)config->readNumEntry("Default unit page",0));
+  d->activeSheet->setPaperOrientation((KoOrientation)config->readEntry("Default orientation page",0));
+  d->activeSheet->setPaperUnit((KoUnit::Unit)config->readEntry("Default unit page",0));
      }
  }
 */

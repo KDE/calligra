@@ -219,17 +219,17 @@ configure::configure( View* _view, KVBox *box , char *name )
   if( config->hasGroup("Parameters" ))
         {
         config->setGroup( "Parameters" );
-        _page=config->readNumEntry( "NbPage" ,1) ;
-        horizontal=config->readBoolEntry("Horiz ScrollBar",true);
-        vertical=config->readBoolEntry("Vert ScrollBar",true);
-        colHeader=config->readBoolEntry("Column Header",true);
-        rowHeader=config->readBoolEntry("Row Header",true);
-	tabbar=config->readBoolEntry("Tabbar",true);
-	formulaBar=config->readBoolEntry("Formula bar",true);
-        statusBar=config->readBoolEntry("Status bar",true);
-        oldRecent=config->readNumEntry( "NbRecentFile" ,10);
-        oldAutoSaveValue=config->readNumEntry("AutoSave",KoDocument::defaultAutoSave()/60);
-        m_oldBackupFile=config->readBoolEntry("BackupFile",m_oldBackupFile);
+        _page=config->readEntry( "NbPage" ,1) ;
+        horizontal=config->readEntry("Horiz ScrollBar",true);
+        vertical=config->readEntry("Vert ScrollBar",true);
+        colHeader=config->readEntry("Column Header",true);
+        rowHeader=config->readEntry("Row Header",true);
+	tabbar=config->readEntry("Tabbar",true);
+	formulaBar=config->readEntry("Formula bar",true);
+        statusBar=config->readEntry("Status bar",true);
+        oldRecent=config->readEntry( "NbRecentFile" ,10);
+        oldAutoSaveValue=config->readEntry("AutoSave",KoDocument::defaultAutoSave()/60);
+        m_oldBackupFile=config->readEntry("BackupFile",m_oldBackupFile);
         }
   nbPage=new KIntNumInput(_page, tmpQGroupBox , 10);
   nbPage->setRange(1, 10, 1);
@@ -415,13 +415,13 @@ miscParameters::miscParameters( View* _view,KVBox *box, char *name )
         {
         config->setGroup( "Parameters" );
         _indent = config->readDoubleNumEntry( "Indent" , _indent ) ;
-        m_bMsgError=config->readBoolEntry( "Msg error" ,false) ;
+        m_bMsgError=config->readEntry( "Msg error" ,false) ;
         }
 
   if( config->hasGroup("Misc") )
   {
    config->setGroup( "Misc" );
-   m_oldNbRedo=config->readNumEntry("UndoRedo",m_oldNbRedo);
+   m_oldNbRedo=config->readEntry("UndoRedo",m_oldNbRedo);
   }
 
   m_undoRedoLimit=new KIntNumInput( m_oldNbRedo, tmpQGroupBox );
@@ -502,7 +502,7 @@ void miscParameters::initComboBox()
   if( config->hasGroup("Parameters" ))
     {
       config->setGroup( "Parameters" );
-      tmpCompletion=( KGlobalSettings::Completion)config->readNumEntry( "Completion Mode" ,KGlobalSettings::CompletionAuto) ;
+      tmpCompletion=( KGlobalSettings::Completion)config->readEntry( "Completion Mode" ,int(KGlobalSettings::CompletionAuto)) ;
       config->writeEntry( "Completion Mode", (int)tmpCompletion);
     }
 switch(tmpCompletion )
@@ -721,7 +721,7 @@ colorParameters::colorParameters( View* _view,KVBox *box , char *name )
   if ( config->hasGroup("KSpread Color" ) )
   {
     config->setGroup( "KSpread Color" );
-    _gridColor = config->readColorEntry("GridColor",&_gridColor);
+    _gridColor = config->readEntry("GridColor",_gridColor);
   }
 
   QGroupBox* tmpQGroupBox = new QGroupBox( i18n("Color"), box, "GroupBox" );
@@ -738,7 +738,7 @@ colorParameters::colorParameters( View* _view,KVBox *box , char *name )
   if ( config->hasGroup("KSpread Color" ) )
   {
     config->setGroup( "KSpread Color" );
-    _pbColor = config->readColorEntry("PageBorderColor", &_pbColor);
+    _pbColor = config->readEntry("PageBorderColor", _pbColor);
   }
 
   QLabel * label2 = new QLabel( i18n("&Page borders:"), tmpQGroupBox, "label21" );
@@ -847,9 +847,9 @@ void configureLayoutPage::initCombo()
     if( config->hasGroup("KSpread Page Layout" ))
     {
         config->setGroup( "KSpread Page Layout" );
-        paper=config->readNumEntry( "Default size page" ,1);
-        orientation=config->readNumEntry( "Default orientation page" ,0);
-        unit=config->readNumEntry( "Default unit page" ,0);
+        paper=config->readEntry( "Default size page" ,1);
+        orientation=config->readEntry( "Default orientation page" ,0);
+        unit=config->readEntry( "Default unit page" ,0);
     }
 
     defaultUnit->setCurrentIndex(m_pView->doc()->unit());
@@ -905,8 +905,8 @@ configureSpellPage::configureSpellPage( View* _view,KVBox *box , char *name )
     {
         config->setGroup( "KSpell kspread" );
 
-        dontCheckUpperWord->setChecked(config->readBoolEntry("KSpell_dont_check_upper_word",false));
-        dontCheckTitleCase->setChecked(config->readBoolEntry("KSpell_dont_check_title_case",false));
+        dontCheckUpperWord->setChecked(config->readEntry("KSpell_dont_check_upper_word",false));
+        dontCheckTitleCase->setChecked(config->readEntry("KSpell_dont_check_title_case",false));
     }
     //m_spellConfigWidget->addIgnoreList( m_pView->doc()->spellListIgnoreAll() );
 }

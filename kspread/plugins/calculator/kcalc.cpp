@@ -1602,19 +1602,19 @@ void QtCalculator::readSettings()
 
     KConfig *config = KGlobal::config();
 	config->setGroup("CalcPlugin");
-    kcalcdefaults.forecolor = config->readColorEntry("ForeColor", &blackC);
-	kcalcdefaults.backcolor = config->readColorEntry("BackColor", &tmpC);
+    kcalcdefaults.forecolor = config->readEntry("ForeColor", blackC);
+	kcalcdefaults.backcolor = config->readEntry("BackColor", tmpC);
 
 #ifdef HAVE_LONG_DOUBLE
-	kcalcdefaults.precision	= config->readNumEntry("precision", (int)14);
+	kcalcdefaults.precision	= config->readEntry("precision", (int)14);
 #else
-	kcalcdefaults.precision	= config->readNumEntry("precision", (int)10);
+	kcalcdefaults.precision	= config->readEntry("precision", (int)10);
 #endif
-    kcalcdefaults.fixedprecision = config->readNumEntry("fixedprecision", (int)2);
-	kcalcdefaults.fixed = config->readBoolEntry("fixed", false);
+    kcalcdefaults.fixedprecision = config->readEntry("fixedprecision", (int)2);
+	kcalcdefaults.fixed = config->readEntry("fixed", false);
 
-	kcalcdefaults.style	= config->readNumEntry("style", (int)0);
-	kcalcdefaults.beep	= config->readBoolEntry("beep", true);
+	kcalcdefaults.style	= config->readEntry("style", (int)0);
+	kcalcdefaults.beep	= config->readEntry("beep", true);
 }
 
 void QtCalculator::writeSettings()
