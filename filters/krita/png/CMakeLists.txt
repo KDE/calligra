@@ -26,7 +26,7 @@ set(kritapngexport_PART_SRCS
 
 kde4_automoc(${kritapngexport_PART_SRCS})
 
-kde4_add_ui3_files(kritapngexport_PART_SRCS kis_wdg_options_png.ui )
+kde4_add_ui_files(kritapngexport_PART_SRCS kis_wdg_options_png.ui )
 
 kde4_add_plugin(kritapngexport WITH_PREFIX ${kritapngexport_PART_SRCS})
 

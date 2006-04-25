@@ -31,6 +31,17 @@
 #include "kis_types.h"
 #include "kis_global.h"
 #include "kis_annotation.h"
+
+#include "ui_kis_wdg_options_png.h"
+
+class KisWdgOptionsPNG : public QWidget, public Ui::KisWdgOptionsPNG
+{
+    Q_OBJECT
+
+    public:
+        KisWdgOptionsPNG(QWidget *parent) : QWidget(parent) { setupUi(this); }
+};
+
 class KisDoc;
 class KisUndoAdapter;
 

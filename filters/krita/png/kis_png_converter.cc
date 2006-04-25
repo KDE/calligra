@@ -90,12 +90,12 @@ namespace {
     }
 
 
-    void fillText(png_text* p_text, char* key, QString& text)
+    void fillText(png_text* p_text, const char* key, QString& text)
     {
         p_text->compression = PNG_TEXT_COMPRESSION_zTXt;
-        p_text->key = key;
+        p_text->key = const_cast<char *>(key);
         char* textc = new char[text.length()+1];
-        strcpy(textc, text.ascii());
+        strcpy(textc, text.toAscii());
         p_text->text = textc;
         p_text->text_length = text.length()+1;
     }
@@ -122,7 +122,7 @@ KisImageBuilder_Result KisPNGConverter::decode(const KUrl& uri)
 {
     kDebug(41008) << "Start decoding PNG File" << endl;
     // open the file
-    kdDebug(41008) << QFile::encodeName(uri.path()) << " " << uri.path() << " " << uri << endl;
+    kDebug(41008) << QFile::encodeName(uri.path()) << " " << uri.path() << " " << uri << endl;
     FILE *fp = fopen(QFile::encodeName(uri.path()), "rb");
     if (!fp)
     {
@@ -242,21 +242,19 @@ KisImageBuilder_Result KisPNGConverter::decode(const KUrl& uri)
     int num_comments;
     png_get_text(png_ptr, info_ptr, &text_ptr, &num_comments);
     KoDocumentInfo * info = m_doc->documentInfo();
-    KoDocumentInfoAbout * aboutPage = static_cast<KoDocumentInfoAbout *>(info->page( "about" ));
-    KoDocumentInfoAuthor * authorPage = static_cast<KoDocumentInfoAuthor *>(info->page( "author"));
     kDebug(41008) << "There are " << num_comments << " comments in the text" << endl;
     for(int i = 0; i < num_comments; i++)
     {
         kDebug(41008) << "key is " << text_ptr[i].key << " containing " << text_ptr[i].text << endl;
         if(QString::compare(text_ptr[i].key, "title") == 0)
         {
-                aboutPage->setTitle(text_ptr[i].text);
+                info->setAboutInfo("title", text_ptr[i].text);
         } else if(QString::compare(text_ptr[i].key, "abstract")  == 0)
         {
-                aboutPage->setAbstract(text_ptr[i].text);
+                info->setAboutInfo("description", text_ptr[i].text);
         } else if(QString::compare(text_ptr[i].key, "author") == 0)
         {
-                authorPage->setFullName(text_ptr[i].text);
+                info->setAuthorInfo("creator", text_ptr[i].text);
         }
     }
     
@@ -412,11 +410,11 @@ KisImageBuilder_Result KisPNGConverter::decode(const KUrl& uri)
 
 KisImageBuilder_Result KisPNGConverter::buildImage(const KUrl& uri)
 {
-    kdDebug(41008) << QFile::encodeName(uri.path()) << " " << uri.path() << " " << uri << endl;
+    kDebug(41008) << QFile::encodeName(uri.path()) << " " << uri.path() << " " << uri << endl;
     if (uri.isEmpty())
         return KisImageBuilder_RESULT_NO_URI;
 
-    if (!KIO::NetAccess::exists(uri, false, qApp -> mainWidget())) {
+    if (!KIO::NetAccess::exists(uri, false, qApp -> activeWindow())) {
         return KisImageBuilder_RESULT_NOT_EXIST;
     }
 
@@ -424,7 +422,7 @@ KisImageBuilder_Result KisPNGConverter::buildImage(const KUrl& uri)
     KisImageBuilder_Result result = KisImageBuilder_RESULT_FAILURE;
     QString tmpFile;
 
-    if (KIO::NetAccess::download(uri, tmpFile, qApp -> mainWidget())) {
+    if (KIO::NetAccess::download(uri, tmpFile, qApp -> activeWindow())) {
         KUrl uriTF;
         uriTF.setPath( tmpFile );
         result = decode(uriTF);
@@ -540,7 +538,7 @@ KisImageBuilder_Result KisPNGConverter::buildFile(const KUrl& uri, KisPaintLayer
             kDebug(41008) << "can't save this annotation : " << (*it) -> type() << endl;
         } else { // Profile
             char* name = new char[(*it)->type().length()+1];
-            strcpy(name, (*it)->type().ascii());
+            strcpy(name, (*it)->type().toAscii());
             png_set_iCCP(png_ptr, info_ptr, name, PNG_COMPRESSION_TYPE_BASE, (char*)(*it)->annotation().data(), (*it) -> annotation() . size());
         }
         ++it;
@@ -550,21 +548,19 @@ KisImageBuilder_Result KisPNGConverter::buildFile(const KUrl& uri, KisPaintLayer
     png_text texts[3];
     int nbtexts = 0;
     KoDocumentInfo * info = m_doc->documentInfo();
-    KoDocumentInfoAbout * aboutPage = static_cast<KoDocumentInfoAbout *>(info->page( "about" ));
-    QString title = aboutPage->title();
+    QString title = info->aboutInfo("creator");
     if(!title.isEmpty())
     {
         fillText(texts+nbtexts, "title", title);
         nbtexts++;
     }
-    QString abstract = aboutPage->abstract();
+    QString abstract = info->aboutInfo("description");
     if(!abstract.isEmpty())
     {
         fillText(texts+nbtexts, "abstract", abstract);
         nbtexts++;
     }
-    KoDocumentInfoAuthor * authorPage = static_cast<KoDocumentInfoAuthor *>(info->page( "author" ));
-    QString author = authorPage->fullName();
+    QString author = info->authorInfo("creator");
     if(!author.isEmpty())
     {
         fillText(texts+nbtexts, "author", author);

@@ -21,11 +21,9 @@
 
 #include <qcheckbox.h>
 #include <qslider.h>
-//Added by qt3to4:
-#include <Q3CString>
 
 #include <kapplication.h>
-#include <kdialogbase.h>
+#include <kdialog.h>
 #include <kgenericfactory.h>
 
 #include <KoFilterChain.h>
@@ -36,7 +34,6 @@
 #include <kis_progress_display_interface.h>
 
 #include "kis_png_converter.h"
-#include "kis_wdg_options_png.h"
 
 typedef KGenericFactory<KisPNGExport, KoFilter> KisPNGExportFactory;
 K_EXPORT_COMPONENT_FACTORY(libkritapngexport, KisPNGExportFactory("kofficefilters"))
@@ -57,7 +54,7 @@ KoFilter::ConversionStatus KisPNGExport::convert(const QByteArray& from, const Q
         return KoFilter::NotImplemented;
 
     
-    KDialogBase* kdb = new KDialogBase(0, "", false, i18n("PNG Export Options"), KDialogBase::Ok | KDialogBase::Cancel);
+    KDialog* kdb = new KDialog(0, i18n("PNG Export Options"), KDialog::Ok | KDialog::Cancel);
  
     KisWdgOptionsPNG* wdg = new KisWdgOptionsPNG(kdb);
     kdb->setMainWidget(wdg);
@@ -104,5 +101,5 @@ KoFilter::ConversionStatus KisPNGExport::convert(const QByteArray& from, const Q
     return KoFilter::InternalError;
 }
 
-#include <kis_png_export.moc>
+#include "kis_png_export.moc"
 

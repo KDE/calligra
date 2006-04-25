@@ -305,17 +305,15 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory( TIFF* image)
     
     // Read META Information
     KoDocumentInfo * info = m_doc->documentInfo();
-    KoDocumentInfoAbout * aboutPage = static_cast<KoDocumentInfoAbout *>(info->page( "about" ));
-    KoDocumentInfoAuthor * authorPage = static_cast<KoDocumentInfoAuthor *>(info->page( "author"));
     char* text;
     if (TIFFGetField(image, TIFFTAG_ARTIST, &text)) {
-        authorPage->setFullName(text);
+        info->setAuthorInfo("creator", text);
     }
     if (TIFFGetField(image, TIFFTAG_DOCUMENTNAME, &text)) {
-        aboutPage->setTitle(text);
+        info->setAboutInfo("title", text);
     }
     if (TIFFGetField(image,TIFFTAG_IMAGEDESCRIPTION,&text) ) {
-        aboutPage->setAbstract( text );
+        info->setAboutInfo("description", text);
     }
     
     
@@ -489,7 +487,7 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory( TIFF* image)
                 }
                 uint32 realTileWidth =  (x + tileWidth) < width ? tileWidth : width - x;
                 for (uint yintile = 0; y + yintile < height && yintile < tileHeight/vsubsampling; ) {
-                    uint linesreaded = tiffReader->copyDataToChannels( x, y + yintile , realTileWidth, tiffstream);
+                    tiffReader->copyDataToChannels( x, y + yintile , realTileWidth, tiffstream);
                     yintile += 1;
                     tiffstream->moveToLine( yintile );
                 }
@@ -586,7 +584,7 @@ KisImageBuilder_Result KisTIFFConverter::buildImage(const KUrl& uri)
     if (uri.isEmpty())
         return KisImageBuilder_RESULT_NO_URI;
 
-    if (!KIO::NetAccess::exists(uri, false, qApp -> mainWidget())) {
+    if (!KIO::NetAccess::exists(uri, false, qApp -> activeWindow())) {
         return KisImageBuilder_RESULT_NOT_EXIST;
     }
 
@@ -594,7 +592,7 @@ KisImageBuilder_Result KisTIFFConverter::buildImage(const KUrl& uri)
     KisImageBuilder_Result result = KisImageBuilder_RESULT_FAILURE;
     QString tmpFile;
 
-    if (KIO::NetAccess::download(uri, tmpFile, qApp -> mainWidget())) {
+    if (KIO::NetAccess::download(uri, tmpFile, qApp -> activeWindow())) {
         KUrl uriTF;
         uriTF.setPath( tmpFile );
         result = decode(uriTF);
@@ -633,22 +631,20 @@ KisImageBuilder_Result KisTIFFConverter::buildFile(const KUrl& uri, KisImageSP i
 
     // Set the document informations
     KoDocumentInfo * info = m_doc->documentInfo();
-    KoDocumentInfoAbout * aboutPage = static_cast<KoDocumentInfoAbout *>(info->page( "about" ));
-    QString title = aboutPage->title();
+    QString title = info->aboutInfo("title");
     if(!title.isEmpty())
     {
-        TIFFSetField(image, TIFFTAG_DOCUMENTNAME, title.ascii());
+        TIFFSetField(image, TIFFTAG_DOCUMENTNAME, title.toAscii().data());
     }
-    QString abstract = aboutPage->abstract();
+    QString abstract = info->aboutInfo("description");
     if(!abstract.isEmpty())
     {
-        TIFFSetField(image, TIFFTAG_IMAGEDESCRIPTION, abstract.ascii());
+        TIFFSetField(image, TIFFTAG_IMAGEDESCRIPTION, abstract.toAscii().data());
     }
-    KoDocumentInfoAuthor * authorPage = static_cast<KoDocumentInfoAuthor *>(info->page( "author" ));
-    QString author = authorPage->fullName();
+    QString author = info->authorInfo("creator");
     if(!author.isEmpty())
     {
-        TIFFSetField(image, TIFFTAG_ARTIST, author.ascii());
+        TIFFSetField(image, TIFFTAG_ARTIST, author.toAscii().data());
     }
     
     KisTIFFWriterVisitor* visitor = new KisTIFFWriterVisitor(image, &options);
