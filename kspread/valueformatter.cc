@@ -239,7 +239,7 @@ QString ValueFormatter::createNumberFormat ( double value, int precision,
   // if precision is -1, ask for a huge number of decimals, we'll remove
   // the zeros later. Is 8 ok ?
   // Stefan: No. Use maximum possible decimal precision (DBL_DIG) instead.
-  int p = (precision == -1) ? DBL_DIG : precision;
+  int p = (precision == -1) ? 8 : precision;
   QString localizedNumber;
   int pos = 0;
 
