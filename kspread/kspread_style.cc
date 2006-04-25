@@ -207,7 +207,7 @@ void Style::loadOasisStyle( KoOasisStyles& oasisStyles, const QDomElement & elem
               m_featuresSet |= SFormatType;
               break;
             case KoOasisStyles::NumericStyleFormat::Currency:
-              kdDebug() << " currency-symbol: " << dataStyle.currencySymbol << endl;
+              kDebug() << " currency-symbol: " << dataStyle.currencySymbol << endl;
               if (!dataStyle.currencySymbol.isEmpty())
               {
                 KSpread::Currency currency(dataStyle.currencySymbol);

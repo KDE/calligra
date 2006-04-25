@@ -709,7 +709,7 @@ void Canvas::scrollToCell(QPoint location) const
       horzScrollBar()->setValue( d->view->doc()->zoomItX( horzScrollBarValue ) );
     }
   }
-//   kdDebug() << "ltr: YPos: " << ypos << ", min: " << minY << ", maxY: " << maxY << endl;
+//   kDebug() << "ltr: YPos: " << ypos << ", min: " << minY << ", maxY: " << maxY << endl;
 
   // do we need to scroll up
   if ( ypos < minY )

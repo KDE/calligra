@@ -2739,7 +2739,7 @@ void View::initialPosition()
     // Set the initial X and Y offsets for the view.
     if (KSPLoadingInfo* loadingInfo = doc()->loadingInfo())
     {
-      kdDebug() << "View::initialPosition(): setting initial position" << endl;
+      kDebug() << "View::initialPosition(): setting initial position" << endl;
       d->savedAnchors = loadingInfo->cursorPositions();
       d->savedMarkers = loadingInfo->cursorPositions();
       d->savedOffsets = loadingInfo->scrollingOffsets();
