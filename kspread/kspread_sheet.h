@@ -225,13 +225,16 @@ public:
      * If the name really changed then @ref #sig_nameChanged is emitted
      * and the GUI will reflect the change.
      *
+     * @param name The new sheet name.
      * @param init If set to true then no formula will be changed and no signal
      *             will be emitted and no undo action created. Usually you dont
      *             want to do that.
+     * @param makeUndo If set to @p true , the renaming is inserted in the
+     *                 undo list.
      *
-     *
-     * @return false if the sheet could not be renamed. Usually the reason is
-     *         that this name is already used.
+     * @return @c true if the sheet was renamed succesfully
+     * @return @c false if the sheet could not be renamed. Usually the reason is
+     * that this name is already used.
      *
      * @see #changeCellTabName
      * @see TabBar::renameTab

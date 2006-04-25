@@ -275,6 +275,7 @@ public:
      * Loads a cell from an OASIS XML element.
      * @param element An OASIS XML element
      * @param oasisContext The loading context assoiated with the XML element
+     * @param style preloaded cell style
      */
     bool loadOasis( const QDomElement & element, KoOasisLoadingContext &oasisContext , Style* style);
 
@@ -282,26 +283,33 @@ public:
     QDate toDate(const QDomElement &element);
 
     /**
-     * Copyies the format from the cell at the position (_column|_row).
+     * Copies the format from the cell at the position @p column , @p row .
      *
-     * @see #copyAll
+     * @see copyFormat( const Cell* cell )
+     * @see copyAll
      */
     void copyFormat( const int column, const int row );
+
     /**
      * A convenience function.
+     * Copies the format from the Cell @p cell .
      *
-     * @see #copyAll
+     * @see copyFormat( const int column, const int row )
+     * @see copyAll(Cell *cell)
      */
     void copyFormat( const Cell* cell );
+
     void copyContent( const Cell* cell );
+
     /**
      * Copies the format and the content. It does not copy the #m_row and #m_column attributes.
      * Besides that all persistent attributes are copied. @ref #setCellText is called to set the real
      * content.
      *
-     * @see #copyFormat
+     * @see copyFormat( const Cell* cell )
+     * @see copyFormat( const int column, const int row )
      */
-    void copyAll( Cell *cell);
+    void copyAll(Cell *cell);
 
     enum BorderSides
     {
@@ -650,7 +658,7 @@ public:
     void setDisplayDirtyFlag();
 
     /**
-     * Tells this cell that the @ref Cell 'cell' obscures this one.
+     * Tells this cell that the Cell @p cell obscures this one.
      * If this cell has to be redrawn, then the obscuring cell is redrawn instead.
      *
      * @param cell the obscuring cell
@@ -777,8 +785,7 @@ public:
 
     /**
      * Parses the formula.
-     * Fills #dependList and #formula.
-     * @return false on error.
+     * @return @c false on error.
      */
     bool makeFormula();
 

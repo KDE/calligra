@@ -39,6 +39,8 @@ class View;
 
 /**
  * The one for all class for points and ranges.
+ * @author Stefan Nikolaus <stefan.nikolaus@kdemail.net>
+ * @since 1.5
  */
 class KSPREAD_EXPORT Region
 {
@@ -195,12 +197,14 @@ public:
    * @param sheet the sheet the point belongs to
    */
   Element* add(const QPoint& point, Sheet* sheet = 0);
+
   /**
    * Adds the range @p range to this region.
    * @param range the range's location
    * @param sheet the sheet the range belongs to
    */
   Element* add(const QRect& range, Sheet* sheet = 0);
+
   /**
    * Adds the region @p region to this region.
    * @param region the range's location
@@ -213,11 +217,13 @@ public:
    * @param point the point's location
    */
   void sub(const QPoint& point);
+
   /**
    * Substracts the range @p range from this region.
    * @param range the range's location
    */
   void sub(const QRect& range);
+
   /**
    * Substracts the region @p region from this region.
    * @param region the region to substract
@@ -286,6 +292,7 @@ protected:
    * valid or the point is already in the list
    */
   Iterator insert(Iterator iterator, const QPoint& point, Sheet*, bool multi = true);
+
   /**
    * @param iterator the iterator to the element in whose front the new range
    * is inserted
@@ -296,11 +303,34 @@ protected:
    */
   Iterator insert(Iterator iterator, const QRect& range, Sheet*, bool multi = true);
 
+  /**
+   * @internal used to create derived Points
+   */
   virtual Point* createPoint(const QPoint&) const;
+
+  /**
+   * @internal used to create derived Points
+   */
   virtual Point* createPoint(const QString&) const;
+
+  /**
+   * @internal used to create derived Points
+   */
   virtual Point* createPoint(const Point&) const;
+
+  /**
+   * @internal used to create derived Ranges
+   */
   virtual Range* createRange(const QRect&) const;
+
+  /**
+   * @internal used to create derived Ranges
+   */
   virtual Range* createRange(const QString&) const;
+
+  /**
+   * @internal used to create derived Ranges
+   */
   virtual Range* createRange(const Range&) const;
 
 private:

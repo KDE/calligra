@@ -33,48 +33,85 @@ namespace KSpread
 {
 class View;
 
+/**
+ * @author Torben Weis <weis@kde.org>
+ * @author Stefan Nikolaus <stefan.nikolaus@kdemail.net>
+ */
 class Selection : public QObject, public Region
 {
   Q_OBJECT
 public:
-  Selection(View*);
-  Selection(const Selection&);
-  ~Selection();
+  /**
+   * Constructor.
+   * Creates a new selection with (1,1) as initial location.
+   * @param view the view this selection belongs to
+   */
+  Selection(View* view);
 
   /**
-   * Sets the selection to the given point
+   * Copy Constructor.
+   * Creates a copy of @p selection
+   * @param selection the Selection to copy
    */
-  void initialize(const QPoint&, Sheet* sheet = 0);
+  Selection(const Selection& selelction);
+
   /**
-   * Sets the selection to the given range
+   * Destructor.
    */
-  void initialize(const QRect&, Sheet* sheet = 0);
+  virtual ~Selection();
+
   /**
-   * Sets the selection to the given region
+   * Sets the selection to @p point
+   * @param point the point's location
+   * @param sheet the sheet the point belongs to
    */
-  void initialize(const Region&, Sheet* sheet = 0);
+  void initialize(const QPoint& point, Sheet* sheet = 0);
+
+  /**
+   * Sets the selection to @p range
+   * @param range the range's location
+   * @param sheet the sheet the range belongs to
+   */
+  void initialize(const QRect& range, Sheet* sheet = 0);
+
+  /**
+   * Sets the selection to @p region
+   * @param region the region's locations
+   * @param sheet the sheet the region belongs to
+   */
+  void initialize(const Region& region, Sheet* sheet = 0);
 
   /**
    * Emits signal changed(const Region&)
    */
   void update();
-  /**
-   * Uses the anchor as starting point
-   */
-  void update(const QPoint&);
 
   /**
-   * Extends the current selection with an additional point
+   * Update the marker of the selection to @p point .
+   * Uses the anchor as starting point
+   * @p point the new marker location
    */
-  void extend(const QPoint&, Sheet* sheet = 0);
+  void update(const QPoint& point);
+
   /**
-   * Extends the current selection with an additional range
+   * Extends the current selection with the Point @p point
+   * @param point the point's location
+   * @param sheet the sheet the point belongs to
    */
-  void extend(const QRect&, Sheet* sheet = 0);
+  void extend(const QPoint& point, Sheet* sheet = 0);
+
   /**
-   * Extends the current selection with an additional region
+   * Extends the current selection with the Range @p range
+   * @param range the range's location
+   * @param sheet the sheet the range belongs to
    */
-  void extend(const Region&);
+  void extend(const QRect& range, Sheet* sheet = 0);
+
+  /**
+   * Extends the current selection with the Region @p region
+   * @param region the region's locations
+   */
+  void extend(const Region& region);
 
   /**
    * @param point the point's location
@@ -86,10 +123,12 @@ public:
    * The anchor is the starting point of a range. For points marker and anchor are the same
    */
   const QPoint& anchor() const;
+
   /**
-   * The cursor represents the cursor position. This needed for obscured cells
+   * The cursor represents the cursor position. This is needed for merged cells
    */
   const QPoint& cursor() const;
+
   /**
    * The marker is the end point of a range. For points marker and anchor are the same
    */
@@ -99,6 +138,7 @@ public:
    * Checks wether the region consists only of one point
    */
   bool isSingular() const;
+
   /**
    * @return the area that the 'handle' of the selection is located in painting coordinates
    */
@@ -114,6 +154,7 @@ public:
    * @param sheet the sheet from which the selection starts
    */
   void setSheet(Sheet* sheet);
+
   /**
    * @return the selection's origin sheet
    */
@@ -123,31 +164,38 @@ public:
    * Sets the element, which has @p point as anchor, as active
    */
   void setActiveElement(const QPoint& point);
+
   /**
    * Sets the @p number 'th element as active
    */
   void setActiveElement(int number);
+
   /**
    * @return the active element
    */
   Element* activeElement() const;
+
   /**
    * Sets the starting position and the length of a subregion in a multiple
    * selection
    */
   void setActiveSubRegion(uint start, uint length);
+
   /**
    *
    */
   QString activeSubRegionName() const;
+
   /**
    * Clears the elements of the subregion
    */
   void clearSubRegion();
+
   /**
    * fix subregion dimensions
    */
   void fixSubRegionDimension();
+
   /**
    * Deletes all elements of the region. The result is an empty region.
    */
@@ -168,17 +216,50 @@ public:
   QRect selection(bool extend = true) const;
 
 signals:
-  void changed(const Region&);
+  /**
+   * Emitted when the Selection was changed.
+   * @param region the changed part of the Selection
+   */
+  void changed(const Region& region);
 
 protected:
   class Point;
   class Range;
 
+  /**
+   * @reimp
+   * @internal used to create derived Points
+   */
   virtual Region::Point* createPoint(const QPoint&) const;
+
+  /**
+   * @reimp
+   * @internal used to create derived Points
+   */
   virtual Region::Point* createPoint(const QString&) const;
+
+  /**
+   * @reimp
+   * @internal used to create derived Points
+   */
   virtual Region::Point* createPoint(const Point&) const;
+
+  /**
+   * @reimp
+   * @internal used to create derived Ranges
+   */
   virtual Region::Range* createRange(const QRect&) const;
+
+  /**
+   * @reimp
+   * @internal used to create derived Ranges
+   */
   virtual Region::Range* createRange(const QString&) const;
+
+  /**
+   * @reimp
+   * @internal used to create derived Ranges
+   */
   virtual Region::Range* createRange(const Range&) const;
 
 private:
@@ -190,6 +271,10 @@ private:
   class Selection::Point
 ****************************************************************************/
 
+/**
+ * This Point is extended by an color attribute and
+ * the ability to be fixed.
+ */
 class Selection::Point : public Region::Point
 {
 public:
@@ -214,6 +299,10 @@ private:
   class Selection::Range
 ****************************************************************************/
 
+/**
+ * This Range is extended by an color attribute and
+ * the ability to be fixed.
+ */
 class Selection::Range : public Region::Range
 {
 public:

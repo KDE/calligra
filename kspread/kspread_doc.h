@@ -676,12 +676,12 @@ protected:
   void insertPixmapKey( KoPictureKey key );
 
   /**
-   * Overloaded function of @ref KoDocument.
+   * @reimp Overloaded function of KoDocument.
    */
   virtual bool completeLoading( KoStore* );
 
   /**
-   * Overloaded function of @ref KoDocument.
+   * @reimp Overloaded function of KoDocument.
    */
   virtual bool saveChildren( KoStore* _store );
 

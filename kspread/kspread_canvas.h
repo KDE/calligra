@@ -134,6 +134,7 @@ public:
      * @return the usual selection of cells
      */
     Selection* selectionInfo() const;
+
     /**
      * @return a selection of cells used in formulas
      */
@@ -146,18 +147,21 @@ public:
      * @see Selection::activeElement()
     */
     QRect selection() const;
+
     /**
      * convenience function.
      * @return selection's marker
      * @see Selection::marker()
      */
     QPoint marker() const;
+
     /**
      * convenience function.
      * @return selection's marker's column
      * @see Selection::marker()
      */
     int markerColumn() const;
+
     /**
      * convenience function.
      * @return selection's marker's row
@@ -180,14 +184,17 @@ public:
      * @return the width of the columns before the current screen
      */
     double xOffset() const;
+
     /**
      * @return the height of the rows before the current screen
      */
     double yOffset() const;
+
     /**
      * Sets the width of the columns before the current screen
      */
     void  setXOffset( double _xOffset );
+
     /**
      * Sets the height of the rows before the current screen
      */
@@ -202,6 +209,7 @@ public:
      * @return a pointer to the active sheet
      */
     Sheet* activeSheet() const;
+
     /**
      * convenience function
      * @see Map::findSheet()
@@ -223,29 +231,29 @@ public:
 
     /**
      * Makes sure a cell is visible onscreen by scrolling up/down and left/right
-     *
      * @param location the cell coordinates to scroll to
      */
     void scrollToCell(QPoint location) const;
+
     /**
      * Chooses the correct EditorType by looking at
      * the current cells value. By default CellEditor is chosen.
      */
     void createEditor( bool captureArrowKeys=false );
     bool createEditor( EditorType type, bool addFocus = true, bool captureArrowKeys=false );
+
     /**
      * Deletes the current cell editor.
-     *
-     * @see #createEditor
-     * @see #editor
-     * @param saveChanges if true, the edited text is stored in the cell.
-     *                    if false, the changes are discarded.
-     * @param array if true, array formula was entered
+     * @see createEditor
+     * @see editor
+     * @param saveChanges if @c true , the edited text is stored in the cell.
+     *                    if @c false , the changes are discarded.
+     * @param array if @c true , array formula was entered
      */
     void deleteEditor(bool saveChanges, bool array = false);
 
     /**
-     * Called from @ref EditWidget and CellEditor
+     * Called from @ref EditWidget and @ref CellEditor
      * if they loose the focus because the user started a "choose selection".
      * This is done because the editor wants to get its focus back afterwards.
      * But somehow Canvas must know whether the EditWidget or the CellEditor
@@ -259,20 +267,24 @@ public:
      * Clears the choice.
      */
     void startChoose();
+
     /**
      * Switches to choose mode and sets the initial @p selection.
      */
     void startChoose( const QRect& selection );
+
     /**
      * Switches to selection mode.
      * Clear the choice.
      */
     void endChoose();
+
     /**
      * Switches the choose mode on and off.
      * Does not clear the choice.
      */
     void setChooseMode(bool state);
+
     /**
      * @return @c true if choose mode is enabled, @c false otherwise
      */
@@ -285,6 +297,7 @@ public:
      * Updates the position widget.
      */
     void updatePosWidget();
+
     /**
      * Close the cell editor and saves changes.
      * @see deleteEditor()
@@ -304,6 +317,7 @@ public:
      * for the autoscroll acceleration
      */
     double autoScrollAccelerationX( int offset );
+
     /**
      * Depending on the offset in "zoomed" screen pixels
      * for the vertical direction,
@@ -332,6 +346,7 @@ public:
     //---- stuff needed for resizing ----
     /// resize the m_resizeObject
     void resizeObject( ModifyType _modType, const KoPoint & point, bool keepRatio );
+
     /// create KPrResizeCmd
     void finishResizeObject( const QString &name, bool layout = true );
 
@@ -344,10 +359,12 @@ public:
      * @param object which should be displayed above the other objects
      */
     void raiseObject( EmbeddedObject *object );
+
     /**
      * @brief Don't display an object above the others
      */
     void lowerObject();
+
     /**
      * @brief Get the list of objects in the order they should be displayed.
      *
@@ -364,10 +381,11 @@ public:
     void repaintObject( EmbeddedObject *obj );
 
     /**
-     * This is intended to copy the selected objects to the clipboard so that they can be pasted into other
-     * applications.  However, until at least KWord, KSpread, KPresenter, KChart and KFormula have consistant
-     * support for copying and pasting of OASIS objects the selected objects will just be copied in the form
-     * of raster graphics
+     * This is intended to copy the selected objects to the clipboard so that
+     * they can be pasted into other applications. However, until at least
+     * KWord, KSpread, KPresenter, KChart and KFormula have consistant
+     * support for copying and pasting of OASIS objects the selected objects
+     * will just be copied in the form of raster graphics
      */
     void copyOasisObjects();
     //void insertOasisData();

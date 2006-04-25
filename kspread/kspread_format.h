@@ -328,8 +328,8 @@ public:
     const QColor& textColor( int col, int row ) const;
 
     /**
-     * @param _col the column this cell is assumed to be in
-     * @param _row the row this cell is assumed to be in
+     * @param col the column this cell is assumed to be in
+     * @param row the row this cell is assumed to be in
      *
      * @return the background color.
      */
