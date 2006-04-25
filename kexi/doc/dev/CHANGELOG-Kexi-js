@@ -12,6 +12,36 @@ Use CCMAIL:###-done@bugs.kde.org
 TODO:
 - inform Raphael about koffice.org/1.5/ url, give him the php code
 
+2006-04-25
+CSV Import
+- simplify whitespace of text in cells (for preview only)
+- priority in delimiter detection changed: now ";" has priority over ","
+Form Designer
+- hide minimumSize and maximumSize widget properties
+1.0/2.0: ported
+
+2006-04-13
+Kexi 2.0
+- merged changes since revision 523723
+KexiDB
+- fixed loading length of text fields within table schema
+0.9/1.0/2.0: ported
+
+2006-04-12
+CSV Import
+- fixed problem with importing data with more than 100 columns (for default settings)
+1.0/2.0: ported
+- only the first 10KiB of data is loaded for the preview by default; can be adjusted 
+  by setting ImportExport/MaximumBytesForPreviewInImportDialog option in kexirc
+1.0/2.0: ported
+- display rows number on the top of the window
+2.0: ported
+
+2006-04-11
+Forms Designer
+- fixed prossible crash while clearing "data source" field name; 
+  now setting the autofield to unbound state works
+
 2006-04-10
 KexiDB
 - QuerySchema(TableSchema* tableSchema) ctor:

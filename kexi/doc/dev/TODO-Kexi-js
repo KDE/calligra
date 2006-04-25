@@ -770,6 +770,7 @@ CSV Import TODO:
 - switch from dialog to wizard; add filedlg widget as the 1st page
 - add better detection for CSV data with \t delimiters (needed for pasting from spreadsheets)
 - add option for storing import settings
+- always test using e.g. this file: http://cvs.sourceforge.net/viewcvs.py/*checkout*/wcuniverse/priv/units/units.csv
 
 CSV Export TODO:
 - add "Include row count as first column - include row number in the first 
@@ -827,3 +828,19 @@ Import
 
 Forms:
 - after setting "auto" tab order, we need to close and open the form to get tab stops to work properly
+
+TODO: 
+- use KLineEdit::displayText() to get partially filled date or time values like 20__-__-__;
+  then use this for checking data validity (?)
+
+TODOs from Jeff Denman:
+- add command line option for performing a complete database import, especially for MSA files
+- instead of always displaying "object names" in the project navigator: 
+  display "captions" but offer an option to display "names" instead;
+   AND, optionally: offer a full-width window with the list of database objects
+- import bug for MSA: no values for this field after import:
+	Field Size:		Decimal
+	Precision:		10
+	Scale:		2
+	Decimal Places:	Auto
+
