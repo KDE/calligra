@@ -56,8 +56,9 @@ class EditorItem;
     or down buttons (for DoubleEdit) </li>
     <li> editable: boolean setting for properties having listData()!=0; 
          if true, the ComboBox will be editable. If that's the case, value() returns 
-         a string and setValue() expects a string rather then the numeric index of the selected item.</li></ul>
+         a string and setValue() expects a string rather then the numeric index of the selected item.
          Default is false (in case of absence of this option).</li>
+    </ul>
    \author Cedric Pasteur <cedric.pasteur@free.fr>
    \author Alexander Dymo <cloudtemple@mskat.net>
    \author Jaroslaw Staniek <js@iidea.pl>
