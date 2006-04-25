@@ -60,12 +60,14 @@ bool KHTMLReader::filter(KUrl url) {
 		kWarning(30503) << "openURL returned false" << endl;
 		return false;
 	}
-
+#warning "kde4: port it"
+#if 0
 	//FIXME use synchronous IO instead of this hack if possible.
 	QWidget dummy(0);//,0,WType_Dialog | WShowModal);
 	qt_enter_modal(&dummy);
 	qApp->enter_loop();
 	qt_leave_modal(&dummy);
+#endif
 	return _it_worked;
 }
 
