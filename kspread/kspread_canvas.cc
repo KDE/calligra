@@ -478,7 +478,7 @@ void Canvas::endChoose()
 
   d->chooseCell = false;
 
-  Sheet *sheet = choice()->sheet();
+  Sheet* sheet = choice()->sheet();
   if (sheet)
   {
     d->view->setActiveSheet(sheet);
@@ -517,11 +517,9 @@ Sheet* Canvas::activeSheet() const
 
 void Canvas::validateSelection()
 {
-  Sheet* sheet = activeSheet();
+  register Sheet * const sheet = activeSheet();
   if (!sheet)
-  {
     return;
-  }
 
     if ( selectionInfo()->isSingular() )
     {
@@ -617,8 +615,8 @@ void Canvas::validateSelection()
 
 void Canvas::scrollToCell(QPoint location) const
 {
-  Sheet* sheet = activeSheet();
-  if (sheet == 0)
+  register Sheet * const sheet = activeSheet();
+  if (!sheet)
     return;
 
   if (d->view->isLoading())
@@ -731,9 +729,8 @@ void Canvas::scrollToCell(QPoint location) const
 
 void Canvas::slotScrollHorz( int _value )
 {
-  Sheet * sheet = activeSheet();
-
-  if ( sheet == 0 )
+  register Sheet * const sheet = activeSheet();
+  if (!sheet)
     return;
 
   kDebug(36001) << "slotScrollHorz: value = " << _value << endl;
@@ -754,7 +751,7 @@ void Canvas::slotScrollHorz( int _value )
     unzoomedValue = 0.0;
   }
 
-  double xpos = sheet->dblColumnPos( qMin( KS_colMax, d->view->activeSheet()->maxColumn()+10 ) ) - d->xOffset;
+  double xpos = sheet->dblColumnPos( qMin( KS_colMax, sheet->maxColumn()+10 ) ) - d->xOffset;
   if ( unzoomedValue > ( xpos + d->xOffset ) )
     unzoomedValue = xpos + d->xOffset;
 
@@ -801,7 +798,8 @@ void Canvas::slotScrollHorz( int _value )
 
 void Canvas::slotScrollVert( int _value )
 {
-  if ( activeSheet() == 0 )
+  register Sheet * const sheet = activeSheet();
+   if (!sheet)
     return;
 
   d->view->doc()->emitBeginOperation(false);
@@ -814,11 +812,11 @@ void Canvas::slotScrollVert( int _value )
                        unzoomedValue << ")" << endl;
   }
 
-  double ypos = activeSheet()->dblRowPos( qMin( KS_rowMax, d->view->activeSheet()->maxRow()+10 ) );
+  double ypos = sheet->dblRowPos( qMin( KS_rowMax, sheet->maxRow()+10 ) );
   if ( unzoomedValue > ypos )
       unzoomedValue = ypos;
 
-  activeSheet()->enableScrollBarUpdates( false );
+  sheet->enableScrollBarUpdates( false );
 
   // Relative movement
   int dy = d->view->doc()->zoomItY( d->yOffset - unzoomedValue );
@@ -830,51 +828,59 @@ void Canvas::slotScrollVert( int _value )
   if (dy > 0)
   {
     area.setBottom(area.top());
-    area.setTop(activeSheet()->topRow(unzoomedValue, tmp));
+    area.setTop(sheet->topRow(unzoomedValue, tmp));
   }
   else
   {
     area.setTop(area.bottom());
-    area.setBottom(activeSheet()->bottomRow(d->view->doc()->unzoomItY(height()) +
+    area.setBottom(sheet->bottomRow(d->view->doc()->unzoomItY(height()) +
                                             unzoomedValue));
   }
 
-  activeSheet()->setRegionPaintDirty( area );
+  sheet->setRegionPaintDirty( area );
 
   // New absolute position
   d->yOffset = unzoomedValue;
   scroll( 0, dy );
   vBorderWidget()->scroll( 0, dy );
 
-  activeSheet()->enableScrollBarUpdates( true );
+  sheet->enableScrollBarUpdates( true );
 
-  d->view->doc()->emitEndOperation( activeSheet()->visibleRect( this ) );
+  d->view->doc()->emitEndOperation( sheet->visibleRect( this ) );
 }
 
 void Canvas::slotMaxColumn( int _max_column )
 {
+  register Sheet * const sheet = activeSheet();
+  if (!sheet)
+    return;
+
   int oldValue = horzScrollBar()->maximum() - horzScrollBar()->value();
-  double xpos = activeSheet()->dblColumnPos( qMin( KS_colMax, _max_column + 10 ) ) - xOffset();
+  double xpos = sheet->dblColumnPos( qMin( KS_colMax, _max_column + 10 ) ) - xOffset();
   double unzoomWidth = d->view->doc()->unzoomItX( width() );
 
   //Don't go beyond the maximum column range (KS_colMax)
-  double sizeMaxX = activeSheet()->sizeMaxX();
+  double sizeMaxX = sheet->sizeMaxX();
   if ( xpos > sizeMaxX - xOffset() - unzoomWidth )
     xpos = sizeMaxX - xOffset() - unzoomWidth;
 
   horzScrollBar()->setRange( 0, d->view->doc()->zoomItX( xpos + xOffset() ) );
 
-  if ( activeSheet()->layoutDirection()==Sheet::RightToLeft )
+  if ( sheet->layoutDirection()==Sheet::RightToLeft )
     horzScrollBar()->setValue( horzScrollBar()->maximum() - oldValue );
 }
 
 void Canvas::slotMaxRow( int _max_row )
 {
-  double ypos = activeSheet()->dblRowPos( qMin( KS_rowMax, _max_row + 10 ) ) - yOffset();
+  register Sheet * const sheet = activeSheet();
+  if (!sheet)
+    return;
+
+  double ypos = sheet->dblRowPos( qMin( KS_rowMax, _max_row + 10 ) ) - yOffset();
   double unzoomHeight = d->view->doc()->unzoomItY( height() );
 
   //Don't go beyond the maximum row range (KS_rowMax)
-  double sizeMaxY = activeSheet()->sizeMaxY();
+  double sizeMaxY = sheet->sizeMaxY();
   if ( ypos > sizeMaxY - yOffset() - unzoomHeight )
     ypos = sizeMaxY - yOffset() - unzoomHeight;
 
@@ -1007,18 +1013,16 @@ void Canvas::mouseMoveEvent( QMouseEvent * _ev )
 
   // Get info about where the event occurred - this is duplicated
   // in ::mousePressEvent, needs to be separated into one function
-  Sheet *sheet = activeSheet();
-  if ( !sheet )
-  {
+  register Sheet * const sheet = activeSheet();
+  if (!sheet)
     return;
-  }
 
   if ( d->mouseSelectedObject )
   {
     EmbeddedObject *obj = 0;
     QPoint p ( (int) _ev->x(),
               (int) _ev->y() );
-    if ( ( obj = getObject( p, activeSheet() ) ) && obj->isSelected() )
+    if ( ( obj = getObject( p, sheet ) ) && obj->isSelected() )
     {
       KoRect const bound = obj->geometry();
       QRect zoomedBound = doc()->zoomRect( KoRect(bound.left(), bound.top(),
@@ -1166,6 +1170,10 @@ void Canvas::mouseMoveEvent( QMouseEvent * _ev )
 
 void Canvas::mouseReleaseEvent( QMouseEvent* /*_ev*/)
 {
+  register Sheet * const sheet = activeSheet();
+  if (!sheet)
+    return;
+
   if ( d->scrollTimer->isActive() )
     d->scrollTimer->stop();
 
@@ -1181,7 +1189,7 @@ void Canvas::mouseReleaseEvent( QMouseEvent* /*_ev*/)
         KoPoint move( objectRect( false ).topLeft() - d->m_moveStartPosMouse );
         if ( move != KoPoint( 0, 0 ) )
         {
-          KCommand *cmd= activeSheet()->moveObject( view(), move.x(), move.y() );
+          KCommand *cmd= sheet->moveObject( view(), move.x(), move.y() );
           if(cmd)
             doc()->addCommand( cmd );
         } else
@@ -1202,10 +1210,6 @@ void Canvas::mouseReleaseEvent( QMouseEvent* /*_ev*/)
     }
     return;
   }
-
-  Sheet *sheet = activeSheet();
-  if ( !sheet )
-    return;
 
   Selection* selectionInfo = d->view->selectionInfo();
   QRect s( selectionInfo->lastRange() );
@@ -1316,16 +1320,20 @@ bool Canvas::highlightRangeSizeGripAt(double x, double y)
 
 void Canvas::mousePressEvent( QMouseEvent * _ev )
 {
+  register Sheet * const sheet = activeSheet();
+  if (!sheet)
+    return;
+
   if ( _ev->button() == Qt::LeftButton )
   {
     d->mousePressed = true;
     d->view->enableAutoScroll();
   }
 
-  if ( activeSheet() && _ev->button() == Qt::LeftButton)
+  if ( sheet && _ev->button() == Qt::LeftButton)
   {
     d->m_moveStartPosMouse = objectRect( false ).topLeft();
-    EmbeddedObject *obj = getObject( _ev->pos(), activeSheet() );
+    EmbeddedObject *obj = getObject( _ev->pos(), sheet );
 
     if ( obj )
     {
@@ -1382,12 +1390,6 @@ void Canvas::mousePressEvent( QMouseEvent * _ev )
 
   // Get info about where the event occurred - this is duplicated
   // in ::mouseMoveEvent, needs to be separated into one function
-  Sheet *sheet = activeSheet();
-  if ( !sheet )
-  {
-    return;
-  }
-
   double dwidth = d->view->doc()->unzoomItX( width() );
   double ev_PosX;
   if ( sheet->layoutDirection()==Sheet::RightToLeft )
@@ -1519,7 +1521,7 @@ void Canvas::mousePressEvent( QMouseEvent * _ev )
           // Start a marking action
           d->mouseAction = Mark;
           // extend the existing selection
-          choice()->extend(QPoint(col,row), activeSheet());
+          choice()->extend(QPoint(col,row), sheet);
 #endif
         }
         else
@@ -1527,10 +1529,10 @@ void Canvas::mousePressEvent( QMouseEvent * _ev )
           // Start a marking action
           d->mouseAction = Mark;
           // extend the existing selection
-          selectionInfo()->extend(QPoint(col,row), activeSheet());
+          selectionInfo()->extend(QPoint(col,row), sheet);
         }
 // TODO Stefan: simplification, if NCS of choices is working
-/*        (d->chooseCell ? choice() : selectionInfo())->extend(QPoint(col,row), activeSheet());*/
+/*        (d->chooseCell ? choice() : selectionInfo())->extend(QPoint(col,row), sheet);*/
       }
 #endif
       else
@@ -1538,14 +1540,14 @@ void Canvas::mousePressEvent( QMouseEvent * _ev )
         // Start a marking action
         d->mouseAction = Mark;
         // reinitialize the selection
-        (d->chooseCell ? choice() : selectionInfo())->initialize(QPoint(col,row), activeSheet());
+        (d->chooseCell ? choice() : selectionInfo())->initialize(QPoint(col,row), sheet);
       }
       break;
     case Qt::MidButton:
       // Paste operation with the middle button?
       if ( d->view->koDocument()->isReadWrite() && !sheet->isProtected() )
       {
-        (d->chooseCell ? choice() : selectionInfo())->initialize( QPoint( col, row ), activeSheet() );
+        (d->chooseCell ? choice() : selectionInfo())->initialize( QPoint( col, row ), sheet );
         sheet->paste(selectionInfo()->lastRange(), true, Paste::Normal,
                      Paste::OverWrite, false, 0, false, QClipboard::Selection);
         sheet->setRegionPaintDirty(*selectionInfo());
@@ -1555,7 +1557,7 @@ void Canvas::mousePressEvent( QMouseEvent * _ev )
       if (!selectionInfo()->contains( QPoint( col, row ) ))
       {
         // No selection or the mouse press was outside of an existing selection?
-        (d->chooseCell ? choice() : selectionInfo())->initialize(QPoint(col,row), activeSheet());
+        (d->chooseCell ? choice() : selectionInfo())->initialize(QPoint(col,row), sheet);
       }
       break;
     default:
@@ -1580,8 +1582,8 @@ void Canvas::mousePressEvent( QMouseEvent * _ev )
 
 void Canvas::startTheDrag()
 {
-  Sheet * sheet = activeSheet();
-  if ( !sheet )
+  register Sheet * const sheet = activeSheet();
+  if (!sheet)
     return;
 
   // right area for start dragging
@@ -1607,9 +1609,12 @@ void Canvas::startTheDrag()
 
 void Canvas::mouseDoubleClickEvent( QMouseEvent*  _ev)
 {
+  register Sheet * const sheet = activeSheet();
+  if (!sheet)
+    return;
 
   EmbeddedObject *obj;
-  if ( ( obj = getObject( _ev->pos(), activeSheet() ) ) )
+  if ( ( obj = getObject( _ev->pos(), sheet ) ) )
   {
     switch ( obj->getType() )
     {
@@ -1628,7 +1633,7 @@ void Canvas::mouseDoubleClickEvent( QMouseEvent*  _ev)
     }
   }
 
-  if ( d->view->koDocument()->isReadWrite() && activeSheet() )
+  if ( d->view->koDocument()->isReadWrite() && sheet )
     createEditor(true);
 }
 
@@ -1650,8 +1655,8 @@ void Canvas::paintEvent( QPaintEvent* event )
   if ( d->view->doc()->isLoading() )
     return;
 
-  Sheet* sheet = activeSheet();
-  if ( !sheet )
+  register Sheet * const sheet = activeSheet();
+  if (!sheet)
     return;
 
   // painting rectangle
@@ -1725,8 +1730,8 @@ void Canvas::focusOutEvent( QFocusEvent* )
 
 void Canvas::dragMoveEvent( QDragMoveEvent * _ev )
 {
-  Sheet * sheet = activeSheet();
-  if ( !sheet )
+  register Sheet * const sheet = activeSheet();
+  if (!sheet)
   {
     _ev->ignore();
     return;
@@ -1765,7 +1770,7 @@ void Canvas::dropEvent( QDropEvent * _ev )
   d->dragging = false;
   if ( d->scrollTimer->isActive() )
     d->scrollTimer->stop();
-  Sheet * sheet = activeSheet();
+  register Sheet * const sheet = activeSheet();
   if ( !sheet || sheet->isProtected() )
   {
     _ev->ignore();
@@ -1852,9 +1857,9 @@ void Canvas::dropEvent( QDropEvent * _ev )
 
 void Canvas::resizeEvent( QResizeEvent* _ev )
 {
-    if (!activeSheet())
-	    return;
-
+  register Sheet * const sheet = activeSheet();
+  if (!sheet)
+    return;
 
     double ev_Width = d->view->doc()->unzoomItX( _ev->size().width() );
     double ev_Height = d->view->doc()->unzoomItY( _ev->size().height() );
@@ -1862,12 +1867,12 @@ void Canvas::resizeEvent( QResizeEvent* _ev )
     // workaround to allow horizontal resizing and zoom changing when sheet
     // direction and interface direction don't match (e.g. an RTL sheet on an
     // LTR interface)
-    if ( activeSheet() && activeSheet()->layoutDirection()==Sheet::RightToLeft && !QApplication::isRightToLeft() )
+    if ( sheet->layoutDirection()==Sheet::RightToLeft && !QApplication::isRightToLeft() )
     {
         int dx = _ev->size().width() - _ev->oldSize().width();
         scroll(dx, 0);
     }
-    else if ( activeSheet() && activeSheet()->layoutDirection()==Sheet::LeftToRight && QApplication::isRightToLeft() )
+    else if ( sheet->layoutDirection()==Sheet::LeftToRight && QApplication::isRightToLeft() )
     {
         int dx = _ev->size().width() - _ev->oldSize().width();
         scroll(-dx, 0);
@@ -1879,11 +1884,11 @@ void Canvas::resizeEvent( QResizeEvent* _ev )
         int oldValue = horzScrollBar()->maximum() - horzScrollBar()->value();
 
         if ( ( xOffset() + ev_Width ) >
-               d->view->doc()->zoomItX( activeSheet()->sizeMaxX() ) )
+               d->view->doc()->zoomItX( sheet->sizeMaxX() ) )
         {
-            horzScrollBar()->setRange( 0, d->view->doc()->zoomItX( activeSheet()->sizeMaxX() - ev_Width ) );
-            if ( activeSheet()->layoutDirection()==Sheet::RightToLeft )
-                horzScrollBar()->setValue( horzScrollBar()->maximum() - oldValue );
+          horzScrollBar()->setRange( 0, d->view->doc()->zoomItX( sheet->sizeMaxX() - ev_Width ) );
+          if ( sheet->layoutDirection()==Sheet::RightToLeft )
+            horzScrollBar()->setValue( horzScrollBar()->maximum() - oldValue );
         }
     }
     // If we lower vertically, then check if the range should represent the maximum range
@@ -1892,11 +1897,11 @@ void Canvas::resizeEvent( QResizeEvent* _ev )
         int oldValue = horzScrollBar()->maximum() - horzScrollBar()->value();
 
         if ( horzScrollBar()->maximum() ==
-             int( d->view->doc()->zoomItX( activeSheet()->sizeMaxX() ) - ev_Width ) )
+             int( d->view->doc()->zoomItX( sheet->sizeMaxX() ) - ev_Width ) )
         {
-            horzScrollBar()->setRange( 0, d->view->doc()->zoomItX( activeSheet()->sizeMaxX() - ev_Width ) );
-            if ( activeSheet()->layoutDirection()==Sheet::RightToLeft )
-                horzScrollBar()->setValue( horzScrollBar()->maximum() - oldValue );
+          horzScrollBar()->setRange( 0, d->view->doc()->zoomItX( sheet->sizeMaxX() - ev_Width ) );
+          if ( sheet->layoutDirection()==Sheet::RightToLeft )
+            horzScrollBar()->setValue( horzScrollBar()->maximum() - oldValue );
         }
     }
 
@@ -1904,18 +1909,18 @@ void Canvas::resizeEvent( QResizeEvent* _ev )
     if ( _ev->size().height() > _ev->oldSize().height() )
     {
         if ( ( yOffset() + ev_Height ) >
-             d->view->doc()->zoomItY( activeSheet()->sizeMaxY() ) )
+             d->view->doc()->zoomItY( sheet->sizeMaxY() ) )
         {
-            vertScrollBar()->setRange( 0, d->view->doc()->zoomItY( activeSheet()->sizeMaxY() - ev_Height ) );
+            vertScrollBar()->setRange( 0, d->view->doc()->zoomItY( sheet->sizeMaxY() - ev_Height ) );
         }
     }
     // If we lower vertically, then check if the range should represent the maximum range
     else if ( _ev->size().height() < _ev->oldSize().height() )
     {
         if ( vertScrollBar()->maximum() ==
-             int( d->view->doc()->zoomItY( activeSheet()->sizeMaxY() ) - ev_Height ) )
+             int( d->view->doc()->zoomItY( sheet->sizeMaxY() ) - ev_Height ) )
         {
-            vertScrollBar()->setRange( 0, d->view->doc()->zoomItY( activeSheet()->sizeMaxY() - ev_Height ) );
+          vertScrollBar()->setRange( 0, d->view->doc()->zoomItY( sheet->sizeMaxY() - ev_Height ) );
         }
     }
 }
@@ -1935,11 +1940,15 @@ QRect Canvas::moveDirection( KSpread::MoveTo direction, bool extendSelection )
 {
   kDebug(36001) << "Canvas::moveDirection" << endl;
 
+  register Sheet * const sheet = activeSheet();
+  if (!sheet)
+    return QRect();
+
   QPoint destination;
   QPoint cursor = cursorPos();
 
   QPoint cellCorner = cursor;
-  Cell* cell = activeSheet()->cellAt(cursor.x(), cursor.y());
+  Cell* cell = sheet->cellAt(cursor.x(), cursor.y());
 
   /* cell is either the same as the marker, or the cell that is forced obscuring
      the marker cell
@@ -1963,52 +1972,52 @@ QRect Canvas::moveDirection( KSpread::MoveTo direction, bool extendSelection )
   {
     case Bottom:
       offset = cell->mergedYCells() - (cursor.y() - cellCorner.y()) + 1;
-      rl = activeSheet()->rowFormat( cursor.y() + offset );
+      rl = sheet->rowFormat( cursor.y() + offset );
       while ( ((cursor.y() + offset) <= KS_rowMax) && rl->isHide())
       {
         offset++;
-        rl = activeSheet()->rowFormat( cursor.y() + offset );
+        rl = sheet->rowFormat( cursor.y() + offset );
       }
 
       destination = QPoint(cursor.x(), qMin(cursor.y() + offset, KS_rowMax));
       break;
     case Top:
       offset = (cellCorner.y() - cursor.y()) - 1;
-      rl = activeSheet()->rowFormat( cursor.y() + offset );
+      rl = sheet->rowFormat( cursor.y() + offset );
       while ( ((cursor.y() + offset) >= 1) && rl->isHide())
       {
         offset--;
-        rl = activeSheet()->rowFormat( cursor.y() + offset );
+        rl = sheet->rowFormat( cursor.y() + offset );
       }
       destination = QPoint(cursor.x(), qMax(cursor.y() + offset, 1));
       break;
     case Left:
       offset = (cellCorner.x() - cursor.x()) - 1;
-      cl = activeSheet()->columnFormat( cursor.x() + offset );
+      cl = sheet->columnFormat( cursor.x() + offset );
       while ( ((cursor.x() + offset) >= 1) && cl->isHide())
       {
         offset--;
-        cl = activeSheet()->columnFormat( cursor.x() + offset );
+        cl = sheet->columnFormat( cursor.x() + offset );
       }
       destination = QPoint(qMax(cursor.x() + offset, 1), cursor.y());
       break;
     case Right:
       offset = cell->mergedXCells() - (cursor.x() - cellCorner.x()) + 1;
-      cl = activeSheet()->columnFormat( cursor.x() + offset );
+      cl = sheet->columnFormat( cursor.x() + offset );
       while ( ((cursor.x() + offset) <= KS_colMax) && cl->isHide())
       {
         offset++;
-        cl = activeSheet()->columnFormat( cursor.x() + offset );
+        cl = sheet->columnFormat( cursor.x() + offset );
       }
       destination = QPoint(qMin(cursor.x() + offset, KS_colMax), cursor.y());
       break;
     case BottomFirst:
       offset = cell->mergedYCells() - (cursor.y() - cellCorner.y()) + 1;
-      rl = activeSheet()->rowFormat( cursor.y() + offset );
+      rl = sheet->rowFormat( cursor.y() + offset );
       while ( ((cursor.y() + offset) <= KS_rowMax) && rl->isHide())
       {
         ++offset;
-        rl = activeSheet()->rowFormat( cursor.y() + offset );
+        rl = sheet->rowFormat( cursor.y() + offset );
       }
 
       destination = QPoint( 1, qMin( cursor.y() + offset, KS_rowMax ) );
@@ -2021,7 +2030,7 @@ QRect Canvas::moveDirection( KSpread::MoveTo direction, bool extendSelection )
   }
   else
   {
-    (d->chooseCell ? choice() : selectionInfo())->initialize(destination, activeSheet());
+    (d->chooseCell ? choice() : selectionInfo())->initialize(destination, sheet);
   }
   d->view->updateEditWidget();
 
@@ -2080,6 +2089,9 @@ void Canvas::processArrowKey( QKeyEvent *event)
   /* NOTE:  hitting the tab key also calls this function.  Don't forget
      to account for it
   */
+  register Sheet * const sheet = activeSheet();
+  if (!sheet)
+    return;
 
   /* save changes to the current editor */
   if (!d->chooseCell)
@@ -2099,13 +2111,13 @@ void Canvas::processArrowKey( QKeyEvent *event)
     direction = Top;
     break;
   case Qt::Key_Left:
-    if (activeSheet()->layoutDirection()==Sheet::RightToLeft)
+    if (sheet->layoutDirection()==Sheet::RightToLeft)
       direction = Right;
     else
       direction = Left;
     break;
   case Qt::Key_Right:
-    if (activeSheet()->layoutDirection()==Sheet::RightToLeft)
+    if (sheet->layoutDirection()==Sheet::RightToLeft)
       direction = Left;
     else
       direction = Right;
@@ -2129,6 +2141,10 @@ void Canvas::processArrowKey( QKeyEvent *event)
 
 void Canvas::processEscapeKey(QKeyEvent * event)
 {
+  register Sheet * const sheet = activeSheet();
+  if (!sheet)
+    return;
+
   if ( d->cellEditor )
     deleteEditor( false );
 
@@ -2162,7 +2178,7 @@ void Canvas::processEscapeKey(QKeyEvent * event)
         oldBoundingRect.translate( (int)( -xOffset()*doc()->zoomedResolutionX() ) ,
                             (int)( -yOffset() * doc()->zoomedResolutionY()) );
 
-        activeSheet()->setRegionPaintDirty( oldBoundingRect );
+        sheet->setRegionPaintDirty( oldBoundingRect );
         repaint( oldBoundingRect );
         repaintObject( d->m_resizeObject );
         d->m_ratio = 0.0;
@@ -2178,7 +2194,7 @@ void Canvas::processEscapeKey(QKeyEvent * event)
         if ( d->m_isMoving )
         {
           KoPoint move( d->m_moveStartPoint - objectRect( false ).topLeft() );
-          activeSheet()->moveObject( view(), move, false );
+          sheet->moveObject( view(), move, false );
           view()->disableAutoScroll();
           d->mousePressed = false;
           d->modType = MT_NONE;
@@ -2195,8 +2211,11 @@ void Canvas::processEscapeKey(QKeyEvent * event)
 
 bool Canvas::processHomeKey(QKeyEvent* event)
 {
+  register Sheet * const sheet = activeSheet();
+  if (!sheet)
+    return false;
+
   bool makingSelection = event->modifiers() & Qt::ShiftModifier;
-  Sheet* sheet = activeSheet();
 
   if ( d->cellEditor )
   // We are in edit mode -> go beginning of line
@@ -2250,7 +2269,7 @@ bool Canvas::processHomeKey(QKeyEvent* event)
     }
     else
     {
-      (d->chooseCell ? choice() : selectionInfo())->initialize(destination, activeSheet());
+      (d->chooseCell ? choice() : selectionInfo())->initialize(destination, sheet);
     }
   }
   return true;
@@ -2258,8 +2277,11 @@ bool Canvas::processHomeKey(QKeyEvent* event)
 
 bool Canvas::processEndKey( QKeyEvent *event )
 {
+  register Sheet * const sheet = activeSheet();
+  if (!sheet)
+    return false;
+
   bool makingSelection = event->modifiers() & Qt::ShiftModifier;
-  Sheet* sheet = activeSheet();
   Cell* cell = 0;
   QPoint marker = d->chooseCell ? choice()->marker() : selectionInfo()->marker();
 
@@ -2296,7 +2318,7 @@ bool Canvas::processEndKey( QKeyEvent *event )
     }
     else
     {
-      (d->chooseCell ? choice() : selectionInfo())->initialize(destination, activeSheet());
+      (d->chooseCell ? choice() : selectionInfo())->initialize(destination, sheet);
     }
   }
   return true;
@@ -2361,14 +2383,18 @@ bool Canvas::processNextKey(QKeyEvent *event)
 
 void Canvas::processDeleteKey(QKeyEvent* /* event */)
 {
+  register Sheet * const sheet = activeSheet();
+  if (!sheet)
+    return;
+
   if ( isObjectSelected() )
   {
-    d->view->doc()->emitEndOperation( activeSheet()->visibleRect( this ) );
+    d->view->doc()->emitEndOperation( sheet->visibleRect( this ) );
     d->view->deleteSelectedObjects();
     return;
   }
 
-  activeSheet()->clearTextSelection( selectionInfo() );
+  sheet->clearTextSelection( selectionInfo() );
   d->editWidget->setText( "" );
 
   QPoint cursor = cursorPos();
@@ -2409,9 +2435,11 @@ void Canvas::processF4Key(QKeyEvent* event)
 
 void Canvas::processOtherKey(QKeyEvent *event)
 {
+  register Sheet * const sheet = activeSheet();
+
   // No null character ...
   if ( event->text().isEmpty() || !d->view->koDocument()->isReadWrite()
-       || !activeSheet() || activeSheet()->isProtected() )
+       || !sheet || sheet->isProtected() )
   {
     event->setAccepted(true);
   }
@@ -2436,9 +2464,12 @@ void Canvas::processOtherKey(QKeyEvent *event)
 
 bool Canvas::processControlArrowKey( QKeyEvent *event )
 {
+  register Sheet * const sheet = activeSheet();
+  if (!sheet)
+    return false;
+
   bool makingSelection = event->modifiers() & Qt::ShiftModifier;
 
-  Sheet* sheet = activeSheet();
   Cell* cell = 0;
   Cell* lastCell;
   QPoint destination;
@@ -2747,7 +2778,7 @@ bool Canvas::processControlArrowKey( QKeyEvent *event )
   }
   else
   {
-    (d->chooseCell ? choice() : selectionInfo())->initialize(destination, activeSheet());
+    (d->chooseCell ? choice() : selectionInfo())->initialize(destination, sheet);
   }
   return true;
 }
@@ -2755,7 +2786,7 @@ bool Canvas::processControlArrowKey( QKeyEvent *event )
 
 void Canvas::keyPressEvent ( QKeyEvent * _ev )
 {
-  Sheet * sheet = activeSheet();
+  register Sheet * const sheet = activeSheet();
 
   if ( !sheet || formatKeyPress( _ev ))
     return;
@@ -2893,6 +2924,10 @@ void Canvas::processIMEvent( QIMEvent * event )
 
 bool Canvas::formatKeyPress( QKeyEvent * _ev )
 {
+  register Sheet * const sheet = activeSheet();
+  if (!sheet)
+    return false;
+
   if (!(_ev->modifiers() & Qt::ControlModifier ))
     return false;
 
@@ -2903,7 +2938,6 @@ bool Canvas::formatKeyPress( QKeyEvent * _ev )
     return false;
 
   Cell  * cell = 0;
-  Sheet * sheet = activeSheet();
 
   d->view->doc()->emitBeginOperation(false);
 
@@ -3644,10 +3678,11 @@ void Canvas::deleteEditor (bool saveChanges, bool array)
 
 void Canvas::createEditor(bool captureArrowKeys)
 {
-  if (!activeSheet())
+  register Sheet * const sheet = activeSheet();
+  if (!sheet)
     return;
 
-  Cell * cell = activeSheet()->nonDefaultCell( markerColumn(), markerRow(), false );
+  Cell * cell = sheet->nonDefaultCell( markerColumn(), markerRow(), false );
 
   if ( !createEditor( CellEditor , true , captureArrowKeys ) )
       return;
@@ -3657,10 +3692,12 @@ void Canvas::createEditor(bool captureArrowKeys)
 
 bool Canvas::createEditor( EditorType ed, bool addFocus, bool captureArrowKeys )
 {
-  Sheet * sheet = activeSheet();
+  register Sheet * const sheet = activeSheet();
+  if (!sheet)
+    return false;
 
   // Set the starting sheet of the choice.
-  choice()->setSheet( activeSheet() );
+  choice()->setSheet( sheet );
 
   if ( !d->cellEditor )
   {
@@ -3860,7 +3897,7 @@ void Canvas::updateEditor()
   if (!d->chooseCell)
     return;
 
-  Sheet* sheet = activeSheet();
+  register Sheet * const sheet = activeSheet();
   if (!sheet)
     return;
 
@@ -3886,11 +3923,15 @@ void Canvas::setSelectionChangePaintDirty(Sheet* sheet, const Region& region)
 
 void Canvas::updatePosWidget()
 {
+  register Sheet * const sheet = activeSheet();
+  if (!sheet)
+    return;
+
     QString buffer;
     // No selection, or only one cell merged selected
     if ( selectionInfo()->isSingular() )
     {
-        if (activeSheet()->getLcMode())
+        if (sheet->getLcMode())
         {
             buffer = "L" + QString::number( markerRow() ) +
 		"C" + QString::number( markerColumn() );
@@ -3903,7 +3944,7 @@ void Canvas::updatePosWidget()
     }
     else
     {
-        if (activeSheet()->getLcMode())
+        if (sheet->getLcMode())
         {
           buffer = QString::number( (selectionInfo()->lastRange().bottom()-selectionInfo()->lastRange().top()+1) )+"Lx";
           if ( util_isRowSelected( selectionInfo()->lastRange() ) )
@@ -3920,7 +3961,7 @@ void Canvas::updatePosWidget()
                     QString::number(selectionInfo()->lastRange().top()) + ":" +
                     Cell::columnName( qMin( KS_colMax, selectionInfo()->lastRange().right() ) ) +
                     QString::number(selectionInfo()->lastRange().bottom());
-                //buffer=activeSheet()->columnLabel( m_iMarkerColumn );
+                //buffer=sheet->columnLabel( m_iMarkerColumn );
                 //buffer+=tmp.setNum(m_iMarkerRow);
         }
   }
@@ -3931,47 +3972,56 @@ void Canvas::updatePosWidget()
 
 void Canvas::equalizeRow()
 {
+  register Sheet * const sheet = activeSheet();
+  if (!sheet)
+    return;
+
   QRect s( selection() );
-  RowFormat *rl = d->view->activeSheet()->rowFormat(s.top());
+  RowFormat *rl = sheet->rowFormat(s.top());
   int size=rl->height(this);
   if ( s.top() == s.bottom() )
       return;
   for(int i=s.top()+1;i<=s.bottom();i++)
   {
-      Sheet *sheet = activeSheet();
-      if ( !sheet )
-          return;
-      size=qMax(d->view->activeSheet()->rowFormat(i)->height(this),size);
+      size=qMax(sheet->rowFormat(i)->height(this),size);
   }
   d->view->vBorderWidget()->equalizeRow(size);
 }
 
 void Canvas::equalizeColumn()
 {
+  register Sheet * const sheet = activeSheet();
+  if (!sheet)
+    return;
+
   QRect s( selection() );
-  ColumnFormat *cl = d->view->activeSheet()->columnFormat(s.left());
+  ColumnFormat *cl = sheet->columnFormat(s.left());
   int size=cl->width(this);
   if ( s.left() == s.right() )
       return;
 
   for(int i=s.left()+1;i<=s.right();i++)
   {
-    size=qMax(d->view->activeSheet()->columnFormat(i)->width(this),size);
+    size=qMax(sheet->columnFormat(i)->width(this),size);
   }
   d->view->hBorderWidget()->equalizeColumn(size);
 }
 
 QRect Canvas::cellsInArea( const QRect area ) const
 {
+  register Sheet * const sheet = activeSheet();
+  if (!sheet)
+    return QRect();
+
 	KoRect unzoomedRect = d->view->doc()->unzoomRect( area );
 
        	unzoomedRect.translate( (int)xOffset(), (int)yOffset() );
 
   	double tmp;
-  	int left_col = activeSheet()->leftColumn( unzoomedRect.left(), tmp );
-  	int right_col = activeSheet()->rightColumn( unzoomedRect.right() );
-  	int top_row = activeSheet()->topRow( unzoomedRect.top(), tmp );
-  	int bottom_row = activeSheet()->bottomRow( unzoomedRect.bottom() );
+  	int left_col = sheet->leftColumn( unzoomedRect.left(), tmp );
+  	int right_col = sheet->rightColumn( unzoomedRect.right() );
+  	int top_row = sheet->topRow( unzoomedRect.top(), tmp );
+  	int bottom_row = sheet->bottomRow( unzoomedRect.bottom() );
 
   	return QRect( left_col, top_row,
                 right_col - left_col + 1, bottom_row - top_row + 1 );
@@ -3992,7 +4042,8 @@ QRect Canvas::visibleCells() const
 
 void Canvas::paintUpdates()
 {
-  if (activeSheet() == 0)
+  register Sheet * const sheet = activeSheet();
+  if (!sheet)
     return;
 
   QPainter painter(this);
@@ -4023,8 +4074,8 @@ void Canvas::paintUpdates()
   QRect range = visibleCells();
   Cell* cell = 0;
 
-  double topPos = activeSheet()->dblRowPos(range.top());
-  double leftPos = activeSheet()->dblColumnPos(range.left());
+  double topPos = sheet->dblRowPos(range.top());
+  double leftPos = sheet->dblColumnPos(range.left());
 
   KoPoint dblCorner( leftPos - xOffset(), topPos - yOffset() );
 
@@ -4033,7 +4084,6 @@ void Canvas::paintUpdates()
 
   int right  = range.right();
   int bottom = range.bottom();
-  Sheet * sheet = activeSheet();
 
 #if 0
   kDebug(36001)
@@ -4221,16 +4271,19 @@ void Canvas::paintChildren( QPainter& painter, QMatrix& /*matrix*/ )
   if ( doc()->embeddedObjects().isEmpty() )
     return;
 
+  register Sheet * const sheet = activeSheet();
+  if (!sheet)
+    return;
+
   painter.save();
   painter.translate( -xOffset() * doc()->zoomedResolutionX() , -yOffset() * doc()->zoomedResolutionY() );
 
   const QRect zoomedWindowGeometry = painterWindowGeometry( painter );
-  const Sheet* sheet = activeSheet();
 
   foreach ( EmbeddedObject* object, doc()->embeddedObjects() )
   {
     QRect const zoomedObjectGeometry = doc()->zoomRect( object->geometry() );
-    if ( ( object )->sheet() == activeSheet() &&
+    if ( ( object )->sheet() == sheet &&
            zoomedWindowGeometry.intersects( zoomedObjectGeometry ) )
     {
 	    //To prevent unnecessary redrawing of the embedded object, we only repaint
@@ -4438,7 +4491,9 @@ void Canvas::paintNormalMarker(QPainter& painter, const KoRect &viewRect)
 
 void Canvas::sheetAreaToRect(const QRect& sheetArea, KoRect& rect)
 {
-	Sheet* sheet=activeSheet();
+  register Sheet * const sheet = activeSheet();
+  if (!sheet)
+    return;
 
 	if ( sheet->layoutDirection()==Sheet::RightToLeft )
 	{
@@ -4519,8 +4574,8 @@ void Canvas::retrieveMarkerInfo( const QRect &marker,
 	sheetAreaToVisibleRect(marker,visibleRect);
 
 
- /* Sheet * sheet = activeSheet();
-  if ( !sheet )
+ /* register Sheet * const sheet = activeSheet();
+  if (!sheet)
     return;
 
   double dWidth = d->view->doc()->unzoomItX( width() );
@@ -4631,12 +4686,12 @@ void VBorder::mousePressEvent( QMouseEvent * _ev )
   if ( !m_pView->koDocument()->isReadWrite() )
     return;
 
+  register Sheet * const sheet = m_pView->activeSheet();
+  if (!sheet)
+    return;
+
   if ( _ev->button() == Qt::LeftButton )
     m_bMousePressed = true;
-
-  const Sheet *sheet = m_pCanvas->activeSheet();
-  if (!sheet)
-	  return;
 
   double ev_PosY = m_pCanvas->d->view->doc()->unzoomItY( _ev->pos().y() ) + m_pCanvas->yOffset();
   double dHeight = m_pCanvas->d->view->doc()->unzoomItY( height() );
@@ -4739,7 +4794,7 @@ void VBorder::mouseReleaseEvent( QMouseEvent * _ev )
     if ( !m_pView->koDocument()->isReadWrite() )
         return;
 
-    Sheet *sheet = m_pCanvas->activeSheet();
+    register Sheet * const sheet = m_pView->activeSheet();
     if (!sheet)
 	    return;
 
@@ -4783,7 +4838,7 @@ void VBorder::mouseReleaseEvent( QMouseEvent * _ev )
             if ( height != 0.0 )
             {
               // TODO Stefan: replace this
-              UndoResizeColRow *undo = new UndoResizeColRow( m_pCanvas->d->view->doc(), m_pCanvas->activeSheet(), rect );
+              UndoResizeColRow *undo = new UndoResizeColRow( m_pCanvas->d->view->doc(), sheet, rect );
                 m_pCanvas->d->view->doc()->addCommand( undo );
             }
           }
@@ -4823,7 +4878,7 @@ void VBorder::mouseReleaseEvent( QMouseEvent * _ev )
 
             for ( i = rect.top(); i <= rect.bottom(); ++i )
             {
-                row = m_pView->activeSheet()->rowFormat( i );
+                row = sheet->rowFormat( i );
                 if ( row->isHide() )
                 {
                     hiddenRows.append(i);
@@ -4831,7 +4886,7 @@ void VBorder::mouseReleaseEvent( QMouseEvent * _ev )
             }
 
             if ( hiddenRows.count() > 0 )
-              m_pView->activeSheet()->showRow(*m_pView->selectionInfo());
+              sheet->showRow(*m_pView->selectionInfo());
         }
     }
 
@@ -4841,13 +4896,14 @@ void VBorder::mouseReleaseEvent( QMouseEvent * _ev )
 
 void VBorder::equalizeRow( double resize )
 {
-  Sheet *sheet = m_pCanvas->activeSheet();
-  Q_ASSERT( sheet );
+  register Sheet * const sheet = m_pView->activeSheet();
+  if (!sheet)
+    return;
 
   QRect selection( m_pView->selectionInfo()->selection() );
   if ( !m_pCanvas->d->view->doc()->undoLocked() )
   {
-     UndoResizeColRow *undo = new UndoResizeColRow( m_pCanvas->d->view->doc(), m_pCanvas->activeSheet(), selection );
+     UndoResizeColRow *undo = new UndoResizeColRow( m_pCanvas->d->view->doc(), sheet, selection );
      m_pCanvas->d->view->doc()->addCommand( undo );
   }
   RowFormat *rl;
@@ -4861,7 +4917,7 @@ void VBorder::equalizeRow( double resize )
 
 void VBorder::mouseDoubleClickEvent(QMouseEvent*)
 {
-  Sheet *sheet = m_pCanvas->activeSheet();
+  register Sheet * const sheet = m_pView->activeSheet();
   if (!sheet)
     return;
 
@@ -4877,10 +4933,9 @@ void VBorder::mouseMoveEvent( QMouseEvent * _ev )
   if ( !m_pView->koDocument()->isReadWrite() )
     return;
 
-  Sheet *sheet = m_pCanvas->activeSheet();
-
+  register Sheet * const sheet = m_pView->activeSheet();
   if (!sheet)
-     return;
+    return;
 
   double ev_PosY = m_pCanvas->d->view->doc()->unzoomItY( _ev->pos().y() ) + m_pCanvas->yOffset();
   double dHeight = m_pCanvas->d->view->doc()->unzoomItY( height() );
@@ -4977,7 +5032,7 @@ void VBorder::wheelEvent( QWheelEvent* _ev )
 
 void VBorder::paintSizeIndicator( int mouseY, bool firstTime )
 {
-    Sheet *sheet = m_pCanvas->activeSheet();
+    register Sheet * const sheet = m_pView->activeSheet();
     if (!sheet)
 	    return;
 
@@ -5041,8 +5096,8 @@ void VBorder::paintSizeIndicator( int mouseY, bool firstTime )
 
 void VBorder::updateRows( int from, int to )
 {
-    Sheet *sheet = m_pCanvas->activeSheet();
-    if ( !sheet )
+    register Sheet * const sheet = m_pView->activeSheet();
+    if (!sheet)
         return;
 
     int y0 = sheet->rowPos( from, m_pCanvas );
@@ -5052,8 +5107,8 @@ void VBorder::updateRows( int from, int to )
 
 void VBorder::paintEvent( QPaintEvent* event )
 {
-  Sheet *sheet = m_pCanvas->activeSheet();
-  if ( !sheet )
+  register Sheet * const sheet = m_pView->activeSheet();
+  if (!sheet)
     return;
 
   // painting rectangle
@@ -5196,7 +5251,7 @@ void HBorder::mousePressEvent( QMouseEvent * _ev )
   if ( _ev->button() == Qt::LeftButton )
     m_bMousePressed = true;
 
-  const Sheet *sheet = m_pCanvas->activeSheet();
+  const register Sheet * const sheet = m_pView->activeSheet();
   if (!sheet)
 	return;
 
@@ -5362,7 +5417,7 @@ void HBorder::mouseReleaseEvent( QMouseEvent * _ev )
     if ( !m_pView->koDocument()->isReadWrite() )
       return;
 
-    Sheet * sheet = m_pCanvas->activeSheet();
+    register Sheet * const sheet = m_pView->activeSheet();
     if (!sheet)
 	    return;
 
@@ -5415,7 +5470,7 @@ void HBorder::mouseReleaseEvent( QMouseEvent * _ev )
             if ( width != 0.0 )
             {
               // TODO Stefan: replace this
-                UndoResizeColRow *undo = new UndoResizeColRow( m_pCanvas->d->view->doc(), m_pCanvas->activeSheet(), rect );
+                UndoResizeColRow *undo = new UndoResizeColRow( m_pCanvas->d->view->doc(), sheet, rect );
                 m_pCanvas->d->view->doc()->addCommand( undo );
             }
           }
@@ -5455,7 +5510,7 @@ void HBorder::mouseReleaseEvent( QMouseEvent * _ev )
 
             for ( i = rect.left(); i <= rect.right(); ++i )
             {
-                col = m_pView->activeSheet()->columnFormat( i );
+                col = sheet->columnFormat( i );
                 if ( col->isHide() )
                 {
                     hiddenCols.append(i);
@@ -5463,7 +5518,7 @@ void HBorder::mouseReleaseEvent( QMouseEvent * _ev )
             }
 
             if ( hiddenCols.count() > 0 )
-              m_pView->activeSheet()->showColumn(*m_pView->selectionInfo());
+              sheet->showColumn(*m_pView->selectionInfo());
         }
     }
 
@@ -5473,13 +5528,13 @@ void HBorder::mouseReleaseEvent( QMouseEvent * _ev )
 
 void HBorder::equalizeColumn( double resize )
 {
-  Sheet *sheet = m_pCanvas->activeSheet();
+  register Sheet * const sheet = m_pView->activeSheet();
   Q_ASSERT( sheet );
 
   QRect selection( m_pView->selectionInfo()->selection() );
   if ( !m_pCanvas->d->view->doc()->undoLocked() )
   {
-      UndoResizeColRow *undo = new UndoResizeColRow( m_pCanvas->d->view->doc(), m_pCanvas->activeSheet(), selection );
+      UndoResizeColRow *undo = new UndoResizeColRow( m_pCanvas->d->view->doc(), sheet, selection );
       m_pCanvas->d->view->doc()->addCommand( undo );
   }
   ColumnFormat *cl;
@@ -5494,7 +5549,7 @@ void HBorder::equalizeColumn( double resize )
 
 void HBorder::mouseDoubleClickEvent(QMouseEvent*)
 {
-  Sheet *sheet = m_pCanvas->activeSheet();
+  register Sheet * const sheet = m_pView->activeSheet();
   if (!sheet)
     return;
 
@@ -5509,7 +5564,7 @@ void HBorder::mouseMoveEvent( QMouseEvent * _ev )
   if ( !m_pView->koDocument()->isReadWrite() )
     return;
 
-  Sheet *sheet = m_pCanvas->activeSheet();
+  register Sheet * const sheet = m_pView->activeSheet();
 
   if (!sheet)
     return;
@@ -5654,15 +5709,19 @@ void HBorder::wheelEvent( QWheelEvent* _ev )
 
 void HBorder::resizeEvent( QResizeEvent* _ev )
 {
+  register Sheet * const sheet = m_pView->activeSheet();
+  if (!sheet)
+    return;
+
   // workaround to allow horizontal resizing and zoom changing when sheet
   // direction and interface direction don't match (e.g. an RTL sheet on an
   // LTR interface)
-  if ( m_pCanvas->activeSheet() && m_pCanvas->activeSheet()->layoutDirection()==Sheet::RightToLeft && !QApplication::isRightToLeft() )
+  if ( sheet->layoutDirection()==Sheet::RightToLeft && !QApplication::isRightToLeft() )
   {
     int dx = _ev->size().width() - _ev->oldSize().width();
     scroll(dx, 0);
   }
-  else if ( m_pCanvas->activeSheet() && m_pCanvas->activeSheet()->layoutDirection()==Sheet::LeftToRight && QApplication::isRightToLeft() )
+  else if ( sheet->layoutDirection()==Sheet::LeftToRight && QApplication::isRightToLeft() )
   {
     int dx = _ev->size().width() - _ev->oldSize().width();
     scroll(-dx, 0);
@@ -5671,7 +5730,7 @@ void HBorder::resizeEvent( QResizeEvent* _ev )
 
 void HBorder::paintSizeIndicator( int mouseX, bool firstTime )
 {
-    Sheet *sheet = m_pCanvas->activeSheet();
+    register Sheet * const sheet = m_pView->activeSheet();
     if (!sheet)
 	    return;
 
@@ -5748,8 +5807,8 @@ void HBorder::paintSizeIndicator( int mouseX, bool firstTime )
 
 void HBorder::updateColumns( int from, int to )
 {
-    Sheet *sheet = m_pCanvas->activeSheet();
-    if ( !sheet )
+    register Sheet * const sheet = m_pView->activeSheet();
+    if (!sheet)
         return;
 
     int x0 = sheet->columnPos( from, m_pCanvas );
@@ -5759,8 +5818,8 @@ void HBorder::updateColumns( int from, int to )
 
 void HBorder::paintEvent( QPaintEvent* event )
 {
-  Sheet * sheet = m_pCanvas->activeSheet();
-  if ( !sheet )
+  register Sheet * const sheet = m_pView->activeSheet();
+  if (!sheet)
     return;
 
   // painting rectangle
@@ -5857,7 +5916,7 @@ void HBorder::paintEvent( QPaintEvent* event )
         painter.setPen( palette().highlightedText().color() );
       else if ( highlighted )
         painter.setFont( boldFont );
-      if ( !m_pView->activeSheet()->getShowColumnNumber() )
+      if ( !sheet->getShowColumnNumber() )
       {
         QString colText = Cell::columnName( x );
         int len = painter.fontMetrics().width( colText );
@@ -5911,7 +5970,7 @@ void HBorder::paintEvent( QPaintEvent* event )
         painter.setPen( palette().highlightedText().color() );
       else if ( highlighted )
         painter.setFont( boldFont );
-      if ( !m_pView->activeSheet()->getShowColumnNumber() )
+      if ( !sheet->getShowColumnNumber() )
       {
         QString colText = Cell::columnName( x );
         int len = painter.fontMetrics().width( colText );
@@ -5960,8 +6019,8 @@ QLabel *tip_findLabel()
 
 void Canvas::showToolTip( const QPoint& p )
 {
-    Sheet *sheet = activeSheet();
-    if ( !sheet )
+    register Sheet * const sheet = activeSheet();
+    if (!sheet)
         return;
 
     // Over which cell is the mouse ?
