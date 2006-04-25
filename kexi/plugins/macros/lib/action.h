@@ -189,14 +189,17 @@ namespace KoMacro {
 	{
 		protected:
 
-			//Variable::List varlist;
-
 			void addVariable(const QString& name, const QString& caption, const QVariant& value)
 			{
 				KoMacro::Variable* v = new KoMacro::Variable(value);
 				v->setName(name);
 				v->setCaption(caption);
 				setVariable(name, v);
+			}
+
+			void addVariable(KoMacro::Variable* variable)
+			{
+				setVariable(variable->name(), variable);
 			}
 
 		public:
@@ -206,9 +209,11 @@ namespace KoMacro {
 			/**
 			* Constructor.
 			*/
-			GenericAction<ACTIONIMPL>(const QString& name)
+			GenericAction<ACTIONIMPL>(const QString& name, const QString& caption)
 				: Action(name)
 			{
+				// Set the caption this action has.
+				setText(caption);
 				// Publish this action.
 				Manager::self()->publishAction( Action::Ptr(this) );
 			}

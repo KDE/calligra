@@ -18,50 +18,29 @@
  * Boston, MA 02110-1301, USA.
  ***************************************************************************/
 
-#ifndef KEXIMACRO_OPENOBJECT_H
-#define KEXIMACRO_OPENOBJECT_H
+#ifndef KEXIMACRO_OBJECTVARIABLE_H
+#define KEXIMACRO_OBJECTVARIABLE_H
 
-//#include "../lib/komacro_export.h"
 #include "../lib/action.h"
 #include "../lib/variable.h"
 
+#include <kdebug.h>
+
 namespace KexiMacro {
 
-	/**
-	* The OpenObject class implements a @a KoMacro::Action
-	* to provide functionality to open any kind of Kexi
-	* object (e.g. table, query, form, script, ...).
-	*/
-	class OpenObject : public KoMacro::GenericAction<OpenObject>
+	class ObjectVariable : public KoMacro::GenericVariable<ObjectVariable>
 	{
 		public:
-
-			/**
-			* Constructor.
-			*/
-			explicit OpenObject();
-			
-			/**
-			* Destructor.
-			*/
-			virtual ~OpenObject();
-
-			/**
-			*
-			*/
-			virtual KoMacro::Variable::List notifyUpdated(KoMacro::Variable::Ptr variable);
-
-		/*
-		public slots:
-			virtual void activate() {}
-		*/
-
-		private:
-			/// @internal d-pointer class.
-			class Private;
-			/// @internal d-pointer instance.
-			Private* const d;
+			explicit ObjectVariable(KoMacro::Action::Ptr action);
+			virtual ~ObjectVariable();
+			virtual void update();
 	};
+
+	/*
+	class ViewVariable : public GenericVariable<ViewVariable>;
+	class NameVariable : public GenericVariable<NameVariable>;
+	*/
+
 }
 
 #endif

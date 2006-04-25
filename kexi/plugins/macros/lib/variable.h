@@ -23,6 +23,7 @@
 #include <qobject.h>
 #include <qdom.h>
 #include <qvariant.h>
+#include <ksharedptr.h>
 
 #include "metaparameter.h"
 
@@ -178,6 +179,30 @@ namespace KoMacro {
 			class Private;
 			/// @internal d-pointer instance.
 			Private* const d;
+	};
+
+	// Forward-declaration.
+	class Action;
+
+	/**
+	* Generic template class for classes that implement @a Variable .
+	*/
+	template<class VARIABLEIMPL>
+	class GenericVariable : public KoMacro::Variable
+	{
+		protected:
+			//typedef VARIABLEIMPL impl;
+			KSharedPtr<KoMacro::Action> m_action;
+		public:
+			GenericVariable(KSharedPtr<KoMacro::Action> action, const QString& name, const QString& caption)
+				: KoMacro::Variable()
+				, m_action(action)
+			{
+				setName(name);
+				setCaption(caption);
+			}
+			virtual ~GenericVariable() {}
+			virtual void update() = 0;
 	};
 
 }

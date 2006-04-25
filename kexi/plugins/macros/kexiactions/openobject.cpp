@@ -20,6 +20,8 @@
 
 #include "openobject.h"
 
+#include "objectvariable.h"
+
 #include <klocale.h>
 
 using namespace KexiMacro;
@@ -38,16 +40,14 @@ namespace KexiMacro {
 }
 
 OpenObject::OpenObject()
-	: KoMacro::GenericAction<OpenObject>("openobject")
+	: KoMacro::GenericAction<OpenObject>("openobject", i18n("Open Object"))
 	, d( new Private() )
 {
-	setText( i18n("Open Object") );
-	
-	//TODO refactor variables out for reuse.
+	addVariable( new ObjectVariable(this) );
 
-	QStringList objectlist;
-	objectlist << "Tables" << "Queries";
-	addVariable("object", i18n("Object"), QVariant(objectlist));
+	//QStringList objectlist;
+	//objectlist << "Tables" << "Queries";
+	//addVariable("object", i18n("Object"), QVariant(objectlist));
 	/* example how to fetch the list of objects.
 	KexiPart::PartInfoList* parts = Kexi::partManager().partInfoList();
 	QStringList objectnames, objecttexts;

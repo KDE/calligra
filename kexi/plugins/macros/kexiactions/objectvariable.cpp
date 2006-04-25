@@ -18,50 +18,45 @@
  * Boston, MA 02110-1301, USA.
  ***************************************************************************/
 
-#ifndef KEXIMACRO_OPENOBJECT_H
-#define KEXIMACRO_OPENOBJECT_H
+#include "objectvariable.h"
 
-//#include "../lib/komacro_export.h"
-#include "../lib/action.h"
-#include "../lib/variable.h"
+#include <kexi_export.h>
+#include <core/kexi.h>
+#include <core/kexiproject.h>
+#include <core/kexipartmanager.h>
+#include <core/kexipartinfo.h>
 
-namespace KexiMacro {
+#include <klocale.h>
 
-	/**
-	* The OpenObject class implements a @a KoMacro::Action
-	* to provide functionality to open any kind of Kexi
-	* object (e.g. table, query, form, script, ...).
-	*/
-	class OpenObject : public KoMacro::GenericAction<OpenObject>
-	{
-		public:
+using namespace KexiMacro;
 
-			/**
-			* Constructor.
-			*/
-			explicit OpenObject();
-			
-			/**
-			* Destructor.
-			*/
-			virtual ~OpenObject();
-
-			/**
-			*
-			*/
-			virtual KoMacro::Variable::List notifyUpdated(KoMacro::Variable::Ptr variable);
-
-		/*
-		public slots:
-			virtual void activate() {}
-		*/
-
-		private:
-			/// @internal d-pointer class.
-			class Private;
-			/// @internal d-pointer instance.
-			Private* const d;
-	};
+ObjectVariable::ObjectVariable(KoMacro::Action::Ptr action)
+	: KoMacro::GenericVariable<ObjectVariable>(action, "object", i18n("Object"))
+{
+	update();
 }
 
-#endif
+ObjectVariable::~ObjectVariable()
+{
+}
+
+void ObjectVariable::update()
+{
+	QStringList list;
+	KexiPart::PartInfoList* parts = Kexi::partManager().partInfoList();
+	for(KexiPart::PartInfoListIterator it(*parts); it.current(); ++it) {
+		KexiPart::Info* info = it.current();
+		if(info->isVisibleInNavigator()) {
+			list << info->objectName();
+			//info->groupName();
+		}
+	}
+	setVariant(list);
+
+	/*
+	for(QStringList::Iterator it = list.begin(); it != list.end(); ++it) {
+		Variable::Ptr v = action->variable(*it);
+		v->update();
+	}
+	*/
+}	
