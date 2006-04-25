@@ -21,6 +21,7 @@
 #include "manager.h"
 #include "exception.h"
 
+#include <qstringlist.h>
 #include <qdom.h>
 #include <kdebug.h>
 
@@ -56,7 +57,14 @@ namespace KoMacro {
 			 * A map of @a Variable instances this @a Action
 			 * provides accessible by there QString name.
 			 */
-			Variable::Map variables;
+			Variable::Map varmap;
+
+			/**
+			* List of variablenames. This list provides a
+			* sorted order for the @a Variable instances
+			* defined in the map above.
+			*/
+			QStringList varnames;
 
 			/**
 			* Cached QDomElement.
@@ -144,18 +152,25 @@ void Action::setBlocking(bool blocking)
 
 Variable::Ptr Action::variable(const QString& name) const
 {
-	return d->variables[name];
+	return d->varmap[name];
 }
 
 Variable::Map Action::variables() const
 {
-	return d->variables;
+	return d->varmap;
+}
+
+QStringList Action::variableNames() const
+{
+	return d->varnames;
 }
 
 void Action::setVariable(const QString& name, Variable::Ptr variable)
 {
-	Q_ASSERT(! d->variables.contains(name));
-	d->variables.replace(name, variable);
+	if(! d->varmap.contains(name)) {
+		d->varnames.append(name);
+	}
+	d->varmap.replace(name, variable);
 }
 
 const QDomElement Action::domElement() const

@@ -131,6 +131,11 @@ namespace KoMacro {
 			Variable::Map variables() const;
 
 			/**
+			* @return a list of variablenames this @a Action provides.s
+			*/
+			QStringList variableNames() const;
+
+			/**
 			 * Append the @a Variable @p variable to list of variables
 			 * this @a Action provides.
 			 */

@@ -279,21 +279,50 @@ void KexiMacroDesignView::updateProperties(int row, KoProperty::Set* set, KoMacr
 	set->addProperty(prop);
 
 	// Display the list of variables.
+	QStringList varnames = action->variableNames();
+	for(QStringList::Iterator it = varnames.begin(); it != varnames.end(); ++it) {
+		KoMacro::Variable* variable = action->variable(*it).data();
+		if(! variable) {
+			continue;
+		}
+
+		int type = KoProperty::Auto;
+		KoProperty::Property::ListData* listdata = 0;
+		QVariant v = variable->variant();
+		switch(v.type()) {
+			//case QVariant::List:
+			case QVariant::StringList: {
+				QStringList keys = variable->variant().toStringList();
+				QStringList names = variable->variant().toStringList();
+				listdata = new KoProperty::Property::ListData(keys, names);
+				if( !v.canCast(QVariant::Int) && keys.count() > 0) {
+					v = keys[0];
+				}
+			} break;
+			case QVariant::String: {
+				// Workaround. Whyever KoProperty::Property doesn't detect the string...
+				type = KoProperty::String;
+			} break;
+			default: {
+			} break;
+		}
+
+		kdDebug() << "KexiMacroDesignView::updateProperties() type=" << QVariant::typeToName( v.type() ) << " name=" << (*it) << " value=" << v.toString() << endl;
+		KoProperty::Property* p = new KoProperty::Property(
+			(*it).latin1(), //v->name().latin1(), // name
+			listdata, // ListData
+			v, // value
+			variable->caption(), // caption
+			action->comment(), // description
+			type // auto-detect type
+		);
+		set->addProperty(p);
+	}
+
 	KoMacro::Variable::Map varmap = action->variables();
 	KoMacro::Variable::Map::ConstIterator it, end( varmap.constEnd() );
 	for( it = varmap.constBegin(); it != end; ++it) {
 		KoMacro::Variable::Ptr v = it.data();
-		kdDebug() << "KexiMacroDesignView::updateProperties() type=" << QVariant::typeToName( v->variant().type() ) << " name=" << it.key() << " value=" << v->variant().toString() << endl;
-		KoProperty::Property* p = new KoProperty::Property(
-			it.key().latin1(), //v->name().latin1(), // name
-			0, // ListData
-			v->variant(), // value
-			v->caption(), // caption
-			action->comment(), // description
-			KoProperty::String // auto-detect type
-		);
-		//TODO why KoProperty::Auto doesn't detect the QString?
-		set->addProperty(p);
 	}
 }
 

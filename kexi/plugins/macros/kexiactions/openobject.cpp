@@ -1,7 +1,8 @@
 /***************************************************************************
  * This file is part of the KDE project
- * copyright (C) 2005 by Sebastian Sauer (mail@dipe.org)
+ * copyright (C) 2006 by Sebastian Sauer (mail@dipe.org)
  * copyright (C) 2006 by Bernd Steindorff (bernd@itii.de)
+ * copyright (C) 2006 by Sascha Kupper (kusato@kfnv.de)
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -43,8 +44,26 @@ OpenObject::OpenObject()
 	setText( i18n("Open Object") );
 	
 	//TODO refactor variables out for reuse.
-	addVariable("object", i18n("Object"), QVariant(QString("")));
-	addVariable("view", i18n("View"), QVariant(QString("")));
+
+	QStringList objectlist;
+	objectlist << "Tables" << "Queries";
+	addVariable("object", i18n("Object"), QVariant(objectlist));
+	/* example how to fetch the list of objects.
+	KexiPart::PartInfoList* parts = Kexi::partManager().partInfoList();
+	QStringList objectnames, objecttexts;
+	for(KexiPart::PartInfoListIterator it(*parts); it.current(); ++it) {
+		KexiPart::Info* info = it.current();
+		if(info->isVisibleInNavigator()) {
+			objectnames << info->objectName();
+			objecttexts << info->groupName();
+		}
+	}
+	*/
+
+	QStringList viewlist;
+	viewlist << "Data View" << "Design View" << "Text View";
+	addVariable("view", i18n("View"), QVariant(viewlist));
+
 	addVariable("name", i18n("Name"), QVariant(QString("")));
 }
 
@@ -53,7 +72,7 @@ OpenObject::~OpenObject()
 	delete d;
 }
 
-KoMacro::Variable::List OpenObject::notifyUpdated(KoMacro::Variable::Ptr var)
+KoMacro::Variable::List OpenObject::notifyUpdated(KoMacro::Variable::Ptr variable)
 {
 	KoMacro::Variable::List l;
 /*TODO
