@@ -8377,9 +8377,9 @@ void Sheet::clearPaintDirtyData()
   d->paintDirtyList.clear();
 }
 
-bool Sheet::cellIsPaintDirty( QPoint const & cell ) const
+const Region& Sheet::paintDirtyData() const
 {
-  return d->paintDirtyList.contains(cell);
+  return d->paintDirtyList;
 }
 
 #ifndef NDEBUG

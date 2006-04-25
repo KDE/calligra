@@ -4071,19 +4071,12 @@ void Canvas::paintUpdates()
 
 
   /* paint any visible cell that has the paintDirty flag */
-  QRect range = visibleCells();
   Cell* cell = 0;
 
-  double topPos = sheet->dblRowPos(range.top());
-  double leftPos = sheet->dblColumnPos(range.left());
+  double topPos = sheet->dblRowPos(visibleCells().top());
+  double leftPos = sheet->dblColumnPos(visibleCells().left());
 
   KoPoint dblCorner( leftPos - xOffset(), topPos - yOffset() );
-
-  int x;
-  int y;
-
-  int right  = range.right();
-  int bottom = range.bottom();
 
 #if 0
   kDebug(36001)
@@ -4092,12 +4085,17 @@ void Canvas::paintUpdates()
   kDebug(36001) << "painting dirty cells " << endl;
 #endif
 
-  QLinkedList<QPoint>  mergedCellsPainted;
-  for ( x = range.left(); x <= right; ++x )
+  QLinkedList<QPoint> mergedCellsPainted;
+  Region paintDirtyList = sheet->paintDirtyData();
+  Region::ConstIterator end(paintDirtyList.constEnd());
+  for (Region::ConstIterator it(paintDirtyList.constBegin()); it != end; ++it)
   {
-    for ( y = range.top(); y <= bottom; ++y )
+    QRect range = (*it)->rect().normalized() & visibleCells();
+    int right  = range.right();
+    for ( int x = range.left(); x <= right; ++x )
     {
-      if ( sheet->cellIsPaintDirty( QPoint( x, y ) ) )
+      int bottom = range.bottom();
+      for ( int y = range.top(); y <= bottom; ++y )
       {
         cell = sheet->cellAt( x, y );
 
@@ -4120,84 +4118,59 @@ void Canvas::paintUpdates()
         QPen leftPen( cell->effLeftBorderPen( x, y ) );
         QPen topPen( cell->effTopBorderPen( x, y ) );
 
-        // paint right border if rightmost cell or if the pen is more "worth" than the left border pen
-        // of the cell on the left or if the cell on the right is not painted. In the latter case get
-        // the pen that is of more "worth"
+        // paint right border
+        // - if rightmost cell
+        // - if the pen is more "worth" than the left border pen of the cell
+        //   on the left
         if ( x >= KS_colMax )
-         // paintBordersRight = true;
-		paintBorder |= Cell::Border_Right;
-        else
-          if ( sheet->cellIsPaintDirty( QPoint( x + 1, y ) ) )
-          {
-            //paintBordersRight = true;
-		  paintBorder |= Cell::Border_Right;
-            if ( cell->effRightBorderValue( x, y ) < sheet->cellAt( x + 1, y )->effLeftBorderValue( x + 1, y ) )
-              rightPen = sheet->cellAt( x + 1, y )->effLeftBorderPen( x + 1, y );
-          }
+        {
+          paintBorder |= Cell::Border_Right;
+        }
         else
         {
-         // paintBordersRight = true;
-		paintBorder |= Cell::Border_Right;
-          if ( cell->effRightBorderValue( x, y ) < sheet->cellAt( x + 1, y )->effLeftBorderValue( x + 1, y ) )
+          paintBorder |= Cell::Border_Right;
+          if ( cell->effRightBorderValue( x, y ) <
+               sheet->cellAt( x + 1, y )->effLeftBorderValue( x + 1, y ) )
             rightPen = sheet->cellAt( x + 1, y )->effLeftBorderPen( x + 1, y );
         }
 
         // similiar for other borders...
         // bottom border:
         if ( y >= KS_rowMax )
-         // paintBordersBottom = true;
-		paintBorder |= Cell::Border_Bottom;
-        else
-          if ( sheet->cellIsPaintDirty( QPoint( x, y + 1 ) ) )
-          {
-            if ( cell->effBottomBorderValue( x, y ) > sheet->cellAt( x, y + 1 )->effTopBorderValue( x, y + 1 ) )
-             // paintBordersBottom = true;
-		    paintBorder |= Cell::Border_Bottom;
-          }
+        {
+          paintBorder |= Cell::Border_Bottom;
+        }
         else
         {
-          //paintBordersBottom = true;
-		paintBorder |= Cell::Border_Bottom;
-          if ( cell->effBottomBorderValue( x, y ) < sheet->cellAt( x, y + 1 )->effTopBorderValue( x, y + 1 ) )
+          paintBorder |= Cell::Border_Bottom;
+          if ( cell->effBottomBorderValue( x, y ) <
+               sheet->cellAt( x, y + 1 )->effTopBorderValue( x, y + 1 ) )
             bottomPen = sheet->cellAt( x, y + 1 )->effTopBorderPen( x, y + 1 );
         }
 
         // left border:
         if ( x == 1 )
-         // paintBordersLeft = true;
-		paintBorder |= Cell::Border_Left;
-        else
-          if ( sheet->cellIsPaintDirty( QPoint( x - 1, y ) ) )
-          {
-           // paintBordersLeft = true;
-		  paintBorder |= Cell::Border_Left;
-            if ( cell->effLeftBorderValue( x, y ) < sheet->cellAt( x - 1, y )->effRightBorderValue( x - 1, y ) )
-              leftPen = sheet->cellAt( x - 1, y )->effRightBorderPen( x - 1, y );
-          }
+        {
+          paintBorder |= Cell::Border_Left;
+        }
         else
         {
-		paintBorder |= Cell::Border_Left;
-          if ( cell->effLeftBorderValue( x, y ) < sheet->cellAt( x - 1, y )->effRightBorderValue( x - 1, y ) )
+          paintBorder |= Cell::Border_Left;
+          if ( cell->effLeftBorderValue( x, y ) <
+               sheet->cellAt( x - 1, y )->effRightBorderValue( x - 1, y ) )
             leftPen = sheet->cellAt( x - 1, y )->effRightBorderPen( x - 1, y );
         }
 
         // top border:
         if ( y == 1 )
-        //  paintBordersTop = true;
-		paintBorder |= Cell::Border_Top;
-        else
-          if ( sheet->cellIsPaintDirty( QPoint( x, y - 1 ) ) )
-          {
-          //  paintBordersTop = true;
-		  paintBorder |= Cell::Border_Top;
-            if ( cell->effTopBorderValue( x, y ) < sheet->cellAt( x, y - 1 )->effBottomBorderValue( x, y - 1 ) )
-              topPen = sheet->cellAt( x, y - 1 )->effBottomBorderPen( x, y - 1 );
-          }
+        {
+          paintBorder |= Cell::Border_Top;
+        }
         else
         {
-        //  paintBordersTop = true;
-		paintBorder |= Cell::Border_Top;
-          if ( cell->effTopBorderValue( x, y ) < sheet->cellAt( x, y - 1 )->effBottomBorderValue( x, y - 1 ) )
+          paintBorder |= Cell::Border_Top;
+          if ( cell->effTopBorderValue( x, y ) <
+               sheet->cellAt( x, y - 1 )->effBottomBorderValue( x, y - 1 ) )
             topPen = sheet->cellAt( x, y - 1 )->effBottomBorderPen( x, y - 1 );
         }
 
@@ -4207,11 +4180,11 @@ void Canvas::paintUpdates()
 			 mergedCellsPainted);
 
 
+        dblCorner.setY( dblCorner.y() + sheet->rowFormat( y )->dblHeight( ) );
       }
-      dblCorner.setY( dblCorner.y() + sheet->rowFormat( y )->dblHeight( ) );
+      dblCorner.setY( topPos - yOffset() );
+      dblCorner.setX( dblCorner.x() + sheet->columnFormat( x )->dblWidth( ) );
     }
-    dblCorner.setY( topPos - yOffset() );
-    dblCorner.setX( dblCorner.x() + sheet->columnFormat( x )->dblWidth( ) );
   }
 
   /* now paint the selection */
@@ -4296,20 +4269,24 @@ void Canvas::paintChildren( QPainter& painter, QMatrix& /*matrix*/ )
 	   const QRect cellsUnderObject=cellsInArea( canvasRelativeGeometry );
 	   bool redraw=false;
 
-	   for (int x=cellsUnderObject.left();x<=cellsUnderObject.right();x++)
-	   {
-		for (int y=cellsUnderObject.top();y<=cellsUnderObject.bottom();y++)
-	     		if ( sheet->cellIsPaintDirty( QPoint(x,y) ) )
-			{
-				redraw=true;
-				break;
-			}
-		if (redraw)
-			break;
-	   }
-
-       	  if ( redraw )
-      		object->draw( &painter );
+      Region paintDirtyList = sheet->paintDirtyData();
+      Region::ConstIterator end(paintDirtyList.constEnd());
+      for (Region::ConstIterator it(paintDirtyList.constBegin()); it != end; ++it)
+      {
+        QRect range = (*it)->rect().normalized() & cellsUnderObject;
+        int right = range.right();
+        for (int x = range.left(); x <= right; ++x)
+        {
+          int bottom = range.bottom();
+          for (int y = range.top(); y <= bottom; ++y)
+          {
+            redraw=true;
+            break;
+          }
+        }
+      }
+      if ( redraw )
+        object->draw( &painter );
     }
   }
   painter.restore();

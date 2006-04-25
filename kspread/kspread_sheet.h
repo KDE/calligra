@@ -1138,7 +1138,7 @@ public:
   /**
    * Test whether a cell needs repainted
    */
-  bool cellIsPaintDirty(QPoint const & cell) const;
+  const Region& paintDirtyData() const;
 
   /**
    * Retrieve the first used cell in a given column.  Can be used in conjunction
