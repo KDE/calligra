@@ -1,6 +1,7 @@
 kde4_header()
 
 macro_optional_find_package(WPD)
+macro_optional_find_package(WV2)
 
 include_directories(${CMAKE_SOURCE_DIR}/filters/kword/libexport ${KOFFICECORE_INCLUDES} )
 
@@ -25,9 +26,9 @@ if(WPD_FOUND)
 	add_subdirectory( wordperfect )
 endif(WPD_FOUND)
 
-message(STATUS "${CMAKE_CURRENT_SOURCE_DIR}: skipped subdir $(MSWORD_SUBDIR)")
-
-
+if(WV2_FOUND)
+	add_subdirectory(msword)
+endif(WV2_FOUND)
 
 ########### install files ###############
 

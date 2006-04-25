@@ -2221,7 +2221,7 @@ void RTFImport::addFormat( DomNode &node, const KWFormat& format, const RTFForma
 	if (!baseFormat || format.fmt.strike != baseFormat->strike || format.fmt.striked != baseFormat->striked)
 	{
 	    node.addNode( "STRIKEOUT" );
-	    Q3CString st;
+	    QByteArray st;
 	    st.setNum(format.fmt.strike);
 	    if(format.fmt.striked)
 		st="double";

@@ -354,7 +354,7 @@ void Document::slotTableCellStart( int row, int column, int rowSpan, int columnS
     framesetElement.setAttribute( "frameType", 1 /* text */ );
     framesetElement.setAttribute( "frameInfo", 0 /* normal text */ );
     framesetElement.setAttribute( "grpMgr", tableName );
-    QString name = i18n("Table_Name Cell row,column", "%1 Cell %2,%3").arg(tableName).arg(row).arg(column);
+    QString name = i18nc("Table_Name Cell row,column", "%1 Cell %2,%3",tableName,row,column);
     framesetElement.setAttribute( "name", name );
     framesetElement.setAttribute( "row", row );
     framesetElement.setAttribute( "col", column );

@@ -38,7 +38,8 @@ void KWordTableHandler::tableStart( KWord::Table* table )
     Q_ASSERT( table );
     Q_ASSERT( !table->name.isEmpty() );
     m_currentTable = table;
-    qHeapSort( table->m_cellEdges );
+#warning "port it: qHeapSort"
+    //qHeapSort( table->m_cellEdges );
 #if 0
     for (unsigned int i = 0; i < table->m_cellEdges.size(); i++)
         kDebug(30513) << table->m_cellEdges[i] << endl;
@@ -224,7 +225,7 @@ int KWord::Table::columnNumber(int cellEdge) const
 
 double KWordTableHandler::rowHeight() const
 {
-    return qMax( m_tap->dyaRowHeight / 20.0, 20);
+    return qMax( m_tap->dyaRowHeight / 20.0, 20.0);
 }
 
 #include "tablehandler.moc"

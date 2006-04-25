@@ -74,7 +74,7 @@ KoFilter::ConversionStatus MSWordImport::convert( const QByteArray& from, const 
         kError(30502) << "Unable to open output file!" << endl;
         return KoFilter::StorageCreationError;
     }
-    Q3CString cstr = mainDocument.toCString();
+    QByteArray cstr = mainDocument.toByteArray();
     // WARNING: we cannot use KoStore::write(const QByteArray&) because it gives an extra NULL character at the end.
     out->write( cstr, cstr.length() );
     out->close();
@@ -84,7 +84,7 @@ KoFilter::ConversionStatus MSWordImport::convert( const QByteArray& from, const 
 	return KoFilter::StorageCreationError;
     }
 
-    cstr = documentInfo.toCString();
+    cstr = documentInfo.toByteArray();
     out->write( cstr, cstr.length() );
     out->close();
 
