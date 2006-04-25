@@ -262,6 +262,11 @@ protected:
    */
   virtual Region::Range* createRange(const Range&) const;
 
+  /**
+   * @internal
+   */
+  void dump() const;
+
 private:
   class Private;
   Private *d;

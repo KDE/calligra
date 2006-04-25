@@ -277,6 +277,9 @@ public:
   ConstIterator constBegin() const;
   ConstIterator constEnd() const;
 
+  static bool isValid(const QPoint& point);
+  static bool isValid(const QRect& rect);
+
 protected:
   /**
    * @return the list of elements
@@ -284,24 +287,24 @@ protected:
   QList<Element*>& cells() const;
 
   /**
-   * @param iterator the iterator to the element in whose front the new point
+   * @param index the index of the element in whose front the new point
    * is inserted
    * @param point the location of the point to be inserted
    * @param multi @c true to allow multiple occurences of a point
-   * @return an iterator to the added point or @p iterator, if @p point is not
-   * valid or the point is already in the list
+   * @return the added point, a null pointer, if @p point is not
+   * valid or the element containing @p point
    */
-  Iterator insert(Iterator iterator, const QPoint& point, Sheet*, bool multi = true);
+  Element* insert(int index, const QPoint& point, Sheet*, bool multi = true);
 
   /**
-   * @param iterator the iterator to the element in whose front the new range
+   * @param index the index of the element in whose front the new range
    * is inserted
    * @param range the location of the range to be inserted
    * @param multi @c true to allow multiple occurences of a range
-   * @return an iterator to the added range or @p iterator, if @p range is not
-   * valid or the range is already in the list
+   * @return the added range, a null pointer, if @p range is not
+   * valid or the element containing @p range
    */
-  Iterator insert(Iterator iterator, const QRect& range, Sheet*, bool multi = true);
+  Element* insert(int index, const QRect& range, Sheet*, bool multi = true);
 
   /**
    * @internal used to create derived Points

@@ -167,7 +167,7 @@ Region::Region(int x, int y, Sheet* sheet)
 {
   d = new Private();
 
-  if (x<1 || y<1)
+  if (!isValid(QPoint(x,y)))
   {
     kError(36001) << "Region::Region(int x, int y): Coordinates are invalid!" << endl;
     return;
@@ -179,7 +179,7 @@ Region::Region(int x, int y, int width, int height, Sheet* sheet)
 {
   d = new Private();
 
-  if (x<1 || y<1 || width<1 || height<1)
+  if (!isValid(QRect(x,y,width,height)))
   {
     kError(36001) << "Region::Region(int x, int y, int width, int height): Dimensions are invalid!" << endl;
     return;
@@ -250,12 +250,11 @@ QString Region::name(Sheet* originSheet) const
 
 Region::Element* Region::add(const QPoint& point, Sheet* sheet)
 {
-//   kDebug() << k_funcinfo << endl;
-  if (point.x() < 1 || point.y() < 1)
+  if (!isValid(point))
   {
     return 0;
   }
-  return *insert(d->cells.end(), point, sheet, false);
+  return insert(d->cells.count(), point, sheet, false);
 }
 
 Region::Element* Region::add(const QRect& range, Sheet* sheet)
@@ -268,7 +267,7 @@ Region::Element* Region::add(const QRect& range, Sheet* sheet)
   {
     return add(range.topLeft(), sheet);
   }
-  return *insert(d->cells.end(), range, sheet, false);
+  return insert(d->cells.count(), range, sheet, false);
 }
 
 Region::Element* Region::add(const Region& region)
@@ -335,20 +334,19 @@ Region::Element* Region::eor(const QPoint& point, Sheet* sheet)
 {
   bool containsPoint = false;
 
-  Iterator it = cells().begin();
-  while (it != cells().end())
+  int index = 0;
+  while (index < d->cells.count())
   {
-    if (!(*it)->contains(point))
+    if (!d->cells[index]->contains(point))
     {
-      ++it;
+      ++index;
       continue;
     }
     containsPoint = true;
     int x = point.x();
     int y = point.y();
-    QRect fullRange = (*it)->rect().normalized();
-    delete *it;
-    it = cells().erase(it);
+    QRect fullRange = d->cells[index]->rect().normalized();
+    delete d->cells.takeAt(index);
 
     // top range
     int left = fullRange.left();
@@ -357,7 +355,7 @@ Region::Element* Region::eor(const QPoint& point, Sheet* sheet)
     int height = y - top;
     if (height > 0)
     {
-      insert(it, QRect(left, top, width, height), sheet);
+      insert(index, QRect(left, top, width, height), sheet);
     }
     // left range
     left = fullRange.left();
@@ -366,7 +364,7 @@ Region::Element* Region::eor(const QPoint& point, Sheet* sheet)
     height = 1;
     if (width > 0)
     {
-      insert(it, QRect(left, top, width, height), sheet);
+      insert(index, QRect(left, top, width, height), sheet);
     }
     // right range
     left = qMin(x+1, fullRange.right());
@@ -375,7 +373,7 @@ Region::Element* Region::eor(const QPoint& point, Sheet* sheet)
     height = 1;
     if (width > 0)
     {
-      insert(it, QRect(left, top, width, height), sheet);
+      insert(index, QRect(left, top, width, height), sheet);
     }
     // bottom range
     left = fullRange.left();
@@ -384,9 +382,9 @@ Region::Element* Region::eor(const QPoint& point, Sheet* sheet)
     height = qMax(0, fullRange.bottom() - y);
     if (height > 0)
     {
-      insert(it, QRect(left, top, width, height), sheet);
+      insert(index, QRect(left, top, width, height), sheet);
     }
-    return *it;
+    return d->cells[index];
   }
 
   if (!containsPoint)
@@ -396,11 +394,11 @@ Region::Element* Region::eor(const QPoint& point, Sheet* sheet)
   return 0;
 }
 
-Region::Iterator Region::insert(Region::Iterator pos, const QPoint& point, Sheet* sheet, bool multi)
+Region::Element* Region::insert(int pos, const QPoint& point, Sheet* sheet, bool multi)
 {
   if (point.x() < 1 || point.y() < 1)
   {
-    return pos;
+    return 0;
   }
 
   bool containsPoint = false;
@@ -412,7 +410,10 @@ Region::Iterator Region::insert(Region::Iterator pos, const QPoint& point, Sheet
   {
     Point* rpoint = createPoint(point);
     rpoint->setSheet(sheet);
-    return d->cells.insert(pos, rpoint);
+    if (pos > d->cells.count())
+      pos = d->cells.count();
+    d->cells.insert(pos, rpoint);
+    return d->cells[pos];
   }
 
   ConstIterator endOfList(d->cells.constEnd());
@@ -444,12 +445,15 @@ Region::Iterator Region::insert(Region::Iterator pos, const QPoint& point, Sheet
   {
     Point* rpoint = createPoint(point);
     rpoint->setSheet(sheet);
-    return d->cells.insert(pos, rpoint);
+    if (pos > d->cells.count())
+      pos = d->cells.count();
+    d->cells.insert(pos, rpoint);
+    return d->cells[pos];
   }
-  return pos;
+  return 0;
 }
 
-Region::Iterator Region::insert(Region::Iterator pos, const QRect& range, Sheet* sheet, bool multi)
+Region::Element* Region::insert(int pos, const QRect& range, Sheet* sheet, bool multi)
 {
   if (range.size() == QSize(1,1))
   {
@@ -460,38 +464,41 @@ Region::Iterator Region::insert(Region::Iterator pos, const QRect& range, Sheet*
   {
     Range* rrange = createRange(range);
     rrange->setSheet(sheet);
-    return d->cells.insert(pos, rrange);
+    if (pos > d->cells.count())
+      pos = d->cells.count();
+    d->cells.insert(pos, rrange);
+    return d->cells[pos];
   }
 
   bool containsRange = false;
 
-  Iterator it( d->cells.begin() );
-  while ( it != d->cells.end() )
+  for (int index = 0; index < d->cells.count(); ++index)
   {
-    if (sheet && sheet != (*it)->sheet())
+    if (sheet && sheet != d->cells[index]->sheet())
     {
-      ++it;
+      ++index;
       continue;
     }
-    if ((*it)->contains(range))
+    if (d->cells[index]->contains(range))
     {
       containsRange = true;
     }
-    else if (range.contains((*it)->rect()))
+    else if (range.contains(d->cells[index]->rect()))
     {
-      delete (*it);
-      it = d->cells.erase(it);
+      delete d->cells.takeAt(index--);
       continue;
     }
-    ++it;
   }
   if ( !containsRange )
   {
     Range* rrange = createRange(range);
     rrange->setSheet(sheet);
-    return d->cells.insert(pos, rrange);
+    if (pos > d->cells.count())
+      pos = d->cells.count();
+    d->cells.insert(pos, rrange);
+    return d->cells[pos];
   }
-  return pos;
+  return 0;
 }
 
 bool Region::isColumnAffected(uint col) const
@@ -601,9 +608,9 @@ bool Region::isEmpty() const
 
 void Region::clear()
 {
-  for (Iterator it = d->cells.begin(); it != d->cells.end(); it = d->cells.erase(it))
+  for (int i = 0; i < d->cells.count(); ++i)
   {
-    delete *it;
+    delete d->cells.takeAt(0);
   }
 }
 
@@ -645,6 +652,24 @@ Region::ConstIterator Region::constBegin() const
 Region::ConstIterator Region::constEnd() const
 {
   return d->cells.constEnd();
+}
+
+bool Region::isValid(const QPoint& point)
+{
+  if ( point.x() < 1 || point.y() < 1 ||
+       point.x() > KS_colMax ||  point.y() > KS_rowMax )
+    return false;
+  else
+    return true;
+}
+
+bool Region::isValid(const QRect& rect)
+{
+  if ( !isValid( rect.topLeft() ) || !isValid( rect.bottomRight() ) ||
+       rect.normalized().width() == 0 || rect.normalized().height() == 0 )
+    return false;
+  else
+    return true;
 }
 
 QList<Region::Element*>& Region::cells() const

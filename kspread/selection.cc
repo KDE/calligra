@@ -63,9 +63,9 @@ public:
 
     multipleSelection = false;
 
-    activeElement = Iterator();
+    activeElement = 0;
     activeSubRegionStart = 0;
-    activeSubRegionLength = 0;
+    activeSubRegionLength = 1;
   }
 
   View*  view;
@@ -77,7 +77,7 @@ public:
 
   bool multipleSelection : 1;
 
-  Selection::Iterator activeElement;
+  int activeElement;
   int activeSubRegionStart;
   int activeSubRegionLength;
 };
@@ -98,7 +98,6 @@ Selection::Selection(View *view)
 Selection::Selection(const Selection& selection)
   : QObject(selection.d->view), Region()
 {
-/*  kDebug() << k_funcinfo << endl;*/
   d = new Private(selection.d->view);
   d->sheet = selection.d->sheet;
   d->activeSubRegionStart = 0;
@@ -112,11 +111,11 @@ Selection::~Selection()
 
 void Selection::initialize(const QPoint& point, Sheet* sheet)
 {
-    if (!util_isPointValid(point))
-        return;
+  if (!isValid(point))
+    return;
 
-    if (!d->view->activeSheet())
-	    return;
+  if (!d->view->activeSheet())
+    return;
 
   if (!sheet)
   {
@@ -133,6 +132,7 @@ void Selection::initialize(const QPoint& point, Sheet* sheet)
   Region changedRegion(*this);
   changedRegion.add(extendToMergedAreas(QRect(d->anchor,d->marker)));
 
+  // for the case of a merged cell
   QPoint topLeft(point);
   Cell* cell = d->view->activeSheet()->cellAt(point);
   if (cell->isObscured() && cell->isPartOfMerged())
@@ -146,13 +146,15 @@ void Selection::initialize(const QPoint& point, Sheet* sheet)
   d->marker = topLeft;
 
   fixSubRegionDimension(); // TODO remove this sanity check
-  Iterator it = cells().begin() += d->activeSubRegionStart + d->activeSubRegionLength;
-  if (it != insert(it, topLeft, sheet/*, true*/))
+  int index = d->activeSubRegionStart + d->activeSubRegionLength;
+  if (insert(index, topLeft, sheet/*, true*/))
   {
+    kDebug() << "CP 1" << endl;
     // if the point was inserted
     clearSubRegion();
   }
-  Element* element = *(cells().begin() += d->activeSubRegionStart);
+  kDebug() << "CP 2" << endl;
+  Element* element = cells()[d->activeSubRegionStart];
   // we end up with one element in the subregion
   d->activeSubRegionLength = 1;
   if (element && element->type() == Element::Point)
@@ -166,7 +168,7 @@ void Selection::initialize(const QPoint& point, Sheet* sheet)
     range->setColor(d->colors[cells().size() % d->colors.size()]);
   }
 
-  d->activeElement = cells().begin();
+  d->activeElement = d->activeSubRegionStart;
 
   if (changedRegion == *this)
   {
@@ -180,8 +182,11 @@ void Selection::initialize(const QPoint& point, Sheet* sheet)
 
 void Selection::initialize(const QRect& range, Sheet* sheet)
 {
-    if (!util_isRectValid(range) || ( range == QRect(0,0,1,1) ))
-        return;
+  if (!isValid(range) || ( range == QRect(0,0,1,1) ))
+      return;
+
+  if (!d->view->activeSheet())
+    return;
 
   if (!sheet)
   {
@@ -198,6 +203,7 @@ void Selection::initialize(const QRect& range, Sheet* sheet)
   Region changedRegion(*this);
   changedRegion.add(extendToMergedAreas(QRect(d->anchor,d->marker)));
 
+  // for the case of a merged cell
   QPoint topLeft(range.topLeft());
   Cell* cell = d->view->activeSheet()->cellAt(topLeft);
   if (cell->isObscured() && cell->isPartOfMerged())
@@ -206,6 +212,7 @@ void Selection::initialize(const QRect& range, Sheet* sheet)
     topLeft = QPoint(cell->column(), cell->row());
   }
 
+  // for the case of a merged cell
   QPoint bottomRight(range.bottomRight());
   cell = d->view->activeSheet()->cellAt(bottomRight);
   if (cell->isObscured() && cell->isPartOfMerged())
@@ -219,14 +226,13 @@ void Selection::initialize(const QRect& range, Sheet* sheet)
   d->marker = bottomRight;
 
   fixSubRegionDimension(); // TODO remove this sanity check
-  Iterator it = cells().begin() += d->activeSubRegionStart + d->activeSubRegionLength;
-  if (it != insert(it, QRect(topLeft, bottomRight), sheet/*, true*/))
+  int index = d->activeSubRegionStart + d->activeSubRegionLength;
+  if (insert(index, QRect(topLeft, bottomRight), sheet/*, true*/))
   {
     // if the range was inserted
     clearSubRegion();
   }
-
-  Element* element = *(cells().begin() += d->activeSubRegionStart);
+  Element* element = cells()[d->activeSubRegionStart];
   // we end up with one element in the subregion
   d->activeSubRegionLength = 1;
   if (element && element->type() == Element::Point)
@@ -240,7 +246,7 @@ void Selection::initialize(const QRect& range, Sheet* sheet)
     range->setColor(d->colors[cells().size() % d->colors.size()]);
   }
 
-  d->activeElement = cells().begin();
+  d->activeElement = 0;
 
   if (changedRegion == *this)
   {
@@ -253,8 +259,8 @@ void Selection::initialize(const QRect& range, Sheet* sheet)
 
 void Selection::initialize(const Region& region, Sheet* sheet)
 {
-    if (!region.isValid())
-        return;
+  if (!region.isValid())
+      return;
 
   if (!sheet)
   {
@@ -286,6 +292,7 @@ void Selection::initialize(const Region& region, Sheet* sheet)
     range->setColor(d->colors[cells().size() % d->colors.size()]);
   }
 
+  // for the case of a merged cell
   QPoint topLeft(cells().last()->rect().normalized().topLeft());
   Cell* cell = d->view->activeSheet()->cellAt(topLeft);
   if (cell->isObscured() && cell->isPartOfMerged())
@@ -294,6 +301,7 @@ void Selection::initialize(const Region& region, Sheet* sheet)
     topLeft = QPoint(cell->column(), cell->row());
   }
 
+  // for the case of a merged cell
   QPoint bottomRight(cells().last()->rect().normalized().bottomRight());
   cell = d->view->activeSheet()->cellAt(bottomRight);
   if (cell->isObscured() && cell->isPartOfMerged())
@@ -306,7 +314,7 @@ void Selection::initialize(const Region& region, Sheet* sheet)
   d->cursor = topLeft;
   d->marker = bottomRight;
 
-  d->activeElement = --cells().end();
+  d->activeElement = cells().count() - 1;
 
   if (changedRegion == *this)
   {
@@ -331,13 +339,13 @@ void Selection::update(const QPoint& point)
     d->activeSubRegionLength += cells().count() - count;
     return;
   }
-  if (d->activeElement == cells().end())
+  if (d->activeElement == cells().count())
   {
     // we're not empty, so this will not become again end()
     d->activeElement--;
   }
 
-  Sheet* sheet = (*d->activeElement)->sheet();
+  Sheet* sheet = cells()[d->activeElement]->sheet();
   if (sheet != d->view->activeSheet())
   {
     extend(point);
@@ -345,6 +353,7 @@ void Selection::update(const QPoint& point)
     return;
   }
 
+  // for the case of a merged cell
   QPoint topLeft(point);
   Cell* cell = d->view->activeSheet()->cellAt(point);
   if (cell->isObscured() && cell->isPartOfMerged())
@@ -358,27 +367,24 @@ void Selection::update(const QPoint& point)
     return;
   }
 
-  QRect area1 = (*d->activeElement)->rect().normalized();
+  QRect area1 = cells()[d->activeElement]->rect().normalized();
   QRect newRange = extendToMergedAreas(QRect(d->anchor, topLeft));
 
-  Element* oldElement = *d->activeElement;
-  // returns iterator to the next element or end
-  Iterator it = cells().erase(d->activeElement);
-  delete oldElement;
+  delete cells().takeAt(d->activeElement);
   // returns iterator to the new element (before 'it') or 'it'
-  d->activeElement = insert(it, newRange, sheet, d->multipleSelection);
+  insert(d->activeElement, newRange, sheet, d->multipleSelection);
   d->activeSubRegionLength += cells().count() - count;
 
   // The call to insert() above can just return the iterator which has been
   // passed in. This may be cells.end(), if the old active element was the
   // iterator to the list's end (!= last element). So attempts to dereference
   // it will fail.
-  if (d->activeElement == cells().end())
+  if (d->activeElement == cells().count())
   {
     d->activeElement--;
   }
 
-  QRect area2 = (*d->activeElement)->rect().normalized();
+  QRect area2 = cells()[d->activeElement]->rect().normalized();
   Region changedRegion;
 
   bool newLeft   = area1.left() != area2.left();
@@ -451,19 +457,21 @@ void Selection::update(const QPoint& point)
 
 void Selection::extend(const QPoint& point, Sheet* sheet)
 {
-    if (!util_isPointValid(point))
-        return;
+  if (!isValid(point))
+    return;
 
   if (isEmpty())
   {
     initialize(point, sheet);
     return;
   }
-  if (d->activeElement == cells().end())
+  if (d->activeElement == cells().count())
   {
     // we're not empty, so this will not become again end()
     d->activeElement--;
   }
+
+  kDebug() << k_funcinfo << endl;
 
   if (!sheet)
   {
@@ -479,6 +487,7 @@ void Selection::extend(const QPoint& point, Sheet* sheet)
 
   Region changedRegion = Region(extendToMergedAreas(QRect(d->marker,d->marker)));
 
+  // for the case of a merged cell
   QPoint topLeft(point);
   Cell* cell = d->view->activeSheet()->cellAt(point);
   if (cell->isObscured() && cell->isPartOfMerged())
@@ -490,15 +499,18 @@ void Selection::extend(const QPoint& point, Sheet* sheet)
   uint count = cells().count();
   if (d->multipleSelection)
   {
-    d->activeElement = insert(++d->activeElement, point, sheet, false);
+    // always succesful
+    insert(++d->activeElement, point, sheet, false);
   }
   else
   {
+    kDebug() << "CP 1" << endl;
     eor(topLeft, sheet);
-    d->activeElement = --cells().end();
+    d->activeElement = cells().count() - 1;
   }
-  d->anchor = (*d->activeElement)->rect().topLeft();
-  d->cursor = (*d->activeElement)->rect().bottomRight();
+  kDebug() << "CP 2" << endl;
+  d->anchor = cells()[d->activeElement]->rect().topLeft();
+  d->cursor = cells()[d->activeElement]->rect().bottomRight();
   d->marker = d->cursor;
 
   d->activeSubRegionLength += cells().count() - count;
@@ -511,16 +523,15 @@ void Selection::extend(const QPoint& point, Sheet* sheet)
 
 void Selection::extend(const QRect& range, Sheet* sheet)
 {
-    //See comment in Selection::initialize(const QRect& range, Sheet* sheet)
-    if (!util_isRectValid(range) || (range == QRect(0,0,1,1)))
-        return;
+  if (!isValid(range) || (range == QRect(0,0,1,1)))
+    return;
 
   if (isEmpty())
   {
     initialize(range, sheet);
     return;
   }
-  if (d->activeElement == cells().end())
+  if (d->activeElement == cells().count())
   {
     // we're not empty, so this will not become again end()
     d->activeElement--;
@@ -538,6 +549,7 @@ void Selection::extend(const QRect& range, Sheet* sheet)
     }
   }
 
+  // for the case of a merged cell
   QPoint topLeft(range.topLeft());
   Cell* cell = d->view->activeSheet()->cellAt(topLeft);
   if (cell->isObscured() && cell->isPartOfMerged())
@@ -546,6 +558,7 @@ void Selection::extend(const QRect& range, Sheet* sheet)
     topLeft = QPoint(cell->column(), cell->row());
   }
 
+  // for the case of a merged cell
   QPoint bottomRight(range.bottomRight());
   cell = d->view->activeSheet()->cellAt(bottomRight);
   if (cell->isObscured() && cell->isPartOfMerged())
@@ -562,13 +575,13 @@ void Selection::extend(const QRect& range, Sheet* sheet)
   Element* element;
   if (d->multipleSelection)
   {
-    d->activeElement = insert(++d->activeElement, extendToMergedAreas(QRect(topLeft, bottomRight)).normalized(), sheet, false);
-    element = *d->activeElement;
+    //always succesful
+    insert(++d->activeElement, extendToMergedAreas(QRect(topLeft, bottomRight)).normalized(), sheet, false);
   }
   else
   {
     element = add(extendToMergedAreas(QRect(topLeft, bottomRight)).normalized(), sheet);
-    d->activeElement = --cells().end();
+    d->activeElement = cells().count() - 1;
   }
   if (element && element->type() == Element::Point)
   {
@@ -588,8 +601,8 @@ void Selection::extend(const QRect& range, Sheet* sheet)
 
 void Selection::extend(const Region& region)
 {
-    if (!region.isValid())
-        return;
+  if (!region.isValid())
+    return;
 
   uint count = cells().count();
   ConstIterator end(region.constEnd());
@@ -691,56 +704,52 @@ Sheet* Selection::sheet() const
 
 void Selection::setActiveElement(const QPoint& point)
 {
-  uint counter = 0;
-  Iterator end = cells().end();
-  for (Iterator it = cells().begin(); it != end; ++it)
+  for (int index = 0; index < cells().count(); ++index)
   {
-    QRect range = (*it)->rect();
+    QRect range = cells()[index]->rect();
     if (range.topLeft() == point || range.bottomRight() == point)
     {
       d->anchor = range.topLeft();
       d->cursor = range.bottomRight();
       d->marker = range.bottomRight();
-      d->activeElement = it;
-      d->activeSubRegionStart = counter;
+      d->activeElement = index;
+      d->activeSubRegionStart = index;
       d->activeSubRegionLength = 1;
       if (d->view->canvasWidget()->editor())
       {
-        d->view->canvasWidget()->editor()->setCursorToRange(counter);
+        d->view->canvasWidget()->editor()->setCursorToRange(index);
       }
     }
-    counter++;
   }
 }
 
 void Selection::setActiveElement(int pos)
 {
-  if (pos >= cells().count())
+  if (pos >= cells().count() || pos < 0 )
   {
     kDebug() << "Selection::setActiveElement: position exceeds list" << endl;
-    d->activeElement = cells().begin();
+    d->activeElement = 0;
     return;
   }
 
-  Iterator it = cells().begin() += pos;
-  QRect range = (*it)->rect();
+  QRect range = cells()[pos]->rect();
   d->anchor = range.topLeft();
   d->cursor = range.bottomRight();
   d->marker = range.bottomRight();
-  d->activeElement = it;
+  d->activeElement = pos;
 }
 
 Region::Element* Selection::activeElement() const
 {
-  return (d->activeElement == cells().end()) ? 0 : *d->activeElement;
+  return (d->activeElement == cells().count()) ? 0 : cells()[d->activeElement];
 }
 
 void Selection::clear()
 {
+  d->activeElement = 0;
   d->activeSubRegionStart = 0;
   d->activeSubRegionLength = 0;
   Region::clear();
-  d->activeElement = cells().begin();
 }
 
 void Selection::clearSubRegion()
@@ -749,22 +758,12 @@ void Selection::clearSubRegion()
   {
     return;
   }
-//   kDebug() << *this << endl;
-//   kDebug() << d->activeSubRegionStart << endl;
-//   kDebug() << d->activeSubRegionLength << endl;
-
-  Iterator it = cells().begin();
-  Iterator end = it += d->activeSubRegionStart;
-  end += d->activeSubRegionLength;
-  while (it != end)
+  for (int index = 0; index < d->activeSubRegionLength; ++index)
   {
-/*    kDebug() << (*it)->name() << endl;*/
-    delete *it;
-    it = cells().erase(it);
+    delete cells().takeAt(d->activeSubRegionStart);
   }
   d->activeSubRegionLength = 0;
-  d->activeElement = it;
-/*  kDebug() << "ENDE" << endl;*/
+  d->activeElement = d->activeSubRegionStart;
 }
 
 void Selection::fixSubRegionDimension()
@@ -787,28 +786,20 @@ void Selection::fixSubRegionDimension()
 void Selection::setActiveSubRegion(uint start, uint length)
 {
 //   kDebug() << k_funcinfo << endl;
+  d->activeElement = start;
   d->activeSubRegionStart = start;
   d->activeSubRegionLength = length;
   fixSubRegionDimension();
-  d->activeElement = cells().begin() += d->activeSubRegionStart;
 }
 
 QString Selection::activeSubRegionName() const
 {
-//   kDebug() << k_funcinfo << endl;
-//   kDebug() << *this << endl;
-//   kDebug() << "start = " << d->activeSubRegionStart << ", len = " << d->activeSubRegionLength << endl;
-
   QStringList names;
-  Iterator it = cells().begin();
-  it += d->activeSubRegionStart;
-  Iterator end = it;
-  end += d->activeSubRegionLength;
-  while (it != end)
+  int end = d->activeSubRegionStart + d->activeSubRegionLength;
+  for (int index = d->activeSubRegionStart; index < end; ++index)
   {
-    names += (*it++)->name(d->sheet);
+    names += cells()[index]->name(d->sheet);
   }
-/*  kDebug() << "ENDE" << endl;*/
   return names.isEmpty() ? "" : names.join(";");
 }
 
@@ -916,6 +907,14 @@ Selection::Region::Range* Selection::createRange(const QString& string) const
 Selection::Region::Range* Selection::createRange(const Range& range) const
 {
   return new Range(range);
+}
+
+void Selection::dump() const
+{
+  kDebug() << *this << endl;
+  kDebug() << "d->activeElement: " << d->activeElement << endl;
+  kDebug() << "d->activeSubRegionStart: " << d->activeSubRegionStart << endl;
+  kDebug() << "d->activeSubRegionLength: " << d->activeSubRegionLength << endl;
 }
 
 /***************************************************************************
