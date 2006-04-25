@@ -298,6 +298,7 @@ void KexiMacroDesignView::updateProperties(int row, KoProperty::Set* set, KoMacr
 				if( !v.canCast(QVariant::Int) && keys.count() > 0) {
 					v = keys[0];
 				}
+				type = KoProperty::StringList;
 			} break;
 			case QVariant::String: {
 				// Workaround. Whyever KoProperty::Property doesn't detect the string...
@@ -314,9 +315,13 @@ void KexiMacroDesignView::updateProperties(int row, KoProperty::Set* set, KoMacr
 			v, // value
 			variable->caption(), // caption
 			action->comment(), // description
-			type // auto-detect type
+			type // type
 		);
 		set->addProperty(p);
+
+		if(type == KoProperty::StringList) {
+			p->setOption("editable",QVariant(true,0));
+		}
 	}
 
 	KoMacro::Variable::Map varmap = action->variables();
