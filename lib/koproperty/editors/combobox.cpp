@@ -87,7 +87,7 @@ ComboBox::value() const
 	}
 
 	if (!property()->listData()) {
-		kopropertywarn << "ComboBox::value(): propery listData not available!" << endl;
+		kopropertywarn << "ComboBox::value(): property listData not available!" << endl;
 		return QVariant();
 	}
 
@@ -111,7 +111,7 @@ ComboBox::setValue(const QVariant &value, bool emitChange)
 	}
 	else {
 		if (!property()->listData()) {
-			kopropertywarn << "ComboBox::value(): propery listData not available!" << endl;
+			kopropertywarn << "ComboBox::value(): property listData not available!" << endl;
 			return;
 		}
 
@@ -175,7 +175,7 @@ ComboBox::fillBox()
 	if(!property())
 		return;
 	if (!property()->listData()) {
-		kopropertywarn << "ComboBox::fillBox(): propery listData not available!" << endl;
+		kopropertywarn << "ComboBox::fillBox(): property listData not available!" << endl;
 		return;
 	}
 
