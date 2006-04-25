@@ -5,6 +5,7 @@ add_subdirectory( drivers )
 
 include_directories( ${CMAKE_SOURCE_DIR}/kexi ${KDE4_INCLUDES}  )
 
+ADD_DEFINITIONS( -D__KEXIDB__= -include ${CMAKE_SOURCE_DIR}/kexi/kexidb/global.h )
 
 ########### next target ###############
 
