@@ -73,6 +73,16 @@ class VPolylineTool : public VTool
 		 */
 		void drawBezierVector( KoPoint& start, KoPoint& end );
 
+		/**
+		 * Creates the polyline from the bezier points.
+		 */
+		void createObject();
+
+		/**
+		 * Initializes the specified path with the actual bezier points.
+		 */
+		void initializePath( VPath &path );
+
 		virtual void mouseMove();
 		virtual void mouseButtonPress();
 		virtual void mouseButtonRelease();

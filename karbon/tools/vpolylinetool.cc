@@ -80,58 +80,70 @@ VPolylineTool::activate()
 }
 
 void
+VPolylineTool::initializePath( VPath &path )
+{
+	KoPoint* p1 = m_bezierPoints.first();
+	KoPoint* p2;
+	KoPoint* p3;
+	KoPoint* p4;
+
+	path.moveTo( *p1 );
+
+	while(
+		( p2 = m_bezierPoints.next() ) &&
+		( p3 = m_bezierPoints.next() ) &&
+		( p4 = m_bezierPoints.next() ) )
+	{
+		if ( *p1 == *p2 )
+			if ( *p3 == *p4 )
+				path.lineTo( *p4 );
+			else
+				//polyline->curve1To( *p3, *p4 );
+				path.curveTo( *p3, *p4, *p4 );
+		else
+			if ( *p3 == *p4 )
+				//polyline->curve2To( *p2, *p4 );
+				path.curveTo( *p2, *p2, *p4 );
+			else
+				path.curveTo( *p2, *p3, *p4 );
+		p1 = p4;
+	}
+}
+
+void
+VPolylineTool::createObject()
+{
+	VPath* polyline = 0L;
+	if( m_bezierPoints.count() > 2 )
+	{
+		polyline = new VPath( 0L );
+		if( polyline )
+		{
+			initializePath( *polyline );
+			if( m_close )
+				polyline->close();
+
+			VShapeCmd* cmd = new VShapeCmd(
+				&view()->part()->document(),
+				i18n( "Polyline" ),
+				polyline,
+				"14_polyline" );
+	
+			view()->part()->addCommand( cmd, true );
+		}
+	}
+
+	m_bezierPoints.clear();
+	m_close = false;
+}
+
+void
 VPolylineTool::deactivate()
 {
 	m_bezierPoints.removeLast();
 	m_bezierPoints.removeLast();
 	
-	VPath* polyline = 0L;
-	if( m_bezierPoints.count() > 2 )
-	{
-		polyline = new VPath( 0L );
-		KoPoint* p1 = m_bezierPoints.first();
-		KoPoint* p2;
-		KoPoint* p3;
-		KoPoint* p4;
-
-		polyline->moveTo( *p1 );
-
-		while(
-			( p2 = m_bezierPoints.next() ) &&
-			( p3 = m_bezierPoints.next() ) &&
-			( p4 = m_bezierPoints.next() ) )
-		{
-			if ( *p1 == *p2 )
-				if ( *p3 == *p4 )
-					polyline->lineTo( *p4 );
-				else
-					//polyline->curve1To( *p3, *p4 );
-					polyline->curveTo( *p3, *p4, *p4 );
-			else
-				if ( *p3 == *p4 )
-					//polyline->curve2To( *p2, *p4 );
-					polyline->curveTo( *p2, *p2, *p4 );
-				else
-					polyline->curveTo( *p2, *p3, *p4 );
-			p1 = p4;
-		}
-
-		if( m_close )
-			polyline->close();
-	}
-
-	m_bezierPoints.clear();
-
-	if( polyline )
-	{
-		VShapeCmd* cmd = new VShapeCmd(
-			&view()->part()->document(),
-			i18n( "Polyline" ),
-			polyline,
-			"14_polyline" );
-
-		view()->part()->addCommand( cmd, true );
-	}
+	createObject();
 
 	disconnect( view()->part()->commandHistory(), SIGNAL(commandExecuted()), this, SLOT(commandExecuted()) );
 }
@@ -145,19 +157,7 @@ VPolylineTool::draw()
 	if( m_bezierPoints.count() > 2 )
 	{
 		VPath polyline( 0L );
-		polyline.moveTo( *m_bezierPoints.first() );
-
-		KoPoint* p2;
-		KoPoint *p3;
-		KoPoint *p4;
-
-		while(
-			( p2 = m_bezierPoints.next() ) &&
-			( p3 = m_bezierPoints.next() ) &&
-			( p4 = m_bezierPoints.next() ) )
-		{
-			polyline.curveTo( *p2, *p3, *p4 );
-		}
+		initializePath( polyline );
 
 		polyline.setState( VObject::edit );
 		polyline.draw( painter, &polyline.boundingBox() );
@@ -312,7 +312,7 @@ VPolylineTool::mouseButtonRelease()
 		{
 			m_bezierPoints.append( new KoPoint( _last ) );
 			m_close = true;
-			accept();
+			createObject();
 			return;
 		}
 	}
@@ -327,13 +327,16 @@ void
 VPolylineTool::rightMouseButtonRelease()
 {
 	// end line without adding new points
-	accept();
+	m_bezierPoints.removeLast();
+	m_bezierPoints.removeLast();
+
+	createObject();
 }
 
 void
 VPolylineTool::mouseButtonDblClick()
 {
-	accept();
+	createObject();
 }
 
 void
