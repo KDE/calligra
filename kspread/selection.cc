@@ -149,11 +149,9 @@ void Selection::initialize(const QPoint& point, Sheet* sheet)
   int index = d->activeSubRegionStart + d->activeSubRegionLength;
   if (insert(index, topLeft, sheet/*, true*/))
   {
-    kDebug() << "CP 1" << endl;
     // if the point was inserted
     clearSubRegion();
   }
-  kDebug() << "CP 2" << endl;
   Element* element = cells()[d->activeSubRegionStart];
   // we end up with one element in the subregion
   d->activeSubRegionLength = 1;
@@ -504,11 +502,9 @@ void Selection::extend(const QPoint& point, Sheet* sheet)
   }
   else
   {
-    kDebug() << "CP 1" << endl;
     eor(topLeft, sheet);
     d->activeElement = cells().count() - 1;
   }
-  kDebug() << "CP 2" << endl;
   d->anchor = cells()[d->activeElement]->rect().topLeft();
   d->cursor = cells()[d->activeElement]->rect().bottomRight();
   d->marker = d->cursor;
