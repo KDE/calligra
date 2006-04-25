@@ -114,28 +114,6 @@ bool KexiDateTimeTableEdit::valueIsEmpty()
 	return valueIsNull();//js OK? TODO (nonsense?)
 }
 
-/* moved to kexidattimeformatter.cpp
-QDateTime KexiDateTimeTableEdit::dateTimeValue()
-{
-	QString s = m_lineedit->text().stripWhiteSpace();
-	const int timepos = s.find(" ");
-	const bool emptyTime = timepos >= 0 && m_timeFormatter.isEmpty(s.mid(timepos+1)); //.replace(':',"").stripWhiteSpace().isEmpty();
-	if (emptyTime)
-		s = s.left(timepos);
-	if (timepos>0 && !emptyTime) {
-		return QDateTime(
-			m_dateFormatter.stringToDate( s.left(timepos) ),
-			m_timeFormatter.stringToTime( s.mid(timepos+1) )
-		);
-	}
-	else {
-		return QDateTime(
-			m_dateFormatter.stringToDate( s ),
-			QTime(0,0,0)
-		);
-	}
-}*/
-
 QVariant KexiDateTimeTableEdit::value()
 {
 	if (textIsEmpty())

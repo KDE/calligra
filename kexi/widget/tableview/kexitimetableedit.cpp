@@ -97,7 +97,6 @@ void KexiTimeTableEdit::setupContents( QPainter *p, bool focused, QVariant val,
 
 bool KexiTimeTableEdit::valueIsNull()
 {
-//	if (m_lineedit->text().replace(':',"").stripWhiteSpace().isEmpty())
 	if (m_formatter.isEmpty( m_lineedit->text() )) //empty time is null
 		return true;
 	return !timeValue().isValid();
@@ -116,18 +115,10 @@ QTime KexiTimeTableEdit::timeValue()
 QVariant KexiTimeTableEdit::value()
 {
 	return m_formatter.stringToVariant( m_lineedit->text() );
-
-//	if (m_lineedit->text().replace(':',"").stripWhiteSpace().isEmpty())
-//		return QVariant();
-//	return timeValue();
-
-	//QDateTime - a hack needed because QVariant(QTime) has broken isNull()
-//	return QVariant(QDateTime( m_cleared ? QDate() : QDate(0,1,2)/*nevermind*/, m_edit->time()));
 }
 
 bool KexiTimeTableEdit::valueIsValid()
 {
-//	if (m_lineedit->text().replace(':',"").stripWhiteSpace().isEmpty()) //empty time is valid
 	if (m_formatter.isEmpty( m_lineedit->text() )) //empty time is valid
 		return true;
 	return m_formatter.stringToTime( m_lineedit->text() ).isValid();

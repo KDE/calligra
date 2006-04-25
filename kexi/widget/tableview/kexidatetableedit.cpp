@@ -115,19 +115,10 @@ QDate KexiDateTableEdit::dateValue() const
 QVariant KexiDateTableEdit::value()
 {
 	return m_formatter.stringToVariant( m_lineedit->text() );
-
-//	if (m_lineedit->text().replace(m_formatter.separator(),"").stripWhiteSpace().isEmpty())
-//		return QVariant();
-//	return dateValue();
-
-//	ok = true;
-//todo	return QVariant(m_edit->date());
-	//todo use conversion from string
 }
 
 bool KexiDateTableEdit::valueIsValid()
 {
-//	if (m_lineedit->text().replace(m_formatter.separator(),"").stripWhiteSpace().isEmpty()) //empty date is valid
 	if (m_formatter.isEmpty(m_lineedit->text())) //empty date is valid
 		return true;
 	return m_formatter.stringToDate( m_lineedit->text() ).isValid();
