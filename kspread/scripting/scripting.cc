@@ -37,8 +37,9 @@ typedef KGenericFactory<Scripting> KSpreadScriptingFactory;
 K_EXPORT_COMPONENT_FACTORY( kspreadscripting, KSpreadScriptingFactory( "kspread" ) )
 
 Scripting::Scripting(QObject *parent, const char *name, const QStringList &)
-        : KParts::Plugin(parent, name)
+        : KParts::Plugin(parent)
 {
+	setObjectName(name);
     setInstance(KSpreadScriptingFactory::instance());
 
     kdDebug() << "Scripting plugin. Class: "

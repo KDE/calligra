@@ -48,15 +48,15 @@ Kross::Api::Object::Ptr Cell::value(Kross::Api::List::Ptr) {
     KSpread::Value value = m_cell->value();
     switch(value.type()) {
 	case KSpread::Value::Empty:
-            return new Kross::Api::Variant(QVariant(), "empty");
+            return Kross::Api::Object::Ptr(new Kross::Api::Variant(QVariant(), "empty"));
 	case KSpread::Value::Boolean:
-            return new Kross::Api::Variant(value.asBoolean());
+            return Kross::Api::Object::Ptr(new Kross::Api::Variant(value.asBoolean()));
 	case KSpread::Value::Integer:
-            return new Kross::Api::Variant(static_cast<Q_LLONG>(value.asInteger()));
+            return Kross::Api::Object::Ptr(new Kross::Api::Variant(static_cast<Q_LLONG>(value.asInteger())));
 	case KSpread::Value::Float:
-            return new Kross::Api::Variant(value.asFloat());
+            return Kross::Api::Object::Ptr(new Kross::Api::Variant(value.asFloat()));
 	case KSpread::Value::String:
-            return new Kross::Api::Variant(value.asString());
+            return Kross::Api::Object::Ptr(new Kross::Api::Variant(value.asString()));
 	case KSpread::Value::Array:
 	    //FIXME
 	    /*
@@ -75,15 +75,15 @@ Kross::Api::Object::Ptr Cell::value(Kross::Api::List::Ptr) {
 	    */
 	case KSpread::Value::CellRange:
 	    //FIXME: not yet used
-            return new Kross::Api::Variant(QVariant(), "cellrange");
+            return Kross::Api::Object::Ptr(new Kross::Api::Variant(QVariant(), "cellrange"));
 	case KSpread::Value::Error:
-            return new Kross::Api::Variant(QVariant(), "error");
+            return Kross::Api::Object::Ptr(new Kross::Api::Variant(QVariant(), "error"));
     }
-    return 0;
+    return Kross::Api::Object::Ptr();
 }
 
 Kross::Api::Object::Ptr Cell::text(Kross::Api::List::Ptr) {
-    return new Kross::Api::Variant(m_cell->text());
+    return Kross::Api::Object::Ptr(new Kross::Api::Variant(m_cell->text()));
 }
 
 Kross::Api::Object::Ptr Cell::setText(Kross::Api::List::Ptr args) {
@@ -101,7 +101,7 @@ Kross::Api::Object::Ptr Cell::setText(Kross::Api::List::Ptr args) {
     prot.setSheet (m_sheet);
     prot.add (QPoint (m_col, m_row));
     if (prot.check())
-        return new Kross::Api::Variant(1);
+        return Kross::Api::Object::Ptr(new Kross::Api::Variant(1));
 
     KSpread::DataManipulator *dm = new KSpread::DataManipulator ();
     dm->setSheet (m_sheet);
@@ -110,19 +110,25 @@ Kross::Api::Object::Ptr Cell::setText(Kross::Api::List::Ptr args) {
     dm->add (QPoint (m_col, m_row));
     dm->execute ();
 
-    return 0;
+    return Kross::Api::Object::Ptr();
 }
 
 Kross::Api::Object::Ptr Cell::setTextColor(Kross::Api::List::Ptr args) {
-    Color* c = (Color*)args->item(0).data();
+#warning "kde4: port it"
+#if 0		
+		Color* c = (Color*)args->item(0).data();
     m_cell->format()->setTextColor(c->toQColor());
-    return 0;
+#endif
+    return Kross::Api::Object::Ptr();
 }
 
 Kross::Api::Object::Ptr Cell::setBackgroundColor(Kross::Api::List::Ptr args) {
-    Color* c = (Color*)args->item(0).data();
+#warning "kde4: port it"
+#if 0
+	Color* c = (Color*)args->item(0).data();
     m_cell->format()->setBgColor(c->toQColor());
-    return 0;
+#endif    
+	return Kross::Api::Object::Ptr();
 }
 
 }

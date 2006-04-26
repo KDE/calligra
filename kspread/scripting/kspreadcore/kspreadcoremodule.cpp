@@ -50,8 +50,7 @@ KSpreadCoreFactory::KSpreadCoreFactory() : Kross::Api::Event<KSpreadCoreFactory>
 
 Kross::Api::Object::Ptr KSpreadCoreFactory::newRGBColor(Kross::Api::List::Ptr args)
 {
-    Color* c = new Color(Kross::Api::Variant::toUInt(args->item(0)), Kross::Api::Variant::toUInt(args->item(1)), Kross::Api::Variant::toUInt(args->item(2)), QColor::Rgb);
-    return c;
+    return Kross::Api::Object::Ptr(new Color(Kross::Api::Variant::toUInt(args->item(0)), Kross::Api::Variant::toUInt(args->item(1)), Kross::Api::Variant::toUInt(args->item(2)), QColor::Rgb));
 }
 
 

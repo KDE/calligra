@@ -23,7 +23,7 @@
 #include <kspread_doc.h>
 #include <kspread_map.h>
 #include <kspread_sheet.h>
-
+#include <Q3PtrListIterator>
 namespace Kross { namespace KSpreadCore {
 
 Doc::Doc(KSpread::Doc* doc) : Kross::Api::Class<Doc>("KSpreadDocument", 0 ), m_doc(doc) {
@@ -42,30 +42,30 @@ const QString Doc::getClassName() const {
 
 Kross::Api::Object::Ptr Doc::currentSheet(Kross::Api::List::Ptr)
 {
-    return new Sheet(m_doc->displaySheet(), m_doc);
+    return Kross::Api::Object::Ptr(new Sheet(m_doc->displaySheet(), m_doc));
 }
 
 Kross::Api::Object::Ptr Doc::sheetByName(Kross::Api::List::Ptr args)
 {
     QString name = Kross::Api::Variant::toString(args->item(0));
-    QPtrListIterator<KSpread::Sheet> it (m_doc->map()->sheetList());
+    Q3PtrListIterator<KSpread::Sheet> it (m_doc->map()->sheetList());
     for( ; it.current(); ++it )
     {
         if(it.current()->sheetName() == name)
-            return new Sheet(it.current(), m_doc);
+            return Kross::Api::Object::Ptr(new Sheet(it.current(), m_doc));
     }
-    return 0;
+    return Kross::Api::Object::Ptr();
 }
 
 Kross::Api::Object::Ptr Doc::sheetNames(Kross::Api::List::Ptr)
 {
     Kross::Api::List* array = new Kross::Api::List;
-    QPtrListIterator<KSpread::Sheet> it (m_doc->map()->sheetList());
+    Q3PtrListIterator<KSpread::Sheet> it (m_doc->map()->sheetList());
     for( ; it.current(); ++it )
     {
-	    array->append(new Kross::Api::Variant(it.current()->sheetName()));
+	    array->append(Kross::Api::Object::Ptr(new Kross::Api::Variant(it.current()->sheetName())));
     }
-    return array;
+    return Kross::Api::Object::Ptr(array);
 }
 
 }
