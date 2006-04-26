@@ -1,0 +1,10 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+<kpartgui library="kspreadscripting" version="1">
+  <MenuBar>
+    <Menu name="Scripts"><text>S&amp;cripts</text>
+      <Separator/>
+      <Action name="executescriptfile"/>
+      <Action name="configurescripts"/>
+    </Menu>
+  </MenuBar>
+</kpartgui>
