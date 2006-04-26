@@ -49,6 +49,7 @@ set(libdialogs_SRCS
 	${CMAKE_SOURCE_DIR}/kspread/dialogs/link.cc
 	${CMAKE_SOURCE_DIR}/kspread/dialogs/sheet_properties.cc
 	${CMAKE_SOURCE_DIR}/kspread/dialogs/kspread_dlg_find.cc
+	${CMAKE_SOURCE_DIR}/kspread/dialogs/SheetSelectPage.cc
 )
 
 
