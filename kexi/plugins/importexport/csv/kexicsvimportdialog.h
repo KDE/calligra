@@ -133,6 +133,8 @@ class KexiCSVImportDialog : public KDialogBase
   void updateColumnText(int col);
   void updateRowCountInfo();
   tristate loadRows(QString &field, int &row, int &columnm, int &maxColumn, bool inGUI);
+  //! Used by loadRows().
+  QString detectDelimiterByLookingAtFirstBytesOfFile(QTextStream& inputStream);
 
   /*! Callback, called whenever row is loaded in loadRows(). When inGUI is true, 
    nothing is performed, else database buffer is written back to the database. */
@@ -142,7 +144,7 @@ class KexiCSVImportDialog : public KDialogBase
   int m_adjustRows;
   int m_startline;
   QChar m_textquote;
-  QString m_data;
+  QString m_clipboardData;
   QByteArray m_fileArray;
 	Mode m_mode;
 	int m_prevSelectedCol;
