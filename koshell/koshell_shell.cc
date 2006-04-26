@@ -395,7 +395,7 @@ void KoShellWindow::updateCaption()
         QString name;
         if ( rootDocument()->documentInfo() )
         {
-            name = rootDocument()->documentInfo()->title();
+            name = rootDocument()->documentInfo()->aboutInfo("title");
         }
         if ( name.isEmpty() )
             // Fall back to document URL
