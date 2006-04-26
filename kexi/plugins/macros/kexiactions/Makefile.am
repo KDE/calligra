@@ -6,7 +6,7 @@ libkeximacroactions_la_SOURCES = \
     objectvariable.cpp \
     openobject.cpp
 
-KDE_CXXFLAGS = $(USE_EXCEPTIONS)
+libkeximacroactions_la_CXXFLAGS = $(USE_EXCEPTIONS)
 
 libkeximacroactions_la_LDFLAGS = $(all_libraries) -Wnounresolved
 libkeximacroactions_la_LIBADD = \
