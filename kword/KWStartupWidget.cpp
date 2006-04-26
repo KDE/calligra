@@ -72,6 +72,10 @@ void KWStartupWidget::buttonClicked() {
     else {
         m_doc->m_processingType = KWDocument::DTP;
         m_doc->clear();
+        m_doc->loadDefaultFrameStyleTemplates();
+        m_doc->loadDefaultTableStyleTemplates();
+        m_doc->loadDefaultTableTemplates();
+
     }
     KoKWHeaderFooter hf;
     hf.header = HF_SAME;
