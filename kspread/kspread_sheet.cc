@@ -8369,21 +8369,24 @@ void Sheet::convertObscuringBorders()
 // TODO Stefan: these belong to View, even better Canvas
 void Sheet::setRegionPaintDirty( Region const & region )
 {
-  Manipulator* manipulator = new DilationManipulator();
-  manipulator->setSheet(this);
-  manipulator->add(region);
-  manipulator->execute();
+  DilationManipulator manipulator;
+  manipulator.setSheet(this);
+  manipulator.add(region);
+  manipulator.execute();
   // don't put it in the undo list! ;-)
-  d->paintDirtyList.add(*manipulator);
-  kdDebug() << "setRegionPaintDirty "<< static_cast<Region*>(manipulator)->name(this) << endl;
-  delete manipulator;
+  d->paintDirtyList.add(manipulator);
+  kdDebug() << "setRegionPaintDirty "<< static_cast<Region*>(&manipulator)->name(this) << endl;
 }
 
 void Sheet::setRegionPaintDirty( QRect const & range )
 {
-
-    d->paintDirtyList.add(range);
-
+  DilationManipulator manipulator;
+  manipulator.setSheet(this);
+  manipulator.add(range);
+  manipulator.execute();
+  // don't put it in the undo list! ;-)
+  d->paintDirtyList.add(manipulator);
+  kdDebug() << "setRegionPaintDirty "<< static_cast<Region*>(&manipulator)->name(this) << endl;
 }
 
 void Sheet::clearPaintDirtyData()
