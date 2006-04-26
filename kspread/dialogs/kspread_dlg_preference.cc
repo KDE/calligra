@@ -144,12 +144,12 @@ void PreferenceDialog::slotDefault()
 }
 
 
-parameterLocale::parameterLocale( View* _view, KVBox *box , char *name )
- :QObject ( box->parent(),name)
+parameterLocale::parameterLocale( View* _view, KVBox *box , char * /*name*/ )
+ :QObject ( box->parent() )
 {
     m_pView = _view;
     m_bUpdateLocale=false;
-  QGroupBox* tmpQGroupBox = new QGroupBox( i18n("Settings"), box, "GroupBox" );
+  QGroupBox* tmpQGroupBox = new QGroupBox( i18n("Settings"), box );
 
   KLocale* locale=_view->doc()->locale();
 
@@ -194,8 +194,8 @@ void parameterLocale::updateToMatchLocale(KLocale* locale)
   m_money->setText( i18n("Currency format: %1").arg( locale->formatMoney(12.55) ));
 }
 
-configure::configure( View* _view, KVBox *box , char *name )
- :QObject ( box->parent(),name)
+configure::configure( View* _view, KVBox *box , char * /*name*/ )
+ :QObject ( box->parent() )
  {
   m_pView = _view;
 
@@ -208,7 +208,7 @@ configure::configure( View* _view, KVBox *box , char *name )
   bool statusBar=true;
   m_oldBackupFile = true;
 
-  QGroupBox* tmpQGroupBox = new QGroupBox( i18n("Settings"), box, "GroupBox" );
+  QGroupBox* tmpQGroupBox = new QGroupBox( i18n("Settings"), box );
 
   config = Factory::global()->config();
   int _page=1;
@@ -399,13 +399,13 @@ void configure::apply()
 }
 
 
-miscParameters::miscParameters( View* _view,KVBox *box, char *name )
- :QObject ( box->parent(),name)
+miscParameters::miscParameters( View* _view,KVBox *box, char * /*name*/ )
+ :QObject ( box->parent() )
  {
   m_pView = _view;
 
 
-  QGroupBox* tmpQGroupBox = new QGroupBox( i18n("Misc"), box, "GroupBox" );
+  QGroupBox* tmpQGroupBox = new QGroupBox( i18n("Misc"), box );
 
   config = Factory::global()->config();
   indentUnit = _view->doc()->unit();
@@ -710,8 +710,8 @@ void miscParameters::apply()
 
 
 
-colorParameters::colorParameters( View* _view,KVBox *box , char *name )
- :QObject ( box->parent(),name)
+colorParameters::colorParameters( View* _view,KVBox *box , char * /*name*/ )
+ :QObject ( box->parent() )
 {
   m_pView = _view;
   config = Factory::global()->config();
@@ -724,7 +724,7 @@ colorParameters::colorParameters( View* _view,KVBox *box , char *name )
     _gridColor = config->readEntry("GridColor",_gridColor);
   }
 
-  QGroupBox* tmpQGroupBox = new QGroupBox( i18n("Color"), box, "GroupBox" );
+  QGroupBox* tmpQGroupBox = new QGroupBox( i18n("Color"), box );
 
   QLabel *label = new QLabel(i18n("&Grid color:"), tmpQGroupBox,"label20" );
 
@@ -778,8 +778,8 @@ void colorParameters::slotDefault()
 
 
 
-configureLayoutPage::configureLayoutPage( View* _view,KVBox *box , char *name )
- :QObject ( box->parent(),name)
+configureLayoutPage::configureLayoutPage( View* _view,KVBox *box , char * /*name*/ )
+ :QObject ( box->parent() )
 {
   m_pView = _view;
 
@@ -787,7 +787,7 @@ configureLayoutPage::configureLayoutPage( View* _view,KVBox *box , char *name )
   tmpQGroupBox->layout()->setSpacing(KDialog::spacingHint());
   tmpQGroupBox->layout()->setMargin(KDialog::marginHint());
 
-  QGridLayout *grid1 = new QGridLayout(tmpQGroupBox->layout());
+  QGridLayout *grid1 = new QGridLayout(tmpQGroupBox);
   grid1->addItem(new QSpacerItem( 0, KDialog::marginHint() ), 0, 0 );
   grid1->setRowStretch( 7, 10 );
 
@@ -884,8 +884,8 @@ void configureLayoutPage::apply()
   m_pView->slotUpdateView( m_pView->activeSheet() );
 }
 
-configureSpellPage::configureSpellPage( View* _view,KVBox *box , char *name )
- :QObject ( box->parent(),name)
+configureSpellPage::configureSpellPage( View* _view,KVBox *box , char * /*name*/ )
+ :QObject ( box->parent() )
 {
   m_pView = _view;
 

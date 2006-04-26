@@ -126,7 +126,7 @@ FormulaDialog::FormulaDialog( View* parent, const char* name,const QString& form
     m_browser->setMinimumWidth( 300 );
 
     m_tabwidget->addTab( m_browser, i18n("&Help") );
-    int index = m_tabwidget->currentPageIndex();
+    int index = m_tabwidget->currentIndex();
 
     m_input = new QWidget( m_tabwidget );
     QVBoxLayout *grid2 = new QVBoxLayout( m_input );
@@ -168,9 +168,9 @@ FormulaDialog::FormulaDialog( View* parent, const char* name,const QString& form
     grid2->addStretch( 10 );
 
     m_tabwidget->addTab( m_input, i18n("&Parameters") );
-    m_tabwidget->setTabEnabled( m_input, false );
+    m_tabwidget->setTabEnabled( m_tabwidget->indexOf(m_input), false );
 
-    m_tabwidget->setCurrentPage( index );
+    m_tabwidget->setCurrentIndex( index );
 
     refresh_result = true;
 
@@ -547,7 +547,7 @@ static void showEntry( QLineEdit* edit, QLabel* label,
     case KSpread_String:
     case KSpread_Boolean:
     case KSpread_Any:
-      edit->clearValidator ();
+      edit->setValidator(0);
       break;
     case KSpread_Float:
         validate=new KFloatValidator (edit);
@@ -579,8 +579,8 @@ void FormulaDialog::slotDoubleClicked( Q3ListBoxItem* item )
 
     // Dont change order of these function calls due to a bug in Qt 2.2
     m_browser->setText( m_desc->toQML() );
-    m_tabwidget->setTabEnabled( m_input, true );
-    m_tabwidget->setCurrentPage( 1 );
+    m_tabwidget->setTabEnabled( m_tabwidget->indexOf(m_input), true );
+    m_tabwidget->setCurrentIndex( 1 );
 
     //
     // Show as many QLineEdits as needed.
@@ -701,8 +701,8 @@ void FormulaDialog::slotSelected( const QString& function )
 
     m_focus=0;
 
-    m_tabwidget->setCurrentPage( 0 );
-    m_tabwidget->setTabEnabled( m_input, false );
+    m_tabwidget->setCurrentIndex( 0 );
+    m_tabwidget->setTabEnabled( m_tabwidget->indexOf(m_input), false );
 
     // Unlock
     refresh_result=true;
@@ -717,7 +717,7 @@ void FormulaDialog::slotShowFunction( const QString& function )
 
     // select the category
     QString category = desc->group();
-    typeFunction->setCurrentText( category );
+    typeFunction->setItemText( typeFunction->currentIndex(), category );
     slotActivated( category );
 
     // select the function
