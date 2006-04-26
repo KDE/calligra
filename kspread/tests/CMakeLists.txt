@@ -1,8 +1,5 @@
 kde4_header()
 
-
-
-
 ########### next target ###############
 
 set(formulatest_SRCS test_formula.cc )
@@ -13,9 +10,12 @@ if(KDE4_BUILD_TESTS)
 
 kde4_add_executable(formulatest ${formulatest_SRCS})
 
-target_link_libraries(formulatest  ${KDE4_KDECORE_LIBS} kspreadcommon )
+target_link_libraries(formulatest  kspreadcommon )
+
+add_test(formula ${EXECUTABLE_OUTPUT_PATH}/formulatest)
 
 endif(KDE4_BUILD_TESTS)
+
 
 ########### next target ###############
 
