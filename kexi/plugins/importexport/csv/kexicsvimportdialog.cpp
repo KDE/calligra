@@ -98,6 +98,7 @@
 #define _FP_NUMBER_TYPE 255 //_NUMBER_TYPE variant
 #define MAX_ROWS_TO_PREVIEW 100 //max 100 rows is reasonable
 #define MAX_BYTES_TO_PREVIEW 10240 //max 10KB is reasonable
+#define MAX_CHARS_TO_SCAN_WHILE_DETECTING_DELIMITER 4096
 
 class KexiCSVImportDialogTable : public QTable
 {
@@ -331,7 +332,7 @@ if ( m_mode == Clipboard )
 	}
 	else if (m_mode == Clipboard) {
 		QCString subtype("plain");
-		m_data = QApplication::clipboard()->text(subtype, QClipboard::Clipboard);
+		m_clipboardData = QApplication::clipboard()->text(subtype, QClipboard::Clipboard);
 /* debug
 		for (int i=0;QApplication::clipboard()->data(QClipboard::Clipboard)->format(i);i++)
 			kdDebug() << i << ": " 
@@ -393,29 +394,6 @@ void KexiCSVImportDialog::initLater()
 	if (!openData())
 		return;
 
-	QChar detectedDelimiter;
-	if (m_mode==File) { //only detect for File mode
-		// try to detect delimiter
-		// \t has priority, then , then ;
-		for (uint i=0; i < QMIN(4096, m_data.length()); i++) {
-			const QChar c(m_data[i]);
-			if (c=='\t') {
-				detectedDelimiter = c;
-				break;
-			}
-			else if (c==',' && detectedDelimiter!='\t') {
-				detectedDelimiter = c;
-			}
-			else if (c==';' && detectedDelimiter!='\t' && detectedDelimiter!=',') {
-				detectedDelimiter = c;
-			}
-		}
-	}
-	if (detectedDelimiter.isNull())
-		detectedDelimiter = m_mode==File 
-			? KEXICSV_DEFAULT_FILE_DELIMITER[0] : KEXICSV_DEFAULT_CLIPBOARD_DELIMITER[0]; //<-- defaults
-
-	m_delimiterWidget->setDelimiter(QString(detectedDelimiter));
 //	delimiterChanged(detectedDelimiter); // this will cause fillTable()
 	m_columnsAdjusted = false;
 	fillTable();
@@ -560,12 +538,39 @@ void KexiCSVImportDialog::fillTable()
 	m_table->horizontalScrollBar()->repaint();//avoid missing repaint
 }
 
+QString KexiCSVImportDialog::detectDelimiterByLookingAtFirstBytesOfFile(QTextStream& inputStream)
+{
+	QChar detectedDelimiter;
+	// try to detect delimiter
+	// \t has priority, then ; then ,
+	const QIODevice::Offset origOffset = inputStream.device()->at();
+	QChar c;
+	m_file->at(0);
+	for (uint i=0; !inputStream.atEnd() && i < MAX_CHARS_TO_SCAN_WHILE_DETECTING_DELIMITER; i++) {
+		(*m_inputStream) >> c; // read one char
+		if (c=='\t') {
+			detectedDelimiter = c;
+			break;
+		}
+		else if (c==';' && detectedDelimiter!='\t') {
+			detectedDelimiter = c;
+			break;
+		}
+		else if (c==',' && detectedDelimiter!='\t' && detectedDelimiter!=';') {
+			detectedDelimiter = c;
+		}
+	}
+	inputStream.device()->at(origOffset); //restore orig. offset
+	if (detectedDelimiter.isNull())
+		return KEXICSV_DEFAULT_FILE_DELIMITER; //<-- default
+	return QString( detectedDelimiter );
+}
+
 tristate KexiCSVImportDialog::loadRows(QString &field, int &row, int &column, int &maxColumn, 
 	bool inGUI)
 {
 	enum { S_START, S_QUOTED_FIELD, S_MAYBE_END_OF_QUOTED_FIELD, S_END_OF_QUOTED_FIELD,
 		 S_MAYBE_NORMAL_FIELD, S_NORMAL_FIELD } state = S_START;
-	const QChar delimiter(m_delimiterWidget->delimiter()[0]);
 	field = QString::null;
 	const bool ignoreDups = m_ignoreDuplicates->isChecked();
 	bool lastCharDelimiter = false;
@@ -575,7 +580,8 @@ tristate KexiCSVImportDialog::loadRows(QString &field, int &row, int &column, in
 	QChar x;
 	delete m_inputStream;
 	if ( m_mode == Clipboard ) {
-		m_inputStream = new QTextStream(m_data, IO_ReadOnly);
+		m_inputStream = new QTextStream(m_clipboardData, IO_ReadOnly);
+		m_delimiterWidget->setDelimiter(KEXICSV_DEFAULT_CLIPBOARD_DELIMITER);
 	}
 	else {
 		m_file->at(0); //always seek at 0 because loadRows() is called many times
@@ -585,7 +591,11 @@ tristate KexiCSVImportDialog::loadRows(QString &field, int &row, int &column, in
 			if (codec)
 				m_inputStream->setCodec(codec); //QTextCodec::codecForName("CP1250"));
 		}
+		const QString delimiter( detectDelimiterByLookingAtFirstBytesOfFile(*m_inputStream) );
+		if (m_delimiterWidget->delimiter() != delimiter)
+			m_delimiterWidget->setDelimiter( delimiter );
 	}
+	const QChar delimiter(m_delimiterWidget->delimiter()[0]);
 	m_stoppedAt_MAX_BYTES_TO_PREVIEW = false;
 	int progressStep = 0;
 	if (m_importingProgressDlg)
@@ -1061,7 +1071,7 @@ void KexiCSVImportDialog::setText(int row, int col, const QString& text, bool in
 		m_adjustRows=1;
 	}
 
-	m_table->setText(row - 1, col - 1, text);
+	m_table->setText(row - 1, col - 1, text.stripWhiteSpace());
 	m_table->verticalHeader()->setLabel(row-1, QString::number(row-1));
 
 	detectTypeAndUniqueness(row-1, col-1, text);
