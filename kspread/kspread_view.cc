@@ -709,19 +709,19 @@ void View::Private::initActions()
   actions->mergeCell = new KToolBarPopupAction( KIcon( "mergecell" ), i18n("Merge Cells"), ac, "mergecell" );
   connect(actions->deleteCell, SIGNAL(triggered(bool)), view, SLOT( mergeCell() ));
   actions->mergeCell->setToolTip(i18n("Merge the selected region"));
-  actions->mergeCell->plug( actions->mergeCell->popupMenu() );
+  actions->mergeCell->popupMenu()->addAction( actions->mergeCell );
 
   actions->mergeCellHorizontal = new KAction( KIcon("mergecell-horizontal" ), i18n("Merge Cells Horizontally"), ac, "mergecellHorizontal" );
   connect(actions->mergeCellHorizontal, SIGNAL(triggered(bool)), view, SLOT( mergeCellHorizontal() ));
 
   actions->mergeCellHorizontal->setToolTip(i18n("Merge the selected region horizontally"));
-  actions->mergeCellHorizontal->plug( actions->mergeCell->popupMenu() );
+  actions->mergeCell->popupMenu()->addAction( actions->mergeCellHorizontal );
 
   actions->mergeCellVertical = new KAction( KIcon("mergecell-vertical" ), i18n("Merge Cells Vertically"), ac, "mergecellVertical" );
   connect(actions->mergeCellVertical, SIGNAL(triggered(bool)), view, SLOT( mergeCellVertical() ));
 
   actions->mergeCellVertical->setToolTip(i18n("Merge the selected region vertically"));
-  actions->mergeCellVertical->plug( actions->mergeCell->popupMenu() );
+  actions->mergeCell->popupMenu()->addAction( actions->mergeCellVertical );
 
   actions->dissociateCell = new KAction( KIcon("dissociatecell" ), i18n("Dissociate Cells"), ac, "dissociatecell" );
   connect(actions->dissociateCell, SIGNAL(triggered(bool)), view, SLOT( dissociateCell() ));
@@ -5403,30 +5403,30 @@ void View::popupColumnMenu( const QPoint & _point )
 
     if ( !isProtected )
     {
-      d->actions->cellLayout->plug( d->popupColumn );
+      d->popupColumn->addAction( d->actions->cellLayout );
       d->popupColumn->addSeparator();
-      d->actions->cut->plug( d->popupColumn );
+      d->popupColumn->addAction( d->actions->cut );
     }
-    d->actions->copy->plug( d->popupColumn );
+    d->popupColumn->addAction( d->actions->copy );
     if ( !isProtected )
     {
-      d->actions->paste->plug( d->popupColumn );
-      d->actions->specialPaste->plug( d->popupColumn );
-      d->actions->insertCellCopy->plug( d->popupColumn );
+      d->popupColumn->addAction( d->actions->paste );
+      d->popupColumn->addAction( d->actions->specialPaste );
+      d->popupColumn->addAction( d->actions->insertCellCopy );
       d->popupColumn->addSeparator();
-      d->actions->defaultFormat->plug( d->popupColumn );
+      d->popupColumn->addAction( d->actions->defaultFormat );
       // If there is no selection
       if (!d->selection->isColumnOrRowSelected())
       {
-        d->actions->areaName->plug( d->popupColumn );
+        d->popupColumn->addAction( d->actions->areaName );
       }
 
-      d->actions->resizeColumn->plug( d->popupColumn );
+      d->popupColumn->addAction( d->actions->resizeColumn );
       d->popupColumn->addAction( i18n("Adjust Column"), this, SLOT(slotPopupAdjustColumn() ) );
       d->popupColumn->addSeparator();
-      d->actions->insertColumn->plug( d->popupColumn );
-      d->actions->deleteColumn->plug( d->popupColumn );
-      d->actions->hideColumn->plug( d->popupColumn );
+      d->popupColumn->addAction( d->actions->insertColumn );
+      d->popupColumn->addAction( d->actions->deleteColumn );
+      d->popupColumn->addAction( d->actions->hideColumn );
 
       d->actions->showSelColumns->setEnabled(false);
 
@@ -5444,7 +5444,7 @@ void View::popupColumnMenu( const QPoint & _point )
           if ( format->isHide() )
           {
             d->actions->showSelColumns->setEnabled( true );
-            d->actions->showSelColumns->plug( d->popupColumn );
+            d->popupColumn->addAction( d->actions->showSelColumns );
             break;
           }
         }
@@ -5460,7 +5460,7 @@ void View::popupColumnMenu( const QPoint & _point )
           if (allHidden)
           {
             d->actions->showSelColumns->setEnabled( true );
-            d->actions->showSelColumns->plug( d->popupColumn );
+            d->popupColumn->addAction( d->actions->showSelColumns );
             break;
           }
         }
@@ -5499,30 +5499,30 @@ void View::popupRowMenu( const QPoint & _point )
 
     if ( !isProtected )
     {
-        d->actions->cellLayout->plug( d->popupRow );
+        d->popupRow->addAction( d->actions->cellLayout );
         d->popupRow->addSeparator();
-        d->actions->cut->plug( d->popupRow );
+        d->popupRow->addAction( d->actions->cut );
     }
-    d->actions->copy->plug( d->popupRow );
+    d->popupRow->addAction( d->actions->copy );
     if ( !isProtected )
     {
-      d->actions->paste->plug( d->popupRow );
-      d->actions->specialPaste->plug( d->popupRow );
-      d->actions->insertCellCopy->plug( d->popupRow );
+      d->popupRow->addAction( d->actions->paste );
+      d->popupRow->addAction( d->actions->specialPaste );
+      d->popupRow->addAction( d->actions->insertCellCopy );
       d->popupRow->addSeparator();
-      d->actions->defaultFormat->plug( d->popupRow );
+      d->popupRow->addAction( d->actions->defaultFormat );
       // If there is no selection
       if (!d->selection->isColumnOrRowSelected())
       {
-        d->actions->areaName->plug(d->popupRow);
+        d->popupRow->addAction( d->actions->areaName );
       }
 
-      d->actions->resizeRow->plug( d->popupRow );
+      d->popupRow->addAction( d->actions->resizeRow );
       d->popupRow->addAction( i18n("Adjust Row"), this, SLOT( slotPopupAdjustRow() ) );
       d->popupRow->addSeparator();
-      d->actions->insertRow->plug( d->popupRow );
-      d->actions->deleteRow->plug( d->popupRow );
-      d->actions->hideRow->plug( d->popupRow );
+      d->popupRow->addAction( d->actions->insertRow );
+      d->popupRow->addAction( d->actions->deleteRow );
+      d->popupRow->addAction( d->actions->hideRow );
 
       d->actions->showSelColumns->setEnabled(false);
 
@@ -5539,7 +5539,7 @@ void View::popupRowMenu( const QPoint & _point )
           if ( format->isHide() )
           {
             d->actions->showSelRows->setEnabled( true );
-            d->actions->showSelRows->plug( d->popupRow );
+            d->popupRow->addAction( d->actions->showSelRows );
             break;
           }
         }
@@ -5555,7 +5555,7 @@ void View::popupRowMenu( const QPoint & _point )
           if (allHidden)
           {
             d->actions->showSelRows->setEnabled( true );
-            d->actions->showSelRows->plug( d->popupRow );
+            d->popupRow->addAction( d->actions->showSelRows );
             break;
           }
         }
@@ -5701,14 +5701,14 @@ void View::openPopupMenu( const QPoint & _point )
     EmbeddedObject *obj;
     if ( d->canvas->isObjectSelected() && ( obj = d->canvas->getObject( d->canvas->mapFromGlobal( _point ), d->activeSheet ) ) && obj->isSelected() )
     {
-      d->actions->deleteCell->plug( d->popupMenu );
+      d->popupMenu->addAction( d->actions->deleteCell );
       d->popupMenu->addSeparator();
-      d->actions->cut->plug( d->popupMenu );
-      d->actions->copy->plug( d->popupMenu );
-      d->actions->paste->plug( d->popupMenu );
+      d->popupMenu->addAction( d->actions->cut );
+      d->popupMenu->addAction( d->actions->copy );
+      d->popupMenu->addAction( d->actions->paste );
       d->popupMenu->popup( _point );
       d->popupMenu->addSeparator();
-      d->actions->actionExtraProperties->plug( d->popupMenu );
+      d->popupMenu->addAction( d->actions->actionExtraProperties );
       return;
     }
 
@@ -5721,37 +5721,37 @@ void View::openPopupMenu( const QPoint & _point )
 
     if ( !isProtected )
     {
-      d->actions->cellLayout->plug( d->popupMenu );
+      d->popupMenu->addAction( d->actions->cellLayout );
       d->popupMenu->addSeparator();
-      d->actions->cut->plug( d->popupMenu );
+      d->popupMenu->addAction( d->actions->cut );
     }
-    d->actions->copy->plug( d->popupMenu );
+    d->popupMenu->addAction( d->actions->copy );
     if ( !isProtected )
-      d->actions->paste->plug( d->popupMenu );
+      d->popupMenu->addAction( d->actions->paste );
 
     if ( !isProtected )
     {
-      d->actions->specialPaste->plug( d->popupMenu );
-      d->actions->insertCellCopy->plug( d->popupMenu );
+      d->popupMenu->addAction( d->actions->specialPaste );
+      d->popupMenu->addAction( d->actions->insertCellCopy );
       d->popupMenu->addSeparator();
-      d->actions->deleteCell->plug( d->popupMenu );
-      d->actions->adjust->plug( d->popupMenu );
-      d->actions->defaultFormat->plug( d->popupMenu );
+      d->popupMenu->addAction( d->actions->deleteCell );
+      d->popupMenu->addAction( d->actions->adjust );
+      d->popupMenu->addAction( d->actions->defaultFormat );
 
       // If there is no selection
       if (!d->selection->isColumnOrRowSelected())
       {
-        d->actions->areaName->plug( d->popupMenu );
+        d->popupMenu->addAction( d->actions->areaName );
         d->popupMenu->addSeparator();
-        d->actions->insertCell->plug( d->popupMenu );
-        d->actions->removeCell->plug( d->popupMenu );
+        d->popupMenu->addAction( d->actions->insertCell );
+        d->popupMenu->addAction( d->actions->removeCell );
       }
 
       d->popupMenu->addSeparator();
-      d->actions->addModifyComment->plug( d->popupMenu );
+      d->popupMenu->addAction( d->actions->addModifyComment );
       if ( !cell->format()->comment(d->canvas->markerColumn(), d->canvas->markerRow()).isEmpty() )
       {
-        d->actions->removeComment->plug( d->popupMenu );
+        d->popupMenu->addAction( d->actions->removeComment );
       }
 
       if (activeSheet()->testListChoose(selectionInfo()))
