@@ -31,6 +31,7 @@
 #include "kspread_doc.h"
 #include "kspread_sheet.h"
 #include "kspread_value.h"
+#include "region.h"
 #include "valueconverter.h"
 
 using namespace KSpread;

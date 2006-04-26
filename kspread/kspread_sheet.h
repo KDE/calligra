@@ -1127,8 +1127,7 @@ public:
    * needs repainted.  This is not a flag on the cell itself since quite
    * often this needs set on a default cell
    */
-  void setRegionPaintDirty(QRect const & range);
-  void setRegionPaintDirty(Region const & region);
+  void setRegionPaintDirty(const Region & region);
 
   /**
    * Remove all records of 'paint dirty' cells
