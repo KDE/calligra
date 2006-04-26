@@ -186,14 +186,14 @@ GeneralTab::GeneralTab( QWidget* parent, CellFormatDialog * dlg )
   m_parentBox->clear();
   m_parentBox->insertItem( 0,i18n( "<None>" ) );
   QStringList tmp = m_dlg->getStyleManager()->styleNames();
-  tmp.erase( m_dlg->styleName );
+  tmp.removeAll( m_dlg->styleName );
   m_parentBox->insertItems( 1, tmp );
 
   if ( m_dlg->getStyle()->parent() )
-    m_parentBox->setItemText( m_dlg->getStyle()->parentName() );
+    m_parentBox->setCurrentText( m_dlg->getStyle()->parentName() );
   else
   {
-    m_parentBox->setItemText( i18n( "<None>" ) );
+    m_parentBox->setCurrentText( i18n( "<None>" ) );
 
     if ( m_dlg->getStyle()->definesAll() )
       m_parentBox->setEnabled( false );
@@ -897,7 +897,7 @@ void CellFormatDialog::init()
   // Did we initialize the bitmaps ?
   if ( formatOnlyNegSignedPixmap == 0 )
   {
-    QColor black = palette().text().color(); // not necessarily black :)
+    QColor black = QApplication::palette().text().color(); // not necessarily black :)
     formatOnlyNegSignedPixmap    = paintFormatPixmap( "123.456", Qt::black, "-123.456", Qt::black );
     formatRedOnlyNegSignedPixmap = paintFormatPixmap( "123.456", Qt::black, "-123.456", Qt::red );
     formatRedNeverSignedPixmap   = paintFormatPixmap( "123.456", Qt::black, "123.456", Qt::red );
@@ -954,7 +954,7 @@ QPixmap * CellFormatDialog::paintFormatPixmap( const char * _string1, const QCol
 
   QPainter painter;
   painter.begin( pixmap );
-  painter.fillRect( 0, 0, 150, 14, palette().base().color() );
+  painter.fillRect( 0, 0, 150, 14, QApplication::palette().base().color() );
   painter.setPen( _color1 );
   painter.drawText( 2, 11, _string1 );
   painter.setPen( _color2 );
@@ -1289,7 +1289,7 @@ CellFormatPageFloat::CellFormatPageFloat( QWidget* parent, CellFormatDialog *_dl
                   }
                   else
                     tmp = dlg->cCurrency.symbol;
-                  currency->setItemText( tmp );
+                  currency->setCurrentText( tmp );
                 }
         }
         else if ( cellFormatType == Scientific_format )

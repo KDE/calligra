@@ -492,8 +492,8 @@ public:
 };
 
 
-CellEditor::CellEditor( Cell* _cell, Canvas* _parent, bool captureAllKeyEvents, const char* _name )
-  : QWidget( _parent, _name )
+CellEditor::CellEditor( Cell* _cell, Canvas* _parent, bool captureAllKeyEvents, const char* /*_name*/ )
+  : QWidget( _parent )
 {
   d = new Private();
   d->cell = _cell;
@@ -592,14 +592,15 @@ QPoint CellEditor::globalCursorPosition() const
 void CellEditor::checkFunctionAutoComplete()
 {
   d->functionCompletionTimer->stop();
-  d->functionCompletionTimer->start( 2000, true );
+  d->functionCompletionTimer->setSingleShot( true );
+  d->functionCompletionTimer->start( 2000 );
 }
 
 void CellEditor::triggerFunctionAutoComplete()
 {
   // tokenize the expression (don't worry, this is very fast)
   int curPos = d->textEdit->textCursor().position();
-  QString subtext = d->textEdit->text().left( curPos );
+  QString subtext = d->textEdit->toPlainText().left( curPos );
 
   KSpread::Formula f;
   KSpread::Tokens tokens = f.scan( subtext );
@@ -653,7 +654,7 @@ void CellEditor::functionAutoComplete( const QString& item )
   textCursor.setPosition( lastToken.pos() + 1 );
   textCursor.setPosition( lastToken.pos() + lastToken.text().length() + 1,
                             QTextCursor::KeepAnchor );
-  d->textEdit->insert( item );
+  d->textEdit->insertPlainText( item );
   d->textEdit->blockSignals( false );
 }
 
@@ -823,7 +824,7 @@ void CellEditor::setEditorFont(QFont const & font, bool updateSize)
     QFontMetrics fm( d->textEdit->font() );
     d->fontLength = fm.width('x');
 
-    int mw = fm.width( d->textEdit->text() ) + d->fontLength;
+    int mw = fm.width( d->textEdit->toPlainText() ) + d->fontLength;
     // don't make it smaller: then we would have to repaint the obscured cells
     if (mw < width())
       mw = width();
@@ -908,7 +909,7 @@ void CellEditor::slotTextChanged()
     if ( (t.length() == 1) && t[0].isDigit() )
     {
       QString tmp = t + " %";
-      d->textEdit->setText(tmp);
+      d->textEdit->setPlainText(tmp);
       d->textEdit->textCursor().setPosition( 1 );
       return;
     }
@@ -934,7 +935,7 @@ bool CellEditor::checkChoice()
   d->length_namecell = 0;
   d->currentToken = 0;
 
-  QString text = d->textEdit->text();
+  QString text = d->textEdit->toPlainText();
   if ( text[0] != '=' )
   {
     canvas()->setChooseMode(false);
@@ -1079,8 +1080,8 @@ void CellEditor::handleKeyPressEvent( QKeyEvent * _ev )
     unsigned i;
     for( i = 0; i < 10; i++ )
     {
-      tmp =  d->textEdit->text().left( cur+i );
-      tmp2 = d->textEdit->text().right( d->textEdit->text().length() - cur - i );
+      tmp =  d->textEdit->toPlainText().left( cur+i );
+      tmp2 = d->textEdit->toPlainText().right( d->textEdit->toPlainText().length() - cur - i );
 
       n = exp.indexIn(tmp);
       if( n >= 0 ) break;
@@ -1103,7 +1104,7 @@ void CellEditor::handleKeyPressEvent( QKeyEvent * _ev )
     cur = newString.length() - i;
     newString += tmp2;
 
-    d->textEdit->setText(newString);
+    d->textEdit->setPlainText(newString);
     d->textEdit->textCursor().setPosition( cur );
 
     _ev->accept();
@@ -1123,12 +1124,12 @@ void CellEditor::handleIMEvent( QInputMethodEvent  * _ev )
 
 QString CellEditor::text() const
 {
-    return d->textEdit->text();
+    return d->textEdit->toPlainText();
 }
 
 void CellEditor::setText(QString text)
 {
-  d->textEdit->setText(text);
+  d->textEdit->setPlainText(text);
   //Usability : It is usually more convenient if the cursor is positioned at the end of the text so it can
   //be quickly deleted using the backspace key
 
@@ -1266,7 +1267,7 @@ void ComboboxLocationEditWidget::slotRemoveAreaName( const QString &_name )
 {
     for ( int i = 0; i<count(); i++ )
     {
-        if ( text(i)==_name )
+        if ( itemText(i) == _name )
         {
             removeItem( i );
             break;
