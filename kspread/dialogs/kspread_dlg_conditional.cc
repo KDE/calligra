@@ -60,7 +60,7 @@ ConditionalWidget::ConditionalWidget( QWidget* parent, const char* name, Qt::WFl
   groupBox1_3->setColumnLayout(0, Qt::Vertical );
   groupBox1_3->layout()->setSpacing( KDialog::spacingHint() );
   groupBox1_3->layout()->setMargin( KDialog::marginHint() );
-  QGridLayout * groupBox1_3Layout = new QGridLayout( groupBox1_3->layout() );
+  QGridLayout * groupBox1_3Layout = new QGridLayout( groupBox1_3 );
   groupBox1_3Layout->setAlignment( Qt::AlignTop );
 
   QLabel * textLabel1_3 = new QLabel( groupBox1_3 );
@@ -96,7 +96,7 @@ ConditionalWidget::ConditionalWidget( QWidget* parent, const char* name, Qt::WFl
   groupBox1_2->layout()->setSpacing( KDialog::spacingHint() );
   groupBox1_2->layout()->setMargin( KDialog::marginHint() );
 
-  QGridLayout * groupBox1_2Layout = new QGridLayout( groupBox1_2->layout() );
+  QGridLayout * groupBox1_2Layout = new QGridLayout( groupBox1_2 );
   groupBox1_2Layout->setAlignment( Qt::AlignTop );
 
   QLabel * textLabel1_2 = new QLabel( groupBox1_2 );
@@ -133,7 +133,7 @@ ConditionalWidget::ConditionalWidget( QWidget* parent, const char* name, Qt::WFl
   groupBox1_1->layout()->setSpacing( KDialog::spacingHint() );
   groupBox1_1->layout()->setMargin( KDialog::marginHint() );
 
-  QGridLayout * groupBox1_1Layout = new QGridLayout( groupBox1_1->layout() );
+  QGridLayout * groupBox1_1Layout = new QGridLayout( groupBox1_1 );
   groupBox1_1Layout->setAlignment( Qt::AlignTop );
 
   QLabel * textLabel1_1 = new QLabel( groupBox1_1 );

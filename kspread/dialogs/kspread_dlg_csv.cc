@@ -97,7 +97,7 @@ CSVDialog::CSVDialog( View * parent, const char * name, QRect const & rect, Mode
   m_delimiterBox->setColumnLayout(0, Qt::Vertical );
   m_delimiterBox->layout()->setSpacing( KDialog::spacingHint() );
   m_delimiterBox->layout()->setMargin( KDialog::marginHint() );
-  m_delimiterBoxLayout = new QGridLayout( m_delimiterBox->layout() );
+  m_delimiterBoxLayout = new QGridLayout( m_delimiterBox );
   m_delimiterBoxLayout->setAlignment( Qt::AlignTop );
   MyDialogLayout->addWidget( m_delimiterBox, 0, 2, 0, 0 );
 
@@ -140,7 +140,7 @@ CSVDialog::CSVDialog( View * parent, const char * name, QRect const & rect, Mode
   m_formatBox->setColumnLayout(0, Qt::Vertical );
   m_formatBox->layout()->setSpacing( KDialog::spacingHint() );
   m_formatBox->layout()->setMargin( KDialog::marginHint() );
-  m_formatBoxLayout = new QGridLayout( m_formatBox->layout() );
+  m_formatBoxLayout = new QGridLayout( m_formatBox );
   m_formatBoxLayout->setAlignment( Qt::AlignTop );
   MyDialogLayout->addWidget( m_formatBox, 0, 2, 1, 1 );
 

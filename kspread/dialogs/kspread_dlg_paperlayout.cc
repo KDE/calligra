@@ -136,7 +136,7 @@ void PaperLayout::initRanges( QWidget * tab, QVBoxLayout * vbox )
     rangeGroup->setColumnLayout( 0, Qt::Vertical );
     vbox->addWidget( rangeGroup );
 
-    QGridLayout *grid = new QGridLayout( rangeGroup->layout() );
+    QGridLayout *grid = new QGridLayout( rangeGroup );
     grid->setMargin(KDialog::marginHint());
     grid->setSpacing(KDialog::spacingHint());
 
@@ -189,7 +189,7 @@ void PaperLayout::initScaleOptions( QWidget * tab, QVBoxLayout * vbox )
     zoomGroup->setColumnLayout( 0, Qt::Vertical );
     vbox->addWidget( zoomGroup );
 
-    QGridLayout *grid = new QGridLayout( zoomGroup->layout() );
+    QGridLayout *grid = new QGridLayout( zoomGroup );
     grid->setMargin(KDialog::marginHint());
     grid->setSpacing(KDialog::spacingHint());
 

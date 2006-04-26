@@ -115,7 +115,7 @@ SortDialog::SortDialog( View * parent,  const char * name,
   sort1Box->setColumnLayout(0, Qt::Vertical );
   sort1Box->layout()->setSpacing( KDialog::spacingHint() );
   sort1Box->layout()->setMargin( KDialog::marginHint() );
-  QHBoxLayout * sort1BoxLayout = new QHBoxLayout( sort1Box->layout() );
+  QHBoxLayout * sort1BoxLayout = new QHBoxLayout( sort1Box );
   sort1BoxLayout->setAlignment( Qt::AlignTop );
 
   m_sortKey1 = new QComboBox( sort1Box );
@@ -134,7 +134,7 @@ SortDialog::SortDialog( View * parent,  const char * name,
   sort2Box->setColumnLayout(0, Qt::Vertical );
   sort2Box->layout()->setSpacing( KDialog::spacingHint() );
   sort2Box->layout()->setMargin( KDialog::marginHint() );
-  QHBoxLayout * sort2BoxLayout = new QHBoxLayout( sort2Box->layout() );
+  QHBoxLayout * sort2BoxLayout = new QHBoxLayout( sort2Box );
   sort2BoxLayout->setAlignment( Qt::AlignTop );
 
   m_sortKey2 = new QComboBox( sort2Box );
@@ -154,7 +154,7 @@ SortDialog::SortDialog( View * parent,  const char * name,
   sort3Box->setColumnLayout(0, Qt::Vertical );
   sort3Box->layout()->setSpacing( KDialog::spacingHint() );
   sort3Box->layout()->setMargin( KDialog::marginHint() );
-  QHBoxLayout * sort3BoxLayout = new QHBoxLayout( sort3Box->layout() );
+  QHBoxLayout * sort3BoxLayout = new QHBoxLayout( sort3Box );
   sort3BoxLayout->setAlignment( Qt::AlignTop );
 
   m_sortKey3 = new QComboBox( sort3Box );
@@ -185,7 +185,7 @@ SortDialog::SortDialog( View * parent,  const char * name,
   firstKeyBox->setColumnLayout(0, Qt::Vertical );
   firstKeyBox->layout()->setSpacing( KDialog::spacingHint() );
   firstKeyBox->layout()->setMargin( KDialog::marginHint() );
-  QVBoxLayout * firstKeyBoxLayout = new QVBoxLayout( firstKeyBox->layout() );
+  QVBoxLayout * firstKeyBoxLayout = new QVBoxLayout( firstKeyBox );
   firstKeyBoxLayout->setAlignment( Qt::AlignTop );
 
   m_useCustomLists = new QCheckBox( firstKeyBox );
@@ -212,7 +212,7 @@ SortDialog::SortDialog( View * parent,  const char * name,
   resultToBox->layout()->setMargin( KDialog::marginHint() );
 
 
-  QHBoxLayout * resultToBoxLayout = new QHBoxLayout( resultToBox->layout() );
+  QHBoxLayout * resultToBoxLayout = new QHBoxLayout( resultToBox );
   resultToBoxLayout->setAlignment( Qt::AlignTop );
 
   QLabel * destinationSheet=new QLabel(resultToBox,"destinationSheet");

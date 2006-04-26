@@ -84,7 +84,7 @@ PatternSelect::PatternSelect( QWidget *parent, const char * )
 {
     penStyle = Qt::NoPen;
     penWidth = 1;
-    penColor = QColorGroup(palette()).text();
+    penColor = palette().text().color();
     selected = false;
     undefined = false;
 }
@@ -167,7 +167,7 @@ GeneralTab::GeneralTab( QWidget* parent, CellFormatDialog * dlg )
   groupBox->layout()->setSpacing( KDialog::spacingHint() );
   groupBox->layout()->setMargin( KDialog::marginHint() );
 
-  QGridLayout * groupBoxLayout = new QGridLayout( groupBox->layout() );
+  QGridLayout * groupBoxLayout = new QGridLayout( groupBox );
   groupBoxLayout->setAlignment( Qt::AlignTop );
 
   QLabel * label1 = new QLabel( groupBox );
@@ -186,14 +186,14 @@ GeneralTab::GeneralTab( QWidget* parent, CellFormatDialog * dlg )
   m_parentBox->clear();
   m_parentBox->insertItem( 0,i18n( "<None>" ) );
   QStringList tmp = m_dlg->getStyleManager()->styleNames();
-  tmp.remove( m_dlg->styleName );
+  tmp.erase( m_dlg->styleName );
   m_parentBox->insertItems( 1, tmp );
 
   if ( m_dlg->getStyle()->parent() )
-    m_parentBox->setCurrentText( m_dlg->getStyle()->parentName() );
+    m_parentBox->setItemText( m_dlg->getStyle()->parentName() );
   else
   {
-    m_parentBox->setCurrentText( i18n( "<None>" ) );
+    m_parentBox->setItemText( i18n( "<None>" ) );
 
     if ( m_dlg->getStyle()->definesAll() )
       m_parentBox->setEnabled( false );
@@ -894,12 +894,10 @@ void CellFormatDialog::initParameters(Format *obj,int x,int y)
 
 void CellFormatDialog::init()
 {
-  QColorGroup colorGroup = QApplication::palette().active();
-
   // Did we initialize the bitmaps ?
   if ( formatOnlyNegSignedPixmap == 0 )
   {
-    QColor Qt::black = colorGroup.text(); // not necessarily black :)
+    QColor black = palette().text().color(); // not necessarily black :)
     formatOnlyNegSignedPixmap    = paintFormatPixmap( "123.456", Qt::black, "-123.456", Qt::black );
     formatRedOnlyNegSignedPixmap = paintFormatPixmap( "123.456", Qt::black, "-123.456", Qt::red );
     formatRedNeverSignedPixmap   = paintFormatPixmap( "123.456", Qt::black, "123.456", Qt::red );
@@ -956,7 +954,7 @@ QPixmap * CellFormatDialog::paintFormatPixmap( const char * _string1, const QCol
 
   QPainter painter;
   painter.begin( pixmap );
-  painter.fillRect( 0, 0, 150, 14, QApplication::palette().active().base() );
+  painter.fillRect( 0, 0, 150, 14, palette().base().color() );
   painter.setPen( _color1 );
   painter.drawText( 2, 11, _string1 );
   painter.setPen( _color2 );
@@ -1291,7 +1289,7 @@ CellFormatPageFloat::CellFormatPageFloat( QWidget* parent, CellFormatDialog *_dl
                   }
                   else
                     tmp = dlg->cCurrency.symbol;
-                  currency->setCurrentText( tmp );
+                  currency->setItemText( tmp );
                 }
         }
         else if ( cellFormatType == Scientific_format )
@@ -2186,10 +2184,10 @@ void CellFormatPageFont::setCombos()
  if ( dlg->bTextColor )
    textColor = dlg->textColor;
  else
-   textColor = QColorGroup(palette()).text();
+   textColor = palette().text().color();
 
  if ( !textColor.isValid() )
-   textColor =QColorGroup(palette()).text();
+   textColor = palette().text().color();
 
  textColorButton->setColor( textColor );
 
@@ -2204,7 +2202,7 @@ void CellFormatPageFont::setCombos()
      found = false;
 
      for (int i = 0; i < number_of_entries ; i++){
-         if ( string == (QString) combo->text(i)){
+         if ( string == (QString) combo->itemText(i)){
              combo->setCurrentIndex(i);
              found = true;
              // kDebug(36001) << "Found Size " << string.data() << " setting to item " i << endl;
@@ -2553,12 +2551,12 @@ double CellFormatPagePosition::getSizeWidth() const
  *
  ***************************************************************************/
 
-BorderButton::BorderButton( QWidget *parent, const char *_name ) : QPushButton(parent,_name)
+BorderButton::BorderButton( QWidget *parent, const char * /*_name*/ ) : QPushButton(parent)
 {
   penStyle = Qt::NoPen;
   penWidth = 1;
-  penColor = QColorGroup(palette()).text();
-  setToggleButton( true );
+  penColor = palette().text().color();
+  setCheckable( true );
   setChecked( false);
   setChanged(false);
 }
@@ -2573,7 +2571,7 @@ void BorderButton::setUndefined()
 {
  setPenStyle(Qt::SolidLine );
  setPenWidth(1);
- setColor(QColorGroup(palette()).midlight());
+ setColor(palette().midlight().color());
 }
 
 
@@ -2582,7 +2580,7 @@ void BorderButton::unselect()
   setChecked(false);
   setPenWidth(1);
   setPenStyle(Qt::NoPen);
-  setColor( QColorGroup(palette()).text() );
+  setColor( palette().text().color() );
   setChanged(true);
 }
 
@@ -2594,8 +2592,8 @@ void BorderButton::unselect()
  *
  ***************************************************************************/
 
-Border::Border( QWidget *parent, const char *_name,bool _oneCol, bool _oneRow )
-    : QFrame( parent, _name )
+Border::Border( QWidget *parent, const char * /*_name*/, bool _oneCol, bool _oneRow )
+    : QFrame( parent )
 {
   oneCol=_oneCol;
   oneRow=_oneRow;
@@ -2610,7 +2608,7 @@ void Border::paintEvent( QPaintEvent *_ev )
   QPen pen;
   QPainter painter;
   painter.begin( this );
-  pen=QPen( QColorGroup(palette()).midlight(),2,Qt::SolidLine);
+  pen=QPen( palette().midlight(),2,Qt::SolidLine).color();
   painter.setPen( pen );
 
   painter.drawLine( OFFSETX-5, OFFSETY, OFFSETX , OFFSETY );
@@ -2716,7 +2714,7 @@ void CellFormatPageBorder::InitializeGrids()
 
   area=new Border(tmpQGroupBox,"area",dlg->oneCol,dlg->oneRow);
   grid2->addWidget(area,2,1,3,3);
-  area->setBackgroundColor( QColorGroup(palette()).base() );
+  area->setBackgroundColor( palette().base().color() );
 
   /* initailize the buttons that are in this box */
   for (int i=BorderType_Top; i < BorderType_END; i++)
@@ -3275,7 +3273,7 @@ void CellFormatPageBorder::changeState( BorderButton *_p)
   {
     _p->setPenWidth(1);
     _p->setPenStyle(Qt::NoPen);
-    _p->setColor( QColorGroup(palette()).text() );
+    _p->setColor( palette().text().color() );
   }
 
  area->repaint();
@@ -3694,10 +3692,10 @@ CellFormatPagePattern::CellFormatPagePattern( QWidget* parent, CellFormatDialog 
     if ( dlg->bBgColor )
         bgColor = dlg->bgColor;
     else
-        bgColor = QColorGroup(palette()).base();
+        bgColor = palette().base().color();
 
     if (!bgColor.isValid())
-        bgColor = QColorGroup(palette()).base();
+        bgColor = palette().base().color();
 
     bgColorButton->setColor( bgColor );
     connect( bgColorButton, SIGNAL( changed( const QColor & ) ),
@@ -3794,8 +3792,8 @@ CellFormatPagePattern::CellFormatPagePattern( QWidget* parent, CellFormatDialog 
 void CellFormatPagePattern::slotNotAnyColor()
 {
   b_notAnyColor = true;
-  bgColorButton->setColor( QColorGroup(palette()).base() );
-  current->setBackgroundColor( QColorGroup(palette()).base() );
+  bgColorButton->setColor( palette().base().color() );
+  current->setBackgroundColor( palette().base().color() );
 }
 
 void CellFormatPagePattern::slotSetBackgroundColor( const QColor &_color )
