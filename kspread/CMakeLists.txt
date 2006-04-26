@@ -10,6 +10,9 @@ add_subdirectory( toolbar )
 add_subdirectory( extensions )
 add_subdirectory( sheetstyles )
 add_subdirectory( templates )
+if(KOFFICE_ENABLE_SCRIPTING)
+    add_subdirectory(scripting)
+endif(KOFFICE_ENABLE_SCRIPTING)
 
 include_directories( ${CMAKE_SOURCE_DIR}/kspread/tests ${CMAKE_SOURCE_DIR}/interfaces ${CMAKE_SOURCE_DIR}/kchart/kdchart ${KOTEXT_INCLUDES} ${KOFFICEUI_INCLUDES} )
 
