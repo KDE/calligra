@@ -7,8 +7,12 @@ add_subdirectory( queries )
 add_subdirectory( forms )
 add_subdirectory( importexport )
 
+if(KOFFICE_ENABLE_SCRIPTING)
+    add_subdirectory(scripting)
+endif(KOFFICE_ENABLE_SCRIPTING)
+
+
 message(STATUS "${CMAKE_CURRENT_SOURCE_DIR}: skipped subdir $(REPORTS)")
-message(STATUS "${CMAKE_CURRENT_SOURCE_DIR}: skipped subdir $(SCRIPTINGDIR)")
 
 
 
