@@ -537,89 +537,93 @@ public:
      */
     void setText( int row, int column, const QString& text,
                   bool asString = false );
-    void setArrayFormula (Selection *selectionInfo, const QString &_text);
+    void setArrayFormula (Selection* selection, const QString &_text);
 
 
-    void setSelectionFont( Selection* selectionInfo,
+    void setSelectionFont( Selection* selection,
                            const char *_font = 0, int _size = -1,
                            signed char _bold = -1, signed char _italic = -1,
                            signed char _underline = -1,
                            signed char _strike = -1 );
 
-    void setSelectionMoneyFormat( Selection* selectionInfo, bool b );
-    void setSelectionAlign( Selection* selectionInfo,
+    void setSelectionMoneyFormat( Selection* selection, bool b );
+    void setSelectionAlign( Selection* selection,
                             Style::HAlign _align );
-    void setSelectionAlignY( Selection* selectionInfo,
+    void setSelectionAlignY( Selection* selection,
                              Style::VAlign _alignY );
-    void setSelectionPrecision( Selection* selectionInfo, int _delta );
-    void setSelectionPercent( Selection* selectionInfo, bool b );
-    void setSelectionMultiRow( Selection* selectionInfo, bool enable );
-    void setSelectionStyle( Selection* selectionInfo, Style * style );
+    void setSelectionPrecision( Selection* selection, int _delta );
+    void setSelectionPercent( Selection* selection, bool b );
+    void setSelectionMultiRow( Selection* selection, bool enable );
+    void setSelectionStyle( Selection* selection, Style * style );
 
     /**
     * setSelectionSize increase or decrease font size
     */
-    void setSelectionSize( Selection* selectionInfo, int _size );
+    void setSelectionSize( Selection* selection, int _size );
 
     /**
      *change string to upper case if _type equals 1
      * or change string to lower if _type equals -1
      */
-    void setSelectionUpperLower( Selection* selectionInfo, int _type );
+    void setSelectionUpperLower( Selection* selection, int _type );
 
-    void setSelectionfirstLetterUpper( Selection* selectionInfo);
+    /**
+     * @param selection the selection of cells to work on
+     */
+    void setSelectionfirstLetterUpper( Selection* selection);
 
-    void setSelectionVerticalText( Selection* selectionInfo, bool _b);
+    void setSelectionVerticalText( Selection* selection, bool _b);
 
-    void setSelectionComment( Selection* selectionInfo,
+    void setSelectionComment( Selection* selection,
                               const QString &_comment);
-    void setSelectionRemoveComment(Selection* selectionInfo);
+    void setSelectionRemoveComment(Selection* selection);
 
-    void setSelectionAngle(Selection* selectionInfo, int _value );
+    void setSelectionAngle(Selection* selection, int _value );
 
-    void setSelectionTextColor( Selection* selectionInfo,
+    void setSelectionTextColor( Selection* selection,
                                 const QColor &tbColor );
-    void setSelectionbgColor( Selection* selectionInfo,
+    void setSelectionbgColor( Selection* selection,
                               const QColor &bg_Color );
-    void setSelectionBorderColor( Selection* selectionInfo,
+    void setSelectionBorderColor( Selection* selection,
                                   const QColor &bd_Color );
 
     /**
-     * @param _marker is used if there is no selection currently.
-     *                In this case the cell on which the marker is will
-     *                be deleted.
-     *
+     * @param selection the selection of cells to work on
+     * @param undo create undo entry, if @c true
      */
-    void deleteSelection( Selection* selectionInfo, bool undo = true );
+    void deleteSelection( Selection* selection, bool undo = true );
 
     /**
-     * @param _marker is used if there is no selection currently.
-     *                In this case the cell on which the marker is will
-     *                be copied.
+     * @param selection the selection of cells to work on
      */
-    void copySelection( Selection* selectionInfo );
+    void copySelection( Selection* selection );
     /**
-     * @param _marker is used if there is no selection currently.
-     *                In this case the cell on which the marker is will
-     *                be cut.
+     * @param selection the selection of cells to work on
      */
-    void cutSelection( Selection* selectionInfo );
+    void cutSelection( Selection* selection );
     /**
-     * @param _marker is used if there is no selection currently.
-     *                In this case the cell on which the marker is will
-     *                be cleared.
+     * @param selection the selection of cells to work on
      */
-    void clearTextSelection( Selection* selectionInfo );
+    void clearTextSelection( Selection* selection );
 
-    void clearValiditySelection(Selection* selectionInfo );
+    /**
+     * @param selection the selection of cells to work on
+     */
+    void clearValiditySelection(Selection* selection );
 
-    void clearConditionalSelection(Selection* selectionInfo );
+    /**
+     * @param selection the selection of cells to work on
+     */
+    void clearConditionalSelection(Selection* selection );
 
-    void fillSelection( Selection * selectionInfo, int direction );
+    void fillSelection( Selection* selection, int direction );
 
-    void setWordSpelling(Selection* selectionInfo,const QString _listWord );
+    void setWordSpelling(Selection* selection,const QString _listWord );
 
-    QString getWordSpelling(Selection* selectionInfo );
+    /**
+     * @param selection the selection of cells to work on
+     */
+    QString getWordSpelling(Selection* selection );
 
     /**
      * A convenience function which retrieves the data to be pasted
@@ -632,7 +636,11 @@ public:
     void paste( const QByteArray & data, const QRect & pasteArea,
                 bool makeUndo = false, Paste::Mode= Paste::Normal, Paste::Operation = Paste::OverWrite,
                 bool insert = false, int insertTo = 0, bool pasteFC = false );
-    void defaultSelection( Selection* selectionInfo );
+
+    /**
+     * @param selection the selection of cells to work on
+     */
+    void defaultSelection( Selection* selection );
 
     /**
      * A function which allows to paste a text plain from the clipboard
@@ -725,18 +733,22 @@ public:
     /**
      * Install borders
      */
-    void borderLeft( Selection* selectionInfo, const QColor &_color );
-    void borderTop( Selection* selectionInfo, const QColor &_color );
-    void borderOutline( Selection* selectionInfo, const QColor &_color );
-    void borderAll( Selection* selectionInfo, const QColor &_color );
-    void borderRemove( Selection* selectionInfo );
-    void borderBottom( Selection* selectionInfo, const QColor &_color );
-    void borderRight( Selection* selectionInfo, const QColor &_color );
+    void borderLeft( Selection* selection, const QColor &_color );
+    void borderTop( Selection* selection, const QColor &_color );
+    void borderOutline( Selection* selection, const QColor &_color );
+    void borderAll( Selection* selection, const QColor &_color );
 
-    void setConditional( Selection* selectionInfo,
+    /**
+     * @param selection the selection of cells to work on
+     */
+    void borderRemove( Selection* selection );
+    void borderBottom( Selection* selection, const QColor &_color );
+    void borderRight( Selection* selection, const QColor &_color );
+
+    void setConditional( Selection* selection,
        QLinkedList<Conditional> const & newConditions );
 
-    void setValidity( Selection* selectionInfo, KSpread::Validity tmp );
+    void setValidity( Selection* selection, KSpread::Validity tmp );
 
     /**
      * Returns, if the grid shall be shown on the screen
@@ -804,8 +816,15 @@ public:
     void mergeCells( const Region& region, bool hor = false, bool ver = false );
     void dissociateCells( const Region &region );
 
-    void increaseIndent( Selection* selectionInfo );
-    void decreaseIndent( Selection* selectionInfo );
+    /**
+     * @param selection the selection of cells to work on
+     */
+    void increaseIndent( Selection* selection );
+
+    /**
+     * @param selection the selection of cells to work on
+     */
+    void decreaseIndent( Selection* selection );
 
     bool areaIsEmpty(const Region& area, TestType _type = Text) ;
 
@@ -976,13 +995,15 @@ public:
 
 
     /**
-     * Return true if there are text value in cell
+     * @return @c true if there are text value in cell
      * so you can create list selection
+     * @param selection the selection of cells to work on
      */
-    bool testListChoose(Selection* selectionInfo);
+    bool testListChoose(Selection* selection);
 
     /**
      * returns the text to be copied to the clipboard
+     * @param selection the selection of cells to work on
      */
     QString copyAsText(Selection* selection);
 
@@ -1354,7 +1375,7 @@ public:
 
 protected:
     typedef enum { CompleteRows, CompleteColumns, CellRegion } SelectionType;
-    SelectionType workOnCells( Selection* selectionInfo,
+    SelectionType workOnCells( Selection* selection,
                                CellWorker& worker );
 
 private:
