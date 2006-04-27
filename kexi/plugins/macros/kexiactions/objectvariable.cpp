@@ -34,17 +34,6 @@ using namespace KexiMacro;
 ObjectVariable::ObjectVariable(KoMacro::Action::Ptr action)
 	: KoMacro::GenericVariable<ObjectVariable>("object", i18n("Object"), action)
 {
-	update();
-}
-
-ObjectVariable::~ObjectVariable()
-{
-}
-
-void ObjectVariable::update()
-{
-	kdDebug() << "ObjectVariable::update()" << endl;
-
 	QString defaultvalue;
 	KexiPart::PartInfoList* parts = Kexi::partManager().partInfoList();
 	for(KexiPart::PartInfoListIterator it(*parts); it.current(); ++it) {
@@ -59,3 +48,8 @@ void ObjectVariable::update()
 	}
 	setVariant(defaultvalue);
 }
+
+ObjectVariable::~ObjectVariable()
+{
+}
+

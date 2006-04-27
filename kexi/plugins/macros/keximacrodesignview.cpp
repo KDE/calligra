@@ -296,6 +296,12 @@ void KexiMacroDesignView::updateProperties(int row, KoProperty::Set* set, KoMacr
 			}
 		}
 
+		/*
+		if(variable->type() != KoMacro::MetaParameter::TypeVariant) {
+			continue;
+		}
+		*/
+
 		KoMacro::Variable::List children = variable->children();
 		if(children.count() > 0) {
 			QStringList keys, names;
@@ -434,7 +440,11 @@ void KexiMacroDesignView::propertyChanged(KoProperty::Set&, KoProperty::Property
 	v->setName(name);
 	macroitem->setVariable(name, KoMacro::Variable::Ptr(v));
 
+//updateProperties(int row, KoProperty::Set* set, KoMacro::MacroItem::Ptr macroitem)
+//updateProperties(row, d->propertyset->currentPropertySet(), macroitem);
+
 	//propertySetSwitched();
+	//propertySetReloaded(true);
 	setDirty();
 }
 

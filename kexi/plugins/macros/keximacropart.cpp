@@ -133,8 +133,8 @@ void KexiMacroPart::initPartActions()
 {
 	kdDebug() << "KexiMacroPart::initPartActions()" << endl;
 
-	::KoMacro::Manager::init( m_mainWin );
-	new KexiMacro::OpenObject;
+	::KoMacro::Manager::init(m_mainWin);
+	new KexiMacro::OpenObject(m_mainWin);
 	new KexiTestAction;
 }
 

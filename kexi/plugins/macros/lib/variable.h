@@ -208,7 +208,6 @@ namespace KoMacro {
 				setText(caption);
 			}
 			virtual ~GenericVariable() {}
-			virtual void update() = 0;
 	};
 
 }

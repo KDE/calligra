@@ -25,6 +25,8 @@
 #include "../lib/action.h"
 #include "../lib/variable.h"
 
+class KexiMainWindow;
+
 namespace KexiMacro {
 
 	/**
@@ -39,7 +41,7 @@ namespace KexiMacro {
 			/**
 			* Constructor.
 			*/
-			explicit OpenObject();
+			explicit OpenObject(KexiMainWindow* const mainwin);
 			
 			/**
 			* Destructor.

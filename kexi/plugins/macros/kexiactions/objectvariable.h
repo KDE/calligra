@@ -50,10 +50,6 @@ namespace KexiMacro {
 			*/
 			virtual ~ObjectVariable();
 
-			/**
-			* Update the variable.
-			*/
-			virtual void update();
 	};
 
 }
