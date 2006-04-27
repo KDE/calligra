@@ -21,6 +21,7 @@
 #define KOMACRO_MACRO_H
 
 #include <qobject.h>
+#include <ksharedptr.h>
 
 #include "action.h"
 #include "xmlhandler.h"
@@ -40,8 +41,9 @@ namespace KoMacro {
 	* of them points to an @a Action instance.
 	*/
 	class KOMACRO_EXPORT Macro
-		: public Action
-		, public XMLHandler
+		: public QObject // Qt functionality like signals and slots
+		, public KShared // shared reference-counting
+		, public XMLHandler // to (un-)serialize from/to XML
 	{
 			Q_OBJECT
 
@@ -71,6 +73,16 @@ namespace KoMacro {
 			* Destructor.
 			*/
 			virtual ~Macro();
+
+			/**
+			* @return the name this @a Macro instance has.
+			*/
+			const QString name() const;
+			
+			/**
+			* Set the @p name this @a Macro instance has.
+			*/
+			void setName(const QString& name);
 
 			/**
 			* @return a string-representation of the macro.

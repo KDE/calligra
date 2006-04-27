@@ -125,6 +125,10 @@ class KexiTestAction : public KoMacro::GenericAction<KexiTestAction> {
 			setVariable("myvar11","My Var 1-1",QVariant(QString("myvalue11")));
 			setVariable("myvar12","My Var 1-2",QVariant(QString("myvalue12")));
 		}
+		virtual void activate(KoMacro::Context::Ptr)
+		{
+			kdDebug() << "KexiTestAction::activate(Context::Ptr)" << endl;
+		}
 };
 
 

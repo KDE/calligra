@@ -91,15 +91,13 @@ namespace KoMacro {
 		public slots:
 
 			/**
-			* Called if the @a Function should be executed.
-			*/
-			virtual void activate();
-
-			/**
 			* Called if the @a Function should be executed within
 			* the context \p context .
 			*/
 			virtual void activate(Context::Ptr context);
+
+		signals:
+			void activated();
 
 		private:
 			/// @internal d-pointer class.

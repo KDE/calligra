@@ -42,6 +42,11 @@ namespace KoMacro {
 			QString name;
 
 			/**
+			* The i18n-caption text this @a Action has.
+			*/
+			QString text;
+
+			/**
 			* The comment the user is able to define for each action.
 			*/
 			QString comment;
@@ -78,7 +83,7 @@ namespace KoMacro {
 }
 
 Action::Action(const QString& name, const QString& text)
-	: KAction()
+	: QObject()
 	, KShared()
 	, d( new Private() ) // create the private d-pointer instance.
 {
@@ -108,6 +113,16 @@ const QString Action::name() const
 void Action::setName(const QString& name)
 {
 	d->name = name;
+}
+
+const QString Action::text() const
+{
+	return d->text;
+}
+
+void Action::setText(const QString& text)
+{
+	d->text = text;
 }
 
 const QString Action::comment() const
@@ -162,24 +177,10 @@ void Action::setVariable(const QString& name, const QString& text, const QVarian
 	setVariable( Variable::Ptr(variable) );
 }
 
-void Action::activate()
+/*
+void Action::activate(Context::Ptr context)
 {
-	kdDebug() << "Action::activate() name=" << name() << " text=" << text() << endl;
-
-	QCString s = name().isNull() ? "" : name().latin1();
-	KAction* action = Manager::self()->guiClient()->action(s);
-	if(action) {
-		action->activate();
-	}
-	else {
-		kdWarning() << QString("Action::activate() No such action \"%1\"").arg(name()) << endl;
-	}
-
-	emit activated();
-}
-
-void Action::activate(Context::Ptr /*context*/)
-{
+	Q_UNUSED(context);
 	kdDebug() << "Action::activate(Context::Ptr) name=" << name() << " text=" << text() << endl;
 
 	QCString s = name().isNull() ? "" : name().latin1();
@@ -193,15 +194,6 @@ void Action::activate(Context::Ptr /*context*/)
 
 	emit activated();
 }
-
-void Action::setAction(const KAction* action)
-{
-	setName( action->name() );
-	setText( action->text().remove("&") );
-	setComment( "" );
-	setIcon( action->icon() );
-	setWhatsThis( action->whatsThis() );
-	setToolTip( action->toolTip() );
-}
+*/
 
 #include "action.moc"

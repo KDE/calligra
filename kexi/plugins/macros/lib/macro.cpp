@@ -45,21 +45,38 @@ namespace KoMacro {
 			*/
 			QValueList<MacroItem::Ptr> itemlist;
 
+			/**
+			* The name the @a Macro has.
+			*/
+			QString name;
+
 	};
 
 }
 
 Macro::Macro(const QString& name)
-	: Action(name)
+	: QObject()
+	, KShared()
 	, XMLHandler(this)
 	, d( new Private() ) // create the private d-pointer instance.
 {
+	d->name = name;
 }
 
 Macro::~Macro()
 {
 	// destroy the private d-pointer instance.
 	delete d;
+}
+
+const QString Macro::name() const
+{
+	return d->name;
+}
+
+void Macro::setName(const QString& name)
+{
+	d->name = name;
 }
 
 const QString Macro::toString() const

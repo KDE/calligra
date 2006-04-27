@@ -157,12 +157,6 @@ void Function::setReceiverObject(MetaObject::Ptr metaobject)
 	d->metaobject = metaobject;
 }
 
-void Function::activate()
-{
-	kdDebug() << "Function::activate()" << endl;
-	activate(0);
-}
-
 void Function::activate(Context::Ptr context)
 {
 	kdDebug() << "Function::activate(Context::Ptr)" << endl;

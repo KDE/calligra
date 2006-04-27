@@ -21,8 +21,6 @@
 #define KOMACRO_ACTION_H
 
 #include <qobject.h>
-
-#include <kaction.h>
 #include <ksharedptr.h>
 
 // Forward declarations.
@@ -42,8 +40,8 @@ namespace KoMacro {
 	 * functionality KAction doesn't provide.
 	 */
 	class KOMACRO_EXPORT Action
-		: public KAction
-		, public KShared
+		: public QObject // Qt functionality like signals and slots
+		, public KShared // shared reference-counting
 	{
 			Q_OBJECT
 
@@ -90,9 +88,19 @@ namespace KoMacro {
 			const QString name() const;
 			
 			/**
-			* Set the name of the @a Macro to @p name .
+			* Set the name of the @a Action to @p name .
 			*/
 			void setName(const QString& name); 
+
+			/**
+			* @return the i18n-caption text this @a Action has.
+			*/
+			const QString text() const;
+
+			/**
+			* Set the i18n-caption text this @a Action has.
+			*/
+			void setText(const QString& text);
 
 			/**
 			* @return the comment associated with this action.
@@ -150,11 +158,6 @@ namespace KoMacro {
 			void setVariable(const QString& name, const QString& text, const QVariant& variant);
 
 			/**
-			* Set the @p action to be used within this @a Action instance.
-			*/
-			void setAction(const KAction* action);
-
-			/**
 			* This function is called, when a @a Variable provided by this
 			* @a Action is changed.
 			*/
@@ -168,15 +171,10 @@ namespace KoMacro {
 		public slots:
 
 			/**
-			* Called if the @a Action should be executed.
-			*/
-			virtual void activate();
-
-			/**
 			* Called if the @a Action should be executed within the
 			* defined @p context .
 			*/
-			virtual void activate(Context::Ptr context);
+			virtual void activate(Context::Ptr context) = 0;
 
 		private:
 			/// @internal d-pointer class.

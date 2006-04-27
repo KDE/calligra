@@ -23,9 +23,13 @@
 
 //#include "../lib/komacro_export.h"
 #include "../lib/action.h"
-#include "../lib/variable.h"
 
 class KexiMainWindow;
+
+namespace KoMacro {
+	class Variable;
+	class Context;
+}
 
 namespace KexiMacro {
 
@@ -40,6 +44,8 @@ namespace KexiMacro {
 
 			/**
 			* Constructor.
+			*
+			* @param mainwin Kexi's main window implementation.
 			*/
 			explicit OpenObject(KexiMainWindow* const mainwin);
 			
@@ -49,14 +55,18 @@ namespace KexiMacro {
 			virtual ~OpenObject();
 
 			/**
-			*
+			* This function is called, when a @a Variable provided by this
+			* @a OpenObject is changed.
 			*/
-			virtual KoMacro::Variable::List notifyUpdated(KoMacro::Variable::Ptr variable);
+			virtual KoMacro::Variable::List notifyUpdated(KSharedPtr<KoMacro::Variable> variable);
 
-		/*
 		public slots:
-			virtual void activate() {}
-		*/
+
+			/**
+			* Called if the @a Action should be executed within the
+			* defined @p context .
+			*/
+			virtual void activate(KSharedPtr<KoMacro::Context> context);
 
 		private:
 			/// @internal d-pointer class.

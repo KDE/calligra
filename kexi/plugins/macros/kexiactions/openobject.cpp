@@ -19,8 +19,10 @@
  ***************************************************************************/
 
 #include "openobject.h"
-
 #include "objectvariable.h"
+
+#include "../lib/variable.h"
+#include "../lib/context.h"
 
 #include <kexi_export.h>
 #include <core/kexi.h>
@@ -134,4 +136,11 @@ KoMacro::Variable::List OpenObject::notifyUpdated(KoMacro::Variable::Ptr variabl
 	}
 
 	return list;
+}
+
+void OpenObject::activate(KoMacro::Context::Ptr context)
+{
+	Q_UNUSED(context);
+	kdDebug() << "OpenObject::activate(Context::Ptr)" << endl;
+	//TODO
 }
