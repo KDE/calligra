@@ -253,7 +253,7 @@ public:
     void deleteEditor(bool saveChanges, bool array = false);
 
     /**
-     * Called from @ref EditWidget and @ref CellEditor
+     * Called from EditWidget and CellEditor
      * if they loose the focus because the user started a "choose selection".
      * This is done because the editor wants to get its focus back afterwards.
      * But somehow Canvas must know whether the EditWidget or the CellEditor

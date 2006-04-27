@@ -303,7 +303,7 @@ public:
 
     /**
      * Copies the format and the content. It does not copy the #m_row and #m_column attributes.
-     * Besides that all persistent attributes are copied. @ref #setCellText is called to set the real
+     * Besides that all persistent attributes are copied. setCellText() is called to set the real
      * content.
      *
      * @see copyFormat( const Cell* cell )

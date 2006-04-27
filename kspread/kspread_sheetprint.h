@@ -209,14 +209,14 @@ public:
 
     /**
      * Sets the page limit in X direction. The zoom factor will be adjusted,
-     * so that there is a maximum of @arg pages pages in X direction.
+     * so that there is a maximum of @p pages pages in X direction.
      * 0 releases the limit
      */
     void setPageLimitX( int pages );
 
     /**
      * Sets the page limit in Y direction. The zoom factor will be adjusted,
-     * so that there is a maximum of @arg pages pages in X direction.
+     * so that there is a maximum of @p pages pages in X direction.
      * 0 releases the limit
      */
     void setPageLimitY( int pages );
@@ -256,16 +256,16 @@ public:
     void setPrintRepeatRows( QPair<int, int> _printRepeatRows );
 
     /**
-     * Tests whether _column is the first column of a new page. In this
+     * Tests whether @p column is the first column of a new page. In this
      * case the left border of this column may be drawn highlighted to show
      * that this is a page break.
      */
-    bool isOnNewPageX( int _column );
+    bool isOnNewPageX( int column );
 
     /**
-     * Updates the new page list up to @ref _column
+     * Updates the new page list up to @p column
      */
-    void updateNewPageX( int _column );
+    void updateNewPageX( int column );
 
     /**
      * Tests whether _row is the first row of a new page. In this
@@ -275,19 +275,19 @@ public:
     bool isOnNewPageY( int _row );
 
     /**
-     * Updates the new page list up to @ref _row
+     * Updates the new page list up to @p row
      */
-    void updateNewPageY( int _row );
+    void updateNewPageY( int row );
 
     /**
-     * Updates the new page list for columns starting at column @arg _col
+     * Updates the new page list for columns starting at column @p col
      */
-    void updateNewPageListX( int _col );
+    void updateNewPageListX( int col );
 
     /**
-     * Updates the new page list for rows starting at row @arg _row
+     * Updates the new page list for rows starting at row @p row
      */
-    void updateNewPageListY( int _row );
+    void updateNewPageListY( int row );
 
     /**
      * Replaces in _text all _search text parts by _replace text parts.
