@@ -222,7 +222,7 @@ Canvas::Canvas(View *view)
 {
   d = new Private;
 
-//   setAttribute( Qt::WA_OpaquePaintEvent );
+  setAttribute( Qt::WA_OpaquePaintEvent );
   setAttribute( Qt::WA_StaticContents );
 
   d->cellEditor = 0;
@@ -4015,9 +4015,8 @@ QRect Canvas::cellsInArea( const QRect area ) const
   if (!sheet)
     return QRect();
 
-	KoRect unzoomedRect = d->view->doc()->unzoomRect( area );
-
-       	unzoomedRect.translate( (int)xOffset(), (int)yOffset() );
+  KoRect unzoomedRect = d->view->doc()->unzoomRect( area );
+  unzoomedRect.moveBy( (int)xOffset(), (int)yOffset() );
 
   	double tmp;
   	int left_col = sheet->leftColumn( unzoomedRect.left(), tmp );
@@ -4062,7 +4061,6 @@ void Canvas::paintUpdates()
     matrix = painter.matrix();
   }
 
-
   paintChildren( painter, matrix );
 
   painter.save();
@@ -4098,7 +4096,6 @@ void Canvas::paintUpdates()
       int bottom = range.bottom();
       for ( int y = range.top(); y <= bottom; ++y )
       {
-        kDebug() << "painting cell at [" << x << "," << y << "]" << endl;
         cell = sheet->cellAt( x, y );
 
         // recalc and relayout only for non default cells

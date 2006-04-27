@@ -470,43 +470,49 @@ public:
   void refreshLocale();
 
   /**
-   * Functions to begin a kspread 'operation'.  Calls to emitBeginOperation
-   * and emitEndOperation should surround each logical user operation.
+   * Function to begin a KSpread 'operation'.
+   *
+   * Calls to emitBeginOperation and emitEndOperation should surround each
+   * logical user operation.
    * During the operation, the following should hold true:
    * - No painting will be done to the screen
    * - No cell calculation will be done (maybe there are exceptions, such
    *   as the goalseek operation needs to calculate values)
-   * During an operation, calls to Sheet::setRegionPaintDirty mark
-   * regions as needing repainted.  Once the emitEndOperation function is
-   * called, those regions will be painted all at once, values being calculated
-   * as necessary.
-   * Calls to begin/endOperation may be nested.  Calcualation/painting will
-   * be delayed until the outer begin/end pair has finished.
+   * During an operation, calls to Sheet::setRegionPaintDirty mark regions
+   * as needing repainted.
+   * Calls to begin/endOperation may be nested.
+   * Calcualation and painting will be delayed until the outer begin/end
+   * pair has finished.
    *
-   * The waitCursor parameter specifies whether to put the hourglass
-   * up during the operation.
-   *
+   * @param waitCursor specifies whether to put the hourglass up during
+   *                   the operation.
    */
   void emitBeginOperation(bool waitCursor);
 
-  /** default override of koDocument version.  Changes the cursor to an
-   * hourglass
+  /**
+   * Function to begin a KSpread 'operation'.
+   * Changes the cursor to an hourglass.
+   * @see emitBeginOperation(bool)
+   * @reimp default override of KoDocument version.
    */
   virtual void emitBeginOperation();
 
   /**
-   * Mark the end of an operation and triggers a repaint of any cells or regions of cells which
-   * have been marked as 'dirty' via calls to Sheet::setRegionPaintDirty
-   * See above comment to emitBeginOperation(bool).
+   * Marks the end of an operation.
+   * If cells have been marked dirty while the operation, a repainted
+   * of them is triggered.
+   * @see emitBeginOperation(bool)
+   * @see Sheet::setRegionPaintDirty
+   * @reimp
    */
   virtual void emitEndOperation();
 
   /**
-   * s.a. difference does only specified tasks and thats why it improves performance
-   * significantly. rect normally are the visible cells/the cells that need to be updated.
-   *
-   * TODO:  This is essentially redundant now since emitEndOperation behaviour has been fixed to
-   * only update cells that were already in the paint dirty list.
+   * Convenience function.
+   * Marks the cells in @p region to get repainted and calls emitEndOperation().
+   * @see emitBeginOperation(bool)
+   * @see emitEndOperation()
+   * @see Sheet::setRegionPaintDirty
    */
   void emitEndOperation( const Region& region );
 

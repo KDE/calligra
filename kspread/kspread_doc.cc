@@ -2141,32 +2141,9 @@ void Doc::emitBeginOperation(void)
 
 void Doc::emitEndOperation()
 {
-   d->numOperations--;
-
-   if (d->numOperations <= 0)
-   {
-     d->numOperations = 0;
-     d->delayCalculation = false;
-   }
-
-   KoDocument::emitEndOperation();
-
-   if (d->numOperations == 0)
-   {
-   	QApplication::restoreOverrideCursor();
-
-     /* do this after the parent class emitEndOperation because that allows updates
-        on the view again
-     */
-     paintUpdates();
-   }
-}
-
-void Doc::emitEndOperation( const Region& /*region*/ )
-{
   d->numOperations--;
 
-  if ( d->numOperations > 0 || !d->activeSheet )
+  if ( d->numOperations > 0 )
   {
     KoDocument::emitEndOperation();
     return;
@@ -2179,10 +2156,18 @@ void Doc::emitEndOperation( const Region& /*region*/ )
 
   QApplication::restoreOverrideCursor();
 
-    /* do this after the parent class emitEndOperation because that allows updates
-    on the view again
-    */
-  paintUpdates();
+  // Do this after the parent class emitEndOperation,
+  // because that allows updates on the view again.
+  // Only if we have dirty cells, trigger a repainting.
+  if (d->activeSheet && !d->activeSheet->paintDirtyData().isEmpty())
+    paintUpdates();
+}
+
+void Doc::emitEndOperation( const Region& region )
+{
+  if (d->activeSheet)
+    d->activeSheet->setRegionPaintDirty(region);
+  Doc::emitEndOperation();
 }
 
 bool Doc::delayCalculation() const

@@ -216,7 +216,8 @@ public:
 
 
     /**
-     * Paint all visible cells that have a paint dirty flag set
+     * Paints all visible cells that have a paint dirty flag set.
+     * @see paintEvent()
      */
     void paintUpdates();
 
@@ -395,6 +396,18 @@ signals:
 
 protected:
     virtual void keyPressEvent ( QKeyEvent* _ev );
+
+    /**
+     * If no cells are marked as dirty before, this method was _not_ called
+     * from the end of a KSpread 'operation'. In this case all visible cells
+     * will be marked as dirty.
+     * Calls paintUpdates(), which repaints the dirty cells.
+     * @see Doc::emitBeginOperation(bool)
+     * @see Doc::emitEndOperation()
+     * @see Sheet::setRegionPaintDirty()
+     * @see paintUpdates()
+     * @reimp
+     */
     virtual void paintEvent ( QPaintEvent* _ev );
     virtual void mousePressEvent( QMouseEvent* _ev );
     virtual void mouseReleaseEvent( QMouseEvent* _ev );
