@@ -3614,6 +3614,8 @@ void View::setActiveSheet( Sheet * _t, bool updateSheet )
   {
     d->canvas->setXOffset((*it3).x());
     d->canvas->setYOffset((*it3).y());
+    d->horzScrollBar->setValue((*it3).x());
+    d->vertScrollBar->setValue((*it3).y());
   }
   calcStatusBarOp();
 
