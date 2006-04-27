@@ -31,22 +31,24 @@
 
 using namespace KexiMacro;
 
-ObjectVariable::ObjectVariable(KoMacro::Action::Ptr action)
+ObjectVariable::ObjectVariable(KoMacro::Action::Ptr action, const QString& objectname)
 	: KoMacro::GenericVariable<ObjectVariable>("object", i18n("Object"), action)
 {
-	QString defaultvalue;
 	KexiPart::PartInfoList* parts = Kexi::partManager().partInfoList();
 	for(KexiPart::PartInfoListIterator it(*parts); it.current(); ++it) {
 		KexiPart::Info* info = it.current();
 		if(info->isVisibleInNavigator()) {
-			const QString objname = info->objectName(); //info->groupName();
-			children().append( KoMacro::Variable::Ptr(new KoMacro::Variable(objname)) );
-			if(defaultvalue.isNull()) {
-				defaultvalue = objname;
-			}
+			const QString name = info->objectName(); //info->groupName();
+			children().append( KoMacro::Variable::Ptr(new KoMacro::Variable(name)) );
 		}
 	}
-	setVariant(defaultvalue);
+
+	if(! objectname.isNull())
+		setVariant( objectname );
+	else if(children().count() > 0)
+		setVariant( children()[0]->variant() );
+	else
+		setVariant( QString::null );
 }
 
 ObjectVariable::~ObjectVariable()

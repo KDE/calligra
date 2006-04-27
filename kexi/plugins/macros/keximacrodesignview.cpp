@@ -17,6 +17,7 @@
 
 #include "keximacrodesignview.h"
 
+#include <qtimer.h>
 #include <qdom.h>
 #include <kdebug.h>
 
@@ -98,6 +99,8 @@ class KexiMacroDesignView::Private
 		*/
 		KexiDataAwarePropertySet* propertyset;
 
+		bool propertyreloads;
+
 		/**
 		* Constructor.
 		*
@@ -106,6 +109,7 @@ class KexiMacroDesignView::Private
 		*/
 		Private()
 			: propertyset(0)
+			, propertyreloads(false)
 		{
 		}
 
@@ -251,6 +255,7 @@ void KexiMacroDesignView::updateData()
 
 void KexiMacroDesignView::updateProperties(int row, KoProperty::Set* set, KoMacro::MacroItem::Ptr macroitem)
 {
+	kdDebug() << "KexiMacroDesignView::updateProperties() row=" << row << endl;
 	if(row < 0) {
 		return; // ignore invalid rows.
 	}
@@ -320,7 +325,6 @@ void KexiMacroDesignView::updateProperties(int row, KoProperty::Set* set, KoMacr
 				action->comment(), // description
 				KoProperty::StringList // type
 			);
-			p->setOption("editable",QVariant(true,0));
 			set->addProperty(p);
 		}
 		else {
@@ -424,8 +428,14 @@ void KexiMacroDesignView::rowUpdated(KexiTableItem*)
 	//setDirty();
 }
 
-void KexiMacroDesignView::propertyChanged(KoProperty::Set&, KoProperty::Property& property)
+void KexiMacroDesignView::propertyChanged(KoProperty::Set& set, KoProperty::Property& property)
 {
+	if(d->propertyreloads) {
+		// be sure to don't update properties if we are still
+		// on reloading.
+		return;
+	}
+
 	const QString name = property.name();
 	int row = d->propertyset->currentRow();
 	if(row < 0 || uint(row) >= macro()->items().count()) {
@@ -434,6 +444,7 @@ void KexiMacroDesignView::propertyChanged(KoProperty::Set&, KoProperty::Property
 	}
 
 	kdDebug() << "KexiMacroDesignView::propertyChanged() name=" << name << endl;
+	d->propertyreloads = true;
 
 	KoMacro::MacroItem::Ptr macroitem = macro()->items()[row];
 
@@ -441,14 +452,17 @@ void KexiMacroDesignView::propertyChanged(KoProperty::Set&, KoProperty::Property
 	pv->setName(name);
 	QStringList dirtyvarnames = macroitem->setVariable(name, KoMacro::Variable::Ptr(pv));
 
+	bool reload = false;
 	for(QStringList::Iterator it = dirtyvarnames.begin(); it != dirtyvarnames.end(); ++it) {
 		KoMacro::Variable::Ptr v = macroitem->variable(*it);
-		if(! v.data())
+		if(! v.data()) {
 			continue;
+		}
 
 		KoProperty::Property& p = d->propertyset->currentPropertySet()->property( (*it).latin1() );
-		if(p == KoProperty::Property::null)
+		if(p == KoProperty::Property::null) {
 			continue;
+		}
 
 		KoMacro::Variable::List children = v->children();
 		if(children.count() > 0) {
@@ -459,14 +473,18 @@ void KexiMacroDesignView::propertyChanged(KoProperty::Set&, KoProperty::Property
 				keys << s;
 				names << s;
 			}
-			p.setListData(keys, names);
+			p.setListData( new KoProperty::Property::ListData(keys, names) );
 		}
 		p.setValue(v->variant());
+		reload = true;
 	}
 
-	//propertySetSwitched();
-	//propertySetReloaded(true);
-	setDirty();
+	if(reload) {
+		propertySetReloaded(true);
+		setDirty();
+	}
+
+	d->propertyreloads = false;
 }
 
 #include "keximacrodesignview.moc"

@@ -43,7 +43,7 @@ namespace KexiMacro {
 			* @param action The @a KoMacro::Action instance
 			* this @a ObjectVariable is child of.
 			*/
-			explicit ObjectVariable(KoMacro::Action::Ptr action);
+			explicit ObjectVariable(KoMacro::Action::Ptr action, const QString& objectname = QString::null);
 
 			/**
 			* Destructor.

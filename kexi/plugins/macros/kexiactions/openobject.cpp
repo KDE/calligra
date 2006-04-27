@@ -113,8 +113,8 @@ OpenObject::OpenObject(KexiMainWindow* const mainwin)
 {
 	ObjectVariable* objvar = new ObjectVariable(this);
 	setVariable(KoMacro::Variable::Ptr( objvar ));
-	const QString objname = objvar->variant().toString();
-	setVariable(KoMacro::Variable::Ptr( new NameVariable(d->mainwin, this, objname) ));
+
+	setVariable(KoMacro::Variable::Ptr( new NameVariable(d->mainwin, this, objvar->variant().toString()) ));
 }
 
 OpenObject::~OpenObject() 
@@ -129,7 +129,8 @@ KoMacro::Variable::List OpenObject::notifyUpdated(KoMacro::Variable::Ptr variabl
 	KoMacro::Variable::List list;
 	if(variable->name() == "object") {
 		const QString objectname = variable->variant().toString(); // e.g. "table" or "query"
-		list.append(KoMacro::Variable::Ptr(new NameVariable(d->mainwin, this, objectname)));
+		//list.append( KoMacro::Variable::Ptr(new ObjectVariable(this, objectname)) );
+		list.append( KoMacro::Variable::Ptr(new NameVariable(d->mainwin, this, objectname)) );
 	}
 
 	return list;

@@ -101,7 +101,7 @@ QStringList MacroItem::setVariable(const QString& name, Variable::Ptr variable)
 		return QStringList();
 	}
 
-	kdDebug() << "MacroItem::setVariable() name=" << name << " variable" << variable->variant().toString() << endl;
+	kdDebug() << "MacroItem::setVariable() name=" << name << " variable=" << variable->variant().toString() << endl;
 
 	// remember the new variable.
 	d->variables.replace(name, variable);
