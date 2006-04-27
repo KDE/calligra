@@ -22,6 +22,7 @@
 #include "objectvariable.h"
 
 #include "../lib/variable.h"
+#include "../lib/macroitem.h"
 #include "../lib/context.h"
 
 #include <kexi_export.h>
@@ -87,12 +88,6 @@ namespace KexiMacro {
 						kdDebug() << "KexiMacro::NameVariable() name=" << n << endl;
 					}
 				
-					/*
-					bool openingCancelled;
-					if(! mainwin->openObject(item, Kexi::DataViewMode, openingCancelled) && !openingCancelled)
-						KMessageBox::error(m_win, i18n("Specified document could not be opened."));
-					*/
-
 					break; // job is done.
 				}
 
@@ -140,7 +135,60 @@ KoMacro::Variable::List OpenObject::notifyUpdated(KoMacro::Variable::Ptr variabl
 
 void OpenObject::activate(KoMacro::Context::Ptr context)
 {
-	Q_UNUSED(context);
-	kdDebug() << "OpenObject::activate(Context::Ptr)" << endl;
-	//TODO
+	QString objectname, name;
+
+	{
+		KoMacro::MacroItem::Ptr macroitem = context ? context->macroItem() : KoMacro::MacroItem::Ptr(0);
+		if(! macroitem.data()) {
+			kdWarning() << "OpenObject::activate(Context::Ptr) Invalid context or macroitem." << endl;
+			return;
+		}
+		kdDebug() << "OpenObject::activate(Context::Ptr)" << endl;
+
+		// Set the object.
+		KoMacro::Variable::Ptr objectnamevar = macroitem->variable("object", true);
+		if(! objectnamevar.data()) {
+			kdWarning() << "OpenObject::activate(Context::Ptr) No object defined." << endl;
+			KoMacro::Variable::Map map = macroitem->variables();
+			QString s;
+			for(KoMacro::Variable::Map::Iterator it = map.begin(); it != map.end(); ++it) s += it.key() + " ";
+			kdDebug() << "Valid names: " << s << endl;
+			return;
+		}
+		objectname = objectnamevar->variant().toString();
+
+		// Set the name.
+		KoMacro::Variable::Ptr namevar = macroitem->variable("name", true);
+		if(! namevar.data()) {
+			kdWarning() << "OpenObject::activate(Context::Ptr) No name for the object defined." << endl;
+			return;
+		}
+		name = namevar->variant().toString();
+	}
+
+	KexiPart::Item* item = 0;
+
+	{
+		// Iterate through the list of parts to find the for the objectname
+		// matching one and determinate the KexiPart::Item we should open.
+		KexiPart::PartInfoList* parts = Kexi::partManager().partInfoList();
+		for(KexiPart::PartInfoListIterator it(*parts); it.current(); ++it) {
+			KexiPart::Info* info = it.current();
+			if(info->isVisibleInNavigator() && objectname == info->objectName()) {
+				item = d->mainwin->project()->item(info, name);
+				if(item) { // if we found an item, our job is done.
+					break;
+				}
+			}
+		}
+	}
+
+	if(item) { // We got a valid item. Try to open the object now.
+		bool openingCancelled;
+		if(! d->mainwin->openObject(item, Kexi::DataViewMode, openingCancelled)) {
+			if(! openingCancelled) {
+				KMessageBox::error(d->mainwin, i18n("Object of type \"%1\" with name \"%2\" could not be opened.").arg(objectname).arg(name));
+			}
+		}
+	}
 }

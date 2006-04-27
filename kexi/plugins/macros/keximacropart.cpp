@@ -118,9 +118,12 @@ bool KexiMacroPart::execute(KexiPart::Item* item)
 
 //################## testcases
 class KexiTestAction : public KoMacro::GenericAction<KexiTestAction> {
+	private:
+		KexiMainWindow* m_mainwin;
 	public:
-		KexiTestAction()
+		KexiTestAction(KexiMainWindow* mainwin)
 			: KoMacro::GenericAction<KexiTestAction>("kexitestaction", "Test Action")
+			, m_mainwin(mainwin)
 		{
 			setVariable("myvar11","My Var 1-1",QVariant(QString("myvalue11")));
 			setVariable("myvar12","My Var 1-2",QVariant(QString("myvalue12")));
@@ -128,6 +131,7 @@ class KexiTestAction : public KoMacro::GenericAction<KexiTestAction> {
 		virtual void activate(KoMacro::Context::Ptr)
 		{
 			kdDebug() << "KexiTestAction::activate(Context::Ptr)" << endl;
+			KMessageBox::information(m_mainwin, "KexiTestAction got executed.", "Activated");
 		}
 };
 
@@ -139,7 +143,7 @@ void KexiMacroPart::initPartActions()
 
 	::KoMacro::Manager::init(m_mainWin);
 	new KexiMacro::OpenObject(m_mainWin);
-	new KexiTestAction;
+	new KexiTestAction(m_mainWin);
 }
 
 void KexiMacroPart::initInstanceActions()

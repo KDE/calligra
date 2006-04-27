@@ -55,6 +55,12 @@ namespace KoMacro {
 			QValueList<MacroItem::Ptr>::Iterator itemit;
 
 			/**
+			* The currently selected @a MacroItem or NULL if there
+			* is now @a MacroItem selected yet.
+			*/
+			MacroItem::Ptr macroitem;
+
+			/**
 			* Map of all @a Variable instance that are defined within this
 			* context.
 			*/
@@ -109,6 +115,12 @@ void Context::setVariable(const QString& name, Variable::Ptr variable)
 	d->variables.replace(name, variable);
 }
 
+//return the currently selected MacroItem
+MacroItem::Ptr Context::macroItem() const
+{
+	return d->macroitem;
+}
+
 //activate an action if there is one 
 void Context::activate()
 {
@@ -119,23 +131,25 @@ void Context::activate()
 	if(d->itemit == d->items.end()) {
 		//if that's the case, just don't execute. Note, that this makes
 		//Context a one-execution only container.
+		d->macroitem = MacroItem::Ptr(0);
 		return;
 	}
 
 	//fetch the MacroItem we like to handle.
-	MacroItem* item = (*d->itemit);
+	d->macroitem = MacroItem::Ptr(*d->itemit);
 
-	//increment iterator
+	//increment iterator to point to the next MacroItem we like to handle
+	//after the current one is done.
 	++d->itemit;
 
 	//check if we really got a valid MacroItem
-	if(! item) {
+	if(! d->macroitem.data()) {
 		kdWarning() << "Context::activate() MacroItem is NULL" << endl;
 		return;
 	}
 
 	//fetch the Action, the MacroItem points to.
-	Action* action = item->action();
+	Action* action = d->macroitem->action();
 	
 	//skip the MacroItem if it doesn't point to a valid Action
 	if(! action) {
@@ -157,6 +171,10 @@ void Context::activate()
 		//activate the action
 		action->activate(this);
 	}
+
+	// The run is done. So, let's remove the currently selected item
+	// to outline, that we don't do anything yet.
+	d->macroitem = MacroItem::Ptr(0);
 }
 
 void Context::activate(Context::Ptr context)

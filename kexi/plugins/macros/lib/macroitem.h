@@ -104,9 +104,14 @@ namespace KoMacro {
 			/**
 			* @return the @a Variable instance identified with
 			* the name @p name . If this @a MacroItem doesn't
-			* have a @a Variable with that name NULL is returned.
+			* have a @a Variable with that name NULL is
+			* returned.
+			* If the boolean value @p checkaction is true, we
+			* also look if our @a action() may know about
+			* such a @p name in the case this @a MacroItem
+			* doesn't have such a name.
 			*/
-			KSharedPtr<Variable> variable(const QString& name) const;
+			KSharedPtr<Variable> variable(const QString& name, bool checkaction = false) const;
 
 			/**
 			* @return a map of @a Variable instances.

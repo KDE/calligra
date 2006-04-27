@@ -30,6 +30,7 @@ namespace KoMacro {
 
 	// Forward declaration.
 	class Macro;
+	class MacroItem;
 	class Action;
 
 	/**
@@ -84,6 +85,12 @@ namespace KoMacro {
 			* there exists already a variable with that name replace it.
 			*/
 			void setVariable(const QString& name, Variable::Ptr variable);
+
+			/**
+			* @return the currently selected @a MacroItem instance
+			* or NULL if there is no @a MacroItem selected yet.
+			*/
+			KSharedPtr<MacroItem> macroItem() const;
 
 		public slots:
 

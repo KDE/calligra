@@ -71,9 +71,13 @@ void MacroItem::setAction(KSharedPtr<Action> action)
 	d->action = action;
 }
 
-Variable::Ptr MacroItem::variable(const QString& name) const
+Variable::Ptr MacroItem::variable(const QString& name, bool checkaction) const
 {
-	return d->variables[name];
+	if(d->variables.contains(name))
+		return d->variables[name];
+	if(checkaction && d->action.data())
+		return d->action->variable(name);
+	return Variable::Ptr(0);
 }
 
 Variable::Map MacroItem::variables() const
