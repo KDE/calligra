@@ -311,17 +311,15 @@ public:
      */
     void copyAll(Cell *cell);
 
-    enum BorderSides
+    enum Border
     {
-      Border_None   =0x00,
-      Border_Left   =0x01,
-      Border_Right  =0x02,
-      Border_Top    =0x04,
-      Border_Bottom =0x08,
-      Border_SizeGrip   =0x10   //the size grip is the little square on the bottom right-hand corner of a highlighted range of cells
-              //which the user can click and drag to resize the range and change which cells are included.
-              //this is not used with normal borders
+      NoBorder     = 0x0,
+      LeftBorder   = 0x1,
+      RightBorder  = 0x2,
+      TopBorder    = 0x4,
+      BottomBorder = 0x8,
     };
+    Q_DECLARE_FLAGS(Borders, Border)
 
     /**
      * Paints the cell.
@@ -333,24 +331,24 @@ public:
      * @param coordinate coordinates on the painter where the top left corner
      *                    of the cell should be painted plus width and height
      * @param cellRef the column/row coordinates of the cell.
-     * @param paintBorder a combination of flags from the Cell::BorderSides enum which specifies which cell borders to paint
-     * @param rightPen pen to use to draw the right border if @p paintBorder includes the Border_Right flag
-     * @param bottomPen pen to use to draw the bottom border if @p paintBorderBottom includes the Border_Bottom flag
-     * @param leftPen pen to use to draw the left border if @p paintBorderLeft includes the Border_Left flag
-     * @param topPen pen to use to draw the top border if @p paintBorderTop includes the Border_Top flag
+     * @param paintBorder a combination of flags from the Cell::Border
+     *                    enum which specifies which cell borders to paint
+     * @param rightPen pen to use to draw the right border
+     *                 if @p paintBorder includes the RightBorder flag
+     * @param bottomPen pen to use to draw the bottom border
+     *                  if @p paintBorder includes the BottomBorder flag
+     * @param leftPen pen to use to draw the left border
+     *                if @p paintBorder includes the LeftBorder flag
+     * @param topPen pen to use to draw the top border
+     *               if @p paintBorder includes the TopBorder flag
      * @param mergedCellsPainted list of merged cells being painted
-     * @param drawCursor whether to draw the cursor and selection or not
      */
     void paintCell( const KoRect & rect, QPainter & painter,
                     View * view, const KoPoint & coordinate,
-                    const QPoint & cellRef,
-		    int paintBorder,
-		    QPen & rightPen,
-                    QPen & bottomPen,
-                    QPen & leftPen,
-                    QPen & topPen,
-		    QLinkedList<QPoint> &mergedCellsPainted,
-                    bool drawCursor = true );
+                    const QPoint & cellRef, Borders paintBorder,
+                    QPen& rightPen, QPen& bottomPen,
+                    QPen& leftPen,  QPen& topPen,
+                    QLinkedList<QPoint> &mergedCellsPainted );
 
 
     /**
@@ -834,85 +832,102 @@ public:
 
     void freeAllObscuredCells();
 
-    /* descriptions of the flags are just below */
-    enum CellFlags{
-    /* this uses the same flags variable as Format.  The least significant
-       16 bits are reserved for the base class, and the most significant 16
-       have been left for this subclass to use. */
+    /**
+     * Cell status flags
+     */
+    enum CellFlags
+    {
+      /**
+       * Flag_LayoutDirty
+       * Flag showing whether the current layout is OK.
+       * If you change for example the fonts point size, set this flag. When the
+       * cell must draw itself on the screen it will first recalculate its layout.
+       */
       Flag_LayoutDirty           = 0x00010000,
+      /**
+       * CalcDirty
+       * Shows whether recalculation is necessary.
+       * If this cell must be recalculated for some reason, for example the user
+       * entered a new formula, then this flag is set. If @ref #bFormula is false
+       * nothing will happen at all.
+       */
       Flag_CalcDirty             = 0x00020000,
+      /**
+       * Progress
+       * Tells whether this cell it currently under calculation.
+       * If a cell thats 'progressFlag' is set is told to calculate we
+       * have detected a circular reference and we must stop calulating.
+       */
       Flag_Progress              = 0x00040000,
+      /**
+       * UpdatingDeps
+       * Tells whether we've already calculated the reverse dependancies for this
+       * cell.  Similar to the Progress flag but it's for when we are calculating
+       * in the reverse direction.
+       * @see updateDependancies()
+       */
       Flag_UpdatingDeps          = 0x00080000,
+      /**
+       * DisplayDirty - TODO - is this unused now??
+       * If this flag is set, then it is known that this cell has to be updated
+       * on the display. This means that somewhere in the calling stack there is a
+       * function which will call @ref Sheet::updateCell once it retains
+       * the control. If a function changes the contents/layout of this cell and this
+       * flag is not set, then the function must set it at once. After the changes
+       * are done the function must call <tt>m_pSheet->updateCell(...).
+       * The flag is cleared by the function format()->sheet()->updateCell.
+       */
       Flag_DisplayDirty          = 0x00100000,
+      /**
+       * Merged
+       * Tells whether the cell is merged with other cells.  Cells may
+       * occupy other cells space on demand. You may force a cell to
+       * do so by setting this flag. Merging the cell with 0 in both
+       * directions, will disable this flag!
+       */
       Flag_Merged                = 0x00200000,
+      /**
+       * CellTooShortX
+       * When it's True displays ** and/or the red triangle and when the
+       * mouse is over it, the tooltip displays the full value
+       * it's true when text size is bigger that cell size
+       * and when Align is center or left
+       */
       Flag_CellTooShortX         = 0x00400000,
+      /**
+       * CellTooShortY
+       * When it's True when mouseover it, the tooltip displays the full value
+       * it's true when text size is bigger that cell height
+       */
       Flag_CellTooShortY         = 0x00800000,
+      /**
+       * ParseError
+       * True if the cell is calculated and there was an error during calculation
+       * In that case the cell usually displays "#####"
+       */
       Flag_ParseError            = 0x01000000,
+      /**
+       * CircularCalculation
+       */
       Flag_CircularCalculation   = 0x02000000,
-      Flag_DependancyError       = 0x04000000,
-      Flag_PaintingCell          = 0x08000000, // On during painting
+      /**
+       * DependencyError
+       */
+      Flag_DependencyError       = 0x04000000,
+      /**
+       * PaintingCell
+       * Set during painting
+       */
+      Flag_PaintingCell          = 0x08000000,
+      /**
+       * TextFormatDirty
+       */
       Flag_TextFormatDirty       = 0x10000000
-     // Flag_Highlight     = 0x20000000
     };
 
     void clearFlag( CellFlags flag );
     void setFlag( CellFlags flag );
     bool testFlag( CellFlags flag ) const;
-
-  /* descriptions of the flags are as follows: */
-
-  /*
-   * Error
-   * True if the cell is calculated and there was an error during calculation
-   * In that case the cell usually displays "#####"
-   *
-   * LayoutDirty
-   * Flag showing whether the current layout is OK.
-   * If you change for example the fonts point size, set this flag. When the
-   * cell must draw itself on the screen it will first recalculate its layout.
-   *
-   * CalcDirty
-   * Shows whether recalculation is necessary.
-   * If this cell must be recalculated for some reason, for example the user
-   * entered a new formula, then this flag is set. If @ref #bFormula is false
-   * nothing will happen at all.
-   *
-   * Progress
-   * Tells whether this cell it currently under calculation.
-   * If a cell thats 'progressFlag' is set is told to calculate we
-   * have detected a circular reference and we must stop calulating.
-   *
-   * UpdatingDeps
-   * Tells whether we've already calculated the reverse dependancies for this
-   * cell.  Similar to the Progress flag but it's for when we are calculating
-   * in the reverse direction.
-   * @see updateDependancies()
-   *
-   * DisplayDirty - TODO - is this unused now??
-   * If this flag is set, then it is known that this cell has to be updated
-   * on the display. This means that somewhere in the calling stack there is a
-   * function which will call @ref Sheet::updateCell once it retains
-   * the control. If a function changes the contents/layout of this cell and this
-   * flag is not set, then the function must set it at once. After the changes
-   * are done the function must call <tt>m_pSheet->updateCell(...).
-   * The flag is cleared by the function format()->sheet()->updateCell.
-   *
-   * Merged
-   * Tells whether the cell is merged with other cells.  Cells may
-   * occupy other cells space on demand. You may force a cell to
-   * do so by setting this flag. Merging the cell with 0 in both
-   * directions, will disable this flag!
-   *
-   * CellTooShortX
-   * When it's True displays ** and/or the red triangle and when the
-   * mouse is over it, the tooltip displays the full value
-   * it's true when text size is bigger that cell size
-   * and when Align is center or left
-   *
-   * CellTooShortY
-   * When it's True when mouseover it, the tooltip displays the full value
-   * it's true when text size is bigger that cell height
-   */
 
 protected:
     /**
@@ -970,59 +985,99 @@ protected:
 
 
 private:
-
     class Extra;
     class Private;
     Private *d;
     // static const char* s_dataTypeToString[];
 
-    /* helper functions to the paintCell(...) function */
- /*   void paintCellHighlight(QPainter& painter,
-          const KoRect& cellRect,
-          const QPoint& cellRef,
-          const int highlightBorder,
-          const QPen& rightPen,
-          const QPen& bottomPen,
-          const QPen& leftPen,
-          const QPen& topPen
-         );*/
-
-
+    /**
+     * helper function for paintCell() function
+     * @see paintCell()
+     * @internal
+     */
     void paintCellBorders( QPainter& painter, const KoRect &rect,
-                           const KoRect &cellRect,
-         const QPoint &cellRef,
-                           bool paintBorderRight, bool paintBorderBottom,
-                           bool paintBorderLeft, bool paintBorderTop,
+                           const KoRect &cellRect, const QPoint &cellRef,
+                           Borders paintBorder,
                            QPen & rightPen, QPen & bottomPen,
                            QPen & leftPen, QPen & topPen );
+
+    /**
+     * helper function for paintCell() function
+     * @see paintCell()
+     * @internal
+     */
     void paintPageBorders( QPainter& painter, const KoRect &cellRect,
-                           const QPoint &cellRef,
-                           bool paintBorderRight, bool paintBorderBottom );
+                           const QPoint &cellRef, Borders paintBorder );
+
+    /**
+     * helper function for paintCell() function
+     * @see paintCell()
+     * @internal
+     */
     void paintText( QPainter& painter, const KoRect &cellRect,
                     const QPoint &cellRef );
+
+    /**
+     * helper function for paintCell() function
+     * @see paintCell()
+     * @internal
+     */
     void paintMoreTextIndicator( QPainter& painter, const KoRect &cellRect,
                                  QColor &backgroundColor );
+
+    /**
+     * helper function for paintCell() function
+     * @see paintCell()
+     * @internal
+     */
     void paintCommentIndicator( QPainter& painter, const KoRect &cellRect,
                                 const QPoint &cellRef, QColor &backgroundColor );
+
+    /**
+     * helper function for paintCell() function
+     * @see paintCell()
+     * @internal
+     */
     void paintFormulaIndicator( QPainter& painter, const KoRect &cellRect,
                                 QColor &backgroundColor );
+
+    /**
+     * helper function for paintCell() function
+     * @see paintCell()
+     * @internal
+     */
     void paintDefaultBorders( QPainter& painter, const KoRect &rect,
                               const KoRect &cellRect, const QPoint &cellRef,
-                              bool paintBorderRight, bool paintBorderBottom,
-                              bool paintBorderLeft, bool paintBorderTop,
+                              Borders paintBorder,
                               QPen const & rightPen, QPen const & bottomPen,
                               QPen const & leftPen, QPen const & topPen );
+
+    /**
+     * helper function for paintCell() function
+     * @see paintCell()
+     * @internal
+     */
     void paintBackground( QPainter& painter, const KoRect &cellRect,
                           const QPoint &cellRef, bool selected,
                           QColor &backgroundColor );
+
+    /**
+     * helper function for paintCell() function
+     * @see paintCell()
+     * @internal
+     */
     void paintObscuredCells( const KoRect& rect, QPainter& painter,
                              View* view, const KoRect &cellRect,
-                             const QPoint &cellRef,
-                             bool paintBorderRight, bool paintBorderBottom,
-                             bool paintBorderLeft, bool paintBorderTop,
+                             const QPoint &cellRef, Borders paintBorder,
                              QPen & rightPen, QPen & bottomPen,
                              QPen & leftPen, QPen & topPen,
-			     QLinkedList<QPoint> &mergedCellsPainted );
+                             QLinkedList<QPoint> &mergedCellsPainted );
+
+    /**
+     * helper function for paintCell() function
+     * @see paintCell()
+     * @internal
+     */
     void paintCellDiagonalLines( QPainter& painter, const KoRect &cellRect,
                                  const QPoint &cellRef );
 
@@ -1064,6 +1119,8 @@ private:
     void loadOasisValidationValue( const QStringList &listVal );
 
 };
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(Cell::Borders)
 
 } // namespace KSpread
 

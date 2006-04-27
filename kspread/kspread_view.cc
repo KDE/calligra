@@ -1580,9 +1580,6 @@ View::View( QWidget *_parent, const char *_name,
     connect( doc(), SIGNAL( damagesFlushed( const QList<Damage*>& ) ),
         this, SLOT( handleDamages( const QList<Damage*>& ) ) );
 
-    //KoView::setZoom( doc()->zoomedResolutionY() /* KoView only supports one zoom */ ); // initial value
-    //when kspread is embedded into konqueror apply a zoom=100
-    //in konqueror we can't change zoom -- ### TODO ?
     if (!doc()->isReadWrite())
     {
         setZoom( 100, true );

@@ -1770,7 +1770,7 @@ void Doc::PaintRegion(QPainter &painter, const KoRect &viewRegion,
       bool paintBordersLeft   = false;
       bool paintBordersTop    = false;
 #endif
-      int paintBorder = Cell::Border_None;
+      Cell::Borders paintBorder = Cell::NoBorder;
 
       QPen rightPen( cell->effRightBorderPen( x, y ) );
       QPen leftPen( cell->effLeftBorderPen( x, y ) );
@@ -1785,15 +1785,15 @@ void Doc::PaintRegion(QPainter &painter, const KoRect &viewRegion,
       // right border:
       if ( x >= KS_colMax )
         //paintBordersRight = true;
-        paintBorder |= Cell::Border_Right;
+        paintBorder |= Cell::RightBorder;
       else if ( x == regionRight ) {
-	paintBorder |= Cell::Border_Right;
+	paintBorder |= Cell::RightBorder;
 	if ( cell->effRightBorderValue( x, y )
 	     < sheet->cellAt( x + 1, y )->effLeftBorderValue( x + 1, y ) )
 	  rightPen = sheet->cellAt( x + 1, y )->effLeftBorderPen( x + 1, y );
       }
       else {
-	paintBorder |= Cell::Border_Right;
+	paintBorder |= Cell::RightBorder;
 	if ( cell->effRightBorderValue( x, y )
 	     < sheet->cellAt( x + 1, y )->effLeftBorderValue( x + 1, y ) )
 	  rightPen = sheet->cellAt( x + 1, y )->effLeftBorderPen( x + 1, y );
@@ -1802,15 +1802,15 @@ void Doc::PaintRegion(QPainter &painter, const KoRect &viewRegion,
       // Similiar for other borders...
       // bottom border:
       if ( y >= KS_rowMax )
-        paintBorder |= Cell::Border_Bottom;
+        paintBorder |= Cell::BottomBorder;
       else if ( y == regionBottom ) {
-	paintBorder |= Cell::Border_Bottom;
+	paintBorder |= Cell::BottomBorder;
 	if ( cell->effBottomBorderValue( x, y )
 	     < sheet->cellAt( x, y + 1 )->effTopBorderValue( x, y + 1) )
 	  bottomPen = sheet->cellAt( x, y + 1 )->effTopBorderPen( x, y + 1 );
       }
       else {
-        paintBorder |= Cell::Border_Bottom;
+        paintBorder |= Cell::BottomBorder;
         if ( cell->effBottomBorderValue( x, y )
 	     < sheet->cellAt( x, y + 1 )->effTopBorderValue( x, y + 1) )
           bottomPen = sheet->cellAt( x, y + 1 )->effTopBorderPen( x, y + 1 );
@@ -1818,15 +1818,15 @@ void Doc::PaintRegion(QPainter &painter, const KoRect &viewRegion,
 
       // left border:
       if ( x == 1 )
-        paintBorder |= Cell::Border_Left;
+        paintBorder |= Cell::LeftBorder;
       else if ( x == regionLeft ) {
-	paintBorder |= Cell::Border_Left;
+	paintBorder |= Cell::LeftBorder;
 	if ( cell->effLeftBorderValue( x, y )
 	     < sheet->cellAt( x - 1, y )->effRightBorderValue( x - 1, y ) )
 	  leftPen = sheet->cellAt( x - 1, y )->effRightBorderPen( x - 1, y );
       }
       else {
-        paintBorder |= Cell::Border_Left;
+        paintBorder |= Cell::LeftBorder;
         if ( cell->effLeftBorderValue( x, y )
 	     < sheet->cellAt( x - 1, y )->effRightBorderValue( x - 1, y ) )
           leftPen = sheet->cellAt( x - 1, y )->effRightBorderPen( x - 1, y );
@@ -1834,15 +1834,15 @@ void Doc::PaintRegion(QPainter &painter, const KoRect &viewRegion,
 
       // top border:
       if ( y == 1 )
-        paintBorder |= Cell::Border_Top;
+        paintBorder |= Cell::TopBorder;
       else if ( y == regionTop ) {
-	paintBorder |= Cell::Border_Top;
+	paintBorder |= Cell::TopBorder;
 	if ( cell->effTopBorderValue( x, y )
 	     < sheet->cellAt( x, y - 1 )->effBottomBorderValue( x, y - 1 ) )
 	  topPen = sheet->cellAt( x, y - 1 )->effBottomBorderPen( x, y - 1 );
       }
       else {
-        paintBorder |= Cell::Border_Top;
+        paintBorder |= Cell::TopBorder;
         if ( cell->effTopBorderValue( x, y )
 	     < sheet->cellAt( x, y - 1 )->effBottomBorderValue( x, y - 1 ) )
           topPen = sheet->cellAt( x, y - 1 )->effBottomBorderPen( x, y - 1 );
@@ -1855,14 +1855,14 @@ void Doc::PaintRegion(QPainter &painter, const KoRect &viewRegion,
 		       rightPen, bottomPen, leftPen, topPen,
 		       mergedCellsPainted, false );
 
-      Cell::BorderSides highlightBorder=Cell::Border_None;
+      Cell::BorderSides highlightBorder=Cell::NoBorder;
       QPen highlightPen;
 #endif
 
       cell->paintCell( viewRegion, painter, view, dblCurrentCellPos, cellRef,
 		       paintBorder,
 		       rightPen, bottomPen, leftPen, topPen,
-		       mergedCellsPainted, false );
+		       mergedCellsPainted );
 
 
       dblCurrentCellPos.setX( dblCurrentCellPos.x() + col_lay->dblWidth() );

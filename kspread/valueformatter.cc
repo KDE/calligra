@@ -637,7 +637,7 @@ QString ValueFormatter::errorFormat (Cell *cell)
     err = "#" + i18n ("Parse") + "!";
   else if ( cell->testFlag (Cell::Flag_CircularCalculation))
     err = "#" + i18n ("Circle") + "!";
-  else if ( cell->testFlag (Cell::Flag_DependancyError))
+  else if ( cell->testFlag (Cell::Flag_DependencyError))
     err = "#" + i18n ("Depend") + "!";
   else
   {

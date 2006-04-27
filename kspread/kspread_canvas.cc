@@ -217,10 +217,12 @@ class Canvas::Private
  *
  ****************************************************************/
 
-Canvas::Canvas (View *_view)
-  : QWidget( _view, /*WNorthWestGravity*/ Qt::WStaticContents| Qt::WResizeNoErase | Qt::WNoAutoErase )
+Canvas::Canvas(View *view)
+  : QWidget( view )
 {
   d = new Private;
+
+  setAttribute( Qt::WA_StaticContents );
 
   d->cellEditor = 0;
   d->chooseCell = false;
@@ -238,7 +240,7 @@ Canvas::Canvas (View *_view)
 
   d->xOffset = 0.0;
   d->yOffset = 0.0;
-  d->view = _view;
+  d->view = view;
   // m_eAction = DefaultAction;
   d->mouseAction = NoAction;
   d->rubberBandStarted = false;
@@ -622,10 +624,6 @@ void Canvas::scrollToCell(QPoint location) const
   if (d->view->isLoading())
     return;
 
-  kDebug(36001) << "------------------------------------------------" << endl;
-  kDebug(36001) << "scrollToCell(): at location [" << location.x() << ","
-  		 << location.y() << "]" << endl;
-
   /* we don't need this cell ptr, but this call is necessary to update the
      scroll bar correctly.  I don't like having that as part of the cellAt function
      but I suppose that's ok for now.
@@ -636,9 +634,6 @@ void Canvas::scrollToCell(QPoint location) const
   double  unzoomedWidth  = d->view->doc()->unzoomItX( width() );
   double  unzoomedHeight = d->view->doc()->unzoomItY( height() );
 
-  kDebug(36001) << "Unzoomed view size: [" << unzoomedWidth << ","
-		 << unzoomedHeight << "]" << endl;
-
   // xpos is the position of the cell in the current window in unzoomed
   // document coordinates.
   double xpos;
@@ -648,12 +643,8 @@ void Canvas::scrollToCell(QPoint location) const
     xpos = unzoomedWidth - sheet->dblColumnPos( location.x() ) + xOffset();
   double ypos = sheet->dblRowPos( location.y() ) - yOffset();
 
-  kDebug(36001) << "Position: [" << xpos << "," << ypos << "]" << endl;
-
   double minY = 40.0;
   double maxY = unzoomedHeight - 40.0;
-  kDebug(36001) << "Canvas::scrollToCell : height=" << height() << endl;
-  kDebug(36001) << "Canvas::scrollToCell : width=" << width() << endl;
 
   if ( sheet->layoutDirection()==Sheet::RightToLeft ) {
     // Right to left sheet.
@@ -688,8 +679,6 @@ void Canvas::scrollToCell(QPoint location) const
     double minX = 100.0; // less than that, we scroll
     double maxX = unzoomedWidth - 100.0; // more than that, we scroll
 
-    kDebug() << "ltr: XPos: " << xpos << ", min: " << minX << ", maxX: " << maxX << endl;
-
     // Do we need to scroll left?
     if ( xpos < minX )
       horzScrollBar()->setValue( d->view->doc()->zoomItX( xOffset() + xpos - minX ) );
@@ -707,7 +696,19 @@ void Canvas::scrollToCell(QPoint location) const
       horzScrollBar()->setValue( d->view->doc()->zoomItX( horzScrollBarValue ) );
     }
   }
-//   kDebug() << "ltr: YPos: " << ypos << ", min: " << minY << ", maxY: " << maxY << endl;
+
+#if 0
+  kDebug() << "------------------------------------------------" << endl;
+  kDebug() << "scrollToCell(): at location [" << location.x() << ","
+           << location.y() << "]" << endl;
+  kDebug() << "Unzoomed view size: [" << unzoomedWidth << ","
+           << unzoomedHeight << "]" << endl;
+  kDebug() << "Position: [" << xpos << "," << ypos << "]" << endl;
+  kDebug() << "Canvas::scrollToCell : height=" << height() << endl;
+  kDebug() << "Canvas::scrollToCell : width=" << width() << endl;
+  kDebug() << "ltr: XPos: " << xpos << ", min: " << minX << ", maxX: " << maxX << endl;
+  kDebug() << "ltr: YPos: " << ypos << ", min: " << minY << ", maxY: " << maxY << endl;
+#endif
 
   // do we need to scroll up
   if ( ypos < minY )
@@ -4069,12 +4070,12 @@ void Canvas::paintUpdates()
   KoRect unzoomedRect = d->view->doc()->unzoomRect( QRect( 0, 0, width(), height() ) );
   // unzoomedRect.translate( xOffset(), yOffset() );
 
-
   /* paint any visible cell that has the paintDirty flag */
   Cell* cell = 0;
 
-  double topPos = sheet->dblRowPos(visibleCells().top());
-  double leftPos = sheet->dblColumnPos(visibleCells().left());
+  const QRect visibleRect = visibleCells();
+  double topPos = sheet->dblRowPos(visibleRect.top());
+  double leftPos = sheet->dblColumnPos(visibleRect.left());
 
   KoPoint dblCorner( leftPos - xOffset(), topPos - yOffset() );
 
@@ -4090,7 +4091,7 @@ void Canvas::paintUpdates()
   Region::ConstIterator end(paintDirtyList.constEnd());
   for (Region::ConstIterator it(paintDirtyList.constBegin()); it != end; ++it)
   {
-    QRect range = (*it)->rect().normalized() & visibleCells();
+    QRect range = (*it)->rect().normalized() & visibleRect;
     int right  = range.right();
     for ( int x = range.left(); x <= right; ++x )
     {
@@ -4106,12 +4107,7 @@ void Canvas::paintUpdates()
           if (cell->layoutDirtyFlag()) cell->makeLayout( painter, x, y );
         }
 
-       /* bool paintBordersBottom = false;
-        bool paintBordersRight = false;
-        bool paintBordersLeft = false;
-	bool paintBordersTop = false; */
-
-	int paintBorder=Cell::Border_None;
+        Cell::Borders paintBorder = Cell::NoBorder;
 
         QPen bottomPen( cell->effBottomBorderPen( x, y ) );
         QPen rightPen( cell->effRightBorderPen( x, y ) );
@@ -4124,11 +4120,11 @@ void Canvas::paintUpdates()
         //   on the left
         if ( x >= KS_colMax )
         {
-          paintBorder |= Cell::Border_Right;
+          paintBorder = paintBorder | Cell::RightBorder;
         }
         else
         {
-          paintBorder |= Cell::Border_Right;
+          paintBorder = paintBorder | Cell::RightBorder;
           if ( cell->effRightBorderValue( x, y ) <
                sheet->cellAt( x + 1, y )->effLeftBorderValue( x + 1, y ) )
             rightPen = sheet->cellAt( x + 1, y )->effLeftBorderPen( x + 1, y );
@@ -4138,11 +4134,11 @@ void Canvas::paintUpdates()
         // bottom border:
         if ( y >= KS_rowMax )
         {
-          paintBorder |= Cell::Border_Bottom;
+          paintBorder = paintBorder | Cell::BottomBorder;
         }
         else
         {
-          paintBorder |= Cell::Border_Bottom;
+          paintBorder = paintBorder | Cell::BottomBorder;
           if ( cell->effBottomBorderValue( x, y ) <
                sheet->cellAt( x, y + 1 )->effTopBorderValue( x, y + 1 ) )
             bottomPen = sheet->cellAt( x, y + 1 )->effTopBorderPen( x, y + 1 );
@@ -4151,11 +4147,11 @@ void Canvas::paintUpdates()
         // left border:
         if ( x == 1 )
         {
-          paintBorder |= Cell::Border_Left;
+          paintBorder = paintBorder | Cell::LeftBorder;
         }
         else
         {
-          paintBorder |= Cell::Border_Left;
+          paintBorder = paintBorder | Cell::LeftBorder;
           if ( cell->effLeftBorderValue( x, y ) <
                sheet->cellAt( x - 1, y )->effRightBorderValue( x - 1, y ) )
             leftPen = sheet->cellAt( x - 1, y )->effRightBorderPen( x - 1, y );
@@ -4164,11 +4160,11 @@ void Canvas::paintUpdates()
         // top border:
         if ( y == 1 )
         {
-          paintBorder |= Cell::Border_Top;
+          paintBorder = paintBorder | Cell::TopBorder;
         }
         else
         {
-          paintBorder |= Cell::Border_Top;
+          paintBorder = paintBorder | Cell::TopBorder;
           if ( cell->effTopBorderValue( x, y ) <
                sheet->cellAt( x, y - 1 )->effBottomBorderValue( x, y - 1 ) )
             topPen = sheet->cellAt( x, y - 1 )->effBottomBorderPen( x, y - 1 );
@@ -4630,11 +4626,13 @@ void Canvas::retrieveMarkerInfo( const QRect &marker,
  ****************************************************************/
 
 VBorder::VBorder( QWidget *_parent, Canvas *_canvas, View *_view)
-    : QWidget( _parent, /*WNorthWestGravity*/Qt::WStaticContents | Qt::WResizeNoErase | Qt::WNoAutoErase )
+    : QWidget( _parent )
 {
   m_pView = _view;
   m_pCanvas = _canvas;
   m_lSize = 0;
+
+  setAttribute( Qt::WA_StaticContents );
 
   setMouseTracking( true );
   m_bResize = false;
@@ -5194,11 +5192,14 @@ void VBorder::focusOutEvent( QFocusEvent* )
  ****************************************************************/
 
 HBorder::HBorder( QWidget *_parent, Canvas *_canvas,View *_view )
-    : QWidget( _parent, /*WNorthWestGravity*/ Qt::WStaticContents| Qt::WResizeNoErase | Qt::WNoAutoErase )
+    : QWidget( _parent )
 {
   m_pView = _view;
   m_pCanvas = _canvas;
   m_lSize = 0;
+
+  setAttribute( Qt::WA_StaticContents );
+
   setMouseTracking( true );
   m_bResize = false;
   m_bSelection = false;

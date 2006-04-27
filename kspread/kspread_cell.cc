@@ -2129,21 +2129,13 @@ bool Cell::calc(bool delay)
 //              coordinates.
 //
 
-void Cell::paintCell( const KoRect   &rect, QPainter & painter,
-          View    *view,
-          const KoPoint  &coordinate,
-          const QPoint   &cellRef,
-          int paintBorder,
-          QPen & rightPen, QPen & bottomPen,
-          QPen & leftPen,  QPen & topPen,
-          QLinkedList<QPoint> &mergedCellsPainted,
-          bool drawCursor )
+void Cell::paintCell( const KoRect& rect, QPainter& painter,
+                      View* view, const KoPoint& coordinate,
+                      const QPoint& cellRef, Borders paintBorder,
+                      QPen& rightPen, QPen& bottomPen,
+                      QPen& leftPen,  QPen& topPen,
+                      QLinkedList<QPoint> &mergedCellsPainted )
 {
-  bool paintBorderRight  = paintBorder & Border_Right;
-  bool paintBorderBottom = paintBorder & Border_Bottom;
-  bool paintBorderLeft   = paintBorder & Border_Left;
-  bool paintBorderTop    = paintBorder & Border_Top;
-
   // If we are already painting this cell, then return immediately.
   // This avoids infinite recursion.
   if ( testFlag( Flag_PaintingCell ) )
@@ -2249,7 +2241,7 @@ void Cell::paintCell( const KoRect   &rect, QPainter & painter,
     selected = selected && !( markerArea.contains( cellRef ) );
 
     // Don't draw any selection at all when printing.
-    if ( dynamic_cast<QPrinter*>(painter.device()) || !drawCursor )
+    if ( dynamic_cast<QPrinter*>(painter.device()) )
       selected = false;
   }
 
@@ -2297,10 +2289,8 @@ void Cell::paintCell( const KoRect   &rect, QPainter & painter,
   //    and the checkbox to do this is checked.
   if ( painter.device()->devType() != QInternal::Printer
        || format()->sheet()->print()->printGrid())
-    paintDefaultBorders( painter, rect, cellRect, cellRef,
-       paintBorderRight, paintBorderBottom,
-                         paintBorderLeft,  paintBorderTop,
-       rightPen, bottomPen, leftPen, topPen );
+    paintDefaultBorders( painter, rect, cellRect, cellRef, paintBorder,
+                         rightPen, bottomPen, leftPen, topPen );
 
   // 3. Paint all the cells that this one obscures.  They may only be
   //    partially obscured.
@@ -2314,11 +2304,9 @@ void Cell::paintCell( const KoRect   &rect, QPainter & painter,
       || d->extra()->extraYCells > 0)) {
     //kDebug(36001) << "painting obscured cells for " << name() << endl;
 
-    paintObscuredCells( rect, painter, view, cellRect, cellRef,
-      paintBorderRight, paintBorderBottom,
-      paintBorderLeft,  paintBorderTop,
-      rightPen, bottomPen, leftPen, topPen,
-      mergedCellsPainted);
+    paintObscuredCells( rect, painter, view, cellRect, cellRef, paintBorder,
+                        rightPen, bottomPen, leftPen, topPen,
+                        mergedCellsPainted);
 
     // FIXME: Is this the right place for this?
     if ( d->extra()->mergedXCells > 0 || d->extra()->mergedYCells > 0 )
@@ -2336,25 +2324,21 @@ void Cell::paintCell( const KoRect   &rect, QPainter & painter,
     painter.setClipping( false );
 
   // Paint the borders if this cell is not part of another merged cell.
-  if ( !isPartOfMerged() ) {
-    // if (!testFlag(Flag_Highlight))
-    paintCellBorders( painter, rect, cellRect0,
-          cellRef,
-          paintBorderRight, paintBorderBottom,
-                      paintBorderLeft,  paintBorderTop,
-          rightPen, bottomPen, leftPen, topPen );
+  if ( !isPartOfMerged() )
+  {
+    paintCellBorders( painter, rect, cellRect0, cellRef, paintBorder,
+                      rightPen, bottomPen, leftPen, topPen );
   }
 
   // Turn clipping back on.
   if ( dynamic_cast<QPrinter*>(painter.device()) )
     painter.setClipping( true );
 
+
   // 5. Paint diagonal lines and page borders.
   paintCellDiagonalLines( painter, cellRect0, cellRef );
 
-  paintPageBorders( painter, cellRect0, cellRef,
-        paintBorderRight, paintBorderBottom );
-
+  paintPageBorders( painter, cellRect0, cellRef, paintBorder );
 
   // 6. Now paint the content, if this cell isn't obscured.
   if ( !isObscured() ) {
@@ -2374,7 +2358,7 @@ void Cell::paintCell( const KoRect   &rect, QPainter & painter,
 
      //6c. Paint cell highlight
 #if 0
-    if (highlightBorder != Border_None)
+    if (highlightBorder != None)
       paintCellHighlight ( painter, cellRect, cellRef, highlightBorder,
          rightHighlightPen, bottomHighlightPen,
          leftHighlightPen,  topHighlightPen );
@@ -2468,7 +2452,7 @@ void Cell::paintCell( const KoRect   &rect, QPainter & painter,
     //      which is inside the merged range.
           obscuringCell->paintCell( rect, painter, view,
                                     corner, obscuringCellRef,
-            Border_Left|Border_Top|Border_Right|Border_Bottom,
+                                    LeftBorder|TopBorder|RightBorder|BottomBorder,
             rp, bp, lp, tp,
             mergedCellsPainted); // new pens
           painter.restore();
@@ -2543,28 +2527,28 @@ void Cell::paintCell( const KoRect   &rect, QPainter & painter,
   if ( cellRef.y() != KS_rowMax )
   zoomedCellRect.setHeight( zoomedCellRect.height() - 1 );
 
-  if (highlightBorder & Border_Top)
+  if (highlightBorder & Top)
   {
     painter.setPen(topPen);
     painter.drawLine(zoomedCellRect.left(),zoomedCellRect.top(),zoomedCellRect.right(),zoomedCellRect.top());
   }
-  if (highlightBorder & Border_Left)
+  if (highlightBorder & Left)
   {
     painter.setPen(leftPen);
     painter.drawLine(zoomedCellRect.left(),zoomedCellRect.top(),zoomedCellRect.left(),zoomedCellRect.bottom());
   }
-  if (highlightBorder & Border_Right)
+  if (highlightBorder & RightBorder)
   {
     painter.setPen(rightPen);
     painter.drawLine(zoomedCellRect.right(),zoomedCellRect.top(),zoomedCellRect.right(),zoomedCellRect.bottom());
   }
-  if (highlightBorder & Border_Bottom)
+  if (highlightBorder & Bottom)
   {
     painter.setPen(bottomPen);
     painter.drawLine(zoomedCellRect.left(),zoomedCellRect.bottom(),zoomedCellRect.right(),zoomedCellRect.bottom());
   }
 
-  if (highlightBorder & Border_SizeGrip)
+  if (highlightBorder & SizeGrip)
   {
     QBrush brush(rightPen.color());
     painter.setBrush(brush);
@@ -2580,16 +2564,11 @@ void Cell::paintCell( const KoRect   &rect, QPainter & painter,
 // Paint all the cells that this cell obscures (helper function to paintCell).
 //
 void Cell::paintObscuredCells(const KoRect& rect, QPainter& painter,
-            View* view,
-            const KoRect &cellRect,
-            const QPoint &cellRef,
-            bool paintBorderRight,
-            bool _paintBorderBottom,
-            bool paintBorderLeft,
-            bool _paintBorderTop,
-            QPen & rightPen, QPen & _bottomPen,
-            QPen & leftPen,  QPen & _topPen,
-            QLinkedList<QPoint> &mergedCellsPainted)
+                              View* view, const KoRect &cellRect,
+                              const QPoint &cellRef, Borders paintBorder,
+                              QPen & rightPen, QPen & _bottomPen,
+                              QPen & leftPen,  QPen & _topPen,
+                              QLinkedList<QPoint> &mergedCellsPainted)
 {
   // If there are no obscured cells, return.
   if ( !extraXCells() && !extraYCells() )
@@ -2612,8 +2591,6 @@ void Cell::paintObscuredCells(const KoRect& rect, QPainter& painter,
 
   QPen  topPen;
   QPen  bottomPen;
-  bool  paintBorderTop;
-  bool  paintBorderBottom;
 
   Cell  *cell = format()->sheet()->cellAt( column, row );
   KoPoint       corner( xpos, ypos );
@@ -2623,12 +2600,11 @@ void Cell::paintObscuredCells(const KoRect& rect, QPainter& painter,
   // bug here (#61452).
   // Check top pen.  Only check if this is not on the top row.
   topPen         = _topPen;
-  paintBorderTop = _paintBorderTop;
   if ( row > 1 && !cell->isPartOfMerged() ) {
     Cell  *cellUp = format()->sheet()->cellAt( column, row - 1 );
 
     if ( cellUp->isDefault() )
-      paintBorderTop = false;
+      paintBorder &= ~TopBorder;
     else {
       // If the cell towards the top is part of a merged cell, get
       // the pointer to the master cell.
@@ -2647,26 +2623,13 @@ void Cell::paintObscuredCells(const KoRect& rect, QPainter& painter,
   // FIXME: I thought we had to check bottom pen as well.
   //        However, it looks as if we don't need to.  It works anyway.
   bottomPen         = _bottomPen;
-  paintBorderBottom = _paintBorderBottom;
-
-  int  paintBorder = Border_None;
-  if (paintBorderLeft)   paintBorder |= Cell::Border_Left;
-  if (paintBorderRight)  paintBorder |= Cell::Border_Right;
-  if (paintBorderTop)    paintBorder |= Cell::Border_Top;
-  if (paintBorderBottom) paintBorder |= Cell::Border_Bottom;
-
-  /*Cell::BorderSides highlightBorder = Border_None;
-    QPen highlightPen;*/
-
 
   //kDebug(36001) << "calling paintcell for obscured cell "
   //       << cell->name() << endl;
-  cell->paintCell( rect, painter, view,
-       corner,
-       QPoint( cellRef.x() + x, cellRef.y() + y ),
-       paintBorder,
-       rightPen, bottomPen, leftPen, topPen,
-       mergedCellsPainted);
+  cell->paintCell( rect, painter, view, corner,
+                   QPoint( cellRef.x() + x, cellRef.y() + y ),
+                   paintBorder, rightPen, bottomPen, leftPen, topPen,
+                   mergedCellsPainted);
       }
       xpos += cl->dblWidth();
     }
@@ -2746,12 +2709,10 @@ void Cell::paintBackground( QPainter& painter, const KoRect& cellRect,
 // Paint the standard light grey borders that are always visible.
 //
 void Cell::paintDefaultBorders( QPainter& painter, const KoRect &rect,
-        const KoRect &cellRect,
-        const QPoint &cellRef,
-        bool paintBorderRight, bool /*paintBorderBottom*/,
-        bool paintBorderLeft,  bool paintBorderTop,
-        QPen const & rightPen, QPen const & /*bottomPen*/,
-        QPen const & leftPen, QPen const & topPen )
+                                const KoRect &cellRect, const QPoint &cellRef,
+                                Borders paintBorder,
+                                QPen const & rightPen, QPen const & /*bottomPen*/,
+                                QPen const & leftPen, QPen const & topPen )
 {
     /*
         *** Notes about optimisation ***
@@ -2783,14 +2744,20 @@ void Cell::paintDefaultBorders( QPainter& painter, const KoRect &rect,
   bool paintBottom=false;
   bool paintRight=false;
 
-  paintLeft   = ( paintBorderLeft && leftPen.style() == Qt::NoPen
-      && sheet()->getShowGrid() && sheetDir==Sheet::LeftToRight );
-  paintRight  = ( paintBorderRight && rightPen.style() == Qt::NoPen
-      && sheet()->getShowGrid() && sheetDir==Sheet::RightToLeft );
-  paintTop    = ( paintBorderTop && topPen.style() == Qt::NoPen
-      && sheet()->getShowGrid() );
-//  paintBottom = ( paintBorderBottom && sheet()->getShowGrid()
-//                  && bottomPen.style() == Qt::NoPen );
+  paintLeft   = ( (paintBorder & LeftBorder) &&
+                  leftPen.style() == Qt::NoPen &&
+                  sheet()->getShowGrid() &&
+                  sheetDir == Sheet::LeftToRight );
+  paintRight  = ( (paintBorder & RightBorder) &&
+                  rightPen.style() == Qt::NoPen &&
+                  sheet()->getShowGrid() &&
+                  sheetDir == Sheet::RightToLeft );
+  paintTop    = ( (paintBorder & TopBorder) &&
+                  topPen.style() == Qt::NoPen &&
+                  sheet()->getShowGrid() );
+//  paintBottom = ( (paintBorder & BottomBorder) &&
+//                  sheet()->getShowGrid() &&
+//                  bottomPen.style() == Qt::NoPen );
 
 
    //Set the single-pixel with pen for drawing the borders with.
@@ -2811,6 +2778,7 @@ void Cell::paintDefaultBorders( QPainter& painter, const KoRect &rect,
         paintLeft = false;
       }
       else {
+
         paintLeft = paintLeft && ( cell->column() == cellRef.x() );
         paintRight = false;
       }
@@ -2818,7 +2786,8 @@ void Cell::paintDefaultBorders( QPainter& painter, const KoRect &rect,
   }
 
   // The left border.
-  if ( paintLeft ) {
+  if ( paintBorder & LeftBorder )
+  {
     int dt = 0;
     int db = 0;
 
@@ -3438,11 +3407,8 @@ void Cell::paintText( QPainter& painter,
 
 // Paint page borders on the page.  Only do this on the screen.
 //
-void Cell::paintPageBorders( QPainter& painter,
-           const KoRect &cellRect,
-           const QPoint &cellRef,
-           bool paintBorderRight,
-           bool paintBorderBottom )
+void Cell::paintPageBorders( QPainter& painter, const KoRect &cellRect,
+                             const QPoint &cellRef, Borders paintBorder )
 {
   // Not screen?  Return immediately.
   if ( dynamic_cast<QPrinter*>(painter.device()) )
@@ -3489,7 +3455,7 @@ void Cell::paintPageBorders( QPainter& painter,
                         zcellRect_right, zcellRect_top );
     }
 
-    if ( paintBorderRight ) {
+    if ( paintBorder & RightBorder ) {
       if ( print->isOnNewPageX( cellRef.x() + 1 )
             && cellRef.y() <= print->printRange().bottom() ) {
         painter.setPen( sheet()->doc()->pageBorderColor() );
@@ -3503,7 +3469,7 @@ void Cell::paintPageBorders( QPainter& painter,
       }
     }
 
-    if ( paintBorderBottom ) {
+    if ( paintBorder & BottomBorder ) {
       if ( print->isOnNewPageY( cellRef.y() + 1 )
           && cellRef.x() <= print->printRange().right() ) {
         painter.setPen( sheet()->doc()->pageBorderColor() );
@@ -3518,18 +3484,15 @@ void Cell::paintPageBorders( QPainter& painter,
 // Paint the cell borders.
 //
 void Cell::paintCellBorders( QPainter& painter, const KoRect& rect,
-           const KoRect &cellRect,
-           const QPoint &cellRef,
-           bool paintRight, bool paintBottom,
-           bool paintLeft,  bool paintTop,
-           QPen & _rightPen, QPen & _bottomPen,
-           QPen & _leftPen,  QPen & _topPen )
+                             const KoRect &cellRect, const QPoint &cellRef,
+                             Borders paintBorder,
+                             QPen& _rightPen, QPen& _bottomPen,
+                             QPen& _leftPen,  QPen& _topPen )
 {
-
   //Sanity check: If we are not painting any of the borders then the function
   //really shouldn't be called at all.
-  if ( (!paintLeft) && (!paintRight) && (!paintTop) && (!paintBottom) )
-        return;
+  if ( paintBorder == NoBorder )
+    return;
 
   Doc * doc = sheet()->doc();
 
@@ -3547,17 +3510,6 @@ void Cell::paintCellBorders( QPainter& painter, const KoRect& rect,
   int zcellRect_top (doc->zoomItY (cellRect.top()));
   int zcellRect_bottom (doc->zoomItY (cellRect.bottom()));
 
-  /* we might not paint some borders if this cell is merged with another in
-     that direction
-  bool paintLeft   = paintBorderLeft;
-  bool paintRight  = paintBorderRight;
-  bool paintTop    = paintBorderTop;
-  bool paintBottom = paintBorderBottom;
-  */
-
-  // paintRight  = paintRight  && ( extraXCells() == 0 );
-  // paintBottom = paintBottom && ( d->extra()->extraYCells() == 0 );
-
   if (d->hasExtra()) {
     QList<Cell*>::const_iterator it  = d->extra()->obscuringCells.begin();
     QList<Cell*>::const_iterator end = d->extra()->obscuringCells.end();
@@ -3566,13 +3518,25 @@ void Cell::paintCellBorders( QPainter& painter, const KoRect& rect,
 
       int xDiff = cellRef.x() - cell->column();
       int yDiff = cellRef.y() - cell->row();
-      paintLeft = paintLeft && xDiff == 0;
-      paintTop  = paintTop  && yDiff == 0;
+      if (xDiff == 0)
+        paintBorder |= LeftBorder;
+      else
+        paintBorder &= ~LeftBorder;
+      if (yDiff == 0)
+        paintBorder |= TopBorder;
+      else
+        paintBorder &= ~TopBorder;
 
       // Paint the border(s) if either this one should or if we have a
       // merged cell with this cell as its border.
-      paintRight  = paintRight  && cell->mergedXCells() == xDiff;
-      paintBottom = paintBottom && cell->mergedYCells() == yDiff;
+      if (cell->mergedXCells() == xDiff)
+        paintBorder |= RightBorder;
+      else
+        paintBorder &= ~RightBorder;
+      if (cell->mergedYCells() == yDiff)
+        paintBorder |= BottomBorder;
+      else
+        paintBorder &= ~BottomBorder;
     }
   }
 
@@ -3596,7 +3560,8 @@ void Cell::paintCellBorders( QPainter& painter, const KoRect& rect,
   topPen.setWidth( top_penWidth );
   bottomPen.setWidth( bottom_penWidth );
 
-  if ( paintLeft && leftPen.style() != Qt::NoPen ) {
+  if ( (paintBorder & LeftBorder) && leftPen.style() != Qt::NoPen )
+  {
     int top = ( qMax( 0, -1 + top_penWidth ) ) / 2 +
               ( ( qMax( 0, -1 + top_penWidth ) ) % 2 );
     int bottom = ( qMax( 0, -1 + bottom_penWidth ) ) / 2 + 1;
@@ -3643,7 +3608,8 @@ void Cell::paintCellBorders( QPainter& painter, const KoRect& rect,
     }
   }
 
-  if ( paintRight && rightPen.style() != Qt::NoPen ) {
+  if ( (paintBorder & RightBorder) && rightPen.style() != Qt::NoPen )
+  {
     int top = ( qMax( 0, -1 + top_penWidth ) ) / 2 +
               ( ( qMax( 0, -1 + top_penWidth ) ) % 2 );
     int bottom = ( qMax( 0, -1 + bottom_penWidth ) ) / 2 + 1;
@@ -3686,7 +3652,8 @@ void Cell::paintCellBorders( QPainter& painter, const KoRect& rect,
     }
   }
 
-  if ( paintTop && topPen.style() != Qt::NoPen ) {
+  if ( (paintBorder & TopBorder) && topPen.style() != Qt::NoPen )
+  {
     painter.setPen( topPen );
 
     //kDebug(36001) << "    painting top border of cell " << name()
@@ -3708,7 +3675,8 @@ void Cell::paintCellBorders( QPainter& painter, const KoRect& rect,
     }
   }
 
-  if ( paintBottom && bottomPen.style() != Qt::NoPen ) {
+  if ( (paintBorder & BottomBorder) && bottomPen.style() != Qt::NoPen )
+  {
     painter.setPen( bottomPen );
 
     //kDebug(36001) << "    painting bottom border of cell " << name()
@@ -3972,9 +3940,8 @@ void Cell::paintCellBorders( QPainter& painter, const KoRect& rect,
 
 // Paint diagonal lines through the cell.
 //
-void Cell::paintCellDiagonalLines( QPainter& painter,
-           const KoRect &cellRect,
-           const QPoint &cellRef )
+void Cell::paintCellDiagonalLines( QPainter& painter, const KoRect &cellRect,
+                                   const QPoint &cellRef )
 {
   if ( isPartOfMerged() )
     return;
@@ -7192,14 +7159,14 @@ bool Cell::hasError() const
 {
   return ( testFlag(Flag_ParseError) ||
            testFlag(Flag_CircularCalculation) ||
-           testFlag(Flag_DependancyError));
+           testFlag(Flag_DependencyError));
 }
 
 void Cell::clearAllErrors()
 {
   clearFlag( Flag_ParseError );
   clearFlag( Flag_CircularCalculation );
-  clearFlag( Flag_DependancyError );
+  clearFlag( Flag_DependencyError );
 }
 
 bool Cell::calcDirtyFlag()
