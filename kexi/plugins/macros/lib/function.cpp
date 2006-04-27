@@ -208,12 +208,12 @@ void Function::activate(Context::Ptr context)
 		const QString rvvalue = rv ? rv->toString() : QString::null;
 		if(rvvalue.startsWith("$") && context.data()) {
 			// the returnvalue is a variable... so, just remember it in the context.
-			context->setVariable(rvvalue, returnvalue);
+			context->setVariable(rvvalue,returnvalue);
 		}
 		else {
 			// the first item in the list of variables is always the returnvalue.
-//this->setVariable("0", returnvalue);
-			this->setVariable("0", returnvalue);
+			returnvalue->setName("0");
+			this->setVariable(returnvalue);
 		}
 
 		kdDebug() << "Function::activate(Context::Ptr) return=" << rvvalue << " value=" << returnvalue->toString() << endl;

@@ -117,18 +117,13 @@ bool KexiMacroPart::execute(KexiPart::Item* item)
 
 
 //################## testcases
-class KexiTestAction1 : public KoMacro::GenericAction<KexiTestAction1> {
+class KexiTestAction : public KoMacro::GenericAction<KexiTestAction> {
 	public:
-		KexiTestAction1() : KoMacro::GenericAction<KexiTestAction1>("kexitestaction1", "Test Action 1") {
-			addVariable("myvar11","My Var 1-1",QVariant(QString("myvalue11")));
-			addVariable("myvar12","My Var 1-2",QVariant(QString("myvalue12")));
-		}
-};
-class KexiTestAction2 : public KoMacro::GenericAction<KexiTestAction2> {
-	public:
-		KexiTestAction2() : KoMacro::GenericAction<KexiTestAction2>("kexitestaction2", "Test Action 2") {
-			addVariable("myvar21","My Var 2-1",QVariant(QString("myvalue21")));
-			addVariable("myvar22","My Var 2-2",QVariant(QString("myvalue22")));
+		KexiTestAction()
+			: KoMacro::GenericAction<KexiTestAction>("kexitestaction", "Test Action")
+		{
+			setVariable("myvar11","My Var 1-1",QVariant(QString("myvalue11")));
+			setVariable("myvar12","My Var 1-2",QVariant(QString("myvalue12")));
 		}
 };
 
@@ -140,8 +135,7 @@ void KexiMacroPart::initPartActions()
 
 	::KoMacro::Manager::init( m_mainWin );
 	new KexiMacro::OpenObject;
-	new KexiTestAction1;
-	new KexiTestAction2;
+	new KexiTestAction;
 }
 
 void KexiMacroPart::initInstanceActions()

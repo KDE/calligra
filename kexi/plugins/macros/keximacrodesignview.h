@@ -88,16 +88,6 @@ class KexiMacroDesignView : public KexiMacroView
 		void rowUpdated(KexiTableItem* item);
 
 		/**
-		* Called if a row should be inserted.
-		*/
-		void aboutToInsertRow(KexiTableItem*, KexiDB::ResultInfo*, bool);
-
-		/**
-		* Called if a row should be deleted.
-		*/
-		void aboutToDeleteRow(KexiTableItem&, KexiDB::ResultInfo*, bool);
-
-		/**
 		* Called if a property in the \a KoProperty got changed.
 		*/
 		void propertyChanged(KoProperty::Set&, KoProperty::Property&);
@@ -115,9 +105,9 @@ class KexiMacroDesignView : public KexiMacroView
 
 		/**
 		* Update the properties of the \a KoProperty::Set \p set at
-		* row-number \p row with the \a KoMacro::Action \p action .
+		* row-number \p row with the \a KoMacro::MacroItem \p macroitem .
 		*/
-		void updateProperties(int row, KoProperty::Set* set, KSharedPtr<KoMacro::Action> action);
+		void updateProperties(int row, KoProperty::Set* set, KSharedPtr<KoMacro::MacroItem> macroitem);
 };
 
 #endif

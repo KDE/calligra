@@ -160,11 +160,16 @@ QDomElement XMLHandler::toXML()
 			Variable::Map vmap = item->variables();
 			Variable::Map::ConstIterator vit(vmap.constBegin()), vend(vmap.constEnd());
 			for(; vit != vend; ++vit) {
+				const Variable::Ptr v = vit.data();
+				if(! v.data()) {
+					// skip if the variable is NULL.
+					continue;
+				}
 				// Create an own element for the variable. The tagname will be
 				// the name of the variable.
 				QDomElement varelement = document.createElement(vit.key());
 				// Remember the value as textnode.
-				varelement.appendChild(document.createTextNode(vit.data()->toString()));
+				varelement.appendChild(document.createTextNode(v->toString()));
 				// Add the new variable-element to our MacroItem.
 				itemelem.appendChild(varelement);
 			}

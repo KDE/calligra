@@ -22,7 +22,6 @@
 #include "exception.h"
 
 #include <qstringlist.h>
-#include <qdom.h>
 #include <kdebug.h>
 
 using namespace KoMacro;
@@ -67,11 +66,6 @@ namespace KoMacro {
 			QStringList varnames;
 
 			/**
-			* Cached QDomElement.
-			*/
-			QDomElement element;
-
-			/**
 			* Constructor.
 			*/
 			Private()
@@ -83,28 +77,14 @@ namespace KoMacro {
 
 }
 
-Action::Action(const QString& name)
+Action::Action(const QString& name, const QString& text)
 	: KAction()
 	, KShared()
 	, d( new Private() ) // create the private d-pointer instance.
 {
 	kdDebug() << "Action::Action() name=" << name << endl;
 	d->name = name;
-
-/*
-	// We need a QCString. XML is always utf8, right?
-	QCString name = element.attribute("name").utf8();
-	setName( name );
-
-	setText( element.attribute("text") );
-	setComment( element.attribute("comment") );
-	setIcon( element.attribute("icon") );
-	//setWhatsThis( element.attribute("whatsthis") );
-	//setToolTip( element.attribute("tooltip") );
-
-	d->element = element;
-	//kdDebug() << QString("Action::Action() name=\"%1\"").arg(name) << endl;
-*/
+	setText(text);
 }
 
 Action::~Action()
@@ -165,17 +145,21 @@ QStringList Action::variableNames() const
 	return d->varnames;
 }
 
-void Action::setVariable(const QString& name, Variable::Ptr variable)
+void Action::setVariable(Variable::Ptr variable)
 {
+	const QString name = variable->name();
 	if(! d->varmap.contains(name)) {
 		d->varnames.append(name);
 	}
 	d->varmap.replace(name, variable);
 }
 
-const QDomElement Action::domElement() const
+void Action::setVariable(const QString& name, const QString& text, const QVariant& variant)
 {
-	return d->element;
+	Variable* variable = new Variable(variant);
+	variable->setName(name);
+	variable->setText(text);
+	setVariable( Variable::Ptr(variable) );
 }
 
 void Action::activate()
@@ -196,18 +180,16 @@ void Action::activate()
 
 void Action::activate(Context::Ptr /*context*/)
 {
-	kdDebug() << "Action::activate(Context*) name=" << name() << " text=" << text() << endl;
+	kdDebug() << "Action::activate(Context::Ptr) name=" << name() << " text=" << text() << endl;
 
 	QCString s = name().isNull() ? "" : name().latin1();
 	KAction* action = Manager::self()->guiClient()->action( s );
-	if(! action) {
-		throw Exception(
-			QString("No such action \"%1\"").arg(name()),
-			"KoMacro::Action::activate(Context*)"
-		);
+	if(action) {
+		action->activate();
 	}
-
-	action->activate();
+	else {
+		kdWarning() << QString("Action::activate(Context::Ptr) No such action \"%1\"").arg(name()) << endl;
+	}
 
 	emit activated();
 }
@@ -220,7 +202,6 @@ void Action::setAction(const KAction* action)
 	setIcon( action->icon() );
 	setWhatsThis( action->whatsThis() );
 	setToolTip( action->toolTip() );
-	//d->element = QDomElement();
 }
 
 #include "action.moc"

@@ -115,12 +115,12 @@ namespace KoMacro {
 			/**
 			* @return the caption this @a Variable has.
 			*/
-			QString caption() const;
+			QString text() const;
 
 			/**
 			* Set the caption this @a Variable has.
 			*/
-			void setCaption(const QString& caption);
+			void setText(const QString& text);
 
 			/**
 			* Set the QObject @p object this variable has. A 
@@ -174,6 +174,12 @@ namespace KoMacro {
 			*/
 			int toInt() const;
 
+			/**
+			* @return the optional list of @a Variable instances
+			* that are children of this @a Variable .
+			*/
+			Variable::List& children() const;
+
 		private:
 			/// @internal d-pointer class.
 			class Private;
@@ -192,14 +198,14 @@ namespace KoMacro {
 	{
 		protected:
 			//typedef VARIABLEIMPL impl;
-			KSharedPtr<KoMacro::Action> m_action;
+			KSharedPtr<Action> m_action;
 		public:
-			GenericVariable(KSharedPtr<KoMacro::Action> action, const QString& name, const QString& caption)
+			GenericVariable(const QString& name, const QString& caption, KSharedPtr<KoMacro::Action> action)
 				: KoMacro::Variable()
 				, m_action(action)
 			{
 				setName(name);
-				setCaption(caption);
+				setText(caption);
 			}
 			virtual ~GenericVariable() {}
 			virtual void update() = 0;

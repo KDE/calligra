@@ -43,7 +43,7 @@ namespace KoMacro {
 			 * The i18n-caption used for display purposes only
 			 * this @a Variable has.
 			 */
-			QString caption;
+			QString text;
 
 			/**
 			* If @a Variable::Type is @a Variable::TypeVariant this QVariant
@@ -57,6 +57,10 @@ namespace KoMacro {
 			*/
 			const QObject* object;
 
+			/**
+			* Optional list of children this @a Variable has.
+			*/
+			Variable::List children;
 	};
 
 }
@@ -127,14 +131,14 @@ void Variable::setName(const QString& name)
 	d->name = name;
 }
 
-QString Variable::caption() const
+QString Variable::text() const
 {
-	return d->caption;
+	return d->text;
 }
 
-void Variable::setCaption(const QString& caption)
+void Variable::setText(const QString& text)
 {
-	d->caption = caption;
+	d->text = text;
 }
 
 const QVariant Variable::variant() const
@@ -205,6 +209,11 @@ const QString Variable::toString() const
 int Variable::toInt() const
 {
 	return variant().toInt();
+}
+
+Variable::List& Variable::children() const
+{
+	return d->children;
 }
 
 //#include "variable.moc"

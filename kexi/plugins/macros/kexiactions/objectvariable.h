@@ -28,18 +28,33 @@
 
 namespace KexiMacro {
 
+	/**
+	* The ObjectVariable class implements @a KoMacro::Variable to
+	* provide a variable list of Kexi-objects. Those Kexi-objects
+	* are KexiPart's like e.g. table, query, form or script.
+	*/
 	class ObjectVariable : public KoMacro::GenericVariable<ObjectVariable>
 	{
 		public:
+
+			/**
+			* Constructor.
+			*
+			* @param action The @a KoMacro::Action instance
+			* this @a ObjectVariable is child of.
+			*/
 			explicit ObjectVariable(KoMacro::Action::Ptr action);
+
+			/**
+			* Destructor.
+			*/
 			virtual ~ObjectVariable();
+
+			/**
+			* Update the variable.
+			*/
 			virtual void update();
 	};
-
-	/*
-	class ViewVariable : public GenericVariable<ViewVariable>;
-	class NameVariable : public GenericVariable<NameVariable>;
-	*/
 
 }
 

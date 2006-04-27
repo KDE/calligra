@@ -27,11 +27,12 @@
 #include <core/kexipartinfo.h>
 
 #include <klocale.h>
+#include <kdebug.h>
 
 using namespace KexiMacro;
 
 ObjectVariable::ObjectVariable(KoMacro::Action::Ptr action)
-	: KoMacro::GenericVariable<ObjectVariable>(action, "object", i18n("Object"))
+	: KoMacro::GenericVariable<ObjectVariable>("object", i18n("Object"), action)
 {
 	update();
 }
@@ -42,21 +43,19 @@ ObjectVariable::~ObjectVariable()
 
 void ObjectVariable::update()
 {
-	QStringList list;
+	kdDebug() << "ObjectVariable::update()" << endl;
+
+	QString defaultvalue;
 	KexiPart::PartInfoList* parts = Kexi::partManager().partInfoList();
 	for(KexiPart::PartInfoListIterator it(*parts); it.current(); ++it) {
 		KexiPart::Info* info = it.current();
 		if(info->isVisibleInNavigator()) {
-			list << info->objectName();
-			//info->groupName();
+			const QString objname = info->objectName(); //info->groupName();
+			children().append( KoMacro::Variable::Ptr(new KoMacro::Variable(objname)) );
+			if(defaultvalue.isNull()) {
+				defaultvalue = objname;
+			}
 		}
 	}
-	setVariant(list);
-
-	/*
-	for(QStringList::Iterator it = list.begin(); it != list.end(); ++it) {
-		Variable::Ptr v = action->variable(*it);
-		v->update();
-	}
-	*/
-}	
+	setVariant(defaultvalue);
+}

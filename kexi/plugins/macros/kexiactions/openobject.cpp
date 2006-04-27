@@ -37,44 +37,45 @@ namespace KexiMacro {
 		public:
 	};
 
+	class NameVariable : public KoMacro::GenericVariable<NameVariable>
+	{
+		public:
+			explicit NameVariable(KoMacro::Action::Ptr action)
+				: KoMacro::GenericVariable<NameVariable>("name", i18n("Name"), action)
+			{
+				update();
+			}
+
+			virtual ~NameVariable() {}
+
+			virtual void update()
+			{
+				//TODO
+				setVariant( QString("") );
+			}
+	};
+
 }
 
 OpenObject::OpenObject()
 	: KoMacro::GenericAction<OpenObject>("openobject", i18n("Open Object"))
 	, d( new Private() )
 {
-	addVariable( new ObjectVariable(this) );
-
-	//QStringList objectlist;
-	//objectlist << "Tables" << "Queries";
-	//addVariable("object", i18n("Object"), QVariant(objectlist));
-	/* example how to fetch the list of objects.
-	KexiPart::PartInfoList* parts = Kexi::partManager().partInfoList();
-	QStringList objectnames, objecttexts;
-	for(KexiPart::PartInfoListIterator it(*parts); it.current(); ++it) {
-		KexiPart::Info* info = it.current();
-		if(info->isVisibleInNavigator()) {
-			objectnames << info->objectName();
-			objecttexts << info->groupName();
-		}
-	}
-	*/
-
-	QStringList viewlist;
-	viewlist << "Data View" << "Design View" << "Text View";
-	addVariable("view", i18n("View"), QVariant(viewlist));
-
-	addVariable("name", i18n("Name"), QVariant(QString("")));
+	setVariable(KoMacro::Variable::Ptr( new ObjectVariable(this) ));
+	setVariable(KoMacro::Variable::Ptr( new NameVariable(this) ));
 }
 
 OpenObject::~OpenObject() 
-{	
+{
 	delete d;
 }
 
 KoMacro::Variable::List OpenObject::notifyUpdated(KoMacro::Variable::Ptr variable)
 {
-	KoMacro::Variable::List l;
+	kdDebug()<<"OpenObject::notifyUpdated() name="<<variable->name()<<" value="<< variable->variant().toString() <<endl;
+
+	KoMacro::Variable::List list;
+
 /*TODO
 	if(var->name() == "object"){
 		l.append(new Variable("view",i18n(""),QString("designview")));
@@ -91,5 +92,5 @@ KoMacro::Variable::List OpenObject::notifyUpdated(KoMacro::Variable::Ptr variabl
 		}
 	}
 */
-	return l;
+	return list;
 }

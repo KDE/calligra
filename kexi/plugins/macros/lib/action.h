@@ -67,8 +67,11 @@ namespace KoMacro {
 
 			/**
 			* Constructor.
+			*
+			* @param name The unique name this @a Action has.
+			* @param text The i18n-caption text this @a Action has.
 			*/
-			explicit Action(const QString& name);
+			explicit Action(const QString& name, const QString& text = QString::null);
 
 			/**
 			* Destructor.
@@ -114,10 +117,6 @@ namespace KoMacro {
 			 */
 			void setBlocking(bool blocking);
 
-			// do we need to have them accessible by an unique key?
-			//Variable::Ptr variable(const QString& name) const;
-			//void setVariable(const QString& name, Variable::Ptr) const;
-
 			/**
 			* @return the variable @a Variable defined for the
 			* name @p name . If there exists no @a Variable with
@@ -139,14 +138,16 @@ namespace KoMacro {
 			 * Append the @a Variable @p variable to list of variables
 			 * this @a Action provides.
 			 */
-			void setVariable(const QString& name, Variable::Ptr variable);
+			void setVariable(Variable::Ptr variable);
 
 			/**
-			* @return this instance as serialized QDomElement.
-			*
-			* @deprecated Use XMLHandler for such functionality.
-			*/
-			const QDomElement domElement() const;
+			 * Set the variable.
+			 *
+			 * @param name The name the variable should have.
+			 * @param text The i18n-caption used for display.
+			 * @param variant The QVariant value.
+			 */
+			void setVariable(const QString& name, const QString& text, const QVariant& variant);
 
 			/**
 			* Set the @p action to be used within this @a Action instance.
@@ -184,36 +185,25 @@ namespace KoMacro {
 			Private* const d;
 	};
 
+	/**
+	* Template class for classes that implement @a Action to
+	* be published.
+	*/
 	template<class ACTIONIMPL>
 	class GenericAction : public Action
 	{
-		protected:
-
-			void addVariable(const QString& name, const QString& caption, const QVariant& value)
-			{
-				KoMacro::Variable* v = new KoMacro::Variable(value);
-				v->setName(name);
-				v->setCaption(caption);
-				setVariable(name, v);
-			}
-
-			void addVariable(KoMacro::Variable* variable)
-			{
-				setVariable(variable->name(), variable);
-			}
-
 		public:
-
 			//typedef ACTIONIMPL action_type;
 
 			/**
 			* Constructor.
 			*/
-			GenericAction<ACTIONIMPL>(const QString& name, const QString& caption)
+			GenericAction(const QString& name, const QString& text)
 				: Action(name)
 			{
 				// Set the caption this action has.
-				setText(caption);
+				setText(text);
+
 				// Publish this action.
 				Manager::self()->publishAction( Action::Ptr(this) );
 			}
