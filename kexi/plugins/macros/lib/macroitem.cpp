@@ -81,7 +81,7 @@ Variable::Map MacroItem::variables() const
 	return d->variables;
 }
 
-bool MacroItem::setVariable(const QString& name, Variable::Ptr variable)
+QStringList MacroItem::setVariable(const QString& name, Variable::Ptr variable)
 {
 	// First try to find the matching in the action defined variable.
 	Variable* v = d->action->variable(name).data();
@@ -92,13 +92,13 @@ bool MacroItem::setVariable(const QString& name, Variable::Ptr variable)
 		if(! v.data()) {
 		*/
 		kdDebug() << QString("MacroItem::setVariable() No such variable \"%1\"").arg(name) << endl;
-		return false;
+		return QStringList();
 	}
 
 	// Check if the variable is valid.
 	if(! v->validVariable(variable)) {
 		kdDebug() << QString("MacroItem::setVariable() update for variable \"%1\" failed.").arg(name) 	<< endl;
-		return false;
+		return QStringList();
 	}
 
 	kdDebug() << "MacroItem::setVariable() name=" << name << " variable" << variable->variant().toString() << endl;
@@ -110,14 +110,15 @@ bool MacroItem::setVariable(const QString& name, Variable::Ptr variable)
 	//v->updated(this);
 
 	// set depending variables by asking the own action.
+	QStringList sl;
 	Variable::List list = d->action->notifyUpdated(variable);
 	Variable::List::ConstIterator it(list.constBegin()), end(list.constEnd());
 	for (; it != end; ++it) {
+		sl << (*it)->name();
 		d->variables.replace((*it)->name(), *it);
 	}
 
-	//TODO emit updated(sl);
-	return true;
+	return sl;
 }
 
 #include "macroitem.moc"

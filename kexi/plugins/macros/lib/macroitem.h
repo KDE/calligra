@@ -117,13 +117,10 @@ namespace KoMacro {
 			* Set the @a Variable @p variable with the variablename
 			* @p name .
 			*/
-			bool setVariable(const QString& name, KSharedPtr<Variable> variable);
+			QStringList setVariable(const QString& name, KSharedPtr<Variable> variable);
 
 		public slots:
 			void activate() {}
-
-		signals:
-			void updated(QStringList ids);
 
 		private:
 			/// @internal d-pointer class.

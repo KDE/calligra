@@ -128,26 +128,9 @@ KoMacro::Variable::List OpenObject::notifyUpdated(KoMacro::Variable::Ptr variabl
 
 	KoMacro::Variable::List list;
 	if(variable->name() == "object") {
-		const QString objectname = variable->variant().toString();
+		const QString objectname = variable->variant().toString(); // e.g. "table" or "query"
 		list.append(KoMacro::Variable::Ptr(new NameVariable(d->mainwin, this, objectname)));
 	}
-
-	/*
-	if(var->name() == "object"){
-		l.append(new Variable("view",i18n(""),QString("designview")));
-		
-		QString s = var->variant();
-		if(s == "table"){
-			l.append(new Variable("name",i18n(""),new SQL(select * from system_tables)));
-		}
-		else if(s == "form"){
-			l.append(new Variable("name",i18n(""),new SQLformQuery());
-		}
-		else if(s == "query"){
-			l.append(new Variable("name",i18n(""),new SQLqueryQuery());
-		}
-	}
-	*/
 
 	return list;
 }

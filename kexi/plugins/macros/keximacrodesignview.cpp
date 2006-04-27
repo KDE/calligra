@@ -272,7 +272,7 @@ void KexiMacroDesignView::updateProperties(int row, KoProperty::Set* set, KoMacr
 		set = new KoProperty::Set(d->propertyset, action->name());
 		d->propertyset->insert(row, set, true);
 		connect(set, SIGNAL(propertyChanged(KoProperty::Set&, KoProperty::Property&)),
-		        this, SLOT(propertyChanged(KoProperty::Set&, KoProperty::Property&)));
+	        	this, SLOT(propertyChanged(KoProperty::Set&, KoProperty::Property&)));
 	}
 
 	// The caption.
@@ -436,12 +436,33 @@ void KexiMacroDesignView::propertyChanged(KoProperty::Set&, KoProperty::Property
 	kdDebug() << "KexiMacroDesignView::propertyChanged() name=" << name << endl;
 
 	KoMacro::MacroItem::Ptr macroitem = macro()->items()[row];
-	KoMacro::Variable* v = new KoMacro::Variable( property.value() );
-	v->setName(name);
-	macroitem->setVariable(name, KoMacro::Variable::Ptr(v));
 
-//updateProperties(int row, KoProperty::Set* set, KoMacro::MacroItem::Ptr macroitem)
-//updateProperties(row, d->propertyset->currentPropertySet(), macroitem);
+	KoMacro::Variable* pv = new KoMacro::Variable( property.value() );
+	pv->setName(name);
+	QStringList dirtyvarnames = macroitem->setVariable(name, KoMacro::Variable::Ptr(pv));
+
+	for(QStringList::Iterator it = dirtyvarnames.begin(); it != dirtyvarnames.end(); ++it) {
+		KoMacro::Variable::Ptr v = macroitem->variable(*it);
+		if(! v.data())
+			continue;
+
+		KoProperty::Property& p = d->propertyset->currentPropertySet()->property( (*it).latin1() );
+		if(p == KoProperty::Property::null)
+			continue;
+
+		KoMacro::Variable::List children = v->children();
+		if(children.count() > 0) {
+			QStringList keys, names;
+			KoMacro::Variable::List::Iterator childit(children.begin()), childend(children.end());
+			for(; childit != childend; ++childit) {
+				const QString s = (*childit)->variant().toString();
+				keys << s;
+				names << s;
+			}
+			p.setListData(keys, names);
+		}
+		p.setValue(v->variant());
+	}
 
 	//propertySetSwitched();
 	//propertySetReloaded(true);
