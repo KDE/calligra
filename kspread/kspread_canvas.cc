@@ -222,6 +222,7 @@ Canvas::Canvas(View *view)
 {
   d = new Private;
 
+//   setAttribute( Qt::WA_OpaquePaintEvent );
   setAttribute( Qt::WA_StaticContents );
 
   d->cellEditor = 0;
@@ -403,11 +404,6 @@ Selection* Canvas::selectionInfo() const
 Selection* Canvas::choice() const
 {
   return d->view->choice();
-}
-
-QRect Canvas::selection() const
-{
-  return d->view->selectionInfo()->selection();
 }
 
 QPoint Canvas::marker() const
@@ -1660,6 +1656,10 @@ void Canvas::paintEvent( QPaintEvent* event )
   if (!sheet)
     return;
 
+  // repaint whole visible region, if no cells are marked as dirty
+  if (sheet->paintDirtyData().isEmpty())
+  {
+
   // painting rectangle
   const QRect paintRect( event->rect() );
 
@@ -1695,9 +1695,10 @@ void Canvas::paintEvent( QPaintEvent* event )
 
   QRect vr( QPoint(left_col, top_row),
             QPoint(right_col, bottom_row) );
-  d->view->doc()->emitBeginOperation( false );
   sheet->setRegionPaintDirty( vr );
-  d->view->doc()->emitEndOperation( vr );
+  }
+  paintUpdates();
+  event->accept();
 }
 
 void Canvas::focusInEvent( QFocusEvent* )
@@ -3977,7 +3978,7 @@ void Canvas::equalizeRow()
   if (!sheet)
     return;
 
-  QRect s( selection() );
+  QRect s( selectionInfo()->lastRange() );
   RowFormat *rl = sheet->rowFormat(s.top());
   int size=rl->height(this);
   if ( s.top() == s.bottom() )
@@ -3995,7 +3996,7 @@ void Canvas::equalizeColumn()
   if (!sheet)
     return;
 
-  QRect s( selection() );
+  QRect s( selectionInfo()->lastRange() );
   ColumnFormat *cl = sheet->columnFormat(s.left());
   int size=cl->width(this);
   if ( s.left() == s.right() )
@@ -4070,15 +4071,6 @@ void Canvas::paintUpdates()
   KoRect unzoomedRect = d->view->doc()->unzoomRect( QRect( 0, 0, width(), height() ) );
   // unzoomedRect.translate( xOffset(), yOffset() );
 
-  /* paint any visible cell that has the paintDirty flag */
-  Cell* cell = 0;
-
-  const QRect visibleRect = visibleCells();
-  double topPos = sheet->dblRowPos(visibleRect.top());
-  double leftPos = sheet->dblColumnPos(visibleRect.left());
-
-  KoPoint dblCorner( leftPos - xOffset(), topPos - yOffset() );
-
 #if 0
   kDebug(36001)
     << "================================================================"
@@ -4086,18 +4078,27 @@ void Canvas::paintUpdates()
   kDebug(36001) << "painting dirty cells " << endl;
 #endif
 
+  /* paint any visible cell that has the paintDirty flag */
+  Cell* cell = 0;
+  const QRect visibleRect = visibleCells();
   QLinkedList<QPoint> mergedCellsPainted;
   Region paintDirtyList = sheet->paintDirtyData();
+
   Region::ConstIterator end(paintDirtyList.constEnd());
   for (Region::ConstIterator it(paintDirtyList.constBegin()); it != end; ++it)
   {
     QRect range = (*it)->rect().normalized() & visibleRect;
+    const double topPos = sheet->dblRowPos(range.top());
+    const double leftPos = sheet->dblColumnPos(range.left());
+    KoPoint dblCorner( leftPos - xOffset(), topPos - yOffset() );
+
     int right  = range.right();
     for ( int x = range.left(); x <= right; ++x )
     {
       int bottom = range.bottom();
       for ( int y = range.top(); y <= bottom; ++y )
       {
+        kDebug() << "painting cell at [" << x << "," << y << "]" << endl;
         cell = sheet->cellAt( x, y );
 
         // recalc and relayout only for non default cells
@@ -4176,10 +4177,10 @@ void Canvas::paintUpdates()
 			 mergedCellsPainted);
 
 
-        dblCorner.setY( dblCorner.y() + sheet->rowFormat( y )->dblHeight( ) );
+        dblCorner.setY( dblCorner.y() + sheet->rowFormat( y )->dblHeight() );
       }
       dblCorner.setY( topPos - yOffset() );
-      dblCorner.setX( dblCorner.x() + sheet->columnFormat( x )->dblWidth( ) );
+      dblCorner.setX( dblCorner.x() + sheet->columnFormat( x )->dblWidth() );
     }
   }
 

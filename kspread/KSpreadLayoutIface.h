@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   
+
    Copyright 2002 Laurent Montel <montel@kde.org>
    Copyright 2002 Philipp Mueller <philipp.mueller@gmx.de>
    Copyright 2002 John Dailey <dailey@vt.edu>
@@ -48,10 +48,7 @@ k_dcop:
     virtual void setAlignY(const QString &_alignY);
     virtual void setPrefix(const QString &_prefix);
     virtual void setPostfix(const QString &_postfix);
-    /** @deprecated use setFormatType*/
-    virtual void setFormatNumber(const QString &ft) { setFormatType(ft); }
     virtual void setFormatType(const QString &formatType);
-    /** @deprecated use getFormatType */
     virtual void setPrecision(int  _p);
     //font
     virtual void setTextFontBold( bool _b );

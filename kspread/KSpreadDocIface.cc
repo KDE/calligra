@@ -62,17 +62,17 @@ QColor DocIface::pageBorderColor() const
 
 bool DocIface::showFormulaBar()const
 {
-    return doc->getShowFormulaBar();
+    return doc->showFormulaBar();
 }
 
 bool DocIface::showStatusBar()const
 {
-    return doc->getShowStatusBar();
+    return doc->showStatusBar();
 }
 
 bool DocIface::showTabBar()const
 {
-    return doc->getShowTabBar();
+    return doc->showTabBar();
 }
 
 void DocIface::setShowVerticalScrollBar(bool _show)
@@ -87,9 +87,9 @@ void DocIface::setShowHorizontalScrollBar(bool _show)
     doc->refreshInterface();
 }
 
-void DocIface::setShowColHeader(bool _show)
+void DocIface::setShowColumnHeader(bool _show)
 {
-    doc->setShowColHeader(_show);
+    doc->setShowColumnHeader(_show);
     doc->refreshInterface();
 }
 

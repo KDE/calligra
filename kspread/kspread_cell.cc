@@ -2045,7 +2045,7 @@ bool Cell::makeFormula()
   // Did a syntax error occur ?
     clearFormula();
 
-    if (format()->sheet()->doc()->getShowMessageError())
+    if (format()->sheet()->doc()->showMessageError())
     {
       QString tmp(i18n("Error in cell %1\n\n"));
       tmp = tmp.arg( fullName() );
@@ -2337,7 +2337,6 @@ void Cell::paintCell( const KoRect& rect, QPainter& painter,
 
   // 5. Paint diagonal lines and page borders.
   paintCellDiagonalLines( painter, cellRect0, cellRef );
-
   paintPageBorders( painter, cellRect0, cellRef, paintBorder );
 
   // 6. Now paint the content, if this cell isn't obscured.

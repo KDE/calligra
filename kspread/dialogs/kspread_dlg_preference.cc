@@ -333,7 +333,7 @@ void configure::apply()
             m_pView->hBorderWidget()->show();
         else
             m_pView->hBorderWidget()->hide();
-        doc->setShowColHeader(active);
+        doc->setShowColumnHeader(active);
     }
 
     active=showRowHeader->isChecked();
@@ -691,7 +691,7 @@ void miscParameters::apply()
     }
 
     double val = valIndent->value();
-    if( val != m_pView->doc()->getIndentValue() )
+    if( val != m_pView->doc()->indentValue() )
     {
         KoUnit::Unit oldUnit = m_pView->doc()->unit();
         m_pView->doc()->setUnit(indentUnit);
@@ -701,7 +701,7 @@ void miscParameters::apply()
     }
 
     bool active=msgError->isChecked();
-    if(active!=m_pView->doc()->getShowMessageError())
+    if(active!=m_pView->doc()->showMessageError())
     {
         m_pView->doc()->setShowMessageError( active);
         config->writeEntry( "Msg error" ,(int)active);

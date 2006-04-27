@@ -97,10 +97,6 @@ class Plugin
 class KSPREAD_EXPORT Doc : public KoDocument, public KoZoomHandler
 {
   Q_OBJECT
-  Q_PROPERTY( bool getShowRowHeader READ getShowRowHeader )
-  Q_PROPERTY( bool getShowColHeader READ getShowColHeader )
-  Q_PROPERTY( double getIndentValue READ getIndentValue WRITE setIndentValue )
-  Q_PROPERTY( bool getShowMessageError READ getShowMessageError WRITE setShowMessageError)
   Q_PROPERTY( bool dontCheckUpperWord READ dontCheckUpperWord WRITE setDontCheckUpperWord)
   Q_PROPERTY( bool dontCheckTitleCase READ dontCheckTitleCase WRITE setDontCheckTitleCase)
 
@@ -225,11 +221,6 @@ public:
   bool showVerticalScrollBar() const;
 
   /**
-   * \deprecated Use showVerticalScrollBar().
-   */
-  bool getShowVerticalScrollBar() const { return showVerticalScrollBar(); }
-
-  /**
    * If b is true, horizontal scrollbar is visible, otherwise
    * it will be hidden.
    */
@@ -239,11 +230,6 @@ public:
    * Returns true if horizontal scroll bar is visible.
    */
   bool showHorizontalScrollBar() const;
-
-  /**
-   * \deprecated Use showHorizontalScrollBar().
-   */
-  bool getShowHorizontalScrollBar() const { return showHorizontalScrollBar(); }
 
   /**
    * If b is true, column header is visible, otherwise
@@ -257,16 +243,6 @@ public:
   bool showColumnHeader() const;
 
   /**
-   * \deprecated Use setShowColumnHeader().
-   */
-  void setShowColHeader( bool b ){ setShowColumnHeader( b ) ; }
-
-  /**
-   * \deprecated Use showColumnHeader().
-   */
-  bool getShowColHeader() const { return showColumnHeader(); }
-
-  /**
    * If b is true, row header is visible, otherwise
    * it will be hidden.
    */
@@ -276,11 +252,6 @@ public:
    * Returns true if row header is visible.
    */
   bool showRowHeader() const;
-
-  /**
-   * \deprecated Use showRowHeader().
-   */
-  bool getShowRowHeader() const { return showRowHeader(); }
 
   /**
    * Sets the color of the grid.
@@ -303,11 +274,6 @@ public:
   double indentValue() const;
 
   /**
-   * \deprecated Use indentValue().
-   */
-  double getIndentValue() const { return indentValue(); }
-
-  /**
    * If b is true, status bar is visible, otherwise
    * it will be hidden.
    */
@@ -317,11 +283,6 @@ public:
    * Returns true if status bar is visible.
    */
   bool showStatusBar() const;
-
-  /**
-   * \deprecated Use showStatusBar().
-   */
-  bool getShowStatusBar() const { return showStatusBar(); }
 
   /**
    * If b is true, tab bar is visible, otherwise
@@ -335,11 +296,6 @@ public:
   bool showTabBar() const;
 
   /**
-   * \deprecated Use showTabBar().
-   */
-  bool getShowTabBar() const { return showTabBar(); }
-
-  /**
    * If b is true, formula bar is visible, otherwise
    * it will be hidden.
    */
@@ -351,11 +307,6 @@ public:
   bool showFormulaBar() const;
 
   /**
-   * \deprecated Use showFormulaBar().
-   */
-  bool getShowFormulaBar() const { return showFormulaBar(); }
-
-  /**
    * If b is true, an error message will pop up whenever error occurs.
    */
   void setShowMessageError( bool b );
@@ -364,11 +315,6 @@ public:
    * Returns true if error message should pop up whenever error occurs.
    */
   bool showMessageError() const;
-
-  /**
-   * \deprecated Use showMessageError().
-   */
-  bool getShowMessageError() const{ return showMessageError(); }
 
   /**
   * completion mode

@@ -145,7 +145,7 @@ void SheetIface::sheetNameHasChanged() {
            delete m_proxy;
            DCOPCString str = objId();
            str += "/";
-	   kDebug(36001)<<"SheetIface::tableNameHasChanged(): new DCOP-ID:"<<objId()<<endl;
+	   kDebug(36001)<<"SheetIface::sheetNameHasChanged(): new DCOP-ID:"<<objId()<<endl;
            m_proxy = new CellProxy( m_sheet, str );
    }
 

@@ -141,14 +141,6 @@ public:
     Selection* choice() const;
 
     /**
-     * @deprecated use selectionInfo()
-     * Selections are no longer contiguous in general.
-     * @see Selection::lastRange()
-     * @see Selection::activeElement()
-    */
-    QRect selection() const;
-
-    /**
      * convenience function.
      * @return selection's marker
      * @see Selection::marker()

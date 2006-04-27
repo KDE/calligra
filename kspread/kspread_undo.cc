@@ -98,7 +98,7 @@ void Undo::undo()
     bool origErrorMessages = true;
     if ( m_pDoc )
     {
-        origErrorMessages = m_pDoc->getShowMessageError();
+        origErrorMessages = m_pDoc->showMessageError();
         m_pDoc->setShowMessageError( false );
     }
 

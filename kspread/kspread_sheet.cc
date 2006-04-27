@@ -467,11 +467,6 @@ void Sheet::setLayoutDirection( LayoutDirection dir )
   d->layoutDirection = dir;
 }
 
-bool Sheet::isRightToLeft() const
-{
-  return d->layoutDirection == RightToLeft;
-}
-
 bool Sheet::isHidden() const
 {
   return d->hide;
@@ -4467,7 +4462,7 @@ struct IncreaseIndentWorker : public Sheet::CellWorkerTypeA {
 void Sheet::increaseIndent(Selection* selectionInfo)
 {
     QPoint       marker(selectionInfo->marker());
-    double       valIndent = doc()->getIndentValue();
+    double       valIndent = doc()->indentValue();
     Cell *c         = cellAt( marker );
     double       tmpIndent = c->format()->getIndent( marker.x(), marker.y() );
 
@@ -4510,7 +4505,7 @@ struct DecreaseIndentWorker : public Sheet::CellWorkerTypeA {
 
 void Sheet::decreaseIndent( Selection* selectionInfo )
 {
-    double valIndent = doc()->getIndentValue();
+    double valIndent = doc()->indentValue();
     QPoint marker(selectionInfo->marker());
     Cell* c = cellAt( marker );
     double tmpIndent = c->format()->getIndent( marker.x(), marker.y() );
@@ -8361,7 +8356,7 @@ void Sheet::setRegionPaintDirty( const Region & region )
   manipulator.execute();
   // don't put it in the undo list! ;-)
   d->paintDirtyList.add(manipulator);
-  kdDebug() << "setRegionPaintDirty "<< static_cast<Region*>(&manipulator)->name(this) << endl;
+  kDebug() << "setRegionPaintDirty "<< static_cast<Region*>(&manipulator)->name(this) << endl;
 }
 
 void Sheet::clearPaintDirtyData()

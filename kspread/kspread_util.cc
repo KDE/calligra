@@ -400,7 +400,7 @@ Point::Point( const QString & str, Map * map,
         //If the loop didn't return a sheet, better keep a string for isValid
         if ( _sheetName.isEmpty() )
         {
-            kDebug(36001) << "Point: tableName is unknown" << endl;
+            kDebug(36001) << "Point: sheet name is unknown" << endl;
             _sheetName = "unknown";
         }
     }

@@ -190,7 +190,6 @@ class KSPREAD_EXPORT Sheet : public QObject
 
     Q_OBJECT
 
-
     Q_PROPERTY( QString sheetName READ sheetName )
     Q_PROPERTY( bool autoCalc READ getAutoCalc WRITE setAutoCalc )
     Q_PROPERTY( bool showGrid READ getShowGrid WRITE setShowGrid )
@@ -212,11 +211,6 @@ public:
      * Return the name of this sheet.
      */
     QString sheetName() const;
-
-    /**
-     * \deprecated Use sheetName().
-     */
-    QString tableName() const { return sheetName(); }
 
     /**
      * Renames a sheet. This will automatically adapt all formulas
@@ -320,11 +314,6 @@ public:
      * documents, it is possibly to layout the sheet from right to left.
      */
     void setLayoutDirection( LayoutDirection dir );
-
-    /**
-     * \deprecated Use direction().
-     */
-    bool isRightToLeft() const;
 
     void password( QByteArray & passwd ) const ;
     bool isProtected() const;

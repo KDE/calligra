@@ -193,8 +193,8 @@ Doc::Doc( QWidget *parentWidget, const char *widgetName, QObject* parent, const 
   d->configLoadFromFile = false;
 
   QFont f( KoGlobal::defaultFont() );
-  Format::setGlobalRowHeight( f.pointSizeFloat() + 3 );
-  Format::setGlobalColWidth( ( f.pointSizeFloat() + 3 ) * 5 );
+  Format::setGlobalRowHeight( f.pointSizeF() + 3 );
+  Format::setGlobalColWidth( ( f.pointSizeF() + 3 ) * 5 );
 
   d->delayCalculation = false;
 
@@ -2138,7 +2138,6 @@ void Doc::emitBeginOperation(void)
 {
   emitBeginOperation(true);
 }
-
 
 void Doc::emitEndOperation()
 {

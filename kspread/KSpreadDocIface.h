@@ -49,7 +49,7 @@ k_dcop:
 
     void setShowVerticalScrollBar(bool _show);
     void setShowHorizontalScrollBar(bool _show);
-    void setShowColHeader(bool _show);
+    void setShowColumnHeader(bool _show);
     void setShowRowHeader(bool _show);
     void setShowTabBar(bool _show);
 

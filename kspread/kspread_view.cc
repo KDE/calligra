@@ -1846,7 +1846,7 @@ void View::initConfig()
             doc()->setShowHorizontalScrollBar(config->readEntry("Horiz ScrollBar",true));
         if ( !doc()->configLoadFromFile() )
             doc()->setShowVerticalScrollBar(config->readEntry("Vert ScrollBar",true));
-        doc()->setShowColHeader(config->readEntry("Column Header",true));
+        doc()->setShowColumnHeader(config->readEntry("Column Header",true));
         doc()->setShowRowHeader(config->readEntry("Row Header",true));
         if ( !doc()->configLoadFromFile() )
             doc()->setCompletionMode((KGlobalSettings::Completion)config->readEntry("Completion Mode",(int)(KGlobalSettings::CompletionAuto)));
@@ -3776,7 +3776,7 @@ void View::hideSheet()
   }
 
   QStringList vs = doc()->map()->visibleSheets();
-  int i = vs.indexOf( d->activeSheet->tableName() ) - 1;
+  int i = vs.indexOf( d->activeSheet->sheetName() ) - 1;
   if( i < 0 ) i = 1;
   QString sn = vs[i];
 
@@ -6983,9 +6983,7 @@ void View::slotChildSelected( KoDocumentChild* /*ch*/ )
 
   doc()->emitBeginOperation( false );
   d->activeSheet->setRegionPaintDirty(QRect(QPoint(1,1), QPoint(KS_colMax, KS_rowMax)));
-
   doc()->emitEndOperation();
-  paintUpdates();
 }
 
 void View::slotChildUnselected( KoDocumentChild* )
@@ -7005,7 +7003,6 @@ void View::slotChildUnselected( KoDocumentChild* )
   doc()->emitBeginOperation( false );
   d->activeSheet->setRegionPaintDirty(QRect(QPoint(1,1), QPoint(KS_colMax, KS_rowMax)));
   doc()->emitEndOperation();
-  paintUpdates();
 }
 
 
@@ -7179,7 +7176,7 @@ void View::paintUpdates()
   /* don't do any begin/end operation here -- this is what is called at an
      endOperation
   */
-  d->canvas->paintUpdates();
+  d->canvas->repaint();
 }
 
 void View::commandExecuted()
