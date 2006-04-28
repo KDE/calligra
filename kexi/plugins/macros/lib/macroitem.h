@@ -49,6 +49,12 @@ namespace KoMacro {
 		, public KShared
 	{
 			Q_OBJECT
+
+			/// Property to get/set the comment.
+			Q_PROPERTY(QString comment READ comment WRITE setComment)
+
+			//Q_PROPERTY(QString action READ action WRITE setAction)
+
 		public:
 
 			/**
@@ -124,8 +130,10 @@ namespace KoMacro {
 			*/
 			QStringList setVariable(const QString& name, KSharedPtr<Variable> variable);
 
+		/*
 		public slots:
 			void activate() {}
+		*/
 
 		private:
 			/// @internal d-pointer class.

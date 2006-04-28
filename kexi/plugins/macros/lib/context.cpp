@@ -96,10 +96,15 @@ bool Context::hasVariable(const QString& name) const
 //return variable with name or throw an exception if none is found
 Variable::Ptr Context::variable(const QString& name) const
 {
-	if (d->variables.contains(name))
+	if (d->variables.contains(name)) {
 		return d->variables[name];
-	if(d->macroitem.data())
-		return d->macroitem->variable(name, true);
+	}
+	if(d->macroitem.data()) {
+		Variable::Ptr v = d->macroitem->variable(name, true);
+		if(v.data()) {
+			return v;
+		}
+	}
 	throw Exception(QString("Variable name='%1' does not exist.").arg(name), QString("Komacro::Context::variable"));
 	//return Variable::Ptr(0);
 }

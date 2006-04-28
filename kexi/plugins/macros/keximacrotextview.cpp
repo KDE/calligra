@@ -48,6 +48,7 @@ KexiMacroTextView::KexiMacroTextView(KexiMainWindow *mainwin, QWidget *parent, :
 	QHBoxLayout* layout = new QHBoxLayout(this);
 	d->editor = new KTextEdit(this);
 	d->editor->setTextFormat(Qt::PlainText);
+	d->editor->setWordWrap(QTextEdit::NoWrap);
 	layout->addWidget(d->editor);
 
 	connect(d->editor, SIGNAL(textChanged()), this, SLOT(editorChanged()));

@@ -146,7 +146,7 @@ tristate KexiMacroView::storeData(bool /*dontAsk*/)
 	QDomDocument domdoc("macros");
 	QDomElement macroelem = d->macro->toXML();
 	domdoc.appendChild(macroelem);
-	const QString xml = domdoc.toString();
+	const QString xml = domdoc.toString(2);
 	const QString name = QString("%1 [%2]").arg(parentDialog()->partItem()->name()).arg(parentDialog()->id());
 	kexipluginsdbg << QString("KexiMacroView::storeData %1\n%2").arg(name).arg(xml) << endl;
 	return storeDataBlock(xml);

@@ -21,6 +21,7 @@
 #include "macro.h"
 #include "macroitem.h"
 #include "action.h"
+#include "metaparameter.h"
 
 #include <qdom.h>
 #include <kdebug.h>
@@ -84,12 +85,11 @@ bool XMLHandler::parseXML(const QDomElement& element)
 
 	// Iterate through the child nodes the passed QDomElement has and
 	// build the MacroItem elements.
-	QDomNode node = element.firstChild();
-	while(! node.isNull()) {
+	for(QDomNode itemnode = element.firstChild(); ! itemnode.isNull(); itemnode = itemnode.nextSibling()) {
 		// The tagname should be "item"
-		if(node.nodeName() == "item") {
+		if(itemnode.nodeName() == "item") {
 			// The node is an element.
-			QDomElement e = node.toElement();
+			QDomElement itemelem = itemnode.toElement();
 
 			// Create a new MacroItem
 			MacroItem* item = new MacroItem();
@@ -100,17 +100,47 @@ bool XMLHandler::parseXML(const QDomElement& element)
 			// Each MacroItem may point to an Action instance. We
 			// try to determinate this action now and if it's defined
 			// and available, we set it.
-			Action::Ptr action = Manager::self()->action(e.attribute("action"));
+			Action::Ptr action = Manager::self()->action( itemelem.attribute("action") );
 			if(action.data()) {
 				item->setAction(action);
 			}
 
 			// Set the comment
-			item->setComment(e.attribute("comment"));
+			item->setComment( itemelem.attribute("comment") );
+
+			// Iterate through the children this item has and try
+			// to fill the list of variables our new MacroItem has.
+			for(QDomNode childnode = itemnode.firstChild(); ! childnode.isNull(); childnode = childnode.nextSibling()) {
+				// The tagname should be "variable"
+				if(childnode.nodeName() == "variable") {
+					// The node is an element.
+					QDomElement childelem = childnode.toElement();
+
+					// The name the variable has.
+					const QString name = childelem.attribute("name");
+
+					// Create the new variable.
+					Variable* variable = new Variable( childelem.text() );
+
+					//TODO
+					if(action.data()) {
+						// Try to restore the datatype by looking at
+						// the datatype of the matching Action instance.
+						Variable::Ptr actionvariable = action->variable(name);
+						if(actionvariable.data()) {
+							variable->setType( actionvariable->type() );
+							if( actionvariable->type() == MetaParameter::TypeVariant ) {
+								variable->setVariantType( actionvariable->variantType() );
+							}
+						}
+					}
+
+					item->setVariable(name, Variable::Ptr(variable));
+				}
+			}
 		}
-		// Fetch the next item.
-		node = node.nextSibling();
 	}
+
 	// Job was done successfully.
 	return true;
 }
@@ -167,9 +197,14 @@ QDomElement XMLHandler::toXML()
 				}
 				// Create an own element for the variable. The tagname will be
 				// the name of the variable.
-				QDomElement varelement = document.createElement(vit.key());
+				QDomElement varelement = document.createElement("variable");
+
+				// Remember the name the value has.
+				varelement.setAttribute("name", vit.key());
+
 				// Remember the value as textnode.
 				varelement.appendChild(document.createTextNode(v->toString()));
+
 				// Add the new variable-element to our MacroItem.
 				itemelem.appendChild(varelement);
 			}

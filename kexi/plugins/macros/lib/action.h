@@ -45,10 +45,16 @@ namespace KoMacro {
 	{
 			Q_OBJECT
 
-			/// Property to get/set the comment-property.
+			/// Property to get/set the name.
+			Q_PROPERTY(QString name READ name WRITE setName)
+
+			/// Property to get/set the text.
+			Q_PROPERTY(QString text READ text WRITE setText)
+
+			/// Property to get/set the comment.
 			Q_PROPERTY(QString comment READ comment WRITE setComment)
 
-			/// Property to get/set the blocking-property.
+			/// Property to get/set the blocking enabled.
 			Q_PROPERTY(bool blocking READ isBlocking WRITE setBlocking)
 
 		public:
