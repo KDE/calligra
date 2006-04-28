@@ -103,14 +103,15 @@ bool KexiMacroPart::execute(KexiPart::Item* item)
 	}
 
 	KoMacro::Macro::Ptr macro = ::KoMacro::Manager::self()->getMacro( item->name() );
-	if(! macro) {
+	if(! macro.data()) {
 		kdWarning() << "KexiMacroPart::execute() No such item " << item->name() << endl;
 		return false;
 	}
 
 	kdDebug() << "KexiMacroPart::execute() itemname=" << item->name() << endl;
+	view->loadData();
 	view->execute();
-	//view->deleteLater();
+	view->deleteLater();
 	return true;
 }
 

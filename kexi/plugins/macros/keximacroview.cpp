@@ -63,11 +63,13 @@ KexiMacroView::KexiMacroView(KexiMainWindow *mainwin, QWidget *parent, ::KoMacro
 	: KexiViewBase(mainwin, parent, (name ? name : "KexiMacroView"))
 	, d( new Private(macro) )
 {
+	kdDebug() << "KexiMacroView::KexiMacroView() Ctor" << endl;
 	plugSharedAction( "data_execute", this, SLOT(execute()) );
 }
 
 KexiMacroView::~KexiMacroView()
 {
+	kdDebug() << "KexiMacroView::~KexiMacroView() Dtor" << endl;
 	delete d;
 }
 
