@@ -34,35 +34,35 @@
 #include <kexipart.h>
 //#include <kexipartitem.h>
 
-class KexiFormEventScriptAction : public KAction
+class KexiFormEventAction : public KAction
 {
 private:
 	KexiMainWindow *m_mainWin;
-	QString m_scripturi;
+	QString m_actionName, m_actionUri;
 public:
-	KexiFormEventScriptAction(KexiMainWindow *mainWin, QObject* parent, const QString& scripturi)
-		: KAction(parent), m_mainWin(mainWin), m_scripturi(scripturi) {}
+	KexiFormEventAction(KexiMainWindow *mainWin, QObject* parent, const QString& actionName, const QString& actionUri)
+		: KAction(parent), m_mainWin(mainWin), m_actionName(actionName), m_actionUri(actionUri) {}
 public slots:
 	void activate() {
-		KexiPart::Part* scriptpart = Kexi::partManager().partForMimeType("kexi/script");
+		KexiPart::Part* part = Kexi::partManager().partForMimeType( QString("kexi/%1").arg(m_actionName) );
 		KexiProject* project = m_mainWin->project();
-		if( (! scriptpart) || (! project) )
+		if( (! part) || (! project) )
 			return;
 
-		KexiPart::ItemDict* itemdict = project->items( scriptpart->info() );
+		KexiPart::ItemDict* itemdict = project->items( part->info() );
 		if(! itemdict)
 			return;
 
 		KexiPart::Item* item = 0;
 		for(KexiPart::ItemDictIterator it(*itemdict); it.current(); ++it) {
-			if(it.current()->name() == m_scripturi) {
+			if(it.current()->name() == m_actionUri) {
 				item = it.current();
 				break;
 			}
 		}
 
 		if(item)
-			scriptpart->execute(item);
+			part->execute(item);
 	}
 };
 
@@ -89,9 +89,6 @@ void KexiFormEventHandler::setMainWidgetForEventHandling(KexiMainWindow *mainWin
 	Q3Dict<char> tmpSources;
 	for ( ; (obj = it.current()) != 0; ++it ) {
 		QString actionName = obj->property("onClickAction").toString();
-		if(actionName.isEmpty())
-			continue;
-
 		if (actionName.startsWith("kaction:")) {
 			actionName = actionName.mid(QString("kaction:").length()); //cut prefix
 			KAction *action = mainWin->actionCollection()->action( actionName.latin1() );
@@ -100,9 +97,20 @@ void KexiFormEventHandler::setMainWidgetForEventHandling(KexiMainWindow *mainWin
 			QObject::disconnect( obj, SIGNAL(clicked()), action, SLOT(activate()) ); //safety
 			QObject::connect( obj, SIGNAL(clicked()), action, SLOT(activate()) );
 		}
-		else if (actionName.startsWith("script:")) {
-			actionName = actionName.mid(QString("script:").length()); //cut prefix
-			KexiFormEventScriptAction* action = new KexiFormEventScriptAction(mainWin, obj, actionName);
+		else {
+			QString actionUri;
+			if (actionName.startsWith("macro:")) {
+				actionUri = actionName.mid(QString("macro:").length()); //cut prefix
+				actionName = "macro";
+			}
+			else if (actionName.startsWith("script:")) {
+				actionUri = actionName.mid(QString("script:").length()); //cut prefix
+				actionName = "script";
+			}
+			else {
+				continue; // ignore unknown actionName
+			}
+			KexiFormEventAction* action = new KexiFormEventAction(mainWin, obj, actionName, actionUri);
 			QObject::disconnect( obj, SIGNAL(clicked()), action, SLOT(activate()) );
 			QObject::connect( obj, SIGNAL(clicked()), action, SLOT(activate()) );
 		}

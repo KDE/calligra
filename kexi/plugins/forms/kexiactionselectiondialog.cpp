@@ -74,25 +74,25 @@ public:
 	virtual ~ActionsListView() {}
 };
 
-class ScriptsListView : public K3ListView
+class KexiPartItemsListView : public K3ListView
 {
 public:
-	ScriptsListView(QWidget* parent, KexiActionSelectionDialog* dialog)
-		: K3ListView(parent, "scriptslistview")
+	KexiPartItemsListView(QWidget* parent, KexiActionSelectionDialog* dialog, const QString& partname)
+		: K3ListView(parent)
 	{
 		setResizeMode(Q3ListView::LastColumn);
 		addColumn("");
 		header()->hide();
 
-		QPixmap pm( SmallIcon("script") );
-		KexiPart::Info* info = Kexi::partManager().infoForMimeType("kexi/script");
+		QPixmap pm( SmallIcon(partname) );
+		KexiPart::Info* info = Kexi::partManager().infoForMimeType( QString("kexi/%1").arg(partname) );
 		KexiProject* project = dialog->mainWin()->project();
 		if(info && project) {
 			KexiPart::ItemDict* itemdict = project->items(info);
 			if(itemdict) {
 				ActionSelectorDialogListItem* item = 0;
 				for (KexiPart::ItemDictIterator it( *itemdict ); it.current(); ++it) {
-					QString name = QString("script:%1").arg(it.current()->name());
+					QString name = QString("%1:%2").arg(partname).arg(it.current()->name());
 					item = new ActionSelectorDialogListItem(name, this, item, it.current()->caption());
 					item->setPixmap(0, pm);
 					if(!selectedItem() && dialog->currentActionName() == name)
@@ -102,6 +102,22 @@ public:
 			}
 		}
 	}
+	virtual ~KexiPartItemsListView() {}
+};
+
+class MacrosListView : public KexiPartItemsListView
+{
+public:
+	MacrosListView(QWidget* parent, KexiActionSelectionDialog* dialog)
+		: KexiPartItemsListView(parent, dialog, "macro") {}
+	virtual ~MacrosListView() {}
+};
+
+class ScriptsListView : public KexiPartItemsListView
+{
+public:
+	ScriptsListView(QWidget* parent, KexiActionSelectionDialog* dialog)
+		: KexiPartItemsListView(parent, dialog, "script") {}
 	virtual ~ScriptsListView() {}
 };
 
@@ -109,12 +125,13 @@ class KexiActionSelectionDialog::KexiActionSelectionDialogPrivate
 {
 public:
 	KexiMainWindow* mainWin;
-	K3ListView* kactionListView;
-	K3ListView* scriptListView;
+	ActionsListView* kactionListView;
+	MacrosListView* macroListView;
+	ScriptsListView* scriptListView;
 	Q3VBox *mainbox;
 	QString currentActionName;
 	KexiActionSelectionDialogPrivate() 
-		: kactionListView(0), scriptListView(0) 
+		: kactionListView(0), macroListView(0), scriptListView(0) 
 	{}
 };
 
@@ -123,7 +140,8 @@ public:
 //! actions IDs for the combo box
 #define ACTION_TYPE_NO_ACTION_ID 0
 #define ACTION_TYPE_KACTION_ID 1
-#define ACTION_TYPE_SCRIPT_ID 2
+#define ACTION_TYPE_MACRO_ID 2
+#define ACTION_TYPE_SCRIPT_ID 3
 
 //-------------------------------------
 
@@ -152,20 +170,31 @@ KexiActionSelectionDialog::KexiActionSelectionDialog(KexiMainWindow* mainWin, QW
 	lyr->addWidget(lbl);
 	lyr->addWidget(combobox);
 	lyr->addStretch(1);
-	
-	// We use the scriptpart to determinate if the Kexi ScriptPart-plugin is
+
+	d->mainbox = new Q3VBox(box);
+	box->setStretchFactor(d->mainbox, 1);
+	resize(400, 500);
+
+	// We use the PartManager to determinate if the Kexi-plugin is
 	// installed and if we like to show it in our list of actions.
+	KexiPart::Info* macroinfo = Kexi::partManager().infoForMimeType("kexi/macro");
+	if(macroinfo) {
+		combobox->insertItem( i18n("Macros") );
+	}
+
 	KexiPart::Info* scriptinfo = Kexi::partManager().infoForMimeType("kexi/script");
 	if(scriptinfo) {
 		combobox->insertItem( i18n("Scripts") );
 	}
 	
-	d->mainbox = new Q3VBox(box);
-	box->setStretchFactor(d->mainbox, 1);
-
-	resize(400, 500);
-
-	if (d->currentActionName.startsWith("script:")) {
+	if (d->currentActionName.startsWith("macro:")) {
+		if(macroinfo) {
+			combobox->setCurrentItem(ACTION_TYPE_MACRO_ID);
+			slotActionTypeSelected(ACTION_TYPE_MACRO_ID);
+		}
+		
+	}
+	else if (d->currentActionName.startsWith("script:")) {
 		if(scriptinfo) {
 			combobox->setCurrentItem(ACTION_TYPE_SCRIPT_ID);
 			slotActionTypeSelected(ACTION_TYPE_SCRIPT_ID);
@@ -187,6 +216,8 @@ KexiActionSelectionDialog::~KexiActionSelectionDialog()
 
 void KexiActionSelectionDialog::showKActionListView()
 {
+	if (d->macroListView)
+		d->macroListView->hide();
 	if (d->scriptListView)
 		d->scriptListView->hide();
 	if (!d->kactionListView) {
@@ -195,10 +226,24 @@ void KexiActionSelectionDialog::showKActionListView()
 	d->kactionListView->show();
 }
 
+void KexiActionSelectionDialog::showMacroListView()
+{
+	if (d->kactionListView)
+		d->kactionListView->hide();
+	if (d->scriptListView)
+		d->scriptListView->hide();
+	if (!d->macroListView) {
+		d->macroListView = new MacrosListView(d->mainbox, this);
+	}
+	d->macroListView->show();
+}
+
 void KexiActionSelectionDialog::showScriptListView()
 {
 	if (d->kactionListView)
 		d->kactionListView->hide();
+	if (d->macroListView)
+		d->macroListView->hide();
 	if (!d->scriptListView) {
 		d->scriptListView = new ScriptsListView(d->mainbox, this);
 	}
@@ -211,11 +256,16 @@ void KexiActionSelectionDialog::slotActionTypeSelected(int index)
 		case ACTION_TYPE_NO_ACTION_ID:
 			if (d->kactionListView)
 				d->kactionListView->hide();
+			if (d->macroListView)
+				d->macroListView->hide();
 			if (d->scriptListView)
 				d->scriptListView->hide();
 			break;
 		case ACTION_TYPE_KACTION_ID:
 			showKActionListView();
+			break;
+		case ACTION_TYPE_MACRO_ID:
+			showMacroListView();
 			break;
 		case ACTION_TYPE_SCRIPT_ID:
 			showScriptListView();
@@ -238,6 +288,8 @@ void KexiActionSelectionDialog::slotOk()
 {
 	Q3ListViewItem *item = 
 		(d->kactionListView && d->kactionListView->isVisible()) ? d->kactionListView->selectedItem() : 0;
+	if (!item)
+		item = (d->macroListView && d->macroListView->isVisible()) ? d->macroListView->selectedItem() : 0;
 	if (!item)
 		item = (d->scriptListView && d->scriptListView->isVisible()) ? d->scriptListView->selectedItem() : 0;
 	if (item) {
