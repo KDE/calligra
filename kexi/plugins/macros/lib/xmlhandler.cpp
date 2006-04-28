@@ -116,13 +116,14 @@ bool XMLHandler::parseXML(const QDomElement& element)
 					// The node is an element.
 					QDomElement childelem = childnode.toElement();
 
+					// Create the new variable.
+					Variable* variable = new Variable();
+
 					// The name the variable has.
 					const QString name = childelem.attribute("name");
+					variable->setName(name);
 
-					// Create the new variable.
-					Variable* variable = new Variable( childelem.text() );
-
-					//TODO
+					bool autodetect = true; // auto-detect variable type.
 					if(action.data()) {
 						// Try to restore the datatype by looking at
 						// the datatype of the matching Action instance.
@@ -132,9 +133,15 @@ bool XMLHandler::parseXML(const QDomElement& element)
 							if( actionvariable->type() == MetaParameter::TypeVariant ) {
 								variable->setVariantType( actionvariable->variantType() );
 							}
+							autodetect = false;
 						}
 					}
 
+					// The value the variable has.
+					const QString value = childelem.text();
+					variable->setVariant(value, autodetect);
+
+					// Add the variable to the MacroItem.
 					item->setVariable(name, Variable::Ptr(variable));
 				}
 			}
@@ -187,10 +194,10 @@ QDomElement XMLHandler::toXML()
 			// Each MacroItem could have a list of variables. We
 			// iterate through that list and build a element
 			// for each single variable.
-			Variable::Map vmap = item->variables();
-			Variable::Map::ConstIterator vit(vmap.constBegin()), vend(vmap.constEnd());
-			for(; vit != vend; ++vit) {
-				const Variable::Ptr v = vit.data();
+
+			QStringList variablenames = action->variableNames();
+			for(QStringList::Iterator vit = variablenames.begin(); vit != variablenames.end(); ++vit) {
+				const Variable::Ptr v = item->variable(*vit);
 				if(! v.data()) {
 					// skip if the variable is NULL.
 					continue;
@@ -200,7 +207,7 @@ QDomElement XMLHandler::toXML()
 				QDomElement varelement = document.createElement("variable");
 
 				// Remember the name the value has.
-				varelement.setAttribute("name", vit.key());
+				varelement.setAttribute("name", *vit);
 
 				// Remember the value as textnode.
 				varelement.appendChild(document.createTextNode(v->toString()));

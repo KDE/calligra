@@ -21,7 +21,6 @@
 #include "openobject.h"
 #include "objectvariable.h"
 
-#include "../lib/variable.h"
 #include "../lib/macroitem.h"
 #include "../lib/context.h"
 
@@ -56,7 +55,7 @@ namespace KexiMacro {
 	class NameVariable : public KoMacro::GenericVariable<NameVariable>
 	{
 		public:
-			explicit NameVariable(KexiMainWindow* const mainwin, KoMacro::Action::Ptr action, const QString& objectname = QString::null)
+			explicit NameVariable(KexiMainWindow* const mainwin, KoMacro::Action::Ptr action, const QString& objectname = QString::null, const QString& name = QString::null)
 				: KoMacro::GenericVariable<NameVariable>("name", i18n("Name"), action)
 			{
 				if(! mainwin->project()) {
@@ -64,7 +63,7 @@ namespace KexiMacro {
 					return;
 				}
 
-				QString name;
+				QStringList namelist;
 				KexiPart::PartInfoList* parts = Kexi::partManager().partInfoList();
 				for(KexiPart::PartInfoListIterator it(*parts); it.current(); ++it) {
 					KexiPart::Info* info = it.current();
@@ -79,23 +78,23 @@ namespace KexiMacro {
 
 					KexiPart::ItemDictIterator item_it(*items);
 					for(; item_it.current(); ++item_it) {
-						//const QString name = (*item_it.current())->name();
 						const QString n = item_it.current()->name();
+						namelist << n;
 						children().append( KoMacro::Variable::Ptr(new KoMacro::Variable(n)) );
-						if(name.isNull()) {
-							name = n;
-						}
-						kdDebug() << "KexiMacro::NameVariable() name=" << n << endl;
+						kdDebug() << "KexiMacro::NameVariable() infoname=" << info->objectName() << " name=" << n << endl;
 					}
 				
 					break; // job is done.
 				}
 
-				if(name.isNull()) {
+				if(namelist.count() <= 0) {
+					namelist << "";
 					children().append( KoMacro::Variable::Ptr(new KoMacro::Variable("")) );
 				}
 
-				setVariant(name);
+				QString n = (name.isNull() || ! namelist.contains(name)) ? namelist[0] : name;
+				kdDebug() << "KexiMacro::NameVariable() name=" << n << " childcount=" << children().count() << endl;
+				setVariant(n);
 			}
 
 			virtual ~NameVariable() {}
@@ -119,15 +118,15 @@ OpenObject::~OpenObject()
 	delete d;
 }
 
-KoMacro::Variable::List OpenObject::notifyUpdated(KoMacro::Variable::Ptr variable)
+KoMacro::Variable::List OpenObject::notifyUpdated(const QString& variablename, KoMacro::Variable::Map variablemap)
 {
-	kdDebug()<<"OpenObject::notifyUpdated() name="<<variable->name()<<" value="<< variable->variant().toString() <<endl;
+	//kdDebug()<<"OpenObject::notifyUpdated() name="<<variable->name()<<" value="<< variable->variant().toString() <<endl;
 
 	KoMacro::Variable::List list;
-	if(variable->name() == "object") {
-		const QString objectname = variable->variant().toString(); // e.g. "table" or "query"
-		//list.append( KoMacro::Variable::Ptr(new ObjectVariable(this, objectname)) );
-		list.append( KoMacro::Variable::Ptr(new NameVariable(d->mainwin, this, objectname)) );
+	if(variablename == "object") {
+		const QString objectname = variablemap["object"]->variant().toString(); // e.g. "table" or "query"
+		const QString name = variablemap.contains("name") ? variablemap["name"]->variant().toString() : QString::null;
+		list.append( KoMacro::Variable::Ptr(new NameVariable(d->mainwin, this, objectname, name)) );
 	}
 
 	return list;

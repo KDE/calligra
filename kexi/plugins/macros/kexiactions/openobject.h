@@ -23,11 +23,11 @@
 
 //#include "../lib/komacro_export.h"
 #include "../lib/action.h"
+#include "../lib/variable.h"
 
 class KexiMainWindow;
 
 namespace KoMacro {
-	class Variable;
 	class Context;
 }
 
@@ -58,7 +58,7 @@ namespace KexiMacro {
 			* This function is called, when a @a Variable provided by this
 			* @a OpenObject is changed.
 			*/
-			virtual KoMacro::Variable::List notifyUpdated(KSharedPtr<KoMacro::Variable> variable);
+			virtual KoMacro::Variable::List notifyUpdated(const QString& variablename, KoMacro::Variable::Map variable);
 
 		public slots:
 

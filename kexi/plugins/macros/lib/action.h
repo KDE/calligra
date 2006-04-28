@@ -167,8 +167,9 @@ namespace KoMacro {
 			* This function is called, when a @a Variable provided by this
 			* @a Action is changed.
 			*/
-			virtual Variable::List notifyUpdated(Variable::Ptr variable) {
-				Q_UNUSED(variable);
+			virtual Variable::List notifyUpdated(const QString& variablename, Variable::Map variablemap) {
+				Q_UNUSED(variablename);
+				Q_UNUSED(variablemap);
 				// The default implementation does nothing.
 				// So, an empty list is returned.
 				return Variable::List();

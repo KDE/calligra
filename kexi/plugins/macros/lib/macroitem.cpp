@@ -115,11 +115,24 @@ QStringList MacroItem::setVariable(const QString& name, Variable::Ptr variable)
 
 	// set depending variables by asking the own action.
 	QStringList sl;
-	Variable::List list = d->action->notifyUpdated(variable);
-	Variable::List::ConstIterator it(list.constBegin()), end(list.constEnd());
+	Variable::List list = d->action->notifyUpdated(name, d->variables);
+	Variable::List::Iterator it(list.begin()), end(list.end());
 	for (; it != end; ++it) {
-		sl << (*it)->name();
-		d->variables.replace((*it)->name(), *it);
+		const QString n = (*it)->name();;
+		sl << n;
+
+		//if( ! d->variables.contains(n) ) {
+		kdDebug()<<"    name=" << n << " value=" << (*it)->variant().toString() << endl;
+		//setVariable(n, *it);
+		d->variables.replace(n, *it);
+		//}
+
+		/*
+		Variable::Ptr v = d->variables[ (*it)->name() ];
+		if(v.data() && (*it)->type() == v->type() && ! v->variant().isNull()) {
+			(*it)->setVariant( v->variant().toString() );
+		}
+		*/
 	}
 
 	return sl;

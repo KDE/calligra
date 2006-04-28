@@ -289,16 +289,12 @@ void KexiMacroDesignView::updateProperties(int row, KoProperty::Set* set, KoMacr
 	QStringList varnames = action->variableNames();
 	for(QStringList::Iterator it = varnames.begin(); it != varnames.end(); ++it) {
 		// first we try to get the variable from the macroitem.
-		KoMacro::Variable::Ptr variable = macroitem->variable(*it);
+		KoMacro::Variable::Ptr variable = macroitem->variable(*it, true);
 		if(! variable.data()) {
-			// if there is no variable defined in the macroitem,
-			// try to look if action knows about it.
-			variable = action->variable(*it);
-			if(! variable.data()) {
-				// if either macroitem and action don't know about
-				// such a variable, just ignore the variable.
-				continue;
-			}
+			// if there is no such variable defined either in the
+			// macroitem nor in the referenced action, just skip.
+			kdDebug() << "KexiMacroDesignView::updateProperties() Skip variable=" << *it << endl;
+			continue;
 		}
 
 		/*
@@ -307,7 +303,17 @@ void KexiMacroDesignView::updateProperties(int row, KoProperty::Set* set, KoMacr
 		}
 		*/
 
+		KoMacro::Variable::Ptr actionvariable = action->variable(*it);
+		if(! actionvariable.data()) {
+			kdDebug() << "KexiMacroDesignView::updateProperties() Skip actionvariable=" << *it << endl;
+			continue;
+		}
+
 		KoMacro::Variable::List children = variable->children();
+		if(children.count() <= 0) {
+			children = actionvariable->children();
+		}
+
 		if(children.count() > 0) {
 			QStringList keys, names;
 			KoMacro::Variable::List::Iterator childit(children.begin()), childend(children.end());
@@ -316,12 +322,16 @@ void KexiMacroDesignView::updateProperties(int row, KoProperty::Set* set, KoMacr
 				keys << s;
 				names << s;
 			}
+			QString value = variable->variant().toString();
+			if( ! keys.contains(value) && keys.count() > 0 ) {
+				value = keys[0];
+			}
 			KoProperty::Property::ListData* listdata = new KoProperty::Property::ListData(keys, names);
 			KoProperty::Property* p = new KoProperty::Property(
 				(*it).latin1(), //v->name().latin1(), // name
 				listdata, // ListData
-				variable->variant(), // value
-				variable->text(), // i18n-caption text
+				value, // value
+				actionvariable->text(), // i18n-caption text
 				action->comment(), // description
 				KoProperty::StringList // type
 			);
@@ -344,19 +354,27 @@ void KexiMacroDesignView::updateProperties(int row, KoProperty::Set* set, KoMacr
 				(*it).latin1(), //v->name().latin1(), // name
 				0, // ListData
 				v, // value
-				variable->text(), // i18n-caption text
+				actionvariable->text(), // i18n-caption text
 				action->comment(), // description
 				type // type
 			);
 			set->addProperty(p);
 		}
-	}
 
+kdDebug()<<"==========================> name=" << *it << " variable=" << variable->variant().toString() << endl;
+		//if(actionvariable.data()) {
+macroitem->setVariable(*it, variable);
+		//}
+	}
+propertySetReloaded(true);
+
+	/*
 	KoMacro::Variable::Map varmap = action->variables();
 	KoMacro::Variable::Map::ConstIterator it, end( varmap.constEnd() );
 	for( it = varmap.constBegin(); it != end; ++it) {
 		KoMacro::Variable::Ptr v = it.data();
 	}
+	*/
 }
 
 bool KexiMacroDesignView::loadData()
@@ -428,7 +446,7 @@ void KexiMacroDesignView::rowUpdated(KexiTableItem*)
 	//setDirty();
 }
 
-void KexiMacroDesignView::propertyChanged(KoProperty::Set& set, KoProperty::Property& property)
+void KexiMacroDesignView::propertyChanged(KoProperty::Set&, KoProperty::Property& property)
 {
 	if(d->propertyreloads) {
 		// be sure to don't update properties if we are still
