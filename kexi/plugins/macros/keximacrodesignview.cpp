@@ -100,6 +100,7 @@ class KexiMacroDesignView::Private
 		KexiDataAwarePropertySet* propertyset;
 
 		bool propertyreloads;
+		bool updateProperties;
 
 		/**
 		* Constructor.
@@ -110,6 +111,7 @@ class KexiMacroDesignView::Private
 		Private()
 			: propertyset(0)
 			, propertyreloads(false)
+			, updateProperties(false)
 		{
 		}
 
@@ -260,6 +262,10 @@ void KexiMacroDesignView::updateProperties(int row, KoProperty::Set* set, KoMacr
 		return; // ignore invalid rows.
 	}
 
+	if(d->updateProperties) {
+		return;
+	}
+
 	KoMacro::Action::Ptr action = macroitem->action();
 
 	if(! action.data()) {
@@ -267,6 +273,8 @@ void KexiMacroDesignView::updateProperties(int row, KoProperty::Set* set, KoMacr
 		d->propertyset->remove(row);
 		return; // job done.
 	}
+
+	d->updateProperties = true;
 
 	if(set) {
 		// we need to clear old data before adding the new content.
@@ -361,12 +369,14 @@ void KexiMacroDesignView::updateProperties(int row, KoProperty::Set* set, KoMacr
 			set->addProperty(p);
 		}
 
-kdDebug()<<"==========================> name=" << *it << " variable=" << variable->variant().toString() << endl;
+		kdDebug()<<"KexiMacroDesignView::updateProperties() name=" << *it << " variable=" << variable->variant().toString() << endl;
 		//if(actionvariable.data()) {
-macroitem->setVariable(*it, variable);
+		macroitem->setVariable(*it, variable);
 		//}
 	}
-propertySetReloaded(true);
+
+	propertySetReloaded(true);
+	d->updateProperties = false;
 
 	/*
 	KoMacro::Variable::Map varmap = action->variables();
