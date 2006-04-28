@@ -16,11 +16,11 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#include "config.h" 
- 
-#ifdef HAVE_SYS_TYPES_H 
-   #include <sys/types.h> 
-#endif 
+#include "config.h"
+
+#ifdef HAVE_SYS_TYPES_H
+   #include <sys/types.h>
+#endif
 
 #include <sys/types.h>
 #include <netinet/in.h>
@@ -131,7 +131,7 @@ KoFilter::ConversionStatus KisRawImport::convert(const QByteArray& from, const Q
 
     KConfig * cfg = KGlobal::config();
     cfg->setGroup("rawimport");
-    
+
     m_page->radioGray->setChecked(cfg->readBoolEntry("gray", false));
     m_page->radioRGB->setChecked(cfg->readBoolEntry("rgb", true));
     m_page->radio8->setChecked(cfg->readBoolEntry("8bit", false));
@@ -151,7 +151,7 @@ KoFilter::ConversionStatus KisRawImport::convert(const QByteArray& from, const Q
     m_page->dblBlackpoint->setValue(cfg->readDoubleNumEntry("blackpoint", 0));
     m_page->dblRed->setValue(cfg->readDoubleNumEntry("red", 1.0));
     m_page->dblBlue->setValue(cfg->readDoubleNumEntry("blue", 1.0));
-    
+
     if (m_dialog->exec() == QDialog::Accepted) {
 
         cfg->writeEntry("gray", m_page->radioGray->isChecked());
@@ -214,7 +214,7 @@ KoFilter::ConversionStatus KisRawImport::convert(const QByteArray& from, const Q
             image = new KisImage(doc->undoAdapter(), img.width(), img.height(), cs, filename);
             if (image.isNull()) return KoFilter::CreationError;
             image->blockSignals(true); // Don't send out signals while we're building the image
-            
+
             layer = dynamic_cast<KisPaintLayer*>( image->newLayer(image -> nextLayerName(), OPACITY_OPAQUE).data() );
             if (layer.isNull()) return KoFilter::CreationError;
 
@@ -276,7 +276,7 @@ KoFilter::ConversionStatus KisRawImport::convert(const QByteArray& from, const Q
                         quint16 d = (qint16)*(data + pos);
                         d = ntohs(d);
                         memcpy(it.rawData() + 4, &d, 2);
-                        
+
                         // Green
                         pos += 2;
                         d = (qint16)*(data + pos );
@@ -374,13 +374,13 @@ void KisRawImport::slotUpdatePreview()
                         quint16 d = (qint16)*(data + pos);
                         d = ntohs(d);
                         memcpy(it.rawData() + 4, &d, 2);
-                            
+
                             // Green
                         pos += 2;
                         d = (qint16)*(data + pos );
                         d = ntohs(d);
                         memcpy(it.rawData() + 2, &d, 2);
-    
+
                             // Blue
                         pos += 2;
                         d = (qint16)*(data + pos );
@@ -513,7 +513,7 @@ QStringList KisRawImport::createArgumentList(bool forPreview)
     if (m_page->chkBrightness->isChecked()) {
         args.append("-b " + QString::number(m_page->dblBrightness->value()));
     }
-    
+
     if (m_page->chkBlackpoint->isChecked()) {
         args.append("-k " + QString::number(m_page->dblBlackpoint->value()));
     }
@@ -521,12 +521,12 @@ QStringList KisRawImport::createArgumentList(bool forPreview)
     if (m_page->chkRed->isChecked()) {
         args.append("-r " + QString::number(m_page->dblRed->value()));
     }
-    
+
     if (m_page->chkBlue->isChecked()) {
         args.append("-l " + QString::number(m_page->dblBlue->value()));
     }
 
-    
+
     KisProfile * pf  = profile();
     if (m_page->chkProfile->isChecked()) {
         if (!pf->filename().isNull()) {
@@ -595,10 +595,10 @@ void KisRawImport::slotFillCmbProfiles()
 
     KisColorSpaceFactory * csf = KisMetaRegistry::instance()->csRegistry() -> get(s);
     m_page -> cmbProfile -> clear();
-    Q3ValueVector<KisProfile *>  profileList = KisMetaRegistry::instance()->csRegistry()->profilesFor( csf );
-        Q3ValueVector<KisProfile *> ::iterator it;
-        for ( it = profileList.begin(); it != profileList.end(); ++it ) {
-        m_page -> cmbProfile -> insertItem((*it) -> productName());
+    QList<KisProfile *>  profileList = KisMetaRegistry::instance()->csRegistry()->profilesFor( csf );
+
+    foreach (KisProfile *profile, profileList) {
+        m_page->cmbProfile->insertItem(profile->productName());
     }
 }
 
