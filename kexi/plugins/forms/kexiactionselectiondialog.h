@@ -50,6 +50,7 @@ class KEXIFORMUTILS_EXPORT KexiActionSelectionDialog : public KDialogBase
 
 	protected:
 		void showKActionListView();
+		void showMacroListView();
 		void showScriptListView();
 
 		class KexiActionSelectionDialogPrivate;
