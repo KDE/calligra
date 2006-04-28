@@ -6421,7 +6421,7 @@ bool Sheet::loadOasis( const QDomElement& sheetElement, KoOasisLoadingContext& o
     // Some spreadsheet programs may support more rows than
     // KSpread so limit the number of repeated rows.
     // FIXME POSSIBLE DATA LOSS!
-    while( !rowNode.isNull() && indexCol <= KS_colMax && rowIndex <= KS_rowMax )
+    while( !rowNode.isNull() && rowIndex <= KS_rowMax )
     {
         kdDebug()<<" rowIndex :"<<rowIndex<<" indexCol :"<<indexCol<<endl;
         QDomElement rowElement = rowNode.toElement();
@@ -6430,7 +6430,7 @@ bool Sheet::loadOasis( const QDomElement& sheetElement, KoOasisLoadingContext& o
             kdDebug()<<" Sheet::loadOasis rowElement.tagName() :"<<rowElement.localName()<<endl;
             if ( rowElement.namespaceURI() == KoXmlNS::table )
             {
-                if ( rowElement.localName()=="table-column" )
+                if ( rowElement.localName()=="table-column" && indexCol <= KS_colMax )
                 {
                     kdDebug ()<<" table-column found : index column before "<< indexCol<<endl;
                     loadColumnFormat( rowElement, oasisContext.oasisStyles(), indexCol , styleMap);
