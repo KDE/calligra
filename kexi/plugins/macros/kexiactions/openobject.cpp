@@ -52,6 +52,54 @@ namespace KexiMacro {
 			}
 	};
 
+	/**
+	* The ViewVariable class provide a list of viewmodes supported
+	* by a KexiPart::Part as @a KoMacro::Variable .
+	*/
+	class ViewVariable : public KoMacro::GenericVariable<ViewVariable>
+	{
+		public:
+			explicit ViewVariable(KexiMainWindow* const mainwin, KoMacro::Action::Ptr action, const QString& objectname = QString::null, const QString& viewname = QString::null)
+				: KoMacro::GenericVariable<ViewVariable>("view", i18n("View"), action)
+			{
+				QStringList namelist;
+				KexiPart::PartInfoList* parts = Kexi::partManager().partInfoList();
+				if(parts) {
+					for(KexiPart::PartInfoListIterator it(*parts); it.current(); ++it) {
+						if(objectname != it.current()->objectName()) {
+							continue;
+						}
+						KexiPart::Part* part = Kexi::partManager().part( it.current() );
+						if(! part) {
+							continue;
+						}
+						int viewmodes = part->supportedViewModes();
+						if(viewmodes & Kexi::DataViewMode) {
+							namelist << "data";
+							children().append( KoMacro::Variable::Ptr(new KoMacro::Variable("data")) );
+						}
+						if(viewmodes & Kexi::DesignViewMode) {
+							namelist << "design";
+							children().append( KoMacro::Variable::Ptr(new KoMacro::Variable("design")) );
+						}
+						if(viewmodes & Kexi::TextViewMode) {
+							namelist << "text";
+							children().append( KoMacro::Variable::Ptr(new KoMacro::Variable("text")) );
+						}
+						break; // job is done.
+					}
+				}
+				QString n = viewname;
+				if(n.isNull() || ! namelist.contains(n))
+					n = namelist.count() > 0 ? namelist[0] : "";
+				setVariant(n);
+			}
+	};
+
+	/**
+	* The ViewVariable class provide a list of KexiPart::PartItem's
+	* supported by a KexiPart::Part as @a KoMacro::Variable .
+	*/
 	class NameVariable : public KoMacro::GenericVariable<NameVariable>
 	{
 		public:
@@ -110,6 +158,8 @@ OpenObject::OpenObject(KexiMainWindow* const mainwin)
 	ObjectVariable* objvar = new ObjectVariable(this);
 	setVariable(KoMacro::Variable::Ptr( objvar ));
 
+	setVariable(KoMacro::Variable::Ptr( new ViewVariable(d->mainwin, this, objvar->variant().toString()) ));
+
 	setVariable(KoMacro::Variable::Ptr( new NameVariable(d->mainwin, this, objvar->variant().toString()) ));
 }
 
@@ -125,8 +175,12 @@ KoMacro::Variable::List OpenObject::notifyUpdated(const QString& variablename, K
 	KoMacro::Variable::List list;
 	if(variablename == "object") {
 		const QString objectname = variablemap["object"]->variant().toString(); // e.g. "table" or "query"
+
 		const QString name = variablemap.contains("name") ? variablemap["name"]->variant().toString() : QString::null;
 		list.append( KoMacro::Variable::Ptr(new NameVariable(d->mainwin, this, objectname, name)) );
+
+		const QString viewname = variablemap.contains("view") ? variablemap["view"]->variant().toString() : QString::null;
+		list.append( KoMacro::Variable::Ptr(new ViewVariable(d->mainwin, this, objectname, viewname)) );
 	}
 
 	return list;
@@ -135,6 +189,7 @@ KoMacro::Variable::List OpenObject::notifyUpdated(const QString& variablename, K
 void OpenObject::activate(KoMacro::Context::Ptr context)
 {
 	const QString objectname = context->variable("object")->variant().toString();
+	const QString view = context->variable("view")->variant().toString();
 	const QString name = context->variable("name")->variant().toString();
 	KexiPart::Item* item = 0;
 
@@ -153,9 +208,24 @@ void OpenObject::activate(KoMacro::Context::Ptr context)
 		}
 	}
 
-	if(item) { // We got a valid item. Try to open the object now.
+	if(item) { // We got a valid item.
+
+		// Determinate the viewmode.
+		int viewmode;
+		if(view == "data")
+			viewmode = Kexi::DataViewMode;
+		else if(view == "design")
+			viewmode = Kexi::DesignViewMode;
+		else if(view == "text")
+			viewmode = Kexi::TextViewMode;
+		else {
+			kdWarning() << "OpenObject::activate(KoMacro::Context::Ptr) Invalid viewmode=" << view << endl;
+			return;
+		}
+
+		// Try to open the object now.
 		bool openingCancelled;
-		if(! d->mainwin->openObject(item, Kexi::DataViewMode, openingCancelled)) {
+		if(! d->mainwin->openObject(item, viewmode, openingCancelled)) {
 			if(! openingCancelled) {
 				KMessageBox::error(d->mainwin, i18n("Object of type \"%1\" with name \"%2\" could not be opened.").arg(objectname).arg(name));
 			}
