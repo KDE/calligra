@@ -135,37 +135,8 @@ KoMacro::Variable::List OpenObject::notifyUpdated(KoMacro::Variable::Ptr variabl
 
 void OpenObject::activate(KoMacro::Context::Ptr context)
 {
-	QString objectname, name;
-
-	{
-		KoMacro::MacroItem::Ptr macroitem = context ? context->macroItem() : KoMacro::MacroItem::Ptr(0);
-		if(! macroitem.data()) {
-			kdWarning() << "OpenObject::activate(Context::Ptr) Invalid context or macroitem." << endl;
-			return;
-		}
-		kdDebug() << "OpenObject::activate(Context::Ptr)" << endl;
-
-		// Set the object.
-		KoMacro::Variable::Ptr objectnamevar = macroitem->variable("object", true);
-		if(! objectnamevar.data()) {
-			kdWarning() << "OpenObject::activate(Context::Ptr) No object defined." << endl;
-			KoMacro::Variable::Map map = macroitem->variables();
-			QString s;
-			for(KoMacro::Variable::Map::Iterator it = map.begin(); it != map.end(); ++it) s += it.key() + " ";
-			kdDebug() << "Valid names: " << s << endl;
-			return;
-		}
-		objectname = objectnamevar->variant().toString();
-
-		// Set the name.
-		KoMacro::Variable::Ptr namevar = macroitem->variable("name", true);
-		if(! namevar.data()) {
-			kdWarning() << "OpenObject::activate(Context::Ptr) No name for the object defined." << endl;
-			return;
-		}
-		name = namevar->variant().toString();
-	}
-
+	const QString objectname = context->variable("object")->variant().toString();
+	const QString name = context->variable("name")->variant().toString();
 	KexiPart::Item* item = 0;
 
 	{

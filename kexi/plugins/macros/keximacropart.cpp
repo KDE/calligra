@@ -122,16 +122,18 @@ class KexiTestAction : public KoMacro::GenericAction<KexiTestAction> {
 		KexiMainWindow* m_mainwin;
 	public:
 		KexiTestAction(KexiMainWindow* mainwin)
-			: KoMacro::GenericAction<KexiTestAction>("kexitestaction", "Test Action")
+			: KoMacro::GenericAction<KexiTestAction>("showmessage", i18n("Show Message"))
 			, m_mainwin(mainwin)
 		{
-			setVariable("myvar11","My Var 1-1",QVariant(QString("myvalue11")));
-			setVariable("myvar12","My Var 1-2",QVariant(QString("myvalue12")));
+			setVariable("caption", i18n("Caption"), QString("my caption"));
+			setVariable("message", i18n("Message"), QString("my message"));
 		}
-		virtual void activate(KoMacro::Context::Ptr)
+		virtual void activate(KoMacro::Context::Ptr context)
 		{
 			kdDebug() << "KexiTestAction::activate(Context::Ptr)" << endl;
-			KMessageBox::information(m_mainwin, "KexiTestAction got executed.", "Activated");
+			const QString caption = context->variable("caption")->variant().toString();
+			const QString message = context->variable("message")->variant().toString();
+			KMessageBox::information(m_mainwin, message, caption);
 		}
 };
 
