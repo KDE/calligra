@@ -254,9 +254,7 @@ public:
      */
     QDomElement save( QDomDocument& doc, int _x_offset = 0, int _y_offset = 0, bool force = false, bool copy = false, bool era = false );
 
-    bool saveOasis( KoXmlWriter& xmlwriter, KoGenStyles& mainStyles,
-                    int row, int column, int &repeated,
-                    GenValidationStyles &valStyle );
+    virtual bool saveOasis( KoXmlWriter& xmlwriter , KoGenStyles &mainStyles, int row, int column, int maxCol, int &repeated, GenValidationStyles &valStyle );
 
     void saveOasisValue (KoXmlWriter &xmlWriter);
 
@@ -640,7 +638,7 @@ public:
      * This flag is for example set if the width of the column changes or if
      * some cell specific format value like font or text change.
      */
-    void setLayoutDirtyFlag( bool format = false );
+    virtual void setLayoutDirtyFlag( bool format = false );
     bool layoutDirtyFlag() const;
 
     void clearDisplayDirtyFlag();

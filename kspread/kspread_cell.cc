@@ -5376,9 +5376,7 @@ QString Cell::saveOasisCellStyle( KoGenStyle &currentCellStyle, KoGenStyles &mai
 }
 
 
-bool Cell::saveOasis( KoXmlWriter& xmlwriter, KoGenStyles &mainStyles,
-                      int row, int column, int &repeated,
-                      GenValidationStyles &valStyle )
+bool Cell::saveOasis( KoXmlWriter& xmlwriter, KoGenStyles &mainStyles, int row, int column, int maxCols, int &repeated, GenValidationStyles &valStyle )
 {
     if ( !isPartOfMerged() )
         xmlwriter.startElement( "table:table-cell" );
@@ -5408,41 +5406,22 @@ bool Cell::saveOasis( KoXmlWriter& xmlwriter, KoGenStyles &mainStyles,
       xmlwriter.addAttribute( "table:style-name", mainStyles.styles()[currentCellStyle] );
 
     // group empty cells with the same style
-    if ( isEmpty() && !format()->hasProperty( Format::PComment ) &&
-         !isPartOfMerged() && !doesMergeCells() )
+    if ( isEmpty() && !format()->hasProperty( Format::PComment ) && !isPartOfMerged() && !doesMergeCells() )
     {
       int j = column + 1;
-      Cell *nextCell = format()->sheet()->getNextCellRight( column, row );
-      while ( nextCell )
+      while ( j <= maxCols )
       {
-        if ( nextCell->column() != j || !nextCell->isEmpty() )
-        {
-          if ( isDefault() )
-          {
-            // if the origin cell was a default cell,
-            // we count the default cells
-            repeated = nextCell->column() - j + 1;
-          }
-          // otherwise we just stop here to process the adjacent
-          // default cell in the next iteration of the outer loop
-          break;
-        }
-
+        Cell *nextCell = format()->sheet()->cellAt( j, row );
         KoGenStyle nextCellStyle; // the type is determined in saveOasisCellStyle
         nextCell->saveOasisCellStyle( nextCellStyle,mainStyles );
 
-        if ( nextCell->isPartOfMerged() || nextCell->doesMergeCells() ||
-             nextCell->format()->hasProperty( Format::PComment ) ||
-             !(nextCellStyle == currentCellStyle) )
-        {
+        if ( nextCell->isEmpty() && !nextCell->format()->hasProperty( Format::PComment )
+             && ( nextCellStyle==currentCellStyle ) && !isPartOfMerged() && !doesMergeCells() )
+          ++repeated;
+        else
           break;
-        }
-        ++repeated;
-        nextCell = format()->sheet()->getNextCellRight( j++, row );
+        ++j;
       }
-      kdDebug() << "Cell::saveOasis: empty cell in column " << column << " "
-                << "repeated " << repeated << " time(s)" << endl;
-
       if ( repeated > 1 )
         xmlwriter.addAttribute( "table:number-columns-repeated", QString::number( repeated ) );
     }

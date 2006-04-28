@@ -1292,12 +1292,13 @@ protected:
 
     QString saveOasisSheetStyleName( KoGenStyles &mainStyles );
     void saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles, int maxCols, int maxRows, GenValidationStyles &valStyle );
-    void saveOasisCells( KoXmlWriter& xmlWriter, KoGenStyles& mainStyles,
-                         int row, GenValidationStyles& valStyle );
+    void saveOasisCells(  KoXmlWriter& xmlWriter, KoGenStyles &mainStyles, int row, int maxCols, GenValidationStyles &valStyle );
     void convertPart( const QString & part, KoXmlWriter & writer ) const;
     void addText( const QString & text, KoXmlWriter & writer ) const;
 
     void maxRowCols( int & maxCols, int & maxRows );
+
+    bool rowAsCell( int row, int maxCols );
 
     QString getPart( const QDomNode & part );
     void replaceMacro( QString & text, const QString & old, const QString & newS );

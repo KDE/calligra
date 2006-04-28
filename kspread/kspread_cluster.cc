@@ -160,7 +160,7 @@ void Cluster::insert( Cell* cell, int x, int y )
 	m_first->setPreviousCell( cell );
     }
     m_first = cell;
-
+    
     if (x > m_biggestX) m_biggestX = x;
     if (y > m_biggestY) m_biggestY = y;
 }
@@ -635,7 +635,7 @@ Value Cluster::valueRange (int col1, int row1,
     int col2, int row2) const
 {
   Value empty;
-
+  
   //swap first/second values if needed
   if (col1 > col2)
   {
@@ -677,10 +677,10 @@ Value Cluster::makeArray (int col1, int row1,
       if (cell)
       {
         Value val = cell->value();
-        array.setElement (col-col1, row-row1, val);
+        array.setElement (col-col1, row-row1, val); 
       }
     }
-
+  
   //return the result
   return array;
 }
@@ -1131,38 +1131,6 @@ bool ColumnCluster::autoDelete() const
     return m_autoDelete;
 }
 
-ColumnFormat* ColumnCluster::next( int col ) const
-{
-  if ( col >= KSPREAD_CLUSTER_MAX || col < 0 )
-  {
-    kdDebug(36001) << "ColumnCluster::next: invalid column value (col: "
-        << col << ")" << endl;
-    return 0;
-  }
-
-  int cx = (col + 1) / KSPREAD_CLUSTER_LEVEL2;
-  int dx = (col + 1) % KSPREAD_CLUSTER_LEVEL2;
-
-  while ( cx < KSPREAD_CLUSTER_LEVEL1 )
-  {
-    if ( m_cluster[ cx ] )
-    {
-      while ( dx < KSPREAD_CLUSTER_LEVEL2 )
-      {
-
-        if ( m_cluster[ cx ][  dx ] )
-        {
-          return m_cluster[ cx ][ dx ];
-        }
-        ++dx;
-      }
-    }
-    ++cx;
-    dx = 0;
-  }
-  return 0;
-}
-
 /****************************************************
  *
  * RowCluster
@@ -1446,36 +1414,4 @@ void RowCluster::setAutoDelete( bool a )
 bool RowCluster::autoDelete() const
 {
     return m_autoDelete;
-}
-
-RowFormat* RowCluster::next( int row ) const
-{
-  if ( row >= KSPREAD_CLUSTER_MAX || row < 0 )
-  {
-    kdDebug(36001) << "RowCluster::removeRow: invalid row value (row: "
-        << row << ")" << endl;
-    return false;
-  }
-
-  int cx = (row + 1) / KSPREAD_CLUSTER_LEVEL2;
-  int dx = (row + 1) % KSPREAD_CLUSTER_LEVEL2;
-
-  while ( cx < KSPREAD_CLUSTER_LEVEL1 )
-  {
-    if ( m_cluster[ cx ] )
-    {
-      while ( dx < KSPREAD_CLUSTER_LEVEL2 )
-      {
-
-        if ( m_cluster[ cx ][  dx ] )
-        {
-          return m_cluster[ cx ][ dx ];
-        }
-        ++dx;
-      }
-    }
-    ++cx;
-    dx = 0;
-  }
-  return 0;
 }
