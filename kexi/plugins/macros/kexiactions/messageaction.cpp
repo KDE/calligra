@@ -58,4 +58,4 @@ void MessageAction::activate(KoMacro::Context::Ptr context)
 	KMessageBox::information(mainWin(), message, caption);
 }
 
-//#include "executeobject.moc"
+#include "messageaction.moc"

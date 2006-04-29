@@ -66,4 +66,4 @@ void ExecuteAction::activate(KoMacro::Context::Ptr context)
 	//TODO
 }
 
-//#include "executeaction.moc"
+#include "executeaction.moc"

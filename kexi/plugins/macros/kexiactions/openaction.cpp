@@ -187,4 +187,4 @@ void OpenAction::activate(KoMacro::Context::Ptr context)
 	}
 }
 
-//#include "openaction.moc"
+#include "openaction.moc"
