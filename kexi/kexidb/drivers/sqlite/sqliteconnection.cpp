@@ -205,6 +205,8 @@ bool SQLiteConnection::drv_useDatabase( const QString &dbName, bool *cancelled,
 			"askBeforeOpeningFileReadOnly", KMessageBox::Notify, msgHandler ))
 		{
 			clearError();
+			if (!drv_closeDatabase())
+				return false;
 			*cancelled = true;
 			return false;
 		}
@@ -231,9 +233,22 @@ bool SQLiteConnection::drv_closeDatabase()
 {
 	if (!d->data)
 		return false;
+
+#ifdef SQLITE2
 	sqlite_close(d->data);
 	d->data = 0;
 	return true;
+#else
+	const int res = sqlite_close(d->data);
+	if (SQLITE_OK == res) {
+		d->data = 0;
+		return true;
+	}
+	if (SQLITE_BUSY==res) {
+		setError(ERR_OTHER);
+	}
+	return false;
+#endif
 }
 
 bool SQLiteConnection::drv_dropDatabase( const QString &dbName )

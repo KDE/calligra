@@ -47,7 +47,7 @@ SQLitePreparedStatement::SQLitePreparedStatement(StatementType type, ConnectionI
 			0 //const char **pzTail     /* OUT: Pointer to unused portion of zSql */
 		);
 		if (SQLITE_OK != res) {
-//! @todo err
+//! @todo copy error msg
 		}
 	}
 #endif
