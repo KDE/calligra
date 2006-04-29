@@ -22,4 +22,7 @@ KDE_CXXFLAGS += -DKEXI_NO_CURSOR_PROPERTY
 
 KDE_CXXFLAGS += -DKEXI_NO_CTXT_HELP -DKEXI_NO_SUBFORM
 
-VER_INFO = -version-info 1:0:0
+# TODO: undefine this before release!
++KDE_CXXFLAGS += -DKEXI_DEBUG_GUI
+
+VER_INFO = -version-info 3:0:0

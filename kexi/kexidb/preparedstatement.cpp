@@ -97,7 +97,7 @@ Q3CString PreparedStatement::generateStatementString()
 			if (first) {
 				s.append( "?" );
 				if (!allTableFieldsUsed)
-					namesList = it.current()->name();
+					namesList = it.current()->name().latin1();
 				first = false;
 			} else {
 				s.append( ",?" );
