@@ -33,7 +33,8 @@ set(kexidb_LIB_SRCS
    msghandler.cpp 
    dbobjectnamevalidator.cpp 
    preparedstatement.cpp 
-   dbproperties.cpp )
+   dbproperties.cpp 
+   admin.cpp )
 
 kde4_automoc(${kexidb_LIB_SRCS})
 

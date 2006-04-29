@@ -329,6 +329,23 @@ class KEXI_DB_EXPORT Field
 		 of 6 and a scale of 4. Integers can be considered to have a scale of zero. */
 		inline uint scale() const { return m_length; }
 
+		/*! \return number of decimal places that should be visible to the user, 
+		 e.g. within table view widget, form or printout. 
+		 Only meaningful if the field type is floating point or (in the future: decimal or currency).
+
+		 - Any value less than 0 (-1 is the default) means that there should be displayed all digits
+		   of the fractional part, except the ending zeros. This is known as "auto" mode.
+		   For example, 12.345000 becomes 12.345.
+
+		 - Value of 0 means that all the fractional part should be hidden (as well as the dot or comma). 
+		   For example, 12.345000 becomes 12.
+
+		 - Value N > 0 means that the fractional part should take exactly N digits. 
+		   If the fractional part is shorter than N, additional zeros are appended. 
+		   For example, "12.345" becomes "12.345000" if N=6.
+		*/
+		inline int visibleDecimalPlaces() const { return m_visibleDecimalPlaces; }
+
 		/*! \return the constraints defined for this field. */
 		inline uint constraints() const { return m_constraints; }
 
@@ -383,11 +400,17 @@ class KEXI_DB_EXPORT Field
 		 enforced as well (see setIndexed()). */
 		void setConstraints(uint c);
 
-		/*! Sets length for this field. Only works for Text Type (even not LongText!). */
+		/*! Sets length for this field. Only works for Text Type (even not LongText!). 
+		 @see length() */
 		void setLength(uint l);
 
-		/*! Sets scale for this field. Only works for floating-point types. */
+		/*! Sets scale for this field. Only works for floating-point types. 
+		 @see scale() */
 		void setScale(uint s);
+
+		/*! Sets number of decimal places that should be visible to the user. 
+		 @see visibleDecimalPlaces() */
+		void setVisibleDecimalPlaces(int p);
 
 		/*! Sets scale for this field. Only works for floating-point types. */
 		void setPrecision(uint p);
@@ -516,6 +539,7 @@ class KEXI_DB_EXPORT Field
 		uint m_constraints;
 		uint m_length; //!< also used for storing scale for floating point types
 		uint m_precision;
+		int m_visibleDecimalPlaces; //!< used in visibleDecimalPlaces()
 		uint m_options;
 		QVariant m_defaultValue;
 		int m_order;

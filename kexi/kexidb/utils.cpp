@@ -17,9 +17,9 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <kexidb/utils.h>
-#include <kexidb/cursor.h>
-#include <kexidb/drivermanager.h>
+#include "utils.h"
+#include "cursor.h"
+#include "drivermanager.h"
 
 #include <qmap.h>
 #include <qthread.h>
@@ -30,6 +30,8 @@
 #include <klocale.h>
 #include <kstaticdeleter.h>
 #include <kmessagebox.h>
+#include <klocale.h>
+#include <kiconloader.h>
 
 #include "utils_p.h"
 
@@ -565,5 +567,65 @@ bool KexiDB::splitToTableAndFieldParts(const QString& string,
 	fieldName = string.mid(id+1);
 	return true;
 }
+
+bool KexiDB::supportsVisibleDecimalPlacesProperty(Field::Type type)
+{
+//! @todo add check for decimal type as well
+	return Field::isFPNumericType(type);
+}
+
+QString KexiDB::formatNumberForVisibleDecimalPlaces(double value, int decimalPlaces)
+{
+//! @todo round?
+	if (decimalPlaces < 0) {
+		QString s = QString::number(value, 'f', 10 /*reasonable precision*/);
+		uint i = s.length()-1;
+		while (i>0 && s[i]=='0')
+			i--;
+		if (s[i]=='.') //remove '.'
+			i--;
+		s = s.left(i+1).replace('.', KGlobal::locale()->decimalSymbol());
+		return s;
+	}
+	if (decimalPlaces == 0)
+		return QString::number((int)value);
+	return KGlobal::locale()->formatNumber(value, decimalPlaces);
+}
+
+#include <ktabwidget.h>
+#include <klistview.h>
+#include <qheader.h>
+
+static KTabWidget* kexidbDebugWindow = 0;
+static KListView* kexidbCursorDebugPage = 0;
+
+#ifdef KEXI_DEBUG_GUI
+QWidget *KexiDB::createDebugWindow(QWidget *parent)
+{
+	// (this is internal code - do not use i18n() here)
+	kexidbDebugWindow = new KTabWidget(parent, "kexidbDebugWindow", Qt::WType_Dialog|Qt::WStyle_MinMax);
+	kexidbCursorDebugPage = new KListView(kexidbDebugWindow, "kexidbCursorDebugPage");
+	kexidbCursorDebugPage->addColumn("");
+	kexidbCursorDebugPage->header()->hide();
+	kexidbCursorDebugPage->setSorting(-1);
+	kexidbCursorDebugPage->setAllColumnsShowFocus ( true );
+	kexidbCursorDebugPage->setColumnWidthMode( 0, QListView::Maximum );
+	kexidbDebugWindow->addTab( kexidbCursorDebugPage, "DB Cursors" );
+	kexidbDebugWindow->resize(900, 600);
+
+	kexidbDebugWindow->setIcon( DesktopIcon("info") );
+	kexidbDebugWindow->setCaption("Kexi Internal Debugger");
+	kexidbDebugWindow->show();
+	return kexidbDebugWindow;
+}
+
+void KexiDB::addCursorDebug(const QString& text)
+{
+	if (!kexidbCursorDebugPage)
+		return;
+	KListViewItem * li = new KListViewItem( kexidbCursorDebugPage, kexidbCursorDebugPage->lastItem(), text );
+	li->setMultiLinesEnabled( true );
+}
+#endif //KEXI_DEBUG_GUI
 
 #include "utils_p.moc"

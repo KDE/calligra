@@ -20,6 +20,7 @@
 
 #include "kexitableedit.h"
 #include <kexidb/field.h>
+#include <kexidb/utils.h>
 
 #include <qpalette.h>
 #include <qpainter.h>
@@ -147,9 +148,12 @@ void KexiTableEdit::setupContents( QPainter * /*p*/, bool /*focused*/, QVariant 
 //	align = SingleLine | AlignVCenter;
 //	QString txt; //text to draw
 	if (m_column->field()->isFPNumericType()) {
-//js TODO: ADD OPTION to desplaying NULL VALUES as e.g. "(null)"
-		if (!val.isNull())
-			txt = KGlobal::locale()->formatNumber(val.toDouble());
+//js TODO: ADD OPTION to displaying NULL VALUES as e.g. "(null)"
+		if (!val.isNull()) {
+			txt = KexiDB::formatNumberForVisibleDecimalPlaces(
+				val.toDouble(), m_column->field()->visibleDecimalPlaces());
+			//txt = KGlobal::locale()->formatNumber(val.toDouble(), 10);
+		}
 		w -= 6;
 		align |= Qt::AlignRight;
 	}

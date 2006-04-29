@@ -1250,6 +1250,9 @@ tristate KexiMainWindowImpl::closeProject()
 	// now we will close for sure
 	emit beforeProjectClosing();
 
+	if (!d->prj->closeConnection())
+		return false;
+
 	if(d->nav)
 	{
 		d->navWasVisibleBeforeProjectClosing = manager()->findWidgetParentDock(d->nav)->isVisible();

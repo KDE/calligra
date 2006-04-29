@@ -21,6 +21,7 @@
 #include <kexiproject.h>
 #include <kexidb/connection.h>
 #include <kexidb/parser/parser.h>
+#include <kexidb/cursor.h>
 #include <keximainwindow.h>
 #include <kexiutils/utils.h>
 
@@ -30,12 +31,15 @@
 
 KexiQueryView::KexiQueryView(KexiMainWindow *win, QWidget *parent, const char *name)
  : KexiDataTable(win, parent, name)
+ , m_cursor(0)
 {
 	tableView()->setInsertingEnabled(false); //default
 }
 
 KexiQueryView::~KexiQueryView()
 {
+	if (m_cursor)
+		m_cursor->connection()->deleteCursor(m_cursor);
 }
 
 bool KexiQueryView::executeQuery(KexiDB::QuerySchema *query)
@@ -43,13 +47,22 @@ bool KexiQueryView::executeQuery(KexiDB::QuerySchema *query)
 	if (!query)
 		return false;
 	KexiUtils::WaitCursor wait;
-	KexiDB::Cursor *rec = mainWin()->project()->dbConnection()->executeQuery(*query);
-	if (!rec) {
-		parentDialog()->setStatus(parentDialog()->mainWin()->project()->dbConnection(), i18n("Query executing failed."));
+	KexiDB::Cursor *oldCursor = m_cursor;
+	m_cursor = mainWin()->project()->dbConnection()->executeQuery(*query);
+	if (!m_cursor) {
+		parentDialog()->setStatus(parentDialog()->mainWin()->project()->dbConnection(), 
+			i18n("Query executing failed."));
 		//todo: also provide server result and sql statement
 		return false;
 	}
-	setData(rec);
+	setData(m_cursor);
+
+//! @todo remove close() when dynamic cursors arrive
+	m_cursor->close();
+
+	if (oldCursor)
+		oldCursor->connection()->deleteCursor(oldCursor);
+
 	//TODO: maybe allow writing and inserting for single-table relations?
 	tableView()->setReadOnly( true );
 	tableView()->setInsertingEnabled( false );

@@ -42,7 +42,7 @@ class KexiQueryView : public KexiDataTable
 
 		bool executeQuery(KexiDB::QuerySchema *query);
 
-	private:
+		KexiDB::Cursor *m_cursor;
 };
 
 #endif

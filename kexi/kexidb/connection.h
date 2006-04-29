@@ -674,9 +674,9 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 
 		/*! Loads (potentially large) data block (e.g. xml form's representation), referenced by objectID
 		 and puts it to \a dataString. The can be block indexed with optional \a dataID.
-		 \return true on success
+		 \return true on success, false on failure and cancelled when there is no such data block
 		 \sa storeDataBlock(). */
-		bool loadDataBlock( int objectID, QString &dataString, const QString& dataID );
+		tristate loadDataBlock( int objectID, QString &dataString, const QString& dataID );
 
 		/*! Stores (potentially large) data block \a dataString (e.g. xml form's representation), 
 		 referenced by objectID. Block will be stored in "kexi__objectdata" table and 
@@ -1073,6 +1073,11 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		/*! @internal used by Driver::createConnection(). 
 		 Only works if connection is not yet established. */
 		void setReadOnly(bool set);
+
+		/*! @internal used by Driver::createConnection(). 
+		 Load extended schema information for table \a t, 
+		 if present (see ExtendedTableSchemaInformation in Kexi Wiki). */
+		bool loadExtendedTableSchemaData(TableSchema& t);
 
 		QPointer<ConnectionData> m_data;
 		QString m_name;
