@@ -23,6 +23,7 @@
 #include <kexidb/driver_p.h>
 #include <kexidb/error.h>
 #include <kexidb/roweditbuffer.h>
+#include <kexidb/utils.h>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -32,6 +33,9 @@
 
 using namespace KexiDB;
 
+#ifdef KEXI_DEBUG_GUI
+
+#endif
 
 Cursor::Cursor(Connection* conn, const QString& statement, uint options)
 	: QObject()
@@ -40,6 +44,9 @@ Cursor::Cursor(Connection* conn, const QString& statement, uint options)
 	, m_rawStatement(statement)
 	, m_options(options)
 {
+#ifdef KEXI_DEBUG_GUI
+	KexiDB::addCursorDebug(QString("Create cursor: ")+statement);
+#endif
 	init();
 }
 
@@ -49,6 +56,9 @@ Cursor::Cursor(Connection* conn, QuerySchema& query, uint options )
 	, m_query(&query)
 	, m_options(options)
 {
+#ifdef KEXI_DEBUG_GUI
+	KexiDB::addCursorDebug(QString("Create cursor for query \"%1\": ").arg(query.name())+query.debugString());
+#endif
 	init();
 }
 
@@ -91,6 +101,12 @@ void Cursor::init()
 
 Cursor::~Cursor()
 {
+#ifdef KEXI_DEBUG_GUI
+	if (m_query)
+		KexiDB::addCursorDebug(QString("~ Delete cursor for query \"%1\": ").arg(m_query->name())+m_query->debugString());
+	else
+		KexiDB::addCursorDebug(QString("~ Delete cursor: ")+m_rawStatement);
+#endif
 /*	if (!m_query)
 		KexiDBDbg << "Cursor::~Cursor() '" << m_rawStatement.latin1() << "'" << endl;
 	else

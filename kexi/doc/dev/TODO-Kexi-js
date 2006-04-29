@@ -1,14 +1,13 @@
----------------------------------------------------------
+-----------------------------------------------------------------------------
  Kexi Development TODO Document
- From js's Point of View
+ From jstaniek's Point of View
  
  Also includes: win32 porting and multiplatform 
   features, planning, improving ideas, details
  
- Copyright (C) 2003-2005 Jaroslaw Staniek js at iidea dot pl
- (C) OpenOffice Polska 2003-2005
+ Copyright (C) 2003-2006 Jaroslaw Staniek js at iidea.pl / OpenOffice Polska
  Kexi home page: http://www.kexi-project.org/
----------------------------------------------------
+-----------------------------------------------------------------------------
 
 TODO: rename KexiTabBrowser to KexiProjectWindow
 TODO: rename KexiBrowser to KexiProjectListView
@@ -844,3 +843,23 @@ TODOs from Jeff Denman:
 	Scale:		2
 	Decimal Places:	Auto
 
+TODO Data Types
+-Currency
+  MS Access: Currency values and numeric data used in mathematical calculations involving data 
+  with one to four decimal places. Accurate to 15 digits on the left side of the decimal separator 
+  and to 4 digits on the right side. 
+-Decimal Number (NUMERIC?)
+  MS Access: Decimal Stores numbers from –10^38–1 through 10^38–1 (.adp), 
+  from –10^28–1 through 10^28–1 (.mdb); decimal precision: 28 B, storage size: 12 B
+
+
+TODO Migration from Native SQLite3
+- use sqlite3_column_decltype() http://sqlite.org/capi3ref.html#sqlite3_column_decltype
+  and sqlite3_column_name() to know column names and types. 
+  Add reasonable case-insensitive mappings like "INTEGER|integer|INT|int" -> [integer]
+
+MDB Import
+- FIXME sometimes order of imported fields is invalid: PKEY field jumps to end.. (books2.mdb)
+
+TODO: table view
+- for FP numbers: allow to start entering value from "." or ","

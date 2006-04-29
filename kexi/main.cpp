@@ -31,11 +31,12 @@
 #include <kiconloader.h>
 #include <kstandarddirs.h>
 
-#include "core/kexiproject.h"
-#include "core/kexidialogbase.h"
-#include "core/kexi.h"
-#include "main/keximainwindowimpl.h"
-#include "main/startup/KexiStartup.h"
+#include <core/kexiproject.h>
+#include <core/kexidialogbase.h>
+#include <core/kexi.h>
+#include <main/keximainwindowimpl.h>
+#include <main/startup/KexiStartup.h>
+#include <kexidb/utils.h>
 
 extern "C" int kdemain(int argc, char *argv[])
 {
@@ -57,6 +58,13 @@ extern "C" int kdemain(int argc, char *argv[])
 		dummyWidget->setIcon( DesktopIcon( "kexi" ) );
 		app.setMainWidget(dummyWidget);
 	}
+
+#ifdef KEXI_DEBUG_GUI
+	QWidget* debugWindow = 0;
+	app.config()->setGroup("General");
+	if (app.config()->readBoolEntry("showKexiDBDebuger", false))
+		debugWindow = KexiDB::createDebugWindow(0);
+#endif
 
 	tristate res = Kexi::startupHandler().init(argc, argv);
 	if (!res)
@@ -86,6 +94,10 @@ extern "C" int kdemain(int argc, char *argv[])
 	win->show();
 	app.processEvents();//allow refresh our app
 
-	return app.exec();
-}
+	int r = app.exec();
 
+#ifdef KEXI_DEBUG_GUI
+	delete debugWindow;
+#endif
+	return r;
+}

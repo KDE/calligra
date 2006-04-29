@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------------
  Kexi Development CHANGELOG Document
- From js's Point of View
+ From jstaniek's Point of View
  
  Copyright (C) 2003-2006 Jaroslaw Staniek js at iidea.pl / OpenOffice Polska
  Kexi home page: http://www.kexi-project.org/
@@ -12,10 +12,41 @@ Use CCMAIL:###-done@bugs.kde.org
 TODO:
 - inform Raphael about koffice.org/1.5/ url, give him the php code
 
+2006-04-28
+KexiDB
+- SQLite3 driver: report error when closing database failed
+1.0/2.0: ported
+Core
+- KexiProject: report error when closing database failed
+Query Data View
+- properly destroy cursor on view removing; this also fixes the problem
+  with compacting Kexi database when it cannot be reopened read/write when 
+  there was opened view with query data because of db cursor blocking the database
+- properly close as soon as the data is fetched (temporary solution)
+General
+- "Kexi Internal Debugger" introduced to help in Kexi development; 
+  "showKexiDBDebuger" in [General] should be set to true and KEXI_DEBUG_GUI defined
+  to use this.
+
+2006-04-27
+KexiDB
+- "visibleDecimalPlaces" property added for table fields of type floating point 
+  (will be added for decimal and currency too); "Auto" state is supported 
+  as default so only meaningful fractional digits are be displayed
+Table Designer
+- "visibleDecimalPlaces" property supported for floating point types
+Table View
+- "visibleDecimalPlaces" property supported when displaying and editing 
+  floating point values
+MDB Import
+- on importing table rows: report failure when inserting row failed
+
 2006-04-25
 CSV Import
 - simplify whitespace of text in cells (for preview only)
+- fixed delimiter detecting
 - priority in delimiter detection changed: now ";" has priority over ","
+1.0/2.0: ported
 Form Designer
 - hide minimumSize and maximumSize widget properties
 1.0/2.0: ported

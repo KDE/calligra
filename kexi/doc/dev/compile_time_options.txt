@@ -134,6 +134,15 @@ Default: undefined
 Description: Defined means Kexi version compiled for standalone distribution 
 with some minor vendor-specific tweaks. Used for OOPL version.
 
+* KEXI_DEBUG_GUI
+Type: defined/undefined
+Default: defined (but should be undefined for releases)
+Description: If defined, showKexiDBDebuger=true (in [General] group) 
+can be specified to display KexiDB Debugger. 
+In the future the window will be probably used for debugging other features
+like scripts or macros. This option is useful for Kexi Developers.
+
+
 ==== Obsolete, don't use ====
 
 * KDOCKWIDGET_P

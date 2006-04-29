@@ -458,14 +458,20 @@ KexiProject::createConnection()
 }
 
 
-void
+bool
 KexiProject::closeConnection()
 {
 	if (!d->connection)
-		return;
+		return true;
+
+	if (!d->connection->disconnect()) {
+		setError(d->connection);
+		return false;
+	}
 
 	delete d->connection; //this will also clear connection for BLOB buffer
 	d->connection = 0;
+	return true;
 }
 
 bool

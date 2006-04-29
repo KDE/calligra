@@ -19,10 +19,11 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include <kexidb/field.h>
-#include <kexidb/connection.h>
-#include <kexidb/driver.h>
-#include <kexidb/expression.h>
+#include "field.h"
+#include "connection.h"
+#include "driver.h"
+#include "expression.h"
+#include "utils.h"
 
 // we use here i18n() but this depends on kde libs: TODO: add #ifdefs
 #include <kdebug.h>
@@ -70,6 +71,7 @@ Field::Field(const QString& name, Type ctype,
 	,m_name(name.lower())
 	,m_length(length)
 	,m_precision(precision)
+	,m_visibleDecimalPlaces(-1)
 	,m_options(options)
 	,m_defaultValue(defaultValue)
 	,m_order(-1)
@@ -110,6 +112,7 @@ void Field::init()
 	m_type = InvalidType;
 	m_length = 0;
 	m_precision = 0;
+	m_visibleDecimalPlaces = -1;
 	m_options = NoOptions;
 	m_defaultValue = QVariant(QString::null);
 	m_order = -1;
@@ -360,6 +363,14 @@ Field::setScale(uint s)
 	if (!isFPNumericType())
 		return;
 	m_length = s;
+}
+
+void
+Field::setVisibleDecimalPlaces(int p)
+{
+	if (!KexiDB::supportsVisibleDecimalPlacesProperty(type()))
+		return;
+	m_visibleDecimalPlaces = p < 0 ? -1 : p;
 }
 
 void

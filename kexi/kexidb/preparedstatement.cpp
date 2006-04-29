@@ -79,22 +79,34 @@ QCString PreparedStatement::generateStatementString()
 			s.append("=?");
 		}
 	}
-	else if (m_type == InsertStatement && dynamic_cast<TableSchema*>(m_fields)) {
+	else if (m_type == InsertStatement /*&& dynamic_cast<TableSchema*>(m_fields)*/) {
 //! @todo only tables supported for insert; what about views?
-			
-		s = QCString("INSERT INTO ")+dynamic_cast<TableSchema*>(m_fields)->name().latin1()
-			+" VALUES (";
+		
+		TableSchema *table = m_fields->fieldCount()>0 ? m_fields->field(0)->table() : 0;
+		if (!table)
+			return ""; //err
+
+		QCString namesList;
 		bool first = true;
+		const bool allTableFieldsUsed = dynamic_cast<TableSchema*>(m_fields); //we are using a selection of fields only
 //		for (Field::ListIterator it(m_fields->fieldsIterator()); it.current(); ++it) {
-		for (uint i=0; i<m_fields->fieldCount(); i++) {
+		Field::ListIterator it = m_fields->fieldsIterator();
+		for (uint i=0; i<m_fields->fieldCount(); i++, ++it) {
 			if (first) {
 				s.append( "?" );
+				if (!allTableFieldsUsed)
+					namesList = it.current()->name();
 				first = false;
 			} else {
 				s.append( ",?" );
+				if (!allTableFieldsUsed)
+					namesList.append(QCString(", ")+it.current()->name().latin1());
 			}
 		}
 		s.append(")");
+		s.prepend(QCString("INSERT INTO ")
+			+ (allTableFieldsUsed ? "" : table->name().latin1()) 
+			+ " (" + namesList + ") VALUES (");
 	}
 	return s;
 }

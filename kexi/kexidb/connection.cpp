@@ -41,9 +41,12 @@
 #include <qdir.h>
 #include <qfileinfo.h>
 #include <qguardedptr.h>
+#include <qdom.h>
 
 #include <klocale.h>
 #include <kdebug.h>
+
+#define KEXIDB_EXTENDED_TABLE_SCHEMA_VERSION 1
 
 namespace KexiDB {
 
@@ -1281,6 +1284,11 @@ bool Connection::createTable( KexiDB::TableSchema* tableSchema, bool replaceExis
 	if (!drv_createTable(*tableSchema))
 		createTable_ERR;
 
+	//todo: future: save in older versions if neeed
+	QDomDocument doc("EXTENDED_TABLE_SCHEMA");
+	QDomElement extendedTableSchemaMainEl;
+	bool extendedTableSchemaStringIsEmpty = true;
+
 	//add schema data to kexi__* tables
 	if (!internalTable) {
 		//update kexi__objects
@@ -1331,11 +1339,41 @@ bool Connection::createTable( KexiDB::TableSchema* tableSchema, bool replaceExis
 			if (!insertRecord(*fl, vals ))
 				createTable_ERR;
 
+			if (f->visibleDecimalPlaces()>=0 && KexiDB::supportsVisibleDecimalPlacesProperty(f->type())) {
+				if (extendedTableSchemaStringIsEmpty) {//init document
+					extendedTableSchemaMainEl = doc.createElement("EXTENDED_TABLE_SCHEMA");
+					doc.appendChild( extendedTableSchemaMainEl );
+					extendedTableSchemaMainEl.setAttribute("version", QString::number(KEXIDB_EXTENDED_TABLE_SCHEMA_VERSION));
+					extendedTableSchemaStringIsEmpty = false;
+				}
+				QDomElement extendedTableSchemaFieldEl = doc.createElement("field");
+				extendedTableSchemaMainEl.appendChild( extendedTableSchemaFieldEl );
+				extendedTableSchemaFieldEl.setAttribute("name", f->name());
+				QDomElement extendedTableSchemaFieldPropertyEl = doc.createElement("property");
+				extendedTableSchemaFieldEl.appendChild( extendedTableSchemaFieldPropertyEl );
+				extendedTableSchemaFieldPropertyEl.setAttribute("name", "visibleDecimalPlaces");
+				QDomElement extendedTableSchemaFieldPropertyValueEl = doc.createElement("number");
+				extendedTableSchemaFieldPropertyEl.appendChild( extendedTableSchemaFieldPropertyValueEl );
+				extendedTableSchemaFieldPropertyValueEl.appendChild( 
+					doc.createTextNode(QString::number(f->visibleDecimalPlaces())) );
+			}
+
 			f = fields->next();
 			order++;
 		}
 		delete fl;
+
+		// Store extended schema information (see ExtendedTableSchemaInformation in Kexi Wiki)
+		if (extendedTableSchemaStringIsEmpty) {
+			if (!removeDataBlock( tableSchema->id(), "extended_schema"))
+				createTable_ERR;
+		}
+		else {
+			if (!storeDataBlock( tableSchema->id(), doc.toString(1), "extended_schema" ))
+				createTable_ERR;
+		}
 	}
+
 	//finally:
 /*	if (replaceExisting) {
 		if (existingTable) {
@@ -1451,6 +1489,9 @@ tristate Connection::dropTable( KexiDB::TableSchema* tableSchema, bool alsoRemov
 
 	if (alsoRemoveSchema) {
 //! \todo js: update any structure (e.g. queries) that depend on this table!
+		tristate res = removeDataBlock( tableSchema->id(), "extended_schema");
+		if (!res)
+			return false;
 		removeTableSchemaInternal(tableSchema);
 	}
 	return commitAutoCommitTransaction(tg.transaction());
@@ -1959,7 +2000,7 @@ bool Connection::deleteCursor(Cursor *cursor)
 		KexiDBWarn << "Connection::deleteCursor(): Cannot delete the cursor not owned by the same connection!" << endl;
 		return false;
 	}
-	bool ret = cursor->close();
+	const bool ret = cursor->close();
 	delete cursor;
 	return ret;
 }
@@ -2220,6 +2261,79 @@ int Connection::resultCount(const QString& sql)
 	return count;
 }
 
+bool Connection::loadExtendedTableSchemaData(TableSchema& t)
+{
+#define loadExtendedTableSchemaData_ERR \
+	{ setError(i18n("Error while loading extended table schema information.")); \
+	  return false; }
+#define loadExtendedTableSchemaData_ERR2(details) \
+	{ setError(i18n("Error while loading extended table schema information."), details); \
+	  return false; }
+#define loadExtendedTableSchemaData_ERR3(data) \
+	{ setError(i18n("Error while loading extended table schema information."), i18n("Invalid XML data: ") + data.left(1024) ); \
+	  return false; }
+
+	// Load extended schema information, if present (see ExtendedTableSchemaInformation in Kexi Wiki)
+	QString extendedTableSchemaString;
+	bool extendedTableSchemaStringLoadingResult = true;
+	tristate res = loadDataBlock( t.id(), extendedTableSchemaString, "extended_schema" );
+	if (!res)
+		loadExtendedTableSchemaData_ERR;
+	// extendedTableSchemaString will be just empty if there is no such data block
+	if (extendedTableSchemaString.isEmpty())
+		return true;
+
+	QDomDocument doc;
+	QString errorMsg;
+	int errorLine, errorColumn;
+	if (!doc.setContent( extendedTableSchemaString, &errorMsg, &errorLine, &errorColumn ))
+		loadExtendedTableSchemaData_ERR2( i18n("Error in XML data: \"%1\" in line %2, column %3.\nXML data: ")
+			.arg(errorMsg).arg(errorLine).arg(errorColumn) + extendedTableSchemaString.left(1024));
+
+//! @todo look at the current format version (KEXIDB_EXTENDED_TABLE_SCHEMA_VERSION)
+	
+	if (doc.doctype().name()!="EXTENDED_TABLE_SCHEMA")
+		loadExtendedTableSchemaData_ERR3( extendedTableSchemaString );
+
+	QDomElement docEl = doc.documentElement();
+	if (docEl.tagName()!="EXTENDED_TABLE_SCHEMA")
+		loadExtendedTableSchemaData_ERR3( extendedTableSchemaString );
+
+	for (QDomNode n = docEl.firstChild(); !n.isNull(); n = n.nextSibling()) {
+		QDomElement fieldEl = n.toElement();
+		if (fieldEl.tagName()=="field") {
+			Field *f = t.field( fieldEl.attribute("name") );
+			if (f) {
+				//set properties of the field:
+//! @todo more properties
+				for (QDomNode propNode = fieldEl.firstChild(); 
+					!propNode.isNull(); propNode = propNode.nextSibling())
+				{
+					QDomElement propEl = propNode.toElement();
+					bool ok;
+					int visibleDecimalPlaces;
+					if (propEl.tagName()=="property") {
+						if (propEl.attribute("name")=="visibleDecimalPlaces"
+							&& KexiDB::supportsVisibleDecimalPlacesProperty(f->type())
+							&& propEl.firstChild().nodeName()=="number")
+						{
+							visibleDecimalPlaces = propEl.firstChild().toElement().text().toInt(&ok);
+							if (ok)
+								f->setVisibleDecimalPlaces(visibleDecimalPlaces);
+						}
+					}
+				}
+			}
+			else {
+				KexiDBWarn << "Connection::loadExtendedTableSchemaData(): no such field \"" 
+					<< fieldEl.attribute("name") << "\" in table \"" << t.name() << "\"" << endl;
+			}
+		}
+	}
+
+	return true;
+}
+
 KexiDB::TableSchema* Connection::setupTableSchema( const RowData &data )
 {
 	TableSchema *t = new TableSchema( this );
@@ -2236,7 +2350,9 @@ KexiDB::TableSchema* Connection::setupTableSchema( const RowData &data )
 	if (!(cursor = executeQuery(
 		QString::fromLatin1("SELECT t_id, f_type, f_name, f_length, f_precision, f_constraints, "
 			"f_options, f_default, f_order, f_caption, f_help"
-			" FROM kexi__fields WHERE t_id=%1 ORDER BY f_order").arg(t->m_id) ))) {
+			" FROM kexi__fields WHERE t_id=%1 ORDER BY f_order").arg(t->m_id) )))
+	{
+		delete t;
 		return 0;
 	}
 	if (!cursor->moveFirst()) {
@@ -2244,8 +2360,11 @@ KexiDB::TableSchema* Connection::setupTableSchema( const RowData &data )
 			setError(i18n("Table has no fields defined."));
 		}
 		deleteCursor(cursor);
+		delete t;
 		return 0;
 	}
+
+	// For each field: load its schema
 	bool ok;
 	while (!cursor->eof()) {
 //		KexiDBDbg<<"@@@ f_name=="<<cursor->value(2).asCString()<<endl;
@@ -2292,6 +2411,11 @@ KexiDB::TableSchema* Connection::setupTableSchema( const RowData &data )
 		delete t;
 		return 0;
 	}
+
+	if (!loadExtendedTableSchemaData(*t)) {
+		delete t;
+		return 0;
+	}
 	//store locally:
 	m_tables.insert(t->m_id, t);
 	m_tables_byname.insert(t->m_name.lower(), t);
@@ -2329,7 +2453,7 @@ TableSchema* Connection::tableSchema( int tableId )
 	return setupTableSchema(data);
 }
 
-bool Connection::loadDataBlock( int objectID, QString &dataString, const QString& dataID )
+tristate Connection::loadDataBlock( int objectID, QString &dataString, const QString& dataID )
 {
 	if (objectID<=0)
 		return false;

@@ -36,9 +36,15 @@ Group: Notification Messages
 -askBeforeOpeningFileReadOnly [boolean] (default: true)
 
 Group: General
-#especially useful for SQL-related messages
-#default=true for advanced Kexi mode
-NOT YET IMPELMENTED: -alwaysShowDetailsInMsgBoxes [boolean]
+# Especially useful for SQL-related messages
+# default=true for advanced Kexi mode
+NOT YET IMPLEMENTED: -alwaysShowDetailsInMsgBoxes [boolean]
+
+# If true, Kexi Debugger internal window will be displayed. 
+# In the future the window will be probably used for debugging other features
+# like scripts or macros. This option is useful for Kexi Developers.
+# Only available when KEXI_DEBUG_GUI compile time option is defined.
+-showKexiDBDebuger [boolean] (default: false)
 
 Group: Recent Dirs
 -lastVisitedImagePath [stringlist] # used for open/save dialogs for image files

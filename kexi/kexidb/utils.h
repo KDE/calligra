@@ -246,6 +246,29 @@ namespace KexiDB
 	KEXI_DB_EXPORT bool splitToTableAndFieldParts(const QString& string, 
 		QString& tableName, QString& fieldName, 
 		SetFieldNameIfNoTableNameOptions option = FailIfNoTableOrFieldName);
+
+	/*! \return true if \a type supports "visibleDecimalPlaces" property. */
+	KEXI_DB_EXPORT bool supportsVisibleDecimalPlacesProperty(Field::Type type);
+
+	/*! \return string constructed by converting \a value. 
+	 * If \a decimalPlaces is < 0, all meaningful fractional digits are returned.
+	 * If \a automatically is 0, just integer part is returned. 
+	 * If \a automatically is > 0, fractional part should take exactly 
+	   N digits: if the fractional part is shorter than N, additional zeros are appended. 
+	   For example, "12.345" becomes "12.345000" if N=6.
+
+	 No rounding is actually performed.
+	 KLocale::formatNumber() and KLocale::decimalSymbol() are used to get locale settings.
+
+	 @see KexiDB::Field::visibleDecimalPlaces() */
+	KEXI_DB_EXPORT QString formatNumberForVisibleDecimalPlaces(double value, int decimalPlaces);
+
+#ifdef KEXI_DEBUG_GUI
+	//! Creates debug window for convenient KexiDB-related debugging
+	KEXI_DB_EXPORT QWidget *createDebugWindow(QWidget *parent);
+
+	KEXI_DB_EXPORT void addCursorDebug(const QString& text);
+#endif
 }
 
 #endif

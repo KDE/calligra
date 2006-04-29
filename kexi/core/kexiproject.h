@@ -269,7 +269,7 @@ class KEXICORE_EXPORT KexiProject : public QObject, public KexiDB::Object
 		 \return true on success, otherwise false and appropriate error is set. */
 		bool createConnection();
 		
-		void closeConnection();
+		bool closeConnection();
 
 		bool initProject();
 

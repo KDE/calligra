@@ -92,6 +92,8 @@ tristate SQLiteVacuum::run()
 		readFromStdout();
 		usleep(50000);
 	}
+	delete m_process;
+	m_process = 0;
 	if (m_result == true) {
 		const uint newSize = QFileInfo(m_filePath).size();
 		const uint decrease = 100-100*newSize/origSize;

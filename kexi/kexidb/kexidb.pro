@@ -41,6 +41,7 @@ parser/sqlparser.cpp \
 parser/sqlscanner.cpp \
 expression.cpp \
 keywords.cpp \
-preparedstatement.cpp
+preparedstatement.cpp \
+alter.cpp
 
 #HEADERS =

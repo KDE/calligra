@@ -285,6 +285,13 @@ static bool updatePropertiesVisibility(KexiDB::Field::Type fieldType, KoProperty
 		changed = true;
 	}
 #endif
+	prop = &set["visibleDecimalPlaces"];
+	visible = KexiDB::supportsVisibleDecimalPlacesProperty(fieldType);
+	if (prop->isVisible()!=visible) {
+		prop->setVisible( visible );
+		changed = true;
+	}
+
 	prop = &set["unique"];
 	visible = fieldType != KexiDB::Field::BLOB;
 	if (prop->isVisible()!=visible) {
@@ -395,6 +402,10 @@ KexiAlterTableDialog::createPropertySet( int row, KexiDB::Field *field, bool new
 #ifdef KEXI_NO_UNFINISHED
 	prop->setVisible(false);
 #endif
+	set->addProperty( prop 
+		= new KoProperty::Property("visibleDecimalPlaces", field->visibleDecimalPlaces(), i18n("Visible Decimal Places")));
+	prop->setOption("min", -1);
+	prop->setOption("minValueText", i18n("Auto Decimal Places","Auto"));
 
 //! @todo set reasonable default for column width
 	set->addProperty( prop 
@@ -1039,6 +1050,8 @@ tristate KexiAlterTableDialog::buildSchema(KexiDB::TableSchema &schema)
 				set["description"].value().toString(),
 				set["width"].value().toInt()
 			);
+			if (KexiDB::supportsVisibleDecimalPlacesProperty(f->type()) && set.contains("visibleDecimalPlaces"))
+				f->setVisibleDecimalPlaces(set["visibleDecimalPlaces"].value().toInt());
 			schema.addField(f);
 		}
 	}
