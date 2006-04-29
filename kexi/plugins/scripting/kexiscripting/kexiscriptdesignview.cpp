@@ -198,7 +198,9 @@ void KexiScriptDesignView::slotPropertyChanged(KoProperty::Set& /*set*/, KoPrope
         // We assume Kross and the HighlightingInterface are using same
         // names for the support languages...
         d->editor->setHighlightMode( language );
-        updateProperties();
+        // Update the properties. We need to call it delayed cause
+        // else we may crash whyever...
+        QTimer::singleShot(50, this, SLOT( updateProperties() ));
     }
     else {
         bool ok = d->scriptaction->setOption( property.name(), property.value() );
