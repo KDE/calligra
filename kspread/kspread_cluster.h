@@ -307,8 +307,7 @@ public:
     void setAutoDelete( bool );
     bool autoDelete() const;
 
-    RowFormat* first() const { return m_first; }
-    RowFormat* next( int row ) const;
+    RowFormat* first()const { return m_first; }
 
 private:
     RowFormat*** m_cluster;

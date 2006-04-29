@@ -1309,8 +1309,8 @@ protected:
 
     QString saveOasisSheetStyleName( KoGenStyles &mainStyles );
     void saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles, int maxCols, int maxRows, GenValidationStyles &valStyle );
-    void saveOasisCells( KoXmlWriter& xmlWriter, KoGenStyles& mainStyles,
-                         int row, GenValidationStyles& valStyle );
+    void saveOasisCells( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles,
+                         int row, int maxCols, GenValidationStyles &valStyle );
     void convertPart( const QString & part, KoXmlWriter & writer ) const;
     void addText( const QString & text, KoXmlWriter & writer ) const;
 

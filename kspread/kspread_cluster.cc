@@ -1447,35 +1447,3 @@ bool RowCluster::autoDelete() const
 {
     return m_autoDelete;
 }
-
-RowFormat* RowCluster::next( int row ) const
-{
-  if ( row >= KSPREAD_CLUSTER_MAX || row < 0 )
-  {
-    kDebug(36001) << "RowCluster::removeRow: invalid row value (row: "
-        << row << ")" << endl;
-    return false;
-  }
-
-  int cx = (row + 1) / KSPREAD_CLUSTER_LEVEL2;
-  int dx = (row + 1) % KSPREAD_CLUSTER_LEVEL2;
-
-  while ( cx < KSPREAD_CLUSTER_LEVEL1 )
-  {
-    if ( m_cluster[ cx ] )
-    {
-      while ( dx < KSPREAD_CLUSTER_LEVEL2 )
-      {
-
-        if ( m_cluster[ cx ][  dx ] )
-        {
-          return m_cluster[ cx ][ dx ];
-        }
-        ++dx;
-      }
-    }
-    ++cx;
-    dx = 0;
-  }
-  return 0;
-}

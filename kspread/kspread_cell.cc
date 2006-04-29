@@ -5360,20 +5360,26 @@ bool Cell::saveOasis( KoXmlWriter& xmlwriter, KoGenStyles &mainStyles,
     // group empty cells with the same style
     if ( isEmpty() && !format()->hasProperty( Style::SComment ) && !isPartOfMerged() && !doesMergeCells() )
     {
+      bool refCellIsDefault = isDefault();
       int j = column + 1;
       Cell *nextCell = format()->sheet()->getNextCellRight( column, row );
       while ( nextCell )
       {
+        // if
+        //   the next cell is not the adjacent one
+        // or
+        //   the next cell is not empty
         if ( nextCell->column() != j || !nextCell->isEmpty() )
         {
-          if ( isDefault() )
+          if ( refCellIsDefault )
           {
             // if the origin cell was a default cell,
             // we count the default cells
             repeated = nextCell->column() - j + 1;
           }
           // otherwise we just stop here to process the adjacent
-          // default cell in the next iteration of the outer loop
+          // cell in the next iteration of the outer loop
+          // (in Sheet::saveOasisCells)
           break;
         }
 
@@ -5387,6 +5393,7 @@ bool Cell::saveOasis( KoXmlWriter& xmlwriter, KoGenStyles &mainStyles,
           break;
         }
         ++repeated;
+        // get the next cell and set the index to the adjacent cell
         nextCell = format()->sheet()->getNextCellRight( j++, row );
       }
       kDebug() << "Cell::saveOasis: empty cell in column " << column << " "
