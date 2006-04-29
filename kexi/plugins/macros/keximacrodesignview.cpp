@@ -30,6 +30,7 @@
 #include <core/kexipartmanager.h>
 #include <core/kexipartinfo.h>
 
+#include <widget/kexidatatable.h>
 #include <widget/tableview/kexitableview.h>
 #include <widget/tableview/kexitableviewdata.h>
 #include <widget/tableview/kexitableitem.h>
@@ -82,10 +83,15 @@ class KexiMacroDesignView::Private
 	public:
 
 		/**
-		* The \a KexiMacroTableView used to display the actions
+		* The view used to display the actions
 		* a \a Macro has.
 		*/
-		KexiMacroTableView* tableview;
+		KexiDataTable* datatable;
+
+		/**
+		* For convenience. The table view (datatable->tableView()).
+		*/
+		KexiTableView* tableview;
 
 		/**
 		* The \a KexiTableViewData data-model for the
@@ -184,10 +190,12 @@ KexiMacroDesignView::KexiMacroDesignView(KexiMainWindow *mainwin, QWidget *paren
 
 	// Create the tableview.
 	QHBoxLayout* layout = new QHBoxLayout(this);
-	d->tableview = new KexiMacroTableView(d->tabledata, this);
+	d->datatable = new KexiDataTable(mainWin(), this, "Macro KexiDataTable", false /*not db aware*/);
+	layout->addWidget(d->datatable);
+	d->tableview = d->datatable->tableView();
+
 	d->tableview->setSpreadSheetMode();
 	d->tableview->setColumnStretchEnabled( true, COLUMN_ID_COMMENT ); //last column occupies the rest of the area
-	layout->addWidget(d->tableview);
 
 	// Create the propertyset.
 	d->propertyset = new KexiDataAwarePropertySet(this, d->tableview);
