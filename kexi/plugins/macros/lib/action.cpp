@@ -147,7 +147,7 @@ void Action::setBlocking(bool blocking)
 
 Variable::Ptr Action::variable(const QString& name) const
 {
-	return d->varmap[name];
+	return d->varmap.contains(name) ? d->varmap[name] : Variable::Ptr(0);
 }
 
 Variable::Map Action::variables() const

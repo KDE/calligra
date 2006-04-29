@@ -98,7 +98,7 @@ Manager::~Manager()
 	delete d;
 }
 
-KXMLGUIClient* const Manager::guiClient() const
+KXMLGUIClient* Manager::guiClient() const
 {
 	return d->xmlguiclient;
 }

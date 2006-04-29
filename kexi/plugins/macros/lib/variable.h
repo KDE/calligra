@@ -187,29 +187,6 @@ namespace KoMacro {
 			Private* const d;
 	};
 
-	// Forward-declaration.
-	class Action;
-
-	/**
-	* Generic template class for classes that implement @a Variable .
-	*/
-	template<class VARIABLEIMPL>
-	class GenericVariable : public KoMacro::Variable
-	{
-		protected:
-			//typedef VARIABLEIMPL impl;
-			KSharedPtr<Action> m_action;
-		public:
-			GenericVariable(const QString& name, const QString& caption, KSharedPtr<KoMacro::Action> action)
-				: KoMacro::Variable()
-				, m_action(action)
-			{
-				setName(name);
-				setText(caption);
-			}
-			virtual ~GenericVariable() {}
-	};
-
 }
 
 #endif

@@ -18,40 +18,60 @@
  * Boston, MA 02110-1301, USA.
  ***************************************************************************/
 
-#include "objectvariable.h"
+#ifndef KEXIMACRO_EXECUTEACTION_H
+#define KEXIMACRO_EXECUTEACTION_H
 
-#include <kexi_export.h>
-#include <core/kexi.h>
-#include <core/kexiproject.h>
-#include <core/kexipartmanager.h>
-#include <core/kexipartinfo.h>
+//#include "../lib/komacro_export.h"
+#include "../lib/action.h"
+#include "../lib/variable.h"
 
-#include <klocale.h>
-#include <kdebug.h>
+#include "kexiaction.h"
 
-using namespace KexiMacro;
+class KexiMainWindow;
 
-ObjectVariable::ObjectVariable(KoMacro::Action::Ptr action, const QString& objectname)
-	: KoMacro::GenericVariable<ObjectVariable>("object", i18n("Object"), action)
-{
-	KexiPart::PartInfoList* parts = Kexi::partManager().partInfoList();
-	for(KexiPart::PartInfoListIterator it(*parts); it.current(); ++it) {
-		KexiPart::Info* info = it.current();
-		if(info->isVisibleInNavigator()) {
-			const QString name = info->objectName(); //info->groupName();
-			children().append( KoMacro::Variable::Ptr(new KoMacro::Variable(name)) );
-		}
-	}
-
-	if(! objectname.isNull())
-		setVariant( objectname );
-	else if(children().count() > 0)
-		setVariant( children()[0]->variant() );
-	else
-		setVariant( QString::null );
+namespace KoMacro {
+	class Context;
 }
 
-ObjectVariable::~ObjectVariable()
-{
+namespace KexiMacro {
+
+	/**
+	* The ExecuteAction class implements a @a KoMacro::Action
+	* to provide functionality to execute an object like
+	* e.g. a script or a macro.
+	*/
+	class ExecuteAction : public KexiAction
+	{
+			Q_OBJECT
+		public:
+
+			/**
+			* Constructor.
+			*
+			* @param mainwin Kexi's main window implementation.
+			*/
+			ExecuteAction();
+			
+			/**
+			* Destructor.
+			*/
+			virtual ~ExecuteAction();
+
+			/**
+			* This function is called, when a @a Variable provided by this
+			* @a OpenObject is changed.
+			*/
+			virtual KoMacro::Variable::List notifyUpdated(const QString& variablename, KoMacro::Variable::Map variable);
+
+		public slots:
+
+			/**
+			* Called if the @a Action should be executed within the
+			* defined @p context .
+			*/
+			virtual void activate(KSharedPtr<KoMacro::Context> context);
+
+	};
 }
 
+#endif

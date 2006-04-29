@@ -18,12 +18,14 @@
  * Boston, MA 02110-1301, USA.
  ***************************************************************************/
 
-#ifndef KEXIMACRO_OPENOBJECT_H
-#define KEXIMACRO_OPENOBJECT_H
+#ifndef KEXIMACRO_OPENACTION_H
+#define KEXIMACRO_OPENACTION_H
 
 //#include "../lib/komacro_export.h"
 #include "../lib/action.h"
 #include "../lib/variable.h"
+
+#include "kexiaction.h"
 
 class KexiMainWindow;
 
@@ -34,12 +36,13 @@ namespace KoMacro {
 namespace KexiMacro {
 
 	/**
-	* The OpenObject class implements a @a KoMacro::Action
+	* The OpenAction class implements a @a KoMacro::Action
 	* to provide functionality to open any kind of Kexi
 	* object (e.g. table, query, form, script, ...).
 	*/
-	class OpenObject : public KoMacro::GenericAction<OpenObject>
+	class OpenAction : public KexiAction
 	{
+			Q_OBJECT
 		public:
 
 			/**
@@ -47,16 +50,16 @@ namespace KexiMacro {
 			*
 			* @param mainwin Kexi's main window implementation.
 			*/
-			explicit OpenObject(KexiMainWindow* const mainwin);
+			OpenAction();
 			
 			/**
 			* Destructor.
 			*/
-			virtual ~OpenObject();
+			virtual ~OpenAction();
 
 			/**
 			* This function is called, when a @a Variable provided by this
-			* @a OpenObject is changed.
+			* @a OpenAction is changed.
 			*/
 			virtual KoMacro::Variable::List notifyUpdated(const QString& variablename, KoMacro::Variable::Map variable);
 
@@ -68,11 +71,6 @@ namespace KexiMacro {
 			*/
 			virtual void activate(KSharedPtr<KoMacro::Context> context);
 
-		private:
-			/// @internal d-pointer class.
-			class Private;
-			/// @internal d-pointer instance.
-			Private* const d;
 	};
 }
 

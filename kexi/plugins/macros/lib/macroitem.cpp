@@ -88,7 +88,7 @@ Variable::Map MacroItem::variables() const
 QStringList MacroItem::setVariable(const QString& name, Variable::Ptr variable)
 {
 	// First try to find the matching in the action defined variable.
-	Variable* v = d->action->variable(name).data();
+	Variable* v = d->action ? d->action->variable(name).data() : 0;
 	if(! v) {
 		/*
 		// The name isn't known, try to fallback to the name the variable defines.

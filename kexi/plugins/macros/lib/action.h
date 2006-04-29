@@ -190,31 +190,6 @@ namespace KoMacro {
 			Private* const d;
 	};
 
-	/**
-	* Template class for classes that implement @a Action to
-	* be published.
-	*/
-	template<class ACTIONIMPL>
-	class GenericAction : public Action
-	{
-		public:
-			//typedef ACTIONIMPL action_type;
-
-			/**
-			* Constructor.
-			*/
-			GenericAction(const QString& name, const QString& text)
-				: Action(name)
-			{
-				// Set the caption this action has.
-				setText(text);
-
-				// Publish this action.
-				Manager::self()->publishAction( Action::Ptr(this) );
-			}
-
-	};
-
 }
 
 #endif

@@ -110,7 +110,7 @@ namespace KoMacro {
 			* @return the KXMLGUIClient instance this @a Manager is
 			* associated with.
 			*/
-			KXMLGUIClient* const guiClient() const;
+			KXMLGUIClient* guiClient() const;
 
 			/**
 			* \return true if we carry a \a Macro with the

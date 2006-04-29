@@ -24,6 +24,15 @@
 #include "../lib/action.h"
 #include "../lib/variable.h"
 
+#include "kexivariable.h"
+
+#include <kexi_export.h>
+#include <core/kexi.h>
+#include <core/kexiproject.h>
+#include <core/kexipartmanager.h>
+#include <core/kexipartinfo.h>
+
+#include <klocale.h>
 #include <kdebug.h>
 
 namespace KexiMacro {
@@ -33,7 +42,8 @@ namespace KexiMacro {
 	* provide a variable list of Kexi-objects. Those Kexi-objects
 	* are KexiPart's like e.g. table, query, form or script.
 	*/
-	class ObjectVariable : public KoMacro::GenericVariable<ObjectVariable>
+	template<class ACTIONIMPL>
+	class ObjectVariable : public KexiVariable<ACTIONIMPL>
 	{
 		public:
 
@@ -43,12 +53,25 @@ namespace KexiMacro {
 			* @param action The @a KoMacro::Action instance
 			* this @a ObjectVariable is child of.
 			*/
-			explicit ObjectVariable(KoMacro::Action::Ptr action, const QString& objectname = QString::null);
+			ObjectVariable(ACTIONIMPL* actionimpl, const QString& objectname = QString::null)
+				: KexiVariable<ACTIONIMPL>(actionimpl, "object", i18n("Object"))
+			{
+				KexiPart::PartInfoList* parts = Kexi::partManager().partInfoList();
+				for(KexiPart::PartInfoListIterator it(*parts); it.current(); ++it) {
+					KexiPart::Info* info = it.current();
+					if(info->isVisibleInNavigator()) {
+						const QString name = info->objectName(); //info->groupName();
+						this->children().append( KoMacro::Variable::Ptr(new KoMacro::Variable(name)) );
+					}
+				}
 
-			/**
-			* Destructor.
-			*/
-			virtual ~ObjectVariable();
+				if(! objectname.isNull())
+					this->setVariant( objectname );
+				else if(this->children().count() > 0)
+					this->setVariant( this->children()[0]->variant() );
+				else
+					this->setVariant( QString::null );
+			}
 
 	};
 

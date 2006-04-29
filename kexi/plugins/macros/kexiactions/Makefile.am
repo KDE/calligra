@@ -3,8 +3,9 @@ include $(top_srcdir)/kexi/Makefile.global
 noinst_LTLIBRARIES = libkeximacroactions.la
 
 libkeximacroactions_la_SOURCES = \
-    objectvariable.cpp \
-    openobject.cpp
+    openaction.cpp \
+    executeaction.cpp \
+    messageaction.cpp
 
 libkeximacroactions_la_CXXFLAGS = $(USE_EXCEPTIONS)
 

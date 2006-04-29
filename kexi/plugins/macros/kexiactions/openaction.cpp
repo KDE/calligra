@@ -18,7 +18,7 @@
  * Boston, MA 02110-1301, USA.
  ***************************************************************************/
 
-#include "openobject.h"
+#include "openaction.h"
 #include "objectvariable.h"
 
 #include "../lib/macroitem.h"
@@ -39,30 +39,16 @@ using namespace KexiMacro;
 namespace KexiMacro {
 
 	/**
-	* @internal d-pointer class to be more flexible on future extension of the
-	* functionality without to much risk to break the binary compatibility.
-	*/
-	class OpenObject::Private
-	{
-		public:
-			KexiMainWindow* const mainwin;
-			Private(KexiMainWindow* const mainwin)
-				: mainwin(mainwin)
-			{
-			}
-	};
-
-	/**
 	* The ViewVariable class provide a list of viewmodes supported
 	* by a KexiPart::Part as @a KoMacro::Variable .
 	*/
-	class ViewVariable : public KoMacro::GenericVariable<ViewVariable>
+	template<class ACTIONIMPL>
+	class ViewVariable : public KexiVariable<ACTIONIMPL>
 	{
 		public:
-			explicit ViewVariable(KexiMainWindow* const mainwin, KoMacro::Action::Ptr action, const QString& objectname = QString::null, const QString& viewname = QString::null)
-				: KoMacro::GenericVariable<ViewVariable>("view", i18n("View"), action)
+			ViewVariable(ACTIONIMPL* actionimpl, const QString& objectname = QString::null, const QString& viewname = QString::null)
+				: KexiVariable<ACTIONIMPL>(actionimpl, "view", i18n("View"))
 			{
-				Q_UNUSED(mainwin);
 				QStringList namelist;
 				KexiPart::Part* part = Kexi::partManager().partForMimeType( QString("kexi/%1").arg(objectname) );
 				if(part) {
@@ -74,12 +60,12 @@ namespace KexiMacro {
 					if(viewmodes & Kexi::TextViewMode)
 						namelist << "text";
 					for(QStringList::Iterator it = namelist.begin(); it != namelist.end(); ++it)
-						children().append( KoMacro::Variable::Ptr(new KoMacro::Variable(*it)) );
+						this->children().append( KoMacro::Variable::Ptr(new KoMacro::Variable(*it)) );
 				}
 				QString n = viewname;
 				if(n.isNull() || ! namelist.contains(n))
 					n = namelist.count() > 0 ? namelist[0] : "";
-				setVariant(n);
+				this->setVariant(n);
 			}
 	};
 
@@ -87,13 +73,14 @@ namespace KexiMacro {
 	* The ViewVariable class provide a list of KexiPart::PartItem's
 	* supported by a KexiPart::Part as @a KoMacro::Variable .
 	*/
-	class NameVariable : public KoMacro::GenericVariable<NameVariable>
+	template<class ACTIONIMPL>
+	class NameVariable : public KexiVariable<ACTIONIMPL>
 	{
 		public:
-			explicit NameVariable(KexiMainWindow* const mainwin, KoMacro::Action::Ptr action, const QString& objectname = QString::null, const QString& name = QString::null)
-				: KoMacro::GenericVariable<NameVariable>("name", i18n("Name"), action)
+			NameVariable(ACTIONIMPL* actionimpl, const QString& objectname = QString::null, const QString& name = QString::null)
+				: KexiVariable<ACTIONIMPL>(actionimpl, "name", i18n("Name"))
 			{
-				if(! mainwin->project()) {
+				if(! actionimpl->mainWin()->project()) {
 					kdWarning() << "KexiMacro::NameVariable() No project loaded." << endl;
 					return;
 				}
@@ -102,12 +89,12 @@ namespace KexiMacro {
 				KexiPart::Info* info = Kexi::partManager().infoForMimeType( QString("kexi/%1").arg(objectname) );
 				if(info) {
 					if(info->isVisibleInNavigator()) {
-						KexiPart::ItemDict* items = mainwin->project()->items(info);
+						KexiPart::ItemDict* items = actionimpl->mainWin()->project()->items(info);
 						if(items) {
 							for(KexiPart::ItemDictIterator item_it = *items; item_it.current(); ++item_it) {
 								const QString n = item_it.current()->name();
 								namelist << n;
-								children().append( KoMacro::Variable::Ptr(new KoMacro::Variable(n)) );
+								this->children().append( KoMacro::Variable::Ptr(new KoMacro::Variable(n)) );
 								kdDebug() << "KexiMacro::NameVariable() infoname=" << info->objectName() << " name=" << n << endl;
 							}
 						}
@@ -116,12 +103,12 @@ namespace KexiMacro {
 
 				if(namelist.count() <= 0) {
 					namelist << "";
-					children().append( KoMacro::Variable::Ptr(new KoMacro::Variable("")) );
+					this->children().append( KoMacro::Variable::Ptr(new KoMacro::Variable("")) );
 				}
 
 				QString n = (name.isNull() || ! namelist.contains(name)) ? namelist[0] : name;
-				kdDebug() << "KexiMacro::NameVariable() name=" << n << " childcount=" << children().count() << endl;
-				setVariant(n);
+				kdDebug() << "KexiMacro::NameVariable() name=" << n << " childcount=" << this->children().count() << endl;
+				this->setVariant(n);
 			}
 
 			virtual ~NameVariable() {}
@@ -130,53 +117,50 @@ namespace KexiMacro {
 
 }
 
-OpenObject::OpenObject(KexiMainWindow* const mainwin)
-	: KoMacro::GenericAction<OpenObject>("openobject", i18n("Open Object"))
-	, d( new Private(mainwin) )
+OpenAction::OpenAction()
+	: KexiAction("openaction", i18n("Open"))
 {
-	ObjectVariable* objvar = new ObjectVariable(this);
+	KoMacro::Variable* objvar = new ObjectVariable<OpenAction>(this);
 	setVariable(KoMacro::Variable::Ptr( objvar ));
 
-	setVariable(KoMacro::Variable::Ptr( new ViewVariable(d->mainwin, this, objvar->variant().toString()) ));
-
-	setVariable(KoMacro::Variable::Ptr( new NameVariable(d->mainwin, this, objvar->variant().toString()) ));
+	setVariable(KoMacro::Variable::Ptr( new ViewVariable<OpenAction>(this, objvar->variant().toString()) ));
+	setVariable(KoMacro::Variable::Ptr( new NameVariable<OpenAction>(this, objvar->variant().toString()) ));
 }
 
-OpenObject::~OpenObject() 
+OpenAction::~OpenAction()
 {
-	delete d;
 }
 
-KoMacro::Variable::List OpenObject::notifyUpdated(const QString& variablename, KoMacro::Variable::Map variablemap)
+KoMacro::Variable::List OpenAction::notifyUpdated(const QString& variablename, KoMacro::Variable::Map variablemap)
 {
-	//kdDebug()<<"OpenObject::notifyUpdated() name="<<variable->name()<<" value="<< variable->variant().toString() <<endl;
+	//kdDebug()<<"OpenAction::notifyUpdated() name="<<variable->name()<<" value="<< variable->variant().toString() <<endl;
 
 	KoMacro::Variable::List list;
 	if(variablename == "object") {
 		const QString objectname = variablemap["object"]->variant().toString(); // e.g. "table" or "query"
 
 		const QString name = variablemap.contains("name") ? variablemap["name"]->variant().toString() : QString::null;
-		list.append( KoMacro::Variable::Ptr(new NameVariable(d->mainwin, this, objectname, name)) );
+		list.append( KoMacro::Variable::Ptr(new NameVariable<OpenAction>(this, objectname, name)) );
 
 		const QString viewname = variablemap.contains("view") ? variablemap["view"]->variant().toString() : QString::null;
-		list.append( KoMacro::Variable::Ptr(new ViewVariable(d->mainwin, this, objectname, viewname)) );
+		list.append( KoMacro::Variable::Ptr(new ViewVariable<OpenAction>(this, objectname, viewname)) );
 	}
 
 	return list;
 }
 
-void OpenObject::activate(KoMacro::Context::Ptr context)
+void OpenAction::activate(KoMacro::Context::Ptr context)
 {
-	if(! d->mainwin->project()) {
-		kdWarning() << "OpenObject::activate(KoMacro::Context::Ptr) Invalid project" << endl;
+	if(! mainWin()->project()) {
+		kdWarning() << "OpenAction::activate(KoMacro::Context::Ptr) Invalid project" << endl;
 		return;
 	}
 
 	const QString objectname = context->variable("object")->variant().toString();
 	const QString name = context->variable("name")->variant().toString();
-	KexiPart::Item* item = d->mainwin->project()->itemForMimeType( QString("kexi/%1").arg(objectname).latin1(), name );
+	KexiPart::Item* item = mainWin()->project()->itemForMimeType( QString("kexi/%1").arg(objectname).latin1(), name );
 	if(! item) {
-		kdWarning() << "OpenObject::activate(KoMacro::Context::Ptr) Invalid item objectname=" << objectname << " name=" << name << endl;
+		kdWarning() << "OpenAction::activate(KoMacro::Context::Ptr) Invalid item objectname=" << objectname << " name=" << name << endl;
 		return;
 	}
 
@@ -190,15 +174,17 @@ void OpenObject::activate(KoMacro::Context::Ptr context)
 	else if(view == "text")
 		viewmode = Kexi::TextViewMode;
 	else {
-		kdWarning() << "OpenObject::activate(KoMacro::Context::Ptr) Invalid viewmode=" << view << endl;
+		kdWarning() << "OpenAction::activate(KoMacro::Context::Ptr) Invalid viewmode=" << view << endl;
 		return;
 	}
 
 	// Try to open the object now.
 	bool openingCancelled;
-	if(! d->mainwin->openObject(item, viewmode, openingCancelled)) {
+	if(! mainWin()->openObject(item, viewmode, openingCancelled)) {
 		if(! openingCancelled) {
-			KMessageBox::error(d->mainwin, i18n("Object of type \"%1\" with name \"%2\" could not be opened.").arg(objectname).arg(name));
+			KMessageBox::error(mainWin(), i18n("Object of type \"%1\" with name \"%2\" could not be opened.").arg(objectname).arg(name));
 		}
 	}
 }
+
+//#include "openaction.moc"

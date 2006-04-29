@@ -37,7 +37,9 @@
 #include "lib/macro.h"
 #include "lib/action.h"
 
-#include "kexiactions/openobject.h"
+#include "kexiactions/openaction.h"
+#include "kexiactions/executeaction.h"
+#include "kexiactions/messageaction.h"
 
 /**
 * \internal d-pointer class to be more flexible on future extension of the
@@ -115,38 +117,14 @@ bool KexiMacroPart::execute(KexiPart::Item* item)
 	return true;
 }
 
-
-
-//################## testcases
-class KexiTestAction : public KoMacro::GenericAction<KexiTestAction> {
-	private:
-		KexiMainWindow* m_mainwin;
-	public:
-		KexiTestAction(KexiMainWindow* mainwin)
-			: KoMacro::GenericAction<KexiTestAction>("showmessage", i18n("Show Message"))
-			, m_mainwin(mainwin)
-		{
-			setVariable("caption", i18n("Caption"), QString("my caption"));
-			setVariable("message", i18n("Message"), QString("my message"));
-		}
-		virtual void activate(KoMacro::Context::Ptr context)
-		{
-			kdDebug() << "KexiTestAction::activate(Context::Ptr)" << endl;
-			const QString caption = context->variable("caption")->variant().toString();
-			const QString message = context->variable("message")->variant().toString();
-			KMessageBox::information(m_mainwin, message, caption);
-		}
-};
-
-
-
 void KexiMacroPart::initPartActions()
 {
 	kdDebug() << "KexiMacroPart::initPartActions()" << endl;
 
 	::KoMacro::Manager::init(m_mainWin);
-	new KexiMacro::OpenObject(m_mainWin);
-	new KexiTestAction(m_mainWin);
+	new KexiMacro::OpenAction;
+	new KexiMacro::ExecuteAction;
+	new KexiMacro::MessageAction;
 }
 
 void KexiMacroPart::initInstanceActions()
