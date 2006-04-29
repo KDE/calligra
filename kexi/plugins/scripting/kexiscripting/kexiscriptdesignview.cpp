@@ -100,6 +100,7 @@ KexiScriptDesignView::KexiScriptDesignView(KexiMainWindow *mainWin, QWidget *par
 
 KexiScriptDesignView::~KexiScriptDesignView()
 {
+    delete d->properties;
     delete d;
 }
 
