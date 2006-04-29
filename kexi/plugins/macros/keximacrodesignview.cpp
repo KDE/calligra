@@ -115,6 +115,11 @@ class KexiMacroDesignView::Private
 		{
 		}
 
+		~Private()
+		{
+			delete propertyset;
+		}
+
 };
 
 KexiMacroDesignView::KexiMacroDesignView(KexiMainWindow *mainwin, QWidget *parent, ::KoMacro::Macro* const macro)
