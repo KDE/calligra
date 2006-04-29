@@ -57,6 +57,9 @@ class KexiScriptDesignViewPrivate
         /// The \a KoProperty::Set used in the propertyeditor.
         KoProperty::Set* properties;
 
+        /// Boolean flag to avoid infinite recursion.
+        bool updatesProperties;
+
         /// Used to display statusmessages.
         KTextBrowser* statusbrowser;
 };
@@ -66,6 +69,7 @@ KexiScriptDesignView::KexiScriptDesignView(KexiMainWindow *mainWin, QWidget *par
     , d( new KexiScriptDesignViewPrivate() )
 {
     d->scriptaction = scriptaction;
+    d->updatesProperties = false;
 
     QSplitter* splitter = new QSplitter(this);
     splitter->setOrientation(Vertical);
@@ -91,6 +95,8 @@ KexiScriptDesignView::KexiScriptDesignView(KexiMainWindow *mainWin, QWidget *par
     loadData();
 
     d->properties = new KoProperty::Set(this, "KexiScripting");
+    connect(d->properties, SIGNAL( propertyChanged(KoProperty::Set&, KoProperty::Property&) ),
+            this, SLOT( slotPropertyChanged(KoProperty::Set&, KoProperty::Property&) ));
 
     // To schedule the initialize fixes a crasher in Kate.
     QTimer::singleShot(50, this, SLOT( initialize() ));
@@ -115,6 +121,10 @@ void KexiScriptDesignView::initialize()
 
 void KexiScriptDesignView::updateProperties()
 {
+    if(d->updatesProperties)
+        return;
+    d->updatesProperties = true;
+
     Kross::Api::Manager* manager = Kross::Api::Manager::scriptManager();
 
     QString interpretername = d->scriptaction->getInterpreterName();
@@ -135,9 +145,6 @@ void KexiScriptDesignView::updateProperties()
     }
 
     if(info) {
-        disconnect(d->properties, SIGNAL( propertyChanged(KoProperty::Set&, KoProperty::Property&) ),
-                   this, SLOT( slotPropertyChanged(KoProperty::Set&, KoProperty::Property&) ));
-
         d->properties->clear();
 
         QStringList interpreters = manager->getInterpreters();
@@ -165,13 +172,11 @@ void KexiScriptDesignView::updateProperties()
             );
             d->properties->addProperty(prop);
         }
-
-        connect(d->properties, SIGNAL( propertyChanged(KoProperty::Set&, KoProperty::Property&) ),
-                this, SLOT( slotPropertyChanged(KoProperty::Set&, KoProperty::Property&) ));
     }
 
     //propertySetSwitched();
     propertySetReloaded(true);
+    d->updatesProperties = false;
 }
 
 KoProperty::Set* KexiScriptDesignView::propertySet()
@@ -191,10 +196,7 @@ void KexiScriptDesignView::slotPropertyChanged(KoProperty::Set& /*set*/, KoPrope
         // We assume Kross and the HighlightingInterface are using same
         // names for the support languages...
         d->editor->setHighlightMode( language );
-
-        // Update the properties. We need to call it delayed cause
-        // else we may crash whyever...
-        QTimer::singleShot(150, this, SLOT( updateProperties() ));
+        updateProperties();
     }
     else {
         bool ok = d->scriptaction->setOption( property.name(), property.value() );
