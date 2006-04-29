@@ -44,7 +44,7 @@ NOT YET IMPLEMENTED: -alwaysShowDetailsInMsgBoxes [boolean]
 # In the future the window will be probably used for debugging other features
 # like scripts or macros. This option is useful for Kexi Developers.
 # Only available when KEXI_DEBUG_GUI compile time option is defined.
--showKexiDBDebuger [boolean] (default: false)
+-showKexiDBDebugger [boolean] (default: false)
 
 Group: Recent Dirs
 -lastVisitedImagePath [stringlist] # used for open/save dialogs for image files
