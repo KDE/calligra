@@ -62,7 +62,7 @@ extern "C" int kdemain(int argc, char *argv[])
 #ifdef KEXI_DEBUG_GUI
 	QWidget* debugWindow = 0;
 	app.config()->setGroup("General");
-	if (app.config()->readBoolEntry("showKexiDBDebuger", false))
+	if (app.config()->readBoolEntry("showKexiDBDebugger", false))
 		debugWindow = KexiDB::createDebugWindow(0);
 #endif
 
