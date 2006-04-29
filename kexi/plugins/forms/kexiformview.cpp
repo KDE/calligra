@@ -163,11 +163,11 @@ KexiFormView::KexiFormView(KexiMainWindow *mainWin, QWidget *parent,
 
 KexiFormView::~KexiFormView()
 {
-	deleteQuery();
 	if (m_cursor) {
 		KexiDB::Connection *conn = parentDialog()->mainWin()->project()->dbConnection();
 		conn->deleteCursor(m_cursor);
 	}
+	deleteQuery();
 
 	// Important: form window is closed.
 	// Set property set to 0 because there is *only one* instance of a property set class
