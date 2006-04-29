@@ -7307,14 +7307,14 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
     int i = 1;
     while ( i <= maxCols )
     {
-        ColumnFormat * column = columnFormat( i );
-        KoGenStyle styleCurrent( Doc::STYLE_COLUMN, "table-column" );
-        styleCurrent.addPropertyPt( "style:column-width", column->dblWidth() );/*FIXME pt and not mm */
-        styleCurrent.addProperty( "fo:break-before", "auto" );/*FIXME auto or not ?*/
+        ColumnFormat* column = columnFormat( i );
+        KoGenStyle currentColumnStyle( Doc::STYLE_COLUMN, "table-column" );
+        currentColumnStyle.addPropertyPt( "style:column-width", column->dblWidth() );/*FIXME pt and not mm */
+        currentColumnStyle.addProperty( "fo:break-before", "auto" );/*FIXME auto or not ?*/
 
         //style default layout for column
-        KoGenStyle styleColCurrent; // the type is determined in saveOasisCellStyle
-        QString nameDefaultCellStyle = column->saveOasisCellStyle( styleColCurrent, mainStyles );
+        KoGenStyle currentDefaultCellStyle; // the type is determined in saveOasisCellStyle
+        QString currentDefaultCellStyleName = column->saveOasisCellStyle( currentDefaultCellStyle, mainStyles );
 
 
         bool hide = column->isHide();
@@ -7322,28 +7322,28 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
         int repeated = 1;
         while ( j <= maxCols )
         {
-            ColumnFormat *nextColumn = columnFormat( j );
-            KoGenStyle nextStyle( Doc::STYLE_COLUMN, "table-column" );
-            nextStyle.addPropertyPt( "style:column-width", nextColumn->dblWidth() );/*FIXME pt and not mm */
-            nextStyle.addProperty( "fo:break-before", "auto" );/*FIXME auto or not ?*/
+            ColumnFormat* nextColumn = columnFormat( j );
+            KoGenStyle nextColumnStyle( Doc::STYLE_COLUMN, "table-column" );
+            nextColumnStyle.addPropertyPt( "style:column-width", nextColumn->dblWidth() );/*FIXME pt and not mm */
+            nextColumnStyle.addProperty( "fo:break-before", "auto" );/*FIXME auto or not ?*/
 
-            KoGenStyle nextStyleCol; // the type is determined in saveOasisCellStyle
-            QString nextNameDefaultCellStyle = nextColumn->saveOasisCellStyle(nextStyleCol,mainStyles );
+            KoGenStyle nextDefaultCellStyle; // the type is determined in saveOasisCellStyle
+            QString nextDefaultCellStyleName = nextColumn->saveOasisCellStyle( nextDefaultCellStyle, mainStyles );
 
             //FIXME all the time repeate == 2
-            if ( ( nextStyle==styleCurrent ) && ( hide == nextColumn->isHide() ) && ( nextNameDefaultCellStyle == nameDefaultCellStyle ) )
+            if ( ( nextColumnStyle == currentColumnStyle ) && ( hide == nextColumn->isHide() ) && ( nextDefaultCellStyleName == currentDefaultCellStyleName ) )
                 ++repeated;
             else
                 break;
             ++j;
         }
         xmlWriter.startElement( "table:table-column" );
-        xmlWriter.addAttribute( "table:style-name", mainStyles.lookup( styleCurrent, "co" ) );
+        xmlWriter.addAttribute( "table:style-name", mainStyles.lookup( currentColumnStyle, "co" ) );
         //FIXME doesn't create format if it's default format
 
         // skip 'table:default-cell-style-name' attribute for the default style
-        if ( !styleColCurrent.isDefaultStyle() )
-            xmlWriter.addAttribute( "table:default-cell-style-name", nameDefaultCellStyle );
+        if ( !currentDefaultCellStyle.isDefaultStyle() )
+            xmlWriter.addAttribute( "table:default-cell-style-name", currentDefaultCellStyleName );
 
         if ( hide )
             xmlWriter.addAttribute( "table:visibility", "collapse" );
@@ -7356,13 +7356,13 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
 
     for ( i = 1; i <= maxRows; ++i )
     {
-        const RowFormat * row = rowFormat( i );
-        KoGenStyle rowStyle( Doc::STYLE_ROW, "table-row" );
-        rowStyle.addPropertyPt( "style:row-height", row->dblHeight());/*FIXME pt and not mm */
-        rowStyle.addProperty( "fo:break-before", "auto" );/*FIXME auto or not ?*/
+        const RowFormat* row = rowFormat( i );
+        KoGenStyle currentRowStyle( Doc::STYLE_ROW, "table-row" );
+        currentRowStyle.addPropertyPt( "style:row-height", row->dblHeight());/*FIXME pt and not mm */
+        currentRowStyle.addProperty( "fo:break-before", "auto" );/*FIXME auto or not ?*/
 
         xmlWriter.startElement( "table:table-row" );
-        xmlWriter.addAttribute( "table:style-name", mainStyles.lookup( rowStyle, "ro" ) );
+        xmlWriter.addAttribute( "table:style-name", mainStyles.lookup( currentRowStyle, "ro" ) );
         int repeated = 1;
         if ( !rowAsCell( i, maxCols ) )
         {
@@ -7371,12 +7371,12 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
             while ( j <= maxRows )
             {
                 const RowFormat *nextRow = rowFormat( j );
-                KoGenStyle nextStyle( Doc::STYLE_ROW, "table-row" );
-                nextStyle.addPropertyPt( "style:row-height", nextRow->dblHeight() );/*FIXME pt and not mm */
-                nextStyle.addProperty( "fo:break-before", "auto" );/*FIXME auto or not ?*/
+                KoGenStyle nextRowStyle( Doc::STYLE_ROW, "table-row" );
+                nextRowStyle.addPropertyPt( "style:row-height", nextRow->dblHeight() );/*FIXME pt and not mm */
+                nextRowStyle.addProperty( "fo:break-before", "auto" );/*FIXME auto or not ?*/
 
                 //FIXME all the time repeate == 2
-                if ( ( nextStyle==rowStyle ) && ( hide == nextRow->isHide() ) &&!rowAsCell( j, maxCols ) )
+                if ( ( nextRowStyle==currentRowStyle ) && ( hide == nextRow->isHide() ) &&!rowAsCell( j, maxCols ) )
                     ++repeated;
                 else
                     break;
