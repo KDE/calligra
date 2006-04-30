@@ -38,6 +38,7 @@
 #include <q3buttongroup.h>
 #include <qcombobox.h>
 #include <qlayout.h>
+#include <QGroupBox>
 //#include <qhgroupbox.h>
 //Added by qt3to4:
 #include <QCloseEvent>
@@ -97,7 +98,7 @@ void PaperLayout::initGeneralOptions( QWidget * tab, QVBoxLayout * vbox )
 {
     SheetPrint* print = m_pSheet->print();
 
-    Q3GroupBox *group = new Q3GroupBox( i18n("General Options"), tab );
+    QGroupBox *group = new QGroupBox( i18n("General Options"), tab );
     QGridLayout *l = new QGridLayout( group );
 
     pPrintGrid = new QCheckBox ( i18n("Print &grid"), group );
@@ -132,8 +133,7 @@ void PaperLayout::initRanges( QWidget * tab, QVBoxLayout * vbox )
 {
     SheetPrint* print = m_pSheet->print();
 
-    Q3GroupBox *rangeGroup = new Q3GroupBox( i18n("Ranges"), tab );
-    rangeGroup->setColumnLayout( 0, Qt::Vertical );
+    QGroupBox *rangeGroup = new QGroupBox( i18n("Ranges"), tab );
     vbox->addWidget( rangeGroup );
 
     QGridLayout *grid = new QGridLayout( rangeGroup );

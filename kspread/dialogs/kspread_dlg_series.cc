@@ -30,6 +30,7 @@
 #include "kspread_sheet.h"
 #include "kspread_view.h"
 
+#include <QGroupBox>
 #include <qlayout.h>
 //Added by qt3to4:
 #include <QHBoxLayout>
@@ -38,7 +39,6 @@
 #include <qlabel.h>
 
 #include <q3buttongroup.h>
-#include <q3groupbox.h>
 #include <kmessagebox.h>
 #include <knumvalidator.h>
 
@@ -84,7 +84,7 @@ SeriesDlg::SeriesDlg( View* parent, const char* name,const QPoint &_marker)
 
   linear->setChecked(true);
 
-  Q3GroupBox* gb = new Q3GroupBox( 1, Qt::Vertical, i18n("Parameters"), page );
+  QGroupBox* gb = new QGroupBox( /*1, Qt::Vertical, */i18n("Parameters"), page );
   QWidget *params = new QWidget( gb );
   QGridLayout *params_layout = new QGridLayout( params );
   params_layout->setSpacing( spacingHint() );

@@ -41,7 +41,7 @@
 
 #include <KoGlobal.h>
 
-#include <q3groupbox.h>
+#include <QGroupBox>
 #include <qlabel.h>
 #include <qlayout.h>
 //Added by qt3to4:
@@ -56,8 +56,7 @@ ConditionalWidget::ConditionalWidget( QWidget* parent, const char* /*name*/, Qt:
   Form1Layout->setMargin(11);
   Form1Layout->setSpacing(6);
 
-  Q3GroupBox * groupBox1_3 = new Q3GroupBox( this, "groupBox1_3" );
-  groupBox1_3->setColumnLayout(0, Qt::Vertical );
+  QGroupBox * groupBox1_3 = new QGroupBox( this );
   groupBox1_3->layout()->setSpacing( KDialog::spacingHint() );
   groupBox1_3->layout()->setMargin( KDialog::marginHint() );
   QGridLayout * groupBox1_3Layout = new QGridLayout( groupBox1_3 );
@@ -91,8 +90,7 @@ ConditionalWidget::ConditionalWidget( QWidget* parent, const char* /*name*/, Qt:
 
   Form1Layout->addWidget( groupBox1_3, 2, 0 );
 
-  Q3GroupBox * groupBox1_2 = new Q3GroupBox( this, "groupBox1_2" );
-  groupBox1_2->setColumnLayout(0, Qt::Vertical );
+  QGroupBox * groupBox1_2 = new QGroupBox( this );
   groupBox1_2->layout()->setSpacing( KDialog::spacingHint() );
   groupBox1_2->layout()->setMargin( KDialog::marginHint() );
 
@@ -128,8 +126,7 @@ ConditionalWidget::ConditionalWidget( QWidget* parent, const char* /*name*/, Qt:
   groupBox1_2Layout->addItem( spacer_4, 1, 3 );
   Form1Layout->addWidget( groupBox1_2, 1, 0 );
 
-  Q3GroupBox * groupBox1_1 = new Q3GroupBox( this, "groupBox1_1" );
-  groupBox1_1->setColumnLayout(0, Qt::Vertical );
+  QGroupBox * groupBox1_1 = new QGroupBox( this );
   groupBox1_1->layout()->setSpacing( KDialog::spacingHint() );
   groupBox1_1->layout()->setMargin( KDialog::marginHint() );
 

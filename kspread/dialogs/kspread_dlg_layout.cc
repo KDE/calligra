@@ -162,7 +162,6 @@ GeneralTab::GeneralTab( QWidget* parent, CellFormatDialog * dlg )
   layout->setSpacing(KDialog::spacingHint());
 
   QGroupBox * groupBox = new QGroupBox( this );
-// ###  groupBox->setColumnLayout(0, Qt::Vertical );
   groupBox->setTitle( i18n( "Style" ) );
   groupBox->layout()->setSpacing( KDialog::spacingHint() );
   groupBox->layout()->setMargin( KDialog::marginHint() );
@@ -1141,7 +1140,7 @@ CellFormatPageFloat::CellFormatPageFloat( QWidget* parent, CellFormatDialog *_dl
     grid->addWidget(customFormat,10,0);
     customFormat->setEnabled( false );
 
-    Q3GroupBox *box2 = new Q3GroupBox( grp, "Box");
+    QGroupBox *box2 = new QGroupBox( grp );
     box2->setTitle(i18n("Preview"));
     QGridLayout *grid3 = new QGridLayout(box2);
     grid3->setMargin(KDialog::marginHint());
@@ -1164,7 +1163,7 @@ CellFormatPageFloat::CellFormatPageFloat( QWidget* parent, CellFormatDialog *_dl
 
     /* *** */
 
-    Q3GroupBox *box = new Q3GroupBox( this, "Box");
+    QGroupBox *box = new QGroupBox( this );
 
     grid = new QGridLayout(box);
     grid->setMargin(KDialog::marginHint());
@@ -2703,7 +2702,7 @@ void CellFormatPageBorder::InitializeGrids()
   /***********************/
 
   /* set up a layout box for most of the border setting buttons */
-  tmpQGroupBox = new Q3GroupBox( this, "GroupBox_1" );
+  tmpQGroupBox = new QGroupBox( this );
   tmpQGroupBox->setTitle( i18n("Border") );
   tmpQGroupBox->setAlignment( Qt::AlignLeft );
   grid2 = new QGridLayout(tmpQGroupBox);
@@ -2731,7 +2730,7 @@ void CellFormatPageBorder::InitializeGrids()
   /* the remove, all, and outline border buttons are in a second box down
      below.*/
 
-  tmpQGroupBox = new Q3GroupBox( this, "GroupBox_3" );
+  tmpQGroupBox = new QGroupBox( this );
   tmpQGroupBox->setTitle( i18n("Preselect") );
   tmpQGroupBox->setAlignment( Qt::AlignLeft );
 
@@ -2771,7 +2770,7 @@ void CellFormatPageBorder::InitializeGrids()
   grid->addWidget(tmpQGroupBox,3,0,2,1);
 
   /* now set up the group box with the pattern selector */
-  tmpQGroupBox = new Q3GroupBox( this, "GroupBox_10" );
+  tmpQGroupBox = new QGroupBox( this );
 #warning "kde4 port it"
   //tmpQGroupBox->setFrameStyle( QFrame::Box | QFrame::Sunken );
   tmpQGroupBox->setTitle( i18n("Pattern") );
@@ -2842,7 +2841,7 @@ void CellFormatPageBorder::InitializeGrids()
   grid->addWidget(tmpQGroupBox,0,1,4,1);
 
   /* Now the preview box is put together */
-  tmpQGroupBox = new Q3GroupBox(this, "GroupBox_4" );
+  tmpQGroupBox = new QGroupBox( this );
   tmpQGroupBox->setTitle( i18n("Preview") );
   tmpQGroupBox->setAlignment( Qt::AlignLeft );
 
@@ -3598,8 +3597,8 @@ CellFormatPagePattern::CellFormatPagePattern( QWidget* parent, CellFormatDialog 
     grid->setMargin(KDialog::marginHint());
     grid->setSpacing(KDialog::spacingHint());
 
-    Q3GroupBox* tmpQGroupBox;
-    tmpQGroupBox = new Q3GroupBox( this, "GroupBox_20" );
+    QGroupBox* tmpQGroupBox;
+    tmpQGroupBox = new QGroupBox( this );
     tmpQGroupBox->setTitle( i18n("Pattern") );
     tmpQGroupBox->setAlignment( Qt::AlignLeft );
 
@@ -3711,7 +3710,7 @@ CellFormatPagePattern::CellFormatPagePattern( QWidget* parent, CellFormatDialog 
 
     grid->addWidget(tmpQGroupBox,0,0,4,1);
 
-    tmpQGroupBox = new Q3GroupBox( this, "GroupBox1" );
+    tmpQGroupBox = new QGroupBox( this );
     tmpQGroupBox->setTitle( i18n("Preview") );
 #warning "kde4: port it"
     //tmpQGroupBox->setFrameStyle( QFrame::Box | QFrame::Sunken );

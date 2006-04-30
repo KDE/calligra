@@ -52,7 +52,7 @@ class View;
  *
  * Currently CSVDialog is used for converting text into columns,
  * inserting text file and pasting text from clipboard, where conversion
- * from CSV (comma separated value) data is is all required. 
+ * from CSV (comma separated value) data is is all required.
  * The different purposed mentioned above is determined
  * using mode, which can be Column, File, or Clipboard respectively.
  *

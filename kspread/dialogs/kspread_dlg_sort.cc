@@ -84,7 +84,7 @@ SortDialog::SortDialog( View * parent,  const char * name,
 //---------------- Sort Layout & Header Row/Column Toggle
 
   //Sort orientation selector (for selecting Left-To-Right or Top-To-Bottom sorting of the selection)
-  Q3GroupBox* layoutGroup = new Q3GroupBox(2 , Qt::Vertical,  m_page1, "layoutGroup");
+  QGroupBox* layoutGroup = new QGroupBox(/*2 , Qt::Vertical,*/  m_page1, "layoutGroup");
   layoutGroup->setTitle( i18n("Layout") );
 
   Q3HButtonGroup * orientationGroup = new Q3HButtonGroup( layoutGroup, "orientationGroup" );
@@ -109,10 +109,9 @@ SortDialog::SortDialog( View * parent,  const char * name,
   page1Layout->addItem(new QSpacerItem( 0, 10 ), 2, 0 );
 
 
-  Q3GroupBox * sort1Box = new Q3GroupBox( m_page1, "sort1Box" );
+  QGroupBox * sort1Box = new QGroupBox( m_page1 );
   sort1Box->setTitle( i18n( "Sort By" ) );
   sort1Box->setFlat(true);
-  sort1Box->setColumnLayout(0, Qt::Vertical );
   sort1Box->layout()->setSpacing( KDialog::spacingHint() );
   sort1Box->layout()->setMargin( KDialog::marginHint() );
   QHBoxLayout * sort1BoxLayout = new QHBoxLayout( sort1Box );
@@ -128,10 +127,9 @@ SortDialog::SortDialog( View * parent,  const char * name,
 
   page1Layout->addWidget( sort1Box, 3, 0 );
 
-  Q3GroupBox * sort2Box = new Q3GroupBox( m_page1, "sort2Box" );
+  QGroupBox * sort2Box = new QGroupBox( m_page1 );
   sort2Box->setTitle( i18n( "Then By" ) );
   sort2Box->setFlat(true);
-  sort2Box->setColumnLayout(0, Qt::Vertical );
   sort2Box->layout()->setSpacing( KDialog::spacingHint() );
   sort2Box->layout()->setMargin( KDialog::marginHint() );
   QHBoxLayout * sort2BoxLayout = new QHBoxLayout( sort2Box );
@@ -148,10 +146,9 @@ SortDialog::SortDialog( View * parent,  const char * name,
 
   page1Layout->addWidget( sort2Box, 4, 0 );
 
-  Q3GroupBox * sort3Box = new Q3GroupBox( m_page1, "sort3Box" );
+  QGroupBox * sort3Box = new QGroupBox( m_page1 );
   sort3Box->setTitle( i18n( "Then By" ) );
   sort3Box->setFlat(true);
-  sort3Box->setColumnLayout(0, Qt::Vertical );
   sort3Box->layout()->setSpacing( KDialog::spacingHint() );
   sort3Box->layout()->setMargin( KDialog::marginHint() );
   QHBoxLayout * sort3BoxLayout = new QHBoxLayout( sort3Box );
@@ -180,9 +177,8 @@ SortDialog::SortDialog( View * parent,  const char * name,
   page2Layout->setSpacing(KDialog::spacingHint());
   page2Layout->setAlignment(Qt::AlignTop);
 
-  Q3GroupBox * firstKeyBox = new Q3GroupBox( m_page2, "firstKeyBox" );
+  QGroupBox * firstKeyBox = new QGroupBox( m_page2 );
   firstKeyBox->setTitle( i18n( "First Key" ) );
-  firstKeyBox->setColumnLayout(0, Qt::Vertical );
   firstKeyBox->layout()->setSpacing( KDialog::spacingHint() );
   firstKeyBox->layout()->setMargin( KDialog::marginHint() );
   QVBoxLayout * firstKeyBoxLayout = new QVBoxLayout( firstKeyBox );
@@ -205,9 +201,8 @@ SortDialog::SortDialog( View * parent,  const char * name,
   to just copy and paste the data and then sort the newly pasted data in place.
   -- Robert Knight
 
-  QGroupBox * resultToBox = new QGroupBox( m_page2, "resultToBox" );
+  QGroupBox * resultToBox = new QGroupBox( m_page2 );
   resultToBox->setTitle( i18n( "Location to Store Sort Results" ) );
-  resultToBox->setColumnLayout(0, Qt::Vertical );
   resultToBox->layout()->setSpacing( KDialog::spacingHint() );
   resultToBox->layout()->setMargin( KDialog::marginHint() );
 

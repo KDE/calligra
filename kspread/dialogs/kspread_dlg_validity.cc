@@ -58,8 +58,7 @@ DlgValidity::DlgValidity(View* parent,const char* name , const QRect &_marker )
   lay1->setMargin(KDialogBase::marginHint());
   lay1->setSpacing(KDialogBase::spacingHint());
 
-  Q3GroupBox* tmpQButtonGroup;
-  tmpQButtonGroup = new Q3GroupBox( 0, Qt::Vertical, i18n("Validity Criteria"), page1, "ButtonGroup_1" );
+  QGroupBox* tmpQButtonGroup = new QGroupBox( i18n("Validity Criteria"), page1 );
   tmpQButtonGroup->layout()->setSpacing(KDialog::spacingHint());
   tmpQButtonGroup->layout()->setMargin(KDialog::marginHint());
   QGridLayout *grid1 = new QGridLayout(tmpQButtonGroup);
