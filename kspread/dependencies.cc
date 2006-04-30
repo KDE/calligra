@@ -382,7 +382,7 @@ void DependencyList::removeDependencies (const Point &cell)
           ++it3;
       //erase the list if we no longer need it
       if (sh->dependencies()->deps->rangeDeps[*it1].empty())
-        sh->dependencies()->deps->rangeDeps.erase (*it1);
+        sh->dependencies()->deps->rangeDeps.remove(*it1);
     }
   }
 
@@ -396,7 +396,7 @@ void DependencyList::removeDependencies (const Point &cell)
   // finally, remove the entry about this cell
   dependencies[cell].cells.clear();
   dependencies[cell].ranges.clear();
-  dependencies.erase (cell);
+  dependencies.remove(cell);
 }
 
 void DependencyList::generateDependencies (const Point &cell)

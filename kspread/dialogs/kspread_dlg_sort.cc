@@ -169,7 +169,7 @@ SortDialog::SortDialog( View * parent,  const char * name,
   sort3BoxLayout->addWidget( m_sortOrder3 );
 
   page1Layout->addWidget( sort3Box, 5, 0 );
-  m_tabWidget->insertTab( m_page1, i18n( "Sort Criteria" ) );
+  m_tabWidget->insertTab( 0, m_page1, i18n( "Sort Criteria" ) );
 
 
   //---------------- options page
@@ -235,7 +235,7 @@ SortDialog::SortDialog( View * parent,  const char * name,
   page2Layout->addWidget( resultToBox, 1,0 );*/
 
 
-  m_tabWidget->insertTab( m_page2, i18n( "Options" ) );
+  m_tabWidget->insertTab( 1, m_page2, i18n( "Options" ) );
 
 #if 0 // ### Why is this here? Never assigned to a widget!
   QHBoxLayout * Layout1 = new QHBoxLayout( 0, 0, 6, "Layout1");

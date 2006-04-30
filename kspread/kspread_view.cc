@@ -709,19 +709,19 @@ void View::Private::initActions()
   actions->mergeCell = new KToolBarPopupAction( KIcon( "mergecell" ), i18n("Merge Cells"), ac, "mergecell" );
   connect(actions->deleteCell, SIGNAL(triggered(bool)), view, SLOT( mergeCell() ));
   actions->mergeCell->setToolTip(i18n("Merge the selected region"));
-  actions->mergeCell->popupMenu()->addAction( actions->mergeCell );
+  actions->mergeCell->menu()->addAction( actions->mergeCell );
 
   actions->mergeCellHorizontal = new KAction( KIcon("mergecell-horizontal" ), i18n("Merge Cells Horizontally"), ac, "mergecellHorizontal" );
   connect(actions->mergeCellHorizontal, SIGNAL(triggered(bool)), view, SLOT( mergeCellHorizontal() ));
 
   actions->mergeCellHorizontal->setToolTip(i18n("Merge the selected region horizontally"));
-  actions->mergeCell->popupMenu()->addAction( actions->mergeCellHorizontal );
+  actions->mergeCell->menu()->addAction( actions->mergeCellHorizontal );
 
   actions->mergeCellVertical = new KAction( KIcon("mergecell-vertical" ), i18n("Merge Cells Vertically"), ac, "mergecellVertical" );
   connect(actions->mergeCellVertical, SIGNAL(triggered(bool)), view, SLOT( mergeCellVertical() ));
 
   actions->mergeCellVertical->setToolTip(i18n("Merge the selected region vertically"));
-  actions->mergeCell->popupMenu()->addAction( actions->mergeCellVertical );
+  actions->mergeCell->menu()->addAction( actions->mergeCellVertical );
 
   actions->dissociateCell = new KAction( KIcon("dissociatecell" ), i18n("Dissociate Cells"), ac, "dissociatecell" );
   connect(actions->dissociateCell, SIGNAL(triggered(bool)), view, SLOT( dissociateCell() ));
