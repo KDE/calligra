@@ -21,10 +21,11 @@
 #define __kspread_undo_h__
 
 #include <QLinkedList>
+#include <QList>
 #include <qrect.h>
+#include <QStack>
 #include <qstring.h>
 
-#include <q3ptrlist.h>
 #include <q3ptrstack.h>
 //Added by qt3to4:
 #include <Q3CString>
@@ -145,7 +146,7 @@ public:
     virtual void redo();
 
 protected:
-    Q3PtrList<UndoAction> m_commands;
+    QList<UndoAction*> m_commands;
 };
 
 class UndoInsertRemoveAction : public UndoAction
@@ -685,8 +686,8 @@ public:
     QString getRedoName();
 
 protected:
-    Q3PtrStack<UndoAction> m_stckUndo;
-    Q3PtrStack<UndoAction> m_stckRedo;
+    QStack<UndoAction*> m_stckUndo;
+    QStack<UndoAction*> m_stckRedo;
 
     Doc *m_pDoc;
 };

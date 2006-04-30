@@ -45,9 +45,6 @@ using namespace KSpread;
 Undo::Undo( Doc *_doc )
 {
     m_pDoc = _doc;
-
-    m_stckUndo.setAutoDelete( false );
-    m_stckRedo.setAutoDelete( false );
 }
 
 Undo::~Undo()
@@ -60,9 +57,8 @@ void Undo::appendUndo( UndoAction *_action )
     if ( isLocked() )
 	return;
 
-    m_stckRedo.setAutoDelete( true );
+    qDeleteAll(m_stckRedo);
     m_stckRedo.clear();
-    m_stckRedo.setAutoDelete( false );
 
     m_stckUndo.push( _action );
 
@@ -79,14 +75,11 @@ void Undo::clear()
     if ( isLocked() )
 	return;
 
-    m_stckUndo.setAutoDelete( true );
-    m_stckRedo.setAutoDelete( true );
+    qDeleteAll(m_stckUndo);
+    qDeleteAll(m_stckRedo);
 
     m_stckUndo.clear();
     m_stckRedo.clear();
-
-    m_stckUndo.setAutoDelete( false );
-    m_stckRedo.setAutoDelete( false );
 }
 
 void Undo::undo()
@@ -148,7 +141,7 @@ QString Undo::getRedoName()
 {
     if ( m_stckRedo.isEmpty() )
 	return QString("");
-    return  m_stckRedo.current()->getName();
+    return  m_stckRedo.top()->getName();
 
 }
 
@@ -156,7 +149,7 @@ QString Undo::getUndoName()
 {
     if ( m_stckUndo.isEmpty() )
 	return QString("");
-    return  m_stckUndo.current()->getName();
+    return  m_stckUndo.top()->getName();
 }
 
 /****************************************************************************
@@ -172,7 +165,7 @@ MacroUndoAction::MacroUndoAction( Doc *_doc, const QString& _name ):
 
 MacroUndoAction::~MacroUndoAction()
 {
-    m_commands.setAutoDelete( true );
+    qDeleteAll(m_commands);
 }
 
 void MacroUndoAction::addCommand(UndoAction *command)
@@ -182,16 +175,16 @@ void MacroUndoAction::addCommand(UndoAction *command)
 
 void MacroUndoAction::undo()
 {
-    Q3PtrListIterator<UndoAction> it(m_commands);
-    for ( ; it.current() ; ++it )
-        it.current()->undo();
+    int end = m_commands.count();
+    for ( int i = 0; i < end; ++i )
+        m_commands[i]->undo();
 }
 
 void MacroUndoAction::redo()
 {
-    Q3PtrListIterator<UndoAction> it(m_commands);
-    for ( ; it.current() ; ++it )
-        it.current()->redo();
+    int end = m_commands.count();
+    for ( int i = 0; i < end; ++i )
+        m_commands[i]->redo();
 }
 
 /****************************************************************************
