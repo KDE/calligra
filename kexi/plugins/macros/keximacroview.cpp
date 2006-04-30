@@ -73,9 +73,9 @@ KexiMacroView::~KexiMacroView()
 	delete d;
 }
 
-::KoMacro::Macro* KexiMacroView::macro() const
+KoMacro::Macro::Ptr KexiMacroView::macro() const
 {
-	return d->macro.data();
+	return d->macro;
 }
 
 tristate KexiMacroView::beforeSwitchTo(int mode, bool& dontstore)

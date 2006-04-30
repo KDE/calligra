@@ -43,36 +43,9 @@
 #include "lib/macroitem.h"
 #include "lib/xmlhandler.h"
 
-//! constants used to name columns instead of hardcoding indices
+/// constants used to name columns instead of hardcoding indices
 #define COLUMN_ID_ACTION 0
 #define COLUMN_ID_COMMENT 1
-
-/**
- * The \a KexiTableView implementation to display a list of actions
- * a \a Macro provides.
- */
-class KexiMacroTableView : public KexiTableView
-{
-	public:
-		/**
-		* Constructor.
-		*
-		* \param data The \a KexiTableViewData data-modell which
-		* contains the data this \a KexiTableView should display.
-		* \param parent The parent widget.
-		*/
-		KexiMacroTableView(KexiTableViewData* data, QWidget* parent)
-			: KexiTableView(data, parent)
-		{
-		}
-
-		/**
-		* Destructor.
-		*/
-		virtual ~KexiMacroTableView()
-		{
-		}
-};
 
 /**
 * \internal d-pointer class to be more flexible on future extension of the
@@ -89,13 +62,13 @@ class KexiMacroDesignView::Private
 		KexiDataTable* datatable;
 
 		/**
-		* For convenience. The table view (datatable->tableView()).
+		* For convenience. The table view ( datatable->tableView() ).
 		*/
 		KexiTableView* tableview;
 
 		/**
 		* The \a KexiTableViewData data-model for the
-		* \a KexiMacroTableView .
+		* \a KexiTableView above.
 		*/
 		KexiTableViewData* tabledata;
 
@@ -105,8 +78,10 @@ class KexiMacroDesignView::Private
 		*/
 		KexiDataAwarePropertySet* propertyset;
 
-		bool propertyreloads;
-		bool updateProperties;
+		/// Boolean flag to avoid infinite recursion.
+		bool reloadsProperties;
+		/// Boolean flag to avoid infinite recursion.
+		bool updatesProperties;
 
 		/**
 		* Constructor.
@@ -116,11 +91,14 @@ class KexiMacroDesignView::Private
 		*/
 		Private()
 			: propertyset(0)
-			, propertyreloads(false)
-			, updateProperties(false)
+			, reloadsProperties(false)
+			, updatesProperties(false)
 		{
 		}
 
+		/**
+		* Destructor.
+		*/
 		~Private()
 		{
 			delete propertyset;
@@ -154,6 +132,7 @@ KexiMacroDesignView::KexiMacroDesignView(KexiMainWindow *mainwin, QWidget *paren
 	QValueVector<QString> items;
 	items.append(""); // empty means no action
 
+	// Append the list of actions provided by Kexi.
 	QStringList actionnames = KoMacro::Manager::self()->actionNames();
 	QStringList::ConstIterator it, end( actionnames.constEnd() );
 	for( it = actionnames.constBegin(); it != end; ++it) {
@@ -177,30 +156,26 @@ KexiMacroDesignView::KexiMacroDesignView(KexiMainWindow *mainwin, QWidget *paren
 		0 // width
 	) );
 
-	connect(d->tabledata, SIGNAL(itemSelected(KexiTableItem*)),
-		this, SLOT(itemSelected(KexiTableItem*)));
-	connect(d->tabledata, SIGNAL(aboutToChangeCell(KexiTableItem*,int,QVariant&,KexiDB::ResultInfo*)),
-		this, SLOT(beforeCellChanged(KexiTableItem*,int,QVariant&,KexiDB::ResultInfo*)));
-	connect(d->tabledata, SIGNAL(rowUpdated(KexiTableItem*)),
-		this, SLOT(rowUpdated(KexiTableItem*)));
-	//connect(d->tabledata, SIGNAL(aboutToInsertRow(KexiTableItem*,KexiDB::ResultInfo*,bool)),
-	//	this, SLOT(aboutToInsertRow(KexiTableItem*,KexiDB::ResultInfo*,bool)));
-	//connect(d->tabledata, SIGNAL(aboutToDeleteRow(KexiTableItem&,KexiDB::ResultInfo*,bool)),
-	//	this, SLOT(aboutToDeleteRow(KexiTableItem&,KexiDB::ResultInfo*,bool)));
-
 	// Create the tableview.
 	QHBoxLayout* layout = new QHBoxLayout(this);
 	d->datatable = new KexiDataTable(mainWin(), this, "Macro KexiDataTable", false /*not db aware*/);
 	layout->addWidget(d->datatable);
 	d->tableview = d->datatable->tableView();
-
 	d->tableview->setSpreadSheetMode();
 	d->tableview->setColumnStretchEnabled( true, COLUMN_ID_COMMENT ); //last column occupies the rest of the area
 
 	// Create the propertyset.
 	d->propertyset = new KexiDataAwarePropertySet(this, d->tableview);
-	//connect(d->propertyset, SIGNAL(rowDeleted()), this, SLOT(updateActions()));
-	//connect(d->propertyset, SIGNAL(rowInserted()), this, SLOT(updateActions()));
+
+	// Connect signals the KexiDataTable provides to local slots.
+	connect(d->tabledata, SIGNAL(aboutToChangeCell(KexiTableItem*,int,QVariant&,KexiDB::ResultInfo*)),
+	        this, SLOT(beforeCellChanged(KexiTableItem*,int,QVariant&,KexiDB::ResultInfo*)));
+	connect(d->tabledata, SIGNAL(rowUpdated(KexiTableItem*)),
+	        this, SLOT(rowUpdated(KexiTableItem*)));
+	connect(d->tabledata, SIGNAL(rowInserted(KexiTableItem*,uint,bool)),
+	        this, SLOT(rowInserted(KexiTableItem*,uint,bool)));
+	connect(d->tabledata, SIGNAL(rowDeleted()),
+	        this, SLOT(rowDeleted()));
 
 	// Everything is ready. So, update the data now.
 	updateData();
@@ -213,6 +188,8 @@ KexiMacroDesignView::~KexiMacroDesignView()
 
 void KexiMacroDesignView::updateData()
 {
+	kdDebug() << "KexiMacroDesignView::updateData()" << endl;
+
 	//d->tableview->blockSignals(true);
 	//d->tabledata->blockSignals(true);
 
@@ -228,8 +205,8 @@ void KexiMacroDesignView::updateData()
 
 	// Set the MacroItem's
 	QStringList actionnames = KoMacro::Manager::self()->actionNames();
-	::KoMacro::MacroItem::List macroitems = macro()->items();
-	::KoMacro::MacroItem::List::ConstIterator it(macroitems.constBegin()), end(macroitems.constEnd());
+	KoMacro::MacroItem::List macroitems = macro()->items();
+	KoMacro::MacroItem::List::ConstIterator it(macroitems.constBegin()), end(macroitems.constEnd());
 	for(uint idx = 0; it != end; ++it, idx++) {
 		KexiTableItem* tableitem = d->tabledata->at(idx);
 		if(! tableitem) {
@@ -271,11 +248,12 @@ void KexiMacroDesignView::updateData()
 void KexiMacroDesignView::updateProperties(int row, KoProperty::Set* set, KoMacro::MacroItem::Ptr macroitem)
 {
 	kdDebug() << "KexiMacroDesignView::updateProperties() row=" << row << endl;
+
 	if(row < 0) {
 		return; // ignore invalid rows.
 	}
 
-	if(d->updateProperties) {
+	if(d->updatesProperties) {
 		return;
 	}
 
@@ -287,7 +265,7 @@ void KexiMacroDesignView::updateProperties(int row, KoProperty::Set* set, KoMacr
 		return; // job done.
 	}
 
-	d->updateProperties = true;
+	d->updatesProperties = true;
 
 	if(set) {
 		// we need to clear old data before adding the new content.
@@ -389,15 +367,7 @@ void KexiMacroDesignView::updateProperties(int row, KoProperty::Set* set, KoMacr
 	}
 
 	propertySetReloaded(true);
-	d->updateProperties = false;
-
-	/*
-	KoMacro::Variable::Map varmap = action->variables();
-	KoMacro::Variable::Map::ConstIterator it, end( varmap.constEnd() );
-	for( it = varmap.constBegin(); it != end; ++it) {
-		KoMacro::Variable::Ptr v = it.data();
-	}
-	*/
+	d->updatesProperties = false;
 }
 
 bool KexiMacroDesignView::loadData()
@@ -414,11 +384,6 @@ KoProperty::Set* KexiMacroDesignView::propertySet()
 	return d->propertyset ? d->propertyset->currentPropertySet() : 0;
 }
 
-void KexiMacroDesignView::itemSelected(KexiTableItem*)
-{
-	kdDebug() << "KexiMacroDesignView::itemSelected" << endl;
-}
-
 void KexiMacroDesignView::beforeCellChanged(KexiTableItem* item, int colnum, QVariant& newvalue, KexiDB::ResultInfo* result)
 {
 	Q_UNUSED(result);
@@ -430,10 +395,18 @@ void KexiMacroDesignView::beforeCellChanged(KexiTableItem* item, int colnum, QVa
 		return;
 	}
 
+	// If the rowindex doesn't exists yet, we need to append new
+	// items till we are able to access the item we like to use.
 	for(int i = macro()->items().count(); i <= rowindex; i++) {
 		macro()->addItem( KoMacro::MacroItem::Ptr( new KoMacro::MacroItem() ) );
 	}
+
+	// Get the matching MacroItem.
 	KoMacro::MacroItem::Ptr macroitem = macro()->items()[rowindex];
+	if(! macroitem.data()) {
+		kdWarning() << "KexiMacroDesignView::beforeCellChanged() Invalid item for rowindex=" << rowindex << endl;
+		return;
+	}
 
 	switch(colnum) {
 		case COLUMN_ID_ACTION: {
@@ -447,7 +420,6 @@ void KexiMacroDesignView::beforeCellChanged(KexiTableItem* item, int colnum, QVa
 			KoMacro::Action::Ptr action = KoMacro::Manager::self()->action(actionname);
 			macroitem->setAction(action);
 			updateProperties(d->propertyset->currentRow(), d->propertyset->currentPropertySet(), macroitem);
-			//propertySetSwitched();
 			propertySetReloaded(true);
 		} break;
 		case COLUMN_ID_COMMENT: {
@@ -461,19 +433,48 @@ void KexiMacroDesignView::beforeCellChanged(KexiTableItem* item, int colnum, QVa
 	setDirty();
 }
 
-void KexiMacroDesignView::rowUpdated(KexiTableItem*)
+void KexiMacroDesignView::rowUpdated(KexiTableItem* item)
 {
-	kdDebug() << "KexiMacroDesignView::rowUpdated" << endl;
+    int rowindex = d->tabledata->findRef(item);
+	kdDebug() << "KexiMacroDesignView::rowUpdated() rowindex=" << rowindex << endl;
 	//propertySetSwitched();
 	//propertySetReloaded(true);
 	//setDirty();
 }
 
+void KexiMacroDesignView::rowInserted(KexiTableItem*, uint row, bool)
+{
+	kdDebug() << "KexiMacroDesignView::rowInserted() rowindex=" << row << endl;
+	KoMacro::MacroItem::List& macroitems = macro()->items();
+
+	if(row < macroitems.count()) {
+		// If a new item was inserted, we need to insert a new item to our
+		// list of MacroItems too. If the new item was appended, we don't
+		// need to do anything yet cause the new item will be handled on
+		// beforeCellChanged() anyway.
+		kdDebug() << "KexiMacroDesignView::rowInserted() Inserting new MacroItem" << endl;
+		KoMacro::MacroItem::Ptr macroitem = KoMacro::MacroItem::Ptr( new KoMacro::MacroItem() );
+		KoMacro::MacroItem::List::Iterator it = macroitems.at(row);
+		macroitems.insert(it, macroitem);
+	}
+}
+
+void KexiMacroDesignView::rowDeleted()
+{
+	int rowindex = d->propertyset->currentRow();
+	if(rowindex < 0) {
+		kdWarning() << "KexiMacroDesignView::rowDeleted() No such item" << endl;
+		return;
+	}
+	kdDebug() << "KexiMacroDesignView::rowDeleted() rowindex=" << rowindex << endl;
+	KoMacro::MacroItem::List& macroitems = macro()->items();
+	macroitems.remove( macroitems.at(rowindex) );
+}
+
 void KexiMacroDesignView::propertyChanged(KoProperty::Set&, KoProperty::Property& property)
 {
-	if(d->propertyreloads) {
-		// be sure to don't update properties if we are still
-		// on reloading.
+	if(d->reloadsProperties) {
+		// be sure to don't update properties if we are still on reloading.
 		return;
 	}
 
@@ -485,7 +486,7 @@ void KexiMacroDesignView::propertyChanged(KoProperty::Set&, KoProperty::Property
 	}
 
 	kdDebug() << "KexiMacroDesignView::propertyChanged() name=" << name << endl;
-	d->propertyreloads = true;
+	d->reloadsProperties = true;
 
 	KoMacro::MacroItem::Ptr macroitem = macro()->items()[row];
 
@@ -525,7 +526,7 @@ void KexiMacroDesignView::propertyChanged(KoProperty::Set&, KoProperty::Property
 		setDirty();
 	}
 
-	d->propertyreloads = false;
+	d->reloadsProperties = false;
 }
 
 #include "keximacrodesignview.moc"

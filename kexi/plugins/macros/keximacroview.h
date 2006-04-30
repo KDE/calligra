@@ -62,7 +62,7 @@ class KexiMacroView : public KexiViewBase
 		/**
 		* \return the Macro instance.
 		*/
-		::KoMacro::Macro* macro() const;
+		KSharedPtr<KoMacro::Macro> macro() const;
 
 		/**
 		* Load the data from XML source and fill the internally

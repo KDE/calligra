@@ -72,11 +72,6 @@ class KexiMacroDesignView : public KexiMacroView
 	private slots:
 
 		/**
-		* Called if an \a KexiTableItem item got selected.
-		*/
-		void itemSelected(KexiTableItem*);
-
-		/**
 		* Called before a cell changed in the internaly used
 		* \a KexiTableView .
 		*/
@@ -86,6 +81,9 @@ class KexiMacroDesignView : public KexiMacroView
 		* Called if the passed \p item got updated.
 		*/
 		void rowUpdated(KexiTableItem* item);
+
+		void rowDeleted();
+		void rowInserted(KexiTableItem* item, uint row, bool repaint);
 
 		/**
 		* Called if a property in the \a KoProperty got changed.

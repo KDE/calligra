@@ -84,7 +84,7 @@ const QString Macro::toString() const
 	return QString("Macro:%1").arg(name());
 }
 
-QValueList<MacroItem::Ptr> Macro::items() const
+QValueList<MacroItem::Ptr>& Macro::items() const
 {
 	return d->itemlist;
 }

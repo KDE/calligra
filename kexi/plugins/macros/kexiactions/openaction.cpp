@@ -123,8 +123,8 @@ OpenAction::OpenAction()
 	KoMacro::Variable* objvar = new ObjectVariable<OpenAction>(this);
 	setVariable(KoMacro::Variable::Ptr( objvar ));
 
-	setVariable(KoMacro::Variable::Ptr( new ViewVariable<OpenAction>(this, objvar->variant().toString()) ));
 	setVariable(KoMacro::Variable::Ptr( new NameVariable<OpenAction>(this, objvar->variant().toString()) ));
+	setVariable(KoMacro::Variable::Ptr( new ViewVariable<OpenAction>(this, objvar->variant().toString()) ));
 }
 
 OpenAction::~OpenAction()

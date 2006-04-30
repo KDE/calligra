@@ -93,7 +93,7 @@ namespace KoMacro {
 			* @return a list of @a MacroItem instances which
 			* are children of this @a Macro .
 			*/
-			QValueList< KSharedPtr<MacroItem> > items() const;
+			QValueList< KSharedPtr<MacroItem> >& items() const;
 
 			/**
 			* Add the @a MacroItem @p item to the list of items
