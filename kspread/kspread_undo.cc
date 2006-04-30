@@ -2075,13 +2075,13 @@ void UndoChangeAreaTextCell::undo()
       for ( it2 = m_lstTextCell.begin(); it2 != m_lstTextCell.end(); ++it2 )
       {
         Cell *cell = sheet->nonDefaultCell( it2.key().x(), it2.key().y() );
-        if ( it2.data().isEmpty() )
+        if ( it2.value().isEmpty() )
         {
           if ( !cell->text().isEmpty() )
             cell->setCellText( "" );
         }
         else
-          cell->setCellText( it2.data() );
+          cell->setCellText( it2.value() );
       }
     }
     }
@@ -2140,13 +2140,13 @@ void UndoChangeAreaTextCell::redo()
       for ( it2 = m_lstRedoTextCell.begin(); it2 != m_lstRedoTextCell.end(); ++it2 )
       {
         Cell *cell = sheet->nonDefaultCell( it2.key().x(), it2.key().y() );
-        if ( it2.data().isEmpty() )
+        if ( it2.value().isEmpty() )
         {
           if ( !cell->text().isEmpty() )
             cell->setCellText( "" );
         }
         else
-          cell->setCellText( it2.data() );
+          cell->setCellText( it2.value() );
       }
     }
     }
