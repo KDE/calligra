@@ -36,6 +36,14 @@
 
 using namespace KSpread;
 
+bool operator < (const QPoint& pointA , const QPoint& pointB)
+{
+	if (pointA.y() == pointB.y())
+		return ( pointA.x() < pointB.x() );
+	else
+		return ( pointA.y() < pointB.y() );
+}
+
 /****************************************************************************
  *
  * Undo
@@ -1934,9 +1942,9 @@ UndoChangeAreaTextCell::UndoChangeAreaTextCell( Doc *_doc, Sheet *_sheet, const 
   createList( m_lstTextCell, _sheet );
 }
 
-void UndoChangeAreaTextCell::createList( QLinkedList<textOfCell> &list, Sheet* sheet )
+void UndoChangeAreaTextCell::createList( QMap<QPoint,QString> &map, Sheet* sheet )
 {
-  list.clear();
+  map.clear();
 
   Region::ConstIterator endOfList(m_region.constEnd());
   for (Region::ConstIterator it = m_region.constBegin(); it != endOfList; ++it)
@@ -1955,11 +1963,11 @@ void UndoChangeAreaTextCell::createList( QLinkedList<textOfCell> &list, Sheet* s
         {
           if ( !c->isPartOfMerged() )
           {
-            textOfCell tmpText;
-            tmpText.col = col;
-            tmpText.row = c->row();
-            tmpText.text = c->text();
-            list.append(tmpText);
+            //textOfCell tmpText;
+            //tmpText.col = col;
+            //tmpText.row = c->row();
+            //tmpText.text = c->text();
+            map.insert( QPoint(col,c->row()) , c->text() );
           }
           c = sheet->getNextCellDown( col, c->row() );
         }
@@ -1975,11 +1983,11 @@ void UndoChangeAreaTextCell::createList( QLinkedList<textOfCell> &list, Sheet* s
         {
           if ( !c->isPartOfMerged() )
           {
-            textOfCell tmpText;
-            tmpText.col = c->column();
-            tmpText.row = row;
-            tmpText.text = c->text();
-            list.append(tmpText);
+            //textOfCell tmpText;
+            //tmpText.col = c->column();
+            //tmpText.row = row;
+            //tmpText.text = c->text();
+            map.insert( QPoint(c->column(),row) , c->text() );
           }
           c = sheet->getNextCellRight( c->column(), row );
         }
@@ -1997,11 +2005,11 @@ void UndoChangeAreaTextCell::createList( QLinkedList<textOfCell> &list, Sheet* s
         {
           if ( !cell->isObscured() )
           {
-            textOfCell tmpText;
-            tmpText.col  = x;
-            tmpText.row  = cell->row();
-            tmpText.text = cell->text();
-            list.append( tmpText );
+            //textOfCell tmpText;
+            //tmpText.col  = x;
+            //tmpText.row  = cell->row();
+            //tmpText.text = cell->text();
+            map.insert( QPoint(x,cell->row()) , cell->text());
           }
           cell = sheet->getNextCellDown( x, cell->row() );
         }
@@ -2022,7 +2030,11 @@ void UndoChangeAreaTextCell::undo()
 
     doc()->undoLock();
     doc()->emitBeginOperation();
+    sheet->setRegionPaintDirty(m_region);
+
+    kDebug() << "creating redo list..." << endl;
     createList( m_lstRedoTextCell, sheet );
+    kDebug() << "created redo list..." << endl;
 
     Region::ConstIterator endOfList(m_region.constEnd());
     for (Region::ConstIterator it = m_region.constBegin(); it != endOfList; ++it)
@@ -2036,7 +2048,15 @@ void UndoChangeAreaTextCell::undo()
         for ( int y = m_rctRect.top(); y <= m_rctRect.bottom(); ++y )
         {
           Cell* cell = sheet->nonDefaultCell( x, y );
-          bool found = false;
+
+          const QPoint location(x,y);
+
+          if ( m_lstTextCell.contains(location) )
+                cell->setCellText( m_lstTextCell[location] );
+          else
+                cell->setCellText( "",true );
+
+           /*bool found = false;
           QLinkedList<textOfCell>::Iterator it;
           for( it = m_lstTextCell.begin(); it != m_lstTextCell.end(); ++it )
             if ( (*it).col == x && (*it).row == y && !found )
@@ -2045,28 +2065,29 @@ void UndoChangeAreaTextCell::undo()
               found = true;
             }
           if( !found )
-            cell->setCellText( "", true );
+            cell->setCellText( "", true );*/
         }
 
     }
     else
     {
-      QLinkedList<textOfCell>::Iterator it2;
+      QMap<QPoint,QString>::Iterator it2;
       for ( it2 = m_lstTextCell.begin(); it2 != m_lstTextCell.end(); ++it2 )
       {
-        Cell *cell = sheet->nonDefaultCell( (*it2).col, (*it2).row );
-        if ( (*it2).text.isEmpty() )
+        Cell *cell = sheet->nonDefaultCell( it2.key().x(), it2.key().y() );
+        if ( it2.data().isEmpty() )
         {
           if ( !cell->text().isEmpty() )
             cell->setCellText( "" );
         }
         else
-          cell->setCellText( (*it2).text );
+          cell->setCellText( it2.data() );
       }
     }
     }
 
-    sheet->updateView();
+    //sheet->updateView();
+    doc()->emitEndOperation();
     doc()->undoUnlock();
 }
 
@@ -2079,6 +2100,8 @@ void UndoChangeAreaTextCell::redo()
 
     doc()->undoLock();
     doc()->emitBeginOperation();
+    sheet->setRegionPaintDirty(m_region);
+
     Region::ConstIterator endOfList(m_region.constEnd());
     for (Region::ConstIterator it = m_region.constBegin(); it != endOfList; ++it)
     {
@@ -2091,7 +2114,14 @@ void UndoChangeAreaTextCell::redo()
         for ( int y = m_rctRect.top(); y <= m_rctRect.bottom(); ++y )
         {
           Cell* cell = sheet->nonDefaultCell( x, y );
-          bool found = false;
+
+          const QPoint location(x,y);
+
+          if (m_lstRedoTextCell.contains(location))
+                  cell->setCellText( m_lstRedoTextCell[location] );
+          else
+                  cell->setCellText( "" , true );
+          /*bool found = false;
           QLinkedList<textOfCell>::Iterator it;
           for( it = m_lstRedoTextCell.begin(); it != m_lstRedoTextCell.end(); ++it )
             if ( (*it).col == x && (*it).row == y && !found )
@@ -2100,28 +2130,29 @@ void UndoChangeAreaTextCell::redo()
               found = true;
             }
           if( !found )
-            cell->setCellText( "", true );
+            cell->setCellText( "", true );*/
         }
 
     }
     else
     {
-      QLinkedList<textOfCell>::Iterator it2;
+      QMap<QPoint,QString>::Iterator it2;
       for ( it2 = m_lstRedoTextCell.begin(); it2 != m_lstRedoTextCell.end(); ++it2 )
       {
-        Cell *cell = sheet->nonDefaultCell( (*it2).col, (*it2).row );
-        if ( (*it2).text.isEmpty() )
+        Cell *cell = sheet->nonDefaultCell( it2.key().x(), it2.key().y() );
+        if ( it2.data().isEmpty() )
         {
           if ( !cell->text().isEmpty() )
             cell->setCellText( "" );
         }
         else
-          cell->setCellText( (*it2).text );
+          cell->setCellText( it2.data() );
       }
     }
     }
 
-    sheet->updateView();
+    //sheet->updateView();
+    doc()->emitEndOperation();
     doc()->undoUnlock();
 }
 

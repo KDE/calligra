@@ -25,6 +25,7 @@
 #include <qrect.h>
 #include <QStack>
 #include <qstring.h>
+#include <QMap>
 
 #include <q3ptrstack.h>
 //Added by qt3to4:
@@ -468,11 +469,11 @@ public:
     virtual void redo();
 
 protected:
-    void createList( QLinkedList<textOfCell> &list, Sheet* sheet );
+    void createList( QMap<QPoint,QString> &list, Sheet* sheet );
 
     Region m_region;
-    QLinkedList<textOfCell> m_lstTextCell;
-    QLinkedList<textOfCell> m_lstRedoTextCell;
+    QMap<QPoint,QString> m_lstTextCell;
+    QMap<QPoint,QString> m_lstRedoTextCell;
     QString m_sheetName;
 };
 
