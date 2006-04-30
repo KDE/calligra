@@ -49,8 +49,8 @@
 
 using namespace KSpread;
 
-ConditionalWidget::ConditionalWidget( QWidget* parent, const char* name, Qt::WFlags fl )
-    : QWidget( parent, name, fl )
+ConditionalWidget::ConditionalWidget( QWidget* parent, const char* /*name*/, Qt::WFlags fl )
+    : QWidget( parent, fl )
 {
   QGridLayout * Form1Layout = new QGridLayout( this );
   Form1Layout->setMargin(11);

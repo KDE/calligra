@@ -422,7 +422,7 @@ Value func_regexp (valVector args, ValueCalc *calc, FuncExtra *)
 
   QString returnValue;
 
-  int pos = exp.search (s);
+  int pos = exp.indexIn(s);
   if (pos == -1)
     returnValue = defText;
   else
@@ -443,7 +443,7 @@ Value func_regexpre (valVector args, ValueCalc *calc, FuncExtra *)
   QString str = calc->conv()->asString (args[2]).asString();
 
   int pos = 0;
-  while ((pos = exp.search (s, pos)) != -1)
+  while ((pos = exp.indexIn(s, pos)) != -1)
   {
     int i = exp.matchedLength();
     s = s.replace (pos, i, str);
@@ -520,7 +520,7 @@ Value func_search (valVector args, ValueCalc *calc, FuncExtra *)
   if (start_num > (int)within_text.length()) return Value::errorVALUE();
 
   // use globbing feature of QRegExp
-  QRegExp regex( find_text, false, true );
+  QRegExp regex( find_text, Qt::CaseInsensitive, QRegExp::Wildcard );
   int pos = within_text.indexOf( regex, start_num-1 );
   if( pos < 0 ) return Value::errorNA();
 

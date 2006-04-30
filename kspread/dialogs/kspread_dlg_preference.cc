@@ -726,7 +726,7 @@ colorParameters::colorParameters( View* _view,KVBox *box , char * /*name*/ )
 
   QGroupBox* tmpQGroupBox = new QGroupBox( i18n("Color"), box );
 
-  QLabel *label = new QLabel(i18n("&Grid color:"), tmpQGroupBox,"label20" );
+  QLabel *label = new QLabel(i18n("&Grid color:"), tmpQGroupBox );
 
   gridColor = new KColorButton( _gridColor,
                                 Qt::lightGray,
@@ -741,7 +741,7 @@ colorParameters::colorParameters( View* _view,KVBox *box , char * /*name*/ )
     _pbColor = config->readEntry("PageBorderColor", _pbColor);
   }
 
-  QLabel * label2 = new QLabel( i18n("&Page borders:"), tmpQGroupBox, "label21" );
+  QLabel * label2 = new QLabel( i18n("&Page borders:"), tmpQGroupBox );
 
   pageBorderColor = new KColorButton( _pbColor,
                                 Qt::red,

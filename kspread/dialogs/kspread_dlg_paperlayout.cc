@@ -216,7 +216,7 @@ void PaperLayout::initScaleOptions( QWidget * tab, QVBoxLayout * vbox )
     QString string = QString( i18n( "%1%" ) ).arg( qRound( print->zoom() * 100 ) );
     for (int i = 0; i < number_of_entries ; i++)
     {
-        if ( string == (QString) m_cZoom->text(i) )
+        if ( string == (QString) m_cZoom->itemText(i) )
         {
             m_cZoom->setCurrentIndex( i );
             break;

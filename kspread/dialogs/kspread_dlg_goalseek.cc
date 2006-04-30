@@ -119,7 +119,7 @@ GoalSeekDialog::GoalSeekDialog( View * parent,  QPoint const & marker,
   Layout5->setMargin(0);
   Layout5->setSpacing(6);
 
-  m_buttonOk = new QPushButton( this, "m_buttonOk" );
+  m_buttonOk = new QPushButton( this );
   m_buttonOk->setText( i18n( "&Start" ) );
   m_buttonOk->setAccel( 276824143 );
   m_buttonOk->setAutoDefault( true );

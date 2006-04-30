@@ -34,8 +34,8 @@
 
 using namespace KSpread;
 
-GeneralProperty::GeneralProperty( QWidget *parent, const char *name, GeneralValue &generalValue, KoUnit::Unit unit )
-: QWidget( parent, name )
+GeneralProperty::GeneralProperty( QWidget *parent, const char * /*name*/, GeneralValue &generalValue, KoUnit::Unit unit )
+: QWidget( parent )
 , m_ratio( 1.0 )
 , m_generalValue( generalValue )
 , m_unit( unit )

@@ -629,8 +629,8 @@ void DatabaseDialog::accept()
   // An update command must also be followed by a space, or it would be parsed
   // as an identifier.
   // For sanity, also check that there is a SELECT
-  QRegExp couldModifyDB( "(^|[( \\s])(UPDATE|DELETE|INSERT|CREATE) ", false /* cs */ );
-  QRegExp couldQueryDB( "(^|[( \\s])(SELECT) ", false /* cs */ );
+  QRegExp couldModifyDB( "(^|[( \\s])(UPDATE|DELETE|INSERT|CREATE) ", Qt::CaseInsensitive );
+  QRegExp couldQueryDB( "(^|[( \\s])(SELECT) ", Qt::CaseInsensitive );
 
   if (couldModifyDB.indexIn( queryStr ) != -1 || couldQueryDB.indexIn( queryStr ) == -1 )
   {
@@ -1043,10 +1043,10 @@ bool DatabaseDialog::optionsDoNext()
   int l = m_columns_1->count() - 1;
   for ( i = 0; i < l; ++i )
   {
-    query += m_columns_1->text( i );
+    query += m_columns_1->itemText( i );
     query += ", ";
   }
-  query += m_columns_1->text( l );
+  query += m_columns_1->itemText( l );
 
   query += "\nFROM ";
 

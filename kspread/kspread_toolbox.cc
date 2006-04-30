@@ -32,8 +32,8 @@
 
 using namespace KSpread;
 
-ToolBox::ToolBox( QWidget* parent, const char* name )
-    : QFrame( parent, name, Qt::WType_TopLevel | Qt::WStyle_Tool )
+ToolBox::ToolBox( QWidget* parent, const char* /*name*/ )
+    : QFrame( parent, Qt::WType_TopLevel | Qt::WStyle_Tool )
 {
     KWin::setType( winId(), NET::Tool );
 
@@ -120,13 +120,25 @@ KoTransformToolBox::KoTransformToolBox( KoDocumentChild* ch, QWidget* parent, co
 {
     m_child = 0;
 
-    m_rotation = new QSpinBox( 0, 360, 5, this );
+    m_rotation = new QSpinBox( this );
+    m_rotation->setMinimum( 0 );
+    m_rotation->setMaximum( 360 );
+    m_rotation->setSingleStep( 5 );
     m_rotation->setSuffix( " deg" );
-    m_scale = new QSpinBox( 10, 400, 10, this );
+    m_scale = new QSpinBox( this );
+    m_scale->setMinimum( 10 );
+    m_scale->setMaximum( 400 );
+    m_scale->setSingleStep( 10 );
     m_scale->setSuffix( "%" );
-    m_shearX = new QSpinBox( -100, 100, 1, this );
+    m_shearX = new QSpinBox( this );
+    m_shearX->setMinimum( -100 );
+    m_shearX->setMaximum( 100 );
+    m_shearX->setSingleStep( 1 );
     m_shearX->setSuffix( " px" );
-    m_shearY = new QSpinBox( -100, 100, 1, this );
+    m_shearY = new QSpinBox( this );
+    m_shearY->setMinimum( -100 );
+    m_shearY->setMaximum( 100 );
+    m_shearY->setSingleStep( 1 );
     m_shearY->setSuffix( " px" );
 
     setDocumentChild( ch );

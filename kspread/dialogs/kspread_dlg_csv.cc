@@ -230,7 +230,7 @@ CSVDialog::CSVDialog( View * parent, const char * name, QRect const & rect, Mode
       m_cancelled = true;
       return;
     }
-    m_fileArray = QByteArray(in.size());
+    m_fileArray = QByteArray(/*in.size()*/);
     in.read(m_fileArray.data(), in.size());
     in.close();
   }
