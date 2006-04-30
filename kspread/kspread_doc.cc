@@ -220,7 +220,7 @@ Doc::Doc( QWidget *parentWidget, const char *widgetName, QObject* parent, const 
   {
       QString tmp( "Document%1" );
       tmp = tmp.arg( d->s_docId++ );
-      setName( tmp.toLocal8Bit());//tmp.toLatin1() );
+      setObjectName( tmp.toLocal8Bit());//tmp.toLatin1() );
       dcopObject();
   }
   else
@@ -1253,7 +1253,7 @@ void Doc::registerPlugin( Plugin * plugin )
 
 void Doc::deregisterPlugin( Plugin * plugin )
 {
-  d->plugins.remove( plugin );
+  d->plugins.removeAll( plugin );
 }
 
 bool Doc::docData( QString const & xmlTag, QDomElement & data )
@@ -1617,6 +1617,7 @@ void Doc::paintContent( QPainter& painter, const QRect& rect,
 
 void Doc::paintContent( QPainter& painter, const QRect& rect, bool /*transparent*/, Sheet* sheet, bool drawCursor )
 {
+  Q_UNUSED( drawCursor );
     if ( isLoading() )
         return;
     //    ElapsedTime et( "Doc::paintContent2" );
@@ -1898,7 +1899,7 @@ void Doc::removeArea( const QString & name)
     {
         if((*it2).ref_name==name)
         {
-            d->refs.remove(it2);
+            d->refs.erase(it2);
             emit sig_removeAreaName( name );
             return;
         }

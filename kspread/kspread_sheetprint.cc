@@ -637,7 +637,7 @@ void SheetPrint::printHeaderFooter( QPainter &painter, int pageNo )
     double w;
     double headFootDistance = MM_TO_POINT( 10.0 /*mm*/ ) / m_dZoom;
     QFont font( "Times" );
-    font.setPointSizeFloat( 0.01 * m_pDoc->zoom() *
+    font.setPointSizeF( 0.01 * m_pDoc->zoom() *
                             /* Font size of 10 */ 10.0 / m_dZoom );
     painter.setFont( font );
     QFontMetrics fm = painter.fontMetrics();

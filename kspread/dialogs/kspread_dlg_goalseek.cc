@@ -73,7 +73,7 @@ GoalSeekDialog::GoalSeekDialog( View * parent,  QPoint const & marker,
   //setWFlags( Qt::WDestructiveClose );
 
   if ( !name )
-    setName( "GoalSeekDialog" );
+    setObjectName( "GoalSeekDialog" );
 
   resize( 458, 153 );
   setWindowTitle( i18n( "Goal Seek" ) );
@@ -121,13 +121,13 @@ GoalSeekDialog::GoalSeekDialog( View * parent,  QPoint const & marker,
 
   m_buttonOk = new QPushButton( this );
   m_buttonOk->setText( i18n( "&Start" ) );
-  m_buttonOk->setAccel( 276824143 );
+  m_buttonOk->setShortcut( 276824143 );
   m_buttonOk->setAutoDefault( true );
   m_buttonOk->setDefault( true );
   Layout5->addWidget( m_buttonOk );
 
   m_buttonCancel = new KPushButton( KStdGuiItem::cancel(), this );
-  m_buttonCancel->setAccel( 276824131 );
+  m_buttonCancel->setShortcut( 276824131 );
   m_buttonCancel->setAutoDefault( true );
   Layout5->addWidget( m_buttonCancel );
   QSpacerItem* spacer = new QSpacerItem( 20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding );
@@ -165,7 +165,8 @@ GoalSeekDialog::GoalSeekDialog( View * parent,  QPoint const & marker,
 
   m_resultText = new QLabel( m_resultFrame );
   m_resultText->setText( "Goal seeking with cell <cell> found <a | no> solution:" );
-  m_resultText->setAlignment( int( Qt::TextWordWrap | Qt::AlignVCenter ) );
+  m_resultText->setAlignment( Qt::AlignVCenter );
+  m_resultText->setWordWrap( true );
 
   m_resultFrameLayout->addWidget( m_resultText, 0, 0, 0, 1 );
 

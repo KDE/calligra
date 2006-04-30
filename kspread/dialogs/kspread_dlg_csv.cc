@@ -66,7 +66,7 @@ CSVDialog::CSVDialog( View * parent, const char * name, QRect const & rect, Mode
     m_mode( mode )
 {
   if ( !name )
-    setName( "CSV" );
+    setObjectName( "CSV" );
 
   setSizeGripEnabled( true );
 

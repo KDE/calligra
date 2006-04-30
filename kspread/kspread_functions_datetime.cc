@@ -76,7 +76,7 @@ void RegisterDateTimeFunctions()
   // TODO: do we really need DATEVALUE and TIMEVALUE ?
   FunctionRepository* repo = FunctionRepository::self();
   Function *f;
-  
+
   f = new Function ("CURRENTDATE",  func_currentDate);
   f->setParamCount (0);
   repo->add (f);
@@ -177,7 +177,7 @@ Value func_edate (valVector args, ValueCalc *calc, FuncExtra *)
 {
   QDate date = calc->conv()->asDate (args[0]).asDate();
   int months = calc->conv()->asInteger (args[1]).asInteger();
-  
+
   date = calc->conv()->locale()->calendar()->addMonths (date, months);
 
   if (!date.isValid())
@@ -192,7 +192,7 @@ Value func_eomonth (valVector args, ValueCalc *calc, FuncExtra *)
   // add months to date using EDATE
   Value modDate = func_edate (args, calc, 0);
   if (modDate.isError()) return modDate;
-  
+
   // modDate is currently in Date format
   QDate date = modDate.asDate();
   date.setYMD (date.year(), date.month(), date.daysInMonth());
@@ -342,7 +342,7 @@ Value func_weekday (valVector args, ValueCalc *calc, FuncExtra *)
   int method = 1;
   if (args.count() == 2)
     method = calc->conv()->asInteger (args[1]).asInteger();
-  
+
   if ( method < 1 || method > 3 )
     return Value::errorVALUE();
 
@@ -394,7 +394,7 @@ Value func_years (valVector args, ValueCalc *calc, FuncExtra *)
 
     return Value (years);
   }
-    
+
   // type is non-zero now
   // the number of full years in between, starting on 1/1/XXXX
   if ( date1.year() == date2.year() )
@@ -427,7 +427,7 @@ Value func_months (valVector args, ValueCalc *calc, FuncExtra *)
 
     return Value (months);
   }
-  
+
   // type is now non-zero
   // the number of full months in between, starting on 1/XX/XXXX
   if (date1.month() == 12)
@@ -455,10 +455,10 @@ Value func_weeks (valVector args, ValueCalc *calc, FuncExtra *)
   if (type == 0)
     // just the number of full weeks between
     return Value ((int) (days / 7));
-    
+
   // the number of full weeks between starting on mondays
   int weekStartDay = calc->conv()->locale()->weekStartDay();
-  
+
   int dow1 = date1.dayOfWeek();
   int dow2 = date2.dayOfWeek();
 
@@ -485,7 +485,7 @@ Value func_date (valVector args, ValueCalc *calc, FuncExtra *)
   int y = calc->conv()->asInteger (args[0]).asInteger();
   int m = calc->conv()->asInteger (args[1]).asInteger();
   int d = calc->conv()->asInteger (args[2]).asInteger();
-  
+
   QDate _date;
   if( _date.setYMD (y, m, d))
     return Value (_date);
@@ -521,7 +521,7 @@ Value func_time (valVector args, ValueCalc *calc, FuncExtra *)
   int h = calc->conv()->asInteger (args[0]).asInteger();
   int m = calc->conv()->asInteger (args[1]).asInteger();
   int s = calc->conv()->asInteger (args[2]).asInteger();
-  
+
   /* normalize the data */
   m += s / 60;
   s = s % 60;
@@ -584,14 +584,14 @@ Value func_daysInMonth (valVector args, ValueCalc *calc, FuncExtra *)
 Value func_isLeapYear  (valVector args, ValueCalc *calc, FuncExtra *)
 {
   int y = calc->conv()->asInteger (args[0]).asInteger();
-  return Value (QDate::leapYear (y));
+  return Value (QDate::isLeapYear (y));
 }
 
 // Function: daysInYear
 Value func_daysInYear  (valVector args, ValueCalc *calc, FuncExtra *)
 {
   int y = calc->conv()->asInteger (args[0]).asInteger();
-  return Value (QDate::leapYear (y) ? 366 : 365);
+  return Value (QDate::isLeapYear (y) ? 366 : 365);
 }
 
 // Function: weeksInYear

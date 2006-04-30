@@ -71,7 +71,7 @@ int KSpread::daysPerYear(QDate const & date, int basis)
     return 360;
 
    case 1:
-    if ( QDate::leapYear( date.year() ) )
+    if ( QDate::isLeapYear( date.year() ) )
       return 366;
     return 365;
 
@@ -103,7 +103,7 @@ int KSpread::daysBetweenDates(QDate const & date1, QDate const & date2, int basi
   months = month2 - month1 + years * 12;
   days   = day2   - day1;
 
-  isLeapYear = QDate::leapYear( year1 );
+  isLeapYear = QDate::isLeapYear( year1 );
 
   switch (basis)
   {
