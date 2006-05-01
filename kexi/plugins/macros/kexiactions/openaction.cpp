@@ -120,7 +120,8 @@ namespace KexiMacro {
 OpenAction::OpenAction()
 	: KexiAction("openaction", i18n("Open"))
 {
-	KoMacro::Variable* objvar = new ObjectVariable<OpenAction>(this);
+	int conditions = ObjectVariable<OpenAction>::VisibleInNav;
+	KoMacro::Variable* objvar = new ObjectVariable<OpenAction>(this, conditions);
 	setVariable(KoMacro::Variable::Ptr( objvar ));
 
 	setVariable(KoMacro::Variable::Ptr( new NameVariable<OpenAction>(this, objvar->variant().toString()) ));

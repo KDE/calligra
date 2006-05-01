@@ -47,22 +47,31 @@ namespace KexiMacro {
 	{
 		public:
 
+			enum Conditions {
+				VisibleInNav = 1,
+				Executable = 2
+			};
+
 			/**
 			* Constructor.
 			*
 			* @param action The @a KoMacro::Action instance
 			* this @a ObjectVariable is child of.
 			*/
-			ObjectVariable(ACTIONIMPL* actionimpl, const QString& objectname = QString::null)
+			ObjectVariable(ACTIONIMPL* actionimpl, int conditions = VisibleInNav, const QString& objectname = QString::null)
 				: KexiVariable<ACTIONIMPL>(actionimpl, "object", i18n("Object"))
 			{
 				KexiPart::PartInfoList* parts = Kexi::partManager().partInfoList();
 				for(KexiPart::PartInfoListIterator it(*parts); it.current(); ++it) {
 					KexiPart::Info* info = it.current();
-					if(info->isVisibleInNavigator()) {
-						const QString name = info->objectName(); //info->groupName();
-						this->children().append( KoMacro::Variable::Ptr(new KoMacro::Variable(name)) );
-					}
+
+					if(conditions & VisibleInNav && ! info->isVisibleInNavigator())
+						continue;
+					if(conditions & Executable && ! info->isExecuteSupported())
+						continue;
+
+					const QString name = info->objectName(); //info->groupName();
+					this->children().append( KoMacro::Variable::Ptr(new KoMacro::Variable(name)) );
 				}
 
 				if(! objectname.isNull())

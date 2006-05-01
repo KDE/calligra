@@ -24,6 +24,8 @@
 #include "../lib/macroitem.h"
 #include "../lib/context.h"
 
+#include "objectnamevariable.h"
+
 #include <kexi_export.h>
 #include <core/kexi.h>
 #include <core/kexiproject.h>
@@ -39,13 +41,11 @@ using namespace KexiMacro;
 ExecuteAction::ExecuteAction()
 	: KexiAction("executeaction", i18n("Execute"))
 {
-/*
-	ObjectVariable* objvar = new ObjectVariable(this);
+	int conditions = ObjectVariable<ExecuteAction>::VisibleInNav | ObjectVariable<ExecuteAction>::Executable;
+	KoMacro::Variable* objvar = new ObjectVariable<ExecuteAction>(this, conditions);
 	setVariable(KoMacro::Variable::Ptr( objvar ));
 
-	setVariable(KoMacro::Variable::Ptr( new ViewVariable(d->mainwin, this, objvar->variant().toString()) ));
-	setVariable(KoMacro::Variable::Ptr( new NameVariable(d->mainwin, this, objvar->variant().toString()) ));
-*/
+	setVariable(KoMacro::Variable::Ptr( new ObjectNameVariable<ExecuteAction>(this, objvar->variant().toString()) ));
 }
 
 ExecuteAction::~ExecuteAction() 
@@ -58,12 +58,35 @@ KoMacro::Variable::List ExecuteAction::notifyUpdated(const QString& variablename
 	Q_UNUSED(variablemap);
 	//kdDebug()<<"OpenObject::ExecuteAction() name="<<variable->name()<<" value="<< variable->variant().toString() <<endl;
 	KoMacro::Variable::List list;
+
+	if(variablename == "object") {
+		const QString objectname = variablemap["object"]->variant().toString(); // e.g. "table" or "query"
+
+		const QString name = variablemap.contains("name") ? variablemap["name"]->variant().toString() : QString::null;
+		list.append( KoMacro::Variable::Ptr(new ObjectNameVariable<ExecuteAction>(this, objectname, name)) );
+	}
+
 	return list;
 }
 
 void ExecuteAction::activate(KoMacro::Context::Ptr context)
 {
-	//TODO
+	if(! mainWin()->project()) {
+		kdWarning() << "ExecuteAction::activate(KoMacro::Context::Ptr) Invalid project" << endl;
+		return;
+	}
+
+	const QString mimetype = QString("kexi/%1").arg( context->variable("object")->variant().toString() );
+	const QString name = context->variable("name")->variant().toString();
+
+	KexiPart::Part* part = Kexi::partManager().partForMimeType(mimetype);
+	if(! part) {
+		kdWarning() << QString("ExecuteAction::activate(KoMacro::Context::Ptr) Invalid part \"\"").arg(mimetype) << endl;
+		return;
+	}
+
+	KexiPart::Item* item = mainWin()->project()->item(part->info(), name);
+	part->execute(item);
 }
 
 #include "executeaction.moc"
