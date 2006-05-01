@@ -27,23 +27,16 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-#include <qapplication.h>
-#include <qbuffer.h>
-#include <qcheckbox.h>
-#include <qclipboard.h>
-#include <qlabel.h>
-#include <qlayout.h>
-#include <QList>
+#include <QApplication>
+#include <QBuffer>
+#include <QClipboard>
 #include <QLinkedList>
-#include <qlineedit.h>
-#include <q3picture.h>
-#include <qregexp.h>
-#include <q3vbox.h>
-#include <qmap.h>
-//Added by qt3to4:
-#include <QTextStream>
-#include <Q3PtrList>
+#include <QList>
+#include <QMap>
 #include <QPixmap>
+#include <QRegExp>
+#include <QStack>
+#include <QTextStream>
 
 #include <kdebug.h>
 #include <kcodecs.h>
@@ -317,7 +310,7 @@ public:
 
   // List of all cell bindings. For example charts use bindings to get
   // informed about changing cell contents.
-  Q3PtrList<CellBinding> cellBindings;
+  QList<CellBinding*> cellBindings;
 
   // Indicates whether the sheet should paint the page breaks.
   // Doing so costs some time, so by default it should be turned off.
@@ -693,16 +686,6 @@ QPainter& Sheet::painter()
 QWidget* Sheet::widget()const
 {
     return d->widget;
-}
-
-CellBinding* Sheet::firstCellBinding()
-{
-    return d->cellBindings.first();
-}
-
-CellBinding* Sheet::nextCellBinding()
-{
-    return d->cellBindings.next();
 }
 
 void Sheet::setDefaultHeight( double height )
@@ -2758,14 +2741,10 @@ void Sheet::refreshChart(const QPoint & pos, bool fullRowOrColumn, ChangeRef ref
   //all cells
   if (c == 0)
   {
-     CellBinding * bind;
-     for ( bind = firstCellBinding(); bind != 0; bind = nextCellBinding() )
+     foreach ( CellBinding * binding, d->cellBindings )
      {
-       bind->cellChanged( 0 );
+       binding->cellChanged( 0 );
      }
-     //    CellBinding * bind = firstCellBinding();
-     //    if ( bind != 0 )
-     //      bind->cellChanged( 0 );
   }
 
 }
@@ -5548,7 +5527,7 @@ bool Sheet::testAreaPasteInsert()const
 void Sheet::deleteCells(const Region& region)
 {
     // A list of all cells we want to delete.
-    Q3PtrStack<Cell> cellStack;
+    QStack<Cell*> cellStack;
 
   Region::ConstIterator endOfList = region.constEnd();
   for (Region::ConstIterator it = region.constBegin(); it != endOfList; ++it)
@@ -6188,10 +6167,10 @@ KCommand *Sheet::moveObject(View *_view,const KoPoint &_move,bool key)
  */
 bool Sheet::objectNameExists( EmbeddedObject *object, QList<EmbeddedObject*> &list )
 {
-    foreach ( EmbeddedObject* object, list ) {
+    foreach ( EmbeddedObject* obj, list ) {
         // object name can exist in current object.
-        if ( object->getObjectName() == object->getObjectName() &&
-             object != object ) {
+        if ( obj->getObjectName() == object->getObjectName() &&
+             obj != object ) {
             return true;
         }
     }
@@ -7891,18 +7870,21 @@ void Sheet::setShowPageBorders( bool b )
     emit sig_updateView( this );
 }
 
-void Sheet::addCellBinding( CellBinding *_bind )
+void Sheet::addCellBinding( CellBinding* bind )
 {
-  d->cellBindings.append( _bind );
-
+  d->cellBindings.append( bind );
   doc()->setModified( true );
 }
 
-void Sheet::removeCellBinding( CellBinding *_bind )
+void Sheet::removeCellBinding( CellBinding* bind )
 {
-  d->cellBindings.removeRef( _bind );
-
+  d->cellBindings.removeAll( bind );
   doc()->setModified( true );
+}
+
+const QList<CellBinding*>& Sheet::cellBindings() const
+{
+  return d->cellBindings;
 }
 
 Sheet* Sheet::findSheet( const QString & _name )

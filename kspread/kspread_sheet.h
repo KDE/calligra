@@ -901,10 +901,20 @@ public:
      */
     void setShowPageBorders( bool _b );
 
-    void addCellBinding( CellBinding *_bind );
-    void removeCellBinding( CellBinding *_bind );
-    CellBinding* firstCellBinding();
-    CellBinding* nextCellBinding();
+    /**
+     * Adds the CellBinding @p bind to the sheet's list of bindings.
+     */
+    void addCellBinding( CellBinding* bind );
+
+    /**
+     * Removes the CellBinding @p bind to the sheet's list of bindings.
+     */
+    void removeCellBinding( CellBinding* bind );
+
+    /**
+     * @return the sheet's list of bindings
+     */
+    const QList<CellBinding*>& cellBindings() const;
 
     /**
      * Used by the 'chart' to get the sheet on which the chart is build.

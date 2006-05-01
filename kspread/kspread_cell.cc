@@ -4951,15 +4951,14 @@ bool Cell::updateChart(bool refresh)
     // Update a chart for example if it depends on this cell.
     if ( d->row != 0 && d->column != 0 )
     {
-        CellBinding *bind;
-        for ( bind = format()->sheet()->firstCellBinding(); bind != 0; bind = format()->sheet()->nextCellBinding() )
+        foreach ( CellBinding* binding, format()->sheet()->cellBindings() )
         {
-            if ( bind->contains( d->column, d->row ) )
+            if ( binding->contains( d->column, d->row ) )
             {
                 if (!refresh)
                     return true;
 
-                bind->cellChanged( this );
+                binding->cellChanged( this );
             }
         }
         return true;

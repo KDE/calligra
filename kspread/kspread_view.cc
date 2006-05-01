@@ -7219,10 +7219,10 @@ void View::handleDamages( const QList<Damage*>& damages )
 
             if( sd->action() == SheetDamage::PropertiesChanged )
             {
-                CellBinding  * b = 0;
-                for ( b = damagedSheet->firstCellBinding(); b != 0;
-                    b = damagedSheet->nextCellBinding() )
-                        b->cellChanged( 0 );
+                foreach ( CellBinding* binding, damagedSheet->cellBindings() )
+                {
+                     binding->cellChanged( 0 );
+                }
 
                 d->activeSheet->setRegionPaintDirty( QRect(QPoint(1,1),
                     QPoint(KS_colMax, KS_rowMax)));

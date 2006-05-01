@@ -22,12 +22,10 @@
 
 #include <QLinkedList>
 #include <QList>
-#include <qrect.h>
-#include <QStack>
-#include <qstring.h>
 #include <QMap>
-
-#include <q3ptrstack.h>
+#include <QRect>
+#include <QStack>
+#include <QString>
 //Added by qt3to4:
 #include <Q3CString>
 
