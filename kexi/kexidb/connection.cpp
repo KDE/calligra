@@ -338,7 +338,7 @@ bool Connection::drv_databaseExists( const QString &dbName, bool ignoreErrors )
 
 bool Connection::databaseExists( const QString &dbName, bool ignoreErrors )
 {
-//	KexiDBDbg << "Connection::databaseExists(" << dbName << "," << ignoreErrors << ")" << endl;
+	KexiDBDbg << "Connection::databaseExists(" << dbName << "," << ignoreErrors << ")" << endl;
 	if (!checkConnected())
 		return false;
 	clearError();
@@ -2366,7 +2366,8 @@ KexiDB::TableSchema* Connection::setupTableSchema( const RowData &data )
 		delete t;
 		return 0;
 	}
-
+	KexiDBDbg << "Connection::setupTableSchema(): cursor->fieldCount()==" << cursor->fieldCount()<<endl;
+	
 	// For each field: load its schema
 	bool ok;
 	while (!cursor->eof()) {
@@ -2388,18 +2389,18 @@ KexiDB::TableSchema* Connection::setupTableSchema( const RowData &data )
 		if (!ok)
 			break;
 
-		if (!KexiUtils::isIdentifier( cursor->value(2).asString() )) {
+		if (!KexiUtils::isIdentifier( cursor->value(2).toString() )) {
 			setError(ERR_INVALID_IDENTIFIER, i18n("Invalid object name \"%1\"")
-				.arg( cursor->value(2).asString() ));
+				.arg( cursor->value(2).toString() ));
 			ok=false;
 			break;
 		}
 
 		Field *f = new Field(
-			cursor->value(2).asString(), (Field::Type)f_type, f_constr, f_opts, f_len, f_prec );
+			cursor->value(2).toString(), (Field::Type)f_type, f_constr, f_opts, f_len, f_prec );
 		f->setDefaultValue( QVariant( cursor->value(7).toCString() ) );
-		f->m_caption = cursor->value(9).asString();
-		f->m_desc = cursor->value(10).asString();
+		f->m_caption = cursor->value(9).toString();
+		f->m_desc = cursor->value(10).toString();
 		t->addField(f);
 		cursor->moveNext();
 	}

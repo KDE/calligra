@@ -19,8 +19,8 @@
 
 #include <qfileinfo.h>
 #include <qpointer.h>
-//Added by qt3to4:
 #include <Q3CString>
+#include <QByteArray>
 
 #include <kdebug.h>
 #include <kcmdlineargs.h>
@@ -43,10 +43,10 @@
 
 using namespace std;
 
-Q3CString prgname;
-Q3CString db_name;
-Q3CString drv_name;
-Q3CString test_name;
+QByteArray prgname;
+QString db_name;
+QString drv_name;
+QString test_name;
 int cursor_options = 0;
 bool db_name_required = true;
 
@@ -65,8 +65,10 @@ static KCmdLineOptions options[] =
 		" dbcreation: test for new db creation\n"
 		" tables: test for tables creation and data\n"
 		"  inserting\n"
+#ifndef NO_GUI
 		" tableview: test for KexiDataTableView data-aware\n"
 		" widget\n"
+#endif
 		" parser: test for parsing sql statements,\n"
 		"  returns debug string for a given\n"
 		"  sql statement or error message\n"
@@ -95,7 +97,9 @@ static KCmdLineOptions options[] =
 #include "cursors_test.h"
 #include "schema_test.h"
 #include "tables_test.h"
-#include "tableview_test.h"
+#ifndef NO_GUI
+# include "tableview_test.h"
+#endif
 #include "parser_test.h"
 #include "dr_prop_test.h"
 
@@ -117,8 +121,8 @@ int main(int argc, char** argv)
 	KCmdLineArgs::init(argc, argv, 
 		new KAboutData( prgname, "KexiDBTest",
 			"0.1.2", "", KAboutData::License_GPL,
-			"(c) 2003-2004, Kexi Team\n"
-			"(c) 2003-2004, OpenOffice Polska Ltd.\n",
+			"(c) 2003-2006, Kexi Team\n"
+			"(c) 2003-2006, OpenOffice Polska Ltd.\n",
 			"",
 			"http://www.koffice.org/kexi",
 			"submit@bugs.kde.org"
@@ -127,7 +131,7 @@ int main(int argc, char** argv)
 	KCmdLineArgs::addCmdLineOptions( options );
 	
 	KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
-	QByteArrayList tests;
+	QStringList tests;
 	tests << "cursors" << "schema" << "dbcreation" << "tables" 
 		<< "tableview" << "parser" << "dr_prop";
 	if (!args->isSet("test")) {
@@ -156,7 +160,7 @@ int main(int argc, char** argv)
 	}
 	
 	if (gui) {
-		app = new KApplication(true, true);
+		app = new KApplication(true);
 		instance = app;
 		KGlobal::iconLoader()->addAppDir("kexi");
 	}
@@ -219,8 +223,10 @@ int main(int argc, char** argv)
 		r=dbCreationTest();
 	else if (test_name == "tables")
 		r=tablesTest();
+#ifndef NO_GUI
 	else if (test_name == "tableview")
 		r=tableViewTest();
+#endif
 	else if (test_name == "parser")
 		r=parserTest(args->arg(2));
 	else if (test_name == "dr_prop")

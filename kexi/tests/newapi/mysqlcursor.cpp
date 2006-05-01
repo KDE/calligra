@@ -66,37 +66,37 @@ int main(int argc, char * argv[])
 
 	if (c) {
 		while (c->moveNext()) {
-			kDebug()<<"Cursor: Value(0)"<<c->value(0).asString()<<endl;
-			kDebug()<<"Cursor: Value(1)"<<c->value(1).asString()<<endl;
+			kDebug()<<"Cursor: Value(0)"<<c->value(0).toString()<<endl;
+			kDebug()<<"Cursor: Value(1)"<<c->value(1).toString()<<endl;
 		}
 		kDebug()<<"Cursor error:"<<c->errorMsg()<<endl;
 	}
 	if (c2) {
 		while (c2->moveNext()) {
-			kDebug()<<"Cursor2: Value(0)"<<c2->value(0).asString()<<endl;
-			kDebug()<<"Cursor2: Value(1)"<<c2->value(1).asString()<<endl;
+			kDebug()<<"Cursor2: Value(0)"<<c2->value(0).toString()<<endl;
+			kDebug()<<"Cursor2: Value(1)"<<c2->value(1).toString()<<endl;
 		}
 	}
 	if (c) {
 		kDebug()<<"Cursor::prev"<<endl;
 		while (c->movePrev()) {
-			kDebug()<<"Cursor: Value(0)"<<c->value(0).asString()<<endl;
-			kDebug()<<"Cursor: Value(1)"<<c->value(1).asString()<<endl;
+			kDebug()<<"Cursor: Value(0)"<<c->value(0).toString()<<endl;
+			kDebug()<<"Cursor: Value(1)"<<c->value(1).toString()<<endl;
 
 		}
 		kDebug()<<"up/down"<<endl;
 			c->moveNext();
-			kDebug()<<"Cursor: Value(0)"<<c->value(0).asString()<<endl;
-			kDebug()<<"Cursor: Value(1)"<<c->value(1).asString()<<endl;
+			kDebug()<<"Cursor: Value(0)"<<c->value(0).toString()<<endl;
+			kDebug()<<"Cursor: Value(1)"<<c->value(1).toString()<<endl;
 			c->moveNext();
-			kDebug()<<"Cursor: Value(0)"<<c->value(0).asString()<<endl;
-			kDebug()<<"Cursor: Value(1)"<<c->value(1).asString()<<endl;
+			kDebug()<<"Cursor: Value(0)"<<c->value(0).toString()<<endl;
+			kDebug()<<"Cursor: Value(1)"<<c->value(1).toString()<<endl;
 			c->movePrev();
-			kDebug()<<"Cursor: Value(0)"<<c->value(0).asString()<<endl;
-			kDebug()<<"Cursor: Value(1)"<<c->value(1).asString()<<endl;
+			kDebug()<<"Cursor: Value(0)"<<c->value(0).toString()<<endl;
+			kDebug()<<"Cursor: Value(1)"<<c->value(1).toString()<<endl;
 			c->movePrev();
-			kDebug()<<"Cursor: Value(0)"<<c->value(0).asString()<<endl;
-			kDebug()<<"Cursor: Value(1)"<<c->value(1).asString()<<endl;
+			kDebug()<<"Cursor: Value(0)"<<c->value(0).toString()<<endl;
+			kDebug()<<"Cursor: Value(1)"<<c->value(1).toString()<<endl;
 
 	}
 #if 0
