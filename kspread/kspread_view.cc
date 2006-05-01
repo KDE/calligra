@@ -53,7 +53,6 @@
 #include <QSqlDatabase>
 #include <QSizePolicy>
 //Added by qt3to4:
-#include <Q3PaintDeviceMetrics>
 #include <Q3ValueList>
 
 // KDE includes
@@ -4723,11 +4722,8 @@ void View::print( KPrinter &prt )
         //   We don't get valid metrics from the printer - and we want a better resolution
         //   anyway (it's the PS driver that takes care of the printer resolution).
         //But KSpread uses fixed 300 dpis, so we can use it.
-
-        Q3PaintDeviceMetrics metrics( &prt );
-
-        int dpiX = metrics.logicalDpiX();
-        int dpiY = metrics.logicalDpiY();
+        int dpiX = prt.logicalDpiX();
+        int dpiY = prt.logicalDpiY();
 
         doc()->setZoomAndResolution( int( print->zoom() * 100 ), dpiX, dpiY );
 
