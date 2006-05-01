@@ -73,7 +73,7 @@ namespace KexiMacro {
 }
 
 OpenAction::OpenAction()
-	: KexiAction("openaction", i18n("Open"))
+	: KexiAction("open", i18n("Open"))
 {
 	int conditions = ObjectVariable<OpenAction>::VisibleInNav;
 	KoMacro::Variable* objvar = new ObjectVariable<OpenAction>(this, conditions);

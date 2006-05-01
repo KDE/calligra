@@ -39,7 +39,7 @@
 using namespace KexiMacro;
 
 ExecuteAction::ExecuteAction()
-	: KexiAction("executeaction", i18n("Execute"))
+	: KexiAction("execute", i18n("Execute"))
 {
 	int conditions = ObjectVariable<ExecuteAction>::VisibleInNav | ObjectVariable<ExecuteAction>::Executable;
 	KoMacro::Variable* objvar = new ObjectVariable<ExecuteAction>(this, conditions);

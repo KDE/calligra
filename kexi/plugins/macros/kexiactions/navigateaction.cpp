@@ -33,20 +33,56 @@
 #include <core/kexipartinfo.h>
 #include <core/kexipart.h>
 #include <core/keximainwindow.h>
+#include <core/kexidialogbase.h>
+
+#include <widget/kexidataawareview.h>
+#include <widget/tableview/kexidataawareobjectiface.h>
 
 #include <klocale.h>
+#include <kdebug.h>
 
 using namespace KexiMacro;
+
+namespace KexiMacro {
+
+	template<class ACTIONIMPL>
+	class NavigateVariable : public KexiVariable<ACTIONIMPL>
+	{
+		public:
+			NavigateVariable(ACTIONIMPL* actionimpl)
+				: KexiVariable<ACTIONIMPL>(actionimpl, "record", i18n("Record"))
+			{
+				this->children().append( KoMacro::Variable::Ptr(new KoMacro::Variable( "first" )) );
+				this->children().append( KoMacro::Variable::Ptr(new KoMacro::Variable( "previous" )) );
+				this->children().append( KoMacro::Variable::Ptr(new KoMacro::Variable( "next" )) );
+				this->children().append( KoMacro::Variable::Ptr(new KoMacro::Variable( "last" )) );
+				
+				//this->children().append( KoMacro::Variable::Ptr(new KoMacro::Variable( "goto" )) );
+				//this->children().append( KoMacro::Variable::Ptr(new KoMacro::Variable( "add" )) );
+				//this->children().append( KoMacro::Variable::Ptr(new KoMacro::Variable( "save" )) );
+				//this->children().append( KoMacro::Variable::Ptr(new KoMacro::Variable( "delete" )) );
+				//this->children().append( KoMacro::Variable::Ptr(new KoMacro::Variable( "query" )) );
+				//this->children().append( KoMacro::Variable::Ptr(new KoMacro::Variable( "execute" )) );
+				//this->children().append( KoMacro::Variable::Ptr(new KoMacro::Variable( "cancel" )) );
+				//this->children().append( KoMacro::Variable::Ptr(new KoMacro::Variable( "reload" )) );
+
+				this->setVariant( this->children()[0]->variant() );
+			}
+	};
+
+}
 
 NavigateAction::NavigateAction()
 	: KexiAction("navigateaction", i18n("Navigate"))
 {
-/*
-- Form/Table/etc. (KexiDataAwareObjectInterface)
-- First, Previous, Next, Last
-- Add, Save, Delete, Query, Execute, Cancel, Reload
-- etc.
-*/
+	KoMacro::Variable* navvar = new NavigateVariable<NavigateAction>(this);
+	setVariable(KoMacro::Variable::Ptr( navvar ));
+
+	/*TODO
+	We need to determinate on what object the navigate-action should be applied;
+	- Form/Table/invoker/ActualSelectedForm/etc.
+	- KexiDataAwareObjectInterface provides us navigation-functionality.
+	*/
 }
 
 NavigateAction::~NavigateAction() 
@@ -64,7 +100,48 @@ KoMacro::Variable::List NavigateAction::notifyUpdated(const QString& variablenam
 
 void NavigateAction::activate(KoMacro::Context::Ptr context)
 {
-	//TODO
+	KexiDialogBase* dialog = dynamic_cast<KexiDialogBase*>( mainWin()->activeWindow() );
+	if(! dialog) {
+		kdWarning() << "NavigateAction::activate() No window active." << endl;
+		return;
+	}
+
+	KexiViewBase* view = dialog->selectedView();
+	if(! view) {
+		kdWarning() << "NavigateAction::activate() No view selected." << endl;
+		return;
+	}
+
+	KexiDataAwareView* dbview = dynamic_cast<KexiDataAwareView*>( view );
+	if(! dbview) {
+		kdWarning() << "NavigateAction::activate() View is not dataaware." << endl;
+		return;
+	}
+
+	KexiDataAwareObjectInterface* dbobj = dbview->dataAwareObject();
+	if(! dbobj) {
+		kdWarning() << "NavigateAction::activate() Dataaware view has no dbobject." << endl;
+		return;
+	}
+
+	const QString record = context->variable("record")->variant().toString();
+	if(record == "previous") {
+		dbobj->selectPrevRow();
+	}
+	else if(record == "next") {
+		dbobj->selectNextRow();
+	}
+	else if(record == "first") {
+		dbobj->selectFirstRow();
+	}
+	else if(record == "last") {
+		dbobj->selectLastRow();
+	}
+	else {
+		//virtual void selectNextPage(); //!< page down action
+		//virtual void selectPrevPage(); //!< page up action
+		kdWarning() << QString("NavigateAction::activate() Unknown record \"%1\".").arg(record) << endl;
+	}
 }
 
 #include "navigateaction.moc"
