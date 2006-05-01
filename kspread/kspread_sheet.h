@@ -33,9 +33,7 @@
 #include <qwidget.h>
 //Added by qt3to4:
 #include <QPixmap>
-#include <Q3PointArray>
 #include <Q3PtrList>
-#include <Q3Dict>
 
 #include <KoDocument.h>
 #include <KoDocumentChild.h>
@@ -1272,11 +1270,6 @@ signals:
      * @see #setSheetName
      */
     void sig_nameChanged( Sheet* sheet, const QString& old_name );
-    /**
-     * Emitted if a certain area of some sheet has to be redrawn.
-     * That is for example the case when a new child is inserted.
-     */
-    void sig_polygonInvalidated( const Q3PointArray& );
 
     void sig_SheetHidden( Sheet* sheet);
     void sig_SheetShown( Sheet* sheet);

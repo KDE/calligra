@@ -18,21 +18,22 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "formula.h"
-#include "functions.h"
-#include "valuecalc.h"
-
-#include <q3dict.h>
-#include <qdom.h>
-#include <qfile.h>
-#include <q3valuevector.h>
+#include <QDomElement>
+#include <QDomNode>
+#include <QFile>
+#include <QHash>
 
 #include <kdebug.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
 #include <kstaticdeleter.h>
 #include <kinstance.h>
+
+#include "formula.h"
 #include "kspread_factory.h"
+#include "valuecalc.h"
+
+#include "functions.h"
 
 namespace KSpread
 {
@@ -50,8 +51,8 @@ public:
 class FunctionRepository::Private
 {
 public:
-  Q3Dict<Function> functions;
-  Q3Dict<FunctionDescription> funcs;
+  QHash<QString, Function*> functions;
+  QHash<QString, FunctionDescription*> funcs;
 };
 
 } // namespace KSpread
@@ -223,13 +224,12 @@ FunctionRepository* FunctionRepository::self()
 FunctionRepository::FunctionRepository()
 {
   d = new Private;
-
-  d->functions.setAutoDelete( true );
-  d->funcs.setAutoDelete( true );
 }
 
 FunctionRepository::~FunctionRepository()
 {
+  qDeleteAll( d->functions );
+  qDeleteAll( d->funcs );
   delete d;
   s_self = 0;
 }
@@ -242,12 +242,12 @@ void FunctionRepository::add( Function* function )
 
 Function *FunctionRepository::function (const QString& name)
 {
-  return d->functions.find (name.toUpper());
+  return d->functions.value( name.toUpper() );
 }
 
 FunctionDescription *FunctionRepository::functionInfo (const QString& name)
 {
-  return d->funcs.find (name.toUpper());
+  return d->funcs.value( name.toUpper() );
 }
 
 // returns names of function in certain group
@@ -255,10 +255,10 @@ QStringList FunctionRepository::functionNames( const QString& group )
 {
   QStringList lst;
 
-  Q3DictIterator<FunctionDescription> it (d->funcs);
-  for(; it.current(); ++it) {
-    if (group.isNull() || (it.current()->group() == group))
-      lst.append (it.current()->name());
+  foreach ( FunctionDescription* description, d->funcs )
+  {
+    if (group.isNull() || (description->group() == group))
+      lst.append (description->name());
   }
 
   lst.sort();
@@ -299,7 +299,7 @@ void FunctionRepository::loadFile (const QString& filename)
         {
           FunctionDescription* desc = new FunctionDescription( e2 );
           desc->setGroup (group);
-          if (d->functions.find (desc->name()))
+          if ( d->functions.contains( desc->name() ) )
             d->funcs.insert (desc->name(), desc);
         }
       }

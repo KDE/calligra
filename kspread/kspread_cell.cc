@@ -48,7 +48,7 @@
 #include <q3popupmenu.h>
 #include <qregexp.h>
 //Added by qt3to4:
-#include <Q3PointArray>
+#include <QPolygon>
 
 #include "kspread_canvas.h"
 #include "kspread_condition.h"
@@ -2986,7 +2986,7 @@ void Cell::paintCommentIndicator( QPainter& painter,
     }
 
     // Get the triangle.
-    Q3PointArray  point( 3 );
+    QPolygon  point( 3 );
     if ( format()->sheet()->layoutDirection()==Sheet::RightToLeft ) {
       point.setPoint( 0, doc->zoomItX( cellRect.x() + 6.0 ),
                          doc->zoomItY( cellRect.y() ) );
@@ -3036,7 +3036,7 @@ void Cell::paintFormulaIndicator( QPainter& painter,
     }
 
     // Get the triangle...
-    Q3PointArray point( 3 );
+    QPolygon point( 3 );
     if ( format()->sheet()->layoutDirection()==Sheet::RightToLeft ) {
       point.setPoint( 0, doc->zoomItX( cellRect.right() - 6.0 ),
                          doc->zoomItY( cellRect.bottom() ) );
@@ -3087,7 +3087,7 @@ void Cell::paintMoreTextIndicator( QPainter& painter,
     }
 
     // Get the triangle...
-    Q3PointArray point( 3 );
+    QPolygon point( 3 );
     if ( d->strOutText.isRightToLeft() ) {
       point.setPoint( 0, doc->zoomItX( cellRect.left() + 4.0 ),
                          doc->zoomItY( cellRect.y() + cellRect.height() / 2.0 -4.0 ) );
