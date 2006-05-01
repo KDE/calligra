@@ -33,7 +33,6 @@
 #include <qwidget.h>
 //Added by qt3to4:
 #include <QPixmap>
-#include <Q3PtrList>
 
 #include <KoDocument.h>
 #include <KoDocumentChild.h>
@@ -1323,7 +1322,10 @@ protected:
     /**
      * @see #autofill
      */
-    void fillSequence( QList<Cell*>& _srcList, QList<Cell*>& _destList, Q3PtrList<AutoFillSequence>& _seqList, bool down = true );
+    void fillSequence( const QList<Cell*>& _srcList,
+                       const QList<Cell*>& _destList,
+                       const QList<AutoFillSequence*>& _seqList,
+                       bool down = true );
 
     static int s_id;
     static Q3IntDict<Sheet>* s_mapSheets;
@@ -1373,13 +1375,13 @@ private:
      */
     bool insertPicture( const KoPoint& point, KoPicture& picture );
 
-    bool FillSequenceWithInterval (QList<Cell*>& _srcList,
-           QList<Cell*>& _destList,
-           Q3PtrList<AutoFillSequence>& _seqList,
-                                   bool down);
+    bool fillSequenceWithInterval( const QList<Cell*>& _srcList,
+                                   const QList<Cell*>& _destList,
+                                   const QList<AutoFillSequence*>& _seqList,
+                                   bool down );
 
-    void FillSequenceWithCopy (QList<Cell*>& _srcList,
-                               QList<Cell*>& _destList,
+    void fillSequenceWithCopy( const QList<Cell*>& _srcList,
+                               const QList<Cell*>& _destList,
                                bool down);
 
     void convertObscuringBorders();

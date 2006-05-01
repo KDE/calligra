@@ -30,9 +30,8 @@
 
 #include <math.h>
 
-#include <qregexp.h>
-//Added by qt3to4:
-#include <Q3PtrList>
+#include <QList>
+#include <QRegExp>
 
 #include <kconfig.h>
 #include <kdebug.h>
@@ -71,10 +70,11 @@ AutoFillDeltaSequence::AutoFillDeltaSequence( AutoFillSequence *_first, AutoFill
 
   m_sequence = new QVector<double> ( _first->count() );
 
-  AutoFillSequenceItem *item = _first->getFirst();
-  AutoFillSequenceItem *item2 = _next->getFirst();
+  int index = 0;
+  AutoFillSequenceItem *item = _first->value( index );
+  AutoFillSequenceItem *item2 = _next->value( index );
   int i = 0;
-  // for( item = _first->getFirst(); item != 0 && item2 != 0L; item = _first->getNext() );
+  // for( item = _first->value( index ); item != 0 && item2 != 0L; item = _first->value( ++index ) );
   for ( i = 0; i < _first->count(); i++ )
   {
     double d;
@@ -84,8 +84,8 @@ AutoFillDeltaSequence::AutoFillDeltaSequence( AutoFillSequence *_first, AutoFill
         return;
       }
     m_sequence->insert( i++, d );
-    item2 = _next->getNext();
-    item = _first->getNext();
+    item2 = _next->value( ++index );
+    item = _first->value( ++index );
   }
 }
 
@@ -493,8 +493,6 @@ QString AutoFillSequenceItem::getPredecessor( int _no, double _delta )
 
 AutoFillSequence::AutoFillSequence( Cell *_cell )
 {
-    sequence.setAutoDelete( true );
-
     if ( _cell->isFormula() )
     {
         QString d = _cell->encodeFormula();
@@ -511,6 +509,11 @@ AutoFillSequence::AutoFillSequence( Cell *_cell )
     }
     else if ( !_cell->text().isEmpty() )
         sequence.append( new AutoFillSequenceItem( _cell->text() ) );
+}
+
+AutoFillSequence::~AutoFillSequence()
+{
+  qDeleteAll( sequence );
 }
 
 bool AutoFillSequence::matches( AutoFillSequence* _seq, AutoFillDeltaSequence *_delta )
@@ -538,16 +541,15 @@ void AutoFillSequence::fillCell( Cell *src, Cell *dest, AutoFillDeltaSequence *d
         return;
     }
 
-    AutoFillSequenceItem *item;
     int i = 0;
     if (down)
     {
-      for ( item = sequence.first(); item != 0; item = sequence.next() )
+      foreach ( AutoFillSequenceItem* item, sequence )
         erg += item->getSuccessor( _block, delta->getItemDelta( i++ ) );
     }
     else
     {
-      for ( item = sequence.first(); item != 0; item = sequence.next() )
+      foreach ( AutoFillSequenceItem* item, sequence )
         erg += item->getPredecessor( _block, delta->getItemDelta( i++ ) );
     }
 
@@ -590,11 +592,11 @@ void Sheet::autofill( QRect &src, QRect &dest )
             QList<Cell*> srcList;
             for ( x = src.left(); x <= src.right(); x++ )
                 srcList.append( cellAt( x, y ) );
-            Q3PtrList<AutoFillSequence> seqList;
-            seqList.setAutoDelete( true );
+            QList<AutoFillSequence*> seqList;
             for ( x = src.left(); x <= src.right(); x++ )
                 seqList.append( new AutoFillSequence( cellAt( x, y ) ) );
             fillSequence( srcList, destList, seqList );
+            qDeleteAll( seqList );
         }
     }
 
@@ -612,11 +614,11 @@ void Sheet::autofill( QRect &src, QRect &dest )
             {
                 srcList.append( cellAt( x, y ) );
             }
-            Q3PtrList<AutoFillSequence> seqList;
-            seqList.setAutoDelete( true );
+            QList<AutoFillSequence*> seqList;
             for ( y = src.top(); y <= src.bottom(); y++ )
                 seqList.append( new AutoFillSequence( cellAt( x, y ) ) );
             fillSequence( srcList, destList, seqList );
+            qDeleteAll( seqList );
         }
     }
 
@@ -640,11 +642,11 @@ void Sheet::autofill( QRect &src, QRect &dest )
             {
                 srcList.append( cellAt( x, y ) );
             }
-            Q3PtrList<AutoFillSequence> seqList;
-            seqList.setAutoDelete( true );
+            QList<AutoFillSequence*> seqList;
             for ( x = src.left(); x <= src.right(); x++ )
                 seqList.append( new AutoFillSequence( cellAt( x, y ) ) );
             fillSequence( srcList, destList, seqList, false );
+            qDeleteAll( seqList );
         }
     }
 
@@ -666,11 +668,11 @@ void Sheet::autofill( QRect &src, QRect &dest )
             {
                 srcList.append( cellAt( x, y ) );
             }
-            Q3PtrList<AutoFillSequence> seqList;
-            seqList.setAutoDelete( true );
+            QList<AutoFillSequence*> seqList;
             for ( y = src.top(); y <= src.bottom(); y++ )
                 seqList.append( new AutoFillSequence( cellAt( x, y ) ) );
             fillSequence( srcList, destList, seqList, false );
+            qDeleteAll( seqList );
         }
     }
 
@@ -679,18 +681,18 @@ void Sheet::autofill( QRect &src, QRect &dest )
 }
 
 
-void Sheet::fillSequence( QList<Cell*>& _srcList,
-				 QList<Cell*>& _destList,
-                                 Q3PtrList<AutoFillSequence>& _seqList,
-                                 bool down)
+void Sheet::fillSequence( const QList<Cell*>& _srcList,
+                          const QList<Cell*>& _destList,
+                          const QList<AutoFillSequence*>& _seqList,
+                          bool down )
 {
     doc()->emitBeginOperation(true);
 
     /* try finding an interval to use to fill the sequence */
-    if (!FillSequenceWithInterval(_srcList, _destList, _seqList, down))
+    if (!fillSequenceWithInterval(_srcList, _destList, _seqList, down))
     {
       /* if no interval was found, just copy down through */
-      FillSequenceWithCopy(_srcList, _destList, down);
+      fillSequenceWithCopy(_srcList, _destList, down);
     }
 
     doc()->emitEndOperation();
@@ -715,16 +717,15 @@ QVariant getDiff( const Value& value1, const Value& value2  , AutoFillSequenceIt
     return 0.0;*/
 }
 
-bool Sheet::FillSequenceWithInterval(QList<Cell*>& _srcList,
-                                            QList<Cell*>& _destList,
-                                            Q3PtrList<AutoFillSequence>& _seqList,
-                                            bool down)
+bool Sheet::fillSequenceWithInterval( const QList<Cell*>& _srcList,
+                                      const QList<Cell*>& _destList,
+                                      const QList<AutoFillSequence*>& _seqList,
+                                      bool down )
 {
   if (_srcList.first()->isFormula())
     return false;
 
-  Q3PtrList<AutoFillDeltaSequence> deltaList;
-  deltaList.setAutoDelete( true );
+  QList<AutoFillDeltaSequence*> deltaList;
   bool ok = false;
 
   if ( _srcList.first()->value().isNumber() || _srcList.first()->isDate() || _srcList.first()->isTime() )
@@ -950,7 +951,7 @@ bool Sheet::FillSequenceWithInterval(QList<Cell*>& _srcList,
   // The case of an interval of length n is handled below.
   //
   // We try to find the shortest interval.
-  for ( unsigned int step = 1; step <= _seqList.count() / 2; step++ )
+  for ( int step = 1; step <= _seqList.count() / 2; step++ )
   {
     kDebug() << "Looking for interval: " << step << " seqList count: " << _seqList.count() << endl;
     // If the interval is of length 'step' then the _seqList size must
@@ -960,6 +961,7 @@ bool Sheet::FillSequenceWithInterval(QList<Cell*>& _srcList,
       // Be optimistic
       ok = true;
 
+      qDeleteAll( deltaList );
       deltaList.clear();
 
       // Guess the delta by looking at cells 0...2*step-1
@@ -970,7 +972,7 @@ bool Sheet::FillSequenceWithInterval(QList<Cell*>& _srcList,
       {
 	deltaList.append( new AutoFillDeltaSequence( _seqList.at(t),
 						     _seqList.at(t+step) ) );
-	ok = deltaList.getLast()->isOk();
+	ok = deltaList.last()->isOk();
       }
 
       /* Verify the delta by looking at cells step..._seqList.count()
@@ -979,10 +981,9 @@ bool Sheet::FillSequenceWithInterval(QList<Cell*>& _srcList,
 	 with the cell "tst * step + s" for all test=1..._seqList.count()/step
 	 and for all s=0...step-1.
       */
-      for ( unsigned int tst = 1; ok && ( tst * step < _seqList.count() );
-	    tst++ )
+      for ( int tst = 1; ok && ( tst * step < _seqList.count() ); tst++ )
       {
-	for ( unsigned int s = 0; ok && ( s < step ); s++ )
+	for ( int s = 0; ok && ( s < step ); s++ )
 	{
 	  if ( !_seqList.at( (tst-1) * step + s )->
 	       matches( _seqList.at( tst * step + s ), deltaList.at( s ) ) )
@@ -992,7 +993,7 @@ bool Sheet::FillSequenceWithInterval(QList<Cell*>& _srcList,
       // Did we find a valid interval ?
       if ( ok )
       {
-	unsigned int s = 0;
+	int s = 0;
 	// Amount of intervals (blocks)
 	int block = _seqList.count() / step;
 
@@ -1058,12 +1059,13 @@ bool Sheet::FillSequenceWithInterval(QList<Cell*>& _srcList,
       }
     }
   }
+  qDeleteAll( deltaList );
   return ok;
 }
 
-void Sheet::FillSequenceWithCopy(QList<Cell*>& _srcList,
-                                        QList<Cell*>& _destList,
-                                        bool down)
+void Sheet::fillSequenceWithCopy( const QList<Cell*>& _srcList,
+                                  const QList<Cell*>& _destList,
+                                  bool down )
 {
   // We did not find any valid interval. So just copy over the marked
   // area.

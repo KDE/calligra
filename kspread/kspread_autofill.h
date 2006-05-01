@@ -26,11 +26,10 @@
 #ifndef __kspread_autofill_h__
 #define __kspread_autofill_h__
 
-#include <qdatetime.h>
+#include <QList>
 #include <QVector>
-#include <qstring.h>
-#include <q3ptrlist.h>
-#include <qstringlist.h>
+#include <QString>
+#include <QStringList>
 
 namespace KSpread
 {
@@ -80,18 +79,18 @@ class AutoFillSequence
 {
 public:
     AutoFillSequence( Cell *_obj );
+    ~AutoFillSequence();
 
     int count()const { return sequence.count(); }
 
-    AutoFillSequenceItem* getFirst() { return sequence.first(); }
-    AutoFillSequenceItem* getNext() { return sequence.next(); }
+    AutoFillSequenceItem* value( int index ) { return sequence.value( index ); }
 
     bool matches( AutoFillSequence* _seq, AutoFillDeltaSequence *_delta );
 
     void fillCell( Cell *src, Cell *dest, AutoFillDeltaSequence *delta, int _block, bool down = true );
 
 protected:
-    Q3PtrList<AutoFillSequenceItem> sequence;
+    QList<AutoFillSequenceItem*> sequence;
 };
 
 class AutoFillDeltaSequence
