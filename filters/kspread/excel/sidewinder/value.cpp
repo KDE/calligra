@@ -378,7 +378,7 @@ std::ostream& Swinder::operator<<( std::ostream& s, Swinder::Value value )
       s << "Float: " << value.asFloat();
       break;
     case Value::String:
-      s << "String: " << value.asString().ascii(); 
+      s << "String: " << value.toString().ascii(); 
       break;
     case Value::Error:
       s << "Error: " << value.errorMessage().ascii();  

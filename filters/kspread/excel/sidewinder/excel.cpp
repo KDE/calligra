@@ -5699,7 +5699,7 @@ UString ExcelReader::decodeFormula( unsigned row, unsigned col, const FormulaTok
       case FormulaToken::String:
         {
           UString str( '\"' );
-          str.append( token.value().asString() );
+          str.append( token.value().toString() );
           str.append( UString( '\"' ) );
           stack.push_back( str );
         }
