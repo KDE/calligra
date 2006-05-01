@@ -1,4 +1,4 @@
-/* WARNING! All changes made in this file will be lost! Run 'make parser' instead. */
+/* WARNING! All changes made in this file will be lost! Run 'generate_parser_code.sh' instead. */
 INS("AND");
 INS("AS");
 INS("CREATE");

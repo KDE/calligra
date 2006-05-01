@@ -88,7 +88,7 @@ Q3CString PreparedStatement::generateStatementString()
 		if (!table)
 			return ""; //err
 
-		QCString namesList;
+		Q3CString namesList;
 		bool first = true;
 		const bool allTableFieldsUsed = dynamic_cast<TableSchema*>(m_fields); //we are using a selection of fields only
 //		for (Field::ListIterator it(m_fields->fieldsIterator()); it.current(); ++it) {
@@ -102,11 +102,11 @@ Q3CString PreparedStatement::generateStatementString()
 			} else {
 				s.append( ",?" );
 				if (!allTableFieldsUsed)
-					namesList.append(QCString(", ")+it.current()->name().latin1());
+					namesList.append(Q3CString(", ")+it.current()->name().latin1());
 			}
 		}
 		s.append(")");
-		s.prepend(QCString("INSERT INTO ")
+		s.prepend(Q3CString("INSERT INTO ")
 			+ (allTableFieldsUsed ? "" : table->name().latin1()) 
 			+ " (" + namesList + ") VALUES (");
 	}

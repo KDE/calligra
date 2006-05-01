@@ -3,13 +3,21 @@ kde4_header()
 add_subdirectory( parser )
 add_subdirectory( drivers )
 
-include_directories( ${CMAKE_SOURCE_DIR}/kexi ${KDE4_INCLUDES}  )
+include_directories( ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/kexidb/parser ${KDE4_INCLUDES}  )
 
-ADD_DEFINITIONS( -D__KEXIDB__= -include ${CMAKE_SOURCE_DIR}/kexi/kexidb/global.h )
+ADD_DEFINITIONS( -D__KEXIDB__= -include ${CMAKE_SOURCE_DIR}/kexi/kexidb/global.h 
+  -DYYERROR_VERBOSE=1 )
 
 ########### next target ###############
 
+set(kexidbparser_STAT_SRCS 
+   parser/sqlscanner.cpp 
+   parser/sqlparser.cpp 
+   parser/parser.cpp 
+   parser/parser_p.cpp )
+
 set(kexidb_LIB_SRCS 
+   ${kexidbparser_STAT_SRCS}
    drivermanager.cpp 
    driver.cpp 
    driver_p.cpp 

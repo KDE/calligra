@@ -93,7 +93,7 @@ class KEXI_DB_EXPORT TableSchema : public FieldList, public SchemaData
 
 		/*! \return connection object if table was created/retrieved using a connection, 
 			otherwise 0. */
-		Connection* connection() const { return m_conn; }
+		Connection* connection() const;
 
 		/*! \return true if this is KexiDB storage system's table 
 		 (used internally by KexiDB). This helps in hiding such tables

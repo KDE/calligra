@@ -293,6 +293,11 @@ QString TableSchema::debugString()
 	return QString("TABLE ") + schemaDataDebugString() + "\n" + FieldList::debugString();
 }
 
+Connection* TableSchema::connection() const
+{
+	return (Connection*)m_conn;
+}
+
 void TableSchema::setKexiDBSystem(bool set)
 {
 	if (set)

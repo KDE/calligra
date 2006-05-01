@@ -1,6 +1,6 @@
 kde4_header()
 
-include_directories( ${CMAKE_SOURCE_DIR}/kexi ${KDE4_INCLUDES}  )
+include_directories( ${MYSQL_INCLUDE_DIR} ${CMAKE_SOURCE_DIR}/kexi ${KDE4_INCLUDES}  )
 
 
 ########### next target ###############
@@ -13,7 +13,8 @@ kde4_add_plugin(keximigrate_mysql ${keximigrate_mysql_PART_SRCS})
 
 kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} keximigrate_mysql )
 
-target_link_libraries(keximigrate_mysql  ${KDE4_KDECORE_LIBS} ${KDE4_KPARTS_LIBS} keximigrate mysqlclient )
+target_link_libraries(keximigrate_mysql ${MYSQL_LIBRARIES} ${KDE4_KDECORE_LIBS}
+ ${KDE4_KPARTS_LIBS} keximigrate )
 
 install_targets(${PLUGIN_INSTALL_DIR} keximigrate_mysql )
 

@@ -1,6 +1,6 @@
 kde4_header()
 
-include_directories( ${CMAKE_SOURCE_DIR}/kexi ${KDE4_INCLUDES}  )
+include_directories( ${POSTGRESQL_INCLUDE_DIR} ${PQXX_INCLUDE_DIR} ${CMAKE_SOURCE_DIR}/kexi ${KDE4_INCLUDES}  )
 
 
 ########### next target ###############
@@ -13,7 +13,8 @@ kde4_add_plugin(keximigrate_pqxx ${keximigrate_pqxx_PART_SRCS})
 
 kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} keximigrate_pqxx )
 
-target_link_libraries(keximigrate_pqxx  ${KDE4_KDECORE_LIBS} ${KDE4_KPARTS_LIBS} pqxx keximigrate )
+target_link_libraries(keximigrate_pqxx ${POSTGRESQL_LIBRARIES} ${PQXX_LIBRARIES} 
+ ${KDE4_KDECORE_LIBS} ${KDE4_KPARTS_LIBS} keximigrate )
 
 install_targets(${PLUGIN_INSTALL_DIR} keximigrate_pqxx )
 

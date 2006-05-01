@@ -1,9 +1,17 @@
 kde4_header()
 
-message(STATUS "${CMAKE_CURRENT_SOURCE_DIR}: skipped subdir $(pgsql_dir)")
-message(STATUS "${CMAKE_CURRENT_SOURCE_DIR}: skipped subdir $(mysql_dir)")
 include_directories( ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/core ${CMAKE_SOURCE_DIR}/kexi/widget ${CMAKE_SOURCE_DIR}/kexi/main/startup ${KDE4_INCLUDES}  )
 
+INCLUDE (FindMySQL)
+IF (MYSQL_FOUND)
+   add_subdirectory( mysql )
+ENDIF (MYSQL_FOUND)
+
+INCLUDE (FindPostgreSQL)
+INCLUDE (FindPqxx)
+IF (POSTGRESQL_FOUND AND PQXX_FOUND)
+   add_subdirectory( pqxx )
+ENDIF (POSTGRESQL_FOUND AND PQXX_FOUND)
 
 ########### next target ###############
 

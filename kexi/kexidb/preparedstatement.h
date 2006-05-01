@@ -21,6 +21,7 @@
 #define KEXIDB_PREPAREDSTATEMENT_H
 
 #include <qvariant.h>
+#include <QStringList>
 //Added by qt3to4:
 #include <Q3ValueList>
 #include <Q3CString>

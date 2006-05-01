@@ -175,7 +175,7 @@ bool MySqlConnection::drv_getTablesList( QStringList &list )
 PreparedStatement::Ptr MySqlConnection::prepareStatement(PreparedStatement::StatementType type, 
 	FieldList& fields)
 {
-	return new MySqlPreparedStatement(type, *d, fields);
+	return KSharedPtr<PreparedStatement>( new MySqlPreparedStatement(type, *d, fields) );
 }
 
 #include "mysqlconnection.moc"

@@ -578,7 +578,7 @@ bool VariableExpr::validate(ParseInfo& parseInfo)
 			parseInfo.errMsg = i18n("Could not access the table directly using its name");
 			parseInfo.errDescr = i18n("Table \"%1\" is covered by aliases. Instead of \"%2\", "
 				"you can write \"%3\"").arg(tableName)
-				.arg(tableName+"."+fieldName).arg(tableAlias+"."+fieldName.latin1());
+				.arg(tableName+"."+fieldName).arg(tableAlias+"."+QString(fieldName));
 			return false;
 		}
 	}

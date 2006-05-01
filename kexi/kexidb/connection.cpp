@@ -2397,7 +2397,7 @@ KexiDB::TableSchema* Connection::setupTableSchema( const RowData &data )
 
 		Field *f = new Field(
 			cursor->value(2).asString(), (Field::Type)f_type, f_constr, f_opts, f_len, f_prec );
-		f->setDefaultValue( cursor->value(7).toCString() );
+		f->setDefaultValue( QVariant( cursor->value(7).toCString() ) );
 		f->m_caption = cursor->value(9).asString();
 		f->m_desc = cursor->value(10).asString();
 		t->addField(f);

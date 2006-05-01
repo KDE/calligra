@@ -523,7 +523,7 @@ class KEXI_DB_EXPORT Field
 //<TMP>
 		/*! \return the hints for enum fields. */
 		Q3ValueVector<QString> enumHints() const { return m_hints; }
-		QString enumHint(uint num) { return (num < m_hints.size()) ? m_hints.at(num) : QString::null; }
+		QString enumHint(uint num) { return (num < (uint)m_hints.size()) ? m_hints.at(num) : QString::null; }
 		/*! sets the hint for enum fields */
 		void setEnumHints(const Q3ValueVector<QString> &l) { m_hints = l; }
 //</TMP>

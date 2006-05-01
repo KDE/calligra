@@ -169,7 +169,7 @@ class QuerySchemaPrivate
 					//missing
 					for (;;) { //find 1st unused
 						colNum++;
-						columnAlias = (i18n("short for 'expression' word (only latin letters, please)", "expr") 
+						columnAlias = (i18nc("short for 'expression' word (only latin letters, please)", "expr").toLatin1() 
 							+ QString::number(colNum)).latin1();
 						if (!tablePositionsForAliases[columnAlias])
 							break;

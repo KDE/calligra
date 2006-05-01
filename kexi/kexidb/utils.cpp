@@ -23,6 +23,7 @@
 
 #include <qmap.h>
 #include <qthread.h>
+#include <QMutex>
 //Added by qt3to4:
 #include <Q3CString>
 
@@ -364,7 +365,7 @@ void ConnectionTestThread::run()
 ConnectionTestDialog::ConnectionTestDialog(QWidget* parent, 
 	const KexiDB::ConnectionData& data,
 	KexiDB::MessageHandler& msgHandler)
- : KProgressDialog(parent, "testconn_dlg",
+ : KProgressDialog(parent, 
 	i18n("Test Connection"), i18n("<qt>Testing connection to <b>%1</b> database server...</qt>")
 	.arg(data.serverInfoString(true)), true /*modal*/)
  , m_thread(new ConnectionTestThread(this, data))
@@ -375,8 +376,8 @@ ConnectionTestDialog::ConnectionTestDialog(QWidget* parent,
  , m_stopWaiting(false)
 {
 	showCancelButton(true);
-	progressBar()->setPercentageVisible(false);
-	progressBar()->setTotalSteps(0);
+	progressBar()->setFormat(""); //hide %
+	progressBar()->setRange(0, 0); //to show busy indicator
 	connect(&m_timer, SIGNAL(timeout()), this, SLOT(slotTimeout()));
 	adjustSize();
 	resize(250, height());
@@ -410,8 +411,7 @@ void ConnectionTestDialog::slotTimeout()
 	if (m_stopWaiting) {
 		m_timer.disconnect(this);
 		m_timer.stop();
-		slotCancel();
-//		reject();
+		reject();
 //		close();
 		if (m_errorObj) {
 			m_msgHandler->showErrorMessage(m_errorObj);
@@ -435,7 +435,7 @@ void ConnectionTestDialog::slotTimeout()
 		return;
 	}
 	m_elapsedTime += 20;
-	progressBar()->setProgress( m_elapsedTime );
+	progressBar()->setValue( m_elapsedTime );
 }
 
 void ConnectionTestDialog::error(KexiDB::Object *obj)
@@ -450,16 +450,22 @@ void ConnectionTestDialog::error(KexiDB::Object *obj)
 	else {
 		accept();
 	}*/
-	m_wait.wait();
+	QMutex mutex;
+	mutex.lock();
+#ifndef Q_OS_WIN
+#warning QWaitCondition::wait() OK?
+#endif
+	m_wait.wait(&mutex);
+	mutex.unlock();
 }
 
-void ConnectionTestDialog::slotCancel()
+void ConnectionTestDialog::reject()
 {
 //	m_wait.wakeAll();
 	m_thread->terminate();
 	m_timer.disconnect(this);
 	m_timer.stop();
-	KProgressDialog::slotCancel();
+	KProgressDialog::reject();
 }
 
 void KexiDB::connectionTestDialog(QWidget* parent, const KexiDB::ConnectionData& data, 
@@ -594,7 +600,6 @@ QString KexiDB::formatNumberForVisibleDecimalPlaces(double value, int decimalPla
 
 #include <ktabwidget.h>
 #include <klistview.h>
-#include <qheader.h>
 
 static KTabWidget* kexidbDebugWindow = 0;
 static KListView* kexidbCursorDebugPage = 0;

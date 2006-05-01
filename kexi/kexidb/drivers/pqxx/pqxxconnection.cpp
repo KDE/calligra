@@ -428,6 +428,6 @@ QString pqxxSqlConnection::serverErrorMsg()
 PreparedStatement::Ptr pqxxSqlConnection::prepareStatement(PreparedStatement::StatementType type, 
 	FieldList& fields)
 {
-	return new pqxxPreparedStatement(type, *d, fields);
+	return KSharedPtr<PreparedStatement>( new pqxxPreparedStatement(type, *d, fields) );
 }
 #include "pqxxconnection.moc"

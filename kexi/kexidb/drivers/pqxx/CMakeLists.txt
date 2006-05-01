@@ -1,7 +1,10 @@
 kde4_header()
 
+include_directories( ${POSTGRESQL_INCLUDE_DIR} ${PQXX_INCLUDE_DIR} 
+${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/kexidb ${KDE4_INCLUDES}  )
 
-
+ADD_DEFINITIONS( -D__KEXIDB__= -include ${CMAKE_SOURCE_DIR}/kexi/kexidb/global.h
+ -fexceptions )
 
 ########### next target ###############
 
@@ -19,7 +22,8 @@ kde4_add_plugin(kexidb_pqxxsqldriver ${kexidb_pqxxsqldriver_PART_SRCS})
 
 kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kexidb_pqxxsqldriver )
 
-target_link_libraries(kexidb_pqxxsqldriver  ${KDE4_KDECORE_LIBS} ${KDE4_KPARTS_LIBS} pqxx kexidb )
+target_link_libraries(kexidb_pqxxsqldriver ${POSTGRESQL_LIBRARIES} ${PQXX_LIBRARIES} 
+ ${KDE4_KDECORE_LIBS} ${KDE4_KPARTS_LIBS} kexidb )
 
 install_targets(${PLUGIN_INSTALL_DIR} kexidb_pqxxsqldriver )
 

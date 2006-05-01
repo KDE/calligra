@@ -1,15 +1,19 @@
 kde4_header()
 
-include_directories( ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/kexidb ${CMAKE_SOURCE_DIR}/kexi/3rdparty/kexisql/src ${KDE4_INCLUDES}  )
+include_directories( ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/kexidb ${CMAKE_SOURCE_DIR}/kexi/3rdparty/kexisql/src ${CMAKE_BUILD_DIR}/kexi/kexidb/drivers/sqlite
+${KDE4_INCLUDES}  )
 
+ADD_DEFINITIONS( -D__KEXIDB__= -DSQLITE2= -include ${CMAKE_SOURCE_DIR}/kexi/kexidb/global.h )
 
 ########### next target ###############
 
 set(kexidb_sqlite2driver_PART_SRCS 
-   sqliteconnection.cpp 
-   sqlitedriver.cpp 
-   sqlitecursor.cpp 
-   sqlitepreparedstatement.cpp )
+   ../sqlite/sqliteconnection.cpp 
+   ../sqlite/sqlitedriver.cpp 
+   ../sqlite/sqlitecursor.cpp 
+   ../sqlite/sqlitekeywords.cpp 
+   ../sqlite/sqlitepreparedstatement.cpp
+   ../sqlite/sqliteadmin.cpp )
 
 kde4_automoc(${kexidb_sqlite2driver_PART_SRCS})
 
@@ -17,7 +21,7 @@ kde4_add_plugin(kexidb_sqlite2driver ${kexidb_sqlite2driver_PART_SRCS})
 
 kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kexidb_sqlite2driver )
 
-target_link_libraries(kexidb_sqlite2driver  ${KDE4_KDECORE_LIBS} ${KDE4_KPARTS_LIBS} kexisql2 kexidb kexidbparser )
+target_link_libraries(kexidb_sqlite2driver  ${KDE4_KDECORE_LIBS} ${KDE4_KPARTS_LIBS} kexisql2 kexidb )
 
 install_targets(${PLUGIN_INSTALL_DIR} kexidb_sqlite2driver )
 

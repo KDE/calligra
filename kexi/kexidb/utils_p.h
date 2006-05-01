@@ -5,7 +5,7 @@
 #include <qtimer.h>
 #include <qwaitcondition.h>
 
-#include <kprogressbar.h>
+#include <kprogressdialog.h>
 
 #include "msghandler.h"
 
@@ -25,7 +25,7 @@ class ConnectionTestDialog : protected KProgressDialog
 
 	protected slots:
 		void slotTimeout();
-		virtual void slotCancel();
+		virtual void reject();
 
 	protected:
 		ConnectionTestThread* m_thread;

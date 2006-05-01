@@ -421,7 +421,7 @@ QuerySchema* parseSelect(
 		for (int i=0; i<tablesList->args(); i++, columnNum++) {
 			BaseExpr *e = tablesList->arg(i);
 			VariableExpr* t_e = 0;
-			Q3CString aliasString;
+			QString aliasString;
 			if (e->exprClass() == KexiDBExpr_SpecialBinary) {
 				BinaryExpr* t_with_alias = e->toBinary();
 				assert(t_with_alias);
@@ -435,7 +435,7 @@ QuerySchema* parseSelect(
 				t_e = e->toVariable();
 			}
 			assert(t_e);
-			Q3CString tname = t_e->name.latin1();
+			QString tname = t_e->name.latin1();
 			TableSchema *s = parser->db()->tableSchema(tname);
 			if(!s) {
 				setError(//i18n("Field List Error"), 
@@ -444,7 +444,7 @@ QuerySchema* parseSelect(
 				CLEANUP;
 				return 0;
 			}
-			Q3CString tableOrAliasName;
+			QString tableOrAliasName;
 			if (!aliasString.isEmpty()) {
 				tableOrAliasName = aliasString;
 //				KexiDBDbg << "- add alias for table: " << aliasString << endl;
@@ -484,7 +484,7 @@ QuerySchema* parseSelect(
 				}
 			}*/
 //			KexiDBDbg << "addTable: " << tname << endl;
-			querySchema->addTable( s, aliasString );
+			querySchema->addTable( s, aliasString.toLatin1() );
 		}
 	}
 

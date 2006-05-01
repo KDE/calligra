@@ -1,7 +1,9 @@
 kde4_header()
 
-include_directories( ${CMAKE_SOURCE_DIR}/kexi ${KDE4_INCLUDES}  )
+include_directories( ${MYSQL_INCLUDE_DIR} 
+${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/kexidb ${KDE4_INCLUDES}  )
 
+ADD_DEFINITIONS( -D__KEXIDB__= -include ${CMAKE_SOURCE_DIR}/kexi/kexidb/global.h )
 
 ########### next target ###############
 
@@ -19,7 +21,8 @@ kde4_add_plugin(kexidb_mysqldriver ${kexidb_mysqldriver_PART_SRCS})
 
 kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kexidb_mysqldriver )
 
-target_link_libraries(kexidb_mysqldriver  ${KDE4_KDECORE_LIBS} ${KDE4_KPARTS_LIBS} mysqlclient kexidb )
+target_link_libraries(kexidb_mysqldriver ${MYSQL_LIBRARIES} 
+ ${KDE4_KDECORE_LIBS} ${KDE4_KPARTS_LIBS} kexidb )
 
 install_targets(${PLUGIN_INSTALL_DIR} kexidb_mysqldriver )
 
