@@ -35,7 +35,14 @@ class KoGenStyle;
 
 namespace KSpread
 {
+class Style;
 class CustomStyle;
+
+// used for preloading OASIS auto styles
+typedef QHash<QString, Style*>      Styles;
+// needs to be ordered (QMap) for the style dialog
+typedef QMap<QString, CustomStyle*> CustomStyles;
+
 
 /**
  * @brief The Style class represents a cell style.

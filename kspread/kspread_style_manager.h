@@ -20,9 +20,9 @@
 #ifndef __kspread_style_manager__
 #define __kspread_style_manager__
 
-#include <qmap.h>
-
 #include <koffice_export.h>
+
+#include <kspread_style.h>
 
 class QDomElement;
 class QDomDocument;
@@ -33,7 +33,6 @@ class KoOasisStyles;
 
 namespace KSpread
 {
-class CustomStyle;
 class Sheet;
 class StyleDlg;
 class View;
@@ -63,13 +62,34 @@ class KSPREAD_EXPORT StyleManager
   QStringList styleNames() const;
   int count() const { return m_styles.count(); }
 
+  /**
+   * Loads OpenDocument auto styles.
+   * The auto styles are preloaded, because an auto style could be shared
+   * among cells. So, preloading prevents a multiple loading of the same
+   * auto style.
+   * This method is called before the cell loading process.
+   * @param oasisStyles repository of styles
+   * @return a hash of styles with the OpenDocument internal name as key
+   */
+  static Styles loadOasisAutoStyles( KoOasisStyles& oasisStyles );
+
+  /**
+   * Releases unused auto styles.
+   * If there are auto styles, which are not used by any cell (uncommon case)
+   * this method makes sure, that these get deleted.
+   * This method is called after the cell loading porcess.
+   * @param autoStyles a hash of styles with the OpenDocument internal name as
+   *                   key
+   * @see loadOasisAutoStyles
+   */
+  static void releaseUnusedAutoStyles( Styles autoStyles );
+
  private:
   friend class StyleDlg;
   friend class View;
-  class Styles : public QMap<QString, CustomStyle *> {};
 
   CustomStyle * m_defaultStyle;
-  Styles               m_styles; // builtin and custom made styles
+  CustomStyles  m_styles; // builtin and custom made styles
 };
 
 } // namespace KSpread

@@ -26,7 +26,6 @@
 #include <qstringlist.h>
 #include <q3intdict.h>
 #include <qobject.h>
-#include <q3dict.h>
 
 #include <koffice_export.h>
 
@@ -77,7 +76,7 @@ public:
 
     bool saveOasis( KoXmlWriter & xmlWriter, KoGenStyles & mainStyles, KoStore *store, KoXmlWriter* manifestWriter, int &_indexObj, int &_partIndexObj );
 
-  bool loadOasis( const QDomElement& mymap, KoOasisLoadingContext& oasisContext , Q3Dict<Style>& styleMap );
+  bool loadOasis( const QDomElement& mymap, KoOasisLoadingContext& oasisContext );
   bool loadXML( const QDomElement& mymap );
   bool loadChildren( KoStore* _store );
 
@@ -90,7 +89,7 @@ public:
 
   /**
    * The sheet named @p _from is being moved to the sheet @p _to.
-   * If @p  _before is true @p _from is inserted before (after otherwise)   
+   * If @p  _before is true @p _from is inserted before (after otherwise)
    * @p  _to.
    */
   void moveSheet( const QString & _from, const QString & _to, bool _before = true );

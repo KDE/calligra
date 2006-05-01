@@ -110,8 +110,8 @@ void StyleDlg::fillComboBox()
   entries.clear();
   entries[m_styleManager->defaultStyle()] = new K3ListViewItem( m_dlg->m_styleList, i18n( "Default" ) );
 
-  StyleManager::Styles::const_iterator iter = m_styleManager->m_styles.begin();
-  StyleManager::Styles::const_iterator end  = m_styleManager->m_styles.end();
+  CustomStyles::const_iterator iter = m_styleManager->m_styles.begin();
+  CustomStyles::const_iterator end  = m_styleManager->m_styles.end();
 
   while ( entries.count() != m_styleManager->m_styles.count() + 1 )
   {
@@ -150,8 +150,8 @@ void StyleDlg::slotDisplayMode( int mode )
   if ( mode != 2 )
     new K3ListViewItem( m_dlg->m_styleList, i18n( "Default" ) );
 
-  StyleManager::Styles::iterator iter = m_styleManager->m_styles.begin();
-  StyleManager::Styles::iterator end  = m_styleManager->m_styles.end();
+  CustomStyles::iterator iter = m_styleManager->m_styles.begin();
+  CustomStyles::iterator end  = m_styleManager->m_styles.end();
 
   while ( iter != end )
   {

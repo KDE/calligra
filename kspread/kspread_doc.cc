@@ -965,22 +965,8 @@ bool Doc::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles, const 
     loadOasisAreaName( body );
     loadOasisCellValidation( body );
 
-    //pre-load auto styles
-    Q3DictIterator<QDomElement> it( oasisStyles.styles("table-cell") );
-    Q3Dict<Style> styleElements;
-    for (;it.current();++it)
-    {
-	if ( it.current()->hasAttributeNS( KoXmlNS::style , "name" ) )
-	{
-		QString name = it.current()->attributeNS( KoXmlNS::style , "name" , QString::null );
-		kDebug() << "Preloading style: " << name << endl;
-		styleElements.insert( name , new Style());
-		styleElements[name]->loadOasisStyle( oasisStyles , *(it.current()) );
-	}
-    }
-
     // all <sheet:sheet> goes to workbook
-    if ( !map()->loadOasis( body, context, styleElements ) )
+    if ( !map()->loadOasis( body, context ) )
     {
         d->isLoading = false;
         deleteLoadingInfo();
@@ -995,16 +981,6 @@ bool Doc::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles, const 
     emit sigProgress( 90 );
     initConfig();
     emit sigProgress(-1);
-
-    //delete any styles which were not used
-    Q3DictIterator<Style> styleIt( styleElements );
-    for (;styleIt.current();++styleIt)
-    {
-	Style* style = styleIt.current();
-	if (style->release())
-		delete style;
-    }
-
 
     //display loading time
     kDebug(36001) << "Loading took " << (float)(dt.elapsed()) / 1000.0 << " seconds" << endl;

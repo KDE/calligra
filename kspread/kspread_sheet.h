@@ -248,7 +248,9 @@ public:
      */
     virtual bool loadXML( const QDomElement& );
 
-    virtual bool loadOasis( const QDomElement& sheet, KoOasisLoadingContext& oasisContext, Q3Dict<Style>& styleMap );
+    virtual bool loadOasis( const QDomElement& sheet,
+                            KoOasisLoadingContext& oasisContext,
+                            const Styles& styleMap );
 
     virtual bool saveOasis( KoXmlWriter & xmlWriter, KoGenStyles &mainStyles, GenValidationStyles &valStyle, KoStore *store, KoXmlWriter* manifestWriter, int & indexObj, int &partIndexObj );
     void saveOasisHeaderFooter( KoXmlWriter &xmlWriter ) const;
@@ -1297,13 +1299,17 @@ protected:
      */
     void changeCellTabName( QString const & old_name,QString const & new_name );
 
-    bool loadRowFormat( const QDomElement& row, int &rowIndex, KoOasisLoadingContext& oasisContext, Q3Dict<Style>& styleMap );
+    bool loadRowFormat( const QDomElement& row, int &rowIndex,
+                        KoOasisLoadingContext& oasisContext,
+                        const Styles& styleMap );
 
     /**
      * Loads the properties of a column from a table:table-column element in an OASIS XML file
      * defaultColumnCellStyles is a map from column indicies to the default cell style for that column
      */
-    bool loadColumnFormat(const QDomElement& row, const KoOasisStyles& oasisStyles, int & indexCol, const Q3Dict<Style>& styleMap);
+    bool loadColumnFormat(const QDomElement& row,
+                          const KoOasisStyles& oasisStyles, int & indexCol,
+                          const Styles& styleMap);
     bool loadSheetStyleFormat( QDomElement *style );
     void loadOasisMasterLayoutPage( KoStyleStack &styleStack );
 

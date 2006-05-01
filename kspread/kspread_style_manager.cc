@@ -40,16 +40,7 @@ StyleManager::StyleManager()
 StyleManager::~StyleManager()
 {
   delete m_defaultStyle;
-
-  Styles::iterator iter = m_styles.begin();
-  Styles::iterator end  = m_styles.end();
-
-  while ( iter != end )
-  {
-    delete iter.value();
-
-    ++iter;
-  }
+  qDeleteAll(m_styles);
 }
 
 void StyleManager::saveOasis( KoGenStyles &mainStyles )
@@ -58,8 +49,8 @@ void StyleManager::saveOasis( KoGenStyles &mainStyles )
     KoGenStyle defaultStyle = KoGenStyle( Doc::STYLE_CELL_USER, "table-cell" );
     m_defaultStyle->saveOasis( defaultStyle, mainStyles );
 
-    Styles::iterator iter = m_styles.begin();
-    Styles::iterator end  = m_styles.end();
+    CustomStyles::iterator iter = m_styles.begin();
+    CustomStyles::iterator end  = m_styles.end();
 
     while ( iter != end )
     {
@@ -119,8 +110,8 @@ void StyleManager::loadOasisStyleTemplate( KoOasisStyles& oasisStyles )
     }
 
     // set the parent pointers after we loaded all styles
-    Styles::iterator iter = m_styles.begin();
-    Styles::iterator end  = m_styles.end();
+    CustomStyles::iterator iter = m_styles.begin();
+    CustomStyles::iterator end  = m_styles.end();
     while ( iter != end )
     {
         CustomStyle * styleData = iter.value();
@@ -140,8 +131,8 @@ QDomElement StyleManager::save( QDomDocument & doc )
   kDebug() << "Saving default style" << endl;
   m_defaultStyle->save( doc, styles );
 
-  Styles::iterator iter = m_styles.begin();
-  Styles::iterator end  = m_styles.end();
+  CustomStyles::iterator iter = m_styles.begin();
+  CustomStyles::iterator end  = m_styles.end();
 
   while ( iter != end )
   {
@@ -195,8 +186,8 @@ bool StyleManager::loadXML( QDomElement const & styles )
     e = e.nextSibling().toElement();
   }
 
-  Styles::iterator iter = m_styles.begin();
-  Styles::iterator end  = m_styles.end();
+  CustomStyles::iterator iter = m_styles.begin();
+  CustomStyles::iterator end  = m_styles.end();
 
   while ( iter != end )
   {
@@ -237,7 +228,7 @@ void StyleManager::createBuiltinStyles()
 
 CustomStyle * StyleManager::style( QString const & name ) const
 {
-  Styles::const_iterator iter( m_styles.find( name ) );
+  CustomStyles::const_iterator iter( m_styles.find( name ) );
 
   if ( iter != m_styles.end() )
     return iter.value();
@@ -252,8 +243,8 @@ void StyleManager::takeStyle( CustomStyle * style )
 {
   CustomStyle * parent = style->parent();
 
-  Styles::iterator iter = m_styles.begin();
-  Styles::iterator end  = m_styles.end();
+  CustomStyles::iterator iter = m_styles.begin();
+  CustomStyles::iterator end  = m_styles.end();
 
   while ( iter != end )
   {
@@ -263,7 +254,7 @@ void StyleManager::takeStyle( CustomStyle * style )
     ++iter;
   }
 
-  Styles::iterator i( m_styles.find( style->name() ) );
+  CustomStyles::iterator i( m_styles.find( style->name() ) );
 
   if ( i != m_styles.end() )
   {
@@ -288,8 +279,8 @@ bool StyleManager::validateStyleName( QString const & name, CustomStyle * style 
   if ( m_defaultStyle->name() == name || name == "Default" )
     return false;
 
-  Styles::const_iterator iter = m_styles.begin();
-  Styles::const_iterator end  = m_styles.end();
+  CustomStyles::const_iterator iter = m_styles.begin();
+  CustomStyles::const_iterator end  = m_styles.end();
 
   while ( iter != end )
   {
@@ -304,8 +295,8 @@ bool StyleManager::validateStyleName( QString const & name, CustomStyle * style 
 
 void StyleManager::changeName( QString const & oldName, QString const & newName )
 {
-  Styles::iterator iter = m_styles.begin();
-  Styles::iterator end  = m_styles.end();
+  CustomStyles::iterator iter = m_styles.begin();
+  CustomStyles::iterator end  = m_styles.end();
 
   while ( iter != end )
   {
@@ -330,8 +321,8 @@ QStringList StyleManager::styleNames() const
 
   list.push_back( "Default" );
 
-  Styles::const_iterator iter = m_styles.begin();
-  Styles::const_iterator end  = m_styles.end();
+  CustomStyles::const_iterator iter = m_styles.begin();
+  CustomStyles::const_iterator end  = m_styles.end();
 
   while ( iter != end )
   {
@@ -343,3 +334,29 @@ QStringList StyleManager::styleNames() const
   return list;
 }
 
+// static
+Styles StyleManager::loadOasisAutoStyles( KoOasisStyles& oasisStyles )
+{
+  Q3DictIterator<QDomElement> it( oasisStyles.styles("table-cell") );
+  Styles styleElements;
+  for (;it.current();++it)
+  {
+    if ( it.current()->hasAttributeNS( KoXmlNS::style , "name" ) )
+    {
+      QString name = it.current()->attributeNS( KoXmlNS::style , "name" , QString::null );
+      kDebug() << "Preloading style: " << name << endl;
+      styleElements.insert( name , new Style());
+      styleElements[name]->loadOasisStyle( oasisStyles , *(it.current()) );
+    }
+  }
+}
+
+// static
+void StyleManager::releaseUnusedAutoStyles( Styles autoStyles )
+{
+  foreach ( Style* style, autoStyles )
+  {
+    if ( style->release() )
+      delete style;
+  }
+}

@@ -3947,27 +3947,8 @@ void View::paste()
     d->doc->loadOasisAreaName( body );
     d->doc->loadOasisCellValidation( body );
 
-    //Copied from kspread_doc.cc - refactor into one place asap.
-    Q3DictIterator<QDomElement> it( oasisStyles.styles("table-cell") );
-    Q3Dict<Style> styleElements;
-    for (;it.current();++it)
-    {
-	if ( it.current()->hasAttributeNS( KoXmlNS::style , "name" ) )
-	{
-		QString name = it.current()->attributeNS( KoXmlNS::style , "name" , QString::null );
-		styleElements.insert( name , new Style());
-		styleElements[name]->loadOasisStyle( oasisStyles , *(it.current()) );
-	}
-    }
-
     // all <sheet:sheet> goes to workbook
-    bool result = d->doc->map()->loadOasis( body, context, styleElements );
-
-    //release unused styles (again, copied from kspread_doc.cc, needs to be refactored into one place asap.)
-    Q3DictIterator<Style> styleIter( styleElements );
-    for (;styleIter.current();++styleIter)
-	    if (styleIter.current()->release())
-		    delete styleIter.current();
+    bool result = d->doc->map()->loadOasis( body, context );
 
     if (!result)
       return;

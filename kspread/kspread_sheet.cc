@@ -2093,7 +2093,7 @@ void Sheet::setSeries( const QPoint &_marker, double start, double end, double s
   kDebug() << "Saving undo information done" << endl;
 
   setRegionPaintDirty( undoRegion );
-  
+
   x = _marker.x();
   y = _marker.y();
 
@@ -6355,7 +6355,9 @@ QString Sheet::getPart( const QDomNode & part )
 }
 
 
-bool Sheet::loadOasis( const QDomElement& sheetElement, KoOasisLoadingContext& oasisContext, Q3Dict<Style>& styleMap )
+bool Sheet::loadOasis( const QDomElement& sheetElement,
+                       KoOasisLoadingContext& oasisContext,
+                       const Styles& styleMap )
 {
     d->layoutDirection = LeftToRight;
     if ( sheetElement.hasAttributeNS( KoXmlNS::table, "style-name" ) )
@@ -6665,7 +6667,9 @@ void Sheet::loadOasisMasterLayoutPage( KoStyleStack &styleStack )
 }
 
 
-bool Sheet::loadColumnFormat(const QDomElement& column, const KoOasisStyles& oasisStyles, int & indexCol, const Q3Dict<Style>& styleMap)
+bool Sheet::loadColumnFormat(const QDomElement& column,
+                             const KoOasisStyles& oasisStyles, int & indexCol,
+                             const Styles& styleMap)
 {
     kDebug()<<"bool Sheet::loadColumnFormat(const QDomElement& column, const KoOasisStyles& oasisStyles, unsigned int & indexCol ) index Col :"<<indexCol<<endl;
 
@@ -6757,7 +6761,9 @@ bool Sheet::loadColumnFormat(const QDomElement& column, const KoOasisStyles& oas
 }
 
 
-bool Sheet::loadRowFormat( const QDomElement& row, int &rowIndex, KoOasisLoadingContext& oasisContext,  Q3Dict<Style>& styleMap )
+bool Sheet::loadRowFormat( const QDomElement& row, int &rowIndex,
+                           KoOasisLoadingContext& oasisContext,
+                           const Styles& styleMap )
 {
 //    kDebug()<<"Sheet::loadRowFormat( const QDomElement& row, int &rowIndex,const KoOasisStyles& oasisStyles, bool isLast )***********\n";
     double height = -1.0;
@@ -7901,7 +7907,7 @@ void Sheet::insertCell( Cell *_cell )
 
   d->cells.insert( _cell, _cell->column(), _cell->row() );
 
-  //Not sure why this is here 
+  //Not sure why this is here
   /*if ( d->scrollBarUpdates )
   {
     checkRangeHBorder ( _cell->column() );
