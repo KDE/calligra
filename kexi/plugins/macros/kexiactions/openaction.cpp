@@ -20,6 +20,7 @@
 
 #include "openaction.h"
 #include "objectvariable.h"
+#include "objectnamevariable.h"
 
 #include "../lib/macroitem.h"
 #include "../lib/context.h"
@@ -69,52 +70,6 @@ namespace KexiMacro {
 			}
 	};
 
-	/**
-	* The ViewVariable class provide a list of KexiPart::PartItem's
-	* supported by a KexiPart::Part as @a KoMacro::Variable .
-	*/
-	template<class ACTIONIMPL>
-	class NameVariable : public KexiVariable<ACTIONIMPL>
-	{
-		public:
-			NameVariable(ACTIONIMPL* actionimpl, const QString& objectname = QString::null, const QString& name = QString::null)
-				: KexiVariable<ACTIONIMPL>(actionimpl, "name", i18n("Name"))
-			{
-				if(! actionimpl->mainWin()->project()) {
-					kdWarning() << "KexiMacro::NameVariable() No project loaded." << endl;
-					return;
-				}
-
-				QStringList namelist;
-				KexiPart::Info* info = Kexi::partManager().infoForMimeType( QString("kexi/%1").arg(objectname) );
-				if(info) {
-					if(info->isVisibleInNavigator()) {
-						KexiPart::ItemDict* items = actionimpl->mainWin()->project()->items(info);
-						if(items) {
-							for(KexiPart::ItemDictIterator item_it = *items; item_it.current(); ++item_it) {
-								const QString n = item_it.current()->name();
-								namelist << n;
-								this->children().append( KoMacro::Variable::Ptr(new KoMacro::Variable(n)) );
-								kdDebug() << "KexiMacro::NameVariable() infoname=" << info->objectName() << " name=" << n << endl;
-							}
-						}
-					}
-				}
-
-				if(namelist.count() <= 0) {
-					namelist << "";
-					this->children().append( KoMacro::Variable::Ptr(new KoMacro::Variable("")) );
-				}
-
-				QString n = (name.isNull() || ! namelist.contains(name)) ? namelist[0] : name;
-				kdDebug() << "KexiMacro::NameVariable() name=" << n << " childcount=" << this->children().count() << endl;
-				this->setVariant(n);
-			}
-
-			virtual ~NameVariable() {}
-
-	};
-
 }
 
 OpenAction::OpenAction()
@@ -124,7 +79,7 @@ OpenAction::OpenAction()
 	KoMacro::Variable* objvar = new ObjectVariable<OpenAction>(this, conditions);
 	setVariable(KoMacro::Variable::Ptr( objvar ));
 
-	setVariable(KoMacro::Variable::Ptr( new NameVariable<OpenAction>(this, objvar->variant().toString()) ));
+	setVariable(KoMacro::Variable::Ptr( new ObjectNameVariable<OpenAction>(this, objvar->variant().toString()) ));
 	setVariable(KoMacro::Variable::Ptr( new ViewVariable<OpenAction>(this, objvar->variant().toString()) ));
 }
 
@@ -141,7 +96,7 @@ KoMacro::Variable::List OpenAction::notifyUpdated(const QString& variablename, K
 		const QString objectname = variablemap["object"]->variant().toString(); // e.g. "table" or "query"
 
 		const QString name = variablemap.contains("name") ? variablemap["name"]->variant().toString() : QString::null;
-		list.append( KoMacro::Variable::Ptr(new NameVariable<OpenAction>(this, objectname, name)) );
+		list.append( KoMacro::Variable::Ptr(new ObjectNameVariable<OpenAction>(this, objectname, name)) );
 
 		const QString viewname = variablemap.contains("view") ? variablemap["view"]->variant().toString() : QString::null;
 		list.append( KoMacro::Variable::Ptr(new ViewVariable<OpenAction>(this, objectname, viewname)) );
