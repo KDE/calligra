@@ -1149,11 +1149,10 @@ void Doc::loadPaper( QDomElement const & paper )
     float bottom = borders.attribute( "bottom" ).toFloat();
 
     //apply to all sheet
-    Q3PtrListIterator<Sheet> it ( map()->sheetList() );
-    for( ; it.current(); ++it )
+    foreach ( Sheet* sheet, map()->sheetList() )
     {
-      it.current()->print()->setPaperLayout( left, top, right, bottom,
-                                             format, orientation );
+      sheet->print()->setPaperLayout( left, top, right, bottom,
+                                      format, orientation );
     }
   }
 
@@ -1195,11 +1194,10 @@ void Doc::loadPaper( QDomElement const & paper )
   fcenter = fcenter.replace( "<table>", "<sheet>" );
   fright  = fright.replace(  "<table>", "<sheet>" );
 
-  Q3PtrListIterator<Sheet> it ( map()->sheetList() );
-  for( ; it.current(); ++it )
+  foreach ( Sheet* sheet, map()->sheetList() )
   {
-    it.current()->print()->setHeadFootLine( hleft, hcenter, hright,
-                                            fleft, fcenter, fright);
+    sheet->print()->setHeadFootLine( hleft, hcenter, hright,
+                                     fleft, fcenter, fright);
   }
 }
 
@@ -1560,7 +1558,7 @@ void Doc::paintContent( QPainter& painter, const QRect& rect,
     // choose sheet: the first or the active
     Sheet* sheet = 0;
     if ( !d->activeSheet )
-        sheet = map()->firstSheet();
+        sheet = map()->sheet( 0 );
     else
         sheet = d->activeSheet;
     if ( !sheet )
@@ -1626,7 +1624,6 @@ void Doc::paintUpdates()
 
   Q3PtrListIterator<KoView> it( views() );
   View  * view  = 0;
-  Sheet * sheet = 0;
 
   for (; it.current(); ++it )
   {
@@ -1634,8 +1631,7 @@ void Doc::paintUpdates()
     view->paintUpdates();
   }
 
-  for (sheet = map()->firstSheet(); sheet != 0;
-       sheet = map()->nextSheet())
+  foreach ( Sheet* sheet, map()->sheetList() )
   {
     sheet->clearPaintDirtyData();
   }

@@ -85,10 +85,9 @@ reference::reference( View* parent, const char* name )
 
   QString text;
   QStringList sheetName;
-  Q3PtrListIterator<Sheet> it2 ( m_pView->doc()->map()->sheetList() );
-  for( ; it2.current(); ++it2 )
+  foreach ( Sheet* sheet, m_pView->doc()->map()->sheetList() )
   {
-      sheetName.append( it2.current()->sheetName());
+    sheetName.append( sheet->sheetName());
   }
 
   QList<Reference>::Iterator it;
@@ -185,11 +184,9 @@ void reference::slotRemove()
 
     m_list->removeItem(m_list->currentItem());
 
-    Sheet *tbl;
-
-    for ( tbl = m_pView->doc()->map()->firstSheet(); tbl != 0; tbl = m_pView->doc()->map()->nextSheet() )
+    foreach ( Sheet* sheet, m_pView->doc()->map()->sheetList() )
     {
-      tbl->refreshRemoveAreaName(textRemove);
+      sheet->refreshRemoveAreaName(textRemove);
     }
 
     m_pView->slotUpdateView( m_pView->activeSheet() );
@@ -306,7 +303,7 @@ EditAreaName::EditAreaName( View * parent,
 
   EditAreaNameLayout->addWidget( m_areaName, 0, 1 );
 
-  Q3PtrList<Sheet> sheetList = m_pView->doc()->map()->sheetList();
+  QList<Sheet*> sheetList = m_pView->doc()->map()->sheetList();
   for (unsigned int c = 0; c < sheetList.count(); ++c)
   {
     Sheet * t = sheetList.at(c);
@@ -360,10 +357,7 @@ void EditAreaName::slotOk()
   m_pView->doc()->removeArea( m_areaName->text() );
   m_pView->doc()->addAreaName(range.range(), m_areaName->text(), m_sheets->currentText() );
 
-  Sheet *sheet;
-
-  for ( sheet = m_pView->doc()->map()->firstSheet(); sheet != 0;
-        sheet = m_pView->doc()->map()->nextSheet() )
+  foreach ( Sheet* sheet, m_pView->doc()->map()->sheetList() )
   {
     sheet->refreshChangeAreaName( m_areaName->text() );
   }

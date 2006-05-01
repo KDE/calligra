@@ -1943,15 +1943,12 @@ void View::recalcWorkBook()
   if (!activeSheet())
 	  return;
 
-  Sheet * tbl;
   doc()->emitBeginOperation( true );
-  for ( tbl = doc()->map()->firstSheet();
-        tbl != 0;
-        tbl = doc()->map()->nextSheet() )
+  foreach ( Sheet* sheet, doc()->map()->sheetList() )
   {
    // bool b = tbl->getAutoCalc();
    // tbl->setAutoCalc( true );
-    tbl->recalc( /*force recalculation = */ true);
+    sheet->recalc( /*force recalculation = */ true);
    // tbl->setAutoCalc( b );
   }
 
@@ -1961,12 +1958,9 @@ void View::recalcWorkBook()
 void View::refreshLocale()
 {
   doc()->emitBeginOperation(true);
-  Sheet *tbl;
-  for ( tbl = doc()->map()->firstSheet();
-        tbl != 0;
-        tbl = doc()->map()->nextSheet() )
+  foreach ( Sheet* sheet, doc()->map()->sheetList() )
   {
-    tbl->updateLocale();
+    sheet->updateLocale();
   }
   doc()->emitEndOperation( d->activeSheet->visibleRect( d->canvas ) );
 }
@@ -2189,9 +2183,9 @@ bool View::spellSwitchToOtherSheet()
     return false;
 
   // for optimization
-  Q3PtrList<Sheet> sheetList = doc()->map()->sheetList();
+  QList<Sheet*> sheetList = doc()->map()->sheetList();
 
-  unsigned int curIndex = sheetList.findRef(d->spell.currentSpellSheet);
+  int curIndex = sheetList.lastIndexOf(d->spell.currentSpellSheet);
   ++curIndex;
 
   // last sheet? then start at the beginning
@@ -2367,9 +2361,10 @@ void View::spellCheckerFinished()
 void View::initialPosition()
 {
     // Loading completed, pick initial worksheet
-    Q3PtrListIterator<Sheet> it( doc()->map()->sheetList() );
-    for( ; it.current(); ++it )
-      addSheet( it.current() );
+    foreach ( Sheet* sheet, doc()->map()->sheetList() )
+    {
+      addSheet( sheet );
+    }
 
     Sheet * tbl = 0;
     if ( doc()->isEmbedded() )
@@ -2387,7 +2382,7 @@ void View::initialPosition()
       tbl = doc()->map()->findSheet( doc()->map()->visibleSheets().first());
       if ( !tbl )
       {
-        tbl = doc()->map()->firstSheet();
+        tbl = doc()->map()->sheet( 0 );
         if ( tbl )
         {
           tbl->setHidden( false );
@@ -3535,11 +3530,9 @@ void View::slotSheetRemoved( Sheet *_t )
       doc()->removeArea( (*it).ref_name );
       //now area name is used in formula
       //so you must recalc sheets when remove areaname
-      Sheet * tbl;
-
-      for ( tbl = doc()->map()->firstSheet(); tbl != 0; tbl = doc()->map()->nextSheet() )
+      foreach ( Sheet* sheet, doc()->map()->sheetList() )
       {
-        tbl->refreshRemoveAreaName((*it).ref_name);
+        sheet->refreshRemoveAreaName((*it).ref_name);
       }
     }
   }
@@ -4668,13 +4661,12 @@ void View::setupPrinter( KPrinter &prt )
     prt.addDialogPage(sheetpage);
 
 //     kDebug() << "Iterating through available sheets and initializing list of available sheets." << endl;
-    Q3PtrList<Sheet> sheetlist = doc()->map()->sheetList();
-    Sheet* sheet = sheetlist.last();
-    while ( sheet )
+    QList<Sheet*> sheetList = doc()->map()->sheetList();
+    for ( int i = sheetList.count()-1; i >= 0; --i )
     {
+      Sheet* sheet = sheetList[ i ];
       kDebug() << "Adding " << sheet->sheetName() << endl;
       sheetpage->prependAvailableSheet(sheet->sheetName());
-      sheet = sheetlist.prev();
     }
 }
 
@@ -5148,7 +5140,7 @@ void View::previousSheet()
 
 void View::firstSheet()
 {
-  Sheet *t = doc()->map()->firstSheet();
+  Sheet *t = doc()->map()->sheet( 0 );
   if ( !t )
   {
     kDebug(36001) << "Unknown sheet " <<  endl;
@@ -5162,7 +5154,7 @@ void View::firstSheet()
 
 void View::lastSheet()
 {
-  Sheet *t = doc()->map()->lastSheet( );
+  Sheet *t = doc()->map()->sheet( doc()->map()->count() - 1 );
   if ( !t )
   {
     kDebug(36001) << "Unknown sheet " <<  endl;

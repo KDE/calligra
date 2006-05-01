@@ -309,12 +309,13 @@ void PaperLayout::slotOk()
     // get new values for borders
     Map   * map   = 0;
     Sheet * sheet = 0;
+    int index = 0;
 
     if ( pApplyToAll->isChecked() )
       map = m_pSheet->doc()->map();
 
     if ( map )
-      sheet = map->firstSheet();
+      sheet = map->sheet( index );
     else
       sheet = m_pSheet;
 
@@ -507,7 +508,9 @@ void PaperLayout::slotOk()
       sheet->doc()->setUnit( unit );
 
       if ( map )
-        sheet = map->nextSheet();
+      {
+        sheet = map->sheet( ++index );
+      }
       else
         sheet = 0;
     }

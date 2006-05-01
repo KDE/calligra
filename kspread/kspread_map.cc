@@ -47,7 +47,7 @@ using namespace KSpread;
 bool Map::respectCase = true;
 
 Map::Map ( Doc* doc, const char* name)
-  : QObject( doc, name ),
+  : QObject( doc ),
     m_doc( doc ),
     m_initialActiveSheet( 0 ),
     m_initialMarkerColumn( 0 ),
@@ -57,12 +57,13 @@ Map::Map ( Doc* doc, const char* name)
     tableId (1),
     m_dcop( 0 )
 {
-  m_lstSheets.setAutoDelete( true );
+  setObjectName( name ); // FIXME necessary for DCOP/Scripting?
 }
 
 Map::~Map()
 {
-    delete m_dcop;
+  qDeleteAll( m_lstSheets );
+  delete m_dcop;
 }
 
 Doc* Map::doc() const
@@ -104,24 +105,24 @@ void Map::moveSheet( const QString & _from, const QString & _to, bool _before )
   Sheet* sheetfrom = findSheet( _from );
   Sheet* sheetto = findSheet( _to );
 
-  int from = m_lstSheets.find( sheetfrom ) ;
-  int to = m_lstSheets.find( sheetto ) ;
+  int from = m_lstSheets.indexOf( sheetfrom ) ;
+  int to = m_lstSheets.indexOf( sheetto ) ;
   if ( !_before )
   ++to;
 
   if ( to > (int)m_lstSheets.count() )
   {
     m_lstSheets.append( sheetfrom );
-    m_lstSheets.take( from );
+    m_lstSheets.removeAt( from );
   }
   else if ( from < to )
   {
     m_lstSheets.insert( to, sheetfrom );
-    m_lstSheets.take( from );
+    m_lstSheets.removeAt( from );
   }
   else
   {
-    m_lstSheets.take( from );
+    m_lstSheets.removeAt( from );
     m_lstSheets.insert( to, sheetfrom );
   }
 }
@@ -136,11 +137,10 @@ void Map::loadOasisSettings( KoOasisSettings &settings )
     kDebug()<<" loadOasisSettings( KoOasisSettings &settings ) exist : "<< !sheetsMap.isNull() <<endl;
     if ( !sheetsMap.isNull() )
     {
-        Q3PtrListIterator<Sheet> it( m_lstSheets );
-        for( ; it.current(); ++it )
-        {
-            it.current()->loadOasisSettings( sheetsMap );
-        }
+      foreach ( Sheet* sheet, m_lstSheets )
+      {
+        sheet->loadOasisSettings( sheetsMap );
+      }
     }
 
     QString activeSheet = firstView.parseConfigItemString( "ActiveTable" );
@@ -171,22 +171,21 @@ void Map::saveOasisSettings( KoXmlWriter &settingsWriter )
     //<config:config-item-map-named config:name="Tables">
     settingsWriter.startElement("config:config-item-map-named" );
     settingsWriter.addAttribute("config:name","Tables" );
-    Q3PtrListIterator<Sheet> it( m_lstSheets );
-    for( ; it.current(); ++it )
+    foreach ( Sheet* sheet, m_lstSheets )
     {
-        settingsWriter.startElement( "config:config-item-map-entry" );
-        settingsWriter.addAttribute( "config:name", ( *it )->sheetName() );
-        if ( view )
-        {
-          QPoint marker = view->markerFromSheet( *it );
-          KoPoint offset = view->offsetFromSheet( *it );
-          settingsWriter.addConfigItem( "CursorPositionX", marker.x() );
-          settingsWriter.addConfigItem( "CursorPositionY", marker.y() );
-          settingsWriter.addConfigItem( "xOffset", offset.x() );
-          settingsWriter.addConfigItem( "yOffset", offset.y() );
-        }
-        it.current()->saveOasisSettings( settingsWriter );
-        settingsWriter.endElement();
+      settingsWriter.startElement( "config:config-item-map-entry" );
+      settingsWriter.addAttribute( "config:name", sheet->sheetName() );
+      if ( view )
+      {
+        QPoint marker = view->markerFromSheet( sheet );
+        KoPoint offset = view->offsetFromSheet( sheet );
+        settingsWriter.addConfigItem( "CursorPositionX", marker.x() );
+        settingsWriter.addConfigItem( "CursorPositionY", marker.y() );
+        settingsWriter.addConfigItem( "xOffset", offset.x() );
+        settingsWriter.addConfigItem( "yOffset", offset.y() );
+      }
+      sheet->saveOasisSettings( settingsWriter );
+      settingsWriter.endElement();
     }
     settingsWriter.endElement();
 }
@@ -216,10 +215,10 @@ bool Map::saveOasis( KoXmlWriter & xmlWriter, KoGenStyles & mainStyles, KoStore 
     KoXmlWriter bodyTmpWriter( tmpFile );
 
 
-    Q3PtrListIterator<Sheet> it( m_lstSheets );
-    for( ; it.current(); ++it )
+    foreach ( Sheet* sheet, m_lstSheets )
     {
-        it.current()->saveOasis( bodyTmpWriter, mainStyles, valStyle, store, manifestWriter, _indexObj, _partIndexObj );
+        sheet->saveOasis( bodyTmpWriter, mainStyles, valStyle, store,
+                          manifestWriter, _indexObj, _partIndexObj );
     }
 
     valStyle.writeStyle( xmlWriter );
@@ -259,10 +258,9 @@ QDomElement Map::save( QDomDocument& doc )
       mymap.setAttribute( "protected", "" );
   }
 
-  Q3PtrListIterator<Sheet> it( m_lstSheets );
-  for( ; it.current(); ++it )
+  foreach ( Sheet* sheet, m_lstSheets )
   {
-    QDomElement e = it.current()->saveXML( doc );
+    QDomElement e = sheet->saveXML( doc );
     if ( e.isNull() )
       return e;
     mymap.appendChild( e );
@@ -390,63 +388,56 @@ bool Map::loadXML( const QDomElement& mymap )
 
 void Map::update()
 {
-  Q3PtrListIterator<Sheet> it( m_lstSheets );
-  for( ; it.current(); ++it )
-    it.current()->recalc();
+  foreach ( Sheet* sheet, m_lstSheets )
+  {
+    sheet->recalc();
+  }
 }
 
 Sheet* Map::findSheet( const QString & _name )
 {
-    Sheet * t;
-
-    for ( t = m_lstSheets.first(); t != 0; t = m_lstSheets.next() )
-    {
-	    if ( _name.toLower() == t->sheetName().toLower() )
-            return t;
-    }
-
-    return 0;
+  foreach ( Sheet* sheet, m_lstSheets )
+  {
+    if ( _name.toLower() == sheet->sheetName().toLower() )
+      return sheet;
+  }
+  return 0;
 }
 
 Sheet * Map::nextSheet( Sheet * currentSheet )
 {
-    Sheet * t;
-
-    if( currentSheet == m_lstSheets.last())
-      return currentSheet;
-
-    for ( t = m_lstSheets.first(); t != 0; t = m_lstSheets.next() )
-    {
-        if ( t  == currentSheet )
-            return m_lstSheets.next();
-    }
-
-    return 0;
+  if( currentSheet == m_lstSheets.last())
+    return currentSheet;
+  int index = 0;
+  foreach ( Sheet* sheet, m_lstSheets )
+  {
+    if ( sheet == currentSheet )
+      return m_lstSheets.value( ++index );
+    ++index;
+  }
+  return 0;
 }
 
 Sheet * Map::previousSheet( Sheet * currentSheet )
 {
-    Sheet * t;
-
-    if( currentSheet == m_lstSheets.first())
-      return currentSheet;
-
-    for ( t = m_lstSheets.first(); t != 0; t = m_lstSheets.next() )
-    {
-        if ( t  == currentSheet )
-            return m_lstSheets.prev();
-    }
-
-    return 0;
+  if( currentSheet == m_lstSheets.first())
+    return currentSheet;
+  int index = 0;
+  foreach ( Sheet* sheet, m_lstSheets )
+  {
+    if ( sheet  == currentSheet )
+      return m_lstSheets.value( --index );
+    ++index;
+  }
+  return 0;
 }
 
 bool Map::saveChildren( KoStore * _store )
 {
-  Q3PtrListIterator<Sheet> it( m_lstSheets );
-  for( ; it.current(); ++it )
+  foreach ( Sheet* sheet, m_lstSheets )
   {
     // set the child document's url to an internal url (ex: "tar:/0/1")
-    if ( !it.current()->saveChildren( _store, it.current()->sheetName() ) )
+    if ( !sheet->saveChildren( _store, sheet->sheetName() ) )
       return false;
   }
   return true;
@@ -454,11 +445,11 @@ bool Map::saveChildren( KoStore * _store )
 
 bool Map::loadChildren( KoStore * _store )
 {
-  Q3PtrListIterator<Sheet> it( m_lstSheets );
-  for( ; it.current(); ++it )
-    if ( !it.current()->loadChildren( _store ) )
+  foreach ( Sheet* sheet, m_lstSheets )
+  {
+    if ( !sheet->loadChildren( _store ) )
       return false;
-
+  }
   return true;
 }
 
@@ -472,49 +463,38 @@ DCOPObject * Map::dcopObject()
 
 void Map::takeSheet( Sheet * sheet )
 {
-    int pos = m_lstSheets.findRef( sheet );
-    m_lstSheets.take( pos );
-    m_lstDeletedSheets.append( sheet );
+  m_lstSheets.removeAll( sheet );
+  m_lstDeletedSheets.append( sheet );
 }
 
 void Map::insertSheet( Sheet * sheet )
 {
-    int pos = m_lstDeletedSheets.findRef( sheet );
-    if ( pos != -1 )
-        m_lstDeletedSheets.take( pos );
+    m_lstDeletedSheets.removeAll( sheet );
     m_lstSheets.append(sheet);
 }
 
 // FIXME cache this for faster operation
 QStringList Map::visibleSheets() const
 {
-    QStringList result;
-
-    Q3PtrListIterator<Sheet> it( m_lstSheets );
-    for( ; it; ++it )
-    {
-        Sheet* sheet = it.current();
-        if( !sheet->isHidden() )
-            result.append( sheet->sheetName() );
-    }
-
-    return result;
+  QStringList result;
+  foreach ( Sheet* sheet, m_lstSheets )
+  {
+    if( !sheet->isHidden() )
+      result.append( sheet->sheetName() );
+  }
+  return result;
 }
 
 // FIXME cache this for faster operation
 QStringList Map::hiddenSheets() const
 {
-    QStringList result;
-
-    Q3PtrListIterator<Sheet> it( m_lstSheets );
-    for( ; it; ++it )
-    {
-        Sheet* sheet = it.current();
-        if( sheet->isHidden() )
-            result.append( sheet->sheetName() );
-    }
-
-    return result;
+  QStringList result;
+  foreach ( Sheet* sheet, m_lstSheets )
+  {
+    if( sheet->isHidden() )
+      result.append( sheet->sheetName() );
+  }
+  return result;
 }
 
 #include "kspread_map.moc"

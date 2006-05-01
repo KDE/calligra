@@ -72,26 +72,18 @@ int MapIface::sheetCount() const
 
 QStringList MapIface::sheetNames() const
 {
-    QStringList names;
-
-    Q3PtrList<Sheet>& lst = m_map->sheetList();
-    Q3PtrListIterator<Sheet> it( lst );
-    for( ; it.current(); ++it )
-      names.append( it.current()->objectName() );
-
-    return names;
+  QStringList names;
+  foreach ( Sheet* sheet, m_map->sheetList() )
+    names.append( sheet->objectName() );
+  return names;
 }
 
 QList<DCOPRef> MapIface::sheets()
 {
-    QList<DCOPRef> t;
-
-    Q3PtrList<Sheet>& lst = m_map->sheetList();
-    Q3PtrListIterator<Sheet> it( lst );
-    for( ; it.current(); ++it )
-        t.append( DCOPRef( kapp->dcopClient()->appId(), it.current()->dcopObject()->objId() ) );
-
-    return t;
+  QList<DCOPRef> t;
+  foreach ( Sheet* sheet, m_map->sheetList() )
+    t.append( DCOPRef( kapp->dcopClient()->appId(), sheet->dcopObject()->objId() ) );
+  return t;
 }
 
 DCOPRef MapIface::insertSheet( const QString& name )

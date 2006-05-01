@@ -20,12 +20,10 @@
 #ifndef __kspread_map_h__
 #define __kspread_map_h__
 
-#include <q3cstring.h>
-#include <q3ptrlist.h>
-#include <qstring.h>
-#include <qstringlist.h>
-#include <q3intdict.h>
-#include <qobject.h>
+#include <QList>
+#include <QObject>
+#include <QString>
+#include <QStringList>
 
 #include <koffice_export.h>
 
@@ -95,11 +93,20 @@ public:
   void moveSheet( const QString & _from, const QString & _to, bool _before = true );
 
   /**
-   * searches for a sheet named @p _name
-   * @return a pointer to the searched sheet, @c 0 if nothing was found
+   * Searches for a sheet named @p name .
+   * @return a pointer to the searched sheet
+   * @return @c 0 if nothing was found
    */
-  Sheet* findSheet( const QString & _name );
-  Sheet* nextSheet( Sheet* );
+  Sheet* findSheet( const QString& name );
+
+  /**
+   * @return a pointer to the next sheet to @p sheet
+   */
+  Sheet* nextSheet( Sheet* sheet );
+
+  /**
+   * @return a pointer to the previous sheet to @p sheet
+   */
   Sheet* previousSheet( Sheet* );
 
   Sheet* initialActiveSheet()const { return m_initialActiveSheet; }
@@ -110,54 +117,42 @@ public:
 
 
   /**
-   * @return a pointer to a new Sheet. The Sheet is not added
-   *         to the map nor added to the GUI.
+   * Creates a new sheet.
+   * The sheet is not added to the map nor added to the GUI.
+   * @return a pointer to a new Sheet
    */
-  Sheet * createSheet();
-  /** add sheet to the map, making it active */
-  void addSheet( Sheet *_sheet );
-
-  /** add a new sheet to the map, returning a pointer to it */
-  Sheet *addNewSheet ();
+  Sheet* createSheet();
 
   /**
-   * Use the @ref #nextSheet function to get all the other sheets.
-   * Attention: Function is not reentrant.
-   *
-   * @return a pointer to the first sheet in this map.
-   */
-  Sheet* firstSheet() { return m_lstSheets.first();  }
+   * Adds @p sheet to this map.
+   * The sheet becomes the active sheet.
+  */
+  void addSheet( Sheet* sheet );
 
   /**
-   * Use the previousSheet() function to get all the other sheets.
-   * Attention: Function is not reentrant.
-   *
-   * @return a pointer to the last sheet in this map.
+   * Creates a new sheet.
+   * Adds a new sheet to this map.
+   * @return a pointer to the new sheet
    */
-  Sheet* lastSheet() { return m_lstSheets.last();  }
+  Sheet* addNewSheet();
 
   /**
-   * Call @ref #firstSheet first. This will set the list pointer to
-   * the first sheet. Attention: Function is not reentrant.
-   *
-   * @return a pointer to the next sheet in this map.
+   * @return a pointer to the sheet at index @p index in this map
+   * @return @c 0 if the index exceeds the list boundaries
    */
-  Sheet* nextSheet() { return m_lstSheets.next();  }
-
-  Q3PtrList<Sheet>& sheetList() { return m_lstSheets; }
+  Sheet* sheet( int index ) const { return m_lstSheets.value( index );  }
 
   /**
-   * @return amount of sheets in this map.
+   * @return the list of sheets in this map
    */
-  int count()const { return m_lstSheets.count(); }
+  QList<Sheet*>& sheetList() { return m_lstSheets; }
+
+  /**
+   * @return amount of sheets in this map
+   */
+  int count() const { return m_lstSheets.count(); }
 
   void update();
-
-  /**
-   * Needed for the printing Extension KOffice::Print
-   */
-    // void draw( QPaintDevice* _dev, long int _width, long int _height,
-    // float _scale );
 
   virtual DCOPObject* dcopObject();
 
@@ -182,8 +177,8 @@ private:
   /**
    * List of all sheets in this map. The list has autodelete turned on.
    */
-  Q3PtrList<Sheet> m_lstSheets;
-  Q3PtrList<Sheet> m_lstDeletedSheets;
+  QList<Sheet*> m_lstSheets;
+  QList<Sheet*> m_lstDeletedSheets;
 
   /**
    * Password to protect the map from being changed.

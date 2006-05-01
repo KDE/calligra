@@ -2383,14 +2383,15 @@ bool Sheet::shiftRow( const QRect &rect,bool makeUndo )
                 res=false;
         }
     }
-    Q3PtrListIterator<Sheet> it( workbook()->sheetList() );
-    for( ; it.current(); ++it )
+    foreach ( Sheet* sheet, workbook()->sheetList() )
     {
-        for(int i = rect.top(); i <= rect.bottom(); i++ )
-            it.current()->changeNameCellRef( QPoint( rect.left(), i ), false,
-                                             Sheet::ColumnInsert, objectName(),
-                                             ( rect.right() - rect.left() + 1),
-                                             undo);
+      for ( int i = rect.top(); i <= rect.bottom(); ++i )
+      {
+        sheet->changeNameCellRef( QPoint( rect.left(), i ), false,
+                                  Sheet::ColumnInsert, objectName(),
+                                  rect.right() - rect.left() + 1,
+                                  undo );
+      }
     }
     refreshChart(QPoint(rect.left(),rect.top()), false, Sheet::ColumnInsert);
     refreshMergedCell();
@@ -2421,14 +2422,15 @@ bool Sheet::shiftColumn( const QRect& rect,bool makeUndo )
         }
     }
 
-    Q3PtrListIterator<Sheet> it( workbook()->sheetList() );
-    for( ; it.current(); ++it )
+    foreach ( Sheet* sheet, workbook()->sheetList() )
     {
-        for(int i=rect.left();i<=rect.right();i++)
-            it.current()->changeNameCellRef( QPoint( i, rect.top() ), false,
-                                             Sheet::RowInsert, objectName(),
-                                             ( rect.bottom() - rect.top() + 1 ),
-                                             undo );
+      for ( int i = rect.left(); i <= rect.right(); ++i )
+      {
+        sheet->changeNameCellRef( QPoint( i, rect.top() ), false,
+                                  Sheet::RowInsert, objectName(),
+                                  rect.bottom() - rect.top() + 1,
+                                  undo );
+      }
     }
     refreshChart(/*marker*/QPoint(rect.left(),rect.top()), false, Sheet::RowInsert);
     refreshMergedCell();
@@ -2455,13 +2457,16 @@ void Sheet::unshiftColumn( const QRect & rect,bool makeUndo )
         for(int j=0;j<=(rect.bottom()-rect.top());j++)
                 d->cells.unshiftColumn( QPoint(i,rect.top()) );
 
-    Q3PtrListIterator<Sheet> it( workbook()->sheetList() );
-    for( ; it.current(); ++it )
-        for(int i=rect.left();i<=rect.right();i++)
-                it.current()->changeNameCellRef( QPoint( i, rect.top() ), false,
-                                                 Sheet::RowRemove, objectName(),
-                                                 ( rect.bottom() - rect.top() + 1 ),
-                                                 undo );
+    foreach ( Sheet* sheet, workbook()->sheetList() )
+    {
+      for ( int i = rect.left(); i <= rect.right(); ++i )
+      {
+        sheet->changeNameCellRef( QPoint( i, rect.top() ), false,
+                                  Sheet::RowRemove, objectName(),
+                                  rect.bottom() - rect.top() + 1,
+                                  undo );
+      }
+    }
 
     refreshChart( QPoint(rect.left(),rect.top()), false, Sheet::RowRemove );
     refreshMergedCell();
@@ -2485,13 +2490,16 @@ void Sheet::unshiftRow( const QRect & rect,bool makeUndo )
         for(int j=0;j<=(rect.right()-rect.left());j++)
                 d->cells.unshiftRow( QPoint(rect.left(),i) );
 
-    Q3PtrListIterator<Sheet> it( workbook()->sheetList() );
-    for( ; it.current(); ++it )
-        for(int i=rect.top();i<=rect.bottom();i++)
-                it.current()->changeNameCellRef( QPoint( rect.left(), i ), false,
-                                                 Sheet::ColumnRemove, objectName(),
-                                                 ( rect.right() - rect.left() + 1 ),
-                                                 undo);
+    foreach ( Sheet* sheet, workbook()->sheetList() )
+    {
+      for ( int i = rect.top(); i <= rect.bottom(); ++i )
+      {
+        sheet->changeNameCellRef( QPoint( rect.left(), i ), false,
+                                  Sheet::ColumnRemove, objectName(),
+                                  rect.right() - rect.left() + 1,
+                                  undo);
+      }
+    }
 
     refreshChart(QPoint(rect.left(),rect.top()), false, Sheet::ColumnRemove );
     refreshMergedCell();
@@ -2524,11 +2532,12 @@ bool Sheet::insertColumn( int col, int nbCol, bool makeUndo )
         d->sizeMaxX += columnFormat( col+i )->dblWidth();
     }
 
-    Q3PtrListIterator<Sheet> it( workbook()->sheetList() );
-    for( ; it.current(); ++it )
-        it.current()->changeNameCellRef( QPoint( col, 1 ), true,
-                                         Sheet::ColumnInsert, objectName(),
-                                         nbCol + 1, undo );
+    foreach ( Sheet* sheet, workbook()->sheetList() )
+    {
+        sheet->changeNameCellRef( QPoint( col, 1 ), true,
+                                  Sheet::ColumnInsert, objectName(),
+                                  nbCol + 1, undo );
+    }
 
     //update print settings
     d->print->insertColumn( col, nbCol );
@@ -2567,11 +2576,12 @@ bool Sheet::insertRow( int row, int nbRow, bool makeUndo )
         d->sizeMaxY += rowFormat( row )->dblHeight();
     }
 
-    Q3PtrListIterator<Sheet> it( workbook()->sheetList() );
-    for( ; it.current(); ++it )
-        it.current()->changeNameCellRef( QPoint( 1, row ), true,
-                                         Sheet::RowInsert, objectName(),
-                                         nbRow + 1, undo );
+    foreach ( Sheet* sheet, workbook()->sheetList() )
+    {
+      sheet->changeNameCellRef( QPoint( 1, row ), true,
+                                Sheet::RowInsert, objectName(),
+                                nbRow + 1, undo );
+    }
 
     //update print settings
     d->print->insertRow( row, nbRow );
@@ -2606,11 +2616,12 @@ void Sheet::removeColumn( int col, int nbCol, bool makeUndo )
         d->sizeMaxX += columnFormat( KS_colMax )->dblWidth();
     }
 
-    Q3PtrListIterator<Sheet> it( workbook()->sheetList() );
-    for( ; it.current(); ++it )
-        it.current()->changeNameCellRef( QPoint( col, 1 ), true,
-                                         Sheet::ColumnRemove, objectName(),
-                                         nbCol + 1, undo );
+    foreach ( Sheet* sheet, workbook()->sheetList() )
+    {
+        sheet->changeNameCellRef( QPoint( col, 1 ), true,
+                                  Sheet::ColumnRemove, objectName(),
+                                  nbCol + 1, undo );
+    }
 
     //update print settings
     d->print->removeColumn( col, nbCol );
@@ -2643,11 +2654,12 @@ void Sheet::removeRow( int row, int nbRow, bool makeUndo )
         d->sizeMaxY += rowFormat( KS_rowMax )->dblHeight();
     }
 
-    Q3PtrListIterator<Sheet> it( workbook()->sheetList() );
-    for( ; it.current(); ++it )
-        it.current()->changeNameCellRef( QPoint( 1, row ), true,
-                                         Sheet::RowRemove, objectName(),
-                                         nbRow + 1, undo );
+    foreach ( Sheet* sheet, workbook()->sheetList() )
+    {
+      sheet->changeNameCellRef( QPoint( 1, row ), true,
+                                Sheet::RowRemove, objectName(),
+                                nbRow + 1, undo );
+    }
 
     //update print settings
     d->print->removeRow( row, nbRow );
@@ -8281,9 +8293,10 @@ bool Sheet::setSheetName( const QString& name, bool init, bool /*makeUndo*/ )
     if ( init )
         return true;
 
-    Q3PtrListIterator<Sheet> it( workbook()->sheetList() );
-    for ( ; it.current(); ++it )
-        it.current()->changeCellTabName( old_name, name );
+    foreach ( Sheet* sheet, workbook()->sheetList() )
+    {
+      sheet->changeCellTabName( old_name, name );
+    }
 
     doc()->changeAreaSheetName( old_name, name );
     emit sig_nameChanged( this, old_name );
