@@ -912,7 +912,7 @@ public:
      * The cells we are interested in are in the rectangle '_range'.
      * The cells are stored row after row in '_list'.
      */
-    bool getCellRectangle( const QRect &_range, Q3PtrList<Cell> &_list );
+    bool getCellRectangle( const QRect &_range, QList<Cell*> &_list );
 
     /**
      * A convenience function that finds a sheet by its name.
@@ -1323,7 +1323,7 @@ protected:
     /**
      * @see #autofill
      */
-    void fillSequence( Q3PtrList<Cell>& _srcList, Q3PtrList<Cell>& _destList, Q3PtrList<AutoFillSequence>& _seqList, bool down = true );
+    void fillSequence( QList<Cell*>& _srcList, QList<Cell*>& _destList, Q3PtrList<AutoFillSequence>& _seqList, bool down = true );
 
     static int s_id;
     static Q3IntDict<Sheet>* s_mapSheets;
@@ -1373,13 +1373,13 @@ private:
      */
     bool insertPicture( const KoPoint& point, KoPicture& picture );
 
-    bool FillSequenceWithInterval (Q3PtrList<Cell>& _srcList,
-           Q3PtrList<Cell>& _destList,
+    bool FillSequenceWithInterval (QList<Cell*>& _srcList,
+           QList<Cell*>& _destList,
            Q3PtrList<AutoFillSequence>& _seqList,
                                    bool down);
 
-    void FillSequenceWithCopy (Q3PtrList<Cell>& _srcList,
-                               Q3PtrList<Cell>& _destList,
+    void FillSequenceWithCopy (QList<Cell*>& _srcList,
+                               QList<Cell*>& _destList,
                                bool down);
 
     void convertObscuringBorders();
