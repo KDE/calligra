@@ -22,6 +22,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#include <QList>
+
 #include <dcopclient.h>
 #include <kapplication.h>
 #include <kdebug.h>
@@ -31,8 +33,6 @@
 #include "kspread_sheet.h"
 
 #include "KSpreadMapIface.h"
-//Added by qt3to4:
-#include <Q3PtrList>
 
 using namespace KSpread;
 

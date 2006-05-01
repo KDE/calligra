@@ -39,8 +39,6 @@
 #include <QList>
 #include <QPainter>
 
-#include <q3ptrlist.h>
-
 #include "kspread_condition.h"
 
 class KLocale;

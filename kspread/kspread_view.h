@@ -28,22 +28,18 @@
 #ifndef KSPREAD_VIEW
 #define KSPREAD_VIEW
 
-
-#include <qpoint.h>
-#include <q3ptrlist.h>
-#include <qstringlist.h>
-#include <q3valuelist.h>
-//Added by qt3to4:
 #include <QKeyEvent>
-#include <QResizeEvent>
 #include <QList>
+#include <QPoint>
+#include <QResizeEvent>
+#include <QString>
+#include <QStringList>
 
 #include <kprinter.h>
 #include <kdeprint/kprintdialogpage.h>
 
 #include <KoPoint.h>
 #include <KoView.h>
-
 
 class QScrollBar;
 

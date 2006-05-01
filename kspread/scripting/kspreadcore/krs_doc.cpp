@@ -23,7 +23,9 @@
 #include <kspread_doc.h>
 #include <kspread_map.h>
 #include <kspread_sheet.h>
-#include <Q3PtrListIterator>
+
+#include <QList>
+
 namespace Kross { namespace KSpreadCore {
 
 Doc::Doc(KSpread::Doc* doc) : Kross::Api::Class<Doc>("KSpreadDocument", 0 ), m_doc(doc) {

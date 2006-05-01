@@ -34,30 +34,27 @@
 #include <time.h>
 
 // Qt includes
-#include <qbuffer.h>
-#include <qbytearray.h>
-#include <qclipboard.h>
-#include <qcursor.h>
+#include <QBuffer>
+#include <QByteArray>
+#include <QClipboard>
+#include <QCursor>
+#include <QEvent>
+#include <QFrame>
 #include <QGridLayout>
 #include <QHBoxLayout>
-#include <qlayout.h>
-#include <QMenu>
-#include <q3paintdevicemetrics.h>
-#include <qregexp.h>
-#include <qtimer.h>
-#include <qtoolbutton.h>
-#include <qsqldatabase.h>
-#include <q3listview.h>
-#include <qsizepolicy.h>
-//Added by qt3to4:
-#include <QResizeEvent>
-#include <QMenu>
-#include <QFrame>
 #include <QKeyEvent>
-#include <QEvent>
-#include <Q3ValueList>
-#include <Q3PtrList>
+#include <QList>
+#include <QMenu>
 #include <QPixmap>
+#include <QRegExp>
+#include <QResizeEvent>
+#include <QTimer>
+#include <QToolButton>
+#include <QSqlDatabase>
+#include <QSizePolicy>
+//Added by qt3to4:
+#include <Q3PaintDeviceMetrics>
+#include <Q3ValueList>
 
 // KDE includes
 #include <dcopclient.h>
@@ -287,7 +284,7 @@ public:
       QString command;
       KDataToolInfo info;
     };
-    Q3PtrList<ToolEntry> toolList;
+    QList<ToolEntry*> toolList;
 
     void initActions();
     void adjustActions( bool mode );
@@ -5734,18 +5731,18 @@ void View::openPopupMenu( const QPoint & _point )
     }
 
     // Remove informations about the last tools we offered
+    qDeleteAll( d->toolList );
     d->toolList.clear();
-    d->toolList.setAutoDelete( true );
 
     if ( !isProtected && !activeSheet()->getWordSpelling( selectionInfo() ).isEmpty() )
     {
       d->popupMenuFirstToolId = 10;
       int i = 0;
-      Q3ValueList<KDataToolInfo> tools = KDataToolInfo::query( "QString", "text/plain", doc()->instance() );
+      QList<KDataToolInfo> tools = KDataToolInfo::query( "QString", "text/plain", doc()->instance() );
       if ( tools.count() > 0 )
       {
         d->popupMenu->addSeparator();
-        Q3ValueList<KDataToolInfo>::Iterator entry = tools.begin();
+        QList<KDataToolInfo>::Iterator entry = tools.begin();
         for( ; entry != tools.end(); ++entry )
         {
           QStringList lst = (*entry).userCommands();
