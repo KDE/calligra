@@ -81,6 +81,12 @@ OpenAction::OpenAction()
 
 	setVariable(KoMacro::Variable::Ptr( new ObjectNameVariable<OpenAction>(this, objvar->variant().toString()) ));
 	setVariable(KoMacro::Variable::Ptr( new ViewVariable<OpenAction>(this, objvar->variant().toString()) ));
+
+	/*TODO
+	KoMacro::Variable::Ptr activatevar = KoMacro::Variable::Ptr( new KexiVariable<OpenAction>(this, "activate", i18n("Activate")) );
+	activatevar->setVariant( QVariant(true,0) );
+	setVariable(activatevar);
+	*/
 }
 
 OpenAction::~OpenAction()

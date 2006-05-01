@@ -21,7 +21,6 @@
 #ifndef KEXIMACRO_OBJECTNAMEVARIABLE_H
 #define KEXIMACRO_OBJECTNAMEVARIABLE_H
 
-#include "../lib/action.h"
 #include "../lib/variable.h"
 
 #include "kexivariable.h"
@@ -33,7 +32,6 @@
 #include <core/kexipartinfo.h>
 
 #include <klocale.h>
-#include <kdebug.h>
 
 namespace KexiMacro {
 
@@ -48,35 +46,25 @@ namespace KexiMacro {
 			ObjectNameVariable(ACTIONIMPL* actionimpl, const QString& objectname = QString::null, const QString& name = QString::null)
 				: KexiVariable<ACTIONIMPL>(actionimpl, "name", i18n("Name"))
 			{
-				if(! actionimpl->mainWin()->project()) {
-					kdWarning() << "KexiMacro::ObjectNameVariable() No project loaded." << endl;
+				if(! actionimpl->mainWin()->project())
 					return;
-				}
 
 				QStringList namelist;
 				KexiPart::Info* info = Kexi::partManager().infoForMimeType( QString("kexi/%1").arg(objectname) );
 				if(info) {
-					if(info->isVisibleInNavigator()) {
-						KexiPart::ItemDict* items = actionimpl->mainWin()->project()->items(info);
-						if(items) {
-							for(KexiPart::ItemDictIterator item_it = *items; item_it.current(); ++item_it) {
-								const QString n = item_it.current()->name();
-								namelist << n;
-								this->children().append( KoMacro::Variable::Ptr(new KoMacro::Variable(n)) );
-								kdDebug() << "KexiMacro::ObjectNameVariable() infoname=" << info->objectName() << " name=" << n << endl;
-							}
-						}
-					}
+					KexiPart::ItemDict* items = actionimpl->mainWin()->project()->items(info);
+					if(items)
+						for(KexiPart::ItemDictIterator item_it = *items; item_it.current(); ++item_it)
+							namelist << item_it.current()->name();
 				}
 
-				if(namelist.count() <= 0) {
+				if(namelist.count() <= 0)
 					namelist << "";
-					this->children().append( KoMacro::Variable::Ptr(new KoMacro::Variable("")) );
-				}
 
-				QString n = (name.isNull() || ! namelist.contains(name)) ? namelist[0] : name;
-				kdDebug() << "KexiMacro::ObjectNameVariable() name=" << n << " childcount=" << this->children().count() << endl;
-				this->setVariant(n);
+				for(QStringList::Iterator it = namelist.begin(); it != namelist.end(); ++it)
+					this->children().append( KoMacro::Variable::Ptr(new KoMacro::Variable(*it)) );
+
+				this->setVariant( (name.isNull() || ! namelist.contains(name)) ? namelist[0] : name );
 			}
 
 			virtual ~ObjectNameVariable() {}

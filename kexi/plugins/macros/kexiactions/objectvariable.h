@@ -52,12 +52,6 @@ namespace KexiMacro {
 				Executable = 2
 			};
 
-			/**
-			* Constructor.
-			*
-			* @param action The @a KoMacro::Action instance
-			* this @a ObjectVariable is child of.
-			*/
 			ObjectVariable(ACTIONIMPL* actionimpl, int conditions = VisibleInNav, const QString& objectname = QString::null)
 				: KexiVariable<ACTIONIMPL>(actionimpl, "object", i18n("Object"))
 			{

@@ -5,6 +5,7 @@ noinst_LTLIBRARIES = libkeximacroactions.la
 libkeximacroactions_la_SOURCES = \
     openaction.cpp \
     executeaction.cpp \
+    navigateaction.cpp \
     messageaction.cpp
 
 libkeximacroactions_la_CXXFLAGS = $(USE_EXCEPTIONS)

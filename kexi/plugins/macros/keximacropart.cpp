@@ -39,6 +39,7 @@
 
 #include "kexiactions/openaction.h"
 #include "kexiactions/executeaction.h"
+#include "kexiactions/navigateaction.h"
 #include "kexiactions/messageaction.h"
 
 /**
@@ -124,6 +125,7 @@ void KexiMacroPart::initPartActions()
 	::KoMacro::Manager::init(m_mainWin);
 	new KexiMacro::OpenAction;
 	new KexiMacro::ExecuteAction;
+	new KexiMacro::NavigateAction;
 	new KexiMacro::MessageAction;
 }
 
