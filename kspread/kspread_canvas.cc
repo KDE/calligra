@@ -98,10 +98,6 @@
 
 #include "kspread_canvas.h"
 
-// TODO Stefan: undefine/remove, if non-contiguous selections don't work
-//              properly or if we are sure, that they do. ;-)
-#define NONCONTIGUOUSSELECTION
-
 #define MIN_SIZE 10
 
 using namespace KSpread;
@@ -1507,7 +1503,6 @@ void Canvas::mousePressEvent( QMouseEvent * _ev )
         // Hyperlink pressed
         processLeftClickAnchor();
       }
-#ifdef NONCONTIGUOUSSELECTION
       else if ( _ev->modifiers() & Qt::ControlModifier )
       {
         if (d->chooseCell)
@@ -1529,7 +1524,6 @@ void Canvas::mousePressEvent( QMouseEvent * _ev )
 // TODO Stefan: simplification, if NCS of choices is working
 /*        (d->chooseCell ? choice() : selectionInfo())->extend(QPoint(col,row), sheet);*/
       }
-#endif
       else
       {
         // Start a marking action
@@ -4728,14 +4722,11 @@ void VBorder::mousePressEvent( QMouseEvent * _ev )
     {
       QPoint newMarker( 1, hit_row );
       QPoint newAnchor( KS_colMax, hit_row );
-#ifdef NONCONTIGUOUSSELECTION
       if (_ev->modifiers() == Qt::ControlModifier)
       {
         m_pView->selectionInfo()->extend(QRect(newAnchor, newMarker));
       }
-      else
-#endif
-      if (_ev->modifiers() == Qt::ShiftModifier)
+      else if (_ev->modifiers() == Qt::ShiftModifier)
       {
         m_pView->selectionInfo()->update(newMarker);
       }
@@ -5354,14 +5345,11 @@ void HBorder::mousePressEvent( QMouseEvent * _ev )
     {
       QPoint newMarker( hit_col, 1 );
       QPoint newAnchor( hit_col, KS_rowMax );
-#ifdef NONCONTIGUOUSSELECTION
       if (_ev->modifiers() == Qt::ControlModifier)
       {
         m_pView->selectionInfo()->extend(QRect(newAnchor, newMarker));
       }
-      else
-#endif
-      if (_ev->modifiers() == Qt::ShiftModifier)
+      else if (_ev->modifiers() == Qt::ShiftModifier)
       {
         m_pView->selectionInfo()->update(newMarker);
       }
