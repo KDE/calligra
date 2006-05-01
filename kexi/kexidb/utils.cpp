@@ -599,17 +599,17 @@ QString KexiDB::formatNumberForVisibleDecimalPlaces(double value, int decimalPla
 }
 
 #include <ktabwidget.h>
-#include <klistview.h>
+#include <k3listview.h>
 
 static KTabWidget* kexidbDebugWindow = 0;
-static KListView* kexidbCursorDebugPage = 0;
+static K3ListView* kexidbCursorDebugPage = 0;
 
 #ifdef KEXI_DEBUG_GUI
 QWidget *KexiDB::createDebugWindow(QWidget *parent)
 {
 	// (this is internal code - do not use i18n() here)
 	kexidbDebugWindow = new KTabWidget(parent, "kexidbDebugWindow", Qt::WType_Dialog|Qt::WStyle_MinMax);
-	kexidbCursorDebugPage = new KListView(kexidbDebugWindow, "kexidbCursorDebugPage");
+	kexidbCursorDebugPage = new K3ListView(kexidbDebugWindow, "kexidbCursorDebugPage");
 	kexidbCursorDebugPage->addColumn("");
 	kexidbCursorDebugPage->header()->hide();
 	kexidbCursorDebugPage->setSorting(-1);
