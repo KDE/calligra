@@ -20,14 +20,13 @@
 #ifndef __kspread_undo_h__
 #define __kspread_undo_h__
 
+#include <QByteArray>
 #include <QLinkedList>
 #include <QList>
 #include <QMap>
 #include <QRect>
 #include <QStack>
 #include <QString>
-//Added by qt3to4:
-#include <Q3CString>
 
 #include <KoUnit.h>
 #include <KoPageLayout.h>
@@ -172,7 +171,7 @@ public:
 
 protected:
     QString m_sheetName;
-    Q3CString m_data;
+    QByteArray m_data;
     int m_iColumn;
     int m_iNbCol;
     QRect m_printRange;
@@ -205,7 +204,7 @@ public:
 
 protected:
     QString m_sheetName;
-    Q3CString m_data;
+    QByteArray m_data;
     int m_iRow;
     int m_iNbRow;
     QRect m_printRange;
@@ -403,11 +402,11 @@ public:
     virtual void redo();
 
 protected:
-    void createListCell( Q3CString &listCell,QLinkedList<columnSize> &listCol,QLinkedList<rowSize> &listRow, Sheet* sheet );
+    void createListCell( QByteArray &listCell,QLinkedList<columnSize> &listCol,QLinkedList<rowSize> &listRow, Sheet* sheet );
 
     Region m_region;
-    Q3CString m_data;
-    Q3CString m_dataRedo;
+    QByteArray m_data;
+    QByteArray m_dataRedo;
     QLinkedList<columnSize> m_lstColumn;
     QLinkedList<columnSize> m_lstRedoColumn;
     QLinkedList<rowSize> m_lstRow;
@@ -427,13 +426,13 @@ public:
 protected:
     Region   m_selectionSource;
     Region   m_selectionTarget;
-    Q3CString m_dataSource;
-    Q3CString m_dataTarget;
-    Q3CString m_dataRedoSource;
-    Q3CString m_dataRedoTarget;
+    QByteArray m_dataSource;
+    QByteArray m_dataTarget;
+    QByteArray m_dataRedoSource;
+    QByteArray m_dataRedoTarget;
     QString  m_sheetName;
 
-    void saveCellRect( Q3CString & cells, Sheet * sheet,
+    void saveCellRect( QByteArray & cells, Sheet * sheet,
                        const Region& region );
 };
 
@@ -528,10 +527,10 @@ public:
     virtual void undo();
     virtual void redo();
 protected:
-    void createListCell( Q3CString &list, Sheet* sheet );
+    void createListCell( QByteArray &list, Sheet* sheet );
     QRect m_selection;
-    Q3CString m_data;
-    Q3CString m_dataRedo;
+    QByteArray m_data;
+    QByteArray m_dataRedo;
     QString m_sheetName;
 };
 
@@ -575,7 +574,7 @@ public:
 protected:
     QString m_sheetName;
     QRect m_rect;
-    Q3CString m_data;
+    QByteArray m_data;
 };
 
 class UndoRemoveCellRow : public UndoInsertRemoveAction
@@ -590,7 +589,7 @@ public:
 protected:
     QString m_sheetName;
     QRect m_rect;
-    Q3CString m_data;
+    QByteArray m_data;
 };
 
 class UndoConditional : public UndoAction
@@ -602,10 +601,10 @@ public:
     virtual void undo();
     virtual void redo();
 protected:
-    void createListCell( Q3CString &list, Sheet* sheet );
+    void createListCell( QByteArray &list, Sheet* sheet );
     Region m_region;
-    Q3CString m_data;
-    Q3CString m_dataRedo;
+    QByteArray m_data;
+    QByteArray m_dataRedo;
     QString m_sheetName;
 };
 
@@ -621,11 +620,11 @@ public:
     virtual void redo();
 
 protected:
-    void createListCell( Q3CString &listCell,QLinkedList<columnSize> &listCol,QLinkedList<rowSize> &listRow, Sheet* sheet );
+    void createListCell( QByteArray &listCell,QLinkedList<columnSize> &listCol,QLinkedList<rowSize> &listRow, Sheet* sheet );
 
     Region m_region;
-    Q3CString m_data;
-    Q3CString m_dataRedo;
+    QByteArray m_data;
+    QByteArray m_dataRedo;
     QLinkedList<columnSize> m_lstColumn;
     QLinkedList<columnSize> m_lstRedoColumn;
     QLinkedList<rowSize> m_lstRow;

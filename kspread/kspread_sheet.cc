@@ -5198,14 +5198,18 @@ void Sheet::paste( const QByteArray& b, const QRect& pasteArea, bool makeUndo,
 {
     kDebug(36001) << "Parsing " << b.size() << " bytes" << endl;
 
-    QByteArray byteArray( b );
-    QBuffer buffer( &byteArray );
-    buffer.open( QIODevice::ReadOnly );
+    QString errorMsg;
+    int errorLine;
+    int errorColumn;
     QDomDocument doc;
-    doc.setContent( &buffer );
-    buffer.close();
-
-    // ##### TODO: Test for parsing errors
+    if ( !doc.setContent( b, false, &errorMsg, &errorLine, &errorColumn ) )
+    {
+      // an error occured
+      kDebug() << "Sheet::paste(const QByteArray&): an error occured" << endl
+               << "line: " << errorLine << " col: " << errorColumn
+               << " " << errorMsg << endl;
+      return;
+    }
 
     int mx = pasteArea.left();
     int my = pasteArea.top();
@@ -5489,24 +5493,31 @@ void Sheet::loadSelectionUndo(const QDomDocument& d, const QRect& loadArea,
   }
 }
 
-bool Sheet::testAreaPasteInsert()const
+bool Sheet::testAreaPasteInsert() const
 {
     QMimeSource* mime = QApplication::clipboard()->data( QClipboard::Clipboard );
     if ( !mime )
         return false;
 
-    QByteArray b;
+    QByteArray byteArray;
 
     if ( mime->provides( "application/x-kspread-snippet" ) )
-        b = mime->encodedData( "application/x-kspread-snippet" );
+        byteArray = mime->encodedData( "application/x-kspread-snippet" );
     else
         return false;
 
-    QBuffer buffer( &b );
-    buffer.open( QIODevice::ReadOnly );
+    QString errorMsg;
+    int errorLine;
+    int errorColumn;
     QDomDocument d;
-    d.setContent( &buffer );
-    buffer.close();
+    if ( !d.setContent( byteArray, false, &errorMsg, &errorLine, &errorColumn ) )
+    {
+      // an error occured
+      kDebug() << "Sheet::testAreaPasteInsert(): an error occured" << endl
+               << "line: " << errorLine << " col: " << errorColumn
+               << " " << errorMsg << endl;
+      return false;
+    }
 
     QDomElement e = d.documentElement();
     if ( !e.namedItem( "columns" ).toElement().isNull() )

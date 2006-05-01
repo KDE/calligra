@@ -45,31 +45,29 @@
 #include <float.h>
 #include <stdlib.h>
 
-#include <qapplication.h>
-#include <qbuffer.h>
-#include <qclipboard.h>
-#include <qdrawutil.h>
-#include <qlabel.h>
-#include <qpoint.h>
-#include <qscrollbar.h>
-#include <qtimer.h>
-#include <qtooltip.h>
-#include <qwidget.h>
-//Added by qt3to4:
-#include <QPaintEvent>
-#include <QResizeEvent>
-#include <QMouseEvent>
+#include <QApplication>
+#include <QBuffer>
+#include <QByteArray>
+#include <QClipboard>
+#include <QDragLeaveEvent>
+#include <QDragMoveEvent>
+#include <QDropEvent>
+#include <QEvent>
 #include <QFocusEvent>
 #include <QKeyEvent>
-#include <QEvent>
-#include <QTextStream>
-#include <QDragMoveEvent>
-#include <Q3CString>
-#include <QDragLeaveEvent>
-#include <QWheelEvent>
-#include <QDropEvent>
+#include <QLabel>
 #include <QList>
+#include <QMouseEvent>
+#include <QPaintEvent>
 #include <QPixmap>
+#include <QPoint>
+#include <QResizeEvent>
+#include <QScrollBar>
+#include <QTextStream>
+#include <QTimer>
+#include <QToolTip>
+#include <QWheelEvent>
+#include <QWidget>
 
 #include <kcursor.h>
 #include <kdebug.h>
@@ -3826,7 +3824,7 @@ void Canvas::copyOasisObjects()
 {
     // We'll create a store (ZIP format) in memory
     QBuffer buffer;
-    Q3CString mimeType = "application/vnd.oasis.opendocument.spreadsheet";
+    QByteArray mimeType = "application/vnd.oasis.opendocument.spreadsheet";
     KoStore* store = KoStore::createStore( &buffer, KoStore::Write, mimeType );
     Q_ASSERT( store );
     Q_ASSERT( !store->bad() );

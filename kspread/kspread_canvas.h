@@ -63,7 +63,6 @@
 
 class QWidget;
 class QTimer;
-class Q3Button;
 class QPainter;
 class QLabel;
 class QScrollBar;

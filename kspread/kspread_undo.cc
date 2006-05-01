@@ -32,7 +32,7 @@
 #include "kspread_undo.h"
 //Added by qt3to4:
 #include <QTextStream>
-#include <Q3CString>
+#include <QByteArray>
 
 using namespace KSpread;
 
@@ -258,19 +258,9 @@ UndoRemoveColumn::UndoRemoveColumn( Doc *_doc, Sheet *_sheet, int _column,int _n
     QDomDocument doc = _sheet->saveCellRegion( selection );
 
     // Save to buffer
-    QString buffer;
-    QTextStream str( &buffer, QIODevice::WriteOnly );
-    str << doc;
-
-    // This is a terrible hack to store unicode
-    // data in a QCString in a way that
-    // QCString::length() == QCString().size().
-    // This allows us to treat the QCString like a QByteArray later on.
-    m_data = buffer.toUtf8();
-    int len = m_data.length();
-    char tmp = m_data[ len - 1 ];
-    m_data.resize( len );
-    *( m_data.data() + len - 1 ) = tmp;
+    QTextStream stream( &m_data, QIODevice::WriteOnly );
+    stream.setCodec( "UTF-8" );
+    stream << doc;
 }
 
 UndoRemoveColumn::~UndoRemoveColumn()
@@ -377,19 +367,9 @@ UndoRemoveRow::UndoRemoveRow( Doc *_doc, Sheet *_sheet, int _row,int _nbRow) :
     QDomDocument doc = _sheet->saveCellRegion( selection );
 
     // Save to buffer
-    QString buffer;
-    QTextStream str( &buffer, QIODevice::WriteOnly );
-    str << doc;
-
-    // This is a terrible hack to store unicode
-    // data in a QCString in a way that
-    // QCString::length() == QCString().size().
-    // This allows us to treat the QCString like a QByteArray later on.
-    m_data = buffer.toUtf8();
-    int len = m_data.length();
-    char tmp = m_data[ len - 1 ];
-    m_data.resize( len );
-    *( m_data.data() + len - 1 ) = tmp;
+    QTextStream stream( &m_data, QIODevice::WriteOnly );
+    stream.setCodec( "UTF-8" );
+    stream << doc;
 
     // printf("UNDO {{{%s}}}\n", buffer.toLatin1() );
     // printf("UNDO2 %i bytes, length %i {{{%s}}}\n", m_data.length(), m_data.size(), (const char*)m_data );
@@ -1504,7 +1484,7 @@ UndoDelete::~UndoDelete()
 {
 }
 
-void UndoDelete::createListCell( Q3CString &listCell,QLinkedList<columnSize> &listCol,QLinkedList<rowSize> &listRow, Sheet* sheet )
+void UndoDelete::createListCell( QByteArray &listCell,QLinkedList<columnSize> &listCol,QLinkedList<rowSize> &listRow, Sheet* sheet )
 {
     listRow.clear();
     listCol.clear();
@@ -1549,19 +1529,9 @@ void UndoDelete::createListCell( Q3CString &listCell,QLinkedList<columnSize> &li
     //save all cells in area
     QDomDocument doc = sheet->saveCellRegion( m_region );
     // Save to buffer
-    QString buffer;
-    QTextStream str( &buffer, QIODevice::WriteOnly );
-    str << doc;
-
-    // This is a terrible hack to store unicode
-    // data in a QCString in a way that
-    // QCString::length() == QCString().size().
-    // This allows us to treat the QCString like a QByteArray later on.
-    listCell = buffer.toUtf8();
-    int len = listCell.length();
-    char tmp = listCell[ len - 1 ];
-    listCell.resize( len );
-    *( listCell.data() + len - 1 ) = tmp;
+    QTextStream stream( &listCell, QIODevice::WriteOnly );
+    stream.setCodec( "UTF-8" );
+    stream << doc;
 }
 
 
@@ -1665,7 +1635,7 @@ UndoDragDrop::~UndoDragDrop()
 {
 }
 
-void UndoDragDrop::saveCellRect( Q3CString & cells, Sheet * sheet,
+void UndoDragDrop::saveCellRect( QByteArray & cells, Sheet * sheet,
                                  const Region& region )
 {
     QDomDocument doc = sheet->saveCellRegion(region);
@@ -2231,23 +2201,13 @@ UndoAutofill::~UndoAutofill()
 {
 }
 
-void UndoAutofill::createListCell( Q3CString &list, Sheet* sheet )
+void UndoAutofill::createListCell( QByteArray &list, Sheet* sheet )
 {
     QDomDocument doc = sheet->saveCellRegion( m_selection );
     // Save to buffer
-    QString buffer;
-    QTextStream str( &buffer, QIODevice::WriteOnly );
-    str << doc;
-
-    // This is a terrible hack to store unicode
-    // data in a QCString in a way that
-    // QCString::length() == QCString().size().
-    // This allows us to treat the QCString like a QByteArray later on.
-    list = buffer.toUtf8();
-    int len = list.length();
-    char tmp = list[ len - 1 ];
-    list.resize( len );
-    *( list.data() + len - 1 ) = tmp;
+    QTextStream stream( &list, QIODevice::WriteOnly );
+    stream.setCodec( "UTF-8" );
+    stream << doc;
 }
 
 void UndoAutofill::undo()
@@ -2392,19 +2352,9 @@ UndoRemoveCellRow::UndoRemoveCellRow( Doc *_doc, Sheet *_sheet, const QRect &rec
     m_rect=rect;
     QDomDocument doc = _sheet->saveCellRegion( m_rect );
     // Save to buffer
-    QString buffer;
-    QTextStream str( &buffer, QIODevice::WriteOnly );
-    str << doc;
-
-    // This is a terrible hack to store unicode
-    // data in a QCString in a way that
-    // QCString::length() == QCString().size().
-    // This allows us to treat the QCString like a QByteArray later on.
-    m_data = buffer.toUtf8();
-    int len = m_data.length();
-    char tmp = m_data[ len - 1 ];
-    m_data.resize( len );
-    *( m_data.data() + len - 1 ) = tmp;
+    QTextStream stream( &m_data, QIODevice::WriteOnly );
+    stream.setCodec( "UTF-8" );
+    stream << doc;
 }
 
 UndoRemoveCellRow::~UndoRemoveCellRow()
@@ -2451,19 +2401,9 @@ UndoRemoveCellCol::UndoRemoveCellCol( Doc *_doc, Sheet *_sheet, const QRect &_re
     m_rect=_rect;
     QDomDocument doc = _sheet->saveCellRegion( m_rect );
     // Save to buffer
-    QString buffer;
-    QTextStream str( &buffer, QIODevice::WriteOnly );
-    str << doc;
-
-    // This is a terrible hack to store unicode
-    // data in a QCString in a way that
-    // QCString::length() == QCString().size().
-    // This allows us to treat the QCString like a QByteArray later on.
-    m_data = buffer.toUtf8();
-    int len = m_data.length();
-    char tmp = m_data[ len - 1 ];
-    m_data.resize( len );
-    *( m_data.data() + len - 1 ) = tmp;
+    QTextStream stream( &m_data, QIODevice::WriteOnly );
+    stream.setCodec( "UTF-8" );
+    stream << doc;
 }
 
 UndoRemoveCellCol::~UndoRemoveCellCol()
@@ -2516,24 +2456,13 @@ UndoConditional::~UndoConditional()
 {
 }
 
-void UndoConditional::createListCell( Q3CString &list, Sheet* sheet )
+void UndoConditional::createListCell( QByteArray &list, Sheet* sheet )
 {
-    // Save to buffer
-    QString buffer;
-    QTextStream str( &buffer, QIODevice::WriteOnly );
-
     QDomDocument doc = sheet->saveCellRegion( m_region );
-    str << doc;
-
-    // This is a terrible hack to store unicode
-    // data in a QCString in a way that
-    // QCString::length() == QCString().size().
-    // This allows us to treat the QCString like a QByteArray later on.
-    list = buffer.toUtf8();
-    int len = list.length();
-    char tmp = list[ len - 1 ];
-    list.resize( len );
-    *( list.data() + len - 1 ) = tmp;
+    // Save to buffer
+    QTextStream stream( &list, QIODevice::WriteOnly );
+    stream.setCodec( "UTF-8" );
+    stream << doc;
 }
 
 void UndoConditional::undo()
@@ -2604,7 +2533,7 @@ UndoCellPaste::~UndoCellPaste()
 {
 }
 
-void UndoCellPaste::createListCell(Q3CString& listCell,
+void UndoCellPaste::createListCell(QByteArray& listCell,
                                    QLinkedList<columnSize>& listCol,
                                    QLinkedList<rowSize>& listRow,
                                    Sheet* sheet)
@@ -2663,19 +2592,9 @@ void UndoCellPaste::createListCell(Q3CString& listCell,
   //save all cells in area
   QDomDocument doc = sheet->saveCellRegion(m_region);
   // Save to buffer
-  QString buffer;
-  QTextStream str( &buffer, QIODevice::WriteOnly );
-  str << doc;
-
-  // This is a terrible hack to store unicode
-  // data in a QCString in a way that
-  // QCString::length() == QCString().size().
-  // This allows us to treat the QCString like a QByteArray later on.
-  listCell = buffer.toUtf8();
-  int len = listCell.length();
-  char tmp = listCell[ len - 1 ];
-  listCell.resize( len );
-  *( listCell.data() + len - 1 ) = tmp;
+  QTextStream stream( &listCell, QIODevice::WriteOnly );
+  stream.setCodec( "UTF-8" );
+  stream << doc;
 }
 
 void UndoCellPaste::undo()
