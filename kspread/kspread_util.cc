@@ -20,7 +20,8 @@
 
 #include <ctype.h>
 
-#include <qregexp.h>
+#include <QRegExp>
+#include <QList>
 
 #include <kdebug.h>
 
@@ -529,8 +530,8 @@ Range::Range(const QString & str, Map * map,
   //try to parse as named area
   bool gotNamed = false;
   QString tmp = str.toLower();
-  Q3ValueList < Reference >::Iterator it;
-  Q3ValueList < Reference > area = map->doc()->listArea();
+  QList<Reference>::Iterator it;
+  QList<Reference> area = map->doc()->listArea();
   for (it = area.begin(); it != area.end(); ++it) {
     if ((*it).ref_name.toLower() == tmp) {
       // success - such named area exists

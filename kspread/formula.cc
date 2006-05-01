@@ -34,10 +34,9 @@
 
 #include <limits.h>
 
-#include <qregexp.h>
-#include <qstring.h>
-#include <q3valuevector.h>
-#include <q3valuestack.h>
+#include <QRegExp>
+#include <QStack>
+#include <QString>
 #include <QTextStream>
 
 #include <klocale.h>
@@ -848,7 +847,7 @@ void Formula::compile( const Tokens& tokens ) const
   if( tokens.count() == 0 ) return;
 
   TokenStack syntaxStack;
-  Q3ValueStack<int> argStack;
+  QStack<int> argStack;
   unsigned argCount = 1;
 
   for( int i = 0; i <= tokens.count(); i++ )
@@ -1158,7 +1157,7 @@ struct stackEntry {
 
 Value Formula::eval() const
 {
-  Q3ValueStack<stackEntry> stack;
+  QStack<stackEntry> stack;
   stackEntry entry;
   int index;
   Value val1, val2;
