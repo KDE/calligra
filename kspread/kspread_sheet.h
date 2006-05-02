@@ -352,30 +352,44 @@ public:
 
     Cell* cellAt( int _column, int _row ) const;
     /**
-     * @param _scrollbar_update will change the scrollbar if set to true disregarding
+     * @param column the cell's column index
+     * @param row the cell's row index
+     * @param scrollbar_update will change the scrollbar if set to true disregarding
      *                          whether _column/_row are bigger than
      *                          m_iMaxRow/m_iMaxColumn. May be overruled by
      *                          @ref #m_bScrollbarUpdates.
      */
-    Cell* cellAt( int _column, int _row, bool _scrollbar_update = false );
+    Cell* cellAt( int column, int row, bool scrollbar_update = false );
+
     /**
      * A convenience function.
+     * @param point the cell's coordinates
+     * @param scrollbar_update will change the scrollbar if set to true disregarding
+     *                          whether _column/_row are bigger than
+     *                          m_iMaxRow/m_iMaxColumn. May be overruled by
+     *                          @ref #m_bScrollbarUpdates.
      */
-    Cell* cellAt( const QPoint& _point, bool _scrollbar_update = false )
-      { return cellAt( _point.x(), _point.y(), _scrollbar_update ); }
+    Cell* cellAt( const QPoint& point, bool scrollbar_update = false )
+      { return cellAt( point.x(), point.y(), scrollbar_update ); }
+
     /**
-     * @returns the pointer to the cell that is visible at a certain position. That means If the cell
-     *          at this position is obscured then the obscuring cell is returned.
-     *
+     * @return the pointer to the cell that is visible at a certain position.
+     *         That means If the cell at this position is obscured then the
+     *         obscuring cell is returned
+     * @param _column the cell's column index
+     * @param _row the cell's row index
      * @param _scrollbar_update will change the scrollbar if set to true disregarding
      *                          whether _column/_row are bigger than
      *                          m_iMaxRow/m_iMaxColumn. May be overruled by
      *                          @ref #m_bScrollbarUpdates.
      */
     Cell* visibleCellAt( int _column, int _row, bool _scrollbar_update = false );
+
     /**
      * If no special Cell exists for this position then a new one is created.
      *
+     * @param _column the cell's column index
+     * @param _row the cell's row index
      * @param _scrollbar_update will change the scrollbar if set to true disregarding
      *                          whether _column/_row are bigger than
      *                          m_iMaxRow/m_iMaxColumn. May be overruled by
@@ -405,35 +419,38 @@ public:
 
     /**
      * @return the left corner of the column as int.
-     *
+     * @param _row the column's index
      * @param _canvas If not 0 then the returned position is in screen
      *                coordinates. Otherwise the point (0|0) is in the upper
      *                left corner of the sheet.
      */
     int columnPos( int _col, const Canvas *_canvas = 0 ) const;
+
     /**
      * @return the left corner of the column as double.
      * Use this method, when you later calculate other positions depending on this one
      * to avoid rounding problems
-     *
+     * @param _row the column's index
      * @param _canvas If not 0 then the returned position is in screen
      *                coordinates. Otherwise the point (0|0) is in the upper
      *                left corner of the sheet.
      */
     double dblColumnPos( int _col, const Canvas *_canvas = 0 ) const;
+
     /**
      * @return the top corner of the row as int.
-     *
+     * @param _row the row's index
      * @param _canvas If not 0 then the returned position is in screen
      *                coordinates. Otherwise the point (0|0) is in the upper
      *                top corner of the sheet.
      */
     int rowPos( int _row, const Canvas *_canvas = 0 ) const;
+
     /**
      * @return the top corner of the row as double.
      * Use this method, when you later calculate other positions depending on this one
      * to avoid rounding problems
-     *
+     * @param _row the row's index
      * @param _canvas If not 0 then the returned position is in screen
      *                coordinates. Otherwise the point (0|0) is in the upper
      *                top corner of the sheet.
@@ -823,6 +840,7 @@ public:
     void removeSheet();
 
     QRect selectionCellMerged(const QRect &_sel);
+
     /**
      * Change name of reference when the user inserts or removes a column,
      * a row or a cell (= insertion of a row [or column] on a single column [or row]).
@@ -835,6 +853,7 @@ public:
      *                        if false, we inserted or removed a cell
      * @param ref see ChangeRef
      * @param tabname completes the pos specification by giving the sheet name
+     * @param NbCol number of columns which were inserted
      * @param undo is the handler of the undo class in case of lost cell references
      */
     void changeNameCellRef( const QPoint & pos, bool fullRowOrColumn,
