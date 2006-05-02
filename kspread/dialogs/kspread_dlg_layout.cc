@@ -853,9 +853,9 @@ void CellFormatDialog::initParameters(Format *obj,int x,int y)
   if ( underline != obj->textFontUnderline( x, y ) )
     bUnderline = false;
   if ( prefix != obj->prefix( x, y ) )
-    prefix = QString::null;
+    prefix.clear();
   if ( postfix != obj->postfix( x, y ) )
-    postfix = QString::null;
+    postfix.clear();
   if ( floatFormat != obj->floatFormat( x, y ) )
     bFloatFormat = false;
   if ( floatColor != obj->floatColor( x, y ) )

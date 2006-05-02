@@ -1255,7 +1255,7 @@ void Cell::makeLayout( QPainter &_painter, int _col, int _row )
   // Empty text?  Reset the outstring and, if this is the default
   // cell, return.
   if ( d->strOutText.isEmpty() ) {
-    d->strOutText = QString::null;
+    d->strOutText.clear();
 
     if ( isDefault() ) {
       clearFlag( Flag_LayoutDirty );
@@ -1585,7 +1585,7 @@ void Cell::valueChanged ()
 void Cell::setOutputText()
 {
   if ( isDefault() ) {
-    d->strOutText = QString::null;
+    d->strOutText.clear();
 
     if ( d->hasExtra() && d->extra()->conditions )
       d->extra()->conditions->checkMatches();
@@ -3213,7 +3213,7 @@ void Cell::paintText( QPainter& painter,
   if ( format()->sheet()->getHideZero()
        && value().isNumber()
        && value().asFloat() == 0 ) {
-    d->strOutText = QString::null;
+    d->strOutText.clear();
   }
 
   // Clear extra cell if column or row is hidden
@@ -6687,7 +6687,7 @@ bool Cell::loadCellData(const QDomElement & text, Paste::Operation op )
           if( !inside_tag )
           {
             inside_tag = true;
-            tag = QString::null;
+            tag.clear();
           }
         }
         else if( ch == '>' )
@@ -6698,7 +6698,7 @@ bool Cell::loadCellData(const QDomElement & text, Paste::Operation op )
             if( tag.startsWith( "a href=\"", Qt::CaseSensitive ) )
             if( tag.endsWith( "\"" ) )
               qml_link = tag.mid( 8, tag.length()-9 );
-            tag = QString::null;
+            tag.clear();
           }
         }
         else

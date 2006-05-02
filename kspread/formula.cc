@@ -443,7 +443,7 @@ bool Formula::isValid() const
 
 void Formula::clear()
 {
-  d->expression = QString::null;
+  d->expression.clear();
   d->dirty = true;
   d->valid = false;
   d->constants.clear();

@@ -609,7 +609,7 @@ void CSVDialog::currentCellChanged(int, int col)
 void CSVDialog::accept()
 {
   Sheet * sheet  = m_pView->activeSheet();
-  QString csv_delimiter = QString::null;
+  QString csv_delimiter;
   Cell  * cell;
 
   int numRows = m_sheet->numRows();
