@@ -51,8 +51,8 @@ void run( Tester* test )
 int main( int argc, char** argv )
 {
   // Initialize command line args
-  KCmdLineArgs::init(argc, argv, "formulatest", "formulatest", "unit test", "0.1", true);
-  KApplication app(false, false);
+  KCmdLineArgs::init(argc, argv, "formulatest", "formulatest", "unit test", "0.1");
+  KApplication app(false);
 
   run( new FormulaParserTester() );
   run( new FormulaEvalTester() );
