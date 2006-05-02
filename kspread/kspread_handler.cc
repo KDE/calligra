@@ -23,12 +23,12 @@ InsertHandler::InsertHandler( View* view, QWidget* widget )
     m_started = false;
     m_clicked = false;
 
-    widget->setCursor( Qt::crossCursor );
+    widget->setCursor( Qt::CrossCursor );
 }
 
 InsertHandler::~InsertHandler()
 {
-    ((QWidget*)target())->setCursor( Qt::arrowCursor );
+    ((QWidget*)target())->setCursor( Qt::ArrowCursor );
     m_view->resetInsertHandle();
 }
 
