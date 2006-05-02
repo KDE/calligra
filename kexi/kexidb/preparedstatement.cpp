@@ -89,7 +89,6 @@ QCString PreparedStatement::generateStatementString()
 		QCString namesList;
 		bool first = true;
 		const bool allTableFieldsUsed = dynamic_cast<TableSchema*>(m_fields); //we are using a selection of fields only
-//		for (Field::ListIterator it(m_fields->fieldsIterator()); it.current(); ++it) {
 		Field::ListIterator it = m_fields->fieldsIterator();
 		for (uint i=0; i<m_fields->fieldCount(); i++, ++it) {
 			if (first) {
@@ -104,9 +103,9 @@ QCString PreparedStatement::generateStatementString()
 			}
 		}
 		s.append(")");
-		s.prepend(QCString("INSERT INTO ")
-			+ (allTableFieldsUsed ? "" : table->name().latin1()) 
-			+ " (" + namesList + ") VALUES (");
+		s.prepend(QCString("INSERT INTO ") + table->name().latin1()
+			+ (allTableFieldsUsed ? "" : (" (" + namesList + ")"))
+			+ " VALUES (");
 	}
 	return s;
 }
