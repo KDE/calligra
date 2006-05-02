@@ -22,6 +22,11 @@ kexidb_sqlite2driver_la_LIBADD = $(LIB_KPARTS) $(LIB_QT) \
 
 kexidb_sqlite2driver_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN) $(VER_INFO) 
 
+# we need the .mocs to be built
+sqliteconnection.lo: ../sqlite/sqliteconnection.lo
+sqlitecursor.lo: ../sqlite/sqlitecursor.lo
+sqlitedriver.lo: ../sqlite/sqlitedriver.lo
+sqlitepreparedstatement.lo: ../sqlite/sqlitepreparedstatement.lo
 
 kde_services_DATA = kexidb_sqlite2driver.desktop
 
