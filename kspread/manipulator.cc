@@ -411,8 +411,8 @@ bool FormatManipulator::process (Element *element)
       cell->format()->copy( *(*it2).l );
       cell->setLayoutDirtyFlag();
       cell->setDisplayDirtyFlag();
-      m_sheet->updateCell( cell, (*it2).col, (*it2).row );
     }
+    m_sheet->setRegionPaintDirty( m_region );
   }
   return true;
 }
