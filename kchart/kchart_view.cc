@@ -8,7 +8,6 @@
 #include <qpainter.h>
 #include <qcursor.h>
 #include <QMenu>
-#include <q3paintdevicemetrics.h>
 //Added by qt3to4:
 #include <QMouseEvent>
 #include <QPixmap>
@@ -635,7 +634,6 @@ void KChartView::print(KPrinter &printer)
 
     QPainter painter;
     painter.begin(&printer);
-    Q3PaintDeviceMetrics  pdm( &printer );
 
     int  height;
     int  width;
@@ -643,13 +641,13 @@ void KChartView::print(KPrinter &printer)
 	int const scalex = printer.option("kde-kchart-printsizex").toInt();
 	int const scaley = printer.option("kde-kchart-printsizey").toInt();
 
-	width  = pdm.width()  * scalex / 100;
-	height = pdm.height() * scaley / 100;
+	width  = printer.width()  * scalex / 100;
+	height = printer.height() * scaley / 100;
     }
     else {
 	// Fill the whole page.
-	width  = pdm.width();
-	height = pdm.height();
+	width  = printer.width();
+	height = printer.height();
     }
 
     QRect  rect(0, 0, width, height);
