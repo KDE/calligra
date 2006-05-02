@@ -20,8 +20,8 @@
 #ifndef KIS_YCBCR_COLORSPACE_H
 #define KIS_YCBCR_COLORSPACE_H
 namespace {
-    const Q_INT32 MAX_CHANNEL_YCbCr = 3;
-    const Q_INT32 MAX_CHANNEL_YCbCrA = 4;
+    const qint32 MAX_CHANNEL_YCbCr = 3;
+    const qint32 MAX_CHANNEL_YCbCrA = 4;
 }
 #endif
 
