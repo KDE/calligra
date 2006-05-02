@@ -39,21 +39,22 @@
 
 
 FormulaString::FormulaString( KFormulaPartView* parent, const char* name, bool modal, Qt::WFlags fl )
-    : QDialog( parent, name, modal, fl ), view( parent )
+    : QDialog( parent, fl ), view( parent )
 {
     if ( !name )
-	setName( "FormulaString" );
+	setObjectName( "FormulaString" );
     resize( 511, 282 );
-    setCaption( i18n( "Formula String" ) );
+    setWindowTitle( i18n( "Formula String" ) );
+    setModal( modal );
     setSizeGripEnabled( true );
     
     m_widgetLayout = new QVBoxLayout( this );
     m_buttonLayout = new QHBoxLayout( this );
-    m_textEdit = new QTextEdit( this, "textEdit" );
-    m_position = new QLabel( this, "position" );
-    m_btnHelp = new KPushButton( KStdGuiItem::help(), this, "btnHelp" );
-    m_btnOk = new KPushButton( KStdGuiItem::ok(), this, "btnOk" );
-    m_btnCancel = new KPushButton( KStdGuiItem::cancel(), this, "btnCancel" );
+    m_textEdit = new QTextEdit( this );
+    m_position = new QLabel( this );
+    m_btnHelp = new KPushButton( KStdGuiItem::help(), this );
+    m_btnOk = new KPushButton( KStdGuiItem::ok(), this );
+    m_btnCancel = new KPushButton( KStdGuiItem::cancel(), this );
     
     m_buttonLayout->addWidget( m_btnHelp );
     m_buttonLayout->addSpacing( 100 );
@@ -66,12 +67,12 @@ FormulaString::FormulaString( KFormulaPartView* parent, const char* name, bool m
     setLayout( m_widgetLayout );
 
     m_position->setText( trUtf8( "1:1" ) );
-    m_btnHelp->setAccel( 4144 );
+    m_btnHelp->setShortcut( 4144 );
     m_btnHelp->setAutoDefault( true );
-    m_btnOk->setAccel( 0 );
+    m_btnOk->setShortcut( 0 );
     m_btnOk->setAutoDefault( true );
     m_btnOk->setDefault( true );
-    m_btnCancel->setAccel( 0 );
+    m_btnCancel->setShortcut( 0 );
     m_btnCancel->setAutoDefault( true );
 
     // signals and slots connections

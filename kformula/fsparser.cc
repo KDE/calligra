@@ -73,7 +73,7 @@ void PrimaryNode::buildXML( QDomDocument& doc, QDomElement element )
             element.appendChild( namesequence );
             element = namesequence;
         }
-        for ( uint i = 0; i < m_primary.length(); i++ ) {
+        for ( int i = 0; i < m_primary.length(); i++ ) {
             QDomElement de = doc.createElement( "TEXT" );
             de.setAttribute( "CHAR", QString( m_primary[i] ) );
             element.appendChild( de );
@@ -307,7 +307,7 @@ void FunctionNode::buildXML( QDomDocument& doc, QDomElement element )
         QDomElement content = doc.createElement( "CONTENT" );
         QDomElement sequence = doc.createElement( "SEQUENCE" );
 
-        for ( uint i = 0; i < m_args.count(); i++ ) {
+        for ( int i = 0; i < m_args.count(); i++ ) {
             m_args.at( i )->buildXML( doc, sequence );
             if ( i < m_args.count()-1 ) {
                 QDomElement de = doc.createElement( "TEXT" );
@@ -344,7 +344,7 @@ private:
 
 void RowNode::buildXML( QDomDocument& doc, QDomElement element )
 {
-    for ( uint i = 0; i < m_requiredColumns; i++ ) {
+    for ( int i = 0; i < m_requiredColumns; i++ ) {
         QDomElement sequence = doc.createElement( "SEQUENCE" );
         if ( i < m_row.count() ) {
             m_row.at( i )->buildXML( doc, sequence );
@@ -690,7 +690,7 @@ QString FormulaStringParser::nextToken()
         return current = m_formula.mid( begin, pos-begin );
     }
     else {
-        switch ( m_formula[pos].latin1() ) {
+        switch ( m_formula[pos].toLatin1() ) {
         case '+':
             pos++; column++;
             currentType = PLUS;

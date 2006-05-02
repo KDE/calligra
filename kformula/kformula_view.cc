@@ -67,7 +67,7 @@ KFormulaPartView::KFormulaPartView(KFormulaDoc* _doc, QWidget* _parent, const ch
     formulaWidget = new KFormulaWidget( _doc->getFormula(), this, "formulaWidget" );
 
     m_scrollArea = new QScrollArea( this);
-    m_scrollArea->setWiget( formulaWidget );
+    m_scrollArea->setWidget( formulaWidget );
 
 //    scrollview->viewport()->setFocusProxy( scrollview );
 //    scrollview->viewport()->setFocusPolicy( WheelFocus );
@@ -213,7 +213,7 @@ void KFormulaPartView::setEnabled(bool enabled)
 
 void KFormulaPartView::resizeEvent( QResizeEvent * )
 {
-    scrollview->setGeometry(0, 0, width(), height());
+    m_scrollArea->setGeometry(0, 0, width(), height());
 }
 
 
@@ -239,7 +239,7 @@ void KFormulaPartView::cursorChanged(bool visible, bool selecting)
     if (visible) {
         int x = formulaWidget->getCursorPoint().x();
         int y = formulaWidget->getCursorPoint().y();
-        scrollview->ensureVisible(x, y);
+        m_scrollArea->ensureVisible(x, y);
     }
 
     KFormula::Document* doc = document()->getDocument();
@@ -257,7 +257,7 @@ void KFormulaPartView::formulaString()
 {
     FormulaString dia( this );
     dia.setEditText( document()->getFormula()->formulaString() );
-    dia.exec()
+    dia.exec();
 }
 
 void KFormulaPartView::sizeSelected( int size )

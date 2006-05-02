@@ -20,7 +20,7 @@
 
 #include <iostream>
 
-#include <qpainter.h>
+#include <QPainter>
 //Added by qt3to4:
 #include <QMouseEvent>
 #include <QFocusEvent>
@@ -39,8 +39,8 @@
 
 
 KFormulaWidget::KFormulaWidget(KFormula::Container* doc,
-                               QWidget* parent, const char* name, Qt::WFlags f)
-    : QWidget(parent, name, f | Qt::WNoAutoErase | Qt::WResizeNoErase),
+                               QWidget* parent, const char* /*name*/, Qt::WFlags f)
+    : QWidget(parent, f | Qt::WNoAutoErase | Qt::WResizeNoErase),
       formulaView(doc)
 {
     connect(doc, SIGNAL(formulaChanged(int, int)),
@@ -49,7 +49,7 @@ KFormulaWidget::KFormulaWidget(KFormula::Container* doc,
             this, SLOT(slotCursorChanged(bool, bool)));
 
     setFocusPolicy(Qt::StrongFocus);
-    setBackgroundMode(Qt::NoBackground/*QWidget::PaletteBase*/);
+    setBackgroundRole( QPalette::NoRole );
 
     QRect rect = doc->boundingRect();
     slotFormulaChanged(rect.width(), rect.height());
@@ -77,7 +77,7 @@ void KFormulaWidget::paintEvent(QPaintEvent* event)
     // than it seems to be as each cursor movement requires a repaint.
     QPainter p( &buffer );
     //p.translate( -fr.x(), -fr.y() );
-    formulaView.draw( p, event->rect(), colorGroup() );
+    formulaView.draw( p, event->rect(), palette() );
 
     QPainter painter;
     painter.begin(this);
@@ -126,7 +126,7 @@ void KFormulaWidget::slotFormulaChanged(int width, int height)
 {
     // Magic numbers just to see the cursor.
     resize(width + 5, height + 5);
-    buffer.resize(width + 5, height + 5);
+    buffer = QPixmap( width + 5, height + 5 );
     update();
     //kDebug( 40000 ) << "KFormulaWidget::slotFormulaChanged" << endl;
 }

@@ -24,14 +24,13 @@
 #include "kformula_factory.h"
 
 #include <qbitmap.h>
-#include <qcolor.h>
-#include <qdom.h>
-#include <qpainter.h>
+#include <QColor>
+#include <QPainter>
 #include <q3popupmenu.h>
-#include <qprinter.h>
-#include <qstring.h>
-#include <qmatrix.h>
-#include <qfile.h>
+#include <QPrinter>
+#include <QString>
+#include <QMatrix>
+#include <QFile>
 //Added by qt3to4:
 #include <QTextStream>
 
@@ -104,7 +103,6 @@ bool KFormulaDoc::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
 
     //todo save content
     QTextStream stream(tmpFile);
-    stream.setEncoding( QTextStream::UnicodeUTF8 );
     formula->saveMathML( stream, true );
 
     tmpFile->close();

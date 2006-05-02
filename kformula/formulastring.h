@@ -56,7 +56,7 @@ class FormulaString : public QDialog
     KFormulaPartView* view;
     QTextEdit* m_textEdit;
     QVBoxLayout* m_widgetLayout;
-    QHBoxLayout* m_btnLayout;
+    QHBoxLayout* m_buttonLayout;
     QPushButton* m_btnHelp;
     QPushButton* m_btnOk;
     QPushButton* m_btnCancel;
