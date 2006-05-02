@@ -23,7 +23,6 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 #include <q3canvas.h>
 #include <qpainter.h>
 #include <qprinter.h>
-#include <q3paintdevicemetrics.h>
 
 #include <koproperty/property.h>
 
@@ -179,9 +178,8 @@ void KugarTemplate::updatePaperProps()
     printer->setOrientation( ( QPrinter::Orientation ) props[ "PageOrientation" ].value().toInt() );
 
     // Get the page metrics and set appropriate wigth and height
-    Q3PaintDeviceMetrics pdm( printer );
-    canvas() ->resize( pdm.width(), pdm.height() );
-    setSize( pdm.width(), pdm.height() );
+    canvas() ->resize( printer->width(), printer->height() );
+    setSize( printer->width(), printer->height() );
 
     //this is not needed anymore
     delete printer;

@@ -621,12 +621,10 @@ QSize MReportEngine::getPageMetrics( int size, int orientation )
     printer->setPageSize( ( QPrinter::PageSize ) size );
     printer->setOrientation( ( QPrinter::Orientation ) orientation );
 
-    // Get the page metrics
-    Q3PaintDeviceMetrics pdm( printer );
 
     // Display the first page of the report
-    ps.setWidth( pdm.width() );
-    ps.setHeight( pdm.height() );
+    ps.setWidth( printer->width() );
+    ps.setHeight( printer->height() );
 
     delete printer;
 

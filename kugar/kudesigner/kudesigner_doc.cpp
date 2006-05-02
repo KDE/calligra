@@ -29,7 +29,6 @@
 
 #include <qpainter.h>
 #include <qprinter.h>
-#include <q3paintdevicemetrics.h>
 #include <qfileinfo.h>
 #include <q3dockwindow.h>
 #include <qdom.h>
@@ -267,9 +266,8 @@ bool KudesignerDoc::loadXML( QIODevice *, const QDomDocument &rt )
     printer->setOrientation( ( QPrinter::Orientation ) attributes.namedItem( "PageOrientation" ).nodeValue().toInt() );
 
     // Get the page metrics and set appropriate wigth and height
-    Q3PaintDeviceMetrics pdm( printer );
-    width = pdm.width();
-    height = pdm.height();
+    width = printer->width();
+    height = printer->height();
 
     //this is not needed anymore
     delete printer;
