@@ -412,7 +412,7 @@ bool FormatManipulator::process (Element *element)
       cell->setLayoutDirtyFlag();
       cell->setDisplayDirtyFlag();
     }
-    m_sheet->setRegionPaintDirty( m_region );
+    m_sheet->setRegionPaintDirty( *this );
   }
   return true;
 }
