@@ -873,9 +873,9 @@ public:
      * @param fullRowOrColumn if true, a whole row or column has been inserted/removed.
      *                        if false, we inserted or removed a cell
      * @param ref see ChangeRef
-     * @param tabname completes the pos specification by giving the sheet name
      */
     void refreshChart(const QPoint & pos, bool fullRowOrColumn, ChangeRef ref);
+
     /**
      * Refresh merged cell when you insert or remove row or column
      */
@@ -885,6 +885,7 @@ public:
      * @return true if this sheet is hidden
      */
     bool isHidden()const;
+
     /**
      * Hides or shows this sheets
      */
@@ -897,9 +898,9 @@ public:
      * need some QPainter related functions.
      */
     QPainter& painter();
+
     /**
      * @return a hidden widget.
-     *
      * @see #painter
      */
     QWidget* widget()const;
@@ -1106,21 +1107,22 @@ public:
 #endif
 
     /**
-     * Calculates the cell if necessary, makes its layout if necessary,
-     * and force redraw.
-     * Then it sets the cell's @ref Cell::m_bDisplayDirtyFlag to false.
+     * Marks the Cell at @p col , @p row as dirty.
+     * \deprecated use setRegionPaintDirty
      */
-    void updateCell( Cell* _cell, int _col, int _row );
+    void updateCell( Cell* cell, int col, int row );
 
     /**
      * Like updateCell except it works on a range of cells.  Use this function
      * rather than calling updateCell(..) on several adjacent cells so there
      * will be one paint event instead of several
+     * \deprecated use setRegionPaintDirty
      */
     void updateCellArea(const Region& cellArea);
 
     /**
      * Updates every cell on the sheet
+     * \deprecated use setRegionPaintDirty
      */
     void update();
 
