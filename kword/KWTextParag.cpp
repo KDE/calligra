@@ -798,7 +798,7 @@ void KWTextParag::loadOasis( const QDomElement& paragElement, KoOasisContext& co
     KoTextParag::loadOasis( paragElement, context, styleCollection, pos );
 
     KWTextFrameSet* textfs = kwTextDocument()->textFrameSet();
-    if ( textfs->isMainFrameset() )
+    if ( textfs->isMainFrameset() && textfs->kWordDocument()->isLoading() /*not during copy/paste*/ )
     {
         KWDocument * doc = textfs->kWordDocument();
         QString& currentMasterPageRef = doc->loadingInfo()->m_currentMasterPage;
