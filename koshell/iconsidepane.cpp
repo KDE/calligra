@@ -379,7 +379,7 @@ IconSidePane::IconSidePane(QWidget *parent, const char *name )
   m_buttongroup = new Q3ButtonGroup(1, Qt::Horizontal, this);
   m_buttongroup->setExclusive(true);
   m_buttongroup->hide();
-  mWidgetstack = new Q3WidgetStack(this);
+  mWidgetstack = new QStackedWidget(this);
   mWidgetstack->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding));
 
   // setup the popup menu
@@ -536,7 +536,7 @@ int IconSidePane::insertGroup(const QString &_text, bool _selectable, QObject *_
   {
     mCurrentNavigator->calculateMinWidth();
     m_buttongroup->setButton(m_buttongroup->id(b));
-    mWidgetstack->raiseWidget(id);
+    mWidgetstack->setCurrentIndex(id);
   }
   if ( b->width() > minimumWidth() )
     setMinimumWidth( b->width() );
@@ -545,12 +545,12 @@ int IconSidePane::insertGroup(const QString &_text, bool _selectable, QObject *_
 
 void IconSidePane::buttonClicked()
 {
-    mWidgetstack->raiseWidget( m_buttongroup->selectedId() );
+    mWidgetstack->setCurrentIndex( m_buttongroup->selectedId() );
 }
 
 void IconSidePane::selectGroup(int group_id)
 {
-    mWidgetstack->raiseWidget(group_id);
+    mWidgetstack->setCurrentIndex(group_id);
 }
 
 void IconSidePane::itemSelected(int item)

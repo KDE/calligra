@@ -29,7 +29,7 @@
 #include <qlayout.h>
 #include <qtooltip.h>
 
-#include <q3widgetstack.h>
+#include <QStackedWidget>
 //Added by qt3to4:
 #include <QPixmap>
 #include <QEvent>
@@ -209,7 +209,7 @@ class IconSidePane :public KVBox
     void buttonClicked();
 
   private:
-    Q3WidgetStack *mWidgetstack;
+    QStackedWidget *mWidgetstack;
     Q3ValueList<int> mWidgetStackIds;
     Navigator *mCurrentNavigator;
     Q3ButtonGroup *m_buttongroup;
