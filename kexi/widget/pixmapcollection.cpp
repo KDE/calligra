@@ -158,7 +158,7 @@ PixmapCollection::load(QDomNode node)
 LoadIconDialog::LoadIconDialog(QWidget *parent)
 : KDialogBase(parent, "loadicon_dialog", true, i18n("Load KDE Icon by Name"), Ok|Cancel, Ok, false)
 {
-	Q3Frame *frame = makeMainWidget();
+	QFrame *frame = makeMainWidget();
 	Q3GridLayout *l = new Q3GridLayout(frame, 2, 3, 0, 6);
 
 	// Name input
@@ -240,7 +240,7 @@ PixmapCollectionEditor::PixmapCollectionEditor(PixmapCollection *collection, QWi
 	i18n("Edit Pixmap Collection: %1").arg(collection->collectionName()), Close, Close, false)
 {
 	m_collection = collection;
-	Q3Frame *frame = makeMainWidget();
+	QFrame *frame = makeMainWidget();
 	Q3HBoxLayout *l = new Q3HBoxLayout(frame, 0, 6);
 	setInitialSize(QSize(400, 200), true);
 

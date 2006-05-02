@@ -628,7 +628,7 @@ void KexiDB::addCursorDebug(const QString& text)
 {
 	if (!kexidbCursorDebugPage)
 		return;
-	KListViewItem * li = new KListViewItem( kexidbCursorDebugPage, kexidbCursorDebugPage->lastItem(), text );
+	K3ListViewItem * li = new K3ListViewItem( kexidbCursorDebugPage, kexidbCursorDebugPage->lastItem(), text );
 	li->setMultiLinesEnabled( true );
 }
 #endif //KEXI_DEBUG_GUI

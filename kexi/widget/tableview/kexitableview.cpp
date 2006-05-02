@@ -1146,13 +1146,13 @@ void KexiTableView::contentsMousePressEvent( QMouseEvent* e )
 		if(columnType(m_curCol) == KexiDB::Field::Boolean && columnEditable(m_curCol))
 		{
 			//only accept clicking on the [x] rect (copied from KexiBoolTableEdit::setupContents())
-			int s = QMAX(d->rowHeight - 5, 12);
-			s = QMIN( d->rowHeight-3, s );
-			s = QMIN( columnWidth(m_curCol)-3, s ); //avoid too large box
-			const QRect r( columnPos(m_curCol) + QMAX( columnWidth(m_curCol)/2 - s/2, 0 ), rowPos(m_curRow) +d->rowHeight/2 - s/2 /*- 1*/, s, s);
-			kdDebug() << r << endl;
+			int s = qMax(d->rowHeight - 5, 12);
+			s = qMin( d->rowHeight-3, s );
+			s = qMin( columnWidth(m_curCol)-3, s ); //avoid too large box
+			const QRect r( columnPos(m_curCol) + qMax( columnWidth(m_curCol)/2 - s/2, 0 ), rowPos(m_curRow) +d->rowHeight/2 - s/2 /*- 1*/, s, s);
+			kDebug() << r << endl;
 			if (r.contains(e->pos())) {
-//				kdDebug() << "e->x:" << e->x() << " e->y:" << e->y() << " " << rowPos(m_curRow) << 
+//				kDebug() << "e->x:" << e->x() << " e->y:" << e->y() << " " << rowPos(m_curRow) << 
 //					" " << columnPos(m_curCol) << endl;
 				boolToggled();
 			}

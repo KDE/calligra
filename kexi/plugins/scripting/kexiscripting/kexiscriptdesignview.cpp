@@ -41,6 +41,7 @@
 
 #include <kexidialogbase.h>
 #include <kexidb/connection.h>
+#include <QTextDocument>
 
 /// @internal
 class KexiScriptDesignViewPrivate
@@ -223,10 +224,10 @@ void KexiScriptDesignView::execute()
     d->scriptaction->activate();
     if( d->scriptaction->hadException() ) {
         QString errormessage = d->scriptaction->getException()->getError();
-        d->statusbrowser->append(QString("<b>%2</b><br>").arg(Q3StyleSheet::escape(errormessage)) );
+        d->statusbrowser->append(QString("<b>%2</b><br>").arg(Qt::escape(errormessage)) );
 
         QString tracedetails = d->scriptaction->getException()->getTrace();
-        d->statusbrowser->append( Q3StyleSheet::escape(tracedetails) );
+        d->statusbrowser->append( Qt::escape(tracedetails) );
 
         long lineno = d->scriptaction->getException()->getLineNo();
         if(lineno >= 0)

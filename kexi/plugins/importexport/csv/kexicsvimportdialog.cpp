@@ -193,8 +193,8 @@ KexiCSVImportDialog::KexiCSVImportDialog( Mode mode, KexiMainWindow* mainWin,
 	m_typeNames[4] = i18n("date/time");
 
 	KGlobal::config()->setGroup("ImportExport");
-	m_maximumRowsForPreview = kapp->config()->readNumEntry("MaximumRowsForPreviewInImportDialog", MAX_ROWS_TO_PREVIEW);
-	m_maximumBytesForPreview = kapp->config()->readNumEntry("MaximumBytesForPreviewInImportDialog", MAX_BYTES_TO_PREVIEW);
+	m_maximumRowsForPreview = KGlobal::config()->readNumEntry("MaximumRowsForPreviewInImportDialog", MAX_ROWS_TO_PREVIEW);
+	m_maximumBytesForPreview = KGlobal::config()->readNumEntry("MaximumBytesForPreviewInImportDialog", MAX_BYTES_TO_PREVIEW);
 
 	m_pkIcon = SmallIcon("key");
 
@@ -216,7 +216,7 @@ KexiCSVImportDialog::KexiCSVImportDialog( Mode mode, KexiMainWindow* mainWin,
 	);
 	lyr->addWidget( m_infoLbl );
 
-	QWidget* page = new Q3Frame( plainPage(), "page" );
+	QWidget* page = new QFrame( plainPage(), "page" );
 	Q3GridLayout *glyr= new Q3GridLayout( page, 4, 5, 0, KDialogBase::spacingHint(), "glyr");
 	lyr->addWidget( page );
 
@@ -592,7 +592,7 @@ tristate KexiCSVImportDialog::loadRows(QString &field, int &row, int &column, in
 	QChar x;
 	delete m_inputStream;
 	if ( m_mode == Clipboard ) {
-		m_inputStream = new QTextStream(m_clipboardData, QIODevice::IO_ReadOnly);
+		m_inputStream = new QTextStream(m_clipboardData, QIODevice::QIODevice::ReadOnly);
 		m_delimiterWidget->setDelimiter(KEXICSV_DEFAULT_CLIPBOARD_DELIMITER);
 	}
 	else {
@@ -1083,7 +1083,7 @@ void KexiCSVImportDialog::setText(int row, int col, const QString& text, bool in
 		m_adjustRows=1;
 	}
 
-	m_table->setText(row - 1, col - 1, text.stripWhiteSpace());
+	m_table->setText(row - 1, col - 1, text.trimmed());
 	m_table->verticalHeader()->setLabel(row-1, QString::number(row-1));
 
 	detectTypeAndUniqueness(row-1, col-1, text);

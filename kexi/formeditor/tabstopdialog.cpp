@@ -44,7 +44,7 @@ using namespace KFormDesigner;
 TabStopDialog::TabStopDialog(QWidget *parent)
 : KDialogBase(parent, "tabstop_dialog", true, i18n("Edit Tab Order"), Ok|Cancel, Ok, false)
 {
-	Q3Frame *frame = makeMainWidget();
+	QFrame *frame = makeMainWidget();
 	Q3GridLayout *l = new Q3GridLayout(frame, 2, 2, 0, 6);
 	m_treeview = new ObjectTreeView(frame, "tabstops_treeview", true);
 	m_treeview->setItemsMovable(true);

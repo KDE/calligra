@@ -273,7 +273,7 @@ QVariant pqxxSqlCursor::pValue(uint pos)const
 		return QVariant();
 	}
 
-	KexiDB::Field *f = (m_fieldsExpanded && pos<QMIN(m_fieldsExpanded->count(), m_fieldCount)) 
+	KexiDB::Field *f = (m_fieldsExpanded && pos<qMin(m_fieldsExpanded->count(), m_fieldCount)) 
 		? m_fieldsExpanded->at(pos)->field : 0;
 
 //	KexiDBDrvDbg << "pqxxSqlCursor::value(" << pos << ")" << endl;

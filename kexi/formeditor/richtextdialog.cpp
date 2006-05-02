@@ -39,7 +39,7 @@ namespace KFormDesigner {
 RichTextDialog::RichTextDialog(QWidget *parent, const QString &text)
 : KDialogBase(parent, "richtext_dialog", true, i18n("Edit Rich Text"), Ok|Cancel, Ok, false)
 {
-	Q3Frame *frame = makeMainWidget();
+	QFrame *frame = makeMainWidget();
 	Q3VBoxLayout *l = new Q3VBoxLayout(frame);
 	l->setAutoAdd(true);
 

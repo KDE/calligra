@@ -157,7 +157,7 @@ void KexiInputTableEdit::setValueInternal(const QVariant& add_, bool removeOld)
 //			tmp_val = QString::number(origValue.toDouble(), 'f', 2/*prec*/);
 //! @todo support 'g' format
 			tmp_val = QString::number(origValue.toDouble(), 'f', 
-				QMAX(field()->visibleDecimalPlaces(), 10)); //<-- 10 is quite good maximum for fractional digits 
+				qMax(field()->visibleDecimalPlaces(), 10)); //<-- 10 is quite good maximum for fractional digits 
 			                                              //! @todo add command line settings?
 			if (origValue.toDouble() == 0.0) {
 				tmp_val=add; //eat 0

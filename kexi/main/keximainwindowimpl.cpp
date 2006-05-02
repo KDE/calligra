@@ -3029,7 +3029,7 @@ bool KexiMainWindowImpl::eventFilter( QObject *obj, QEvent * e )
 		KexiVDebug << endl;
 	}
 	if (e->type()==QEvent::ShortcutOverride) {
-		//KexiVDebug << "AccelOverride EVENT " << static_cast<QKeyEvent*>(e)->key() << " " << static_cast<QKeyEvent*>(e)->state() == Qt::ControlButton << endl;
+		//KexiVDebug << "AccelOverride EVENT " << static_cast<QKeyEvent*>(e)->key() << " " << static_cast<QKeyEvent*>(e)->state() == Qt::ControlModifier << endl;
 
 		//avoid sending CTRL+Tab key twice for tabbed/ideal mode, epecially for win32
 		if (static_cast<QKeyEvent*>(e)->key()==Qt::Key_Tab && static_cast<QKeyEvent*>(e)->state() == Qt::ControlModifier) {
