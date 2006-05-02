@@ -26,6 +26,7 @@ Name[sr]=Информације Abiword-а
 Name[sr@Latn]=Informacije Abiword-a
 Name[sv]=Abiword-information
 Name[uk]=Інформація Abiword
+Name[uz]=Abiword ҳужжати ҳақида маълумот
 Name[zh_CN]=Abiword 信息
 ServiceTypes=KFilePlugin
 X-KDE-Library=kfile_abiword

@@ -35,6 +35,7 @@ Comment[sr]=OASIS-ов OpenDocument дијаграм
 Comment[sr@Latn]=OASIS-ov OpenDocument dijagram
 Comment[sv]=OASIS OpenDocument diagram
 Comment[uk]=Діаграма OASIS OpenDocument
+Comment[uz]=OASIS OpenDocument диаграммаси
 Comment[zh_CN]=OASIS OpenDocument 图表
 [Property::X-KDE-NativeExtension]
 Type=QString

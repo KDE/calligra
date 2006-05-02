@@ -33,6 +33,7 @@ Name[sv]=Koffice-ordbehandlingskomponent
 Name[tg]=Компоненти муҳаррири матн¯дар KOffice
 Name[tr]=KOffice Kelime İşlem Bileşeni
 Name[uk]=Компонент текстового редактора KOffice
+Name[uz]=КOffice матн таҳрирлаш компоненти
 Name[zh_CN]=KOffice 字处理组件
 X-KDE-Library=libkwordpart
 X-KDE-NativeMimeType=application/vnd.oasis.opendocument.text

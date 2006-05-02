@@ -37,6 +37,7 @@ Name[ta]=கேஸ்பிரிட் அட்டவணை மூலம்
 Name[tg]=Сарчашмаи ҷадвали KSpread
 Name[tr]=KSpread Tablo Kaynağı
 Name[uk]=Джерело таблиць KSpread
+Name[uz]=KSpread жадвали манбаси
 Name[zh_CN]=KSpread 表源
 Comment=This datasource type lets you use your entries from a kspread file.
 Comment[bg]=Източник на данни за от файл на KSpread.

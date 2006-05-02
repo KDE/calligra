@@ -57,6 +57,7 @@ GenericName[sr@Latn]=Grafikon
 GenericName[sv]=Diagram
 GenericName[th]=แผนภูมิ
 GenericName[uk]=Діаграми
+GenericName[uz]=Диаграмма
 GenericName[xh]=Itshati
 GenericName[zh_CN]=图表
 Exec=kchart %u
