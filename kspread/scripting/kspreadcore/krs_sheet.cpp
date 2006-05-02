@@ -57,8 +57,8 @@ Kross::Api::Object::Ptr Sheet::setName(Kross::Api::List::Ptr args)
 }
 
 Kross::Api::Object::Ptr Sheet::cell(Kross::Api::List::Ptr args) {
-    uint col = QMAX(uint(1), Kross::Api::Variant::toUInt(args->item(0)));
-    uint row = QMAX(uint(1), Kross::Api::Variant::toUInt(args->item(1)));
+    uint col = qMax(uint(1), Kross::Api::Variant::toUInt(args->item(0)));
+    uint row = qMax(uint(1), Kross::Api::Variant::toUInt(args->item(1)));
 
     return Kross::Api::Object::Ptr(new Cell(m_sheet->cellAt(col,row),m_sheet,col,row));
 }
@@ -74,13 +74,13 @@ Kross::Api::Object::Ptr Sheet::insertColumn(Kross::Api::List::Ptr args) {
 }
 
 Kross::Api::Object::Ptr Sheet::removeRow(Kross::Api::List::Ptr args) {
-    uint row = QMAX(uint(1), Kross::Api::Variant::toUInt(args->item(0)));
+    uint row = qMax(uint(1), Kross::Api::Variant::toUInt(args->item(0)));
     m_sheet->removeRow(row);
     return Kross::Api::Object::Ptr();
 }
 
 Kross::Api::Object::Ptr Sheet::removeColumn(Kross::Api::List::Ptr args) {
-    uint col = QMAX(uint(1), Kross::Api::Variant::toUInt(args->item(0)));
+    uint col = qMax(uint(1), Kross::Api::Variant::toUInt(args->item(0)));
     m_sheet->removeColumn(col);
     return Kross::Api::Object::Ptr();
 }

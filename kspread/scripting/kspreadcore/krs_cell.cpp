@@ -52,7 +52,7 @@ Kross::Api::Object::Ptr Cell::value(Kross::Api::List::Ptr) {
 	case KSpread::Value::Boolean:
             return Kross::Api::Object::Ptr(new Kross::Api::Variant(value.asBoolean()));
 	case KSpread::Value::Integer:
-            return Kross::Api::Object::Ptr(new Kross::Api::Variant(static_cast<Q_LLONG>(value.asInteger())));
+            return Kross::Api::Object::Ptr(new Kross::Api::Variant(static_cast<qint64>(value.asInteger())));
 	case KSpread::Value::Float:
             return Kross::Api::Object::Ptr(new Kross::Api::Variant((float)value.toDouble()));
 	case KSpread::Value::String:
@@ -94,7 +94,7 @@ Kross::Api::Object::Ptr Cell::setText(Kross::Api::List::Ptr args) {
     //kspread: Cell at row 6, col 1 marked as formula, but formula is NULL
     if(args->count() > 1) {
     	asString= Kross::Api::Variant::toBool(args->item(1));
-	kdDebug() << "asString" << endl;
+	kDebug() << "asString" << endl;
     }
 
     KSpread::ProtectedCheck prot;

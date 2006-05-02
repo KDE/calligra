@@ -58,10 +58,10 @@ KSpreadCoreModule::KSpreadCoreModule(Kross::Api::Manager* manager)
     : Kross::Api::Module("kspreadcore") , m_manager(manager), m_factory(new KSpreadCoreFactory())
 {
     QMap<QString, Object::Ptr> children = manager->getChildren();
-    kdDebug() << " there are " << children.size() << endl;
+    kDebug() << " there are " << children.size() << endl;
     for(QMap<QString, Object::Ptr>::const_iterator it = children.begin(); it != children.end(); it++)
     {
-        kdDebug() << it.key() << " " << it.data() << endl;
+        kDebug() << it.key() << " " << it.data() << endl;
     }
 
     // Wrap doc
@@ -92,7 +92,7 @@ const QString KSpreadCoreModule::getClassName() const
 
 Kross::Api::Object::Ptr KSpreadCoreModule::call(const QString& name, Kross::Api::List::Ptr arguments)
 {
-    kdDebug() << "KSpreadCoreModule::call" << name << endl;
+    kDebug() << "KSpreadCoreModule::call" << name << endl;
     if( m_factory->isAFunction(name))
     {
         return m_factory->call(name, arguments);
