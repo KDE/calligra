@@ -150,15 +150,15 @@ Index: kptstandardworktimedialog.cc
 +#include <kglobal.h>
  #include <klocale.h>
  #include <knuminput.h>
-+#include <klistview.h>
++#include <k3listview.h>
  
  namespace KPlato
  {
-+class WeekdayListItem : public KListViewItem
++class WeekdayListItem : public K3ListViewItem
 +{
 +public:
-+    WeekdayListItem(Calendar *cal, int wd, KListView *parent, QString name, KListViewItem *after)
-+    : KListViewItem(parent, after),
++    WeekdayListItem(Calendar *cal, int wd, K3ListView *parent, QString name, K3ListViewItem *after)
++    : K3ListViewItem(parent, after),
 +      original(cal->weekday(wd)),
 +      calendar(cal),
 +      weekday(wd)
@@ -206,8 +206,8 @@ Index: kptstandardworktimedialog.cc
  }
  
  KMacroCommand *StandardWorktimeDialog::buildCommand(Part *part) {
--    kdDebug()<<k_funcinfo<<endl;
-+    //kdDebug()<<k_funcinfo<<endl;
+-    kDebug()<<k_funcinfo<<endl;
++    //kDebug()<<k_funcinfo<<endl;
      QString n = i18n("Modify Standard Worktime");
      KMacroCommand *cmd = 0;
      if (m_original->year() != dia->inYear()) {
@@ -285,16 +285,16 @@ Index: kptstandardworktimedialog.cc
  }
  
 +void StandardWorktimeDialogImpl::slotIntervalChanged() {
-+    //kdDebug()<<k_funcinfo<<endl;
++    //kDebug()<<k_funcinfo<<endl;
 +    slotEnableButtonApply(true);
 +}
  
 +void StandardWorktimeDialogImpl::slotApplyClicked() {
-+    //kdDebug()<<k_funcinfo<<"state="<<state->currentItem()<<endl;
++    //kDebug()<<k_funcinfo<<"state="<<state->currentItem()<<endl;
 +    QListViewItem *item = weekdayList->firstChild();
 +    for (; item; item = item->nextSibling()) {
 +        if (item->isSelected()) {
-+            //kdDebug()<<k_funcinfo<<item->text(0)<<" selected"<<endl;
++            //kDebug()<<k_funcinfo<<item->text(0)<<" selected"<<endl;
 +            WeekdayListItem *wd = static_cast<WeekdayListItem*>(item);
 +            wd->setState(state->currentItem());
 +            if (state->currentItem() == 0) {
@@ -308,12 +308,12 @@ Index: kptstandardworktimedialog.cc
 +}
 +
 +void StandardWorktimeDialogImpl::slotWeekdaySelected() {
-+    //kdDebug()<<k_funcinfo<<"state="<<state->currentItem()<<endl;
++    //kDebug()<<k_funcinfo<<"state="<<state->currentItem()<<endl;
 +    
 +    QListViewItem *item = weekdayList->firstChild();
 +    for (; item; item = item->nextSibling()) {
 +        if (item->isSelected()) {
-+            //kdDebug()<<k_funcinfo<<item->text(0)<<" selected"<<endl;
++            //kDebug()<<k_funcinfo<<item->text(0)<<" selected"<<endl;
 +            WeekdayListItem *wd = static_cast<WeekdayListItem*>(item);
 +            state->setCurrentItem(wd->day->state()-1);
 +            m_intervalEdit->setIntervals(wd->day->workingIntervals());
@@ -325,7 +325,7 @@ Index: kptstandardworktimedialog.cc
 +}
 +
 +void StandardWorktimeDialogImpl::slotStateChanged(int st) {
-+    //kdDebug()<<k_funcinfo<<"state="<<state->currentItem()<<endl;
++    //kDebug()<<k_funcinfo<<"state="<<state->currentItem()<<endl;
 +    intervalBox->setEnabled(st == 1); //Working
 +    slotEnableButtonApply(st == 0);
 +}
@@ -568,7 +568,7 @@ Index: standardworktimedialogbase.ui
 +                <property name="name">
 +                    <cstring>unnamed</cstring>
 +                </property>
-+                <widget class="KListView">
++                <widget class="K3ListView">
 +                    <column>
 +                        <property name="text">
 +                            <string>Weekday</string>
@@ -746,7 +746,7 @@ Index: kptproject.cc
        m_accounts(*this),
 -      m_defaultCalendar(0),
        m_baselined(false) {
-     //kdDebug()<<k_funcinfo<<"("<<this<<")"<<endl;
+     //kDebug()<<k_funcinfo<<"("<<this<<")"<<endl;
      m_constraint = Node::MustStartOn;
 @@ -926,10 +925,6 @@
      }
@@ -757,7 +757,7 @@ Index: kptproject.cc
 -}
 -
  bool Project::legalToLink(Node *par, Node *child) {
-     //kdDebug()<<k_funcinfo<<par.name()<<" ("<<par.numDependParentNodes()<<" parents) "<<child.name()<<" ("<<child.numDependChildNodes()<<" children)"<<endl;
+     //kDebug()<<k_funcinfo<<par.name()<<" ("<<par.numDependParentNodes()<<" parents) "<<child.name()<<" ("<<child.numDependChildNodes()<<" children)"<<endl;
      
 Index: kptintervaledit.cc
 ===================================================================
@@ -794,7 +794,7 @@ Index: kptintervaledit.cc
 +IntervalEdit::IntervalEdit(QWidget *parent, const char *name)
 +    : IntervalEditImpl(parent)
  {
-     //kdDebug()<<k_funcinfo<<endl;
+     //kDebug()<<k_funcinfo<<endl;
 -    dia = new IntervalEditImpl(intervals, this);
  
 -    setMainWidget(dia);
