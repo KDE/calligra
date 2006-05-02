@@ -299,7 +299,7 @@ if ( m_mode == Clipboard )
 	m_dateRegExp2 = QRegExp("\\d{1,2}[/\\-\\.]\\d{1,2}[/\\-\\.]\\d{1,4}");
 	m_timeRegExp1 = QRegExp("\\d{1,2}:\\d{1,2}:\\d{1,2}");
 	m_timeRegExp2 = QRegExp("\\d{1,2}:\\d{1,2}");
-	m_fpNumberRegExp = QRegExp("\\d*[,\\.]\\d+");
+	m_fpNumberRegExp = QRegExp("[\\-]{0,1}\\d*[,\\.]\\d+");
 
 	if (m_mode == File) {
 		QStringList mimetypes( csvMimeTypes() );
@@ -886,6 +886,16 @@ void KexiCSVImportDialog::detectTypeAndUniqueness(int row, int col, const QStrin
 		if (text.isEmpty() && type==_NO_TYPE_YET)
 			found = true; //real type should be found later
 		//detect type because it's 1st row or all prev. rows were not text
+		//-FP number? (trying before "number" type is a must)
+		if (!found && (row==1 || type==_NUMBER_TYPE || type==_FP_NUMBER_TYPE || type==_NO_TYPE_YET)) {
+			bool ok = text.isEmpty() || m_fpNumberRegExp.exactMatch(text);
+			//if (!ok)
+			//	text.toDouble(&ok);
+			if (ok && (row==1 || type==_NUMBER_TYPE || type==_FP_NUMBER_TYPE || type==_NO_TYPE_YET)) {
+				m_detectedTypes[col]=_FP_NUMBER_TYPE;
+				found = true; //yes
+			}
+		}
 		//-number?
 		if (!found && (row==1 || type==_NUMBER_TYPE || type==_NO_TYPE_YET)) {
 			bool ok = text.isEmpty();//empty values allowed
@@ -893,16 +903,6 @@ void KexiCSVImportDialog::detectTypeAndUniqueness(int row, int col, const QStrin
 				intValue = text.toInt(&ok);
 			if (ok && (row==1 || type==_NO_TYPE_YET)) {
 				m_detectedTypes[col]=_NUMBER_TYPE;
-				found = true; //yes
-			}
-		}
-		//-FP number?
-		if (!found && (row==1 || type==_FP_NUMBER_TYPE || type==_NO_TYPE_YET)) {
-			bool ok = text.isEmpty() || m_fpNumberRegExp.exactMatch(text);
-			if (!ok)
-				text.toInt(&ok);
-			if (ok && (row==1 || type==_NO_TYPE_YET)) {
-				m_detectedTypes[col]=_FP_NUMBER_TYPE;
 				found = true; //yes
 			}
 		}
