@@ -20,10 +20,9 @@
 #ifndef KSPREAD_FORMULA
 #define KSPREAD_FORMULA
 
-#include <qstring.h>
-#include <q3valuevector.h>
-//Added by qt3to4:
+#include <QString>
 #include <QTextStream>
+#include <QVector>
 
 class KLocale;
 

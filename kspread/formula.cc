@@ -1404,7 +1404,7 @@ Value Formula::eval() const
 
         args.clear();
         fe.ranges.clear ();
-        fe.ranges.reserve (index);
+        fe.ranges.resize (index);
         fe.sheet = sheet;
         for( ; index; index-- )
         {
