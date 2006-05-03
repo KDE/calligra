@@ -986,7 +986,16 @@ void KexiCSVImportDialog::setText(int row, int col, const QString& text, bool in
 //! @todo what about time and float/double types and different integer subtypes?
 		}
 		else if (detectedType==_FP_NUMBER_TYPE) {
-			*m_importingStatement << ( text.isEmpty() ? QVariant() : text.toDouble() );
+			//replace ',' with '.'
+			QCString t(text.latin1());
+			const int textLen = t.length();
+			for (int i=0; i<textLen; i++) {
+				if (t.at(i)==',') {
+					t.at(i) = '.';
+					break;
+				}
+			}
+			*m_importingStatement << ( t.isEmpty() ? QVariant() : t.toDouble() );
 		}
 		else if (detectedType==_DATE_TYPE) {
 			QDate date( QDate::fromString(text, Qt::ISODate) ); //same as m_dateRegExp1
