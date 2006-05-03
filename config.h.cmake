@@ -177,12 +177,6 @@
 /* Define to 1 if you have the `vsnprintf' function. */
 #cmakedefine HAVE_VSNPRINTF 1
 
-/* Defines if your system has the libwpd library */
-/* #undef HAVE_WPD */
-
-/* Defines if your system has the wv2 library */
-/* #undef HAVE_WV2 */
-
 /* Suffix for lib directories */
 #define KDELIBSUFF "${KDELIBSUFF}"
 
