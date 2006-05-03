@@ -59,12 +59,11 @@
 using namespace KSpread;
 
 ConsolidateDialog::ConsolidateDialog( View* parent, const char* name )
-  : KDialogBase( KDialogBase::Tabbed, Qt::Dialog, parent, name, false, i18n("Consolidate"), Ok|Cancel )
+  : KDialogBase( KDialogBase::Plain, Qt::Dialog, parent, name, false, i18n("Consolidate"), Ok|Cancel )
 {
   m_pView = parent;
 
-  QWidget* page = new QWidget( this );
-  setMainWidget( page );
+  QWidget* page = plainPage();
 
   QGridLayout *grid1 = new QGridLayout( page );
   grid1->setMargin(KDialog::marginHint());

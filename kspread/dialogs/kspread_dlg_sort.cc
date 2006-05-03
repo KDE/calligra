@@ -62,7 +62,7 @@ using namespace KSpread;
 
 SortDialog::SortDialog( View * parent,  const char * name,
                                 bool modal )
-  : KDialogBase( KDialogBase::Tabbed, Qt::Dialog, parent, name, modal,"Sort",Ok|Cancel ),
+  : KDialogBase( KDialogBase::Plain, Qt::Dialog, parent, name, modal,"Sort",Ok|Cancel ),
     m_pView( parent )
 {
   if ( !name )

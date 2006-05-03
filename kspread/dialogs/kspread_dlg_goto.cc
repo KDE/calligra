@@ -41,11 +41,10 @@
 using namespace KSpread;
 
 GotoDialog::GotoDialog( View* parent, const char* name )
-  : KDialogBase( KDialogBase::Tabbed, Qt::Dialog, parent, name, true, i18n("Goto Cell"), Ok|Cancel )
+  : KDialogBase( KDialogBase::Plain, Qt::Dialog, parent, name, true, i18n("Goto Cell"), Ok|Cancel )
 {
   m_pView = parent;
-  QWidget *page = new QWidget( this );
-  setMainWidget(page);
+  QWidget *page = plainPage();
   QVBoxLayout *lay1 = new QVBoxLayout( page );
   lay1->setMargin(KDialogBase::marginHint());
   lay1->setSpacing(KDialogBase::spacingHint());

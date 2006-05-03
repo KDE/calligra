@@ -21,6 +21,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#include <QFrame>
 #include <qlayout.h>
 #include <qpushbutton.h>
 //Added by qt3to4:
@@ -41,13 +42,12 @@
 using namespace KSpread;
 
 AngleDialog::AngleDialog(View* parent, const char* name, const QPoint &_marker)
-  : KDialogBase( KDialogBase::Tabbed, Qt::Dialog, parent, name,true,i18n("Change Angle" ), Ok|Cancel|Default )
+  : KDialogBase( KDialogBase::Plain, Qt::Dialog, parent, name,true,i18n("Change Angle" ), Ok|Cancel|Default )
 {
   m_pView=parent;
   marker=_marker;
 
-  QWidget *page = new QWidget( this );
-  setMainWidget(page);
+  QWidget *page = plainPage();
 
   QVBoxLayout *lay = new QVBoxLayout( page );
   lay->setMargin(0);

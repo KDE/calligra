@@ -183,10 +183,7 @@ protected:
  */
 class KSPREAD_EXPORT Sheet : public QObject
 {
-    friend class Cell;
-
     Q_OBJECT
-
     Q_PROPERTY( QString sheetName READ sheetName )
     Q_PROPERTY( bool autoCalc READ getAutoCalc WRITE setAutoCalc )
     Q_PROPERTY( bool showGrid READ getShowGrid WRITE setShowGrid )

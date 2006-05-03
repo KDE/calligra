@@ -45,14 +45,13 @@
 using namespace KSpread;
 
 InsertDialog::InsertDialog( View* parent, const char* name,const QRect &_rect,Mode _mode)
-  : KDialogBase( KDialogBase::Tabbed, Qt::Dialog, parent, name, true,"",Ok|Cancel )
+  : KDialogBase( KDialogBase::Plain, Qt::Dialog, parent, name, true,"",Ok|Cancel )
 {
   m_pView = parent;
   rect=_rect;
   insRem=_mode;
 
-  QWidget *page = new QWidget( this );
-  setMainWidget(page);
+  QWidget *page = plainPage();
   QVBoxLayout *lay1 = new QVBoxLayout( page );
   lay1->setMargin(KDialogBase::marginHint());
   lay1->setSpacing(KDialogBase::spacingHint());

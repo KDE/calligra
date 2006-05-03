@@ -40,13 +40,12 @@
 using namespace KSpread;
 
 PasteInsertDialog::PasteInsertDialog( View* parent, const char* name,const QRect &_rect)
-  : KDialogBase( KDialogBase::Tabbed, Qt::Dialog, parent, name, true,i18n("Paste Inserting Cells"),Ok|Cancel )
+  : KDialogBase( KDialogBase::Plain, Qt::Dialog, parent, name, true,i18n("Paste Inserting Cells"),Ok|Cancel )
 {
   m_pView = parent;
   rect=_rect;
 
-  QWidget *page = new QWidget( this );
-  setMainWidget(page);
+  QWidget *page = plainPage();
   QVBoxLayout *lay1 = new QVBoxLayout( page );
   lay1->setMargin(KDialogBase::marginHint());
   lay1->setSpacing(KDialogBase::spacingHint());

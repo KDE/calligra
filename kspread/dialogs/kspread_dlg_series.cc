@@ -51,12 +51,11 @@
 using namespace KSpread;
 
 SeriesDlg::SeriesDlg( View* parent, const char* name,const QPoint &_marker)
-  : KDialogBase( KDialogBase::Tabbed, Qt::Dialog, parent, name,true,i18n("Series"),Ok|Cancel )
+  : KDialogBase( KDialogBase::Plain, Qt::Dialog, parent, name,true,i18n("Series"),Ok|Cancel )
 {
   m_pView = parent;
   marker=_marker;
-  QWidget *page = new QWidget( this );
-  setMainWidget(page);
+  QWidget *page = plainPage();
 
   QHBoxLayout *grid1 = new QHBoxLayout(page);
   grid1->setSpacing( spacingHint() );

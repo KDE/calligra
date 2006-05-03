@@ -51,12 +51,11 @@
 using namespace KSpread;
 
 ResizeRow::ResizeRow( View* parent, const char* name )
-  : KDialogBase( KDialogBase::Tabbed, Qt::Dialog, parent, name, true, i18n("Resize Row"), Ok|Cancel|Default )
+  : KDialogBase( KDialogBase::Plain, Qt::Dialog, parent, name, true, i18n("Resize Row"), Ok|Cancel|Default )
 {
     m_pView = parent;
 
-    QWidget *page = new QWidget( this );
-    setMainWidget( page );
+    QWidget *page = plainPage();
 
     QVBoxLayout *vLay = new QVBoxLayout( page );
     vLay->setMargin(KDialogBase::marginHint());
@@ -119,12 +118,11 @@ void ResizeRow::slotDefault()
 }
 
 ResizeColumn::ResizeColumn( View* parent, const char* name )
-  : KDialogBase( KDialogBase::Tabbed, Qt::Dialog, parent, name, true, i18n("Resize Column"), Ok|Cancel|Default )
+  : KDialogBase( KDialogBase::Plain, Qt::Dialog, parent, name, true, i18n("Resize Column"), Ok|Cancel|Default )
 {
     m_pView = parent;
 
-    QWidget *page = new QWidget( this );
-    setMainWidget(page);
+    QWidget *page = plainPage();
 
     QVBoxLayout *vLay = new QVBoxLayout( page );
     vLay->setMargin(KDialogBase::marginHint());

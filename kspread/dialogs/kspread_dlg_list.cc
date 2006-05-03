@@ -43,10 +43,9 @@
 using namespace KSpread;
 
 ListDialog::ListDialog( QWidget* parent, const char* name )
-  : KDialogBase( KDialogBase::Tabbed, Qt::Dialog, parent, name, true, i18n("Custom Lists"), Ok|Cancel )
+  : KDialogBase( KDialogBase::Plain, Qt::Dialog, parent, name, true, i18n("Custom Lists"), Ok|Cancel )
 {
-  QWidget* page = new QWidget( this );
-  setMainWidget( page );
+  QWidget* page = plainPage();
 
   QGridLayout *grid1 = new QGridLayout(page);
   grid1->setMargin(KDialog::marginHint());

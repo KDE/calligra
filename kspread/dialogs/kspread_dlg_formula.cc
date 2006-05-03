@@ -58,7 +58,7 @@
 using namespace KSpread;
 
 FormulaDialog::FormulaDialog( View* parent, const char* name,const QString& formulaName)
-  : KDialogBase( KDialogBase::Tabbed, Qt::Dialog, parent, name,false,i18n("Function"), Ok|Cancel )
+  : KDialogBase( KDialogBase::Plain, Qt::Dialog, parent, name,false,i18n("Function"), Ok|Cancel )
 {
 
   //setWFlags( Qt::WDestructiveClose );
@@ -85,8 +85,7 @@ FormulaDialog::FormulaDialog( View* parent, const char* name,const QString& form
 
     Q_ASSERT( m_pView->canvasWidget()->editor() );
 
-    QWidget *page = new QWidget( this );
-    setMainWidget(page);
+    QWidget *page = plainPage();
 
     QGridLayout *grid1 = new QGridLayout(page);
     grid1->setMargin(KDialog::marginHint());

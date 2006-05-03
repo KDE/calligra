@@ -41,12 +41,11 @@
 using namespace KSpread;
 
 CommentDialog::CommentDialog( View* parent, const char* name,const QPoint &_marker)
-  : KDialogBase( KDialogBase::Tabbed, Qt::Dialog, parent, name,true,i18n("Cell Comment"),Ok|Cancel )
+  : KDialogBase( KDialogBase::Plain, Qt::Dialog, parent, name,true,i18n("Cell Comment"),Ok|Cancel )
 {
     m_pView = parent;
     marker= _marker;
-    QWidget *page = new QWidget( this );
-    setMainWidget(page);
+    QWidget *page = plainPage();
     QVBoxLayout *lay1 = new QVBoxLayout( page );
     lay1->setMargin(KDialogBase::marginHint());
     lay1->setSpacing(KDialogBase::spacingHint());
