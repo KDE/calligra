@@ -23,6 +23,8 @@
 #ifndef _KEXI_VERSION_
 #define _KEXI_VERSION_
 
+#include "kexi_export.h"
+
 #ifdef CUSTOM_VERSION /* user-friendly version info */
 # include "custom_global.h"
 #else /* default */

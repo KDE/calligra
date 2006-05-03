@@ -34,6 +34,8 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 
+class KAboutData;
+
 namespace Kexi
 {
 	KEXICORE_EXPORT void initCmdLineArgs(int argc, char *argv[], KAboutData* aboutData = 0);
