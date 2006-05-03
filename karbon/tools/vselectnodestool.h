@@ -63,6 +63,7 @@ private:
 	VObjectList m_objects;
 
 	KoPoint m_current;
+	KoPoint m_first;
 
 	bool m_select;
 };

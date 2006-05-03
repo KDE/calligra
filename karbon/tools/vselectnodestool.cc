@@ -84,57 +84,23 @@ VSelectNodesTool::draw()
 	painter->setZoomFactor( view()->zoom() );
 	painter->setRasterOp( Qt::NotROP );
 
-	VSelection* selection = view()->part()->document().selection();
-
-	KoRect selrect = calcSelRect( last() );	
-
-	QPtrList<VSegment> segments = selection->getSegments( selrect );
-	if( selection->objects().count() > 0 &&
-		m_state != dragging && ( m_state >= moving || segments.count() > 0 ) )
-	{
-		if( m_state == normal )
-		{
-			if( segments.count() == 1 && !selrect.contains( segments.at( 0 )->knot() ) )
-			{
-				if( selrect.contains( segments.at( 0 )->point( 1 ) ) )
-//					segments.at( 0 )->prev()->type() != VSegment::curve )
-				{
-					m_state = movingbezier1;
-					segments.at( 0 )->selectPoint( 1, false );
-				}
-				else
-				{
-					m_state = movingbezier2;
-					segments.at( 0 )->selectPoint( 0, false );
-				}
-				selection->append( selrect.normalize(), false, true );
-			}
-			else
-			{
-				m_state = moving;
-				selection->append( selrect.normalize(), false, false );
-			}
-
-			recalc();
-		}
-
-		VDrawSelection op( m_objects, painter, true, selection->handleSize() );
-		VObjectListIterator itr = m_objects;
-        for( ; itr.current(); ++itr )
-			op.visit( *( itr.current() ) );
-	}
-	else
+	if( m_state == dragging )
 	{
 		painter->setPen( Qt::DotLine );
 		painter->newPath();
-		painter->moveTo( KoPoint( first().x(), first().y() ) );
-		painter->lineTo( KoPoint( m_current.x(), first().y() ) );
+		painter->moveTo( KoPoint( m_first.x(), m_first.y() ) );
+		painter->lineTo( KoPoint( m_current.x(), m_first.y() ) );
 		painter->lineTo( KoPoint( m_current.x(), m_current.y() ) );
-		painter->lineTo( KoPoint( first().x(), m_current.y() ) );
-		painter->lineTo( KoPoint( first().x(), first().y() ) );
+		painter->lineTo( KoPoint( m_first.x(), m_current.y() ) );
+		painter->lineTo( KoPoint( m_first.x(), m_first.y() ) );
 		painter->strokePath();
-
-		m_state = dragging;
+	}
+	else
+	{
+		VDrawSelection op( m_objects, painter, true, VSelection::handleSize() );
+		VObjectListIterator itr = m_objects;
+        for( ; itr.current(); ++itr )
+			op.visit( *( itr.current() ) );
 	}
 }
 
@@ -161,7 +127,7 @@ VSelectNodesTool::setCursor() const
 void
 VSelectNodesTool::mouseButtonPress()
 {
-	m_current = first();
+	m_first = m_current = first();
 
 	m_state = normal;
 	m_select = true;
@@ -172,13 +138,58 @@ VSelectNodesTool::mouseButtonPress()
 	view()->repaintAll( view()->part()->document().selection()->boundingBox() );
 	view()->part()->document().selection()->setState( VObject::selected );
 
+	VSelection* selection = view()->part()->document().selection();
+
+	KoRect selrect = calcSelRect( m_current );
+
+	// get segments inside selection rect
+	QPtrList<VSegment> segments = selection->getSegments( selrect );
+	if( segments.count() > 0 )
+	{
+		VSegment *seg = segments.at( 0 );
+		// allow moving bezier points only if one segment is selected 
+		// and one of the bezier points is within the selection rect
+		if( segments.count() == 1 && !selrect.contains( seg->knot() ) )
+		{
+			if( selrect.contains( seg->point( 1 ) ) )
+			{
+				m_state = movingbezier1;
+				seg->selectPoint( 1, false );
+			}
+			else
+			{
+				m_state = movingbezier2;
+				seg->selectPoint( 0, false );
+			}
+			selection->append( selrect.normalize(), false, true );
+		}
+		else
+		{
+			m_state = moving;
+			selection->append( selrect.normalize(), false, false );
+		}
+
+		// use the first control point of the first segment as starting point
+		for( int i = 0; i < seg->degree(); ++i )
+		{
+			if( selrect.contains( seg->point( i ) ) )
+			{
+				m_first = seg->point( i );
+				break;
+			}
+		}
+		recalc();
+	}
+	else
+		m_state = dragging;
+
 	draw();
 }
 
 void 
 VSelectNodesTool::rightMouseButtonPress()
 {
-	m_current = first();
+	m_first = m_current = first();
 
 	m_state = normal;
 	m_select = false;
@@ -195,7 +206,6 @@ VSelectNodesTool::rightMouseButtonPress()
 bool
 VSelectNodesTool::keyReleased( Qt::Key key )
 {
-	
 	VSelection* selection = view()->part()->document().selection();
 
 	switch( key )
@@ -281,26 +291,26 @@ VSelectNodesTool::mouseDragRelease()
 		KoPoint _last = view()->canvasWidget()->snapToGrid( last() );
 		if( m_state == movingbezier1 || m_state == movingbezier2 )
 		{
-			KoRect selrect = calcSelRect( first() );
+			KoRect selrect = calcSelRect( m_first );
 			segments = view()->part()->document().selection()->getSegments( selrect );
 			cmd = new VTranslateBezierCmd( &view()->part()->document(), segments.at( 0 ),
-					qRound( ( _last.x() - first().x() ) ),
-					qRound( ( _last.y() - first().y() ) ),
+					qRound( ( _last.x() - m_first.x() ) ),
+					qRound( ( _last.y() - m_first.y() ) ),
 					m_state == movingbezier2 );
 		}
 		else
 		{
 			cmd = new VTranslatePointCmd(
 					&view()->part()->document(),
-					qRound( ( _last.x() - first().x() ) ),
-					qRound( ( _last.y() - first().y() ) ) );
+					qRound( ( _last.x() - m_first.x() ) ),
+					qRound( ( _last.y() - m_first.y() ) ) );
 		}
 		view()->part()->addCommand( cmd, true );
 		m_state = normal;
 	}
 	else
 	{
-		KoPoint fp = first();
+		KoPoint fp = m_first;
 		KoPoint lp = last();
 
 		if ( (fabs(lp.x() - fp.x()) + fabs(lp.y()-fp.y())) < 3.0 )
@@ -354,8 +364,8 @@ VSelectNodesTool::recalc()
 	else if( m_state == moving || m_state == movingbezier1 || m_state == movingbezier2 )
 	{
 		KoPoint _last = view()->canvasWidget()->snapToGrid( last() );
-		double distx = _last.x() - first().x();
-		double disty = _last.y() - first().y();
+		double distx = _last.x() - m_first.x();
+		double disty = _last.y() - m_first.y();
 		// move operation
 		QWMatrix mat;
 		mat.translate( distx, disty );
