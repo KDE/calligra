@@ -170,10 +170,10 @@
                     <property name="enabled">
                         <bool>true</bool>
                     </property>
-                    <property name="minValue">
+                    <property name="minimum">
                         <number>0</number>
                     </property>
-                    <property name="maxValue">
+                    <property name="maximum">
                         <number>100</number>
                     </property>
                 </widget>
@@ -395,7 +395,13 @@
         <slot access="public" specifier="">setValue( const KPLato::Duration &amp; newDuration )</slot>
         <slot access="public" specifier="">slot()</slot>
         <slot access="public" specifier="">handleFocus( int field )</slot>
+	</customwidget>
+    <customwidget>
+        <class>KIntNumInput</class>
+        <header location="global">knuminput.h</header>
+        <container>0</container>
     </customwidget>
+
 </customwidgets>
 <images>
     <image name="image0">

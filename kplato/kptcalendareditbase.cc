@@ -114,7 +114,8 @@ CalendarEditBase::CalendarEditBase( QWidget* parent, const char* name, Qt::WFlag
     CalendarEditBaseLayout->addWidget( groupBox2 );
     languageChange();
     resize( QSize(540, 340).expandedTo(minimumSizeHint()) );
-    clearWState( WState_Polished );
+#warning "kde4: port it ?"	
+    //clearWState( WState_Polished );
 }
 
 /*
