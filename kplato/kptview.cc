@@ -180,14 +180,19 @@ View::View(Part* part, QWidget* parent, const char* /*name*/)
     // ------ View
     actionViewGantt = new KAction(i18n("Gantt"), "gantt_chart", 0, this, SLOT(slotViewGantt()), actionCollection(), "view_gantt");
 
-    QString group = "EstimationType";
-    actionViewExpected = new KRadioAction(i18n("Expected"), 0, 0, this, SLOT(slotViewExpected()), actionCollection(), "view_expected");
-    actionViewExpected->setExclusiveGroup(group);
-    actionViewOptimistic = new KRadioAction(i18n("Optimistic"), 0, 0, this, SLOT(slotViewOptimistic()), actionCollection(), "view_optimistic");
-    actionViewOptimistic->setExclusiveGroup(group);
-    actionViewPessimistic = new KRadioAction(i18n("Pessimistic"), 0, 0, this, SLOT(slotViewPessimistic()), actionCollection(), "view_pessimistic");
-    actionViewPessimistic->setExclusiveGroup(group);
+    actionViewExpected = new KToggleAction(i18n("Expected"), 0, 0, this, SLOT(slotViewExpected()), actionCollection(), "view_expected");
+    actionViewOptimistic = new KToggleAction(i18n("Optimistic"), 0, 0, this, SLOT(slotViewOptimistic()), actionCollection(), "view_optimistic");
+    actionViewPessimistic = new KToggleAction(i18n("Pessimistic"), 0, 0, this, SLOT(slotViewPessimistic()), actionCollection(), "view_pessimistic");
 
+	QActionGroup *estimationType = new QActionGroup( this );
+    estimationType->setExclusive( true );
+	estimationType->addAction(actionViewExpected);
+	estimationType->addAction(actionViewOptimistic);
+	estimationType->addAction(actionViewPessimistic);
+	
+ 
+
+	
     actionViewGanttResources = new KToggleAction(i18n("Resources"), 0, 0, this, SLOT(slotViewGanttResources()), actionCollection(), "view_gantt_showResources");
     actionViewGanttTaskName = new KToggleAction(i18n("Task Name"), 0, 0, this, SLOT(slotViewGanttTaskName()), actionCollection(), "view_gantt_showTaskName");
     actionViewGanttTaskLinks = new KToggleAction(i18n("Task Links"), 0, 0, this, SLOT(slotViewGanttTaskLinks()), actionCollection(), "view_gantt_showTaskLinks");

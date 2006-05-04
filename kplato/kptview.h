@@ -40,7 +40,6 @@ class KAction;
 class KActionMenu;
 class KSelectAction;
 class KToggleAction;
-class KRadioAction;
 class KStatusBarLabel;
 
 class DCOPObject;
@@ -214,9 +213,9 @@ private:
     
     // ------ View
     KAction *actionViewGantt;
-    KRadioAction *actionViewExpected;
-    KRadioAction *actionViewOptimistic;
-    KRadioAction *actionViewPessimistic;
+    KToggleAction *actionViewExpected;
+    KToggleAction *actionViewOptimistic;
+    KToggleAction *actionViewPessimistic;
     
     KToggleAction *actionViewGanttResources;
     KToggleAction *actionViewGanttTaskName;
