@@ -41,8 +41,8 @@
 
 #include <qlayout.h>
 #include <qlabel.h>
-#include <qdatetime.h> 
-#include <q3datetimeedit.h> 
+#include <qdatetime.h>
+#include <q3datetimeedit.h>
 #include <q3groupbox.h>
 #include <qpushbutton.h>
 #include <qspinbox.h>
@@ -75,7 +75,7 @@ void TaskGeneralPanel::setStartValues(Task &task, StandardWorktime *workTime) {
     descriptionfield->setText(task.description());
     idfield->setText(task.id());
     wbsfield->setText(task.wbs());
-    
+
     setEstimateFields(DurationWidget::Days|DurationWidget::Hours|DurationWidget::Minutes);
     if (workTime) {
         //kDebug()<<k_funcinfo<<"daylength="<<workTime->day()<<endl;
@@ -84,28 +84,28 @@ void TaskGeneralPanel::setStartValues(Task &task, StandardWorktime *workTime) {
             setEstimateScales(m_dayLength);
         }
     }
-    setEstimateFieldUnit(0, i18n("days", "d"));
-    setEstimateFieldUnit(1, i18n("hours", "h"));
-    setEstimateFieldUnit(2, i18n("minutes", "m"));
+    setEstimateFieldUnit(0, i18nc("days", "d"));
+    setEstimateFieldUnit(1, i18nc("hours", "h"));
+    setEstimateFieldUnit(2, i18nc("minutes", "m"));
     setEstimateType(task.effort()->type());
-    
+
     setSchedulingType(task.constraint());
     if (task.constraintStartTime().isValid()) {
         setStartDateTime(task.constraintStartTime());
     } else {
         QDate date = QDate::currentDate();
-        setStartDateTime(QDateTime(date, QTime())); 
+        setStartDateTime(QDateTime(date, QTime()));
     }
     if (task.constraintEndTime().isValid()) {
         setEndDateTime(task.constraintEndTime());
     } else {
-        setEndDateTime(QDateTime(startDate().addDays(1), QTime())); 
+        setEndDateTime(QDateTime(startDate().addDays(1), QTime()));
     }
     //kDebug()<<k_funcinfo<<"Effort: "<<task.effort()->expected().toString()<<endl;
-    setEstimate(task.effort()->expected()); 
+    setEstimate(task.effort()->expected());
     setOptimistic(task.effort()->optimisticRatio());
     setPessimistic(task.effort()->pessimisticRatio());
-    
+
     namefield->setFocus();
 }
 
@@ -123,7 +123,7 @@ KMacroCommand *TaskGeneralPanel::buildCommand(Part *part) {
         cmd->addCommand(new NodeModifyLeaderCmd(part, m_task, leaderfield->text()));
         modified = true;
     }
-    if (!descriptionfield->isHidden() && 
+    if (!descriptionfield->isHidden() &&
         m_task.description() != descriptionfield->text()) {
         cmd->addCommand(new NodeModifyDescriptionCmd(part, m_task, descriptionfield->text()));
         modified = true;
@@ -144,7 +144,7 @@ KMacroCommand *TaskGeneralPanel::buildCommand(Part *part) {
         modified = true;
     }
     if (!idfield->isHidden() && idfield->text() != m_task.id()) {
-        
+
         cmd->addCommand(new NodeModifyIdCmd(part, m_task, idfield->text()));
         modified = true;
     }
@@ -201,14 +201,14 @@ void TaskGeneralPanel::estimationTypeChanged(int type) {
         } else {
             estimate->setEnabled(true);
         }
-        
+
     }
     TaskGeneralPanelImpl::estimationTypeChanged(type);
 }
 
 void TaskGeneralPanel::scheduleTypeChanged(int value)
 {
-    if (value == 6 /*Fixed interval*/) { 
+    if (value == 6 /*Fixed interval*/) {
         if (estimateType->currentItem() == 1/*duration*/){
             setEstimateScales(24);
             estimate->setEnabled(false);
@@ -224,7 +224,7 @@ void TaskGeneralPanel::scheduleTypeChanged(int value)
 //-----------------------------
 TaskGeneralPanelImpl::TaskGeneralPanelImpl(QWidget *p, const char *n)
     : TaskGeneralPanelBase(p, n) {
-    
+
     connect(idfield, SIGNAL(textChanged(const QString &)), SLOT(checkAllFieldsFilled()));
     connect(namefield, SIGNAL(textChanged(const QString &)), SLOT(checkAllFieldsFilled()));
     connect(leaderfield, SIGNAL(textChanged(const QString &)), SLOT(checkAllFieldsFilled()));
@@ -248,7 +248,7 @@ void TaskGeneralPanelImpl::setSchedulingType(int type)
     emit schedulingTypeChanged(type);
 }
 
-int TaskGeneralPanelImpl::schedulingType() const 
+int TaskGeneralPanelImpl::schedulingType() const
 {
     return scheduleType->currentItem();
 }
@@ -377,7 +377,7 @@ void TaskGeneralPanelImpl::setEstimateScales( double day )
 {
     estimate->setFieldScale(0, day);
     estimate->setFieldRightscale(0, day);
-    
+
     estimate->setFieldLeftscale(1, day);
 }
 
@@ -393,7 +393,7 @@ void TaskGeneralPanelImpl::startDateChanged()
         return;
     }
     QDate date = startDate();
-    if (startDateTime() > endDateTime()) 
+    if (startDateTime() > endDateTime())
     {
         scheduleEndTime->blockSignals(true);
         scheduleEndDate->blockSignals(true);
@@ -414,7 +414,7 @@ void TaskGeneralPanelImpl::startTimeChanged( const QTime &time )
     if (!scheduleStartTime->isEnabled()) {
         return;
     }
-    if (startDateTime() > endDateTime()) 
+    if (startDateTime() > endDateTime())
     {
         scheduleEndTime->blockSignals(true);
         setEndTime(time);
@@ -434,7 +434,7 @@ void TaskGeneralPanelImpl::endDateChanged()
         return;
     }
     QDate date = endDate();
-    if (endDateTime() < startDateTime()) 
+    if (endDateTime() < startDateTime())
     {
         scheduleStartTime->blockSignals(true);
         scheduleStartDate->blockSignals(true);
@@ -443,7 +443,7 @@ void TaskGeneralPanelImpl::endDateChanged()
         scheduleStartTime->blockSignals(false);
         scheduleStartDate->blockSignals(false);
     }
-    
+
     if (scheduleType->currentItem() == 6 /*FixedInterval*/)
     {
         estimationTypeChanged(estimateType->currentItem());
@@ -456,13 +456,13 @@ void TaskGeneralPanelImpl::endTimeChanged( const QTime &time )
     if (!scheduleEndTime->isEnabled()) {
         return;
     }
-    if (endDateTime() < startDateTime()) 
+    if (endDateTime() < startDateTime())
     {
         scheduleStartTime->blockSignals(true);
         setStartTime(time);
         scheduleStartTime->blockSignals(false);
     }
-    
+
     if (scheduleType->currentItem() == 6 /*FixedInterval*/)
     {
         estimationTypeChanged(estimateType->currentItem());
