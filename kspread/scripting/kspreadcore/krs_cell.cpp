@@ -54,9 +54,9 @@ Kross::Api::Object::Ptr Cell::value(Kross::Api::List::Ptr) {
 	case KSpread::Value::Integer:
             return Kross::Api::Object::Ptr(new Kross::Api::Variant(static_cast<qint64>(value.asInteger())));
 	case KSpread::Value::Float:
-            return Kross::Api::Object::Ptr(new Kross::Api::Variant((float)value.toDouble()));
+            return Kross::Api::Object::Ptr(new Kross::Api::Variant((float)value.asFloat()));
 	case KSpread::Value::String:
-            return Kross::Api::Object::Ptr(new Kross::Api::Variant(value.toString()));
+            return Kross::Api::Object::Ptr(new Kross::Api::Variant(value.asString()));
 	case KSpread::Value::Array:
 	    //FIXME
 	    /*
