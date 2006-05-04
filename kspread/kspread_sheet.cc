@@ -8315,7 +8315,7 @@ void Sheet::setRegionPaintDirty( Region const & region )
   manipulator.execute();
   // don't put it in the undo list! ;-)
   d->paintDirtyList.add(manipulator);
-  kdDebug() << "setRegionPaintDirty "<< static_cast<Region*>(&manipulator)->name(this) << endl;
+  //kdDebug() << "setRegionPaintDirty "<< static_cast<Region*>(&manipulator)->name(this) << endl;
 }
 
 void Sheet::setRegionPaintDirty( QRect const & range )
@@ -8326,7 +8326,7 @@ void Sheet::setRegionPaintDirty( QRect const & range )
   manipulator.execute();
   // don't put it in the undo list! ;-)
   d->paintDirtyList.add(manipulator);
-  kdDebug() << "setRegionPaintDirty "<< static_cast<Region*>(&manipulator)->name(this) << endl;
+  //kdDebug() << "setRegionPaintDirty "<< static_cast<Region*>(&manipulator)->name(this) << endl;
 }
 
 void Sheet::clearPaintDirtyData()
