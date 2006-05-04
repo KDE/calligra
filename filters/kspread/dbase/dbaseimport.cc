@@ -104,7 +104,7 @@ KoFilter::ConversionStatus DBaseImport::convert( const QByteArray& from, const Q
   QFontMetrics fm( font );
   for( unsigned i=0; i<dbase.fields.count(); i++ )
   {
-    int mw = qMax( dbase.fields.at(i)->length, dbase.fields.at(i)->name.length());
+    int mw = qMax( (int)dbase.fields.at(i)->length, dbase.fields.at(i)->name.length());
     double w = POINT_TO_MM( fm.maxWidth() * mw );
     root += "<column column=\"" + QString::number(i+1) + "\"";
     root += " width=\"" + QString::number( w ) + "\"><format/></column>\n";
@@ -123,12 +123,12 @@ KoFilter::ConversionStatus DBaseImport::convert( const QByteArray& from, const Q
   {
     root += "<cell row=\"1\" column=\"" + QString::number(i+1) + "\" >\n";
     root += "<format><pen width=\"0\" style=\"1\" color=\"#000000\" />";
-    root += "<font family=\"" + font.family() + "\"" + 
-      " size=\"" + QString::number(font.pointSizeFloat()) + "\"" + 
+    root += "<font family=\"" + font.family() + "\"" +
+      " size=\"" + QString::number(font.pointSizeFloat()) + "\"" +
       " weight=\"50\" />";
     root += "</format>\n";
     root += "<text>" + dbase.fields.at(i)->name + "</text></cell>\n";
-  }  
+  }
 
   // process all records
   unsigned row = 1;
@@ -143,8 +143,8 @@ KoFilter::ConversionStatus DBaseImport::convert( const QByteArray& from, const Q
         root += "<cell row=\"" + QString::number(row) + "\"" +
           "column=\"" + QString::number(i+1) + "\" >\n";
         root += "<format><pen width=\"0\" style=\"1\" color=\"#000000\" />";
-        root += "<font family=\"" + font.family() + "\"" + 
-          " size=\"" + QString::number(font.pointSizeFloat()) + "\"" + 
+        root += "<font family=\"" + font.family() + "\"" +
+          " size=\"" + QString::number(font.pointSizeFloat()) + "\"" +
           " weight=\"50\" />";
         root += "</format>\n";
         root += "<text>" + rec[i] + "</text></cell>\n";
@@ -171,7 +171,7 @@ KoFilter::ConversionStatus DBaseImport::convert( const QByteArray& from, const Q
 
   // store document info
   out = m_chain->storageFile( "documentinfo.xml", KoStore::Write );
-  if ( out ) 
+  if ( out )
     {
        Q3CString cstring = documentInfo.utf8();
        cstring.prepend( "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" );

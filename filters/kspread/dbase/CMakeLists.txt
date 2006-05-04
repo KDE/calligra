@@ -13,7 +13,7 @@ kde4_add_plugin(dbaseimport WITH_PREFIX ${dbaseimport_PART_SRCS})
 
 kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} dbaseimport )
 
-target_link_libraries(dbaseimport  ${KDE4_KDECORE_LIBS} )
+target_link_libraries(dbaseimport kofficecore)
 
 install_targets(${PLUGIN_INSTALL_DIR} dbaseimport )
 

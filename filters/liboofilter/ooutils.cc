@@ -585,7 +585,7 @@ KoFilter::ConversionStatus OoUtils::loadThumbnail( QImage& thumbnail, KZip * m_z
         return KoFilter::WrongFormat;
     }
     const KZipFileEntry* f = static_cast<const KZipFileEntry *>(entry);
-    QIODevice* io=f->device();
+    QIODevice* io = f->device();
     kDebug(30519) << "Entry " << filename << " has size " << f->size() << endl;
 
     if ( ! io->open( QIODevice::ReadOnly ) )
@@ -595,8 +595,7 @@ KoFilter::ConversionStatus OoUtils::loadThumbnail( QImage& thumbnail, KZip * m_z
         return KoFilter::StupidError;
     }
 
-    QImageIO imageIO( io, "PNG" );
-    if ( ! imageIO.read() )
+    if ( ! thumbnail.load( io, "PNG" ) )
     {
         kWarning(30519) << "Thumbnail could not be read!" <<endl;
         delete io;
@@ -604,8 +603,6 @@ KoFilter::ConversionStatus OoUtils::loadThumbnail( QImage& thumbnail, KZip * m_z
     }
 
     io->close();
-
-    thumbnail = imageIO.image();
 
     if ( thumbnail.isNull() )
     {

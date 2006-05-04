@@ -99,7 +99,7 @@ static RTFProperty propertyTable[] =
 	PROP(	0L,		"ansicpg",	setCodepage,		0L, 0 ),
 	MEMBER(	0L,		"b",		setToggleProperty,	state.format.bold, 0 ),
         // \bin is handled in the tokenizer
-	MEMBER(	"@colortbl",	"blue",		setNumericProperty,	Qt::blue, 0 ),
+	MEMBER(	"@colortbl",	"blue",		setNumericProperty,	blue, 0 ),
 	MEMBER(	0L,		"box",		setEnumProperty,	state.layout.border, 0 ),
 	PROP(	0L,		"brdrb",	selectLayoutBorder,	0L, 3 ),
 	PROP(	0L,		"brdrcf",	setBorderColor,           0L, 0 ),
@@ -161,7 +161,7 @@ static RTFProperty propertyTable[] =
 	PROP(	"@fonttbl",	"fscript",	setFontStyleHint,	0L, QFont::AnyStyle ),
 	PROP(	"@fonttbl",	"fswiss",	setFontStyleHint,	0L, QFont::SansSerif ),
 	PROP(	"@fonttbl",	"ftech",	setFontStyleHint,	0L, QFont::AnyStyle ),
-	MEMBER(	"@colortbl",	"green",	setNumericProperty,	Qt::green, 0 ),
+	MEMBER(	"@colortbl",	"green",	setNumericProperty,	green, 0 ),
 	MEMBER(	0L,		"headery",	setNumericProperty,	state.section.headerMargin, 0 ),
 	MEMBER(	0L,		"i",		setToggleProperty,	state.format.italic, 0 ),
 	MEMBER(	0L,		"intbl",	setFlagProperty,	state.layout.inTable, true ),
@@ -210,7 +210,7 @@ static RTFProperty propertyTable[] =
 	PROP(	0L,		"qmspace",	insertSymbol,		0L, 0x2004 ),
 	MEMBER(	0L,		"qr",		setEnumProperty,	state.layout.alignment, RTFLayout::Right ),
 	PROP(	0L,		"rdblquote",	insertSymbol,		0L, 0x201d ),
-	MEMBER(	"@colortbl",	"red",		setNumericProperty,	Qt::red, 0 ),
+	MEMBER(	"@colortbl",	"red",		setNumericProperty,	red, 0 ),
 	MEMBER(	0L,		"ri",		setNumericProperty,	state.layout.rightIndent, 0 ),
 	PROP(	"Text",		"row",		insertTableRow,		0L, 0 ),
 	PROP(	0L,		"rquote",	insertSymbol,		0L, 0x2019 ),
@@ -481,7 +481,7 @@ KoFilter::ConversionStatus RTFImport::convert( const QByteArray& from, const QBy
 
     // Add a security item for the destination stack
     destination.name = "!stackbottom";
-    
+
     changeDestination( destinationProperties["@rtf"] );
 
     flddst = -1;
@@ -811,7 +811,7 @@ void RTFImport::setCodepage( RTFProperty * )
     if ( token.value == 10000 )
     {
     	cp = "Apple Roman"; // ### TODO: how to support the other ones (Qt does not know them!)
-    } 
+    }
     else
     {
         cp.setNum( token.value );
@@ -1164,8 +1164,7 @@ void RTFImport::insertTableRow( RTFProperty * )
 	{
 	    row.height = 1;
 	}
-        // ### TODO: use ConstIterator
-	for (uint k=0; k < row.cells.count(); k++)
+	for (int k=0; k < row.cells.count(); k++)
 	{
 	    if ((row.cells[k].x - lx) < 1)
 		row.cells[k].x = ++lx;
@@ -1174,8 +1173,7 @@ void RTFImport::insertTableRow( RTFProperty * )
 	}
 	if (row.left < 0)
 	{
-            // ### TODO: use ConstIterator
-	    for (uint k=0; k < row.cells.count(); k++)
+	    for (int k=0; k < row.cells.count(); k++)
 	    {
 		row.cells[k].x -= row.left;
 	    }
@@ -1754,7 +1752,7 @@ void RTFImport::parseField( RTFProperty * )
 		QString hrefName = QString::null;
 
                 // Use ConstIterator
-		for (uint i=1; i < list.count(); i++)
+		for (int i=1; i < list.count(); i++)
 		{
 		    if (list[i] == "\\l")
 		    {
@@ -1770,7 +1768,7 @@ void RTFImport::parseField( RTFProperty * )
 		    }
 		}
 		node.addNode( "LINK" );
-		node.setAttribute( "linkName", fldrslt );
+		node.setAttribute( "linkName", QString::fromLatin1( fldrslt ) );
 		node.setAttribute( "hrefName", hrefName );
 		node.closeNode( "LINK" );
 		addVariable( node, 9, "STRING", &fldfmt);
@@ -1901,9 +1899,8 @@ void RTFImport::parseFootNote( RTFProperty * property)
         fnnum++;
         destination.target = newTextState;
 
-        Q3CString str;
-        str.setNum(fnnum);
-        str.prepend("Footnote ");
+        QByteArray str = "Footnote ";
+        str += QByteArray::number(fnnum);
 
         DomNode node;
 
@@ -1911,7 +1908,7 @@ void RTFImport::parseFootNote( RTFProperty * property)
             node.addNode("FOOTNOTE");
             node.setAttribute("numberingtype", "auto");
             node.setAttribute("notetype", "footnote");
-            node.setAttribute("frameset", str);
+            node.setAttribute("frameset", QString::fromLatin1(str));
             node.setAttribute("value", fnnum);
             node.closeNode("FOOTNOTE");
 	addVariable(node, 11, "STRING");
@@ -2097,11 +2094,11 @@ void RTFImport::addFormat( DomNode &node, const KWFormat& format, const RTFForma
 	if (!baseFormat || format.fmt.color != baseFormat->color)
 	{
 	    node.addNode( "COLOR" );
-	    node.addColor( ((uint)format.fmt.color >= colorTable.count())
-			   ? (QColor &)Qt::black : colorTable[format.fmt.color] );
+	    node.addColor( (format.fmt.color >= colorTable.count())
+			   ? QColor(Qt::black) : colorTable[format.fmt.color] );
 	    node.closeNode( "COLOR" );
 	}
-	if ((uint)format.fmt.bgcolor < colorTable.count() &&
+	if (format.fmt.bgcolor < colorTable.count() &&
 	    (!baseFormat || format.fmt.bgcolor != baseFormat->bgcolor))
 	{
 	    node.addNode( "TEXTBACKGROUNDCOLOR" );
@@ -2139,7 +2136,7 @@ void RTFImport::addFormat( DomNode &node, const KWFormat& format, const RTFForma
         if (!baseFormat || format.fmt.underline != baseFormat->underline )
 	{
 	    node.addNode( "UNDERLINE" );
-            Q3CString st,styleline,wordbyword("0");
+            QByteArray st,styleline,wordbyword("0");
             st.setNum(format.fmt.underline);
             int underlinecolor = format.fmt.underlinecolor;
 
@@ -2207,11 +2204,11 @@ void RTFImport::addFormat( DomNode &node, const KWFormat& format, const RTFForma
                     break;
                 }
             } // end of switch
-            node.setAttribute( "value", st );
-            node.setAttribute( "wordbyword", wordbyword );
+            node.setAttribute( "value", QString::fromLatin1(st) );
+            node.setAttribute( "wordbyword", QString::fromLatin1(wordbyword) );
             if ( !styleline.isEmpty() )
-                node.setAttribute( "styleline", styleline );
-            if ( underlinecolor >= 0 && uint(underlinecolor) < colorTable.count() )
+                node.setAttribute( "styleline", QString::fromLatin1(styleline) );
+            if ( underlinecolor >= 0 && underlinecolor < colorTable.count() )
             {
                 node.setAttribute( "underlinecolor", colorTable[underlinecolor].name() );
             }
@@ -2225,7 +2222,7 @@ void RTFImport::addFormat( DomNode &node, const KWFormat& format, const RTFForma
 	    st.setNum(format.fmt.strike);
 	    if(format.fmt.striked)
 		st="double";
-	    node.setAttribute( "value", st );
+	    node.setAttribute( "value", QString::fromLatin1(st) );
 	    node.closeNode( "STRIKEOUT" );
 	}
 	if (vertAlign != vertAlign0)
@@ -2237,7 +2234,7 @@ void RTFImport::addFormat( DomNode &node, const KWFormat& format, const RTFForma
 	if (!baseFormat || format.fmt.caps != baseFormat->caps || format.fmt.smallCaps != baseFormat->smallCaps)
 	{
 	    node.addNode( "FONTATTRIBUTE" );
-            Q3CString fontattr;
+            QString fontattr;
             if ( format.fmt.caps )
                 fontattr="uppercase";
             else if ( format.fmt.smallCaps )
@@ -2247,12 +2244,12 @@ void RTFImport::addFormat( DomNode &node, const KWFormat& format, const RTFForma
 	    node.setAttribute( "value", fontattr );
 	    node.closeNode( "FONTATTRIBUTE" );
 	}
-	if (!baseFormat)
-	{
-	    node.addNode( "CHARSET" );
-	    node.setAttribute( "value", (int)QFont::Unicode );
-	    node.closeNode( "CHARSET" );
-	}
+	//if (!baseFormat)
+	//{
+        //    node.addNode( "CHARSET" );
+        //    node.setAttribute( "value", (int)QFont::Unicode );
+	//    node.closeNode( "CHARSET" );
+	//}
     }
     if (format.id == 4 || format.id == 6)
     {
@@ -2305,7 +2302,7 @@ void RTFImport::addLayout( DomNode &node, const QString &name, const RTFLayout &
     // Linespacing
 
     QString lineSpacingType;
-    QString lineSpacingValue;  
+    QString lineSpacingValue;
     if ( layout.spaceBetweenMultiple )
     {
         // Note: 240 is a sort of magic value for one line (Once upon a time, it meant 12pt for a single line)
@@ -2327,7 +2324,7 @@ void RTFImport::addLayout( DomNode &node, const QString &name, const RTFLayout &
                 break;
             }
         default:
-            {    
+            {
                 if ( layout.spaceBetween > 0 )
                 {
                     lineSpacingType = "multiple";
@@ -2351,7 +2348,7 @@ void RTFImport::addLayout( DomNode &node, const QString &name, const RTFLayout &
             lineSpacingValue.setNum( -0.05*layout.spaceBetween );
         }
     }
-    
+
     if ( ! lineSpacingType.isEmpty() )
     {
         node.addNode( "LINESPACING" );
@@ -2379,8 +2376,8 @@ void RTFImport::addLayout( DomNode &node, const QString &name, const RTFLayout &
 	if (border.style != RTFBorder::None || border.width > 0)
 	{
 	    node.addNode( borderN[i] );
-	      node.addColor( ((uint)border.color >= colorTable.count())
-			     ? (QColor &)Qt::black : colorTable[border.color] );
+	      node.addColor( (border.color >= colorTable.count())
+			     ? QColor(Qt::black) : colorTable[border.color] );
 	      node.setAttribute( "style", (int)border.style & 0xf );
 	      node.setAttribute( "width", (border.width < 20) ? 1 : border.width /20 );
 	    node.closeNode( borderN[i] );
@@ -2399,16 +2396,15 @@ void RTFImport::addLayout( DomNode &node, const QString &name, const RTFLayout &
     // Tabulators
     if (!layout.tablist.isEmpty())
     {
-        // ### TODO: use ConstIterator
-	for (uint i=0; i < layout.tablist.count(); i++)
+	for (int i=0; i < layout.tablist.count(); i++)
 	{
 	    const RTFTab &tab = layout.tablist[i];
 	    int l = (int)tab.leader;
 	    node.addNode( "TABULATOR" );
-	      node.setAttribute( "type", tab.type );
-	      node.setAttribute( "ptpos", .05*tab.position );
-	      node.setAttribute( "filling", (l < 2) ? l : ((l == 2) ? 1 : 2) );
-	      node.setAttribute( "width", (l == 4) ? 1. : 0.5 );
+            node.setAttribute( "type", tab.type );
+            node.setAttribute( "ptpos", .05*tab.position );
+            node.setAttribute( "filling", (l < 2) ? l : ((l == 2) ? 1 : 2) );
+            node.setAttribute( "width", (l == 4) ? 1. : 0.5 );
 	    node.closeNode( "TABULATOR" );
 	}
     }
@@ -2449,7 +2445,7 @@ void RTFImport::addParagraph( DomNode &node, bool frameBreak )
         kWarning(30515) << "Style name empty! Assuming Standard!" << endl;
         name = "Standard";
     }
-    
+
     // Insert character formatting
     bool hasFormats = false;
 
@@ -2493,8 +2489,7 @@ void RTFImport::finishTable()
     insertTableRow();
 
     // Calculate maximum horizontal extents
-    // ### TODO: use ConstIterator
-    for (uint i=0; i < textState->rows.count(); i++)
+    for (int i=0; i < textState->rows.count(); i++)
     {
 	RTFTableRow &row = textState->rows[i];
 
@@ -2505,8 +2500,7 @@ void RTFImport::finishTable()
     }
 
     // Force rectangular table (fill gaps with empty cells)
-    // ### TODO: use ConstIterator
-    for (uint i=0; i < textState->rows.count(); i++)
+    for (int i=0; i < textState->rows.count(); i++)
     {
 	RTFTableRow &row = textState->rows[i];
 
@@ -2523,8 +2517,7 @@ void RTFImport::finishTable()
 	    emptyCell.x = right;
 	    row.cells << emptyCell;
 	}
-        // ### TODO: use ConstIterator
-	for (uint k=0; k < row.cells.count(); k++)
+	for (int k=0; k < row.cells.count(); k++)
 	{
 	    if (!cellx.contains( row.cells[k].x ))
 		cellx << row.cells[k].x;
@@ -2536,10 +2529,9 @@ void RTFImport::finishTable()
     }
 
     // Sort vertical cell boundaries
-    // ### TODO: use ConstIterator
-    for (uint k=0; k < cellx.count(); k++)
+    for (int k=0; k < cellx.count(); k++)
     {
-	for (uint l=k+1; l < cellx.count(); l++)
+	for (int l=k+1; l < cellx.count(); l++)
 	{
 	    if (cellx[l] < cellx[k])
 	    {
@@ -2552,15 +2544,14 @@ void RTFImport::finishTable()
     int y1 = 0;
 
     // Store cell frame and table information
-    // ### TODO: use ConstIterator
-    for (uint i=0; i < textState->rows.count(); i++)
+    for (int i=0; i < textState->rows.count(); i++)
     {
 	RTFTableRow &row = textState->rows[i];
 	int h  = abs( row.height );
 	int y2 = y1 + ((h < 400) ? 400 : h);	// KWord work-around
 	int x1 = row.left;
 
-	for (uint k=0; k < row.cells.count(); k++)
+	for (int k=0; k < row.cells.count(); k++)
 	{
 	    char buf[64];
 	    int x2 = row.cells[k].x;
@@ -2585,15 +2576,15 @@ void RTFImport::finishTable()
 		if (border.style != RTFBorder::None || border.width > 0)
 		{
 		    const char *id = "lrtb";
-		    QColor &c = ((uint)border.color >= colorTable.count())
-				? (QColor &)Qt::black : colorTable[border.color];
+		    QColor c = (border.color >= colorTable.count())
+				? QColor(Qt::black) : colorTable[border.color];
 		    frameSets.addBorder( (int)id[i], c, (int)border.style & 0x0f,
 					 .05*(!border.width ? 10 : border.width) );
 		}
 	    }
 
 	    // Frame background color
-	    if ((uint)row.cells[k].bgcolor < colorTable.count())
+	    if (row.cells[k].bgcolor < colorTable.count())
 	    {
 		QColor &color = colorTable[row.cells[k].bgcolor];
 		frameSets.setAttribute( "bkRed", color.red() );

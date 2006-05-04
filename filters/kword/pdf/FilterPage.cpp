@@ -317,7 +317,7 @@ void Page::fillParagraph(Paragraph &par, double &offset) const
                 Q_ASSERT( si>=0 );
                 QChar c = par.blocks[bi].text[si];
                 int psi = par.charFromEnd(1, pbi);
-                QChar prev = (psi<0 ? QChar::Null : par.blocks[pbi].text[psi]);
+                QChar prev = (psi<0 ? QChar() : par.blocks[pbi].text[psi]);
                 if ( !prev.isNull() && type(c.unicode())==Hyphen )
                     kDebug(30516) << "hyphen ? " << QString(prev)
                                    << " type=" << type(prev.unicode())

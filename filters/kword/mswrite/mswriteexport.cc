@@ -1145,7 +1145,7 @@ public:
 
 					outBuffer.close ();
 					inBuffer.close ();
-				imageData = imageWMF.copy ();
+				imageData = imageWMF;
 
 				imageType = ".wmf";
 			}
@@ -1169,36 +1169,28 @@ public:
 										<< " size=" << imageSize
 										<< endl;
 
+                // read foreign image
+                QImage inImage;
+                if ( !inImage.loadFromData(imageData) )
+                {
+                    kError (30509) << "Could not read foreign format" << endl;
+                    return true;
+                }
+
+                // output image
 				QByteArray imageBMP;
-					// input device
-					QBuffer inBuffer (&imageData);
-					inBuffer.open (QIODevice::ReadOnly);
+                QBuffer outBuffer(&imageBMP);
+                outBuffer.open (QIODevice::WriteOnly);
 
-					// read foreign image
-					QImageIO imageIO (&inBuffer, NULL);
-					if (!imageIO.read ())
-					{
-						kError (30509) << "Could not read foreign format" << endl;
-						return true;
-					}
+                // write BMP
+                if ( !inImage.save( &outBuffer, "BMP" ) )
+                {
+                    kError (30509) << "Could not convert to BMP" << endl;
+                    return true;
+                }
 
-					// output device
-					QBuffer outBuffer (&imageBMP);
-					outBuffer.open (QIODevice::WriteOnly);
-
-					// write BMP
-					imageIO.setIODevice (&outBuffer);
-					imageIO.setFormat ("BMP");
-					if (!imageIO.write ())
-					{
-						kError (30509) << "Could not convert to BMP" << endl;
-						return true;
-					}
-
-					outBuffer.close ();
-					inBuffer.close ();
-				imageData = imageBMP/*.copy ()*/;
-
+                outBuffer.close ();
+				imageData = imageBMP;
 				imageType = ".bmp";
 			}
 		}

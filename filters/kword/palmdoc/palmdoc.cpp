@@ -73,7 +73,7 @@ bool PalmDoc::load( const char* filename )
   QByteArray header( *records.at( 0 ) );
 
   // format of the DOC
-  int format = (header[0]<<8) + header[1];
+  int format = ((int)header[0]<<8) + (int)header[1];
   qDebug( "DOC format: %d (%s)", format,
      (format==1) ? "Plain" : (format==2) ? "Compressed" : "Unknown" );
 
@@ -120,13 +120,13 @@ bool PalmDoc::save( const char* filename )
   setCreator( "REAd" );
 
   // "touch" the database :-)
-  setModificationDate( QDateTime::currentDateTime() ); 
+  setModificationDate( QDateTime::currentDateTime() );
 
   // Palm record size is always 4 KB
   unsigned recsize = 4096;
 
   // compress the text
-  QByteArray data = compress( text() );  
+  QByteArray data = compress( text() );
 
   // prepare the records
   records.clear();
@@ -139,17 +139,17 @@ bool PalmDoc::save( const char* filename )
     for( unsigned m=0; m<rs; m++ )
       (*ptr)[m] = data[i++];
     records.append( ptr );
-  } 
+  }
 
-  // prepare the header 
+  // prepare the header
   QByteArray header( 16 );
   int docsize = m_text.length();
-  header[0] = 0; header[1] = 2;  // 1=plain, 2=compressed 
+  header[0] = 0; header[1] = 2;  // 1=plain, 2=compressed
   header[2] = header[3] = 0; // reserved word, set to 0
   header[4] = (docsize >> 24) & 255; // uncompressed size
   header[5] = (docsize >> 16) & 255;
   header[6] = (docsize >> 8) & 255;
-  header[7] = docsize & 255;  
+  header[7] = docsize & 255;
   header[8] = records.count()>> 8; // no of records
   header[9] = records.count() & 255;
   header[10] = recsize >>8; // record size

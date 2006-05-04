@@ -31,7 +31,7 @@
 #include <KoGlobal.h>
 #include <KoStore.h>
 #include <kapplication.h>
-#include <kprogressbar.h>
+#include <kprogressdialog.h>
 
 #include "data.h"
 
@@ -174,8 +174,8 @@ void PdfImport::treatInfoDocument()
     if ( !out )
         kWarning(30516) << "unable to open doc info. continuing anyway\n";
 	else {
-		Q3CString cstr = infoDocument.toCString();
-		out->write(cstr, cstr.length());
+		QByteArray cstr = infoDocument.toByteArray();
+		out->write(cstr);
 		out->close();
 	}
 }

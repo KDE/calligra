@@ -13,7 +13,7 @@ kde4_add_plugin(palmdocimport WITH_PREFIX ${palmdocimport_PART_SRCS})
 
 kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} palmdocimport )
 
-target_link_libraries(palmdocimport  ${KDE4_KDECORE_LIBS} )
+target_link_libraries(palmdocimport kofficecore)
 
 install_targets(${PLUGIN_INSTALL_DIR} palmdocimport )
 
@@ -28,7 +28,7 @@ kde4_add_plugin(palmdocexport WITH_PREFIX ${palmdocexport_PART_SRCS})
 
 kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} palmdocexport )
 
-target_link_libraries(palmdocexport  ${KDE4_KDECORE_LIBS} )
+target_link_libraries(palmdocexport kofficecore)
 
 install_targets(${PLUGIN_INSTALL_DIR} palmdocexport )
 

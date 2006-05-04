@@ -22,7 +22,7 @@ kde4_add_plugin(mswriteimport WITH_PREFIX ${mswriteimport_PART_SRCS})
 
 kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} mswriteimport )
 
-target_link_libraries(mswriteimport  ${KDE4_KDECORE_LIBS} )
+target_link_libraries(mswriteimport kofficecore)
 
 install_targets(${PLUGIN_INSTALL_DIR} mswriteimport )
 

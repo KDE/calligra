@@ -227,9 +227,7 @@ void Device::addImage()
     _data.pictures().appendChild(key);
 
     KoStoreDevice *sd = _data.chain()->storageFile(name, KoStore::Write);
-    QImageIO io(sd, "PNG");
-    io.setImage(_currentImage.image);
-    bool ok = io.write();
+    bool ok = _currentImage.image.save( sd, "PNG" );
     Q_ASSERT(ok);
     sd->close();
 
@@ -344,9 +342,9 @@ void Device::drawImageMask(GfxState *state, Object *, Stream *str,
     // read pixels
     GfxRGB rgb;
     state->getFillRGB(&rgb);
-    int Qt::red = qRound(rgb.r * 255);
-    int Qt::green = qRound(rgb.g * 255);
-    int Qt::blue = qRound(rgb.b * 255);
+    int red = qRound(rgb.r * 255);
+    int green = qRound(rgb.g * 255);
+    int blue = qRound(rgb.b * 255);
 
     ImageStream *istr = new ImageStream(str, width, 1, 1);
     str->reset();

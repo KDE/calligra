@@ -1,11 +1,22 @@
 kde4_header()
 
-
+include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/../sidewinder )
 
 
 ########### next target ###############
 
-set(excelimport_PART_SRCS excelimport.cc )
+set(sidewinder_SRCS 
+  ${CMAKE_CURRENT_SOURCE_DIR}/../sidewinder/cell.cpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/../sidewinder/excel.cpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/../sidewinder/format.cpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/../sidewinder/pole.cpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/../sidewinder/sheet.cpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/../sidewinder/ustring.cpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/../sidewinder/value.cpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/../sidewinder/workbook.cpp
+)
+
+set(excelimport_PART_SRCS excelimport.cc ${sidewinder_SRCS})
 
 kde4_automoc(${excelimport_PART_SRCS})
 
@@ -13,7 +24,7 @@ kde4_add_plugin(excelimport WITH_PREFIX ${excelimport_PART_SRCS})
 
 kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} excelimport )
 
-target_link_libraries(excelimport  ${KDE4_KDECORE_LIBS} sidewinder )
+target_link_libraries(excelimport  ${KDE4_KDECORE_LIBS} )
 
 install_targets(${PLUGIN_INSTALL_DIR} excelimport )
 

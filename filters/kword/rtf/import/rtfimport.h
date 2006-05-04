@@ -561,7 +561,7 @@ public:
     bool landscape, facingPages;
 
     // Field support
-    Q3CString fldinst, fldrslt;
+    QByteArray fldinst, fldrslt;
     RTFFormat fldfmt;
     int flddst; ///< support for recursive fields
     QString inFileName; ///< File name of the source file.
