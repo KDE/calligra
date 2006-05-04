@@ -88,11 +88,14 @@ void KWMailMergeKSpreadConfig::documentLoaded()
 {
   _pageNumber->clear();
 
-  Q3PtrListIterator<Sheet> it( _document->map()->sheetList() );
+  QListIterator<Sheet*> it( _document->map()->sheetList() );
   int counter = 1;
-  for ( it.toFirst(); it.current(); ++it ) {
+  it.toFront();
+  while( it.hasNext() )
+  {
     _pageNumber->insertItem( QString::number( counter ) );
     counter++;
+    it.next();
   }
 
   _pageNumber->setEnabled( true );

@@ -111,10 +111,12 @@ void KWMailMergeKSpread::initSpreadSheets()
   _columnMap.clear();
   sampleRecord.clear();
 
-  Q3PtrListIterator<Sheet> it( _document->map()->sheetList() );
+  QListIterator<Sheet*> it( _document->map()->sheetList() );
   int counter = 0;
-  for ( it.toFirst(); it.current(), counter < _spreadSheetNumber; ++it ) {
-    _sheet = it.current();
+  it.toFront();
+  while( counter < _spreadSheetNumber )
+  {
+    _sheet = it.next();
     counter++;
   }
 
