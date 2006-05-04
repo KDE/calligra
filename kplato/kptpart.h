@@ -31,7 +31,7 @@
 #include <KoTextZoomHandler.h>
 
 class KoView;
-class KoCommandHistory;
+class KCommandHistory;
 class KCommand;
 
 namespace KPlato
@@ -75,14 +75,14 @@ public:
     bool loadOasis(const QDomDocument &, KoOasisStyles &, const QDomDocument&, KoStore *) { return false; }
 
     void addCommand(KCommand * cmd, bool execute=true);
-    
+
     void setCommandType(int type);
-    
+
     Config &config() { return m_config; }
-    
+
     void generateWBS();
     WBSDefinition &wbsDefinition() { return m_wbsDefinition; }
-    
+
     const XMLLoaderObject &xmlLoader() const { return m_xmlLoader; }
 protected:
     virtual KoView* createViewInstance(QWidget* parent, const char* name);
@@ -98,7 +98,7 @@ private:
     ProjectDialog *m_projectDialog;
     QWidget* m_parentWidget;
     View *m_view;
-    
+
     /**
      * Used for drawing the project when embedded into another koffice app.
      * @see paintContent()
@@ -106,15 +106,15 @@ private:
     GanttView* m_embeddedGanttView;
     Context* m_embeddedContext;
     bool m_embeddedContextInitialized;
-    
-    KoCommandHistory *m_commandHistory;
+
+    KCommandHistory *m_commandHistory;
     bool m_update, m_calculate, m_baseline;
-    
+
     Config m_config;
     Context *m_context;
-    
+
     WBSDefinition m_wbsDefinition;
-    
+
     XMLLoaderObject m_xmlLoader;
 };
 

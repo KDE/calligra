@@ -81,7 +81,7 @@ public:
         }
         EffortCostDayMap::const_iterator it = m_days.find(date);
         if (it != m_days.end())
-            ec = it.data();
+            ec = it.value();
         return ec;
     }
     void insert(const QDate &date, const Duration &effort, const double cost) {
@@ -128,7 +128,7 @@ public:
         }
         EffortCostDayMap::const_iterator it;
         for(it = ec.days().constBegin(); it != ec.days().constEnd(); ++it) {
-            add(it.key(), it.data());
+            add(it.key(), it.value());
         }
         return *this;
     }
@@ -167,7 +167,7 @@ public:
         double cost = 0.0;
         EffortCostDayMap::const_iterator it;
         for(it = m_days.constBegin(); it != m_days.constEnd(); ++it) {
-            cost += it.data().cost();
+            cost += it.value().cost();
         }
         return cost;
     }
@@ -175,7 +175,7 @@ public:
         Duration eff;
         EffortCostDayMap::const_iterator it;
         for(it = m_days.constBegin(); it != m_days.constEnd(); ++it) {
-            eff += it.data().effort();
+            eff += it.value().effort();
         }
         return eff;
     }

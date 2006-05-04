@@ -30,6 +30,9 @@ DateTime::DateTime() : QDateTime() {
 DateTime::DateTime(const QDateTime &dt) : QDateTime(dt.date(), dt.time()) {
 }
 
+DateTime::DateTime(const QDate &date) : QDateTime(date) {
+}
+
 DateTime::DateTime(const QDate &date, const QTime &time) : QDateTime(date, time) {
 }
 

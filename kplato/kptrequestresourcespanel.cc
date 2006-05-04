@@ -67,7 +67,7 @@ void ResourceTableItem::insert(Q3Table *table, int row) {
     m_checkitem = new Q3CheckTableItem(table, m_resource->name());
     m_checkitem->setChecked(m_checked);
     table->setItem(row, 0, m_checkitem);
-    
+
     //kDebug()<<k_funcinfo<<"Added: '"<<m_resource->name()<<"' checked="<<m_checked<<endl;
 }
 
@@ -90,7 +90,7 @@ GroupLVItem::GroupLVItem(Q3ListView *parent, ResourceGroup *group, Task &task)
         }
         m_resources.append(new ResourceTableItem(it.current(), req, (bool)req));
     }
-    
+
     m_resources.setAutoDelete(true);
 }
 
@@ -114,7 +114,7 @@ void GroupLVItem::insert(Q3Table *table) {
     if (m_group->numResources() == 0) {
         table->setNumRows(1);
         table->setItem(0, 0, new Q3CheckTableItem(table,i18n("None")));
-        table->setItem(0, 1, new Q3ComboTableItem(table,i18n("None")));
+        table->setItem(0, 1, new Q3ComboTableItem(table,QStringList(i18n("None"))));
     } else {
         table->setNumRows(m_group->numResources());
         Q3PtrListIterator<ResourceTableItem> it(m_resources);
@@ -157,7 +157,7 @@ RequestResourcesPanel::RequestResourcesPanel(QWidget *parent, Task &task, bool b
     Project *p = dynamic_cast<Project*>(task.projectNode());
     if (p) {
         m_worktime = p->standardWorktime();
-        
+
         Q3PtrListIterator<ResourceGroup> git(p->resourceGroups());
         for(int i=0; git.current(); ++git, ++i) {
             ResourceGroup *grp = git.current();
@@ -173,7 +173,7 @@ RequestResourcesPanel::RequestResourcesPanel(QWidget *parent, Task &task, bool b
     }
 
     resourceTable->setReadOnly(baseline);
-    
+
     connect(groupList, SIGNAL(selectionChanged(Q3ListViewItem*)),  SLOT(groupChanged(Q3ListViewItem*)));
     connect(resourceTable, SIGNAL(valueChanged(int, int)), SLOT(resourceChanged(int, int)));
 //    connect(numUnits, SIGNAL(valueChanged(int)), SLOT(unitsChanged(int)));
@@ -230,7 +230,7 @@ KCommand *RequestResourcesPanel::buildCommand(Part *part) {
                         cmd->addCommand(new AddResourceGroupRequestCmd(part, m_task, grp->m_request));
                     }
                     cmd->addCommand(new AddResourceRequestCmd(part, grp->m_request, new ResourceRequest(it.current()->resource(), it.current()->units())));
-                    
+
                     continue;
                 }
                 if (grp->m_request && it.current()->request()) {

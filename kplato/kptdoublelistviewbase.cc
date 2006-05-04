@@ -47,8 +47,8 @@ void ListView::paintToPrinter(QPainter * p, int cx, int cy, int cw, int ch) {
     //kDebug()<<k_funcinfo<<QRect(cx, cy, cw, ch)<<endl;
     // draw header labels
     p->save();
-    QRegion r = p->clipRegion(QPainter::CoordPainter);
-    p->setClipRegion(r.intersect(QRegion(cx, 0, cw, ch)), QPainter::CoordPainter);
+    QRegion r = p->clipRegion();
+    p->setClipRegion(r.intersect(QRegion(cx, 0, cw, ch)));
     QColor bgc(193, 223, 255);
     QBrush bg(bgc);
     p->setBackgroundMode(Qt::OpaqueMode);
@@ -75,14 +75,14 @@ void ListView::paintToPrinter(QPainter * p, int cx, int cy, int cw, int ch) {
         p->drawText(tr, columnAlignment(s)|Qt::AlignVCenter, h->label(s), -1);
         hei = qMax(tr.height(), hei);
     }
-    r = p->clipRegion(QPainter::CoordPainter);
+    r = p->clipRegion();
     p->restore();
 //    p->drawRect(r.boundingRect());
     p->save();
     p->translate(0, hei+2);
-    r = p->clipRegion(QPainter::CoordPainter);
+    r = p->clipRegion();
     // FIXME: Doesn't clip correctly, haven't figured out why
-    p->setClipRegion(r.intersect(QRegion(cx, cy, cw, ch)), QPainter::CoordPainter);
+    p->setClipRegion(r.intersect(QRegion(cx, cy, cw, ch)));
     drawContentsOffset(p, 0, 0, cx, cy, cw, ch);
 //    p->drawRect(r.boundingRect());
     p->restore();
@@ -94,7 +94,7 @@ DoubleListViewBase::SlaveListItem::SlaveListItem(DoubleListViewBase::MasterListI
       m_value(0.0),
       m_highlight(highlight),
       m_valueMap() {
-    
+
     setFormat();
     setExpandable(master->isExpandable());
     setOpen(master->isOpen());
@@ -106,7 +106,7 @@ DoubleListViewBase::SlaveListItem::SlaveListItem(DoubleListViewBase::MasterListI
       m_value(0.0),
       m_highlight(highlight),
       m_valueMap() {
-    
+
     setFormat();
     setExpandable(master->isExpandable());
     setOpen(master->isOpen());
@@ -167,7 +167,7 @@ DoubleListViewBase::MasterListItem::MasterListItem(Q3ListView *parent, bool high
       m_value(0.0),
       m_limit(0.0),
       m_highlight(highlight) {
-    
+
     setFormat();
     //kDebug()<<k_funcinfo<<endl;
 }
@@ -189,7 +189,7 @@ DoubleListViewBase::MasterListItem::MasterListItem(Q3ListViewItem *parent, bool 
       m_value(0.0),
       m_limit(0.0),
       m_highlight(highlight) {
-    
+
     setFormat();
     //kDebug()<<k_funcinfo<<endl;
 }
@@ -347,10 +347,10 @@ DoubleListViewBase::DoubleListViewBase(QWidget *parent, bool description)
       m_fieldwidth(0),
       m_fmt('f'),
       m_prec(0) {
-    
+
     setOrientation(Qt::Horizontal);
     setHandleWidth(qMin(2, handleWidth()));
-    
+
     m_masterList = new ListView(this);
     m_masterList->setSelectionMode(Q3ListView::NoSelection);
     m_masterList->setItemMargin(2);
@@ -369,21 +369,21 @@ DoubleListViewBase::DoubleListViewBase(QWidget *parent, bool description)
     }
     m_masterList->setVScrollBarMode(Q3ScrollView::AlwaysOff);
     m_masterList->setHScrollBarMode(Q3ScrollView::AlwaysOn);
-    
+
     m_slaveList = new ListView(this);
     m_slaveList->setSelectionMode(Q3ListView::NoSelection);
     m_slaveList->setItemMargin(2);
     m_slaveList->setSortColumn(-1); // Disable sort!!
     m_slaveList->setTreeStepSize(0);
     m_slaveList->setHScrollBarMode(Q3ScrollView::AlwaysOn);
-    
-    
+
+
     connect(m_slaveList->verticalScrollBar(), SIGNAL(valueChanged(int)),
             m_masterList->verticalScrollBar(), SLOT(setValue(int)));
-    
+
     connect(m_masterList, SIGNAL(expanded(Q3ListViewItem*)), SLOT(slotExpanded(Q3ListViewItem*)));
     connect(m_masterList, SIGNAL(collapsed(Q3ListViewItem*)), SLOT(slotCollapsed(Q3ListViewItem*)));
-    
+
 }
 
 QSize DoubleListViewBase::sizeHint() const {

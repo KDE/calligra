@@ -36,19 +36,19 @@ namespace KPlato
 class Resource;
 
 AppointmentInterval::AppointmentInterval() {
-    m_load = 100.0; 
+    m_load = 100.0;
 }
 AppointmentInterval::AppointmentInterval(const AppointmentInterval &interval) {
     //kDebug()<<k_funcinfo<<endl;
-    m_start = interval.startTime(); 
-    m_end = interval.endTime(); 
-    m_load = interval.load(); 
+    m_start = interval.startTime();
+    m_end = interval.endTime();
+    m_load = interval.load();
 }
 AppointmentInterval::AppointmentInterval(const DateTime &start, const DateTime end, double load) {
     //kDebug()<<k_funcinfo<<endl;
-    m_start = start; 
-    m_end = end; 
-    m_load = load; 
+    m_start = start;
+    m_end = end;
+    m_load = load;
 }
 AppointmentInterval::~AppointmentInterval() {
     //kDebug()<<k_funcinfo<<endl;
@@ -147,7 +147,7 @@ AppointmentInterval AppointmentInterval::firstInterval(const AppointmentInterval
         a.setStartTime(s1);
         if (e1 <= e2)
             a.setEndTime(e1);
-        else 
+        else
             a.setEndTime(e2);
         a.setLoad(m_load + interval.load());
     }
@@ -162,18 +162,18 @@ Appointment::UsedEffortItem::UsedEffortItem(QDate date, Duration effort, bool ov
     m_effort = effort;
     m_overtime = overtime;
 }
-QDate Appointment::UsedEffortItem::date() { 
-    return m_date; 
+QDate Appointment::UsedEffortItem::date() {
+    return m_date;
 }
 Duration Appointment::UsedEffortItem::effort() {
-    return m_effort; 
+    return m_effort;
 }
-bool Appointment::UsedEffortItem::isOvertime() { 
-    return m_overtime; 
+bool Appointment::UsedEffortItem::isOvertime() {
+    return m_overtime;
 }
 
-Appointment::UsedEffort::UsedEffort() { 
-    setAutoDelete(true); 
+Appointment::UsedEffort::UsedEffort() {
+    setAutoDelete(true);
 }
 
 void Appointment::UsedEffort::inSort(QDate date, Duration effort, bool overtime) {
@@ -191,12 +191,12 @@ Duration Appointment::UsedEffort::usedEffort(bool includeOvertime) const {
     }
     return eff;
 }
-        
+
 Duration Appointment::UsedEffort::usedEffort(const QDate &date, bool includeOvertime) const {
     Duration eff;
     Q3PtrListIterator<UsedEffortItem> it(*this);
     for (; it.current(); ++it) {
-        if ((includeOvertime || !it.current()->isOvertime()) && 
+        if ((includeOvertime || !it.current()->isOvertime()) &&
             it.current()->date() == date) {
             eff += it.current()->effort();
         }
@@ -208,7 +208,7 @@ Duration Appointment::UsedEffort::usedEffortTo(const QDate &date, bool includeOv
     Duration eff;
     Q3PtrListIterator<UsedEffortItem> it(*this);
     for (; it.current(); ++it) {
-        if ((includeOvertime || !it.current()->isOvertime()) && 
+        if ((includeOvertime || !it.current()->isOvertime()) &&
             it.current()->date() <= date) {
             eff += it.current()->effort();
         }
@@ -262,7 +262,7 @@ bool Appointment::UsedEffort::load(QDomElement &element) {
                     kError()<<k_funcinfo<<"Load failed, illegal date: "<<e.attribute("date")<<endl;
                 }
             }
-        }   
+        }
     }
     return true;
 }
@@ -288,7 +288,7 @@ int Appointment::UsedEffort::compareItems(Q3PtrCollection::Item item1, Q3PtrColl
 }
 
 ////
-Appointment::Appointment() 
+Appointment::Appointment()
     : m_extraRepeats(), m_skipRepeats() {
     //kDebug()<<k_funcinfo<<"("<<this<<")"<<endl;
     m_resource=0;
@@ -299,8 +299,8 @@ Appointment::Appointment()
     m_intervals.setAutoDelete(true);
 }
 
-Appointment::Appointment(Schedule *resource, Schedule *node, DateTime start, DateTime end, double load) 
-    : m_extraRepeats(), 
+Appointment::Appointment(Schedule *resource, Schedule *node, DateTime start, DateTime end, double load)
+    : m_extraRepeats(),
       m_skipRepeats() {
     //kDebug()<<k_funcinfo<<"("<<this<<")"<<endl;
     m_node = node;
@@ -313,8 +313,8 @@ Appointment::Appointment(Schedule *resource, Schedule *node, DateTime start, Dat
     m_intervals.setAutoDelete(true);
 }
 
-Appointment::Appointment(Schedule *resource, Schedule *node, DateTime start, Duration duration, double load) 
-    : m_extraRepeats(), 
+Appointment::Appointment(Schedule *resource, Schedule *node, DateTime start, Duration duration, double load)
+    : m_extraRepeats(),
       m_skipRepeats() {
     //kDebug()<<k_funcinfo<<"("<<this<<")"<<endl;
     m_node = node;
@@ -323,7 +323,7 @@ Appointment::Appointment(Schedule *resource, Schedule *node, DateTime start, Dur
     m_repeatCount = 0;
 
     addInterval(start, duration, load);
-    
+
     m_intervals.setAutoDelete(true);
 }
 
@@ -426,7 +426,7 @@ bool Appointment::loadXML(QDomElement &element, Project &project, Schedule &sch)
         }
     }
     if (m_intervals.isEmpty()) {
-        return false; 
+        return false;
     }
     m_actualEffort.load(element);
     return true;
@@ -588,14 +588,14 @@ void Appointment::addActualEffort(QDate date, Duration effort, bool overtime) {
     m_actualEffort.inSort(date, effort, overtime);
 }
 
-bool Appointment::attach() { 
+bool Appointment::attach() {
     //kDebug()<<k_funcinfo<<"("<<this<<")"<<endl;
     if (m_resource && m_node) {
         m_resource->add(this);
         m_node->add(this);
         return true;
     }
-    kWarning()<<k_funcinfo<<"Failed: "<<(m_resource ? "" : "resource=0 ") 
+    kWarning()<<k_funcinfo<<"Failed: "<<(m_resource ? "" : "resource=0 ")
                                        <<(m_node ? "" : "node=0")<<endl;
     return false;
 }
@@ -628,7 +628,7 @@ Duration Appointment::effort(const DateTime &start, const Duration &duration) co
     }
     return d;
 }
-// Returns the effort upto time / from time 
+// Returns the effort upto time / from time
 Duration Appointment::effortFrom(const DateTime &time) const {
     Duration d;
     Q3PtrListIterator<AppointmentInterval> it = m_intervals;

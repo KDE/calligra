@@ -50,7 +50,9 @@
 #include <kaction.h>
 #include <kstdaction.h>
 #include <klocale.h>
+#include <ktoolbar.h>
 #include <kdebug.h>
+#include <ktoolbar.h>
 #include <k3listview.h>
 #include <kstdaccel.h>
 #include <kaccelgen.h>
@@ -113,7 +115,7 @@ View::View(Part* part, QWidget* parent, const char* /*name*/)
 {
     //kDebug()<<k_funcinfo<<endl;
     getProject().setCurrentSchedule(Schedule::Expected);
-    
+
     setInstance(Factory::global());
     if ( !part->isReadWrite() )
         setXMLFile("kplato_readonly.rc");
@@ -138,16 +140,16 @@ View::View(Part* part, QWidget* parent, const char* /*name*/)
     m_resourceview = new ResourceView( this, m_tab );
     m_updateResourceview = true;
     m_tab->addWidget(m_resourceview);
-    
+
     m_accountsview = new AccountsView( getProject(), this, m_tab );
     m_updateAccountsview = true;
     m_tab->addWidget(m_accountsview);
-    
+
     //m_reportview = new ReportView(this, m_tab);
     //m_tab->addWidget(m_reportview);
 
     connect(m_tab, SIGNAL(aboutToShow(QWidget *)), this, SLOT(slotAboutToShow(QWidget *)));
-    
+
     connect(m_pertview, SIGNAL(addRelation(Node*, Node*)), SLOT(slotAddRelation(Node*, Node*)));
     connect(m_pertview, SIGNAL(modifyRelation(Relation*)), SLOT(slotModifyRelation(Relation*)));
 
@@ -177,7 +179,7 @@ View::View(Part* part, QWidget* parent, const char* /*name*/)
 
     // ------ View
     actionViewGantt = new KAction(i18n("Gantt"), "gantt_chart", 0, this, SLOT(slotViewGantt()), actionCollection(), "view_gantt");
-    
+
     QString group = "EstimationType";
     actionViewExpected = new KRadioAction(i18n("Expected"), 0, 0, this, SLOT(slotViewExpected()), actionCollection(), "view_expected");
     actionViewExpected->setExclusiveGroup(group);
@@ -193,15 +195,15 @@ View::View(Part* part, QWidget* parent, const char* /*name*/)
     actionViewGanttFloat = new KToggleAction(i18n("Float"), 0, 0, this, SLOT(slotViewGanttFloat()), actionCollection(), "view_gantt_showFloat");
     actionViewGanttCriticalTasks = new KToggleAction(i18n("Critical Tasks"), 0, 0, this, SLOT(slotViewGanttCriticalTasks()), actionCollection(), "view_gantt_showCriticalTasks");
     actionViewGanttCriticalPath = new KToggleAction(i18n("Critical Path"), 0, 0, this, SLOT(slotViewGanttCriticalPath()), actionCollection(), "view_gantt_showCriticalPath");
-    
+
 //    actionViewGanttNotScheduled = new KToggleAction(i18n("Not Scheduled"), 0, 0, this, SLOT(slotViewGanttNotScheduled()), actionCollection(), "view_gantt_showNotScheduled");
-    
+
     actionViewTaskAppointments = new KToggleAction(i18n("Show allocations"), 0, 0, this, SLOT(slotViewTaskAppointments()), actionCollection(), "view_task_appointments");
 
     actionViewPert = new KAction(i18n("Network"), "pert_chart", 0, this, SLOT(slotViewPert()), actionCollection(), "view_pert");
-    
+
     actionViewResources = new KAction(i18n("Resources"), "resources", 0, this, SLOT(slotViewResources()), actionCollection(), "view_resources");
-    
+
     actionViewResourceAppointments = new KToggleAction(i18n("Show allocations"), 0, 0, this, SLOT(slotViewResourceAppointments()), actionCollection(), "view_resource_appointments");
 
     actionViewAccounts = new KAction(i18n("Accounts"), "accounts", 0, this, SLOT(slotViewAccounts()), actionCollection(), "view_accounts");
@@ -222,19 +224,19 @@ View::View(Part* part, QWidget* parent, const char* /*name*/)
     actionEditCalendar = new KAction(i18n("Edit Calendar..."), "edit", 0, this, SLOT(slotProjectCalendar()), actionCollection(), "project_calendar");
     actionEditAccounts = new KAction(i18n("Edit Accounts..."), "edit", 0, this, SLOT(slotProjectAccounts()), actionCollection(), "project_accounts");
     actionEditResources = new KAction(i18n("Edit Resources..."), "edit", 0, this, SLOT(slotProjectResources()), actionCollection(), "project_resources");
-    
-    actionCalculate = new KActionMenu(i18n("Calculate"), "project_calculate",  actionCollection(), "project_calculate");
+
+    actionCalculate = new KActionMenu(KIcon("project_calculate"), i18n("Calculate"), actionCollection());
     connect(actionCalculate, SIGNAL(activated()), SLOT(slotProjectCalculate()));
-    
+
     actionCalculateExpected = new KAction(i18n("Expected"), 0, 0, this, SLOT(slotProjectCalculateExpected()), actionCollection(), "project_calculate_expected");
     actionCalculate->insert(actionCalculateExpected);
-    
+
     actionCalculateOptimistic = new KAction(i18n("Optimistic"), 0, 0, this, SLOT(slotProjectCalculateOptimistic()), actionCollection(), "project_calculate_optimistic");
     actionCalculate->insert(actionCalculateOptimistic);
-    
+
     actionCalculatePessimistic = new KAction(i18n("Pessimistic"), 0, 0, this, SLOT(slotProjectCalculatePessimistic()), actionCollection(), "project_calculate_pessimistic");
     actionCalculate->insert(actionCalculatePessimistic);
-    
+
 /*    // ------ Reports
     actionFirstpage = KStdAction::firstPage(m_reportview,SLOT(slotPrevPage()),actionCollection(),"go_firstpage");
     connect(m_reportview, SIGNAL(setFirstPageActionEnabled(bool)), actionFirstpage, SLOT(setEnabled(bool)));
@@ -246,27 +248,27 @@ View::View(Part* part, QWidget* parent, const char* /*name*/)
     connect(m_reportview, SIGNAL(setLastPageActionEnabled(bool)), actionLastpage, SLOT(setEnabled(bool)));
     m_reportview->enableNavigationBtn();*/
     mainWindow()->toolBar("report")->hide();
-    
+
 //     new KAction(i18n("Design..."), "report_design", 0, this,
 //         SLOT(slotReportDesign()), actionCollection(), "report_design");
 
 
     // ------ Tools
-    actionDefineWBS = 
+    actionDefineWBS =
         new KAction(i18n("Define WBS Pattern..."), "tools_define_wbs", 0, this,
         SLOT(slotDefineWBS()), actionCollection(), "tools_generate_wbs");
-    actionGenerateWBS = 
+    actionGenerateWBS =
         new KAction(i18n("Generate WBS Code"), "tools_generate_wbs", 0, this,
         SLOT(slotGenerateWBS()), actionCollection(), "tools_define_wbs");
-    
+
     // ------ Export (testing)
     //actionExportGantt = new KAction(i18n("Export Ganttview"), "export_gantt", 0, this,
     //    SLOT(slotExportGantt()), actionCollection(), "export_gantt");
-    
+
     // ------ Settings
     actionConfigure = new KAction(i18n("Configure KPlato..."), "configure", 0, this,
         SLOT(slotConfigure()), actionCollection(), "configure");
-    
+
     // ------ Popup
     actionOpenNode = new KAction(i18n("Edit..."), "edit", 0, this,
         SLOT(slotOpenNode()), actionCollection(), "node_properties");
@@ -281,7 +283,7 @@ View::View(Part* part, QWidget* parent, const char* /*name*/)
     // ------------------- Actions with a key binding and no GUI item
     // Temporary, till we get a menu entry
     actNoInformation = new KAction("Toggle no information", Qt::CTRL+Qt::SHIFT+Qt::Key_T, this, SLOT(slotViewGanttNoInformation()), actionCollection(), "show_noinformation");
-    
+
 #ifndef NDEBUG
     //new KAction("Print Debug", CTRL+Qt::SHIFT+Qt::Key_P, this, SLOT( slotPrintDebug()), actionCollection(), "print_debug");
     new KAction("Print Debug", Qt::CTRL+Qt::SHIFT+Qt::Key_P, this, SLOT(slotPrintSelectedDebug()), actionCollection(), "print_debug");
@@ -304,7 +306,7 @@ View::View(Part* part, QWidget* parent, const char* /*name*/)
     actionViewExpected->setChecked(true); //TODO: context
     setScheduleActionsEnabled();
     slotViewExpected();
-    
+
     setTaskActionsEnabled(false);
 }
 
@@ -683,7 +685,7 @@ void View::slotDefineWBS() {
     //kDebug()<<k_funcinfo<<endl;
     WBSDefinitionDialog *dia = new WBSDefinitionDialog(getPart()->wbsDefinition());
     dia->exec();
-    
+
     delete dia;
 }
 
@@ -941,7 +943,7 @@ void View::slotAddRelation(Node *par, Node *child, int linkType) {
     //kDebug()<<k_funcinfo<<endl;
     if (linkType == Relation::FinishStart ||
         linkType == Relation::StartStart ||
-        linkType == Relation::FinishFinish) 
+        linkType == Relation::FinishFinish)
     {
         Relation *rel = new Relation(par, child,  static_cast<Relation::Type>(linkType));
         getPart()->addCommand(new AddRelationCmd(getPart(), rel, i18n("Add Relation")));
@@ -970,7 +972,7 @@ void View::slotModifyRelation(Relation *rel, int linkType) {
     //kDebug()<<k_funcinfo<<endl;
     if (linkType == Relation::FinishStart ||
         linkType == Relation::StartStart ||
-        linkType == Relation::FinishFinish) 
+        linkType == Relation::FinishFinish)
     {
         getPart()->addCommand(new ModifyRelationTypeCmd(getPart(), rel, static_cast<Relation::Type>(linkType)));
     } else {
@@ -1046,11 +1048,11 @@ void View::slotUpdate(bool calculate)
     //kDebug()<<k_funcinfo<<"calculate="<<calculate<<endl;
     if (calculate)
         projectCalculate();
-        
+
     m_updateGanttview = true;
     m_updateResourceview = true;
     m_updateAccountsview = true;
-    
+
     updateView(m_tab->visibleWidget());
 }
 
@@ -1124,7 +1126,7 @@ bool View::setContext(Context &context) {
     actionViewExpected->setChecked(context.actionViewExpected);
     actionViewOptimistic->setChecked(context.actionViewOptimistic);
     actionViewPessimistic->setChecked(context.actionViewPessimistic);
-    
+
     m_ganttview->setContext(context.ganttview, getProject());
     // hmmm, can't decide if these should be here or actions moved to ganttview
     actionViewGanttResources->setChecked(context.ganttview.showResources);
@@ -1139,7 +1141,7 @@ bool View::setContext(Context &context) {
     m_resourceview->setContext(context.resourceview);
     m_accountsview->setContext(context.accountsview);
 //    m_reportview->setContext(context.reportview);
-    
+
     if (context.currentView == "ganttview") {
         m_ganttview->setShowExpected(actionViewExpected->isChecked());
         m_ganttview->setShowOptimistic(actionViewOptimistic->isChecked());
@@ -1168,7 +1170,7 @@ void View::getContext(Context &context) const {
     context.actionViewExpected = actionViewExpected->isChecked();
     context.actionViewOptimistic = actionViewOptimistic->isChecked();
     context.actionViewPessimistic = actionViewPessimistic->isChecked();
-    
+
     if (m_tab->visibleWidget() == m_ganttview) {
         context.currentView = "ganttview";
     } else if (m_tab->visibleWidget() == m_pertview) {
@@ -1190,9 +1192,9 @@ void View::getContext(Context &context) const {
 void View::setBaselineMode(bool /*on*/) {
     //kDebug()<<k_funcinfo<<endl;
 /*    m_baselineMode = on;
-    
+
     m_ganttview->setReadWriteMode(!on);
-    
+
     actionCut->setEnabled(!on);
     actionCopy->setEnabled(!on);
     actionPaste->setEnabled(!on);
@@ -1221,7 +1223,7 @@ void View::setTaskActionsEnabled(QWidget *w, bool on) {
     if (w == m_ganttview) {
         n = m_ganttview->currentNode();
     }// else pert, etc when implemented
-     
+
     actionAddTask->setEnabled(on);
     actionAddMilestone->setEnabled(on);
     // only enabled when we have a task selected
@@ -1287,7 +1289,7 @@ void View::slotPrintCalendarDebug() {
 }
 void View::slotPrintTestDebug() {
     const QStringList &lst = getPart()->xmlLoader().log();
-    
+
     for ( QStringList::ConstIterator it = lst.constBegin(); it != lst.constEnd(); ++it ) {
         kDebug()<<*it<<endl;
     }
@@ -1335,44 +1337,44 @@ void View::slotPrintTestDebug() {
 //     }
 //     kDebug()<<"Added     date="<<day->date().toString()<<" "<<day->startOfDay().toString()<<" - "<<day->endOfDay()<<endl;
 //     kDebug()<<"Found     date="<<day->date().toString()<<" "<<day->startOfDay().toString()<<" - "<<day->endOfDay()<<endl;
-//     
+//
 //     CalendarDay *d = t->findDay(wdate);
 //     bool b = (day == d);
 //     kDebug()<<"1: Success="<<b<<"      Find same day"<<endl;
-//     
+//
 //     DateTime dt = t->firstAvailableAfter(after, after.addDays(10));
 //     b = !dt.isValid();
 //     kDebug()<<"2: Success="<<b<<"      firstAvailableAfter("<<after<<"): ="<<dt<<endl;
-//     
+//
 //     dt = t->firstAvailableBefore(before, before.addDays(-10));
 //     b = !dt.isValid();
 //     kDebug()<<"3: Success="<<b<<"       firstAvailableBefore("<<before.toString()<<"): ="<<dt<<endl;
-//     
+//
 //     dt = t->firstAvailableAfter(before, after);
 //     b = dt == wdt1;
 //     kDebug()<<"4: Success="<<b<<"      firstAvailableAfter("<<before<<"): ="<<dt<<endl;
-//     
+//
 //     dt = t->firstAvailableBefore(after, before);
 //     b = dt == wdt2;
 //     kDebug()<<"5: Success="<<b<<"      firstAvailableBefore("<<after<<"): ="<<dt<<endl;
-//     
+//
 //     b = t->hasInterval(before, after);
 //     kDebug()<<"6: Success="<<b<<"      hasInterval("<<before<<", "<<after<<")"<<endl;
-//     
+//
 //     b = !t->hasInterval(after, after.addDays(1));
 //     kDebug()<<"7: Success="<<b<<"      !hasInterval("<<after<<", "<<after.addDays(1)<<")"<<endl;
-//     
+//
 //     b = !t->hasInterval(before, before.addDays(-1));
 //     kDebug()<<"8: Success="<<b<<"      !hasInterval("<<before<<", "<<before.addDays(-1)<<")"<<endl;
-//     
+//
 //     Duration e1(0, 2, 0); // 2 hours
 //     Duration e2 = t->effort(before, after);
 //     b = e1==e2;
 //     kDebug()<<"9: Success="<<b<<"      effort"<<e1.toString()<<" = "<<e2.toString()<<endl;
-//     
+//
 //     delete t;
 //     }// end test 2
-//     
+//
 //     kDebug()<<endl;
 //     kDebug()<<"------------Test 3 Parent calendar-----------------"<<endl;
 //     {
@@ -1396,40 +1398,40 @@ void View::slotPrintTestDebug() {
 //     }
 //     kDebug()<<"Added     date="<<day->date().toString()<<" "<<day->startOfDay().toString()<<" - "<<day->endOfDay().toString()<<endl;
 //     kDebug()<<"Found     date="<<day->date().toString()<<" "<<day->startOfDay().toString()<<" - "<<day->endOfDay().toString()<<endl;
-//     
+//
 //     CalendarDay *d = p->findDay(wdate);
 //     bool b = (day == d);
 //     kDebug()<<"1: Success="<<b<<"      Find same day"<<endl;
-//     
+//
 //     DateTime dt = t->firstAvailableAfter(after, after.addDays(10));
 //     b = !dt.isValid();
 //     kDebug()<<"2: Success="<<b<<"      firstAvailableAfter("<<after.toString()<<"): ="<<!b<<endl;
-//     
+//
 //     dt = t->firstAvailableBefore(before, before.addDays(-10));
 //     b = !dt.isValid();
 //     kDebug()<<"3: Success="<<b<<"       firstAvailableBefore("<<before.toString()<<"): ="<<!b<<endl;
-//     
+//
 //     dt = t->firstAvailableAfter(before, after);
 //     b = dt == wdt1;
 //     kDebug()<<"4: Success="<<b<<"      firstAvailableAfter("<<before.toString()<<"): ="<<dt.toString()<<endl;
-//     
+//
 //     dt = t->firstAvailableBefore(after, before);
 //     b = dt == wdt2;
 //     kDebug()<<"5: Success="<<b<<"      firstAvailableBefore("<<after.toString()<<"): ="<<dt.toString()<<endl;
-//     
+//
 //     b = t->hasInterval(before, after);
 //     kDebug()<<"6: Success="<<b<<"      hasInterval("<<before.toString()<<", "<<after<<")"<<endl;
-//     
+//
 //     b = !t->hasInterval(after, after.addDays(1));
 //     kDebug()<<"7: Success="<<b<<"      !hasInterval("<<after.toString()<<", "<<after.addDays(1)<<")"<<endl;
-//     
+//
 //     b = !t->hasInterval(before, before.addDays(-1));
 //     kDebug()<<"8: Success="<<b<<"      !hasInterval("<<before.toString()<<", "<<before.addDays(-1)<<")"<<endl;
 //     Duration e1(0, 2, 0); // 2 hours
 //     Duration e2 = t->effort(before, after);
 //     b = e1==e2;
 //     kDebug()<<"9: Success="<<b<<"      effort "<<e1.toString()<<"=="<<e2.toString()<<endl;
-//     
+//
 //     delete t;
 //     delete p;
 //     }// end test 3
@@ -1444,14 +1446,14 @@ void View::slotPrintTestDebug() {
 //         kDebug()<<"Failed to get weekday"<<endl;
 //     }
 //     wd1->setState(Map::NonWorking);
-//     
+//
 //     CalendarDay *wd2 = p->weekday(2); // wednesday
 //     if (wd2 == 0) {
 //         kDebug()<<"Failed to get weekday"<<endl;
 //     }
 //     wd2->addInterval(QPair<QTime, QTime>(t1, t2));
 //     wd2->setState(Map::Working);
-//      
+//
 //     Calendar *t = new Calendar("Test 4");
 //     t->setParent(p);
 //     QDate wdate(2006,1,2); // monday jan 2
@@ -1469,47 +1471,47 @@ void View::slotPrintTestDebug() {
 //     }
 //     kDebug()<<"Added     date="<<day->date().toString()<<" "<<day->startOfDay().toString()<<" - "<<day->endOfDay().toString()<<endl;
 //     kDebug()<<"Found     date="<<day->date().toString()<<" "<<day->startOfDay().toString()<<" - "<<day->endOfDay().toString()<<endl;
-//     
+//
 //     CalendarDay *d = p->findDay(wdate);
 //     bool b = (day == d);
 //     kDebug()<<"1: Success="<<b<<"      Find same day"<<endl;
-//     
+//
 //     DateTime dt = t->firstAvailableAfter(after, after.addDays(10));
 //     b = (dt.isValid() && dt == DateTime(QDate(2006,1,11), t1));
 //     kDebug()<<"2: Success="<<b<<"      firstAvailableAfter("<<after<<"): ="<<dt<<endl;
-//     
+//
 //     dt = t->firstAvailableBefore(before, before.addDays(-10));
 //     b = (dt.isValid() && dt == DateTime(QDate(2005, 12, 28), t2));
 //     kDebug()<<"3: Success="<<b<<"       firstAvailableBefore("<<before.toString()<<"): ="<<dt<<endl;
-//     
+//
 //     dt = t->firstAvailableAfter(before, after);
 //     b = dt == wdt1; // We find the day jan 2
 //     kDebug()<<"4: Success="<<b<<"      firstAvailableAfter("<<before.toString()<<"): ="<<dt.toString()<<endl;
-//     
+//
 //     dt = t->firstAvailableBefore(after, before);
 //     b = dt == wdt2; // We find the weekday (wednesday)
 //     kDebug()<<"5: Success="<<b<<"      firstAvailableBefore("<<after.toString()<<"): ="<<dt.toString()<<endl;
-//     
+//
 //     b = t->hasInterval(before, after);
 //     kDebug()<<"6: Success="<<b<<"      hasInterval("<<before.toString()<<", "<<after<<")"<<endl;
-//     
+//
 //     b = !t->hasInterval(after, after.addDays(1));
 //     kDebug()<<"7: Success="<<b<<"      !hasInterval("<<after.toString()<<", "<<after.addDays(1)<<")"<<endl;
-//     
+//
 //     b = !t->hasInterval(before, before.addDays(-1));
 //     kDebug()<<"8: Success="<<b<<"      !hasInterval("<<before.toString()<<", "<<before.addDays(-1)<<")"<<endl;
 //     Duration e1(0, 4, 0); // 2 hours
 //     Duration e2 = t->effort(before, after);
 //     b = e1==e2;
 //     kDebug()<<"9: Success="<<b<<"      effort "<<e1.toString()<<"="<<e2.toString()<<endl;
-//     
+//
 //     QPair<DateTime, DateTime> r = t->firstInterval(before, after);
 //     b = r.first == wdt1; // We find the monday jan 2
 //     kDebug()<<"10: Success="<<b<<"      firstInterval("<<before<<"): ="<<r.first<<", "<<r.second<<endl;
 //     r = t->firstInterval(r.second, after);
 //     b = r.first == DateTime(QDate(2006, 1, 4),t1); // We find the wednesday jan 4
 //     kDebug()<<"11: Success="<<b<<"      firstInterval("<<r.second<<"): ="<<r.first<<", "<<r.second<<endl;
-//     
+//
 //     delete t;
 //     delete p;
 //     }// end test 4

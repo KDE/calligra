@@ -138,7 +138,7 @@ bool Schedule::loadXML(const QDomElement &sch) {
     m_name = sch.attribute("name");
     setType(sch.attribute("type"));
     m_id = sch.attribute("id").toLong();
-    
+
     return true;
 }
 
@@ -152,7 +152,7 @@ void Schedule::saveCommonXML(QDomElement &element) const {
     //kDebug()<<k_funcinfo<<m_name<<" save schedule"<<endl;
     element.setAttribute("name", m_name);
     element.setAttribute("type", typeToString());
-    element.setAttribute("id", m_id);
+    element.setAttribute("id", qlonglong(m_id));
 }
 
 void Schedule::saveAppointments(QDomElement &element) const {
@@ -349,7 +349,7 @@ NodeSchedule::NodeSchedule(Node *node, QString name, Schedule::Type type, long i
 NodeSchedule::NodeSchedule(Schedule *parent, Node *node)
     : Schedule(parent),
       m_node(node) {
-    
+
     //kDebug()<<k_funcinfo<<"node name: "<<node->name()<<endl;
     if (parent) {
         m_name = parent->name();
@@ -407,7 +407,7 @@ bool NodeSchedule::loadXML(const QDomElement &sch) {
     if (s != "")
         workEndTime = DateTime::fromString(s);
     duration = Duration::fromString(sch.attribute("duration"));
-    
+
     inCriticalPath = sch.attribute("in-critical-path", "0").toInt();
     resourceError = sch.attribute("resource-error", "0").toInt();
     resourceOverbooked = sch.attribute("resource-overbooked", "0").toInt();
@@ -423,7 +423,7 @@ void NodeSchedule::saveXML(QDomElement &element) const {
     QDomElement sch = element.ownerDocument().createElement("schedule");
     element.appendChild(sch);
     saveCommonXML(sch);
-    
+
     if (earliestStart.isValid())
         sch.setAttribute("earlieststart",earliestStart.toString(Qt::ISODate));
     if (latestFinish.isValid())
@@ -436,7 +436,7 @@ void NodeSchedule::saveXML(QDomElement &element) const {
         sch.setAttribute("start-work", workStartTime.toString(Qt::ISODate));
     if (workEndTime.isValid())
         sch.setAttribute("end-work", workEndTime.toString(Qt::ISODate));
-    
+
     sch.setAttribute("duration",duration.toString());
 
     sch.setAttribute("in-critical-path",inCriticalPath);
@@ -522,8 +522,8 @@ bool ResourceSchedule::isOverbooked(const DateTime &start, const DateTime &end) 
     Appointment a = appointmentIntervals();
     Q3PtrListIterator<AppointmentInterval> it = a.intervals();
     for (; it.current(); ++it) {
-        if ((!end.isValid() || it.current()->startTime() < end) && 
-            (!start.isValid() || it.current()->endTime() > start)) 
+        if ((!end.isValid() || it.current()->startTime() < end) &&
+            (!start.isValid() || it.current()->endTime() > start))
         {
             if (it.current()->load() > m_resource->units()) {
                 //kDebug()<<k_funcinfo<<m_name<<" overbooked"<<endl;
@@ -534,7 +534,7 @@ bool ResourceSchedule::isOverbooked(const DateTime &start, const DateTime &end) 
             break;
     }
     //kDebug()<<k_funcinfo<<m_name<<" not overbooked"<<endl;
-    return false; 
+    return false;
 }
 
 Appointment ResourceSchedule::appointmentIntervals() const {
@@ -571,21 +571,21 @@ bool MainSchedule::loadXML(const QDomElement &sch, Project &project) {
     kDebug()<<k_funcinfo<<endl;
     QString s;
     Schedule::loadXML(sch);
-    
+
     s = sch.attribute("start");
     if (s != "")
         startTime = DateTime::fromString(s);
     s = sch.attribute("end");
     if (s != "")
         endTime = DateTime::fromString(s);
-    
+
     QDomNodeList al = sch.childNodes();
     kDebug()<<k_funcinfo<<"No of appointments: "<<al.count()<<endl;
     for (unsigned int i=0; i<al.count(); ++i) {
         if (al.item(i).isElement()) {
             QDomElement app = al.item(i).toElement();
             if (app.tagName() == "appointment") {
-                // Load the appointments. 
+                // Load the appointments.
                 // Resources and tasks must allready loaded
                 Appointment *child = new Appointment();
                 if (!child->loadXML(app, project, *this)) {
@@ -601,7 +601,7 @@ bool MainSchedule::loadXML(const QDomElement &sch, Project &project) {
 
 void MainSchedule::saveXML(QDomElement &element) const {
     saveCommonXML(element);
-    
+
     element.setAttribute("start",startTime.toString(Qt::ISODate));
     element.setAttribute("end",endTime.toString(Qt::ISODate));
 }
@@ -657,7 +657,7 @@ void MainSchedule::printDebug(QString indent) {
     indent += "!  ";
     if (node()) kDebug()<<indent<<"Node: "<<node()->name()<<endl;
     else kDebug()<<indent<<"No parent node!"<<endl;
-    
+
     kDebug()<<indent<<"Not scheduled="<<notScheduled<<endl;
     kDebug()<<indent<<"Start time: "<<startTime.toString()<<endl;
     kDebug()<<indent<<"End time: " <<endTime.toString()<<endl;

@@ -38,14 +38,14 @@ namespace KPlato
 TaskAppointmentsView::ResourceItem::ResourceItem(Resource *r, Q3ListView *parent, bool highlight)
     : DoubleListViewBase::MasterListItem(parent, r->name(), highlight),
       resource(r) {
-      
+
       setFormat(0, 'f', 1);
     //kDebug()<<k_funcinfo<<endl;
 }
 TaskAppointmentsView::ResourceItem::ResourceItem(Resource *r, Q3ListViewItem *p, bool highlight)
     : DoubleListViewBase::MasterListItem(p, r->name(), highlight),
       resource(r) {
-      
+
       setFormat(0, 'f', 1);
     //kDebug()<<k_funcinfo<<endl;
 }
@@ -53,7 +53,7 @@ TaskAppointmentsView::ResourceItem::ResourceItem(Resource *r, Q3ListViewItem *p,
 TaskAppointmentsView::ResourceItem::ResourceItem(QString text, Q3ListViewItem *parent, bool highlight)
     : DoubleListViewBase::MasterListItem(parent, text, highlight),
       resource(0) {
-      
+
       setFormat(0, 'f', 1);
     //kDebug()<<k_funcinfo<<endl;
 }
@@ -62,10 +62,10 @@ TaskAppointmentsView::ResourceItem::ResourceItem(QString text, Q3ListViewItem *p
 TaskAppointmentsView::TaskAppointmentsView(QWidget *parent)
     : DoubleListViewBase(parent),
       m_task(0) {
-    
+
     setNameHeader(i18n("Resource"));
-    
-    
+
+
     Q3ValueList<int> list = sizes();
     int tot = list[0] + list[1];
     list[0] = qMin(35, tot);
@@ -88,21 +88,16 @@ void TaskAppointmentsView::draw() {
     clearLists();
     if (!m_task)
         return;
-    
+
     Q3PtrList<Appointment> lst = m_task->appointments();
     Q3PtrListIterator<Appointment> it(lst);
     for (; it.current(); ++it) {
         Resource *r = it.current()->resource()->resource();
         TaskAppointmentsView::ResourceItem *item = new TaskAppointmentsView::ResourceItem(r, masterListView());
-        
+
         item->effortMap = it.current()->plannedPrDay(m_task->startTime().date(), m_task->endTime().date());
     }
     slotUpdate();
-}
-
-void TaskAppointmentsView::drawContents(QPainter* painter)
-{
-  this->DoubleListViewBase::drawContents(painter);
 }
 
 void TaskAppointmentsView::slotUpdate() {
@@ -113,7 +108,7 @@ void TaskAppointmentsView::slotUpdate() {
     createSlaveItems();
     KLocale *locale = KGlobal::locale();
     const KCalendarSystem *cal = locale->calendar();
-    
+
     // Add columns for selected period/periods
     QDate start = m_task->startTime().date();
     QDate end = m_task->endTime().date();
@@ -148,7 +143,7 @@ void TaskAppointmentsView::print(KPrinter &/*printer*/) {
 
 // bool TaskAppointmentsView::setContext(Context::TaskAppointmentsView &context) {
 //     //kDebug()<<k_funcinfo<<endl;
-//     
+//
 //     QValueList<int> list;
 //     list << context.accountsviewsize << context.periodviewsize;
 //     m_dlv->setSizes(list);
@@ -157,10 +152,10 @@ void TaskAppointmentsView::print(KPrinter &/*printer*/) {
 //         m_date = QDate::currentDate();
 //     m_period = context.period;
 //     m_cumulative = context.cumulative;
-//     
+//
 //     return true;
 // }
-// 
+//
 // void TaskAppointmentsView::getContext(Context::TaskAppointmentsView &context) const {
 //     //kDebug()<<k_funcinfo<<endl;
 //     context.accountsviewsize = m_dlv->sizes()[0];

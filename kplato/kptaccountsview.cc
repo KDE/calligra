@@ -56,17 +56,6 @@
 namespace KPlato
 {
 
-class Label : public QLabel
-{
-public:
-    Label(QWidget *w)
-    : QLabel(w)
-    {}
-    void paintContents(QPainter *p) {
-        drawContents(p);
-    }
-};
-
 AccountsView::AccountItem::AccountItem(Account *a, Q3ListView *parent, bool highlight)
     : DoubleListViewBase::MasterListItem(parent, a->name(), highlight),
       account(a) {
@@ -101,16 +90,16 @@ AccountsView::AccountsView(Project &project, View *view, QWidget *parent)
       m_mainview(view),
       m_project(project),
       m_accounts(project.accounts()) {
-    
+
     m_date = QDate::currentDate();
     m_period = 0;
     m_periodTexts<<i18n("Day")<<i18n("Week")<<i18n("Month");
     m_cumulative = false;
 
     Q3VBoxLayout *lay1 = new Q3VBoxLayout(this, 0, KDialog::spacingHint());
-    
+
     Q3HBoxLayout *lay2 = new Q3HBoxLayout(0, 0, KDialog::spacingHint());
-    m_label = new Label(this);
+    m_label = new QLabel(this);
     m_label->setFrameShape(QLabel::StyledPanel);
     m_label->setFrameShadow(QLabel::Sunken);
     m_label->setAlignment(int(Qt::TextWordWrap | Qt::AlignVCenter));
@@ -122,14 +111,14 @@ AccountsView::AccountsView(Project &project, View *view, QWidget *parent)
 
     m_dlv = new DoubleListViewBase(this, true);
     m_dlv->setNameHeader(i18n("Account"));
-    
+
     init();
-    
+
     lay1->addWidget(m_dlv);
-    
+
     connect(this, SIGNAL(update()), SLOT(slotUpdate()));
     connect(m_changeBtn, SIGNAL(clicked()), SLOT(slotConfigure()));
-    
+
     Q3ValueList<int> list = m_dlv->sizes();
     int tot = list[0] + list[1];
     list[0] = qMin(35, tot);
@@ -173,17 +162,17 @@ void AccountsView::initAccSubItems(Account *acc, AccountsView::AccountItem *pare
 /*        AccountsView::AccountItem *a = new AccountsView::AccountItem(i18n("Subaccounts"), acc, parent);
         DoubleListViewBase::SlaveListItem *i = new DoubleListViewBase::SlaveListItem(a, parent->period);
         a->period = i;*/
-    
+
         initAccList(acc->accountList(), parent);
     }
 //     AccountsView::AccountItem *a = new AccountsView::AccountItem(i18n("Variance"), acc, parent, true);
 //     DoubleListViewBase::SlaveListItem *i = new DoubleListViewBase::SlaveListItem(a, parent->period, true);
 //     a->period = i;
-// 
+//
 //     a = new AccountsView::AccountItem(i18n("Actual"), acc, parent);
 //     i = new DoubleListViewBase::SlaveListItem(a, parent->period);
 //     a->period = i;
-// 
+//
 //     a = new AccountsView::AccountItem(i18n("Planned"), acc, parent);
 //     i = new DoubleListViewBase::SlaveListItem(a, parent->period);
 //     a->period = i;
@@ -214,7 +203,7 @@ void AccountsView::slotUpdate() {
     createPeriods();
     KLocale *locale = KGlobal::locale();
     const KCalendarSystem *cal = locale->calendar();
-    
+
     QString t;
     if (m_cumulative) {
         t += " <b>" + i18n("Cumulative") + "</b>  ";
@@ -222,7 +211,7 @@ void AccountsView::slotUpdate() {
     t += i18n("Cut-off date:%1").arg("<b>" + locale->formatDate(m_date, true) + "</b>");
     t += " " + i18n("Periodicity:%1").arg("<b>" + periodText(m_period) + "</b>");
     m_label->setText(t);
-    
+
     // Add columns for selected period/periods
     QDate start = m_project.startTime().date();
     QDate end = m_date;
@@ -263,7 +252,7 @@ void AccountsView::slotUpdate() {
             //kDebug()<<k_funcinfo<<c<<": "<<dt<<"-"<<pend<<" : "<<end<<endl;
             int y;
             int w = cal->weekNumber(dt, &y);
-            QString t = i18n("<week>-<year>", "%1-%2").arg(w).arg(y);
+            QString t = i18nc("<week>-<year>", "%1-%2", w, y);
             m_dlv->addSlaveColumn(t);
             dt = pend.addDays(1);
             pend = cal->addDays(pend, 7);
@@ -304,13 +293,13 @@ void AccountsView::slotUpdate() {
     if (m_period == 2) { //Monthly
         //TODO make this user controlled
         QDate dt = start;
-        QDate pend; 
+        QDate pend;
         cal->setYMD(pend, dt.year(), dt.month(), dt.daysInMonth());
         for (; pend <= end; ++c) {
             //kDebug()<<k_funcinfo<<c<<": "<<dt<<"-"<<pend<<" : "<<end<<endl;
             QString m = cal->monthName(dt, true) + QString(" %1").arg( dt.year());
             m_dlv->addSlaveColumn(m);
-        
+
             dt = pend.addDays(1); // 1. next month
             pend = cal->addDays(pend, dt.daysInMonth());
             if ((pend.year() == end.year()) && (pend.month() == end.month())) {
@@ -360,7 +349,7 @@ void AccountsView::print(KPrinter &printer) {
     p.begin(&printer);
     p.setViewport(left, top, m.width()-left-right, m.height()-top-bottom);
     p.setClipRect(left, top, m.width()-left-right, m.height()-top-bottom);
-    QRect preg = p.clipRegion(QPainter::CoordPainter).boundingRect();
+    QRect preg = p.clipRegion().boundingRect();
     //kDebug()<<"p="<<preg<<endl;
     //p.drawRect(preg.x(), preg.y(), preg.width()-1, preg.height()-1);
     double scale = qMin((double)preg.width()/(double)size().width(), (double)preg.height()/(double)(size().height()));
@@ -368,7 +357,8 @@ void AccountsView::print(KPrinter &printer) {
     if (scale < 1.0) {
         p.scale(scale, scale);
     }
-    m_label->paintContents(&p);
+    QPixmap labelPixmap = QPixmap::grabWidget( m_label );
+    p.drawPixmap( m_label->pos(), labelPixmap );
     p.translate(0, m_label->size().height());
     m_dlv->paintContents(&p);
     p.end();
@@ -411,7 +401,7 @@ void AccountsView::getContext(Context::Accountsview &context) const {
     context.period = m_period;
     context.cumulative = m_cumulative;
     //kDebug()<<k_funcinfo<<"sizes="<<sizes()[0]<<","<<sizes()[1]<<endl;
-    
+
     getContextClosedItems(context, m_dlv->masterListView()->firstChild());
 }
 
@@ -441,12 +431,9 @@ void AccountsView::slotConfigure() {
 }
 
 QString AccountsView::periodText(int offset) {
-    QString s;
-    QStringList::const_iterator it = m_periodTexts.at(offset);
-    if (it != m_periodTexts.constEnd()) {
-        s = (*it);
-    }
-    return s;
+    if ( offset < m_periodTexts.count() )
+        return m_periodTexts[offset];
+    return QString();
 }
 
 }  //KPlato namespace

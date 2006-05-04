@@ -48,17 +48,17 @@ AddRelationDialog::AddRelationDialog(Relation *rel, QWidget *p, QString caption,
     m_panel = new RelationPanel(this);
     setMainWidget(m_panel);
     m_panel->setActiveWindow();
-    
+
     m_panel->fromName->setText(rel->parent()->name());
     m_panel->toName->setText(rel->child()->name());
     m_panel->relationType->setButton(rel->type());
-    
+
     m_panel->lag->setVisibleFields(DurationWidget::Days|DurationWidget::Hours|DurationWidget::Minutes);
-    m_panel->lag->setFieldUnit(0, i18n("days", "d"));
-    m_panel->lag->setFieldUnit(1, i18n("hours", "h"));
-    m_panel->lag->setFieldUnit(2, i18n("minutes", "m"));
+    m_panel->lag->setFieldUnit(0, i18nc("days", "d"));
+    m_panel->lag->setFieldUnit(1, i18nc("hours", "h"));
+    m_panel->lag->setFieldUnit(2, i18nc("minutes", "m"));
     m_panel->lag->setValue(rel->lag());
-    
+
     m_panel->relationType->setFocus();
     enableButtonOK(true);
     connect(m_panel->relationType, SIGNAL(clicked(int)), SLOT(typeClicked(int)));

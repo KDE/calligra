@@ -35,6 +35,7 @@ class DateTime : public QDateTime {
 public:
     DateTime();
     DateTime(const QDateTime &dt);
+    DateTime(const QDate &date);
     DateTime(const QDate &date, const QTime &time);
 
     /**

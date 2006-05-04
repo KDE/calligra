@@ -158,8 +158,7 @@ void DateTable::paintWeekday(QPainter *painter, int col) {
     }
     painter->drawText(0, 0, w, h-1, Qt::AlignCenter, KGlobal::locale()->calendar()->weekDayName(day, true), -1, &rect);
     painter->setPen(colorLine);
-    painter->moveTo(0, h-1);
-    painter->lineTo(w-1, h-1);
+    painter->drawLine(0, h-1, w-1, h-1);
 
     if(rect.width()>maxCell.width()) maxCell.setWidth(rect.width());
     if(rect.height()>maxCell.height()) maxCell.setHeight(rect.height());
@@ -182,11 +181,10 @@ void DateTable::paintWeekNumber(QPainter *painter, int row) {
     painter->setPen(KGlobalSettings::baseColor());
     painter->drawRect(0, 0, w, h);
     painter->setPen(KGlobalSettings::textColor());
-    
+
     painter->drawText(0, 0, w, h-1, Qt::AlignCenter, QString("%1").arg(m_weeks[row].first), -1, &rect);
     painter->setPen(colorLine);
-    painter->moveTo(w-1, 0);
-    painter->lineTo(w-1, h-1);
+    painter->drawLine(w-1, 0, w-1, h-1);
 
     if(rect.width()>maxCell.width()) maxCell.setWidth(rect.width());
     if(rect.height()>maxCell.height()) maxCell.setHeight(rect.height());
@@ -234,10 +232,8 @@ void DateTable::paintDay(QPainter *painter, int row, int col) {
         //kDebug()<<k_funcinfo<<"Marked weekday: row,dayCol=("<<row<<","<<dayCol<<")=Working"<<endl;
         pen.setColor(colorBackgroundWorkday);
         painter->setPen(pen);
-        painter->moveTo(0, 0);
-        painter->lineTo(0, h-1);
-        painter->moveTo(w-1, 0);
-        painter->lineTo(w-1, h-1);
+        painter->drawLine(0, 0, 0, h-1);
+        painter->drawLine(w-1, 0, w-1, h-1);
     }
     // then paint square if current date
     if (d  == QDate::currentDate()) {
@@ -261,9 +257,8 @@ void DateTable::paintCell(QPainter *painter, int row, int col) {
         int h=cellHeight();
         painter->setPen(colorLine);
         painter->setBrush(KGlobalSettings::baseColor());
-        painter->moveTo(w-1, 0);
-        painter->lineTo(w-1, h-1);
-        painter->lineTo(0, h-1);
+        painter->drawLine(w-1, 0, w-1, h-1);
+        painter->drawLine(w-1, h-1, 0, h-1);
         painter->restore();
         return;
     }
@@ -711,7 +706,7 @@ DateInternalWeekSelector::DateInternalWeekSelector
   font=KGlobalSettings::generalFont();
   font.setPointSize(fontsize);
   setFont(font);
-  setFrameStyle(Q3Frame::NoFrame);
+  setFrame(false);
   val->setRange(1, 53);
   setValidator(val);
   connect(this, SIGNAL(returnPressed()), SLOT(weekEnteredSlot()));

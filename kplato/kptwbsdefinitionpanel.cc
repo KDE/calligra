@@ -59,9 +59,9 @@ WBSDefinitionPanel::WBSDefinitionPanel(WBSDefinition &def, QWidget *p, const cha
     for (it = lev.begin(); it != lev.end(); ++it) {
         levelsTable->verticalHeader()->setLabel(i, QString("%1").arg(it.key()));
         Q3ComboTableItem *item = new Q3ComboTableItem(levelsTable, codeList, true);
-        item->setCurrentItem(it.data().code);
+        item->setCurrentItem(it.value().code);
         levelsTable->setItem(i, 0, item);
-        levelsTable->setText(i, 1, it.data().separator);
+        levelsTable->setText(i, 1, it.value().separator);
         i++;
     }
     levelsTable->setColumnStretchable(0, true);

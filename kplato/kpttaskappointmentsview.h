@@ -62,31 +62,30 @@ public:
 
     void draw();
     void draw(Task *task);
-    virtual void drawContents(QPainter* painter);
     void print(KPrinter &printer);
     void clear();
-    
+
     //virtual bool setContext(Context::TaskAppointmentsView &context);
     //virtual void getContext(Context::TaskAppointmentsView &context) const;
 
     virtual void createSlaveItems();
-    
+
 protected slots:
     void slotUpdate();
-    
+
 private:
     class ResourceItem : public DoubleListViewBase::MasterListItem {
     public:
         ResourceItem(Resource *r, Q3ListView *parent, bool highlight=false);
         ResourceItem(Resource *r, Q3ListViewItem *parent, bool highlight=false);
         ResourceItem(QString text, Q3ListViewItem *parent, bool highlight=false);
-        
+
         Resource *resource;
         EffortCostMap effortMap;
     };
-    
+
 private:
-    
+
     int m_defaultFontSize;
     Task *m_task;
 };

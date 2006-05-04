@@ -51,8 +51,8 @@ namespace KPlato
 
 class ResListView : public K3ListView {
 public:
-    ResListView(QWidget * parent = 0, const char* name=0)
-    : K3ListView(parent, name)
+    ResListView(QWidget * parent = 0)
+    : K3ListView(parent)
     {}
 
     int headerHeight() const {
@@ -160,23 +160,23 @@ protected:
         for (; child; child = child->nextSibling()) {
             ypos = buildDrawables(drawables, level, ypos, child, cy, cy+ch);
         }
-        
+
         p->setFont( font() );
-    
+
         Q3PtrListIterator<ResListView::DrawableItem> it(drawables);
-    
+
         QRect r;
         int fx = -1, x, fc = 0, lc = 0;
         int tx = -1;
         ResListView::DrawableItem * current;
-    
+
         while ( (current = it.current()) != 0 ) {
             ++it;
             int ih = current->i->height();
             int ith = current->i->totalHeight();
             int c;
             int cs;
-    
+
             // need to paint current?
             if ( ih > 0 && current->y < cy+ch && current->y+ih > cy ) {
                 //kDebug()<<k_funcinfo<<"Paint: "<<current->i->text(0)<<" y="<<current->y<<endl;
@@ -201,20 +201,20 @@ protected:
                     }
                     lc = c;
                 }
-    
+
                 x = fx;
                 c = fc;
                 // draw to last interesting column
-    
+
                 const QColorGroup &cg = ( palette().inactive() );
-    
+
                 while ( c < lc && !drawables.isEmpty() ) {
                     int i = header()->mapToLogical( c );
                     cs = header()->cellSize( c );
                     r.setRect( x, current->y-cy, cs, ih );
                     if ( i == 0 )
                         r.setLeft( r.left() + current->l * treeStepSize() );
-    
+
                     p->save();
                     // No need to paint if the cell isn't technically visible
                     if ( !( r.width() == 0 || r.height() == 0 ) ) {
@@ -223,7 +223,7 @@ protected:
                         // map to Left currently. This should change once we
                         // can really reverse the listview.
                         int align = columnAlignment( ac );
-                        if ( align == AlignAuto ) align = AlignLeft;
+                        if ( align == Qt::AlignAuto ) align = Qt::AlignLeft;
                         bool sel = current->i->isSelected();
                         if (sel)
                             current->i->setSelected(false);
@@ -235,37 +235,37 @@ protected:
                     x += cs;
                     c++;
                 }
-    
+
             }
-    
+
             const int cell = header()->mapToActual( 0 );
-    
+
             if ( tx < 0 )
                 tx = header()->cellPos( cell );
-    
+
             // do any children of current need to be painted?
 /* FIXME: painting branches doesn't work for some reason...
-              if ( ih != ith && 
+              if ( ih != ith &&
                  rootIsDecorated() &&
                  current->y + ith > cy &&
                  current->y + ih < cy + ch &&
                  tx + current->l * treeStepSize() < cx + cw &&
                  tx + (current->l+1) * treeStepSize() > cx ) {
                 // compute the clip rectangle the safe way
-    
+
                 int rtop = current->y + ih;
                 int rbottom = current->y + ith;
                 int rleft = tx + current->l*treeStepSize();
                 int rright = rleft + treeStepSize();
-    
+
                 int crtop = qMax( rtop, cy );
                 int crbottom = qMin( rbottom, cy+ch );
                 int crleft = qMax( rleft, cx );
                 int crright = qMin( rright, cx+cw );
-    
+
                 r.setRect( crleft, crtop,
                         crright-crleft, crbottom-crtop );
-    
+
                 if ( r.isValid() ) {
                     p->save();
                     p->translate( rleft, crtop );
@@ -292,8 +292,8 @@ public:
     virtual void paintCell(QPainter *p, const QColorGroup &cg, int column, int width, int align) {
         QColorGroup g = cg;
         if (m_columns[column] == 1) {
-            g.setColor(QColorGroup::Text, QColor(red));
-            g.setColor(QColorGroup::HighlightedText, QColor(red));
+            g.setColor(QColorGroup::Text, QColor(Qt::red));
+            g.setColor(QColorGroup::HighlightedText, QColor(Qt::red));
         }
 
         K3ListViewItem::paintCell(p, g, column, width, align);
@@ -332,7 +332,7 @@ public:
         }
         return 0;
     }
-        
+
     virtual void paintCell ( QPainter * p, const QColorGroup & cg, int column, int width, int align ) {
         //kDebug()<<k_funcinfo<<"c="<<column<<" prio="<<(columnPrio.contains(column)?columnPrio[column]:0)<<endl;
         QColorGroup g = cg;
@@ -341,14 +341,14 @@ public:
         }
         K3ListViewItem::paintCell(p, g, column, width, align);
     }
-    
+
     Task *node;
 private:
     void init() {
-        prioColors.insert(1, QColor(gray));
-        prioColors.insert(2, QColor(green));
-        prioColors.insert(3, QColor(yellow));
-        prioColors.insert(4, QColor(red));
+        prioColors.insert(1, QColor(Qt::gray));
+        prioColors.insert(2, QColor(Qt::green));
+        prioColors.insert(3, QColor(Qt::yellow));
+        prioColors.insert(4, QColor(Qt::red));
     }
     QMap<int, QColor> prioColors;
     QMap<int, int> columnPrio;
@@ -574,7 +574,7 @@ void ResourceView::print(KPrinter &printer) {
     p.begin(&printer);
     p.setViewport(left, top, m.width()-left-right, m.height()-top-bottom);
     p.setClipRect(left, top, m.width()-left-right, m.height()-top-bottom);
-    QRect preg = p.clipRegion(QPainter::CoordPainter).boundingRect();
+    QRect preg = p.clipRegion().boundingRect();
     //kDebug()<<"p="<<preg<<endl;
     //p.drawRect(preg.x(), preg.y(), preg.width()-1, preg.height()-1);
     int ch = resList->contentsHeight();
@@ -593,7 +593,7 @@ void ResourceView::print(KPrinter &printer) {
         }
         resList->paintToPrinter(&p, 0, lst[i], cw, ph);
     }
-    
+
     p.end();
 }
 

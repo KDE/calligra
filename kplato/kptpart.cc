@@ -39,7 +39,7 @@
 #include <kstandarddirs.h>
 #include <kcommand.h>
 #include <KoTemplateChooseDia.h>
-#include <KoCommandHistory.h>
+#include <kcommand.h>
 #include <KoGlobal.h>
 
 #define CURRENT_SYNTAX_VERSION "0.3"
@@ -56,7 +56,7 @@ Part::Part(QWidget *parentWidget, const char *widgetName,
       m_context(0), m_xmlLoader()
 {
     m_update = m_calculate = false;
-    m_commandHistory = new KoCommandHistory(actionCollection());
+    m_commandHistory = new KCommandHistory(actionCollection());
 
     setInstance(Factory::global());
     setTemplateType("kplato_template");
@@ -157,11 +157,11 @@ KoView *Part::createViewInstance(QWidget *parent, const char *name) {
     else if (m_embeddedContext && m_embeddedContextInitialized)
         m_view->setContext( *m_embeddedContext );
     else {
-        // Activate menu actions. Assumes ganttview, we don't get any 
+        // Activate menu actions. Assumes ganttview, we don't get any
         // 'aboutToShow' signal. Need to redo action control.
         m_view->setTaskActionsEnabled(true);
     }
-    //m_view->setBaselineMode(getProject().isBaselined()); FIXME: Removed for this release  
+    //m_view->setBaselineMode(getProject().isBaselined()); FIXME: Removed for this release
     return m_view;
 }
 
@@ -171,7 +171,7 @@ void Part::editProject() {
     QWidget* parent = m_parentWidget;
     if (m_view)
       parent = m_view;
-      
+
     if (m_projectDialog == 0)
 	// Make the dialog
 	m_projectDialog = new ProjectDialog(*m_project, parent);
@@ -312,13 +312,13 @@ void Part::paintContent(QPainter &painter, const QRect &rect,
             int ganttsize = m_embeddedContext->ganttview.ganttviewsize;
             int tasksize = m_embeddedContext->ganttview.taskviewsize;
             bool showtaskname = m_embeddedContext->ganttview.showTaskName;
-            
+
 //            m_embeddedContext->ganttview.ganttviewsize += m_embeddedContext->ganttview.taskviewsize;
 //            m_embeddedContext->ganttview.taskviewsize = 0;  //TODO this doesn't have any effect?! (bug?)
             m_embeddedContext->ganttview.showTaskName = true;  //since task view is not shown(?), show name in the gantt itself
-            
+
             m_embeddedGanttView->setContext( m_embeddedContext->ganttview, *m_project );
-            
+
             m_embeddedContext->ganttview.ganttviewsize = ganttsize;
             m_embeddedContext->ganttview.taskviewsize = tasksize;
             m_embeddedContext->ganttview.showTaskName = showtaskname;
@@ -327,7 +327,7 @@ void Part::paintContent(QPainter &painter, const QRect &rect,
         {
             kWarning() << "Don't have any context to set!" << endl;
         }
-        painter.setClipRect(rect, QPainter::CoordPainter);
+        painter.setClipRect(rect);
         // We don't support zoom yet, so use the painters scaling
         double d_zoom = 1.0;
         setZoomAndResolution(100, KoGlobal::dpiX(), KoGlobal::dpiY());
@@ -335,7 +335,7 @@ void Part::paintContent(QPainter &painter, const QRect &rect,
             d_zoom *= ( zoomX / m_zoomedResolutionX );
             painter.scale(d_zoom, d_zoom);
         }
-        
+
         m_embeddedGanttView->clear();
         m_embeddedGanttView->draw(*m_project);
         m_embeddedGanttView->drawOnPainter(&painter,rect);
@@ -366,7 +366,7 @@ void Part::slotCommandExecuted() {
     kDebug() << "------- KPlato, is embedded: " << isEmbedded() << endl;
     if (m_view == NULL)
       return;
-      
+
     if (m_calculate)
         m_view->slotUpdate(false/*config().behavior().calculationMode == Behavior::OnChange*/);
     else if (m_update)

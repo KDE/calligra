@@ -46,7 +46,6 @@ class KPrinter;
 namespace KPlato
 {
 
-class Label;
 class Account;
 class View;
 class Project;
@@ -71,19 +70,19 @@ public:
     View *mainView() { return m_mainview; }
     void draw();
     void print(KPrinter &printer);
-    
+
     virtual bool setContext(Context::Accountsview &context);
     virtual void getContext(Context::Accountsview &context) const;
 
 signals:
     void update();
-    
+
 public slots:
     void slotConfigure();
 
 protected slots:
     void slotUpdate();
-    
+
 protected:
     void getContextClosedItems(Context::Accountsview &context, Q3ListViewItem *item) const;
     void setContextClosedItems(Context::Accountsview &context);
@@ -94,9 +93,9 @@ private:
         AccountItem(Account *a, Q3ListView *parent, bool highlight=false);
         AccountItem(Account *a, Q3ListViewItem *parent, bool highlight=false);
         AccountItem(QString text, Account *a, Q3ListViewItem *parent, bool _highlight=false);
-        
+
         void add(int col, const QDate &date, const EffortCost &ec);
-        
+
         Account *account;
         EffortCostMap costMap;
     };
@@ -108,24 +107,24 @@ private:
     void createPeriods();
     void clearPeriods();
     QString periodText(int offset);
-    
+
 private:
     View *m_mainview;
     Project &m_project;
     Accounts &m_accounts;
-    
+
     int m_defaultFontSize;
 
     QDate m_date;
     int m_period;
     bool m_cumulative;
-    
+
     DoubleListViewBase *m_dlv;
 
     QStringList m_periodTexts;
     QPushButton *m_changeBtn;
-    Label *m_label;
-    
+    QLabel *m_label;
+
 };
 
 }  //KPlato namespace

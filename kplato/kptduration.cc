@@ -156,7 +156,7 @@ QString Duration::toString(Format format) const {
             hours = ms / (1000 * 60 * 60);
             ms -= (qint64)hours * (1000 * 60 * 60);
             minutes = ms / (1000 * 60);
-            result = i18n("<hours>h:<minutes>m", "%1h:%2m").arg(hours).arg(minutes);
+            result = i18nc("<hours>h:<minutes>m", "%1h:%2m", hours, minutes);
             break;
         case Format_i18nDay:
             result = KGlobal::locale()->formatNumber(toDouble(Unit_d), 2);
@@ -174,7 +174,7 @@ QString Duration::toString(Format format) const {
             if (days == 0) {
                 result = toString(Format_i18nHour);
             } else {
-                result = i18n("<days>d <hours>h:<minutes>m", "%1d %2h:%3m").arg(days).arg(hours).arg(minutes);
+                result = i18nc("<days>d <hours>h:<minutes>m", "%1d %2h:%3m", days, hours, minutes);
             }
             break;
         case Format_i18nHourFraction:

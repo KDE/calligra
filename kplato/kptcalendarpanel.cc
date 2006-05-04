@@ -29,7 +29,7 @@
 #include <kglobal.h>
 #include <kapplication.h>
 #include <klocale.h>
-#include <kcalendarsystem.h> 
+#include <kcalendarsystem.h>
 #include <kiconloader.h>
 #include <q3frame.h>
 #include <qpainter.h>
@@ -179,7 +179,7 @@ CalendarPanel::resizeEvent(QResizeEvent*)
     for(count=0; count<NoOfButtons; ++count) {
         if(buttons[count]==selectMonth) {
             QSize metricBound = style().sizeFromContents(QStyle::CT_ToolButton, selectMonth, maxMonthRect);
-            sizes[count].setWidth(qMax(metricBound.width(), maxMonthRect.width()+2*QApplication::style().pixelMetric(QStyle::PM_ButtonMargin)));
+            sizes[count].setWidth(qMax(metricBound.width(), maxMonthRect.width()+2*QApplication::style()->pixelMetric(QStyle::PM_ButtonMargin)));
         }
     }
     // ----- center buttons
@@ -437,7 +437,7 @@ CalendarPanel::sizeHint() const
 
         if(buttons[count]==selectMonth) {
 	        QSize metricBound = style().sizeFromContents(QStyle::CT_ToolButton, selectMonth, maxMonthRect);
-            cx+=qMax(metricBound.width(), maxMonthRect.width()+2*QApplication::style().pixelMetric(QStyle::PM_ButtonMargin));
+            cx+=qMax(metricBound.width(), maxMonthRect.width()+2*QApplication::style()->pixelMetric(QStyle::PM_ButtonMargin));
     	} else {
 	        cx+=sizes[count].width();
 	    }
@@ -500,7 +500,7 @@ CalendarPanel::setCloseButton( bool enable )
         delete d->closeButton;
         d->closeButton = 0L;
     }
-    
+
     updateGeometry();
 }
 

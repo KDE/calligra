@@ -54,9 +54,9 @@ MainProjectPanel::MainProjectPanel(Project &p, QWidget *parent, const char *name
     leaderfield->setText(project.leader());
     descriptionfield->setText(project.description());
     wbs->setText(project.wbs());
-    
+
     //baseline->setChecked(project.isBaselined()); FIXME: Removed for this release
-    
+
     QDateTime st = project.constraintStartTime();
     QDateTime et = project.constraintEndTime();
     QString s = i18n("Scheduling");
@@ -84,7 +84,7 @@ MainProjectPanel::MainProjectPanel(Project &p, QWidget *parent, const char *name
     endDate->setDate(et.date());
     endTime->setTime(et.time());
     enableDateTime();
-    //slotBaseline(); 
+    //slotBaseline();
     namefield->setFocus();
 }
 
@@ -117,24 +117,24 @@ KCommand *MainProjectPanel::buildCommand(Part *part) {
         if (!m) m = new KMacroCommand(c);
         m->addCommand(new NodeModifyDescriptionCmd(part, project, descriptionfield->text()));
     }
-/*  FIXME: Removed for this release  
+/*  FIXME: Removed for this release
     if (baseline->isChecked() != project.isBaselined()) {
         if (!m) m = new KMacroCommand(c);
         m->addCommand(new ProjectModifyBaselineCmd(part, project, baseline->isChecked()));
     } */
-    if (bStartDate->state() && project.constraint() != Node::MustStartOn) {
+    if (bStartDate->isChecked() && project.constraint() != Node::MustStartOn) {
         if (!m) m = new KMacroCommand(c);
         m->addCommand(new ProjectModifyConstraintCmd(part, project, Node::MustStartOn));
     }
-    if (bEndDate->state() && project.constraint() != Node::MustFinishOn) {
+    if (bEndDate->isChecked() && project.constraint() != Node::MustFinishOn) {
         if (!m) m = new KMacroCommand(c);
         m->addCommand(new ProjectModifyConstraintCmd(part, project, Node::MustFinishOn));
     }
-    if (bStartDate->state() && startDateTime() != project.constraintStartTime()) {
+    if (bStartDate->isChecked() && startDateTime() != project.constraintStartTime()) {
         if (!m) m = new KMacroCommand(c);
         m->addCommand(new ProjectModifyStartTimeCmd(part, project, startDateTime()));
     }
-    if (bEndDate->state() && endDateTime() != project.constraintEndTime()) {
+    if (bEndDate->isChecked() && endDateTime() != project.constraintEndTime()) {
         if (!m) m = new KMacroCommand(c);
         m->addCommand(new ProjectModifyEndTimeCmd(part, project, endDateTime()));
     }
@@ -155,11 +155,11 @@ MainProjectPanelImpl::MainProjectPanelImpl(QWidget *parent, const char *name)
     connect( endTime, SIGNAL( valueChanged(const QTime&) ), this, SLOT( slotCheckAllFieldsFilled() ) );
     connect( startDate, SIGNAL( changed(QDate) ), this, SLOT( slotCheckAllFieldsFilled() ) );
     connect( startTime, SIGNAL( valueChanged(const QTime&) ), this, SLOT( slotCheckAllFieldsFilled() ) );
-    //connect( baseline, SIGNAL( toggled(bool) ), this, SLOT( slotCheckAllFieldsFilled() ) ); FIXME: Removed for this release  
+    //connect( baseline, SIGNAL( toggled(bool) ), this, SLOT( slotCheckAllFieldsFilled() ) ); FIXME: Removed for this release
     connect( namefield, SIGNAL( textChanged(const QString&) ), this, SLOT( slotCheckAllFieldsFilled() ) );
     connect( idfield, SIGNAL( textChanged(const QString&) ), this, SLOT( slotCheckAllFieldsFilled() ) );
     connect( leaderfield, SIGNAL( textChanged(const QString&) ), this, SLOT( slotCheckAllFieldsFilled() ) );
-    //connect( baseline, SIGNAL( toggled(bool) ), this, SLOT( slotBaseline() ) ); FIXME: Removed for this release  
+    //connect( baseline, SIGNAL( toggled(bool) ), this, SLOT( slotBaseline() ) ); FIXME: Removed for this release
     connect( chooseLeader, SIGNAL( clicked() ), this, SLOT( slotChooseLeader() ) );
 }
 
@@ -173,7 +173,7 @@ void MainProjectPanelImpl::slotCheckAllFieldsFilled()
 void MainProjectPanelImpl::slotChooseLeader()
 {
     KABC::Addressee a = KABC::AddresseeDialog::getAddressee(this);
-    if (!a.isEmpty()) 
+    if (!a.isEmpty())
     {
         leaderfield->setText(a.fullEmail());
     }
@@ -227,7 +227,7 @@ QDateTime MainProjectPanelImpl::endDateTime()
 void MainProjectPanelImpl::slotBaseline()
 {
     bool b = false;
-    //b = baseline->isChecked(); FIXME: Removed for this release  
+    //b = baseline->isChecked(); FIXME: Removed for this release
     namefield->setReadOnly(b);
     idfield->setReadOnly(b);
     leaderfield->setReadOnly(b);

@@ -56,8 +56,8 @@
 #include <qlabel.h>
 #include <qspinbox.h>
 #include <q3valuelist.h>
-#include <qpainter.h> 
-#include <q3paintdevicemetrics.h> 
+#include <qpainter.h>
+#include <q3paintdevicemetrics.h>
 
 #include <klocale.h>
 #include <kglobal.h>
@@ -87,9 +87,9 @@ GanttView::GanttView(QWidget *parent, bool readWrite, const char* name)
 {
     kDebug() << " ---------------- KPlato: Creating GanttView ----------------" << endl;
     setOrientation(Qt::Vertical);
-    
+
     m_gantt = new MyKDGanttView(this, "Gantt view");
-    
+
     m_showExpected = true;
     m_showOptimistic = false;
     m_showPessimistic = false;
@@ -102,14 +102,14 @@ GanttView::GanttView(QWidget *parent, bool readWrite, const char* name)
     m_showCriticalPath = false; //FIXME
     m_showNoInformation = false; //FIXME
     m_showAppointments = false;
-    
+
     m_gantt->setHeaderVisible(true);
-    m_gantt->addColumn(i18n("Work Breakdown Structure", "WBS"));
+    m_gantt->addColumn(i18nc("Work Breakdown Structure", "WBS"));
     // HACK: need changes to kdgantt
     KDGanttViewTaskItem *item = new KDGanttViewTaskItem(m_gantt);
     Q3ListView *lv = item->listView();
     lv->header()->moveSection(1, 0);
-    
+
     m_gantt->setScale(KDGanttView::Day);
     m_gantt->setShowLegendButton(false);
     m_gantt->setShowHeaderPopupMenu();
@@ -120,9 +120,9 @@ GanttView::GanttView(QWidget *parent, bool readWrite, const char* name)
     list[1] = 0;
     setSizes(list);
     m_taskView->hide();
-    
+
     setReadWriteMode(readWrite);
-    
+
 	connect(m_gantt, SIGNAL(lvContextMenuRequested ( KDGanttViewItem *, const QPoint &, int )),
 	             this, SLOT (popupMenuRequested(KDGanttViewItem *, const QPoint &, int)));
 
@@ -132,7 +132,7 @@ GanttView::GanttView(QWidget *parent, bool readWrite, const char* name)
 	connect(lv, SIGNAL(doubleClicked(Q3ListViewItem*, const QPoint&, int)), this, SLOT (slotItemDoubleClicked(Q3ListViewItem*)));
 
     m_taskLinks.setAutoDelete(true);
-    
+
     if (m_gantt->firstChild()) {
         m_gantt->firstChild()->listView()->setCurrentItem(m_gantt->firstChild());
         m_gantt->firstChild()->listView()->setFocus();
@@ -172,7 +172,7 @@ void GanttView::draw(Project &project)
     clear();
     drawChildren(NULL, project);
     drawRelations();
-    
+
     if (m_firstTime) {
         m_gantt->centerTimelineAfterShow(project.startTime().addDays(-1));
         m_firstTime = false;
@@ -200,10 +200,10 @@ void GanttView::drawChanges(Project &project)
     resetDrawn(m_gantt->firstChild());
     updateChildren(&project); // don't draw project
     removeNotDrawn(m_gantt->firstChild());
-    
+
     m_taskLinks.clear();
     drawRelations();
-    
+
     m_gantt->setUpdateEnabled(true);
     if (m_currentItem == 0 && m_gantt->firstChild()) {
         m_gantt->firstChild()->listView()->setCurrentItem(m_gantt->firstChild());
@@ -215,7 +215,7 @@ void GanttView::drawChanges(Project &project)
 void GanttView::drawOnPainter(QPainter* painter, const QRect rect)
 {
     // Assume clipping is allready set
-    
+
     // Fill out the rect by adding ticks to right side of the timeline
     QSize s = m_gantt->drawContents(0, false, true);
     while (s.width() < rect.width()) {
@@ -225,7 +225,7 @@ void GanttView::drawOnPainter(QPainter* painter, const QRect rect)
     }
     kDebug()<<k_funcinfo<<rect<<" : "<<s<<endl;
     painter->save();
-    
+
 //    QValueList<int> sizes = m_taskView->sizes();
 //    if (sizes.count() >= 2)
 //    {
@@ -244,7 +244,7 @@ void GanttView::drawOnPainter(QPainter* painter, const QRect rect)
 //    int listviewwidth = m_gantt->listViewWidth();
 //    m_gantt->setShowListView(false);
 //    m_gantt->setListViewWidth(0);
-  
+
 //    m_gantt->setGanttMaximumWidth(rect.x());
     m_gantt->drawContents(painter,false,true);
 //    m_gantt->setShowListView(showlistview);
@@ -423,9 +423,9 @@ void GanttView::updateNode(Node *node)
     item = correctType(item, node);
     item = correctParent(item, node);
     correctPosition(item, node);
-        
+
     modifyNode(node);
-    
+
     if (node->type() == Node::Type_Summarytask)
         updateChildren(node);
 }
@@ -500,7 +500,7 @@ void GanttView::modifySummaryTask(KDGanttViewItem *item, Task *task)
         item->setText(task->name());
     } else {
         item->setText(QString());
-    }    
+    }
     QString w = i18n("Name: %1").arg(task->name());
     if (!task->notScheduled()) {
         w += "\n" + i18n("Start: %1").arg(locale->formatDateTime(task->startTime()));
@@ -565,6 +565,10 @@ void GanttView::modifyTask(KDGanttViewItem *item, Task *task)
         }
     }
     item->setText(text);
+#ifdef __GNUC__
+#warning what happened to KDGanttViewItem::setProgress and setFloatStart/EndTime?
+#endif
+#if 0
     if (m_showProgress) {
         item->setProgress(task->progress().percentFinished);
     } else {
@@ -581,6 +585,7 @@ void GanttView::modifyTask(KDGanttViewItem *item, Task *task)
         item->setFloatStartTime(QDateTime());
         item->setFloatEndTime(QDateTime());
     }
+#endif
     QString w = i18n("Name: %1").arg(task->name());
     if (!task->notScheduled()) {
         w += "\n"; w += i18n("Start: %1").arg(locale->formatDateTime(task->startTime()));
@@ -637,7 +642,7 @@ void GanttView::modifyTask(KDGanttViewItem *item, Task *task)
     } else if (m_showCriticalPath) {
         item->setHighlight(task->inCriticalPath());
     }
-    
+
     item->setTooltipText(w);
     setDrawn(item, true);
 }
@@ -662,7 +667,11 @@ void GanttView::modifyMilestone(KDGanttViewItem *item, Task *task)
         item->setText(task->name());
     } else {
         item->setText(QString());
-    }    
+    }
+#ifdef __GNUC__
+#warning what happened to KDGanttViewItem::setFloatStart/EndTime?
+#endif
+#if 0
     if (m_showPositiveFloat) {
         DateTime t = task->startTime() + task->positiveFloat();
         //kDebug()<<k_funcinfo<<task->name()<<" float: "<<t.toString()<<endl;
@@ -675,12 +684,13 @@ void GanttView::modifyMilestone(KDGanttViewItem *item, Task *task)
         item->setFloatStartTime(QDateTime());
         item->setFloatEndTime(QDateTime());
     }
+#endif
     //TODO: Show progress
-    
+
     QString w = i18n("Name: %1").arg(task->name());
     if (!task->notScheduled()) {
         w += "\n" + i18n("Time: %1").arg(locale->formatDateTime(task->startTime()));
-        
+
         if (task->positiveFloat() > Duration::zeroDuration) {
             w += "\n" + i18n("Float: %1").arg(task->positiveFloat().toString(Duration::Format_i18nDayTime));
         }
@@ -716,7 +726,7 @@ void GanttView::modifyMilestone(KDGanttViewItem *item, Task *task)
     } else if (m_showCriticalPath) {
         item->setHighlight(task->inCriticalPath());
     }
-    
+
     item->setTooltipText(w);
     setDrawn(item, true);
 }
@@ -760,7 +770,7 @@ KDGanttViewItem *GanttView::addProject(KDGanttViewItem *parentItem, Node *node, 
 
 KDGanttViewItem *GanttView::addSubProject(KDGanttViewItem *parentItem, Node *node, KDGanttViewItem *after)
 {
-    //kDebug()<<k_funcinfo<<endl;    
+    //kDebug()<<k_funcinfo<<endl;
     return addProject(parentItem, node, after);
 }
 
@@ -985,7 +995,7 @@ void GanttView::popupMenuRequested(KDGanttViewItem * item, const QPoint & pos, i
             //kDebug()<<k_funcinfo<<"id="<<id<<endl;
 //         }
         return;
-    } 
+    }
     if (t && t->type() == Node::Type_Summarytask) {
         emit requestPopupMenu("summarytask_popup",pos);
 //         QPopupMenu *menu = m_mainview->popupMenu("summarytask_popup");
@@ -1008,7 +1018,7 @@ void GanttView::slotItemDoubleClicked(Q3ListViewItem* item) {
     emit itemDoubleClicked();
 }
 
-//TODO: 1) make it koffice compliant, 
+//TODO: 1) make it koffice compliant,
 //      2) allow printing on multiple pages
 void GanttView::print(KPrinter &prt) {
     //kDebug()<<k_funcinfo<<endl;
@@ -1016,7 +1026,7 @@ void GanttView::print(KPrinter &prt) {
     KDGanttViewItem *selItem = m_gantt->selectedItem();
     if (selItem)
         selItem->setSelected(false);
-    
+
     //Comment from KWord
     //   We don't get valid metrics from the printer - and we want a better resolution
     //   anyway (it's the PS driver that takes care of the printer resolution).
@@ -1031,12 +1041,12 @@ void GanttView::print(KPrinter &prt) {
     // here we want to print: ListView and TimeLine (default)
     // for this purpose, we call drawContents() with a 0 pointer as painter
     QSize size = m_gantt->drawContents(0);
-    
+
     QPainter p;
     p.begin( &prt );
     p.setViewport(left, top, metrics.width()-left-right, metrics.height()-top-bottom);
     p.setClipRect(left, top, metrics.width()-left-right, metrics.height()-top-bottom);
-    
+
     // Make a simple header
     p.drawRect(0,0,metrics.width(),metrics.height());
     QString text;
@@ -1055,7 +1065,7 @@ void GanttView::print(KPrinter &prt) {
       //kDebug()<<"Project r="<<re.left()<<","<<re.top()<<" "<<re.width()<<"x"<<re.height()<<": "<<endl;
       hei = qMax(hei, re.height());
     }
-    
+
     hei++;
     p.drawLine(0,hei,metrics.width(),hei);
     hei += 3;
@@ -1077,7 +1087,7 @@ void GanttView::print(KPrinter &prt) {
     // for instance a
     // p.drawText(0, 0, "printend");
     // would be painted directly below the paintout of drawContents()
-    
+
     p.end();
     if (selItem)
         selItem->setSelected(true);
@@ -1112,23 +1122,23 @@ void GanttView::slotLinkItems(KDGanttViewItem* from, KDGanttViewItem* to, int li
         emit modifyRelation(rel, linkTypeToRelation(linkType));
     else
         emit addRelation(par, child, linkTypeToRelation(linkType));
-    
+
     return;
 }
 
 int GanttView::linkTypeToRelation(int linkType) {
     switch (linkType) {
-        case KDGanttViewTaskLink::FinishStart: 
+        case KDGanttViewTaskLink::FinishStart:
             return Relation::FinishStart;
             break;
-        case KDGanttViewTaskLink::StartStart: 
+        case KDGanttViewTaskLink::StartStart:
             return Relation::StartStart;
             break;
-        case KDGanttViewTaskLink::FinishFinish: 
+        case KDGanttViewTaskLink::FinishFinish:
             return Relation::FinishFinish;
             break;
         case KDGanttViewTaskLink::StartFinish:
-        default: 
+        default:
             return -1;
             break;
     }
@@ -1145,7 +1155,7 @@ void GanttView::slotModifyLink(KDGanttViewTaskLink* link) {
 
 bool GanttView::setContext(Context::Ganttview &context, Project& /*project*/) {
     //kDebug()<<k_funcinfo<<endl;
-    
+
     Q3ValueList<int> list = sizes();
     list[0] = context.ganttviewsize;
     list[1] = context.taskviewsize;
@@ -1153,7 +1163,7 @@ bool GanttView::setContext(Context::Ganttview &context, Project& /*project*/) {
 
     //TODO this does not work yet!
 //     currentItemChanged(findItem(project.findNode(context.currentNode)));
-    
+
     m_showResources = context.showResources ;
     m_showTaskName = context.showTaskName;
     m_showTaskLinks = context.showTaskLinks;
@@ -1162,7 +1172,7 @@ bool GanttView::setContext(Context::Ganttview &context, Project& /*project*/) {
     m_showCriticalTasks = context.showCriticalTasks;
     m_showCriticalPath = context.showCriticalPath;
     m_showNoInformation = context.showNoInformation;
-    
+
     //TODO this does not work yet!
 //     getContextClosedNodes(context, m_gantt->firstChild());
 //     for (QStringList::ConstIterator it = context.closedNodes.begin(); it != context.closedNodes.end(); ++it) {
@@ -1209,11 +1219,16 @@ void GanttView::setReadWriteMode(bool on) {
     m_readWrite = on;
     disconnect(m_gantt, SIGNAL(linkItems(KDGanttViewItem*, KDGanttViewItem*, int)), this, SLOT(slotLinkItems(KDGanttViewItem*, KDGanttViewItem*, int)));
     disconnect(m_gantt, SIGNAL(taskLinkDoubleClicked(KDGanttViewTaskLink*)), this, SLOT(slotModifyLink(KDGanttViewTaskLink*)));
+#ifdef __GNUC__
+#warning setLinkItemsEnabled missing
+#endif
+#if 0
     m_gantt->setLinkItemsEnabled(on);
+#endif
 
     if (on) {
         connect(m_gantt, SIGNAL(linkItems(KDGanttViewItem*, KDGanttViewItem*, int)), SLOT(slotLinkItems(KDGanttViewItem*, KDGanttViewItem*, int)));
-        
+
         connect(m_gantt, SIGNAL(taskLinkDoubleClicked(KDGanttViewTaskLink*)), SLOT(slotModifyLink(KDGanttViewTaskLink*)));
     }
     setRenameEnabled(m_gantt->firstChild(), on);

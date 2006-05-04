@@ -333,7 +333,7 @@ void PertRelationItem::draw()
 	top -= 3;
 	bottom += 3;
 
-	setPen(Qt::black);
+	setPen(QPen(Qt::black));
 	setZ(45);
 
 /*#ifndef NDEBUG
@@ -706,7 +706,10 @@ void GanttViewSummaryItem::insertRelations(GanttView *view)
         KDGanttViewItem *child = find(m_view->firstChild(), it.current()->child());
         if (child)
         {
-            KDGanttViewTaskLink *link = new KDGanttViewTaskLink(this, child, kdLinkType(it.current()->type()));
+#ifdef __GNUC__
+#warning KDGanttViewTaskLink::LinkType is declared but not used anymore in KDGanttViewTaskLink...
+#endif
+            KDGanttViewTaskLink *link = new KDGanttViewTaskLink(this, child /*, kdLinkType(it.current()->type())*/);
             //TODO i18n
             QString t = i18n("From: %1").arg(this->listViewText(0));
             t += "\n" + i18n("To: %1").arg(child->listViewText(0));
@@ -787,7 +790,10 @@ void GanttViewTaskItem::insertRelations(GanttView *view)
         KDGanttViewItem *child = find(m_view->firstChild(), it.current()->child());
         if (child)
         {
-            KDGanttViewTaskLink *link = new KDGanttViewTaskLink(this, child, kdLinkType(it.current()->type()));
+#ifdef __GNUC__
+#warning KDGanttViewTaskLink::LinkType is declared but not used anymore in KDGanttViewTaskLink...
+#endif
+            KDGanttViewTaskLink *link = new KDGanttViewTaskLink(this, child/*, kdLinkType(it.current()->type())*/);
             //TODO i18n
             QString t = i18n("From: %1").arg(this->listViewText(0));
             t += "\n" + i18n("To: %1").arg(child->listViewText(0));
@@ -870,7 +876,7 @@ void GanttViewEventItem::insertRelations(GanttView *view)
         if (child)
         {
             KDGanttViewTaskLink *link = new KDGanttViewTaskLink(this, child, kdLinkType(it.current()->type()));
-            
+
             QString t = i18n("From: %1").arg(this->listViewText(0));
             t += "\n" + i18n("To: %1").arg(child->listViewText(0));
             if (it.current()->lag() > Duration::zeroDuration) {

@@ -62,17 +62,17 @@ public:
     int state(QString date) {
         DateMapType::iterator it = find(date);
         if (it == end()) return 0;
-        else return it.data();
+        else return it.value();
     }
     int state(QDate date) { return state(date.toString(Qt::ISODate)); }
 
-    bool operator==(const DateMap &m) const { 
-        return keys() == m.keys() && values() == m.values(); 
+    bool operator==(const DateMap &m) const {
+        return keys() == m.keys() && values() == m.values();
     }
-    bool operator!=(const DateMap &m) const { 
-        return keys() != m.keys() || values() != m.values(); 
+    bool operator!=(const DateMap &m) const {
+        return keys() != m.keys() || values() != m.values();
     }
-    
+
     // boolean use
     void toggle(QString date, int state=Map::NonWorking) {
         //kDebug()<<k_funcinfo<<date<<"="<<state<<endl;
@@ -88,7 +88,9 @@ public:
         clear();
         if (!s) insert(date, state);
     }
-    void toggleClear(QDate date, int state=Map::NonWorking) { toggleClear(date.toString(Qt::ISODate)); }
+    void toggleClear(QDate date, int state=Map::NonWorking) {
+        toggleClear(date.toString(Qt::ISODate), state);
+    }
 };
 
 typedef QMap<int, int> IntMapType;
@@ -107,18 +109,23 @@ public:
     virtual int state(int key) {
         IntMapType::iterator it = IntMapType::find(key);
         if (it == IntMapType::end()) return 0;
-        else return it.data();
+        else return it.value();
     }
 
-    bool operator==(const IntMap &m) const { 
-        return keys() == m.keys() && values() == m.values(); 
+    bool operator==(const IntMap &m) const {
+        return keys() == m.keys() && values() == m.values();
     }
-    bool operator!=(const IntMap &m) const { 
-        return keys() != m.keys() || values() != m.values(); 
+    bool operator!=(const IntMap &m) const {
+        return keys() != m.keys() || values() != m.values();
     }
-    
+
     // boolean use
-    void toggle(int key, int state=Map::NonWorking) { IntMapType::contains(key) ? remove(key) : insert(key, state); }
+    void toggle(int key, int state=Map::NonWorking) {
+        if ( IntMapType::contains(key) )
+            remove(key);
+        else
+            insert(key, state);
+    }
     void toggleClear(int key, int state=Map::NonWorking) {
         bool s =contains(key);
         clear();
