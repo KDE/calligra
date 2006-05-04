@@ -178,8 +178,9 @@ CalendarPanel::resizeEvent(QResizeEvent*)
     // ----- calculate size of the month button:
     for(count=0; count<NoOfButtons; ++count) {
         if(buttons[count]==selectMonth) {
-            QSize metricBound = style().sizeFromContents(QStyle::CT_ToolButton, selectMonth, maxMonthRect);
-            sizes[count].setWidth(qMax(metricBound.width(), maxMonthRect.width()+2*QApplication::style()->pixelMetric(QStyle::PM_ButtonMargin)));
+            //QSize metricBound = style()->sizeFromContents(QStyle::CT_ToolButton, selectMonth, maxMonthRect);
+            //sizes[count].setWidth(qMax(metricBound.width(), maxMonthRect.width()+2*QApplication::style()->pixelMetric(QStyle::PM_ButtonMargin)));
+            sizes[count].setWidth( selectMonth->sizeHint().width() );
         }
     }
     // ----- center buttons
@@ -436,8 +437,10 @@ CalendarPanel::sizeHint() const
             sizes[count] = QSize(0,0);
 
         if(buttons[count]==selectMonth) {
-	        QSize metricBound = style().sizeFromContents(QStyle::CT_ToolButton, selectMonth, maxMonthRect);
-            cx+=qMax(metricBound.width(), maxMonthRect.width()+2*QApplication::style()->pixelMetric(QStyle::PM_ButtonMargin));
+            // what's this doing differently from sizeHint?
+            //QSize metricBound = style()->sizeFromContents(QStyle::CT_ToolButton, selectMonth, maxMonthRect);
+            //cx+=qMax(metricBound.width(), maxMonthRect.width()+2*QApplication::style()->pixelMetric(QStyle::PM_ButtonMargin));
+            cx += qMax( selectMonth->sizeHint().width(), maxMonthRect.width()+2*QApplication::style()->pixelMetric(QStyle::PM_ButtonMargin) );
     	} else {
 	        cx+=sizes[count].width();
 	    }

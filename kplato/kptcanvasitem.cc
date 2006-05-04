@@ -875,7 +875,10 @@ void GanttViewEventItem::insertRelations(GanttView *view)
         KDGanttViewItem *child = find(m_view->firstChild(), it.current()->child());
         if (child)
         {
-            KDGanttViewTaskLink *link = new KDGanttViewTaskLink(this, child, kdLinkType(it.current()->type()));
+#ifdef __GNUC__
+#warning KDGanttViewTaskLink::LinkType is declared but not used anymore in KDGanttViewTaskLink...
+#endif
+            KDGanttViewTaskLink *link = new KDGanttViewTaskLink(this, child/*, kdLinkType(it.current()->type())*/);
 
             QString t = i18n("From: %1",this->listViewText(0));
             t += "\n" + i18n("To: %1",child->listViewText(0));

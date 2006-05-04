@@ -70,6 +70,7 @@ set(libkplatopart_SRCS
     kptwbsdefinitiondialog.cc 
     kptwbsdefinitionpanel.cc 
     kptwbsdefinition.cc
+    KPtViewIface.cc
 )
 
 kde4_add_dcop_skels(libkplatopart_SRCS KPtViewIface.h )
@@ -107,7 +108,7 @@ kde4_add_plugin(kplatopart WITH_PREFIX ${kplatopart_PART_SRCS})
 
 kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kplatopart )
 
-target_link_libraries(kplatopart  ${KDE4_KDECORE_LIBS}   )
+target_link_libraries(kplatopart kofficeui ${KDE4_KDEUI_LIBS} ${QT_QTXML_LIBRARY}  )
 
 install_targets(${PLUGIN_INSTALL_DIR} kplatopart )
 

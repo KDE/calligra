@@ -45,7 +45,7 @@ bool Context::load(QDomElement &element) {
     QDomNodeList list = element.childNodes();
     for (unsigned int i=0; i<list.count(); ++i) {
         if (list.item(i).isElement()) {
-            QDomElement e = list.item(i).toElement();    
+            QDomElement e = list.item(i).toElement();
             if (e.tagName() == "gantt-view") {
                 ganttview.ganttviewsize = e.attribute("ganttview-size").toInt();
                 ganttview.taskviewsize = e.attribute("taskview-size").toInt();
@@ -58,7 +58,7 @@ bool Context::load(QDomElement &element) {
                 ganttview.showCriticalTasks = e.attribute("show-criticaltasks").toInt();
                 ganttview.showCriticalPath = e.attribute("show-criticalpath").toInt();
                 ganttview.showNoInformation = e.attribute("show-noinformation").toInt();
-                
+
                 QDomNodeList list = e.childNodes();
                 for (unsigned int i=0; i<list.count(); ++i) {
                     if (list.item(i).isElement()) {
@@ -82,7 +82,7 @@ bool Context::load(QDomElement &element) {
                 accountsview.date = QDate::fromString(e.attribute("date"), Qt::ISODate);
                 accountsview.period = e.attribute("period").toInt();
                 accountsview.cumulative = e.attribute("cumulative").toInt();
-                
+
                 QDomNodeList list = e.childNodes();
                 for (unsigned int i=0; i<list.count(); ++i) {
                     if (list.item(i).isElement()) {
@@ -114,7 +114,7 @@ void Context::save(QDomElement &element) const {
     element.appendChild(me);
     me.setAttribute("current-view", currentView);
     me.setAttribute("estimate-type", currentEstimateType);
-    me.setAttribute("current-schedule", currentSchedule);
+    me.setAttribute("current-schedule", (qlonglong)currentSchedule);
     me.setAttribute("view-expected", actionViewExpected);
     me.setAttribute("view-optimistic", actionViewOptimistic);
     me.setAttribute("view-pessimistic", actionViewPessimistic);
