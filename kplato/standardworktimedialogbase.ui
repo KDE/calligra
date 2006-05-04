@@ -141,7 +141,18 @@
     </grid>
 </widget>
 <customwidgets>
+      <customwidget>
+          <class>KDoubleNumInput</class>
+          <header location="global">knuminput.h</header>
+          <container>0</container>
+  </customwidget>
+      <customwidget>
+          <class>KDoubleSpinBox</class>
+          <header location="global">knuminput.h</header>
+          <container>0</container>
+  </customwidget>
 </customwidgets>
+
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
     <includehint>knuminput.h</includehint>

@@ -230,7 +230,7 @@ View::View(Part* part, QWidget* parent, const char* /*name*/)
     actionEditAccounts = new KAction(i18n("Edit Accounts..."), "edit", 0, this, SLOT(slotProjectAccounts()), actionCollection(), "project_accounts");
     actionEditResources = new KAction(i18n("Edit Resources..."), "edit", 0, this, SLOT(slotProjectResources()), actionCollection(), "project_resources");
 
-    actionCalculate = new KActionMenu(KIcon("project_calculate"), i18n("Calculate"), actionCollection());
+    actionCalculate = new KActionMenu(KIcon("project_calculate"), i18n("Calculate"), actionCollection(),"action_calculate");
     connect(actionCalculate, SIGNAL(activated()), SLOT(slotProjectCalculate()));
 
     actionCalculateExpected = new KAction(i18n("Expected"), 0, 0, this, SLOT(slotProjectCalculateExpected()), actionCollection(), "project_calculate_expected");
