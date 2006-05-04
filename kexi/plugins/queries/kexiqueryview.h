@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Lucijan Busch <lucijan@kde.org>
-   Copyright (C) 2004 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2004, 2006 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -40,9 +40,14 @@ class KexiQueryView : public KexiDataTable
 	protected:
 		virtual tristate afterSwitchFrom(int mode);
 
+		virtual KexiDB::SchemaData* storeNewData(const KexiDB::SchemaData& sdata, bool &cancel);
+
+		virtual tristate storeData(bool dontAsk = false);
+
 		bool executeQuery(KexiDB::QuerySchema *query);
 
-		KexiDB::Cursor *m_cursor;
+		class Private;
+		Private *d;
 };
 
 #endif
