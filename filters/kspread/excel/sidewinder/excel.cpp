@@ -62,7 +62,7 @@ inline void convert_64 (data_64 convert)
   temp = ((unsigned char*)&convert)[5];
   ((unsigned char*)&convert)[5] = ((unsigned char*)&convert)[6];
   ((unsigned char*)&convert)[6] = temp;
-       
+
   u_int_temp = ((unsigned int *)&convert)[0];
   ((unsigned int *)&convert)[0] = ((unsigned int *)&convert)[1];
   ((unsigned int *)&convert)[1] = u_int_temp;
@@ -82,10 +82,10 @@ static inline double readFloat64( const void*p )
   const double* ptr = (const double*) p;
   double num = 0.0;
   num = *ptr;
- 
+
   if( !isLittleEndian() )
     convert_64( num );
-    
+
   return num;
 }
 
@@ -114,11 +114,11 @@ static inline void decodeRK( unsigned rkvalue, bool& isInteger,
       r[5] = s[1]; r[6] = s[2];  r[7] = s[3];
     }
     else
-    {    
+    {
       r[0] = r[1] = r[2] = r[3] = 0;
       r[4] = s[0] & 0xfc;
       r[5] = s[1]; r[6] = s[2];  r[7] = s[3];
-    }  
+    }
     memcpy( &f, r, 8 );
     f *= factor;
   }
@@ -126,7 +126,7 @@ static inline void decodeRK( unsigned rkvalue, bool& isInteger,
 
 }
 
-namespace Swinder 
+namespace Swinder
 {
 std::ostream& operator<<( std::ostream& s, Swinder::UString ustring )
 {
@@ -142,7 +142,7 @@ using namespace Swinder;
 static Value errorAsValue( int errorCode )
 {
   Value result( Value::Error );
-  
+
   switch( errorCode )
   {
     case 0x00: result = Value::errorNULL();  break;
@@ -154,7 +154,7 @@ static Value errorAsValue( int errorCode )
     case 0x2A: result = Value::errorNA();    break;
     default: break;
   };
-  
+
   return result;
 }
 
@@ -246,27 +246,27 @@ EString EString::fromUnicodeString( const void* p, bool longString, unsigned /* 
 {
   const unsigned char* data = (const unsigned char*) p;
   UString str = UString::null;
-  
-  unsigned offset = longString ? 2 : 1;  
+
+  unsigned offset = longString ? 2 : 1;
   unsigned len = longString ? readU16( data  ): data[0];
   unsigned char flag = data[ offset ];
   offset++; // for flag (1 byte)
-  
+
   bool unicode = flag & 0x01;
   bool richText = flag & 0x08;
   unsigned formatRuns = 0;
-  
+
   if( richText )
   {
     formatRuns = readU16( data + offset );
     offset += 2;
   }
-  
+
   // find out total bytes used in this string
   unsigned size = offset + len; // string data
   if( unicode ) size += len; // because unicode takes 2-bytes char
   if( richText ) size += (formatRuns*4);
-  
+
   if( !unicode )
   {
     char* buffer = new char[ len+1 ];
@@ -284,40 +284,40 @@ EString EString::fromUnicodeString( const void* p, bool longString, unsigned /* 
       str.append( UString(UChar(uchar)) );
     }
   }
-  
+
   EString result;
   result.setUnicode( unicode );
   result.setRichText( richText );
   result.setSize( size );
   result.setStr( str );
-  
+
   return result;
 }
 
 // FIXME use maxsize for sanity check
-EString EString::fromByteString( const void* p, bool longString, 
+EString EString::fromByteString( const void* p, bool longString,
   unsigned /* maxsize */ )
 {
   const unsigned char* data = (const unsigned char*) p;
   UString str = UString::null;
-  
-  unsigned offset = longString ? 2 : 1;  
+
+  unsigned offset = longString ? 2 : 1;
   unsigned len = longString ? readU16( data  ): data[0];
-  
+
   char* buffer = new char[ len+1 ];
   memcpy( buffer, data + offset, len );
   buffer[ len ] = 0;
   str = UString( buffer );
   delete[] buffer;
-  
+
   unsigned size = offset + len;
-  
+
   EString result;
   result.setUnicode( false );
   result.setRichText( false );
   result.setSize( size );
   result.setStr( str );
-  
+
   return result;
 }
 
@@ -328,19 +328,19 @@ EString EString::fromSheetName( const void* p, unsigned datasize )
 {
   const unsigned char* data = (const unsigned char*) p;
   UString str = UString::null;
-  
+
   bool richText = false;
   // unsigned formatRuns = 0;
-  
+
   unsigned len = data[0];
   unsigned flag = data[1];
   bool unicode = flag & 1;
-  
+
   if( len > datasize-2 ) len = datasize-2;
   if( len == 0 ) return EString();
-  
+
   unsigned offset = 2;
-  
+
   if( !unicode )
   {
     char* buffer = new char[ len+1 ];
@@ -357,13 +357,13 @@ EString EString::fromSheetName( const void* p, unsigned datasize )
       str.append( UString(UChar(uchar)) );
     }
   }
-  
+
   EString result;
   result.setUnicode( unicode );
   result.setRichText( richText );
   result.setSize( datasize );
   result.setStr( str );
-  
+
   return result;
 }
 
@@ -398,7 +398,7 @@ FormulaToken::FormulaToken( const FormulaToken& token )
   d = new Private;
   d->ver = token.d->ver;
   d->id = token.id();
-  
+
   d->data.resize( token.d->data.size() );
   for( unsigned i = 0; i < d->data.size(); i++ )
     d->data[i] = token.d->data[i];
@@ -427,7 +427,7 @@ unsigned FormulaToken::id() const
 const char* FormulaToken::idAsString() const
 {
   const char* s = 0;
-  
+
   switch( d->id )
   {
     case Matrix:       s = "Matrix"; break;
@@ -474,7 +474,7 @@ const char* FormulaToken::idAsString() const
     case AreaErr3d:    s = "AreaErr3d"; break;
     default:           s = "Unknown"; break;
   };
-  
+
   return s;
 }
 
@@ -482,12 +482,12 @@ const char* FormulaToken::idAsString() const
 unsigned FormulaToken::size() const
 {
   unsigned s = 0; // on most cases no data
-  
+
   switch( d->id )
   {
-    case Add: 
-    case Sub: 
-    case Mul: 
+    case Add:
+    case Sub:
+    case Mul:
     case Div:
     case Power:
     case Concat:
@@ -509,68 +509,68 @@ unsigned FormulaToken::size() const
 
     case Attr:
       s = 3; break;
-      
+
     case ErrorCode:
     case Bool:
-      s = 1; break;  
-    
+      s = 1; break;
+
     case Integer:
       s = 2; break;
-      
+
     case Array:
       s = 7; break;
-    
+
     case Function:
       s = 2;
       break;
-    
+
     case FunctionVar:
       s = 3;
       break;
-    
+
     case Matrix:
-    case Table:  
+    case Table:
       s = (d->ver == Excel97) ? 4 : 3;
       break;
-      
+
     case Name:
       s = (d->ver == Excel97) ? 4 : 14;
       break;
-    
+
     case Ref:
     case RefErr:
     case RefN:
       s = (d->ver == Excel97) ? 4 : 3;
       break;
-    
+
     case Area:
     case AreaErr:
     case AreaN:
       s = (d->ver == Excel97) ? 8 : 6;
       break;
-    
+
     case NameX:
       s = (d->ver == Excel97) ? 6 : 24;
       break;
-    
+
     case Ref3d:
     case RefErr3d:
       s = (d->ver == Excel97) ? 6 : 27;
       break;
-      
+
     case Float:
-      s = 8; break;  
-      
+      s = 8; break;
+
     case Area3d:
     case AreaErr3d:
       s = (d->ver == Excel97) ? 10 : 20;
-      break;  
-      
+      break;
+
     default:
       // WARNING this is unhandled case
       break;
   };
-  
+
   return s;
 }
 
@@ -590,40 +590,40 @@ Value FormulaToken::value() const
   for( unsigned k=0; k<d->data.size(); k++ )
     buf[k] = d->data[k];
 
-  // FIXME sanity check: verify size of data  
+  // FIXME sanity check: verify size of data
   switch( d->id )
   {
     case ErrorCode:
       result = errorAsValue( buf[0] );
       break;
-    
-    case Bool:    
+
+    case Bool:
       result = Value( buf[0]!=0 );
       break;
-      
+
     case Integer:
       result = Value( (int)readU16( buf ) );
       break;
-      
-    case Float:  
+
+    case Float:
       result = Value( readFloat64( buf ) );
       break;
-     
+
     case String:
       {
-        EString estr = (version()==Excel97) ? 
+        EString estr = (version()==Excel97) ?
           EString::fromUnicodeString( buf, false, d->data.size() ) :
           EString::fromByteString( buf, false, d->data.size() );
-        result = Value( estr.str() );  
+        result = Value( estr.str() );
       }
-      break;  
-      
-    default: break;  
+      break;
+
+    default: break;
   }
-  
+
   delete [] buf;
-  
-  return result;  
+
+  return result;
 }
 
 unsigned FormulaToken::functionIndex() const
@@ -760,7 +760,7 @@ static const FunctionEntry FunctionEntries[] =
   { "CHOOSE",          0 },     // 100
   { "HLOOKUP",         0 },     // 101
   { "VLOOKUP",         0 },     // 102
-  { "LINKS",           0 },  
+  { "LINKS",           0 },
   { "INPUT",           0 },
   { "ISREF",           1 },     // 105
   { "GETFORMULA",      0 },
@@ -823,11 +823,11 @@ static const FunctionEntry FunctionEntries[] =
   { "MDETERM",         1 },     // 163
   { "MINVERSE",        1 },     // 164
   { "MMULT",           2 },     // 165
-  { "FILES",           0 },  
+  { "FILES",           0 },
   { "IPMT",            0 },     // 167
   { "PPMT",            0 },     // 168
   { "COUNTA",          0 },     // 169
-  { "CANCELKEY",       1 },	
+  { "CANCELKEY",       1 },
   { "Unknown171",      0 },
   { "Unknown172",      0 },
   { "Unknown173",      0 },
@@ -839,10 +839,10 @@ static const FunctionEntry FunctionEntries[] =
   { "TERMINATE",       0 },
   { "RESTART",         0 },
   { "HELP",            0 },
-  { "GETBAR",          0 },  
+  { "GETBAR",          0 },
   { "PRODUCT",         0 },     // 183
   { "FACT",            1 },     // 184
-  { "GETCELL",         0 },  
+  { "GETCELL",         0 },
   { "GETWORKSPACE",    0 },
   { "GETWINDOW",       0 },
   { "GETDOCUMENT",     0 },
@@ -868,20 +868,20 @@ static const FunctionEntry FunctionEntries[] =
   { "LEFTB",           0 },
   { "RIGHTB",          0 },
   { "MIDB",            0 },
-  { "LENB",            0 },  
+  { "LENB",            0 },
   { "ROUNDUP",         2 },     // 212
   { "ROUNDDOWN",       2 },     // 213
   { "ASC",             0 },
   { "DBCS",            0 },
   { "RANK",            0 },     // 216
   { "Unknown217",      0 },
-  { "Unknown218",      0 },  
+  { "Unknown218",      0 },
   { "ADDRESS",         0 },     // 219
   { "GETDIFFDATE360",  0 },     // 220
   { "CURRENTDATE",     0 },     // 221
   { "VBD",             0 },     // 222
   { "Unknown223",      0 },
-  { "Unknown224",      0 }, 
+  { "Unknown224",      0 },
   { "Unknown225",      0 },
   { "Unknown226",      0 },
   { "MEDIAN",          0 },     // 227
@@ -900,10 +900,10 @@ static const FunctionEntry FunctionEntries[] =
   { "CUSTOMREPEAT",    0 },
   { "FORMULACONVERT",  0 },
   { "GETLINKINFO",     0 },
-  { "TEXTBOX",         0 },  
+  { "TEXTBOX",         0 },
   { "INFO",            1 },     // 244
   { "GROUP",           0 },
-  { "GETOBJECT",       0 },  
+  { "GETOBJECT",       0 },
   { "DB",              0 },     // 247
   { "PAUSE",           0 },
   { "Unknown249",      0 },
@@ -912,12 +912,12 @@ static const FunctionEntry FunctionEntries[] =
   { "FREQUENCY",       2 },     // 252
   { "ADDTOOLBAR",      0 },
   { "DELETETOOLBAR",   0 },
-  { "Unknown255",      0 }, 
+  { "Unknown255",      0 },
   { "RESETTOOLBAR",    0 },
   { "EVALUATE",        0 },
   { "GETTOOLBAR",      0 },
   { "GETTOOL",         0 },
-  { "SPELLINGCHECK",   0 },  
+  { "SPELLINGCHECK",   0 },
   { "ERRORTYPE",       1 },     // 261
   { "APPTITLE",        0 },
   { "WINDOWTITLE",     0 },
@@ -992,13 +992,13 @@ static const FunctionEntry FunctionEntries[] =
   { "TINV",            2 },     // 332
   { "Unknown333",      0 },
   { "MOVIECOMMAND",    0 },
-  { "GETMOVIE",        0 },  
+  { "GETMOVIE",        0 },
   { "CONCATENATE",     0 },     // 336
   { "POWER",           2 },     // 337
   { "PIVOTADDDATA",    0 },
   { "GETPIVOTTABLE",   0 },
   { "GETPIVOTFIELD",   0 },
-  { "GETPIVOTITEM",    0 },  
+  { "GETPIVOTITEM",    0 },
   { "RADIANS",         1 },     // 342
   { "DEGREES",         1 },     // 343
   { "SUBTOTAL",        0 },     // 344
@@ -1151,24 +1151,24 @@ UString FormulaToken::area( unsigned row, unsigned col ) const
 
   UString result;
   result.append( UString("[") );  // OpenDocument format
-  
+
   if( !col1Relative )
     result.append( UString("$") );
-  result.append( Cell::columnLabel( col1Ref ) );  
+  result.append( Cell::columnLabel( col1Ref ) );
   if( !row1Relative )
     result.append( UString("$") );
-  result.append( UString::from( row1Ref+1 ) );  
+  result.append( UString::from( row1Ref+1 ) );
   result.append( UString(":") );
   if( !col2Relative )
     result.append( UString("$") );
-  result.append( Cell::columnLabel( col2Ref ) );  
+  result.append( Cell::columnLabel( col2Ref ) );
   if( !row2Relative )
     result.append( UString("$") );
-  result.append( UString::from( row2Ref+1 ) );  
-  
+  result.append( UString::from( row2Ref+1 ) );
+
   result.append( UString("]") );// OpenDocument format
 
-  return result;  
+  return result;
 }
 
 UString FormulaToken::ref( unsigned row, unsigned col ) const
@@ -1211,17 +1211,17 @@ UString FormulaToken::ref( unsigned row, unsigned col ) const
   UString result;
 
   result.append( UString("[") );  // OpenDocument format
-  
+
   if( !colRelative )
     result.append( UString("$") );
-  result.append( Cell::columnLabel( colRef ) );  
+  result.append( Cell::columnLabel( colRef ) );
   if( !rowRelative )
     result.append( UString("$") );
-  result.append( UString::from( rowRef+1 ) );  
-  
+  result.append( UString::from( rowRef+1 ) );
+
   result.append( UString("]") );// OpenDocument format
 
-  return result;  
+  return result;
 }
 
 std::ostream& Swinder::operator<<( std::ostream& s,  Swinder::FormulaToken token )
@@ -1229,7 +1229,7 @@ std::ostream& Swinder::operator<<( std::ostream& s,  Swinder::FormulaToken token
   s << std::setw(2) << std::hex << token.id() << std::dec;
   // s  << "  Size: " << std::dec << token.size();
   s << "  ";
-  
+
   switch( token.id() )
   {
     case FormulaToken::ErrorCode:
@@ -1242,16 +1242,16 @@ std::ostream& Swinder::operator<<( std::ostream& s,  Swinder::FormulaToken token
         s << v;
       }
       break;
-      
+
     case FormulaToken::Function:
-      s << "Function " << token.functionName();  
+      s << "Function " << token.functionName();
       break;
-      
-    default:  
+
+    default:
       s << token.idAsString();
       break;
   }
-  
+
   return s;
 }
 
@@ -1370,112 +1370,112 @@ Record::~Record()
 Record* Record::create( unsigned type )
 {
   Record* record = 0;
-  
+
   if( type == BOFRecord::id )
     record = new BOFRecord();
-    
+
   else if( type == EOFRecord::id )
     record = new EOFRecord();
-    
+
   if( type == BackupRecord::id )
     record = new BackupRecord();
-    
+
   if( type == BlankRecord::id )
     record = new BlankRecord();
-    
+
   if( type == BoolErrRecord::id )
     record = new BoolErrRecord();
-    
+
   if( type == BottomMarginRecord::id )
     record = new BottomMarginRecord();
-    
+
   if( type == BoundSheetRecord::id )
     record = new BoundSheetRecord();
-    
+
   if( type == CalcModeRecord::id )
     record = new CalcModeRecord();
-    
+
   if( type == ColInfoRecord::id )
     record = new ColInfoRecord();
-    
+
   if( type == DateModeRecord::id )
     record = new DateModeRecord();
-    
+
   if( type == DimensionRecord::id )
     record = new DimensionRecord();
-    
+
   if( type == ExternNameRecord::id )
     record = new ExternNameRecord();
-    
+
   else if( type == FilepassRecord::id )
     record = new FilepassRecord();
-    
+
   else if( type == FontRecord::id )
     record = new FontRecord();
-    
+
   else if( type == FooterRecord::id )
     record = new FooterRecord();
-    
+
   else if( type == FormatRecord::id )
     record = new FormatRecord();
-    
+
   else if( type == FormulaRecord::id )
     record = new FormulaRecord();
-    
+
   else if( type == HeaderRecord::id )
     record = new HeaderRecord();
-    
+
   else if( type == LabelRecord::id )
     record = new LabelRecord();
-    
+
   else if( type == LabelSSTRecord::id )
     record = new LabelSSTRecord();
-    
+
   if( type == LeftMarginRecord::id )
     record = new LeftMarginRecord();
-    
+
   else if( type == MergedCellsRecord::id )
     record = new MergedCellsRecord();
-    
+
   else if( type == MulBlankRecord::id )
     record = new MulBlankRecord();
-    
+
   else if( type == MulRKRecord::id )
     record = new MulRKRecord();
-    
+
   if( type == NameRecord::id )
     record = new NameRecord();
-    
+
   else if( type == NumberRecord::id )
     record = new NumberRecord();
-    
+
   else if( type == PaletteRecord::id )
     record = new PaletteRecord();
-    
+
   if( type == RightMarginRecord::id )
     record = new RightMarginRecord();
-    
+
   else if( type == RKRecord::id )
     record = new RKRecord();
-    
+
   else if( type == RowRecord::id )
     record = new RowRecord();
-    
+
   else if( type == RStringRecord::id )
     record = new RStringRecord();
-    
+
   else if( type == SSTRecord::id )
     record = new SSTRecord();
-  
+
   else if( type == StringRecord::id )
     record = new StringRecord();
-  
+
   else if( type == XFRecord::id )
     record = new XFRecord();
-  
+
   else if( type == TopMarginRecord::id )
     record = new TopMarginRecord();
-    
+
   return record;
 }
 
@@ -1483,7 +1483,7 @@ void Record::setPosition( unsigned pos )
 {
   stream_position = pos;
 }
-  
+
 unsigned Record::position() const
 {
   return stream_position;
@@ -1498,7 +1498,7 @@ void Record::dump( std::ostream& ) const
   // nothing to dump
 }
 
-// ========== BACKUP ========== 
+// ========== BACKUP ==========
 
 const unsigned int BackupRecord::id = 0x0040;
 
@@ -1533,7 +1533,7 @@ void BackupRecord::setBackup( bool b )
 void BackupRecord::setData( unsigned size, const unsigned char* data )
 {
   if( size < 2 ) return;
-  
+
   unsigned flag = readU16( data );
   d->backup = flag != 0;
 }
@@ -1544,7 +1544,7 @@ void BackupRecord::dump( std::ostream& out ) const
   out << "     Backup on save : " << (backup() ? "Yes" : "No") << std::endl;
 }
 
-// ========== BLANK ========== 
+// ========== BLANK ==========
 
 const unsigned int BlankRecord::id = 0x0201;
 
@@ -1571,7 +1571,7 @@ void BlankRecord::dump( std::ostream& out ) const
 }
 
 
-// ========== BOF ========== 
+// ========== BOF ==========
 
 const unsigned int BOFRecord::id = 0x0809;
 
@@ -1609,7 +1609,7 @@ BOFRecord::~BOFRecord()
 void BOFRecord::setData( unsigned size, const unsigned char* data )
 {
   if( size < 4 ) return;
-  
+
   d->version  = readU16( data );
   d->type     = readU16( data+2 );
   if( size > 6 )
@@ -1894,17 +1894,17 @@ BoundSheetRecord::~BoundSheetRecord()
 void BoundSheetRecord::setData( unsigned size, const unsigned char* data )
 {
   if( size < 6 ) return;
-  
+
   d->bofPosition = readU32( data );
   d->visibility = data[4];
   d->type = data[5];
-  
+
   /* FIXME: it turned out that sheet name is not normal unicode string
      where the first two bytes specifies string length, but instead
      only the first specifies it.
      the next byte could be correctly interpreted as flag.
-   */  
-   
+   */
+
   UString name = ( version() >= Excel97 ) ?
     EString::fromSheetName( data+6, size-6 ).str() :
     EString::fromByteString( data+6, false, size-6 ).str();
@@ -1921,7 +1921,7 @@ void BoundSheetRecord::dump( std::ostream& out ) const
   out << "            BOF pos : " << d->bofPosition << std::endl;
 }
 
-// ========== CALCMODE ========== 
+// ========== CALCMODE ==========
 
 const unsigned int CalcModeRecord::id = 0x000d;
 
@@ -1956,7 +1956,7 @@ void CalcModeRecord::setAutoCalc( bool b )
 void CalcModeRecord::setData( unsigned size, const unsigned char* data )
 {
   if( size < 2 ) return;
-  
+
   unsigned flag = readU16( data );
   d->autoCalc = flag != 0;
 }
@@ -2056,7 +2056,7 @@ void ColInfoRecord::setData( unsigned size, const unsigned char* data )
   setLastColumn( readU16( data+2 ) );
   setWidth( readU16( data+4 ) );
   setXfIndex( readU16( data+6 ) );
-  
+
   unsigned options = readU16( data+8 );
   setHidden ( options & 1 );
   setCollapsed ( options & 0x1000 );
@@ -2072,10 +2072,10 @@ void ColInfoRecord::dump( std::ostream& out ) const
   out << "           XF Index : " << xfIndex() << std::endl;
   out << "             Hidden : " << ( hidden() ? "Yes" : "No" ) << std::endl;
   out << "          Collapsed : " << ( collapsed() ? "Yes" : "No" ) << std::endl;
-  out << "      Outline Level : " << outlineLevel() << std::endl;  
+  out << "      Outline Level : " << outlineLevel() << std::endl;
 }
 
-// ========== DATEMODE ========== 
+// ========== DATEMODE ==========
 
 const unsigned int DateModeRecord::id = 0x0022;
 
@@ -2110,7 +2110,7 @@ void DateModeRecord::setBase1904( bool r )
 void DateModeRecord::setData( unsigned size, const unsigned char* data )
 {
   if( size < 2 ) return;
-  
+
   unsigned flag = readU16( data );
   d->base1904 = flag != 0;
 }
@@ -2122,7 +2122,7 @@ void DateModeRecord::dump( std::ostream& out ) const
 }
 
 
-// ========== DIMENSION ========== 
+// ========== DIMENSION ==========
 
 const unsigned int DimensionRecord::id = 0x0200;
 
@@ -2193,7 +2193,7 @@ void DimensionRecord::setLastColumn( unsigned r )
 void DimensionRecord::setData( unsigned size, const unsigned char* data )
 {
   if( size < 14 ) return;
-  
+
   setFirstRow( readU32( data ) );
   setLastRow( readU32( data+4 ) - 1 );
   setFirstColumn( readU16( data + 8 ) );
@@ -2209,7 +2209,7 @@ void DimensionRecord::dump( std::ostream& out ) const
   out << "        Last Column : " << lastColumn() << std::endl;
 }
 
-// ========== EOF ========== 
+// ========== EOF ==========
 
 const unsigned int EOFRecord::id = 0x000a;
 
@@ -2232,7 +2232,7 @@ void EOFRecord::dump( std::ostream& out ) const
   out << "EOF" << std::endl;
 }
 
-// ========== EXTERNNAME ========== 
+// ========== EXTERNNAME ==========
 
 const unsigned int ExternNameRecord::id = 0x0023;
 
@@ -2280,7 +2280,7 @@ UString ExternNameRecord::externName() const
 void ExternNameRecord::setData( unsigned size, const unsigned char* data )
 {
   if( size < 6 ) return;
-  
+
   if ( version() == Excel97 )
   {
     d->optionFlags = readU16( data );
@@ -2300,7 +2300,7 @@ void ExternNameRecord::dump( std::ostream& out ) const
 {
 }
 
-// ========== FILEPASS ========== 
+// ========== FILEPASS ==========
 
 const unsigned int FilepassRecord::id = 0x002f;
 
@@ -2323,7 +2323,7 @@ void FilepassRecord::dump( std::ostream& out ) const
   out << "FILEPASS" << std::endl;
 }
 
-// ========== FONT ========== 
+// ========== FONT ==========
 
 const unsigned int FontRecord::id = 0x0031;
 
@@ -2487,22 +2487,22 @@ void FontRecord::setUnderline( unsigned u )
 void FontRecord::setData( unsigned size, const unsigned char* data )
 {
   if( size < 14 ) return;
-  
+
   setHeight( readU16( data ) );
   unsigned flag = readU16( data+2 );
   setItalic( flag & 2 );
   setStrikeout( flag & 8 );
   setStrikeout( flag & 8 );
-  
+
   setColorIndex( readU16( data+4 ) );
-  
+
   setBoldness( readU16( data+6 ) );
   setEscapement( readU16( data+8 ) );
   setUnderline( data[10] );
-  
+
   setFontFamily( data[11] );
   setCharacterSet( data[12] );
-    
+
   UString fn = ( version() >= Excel97 ) ?
     EString::fromSheetName( data+14, size-14 ).str() :
     EString::fromByteString( data+14, false, size-14 ).str();
@@ -2637,10 +2637,10 @@ void FormatRecord::setFormatString( const UString& fs )
 void FormatRecord::setData( unsigned size, const unsigned char* data )
 {
   if( size < 3 ) return;
-  
+
   setIndex( readU16( data ) );
 
-  UString fs = ( version() >= Excel97 ) ? 
+  UString fs = ( version() >= Excel97 ) ?
     EString::fromUnicodeString( data+2, true, size-2 ).str() :
     EString::fromByteString( data+2, false, size-2 ).str();
   setFormatString( fs );
@@ -2654,7 +2654,7 @@ void FormatRecord::dump( std::ostream& out ) const
 }
 
 
-// ========== FORMULA ========== 
+// ========== FORMULA ==========
 
 const unsigned int FormulaRecord::id = 0x0006;
 
@@ -2694,14 +2694,14 @@ FormulaTokens FormulaRecord::tokens() const
 void FormulaRecord::setData( unsigned size, const unsigned char* data )
 {
   if( size < 20 ) return;
-  
+
   setRow( readU16( data ) );
   setColumn( readU16( data+2 ) );
   setXfIndex( readU16( data+4 ) );
-  
+
   if( readU16( data+12 ) != 0xffff )
   {
-    // Floating-point 
+    // Floating-point
     setResult( Value( readFloat64( data+6 ) ) );
   }
   else
@@ -2714,20 +2714,20 @@ void FormulaRecord::setData( unsigned size, const unsigned char* data )
       case 1: // boolean
         setResult( Value( data[8] ? true : false ) );
         break;
-      case 2: // error code  
+      case 2: // error code
         setResult( errorAsValue( data[8] ) );
         break;
       case 3: // empty
         setResult( Value::empty() );
         break;
-      default: // fallback  
+      default: // fallback
         setResult( Value::empty() );
         break;
     };
   }
-  
+
   unsigned formula_len = readU16( data+20 );
-  
+
   // reconstruct all tokens
   d->tokens.clear();
   for( unsigned j = 22; j < size; )
@@ -2736,15 +2736,15 @@ void FormulaRecord::setData( unsigned size, const unsigned char* data )
     ptg = ((ptg & 0x40) ? (ptg | 0x20) : ptg) & 0x3F;
     FormulaToken token( ptg );
     token.setVersion( version() );
-    
+
     if( token.id() == FormulaToken::String )
     {
       // find bytes taken to represent the string
-      EString estr = (version()==Excel97) ? 
+      EString estr = (version()==Excel97) ?
         EString::fromUnicodeString( data+j, false, formula_len ) :
         EString::fromByteString( data+j, false, formula_len );
       token.setData( estr.size(), data+j );
-      j += estr.size();  
+      j += estr.size();
     }
     else
     {
@@ -2755,9 +2755,9 @@ void FormulaRecord::setData( unsigned size, const unsigned char* data )
         j += token.size();
       }
     }
-    
+
     d->tokens.push_back( token );
-  }  
+  }
 }
 
 void FormulaRecord::dump( std::ostream& out ) const
@@ -2767,15 +2767,15 @@ void FormulaRecord::dump( std::ostream& out ) const
   out << "             Column : " << column() << std::endl;
   out << "           XF Index : " << xfIndex() << std::endl;
   out << "             Result : " << result() << std::endl;
-  
+
   FormulaTokens ts = tokens();
   out << "             Tokens : " << ts.size() << std::endl;
   for( unsigned i = 0; i < ts.size(); i++ )
     out << "                       " << ts[i]  << std::endl;
-    
+
 }
 
-// ========== LABEL ========== 
+// ========== LABEL ==========
 
 const unsigned int LabelRecord::id = 0x0204;
 
@@ -2814,7 +2814,7 @@ void LabelRecord::setData( unsigned size, const unsigned char* data )
   setRow( readU16( data ) );
   setColumn( readU16( data+2 ) );
   setXfIndex( readU16( data+4 ) );
-  
+
   UString label = ( version() >= Excel97 ) ?
     EString::fromUnicodeString( data+6, true, size-6 ).str() :
     EString::fromByteString( data+6, true, size-6 ).str();
@@ -2864,7 +2864,7 @@ void HeaderRecord::setHeader( const UString& header )
 void HeaderRecord::setData( unsigned size, const unsigned char* data )
 {
   if( size < 2 ) return;
-  
+
   UString header = ( version() >= Excel97 ) ?
     EString::fromUnicodeString( data, true, size ).str() :
     EString::fromByteString( data, false, size ).str();
@@ -2877,7 +2877,7 @@ void HeaderRecord::dump( std::ostream& out ) const
   out << "              Header: " << header() << std::endl;
 }
 
-// ========== LABELSST ========== 
+// ========== LABELSST ==========
 
 const unsigned int LabelSSTRecord::id = 0x00fd;
 
@@ -2924,7 +2924,7 @@ void LabelSSTRecord::dump( std::ostream& out ) const
   out << "          SST Index : " << d->sstIndex << std::endl;
 }
 
-// ========== LEFTMARGIN ========== 
+// ========== LEFTMARGIN ==========
 
 const unsigned int LeftMarginRecord::id = 0x0026;
 
@@ -3033,10 +3033,10 @@ void MergedCellsRecord::setData( unsigned size, const unsigned char* data )
   if( size < 2 ) return;
 
   unsigned num = readU16( data );
-  
+
   // sanity check
   if( size < 2 + num*4 ) return;
-  
+
   unsigned p = 2;
   for( unsigned i = 0; i < num; i++ )
   {
@@ -3212,7 +3212,7 @@ void MulRKRecord::dump( std::ostream& out ) const
   }
 }
 
-// ========== NAME ========== 
+// ========== NAME ==========
 
 const unsigned int NameRecord::id = 0x0018;
 
@@ -3248,7 +3248,7 @@ UString NameRecord::definedName() const
 void NameRecord::setData( unsigned size, const unsigned char* data )
 {
   if( size < 14 ) return;
-  
+
   d->optionFlags = readU16( data );
   unsigned len = data[3];
 
@@ -3277,7 +3277,7 @@ void NameRecord::dump( std::ostream& out ) const
 {
 }
 
-// ========== Number ========== 
+// ========== Number ==========
 
 const unsigned int NumberRecord::id = 0x0203;
 
@@ -3329,7 +3329,7 @@ void NumberRecord::dump( std::ostream& out ) const
   out << "              Value : " << number() << std::endl;
 }
 
-// ========== PALETTE ========== 
+// ========== PALETTE ==========
 
 const unsigned int PaletteRecord::id = 0x0092;
 
@@ -3363,16 +3363,16 @@ unsigned PaletteRecord::count() const
 void PaletteRecord::setData( unsigned size, const unsigned char* data )
 {
   if( size < 14 ) return;
-  
+
   unsigned num = readU16( data );
-  
+
   unsigned p = 2;
   for( unsigned i = 0; i < num; i++, p+=4 )
   {
-    unsigned Qt::red = data[ p ];
-    unsigned Qt::green = data[ p+1 ];
-    unsigned Qt::blue = data[ p+2 ];
-    d->colors.push_back( Color( Qt::red, Qt::green, Qt::blue ) );
+    unsigned red = data[ p ];
+    unsigned green = data[ p+1 ];
+    unsigned blue = data[ p+2 ];
+    d->colors.push_back( Color( red, green, blue ) );
   }
 }
 
@@ -3384,13 +3384,13 @@ void PaletteRecord::dump( std::ostream& out ) const
   {
     out << "         Color #" << std::setw(2) << i << " : ";
     Color c = color( i );
-    out << "R:" << std::setw(3) << c.Qt::red;
-    out << "   G:" << std::setw(3) << c.Qt::green;
-    out << "   B:" << std::setw(3) << c.Qt::blue << std::endl;
+    out << "R:" << std::setw(3) << c.red;
+    out << "   G:" << std::setw(3) << c.green;
+    out << "   B:" << std::setw(3) << c.blue << std::endl;
   }
 }
 
-// ========== RIGHTMARGIN ========== 
+// ========== RIGHTMARGIN ==========
 
 const unsigned int RightMarginRecord::id = 0x0027;
 
@@ -3606,13 +3606,13 @@ void RowRecord::setHidden( bool h )
 void RowRecord::setData( unsigned size, const unsigned char* data )
 {
   if( size < 16 ) return;
-  
+
   setRow( readU16( data ) );
   setFirstColumn( readU16( data+2 ) );
   setLastColumn( readU16( data+4 ) );
   setHeight( readU16( data+6 ) & 0x7fff );
   setXfIndex( readU16( data+14 ) & 0xfff );
-  
+
   unsigned options = readU16( data+12 );
   setHidden ( options & 0x20 );
 }
@@ -3628,7 +3628,7 @@ void RowRecord::dump( std::ostream& out ) const
   out << "             Hidden : " << ( hidden() ? "Yes" : "No" ) << std::endl;
 }
 
-// ========== RSTRING ========== 
+// ========== RSTRING ==========
 
 const unsigned int RStringRecord::id = 0x00d6;
 
@@ -3668,7 +3668,7 @@ void RStringRecord::setData( unsigned size, const unsigned char* data )
   setRow( readU16( data ) );
   setColumn( readU16( data+2 ) );
   setXfIndex( readU16( data+4 ) );
-  
+
   // FIXME check Excel97
   UString label = ( version() >= Excel97 ) ?
     EString::fromUnicodeString( data+6, true, size-6 ).str() :
@@ -3693,7 +3693,7 @@ class SSTRecord::Private
 {
 public:
   unsigned total;
-  unsigned count;  
+  unsigned count;
   std::vector<UString> strings;
 };
 
@@ -3723,13 +3723,13 @@ UString sstrecord_get_plain_string( const unsigned char* data, unsigned length )
 void SSTRecord::setData( unsigned size, const unsigned char* data )
 {
   if( size < 8 ) return;
-  
+
   d->total = readU32( data );
   d->count = readU32( data+4 );
-  
+
   unsigned offset = 8;
   d->strings.clear();
-  
+
   for( unsigned i = 0; i < d->count; i++ )
   {
     // check against size
@@ -3737,13 +3737,13 @@ void SSTRecord::setData( unsigned size, const unsigned char* data )
       std::cerr << "Warning: reached end of SST record, but not all strings have been read!" << std::endl;
       break;
     }
-    
+
     EString es = EString::fromUnicodeString( data+offset, true, size - offset );
     d->strings.push_back( es.str() );
     offset += es.size();
   }
 
-  
+
   // sanity check, adjust to safer condition
   if( d->count < d->strings.size() )
   {
@@ -3770,7 +3770,7 @@ void SSTRecord::dump( std::ostream& out ) const
   out << "         Occurences : " << d->total << std::endl;
   out << "              Count : " << count() << std::endl;
   for( unsigned i = 0; i < count(); i++ )
-    out << "         String #" << std::setw(2) << i << " : " << 
+    out << "         String #" << std::setw(2) << i << " : " <<
     stringAt( i ) << std::endl;
 }
 
@@ -3798,9 +3798,9 @@ StringRecord::~StringRecord()
 void StringRecord::setData( unsigned size, const unsigned char* data )
 {
   if( size < 3 ) return;
-  
+
   //  TODO simple string for BIFF7
-  
+
   EString es = EString::fromUnicodeString( data, true, size );
   d->string = es.str();
 }
@@ -3813,7 +3813,7 @@ UString StringRecord::ustring() const
 Value StringRecord::value() const
 {
   return Value( d->string );
-}  
+}
 
 void StringRecord::dump( std::ostream& out ) const
 {
@@ -3910,7 +3910,7 @@ XFRecord::XFRecord():  Record()
   d->locked              = false;
   d->formulaHidden       = false;
   d->parentStyle         = 0;
-  d->horizontalAlignment = Qt::DockLeft;
+  d->horizontalAlignment = Left;
   d->verticalAlignment   = VCentered;
   d->textWrap            = false;
   d->rotationAngle       = 0;
@@ -4043,9 +4043,9 @@ const char* XFRecord::horizontalAlignmentAsString() const
   switch( horizontalAlignment() )
   {
     case General:   result = "General"; break;
-    case Qt::DockLeft:      result = "Left"; break;
+    case Left:      result = "Left"; break;
     case Centered:  result = "Centered"; break;
-    case Qt::DockRight:     result = "Right"; break;
+    case Right:     result = "Right"; break;
     case Justified: result = "Justified"; break;
     case Filled:    result = "Filled"; break;
     default: break;
@@ -4068,9 +4068,9 @@ const char* XFRecord::verticalAlignmentAsString() const
   const char *result = "Unknown";
   switch( verticalAlignment() )
   {
-    case Qt::DockTop:          result = "Top"; break;
+    case Top:          result = "Top"; break;
     case VCentered:    result = "Centered"; break;
-    case Qt::DockBottom:       result = "Bottom"; break;
+    case Bottom:       result = "Bottom"; break;
     case VJustified:   result = "Justified"; break;
     case VDistributed: result = "Distributed"; break;
     default: break;
@@ -4253,7 +4253,7 @@ unsigned XFRecord::fillPattern() const
   return d->fillPattern;
 }
 
-void XFRecord::setFillPattern( unsigned pattern ) 
+void XFRecord::setFillPattern( unsigned pattern )
 {
   d->fillPattern = pattern;
 }
@@ -4282,54 +4282,54 @@ void XFRecord::setData( unsigned size, const unsigned char* data )
 {
   unsigned recordSize = ( version() == Excel97 ) ? 20: 16;
   if( size < recordSize ) return;
-  
-  setFontIndex( readU16( data ) ); 
+
+  setFontIndex( readU16( data ) );
   setFormatIndex( readU16( data+2 ) );
-  
+
   unsigned protection = readU16( data+4 ) & 7;
   setLocked( protection & 1 );
   setFormulaHidden( protection & 2 );
-  
+
   setParentStyle( readU16( data+4 ) >> 4 );
-  
+
   unsigned align = data[6];
   setHorizontalAlignment( align & 0x07 );
   setVerticalAlignment( align >> 4 );
   setTextWrap( align & 0x08 );
-  
+
   unsigned angle = data[7];
   setRotationAngle( ( angle != 255 ) ? ( angle & 0x7f ) : 0 );
   setStackedLetters( angle == 255 );
-  
+
   if( version() == Excel97 )
-  { 
+  {
     unsigned options = data[8];
     unsigned attributes = data[9];
 
     setIndentLevel( options & 0x0f );
     setShrinkContent( options & 0x10 );
-  
+
     unsigned linestyle = readU16( data + 10 );
-    unsigned Qt::color1 = readU16( data + 12 );
+    unsigned color1 = readU16( data + 12 );
     // unsigned color2 = readU16( data + 14 );
     unsigned flag = readU16( data + 16 );
     unsigned fill = readU16( data + 18 );
-  
+
     setLeftBorderStyle( linestyle & 0xf );
     setRightBorderStyle( ( linestyle >> 4 ) & 0xf );
     setTopBorderStyle( ( linestyle >> 8 ) & 0xf );
     setBottomBorderStyle( ( linestyle >> 12 ) & 0xf );
-  
-    setLeftBorderColor( Qt::color1 & 0x7f );
-    setRightBorderColor( ( Qt::color1 >> 7 ) & 0x7f );
-    setTopBorderColor( Qt::color1 & 0x7f );
-    setBottomBorderColor( ( Qt::color1 >> 7 ) & 0x7f );
-  
-    setDiagonalTopLeft( Qt::color1 & 0x40 );
-    setDiagonalBottomLeft( Qt::color1 & 0x40 );
+
+    setLeftBorderColor( color1 & 0x7f );
+    setRightBorderColor( ( color1 >> 7 ) & 0x7f );
+    setTopBorderColor( color1 & 0x7f );
+    setBottomBorderColor( ( color1 >> 7 ) & 0x7f );
+
+    setDiagonalTopLeft( color1 & 0x40 );
+    setDiagonalBottomLeft( color1 & 0x40 );
     setDiagonalStyle( ( flag >> 4 ) & 0x1e  );
-    setDiagonalColor( ( ( flag & 0x1f ) << 2 ) + (  ( Qt::color1 >> 14 ) & 3 ));
-    
+    setDiagonalColor( ( ( flag & 0x1f ) << 2 ) + (  ( color1 >> 14 ) & 3 ));
+
     setFillPattern( ( flag >> 10 ) & 0x3f );
     setPatternForeColor( fill & 0x7f );
     setPatternBackColor( ( fill >> 7 ) & 0x7f );
@@ -4338,18 +4338,18 @@ void XFRecord::setData( unsigned size, const unsigned char* data )
   {
     unsigned data1 = readU32( data + 8 );
     unsigned data2 = readU32( data + 12 );
-    
+
     setPatternForeColor( data1 & 0x7f );
     setPatternBackColor( ( data1 >> 7 ) & 0x7f );
     setFillPattern( ( data1 >> 16 ) & 0x3f );
-    
+
     setBottomBorderStyle( ( data1 >> 22 ) & 0x07 );
-    setBottomBorderColor( ( data1 >> 25 ) & 0x7f ); 
-    
+    setBottomBorderColor( ( data1 >> 25 ) & 0x7f );
+
     setTopBorderStyle( data2 & 0x07 );
     setLeftBorderStyle( ( data2 >> 3 ) & 0x07 );
     setRightBorderStyle( ( data2 >> 6 ) & 0x07 );
-    
+
     setTopBorderColor( ( data2 >> 9 ) & 0x7f );
     setLeftBorderColor( ( data2 >> 16 ) & 0x7f );
     setRightBorderColor( ( data2 >> 23 ) & 0x7f );
@@ -4384,7 +4384,7 @@ void XFRecord::dump( std::ostream& out ) const
   if ( diagonalBottomLeft() ) out << "BottomLeft ";
   out << "Style " << diagonalStyle() << " Color: " << diagonalColor() << std::endl;
   out << "       Fill Pattern : " << fillPattern() << std::endl;
-  out << "         Fill Color : Fore " << patternForeColor() << " Back: " 
+  out << "         Fill Color : Fore " << patternForeColor() << " Back: "
   << patternBackColor() << std::endl;
 }
 
@@ -4398,36 +4398,36 @@ public:
 
   // the workbook
   Workbook* workbook;
-  
+
   // password protection flag
   // TODO: password hash for record decryption
   bool passwordProtected;
 
   // active sheet, all cell records will be stored here
   Sheet* activeSheet;
-  
+
   // for FORMULA+STRING record pair
   Cell* formulaCell;
-  
+
   // mapping from BOF pos to actual Sheet
   std::map<unsigned,Sheet*> bofMap;
-  
+
   // shared-string table
   std::vector<UString> stringTable;
-  
+
   // table of format
   std::map<unsigned,FormatRecord> formatTable;
   std::map<unsigned,UString> formatsTable;
-  
+
   // table of font
   std::vector<FontRecord> fontTable;
-  
+
   // table of Xformat
   std::vector<XFRecord> xfTable;
-  
+
   // color table (from Palette record)
   std::vector<Color> colorTable;
-  
+
   // mapping from font index to Swinder::FormatFont
   std::map<unsigned,FormatFont> fontCache;
 
@@ -4438,13 +4438,13 @@ public:
 ExcelReader::ExcelReader()
 {
   d = new ExcelReader::Private();
-  
+
   d->workbook    = 0;
   d->activeSheet = 0;
   d->formulaCell = 0;
-  
+
   d->passwordProtected = false;
-  
+
   // initialize palette
   static const char *const default_palette[64-8] =	// default palette for all but the first 8 colors
   {
@@ -4475,7 +4475,7 @@ bool ExcelReader::load( Workbook* workbook, const char* filename )
     std::cerr << "Cannot open " << filename << std::endl;
     return false;
   }
-  
+
   unsigned version = Swinder::Excel97;
   POLE::Stream* stream;
   stream = new POLE::Stream( &storage, "/Workbook" );
@@ -4485,30 +4485,30 @@ bool ExcelReader::load( Workbook* workbook, const char* filename )
     stream = new POLE::Stream( &storage, "/Book" );
     version = Swinder::Excel95;
   }
-  
+
   if( stream->fail() )
   {
     std::cerr << filename << " is not Excel workbook" << std::endl;
     delete stream;
     return false;
   }
-  
+
   unsigned long stream_size = stream->size();
 
   unsigned int buffer_size = 65536;		// current size of the buffer
   unsigned char *buffer = (unsigned char *) malloc(buffer_size);
   unsigned char small_buffer[128];	// small, fixed size buffer
 
-  workbook->clear();  
+  workbook->clear();
   d->workbook = workbook;
-  
+
   d->passwordProtected = false;
-  
+
   // assume
 
   while( stream->tell() < stream_size )
   {
-  
+
     // this is set by FILEPASS record
     // subsequent records will need to be decrypted
     // since we do not support it yet, we have to bail out
@@ -4517,21 +4517,21 @@ bool ExcelReader::load( Workbook* workbook, const char* filename )
       d->workbook->setPasswordProtected( true );
       break;
     }
-  
+
     // get record type and data size
     unsigned long pos = stream->tell();
     unsigned bytes_read = stream->read( buffer, 4 );
     if( bytes_read != 4 ) break;
-    
+
     unsigned long type = readU16( buffer );
     unsigned long size = readU16( buffer + 2 );
-    
+
     // verify buffer is large enough to hold the record data
     if (size > buffer_size) {
         buffer = (unsigned char *) realloc(buffer, size);
 	buffer_size = size;
     }
-    
+
     // load actual record data
     bytes_read = stream->read( buffer, size );
     if( bytes_read != size ) break;
@@ -4545,10 +4545,10 @@ bool ExcelReader::load( Workbook* workbook, const char* filename )
 
         bytes_read = stream->read( small_buffer, 4 );
 	if (bytes_read != 4) break;
-	
+
 	next_type = readU16( small_buffer );
 	unsigned long next_size = readU16( small_buffer + 2 );
-	
+
 	if (next_type == 0x3C) {
 	    // type of next record is 0x3C, so go ahead and append the contents of the next record to the buffer
 
@@ -4577,10 +4577,10 @@ bool ExcelReader::load( Workbook* workbook, const char* filename )
 
     // restore position in stream to the beginning of the next record
     stream->seek( saved_pos );
-    
+
     // skip record type 0, this is just for filler
     if( type == 0 ) continue;
-    
+
     // create the record using the factory
     Record* record = Record::create( type );
 
@@ -4590,9 +4590,9 @@ bool ExcelReader::load( Workbook* workbook, const char* filename )
       record->setVersion( version );
       record->setData( size, buffer );
       record->setPosition( pos );
-      
+
       handleRecord( record );
-      
+
       // special handling to find Excel version
       if ( record->rtti() == BOFRecord::id )
       {
@@ -4612,7 +4612,7 @@ bool ExcelReader::load( Workbook* workbook, const char* filename )
 
       delete record;
     }
-    
+
 #ifdef SWINDER_XLS2RAW
     if( !record )
     {
@@ -4627,85 +4627,85 @@ bool ExcelReader::load( Workbook* workbook, const char* filename )
   }
 
   free(buffer);
-  
+
   delete stream;
-  
+
   storage.close();
-  
+
   return true;
 }
 
 void ExcelReader::handleRecord( Record* record )
 {
   if( !record ) return;
-  
+
   unsigned type = record->rtti();
   switch( type )
   {
-    case BottomMarginRecord::id: 
+    case BottomMarginRecord::id:
       handleBottomMargin( static_cast<BottomMarginRecord*>( record ) ); break;
-    case BoundSheetRecord::id: 
+    case BoundSheetRecord::id:
       handleBoundSheet( static_cast<BoundSheetRecord*>( record ) ); break;
-    case BOFRecord::id: 
+    case BOFRecord::id:
       handleBOF( static_cast<BOFRecord*>( record ) ); break;
-    case BoolErrRecord::id: 
+    case BoolErrRecord::id:
       handleBoolErr( static_cast<BoolErrRecord*>( record ) ); break;
-    case BlankRecord::id: 
+    case BlankRecord::id:
       handleBlank( static_cast<BlankRecord*>( record ) ); break;
-    case CalcModeRecord::id: 
+    case CalcModeRecord::id:
       handleCalcMode( static_cast<CalcModeRecord*>( record ) ); break;
-    case ColInfoRecord::id: 
+    case ColInfoRecord::id:
       handleColInfo( static_cast<ColInfoRecord*>( record ) ); break;
-    case ExternNameRecord::id: 
+    case ExternNameRecord::id:
       handleExternName( static_cast<ExternNameRecord*>( record ) ); break;
-    case FilepassRecord::id: 
+    case FilepassRecord::id:
       handleFilepass( static_cast<FilepassRecord*>( record ) ); break;
-    case FormatRecord::id: 
+    case FormatRecord::id:
       handleFormat( static_cast<FormatRecord*>( record ) ); break;
-    case FormulaRecord::id: 
+    case FormulaRecord::id:
       handleFormula( static_cast<FormulaRecord*>( record ) ); break;
-    case FontRecord::id: 
+    case FontRecord::id:
       handleFont( static_cast<FontRecord*>( record ) ); break;
-    case FooterRecord::id: 
+    case FooterRecord::id:
       handleFooter( static_cast<FooterRecord*>( record ) ); break;
-    case HeaderRecord::id: 
+    case HeaderRecord::id:
       handleHeader( static_cast<HeaderRecord*>( record ) ); break;
-    case LabelRecord::id: 
+    case LabelRecord::id:
       handleLabel( static_cast<LabelRecord*>( record ) ); break;
-    case LabelSSTRecord::id: 
+    case LabelSSTRecord::id:
       handleLabelSST( static_cast<LabelSSTRecord*>( record ) ); break;
-    case LeftMarginRecord::id: 
+    case LeftMarginRecord::id:
       handleLeftMargin( static_cast<LeftMarginRecord*>( record ) ); break;
-    case MergedCellsRecord::id: 
+    case MergedCellsRecord::id:
       handleMergedCells( static_cast<MergedCellsRecord*>( record ) ); break;
-    case MulBlankRecord::id: 
+    case MulBlankRecord::id:
       handleMulBlank( static_cast<MulBlankRecord*>( record ) ); break;
-    case MulRKRecord::id: 
+    case MulRKRecord::id:
       handleMulRK( static_cast<MulRKRecord*>( record ) ); break;
-    case NameRecord::id: 
+    case NameRecord::id:
       handleName( static_cast<NameRecord*>( record ) ); break;
-    case NumberRecord::id: 
+    case NumberRecord::id:
       handleNumber( static_cast<NumberRecord*>( record ) ); break;
-    case PaletteRecord::id: 
+    case PaletteRecord::id:
       handlePalette( static_cast<PaletteRecord*>( record ) ); break;
-    case RightMarginRecord::id: 
+    case RightMarginRecord::id:
       handleRightMargin( static_cast<RightMarginRecord*>( record ) ); break;
-    case RKRecord::id: 
+    case RKRecord::id:
       handleRK( static_cast<RKRecord*>( record ) ); break;
-    case RowRecord::id: 
+    case RowRecord::id:
       handleRow( static_cast<RowRecord*>( record ) ); break;
-    case RStringRecord::id: 
+    case RStringRecord::id:
       handleRString( static_cast<RStringRecord*>( record ) ); break;
-    case SSTRecord::id: 
+    case SSTRecord::id:
       handleSST( static_cast<SSTRecord*>( record ) ); break;
-    case StringRecord::id: 
+    case StringRecord::id:
       handleString( static_cast<StringRecord*>( record ) ); break;
-    case TopMarginRecord::id: 
+    case TopMarginRecord::id:
       handleTopMargin( static_cast<TopMarginRecord*>( record ) ); break;
-    case XFRecord::id: 
+    case XFRecord::id:
       handleXF( static_cast<XFRecord*>( record ) ); break;
     default:
-      break;  
+      break;
   }
 }
 
@@ -4725,7 +4725,7 @@ void ExcelReader::handleBottomMargin( BottomMarginRecord* record )
 void ExcelReader::handleBoundSheet( BoundSheetRecord* record )
 {
   if( !record ) return;
-  
+
   // only care for Worksheet, forget everything else
   if( record->type() == BoundSheetRecord::Worksheet )
   {
@@ -4745,7 +4745,7 @@ void ExcelReader::handleBoundSheet( BoundSheetRecord* record )
 void ExcelReader::handleBOF( BOFRecord* record )
 {
   if( !record ) return;
-  
+
   if( record->type() == BOFRecord::Worksheet )
   {
     // find the sheet and make it active
@@ -4758,13 +4758,13 @@ void ExcelReader::handleBOF( BOFRecord* record )
 void ExcelReader::handleBoolErr( BoolErrRecord* record )
 {
   if( !record ) return;
-  
+
   if( !d->activeSheet ) return;
-  
+
   unsigned column = record->column();
   unsigned row = record->row();
   unsigned xfIndex = record->xfIndex();
-  
+
   Cell* cell = d->activeSheet->cell( column, row, true );
   if( cell )
   {
@@ -4776,14 +4776,14 @@ void ExcelReader::handleBoolErr( BoolErrRecord* record )
 void ExcelReader::handleBlank( BlankRecord* record )
 {
   if( !record ) return;
-  
+
   if( !d->activeSheet ) return;
-  
+
   unsigned column = record->column();
   unsigned row = record->row();
   unsigned xfIndex = record->xfIndex();
-  
-  Cell* cell = d->activeSheet->cell( column, row, true ); 
+
+  Cell* cell = d->activeSheet->cell( column, row, true );
   if( cell )
   {
     cell->setFormat( convertFormat( xfIndex ) );
@@ -4793,22 +4793,22 @@ void ExcelReader::handleBlank( BlankRecord* record )
 void ExcelReader::handleCalcMode( CalcModeRecord* record )
 {
   if( !record ) return;
-  
+
   d->workbook->setAutoCalc( record->autoCalc() );
 }
-  
+
 void ExcelReader::handleColInfo( ColInfoRecord* record )
 {
   if( !record ) return;
-  
+
   if( !d->activeSheet ) return;
-  
+
   unsigned firstColumn = record->firstColumn();
   unsigned lastColumn = record->lastColumn();
   unsigned xfIndex = record->xfIndex();
   unsigned width = record->width();
   bool hidden = record->hidden();
-  
+
   for( unsigned i = firstColumn; i <= lastColumn; i++ )
   {
     Column* column = d->activeSheet->column( i, true );
@@ -4818,13 +4818,13 @@ void ExcelReader::handleColInfo( ColInfoRecord* record )
       column->setFormat( convertFormat( xfIndex ) );
       column->setVisible( !hidden );
     }
-  }  
+  }
 }
 
 void ExcelReader::handleDateMode( DateModeRecord* record )
 {
   if( !record ) return;
-  
+
   // FIXME FIXME what to do ??
   std::cerr << "WARNING: Workbook uses unsupported 1904 Date System " << std::endl;
 }
@@ -4832,9 +4832,9 @@ void ExcelReader::handleDateMode( DateModeRecord* record )
 void ExcelReader::handleDimension( DimensionRecord* record )
 {
   if( !record ) return;
-  
+
   // in the mean time we don't need to handle this because we don't care
-  // about the used range of the sheet  
+  // about the used range of the sheet
 }
 
 void ExcelReader::handleLabel( LabelRecord* record )
@@ -4844,10 +4844,10 @@ void ExcelReader::handleLabel( LabelRecord* record )
   if( !d->activeSheet ) return;
 
   unsigned column = record->column();
-  unsigned row = record->row();  
+  unsigned row = record->row();
   unsigned xfIndex = record->xfIndex();
   UString label = record->label();
-  
+
   Cell* cell = d->activeSheet->cell( column, row, true );
   if( cell )
   {
@@ -4880,14 +4880,14 @@ void ExcelReader::handleFormula( FormulaRecord* record )
   if( !record ) return;
 
   if( !d->activeSheet ) return;
-  
+
   unsigned column = record->column();
-  unsigned row = record->row();  
+  unsigned row = record->row();
   unsigned xfIndex = record->xfIndex();
   Value value = record->result();
-  
+
   UString formula = decodeFormula( row, column, record->tokens() );
-  
+
   Cell* cell = d->activeSheet->cell( column, row, true );
   if( cell )
   {
@@ -4895,7 +4895,7 @@ void ExcelReader::handleFormula( FormulaRecord* record )
     if( !formula.isEmpty() )
       cell->setFormula( formula );
     cell->setFormat( convertFormat( xfIndex ) );
-    
+
     // if value is string, real value is in subsequent String record
     if( value.isString() )
       d->formulaCell = cell;
@@ -4912,7 +4912,7 @@ void ExcelReader::handleExternName( ExternNameRecord* record )
 void ExcelReader::handleFilepass( FilepassRecord* record )
 {
   if( !record ) return;
-  
+
   d->passwordProtected = true;
 }
 
@@ -5051,16 +5051,16 @@ void ExcelReader::handleLabelSST( LabelSSTRecord* record )
 void ExcelReader::handleMergedCells( MergedCellsRecord* record )
 {
   if( !record ) return;
-  
+
   if( !d->activeSheet ) return;
-  
+
   for( unsigned i = 0; i < record->count(); i++ )
   {
     unsigned firstRow = record->firstRow( i );
     unsigned lastRow = record->lastRow( i );
     unsigned firstColumn = record->firstColumn( i );
     unsigned lastColumn = record->lastColumn( i );
-    
+
     Cell* cell = d->activeSheet->cell( firstColumn, firstRow, true );
     if( cell )
     {
@@ -5075,11 +5075,11 @@ void ExcelReader::handleMulBlank( MulBlankRecord* record )
   if( !record ) return;
 
   if( !d->activeSheet ) return;
-  
+
   unsigned firstColumn = record->firstColumn();
   unsigned lastColumn = record->lastColumn();
   unsigned row = record->row();
-  
+
   for( unsigned column = firstColumn; column <= lastColumn; column++ )
   {
     Cell* cell = d->activeSheet->cell( column, row, true );
@@ -5093,16 +5093,16 @@ void ExcelReader::handleMulBlank( MulBlankRecord* record )
 void ExcelReader::handleMulRK( MulRKRecord* record )
 {
   if( !record ) return;
-  
+
   if( !d->activeSheet ) return;
-  
+
   unsigned firstColumn = record->firstColumn();
   unsigned lastColumn = record->lastColumn();
   unsigned row = record->row();
-  
+
   for( unsigned column = firstColumn; column <= lastColumn; column++ )
   {
-    Cell* cell = d->activeSheet->cell( column, row, true );    
+    Cell* cell = d->activeSheet->cell( column, row, true );
     if( cell )
     {
       unsigned i = column - firstColumn;
@@ -5127,14 +5127,14 @@ void ExcelReader::handleName( NameRecord* record )
 void ExcelReader::handleNumber( NumberRecord* record )
 {
   if( !record ) return;
-  
+
   if( !d->activeSheet ) return;
-  
+
   unsigned column = record->column();
   unsigned row = record->row();
   unsigned xfIndex = record->xfIndex();
   double number = record->number();
-  
+
   Cell* cell = d->activeSheet->cell( column, row, true );
   if( cell )
   {
@@ -5146,39 +5146,39 @@ void ExcelReader::handleNumber( NumberRecord* record )
 void ExcelReader::handlePalette( PaletteRecord* record )
 {
   if( !record ) return;
-  
+
   d->colorTable.clear();
   for( unsigned i = 0; i < record->count(); i++ )
     d->colorTable.push_back( record->color( i ) );
 }
-  
+
 void ExcelReader::handleRightMargin( RightMarginRecord* record )
 {
   if( !record ) return;
-  
+
   if( !d->activeSheet ) return;
-  
+
   // convert from inches to points
   double margin = record->rightMargin() * 72.0;
-  d->activeSheet->setRightMargin( margin );  
+  d->activeSheet->setRightMargin( margin );
 }
 
 void ExcelReader::handleRK( RKRecord* record )
 {
   if( !record ) return;
-  
+
   if( !d->activeSheet ) return;
-  
+
   unsigned column = record->column();
   unsigned row = record->row();
   unsigned xfIndex = record->xfIndex();
-  
+
   Value value;
   if( record->isInteger() )
     value.setValue( record->asInteger() );
   else
     value.setValue( record->asFloat() );
-  
+
   Cell* cell = d->activeSheet->cell( column, row, true );
   if( cell )
   {
@@ -5190,34 +5190,34 @@ void ExcelReader::handleRK( RKRecord* record )
 void ExcelReader::handleRow( RowRecord* record )
 {
   if( !record ) return;
-  
+
   if( !d->activeSheet ) return;
 
-  unsigned index = record->row();  
+  unsigned index = record->row();
   unsigned xfIndex = record->xfIndex();
   unsigned height = record->height();
   bool hidden = record->hidden();
-  
+
   Row* row = d->activeSheet->row( index, true );
   if( row )
   {
     row->setHeight( height / 20.0 );
     row->setFormat( convertFormat( xfIndex ) );
     row->setVisible( !hidden );
-  }  
+  }
 }
 
 void ExcelReader::handleRString( RStringRecord* record )
 {
   if( !record ) return;
-  
+
   if( !d->activeSheet ) return;
-  
+
   unsigned column = record->column();
-  unsigned row = record->row();  
+  unsigned row = record->row();
   unsigned xfIndex = record->xfIndex();
   UString label = record->label();
-  
+
   Cell* cell = d->activeSheet->cell( column, row, true );
   if( cell )
   {
@@ -5229,7 +5229,7 @@ void ExcelReader::handleRString( RStringRecord* record )
 void ExcelReader::handleSST( SSTRecord* record )
 {
   if( !record ) return;
-  
+
   d->stringTable.clear();
   for( unsigned i = 0; i < record->count();i++ )
   {
@@ -5241,12 +5241,12 @@ void ExcelReader::handleSST( SSTRecord* record )
 void ExcelReader::handleString( StringRecord* record )
 {
   if( !record ) return;
-  
+
   if( !d->activeSheet ) return;
   if( !d->formulaCell ) return;
-  
+
   d->formulaCell->setValue( record->value() );
-  
+
   d->formulaCell = 0;
 }
 
@@ -5263,8 +5263,8 @@ void ExcelReader::handleTopMargin( TopMarginRecord* record )
 }
 
 FormatFont ExcelReader::convertFont( unsigned fontIndex )
-{  
-  // speed-up trick: check in the cache first  
+{
+  // speed-up trick: check in the cache first
   FormatFont font = d->fontCache[ fontIndex ];
   if( font.isNull() && ( fontIndex < d->fontTable.size() ))
   {
@@ -5274,32 +5274,32 @@ FormatFont ExcelReader::convertFont( unsigned fontIndex )
     font.setColor( convertColor( fr.colorIndex() ) );
     font.setBold( fr.boldness() > 500 );
     font.setItalic( fr.italic() );
-    font.setStrikeout( fr.strikeout() );    
+    font.setStrikeout( fr.strikeout() );
     font.setSubscript( fr.escapement() == FontRecord::Subscript );
     font.setSuperscript( fr.escapement() == FontRecord::Superscript );
     font.setUnderline( fr.underline() != FontRecord::None );
-    
+
     // put in the cache for further use
-    d->fontCache[ fontIndex ] = font;    
-  }  
-  
+    d->fontCache[ fontIndex ] = font;
+  }
+
   return font;
 }
 
 Color ExcelReader::convertColor( unsigned colorIndex )
-{  
+{
   if( ( colorIndex >= 8 ) && ( colorIndex < 0x40 ) )
     if( colorIndex-8 < d->colorTable.size() )
       return d->colorTable[ colorIndex-8 ];
-  
+
   // FIXME the following colors depend on system color settings
-  // 0x0040  system window text colour for border lines    
+  // 0x0040  system window text colour for border lines
   // 0x0041  system window background colour for pattern background
   // 0x7fff  system window text colour for fonts
   if( colorIndex == 0x40 ) return Color( 0, 0, 0 );
   if( colorIndex == 0x41 ) return Color( 255, 255, 255 );
   if( colorIndex == 0x7fff ) return Color( 0, 0, 0 );
-  
+
   // fallback: just "black"
   Color color;
 
@@ -5307,8 +5307,8 @@ Color ExcelReader::convertColor( unsigned colorIndex )
   // yellow, magenta, cyan
   switch( colorIndex )
   {
-    case 0:   color = Color( 0, 0, 0 ); break; 
-    case 1:   color = Color( 255, 255, 255 ); break; 
+    case 0:   color = Color( 0, 0, 0 ); break;
+    case 1:   color = Color( 255, 255, 255 ); break;
     case 2:   color = Color( 255, 0, 0 ); break;
     case 3:   color = Color( 0, 255, 0 ); break;
     case 4:   color = Color( 0, 0, 255 ); break;
@@ -5317,7 +5317,7 @@ Color ExcelReader::convertColor( unsigned colorIndex )
     case 7:   color = Color( 0, 255, 255 ); break;
     default:  break;
   }
-  
+
   return color;
 }
 
@@ -5390,9 +5390,9 @@ static Pen convertBorderStyle( unsigned style )
     // fallback, simple solid line
     pen.width = 1;
     pen.style = Pen::SolidLine;
-    break;    
+    break;
   };
-  
+
   return pen;
 }
 
@@ -5431,7 +5431,7 @@ Format ExcelReader::convertFormat( unsigned xfIndex )
   if( xfIndex >= d->xfTable.size() ) return format;
 
   XFRecord xf = d->xfTable[ xfIndex ];
-  
+
   UString valueFormat = d->formatsTable[xf.formatIndex()];
   if( valueFormat.isEmpty() )
     switch( xf.formatIndex() )
@@ -5475,17 +5475,17 @@ Format ExcelReader::convertFormat( unsigned xfIndex )
       default: valueFormat = "General"; break;
     };
   format.setValueFormat( valueFormat );
-    
+
   format.setFont( convertFont( xf.fontIndex() ) );
-  
+
   FormatAlignment alignment;
   switch( xf.horizontalAlignment() )
   {
-    case XFRecord::Left:     
+    case XFRecord::Left:
       alignment.setAlignX( Format::Left ); break;
-    case XFRecord::Right:    
+    case XFRecord::Right:
       alignment.setAlignX( Format::Right ); break;
-    case XFRecord::Centered: 
+    case XFRecord::Centered:
       alignment.setAlignX( Format::Center ); break;
     default: break;
     // FIXME still unsupported: Repeat, Justified, Filled, Distributed
@@ -5505,24 +5505,24 @@ Format ExcelReader::convertFormat( unsigned xfIndex )
   format.setAlignment( alignment );
 
   FormatBorders borders;
-    
+
   Pen pen;
   pen = convertBorderStyle( xf.leftBorderStyle() );
   pen.color = convertColor( xf.leftBorderColor() );
   borders.setLeftBorder( pen );
-  
+
   pen = convertBorderStyle( xf.rightBorderStyle() );
   pen.color = convertColor( xf.rightBorderColor() );
   borders.setRightBorder( pen );
-  
+
   pen = convertBorderStyle( xf.topBorderStyle() );
   pen.color = convertColor( xf.topBorderColor() );
   borders.setTopBorder( pen );
-  
+
   pen = convertBorderStyle( xf.bottomBorderStyle() );
   pen.color = convertColor( xf.bottomBorderColor() );
   borders.setBottomBorder( pen );
-  
+
   format.setBorders( borders );
 
   FormatBackground background;
@@ -5537,8 +5537,8 @@ Format ExcelReader::convertFormat( unsigned xfIndex )
 void ExcelReader::handleXF( XFRecord* record )
 {
   if( !record ) return;
-  
-  d->xfTable.push_back( *record );  
+
+  d->xfTable.push_back( *record );
 }
 
 typedef std::vector<UString> UStringStack;
@@ -5547,13 +5547,13 @@ void mergeTokens( UStringStack* stack, int count, UString mergeString )
 {
   if( !stack ) return;
   if( !stack->size() ) return;
-  
+
   UString s1, s2;
-	
+
   while(count)
   {
 	count--;
-    
+
     UString last = (*stack)[ stack->size()-1 ];
     UString tmp = last;
     tmp.append( s1 );
@@ -5579,7 +5579,7 @@ void dumpStack( std::vector<UString> stack )
   std::cout << "Stack now is: " ;
   if( !stack.size() )
   std::cout << "(empty)" ;
- 
+
   for( unsigned i = 0; i < stack.size(); i++ )
     std::cout << "  " << i << ": " << stack[i].ascii() << std::endl;
   std::cout << std::endl;
@@ -5589,79 +5589,79 @@ void dumpStack( std::vector<UString> stack )
 UString ExcelReader::decodeFormula( unsigned row, unsigned col, const FormulaTokens& tokens )
 {
   UStringStack stack;
-  
+
   for( unsigned c=0; c < tokens.size(); c++ )
   {
     FormulaToken token = tokens[c];
 
 #ifdef SWINDER_XLS2RAW
     std::cout << "Token " << c << ": ";
-    std::cout <<  token.id() << "  "; 
+    std::cout <<  token.id() << "  ";
     std::cout << token.idAsString() << std::endl;
 #endif
 
     switch( token.id() )
     {
-      case FormulaToken::Add:  
+      case FormulaToken::Add:
         mergeTokens( &stack, 2, UString("+") );
         break;
-        
-      case FormulaToken::Sub:  
+
+      case FormulaToken::Sub:
         mergeTokens( &stack, 2, UString("-") );
         break;
-        
-      case FormulaToken::Mul:  
+
+      case FormulaToken::Mul:
         mergeTokens( &stack, 2, UString("*") );
         break;
-        
-      case FormulaToken::Div:  
+
+      case FormulaToken::Div:
         mergeTokens( &stack, 2, UString("/") );
         break;
-        
-      case FormulaToken::Power:  
+
+      case FormulaToken::Power:
         mergeTokens( &stack, 2, UString("^") );
         break;
-        
-      case FormulaToken::Concat:  
+
+      case FormulaToken::Concat:
         mergeTokens( &stack, 2, UString("&") );
         break;
-        
-      case FormulaToken::LT:  
+
+      case FormulaToken::LT:
         mergeTokens( &stack, 2, UString("<") );
         break;
-        
-      case FormulaToken::LE:  
+
+      case FormulaToken::LE:
         mergeTokens( &stack, 2, UString("<=") );
         break;
-        
-      case FormulaToken::EQ:  
+
+      case FormulaToken::EQ:
         mergeTokens( &stack, 2, UString("=") );
         break;
-        
-      case FormulaToken::GE:  
+
+      case FormulaToken::GE:
         mergeTokens( &stack, 2, UString(">=") );
         break;
-        
-      case FormulaToken::GT:  
+
+      case FormulaToken::GT:
         mergeTokens( &stack, 2, UString(">") );
         break;
-        
-      case FormulaToken::NE:  
+
+      case FormulaToken::NE:
         mergeTokens( &stack, 2, UString("<>") );
         break;
-      
-      case FormulaToken::Intersect:  
+
+      case FormulaToken::Intersect:
         mergeTokens( &stack, 2, UString(" ") );
         break;
-        
-      case FormulaToken::List:  
+
+      case FormulaToken::List:
         mergeTokens( &stack, 2, UString(";") );
         break;
-      
-      case FormulaToken::Range:  
+
+      case FormulaToken::Range:
         mergeTokens( &stack, 2, UString(";") );
         break;
-      
+
       case FormulaToken::UPlus:
         {
           UString str( "+" );
@@ -5669,20 +5669,20 @@ UString ExcelReader::decodeFormula( unsigned row, unsigned col, const FormulaTok
           stack[ stack.size()-1 ] = str;
         }
         break;
-    
-      case FormulaToken::UMinus:  
+
+      case FormulaToken::UMinus:
         {
           UString str( "-" );
           str.append( stack[ stack.size()-1 ] );
           stack[ stack.size()-1 ] = str;
         }
         break;
-    
-      case FormulaToken::Percent:  
+
+      case FormulaToken::Percent:
         stack[ stack.size()-1 ].append( UString("%") );
         break;
-    
-      case FormulaToken::Paren:  
+
+      case FormulaToken::Paren:
         {
           UString str( "(" );
           str.append( stack[ stack.size()-1 ] );
@@ -5690,44 +5690,44 @@ UString ExcelReader::decodeFormula( unsigned row, unsigned col, const FormulaTok
           stack[ stack.size()-1 ] = str;
         }
         break;
-    
+
       case FormulaToken::MissArg:
         // just ignore
         stack.push_back( UString(" ") );
         break;
-    
+
       case FormulaToken::String:
         {
           UString str( '\"' );
-          str.append( token.value().toString() );
+          str.append( token.value().asString() );
           str.append( UString( '\"' ) );
           stack.push_back( str );
         }
         break;
-    
+
       case FormulaToken::Bool:
         if( token.value().asBoolean() )
           stack.push_back( UString( "TRUE" ) );
-        else  
+        else
           stack.push_back( UString( "FALSE" ) );
         break;
-        
+
       case FormulaToken::Integer:
         stack.push_back( UString::from( token.value().asInteger() ) );
         break;
-        
+
       case FormulaToken::Float:
         stack.push_back( UString::from( token.value().asFloat() ) );
         break;
-        
+
       case FormulaToken::Array:
         // FIXME handle this !
         break;
-      
+
       case FormulaToken::Ref:
         stack.push_back( token.ref( row, col ) );
         break;
-      
+
       case FormulaToken::Area:
         stack.push_back( token.area( row, col ) );
         break;
@@ -5827,11 +5827,11 @@ UString ExcelReader::decodeFormula( unsigned row, unsigned col, const FormulaTok
 #endif
 
   }
-  
+
   UString result;
   for( unsigned i = 0; i < stack.size(); i++ )
     result.append( stack[i] );
-  
+
 #ifdef SWINDER_XLS2RAW
   std::cout << "FORMULA Result: " << result << std::endl;
 #endif
@@ -5853,13 +5853,13 @@ int main( int argc, char ** argv )
 
   char* filename = argv[1];
   std::cout << "Checking " << filename << std::endl;
-  
+
   Workbook* workbook = new Workbook();
   ExcelReader* reader = new ExcelReader();
   reader->load( workbook, filename );
   delete reader;
   delete workbook;
-    
+
   return 0;
 }
 

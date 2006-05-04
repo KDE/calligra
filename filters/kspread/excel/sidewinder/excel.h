@@ -5,7 +5,7 @@
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
    version 2 of the License, or (at your option) any later version.
-   
+
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
@@ -43,39 +43,39 @@ class EString
 public:
 
   EString();
-  
+
   EString( const EString& );
-  
+
   EString& operator=( const EString& );
-  
+
   ~EString();
-  
+
   bool unicode() const;
-  
+
   void setUnicode( bool u );
-  
+
   bool richText() const;
-  
+
   void setRichText( bool r );
-    
+
   UString str() const;
-  
+
   void setStr( const UString& str );
-  
-  // space allocate for the string, not length (use string.length() for that) 
+
+  // space allocate for the string, not length (use string.length() for that)
   unsigned size() const;
   void setSize( unsigned size ); // HACKS
-  
-  
+
+
   static EString fromUnicodeString( const void* p, bool longString, unsigned maxsize = 0 );
-  
+
   static EString fromSheetName( const void* p, unsigned maxsize = 0 );
-  
+
   // from the buffer
   // longstring means 16-bit string length, usually for label
   // longstring=false is normally for sheet name
   static EString fromByteString( const void* p, bool longString, unsigned maxsize = 0 );
-  
+
 private:
   class Private;
   Private* d;
@@ -147,27 +147,27 @@ public:
   FormulaToken( unsigned id );
   FormulaToken( const FormulaToken& );
   ~FormulaToken();
-  
+
   // token id, excluding token class
   unsigned id() const;
   const char* idAsString() const;
-  
+
   // Excel version
   unsigned version() const;
   void setVersion( unsigned version );  // Excel version
-  
+
   // size of data, EXCLUDING the byte for token id
   unsigned size() const;
   void setData( unsigned size, const unsigned char* data );
-  
+
   // only when id returns ErrorCode, Bool, Integer, Float, or String
   Value value() const;
-  
+
   // only when id is Function or FunctionVar
   unsigned functionIndex() const;
   const char* functionName() const;  // for non external function
   unsigned functionParams() const;
-  
+
   // only when id is Ref
   UString ref( unsigned row, unsigned col ) const;
 
@@ -182,7 +182,7 @@ public:
 
 private:
   class Private;
-  Private *d;  
+  Private *d;
 };
 
 typedef std::vector<FormulaToken> FormulaTokens;
@@ -192,7 +192,7 @@ std::ostream& operator<<( std::ostream& s, FormulaToken token );
 /**
   Class Record represents a base class for all other type record,
   hence do not use this class in real life.
-   
+
  */
 class Record
 {
@@ -201,48 +201,48 @@ public:
   /**
     Static ID of the record. Subclasses should override this value
     with the id of the record they handle.
-  */  
+  */
   static const unsigned int id;
-  
+
   virtual unsigned int rtti(){
 	  return this->id;
   }
-  
+
   /**
     Creates a new generic record.
-  */  
+  */
   Record();
-  
+
   /**
     Destroys the record.
   */
   virtual ~Record();
-  
+
   /**
    * Record factory, create a new record of specified type.
    */
   static Record* create( unsigned type );
-  
+
   void setVersion( unsigned v ){ ver = v; };
-  
+
   unsigned version(){ return ver; };
 
   /**
     Sets the data for this record.
    */
   virtual void setData( unsigned size, const unsigned char* data );
-  
+
   /**
     Sets the position of the record in the OLE stream. Somehow this is
     required to process BoundSheet and BOF(Worksheet) properly.
    */
   void setPosition( unsigned pos );
-  
+
   /**
-    Gets the position of this record in the OLE stream. 
+    Gets the position of this record in the OLE stream.
    */
   unsigned position() const;
-  
+
   /**
     Returns the name of the record. For debugging only.
    */
@@ -252,7 +252,7 @@ public:
     Dumps record information to output stream. For debugging only.
    */
   virtual void dump( std::ostream& out ) const;
-  
+
 protected:
 
    // position of this record in the OLE stream
@@ -265,13 +265,13 @@ private:
    // no copy or assign
    Record( const Record& );
    Record& operator=( const Record& );
-   
+
 };
 
 /**
   Class CellInfo represents a base class for records which provide information
   about cells. Some important records like BlankRecord, LabelRecord, and others
-  inherit this class.   
+  inherit this class.
  */
 class CellInfo
 {
@@ -344,7 +344,7 @@ private:
 
 /**
   Class CellInfo represents a base class for records which provide information
-  about a span of columns. The information, like formatting index, should 
+  about a span of columns. The information, like formatting index, should
   apply to columns (as specified) from firstColumn and lastColumn.
  */
 class ColumnSpanInfo
@@ -362,7 +362,7 @@ public:
   virtual ~ColumnSpanInfo();
 
   /**
-   * Returns the first column associated with the span information. 
+   * Returns the first column associated with the span information.
    * Column index is zero based, so the first column is 0.
    *
    * \sa lastColumn, setFirstColumn
@@ -370,7 +370,7 @@ public:
   virtual unsigned firstColumn() const;
 
   /**
-   * Returns the last column associated with the span information. 
+   * Returns the last column associated with the span information.
    * Column index is zero based, so the first column is 0.
    *
    * \sa firstColumn, setLastColumn
@@ -378,7 +378,7 @@ public:
   virtual unsigned lastColumn() const;
 
   /**
-   * Sets the first column associated with the span information. 
+   * Sets the first column associated with the span information.
    * Column index is zero based, so the first column is 0.
    *
    * \sa setLastColumn, firstColumn
@@ -386,7 +386,7 @@ public:
   virtual void setFirstColumn( unsigned c );
 
   /**
-   * Sets the last column associated with the span information. 
+   * Sets the last column associated with the span information.
    * Column index is zero based, so the first column is 0.
    *
    * \sa setFirstColumn, lastColumn
@@ -404,8 +404,8 @@ private:
 
 /**
   \brief Backup upon save.
-  
-  Class BackupRecord represents Backup record, which determines whether 
+
+  Class BackupRecord represents Backup record, which determines whether
   Microsoft Excel makes a backup of the file while saving.
  */
 class BackupRecord : public Record
@@ -418,25 +418,25 @@ public:
    * Creates a new Backup record.
    */
   BackupRecord();
-  
+
   /**
    * Destroy the record.
    */
   ~BackupRecord();
-  
+
   unsigned int rtti(){
 	  return this->id;
   }
   /**
    * Returns true if a backup is made when saving the file.
-   * 
+   *
    * \sa setBackup
    */
   bool backup() const;
-  
+
   /**
    * If r is true, a backup will be made when saving the file.
-   * 
+   *
    * \sa backup
    */
   void setBackup( bool r );
@@ -459,7 +459,7 @@ private:
 
 /**
   \brief Beginning of file/set of records.
-  
+
   Class BOFRecord represents BOF (Beginning of File) record, which
   is used to mark beginning of a set of records (following the BOF record).
   For each BOF record, there should also be one corresponding EOF record.
@@ -538,7 +538,7 @@ private:
 
 /**
   \brief Blank cell.
-  
+
   Class BlankRecord represents a blank cell. It contains information
   about cell address and formatting.
  */
@@ -571,7 +571,7 @@ private:
 
 /**
   \brief Boolean value or error code.
-  
+
   Class BOFRecord represents BoolErr record, which
   is used to store boolean value or error code of a cell.
  */
@@ -618,8 +618,8 @@ private:
 
 /**
   \brief Bottom margin.
-  
-  Class BottomMarginRecord holds information about bottom margin 
+
+  Class BottomMarginRecord holds information about bottom margin
   (in inches).
  */
 class BottomMarginRecord : public Record
@@ -635,17 +635,17 @@ public:
    * Creates a new BottomMargin record.
    */
   BottomMarginRecord();
-  
+
   /**
    * Destroy the record.
    */
   ~BottomMarginRecord();
-  
+
   /**
    * Gets the bottom margin (in inches).
    */
   double bottomMargin() const;
-  
+
   /**
    * Sets the new bottom margin (in inches).
    */
@@ -668,17 +668,17 @@ private:
 
 /**
   \brief Sheet information.
-  
+
   Class BoundSheetRecord represents BoundSheet record, which defines a sheet
-  within the workbook. There must be exactly one BoundSheet record for 
+  within the workbook. There must be exactly one BoundSheet record for
   each sheet.
-  
-  BoundSheet record stores information about sheet type, sheet name, and 
+
+  BoundSheet record stores information about sheet type, sheet name, and
   the corresponding BOF record.
-  
+
   \sa BOFRecord
  */
- 
+
 // TODO support for strong visible
 
 class BoundSheetRecord : public Record
@@ -700,65 +700,65 @@ public:
    * Destroys the BoundSheet record.
    */
   virtual ~BoundSheetRecord();
-  
+
   /**
    * Type of the sheet.
    */
   enum { Worksheet=0, Chart=2, VBModule=6 };
-  
+
   /**
-   * Sets the type of the BoundSheet. Possible values are 
+   * Sets the type of the BoundSheet. Possible values are
    * BoundSheet::Worksheet, BoundSheet::Chart and BoundSheet::VBModule.
    */
   void setType( unsigned type );
-  
+
   /**
-   * Returns the type of the BoundSheet. Possible values are 
+   * Returns the type of the BoundSheet. Possible values are
    * BoundSheet::Worksheet, BoundSheet::Chart and BoundSheet::VBModule.
    */
   unsigned type() const;
-  
+
   /**
-   * Returns the type of the BoundSheet as string. For example, if 
+   * Returns the type of the BoundSheet as string. For example, if
    * type of BoundSheet is BoundSheet::Chart, then this function returns
    * "Chart".
    */
   const char* typeAsString() const;
-  
+
   /**
    * Sets the visibility of the sheet.
    */
   void setVisible( bool visible );
-  
+
   /**
    * Returns true if the sheet is visible.
    */
   bool visible() const;
-  
+
   /**
    * Sets the name of the sheet.
    */
   void setSheetName( const UString& name );
-  
+
   /**
    * Returns the name of the sheet.
    */
   UString sheetName() const;
-  
+
   /**
    * Sets the position of the BOF record associated with this BoundSheet.
    */
   void setBofPosition( unsigned pos );
-  
+
   /**
    * Returns the position of the BOF record associated with this BoundSheet.
    */
   unsigned bofPosition() const;
 
   virtual void setData( unsigned size, const unsigned char* data );
-  
+
   virtual const char* name(){ return "BOUNDSHEET"; }
-  
+
   virtual void dump( std::ostream& out ) const;
 
 private:
@@ -772,8 +772,8 @@ private:
 
 /**
   \brief Automatic recalculation mode.
-  
-  Class CalcModeRecord represents CalcMode record, which specifies whether 
+
+  Class CalcModeRecord represents CalcMode record, which specifies whether
   to (re)calculate formulas manually or automatically.
  */
 class CalcModeRecord : public Record
@@ -790,22 +790,22 @@ public:
    * Creates a new CalcMode record.
    */
   CalcModeRecord();
-  
+
   /**
    * Destroy the record.
    */
   ~CalcModeRecord();
-  
+
   /**
    * Returns true if formulas calculation is performed automatically.
-   * 
+   *
    * \sa setAutoCalc
    */
   bool autoCalc() const;
-  
+
   /**
    * If r is true, formulas calculation will be performed automatically.
-   * 
+   *
    * \sa autoCalc
    */
   void setAutoCalc( bool r );
@@ -827,7 +827,7 @@ private:
 
 /**
   \brief Columns width and format.
-  
+
   Class ColInfoRecord represents ColInfo record, which provides information
   (such as column width and formatting) for a span of columns.
  */
@@ -850,46 +850,46 @@ public:
    * Destroys the record.
    */
   virtual ~ColInfoRecord();
-  
+
   /**
    * Returns the XF index for the formatting of the column(s).
    *
    * \sa setXfIndex
    */
   unsigned xfIndex() const;
-  
+
   /**
    * Sets the XF index for the formatting of the column(s).
    *
    * \sa xfIndex
    */
   void setXfIndex( unsigned i );
-  
+
   /**
-   * Returns the width of the column(s), specified in 1/256 of 
-   * a character width. The exact width (in pt or inch) could only be 
+   * Returns the width of the column(s), specified in 1/256 of
+   * a character width. The exact width (in pt or inch) could only be
    * calculated given the base character width for the column format.
    *
    * \sa setWidth
    */
   unsigned width() const;
-  
+
   /**
-   * Sets the width of the column(s), specified in 1/256 of 
-   * a character width. The exact width (in pt or inch) could only be 
+   * Sets the width of the column(s), specified in 1/256 of
+   * a character width. The exact width (in pt or inch) could only be
    * calculated given the base character width for the column format.
    *
    * \sa width
    */
   void setWidth( unsigned w );
-  
+
   /**
    * Returns true if the columns should be hidden, i.e not visible.
    *
    * \sa setHidden
    */
   bool hidden() const;
-  
+
   /**
    * Sets whether columns should be hidden or visible.
    *
@@ -903,14 +903,14 @@ public:
    * \sa setCollapsed
    */
   bool collapsed() const;
-  
+
   /**
    * Sets whether columns should be collapsed or not.
    *
    * \sa collapsed
    */
   void setCollapsed( bool c );
-  
+
   /**
    * Returns the outline level of the columns. If it is 0, then
    * the columns are not outlined.
@@ -918,7 +918,7 @@ public:
    * \sa setOutlineLevel
    */
   unsigned outlineLevel() const;
-  
+
   /**
    * Sets the outline level of the columns. If it is 0, then
    * the columns are not outlined.
@@ -926,7 +926,7 @@ public:
    * \sa outlineLevel
    */
   void setOutlineLevel( unsigned l );
-  
+
   virtual void setData( unsigned size, const unsigned char* data );
 
   virtual const char* name(){ return "COLINFO"; }
@@ -944,7 +944,7 @@ private:
 
 /**
   \brief Date reference.
-  
+
   Class DateModeRecord represents DateMode record, which specifies
   reference date for displaying date value of given serial number.
   If base1904 is true, the reference date is 1st of January, 1904 (in which
@@ -966,24 +966,24 @@ public:
    * Creates a new DateMode record.
    */
   DateModeRecord();
-  
+
   /**
    * Destroy the record.
    */
   ~DateModeRecord();
-  
+
   /**
    * Returns true if the reference date is 1st of January, 1904 or false
    * if the reference date is 31st of December, 1899.
-   * 
+   *
    * \sa setBase1904
    */
   bool base1904() const;
-  
+
   /**
    * If r is true, sets the reference date to 1st of January, 1904. Else,
    * sets the reference date to 31st of December, 1899.
-   * 
+   *
    * \sa base1904
    */
   void setBase1904( bool r );
@@ -1005,8 +1005,8 @@ private:
 
 /**
   \brief Range of used area.
-  
-  Class DimensionRecord represents Dimension record, which contains the 
+
+  Class DimensionRecord represents Dimension record, which contains the
   range address of the used area in the current sheet.
  */
 class DimensionRecord : public Record
@@ -1023,79 +1023,79 @@ public:
    * Creates a new Dimension record.
    */
   DimensionRecord();
-  
+
   /**
    * Destroys the record.
    */
   ~DimensionRecord();
-  
+
   /**
    * Returns index to the first used row.
    *
    * \sa setFirstRow, lastRow
    */
   unsigned firstRow() const;
-  
+
   /**
    * Sets index to the first used row.
    *
    * \sa firstRow, setLastRow
    */
   void setFirstRow( unsigned r );
-  
+
   /**
    * Returns index to the last used row.
    *
    * \sa setLastRow, firstRow
    */
   unsigned lastRow() const;
-  
+
   /**
    * Sets index to the last used row.
    *
    * \sa lastRow, setFirstRow
    */
   void setLastRow( unsigned r );
-  
+
   /**
    * Returns index to the first used column.
    *
    * \sa setFirstColumn, lastColumn
    */
   unsigned firstColumn() const;
-  
+
   /**
    * Sets index to the first used column.
    *
    * \sa firstColumn, setLastColumn
    */
   void setFirstColumn( unsigned r );
-  
+
   /**
    * Returns index to the last used column.
    *
    * \sa setLastColumn, firstColumn
    */
   unsigned lastColumn() const;
-  
+
   /**
    * Sets index to the last used column.
    *
    * \sa lastColumn, setFirstColumn
    */
   void setLastColumn( unsigned r );
-  
+
   virtual const char* name(){ return "DIMENSION"; }
-  
+
   virtual void setData( unsigned size, const unsigned char* data );
-  
+
   virtual void dump( std::ostream& out ) const;
 
 private:
    // no copy or assign
    DimensionRecord( const DimensionRecord& );
    DimensionRecord& operator=( const DimensionRecord& );
-   
+
    class Private;
    Private *d;
 };
@@ -1136,7 +1136,7 @@ private:
    // no copy or assign
    ExternNameRecord( const ExternNameRecord& );
    ExternNameRecord& operator=( const ExternNameRecord& );
-   
+
    class Private;
    Private *d;
 };
@@ -1144,7 +1144,7 @@ private:
 
 /**
   \brief End of record set.
-  
+
   Class EOFRecord represents EOF record, which marks the end of records
   for a specific object. EOF record should be always in pair with BOF Record.
 
@@ -1170,7 +1170,7 @@ public:
    * Destroy the record.
    */
   virtual ~EOFRecord();
-  
+
   virtual void setData( unsigned size, const unsigned char* data );
 
   virtual const char* name(){ return "EOF"; }
@@ -1202,7 +1202,7 @@ public:
    * Destroy the record.
    */
   virtual ~FilepassRecord();
-  
+
   virtual void setData( unsigned size, const unsigned char* data );
 
   virtual const char* name(){ return "FILEPASS"; }
@@ -1217,11 +1217,11 @@ private:
 
 /**
   \brief Font information.
-  
+
   Class FontRecord represents Font record, which has the information
   about specific font used in the document. Several Font records creates
   a font table, whose index will be referred in XFormat records.
-  
+
   A note about weirdness: font index #4 is never used. Hence, the first Font
   record will be index #0, the second is #1, the third is #2, the fourth is
   #3, but the fourth will be index #5.
@@ -1243,12 +1243,12 @@ public:
    * Creates a new Font record.
    */
   FontRecord();
-  
+
   /**
    * Creates a copy of another Font record.
    */
   FontRecord( const FontRecord& fr );
-  
+
   /**
    * Assigns from another Font record.
    */
@@ -1258,29 +1258,29 @@ public:
    * Destroy the record.
    */
   virtual ~FontRecord();
-  
-  enum { 
-    Normal = 0, 
+
+  enum {
+    Normal = 0,
     Superscript = 1,
     Subscript = 2 };
-    
-  enum { 
-    None = 0, 
-    Single = 1, 
-    Double = 2, 
-    SingleAccounting = 0x21, 
+
+  enum {
+    None = 0,
+    Single = 1,
+    Double = 2,
+    SingleAccounting = 0x21,
     DoubleAccounting = 0x22 };
-  
+
   unsigned height() const;
   void setHeight( unsigned h );
-  
+
   /**
    * Returns the name of font, e.g "Arial".
    *
    * \sa setFontName
    */
   UString fontName() const;
-  
+
   /**
    * Sets the name of the font.
    *
@@ -1288,28 +1288,28 @@ public:
    */
   void setFontName( const UString& fn );
 
-  // FIXME what is this font family ? index ?  
+  // FIXME what is this font family ? index ?
   unsigned fontFamily() const;
   void setFontFamily( unsigned f );
-  
+
   // FIXME and character set index ?
   unsigned characterSet() const;
   void setCharacterSet( unsigned s );
-  
+
   /**
    * Returns index of the color of the font.
    *
    * \sa setColorIndex
    */
   unsigned colorIndex() const;
-  
+
   /**
    * Sets the index of the color of the font.
    *
    * \sa colorIndex
    */
   void setColorIndex( unsigned c );
-  
+
   /**
    * Returns the boldness of the font. Standard values are 400 for normal
    * and 700 for bold.
@@ -1317,7 +1317,7 @@ public:
    * \sa setBoldness
    */
   unsigned boldness() const;
-  
+
   /**
    * Sets the boldness of the font. Standard values are 400 for normal
    * and 700 for bold.
@@ -1325,35 +1325,35 @@ public:
    * \sa boldness
    */
   void setBoldness( unsigned b );
-  
+
   /**
    * Returns true if italic has been set.
    *
    * \sa setItalic
-   */  
+   */
   bool italic() const;
-  
+
   /**
    * If i is true, italic is set on; otherwise italic is set off.
    *
    * \sa italic
-   */  
+   */
   void setItalic( bool i );
-  
+
   /**
    * Returns true if strikeout has been set.
    *
    * \sa setStrikeout
    */
   bool strikeout() const;
-  
+
   /**
    * If s is true, strikeout is set on; otherwise strikeout is set off.
    *
    * \sa strikeout
    */
   void setStrikeout( bool s );
-  
+
   /**
    * Returns Font::Superscript if superscript is set, or Font::Subscript
    * if subscript is set, or Font::Normal in other case.
@@ -1361,7 +1361,7 @@ public:
    * \sa setEscapement
    */
   unsigned escapement() const;
-  
+
   /**
    * Sets the superscript or subscript. If s is Font::Superscript, then
    * superscript is set. If s is Font::Subscript, then subscript is set.
@@ -1369,25 +1369,25 @@ public:
    * \sa escapement
    */
   void setEscapement( unsigned s );
-  
+
   /**
    * Returns the underline style of the font. Possible values are
    * Font::None, Font::Single, Font::Double, Font::SingleAccounting and
    * Font::DoubleAccounting.
    *
    * \sa setUnderline
-   */  
+   */
   unsigned underline() const;
-  
+
   /**
    * Sets the underline style of the font. Possible values are
    * Font::None, Font::Single, Font::Double, Font::SingleAccounting and
    * Font::DoubleAccounting.
    *
    * \sa underline
-   */  
+   */
   void setUnderline( unsigned u );
-  
+
   virtual void setData( unsigned size, const unsigned char* data );
 
   virtual const char* name(){ return "FONT"; }
@@ -1401,9 +1401,9 @@ private:
 
 /**
   \brief Sheet footer.
-  
+
   Class FooterRecord holds information about sheet footer.
-  
+
  */
 class FooterRecord : public Record
 {
@@ -1419,22 +1419,22 @@ public:
    * Creates a new Footer record.
    */
   FooterRecord();
-  
+
   /**
    * Destroy the record.
    */
   ~FooterRecord();
-  
+
   /**
    * Gets the footer.
    */
   UString footer() const;
-  
+
   /**
    * Sets the footer.
    */
   void setFooter( const UString& f );
-  
+
   virtual void setData( unsigned size, const unsigned char* data );
 
   virtual const char* name(){ return "FOOTER"; }
@@ -1452,8 +1452,8 @@ private:
 
 /**
   \brief Number formatting string.
-  
-  Class FormatRecord contains information about a number format. 
+
+  Class FormatRecord contains information about a number format.
   All Format records occur together in a sequential list.
   An XFRecord might refer to the specific Format record using
   an index to that list.
@@ -1475,22 +1475,22 @@ public:
    * Creates a new Format record.
    */
   FormatRecord();
-  
+
   /**
    * Destroys the Format record.
    */
   ~FormatRecord();
-  
+
   /**
    * Creates a copy of Format record.
    */
   FormatRecord( const FormatRecord& fr );
-  
+
   /**
    * Assigns from another Format record.
    */
   FormatRecord& operator=( const FormatRecord& fr );
-  
+
   /**
    * Returns the index of the format. Each format specified by Format record
    * has unique index which will be referred by XF Record.
@@ -1498,7 +1498,7 @@ public:
    * \sa setIndex
    */
   unsigned index() const;
-  
+
   /**
    * Sets the index of the format. Each format specified by Format record
    * has unique index which will be referred by XF Record.
@@ -1514,16 +1514,16 @@ public:
    * \sa setFormatString
    */
   UString formatString() const;
-  
+
   /**
    * Sets the formatting string of the format.
    *
    * \sa formatString
    */
   void setFormatString( const UString& fs );
-    
+
   virtual const char* name(){ return "FORMAT"; }
-  
+
   virtual void setData( unsigned size, const unsigned char* data );
 
   virtual void dump( std::ostream& out ) const;
@@ -1535,9 +1535,9 @@ private:
 
 /**
   \brief Formula.
-  
+
   Class FormulaRecord holds Formula record.
-  
+
  */
 class FormulaRecord : public Record, public CellInfo
 {
@@ -1553,24 +1553,24 @@ public:
    * Creates a new formula record.
    */
   FormulaRecord();
-  
+
   /**
    * Destroy the record.
    */
   ~FormulaRecord();
-  
+
   /**
    * Gets the result of the formula.
    */
   Value result() const;
-  
+
   /**
    * Sets the result of the formula.
    */
   void setResult( const Value& v );
-  
+
   FormulaTokens tokens() const;
-  
+
   virtual void setData( unsigned size, const unsigned char* data );
 
   virtual const char* name(){ return "FORMULA"; }
@@ -1588,8 +1588,8 @@ private:
 
 /**
   \brief Sheet header.
-  
-  Class HeaderRecord holds information about sheet header.  
+
+  Class HeaderRecord holds information about sheet header.
  */
 
 class HeaderRecord : public Record
@@ -1606,22 +1606,22 @@ public:
    * Creates a new Header record.
    */
   HeaderRecord();
-  
+
   /**
    * Destroy the record.
    */
   ~HeaderRecord();
-  
+
   /**
    * Gets the header.
    */
   UString header() const;
-  
+
   /**
    * Sets the header.
    */
   void setHeader( const UString& h );
-  
+
   virtual void setData( unsigned size, const unsigned char* data );
 
   virtual const char* name(){ return "HEADER"; }
@@ -1640,7 +1640,7 @@ private:
 
 /**
   Class LabelRecord represents a cell that contains a string.
-   
+
   In Excel 97 and later version, it is replaced by LabelSSTRecord. However,
   Excel 97 can still load LabelRecord.
 
@@ -1671,7 +1671,7 @@ public:
    * Returns the label string.
    */
   UString label() const;
-  
+
   /**
    * Sets the label string.
    */
@@ -1680,7 +1680,7 @@ public:
   virtual void setData( unsigned size, const unsigned char* data );
 
   virtual const char* name(){ return "LABEL"; }
-  
+
   virtual void dump( std::ostream& out ) const;
 
 private:
@@ -1723,14 +1723,14 @@ public:
 
   /**
    * Returns the SST index. This is the index to the global SST which hold
-   * every label strings used in SST record. 
+   * every label strings used in SST record.
    */
   unsigned sstIndex() const;
 
   virtual void setData( unsigned size, const unsigned char* data );
 
   virtual const char* name(){ return "LABELSST"; }
-  
+
   virtual void dump( std::ostream& out ) const;
 
 private:
@@ -1744,7 +1744,7 @@ private:
 
 /**
   Class LeftMarginRecord holds information about left margin.
-  
+
  */
 class LeftMarginRecord : public Record
 {
@@ -1760,17 +1760,17 @@ public:
    * Creates a new LeftMargin record.
    */
   LeftMarginRecord();
-  
+
   /**
    * Destroy the record.
    */
   ~LeftMarginRecord();
-  
+
   /**
    * Gets the left margin (in inches).
    */
   double leftMargin() const;
-  
+
   /**
    * Sets the new left margin (in inches).
    */
@@ -1795,10 +1795,10 @@ private:
 /**
   Class MergedCellsRecord represents MergedCells record, which contains
   a list of all merged cells in the current sheets. Each entry in this list
-  define the range of cells that should be merged, namely firstRow, lastRow, 
+  define the range of cells that should be merged, namely firstRow, lastRow,
   firstColumn and lastColumn.
  */
- 
+
 class MergedCellsRecord : public Record
 {
 public:
@@ -1818,34 +1818,34 @@ public:
    * Destroys the record.
    */
   virtual ~MergedCellsRecord();
-  
+
   /**
    * Returns the total number of merged cells in the list.
    */
   unsigned count() const;
-  
+
   /**
    * Returns the index to first row in the i-th position in the list.
    */
   unsigned firstRow( unsigned i ) const;
-  
+
   /**
    * Returns the index to last row in the i-th position in the list.
    */
   unsigned lastRow( unsigned i ) const;
-  
+
   /**
    * Returns the index to first column in the i-th position in the list.
    */
   unsigned firstColumn( unsigned i ) const;
-  
+
   /**
    * Returns the index to last column in the i-th position in the list.
    */
   unsigned lastColumn( unsigned i ) const;
 
   virtual void setData( unsigned size, const unsigned char* data );
-  
+
   virtual const char* name(){ return "MERGEDCELLS"; }
 
   virtual void dump( std::ostream& out ) const;
@@ -1860,12 +1860,12 @@ private:
 };
 
 /**
-  Class MulBlankRecord represents a cell range containing blank cells. 
+  Class MulBlankRecord represents a cell range containing blank cells.
   All cells are located in the same row.
-  
+
   \sa BlankRecord
  */
- 
+
 class MulBlankRecord : public Record, public CellInfo, public ColumnSpanInfo
 {
 public:
@@ -1912,9 +1912,9 @@ private:
 };
 
 /**
-  Class MulRKRecord represents a cell range containing RK value cells. 
+  Class MulRKRecord represents a cell range containing RK value cells.
   These cells are located in the same row.
-  
+
   \sa RKRecord
  */
 
@@ -1944,14 +1944,14 @@ public:
    Returns XF index of ith column.
    */
   unsigned xfIndex( unsigned i ) const;
-  
+
   /**
    * Returns true if the record holds an integer value.
    *
    * \sa asInteger
    */
   bool isInteger( unsigned i ) const;
-  
+
   /**
    * Returns the integer value specified by the record. It is only valid
    * when isInteger returns true.
@@ -1959,7 +1959,7 @@ public:
    * \sa isInteger, asFloat
    */
   int asInteger( unsigned i ) const;
-  
+
   /**
    * Returns the floating-point value specified by the record. It is only valid
    * when isInteger returns false.
@@ -1967,9 +1967,9 @@ public:
    * \sa asInteger
    */
   double asFloat( unsigned i ) const;
-  
+
   unsigned encodedRK( unsigned i ) const;
-  
+
   virtual const char* name(){ return "MULRK"; }
 
   virtual void dump( std::ostream& out ) const;
@@ -2017,14 +2017,14 @@ private:
    // no copy or assign
    NameRecord( const NameRecord& );
    NameRecord& operator=( const NameRecord& );
-   
+
    class Private;
    Private *d;
 };
 
 
 /**
-  Class NumberRecord represents a cell that contains a floating point value. 
+  Class NumberRecord represents a cell that contains a floating point value.
 
  */
 class NumberRecord : public Record, public CellInfo
@@ -2048,14 +2048,14 @@ public:
   virtual ~NumberRecord();
 
   virtual void setData( unsigned size, const unsigned char* data );
-  
+
   /**
    * Returns the floating-point value specified by the record.
    *
    * \sa setNumber
    */
   double number() const;
-  
+
   /**
    * Sets the floating-point value specified by the record.
    *
@@ -2064,7 +2064,7 @@ public:
   void setNumber( double f );
 
   virtual const char* name(){ return "NUMBER"; }
-  
+
   virtual void dump( std::ostream& out ) const;
 
 private:
@@ -2078,7 +2078,7 @@ private:
 
 /**
   Class PaletteRecord lists colors.
-  
+
  */
 class PaletteRecord : public Record
 {
@@ -2094,7 +2094,7 @@ public:
    * Creates a new Palette record.
    */
   PaletteRecord();
-  
+
   /**
    * Destroy the record.
    */
@@ -2109,7 +2109,7 @@ public:
    * Returns the number of colors in the palette.
    */
   unsigned count() const;
-  
+
   virtual void setData( unsigned size, const unsigned char* data );
 
   virtual const char* name(){ return "PALETTE"; }
@@ -2129,7 +2129,7 @@ private:
 
 /**
   Class RightMarginRecord holds information about right margin.
-  
+
  */
 class RightMarginRecord : public Record
 {
@@ -2145,17 +2145,17 @@ public:
    * Creates a new RightMargin record.
    */
   RightMarginRecord();
-  
+
   /**
    * Destroy the record.
    */
   ~RightMarginRecord();
-  
+
   /**
    * Gets the right margin (in inches).
    */
   double rightMargin() const;
-  
+
   /**
    * Sets the new right margin (in inches).
    */
@@ -2179,7 +2179,7 @@ private:
 
 
 /**
-  Class RKRecord represents a cell that contains an RK value, 
+  Class RKRecord represents a cell that contains an RK value,
   i.e encoded integer or floating-point value.
 
  */
@@ -2204,21 +2204,21 @@ public:
   virtual ~RKRecord();
 
   virtual void setData( unsigned size, const unsigned char* data );
-  
+
   /**
    * Returns true if the record holds an integer value.
    *
    * \sa asInteger, isFloat
    */
   bool isInteger() const;
-  
+
   /**
    * Returns true if the record holds a floating-point value.
    *
    * \sa asFloat, isInteger
    */
   bool isFloat() const;
-    
+
   /**
    * Returns the integer value specified by the record. It is only valid
    * when isInteger returns true.
@@ -2226,7 +2226,7 @@ public:
    * \sa isInteger, asFloat
    */
   int asInteger() const;
-  
+
   /**
    * Returns the floating-point value specified by the record. It is only valid
    * when isFloat returns true.
@@ -2234,25 +2234,25 @@ public:
    * \sa isFloat, asInteger
    */
   double asFloat() const;
-  
+
   /**
-   * Sets the integer value to be specified by the record. 
+   * Sets the integer value to be specified by the record.
    *
    * \sa setFloat
    */
   void setInteger( int i );
-  
+
   /**
-   * Sets the floating-point value to be specified by the record. 
+   * Sets the floating-point value to be specified by the record.
    *
    * \sa setFloat
    */
   void setFloat( double f );
 
   unsigned encodedRK() const;
-  
+
   virtual const char* name(){ return "RK"; }
-  
+
   virtual void dump( std::ostream& out ) const;
 
 private:
@@ -2287,56 +2287,56 @@ public:
    * Destroys the record.
    */
   virtual ~RowRecord();
-  
+
   /**
    * Returns the index of the row.
    *
    * \sa setRow
    */
   unsigned row() const;
-  
+
   /**
    * Sets the index of the row.
    *
    * \sa row
    */
   void setRow( unsigned r );
-    
+
   /**
    * Returns the XF index for the formatting of the cells.
    *
    * \sa setXfIndex
    */
   unsigned xfIndex() const;
-  
+
   /**
    * Sets the XF index for the formatting of the cells.
    *
    * \sa xfIndex
    */
   void setXfIndex( unsigned i );
-  
+
   /**
    * Returns the height of the row, specified in twips (1/20 pt).
    *
    * \sa setHeight
    */
   unsigned height() const;
-  
+
   /**
    * Sets the height of the row, specified in twips (1/20 pt).
    *
    * \sa height
    */
   void setHeight( unsigned h );
-  
+
   /**
    * Returns true if the row should be hidden, i.e not visible.
    *
    * \sa setHidden
    */
   bool hidden() const;
-  
+
   /**
    * Sets whether row should be hidden or visible.
    *
@@ -2362,7 +2362,7 @@ private:
 
 /**
   Class RStringRecord represents a cell that contains rich-text string.
-   
+
   In Excel 97 and later version, it is replaced by LabelSSTRecord. However,
   Excel 97 is still able to load RStringRecord.
 
@@ -2396,7 +2396,7 @@ public:
    * \sa setLabel
    */
   UString label() const;
-  
+
   /**
    * Sets the label string.
    *
@@ -2407,7 +2407,7 @@ public:
   virtual void setData( unsigned size, const unsigned char* data );
 
   virtual const char* name(){ return "RSTRING"; }
-  
+
   virtual void dump( std::ostream& out ) const;
 
 private:
@@ -2425,46 +2425,46 @@ private:
   table of the workbook.
 
   \sa LabelSSTRecord
-  
+
  */
 class SSTRecord : public Record
 {
 public:
 
   static const unsigned int id;
-  
+
   unsigned int rtti(){
 	  return this->id;
   }
 
   /**
    * Creates a new SST record.
-   */ 
+   */
   SSTRecord();
-  
+
   /**
    * Destroys the record.
-   */ 
+   */
   virtual ~SSTRecord();
 
   virtual void setData( unsigned size, const unsigned char* data );
-  
+
   /**
     Returns the number of available string in this string table.
-   */  
+   */
   unsigned count() const;
-  
+
   /**
-    Returns the string at specified index. 
+    Returns the string at specified index.
     Note that index must be less than count().
-    If index is not valid, this will return UString::null.    
-   */  
+    If index is not valid, this will return UString::null.
+   */
   UString stringAt( unsigned index ) const;
-  
+
   virtual const char* name(){ return "SST"; }
-  
+
   virtual void dump( std::ostream& out ) const;
-  
+
 private:
    // no copy or assign
    SSTRecord( const SSTRecord& );
@@ -2476,47 +2476,47 @@ private:
 
 
 /**
-  Class String represents a string record, which holds the value of 
-  calculation if a formula returns a string. This record must appear 
+  Class String represents a string record, which holds the value of
+  calculation if a formula returns a string. This record must appear
   right after the associated formula record.
 
   \sa FormulaRecord
-  
+
  */
 class StringRecord : public Record
 {
 public:
 
   static const unsigned int id;
-  
+
   unsigned int rtti(){ return this->id; }
 
   /**
    * Creates a new string record.
-   */ 
+   */
   StringRecord();
-  
+
   /**
    * Destroys the record.
-   */ 
+   */
   virtual ~StringRecord();
 
   virtual void setData( unsigned size, const unsigned char* data );
-  
+
   /**
     Returns the string (in Unicode).
-   */  
+   */
   UString ustring() const;
-  
+
   /**
     Returns the string as a value.
-   */  
+   */
   Value value() const;
-  
+
   virtual const char* name(){ return "STRING"; }
-  
+
   virtual void dump( std::ostream& out ) const;
-  
+
 private:
    // no copy or assign
    StringRecord( const SSTRecord& );
@@ -2528,7 +2528,7 @@ private:
 
 /**
   Class TopMarginRecord holds information about top margin.
-  
+
  */
 class TopMarginRecord : public Record
 {
@@ -2544,17 +2544,17 @@ public:
    * Creates a new TopMargin record.
    */
   TopMarginRecord();
-  
+
   /**
    * Destroy the record.
    */
   ~TopMarginRecord();
-  
+
   /**
    * Gets the top margin (in inches).
    */
   double topMargin() const;
-  
+
   /**
    * Sets the new top margin (in inches).
    */
@@ -2577,9 +2577,9 @@ private:
 
 /**
   Class XFRecord holds information of XF (eXtended Format) which specifies
-  many kind of properties of a specific cell. It will be referred 
+  many kind of properties of a specific cell. It will be referred
   by record derived from CellInfo, in the member function xfIndex().
-        
+
  */
 class XFRecord : public Record
 {
@@ -2595,22 +2595,22 @@ public:
    * Creates a new XF record.
    */
   XFRecord();
-  
+
   /**
    * Creates a copy of XF record.
    */
   XFRecord( const XFRecord& xf );
-  
+
   /**
    * Assigns from another XF record.
    */
   XFRecord& operator=( const XFRecord& xf );
-  
+
   /**
    * Destroy the record.
    */
   ~XFRecord();
-  
+
   /**
    * Gets the index of the font for use in this XFormat. The index
    * refers to the font table.
@@ -2618,7 +2618,7 @@ public:
    * \sa setFontIndex, FontRecord
    */
   unsigned fontIndex() const;
-  
+
   /**
    * Sets the index of the font for use in this XFormat. The index
    * refers to the font table.
@@ -2634,7 +2634,7 @@ public:
    * \sa setFormatIndex, FormatRecord
    */
   unsigned formatIndex() const;
-  
+
   /**
    * Sets the index of the number format for use in this XFormat. The index
    * refers to the format table.
@@ -2642,122 +2642,122 @@ public:
    * \sa formatIndex, FormatRecord
    */
   void setFormatIndex( unsigned fi );
-  
+
   /**
    * Returns true if the cells using this format should be locked.
    *
    * \sa setLocked
-   */  
+   */
   bool locked() const;
-  
+
   /**
    * Sets whether the cells using this format should be locked or not.
    *
    * \sa locked
-   */  
+   */
   void setLocked( bool l );
-  
+
   /**
-   * Returns true if the formula of the cells using this format 
+   * Returns true if the formula of the cells using this format
    * should be hidden from user.
    *
    * \sa setFormulaHidden
-   */  
+   */
   bool formulaHidden() const;
 
   /**
-   * Sets whether the formula of the cells using this format 
+   * Sets whether the formula of the cells using this format
    * should be hidden or should be visible.
    *
    * \sa formulaHidden
-   */  
+   */
   void setFormulaHidden( bool f );
-  
+
   /**
    * Returns the index of the parent stlye of this format.
-   * This refers to the index of the XFormat table which is constructed 
+   * This refers to the index of the XFormat table which is constructed
    * from a series of XFormat records.
    *
    * \sa setParentStyle
-   */  
+   */
   unsigned parentStyle() const;
-  
+
   /**
    * Sets the index of the parent stlye of this format.
-   * This refers to the index of the XFormat table which is constructed 
+   * This refers to the index of the XFormat table which is constructed
    * from a series of XFormat records.
    *
    * \sa parentStyle
-   */  
+   */
   void setParentStyle( unsigned ps );
 
-  enum { 
-    General = 0, 
-    Qt::DockLeft, 
-    Centered, 
-    Qt::DockRight, 
-    Filled, 
+  enum {
+    General = 0,
+    Left,
+    Centered,
+    Right,
+    Filled,
     Justified,
     CenteredSelection,
     Distributed };
-  
+
   /**
    * Gets the horizontal alignment, e.g Left.
    */
   unsigned horizontalAlignment() const;
-  
+
   /**
    * Sets the horizontal alignment, e.g Left.
    */
   void setHorizontalAlignment( unsigned ha );
-  
+
   /**
    * Returns human-readable string representation of the horizontal alignment.
      For example, XFRecord::Left will return "Left".
    */
-  const char* horizontalAlignmentAsString() const; 
-  
-  enum { 
-    Qt::DockTop = 0, 
-    VCentered = 1, 
-    Qt::DockBottom = 2, 
-    VJustified = 3, 
+  const char* horizontalAlignmentAsString() const;
+
+  enum {
+    Top = 0,
+    VCentered = 1,
+    Bottom = 2,
+    VJustified = 3,
     VDistributed = 4 };
-  
+
   /**
    * Gets the vertical alignment, e.g Bottom.
    *
    * \sa setVerticalAlignment
    */
   unsigned verticalAlignment() const;
-  
+
   /**
    * Sets the vertical alignment, e.g Top.
    *
    * \sa verticalAlignment
    */
   void setVerticalAlignment( unsigned va );
-  
+
   /**
    * Returns human-readable string representation of the vertical alignment.
      For example, XFRecord::Top will return "Top".
    */
-  const char* verticalAlignmentAsString() const; 
-  
+  const char* verticalAlignmentAsString() const;
+
   /**
    * Returns true if text is wrapped at right border.
    *
    * \sa setTextWrap
    */
   bool textWrap() const;
-  
+
   /**
    * Sets whether text should be wrapped at right border.
    *
    * \sa textWrap
    */
   void setTextWrap( bool wrap );
-  
+
   /**
    * Returns the rotation angle of the text. If it is between 1 to 90,
    * the text is rotated 1 to 90 degrees counterclockwise. If it is between
@@ -2766,7 +2766,7 @@ public:
    * \sa setRotationAngle
    */
   unsigned rotationAngle() const;
-  
+
   /**
    * Sets the rotation angle of the text. If it is between 1 to 90,
    * the text is rotated 1 to 90 degrees counterclockwise. If it is between
@@ -2775,7 +2775,7 @@ public:
    * \sa setRotationAngle
    */
   void setRotationAngle( unsigned angle );
-  
+
   /**
    * Returns true if the letters for text are not rotated, but
    * instead stacked top-to-bottom.
@@ -2783,7 +2783,7 @@ public:
    * \sa setStackedLetters
    */
   bool stackedLetters() const;
-  
+
   /**
    * Sets whether the letters for text should be stacked top-to-bottom.
    *
@@ -2797,28 +2797,28 @@ public:
    * \sa indentLevel
    */
   unsigned indentLevel() const;
-  
+
   /**
    * Sets indent level.
    *
    * \sa indentLevel
    */
   void setIndentLevel( unsigned i );
-  
+
   /**
    * Returns true if content should be shrunk to fit into cell.
    *
    * \sa setShrinkContent
    */
   bool shrinkContent() const;
-  
+
   /**
    * Sets whether content should be shrunk to fit into cell.
    *
    * \sa shrinkContent
    */
   void setShrinkContent( bool s );
-  
+
   enum
   {
     NoLine = 0,
@@ -2834,23 +2834,23 @@ public:
     MediumDashDotted = 10,
     ThinDashDotDotted = 11,
     MediumDashDotDotted = 12,
-    SlantedMediumDashDotted = 13    
+    SlantedMediumDashDotted = 13
   };
-  
+
   /**
    * Returns the line style for left border.
    *
    * \sa setLeftBorderStyle, leftBorderColor
    */
   unsigned leftBorderStyle() const;
-  
+
   /**
    * Sets the line style for left border.
    *
    * \sa leftBorderStyle, setLeftBorderColor
    */
   void setLeftBorderStyle( unsigned style );
-  
+
   /**
    * Returns the color for left border. This is an index to color palette
    * specified in Palette record.
@@ -2858,7 +2858,7 @@ public:
    * \sa setLeftBorderColor, leftBorderStyle
    */
   unsigned leftBorderColor() const;
-  
+
   /**
    * Sets the color for left border. This is an index to color palette
    * specified in Palette record.
@@ -2873,14 +2873,14 @@ public:
    * \sa setRightBorderStyle, rightBorderColor
    */
   unsigned rightBorderStyle() const;
-  
+
   /**
    * Sets the line style for right border.
    *
    * \sa rightBorderStyle, setRightBorderColor
    */
   void setRightBorderStyle( unsigned style );
-  
+
   /**
    * Returns the color for right border. This is an index to color palette
    * specified in Palette record.
@@ -2888,7 +2888,7 @@ public:
    * \sa setRightBorderColor, rightBorderStyle
    */
   unsigned rightBorderColor() const;
-  
+
   /**
    * Sets the color for right border. This is an index to color palette
    * specified in Palette record.
@@ -2896,21 +2896,21 @@ public:
    * \sa rightBorderColor, setRightBorderStyle
    */
   void setRightBorderColor( unsigned color );
-  
+
   /**
    * Returns the line style for top border.
    *
    * \sa setTopBorderStyle, topBorderColor
    */
   unsigned topBorderStyle() const;
-  
+
   /**
    * Sets the line style for top border.
    *
    * \sa topBorderStyle, setTopBorderColor
    */
   void setTopBorderStyle( unsigned style );
-  
+
   /**
    * Returns the color for top border. This is an index to color palette
    * specified in Palette record.
@@ -2918,7 +2918,7 @@ public:
    * \sa setTopBorderColor, topBorderStyle
    */
   unsigned topBorderColor() const;
-  
+
   /**
    * Sets the color for top border. This is an index to color palette
    * specified in Palette record.
@@ -2926,21 +2926,21 @@ public:
    * \sa topBorderColor, setTopBorderStyle
    */
   void setTopBorderColor( unsigned color );
-  
+
   /**
    * Returns the line style for bottom border.
    *
    * \sa setBottomBorderStyle, bottomBorderColor
    */
   unsigned bottomBorderStyle() const;
-  
+
   /**
    * Sets the line style for bottom border.
    *
    * \sa bottomBorderStyle, setBottomBorderColor
    */
   void setBottomBorderStyle( unsigned style );
-  
+
   /**
    * Returns the color for bottom border. This is an index to color palette
    * specified in Palette record.
@@ -2948,7 +2948,7 @@ public:
    * \sa setBottomBorderColor, bottomBorderStyle
    */
   unsigned bottomBorderColor() const;
-  
+
   /**
    * Sets the color for bottom border. This is an index to color palette
    * specified in Palette record.
@@ -2956,49 +2956,49 @@ public:
    * \sa bottomBorderColor, setBottomBorderStyle
    */
   void setBottomBorderColor( unsigned color );
-  
+
   /**
    * Returns true if there is a diagonal line from top left to right bottom.
    *
    * \sa diagonalStyle, diagonalColor, setDiagonalTopLeft
    */
   bool diagonalTopLeft() const;
-  
+
   /**
    * Sets whether there should be a diagonal line from top left to right bottom.
    *
    * \sa diagonalTopLeft, setDiagonalStlye, setDiagonalColor
    */
   void setDiagonalTopLeft( bool d );
-  
+
   /**
    * Returns true if there is a diagonal line from bottom left to right top.
    *
    * \sa diagonalStyle, diagonalColor, setDiagonalBottomLeft
    */
   bool diagonalBottomLeft() const;
-  
+
   /**
    * Sets whether there should be a diagonal line from bottom left to right top.
    *
    * \sa diagonalBottomLeft, setDiagonalStlye, setDiagonalColor
    */
   void setDiagonalBottomLeft( bool d );
-  
+
   /**
    * Returns the diagonal line style.
    *
    * \sa diagonalTopLeft, diagonalBottomLeft, setDiagonalStyle
    */
   unsigned diagonalStyle() const;
-  
+
   /**
    * Sets the line style for diagonal line.
    *
    * \sa diagonalBorderStyle, setDiagonalTopLeft, setDiagonalBottomLeft
    */
   void setDiagonalStyle( unsigned style );
-  
+
   /**
    * Returns the color for diagonal line. This is an index to color palette
    * specified in Palette record.
@@ -3006,7 +3006,7 @@ public:
    * \sa setDiagonalColor, diagonalStyle
    */
   unsigned diagonalColor() const;
-  
+
   /**
    * Sets the color for diagonal line. This is an index to color palette
    * specified in Palette record.
@@ -3014,21 +3014,21 @@ public:
    * \sa diagonalColor, setDiagonalStyle
    */
   void setDiagonalColor( unsigned color );
-  
+
   /**
    * Returns fill pattern.
    *
    * \sa setFillPattern
    */
   unsigned fillPattern() const;
-  
+
   /**
    * Sets fill pattern.
    *
    * \sa fillPattern
    */
   void setFillPattern( unsigned pattern );
-  
+
   /**
    * Returns the fill foreground color. This is an index to color palette
    * specified in Palette record.
@@ -3036,7 +3036,7 @@ public:
    * \sa setPatternForeColor, patternBackColor
    */
   unsigned patternForeColor() const;
-  
+
   /**
    * Sets the fill foreground color. This is an index to color palette
    * specified in Palette record.
@@ -3044,15 +3044,15 @@ public:
    * \sa patternForeColor, setPatternBackColor
    */
   void setPatternForeColor( unsigned color );
-  
+
   /**
    * Returns the fill background color. This is an index to color palette
    * specified in Palette record.
    *
    * \sa setPatternBackColor, patternForeColor
    */
-  unsigned patternBackColor() const;    
-  
+  unsigned patternBackColor() const;
+
   /**
    * Sets the fill background color. This is an index to color palette
    * specified in Palette record.
@@ -3060,11 +3060,11 @@ public:
    * \sa patternBackColor, setPatternForeColor
    */
   void setPatternBackColor( unsigned color );
-  
+
   virtual const char* name(){ return "XF"; }
-  
+
   virtual void setData( unsigned size, const unsigned char* data );
-  
+
   virtual void dump( std::ostream& out ) const;
 
 private:
@@ -3079,11 +3079,11 @@ public:
   ExcelReader();
   virtual ~ExcelReader();
   bool load( Workbook* workbook, const char* filename );
-  
-protected:  
+
+protected:
   virtual void handleRecord( Record* record );
-    
-private:  
+
+private:
   void handleBoundSheet( BoundSheetRecord* record );
   void handleBOF( BOFRecord* record );
   void handleBoolErr( BoolErrRecord* record );
@@ -3116,17 +3116,17 @@ private:
   void handleSST( SSTRecord* record );
   void handleString( StringRecord* record );
   void handleTopMargin( TopMarginRecord* record );
-  void handleXF( XFRecord* record );    
-  
+  void handleXF( XFRecord* record );
+
   Color convertColor( unsigned colorIndex );
   FormatFont convertFont( unsigned fontIndex );
   Format convertFormat( unsigned xfIndex );
   UString decodeFormula( unsigned row, unsigned col, const FormulaTokens& tokens );
-  
+
   // no copy or assign
   ExcelReader( const ExcelReader& );
   ExcelReader& operator=( const ExcelReader& );
-  
+
   class Private;
   Private* d;
 };

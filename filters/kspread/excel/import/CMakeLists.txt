@@ -24,7 +24,7 @@ kde4_add_plugin(excelimport WITH_PREFIX ${excelimport_PART_SRCS})
 
 kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} excelimport )
 
-target_link_libraries(excelimport  ${KDE4_KDECORE_LIBS} )
+target_link_libraries(excelimport kofficecore)
 
 install_targets(${PLUGIN_INSTALL_DIR} excelimport )
 

@@ -1,11 +1,11 @@
-/* Swinder - Portable library for spreadsheet 
+/* Swinder - Portable library for spreadsheet
    Copyright (C) 2003 Ariya Hidayat <ariya@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
    version 2 of the License, or (at your option) any later version.
-   
+
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
@@ -50,10 +50,10 @@ class ValueData
       };
 
     // destroys data
-    ~ValueData(){ 
-       if( this == s_null ) s_null = 0;  
+    ~ValueData(){
+       if( this == s_null ) s_null = 0;
        }
-       
+
     void ref(){ count++; }
 
     // static empty data to be shared
@@ -68,11 +68,11 @@ class ValueData
     bool isNull(){ return this == s_null; }
 
     unsigned count; // reference count
-    
+
   private:
 
     static ValueData* s_null;
-    
+
 };
 
 }
@@ -378,14 +378,14 @@ std::ostream& Swinder::operator<<( std::ostream& s, Swinder::Value value )
       s << "Float: " << value.asFloat();
       break;
     case Value::String:
-      s << "String: " << value.toString().ascii(); 
+      s << "String: " << value.asString().ascii();
       break;
     case Value::Error:
-      s << "Error: " << value.errorMessage().ascii();  
+      s << "Error: " << value.errorMessage().ascii();
       break;
     default:
       break;
   };
-  
+
   return s;
 }
