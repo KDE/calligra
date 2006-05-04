@@ -1728,7 +1728,7 @@ void CellFormatPageFloat::makeformat()
                         newFormatType == Money_format ? dlg->cCurrency.symbol : QString::null);
   if (tmp.length() > 50)
     tmp = tmp.left (50);
-  exampleLabel->setText(tmp.prepend("<font color=" + color.name() + ">").append("</font>"));
+  exampleLabel->setText(tmp.prepend("<font color=" + color.name() + '>').append("</font>"));
 }
 
 void CellFormatPageFloat::apply( CustomStyle * style )

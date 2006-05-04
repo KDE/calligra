@@ -152,7 +152,7 @@ void PaperLayout::initRanges( QWidget * tab, QVBoxLayout * vbox )
 
     eRepeatCols = new QLineEdit( rangeGroup );
     if ( print->printRepeatColumns().first != 0 )
-        eRepeatCols->setText( Cell::columnName( print->printRepeatColumns().first ) +  ":" +
+        eRepeatCols->setText( Cell::columnName( print->printRepeatColumns().first ) +  ':' +
                               Cell::columnName( print->printRepeatColumns().second ) );
     grid->addWidget( eRepeatCols, 1, 1 );
 
@@ -162,7 +162,7 @@ void PaperLayout::initRanges( QWidget * tab, QVBoxLayout * vbox )
     eRepeatRows = new QLineEdit( rangeGroup );
     if ( print->printRepeatRows().first != 0 )
         eRepeatRows->setText( QString().setNum( print->printRepeatRows().first ) +
-                              ":" +
+                              ':' +
                               QString().setNum( print->printRepeatRows().second ) );
     grid->addWidget( eRepeatRows, 2, 1 );
 
@@ -343,7 +343,7 @@ void PaperLayout::slotOk()
       else
       {
         bool error = true;
-        int first = tmpPrintRange.indexOf(":");
+        int first = tmpPrintRange.indexOf(':');
         if ( ( first != -1 ) && ( (int)tmpPrintRange.length() > first ) )
         {
             Point point1 ( tmpPrintRange.left( first ) );
@@ -371,7 +371,7 @@ void PaperLayout::slotOk()
       else
       {
         bool error = true;
-        int first = tmpRepeatCols.indexOf(":");
+        int first = tmpRepeatCols.indexOf(':');
         if ( ( first != -1 ) && ( (int)tmpRepeatCols.length() > first ) )
         {
             int col1 = util_decodeColumnLabelText( tmpRepeatCols.left( first ) );
@@ -397,7 +397,7 @@ void PaperLayout::slotOk()
       else
       {
         bool error = true;
-        int first = tmpRepeatRows.indexOf(":");
+        int first = tmpRepeatRows.indexOf(':');
         if ( ( first != -1 ) && ( (int)tmpRepeatRows.length() > first ) )
         {
             int row1 = tmpRepeatRows.left( first ).toInt();
@@ -423,7 +423,7 @@ void PaperLayout::slotOk()
         {
           kDebug() << "New zoom is different than original: " << m_cZoom->currentText() << endl;
           QString zoomtext = m_cZoom->currentText();
-          zoomtext.replace("%","");
+          zoomtext.replace( '%', "" );
           bool convertok = false;
           double zoomvalue = zoomtext.toDouble(&convertok);
           if (!convertok)

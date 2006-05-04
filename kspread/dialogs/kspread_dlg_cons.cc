@@ -269,7 +269,7 @@ void ConsolidateDialog::slotOk()
       for( int y = 0; y < h; y++ )
       {
         bool novalue=true;
-        QString formula = "=" + function + "(";
+        QString formula = '=' + function + '(';
 	it = ranges.begin();
 	for( ; it != ranges.end(); ++it )
         {
@@ -279,11 +279,11 @@ void ConsolidateDialog::slotOk()
           if(!c->isDefault())
                 novalue=false;
 	  if ( it != ranges.begin() )
-	    formula += ";";
-	  formula += (*it).sheetName() + "!";
+	    formula += ';';
+	  formula += (*it).sheetName() + '!';
 	  formula += c->name();
 	}
-	formula += ")";
+	formula += ')';
 
         if(!novalue)
 	  sheet->setText( dy + y, dx + x,
@@ -344,7 +344,7 @@ void ConsolidateDialog::slotOk()
       for( int y = 1; y < h; ++y )
       {
 	int count = 0;
-        QString formula = "=" + function + "(";
+        QString formula = '=' + function + '(';
 	it = ranges.begin();
 	for( ; it != ranges.end(); ++it )
         {
@@ -360,14 +360,14 @@ void ConsolidateDialog::slotOk()
 //		Cell *c2 = t->cellAt( i, y + (*it).range.top() );
 		count++;
 		if ( it != ranges.begin() )
-		  formula += ";";
-		formula += (*it).sheetName() + "!";
+		  formula += ';';
+		formula += (*it).sheetName() + '!';
 		formula += Cell::name( i, y + (*it).range().top() );
 	      }
 	    }
 	  }
 	}
-	formula += ")";
+	formula += ')';
 
 	sheet->setText( dy + y, dx + x,
           m_pCopy->isChecked() ? evaluate( formula, sheet ) : formula );
@@ -426,7 +426,7 @@ void ConsolidateDialog::slotOk()
       for( int x = 1; x < w; ++x )
       {
 	int count = 0;
-        QString formula = "=" + function + "(";
+        QString formula = '=' + function + '(';
 	it = ranges.begin();
 	for( ; it != ranges.end(); ++it )
         {
@@ -442,15 +442,15 @@ void ConsolidateDialog::slotOk()
 	      {
 //		Cell *c2 = t->cellAt( x + (*it).range.left(), i );
 		count++;
-		if ( it != ranges.begin() ) formula += ";";
-		formula += (*it).sheetName() + "!";
+		if ( it != ranges.begin() ) formula += ';';
+		formula += (*it).sheetName() + '!';
 		formula += Cell::name( i, y + (*it).range().top() );
 	      }
 	    }
 	  }
 	}
 
-	formula += ")";
+	formula += ')';
 
 	sheet->setText( dy + y, dx + x,
           m_pCopy->isChecked() ? evaluate( formula, sheet ) : formula );
@@ -578,19 +578,19 @@ void ConsolidateDialog::slotOk()
       for( ; xdesc != cols.end(); ++xdesc, y++ )
       {
 	int count = 0;
-        QString formula = "=" + function + "(";
+        QString formula = '=' + function + '(';
 	QLinkedList<st_cell>::Iterator lit = lst.begin();
 	for( ; lit != lst.end(); ++lit )
 	{
 	  if ( (*lit).xdesc == *xdesc && (*lit).ydesc == *ydesc )
 	  {
 	    count++;
-  	    if ( it != ranges.begin() ) formula += ";";
-	    formula += (*it).sheetName() + "!";
+  	    if ( it != ranges.begin() ) formula += ';';
+	    formula += (*it).sheetName() + '!';
 	    formula += Cell::name( i, y + (*it).range().top() );
 	  }
 	}
-	formula += ")";
+	formula += ')';
 
 	sheet->setText( dy + y, dx + x,
           m_pCopy->isChecked() ? evaluate( formula, sheet ) : formula );

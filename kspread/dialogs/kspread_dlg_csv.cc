@@ -61,7 +61,7 @@ CSVDialog::CSVDialog( View * parent, const char * name, QRect const & rect, Mode
     m_adjustRows( 0 ),
     m_startline( 0 ),
     m_textquote( '"' ),
-    m_delimiter( "," ),
+    m_delimiter( ',' ),
     m_targetRect( rect ),
     m_mode( mode )
 {
@@ -247,7 +247,7 @@ CSVDialog::CSVDialog( View * parent, const char * name, QRect const & rect, Mode
       {
         m_data += cell->strOutText();
       }
-      m_data += "\n";
+      m_data += '\n';
     }
   }
 
@@ -553,19 +553,19 @@ void CSVDialog::delimiterClicked(int id)
   switch (id)
   {
    case 0: // comma
-    m_delimiter = ",";
+    m_delimiter = ',';
     break;
    case 4: // other
     m_delimiter = m_delimiterEdit->text();
     break;
    case 2: // tab
-    m_delimiter = "\t";
+    m_delimiter = '\t';
     break;
    case 3: // space
-    m_delimiter = " ";
+    m_delimiter = ' ';
     break;
    case 1: // semicolon
-    m_delimiter = ";";
+    m_delimiter = ';';
     break;
   }
 

@@ -485,7 +485,7 @@ void DlgValidity::init()
          QStringList lst =tmpValidity->listValidity;
          QString tmp;
          for ( QStringList::Iterator it = lst.begin(); it != lst.end(); ++it ) {
-             tmp +=( *it )+"\n";
+             tmp +=( *it ) + '\n';
          }
          validityList->setText( tmp );
      }
@@ -805,7 +805,7 @@ void DlgValidity::OkPressed()
     }
     else if ( chooseType->currentIndex()==7 )
     {
-      result.listValidity = validityList->text().split( "\n", QString::SkipEmptyParts );
+      result.listValidity = validityList->text().split( '\n', QString::SkipEmptyParts );
     }
   }
   result.displayMessage = displayMessage->isChecked();

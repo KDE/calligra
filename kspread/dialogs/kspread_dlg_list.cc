@@ -166,7 +166,7 @@ void ListDialog::init()
     QString tmp;
     for ( QStringList::Iterator it = other.begin(); it != other.end();++it )
     {
-        if((*it)!="\\")
+        if ( (*it) != "\\" )
             tmp+=(*it)+", ";
         else if( it!=other.begin())
 	{
@@ -259,7 +259,7 @@ void ListDialog::slotOk()
     if(m_bChanged)
     {
         QStringList result;
-        result.append("\\");
+        result.append( "\\" );
 
         //don't save the two first line
         for(unsigned int i=2;i<list->count();i++)
@@ -268,7 +268,7 @@ void ListDialog::slotOk()
             if ( !tmp.isEmpty() )
             {
                 result+=tmp;
-                result+="\\";
+                result += "\\";
             }
         }
         config->setGroup( "Parameters" );

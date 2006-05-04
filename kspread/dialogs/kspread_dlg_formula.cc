@@ -78,7 +78,7 @@ FormulaDialog::FormulaDialog( View* parent, const char* name,const QString& form
           m_pView->canvasWidget()->editor()->setText( "=" );
         else
           if(cell->text().at(0)!='=')
-            m_pView->canvasWidget()->editor()->setText( "="+cell->text() );
+            m_pView->canvasWidget()->editor()->setText( '='+cell->text() );
           else
             m_pView->canvasWidget()->editor()->setText( cell->text() );
     }
@@ -219,7 +219,7 @@ FormulaDialog::FormulaDialog( View* parent, const char* name,const QString& form
     else
     {
         if( tmp_oldText.at(0)!='=')
-	    result->setText( "=" + tmp_oldText );
+	    result->setText( '=' + tmp_oldText );
         else
 	    result->setText( tmp_oldText );
     }
@@ -321,7 +321,7 @@ void FormulaDialog::slotOk()
         Q_ASSERT( m_pView->canvasWidget()->editor() );
         QString tmp = result->text();
         if( tmp.at(0) != '=')
-	    tmp = "=" + tmp;
+	    tmp = '=' + tmp;
         int pos = m_pView->canvasWidget()->editor()->cursorPosition()+ tmp.length();
         m_pView->canvasWidget()->editor()->setText( tmp );
         m_pView->canvasWidget()->editor()->setFocus();
@@ -385,9 +385,9 @@ void FormulaDialog::slotChangeText( const QString& )
     if ( m_focus == 0 )
 	return;
 
-    QString tmp = m_leftText+m_funcName+"(";
+    QString tmp = m_leftText+m_funcName+'(';
     tmp += createFormula();
-    tmp = tmp+ ")" + m_rightText;
+    tmp = tmp+ ')' + m_rightText;
 
     result->setText( tmp );
 }
@@ -413,7 +413,7 @@ QString FormulaDialog::createFormula()
     {
 	first = false;
 	if ( !first )
-	    tmp=tmp+";"+createParameter(secondElement->text(), 1 );
+	    tmp=tmp+';'+createParameter(secondElement->text(), 1 );
 	else
 	    tmp=tmp+createParameter(secondElement->text(), 1 );
     }
@@ -421,7 +421,7 @@ QString FormulaDialog::createFormula()
     {
 	first = false;
 	if ( !first )
-	    tmp=tmp+";"+createParameter(thirdElement->text(), 2 );
+	    tmp=tmp+';'+createParameter(thirdElement->text(), 2 );
         else
 	    tmp=tmp+createParameter(thirdElement->text(), 2 );
     }
@@ -429,7 +429,7 @@ QString FormulaDialog::createFormula()
     {
 	first = false;
 	if ( !first )
-	    tmp=tmp+";"+createParameter(fourElement->text(), 3 );
+	    tmp=tmp+';'+createParameter(fourElement->text(), 3 );
         else
 	    tmp=tmp+createParameter(fourElement->text(), 3 );
     }
@@ -437,7 +437,7 @@ QString FormulaDialog::createFormula()
     {
 	first = false;
 	if ( !first )
-	    tmp=tmp+";"+createParameter(fiveElement->text(), 4 );
+	    tmp=tmp+';'+createParameter(fiveElement->text(), 4 );
         else
 	    tmp=tmp+createParameter(fiveElement->text(), 4 );
     }
@@ -475,7 +475,7 @@ QString FormulaDialog::createParameter( const QString& _text, int param )
 	    // Does the text start with quotes?
 	    if ( _text[0] == '"' )
 	    {
-  	        text = "\\"; // changed: was "\""
+  	        text = '\\'; // changed: was '"'
 
 		// Escape quotes
 		QString tmp = _text;
@@ -490,7 +490,7 @@ QString FormulaDialog::createParameter( const QString& _text, int param )
 		}
 
 		text += tmp;
-		text += "\"";
+		text += '"';
 	    }
 	    else
 	    {
@@ -499,7 +499,7 @@ QString FormulaDialog::createParameter( const QString& _text, int param )
 
 		if( !p.isValid() && !r.isValid() )
 		{
-		    text = "\"";
+		    text = '"';
 
 		    // Escape quotes
 		    QString tmp = _text;
@@ -514,7 +514,7 @@ QString FormulaDialog::createParameter( const QString& _text, int param )
 		    }
 
 		    text += tmp;
-		    text += "\"";
+		    text += '"';
 		}
 		else
 		    text = _text;
@@ -537,7 +537,7 @@ static void showEntry( QLineEdit* edit, QLabel* label,
     FunctionDescription* desc, int param )
 {
     edit->show();
-    label->setText( desc->param( param ).helpText()+":" );
+    label->setText( desc->param( param ).helpText()+':' );
     label->show();
     ParameterType elementType = desc->param( param ).type();
     KFloatValidator *validate=0;
@@ -659,7 +659,7 @@ void FormulaDialog::slotDoubleClicked( Q3ListBoxItem* item )
     result->setText( m_leftText+functions->text( functions->currentItem() ) + "()" + m_rightText);
 
     if (result->text()[0] != '=')
-      result->setText("=" + result->text());
+      result->setText('=' + result->text());
 
     //
     // Put focus somewhere is there are no QLineEdits visible

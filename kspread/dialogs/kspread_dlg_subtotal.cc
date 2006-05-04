@@ -90,7 +90,7 @@ void SubtotalDialog::slotOk()
   left       = m_selection.left();
   QString oldText = m_pSheet->cellAt( mainCol, top )->strOutText();
   QString newText;
-  QString result( " " + i18n("Result") );
+  QString result( ' ' + i18n("Result") );
   int lastChangedRow = top;
 
   m_pView->doc()->emitBeginOperation( false );
@@ -302,11 +302,11 @@ bool SubtotalDialog::addSubtotal( int mainCol, int column, int row, int topRow,
   formula += QString::number( topRow );
   // if ( topRow != row )
   {
-    formula += ":";
+    formula += ':';
     formula += colName;
     formula += QString::number( row );
   }
-  formula += ")";
+  formula += ')';
 
   Cell * cell = m_pSheet->nonDefaultCell( column, row + 1 );
   cell->setCellText( formula );

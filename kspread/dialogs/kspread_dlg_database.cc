@@ -617,7 +617,7 @@ void DatabaseDialog::accept()
     if ( tmp[i] != '\n' )
       queryStr += tmp[i];
     else
-      queryStr += " ";
+      queryStr += ' ';
   }
 
   Cell * cell;
@@ -782,12 +782,12 @@ bool DatabaseDialog::databaseDoNext()
       if ( !err1.isEmpty() )
       {
         errorMsg.append( error.driverText() );
-        errorMsg.append( "\n" );
+        errorMsg.append( '\n' );
       }
       if ( !err2.isEmpty() && err1 != err2)
       {
         errorMsg.append( error.databaseText() );
-        errorMsg.append( "\n" );
+        errorMsg.append( '\n' );
       }
       m_databaseStatus->setText( " " );
 
@@ -859,7 +859,7 @@ bool DatabaseDialog::columnsDoNext()
   {
     if (((Q3CheckListItem * ) item)->isOn())
     {
-      columns.append( item->text(1) + "." + ((Q3CheckListItem * ) item)->text());
+      columns.append( item->text(1) + '.' + ((Q3CheckListItem * ) item)->text());
     }
   }
 
@@ -945,12 +945,12 @@ QString DatabaseDialog::getWhereCondition(QString const & column,
     if ( !ok )
     {
       if (value[0] != '\'')
-        val = "'";
+        val = '\'';
 
       val += value;
 
       if (value[value.length() - 1] != '\'')
-        val += "'";
+        val += '\'';
     }
     else
       val = value;
@@ -961,10 +961,10 @@ QString DatabaseDialog::getWhereCondition(QString const & column,
   {
     QString val;
     if (value[0] != '(')
-      val = "(";
+      val = '(';
     val += value;
     if ( value[value.length() - 1] != ')' )
-      val += ")";
+      val += ')';
     wherePart += val;
   }
 
@@ -977,14 +977,14 @@ QString DatabaseDialog::exchangeWildcards(QString const & value)
   int p = str.indexOf('*');
   while ( p > -1 )
   {
-    str = str.replace( p, 1, "%" );
+    str = str.replace( p, 1, '%' );
     p = str.indexOf('*');
   }
 
   p = str.indexOf('?');
   while ( p > -1 )
   {
-    str = str.replace( p, 1, "_" );
+    str = str.replace( p, 1, '_' );
     p = str.indexOf('?');
   }
   return str;

@@ -345,7 +345,7 @@ void EditAreaName::slotOk()
     if ( !point.isValid() )
       return;
 
-    m_area->setText( m_area->text() + ":" + m_area->text() );
+    m_area->setText( m_area->text() + ':' + m_area->text() );
 
     range = Range( m_area->text() );
   }
