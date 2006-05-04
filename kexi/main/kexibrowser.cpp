@@ -326,7 +326,8 @@ KexiBrowser::slotExecuteItem(QListViewItem *vitem)
 {
 //	kdDebug() << "KexiBrowser::slotExecuteItem()" << endl;
 	KexiBrowserItem *it = static_cast<KexiBrowserItem*>(vitem);
-
+	if (!it)
+		return;
 	if (!it->item() && !m_singleClick /*annoying when in single click mode*/) {
 		m_list->setOpen( vitem, !vitem->isOpen() );
 		return;
@@ -338,6 +339,8 @@ void
 KexiBrowser::slotSelectionChanged(QListViewItem* i)
 {
 	KexiBrowserItem *it = static_cast<KexiBrowserItem*>(i);
+	if (!it)
+		return;
 	KexiPart::Part* part = Kexi::partManager().part(it->info());
 	if (!part) {
 		it = static_cast<KexiBrowserItem*>(it->parent());
@@ -396,6 +399,8 @@ KexiBrowser::slotSelectionChanged(QListViewItem* i)
 
 void KexiBrowser::installEventFilter ( const QObject * filterObj )
 {
+	if (!filterObj)
+		return;
 	m_list->installEventFilter ( filterObj );
 	QWidget::installEventFilter ( filterObj );
 }
