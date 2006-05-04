@@ -182,6 +182,10 @@ class KEXICORE_EXPORT KexiDialogBase :
 		 \return true if at least on "dirty" flag is set for one of the dialog's view. */
 		bool dirty() const;
 
+		/*! \return a pointer to view that has recently set dirty flag.
+		 This value is cleared when dirty flag is set to false (i.e. upon saving changes). */
+		KexiViewBase* viewThatRecentlySetDirtyFlag() const { return m_viewThatRecentlySetDirtyFlag; }
+
 		/*! \return true, if this dialog's data were never saved.
 		 If it's true we're usually try to ask a user if the dialog's
 		 data should be saved somewhere. After dialog construction,
@@ -278,7 +282,8 @@ class KEXICORE_EXPORT KexiDialogBase :
 
 		inline Q3WidgetStack * stack() const { return m_stack; }
 
-		void dirtyChanged();
+		//! Used by \a view to inform the dialog about changing state of the "dirty" flag.
+		void dirtyChanged(KexiViewBase* view);
 #if 0
 		/*! Loads large string data \a dataString block (e.g. xml form's representation),
 		 indexed with optional \a dataID, from the database backend.
@@ -320,8 +325,10 @@ class KEXICORE_EXPORT KexiDialogBase :
 		Q3WidgetStack *m_stack;
 		QString m_origCaption; //!< helper
 		KexiDB::SchemaData* m_schemaData;
-		KexiViewBase *m_newlySelectedView; //!< Used in dirty(), temporary set in switchToViewMode()
+		QPointer<KexiViewBase> m_newlySelectedView; //!< Used in dirty(), temporary set in switchToViewMode()
 		                                   //!< during view setup, when a new view is not yet raised.
+		//! Used in viewThatRecentlySetDirtyFlag(), modified in dirtyChanged().
+		QPointer<KexiViewBase> m_viewThatRecentlySetDirtyFlag; 
 		QPointer<KexiDialogTempData> m_tempData; //!< temporary data shared between views
 
 		/*! Created view's mode - helper for switchToViewMode(),

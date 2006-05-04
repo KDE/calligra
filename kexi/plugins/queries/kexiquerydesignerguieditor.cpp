@@ -77,10 +77,10 @@
 #endif
 
 /*! @internal */
-class KexiQueryDesignerGuiEditorPrivate
+class KexiQueryDesignerGuiEditor::Private
 {
 public:
-	KexiQueryDesignerGuiEditorPrivate()
+	Private()
 		: fieldColumnIdentifiers(101, false/*case insens.*/)
 	{
 		droppedNewItem = 0;
@@ -121,7 +121,7 @@ public:
 KexiQueryDesignerGuiEditor::KexiQueryDesignerGuiEditor(
 	KexiMainWindow *mainWin, QWidget *parent, const char *name)
  : KexiViewBase(mainWin, parent, name)
- , d( new KexiQueryDesignerGuiEditorPrivate() )
+ , d( new Private() )
 {
 	d->conn = mainWin->project()->dbConnection();
 

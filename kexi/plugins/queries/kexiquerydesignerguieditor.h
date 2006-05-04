@@ -59,8 +59,6 @@ namespace KexiDB
 	class ResultInfo;
 }
 
-class KexiQueryDesignerGuiEditorPrivate;
-
 class KexiQueryDesignerGuiEditor : public KexiViewBase
 {
 	Q_OBJECT
@@ -162,8 +160,10 @@ class KexiQueryDesignerGuiEditor : public KexiViewBase
 		void slotItemRemoved(const KexiPart::Item& item);
 		void slotItemRenamed(const KexiPart::Item& item, const Q3CString& oldName);
 
+		friend class KexiQueryView; // for storeNewData() and storeData() only
 	private:
-		KexiQueryDesignerGuiEditorPrivate *d;
+		class Private;
+		Private *d;
 };
 
 #endif

@@ -58,7 +58,6 @@ KexiDialogBase::KexiDialogBase(KexiMainWindow *parent, const QString &caption)
 	m_openedViewModes = 0;
 	m_currentViewMode = Kexi::NoViewMode; //no view available yet
 	m_parentWindow = parent;
-	m_newlySelectedView = 0;
 	m_creatingViewsMode = -1;
 
 	Q3VBoxLayout *lyr = new Q3VBoxLayout(this);
@@ -243,7 +242,7 @@ void KexiDialogBase::setDirty(bool dirty)
 		mode <<= 1;
 	}
 	m_disableDirtyChanged = false;
-	dirtyChanged(); //update
+	dirtyChanged(m_viewThatRecentlySetDirtyFlag); //update
 }
 
 QString KexiDialogBase::itemIcon()
@@ -423,10 +422,11 @@ bool KexiDialogBase::eventFilter(QObject *obj, QEvent *e)
 	return false;
 }
 
-void KexiDialogBase::dirtyChanged()
+void KexiDialogBase::dirtyChanged(KexiViewBase* view)
 {
 	if (m_disableDirtyChanged)
 		return;
+	m_viewThatRecentlySetDirtyFlag = dirty() ? view : 0;
 /*	if (!dirty()) {
 		if (caption()!=m_origCaption)
 			KMdiChildView::setCaption(m_origCaption);

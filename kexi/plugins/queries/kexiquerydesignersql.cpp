@@ -53,10 +53,10 @@ static bool compareSQL(const QString& sql1, const QString& sql2)
 //===================
 
 //! @internal
-class KexiQueryDesignerSQLViewPrivate
+class KexiQueryDesignerSQLView::Private
 {
 	public:
-		KexiQueryDesignerSQLViewPrivate() :
+		Private() :
 		   history(0)
 		 , historyHead(0)
 		 , statusPixmapOk( DesktopIcon("button_ok") )
@@ -97,7 +97,7 @@ class KexiQueryDesignerSQLViewPrivate
 
 KexiQueryDesignerSQLView::KexiQueryDesignerSQLView(KexiMainWindow *mainWin, QWidget *parent, const char *name)
  : KexiViewBase(mainWin, parent, name)
- , d( new KexiQueryDesignerSQLViewPrivate() )
+ , d( new Private() )
 {
 	d->splitter = new QSplitter(this);
 	d->splitter->setOrientation(Vertical);
@@ -310,7 +310,7 @@ KexiQueryDesignerSQLView::afterSwitchFrom(int mode)
 		int flags = KexiDB::Driver::EscapeKexi;
 		d->origStatement = conn->selectStatement(*query, flags).trimmed();
 	}
-
+	
 	d->editor->setText( d->origStatement );
 	return true;
 }
