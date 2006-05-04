@@ -377,7 +377,8 @@ ResourceView::ResourceView(View *view, QWidget *parent)
 {
     setOrientation(Qt::Vertical);
 
-    resList = new ResListView(this, "Resource list");
+    resList = new ResListView(this);
+	setObjectName("Resource list");
     resList->setItemMargin(2);
     resList->setShadeSortColumn(false);
     resList->setRootIsDecorated(true);

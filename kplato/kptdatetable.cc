@@ -43,7 +43,7 @@
 #include <qlayout.h>
 #include <q3valuelist.h>
 #include <kglobalsettings.h>
-
+#include <QDesktopWidget>
 #include <kdebug.h>
 
 namespace KPlato
@@ -918,7 +918,8 @@ DateInternalYearSelector::DateInternalYearSelector
   font=KGlobalSettings::generalFont();
   font.setPointSize(fontsize);
   setFont(font);
-  setFrameStyle(Q3Frame::NoFrame);
+#warning "kde4: port it ?"  
+  //setFrameStyle(Q3Frame::NoFrame);
   // we have to respect the limits of QDate here, I fear:
   val->setRange(0, 8000);
   setValidator(val);
