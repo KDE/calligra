@@ -394,7 +394,7 @@ QString Cell::fullName() const
 //
 QString Cell::fullName( const Sheet* s, int col, int row )
 {
-  return s->sheetName() + "!" + name( col, row );
+  return s->sheetName() + '!' + name( col, row );
 }
 
 
@@ -1002,7 +1002,7 @@ QString Cell::encodeFormula( bool _era, int _col, int _row ) const
             QString tmp = "";
             if ( d->strText[pos] == '$' )
             {
-                tmp = "$";
+                tmp = '$';
                 pos++;
                 fix1 = true;
             }
@@ -1017,7 +1017,7 @@ QString Cell::encodeFormula( bool _era, int _col, int _row ) const
                 }
                 if ( d->strText[pos] == '$' )
                 {
-                    tmp += "$";
+                    tmp += '$';
                     pos++;
                     fix2 = true;
                 }
@@ -1150,16 +1150,16 @@ QString Cell::decodeFormula( const QString &_text, int _col, int _row) const
             ++pos;
             if ( row < 1 || col < 1 || row > KS_rowMax || col > KS_colMax )
             {
-                kDebug(36001) << "Cell::decodeFormula: row or column out of range (col: " << col << " | row: " << row << ")" << endl;
-                erg = "=\"#### " + i18n("REFERENCE TO COLUMN OR ROW IS OUT OF RANGE") + "\"";
+                kDebug(36001) << "Cell::decodeFormula: row or column out of range (col: " << col << " | row: " << row << ')' << endl;
+                erg = "=\"#### " + i18n("REFERENCE TO COLUMN OR ROW IS OUT OF RANGE") + '"';
                 return erg;
             }
             if ( abs1 )
-                erg += "$";
+                erg += '$';
             erg += Cell::columnName(col); //Get column text
 
             if ( abs2 )
-                erg += "$";
+                erg += '$';
             erg += QString::number( row );
         }
         else
@@ -5419,9 +5419,9 @@ bool Cell::saveOasis( KoXmlWriter& xmlwriter, KoGenStyles &mainStyles,
         //kDebug()<<"Link found \n";
         xmlwriter.startElement( "text:p" );
         xmlwriter.startElement( "text:a" );
-        //Reference cell is started by "#"
+        //Reference cell is started by '#'
         if ( localReferenceAnchor( link() ) )
-            xmlwriter.addAttribute( " xlink:href", ( "#"+link() ) );
+            xmlwriter.addAttribute( " xlink:href", ( '#'+link() ) );
         else
             xmlwriter.addAttribute( " xlink:href", link() );
         xmlwriter.addTextNode( text() );
@@ -5631,7 +5631,7 @@ void Cell::loadOasisConditional( QDomElement * style )
 
 bool Cell::loadOasis( const QDomElement& element , KoOasisLoadingContext& oasisContext , Style* style )
 {
-  kDebug() << "*** Loading cell properties ***** at " << column() << "," << row () << endl;
+  kDebug() << "*** Loading cell properties ***** at " << column() << ',' << row () << endl;
 
     QString text;
     kDebug()<<" table:style-name: "<<element.attributeNS( KoXmlNS::table, "style-name", QString::null )<<endl;
@@ -5919,7 +5919,7 @@ void Cell::loadOasisCellText( const QDomElement& parent )
 
     forEachElement( textParagraphElement , parent )
     {
-        if ( textParagraphElement.localName()=="p" &&
+        if ( textParagraphElement.localName() == "p" &&
              textParagraphElement.namespaceURI()== KoXmlNS::text )
         {
             // our text, could contain formating for value or result of formul
@@ -6066,8 +6066,8 @@ void Cell::loadOasisValidation( const QString& validationName )
             d->extra()->validity->m_cond = Conditional::Between;
             valExpression = valExpression.remove( "oooc:cell-content-text-length-is-between(" );
             kDebug()<<" valExpression :"<<valExpression<<endl;
-            valExpression = valExpression.remove( ")" );
-            QStringList listVal = valExpression.split( ",", QString::SkipEmptyParts );
+            valExpression = valExpression.remove( ')' );
+            QStringList listVal = valExpression.split( ',', QString::SkipEmptyParts );
             loadOasisValidationValue( listVal );
         }
         else if ( valExpression.contains( "cell-content-text-length-is-not-between" ) )
@@ -6076,9 +6076,9 @@ void Cell::loadOasisValidation( const QString& validationName )
             d->extra()->validity->m_cond = Conditional::Different;
             valExpression = valExpression.remove( "oooc:cell-content-text-length-is-not-between(" );
             kDebug()<<" valExpression :"<<valExpression<<endl;
-            valExpression = valExpression.remove( ")" );
+            valExpression = valExpression.remove( ')' );
             kDebug()<<" valExpression :"<<valExpression<<endl;
-            QStringList listVal = valExpression.split( ",", QString::SkipEmptyParts );
+            QStringList listVal = valExpression.split( ',', QString::SkipEmptyParts );
             loadOasisValidationValue( listVal );
         }
         else if ( valExpression.contains( "cell-content-is-in-list(" ) )
@@ -6086,8 +6086,8 @@ void Cell::loadOasisValidation( const QString& validationName )
             d->extra()->validity->m_restriction = Restriction::List;
             valExpression = valExpression.remove( "oooc:cell-content-is-in-list(" );
             kDebug()<<" valExpression :"<<valExpression<<endl;
-            valExpression = valExpression.remove( ")" );
-            d->extra()->validity->listValidity = valExpression.split( ";",  QString::SkipEmptyParts );
+            valExpression = valExpression.remove( ')' );
+            d->extra()->validity->listValidity = valExpression.split( ';',  QString::SkipEmptyParts );
 
         }
         //TrueFunction ::= cell-content-is-whole-number() | cell-content-is-decimal-number() | cell-content-is-date() | cell-content-is-time()
@@ -6125,16 +6125,16 @@ void Cell::loadOasisValidation( const QString& validationName )
             if ( valExpression.contains( "cell-content-is-between(" ) )
             {
                 valExpression = valExpression.remove( "cell-content-is-between(" );
-                valExpression = valExpression.remove( ")" );
-                QStringList listVal = valExpression.split( ",", QString::SkipEmptyParts );
+                valExpression = valExpression.remove( ')' );
+                QStringList listVal = valExpression.split( ',', QString::SkipEmptyParts );
                 loadOasisValidationValue( listVal );
                 d->extra()->validity->m_cond = Conditional::Between;
             }
             if ( valExpression.contains( "cell-content-is-not-between(" ) )
             {
                 valExpression = valExpression.remove( "cell-content-is-not-between(" );
-                valExpression = valExpression.remove( ")" );
-                QStringList listVal = valExpression.split( ",", QString::SkipEmptyParts );
+                valExpression = valExpression.remove( ')' );
+                QStringList listVal = valExpression.split( ',', QString::SkipEmptyParts );
                 loadOasisValidationValue( listVal );
                 d->extra()->validity->m_cond = Conditional::Different;
             }
@@ -6265,17 +6265,17 @@ void Cell::loadOasisValidationCondition( QString &valExpression )
         value = valExpression.remove( 0,2 );
         d->extra()->validity->m_cond = Conditional::DifferentTo;
     }
-    else if ( valExpression.indexOf( "<" )==0 )
+    else if ( valExpression.indexOf( '<' )==0 )
     {
         value = valExpression.remove( 0,1 );
         d->extra()->validity->m_cond = Conditional::Inferior;
     }
-    else if(valExpression.indexOf( ">" )==0 )
+    else if(valExpression.indexOf( '>' )==0 )
     {
         value = valExpression.remove( 0,1 );
         d->extra()->validity->m_cond = Conditional::Superior;
     }
-    else if (valExpression.indexOf( "=" )==0 )
+    else if (valExpression.indexOf( '=' )==0 )
     {
         value = valExpression.remove( 0,1 );
         d->extra()->validity->m_cond = Conditional::Equal;
@@ -6464,7 +6464,7 @@ bool Cell::load( const QDomElement & cell, int _xshift, int _yshift,
           }
           if ( param.hasAttribute("listvalidity") )
           {
-            d->extra()->validity->listValidity = param.attribute("listvalidity").split(";", QString::SkipEmptyParts );
+            d->extra()->validity->listValidity = param.attribute("listvalidity").split(';', QString::SkipEmptyParts );
           }
         }
         QDomElement inputTitle = validity.namedItem( "inputtitle" ).toElement();
@@ -6696,7 +6696,7 @@ bool Cell::loadCellData(const QDomElement & text, Paste::Operation op )
           {
             inside_tag = false;
             if( tag.startsWith( "a href=\"", Qt::CaseSensitive ) )
-            if( tag.endsWith( "\"" ) )
+            if( tag.endsWith( '"' ) )
               qml_link = tag.mid( 8, tag.length()-9 );
             tag.clear();
           }
@@ -6928,7 +6928,7 @@ QString Cell::pasteOperation( const QString &new_text, const QString &old_text, 
     old.toDouble( &b2 );
     if (b1 && !b2 && old.length() == 0)
     {
-      old = "0";
+      old = '0';
       b2 = true;
     }
 
@@ -6963,16 +6963,16 @@ QString Cell::pasteOperation( const QString &new_text, const QString &old_text, 
         switch( op )
         {
           case Paste::Add :
-            tmp_op="=("+old+")+"+"("+tmp+")";
+            tmp_op="=("+old+")+"+"("+tmp+')';
             break;
           case Paste::Mul :
-            tmp_op="=("+old+")*"+"("+tmp+")";
+            tmp_op="=("+old+")*"+"("+tmp+')';
             break;
           case Paste::Sub:
-            tmp_op="=("+old+")-"+"("+tmp+")";
+            tmp_op="=("+old+")-"+"("+tmp+')';
             break;
           case Paste::Div:
-            tmp_op="=("+old+")/"+"("+tmp+")";
+            tmp_op="=("+old+")/"+"("+tmp+')';
             break;
         default :
             Q_ASSERT( 0 );
@@ -7233,7 +7233,7 @@ void Cell::checkForNamedAreas( QString & formula ) const
     {
       if ( sheet()->doc()->loadingInfo()->findWordInAreaList(word) )
       {
-        formula = formula.replace( start, word.length(), "'" + word + "'" );
+        formula = formula.replace( start, word.length(), '\'' + word + '\'' );
         l = formula.length();
         ++i;
         kDebug() << "Formula: " << formula << ", L: " << l << ", i: " << i + 1 <<endl;
@@ -7248,7 +7248,7 @@ void Cell::checkForNamedAreas( QString & formula ) const
   {
     if ( sheet()->doc()->loadingInfo()->findWordInAreaList(word) )
     {
-      formula = formula.replace( start, word.length(), "'" + word + "'" );
+      formula = formula.replace( start, word.length(), '\'' + word + '\'' );
       l = formula.length();
       ++i;
       kDebug() << "Formula: " << formula << ", L: " << l << ", i: " << i + 1 <<endl;

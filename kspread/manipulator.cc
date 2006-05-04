@@ -1664,7 +1664,7 @@ QString HideShowManipulator::name() const
   }
   if (m_manipulateColumns && m_manipulateRows)
   {
-    name += "/";
+    name += '/';
   }
   if (m_manipulateRows)
   {

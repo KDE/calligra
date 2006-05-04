@@ -68,7 +68,7 @@ int KSpread::util_decodeColumnLabelText( const QString &_col )
         else if( _col[i] >= 'a' && _col[i] <= 'z' )
             col += counterColumn * ( _col[i].toLatin1() - 'A' - offset + 1 );
         else
-            kDebug(36001) << "util_decodeColumnLabelText: Wrong characters in label text for col:'" << _col << "'" << endl;
+            kDebug(36001) << "util_decodeColumnLabelText: Wrong characters in label text for col:'" << _col << '\'' << endl;
     }
     return col;
 }
@@ -91,13 +91,13 @@ QString KSpread::util_rangeRowName( const QRect &_area)
 
 QString KSpread::util_rangeName(const QRect &_area)
 {
-    return Cell::name( _area.left(), _area.top() ) + ":" +
+    return Cell::name( _area.left(), _area.top() ) + ':' +
   Cell::name( _area.right(), _area.bottom() );
 }
 
 QString KSpread::util_rangeName(Sheet * _sheet, const QRect &_area)
 {
-    return _sheet->sheetName() + "!" + util_rangeName(_area);
+    return _sheet->sheetName() + '!' + util_rangeName(_area);
 }
 
 QDomElement KSpread::util_createElement( const QString & tagName, const QFont & font, QDomDocument & doc )
@@ -238,7 +238,7 @@ void Point::init(const QString & _str)
     _columnFixed=false;
     _rowFixed=false;
 
-//    kDebug(36001) <<"Point::init ("<<_str<<")"<<endl;
+//    kDebug(36001) <<"Point::init ("<<_str<<')'<<endl;
     _pos.setX(-1);
 
     uint len = _str.length();
@@ -271,14 +271,14 @@ void Point::init(const QString & _str)
     // Malformed ?
     if ( p == len )
     {
-  kDebug(36001) << "Point::init: no point after '$' (str: '" << str.mid( p ) << "'" << endl;
+  kDebug(36001) << "Point::init: no point after '$' (str: '" << str.mid( p ) << '\'' << endl;
   return;
     }
     if ( str[p] < 'A' || str[p] > 'Z' )
     {
   if ( str[p] < 'a' || str[p] > 'z' )
   {
-      kDebug(36001) << "Point::init: wrong first character in point (str: '" << str.mid( p ) << "'" << endl;
+      kDebug(36001) << "Point::init: wrong first character in point (str: '" << str.mid( p ) << '\'' << endl;
       return;
   }
     }
@@ -292,7 +292,7 @@ void Point::init(const QString & _str)
   x = util_decodeColumnLabelText( str.mid( p, result - p ) ); // x is defined now
     else  // If there isn't any, then this is not a point -> return
     {
-  kDebug(36001) << "Point::init: no number in string (str: '" << str.mid( p, result ) << "'" << endl;
+  kDebug(36001) << "Point::init: no number in string (str: '" << str.mid( p, result ) << '\'' << endl;
   return;
     }
     p = result;
@@ -300,7 +300,7 @@ void Point::init(const QString & _str)
     //limit is KS_colMax
     if ( x > KS_colMax )
     {
-  kDebug(36001) << "Point::init: column value too high (col: " << x << ")" << endl;
+  kDebug(36001) << "Point::init: column value too high (col: " << x << ')' << endl;
   return;
     }
 
@@ -339,12 +339,12 @@ void Point::init(const QString & _str)
     int y = str.mid( p2, p-p2 ).toInt( &ok );
     if ( !ok )
     {
-  kDebug(36001) << "Point::init: Invalid number (str: '" << str.mid( p2, p-p2 ) << "'" << endl;
+  kDebug(36001) << "Point::init: Invalid number (str: '" << str.mid( p2, p-p2 ) << '\'' << endl;
   return;
     }
     if ( y > KS_rowMax )
     {
-  kDebug(36001) << "Point::init: row value too high (row: " << y << ")" << endl;
+  kDebug(36001) << "Point::init: row value too high (row: " << y << ')' << endl;
   return;
     }
     if ( y <= 0 )
@@ -604,7 +604,7 @@ QString Range::toString() const
 
   //Insert $ characters to show fixed parts of range
 
-  int pos=result.indexOf("!")+1;
+  int pos=result.indexOf('!')+1;
   Q_ASSERT(pos != -1);
 
   if (_leftFixed)
@@ -617,7 +617,7 @@ QString Range::toString() const
     result.insert(pos+Cell::columnName(_range.left()).length(),'$');
   }
 
-  pos=result.indexOf(":")+1;
+  pos=result.indexOf(':')+1;
   Q_ASSERT(pos != -1);
 
   if (_rightFixed)
@@ -864,7 +864,7 @@ QString KSpread::convertRefToBase( const QString & sheet, const QRect & rect )
 {
   QPoint bottomRight( rect.bottomRight() );
 
-  QString s( "$" );
+  QString s( '$' );
   s += sheet;
   s += ".$";
   s += Cell::columnName( bottomRight.x() );
@@ -882,7 +882,7 @@ QString KSpread::convertRefToRange( const QString & sheet, const QRect & rect )
   if ( topLeft == bottomRight )
     return convertRefToBase( sheet, rect );
 
-  QString s( "$" );
+  QString s( '$' );
   s += sheet;
   s += ".$";
   s += /*util_encodeColumnLabelText*/Cell::columnName( topLeft.x() );
@@ -921,7 +921,7 @@ void KSpread::insertBracket( QString & s )
  //used in Sheet::saveOasis
 QString KSpread::convertRangeToRef( const QString & sheetName, const QRect & _area )
 {
-    return sheetName + "." + Cell::name( _area.left(), _area.top() ) + ":" + sheetName + "."+ Cell::name( _area.right(), _area.bottom() );
+    return sheetName + '.' + Cell::name( _area.left(), _area.top() ) + ':' + sheetName + '.'+ Cell::name( _area.right(), _area.bottom() );
 }
 
 QString KSpread::convertOasisPenToString( const QPen & pen )
@@ -1025,7 +1025,7 @@ QString KSpread::Oasis::decodeFormula(const QString& expr, const KLocale* locale
 
   if (ex[0] == '=')
   {
-	result="=";
+	result='=';
 	++i;
   }
 

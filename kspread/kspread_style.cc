@@ -883,13 +883,13 @@ QString Style::saveOasisStyleNumericNumber( KoGenStyles& mainStyles, FormatType 
 {
   QString format;
   if ( _precision == -1 )
-    format="0";
+    format='0';
   else
   {
     QString tmp;
     for ( int i = 0; i <_precision; i++ )
     {
-      tmp+="0";
+      tmp+='0';
     }
     format = "0."+tmp;
   }
@@ -905,13 +905,13 @@ QString Style::saveOasisStyleNumericMoney( KoGenStyles& mainStyles, FormatType /
 {
     QString format;
     if ( _precision == -1 )
-        format="0";
+        format='0';
     else
     {
         QString tmp;
         for ( int i = 0; i <_precision; i++ )
         {
-            tmp+="0";
+            tmp+='0';
         }
         format = "0."+tmp;
     }
@@ -927,13 +927,13 @@ QString Style::saveOasisStyleNumericPercentage( KoGenStyles&mainStyles, FormatTy
     //TODO add decimal etc.
     QString format;
     if ( _precision == -1 )
-        format="0";
+        format='0';
     else
     {
         QString tmp;
         for ( int i = 0; i <_precision; i++ )
         {
-            tmp+="0";
+            tmp+='0';
         }
         format = "0."+tmp;
     }
@@ -954,7 +954,7 @@ QString Style::saveOasisStyleNumericScientific( KoGenStyles&mainStyles, FormatTy
         QString tmp;
         for ( int i = 0; i <_precision; i++ )
         {
-            tmp+="0";
+            tmp+='0';
         }
         format = "0."+tmp+"E+00";
     }

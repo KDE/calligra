@@ -769,7 +769,7 @@ void Format::loadOasisStyle( /*const QDomElement& style,*/ KoOasisLoadingContext
   KoOasisStyles& oasisStyles = context.oasisStyles();
 
   styleStack.push( style );
-  
+
   KoStyleStack& styleStack = context.styleStack();
   loadOasisStyleStyle( styleStack, context.oasisStyles() );
 
@@ -3382,7 +3382,7 @@ Currency::Currency(QString const & code, currencyFormat format)
       }
     }
     else if ( code.indexOf( '$' ) != -1 )
-      m_code = "$";
+      m_code = '$';
   } // end gnumeric
   m_type = gCurrencyMap.getIndex( m_code );
 }
@@ -3461,7 +3461,7 @@ QString Currency::getExportCode( currencyFormat format ) const
 
     QString ret( "[$");
     ret += m_code;
-    ret += "]";
+    ret += ']';
 
     return ret;
   }
@@ -3483,7 +3483,7 @@ QString Currency::getChooseString( int type, bool & ok )
     {
       ret += " (";
       ret += i18n( gMoneyList[type].country );
-      ret += ")";
+      ret += ')';
     }
     return ret;
   }
@@ -3494,7 +3494,7 @@ QString Currency::getChooseString( int type, bool & ok )
     {
       ret += " (";
       ret += i18n( gMoneyList[type].name );
-      ret += ")";
+      ret += ')';
     }
     return ret;
   }

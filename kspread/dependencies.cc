@@ -125,7 +125,7 @@ void DependencyList::dump()
   QMap<Point, RangeList>::const_iterator it = dependencies.begin();
   for ( ; it != dependencies.end(); ++it ) {
     Point p = it.key();
-    kDebug() << "Cell " << p.sheetName() << " " << p.pos()
+    kDebug() << "Cell " << p.sheetName() << ' ' << p.pos()
               << " depends on :" << endl;
     RangeList rl = (*it);
     QLinkedList<Point>::const_iterator itp = rl.cells.begin();
@@ -140,7 +140,7 @@ void DependencyList::dump()
   for ( ; cit != cellDeps.end(); ++cit )
   {
     Point p = cit.key();
-    kDebug() << "The cells that depend on " << p.sheetName() << " " << p.pos()
+    kDebug() << "The cells that depend on " << p.sheetName() << ' ' << p.pos()
               << " are :" << endl;
     QLinkedList<Point>::const_iterator itp = (*cit).begin();
     for ( ; itp != (*cit).end(); ++itp )

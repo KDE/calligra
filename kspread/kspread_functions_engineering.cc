@@ -723,11 +723,11 @@ static QString func_create_complex( double real,double imag )
   if(real!=0)
         tmp=KGlobal::locale()->formatNumber(real);
   else
-    return KGlobal::locale()->formatNumber(imag)+"i";
+    return KGlobal::locale()->formatNumber(imag)+'i';
   if (imag >0)
-        tmp=tmp+"+"+KGlobal::locale()->formatNumber(imag)+"i";
+        tmp=tmp+'+'+KGlobal::locale()->formatNumber(imag)+'i';
   else
-        tmp=tmp+KGlobal::locale()->formatNumber(imag)+"i";
+        tmp=tmp+KGlobal::locale()->formatNumber(imag)+'i';
   return tmp;
 
 }

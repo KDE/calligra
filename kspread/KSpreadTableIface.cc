@@ -96,7 +96,7 @@ bool KSpread::CellProxy::process( const DCOPCString& obj, const DCOPCString& fun
 	}
 
     QString cellID=QString::fromUtf8(obj.data() + m_prefix.length());
-    cellID=m_sheet->sheetName()+"!"+cellID;
+    cellID=m_sheet->sheetName()+'!'+cellID;
 
     kDebug()<<"CellProxy::process: cellID="<<cellID<<endl;
 
@@ -133,7 +133,7 @@ void SheetIface::sheetNameHasChanged() {
   QObject *currentObj = m_sheet;
     while (currentObj != 0) {
         ident.prepend( currentObj->objectName().toUtf8() );
-        ident.prepend("/");
+        ident.prepend('/');
         currentObj = currentObj->parent();
     }
     if ( ident[0] == '/' )
@@ -144,7 +144,7 @@ void SheetIface::sheetNameHasChanged() {
 
            delete m_proxy;
            DCOPCString str = objId();
-           str += "/";
+           str += '/';
 	   kDebug(36001)<<"SheetIface::sheetNameHasChanged(): new DCOP-ID:"<<objId()<<endl;
            m_proxy = new CellProxy( m_sheet, str );
    }
@@ -176,7 +176,7 @@ DCOPRef SheetIface::cell( int x, int y )
 DCOPRef SheetIface::cell( const QString& name )
 {
     DCOPCString str = objId();
-    str += "/";
+    str += '/';
     str += name.toLatin1();
 
     return DCOPRef( kapp->dcopClient()->appId(), str );
@@ -233,7 +233,7 @@ int SheetIface::maxRow() const
 bool SheetIface::processDynamic( const DCOPCString& fun, const QByteArray&/*data*/,
                                         DCOPCString& replyType, QByteArray &replyData )
 {
-    kDebug(36001) << "Calling '" << fun.data() << "'" << endl;
+    kDebug(36001) << "Calling '" << fun.data() << '\'' << endl;
     // Does the name follow the pattern "foobar()" ?
     uint len = fun.length();
     if ( len < 3 )
@@ -247,7 +247,7 @@ bool SheetIface::processDynamic( const DCOPCString& fun, const QByteArray&/*data
     if ( !p.isValid() )
         return false;
 
-    DCOPCString str = objId() + "/" + fun.left( len - 2 );
+    DCOPCString str = objId() + '/' + fun.left( len - 2 );
 
     replyType = "DCOPRef";
     QDataStream out( &replyData,QIODevice::WriteOnly );

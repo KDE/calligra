@@ -301,7 +301,7 @@ Value ValueParser::tryParseNumber (const QString& str, bool *ok)
     if (percent)
     {
       //kDebug(36001) << "ValueParser::tryParseNumber '" << str <<
-      //    "' successfully parsed as percentage: " << val << "%" << endl;
+      //    "' successfully parsed as percentage: " << val << '%' << endl;
       value.setValue (val / 100.0);
       value.setFormat (Value::fmt_Percent);
       fmtType = Percentage_format;
@@ -440,7 +440,7 @@ Value ValueParser::tryParseTime (const QString& str, bool *ok)
       {
           QString tmp=str.mid(0,str.length()-stringPm.length());
           tmp=tmp.simplified();
-          tm = parserLocale->readTime(tmp+" "+stringPm, &valid);
+          tm = parserLocale->readTime(tmp+' '+stringPm, &valid);
           if (!valid)
               tm = parserLocale->readTime(tmp+":00 "+stringPm, &valid);
       }
@@ -448,7 +448,7 @@ Value ValueParser::tryParseTime (const QString& str, bool *ok)
       {
           QString tmp = str.mid(0,str.length()-stringAm.length());
           tmp = tmp.simplified();
-          tm = parserLocale->readTime (tmp + " " + stringAm, &valid);
+          tm = parserLocale->readTime (tmp + ' ' + stringAm, &valid);
           if (!valid)
               tm = parserLocale->readTime (tmp + ":00 " + stringAm, &valid);
       }

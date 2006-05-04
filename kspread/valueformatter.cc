@@ -428,9 +428,9 @@ QString ValueFormatter::timeFormat (const QDateTime &dt, FormatType fmtType)
   int m = dt.time().minute();
   int s = dt.time().second();
 
-  QString hour = ( h < 10 ? "0" + QString::number(h) : QString::number(h) );
-  QString minute = ( m < 10 ? "0" + QString::number(m) : QString::number(m) );
-  QString second = ( s < 10 ? "0" + QString::number(s) : QString::number(s) );
+  QString hour = ( h < 10 ? '0' + QString::number(h) : QString::number(h) );
+  QString minute = ( m < 10 ? '0' + QString::number(m) : QString::number(m) );
+  QString second = ( s < 10 ? '0' + QString::number(s) : QString::number(s) );
   bool pm = (h > 12);
   QString AMPM( pm ? i18n("PM"):i18n("AM") );
 
@@ -501,42 +501,42 @@ QString ValueFormatter::dateFormat (const QDate &date, FormatType fmtType)
   }
   else if (fmtType == date_format1) {  /*18-Feb-99 */
     tmp = QString().sprintf("%02d", date.day());
-    tmp += "-" + converter->locale()->calendar()->monthString(date, true) + "-";
+    tmp += '-' + converter->locale()->calendar()->monthString(date, true) + '-';
     tmp += QString::number(date.year()).right(2);
   }
   else if (fmtType == date_format2) {  /*18-Feb-1999 */
     tmp = QString().sprintf("%02d", date.day());
-    tmp += "-" + converter->locale()->calendar()->monthString(date, true) + "-";
+    tmp += '-' + converter->locale()->calendar()->monthString(date, true) + '-';
     tmp += QString::number(date.year());
   }
   else if (fmtType == date_format3) {  /*18-Feb */
     tmp = QString().sprintf("%02d", date.day());
-    tmp += "-" + converter->locale()->calendar()->monthString(date, true);
+    tmp += '-' + converter->locale()->calendar()->monthString(date, true);
   }
   else if (fmtType == date_format4) {  /*18-05 */
     tmp = QString().sprintf("%02d", date.day());
-    tmp += "-" + QString().sprintf("%02d", date.month() );
+    tmp += '-' + QString().sprintf("%02d", date.month() );
   }
   else if (fmtType == date_format5) {  /*18/05/00 */
     tmp = QString().sprintf("%02d", date.day());
-    tmp += "/" + QString().sprintf("%02d", date.month()) + "/";
+    tmp += '/' + QString().sprintf("%02d", date.month()) + '/';
     tmp += QString::number(date.year()).right(2);
   }
   else if (fmtType == date_format6) {  /*18/05/1999 */
     tmp = QString().sprintf("%02d", date.day());
-    tmp += "/" + QString().sprintf("%02d", date.month()) + "/";
+    tmp += '/' + QString().sprintf("%02d", date.month()) + '/';
     tmp += QString::number(date.year());
   }
   else if (fmtType == date_format7) {  /*Feb-99 */
-    tmp = converter->locale()->calendar()->monthString(date, true) + "-";
+    tmp = converter->locale()->calendar()->monthString(date, true) + '-';
     tmp += QString::number(date.year()).right(2);
   }
   else if (fmtType == date_format8) {  /*February-99 */
-    tmp = converter->locale()->calendar()->monthString(date, false) + "-";
+    tmp = converter->locale()->calendar()->monthString(date, false) + '-';
     tmp += QString::number(date.year()).right(2);
   }
   else if (fmtType == date_format9) {  /*February-1999 */
-    tmp = converter->locale()->calendar()->monthString(date, false) + "-";
+    tmp = converter->locale()->calendar()->monthString(date, false) + '-';
     tmp += QString::number(date.year());
   }
   else if (fmtType == date_format10) {  /*F-99 */
@@ -544,60 +544,60 @@ QString ValueFormatter::dateFormat (const QDate &date, FormatType fmtType)
     tmp += QString::number(date.year()).right(2);
   }
   else if (fmtType == date_format11) {  /*18/Feb */
-    tmp = QString().sprintf("%02d", date.day()) + "/";
+    tmp = QString().sprintf("%02d", date.day()) + '/';
     tmp += converter->locale()->calendar()->monthString(date, true);
   }
   else if (fmtType == date_format12) {  /*18/02 */
-    tmp = QString().sprintf("%02d", date.day()) + "/";
+    tmp = QString().sprintf("%02d", date.day()) + '/';
     tmp += QString().sprintf("%02d", date.month());
   }
   else if (fmtType == date_format13) {  /*18/Feb/1999 */
     tmp = QString().sprintf("%02d", date.day());
-    tmp += "/" + converter->locale()->calendar()->monthString(date, true) + "/";
+    tmp += '/' + converter->locale()->calendar()->monthString(date, true) + '/';
     tmp += QString::number(date.year());
   }
   else if (fmtType == date_format14) {  /*2000/Feb/18 */
     tmp = QString::number(date.year());
-    tmp += "/" + converter->locale()->calendar()->monthString(date, true) + "/";
+    tmp += '/' + converter->locale()->calendar()->monthString(date, true) + '/';
     tmp += QString().sprintf("%02d", date.day());
   }
   else if (fmtType == date_format15) {  /*2000-Feb-18 */
     tmp = QString::number(date.year());
-    tmp += "-" + converter->locale()->calendar()->monthString(date, true) + "-";
+    tmp += '-' + converter->locale()->calendar()->monthString(date, true) + '-';
     tmp += QString().sprintf("%02d", date.day());
   }
   else if (fmtType == date_format16) {  /*2000-02-18 */
     tmp = QString::number(date.year());
-    tmp += "-" + QString().sprintf("%02d", date.month()) + "-";
+    tmp += '-' + QString().sprintf("%02d", date.month()) + '-';
     tmp += QString().sprintf("%02d", date.day());
   }
   else if (fmtType == date_format17) {  /*2 february 2000 */
     tmp = QString().sprintf("%d", date.day());
-    tmp += " " + converter->locale()->calendar()->monthString(date, false) + " ";
+    tmp += ' ' + converter->locale()->calendar()->monthString(date, false) + ' ';
     tmp += QString::number(date.year());
   }
   else if (fmtType == date_format18) {  /*02/18/1999 */
     tmp = QString().sprintf("%02d", date.month());
-    tmp += "/" + QString().sprintf("%02d", date.day());
-    tmp += "/" + QString::number(date.year());
+    tmp += '/' + QString().sprintf("%02d", date.day());
+    tmp += '/' + QString::number(date.year());
   }
   else if (fmtType == date_format19) {  /*02/18/99 */
     tmp = QString().sprintf("%02d", date.month());
-    tmp += "/" + QString().sprintf("%02d", date.day());
-    tmp += "/" + QString::number(date.year()).right(2);
+    tmp += '/' + QString().sprintf("%02d", date.day());
+    tmp += '/' + QString::number(date.year()).right(2);
   }
   else if (fmtType == date_format20) {  /*Feb/18/99 */
     tmp = converter->locale()->calendar()->monthString(date, true);
-    tmp += "/" + QString().sprintf("%02d", date.day());
-    tmp += "/" + QString::number(date.year()).right(2);
+    tmp += '/' + QString().sprintf("%02d", date.day());
+    tmp += '/' + QString::number(date.year()).right(2);
   }
   else if (fmtType == date_format21) {  /*Feb/18/1999 */
     tmp = converter->locale()->calendar()->monthString(date, true);
-    tmp += "/" + QString().sprintf("%02d", date.day());
-    tmp += "/" + QString::number(date.year());
+    tmp += '/' + QString().sprintf("%02d", date.day());
+    tmp += '/' + QString::number(date.year());
   }
   else if (fmtType == date_format22) {  /*Feb-1999 */
-    tmp = converter->locale()->calendar()->monthString(date, true) + "-";
+    tmp = converter->locale()->calendar()->monthString(date, true) + '-';
     tmp += QString::number(date.year());
   }
   else if (fmtType == date_format23) {  /*1999 */
@@ -608,13 +608,13 @@ QString ValueFormatter::dateFormat (const QDate &date, FormatType fmtType)
   }
   else if (fmtType == date_format25) {  /*2000/02/18 */
     tmp = QString::number(date.year());
-    tmp += "/" + QString().sprintf("%02d", date.month());
-    tmp += "/" + QString().sprintf("%02d", date.day());
+    tmp += '/' + QString().sprintf("%02d", date.month());
+    tmp += '/' + QString().sprintf("%02d", date.day());
   }
   else if (fmtType == date_format26) {  /*2000/Feb/18 */
     tmp = QString::number(date.year());
-    tmp += "/" + converter->locale()->calendar()->monthString(date, true);
-    tmp += "/" + QString().sprintf("%02d", date.day());
+    tmp += '/' + converter->locale()->calendar()->monthString(date, true);
+    tmp += '/' + QString().sprintf("%02d", date.day());
   }
   else
     tmp = converter->locale()->formatDate(date, true);
@@ -634,11 +634,11 @@ QString ValueFormatter::errorFormat (Cell *cell)
 {
   QString err;
   if (cell->testFlag (Cell::Flag_ParseError))
-    err = "#" + i18n ("Parse") + "!";
+    err = '#' + i18n ("Parse") + '!';
   else if ( cell->testFlag (Cell::Flag_CircularCalculation))
-    err = "#" + i18n ("Circle") + "!";
+    err = '#' + i18n ("Circle") + '!';
   else if ( cell->testFlag (Cell::Flag_DependencyError))
-    err = "#" + i18n ("Depend") + "!";
+    err = '#' + i18n ("Depend") + '!';
   else
   {
     err = "####";

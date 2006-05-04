@@ -738,7 +738,7 @@ void Canvas::slotScrollHorz( int _value )
   if ( unzoomedValue < 0.0 ) {
     kDebug (36001)
       << "Canvas::slotScrollHorz: value out of range (unzoomedValue: "
-      << unzoomedValue << ")" << endl;
+      << unzoomedValue << ')' << endl;
     unzoomedValue = 0.0;
   }
 
@@ -800,7 +800,7 @@ void Canvas::slotScrollVert( int _value )
   {
     unzoomedValue = 0;
     kDebug (36001) << "Canvas::slotScrollVert: value out of range (unzoomedValue: " <<
-                       unzoomedValue << ")" << endl;
+                       unzoomedValue << ')' << endl;
   }
 
   double ypos = sheet->dblRowPos( qMin( KS_rowMax, sheet->maxRow()+10 ) );
@@ -3927,8 +3927,8 @@ void Canvas::updatePosWidget()
     {
         if (sheet->getLcMode())
         {
-            buffer = "L" + QString::number( markerRow() ) +
-		"C" + QString::number( markerColumn() );
+            buffer = 'L' + QString::number( markerRow() ) +
+		'C' + QString::number( markerColumn() );
         }
         else
         {
@@ -3942,9 +3942,9 @@ void Canvas::updatePosWidget()
         {
           buffer = QString::number( (selectionInfo()->lastRange().bottom()-selectionInfo()->lastRange().top()+1) )+"Lx";
           if ( util_isRowSelected( selectionInfo()->lastRange() ) )
-            buffer+=QString::number((KS_colMax-selectionInfo()->lastRange().left()+1))+"C";
+            buffer+=QString::number((KS_colMax-selectionInfo()->lastRange().left()+1))+'C';
             else
-              buffer+=QString::number((selectionInfo()->lastRange().right()-selectionInfo()->lastRange().left()+1))+"C";
+              buffer+=QString::number((selectionInfo()->lastRange().right()-selectionInfo()->lastRange().left()+1))+'C';
         }
         else
         {
@@ -3952,7 +3952,7 @@ void Canvas::updatePosWidget()
                 //=> it's not a good display
                 //=> for the moment I display pos of marker
           buffer=Cell::columnName( selectionInfo()->lastRange().left() ) +
-                    QString::number(selectionInfo()->lastRange().top()) + ":" +
+                    QString::number(selectionInfo()->lastRange().top()) + ':' +
                     Cell::columnName( qMin( KS_colMax, selectionInfo()->lastRange().right() ) ) +
                     QString::number(selectionInfo()->lastRange().bottom());
                 //buffer=sheet->columnLabel( m_iMarkerColumn );

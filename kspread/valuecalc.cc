@@ -727,7 +727,7 @@ Value ValueCalc::base (const Value &val, int base, int prec)
 
   if (prec > 0)
   {
-    result += "."; value = value - (int)value;
+    result += '.'; value = value - (int)value;
 
     int ix;
     for( int i = 0; i < prec; i++ )
@@ -1894,17 +1894,17 @@ void ValueCalc::getCond (Condition &cond, Value val)
     cond.comp = isEqual;
     text = text.remove( 0, 2 );
   }
-  else if ( text.startsWith( "<" ) )
+  else if ( text.startsWith( '<' ) )
   {
     cond.comp = isLess;
     text = text.remove( 0, 1 );
   }
-  else if ( text.startsWith( ">" ) )
+  else if ( text.startsWith( '>' ) )
   {
     cond.comp = isGreater;
     text = text.remove( 0, 1 );
   }
-  else if ( text.startsWith( "=" ) )
+  else if ( text.startsWith( '=' ) )
   {
     cond.comp = isEqual;
     text = text.remove( 0, 1 );

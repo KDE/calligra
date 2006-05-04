@@ -126,7 +126,7 @@ using namespace KSpread;
 const Token Token::null;
 
 // helper function: return operator of given token text
-// e.g. "*" yields Operator::Asterisk, and so on
+// e.g. '*' yields Operator::Asterisk, and so on
 Token::Op KSpread::matchOperator( const QString& text )
 {
   Token::Op result = Token::InvalidOp;
@@ -166,7 +166,7 @@ Token::Op KSpread::matchOperator( const QString& text )
 }
 
 // helper function: give operator precedence
-// e.g. "+" is 1 while "*" is 3
+// e.g. '+' is 1 while '*' is 3
 static int opPrecedence( Token::Op op )
 {
   int prec = -1;
@@ -1016,7 +1016,7 @@ void Formula::compile( const Tokens& tokens ) const
         // rule for binary operator:  A (op) B -> A
         // conditions: precedence of op >= precedence of token
         // action: push (op) to result
-        // e.g. "A * B" becomes "A" if token is operator "+"
+        // e.g. "A * B" becomes 'A' if token is operator '+'
         // exception: for caret (power operator), if op is another caret
         // then the rule doesn't apply, e.g. "2^3^2" is evaluated as "2^(3^2)"
         if( !ruleFound )
@@ -1077,7 +1077,7 @@ void Formula::compile( const Tokens& tokens ) const
          // rule for unary operator:  (op1) (op2) X -> (op1) X
          // conditions: op2 is unary
          // action: push (op2) to result
-         // e.g.  "* - 2" becomes "*"
+         // e.g.  "* - 2" becomes '*'
          if( !ruleFound )
          if( syntaxStack.itemCount() >= 3 )
          {

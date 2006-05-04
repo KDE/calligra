@@ -775,7 +775,7 @@ int Sheet::leftColumn( double _xpos, double &_left,
         // Should never happen
         if ( col >= KS_colMax )
   {
-      kDebug(36001) << "Sheet:leftColumn: invalid column (col: " << col + 1 << ")" << endl;
+      kDebug(36001) << "Sheet:leftColumn: invalid column (col: " << col + 1 << ')' << endl;
       return KS_colMax + 1; //Return out of range value, so other code can react on this
   }
         _left += columnFormat( col )->dblWidth( _canvas );
@@ -798,7 +798,7 @@ int Sheet::rightColumn( double _xpos, const Canvas *_canvas ) const
         // Should never happen
         if ( col > KS_colMax )
   {
-      kDebug(36001) << "Sheet:rightColumn: invalid column (col: " << col << ")" << endl;
+      kDebug(36001) << "Sheet:rightColumn: invalid column (col: " << col << ')' << endl;
             return KS_colMax + 1; //Return out of range value, so other code can react on this
   }
         x += columnFormat( col )->dblWidth( _canvas );
@@ -892,7 +892,7 @@ int Sheet::topRow( double _ypos, double & _top,
         // Should never happen
         if ( row >= KS_rowMax )
         {
-            kDebug(36001) << "Sheet:topRow: invalid row (row: " << row + 1 << ")" << endl;
+            kDebug(36001) << "Sheet:topRow: invalid row (row: " << row + 1 << ')' << endl;
             return KS_rowMax + 1; //Return out of range value, so other code can react on this
         }
         _top += rowFormat( row )->dblHeight( _canvas );
@@ -915,7 +915,7 @@ int Sheet::bottomRow( double _ypos, const Canvas *_canvas ) const
         // Should never happen
         if ( row > KS_rowMax )
   {
-      kDebug(36001) << "Sheet:bottomRow: invalid row (row: " << row << ")" << endl;
+      kDebug(36001) << "Sheet:bottomRow: invalid row (row: " << row << ')' << endl;
             return KS_rowMax + 1; //Return out of range value, so other code can react on this
   }
         y += rowFormat( row )->dblHeight( _canvas );
@@ -935,7 +935,7 @@ double Sheet::dblColumnPos( int _col, const Canvas *_canvas ) const
         // Should never happen
         if ( col > KS_colMax )
   {
-      kDebug(36001) << "Sheet:columnPos: invalid column (col: " << col << ")" << endl;
+      kDebug(36001) << "Sheet:columnPos: invalid column (col: " << col << ')' << endl;
             return x;
   }
 
@@ -962,7 +962,7 @@ double Sheet::dblRowPos( int _row, const Canvas *_canvas ) const
         // Should never happen
         if ( row > KS_rowMax )
   {
-      kDebug(36001) << "Sheet:rowPos: invalid row (row: " << row << ")" << endl;
+      kDebug(36001) << "Sheet:rowPos: invalid row (row: " << row << ')' << endl;
             return y;
   }
 
@@ -1025,10 +1025,10 @@ Cell* Sheet::cellAt( int _column, int _row, bool _scrollbar_update )
 {
   if ( _column > KS_colMax ) {
     _column = KS_colMax;
-    kDebug (36001) << "Sheet::cellAt: column range: (col: " << _column << ")" << endl;
+    kDebug (36001) << "Sheet::cellAt: column range: (col: " << _column << ')' << endl;
   }
   if ( _row > KS_rowMax) {
-    kDebug (36001) << "Sheet::cellAt: row out of range: (row: " << _row << ")" << endl;
+    kDebug (36001) << "Sheet::cellAt: row out of range: (row: " << _row << ')' << endl;
     _row = KS_rowMax;
   }
 
@@ -1169,8 +1169,8 @@ void Sheet::setArrayFormula (Selection *selectionInfo, const QString &_text)
       if (col || row)
       {
         Cell *cell = nonDefaultCell (_column + col, _row + row);
-        cell->setCellText ("=INDEX(" + cellRef + ";" + QString::number (row+1)
-            + ";" + QString::number (col+1) + ")", false);
+        cell->setCellText ("=INDEX(" + cellRef + ';' + QString::number (row+1)
+            + ';' + QString::number (col+1) + ')', false);
       }
   */
 }
@@ -1251,7 +1251,7 @@ void Sheet::recalc( bool force )
     // some debug output to get some idea how damn slow this is ...
     if (cur*100/count != percent) {
       percent = cur*100/count;
-//       kDebug() << "Recalc: " << percent << "%" << endl;
+//       kDebug() << "Recalc: " << percent << '%' << endl;
     }
   }
 
@@ -2285,7 +2285,7 @@ void Sheet::slotAreaModified (const QString &name)
 void Sheet::refreshRemoveAreaName(const QString & _areaName)
 {
   Cell * c = d->cells.firstCell();
-  QString tmp = "'" + _areaName + "'";
+  QString tmp = '\'' + _areaName + '\'';
   for( ;c ; c = c->nextCell() )
   {
     if ( c->isFormula() )
@@ -2302,7 +2302,7 @@ void Sheet::refreshRemoveAreaName(const QString & _areaName)
 void Sheet::refreshChangeAreaName(const QString & _areaName)
 {
   Cell * c = d->cells.firstCell();
-  QString tmp = "'" + _areaName + "'";
+  QString tmp = '\'' + _areaName + '\'';
   for( ;c ; c = c->nextCell() )
   {
     if ( c->isFormula() )
@@ -2330,15 +2330,15 @@ void Sheet::changeCellTabName( QString const & old_name, QString const & new_nam
         {
             if(c->text().indexOf(old_name)!=-1)
             {
-                int nb = c->text().count( old_name + "!" );
-                QString tmp = old_name + "!";
+                int nb = c->text().count( old_name + '!' );
+                QString tmp = old_name + '!';
                 int len = tmp.length();
                 tmp=c->text();
 
                 for( int i=0; i<nb; i++ )
                 {
-                    int pos = tmp.indexOf( old_name + "!" );
-                    tmp.replace( pos, len, new_name + "!" );
+                    int pos = tmp.indexOf( old_name + '!' );
+                    tmp.replace( pos, len, new_name + '!' );
                 }
                 c->setCellText(tmp);
             }
@@ -2807,7 +2807,7 @@ void Sheet::changeNameCellRef( const QPoint & pos, bool fullRowOrColumn,
           {
             newText += str + '!'; // Copy it (and the '!')
             // Look for the sheet name right before that '!'
-            correctSheetName = ( newText.right( tabname.length()+1 ) == tabname+"!" );
+            correctSheetName = ( newText.right( tabname.length()+1 ) == tabname+'!' );
           }
           else // It must be a cell identifier
           {
@@ -2879,7 +2879,7 @@ void Sheet::changeNameCellRef( const QPoint & pos, bool fullRowOrColumn,
                       && row >= pos.y() // Row after the new one : +1
                       && ( fullRowOrColumn || col == pos.x() ) ) ) )
               {
-                newPoint = "#" + i18n("Dependency") + "!";
+                newPoint = '#' + i18n("Dependency") + '!';
                 error = true;
               }
 
@@ -2887,7 +2887,7 @@ void Sheet::changeNameCellRef( const QPoint & pos, bool fullRowOrColumn,
             }
             else // Not a cell ref
             {
-              kDebug(36001) << "Copying (unchanged) : '" << str << "'" << endl;
+              kDebug(36001) << "Copying (unchanged) : '" << str << '\'' << endl;
               newText += str;
             }
             // Copy the char that got us to stop
@@ -4954,32 +4954,32 @@ static QString cellAsText( Cell* cell, unsigned int max )
     if (cell->defineAlignX() == Style::Right )
     {
         for ( int i = 0; i < l; ++i )
-          result += " ";
+          result += ' ';
         result += cell->strOutText();
     }
     else if (cell->defineAlignX() == Style::Left )
       {
-          result += " ";
+          result += ' ';
           result += cell->strOutText();
-          // start with "1" because we already set one space
+          // start with '1' because we already set one space
           for ( int i = 1; i < l; ++i )
-            result += " ";
+            result += ' ';
        }
          else // centered
          {
            int i;
            int s = (int) l / 2;
            for ( i = 0; i < s; ++i )
-             result += " ";
+             result += ' ';
            result += cell->strOutText();
            for ( i = s; i < l; ++i )
-             result += " ";
+             result += ' ';
           }
   }
   else
   {
     for ( unsigned int i = 0; i < max; ++i )
-      result += " ";
+      result += ' ';
   }
 
   return result;
@@ -5207,7 +5207,7 @@ void Sheet::paste( const QByteArray& b, const QRect& pasteArea, bool makeUndo,
       // an error occured
       kDebug() << "Sheet::paste(const QByteArray&): an error occured" << endl
                << "line: " << errorLine << " col: " << errorColumn
-               << " " << errorMsg << endl;
+               << ' ' << errorMsg << endl;
       return;
     }
 
@@ -5332,8 +5332,8 @@ bool Sheet::loadSelection(const QDomDocument& doc, const QRect& pasteArea,
       {
         for (int coff = 0; col + coff - _xshift <= pasteWidth; coff += columnsInClpbrd)
         {
-//           kDebug() << "loadSelection: cell at " << (col+coff) << "," << (row+roff)
-//                     << " with roff,coff= " << roff << "," << coff
+//           kDebug() << "loadSelection: cell at " << (col+coff) << ',' << (row+roff)
+//                     << " with roff,coff= " << roff << ',' << coff
 //                     << ", _xshift: " << _xshift << ", _yshift: " << _yshift << endl;
 
           cell = nonDefaultCell( col + coff, row + roff );
@@ -5515,7 +5515,7 @@ bool Sheet::testAreaPasteInsert() const
       // an error occured
       kDebug() << "Sheet::testAreaPasteInsert(): an error occured" << endl
                << "line: " << errorLine << " col: " << errorColumn
-               << " " << errorMsg << endl;
+               << ' ' << errorMsg << endl;
       return false;
     }
 
@@ -6478,7 +6478,7 @@ bool Sheet::loadOasis( const QDomElement& sheetElement,
             kDebug(30518) << "Decoding password: " << str << endl;
             passwd = KCodecs::base64Decode( str );
         }
-        kDebug(30518) << "Password hash: '" << passwd << "'" << endl;
+        kDebug(30518) << "Password hash: '" << passwd << '\'' << endl;
         d->password = passwd;
     }
     return true;
@@ -7382,7 +7382,7 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
 
         xmlWriter.endElement();
 
-        kDebug() << "Sheet::saveOasisColRowCell: column " << i << " "
+        kDebug() << "Sheet::saveOasisColRowCell: column " << i << ' '
                   << "repeated " << repeated << " time(s)" << endl;
         i += repeated;
 
@@ -7462,7 +7462,7 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
             if ( repeated > 1 )
                 xmlWriter.addAttribute( "table:number-rows-repeated", repeated  );
 
-            kDebug() << "Sheet::saveOasisColRowCell: empty row " << i << " "
+            kDebug() << "Sheet::saveOasisColRowCell: empty row " << i << ' '
                       << "repeated " << repeated << " time(s)" << endl;
 
             // copy the index for the next row to process

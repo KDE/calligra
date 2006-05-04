@@ -319,17 +319,17 @@ QString Conditions::saveOasisConditionValue( Conditional &condition)
         if ( condition.strVal1 )
         {
             value+=*condition.strVal1;
-            value+=",";
+            value+=',';
             if ( condition.strVal2 )
                 value+=*condition.strVal2;
         }
         else
         {
             value+=QString::number( condition.val1 );
-            value+=",";
+            value+=',';
             value+=QString::number( condition.val2 );
         }
-        value+=")";
+        value+=')';
         break;
       case Conditional::DifferentTo:
         value="cell-content()!="; //FIXME not good here !
@@ -343,17 +343,17 @@ QString Conditions::saveOasisConditionValue( Conditional &condition)
         if ( condition.strVal1 )
         {
             value+=*condition.strVal1;
-            value+=",";
+            value+=',';
             if ( condition.strVal2 )
                 value+=*condition.strVal2;
         }
         else
         {
             value+=QString::number( condition.val1 );
-            value+=",";
+            value+=',';
             value+=QString::number( condition.val2 );
         }
-        value+=")";
+        value+=')';
         break;
     }
     return value;
@@ -468,16 +468,16 @@ void Conditions::loadOasisConditionValue( const QString &styleCondition, Conditi
     if ( val.contains( "cell-content-is-between(" ) )
     {
         val = val.remove( "cell-content-is-between(" );
-        val = val.remove( ")" );
-        QStringList listVal = val.split( ",", QString::SkipEmptyParts );
+        val = val.remove( ')' );
+        QStringList listVal = val.split( ',', QString::SkipEmptyParts );
         loadOasisValidationValue( listVal, newCondition );
         newCondition.cond = Conditional::Between;
     }
     if ( val.contains( "cell-content-is-not-between(" ) )
     {
         val = val.remove( "cell-content-is-not-between(" );
-        val = val.remove( ")" );
-        QStringList listVal = val.split( ",", QString::SkipEmptyParts );
+        val = val.remove( ')' );
+        QStringList listVal = val.split( ',', QString::SkipEmptyParts );
         loadOasisValidationValue( listVal,newCondition );
         newCondition.cond = Conditional::Different;
     }
@@ -504,17 +504,17 @@ void Conditions::loadOasisCondition( QString &valExpression, Conditional &newCon
         value = valExpression.remove( 0,2 );
         newCondition.cond = Conditional::DifferentTo;
     }
-    else if ( valExpression.indexOf( "<" )==0 )
+    else if ( valExpression.indexOf( '<' )==0 )
     {
         value = valExpression.remove( 0,1 );
         newCondition.cond = Conditional::Inferior;
     }
-    else if(valExpression.indexOf( ">" )==0 )
+    else if(valExpression.indexOf( '>' )==0 )
     {
         value = valExpression.remove( 0,1 );
         newCondition.cond = Conditional::Superior;
     }
-    else if (valExpression.indexOf( "=" )==0 )
+    else if (valExpression.indexOf( '=' )==0 )
     {
         value = valExpression.remove( 0,1 );
         newCondition.cond = Conditional::Equal;

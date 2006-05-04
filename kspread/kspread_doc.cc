@@ -2006,7 +2006,7 @@ void Doc::loadOasisAreaName( const QDomElement& body )
 
                 int n = range.indexOf( '!' );
                 if ( n > 0 )
-                    range = range + ":" + range.right( range.length() - n - 1);
+                    range = range + ':' + range.right( range.length() - n - 1);
 
                 kDebug() << "=> Area: " << range << endl;
             }

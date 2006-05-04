@@ -573,7 +573,7 @@ void View::Private::initActions()
                     view, SLOT( verticalText( bool ) ) );
   actions->verticalText->setToolTip(i18n("Print cell contents vertically"));
 
-  actions->increaseIndent = new KAction( KIcon( QApplication::isRightToLeft() ? "format_decreaseindent":"format_increaseindent" ), i18n("Increase Indent"), ac, "increaseindent" );
+  actions->increaseIndent = new KAction( KIcon( QApplication::isRightToLeft() ? "format_decreaseindent" : "format_increaseindent" ), i18n("Increase Indent"), ac, "increaseindent" );
   connect(actions->increaseIndent, SIGNAL(triggered(bool)), view, SLOT( increaseIndent() ));
 
   actions->increaseIndent->setToolTip(i18n("Increase the indentation"));
@@ -2678,7 +2678,7 @@ void View::autoSum()
         QString str = Range(startPoint, endPoint).toString();
 
         d->canvas->createEditor( Canvas::CellEditor , true , true );
-        d->canvas->editor()->setText("=SUM(" + str + ")");
+        d->canvas->editor()->setText("=SUM(" + str + ')');
         d->canvas->editor()->setCursorPosition(5 + str.length());
         return;
       }
@@ -2697,7 +2697,7 @@ void View::autoSum()
         QString str = Range(startPoint, endPoint).toString();
 
         d->canvas->createEditor( Canvas::CellEditor , true , true );
-        d->canvas->editor()->setText("=SUM(" + str + ")");
+        d->canvas->editor()->setText("=SUM(" + str + ')');
         d->canvas->editor()->setCursorPosition(5 + str.length());
         return;
       }
@@ -2714,7 +2714,7 @@ void View::autoSum()
 
   if ( (rg.range().isValid() ) && (!rg.range().isEmpty()) )
   {
-    d->canvas->editor()->setText( "=SUM("+rg.toString()+")" );
+    d->canvas->editor()->setText( "=SUM("+rg.toString()+')' );
     d->canvas->deleteEditor(true);
   }
   else
@@ -4275,7 +4275,7 @@ void View::findNext()
             else
                 findObj->setData( cell->text() );
             d->findPos = QPoint( cell->column(), cell->row() );
-            //kDebug() << "setData(cell " << d->findPos << ")" << endl;
+            //kDebug() << "setData(cell " << d->findPos << ')' << endl;
         }
 
         // Let KFind inspect the text fragment, and display a dialog if a match is found
@@ -4343,7 +4343,7 @@ Cell* View::findNextCell()
     int col = d->findPos.x();
     int row = d->findPos.y();
     int maxRow = sheet->maxRow();
-    //kDebug() << "findNextCell starting at " << col << "," << row << "   forw=" << forw << endl;
+    //kDebug() << "findNextCell starting at " << col << ',' << row << "   forw=" << forw << endl;
 
     if ( d->directionValue == FindOption::Row )
     {
@@ -4365,7 +4365,7 @@ Cell* View::findNextCell()
                 col = d->findRightColumn;
                 --row;
             }
-            //kDebug() << "next row: " << col << "," << row << endl;
+            //kDebug() << "next row: " << col << ',' << row << endl;
         }
     }
     else
@@ -4388,7 +4388,7 @@ Cell* View::findNextCell()
                 col = maxRow;
                 --col;
             }
-            //kDebug() << "next row: " << col << "," << row << endl;
+            //kDebug() << "next row: " << col << ',' << row << endl;
         }
     }
     // if ( !cell )
@@ -6857,7 +6857,7 @@ void View::calcStatusBarOp()
 
   //doc()->emitBeginOperation();
   if ( d->calcLabel )
-    d->calcLabel->setText(QString(" ") + tmp + ' ');
+    d->calcLabel->setText(QString(' ') + tmp + ' ');
   //doc()->emitEndOperation();
 }
 

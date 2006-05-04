@@ -167,7 +167,7 @@ QString GenValidationStyle::createListValidationCondition( Validity* _val )
 {
     QString result = "oooc:cell-content-is-in-list(";
     result = _val->listValidity.join( ";" );
-    result +=")";
+    result +=')';
     return result;
 }
 
@@ -185,17 +185,17 @@ QString GenValidationStyle::createNumberValidationCondition( Validity* _val )
         break;
       case Conditional::Equal:
         result+="cell-content()";
-        result+="=";
+        result+='=';
         result+=QString::number( _val->valMin );
         break;
       case Conditional::Superior:
         result+="cell-content()";
-        result+=">";
+        result+='>';
         result+=QString::number( _val->valMin );
         break;
       case Conditional::Inferior:
         result+="cell-content()";
-        result+="<";
+        result+='<';
         result+=QString::number( _val->valMin );
         break;
       case Conditional::SuperiorEqual:
@@ -216,16 +216,16 @@ QString GenValidationStyle::createNumberValidationCondition( Validity* _val )
       case Conditional::Between:
         result+="cell-content-is-between(";
         result+=QString::number( _val->valMin );
-        result+=",";
+        result+=',';
         result+=QString::number( _val->valMax );
-        result+=")";
+        result+=')';
         break;
       case Conditional::DifferentTo:
         result+="cell-content-is-not-between(";
         result+=QString::number( _val->valMin );
-        result+=",";
+        result+=',';
         result+=QString::number( _val->valMax );
-        result+=")";
+        result+=')';
         break;
     }
     return result;
@@ -242,17 +242,17 @@ QString GenValidationStyle::createTimeValidationCondition( Validity* _val )
         break;
       case Conditional::Equal:
         result+="cell-content()";
-        result+="=";
+        result+='=';
         result+=_val->timeMin.toString( );
         break;
       case Conditional::Superior:
         result+="cell-content()";
-        result+=">";
+        result+='>';
         result+=_val->timeMin.toString( );
         break;
       case Conditional::Inferior:
         result+="cell-content()";
-        result+="<";
+        result+='<';
         result+=_val->timeMin.toString( );
         break;
       case Conditional::SuperiorEqual:
@@ -273,16 +273,16 @@ QString GenValidationStyle::createTimeValidationCondition( Validity* _val )
       case Conditional::Between:
         result+="cell-content-is-between(";
         result+=_val->timeMin.toString( );
-        result+=",";
+        result+=',';
         result+=_val->timeMax.toString( );
-        result+=")";
+        result+=')';
         break;
       case Conditional::DifferentTo:
         result+="cell-content-is-not-between(";
         result+=_val->timeMin.toString( );
-        result+=",";
+        result+=',';
         result+=_val->timeMax.toString( );
-        result+=")";
+        result+=')';
         break;
     }
     return result;
@@ -298,17 +298,17 @@ QString GenValidationStyle::createDateValidationCondition( Validity* _val )
         break;
       case Conditional::Equal:
         result+="cell-content()";
-        result+="=";
+        result+='=';
         result+=_val->dateMin.toString();
         break;
       case Conditional::Superior:
         result+="cell-content()";
-        result+=">";
+        result+='>';
         result+=_val->dateMin.toString();
         break;
       case Conditional::Inferior:
         result+="cell-content()";
-        result+="<";
+        result+='<';
         result+=_val->dateMin.toString();
         break;
       case Conditional::SuperiorEqual:
@@ -329,16 +329,16 @@ QString GenValidationStyle::createDateValidationCondition( Validity* _val )
       case Conditional::Between:
         result+="cell-content-is-between(";
         result+=_val->dateMin.toString();
-        result+=",";
+        result+=',';
         result+=_val->dateMax.toString();
-        result+=")";
+        result+=')';
         break;
       case Conditional::DifferentTo:
         result+="cell-content-is-not-between(";
         result+=_val->dateMin.toString();
-        result+=",";
+        result+=',';
         result+=_val->dateMax.toString();
-        result+=")";
+        result+=')';
         break;
     }
     return result;
@@ -354,17 +354,17 @@ QString GenValidationStyle::createTextValidationCondition( Validity* _val )
         break;
       case Conditional::Equal:
         result+="oooc:cell-content-text-length()";
-        result+="=";
+        result+='=';
         result+=QString::number( _val->valMin );
         break;
       case Conditional::Superior:
         result+="oooc:cell-content-text-length()";
-        result+=">";
+        result+='>';
         result+=QString::number( _val->valMin );
         break;
       case Conditional::Inferior:
         result+="oooc:cell-content-text-length()";
-        result+="<";
+        result+='<';
         result+=QString::number( _val->valMin );
         break;
       case Conditional::SuperiorEqual:
@@ -385,16 +385,16 @@ QString GenValidationStyle::createTextValidationCondition( Validity* _val )
       case Conditional::Between:
         result+="oooc:cell-content-text-length-is-between(";
         result+=QString::number( _val->valMin );
-        result+=",";
+        result+=',';
         result+=QString::number( _val->valMax );
-        result+=")";
+        result+=')';
         break;
       case Conditional::DifferentTo:
         result+="oooc:cell-content-text-length-is-not-between(";
         result+=QString::number( _val->valMin );
-        result+=",";
+        result+=',';
         result+=QString::number( _val->valMax );
-        result+=")";
+        result+=')';
         break;
     }
     return result;

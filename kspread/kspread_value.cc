@@ -961,7 +961,7 @@ QTextStream& operator<<( QTextStream& ts, Value value )
       ts << ": " << value.asString(); break;
 
     case Value::Error:
-      ts << "(" << value.errorMessage() << ")"; break;
+      ts << '(' << value.errorMessage() << ')'; break;
 
     default: break;
   }
