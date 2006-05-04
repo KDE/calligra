@@ -29,8 +29,6 @@
 namespace KPlato
 {
 
-K_EXPORT_COMPONENT_FACTORY( libkplatopart, Factory )
-
 KInstance* Factory::s_global = 0L;
 KAboutData* Factory::s_aboutData = 0L;
 
