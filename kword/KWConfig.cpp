@@ -344,7 +344,7 @@ ConfigureInterfacePage::ConfigureInterfacePage( KWView *view, KVBox *box, char *
     labelIndent->setWhatsThis( indentHelp );
     indent = new KoUnitDoubleSpinBox( hbIndent,
                                       0.1,
-                                      50,
+                                      5000,
                                       0.1,
                                       ptIndent,
                                       unit );
