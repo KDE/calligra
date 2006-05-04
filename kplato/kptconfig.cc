@@ -23,6 +23,7 @@
 
 #include <kconfig.h>
 #include <kdebug.h>
+#include <kinstance.h>
 
 namespace KPlato
 {
@@ -39,7 +40,7 @@ Config::~Config()
 void Config::load() {
     //kDebug()<<k_funcinfo<<endl;
     KConfig *config = Factory::global()->config();
-    
+
 /*    if( config->hasGroup("Behavior"))
     {
         config->setGroup("Behavior");
@@ -65,9 +66,9 @@ void Config::save() {
     //kDebug()<<k_funcinfo<<m_readWrite<<endl;
     if (!m_readWrite)
         return;
-        
+
     KConfig *config = Factory::global()->config();
-    
+
 //     config->setGroup( "Behavior" );
 //     config->writeEntry("CalculationMode",m_behavior.calculationMode);
 //     config->writeEntry("AllowOverbooking",m_behavior.allowOverbooking);
@@ -75,10 +76,10 @@ void Config::save() {
     config->setGroup("Task defaults");
     config->writeEntry("Leader", m_taskDefaults.leader());
     config->writeEntry("Description", m_taskDefaults.description());
-    config->writeEntry("ConstraintType", m_taskDefaults.constraint());
-    config->writeEntry("ConstraintStartTime", m_taskDefaults.constraintStartTime());
-    config->writeEntry("ConstraintEndTime", m_taskDefaults.constraintEndTime());
-    config->writeEntry("EffortType", m_taskDefaults.effort()->type());
+    config->writeEntry("ConstraintType", (int)m_taskDefaults.constraint());
+    config->writeEntry("ConstraintStartTime", (QDateTime)m_taskDefaults.constraintStartTime());
+    config->writeEntry("ConstraintEndTime", (QDateTime)m_taskDefaults.constraintEndTime());
+    config->writeEntry("EffortType", (int)m_taskDefaults.effort()->type());
     config->writeEntry("ExpectedEffort", m_taskDefaults.effort()->expected().seconds()); //FIXME
     config->writeEntry("PessimisticEffort", m_taskDefaults.effort()->pessimisticRatio());
     config->writeEntry("OptimisticEffort", m_taskDefaults.effort()->optimisticRatio());

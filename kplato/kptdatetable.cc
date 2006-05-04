@@ -918,8 +918,7 @@ DateInternalYearSelector::DateInternalYearSelector
   font=KGlobalSettings::generalFont();
   font.setPointSize(fontsize);
   setFont(font);
-#warning "kde4: port it ?"  
-  //setFrameStyle(Q3Frame::NoFrame);
+  setFrame(false);
   // we have to respect the limits of QDate here, I fear:
   val->setRange(0, 8000);
   setValidator(val);
