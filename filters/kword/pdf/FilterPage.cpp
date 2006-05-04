@@ -254,7 +254,7 @@ void Page::initParagraph(Paragraph &par) const
                 par.tabs.push_back(tab);
             }
         }
-        qHeapSort2(par.tabs);
+        qSort(par.tabs);
 
         // compute indents
         double left = (*it)->blocks->xMin - pleft;

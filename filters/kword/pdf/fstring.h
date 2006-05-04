@@ -86,7 +86,7 @@ public:
     bool isLast(const TextLine *line) const { return line==_lines.last(); }
 
     int findTab(double xMin, const TextLine *) const;
-    uint findNbTabs(uint i, double prevXMax) const;
+    int findNbTabs(int i, double prevXMax) const;
     int charFromEnd(uint dec, uint &blockIndex) const;
 
 public:

@@ -196,13 +196,13 @@ void Data::createParagraph(const QString &text, ParagraphType type,
     QDomElement element = _document.createElement("NAME");
     element.setAttribute("value", "Standard");
     layout.appendChild(element);
-    for (uint i=0; i<layouts.size(); i++)
+    for (int i=0; i<layouts.size(); i++)
         layout.appendChild(layouts[i]);
 
     if ( formats.size() ) {
         QDomElement format = _document.createElement("FORMATS");
         paragraph.appendChild(format);
-        for (uint i=0; i<formats.size(); i++)
+        for (int i=0; i<formats.size(); i++)
             format.appendChild(formats[i]);
     }
 }

@@ -72,14 +72,14 @@ int Paragraph::findTab(double xMin, const TextLine *line) const
     double epsilon = 0.1 * (line->yMax - line->yMin);
     double dx = xMin - (isFirst(line) ? firstIndent : leftIndent);
     if ( fabs(dx)<epsilon ) return -2;
-    for (uint i=0; i<tabs.size(); i++)
+    for (int i=0; i<tabs.size(); i++)
         if ( fabs(xMin-tabs[i].pos)<epsilon ) return i;
     return -1;
 }
 
-uint Paragraph::findNbTabs(uint i, double prevXMax) const
+int Paragraph::findNbTabs(int i, double prevXMax) const
 {
-    uint k = 0;
+    int k = 0;
     for (; k<tabs.size(); k++)
         if ( tabs[k].pos>prevXMax ) break;
     if ( k>i ) return 0;

@@ -38,19 +38,6 @@ class GfxState;
 namespace PDFImport
 {
 
-// FIX for Qt 3.0
-// qvaluevector bug - qheapsort uses 'count' but qvaluevector has only 'size'
-template <class Container>
-inline void qHeapSort2( Container &c )
-{
-    if ( c.begin() == c.end() )
-        return;
-
-    // The second last parameter is a hack to retrieve the value type
-    // Do the real sorting here
-    qHeapSortHelper( c.begin(), c.end(), *(c.begin()), (uint)c.size() );
-}
-
 enum ParagraphType { Body = 0, Header, Footer, Nb_ParagraphTypes };
 
 //-----------------------------------------------------------------------------

@@ -28,7 +28,7 @@ kde4_add_plugin(palmdocexport WITH_PREFIX ${palmdocexport_PART_SRCS})
 
 kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} palmdocexport )
 
-target_link_libraries(palmdocexport kofficecore)
+target_link_libraries(palmdocexport kofficecore kwordexportfilters)
 
 install_targets(${PLUGIN_INSTALL_DIR} palmdocexport )
 

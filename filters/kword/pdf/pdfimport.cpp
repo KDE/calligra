@@ -79,10 +79,10 @@ KoFilter::ConversionStatus PdfImport::convert(const QByteArray& from,
     }
 
     // progress dialog
-    KProgressDialog pd(0, "progress_dialog", i18n("PDF Import"),
+    KProgressDialog pd(0, i18n("PDF Import"),
                        i18n("Initializing..."), true);
     pd.setMinimumDuration(0);
-    pd.progressBar()->setTotalSteps( _options.range.nbPages()*2 );
+    pd.progressBar()->setMaximum( _options.range.nbPages()*2 );
     pd.progressBar()->setValue(1);
     qApp->processEvents();
 
@@ -115,7 +115,7 @@ KoFilter::ConversionStatus PdfImport::convert(const QByteArray& from,
                          : i18n("Second pass: page #%1..."));
             pd.setLabel( s.arg(it.current()) );
             qApp->processEvents();
-            if (pd.wasCanceled()) return KoFilter::UserCancelled;
+            if (pd.wasCancelled()) return KoFilter::UserCancelled;
             kDebug(30516) << "-- " << "pass #" << k
                            << "  treat page: " << it.current()
                            << "----------------" << endl;
@@ -134,9 +134,9 @@ KoFilter::ConversionStatus PdfImport::convert(const QByteArray& from,
         kError(30516) << "Unable to open output file!" << endl;
         return KoFilter::StorageCreationError;
     }
-//    kDebug(30516) << data.document().toCString() << endl;
-    Q3CString cstr = data.document().toCString();
-    out->write(cstr, cstr.length());
+//    kDebug(30516) << data.document().toByteArray() << endl;
+    QByteArray cstr = data.document().toByteArray();
+    out->write(cstr);
     out->close();
 
     treatInfoDocument();
