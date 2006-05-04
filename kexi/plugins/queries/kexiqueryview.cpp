@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Lucijan Busch <lucijan@kde.org>
-   Copyright (C) 2004 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2004, 2006 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -21,21 +21,46 @@
 #include <kexiproject.h>
 #include <kexidb/connection.h>
 #include <kexidb/parser/parser.h>
+#include <kexidb/cursor.h>
 #include <keximainwindow.h>
 #include <kexiutils/utils.h>
 
 #include "kexiqueryview.h"
+#include "kexiquerydesignersql.h"
+#include "kexiquerydesignerguieditor.h"
 #include "kexiquerypart.h"
 #include "kexitableview.h"
 
+//! @internal
+class KexiQueryView::Private
+{
+	public:
+		Private()
+			: cursor(0)
+//			, queryHasBeenChangedInViewMode( Kexi::NoViewMode )
+		{}
+		~Private() {}
+		KexiDB::Cursor *cursor;
+		/*! Used in storeNewData(), storeData() to decide whether 
+		 we should ask other view to save changes.
+		 Stores information about view mode. */
+//		int queryHasBeenChangedInViewMode;
+};
+
+//---------------------------------------------------------------------------------
+
 KexiQueryView::KexiQueryView(KexiMainWindow *win, QWidget *parent, const char *name)
  : KexiDataTable(win, parent, name)
+ , d( new Private() )
 {
 	tableView()->setInsertingEnabled(false); //default
 }
 
 KexiQueryView::~KexiQueryView()
 {
+	if (d->cursor)
+		d->cursor->connection()->deleteCursor(d->cursor);
+	delete d;
 }
 
 bool KexiQueryView::executeQuery(KexiDB::QuerySchema *query)
@@ -43,21 +68,28 @@ bool KexiQueryView::executeQuery(KexiDB::QuerySchema *query)
 	if (!query)
 		return false;
 	KexiUtils::WaitCursor wait;
-	KexiDB::Cursor *rec = mainWin()->project()->dbConnection()->executeQuery(*query);
-	if (!rec) {
+	KexiDB::Cursor *oldCursor = d->cursor;
+	d->cursor = mainWin()->project()->dbConnection()->executeQuery(*query);
+	if (!d->cursor) {
 		parentDialog()->setStatus(parentDialog()->mainWin()->project()->dbConnection(), i18n("Query executing failed."));
 		//todo: also provide server result and sql statement
 		return false;
 	}
-	setData(rec);
+	setData(d->cursor);
+
+//! @todo remove close() when dynamic cursors arrive
+	d->cursor->close();
+
+	if (oldCursor)
+		oldCursor->connection()->deleteCursor(oldCursor);
+
 	//TODO: maybe allow writing and inserting for single-table relations?
 	tableView()->setReadOnly( true );
 	tableView()->setInsertingEnabled( false );
 	return true;
 }
 
-tristate
-KexiQueryView::afterSwitchFrom(int mode)
+tristate KexiQueryView::afterSwitchFrom(int mode)
 {
 	if (mode==Kexi::NoViewMode) {
 		KexiDB::QuerySchema *querySchema = static_cast<KexiDB::QuerySchema *>(parentDialog()->schemaData());
@@ -67,37 +99,38 @@ KexiQueryView::afterSwitchFrom(int mode)
 	}
 	else if (mode==Kexi::DesignViewMode || Kexi::TextViewMode) {
 		KexiQueryPart::TempData * temp = static_cast<KexiQueryPart::TempData*>(parentDialog()->tempData());
+
+		//remember what view we should use to store data changes, if needed
+//		if (temp->queryChangedInPreviousView)
+//			d->queryHasBeenChangedInViewMode = mode;
+//		else
+//			d->queryHasBeenChangedInViewMode = Kexi::NoViewMode;
+
 		if (!executeQuery(temp->query())) {
 			return false;
 		}
 	}
-
-#if 0
-	if (m_doc && m_doc->schema())
-	{
-		KexiDB::Cursor *rec = mainWin()->project()->dbConnection()->executeQuery(*m_doc->schema());
-		QString statement = mainWin()->project()->dbConnection()->selectStatement(*m_doc->schema());
-		if(!rec && !statement.isEmpty())
-		{
-			KexiDB::Parser *parser = new KexiDB::Parser(mainWin()->project()->dbConnection());
-			parser->parse(statement);
-			m_doc->setSchema(parser->select());
-
-			if(parser->operation() == KexiDB::Parser::OP_Error)
-				m_doc->addHistoryItem(statement, parser->error().error());
-//			else
-				//m_doc->addHistoryItem(statement, mainWin()->project()->dbConnection()->serverErrorMsg());
-				//m_doc->addHistoryItem(statement, "The user is stupid");
-
-//			delete parser;
-			return true;
-		}
-		setData(rec);
-
-		m_doc->addHistoryItem(statement, "");
-	}
-#endif
 	return true;
+}
+
+KexiDB::SchemaData* KexiQueryView::storeNewData(const KexiDB::SchemaData& sdata, bool &cancel)
+{
+	KexiViewBase * view = parentDialog()->viewThatRecentlySetDirtyFlag();
+	if (dynamic_cast<KexiQueryDesignerGuiEditor*>(view))
+		return dynamic_cast<KexiQueryDesignerGuiEditor*>(view)->storeNewData(sdata, cancel);
+	if (dynamic_cast<KexiQueryDesignerSQLView*>(view))
+		return dynamic_cast<KexiQueryDesignerSQLView*>(view)->storeNewData(sdata, cancel);
+	return 0;
+}
+
+tristate KexiQueryView::storeData(bool dontAsk)
+{
+	KexiViewBase * view = parentDialog()->viewThatRecentlySetDirtyFlag();
+	if (dynamic_cast<KexiQueryDesignerGuiEditor*>(view))
+		return dynamic_cast<KexiQueryDesignerGuiEditor*>(view)->storeData(dontAsk);
+	if (dynamic_cast<KexiQueryDesignerSQLView*>(view))
+		return dynamic_cast<KexiQueryDesignerSQLView*>(view)->storeData(dontAsk);
+	return false;
 }
 
 

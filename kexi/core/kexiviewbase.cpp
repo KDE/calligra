@@ -133,7 +133,7 @@ void KexiViewBase::setDirty(bool set)
 	}
 	else {
 		if (changed && m_dialog)
-			m_dialog->dirtyChanged();
+			m_dialog->dirtyChanged(this);
 	}
 }
 

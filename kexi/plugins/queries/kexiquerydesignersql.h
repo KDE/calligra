@@ -72,8 +72,11 @@ class KexiQueryDesignerSQLView : public KexiViewBase
 	signals:
 		void queryShortcut();
 
+		friend class KexiQueryView; // for storeNewData() and storeData() only
+
 	private:
-		KexiQueryDesignerSQLViewPrivate *d;
+		class Private;
+		Private *d;
 };
 
 #endif

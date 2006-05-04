@@ -159,7 +159,7 @@ QString KexiEditor::text()
 void KexiEditor::setText(const QString &text)
 {
 #ifdef KTEXTEDIT_BASED_SQL_EDITOR
-	const bool was_dirty = dirty();
+	const bool was_dirty = m_parentView ? m_parentView->dirty() : dirty();
 	d->view->setText(text);
 	setDirty(was_dirty);
 #else
