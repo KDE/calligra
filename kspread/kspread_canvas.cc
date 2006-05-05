@@ -1064,9 +1064,9 @@ void Canvas::mouseMoveEvent( QMouseEvent * _ev )
   if (highlightRangeSizeGripAt(ev_PosX,ev_PosY))
   {
     if ( sheet->layoutDirection()==Sheet::RightToLeft )
-      setCursor( Qt::sizeBDiagCursor );
+      setCursor( Qt::SizeBDiagCursor );
     else
-      setCursor( Qt::sizeFDiagCursor );
+      setCursor( Qt::SizeFDiagCursor );
     return;
   }
 
@@ -1125,9 +1125,9 @@ void Canvas::mouseMoveEvent( QMouseEvent * _ev )
     if ( !sheet->isProtected() )
     {
       if ( sheet->layoutDirection()==Sheet::RightToLeft )
-        setCursor( Qt::sizeBDiagCursor );
+        setCursor( Qt::SizeBDiagCursor );
       else
-        setCursor( Qt::sizeFDiagCursor );
+        setCursor( Qt::SizeFDiagCursor );
     }
   }
   else if ( !d->anchor.isEmpty() )
@@ -1148,7 +1148,7 @@ void Canvas::mouseMoveEvent( QMouseEvent * _ev )
   else
   {
 	//Nothing special is happening, use a normal arrow cursor
-    setCursor( Qt::arrowCursor );
+    setCursor( Qt::ArrowCursor );
   }
 
   // No marking, selecting etc. in progess? Then quit here.
@@ -2145,7 +2145,7 @@ void Canvas::processEscapeKey(QKeyEvent * event)
   if ( view()->isInsertingObject() )
   {
     view()->resetInsertHandle();
-    setCursor( Qt::arrowCursor );
+    setCursor( Qt::ArrowCursor );
     return;
   }
 
@@ -4953,13 +4953,13 @@ void VBorder::mouseMoveEvent( QMouseEvent * _ev )
            ev_PosY <= y + h + unzoomedPixel &&
            !( sheet->rowFormat( tmpRow )->isHide() && tmpRow == 1 ) )
       {
-        setCursor( Qt::splitVCursor );
+        setCursor( Qt::SplitVCursor );
         return;
       }
       y += h;
       tmpRow++;
     }
-    setCursor( Qt::arrowCursor );
+    setCursor( Qt::ArrowCursor );
   }
 }
 
@@ -5610,12 +5610,12 @@ void HBorder::mouseMoveEvent( QMouseEvent * _ev )
              ev_PosX <= x + w + unzoomedPixel &&
              !( sheet->columnFormat( tmpCol )->isHide() && tmpCol == 0 ) )
         {
-          setCursor( Qt::splitHCursor );
+          setCursor( Qt::SplitHCursor );
           return;
         }
         x += w;
       }
-      setCursor( Qt::arrowCursor );
+      setCursor( Qt::ArrowCursor );
     }
     else
     {
@@ -5630,13 +5630,13 @@ void HBorder::mouseMoveEvent( QMouseEvent * _ev )
              ev_PosX <= x + w + unzoomedPixel &&
              !( sheet->columnFormat( tmpCol )->isHide() && tmpCol == 1 ) )
         {
-          setCursor( Qt::splitHCursor );
+          setCursor( Qt::SplitHCursor );
           return;
         }
         x += w;
         tmpCol++;
       }
-      setCursor( Qt::arrowCursor );
+      setCursor( Qt::ArrowCursor );
     }
   }
 }
