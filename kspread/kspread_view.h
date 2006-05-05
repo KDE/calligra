@@ -28,10 +28,8 @@
 #ifndef KSPREAD_VIEW
 #define KSPREAD_VIEW
 
-#include <QKeyEvent>
 #include <QList>
 #include <QPoint>
-#include <QResizeEvent>
 #include <QString>
 #include <QStringList>
 
@@ -41,6 +39,8 @@
 #include <KoPoint.h>
 #include <KoView.h>
 
+class QKeyEvent;
+class QResizeEvent;
 class QScrollBar;
 
 class KoDocumentEntry;

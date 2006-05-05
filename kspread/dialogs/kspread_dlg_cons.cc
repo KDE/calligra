@@ -28,33 +28,34 @@
 
 #include <assert.h>
 
-#include <qcheckbox.h>
-#include <qcombobox.h>
-#include <qlabel.h>
-#include <qlayout.h>
-#include <qpushbutton.h>
-//Added by qt3to4:
-#include <QGridLayout>
+#include <QCheckBox>
 #include <QCloseEvent>
+#include <QComboBox>
+#include <QGridLayout>
+#include <QLabel>
+#include <QLineEdit>
+#include <QPushButton>
+//Added by qt3to4:
 #include <Q3ListBox>
+
 #include <kpushbutton.h>
 #include <kdebug.h>
 #include <kdialogbase.h>
 #include <kmessagebox.h>
 
-#include "kspread_dlg_cons.h"
-
 #include <kspread_canvas.h>
 #include <kspread_doc.h>
 #include <kspread_global.h>
 #include <kspread_locale.h>
-#include "selection.h"
 #include <kspread_sheet.h>
 #include <kspread_util.h>
 #include <kspread_view.h>
 
 #include <formula.h>
+#include <selection.h>
 #include <valueconverter.h>
+
+#include "kspread_dlg_cons.h"
 
 using namespace KSpread;
 

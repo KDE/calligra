@@ -28,6 +28,7 @@
 #include <qlabel.h>
 #include <qlineedit.h>
 #include <QMimeData>
+#include <QPainter>
 #include <qpushbutton.h>
 #include <qradiobutton.h>
 #include <q3table.h>

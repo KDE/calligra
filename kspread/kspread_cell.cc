@@ -44,11 +44,10 @@
 #include <float.h>
 #include <math.h>
 
-#include <qapplication.h>
-#include <q3popupmenu.h>
-#include <qregexp.h>
-//Added by qt3to4:
+#include <QApplication>
+#include <QPainter>
 #include <QPolygon>
+#include <QRegExp>
 
 #include "kspread_canvas.h"
 #include "kspread_condition.h"

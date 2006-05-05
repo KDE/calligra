@@ -34,10 +34,9 @@
 #include <kprinter.h>
 #include <kdebug.h>
 
-#include <qregexp.h>
-//Added by qt3to4:
-#include <QPixmap>
 #include <QLinkedList>
+#include <QPainter>
+#include <QPixmap>
 
 #include <pwd.h>
 #include <unistd.h>

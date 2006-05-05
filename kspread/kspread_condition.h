@@ -22,14 +22,13 @@
 #ifndef __kspread_condition_h__
 #define __kspread_condition_h__
 
-#include <qdom.h>
+#include <QDomElement>
 #include <QLinkedList>
 
 #include <koffice_export.h>
 
-#include "kspread_global.h"
-
 class QColor;
+class QDomDocument;
 class QFont;
 class QString;
 class KoGenStyle;

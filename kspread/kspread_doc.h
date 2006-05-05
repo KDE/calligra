@@ -29,22 +29,27 @@
 #define KSPREAD_DOC
 
 #include <QList>
-#include <qmap.h>
-#include <qobject.h>
-#include <qpainter.h>
-#include <qrect.h>
-#include <qstring.h>
+#include <QMap>
+#include <QRect>
+#include <QString>
 
-#include <kcompletion.h>
+#include <kglobalsettings.h>
 
 #include <KoDocument.h>
 #include <KoZoomHandler.h>
 
 #include "kspread_global.h"
-#include <kcommand.h>
-class KCommand;
 
+class QDomDocument;
+class QObject;
+class QPainter;
+
+class DCOPObject;
+class KCommand;
 class KCommandHistory;
+class KCompletion;
+class KSpellConfig;
+
 class KoGenStyles;
 class KoOasisSettings;
 class KoPicture;
@@ -52,10 +57,6 @@ class KoPictureCollection;
 class KoPictureKey;
 class KoStore;
 class KoXmlWriter;
-
-class DCOPObject;
-class QDomDocument;
-class KSpellConfig;
 
 #define MIME_TYPE "application/x-kspread"
 

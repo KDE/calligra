@@ -58,6 +58,7 @@
 #include <QLabel>
 #include <QList>
 #include <QMouseEvent>
+#include <QPainter>
 #include <QPaintEvent>
 #include <QPixmap>
 #include <QPoint>

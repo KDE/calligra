@@ -41,6 +41,7 @@
 #include <QLabel>
 #include <QResizeEvent>
 #include <QTimer>
+#include <QToolTip>
 #include <QVBoxLayout>
 //Added by qt3to4:
 #include <q3listbox.h>

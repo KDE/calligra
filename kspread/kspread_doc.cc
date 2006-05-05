@@ -40,6 +40,7 @@
 //Added by qt3to4:
 #include <Q3ValueList>
 
+#include <kcompletion.h>
 #include <kstandarddirs.h>
 #include <kdebug.h>
 #include <kconfig.h>

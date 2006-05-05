@@ -39,6 +39,7 @@
 #include <qlayout.h>
 #include <q3listbox.h>
 #include <qfontdatabase.h>
+#include <QPainter>
 #include <qradiobutton.h>
 #include <qslider.h>
 

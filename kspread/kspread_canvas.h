@@ -33,26 +33,8 @@
 #ifndef KSPREAD_CANVAS
 #define KSPREAD_CANVAS
 
-#include <vector>
-
-#include <qlineedit.h>
-#include <qtooltip.h>
-#include <qpen.h>
-//Added by qt3to4:
-#include <QWheelEvent>
-#include <QFocusEvent>
-#include <QDragLeaveEvent>
-#include <QPaintEvent>
 #include <QList>
-#include <QKeyEvent>
-#include <QDragMoveEvent>
-#include <QEvent>
-#include <QDropEvent>
-#include <QLabel>
-#include <QResizeEvent>
-#include <QMouseEvent>
-
-#include <ksharedptr.h>
+#include <QWidget>
 
 #include <koffice_export.h>
 
@@ -61,11 +43,22 @@
 #define YBORDER_WIDTH 50
 #define XBORDER_HEIGHT 20
 
-class QWidget;
-class QTimer;
-class QPainter;
+class QDragLeaveEvent;
+class QDragMoveEvent;
+class QDropEvent;
+class QEvent;
+class QFocusEvent;
+class QKeyEvent;
 class QLabel;
+class QMouseEvent;
+class QPainter;
+class QPaintEvent;
+class QPen;
+class QResizeEvent;
 class QScrollBar;
+class QTimer;
+class QWheelEvent;
+
 class KoRect;
 class KoPoint;
 

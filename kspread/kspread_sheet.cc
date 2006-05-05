@@ -34,6 +34,7 @@
 #include <QList>
 #include <QMap>
 #include <QMimeData>
+#include <QPainter>
 #include <QPixmap>
 #include <QRegExp>
 #include <QStack>

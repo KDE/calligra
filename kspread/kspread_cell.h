@@ -37,13 +37,15 @@
 #include <QDate>
 #include <QLinkedList>
 #include <QList>
-#include <QPainter>
 
 #include "kspread_condition.h"
+#include "kspread_global.h"
 
-class KLocale;
 class QDomElement;
 class QDomDocument;
+class QPainter;
+
+class KLocale;
 class KoXmlWriter;
 class KoGenStyles;
 class KoGenStyle;
