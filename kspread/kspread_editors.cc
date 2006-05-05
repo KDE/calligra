@@ -29,11 +29,16 @@
 #include "formula.h"
 #include "functions.h"
 
+#include <kdebug.h>
 #include <klistbox.h>
+#include <ktextedit.h>
 
+#include <QAbstractButton>
 #include <QApplication>
 #include <QDesktopWidget>
 #include <QEvent>
+#include <QFont>
+#include <QFontMetrics>
 #include <QFocusEvent>
 #include <QFrame>
 #include <QInputMethodEvent>
@@ -49,18 +54,7 @@
 #warning "kde4: I think that it's not a good idea to use private class"
 //#include <private/qrichtext_p.h>
 
-//#include <klineedit.h>
-#include <ktextedit.h>
-#include <qapplication.h>
-#include <q3button.h>
-#include <qfont.h>
-#include <qfontmetrics.h>
-#include <qregexp.h>
-#include <kdebug.h>
-
 using namespace KSpread;
-
-
 
 /*****************************************************************************
  *

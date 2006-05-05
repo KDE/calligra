@@ -22,8 +22,8 @@
 #ifndef KSPREAD_GENVALIDATIONSTYLE
 #define KSPREAD_GENVALIDATIONSTYLE
 
-#include <q3dict.h>
-#include <qmap.h>
+#include <QMap>
+#include <QString>
 
 class KoXmlWriter;
 

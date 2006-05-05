@@ -17,20 +17,17 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
 */
-#include "kspread_generalProperty.h"
 
-#include <qcheckbox.h>
-#include <q3groupbox.h>
-#include <qlabel.h>
-#include <qlayout.h>
-#include <qlineedit.h>
-//Added by qt3to4:
+#include <QCheckBox>
 #include <QVBoxLayout>
 
-#include <knuminput.h>
 #include <klocale.h>
+#include <knuminput.h>
+
 #include <KoGeneralPropertyUi.h>
 #include <KoUnitWidgets.h>
+
+#include "kspread_generalProperty.h"
 
 using namespace KSpread;
 

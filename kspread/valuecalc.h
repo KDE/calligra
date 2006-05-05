@@ -22,8 +22,7 @@
 
 #include <map>
 
-#include <q3valuelist.h>
-#include <q3valuevector.h>
+#include <QVector>
 
 #include "kspread_value.h"
 
