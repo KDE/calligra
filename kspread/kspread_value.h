@@ -70,17 +70,17 @@ class KSPREAD_EXPORT Value
      */
     Value();
 
-    /** 
+    /**
      * Creates a value of certain type.
      */
     Value( Type _type );
 
-    /** 
+    /**
      * Destroys the value.
      */
     virtual ~Value();
 
-    /** 
+    /**
      * Creates a copy from another value.
      */
     Value( const Value& _value );
@@ -118,7 +118,7 @@ class KSPREAD_EXPORT Value
      */
     Value( double f );
 
-    /** 
+    /**
      * Create a string value.
      */
     Value( const QString& s );
@@ -178,7 +178,7 @@ class KSPREAD_EXPORT Value
     bool isFloat() const { return type() == Float; }
 
     /**
-     * Returns true if the type of this value is either 
+     * Returns true if the type of this value is either
      * integer or floating-point.
      */
     bool isNumber() const { return (type() == Integer) || (type() == Float); }
@@ -336,51 +336,51 @@ class KSPREAD_EXPORT Value
     static const Value& empty();
 
     /**
-     * Returns constant reference to #DIV/0! error.
+     * Returns constant reference to '#DIV/0!' error.
      *
      * This is used to indicate that a formula divides by 0 (zero).
      */
     static const Value& errorDIV0();
 
     /**
-     * Returns constant reference to #N/A error.
+     * Returns constant reference to '#N/A' error.
      *
      * This is to indicate that  a value is not available to a function.
      */
     static const Value& errorNA();
 
     /**
-     * Returns constant reference to #NAME? error.
+     * Returns constant reference to '#NAME?' error.
      *
-     * This is to indicate that certain text inside formula is not 
-     * recognized, possibly a misspelled name or name that 
+     * This is to indicate that certain text inside formula is not
+     * recognized, possibly a misspelled name or name that
      * does not exist.
      */
     static const Value& errorNAME();
 
     /**
-     * Returns constant reference to #NUM! error.
+     * Returns constant reference to '#NUM!' error.
      *
      * This is to indicate a problem with a number in a formula.
      */
     static const Value& errorNUM();
 
     /**
-     * Returns constant reference to #NULL! error.
+     * Returns constant reference to '#NULL!' error.
      *
      * This is to indicate that two area do not intersect.
      */
     static const Value& errorNULL();
 
     /**
-     * Returns constant reference to #REF! error.
+     * Returns constant reference to '#REF!' error.
      *
      * This is used to indicate an invalid cell reference.
      */
     static const Value& errorREF();
 
     /**
-     * Returns constant reference to #VALUE! error.
+     * Returns constant reference to '#VALUE!' error.
      *
      * This is to indicate that wrong type of argument or operand
      * is used, usually within a function call, e.g SIN("some text").
@@ -392,7 +392,7 @@ class KSPREAD_EXPORT Value
      * If this function returns false, then return value of compare is undefined.
      */
     bool allowComparison( const Value& v ) const;
-    
+
     /**
      * Returns -1, 0, 1, depends whether this value is less than, equal to, or
      * greater than v.
@@ -418,11 +418,11 @@ class KSPREAD_EXPORT Value
     bool operator==( const Value& v ) const;
 
     static int compare( double v1, double v2 );
-    
+
     bool isZero() const;
-    
+
     static bool isZero( double v );
-      
+
   protected:
 
     ValueData* d; // can't never be 0

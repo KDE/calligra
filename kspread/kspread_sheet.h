@@ -304,7 +304,7 @@ public:
 
     /**
      * @return the first cell of this sheet. Next cells can
-     * be retrieved by calling @ref Cell::nextCell.
+     * be retrieved by calling @ref Cell::nextCell .
      */
     Cell* firstCell() const;
 
@@ -319,7 +319,7 @@ public:
      * @param scrollbar_update will change the scrollbar if set to true disregarding
      *                          whether _column/_row are bigger than
      *                          m_iMaxRow/m_iMaxColumn. May be overruled by
-     *                          @ref #m_bScrollbarUpdates.
+     *                          Sheet::Private::scrollbarUpdates.
      */
     Cell* cellAt( int column, int row, bool scrollbar_update = false );
 
@@ -329,7 +329,7 @@ public:
      * @param scrollbar_update will change the scrollbar if set to true disregarding
      *                          whether _column/_row are bigger than
      *                          m_iMaxRow/m_iMaxColumn. May be overruled by
-     *                          @ref #m_bScrollbarUpdates.
+     *                          @ref Sheet::Private::ccrollbarUpdates .
      */
     Cell* cellAt( const QPoint& point, bool scrollbar_update = false )
       { return cellAt( point.x(), point.y(), scrollbar_update ); }
@@ -343,7 +343,7 @@ public:
      * @param _scrollbar_update will change the scrollbar if set to true disregarding
      *                          whether _column/_row are bigger than
      *                          m_iMaxRow/m_iMaxColumn. May be overruled by
-     *                          @ref #m_bScrollbarUpdates.
+     *                          @ref Sheet::Private::scrollbarUpdates .
      */
     Cell* visibleCellAt( int _column, int _row, bool _scrollbar_update = false );
 
@@ -355,7 +355,7 @@ public:
      * @param _scrollbar_update will change the scrollbar if set to true disregarding
      *                          whether _column/_row are bigger than
      *                          m_iMaxRow/m_iMaxColumn. May be overruled by
-     *                          @ref #m_bScrollbarUpdates.
+     *                          @ref Sheet::Private::scrollbarUpdates .
      *
      * @return a non default Cell for the position.
      */
@@ -441,9 +441,10 @@ public:
     void adjustSizeMaxY ( double _y );
 
     /**
-     * Sets the @ref Cell::layoutDirtyFlag in all cells.
+     * Sets the @ref Cell::Flag_LayoutDirty in all cells.
      */
     void setLayoutDirtyFlag();
+
     /**
      * Sets the @ref Cell::calcDirtyFlag in all cells.
      * That means that the cells are marked dirty and will recalculate
@@ -460,7 +461,7 @@ public:
 
     /**
      * Recalculates the current sheet. If you want to recalculate EVERYTHING, then
-     * call @ref Sheet::setCalcDirtyFlag for all sheets in the @ref #m_pMap to make
+     * call @ref Sheet::setCalcDirtyFlag for all sheets in the @ref Map to make
      * sure that no invalid values in other sheets make you trouble.
      *
      * Recalc will do nothing if automatic calculation is disabled (via @ref Sheet::setAutoCalc ).
@@ -870,16 +871,16 @@ public:
     /**
      * @return a flag that indicates whether the sheet should paint the page breaks.
      *
-     * @see #setShowPageBorders
-     * @see #bShowPageBorders
+     * @see setShowPageBorders
+     * @see Sheet::Private::showPageBorders
      */
     bool isShowPageBorders() const;
 
     /**
      * Turns the page break lines on or off.
      *
-     * @see #isShowPageBorders
-     * @see #bShowPageBorders
+     * @see isShowPageBorders
+     * @see Sheet::Private::showPageBorders
      */
     void setShowPageBorders( bool _b );
 
@@ -930,10 +931,9 @@ public:
     void insertRowFormat( RowFormat *_l );
 
     /**
-     * @see #copy
-     *
-     * @param era set this to true if you want to encode relative references absolutely (they will
-     *            be switched back to relative references during decoding) - used for cut to clipboard
+     * @param era set this to true if you want to encode relative references
+     *            absolutely (they will be switched back to relative
+     *            references during decoding) - used for cut to clipboard
      */
     QDomDocument saveCellRegion(const Region&, bool copy = false, bool era = false);
 
