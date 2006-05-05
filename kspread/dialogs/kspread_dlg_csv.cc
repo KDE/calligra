@@ -27,7 +27,7 @@
 #include <qcombobox.h>
 #include <qlabel.h>
 #include <qlineedit.h>
-#include <qmime.h>
+#include <QMimeData>
 #include <qpushbutton.h>
 #include <qradiobutton.h>
 #include <q3table.h>
@@ -190,7 +190,7 @@ CSVDialog::CSVDialog( View * parent, const char * name, QRect const & rect, Mode
   if ( m_mode == Clipboard )
   {
     setWindowTitle( i18n( "Inserting From Clipboard" ) );
-    QMimeSource * mime = QApplication::clipboard()->data();
+    const QMimeData* mime = QApplication::clipboard()->mimeData();
     if ( !mime )
     {
       KMessageBox::information( this, i18n("There is no data in the clipboard.") );
@@ -198,13 +198,13 @@ CSVDialog::CSVDialog( View * parent, const char * name, QRect const & rect, Mode
       return;
     }
 
-    if ( !mime->provides( "text/plain" ) )
+    if ( !mime->hasText() /*### !mime->provides( "text/plain" )*/ )
     {
       KMessageBox::information( this, i18n("There is no usable data in the clipboard.") );
       m_cancelled = true;
       return;
     }
-    m_fileArray = QByteArray(mime->encodedData( "text/plain" ) );
+    m_fileArray = QByteArray( mime->data( "text/plain" ) );
   }
   else if ( mode == File )
   {
