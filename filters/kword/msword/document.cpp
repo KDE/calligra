@@ -330,10 +330,10 @@ void Document::footnoteStart()
     framesetElement.setAttribute( "frameInfo", 7 /* footnote/endnote */ );
     if ( type == wvWare::FootnoteData::Endnote )
         // Keep name in sync with KWordTextHandler::footnoteFound
-        framesetElement.setAttribute("name", i18n("Endnote %1").arg( ++m_endNoteNumber ) );
+        framesetElement.setAttribute("name", i18n("Endnote %1", ++m_endNoteNumber ) );
     else
         // Keep name in sync with KWordTextHandler::footnoteFound
-        framesetElement.setAttribute("name", i18n("Footnote %1").arg( ++m_footNoteNumber ) );
+        framesetElement.setAttribute("name", i18n("Footnote %1", ++m_footNoteNumber ) );
     m_framesetsElement.appendChild(framesetElement);
 
     createInitialFrame( framesetElement, 29, 798, 567, 567+41, true, NoFollowup );

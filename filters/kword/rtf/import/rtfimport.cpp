@@ -386,7 +386,7 @@ KoFilter::ConversionStatus RTFImport::convert( const QByteArray& from, const QBy
             if ( !m_batch )
             {
                 force = ( KMessageBox::warningYesNo( 0L,
-                    i18n("The RTF (Rich Text Format) document has an unexpected version number: %1. Continuing might result in an erroneous conversion. Do you want to continue?").arg( token.value ),
+                    i18n("The RTF (Rich Text Format) document has an unexpected version number: %1. Continuing might result in an erroneous conversion. Do you want to continue?", token.value ),
                     i18n("KWord's RTF Import Filter") ) == KMessageBox::Yes );
             }
             if ( !force )
@@ -405,7 +405,7 @@ KoFilter::ConversionStatus RTFImport::convert( const QByteArray& from, const QBy
             if ( !m_batch )
             {
                 force = ( KMessageBox::warningYesNo( 0L,
-                    i18n("The PWD (PocketWord's Rich Text Format) document has an unexpected version number: %1. Continuing might result in an erroneous conversion. Do you want to continue?").arg( token.value ),
+                    i18n("The PWD (PocketWord's Rich Text Format) document has an unexpected version number: %1. Continuing might result in an erroneous conversion. Do you want to continue?", token.value ),
                     i18n("KWord's RTF Import Filter") ) == KMessageBox::Yes );
             }
             if ( !force )
@@ -424,7 +424,7 @@ KoFilter::ConversionStatus RTFImport::convert( const QByteArray& from, const QBy
             if ( !m_batch )
             {
                 force = ( KMessageBox::warningYesNo( 0L,
-                    i18n("The URTF (\"Unicode Rich Text Format\") document has an unexpected version number: %1. Continuing might result in an erroneous conversion. Do you want to continue?").arg( token.value ),
+                    i18n("The URTF (\"Unicode Rich Text Format\") document has an unexpected version number: %1. Continuing might result in an erroneous conversion. Do you want to continue?", token.value ),
                     i18n("KWord's RTF Import Filter") ) == KMessageBox::Yes );
             }
             if ( !force )
@@ -441,7 +441,7 @@ KoFilter::ConversionStatus RTFImport::convert( const QByteArray& from, const QBy
         if ( !m_batch )
         {
             KMessageBox::error( 0L,
-                i18n("The RTF document cannot be loaded, as it has an unexpected first keyword: \\%1.").arg( token.text ),
+                i18n("The RTF document cannot be loaded, as it has an unexpected first keyword: \\%1.",token.text ),
                 i18n("KWord's RTF Import Filter"), 0 );
         }
         return KoFilter::WrongFormat;

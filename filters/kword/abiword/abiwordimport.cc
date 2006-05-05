@@ -529,7 +529,7 @@ bool StructureParser::StartElementImage(StackItem* stackItem, StackItem* stackCu
         kDebug(30506) << "Image: " << strDataId << endl;
     }
 
-    QString strPictureFrameName(i18nc("Frameset name","Picture %1").arg(++m_pictureFrameNumber));
+    QString strPictureFrameName(i18nc("Frameset name","Picture %1",++m_pictureFrameNumber));
 
     // Create the frame set of the image
 
@@ -1129,7 +1129,7 @@ bool StructureParser::StartElementTable(StackItem* stackItem, StackItem* stackCu
     // ### TODO: in case of automatic column widths, we have not any width given by AbiWord
 
     const uint tableNumber(++m_tableGroupNumber);
-    const QString tableName(i18n("Table %1").arg(tableNumber));
+    const QString tableName(i18n("Table %1",tableNumber));
 
     QDomElement elementText=stackCurrent->stackElementText;
     QDomElement paragraphElementOut=mainDocument.createElement("PARAGRAPH");

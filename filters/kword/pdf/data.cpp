@@ -156,7 +156,7 @@ void Data::initPage(const Q3ValueVector<DRect> &rects,
 //        kDebug(30516) << "page #" << pageIndex << " rect #" << i
 //                       << ": " << rects[i].toString() << endl;
         if ( !rects[i].isValid() ) continue;
-        QString name = i18n(TEXT_FRAMESET_NAMES[i]).arg(pageIndex);
+        QString name = i18n(TEXT_FRAMESET_NAMES[i],pageIndex);
         _textFramesets[i] = createFrameset(Text, name);
         _framesets.appendChild(_textFramesets[i]);
         QDomElement frame = createFrame(Text, rects[i], true);

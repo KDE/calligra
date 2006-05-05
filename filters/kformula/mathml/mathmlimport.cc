@@ -70,7 +70,7 @@ KoFilter::ConversionStatus MathMLImport::convert( const QByteArray& from, const 
     const QString filename( m_chain->inputFile() );
     QFile f( filename );
     if ( !f.open( QIODevice::ReadOnly ) ) {
-        KMessageBox::error( 0, i18n( "Failed to open input file: %1" ).arg( filename ), i18n( "MathML Import Error" ) );
+        KMessageBox::error( 0, i18n( "Failed to open input file: %1" , filename ), i18n( "MathML Import Error" ) );
         delete wrapper;
         return KoFilter::FileNotFound;
     }
@@ -85,8 +85,7 @@ KoFilter::ConversionStatus MathMLImport::convert( const QByteArray& from, const 
         kError(KFormula::DEBUGID) << "Parsing error in " << filename << "! Aborting!" << endl
             << " In line: " << errorLine << ", column: " << errorColumn << endl
             << " Error message: " << errorMsg << endl;
-        KMessageBox::error( 0, i18n( "Parsing error in MathML file %4 at line %1, column %2\nError message: %3" )
-                              .arg( errorLine ).arg( errorColumn ).arg( i18n ( "QXml", errorMsg ).arg( filename ) ), i18n( "MathML Import Error" ) );
+        KMessageBox::error( 0, i18n( "Parsing error in MathML file %4 at line %1, column %2\nError message: %3", errorLine , errorColumn , i18n ( "QXml", errorMsg ),filename  ), i18n( "MathML Import Error" ) );
         return KoFilter::WrongFormat;
     }
     f.close();

@@ -123,10 +123,10 @@ void KWordTextHandler::footnoteFound( wvWare::FootnoteData::Type type,
     footnoteElem.setAttribute( "numberingtype", autoNumbered ? "auto" : "manual" );
     if ( type == wvWare::FootnoteData::Endnote )
         // Keep name in sync with Document::startFootnote
-        footnoteElem.setAttribute( "frameset", i18n("Endnote %1").arg( ++m_endNoteNumber ) );
+        footnoteElem.setAttribute( "frameset", i18n("Endnote %1", ++m_endNoteNumber ) );
     else
         // Keep name in sync with Document::startFootnote
-        footnoteElem.setAttribute( "frameset", i18n("Footnote %1").arg( ++m_footNoteNumber ) );
+        footnoteElem.setAttribute( "frameset", i18n("Footnote %1", ++m_footNoteNumber ) );
     varElem.appendChild( footnoteElem );
 
     // Remember to parse the footnote text later
@@ -160,7 +160,7 @@ void KWordTextHandler::tableRowFound( const wvWare::TableRowFunctor& functor, wv
         paragraphStart( 0L );
         static int s_tableNumber = 0;
         m_currentTable = new KWord::Table();
-        m_currentTable->name = i18n("Table %1").arg( ++s_tableNumber );
+        m_currentTable->name = i18n("Table %1", ++s_tableNumber );
         insertAnchor( m_currentTable->name );
     }
 
@@ -181,7 +181,7 @@ void KWordTextHandler::pictureFound( const wvWare::PictureFunctor& pictureFuncto
     QString pictureName = "pictures/picture";
     pictureName += QString::number( s_pictureNumber ); // filenames start at 0
     // looks better to the user if frame names start at 1
-    QString frameName = i18n("Picture %1").arg( ++s_pictureNumber );
+    QString frameName = i18n("Picture %1", ++s_pictureNumber );
     insertAnchor( frameName );
 
     switch ( picf->mfp.mm ) {

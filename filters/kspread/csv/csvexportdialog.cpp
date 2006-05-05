@@ -253,7 +253,7 @@ QTextCodec* CSVExportDialog::getCodec(void) const
         // Default: UTF-8
         kWarning(30502) << "Cannot find encoding:" << strCodec << endl;
         // ### TODO: what parent to use?
-        KMessageBox::error( 0, i18n("Cannot find encoding: %1").arg( strCodec ) );
+        KMessageBox::error( 0, i18n("Cannot find encoding: %1", strCodec ) );
         return 0;
     }
 

@@ -46,7 +46,7 @@ HtmlExportDialog :: HtmlExportDialog(QWidget* parent)
     QStringList encodingList;
 
     encodingList += i18nc( "Descriptive encoding name", "Recommended ( %1 )" , "UTF-8" );
-    encodingList += i18nc( "Descriptive encoding name", "Locale ( %1 )" ).arg( QString(QTextCodec::codecForLocale()->name()) );
+    encodingList += i18nc( "Descriptive encoding name", "Locale ( %1 )" , QString(QTextCodec::codecForLocale()->name()) );
     encodingList += KGlobal::charsets()->descriptiveEncodingNames();
 
     m_dialog->comboBoxEncoding->insertStringList( encodingList );
@@ -105,7 +105,7 @@ QTextCodec* HtmlExportDialog::getCodec(void) const
         // Default: UTF-8
         kWarning(30503) << "Cannot find encoding:" << strCodec << endl;
         // ### TODO: what parent to use?
-        KMessageBox::error( 0, i18n("Cannot find encoding: %1").arg( strCodec ) );
+        KMessageBox::error( 0, i18n("Cannot find encoding: %1", strCodec ) );
         return 0;
     }
 
