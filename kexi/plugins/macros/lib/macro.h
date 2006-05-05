@@ -119,16 +119,11 @@ namespace KoMacro {
 
 			/**
 			* Called if the @a Macro should be executed.
-			*/
-			virtual void activate();
-
-			/**
-			* Called if the @a Macro should be executed.
 			* 
 			* @param context The @a Context this @a Macro should
 			* be executed in.
 			*/
-			virtual void activate(Context::Ptr context);
+			virtual void execute(QObject* sender);
 
 		private:
 			/// @internal d-pointer class.

@@ -68,8 +68,10 @@ KexiScriptPart::~KexiScriptPart()
 	delete d;
 }
 
-bool KexiScriptPart::execute(KexiPart::Item* item)
+bool KexiScriptPart::execute(KexiPart::Item* item, QObject* sender)
 {
+	Q_UNUSED(sender);
+
 	if(! item) {
 		kdWarning() << "KexiScriptPart::execute: Invalid item." << endl;
 		return false;

@@ -111,20 +111,17 @@ void Macro::connectSignal(const QObject* sender, const char* signal)
 	//TODO d->proxies.append( metaproxy );
 }
 
-void Macro::activate()
+void Macro::execute(QObject* sender)
 {
-	kdDebug() << "Macro::activate()" << endl;
+	kdDebug() << "Macro::execute(Context::Ptr)" << endl;
 
-	Context::Ptr context = new Context(this);
+	Context::Ptr c = Context::Ptr( new Context(this) );
+	if(sender) {
+		// set the sender-variable if we got a sender QObject.
+		c->setVariable("[sender]", Variable::Ptr( new Variable(sender) ));
+	}
 	//connect(context, SIGNAL(activated()), this, SIGNAL(activated()));
-	context->activate();
-}
-
-void Macro::activate(Context::Ptr context)
-{
-	Context* c = new Context(this);
-	//connect(context, SIGNAL(activated()), this, SIGNAL(activated()));
-	c->activate( context );
+	c->activate( c );
 }
 
 #include "macro.moc"

@@ -95,7 +95,7 @@ KexiMacroPart::~KexiMacroPart()
 	delete d;
 }
 
-bool KexiMacroPart::execute(KexiPart::Item* item)
+bool KexiMacroPart::execute(KexiPart::Item* item, QObject* sender)
 {
 	KexiDialogBase* dialog = new KexiDialogBase(m_mainWin);
 	dialog->setId( item->identifier() );
@@ -113,7 +113,7 @@ bool KexiMacroPart::execute(KexiPart::Item* item)
 
 	kdDebug() << "KexiMacroPart::execute() itemname=" << item->name() << endl;
 	view->loadData();
-	view->execute();
+	view->execute(sender);
 	view->deleteLater();
 	return true;
 }

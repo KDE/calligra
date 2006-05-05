@@ -62,7 +62,7 @@ public slots:
 		}
 
 		if(item)
-			part->execute(item);
+			part->execute(item, parent());
 	}
 };
 

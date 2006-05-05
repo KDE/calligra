@@ -94,7 +94,7 @@ class KexiMacroView : public KexiViewBase
 		* This slot will be invoked if Kexi's menuitem Data=>Execute
 		* got activated and will execute the Macro.
 		*/
-		void execute();
+		void execute(QObject* sender = 0);
 
 	protected:
 

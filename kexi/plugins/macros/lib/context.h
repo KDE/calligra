@@ -92,7 +92,7 @@ namespace KoMacro {
 			*/
 			KSharedPtr<MacroItem> macroItem() const;
 
-		public slots:
+		private slots:
 
 			/**
 			* A @a Context does take care of an execution-chain which
@@ -101,6 +101,8 @@ namespace KoMacro {
 			* calling this slot just activates those @a Action .
 			*/
 			virtual void activate();
+
+		public slots:
 
 			/**
 			* This slot extends the slot above with the passed

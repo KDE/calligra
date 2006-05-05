@@ -21,7 +21,6 @@
 #ifndef KEXIMACRO_NAVIGATEACTION_H
 #define KEXIMACRO_NAVIGATEACTION_H
 
-//#include "../lib/komacro_export.h"
 #include "../lib/action.h"
 #include "../lib/variable.h"
 

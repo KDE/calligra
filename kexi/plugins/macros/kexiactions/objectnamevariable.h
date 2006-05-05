@@ -25,7 +25,6 @@
 
 #include "kexivariable.h"
 
-#include <kexi_export.h>
 #include <core/kexi.h>
 #include <core/kexiproject.h>
 #include <core/kexipartmanager.h>

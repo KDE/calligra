@@ -21,7 +21,6 @@
 #ifndef KEXIMACRO_EXECUTEACTION_H
 #define KEXIMACRO_EXECUTEACTION_H
 
-//#include "../lib/komacro_export.h"
 #include "../lib/action.h"
 #include "../lib/variable.h"
 

@@ -23,7 +23,6 @@
 #include "../lib/action.h"
 #include "../lib/context.h"
 
-#include <kexi_export.h>
 #include <core/keximainwindow.h>
 
 #include <klocale.h>

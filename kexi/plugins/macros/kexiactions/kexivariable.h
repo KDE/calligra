@@ -21,7 +21,6 @@
 #ifndef KEXIMACRO_KEXIVARIABLE_H
 #define KEXIMACRO_KEXIVARIABLE_H
 
-//#include "../lib/komacro_export.h"
 #include "../lib/manager.h"
 #include "../lib/exception.h"
 #include "../lib/action.h"

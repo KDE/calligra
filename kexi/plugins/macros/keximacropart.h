@@ -51,7 +51,7 @@ class KexiMacroPart : public KexiPart::Part
 		* Implementation of the KexiPart::Part::action method used to
 		* provide scripts as KAction's to the outside world.
 		*/
-		virtual bool execute(KexiPart::Item* item);
+		virtual bool execute(KexiPart::Item* item, QObject* sender);
 
 		/**
 		* \return the i18n message for the passed \p englishMessage string.

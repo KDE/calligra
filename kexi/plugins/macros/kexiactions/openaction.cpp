@@ -25,7 +25,6 @@
 #include "../lib/macroitem.h"
 #include "../lib/context.h"
 
-#include <kexi_export.h>
 #include <core/kexi.h>
 #include <core/kexiproject.h>
 #include <core/kexipartmanager.h>

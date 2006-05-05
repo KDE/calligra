@@ -21,7 +21,6 @@
 #ifndef KEXIMACRO_OPENACTION_H
 #define KEXIMACRO_OPENACTION_H
 
-//#include "../lib/komacro_export.h"
 #include "../lib/action.h"
 #include "../lib/variable.h"
 

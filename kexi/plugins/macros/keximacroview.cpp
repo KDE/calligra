@@ -154,9 +154,9 @@ tristate KexiMacroView::storeData(bool /*dontAsk*/)
 	return storeDataBlock(xml);
 }
 
-void KexiMacroView::execute()
+void KexiMacroView::execute(QObject* sender)
 {
-	d->macro->activate();
+	d->macro->execute(sender);
 }
 
 #include "keximacroview.moc"

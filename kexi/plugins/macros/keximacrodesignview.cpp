@@ -498,13 +498,22 @@ void KexiMacroDesignView::propertyChanged(KoProperty::Set&, KoProperty::Property
 	for(QStringList::Iterator it = dirtyvarnames.begin(); it != dirtyvarnames.end(); ++it) {
 		KoMacro::Variable::Ptr v = macroitem->variable(*it);
 		if(! v.data()) {
+			kdDebug() << "KexiMacroDesignView::propertyChanged() name=" << name << " it=" << *it << " skipped cause such a variable is not known." << endl;
 			continue;
 		}
 
-		KoProperty::Property& p = d->propertyset->currentPropertySet()->property( (*it).latin1() );
-		if(p == KoProperty::Property::null) {
+		KoProperty::Set* const currentset = d->propertyset->currentPropertySet();
+		const QCString currentname = (*it).isNull() ? "" : (*it).latin1();
+		if(! currentset->contains(currentname)) {
+			kdDebug() << "KexiMacroDesignView::propertyChanged() name=" << name << " it=" << *it << " skipped cause we do not have such a property." << endl;
+
+//TODO create new PropertySet-item
+//updateProperties(int row, KoProperty::Set* set, KoMacro::MacroItem::Ptr macroitem)
+
 			continue;
 		}
+
+		KoProperty::Property& p = d->propertyset->currentPropertySet()->property(currentname);
 
 		KoMacro::Variable::List children = v->children();
 		if(children.count() > 0) {

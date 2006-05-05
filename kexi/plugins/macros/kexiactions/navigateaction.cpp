@@ -26,7 +26,6 @@
 
 #include "objectnamevariable.h"
 
-#include <kexi_export.h>
 #include <core/kexi.h>
 #include <core/kexiproject.h>
 #include <core/kexipartmanager.h>
@@ -56,8 +55,8 @@ namespace KexiMacro {
 				this->children().append( KoMacro::Variable::Ptr(new KoMacro::Variable( "previous" )) );
 				this->children().append( KoMacro::Variable::Ptr(new KoMacro::Variable( "next" )) );
 				this->children().append( KoMacro::Variable::Ptr(new KoMacro::Variable( "last" )) );
-				
-				//this->children().append( KoMacro::Variable::Ptr(new KoMacro::Variable( "goto" )) );
+				this->children().append( KoMacro::Variable::Ptr(new KoMacro::Variable( "goto" )) );
+
 				//this->children().append( KoMacro::Variable::Ptr(new KoMacro::Variable( "add" )) );
 				//this->children().append( KoMacro::Variable::Ptr(new KoMacro::Variable( "save" )) );
 				//this->children().append( KoMacro::Variable::Ptr(new KoMacro::Variable( "delete" )) );
@@ -73,15 +72,17 @@ namespace KexiMacro {
 }
 
 NavigateAction::NavigateAction()
-	: KexiAction("navigateaction", i18n("Navigate"))
+	: KexiAction("navigate", i18n("Navigate"))
 {
 	KoMacro::Variable* navvar = new NavigateVariable<NavigateAction>(this);
 	setVariable(KoMacro::Variable::Ptr( navvar ));
 
 	/*TODO
-	We need to determinate on what object the navigate-action should be applied;
-	- Form/Table/invoker/ActualSelectedForm/etc.
-	- KexiDataAwareObjectInterface provides us navigation-functionality.
+	- We need to determinate on what object the navigate-action should be applied;
+		- Form/Table/invoker/ActualSelectedForm/etc.
+		- KexiDataAwareObjectInterface provides us navigation-functionality.
+
+	- We need to be able to add/remove variables during runtime.
 	*/
 }
 
@@ -95,6 +96,20 @@ KoMacro::Variable::List NavigateAction::notifyUpdated(const QString& variablenam
 	Q_UNUSED(variablemap);
 	//kdDebug()<<"OpenObject::NavigateAction() name="<<variable->name()<<" value="<< variable->variant().toString() <<endl;
 	KoMacro::Variable::List list;
+
+	if(variablename == "record") {
+		const QString record = variablemap.contains("record") ? variablemap["record"]->variant().toString() : QString::null;
+		if(record == "goto") {
+			KoMacro::Variable* rowvar = new KexiVariable<NavigateAction>(this, "row", i18n("Row"));
+			rowvar->setVariant(0);
+			list.append( KoMacro::Variable::Ptr(rowvar) );
+
+			KoMacro::Variable* colvar = new KexiVariable<NavigateAction>(this, "col", i18n("Column"));
+			colvar->setVariant(0);
+			list.append( KoMacro::Variable::Ptr(colvar) );
+		}
+	}
+
 	return list;
 }
 
@@ -138,8 +153,19 @@ void NavigateAction::activate(KoMacro::Context::Ptr context)
 		dbobj->selectLastRow();
 	}
 	else {
-		//virtual void selectNextPage(); //!< page down action
-		//virtual void selectPrevPage(); //!< page up action
+		/*
+		virtual void selectNextPage(); //!< page down action
+		virtual void selectPrevPage(); //!< page up action
+		
+		void deleteAllRows();
+		void deleteCurrentRow();
+		void deleteAndStartEditCurrentCell();
+		void startEditOrToggleValue();
+		bool acceptRowEdit();
+		void cancelRowEdit();
+		void sortAscending();
+		void sortDescending();
+		*/
 		kdWarning() << QString("NavigateAction::activate() Unknown record \"%1\".").arg(record) << endl;
 	}
 }

@@ -72,12 +72,17 @@ class KEXICORE_EXPORT Part : public QObject
 		/*! Destructor. */
 		virtual ~Part();
 
-		/*! Try to execute the passed \a KexiPart::Item \p item and
-		return true on success else false.
-		@todo THIS IS EXPERIMENTAL STUFF and used only on the ScriptPart-plugin.
+		/*! Try to execute the part. Implementations of this \a Part
+		are able to overwrite this method to offer execution.
+		\param item The \a KexiPart::Item that should be executed.
+		\param sender The sender QObject which likes to execute this \a Part or
+		NULL if there is no sender. The KFormDesigner uses this to pass
+		the actual widget (e.g. the button that was pressed).
+		\return true if execution was successfully else false.
 		*/
-		virtual bool execute(KexiPart::Item* item) {
+		virtual bool execute(KexiPart::Item* item, QObject* sender = 0) {
 			Q_UNUSED(item);
+			Q_UNUSED(sender);
 			return false;
 		}
 
