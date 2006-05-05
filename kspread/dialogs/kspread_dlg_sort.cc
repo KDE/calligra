@@ -362,7 +362,7 @@ void SortDialog::init()
 	    }
 	    else
 	    {
-		m_listColumn += i18n("Column %1").arg(Cell::columnName(i));
+		m_listColumn += i18n("Column %1",Cell::columnName(i));
 
 		if ( i == r.left() )
 		  selectionMayHaveHeader=false;
@@ -380,7 +380,7 @@ void SortDialog::init()
     for (int i = r.top(); i <= bottom; ++i)
     {
 	    QString guessName=m_pView->activeSheet()->guessRowTitle(r,i);
-	    QString rowName=i18n(" (Row %1)").arg(i);
+	    QString rowName=i18n(" (Row %1)",i);
 
 	    if (!guessName.isEmpty())
 	    {
@@ -388,7 +388,7 @@ void SortDialog::init()
 	    }
 	    else
 	    {
-		m_listRow += i18n("Row %1").arg(i);
+		m_listRow += i18n("Row %1",i);
 
 		if ( i == r.top() )
 		  selectionMayHaveHeader=false;
@@ -422,13 +422,13 @@ void SortDialog::init()
     for (int i = r.left(); i <= right; ++i)
     {
 	    QString guessName=m_pView->activeSheet()->guessColumnTitle(r,i);
-	    QString colName=i18n(" (Column %1)").arg(Cell::columnName(i));
+	    QString colName=i18n(" (Column %1)",Cell::columnName(i));
 
 	    if (!guessName.isEmpty())
 		    m_listColumn += guessName + colName;
 	    else
 	    {
-		    m_listColumn += i18n("Column %1").arg(Cell::columnName(i));
+		    m_listColumn += i18n("Column %1",Cell::columnName(i));
 
 		    if (i == r.left())
 		      selectionMayHaveHeader=false;
@@ -438,13 +438,13 @@ void SortDialog::init()
     for (int i = r.top(); i <= bottom; ++i)
     {
 	    QString guessName=m_pView->activeSheet()->guessRowTitle(r,i);
-	    QString rowName=i18n(" (Row %1)").arg(i);
+	    QString rowName=i18n(" (Row %1)",i);
 
 	    if (!guessName.isEmpty())
 		    m_listRow += guessName + rowName;
 	    else
 	    {
-		    m_listRow += i18n("Row %1").arg(i);
+		    m_listRow += i18n("Row %1",i);
 
 		    if (i == r.top())
 		      selectionMayHaveHeader=false;

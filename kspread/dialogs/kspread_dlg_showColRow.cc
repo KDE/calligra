@@ -82,9 +82,9 @@ ShowColRow::ShowColRow( View* parent, const char* name, Type _type )
         for( it = listInt.begin(); it != listInt.end(); ++it )
 	  {
 	    if(!showColNumber)
-	      listCol+=i18n("Column: %1").arg(Cell::columnName(*it));
+	      listCol+=i18n("Column: %1",Cell::columnName(*it));
 	    else
-	      listCol+=i18n("Column: %1").arg(text.setNum(*it));
+	      listCol+=i18n("Column: %1",text.setNum(*it));
 	  }
         list->insertStringList(listCol);
         }
@@ -102,7 +102,7 @@ ShowColRow::ShowColRow( View* parent, const char* name, Type _type )
         qHeapSort(listInt);
         QList<int>::Iterator it;
         for( it = listInt.begin(); it != listInt.end(); ++it )
-	  listRow+=i18n("Row: %1").arg(text.setNum(*it));
+	  listRow+=i18n("Row: %1",text.setNum(*it));
 
         list->insertStringList(listRow);
         }

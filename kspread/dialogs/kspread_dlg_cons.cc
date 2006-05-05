@@ -202,14 +202,14 @@ void ConsolidateDialog::slotOk()
        h <= ( ( desc == D_BOTH || desc == D_ROW ) ? 1 : 0 ) )
   {
     m_pView->slotUpdateView( m_pView->activeSheet() );
-    KMessageBox::error( this, i18n( "The range\n%1\nis too small" ).arg( *( r.begin() ) ));
+    KMessageBox::error( this, i18n( "The range\n%1\nis too small" , *( r.begin() ) ));
     return;
   }
 
   if( (*it).range().bottom()==KS_rowMax || (*it).range().right()== KS_colMax )
   {
     m_pView->slotUpdateView( m_pView->activeSheet() );
-    KMessageBox::error( this, i18n( "The range\n%1\nis too large" ).arg( *( r.begin() ) ));
+    KMessageBox::error( this, i18n( "The range\n%1\nis too large" , *( r.begin() ) ));
     return;
   }
 
@@ -225,7 +225,7 @@ void ConsolidateDialog::slotOk()
     if(currentRange.bottom()==KS_rowMax || currentRange.right()== KS_colMax)
     {
       m_pView->slotUpdateView( m_pView->activeSheet() );
-      KMessageBox::error( this, i18n( "The range\n%1\nis too large" ).arg( r[i]));
+      KMessageBox::error( this, i18n( "The range\n%1\nis too large" , r[i]));
       return;
     }
     if ( ( desc == D_NONE && ( w != w2 || h != h2 ) ) ||
@@ -233,7 +233,7 @@ void ConsolidateDialog::slotOk()
 	 ( desc == D_COL && w != w2 ) )
     {
       m_pView->slotUpdateView( m_pView->activeSheet() );
-      QString tmp = i18n( "The ranges\n%1\nand\n%2\nhave different size").arg( *( r.begin() ) ).arg( r[i] );
+      QString tmp = i18n( "The ranges\n%1\nand\n%2\nhave different size", *( r.begin() ) , r[i] );
       KMessageBox::error( this, tmp);
       return;
     }
@@ -657,7 +657,7 @@ void ConsolidateDialog::slotReturnPressed()
   Range r( txt, m_pView->doc()->map() );
   if ( !r.isValid() )
   {
-    KMessageBox::error( this, i18n("The range\n%1\n is malformed").arg( txt ));
+    KMessageBox::error( this, i18n("The range\n%1\n is malformed", txt ));
     return;
   }
 

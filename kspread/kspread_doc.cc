@@ -951,7 +951,7 @@ bool Doc::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles, const 
         if ( localName.isEmpty() )
             setErrorMessage( i18n( "Invalid OASIS OpenDocument file. No tag found inside office:body." ) );
         else
-            setErrorMessage( i18n( "This document is not a spreadsheet, but %1. Please try opening it with the appropriate application." ).arg( KoDocument::tagNameToDocumentType( localName ) ) );
+            setErrorMessage( i18n( "This document is not a spreadsheet, but %1. Please try opening it with the appropriate application." , KoDocument::tagNameToDocumentType( localName ) ) );
         deleteLoadingInfo();
         return false;
     }
@@ -1001,7 +1001,7 @@ bool Doc::loadXML( QIODevice *, const QDomDocument& doc )
   if ( spread.attribute( "mime" ) != "application/x-kspread" && spread.attribute( "mime" ) != "application/vnd.kde.kspread" )
   {
     d->isLoading = false;
-    setErrorMessage( i18n( "Invalid document. Expected mimetype application/x-kspread or application/vnd.kde.kspread, got %1" ).arg( spread.attribute("mime") ) );
+    setErrorMessage( i18n( "Invalid document. Expected mimetype application/x-kspread or application/vnd.kde.kspread, got %1" , spread.attribute("mime") ) );
     return false;
   }
 
@@ -1010,7 +1010,7 @@ bool Doc::loadXML( QIODevice *, const QDomDocument& doc )
   {
       int ret = KMessageBox::warningContinueCancel(
           0, i18n("This document was created with a newer version of KSpread (syntax version: %1)\n"
-                  "When you open it with this version of KSpread, some information may be lost.").arg(d->syntaxVersion),
+                  "When you open it with this version of KSpread, some information may be lost.",d->syntaxVersion),
           i18n("File Format Mismatch"), KStdGuiItem::cont() );
       if ( ret == KMessageBox::Cancel )
       {

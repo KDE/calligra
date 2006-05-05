@@ -77,7 +77,7 @@ QString MergeCellCommand::name() const
   if( rangeName.isEmpty() )
     return i18n("Merge Cells");
   else
-    return i18n("Merge Cells %1").arg( rangeName );
+    return i18n("Merge Cells %1", rangeName );
 }
 
 void MergeCellCommand::execute()
@@ -174,7 +174,7 @@ void HideSheetCommand::unexecute()
 
 QString HideSheetCommand::name() const
 {
-    QString n = QString( i18n("Hide Sheet %1") ).arg( sheetName );
+    QString n =  i18n("Hide Sheet %1", sheetName );
     if( n.length() > 64 ) n = i18n("Hide Sheet");
     return n;
 }
@@ -205,7 +205,7 @@ void ShowSheetCommand::unexecute()
 
 QString ShowSheetCommand::name() const
 {
-    QString n = QString( i18n("Show Sheet %1") ).arg( sheetName );
+    QString n =  i18n("Show Sheet %1", sheetName );
     if( n.length() > 64 ) n = i18n("Show Sheet");
     return n;
 }

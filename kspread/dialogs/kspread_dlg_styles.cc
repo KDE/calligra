@@ -236,11 +236,11 @@ void StyleDlg::slotUser1()
     s = m_styleManager->defaultStyle();
 
   int i = 1;
-  QString newName( i18n( "style%1" ).arg( m_styleManager->count() + i ) );
+  QString newName( i18n( "style%1" , m_styleManager->count() + i ) );
   while ( m_styleManager->style( newName ) != 0 )
   {
     ++i;
-    newName = i18n( "style%1" ).arg( m_styleManager->count() + i );
+    newName = i18n( "style%1" , m_styleManager->count() + i );
   }
 
   CustomStyle * style = new CustomStyle( newName, s );
