@@ -93,19 +93,19 @@ bool KugarPart::loadXML( QIODevice *file, const QDomDocument & /*doc*/ )
                 }
             }
             if ( !ok )
-                KMessageBox::sorry( 0, i18n( "Invalid data file %1" ).arg( m_file ) );
+                KMessageBox::sorry( 0, i18n( "Invalid data file %1" , m_file ) );
         }
         else
         {
             ok = false;
-            KMessageBox::sorry( 0, i18n( "The zero sized data file %1 can't be rendered" ).arg( m_file ) );
+            KMessageBox::sorry( 0, i18n( "The zero sized data file %1 can't be rendered" , m_file ) );
         }
 
     }
     else
     {
         ok = false;
-        KMessageBox::sorry( 0, i18n( "Unable to open data file: %1" ).arg( m_file ) );
+        KMessageBox::sorry( 0, i18n( "Unable to open data file: %1" , m_file ) );
     }
 
     return ok;
@@ -170,7 +170,7 @@ void KugarPart::slotPreferredTemplate( const QString &tpl )
                 if ( KIO::NetAccess::download( tmpURL, localtpl,0L) )
                     isTemp = true;
                 else
-                    KMessageBox::sorry( 0, i18n( "Unable to download template file: %1" ).arg( url.prettyURL() ) );
+                    KMessageBox::sorry( 0, i18n( "Unable to download template file: %1" , url.prettyURL() ) );
             }
             else
                 localtpl = tpl;
@@ -187,7 +187,7 @@ void KugarPart::slotPreferredTemplate( const QString &tpl )
                 if ( KIO::NetAccess::download( tmpURL, localtpl,0L ) )
                     isTemp = true;
                 else
-                    KMessageBox::sorry( 0, i18n( "Unable to download template file: %1" ).arg( url.prettyURL() ) );
+                    KMessageBox::sorry( 0, i18n( "Unable to download template file: %1" , url.prettyURL() ) );
             }
         }
     }
@@ -196,7 +196,7 @@ void KugarPart::slotPreferredTemplate( const QString &tpl )
         if ( KIO::NetAccess::download( url, localtpl,0L ) )
             isTemp = true;
         else
-            KMessageBox::sorry( 0, i18n( "Unable to download template file: %1" ).arg( url.prettyURL() ) );
+            KMessageBox::sorry( 0, i18n( "Unable to download template file: %1" ,url.prettyURL() ) );
     }
 
 /*    kDebug() << "localtpl: " << localtpl.latin1() << endl;*/
@@ -219,7 +219,7 @@ void KugarPart::slotPreferredTemplate( const QString &tpl )
 /*                    kDebug() << "RawXML" << endl;*/
                     f.open( QIODevice::ReadOnly );
                     if ( !m_reportEngine -> setReportTemplate( &f ) )
-                        KMessageBox::sorry( 0, i18n( "Invalid template file: %1" ).arg( localtpl ) );
+                        KMessageBox::sorry( 0, i18n( "Invalid template file: %1" , localtpl ) );
                     else
                     {
                         m_templateOk = true;
@@ -233,13 +233,13 @@ void KugarPart::slotPreferredTemplate( const QString &tpl )
                     if ( tmpStore->open( "maindoc.xml" ) )
                     {
                         if ( !m_reportEngine -> setReportTemplate( tmpStore->device() ) )
-                            KMessageBox::sorry( 0, i18n( "%1 is not a valid Kugar Designer template file." ).arg( localtpl ) );
+                            KMessageBox::sorry( 0, i18n( "%1 is not a valid Kugar Designer template file." , localtpl ) );
                         else
                             m_templateOk = true;
                         tmpStore->close();
                     }
                     else
-                        KMessageBox::sorry( 0, i18n( "%1 is not a valid Kugar Designer template file." ).arg( localtpl ) );
+                        KMessageBox::sorry( 0, i18n( "%1 is not a valid Kugar Designer template file." , localtpl ) );
 
                     delete tmpStore;
                 }
@@ -248,12 +248,12 @@ void KugarPart::slotPreferredTemplate( const QString &tpl )
             else
             {
                 f.close();
-                KMessageBox::sorry( 0, i18n( "Couldn't read the beginning of the template file: %1" ).arg( localtpl ) );
+                KMessageBox::sorry( 0, i18n( "Couldn't read the beginning of the template file: %1" , localtpl ) );
             }
 
         }
         else
-            KMessageBox::sorry( 0, i18n( "Unable to open template file: %1" ).arg( localtpl ) );
+            KMessageBox::sorry( 0, i18n( "Unable to open template file: %1" , localtpl ) );
 
         if ( isTemp )
             KIO::NetAccess::removeTempFile( localtpl );
