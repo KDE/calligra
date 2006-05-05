@@ -1818,8 +1818,6 @@ void Canvas::dropEvent( QDropEvent * _ev )
 
   if ( mimeData->hasFormat( "application/x-kspread-snippet" ) )
   {
-    /* ### Stefan: Deletion should be done by the source. Next line was:
-    if ( TextDrag::target() == _ev->source() ) */
     if ( _ev->source() == this  )
     {
       if ( !d->view->doc()->undoLocked() )
@@ -1836,7 +1834,7 @@ void Canvas::dropEvent( QDropEvent * _ev )
     }
 
 
-    b = _ev->data( "application/x-kspread-snippet" );
+    b = mimeData->data( "application/x-kspread-snippet" );
     sheet->paste( b, QRect( col, row, 1, 1 ), makeUndo );
 
     _ev->setAccepted(true);
@@ -3836,44 +3834,37 @@ void Canvas::copyOasisObjects()
         return;
     }
     delete store;
+    QMimeData* mimeData = new QMimeData();
+    if ( !plainText.isEmpty() )
+        mimeData->setText( plainText );
 #warning TODO KDE4 portage
 #if 0
-    KMultipleDrag* multiDrag = new KMultipleDrag();
-    if ( !plainText.isEmpty() )
-        multiDrag->addDragObject( new Q3TextDrag( plainText, 0 ) );
     if ( !picture.isNull() )
-        multiDrag->addDragObject( picture.dragObject( 0 ) );
-    KoStoreDrag* storeDrag = new KoStoreDrag( mimeType, 0 );
+        multiDrag->setMimeData( picture.dragObject( 0 ) );
+#endif
     kDebug() << k_funcinfo << "setting zip data: " << buffer.buffer().size() << " bytes." << endl;
-    storeDrag->setEncodedData( buffer.buffer() );
-    multiDrag->addDragObject( storeDrag );
+    mimeData->setData( mimeType, buffer.buffer() );
 
     //save the objects as pictures too so that other programs can access them
-    QList<EmbeddedObject*>::Iterator itObject( doc()->embeddedObjects() );
-    itObject.toFirst();
-    if ( object )
+    foreach ( EmbeddedObject* object, doc()->embeddedObjects() )
     {
       KoRect kr = objectRect(false);
       QRect r( kr.toQRect() );
       QPixmap pixmap( r.width(), r.height() );
       pixmap.fill( "white" );
       QPainter p(&pixmap);
-      foreach ( EmbeddedObject* object, doc()->embeddedObjects() )
+      if ( object->isSelected() )
       {
-        if ( object->isSelected() )
           p.drawPixmap( object->geometry().toQRect().left() - r.left(), object->geometry().toQRect().top() - r.top(), object->toPixmap( 1.0 , 1.0 ) );
       }
       p.end();
       if (!pixmap.isNull())
       {
-        Q3ImageDrag *imagedrag = new Q3ImageDrag( pixmap.toImage() );
-        multiDrag->addDragObject( imagedrag );
+        mimeData->setImageData( pixmap.toImage() );
       }
     }
 
-    Q3DragObject *dragObject = multiDrag;
-    QApplication::clipboard()->setData( dragObject, QClipboard::Clipboard );
-#endif
+    QApplication::clipboard()->setMimeData( mimeData, QClipboard::Clipboard );
 }
 
 void Canvas::closeEditor()
