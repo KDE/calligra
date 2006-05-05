@@ -447,7 +447,7 @@ QDomDocument FormulaStringParser::parse()
     head = parseAssign();
     //head->output( cout );
     if ( !eol() ) {
-        error( QString( i18n( "Aborted parsing at %1:%2" ) ).arg( line ).arg( column ) );
+        error(  i18n( "Aborted parsing at %1:%2" ).arg( line ).arg( column ) );
     }
 
     QDomDocument doc = KFormula::Document::createDomDocument();
@@ -556,7 +556,7 @@ ParserNode* FormulaStringParser::parsePrimary()
                     nextToken();
                 }
             }
-            expect( RP, QString( i18n( "'%3' expected at %1:%2" ) ).arg( line ).arg( column ).arg( ")" ) );
+            expect( RP, i18n( "'%3' expected at %1:%2" ).arg( line ).arg( column ).arg( ")" ) );
             node->setFunctionName( true );
             return new FunctionNode( node, args );
         }
@@ -571,7 +571,7 @@ ParserNode* FormulaStringParser::parsePrimary()
     case LP: {
         nextToken();
         ParserNode* node = parseExpr();
-        expect( RP, QString( i18n( "'%3' expected at %1:%2" ) ).arg( line ).arg( column ).arg( ")" ) );
+        expect( RP, i18n( "'%3' expected at %1:%2" ).arg( line ).arg( column ).arg( ")" ) );
         return node;
     }
     case LB: {
@@ -582,7 +582,7 @@ ParserNode* FormulaStringParser::parsePrimary()
         m_newlineIsSpace = innerBrackets;
         while ( ( currentType != EOL ) && ( currentType != RB ) ) {
             if ( innerBrackets ) {
-                expect( LB, QString( i18n( "'%3' expected at %1:%2" ) ).arg( line ).arg( column ).arg( "[" ) );
+                expect( LB, i18n( "'%3' expected at %1:%2" ).arg( line ).arg( column ).arg( "[" ) );
             }
             QPtrList<ParserNode> row;
             row.setAutoDelete( false );
@@ -594,7 +594,7 @@ ParserNode* FormulaStringParser::parsePrimary()
                 }
             }
             if ( innerBrackets ) {
-                expect( RB, QString( i18n( "'%3' expected at %1:%2" ) ).arg( line ).arg( column ).arg( "]" ) );
+                expect( RB, i18n( "'%3' expected at %1:%2" ).arg( line ).arg( column ).arg( "]" ) );
                 if ( currentType == COMMA ) {
                     nextToken();
                 }
@@ -605,20 +605,20 @@ ParserNode* FormulaStringParser::parsePrimary()
                         nextToken();
                     }
                     else {
-                        expect( SEMIC, QString( i18n( "'%3' expected at %1:%2" ) ).arg( line ).arg( column ).arg( ";" ) );
+                        expect( SEMIC,  i18n( "'%3' expected at %1:%2" ).arg( line ).arg( column ).arg( ";" ) );
                     }
                 }
             }
             rows.append( new RowNode( row ) );
         }
         m_newlineIsSpace = true;
-        expect( RB, QString( i18n( "'%3' expected at %1:%2" ) ).arg( line ).arg( column ).arg( "]" ) );
+        expect( RB,  i18n( "'%3' expected at %1:%2" ).arg( line ).arg( column ).arg( "]" ) );
         MatrixNode* node = new MatrixNode( rows );
         if ( node->columns() == 0 ) {
-            error( QString( i18n( "Null columns in Matrix at %1:%2" ) ).arg( line ).arg( column ) );
+            error( i18n( "Null columns in Matrix at %1:%2" ).arg( line ).arg( column ) );
         }
         if ( node->rows() == 0 ) {
-            error( QString( i18n( "Null rows in Matrix at %1:%2" ) ).arg( line ).arg( column ) );
+            error(  i18n( "Null rows in Matrix at %1:%2" ).arg( line ).arg( column ) );
         }
         return node;
     }
@@ -628,7 +628,7 @@ ParserNode* FormulaStringParser::parsePrimary()
         return node;
     }
     default:
-        error( QString( i18n( "Unexpected token at %1:%2" ) ).arg( line ).arg( column ) );
+        error( i18n( "Unexpected token at %1:%2" ).arg( line ).arg( column ) );
         return new PrimaryNode( "?" );
     }
 }
@@ -773,7 +773,7 @@ void FormulaStringParser::readNumber()
                 readDigits();
             }
             else if ( !digitsBeforeDot ) {
-                error( QString( i18n( "A single '.' is not a number at %1:%2" ) ).arg( line ).arg( column ) );
+                error( i18n( "A single '.' is not a number at %1:%2" ).arg( line ).arg( column ) );
                 return;
             }
         }
