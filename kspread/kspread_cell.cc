@@ -6962,16 +6962,16 @@ QString Cell::pasteOperation( const QString &new_text, const QString &old_text, 
         switch( op )
         {
           case Paste::Add :
-            tmp_op="=("+old+")+"+"("+tmp+')';
+            tmp_op="=("+old+")+"+'('+tmp+')';
             break;
           case Paste::Mul :
-            tmp_op="=("+old+")*"+"("+tmp+')';
+            tmp_op="=("+old+")*"+'('+tmp+')';
             break;
           case Paste::Sub:
-            tmp_op="=("+old+")-"+"("+tmp+')';
+            tmp_op="=("+old+")-"+'('+tmp+')';
             break;
           case Paste::Div:
-            tmp_op="=("+old+")/"+"("+tmp+')';
+            tmp_op="=("+old+")/"+'('+tmp+')';
             break;
         default :
             Q_ASSERT( 0 );

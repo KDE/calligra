@@ -906,7 +906,7 @@ QString Region::Point::name(Sheet* originSheet) const
   QString name = "";
   if (m_sheet && m_sheet != originSheet)
   {
-    name = m_sheet->sheetName() + "!";
+    name = m_sheet->sheetName() + '!';
   }
   return name + Cell::name(m_point.x(), m_point.y());
 }
@@ -963,9 +963,9 @@ QString Region::Range::name(Sheet* originSheet) const
   QString name = "";
   if (m_sheet && m_sheet != originSheet)
   {
-    name = m_sheet->sheetName() + "!";
+    name = m_sheet->sheetName() + '!';
   }
-  return name + Cell::name(m_range.left(), m_range.top()) + ":" +
+  return name + Cell::name(m_range.left(), m_range.top()) + ':' +
                 Cell::name(m_range.right(), m_range.bottom() );
 }
 

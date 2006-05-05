@@ -1090,11 +1090,11 @@ void CellEditor::handleKeyPressEvent( QKeyEvent * _ev )
 
     QString newPart;
     if ((exp.cap(1) == "$") && (exp.cap(3) == "$"))
-      newPart = "$" + exp.cap(2) + exp.cap(4);
+      newPart = '$' + exp.cap(2) + exp.cap(4);
     else if ((exp.cap(1) != "$") && (exp.cap(3) != "$"))
-      newPart = "$" + exp.cap(2) + "$" + exp.cap(4);
+      newPart = '$' + exp.cap(2) + '$' + exp.cap(4);
     else if ((exp.cap(1) == "$") && (exp.cap(3) != "$"))
-      newPart = exp.cap(2) + "$" + exp.cap(4);
+      newPart = exp.cap(2) + '$' + exp.cap(4);
     else if ((exp.cap(1) != "$") && (exp.cap(3) == "$"))
       newPart = exp.cap(2) + exp.cap(4);
 
@@ -1409,7 +1409,7 @@ void LocationEditWidget::keyPressEvent( QKeyEvent * _ev )
         } else {
             setText( Cell::columnName( m_pView->selectionInfo()->lastRange().left() )
                      + QString::number( m_pView->selectionInfo()->lastRange().top() )
-                     + ":"
+                     + ':'
                      + Cell::columnName( m_pView->selectionInfo()->lastRange().right() )
                      + QString::number( m_pView->selectionInfo()->lastRange().bottom() ) );
         }

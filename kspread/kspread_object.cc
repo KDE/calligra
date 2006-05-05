@@ -623,8 +623,8 @@ bool EmbeddedChart::saveOasisObjectAttributes( KSpreadOasisSaveContext &sc ) con
 
     QRect dataArea = m_pBinding->dataArea();
     QString rangeName = util_rangeName( dataArea);
-    rangeName.insert( rangeName.indexOf(':') +1, sheet()->sheetName() + "." );
-    rangeName.prepend( sheet()->sheetName() + "." );
+    rangeName.insert( rangeName.indexOf(':') +1, sheet()->sheetName() + '.' );
+    rangeName.prepend( sheet()->sheetName() + '.' );
     sc.xmlWriter.addAttribute( "draw:notify-on-update-of-ranges", rangeName );
 
     sc.xmlWriter.endElement();
@@ -750,7 +750,7 @@ QDomElement EmbeddedPictureObject::save( QDomDocument& /*doc*/ )
 
 QString EmbeddedPictureObject::convertValueToPercent( int val ) const
 {
-   return QString::number( val )+"%";
+   return QString::number( val ) + '%';
 }
 
 void EmbeddedPictureObject::saveOasisPictureElement( KoGenStyle &styleobjectauto ) const

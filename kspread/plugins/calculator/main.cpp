@@ -195,7 +195,7 @@ void QtCalculator::useData()
 
     delete []v;
 
-    sheet_name = QString::null;
+    sheet_name.clear();
 }
 
 #include "main.moc"
