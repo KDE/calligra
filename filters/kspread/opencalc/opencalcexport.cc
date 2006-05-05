@@ -294,7 +294,7 @@ bool OpenCalcExport::exportSettings( KoStore * store, const Doc * ksdoc )
   attribute.setAttribute( "config:name", "ActiveTable" );
   attribute.setAttribute( "config:type", "string" );
 
-  View * view = static_cast<View*>( ksdoc->views().getFirst());
+  View * view = static_cast<View*>( ksdoc->views().first());
   QString activeTable;
   if ( view ) // no view if embedded document
   {

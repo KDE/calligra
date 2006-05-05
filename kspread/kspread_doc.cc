@@ -528,15 +528,12 @@ bool Doc::completeSaving( KoStore* _store )
 
 QDomDocument Doc::saveXML()
 {
-    //Terminate current cell edition, if any
-    Q3PtrListIterator<KoView> it( views() );
-
     /* don't pull focus away from the editor if this is just a background
        autosave */
     if (!isAutosaving())
     {
-        for (; it.current(); ++it )
-            static_cast<View *>( it.current() )->deleteEditor( true );
+        foreach ( KoView* view, views() )
+            static_cast<View *>( view )->deleteEditor( true );
     }
 
     QDomDocument doc = createDomDocument( "spreadsheet", CURRENT_DTD_VERSION );
@@ -615,16 +612,14 @@ bool Doc::saveOasisHelper( KoStore* store, KoXmlWriter* manifestWriter, SaveFlag
                             QString* /*plainText*/, KoPicture* /*picture*/ )
 {
     d->m_pictureCollection.assignUniqueIds();
-    //Terminate current cell edition, if any
-    Q3PtrListIterator<KoView> it2( views() );
     d->m_savingWholeDocument = saveFlag == SaveAll ? true : false;
 
     /* don't pull focus away from the editor if this is just a background
        autosave */
     if (!isAutosaving())
     {
-        for (; it2.current(); ++it2 )
-            static_cast<View *>( it2.current() )->deleteEditor( true );
+      foreach ( KoView* view, views() )
+        static_cast<View *>( view )->deleteEditor( true );
     }
     if ( !store->open( "content.xml" ) )
         return false;
@@ -1210,9 +1205,8 @@ bool Doc::completeLoading( KoStore* /* _store */ )
 
   //  map()->update();
 
-  Q3PtrListIterator<KoView> it( views() );
-  for (; it.current(); ++it )
-    ((View*)it.current())->initialPosition();
+  foreach ( KoView* view, views() )
+    static_cast<View *>( view )->initialPosition();
 
   kDebug(36001) << "------------------------ COMPLETION DONE --------------------" << endl;
 
@@ -1533,16 +1527,14 @@ KCommandHistory* Doc::commandHistory()
 
 void Doc::enableUndo( bool _b )
 {
-    Q3PtrListIterator<KoView> it( views() );
-    for (; it.current(); ++it )
-      static_cast<View *>( it.current() )->enableUndo( _b );
+  foreach ( KoView* view, views() )
+    static_cast<View *>( view )->enableUndo( _b );
 }
 
 void Doc::enableRedo( bool _b )
 {
-    Q3PtrListIterator<KoView> it( views() );
-    for (; it.current(); ++it )
-      static_cast<View *>( it.current() )->enableRedo( _b );
+  foreach ( KoView* view, views() )
+    static_cast<View *>( view )->enableRedo( _b );
 }
 
 void Doc::paintContent( QPainter& painter, const QRect& rect,
@@ -1621,15 +1613,9 @@ void Doc::paintContent( QPainter& painter, const QRect& rect, bool /*transparent
 
 void Doc::paintUpdates()
 {
-  //  ElapsedTime et( "Doc::paintUpdates" );
-
-  Q3PtrListIterator<KoView> it( views() );
-  View  * view  = 0;
-
-  for (; it.current(); ++it )
+  foreach ( KoView* view, views() )
   {
-    view = static_cast<View *>( it.current() );
-    view->paintUpdates();
+    static_cast<View *>( view )->paintUpdates();
   }
 
   foreach ( Sheet* sheet, map()->sheetList() )
@@ -2151,23 +2137,20 @@ bool Doc::delayCalculation() const
 
 void Doc::updateBorderButton()
 {
-    Q3PtrListIterator<KoView> it( views() );
-    for (; it.current(); ++it )
-      static_cast<View *>( it.current() )->updateBorderButton();
+  foreach ( KoView* view, views() )
+    static_cast<View*>( view )->updateBorderButton();
 }
 
 void Doc::insertSheet( Sheet * sheet )
 {
-    Q3PtrListIterator<KoView> it( views() );
-    for (; it.current(); ++it )
-  ((View*)it.current())->insertSheet( sheet );
+  foreach ( KoView* view, views() )
+    static_cast<View*>( view )->insertSheet( sheet );
 }
 
 void Doc::takeSheet( Sheet * sheet )
 {
-    Q3PtrListIterator<KoView> it( views() );
-    for (; it.current(); ++it )
-  ((View*)it.current())->removeSheet( sheet );
+  foreach ( KoView* view, views() )
+    static_cast<View*>( view )->removeSheet( sheet );
 }
 
 void Doc::addIgnoreWordAll( const QString & word)
@@ -2204,10 +2187,9 @@ Sheet * Doc::displaySheet() const
 
 void Doc::addView( KoView *_view )
 {
-    KoDocument::addView( _view );
-    Q3PtrListIterator<KoView> it( views() );
-    for (; it.current(); ++it )
-  ((View*)it.current())->closeEditor();
+  KoDocument::addView( _view );
+  foreach ( KoView* view, views() )
+    static_cast<View*>( view )->closeEditor();
 }
 
 void Doc::addDamage( Damage* damage )
@@ -2266,11 +2248,10 @@ KoPictureCollection *Doc::pictureCollection()
 void Doc::repaint( const QRect& rect )
 {
   QRect r;
-  Q3PtrListIterator<KoView> it( views() );
-  for( ; it.current(); ++it )
+  foreach ( KoView* view, views() )
   {
     r = rect;
-    Canvas* canvas = ((View*)it.current())->canvasWidget();
+    Canvas* canvas = static_cast<View*>( view )->canvasWidget();
     r.moveTopLeft( QPoint( r.x() - (int) canvas->xOffset(),
                            r.y() - (int) canvas->yOffset() ) );
     canvas->update( r );
@@ -2279,10 +2260,9 @@ void Doc::repaint( const QRect& rect )
 
 void Doc::repaint( EmbeddedObject *obj )
 {
-  Q3PtrListIterator<KoView> it( views() );
-  for( ; it.current(); ++it )
+  foreach ( KoView* view, views() )
   {
-    Canvas* canvas = ((View*)it.current())->canvasWidget();
+    Canvas* canvas = static_cast<View*>( view )->canvasWidget();
     if ( obj->sheet() == canvas->activeSheet() )
         canvas->repaintObject( obj );
   }
@@ -2291,10 +2271,9 @@ void Doc::repaint( EmbeddedObject *obj )
 void Doc::repaint( const KoRect& rect )
 {
   QRect r;
-  Q3PtrListIterator<KoView> it( views() );
-  for( ; it.current(); ++it )
+  foreach ( KoView* view, views() )
   {
-    Canvas* canvas = ((View*)it.current())->canvasWidget();
+    Canvas* canvas = static_cast<View*>( view )->canvasWidget();
 
     r = zoomRect( rect );
     r.translate( (int)( -canvas->xOffset()*zoomedResolutionX() ) ,

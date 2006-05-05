@@ -517,9 +517,8 @@ KarbonPart::slotCommandExecuted( VCommand *command )
 	setModified( true );
 	if( command && command->changesSelection() )
 	{
-		QPtrListIterator<KoView> itr( views() );
-			for( ; itr.current() ; ++itr )
-				static_cast<KarbonView*>( itr.current() )->selectionChanged();
+		foreach ( KoView* view, views() )
+			static_cast<KarbonView*>( view )->selectionChanged();
 	}
 }
 
@@ -532,19 +531,15 @@ KarbonPart::clearHistory()
 void
 KarbonPart::repaintAllViews( bool repaint )
 {
-	QPtrListIterator<KoView> itr( views() );
-
-	for( ; itr.current() ; ++itr )
-		static_cast<KarbonView*>( itr.current() )->canvasWidget()->repaintAll( repaint );
+	foreach ( KoView* view, views() )
+		static_cast<KarbonView*>( view )->canvasWidget()->repaintAll( repaint );
 }
 
 void
 KarbonPart::repaintAllViews( const KoRect &rect )
 {
-	QPtrListIterator<KoView> itr( views() );
-
-	for( ; itr.current() ; ++itr )
-		static_cast<KarbonView*>( itr.current() )->canvasWidget()->repaintAll( rect );
+	foreach ( KoView* view, views() )
+		static_cast<KarbonView*>( view )->canvasWidget()->repaintAll( rect );
 }
 
 void
@@ -599,12 +594,8 @@ KarbonPart::setShowStatusBar( bool b )
 void
 KarbonPart::reorganizeGUI()
 {
-	QPtrListIterator<KoView> itr( views() );
-
-	for( ; itr.current(); ++itr )
-	{
-		static_cast<KarbonView*>( itr.current() )->reorganizeGUI();
-	}
+	foreach ( KoView* view, views() )
+		static_cast<KarbonView*>( view )->reorganizeGUI();
 }
 
 void

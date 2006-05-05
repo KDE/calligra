@@ -644,16 +644,14 @@ void KivioDoc::addPage( KivioPage* page )
 
 void KivioDoc::insertPage( KivioPage * page )
 {
-    QPtrListIterator<KoView> it( views() );
-    for (; it.current(); ++it )
-	((KivioView*)it.current())->insertPage( page );
+    foreach ( KoView* view, views() )
+        static_cast<KivioView*>(view)->insertPage( page );
 }
 
 void KivioDoc::takePage( KivioPage * page )
 {
-    QPtrListIterator<KoView> it( views() );
-    for (; it.current(); ++it )
-	((KivioView*)it.current())->removePage( page );
+    foreach ( KoView* view, views() )
+        static_cast<KivioView*>(view)->removePage( page );
 }
 
 
@@ -960,16 +958,14 @@ void KivioDoc::updateView(KivioPage* page)
 
 void KivioDoc::updateButton()
 {
-    QPtrListIterator<KoView> it( views() );
-    for (; it.current(); ++it )
-	((KivioView*)it.current())->updateButton();
+    foreach ( KoView* view, views() )
+        static_cast<KivioView*>(view)->updateButton();
 }
 
 void KivioDoc::resetLayerPanel()
 {
-    QPtrListIterator<KoView> it( views() );
-    for (; it.current(); ++it )
-	((KivioView*)it.current())->resetLayerPanel();
+    foreach ( KoView* view, views() )
+        static_cast<KivioView*>(view)->resetLayerPanel();
 }
 
 void KivioDoc::addCommand( KCommand * cmd )
@@ -1002,9 +998,8 @@ void KivioDoc::slotCommandExecuted()
 
 void KivioDoc::updateProtectPanelCheckBox()
 {
-    QPtrListIterator<KoView> it( views() );
-    for (; it.current(); ++it )
-      ((KivioView*)it.current())->updateProtectPanelCheckBox();
+    foreach ( KoView* view, views() )
+        static_cast<KivioView*>(view)->updateProtectPanelCheckBox();
 }
 
 void KivioDoc::loadStencil()
@@ -1044,12 +1039,11 @@ void KivioDoc::updateGuideLines(KoView* sender)
   view->canvasWidget()->guideLines().getGuideLines(hGuideLines, vGuideLines);
   view->activePage()->setGuideLines(hGuideLines, vGuideLines);
 
-  QPtrListIterator<KoView> it(views());
   KivioView* itView = 0;
 
-  for (; it.current(); ++it ) {
-    itView = static_cast<KivioView*>(it.current());
-    if(it.current() != sender && (itView->activePage() == view->activePage())) {
+  foreach ( KoView* v, views() ) {
+    itView = static_cast<KivioView*>(v);
+    if(v != sender && (itView->activePage() == view->activePage())) {
       itView->canvasWidget()->guideLines().setGuideLines(hGuideLines, vGuideLines);
     }
   }
@@ -1059,11 +1053,10 @@ void KivioDoc::updateGuideLines(KivioPage* page)
 {
   QValueList<double> hGuideLines = page->horizontalGuideLines();
   QValueList<double> vGuideLines = page->verticalGuideLines();
-  QPtrListIterator<KoView> it(views());
   KivioView* itView = 0;
 
-  for (; it.current(); ++it ) {
-    itView = static_cast<KivioView*>(it.current());
+  foreach ( KoView* view, views() ) {
+    itView = static_cast<KivioView*>(view);
     if(itView->activePage() == page) {
       itView->canvasWidget()->guideLines().setGuideLines(hGuideLines, vGuideLines);
     }

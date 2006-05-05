@@ -77,7 +77,7 @@ ImageExport::convert(const QByteArray& from, const QByteArray& to)
     height = int( layoutPage.ptHeight );
     if (extraImageAttribute())
     {
-        KPrView* view = static_cast<KPrView*>( kpresenterdoc->views().getFirst());
+        KPrView* view = static_cast<KPrView*>( kpresenterdoc->views().first());
         if ( view ) // no view if embedded document
         {
             KPrCanvas * canvas = view->getCanvas();

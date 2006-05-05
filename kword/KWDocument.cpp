@@ -2815,7 +2815,7 @@ bool KWDocument::saveOasisHelper( KoStore* store, KoXmlWriter* manifestWriter, S
     {
         // Save visual info for the first view, such as the active frameset and cursor position
         // It looks like a hack, but reopening a document creates only one view anyway (David)
-        KWView * view = static_cast<KWView*>(views().getFirst());
+        KWView * view = static_cast<KWView*>(views().first());
         if ( view ) // no view if embedded document
         {
             KWFrameSetEdit* edit = view->getGUI()->canvasWidget()->currentFrameSetEdit();
@@ -3445,7 +3445,7 @@ QDomDocument KWDocument::saveXML()
 
     // Save visual info for the first view, such as the active frameset and cursor position
     // It looks like a hack, but reopening a document creates only one view anyway (David)
-    KWView * view = static_cast<KWView*>(views().getFirst());
+    KWView * view = static_cast<KWView*>(views().first());
     if ( view ) // no view if embedded document
     {
         KWFrameSetEdit* edit = view->getGUI()->canvasWidget()->currentFrameSetEdit();
@@ -5378,9 +5378,8 @@ void KWDocument::setEmpty()
 
 void KWDocument::updateGridButton()
 {
-  Q3PtrListIterator<KoView> it( views() );
-  for (; it.current(); ++it )
-    ((KWView*)it.current())->updateGridButton();
+  foreach ( KoView* view, views() )
+      static_cast<KWView*>(view)->updateGridButton();
 
 }
 

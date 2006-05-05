@@ -51,24 +51,24 @@ KoFilter::ConversionStatus KisJPEGImport::convert(const QByteArray&, const QByte
         return KoFilter::BadMimeType;
 
     KisDoc * doc = dynamic_cast<KisDoc*>(m_chain -> outputDocument());
-    KisView * view = static_cast<KisView*>(doc -> views().getFirst());
-    
+    KisView * view = static_cast<KisView*>(doc -> views().first());
+
     QString filename = m_chain -> inputFile();
-    
+
     if (!doc)
         return KoFilter::CreationError;
 
     doc->prepareForImport();
-        
+
 
     if (!filename.isEmpty()) {
-    
+
         KUrl url;
         url.setPath(filename);
 
         if (url.isEmpty())
             return KoFilter::FileNotFound;
-            
+
         KisJPEGConverter ib(doc, doc -> undoAdapter());
 
         if (view != 0)

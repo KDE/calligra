@@ -191,7 +191,7 @@ KoFilter::ConversionStatus CSVExport::convert( const QByteArray & from, const QB
   if ( expDialog && expDialog->exportSelectionOnly() )
   {
     kDebug(30501) << "Export as selection mode" << endl;
-    View const * const view = static_cast<View*>(ksdoc->views().getFirst());
+    View const * const view = static_cast<View*>(ksdoc->views().first());
 
     if ( !view ) // no view if embedded document
     {

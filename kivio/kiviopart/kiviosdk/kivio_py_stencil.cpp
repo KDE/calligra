@@ -529,7 +529,7 @@ void KivioPyStencil::paint( KivioIntraStencilData *d, bool outlined )
 int KivioPyStencil::runPython(QString code)
 {
 
-    view = dynamic_cast<KivioView*>(KoDocument::documentList()->first()->views().getFirst());
+    view = dynamic_cast<KivioView*>(KoDocument::documentList()->first()->views().first());
     if ( view ) {
         page = view->activePage();
     }

@@ -51,24 +51,24 @@ KoFilter::ConversionStatus KisPNGImport::convert(const QByteArray&, const QByteA
         return KoFilter::BadMimeType;
 
     KisDoc * doc = dynamic_cast<KisDoc*>(m_chain -> outputDocument());
-    KisView * view = static_cast<KisView*>(doc -> views().getFirst());
-    
+    KisView * view = static_cast<KisView*>(doc -> views().first());
+
     QString filename = m_chain -> inputFile();
-    
+
     if (!doc)
         return KoFilter::CreationError;
 
     doc -> prepareForImport();
-        
+
 
     if (!filename.isEmpty()) {
-    
+
         KUrl url;
         url.setPath(filename);
 
         if (url.isEmpty())
             return KoFilter::FileNotFound;
-            
+
         KisPNGConverter ib(doc, doc -> undoAdapter());
 
         if (view != 0)
@@ -87,7 +87,7 @@ KoFilter::ConversionStatus KisPNGImport::convert(const QByteArray&, const QByteA
                 break;
             case KisImageBuilder_RESULT_BAD_FETCH:
             case KisImageBuilder_RESULT_EMPTY:
-                return KoFilter::ParsingError;                
+                return KoFilter::ParsingError;
                 break;
             case KisImageBuilder_RESULT_FAILURE:
                 return KoFilter::InternalError;

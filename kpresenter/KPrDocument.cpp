@@ -1034,7 +1034,7 @@ bool KPrDocument::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
 //save page
 
     QMap<QString, int> pageNames;
-    
+
     if ( !_duplicatePage )
     {
         m_masterPage->saveOasisPage( store, stickyTmpWriter, 0, savingContext, indexObj, partIndexObj, manifestWriter, pageNames );
@@ -1048,7 +1048,7 @@ bool KPrDocument::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
         }
 
     }
-    
+
     if ( saveOnlyPage != -1 )
     {
         m_pageList.at( saveOnlyPage )->saveOasisPage( store, contentTmpWriter, ( saveOnlyPage+1 ), savingContext, indexObj, partIndexObj , manifestWriter, pageNames );
@@ -1457,7 +1457,7 @@ void KPrDocument::saveOasisPresentationCustomSlideShow( KoXmlWriter &contentTmpW
     //<presentation:show presentation:name="New Custom Slide Show" presentation:pages="page1,page1,page1,page1,page1"/>
 }
 
-void KPrDocument::saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyles, QFile* masterStyles, 
+void KPrDocument::saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyles, QFile* masterStyles,
                                            KoSavingContext & savingContext, SaveFlag saveFlag ) const
 {
     KoStoreDevice stylesDev( store );
@@ -1838,7 +1838,7 @@ void KPrDocument::loadOasisObject( KPrPage * newpage, QDomNode & drawPage, KoOas
                         else
                             newpage->appendObject(kppixmapobject);
                         break;
-                    } 
+                    }
                     else if ( localName == "object" )
                     {
                         KPrChild *ch = new KPrChild( this );
@@ -3383,9 +3383,8 @@ void KPrDocument::setGridValue( double _x, double _y, bool _replace )
 
 void KPrDocument::repaint( bool erase )
 {
-    QPtrListIterator<KoView> it( views() );
-    for( ; it.current(); ++it ) {
-        KPrCanvas* canvas = ((KPrView*)it.current())->getCanvas();
+    foreach ( KoView* view, views() ) {
+        KPrCanvas* canvas = static_cast<KPrView*>(view)->getCanvas();
         canvas->repaint( erase );
     }
 }
@@ -3393,10 +3392,9 @@ void KPrDocument::repaint( bool erase )
 void KPrDocument::repaint( const QRect& rect )
 {
     QRect r;
-    QPtrListIterator<KoView> it( views() );
-    for( ; it.current(); ++it ) {
+    foreach ( KoView* view, views() ) {
         r = rect;
-        KPrCanvas* canvas = ((KPrView*)it.current())->getCanvas();
+        KPrCanvas* canvas = static_cast<KPrView*>(view)->getCanvas();
         r.moveTopLeft( QPoint( r.x() - canvas->diffx(),
                                r.y() - canvas->diffy() ) );
         canvas->update( r );
@@ -3412,9 +3410,8 @@ void KPrDocument::layout(KPrObject *kpobject)
 
 void KPrDocument::layout()
 {
-    QPtrListIterator<KoView> it( views() );
-    for( ; it.current(); ++it ) {
-        KPrCanvas* canvas = ((KPrView*)it.current())->getCanvas();
+    foreach ( KoView* view, views() ) {
+        KPrCanvas* canvas = static_cast<KPrView*>(view)->getCanvas();
         canvas->layout();
     }
 }
@@ -3493,10 +3490,9 @@ void KPrDocument::insertPage( KPrPage *page, int currentPageNum, int insertPageN
 
     pageOrderChanged();
     //activate this page in all views which on slide currentPageNum
-    QPtrListIterator<KoView> it( views() );
-    for (; it.current(); ++it )
+    foreach ( KoView* v, views() )
     {
-        KPrView *view = static_cast<KPrView*>( it.current() );
+        KPrView *view = static_cast<KPrView*>( v );
         view->addSideBarItem( insertPageNum );
 
         // change to the new page if the view was on the current page.
@@ -3519,10 +3515,9 @@ void KPrDocument::takePage( KPrPage *page, int pageNum )
 
     pageOrderChanged();
 
-    QPtrListIterator<KoView> it( views() );
-    for (; it.current(); ++it )
+    foreach ( KoView* v, views() )
     {
-        KPrView *view = static_cast<KPrView*>( it.current() );
+        KPrView *view = static_cast<KPrView*>( v );
         view->removeSideBarItem( pos );
 
         // change to the new page if the view was on the current page.
@@ -3558,10 +3553,9 @@ void KPrDocument::movePageTo( int oldPos, int newPos )
     pageOrderChanged();
 
     // Update the sidebars
-    QPtrListIterator<KoView> it( views() );
-    for (; it.current(); ++it )
+    foreach ( KoView* v, views() )
     {
-        KPrView *view = static_cast<KPrView*>( it.current() );
+        KPrView *view = static_cast<KPrView*>( v );
         view->moveSideBarItem( oldPos, newPos );
 
         // change to the new page if the view was on the old pos.
@@ -3713,31 +3707,27 @@ KCommand * KPrDocument::loadPastedObjs( const QString &in, KPrPage* _page )
 
 void KPrDocument::deSelectAllObj()
 {
-    QPtrListIterator<KoView> it( views() );
-    for (; it.current(); ++it )
-        ((KPrView*)it.current())->getCanvas()->deSelectAllObj();
+    foreach ( KoView* view, views() )
+        static_cast<KPrView*>(view)->getCanvas()->deSelectAllObj();
 }
 
 void KPrDocument::deSelectObj(KPrObject *obj)
 {
-    QPtrListIterator<KoView> it( views() );
-    for (; it.current(); ++it )
-        ((KPrView*)it.current())->getCanvas()->deSelectObj( obj );
+    foreach ( KoView* view, views() )
+        static_cast<KPrView*>(view)->getCanvas()->deSelectObj( obj );
 }
 
 void KPrDocument::setDisplayObjectMasterPage( bool b )
 {
-    QPtrListIterator<KoView> it( views() );
-    for (; it.current(); ++it )
-        ((KPrView*)it.current())->updateDisplayObjectMasterPageButton();
+    foreach ( KoView* view, views() )
+        static_cast<KPrView*>(view)->updateDisplayObjectMasterPageButton();
     repaint(b);
 }
 
 void KPrDocument::setDisplayBackground( bool b )
 {
-    QPtrListIterator<KoView> it( views() );
-    for (; it.current(); ++it )
-        ((KPrView*)it.current())->updateDisplayBackgroundButton();
+    foreach ( KoView* view, views() )
+        static_cast<KPrView*>(view)->updateDisplayBackgroundButton();
     repaint(b);
 }
 
@@ -3771,9 +3761,8 @@ void KPrDocument::setFooter( bool b )
 
 void KPrDocument::updateHeaderFooterButton()
 {
-    QPtrListIterator<KoView> it( views() );
-    for (; it.current(); ++it )
-        ((KPrView*)it.current())->updateHeaderFooterButton();
+    foreach ( KoView* view, views() )
+        static_cast<KPrView*>(view)->updateHeaderFooterButton();
 }
 
 void KPrDocument::makeUsedPixmapList()
@@ -4032,9 +4021,8 @@ KPrPage * KPrDocument::findPage(QPtrList<KPrObject> &objects)
 void KPrDocument::updateSideBarItem( KPrPage * page )
 {
     // Update the views
-    QPtrListIterator<KoView> it( views() );
-    for (; it.current(); ++it )
-        static_cast<KPrView*>( it.current() )->updateSideBarItem( page );
+    foreach ( KoView* view, views() )
+        static_cast<KPrView*>(view)->updateSideBarItem( page );
 }
 
 bool KPrDocument::isSlideSelected( int pgNum /* 0-based */ )
@@ -4146,12 +4134,11 @@ void KPrDocument::recalcVariables( int type )
 void KPrDocument::slotGuideLinesChanged( KoView *view )
 {
     ( (KPrView*)view )->getCanvas()->guideLines().getGuideLines( m_hGuideLines, m_vGuideLines );
-    QPtrListIterator<KoView> it( views() );
-    for (; it.current(); ++it )
+    foreach ( KoView* v, views() )
     {
-        if ( it.current() != view )
+        if ( v != view )
         {
-            ( (KPrView*)it.current() )->getCanvas()->guideLines().setGuideLines( m_hGuideLines, m_vGuideLines );
+            static_cast<KPrView*>(v)->getCanvas()->guideLines().setGuideLines( m_hGuideLines, m_vGuideLines );
         }
     }
 }
@@ -4164,9 +4151,8 @@ void KPrDocument::slotDocumentInfoModifed()
 
 void KPrDocument::reorganizeGUI()
 {
-    QPtrListIterator<KoView> it( views() );
-    for (; it.current(); ++it )
-        ((KPrView*)it.current())->reorganize();
+    foreach ( KoView* view, views() )
+        static_cast<KPrView*>(view)->reorganize();
 }
 
 int KPrDocument::undoRedoLimit() const
@@ -4250,12 +4236,11 @@ void KPrDocument::displayActivePage(KPrPage * _page)
 
 void KPrDocument::updateZoomRuler()
 {
-    QPtrListIterator<KoView> it( views() );
-    for (; it.current(); ++it )
+    foreach ( KoView* view, views() )
     {
-        ((KPrView*)it.current())->getHRuler()->setZoom( m_zoomHandler->zoomedResolutionX() );
-        ((KPrView*)it.current())->getVRuler()->setZoom( m_zoomHandler->zoomedResolutionY() );
-        ((KPrView*)it.current())->slotUpdateRuler();
+        static_cast<KPrView*>(view)->getHRuler()->setZoom( m_zoomHandler->zoomedResolutionX() );
+        static_cast<KPrView*>(view)->getVRuler()->setZoom( m_zoomHandler->zoomedResolutionY() );
+        static_cast<KPrView*>(view)->slotUpdateRuler();
     }
 }
 
@@ -4271,11 +4256,10 @@ void KPrDocument::newZoomAndResolution( bool updateViews, bool /*forPrint*/ )
     }
     if ( updateViews )
     {
-        QPtrListIterator<KoView> it( views() );
-        for (; it.current(); ++it )
+        foreach ( KoView* view, views() )
         {
-            static_cast<KPrView *>( it.current() )->getCanvas()->update();
-            static_cast<KPrView *>( it.current() )->getCanvas()->layout();
+            static_cast<KPrView *>( view )->getCanvas()->update();
+            static_cast<KPrView *>( view )->getCanvas()->layout();
         }
     }
 }
@@ -4297,22 +4281,19 @@ bool KPrDocument::isHeaderFooter(const KPrObject *obj) const
 
 void KPrDocument::updateRulerPageLayout()
 {
-    QPtrListIterator<KoView> it( views() );
-    for (; it.current(); ++it )
+    foreach ( KoView* view, views() )
     {
-        ((KPrView*)it.current())->getHRuler()->setPageLayout(m_pageLayout );
-        ((KPrView*)it.current())->getVRuler()->setPageLayout(m_pageLayout );
-
+        static_cast<KPrView*>(view)->getHRuler()->setPageLayout(m_pageLayout );
+        static_cast<KPrView*>(view)->getVRuler()->setPageLayout(m_pageLayout );
     }
 }
 
 void KPrDocument::refreshAllNoteBarMasterPage(const QString &text, KPrView *exceptView)
 {
     m_masterPage->setNoteText(text );
-    QPtrListIterator<KoView> it( views() );
-    for (; it.current(); ++it )
+    foreach ( KoView* v, views() )
     {
-        KPrView* view=(KPrView*)it.current();
+        KPrView* view = static_cast<KPrView*>(v);
         if ( view->getNoteBar() && view != exceptView && view->editMaster() )
             view->getNoteBar()->setCurrentNoteText(text );
     }
@@ -4321,10 +4302,9 @@ void KPrDocument::refreshAllNoteBarMasterPage(const QString &text, KPrView *exce
 void KPrDocument::refreshAllNoteBar(int page, const QString &text, KPrView *exceptView)
 {
     m_pageList.at(page)->setNoteText(text );
-    QPtrListIterator<KoView> it( views() );
-    for (; it.current(); ++it )
+    foreach ( KoView* v, views() )
     {
-        KPrView* view=(KPrView*)it.current();
+        KPrView* view=(KPrView*)v;
         if ( view->getNoteBar() && view != exceptView && ((int)(view->getCurrPgNum())-1 == page))
             view->getNoteBar()->setCurrentNoteText(text );
     }
@@ -4377,9 +4357,8 @@ void KPrDocument::loadStyleTemplates( const QDomElement &stylesElem )
 
 void KPrDocument::updateAllStyleLists()
 {
-    QPtrListIterator<KoView> it( views() );
-    for (; it.current(); ++it )
-        ((KPrView*)it.current())->updateStyleList();
+    foreach ( KoView* view, views() )
+        static_cast<KPrView*>(view)->updateStyleList();
 }
 
 void KPrDocument::applyStyleChange( KoStyleChangeDefMap changed )
@@ -4418,9 +4397,8 @@ void KPrDocument::enableBackgroundSpellCheck( bool b )
 {
     //m_bgSpellCheck->enableBackgroundSpellCheck(b);
     m_bgSpellCheck->setEnabled(b);
-    QPtrListIterator<KoView> it( views() );
-    for( ; it.current(); ++it )
-        ((KPrView*)it.current())->updateBgSpellCheckingState();
+    foreach ( KoView* view, views() )
+        static_cast<KPrView*>(view)->updateBgSpellCheckingState();
 }
 
 bool KPrDocument::backgroundSpellCheckEnabled() const
@@ -4511,19 +4489,17 @@ void KPrDocument::addGuideLine( Qt::Orientation o, double pos )
         m_vGuideLines.append( pos );
     }
 
-    QPtrListIterator<KoView> it( views() );
-    for (; it.current(); ++it )
+    foreach ( KoView* view, views() )
     {
-        ( (KPrView*)it.current() )->getCanvas()->guideLines().setGuideLines( m_hGuideLines, m_vGuideLines );
+        ( (KPrView*)view )->getCanvas()->guideLines().setGuideLines( m_hGuideLines, m_vGuideLines );
     }
 }
 
 
 void KPrDocument::updateGuideLineButton()
 {
-    QPtrListIterator<KoView> it( views() );
-    for (; it.current(); ++it )
-        ((KPrView*)it.current())->updateGuideLineButton();
+    foreach ( KoView* view, views() )
+        static_cast<KPrView*>(view)->updateGuideLineButton();
 }
 
 void KPrDocument::loadGuideLines( const QDomElement &element )
@@ -4565,9 +4541,8 @@ void KPrDocument::saveGuideLines( QDomDocument &doc, QDomElement& element )
 
 void KPrDocument::updateGridButton()
 {
-    QPtrListIterator<KoView> it( views() );
-    for (; it.current(); ++it )
-        ((KPrView*)it.current())->updateGridButton();
+    foreach ( KoView* view, views() )
+        static_cast<KPrView*>(view)->updateGridButton();
 
 }
 
@@ -4588,16 +4563,14 @@ void KPrDocument::addSpellCheckIgnoreWord( const QString & word )
 
 void KPrDocument::updateObjectStatusBarItem()
 {
-    QPtrListIterator<KoView> it( views() );
-    for (; it.current(); ++it )
-        ((KPrView*)it.current())->updateObjectStatusBarItem();
+    foreach ( KoView* view, views() )
+        static_cast<KPrView*>(view)->updateObjectStatusBarItem();
 }
 
 void KPrDocument::updateObjectSelected()
 {
-    QPtrListIterator<KoView> it( views() );
-    for (; it.current(); ++it )
-        ((KPrView*)it.current())->objectSelectedChanged();
+    foreach ( KoView* view, views() )
+        static_cast<KPrView*>(view)->objectSelectedChanged();
 }
 
 void KPrDocument::setTabStopValue ( double _tabStop )
@@ -4635,9 +4608,8 @@ void KPrDocument::testAndCloseAllTextObjectProtectedContent()
 {
     if ( !m_cursorInProtectectedArea )
     {
-        QPtrListIterator<KoView> it( views() );
-        for (; it.current(); ++it )
-            static_cast<KPrView*>(it.current())->testAndCloseAllTextObjectProtectedContent();
+        foreach ( KoView* view, views() )
+            static_cast<KPrView*>(view)->testAndCloseAllTextObjectProtectedContent();
     }
 }
 
@@ -4670,16 +4642,14 @@ void KPrDocument::insertFile(const QString & file )
     m_childCountBeforeInsert = 0;
     // Update the views
     int newPos = m_pageList.count()-1;
-    QPtrListIterator<KoView> it( views() );
-    for (; it.current(); ++it )
-        static_cast<KPrView*>(it.current())->updateSideBar();
+    foreach ( KoView* view, views() )
+        static_cast<KPrView*>(view)->updateSideBar();
     _clean = clean;
     updatePresentationButton();
 
     //activate this page in all views (...)
-    QPtrListIterator<KoView>it2( views() );
-    for (; it2.current(); ++it2 )
-        static_cast<KPrView*>(it2.current())->skipToPage(newPos);
+    foreach ( KoView* view, views() )
+        static_cast<KPrView*>(view)->skipToPage(newPos);
 }
 
 void KPrDocument::spellCheckParagraphDeleted( KoTextParag * /* _parag */,  KPrTextObject * /* frm */ )
@@ -4689,39 +4659,34 @@ void KPrDocument::spellCheckParagraphDeleted( KoTextParag * /* _parag */,  KPrTe
 
 void KPrDocument::updateRulerInProtectContentMode()
 {
-    QPtrListIterator<KoView> it( views() );
-    for (; it.current(); ++it )
-        static_cast<KPrView*>(it.current())->updateRulerInProtectContentMode();
+    foreach ( KoView* view, views() )
+        static_cast<KPrView*>(view)->updateRulerInProtectContentMode();
 }
 
 void KPrDocument::updatePresentationButton()
 {
-    QPtrListIterator<KoView> it( views() );
-    for (; it.current(); ++it )
-        static_cast<KPrView*>(it.current())->updatePresentationButton((selectedSlides().count()>0));
+    foreach ( KoView* view, views() )
+        static_cast<KPrView*>(view)->updatePresentationButton((selectedSlides().count()>0));
 }
 
 void KPrDocument::refreshGroupButton()
 {
-    QPtrListIterator<KoView> it( views() );
-    for (; it.current(); ++it )
-        static_cast<KPrView*>(it.current())->refreshGroupButton();
+    foreach ( KoView* view, views() )
+        static_cast<KPrView*>(view)->refreshGroupButton();
 }
 
 void KPrDocument::addView( KoView *_view )
 {
     KoDocument::addView( _view );
-    QPtrListIterator<KoView> it( views() );
-    for (; it.current(); ++it )
-        static_cast<KPrView*>(it.current())->closeTextObject();
+    foreach ( KoView* view, views() )
+        static_cast<KPrView*>(view)->closeTextObject();
 }
 
 void KPrDocument::removeView( KoView *_view )
 {
     KoDocument::removeView( _view );
-    QPtrListIterator<KoView> it( views() );
-    for (; it.current(); ++it )
-        static_cast<KPrView*>(it.current())->deSelectAllObjects();
+    foreach ( KoView* view, views() )
+        static_cast<KPrView*>(view)->deSelectAllObjects();
 }
 
 void KPrDocument::updateStyleListOrder( const QStringList &list )
@@ -4731,9 +4696,8 @@ void KPrDocument::updateStyleListOrder( const QStringList &list )
 
 void KPrDocument::updateDirectCursorButton()
 {
-    QPtrListIterator<KoView> it( views() );
-    for (; it.current(); ++it )
-        static_cast<KPrView*>(it.current())->updateDirectCursorButton();
+    foreach ( KoView* view, views() )
+        static_cast<KPrView*>(view)->updateDirectCursorButton();
 }
 
 void KPrDocument::setInsertDirectCursor(bool _b)
@@ -4748,7 +4712,7 @@ void KPrDocument::setInsertDirectCursor(bool _b)
 KPrView *KPrDocument::firstView() const
 {
     if ( views().count()>0)
-        return static_cast<KPrView*>(views().getFirst());
+        return static_cast<KPrView*>(views().first());
     else
         return 0L;
 }

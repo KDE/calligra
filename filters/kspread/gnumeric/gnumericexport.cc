@@ -1080,7 +1080,7 @@ KoFilter::ConversionStatus GNUMERICExport::convert( const QByteArray& from, cons
 
     QString str;
 
-    View * view = static_cast<View*>( ksdoc->views().getFirst());
+    View * view = static_cast<View*>( ksdoc->views().first());
     Canvas * canvas=0L;
     QString activeTableName;
     if (view)

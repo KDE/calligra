@@ -32,8 +32,8 @@
 
 #include <KoFilterManager.h>
 
-KugarPart::KugarPart( QWidget *parentWidget, const char *widgetName, 
-                      QObject* parent, const char* name, bool singleViewMode ) 
+KugarPart::KugarPart( QWidget *parentWidget, const char *widgetName,
+                      QObject* parent, const char* name, bool singleViewMode )
     : KoDocument( parentWidget, widgetName, parent, name, singleViewMode ),
     m_templateOk( false )
 {
@@ -49,7 +49,7 @@ KugarPart::~KugarPart()
     //  closeURL();
 }
 
-bool KugarPart::loadOasis( const QDomDocument&, KoOasisStyles&, 
+bool KugarPart::loadOasis( const QDomDocument&, KoOasisStyles&,
                            const QDomDocument&, KoStore* )
 {
     return false;
@@ -78,17 +78,11 @@ bool KugarPart::loadXML( QIODevice *file, const QDomDocument & /*doc*/ )
                 m_reportEngine->renderReport();
                 if ( ok )
                 {
-                    Q3PtrList<KoView> vs = views();
-                    if ( vs.count() )
+                    foreach ( KoView* view, views() )
                     {
-                        for ( KoView * v = vs.first();v;v = vs.next() )
-                        {
-
-                            ok = static_cast<KugarView*>( qobject_cast<KugarView*>(v))->renderReport();
-                            if ( !ok )
-                                break;
-								
-						}
+                        ok = static_cast<KugarView*>( qobject_cast<KugarView*>(view))->renderReport();
+                        if ( !ok )
+                            break;
                     }
                 }
             }
@@ -116,7 +110,7 @@ bool KugarPart::initDoc( InitDocFlags /*flags*/, QWidget* /*parentWidget*/ )
     QString filename;
     bool ok = false;
 
-    KFileDialog *dialog = 
+    KFileDialog *dialog =
         new KFileDialog( QString::null, QString::null, 0L);
     dialog->setMimeFilter( KoFilterManager::mimeFilter( KoDocument::readNativeFormatMimeType(),
                            KoFilterManager::Import ) );
