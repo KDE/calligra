@@ -33,6 +33,7 @@
 #include <QLinkedList>
 #include <QList>
 #include <QMap>
+#include <QMimeData>
 #include <QPixmap>
 #include <QRegExp>
 #include <QStack>
@@ -207,49 +208,6 @@ void ChartBinding::cellChanged( Cell* /*changedCell*/ )
 }
 
 
-/******************************************************************/
-/* Class: TextDrag                                               */
-/******************************************************************/
-
-
-TextDrag::TextDrag( QWidget * dragSource, const char * name )
-    : Q3TextDrag( dragSource, name )
-{
-}
-
-TextDrag::~TextDrag()
-{
-}
-
-
-QByteArray TextDrag::encodedData( const char * mime ) const
-{
-  if ( strcmp( selectionMimeType(), mime ) == 0)
-    return m_kspread;
-  else
-    return Q3TextDrag::encodedData( mime );
-}
-
-bool TextDrag::canDecode( QMimeSource* e )
-{
-  if ( e->provides( selectionMimeType() ) )
-    return true;
-  return Q3TextDrag::canDecode(e);
-}
-
-const char * TextDrag::format( int i ) const
-{
-  if ( i < 4 ) // HACK, but how to do otherwise ??
-    return Q3TextDrag::format(i);
-  else if ( i == 4 )
-    return selectionMimeType();
-  else return 0;
-}
-
-const char * TextDrag::selectionMimeType()
-{
-  return "application/x-kspread-snippet";
-}
 
 /*****************************************************************************
  *
@@ -5051,11 +5009,11 @@ void Sheet::copySelection( Selection* selectionInfo )
     str << doc;
     buffer.close();
 
-    TextDrag * kd = new TextDrag( 0 );
-    kd->setPlain( copyAsText(selectionInfo) );
-    kd->setKSpread( buffer.buffer() );
+    QMimeData* mimeData = new QMimeData();
+    mimeData->setText( copyAsText(selectionInfo) );
+    mimeData->setData( "application/x-kspread-snippet", buffer.buffer() );
 
-    QApplication::clipboard()->setData( kd );
+    QApplication::clipboard()->setMimeData( mimeData );
 }
 
 void Sheet::cutSelection( Selection* selectionInfo )
@@ -5070,11 +5028,11 @@ void Sheet::cutSelection( Selection* selectionInfo )
     str << doc;
     buffer.close();
 
-    TextDrag * kd = new TextDrag( 0 );
-    kd->setPlain( copyAsText(selectionInfo) );
-    kd->setKSpread( buffer.buffer() );
+    QMimeData* mimeData = new QMimeData();
+    mimeData->setText( copyAsText(selectionInfo) );
+    mimeData->setData( "application/x-kspread-snippet", buffer.buffer() );
 
-    QApplication::clipboard()->setData( kd );
+    QApplication::clipboard()->setMimeData( mimeData );
 
     deleteSelection( selectionInfo, true );
 }
@@ -5084,18 +5042,19 @@ void Sheet::paste( const QRect& pasteArea, bool makeUndo,
                    bool insert, int insertTo, bool pasteFC,
                    QClipboard::Mode clipboardMode )
 {
-    QMimeSource * mime = QApplication::clipboard()->data( clipboardMode );
-    if ( !mime )
+    const QMimeData* mimeData = QApplication::clipboard()->mimeData( clipboardMode );
+    if ( !mimeData )
         return;
 
     QByteArray b;
 
-    if ( mime->provides( TextDrag::selectionMimeType() ) )
+    if ( mimeData->hasFormat( "application/x-kspread-snippet" ) )
     {
-        b = mime->encodedData( TextDrag::selectionMimeType() );
+      b = mimeData->data( "application/x-kspread-snippet" );
     }
-    else if( mime->provides( "text/plain" ) )
+    else if( mimeData->hasText() )
     {
+        // ### Stefan: Is this still true for Qt4?
         // Note: QClipboard::text() seems to do a better job than encodedData( "text/plain" )
         // In particular it handles charsets (in the mimetype). Copied from KPresenter ;-)
         QString _text = QApplication::clipboard()->text( clipboardMode );

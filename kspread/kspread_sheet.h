@@ -22,7 +22,6 @@
 #ifndef KSPREAD_SHEET
 #define KSPREAD_SHEET
 
-#include <Q3TextDrag>
 #include <QClipboard>
 #include <QHash>
 #include <QList>
@@ -136,38 +135,6 @@ public:
 
 private:
     EmbeddedChart* m_child;
-};
-
-/********************************************************************
- *
- * TextDrag
- *
- ********************************************************************/
-
-/**
- * @short This is a class for handling clipboard data
- */
-
-class TextDrag : public Q3TextDrag
-{
-    Q_OBJECT
-
-public:
-    TextDrag( QWidget * dragSource = 0, const char * name = 0L );
-    virtual ~TextDrag();
-
-    void setPlain( QString const & _plain ) { setText( _plain ); }
-    void setKSpread( QByteArray const & _kspread ) { m_kspread = _kspread; }
-
-    virtual QByteArray encodedData( const char * mime ) const;
-    virtual const char* format( int i ) const;
-
-    static bool canDecode( QMimeSource * e );
-
-    static const char * selectionMimeType();
-
-protected:
-    QByteArray m_kspread;
 };
 
 

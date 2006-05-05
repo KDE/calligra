@@ -1576,7 +1576,6 @@ void Canvas::startTheDrag()
     return;
 
   // right area for start dragging
-  TextDrag * d = new TextDrag( this );
   setCursor( KCursor::handCursor() );
 
   QDomDocument doc = sheet->saveCellRegion(*selectionInfo());
@@ -1589,10 +1588,14 @@ void Canvas::startTheDrag()
   str << doc;
   buffer.close();
 
-  d->setPlain( sheet->copyAsText( selectionInfo() ) );
-  d->setKSpread( buffer.buffer() );
+  QMimeData* mimeData = new QMimeData();
+  mimeData->setText( sheet->copyAsText( selectionInfo() ) );
+  mimeData->setData( "application/x-kspread-snippet", buffer.buffer() );
 
-  d->dragCopy();
+  QDrag *drag = new QDrag(this);
+  drag->setMimeData( mimeData );
+  drag->start();
+
   setCursor( KCursor::arrowCursor() );
 }
 
@@ -1731,7 +1734,10 @@ void Canvas::dragMoveEvent( QDragMoveEvent * _ev )
     return;
   }
 
-  _ev->setAccepted( TextDrag::canDecode( _ev ) );
+  const QMimeData* mimeData = _ev->mimeData();
+
+  _ev->setAccepted( mimeData->hasText() ||
+                    mimeData->hasFormat( "application/x-kspread-snippet" ) );
 
   double dwidth = d->view->doc()->unzoomItX( width() );
   double xpos = sheet->dblColumnPos( selectionInfo()->lastRange().left() );
@@ -1799,7 +1805,8 @@ void Canvas::dropEvent( QDropEvent * _ev )
   int col = sheet->leftColumn( ev_PosX, tmp );
   int row = sheet->topRow( ev_PosY, tmp );
 
-  if ( !TextDrag::canDecode( _ev ) )
+  const QMimeData* mimeData = _ev->mimeData();
+  if ( !mimeData->hasText() && !mimeData->hasFormat( "application/x-kspread-snippet" ) )
   {
     _ev->ignore();
     return;
@@ -1809,9 +1816,11 @@ void Canvas::dropEvent( QDropEvent * _ev )
 
   bool makeUndo = true;
 
-  if ( _ev->provides( TextDrag::selectionMimeType() ) )
+  if ( mimeData->hasFormat( "application/x-kspread-snippet" ) )
   {
-    if ( TextDrag::target() == _ev->source() )
+    /* ### Stefan: Deletion should be done by the source. Next line was:
+    if ( TextDrag::target() == _ev->source() ) */
+    if ( _ev->source() == this  )
     {
       if ( !d->view->doc()->undoLocked() )
       {
@@ -1827,22 +1836,14 @@ void Canvas::dropEvent( QDropEvent * _ev )
     }
 
 
-    b = _ev->encodedData( TextDrag::selectionMimeType() );
+    b = _ev->data( "application/x-kspread-snippet" );
     sheet->paste( b, QRect( col, row, 1, 1 ), makeUndo );
 
     _ev->setAccepted(true);
   }
   else
   {
-    QString text;
-    if ( !Q3TextDrag::decode( _ev, text ) )
-    {
-      _ev->ignore();
-      return;
-    }
-    //    if ( TextDrag::target() == _ev->source() )
-    //      sheet->deleteSelection( selectionInfo() );
-
+    QString text = mimeData->text();
     sheet->pasteTextPlain( text, QRect( col, row, 1, 1 ) );
     _ev->setAccepted(true);
     return;
