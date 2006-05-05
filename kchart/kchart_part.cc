@@ -227,12 +227,12 @@ void KChartPart::generateBarChartTemplate()
 
 		// Fill column label, but only on the first iteration.
 		if (row == 0) {
-		    m_colLabels << i18n("Column %1").arg(col + 1);
+		    m_colLabels << i18n("Column %1",col + 1);
 		}
             }
 
 	    // Fill row label.
-	    m_rowLabels << i18n("Row %1").arg(row + 1);
+	    m_rowLabels << i18n("Row %1",row + 1);
 	}
     }
 
@@ -977,7 +977,7 @@ bool KChartPart::loadOasis( const QDomDocument& doc,
         if ( localName.isEmpty() )
             setErrorMessage( i18n( "Invalid OASIS OpenDocument file. No tag found inside office:body." ) );
         else
-            setErrorMessage( i18n( "This document is not a chart, but %1. Please try opening it with the appropriate application." ).arg( KoDocument::tagNameToDocumentType( localName ) ) );
+            setErrorMessage( i18n( "This document is not a chart, but %1. Please try opening it with the appropriate application." , KoDocument::tagNameToDocumentType( localName ) ) );
 
         return false;
     }

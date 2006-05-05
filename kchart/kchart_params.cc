@@ -242,7 +242,7 @@ bool KChartParams::loadOasis( const QDomElement     &chartElem,
 
     // If we can't find out what charttype it is, we might as well end here.
     if ( !knownType ) {
-        errorMessage = i18n( "Unknown chart type %1" ).arg( chartClass );
+        errorMessage = i18n( "Unknown chart type %1" ,chartClass );
         kDebug(35001) << errorMessage << endl;
         return false;
     }

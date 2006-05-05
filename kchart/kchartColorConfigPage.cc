@@ -223,7 +223,7 @@ void KChartColorConfigPage::initDataColorList()
         extColor.resize( m_params->maxDataColor() );
         if(i<m_params->maxDataColor())
         {
-            _dataColorLB->insertItem(m_params->legendText( i ).isEmpty() ? i18n("Series %1").arg(i+1) :m_params->legendText( i ) );
+            _dataColorLB->insertItem(m_params->legendText( i ).isEmpty() ? i18n("Series %1",i+1) :m_params->legendText( i ) );
             extColor[i] =m_params->dataColor(i);
         }
     }
