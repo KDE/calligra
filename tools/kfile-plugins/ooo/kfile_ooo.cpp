@@ -243,7 +243,7 @@ void KOfficePlugin::getEditingTime(KFileMetaInfoGroup group1,
 		int res = getNumber(txt, &pos);
 		if (pos >= len)
 			return;
-		switch (txt.at(pos).latin1()){
+		switch (txt.at(pos).toLatin1()){
 			case 'H':
 				hours = res;
 				break;
@@ -460,31 +460,28 @@ bool KOfficePlugin::writeInfo( const KFileMetaInfo& info) const
  */
 bool copyZipToZip( const KZip * src, KZip * dest)
 {
-  KArchiveDirectory * src_dir;
-  KArchiveFile * input_file;
   Q3PtrStack<KArchiveDirectory> src_dirStack ;
-  QStringList dirEntries;
   QStringList curDirName;
-  QStringList::Iterator it;
-  KArchiveEntry* curEntry;
-  QString filename = QString::null;
 
   src_dirStack.push ( src->directory()  );
 
   do {
-    src_dir = src_dirStack.pop();
+    KArchiveDirectory * src_dir = src_dirStack.pop();
     curDirName.append(src_dir->name());
-    dirEntries = src_dir->entries();
+    const QStringList dirEntries = src_dir->entries();
 
     /* We now iterate over all entries and create entries in dest */
+    QStringList::const_iterator it;
     for ( it = dirEntries.begin(); it != dirEntries.end(); ++it ) {
       if ( *it == metafile )
 	continue;
-      curEntry = src_dir->entry( *it );
+
+      const KArchiveEntry* curEntry = src_dir->entry( *it );
 
       if (curEntry->isFile()) {
-        input_file = dynamic_cast<KArchiveFile*>( curEntry );
+        const KArchiveFile * input_file = dynamic_cast<const KArchiveFile*>( curEntry );
 	QByteArray b = input_file->data();
+        QString filename;
 	if (curDirName.isEmpty() || src_dir->name()=="/"){
 		filename = *it;
 	} else {
@@ -493,7 +490,7 @@ bool copyZipToZip( const KZip * src, KZip * dest)
 	dest->writeFile(filename , QString::null, QString::null,b.data(), b.count() );
       } else
         if (curEntry->isDirectory()) {
-          src_dirStack.push( dynamic_cast<KArchiveDirectory*>( curEntry ) );
+          src_dirStack.push( dynamic_cast<const KArchiveDirectory*>( curEntry ) );
         }
         else {
 		kDebug(7034) << *it << " is a unknown type. Aborting." << endl;
@@ -515,12 +512,11 @@ bool KOfficePlugin::writeMetaData(const QString & path,
     /* To correct problem with OOo 1.1, we have to recreate the file from scratch */
     if (!m_zip->open(QIODevice::WriteOnly) || !current->open(QIODevice::ReadOnly) )
 	    return false;
-    QString text = doc.toString();
+    QByteArray text = doc.toByteArray();
     m_zip->setCompression(KZip::DeflateCompression);
     if (!copyZipToZip(current, m_zip))
 	    return false;
-    m_zip->writeFile(QString(metafile), QString::null, QString::null,text.length(),
-		     text);
+    m_zip->writeFile(QString(metafile), QString::null, QString::null,text,text.length());
     delete current;
     delete m_zip;
     // NULL as third parameter is not good, but I don't know the Window ID
@@ -533,10 +529,10 @@ bool KOfficePlugin::writeMetaData(const QString & path,
 }
 
 
-QIODevice* KOfficePlugin::getData(KArchive &m_zip, int fileMode) const
+QIODevice* KOfficePlugin::getData(KArchive &m_zip) const
 {
 
-    if ( !m_zip.open(fileMode) || !m_zip.directory())
+    if ( !m_zip.open(QIODevice::ReadOnly) || !m_zip.directory())
         return 0;
 
     const KArchiveEntry* entry = m_zip.directory()->entry( metafile );
@@ -553,13 +549,13 @@ QDomDocument KOfficePlugin::getMetaDocument(const QString &path) const
 {
     QDomDocument doc;
     KZip m_zip(path);
-    QIODevice * io = getData(m_zip, QIODevice::ReadOnly);
+    QIODevice * io = getData(m_zip);
     if (!io || !io->isReadable())
 	    return doc;
     QString errorMsg;
     int errorLine, errorColumn;
     if ( !doc.setContent( io, &errorMsg, &errorLine, &errorColumn ) ){
-      kDebug(7034) << "Error " << errorMsg.latin1()
+      kDebug(7034) << "Error " << errorMsg
 		    << "while getting XML content at line "
 		    << errorLine << ", column "<< errorColumn << endl;
     	delete io;
@@ -583,7 +579,7 @@ QValidator * KOfficePlugin::createValidator(const QString &,      /* mimetype */
 {
 	if (key == dclanguage)
 		return new QRegExpValidator(QRegExp("[a-zA-Z-]{1,5}"),
-					    parent, name);
+					    parent);
 	return 0;
 }
 

@@ -64,7 +64,7 @@ private:
     KFileMimeTypeInfo::GroupInfo* userdefined;
     void addAttributeInfo(const QDomElement & elem, KFileMetaInfoGroup & group,
 		          const QString &attributeName);
-    QIODevice* getData(KArchive &m_zip, int fileMode) const;
+    QIODevice* getData(KArchive &m_zip) const;
     bool writeMetaData(const QString & path, const QDomDocument &doc) const;
     QDomDocument getMetaDocument(const QString &path) const;
     QDomNode getBaseNode(const QDomDocument &doc) const;
