@@ -174,7 +174,7 @@ void HideSheetCommand::unexecute()
 
 QString HideSheetCommand::name() const
 {
-    QString n = QString( i18n("Hide Sheet %1") ).arg( sheetName );
+    QString n = i18n("Hide Sheet %1").arg( sheetName );
     if( n.length() > 64 ) n = i18n("Hide Sheet");
     return n;
 }
@@ -205,7 +205,7 @@ void ShowSheetCommand::unexecute()
 
 QString ShowSheetCommand::name() const
 {
-    QString n = QString( i18n("Show Sheet %1") ).arg( sheetName );
+    QString n = i18n("Show Sheet %1").arg( sheetName );
     if( n.length() > 64 ) n = i18n("Show Sheet");
     return n;
 }
