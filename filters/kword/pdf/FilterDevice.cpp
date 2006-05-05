@@ -352,7 +352,7 @@ void Device::drawImageMask(GfxState *state, Object *, Stream *str,
         Guchar *p = istr->getLine();
         QRgb *pix = (QRgb *)_currentImage.image.scanLine(offset + j);
         for (int i=0; i<width; i++)
-            pix[i] = qRgba(Qt::red, Qt::green, Qt::blue, 255 * p[i]);
+            pix[i] = qRgba(red, green, blue, 255 * p[i]);
     }
     delete istr;
 
