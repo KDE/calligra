@@ -117,7 +117,7 @@ int main( int argc, char **argv )
         KMimeType::Ptr inputMimetype = KMimeType::findByURL( uIn );
         if ( inputMimetype->name() == KMimeType::defaultMimeType() )
         {
-            kError() << i18n("Mimetype for input file %1 not found!").arg(uIn.prettyURL()) << endl;
+            kError() << i18n("Mimetype for input file %1 not found!",uIn.prettyURL()) << endl;
             return 1;
         }
         KMimeType::Ptr outputMimetype;
@@ -127,7 +127,7 @@ int main( int argc, char **argv )
             outputMimetype = KMimeType::mimeType( mime );
             if ( outputMimetype->name() == KMimeType::defaultMimeType() )
             {
-                kError() << i18n("Mimetype not found %1").arg(mime) << endl;
+                kError() << i18n("Mimetype not found %1",mime) << endl;
                 return 1;
             }
         }
