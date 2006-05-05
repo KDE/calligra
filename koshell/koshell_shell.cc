@@ -509,7 +509,7 @@ void KoShellWindow::switchToPage( Q3ValueList<Page>::Iterator it )
   v->setFocus();
 
   partSpecificHelpAction->setEnabled(true);
-  partSpecificHelpAction->setText(i18n("%1 Handbook").arg((*m_activePage).m_pDoc->instance()->aboutData()->programName()));
+  partSpecificHelpAction->setText(i18n("%1 Handbook",(*m_activePage).m_pDoc->instance()->aboutData()->programName()));
 }
 
 void KoShellWindow::slotFileNew()
