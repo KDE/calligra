@@ -101,12 +101,11 @@ void CSVExportDialog::fillSheet( Map * map )
   m_dialog->m_sheetList->clear();
   Q3CheckListItem * item;
 
-  Q3PtrListIterator<Sheet> it( map->sheetList() );
-  for( ; it.current(); ++it )
+  foreach( Sheet* sheet, map->sheetList() )
   {
     item = new Q3CheckListItem( m_dialog->m_sheetList,
-                               it.current()->sheetName(),
-                               Q3CheckListItem::CheckBox );
+                                sheet->sheetName(),
+                                Q3CheckListItem::CheckBox );
     item->setOn(true);
     m_dialog->m_sheetList->insertItem( item );
   }

@@ -49,7 +49,7 @@ CSVDialog::CSVDialog(QWidget* parent, QByteArray& fileArray, const QString /*sep
       m_endRow(-1),
       m_endCol(-1),
       m_textquote('"'),
-      m_delimiter(","),
+      m_delimiter(','),
       m_ignoreDups(false),
       m_fileArray(fileArray),
       m_dialog(new DialogUI(this)),
@@ -173,15 +173,12 @@ void CSVDialog::fillTable( )
             {
                 state = S_QUOTED_FIELD;
             }
-#warning "kde4: port it"
-#if 0			
             else if (x == m_delimiter)
             {
                 if ((m_ignoreDups == false) || (lastCharDelimiter == false))
                     ++column;
                 lastCharDelimiter = true;
             }
-#endif			
             else if (x == '\n')
             {
                 ++row;
@@ -450,7 +447,7 @@ void CSVDialog::returnPressed()
     if (m_dialog->m_delimiterBox->id(m_dialog->m_delimiterBox->selected()) != 4)
         return;
 
-    m_delimiter = m_dialog->m_delimiterEdit->text();
+    m_delimiter = m_dialog->m_delimiterEdit->text()[0];
     fillTable();
 }
 
@@ -479,19 +476,19 @@ void CSVDialog::delimiterClicked(int id)
     switch (id)
     {
     case 0: // comma
-        m_delimiter = ",";
+        m_delimiter = ',';
         break;
     case 4: // other
-        m_delimiter = m_dialog->m_delimiterEdit->text();
+        m_delimiter = m_dialog->m_delimiterEdit->text()[0];
         break;
     case 2: // tab
-        m_delimiter = "\t";
+        m_delimiter = '\t';
         break;
     case 3: // space
-        m_delimiter = " ";
+        m_delimiter = ' ';
         break;
     case 1: // semicolon
-        m_delimiter = ";";
+        m_delimiter = ';';
         break;
     }
 

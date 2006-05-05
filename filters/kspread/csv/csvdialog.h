@@ -65,7 +65,7 @@ private:
     int     m_endRow;
     int     m_endCol;
     QChar   m_textquote;
-    QString m_delimiter;
+    QChar   m_delimiter;
     bool    m_ignoreDups;
     QByteArray m_fileArray;
     DialogUI * m_dialog;

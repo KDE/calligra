@@ -238,7 +238,7 @@ KoFilter::ConversionStatus CSVExport::convert( const QByteArray & from, const QB
           str += csvDelimiter;
       }
 
-      // This is to deal with the case of non-rectangular selections 
+      // This is to deal with the case of non-rectangular selections
       for ( ; idxCol < CSVMaxCol; ++idxCol )
           str += csvDelimiter;
 
@@ -248,11 +248,8 @@ KoFilter::ConversionStatus CSVExport::convert( const QByteArray & from, const QB
   else
   {
     kDebug(30501) << "Export as full mode" << endl;
-    Q3PtrListIterator<Sheet> it( ksdoc->map()->sheetList() );
-    for( ; it.current(); ++it )
+    foreach( Sheet const * const sheet, ksdoc->map()->sheetList() )
     {
-      Sheet const * const sheet = it.current();
-
       if (expDialog && !expDialog->exportSheet( sheet->sheetName() ) )
       {
         continue;
