@@ -5454,14 +5454,14 @@ void Sheet::loadSelectionUndo(const QDomDocument& d, const QRect& loadArea,
 
 bool Sheet::testAreaPasteInsert() const
 {
-    QMimeSource* mime = QApplication::clipboard()->data( QClipboard::Clipboard );
-    if ( !mime )
+    const QMimeData* mimeData = QApplication::clipboard()->mimeData( QClipboard::Clipboard );
+    if ( !mimeData )
         return false;
 
     QByteArray byteArray;
 
-    if ( mime->provides( "application/x-kspread-snippet" ) )
-        byteArray = mime->encodedData( "application/x-kspread-snippet" );
+    if ( mimeData->hasFormat( "application/x-kspread-snippet" ) )
+        byteArray = mimeData->data( "application/x-kspread-snippet" );
     else
         return false;
 

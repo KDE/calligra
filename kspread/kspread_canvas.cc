@@ -79,7 +79,6 @@
 
 #include <KoOasisStore.h>
 #include <KoStore.h>
-#include <KoStoreDrag.h>
 #include <KoXmlWriter.h>
 #include <KoDocumentChild.h>
 #include <KoRect.h>

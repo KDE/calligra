@@ -91,7 +91,6 @@
 #include <KoOasisStore.h>
 #include <KoOasisStyles.h>
 #include <KoPartSelectAction.h>
-#include <KoStoreDrag.h>
 #include <KoTabBar.h>
 #include <kspread_toolbox.h>
 #include <KoTemplateCreateDia.h>
@@ -3874,15 +3873,13 @@ void View::paste()
   if (!koDocument()->isReadWrite()) // don't paste into a read only document
     return;
 
-  QMimeSource *data = QApplication::clipboard()->data( QClipboard::Clipboard );
-  for ( int i=0; data->format(i) != 0; i++ )
-    kDebug() << "format:" << data->format(i) << endl;
+  const QMimeData* mimeData = QApplication::clipboard()->mimeData( QClipboard::Clipboard );
 
-  if ( data->provides( KoStoreDrag::mimeType("application/vnd.oasis.opendocument.spreadsheet" ) ))
+  if ( mimeData->hasFormat( "application/vnd.oasis.opendocument.spreadsheet" ) )
   {
     canvasWidget()->deselectAllObjects();
     QByteArray returnedTypeMime = "application/vnd.oasis.opendocument.spreadsheet";
-    QByteArray arr = data->encodedData( returnedTypeMime );
+    QByteArray arr = mimeData->data( returnedTypeMime );
     if( arr.isEmpty() )
       return;
     QBuffer buffer( &arr );
