@@ -198,13 +198,13 @@ CSVDialog::CSVDialog( View * parent, const char * name, QRect const & rect, Mode
       return;
     }
 
-    if ( !mime->hasText() /*### !mime->provides( "text/plain" )*/ )
+    if ( !mime->hasText() )
     {
       KMessageBox::information( this, i18n("There is no usable data in the clipboard.") );
       m_cancelled = true;
       return;
     }
-    m_fileArray = QByteArray( mime->data( "text/plain" ) );
+    m_fileArray = QByteArray( mime->text().toUtf8() );
   }
   else if ( mode == File )
   {
