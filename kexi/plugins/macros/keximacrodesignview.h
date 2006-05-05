@@ -82,13 +82,22 @@ class KexiMacroDesignView : public KexiMacroView
 		*/
 		void rowUpdated(KexiTableItem* item);
 
+		/**
+		* Called if a row got deleted.
+		*/
 		void rowDeleted();
+
+		/**
+		* Called if a row got inserted.
+		*/
 		void rowInserted(KexiTableItem* item, uint row, bool repaint);
 
 		/**
 		* Called if a property in the \a KoProperty got changed.
 		*/
 		void propertyChanged(KoProperty::Set&, KoProperty::Property&);
+
+		void reloadProperties();
 
 	private:
 		/// \internal d-pointer class.
@@ -100,6 +109,12 @@ class KexiMacroDesignView : public KexiMacroView
 		* Update the table's data.
 		*/
 		void updateData();
+
+		/**
+		* Update the \a KoProperty::Set set with the passed \a KoMacro::MacroItem
+		* \p item and the variablename \p variablename .
+		*/
+		bool updateSet(KoProperty::Set* set, KSharedPtr<KoMacro::MacroItem> item, const QString& variablename);
 
 		/**
 		* Update the properties of the \a KoProperty::Set \p set at

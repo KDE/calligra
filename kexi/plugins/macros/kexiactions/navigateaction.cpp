@@ -103,10 +103,12 @@ KoMacro::Variable::List NavigateAction::notifyUpdated(const QString& variablenam
 			KoMacro::Variable* rowvar = new KexiVariable<NavigateAction>(this, "row", i18n("Row"));
 			rowvar->setVariant(0);
 			list.append( KoMacro::Variable::Ptr(rowvar) );
+setVariable(KoMacro::Variable::Ptr( rowvar ));
 
 			KoMacro::Variable* colvar = new KexiVariable<NavigateAction>(this, "col", i18n("Column"));
-			colvar->setVariant(0);
+			colvar->setVariant(-1);
 			list.append( KoMacro::Variable::Ptr(colvar) );
+setVariable(KoMacro::Variable::Ptr( colvar ));
 		}
 	}
 
