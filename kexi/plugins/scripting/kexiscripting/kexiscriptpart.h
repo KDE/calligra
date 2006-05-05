@@ -56,7 +56,7 @@ class KexiScriptPart : public KexiPart::Part
          * Implementation of the \a KexiPart::Part::execute method used to
          * execute the passed \p item instance.
          */
-        virtual bool execute(KexiPart::Item* item);
+        virtual bool execute(KexiPart::Item* item, QObject* sender = 0);
 
         /**
          * \return the i18n message for the passed \p englishMessage string.
