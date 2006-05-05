@@ -43,7 +43,8 @@
 using namespace KSpread;
 
 ListDialog::ListDialog( QWidget* parent, const char* name )
-  : KDialogBase( KDialogBase::Plain, Qt::Dialog, parent, name, true, i18n("Custom Lists"), Ok|Cancel )
+  : KDialogBase( KDialogBase::Plain, Qt::Dialog, parent, name, true,
+                 i18n("Custom Lists"), Ok|Cancel )
 {
   QWidget* page = plainPage();
 
@@ -56,7 +57,7 @@ ListDialog::ListDialog( QWidget* parent, const char* name )
   grid1->addWidget(lab,0,0);
 
   list=new Q3ListBox(page);
-  grid1->addWidget(list,1,8,0,0);
+  grid1->addWidget(list,1,0,7,1);
 
 
   lab=new QLabel(page);
@@ -64,7 +65,7 @@ ListDialog::ListDialog( QWidget* parent, const char* name )
   grid1->addWidget(lab,0,1);
 
   entryList=new Q3MultiLineEdit(page);
-  grid1->addWidget(entryList,1,8,1,1);
+  grid1->addWidget(entryList,1,1,7,1);
 
   m_pRemove=new QPushButton(i18n("&Remove"),page);
   grid1->addWidget(m_pRemove,3,2);

@@ -20,7 +20,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <q3buttongroup.h>
+#include <QButtonGroup>
+#include <QGroupBox>
 #include <qcheckbox.h>
 #include <qclipboard.h>
 #include <qcombobox.h>
@@ -72,8 +73,8 @@ CSVDialog::CSVDialog( View * parent, const char * name, QRect const & rect, Mode
 
   QWidget* page = plainPage();
   MyDialogLayout = new QGridLayout( page );
-  MyDialogLayout->setMargin(11);
-  MyDialogLayout->setSpacing(6);
+  MyDialogLayout->setMargin( KDialog::marginHint() );
+  MyDialogLayout->setSpacing( KDialog::spacingHint() );
 
   // Limit the range
   int column = m_targetRect.left();
@@ -87,23 +88,22 @@ CSVDialog::CSVDialog( View * parent, const char * name, QRect const & rect, Mode
   m_sheet->setNumRows( 0 );
   m_sheet->setNumCols( 0 );
 
-  MyDialogLayout->addWidget( m_sheet, 3, 3, 0, 3 );
+  MyDialogLayout->addWidget( m_sheet, 3, 0, 1, 4 );
 
   // Delimiter: comma, semicolon, tab, space, other
-  m_delimiterBox = new Q3ButtonGroup( page, "m_delimiterBox" );
+  m_delimiterBox = new QGroupBox( page );
   m_delimiterBox->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)1, (QSizePolicy::SizeType)1 ) );
   m_delimiterBox->setTitle( i18n( "Delimiter" ) );
-  m_delimiterBox->setColumnLayout(0, Qt::Vertical );
-  m_delimiterBox->layout()->setSpacing( KDialog::spacingHint() );
-  m_delimiterBox->layout()->setMargin( KDialog::marginHint() );
   m_delimiterBoxLayout = new QGridLayout( m_delimiterBox );
+  m_delimiterBoxLayout->setSpacing( KDialog::spacingHint() );
+  m_delimiterBoxLayout->setMargin( KDialog::marginHint() );
   m_delimiterBoxLayout->setAlignment( Qt::AlignTop );
-  MyDialogLayout->addWidget( m_delimiterBox, 0, 2, 0, 0 );
+  MyDialogLayout->addWidget( m_delimiterBox, 0, 0, 3, 1 );
 
   m_ignoreDuplicates = new QCheckBox( page );
   m_ignoreDuplicates->setText( i18n( "Ignore duplicate delimiters" ) );
 
-  MyDialogLayout->addWidget( m_ignoreDuplicates, 2, 2, 2, 3 );
+  MyDialogLayout->addWidget( m_ignoreDuplicates, 2, 2, 1, 2 );
 
   m_radioComma = new QRadioButton( m_delimiterBox );
   m_radioComma->setText( i18n( "Comma" ) );
@@ -133,19 +133,18 @@ CSVDialog::CSVDialog( View * parent, const char * name, QRect const & rect, Mode
 
 
   // Format: number, text, currency,
-  m_formatBox = new Q3ButtonGroup( page );
+  m_formatBox = new QGroupBox( page );
   m_formatBox->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)1, (QSizePolicy::SizeType)1 ) );
   m_formatBox->setTitle( i18n( "Format" ) );
-  m_formatBox->setColumnLayout(0, Qt::Vertical );
-  m_formatBox->layout()->setSpacing( KDialog::spacingHint() );
-  m_formatBox->layout()->setMargin( KDialog::marginHint() );
   m_formatBoxLayout = new QGridLayout( m_formatBox );
+  m_formatBoxLayout->setSpacing( KDialog::spacingHint() );
+  m_formatBoxLayout->setMargin( KDialog::marginHint() );
   m_formatBoxLayout->setAlignment( Qt::AlignTop );
-  MyDialogLayout->addWidget( m_formatBox, 0, 2, 1, 1 );
+  MyDialogLayout->addWidget( m_formatBox, 0, 1, 3, 1 );
 
   m_radioNumber = new QRadioButton( m_formatBox );
   m_radioNumber->setText( i18n( "Number" ) );
-  m_formatBoxLayout->addWidget( m_radioNumber, 1, 1, 0, 1 );
+  m_formatBoxLayout->addWidget( m_radioNumber, 1, 0, 1, 2 );
 
   m_radioText = new QRadioButton( m_formatBox );
   m_radioText->setText( i18n( "Text" ) );
@@ -154,7 +153,7 @@ CSVDialog::CSVDialog( View * parent, const char * name, QRect const & rect, Mode
 
   m_radioCurrency = new QRadioButton( m_formatBox );
   m_radioCurrency->setText( i18n( "Currency" ) );
-  m_formatBoxLayout->addWidget( m_radioCurrency, 0, 0, 1, 2 );
+  m_formatBoxLayout->addWidget( m_radioCurrency, 0, 1, 1, 2 );
 
   m_radioDate = new QRadioButton( m_formatBox );
   m_radioDate->setText( i18n( "Date" ) );
@@ -512,7 +511,7 @@ void CSVDialog::adjustRows(int iRows)
 
 void CSVDialog::returnPressed()
 {
-  if (m_delimiterBox->id(m_delimiterBox->selected()) != 4)
+  if (m_radioOther->isChecked())
     return;
 
   m_delimiter = m_delimiterEdit->text();
@@ -602,7 +601,7 @@ void CSVDialog::currentCellChanged(int, int col)
   else
     id = 2;
 
-  m_formatBox->setButton(id);
+  m_radioComma->group()->button(id)->setChecked(true);
 }
 
 void CSVDialog::accept()

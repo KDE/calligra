@@ -24,16 +24,11 @@
 #define CSVDIALOG_H
 
 #include <kdialogbase.h>
-//Added by qt3to4:
-#include <QVBoxLayout>
-#include <QHBoxLayout>
-#include <QLabel>
-#include <QGridLayout>
 
 class QVBoxLayout;
 class QHBoxLayout;
 class QGridLayout;
-class Q3ButtonGroup;
+class QGroupBox;
 class QComboBox;
 class QCheckBox;
 class QLabel;
@@ -84,14 +79,14 @@ class CSVDialog : public KDialogBase
   QGridLayout* m_delimiterBoxLayout;
   QGridLayout* m_formatBoxLayout;
   Q3Table* m_sheet;
-  Q3ButtonGroup* m_delimiterBox;
+  QGroupBox* m_delimiterBox;
   QRadioButton* m_radioComma;
   QRadioButton* m_radioSemicolon;
   QRadioButton* m_radioTab;
   QRadioButton* m_radioSpace;
   QRadioButton* m_radioOther;
   QLineEdit* m_delimiterEdit;
-  Q3ButtonGroup* m_formatBox;
+  QGroupBox* m_formatBox;
   QRadioButton* m_radioNumber;
   QRadioButton* m_radioText;
   QRadioButton* m_radioCurrency;
