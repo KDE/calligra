@@ -22,17 +22,15 @@
 #ifndef KSPREAD_SHEET
 #define KSPREAD_SHEET
 
-#include <qclipboard.h>
-#include <q3dragobject.h>
-#include <q3intdict.h>
+#include <Q3TextDrag>
+#include <QClipboard>
+#include <QHash>
 #include <QList>
 #include <QLinkedList>
-#include <q3memarray.h>
-#include <qpen.h>
-#include <qrect.h>
-#include <qwidget.h>
-//Added by qt3to4:
+#include <QPen>
 #include <QPixmap>
+#include <QRect>
+#include <QWidget>
 
 #include <KoDocument.h>
 #include <KoDocumentChild.h>
@@ -1356,7 +1354,7 @@ protected:
                        bool down = true );
 
     static int s_id;
-    static Q3IntDict<Sheet>* s_mapSheets;
+    static QHash<int,Sheet*>* s_mapSheets;
 
 public:
     // see kspread_sheet.cc for an explanation of this

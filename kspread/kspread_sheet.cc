@@ -342,7 +342,7 @@ public:
 };
 
 int Sheet::s_id = 0;
-Q3IntDict<Sheet>* Sheet::s_mapSheets;
+QHash<int,Sheet*>* Sheet::s_mapSheets;
 
 Sheet* Sheet::find( int _id )
 {
@@ -357,7 +357,7 @@ Sheet::Sheet( Map* map, const QString &sheetName, const char *_name )
 {
   setObjectName( _name );
   if ( s_mapSheets == 0 )
-    s_mapSheets = new Q3IntDict<Sheet>;
+    s_mapSheets = new QHash<int,Sheet*>;
   d = new Private;
 
   d->workbook = map;
