@@ -371,7 +371,7 @@ WidgetFactory::eventFilter(QObject *obj, QEvent *ev)
 			return false;
 
 		QWidget *focus = w->topLevelWidget()->focusWidget();
-		if(w != focus && !w->child(focus->name(), focus->className()))
+		if(focus && w != focus && !w->child(focus->name(), focus->className()))
 			resetEditor();
 	}
 	else if(ev->type() == QEvent::KeyPress)
