@@ -81,7 +81,7 @@ QString KWQtSqlPowerSerialDataSource::getValue( const QString &name, int record 
 	if ( num < 0 || num > (int)myquery->size() )
 		return name;
 	if (!myquery->seek(num,false)) return i18n(">>>Illegal position within datasource<<<");
-	if (!myquery->contains(name)) return i18n(">>>Field %1 is unknown in the current database query<<<").arg(name);
+	if (!myquery->contains(name)) return i18n(">>>Field %1 is unknown in the current database query<<<",name);
 	return (myquery->value(name)).toString();
 }
 

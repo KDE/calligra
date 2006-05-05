@@ -170,7 +170,7 @@ QString KWMailMergeKABC::getValue( const QString &name, int record ) const
 
     if( !uidAvailable )
     {
-        return ( i18n ( "KAddressbook entry '%1' not available." ).arg( *_UIDIterator ) );
+        return ( i18n ( "KAddressbook entry '%1' not available." , *_UIDIterator ) );
     }
 
 
@@ -388,7 +388,7 @@ QString KWMailMergeKABC::getValue( const QString &name, int record ) const
         return KABC::Secrecy::typeLabel( secrecy.type() );
     }
 
-    return ( i18n("Unkown mail merge variable: %1").arg ( name ) ) ;
+    return ( i18n("Unkown mail merge variable: %1", name ) ) ;
 }
 
 

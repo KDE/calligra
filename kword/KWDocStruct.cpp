@@ -340,12 +340,12 @@ void KWDocStructTextFrameSetItem::setupTextFrames()
         if ( K3ListViewItem::parent()->firstChild() == this && dok->processingType() == KWDocument::WP )
         {
             if ( dok->numColumns() == 1 )
-                name=i18n( "Page %1" ).arg(QString::number(j + 1));
+                name=i18n( "Page %1" ,QString::number(j + 1));
             else
-                name=i18n( "Column %1" ).arg(QString::number(j + 1));
+                name=i18n( "Column %1" ,QString::number(j + 1));
         }
         else
-            name=i18n( "Text Frame %1" ).arg(QString::number(j + 1));
+            name=i18n( "Text Frame %1" ,QString::number(j + 1));
         KWDocStructTextFrameItem* child = findTextFrameItem(frame);
         if (child)
             child->setText(0, name);
@@ -822,7 +822,7 @@ void KWDocStructRootItem::setupFormulaFrames()
         if ( frameset->type() == FT_FORMULA &&
             frameset->frameCount()>0  )
         {
-            _name=i18n("Formula Frame %1").arg(QString::number(i+1));
+            _name=i18n("Formula Frame %1",QString::number(i+1));
             child = new KWDocStructFormulaItem(this, _name, dynamic_cast<KWFormulaFrameSet*>( frameset ));
         }
     }
@@ -900,7 +900,7 @@ void KWDocStructRootItem::setupPictures()
         frameset = dok->frameSet( i );
         if ( frameset->type() == FT_PICTURE && frameset->frameCount()>0)
         {
-            _name=i18n("Picture (%1) %2").arg(dynamic_cast<KWPictureFrameSet*>( frameset )->key().filename()).arg(++j);
+            _name=i18n("Picture (%1) %2",static_cast<KWPictureFrameSet*>( frameset )->key().filename(),++j);
             child = new KWDocStructPictureItem(this, _name, dynamic_cast<KWPictureFrameSet*>( frameset ));
         }
     }

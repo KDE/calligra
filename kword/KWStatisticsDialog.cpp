@@ -212,7 +212,7 @@ bool KWStatisticsDialog::calcStats( QLabel **resultLabel, bool selection, bool u
     QString flesch = locale->formatNumber( f , 1 );
     if( words < 200 ) {
         // a kind of warning if too few words:
-        flesch = i18n("approximately %1").arg( flesch );
+        flesch = i18n("approximately %1", flesch );
     }
     resultLabel[6]->setText( flesch );
     return true;

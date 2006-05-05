@@ -53,7 +53,7 @@ QString KWMailMergeKSpread::getValue( const QString &name, int record ) const
   if ( cell )
     return cellText( cell );
   else
-    return i18n( "Unkown mail merge variable: %1" ).arg( name );
+    return i18n( "Unkown mail merge variable: %1" , name );
 }
 
 void KWMailMergeKSpread::load( QDomElement& parentElem )

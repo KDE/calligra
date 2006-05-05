@@ -1750,7 +1750,7 @@ KWInsertRemovePageCommand::~KWInsertRemovePageCommand() {
 QString KWInsertRemovePageCommand::name() const
 {
     return m_cmd == Insert ? i18n("Insert Page") // problem with after/before page
-                  : i18n("Delete Page %1").arg(m_pgNum);
+                  : i18n("Delete Page %1",m_pgNum);
 }
 
 void KWInsertRemovePageCommand::execute() {

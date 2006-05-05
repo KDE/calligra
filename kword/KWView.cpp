@@ -123,7 +123,6 @@
 #include <qapplication.h>
 #include <q3groupbox.h>
 #include <qlayout.h>
-#include <q3paintdevicemetrics.h>
 #include <q3progressdialog.h>
 #include <qregexp.h>
 #include <qtimer.h>
@@ -1564,7 +1563,7 @@ void KWView::addVariableActions( int type, const QStringList & texts,
             KAction * act = new KAction( (*it), 0, this, SLOT( insertVariable() ),
                                          actionCollection(), actionName );
             // Mainly for KEditToolbar
-            act->setToolTip( i18n( "Insert variable \"%1\" into the text" ).arg( *it ) );
+            act->setToolTip( i18n( "Insert variable \"%1\" into the text" , *it ) );
             m_variableDefMap.insert( act, v );
             parentMenu->insert( act );
         }
@@ -1675,8 +1674,7 @@ void KWView::updatePageInfo()
         QString oldText = m_sbPageLabel->text();
         QString newText;
         if ( viewMode()->hasPages() )
-            newText = ' ' + i18n( "Page %1 of %2" ).arg(m_currentPage->pageNumber())
-                .arg(m_doc->pageCount()) + ' ';
+            newText = ' ' + i18n( "Page %1 of %2" ,m_currentPage->pageNumber(),m_doc->pageCount()) + ' ';
 
         if ( newText != oldText )
         {
@@ -1718,7 +1716,7 @@ void KWView::updateFrameStatusBarItem()
 #warning re-enable at next kdelibs snapshot after 19/04/2006
             //m_sbFramesLabel->setText( ' ' + i18nc( "Statusbar info", "%1: %2, %3 - %4, %5 (width: %6, height: %7)", frame->frameSet()->name(), leftStr, topStr, rightStr, bottomStr, widthStr, heightStr ) );
         } else
-            m_sbFramesLabel->setText( ' ' + i18n( "%1 frames selected" ).arg( nbFrame ) );
+            m_sbFramesLabel->setText( ' ' + i18n( "%1 frames selected" , nbFrame ) );
     }
     else if ( sb && m_sbFramesLabel )
         m_sbFramesLabel->setText( QString() );
@@ -1808,7 +1806,7 @@ void KWView::print( KPrinter &prt )
 
 // Don't repaint behind the print dialog until we're done zooming/unzooming the doc
     m_gui->canvasWidget()->setUpdatesEnabled(false);
-    m_gui->canvasWidget()->viewport()->setCursor( Qt::waitCursor );
+    m_gui->canvasWidget()->viewport()->setCursor( Qt::WaitCursor );
 
     prt.setFullPage( true );
 
@@ -1824,7 +1822,6 @@ void KWView::print( KPrinter &prt )
     int oldZoom = m_doc->zoom();
     // We don't get valid metrics from the printer - and we want a better resolution
     // anyway (it's the PS driver that takes care of the printer resolution).
-    Q3PaintDeviceMetrics metrics( &prt );
 
     //int dpiX = metrics.logicalDpiX();
     //int dpiY = metrics.logicalDpiY();
@@ -1876,10 +1873,10 @@ void KWView::print( KPrinter &prt )
     QPainter painter;
     painter.begin( &prt );
 
-    kDebug(32001) << "KWView::print scaling by " << (double)metrics.logicalDpiX() / (double)dpiX
-                   << "," << (double)metrics.logicalDpiY() / (double)dpiY << endl;
-    painter.scale( (double)metrics.logicalDpiX() / (double)dpiX,
-                   (double)metrics.logicalDpiY() / (double)dpiY );
+    kDebug(32001) << "KWView::print scaling by " << (double)ptr.logicalDpiX() / (double)dpiX
+                   << "," << (double)ptr.logicalDpiY() / (double)dpiY << endl;
+    painter.scale( (double)ptr.logicalDpiX() / (double)dpiX,
+                   (double)ptr.logicalDpiY() / (double)dpiY );
 
     bool canceled = false;
     // Breaks wysiwyg, obviously - trying without
@@ -1943,7 +1940,7 @@ void KWView::print( KPrinter &prt )
     kDebug() << "KWView::print zoom&res reset" << endl;
 
     m_gui->canvasWidget()->setUpdatesEnabled(true);
-    m_gui->canvasWidget()->viewport()->setCursor( Qt::ibeamCursor );
+    m_gui->canvasWidget()->viewport()->setCursor( Qt::IBeamCursor );
     m_doc->repaintAllViews();
 
     if ( displayFieldCode )
@@ -2787,7 +2784,7 @@ void KWView::deleteFrame( bool warning )
                 int result = KMessageBox::warningContinueCancel(
                     this,
                     i18n("By deleting the last text frame (%1),\nthe text-contents will be lost.\n"
-                          "Delete anyway?").arg(fs->name()),
+                          "Delete anyway?",fs->name()),
                     i18n("Delete Frame"), KStdGuiItem::del());
 
                 if (result != KMessageBox::Continue)
@@ -3075,7 +3072,7 @@ void KWView::changeZoomMenu( int zoom )
         qHeapSort( list );
 
         for (Q3ValueList<int>::Iterator it = list.begin() ; it != list.end() ; ++it)
-            lst.append( i18n("%1%").arg(*it) );
+            lst.append( i18n("%1%",*it) );
     }
     else
     {
@@ -3098,7 +3095,7 @@ void KWView::changeZoomMenu( int zoom )
 void KWView::showZoom( int zoom )
 {
     QStringList list = m_actionViewZoom->items();
-    QString zoomStr( i18n("%1%").arg( zoom ) );
+    QString zoomStr( i18n("%1%", zoom ) );
     m_actionViewZoom->setCurrentItem( list.findIndex(zoomStr)  );
 }
 
@@ -6126,7 +6123,7 @@ void KWView::savePicture()
                     else
                     {
                         KMessageBox::error(this,
-                                   i18n("Error during saving. Could not open '%1' for writing").arg ( url.path() ),
+                                   i18n("Error during saving. Could not open '%1' for writing", url.path() ),
                                    i18n("Save Picture"));
                     }
                 }
@@ -6144,23 +6141,23 @@ void KWView::savePicture()
                             if ( !KIO::NetAccess::upload( tempFile.name(), url, this ) )
                             {
                               KMessageBox::sorry( this, i18n(
-                                  "Unable to save the file to '%1'. %2.").arg( url.prettyURL() ).arg( KIO::NetAccess::lastErrorString() ),
+                                  "Unable to save the file to '%1'. %2.", url.prettyURL() ,KIO::NetAccess::lastErrorString() ),
                                   i18n("Save Failed") );
                             }
                         }
                         else
                             KMessageBox::error(this,
-                                i18n("Error during saving. Could not open '%1' temporary file for writing").arg ( file.name() ),
+                                i18n("Error during saving. Could not open '%1' temporary file for writing", file.name() ),
                                 i18n("Save Picture"));
                     }
                     else
                         KMessageBox::sorry( this, i18n(
-                            "Error during saving. Could not create temporary file: %1.").arg( strerror( tempFile.status() ) ),
+                            "Error during saving. Could not create temporary file: %1.", strerror( tempFile.status() ) ),
                             i18n("Save Picture") );
                 }
             }
             else
-                KMessageBox::sorry( this, i18n("URL %1 is invalid.").arg( url.prettyURL() ), i18n("Save Picture") );
+                KMessageBox::sorry( this, i18n("URL %1 is invalid.", url.prettyURL() ), i18n("Save Picture") );
         }
     }
 }

@@ -800,7 +800,7 @@ ConfigureDefaultDocPage::ConfigureDefaultDocPage( KWView *view, KVBox *box, char
     labelStartingPage->setBuddy( m_variableNumberOffset );
 
     KHBox* hbTabStop = new KHBox( gbDocumentSettings );
-    tabStop = new QLabel(i18n("Tab stop (%1):").arg(doc->unitName()), hbTabStop);
+    tabStop = new QLabel(i18n("Tab stop (%1):",doc->unitName()), hbTabStop);
     m_tabStopWidth = new KoUnitDoubleSpinBox( hbTabStop,
                                               MM_TO_POINT(2),
                                               doc->pageManager()->page(doc->startPage())->width(),
