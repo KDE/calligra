@@ -24,10 +24,9 @@
 
 #include "link.h"
 
-#include <qcombobox.h>
-#include <q3frame.h>
-#include <qlabel.h>
-#include <qlayout.h>
+#include <QComboBox>
+#include <QFrame>
+#include <QLabel>
 #include <QVBoxLayout>
 
 #include <kdesktopfile.h>

@@ -42,14 +42,12 @@
 #include <kstdguiitem.h>
 #include <kpushbutton.h>
 
-#include <q3frame.h>
+#include <QFrame>
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qlineedit.h>
 #include <qtooltip.h>
 #include <qvariant.h>
-#include <q3whatsthis.h>
-//Added by qt3to4:
 #include <QVBoxLayout>
 #include <QGridLayout>
 #include <QEvent>

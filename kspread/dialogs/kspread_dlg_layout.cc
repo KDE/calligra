@@ -34,7 +34,7 @@
 
 #include <qbitmap.h>
 #include <qcheckbox.h>
-#include <q3frame.h>
+#include <QFrame>
 #include <qlabel.h>
 #include <qlayout.h>
 #include <q3listbox.h>

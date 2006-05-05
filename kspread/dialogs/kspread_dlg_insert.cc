@@ -25,10 +25,8 @@
 */
 
 #include <q3buttongroup.h>
-#include <qradiobutton.h>
-#include <qcheckbox.h>
-#include <qlayout.h>
-//Added by qt3to4:
+
+#include <QRadioButton>
 #include <QVBoxLayout>
 
 #include <kbuttonbox.h>

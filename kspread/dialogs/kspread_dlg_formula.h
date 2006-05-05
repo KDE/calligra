@@ -27,12 +27,11 @@
 #ifndef __kspread_dlg_formula__
 #define __kspread_dlg_formula__
 
-#include <q3frame.h>
-//Added by qt3to4:
+#include <QCloseEvent>
 #include <QLabel>
 #include <QEvent>
-#include <QCloseEvent>
 #include <Q3ListBoxItem>
+
 #include <kcompletion.h>
 #include <kdialogbase.h>
 

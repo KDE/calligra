@@ -20,13 +20,12 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <qlabel.h>
-#include <qlayout.h>
-//Added by qt3to4:
+#include <QLabel>
 #include <QVBoxLayout>
+//Added by qt3to4:
 #include <Q3ListBox>
+
 #include <klocale.h>
-#include <q3tl.h>
 
 #include "kspread_doc.h"
 #include "kspread_sheet.h"

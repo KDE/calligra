@@ -19,9 +19,8 @@
 */
 
 #include <q3header.h>
-#include <qlayout.h>
-#include <qmap.h>
-//Added by qt3to4:
+
+#include <QMap>
 #include <QVBoxLayout>
 
 #include <kcombobox.h>

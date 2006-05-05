@@ -30,17 +30,15 @@
 #ifndef __kspread_dlg_layout_h__
 #define __kspread_dlg_layout_h__
 
-
-#include <q3tabdialog.h>
-#include <qapplication.h>
-#include <q3buttongroup.h>
-#include <q3groupbox.h>
 //Added by qt3to4:
-#include <QPixmap>
-#include <QPaintEvent>
+#include <q3tabdialog.h>
+
 #include <QFrame>
 #include <QLabel>
 #include <QMouseEvent>
+#include <QPixmap>
+#include <QPaintEvent>
+
 #include <knuminput.h>
 #include <kcompletion.h>
 #include "kspread_view.h"

@@ -25,16 +25,12 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <q3vbox.h>
-#include <qlayout.h>
-#include <qcheckbox.h>
-#include <qcombobox.h>
-#include <qgroupbox.h>
-#include <qscrollbar.h>
-
-//Added by qt3to4:
+#include <QCheckBox>
+#include <QComboBox>
 #include <QGridLayout>
+#include <QGroupBox>
 #include <QLabel>
+#include <QScrollBar>
 
 #include <kconfig.h>
 #include <kinstance.h>

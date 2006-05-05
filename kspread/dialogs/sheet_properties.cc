@@ -17,13 +17,11 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <q3vbox.h>
-#include <qcheckbox.h>
-
 #include <kcombobox.h>
 #include <kdialogbase.h>
 #include <klocale.h>
 #include <kvbox.h>
+
 #include "kspread_sheet.h"
 
 #include "sheet_properties.h"

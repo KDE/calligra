@@ -27,9 +27,10 @@
 
 
 #include <q3buttongroup.h>
+
 #include <qcheckbox.h>
 #include <qcombobox.h>
-#include <q3groupbox.h>
+#include <QGroupBox>
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qlineedit.h>
@@ -38,9 +39,6 @@
 #include <qrect.h>
 #include <qtabwidget.h>
 #include <qwidget.h>
-#include <kvbox.h>
-#include <kinstance.h>
-//Added by qt3to4:
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QGridLayout>
@@ -49,6 +47,8 @@
 #include <kdebug.h>
 #include <klocale.h>
 #include <kmessagebox.h>
+#include <kvbox.h>
+#include <kinstance.h>
 
 #include "kspread_dlg_sort.h"
 #include "kspread_doc.h"

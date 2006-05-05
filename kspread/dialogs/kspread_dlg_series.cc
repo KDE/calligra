@@ -31,14 +31,13 @@
 #include "kspread_view.h"
 
 #include <QGroupBox>
-#include <qlayout.h>
-//Added by qt3to4:
 #include <QHBoxLayout>
 #include <QGridLayout>
 #include <klocale.h>
 #include <qlabel.h>
 
 #include <q3buttongroup.h>
+
 #include <kmessagebox.h>
 #include <knumvalidator.h>
 

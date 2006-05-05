@@ -37,8 +37,10 @@
 
 #include <qcheckbox.h>
 #include <qcombobox.h>
-#include <q3frame.h>
-#include <q3header.h>
+#include <QFrame>
+#include <QGridLayout>
+#include <QHBoxLayout>
+#include <QVBoxLayout>
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qlineedit.h>
@@ -49,15 +51,11 @@
 #include <qsqlfield.h>
 #include <qsqlquery.h>
 #include <qsqlrecord.h>
-#include <q3textedit.h>
 #include <qtooltip.h>
 #include <qvariant.h>
-#include <q3whatsthis.h>
 #include <qwidget.h>
 //Added by qt3to4:
-#include <QGridLayout>
-#include <QHBoxLayout>
-#include <QVBoxLayout>
+#include <q3textedit.h>
 
 using namespace KSpread;
 
