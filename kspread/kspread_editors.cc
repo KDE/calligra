@@ -31,20 +31,20 @@
 
 #include <klistbox.h>
 
-#include <qapplication.h>
-#include <qdesktopwidget.h>
-#include <q3listbox.h>
-#include <qtimer.h>
-#include <qlabel.h>
-#include <q3vbox.h>
-#include <q3valuelist.h>
-//Added by qt3to4:
-#include <QFocusEvent>
-#include <QKeyEvent>
+#include <QApplication>
+#include <QDesktopWidget>
 #include <QEvent>
+#include <QFocusEvent>
 #include <QFrame>
 #include <QInputMethodEvent>
+#include <QKeyEvent>
+#include <QLabel>
 #include <QResizeEvent>
+#include <QTimer>
+#include <QVBoxLayout>
+//Added by qt3to4:
+#include <q3listbox.h>
+
 #warning "kde4: I think that it's not a good idea to use private class"
 //#include <private/qrichtext_p.h>
 
@@ -309,7 +309,7 @@ class FunctionCompletion::Private
 {
 public:
   CellEditor* editor;
-  Q3VBox *completionPopup;
+  QFrame *completionPopup;
   KListBox *completionListBox;
   QLabel* hintLabel;
 };
@@ -321,11 +321,14 @@ QObject( editor )
   d->editor = editor;
   d->hintLabel = 0;
 
-  d->completionPopup = new Q3VBox( editor->topLevelWidget(), 0, Qt::WType_Popup );
+  d->completionPopup = new QFrame( editor->topLevelWidget(), Qt::WType_Popup );
   d->completionPopup->setFrameStyle( QFrame::Box | QFrame::Plain );
   d->completionPopup->setLineWidth( 1 );
   d->completionPopup->installEventFilter( this );
   d->completionPopup->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Minimum);
+  QVBoxLayout *layout = new QVBoxLayout( d->completionPopup );
+  layout->setMargin( 0 );
+  layout->setSpacing( 0 );
 
   d->completionListBox = new KListBox( d->completionPopup );
   d->completionPopup->setFocusProxy( d->completionListBox );
@@ -336,6 +339,7 @@ QObject( editor )
     SLOT(itemSelected(const QString&)) );
   connect( d->completionListBox, SIGNAL(highlighted(const QString&)), this,
     SLOT(itemSelected(const QString&)) );
+  layout->addWidget( d->completionListBox );
 
   d->hintLabel = new QLabel( 0, (Qt::WFlags)
     Qt::WStyle_Customize | Qt::WStyle_NoBorder | Qt::WStyle_Tool |  Qt::WX11BypassWM );
