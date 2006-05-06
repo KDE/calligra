@@ -145,7 +145,8 @@ parameterLocale::parameterLocale( View* _view, KVBox *box , char * /*name*/ )
 {
     m_pView = _view;
     m_bUpdateLocale=false;
-  QGroupBox* tmpQGroupBox = new QGroupBox( i18n("Settings"), box );
+//   QGroupBox* tmpQGroupBox = new QGroupBox( i18n("Settings"), box );
+  KVBox* tmpQGroupBox = box;
 
   KLocale* locale=_view->doc()->locale();
 
@@ -160,6 +161,8 @@ parameterLocale::parameterLocale( View* _view, KVBox *box , char * /*name*/ )
 
   m_updateButton=new QPushButton ( i18n("&Update Locale Settings"), tmpQGroupBox);
   connect(m_updateButton, SIGNAL(clicked()),this,SLOT(updateDefaultSystemConfig()));
+
+  box->layout()->addItem( new QSpacerItem( 1, 1, QSizePolicy::Minimum, QSizePolicy::Expanding ) );
 }
 
 void parameterLocale::apply()
@@ -182,12 +185,12 @@ void parameterLocale::updateDefaultSystemConfig()
 
 void parameterLocale::updateToMatchLocale(KLocale* locale)
 {
-  m_language->setText( i18n("Language: %1").arg( locale->language() ));
-  m_number->setText( i18n("Default number format: %1").arg( locale->formatNumber(12.55) ));
-  m_date->setText( i18n("Long date format: %1").arg( locale->formatDate( QDate::currentDate() )));
-  m_shortDate->setText( i18n("Short date format: %1").arg( locale->formatDate( QDate::currentDate() ,true) ));
-  m_time->setText( i18n("Time format: %1").arg( locale->formatTime( QTime::currentTime() ) ));
-  m_money->setText( i18n("Currency format: %1").arg( locale->formatMoney(12.55) ));
+  m_language->setText( i18n("Language: %1", locale->language() ));
+  m_number->setText( i18n("Default number format: %1", locale->formatNumber(12.55) ));
+  m_date->setText( i18n("Long date format: %1", locale->formatDate( QDate::currentDate() )));
+  m_shortDate->setText( i18n("Short date format: %1", locale->formatDate( QDate::currentDate() ,true) ));
+  m_time->setText( i18n("Time format: %1", locale->formatTime( QTime::currentTime() ) ));
+  m_money->setText( i18n("Currency format: %1", locale->formatMoney(12.55) ));
 }
 
 configure::configure( View* _view, KVBox *box , char * /*name*/ )
@@ -204,7 +207,8 @@ configure::configure( View* _view, KVBox *box , char * /*name*/ )
   bool statusBar=true;
   m_oldBackupFile = true;
 
-  QGroupBox* tmpQGroupBox = new QGroupBox( i18n("Settings"), box );
+//   QGroupBox* tmpQGroupBox = new QGroupBox( i18n("Settings"), box );
+  KVBox* tmpQGroupBox = box;
 
   config = Factory::global()->config();
   int _page=1;
@@ -259,6 +263,7 @@ configure::configure( View* _view, KVBox *box , char * /*name*/ )
   showColHeader=new QCheckBox(i18n("Show c&olumn header"),tmpQGroupBox);
   showColHeader->setChecked(colHeader);
   showColHeader->setWhatsThis( i18n( "Check this box to show the column letters across the top of each worksheet." ) );
+
   showRowHeader=new QCheckBox(i18n("Show &row header"),tmpQGroupBox);
   showRowHeader->setChecked(rowHeader);
   showRowHeader->setWhatsThis( i18n( "Check this box to show the row numbers down the left side." ) );
@@ -274,6 +279,8 @@ configure::configure( View* _view, KVBox *box , char * /*name*/ )
   showStatusBar =new QCheckBox(i18n("Show stat&us bar"),tmpQGroupBox);
   showStatusBar->setChecked(statusBar);
   showStatusBar->setWhatsThis( i18n( "Uncheck this box if you want to hide the status bar." ) );
+
+  box->layout()->addItem( new QSpacerItem( 1, 1, QSizePolicy::Minimum, QSizePolicy::Expanding ) );
 }
 
 
@@ -401,7 +408,8 @@ miscParameters::miscParameters( View* _view,KVBox *box, char * /*name*/ )
   m_pView = _view;
 
 
-  QGroupBox* tmpQGroupBox = new QGroupBox( i18n("Misc"), box );
+//   QGroupBox* tmpQGroupBox = new QGroupBox( i18n("Misc"), box );
+  KVBox* tmpQGroupBox = box;
 
   config = Factory::global()->config();
   indentUnit = _view->doc()->unit();
@@ -478,11 +486,13 @@ miscParameters::miscParameters( View* _view,KVBox *box, char * /*name*/ )
 //   valIndent->setRange( 0.0, 100.0, 10.0 );
   valIndent->setValue ( KoUnit::toUserValue( _indent, indentUnit ) );
   valIndent->setWhatsThis( i18n( "Lets you define the amount of indenting used by the Increase Indent and Decrease Indent option in the Format menu." ) );
-  valIndent->setLabel(i18n("&Indentation step (%1):").arg(KoUnit::unitName(indentUnit)));
+  valIndent->setLabel(i18n("&Indentation step (%1):", KoUnit::unitName(indentUnit)));
 
   msgError= new QCheckBox(i18n("&Show error message for invalid formulae"),tmpQGroupBox);
   msgError->setChecked(m_bMsgError);
   msgError->setWhatsThis( i18n( "If this box is checked a message box will pop up when what you have entered into a cell cannot be understood by KSpread." ) );
+
+  box->layout()->addItem( new QSpacerItem( 1, 1, QSizePolicy::Minimum, QSizePolicy::Expanding ) );
 
   initComboBox();
 }
@@ -720,7 +730,8 @@ colorParameters::colorParameters( View* _view,KVBox *box , char * /*name*/ )
     _gridColor = config->readEntry("GridColor",_gridColor);
   }
 
-  QGroupBox* tmpQGroupBox = new QGroupBox( i18n("Color"), box );
+//   QGroupBox* tmpQGroupBox = new QGroupBox( i18n("Color"), box );
+  KVBox* tmpQGroupBox = box;
 
   QLabel *label = new QLabel(i18n("&Grid color:"), tmpQGroupBox );
 
@@ -745,6 +756,8 @@ colorParameters::colorParameters( View* _view,KVBox *box , char * /*name*/ )
   pageBorderColor->setWhatsThis( i18n( "When the View ->Show Page Borders menu item is checked, the page borders are displayed. Click here to choose another color for the borders than the default red." ) );
 
   label2->setBuddy(pageBorderColor);
+
+  box->layout()->addItem( new QSpacerItem( 1, 1, QSizePolicy::Minimum, QSizePolicy::Expanding ) );
 }
 
 void colorParameters::apply()
@@ -779,12 +792,13 @@ configureLayoutPage::configureLayoutPage( View* _view,KVBox *box , char * /*name
 {
   m_pView = _view;
 
-  QGroupBox* tmpQGroupBox = new QGroupBox( i18n("Default Parameters"), box );
-  tmpQGroupBox->layout()->setSpacing(KDialog::spacingHint());
-  tmpQGroupBox->layout()->setMargin(KDialog::marginHint());
+//   QGroupBox* tmpQGroupBox = new QGroupBox( i18n("Default Parameters"), box );
+//   tmpQGroupBox->layout()->setSpacing(KDialog::spacingHint());
+//   tmpQGroupBox->layout()->setMargin(KDialog::marginHint());
+  QWidget* tmpQGroupBox = new QWidget( box );
 
   QGridLayout *grid1 = new QGridLayout(tmpQGroupBox);
-  grid1->addItem(new QSpacerItem( 0, KDialog::marginHint() ), 0, 0 );
+//   grid1->addItem(new QSpacerItem( 0, KDialog::marginHint() ), 0, 0 );
   grid1->setRowStretch( 7, 10 );
 
   config = Factory::global()->config();
@@ -824,8 +838,10 @@ configureLayoutPage::configureLayoutPage( View* _view,KVBox *box , char * /*name
   defaultUnit->setCurrentIndex(0);
   defaultUnit->setWhatsThis( i18n( "Choose the default unit that will be used in your sheet.\nNote that you can overwrite the unit for the current sheet using the Format -> Page Layout... dialog." ) );
   grid1->addWidget(defaultUnit,5,0);
-  initCombo();
 
+  box->layout()->addItem( new QSpacerItem( 1, 1, QSizePolicy::Minimum, QSizePolicy::Expanding ) );
+
+  initCombo();
 }
 
 void configureLayoutPage::slotDefault()
