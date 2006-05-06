@@ -100,7 +100,7 @@ public:
 
     bool contains( int _x, int _y );
     /**
-     * Call this function if one of the cells covered by this binding ( @see #rect )
+     * Call this function if one of the cells covered by this binding ( @see rect )
      * has changed. This will in turn force for example a chart to update.
      *
      * @param _obj may by 0. In this case all cells may have changed.
@@ -175,7 +175,7 @@ public:
      * Renames a sheet. This will automatically adapt all formulas
      * in all sheets and all cells to reflect the new name.
      *
-     * If the name really changed then @ref #sig_nameChanged is emitted
+     * If the name really changed then sig_nameChanged is emitted
      * and the GUI will reflect the change.
      *
      * @param name The new sheet name.
@@ -189,9 +189,9 @@ public:
      * @return @c false if the sheet could not be renamed. Usually the reason is
      * that this name is already used.
      *
-     * @see #changeCellTabName
+     * @see changeCellTabName
      * @see TabBar::renameTab
-     * @see #sheetName
+     * @see sheetName
      */
     bool setSheetName( const QString& name, bool init = false, bool makeUndo=true );
 
@@ -287,7 +287,7 @@ public:
     const ColumnFormat* columnFormat( int _column ) const;
     ColumnFormat* columnFormat( int _column );
     /**
-     * If no special @ref ColumnFormat exists for this column, then a new one is created.
+     * If no special ColumnFormat exists for this column, then a new one is created.
      *
      * @return a non default ColumnFormat for this column.
      */
@@ -296,15 +296,14 @@ public:
     const RowFormat* rowFormat( int _row ) const;
     RowFormat* rowFormat( int _row );
     /**
-     * If no special @ref RowFormat exists for this row, then a new one is created.
+     * If no special RowFormat exists for this row, then a new one is created.
      *
      * @return a non default RowFormat for this row.
      */
     RowFormat* nonDefaultRowFormat( int _row, bool force_creation = true );
 
     /**
-     * @return the first cell of this sheet. Next cells can
-     * be retrieved by calling @ref Cell::nextCell .
+     * @return the first cell of this sheet.
      */
     Cell* firstCell() const;
 
@@ -329,7 +328,7 @@ public:
      * @param scrollbar_update will change the scrollbar if set to true disregarding
      *                          whether _column/_row are bigger than
      *                          m_iMaxRow/m_iMaxColumn. May be overruled by
-     *                          @ref Sheet::Private::ccrollbarUpdates .
+     *                          Sheet::Private::scrollbarUpdates .
      */
     Cell* cellAt( const QPoint& point, bool scrollbar_update = false )
       { return cellAt( point.x(), point.y(), scrollbar_update ); }
@@ -343,7 +342,7 @@ public:
      * @param _scrollbar_update will change the scrollbar if set to true disregarding
      *                          whether _column/_row are bigger than
      *                          m_iMaxRow/m_iMaxColumn. May be overruled by
-     *                          @ref Sheet::Private::scrollbarUpdates .
+     *                          Sheet::Private::scrollbarUpdates .
      */
     Cell* visibleCellAt( int _column, int _row, bool _scrollbar_update = false );
 
@@ -355,8 +354,8 @@ public:
      * @param _scrollbar_update will change the scrollbar if set to true disregarding
      *                          whether _column/_row are bigger than
      *                          m_iMaxRow/m_iMaxColumn. May be overruled by
-     *                          @ref Sheet::Private::scrollbarUpdates .
-     *
+     *                          Sheet::Private::scrollbarUpdates .
+     * @param _style if a new cell is created, this Style is used
      * @return a non default Cell for the position.
      */
     Cell* nonDefaultCell( int _column, int _row, bool _scrollbar_update = false, Style * _style = 0 );
@@ -381,23 +380,23 @@ public:
 
     /**
      * @return the left corner of the column as int.
-     * @param _row the column's index
-     * @param _canvas If not 0 then the returned position is in screen
-     *                coordinates. Otherwise the point (0|0) is in the upper
-     *                left corner of the sheet.
+     * @param col the column's index
+     * @param canvas If not 0 then the returned position is in screen
+     *               coordinates. Otherwise the point (0|0) is in the upper
+     *               left corner of the sheet.
      */
-    int columnPos( int _col, const Canvas *_canvas = 0 ) const;
+    int columnPos( int col, const Canvas *canvas = 0 ) const;
 
     /**
      * @return the left corner of the column as double.
      * Use this method, when you later calculate other positions depending on this one
      * to avoid rounding problems
-     * @param _row the column's index
-     * @param _canvas If not 0 then the returned position is in screen
-     *                coordinates. Otherwise the point (0|0) is in the upper
-     *                left corner of the sheet.
+     * @param col the column's index
+     * @param canvas If not 0 then the returned position is in screen
+     *               coordinates. Otherwise the point (0|0) is in the upper
+     *               left corner of the sheet.
      */
-    double dblColumnPos( int _col, const Canvas *_canvas = 0 ) const;
+    double dblColumnPos( int col, const Canvas *canvas = 0 ) const;
 
     /**
      * @return the top corner of the row as int.
@@ -441,15 +440,15 @@ public:
     void adjustSizeMaxY ( double _y );
 
     /**
-     * Sets the @ref Cell::Flag_LayoutDirty in all cells.
+     * Sets the Cell::Flag_LayoutDirty in all cells.
      */
     void setLayoutDirtyFlag();
 
     /**
-     * Sets the @ref Cell::calcDirtyFlag in all cells.
+     * Sets the Cell::calcDirtyFlag in all cells.
      * That means that the cells are marked dirty and will recalculate
      * if requested. This function does only MARK, it does NOT actually calculate.
-     * Use @ref #recalc to recaculate dirty values.
+     * Use Sheet::recalc to recaculate dirty values.
      */
     void setCalcDirtyFlag();
 
@@ -461,16 +460,17 @@ public:
 
     /**
      * Recalculates the current sheet. If you want to recalculate EVERYTHING, then
-     * call @ref Sheet::setCalcDirtyFlag for all sheets in the @ref Map to make
+     * call Sheet::setCalcDirtyFlag for all sheets in the Map to make
      * sure that no invalid values in other sheets make you trouble.
      *
-     * Recalc will do nothing if automatic calculation is disabled (via @ref Sheet::setAutoCalc ).
+     * Recalc will do nothing if automatic calculation is disabled (via Sheet::setAutoCalc ).
      * unless the force flag is set to true.  Automatic recalculation is enabled by default.
      *
      * @param force If false, the sheet will be recalculated if automatic calculation is enabled.
      * If true, the sheet will be recalculated regardless of the automatic calculation setting.
      */
     void recalc( bool force );
+
     /**
      * Recalculates the current sheet, if automatic recalculation is enabled.
      */
@@ -855,7 +855,7 @@ public:
     void setHidden( bool hidden );
 
     /**
-     * @return a painter for the hidden widget ( @ref #widget ).
+     * @return a painter for the hidden widget
      *
      * This function is useful while making formats where you
      * need some QPainter related functions.
@@ -864,7 +864,7 @@ public:
 
     /**
      * @return a hidden widget.
-     * @see #painter
+     * @see painter
      */
     QWidget* widget()const;
 
@@ -942,7 +942,7 @@ public:
     * insert to bottom if insertTo==1
     * insert to right if insertTo ==-1
     * insertTo used just for insert/paste an area
-     * @see #paste
+     * @see paste
      */
     bool loadSelection( const QDomDocument& doc, const QRect &pasteArea,
                         int _xshift, int _yshift, bool makeUndo,
@@ -957,7 +957,7 @@ public:
     * return true if it's a area
     * false if it's a column/row
     * it's used to select if you want to insert at the bottom or right
-    * @see #paste
+    * @see paste
      */
     bool testAreaPasteInsert()const;
 
@@ -968,8 +968,6 @@ public:
      * in this area.
      *
      * @param region The region that contains the cells that should be deleted
-     *
-     * @see #loadCells
      */
     void deleteCells(const Region& region);
 
@@ -993,7 +991,7 @@ public:
      * Once he releases the mouse we have to autofill the region 'dest'. Mention that
      * src.left() == dest.left() and src.top() == dest.top().
      *
-     * @see #mouseReleaseEvent
+     * @see mouseReleaseEvent
      */
     void autofill( QRect &src, QRect &dest );
 
@@ -1112,7 +1110,7 @@ public:
     void emit_updateColumn( ColumnFormat *_format, int _column );
 
     /**
-     * Needed for @ref Cell::leftBorderPen and friends, since we can not
+     * Needed for Cell::leftBorderPen and friends, since we can not
      * have a static pen object.
      *
      * The returned pen has pen style NoPen set.
@@ -1259,7 +1257,7 @@ signals:
     void sig_maxColumn( int _max_column );
     void sig_maxRow( int _max_row );
     /**
-     * @see #setSheetName
+     * @see setSheetName
      */
     void sig_nameChanged( Sheet* sheet, const QString& old_name );
 
@@ -1313,7 +1311,7 @@ protected:
     void insertObject( EmbeddedObject *_obj );
 
     /**
-     * @see #autofill
+     * @see autofill
      */
     void fillSequence( const QList<Cell*>& _srcList,
                        const QList<Cell*>& _destList,

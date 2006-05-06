@@ -336,21 +336,21 @@ class KSPREAD_EXPORT Value
     static const Value& empty();
 
     /**
-     * Returns constant reference to '#DIV/0!' error.
+     * Returns constant reference to '\#DIV/0!' error.
      *
      * This is used to indicate that a formula divides by 0 (zero).
      */
     static const Value& errorDIV0();
 
     /**
-     * Returns constant reference to '#N/A' error.
+     * Returns constant reference to '\#N/A' error.
      *
      * This is to indicate that  a value is not available to a function.
      */
     static const Value& errorNA();
 
     /**
-     * Returns constant reference to '#NAME?' error.
+     * Returns constant reference to '\#NAME?' error.
      *
      * This is to indicate that certain text inside formula is not
      * recognized, possibly a misspelled name or name that
@@ -359,28 +359,28 @@ class KSPREAD_EXPORT Value
     static const Value& errorNAME();
 
     /**
-     * Returns constant reference to '#NUM!' error.
+     * Returns constant reference to '\#NUM!' error.
      *
      * This is to indicate a problem with a number in a formula.
      */
     static const Value& errorNUM();
 
     /**
-     * Returns constant reference to '#NULL!' error.
+     * Returns constant reference to '\#NULL!' error.
      *
      * This is to indicate that two area do not intersect.
      */
     static const Value& errorNULL();
 
     /**
-     * Returns constant reference to '#REF!' error.
+     * Returns constant reference to '\#REF!' error.
      *
      * This is used to indicate an invalid cell reference.
      */
     static const Value& errorREF();
 
     /**
-     * Returns constant reference to '#VALUE!' error.
+     * Returns constant reference to '\#VALUE!' error.
      *
      * This is to indicate that wrong type of argument or operand
      * is used, usually within a function call, e.g SIN("some text").
