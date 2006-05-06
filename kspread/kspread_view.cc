@@ -6331,14 +6331,12 @@ void View::createStyleFromCell()
 
     if ( styleName.length() < 1 )
     {
-      KNotifyClient::beep();
       KMessageBox::sorry( this, i18n( "The style name cannot be empty." ) );
       continue;
     }
 
     if ( doc()->styleManager()->style( styleName ) != 0 )
     {
-      KNotifyClient::beep();
       KMessageBox::sorry( this, i18n( "A style with this name already exists." ) );
       continue;
     }
@@ -6493,11 +6491,9 @@ void View::removeSheet()
 {
   if ( doc()->map()->count() <= 1 || ( doc()->map()->visibleSheets().count() <= 1 ) )
   {
-    KNotifyClient::beep();
     KMessageBox::sorry( this, i18n("You cannot delete the only sheet."), i18n("Remove Sheet") ); // FIXME bad english? no english!
     return;
   }
-  KNotifyClient::beep();
   int ret = KMessageBox::warningContinueCancel( this, i18n( "You are about to remove the active sheet.\nDo you want to continue?" ),
                                        i18n( "Remove Sheet" ),KGuiItem(i18n("&Delete"),"editdelete") );
 
@@ -6545,7 +6541,6 @@ void View::slotRename()
 
   while (!util_validateSheetName(newName))
   {
-    KNotifyClient::beep();
     KMessageBox::information( this, i18n("Sheet name contains illegal characters. Only numbers and letters are allowed."),
       i18n("Change Sheet Name") );
 
@@ -6564,7 +6559,6 @@ void View::slotRename()
 
   if ( (newName.trimmed()).isEmpty() ) // Sheet name is empty.
   {
-    KNotifyClient::beep();
     KMessageBox::information( this, i18n("Sheet name cannot be empty."), i18n("Change Sheet Name") );
     // Recursion
     slotRename();
@@ -6574,7 +6568,6 @@ void View::slotRename()
     // Is the name already used
     if ( doc()->map()->findSheet( newName ) )
     {
-      KNotifyClient::beep();
       KMessageBox::information( this, i18n("This name is already used."), i18n("Change Sheet Name") );
       // Recursion
       slotRename();
