@@ -104,10 +104,10 @@ void WUView::setupWriteUpGUI()
 
     m_toolBox->setupTools();
 
-    m_toolBox->setIconSize( 48 );
+    m_toolBox->setIconSize( QSize( 48, 48 ) );
 
-    mainWindow()->addDockWindow( m_toolBox, Qt::DockRight, false);
-    mainWindow()->moveDockWindow( m_toolBox, Qt::DockRight, false, 0, 0 );
+    mainWindow()->addToolBar(Qt::RightToolBarArea, m_toolBox);
+//    mainWindow()->moveDockWindow( m_toolBox, Qt::DockRight, false, 0, 0 );
 #else
     createWriteUpToolBox();
 #endif
