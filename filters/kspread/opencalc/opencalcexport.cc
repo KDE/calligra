@@ -182,8 +182,6 @@ bool OpenCalcExport::exportDocInfo( KoStore * store, const Doc* ksdoc )
     return false;
 
   KoDocumentInfo       * docInfo    = ksdoc->documentInfo();
-  KoDocumentInfoAbout  * aboutPage  = static_cast<KoDocumentInfoAbout *>( docInfo->page( "about" ) );
-  KoDocumentInfoAuthor * authorPage = static_cast<KoDocumentInfoAuthor*>( docInfo->page( "author" ) );
 
   QDomDocument meta;
   meta.appendChild( meta.createProcessingInstruction( "xml","version=\"1.0\" encoding=\"UTF-8\"" ) );
@@ -204,29 +202,29 @@ bool OpenCalcExport::exportDocInfo( KoStore * store, const Doc* ksdoc )
   officeMeta.appendChild( data );
 
   data = meta.createElement( "meta:initial-creator" );
-  data.appendChild( meta.createTextNode( authorPage->fullName() ) );
+  data.appendChild( meta.createTextNode( docInfo->aboutInfo("initial-creator") ) );
   officeMeta.appendChild( data );
 
   data = meta.createElement( "meta:creator" );
-  data.appendChild( meta.createTextNode( authorPage->fullName() ) );
+  data.appendChild( meta.createTextNode( docInfo->authorInfo("creator") ) );
   officeMeta.appendChild( data );
 
   data = meta.createElement( "dc:description" );
-  data.appendChild( meta.createTextNode( aboutPage->abstract() ) );
+  data.appendChild( meta.createTextNode( docInfo->aboutInfo("description") ) );
   officeMeta.appendChild( data );
 
   data = meta.createElement( "meta:keywords" );
   QDomElement dataItem = meta.createElement( "meta:keyword" );
-  dataItem.appendChild( meta.createTextNode( aboutPage->keywords() ) );
+  dataItem.appendChild( meta.createTextNode( docInfo->aboutInfo("keyword") ) );
   data.appendChild( dataItem );
   officeMeta.appendChild( data );
 
   data = meta.createElement( "dc:title" );
-  data.appendChild( meta.createTextNode( aboutPage->title() ) );
+  data.appendChild( meta.createTextNode( docInfo->aboutInfo("title") ) );
   officeMeta.appendChild( data );
 
   data = meta.createElement( "dc:subject" );
-  data.appendChild( meta.createTextNode( aboutPage->subject() ) );
+  data.appendChild( meta.createTextNode( docInfo->aboutInfo("subject") ) );
   officeMeta.appendChild( data );
 
   const QDateTime dt ( QDateTime::currentDateTime() );
@@ -309,16 +307,15 @@ bool OpenCalcExport::exportSettings( KoStore * store, const Doc * ksdoc )
   QDomElement configmaped = doc.createElement( "config:config-item-map-named" );
   configmaped.setAttribute( "config:name","Tables" );
 
-  Q3PtrListIterator<Sheet> it( ksdoc->map()->sheetList() );
-  for( ; it.current(); ++it )
+  foreach(Sheet* sheet, ksdoc->map()->sheetList())
   {
       QPoint marker;
       if ( view )
       {
-          marker = view->markerFromSheet( *it );
+          marker = view->markerFromSheet( sheet );
       }
       QDomElement tmpItemMapNamed = doc.createElement( "config:config-item-map-entry" );
-      tmpItemMapNamed.setAttribute( "config:name", ( *it )->tableName() );
+      tmpItemMapNamed.setAttribute( "config:name", sheet->sheetName() );
 
       QDomElement sheetAttribute = doc.createElement( "config:config-item" );
       sheetAttribute.setAttribute( "config:name", "CursorPositionX" );
@@ -445,16 +442,11 @@ bool OpenCalcExport::exportBody( QDomDocument & doc, QDomElement & content, cons
     }
   }
 
-
-
-  Q3PtrListIterator<Sheet> it( ksdoc->map()->sheetList() );
-
-  for( it.toFirst(); it.current(); ++it )
+  foreach(Sheet* sheet, ksdoc->map()->sheetList())
   {
     SheetStyle ts;
     int maxCols         = 1;
     int maxRows         = 1;
-    Sheet * sheet = it.current();
 
     ts.visible = !sheet->isHidden();
 
@@ -474,7 +466,7 @@ bool OpenCalcExport::exportBody( QDomDocument & doc, QDomElement & content, cons
       }
     }
 
-    QString name( sheet->tableName() );
+    QString name( sheet->sheetName() );
 
     int n = name.find( ' ' );
     if ( n != -1 )
@@ -528,7 +520,7 @@ bool OpenCalcExport::exportBody( QDomDocument & doc, QDomElement & content, cons
 void OpenCalcExport::exportSheet( QDomDocument & doc, QDomElement & tabElem,
                                   const Sheet * sheet, int maxCols, int maxRows )
 {
-  kDebug(30518) << "exportSheet: " << sheet->tableName() << endl;
+  kDebug(30518) << "exportSheet: " << sheet->sheetName() << endl;
   int i = 1;
 
   while ( i <= maxCols )
@@ -871,8 +863,7 @@ void OpenCalcExport::createDefaultStyles()
 void OpenCalcExport::exportPageAutoStyles( QDomDocument & doc, QDomElement & autoStyles,
                                            const Doc *ksdoc )
 {
-  Q3PtrListIterator<Sheet> it( ksdoc->map()->sheetList() );
-  const Sheet * sheet = it.toFirst();
+  const Sheet * sheet = ksdoc->map()->sheetList().first();
 
   float width  = 20.999;
   float height = 29.699;
@@ -929,8 +920,7 @@ void OpenCalcExport::exportMasterStyles( QDomDocument & doc, QDomElement & maste
   masterPage.setAttribute( "style:name", "Default" );
   masterPage.setAttribute( "style:page-master-name", "pm1" );
 
-  Q3PtrListIterator<Sheet> it( ksdoc->map()->sheetList() );
-  const Sheet * sheet = it.toFirst();
+  const Sheet * sheet = ksdoc->map()->sheetList().first();
 
   QString headerLeft;
   QString headerCenter;
@@ -1106,27 +1096,24 @@ void OpenCalcExport::convertPart( QString const & part, QDomDocument & doc,
         else if ( var == "<author>" )
         {
           KoDocumentInfo       * docInfo    = ksdoc->documentInfo();
-          KoDocumentInfoAuthor * authorPage = static_cast<KoDocumentInfoAuthor*>( docInfo->page( "author" ) );
 
-          text += authorPage->fullName();
+          text += docInfo->authorInfo("creator");
 
           addText( text, doc, parent );
         }
         else if ( var == "<email>" )
         {
           KoDocumentInfo       * docInfo    = ksdoc->documentInfo();
-          KoDocumentInfoAuthor * authorPage = static_cast<KoDocumentInfoAuthor*>( docInfo->page( "author" ) );
 
-          text += authorPage->email();
+          text += docInfo->authorInfo("email");
 
           addText( text, doc, parent );
         }
         else if ( var == "<org>" )
         {
           KoDocumentInfo       * docInfo    = ksdoc->documentInfo();
-          KoDocumentInfoAuthor * authorPage = static_cast<KoDocumentInfoAuthor*>( docInfo->page( "author" ) );
 
-          text += authorPage->company();
+          text += docInfo->authorInfo("company");
 
           addText( text, doc, parent );
         }
