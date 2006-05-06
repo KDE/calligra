@@ -287,9 +287,8 @@ public:
 
     void initActions();
     void adjustActions( bool mode );
-    void adjustActions( Sheet* sheet, Cell* cell );
+    void adjustActions( Cell *cell, int column, int row );
     void adjustWorkbookActions( bool mode );
-    void updateButton( Cell *cell, int column, int row);
     QAbstractButton* newIconButton( const char *_file, bool _kbutton = false, QWidget *_parent = 0 );
 
     PropertyEditor *m_propertyEditor;
@@ -1351,9 +1350,57 @@ void View::Private::adjustActions( bool mode )
   }
 }
 
-void View::Private::adjustActions( Sheet* sheet, Cell* cell )
+void View::Private::adjustActions( Cell* cell, int column, int row )
 {
-  if ( sheet->isProtected() && !cell->isDefault() && cell->format()->notProtected( cell->column(), cell->row() ) )
+  toolbarLock = true;
+
+  // workaround for bug #59291 (crash upon starting from template)
+  // certain Qt and Fontconfig combination fail miserably if can not
+  // find the font name (e.g. not installed in the system)
+  QStringList fontList;
+  KFontChooser::getFontList( fontList, 0 );
+  QString fontFamily = cell->format()->textFontFamily( column,row );
+  for ( QStringList::Iterator it = fontList.begin(); it != fontList.end(); ++it )
+  {
+    if ((*it).toLower() == fontFamily.toLower())
+    {
+      actions->selectFont->setFont( fontFamily );
+      break;
+    }
+  }
+
+  actions->selectFontSize->setFontSize( cell->format()->textFontSize( column, row ) );
+  actions->bold->setChecked( cell->format()->textFontBold( column, row ) );
+  actions->italic->setChecked( cell->format()->textFontItalic(  column, row) );
+  actions->underline->setChecked( cell->format()->textFontUnderline( column, row ) );
+  actions->strikeOut->setChecked( cell->format()->textFontStrike( column, row ) );
+
+  actions->alignLeft->setChecked( cell->format()->align( column, row ) == Style::Left );
+  actions->alignCenter->setChecked( cell->format()->align( column, row ) == Style::Center );
+  actions->alignRight->setChecked( cell->format()->align( column, row ) == Style::Right );
+
+  actions->alignTop->setChecked( cell->format()->alignY( column, row ) == Style::Top );
+  actions->alignMiddle->setChecked( cell->format()->alignY( column, row ) == Style::Middle );
+  actions->alignBottom->setChecked( cell->format()->alignY( column, row ) == Style::Bottom );
+
+  actions->verticalText->setChecked( cell->format()->verticalText( column,row ) );
+
+  actions->wrapText->setChecked( cell->format()->multiRow( column,row ) );
+
+  FormatType ft = cell->formatType();
+  actions->percent->setChecked( ft == Percentage_format );
+  actions->money->setChecked( ft == Money_format );
+
+  if ( activeSheet && !activeSheet->isProtected() )
+    actions->removeComment->setEnabled( !cell->format()->comment(column,row).isEmpty() );
+
+  if ( activeSheet && !activeSheet->isProtected() )
+    actions->decreaseIndent->setEnabled( cell->format()->getIndent( column, row ) > 0.0 );
+
+  toolbarLock = false;
+
+  if ( activeSheet && activeSheet->isProtected() && !cell->isDefault() &&
+       cell->format()->notProtected( cell->column(), cell->row() ) )
   {
     if ( selection->isSingular() )
     {
@@ -1366,7 +1413,7 @@ void View::Private::adjustActions( Sheet* sheet, Cell* cell )
         adjustActions( false );
     }
   }
-  else if ( sheet->isProtected() )
+  else if ( activeSheet->isProtected() )
   {
     if ( actions->bold->isEnabled() )
       adjustActions( false );
@@ -1394,57 +1441,6 @@ void View::Private::adjustWorkbookActions( bool mode )
     actions->showSheet->setEnabled( view->doc()->map()->hiddenSheets().count() > 0 );
     actions->renameSheet->setEnabled( activeSheet && !activeSheet->isProtected() );
   }
-}
-
-// TODO this should be merged with adjustActions
-void View::Private::updateButton( Cell *cell, int column, int row)
-{
-    toolbarLock = true;
-
-    // workaround for bug #59291 (crash upon starting from template)
-    // certain Qt and Fontconfig combination fail miserably if can not
-    // find the font name (e.g. not installed in the system)
-    QStringList fontList;
-    KFontChooser::getFontList( fontList, 0 );
-    QString fontFamily = cell->format()->textFontFamily( column,row );
-    for ( QStringList::Iterator it = fontList.begin(); it != fontList.end(); ++it )
-      if ((*it).toLower() == fontFamily.toLower())
-      {
-        actions->selectFont->setFont( fontFamily );
-        break;
-      }
-
-      actions->selectFontSize->setFontSize( cell->format()->textFontSize( column, row ) );
-      actions->bold->setChecked( cell->format()->textFontBold( column, row ) );
-      actions->italic->setChecked( cell->format()->textFontItalic(  column, row) );
-      actions->underline->setChecked( cell->format()->textFontUnderline( column, row ) );
-      actions->strikeOut->setChecked( cell->format()->textFontStrike( column, row ) );
-
-      actions->alignLeft->setChecked( cell->format()->align( column, row ) == Style::Left );
-      actions->alignCenter->setChecked( cell->format()->align( column, row ) == Style::Center );
-      actions->alignRight->setChecked( cell->format()->align( column, row ) == Style::Right );
-
-      actions->alignTop->setChecked( cell->format()->alignY( column, row ) == Style::Top );
-      actions->alignMiddle->setChecked( cell->format()->alignY( column, row ) == Style::Middle );
-      actions->alignBottom->setChecked( cell->format()->alignY( column, row ) == Style::Bottom );
-
-      actions->verticalText->setChecked( cell->format()->verticalText( column,row ) );
-
-      actions->wrapText->setChecked( cell->format()->multiRow( column,row ) );
-
-    FormatType ft = cell->formatType();
-    actions->percent->setChecked( ft == Percentage_format );
-    actions->money->setChecked( ft == Money_format );
-
-    if ( activeSheet && !activeSheet->isProtected() )
-      actions->removeComment->setEnabled( !cell->format()->comment(column,row).isEmpty() );
-
-    if ( activeSheet && !activeSheet->isProtected() )
-      actions->decreaseIndent->setEnabled( cell->format()->getIndent( column, row ) > 0.0 );
-
-    toolbarLock = false;
-    if ( activeSheet )
-      adjustActions( activeSheet, cell );
 }
 
 QAbstractButton* View::Private::newIconButton( const char *_file, bool _kbutton, QWidget *_parent )
@@ -2488,8 +2484,7 @@ void View::updateEditWidgetOnPress()
     else
         d->editWidget->setText( cell->text() );
 
-    d->updateButton(cell, column, row);
-    d->adjustActions( d->activeSheet, cell );
+    d->adjustActions(cell, column, row);
 }
 
 void View::updateEditWidget()
@@ -2538,8 +2533,8 @@ void View::updateEditWidget()
       d->canvas->editor()->setEditorFont(cell->format()->textFont(column, row), true);
       d->canvas->editor()->setFocus();
     }
-    d->updateButton(cell, column, row);
-    d->adjustActions( d->activeSheet, cell );
+
+    d->adjustActions(cell, column, row);
 }
 
 void View::activateFormulaEditor()
