@@ -934,17 +934,16 @@ void SheetPrint::updateNewPageListX( int _col )
     if ( _col < m_lnewPageListX.last().startItem() )
     {
         //Find the page entry for this column
-        QList<PrintNewPageEntry>::iterator it;
-        it = m_lnewPageListX.find( _col );
-        while ( ( it == m_lnewPageListX.end() ) && _col > 0 )
+        int index = m_lnewPageListX.indexOf( _col );
+        while ( ( index == -1 ) && _col > 0 )
         {
             _col--;
-            it = m_lnewPageListX.find( _col );
+            index = m_lnewPageListX.indexOf( _col );
         }
 
         //Remove later pages
-        while ( it != m_lnewPageListX.end() )
-            it = m_lnewPageListX.remove( it );
+        while ( index != m_lnewPageListX.count() )
+            m_lnewPageListX.removeAt( index );
 
         //Add default page when list is now empty
         if ( m_lnewPageListX.empty() )
@@ -969,16 +968,16 @@ void SheetPrint::updateNewPageListY( int _row )
     if ( _row < m_lnewPageListY.last().startItem() )
     {
         //Find the page entry for this row
-        QList<PrintNewPageEntry>::iterator it;
-        it = m_lnewPageListY.find( _row );
-        while ( ( it == m_lnewPageListY.end() ) && _row > 0 )
+        int index = m_lnewPageListY.indexOf( _row );
+        while ( ( index == -1 ) && _row > 0 )
         {
             _row--;
-            it = m_lnewPageListY.find( _row );
+            index = m_lnewPageListY.indexOf( _row );
         }
 
         //Remove later pages
-        m_lnewPageListY.erase( ++it, m_lnewPageListY.end() );
+        while ( index != m_lnewPageListY.count() )
+            m_lnewPageListY.removeAt( index );
 
         //Add default page when list is now empty
         if ( m_lnewPageListY.empty() )
