@@ -39,6 +39,7 @@
 #include <KoPoint.h>
 #include <KoView.h>
 
+class QAction;
 class QKeyEvent;
 class QResizeEvent;
 class QScrollBar;
@@ -528,7 +529,7 @@ protected slots:
     /**
      * list from list choose
      */
-    void slotItemSelected( int );
+    void slotItemSelected( QAction* );
     void slotListChoosePopupMenu( );
 
     /**

@@ -410,7 +410,7 @@ miscParameters::miscParameters( View* _view,KVBox *box, char * /*name*/ )
   if( config->hasGroup("Parameters" ))
         {
         config->setGroup( "Parameters" );
-        _indent = config->readDoubleNumEntry( "Indent" , _indent ) ;
+        _indent = config->readEntry( "Indent" , _indent ) ;
         m_bMsgError=config->readEntry( "Msg error" ,false) ;
         }
 

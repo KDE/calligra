@@ -1847,7 +1847,7 @@ void View::initConfig()
         if ( !doc()->configLoadFromFile() )
             doc()->setCompletionMode((KGlobalSettings::Completion)config->readEntry("Completion Mode",(int)(KGlobalSettings::CompletionAuto)));
         doc()->setMoveToValue((KSpread::MoveTo)config->readEntry("Move",(int)(Bottom)));
-        doc()->setIndentValue( config->readDoubleNumEntry( "Indent", 10.0 ) );
+        doc()->setIndentValue( config->readEntry( "Indent", 10.0 ) );
         doc()->setTypeOfCalc((MethodOfCalc)config->readEntry("Method of Calc",(int)(SumOfNumber)));
         if ( !doc()->configLoadFromFile() )
             doc()->setShowTabBar(config->readEntry("Tabbar",true));
@@ -3603,8 +3603,8 @@ void View::setActiveSheet( Sheet * _t, bool updateSheet )
   {
     d->canvas->setXOffset((*it3).x());
     d->canvas->setYOffset((*it3).y());
-    d->horzScrollBar->setValue((*it3).x());
-    d->vertScrollBar->setValue((*it3).y());
+    d->horzScrollBar->setValue((int)(*it3).x());
+    d->vertScrollBar->setValue((int)(*it3).y());
   }
   calcStatusBarOp();
 
@@ -5621,14 +5621,14 @@ void View::slotListChoosePopupMenu( )
   }
 
   d->popupListChoose->popup( p2 );
-  connect( d->popupListChoose, SIGNAL( activated( int ) ),
-                    this, SLOT( slotItemSelected( int ) ) );
+  connect( d->popupListChoose, SIGNAL( triggered( QAction* ) ),
+           this, SLOT( slotItemSelected( QAction* ) ) );
 }
 
 
-void View::slotItemSelected( int id )
+void View::slotItemSelected( QAction* action )
 {
-  QString tmp = d->popupListChoose->text( id );
+  QString tmp = action->text();
   int x = d->canvas->markerColumn();
   int y = d->canvas->markerRow();
   Cell * cell = d->activeSheet->nonDefaultCell( x, y );
