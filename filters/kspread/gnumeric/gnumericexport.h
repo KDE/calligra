@@ -30,6 +30,8 @@ namespace KSpread
   class Cell;
 }
 
+class QRect;
+
 class GNUMERICExport : public KoFilter {
 
     Q_OBJECT

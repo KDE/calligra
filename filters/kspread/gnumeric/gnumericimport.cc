@@ -306,21 +306,18 @@ void set_document_info(KoDocument * document, QDomElement * docElem)
     QDomNode gmr_value = gmr_item.namedItem("gmr:val-string");
 
     KoDocumentInfo * DocumentInfo     = document->documentInfo();
-    KoDocumentInfoAbout  * aboutPage  = static_cast<KoDocumentInfoAbout *>(DocumentInfo->page( "about" ));
-    KoDocumentInfoAuthor * authorPage = static_cast<KoDocumentInfoAuthor*>(DocumentInfo->page( "author" ));
-
 
     if (gmr_name.toElement().text() == "title")
     {
-      aboutPage->setTitle(gmr_value.toElement().text());
+      DocumentInfo->setAboutInfo("title", gmr_value.toElement().text());
     }
     else if (gmr_name.toElement().text() == "keywords")
     {
-        aboutPage->setKeywords( gmr_value.toElement().text());
+      DocumentInfo->setAboutInfo("keyword", gmr_value.toElement().text());
     }
     else if (gmr_name.toElement().text() == "comments")
     {
-      aboutPage->setAbstract(gmr_value.toElement().text());
+      DocumentInfo->setAboutInfo("comments", gmr_value.toElement().text());
     }
     else if (gmr_name.toElement().text() == "category")
     {
@@ -336,11 +333,11 @@ void set_document_info(KoDocument * document, QDomElement * docElem)
     }
     else if (gmr_name.toElement().text() == "author")
     {
-      authorPage->setFullName(gmr_value.toElement().text());
+      DocumentInfo->setAuthorInfo("creator", gmr_value.toElement().text());
     }
     else if (gmr_name.toElement().text() == "company")
     {
-      authorPage->setCompany(gmr_value.toElement().text());
+      DocumentInfo->setAuthorInfo("company", gmr_value.toElement().text());
     }
 
     gmr_item = gmr_item.nextSibling();
@@ -572,25 +569,25 @@ void GNUMERICFilter::ParseBorder( QDomElement & gmr_styleborder, Cell * kspread_
   if ( !gmr_left.isNull() )
   {
     QDomElement e = gmr_left.toElement(); // try to convert the node to an element.
-    importBorder( e, Qt::DockLeft, kspread_cell);
+    importBorder( e, Left, kspread_cell);
    }
 
   if ( !gmr_right.isNull() )
   {
     QDomElement e = gmr_right.toElement(); // try to convert the node to an element.
-    importBorder( e, Qt::DockRight, kspread_cell);
+    importBorder( e, Right, kspread_cell);
   }
 
   if ( !gmr_top.isNull() )
   {
     QDomElement e = gmr_top.toElement(); // try to convert the node to an element.
-    importBorder( e, Qt::DockTop,  kspread_cell);
+    importBorder( e, Top,  kspread_cell);
   }
 
   if ( !gmr_bottom.isNull() )
   {
     QDomElement e = gmr_bottom.toElement(); // try to convert the node to an element.
-    importBorder( e, Qt::DockBottom, kspread_cell);
+    importBorder( e, Bottom, kspread_cell);
   }
 
   if ( !gmr_diagonal.isNull() )
@@ -625,16 +622,16 @@ void GNUMERICFilter::importBorder( QDomElement border, borderStyle _style,  Cell
             {
                 switch( _style )
                 {
-                case Qt::DockLeft:
+                case Left:
                     cell->setLeftBorderPen( pen );
                     break;
-                case Qt::DockRight:
+                case Right:
                     cell->setRightBorderPen( pen );
                     break;
-                case Qt::DockTop:
+                case Top:
                     cell->setTopBorderPen( pen );
                     break;
-                case Qt::DockBottom:
+                case Bottom:
                     cell->setBottomBorderPen( pen );
                     break;
                 case Diagonal:
@@ -653,16 +650,16 @@ void GNUMERICFilter::importBorder( QDomElement border, borderStyle _style,  Cell
                 {
                     switch( _style )
                     {
-                    case Qt::DockLeft:
+                    case Left:
                         cell->format()->setLeftBorderColor( color );
                         break;
-                    case Qt::DockRight:
+                    case Right:
                         cell->format()->setRightBorderColor( color );
                         break;
-                    case Qt::DockTop:
+                    case Top:
                         cell->format()->setTopBorderColor( color );
                         break;
-                    case Qt::DockBottom:
+                    case Bottom:
                         cell->format()->setBottomBorderColor( color );
                         break;
                     case Diagonal:
@@ -822,7 +819,7 @@ QString GNUMERICFilter::convertVars( QString const & str, Sheet * table ) const
     {
         kDebug(30521) << "Found var: " << list1[i] << endl;
       if ( i == 0 )
-        result = result.replace( list1[i], table->tableName() );
+        result = result.replace( list1[i], table->sheetName() );
       else
         result = result.replace( list1[i], list2[i] );
     }
@@ -1052,15 +1049,15 @@ void GNUMERICFilter::ParseFormat(QString const & formatString, Cell * kspread_ce
     kspread_cell->format()->setPrecision( precision );
   }
 
-  bool Qt::red = false;
+  bool red = false;
   if (formatString.find("[RED]", lastPos) != -1)
   {
-    Qt::red = true;
+    red = true;
     kspread_cell->format()->setFloatColor( Style::NegRed );
   }
   if ( formatString.find('(', lastPos) != -1 )
   {
-    if ( Qt::red )
+    if ( red )
       kspread_cell->format()->setFloatColor( Style::NegRedBrackets );
     else
       kspread_cell->format()->setFloatColor( Style::NegBrackets );
@@ -1837,7 +1834,7 @@ KoFilter::ConversionStatus GNUMERICFilter::convert( const QByteArray & from, con
 
     kDebug(30521) << "here we go... " << document->className() << endl;
 
-    if ( !::qt_cast<const KSpread::Doc *>( document ) )  // it's safer that way :)
+    if ( !qobject_cast<const KSpread::Doc *>( document ) )  // it's safer that way :)
     {
         kWarning(30521) << "document isn't a KSpread::Doc but a " << document->className() << endl;
         return KoFilter::NotImplemented;

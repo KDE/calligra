@@ -953,7 +953,7 @@ KoFilter::ConversionStatus GNUMERICExport::convert( const QByteArray& from, cons
     if (!document)
         return KoFilter::StupidError;
 
-    if ( !qtobject_cast<const KSpread::Doc *>( document ) )  // it's safer that way :)
+    if ( !qobject_cast<const KSpread::Doc *>( document ) )  // it's safer that way :)
     {
       kWarning(30521) << "document isn't a KSpread::Doc but a " << document->className() << endl;
         return KoFilter::NotImplemented;
@@ -987,9 +987,6 @@ KoFilter::ConversionStatus GNUMERICExport::convert( const QByteArray& from, cons
     QDomElement sheets,sheet,tmp,cells,selections, cols,rows,styles,merged, margins, top, left, bottom, right, orientation, paper, header, footer, customSize, cellComment, objects, repeatColumns, repeatRows;
 
     KoDocumentInfo *DocumentInfo = document->documentInfo();
-    KoDocumentInfoAbout *aboutPage = static_cast<KoDocumentInfoAbout *>(DocumentInfo->page( "about" ));
-
-    KoDocumentInfoAuthor *authorPage = static_cast<KoDocumentInfoAuthor*>(DocumentInfo->page( "author" ));
 
     /*
      * Attributes
@@ -1012,11 +1009,11 @@ KoFilter::ConversionStatus GNUMERICExport::convert( const QByteArray& from, cons
     QDomElement summary =  gnumeric_doc.createElement("gmr:Summary");
     workbook.appendChild(summary);
 
-    addSummaryItem(gnumeric_doc, summary, "title", aboutPage->title());
-    addSummaryItem(gnumeric_doc, summary, "company", authorPage->company());
-    addSummaryItem(gnumeric_doc, summary, "author", authorPage->fullName());
-    addSummaryItem(gnumeric_doc, summary, "comments", aboutPage->abstract());
-    addSummaryItem(gnumeric_doc, summary, "keywords", aboutPage->keywords());
+    addSummaryItem(gnumeric_doc, summary, "title", DocumentInfo->aboutInfo("title"));
+    addSummaryItem(gnumeric_doc, summary, "company", DocumentInfo->authorInfo("company"));
+    addSummaryItem(gnumeric_doc, summary, "author", DocumentInfo->authorInfo("creator"));
+    addSummaryItem(gnumeric_doc, summary, "comments", DocumentInfo->aboutInfo("comments"));
+    addSummaryItem(gnumeric_doc, summary, "keywords", DocumentInfo->aboutInfo("keyword"));
 
     addSummaryItem(gnumeric_doc, summary, "application", "KSpread");
 
@@ -1026,10 +1023,10 @@ KoFilter::ConversionStatus GNUMERICExport::convert( const QByteArray& from, cons
     QDomElement sheetNameIndex = gnumeric_doc.createElement("gmr:SheetNameIndex");
     workbook.appendChild(sheetNameIndex);
 
-    for (table = ksdoc->map()->firstSheet(); table != 0L; table =ksdoc->map()->nextSheet())
+    foreach(Sheet* table, ksdoc->map()->sheetList())
     {
         QDomElement sheetName = gnumeric_doc.createElement("gmr:SheetName");
-        sheetName.appendChild(gnumeric_doc.createTextNode(table->tableName()));
+        sheetName.appendChild(gnumeric_doc.createTextNode(table->sheetName()));
         sheetNameIndex.appendChild(sheetName);
     }
 
@@ -1090,7 +1087,7 @@ KoFilter::ConversionStatus GNUMERICExport::convert( const QByteArray& from, cons
     }
     int i = 0;
     int indexActiveTable=0;
-    for (table = ksdoc->map()->firstSheet(); table != 0L; table =ksdoc->map()->nextSheet(), i++)
+    foreach(Sheet* table, ksdoc->map()->sheetList())
     {
         if ( table->print()->paperFormat()==PG_CUSTOM )
         {
@@ -1118,10 +1115,10 @@ KoFilter::ConversionStatus GNUMERICExport::convert( const QByteArray& from, cons
          */
 
         tmp = gnumeric_doc.createElement("gmr:Name");
-        if ( table->tableName()==activeTableName )
+        if ( table->sheetName()==activeTableName )
             indexActiveTable = i;
 
-        tmp.appendChild(gnumeric_doc.createTextNode(table->tableName()));
+        tmp.appendChild(gnumeric_doc.createTextNode(table->sheetName()));
 
         sheet.appendChild(tmp);
 
