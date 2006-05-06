@@ -1873,10 +1873,10 @@ void KWView::print( KPrinter &prt )
     QPainter painter;
     painter.begin( &prt );
 
-    kDebug(32001) << "KWView::print scaling by " << (double)ptr.logicalDpiX() / (double)dpiX
-                   << "," << (double)ptr.logicalDpiY() / (double)dpiY << endl;
-    painter.scale( (double)ptr.logicalDpiX() / (double)dpiX,
-                   (double)ptr.logicalDpiY() / (double)dpiY );
+    kDebug(32001) << "KWView::print scaling by " << (double)prt.logicalDpiX() / (double)dpiX
+                   << "," << (double)prt.logicalDpiY() / (double)dpiY << endl;
+    painter.scale( (double)prt.logicalDpiX() / (double)dpiX,
+                   (double)prt.logicalDpiY() / (double)dpiY );
 
     bool canceled = false;
     // Breaks wysiwyg, obviously - trying without
