@@ -332,9 +332,13 @@ KSPREAD_EXPORT bool localReferenceAnchor( const QString &_ref );
 
 
 
+/**
+ * \ingroup OpenDocument
+ */
 namespace Oasis
 {
   /**
+   * \ingroup OpenDocument
    * Converts an OpenDocument representation of a formula/cell reference to a
    * localized formula/cell reference.
    * @param expr The expression to convert from OpenDocument format.
@@ -343,6 +347,7 @@ namespace Oasis
   // TODO check visibility
   KSPREAD_EXPORT QString decodeFormula(const QString& expr, const KLocale* locale = 0);
   /**
+   * \ingroup OpenDocument
    * Converts a localized formula/cell reference to an OpenDocument
    * representation of a formula/cell reference.
    * @param expr The expression to convert to OpenDocument format.

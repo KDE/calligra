@@ -241,6 +241,16 @@ public:
     void sheetDies();
 
     /**
+     * \ingroup NativeFormat
+     */
+    bool load( const QDomElement& cell,
+               int _xshift, int _yshift,
+               Paste::Mode pm = Paste::Normal,
+               Paste::Operation op = Paste::OverWrite,
+               bool paste = false );
+
+    /**
+     * \ingroup NativeFormat
      * Save this cell.
      * @param doc document to save cell in
      * @param _x_offset x offset
@@ -255,29 +265,38 @@ public:
      *            back to relative references during decoding) - is used for cutting to clipboard
      *            Usually this is false, to only store the properties explicitely set.
      */
-    QDomElement save( QDomDocument& doc, int _x_offset = 0, int _y_offset = 0, bool force = false, bool copy = false, bool era = false );
+    QDomElement save( QDomDocument& doc,
+                      int _x_offset = 0, int _y_offset = 0,
+                      bool force = false, bool copy = false, bool era = false );
 
+
+    /**
+     * \ingroup OpenDocument
+     */
     bool saveOasis( KoXmlWriter& xmlwriter, KoGenStyles& mainStyles,
                     int row, int column, int &repeated,
                     GenValidationStyles &valStyle );
 
+    /**
+     * \ingroup OpenDocument
+     */
     void saveOasisValue (KoXmlWriter &xmlWriter);
 
     /**
+     * \ingroup OpenDocument
      * @return the OASIS style's name
      */
     QString saveOasisCellStyle( KoGenStyle &currentCellStyle,KoGenStyles &mainStyles );
 
-    bool load( const QDomElement& cell, int _xshift, int _yshift, Paste::Mode pm = Paste::Normal,
-               Paste::Operation op = Paste::OverWrite, bool paste = false );
-
     /**
+     * \ingroup OpenDocument
      * Loads a cell from an OASIS XML element.
      * @param element An OASIS XML element
      * @param oasisContext The loading context assoiated with the XML element
      * @param style preloaded cell style
      */
     bool loadOasis( const QDomElement & element, KoOasisLoadingContext &oasisContext , Style* style);
+
 
     QTime toTime(const QDomElement &element);
     QDate toDate(const QDomElement &element);
@@ -322,6 +341,7 @@ public:
     Q_DECLARE_FLAGS(Borders, Border)
 
     /**
+     * \ingroup Painting
      * Paints the cell.
      *
      * @param rect the portion of the canvas that is actually in view
@@ -776,6 +796,7 @@ public:
     void clearAllErrors();
 
     /**
+     * \ingroup Painting
      * Calculates the layout of the cell, i,e, determines what should be shown
      * for this cell, m_strOutText.
      */
@@ -811,6 +832,7 @@ public:
     bool testValidity() const;
 
     /**
+     * \ingroup Painting
      * Calculates the text parameters stored in cell
      * Applies font to use to @p painter
      */
@@ -931,18 +953,21 @@ public:
 
 protected:
     /**
+     * \ingroup Painting
      * Applies the font to use to @p painter
      */
     void applyZoomedFont( QPainter &painter, int _col, int _row );
 
     /**
+     * \ingroup Painting
      * Called from makeFormat() to determine the space
      * needed for the text.
      */
     void textSize( QPainter &_paint );
 
     /**
-    *  Called from @ref #paintCell to determine the text
+     * \ingroup Painting
+     *  Called from @ref #paintCell to determine the text
      * wich can be displaying.
     */
     QString textDisplaying( QPainter &painter);
@@ -970,19 +995,37 @@ protected:
      */
     void checkNumberFormat();
 
-   /**
+    /**
+     * \ingroup OpenDocument
      * Load the text paragraphs from an OASIS XML cell description.
      * @param parent The DOM element representing the cell.
      */
     void loadOasisCellText( const QDomElement& parent );
+
+    /**
+     * \ingroup OpenDocument
+     */
     void loadOasisObjects( const QDomElement& e, KoOasisLoadingContext& oasisContext );
+
+    /**
+     * \ingroup OpenDocument
+     */
     void loadOasisValidation( const QString& validationName );
 
+    /**
+     * \ingroup OpenDocument
+     */
     void loadOasisValidationCondition( QString &valExpression );
+
+    /**
+     * \ingroup OpenDocument
+     */
     void saveOasisAnnotation( KoXmlWriter &xmlwriter );
+
+    /**
+     * \ingroup OpenDocument
+     */
     void loadOasisConditional( QDomElement * style );
-
-
 
 private:
     class Extra;
@@ -991,6 +1034,7 @@ private:
     // static const char* s_dataTypeToString[];
 
     /**
+     * \ingroup Painting
      * helper function for paintCell() function
      * @see paintCell()
      * @internal
@@ -1002,6 +1046,7 @@ private:
                            QPen & leftPen, QPen & topPen );
 
     /**
+     * \ingroup Painting
      * helper function for paintCell() function
      * @see paintCell()
      * @internal
@@ -1010,6 +1055,7 @@ private:
                            const QPoint &cellRef, Borders paintBorder );
 
     /**
+     * \ingroup Painting
      * helper function for paintCell() function
      * @see paintCell()
      * @internal
@@ -1018,6 +1064,7 @@ private:
                     const QPoint &cellRef );
 
     /**
+     * \ingroup Painting
      * helper function for paintCell() function
      * @see paintCell()
      * @internal
@@ -1026,6 +1073,7 @@ private:
                                  QColor &backgroundColor );
 
     /**
+     * \ingroup Painting
      * helper function for paintCell() function
      * @see paintCell()
      * @internal
@@ -1034,6 +1082,7 @@ private:
                                 const QPoint &cellRef, QColor &backgroundColor );
 
     /**
+     * \ingroup Painting
      * helper function for paintCell() function
      * @see paintCell()
      * @internal
@@ -1042,6 +1091,7 @@ private:
                                 QColor &backgroundColor );
 
     /**
+     * \ingroup Painting
      * helper function for paintCell() function
      * @see paintCell()
      * @internal
@@ -1053,6 +1103,7 @@ private:
                               QPen const & leftPen, QPen const & topPen );
 
     /**
+     * \ingroup Painting
      * helper function for paintCell() function
      * @see paintCell()
      * @internal
@@ -1062,6 +1113,7 @@ private:
                           QColor &backgroundColor );
 
     /**
+     * \ingroup Painting
      * helper function for paintCell() function
      * @see paintCell()
      * @internal
@@ -1074,6 +1126,7 @@ private:
                              QLinkedList<QPoint> &mergedCellsPainted );
 
     /**
+     * \ingroup Painting
      * helper function for paintCell() function
      * @see paintCell()
      * @internal

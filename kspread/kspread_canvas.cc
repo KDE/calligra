@@ -2045,7 +2045,7 @@ void Canvas::processEnterKey(QKeyEvent* event)
   /* use the configuration setting to see which direction we're supposed to move
      when enter is pressed.
   */
-  KSpread::MoveTo direction = d->view->doc()->getMoveToValue();
+  KSpread::MoveTo direction = d->view->doc()->moveToValue();
 
   //if shift Button clicked inverse move direction
   if (event->modifiers() & Qt::ShiftModifier)

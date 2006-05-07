@@ -93,6 +93,8 @@ static const int CURRENT_SYNTAX_VERSION = 1;
 // Make sure an appropriate DTD is available in www/koffice/DTD if changing this value
 static const char * CURRENT_DTD_VERSION = "1.2";
 
+typedef QMap<QString, QDomElement> SavedDocParts;
+
 class Doc::Private
 {
 public:
@@ -106,7 +108,7 @@ public:
   ValueCalc *calc;
 
   Sheet *activeSheet;
-    KSPLoadingInfo *m_loadingInfo;
+  KSPLoadingInfo *loadingInfo;
   static QList<Doc*> s_docs;
   static int s_docId;
 
@@ -161,6 +163,7 @@ public:
   KoPictureCollection m_pictureCollection;
   Q3ValueList<KoPictureKey> usedPictures;
   bool m_savingWholeDocument;
+  SavedDocParts savedDocParts;
 };
 
 /*****************************************************************************
@@ -176,7 +179,7 @@ Doc::Doc( QWidget *parentWidget, const char *widgetName, QObject* parent, const 
   : KoDocument( parentWidget, widgetName, parent, name, singleViewMode )
 {
   d = new Private;
-  d->m_loadingInfo = 0;
+  d->loadingInfo = 0;
 
   d->map = new Map( this, "Map" );
   d->locale = new Locale;
@@ -352,8 +355,8 @@ bool Doc::initDoc(InitDocFlags flags, QWidget* parentWidget)
     if ( ret == KoTemplateChooseDia::Template )
     {
         resetURL();
-        d->m_loadingInfo = new KSPLoadingInfo;
-        d->m_loadingInfo->setLoadTemplate( true );
+        d->loadingInfo = new KSPLoadingInfo;
+        d->loadingInfo->setLoadTemplate( true );
         bool ok = loadNativeFormat( f );
         if ( !ok )
         {
@@ -370,8 +373,8 @@ bool Doc::initDoc(InitDocFlags flags, QWidget* parentWidget)
 
 void Doc::openTemplate (const QString& file)
 {
-    d->m_loadingInfo = new KSPLoadingInfo;
-    d->m_loadingInfo->setLoadTemplate( true );
+    d->loadingInfo = new KSPLoadingInfo;
+    d->loadingInfo->setLoadTemplate( true );
     KoDocument::openTemplate( file );
     deleteLoadingInfo();
     initConfig();
@@ -563,8 +566,8 @@ QDomDocument Doc::saveXML()
         }
     }
 
-    SavedDocParts::const_iterator iter = m_savedDocParts.begin();
-    SavedDocParts::const_iterator end  = m_savedDocParts.end();
+    SavedDocParts::const_iterator iter = d->savedDocParts.begin();
+    SavedDocParts::const_iterator end  = d->savedDocParts.end();
     while ( iter != end )
     {
       // save data we loaded in the beginning and which has no owner back to file
@@ -914,8 +917,8 @@ void Doc::saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyles ) con
 
 bool Doc::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles, const QDomDocument& settings, KoStore* store)
 {
-    if ( !d->m_loadingInfo )
-        d->m_loadingInfo = new KSPLoadingInfo;
+    if ( !d->loadingInfo )
+        d->loadingInfo = new KSPLoadingInfo;
 
     QTime dt;
     dt.start();
@@ -1112,7 +1115,7 @@ bool Doc::loadXML( QIODevice *, const QDomDocument& doc )
          && tagName != "paper" )
     {
       // belongs to a plugin, load it and save it for later use
-      m_savedDocParts[ tagName ] = element;
+      d->savedDocParts[ tagName ] = element;
     }
 
     element = element.nextSibling().toElement();
@@ -1227,12 +1230,12 @@ void Doc::deregisterPlugin( Plugin * plugin )
 
 bool Doc::docData( QString const & xmlTag, QDomElement & data )
 {
-  SavedDocParts::iterator iter = m_savedDocParts.find( xmlTag );
-  if ( iter == m_savedDocParts.end() )
+  SavedDocParts::iterator iter = d->savedDocParts.find( xmlTag );
+  if ( iter == d->savedDocParts.end() )
     return false;
 
   data = iter.value();
-  m_savedDocParts.erase( iter );
+  d->savedDocParts.erase( iter );
 
   return true;
 }
@@ -1347,7 +1350,7 @@ bool Doc::showMessageError() const
   return  d->showError;
 }
 
-KSpread::MoveTo Doc::getMoveToValue() const
+KSpread::MoveTo Doc::moveToValue() const
 {
   return d->moveTo;
 }
@@ -1483,16 +1486,16 @@ void Doc::addCommand( UndoAction* undo )
 
 void Doc::undo()
 {
-  undoLock ();
+  setUndoLocked( true );
   d->commandHistory->undo();
-  undoUnlock ();
+  setUndoLocked( false );
 }
 
 void Doc::redo()
 {
-  undoLock ();
+  setUndoLocked( true );
   d->commandHistory->redo();
-  undoUnlock ();
+  setUndoLocked( false );
 }
 
 void Doc::commandExecuted()
@@ -1505,14 +1508,9 @@ void Doc::documentRestored()
   setModified( false );
 }
 
-void Doc::undoLock()
+void Doc::setUndoLocked( bool lock )
 {
-  d->undoLocked++;
-}
-
-void Doc::undoUnlock()
-{
-  d->undoLocked--;
+  lock ? d->undoLocked++ : d->undoLocked--;
 }
 
 bool Doc::undoLocked() const
@@ -1668,12 +1666,12 @@ void Doc::paintCellRegions(QPainter& painter, const QRect &viewRect,
   {
     cellRegion = (*it)->rect().normalized();
 
-    PaintRegion(painter, unzoomedViewRect, view, cellRegion, (*it)->sheet());
+    paintRegion(painter, unzoomedViewRect, view, cellRegion, (*it)->sheet());
   }
 }
 
 
-void Doc::PaintRegion(QPainter &painter, const KoRect &viewRegion,
+void Doc::paintRegion(QPainter &painter, const KoRect &viewRegion,
 		      View* view, const QRect &paintRegion,
 		      const Sheet* sheet)
 {
@@ -1929,7 +1927,7 @@ void Doc::loadOasisCellValidation( const QDomElement&body )
                 QDomElement element = n.toElement();
                 //kDebug()<<" loadOasisCellValidation element.tagName() :"<<element.tagName()<<endl;
                 if ( element.tagName() ==  "content-validation" && element.namespaceURI() == KoXmlNS::table ) {
-                    d->m_loadingInfo->appendValidation(element.attributeNS( KoXmlNS::table, "name", QString::null ), element );
+                    d->loadingInfo->appendValidation(element.attributeNS( KoXmlNS::table, "name", QString::null ), element );
                     kDebug()<<" validation found :"<<element.attributeNS( KoXmlNS::table, "name", QString::null )<<endl;
                 }
                 else {
@@ -1982,7 +1980,7 @@ void Doc::loadOasisAreaName( const QDomElement& body )
             QString name  = e.attributeNS( KoXmlNS::table, "name", QString::null );
             QString range = e.attributeNS( KoXmlNS::table, "cell-range-address", QString::null );
             kDebug()<<"area name : "<<name<<" range :"<<range<<endl;
-            d->m_loadingInfo->addWordInAreaList( name );
+            d->loadingInfo->addWordInAreaList( name );
             kDebug() << "Reading in named area, name: " << name << ", area: " << range << endl;
 
             range = Oasis::decodeFormula( range );
@@ -2171,13 +2169,13 @@ void Doc::setDisplaySheet(Sheet *_sheet )
 
 KSPLoadingInfo * Doc::loadingInfo() const
 {
-    return d->m_loadingInfo;
+    return d->loadingInfo;
 }
 
 void Doc::deleteLoadingInfo()
 {
-    delete d->m_loadingInfo;
-    d->m_loadingInfo = 0;
+    delete d->loadingInfo;
+    d->loadingInfo = 0;
 }
 
 Sheet * Doc::displaySheet() const

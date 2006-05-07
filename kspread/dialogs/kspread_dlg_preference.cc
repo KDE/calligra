@@ -532,7 +532,7 @@ switch(tmpCompletion )
                 typeCompletion->setCurrentIndex(0);
                 break;
         }
-switch( m_pView->doc()->getMoveToValue( ))
+        switch( m_pView->doc()->moveToValue( ))
         {
         case  Bottom:
                 typeOfMove->setCurrentIndex(0);
@@ -656,7 +656,7 @@ void miscParameters::apply()
             tmpMoveTo=BottomFirst;
             break;
     }
-    if(tmpMoveTo!=m_pView->doc()->getMoveToValue())
+    if(tmpMoveTo!=m_pView->doc()->moveToValue())
     {
         m_pView->doc()->setMoveToValue(tmpMoveTo);
         config->writeEntry( "Move", (int)tmpMoveTo);

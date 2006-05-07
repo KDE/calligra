@@ -132,12 +132,12 @@ void Undo::redo()
 
 void Undo::lock()
 {
-  m_pDoc->undoLock();
+  m_pDoc->setUndoLocked( true );
 }
 
 void Undo::unlock()
 {
-  m_pDoc->undoUnlock();
+  m_pDoc->setUndoLocked( false );
 }
 
 bool Undo::isLocked() const
@@ -273,7 +273,7 @@ void UndoRemoveColumn::undo()
     if ( !sheet )
 	return;
 
-    doc()->undoLock();
+    doc()->setUndoLocked( true );
 
     sheet->insertColumn( m_iColumn,m_iNbCol);
 
@@ -284,14 +284,14 @@ void UndoRemoveColumn::undo()
     sheet->print()->setPrintRange( m_printRange );
     sheet->print()->setPrintRepeatColumns( m_printRepeatColumns );
 
-    doc()->undoUnlock();
+    doc()->setUndoLocked( false );
 
     undoFormulaReference();
 }
 
 void UndoRemoveColumn::redo()
 {
-    doc()->undoLock();
+    doc()->setUndoLocked( true );
 
     Sheet* sheet = doc()->map()->findSheet( m_sheetName );
     if ( !sheet )
@@ -299,7 +299,7 @@ void UndoRemoveColumn::redo()
 
     sheet->removeColumn( m_iColumn,m_iNbCol );
 
-    doc()->undoUnlock();
+    doc()->setUndoLocked( false );
 }
 
 /****************************************************************************
@@ -327,9 +327,9 @@ void UndoInsertColumn::undo()
     if ( !sheet )
 	return;
 
-    doc()->undoLock();
+    doc()->setUndoLocked( true );
     sheet->removeColumn( m_iColumn,m_iNbCol );
-    doc()->undoUnlock();
+    doc()->setUndoLocked( false );
 
     undoFormulaReference();
 }
@@ -340,9 +340,9 @@ void UndoInsertColumn::redo()
     if ( !sheet )
 	return;
 
-    doc()->undoLock();
+    doc()->setUndoLocked( true );
     sheet->insertColumn( m_iColumn,m_iNbCol);
-    doc()->undoUnlock();
+    doc()->setUndoLocked( false );
 }
 
 /****************************************************************************
@@ -388,7 +388,7 @@ void UndoRemoveRow::undo()
     if ( !sheet )
 	return;
 
-    doc()->undoLock();
+    doc()->setUndoLocked( true );
 
     sheet->insertRow( m_iRow,m_iNbRow );
 
@@ -400,14 +400,14 @@ void UndoRemoveRow::undo()
 
     if(sheet->getAutoCalc()) sheet->recalc();
 
-    doc()->undoUnlock();
+    doc()->setUndoLocked( false );
 
     undoFormulaReference();
 }
 
 void UndoRemoveRow::redo()
 {
-    doc()->undoLock();
+    doc()->setUndoLocked( true );
 
     Sheet* sheet = doc()->map()->findSheet( m_sheetName );
     if ( !sheet )
@@ -415,7 +415,7 @@ void UndoRemoveRow::redo()
 
     sheet->removeRow( m_iRow,m_iNbRow );
 
-    doc()->undoUnlock();
+    doc()->setUndoLocked( false );
 }
 
 /****************************************************************************
@@ -443,9 +443,9 @@ void UndoInsertRow::undo()
     if ( !sheet )
 	return;
 
-    doc()->undoLock();
+    doc()->setUndoLocked( true );
     sheet->removeRow( m_iRow,m_iNbRow );
-    doc()->undoUnlock();
+    doc()->setUndoLocked( false );
 
     undoFormulaReference();
 }
@@ -456,9 +456,9 @@ void UndoInsertRow::redo()
     if ( !sheet )
 	return;
 
-    doc()->undoLock();
+    doc()->setUndoLocked( true );
     sheet->insertRow( m_iRow,m_iNbRow );
-    doc()->undoUnlock();
+    doc()->setUndoLocked( false );
 }
 
 
@@ -502,9 +502,9 @@ void UndoHideRow::undo()
     if ( !sheet )
 	return;
 
-    doc()->undoLock();
+    doc()->setUndoLocked( true );
     sheet->showRow( 0,-1,listRow );
-    doc()->undoUnlock();
+    doc()->setUndoLocked( false );
 }
 
 void UndoHideRow::redo()
@@ -513,9 +513,9 @@ void UndoHideRow::redo()
     if ( !sheet )
 	return;
 
-    doc()->undoLock();
+    doc()->setUndoLocked( true );
     sheet->hideRow(0,-1, listRow );
-    doc()->undoUnlock();
+    doc()->setUndoLocked( false );
 }*/
 
 /****************************************************************************
@@ -559,9 +559,9 @@ void UndoHideColumn::undo()
     if ( !sheet )
 	return;
 
-    doc()->undoLock();
+    doc()->setUndoLocked( true );
     sheet->showColumn(0,-1,listCol);
-    doc()->undoUnlock();
+    doc()->setUndoLocked( false );
 }
 
 void UndoHideColumn::redo()
@@ -570,9 +570,9 @@ void UndoHideColumn::redo()
     if ( !sheet )
 	return;
 
-    doc()->undoLock();
+    doc()->setUndoLocked( true );
     sheet->hideColumn(0,-1,listCol);
-    doc()->undoUnlock();
+    doc()->setUndoLocked( false );
 }*/
 
 /****************************************************************************
@@ -616,9 +616,9 @@ void UndoShowRow::undo()
     if ( !sheet )
 	return;
 
-    doc()->undoLock();
+    doc()->setUndoLocked( true );
     sheet->hideRow(0,-1,listRow);
-    doc()->undoUnlock();
+    doc()->setUndoLocked( false );
 }
 
 void UndoShowRow::redo()
@@ -627,9 +627,9 @@ void UndoShowRow::redo()
     if ( !sheet )
 	return;
 
-    doc()->undoLock();
+    doc()->setUndoLocked( true );
     sheet->showRow(0,-1,listRow);
-    doc()->undoUnlock();
+    doc()->setUndoLocked( false );
 }*/
 
 /****************************************************************************
@@ -674,9 +674,9 @@ void UndoShowColumn::undo()
     if ( !sheet )
 	return;
 
-    doc()->undoLock();
+    doc()->setUndoLocked( true );
     sheet->hideColumn( 0,-1,listCol );
-    doc()->undoUnlock();
+    doc()->setUndoLocked( false );
 }
 
 void UndoShowColumn::redo()
@@ -685,9 +685,9 @@ void UndoShowColumn::redo()
     if ( !sheet )
 	return;
 
-    doc()->undoLock();
+    doc()->setUndoLocked( true );
     sheet->showColumn(0,-1,listCol);
-    doc()->undoUnlock();
+    doc()->setUndoLocked( false );
 }*/
 
 
@@ -728,7 +728,7 @@ void UndoPaperLayout::undo()
         return;
     SheetPrint* print = sheet->print();
 
-    doc()->undoLock();
+    doc()->setUndoLocked( true );
 
     m_plRedo = print->paperLayout();
     print->setPaperLayout( m_pl.ptLeft,  m_pl.ptTop,
@@ -769,7 +769,7 @@ void UndoPaperLayout::undo()
     m_iPageLimitYRedo = print->pageLimitY();
     print->setPageLimitY( m_iPageLimitY );
 
-    doc()->undoUnlock();
+    doc()->setUndoLocked( false );
 }
 
 void UndoPaperLayout::redo()
@@ -779,7 +779,7 @@ void UndoPaperLayout::redo()
         return;
     SheetPrint* print = sheet->print();
 
-    doc()->undoLock();
+    doc()->setUndoLocked( true );
     print->setPaperLayout( m_plRedo.ptLeft,  m_plRedo.ptTop,
                            m_plRedo.ptRight, m_plRedo.ptBottom,
                            m_plRedo.format, m_plRedo.orientation );
@@ -802,7 +802,7 @@ void UndoPaperLayout::redo()
     print->setPageLimitX( m_iPageLimitX );
     print->setPageLimitY( m_iPageLimitY );
 
-    doc()->undoUnlock();
+    doc()->setUndoLocked( false );
 }
 
 
@@ -836,7 +836,7 @@ void UndoSetText::undo()
     if ( !sheet )
 	return;
 
-    doc()->undoLock();
+    doc()->setUndoLocked( true );
     doc()->emitBeginOperation();
     Cell *cell = sheet->nonDefaultCell( m_iColumn, m_iRow );
     m_strRedoText = cell->text();
@@ -848,7 +848,7 @@ void UndoSetText::undo()
     else
 	cell->setCellText( m_strText );
     sheet->updateView( QRect( m_iColumn, m_iRow, 1, 1 ) );
-    doc()->undoUnlock();
+    doc()->setUndoLocked( false );
 }
 
 void UndoSetText::redo()
@@ -857,7 +857,7 @@ void UndoSetText::redo()
     if ( !sheet )
 	return;
 
-    doc()->undoLock();
+    doc()->setUndoLocked( true );
     doc()->emitBeginOperation();
     Cell *cell = sheet->nonDefaultCell( m_iColumn, m_iRow );
     m_strText = cell->text();
@@ -868,7 +868,7 @@ void UndoSetText::redo()
 	cell->setCellText( m_strRedoText );
     cell->format()->setFormatType(m_eFormatTypeRedo);
     sheet->updateView( QRect( m_iColumn, m_iRow, 1, 1 ) );
-    doc()->undoUnlock();
+    doc()->setUndoLocked( false );
 }
 
 /****************************************************************************
@@ -1086,7 +1086,7 @@ void UndoCellFormat::undo()
   if ( !sheet )
     return;
 
-  doc()->undoLock();
+  doc()->setUndoLocked( true );
   doc()->emitBeginOperation();
   copyFormat( m_lstRedoFormats, m_lstRedoColFormats, m_lstRedoRowFormats, sheet );
   Region::ConstIterator endOfList(m_region.constEnd());
@@ -1125,7 +1125,7 @@ void UndoCellFormat::undo()
   sheet->setRegionPaintDirty( m_region );
   sheet->updateView( &m_region );
 
-  doc()->undoUnlock();
+  doc()->setUndoLocked( false );
 }
 
 void UndoCellFormat::redo()
@@ -1134,7 +1134,7 @@ void UndoCellFormat::redo()
   if ( !sheet )
     return;
 
-  doc()->undoLock();
+  doc()->setUndoLocked( true );
   doc()->emitBeginOperation();
 
   Region::ConstIterator endOfList(m_region.constEnd());
@@ -1173,7 +1173,7 @@ void UndoCellFormat::redo()
 
   sheet->setRegionPaintDirty( m_region );
   sheet->updateView( &m_region );
-  doc()->undoUnlock();
+  doc()->setUndoLocked( false );
 }
 
 /****************************************************************************
@@ -1365,7 +1365,7 @@ void UndoSort::undo()
   if ( !sheet )
     return;
 
-  doc()->undoLock();
+  doc()->setUndoLocked( true );
   doc()->emitBeginOperation();
 
   copyAll( m_lstRedoFormats, m_lstRedoColFormats,
@@ -1411,7 +1411,7 @@ void UndoSort::undo()
   sheet->setRegionPaintDirty(m_rctRect);
   sheet->updateView( m_rctRect );
 
-  doc()->undoUnlock();
+  doc()->setUndoLocked( false );
 }
 
 void UndoSort::redo()
@@ -1420,7 +1420,7 @@ void UndoSort::redo()
     if ( !sheet )
 	return;
 
-    doc()->undoLock();
+    doc()->setUndoLocked( true );
     doc()->emitBeginOperation();
 
     if( util_isColumnSelected( m_rctRect ) )
@@ -1462,7 +1462,7 @@ void UndoSort::redo()
     }
     sheet->setRegionPaintDirty(m_rctRect);
     sheet->updateView( m_rctRect );
-    doc()->undoUnlock();
+    doc()->setUndoLocked( false );
 }
 
 /****************************************************************************
@@ -1542,7 +1542,7 @@ void UndoDelete::undo()
 	return;
     createListCell( m_dataRedo, m_lstRedoColumn, m_lstRedoRow, sheet );
 
-    doc()->undoLock();
+    doc()->setUndoLocked( true );
     doc()->emitBeginOperation();
 
     {
@@ -1569,7 +1569,7 @@ void UndoDelete::undo()
 
     if(sheet->getAutoCalc()) sheet->recalc();
 
-    doc()->undoUnlock();
+    doc()->setUndoLocked( false );
 }
 
 void UndoDelete::redo()
@@ -1578,7 +1578,7 @@ void UndoDelete::redo()
     if ( !sheet )
 	return;
 
-    doc()->undoLock();
+    doc()->setUndoLocked( true );
     doc()->emitBeginOperation();
 
     {
@@ -1607,7 +1607,7 @@ void UndoDelete::redo()
     //sheet->deleteCells( m_selection );
     sheet->updateView();
     sheet->refreshView( m_region ); // deletes the cells in region!
-    doc()->undoUnlock();
+    doc()->setUndoLocked( false );
 }
 
 /****************************************************************************
@@ -1660,7 +1660,7 @@ void UndoDragDrop::undo()
     saveCellRect( m_dataRedoSource, sheet, m_selectionSource );
     saveCellRect( m_dataRedoTarget, sheet, m_selectionTarget );
 
-    doc()->undoLock();
+    doc()->setUndoLocked( true );
     doc()->emitBeginOperation();
 
     sheet->deleteCells( m_selectionTarget );
@@ -1674,7 +1674,7 @@ void UndoDragDrop::undo()
     if ( sheet->getAutoCalc() )
       sheet->recalc();
 
-    doc()->undoUnlock();
+    doc()->setUndoLocked( false );
 }
 
 void UndoDragDrop::redo()
@@ -1683,7 +1683,7 @@ void UndoDragDrop::redo()
     if ( !sheet )
 	return;
 
-    doc()->undoLock();
+    doc()->setUndoLocked( true );
     doc()->emitBeginOperation();
 
     //move next line to refreshView
@@ -1699,7 +1699,7 @@ void UndoDragDrop::redo()
     if ( sheet->getAutoCalc() )
           sheet->recalc();
 
-    doc()->undoUnlock();
+    doc()->setUndoLocked( false );
 }
 
 
@@ -1796,7 +1796,7 @@ void UndoResizeColRow::undo()
     if ( !sheet )
 	return;
 
-    doc()->undoLock();
+    doc()->setUndoLocked( true );
 
     createList( m_lstRedoColumn,m_lstRedoRow, sheet );
 
@@ -1840,7 +1840,7 @@ void UndoResizeColRow::undo()
     }
     }
 
-    doc()->undoUnlock();
+    doc()->setUndoLocked( false );
 }
 
 void UndoResizeColRow::redo()
@@ -1849,7 +1849,7 @@ void UndoResizeColRow::redo()
     if ( !sheet )
 	return;
 
-    doc()->undoLock();
+    doc()->setUndoLocked( true );
 
     Region::ConstIterator endOfList(m_region.constEnd());
     for (Region::ConstIterator it = m_region.constBegin(); it != endOfList; ++it)
@@ -1891,7 +1891,7 @@ void UndoResizeColRow::redo()
     }
     }
 
-    doc()->undoUnlock();
+    doc()->setUndoLocked( false );
 }
 
 /****************************************************************************
@@ -1998,7 +1998,7 @@ void UndoChangeAreaTextCell::undo()
     if ( !sheet )
 	return;
 
-    doc()->undoLock();
+    doc()->setUndoLocked( true );
     doc()->emitBeginOperation();
     sheet->setRegionPaintDirty(m_region);
 
@@ -2058,7 +2058,7 @@ void UndoChangeAreaTextCell::undo()
 
     //sheet->updateView();
     doc()->emitEndOperation();
-    doc()->undoUnlock();
+    doc()->setUndoLocked( false );
 }
 
 void UndoChangeAreaTextCell::redo()
@@ -2068,7 +2068,7 @@ void UndoChangeAreaTextCell::redo()
     if ( !sheet )
 	return;
 
-    doc()->undoLock();
+    doc()->setUndoLocked( true );
     doc()->emitBeginOperation();
     sheet->setRegionPaintDirty(m_region);
 
@@ -2123,7 +2123,7 @@ void UndoChangeAreaTextCell::redo()
 
     //sheet->updateView();
     doc()->emitEndOperation();
-    doc()->undoUnlock();
+    doc()->setUndoLocked( false );
 }
 
 /****************************************************************************
@@ -2156,7 +2156,7 @@ void UndoMergedCell::undo()
     if ( !sheet )
 	return;
 
-    doc()->undoLock();
+    doc()->setUndoLocked( true );
 
     Cell *cell = sheet->nonDefaultCell( m_iCol, m_iRow );
     m_iExtraRedoX=cell->extraXCells();
@@ -2164,7 +2164,7 @@ void UndoMergedCell::undo()
 
     sheet->changeMergedCell( m_iCol, m_iRow, m_iExtraX,m_iExtraY);
 
-    doc()->undoUnlock();
+    doc()->setUndoLocked( false );
 }
 
 void UndoMergedCell::redo()
@@ -2173,11 +2173,11 @@ void UndoMergedCell::redo()
     if ( !sheet )
 	return;
 
-    doc()->undoLock();
+    doc()->setUndoLocked( true );
 
     sheet->changeMergedCell( m_iCol, m_iRow, m_iExtraRedoX,m_iExtraRedoY);
 
-    doc()->undoUnlock();
+    doc()->setUndoLocked( false );
 }
 
 /****************************************************************************
@@ -2218,7 +2218,7 @@ void UndoAutofill::undo()
 
     createListCell( m_dataRedo, sheet );
 
-    doc()->undoLock();
+    doc()->setUndoLocked( true );
     doc()->emitBeginOperation();
 
     sheet->deleteCells( m_selection );
@@ -2228,12 +2228,12 @@ void UndoAutofill::undo()
     doc()->emitEndOperation();
     //sheet->updateView();
 
-    doc()->undoUnlock();
+    doc()->setUndoLocked( false );
 }
 
 void UndoAutofill::redo()
 {
-    doc()->undoLock();
+    doc()->setUndoLocked( true );
 
     Sheet* sheet = doc()->map()->findSheet( m_sheetName );
     if ( !sheet )
@@ -2242,12 +2242,12 @@ void UndoAutofill::redo()
     doc()->emitBeginOperation();
 
     sheet->deleteCells( m_selection );
-    doc()->undoLock();
+    doc()->setUndoLocked( true );
     sheet->paste( m_dataRedo, m_selection );
     if ( sheet->getAutoCalc() )
       sheet->recalc();
     sheet->updateView();
-    doc()->undoUnlock();
+    doc()->setUndoLocked( false );
 }
 
 /****************************************************************************
@@ -2275,9 +2275,9 @@ void UndoInsertCellRow::undo()
     if ( !sheet )
 	return;
 
-    doc()->undoLock();
+    doc()->setUndoLocked( true );
     sheet->unshiftRow( m_rect);
-    doc()->undoUnlock();
+    doc()->setUndoLocked( false );
 
     undoFormulaReference();
 }
@@ -2288,9 +2288,9 @@ void UndoInsertCellRow::redo()
     if ( !sheet )
 	return;
 
-    doc()->undoLock();
+    doc()->setUndoLocked( true );
     sheet->shiftRow( m_rect);
-    doc()->undoUnlock();
+    doc()->setUndoLocked( false );
 }
 
 /****************************************************************************
@@ -2319,9 +2319,9 @@ void UndoInsertCellCol::undo()
     if ( !sheet )
 	return;
 
-    doc()->undoLock();
+    doc()->setUndoLocked( true );
     sheet->unshiftColumn( m_rect);
-    doc()->undoUnlock();
+    doc()->setUndoLocked( false );
 
     undoFormulaReference();
 }
@@ -2332,9 +2332,9 @@ void UndoInsertCellCol::redo()
     if ( !sheet )
 	return;
 
-    doc()->undoLock();
+    doc()->setUndoLocked( true );
     sheet->shiftColumn( m_rect );
-    doc()->undoUnlock();
+    doc()->setUndoLocked( false );
 }
 
 /****************************************************************************
@@ -2367,10 +2367,10 @@ void UndoRemoveCellRow::undo()
     if ( !sheet )
 	return;
 
-    doc()->undoLock();
+    doc()->setUndoLocked( true );
     sheet->shiftRow( m_rect );
     sheet->paste( m_data, m_rect );
-    doc()->undoUnlock();
+    doc()->setUndoLocked( false );
 
     undoFormulaReference();
 }
@@ -2381,9 +2381,9 @@ void UndoRemoveCellRow::redo()
     if ( !sheet )
 	return;
 
-    doc()->undoLock();
+    doc()->setUndoLocked( true );
     sheet->unshiftRow( m_rect);
-    doc()->undoUnlock();
+    doc()->setUndoLocked( false );
 }
 
 /****************************************************************************
@@ -2416,10 +2416,10 @@ void UndoRemoveCellCol::undo()
     if ( !sheet )
 	return;
 
-    doc()->undoLock();
+    doc()->setUndoLocked( true );
     sheet->shiftColumn( m_rect );
     sheet->paste( m_data, m_rect );
-    doc()->undoUnlock();
+    doc()->setUndoLocked( false );
 
     undoFormulaReference();
 }
@@ -2430,9 +2430,9 @@ void UndoRemoveCellCol::redo()
     if ( !sheet )
 	return;
 
-    doc()->undoLock();
+    doc()->setUndoLocked( true );
     sheet->unshiftColumn( m_rect );
-    doc()->undoUnlock();
+    doc()->setUndoLocked( false );
 }
 
 /****************************************************************************
@@ -2473,32 +2473,32 @@ void UndoConditional::undo()
 
     createListCell( m_dataRedo, sheet );
 
-    doc()->undoLock();
+    doc()->setUndoLocked( true );
     sheet->paste(m_data, m_region.boundingRect());
     if (sheet->getAutoCalc())
     {
       sheet->recalc();
     }
 
-    doc()->undoUnlock();
+    doc()->setUndoLocked( false );
 }
 
 void UndoConditional::redo()
 {
-    doc()->undoLock();
+    doc()->setUndoLocked( true );
 
     Sheet* sheet = doc()->map()->findSheet( m_sheetName );
     if ( !sheet )
 	return;
 
-    doc()->undoLock();
+    doc()->setUndoLocked( true );
     sheet->paste(m_dataRedo, m_region.boundingRect());
     if (sheet->getAutoCalc())
     {
       sheet->recalc();
     }
 
-    doc()->undoUnlock();
+    doc()->setUndoLocked( false );
 }
 
 
@@ -2605,7 +2605,7 @@ void UndoCellPaste::undo()
 
   createListCell( m_dataRedo, m_lstRedoColumn, m_lstRedoRow, sheet );
 
-  doc()->undoLock();
+  doc()->setUndoLocked( true );
   doc()->emitBeginOperation();
 
   uint numCols = 0;
@@ -2691,7 +2691,7 @@ void UndoCellPaste::undo()
       sheet->recalc();
   }
   sheet->updateView();
-  doc()->undoUnlock();
+  doc()->setUndoLocked( false );
 }
 
 void UndoCellPaste::redo()
@@ -2700,7 +2700,7 @@ void UndoCellPaste::redo()
   if ( !sheet )
       return;
 
-  doc()->undoLock();
+  doc()->setUndoLocked( true );
   doc()->emitBeginOperation();
 
   uint numCols = 0;
@@ -2783,7 +2783,7 @@ void UndoCellPaste::redo()
   }
 
   sheet->updateView();
-  doc()->undoUnlock();
+  doc()->setUndoLocked( false );
 }
 
 
@@ -2873,7 +2873,7 @@ void UndoStyleCell::undo()
 
     createListCell( m_lstRedoStyleCell, sheet );
 
-    doc()->undoLock();
+    doc()->setUndoLocked( true );
     doc()->emitBeginOperation();
 
 
@@ -2884,18 +2884,18 @@ void UndoStyleCell::undo()
       }
     sheet->setRegionPaintDirty(m_selection);
     sheet->updateView( m_selection );
-    doc()->undoUnlock();
+    doc()->setUndoLocked( false );
 }
 
 void UndoStyleCell::redo()
 {
-    doc()->undoLock();
+    doc()->setUndoLocked( true );
 
     Sheet* sheet = doc()->map()->findSheet( m_sheetName );
     if ( !sheet )
 	return;
 
-    doc()->undoLock();
+    doc()->setUndoLocked( true );
     doc()->emitBeginOperation();
 
     QLinkedList<styleCell>::Iterator it2;
@@ -2906,7 +2906,7 @@ void UndoStyleCell::redo()
     sheet->setRegionPaintDirty(m_selection);
     sheet->updateView();
 
-    doc()->undoUnlock();
+    doc()->setUndoLocked( false );
 }
 
 UndoInsertData::UndoInsertData( Doc * _doc, Sheet * _sheet, QRect & _selection )

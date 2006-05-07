@@ -117,7 +117,7 @@ void Manipulator::execute()
   }
 
   m_sheet->doc()->setModified(true);
-  m_sheet->doc()->undoLock ();
+  m_sheet->doc()->setUndoLocked(true);
   m_sheet->doc()->emitBeginOperation();
 
   successfully = true;
@@ -141,7 +141,7 @@ void Manipulator::execute()
 
   m_sheet->setRegionPaintDirty( *this );
   m_sheet->doc()->emitEndOperation();
-  m_sheet->doc()->undoUnlock ();
+  m_sheet->doc()->setUndoLocked(false);
 
   // add me to undo if needed
   if (m_firstrun && m_register)

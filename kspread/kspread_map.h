@@ -49,8 +49,8 @@ class GenValidationStyles;
 class Style;
 
 /**
-  A map is a simple container for all sheets. Usually a complete map
-  is saved in one file.
+ * A map is a simple container for all sheets. Usually a complete map
+ * is saved in one file.
  */
 class KSPREAD_EXPORT Map : public QObject
 {
@@ -60,6 +60,7 @@ public:
    * Created an empty map.
    */
   Map(Doc* doc, const char* name = 0);
+
   /**
    * This deletes all sheets contained in this map.
    */
@@ -67,15 +68,39 @@ public:
 
   Doc* doc() const;
 
+  /**
+   * \ingroup OpenDocument
+   */
+  void saveOasisSettings( KoXmlWriter &settingsWriter );
+
+  /**
+   * \ingroup OpenDocument
+   */
+  void loadOasisSettings( KoOasisSettings &settings );
+
+  /**
+   * \ingroup OpenDocument
+   */
+  bool saveOasis( KoXmlWriter & xmlWriter, KoGenStyles & mainStyles,
+                  KoStore *store, KoXmlWriter* manifestWriter,
+                  int &_indexObj, int &_partIndexObj );
+
+  /**
+   * \ingroup OpenDocument
+   */
+  bool loadOasis( const QDomElement& mymap, KoOasisLoadingContext& oasisContext );
+
+  /**
+   * \ingroup NativeFormat
+   */
+  bool loadXML( const QDomElement& mymap );
+
+  /**
+   * \ingroup NativeFormat
+   */
   QDomElement save( QDomDocument& doc );
 
-    void saveOasisSettings( KoXmlWriter &settingsWriter );
-    void loadOasisSettings( KoOasisSettings &settings );
 
-    bool saveOasis( KoXmlWriter & xmlWriter, KoGenStyles & mainStyles, KoStore *store, KoXmlWriter* manifestWriter, int &_indexObj, int &_partIndexObj );
-
-  bool loadOasis( const QDomElement& mymap, KoOasisLoadingContext& oasisContext );
-  bool loadXML( const QDomElement& mymap );
   bool loadChildren( KoStore* _store );
 
   bool saveChildren( KoStore* _store );

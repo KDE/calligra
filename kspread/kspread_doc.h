@@ -84,6 +84,9 @@ struct Reference
     QRect rect;
 };
 
+/**
+ * \ingroup Plugins
+ */
 class Plugin
 {
  public:
@@ -100,7 +103,6 @@ class KSPREAD_EXPORT Doc : public KoDocument, public KoZoomHandler
   Q_OBJECT
   Q_PROPERTY( bool dontCheckUpperWord READ dontCheckUpperWord WRITE setDontCheckUpperWord)
   Q_PROPERTY( bool dontCheckTitleCase READ dontCheckTitleCase WRITE setDontCheckTitleCase)
-
   Q_PROPERTY( int syntaxVersion READ syntaxVersion )
   Q_PROPERTY( bool showVerticalScrollBar READ showVerticalScrollBar WRITE setShowVerticalScrollBar )
   Q_PROPERTY( bool showHorizontalScrollBar READ showHorizontalScrollBar WRITE setShowHorizontalScrollBar )
@@ -112,12 +114,16 @@ class KSPREAD_EXPORT Doc : public KoDocument, public KoZoomHandler
   Q_PROPERTY( int undoRedoLimit READ undoRedoLimit WRITE setUndoRedoLimit )
 
 public:
-
   /**
    * Creates a new document.
+   * @param parentWidget the parent widget
+   * @param widgetName the widget name
+   * @param parent the parent object
+   * @param name the object name
+   * @param singleViewMode enables single view mode, if @c true
    */
   Doc( QWidget *parentWidget = 0, const char *widgetName = 0, QObject* parent = 0,
-  const char* name = 0, bool singleViewMode = false );
+       const char* name = 0, bool singleViewMode = false );
 
   /**
    * Destroys the document.
@@ -127,79 +133,203 @@ public:
   /**
    * Possible values for the "type" argument of the KoGenStyle constructor.
    */
-  enum { STYLE_PAGE = 20,
-         STYLE_COLUMN,
-         STYLE_ROW,
-         STYLE_CELL_USER,
-         STYLE_CELL_AUTO,
-         STYLE_PAGEMASTER,
-         STYLE_NUMERIC_NUMBER };
+  enum
+  {
+    STYLE_PAGE = 20,      /**< table styles */
+    STYLE_COLUMN,         /**< column styles */
+    STYLE_ROW,            /**< row styles */
+    STYLE_CELL_USER,      /**< common cell styles (used in StyleManager) */
+    STYLE_CELL_AUTO,      /**< auto cell styles */
+    STYLE_PAGEMASTER,     /**< master pages */
+    STYLE_NUMERIC_NUMBER  /**< number styles */
+  };
 
   /**
-   * Returns list of all documents.
+   * \ingroup OpenDocument
+   */
+  enum SaveFlag { SaveAll, SaveSelected }; // kpresenter and kword have have SavePage too
+
+  /**
+   * @return list of all documents
    */
   static QList<Doc*> documents();
 
   /**
-   * Returns the MIME type of KSpread document.
+   * @return the MIME type of KSpread document
    */
   virtual QByteArray mimeType() const { return MIME_TYPE; }
 
-  KLocale *locale () const;
-  Map *map () const;
-  StyleManager *styleManager () const;
-  ValueParser *parser () const;
-  ValueFormatter *formatter () const;
-  ValueConverter *converter () const;
-  ValueCalc *calc () const;
 
   /**
-   * Adds a command to the command history. The command itself
+   * A sheet could use a different localization as the KDE default.
+   * @return the KLocale associated with this sheet
+   */
+  KLocale *locale () const;
+
+  /**
+   * @return the Map that belongs to this Document
+   */
+  Map *map () const;
+
+  /**
+   * @return the StyleManager of this Document
+   */
+  StyleManager *styleManager () const;
+
+  /**
+   * @return the value parser of this Document
+   */
+  ValueParser *parser () const;
+
+  /**
+   * @return the value formatter of this Document
+   */
+  ValueFormatter *formatter () const;
+
+  /**
+   * @return the value converter of this Document
+   */
+  ValueConverter *converter () const;
+
+  /**
+   * @return the value calculator of this Document
+   */
+  ValueCalc *calc () const;
+
+
+  /**
+   * \ingroup Operations
+   * Adds @p command to the command history. The command itself
    * would not be executed.
+   * @param command the command which will be added
    */
   void addCommand( KCommand* command );
 
-  /*
-   * Adds an undo object. This is the same as addCommand, except
+  /**
+   * \ingroup Operations
+   * Adds an undo object @p command . This is the same as addCommand, except
    * that it accepts Undo instance. Once every undo object
    * is converted to KCommand, this function will be obsoleted.
+   * @param command the action which will be added
+   * @see addCommand(KCommand*)
    */
   void addCommand( UndoAction* command );
 
   /**
+   * \ingroup Operations
    * Undoes the last operation.
    */
   void undo();
 
   /**
+   * \ingroup Operations
    * Redoes the last undo.
    */
   void redo();
 
   /**
-   * Locks the undo buffer.
+   * \ingroup Operations
+   * Locks/Unlocks undo buffer.
+   * The locks are counted, so you calls of this method can be nested.
    */
-  void undoLock();
+  void setUndoLocked( bool lock );
 
   /**
-   * Releases lock of undo buffer.
-   */
-  void undoUnlock();
-
-  /**
+   * \ingroup Operations
    * Returns true if undo buffer is locked.
    */
   bool undoLocked() const;
 
   /**
-   * Returns the command history for the document. This is used
+   * \ingroup Operations
+   * @return the command history for the document. This is used
    * in View for updating the actions (i.e through
    * signal KCommandHistory::commandExecuted)
+   * @see addCommand
+   * @see undo
+   * @see redo
    */
   KCommandHistory* commandHistory();
 
   /**
-   * Returns the name of the unit used to display margins.
+   * \ingroup Operations
+   * Function to begin a KSpread 'operation'.
+   *
+   * Calls to emitBeginOperation and emitEndOperation should surround each
+   * logical user operation.
+   * During the operation, the following should hold true:
+   * - No painting will be done to the screen
+   * - No cell calculation will be done (maybe there are exceptions, such
+   *   as the goalseek operation needs to calculate values)
+   * During an operation, calls to Sheet::setRegionPaintDirty mark regions
+   * as needing repainted.
+   * Calls to begin/endOperation may be nested.
+   * Calcualation and painting will be delayed until the outer begin/end
+   * pair has finished.
+   *
+   * @param waitCursor specifies whether to put the hourglass up during
+   *                   the operation.
+   */
+  void emitBeginOperation(bool waitCursor);
+
+  /**
+   * \ingroup Operations
+   * Function to begin a KSpread 'operation'.
+   * Changes the cursor to an hourglass.
+   * @see emitBeginOperation(bool)
+   * @reimp default override of KoDocument version.
+   */
+  virtual void emitBeginOperation();
+
+  /**
+   * \ingroup Operations
+   * Marks the end of an operation.
+   * If cells have been marked dirty while the operation, a repainted
+   * of them is triggered.
+   * @see emitBeginOperation(bool)
+   * @see Sheet::setRegionPaintDirty
+   * @reimp
+   */
+  virtual void emitEndOperation();
+
+  /**
+   * \ingroup Operations
+   * Convenience function.
+   * Marks the cells in @p region to get repainted and calls emitEndOperation().
+   * @see emitBeginOperation(bool)
+   * @see emitEndOperation()
+   * @see Sheet::setRegionPaintDirty
+   */
+  void emitEndOperation( const Region& region );
+
+  /**
+   * \ingroup Operations
+   */
+  void increaseNumOperation();
+
+  /**
+   * \ingroup Operations
+   */
+  void decreaseNumOperation();
+
+  /**
+   * \ingroup Operations
+   */
+  void addDamage( Damage* damage );
+
+  /**
+   * \ingroup Operations
+   */
+  void enableUndo( bool _b );
+
+  /**
+   * \ingroup Operations
+   */
+  void enableRedo( bool _b );
+
+
+  /**
+   * @return the name of the unit used to display margins.
    * For example, if unit() returns KoUnit::U_MM, then
    * this functions return "mm".
    */
@@ -318,14 +448,18 @@ public:
   bool showMessageError() const;
 
   /**
-  * completion mode
-  */
+   * @return completion mode
+   */
+  KGlobalSettings::Completion completionMode() const ;
 
-  KGlobalSettings::Completion completionMode( )const ;
-  void setCompletionMode( KGlobalSettings::Completion _complMode);
+  /**
+   * Sets the completion mode.
+   * @param mode the mode to be set
+   */
+  void setCompletionMode( KGlobalSettings::Completion mode );
 
-  KSpread::MoveTo getMoveToValue()const;
-  void setMoveToValue(KSpread::MoveTo _moveTo) ;
+  KSpread::MoveTo moveToValue() const;
+  void setMoveToValue(KSpread::MoveTo _moveTo);
 
   /**
   * Method of calc
@@ -351,41 +485,89 @@ public:
 
   virtual bool completeSaving( KoStore* _store );
 
+
+  /**
+   * \ingroup NativeFormat
+   * Main saving method.
+   */
   virtual QDomDocument saveXML();
 
-  enum SaveFlag { SaveAll, SaveSelected }; // kpresenter and kword have have SavePage too
+  /**
+   * \ingroup NativeFormat
+   * Main loading method.
+   */
+  virtual bool loadXML( QIODevice *, const QDomDocument& doc );
+
+  /**
+   * \ingroup NativeFormat
+   */
+  QDomElement saveAreaName( QDomDocument& doc ) ;
+
+  /**
+   * \ingroup NativeFormat
+   */
+  void loadAreaName( const QDomElement& element );
+
 
   bool savingWholeDocument();
 
-    /**
-     * Save the whole document, or just the selection, into OASIS format
-     * When saving the selection, also return the data as plain text and/or plain picture,
-     * which are used to insert into the KMultipleDrag drag object.
-     *
-     * @param store the KoStore to save into
-     * @param manifestWriter pointer to a koxmlwriter to add entries to the manifest
-     * @param saveFlag either the whole document, or only the selected text/objects.
-     * @param plainText must be set when saveFlag==SaveSelected.
-     *        It returns the plain text format of the saved data, when available.
-     * @param picture must be set when saveFlag==SaveSelected.
-     *        It returns the selected picture, when exactly one picture was selected.
-     */
+
+  /**
+   * \ingroup OpenDocument
+   * Save the whole document, or just the selection, into OASIS format
+   * When saving the selection, also return the data as plain text and/or plain picture,
+   * which are used to insert into the KMultipleDrag drag object.
+   *
+   * @param store the KoStore to save into
+   * @param manifestWriter pointer to a koxmlwriter to add entries to the manifest
+   * @param saveFlag either the whole document, or only the selected text/objects.
+   * @param plainText must be set when saveFlag==SaveSelected.
+   *        It returns the plain text format of the saved data, when available.
+   * @param picture must be set when saveFlag==SaveSelected.
+   *        It returns the selected picture, when exactly one picture was selected.
+   */
   bool saveOasisHelper( KoStore* store, KoXmlWriter* manifestWriter, SaveFlag saveFlag,
                         QString* plainText = 0, KoPicture* picture = 0 );
 
+  /**
+   * \ingroup OpenDocument
+   * Main saving method.
+   */
   virtual bool saveOasis( KoStore* store, KoXmlWriter* manifestWriter );
+
+  /**
+   * \ingroup OpenDocument
+   * Saves the docment styles.
+   */
   void saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyles ) const;
+
+  /**
+   * \ingroup OpenDocument
+   * Main loading method.
+   * @see Map::loadOasis
+   */
+  virtual bool loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles,
+                          const QDomDocument& settings, KoStore* );
+
+  /**
+   * \ingroup OpenDocument
+   */
+  void saveOasisAreaName( KoXmlWriter & xmlWriter );
+
+  /**
+   * \ingroup OpenDocument
+   */
+  void loadOasisAreaName( const QDomElement& element );
+
+  /**
+   * \ingroup OpenDocument
+   */
+  void loadOasisCellValidation( const QDomElement&body );
+
+
   virtual int supportedSpecialFormats() const;
 
-  virtual bool loadXML( QIODevice *, const QDomDocument& doc );
-  virtual bool loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles, const QDomDocument& settings, KoStore* );
   virtual bool loadChildren( KoStore* _store );
-  QDomElement saveAreaName( QDomDocument& doc ) ;
-    void saveOasisAreaName( KoXmlWriter & xmlWriter );
-
-  void loadAreaName( const QDomElement& element );
-  void loadOasisAreaName( const QDomElement& element );
-  void loadOasisCellValidation( const QDomElement&body );
 
   virtual void addView( KoView *_view );
 
@@ -405,26 +587,27 @@ public:
    */
   void newZoomAndResolution( bool updateViews, bool forPrint );
 
-  // virtual void printMap( QPainter & _painter );
-
-  void enableUndo( bool _b );
-  void enableRedo( bool _b );
-
   /**
    * @return true if the document is currently loading.
    */
   bool isLoading() const;
 
-  virtual void paintContent( QPainter & painter, const QRect & rect, bool transparent = false,
-                             double zoomX = 1.0, double zoomY = 1.0 );
-  void paintContent( QPainter & painter, const QRect & rect, bool transparent,
-                     Sheet * sheet, bool drawCursor = true );
-
   bool docData( QString const & xmlTag, QDomElement & data );
-  void deregisterPlugin( Plugin * plugin );
-  void registerPlugin( Plugin * plugin );
+
 
   /**
+   * \ingroup Plugins
+   */
+  void deregisterPlugin( Plugin * plugin );
+
+  /**
+   * \ingroup Plugins
+   */
+  void registerPlugin( Plugin * plugin );
+
+
+  /**
+   * \ingroup Painting
    * Primary entry point for painting.  Use this function to paint groups of cells
    *
    * @param painter the painter object to use.  This should already be
@@ -443,6 +626,19 @@ public:
   void paintCellRegions(QPainter& painter, const QRect &viewRect,
                         View* view, const Region& region);
 
+  /**
+   * \ingroup Painting
+   */
+  virtual void paintContent( QPainter & painter, const QRect & rect, bool transparent = false,
+                             double zoomX = 1.0, double zoomY = 1.0 );
+
+  /**
+   * \ingroup Painting
+   */
+  void paintContent( QPainter & painter, const QRect & rect, bool transparent,
+                     Sheet * sheet, bool drawCursor = true );
+
+
   virtual DCOPObject* dcopObject();
 
   void addAreaName(const QRect &_rect,const QString & name,const QString & sheetName);
@@ -460,9 +656,11 @@ public:
    * Inserts an object to the object list.
    */
   void insertObject( EmbeddedObject * obj );
-    /**
-    * @return the list of all embedded objects (charts, pictures and koffice objects) Use insertObject to add an object to the list.
-    */
+
+  /**
+   * @return the list of all embedded objects (charts, pictures and koffice
+   *         objects) Use insertObject to add an object to the list
+   */
   QList<EmbeddedObject*>& embeddedObjects();
   KoPictureCollection *pictureCollection();
 
@@ -470,68 +668,24 @@ public:
   void saveConfig();
   void refreshLocale();
 
-  /**
-   * Function to begin a KSpread 'operation'.
-   *
-   * Calls to emitBeginOperation and emitEndOperation should surround each
-   * logical user operation.
-   * During the operation, the following should hold true:
-   * - No painting will be done to the screen
-   * - No cell calculation will be done (maybe there are exceptions, such
-   *   as the goalseek operation needs to calculate values)
-   * During an operation, calls to Sheet::setRegionPaintDirty mark regions
-   * as needing repainted.
-   * Calls to begin/endOperation may be nested.
-   * Calcualation and painting will be delayed until the outer begin/end
-   * pair has finished.
-   *
-   * @param waitCursor specifies whether to put the hourglass up during
-   *                   the operation.
-   */
-  void emitBeginOperation(bool waitCursor);
-
-  /**
-   * Function to begin a KSpread 'operation'.
-   * Changes the cursor to an hourglass.
-   * @see emitBeginOperation(bool)
-   * @reimp default override of KoDocument version.
-   */
-  virtual void emitBeginOperation();
-
-  /**
-   * Marks the end of an operation.
-   * If cells have been marked dirty while the operation, a repainted
-   * of them is triggered.
-   * @see emitBeginOperation(bool)
-   * @see Sheet::setRegionPaintDirty
-   * @reimp
-   */
-  virtual void emitEndOperation();
-
-  /**
-   * Convenience function.
-   * Marks the cells in @p region to get repainted and calls emitEndOperation().
-   * @see emitBeginOperation(bool)
-   * @see emitEndOperation()
-   * @see Sheet::setRegionPaintDirty
-   */
-  void emitEndOperation( const Region& region );
-
   bool delayCalculation() const;
-
 
   void updateBorderButton();
 
   void insertSheet( Sheet * sheet );
   void takeSheet( Sheet * sheet );
 
-  // The user-chosen global unit
-
+  /**
+   * @deprecated
+   */
   static QString getAttribute(const QDomElement &element, const char *attributeName, const QString &defaultValue)
   {
     return element.attribute( attributeName, defaultValue );
   }
 
+  /**
+   * @deprecated
+   */
   static int getAttribute(const QDomElement &element, const char *attributeName, int defaultValue)
   {
     QString value;
@@ -541,6 +695,9 @@ public:
 	return defaultValue;
   }
 
+  /**
+   * @deprecated
+   */
   static double getAttribute(const QDomElement &element, const char *attributeName, double defaultValue)
   {
     QString value;
@@ -558,20 +715,19 @@ public:
     void setDisplaySheet(Sheet *_Sheet );
     Sheet * displaySheet() const;
 
-    /**
-     * @return the loading info
-     */
-    KSPLoadingInfo* loadingInfo() const;
+  /**
+   * \ingroup OpenDocument
+   * \ingroup NativeFormat
+   * @return the loading info
+   */
+  KSPLoadingInfo* loadingInfo() const;
 
-    /**
-     * deletes the loading info after loading is complete
-     */
-    void deleteLoadingInfo();
-
-  void increaseNumOperation();
-  void decreaseNumOperation();
-
-  void addDamage( Damage* damage );
+  /**
+   * \ingroup OpenDocument
+   * \ingroup NativeFormat
+   * Deletes the loading info. Called after loading is complete.
+   */
+  void deleteLoadingInfo();
 
 /* Function specific when we load config from file */
   void loadConfigFromFile();
@@ -588,25 +744,22 @@ public:
   void setUndoRedoLimit(int _val);
 
 public slots:
-
-  //void newView(); obsloete (Werner)
-
   void refreshInterface();
-
   void flushDamages();
 
 signals:
-  // Document signals
   /**
    * Emitted if all views have to be updated.
    */
   void sig_updateView();
+
   /**
-  *  Emitted if all interfaces have to be updated.
-  */
+   * Emitted if all interfaces have to be updated.
+   */
   void sig_refreshView();
+
   /**
-   * Emitted if we update to locale system
+   * Emitted if we update to locale system.
    */
   void sig_refreshLocale();
 
@@ -638,9 +791,6 @@ protected:
    */
   virtual bool saveChildren( KoStore* _store );
 
-  class SavedDocParts : public QMap<QString, QDomElement> {};
-  SavedDocParts m_savedDocParts;
-
 private:
   class Private;
   Private* d;
@@ -652,21 +802,42 @@ private:
   /* helper functions for painting */
 
   /**
+   * \ingroup Painting
    * This function is called at the end of an operation and is responsible
    * for painting any changes that have occurred in the meantime
    */
   void paintUpdates();
 
-  void PaintRegion(QPainter& painter, const KoRect &viewRegion,
+  /**
+   * \ingroup Painting
+   */
+  void paintRegion(QPainter& painter, const KoRect &viewRegion,
                    View* view, const QRect &paintRegion,
                    const Sheet* sheet);
 
   void loadPaper( QDomElement const & paper );
 
-    void saveOasisSettings( KoXmlWriter &settingsWriter );
-    void loadOasisSettings( const QDomDocument&settingsDoc );
-    void loadOasisIgnoreList( const KoOasisSettings& settings );
-    KSPLoadingInfo *m_loadingInfo;
+  /**
+   * \ingroup OpenDocument
+   * Saves the Document related settings.
+   * The actual saving takes place in Map::saveOasisSettings.
+   * @see Map::saveOasisSettings
+   */
+  void saveOasisSettings( KoXmlWriter &settingsWriter );
+
+  /**
+   * \ingroup OpenDocument
+   * Loads the Document related settings.
+   * The actual loading takes place in Map::loadOasisSettings.
+   * @see Map::loadOasisSettings
+   */
+  void loadOasisSettings( const QDomDocument&settingsDoc );
+
+  /**
+   * \ingroup OpenDocument
+   * Load the spell checker ignore list.
+   */
+  void loadOasisIgnoreList( const KoOasisSettings& settings );
 };
 
 } // namespace KSpread

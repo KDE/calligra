@@ -139,7 +139,7 @@ int DocIface::zoom() const
 
 QString DocIface::moveToValue()const
 {
-    switch(doc->getMoveToValue())
+    switch(doc->moveToValue())
     {
     case Bottom:
         return QString("bottom");
