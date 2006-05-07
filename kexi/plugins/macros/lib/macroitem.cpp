@@ -85,6 +85,11 @@ Variable::Map MacroItem::variables() const
 	return d->variables;
 }
 
+QStringList MacroItem::setVariable(const QString& name, const QVariant& variant)
+{
+ 	return setVariable(name,new Variable(variant));
+}
+
 QStringList MacroItem::setVariable(const QString& name, Variable::Ptr variable)
 {
 	// First try to find the matching in the action defined variable.

@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
  ***************************************************************************/
 
-#ifndef KOMACROTEST_COMMOBTESTS_H
-#define KOMACROTEST_COMMOBTESTS_H
+#ifndef KOMACROTEST_COMMONTESTS_H
+#define KOMACROTEST_COMMONTESTS_H
 
 #include <kunittest/tester.h>
 

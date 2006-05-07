@@ -129,6 +129,12 @@ namespace KoMacro {
 			* @p name .
 			*/
 			QStringList setVariable(const QString& name, KSharedPtr<Variable> variable);
+			
+			/**
+			* Set the @a QVariant @p variant as variable with the variablename
+			* @p name .
+			*/
+			QStringList setVariable(const QString& name, const QVariant& variant);
 
 		/*
 		public slots:
