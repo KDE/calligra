@@ -386,7 +386,6 @@ void FormulaOasisConversionTester::checkOasis( const char *file, int line, const
 
   // KSpread -> OpenDocument
   QString formula = localeFormula;
-#if 0
   Oasis::encodeFormula( formula, &locale );
 
   if( formula != oasisFormula )
@@ -399,7 +398,6 @@ void FormulaOasisConversionTester::checkOasis( const char *file, int line, const
   }
 
   testCount++;
-#endif
 
   // OpenDocument -> KSpread
   formula = Oasis::decodeFormula( oasisFormula, &locale );

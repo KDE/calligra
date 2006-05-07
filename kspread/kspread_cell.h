@@ -1160,17 +1160,16 @@ private:
    */
   void offsetAlign( int _col, int _row );
 
-    void checkForNamedAreas( QString & formula ) const;
-    /**
-     * replacements:
-     * 1. "==" -> "="
-     * 2. "Sheet1!A1"  -> "[Sheet1.A1]"
-     *    "A1" -> "[.A1]"
-     * 3. ","  -> "."
-     */
-    QString convertFormulaToOasisFormat( const QString & formula ) const;
-    void loadOasisValidationValue( const QStringList &listVal );
+  /**
+   * \ingroup OpenDocument
+   * \todo TODO Stefan: merge this into Oasis::decodeFormula
+   */
+  void checkForNamedAreas( QString & formula ) const;
 
+  /**
+   * \ingroup OpenDocument
+   */
+  void loadOasisValidationValue( const QStringList &listVal );
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(Cell::Borders)

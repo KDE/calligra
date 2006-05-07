@@ -5409,8 +5409,8 @@ bool Cell::saveOasis( KoXmlWriter& xmlwriter, KoGenStyles &mainStyles,
     }
     if ( isFormula() )
     {
-        //kDebug() << "Formula found" << endl;
-      QString formula( convertFormulaToOasisFormat( text() ) );
+      //kDebug() << "Formula found" << endl;
+      QString formula = Oasis::encodeFormula( text(), locale() );
       xmlwriter.addAttribute( "table:formula", formula );
     }
     else if ( !link().isEmpty() )
@@ -5514,94 +5514,6 @@ void Cell::saveOasisValue (KoXmlWriter &xmlWriter)
       break;
     }
   };
-}
-
-QString Cell::convertFormulaToOasisFormat( const QString & formula ) const
-{
-    QString s;
-    QRegExp exp("(\\$?)([a-zA-Z]+)(\\$?)([0-9]+)");
-    int n = exp.indexIn( formula, 0 );
-    kDebug() << "Exp: " << formula << ", n: " << n << ", Length: " << formula.length()
-              << ", Matched length: " << exp.matchedLength() << endl;
-
-    bool inQuote1 = false;
-    bool inQuote2 = false;
-    int i = 0;
-    int l = (int) formula.length();
-    if ( l <= 0 )
-        return formula;
-    while ( i < l )
-    {
-        if ( ( n != -1 ) && ( n < i ) )
-        {
-            n = exp.indexIn( formula, i );
-            kDebug() << "Exp: " << formula.right( l - i ) << ", n: " << n << endl;
-        }
-        if ( formula[i] == '"' )
-        {
-            inQuote1 = !inQuote1;
-            s += formula[i];
-            ++i;
-            continue;
-        }
-        if ( formula[i] == '\'' )
-        {
-            // named area
-            inQuote2 = !inQuote2;
-            ++i;
-            continue;
-        }
-        if ( inQuote1 || inQuote2 )
-        {
-            s += formula[i];
-            ++i;
-            continue;
-        }
-        if ( ( formula[i] == '=' ) && ( formula[i + 1] == '=' ) )
-        {
-            s += '=';
-            ++i;++i;
-            continue;
-        }
-        if ( formula[i] == '!' )
-        {
-            insertBracket( s );
-            s += '.';
-            ++i;
-            continue;
-        }
-        if ( formula[i] == ',' )
-        {
-            s += '.';
-            ++i;
-            continue;
-        }
-        if ( n == i )
-        {
-            int ml = exp.matchedLength();
-            if ( formula[ i + ml ] == '!' )
-            {
-                kDebug() << "No cell ref but sheet name" << endl;
-                s += formula[i];
-                ++i;
-                continue;
-            }
-            if ( ( i > 0 ) && ( formula[i - 1] != '!' ) )
-                s += "[.";
-            for ( int j = 0; j < ml; ++j )
-            {
-                s += formula[i];
-                ++i;
-            }
-            s += ']';
-            continue;
-        }
-
-        s += formula[i];
-        ++i;
-    }
-
-    return s;
 }
 
 void Cell::loadOasisConditional( QDomElement * style )

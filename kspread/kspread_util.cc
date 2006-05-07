@@ -896,27 +896,6 @@ QString KSpread::convertRefToRange( const QString & sheet, const QRect & rect )
   return s;
 }
 
-//used in Cell::convertFormulaToOasisFormat
-void KSpread::insertBracket( QString & s )
-{
-  QChar c;
-  int i = (int) s.length() - 1;
-
-  while ( i >= 0 )
-  {
-    c = s[i];
-    if ( c == ' ' )
-      s[i] = '_';
-    if ( !(c.isLetterOrNumber() || c == ' ' || c == '.'
-           || c == '_') )
-    {
-      s.insert( i + 1, '[' );
-      return;
-    }
-    --i;
-  }
-}
-
  // e.g.: Sheet4.A1:Sheet4.E28
  //used in Sheet::saveOasis
 QString KSpread::convertRangeToRef( const QString & sheetName, const QRect & _area )
@@ -1190,11 +1169,110 @@ QString KSpread::Oasis::decodeFormula(const QString& expr, const KLocale* locale
   return result;
 }
 
-/*QString KSpread::Oasis::encodeFormula(const QString& expr, const KLocale* locale)
+QString KSpread::Oasis::encodeFormula(const QString& expr, const KLocale* locale)
 {
-  // TODO move Cell::convertFormulaToOasisFormat to this point
-  //expr = "not here yet";
-  //Q_UNUSED(locale);
-  kDebug() << k_funcinfo << " not implemented"
-  qFatal(0);
-}*/
+  // TODO Stefan: rewrite to use an adopted tokenizer as in Oasis::decodeFormula
+
+  // use locale settings
+  QString decimal = locale ? locale->decimalSymbol() : ".";
+
+  QString s;
+  QRegExp exp("(\\$?)([a-zA-Z]+)(\\$?)([0-9]+)");
+  int n = exp.indexIn( expr, 0 );
+  kDebug() << "Exp: " << expr << ", n: " << n << ", Length: " << expr.length()
+      << ", Matched length: " << exp.matchedLength() << endl;
+
+  bool inQuote1 = false;
+  bool inQuote2 = false;
+  int i = 0;
+  int l = (int) expr.length();
+  if ( l <= 0 )
+    return expr;
+  while ( i < l )
+  {
+    if ( ( n != -1 ) && ( n < i ) )
+    {
+      n = exp.indexIn( expr, i );
+      kDebug() << "Exp: " << expr.right( l - i ) << ", n: " << n << endl;
+    }
+    if ( expr[i] == '"' )
+    {
+      inQuote1 = !inQuote1;
+      s += expr[i];
+      ++i;
+      continue;
+    }
+    if ( expr[i] == '\'' )
+    {
+            // named area
+      inQuote2 = !inQuote2;
+      ++i;
+      continue;
+    }
+    if ( inQuote1 || inQuote2 )
+    {
+      s += expr[i];
+      ++i;
+      continue;
+    }
+    if ( ( expr[i] == '=' ) && ( expr[i + 1] == '=' ) )
+    {
+      s += '=';
+      ++i;++i;
+      continue;
+    }
+    if ( expr[i] == '!' )
+    {
+      QChar c;
+      int j = (int) s.length() - 1;
+
+      while ( j >= 0 )
+      {
+        c = s[j];
+        if ( c == ' ' )
+          s[j] = '_';
+        if ( !(c.isLetterOrNumber() || c == ' ' || c == '.'
+               || c == '_') )
+        {
+          s.insert( j + 1, '[' );
+          break;
+        }
+        --j;
+      }
+      s += '.';
+      ++i;
+      continue;
+    }
+    if ( QString(expr[i]) == decimal ) // FIXME Stefan: support multi char dec. sep.
+    {
+      s += '.';
+      ++i;
+      continue;
+    }
+    if ( n == i )
+    {
+      int ml = exp.matchedLength();
+      if ( expr[ i + ml ] == '!' )
+      {
+        kDebug() << "No cell ref but sheet name" << endl;
+        s += expr[i];
+        ++i;
+        continue;
+      }
+      if ( ( i > 0 ) && ( expr[i - 1] != '!' ) )
+        s += "[.";
+      for ( int j = 0; j < ml; ++j )
+      {
+        s += expr[i];
+        ++i;
+      }
+      s += ']';
+      continue;
+    }
+
+    s += expr[i];
+    ++i;
+  }
+
+  return s;
+}

@@ -288,10 +288,17 @@ bool formatIsFraction (FormatType fmt);
 
 
 
+// TODO Stefan: move to Region class as static members
+//BEGIN
 KSPREAD_EXPORT QString util_rangeName( const QRect &_area );
 KSPREAD_EXPORT QString util_rangeName( Sheet *_sheet, const QRect &_area );
+//END
+
+// TODO Stefan: used nowhere
+//BEGIN
 QString util_rangeColumnName( const QRect &_area);
 QString util_rangeRowName( const QRect &_area);
+//END
 
 /**
 * Call this function to decode the text of a column label to an integer
@@ -304,26 +311,56 @@ KSPREAD_EXPORT int util_decodeColumnLabelText( const QString &_col );
 */
 KSPREAD_EXPORT QString util_encodeColumnLabelText( int column );
 
+
+// TODO Stefan: move to Region class as static members
+//BEGIN
 bool util_isAllSelected(const QRect &selection);
 bool util_isColumnSelected(const QRect &selection);
 bool util_isRowSelected(const QRect &selection);
 bool util_isRowOrColumnSelected( const QRect &selection );
-
+//END
 
 
 bool util_validateSheetName(const QString &name);
 
+
+/**
+ * \ingroup NativeFormat
+ */
 QDomElement util_createElement( const QString & tagName, const QFont & font, QDomDocument & doc );
+
+/**
+ * \ingroup NativeFormat
+ */
 QDomElement util_createElement( const QString & tagname, const QPen & pen, QDomDocument & doc );
+
+/**
+ * \ingroup NativeFormat
+ */
 QFont       util_toFont( QDomElement & element );
+
+/**
+ * \ingroup NativeFormat
+ */
 QPen        util_toPen( QDomElement & element );
+// TODO Stefan: used nowhere
 int         util_penCompare( QPen const & pen1, QPen const & pen2 );
 
+/**
+ * \ingroup OpenDocument
+ */
 QString convertRefToRange( const QString & sheet, const QRect & rect );
+
+/**
+ * \ingroup OpenDocument
+ */
 QString convertRefToBase( const QString & sheet, const QRect & rect );
+
+/**
+ * \ingroup OpenDocument
+ */
 QString convertRangeToRef( const QString & sheetName, const QRect & _area );
 
-void insertBracket( QString & s );
 
 //Return true when it's a reference to cell from sheet.
 KSPREAD_EXPORT bool localReferenceAnchor( const QString &_ref );
@@ -332,6 +369,8 @@ KSPREAD_EXPORT bool localReferenceAnchor( const QString &_ref );
 
 /**
  * \ingroup OpenDocument
+ * This namespace collects methods related to OpenDocument
+ * encoding/decoding.
  */
 namespace Oasis
 {

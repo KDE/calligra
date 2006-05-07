@@ -29,7 +29,6 @@
 #include <koffice_export.h>
 
 #include "kspread_global.h"
-#include "kspread_util.h"
 
 namespace KSpread
 {
@@ -407,7 +406,7 @@ public:
   virtual ~Point();
 
   virtual Type type() const { return Element::Point; }
-  virtual bool isValid() const { return (!m_point.isNull() && util_isPointValid(pos())); }
+  virtual bool isValid() const { return (!m_point.isNull() && Region::isValid(m_point)); }
   virtual bool isColumn() const { return false; }
   virtual bool isRow() const { return false; }
 
@@ -447,7 +446,7 @@ public:
   virtual ~Range();
 
   virtual Type type() const { return Element::Range; }
-  virtual bool isValid() const { return !m_range.isNull() && util_isRectValid(rect()); }
+  virtual bool isValid() const { return !m_range.isNull() && Region::isValid(m_range); }
   virtual bool isColumn() const { return (m_range.normalized().top() == 1 && m_range.normalized().bottom() == KS_rowMax); }
   virtual bool isRow() const { return (m_range.normalized().left() == 1 && m_range.normalized().right() == KS_colMax); }
 
