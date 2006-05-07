@@ -1003,31 +1003,31 @@ bool Format::loadOasisStyleProperties( KoStyleStack & /*styleStack*/, const KoOa
     }
     if ( styleStack.hasAttributeNS( KoXmlNS::fo, "border-bottom" ) )
     {
-        setBottomBorderPen( convertOasisStringToPen( styleStack.attributeNS( KoXmlNS::fo, "border-bottom" ) ) );
+        setBottomBorderPen( Oasis::decodePen( styleStack.attributeNS( KoXmlNS::fo, "border-bottom" ) ) );
         // TODO: style:border-line-width-bottom if double!
     }
 
     if ( styleStack.hasAttributeNS( KoXmlNS::fo, "border-right" ) )
     {
-        setRightBorderPen( convertOasisStringToPen(  styleStack.attributeNS( KoXmlNS::fo, "border-right" ) ) );
+        setRightBorderPen( Oasis::decodePen(  styleStack.attributeNS( KoXmlNS::fo, "border-right" ) ) );
         // TODO: style:border-line-width-right
     }
 
     if ( styleStack.hasAttributeNS( KoXmlNS::fo, "border-top" ) )
     {
-        setTopBorderPen( convertOasisStringToPen(  styleStack.attributeNS( KoXmlNS::fo, "border-top" ) ) );
+        setTopBorderPen( Oasis::decodePen(  styleStack.attributeNS( KoXmlNS::fo, "border-top" ) ) );
         // TODO: style:border-line-width-top
     }
 
     if ( styleStack.hasAttributeNS( KoXmlNS::fo, "border-left" ) )
     {
-        setLeftBorderPen( convertOasisStringToPen( styleStack.attributeNS( KoXmlNS::fo, "border-left" ) ) );
+        setLeftBorderPen( Oasis::decodePen( styleStack.attributeNS( KoXmlNS::fo, "border-left" ) ) );
         // TODO: style:border-line-width-left
     }
 
     if ( styleStack.hasAttributeNS( KoXmlNS::fo, "border" ) )
     {
-        QPen pen = convertOasisStringToPen( styleStack.attributeNS( KoXmlNS::fo, "border" ) );
+        QPen pen = Oasis::decodePen( styleStack.attributeNS( KoXmlNS::fo, "border" ) );
         setLeftBorderPen( pen );
         setRightBorderPen( pen );
         setTopBorderPen( pen );
@@ -1037,11 +1037,11 @@ bool Format::loadOasisStyleProperties( KoStyleStack & /*styleStack*/, const KoOa
     }
     if ( styleStack.hasAttributeNS( KoXmlNS::style, "diagonal-tl-br" ) )
     {
-        setFallDiagonalPen( convertOasisStringToPen( styleStack.attributeNS( KoXmlNS::style, "diagonal-tl-br" ) ) );
+        setFallDiagonalPen( Oasis::decodePen( styleStack.attributeNS( KoXmlNS::style, "diagonal-tl-br" ) ) );
     }
     if ( styleStack.hasAttributeNS( KoXmlNS::style, "diagonal-bl-tr" ) )
     {
-        setGoUpDiagonalPen( convertOasisStringToPen( styleStack.attributeNS( KoXmlNS::style, "diagonal-bl-tr" ) ) );
+        setGoUpDiagonalPen( Oasis::decodePen( styleStack.attributeNS( KoXmlNS::style, "diagonal-bl-tr" ) ) );
     }
 
     if ( styleStack.hasAttributeNS( KoXmlNS::draw, "style-name" ) )

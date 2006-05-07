@@ -468,7 +468,7 @@ void Style::loadOasisStyle( KoOasisStyles& oasisStyles, const QDomElement & elem
     if ( styleStack.hasAttributeNS( KoXmlNS::fo, "border" ) )
     {
         str=styleStack.attributeNS( KoXmlNS::fo, "border" );
-        QPen pen = convertOasisStringToPen( str );
+        QPen pen = Oasis::decodePen( str );
         m_featuresSet |= SLeftBorder;
         m_featuresSet |= SRightBorder;
         m_featuresSet |= STopBorder;
@@ -481,37 +481,37 @@ void Style::loadOasisStyle( KoOasisStyles& oasisStyles, const QDomElement & elem
     if ( styleStack.hasAttributeNS( KoXmlNS::fo, "border-left" ) )
     {
         str=styleStack.attributeNS( KoXmlNS::fo, "border-left" );
-        m_leftBorderPen = convertOasisStringToPen( str );
+        m_leftBorderPen = Oasis::decodePen( str );
         m_featuresSet |= SLeftBorder;
     }
     if ( styleStack.hasAttributeNS( KoXmlNS::fo, "border-right" ) )
     {
         str=styleStack.attributeNS( KoXmlNS::fo, "border-right" );
-        m_rightBorderPen = convertOasisStringToPen( str );
+        m_rightBorderPen = Oasis::decodePen( str );
         m_featuresSet |= SRightBorder;
     }
     if ( styleStack.hasAttributeNS( KoXmlNS::fo, "border-top" ) )
     {
         str=styleStack.attributeNS( KoXmlNS::fo, "border-top" );
-        m_topBorderPen = convertOasisStringToPen( str );
+        m_topBorderPen = Oasis::decodePen( str );
         m_featuresSet |= STopBorder;
     }
     if ( styleStack.hasAttributeNS( KoXmlNS::fo, "border-bottom" ) )
     {
         str=styleStack.attributeNS( KoXmlNS::fo, "border-bottom" );
-        m_bottomBorderPen = convertOasisStringToPen( str );
+        m_bottomBorderPen = Oasis::decodePen( str );
         m_featuresSet |= SBottomBorder;
     }
     if (styleStack.hasAttributeNS( KoXmlNS::style, "diagonal-tl-br" ) )
     {
         str=styleStack.attributeNS( KoXmlNS::style, "diagonal-tl-br" );
-        m_fallDiagonalPen = convertOasisStringToPen( str );
+        m_fallDiagonalPen = Oasis::decodePen( str );
         m_featuresSet |= SFallDiagonal;
     }
     if (styleStack.hasAttributeNS( KoXmlNS::style, "diagonal-bl-tr" ) )
     {
         str=styleStack.attributeNS( KoXmlNS::style, "diagonal-bl-tr" );
-        m_goUpDiagonalPen = convertOasisStringToPen( str );
+        m_goUpDiagonalPen = Oasis::decodePen( str );
         m_featuresSet |= SGoUpDiagonal;
     }
 
@@ -1324,35 +1324,35 @@ void Style::saveOasisStyle( KoGenStyle &style, KoGenStyles &mainStyles )
          ( m_leftBorderPen == m_bottomBorderPen ) )
     {
         if ( ( m_leftBorderPen.width() != 0 ) && ( m_leftBorderPen.style() != Qt::NoPen ) )
-            style.addProperty("fo:border", convertOasisPenToString( m_leftBorderPen ) );
+            style.addProperty("fo:border", Oasis::encodePen( m_leftBorderPen ) );
     }
     else
     {
         if ( featureSet( SLeftBorder ) &&
              ( ( m_leftBorderPen.width() != 0 ) && ( m_leftBorderPen.style() != Qt::NoPen ) ) )
-            style.addProperty( "fo:border-left", convertOasisPenToString( m_leftBorderPen ) );
+            style.addProperty( "fo:border-left", Oasis::encodePen( m_leftBorderPen ) );
 
         if ( featureSet( SRightBorder ) &&
              ( ( m_rightBorderPen.width() != 0 ) && ( m_rightBorderPen.style() != Qt::NoPen ) ) )
-            style.addProperty( "fo:border-right", convertOasisPenToString( m_rightBorderPen ) );
+            style.addProperty( "fo:border-right", Oasis::encodePen( m_rightBorderPen ) );
 
         if ( featureSet( STopBorder ) &&
              ( ( m_topBorderPen.width() != 0 ) && ( m_topBorderPen.style() != Qt::NoPen ) ) )
-            style.addProperty( "fo:border-top", convertOasisPenToString( m_topBorderPen ) );
+            style.addProperty( "fo:border-top", Oasis::encodePen( m_topBorderPen ) );
 
         if ( featureSet( SBottomBorder ) &&
              ( m_bottomBorderPen.width() != 0 ) && ( m_bottomBorderPen.style() != Qt::NoPen ) )
-            style.addProperty( "fo:border-bottom", convertOasisPenToString( m_bottomBorderPen ) );
+            style.addProperty( "fo:border-bottom", Oasis::encodePen( m_bottomBorderPen ) );
     }
     if ( featureSet( SFallDiagonal ) &&
          ( ( m_fallDiagonalPen.width() != 0 ) && ( m_fallDiagonalPen.style() != Qt::NoPen ) ) )
     {
-        style.addProperty("style:diagonal-tl-br", convertOasisPenToString( m_fallDiagonalPen ) );
+        style.addProperty("style:diagonal-tl-br", Oasis::encodePen( m_fallDiagonalPen ) );
     }
     if ( featureSet( SGoUpDiagonal ) &&
          ( ( m_goUpDiagonalPen.width() != 0 ) && ( m_goUpDiagonalPen.style() != Qt::NoPen ) ))
     {
-        style.addProperty("style:diagonal-bl-tr", convertOasisPenToString(m_goUpDiagonalPen ) );
+        style.addProperty("style:diagonal-bl-tr", Oasis::encodePen(m_goUpDiagonalPen ) );
     }
     if ( featureSet( SFontFamily ) )
     {

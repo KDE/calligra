@@ -324,8 +324,6 @@ QString convertRefToBase( const QString & sheet, const QRect & rect );
 QString convertRangeToRef( const QString & sheetName, const QRect & _area );
 
 void insertBracket( QString & s );
-QString convertOasisPenToString( const QPen & pen );
-QPen convertOasisStringToPen( const QString &str );
 
 //Return true when it's a reference to cell from sheet.
 KSPREAD_EXPORT bool localReferenceAnchor( const QString &_ref );
@@ -339,6 +337,20 @@ namespace Oasis
 {
   /**
    * \ingroup OpenDocument
+   * Creates OpenDocument pen attributes of the QPen \p pen .
+   * \return the OpenDocument pen attributes
+   */
+  QString encodePen( const QPen& pen );
+
+  /**
+   * \ingroup OpenDocument
+   * Creates a QPen of OpenDocument pen attributes \p str .
+   * \return the created QPen
+   */
+  QPen decodePen( const QString &str );
+
+  /**
+   * \ingroup OpenDocument
    * Converts an OpenDocument representation of a formula/cell reference to a
    * localized formula/cell reference.
    * @param expr The expression to convert from OpenDocument format.
@@ -346,6 +358,7 @@ namespace Oasis
    */
   // TODO check visibility
   KSPREAD_EXPORT QString decodeFormula(const QString& expr, const KLocale* locale = 0);
+
   /**
    * \ingroup OpenDocument
    * Converts a localized formula/cell reference to an OpenDocument

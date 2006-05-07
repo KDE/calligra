@@ -7180,6 +7180,7 @@ bool Sheet::saveOasis( KoXmlWriter & xmlWriter, KoGenStyles &mainStyles, GenVali
     {
         xmlWriter.addAttribute("table:protected", "true" );
         QByteArray str = KCodecs::base64Encode( d->password );
+        // FIXME Stefan: see OpenDocument spec, ch. 17.3 Encryption
         xmlWriter.addAttribute("table:protection-key", QString( str.data() ) );
     }
     QRect _printRange = d->print->printRange();

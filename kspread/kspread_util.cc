@@ -924,9 +924,9 @@ QString KSpread::convertRangeToRef( const QString & sheetName, const QRect & _ar
     return sheetName + '.' + Cell::name( _area.left(), _area.top() ) + ':' + sheetName + '.'+ Cell::name( _area.right(), _area.bottom() );
 }
 
-QString KSpread::convertOasisPenToString( const QPen & pen )
+QString KSpread::Oasis::encodePen( const QPen & pen )
 {
-    kDebug()<<"convertOasisPenToString( const QPen & pen ) :"<<pen<<endl;
+    kDebug()<<"encodePen( const QPen & pen ) :"<<pen<<endl;
     QString s = QString( "%1pt " ).arg( pen.width() );
     switch( pen.style() )
     {
@@ -949,7 +949,7 @@ QString KSpread::convertOasisPenToString( const QPen & pen )
         break;
     default: break;
     }
-    kDebug()<<" convertOasisPenToString :"<<s<<endl;
+    kDebug()<<" encodePen :"<<s<<endl;
     if ( pen.color().isValid() )
     {
         s+=' ';
@@ -958,7 +958,7 @@ QString KSpread::convertOasisPenToString( const QPen & pen )
     return s;
 }
 
-QPen KSpread::convertOasisStringToPen( const QString &border )
+QPen KSpread::Oasis::decodePen( const QString &border )
 {
     QPen pen;
     //string like "0.088cm solid #800000"
