@@ -360,7 +360,7 @@ WARNINGS               = NO
 # for undocumented members. If EXTRACT_ALL is set to YES then this flag will
 # automatically be disabled.
 
-WARN_IF_UNDOCUMENTED   = YES
+WARN_IF_UNDOCUMENTED   = NO
 
 # If WARN_IF_DOC_ERROR is set to YES, doxygen will generate warnings for
 # potential errors in the documentation, such as not documenting some
@@ -568,13 +568,13 @@ HTML_FILE_EXTENSION    = .html
 # each generated HTML page. If it is left blank doxygen will generate a
 # standard header.
 
-HTML_HEADER            = ../apidocs/common/header.html
+HTML_HEADER            = ../doc/api/header.html
 
 # The HTML_FOOTER tag can be used to specify a personal HTML footer for
 # each generated HTML page. If it is left blank doxygen will generate a
 # standard footer.
 
-HTML_FOOTER            = ../apidocs/common/footer.html
+#HTML_FOOTER            = ../apidocs/common/footer.html
 
 # The HTML_STYLESHEET tag can be used to specify a user-defined cascading
 # style sheet that is used by each HTML page. It can be used to
@@ -583,7 +583,7 @@ HTML_FOOTER            = ../apidocs/common/footer.html
 # the style sheet file to the HTML output directory, so don't put your own
 # stylesheet in the HTML output directory as well, or it will be erased!
 
-HTML_STYLESHEET        = ../apidocs/common/doxygen.css
+#HTML_STYLESHEET        = ../apidocs/common/doxygen.css
 
 # If the HTML_ALIGN_MEMBERS tag is set to YES, the members of classes,
 # files or namespaces will be aligned in HTML using tables. If set to
@@ -1131,15 +1131,13 @@ DOT_CLEANUP            = YES
 # used. If set to NO the values of all tags below this one will be ignored.
 
 SEARCHENGINE           = NO
-PROJECT_NAME           = "kspread Library"
-PROJECT_NUMBER         = "Version 1.3post"
 INPUT                  = .
 IMAGE_PATH             = ../doc/api
 OUTPUT_DIRECTORY       = ../apidocs
 HTML_OUTPUT            = kspread/html
-HTML_HEADER            = ../apidocs/common/header.html
-HTML_FOOTER            = ../apidocs/common/footer.html
-HTML_STYLESHEET        = ../apidocs/common/doxygen.css
+#HTML_HEADER            = ../apidocs/common/header.html
+#HTML_FOOTER            = ../apidocs/common/footer.html
+#HTML_STYLESHEET        = ../apidocs/common/doxygen.css
 LATEX_OUTPUT           = kspread/latex
 RTF_OUTPUT             = kspread/rtf
 MAN_OUTPUT             = kspread/man
