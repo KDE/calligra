@@ -321,7 +321,7 @@ public:
     void copyContent( const Cell* cell );
 
     /**
-     * Copies the format and the content. It does not copy the #m_row and #m_column attributes.
+     * Copies the format and the content. It does not copy the row and column indices.
      * Besides that all persistent attributes are copied. setCellText() is called to set the real
      * content.
      *
@@ -870,7 +870,7 @@ public:
        * CalcDirty
        * Shows whether recalculation is necessary.
        * If this cell must be recalculated for some reason, for example the user
-       * entered a new formula, then this flag is set. If @ref #bFormula is false
+       * entered a new formula, then this flag is set. If isFormula() is false
        * nothing will happen at all.
        */
       Flag_CalcDirty             = 0x00020000,
@@ -896,7 +896,7 @@ public:
        * function which will call @ref Sheet::updateCell once it retains
        * the control. If a function changes the contents/layout of this cell and this
        * flag is not set, then the function must set it at once. After the changes
-       * are done the function must call <tt>m_pSheet->updateCell(...).
+       * are done the function must call m_pSheet->updateCell(...).
        * The flag is cleared by the function format()->sheet()->updateCell.
        */
       Flag_DisplayDirty          = 0x00100000,

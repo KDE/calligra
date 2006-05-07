@@ -226,7 +226,7 @@ protected:
     void resizeEvent( QResizeEvent* );
     /**
      * Steals some key events from the QLineEdit and sends
-     * it to the @ref Canvas ( its parent ) instead.
+     * it to the KSpread::Canvas ( its parent ) instead.
      */
     bool eventFilter( QObject* o, QEvent* e );
 
