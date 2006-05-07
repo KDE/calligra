@@ -25,9 +25,9 @@
 
 /* NOTE Stefan:
         Use doxygen's 'ingroup' command for each method/class/namespace
-        explicitly. Don't group member function together use 'addgroup'.
-        This way one sees immediately to which group the method belongs,
-        if one looks directly into the header file.
+        explicitly. This way one sees immediately to which group the method
+        belongs, if one looks directly into the header file.
+        Don't group member function together and use 'addgroup'.
 */
 
 /**
