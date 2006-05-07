@@ -1,6 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 1998-2002 The KSpread Team
-                           www.koffice.org/kspread
+   Copyright (C) 1998-2002 The KSpread Team <koffice-devel@kde.org>
    Copyright (C) 2005 Tomas Mecir <mecirt@gmail.com>
 
    This library is free software; you can redistribute it and/or
@@ -252,7 +251,7 @@ Value func_accrint (valVector args, ValueCalc *calc, FuncExtra *)
   QDate maturity = calc->conv()->asDate (args[0]).asDate();
   QDate firstInterest = calc->conv()->asDate (args[1]).asDate();
   QDate settlement = calc->conv()->asDate (args[2]).asDate();
-  
+
   Value rate = args[3];
   Value par = args[4];
   int frequency = calc->conv()->asInteger (args[5]).asInteger();
@@ -260,7 +259,7 @@ Value func_accrint (valVector args, ValueCalc *calc, FuncExtra *)
   int basis = 0;
   if (args.count() == 7)
     basis = calc->conv()->asInteger (args[6]).asInteger();
-  
+
   if ( basis < 0 || basis > 4 || (calc->isZero (frequency)) ||
       (12 % frequency != 0))
     return Value::errorVALUE();
@@ -288,7 +287,7 @@ Value func_accrintm (valVector args, ValueCalc *calc, FuncExtra *)
   QDate issue = calc->conv()->asDate (args[0]).asDate();
   QDate maturity = calc->conv()->asDate (args[1]).asDate();
   Value rate = args[2];
-  
+
   Value par = 1000;
   int basis = 0;
   if (args.count() > 3)
@@ -315,7 +314,7 @@ Value func_disc (valVector args, ValueCalc *calc, FuncExtra *)
 
   Value par = args[2];
   Value redemp = args[3];
-  
+
   int basis = 0;
   if (args.count() == 5)
     basis = calc->conv()->asInteger (args[4]).asInteger();
@@ -503,7 +502,7 @@ Value func_duration (valVector args, ValueCalc *calc, FuncExtra *)
     return Value::errorVALUE();
   if (calc->isZero (fv) || calc->isZero (pv))
     return Value::errorDIV0();
-  
+
   if (calc->lower (calc->div (fv, pv), 0))
     return Value::errorVALUE();
 
@@ -582,7 +581,7 @@ Value func_ipmt (valVector args, ValueCalc *calc, FuncExtra *)
   Value per  = args[1];
   Value nper = args[2];
   Value pv   = args[3];
-  
+
   Value fv = 0.0;
   Value type = 0;
   if (args.count() > 4) fv = args[4];
@@ -620,7 +619,7 @@ Type (optional) defines the due date. F=1 for payment at the beginning of a peri
   Value type = 0;
   if (args.count() > 4) fv = args[4];
   if (args.count() == 6) type = args[5];
-  
+
   Value pay  = getPay (calc, rate, nper, pv, fv, type);
   Value ipmt = func_ipmt (args, calc, 0);
   return calc->sub (pay, ipmt);
@@ -685,7 +684,7 @@ Value func_pv_annuity (valVector args, ValueCalc *calc, FuncExtra *)
   Value amount = args[0];
   Value interest = args[1];
   Value periods = args[2];
-  
+
   // recpow = 1 / pow (1 + interest, periods)
   // result = amount * (1 - recpow) / interest;
   Value recpow;
@@ -767,7 +766,7 @@ Value func_nominal (valVector args, ValueCalc *calc, FuncExtra *)
 
   if (calc->isZero (periods)) // Check null
     return Value::errorDIV0();
-  
+
   // pw = pow (effective + 1, 1 / periods)
   // result = periods * (pw - 1);
   Value pw;
@@ -864,7 +863,7 @@ Value func_ddb (valVector args, ValueCalc *calc, FuncExtra *)
   double factor = 12;
   if (args.count() == 5)
     factor = calc->conv()->asFloat (args[4]).asFloat();
-  
+
   double total   = 0.0;
 
   if ( cost < 0.0 || salvage < 0.0 || life <= 0.0 || period < 0.0 || factor < 0.0 )

@@ -1,6 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 1998-2002 The KSpread Team
-                           www.koffice.org/kspread
+   Copyright (C) 1998-2002 The KSpread Team <koffice-devel@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public

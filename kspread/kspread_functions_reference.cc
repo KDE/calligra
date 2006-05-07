@@ -1,6 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 1998-2002 The KSpread Team
-                           www.koffice.org/kspread
+   Copyright (C) 1998-2002 The KSpread Team <koffice-devel@kde.org>
    Copyright (C) 2005 Tomas Mecir <mecirt@gmail.com>
 
    This library is free software; you can redistribute it and/or
@@ -49,7 +48,7 @@ void RegisterReferenceFunctions()
 {
   FunctionRepository* repo = FunctionRepository::self();
   Function *f;
-  
+
   f = new Function ("ADDRESS",  func_address);
   f->setParamCount (2, 5);
   repo->add (f);
@@ -162,7 +161,7 @@ Value func_address (valVector args, ValueCalc *calc, FuncExtra *)
 
     result += QString::number( row );
   }
-  
+
   return Value (result);
 }
 
@@ -187,7 +186,7 @@ Value func_areas (valVector args, ValueCalc *calc, FuncExtra *e)
       // we have a range reference - return 1
       return 1;
   }
-  
+
   QString s = calc->conv()->asString (args[0]).asString();
   if ( s[0] != '(' || s[s.length() - 1] != ')' )
     return Value::errorVALUE();
@@ -232,7 +231,7 @@ Value func_index (valVector args, ValueCalc *calc, FuncExtra *)
   // value, or a single cell containing an array - then we return the array
   // element. In any case, this function can assume that the given value
   // is the same. Because it is.
-  
+
   Value val = args[0];
   unsigned row = calc->conv()->asInteger (args[1]).asInteger() - 1;
   unsigned col = calc->conv()->asInteger (args[2]).asInteger() - 1;
@@ -254,7 +253,7 @@ Value func_lookup (valVector args, ValueCalc *calc, FuncExtra *)
   if ((cols != rr.columns()) || (rows != rr.rows()))
     return Value::errorVALUE();
   Value res;
-  
+
   // now traverse the array and perform comparison
   for (unsigned r = 0; r < rows; ++r)
     for (unsigned c = 0; c < cols; ++c)
