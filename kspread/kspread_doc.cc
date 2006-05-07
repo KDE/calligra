@@ -695,46 +695,43 @@ bool Doc::saveOasisHelper( KoStore* store, KoXmlWriter* manifestWriter, SaveFlag
     styles = mainStyles.styles( KoGenStyle::STYLE_NUMERIC_NUMBER );
     it = styles.begin();
     for ( ; it != styles.end() ; ++it ) {
-      (*it).style->writeStyle( contentWriter, mainStyles, "number:number-style", (*it).name, 0 /*TODO ????*/  );
+      (*it).style->writeStyle( contentWriter, mainStyles, "number:number-style", (*it).name, 0 );
     }
 
-    //TODO FIXME !!!!
     styles = mainStyles.styles( KoGenStyle::STYLE_NUMERIC_DATE );
     it = styles.begin();
     for ( ; it != styles.end() ; ++it ) {
-        (*it).style->writeStyle( contentWriter, mainStyles, "number:date-style", (*it).name, 0 /*TODO ????*/  );
+        (*it).style->writeStyle( contentWriter, mainStyles, "number:date-style", (*it).name, 0 );
     }
 
     styles = mainStyles.styles( KoGenStyle::STYLE_NUMERIC_TIME );
     it = styles.begin();
     for ( ; it != styles.end() ; ++it ) {
-        (*it).style->writeStyle( contentWriter, mainStyles, "number:time-style", (*it).name, 0 /*TODO ????*/  );
+        (*it).style->writeStyle( contentWriter, mainStyles, "number:time-style", (*it).name, 0 );
     }
 
     styles = mainStyles.styles( KoGenStyle::STYLE_NUMERIC_FRACTION );
     it = styles.begin();
     for ( ; it != styles.end() ; ++it ) {
-        (*it).style->writeStyle( contentWriter, mainStyles, "number:number-style", (*it).name, 0 /*TODO ????*/  );
+        (*it).style->writeStyle( contentWriter, mainStyles, "number:number-style", (*it).name, 0 );
     }
 
-    //TODO FIME !!!!!
     styles = mainStyles.styles( KoGenStyle::STYLE_NUMERIC_PERCENTAGE );
     it = styles.begin();
     for ( ; it != styles.end() ; ++it ) {
-        (*it).style->writeStyle( contentWriter, mainStyles, "number:percentage-style", (*it).name, 0 /*TODO ????*/  );
+        (*it).style->writeStyle( contentWriter, mainStyles, "number:percentage-style", (*it).name, 0 );
     }
 
-    //TODO FIME !!!!!
     styles = mainStyles.styles( KoGenStyle::STYLE_NUMERIC_CURRENCY );
     it = styles.begin();
     for ( ; it != styles.end() ; ++it ) {
-        (*it).style->writeStyle( contentWriter, mainStyles, "number:currency-style", (*it).name, 0 /*TODO ????*/  );
+        (*it).style->writeStyle( contentWriter, mainStyles, "number:currency-style", (*it).name, 0 );
     }
 
     styles = mainStyles.styles( KoGenStyle::STYLE_NUMERIC_SCIENTIFIC );
     it = styles.begin();
     for ( ; it != styles.end() ; ++it ) {
-        (*it).style->writeStyle( contentWriter, mainStyles, "number:number-style", (*it).name, 0 /*TODO ????*/  );
+        (*it).style->writeStyle( contentWriter, mainStyles, "number:number-style", (*it).name, 0 );
     }
 
 

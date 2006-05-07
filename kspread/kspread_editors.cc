@@ -1401,7 +1401,6 @@ void LocationEditWidget::keyPressEvent( QKeyEvent * _ev )
     break;
     // Escape pressed, restore original value
     case Qt::Key_Escape:
-        // #### Torben says: This is duplicated code. Bad.
         if ( m_pView->selectionInfo()->isSingular() ) {
             setText( Cell::columnName( m_pView->canvasWidget()->markerColumn() )
                      + QString::number( m_pView->canvasWidget()->markerRow() ) );

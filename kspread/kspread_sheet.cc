@@ -188,23 +188,6 @@ void ChartBinding::cellChanged( Cell* /*changedCell*/ )
         }
     }
     chart->analyzeHeaders( );
-
-    // ######### Kalle may be interested in that, too
-#if 0
-    Chart::Range range;
-    range.top = m_rctDataArea.top();
-    range.left = m_rctDataArea.left();
-    range.right = m_rctDataArea.right();
-    range.bottom = m_rctDataArea.bottom();
-    range.sheet = m_pSheet->name(); */
-
-    //m_child->chart()->setData( matrix );
-
-    // Force a redraw of the chart on all views
-
-    /** TODO - replace the call below with something that will repaint this chart */
-#endif
-    //    sheet()->emit_polygonInvalidated( m_child->framePointArray() );
 }
 
 
@@ -274,9 +257,6 @@ public:
   // Doing so costs some time, so by default it should be turned off.
   bool showPageBorders;
 
-  // List of all embedded objects. FIXME unused ??
-  // QPtrList<Child> m_lstChildren;
-
   // The highest row and column ever accessed by the user.
   int maxRow;
   int maxColumn;
@@ -331,8 +311,6 @@ Sheet::Sheet( Map* map, const QString &sheetName, const char *_name )
   d->name = sheetName;
 
   dcopObject();
-
-  // m_lstChildren.setAutoDelete( true );
 
   d->cells.setAutoDelete( true );
   d->rows.setAutoDelete( true );
@@ -4403,7 +4381,8 @@ struct IncreaseIndentWorker : public Sheet::CellWorkerTypeA {
     //cell->format()->setIndent( 0.0 );
       }
       cell->setDisplayDirtyFlag();
-      cell->format()->setIndent( /* ### ??? --> */ cell->format()->getIndent(x,y) /* <-- */ +valIndent );
+      // add the indentation value to the current value
+      cell->format()->setIndent( cell->format()->getIndent(x,y) + valIndent );
       cell->clearDisplayDirtyFlag();
   } else {
       cell->format()->setIndent( tmpIndent+valIndent);
@@ -5761,7 +5740,7 @@ QDomDocument Sheet::saveCellRegion(const Region& region, bool copy, bool era)
         }
       }
 
-      // ##### Inefficient
+      // TODO Stefan: Inefficient, use cluster functionality
       // Save the row formats if there are any
       RowFormat* format;
       for (int row = range.top(); row <= range.bottom(); ++row)
@@ -5802,7 +5781,7 @@ QDomDocument Sheet::saveCellRegion(const Region& region, bool copy, bool era)
         }
       }
 
-      // ##### Inefficient
+      // TODO Stefan: Inefficient, use the cluster functionality
       // Save the column formats if there are any
       ColumnFormat* format;
       for (int col = range.left(); col <= range.right(); ++col)
@@ -7201,7 +7180,7 @@ bool Sheet::saveOasis( KoXmlWriter & xmlWriter, KoGenStyles &mainStyles, GenVali
     {
         xmlWriter.addAttribute("table:protected", "true" );
         QByteArray str = KCodecs::base64Encode( d->password );
-        xmlWriter.addAttribute("table:protection-key", QString( str.data() ) );/* FIXME !!!!*/
+        xmlWriter.addAttribute("table:protection-key", QString( str.data() ) );
     }
     QRect _printRange = d->print->printRange();
     if ( _printRange != ( QRect( QPoint( 1, 1 ), QPoint( KS_colMax, KS_rowMax ) ) ) )
@@ -7275,7 +7254,7 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
 //                   << " i: " << i
 //                   << " column: " << column->column() << endl;
         KoGenStyle currentColumnStyle( Doc::STYLE_COLUMN, "table-column" );
-        currentColumnStyle.addPropertyPt( "style:column-width", column->dblWidth() );/*FIXME pt and not mm */
+        currentColumnStyle.addPropertyPt( "style:column-width", column->dblWidth() );
         currentColumnStyle.addProperty( "fo:break-before", "auto" );/*FIXME auto or not ?*/
 
         //style default layout for column
@@ -7307,7 +7286,7 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
           }
 
           KoGenStyle nextColumnStyle( Doc::STYLE_COLUMN, "table-column" );
-          nextColumnStyle.addPropertyPt( "style:column-width", nextColumn->dblWidth() );/*FIXME pt and not mm */
+          nextColumnStyle.addPropertyPt( "style:column-width", nextColumn->dblWidth() );
           nextColumnStyle.addProperty( "fo:break-before", "auto" );/*FIXME auto or not ?*/
 
           KoGenStyle nextDefaultCellStyle; // the type is determined in saveOasisCellStyle
@@ -7327,7 +7306,7 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
         xmlWriter.startElement( "table:table-column" );
         xmlWriter.addAttribute( "table:style-name", mainStyles.lookup( currentColumnStyle, "co" ) );
 
-        //FIXME don't create format if it's default format
+        // FIXME Stefan: don't create format if it's default format
 
         // skip 'table:default-cell-style-name' attribute for the default style
         if ( !currentDefaultCellStyle.isDefaultStyle() )
@@ -7359,12 +7338,12 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
         const RowFormat* row = rowFormat( i );
 
         KoGenStyle currentRowStyle( Doc::STYLE_ROW, "table-row" );
-        currentRowStyle.addPropertyPt( "style:row-height", row->dblHeight());/*FIXME pt and not mm */
+        currentRowStyle.addPropertyPt( "style:row-height", row->dblHeight() );
         currentRowStyle.addProperty( "fo:break-before", "auto" );/*FIXME auto or not ?*/
 
         xmlWriter.startElement( "table:table-row" );
 
-        // TODO skip attribute saving for default row
+        // TODO Stefan: skip attribute saving for default row
 
         xmlWriter.addAttribute( "table:style-name", mainStyles.lookup( currentRowStyle, "ro" ) );
         int repeated = 1;
@@ -7402,7 +7381,7 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
 
               // create the Oasis representation of the format for the comparison
               KoGenStyle nextRowStyle( Doc::STYLE_ROW, "table-row" );
-              nextRowStyle.addPropertyPt( "style:row-height", nextRow->dblHeight() );/*FIXME pt and not mm */
+              nextRowStyle.addPropertyPt( "style:row-height", nextRow->dblHeight() );
               nextRowStyle.addProperty( "fo:break-before", "auto" );/*FIXME auto or not ?*/
 
               // TODO default cell style (name)
@@ -7865,18 +7844,16 @@ Sheet* Sheet::findSheet( const QString & _name )
   return workbook()->findSheet( _name );
 }
 
-// ###### Torben: Use this one instead of d->cells.insert()
 void Sheet::insertCell( Cell *_cell )
 {
-
   d->cells.insert( _cell, _cell->column(), _cell->row() );
 
-  //Not sure why this is here
-  /*if ( d->scrollBarUpdates )
+  // Adjust the scrollbar range, if the max. dimension has changed.
+  if ( d->scrollBarUpdates )
   {
-    checkRangeHBorder ( _cell->column() );
-    checkRangeVBorder ( _cell->row() );
-  }*/
+    checkRangeHBorder( _cell->column() );
+    checkRangeVBorder( _cell->row() );
+  }
 }
 
 void Sheet::insertColumnFormat( ColumnFormat *l )

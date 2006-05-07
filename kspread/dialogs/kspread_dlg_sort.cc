@@ -232,13 +232,6 @@ SortDialog::SortDialog( View * parent,  const char * name,
 
   m_tabWidget->insertTab( 1, m_page2, i18n( "Options" ) );
 
-#if 0 // ### Why is this here? Never assigned to a widget!
-  QHBoxLayout * Layout1 = new QHBoxLayout( 0, 0, 6, "Layout1");
-  QSpacerItem * spacer_2 = new QSpacerItem( 20, 20, QSizePolicy::Expanding,
-                                            QSizePolicy::Minimum );
-  Layout1->addItem( spacer_2 );
-#endif
-
   m_copyLayout = new QCheckBox( m_page2 );
   m_copyLayout->setText( i18n( "Copy cell &formatting (Borders, Colours, Text Style)" ) );
 

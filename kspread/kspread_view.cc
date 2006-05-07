@@ -3104,6 +3104,8 @@ void View::insertMathExpr()
   /* TODO - because I search on 'TODO's :-) */
   // #### Is the dialog deleted when it's closed ? (David)
   // Torben thinks that not.
+  // FIXME Stefan: FormulaDialog has no 'delete this' statement.
+  //               -> It is deleted, when this view is deleted.
 }
 
 void View::formulaSelection( const QString &_math )
@@ -6486,7 +6488,7 @@ void View::removeSheet()
 {
   if ( doc()->map()->count() <= 1 || ( doc()->map()->visibleSheets().count() <= 1 ) )
   {
-    KMessageBox::sorry( this, i18n("You cannot delete the only sheet."), i18n("Remove Sheet") ); // FIXME bad english? no english!
+    KMessageBox::sorry( this, i18n("You cannot delete the only sheet."), i18n("Remove Sheet") );
     return;
   }
   int ret = KMessageBox::warningContinueCancel( this, i18n( "You are about to remove the active sheet.\nDo you want to continue?" ),

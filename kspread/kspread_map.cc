@@ -57,7 +57,7 @@ Map::Map ( Doc* doc, const char* name)
     tableId (1),
     m_dcop( 0 )
 {
-  setObjectName( name ); // FIXME necessary for DCOP/Scripting?
+  setObjectName( name ); // ### necessary for DCOP/Scripting?
 }
 
 Map::~Map()
@@ -197,7 +197,8 @@ bool Map::saveOasis( KoXmlWriter & xmlWriter, KoGenStyles & mainStyles, KoStore 
     {
         xmlWriter.addAttribute("table:structure-protected", "true" );
         QByteArray str = KCodecs::base64Encode( m_strPassword );
-        xmlWriter.addAttribute("table:protection-key", QString( str.data() ) );/* FIXME !!!!*/
+        // FIXME Stefan: see OpenDocument spec, ch. 17.3 Encryption
+        xmlWriter.addAttribute("table:protection-key", QString( str.data() ) );
     }
 
     GenValidationStyles valStyle;

@@ -379,8 +379,19 @@ public slots:
     void slotScrollVert( int _value );
     void slotScrollHorz( int _value );
 
-    void slotMaxColumn( int _max_column );
-    void slotMaxRow( int _max_row );
+    /**
+     * Updates the scrollbar.
+     * If the maximum used column index @p maxColumn was increased,
+     * the scrollbar range will be increased accordingly.
+     */
+    void slotMaxColumn( int maxColumn );
+
+    /**
+     * Updates the scrollbar.
+     * If the maximum used column index @p maxRow was increased,
+     * the scrollbar range will be increased accordingly.
+     */
+    void slotMaxRow( int maxRow );
 
 signals:
     void objectSelectedChanged();
