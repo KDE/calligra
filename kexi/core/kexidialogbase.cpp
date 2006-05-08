@@ -354,6 +354,8 @@ tristate KexiDialogBase::switchToViewMode( int newViewMode, QMap<QString,QString
 	if (!res) {
 		kdDebug() << "Switching to mode " << newViewMode << " failed. Previous mode "
 			<< prevViewMode << " restored." << endl;
+		setStatus(mainWin()->project()->dbConnection(), 
+			i18n("Switching to other view failed (%1).").arg(Kexi::nameForViewMode(newViewMode)),"");
 		m_currentViewMode = prevViewMode;
 		return false;
 	}
