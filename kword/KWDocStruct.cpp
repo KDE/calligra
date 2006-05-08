@@ -39,7 +39,7 @@
 #include <k3listviewsearchline.h>
 #include <kglobalsettings.h>
 #include <kglobal.h>
-#include <kpixmap.h>
+#include <QPixmap>
 #include <ktoolbar.h>
 
 
