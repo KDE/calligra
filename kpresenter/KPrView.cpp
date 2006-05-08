@@ -4130,7 +4130,7 @@ void KPrView::openPopupMenuMenuPage( const QPoint & _point )
     if(!koDocument()->isReadWrite() || !factory())
         return;
     QPtrList<KAction> actionList= QPtrList<KAction>();
-    KActionSeparator *separator=new KActionSeparator();
+    KSeparatorAction *separator=new KSeparatorAction();
     switch( m_canvas->activePage()->getBackType())
     {
     case BT_COLOR:

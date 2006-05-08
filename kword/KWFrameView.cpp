@@ -177,7 +177,7 @@ void KWFrameView::paintFrameAttributes(QPainter *painter, const QRect &crect, KW
 
 // *********** Policies *********
 FramePolicy::FramePolicy(KWFrameView *view) {
-    m_separator = new KActionSeparator();
+    m_separator = new KSeparatorAction();
     m_view = view;
 }
 void FramePolicy::addFloatingAction(KWView *view, QList<KAction*> &actionList) {
@@ -329,7 +329,7 @@ MouseMeaning PartFramePolicy::mouseMeaning( const KoPoint &point, int keyState )
 QMenu* PartFramePolicy::createPopup( const KoPoint &point, KWView *view ) {
     Q_UNUSED(point);
     KWPartFrameSet *part = static_cast<KWPartFrameSet *>(m_view->frame()->frameSet());
-    KActionSeparator *separator=new KActionSeparator();
+    KSeparatorAction *separator=new KSeparatorAction();
     KActionCollection *actionCollection = view->actionCollection();
     QList<KAction*> actionList;
     actionList.append(separator);
@@ -369,7 +369,7 @@ MouseMeaning TextFramePolicy::mouseMeaning( const KoPoint &point, int keyState )
 QMenu* TextFramePolicy::createPopup( const KoPoint &point, KWView *view ) {
     if( m_view->isBorderHit(point) ) {
         KWFrameSet *fs = m_view->frame()->frameSet();
-        KActionSeparator *separator=new KActionSeparator();
+        KSeparatorAction *separator=new KSeparatorAction();
         KActionCollection *actionCollection = view->actionCollection();
         QList<KAction*> actionList;
         if(fs->isHeaderOrFooter()) {
@@ -468,7 +468,7 @@ MouseMeaning ImageFramePolicy::mouseMeaning( const KoPoint &point, int keyState 
 }
 QMenu* ImageFramePolicy::createPopup( const KoPoint &point, KWView *view ) {
     Q_UNUSED(point);
-    KActionSeparator *separator=new KActionSeparator();
+    KSeparatorAction *separator=new KSeparatorAction();
     KActionCollection *actionCollection = view->actionCollection();
     QList<KAction*> actionList;
     actionList.append(separator);

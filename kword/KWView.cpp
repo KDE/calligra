@@ -1424,7 +1424,7 @@ void KWView::setupActions()
     // For RMB inside a cell, see KWFrameView::showPopup
     // This isn't a dynamic list; it's only plugged/unplugged depending on the context.
     // If you change the contents of that list, check ~KWView.
-    m_tableActionList.append( new KActionSeparator(actionCollection()) );
+    m_tableActionList.append( new KSeparatorAction(actionCollection()) );
     m_tableActionList.append( m_actionTableInsertRow );
     m_tableActionList.append( m_actionTableDelRow );
     m_tableActionList.append( m_actionTableInsertCol );
