@@ -10,7 +10,7 @@ add_subdirectory(src)
 ########### install files ###############
 
 
-kde4_create_doxygen_docs(  )
+
 
 kde4_footer()
 

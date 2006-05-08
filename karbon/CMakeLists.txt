@@ -79,7 +79,7 @@ install_targets(/bin karbon )
 ########### install files ###############
 
 
-kde4_create_doxygen_docs(  )
+
 
 kde4_footer()
 

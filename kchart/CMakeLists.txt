@@ -99,7 +99,7 @@ install_files( ${SERVICES_INSTALL_DIR} FILES  kchartpart.desktop )
 install_files( ${DATA_INSTALL_DIR}/kchart FILES  kchart.rc kchart_readonly.rc )
 install_files( ${APPLNK_INSTALL_DIR}/Office FILES  kchart.desktop )
 
-kde4_create_doxygen_docs(  )
+
 
 kde4_footer()
 

@@ -200,7 +200,7 @@ install_files( ${DATA_INSTALL_DIR}/kspread FILES  kspread.rc kspread_readonly.rc
 install_files( ${SERVICES_INSTALL_DIR} FILES  kspreadpart.desktop )
 install_files( ${APPLNK_INSTALL_DIR}/Office FILES  kspread.desktop )
 
-kde4_create_doxygen_docs(  )
+
 
 kde4_footer()
 

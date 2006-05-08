@@ -28,7 +28,7 @@ install_files( ${DATA_INSTALL_DIR}/koshell FILES  koshellui.rc )
 
 kde4_install_icons( ${ICON_INSTALL_DIR}  hicolor )
 
-kde4_create_doxygen_docs(  )
+
 
 kde4_footer()
 

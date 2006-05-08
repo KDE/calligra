@@ -169,7 +169,7 @@ install_files( ${SERVICES_INSTALL_DIR} FILES  kwordpart.desktop )
 install_files( ${APPLNK_INSTALL_DIR}/Office FILES  kword.desktop )
 install_files( /include/kword FILES  KWMailMergeDataSource.h )
 
-kde4_create_doxygen_docs(  )
+
 
 kde4_footer()
 

@@ -188,7 +188,7 @@ install_files( ${SERVICES_INSTALL_DIR} FILES  kpresenterpart.desktop )
 install_files( ${APPLNK_INSTALL_DIR}/Office FILES  kpresenter.desktop )
 install_files(  FILES  kprconverter.pl )
 
-kde4_create_doxygen_docs(  )
+
 
 kde4_footer()
 
