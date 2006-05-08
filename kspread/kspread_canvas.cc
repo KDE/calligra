@@ -1263,7 +1263,7 @@ void Canvas::processLeftClickAnchor()
                           //   "compromise your system's security.");
 
 		QString question = i18n("This link points to the program or script '%1'.\n"
-					"Malicious programs can harm your computer.  Are you sure that you want to run this program?").arg(d->anchor);
+					"Malicious programs can harm your computer.  Are you sure that you want to run this program?", d->anchor);
         	// this will also start local programs, so adding a "don't warn again"
         	// checkbox will probably be too dangerous
         	int choice = KMessageBox::warningYesNo(this, question, i18n("Open Link?"));
@@ -5010,9 +5010,7 @@ void VBorder::paintSizeIndicator( int mouseY, bool firstTime )
 
     QString tmpSize;
     if ( m_iResizePos != y )
-        tmpSize = i18n("Height: %1 %2").arg( KoUnit::toUserValue( m_pCanvas->doc()->unzoomItY( m_iResizePos - y ),
-                                                               m_pView->doc()->unit() ) )
-                                       .arg( m_pView->doc()->unitName() );
+        tmpSize = i18n("Height: %1 %2", KoUnit::toUserValue( m_pCanvas->doc()->unzoomItY( m_iResizePos - y ), m_pView->doc()->unit() ) ).arg( m_pView->doc()->unitName() );
     else
         tmpSize = i18n( "Hide Row" );
 

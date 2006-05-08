@@ -59,11 +59,14 @@
 // KDE includes
 #include <dcopclient.h>
 #include <dcopref.h>
+#include <kactioncollection.h>
 #include <kapplication.h>
 #include <kconfig.h>
 #include <kdebug.h>
 #include <kfind.h>
 #include <kfinddialog.h>
+#include <kfontaction.h>
+#include <kfontsizeaction.h>
 #include <kfontdialog.h>
 #include <kinputdialog.h>
 #include <kmessagebox.h>
@@ -78,6 +81,7 @@
 #include <kstdaction.h>
 #include <kstandarddirs.h>
 #include <ktempfile.h>
+#include <ktoolbarpopupaction.h>
 #include <kparts/partmanager.h>
 #include <k3listview.h>
 #include <kpushbutton.h>
