@@ -65,6 +65,35 @@ void KexiDBLineEdit::setValueInternal(const QVariant& add, bool removeOld)
 
 QVariant KexiDBLineEdit::value()
 {
+	const KexiDB::Field::Type t = m_columnInfo->field->type();
+	switch (t) {
+	case KexiDB::Field::Text:
+	case KexiDB::Field::LongText:
+		return text();
+	case KexiDB::Field::Byte:
+	case KexiDB::Field::ShortInteger:
+		return text().toShort();
+//! @todo uint, etc?
+	case KexiDB::Field::Integer:
+		return text().toInt();
+	case KexiDB::Field::BigInteger:
+		return text().toLongLong();
+	case KexiDB::Field::Boolean:
+		//! @todo temporary solution for booleans!
+		return text() == "1" ? QVariant(true,1) : QVariant(false,0);
+/*	case KexiDB::Field::Date:
+		return dateFormatter()->stringToVariant( text() );
+	case KexiDB::Field::Time:
+		return timeFormatter()->stringToVariant( text() );
+	case KexiDB::Field::DateTime:
+		return stringToDateTime(*dateFormatter(), *timeFormatter(), text());*/
+	case KexiDB::Field::Float:
+		return text().toFloat();
+	case KexiDB::Field::Double:
+		return text().toDouble();
+	}
+//! @todo more data types!
+
 	return text();
 }
 
