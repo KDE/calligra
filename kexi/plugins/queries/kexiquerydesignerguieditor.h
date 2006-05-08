@@ -55,6 +55,7 @@ namespace KexiDB
 	class ResultInfo;
 }
 
+//! Design view of the Query Designer
 class KexiQueryDesignerGuiEditor : public KexiViewBase
 {
 	Q_OBJECT

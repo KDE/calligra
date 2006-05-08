@@ -299,7 +299,7 @@ KexiQueryDesignerSQLView::afterSwitchFrom(int mode)
 
 	if (!query) {
 		//no valid query schema delivered: just load sql text, no matter if it's valid
-		if (!loadDataBlock( d->origStatement, "sql" ))
+		if (!loadDataBlock( d->origStatement, "sql", true /*canBeEmpty*/ ))
 			return false;
 	}
 	else {
