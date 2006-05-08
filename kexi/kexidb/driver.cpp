@@ -244,13 +244,25 @@ QString Driver::valueToSQL( uint ftype, const QVariant& v ) const
 	if (v.isNull())
 		return "NULL";
 	switch (ftype) {
+		case Field::Text:
+		case Field::LongText: {
+			QString s = v.toString();
+			return escapeString(s); //QString("'")+s.replace( '"', "\\\"" ) + "'";
+		}
 		case Field::Byte:
 		case Field::ShortInteger:
 		case Field::Integer:
-		case Field::Float:
-		case Field::Double:
 		case Field::BigInteger:
 			return v.toString();
+		case Field::Float:
+		case Field::Double: {
+			if (v.type()==QVariant::String) {
+				//workaround for values stored as string but should be casted to floating-point
+				QString s(v.toString());
+				return s.replace(',', ".");
+			}
+			return v.toString();
+		}
 //TODO: here special encoding method needed
 		case Field::Boolean:
 			return QString::number(v.toInt()?1:0); //0 or 1
@@ -260,11 +272,6 @@ QString Driver::valueToSQL( uint ftype, const QVariant& v ) const
 			return QString("\'")+v.toDate().toString(Qt::ISODate)+"\'";
 		case Field::DateTime:
 			return dateTimeToSQL( v.toDateTime() );
-		case Field::Text:
-		case Field::LongText: {
-			QString s = v.toString();
-			return escapeString(s); //QString("'")+s.replace( '"', "\\\"" ) + "'";
-		}
 		case Field::BLOB: {
 			if (v.type()==QVariant::String)
 				return escapeBLOB(v.toString().utf8());
