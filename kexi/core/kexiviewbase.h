@@ -184,10 +184,12 @@ class KEXICORE_EXPORT KexiViewBase : public QWidget, public KexiActionProxy
 		virtual KexiDB::SchemaData* storeNewData(const KexiDB::SchemaData& sdata, bool &cancel);
 
 		/*! Loads large string data \a dataString block (e.g. xml form's representation),
-		 indexed with optional \a dataID, from the database backend.
+		 indexed with optional \a dataID, from the database backend. 
+		 If \a canBeEmpty is true and there is no data block for dataID, true is returned
+		 and \a dataString is set to null string. The default is false.
 		 \return true on success
 		 \sa storeDataBlock(). */
-		bool loadDataBlock( QString &dataString, const QString& dataID = QString::null);
+		bool loadDataBlock( QString &dataString, const QString& dataID = QString::null, bool canBeEmpty = false );
 
 		/*! Tells this view to store data changes on the backend.
 		 Called by KexiDialogBase::storeData().

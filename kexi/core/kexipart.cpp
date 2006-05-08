@@ -288,7 +288,7 @@ KexiDialogBase* Part::openInstance(KexiMainWindow *win, KexiPart::Item &item, in
 	bool switchingFailed = false;
 	tristate res = dlg->switchToViewMode( viewMode, staticObjectArgs );
 	if (!res) {
-		//js TODO ERROR???
+		//dlg has an error info
 		switchingFailed = true;
 	}
 	if (~res)

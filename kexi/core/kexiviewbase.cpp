@@ -178,11 +178,16 @@ tristate KexiViewBase::storeData(bool dontAsk)
 	return true;
 }
 
-bool KexiViewBase::loadDataBlock( QString &dataString, const QString& dataID )
+bool KexiViewBase::loadDataBlock( QString &dataString, const QString& dataID, bool canBeEmpty )
 {
 	if (!m_dialog)
 		return false;
-	return m_mainWin->project()->dbConnection()->loadDataBlock(m_dialog->id(), dataString, dataID);
+	const tristate res = m_mainWin->project()->dbConnection()->loadDataBlock(m_dialog->id(), dataString, dataID);
+	if (canBeEmpty && ~res) {
+		dataString = QString::null;
+		return true;
+	}
+	return res == true;
 }
 
 bool KexiViewBase::storeDataBlock( const QString &dataString, const QString &dataID )
