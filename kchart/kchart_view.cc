@@ -26,6 +26,7 @@
 #include <kxmlguifactory.h>
 #include <kfiledialog.h>
 #include <kmessagebox.h>
+#include <ktoggleaction.h>
 
 #include <KoTemplateCreateDia.h>
 
