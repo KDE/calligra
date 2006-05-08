@@ -545,9 +545,9 @@ void KoShellWindow::slotFileOpen()
         url=dialog->selectedURL();
         recentAction()->addUrl( url );
         if ( url.isLocalFile() )
-            KRecentDocument::add(url.path(-1));
+            KRecentDocument::add(url.path(KUrl::RemoveTrailingSlash));
         else
-            KRecentDocument::add(url.url(-1), true);
+            KRecentDocument::add(url.url(KUrl::RemoveTrailingSlash), true);
     }
     else
         return;
