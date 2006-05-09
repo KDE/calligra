@@ -30,7 +30,7 @@ class GnumericPlugin: public KFilePlugin
     Q_OBJECT
 
 public:
-    GnumericPlugin( QObject *parent, const char *name, const QStringList& args );
+    GnumericPlugin( QObject *parent, const QStringList& args );
 
     virtual bool readInfo( KFileMetaInfo& info, uint what);
 

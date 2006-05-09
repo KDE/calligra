@@ -3,7 +3,7 @@
    This file is part of the KDE project
    Copyright (C) 2001,2002,2003 Daniel Naber <daniel.naber@t-online.de>
    This is a thesaurus based on a subset of WordNet. It also offers an
-   almost complete WordNet 1.7 frontend (WordNet is a powerful lexical 
+   almost complete WordNet 1.7 frontend (WordNet is a powerful lexical
    database/thesaurus)
 */
 /***************************************************************************
@@ -36,7 +36,7 @@ TODO:
 -Fix "no mimesource" warning of QTextBrowser? Seems really harmless.
 
 NOT TODO:
--Add part of speech information -- I think this would blow up the 
+-Add part of speech information -- I think this would blow up the
  filesize too much
 */
 
@@ -66,10 +66,9 @@ K_EXPORT_COMPONENT_FACTORY( libthesaurustool, ThesaurusFactory("thesaurus_tool")
  * Thesaurus *
  ***************************************************/
 
-Thesaurus::Thesaurus(QObject* parent, const char* name, const QStringList &)
+Thesaurus::Thesaurus(QObject* parent, const QStringList &)
     : KDataTool(parent)
 {
-   setObjectName(name); 
     m_dialog = new KDialogBase(KJanusWidget::Plain, QString::null,
         KDialogBase::Help|KDialogBase::Ok|KDialogBase::Cancel, KDialogBase::Ok);
     m_dialog->setHelp(QString::null, "thesaurus");
@@ -84,10 +83,10 @@ Thesaurus::Thesaurus(QObject* parent, const char* name, const QStringList &)
     setCaption();
 
     m_no_match = i18n("(No match)");
-    
+
     m_replacement = false;
     m_history_pos = 1;
-    
+
     m_page = m_dialog->plainPage();
     QVBoxLayout *m_top_layout = new QVBoxLayout(m_page/*, KDialog::marginHint(), KDialog::spacingHint()*/);
     m_top_layout->setMargin( KDialog::marginHint() );
@@ -119,7 +118,7 @@ Thesaurus::Thesaurus(QObject* parent, const char* name, const QStringList &)
 
     connect(m_back, SIGNAL(clicked()), this, SLOT(slotBack()));
     connect(m_forward, SIGNAL(clicked()), this, SLOT(slotForward()));
-    
+
     m_tab = new QTabWidget(m_page);
     m_top_layout->addWidget(m_tab);
 
@@ -161,7 +160,7 @@ Thesaurus::Thesaurus(QObject* parent, const char* name, const QStringList &)
     l1->addLayout(l2);
 
     // single click -- keep display unambiguous by removing other selections:
-    
+
     connect(m_thes_syn, SIGNAL(itemClicked(QListWidgetItem *)), m_thes_hyper, SLOT(clearSelection()));
     connect(m_thes_syn, SIGNAL(itemClicked(QListWidgetItem *)), m_thes_hypo, SLOT(clearSelection()));
     connect(m_thes_syn, SIGNAL(itemSelectionChanged(QListWidgetItem *)),
@@ -225,11 +224,11 @@ Thesaurus::Thesaurus(QObject* parent, const char* name, const QStringList &)
     // Set focus
     m_edit->setFocus();
     slotUpdateNavButtons();
-    
+
     //
     // The external command stuff
     //
-    
+
     // calling the 'wn' binary
     m_wnproc = new KProcess;
     connect(m_wnproc, SIGNAL(processExited(KProcess*)), this, SLOT(wnExited(KProcess*)));
@@ -255,7 +254,7 @@ Thesaurus::~Thesaurus()
     m_config->sync();
     delete m_config;
     // FIXME?: this hopefully fixes the problem of a wrong cursor
-    // and a crash (when closing e.g. konqueror) when the thesaurus dialog 
+    // and a crash (when closing e.g. konqueror) when the thesaurus dialog
     // gets close while it was still working and showing the wait cursor
     QApplication::restoreOverrideCursor();
     delete m_thesproc;
@@ -410,7 +409,7 @@ void Thesaurus::slotFindTermFromList(QListWidgetItem *item)
     slotFindTerm( item->text() );
 }
 
-// Triggered when a word is clicked 
+// Triggered when a word is clicked
 void Thesaurus::slotFindTerm(const QString &term, bool add_to_history)
 {
     slotSetReplaceTerm(term);
@@ -451,7 +450,7 @@ void Thesaurus::findTermThesaurus(const QString &term)
 
     m_thesproc_stdout = "";
     m_thesproc_stderr = "";
-    
+
     // Find only whole words. Looks clumsy, but this way we don't have to rely on
     // features that might only be in certain versions of grep:
     QString term_tmp = ";" + term.trimmed() + ";";
@@ -466,7 +465,7 @@ void Thesaurus::findTermThesaurus(const QString &term)
     }
 }
 
-// The external process has ended, so we parse its result and put it in 
+// The external process has ended, so we parse its result and put it in
 // the list box.
 void Thesaurus::thesExited(KProcess *)
 {
@@ -479,7 +478,7 @@ void Thesaurus::thesExited(KProcess *)
     }
 
     QString search_term = m_edit->currentText().trimmed();
-    
+
     QStringList syn;
     QStringList hyper;
     QStringList hypo;
@@ -531,7 +530,7 @@ void Thesaurus::thesExited(KProcess *)
         m_thes_syn->addItem( m_no_match);
         m_thes_syn->setEnabled(false);
     }
-    
+
     m_thes_hyper->clear();
     if( hyper.size() > 0 ) {
         hyper = sortQStringList(hyper);
@@ -575,7 +574,7 @@ void Thesaurus::findTermWordnet(const QString &term)
 
     m_wnproc_stdout = "";
     m_wnproc_stderr = "";
-    
+
     m_wnproc->clearArguments();
     *m_wnproc << "wn";
     *m_wnproc << term;
@@ -628,9 +627,9 @@ void Thesaurus::findTermWordnet(const QString &term)
 
     int current = m_combobox->currentIndex();    // remember current position
     m_combobox->clear();
-    
+
     // warning: order matters!
-    // 0:    
+    // 0:
     m_combobox->insertItem(-1, i18n("Synonyms/Hypernyms - Ordered by Frequency"));
     m_combobox->insertItem(-1, i18n("Synonyms - Ordered by Similarity of Meaning (verbs only)"));
     m_combobox->insertItem(-1, i18n("Antonyms - Words with Opposite Meanings"));
@@ -689,7 +688,7 @@ void Thesaurus::findTermWordnet(const QString &term)
 // The process has ended, so parse its result and display it as Qt richtext.
 void Thesaurus::wnExited(KProcess *)
 {
-    
+
     if( !m_wnproc_stderr.isEmpty() ) {
         m_resultbox->setHtml(i18n("<b>Error:</b> Failed to execute WordNet program 'wn'. "
           "Output:<br>%1", m_wnproc_stderr));
@@ -718,7 +717,7 @@ void Thesaurus::wnExited(KProcess *)
             l = l.replace('&', "&amp;");
             l = l.replace('<', "&lt;");
             l = l.replace('>', "&gt;");
-            // TODO?: 
+            // TODO?:
             // move "=>" in own column?
             l = formatLine(l);
             // Table layout:
@@ -739,7 +738,7 @@ void Thesaurus::wnExited(KProcess *)
 //         m_resultbox->setContentsPos(0,0);
         //kDebug() << result << endl;
     }
-    
+
     QApplication::restoreOverrideCursor();
 }
 
@@ -761,24 +760,24 @@ void Thesaurus::receivedWnStderr(KProcess *, char *result, int len)
 // Format lines using Qt's simple richtext.
 QString Thesaurus::formatLine(QString l)
 {
-    
+
     if( l == "--------------" ) {
         return QString("<hr>");
     }
-    
+
     QRegExp re;
 
     re.setPattern("^(\\d+\\.)(.*)$");
     if( re.indexIn(l) != -1 ) {
         l = "<b>" +re.cap(1)+ "</b>" +re.cap(2);
         return l;
-    } 
+    }
 
     re.setPattern("^.* of (noun|verb|adj|adv) .*");
     if( re.indexIn(l) != -1 ) {
         l = "<font size=\"5\">" +re.cap()+ "</font>\n\n";
         return l;
-    } 
+    }
 
     if( m_mode == grep ) {
         l = l.trimmed();
@@ -790,7 +789,7 @@ QString Thesaurus::formatLine(QString l)
         l = "<b>" +re.cap()+ "</b>\n";
         return l;
     }
-    
+
     re.setPattern("(.*)(Also See-&gt;)(.*)");
     // Example: first sense of verb "keep"
     if( re.indexIn(l) != -1 ) {
@@ -834,7 +833,7 @@ QString Thesaurus::formatLine(QString l)
     return l;
 }
 
-/** 
+/**
  * Sort a list case insensitively.
  * Be careful: @p list is modified
  * TODO: use ksortablevaluelist?

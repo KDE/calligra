@@ -33,7 +33,7 @@ typedef KGenericFactory<AbiwordPlugin> AbiwordFactory;
 
 K_EXPORT_COMPONENT_FACTORY(kfile_abiword, AbiwordFactory( "kfile_abiword" ))
 
-AbiwordPlugin::AbiwordPlugin(QObject *parent, const char *name,
+AbiwordPlugin::AbiwordPlugin(QObject *parent,
                        const QStringList &args)
 
     : KFilePlugin(parent, args)

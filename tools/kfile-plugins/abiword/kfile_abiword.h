@@ -30,7 +30,7 @@ class AbiwordPlugin: public KFilePlugin
     Q_OBJECT
 
 public:
-    AbiwordPlugin( QObject *parent, const char *name, const QStringList& args );
+    AbiwordPlugin( QObject *parent, const QStringList& args );
 
     virtual bool readInfo( KFileMetaInfo& info, uint what);
 

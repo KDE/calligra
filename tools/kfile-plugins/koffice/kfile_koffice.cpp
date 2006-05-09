@@ -33,7 +33,7 @@ typedef KGenericFactory<KOfficePlugin> KOfficeFactory;
 
 K_EXPORT_COMPONENT_FACTORY(kfile_koffice, KOfficeFactory( "kfile_koffice" ))
 
-KOfficePlugin::KOfficePlugin(QObject *parent, const char *name,
+KOfficePlugin::KOfficePlugin(QObject *parent,
                        const QStringList &args)
 
     : KFilePlugin(parent, args)
@@ -47,7 +47,7 @@ KOfficePlugin::KOfficePlugin(QObject *parent, const char *name,
     makeMimeTypeInfo( "application/x-kivio" );
     makeMimeTypeInfo( "application/x-krita" );
     makeMimeTypeInfo( "application/x-kformula" );
-    
+
     /*makeMimeTypeInfo( "application/vnd.kde.kword" );
     makeMimeTypeInfo( "application/vnd.kde.kpresenter" );
     makeMimeTypeInfo( "application/vnd.kde.kspread" );

@@ -35,7 +35,7 @@ class KOfficePlugin: public KFilePlugin
 public:
     /**
      * Constructor */
-    KOfficePlugin( QObject *parent, const char *name, const QStringList& args );
+    KOfficePlugin( QObject *parent, const QStringList& args );
     /**
      * Read informations from files and store info in KFileMetaInfo.
      * We currently only parse meta.xml in OOo files.

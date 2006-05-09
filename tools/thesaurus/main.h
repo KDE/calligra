@@ -66,7 +66,7 @@ class Thesaurus : public KDataTool
     Q_OBJECT
 
 public:
-    Thesaurus(QObject* parent, const char* name, const QStringList &);
+    Thesaurus(QObject* parent, const QStringList &);
     ~Thesaurus();
     virtual bool run(const QString& command, void* data,
         const QString& datatype, const QString& mimetype);
@@ -103,7 +103,7 @@ protected:
     void findTermWordnet(const QString &term);
     QString formatLine(QString l);
 
-/** 
+/**
  * Sort a list case insensitively.
  * Be careful: @p list is modified
  * TODO: use ksortablevaluelist?

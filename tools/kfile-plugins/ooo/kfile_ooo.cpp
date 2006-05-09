@@ -125,7 +125,7 @@ static const char * metadocstat   = "meta:document-statistic";
 static const char * metaname      = "meta:name"    ;
 static const char * metauserdef   = "meta:user-defined";
 static const char * metafile      = "meta.xml"     ;
-KOfficePlugin::KOfficePlugin(QObject *parent, const char *name,
+KOfficePlugin::KOfficePlugin(QObject *parent,
                        const QStringList &args)
 
     : KFilePlugin(parent, args)

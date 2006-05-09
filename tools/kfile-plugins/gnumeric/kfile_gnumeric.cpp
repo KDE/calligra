@@ -33,7 +33,7 @@ typedef KGenericFactory<GnumericPlugin> GnumericFactory;
 
 K_EXPORT_COMPONENT_FACTORY(kfile_gnumeric, GnumericFactory( "kfile_gnumeric" ))
 
-GnumericPlugin::GnumericPlugin(QObject *parent, const char *name,
+GnumericPlugin::GnumericPlugin(QObject *parent,
                        const QStringList &args)
 
     : KFilePlugin(parent, args)

@@ -30,7 +30,7 @@ class KOfficePlugin: public KFilePlugin
     Q_OBJECT
 
 public:
-    KOfficePlugin( QObject *parent, const char *name, const QStringList& args );
+    KOfficePlugin( QObject *parent, const QStringList& args );
 
     virtual bool readInfo( KFileMetaInfo& info, uint what);
 
