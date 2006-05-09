@@ -25,8 +25,19 @@
 #include <QPixmap>
 #include <Q3CString>
 
+// we have only one class being exported, no need to pollute koffice_export.h with this stuff:
+#ifdef Q_WS_WIN
+ #ifdef MAKE_IMAGEEXPORT_LIB
+  #define IMAGEEXPORT_EXPORT KDE_EXPORT
+ #else
+  #define IMAGEEXPORT_EXPORT KDE_IMPORT
+ #endif
+#else // not windows
+ #define IMAGEEXPORT_EXPORT KDE_EXPORT
+#endif
+
 class QPixmap;
-class ImageExport : public KoFilter
+class IMAGEEXPORT_EXPORT ImageExport : public KoFilter
 {
     Q_OBJECT
 
