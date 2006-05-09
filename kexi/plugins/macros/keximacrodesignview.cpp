@@ -283,8 +283,9 @@ void KexiMacroDesignView::beforeCellChanged(KexiTableItem* item, int colnum, QVa
 		return;
 	}
 
+	// Handle the column thatshould be changed
 	switch(colnum) {
-		case COLUMN_ID_ACTION: {
+		case COLUMN_ID_ACTION: { // The "Action" column
 			QString actionname;
 			bool ok;
 			int selectedindex = newvalue.toInt(&ok);
@@ -297,7 +298,7 @@ void KexiMacroDesignView::beforeCellChanged(KexiTableItem* item, int colnum, QVa
 			updateProperties(d->propertyset->currentRow(), d->propertyset->currentPropertySet(), macroitem);
 			propertySetReloaded(true);
 		} break;
-		case COLUMN_ID_COMMENT: {
+		case COLUMN_ID_COMMENT: { // The "Comment" column
 			macroitem->setComment( newvalue.toString() );
 		} break;
 		default:
@@ -348,6 +349,8 @@ void KexiMacroDesignView::rowDeleted()
 
 bool KexiMacroDesignView::updateSet(KoProperty::Set* set, KoMacro::MacroItem::Ptr macroitem, const QString& variablename)
 {
+	kdDebug() << "KexiMacroDesignView::updateSet() variablename=" << variablename << endl;
+
 	KoMacro::Variable::Ptr variable = macroitem->variable(variablename, true);
 	if(! variable.data()) {
 		kdDebug() << "KexiMacroDesignView::updateSet() Skipped cause there exists no such variable=" << variablename << endl;
@@ -392,11 +395,10 @@ bool KexiMacroDesignView::updateSet(KoProperty::Set* set, KoMacro::MacroItem::Pt
 		int type = KoProperty::Auto;
 		QVariant v = variable->variant();
 		switch(v.type()) {
-			//case QVariant::List:
-			//case QVariant::StringList:
 			case QVariant::Int: {
 				type = KoProperty::Integer;
-			}
+			} break;
+			case QVariant::CString:
 			case QVariant::String: {
 				type = KoProperty::String;
 			} break;
@@ -426,7 +428,6 @@ void KexiMacroDesignView::updateProperties(int row, KoProperty::Set* set, KoMacr
 	}
 
 	KoMacro::Action::Ptr action = macroitem->action();
-
 	if(! action.data()) {
 		// don't display a propertyset if there is no action defined.
 		d->propertyset->remove(row);
@@ -444,7 +445,7 @@ void KexiMacroDesignView::updateProperties(int row, KoProperty::Set* set, KoMacr
 		set = new KoProperty::Set(d->propertyset, action->name());
 		d->propertyset->insert(row, set, true);
 		connect(set, SIGNAL(propertyChanged(KoProperty::Set&, KoProperty::Property&)),
-	        	this, SLOT(propertyChanged(KoProperty::Set&, KoProperty::Property&)));
+		        this, SLOT(propertyChanged(KoProperty::Set&, KoProperty::Property&)));
 	}
 
 	// The caption.
@@ -466,15 +467,18 @@ void KexiMacroDesignView::updateProperties(int row, KoProperty::Set* set, KoMacr
 	d->updatesProperties = false;
 }
 
-void KexiMacroDesignView::propertyChanged(KoProperty::Set&, KoProperty::Property& property)
+void KexiMacroDesignView::propertyChanged(KoProperty::Set& /*set*/, KoProperty::Property& property)
 {
 	if(d->reloadsProperties) {
 		// be sure to don't update properties if we are still on reloading.
 		return;
 	}
 
-	const QString name = property.name();
+	kdDebug() << "KexiMacroDesignView::propertyChanged()" << endl;
+	KoProperty::Set& set = *d->propertyset->currentPropertySet();
 	int row = d->propertyset->currentRow();
+
+	const QCString name = property.name();
 	if(row < 0 || uint(row) >= macro()->items().count()) {
 		kdWarning() << "KexiMacroDesignView::propertyChanged() name=" << name << " out of bounds." << endl;
 		return;
@@ -484,6 +488,7 @@ void KexiMacroDesignView::propertyChanged(KoProperty::Set&, KoProperty::Property
 	d->reloadsProperties = true;
 
 	KoMacro::MacroItem::Ptr macroitem = macro()->items()[row];
+	KoMacro::Action::Ptr action = macroitem->action();
 
 	KoMacro::Variable* pv = new KoMacro::Variable( property.value() );
 	pv->setName(name);
@@ -497,15 +502,19 @@ void KexiMacroDesignView::propertyChanged(KoProperty::Set&, KoProperty::Property
 			continue;
 		}
 
-		KoProperty::Set* set = d->propertyset->currentPropertySet();
-		if(! set->contains((*it).latin1())) {
+		if(! set.contains( (*it).latin1() )) {
 			// If there exist no such property yet, update the KoProperty::Set
-			if(updateSet(set, macroitem, *it))
+			QString s;
+			for(KoProperty::Set::Iterator setit = set; setit.current(); ++setit) s += setit.currentKey() + ",";
+			kdDebug() << "KexiMacroDesignView::propertyChanged() add new property=" << *it << " items=[" << s << "]" << endl;
+
+			if(updateSet(&set, macroitem, *it))
 				reload = true;
 			continue;
 		}
 
-		KoProperty::Property& p = d->propertyset->currentPropertySet()->property((*it).latin1());
+		kdDebug() << "KexiMacroDesignView::propertyChanged() set existing property=" << *it << endl;
+		KoProperty::Property& p = set.property((*it).latin1());
 		KoMacro::Variable::List children = variable->children();
 		if(children.count() > 0) {
 			QStringList keys, names;
@@ -521,10 +530,28 @@ void KexiMacroDesignView::propertyChanged(KoProperty::Set&, KoProperty::Property
 		reload = true;
 	}
 
+	// Remove expired (aka not any longer needed) properties. We need
+	// to iter two times through the list cause be can't remove the
+	// property direct else our iterator may comes invalid.
+	QValueList<QCString> remlist;
+	for(KoProperty::Set::Iterator setit = set; setit.current(); ++setit) {
+		if(setit.currentKey() == name) continue; // don't remove ourself
+		if(setit.currentKey().left(5) == QCString("this:")) continue; // don't remove internal properties
+		if(setit.currentKey() == QCString("newrow")) continue; // also an internal used property
+		if(action.data() && action->hasVariable(setit.currentKey())) continue; // the property is still valid
+		remlist.append(setit.currentKey());
+		reload = true;
+	}
+	for(QValueList<QCString>::Iterator it = remlist.begin(); it != remlist.end(); ++it) {
+		kdDebug() << "KexiMacroDesignView::propertyChanged() remove property=" << *it << endl;
+		set.removeProperty(*it);
+	}
+
+	// Only reload properties if it's really needed.
 	if(reload) {
 		setDirty();
 		// It's needed to call this delayed else we may crash whyever. It
-		// seems we have the same problem at the scripting-plugin too.
+		// seems we be the same problem like at the scripting-plugin :-/
 		QTimer::singleShot(50, this, SLOT( reloadProperties() ));
 	}
 

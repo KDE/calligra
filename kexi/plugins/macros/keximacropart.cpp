@@ -49,28 +49,13 @@
 class KexiMacroPart::Private
 {
 	public:
-
-		/**
-		* Constructor.
-		*/
-		Private()
-		{
-		}
-
-		/**
-		* Destructor.
-		*/
-		~Private()
-		{
-		}
-
 };
 
 KexiMacroPart::KexiMacroPart(QObject *parent, const char *name, const QStringList &l)
 	: KexiPart::Part(parent, name, l)
 	, d( new Private() )
 {
-	kdDebug() << "KexiMacroPart::KexiMacroPart() Ctor" << endl;
+	//kdDebug() << "KexiMacroPart::KexiMacroPart() Ctor" << endl;
 
 	//registered ID
 	m_registeredPartID = (int)KexiPart::MacroObjectType;
@@ -91,7 +76,7 @@ KexiMacroPart::KexiMacroPart(QObject *parent, const char *name, const QStringLis
 
 KexiMacroPart::~KexiMacroPart()
 {
-	kdDebug() << "KexiMacroPart::~KexiMacroPart() Dtor" << endl;
+	//kdDebug() << "KexiMacroPart::~KexiMacroPart() Dtor" << endl;
 	delete d;
 }
 
@@ -105,8 +90,7 @@ bool KexiMacroPart::execute(KexiPart::Item* item, QObject* sender)
 		return false;
 	}
 
-	KoMacro::Macro::Ptr macro = ::KoMacro::Manager::self()->getMacro( item->name() );
-	if(! macro.data()) {
+	if(! view->macro().data()) {
 		kdWarning() << "KexiMacroPart::execute() No such item " << item->name() << endl;
 		return false;
 	}
@@ -120,7 +104,7 @@ bool KexiMacroPart::execute(KexiPart::Item* item, QObject* sender)
 
 void KexiMacroPart::initPartActions()
 {
-	kdDebug() << "KexiMacroPart::initPartActions()" << endl;
+	//kdDebug() << "KexiMacroPart::initPartActions()" << endl;
 
 	::KoMacro::Manager::init(m_mainWin);
 	new KexiMacro::OpenAction;
@@ -131,14 +115,15 @@ void KexiMacroPart::initPartActions()
 
 void KexiMacroPart::initInstanceActions()
 {
-	kdDebug() << "KexiMacroPart::initInstanceActions()" << endl;
+	//kdDebug() << "KexiMacroPart::initInstanceActions()" << endl;
+
 	//createSharedAction(Kexi::DesignViewMode, i18n("Execute Macro"), "exec", 0, "data_execute");
 }
 
 KexiViewBase* KexiMacroPart::createView(QWidget* parent, KexiDialogBase* dialog, KexiPart::Item& item, int viewMode, QMap<QString,QString>*)
 {
 	const QString itemname = item.name();
-	kdDebug() << "KexiMacroPart::createView() itemname=" << itemname << endl;
+	//kdDebug() << "KexiMacroPart::createView() itemname=" << itemname << endl;
 
 	if(! itemname.isNull()) {
 		KoMacro::Macro::Ptr macro = ::KoMacro::Manager::self()->getMacro(itemname);

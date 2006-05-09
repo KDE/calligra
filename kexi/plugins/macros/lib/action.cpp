@@ -145,6 +145,11 @@ void Action::setBlocking(bool blocking)
 	d->blocking = blocking;
 }
 
+bool Action::hasVariable(const QString& name) const
+{
+	return d->varmap.contains(name);
+}
+
 Variable::Ptr Action::variable(const QString& name) const
 {
 	return d->varmap.contains(name) ? d->varmap[name] : Variable::Ptr(0);
@@ -175,6 +180,14 @@ void Action::setVariable(const QString& name, const QString& text, const QVarian
 	variable->setName(name);
 	variable->setText(text);
 	setVariable( Variable::Ptr(variable) );
+}
+
+void Action::removeVariable(const QString& name)
+{
+	if(d->varmap.contains(name)) {
+		d->varmap.remove(name);
+		d->varnames.remove(name);
+	}
 }
 
 /*

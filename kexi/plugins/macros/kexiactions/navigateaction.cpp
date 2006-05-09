@@ -57,6 +57,9 @@ namespace KexiMacro {
 				this->children().append( KoMacro::Variable::Ptr(new KoMacro::Variable( "last" )) );
 				this->children().append( KoMacro::Variable::Ptr(new KoMacro::Variable( "goto" )) );
 
+				/*TODO should this actions belong to navigate? maybe it would be more wise to have
+				such kind of functionality in an own e.g. "Modify" action to outline, that
+				we are manipulating the database that way... */
 				//this->children().append( KoMacro::Variable::Ptr(new KoMacro::Variable( "add" )) );
 				//this->children().append( KoMacro::Variable::Ptr(new KoMacro::Variable( "save" )) );
 				//this->children().append( KoMacro::Variable::Ptr(new KoMacro::Variable( "delete" )) );
@@ -76,14 +79,6 @@ NavigateAction::NavigateAction()
 {
 	KoMacro::Variable* navvar = new NavigateVariable<NavigateAction>(this);
 	setVariable(KoMacro::Variable::Ptr( navvar ));
-
-	/*TODO
-	- We need to determinate on what object the navigate-action should be applied;
-		- Form/Table/invoker/ActualSelectedForm/etc.
-		- KexiDataAwareObjectInterface provides us navigation-functionality.
-
-	- We need to be able to add/remove variables during runtime.
-	*/
 }
 
 NavigateAction::~NavigateAction() 
@@ -97,20 +92,27 @@ KoMacro::Variable::List NavigateAction::notifyUpdated(const QString& variablenam
 	//kdDebug()<<"OpenObject::NavigateAction() name="<<variable->name()<<" value="<< variable->variant().toString() <<endl;
 	KoMacro::Variable::List list;
 
-	if(variablename == "record") {
-		const QString record = variablemap.contains("record") ? variablemap["record"]->variant().toString() : QString::null;
-		if(record == "goto") {
-			KoMacro::Variable* rowvar = new KexiVariable<NavigateAction>(this, "row", i18n("Row"));
-			rowvar->setVariant(0);
-			list.append( KoMacro::Variable::Ptr(rowvar) );
-setVariable(KoMacro::Variable::Ptr( rowvar ));
+	const QString record = variablemap.contains("record") ? variablemap["record"]->variant().toString() : QString::null;
 
-			KoMacro::Variable* colvar = new KexiVariable<NavigateAction>(this, "col", i18n("Column"));
-			colvar->setVariant(-1);
+	if(record == "goto") {
+		if(variablename == "record") {
+			KoMacro::Variable* rowvar = new KexiVariable<NavigateAction>(this, "rownr", i18n("Row"));
+			const int rownr = variablemap.contains("rownr") ? variablemap["rownr"]->variant().toInt() : 0;
+			rowvar->setVariant(rownr);
+			list.append( KoMacro::Variable::Ptr(rowvar) );
+			setVariable(KoMacro::Variable::Ptr( rowvar ));
+
+			KoMacro::Variable* colvar = new KexiVariable<NavigateAction>(this, "colnr", i18n("Column"));
+			const int colnr = variablemap.contains("rownr") ? variablemap["rownr"]->variant().toInt() : 0;
+			colvar->setVariant(colnr);
 			list.append( KoMacro::Variable::Ptr(colvar) );
-setVariable(KoMacro::Variable::Ptr( colvar ));
+			setVariable(KoMacro::Variable::Ptr( colvar ));
 		}
+		return list;
 	}
+
+	removeVariable("rownr");
+	removeVariable("colnr");
 
 	return list;
 }
@@ -154,11 +156,15 @@ void NavigateAction::activate(KoMacro::Context::Ptr context)
 	else if(record == "last") {
 		dbobj->selectLastRow();
 	}
+	else if(record == "goto") {
+		int rownr = context->variable("rownr")->variant().toInt() - 1;
+		int colnr = context->variable("colnr")->variant().toInt() - 1;
+		dbobj->setCursorPosition(rownr >= 0 ? rownr : dbobj->currentRow(), colnr >= 0 ? colnr : dbobj->currentColumn());
+	}
 	else {
 		/*
 		virtual void selectNextPage(); //!< page down action
 		virtual void selectPrevPage(); //!< page up action
-		
 		void deleteAllRows();
 		void deleteCurrentRow();
 		void deleteAndStartEditCurrentCell();

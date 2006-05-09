@@ -132,6 +132,12 @@ namespace KoMacro {
 			void setBlocking(bool blocking);
 
 			/**
+			* @return true if there exists a variable with the
+			* name @p name else false is returned.
+			*/
+			bool hasVariable(const QString& name) const;
+
+			/**
 			* @return the variable @a Variable defined for the
 			* name @p name . If there exists no @a Variable with
 			* such a name, NULL is returned.
@@ -162,6 +168,12 @@ namespace KoMacro {
 			 * @param variant The QVariant value.
 			 */
 			void setVariable(const QString& name, const QString& text, const QVariant& variant);
+
+			/**
+			* Remove the variable defined with @p name . If there exists
+			* no such variable, nothing is done.
+			*/
+			void removeVariable(const QString& name);
 
 			/**
 			* This function is called, when a @a Variable provided by this

@@ -63,13 +63,13 @@ KexiMacroView::KexiMacroView(KexiMainWindow *mainwin, QWidget *parent, ::KoMacro
 	: KexiViewBase(mainwin, parent, (name ? name : "KexiMacroView"))
 	, d( new Private(macro) )
 {
-	kdDebug() << "KexiMacroView::KexiMacroView() Ctor" << endl;
+	//kdDebug() << "KexiMacroView::KexiMacroView() Ctor" << endl;
 	plugSharedAction( "data_execute", this, SLOT(execute()) );
 }
 
 KexiMacroView::~KexiMacroView()
 {
-	kdDebug() << "KexiMacroView::~KexiMacroView() Dtor" << endl;
+	//kdDebug() << "KexiMacroView::~KexiMacroView() Dtor" << endl;
 	delete d;
 }
 
@@ -93,6 +93,8 @@ tristate KexiMacroView::afterSwitchFrom(int mode)
 
 bool KexiMacroView::loadData()
 {
+	d->macro->clearItems();
+
 	QString data;
 	if(! loadDataBlock(data)) {
 		kexipluginsdbg << "KexiMacroView::loadData(): no DataBlock" << endl;
@@ -100,8 +102,7 @@ bool KexiMacroView::loadData()
 	}
 
 	QString errmsg;
-	int errline;
-	int errcol;
+	int errline, errcol;
 
 	QDomDocument domdoc;
 	bool parsed = domdoc.setContent(data, false, &errmsg, &errline, &errcol);
@@ -117,7 +118,8 @@ bool KexiMacroView::loadData()
 		kexipluginsdbg << "KexiMacroView::loadData() Macro domelement is null" << endl;
 		return false;
 	}
-		
+
+	//kexipluginsdbg << "KexiMacroView::loadData()" << endl;
 	return d->macro->parseXML(macroelem);
 }
 
