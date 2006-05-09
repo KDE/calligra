@@ -17,7 +17,7 @@ class KAboutData;
 namespace KChart
 {
 
-class KChartFactory : public KoFactory
+class KCHART_EXPORT KChartFactory : public KoFactory
 {
     Q_OBJECT
 public:

@@ -45,7 +45,7 @@ KParts::Part* KFormulaFactory::createPartObject( QWidget *parentWidget, QObject*
 {
   bool bWantKoDocument = ( strcmp( classname, "KoDocument" ) == 0 );
 
-  KFormulaDoc *doc = new KFormulaDoc( parentWidget, widgetName, parent, name, !bWantKoDocument );
+  KFormulaDoc *doc = new KFormulaDoc( parentWidget, parent, !bWantKoDocument );
 
   if ( !bWantKoDocument )
     doc->setReadWrite( false );

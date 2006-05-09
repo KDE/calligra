@@ -28,10 +28,10 @@ class WUFactory : public KoFactory
 {
     Q_OBJECT
 public:
-    WUFactory( QObject* parent = 0, const char* name = 0 );
+    WUFactory( QObject* parent = 0 );
     ~WUFactory();
 
-    virtual KParts::Part* createPartObject( QWidget * = 0, const char * = 0, QObject* parent = 0, const char* name = 0, const char* classname = "KoDocument", const QStringList &args = QStringList() );
+    virtual KParts::Part* createPartObject( QWidget * = 0, QObject* parent = 0, const char* classname = "KoDocument", const QStringList &args = QStringList() );
 
     static KInstance* instance();
 

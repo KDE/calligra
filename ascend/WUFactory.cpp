@@ -31,8 +31,8 @@ K_EXPORT_COMPONENT_FACTORY( libwriteup_part, WUFactory )
 KInstance*   WUFactory::s_instance  = 0;
 KAboutData*  WUFactory::s_aboutData = 0;
 
-WUFactory::WUFactory( QObject* parent, const char* name )
-    : KoFactory( parent, name )
+WUFactory::WUFactory( QObject* parent )
+    : KoFactory( parent )
 {
   // Create our instance, so that it becomes KGlobal::instance if the
   // main app is WriteUp.
@@ -47,11 +47,11 @@ WUFactory::~WUFactory()
     s_instance=0L;
 }
 
-KParts::Part* WUFactory::createPartObject( QWidget *parentWidget, const char *widname, QObject* parent, const char* name, const char* classname, const QStringList & )
+KParts::Part* WUFactory::createPartObject( QWidget *parentWidget, QObject* parent, const char* classname, const QStringList & )
 {
     bool bWantKoDocument = ( strcmp( classname, "KoDocument" ) == 0 );
 
-    WUDocument *doc = new WUDocument( parentWidget, widname, parent, name, !bWantKoDocument );
+    WUDocument *doc = new WUDocument( parentWidget, parent, !bWantKoDocument );
 
     if ( !bWantKoDocument )
       doc->setReadWrite( false );

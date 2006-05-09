@@ -26,8 +26,8 @@
 /******************************************************************/
 
 
-WUDocument::WUDocument(QWidget *parentWidget, const char *widname, QObject* parent, const char* name, bool singleViewMode )
-    : KWDocument( parentWidget, widname, parent, name, singleViewMode )
+WUDocument::WUDocument(QWidget *parentWidget, QObject* parent, bool singleViewMode )
+    : KWDocument( parentWidget, parent, singleViewMode )
 {
 }
 

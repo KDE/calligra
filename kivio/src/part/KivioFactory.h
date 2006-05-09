@@ -25,7 +25,7 @@
 class KInstance;
 class KAboutData;
 
-class KivioFactory : public KoFactory
+class KIVIO_EXPORT KivioFactory : public KoFactory
 {
   Q_OBJECT
 
