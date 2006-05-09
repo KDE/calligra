@@ -24,6 +24,7 @@
 #include "manipulator.h"
 #include "kspread_global.h"
 #include "kspread_value.h"
+#include <koffice_export.h>
 
 namespace KSpread {
 
@@ -63,7 +64,7 @@ class AbstractDataManipulator : public Manipulator {
  * If multiple ranges are selected, they all get set to the same values
  */
 
-class DataManipulator : public AbstractDataManipulator {
+class KSPREAD_EXPORT DataManipulator : public AbstractDataManipulator {
   public:
     DataManipulator ();
     virtual ~DataManipulator ();
@@ -97,7 +98,7 @@ class ArrayFormulaManipulator : public AbstractDataManipulator {
 
 /** class ProtectedCheck can be used to check, whether a particular
   range is protected or not */
-class ProtectedCheck : public Region {
+class KSPREAD_EXPORT ProtectedCheck : public Region {
   public:
     ProtectedCheck ();
     virtual ~ProtectedCheck ();
