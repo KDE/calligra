@@ -40,7 +40,7 @@
 #include "kis_jpeg_converter.h"
 #include "kis_wdg_options_jpeg.h"
 
-    
+
 class KisExifInfoVisitor : public KisLayerVisitor
 {
     public:
@@ -79,7 +79,7 @@ class KisExifInfoVisitor : public KisLayerVisitor
 typedef KGenericFactory<KisJPEGExport> KisJPEGExportFactory;
 K_EXPORT_COMPONENT_FACTORY(libkritajpegexport, KisJPEGExportFactory("kofficefilters"))
 
-KisJPEGExport::KisJPEGExport(KoFilter *, const char *, const QStringList&) : KoFilter(parent)
+KisJPEGExport::KisJPEGExport(QObject *parent, const QStringList&) : KoFilter(parent)
 {
 }
 
@@ -90,13 +90,13 @@ KisJPEGExport::~KisJPEGExport()
 KoFilter::ConversionStatus KisJPEGExport::convert(const QByteArray& from, const QByteArray& to)
 {
     kDebug(41008) << "JPEG export! From: " << from << ", To: " << to << "\n";
-    
+
     if (from != "application/x-krita")
         return KoFilter::NotImplemented;
 
-    
+
     KDialogBase* kdb = new KDialogBase(0, "", false, i18n("JPEG Export Options"), KDialogBase::Ok | KDialogBase::Cancel);
- 
+
     KisWdgOptionsJPEG* wdg = new KisWdgOptionsJPEG(kdb);
     kdb->setMainWidget(wdg);
     kapp->restoreOverrideCursor();
@@ -107,17 +107,17 @@ KoFilter::ConversionStatus KisJPEGExport::convert(const QByteArray& from, const 
     KisJPEGOptions options;
     options.progressive = wdg->progressive->isChecked();
     options.quality = wdg->qualityLevel->value();
-    
+
     delete kdb;
     // XXX: Add dialog about flattening layers here
 
     KisDoc *output = dynamic_cast<KisDoc*>(m_chain->inputDocument());
     QString filename = m_chain->outputFile();
-    
+
     if (!output)
         return KoFilter::CreationError;
-    
-    
+
+
     if (filename.isEmpty()) return KoFilter::FileNotFound;
 
     KUrl url;
@@ -134,14 +134,14 @@ KoFilter::ConversionStatus KisJPEGExport::convert(const QByteArray& from, const 
     vKisAnnotationSP_it beginIt = img->beginAnnotations();
     vKisAnnotationSP_it endIt = img->endAnnotations();
     KisImageBuilder_Result res;
-    
+
     KisExifInfoVisitor eIV;
     eIV.visit( img->rootLayer().data() );
-    
+
     KisExifInfo* eI = 0;
     if(eIV.countPaintLayer() == 1)
         eI = eIV.exifInfo();
-    
+
     if ( (res = kpc.buildFile(url, l, beginIt, endIt, options, eI)) == KisImageBuilder_RESULT_OK) {
         kDebug(41008) << "success !" << endl;
         return KoFilter::OK;

@@ -43,7 +43,7 @@
 typedef KGenericFactory<KisTIFFExport> KisTIFFExportFactory;
 K_EXPORT_COMPONENT_FACTORY(libkritatiffexport, KisTIFFExportFactory("kofficefilters"))
 
-KisTIFFExport::KisTIFFExport(KoFilter *, const char *, const QStringList&) : KoFilter(parent)
+KisTIFFExport::KisTIFFExport(QObject *parent, const QStringList&) : KoFilter(parent)
 {
 }
 
@@ -54,35 +54,35 @@ KisTIFFExport::~KisTIFFExport()
 KoFilter::ConversionStatus KisTIFFExport::convert(const QByteArray& from, const QByteArray& to)
 {
     kDebug(41008) << "Tiff export! From: " << from << ", To: " << to << "\n";
-    
+
     if (from != "application/x-krita")
         return KoFilter::NotImplemented;
 
-    
+
     KisDlgOptionsTIFF* kdb = new KisDlgOptionsTIFF(0, "options dialog for tiff");
- 
+
     if(kdb->exec() == QDialog::Rejected)
     {
         return KoFilter::OK; // FIXME Cancel doesn't exist :(
     }
-    
+
     KisTIFFOptions options = kdb->options();
 
     delete kdb;
 
     KisDoc *output = dynamic_cast<KisDoc*>(m_chain->inputDocument());
     QString filename = m_chain->outputFile();
-    
+
     if (!output)
         return KoFilter::CreationError;
-    
+
     if (filename.isEmpty()) return KoFilter::FileNotFound;
 
     KUrl url;
     url.setPath(filename);
 
     KisImageSP img;
-    
+
     if(options.flatten)
     {
         img = new KisImage(0, output->currentImage()->width(), output->currentImage()->height(), output->currentImage()->colorSpace(), "");
@@ -92,7 +92,7 @@ KoFilter::ConversionStatus KisTIFFExport::convert(const QByteArray& from, const 
     } else {
         img = output->currentImage();
     }
-    
+
 
     KisTIFFConverter ktc(output, output->undoAdapter());
 /*    vKisAnnotationSP_it beginIt = img->beginAnnotations();

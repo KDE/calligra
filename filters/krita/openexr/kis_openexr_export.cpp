@@ -52,7 +52,7 @@ using namespace Imath;
 typedef KGenericFactory<KisOpenEXRExport> KisOpenEXRExportFactory;
 K_EXPORT_COMPONENT_FACTORY(libkrita_openexr_export, KisOpenEXRExportFactory("kofficefilters"))
 
-KisOpenEXRExport::KisOpenEXRExport(KoFilter *, const char *, const QStringList&) : KoFilter(parent)
+KisOpenEXRExport::KisOpenEXRExport(QObject *parent, const QStringList&) : KoFilter(parent)
 {
 }
 
@@ -72,11 +72,11 @@ KoFilter::ConversionStatus KisOpenEXRExport::convert(const QByteArray& from, con
 
     KisDoc *doc = dynamic_cast<KisDoc*>(m_chain -> inputDocument());
     QString filename = m_chain -> outputFile();
-    
+
     if (!doc) {
         return KoFilter::CreationError;
     }
-    
+
     if (filename.isEmpty()) {
         return KoFilter::FileNotFound;
     }
@@ -92,7 +92,7 @@ KoFilter::ConversionStatus KisOpenEXRExport::convert(const QByteArray& from, con
 
     KisPaintLayerSP layer = KisPaintLayerSP(dynamic_cast<KisPaintLayer*>(img->activeLayer().data()));
     Q_ASSERT(layer);
-    
+
     doc -> undoAdapter() -> setUndo(undo);
 
     //KisF32RgbColorSpace * cs = static_cast<KisF32RgbColorSpace *>((KisColorSpaceRegistry::instance() -> get(KisID("RGBAF32", ""))));

@@ -35,7 +35,7 @@
 typedef KGenericFactory<KisJPEGImport> JPEGImportFactory;
 K_EXPORT_COMPONENT_FACTORY(libkritajpegimport, JPEGImportFactory("kofficefilters"))
 
-KisJPEGImport::KisJPEGImport(KoFilter *, const char *, const QStringList&) : KoFilter(parent)
+KisJPEGImport::KisJPEGImport(QObject *parent, const QStringList&) : KoFilter(parent)
 {
 }
 

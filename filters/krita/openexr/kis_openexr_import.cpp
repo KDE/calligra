@@ -57,7 +57,7 @@ using namespace Imath;
 typedef KGenericFactory<KisOpenEXRImport> KisOpenEXRImportFactory;
 K_EXPORT_COMPONENT_FACTORY(libkrita_openexr_import, KisOpenEXRImportFactory("kofficefilters"))
 
-KisOpenEXRImport::KisOpenEXRImport(KoFilter *, const char *, const QStringList&) : KoFilter(parent)
+KisOpenEXRImport::KisOpenEXRImport(QObject *parent, const QStringList&) : KoFilter(parent)
 {
 }
 

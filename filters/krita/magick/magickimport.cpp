@@ -35,7 +35,7 @@
 typedef KGenericFactory<MagickImport> MagickImportFactory;
 K_EXPORT_COMPONENT_FACTORY(libkritamagickimport, MagickImportFactory("kofficefilters"))
 
-MagickImport::MagickImport(KoFilter *, const char *, const QStringList&) : KoFilter(parent)
+MagickImport::MagickImport(QObject *parent, const QStringList&) : KoFilter(parent)
 {
 }
 

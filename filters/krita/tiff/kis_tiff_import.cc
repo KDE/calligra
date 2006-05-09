@@ -35,7 +35,7 @@
 typedef KGenericFactory<KisTIFFImport> TIFFImportFactory;
 K_EXPORT_COMPONENT_FACTORY(libkritatiffimport, TIFFImportFactory("kofficefilters"))
 
-KisTIFFImport::KisTIFFImport(KoFilter *, const char *, const QStringList&) : KoFilter(parent)
+KisTIFFImport::KisTIFFImport(QObject *parent, const QStringList&) : KoFilter(parent)
 {
 }
 

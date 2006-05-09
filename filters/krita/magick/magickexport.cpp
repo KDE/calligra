@@ -33,7 +33,7 @@
 typedef KGenericFactory<MagickExport> MagickExportFactory;
 K_EXPORT_COMPONENT_FACTORY(libkritamagickexport, MagickExportFactory("kofficefilters"))
 
-MagickExport::MagickExport(KoFilter *, const char *, const QStringList&) : KoFilter(parent)
+MagickExport::MagickExport(QObject *parent, const QStringList&) : KoFilter(parent)
 {
 }
 
@@ -44,7 +44,7 @@ MagickExport::~MagickExport()
 KoFilter::ConversionStatus MagickExport::convert(const QByteArray& from, const QByteArray& to)
 {
     kDebug(41008) << "magick export! From: " << from << ", To: " << to << "\n";
-    
+
     if (from != "application/x-krita")
         return KoFilter::NotImplemented;
 
@@ -52,10 +52,10 @@ KoFilter::ConversionStatus MagickExport::convert(const QByteArray& from, const Q
 
     KisDoc *output = dynamic_cast<KisDoc*>(m_chain->inputDocument());
     QString filename = m_chain->outputFile();
-    
+
     if (!output)
         return KoFilter::CreationError;
-    
+
     if (filename.isEmpty()) return KoFilter::FileNotFound;
 
     KUrl url;
@@ -67,7 +67,7 @@ KoFilter::ConversionStatus MagickExport::convert(const QByteArray& from, const Q
 
     KisPaintDeviceSP pd = KisPaintDeviceSP(new KisPaintDevice(*img->projection()));
     KisPaintLayerSP l = KisPaintLayerSP(new KisPaintLayer(img.data(), "projection", OPACITY_OPAQUE, pd));
-    
+
     vKisAnnotationSP_it beginIt = img->beginAnnotations();
     vKisAnnotationSP_it endIt = img->endAnnotations();
     if (ib.buildFile(url, l, beginIt, endIt) == KisImageBuilder_RESULT_OK) {

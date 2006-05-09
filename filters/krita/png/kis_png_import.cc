@@ -35,7 +35,7 @@
 typedef KGenericFactory<KisPNGImport> PNGImportFactory;
 K_EXPORT_COMPONENT_FACTORY(libkritapngimport, PNGImportFactory("kofficefilters"))
 
-KisPNGImport::KisPNGImport(KoFilter *, const char *, const QStringList&) : KoFilter(parent)
+KisPNGImport::KisPNGImport(QObject *parent, const QStringList&) : KoFilter(parent)
 {
 }
 

@@ -74,7 +74,7 @@
 typedef KGenericFactory<KisRawImport> KisRawImportFactory;
 K_EXPORT_COMPONENT_FACTORY(libkrita_raw_import, KisRawImportFactory("kofficefilters"))
 
-KisRawImport::KisRawImport(KoFilter *, const char *, const QStringList&)
+KisRawImport::KisRawImport(QObject *parent, const QStringList&)
     : KoFilter(parent)
     , m_data(0)
     , m_process(0)

@@ -38,7 +38,7 @@
 typedef KGenericFactory<KisPNGExport> KisPNGExportFactory;
 K_EXPORT_COMPONENT_FACTORY(libkritapngexport, KisPNGExportFactory("kofficefilters"))
 
-KisPNGExport::KisPNGExport(KoFilter *, const char *, const QStringList&) : KoFilter(parent)
+KisPNGExport::KisPNGExport(QObject *parent, const QStringList&) : KoFilter(parent)
 {
 }
 
@@ -49,13 +49,13 @@ KisPNGExport::~KisPNGExport()
 KoFilter::ConversionStatus KisPNGExport::convert(const QByteArray& from, const QByteArray& to)
 {
     kDebug(41008) << "Png export! From: " << from << ", To: " << to << "\n";
-    
+
     if (from != "application/x-krita")
         return KoFilter::NotImplemented;
 
-    
+
     KDialog* kdb = new KDialog(0, i18n("PNG Export Options"), KDialog::Ok | KDialog::Cancel);
- 
+
     KisWdgOptionsPNG* wdg = new KisWdgOptionsPNG(kdb);
     kdb->setMainWidget(wdg);
     kapp->restoreOverrideCursor();
@@ -67,16 +67,16 @@ KoFilter::ConversionStatus KisPNGExport::convert(const QByteArray& from, const Q
     bool alpha = wdg->alpha->isChecked();
     bool interlace = wdg->interlacing->isChecked();
     int compression = wdg->compressionLevel->value();
-    
+
     delete kdb;
 
     KisDoc *output = dynamic_cast<KisDoc*>(m_chain->inputDocument());
     QString filename = m_chain->outputFile();
-    
+
     if (!output)
         return KoFilter::CreationError;
-    
-    
+
+
     if (filename.isEmpty()) return KoFilter::FileNotFound;
 
     KUrl url;
@@ -92,7 +92,7 @@ KoFilter::ConversionStatus KisPNGExport::convert(const QByteArray& from, const Q
 
     KisPaintDeviceSP pd = KisPaintDeviceSP(new KisPaintDevice(*img->projection()));
     KisPaintLayerSP l = KisPaintLayerSP(new KisPaintLayer(img.data(), "projection", OPACITY_OPAQUE, pd));
-    
+
     if ( (res = kpc.buildFile(url, l, beginIt, endIt, compression, interlace, alpha)) == KisImageBuilder_RESULT_OK) {
         kDebug(41008) << "success !" << endl;
         return KoFilter::OK;
