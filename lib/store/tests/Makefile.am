@@ -1,7 +1,7 @@
 ####### General stuff
 
 KDE_CXXFLAGS = $(USE_RTTI)
-INCLUDES= -I$(srcdir)/.. $(all_includes)
+INCLUDES= -I$(srcdir)/.. -I$(srcdir)/../../kofficecore $(all_includes)
 
 ####### Files
 
