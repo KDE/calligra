@@ -35,6 +35,7 @@
 #include <kspread_map.h>
 #include <kspread_sheet.h>
 #include <kspread_doc.h>
+#include <kspread_value.h>
 #include <kspread_view.h>
 #include <selection.h>
 
@@ -94,7 +95,7 @@ QString CSVExport::exportCSVCell( Sheet const * const sheet, int col, int row, Q
 
   if ( !text.isEmpty() )
   {
-    if ( text.find( textQuote ) != -1 )
+    if ( text.indexOf( textQuote ) != -1 )
     {
       QString doubleTextQuote(textQuote);
       doubleTextQuote.append(textQuote);
@@ -120,7 +121,7 @@ KoFilter::ConversionStatus CSVExport::convert( const QByteArray & from, const QB
 
   if ( !qobject_cast<const KSpread::Doc *>( document ) )
   {
-    kWarning(30501) << "document isn't a KSpread::Doc but a " << document->className() << endl;
+    kWarning(30501) << "document isn't a KSpread::Doc but a " << document->metaObject()->className() << endl;
     return KoFilter::NotImplemented;
   }
   if ( ( to != "text/x-csv" && to != "text/plain" ) || from != "application/x-kspread" )
@@ -296,7 +297,7 @@ KoFilter::ConversionStatus CSVExport::convert( const QByteArray & from, const QB
 	else
 	  name = "********<SHEETNAME>********";
         const QString tname( i18n("<SHEETNAME>") );
-        int pos = name.find( tname );
+        int pos = name.indexOf( tname );
         if ( pos != -1 )
         {
           name.replace( pos, tname.length(), sheet->sheetName() );
