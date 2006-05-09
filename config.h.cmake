@@ -341,10 +341,6 @@ int snprintf(char *str, size_t n, char const *fmt, ...);
 #endif
 
 
-/* define to 1 if -fvisibility is supported */
-/* #undef __KDE_HAVE_GCC_VISIBILITY */
-
-
 #if defined(__SVR4) && !defined(__svr4__)
 #define __svr4__ 1
 #endif
