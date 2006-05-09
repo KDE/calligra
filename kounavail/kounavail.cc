@@ -33,8 +33,8 @@
 #include <kglobalsettings.h>
 #include <qapplication.h>
 
-KoUnavailPart::KoUnavailPart( QWidget *parentWidget, const char *widgetName, QObject* parent, const char* name )
-    : KoDocument( parentWidget, widgetName, parent, name, false /*singleViewMode*/ )
+KoUnavailPart::KoUnavailPart( QWidget *parentWidget, QObject* parent )
+    : KoDocument( parentWidget, parent, false /*singleViewMode*/ )
 {
     setReadWrite( false );
 }
@@ -147,9 +147,9 @@ KoUnavailFactory::~KoUnavailFactory()
     s_global = 0L;
 }
 
-KParts::Part* KoUnavailFactory::createPartObject( QWidget *parentWidget, const char *widgetName, QObject* parent, const char* name, const char*, const QStringList & )
+KParts::Part* KoUnavailFactory::createPartObject( QWidget *parentWidget, QObject* parent, const char*, const QStringList & )
 {
-    return new KoUnavailPart( parentWidget, widgetName, parent, name );
+    return new KoUnavailPart( parentWidget, parent );
 }
 
 KAboutData* KoUnavailFactory::aboutData()
