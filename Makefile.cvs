@@ -1,14 +1,8 @@
-all: 
-	@echo "This Makefile is only for the CVS repository"
-	@echo "This will be deleted before making the distribution"
+
+all:
+	@echo "This file was used for automake/unsermake, but the KDE build system has changed."
+	@echo "Please use cmake instead, see http://wiki.kde.org/tiki-index.php?page=KDECMakeIntro"
 	@echo ""
-	@if test ! -d admin; then \
-	   echo "Please recheckout this module!" ;\
-	   echo "for cvs: use checkout once and after that update again" ;\
-	   echo "for cvsup: checkout kde-common from cvsup and" ;\
-	   echo "   link kde-common/admin to ./admin" ;\
-	   exit 1 ;\
-	fi
-	$(MAKE) -f admin/Makefile.common cvs
 
 .SILENT:
+.PHONY: all
