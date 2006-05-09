@@ -69,8 +69,7 @@ DatabaseDialog::DatabaseDialog( View * parent, QRect const & rect, const char * 
   : K3Wizard( (QWidget *) parent, name, modal, fl ),
     m_currentPage( eDatabase ),
     m_pView( parent ),
-    m_targetRect( rect ),
-    m_dbConnection( 0 )
+    m_targetRect( rect )
 {
   if ( !name )
     setObjectName( "DatabaseDialog" );
@@ -469,8 +468,8 @@ DatabaseDialog::DatabaseDialog( View * parent, QRect const & rect, const char * 
 DatabaseDialog::~DatabaseDialog()
 {
   // no need to delete child widgets, Qt does it all for us
-  if ( m_dbConnection )
-    m_dbConnection->close();
+  if ( m_dbConnection.isValid() )
+    m_dbConnection.close();
 }
 
 void DatabaseDialog::switchPage( int id )
@@ -619,7 +618,7 @@ void DatabaseDialog::accept()
   }
 
   Cell * cell;
-  QSqlQuery query( *m_dbConnection );
+  QSqlQuery query( m_dbConnection );
 
   // Check the whole query for SQL that might modify database.
   // If there is an update command, then it must be at the start of the string,
@@ -721,18 +720,18 @@ void DatabaseDialog::accept()
 
 bool DatabaseDialog::databaseDoNext()
 {
-  m_dbConnection = &QSqlDatabase::addDatabase( m_driver->currentText() );
+  m_dbConnection = QSqlDatabase::addDatabase( m_driver->currentText() );
 
-  if ( m_dbConnection )
+  if ( m_dbConnection.isValid() )
   {
-    m_dbConnection->setDatabaseName( m_databaseName->text() );
-    m_dbConnection->setHostName( m_host->text() );
+    m_dbConnection.setDatabaseName( m_databaseName->text() );
+    m_dbConnection.setHostName( m_host->text() );
 
     if ( !m_username->text().isEmpty() )
-      m_dbConnection->setUserName( m_username->text() );
+      m_dbConnection.setUserName( m_username->text() );
 
     if ( !m_password->text().isEmpty() )
-      m_dbConnection->setPassword( m_password->text() );
+      m_dbConnection.setPassword( m_password->text() );
 
     if ( !m_port->text().isEmpty() )
     {
@@ -743,14 +742,14 @@ bool DatabaseDialog::databaseDoNext()
         KMessageBox::error( this, i18n("The port must be a number") );
         return false;
       }
-      m_dbConnection->setPort( port );
+      m_dbConnection.setPort( port );
     }
 
     m_databaseStatus->setText( i18n("Connecting to database...") );
-    if ( m_dbConnection->open() )
+    if ( m_dbConnection.open() )
     {
       m_databaseStatus->setText( i18n("Connected. Retrieving table information...") );
-      QStringList sheetList( m_dbConnection->tables() );
+      QStringList sheetList( m_dbConnection.tables() );
 
       if ( sheetList.isEmpty() )
       {
@@ -773,7 +772,7 @@ bool DatabaseDialog::databaseDoNext()
     }
     else
     {
-      QSqlError error = m_dbConnection->lastError();
+      QSqlError error = m_dbConnection.lastError();
       QString errorMsg;
       QString err1 = error.driverText();
       QString err2 = error.databaseText();
@@ -828,7 +827,7 @@ bool DatabaseDialog::sheetsDoNext()
   Q3CheckListItem * item;
   for (int i = 0; i < (int) sheets.size(); ++i)
   {
-    info = m_dbConnection->record( sheets[i] );
+    info = m_dbConnection.record( sheets[i] );
     for (int j = 0; j < (int) info.count(); ++j)
     {
       QString name = info.fieldName(j);

@@ -30,6 +30,7 @@
 #include <QLabel>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
+#include <QtSql/QSqlDatabase>
 
 #include <k3wizard.h>
 
@@ -42,7 +43,6 @@ class QLineEdit;
 class Q3ListViewItem;
 class QHBoxLayout;
 class QRadioButton;
-class QSqlDatabase;
 class Q3TextEdit;
 class QVBoxLayout;
 class QWidget;
@@ -90,7 +90,7 @@ class DatabaseDialog : public K3Wizard
   int            m_currentPage;
   View  * m_pView;
   QRect          m_targetRect;
-  QSqlDatabase * m_dbConnection;
+  QSqlDatabase   m_dbConnection;
 
   QWidget      * m_database;
   QLabel       * m_databaseStatus;
