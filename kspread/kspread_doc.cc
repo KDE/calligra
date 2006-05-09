@@ -220,11 +220,11 @@ Doc::Doc( QWidget *parentWidget, QObject* parent, bool singleViewMode )
 
   // Make us scripsheet if the document has a name
   // Set a name if there is no name specified
-  if ( !objectName().isEmpty() ) // always true?
-  {
-      QString tmp = QString( "Document%1" ).arg( d->s_docId++ );
-      setObjectName( tmp.toLocal8Bit());//tmp.toLatin1() );
-  }
+  // NOTE Stefan: This is the ctor and the KoDocument ctor does NOT set
+  //             an object name, so there's no object name at all yet.
+  //             Let's set one for dcop.
+  QString tmp = QString( "Document%1" ).arg( d->s_docId++ );
+  setObjectName( tmp.toLocal8Bit());//tmp.toLatin1() );
   dcopObject();
 
   // default document properties
