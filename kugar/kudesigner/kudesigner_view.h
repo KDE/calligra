@@ -38,7 +38,7 @@ class Q3DockWindow;
 class Q3ToolBar;
 
 class KAction;
-class KWidgetAction;
+class K3WidgetAction;
 class KToggleAction;
 
 class KudesignerDoc;
@@ -132,8 +132,8 @@ private:
     KAction* selectAllAction;
     KAction* deleteAction;
 
-    KWidgetAction *gridActionLabel;
-    KWidgetAction *gridAction;
+    K3WidgetAction *gridActionLabel;
+    K3WidgetAction *gridAction;
     QLabel *gridLabel;
     QSpinBox *gridBox;
 

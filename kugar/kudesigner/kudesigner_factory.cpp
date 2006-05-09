@@ -29,8 +29,8 @@
 KInstance* KudesignerFactory::s_global = 0L;
 KAboutData* KudesignerFactory::s_aboutData = 0L;
 
-KudesignerFactory::KudesignerFactory( QObject* parent, const char* name )
-        : KoFactory( parent, name )
+KudesignerFactory::KudesignerFactory( QObject* parent )
+        : KoFactory( parent )
 {
     global();
 }
@@ -43,13 +43,13 @@ KudesignerFactory::~KudesignerFactory()
     s_global = 0L;
 }
 
-KParts::Part* KudesignerFactory::createPartObject( QWidget *parentWidget, const char *widgetName, QObject* parent, const char* name, const char* classname, const QStringList & data )
+KParts::Part* KudesignerFactory::createPartObject( QWidget *parentWidget, QObject* parent, const char* classname, const QStringList & data )
 {
     // If classname is "KoDocument", our host is a koffice application
     // otherwise, the host wants us as a simple part, so switch to readonly and single view.
     bool bWantKoDocument = ( strcmp( classname, "KoDocument" ) == 0 );
-    // parentWidget and widgetName are used by KoDocument for the "readonly+singleView" case.
-    KudesignerDoc *part = new KudesignerDoc( parentWidget, widgetName, parent, name, !bWantKoDocument );
+    // parentWidget is used by KoDocument for the "readonly+singleView" case.
+    KudesignerDoc *part = new KudesignerDoc( parentWidget, parent, !bWantKoDocument );
 
     if ( !bWantKoDocument )
         part->setReadWrite( false );

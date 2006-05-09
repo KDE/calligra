@@ -77,7 +77,7 @@ KParts::Part* KugarFactory::createPartObject( QWidget *parentWidget,
     }
 
     bool bWantKoDocument = ( strcmp( classname, "KoDocument" ) == 0 );
-    // parentWidget and widgetName are used by KoDocument for the "readonly+singleView" case.
+    // parentWidget is used by KoDocument for the "readonly+singleView" case.
     KugarPart *part = new KugarPart( parentWidget, parent, !bWantKoDocument );
 
     //  if ( !bWantKoDocument )
@@ -85,7 +85,7 @@ KParts::Part* KugarFactory::createPartObject( QWidget *parentWidget,
 
     part->setForcedUserTemplate( forcedUserTemplate );
     return part;
-    //return ( new KugarPart(parentWidget,name,forcedUserTemplate));
+    //return ( new KugarPart(parentWidget,forcedUserTemplate));
 }
 
 

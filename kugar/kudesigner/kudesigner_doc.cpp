@@ -40,8 +40,8 @@
 
 #include "kudesigner_view.h"
 
-KudesignerDoc::KudesignerDoc( QWidget *parentWidget, const char *widgetName, QObject* parent, const char* name, bool singleViewMode )
-        : KoDocument( parentWidget, widgetName, parent, name, singleViewMode ), m_plugin( 0 ), m_propPos( Qt::RightDockWidgetArea ), m_modified( false )
+KudesignerDoc::KudesignerDoc( QWidget *parentWidget, QObject* parent, bool singleViewMode )
+        : KoDocument( parentWidget, parent, singleViewMode ), m_plugin( 0 ), m_propPos( Qt::RightDockWidgetArea ), m_modified( false )
 {
     setInstance( KudesignerFactory::global(), false );
     history = new KCommandHistory( actionCollection() );

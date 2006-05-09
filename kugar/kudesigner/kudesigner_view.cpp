@@ -41,6 +41,7 @@
 #include <QDockWidget>
 #include <kaction.h>
 #include <kstdaction.h>
+#include <k3widgetaction.h>
 #include <klocale.h>
 #include <kdebug.h>
 
@@ -232,10 +233,10 @@ void KudesignerView::initActions()
 	group->addAction( itemsCalculated );
 	group->addAction( itemsLine );
 	
-    gridActionLabel = new KWidgetAction( gridLabel, i18n( "Grid Label" ), 0, this,
+    gridActionLabel = new K3WidgetAction( gridLabel, i18n( "Grid Label" ), 0, this,
                                          0, actionCollection(), "gridlabel" );
 
-    gridAction = new KWidgetAction( gridBox, i18n( "Grid Size" ), 0, this,
+    gridAction = new K3WidgetAction( gridBox, i18n( "Grid Size" ), 0, this,
                                     0, actionCollection(), "gridaction" );
 }
 

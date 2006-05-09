@@ -17,7 +17,7 @@ class KugarFactory : public KoFactory
 {
     Q_OBJECT
 public:
-    KugarFactory( QObject* parent = 0, const char* name = 0 );
+    KugarFactory( QObject* parent = 0 );
     ~KugarFactory();
 
     virtual KParts::Part *createPartObject( QWidget *parentWidget = 0,
