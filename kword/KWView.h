@@ -98,7 +98,7 @@ namespace KSpell2 {
 /* Class: KWView                                                  */
 /******************************************************************/
 
-class KWView : public KoView
+class KWORD_EXPORT KWView : public KoView
 {
     Q_OBJECT
 

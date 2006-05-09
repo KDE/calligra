@@ -104,7 +104,7 @@ class KoOasisSettings;
 /* Class: KWDocument                                           */
 /******************************************************************/
 
-class KWDocument : public KoDocument, public KoTextZoomHandler
+class KWORD_EXPORT KWDocument : public KoDocument, public KoTextZoomHandler
 {
     Q_OBJECT
     Q_PROPERTY( double ptColumnWidth READ ptColumnWidth )
