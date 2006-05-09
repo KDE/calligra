@@ -32,7 +32,7 @@
 #include <kimageio.h>
 #include <kiconloader.h>
 #include <kstandarddirs.h>
-
+#include <locale.h>
 
 KoGlobal* KoGlobal::s_global = 0L;
 static KStaticDeleter<KoGlobal> sdg;
@@ -47,6 +47,9 @@ KoGlobal* KoGlobal::self()
 KoGlobal::KoGlobal()
     : m_pointSize( -1 ), m_kofficeConfig( 0L )
 {
+    // Make sure that QCString::setNum doesn't give us "," as decimal point, e.g. when saving to OpenDocument.
+    setlocale( LC_NUMERIC, "C" );
+
     // Install the libkoffice* translations
     KGlobal::locale()->insertCatalogue("koffice");
 
