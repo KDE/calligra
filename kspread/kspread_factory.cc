@@ -54,11 +54,11 @@ Factory::~Factory()
   s_dcopObject = 0;
 }
 
-KParts::Part* Factory::createPartObject( QWidget *parentWidget, const char *widgetName, QObject* parent, const char* name, const char* classname, const QStringList & )
+KParts::Part* Factory::createPartObject( QWidget *parentWidget, QObject* parent, const char* classname, const QStringList & )
 {
   bool bWantKoDocument = ( strcmp( classname, "KoDocument" ) == 0 );
 
-  Doc *doc = new Doc( parentWidget, widgetName, parent, name, !bWantKoDocument );
+  Doc *doc = new Doc( parentWidget, 0, parent, 0, !bWantKoDocument );
 
   if ( !bWantKoDocument )
     doc->setReadWrite( false );

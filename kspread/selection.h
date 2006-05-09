@@ -37,7 +37,7 @@ class View;
  * @author Torben Weis <weis@kde.org>
  * @author Stefan Nikolaus <stefan.nikolaus@kdemail.net>
  */
-class Selection : public QObject, public Region
+class KSPREAD_EXPORT Selection : public QObject, public Region
 {
   Q_OBJECT
 public:
