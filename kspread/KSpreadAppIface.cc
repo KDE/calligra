@@ -48,8 +48,9 @@ DCOPRef AppIface::createDoc()
 
 DCOPRef AppIface::createDoc( const QString& name )
 {
+    Doc* doc = new Doc( 0 );
     // ######### Torben: Check for duplicate names here
-    Doc* doc = new Doc( 0, name.toLatin1() );
+    doc->setObjectName( name );
     doc->initDoc( KoDocument::InitDocEmpty, 0 );
 
     return DCOPRef( kapp->dcopClient()->appId(), doc->dcopObject()->objId() );

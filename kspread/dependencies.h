@@ -46,7 +46,7 @@ No need to inherit from DocBase here, at least not yet.
 TODO: describe how it works and why there are two types of dependencies
 */
 
-class DependencyManager {
+class KSPREAD_EXPORT DependencyManager {
  public:
   /** constructor */
    DependencyManager (Sheet *s);

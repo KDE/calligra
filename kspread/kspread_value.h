@@ -430,7 +430,7 @@ class KSPREAD_EXPORT Value
 
 } // namespace KSpread
 
-QTextStream& operator<<( QTextStream& ts, KSpread::Value::Type type );
-QTextStream& operator<<( QTextStream& ts, KSpread::Value value );
+KSPREAD_EXPORT QTextStream& operator<<( QTextStream& ts, KSpread::Value::Type type );
+KSPREAD_EXPORT QTextStream& operator<<( QTextStream& ts, KSpread::Value value );
 
 #endif // KSPREAD_VALUE_H

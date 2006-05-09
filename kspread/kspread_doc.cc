@@ -175,8 +175,8 @@ public:
 QList<Doc*> Doc::Private::s_docs;
 int Doc::Private::s_docId = 0;
 
-Doc::Doc( QWidget *parentWidget, const char *widgetName, QObject* parent, const char* name, bool singleViewMode )
-  : KoDocument( parentWidget, widgetName, parent, name, singleViewMode )
+Doc::Doc( QWidget *parentWidget, QObject* parent, bool singleViewMode )
+  : KoDocument( parentWidget, parent, singleViewMode )
 {
   d = new Private;
   d->loadingInfo = 0;
@@ -220,15 +220,12 @@ Doc::Doc( QWidget *parentWidget, const char *widgetName, QObject* parent, const 
 
   // Make us scripsheet if the document has a name
   // Set a name if there is no name specified
-  if ( !name )
+  if ( !objectName().isEmpty() ) // always true?
   {
-      QString tmp( "Document%1" );
-      tmp = tmp.arg( d->s_docId++ );
+      QString tmp = QString( "Document%1" ).arg( d->s_docId++ );
       setObjectName( tmp.toLocal8Bit());//tmp.toLatin1() );
-      dcopObject();
   }
-  else
-      dcopObject();
+  dcopObject();
 
   // default document properties
   d->syntaxVersion = CURRENT_SYNTAX_VERSION;

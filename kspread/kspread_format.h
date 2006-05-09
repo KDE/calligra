@@ -263,36 +263,36 @@ public:
     virtual const QPen& leftBorderPen( int col, int row ) const;
     int leftBorderWidth( int col, int row ) const;
     Qt::PenStyle leftBorderStyle( int col, int row ) const;
-    const QColor& leftBorderColor( int col, int row ) const;
+    const QColor leftBorderColor( int col, int row ) const;
 
     virtual const QPen& topBorderPen( int col, int row ) const;
     int topBorderWidth( int col, int row ) const;
     Qt::PenStyle topBorderStyle( int col, int row ) const;
-    const QColor& topBorderColor( int col, int row ) const;
+    const QColor topBorderColor( int col, int row ) const;
 
     virtual const QPen& rightBorderPen( int col, int row ) const;
     int rightBorderWidth( int col, int row ) const;
     Qt::PenStyle rightBorderStyle( int col, int row ) const;
-    const QColor& rightBorderColor( int col, int row ) const;
+    const QColor rightBorderColor( int col, int row ) const;
 
     virtual const QPen& bottomBorderPen( int col, int row ) const;
     int bottomBorderWidth( int col, int row ) const;
     Qt::PenStyle bottomBorderStyle( int col, int row ) const;
-    const QColor& bottomBorderColor( int col, int row ) const;
+    const QColor bottomBorderColor( int col, int row ) const;
 
     const QPen& fallDiagonalPen( int col, int row ) const;
     int fallDiagonalWidth( int col, int row ) const;
     Qt::PenStyle fallDiagonalStyle( int col, int row ) const;
-    const QColor& fallDiagonalColor( int col, int row ) const;
+    const QColor fallDiagonalColor( int col, int row ) const;
 
     const QPen& goUpDiagonalPen( int col, int row ) const;
     int goUpDiagonalWidth( int col, int row ) const;
     Qt::PenStyle goUpDiagonalStyle( int col, int row ) const;
-    const QColor& goUpDiagonalColor( int col, int row ) const;
+    const QColor goUpDiagonalColor( int col, int row ) const;
 
     const QBrush& backGroundBrush( int col, int row ) const;
     Qt::BrushStyle backGroundBrushStyle( int col, int row ) const;
-    const QColor& backGroundBrushColor(int col, int row ) const;
+    const QColor backGroundBrushColor(int col, int row ) const;
 
     uint bottomBorderValue( int col, int row ) const;
     uint rightBorderValue( int col, int row ) const;
@@ -324,7 +324,7 @@ public:
     /**
      * @return the text color.
      */
-    const QColor& textColor( int col, int row ) const;
+    const QColor textColor( int col, int row ) const;
 
     /**
      * @param col the column this cell is assumed to be in
@@ -332,7 +332,7 @@ public:
      *
      * @return the background color.
      */
-    const QColor& bgColor( int col, int row ) const;
+    const QColor bgColor( int col, int row ) const;
 
     const QFont textFont( int col, int row ) const;
     int textFontSize( int col, int row ) const;

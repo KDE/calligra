@@ -504,7 +504,7 @@ public:
      * @see effGoUpDiagonalPen
      */
     const QPen & effFallDiagonalPen( int col, int row ) const;
-    const QColor & effTextColor( int col, int row ) const;
+    const QColor effTextColor( int col, int row ) const;
 
     /**
      * @return "worth" of the effective bottom border pen
@@ -554,7 +554,7 @@ public:
     /**
      * @see Format::bgColor
      */
-    const QColor& bgColor( int col, int row ) const;
+    const QColor bgColor( int col, int row ) const;
 
     /**
      * @see Format::backGroundBrush

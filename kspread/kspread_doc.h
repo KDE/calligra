@@ -117,13 +117,10 @@ public:
   /**
    * Creates a new document.
    * @param parentWidget the parent widget
-   * @param widgetName the widget name
    * @param parent the parent object
-   * @param name the object name
    * @param singleViewMode enables single view mode, if @c true
    */
-  Doc( QWidget *parentWidget = 0, const char *widgetName = 0, QObject* parent = 0,
-       const char* name = 0, bool singleViewMode = false );
+  Doc( QWidget *parentWidget = 0, QObject* parent = 0, bool singleViewMode = false );
 
   /**
    * Destroys the document.

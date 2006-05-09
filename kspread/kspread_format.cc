@@ -1840,7 +1840,7 @@ Qt::PenStyle Format::fallDiagonalStyle( int col, int row ) const
   return fallDiagonalPen( col, row ).style();
 }
 
-const QColor & Format::fallDiagonalColor( int col, int row ) const
+const QColor Format::fallDiagonalColor( int col, int row ) const
 {
   return fallDiagonalPen( col, row ).color();
 }
@@ -1866,7 +1866,7 @@ Qt::PenStyle Format::goUpDiagonalStyle( int col, int row ) const
   return goUpDiagonalPen( col, row ).style();
 }
 
-const QColor& Format::goUpDiagonalColor( int col, int row ) const
+const QColor Format::goUpDiagonalColor( int col, int row ) const
 {
   return goUpDiagonalPen( col, row ).color();
 }
@@ -1945,7 +1945,7 @@ Qt::PenStyle Format::leftBorderStyle( int col, int row ) const
   return leftBorderPen( col, row ).style();
 }
 
-const QColor& Format::leftBorderColor( int col, int row ) const
+const QColor Format::leftBorderColor( int col, int row ) const
 {
   return leftBorderPen( col, row ).color();
 }
@@ -1968,7 +1968,7 @@ const QPen& Format::topBorderPen( int col, int row ) const
   return m_pStyle->topBorderPen();
 }
 
-const QColor& Format::topBorderColor( int col, int row ) const
+const QColor Format::topBorderColor( int col, int row ) const
 {
   return topBorderPen( col, row ).color();
 }
@@ -2006,7 +2006,7 @@ Qt::PenStyle Format::rightBorderStyle( int col, int row ) const
   return rightBorderPen( col, row ).style();
 }
 
-const QColor& Format::rightBorderColor( int col, int row ) const
+const QColor Format::rightBorderColor( int col, int row ) const
 {
   return rightBorderPen( col, row ).color();
 }
@@ -2034,7 +2034,7 @@ Qt::PenStyle Format::bottomBorderStyle( int col, int row ) const
   return bottomBorderPen( col, row ).style();
 }
 
-const QColor& Format::bottomBorderColor( int col, int row ) const
+const QColor Format::bottomBorderColor( int col, int row ) const
 {
   return bottomBorderPen( col, row ).color();
 }
@@ -2055,7 +2055,7 @@ Qt::BrushStyle Format::backGroundBrushStyle( int col, int row ) const
   return backGroundBrush( col, row ).style();
 }
 
-const QColor& Format::backGroundBrushColor( int col, int row ) const
+const QColor Format::backGroundBrushColor( int col, int row ) const
 {
   return backGroundBrush( col, row ).color();
 }
@@ -2093,7 +2093,7 @@ Style::FloatColor Format::floatColor( int col, int row ) const
   return m_pStyle->floatColor();
 }
 
-const QColor& Format::bgColor( int col, int row ) const
+const QColor Format::bgColor( int col, int row ) const
 {
   if ( !hasProperty( Style::SBackgroundColor, false ) && !hasNoFallBackProperties( Style::SBackgroundColor ) )
   {
@@ -2116,7 +2116,7 @@ const QPen& Format::textPen( int col, int row ) const
   return m_pStyle->pen();
 }
 
-const QColor& Format::textColor( int col, int row ) const
+const QColor Format::textColor( int col, int row ) const
 {
   return textPen( col, row ).color();
 }

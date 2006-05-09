@@ -58,7 +58,7 @@ KParts::Part* Factory::createPartObject( QWidget *parentWidget, QObject* parent,
 {
   bool bWantKoDocument = ( strcmp( classname, "KoDocument" ) == 0 );
 
-  Doc *doc = new Doc( parentWidget, 0, parent, 0, !bWantKoDocument );
+  Doc *doc = new Doc( parentWidget, parent, !bWantKoDocument );
 
   if ( !bWantKoDocument )
     doc->setReadWrite( false );

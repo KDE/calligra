@@ -4203,7 +4203,7 @@ const QBrush& Cell::backGroundBrush( int _col, int _row ) const
   return format()->backGroundBrush( _col, _row );
 }
 
-const QColor& Cell::bgColor( int _col, int _row ) const
+const QColor Cell::bgColor( int _col, int _row ) const
 {
   if ( d->hasExtra() && (!d->extra()->obscuringCells.isEmpty()) )
   {
@@ -4320,7 +4320,7 @@ const QPen& Cell::topBorderPen( int _col, int _row ) const
     return format()->topBorderPen( _col, _row );
 }
 
-const QColor & Cell::effTextColor( int col, int row ) const
+const QColor Cell::effTextColor( int col, int row ) const
 {
   if ( d->hasExtra() && d->extra()->conditions
        && d->extra()->conditions->matchedStyle()

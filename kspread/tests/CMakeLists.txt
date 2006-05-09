@@ -4,9 +4,11 @@ if(KDE4_BUILD_TESTS)
 
 include_directories( ${CMAKE_SOURCE_DIR}/kspread ${KOFFICEUI_INCLUDES} )
 
+set(libtests_SRCS tester.cc testrunner.cc value_tester.cc formula_tester.cc inspector.cc)
+
 ########### next target ###############
 
-set(formulatest_SRCS test_formula.cc )
+set(formulatest_SRCS test_formula.cc ${libtests_SRCS})
 
 kde4_automoc(${formulatest_SRCS})
 

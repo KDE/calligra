@@ -23,6 +23,7 @@
 #include <QString>
 #include <QTextStream>
 #include <QVector>
+#include <koffice_export.h>
 
 class KLocale;
 
@@ -35,7 +36,7 @@ class Value;
 /**
  * Token
  */
-class Token
+class KSPREAD_EXPORT Token
 {
   public:
     /**
@@ -236,7 +237,7 @@ protected:
  *
  *
  */
-class Formula
+class KSPREAD_EXPORT Formula
 {
   public:
 
