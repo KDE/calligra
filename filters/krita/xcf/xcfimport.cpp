@@ -49,15 +49,19 @@ KoFilter::ConversionStatus XCFImport::convert(const QByteArray&, const QByteArra
         return KoFilter::BadMimeType;
 
     KisDoc * doc = dynamic_cast<KisDoc*>(m_chain -> outputDocument());
-    KisView * view = static_cast<KisView*>(doc -> views().first());
-
-    QString filename = m_chain -> inputFile();
 
     if (!doc)
         return KoFilter::CreationError;
 
-    doc -> prepareForImport();
+    KisView * view = 0;
 
+    if (!doc->views().isEmpty()) {
+        view = static_cast<KisView*>(doc->views().first());
+    }
+
+    QString filename = m_chain -> inputFile();
+
+    doc -> prepareForImport();
 
     if (!filename.isEmpty()) {
 
