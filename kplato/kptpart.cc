@@ -47,9 +47,9 @@
 namespace KPlato
 {
 
-Part::Part(QWidget *parentWidget, const char *widgetName,
-		 QObject *parent, const char *name, bool singleViewMode)
-    : KoDocument(parentWidget, widgetName, parent, name, singleViewMode),
+Part::Part(QWidget *parentWidget,
+		 QObject *parent, bool singleViewMode)
+    : KoDocument(parentWidget, parent, singleViewMode),
       m_project(0), m_projectDialog(0), m_parentWidget(parentWidget), m_view(0),
       m_embeddedGanttView(new GanttView(parentWidget)),
       m_embeddedContext(new Context()), m_embeddedContextInitialized(false),

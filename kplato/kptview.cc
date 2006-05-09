@@ -99,6 +99,7 @@
 #include "KDGanttView.h"
 #include "KDGanttViewTaskItem.h"
 #include "KPtViewIface.h"
+#include <kactionmenu.h>
 
 namespace KPlato
 {
@@ -189,10 +190,10 @@ View::View(Part* part, QWidget* parent, const char* /*name*/)
 	estimationType->addAction(actionViewExpected);
 	estimationType->addAction(actionViewOptimistic);
 	estimationType->addAction(actionViewPessimistic);
-	
- 
 
-	
+
+
+
     actionViewGanttResources = new KToggleAction(i18n("Resources"), 0, 0, this, SLOT(slotViewGanttResources()), actionCollection(), "view_gantt_showResources");
     actionViewGanttTaskName = new KToggleAction(i18n("Task Name"), 0, 0, this, SLOT(slotViewGanttTaskName()), actionCollection(), "view_gantt_showTaskName");
     actionViewGanttTaskLinks = new KToggleAction(i18n("Task Links"), 0, 0, this, SLOT(slotViewGanttTaskLinks()), actionCollection(), "view_gantt_showTaskLinks");

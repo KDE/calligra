@@ -81,7 +81,7 @@ public:
         else
             DateMapType::insert(date, state);
     }
-    void toggle(QDate date, int state=Map::NonWorking) { return toggle(date.toString(Qt::ISODate)); }
+    void toggle(QDate date, int state=Map::NonWorking) { return toggle(date.toString(Qt::ISODate), state); }
     void toggleClear(QString date, int state=Map::NonWorking) {
         //kDebug()<<k_funcinfo<<date<<"="<<state<<endl;
         bool s = DateMapType::contains(date);

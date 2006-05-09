@@ -57,8 +57,8 @@
 #include <kglobal.h>
 
 
-KFormulaDoc::KFormulaDoc(QWidget *parentWidget, const char *widgetName, QObject* parent, const char* name, bool singleViewMode)
-        : KoDocument(parentWidget, widgetName, parent, name, singleViewMode)
+KFormulaDoc::KFormulaDoc(QWidget *parentWidget, QObject* parent, bool singleViewMode)
+        : KoDocument(parentWidget, parent, singleViewMode)
 {
     setInstance(KFormulaFactory::global(), false);
     //kDebug(39001) << "General Settings" << endl;
@@ -137,7 +137,7 @@ bool KFormulaDoc::loadOasis( const QDomDocument& doc, KoOasisStyles&, const QDom
     // we don't have style into this format
     // we don't have settings into kformula (for the moment)
     // necessary to adapt kformula code to load MathML format with Oasis Extension.
-    
+
     if ( document->loadOasis( doc ) ) {
         history->clear();
         history->documentSaved();

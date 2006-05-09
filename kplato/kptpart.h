@@ -48,9 +48,9 @@ class Part : public KoDocument, public KoTextZoomHandler {
     Q_OBJECT
 
 public:
-    Part(QWidget *parentWidget = 0, const char *widgetName = 0,
-	    QObject* parent = 0, const char* name = 0,
-	    bool singleViewMode = false);
+    Part(QWidget *parentWidget = 0,
+         QObject* parent = 0,
+         bool singleViewMode = false);
     ~Part();
 
     virtual void paintContent(QPainter& painter, const QRect& rect,

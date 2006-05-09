@@ -37,8 +37,7 @@ class KivioDocument : public KoDocument
   Q_OBJECT
 
   public:
-    KivioDocument(QWidget* parentWidget, const char* widgetName, QObject* parent,
-                  const char* name, bool singleViewMode = false);
+    KivioDocument(QWidget* parentWidget, QObject* parent, bool singleViewMode = false);
     ~KivioDocument();
 
     virtual void paintContent(QPainter &painter, const QRect &rect, bool transparent = false,

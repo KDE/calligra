@@ -48,6 +48,8 @@ class KPrinter;
 #include "kformula_view.h"
 #include "kformula_view_iface.h"
 #include "kformulawidget.h"
+#include <kfontsizeaction.h>
+#include <ktoggleaction.h>
 
 
 bool KFormulaPartView::first_window = true;

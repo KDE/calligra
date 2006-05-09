@@ -21,9 +21,8 @@
 
 #include "KivioView.h"
 
-KivioDocument::KivioDocument(QWidget* parentWidget, const char* widgetName, QObject* parent,
-              const char* name, bool singleViewMode)
-  : KoDocument(parentWidget, widgetName, parent, name, singleViewMode)
+KivioDocument::KivioDocument(QWidget* parentWidget, QObject* parent, bool singleViewMode)
+  : KoDocument(parentWidget, parent, singleViewMode)
 {
 }
 

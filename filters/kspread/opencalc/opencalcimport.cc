@@ -2189,25 +2189,25 @@ void OpenCalcImport::loadStyleProperties( Format * layout, QDomElement const & p
 
   if ( property.hasAttributeNS( ooNS::fo, "border-bottom" ) )
   {
-    loadBorder( layout, property.attributeNS( ooNS::fo, "border-bottom", QString::null ), Qt::DockBottom );
+    loadBorder( layout, property.attributeNS( ooNS::fo, "border-bottom", QString::null ), Bottom );
     // TODO: style:border-line-width-bottom if double!
   }
 
   if ( property.hasAttributeNS( ooNS::fo, "border-right" ) )
   {
-    loadBorder( layout, property.attributeNS( ooNS::fo, "border-right", QString::null ), Qt::DockRight );
+    loadBorder( layout, property.attributeNS( ooNS::fo, "border-right", QString::null ), Right );
     // TODO: style:border-line-width-right
   }
 
   if ( property.hasAttributeNS( ooNS::fo, "border-top" ) )
   {
-    loadBorder( layout, property.attributeNS( ooNS::fo, "border-top", QString::null ), Qt::DockTop );
+    loadBorder( layout, property.attributeNS( ooNS::fo, "border-top", QString::null ), Top );
     // TODO: style:border-line-width-top
   }
 
   if ( property.hasAttributeNS( ooNS::fo, "border-left" ) )
   {
-    loadBorder( layout, property.attributeNS( ooNS::fo, "border-left", QString::null ), Qt::DockLeft );
+    loadBorder( layout, property.attributeNS( ooNS::fo, "border-left", QString::null ), Left );
     // TODO: style:border-line-width-left
   }
 
