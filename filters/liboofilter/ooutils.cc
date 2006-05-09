@@ -132,21 +132,26 @@ void OoUtils::importLineSpacing( QDomElement& parentElement, const KoStyleStack&
         if ( value != "normal" )
         {
             QDomElement lineSpacing = parentElement.ownerDocument().createElement( "LINESPACING" );
-            if ( value == "100%" )
-                lineSpacing.setAttribute("type","single");
-            else if( value=="150%")
-                lineSpacing.setAttribute("type","oneandhalf");
-            else if( value=="200%")
-                lineSpacing.setAttribute("type","double");
-            else if ( value.find('%') > -1 )
+
+            if ( value.endsWith("%" ) )
             {
-                double percent = value.toDouble();
-                lineSpacing.setAttribute("type", "multiple");
-                lineSpacing.setAttribute("spacingvalue", percent/100);
+                double percent = value.left(value.length()-1).toDouble();
+                if( percent == 100 )
+                    lineSpacing.setAttribute("type","single");
+                else if( percent == 150 )
+                    lineSpacing.setAttribute("type","oneandhalf");
+                else if( percent == 200 )
+                    lineSpacing.setAttribute("type","double");
+                else
+                {
+                  lineSpacing.setAttribute("type", "multiple");
+                  lineSpacing.setAttribute("spacingvalue", percent/100);
+                }
             }
-            else // fixed value (use KoUnit::parseValue to get it in pt)
+            else // fixed value (TODO use KoUnit::parseValue to get it in pt)
             {
                 kdWarning(30519) << "Unhandled value for fo:line-height: " << value << endl;
+                lineSpacing.setAttribute("type","single"); // fallback
             }
             parentElement.appendChild( lineSpacing );
         }
