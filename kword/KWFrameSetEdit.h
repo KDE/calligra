@@ -105,7 +105,7 @@ public:
      * Paste data from the clipboard to the FSe.
      * @param mode use this mode to get data from the clipboard.
      */
-    virtual void paste(QClipboard::Mode mode = QClipboard::Clipboard) {}
+    virtual void paste(QClipboard::Mode /*mode*/ = QClipboard::Clipboard) {}
     virtual void selectAll() {}
     virtual void pasteData( const QMimeData* /*data*/, int /*provides*/, bool /*drop*/ ) {}
 

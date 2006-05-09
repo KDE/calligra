@@ -738,7 +738,7 @@ void KWTextParag::loadFormatting( QDomElement &attributes, int offset, bool load
             }
         }
     }
-    for(unsigned int i=0; i < removeLenList.count(); i++) {
+    for(int i=0; i < removeLenList.count(); i++) {
         remove(*removePosList.at(i), *removeLenList.at(i));
     }
 }

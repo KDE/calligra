@@ -123,7 +123,7 @@ KWTextFrameSet::KWTextFrameSet( KWDocument *_doc, const QString & name )
     else
         m_name = name;
 
-    QObject::setName( m_name.toUtf8() ); // store name in the QObject, for DCOP users
+    QObject::setObjectName( m_name ); // store name in the QObject, for DCOP users
     init();
 }
 
@@ -142,7 +142,7 @@ KWTextFrameSet::KWTextFrameSet( KWDocument* doc, const QDomElement& tag, KoOasis
 KWTextFrameSet::KWTextFrameSet( const QString &name ) : KWFrameSet(0) {
     m_name = name;
 
-    QObject::setName( m_name.toUtf8() ); // store name in the QObject, for DCOP users
+    QObject::setObjectName( m_name ); // store name in the QObject, for DCOP users
     m_currentViewMode = 0L;
     m_currentDrawnFrame = 0L;
     m_lastTextDocHeight = 0;

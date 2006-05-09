@@ -29,7 +29,7 @@
 #include "KWPictureFrameSet.h"
 
 #include <KoSetPropCommand.h>
-#include <KoParagDia_p.h> // for KoBorderPreview
+#include <KoBorderPreview.h>
 
 #include <knuminput.h>
 #include <klocale.h>

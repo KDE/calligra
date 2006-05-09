@@ -29,7 +29,7 @@ class KWView;
 class KWViewMode;
 class KoZoomHandler;
 class KoPoint;
-class KActionSeparator;
+class KSeparatorAction;
 class KAction;
 class QMenu;
 
@@ -73,7 +73,7 @@ protected:
     void addFloatingAction(KWView *view, QList<KAction*> &actionList);
 
     KWFrameView *m_view;
-    KActionSeparator *m_separator;
+    KSeparatorAction *m_separator;
 
     friend class KWFrameView; // so it can call mouseMeaningOnBorder which assumes some stuff
 };
@@ -181,7 +181,7 @@ public:
 /**  A policy for Text Frames */
 class TextFramePolicy : public FramePolicy {
 public:
-	virtual ~TextFramePolicy(){}		
+	virtual ~TextFramePolicy(){}
     TextFramePolicy(KWFrameView *view);
     MouseMeaning mouseMeaning( const KoPoint &point, int keyState );
     QMenu* createPopup( const KoPoint &point, KWView *view );

@@ -32,6 +32,8 @@
 
 #include <klocale.h>
 #include <kactionclasses.h>
+#include <kactioncollection.h>
+#include <kseparatoraction.h>
 
 #include <qapplication.h>
 #include <q3popupmenu.h>
@@ -367,10 +369,10 @@ MouseMeaning TextFramePolicy::mouseMeaning( const KoPoint &point, int keyState )
     return MEANING_MOUSE_INSIDE_TEXT;
 }
 QMenu* TextFramePolicy::createPopup( const KoPoint &point, KWView *view ) {
+    KActionCollection *actionCollection = view->actionCollection();
     if( m_view->isBorderHit(point) ) {
         KWFrameSet *fs = m_view->frame()->frameSet();
         KSeparatorAction *separator=new KSeparatorAction();
-        KActionCollection *actionCollection = view->actionCollection();
         QList<KAction*> actionList;
         if(fs->isHeaderOrFooter()) {
             actionList.append(separator);
@@ -414,7 +416,7 @@ QMenu* TextFramePolicy::createPopup( const KoPoint &point, KWView *view ) {
 
     bool singleWord= false;
     KWDocument * doc = m_view->frame()->frameSet()->kWordDocument();
-    actionList = fse->dataToolActionList(doc->instance(), word, singleWord);
+    actionList = fse->dataToolActionList(doc->instance(), actionCollection, word, singleWord);
 
     KoVariable* var = fse->variable();
     doc->variableCollection()->setVariableSelected(var);

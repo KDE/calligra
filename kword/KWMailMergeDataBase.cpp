@@ -34,6 +34,7 @@
 #include <kseparator.h>
 #include <kservice.h>
 #include <kmainwindow.h>
+#include <kactioncollection.h>
 
 #include <qfile.h>
 

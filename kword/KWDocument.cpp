@@ -154,8 +154,8 @@ public:
 
 const int KWDocument::CURRENT_SYNTAX_VERSION = 3;
 
-KWDocument::KWDocument(QWidget *parentWidget, const char *widname, QObject* parent, const char* name, bool singleViewMode )
-    : KoDocument( parentWidget, widname, parent, name, singleViewMode ),
+KWDocument::KWDocument(QWidget *parentWidget, QObject* parent, bool singleViewMode )
+    : KoDocument( parentWidget, parent, singleViewMode ),
       m_urlIntern()
 {
     KWStatisticVariable::setExtendedType(  true );
@@ -277,7 +277,7 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widname, QObject* pare
     //kDebug() << "Default font: requested family: " << m_defaultFont.family() << endl;
     //kDebug() << "Default font: real family: " << QFontInfo(m_defaultFont).family() << endl;
 
-    if ( name )
+    if ( !objectName().isEmpty() )
         dcopObject();
 }
 

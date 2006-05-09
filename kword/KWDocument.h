@@ -133,7 +133,7 @@ public:
     friend class KWOasisLoader;
     friend class KWStartupWidget;
 
-    KWDocument( QWidget *parentWidget = 0, const char *widname = 0, QObject* parent = 0, const char* name = 0, bool singleViewMode = false );
+    KWDocument( QWidget *parentWidget = 0, QObject* parent = 0, bool singleViewMode = false );
     ~KWDocument();
 
     enum ProcessingType {WP = 0, DTP = 1};
@@ -637,8 +637,8 @@ public:
     void setDefaultColumnSpacing(double val){ m_defaultColumnSpacing=val; }
     /**
      * @returns the document for the formulas
-     * @param init if true mathematical fonts may be installed if needed. 
-     * Should be true unless no real document is being used (i. e. in 
+     * @param init if true mathematical fonts may be installed if needed.
+     * Should be true unless no real document is being used (i. e. in
      * configuration dialog>
      */
     KFormula::Document* formulaDocument( bool init = true );

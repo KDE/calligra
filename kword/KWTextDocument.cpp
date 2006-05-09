@@ -255,7 +255,7 @@ bool KWTextDocument::loadSpanTag( const QDomElement& tag, KoOasisContext& contex
                 } else {
                     appendBookmark( (*it).parag, (*it).pos, parag, pos, it.key() );
                 }
-                loadingInfo->m_bookmarkStarts.remove( it );
+                loadingInfo->m_bookmarkStarts.erase( it );
             }
             return true;
         }

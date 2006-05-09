@@ -98,6 +98,7 @@
 #include <KoVariable.h>
 #include <KoCustomVariablesDia.h>
 #include <KoTextObject.h>
+#include "KoSpell.h"
 #include <tkcoloractions.h>
 
 #include <kparts/partmanager.h>
@@ -118,6 +119,11 @@
 #include <kdeversion.h>
 #include <kiconloader.h>
 #include <kxmlguifactory.h>
+#include <kfontsizeaction.h>
+#include <kactioncollection.h>
+#include <kfontaction.h>
+#include <kseparatoraction.h>
+#include <kvbox.h>
 
 #include <qclipboard.h>
 #include <qapplication.h>
@@ -142,8 +148,6 @@
 #include <kspell2/dialog.h>
 #include <kspell2/defaultdictionary.h>
 #include <q3tl.h>
-#include <kvbox.h>
-#include "KoSpell.h"
 
 using namespace KSpell2;
 
@@ -1713,8 +1717,7 @@ void KWView::updateFrameStatusBarItem()
             QString bottomStr = KoUnit::toUserStringValue( frame->bottom(), unit );
             QString widthStr = KoUnit::toUserStringValue( frame->width(), unit );
             QString heightStr = KoUnit::toUserStringValue( frame->height(), unit );
-#warning re-enable at next kdelibs snapshot after 19/04/2006
-            //m_sbFramesLabel->setText( ' ' + i18nc( "Statusbar info", "%1: %2, %3 - %4, %5 (width: %6, height: %7)", frame->frameSet()->name(), leftStr, topStr, rightStr, bottomStr, widthStr, heightStr ) );
+            m_sbFramesLabel->setText( ' ' + i18nc( "Statusbar info", "%1: %2, %3 - %4, %5 (width: %6, height: %7)", frame->frameSet()->name(), leftStr, topStr, rightStr, bottomStr, widthStr, heightStr ) );
         } else
             m_sbFramesLabel->setText( ' ' + i18n( "%1 frames selected" , nbFrame ) );
     }
