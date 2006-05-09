@@ -103,7 +103,7 @@ KoMacro::Variable::List NavigateAction::notifyUpdated(const QString& variablenam
 			setVariable(KoMacro::Variable::Ptr( rowvar ));
 
 			KoMacro::Variable* colvar = new KexiVariable<NavigateAction>(this, "colnr", i18n("Column"));
-			const int colnr = variablemap.contains("rownr") ? variablemap["rownr"]->variant().toInt() : 0;
+			const int colnr = variablemap.contains("colnr") ? variablemap["colnr"]->variant().toInt() : 0;
 			colvar->setVariant(colnr);
 			list.append( KoMacro::Variable::Ptr(colvar) );
 			setVariable(KoMacro::Variable::Ptr( colvar ));
