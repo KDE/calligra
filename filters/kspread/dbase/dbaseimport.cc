@@ -41,12 +41,12 @@
 #include <kgenericfactory.h>
 #include <kmessagebox.h>
 
-typedef KGenericFactory<DBaseImport, KoFilter> DBaseImportFactory;
+typedef KGenericFactory<DBaseImport> DBaseImportFactory;
 K_EXPORT_COMPONENT_FACTORY( libdbaseimport, DBaseImportFactory( "kofficefilters" ) )
 
 
-DBaseImport::DBaseImport ( QObject*, const char*, const QStringList& )
-    : KoFilter()
+DBaseImport::DBaseImport ( QObject* parent, const QStringList& )
+    : KoFilter( parent )
 {
 }
 

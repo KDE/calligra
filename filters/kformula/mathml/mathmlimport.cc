@@ -37,12 +37,12 @@
 #include "mathmlimport.moc"
 
 
-typedef KGenericFactory<MathMLImport, KoFilter> MathMLImportFactory;
+typedef KGenericFactory<MathMLImport> MathMLImportFactory;
 K_EXPORT_COMPONENT_FACTORY( libkfomathmlimport, MathMLImportFactory( "kofficefilters" ) )
 
 
-MathMLImport::MathMLImport(KoFilter *, const char *, const QStringList&)
-    : KoFilter()
+MathMLImport::MathMLImport(QObject* parent, const QStringList&)
+    : KoFilter(parent)
 {
 }
 

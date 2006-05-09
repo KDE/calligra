@@ -59,12 +59,12 @@ printIndentation( QTextStream *stream, unsigned int indent )
 		*stream << INDENT;
 }
 
-typedef KGenericFactory<SvgExport, KoFilter> SvgExportFactory;
+typedef KGenericFactory<SvgExport> SvgExportFactory;
 K_EXPORT_COMPONENT_FACTORY( libkarbonsvgexport, SvgExportFactory( "kofficefilters" ) )
 
 
 SvgExport::SvgExport( KoFilter*, const char*, const QStringList& )
-	: KoFilter(), m_indent( 0 ), m_indent2( 0 ), m_trans( 0L )
+	: KoFilter(parent), m_indent( 0 ), m_indent2( 0 ), m_trans( 0L )
 {
 	m_gc.setAutoDelete( true );
 }

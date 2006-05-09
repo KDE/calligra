@@ -39,11 +39,11 @@
 using namespace PDFImport;
 
 //-----------------------------------------------------------------------------
-class PdfImportFactory : KGenericFactory<PdfImport, KoFilter>
+class PdfImportFactory : KGenericFactory<PdfImport>
 {
  public:
     PdfImportFactory()
-        : KGenericFactory<PdfImport, KoFilter>("kwordpdfimport") {}
+        : KGenericFactory<PdfImport>("kwordpdfimport") {}
 
  protected:
     virtual void setupTranslations() {
@@ -54,7 +54,8 @@ class PdfImportFactory : KGenericFactory<PdfImport, KoFilter>
 K_EXPORT_COMPONENT_FACTORY(libpdfimport, PdfImportFactory())
 
 //-----------------------------------------------------------------------------
-PdfImport::PdfImport(KoFilter *, const char *, const QStringList&)
+PdfImport::PdfImport(QObject* parent, const QStringList&)
+    : KoFilter(parent)
 {}
 
 KoFilter::ConversionStatus PdfImport::convert(const QByteArray& from,

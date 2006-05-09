@@ -43,7 +43,7 @@ class SvgImport : public KoFilter
 	Q_OBJECT
 
 public:
-	SvgImport(KoFilter *parent, const char *name, const QStringList&);
+	SvgImport(QObject* parent, const QStringList&);
 	virtual ~SvgImport();
 
 	virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);

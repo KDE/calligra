@@ -52,15 +52,15 @@
 #include <htmlexport.h>
 #include <htmlexport.moc>
 
-typedef KGenericFactory<HTMLExport, KoFilter> HTMLExportFactory;
+typedef KGenericFactory<HTMLExport> HTMLExportFactory;
 K_EXPORT_COMPONENT_FACTORY( libhtmlexport, HTMLExportFactory( "kofficefilters" ) )
 
 //
 // HTMLExport
 //
 
-HTMLExport::HTMLExport(KoFilter *, const char *, const QStringList &) :
-                     KoFilter() {
+HTMLExport::HTMLExport(QObject* parent, const QStringList &) :
+                     KoFilter(parent) {
 }
 
 KoFilter::ConversionStatus HTMLExport::convert( const QByteArray& from, const QByteArray& to )

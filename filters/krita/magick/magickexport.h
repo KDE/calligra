@@ -27,7 +27,7 @@ class MagickExport : public KoFilter {
     Q_OBJECT
 
 public:
-    MagickExport(KoFilter *parent, const char *name, const QStringList&);
+    MagickExport(QObject* parent, const QStringList&);
     virtual ~MagickExport();
 
 public:

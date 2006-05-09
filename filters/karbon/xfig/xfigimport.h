@@ -42,7 +42,7 @@ class XFIGImport : public KoFilter
     Q_OBJECT
 
 public:
-    XFIGImport( KoFilter *parent, const char *name );
+    XFIGImport( QObject* parent );
     virtual ~XFIGImport();
 
     virtual bool filterImport( const QString &file, KoDocument *,

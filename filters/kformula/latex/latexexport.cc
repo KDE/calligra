@@ -39,12 +39,12 @@
 #include "latexexport.h"
 
 
-typedef KGenericFactory<LATEXExport, KoFilter> LATEXExportFactory;
+typedef KGenericFactory<LATEXExport> LATEXExportFactory;
 K_EXPORT_COMPONENT_FACTORY( libkfolatexexport, LATEXExportFactory( "kofficefilters" ) )
 
 
-LATEXExport::LATEXExport( KoFilter */*parent*/, const char */*name*/, const QStringList& )
-    : KoFilter()
+LATEXExport::LATEXExport( QObject* parent, const QStringList& )
+    : KoFilter(parent)
 {
 }
 

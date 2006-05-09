@@ -30,7 +30,7 @@ class KprKword : public KoFilter {
     Q_OBJECT
 
 public:
-    KprKword(KoFilter *parent, const char *name, const QStringList&);
+    KprKword(QObject* parent, const QStringList&);
 
     virtual ~KprKword() {}
 

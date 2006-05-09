@@ -37,7 +37,7 @@ class RTFExport : public KoFilter {
     Q_OBJECT
 
 public:
-    RTFExport(KoFilter *parent, const char *name, const QStringList &);
+    RTFExport(QObject* parent, const QStringList &);
     virtual ~RTFExport() {}
 
     virtual KoFilter::ConversionStatus convert( const QByteArray& from, const QByteArray& to );

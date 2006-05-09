@@ -30,10 +30,10 @@
 //Added by qt3to4:
 #include <Q3CString>
 
-typedef KGenericFactory<MagickExport, KoFilter> MagickExportFactory;
+typedef KGenericFactory<MagickExport> MagickExportFactory;
 K_EXPORT_COMPONENT_FACTORY(libkritamagickexport, MagickExportFactory("kofficefilters"))
 
-MagickExport::MagickExport(KoFilter *, const char *, const QStringList&) : KoFilter()
+MagickExport::MagickExport(KoFilter *, const char *, const QStringList&) : KoFilter(parent)
 {
 }
 

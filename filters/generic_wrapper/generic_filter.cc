@@ -35,12 +35,12 @@
 
 #include "generic_filter.h"
 
-typedef KGenericFactory<GenericFilter, KoFilter> GenericFilterFactory;
+typedef KGenericFactory<GenericFilter> GenericFilterFactory;
 K_EXPORT_COMPONENT_FACTORY( libgenerickofilter, GenericFilterFactory )
 
 
-GenericFilter::GenericFilter(KoFilter *, const char *, const QStringList&) :
-    KoFilter() {
+GenericFilter::GenericFilter(QObject *parent, const QStringList&) :
+    KoFilter(parent) {
 }
 
 KoFilter::ConversionStatus GenericFilter::convert( const QByteArray &from, const QByteArray &to )

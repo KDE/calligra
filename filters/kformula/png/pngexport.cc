@@ -38,12 +38,12 @@
 #include "pngexportdia.h"
 
 
-typedef KGenericFactory<PNGExport, KoFilter> PNGExportFactory;
+typedef KGenericFactory<PNGExport> PNGExportFactory;
 K_EXPORT_COMPONENT_FACTORY( libkfopngexport, PNGExportFactory( "kofficefilters" ) )
 
 
-PNGExport::PNGExport( KoFilter */*parent*/, const char */*name*/, const QStringList& )
-    : KoFilter()
+PNGExport::PNGExport( QObject* parent, const QStringList& )
+    : KoFilter(parent)
 {
 }
 

@@ -31,7 +31,7 @@ DESCRIPTION
 #include <msodimport.h>
 #include <q3pointarray.h>
 
-typedef KGenericFactory<MSODImport, KoFilter> MSODImportFactory;
+typedef KGenericFactory<MSODImport> MSODImportFactory;
 K_EXPORT_COMPONENT_FACTORY( libmsodimport, MSODImportFactory( "kofficefilters" ) )
 
 const int MSODImport::s_area = 30505;

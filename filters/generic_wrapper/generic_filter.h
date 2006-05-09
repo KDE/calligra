@@ -32,7 +32,7 @@ class GenericFilter : public KoFilter
 	Q_OBJECT
 
 public:
-    GenericFilter(KoFilter *parent, const char *name, const QStringList&);
+    GenericFilter(QObject *parent, const QStringList&);
     virtual ~GenericFilter() {}
 
     virtual KoFilter::ConversionStatus convert( const QByteArray& from,

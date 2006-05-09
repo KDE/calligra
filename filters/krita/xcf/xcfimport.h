@@ -27,7 +27,7 @@ class XCFImport : public KoFilter {
     Q_OBJECT
 
 public:
-    XCFImport(KoFilter *parent, const char *name, const QStringList&);
+    XCFImport(QObject* parent, const QStringList&);
     virtual ~XCFImport();
 
 public:

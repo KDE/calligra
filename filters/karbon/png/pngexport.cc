@@ -38,12 +38,12 @@
 #include <kdebug.h>
 
 
-typedef KGenericFactory<PngExport, KoFilter> PngExportFactory;
+typedef KGenericFactory<PngExport> PngExportFactory;
 K_EXPORT_COMPONENT_FACTORY( libkarbonpngexport, PngExportFactory( "kofficefilters" ) )
 
 
 PngExport::PngExport( KoFilter*, const char*, const QStringList& )
-	: KoFilter()
+	: KoFilter(parent)
 {
 }
 

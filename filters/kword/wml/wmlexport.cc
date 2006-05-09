@@ -41,7 +41,7 @@
 
 #include "wmlexport.h"
 
-typedef KGenericFactory<WMLExport, KoFilter> WMLExportFactory;
+typedef KGenericFactory<WMLExport> WMLExportFactory;
 K_EXPORT_COMPONENT_FACTORY( libwmlexport, WMLExportFactory( "kofficefilters" ) )
 
 class WMLWorker : public KWEFBaseWorker
@@ -74,7 +74,7 @@ bool WMLWorker::doCloseFile(void)
     return FALSE;
   QTextStream stream;
   stream.setDevice( &out );
-  stream << result; 
+  stream << result;
   return TRUE;
 }
 
@@ -98,13 +98,13 @@ bool WMLWorker::doCloseDocument(void)
   return TRUE;
 }
 
-bool WMLWorker::doFullParagraph(const QString& paraText, 
+bool WMLWorker::doFullParagraph(const QString& paraText,
   const LayoutData& layout, const ValueListFormatData& paraFormatDataList)
 {
   QString wmlText;
   QString text = paraText;
 
-  ValueListFormatData::ConstIterator it;  
+  ValueListFormatData::ConstIterator it;
   for( it = paraFormatDataList.begin(); it!=paraFormatDataList.end(); ++it )
   {
     const FormatData& formatData = *it;
@@ -114,7 +114,7 @@ bool WMLWorker::doFullParagraph(const QString& paraText,
     {
       QString partialText;
       partialText = text.mid( formatData.pos, formatData.len );
-  
+
       // escape the text
       partialText = KWEFUtil::EscapeSgmlText( NULL, partialText, TRUE, TRUE );
 
@@ -128,26 +128,26 @@ bool WMLWorker::doFullParagraph(const QString& paraText,
       if( m_underline ) partialText = "<u>" + partialText + "</u>";
 
 
-      wmlText += partialText; 
+      wmlText += partialText;
     }
   }
 
   // sentinel check
   QString align = layout.alignment.lower();
   if( ( align!="left" ) && ( align!="right" ) && ( align!="center" ) )
-    align = "left"; 
+    align = "left";
 
   result += "<p align=\"" + align + "\">" + wmlText + "</p>\n";
 
   return TRUE;
 }
 
-WMLExport::WMLExport( KoFilter *, const char *, const QStringList& ):
-                     KoFilter()
+WMLExport::WMLExport( QObject* parent, const QStringList& ):
+                     KoFilter(parent)
 {
 }
 
-KoFilter::ConversionStatus WMLExport::convert( const QByteArray& from, 
+KoFilter::ConversionStatus WMLExport::convert( const QByteArray& from,
   const QByteArray& to )
 {
   // check for proper conversion
@@ -163,7 +163,7 @@ KoFilter::ConversionStatus WMLExport::convert( const QByteArray& from,
   delete worker;
   delete leader;
 
-  return result; 
+  return result;
 }
 
 #include "wmlexport.moc"

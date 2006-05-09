@@ -27,7 +27,7 @@
 class KisPNGExport : public KoFilter {
     Q_OBJECT
     public:
-        KisPNGExport(KoFilter *parent, const char *name, const QStringList&);
+        KisPNGExport(QObject* parent, const QStringList&);
         virtual ~KisPNGExport();
     public:
         virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);

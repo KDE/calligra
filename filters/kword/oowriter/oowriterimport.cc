@@ -50,11 +50,11 @@
 #include <KoDom.h>
 
 
-typedef KGenericFactory<OoWriterImport, KoFilter> OoWriterImportFactory;
+typedef KGenericFactory<OoWriterImport> OoWriterImportFactory;
 K_EXPORT_COMPONENT_FACTORY( liboowriterimport, OoWriterImportFactory(  "kofficefilters" ) )
 
-OoWriterImport::OoWriterImport( KoFilter *, const char *, const QStringList & )
-  : KoFilter(),
+OoWriterImport::OoWriterImport( QObject* parent, const QStringList & )
+  : KoFilter(parent),
     m_styleStack( ooNS::style, ooNS::fo ),
     m_insideOrderedList( false ), m_nextItemIsListItem( false ),
     m_hasTOC( false ), m_hasHeader( false ), m_hasFooter( false ), m_restartNumbering( -1 ),

@@ -32,10 +32,10 @@
 //Added by qt3to4:
 #include <Q3CString>
 
-typedef KGenericFactory<KisPNGImport, KoFilter> PNGImportFactory;
+typedef KGenericFactory<KisPNGImport> PNGImportFactory;
 K_EXPORT_COMPONENT_FACTORY(libkritapngimport, PNGImportFactory("kofficefilters"))
 
-KisPNGImport::KisPNGImport(KoFilter *, const char *, const QStringList&) : KoFilter()
+KisPNGImport::KisPNGImport(KoFilter *, const char *, const QStringList&) : KoFilter(parent)
 {
 }
 

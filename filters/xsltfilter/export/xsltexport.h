@@ -30,7 +30,7 @@ class XSLTExport : public KoFilter
     Q_OBJECT
 
 public:
-    XSLTExport(KoFilter *parent, const char *name, const QStringList&);
+    XSLTExport(QObject* parent, const QStringList&);
     virtual ~XSLTExport() {}
 
     virtual KoFilter::ConversionStatus convert( const QByteArray& from, const QByteArray& to );

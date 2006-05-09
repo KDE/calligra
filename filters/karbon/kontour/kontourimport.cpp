@@ -38,11 +38,11 @@
 
 #define DPI 90
 
-typedef KGenericFactory<KontourImport, KoFilter> KontourImportFactory;
+typedef KGenericFactory<KontourImport> KontourImportFactory;
 K_EXPORT_COMPONENT_FACTORY( libkarbonkontourimport, KontourImportFactory( "kofficefilters" ) )
 
 KontourImport::KontourImport(KoFilter *, const char *, const QStringList&) :
-    KoFilter(),
+    KoFilter(parent),
     outdoc( "DOC" )
 {
 }

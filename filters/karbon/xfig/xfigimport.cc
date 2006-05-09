@@ -136,7 +136,7 @@ int hexstrToInt (const char *str) {
    return value;
 }
 
-XFIGImport::XFIGImport( KoFilter *parent, const char *name ) : KoFilter(parent, name)
+XFIGImport::XFIGImport( QObject* parent ) : KoFilter(parent, name)
 {
   fig_resolution = 1200.0 / 72.0;
   coordinate_system = 2;

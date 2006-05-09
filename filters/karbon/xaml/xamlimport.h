@@ -41,7 +41,7 @@ class XAMLImport : public KoFilter
 	Q_OBJECT
 
 public:
-	XAMLImport(KoFilter *parent, const char *name, const QStringList&);
+	XAMLImport(QObject* parent, const QStringList&);
 	virtual ~XAMLImport();
 
 	virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);

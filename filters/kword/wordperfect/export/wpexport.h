@@ -31,7 +31,7 @@ class WPExport : public KoFilter
 
   public:
 
-    WPExport(KoFilter *parent, const char *name, const QStringList&);
+    WPExport(QObject* parent, const QStringList&);
     WPExport();
 
     virtual ~WPExport() {}

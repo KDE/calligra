@@ -32,10 +32,10 @@
 //Added by qt3to4:
 #include <Q3CString>
 
-typedef KGenericFactory<XCFExport, KoFilter> XCFExportFactory;
+typedef KGenericFactory<XCFExport> XCFExportFactory;
 K_EXPORT_COMPONENT_FACTORY(libkritaxcfexport, XCFExportFactory("kofficefilters"))
 
-XCFExport::XCFExport(KoFilter *, const char *, const QStringList&) : KoFilter()
+XCFExport::XCFExport(KoFilter *, const char *, const QStringList&) : KoFilter(parent)
 {
 }
 

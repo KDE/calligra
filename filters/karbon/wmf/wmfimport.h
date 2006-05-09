@@ -34,7 +34,7 @@ class WMFImport : public KoFilter
     Q_OBJECT
 
 public:
-    WMFImport( KoFilter *parent, const char *name, const QStringList&);
+    WMFImport( QObject* parent, const QStringList&);
     virtual ~WMFImport();
 
     virtual KoFilter::ConversionStatus convert( const QByteArray& from, const QByteArray& to );

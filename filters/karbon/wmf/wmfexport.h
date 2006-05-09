@@ -39,7 +39,7 @@ class WmfExport : public KoFilter, private VVisitor
     Q_OBJECT
 
 public:
-    WmfExport( KoFilter *parent, const char *name, const QStringList&);
+    WmfExport( QObject* parent, const QStringList&);
     virtual ~WmfExport();
 
     virtual KoFilter::ConversionStatus convert( const QByteArray& from, const QByteArray& to );

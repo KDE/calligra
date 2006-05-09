@@ -27,7 +27,7 @@
 class KisTIFFExport : public KoFilter {
     Q_OBJECT
     public:
-        KisTIFFExport(KoFilter *parent, const char *name, const QStringList&);
+        KisTIFFExport(QObject* parent, const QStringList&);
         virtual ~KisTIFFExport();
     public:
         virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);

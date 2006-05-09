@@ -35,7 +35,7 @@
 #include "imageexport.h"
 
 ImageExport::ImageExport(KoFilter *, const char *, const QStringList&)
-    : KoFilter()
+    : KoFilter(parent)
 {
 }
 

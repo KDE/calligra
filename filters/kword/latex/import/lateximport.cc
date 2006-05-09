@@ -29,12 +29,12 @@
 #include <Q3CString>
 #include "lateximportdia.h"
 
-typedef KGenericFactory<LATEXImport, KoFilter> LATEXImportFactory;
+typedef KGenericFactory<LATEXImport> LATEXImportFactory;
 K_EXPORT_COMPONENT_FACTORY( libkwordlateximport, LATEXImportFactory( "kofficefilters" ) )
 
 
 LATEXImport::LATEXImport(KoFilter *, const char *, const QStringList&) :
-                     KoFilter() {
+                     KoFilter(parent) {
 }
 
 KoFilter::ConversionStatus LATEXImport::convert( const QByteArray& from, const QByteArray& to )

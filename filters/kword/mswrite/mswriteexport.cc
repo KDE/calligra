@@ -44,10 +44,10 @@
 #include "mswriteexport.h"
 
 
-class MSWriteExportFactory : KGenericFactory <MSWriteExport, KoFilter>
+class MSWriteExportFactory : KGenericFactory <MSWriteExport>
 {
 public:
-	MSWriteExportFactory () : KGenericFactory <MSWriteExport, KoFilter> ("kwordmswriteexport")
+	MSWriteExportFactory () : KGenericFactory <MSWriteExport> ("kwordmswriteexport")
 	{
 	}
 
@@ -691,7 +691,7 @@ public:
 				absoffset = offset;
 				break;
 			case SEEK_CUR:
-				absoffset = m_buffer->at () + offset;
+				absoffset = m_buffer->pos () + offset;
 				break;
 			case SEEK_END:
 				absoffset = m_buffer->size () + offset;
@@ -701,13 +701,13 @@ public:
 				return false;
 			}
 
-			if (absoffset > long (m_buffer->size ()))
+			if (absoffset > m_buffer->size ())
 			{
 				error (MSWrite::Error::InternalError, "seek past EOF unimplemented\n");
 				return false;
 			}
 
-			if (!m_buffer->at (absoffset))
+			if (!m_buffer->seek (absoffset))
 			{
 				error (MSWrite::Error::FileError, "QBuffer could not seek (not really a FileError)\n");
 				return false;
@@ -1885,8 +1885,8 @@ public:
 };
 
 
-MSWriteExport::MSWriteExport (KoFilter *, const char *, const QStringList &)
-					: KoFilter()
+MSWriteExport::MSWriteExport (QObject* parent, const QStringList &)
+					: KoFilter(parent)
 {
 }
 

@@ -41,7 +41,7 @@
 
 #include <amiproexport.h>
 
-typedef KGenericFactory<AmiProExport, KoFilter> AmiProExportFactory;
+typedef KGenericFactory<AmiProExport> AmiProExportFactory;
 K_EXPORT_COMPONENT_FACTORY( libamiproexport, AmiProExportFactory( "kofficefilters" ) )
 class AmiProWorker : public KWEFBaseWorker
 {
@@ -75,7 +75,7 @@ bool AmiProWorker::doCloseFile(void)
     return FALSE;
   QTextStream stream;
   stream.setDevice( &out );
-  stream << result; 
+  stream << result;
   return TRUE;
 }
 
@@ -99,7 +99,7 @@ bool AmiProWorker::doOpenDocument(void)
   result += "[elay]\n";
   result += "[edoc]\n";
 
-  m_bold = m_italic = m_underline = m_underlineDouble = 
+  m_bold = m_italic = m_underline = m_underlineDouble =
   m_strike = m_subscript = m_superscript = FALSE;
 
   return TRUE;
@@ -129,16 +129,16 @@ static QString AmiProEscape( const QString& text )
     }
   }
 
-  return result; 
+  return result;
 }
 
-bool AmiProWorker::doFullParagraph(const QString& paraText, 
+bool AmiProWorker::doFullParagraph(const QString& paraText,
   const LayoutData& /*layout*/, const ValueListFormatData& paraFormatDataList)
 {
   QString amiproText = "";
   QString text = paraText;
 
-  ValueListFormatData::ConstIterator it;  
+  ValueListFormatData::ConstIterator it;
   for( it = paraFormatDataList.begin(); it!=paraFormatDataList.end(); ++it )
   {
     const FormatData& formatData = *it;
@@ -150,7 +150,7 @@ bool AmiProWorker::doFullParagraph(const QString& paraText,
       partialText = text.mid( formatData.pos, formatData.len );
 
       partialText = AmiProEscape( partialText );
-  
+
       // apply formatting
       m_bold = formatData.text.weight >= 75;
       m_italic = formatData.text.italic;
@@ -168,7 +168,7 @@ bool AmiProWorker::doFullParagraph(const QString& paraText,
       if( m_superscript ) partialText = "<+&>" + partialText + "<-&>";
       if( m_strike) partialText = "<+%>" + partialText + "<-%>";
 
-      amiproText += partialText; 
+      amiproText += partialText;
     }
   }
 
@@ -177,13 +177,13 @@ bool AmiProWorker::doFullParagraph(const QString& paraText,
   return TRUE;
 }
 
-AmiProExport::AmiProExport( KoFilter *, const char *, const QStringList& ):
-                     KoFilter()
+AmiProExport::AmiProExport( QObject* parent, const QStringList& ):
+                     KoFilter(parent)
 {
 }
 
-KoFilter::ConversionStatus 
-AmiProExport::convert( const QByteArray& from, 
+KoFilter::ConversionStatus
+AmiProExport::convert( const QByteArray& from,
   const QByteArray& to )
 {
   // check for proper conversion
@@ -199,7 +199,7 @@ AmiProExport::convert( const QByteArray& from,
   delete worker;
   delete leader;
 
-  return result; 
+  return result;
 }
 
 #include "amiproexport.moc"

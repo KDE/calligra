@@ -71,11 +71,11 @@
 #include "kis_paint_device.h"
 #include "kis_paint_layer.h"
 
-typedef KGenericFactory<KisRawImport, KoFilter> KisRawImportFactory;
+typedef KGenericFactory<KisRawImport> KisRawImportFactory;
 K_EXPORT_COMPONENT_FACTORY(libkrita_raw_import, KisRawImportFactory("kofficefilters"))
 
 KisRawImport::KisRawImport(KoFilter *, const char *, const QStringList&)
-    : KoFilter()
+    : KoFilter(parent)
     , m_data(0)
     , m_process(0)
     , m_progress(0)

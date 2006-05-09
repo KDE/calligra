@@ -29,7 +29,7 @@ class ASCIIExport : public KoFilter
     Q_OBJECT
 
 public:
-    ASCIIExport(KoFilter* parent, const char* name, const QStringList&);
+    ASCIIExport(QObject* parent, const QStringList&);
     virtual ~ASCIIExport() {}
 
     virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);

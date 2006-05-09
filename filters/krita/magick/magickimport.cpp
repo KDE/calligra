@@ -32,10 +32,10 @@
 #include <kis_image.h>
 #include <kis_layer.h>
 
-typedef KGenericFactory<MagickImport, KoFilter> MagickImportFactory;
+typedef KGenericFactory<MagickImport> MagickImportFactory;
 K_EXPORT_COMPONENT_FACTORY(libkritamagickimport, MagickImportFactory("kofficefilters"))
 
-MagickImport::MagickImport(KoFilter *, const char *, const QStringList&) : KoFilter()
+MagickImport::MagickImport(KoFilter *, const char *, const QStringList&) : KoFilter(parent)
 {
 }
 

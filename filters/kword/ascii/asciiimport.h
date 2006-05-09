@@ -63,7 +63,7 @@ class ASCIIImport : public KoFilter {
     Q_OBJECT
 
 public:
-    ASCIIImport(KoFilter *parent, const char *name, const QStringList &);
+    ASCIIImport(QObject *parent, const QStringList &);
     ASCIIImport();
     virtual ~ASCIIImport() {}
 

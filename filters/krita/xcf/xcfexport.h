@@ -27,7 +27,7 @@ class XCFExport : public KoFilter {
     Q_OBJECT
 
 public:
-    XCFExport(KoFilter *parent, const char *name, const QStringList&);
+    XCFExport(QObject* parent, const QStringList&);
     virtual ~XCFExport();
 
 public:

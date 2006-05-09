@@ -33,7 +33,7 @@ class PalmDocImport : public KoFilter
 
   public:
 
-    PalmDocImport(KoFilter *parent, const char *name, const QStringList&);
+    PalmDocImport(QObject* parent, const QStringList&);
     PalmDocImport();
 
     virtual ~PalmDocImport() {}

@@ -24,12 +24,12 @@
 #include "KoDocument.h"
 #include <qdom.h>
 
-typedef KGenericFactory<KugarNOPImport, KoFilter> KugarNOPImportFactory;
+typedef KGenericFactory<KugarNOPImport> KugarNOPImportFactory;
 K_EXPORT_COMPONENT_FACTORY( libkugarnopimport, KugarNOPImportFactory( "kugarnopimport" ) )
 
 
 KugarNOPImport::KugarNOPImport( KoFilter *, const char *, const QStringList& )
-    : KoFilter()
+    : KoFilter(parent)
 {
 }
 

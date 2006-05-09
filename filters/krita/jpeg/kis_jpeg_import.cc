@@ -32,10 +32,10 @@
 //Added by qt3to4:
 #include <Q3CString>
 
-typedef KGenericFactory<KisJPEGImport, KoFilter> JPEGImportFactory;
+typedef KGenericFactory<KisJPEGImport> JPEGImportFactory;
 K_EXPORT_COMPONENT_FACTORY(libkritajpegimport, JPEGImportFactory("kofficefilters"))
 
-KisJPEGImport::KisJPEGImport(KoFilter *, const char *, const QStringList&) : KoFilter()
+KisJPEGImport::KisJPEGImport(KoFilter *, const char *, const QStringList&) : KoFilter(parent)
 {
 }
 

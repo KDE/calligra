@@ -38,11 +38,11 @@
 #include <amiproimport.h>
 #include <amiproparser.h>
 
-typedef KGenericFactory<AmiProImport, KoFilter> AmiProImportFactory;
+typedef KGenericFactory<AmiProImport> AmiProImportFactory;
 K_EXPORT_COMPONENT_FACTORY( libamiproimport, AmiProImportFactory( "kofficefilters" ) )
 
-AmiProImport::AmiProImport( KoFilter *, const char *, const QStringList& ):
-                     KoFilter()
+AmiProImport::AmiProImport( QObject* parent, const QStringList& ):
+                     KoFilter(parent)
 {
 }
 
@@ -65,7 +65,7 @@ static QString XMLEscape( const QString& str )
 {
   QString result;
 
-  for( unsigned i=0; i<str.length(); i++ )
+  for( int i=0; i<str.length(); i++ )
     if( str[i] == '&' ) result += "&amp;";
     else if( str[i] == '<' ) result += "&lt;";
     else if( str[i] == '>' ) result += "&gt;";
@@ -349,19 +349,18 @@ KoFilter::ConversionStatus AmiProImport::convert( const QByteArray& from, const 
   // store output document
   if( out )
     {
-      Q3CString cstring = root.utf8();
+      QByteArray cstring = root.toUtf8();
       cstring.prepend( "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" );
-      out->write( (const char*) cstring, cstring.length() );
+      out->write( cstring );
     }
 
   // store document info
   out = m_chain->storageFile( "documentinfo.xml", KoStore::Write );
   if ( out )
     {
-       Q3CString cstring = documentInfo.utf8();
+       QByteArray cstring = documentInfo.toUtf8();
        cstring.prepend( "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" );
-
-       out->write( (const char*) cstring, cstring.length() );
+       out->write( cstring );
      }
 
   return KoFilter::OK;

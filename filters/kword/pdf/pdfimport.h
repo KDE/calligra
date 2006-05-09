@@ -32,7 +32,7 @@ class PdfImport : public KoFilter
 {
     Q_OBJECT
 public:
-    PdfImport(KoFilter *parent, const char *name, const QStringList&);
+    PdfImport(QObject* parent, const QStringList&);
 
     KoFilter::ConversionStatus
     convert(const QByteArray& from, const QByteArray& to);

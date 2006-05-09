@@ -41,7 +41,7 @@
 
 #include "palmdocexport.h"
 
-typedef KGenericFactory<PalmDocExport, KoFilter> PalmDocExportFactory;
+typedef KGenericFactory<PalmDocExport> PalmDocExportFactory;
 K_EXPORT_COMPONENT_FACTORY( libpalmdocexport, PalmDocExportFactory( "kofficefilters" ) )
 
 class PalmDocWorker : public KWEFBaseWorker
@@ -76,7 +76,7 @@ bool PalmDocWorker::doCloseFile(void)
     QFileInfo info( outfile );
     title = info.baseName();
   }
-  
+
   PalmDoc doc;
   doc.setName( title );
   doc.setText( text );
@@ -102,7 +102,7 @@ bool PalmDocWorker::doFullDocumentInfo( const KWEFDocumentInfo& docInfo )
   return TRUE;
 }
 
-bool PalmDocWorker::doFullParagraph(const QString& paraText, 
+bool PalmDocWorker::doFullParagraph(const QString& paraText,
   const LayoutData& /*layout*/, const ValueListFormatData& /*paraFormatDataList*/)
 {
   kDebug(30525) << "Entering ::doFullParagraph" << endl;
@@ -112,12 +112,12 @@ bool PalmDocWorker::doFullParagraph(const QString& paraText,
   return TRUE;
 }
 
-PalmDocExport::PalmDocExport( KoFilter *, const char *, const QStringList& ):
-                     KoFilter()
+PalmDocExport::PalmDocExport( QObject* parent, const QStringList& ):
+                     KoFilter( parent )
 {
 }
 
-KoFilter::ConversionStatus PalmDocExport::convert( const QByteArray& from, 
+KoFilter::ConversionStatus PalmDocExport::convert( const QByteArray& from,
   const QByteArray& to )
 {
   // check for proper conversion
@@ -133,7 +133,7 @@ KoFilter::ConversionStatus PalmDocExport::convert( const QByteArray& from,
   delete worker;
   delete leader;
 
-  return result; 
+  return result;
 }
 
 #include "palmdocexport.moc"

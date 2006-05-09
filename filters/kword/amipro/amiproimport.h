@@ -33,7 +33,7 @@ class AmiProImport : public KoFilter
 
   public:
 
-    AmiProImport(KoFilter *parent, const char *name, const QStringList&);
+    AmiProImport(QObject* parent, const QStringList&);
     AmiProImport();
 
     virtual ~AmiProImport() {}

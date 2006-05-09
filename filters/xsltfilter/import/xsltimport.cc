@@ -30,12 +30,12 @@
 #include "xsltimportdia.h"
 
 
-typedef KGenericFactory<XSLTImport, KoFilter> XSLTImportFactory;
+typedef KGenericFactory<XSLTImport> XSLTImportFactory;
 K_EXPORT_COMPONENT_FACTORY( libxsltimport, XSLTImportFactory( "kofficefilters" ) )
 
 
-XSLTImport::XSLTImport(KoFilter *, const char *, const QStringList&) :
-                     KoFilter() {
+XSLTImport::XSLTImport(QObject* parent, const QStringList&) :
+                     KoFilter(parent) {
 }
 
 KoFilter::ConversionStatus XSLTImport::convert( const QByteArray&, const QByteArray& to )

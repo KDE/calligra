@@ -41,12 +41,12 @@ const unsigned XcfExport::m_tileWidth  = 64;
 const unsigned XcfExport::m_tileHeight = 64;
 
 
-typedef KGenericFactory<XcfExport, KoFilter> XcfExportFactory;
+typedef KGenericFactory<XcfExport> XcfExportFactory;
 K_EXPORT_COMPONENT_FACTORY( libkarbonxcfexport, XcfExportFactory( "kofficefilters" ) )
 
 
 XcfExport::XcfExport( KoFilter*, const char*, const QStringList& )
-	: KoFilter()
+	: KoFilter(parent)
 {
 	m_zoomX = 1.0;
 	m_zoomY = 1.0;

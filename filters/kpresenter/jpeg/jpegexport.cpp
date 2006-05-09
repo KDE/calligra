@@ -33,7 +33,7 @@
 #include "jpegexport.h"
 #include "exportsizedia.h"
 
-typedef KGenericFactory<JpegExport, KoFilter> jpegExportFactory;
+typedef KGenericFactory<JpegExport> jpegExportFactory;
 K_EXPORT_COMPONENT_FACTORY( libkpresenterjpegexport, jpegExportFactory( "jpegexport" ) )
 
 JpegExport::JpegExport(KoFilter *fil, const char *name, const QStringList&lst)

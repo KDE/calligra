@@ -27,7 +27,7 @@ class JpegExport : public ImageExport
     Q_OBJECT
 
 public:
-    JpegExport(KoFilter *parent, const char *name, const QStringList&);
+    JpegExport(QObject* parent, const QStringList&);
     virtual ~JpegExport();
     virtual bool saveImage( QString fileName);
     virtual void extraImageAttribute();

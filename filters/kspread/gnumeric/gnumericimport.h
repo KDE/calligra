@@ -37,7 +37,7 @@ class GNUMERICFilter : public KoFilter
 {
     Q_OBJECT
  public:
-    GNUMERICFilter(KoFilter *parent, const char *name, const QStringList&);
+    GNUMERICFilter(QObject* parent, const QStringList&);
     virtual ~GNUMERICFilter() {}
 
     virtual KoFilter::ConversionStatus convert( const QByteArray& from, const QByteArray& to );

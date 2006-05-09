@@ -49,12 +49,12 @@
 #include <core/vfill.h>
 #include <core/vgroup.h>
 
-typedef KGenericFactory<OoDrawImport, KoFilter> OoDrawImportFactory;
+typedef KGenericFactory<OoDrawImport> OoDrawImportFactory;
 K_EXPORT_COMPONENT_FACTORY( liboodrawimport, OoDrawImportFactory( "kofficefilters" ) )
 
 
 OoDrawImport::OoDrawImport( KoFilter *, const char *, const QStringList & )
-    : KoFilter(),
+    : KoFilter(parent),
       m_styles( 23, true ),
       m_styleStack( ooNS::style, ooNS::fo )
 {

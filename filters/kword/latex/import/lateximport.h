@@ -36,7 +36,7 @@ class LATEXImport : public KoFilter
 	Q_OBJECT
 
 	public:
-		LATEXImport(KoFilter *parent, const char *name, const QStringList&);
+		LATEXImport(QObject* parent, const QStringList&);
 		virtual ~LATEXImport() {}
 
 		virtual KoFilter::ConversionStatus convert( const QByteArray& from, const QByteArray& to );

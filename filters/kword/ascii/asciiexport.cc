@@ -48,10 +48,10 @@
 #include <asciiexport.h>
 
 
-class ASCIIExportFactory : KGenericFactory<ASCIIExport, KoFilter>
+class ASCIIExportFactory : KGenericFactory<ASCIIExport>
 {
 public:
-    ASCIIExportFactory() : KGenericFactory<ASCIIExport, KoFilter>("kwordasciiexport")
+    ASCIIExportFactory() : KGenericFactory<ASCIIExport>("kwordasciiexport")
     {
     }
 
@@ -432,8 +432,8 @@ bool ASCIIWorker::ProcessParagraphData(const QString& paraText,
 }
 
 
-ASCIIExport::ASCIIExport(KoFilter*, const char*, const QStringList&)
-           : KoFilter()
+ASCIIExport::ASCIIExport(QObject* parent, const QStringList&)
+           : KoFilter(parent)
 {
 }
 
@@ -452,7 +452,7 @@ KoFilter::ConversionStatus ASCIIExport::convert(const QByteArray& from, const QB
 	kError(30502) << "Dialog has not been created! Aborting!" << endl;
 	return KoFilter::StupidError;
       }
-      
+
       if (!dialog->exec())
       {
 	kError(30502) << "Dialog was aborted! Aborting filter!" << endl;
@@ -472,7 +472,7 @@ KoFilter::ConversionStatus ASCIIExport::convert(const QByteArray& from, const QB
     	codec = dialog->getCodec();
     else
         codec = QTextCodec::codecForName("UTF-8");
-    
+
     if ( !codec )
     {
         kError(30502) << "No codec!" << endl;

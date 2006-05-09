@@ -43,7 +43,7 @@ class OOWRITERExport : public KoFilter {
     Q_OBJECT
 
 public:
-    OOWRITERExport(KoFilter *parent, const char *name, const QStringList &);
+    OOWRITERExport(QObject* parent, const QStringList &);
     virtual ~OOWRITERExport() {}
 
     virtual KoFilter::ConversionStatus convert( const QByteArray& from, const QByteArray& to );

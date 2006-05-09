@@ -29,7 +29,7 @@ class SvgExport : public KoFilter
     Q_OBJECT
 
 public:
-    SvgExport(KoFilter *parent, const char *name, const QStringList&);
+    SvgExport(QObject* parent, const QStringList&);
     virtual ~SvgExport();
 
     virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);

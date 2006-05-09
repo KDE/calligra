@@ -33,7 +33,7 @@
 //Added by qt3to4:
 #include <Q3CString>
 
-typedef KGenericFactory<WPImport, KoFilter> WPImportFactory;
+typedef KGenericFactory<WPImport> WPImportFactory;
 K_EXPORT_COMPONENT_FACTORY( libwpimport, WPImportFactory( "kofficefilters" ) )
 
 #include <libwpd/libwpd.h>
@@ -87,7 +87,7 @@ const uint8_t * WPXMemoryInputStream::read(size_t numBytes, size_t &numBytesRead
 		numBytesToRead = numBytes;
 	else
 		numBytesToRead = m_size - m_offset;
-	
+
 	numBytesRead = numBytesToRead; // about as paranoid as we can be..
 
 	if (numBytesToRead == 0)
@@ -99,7 +99,7 @@ const uint8_t * WPXMemoryInputStream::read(size_t numBytes, size_t &numBytesRead
 		m_tmpBuf[i] = m_data[m_offset];
 		m_offset++;
 	}
-    
+
 	return m_tmpBuf;
 }
 
@@ -125,8 +125,8 @@ long WPXMemoryInputStream::tell()
 
 bool WPXMemoryInputStream::atEOS()
 {
-	if (m_offset >= m_size ) 
-		return true; 
+	if (m_offset >= m_size )
+		return true;
 
 	return false;
 }
@@ -182,7 +182,7 @@ public:
 	virtual void closeTableCell() {}
 	virtual void insertCoveredTableCell(const WPXPropertyList &propList) {}
 	virtual void closeTable() {}
-    
+
     QString root;
 
 private:
@@ -263,7 +263,8 @@ void KWordListener::insertLineBreak()
 {
 }
 
-WPImport::WPImport( KoFilter *, const char *, const QStringList& ):  KoFilter()
+WPImport::WPImport( QObject* parent, const QStringList& )
+    : KoFilter(parent)
 {
 }
 
@@ -278,29 +279,29 @@ KoFilter::ConversionStatus WPImport::convert( const QByteArray& from, const QByt
   FILE *f = fopen( infile, "rb" );
   if( !f )
      return KoFilter::StupidError;
-  
+
   fseek( f, 0, SEEK_END );
   long fsize = ftell( f );
   fseek( f, 0, SEEK_SET );
-  
+
   unsigned char* buf = new unsigned char[fsize];
   fread( buf, 1, fsize, f );
   fclose( f );
-  
+
   // instream now owns buf, no need to delete buf later
   WPXMemoryInputStream* instream = new WPXMemoryInputStream( buf, fsize );
-     
-  // open and parse the file   	
+
+  // open and parse the file
   KWordListener listener;
   WPDResult error = WPDocument::parse( instream, static_cast<WPXHLListenerImpl *>(&listener));
   delete instream;
 
-  if( error != WPD_OK )  
+  if( error != WPD_OK )
     return KoFilter::StupidError;
-     
+
   QString root = listener.root;
 
-  
+
   if( root.isEmpty() ) return KoFilter::StupidError;
 
   // prepare storage

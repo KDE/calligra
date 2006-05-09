@@ -32,8 +32,8 @@
 #include "imageexport.h"
 #include "kchart_part.h"
 
-ImageExport::ImageExport(KoFilter *, const char *, const QStringList&)
-    : KoFilter()
+ImageExport::ImageExport(QObject* parent, const QStringList&)
+    : KoFilter(parent)
 {
 }
 
@@ -76,7 +76,7 @@ ImageExport::convert(const QByteArray& from, const QByteArray& to)
     QPainter  painter(&pixmap);
     kchartDoc.paintContent(painter, pixmap.rect(), false);
     saveImage( m_chain->outputFile());
-    return KoFilter::OK; 
+    return KoFilter::OK;
 }
 
 

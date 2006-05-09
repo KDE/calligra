@@ -44,12 +44,12 @@
 #include <KoDom.h>
 #include <KoOasisSettings.h>
 
-typedef KGenericFactory<OoImpressImport, KoFilter> OoImpressImportFactory;
+typedef KGenericFactory<OoImpressImport> OoImpressImportFactory;
 K_EXPORT_COMPONENT_FACTORY( libooimpressimport, OoImpressImportFactory( "kofficefilters" ) )
 
 
 OoImpressImport::OoImpressImport( KoFilter *, const char *, const QStringList & )
-    : KoFilter(),
+    : KoFilter(parent),
       m_numPicture( 1 ),
       m_numSound(1),
       m_styles( 23, true ),

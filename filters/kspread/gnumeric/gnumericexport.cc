@@ -46,11 +46,11 @@
 
 using namespace KSpread;
 
-typedef KGenericFactory<GNUMERICExport, KoFilter> GNUMERICExportFactory;
+typedef KGenericFactory<GNUMERICExport> GNUMERICExportFactory;
 K_EXPORT_COMPONENT_FACTORY( libgnumericexport, GNUMERICExportFactory( "kofficefilters" ) )
 
-GNUMERICExport::GNUMERICExport(KoFilter *, const char *, const QStringList&) :
-KoFilter()
+GNUMERICExport::GNUMERICExport(QObject* parent, const QStringList&)
+    : KoFilter(parent)
 {
     isLink = false;
     isLinkBold = false;

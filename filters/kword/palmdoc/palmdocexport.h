@@ -31,7 +31,7 @@ class PalmDocExport : public KoFilter
 
   public:
 
-    PalmDocExport(KoFilter *parent, const char *name, const QStringList&);
+    PalmDocExport(QObject* parent, const QStringList&);
     PalmDocExport();
 
     virtual ~PalmDocExport() {}

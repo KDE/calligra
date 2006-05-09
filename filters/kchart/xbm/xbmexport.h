@@ -27,7 +27,7 @@ class XbmExport : public ImageExport
     Q_OBJECT
 
 public:
-    XbmExport(KoFilter *parent, const char *name, const QStringList&);
+    XbmExport(QObject* parent, const QStringList&);
     virtual ~XbmExport();
     virtual bool saveImage( QString fileName);
     virtual void extraImageAttribute();

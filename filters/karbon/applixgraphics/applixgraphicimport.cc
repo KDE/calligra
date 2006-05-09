@@ -36,7 +36,7 @@
 
 #include <applixgraphicimport.h>
 
-typedef KGenericFactory<APPLIXGRAPHICImport, KoFilter> APPLIXGRAPHICImportFactory;
+typedef KGenericFactory<APPLIXGRAPHICImport> APPLIXGRAPHICImportFactory;
 K_EXPORT_COMPONENT_FACTORY( libapplixgraphicimport, APPLIXGRAPHICImportFactory( "kofficefilters" ) )
 
 int s_area = 30517;

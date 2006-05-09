@@ -44,14 +44,14 @@
 
 #include "kivio_imageexportdialog.h"
 
-typedef KGenericFactory<Kivio::ImageExport, KoFilter> KivioImageExportFactory;
+typedef KGenericFactory<Kivio::ImageExport> KivioImageExportFactory;
 K_EXPORT_COMPONENT_FACTORY( libkivioimageexport, KivioImageExportFactory("KivioImageExport") )
 
 namespace Kivio
 {
 
 ImageExport::ImageExport(KoFilter *, const char *, const QStringList&)
-  : KoFilter()
+  : KoFilter(parent)
 {
 }
 

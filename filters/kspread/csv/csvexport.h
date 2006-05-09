@@ -31,12 +31,12 @@ namespace KSpread
 class Sheet;
 }
 
-class CSVExport : public KoFilter 
+class CSVExport : public KoFilter
 {
   Q_OBJECT
 
   public:
-  CSVExport(KoFilter * parent, const char * name, const QStringList &);
+  CSVExport(QObject* parent, const QStringList &);
   virtual ~CSVExport() {}
 
   virtual KoFilter::ConversionStatus convert( const QByteArray & from, const QByteArray & to );
@@ -45,7 +45,7 @@ class CSVExport : public KoFilter
   QString exportCSVCell( KSpread::Sheet const * const sheet, int col, int row, QChar const & textQuote );
 
   private:
-  QString m_eol; ///< End of line (LF, CR or CRLF)  
+  QString m_eol; ///< End of line (LF, CR or CRLF)
 };
 
 #endif // CSVEXPORT_H

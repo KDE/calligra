@@ -27,7 +27,7 @@ class MngExport : public ImageExport
     Q_OBJECT
 
 public:
-    MngExport(KoFilter *parent, const char *name, const QStringList&);
+    MngExport(QObject* parent, const QStringList&);
     virtual ~MngExport();
     virtual bool saveImage( QString fileName);
     virtual void extraImageAttribute();

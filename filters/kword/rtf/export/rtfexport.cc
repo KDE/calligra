@@ -48,15 +48,15 @@
 //Added by qt3to4:
 #include <Q3CString>
 
-typedef KGenericFactory<RTFExport, KoFilter> RTFExportFactory;
+typedef KGenericFactory<RTFExport> RTFExportFactory;
 K_EXPORT_COMPONENT_FACTORY( librtfexport, RTFExportFactory( "kofficefilters" ) )
 
 //
 // RTFExport
 //
 
-RTFExport::RTFExport(KoFilter *, const char *, const QStringList &) :
-                     KoFilter() {
+RTFExport::RTFExport(QObject* parent, const QStringList &) :
+                     KoFilter(parent) {
 }
 
 KoFilter::ConversionStatus RTFExport::convert( const QByteArray& from, const QByteArray& to )
@@ -66,7 +66,7 @@ KoFilter::ConversionStatus RTFExport::convert( const QByteArray& from, const QBy
         return KoFilter::NotImplemented;
     }
 
-    
+
 
     RTFWorker* worker=new RTFWorker();
 
@@ -78,7 +78,7 @@ KoFilter::ConversionStatus RTFExport::convert( const QByteArray& from, const QBy
         delete worker;
         return KoFilter::StupidError;
     }
-    
+
     KoFilter::ConversionStatus result=leader->convert(m_chain, from,to );
 
     delete leader;

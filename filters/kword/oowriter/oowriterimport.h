@@ -37,7 +37,7 @@ class OoWriterImport : public KoFilter
 {
     Q_OBJECT
 public:
-    OoWriterImport( KoFilter * parent, const char * name, const QStringList & );
+    OoWriterImport( QObject * parent, const QStringList & );
     virtual ~OoWriterImport();
 
     virtual KoFilter::ConversionStatus convert( QByteArray const & from, QByteArray const & to );

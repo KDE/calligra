@@ -31,7 +31,7 @@ class MathMLExport : public KoFilter
 {
     Q_OBJECT
 public:
-    MathMLExport( KoFilter *parent, const char *name, const QStringList& );
+    MathMLExport( QObject* parent, const QStringList& );
     virtual ~MathMLExport() {}
 
     virtual KoFilter::ConversionStatus convert( const QByteArray& from, const QByteArray& to );

@@ -37,11 +37,11 @@
 #include "svgexport.h"
 
 
-typedef KGenericFactory<SvgExport, KoFilter> SvgExportFactory;
+typedef KGenericFactory<SvgExport> SvgExportFactory;
 K_EXPORT_COMPONENT_FACTORY( libkpresentersvgexport, SvgExportFactory( "svgexport" ) )
 
 SvgExport::SvgExport(KoFilter *, const char *, const QStringList&) 
-    : KoFilter()
+    : KoFilter(parent)
 {
 }
 

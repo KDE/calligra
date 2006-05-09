@@ -37,7 +37,7 @@ class HTMLExport : public KoFilter {
     Q_OBJECT
 
 public:
-    HTMLExport(KoFilter *parent, const char *name, const QStringList &);
+    HTMLExport(QObject* parent, const QStringList &);
     virtual ~HTMLExport() {}
 
     virtual KoFilter::ConversionStatus convert( const QByteArray& from, const QByteArray& to );

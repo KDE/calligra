@@ -56,10 +56,10 @@
 #include <abiwordexport.h>
 #include <abiwordexport.moc>
 
-class ABIWORDExportFactory : KGenericFactory<ABIWORDExport, KoFilter>
+class ABIWORDExportFactory : KGenericFactory<ABIWORDExport>
 {
 public:
-    ABIWORDExportFactory(void) : KGenericFactory<ABIWORDExport, KoFilter> ("kwordabiwordexport")
+    ABIWORDExportFactory(void) : KGenericFactory<ABIWORDExport> ("kwordabiwordexport")
     {}
 protected:
     virtual void setupTranslations( void )
@@ -1224,8 +1224,8 @@ bool AbiWordWorker::doFullDocumentInfo(const KWEFDocumentInfo& docInfo)
 
 // ==========================================================================================
 
-ABIWORDExport::ABIWORDExport(KoFilter */*parent*/, const char */*name*/, const QStringList &) :
-                     KoFilter() {
+ABIWORDExport::ABIWORDExport(QObject* parent, const QStringList &) :
+                     KoFilter(parent) {
 }
 
 KoFilter::ConversionStatus ABIWORDExport::convert( const QByteArray& from, const QByteArray& to )
@@ -1236,7 +1236,7 @@ KoFilter::ConversionStatus ABIWORDExport::convert( const QByteArray& from, const
     }
 
     // We need KimageIO's help in AbiWordWorker::convertUnknownImage
-    
+
 
     AbiWordWorker* worker=new AbiWordWorker();
 

@@ -31,7 +31,7 @@ class AmiProExport : public KoFilter
 
   public:
 
-    AmiProExport(KoFilter *parent, const char *name, const QStringList&);
+    AmiProExport(QObject* parent, const QStringList&);
     AmiProExport();
 
     virtual ~AmiProExport() {}

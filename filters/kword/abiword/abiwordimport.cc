@@ -49,10 +49,10 @@
 
 #include "abiwordimport.h"
 
-class ABIWORDImportFactory : KGenericFactory<ABIWORDImport, KoFilter>
+class ABIWORDImportFactory : KGenericFactory<ABIWORDImport>
 {
 public:
-    ABIWORDImportFactory(void) : KGenericFactory<ABIWORDImport, KoFilter> ("kwordabiwordimport")
+    ABIWORDImportFactory(void) : KGenericFactory<ABIWORDImport> ("kwordabiwordimport")
     {}
 protected:
     virtual void setupTranslations( void )
@@ -1752,8 +1752,8 @@ bool StructureParser::clearStackUntilParagraph(StackItemStack& auxilaryStack)
     }
 }
 
-ABIWORDImport::ABIWORDImport(KoFilter */*parent*/, const char */*name*/, const QStringList &) :
-                     KoFilter() {
+ABIWORDImport::ABIWORDImport(QObject* parent, const QStringList &) :
+                     KoFilter(parent) {
 }
 
 KoFilter::ConversionStatus ABIWORDImport::convert( const QByteArray& from, const QByteArray& to )

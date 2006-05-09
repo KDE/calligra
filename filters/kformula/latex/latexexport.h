@@ -31,7 +31,7 @@ class LATEXExport : public KoFilter
 {
     Q_OBJECT
 public:
-    LATEXExport( KoFilter *parent, const char *name, const QStringList& );
+    LATEXExport( QObject* parent, const QStringList& );
     virtual ~LATEXExport() {}
 
     virtual KoFilter::ConversionStatus convert( const QByteArray& from, const QByteArray& to );

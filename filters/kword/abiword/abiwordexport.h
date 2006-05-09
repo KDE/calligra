@@ -43,7 +43,7 @@ class ABIWORDExport : public KoFilter {
     Q_OBJECT
 
 public:
-    ABIWORDExport(KoFilter *parent, const char *name, const QStringList &);
+    ABIWORDExport(QObject* parent, const QStringList &);
     virtual ~ABIWORDExport() {}
 
     virtual KoFilter::ConversionStatus convert( const QByteArray& from, const QByteArray& to );

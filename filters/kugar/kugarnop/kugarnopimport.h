@@ -25,7 +25,7 @@ class KugarNOPImport : public KoFilter
     Q_OBJECT
 
 public:
-    KugarNOPImport( KoFilter *parent, const char *name, const QStringList& );
+    KugarNOPImport( QObject* parent, const QStringList& );
 
     virtual KoFilter::ConversionStatus convert( const QByteArray& from, const QByteArray& to );
 

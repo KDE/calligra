@@ -41,7 +41,7 @@
 
 using namespace KSpread;
 
-typedef KGenericFactory<HTMLExport, KoFilter> HTMLExportFactory;
+typedef KGenericFactory<HTMLExport> HTMLExportFactory;
 K_EXPORT_COMPONENT_FACTORY( libkspreadhtmlexport, HTMLExportFactory( "kofficefilters" ) )
 
 const QString html_table_tag = "table";
@@ -61,8 +61,8 @@ const QString html_bottom="bottom";
 const QString html_middle="middle";
 const QString html_h1="h1";
 
-HTMLExport::HTMLExport(KoFilter *, const char *, const QStringList&) :
-    KoFilter(), m_dialog( new ExportDialog() )
+HTMLExport::HTMLExport(QObject* parent, const QStringList&) :
+    KoFilter(parent), m_dialog( new ExportDialog() )
 {
 }
 
@@ -92,9 +92,9 @@ KoFilter::ConversionStatus HTMLExport::convert( const QByteArray& from, const QB
     if ( !document )
       return KoFilter::StupidError;
 
-    if( !::qt_cast<const KSpread::Doc *>( document ) )  // it's safer that way :)
+    if( !::qobject_cast<const KSpread::Doc *>( document ) )  // it's safer that way :)
     {
-      kWarning(30501) << "document isn't a KSpread::Doc but a " << document->className() << endl;
+      kWarning(30501) << "document isn't a KSpread::Doc but a " << document->metaObject()->className() << endl;
       return KoFilter::NotImplemented;
     }
 

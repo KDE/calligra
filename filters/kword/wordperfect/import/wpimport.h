@@ -42,7 +42,7 @@ class WPImport : public KoFilter
 
   public:
 
-    WPImport(KoFilter *parent, const char *name, const QStringList&);
+    WPImport(QObject* parent, const QStringList&);
     WPImport();
 
     virtual ~WPImport() {}

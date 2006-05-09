@@ -39,12 +39,11 @@
 #include <ProcessDocument.h>
 #include <KWEFBaseWorker.h>
 
-typedef KGenericFactory<DocBookExport, KoFilter> DocBookExportFactory;
+typedef KGenericFactory<DocBookExport> DocBookExportFactory;
 K_EXPORT_COMPONENT_FACTORY( libdocbookexport, DocBookExportFactory( "kofficefilters" ) )
 
-DocBookExport::DocBookExport ( KoFilter          *,
-                               const char        *,
-                               const QStringList & ) : KoFilter ()
+DocBookExport::DocBookExport ( QObject          *parent,
+                               const QStringList & ) : KoFilter (parent)
 {
 }
 
@@ -332,7 +331,7 @@ void DocBookWorker::ProcessParagraphData ( const ParaData &para,
                     }
                     }
                     break;
-                    
+
                case 4:   // variables
                     if (9 == (*formattingIt).variable.m_type)
                     {
@@ -725,10 +724,7 @@ bool DocBookWorker::doCloseFile ( void )
 {
     if ( !fileOut ) return true;
 
-    // As a QChar can be transformed into many bytes,
-    //  we need to use QCString::length instead of QString::length
-    Q3CString cstr = outputText.local8Bit ();
-    fileOut->write ( cstr, cstr.length () );
+    fileOut->write( outputText.toLocal8Bit () );
 
     fileOut->close ();
     delete fileOut;

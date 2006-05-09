@@ -7,11 +7,11 @@
 #include <Q3CString>
 
 
-typedef KGenericFactory<ExcelExport, KoFilter> ExcelExportFactory;
+typedef KGenericFactory<ExcelExport> ExcelExportFactory;
 //K_EXPORT_COMPONENT_FACTORY(libkspreadexcelexport, ExcelExportFactory("excelexport"))
 
 
-ExcelExport::ExcelExport(KoFilter *, const char *, const QStringList&) : KoFilter() {
+ExcelExport::ExcelExport(KoFilter *, const char *, const QStringList&) : KoFilter(parent) {
 }
 
 

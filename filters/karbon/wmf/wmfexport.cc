@@ -46,12 +46,12 @@
 TODO: bs.wmf stroke in red with MSword and in brown with Kword ??
 */
 
-typedef KGenericFactory<WmfExport, KoFilter> WmfExportFactory;
+typedef KGenericFactory<WmfExport> WmfExportFactory;
 K_EXPORT_COMPONENT_FACTORY( libwmfexport, WmfExportFactory( "kofficefilters" ) )
 
 
 WmfExport::WmfExport( KoFilter *, const char *, const QStringList&) :
-        KoFilter()
+        KoFilter(parent)
 {
 }
 

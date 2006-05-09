@@ -30,7 +30,7 @@
 #include "xpmexport.h"
 #include "exportsizedia.h"
 
-typedef KGenericFactory<XpmExport, KoFilter> xpmExportFactory;
+typedef KGenericFactory<XpmExport> xpmExportFactory;
 K_EXPORT_COMPONENT_FACTORY( libkpresenterxpmexport, xpmExportFactory( "xpmexport" ) )
 
 XpmExport::XpmExport(KoFilter *fil, const char *name, const QStringList&lst)

@@ -35,7 +35,7 @@ class HTMLImport : public KoFilter {
     Q_OBJECT
 
 public:
-    HTMLImport(KoFilter *parent, const char *name, const QStringList &);
+    HTMLImport(QObject* parent, const QStringList &);
     virtual ~HTMLImport() {}
 
     virtual KoFilter::ConversionStatus convert( const QByteArray& from, const QByteArray& to );

@@ -30,7 +30,7 @@ class APPLIXGRAPHICImport : public KoFilter {
     Q_OBJECT
 
 public:
-    APPLIXGRAPHICImport (KoFilter *parent, const char *name, const QStringList&);
+    APPLIXGRAPHICImport (QObject* parent, const QStringList&);
     virtual ~APPLIXGRAPHICImport() {}
 
     virtual KoFilter::ConversionStatus convert( const QByteArray& from, const QByteArray& to );

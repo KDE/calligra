@@ -31,7 +31,7 @@ class StarWriterImport: public KoFilter
     Q_OBJECT
 
 public:
-    StarWriterImport(KoFilter *parent, const char *name, const QStringList&);
+    StarWriterImport(QObject* parent, const QStringList&);
     virtual ~StarWriterImport();
     KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
 

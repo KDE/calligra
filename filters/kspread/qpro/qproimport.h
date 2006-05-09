@@ -35,7 +35,7 @@ class QpImport : public KoFilter {
     Q_OBJECT
 
 public:
-    QpImport(KoFilter* parent, const char* name, const QStringList&);
+    QpImport(QObject* parent, const QStringList&);
     virtual ~QpImport() {}
 
     virtual KoFilter::ConversionStatus convert( const QByteArray& from, const QByteArray& to );

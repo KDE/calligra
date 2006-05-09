@@ -46,7 +46,7 @@
 
 using namespace Libppt;
 
-typedef KGenericFactory<PowerPointImport, KoFilter> PowerPointImportFactory;
+typedef KGenericFactory<PowerPointImport> PowerPointImportFactory;
 K_EXPORT_COMPONENT_FACTORY( libpowerpointimport, 
   PowerPointImportFactory( "kofficefilters" ) )
 
@@ -70,7 +70,7 @@ public:
 
 
 PowerPointImport::PowerPointImport ( QObject*, const char*, const QStringList& )
-    : KoFilter()
+    : KoFilter(parent)
 {
   d = new Private;
 }

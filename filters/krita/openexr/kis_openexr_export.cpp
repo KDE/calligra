@@ -49,10 +49,10 @@ using namespace std;
 using namespace Imf;
 using namespace Imath;
 
-typedef KGenericFactory<KisOpenEXRExport, KoFilter> KisOpenEXRExportFactory;
+typedef KGenericFactory<KisOpenEXRExport> KisOpenEXRExportFactory;
 K_EXPORT_COMPONENT_FACTORY(libkrita_openexr_export, KisOpenEXRExportFactory("kofficefilters"))
 
-KisOpenEXRExport::KisOpenEXRExport(KoFilter *, const char *, const QStringList&) : KoFilter()
+KisOpenEXRExport::KisOpenEXRExport(KoFilter *, const char *, const QStringList&) : KoFilter(parent)
 {
 }
 

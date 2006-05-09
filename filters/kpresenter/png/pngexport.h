@@ -27,7 +27,7 @@ class PngExport : public ImageExport
     Q_OBJECT
 
 public:
-    PngExport(KoFilter *parent, const char *name, const QStringList&);
+    PngExport(QObject* parent, const QStringList&);
     virtual ~PngExport();
     virtual bool saveImage( QString fileName);
     virtual bool extraImageAttribute();

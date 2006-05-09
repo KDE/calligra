@@ -48,7 +48,7 @@ class APPLIXWORDImport : public KoFilter {
     Q_OBJECT
 
 public:
-    APPLIXWORDImport(KoFilter *parent, const char *name, const QStringList&);
+    APPLIXWORDImport(QObject *parent, const QStringList&);
     virtual ~APPLIXWORDImport() {}
 
     virtual KoFilter::ConversionStatus convert( const QByteArray& from, const QByteArray& to );

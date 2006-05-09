@@ -31,7 +31,7 @@ class ExcelImport : public KoFilter {
 
 public:
 
-    ExcelImport ( QObject *parent, const char* name, const QStringList& );
+    ExcelImport ( QObject *parent, const QStringList& );
     virtual ~ExcelImport();
 
     virtual KoFilter::ConversionStatus convert( const QByteArray& from, const QByteArray& to );

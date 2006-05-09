@@ -50,10 +50,10 @@
 #include <asciiimport.moc>
 #include "ImportDialog.h"
 
-class ASCIIImportFactory : KGenericFactory<ASCIIImport, KoFilter>
+class ASCIIImportFactory : KGenericFactory<ASCIIImport>
 {
 public:
-    ASCIIImportFactory(void) : KGenericFactory<ASCIIImport, KoFilter> ("kwordasciiimport")
+    ASCIIImportFactory(void) : KGenericFactory<ASCIIImport> ("kwordasciiimport")
     {}
 protected:
     virtual void setupTranslations( void )
@@ -64,8 +64,8 @@ protected:
 
 K_EXPORT_COMPONENT_FACTORY( libasciiimport, ASCIIImportFactory() )
 
-ASCIIImport::ASCIIImport(KoFilter *, const char *, const QStringList &) :
-                     KoFilter() {
+ASCIIImport::ASCIIImport(QObject *parent, const QStringList &) :
+                     KoFilter(parent) {
 }
 
 void ASCIIImport::prepareDocument(QDomDocument& mainDocument, QDomElement& mainFramesetElement)
@@ -398,7 +398,7 @@ void ASCIIImport::sentenceConvert(QTextStream& stream, QDomDocument& mainDocumen
 
             paragraph.append(strLine);
 
-            uint lastPos=strLine.length()-1;
+            int lastPos = strLine.length() - 1;
             QChar lastChar;
             // Skip a maximum of 10 quotes (or similar) at the end of the line
             for (int i=0;i<10;i++)
@@ -526,7 +526,7 @@ int ASCIIImport::Indent(const QString& line) const
     QChar c;  // for reading string a character at a time
     int count=0;  // amount of white space at the begining of the line
 
-    for( uint i = 0; i < line.length(); i++ )
+    for( int i = 0; i < line.length(); i++ )
     {
          c = line.at(i);
          if( c == QChar(' '))
@@ -795,7 +795,7 @@ int ASCIIImport::MultSpaces(const QString& text, const int index) const
     QChar lastchar = 'c'; // previous character - initialize non blank
     bool found = false;
     // kDebug(30502) << "length = "  << text.length() << endl;
-    for (uint i = index; i < text.length(); i++)
+    for (int i = index; i < text.length(); i++)
     {
         c = text.at(i);
     // kDebug(30502) << "i = " << i << " found = " << found << " c = " << c << " lastchar = " << lastchar << endl;
@@ -972,11 +972,12 @@ bool ASCIIImport::IsListItem( QString FirstLine, QChar mark )
      if( k < 0) return false;  // list item mark not on line
 
      // find first non white character on the line
-     for( i=0; IsWhiteSpace( c = FirstLine.at((uint)i) ); i++);
+     for( i=0; IsWhiteSpace( c = FirstLine.at(i) ); i++)
+         ;
 
      if(i != k ) return false;  // mark is in wrong position
 
-     c = FirstLine.at((uint)++i);
+     c = FirstLine.at(++i);
 
      return IsWhiteSpace(c);  // character after the mark must be a white space
 

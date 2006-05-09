@@ -44,7 +44,7 @@
 #include <iostream>
 #include "pole.h"
 
-typedef KGenericFactory<HancomWordImport, KoFilter> HancomWordImportFactory;
+typedef KGenericFactory<HancomWordImport> HancomWordImportFactory;
 K_EXPORT_COMPONENT_FACTORY( libhancomwordimport, HancomWordImportFactory( "kofficefilters" ) )
 
 class HancomWordImport::Private
@@ -52,16 +52,16 @@ class HancomWordImport::Private
 public:
   QString inputFile;
   QString outputFile;
-  
+
   QStringList paragraphs;
-  
+
   QByteArray createStyles();
   QByteArray createContent();
   QByteArray createManifest();
 };
 
-HancomWordImport::HancomWordImport ( QObject*, const char*, const QStringList& )
-    : KoFilter()
+HancomWordImport::HancomWordImport ( QObject* parent, const QStringList& )
+    : KoFilter(parent)
 {
   d = new Private;
 }
@@ -85,7 +85,7 @@ static inline unsigned long readU16( const void* p )
 KoFilter::ConversionStatus HancomWordImport::convert( const QByteArray& from, const QByteArray& to )
 {
   if ( from != "application/x-hancomword" )
-    return KoFilter::NotImplemented; 
+    return KoFilter::NotImplemented;
 
   if ( to != "application/vnd.oasis.opendocument.text" )
     return KoFilter::NotImplemented;
@@ -97,7 +97,7 @@ KoFilter::ConversionStatus HancomWordImport::convert( const QByteArray& from, co
   POLE::Storage storage( d->inputFile.latin1() );
   if( !storage.open() )
     return KoFilter::WrongFormat;
-  
+
   POLE::Stream* stream;
   stream = new POLE::Stream( &storage, "/PrvText" );
   if( stream->fail() || (stream->size() == 0) )
@@ -105,11 +105,11 @@ KoFilter::ConversionStatus HancomWordImport::convert( const QByteArray& from, co
     delete stream;
     return KoFilter::WrongFormat;
   }
-  
+
   int len = stream->size() / 2;
   QString plaindoc;
   plaindoc.reserve( len );
-  
+
   unsigned char* buf = new unsigned char [stream->size()];
   stream->read( buf, stream->size());
   for(int i = 0; i < len; i++ )
@@ -119,10 +119,10 @@ KoFilter::ConversionStatus HancomWordImport::convert( const QByteArray& from, co
 
   // split into paragraphs
   d->paragraphs = QStringList::split( "\n", plaindoc, true );
-    
+
   // create output store
   KoStore* storeout;
-  storeout = KoStore::createStore( d->outputFile, KoStore::Write, 
+  storeout = KoStore::createStore( d->outputFile, KoStore::Write,
     "application/vnd.oasis.opendocument.text", KoStore::Zip );
 
   if ( !storeout )
@@ -176,7 +176,7 @@ QByteArray HancomWordImport::Private::createContent()
 
   contentWriter->startDocument( "office:document-content" );
   contentWriter->startElement( "office:document-content" );
-  
+
   contentWriter->addAttribute( "xmlns:office", "urn:oasis:names:tc:opendocument:xmlns:office:1.0" );
   contentWriter->addAttribute( "xmlns:style", "urn:oasis:names:tc:opendocument:xmlns:style:1.0" );
   contentWriter->addAttribute( "xmlns:text", "urn:oasis:names:tc:opendocument:xmlns:text:1.0" );
@@ -191,13 +191,13 @@ QByteArray HancomWordImport::Private::createContent()
 
   // office:body
   contentWriter->startElement( "office:body" );
-  
+
   contentWriter->startElement( "office:text" );
-  
+
   contentWriter->startElement( "text:sequence-decls" );
   contentWriter->endElement();  // text:sequence-decls
 
-  for( uint i = 0; i < paragraphs.count(); i++ )
+  for( int i = 0; i < paragraphs.count(); i++ )
   {
     QString text = paragraphs[i];
     text.replace( '\r', ' ' );
@@ -205,13 +205,13 @@ QByteArray HancomWordImport::Private::createContent()
     contentWriter->addTextNode( text );
     contentWriter->endElement();  // text:p
   }
-  
+
   contentWriter->endElement();  //office:text
   contentWriter->endElement();  // office:body
-  
+
   contentWriter->endElement();  // office:document-content
   contentWriter->endDocument();
-  
+
   delete contentWriter;
 
   return contentData;
@@ -237,11 +237,11 @@ QByteArray HancomWordImport::Private::createStyles()
   stylesWriter->addAttribute( "xmlns:svg","urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" );
   stylesWriter->addAttribute( "office:version","1.0" );
   stylesWriter->startElement( "office:styles" );
-  
+
   // dummy default paragraph style
   stylesWriter->startElement( "style:default-style" );
   stylesWriter->addAttribute( "style:family", "paragraph" );
-  
+
   stylesWriter->startElement( "style:paragraph-properties" );
   stylesWriter->addAttribute( "fo:hyphenation-ladder-count", "no-limit" );
   stylesWriter->addAttribute( "style:text-autospace", "ideograph-alpha" );
@@ -257,17 +257,17 @@ QByteArray HancomWordImport::Private::createStyles()
   stylesWriter->addAttribute( "fo:font-size", "12pt" );
   stylesWriter->addAttribute( "fo:hyphenate", "false" );
   stylesWriter->endElement(); // style:text-properties
-  
+
   stylesWriter->endElement(); // style:default-style
   stylesWriter->endElement(); // office:styles
-  
+
   // office:automatic-styles
   stylesWriter->startElement( "office:automatic-styles" );
   stylesWriter->endElement(); // office:automatic-styles
 
   stylesWriter->endElement();  // office:document-styles
   stylesWriter->endDocument();
-  
+
   delete stylesWriter;
 
   return stylesData;
@@ -281,7 +281,7 @@ QByteArray HancomWordImport::Private::createManifest()
 
   manifestBuffer.open( QIODevice::WriteOnly );
   manifestWriter = new KoXmlWriter( &manifestBuffer );
-  
+
   manifestWriter->startDocument( "manifest:manifest" );
   manifestWriter->startElement( "manifest:manifest" );
   manifestWriter->addAttribute( "xmlns:manifest", "urn:oasis:names:tc:openoffice:xmlns:manifest:1.0" );

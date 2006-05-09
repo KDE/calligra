@@ -29,7 +29,7 @@ class CSVFilter : public KoFilter {
     Q_OBJECT
 
 public:
-    CSVFilter(KoFilter *parent, const char *name, const QStringList&);
+    CSVFilter(QObject* parent, const QStringList&);
     virtual ~CSVFilter() {}
 
     virtual KoFilter::ConversionStatus convert( const QByteArray& from, const QByteArray& to );

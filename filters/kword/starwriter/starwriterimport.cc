@@ -32,7 +32,7 @@
 
 #include "pole.h"
 
-typedef KGenericFactory<StarWriterImport, KoFilter> StarWriterImportFactory;
+typedef KGenericFactory<StarWriterImport> StarWriterImportFactory;
 K_EXPORT_COMPONENT_FACTORY(libstarwriterimport, StarWriterImportFactory("kofficefilters"))
 
 // Get unsigned 24-bits integer at given offset
@@ -49,7 +49,7 @@ static inline quint16 readU16(QByteArray array, quint32 p)
    return (quint16) (ptr[p] + (ptr[p+1] << 8));
 }
 
-StarWriterImport::StarWriterImport(KoFilter *, const char *, const QStringList&) : KoFilter()
+StarWriterImport::StarWriterImport(KoFilter *, const char *, const QStringList&) : KoFilter(parent)
 {
     hasHeader = false;
     hasFooter = false;

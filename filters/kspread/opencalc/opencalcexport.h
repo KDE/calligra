@@ -44,7 +44,7 @@ class OpenCalcExport : public KoFilter
   Q_OBJECT
 
  public:
-  OpenCalcExport( KoFilter * parent, const char * name, const QStringList & );
+  OpenCalcExport( QObject* parent, const QStringList & );
   virtual ~OpenCalcExport() {}
 
   virtual KoFilter::ConversionStatus convert( const QByteArray & from,

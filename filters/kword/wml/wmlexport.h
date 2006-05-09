@@ -31,7 +31,7 @@ class WMLExport : public KoFilter
 
   public:
 
-    WMLExport(KoFilter *parent, const char *name, const QStringList&);
+    WMLExport(QObject* parent, const QStringList&);
     WMLExport();
 
     virtual ~WMLExport() {}

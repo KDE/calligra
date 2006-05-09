@@ -27,7 +27,7 @@ class MagickImport : public KoFilter {
     Q_OBJECT
 
 public:
-    MagickImport(KoFilter *parent, const char *name, const QStringList&);
+    MagickImport(QObject* parent, const QStringList&);
     virtual ~MagickImport();
 
 public:

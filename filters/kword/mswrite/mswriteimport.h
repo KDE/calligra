@@ -38,11 +38,11 @@ private:
 	KWordGenerator *m_generator;
 
 public:
-	MSWriteImport (KoFilter *parent, const char *name, const QStringList &);
+	MSWriteImport (QObject *parent, const QStringList &);
 	virtual ~MSWriteImport ();
 
 	KoFilter::ConversionStatus convert (const QByteArray &from, const QByteArray &to);
-	
+
 	void sigProgress (const int value)
 	{
 		emit KoFilter::sigProgress (value);

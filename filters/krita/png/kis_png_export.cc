@@ -35,10 +35,10 @@
 
 #include "kis_png_converter.h"
 
-typedef KGenericFactory<KisPNGExport, KoFilter> KisPNGExportFactory;
+typedef KGenericFactory<KisPNGExport> KisPNGExportFactory;
 K_EXPORT_COMPONENT_FACTORY(libkritapngexport, KisPNGExportFactory("kofficefilters"))
 
-KisPNGExport::KisPNGExport(KoFilter *, const char *, const QStringList&) : KoFilter()
+KisPNGExport::KisPNGExport(KoFilter *, const char *, const QStringList&) : KoFilter(parent)
 {
 }
 

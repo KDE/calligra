@@ -30,11 +30,11 @@
 #include "jpegexport.h"
 #include "exportsizedia.h"
 
-typedef KGenericFactory<JpegExport, KoFilter> jpegExportFactory;
+typedef KGenericFactory<JpegExport> jpegExportFactory;
 K_EXPORT_COMPONENT_FACTORY( libkchartjpegexport, jpegExportFactory( "jpegexport" ) )
 
-JpegExport::JpegExport(KoFilter *fil, const char *name, const QStringList&lst)
-    : ImageExport(fil,name,lst)
+JpegExport::JpegExport(QObject* parent, const QStringList&lst)
+    : ImageExport(parent,lst)
 {
 }
 

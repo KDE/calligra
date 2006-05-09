@@ -32,12 +32,12 @@
 //Added by qt3to4:
 #include <Q3CString>
 
-typedef KGenericFactory<HTMLImport, KoFilter> HTMLImportFactory;
+typedef KGenericFactory<HTMLImport> HTMLImportFactory;
 K_EXPORT_COMPONENT_FACTORY( libhtmlimport, HTMLImportFactory( "kofficefilters" ) )
 
 
-HTMLImport::HTMLImport(KoFilter *, const char*, const QStringList &) :
-                     KoFilter() {
+HTMLImport::HTMLImport(QObject* parent, const QStringList &) :
+                     KoFilter(parent) {
 // 123
 }
 

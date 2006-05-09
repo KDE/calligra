@@ -33,7 +33,7 @@
 #include "bmpexport.h"
 #include "exportsizedia.h"
 
-typedef KGenericFactory<BmpExport, KoFilter> bmpExportFactory;
+typedef KGenericFactory<BmpExport> bmpExportFactory;
 K_EXPORT_COMPONENT_FACTORY( libkpresenterbmpexport, bmpExportFactory( "bmpexport" ) )
 
 BmpExport::BmpExport(KoFilter *fil, const char *name, const QStringList&lst)

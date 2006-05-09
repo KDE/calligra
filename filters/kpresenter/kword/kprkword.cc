@@ -31,11 +31,11 @@
 //Added by qt3to4:
 #include <Q3CString>
 
-typedef KGenericFactory<KprKword, KoFilter> KprKwordFactory;
+typedef KGenericFactory<KprKword> KprKwordFactory;
 K_EXPORT_COMPONENT_FACTORY( libkprkword, KprKwordFactory( "kofficefilters" ) )
 
 KprKword::KprKword(KoFilter *, const char *, const QStringList&) :
-    KoFilter(),
+    KoFilter(parent),
     outdoc( "DOC" )
 {
 }

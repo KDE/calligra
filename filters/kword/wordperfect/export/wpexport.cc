@@ -41,23 +41,23 @@
 #include <wp5.h>
 #include <wp6.h>
 
-typedef KGenericFactory<WPExport, KoFilter> WPExportFactory;
+typedef KGenericFactory<WPExport> WPExportFactory;
 K_EXPORT_COMPONENT_FACTORY( libwpexport, WPExportFactory( "kofficefilters" ) )
 
-WPExport::WPExport( KoFilter *, const char *, const QStringList& ):
-                     KoFilter()
+WPExport::WPExport( QObject* parent, const QStringList& ):
+                     KoFilter(parent)
 {
 }
 
-KoFilter::ConversionStatus 
-WPExport::convert( const QByteArray& from, 
+KoFilter::ConversionStatus
+WPExport::convert( const QByteArray& from,
   const QByteArray& to )
 {
   // check for proper conversion
   if( to!= "application/wordperfect" || from != "application/x-kword" )
      return KoFilter::NotImplemented;
 
-  // document version is determined using file extension, 
+  // document version is determined using file extension,
   // "WP" is for WP 5.x, "WPD" or else is for WP 6/7
   // e.g /home/ariya/test.wp is a WP 5 document
   // TODO ask user with a dialog box
@@ -77,7 +77,7 @@ WPExport::convert( const QByteArray& from,
   delete worker;
   delete leader;
 
-  return result; 
+  return result;
 }
 
 #include "wpexport.moc"

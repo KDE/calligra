@@ -42,7 +42,7 @@
 
 using namespace KSpread;
 
-typedef KGenericFactory<CSVExport, KoFilter> CSVExportFactory;
+typedef KGenericFactory<CSVExport> CSVExportFactory;
 K_EXPORT_COMPONENT_FACTORY( libcsvexport, CSVExportFactory( "kofficefilters" ) )
 
 class Cell
@@ -62,8 +62,8 @@ class Cell
 };
 
 
-CSVExport::CSVExport( KoFilter *, const char *, const QStringList & )
-  : KoFilter(), m_eol("\n")
+CSVExport::CSVExport( QObject* parent, const QStringList & )
+  : KoFilter(parent), m_eol("\n")
 {
 }
 

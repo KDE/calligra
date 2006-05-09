@@ -27,7 +27,7 @@ class XpmExport : public ImageExport
     Q_OBJECT
 
 public:
-    XpmExport(KoFilter *parent, const char *name, const QStringList&);
+    XpmExport(QObject* parent, const QStringList&);
     virtual ~XpmExport();
     virtual bool saveImage( QString fileName);
     virtual void extraImageAttribute();

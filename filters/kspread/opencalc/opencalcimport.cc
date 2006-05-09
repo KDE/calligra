@@ -60,10 +60,10 @@
 
 using namespace KSpread;
 
-class OpenCalcImportFactory : KGenericFactory<OpenCalcImport, KoFilter>
+class OpenCalcImportFactory : KGenericFactory<OpenCalcImport>
 {
 public:
-    OpenCalcImportFactory(void) : KGenericFactory<OpenCalcImport, KoFilter> ("kspreadopencalcimport")
+    OpenCalcImportFactory(void) : KGenericFactory<OpenCalcImport> ("kspreadopencalcimport")
     {}
 protected:
     virtual void setupTranslations( void )
@@ -134,8 +134,8 @@ OpenCalcImport::OpenCalcPoint::OpenCalcPoint( QString const & str )
 }
 
 
-OpenCalcImport::OpenCalcImport( KoFilter *, const char *, const QStringList & )
-  : KoFilter(),
+OpenCalcImport::OpenCalcImport( QObject* parent, const QStringList & )
+  : KoFilter(parent),
     m_styles( 17, true ),
     m_defaultStyles( 17, true ),
     m_formats( 17, true )

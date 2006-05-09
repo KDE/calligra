@@ -26,7 +26,7 @@
 class KisJPEGImport : public KoFilter {
     Q_OBJECT
     public:
-        KisJPEGImport(KoFilter *parent, const char *name, const QStringList&);
+        KisJPEGImport(QObject* parent, const QStringList&);
         virtual ~KisJPEGImport();
     public:
         virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);

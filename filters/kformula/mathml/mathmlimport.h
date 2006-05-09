@@ -34,7 +34,7 @@ class MathMLImport : public KoFilter
 {
     Q_OBJECT
 public:
-    MathMLImport(KoFilter *parent, const char *name, const QStringList&);
+    MathMLImport(QObject* parent, const QStringList&);
     virtual ~MathMLImport() {}
 
     virtual KoFilter::ConversionStatus convert( const QByteArray& from, const QByteArray& to );

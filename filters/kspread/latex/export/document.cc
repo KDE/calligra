@@ -28,8 +28,8 @@
 Document::Document(const KoStore* in, QString fileOut):
 		XmlParser(in), _file(fileOut), _in( in )
 {
-	//kDebug(30522) << fileIn.latin1() << endl;
-	kDebug(30522) << fileOut.latin1() << endl;
+	//kDebug(30522) << fileIn << endl;
+	kDebug(30522) << fileOut << endl;
 	_filename = fileOut;
 	//setFileHeader(_fileHeader);
 	//setRoot(&_document);
@@ -39,7 +39,7 @@ Document::Document(const KoStore* in, QString fileOut):
 
 Document::~Document()
 {
-	
+
 }
 
 void Document::analyse()

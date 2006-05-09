@@ -30,11 +30,11 @@
 #include "xpmexport.h"
 #include "exportsizedia.h"
 
-typedef KGenericFactory<XpmExport, KoFilter> xpmExportFactory;
+typedef KGenericFactory<XpmExport> xpmExportFactory;
 K_EXPORT_COMPONENT_FACTORY( libkchartxpmexport, xpmExportFactory( "xpmexport" ) )
 
-XpmExport::XpmExport(KoFilter *fil, const char *name, const QStringList&lst)
-    : ImageExport(fil,name,lst)
+XpmExport::XpmExport(QObject* parent, const QStringList&lst)
+    : ImageExport(parent,lst)
 {
 }
 

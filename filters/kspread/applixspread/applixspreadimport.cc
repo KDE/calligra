@@ -36,12 +36,12 @@
 #include <KoFilterChain.h>
 #include <kgenericfactory.h>
 
-typedef KGenericFactory<APPLIXSPREADImport, KoFilter> APPLIXSPREADImportFactory;
+typedef KGenericFactory<APPLIXSPREADImport> APPLIXSPREADImportFactory;
 K_EXPORT_COMPONENT_FACTORY( libapplixspreadimport, APPLIXSPREADImportFactory( "kofficefilters" ) )
 
 
-APPLIXSPREADImport::APPLIXSPREADImport ( QObject */*parent*/, const char* /*name*/, const QStringList& )
-    : KoFilter()
+APPLIXSPREADImport::APPLIXSPREADImport ( QObject *parent, const QStringList& )
+    : KoFilter( parent )
 {
 }
 
@@ -826,7 +826,7 @@ APPLIXSPREADImport::specCharfind (QChar a, QChar b)
 
    else if ( (a == 'n') && (b == 'h') ) chr = '×';
 
-   else if ( (a == 'k') && (b == 'a') ) chr = ' ';
+   else if ( (a == 'k') && (b == 'a') ) chr = ' ';
 
    else if ( (a == 'a') && (b == 'j') ) chr = '!';
 

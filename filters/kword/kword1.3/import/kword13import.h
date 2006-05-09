@@ -35,13 +35,13 @@ class KWord13Import : public KoFilter {
     Q_OBJECT
 
 public:
-    KWord13Import(KoFilter *parent, const char *name, const QStringList &);
+    KWord13Import(QObject* parent, const QStringList &);
     virtual ~KWord13Import() {}
 
     virtual KoFilter::ConversionStatus convert( const QByteArray& from, const QByteArray& to );
 protected:
     bool parseInfo( QIODevice* io, KWord13Document& kwordDocument );
     bool parseRoot( QIODevice* io, KWord13Document& kwordDocument );
-    bool postParse( KoStore* store, KWord13Document& doc );    
+    bool postParse( KoStore* store, KWord13Document& doc );
 };
 #endif // KWORD_1_3_IMPORT_H

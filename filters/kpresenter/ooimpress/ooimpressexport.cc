@@ -31,12 +31,12 @@
 #include <KoGlobal.h>
 #include <KoUnit.h>
 
-typedef KGenericFactory<OoImpressExport, KoFilter> OoImpressExportFactory;
+typedef KGenericFactory<OoImpressExport> OoImpressExportFactory;
 K_EXPORT_COMPONENT_FACTORY( libooimpressexport, OoImpressExportFactory( "kofficefilters" ) )
 
 
 OoImpressExport::OoImpressExport( KoFilter *, const char *, const QStringList & )
-    : KoFilter()
+    : KoFilter(parent)
     , m_currentPage( 0 )
     , m_objectIndex( 0 )
     , m_pageHeight( 0 )

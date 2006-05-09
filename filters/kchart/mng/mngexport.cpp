@@ -30,11 +30,11 @@
 #include "mngexport.h"
 #include "exportsizedia.h"
 
-typedef KGenericFactory<MngExport, KoFilter> mngExportFactory;
+typedef KGenericFactory<MngExport> mngExportFactory;
 K_EXPORT_COMPONENT_FACTORY( libkchartmngexport, mngExportFactory( "mngexport" ) )
 
-MngExport::MngExport(KoFilter *fil, const char *name, const QStringList&lst)
-    : ImageExport(fil,name,lst)
+MngExport::MngExport(QObject* parent, const QStringList&lst)
+    : ImageExport(parent,lst)
 {
 }
 

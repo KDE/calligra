@@ -52,12 +52,12 @@
 #include <kdebug.h>
 
 
-typedef KGenericFactory<XAMLExport, KoFilter> XAMLExportFactory;
+typedef KGenericFactory<XAMLExport> XAMLExportFactory;
 K_EXPORT_COMPONENT_FACTORY( libkarbonxamlexport, XAMLExportFactory( "kofficefilters" ) )
 
 
 XAMLExport::XAMLExport( KoFilter*, const char*, const QStringList& )
-	: KoFilter()
+	: KoFilter(parent)
 {
 	m_gc.setAutoDelete( true );
 }

@@ -36,7 +36,7 @@ class XSLTImport : public KoFilter
 	Q_OBJECT
 
 	public:
-    	XSLTImport(KoFilter *parent, const char *name, const QStringList&);
+    	XSLTImport(QObject* parent, const QStringList&);
 		virtual ~XSLTImport() {}
 
 		virtual KoFilter::ConversionStatus convert( const QByteArray& from,

@@ -53,11 +53,11 @@ using namespace KSpread;
  perl -e '$i=0;while($i<30000) { print rand().",".rand()."\n"; $i++ }' > file.csv
 */
 
-typedef KGenericFactory<CSVFilter, KoFilter> CSVImportFactory;
+typedef KGenericFactory<CSVFilter> CSVImportFactory;
 K_EXPORT_COMPONENT_FACTORY( libcsvimport, CSVImportFactory( "kofficefilters" ) )
 
-CSVFilter::CSVFilter(KoFilter *, const char*, const QStringList&) :
-                     KoFilter() {
+CSVFilter::CSVFilter(QObject* parent, const QStringList&) :
+                     KoFilter(parent) {
 }
 
 KoFilter::ConversionStatus CSVFilter::convert( const QByteArray& from, const QByteArray& to )
@@ -159,12 +159,12 @@ KoFilter::ConversionStatus CSVFilter::convert( const QByteArray& from, const QBy
                //the Insert->External Data-> ... dialog uses the generic format for everything (see mentioned method)
                //I will use this approach only for the TEXT format in the CSV import filter... (raphael)
                //### FIXME: long term solution is to allow to select Generic format ("autodetect") in the dialog and make it the default
-               
+
                cell = sheet->nonDefaultCell( col + 1, row + 1, false, s );
                cell->setCellText( text );
-               
+
                cell->format()->setFormatType (Generic_format);
-               
+
                /* old code
               cell = sheet->nonDefaultCell( col + 1, row + 1, false, s );
               cell->setCellText( text, true );

@@ -42,11 +42,11 @@
 #include <Q3CString>
 #include <kfilterdev.h>
 
-typedef KGenericFactory<SvgImport, KoFilter> SvgImportFactory;
+typedef KGenericFactory<SvgImport> SvgImportFactory;
 K_EXPORT_COMPONENT_FACTORY( libkarbonsvgimport, SvgImportFactory( "kofficefilters" ) )
 
 SvgImport::SvgImport(KoFilter *, const char *, const QStringList&) :
-    KoFilter(),
+    KoFilter(parent),
     outdoc( "DOC" )
 {
 	m_gc.setAutoDelete( true );

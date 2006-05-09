@@ -30,7 +30,7 @@
 #include "mngexport.h"
 #include "exportsizedia.h"
 
-typedef KGenericFactory<MngExport, KoFilter> mngExportFactory;
+typedef KGenericFactory<MngExport> mngExportFactory;
 K_EXPORT_COMPONENT_FACTORY( libkpresentermngexport, mngExportFactory( "mngexport" ) )
 
 MngExport::MngExport(KoFilter *fil, const char *name, const QStringList&lst)

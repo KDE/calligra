@@ -30,11 +30,11 @@
 #include "xbmexport.h"
 #include "exportsizedia.h"
 
-typedef KGenericFactory<XbmExport, KoFilter> xbmExportFactory;
+typedef KGenericFactory<XbmExport> xbmExportFactory;
 K_EXPORT_COMPONENT_FACTORY( libkchartxbmexport, xbmExportFactory( "xbmexport" ) )
 
-XbmExport::XbmExport(KoFilter *fil, const char *name, const QStringList&lst)
-    : ImageExport(fil,name,lst)
+XbmExport::XbmExport(QObject* parent, const QStringList&lst)
+    : ImageExport(parent,lst)
 {
 }
 

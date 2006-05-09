@@ -28,7 +28,7 @@ class KisOpenEXRImport : public KoFilter {
     Q_OBJECT
 
 public:
-    KisOpenEXRImport(KoFilter *parent, const char *name, const QStringList&);
+    KisOpenEXRImport(QObject* parent, const QStringList&);
     virtual ~KisOpenEXRImport();
 
 public:

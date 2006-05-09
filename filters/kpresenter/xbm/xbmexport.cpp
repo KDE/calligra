@@ -30,7 +30,7 @@
 #include "xbmexport.h"
 #include "exportsizedia.h"
 
-typedef KGenericFactory<XbmExport, KoFilter> xbmExportFactory;
+typedef KGenericFactory<XbmExport> xbmExportFactory;
 K_EXPORT_COMPONENT_FACTORY( libkpresenterxbmexport, xbmExportFactory( "xbmexport" ) )
 
 XbmExport::XbmExport(KoFilter *fil, const char *name, const QStringList&lst)

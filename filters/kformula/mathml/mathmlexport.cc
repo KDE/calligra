@@ -39,12 +39,12 @@
 #include "mathmlexport.h"
 
 
-typedef KGenericFactory<MathMLExport, KoFilter> MathMLExportFactory;
+typedef KGenericFactory<MathMLExport> MathMLExportFactory;
 K_EXPORT_COMPONENT_FACTORY( libkfomathmlexport, MathMLExportFactory( "kofficefilters" ) )
 
 
-MathMLExport::MathMLExport( KoFilter */*parent*/, const char */*name*/, const QStringList& )
-    : KoFilter()
+MathMLExport::MathMLExport( QObject* parent, const QStringList& )
+    : KoFilter(parent)
 {
 }
 

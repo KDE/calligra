@@ -31,11 +31,11 @@
 #include "aiimport.h"
 #include "karbonaiparserbase.h"
 
-class AiImportFactory : KGenericFactory<AiImport, KoFilter>
+class AiImportFactory : KGenericFactory<AiImport>
 {
 public:
 	AiImportFactory( void )
-		: KGenericFactory<AiImport, KoFilter>( "karbonaiimport" )
+		: KGenericFactory<AiImport>( "karbonaiimport" )
 	{}
 
 protected:
@@ -48,7 +48,7 @@ protected:
 K_EXPORT_COMPONENT_FACTORY( libkarbonaiimport, AiImportFactory() )
 
 AiImport::AiImport( KoFilter*, const char*, const QStringList& )
-	: KoFilter()
+	: KoFilter(parent)
 {
 }
 

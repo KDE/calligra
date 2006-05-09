@@ -41,7 +41,7 @@
 
 using namespace KSpread;
 
-typedef KGenericFactory<QpImport, KoFilter> QPROImportFactory;
+typedef KGenericFactory<QpImport> QPROImportFactory;
 K_EXPORT_COMPONENT_FACTORY( libqproimport, QPROImportFactory( "kofficefilters" ) )
 
 // ---------------------------------------------------------------
@@ -78,10 +78,9 @@ QpTableList::table(unsigned pIdx)
 
 // ---------------------------------------------------------------
 
-QpImport::QpImport( KoFilter*, const char*, const QStringList& )
- : KoFilter()
+QpImport::QpImport( QObject* parent, const QStringList& )
+ : KoFilter(parent)
 {
-//cout << "Hooray - in QpImport::QpImport" << endl; // ???
 }
 
 void

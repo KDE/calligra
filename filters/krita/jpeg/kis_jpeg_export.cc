@@ -76,10 +76,10 @@ class KisExifInfoVisitor : public KisLayerVisitor
 };
 
 
-typedef KGenericFactory<KisJPEGExport, KoFilter> KisJPEGExportFactory;
+typedef KGenericFactory<KisJPEGExport> KisJPEGExportFactory;
 K_EXPORT_COMPONENT_FACTORY(libkritajpegexport, KisJPEGExportFactory("kofficefilters"))
 
-KisJPEGExport::KisJPEGExport(KoFilter *, const char *, const QStringList&) : KoFilter()
+KisJPEGExport::KisJPEGExport(KoFilter *, const char *, const QStringList&) : KoFilter(parent)
 {
 }
 

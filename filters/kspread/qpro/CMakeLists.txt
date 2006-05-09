@@ -2,7 +2,7 @@ kde4_header()
 
 add_subdirectory( libqpro )
 
-include_directories( ${CMAKE_SOURCE_DIR}/kspread ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
+include_directories( ${CMAKE_SOURCE_DIR}/kspread ${CMAKE_CURRENT_SOURCE_DIR}/libqpro ${KDE4_INCLUDES} )
 
 
 ########### next target ###############

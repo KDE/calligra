@@ -37,11 +37,11 @@
 #include <wmlimport.h>
 #include <wmlparser.h>
 
-typedef KGenericFactory<WMLImport, KoFilter> WMLImportFactory;
+typedef KGenericFactory<WMLImport> WMLImportFactory;
 K_EXPORT_COMPONENT_FACTORY( libwmlimport, WMLImportFactory( "kofficefilters" ) )
 
-WMLImport::WMLImport( KoFilter *, const char *, const QStringList& ):
-                     KoFilter()
+WMLImport::WMLImport( QObject* parent, const QStringList& ):
+                     KoFilter(parent)
 {
 }
 
@@ -74,7 +74,7 @@ static QString WMLFormatAsXML( WMLFormat format )
   {
     QFont font = KoGlobal::defaultFont();
     QString fontFamily = font.family();
-    QString fontSize = QString::number( 
+    QString fontSize = QString::number(
       format.fontsize == WMLFormat::Big ? font.pointSizeFloat()+3 :
       format.fontsize == WMLFormat::Small ? font.pointSizeFloat()-3 : font.pointSizeFloat() );
     QString boldness = format.bold ? "75" : "50";
@@ -97,7 +97,7 @@ static QString WMLFormatAsXML( WMLFormat format )
      "\" len=\"" + QString::number(format.len) + "\">\n");
     result.append( "<VARIABLE>\n" );
     result.append( "  <TYPE key=\"STRING\" type=\"9\" text=\"" + format.link + "\" />\n" );
-    result.append( "  <LINK linkName=\"" + format.link + "\" hrefName=\"" + 
+    result.append( "  <LINK linkName=\"" + format.link + "\" hrefName=\"" +
       format.href + "\" />\n" );
     result.append( "</VARIABLE>\n" );
     result.append( "</FORMAT>\n" );

@@ -127,7 +127,7 @@ bool DBase::load( const QString& filename )
        m_stream >> colname[j];
     colname[11] = '\0';
     field->name = QString( (const char*) &colname[0] );
-      
+
     // type of column
     quint8 coltype;
     m_stream >> coltype;
@@ -140,7 +140,7 @@ bool DBase::load( const QString& filename )
       case 'L': field->type = DBaseField::Logical; break;
       default: field->type = DBaseField::Unknown; break;
     }
-      
+
     // fileddataaddress
     quint32 addr;
     m_stream >> addr;
@@ -148,7 +148,7 @@ bool DBase::load( const QString& filename )
     // columnlength
     quint8 colsize;
     m_stream >> colsize;
-    field->length = colsize; 
+    field->length = colsize;
 
     // decimals
     quint8 decimals;
@@ -160,7 +160,7 @@ bool DBase::load( const QString& filename )
     for ( int foo = 0; foo < 14; ++foo )
       m_stream >> dummy;
 
-    // now append 
+    // now append
     fields.append( field );
   }
 
@@ -183,8 +183,8 @@ QStringList DBase::readRecord( unsigned recno )
   }
 
   // seek to where the record is
-  unsigned filepos = m_headerLength + recno * m_recordLength;
-  m_stream.device()->at( filepos );
+  qint64 filepos = m_headerLength + recno * m_recordLength;
+  m_stream.device()->seek( filepos );
 
   // first char == '*' means the record is deleted
   // so we just skip it

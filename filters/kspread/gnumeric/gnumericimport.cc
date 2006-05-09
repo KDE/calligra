@@ -163,11 +163,11 @@ QTime GNUMERICFilter::GnumericDate::getTime( double num )
   return time;
 }
 
-typedef KGenericFactory<GNUMERICFilter, KoFilter> GNUMERICFilterFactory;
+typedef KGenericFactory<GNUMERICFilter> GNUMERICFilterFactory;
 K_EXPORT_COMPONENT_FACTORY( libgnumericimport, GNUMERICFilterFactory( "kofficefilters" ) )
 
-GNUMERICFilter::GNUMERICFilter( KoFilter *, const char *, const QStringList & )
-  : KoFilter()
+GNUMERICFilter::GNUMERICFilter( QObject* parent, const QStringList & )
+  : KoFilter(parent)
 {
 }
 

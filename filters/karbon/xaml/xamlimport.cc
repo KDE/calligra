@@ -41,11 +41,11 @@
 #include <Q3CString>
 #include <kfilterdev.h>
 
-typedef KGenericFactory<XAMLImport, KoFilter> XAMLImportFactory;
+typedef KGenericFactory<XAMLImport> XAMLImportFactory;
 K_EXPORT_COMPONENT_FACTORY( libkarbonxamlimport, XAMLImportFactory( "kofficefilters" ) )
 
 XAMLImport::XAMLImport(KoFilter *, const char *, const QStringList&) :
-    KoFilter(),
+    KoFilter(parent),
     outdoc( "DOC" )
 {
 	m_gc.setAutoDelete( true );

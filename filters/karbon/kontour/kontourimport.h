@@ -31,7 +31,7 @@ class KontourImport : public KoFilter
 	Q_OBJECT
 
 public:
-	KontourImport(KoFilter *parent, const char *name, const QStringList&);
+	KontourImport(QObject* parent, const QStringList&);
 	virtual ~KontourImport();
 
 	virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);

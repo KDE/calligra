@@ -38,7 +38,7 @@
 #include "rtfimport.h"
 #include "rtfimport.moc"
 
-typedef KGenericFactory<RTFImport, KoFilter> RTFImportFactory;
+typedef KGenericFactory<RTFImport> RTFImportFactory;
 K_EXPORT_COMPONENT_FACTORY( librtfimport, RTFImportFactory( "kofficefilters" ) )
 
 // defines a property
@@ -289,8 +289,8 @@ static const char *alignN[4]	= { "left", "right", "justify", "center" };
 static const char *boolN[2]	= { "false", "true" };
 static const char *borderN[4]	= { "LEFTBORDER", "RIGHTBORDER", "TOPBORDER", "BOTTOMBORDER" };
 
-RTFImport::RTFImport( KoFilter *, const char *, const QStringList& )
-    : KoFilter(), properties(181), destinationProperties(29), textCodec(0), utf8TextCodec(0)
+RTFImport::RTFImport( QObject* parent, const QStringList& )
+    : KoFilter(parent), properties(181), destinationProperties(29), textCodec(0), utf8TextCodec(0)
 {
     for (uint i=0; i < sizeof(propertyTable) / sizeof(propertyTable[0]); i++)
     {

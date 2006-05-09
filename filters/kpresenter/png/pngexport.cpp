@@ -30,7 +30,7 @@
 #include "pngexport.h"
 #include "exportsizedia.h"
 
-typedef KGenericFactory<PngExport, KoFilter> PngExportFactory;
+typedef KGenericFactory<PngExport> PngExportFactory;
 K_EXPORT_COMPONENT_FACTORY( libkpresenterpngexport, PngExportFactory( "pngexport" ) )
 
 PngExport::PngExport(KoFilter *fil, const char *name, const QStringList&lst)

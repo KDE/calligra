@@ -246,7 +246,7 @@ class RTFImport : public KoFilter
     Q_OBJECT
 
 public:
-    RTFImport( KoFilter *parent, const char *name, const QStringList& );
+    RTFImport( QObject* parent, const QStringList& );
 
     /**
      * Convert document from RTF to KWord format.

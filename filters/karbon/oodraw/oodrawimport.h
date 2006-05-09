@@ -41,7 +41,7 @@ class OoDrawImport : public KoFilter
 {
     Q_OBJECT
 public:
-    OoDrawImport( KoFilter *parent, const char *name, const QStringList & );
+    OoDrawImport( QObject* parent, const QStringList & );
     virtual ~OoDrawImport();
 
     virtual KoFilter::ConversionStatus convert( QByteArray const & from, QByteArray const & to );

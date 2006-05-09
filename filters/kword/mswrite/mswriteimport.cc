@@ -45,10 +45,10 @@
 #include "mswriteimport.h"
 
 
-class MSWriteImportFactory : KGenericFactory <MSWriteImport, KoFilter>
+class MSWriteImportFactory : KGenericFactory <MSWriteImport>
 {
 public:
-	MSWriteImportFactory () : KGenericFactory <MSWriteImport, KoFilter> ("kwordmswriteimport")
+	MSWriteImportFactory () : KGenericFactory <MSWriteImport> ("kwordmswriteimport")
 	{
 	}
 
@@ -1335,8 +1335,8 @@ public:
 // KoFilter
 //
 
-MSWriteImport::MSWriteImport (KoFilter *, const char *, const QStringList &)
-					: m_device (NULL), m_parser (NULL), m_generator (NULL)
+MSWriteImport::MSWriteImport (QObject* parent, const QStringList &)
+					: KoFilter( parent ), m_device (NULL), m_parser (NULL), m_generator (NULL)
 {
 }
 

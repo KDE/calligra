@@ -25,13 +25,13 @@
 
 #include <q3cstring.h>
 
-class HancomWordImport : public KoFilter 
+class HancomWordImport : public KoFilter
 {
 Q_OBJECT
 
 public:
 
-    HancomWordImport ( QObject *parent, const char* name, const QStringList& );
+    HancomWordImport ( QObject *parent, const QStringList& );
     virtual ~HancomWordImport();
 
     virtual KoFilter::ConversionStatus convert( const QByteArray& from, const QByteArray& to );

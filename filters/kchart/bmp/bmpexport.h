@@ -27,7 +27,7 @@ class BmpExport : public ImageExport
     Q_OBJECT
 
 public:
-    BmpExport(KoFilter *parent, const char *name, const QStringList&);
+    BmpExport(QObject* parent, const QStringList&);
     virtual ~BmpExport();
     virtual bool saveImage( QString fileName);
     virtual void extraImageAttribute();

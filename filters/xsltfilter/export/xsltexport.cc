@@ -27,7 +27,7 @@
 //Added by qt3to4:
 #include <Q3CString>
 
-typedef KGenericFactory<XSLTExport, KoFilter> XSLTExportFactory;
+typedef KGenericFactory<XSLTExport> XSLTExportFactory;
 K_EXPORT_COMPONENT_FACTORY( libxsltexport, XSLTExportFactory( "kofficefilters" ) )
 
 // Check for XSLT files
@@ -38,8 +38,8 @@ extern "C" {
 }
 
 
-XSLTExport::XSLTExport(KoFilter *, const char *, const QStringList&) :
-                     KoFilter() {
+XSLTExport::XSLTExport(QObject* parent, const QStringList&) :
+                     KoFilter(parent) {
 }
 
 KoFilter::ConversionStatus XSLTExport::convert( const QByteArray& from, const QByteArray&)

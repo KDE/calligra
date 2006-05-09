@@ -29,7 +29,7 @@ class MSWriteExport : public KoFilter
 	Q_OBJECT
 
 public:
-	MSWriteExport (KoFilter *parent, const char *name, const QStringList &);
+	MSWriteExport (QObject* parent, const QStringList &);
 	virtual ~MSWriteExport ();
 
 	KoFilter::ConversionStatus convert (const QByteArray &from, const QByteArray &to);

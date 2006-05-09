@@ -30,10 +30,10 @@
 #include <kis_xcf_converter.h>
 #include <kis_progress_display_interface.h>
 
-typedef KGenericFactory<XCFImport, KoFilter> XCFImportFactory;
+typedef KGenericFactory<XCFImport> XCFImportFactory;
 K_EXPORT_COMPONENT_FACTORY(libkritaxcfimport, XCFImportFactory("kofficefilters"))
 
-XCFImport::XCFImport(KoFilter *, const char *, const QStringList&) : KoFilter()
+XCFImport::XCFImport(KoFilter *, const char *, const QStringList&) : KoFilter(parent)
 {
 }
 

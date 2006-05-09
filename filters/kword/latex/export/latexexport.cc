@@ -30,12 +30,12 @@
 #include <Q3CString>
 #include "kwordlatexexportdia.h"
 
-typedef KGenericFactory<LATEXExport, KoFilter> LATEXExportFactory;
+typedef KGenericFactory<LATEXExport> LATEXExportFactory;
 K_EXPORT_COMPONENT_FACTORY( libkwordlatexexport, LATEXExportFactory( "kofficefilters" ) )
 
 
-LATEXExport::LATEXExport(KoFilter *, const char *, const QStringList&) :
-                     KoFilter() {
+LATEXExport::LATEXExport(QObject* parent, const QStringList&) :
+                     KoFilter(parent) {
 }
 
 KoFilter::ConversionStatus LATEXExport::convert( const QByteArray& from, const QByteArray& to )

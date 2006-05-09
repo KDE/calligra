@@ -66,11 +66,11 @@ static char l1_gsave		= 'S';
 static char l1_grestore		= 'R';
 
 
-class EpsExportFactory : KGenericFactory<EpsExport, KoFilter>
+class EpsExportFactory : KGenericFactory<EpsExport>
 {
 public:
 	EpsExportFactory( void )
-		: KGenericFactory<EpsExport, KoFilter>( "karbonepsexport" )
+		: KGenericFactory<EpsExport>( "karbonepsexport" )
 	{}
 
 protected:
@@ -85,7 +85,7 @@ K_EXPORT_COMPONENT_FACTORY( libkarbonepsexport, EpsExportFactory() )
 
 
 EpsExport::EpsExport( KoFilter*, const char*, const QStringList& )
-	: KoFilter()
+	: KoFilter(parent)
 {
 }
 

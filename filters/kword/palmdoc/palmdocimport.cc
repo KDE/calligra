@@ -40,11 +40,11 @@
 #include "palmdocimport.h"
 #include "palmdoc.h"
 
-typedef KGenericFactory<PalmDocImport, KoFilter> PalmDocImportFactory;
+typedef KGenericFactory<PalmDocImport> PalmDocImportFactory;
 K_EXPORT_COMPONENT_FACTORY( libpalmdocimport, PalmDocImportFactory( "kofficefilters" ) )
 
-PalmDocImport::PalmDocImport( KoFilter *, const char *, const QStringList& ):
-                     KoFilter()
+PalmDocImport::PalmDocImport( QObject* parent, const QStringList& ):
+                     KoFilter(parent)
 {
 }
 

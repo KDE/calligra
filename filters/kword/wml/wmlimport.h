@@ -33,7 +33,7 @@ class WMLImport : public KoFilter
 
   public:
 
-    WMLImport(KoFilter *parent, const char *name, const QStringList&);
+    WMLImport(QObject* parent, const QStringList&);
     WMLImport();
 
     virtual ~WMLImport() {}

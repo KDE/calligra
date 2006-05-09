@@ -26,7 +26,7 @@
 class KisPNGImport : public KoFilter {
     Q_OBJECT
     public:
-        KisPNGImport(KoFilter *parent, const char *name, const QStringList&);
+        KisPNGImport(QObject* parent, const QStringList&);
         virtual ~KisPNGImport();
     public:
         virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);

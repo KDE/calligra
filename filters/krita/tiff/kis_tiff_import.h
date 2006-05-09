@@ -26,7 +26,7 @@
 class KisTIFFImport : public KoFilter {
     Q_OBJECT
     public:
-        KisTIFFImport(KoFilter *parent, const char *name, const QStringList&);
+        KisTIFFImport(QObject* parent, const QStringList&);
         virtual ~KisTIFFImport();
     public:
         virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);

@@ -32,11 +32,11 @@
 #include "epsimport.h"
 #include "pscommentlexer.h"
 
-class EpsImportFactory : KGenericFactory<EpsImport, KoFilter>
+class EpsImportFactory : KGenericFactory<EpsImport>
 {
 public:
 	EpsImportFactory( void )
-		: KGenericFactory<EpsImport, KoFilter>( "karbonepsimport" )
+		: KGenericFactory<EpsImport>( "karbonepsimport" )
 	{}
 
 protected:
@@ -49,7 +49,7 @@ protected:
 K_EXPORT_COMPONENT_FACTORY( libkarbonepsimport, EpsImportFactory() )
 
 EpsImport::EpsImport( KoFilter*, const char*, const QStringList& )
-	: KoFilter()
+	: KoFilter(parent)
 {
 }
 

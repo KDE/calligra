@@ -32,12 +32,12 @@ DESCRIPTION
 #include "wmfimport.h"
 #include "wmfimportparser.h"
 
-typedef KGenericFactory<WMFImport, KoFilter> WMFImportFactory;
+typedef KGenericFactory<WMFImport> WMFImportFactory;
 K_EXPORT_COMPONENT_FACTORY( libwmfimport, WMFImportFactory( "kofficefilters" ) )
 
 
 WMFImport::WMFImport( KoFilter *, const char *, const QStringList&) :
-        KoFilter()
+        KoFilter(parent)
 {
 }
 

@@ -40,10 +40,10 @@
 #include "kis_dlg_options_tiff.h"
 #include "kis_wdg_options_tiff.h"
 
-typedef KGenericFactory<KisTIFFExport, KoFilter> KisTIFFExportFactory;
+typedef KGenericFactory<KisTIFFExport> KisTIFFExportFactory;
 K_EXPORT_COMPONENT_FACTORY(libkritatiffexport, KisTIFFExportFactory("kofficefilters"))
 
-KisTIFFExport::KisTIFFExport(KoFilter *, const char *, const QStringList&) : KoFilter()
+KisTIFFExport::KisTIFFExport(KoFilter *, const char *, const QStringList&) : KoFilter(parent)
 {
 }
 

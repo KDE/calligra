@@ -34,7 +34,7 @@
 #include <KoFilterChain.h>
 #include <kgenericfactory.h>
 
-typedef KGenericFactory<APPLIXWORDImport, KoFilter> APPLIXWORDImportFactory;
+typedef KGenericFactory<APPLIXWORDImport> APPLIXWORDImportFactory;
 K_EXPORT_COMPONENT_FACTORY( libapplixwordimport, APPLIXWORDImportFactory( "kofficefilters" ) )
 
 
@@ -46,8 +46,8 @@ K_EXPORT_COMPONENT_FACTORY( libapplixwordimport, APPLIXWORDImportFactory( "koffi
  *                                                                            *
  *                                                                            *
  ******************************************************************************/
-APPLIXWORDImport::APPLIXWORDImport (KoFilter *, const char *, const QStringList& ) :
-                     KoFilter()
+APPLIXWORDImport::APPLIXWORDImport (QObject *parent, const QStringList& ) :
+                     KoFilter( parent )
 {
 }
 
@@ -609,7 +609,7 @@ APPLIXWORDImport::specCharfind (QChar a, QChar b)
 
    else if ( (a == 'n') && (b == 'h') ) chr = '×';
 
-   else if ( (a == 'k') && (b == 'a') ) chr = ' ';
+   else if ( (a == 'k') && (b == 'a') ) chr = ' ';
 
    else if ( (a == 'a') && (b == 'j') ) chr = '!';
 

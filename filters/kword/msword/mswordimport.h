@@ -31,7 +31,7 @@ class MSWordImport : public KoFilter
 {
     Q_OBJECT
 public:
-    MSWordImport( KoFilter* parent, const char* name, const QStringList& );
+    MSWordImport( QObject* parent, const QStringList& );
     virtual ~MSWordImport();
 
     virtual KoFilter::ConversionStatus convert( const QByteArray& from, const QByteArray& to );

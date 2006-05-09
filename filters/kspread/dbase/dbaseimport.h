@@ -31,7 +31,7 @@ class DBaseImport : public KoFilter {
 
 public:
 
-    DBaseImport ( QObject *parent, const char* name, const QStringList& );
+    DBaseImport ( QObject *parent, const QStringList& );
     virtual ~DBaseImport() {}
 
     virtual KoFilter::ConversionStatus convert( const QByteArray& from, const QByteArray& to );

@@ -34,11 +34,11 @@
 #include "svgexport.h"
 
 
-typedef KGenericFactory<SvgExport, KoFilter> SvgExportFactory;
+typedef KGenericFactory<SvgExport> SvgExportFactory;
 K_EXPORT_COMPONENT_FACTORY( libkchartsvgexport, SvgExportFactory( "svgexport" ) )
 
-SvgExport::SvgExport(KoFilter *, const char *, const QStringList&) 
-    : KoFilter()
+SvgExport::SvgExport(QObject* parent, const QStringList&)
+    : KoFilter(parent)
 {
 }
 
@@ -57,7 +57,7 @@ SvgExport::convert(const QByteArray& from, const QByteArray& to)
     // Read the contents of the KChart file
     KoStoreDevice* storeIn = m_chain->storageFile( "root", KoStore::Read );
     if ( !storeIn ) {
-	KMessageBox::error( 0, i18n("Failed to read data." ), 
+	KMessageBox::error( 0, i18n("Failed to read data." ),
 			    i18n( "SVG Export Error" ) );
 	return KoFilter::FileNotFound;
     }
@@ -70,7 +70,7 @@ SvgExport::convert(const QByteArray& from, const QByteArray& to)
     // Read the document from the XML tree.
     KChart::KChartPart  kchartDoc;
     if ( !kchartDoc.loadXML(0, domIn) ) {
-        KMessageBox::error( 0, i18n( "Malformed XML data." ), 
+        KMessageBox::error( 0, i18n( "Malformed XML data." ),
 			    i18n( "SVG Export Error" ) );
         return KoFilter::WrongFormat;
     }
@@ -84,7 +84,7 @@ SvgExport::convert(const QByteArray& from, const QByteArray& to)
 
     // Save the image.
     if ( !picture.save( m_chain->outputFile(), "SVG" ) ) {
-        KMessageBox::error( 0, i18n( "Failed to write file." ), 
+        KMessageBox::error( 0, i18n( "Failed to write file." ),
 			    i18n( "SVG Export Error" ) );
     }
 

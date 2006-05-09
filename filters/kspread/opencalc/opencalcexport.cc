@@ -59,10 +59,10 @@ using namespace KSpread;
 
 typedef Q3ValueList<Reference> AreaList;
 
-class OpenCalcExportFactory : KGenericFactory<OpenCalcExport, KoFilter>
+class OpenCalcExportFactory : KGenericFactory<OpenCalcExport>
 {
 public:
-    OpenCalcExportFactory(void) : KGenericFactory<OpenCalcExport, KoFilter> ("kspreadopencalcexport")
+    OpenCalcExportFactory(void) : KGenericFactory<OpenCalcExport> ("kspreadopencalcexport")
     {}
 protected:
     virtual void setupTranslations( void )
@@ -80,8 +80,8 @@ K_EXPORT_COMPONENT_FACTORY( libopencalcexport, OpenCalcExportFactory() )
     return false; \
   } while(0)
 
-OpenCalcExport::OpenCalcExport( KoFilter *, const char *, const QStringList & )
-  : KoFilter(), m_locale( 0 )
+OpenCalcExport::OpenCalcExport( QObject* parent, const QStringList & )
+  : KoFilter(parent), m_locale( 0 )
 {
 }
 

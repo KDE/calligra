@@ -41,17 +41,17 @@
 //Added by qt3to4:
 #include <Q3CString>
 
-class OOWRITERExportFactory : KGenericFactory<OOWRITERExport, KoFilter>
+class OOWRITERExportFactory : KGenericFactory<OOWRITERExport>
 {
 public:
-    OOWRITERExportFactory(void) : KGenericFactory<OOWRITERExport, KoFilter> ("kwordoowriterexport")
+    OOWRITERExportFactory(void) : KGenericFactory<OOWRITERExport> ("kwordoowriterexport")
     {}
 };
 
 K_EXPORT_COMPONENT_FACTORY( liboowriterexport, OOWRITERExportFactory() )
 
-OOWRITERExport::OOWRITERExport(KoFilter */*parent*/, const char */*name*/, const QStringList &) :
-                     KoFilter() {
+OOWRITERExport::OOWRITERExport(QObject* parent , const QStringList &) :
+                     KoFilter(parent) {
 }
 
 KoFilter::ConversionStatus OOWRITERExport::convert( const QByteArray& from, const QByteArray& to )
@@ -62,7 +62,7 @@ KoFilter::ConversionStatus OOWRITERExport::convert( const QByteArray& from, cons
     }
 
     // We need KimageIO's help in OOWriterWorker::convertUnknownImage
-    
+
 
     OOWriterWorker* worker=new OOWriterWorker();
 
