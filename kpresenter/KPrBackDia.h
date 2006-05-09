@@ -72,7 +72,7 @@ public:
              const QColor &backColor2, BCType _bcType,
              const KoPicture &backPic,
              BackView backPicView, bool _unbalanced,
-             int _xfactor, int _yfactor, KPrPage *m_page  );
+             int _xfactor, int _yfactor, KPrPage *_page  );
 
     KPrBackGround::Settings getBackGround() const;
     bool useMasterBackground() const;
@@ -113,6 +113,7 @@ private:
     int oldYFactor;
 
     KoPicture m_picture, m_oldpicture;
+    KPrPage *m_page;
 
 private slots:
     void aboutToSelectPic();
