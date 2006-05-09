@@ -38,15 +38,13 @@ KChartFactory::~KChartFactory()
 
 
 KParts::Part* KChartFactory::createPartObject( QWidget *parentWidget,
-					       const char *widgetName,
 					       QObject* parent,
-					       const char* name,
 					       const char *classname,
 					       const QStringList & )
 {
     bool bWantKoDocument = ( strcmp( classname, "KoDocument" ) == 0 );
 
-    KChartPart *part = new KChartPart( parentWidget, widgetName, parent, name,
+    KChartPart *part = new KChartPart( parentWidget, parent,
 				       !bWantKoDocument );
 
     if ( !bWantKoDocument )

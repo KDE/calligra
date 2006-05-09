@@ -32,9 +32,9 @@
 
 #include <KoFilterManager.h>
 
-KugarPart::KugarPart( QWidget *parentWidget, const char *widgetName,
-                      QObject* parent, const char* name, bool singleViewMode )
-    : KoDocument( parentWidget, widgetName, parent, name, singleViewMode ),
+KugarPart::KugarPart( QWidget *parentWidget,
+                      QObject* parent, bool singleViewMode )
+    : KoDocument( parentWidget, parent, singleViewMode ),
     m_templateOk( false )
 {
     setInstance( KugarFactory::global(), false );

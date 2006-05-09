@@ -19,14 +19,12 @@ class KugarPart: public KoDocument
     Q_OBJECT
 
 public:
-    KugarPart( QWidget *parentWidget = 0, const char *widgetName = 0, 
-               QObject* parent = 0,
-               const char* name = 0, bool singleViewMode = false );
+    KugarPart( QWidget *parentWidget = 0, QObject* parent = 0, bool singleViewMode = false );
     virtual ~KugarPart();
 
     virtual bool initDoc( InitDocFlags flags, QWidget* parentWidget = 0 );
 
-    virtual bool loadOasis( const QDomDocument&, KoOasisStyles&, 
+    virtual bool loadOasis( const QDomDocument&, KoOasisStyles&,
                             const QDomDocument&, KoStore* );
     virtual bool saveOasis( KoStore*, KoXmlWriter* );
 

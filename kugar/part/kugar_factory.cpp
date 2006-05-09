@@ -29,7 +29,7 @@ K_EXPORT_COMPONENT_FACTORY( libkugarpart, KugarFactory )
 
 // The factory ctor.
 
-KugarFactory::KugarFactory( QObject *parent, const char* name ) : KoFactory( parent, name )
+KugarFactory::KugarFactory( QObject *parent ) : KoFactory( parent )
 {
     global();
 }
@@ -65,8 +65,8 @@ KAboutData *KugarFactory::aboutData()
 
 // Create a new part.
 
-KParts::Part* KugarFactory::createPartObject( QWidget *parentWidget, const char *widgetName,
-        QObject* parent, const char* name, const char* classname, const QStringList & data )
+KParts::Part* KugarFactory::createPartObject( QWidget *parentWidget,
+        QObject* parent, const char* classname, const QStringList & data )
 {
     QString forcedUserTemplate;
     for ( QStringList::const_iterator it = data.begin();it != data.end();++it )
@@ -78,7 +78,7 @@ KParts::Part* KugarFactory::createPartObject( QWidget *parentWidget, const char 
 
     bool bWantKoDocument = ( strcmp( classname, "KoDocument" ) == 0 );
     // parentWidget and widgetName are used by KoDocument for the "readonly+singleView" case.
-    KugarPart *part = new KugarPart( parentWidget, widgetName, parent, name, !bWantKoDocument );
+    KugarPart *part = new KugarPart( parentWidget, parent, !bWantKoDocument );
 
     //  if ( !bWantKoDocument )
     part->setReadWrite( false );

@@ -20,8 +20,8 @@ public:
     KugarFactory( QObject* parent = 0, const char* name = 0 );
     ~KugarFactory();
 
-    virtual KParts::Part *createPartObject( QWidget *parentWidget = 0, const char *widgetName = 0,
-                                            QObject *parent = 0, const char *name = 0, const char *classname = "KoDocument",
+    virtual KParts::Part *createPartObject( QWidget *parentWidget = 0,
+                                            QObject *parent = 0, const char *classname = "KoDocument",
                                             const QStringList &args = QStringList() );
 
     static KInstance* global();

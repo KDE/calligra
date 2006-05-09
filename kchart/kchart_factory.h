@@ -24,10 +24,8 @@ public:
     KChartFactory( QObject* parent = 0, const char* name = 0 );
     virtual ~KChartFactory();
 
-    virtual KParts::Part  *createPartObject( QWidget* = 0, 
-					     const char * = 0,
+    virtual KParts::Part  *createPartObject( QWidget* = 0,
 					     QObject* parent = 0,
-					     const char* name = 0,
 					     const char* classname = "KoDocument",
 					     const QStringList &args = QStringList() );
 

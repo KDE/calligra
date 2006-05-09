@@ -26,7 +26,7 @@ class ExamplePart : public KoDocument
 {
     Q_OBJECT
 public:
-    ExamplePart( QWidget *parentWidget = 0, const char *widgetName = 0, QObject* parent = 0, const char* name = 0, bool singleViewMode = false );
+    ExamplePart( QWidget *parentWidget = 0, QObject* parent = 0, bool singleViewMode = false );
 
     virtual void paintContent( QPainter& painter, const QRect& rect, bool transparent = FALSE, double zoomX = 1.0, double zoomY = 1.0 );
 

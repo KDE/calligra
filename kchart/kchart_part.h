@@ -27,8 +27,8 @@ class KCHART_EXPORT KChartPart : public KoChart::Part
     Q_OBJECT
 
 public:
-    KChartPart( QWidget *parentWidget = 0, const char *widgetName = 0,
-		QObject* parent = 0, const char* name = 0,
+    KChartPart( QWidget *parentWidget = 0,
+		QObject* parent = 0,
 		bool singleViewMode = false );
     ~KChartPart();
 

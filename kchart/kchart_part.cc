@@ -52,10 +52,10 @@ using namespace std;
 namespace KChart
 {
 
-KChartPart::KChartPart( QWidget *parentWidget, const char *widgetName,
-			QObject* parent, const char* name,
+KChartPart::KChartPart( QWidget *parentWidget,
+			QObject* parent,
 			bool singleViewMode )
-  : KoChart::Part( parentWidget, widgetName, parent, name, singleViewMode ),
+  : KoChart::Part( parentWidget, parent, singleViewMode ),
     m_params( 0 ),
     m_parentWidget( parentWidget ),
     m_rowLabels(), m_colLabels()

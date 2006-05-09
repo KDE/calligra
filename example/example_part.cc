@@ -23,8 +23,8 @@
 
 #include <qpainter.h>
 
-ExamplePart::ExamplePart( QWidget *parentWidget, const char *widgetName, QObject* parent, const char* name, bool singleViewMode )
-    : KoDocument( parentWidget, widgetName, parent, name, singleViewMode )
+ExamplePart::ExamplePart( QWidget *parentWidget, QObject* parent, bool singleViewMode )
+    : KoDocument( parentWidget, parent, singleViewMode )
 {
     setInstance( ExampleFactory::global(), false );
 }
