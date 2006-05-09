@@ -106,12 +106,11 @@ KoFilter::ConversionStatus HTMLExport::convert( const QByteArray& from, const QB
       return KoFilter::NotImplemented;
     }
 
-    Sheet *sheet = ksdoc->map()->firstSheet();
     QString filenameBase = m_chain->outputFile();
-    filenameBase = filenameBase.left( filenameBase.findRev( '.' ) );
+    filenameBase = filenameBase.left( filenameBase.lastIndexOf( '.' ) );
 
     QStringList sheets;
-    while( sheet != 0 )
+    foreach ( Sheet* sheet, ksdoc->map()->sheetList() )
     {
       int rows = 0;
       int columns = 0;
@@ -123,13 +122,13 @@ KoFilter::ConversionStatus HTMLExport::convert( const QByteArray& from, const QB
       {
         sheets.append( sheet->sheetName() );
       }
-      sheet = ksdoc->map()->nextSheet();
     }
     m_dialog->setSheets( sheets );
 
     if( m_dialog->exec() == QDialog::Rejected )
       return KoFilter::UserCancelled;
 
+    Sheet* sheet = 0;
     sheets = m_dialog->sheets();
     QString str;
     for( uint i = 0; i < sheets.count() ; ++i )
@@ -189,7 +188,7 @@ void HTMLExport::openPage( Sheet *sheet, KoDocument *document, QString &str )
   str += "<html>\n";
   str += "<head>\n";
   str += "<meta http-equiv=\"Content-Type\" ";
-  str += QString("content=\"text/html; charset=%1\">\n", QString(m_dialog->encoding()->mimeName() ));
+  str += QString("content=\"text/html; charset=%1\">\n").arg( QString(m_dialog->encoding()->name() ) );
   str += "<meta name=\"Generator\" ";
   str += "content=\"KSpread HTML Export Filter Version = ";
   str += KOFFICE_VERSION_STRING;
@@ -206,7 +205,7 @@ void HTMLExport::openPage( Sheet *sheet, KoDocument *document, QString &str )
   str += "<title>" + title + "</title>\n";
   str += "</head>\n";
   str += QString("<body bgcolor=\"#FFFFFF\" dir=\"%1\">\n").arg(
-      sheet->isRightToLeft()?"rtl":"ltr");
+      (sheet->layoutDirection() Sheet::RightToLeft) ? "rtl" : "ltr" );
 
   str += "<a name=\"__top\">\n";
 }
@@ -238,7 +237,7 @@ void HTMLExport::convertSheet( Sheet *sheet, QString &str, int iMaxUsedRow, int 
     int i=1;
 
     str += "<" + html_table_tag + html_table_options.arg( m_dialog->useBorders() ? "1" : "0" ).arg( m_dialog->pixelsBetweenCells() ) +
-           QString("dir=\"%1\">\n").arg(sheet->isRightToLeft()?"rtl":"ltr");
+        QString("dir=\"%1\">\n").arg( (sheet->layoutDirection() == Sheet::RightToLeft ) ? "rtl" : "ltr" );
 
     unsigned int nonempty_cells_prev=0;
 
@@ -299,7 +298,7 @@ void HTMLExport::convertSheet( Sheet *sheet, QString &str, int iMaxUsedRow, int 
                    + cell->postfix(currentrow, currentcolumn);
 #endif
             line += "  <" + html_cell_tag + html_cell_options;
-	    if (text.isRightToLeft() != sheet->isRightToLeft())
+	    if (text.isRightToLeft() != (sheet->layoutDirection() == Sheet::RightToLeft))
                 line += QString(" dir=\"%1\" ").arg(text.isRightToLeft()?"rtl":"ltr");
             if (bgcolor.isValid() && bgcolor.name()!="#ffffff") // change color only for non-white cells
                 line += " bgcolor=\"" + bgcolor.name() + "\"";
