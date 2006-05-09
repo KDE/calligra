@@ -1,13 +1,18 @@
 kde4_header()
 
-add_subdirectory( libqpro )
-
 include_directories( ${CMAKE_SOURCE_DIR}/kspread ${CMAKE_CURRENT_SOURCE_DIR}/libqpro ${KDE4_INCLUDES} )
 
 
 ########### next target ###############
 
-set(qproimport_PART_SRCS qproimport.cc qproformula.cc )
+set(qproimport_PART_SRCS
+	${CMAKE_CURRENT_SOURCE_DIR}/libqpro/src/formula.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/libqpro/src/record.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/libqpro/src/record_factory.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/libqpro/src/stream.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/libqpro/src/tablenames.cc
+	qproimport.cc
+	qproformula.cc )
 
 kde4_automoc(${qproimport_PART_SRCS})
 
@@ -15,7 +20,7 @@ kde4_add_plugin(qproimport WITH_PREFIX ${qproimport_PART_SRCS})
 
 kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} qproimport )
 
-target_link_libraries(qproimport  ${KDE4_KDECORE_LIBS} kspreadcommon qpro )
+target_link_libraries(qproimport  ${KDE4_KDECORE_LIBS} kspreadcommon )
 
 install_targets(${PLUGIN_INSTALL_DIR} qproimport )
 
