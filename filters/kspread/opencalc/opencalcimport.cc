@@ -291,6 +291,7 @@ void OpenCalcImport::checkForNamedAreas( QString & formula ) const
 
 void OpenCalcImport::convertFormula( QString & text, QString const & f ) const
 {
+  // TODO Stefan: Check if Oasis::decodeFormula could be used instead
   kDebug(30518) << "Parsing formula: " << f << endl;
 
   QString formula;
@@ -638,13 +639,13 @@ bool OpenCalcImport::readCells( QDomElement & rowNode, Sheet  * table, int row, 
           int year=0, month=0, day=0;
           ok = false;
 
-          int p1 = value.find( '-' );
+          int p1 = value.indexOf( '-' );
           if ( p1 > 0 )
             year  = value.left( p1 ).toInt( &ok );
 
           kDebug(30518) << "year: " << value.left( p1 ) << endl;
 
-          int p2 = value.find( '-', ++p1 );
+          int p2 = value.indexOf( '-', ++p1 );
 
           if ( ok )
             month = value.mid( p1, p2 - p1  ).toInt( &ok );
@@ -840,33 +841,33 @@ void OpenCalcImport::loadOasisConditionValue( const QString &styleCondition, Con
 void OpenCalcImport::loadOasisCondition( QString &valExpression, Conditional &newCondition )
 {
     QString value;
-    if (valExpression.find( "<=" )==0 )
+    if (valExpression.indexOf( "<=" )==0 )
     {
         value = valExpression.remove( 0,2 );
         newCondition.cond = Conditional::InferiorEqual;
     }
-    else if (valExpression.find( ">=" )==0 )
+    else if (valExpression.indexOf( ">=" )==0 )
     {
         value = valExpression.remove( 0,2 );
         newCondition.cond = Conditional::SuperiorEqual;
     }
-    else if (valExpression.find( "!=" )==0 )
+    else if (valExpression.indexOf( "!=" )==0 )
     {
         //add Differentto attribute
         value = valExpression.remove( 0,2 );
         newCondition.cond = Conditional::DifferentTo;
     }
-    else if ( valExpression.find( "<" )==0 )
+    else if ( valExpression.indexOf( "<" )==0 )
     {
         value = valExpression.remove( 0,1 );
         newCondition.cond = Conditional::Inferior;
     }
-    else if(valExpression.find( ">" )==0 )
+    else if(valExpression.indexOf( ">" )==0 )
     {
         value = valExpression.remove( 0,1 );
         newCondition.cond = Conditional::Superior;
     }
-    else if (valExpression.find( "=" )==0 )
+    else if (valExpression.indexOf( "=" )==0 )
     {
         value = valExpression.remove( 0,1 );
         newCondition.cond = Conditional::Equal;
@@ -1137,7 +1138,7 @@ bool OpenCalcImport::readColLayouts( QDomElement & content, Sheet * table )
 
 void replaceMacro( QString & text, QString const & old, QString const & newS )
 {
-  int n = text.find( old );
+  int n = text.indexOf( old );
   if ( n != -1 )
     text = text.replace( n, old.length(), newS );
 }
@@ -1437,7 +1438,7 @@ bool OpenCalcImport::parseBody( int numOfTables )
     table = m_doc->map()->addNewSheet();
 
     table->setSheetName( t.attributeNS( ooNS::table, "name", QString::null ), true, false );
-    kDebug()<<" table->name()"<<table->name()<<endl;
+    kDebug()<<" table->name()"<<table->objectName()<<endl;
     sheet = sheet.nextSibling();
   }
 
@@ -1504,7 +1505,7 @@ bool OpenCalcImport::parseBody( int numOfTables )
           {
             bool visible = (property.attributeNS( ooNS::table, "display", QString::null ) == "true" ? true : false );
             table->hideSheet( !visible );
-            kDebug(30518) << "Table: " << table->tableName() << ", hidden: " << !visible << endl;
+            kDebug(30518) << "Table: " << table->sheetName() << ", hidden: " << !visible << endl;
           }
         }
 
@@ -1546,7 +1547,7 @@ bool OpenCalcImport::parseBody( int numOfTables )
       if ( t.hasAttributeNS( ooNS::table, "protection-key" ) )
       {
         QString p = t.attributeNS( ooNS::table, "protection-key", QString::null );
-        Q3CString str( p.latin1() );
+        Q3CString str( p.toLatin1() );
         kDebug(30518) << "Decoding password: " << str << endl;
         passwd = KCodecs::base64Decode( str );
       }
@@ -1566,7 +1567,7 @@ bool OpenCalcImport::parseBody( int numOfTables )
     if ( b.hasAttributeNS( ooNS::table, "protection-key" ) )
     {
       QString p = b.attributeNS( ooNS::table, "protection-key", QString::null );
-      Q3CString str( p.latin1() );
+      Q3CString str( p.toLatin1() );
       kDebug(30518) << "Decoding password: " << str << endl;
       passwd = KCodecs::base64Decode( str );
     }
@@ -1626,11 +1627,11 @@ void OpenCalcImport::loadOasisAreaName( const QDomElement&body )
 
       QString range( point.translation );
 
-      if ( point.translation.find( ':' ) == -1 )
+      if ( point.translation.indexOf( ':' ) == -1 )
       {
         Point p( point.translation );
 
-        int n = range.find( '!' );
+        int n = range.indexOf( '!' );
         if ( n > 0 )
           range = range + ":" + range.right( range.length() - n - 1);
 
@@ -2003,7 +2004,7 @@ void OpenCalcImport::loadBorder( Format * layout, QString const & borderDef, bPo
   if ( borderDef == "none" )
     return;
 
-  int p = borderDef.find( ' ' );
+  int p = borderDef.indexOf( ' ' );
   if ( p < 0 )
     return;
 
@@ -2013,7 +2014,7 @@ void OpenCalcImport::loadBorder( Format * layout, QString const & borderDef, bPo
 
 
   ++p;
-  int p2 = borderDef.find( ' ', p );
+  int p2 = borderDef.indexOf( ' ', p );
   QString s = borderDef.mid( p, p2 - p );
 
   kDebug(30518) << "Borderstyle: " << s << endl;
@@ -2033,19 +2034,19 @@ void OpenCalcImport::loadBorder( Format * layout, QString const & borderDef, bPo
   }
 
   ++p2;
-  p = borderDef.find( ' ', p2 );
+  p = borderDef.indexOf( ' ', p2 );
   if ( p == -1 )
     p = borderDef.length();
 
   pen.setColor( QColor( borderDef.right( p - p2 ) ) );
 
-  if ( pos == Qt::DockLeft )
+  if ( pos == Left )
     layout->setLeftBorderPen( pen );
-  else if ( pos == Qt::DockTop )
+  else if ( pos == Top )
     layout->setTopBorderPen( pen );
-  else if ( pos == Qt::DockRight )
+  else if ( pos == Right )
     layout->setRightBorderPen( pen );
-  else if ( pos == Qt::DockBottom )
+  else if ( pos == Bottom )
     layout->setBottomBorderPen( pen );
   else if ( pos == Border )
   {
@@ -2690,8 +2691,6 @@ int OpenCalcImport::readMetaData()
 {
   int result = 5;
   KoDocumentInfo * docInfo          = m_doc->documentInfo();
-  KoDocumentInfoAbout  * aboutPage  = static_cast<KoDocumentInfoAbout *>(docInfo->page( "about" ));
-  KoDocumentInfoAuthor * authorPage = static_cast<KoDocumentInfoAuthor*>(docInfo->page( "author" ));
 
   QDomNode meta   = KoDom::namedItemNS( m_meta, ooNS::office, "document-meta" );
   QDomNode office = KoDom::namedItemNS( meta, ooNS::office, "meta" );
@@ -2701,26 +2700,26 @@ int OpenCalcImport::readMetaData()
 
   QDomElement e = KoDom::namedItemNS( office, ooNS::dc, "creator" );
   if ( !e.isNull() && !e.text().isEmpty() )
-    authorPage->setFullName( e.text() );
+    docInfo->setAuthorInfo( "creator", e.text() );
 
   e = KoDom::namedItemNS( office, ooNS::dc, "title" );
   if ( !e.isNull() && !e.text().isEmpty() )
-    aboutPage->setTitle( e.text() );
+    docInfo->setAboutInfo( "title", e.text() );
 
   e = KoDom::namedItemNS( office, ooNS::dc, "description" );
   if ( !e.isNull() && !e.text().isEmpty() )
-    aboutPage->setAbstract( e.text() );
+    docInfo->setAboutInfo( "description", e.text() ); // ### was: abstract
 
   e = KoDom::namedItemNS( office, ooNS::dc, "subject" );
   if ( !e.isNull() && !e.text().isEmpty() )
-    aboutPage->setSubject( e.text() );
+    docInfo->setAboutInfo( "subject", e.text() );
 
   e= KoDom::namedItemNS( office, ooNS::meta, "keywords" );
   if ( !e.isNull() )
   {
       e = KoDom::namedItemNS( e,  ooNS::meta, "keyword" );
       if ( !e.isNull() && !e.text().isEmpty() )
-          aboutPage->setKeywords( e.text() );
+        docInfo->setAboutInfo( "keyword", e.text() );
   }
 
   e = KoDom::namedItemNS( office, ooNS::meta, "document-statistic" );
@@ -2745,7 +2744,7 @@ KoFilter::ConversionStatus OpenCalcImport::convert( QByteArray const & from, QBy
   if ( !document )
     return KoFilter::StupidError;
 
-  if (  !::qt_cast<const KSpread::Doc *>( document ) )  // it's safer that way :)
+  if (  !qobject_cast<const KSpread::Doc *>( document ) )  // it's safer that way :)
   {
     kWarning(30518) << "document isn't a KSpread::Doc but a " << document->className() << endl;
     return KoFilter::NotImplemented;

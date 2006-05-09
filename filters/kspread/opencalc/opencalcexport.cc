@@ -109,7 +109,7 @@ KoFilter::ConversionStatus OpenCalcExport::convert( const QByteArray & from,
   if (  !qobject_cast<const KSpread::Doc *>( document ) )
   {
     kWarning(30518) << "document isn't a KSpread::Doc but a "
-                     << document->className() << endl;
+        << document->metaObject()->className() << endl;
     return KoFilter::NotImplemented;
   }
 
@@ -468,7 +468,7 @@ bool OpenCalcExport::exportBody( QDomDocument & doc, QDomElement & content, cons
 
     QString name( sheet->sheetName() );
 
-    int n = name.find( ' ' );
+    int n = name.indexOf( ' ' );
     if ( n != -1 )
     {
       kDebug(30518) << "Sheet name converting: " << name << endl;
@@ -1151,6 +1151,7 @@ void OpenCalcExport::convertPart( QString const & part, QDomDocument & doc,
 
 QString OpenCalcExport::convertFormula( QString const & formula ) const
 {
+  // TODO Stefan: Check if Oasis::encodeFormula could be used instead
   QChar decimalSymbol( '.' );
   if ( m_locale )
   {
@@ -1208,7 +1209,22 @@ QString OpenCalcExport::convertFormula( QString const & formula ) const
     }
     if ( formula[i] == '!' )
     {
-      insertBracket( s );
+      QChar c;
+      int j = (int) s.length() - 1;
+
+      while ( j >= 0 )
+      {
+        c = s[j];
+        if ( c == ' ' )
+          s[j] = '_';
+        if ( !(c.isLetterOrNumber() || c == ' ' || c == '.'
+               || c == '_') )
+        {
+          s.insert( j + 1, '[' );
+          break;
+        }
+        --j;
+      }
       s += '.';
       ++i;
       continue;
