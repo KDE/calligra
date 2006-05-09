@@ -131,7 +131,7 @@ KoFilter::ConversionStatus HTMLExport::convert( const QByteArray& from, const QB
     Sheet* sheet = 0;
     sheets = m_dialog->sheets();
     QString str;
-    for( uint i = 0; i < sheets.count() ; ++i )
+    for( int i = 0; i < sheets.count() ; ++i )
     {
       sheet = ksdoc->map()->findSheet( sheets[i] );
 
@@ -176,10 +176,8 @@ void HTMLExport::openPage( Sheet *sheet, KoDocument *document, QString &str )
 {
   QString title;
   KoDocumentInfo *info = document->documentInfo();
-  KoDocumentInfoAbout *aboutPage = static_cast<KoDocumentInfoAbout *>(info->page( "about" ));
-  if ( aboutPage && !aboutPage->title().isEmpty() )
-    title = aboutPage->title() + " - ";
-
+  if ( info && !info->aboutInfo( "title" ).isEmpty() )
+    title = info->aboutInfo( "title" ) + " - ";
   title += sheet->sheetName();
 
       // header
@@ -205,7 +203,7 @@ void HTMLExport::openPage( Sheet *sheet, KoDocument *document, QString &str )
   str += "<title>" + title + "</title>\n";
   str += "</head>\n";
   str += QString("<body bgcolor=\"#FFFFFF\" dir=\"%1\">\n").arg(
-      (sheet->layoutDirection() Sheet::RightToLeft) ? "rtl" : "ltr" );
+      (sheet->layoutDirection() == Sheet::RightToLeft) ? "rtl" : "ltr" );
 
   str += "<a name=\"__top\">\n";
 }
@@ -226,7 +224,7 @@ void HTMLExport::convertSheet( Sheet *sheet, QString &str, int iMaxUsedRow, int 
     int iMaxRow = sheet->maxRow();
 
     if( !m_dialog->separateFiles() )
-        str += "<a name=\"" + sheet->sheetName().lower().trimmed() + "\">\n";
+        str += "<a name=\"" + sheet->sheetName().toLower().trimmed() + "\">\n";
 
     str += ("<h1>" + sheet->sheetName() + "</h1><br>\n");
 
@@ -412,7 +410,7 @@ void HTMLExport::writeTOC( const QStringList &sheets, const QString &base, QStri
 
   str += "<p align=\"" + html_center + "\">\n";
 
-  for( uint i = 0 ; i < sheets.count() ; ++i )
+  for( int i = 0 ; i < sheets.count() ; ++i )
   {
     str += "<a href=\"";
 
@@ -422,7 +420,7 @@ void HTMLExport::writeTOC( const QStringList &sheets, const QString &base, QStri
     }
     else
     {
-      str += "#" + sheets[i].lower().trimmed();
+      str += "#" + sheets[i].toLower().trimmed();
     }
 
     str += "\">" + sheets[i] + "</a>\n";
