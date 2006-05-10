@@ -132,7 +132,7 @@ void KexiDataAwarePropertySet::insert(uint row, KoProperty::Set* buf, bool newOn
 
 //	m_sets.setAutoDelete(true);//revert the flag
 
-	connect(buf,SIGNAL(propertyChanged()), m_view, SLOT(setDirty()));
+	connect(buf, SIGNAL(propertyChanged(KoProperty::Set&, KoProperty::Property&)), m_view, SLOT(setDirty()));
 
 	if (newOne) {
 		//add a special property indicating that this is brand new buffer,
