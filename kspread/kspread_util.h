@@ -349,17 +349,17 @@ int         util_penCompare( QPen const & pen1, QPen const & pen2 );
 /**
  * \ingroup OpenDocument
  */
-QString convertRefToRange( const QString & sheet, const QRect & rect );
+KSPREAD_EXPORT QString convertRefToRange( const QString & sheet, const QRect & rect );
 
 /**
  * \ingroup OpenDocument
  */
-QString convertRefToBase( const QString & sheet, const QRect & rect );
+KSPREAD_EXPORT QString convertRefToBase( const QString & sheet, const QRect & rect );
 
 /**
  * \ingroup OpenDocument
  */
-QString convertRangeToRef( const QString & sheetName, const QRect & _area );
+KSPREAD_EXPORT QString convertRangeToRef( const QString & sheetName, const QRect & _area );
 
 
 //Return true when it's a reference to cell from sheet.
