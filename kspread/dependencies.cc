@@ -25,7 +25,7 @@
 #include "kspread_cell.h"
 #include "kspread_sheet.h"
 
-#include <qmap.h>
+#include <QMap>
 #include <QLinkedList>
 
 //rows x cols in one cell-chunk; bigger values lead to slower updating

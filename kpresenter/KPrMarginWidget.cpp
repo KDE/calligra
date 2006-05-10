@@ -23,8 +23,8 @@
 #include "KPrMarginWidget.h"
 
 #include <qgroupbox.h>
-#include <qcheckbox.h>
-#include <qlayout.h>
+#include <QCheckBox>
+#include <QLayout>
 
 #include <klocale.h>
 #include <knuminput.h>

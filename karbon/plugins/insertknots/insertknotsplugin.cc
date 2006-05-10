@@ -26,7 +26,7 @@
 #include <kgenericfactory.h>
 #include <kdebug.h>
 #include <qgroupbox.h>
-#include <qlabel.h>
+#include <QLabel>
 
 #include <knuminput.h>
 

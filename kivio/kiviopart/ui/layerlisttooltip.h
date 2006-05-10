@@ -19,7 +19,7 @@
 #ifndef KIVIOLAYERLISTTOOLTIP_H
 #define KIVIOLAYERLISTTOOLTIP_H
 
-#include <qtooltip.h>
+#include <QToolTip>
 #include <qlistview.h>
 
 namespace Kivio {

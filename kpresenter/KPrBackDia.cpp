@@ -24,14 +24,14 @@
 #include "KPrDocument.h"
 #include "KPrPage.h"
 
-#include <qlabel.h>
+#include <QLabel>
 #include <qpainter.h>
-#include <qcombobox.h>
+#include <QComboBox>
 #include <qslider.h>
-#include <qlayout.h>
+#include <QLayout>
 #include <qtabwidget.h>
 #include <qvbox.h>
-#include <qcheckbox.h>
+#include <QCheckBox>
 #include <qdatetime.h>
 
 #include <kcolorbutton.h>

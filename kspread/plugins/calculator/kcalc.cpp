@@ -26,9 +26,9 @@
 #include "version.h"
 #include <klocale.h>
 #include <knotifyclient.h>
-#include <qlayout.h>
+#include <QLayout>
 #include <qobject.h>
-#include <qpushbutton.h>
+#include <QPushButton>
 //Added by qt3to4:
 #include <QPixmap>
 #include <QCloseEvent>

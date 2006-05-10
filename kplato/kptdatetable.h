@@ -33,7 +33,7 @@
 #include <qpair.h>
 
 #include <qvalidator.h>
-#include <qlineedit.h>
+#include <QLineEdit>
 #include <qdatetime.h>
 //Added by qt3to4:
 #include <QWheelEvent>

@@ -20,7 +20,7 @@
 #include <stdlib.h>
 
 #include <qtextcodec.h>
-#include <qfile.h>
+#include <QFile>
 //Added by qt3to4:
 #include <Q3CString>
 

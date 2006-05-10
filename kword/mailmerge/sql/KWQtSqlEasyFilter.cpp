@@ -21,8 +21,8 @@
 #include <q3table.h>
 #include <q3scrollview.h>
 #include <klocale.h>
-#include <qlayout.h>
-#include <qcheckbox.h>
+#include <QLayout>
+#include <QCheckBox>
 
 KWQtSqlEasyFilter::KWQtSqlEasyFilter( QWidget *parent)
         :KDialogBase( Swallow, i18n( "Mail Merge - Editor" ), Ok | Cancel, Ok, parent, "", true)

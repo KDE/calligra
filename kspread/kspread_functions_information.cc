@@ -24,7 +24,7 @@
 #include <config.h>
 #include <sys/utsname.h>
 
-#include <qdir.h>
+#include <QDir>
 #include <kdebug.h>
 #include <klocale.h>
 

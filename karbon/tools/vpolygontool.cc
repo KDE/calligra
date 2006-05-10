@@ -18,7 +18,7 @@
 */
 
 
-#include <qlabel.h>
+#include <QLabel>
 #include <qgroupbox.h>
 
 #include <kdialogbase.h>

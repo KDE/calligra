@@ -22,8 +22,8 @@
 #include <string.h>
 #include <qbuffer.h>
 #include <q3cstring.h>
-#include <qfile.h>
-#include <qfont.h>
+#include <QFile>
+#include <QFont>
 #include <qimage.h>
 #include <qtextcodec.h>
 #include <q3valuelist.h>

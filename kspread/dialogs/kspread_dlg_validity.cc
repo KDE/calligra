@@ -28,7 +28,7 @@
 #include "kspread_sheet.h"
 #include "kspread_view.h"
 
-#include <qlayout.h>
+#include <QLayout>
 #include <q3buttongroup.h>
 //Added by qt3to4:
 #include <QVBoxLayout>
@@ -38,12 +38,12 @@
 #include <kdebug.h>
 #include <kmessagebox.h>
 
-#include <qcombobox.h>
-#include <qlineedit.h>
-#include <qpushbutton.h>
-#include <qlabel.h>
+#include <QComboBox>
+#include <QLineEdit>
+#include <QPushButton>
+#include <QLabel>
 #include <q3textedit.h>
-#include <qcheckbox.h>
+#include <QCheckBox>
 
 using namespace KSpread;
 

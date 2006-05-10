@@ -32,14 +32,14 @@
 #define _CONFIG_DLG_H_
 
 #include <q3groupbox.h>
-#include <qcheckbox.h>
+#include <QCheckBox>
 #include <qdialog.h>
-#include <qlineedit.h>
-#include <qpushbutton.h>
+#include <QLineEdit>
+#include <QPushButton>
 #include <qpainter.h>
-#include <qlabel.h>
+#include <QLabel>
 #include <q3frame.h>
-#include <qspinbox.h>
+#include <QSpinBox>
 #include <kcolorbutton.h>
 
 #include "kcalc.h"

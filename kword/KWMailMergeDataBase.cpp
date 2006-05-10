@@ -36,12 +36,12 @@
 #include <kmainwindow.h>
 #include <kactioncollection.h>
 
-#include <qfile.h>
+#include <QFile>
 
-#include <qspinbox.h>
-#include <qlayout.h>
-#include <qlabel.h>
-#include <qpushbutton.h>
+#include <QSpinBox>
+#include <QLayout>
+#include <QLabel>
+#include <QPushButton>
 //Added by qt3to4:
 #include <Q3Frame>
 #include <Q3VBoxLayout>

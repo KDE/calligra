@@ -22,7 +22,7 @@
 #define _KWMAILMERGE_KSPREAD_H_
 
 #include <qdom.h>
-#include <qmap.h>
+#include <QMap>
 
 #include <kspread_doc.h>
 #include <kspread_sheet.h>

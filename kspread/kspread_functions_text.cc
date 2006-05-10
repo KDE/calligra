@@ -22,7 +22,7 @@
 // built-in text functions
 // please keep it in alphabetical order
 
-#include <qregexp.h>
+#include <QRegExp>
 #include <kdebug.h>
 #include <klocale.h>
 #include <math.h>

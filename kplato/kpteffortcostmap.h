@@ -21,7 +21,7 @@
 #define KPTEFFORTCOST_H
 
 #include <qdatetime.h>
-#include <qmap.h>
+#include <QMap>
 
 #include "kptduration.h"
 

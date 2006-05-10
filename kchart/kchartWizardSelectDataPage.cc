@@ -2,8 +2,8 @@
 
 #include "kchartWizardSelectDataPage.h"
 
-#include <qlabel.h>
-#include <qlineedit.h>
+#include <QLabel>
+#include <QLineEdit>
 #include <kdebug.h>
 
 namespace KChart

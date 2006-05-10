@@ -21,7 +21,7 @@
 #ifndef PICTUREPROPERTY_H
 #define PICTUREPROPERTY_H
 
-#include <qwidget.h>
+#include <QWidget>
 
 #include "KPrCommand.h"
 

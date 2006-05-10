@@ -20,7 +20,7 @@
 
 /* vselecttoolbar.cc */
 
-#include <qlabel.h>
+#include <QLabel>
 
 #include <klocale.h>
 #include <kdebug.h>

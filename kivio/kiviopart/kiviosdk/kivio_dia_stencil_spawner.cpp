@@ -18,8 +18,8 @@
 */
 
 #include <qdom.h>
-#include <qfile.h>
-#include <qregexp.h>
+#include <QFile>
+#include <QRegExp>
 #include <qstringlist.h>
 #include <kdebug.h>
 #include <math.h>

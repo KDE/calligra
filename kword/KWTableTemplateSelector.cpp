@@ -33,15 +33,15 @@
 #include <kstandarddirs.h>
 #include <kdebug.h>
 
-#include <qlabel.h>
+#include <QLabel>
 #include <q3buttongroup.h>
-#include <qcheckbox.h>
-#include <qcombobox.h>
-#include <qfile.h>
+#include <QCheckBox>
+#include <QComboBox>
+#include <QFile>
 #include <qdom.h>
 #include <qrect.h>
 #include <q3ptrlist.h>
-#include <qlayout.h>
+#include <QLayout>
 //Added by qt3to4:
 #include <Q3GridLayout>
 #include <Q3ListBox>

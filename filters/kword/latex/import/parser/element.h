@@ -20,7 +20,7 @@
 #ifndef __LATEXPARSER_ELEMENT_H__
 #define __LATEXPARSER_ELEMENT_H__
 
-#include <qstring.h>
+#include <QString>
 
 class Element
 {

@@ -21,7 +21,7 @@
 #define __my_app_h__
 
 #include <q3ptrlist.h>
-#include <qstring.h>
+#include <QString>
 #include <qobject.h>
 //Added by qt3to4:
 #include <QEvent>

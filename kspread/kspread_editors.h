@@ -25,7 +25,7 @@
 #include <vector>
 
 #include <qsyntaxhighlighter.h>
-#include <qwidget.h>
+#include <QWidget>
 //Added by qt3to4:
 #include <QFocusEvent>
 #include <QKeyEvent>

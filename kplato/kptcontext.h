@@ -22,7 +22,7 @@
 #define KPTCONTEXT_H
 
 #include <qdatetime.h>
-#include <qstring.h>
+#include <QString>
 #include <qstringlist.h>
 
 class QDomElement;

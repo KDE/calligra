@@ -50,8 +50,8 @@
 #include "ui_font_cell_format.h"
 #include "ui_protection_cell_format.h"
 
-#include <qpushbutton.h>
-#include <qcheckbox.h>
+#include <QPushButton>
+#include <QCheckBox>
 
 class KoUnitDoubleSpinBox;
 class QPixmap;

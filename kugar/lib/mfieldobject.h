@@ -9,7 +9,7 @@
 #ifndef MFIELDOBJECT_H
 #define MFIELDOBJECT_H
 
-#include <qregexp.h>
+#include <QRegExp>
 
 #include "mlabelobject.h"
 

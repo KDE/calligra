@@ -3,17 +3,17 @@
 #include "kchart_part.h"
 
 #include <q3buttongroup.h>
-#include <qlineedit.h>
+#include <QLineEdit>
 #include <qradiobutton.h>
-#include <qlabel.h>
+#include <QLabel>
 //Added by qt3to4:
 #include <Q3GridLayout>
 #include <QPaintEvent>
 #include <klocale.h>
 #include <kfontdialog.h>
-#include <qlayout.h>
-#include <qpushbutton.h>
-#include <qcolor.h>
+#include <QLayout>
+#include <QPushButton>
+#include <QColor>
 
 #include "kchart_params.h"
 

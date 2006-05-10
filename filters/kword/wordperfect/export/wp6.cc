@@ -24,7 +24,7 @@
 #endif
 
 #include <qtextcodec.h>
-#include <qfile.h>
+#include <QFile>
 #include <qfileinfo.h>
 #include <qtextstream.h>
 #include <q3valuevector.h>

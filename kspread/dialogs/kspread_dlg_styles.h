@@ -22,7 +22,7 @@
 #define __kspread_dlg_styles__
 
 #include <kdialogbase.h>
-#include <qwidget.h>
+#include <QWidget>
 
 class KComboBox;
 class K3ListView;

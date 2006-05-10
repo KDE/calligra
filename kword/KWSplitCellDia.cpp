@@ -21,9 +21,9 @@
 #include "KWSplitCellDia.moc"
 #include "KWTableDia.h"
 
-#include <qlayout.h>
-#include <qlabel.h>
-#include <qspinbox.h>
+#include <QLayout>
+#include <QLabel>
+#include <QSpinBox>
 //Added by qt3to4:
 #include <Q3GridLayout>
 

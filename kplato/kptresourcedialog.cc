@@ -24,15 +24,15 @@
 #include "kptresource.h"
 #include "kptcalendar.h"
 
-#include <qpushbutton.h>
-#include <qlabel.h>
-#include <qlineedit.h>
-#include <qcombobox.h>
+#include <QPushButton>
+#include <QLabel>
+#include <QLineEdit>
+#include <QComboBox>
 #include <q3datetimeedit.h>
 #include <qdatetime.h>
 #include <q3buttongroup.h>
 #include <qradiobutton.h>
-#include <qspinbox.h>
+#include <QSpinBox>
 #include <q3ptrlist.h>
 #include <qstringlist.h>
 

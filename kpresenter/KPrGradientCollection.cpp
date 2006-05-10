@@ -20,7 +20,7 @@
 
 #include "KPrGradientCollection.h"
 #include "KPrGradient.h"
-#include <qstring.h>
+#include <QString>
 
 const QPixmap& KPrGradientCollection::getGradient( const QColor &_color1, const QColor &_color2,
                                                   BCType _bcType, const QSize &_size,

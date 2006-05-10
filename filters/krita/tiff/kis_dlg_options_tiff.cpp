@@ -19,7 +19,7 @@
 
 #include "kis_dlg_options_tiff.h"
 
-#include <qcheckbox.h>
+#include <QCheckBox>
 #include <q3groupbox.h>
 #include <qslider.h>
 #include <q3widgetstack.h>

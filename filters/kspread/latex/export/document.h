@@ -23,9 +23,9 @@
 #ifndef __KSPREAD_LATEX_DOCUMENT_H__
 #define __KSPREAD_LATEX_DOCUMENT_H__
 
-#include <qfile.h>			/* for QFile class */
+#include <QFile>			/* for QFile class */
 #include <qtextstream.h>	/* for QTextStream class */
-#include <qstring.h>		/* for QString class */
+#include <QString>		/* for QString class */
 
 #include "xmlparser.h"
 #include "config.h"

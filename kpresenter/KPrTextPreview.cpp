@@ -3,7 +3,7 @@
 #include <KoGlobal.h>
 
 #include <qpainter.h>
-#include <qfont.h>
+#include <QFont>
 
 KPrTextPreview::KPrTextPreview( QWidget* parent, const char* name )
     : QFrame( parent, name ),

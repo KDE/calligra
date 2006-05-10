@@ -27,7 +27,7 @@
 #include "layerlisttooltip.h"
 
 #include <qheader.h>
-#include <qlayout.h>
+#include <QLayout>
 
 #include <ktoolbar.h>
 #include <klocale.h>

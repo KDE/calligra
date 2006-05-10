@@ -44,7 +44,7 @@
 #define _DIGEST_
 
 #include <qbytearray.h>
-#include <qstring.h>
+#include <QString>
 
 class SHA1
 {

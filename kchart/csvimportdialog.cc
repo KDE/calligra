@@ -22,14 +22,14 @@
 #include <csvimportdialog.h>
 
 #include <q3table.h>
-#include <qcheckbox.h>
+#include <QCheckBox>
 #include <qcursor.h>
-#include <qlineedit.h>
-#include <qcombobox.h>
-#include <qspinbox.h>
+#include <QLineEdit>
+#include <QComboBox>
+#include <QSpinBox>
 #include <qtextstream.h>
 #include <q3buttongroup.h>
-#include <qpushbutton.h>
+#include <QPushButton>
 #include <qradiobutton.h>
 #include <qtextcodec.h>
 

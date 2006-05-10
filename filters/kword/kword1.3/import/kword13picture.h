@@ -24,7 +24,7 @@
 class KTempFile;
 class KoStore;
 
-#include <qstring.h>
+#include <QString>
 
 class KWord13Picture
 {

@@ -23,7 +23,7 @@
 
 #include <qtabdialog.h>
 #include <qptrlist.h>
-#include <qmap.h>
+#include <QMap>
 #include <qfileinfo.h>
 
 class QLabel;

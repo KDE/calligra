@@ -28,12 +28,12 @@
 #include <qevent.h>
 #include <q3mainwindow.h>
 #include <qaction.h>
-#include <qlayout.h>
+#include <QLayout>
 #include <q3dockwindow.h>
 #include <qmenubar.h>
 #include <qmessagebox.h>
-#include <qspinbox.h>
-#include <qlabel.h>
+#include <QSpinBox>
+#include <QLabel>
 //Added by qt3to4:
 #include <Q3VBoxLayout>
 #include <QResizeEvent>

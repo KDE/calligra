@@ -23,7 +23,7 @@
 #include <math.h>
 
 #include <qprogressdialog.h>
-#include <qfile.h>
+#include <QFile>
 #include <qtextstream.h>
 #include <qpainter.h>
 #include <qpaintdevicemetrics.h>
@@ -35,7 +35,7 @@
 #include <qdropsite.h>
 #include <qrect.h>
 #include <qsize.h>
-#include <qpoint.h>
+#include <QPoint>
 #include <qclipboard.h>
 
 #include <kapplication.h>

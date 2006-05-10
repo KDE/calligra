@@ -19,8 +19,8 @@
 
 #include "amiproparser.h"
 
-#include <qfile.h>
-#include <qstring.h>
+#include <QFile>
+#include <QString>
 #include <qstringlist.h>
 #include <qtextstream.h>
 

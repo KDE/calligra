@@ -22,12 +22,12 @@
 #include "KWClassicSerialDataSource.moc"
 #include "KWMailMergeDataBase.h"
 #include <kinputdialog.h>
-#include <qlabel.h>
+#include <QLabel>
 
-#include <qlayout.h>
+#include <QLayout>
 
-#include <qpushbutton.h>
-#include <qlineedit.h>
+#include <QPushButton>
+#include <QLineEdit>
 #include <qvalidator.h>
 //Added by qt3to4:
 #include <QResizeEvent>
@@ -35,7 +35,7 @@
 #include <klocale.h>
 #include <kdebug.h>
 #include <qtoolbutton.h>
-#include <qtooltip.h>
+#include <QToolTip>
 #include <kiconloader.h>
 #include <q3header.h>
 #include <kvbox.h>

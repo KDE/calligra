@@ -18,12 +18,12 @@
 */
 #include "kivioaddstencilsetpanel.h"
 
-#include <qfile.h>
-#include <qdir.h>
+#include <QFile>
+#include <QDir>
 #include <qstringlist.h>
 #include <qiconview.h>
 #include <qgroupbox.h>
-#include <qpushbutton.h>
+#include <QPushButton>
 #include <qtextbrowser.h>
 #include <qsplitter.h>
 

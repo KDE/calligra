@@ -20,9 +20,9 @@
 #ifndef DOCBOOKEXPORT_H
 #define DOCBOOKEXPORT_H
 
-#include <qstring.h>
+#include <QString>
 #include <q3cstring.h>
-#include <qfile.h>
+#include <QFile>
 #include <qobject.h>
 
 #include <KoFilter.h>

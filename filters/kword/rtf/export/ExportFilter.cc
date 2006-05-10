@@ -20,16 +20,16 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <qstring.h>
+#include <QString>
 #include <qtextcodec.h>
-#include <qfile.h>
+#include <QFile>
 #include <qfileinfo.h>
 #include <qfontinfo.h>
 #include <qfontdatabase.h>
 #include <q3picture.h>
 #include <qimage.h>
-#include <qregexp.h>
-#include <qcolor.h>
+#include <QRegExp>
+#include <QColor>
 #include <qdatetime.h>
 //Added by qt3to4:
 #include <QTextStream>

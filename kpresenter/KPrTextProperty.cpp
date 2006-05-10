@@ -22,8 +22,8 @@
 
 #include "KPrTextProperty.h"
 
-#include <qcheckbox.h>
-#include <qlayout.h>
+#include <QCheckBox>
+#include <QLayout>
 
 #include <klocale.h>
 #include <kdebug.h>

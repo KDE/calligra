@@ -21,7 +21,7 @@
 #define KSPREAD_VALUE_H
 
 #include <qdatetime.h>
-#include <qstring.h>
+#include <QString>
 #include <qtextstream.h>
 
 #include <koffice_export.h>

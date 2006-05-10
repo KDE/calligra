@@ -21,8 +21,8 @@ DESCRIPTION
 */
 
 #include <kdebug.h>
-#include <qdatastream.h>
-#include <qfile.h>
+#include <QDataStream>
+#include <QFile>
 #include <q3ptrlist.h>
 #include <q3pointarray.h>
 #include <qrect.h>

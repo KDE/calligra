@@ -25,7 +25,7 @@
 #include <wv2/handlers.h>
 #include <wv2/functor.h>
 
-#include <qstring.h>
+#include <QString>
 #include <qdom.h>
 #include <qobject.h>
 #include <qstringlist.h>

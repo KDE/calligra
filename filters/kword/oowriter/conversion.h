@@ -20,7 +20,7 @@
 #ifndef CONVERSION_H
 #define CONVERSION_H
 
-#include <qstring.h>
+#include <QString>
 #include <qpair.h>
 
 // Static methods for simple OO<->KWord conversions

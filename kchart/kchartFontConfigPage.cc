@@ -27,11 +27,11 @@
 #include <kcolorbutton.h>
 #include <kdebug.h>
 
-#include <qlayout.h>
-#include <qlabel.h>
-#include <qlineedit.h>
+#include <QLayout>
+#include <QLabel>
+#include <QLineEdit>
 #include <q3listbox.h>
-#include <qpushbutton.h>
+#include <QPushButton>
 #include <qpainter.h>
 
 //Added by qt3to4:

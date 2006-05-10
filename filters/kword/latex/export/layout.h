@@ -24,7 +24,7 @@
 #define __KWORD_LAYOUT_H__
 
 #include <qtextstream.h>
-#include <qstring.h>
+#include <QString>
 #include <kdebug.h>
 #include "textformat.h"
 

@@ -24,8 +24,8 @@
 #include <dcopobject.h>
 #include <dcopref.h>
 
-#include <qmap.h>
-#include <qstring.h>
+#include <QMap>
+#include <QString>
 
 namespace KSpread
 {

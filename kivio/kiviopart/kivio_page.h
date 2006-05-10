@@ -42,7 +42,7 @@ class DCOPObject;
 #include <qmemarray.h>
 #include <qrect.h>
 #include <qpalette.h>
-#include <qwidget.h>
+#include <QWidget>
 #include <KoPoint.h>
 
 #include "kivio_stencil.h"

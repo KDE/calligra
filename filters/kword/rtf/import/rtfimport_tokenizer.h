@@ -13,7 +13,7 @@
 #define __RTFIMPORT_TOKENIZER_H__
 
 #include <q3cstring.h>
-#include <qfile.h>
+#include <QFile>
 
 
 /// This class represents the tokenizer and the token

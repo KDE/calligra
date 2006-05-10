@@ -2,7 +2,7 @@
 #ifndef __LATEXPARSER_OPTION_H__
 #define __LATEXPARSER_OPTION_H__
 
-#include <qstring.h>
+#include <QString>
 
 class Option
 {

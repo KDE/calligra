@@ -24,7 +24,7 @@
 #include <qstyle.h>
 #include <qpainter.h>
 #include <qpixmap.h>
-#include <qtooltip.h>
+#include <QToolTip>
 #include <kdebug.h>
 #include "qdrawutil.h"
 

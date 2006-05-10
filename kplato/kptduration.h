@@ -22,7 +22,7 @@
 #define KPTDURATION_H
 
 #include <qglobal.h>
-#include <qstring.h>
+#include <QString>
 
 namespace KPlato
 {

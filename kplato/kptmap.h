@@ -21,9 +21,9 @@
 #define KPTMAP_H
 
 
-#include <qmap.h>
+#include <QMap>
 #include <qdatetime.h>
-#include <qstring.h>
+#include <QString>
 #include <qpair.h>
 #include <q3valuelist.h>
 

@@ -39,7 +39,7 @@
 #include <kofficeversion.h>
 #include <kmessagebox.h>
 
-#include <qpoint.h>
+#include <QPoint>
 #include <qrect.h>
 
 namespace KSpread

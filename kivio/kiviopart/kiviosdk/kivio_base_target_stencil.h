@@ -19,8 +19,8 @@
 #ifndef KIVIO_BASE_TARGET_STENCIL_H
 #define KIVIO_BASE_TARGET_STENCIL_H
 
-#include <qfont.h>
-#include <qcolor.h>
+#include <QFont>
+#include <QColor>
 #include <qdom.h>
 #include <qptrlist.h>
 

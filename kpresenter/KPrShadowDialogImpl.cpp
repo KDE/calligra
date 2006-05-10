@@ -1,7 +1,7 @@
 // -*- Mode: c++; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
-#include <qspinbox.h>
+#include <QSpinBox>
 #include <qgroupbox.h>
-#include <qlayout.h>
+#include <QLayout>
 #include <qbuttongroup.h>
 
 #include <kcolorbutton.h>

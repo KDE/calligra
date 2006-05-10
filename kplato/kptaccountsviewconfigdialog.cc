@@ -19,11 +19,11 @@
 
 #include "kptaccountsviewconfigdialog.h"
 
-#include <qcheckbox.h>
-#include <qcombobox.h>
+#include <QCheckBox>
+#include <QComboBox>
 #include <q3datetimeedit.h>
 #include <qdatetime.h>
-#include <qstring.h>
+#include <QString>
 
 #include <kdatewidget.h>
 #include <klocale.h>

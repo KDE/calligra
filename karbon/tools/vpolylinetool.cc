@@ -20,7 +20,7 @@
 
 #include <qcursor.h>
 #include <qevent.h>
-#include <qlabel.h>
+#include <QLabel>
 
 #include <klocale.h>
 

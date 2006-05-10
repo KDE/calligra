@@ -34,12 +34,12 @@
 
 #include <qpen.h>
 #include <qdom.h>
-#include <qstring.h>
-#include <qcolor.h>
+#include <QString>
+#include <QColor>
 #include <qbrush.h>
 #include <qsize.h>
 #include <qrect.h>
-#include <qfont.h>
+#include <QFont>
 #include <qstringlist.h>
 #include <qdatetime.h>
 //Added by qt3to4:

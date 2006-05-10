@@ -21,20 +21,20 @@
 #include "KWDocument.h"
 
 #include <q3vbox.h>
-#include <qlayout.h>
-#include <qlineedit.h>
-#include <qpushbutton.h>
+#include <QLayout>
+#include <QLineEdit>
+#include <QPushButton>
 #include <q3listbox.h>
 //Added by qt3to4:
 #include <QList>
 #include <kmessagebox.h>
 #include "KWImportStyleDia.h"
 #include <KoStore.h>
-#include <qfile.h>
+#include <QFile>
 
 #include <kfiledialog.h>
 #include <kdebug.h>
-#include <qlabel.h>
+#include <QLabel>
 
 #include "KWTextParag.h"
 

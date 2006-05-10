@@ -22,7 +22,7 @@
 #ifndef VCOLORSLIDER_H
 #define VCOLORSLIDER_H
 
-#include <qwidget.h>
+#include <QWidget>
 
 class QLabel;
 class KIntSpinBox;

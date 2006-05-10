@@ -19,8 +19,8 @@
 #include "stenciltexteditor.h"
 
 #include <qtoolbutton.h>
-#include <qfont.h>
-#include <qcolor.h>
+#include <QFont>
+#include <QColor>
 #include <qpopupmenu.h>
 
 #include <kiconloader.h>

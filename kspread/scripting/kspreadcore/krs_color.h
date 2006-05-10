@@ -20,7 +20,7 @@
 #ifndef KROSS_KSPREADCOREKRSCOLOR_H
 #define KROSS_KSPREADCOREKRSCOLOR_H
 
-#include <qcolor.h>
+#include <QColor>
 
 #include <api/class.h>
 

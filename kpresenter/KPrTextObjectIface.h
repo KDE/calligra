@@ -24,9 +24,9 @@
 #include <KoDocumentIface.h>
 #include <dcopref.h>
 #include "KPrObject2DIface.h"
-#include <qstring.h>
-#include <qcolor.h>
-#include <qfont.h>
+#include <QString>
+#include <QColor>
+#include <QFont>
 class KPrTextObject;
 
 class KPrTextObjectIface : public KPrObject2DIface

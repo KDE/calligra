@@ -19,8 +19,8 @@
 #include "kivio_stackbar.h"
 #include "stencilbarbutton.h"
 
-#include <qlayout.h>
-#include <qpushbutton.h>
+#include <QLayout>
+#include <QPushButton>
 #include <qapplication.h>
 
 #include <kdebug.h>

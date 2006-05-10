@@ -26,7 +26,7 @@
 #include <KoStoreDevice.h>
 
 #include <qdom.h>
-#include <qfile.h>
+#include <QFile>
 #include <qdatetime.h>
 
 typedef KGenericFactory<KOfficePlugin> KOfficeFactory;

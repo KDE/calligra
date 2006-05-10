@@ -27,7 +27,7 @@
 #include <klocale.h>
 #include <kdebug.h>
 #include <q3sortedlist.h>
-#include <qcolor.h>
+#include <QColor>
 //Added by qt3to4:
 #include <Q3CString>
 

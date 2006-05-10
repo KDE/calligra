@@ -21,7 +21,7 @@
 #ifndef kprvariable_h
 #define kprvariable_h
 
-#include <qstring.h>
+#include <QString>
 #include <qasciidict.h>
 #include <KoVariable.h>
 

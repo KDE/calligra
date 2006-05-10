@@ -26,8 +26,8 @@
 class QString;
 class QTextStream;
 
-#include <qstring.h>
-#include <qmap.h>
+#include <QString>
+#include <QMap>
 
 #include "kword13paragraph.h"
 

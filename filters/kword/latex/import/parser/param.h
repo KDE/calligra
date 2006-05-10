@@ -20,7 +20,7 @@
 #ifndef __LATEXPARSER_PARAM_H__
 #define __LATEXPARSER_PARAM_H__
 
-#include <qstring.h>
+#include <QString>
 
 class Param
 {

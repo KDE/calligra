@@ -29,7 +29,7 @@
 #include <wv2/parser.h>
 #include <wv2/fields.h>
 
-#include <qfont.h>
+#include <QFont>
 #include <qfontinfo.h>
 #include <kdebug.h>
 #include <klocale.h>

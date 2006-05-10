@@ -34,13 +34,13 @@
 #include <kiconloader.h>
 #include <kdebug.h>
 
-#include <qpushbutton.h>
-#include <qlabel.h>
+#include <QPushButton>
+#include <QLabel>
 #include <q3groupbox.h>
 #include <qpainter.h>
-#include <qlineedit.h>
-#include <qlayout.h>
-#include <qcombobox.h>
+#include <QLineEdit>
+#include <QLayout>
+#include <QComboBox>
 #include <q3frame.h>
 //Added by qt3to4:
 #include <Q3GridLayout>

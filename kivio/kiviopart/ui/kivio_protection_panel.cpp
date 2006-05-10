@@ -27,7 +27,7 @@
 #include "kivio_command.h"
 
 #include <qbitarray.h>
-#include <qcheckbox.h>
+#include <QCheckBox>
 #include <kaction.h>
 #include <kdebug.h>
 #include <klocale.h>

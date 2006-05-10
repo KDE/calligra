@@ -27,11 +27,11 @@
 #include <kstandarddirs.h>
 #include <kurlrequester.h>
 
-#include <qcheckbox.h>
-#include <qcombobox.h>
+#include <QCheckBox>
+#include <QComboBox>
 #include <qimage.h>
-#include <qlabel.h>
-#include <qpushbutton.h>
+#include <QLabel>
+#include <QPushButton>
 
 #include "KPrBackground.h"
 #include "KPrCanvas.h"

@@ -20,8 +20,8 @@
 #ifndef KIVIO_STENCIL_H
 #define KIVIO_STENCIL_H
 
-#include <qfont.h>
-#include <qcolor.h>
+#include <QFont>
+#include <QColor>
 #include <qdom.h>
 #include <qptrlist.h>
 #include <qbitarray.h>

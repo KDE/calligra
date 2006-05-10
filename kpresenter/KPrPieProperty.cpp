@@ -20,7 +20,7 @@
 
 #include "KPrPieProperty.h"
 
-#include <qlayout.h>
+#include <QLayout>
 
 #include <kcombobox.h>
 #include <klocale.h>

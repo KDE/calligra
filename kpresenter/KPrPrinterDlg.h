@@ -26,8 +26,8 @@
 #include <kdeprint/kprintdialogpage.h>
 #include <knuminput.h>
 
-#include <qcheckbox.h>
-#include <qlabel.h>
+#include <QCheckBox>
+#include <QLabel>
 
 class KPrPrinterDlg : public KPrintDialogPage
 {

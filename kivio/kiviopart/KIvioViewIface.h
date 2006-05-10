@@ -22,8 +22,8 @@
 
 #include <KoViewIface.h>
 
-#include <qstring.h>
-#include <qcolor.h>
+#include <QString>
+#include <QColor>
 class KivioView;
 
 class KIvioViewIface : public KoViewIface

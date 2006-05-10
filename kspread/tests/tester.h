@@ -20,7 +20,7 @@
 #ifndef KSPREAD_TESTER
 #define KSPREAD_TESTER
 
-#include <qstring.h>
+#include <QString>
 #include <qstringlist.h>
 
 namespace KSpread

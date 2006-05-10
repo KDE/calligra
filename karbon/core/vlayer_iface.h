@@ -21,7 +21,7 @@
 #define __VLAYER_IFACE_H__
 
 #include "vgroup_iface.h"
-#include <qstring.h>
+#include <QString>
 
 class VLayer;
 

@@ -23,10 +23,10 @@
 
 #include "kspread_format.h"
 
-#include <qcolor.h>
-#include <qfont.h>
+#include <QColor>
+#include <QFont>
 #include <q3ptrlist.h>
-#include <qstring.h>
+#include <QString>
 
 namespace KSpread
 {

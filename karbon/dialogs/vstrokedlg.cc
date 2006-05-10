@@ -18,9 +18,9 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <qcombobox.h>
-#include <qlabel.h>
-#include <qlayout.h>
+#include <QComboBox>
+#include <QLabel>
+#include <QLayout>
 #include <qtabwidget.h>
 #include <qradiobutton.h>
 #include <qvbuttongroup.h>

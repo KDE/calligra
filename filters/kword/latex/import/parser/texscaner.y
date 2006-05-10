@@ -1,9 +1,9 @@
 %{
 #include <stdlib.h>
 #include <stdio.h>
-#include <qstring.h>
+#include <QString>
 /*#include <qpair.h>
-#include <qmap.h>*/
+#include <QMap>*/
 #include "param.h"
 #include "element.h"
 #include "comment.h"

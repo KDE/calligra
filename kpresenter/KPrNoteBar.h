@@ -21,7 +21,7 @@
 #ifndef NOTEBAR_H
 #define NOTEBAR_H
 
-#include <qwidget.h>
+#include <QWidget>
 
 class QPainter;
 class QLabel;

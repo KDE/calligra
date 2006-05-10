@@ -20,14 +20,14 @@
 #ifndef kwtabletemplateselector_h
 #define kwtabletemplateselector_h
 
-#include <qwidget.h>
+#include <QWidget>
 #include <q3groupbox.h>
 #include <q3ptrlist.h>
 
-#include <qlabel.h>
-#include <qpushbutton.h>
-/*#include <qlayout.h>
-#include <qfont.h>
+#include <QLabel>
+#include <QPushButton>
+/*#include <QLayout>
+#include <QFont>
 #include <qbrush.h>
 */
 

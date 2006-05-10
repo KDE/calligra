@@ -20,8 +20,8 @@
 #ifndef KPTDOUBLELISTVIEWBASE_H
 #define KPTDOUBLELISTVIEWBASE_H
 
-#include <qcolor.h>
-#include <qmap.h>
+#include <QColor>
+#include <QMap>
 #include <q3ptrvector.h>
 #include <qsplitter.h>
 

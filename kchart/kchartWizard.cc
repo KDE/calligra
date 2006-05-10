@@ -8,9 +8,9 @@
 #include "kchartWizardSetupAxesPage.h"
 #include "kchartWizardSelectDataFormatPage.h"
 
-#include <qlineedit.h>
-#include <qwidget.h>
-#include <qpushbutton.h>
+#include <QLineEdit>
+#include <QWidget>
+#include <QPushButton>
 
 #include <kglobal.h>
 #include <kiconloader.h>

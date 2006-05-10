@@ -18,10 +18,10 @@
 */
 
 #include <q3cstring.h>
-#include <qdatastream.h>
+#include <QDataStream>
 #include <qdom.h>
-#include <qfile.h>
-#include <qstring.h>
+#include <QFile>
+#include <QString>
 #include <q3valuelist.h>
 
 #include <kgenericfactory.h>

@@ -17,11 +17,11 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <qstring.h>
+#include <QString>
 #include <q3dict.h>
-#include <qfile.h>
+#include <QFile>
 #include <qbuffer.h>
-#include <qcolor.h>
+#include <QColor>
 #include <qimage.h>
 //Added by qt3to4:
 #include <Q3ValueList>

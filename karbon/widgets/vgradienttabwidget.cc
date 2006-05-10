@@ -17,11 +17,11 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <qlabel.h>
+#include <QLabel>
 #include <qpainter.h>
-#include <qlayout.h>
+#include <QLayout>
 #include <qgroupbox.h>
-#include <qpushbutton.h>
+#include <QPushButton>
 #include <qfileinfo.h>
 #include <qpixmap.h>
 

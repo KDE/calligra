@@ -23,7 +23,7 @@
 class QString;
 class QStringList;
 #include <q3valuelist.h>
-#include <qcolor.h>
+#include <QColor>
 
 class AmiPro
 {

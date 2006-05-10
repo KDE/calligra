@@ -21,10 +21,10 @@
 #ifndef DBASE_H
 #define DBASE_H
 
-#include <qdatastream.h>
+#include <QDataStream>
 #include <qdatetime.h>
-#include <qfile.h>
-#include <qstring.h>
+#include <QFile>
+#include <QString>
 #include <qstringlist.h>
 //Added by qt3to4:
 #include <Q3PtrList>

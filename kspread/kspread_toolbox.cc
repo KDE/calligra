@@ -22,8 +22,8 @@
 
 #include <kwin.h>
 
-#include <qlayout.h>
-#include <qspinbox.h>
+#include <QLayout>
+#include <QSpinBox>
 #include <qobject.h>
 //Added by qt3to4:
 #include <QVBoxLayout>

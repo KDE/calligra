@@ -47,7 +47,7 @@
 
 #include <assert.h>
 #include <stdio.h>
-#include <qlabel.h>
+#include <QLabel>
 #include <qpixmap.h>
 #include <qscrollbar.h>
 #include <qtimer.h>

@@ -21,7 +21,7 @@
 #define docstruct_h
 
 #include <k3listview.h>
-#include <qwidget.h>
+#include <QWidget>
 //Added by qt3to4:
 #include <Q3VBoxLayout>
 #include <QPaintEvent>

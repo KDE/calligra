@@ -31,7 +31,7 @@
 #include <klocale.h>
 
 #include <q3intdict.h>
-#include <qmap.h>
+#include <QMap>
 
 namespace KPlato
 {

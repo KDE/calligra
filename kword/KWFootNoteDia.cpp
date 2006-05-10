@@ -27,8 +27,8 @@
 #include <Q3GridLayout>
 
 #include <klocale.h>
-#include <qlayout.h>
-#include <qlineedit.h>
+#include <QLayout>
+#include <QLineEdit>
 #include "KWConfigFootNoteDia.h"
 
 

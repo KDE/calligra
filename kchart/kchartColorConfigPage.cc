@@ -24,8 +24,8 @@
 #include <kdialog.h>
 #include <klocale.h>
 #include <kcolorbutton.h>
-#include <qlayout.h>
-#include <qlabel.h>
+#include <QLayout>
+#include <QLabel>
 #include <q3buttongroup.h>
 
 

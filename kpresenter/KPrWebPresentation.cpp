@@ -32,26 +32,26 @@
 #include <sys/types.h>
 #include <ktempfile.h>
 
-#include <qfile.h>
+#include <QFile>
 #include <qtextstream.h>
 #include <qvbox.h>
 #include <qhbox.h>
-#include <qlabel.h>
-#include <qpushbutton.h>
+#include <QLabel>
+#include <QPushButton>
 #include <qfileinfo.h>
 #include <qframe.h>
-#include <qfont.h>
+#include <QFont>
 #include <qpixmap.h>
 #include <qdatetime.h>
-#include <qdir.h>
+#include <QDir>
 #include <qheader.h>
 #include <qwmatrix.h>
 #include <qtextcodec.h>
-#include <qregexp.h>
+#include <QRegExp>
 #include <qimage.h>
-#include <qlayout.h>
+#include <QLayout>
 #include <qwhatsthis.h>
-#include <qcheckbox.h>
+#include <QCheckBox>
 
 #include <kdebug.h>
 #include <klocale.h>

@@ -21,7 +21,7 @@
 #ifndef _VGRADIENTTABWIDGET_H_
 #define _VGRADIENTTABWIDGET_H_
 
-#include <qwidget.h>
+#include <QWidget>
 #include <qtabwidget.h>
 #include <qlistbox.h>
 #include <koffice_export.h>

@@ -35,7 +35,7 @@ class QColor;
 
 #include <KoFilter.h>
 #include <qobject.h>
-#include <qstring.h>
+#include <QString>
 
 class XFIGImport : public KoFilter
 {

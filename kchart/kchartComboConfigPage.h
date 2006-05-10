@@ -20,7 +20,7 @@
 #ifndef __KCHARTCOMBOPAGE_H__
 #define __KCHARTCOMBOPAGE_H__
 
-#include <qwidget.h>
+#include <QWidget>
 
 class QRadioButton;
 

@@ -34,16 +34,16 @@
 #include <qheader.h>
 #include <qwmatrix.h>
 #include <qvbox.h>
-#include <qlayout.h>
+#include <QLayout>
 #include <qimage.h>
-#include <qpushbutton.h>
-#include <qcheckbox.h>
+#include <QPushButton>
+#include <QCheckBox>
 #include <qslider.h>
-#include <qtooltip.h>
+#include <QToolTip>
 #include <qwhatsthis.h>
 #include <qframe.h>
-#include <qlabel.h>
-#include <qcombobox.h>
+#include <QLabel>
+#include <QComboBox>
 
 #include <kdebug.h>
 #include <kurlrequester.h>

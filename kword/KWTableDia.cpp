@@ -31,12 +31,12 @@
 #include "KWPage.h"
 #include <kcommand.h>
 
-#include <qlabel.h>
-#include <qlayout.h>
-#include <qspinbox.h>
-#include <qcheckbox.h>
+#include <QLabel>
+#include <QLayout>
+#include <QSpinBox>
+#include <QCheckBox>
 #include <q3buttongroup.h>
-#include <qcombobox.h>
+#include <QComboBox>
 //Added by qt3to4:
 #include <Q3GridLayout>
 #include <QPaintEvent>

@@ -19,13 +19,13 @@
 
 #include <float.h>
 
-#include <qcheckbox.h>
+#include <QCheckBox>
 #include <qgroupbox.h>
-#include <qlabel.h>
-#include <qlayout.h>
+#include <QLabel>
+#include <QLayout>
 #include <qvbox.h>
 #include <qvgroupbox.h>
-#include <qcombobox.h>
+#include <QComboBox>
 #include <qgrid.h>
 
 #include <kiconloader.h>

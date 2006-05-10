@@ -20,7 +20,7 @@
 
 
 #include "KWSortDia.h"
-#include <qlayout.h>
+#include <QLayout>
 #include <klocale.h>
 #include <qradiobutton.h>
 #include <q3groupbox.h>

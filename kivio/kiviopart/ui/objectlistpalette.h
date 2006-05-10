@@ -19,7 +19,7 @@
 #ifndef KIVIOOBJECTLISTPALETTE_H
 #define KIVIOOBJECTLISTPALETTE_H
 
-#include <qwidget.h>
+#include <QWidget>
 
 class K3ListView;
 class KivioView;

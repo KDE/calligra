@@ -26,9 +26,9 @@
 #ifndef KSPREAD_VIEW_IFACE_H
 #define KSPREAD_VIEW_IFACE_H
 
-#include <qcolor.h>
+#include <QColor>
 #include <qrect.h>
-#include <qstring.h>
+#include <QString>
 
 #include <KoViewIface.h>
 

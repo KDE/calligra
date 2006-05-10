@@ -20,7 +20,7 @@
 
 #include <klocale.h>
 
-#include <qmap.h>
+#include <QMap>
 
 #include <koproperty/property.h>
 

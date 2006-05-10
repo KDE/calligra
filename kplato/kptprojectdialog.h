@@ -26,7 +26,7 @@
 
 #include <kdialogbase.h>
 
-#include <qstring.h>
+#include <QString>
 
 namespace KPlato
 {

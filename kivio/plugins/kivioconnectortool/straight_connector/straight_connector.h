@@ -30,7 +30,7 @@
 
 class KivioPage;
 
-#include <qcolor.h>
+#include <QColor>
 #include <qdom.h>
 
 #include "kivio_1d_stencil.h"

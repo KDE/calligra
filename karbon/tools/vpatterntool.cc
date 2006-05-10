@@ -22,9 +22,9 @@
 #include <qtoolbutton.h>
 #include <qframe.h>
 #include <qhbuttongroup.h>
-#include <qlayout.h>
+#include <QLayout>
 #include <qfileinfo.h>
-#include <qlabel.h>
+#include <QLabel>
 #include <qcursor.h>
 
 #include <kiconloader.h>

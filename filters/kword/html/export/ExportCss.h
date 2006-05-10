@@ -21,7 +21,7 @@
 #ifndef EXPORTCSS_H
 #define EXPORTCSS_H
 
-#include <qmap.h>
+#include <QMap>
 
 #include <KWEFBaseWorker.h>
 #include "ExportFilter.h"

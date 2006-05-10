@@ -27,7 +27,7 @@
 #include <kdebug.h>
 #include <qbitmap.h>
 #include <qregion.h>
-#include <qregexp.h>
+#include <QRegExp>
 #include <qdom.h>
 #include <qpicture.h>
 #include <qpainter.h>

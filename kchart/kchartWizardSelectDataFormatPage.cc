@@ -4,15 +4,15 @@
 #include "kchart_part.h"
 
 
-#include <qcheckbox.h>
-#include <qlayout.h>
-#include <qlabel.h>
-#include <qlineedit.h>
+#include <QCheckBox>
+#include <QLayout>
+#include <QLabel>
+#include <QLineEdit>
 #include <q3listbox.h>
 #include <q3buttongroup.h>
-#include <qpushbutton.h>
+#include <QPushButton>
 #include <qradiobutton.h>
-#include <qlineedit.h>
+#include <QLineEdit>
 #include <qpainter.h>
 //Added by qt3to4:
 #include <Q3GridLayout>

@@ -22,12 +22,12 @@
 
 #include <math.h>
 
-#include <qcolor.h>
+#include <QColor>
 #include <qdom.h>
 #include <qsize.h>
 #include <q3valuevector.h>
 #include <q3dict.h>
-#include <qmap.h>
+#include <QMap>
 #include <q3tl.h>
 
 class LinkAction;

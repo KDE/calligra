@@ -27,7 +27,7 @@
 #define __kspread_dlg_goalseek__
 
 #include <kdialog.h>
-#include <qpoint.h>
+#include <QPoint>
 #include <qrect.h>
 //Added by qt3to4:
 #include <QVBoxLayout>

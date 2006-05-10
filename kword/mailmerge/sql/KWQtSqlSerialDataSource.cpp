@@ -22,10 +22,10 @@
 #include "KWQtSqlEasyFilter.h"
 
 #include <klocale.h>
-#include <qlayout.h>
+#include <QLayout>
 #include <q3sqlcursor.h>
 #include <q3datatable.h>
-#include <qcheckbox.h>
+#include <QCheckBox>
 #include <qsqlrecord.h>
 #include <qsqlquery.h>
 //Added by qt3to4:

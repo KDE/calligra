@@ -30,7 +30,7 @@
 #include <qapplication.h>
 #include <q3ptrlist.h>
 #include <q3sortedlist.h>
-#include <qfile.h>
+#include <QFile>
 #include <qtextstream.h>
 //Added by qt3to4:
 #include <Q3ValueList>

@@ -25,7 +25,7 @@
 #define kppixmapobject_h
 
 #include <qdatetime.h>
-#include <qvariant.h>
+#include <QVariant>
 
 #include "KPrObject.h"
 #include <KoPictureCollection.h>

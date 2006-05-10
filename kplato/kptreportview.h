@@ -26,7 +26,7 @@
 #include "kptresource.h"
 #include "kptduration.h"
 #include <qsplitter.h>
-#include <qstring.h>
+#include <QString>
 
 #include <k3listview.h>
 

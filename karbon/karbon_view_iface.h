@@ -21,7 +21,7 @@
 #define __KARBON_VIEW_IFACE_H__
 
 
-#include <qstring.h>
+#include <QString>
 
 #include <KoViewIface.h>
 

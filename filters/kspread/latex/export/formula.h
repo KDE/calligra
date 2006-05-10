@@ -24,7 +24,7 @@
 #define __KWORD_LATEXFORMULA__
 
 #include "element.h"
-#include <qstring.h>
+#include <QString>
 #include <qtextstream.h>
 
 /***********************************************************************/

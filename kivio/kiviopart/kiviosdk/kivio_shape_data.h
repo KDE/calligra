@@ -19,11 +19,11 @@
 #ifndef KIVIO_SHAPE_DATA_H
 #define KIVIO_SHAPE_DATA_H
 
-#include <qfont.h>
-#include <qcolor.h>
+#include <QFont>
+#include <QColor>
 #include <qdom.h>
 #include <qptrlist.h>
-#include <qstring.h>
+#include <QString>
 
 #include "kivio_point.h"
 

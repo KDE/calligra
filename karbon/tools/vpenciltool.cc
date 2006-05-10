@@ -21,10 +21,10 @@
 
 #include <qcursor.h>
 #include <qevent.h>
-#include <qlabel.h>
+#include <QLabel>
 #include <qgroupbox.h>
-#include <qcombobox.h>
-#include <qcheckbox.h>
+#include <QComboBox>
+#include <QCheckBox>
 #include <qvbox.h>
 #include <qwidgetstack.h>
 

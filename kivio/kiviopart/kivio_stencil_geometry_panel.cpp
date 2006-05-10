@@ -1,7 +1,7 @@
 #include "kivio_stencil_geometry_panel.h"
 
-#include <qlayout.h>
-#include <qlabel.h>
+#include <QLayout>
+#include <QLabel>
 #include <qpixmap.h>
 
 #include <knuminput.h>

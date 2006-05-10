@@ -8,7 +8,7 @@
   email     : cloudtemple@mksat.net
 ***************************************************************************/
 
-#include <qfile.h>
+#include <QFile>
 #include <qprinter.h>
 //Added by qt3to4:
 #include <Q3PtrList>

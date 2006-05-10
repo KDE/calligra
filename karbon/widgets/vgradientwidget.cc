@@ -18,7 +18,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <qlabel.h>
+#include <QLabel>
 #include <qframe.h>
 #include <qbitmap.h>
 

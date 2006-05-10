@@ -20,7 +20,7 @@
 #ifndef __VSTATEBUTTON_H__
 #define __VSTATEBUTTON_H__
 
-#include <qpushbutton.h>
+#include <QPushButton>
 #include <qpixmap.h>
 #include <qptrlist.h>
 

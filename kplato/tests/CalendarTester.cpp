@@ -23,7 +23,7 @@
 #include <kptmap.h>
 #include <kunittest/runner.h>
 #include <kunittest/module.h>
-#include <qstring.h>
+#include <QString>
 
 using namespace KUnitTest;
 

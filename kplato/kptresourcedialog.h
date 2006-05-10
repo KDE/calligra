@@ -25,8 +25,8 @@
 
 #include <kdialogbase.h>
 
-#include <qmap.h>
-#include <qcombobox.h>
+#include <QMap>
+#include <QComboBox>
 
 class KCommand;
 

@@ -19,7 +19,7 @@
 #ifndef STENCILBARDOCKMANAGER_H
 #define STENCILBARDOCKMANAGER_H
 
-#include <qwidget.h>
+#include <QWidget>
 #include <qptrlist.h>
 #if defined Q_WS_X11 && !defined K_WS_QTONLY
 #include <X11/X.h>

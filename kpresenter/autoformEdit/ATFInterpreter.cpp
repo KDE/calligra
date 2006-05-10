@@ -21,7 +21,7 @@
 #include "ATFInterpreter.h"
 
 #include <qvaluestack.h>
-#include <qfile.h>
+#include <QFile>
 
 const char ATFInterpreter::PNT_BG[]   = "POINT {";
 const char ATFInterpreter::X_BG[]     = "X {";

@@ -20,10 +20,10 @@
 #include "parser.h"
 
 #include <q3memarray.h>
-#include <qdatastream.h>
-#include <qfile.h>
+#include <QDataStream>
+#include <QFile>
 #include <q3ptrlist.h>
-#include <qstring.h>
+#include <QString>
 
 using namespace WP;
 

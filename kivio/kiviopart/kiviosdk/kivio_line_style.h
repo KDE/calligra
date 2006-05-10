@@ -23,7 +23,7 @@
 #include <config.h>
 #endif
 
-#include <qcolor.h>
+#include <QColor>
 #include <qdom.h>
 #include <qpen.h>
 

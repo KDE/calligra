@@ -22,7 +22,7 @@
 #include <kcombobox.h>
 #include <klineedit.h>
 #include <kdebug.h>
-#include <qlayout.h>
+#include <QLayout>
 //Added by qt3to4:
 #include <Q3VBoxLayout>
 #include <kconfig.h>

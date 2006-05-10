@@ -25,7 +25,7 @@
 
 #include <kdialogbase.h>
 
-#include <qstring.h>
+#include <QString>
 
 class KMacroCommand;
 

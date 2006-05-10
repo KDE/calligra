@@ -21,7 +21,7 @@
 #define __WMLPARSER_H
 
 #include <q3valuelist.h>
-#include <qstring.h>
+#include <QString>
 
 class WMLFormat
 {

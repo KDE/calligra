@@ -21,7 +21,7 @@
 #ifndef __KCHARTPARAMETERPIECONFIGPAGE_H__
 #define __KCHARTPARAMETERPIECONFIGPAGE_H__
 
-#include <qwidget.h>
+#include <QWidget>
 
 
 class QCheckBox;

@@ -22,8 +22,8 @@
 #define __kspread_format_h__
 
 #include <qbrush.h>
-#include <qcolor.h>
-#include <qfont.h>
+#include <QColor>
+#include <QFont>
 #include <qpen.h>
 
 #include <koffice_export.h>

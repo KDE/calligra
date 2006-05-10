@@ -21,7 +21,7 @@
 #ifndef __KCHARTPARAMETER3DCONFIGPAGE_H__
 #define __KCHARTPARAMETER3DCONFIGPAGE_H__
 
-#include <qwidget.h>
+#include <QWidget>
 #include <knuminput.h>
 
 class QCheckBox;

@@ -23,7 +23,7 @@
 #include <klocale.h>
 #include <kdebug.h>
 
-#include <qstring.h>
+#include <QString>
 #include <qstringlist.h>
 #include <qpair.h>
 //Added by qt3to4:

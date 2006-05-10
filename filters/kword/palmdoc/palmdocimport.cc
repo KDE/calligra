@@ -25,7 +25,7 @@
 
 #include <qfileinfo.h>
 #include <qstringlist.h>
-#include <qfont.h>
+#include <QFont>
 //Added by qt3to4:
 #include <Q3CString>
 

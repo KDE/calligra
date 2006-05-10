@@ -23,9 +23,9 @@
 #include <KoDocumentIface.h>
 #include <dcopref.h>
 
-#include <qstring.h>
-#include <qcolor.h>
-#include <qfont.h>
+#include <QString>
+#include <QColor>
+#include <QFont>
 #include "KWordFrameSetIface.h"
 class KWTextFrameSet;
 class KWordViewIface;

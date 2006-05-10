@@ -19,7 +19,7 @@
 
 #include "stylefactory.h"
 
-#include <qcolor.h>
+#include <QColor>
 #include <qdatetime.h>
 #include <KoUnit.h>
 #include <kdebug.h>

@@ -24,9 +24,9 @@
 
 #include <q3cstring.h>
 #include <qstringlist.h>
-#include <qdir.h>
+#include <QDir>
 #include <qfileinfo.h>
-#include <qregexp.h>
+#include <QRegExp>
 #include <q3valuelist.h>
 
 #include <kurl.h>

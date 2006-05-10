@@ -26,7 +26,7 @@
 #include <docbookexport.moc>
 #include <kdebug.h>
 #include <kgenericfactory.h>
-#include <qdir.h>
+#include <QDir>
 #include <qdom.h>
 //Added by qt3to4:
 #include <Q3ValueList>

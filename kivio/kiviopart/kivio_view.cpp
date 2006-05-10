@@ -24,15 +24,15 @@
 #include <time.h>
 #include <assert.h>
 
-#include <qlayout.h>
+#include <QLayout>
 #include <qwidgetstack.h>
 #include <qsplitter.h>
-#include <qpushbutton.h>
+#include <QPushButton>
 #include <qradiobutton.h>
 #include <qprintdialog.h>
 #include <qptrcollection.h>
 #include <qkeycode.h>
-#include <qcheckbox.h>
+#include <QCheckBox>
 #include <qmime.h>
 #include <qtoolbutton.h>
 #include <qtimer.h>

@@ -20,7 +20,7 @@
 #ifndef __KCHARTFONTCONFIGPAGE_H__
 #define __KCHARTFONTCONFIGPAGE_H__
 
-#include <qwidget.h>
+#include <QWidget>
 #include <q3button.h>
 #include <QCheckBox>
 #include "kchartcolorarray.h"

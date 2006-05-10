@@ -20,7 +20,7 @@
 #include "aiparserbase.h"
 #include "ai88handler.h"
 #include "ai3handler.h"
-#include <qregexp.h>
+#include <QRegExp>
 #include <qstringlist.h>
 
 typedef struct {

@@ -32,7 +32,7 @@
 #ifndef ABIWORDEXPORT_H
 #define ABIWORDEXPORT_H
 
-#include <qstring.h>
+#include <QString>
 #include <q3cstring.h>
 
 #include <KoFilter.h>

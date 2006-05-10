@@ -22,7 +22,7 @@
 
 #include <aiparserbase.h>
 #include <q3ptrlist.h>
-#include <qstring.h>
+#include <QString>
 #include <qpair.h>
 
 #include "aicolor.h"

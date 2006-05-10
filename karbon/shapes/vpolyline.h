@@ -21,7 +21,7 @@
 #define __VPOLYLINE_H__
 
 #include "vcomposite.h"
-#include <qstring.h>
+#include <QString>
 
 class VPolyline : public VPath
 {

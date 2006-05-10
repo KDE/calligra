@@ -30,7 +30,7 @@
 #include <kdialogbase.h>
 #include <KoCustomVariablesDia.h>
 #include "KWMailMergeDataSource.h"
-#include <qspinbox.h>
+#include <QSpinBox>
 #include <kvbox.h>
 
 class KHBox;

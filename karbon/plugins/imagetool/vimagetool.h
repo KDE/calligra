@@ -21,7 +21,7 @@
 #ifndef __VIMAGETOOL_H__
 #define __VIMAGETOOL_H__
 
-#include <qstring.h>
+#include <QString>
 
 #include "vtool.h"
 #include <commands/vcommand.h>

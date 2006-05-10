@@ -23,9 +23,9 @@
 #include <KoPageLayoutColumns.h>
 
 #include <kdebug.h>
-#include <qpushbutton.h>
-#include <qcheckbox.h>
-#include <qlayout.h>
+#include <QPushButton>
+#include <QCheckBox>
+#include <QLayout>
 //Added by qt3to4:
 #include <Q3VBoxLayout>
 

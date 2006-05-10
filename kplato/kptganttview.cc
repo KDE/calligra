@@ -45,16 +45,16 @@
 
 #include <qsplitter.h>
 #include <q3vbox.h>
-#include <qlayout.h>
+#include <QLayout>
 #include <q3listview.h>
 #include <q3header.h>
 #include <q3popupmenu.h>
 #include <qtabwidget.h>
 #include <q3ptrlist.h>
-#include <qlineedit.h>
-#include <qwidget.h>
-#include <qlabel.h>
-#include <qspinbox.h>
+#include <QLineEdit>
+#include <QWidget>
+#include <QLabel>
+#include <QSpinBox>
 #include <q3valuelist.h>
 #include <qpainter.h>
 #include <q3paintdevicemetrics.h>

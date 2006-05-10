@@ -20,7 +20,7 @@
 #ifndef GENERALPROPERTY_H
 #define GENERALPROPERTY_H
 
-#include <qwidget.h>
+#include <QWidget>
 #include "kspread_global.h"
 
 #include <KoRect.h>

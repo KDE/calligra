@@ -14,9 +14,9 @@
 #include <stdio.h>
 #include <string.h>
 #include <sys/param.h>
-#include <qstring.h>
+#include <QString>
 #include <qpair.h>
-#include <qmap.h>
+#include <QMap>
 
 #include "element.h"
 #include "env.h"

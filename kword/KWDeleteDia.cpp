@@ -23,8 +23,8 @@
 #include "KWView.h"
 
 #include <klocale.h>
-#include <qlabel.h>
-#include <qlayout.h>
+#include <QLabel>
+#include <QLayout>
 //Added by qt3to4:
 #include <Q3GridLayout>
 #include <Q3ValueList>

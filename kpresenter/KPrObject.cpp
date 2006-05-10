@@ -31,7 +31,7 @@
 #include <qregion.h>
 #include <qdom.h>
 #include <qbuffer.h>
-#include <qregexp.h>
+#include <QRegExp>
 
 #include <kapplication.h>
 #include <KoOasisContext.h>

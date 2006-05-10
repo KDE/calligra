@@ -21,7 +21,7 @@
 #ifndef RECTPROPERTY_H
 #define RECTPROPERTY_H
 
-#include <qwidget.h>
+#include <QWidget>
 
 #include "KPrCommand.h"
 

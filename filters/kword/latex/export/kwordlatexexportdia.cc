@@ -20,11 +20,11 @@
 
 #include <kwordlatexexportdia.h>
 
-#include <qdir.h>
-#include <qcombobox.h>
+#include <QDir>
+#include <QComboBox>
 #include <q3buttongroup.h>
 #include <qradiobutton.h>
-#include <qcheckbox.h>
+#include <QCheckBox>
 
 #include <kapplication.h>
 #include <kglobal.h>

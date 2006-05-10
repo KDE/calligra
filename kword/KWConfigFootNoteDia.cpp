@@ -32,10 +32,10 @@
 
 #include <qradiobutton.h>
 
-#include <qlabel.h>
+#include <QLabel>
 #include <q3vbox.h>
-#include <qlayout.h>
-#include <qcombobox.h>
+#include <QLayout>
+#include <QComboBox>
 //Added by qt3to4:
 #include <Q3VBoxLayout>
 #include <Q3HBoxLayout>

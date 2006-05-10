@@ -21,7 +21,7 @@
 
 #include <kdebug.h>
 
-#include <qstring.h>
+#include <QString>
 #include <qtextstream.h>
 
 #include <float.h>

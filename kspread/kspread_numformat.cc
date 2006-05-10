@@ -30,8 +30,8 @@ Tomas
 #include <math.h>
 
 #include <qdatetime.h>
-#include <qmap.h>
-#include <qstring.h>
+#include <QMap>
+#include <QString>
 
 #include <kcalendarsystem.h>
 #include <klocale.h>

@@ -21,7 +21,7 @@
 #define defs_h
 
 #include <qtextstream.h>
-#include <qstring.h>
+#include <QString>
 #include <KoGlobal.h>
 #include "KWFactory.h"
 

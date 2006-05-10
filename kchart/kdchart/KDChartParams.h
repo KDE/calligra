@@ -30,10 +30,10 @@
 #define __KDCHARTPARAMS_H__
 
 #include <qapplication.h>
-#include <qfont.h>
-#include <qcolor.h>
+#include <QFont>
+#include <QColor>
 #include <qpen.h>
-#include <qmap.h>
+#include <QMap>
 #include <q3dict.h>
 #include <q3intdict.h>
 #include <qobject.h>

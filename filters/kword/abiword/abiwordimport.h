@@ -33,8 +33,8 @@
 #ifndef ABIWORDIMPORT_H
 #define ABIWORDIMPORT_H
 
-#include <qstring.h>
-#include <qfile.h>
+#include <QString>
+#include <QFile>
 #include <qobject.h>
 //Added by qt3to4:
 #include <Q3CString>

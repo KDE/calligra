@@ -23,11 +23,11 @@
 
 #include <kapplication.h>
 #include <klocale.h>
-#include <qlayout.h>
-#include <qlabel.h>
-#include <qcheckbox.h>
-#include <qlineedit.h>
-#include <qspinbox.h>
+#include <QLayout>
+#include <QLabel>
+#include <QCheckBox>
+#include <QLineEdit>
+#include <QSpinBox>
 #include <q3buttongroup.h>
 #include <qradiobutton.h>
 //Added by qt3to4:

@@ -20,7 +20,7 @@
 #ifndef FSPARSER_H
 #define FSPARSER_H
 
-#include <qstring.h>
+#include <QString>
 #include <qstringlist.h>
 #include <qdom.h>
 

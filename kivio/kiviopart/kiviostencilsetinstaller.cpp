@@ -24,8 +24,8 @@
 #include "kiviostencilsetinstaller.h"
 
 #include <qframe.h>
-#include <qlayout.h>
-#include <qcheckbox.h>
+#include <QLayout>
+#include <QCheckBox>
 #include <qstringlist.h>
 
 #include <klocale.h>

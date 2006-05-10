@@ -25,7 +25,7 @@
 #include "valueconverter.h"
 
 // used by the CONVERT function
-#include <qmap.h>
+#include <QMap>
 
 // these are needed for complex functions, while we handle them in the old way
 #include <kglobal.h>

@@ -22,7 +22,7 @@
 #include <q3cstring.h>
 #include <qdatetime.h>
 #include <q3ptrlist.h>
-#include <qstring.h>
+#include <QString>
 
 PalmDoc::PalmDoc(): PalmDB()
 {

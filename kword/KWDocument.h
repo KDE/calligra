@@ -95,9 +95,9 @@ class KoOasisSettings;
 #include <KoPictureKey.h>
 #include <KoStyleCollection.h> // for KoStyleChangeDefMap
 
-#include <qmap.h>
+#include <QMap>
 #include <q3ptrlist.h>
-#include <qfont.h>
+#include <QFont>
 #include <q3valuevector.h>
 
 /******************************************************************/

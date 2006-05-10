@@ -26,7 +26,7 @@ KivioView *view;
 
 #include <qpainter.h>
 #include <qbrush.h>
-#include <qcolor.h>
+#include <QColor>
 #include <kdebug.h>
 #include <math.h>
 #include <KoZoomHandler.h>

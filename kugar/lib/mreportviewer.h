@@ -12,7 +12,7 @@
 #define MREPORTVIEWER_H
 
 #include <qapplication.h>
-#include <qwidget.h>
+#include <QWidget>
 #include <q3scrollview.h>
 #include <qpixmap.h>
 #include <qpainter.h>

@@ -4,13 +4,13 @@
 #include "kchart_part.h"
 
 #include <q3buttongroup.h>
-#include <qpushbutton.h>
+#include <QPushButton>
 #include <qradiobutton.h>
-#include <qspinbox.h>
-#include <qlabel.h>
+#include <QSpinBox>
+#include <QLabel>
 #include <q3ptrcollection.h>
 #include <qobject.h>
-#include <qlayout.h>
+#include <QLayout>
 
 //Added by qt3to4:
 #include <Q3VBoxLayout>

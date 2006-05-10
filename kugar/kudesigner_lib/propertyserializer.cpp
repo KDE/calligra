@@ -20,8 +20,8 @@
 ***************************************************************************/
 #include "propertyserializer.h"
 
-#include <qcolor.h>
-#include <qfont.h>
+#include <QColor>
+#include <QFont>
 
 #include <kdebug.h>
 

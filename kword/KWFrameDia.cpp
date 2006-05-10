@@ -40,16 +40,16 @@
 #include <kdebug.h>
 
 
-#include <qlineedit.h>
-#include <qcheckbox.h>
-#include <qcombobox.h>
-#include <qlabel.h>
+#include <QLineEdit>
+#include <QCheckBox>
+#include <QComboBox>
+#include <QLabel>
 #include <qradiobutton.h>
 #include <q3listview.h>
 #include <q3buttongroup.h>
 #include <q3hbox.h>
 #include <q3header.h>
-#include <qlayout.h>
+#include <QLayout>
 //Added by qt3to4:
 #include <QPixmap>
 #include <Q3GridLayout>

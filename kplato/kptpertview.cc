@@ -30,7 +30,7 @@
 
 #include <qsplitter.h>
 #include <q3vbox.h>
-#include <qlayout.h>
+#include <QLayout>
 #include <q3listview.h>
 #include <q3header.h>
 #include <q3popupmenu.h>

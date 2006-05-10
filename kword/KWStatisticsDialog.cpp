@@ -22,10 +22,10 @@
 #include <klocale.h>
 #include <qtabwidget.h>
 #include <q3vbox.h>
-#include <qlabel.h>
-#include <qlayout.h>
+#include <QLabel>
+#include <QLayout>
 #include <q3progressdialog.h>
-#include <qcheckbox.h>
+#include <QCheckBox>
 //Added by qt3to4:
 #include <Q3VBoxLayout>
 #include <Q3GridLayout>

@@ -20,8 +20,8 @@
 #ifndef __WPIMPORT_H
 #define __WPIMPORT_H
 
-#include <qstring.h>
-#include <qdatastream.h>
+#include <QString>
+#include <QDataStream>
 #include <qobject.h>
 #include <q3ptrlist.h>
 #include <q3cstring.h>

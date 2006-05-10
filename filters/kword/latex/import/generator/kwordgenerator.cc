@@ -19,7 +19,7 @@
 
 #include <kdebug.h>
 #include <ktempfile.h>
-#include <qfile.h>
+#include <QFile>
 
 #include <qdom.h>
 

@@ -19,14 +19,14 @@
 
 #include <qhbuttongroup.h>
 #include <qinputdialog.h>
-#include <qlayout.h>
-#include <qcheckbox.h>
+#include <QLayout>
+#include <QCheckBox>
 #include <qlistview.h>
 #include <qptrvector.h>
 #include <qtoolbutton.h>
 #include <qpainter.h>
 #include <qtabwidget.h>
-#include <qlabel.h>
+#include <QLabel>
 #include <qcursor.h>
 
 #include <klocale.h>

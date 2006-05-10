@@ -22,7 +22,7 @@
 #define __VZOOMTOOL_H__
 
 #include "KoPoint.h"
-#include <qstring.h>
+#include <QString>
 
 #include "vtool.h"
 

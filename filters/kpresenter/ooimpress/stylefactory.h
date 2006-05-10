@@ -22,7 +22,7 @@
 #define STYLEFACTORY_H
 
 #include <q3ptrlist.h>
-#include <qstring.h>
+#include <QString>
 
 #include <qdom.h>
 

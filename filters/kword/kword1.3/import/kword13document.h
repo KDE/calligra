@@ -27,8 +27,8 @@ class QIODevice;
 class KTempFile;
 class KWord13Picture;
 
-#include <qstring.h>
-#include <qmap.h>
+#include <QString>
+#include <QMap>
 #include <q3ptrlist.h>
 #include <qdatetime.h>
 #include <q3dict.h>

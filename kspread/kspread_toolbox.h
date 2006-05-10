@@ -21,7 +21,7 @@
 #define TOOLBOX_H
 
 #include <qframe.h>
-#include <qpoint.h>
+#include <QPoint>
 //Added by qt3to4:
 #include <QVBoxLayout>
 #include <QMouseEvent>

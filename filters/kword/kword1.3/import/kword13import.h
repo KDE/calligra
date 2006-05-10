@@ -21,7 +21,7 @@
 #ifndef KWORD_1_3_IMPORT_H
 #define KWORD_1_3_IMPORT_H
 
-#include <qstring.h>
+#include <QString>
 #include <q3cstring.h>
 
 #include <KoFilter.h>

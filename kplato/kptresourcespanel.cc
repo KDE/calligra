@@ -33,9 +33,9 @@
 #include <q3groupbox.h>
 #include <q3header.h>
 #include <q3listbox.h>
-#include <qlineedit.h>
+#include <QLineEdit>
 #include <q3listview.h>
-#include <qpushbutton.h>
+#include <QPushButton>
 //Added by qt3to4:
 #include <Q3PtrList>
 

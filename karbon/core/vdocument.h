@@ -23,7 +23,7 @@
 
 #include <KoUnit.h>
 
-#include <qstring.h>
+#include <QString>
 #include <qptrlist.h>
 #include <qptrdict.h>
 

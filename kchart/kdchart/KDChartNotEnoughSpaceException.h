@@ -31,7 +31,7 @@
 
 #ifdef USE_EXCEPTIONS
 
-#include <qstring.h>
+#include <QString>
 
 #include "KDChartGlobal.h"
 

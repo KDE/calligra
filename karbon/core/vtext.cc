@@ -18,7 +18,7 @@
 */
 
 #include <qdom.h>
-#include <qfile.h>
+#include <QFile>
 
 #include <kdebug.h>
 #include <KoPoint.h>

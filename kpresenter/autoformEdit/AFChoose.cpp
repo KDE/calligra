@@ -20,10 +20,10 @@
 
 #include "AFChoose.h"
 
-#include <qlabel.h>
+#include <QLabel>
 #include <qvbox.h>
 #include <qtextstream.h>
-#include <qdir.h>
+#include <QDir>
 #include <qwhatsthis.h>
 
 #include <klocale.h>

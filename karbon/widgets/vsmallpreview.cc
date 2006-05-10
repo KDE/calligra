@@ -19,10 +19,10 @@
 */
 
 /* vsmallpreview.cc */
-#include <qcolor.h>
+#include <QColor>
 #include <qframe.h>
-#include <qlabel.h>
-#include <qlayout.h>
+#include <QLabel>
+#include <QLayout>
 #include <qpixmap.h>
 
 #include <klocale.h>

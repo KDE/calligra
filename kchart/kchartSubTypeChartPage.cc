@@ -27,9 +27,9 @@
 #include <kiconloader.h>
 #include <kdebug.h>
 #include <qradiobutton.h>
-#include <qspinbox.h>
-#include <qlabel.h>
-#include <qlayout.h>
+#include <QSpinBox>
+#include <QLabel>
+#include <QLayout>
 
 
 //Added by qt3to4:

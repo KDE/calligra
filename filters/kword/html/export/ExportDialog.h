@@ -21,7 +21,7 @@
 #ifndef EXPORT_DIALOG_H
 #define EXPORT_DIALOG_H
 
-#include <qwidget.h>
+#include <QWidget>
 #include <kdialogbase.h>
 
 class ExportDialogUI;

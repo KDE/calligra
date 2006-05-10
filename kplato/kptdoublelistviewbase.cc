@@ -23,15 +23,15 @@
 #include "kptview.h"
 
 #include <q3header.h>
-#include <qlayout.h>
-#include <qmap.h>
+#include <QLayout>
+#include <QMap>
 #include <qpainter.h>
 #include <qpalette.h>
 #include <q3ptrvector.h>
 #include <qsplitter.h>
-#include <qstring.h>
+#include <QString>
 #include <q3valuelist.h>
-#include <qpoint.h>
+#include <QPoint>
 
 #include <kcalendarsystem.h>
 #include <kglobal.h>

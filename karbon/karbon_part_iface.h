@@ -21,7 +21,7 @@
 #define __KARBON_PART_IFACE_H__
 
 
-#include <qstring.h>
+#include <QString>
 
 #include <dcopref.h>
 #include <KoDocumentIface.h>

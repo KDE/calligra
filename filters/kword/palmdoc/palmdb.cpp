@@ -25,12 +25,12 @@
 #include "palmdb.h"
 
 #include <q3cstring.h>
-#include <qdatastream.h>
+#include <QDataStream>
 #include <qdatetime.h>
-#include <qfile.h>
+#include <QFile>
 #include <q3memarray.h>
 #include <q3ptrlist.h>
-#include <qstring.h>
+#include <QString>
 
 PalmDB::PalmDB()
 {

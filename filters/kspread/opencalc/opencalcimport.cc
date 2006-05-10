@@ -21,9 +21,9 @@
 #include <float.h>
 #include <math.h>
 
-#include <qcolor.h>
-#include <qfile.h>
-#include <qfont.h>
+#include <QColor>
+#include <QFile>
+#include <QFont>
 #include <qpen.h>
 #include <qxml.h>
 //Added by qt3to4:

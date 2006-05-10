@@ -12,7 +12,7 @@
 #include <qobject.h>
 #include <qpainter.h>
 #include <qpaintdevice.h>
-#include <qcolor.h>
+#include <QColor>
 
 /**Kugar report line object
   *@author Mutiny Bay Software

@@ -12,12 +12,12 @@
 #include <kstdaction.h>
 #include <kmessagebox.h>
 #include <kio/netaccess.h>
-#include <qfile.h>
+#include <QFile>
 //Added by qt3to4:
 #include <Q3VBoxLayout>
 #include <kglobal.h>
 #include <kiconloader.h>
-#include <qlayout.h>
+#include <QLayout>
 
 #if defined(HAVE_CONFIG_H)
 #include "config.h"

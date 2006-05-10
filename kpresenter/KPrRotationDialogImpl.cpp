@@ -19,7 +19,7 @@
 #include <qtoolbutton.h>
 #include <qslider.h>
 #include <qgroupbox.h>
-#include <qlayout.h>
+#include <QLayout>
 #include <qbuttongroup.h>
 #include <qobject.h>
 #include <qevent.h>

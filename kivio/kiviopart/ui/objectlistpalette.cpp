@@ -18,7 +18,7 @@
  */
 #include "objectlistpalette.h"
 
-#include <qlayout.h>
+#include <QLayout>
 #include <qheader.h>
 #include <qptrlist.h>
 

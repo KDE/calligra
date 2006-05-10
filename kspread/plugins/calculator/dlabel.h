@@ -29,7 +29,7 @@
 #ifndef _D_LABEL_H_
 #define _D_LABEL_H_
 
-#include <qlabel.h>
+#include <QLabel>
 //Added by qt3to4:
 #include <QMouseEvent>
 

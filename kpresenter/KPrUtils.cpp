@@ -33,8 +33,8 @@
 
 #include <qpainter.h>
 #include <qpointarray.h>
-#include <qpoint.h>
-#include <qcolor.h>
+#include <QPoint>
+#include <QColor>
 #include <qsize.h>
 #include <qbitmap.h>
 #include <qcursor.h>

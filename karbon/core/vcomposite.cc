@@ -20,7 +20,7 @@
 #include <qdom.h>
 #include <qpainter.h>
 #include <qwmatrix.h>
-#include <qregexp.h>
+#include <QRegExp>
 
 #include <KoPoint.h>
 #include <KoRect.h>

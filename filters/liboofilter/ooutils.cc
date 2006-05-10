@@ -23,10 +23,10 @@
 #include <KoDocument.h>
 #include <KoStyleStack.h>
 #include <qdom.h>
-#include <qcolor.h>
+#include <QColor>
 #include <qimage.h>
 #include <KoUnit.h>
-#include <qregexp.h>
+#include <QRegExp>
 #include <kdebug.h>
 #include <kzip.h>
 #include <KoDom.h>

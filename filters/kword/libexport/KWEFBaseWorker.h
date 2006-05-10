@@ -21,7 +21,7 @@
 #ifndef KWEF_BASEWORKER_H
 #define KWEF_BASEWORKER_H
 
-#include <qstring.h>
+#include <QString>
 #include <qiodevice.h>
 //Added by qt3to4:
 #include <Q3ValueList>

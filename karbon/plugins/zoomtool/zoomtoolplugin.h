@@ -21,7 +21,7 @@
 #ifndef __ZOOMTOOLPLUGIN_H__
 #define __ZOOMTOOLPLUGIN_H__
 
-#include <qstring.h>
+#include <QString>
 
 #include <kparts/plugin.h>
 

@@ -23,7 +23,7 @@
 /* additions: Norbert Andres nandres@web.de         */
 
 #include <q3dict.h>
-#include <qfile.h>
+#include <QFile>
 #include <qstringlist.h>
 //Added by qt3to4:
 #include <Q3CString>

@@ -23,7 +23,7 @@
 
 #include <QLinkedList>
 #include <qrect.h>
-#include <qstring.h>
+#include <QString>
 
 #include <kcommand.h>
 #include <klocale.h>

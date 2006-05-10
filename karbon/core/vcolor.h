@@ -22,8 +22,8 @@
 #define __VCOLOR_H__
 
 
-#include <qcolor.h>
-#include <qstring.h>
+#include <QColor>
+#include <QString>
 #include <koffice_export.h>
 class QDomElement;
 

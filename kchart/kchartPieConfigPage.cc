@@ -22,18 +22,18 @@
 
 #include <kapplication.h>
 #include <klocale.h>
-#include <qlayout.h>
-#include <qlabel.h>
+#include <QLayout>
+#include <QLabel>
 //Added by qt3to4:
 #include <Q3GridLayout>
 #include <kfontdialog.h>
 
-#include <qcheckbox.h>
-#include <qlineedit.h>
+#include <QCheckBox>
+#include <QLineEdit>
 #include <qradiobutton.h>
-#include <qpushbutton.h>
-#include <qfont.h>
-#include <qspinbox.h>
+#include <QPushButton>
+#include <QFont>
+#include <QSpinBox>
 
 #include "kchart_params.h"
 

@@ -29,8 +29,8 @@
 #ifndef __KDCHARTDATAINTERN_H__
 #define __KDCHARTDATAINTERN_H__
 
-#include <qvariant.h>
-#include <qstring.h>
+#include <QVariant>
+#include <QString>
 #include <qdatetime.h>
 #include "KDChartGlobal.h"
 

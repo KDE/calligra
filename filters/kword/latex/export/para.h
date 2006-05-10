@@ -22,7 +22,7 @@
 #ifndef __KWORD_PARA_H__
 #define __KWORD_PARA_H__
 
-#include <qstring.h>
+#include <QString>
 #include <q3ptrstack.h>		/* historic list */
 #include <q3ptrlist.h>		/* for list of format */
 //Added by qt3to4:

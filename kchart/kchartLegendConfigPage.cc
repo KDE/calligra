@@ -26,11 +26,11 @@
 #include <kfontdialog.h>
 #include <kiconloader.h>
 
-#include <qlabel.h>
+#include <QLabel>
 #include <q3buttongroup.h>
 #include <qradiobutton.h>
-#include <qlineedit.h>
-#include <qtooltip.h> 
+#include <QLineEdit>
+#include <QToolTip> 
 
 //Added by qt3to4:
 #include <Q3GridLayout>

@@ -20,7 +20,7 @@
 #ifndef __PALMDOCIMPORT_H
 #define __PALMDOCIMPORT_H
 
-#include <qstring.h>
+#include <QString>
 //Added by qt3to4:
 #include <Q3CString>
 

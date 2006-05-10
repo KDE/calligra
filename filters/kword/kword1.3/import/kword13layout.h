@@ -6,8 +6,8 @@
 
 class QTextStream;
 
-#include <qstring.h>
-#include <qmap.h>
+#include <QString>
+#include <QMap>
 
 #include "kword13formatone.h"
 

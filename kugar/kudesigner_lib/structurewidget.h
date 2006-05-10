@@ -22,7 +22,7 @@
 #define KUDESIGNERSTRUCTUREWIDGET_H
 
 #include <k3listview.h>
-#include <qmap.h>
+#include <QMap>
 //Added by qt3to4:
 #include <Q3ValueList>
 

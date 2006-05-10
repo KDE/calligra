@@ -12,7 +12,7 @@
 #define MUTIL_H
 
 #include <qobject.h>
-#include <qstring.h>
+#include <QString>
 #include <qdatetime.h>
 #include <q3memarray.h>
 

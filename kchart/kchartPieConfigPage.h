@@ -23,7 +23,7 @@
 #define __KCHARTPIECONFIGPAGE_H__
 
 
-#include <qwidget.h>
+#include <QWidget>
 #include <q3listview.h>
 //Added by qt3to4:
 #include <Q3MemArray>

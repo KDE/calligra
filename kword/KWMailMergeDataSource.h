@@ -23,7 +23,7 @@
 #include <q3cstring.h>
 #include <qdom.h>
 #include <kinstance.h>
-#include <qmap.h>
+#include <QMap>
 #include <qobject.h>
 #include <dcopobject.h>
 #include <koffice_export.h>

@@ -23,9 +23,9 @@
 
 #include <magick/api.h>
 
-#include <qfile.h>
+#include <QFile>
 #include <qfileinfo.h>
-#include <qstring.h>
+#include <QString>
 
 #include <kdeversion.h>
 #include <kdebug.h>
@@ -34,7 +34,7 @@
 #include <kurl.h>
 #include <kio/netaccess.h>
 
-#include <qcolor.h>
+#include <QColor>
 
 #include "kis_types.h"
 #include "kis_global.h"

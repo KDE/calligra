@@ -26,10 +26,10 @@
 #endif
 
 #include <qobject.h>
-#include <qstring.h>
-// #include <qregexp.h> // Currently not needed (due to disabled code)
+#include <QString>
+// #include <QRegExp> // Currently not needed (due to disabled code)
 #include <qtextcodec.h>
-#include <qfile.h>
+#include <QFile>
 #include <qtextstream.h>
 #include <qdom.h>
 #include <qfontinfo.h>

@@ -26,8 +26,8 @@
 
 #include <qdatetime.h>
 #include <qdom.h>
-#include <qfile.h>
-#include <qregexp.h>
+#include <QFile>
+#include <QRegExp>
 #include <q3valuelist.h>
 //Added by qt3to4:
 #include <Q3CString>

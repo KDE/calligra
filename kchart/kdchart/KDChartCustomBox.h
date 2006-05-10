@@ -31,7 +31,7 @@
 
 #include <qobject.h>
 #include <qtextstream.h>
-#include <qfont.h>
+#include <QFont>
 #include <qdom.h>
 #include "KDChartGlobal.h"
 #include "KDChartEnums.h"

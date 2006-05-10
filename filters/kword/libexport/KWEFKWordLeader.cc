@@ -33,7 +33,7 @@
    License version 2.
 */
 
-#include <qfile.h>
+#include <QFile>
 #include <qdom.h>
 //Added by qt3to4:
 #include <Q3ValueList>

@@ -31,12 +31,12 @@
 #include <kiconloader.h>
 
 #include <qtabwidget.h>
-#include <qpushbutton.h>
-#include <qlabel.h>
+#include <QPushButton>
+#include <QLabel>
 #include <qbrush.h>
 #include <q3groupbox.h>
 #include <qpainter.h>
-#include <qlayout.h>
+#include <QLayout>
 //Added by qt3to4:
 #include <QPaintEvent>
 #include <Q3GridLayout>

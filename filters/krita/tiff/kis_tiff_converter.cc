@@ -24,7 +24,7 @@
 #include <config.h>
 #include <lcms.h>
 
-#include <qfile.h>
+#include <QFile>
 
 #include <kapplication.h>
 #include <KoDocumentInfo.h>

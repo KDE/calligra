@@ -24,9 +24,9 @@
 #include "kivio_stencil_spawner.h"
 #include "kivio_stencil_spawner_set.h"
 
-#include <qdir.h>
-#include <qfile.h>
-#include <qstring.h>
+#include <QDir>
+#include <QFile>
+#include <QString>
 #include <kdebug.h>
 #include <kglobal.h>
 #include <klocale.h>

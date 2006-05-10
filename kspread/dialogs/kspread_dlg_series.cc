@@ -34,7 +34,7 @@
 #include <QHBoxLayout>
 #include <QGridLayout>
 #include <klocale.h>
-#include <qlabel.h>
+#include <QLabel>
 
 #include <q3buttongroup.h>
 
@@ -42,8 +42,8 @@
 #include <knumvalidator.h>
 
 #include <qradiobutton.h>
-#include <qcheckbox.h>
-#include <qlineedit.h>
+#include <QCheckBox>
+#include <QLineEdit>
 
 #include <knuminput.h>
 

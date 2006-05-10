@@ -18,8 +18,8 @@
 */
 
 #include <q3cstring.h>
-#include <qstring.h>
-#include <qfile.h>
+#include <QString>
+#include <QFile>
 
 #include <kgenericfactory.h>
 #include <KoFilter.h>

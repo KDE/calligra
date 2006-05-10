@@ -27,14 +27,14 @@
 #include <kdebug.h>
 
 
-#include <qlayout.h>
-#include <qlabel.h>
-#include <qlineedit.h>
+#include <QLayout>
+#include <QLabel>
+#include <QLineEdit>
 #include <q3listbox.h>
 #include <q3buttongroup.h>
-#include <qpushbutton.h>
+#include <QPushButton>
 #include <qradiobutton.h>
-#include <qcheckbox.h>
+#include <QCheckBox>
 #include <qpainter.h>
 
 //Added by qt3to4:

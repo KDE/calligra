@@ -22,7 +22,7 @@
 
 #include <dcopobject.h>
 #include <dcopref.h>
-#include <qstring.h>
+#include <QString>
 
 class KivioPage;
 

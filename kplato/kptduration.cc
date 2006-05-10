@@ -24,7 +24,7 @@
 #include <kglobal.h>
 #include <klocale.h>
 #include <kdebug.h>
-#include <qregexp.h>
+#include <QRegExp>
 
 namespace KPlato
 {

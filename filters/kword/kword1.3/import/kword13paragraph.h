@@ -2,7 +2,7 @@
 #ifndef _FILTER_KWORD_1_3__KWORDPARAGRAPH_H
 #define _FILTER_KWORD_1_3__KWORDPARAGRAPH_H
 
-#include <qstring.h>
+#include <QString>
 #include <q3valuelist.h>
 #include <q3ptrlist.h>
 //Added by qt3to4:

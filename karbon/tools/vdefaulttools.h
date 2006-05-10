@@ -21,7 +21,7 @@
 #ifndef __DEFAULTTOOLS_H__
 #define __DEFAULTTOOLS_H__
 
-#include <qstring.h>
+#include <QString>
 
 #include <kparts/plugin.h>
 

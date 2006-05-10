@@ -24,7 +24,7 @@
 #define __kspread_dlg_conditional__
 
 #include <kdialogbase.h>
-#include <qwidget.h>
+#include <QWidget>
 
 #include "kspread_condition.h"
 

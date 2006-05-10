@@ -28,7 +28,7 @@
 #ifndef KSPREAD_CELL_IFACE_H
 #define KSPREAD_CELL_IFACE_H
 
-#include <qpoint.h>
+#include <QPoint>
 #include <qstringlist.h>
 
 #include <dcopobject.h>

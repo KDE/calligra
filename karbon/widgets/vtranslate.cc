@@ -18,10 +18,10 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <qcheckbox.h>
-#include <qlabel.h>
-#include <qlayout.h>
-#include <qstring.h>
+#include <QCheckBox>
+#include <QLabel>
+#include <QLayout>
+#include <QString>
 #include <klocale.h>
 #include <knuminput.h>
 #include <kstdguiitem.h>

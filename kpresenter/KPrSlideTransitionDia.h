@@ -23,7 +23,7 @@
 #define SLIDETRANSITIONDIA_H
 
 #include <qtimer.h>
-#include <qwidget.h>
+#include <QWidget>
 
 #include <kdialogbase.h>
 

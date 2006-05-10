@@ -30,7 +30,7 @@
    License version 2.
 */
 
-#include <qmap.h>
+#include <QMap>
 #include <qiodevice.h>
 #include <qtextstream.h>
 #include <qdom.h>

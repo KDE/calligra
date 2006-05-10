@@ -21,8 +21,8 @@
 #define CONVERSION_H
 
 #include <wv2/ustring.h>
-#include <qstring.h>
-#include <qcolor.h>
+#include <QString>
+#include <QColor>
 
 class QDomElement;
 namespace wvWare {

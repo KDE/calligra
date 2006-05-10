@@ -20,8 +20,8 @@
 #ifndef _IMPORT_HELPERS_H
 #define _IMPORT_HELPERS_H
 
-#include <qstring.h>
-#include <qmap.h>
+#include <QString>
+#include <QMap>
 
 /**
  * \file ImportHelpers.h

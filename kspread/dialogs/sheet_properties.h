@@ -20,7 +20,7 @@
 #ifndef SHEET_PROPERTIES_DIALOG
 #define SHEET_PROPERTIES_DIALOG
 
-#include <qwidget.h>
+#include <QWidget>
 
 #include <kdialogbase.h>
 

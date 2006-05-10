@@ -19,8 +19,8 @@
 
 #include <q3cstring.h>
 #include <qdom.h>
-#include <qfile.h>
-#include <qstring.h>
+#include <QFile>
+#include <QString>
 #include <q3valuelist.h>
 #include <qimage.h>
 

@@ -20,8 +20,8 @@
 
 /* vcolorslider.cc */
 
-#include <qlayout.h>
-#include <qlabel.h>
+#include <QLayout>
+#include <QLabel>
 #include <knuminput.h>
 #include <kselector.h>
 

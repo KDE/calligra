@@ -20,7 +20,7 @@
 #ifndef __KCHARTPARAMETERPOLARCONFIGPAGE_H__
 #define __KCHARTPARAMETERPOLARCONFIGPAGE_H__
 
-#include <qwidget.h>
+#include <QWidget>
 
 class QCheckBox;
 class QRadioButton;

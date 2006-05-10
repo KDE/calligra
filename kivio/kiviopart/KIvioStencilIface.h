@@ -22,9 +22,9 @@
 
 #include <dcopref.h>
 #include <dcopobject.h>
-#include <qstring.h>
-#include <qfont.h>
-#include <qcolor.h>
+#include <QString>
+#include <QFont>
+#include <QColor>
 #include <qrect.h>
 
 class KivioStencil;

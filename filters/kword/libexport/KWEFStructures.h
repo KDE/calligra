@@ -41,9 +41,9 @@
 #define EXPORTFILTERSSTRUCTURES_H
 
 #include <q3valuelist.h>
-#include <qstring.h>
-#include <qmap.h>
-#include <qcolor.h>
+#include <QString>
+#include <QMap>
+#include <QColor>
 #include <qdom.h>
 #include <qdatetime.h>
 

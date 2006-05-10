@@ -34,7 +34,7 @@ using std::cerr;
 #include <KoDom.h>
 #include <KoOasisLoadingContext.h>
 
-#include <qregexp.h>
+#include <QRegExp>
 
 #include "kdchart/KDChartParams.h"
 #include "kdchart/KDChartAxisParams.h"

@@ -21,7 +21,7 @@
 #ifndef __kspread_util_h__
 #define __kspread_util_h__
 
-#include <qstring.h>
+#include <QString>
 #include <qrect.h>
 #include <qdatetime.h>
 #include <QLinkedList>

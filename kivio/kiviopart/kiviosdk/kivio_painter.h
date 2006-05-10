@@ -19,7 +19,7 @@
 #ifndef KIVIO_PAINTER_H
 #define KIVIO_PAINTER_H
 
-#include <qfont.h>
+#include <QFont>
 #include <qptrlist.h>
 #include <qpaintdevice.h>
 #include <qpixmap.h>

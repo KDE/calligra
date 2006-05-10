@@ -19,8 +19,8 @@
 
 #include "kiviostencilformatdlg.h"
 
-#include <qlabel.h>
-#include <qlayout.h>
+#include <QLabel>
+#include <QLayout>
 #include <qbitmap.h>
 #include <qpixmap.h>
 #include <qpainter.h>

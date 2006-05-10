@@ -22,7 +22,7 @@
 
 #include <KoViewIface.h>
 
-#include <qstring.h>
+#include <QString>
 
 class KWView;
 

@@ -27,11 +27,11 @@
 #define KSPREAD_DLG_FORMAT
 
 #include <kdialogbase.h>
-#include <qstring.h>
+#include <QString>
 #include <qlist.h>
-#include <qcolor.h>
+#include <QColor>
 #include <qpen.h>
-#include <qfont.h>
+#include <QFont>
 //Added by qt3to4:
 #include <QLabel>
 

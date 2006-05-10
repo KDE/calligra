@@ -21,7 +21,7 @@
 #define __VSELECTIONDESC_H__
 
 #include "vvisitor.h"
-#include <qstring.h>
+#include <QString>
 #include <koffice_export.h>
 /**
  * This visitors visits structures and tries to capture relevant object type info

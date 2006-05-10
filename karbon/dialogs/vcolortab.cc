@@ -19,8 +19,8 @@
 */
 
 #include <qgroupbox.h>
-#include <qlabel.h>
-#include <qlayout.h>
+#include <QLabel>
+#include <QLayout>
 
 #include <kcolordialog.h>
 #include <klocale.h>

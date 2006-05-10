@@ -24,12 +24,12 @@
 #include <kdebug.h>
 #include <kstandarddirs.h>
 
-#include <qfile.h>
-#include <qpushbutton.h>
-#include <qcombobox.h>
-#include <qlineedit.h>
-#include <qlabel.h>
-#include <qlayout.h>
+#include <QFile>
+#include <QPushButton>
+#include <QComboBox>
+#include <QLineEdit>
+#include <QLabel>
+#include <QLayout>
 #include <Q3GroupBox>
 //Added by qt3to4:
 #include <Q3GridLayout>

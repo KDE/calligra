@@ -8,7 +8,7 @@
 #define KCHARTCOLORARRAY
 
 #include <q3valuevector.h>
-#include <qcolor.h>
+#include <QColor>
 
 namespace KChart
 {

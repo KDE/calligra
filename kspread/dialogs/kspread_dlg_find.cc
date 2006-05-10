@@ -19,15 +19,15 @@
 
 
 #include "kspread_dlg_find.h"
-#include <qcheckbox.h>
-#include <qlayout.h>
+#include <QCheckBox>
+#include <QLayout>
 //Added by qt3to4:
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <klocale.h>
-#include <qpushbutton.h>
-#include <qlabel.h>
-#include <qcombobox.h>
+#include <QPushButton>
+#include <QLabel>
+#include <QComboBox>
 
 using namespace KSpread;
 

@@ -24,7 +24,7 @@
 #include <dcopobject.h>
 #include <dcopref.h>
 #include "KPrObjectIface.h"
-#include <qstring.h>
+#include <QString>
 
 class KPrCubicBezierCurveObject;
 

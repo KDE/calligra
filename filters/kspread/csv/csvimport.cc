@@ -20,8 +20,8 @@
 
 #include <csvimport.h>
 
-#include <qfile.h>
-#include <qregexp.h>
+#include <QFile>
+#include <QRegExp>
 //Added by qt3to4:
 #include <Q3CString>
 #include <Q3MemArray>

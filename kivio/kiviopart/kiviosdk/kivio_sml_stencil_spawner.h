@@ -21,7 +21,7 @@
 
 #include <qdom.h>
 #include <qptrlist.h>
-#include <qstring.h>
+#include <QString>
 
 #include "kivio_stencil_spawner.h"
 

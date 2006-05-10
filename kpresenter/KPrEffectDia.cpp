@@ -25,18 +25,18 @@
 #include "KPrObject.h"
 #include "KPrSoundPlayer.h"
 
-#include <qpushbutton.h>
-#include <qcombobox.h>
-#include <qlabel.h>
+#include <QPushButton>
+#include <QComboBox>
+#include <QLabel>
 #include <qgroupbox.h>
-#include <qcheckbox.h>
-#include <qlineedit.h>
+#include <QCheckBox>
+#include <QLineEdit>
 #include <qvaluelist.h>
-#include <qlayout.h>
-#include <qspinbox.h>
+#include <QLayout>
+#include <QSpinBox>
 #include <qstringlist.h>
-#include <qdir.h>
-#include <qtooltip.h>
+#include <QDir>
+#include <QToolTip>
 #include <qwhatsthis.h>
 
 #include <klocale.h>

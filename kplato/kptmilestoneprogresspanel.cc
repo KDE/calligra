@@ -19,7 +19,7 @@
 
 #include "kptmilestoneprogresspanel.h"
 
-#include <qcheckbox.h>
+#include <QCheckBox>
 
 #include <kdatetimewidget.h>
 #include <klocale.h>

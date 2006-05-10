@@ -20,8 +20,8 @@
 #ifndef KSPREAD_KROSS_KSPREADCOREMODULE_H
 #define KSPREAD_KROSS_KSPREADCOREMODULE_H
 
-#include <qstring.h>
-#include <qvariant.h>
+#include <QString>
+#include <QVariant>
 
 #define KROSS_MAIN_EXPORT KDE_EXPORT
 

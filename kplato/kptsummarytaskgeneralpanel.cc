@@ -34,9 +34,9 @@
 #include <kabc/addressee.h>
 #include <kabc/addresseedialog.h>
 
-#include <qpushbutton.h>
-#include <qlayout.h>
-#include <qlabel.h>
+#include <QPushButton>
+#include <QLayout>
+#include <QLabel>
 #include <qdatetime.h> 
 #include <q3datetimeedit.h> 
 #include <q3groupbox.h> 

@@ -36,8 +36,8 @@
 #include <qdialog.h>
 #include <qstyle.h>
 #include <qtoolbutton.h>
-#include <qtooltip.h>
-#include <qfont.h>
+#include <QToolTip>
+#include <QFont>
 //Added by qt3to4:
 #include <QKeyEvent>
 #include <QEvent>

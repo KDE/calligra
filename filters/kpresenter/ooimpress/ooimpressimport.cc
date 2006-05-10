@@ -23,10 +23,10 @@
 
 #include <math.h>
 
-#include <qregexp.h>
+#include <QRegExp>
 #include <qdatetime.h>
 #include <qfileinfo.h>
-#include <qdir.h>
+#include <QDir>
 //Added by qt3to4:
 #include <Q3CString>
 

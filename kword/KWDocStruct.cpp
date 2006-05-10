@@ -43,7 +43,7 @@
 #include <ktoolbar.h>
 
 
-#include <qlayout.h>
+#include <QLayout>
 //Added by qt3to4:
 #include <Q3VBoxLayout>
 #include <QList>

@@ -205,7 +205,7 @@ static const char* const buttonpattern[]={
 
 #include <qpixmap.h>
 #include <qtoolbutton.h>
-#include <qtooltip.h>
+#include <QToolTip>
 
 #include <klocale.h>
 

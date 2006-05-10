@@ -22,8 +22,8 @@
 */
 
 #include <QFrame>
-#include <qlayout.h>
-#include <qpushbutton.h>
+#include <QLayout>
+#include <QPushButton>
 //Added by qt3to4:
 #include <QVBoxLayout>
 

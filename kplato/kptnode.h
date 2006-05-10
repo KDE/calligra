@@ -29,7 +29,7 @@
 #include <q3intdict.h>
 #include <qrect.h>
 #include <q3ptrlist.h>
-#include <qstring.h>
+#include <QString>
 #include <q3canvas.h>
 //Added by qt3to4:
 #include <Q3CString>

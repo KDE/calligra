@@ -16,7 +16,7 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <qstring.h>
+#include <QString>
 
 #include <kaboutdata.h>
 #include <kapplication.h>

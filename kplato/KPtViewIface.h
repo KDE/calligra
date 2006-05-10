@@ -4,9 +4,9 @@
 
 #include <KoViewIface.h>
 
-#include <qstring.h>
+#include <QString>
 #include <qrect.h>
-#include <qcolor.h>
+#include <QColor>
 
 namespace KPlato
 {

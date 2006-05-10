@@ -23,7 +23,7 @@
 
 #include "global.h"
 
-#include <qwidget.h>
+#include <QWidget>
 
 #include "KPrCommand.h"
 #include <KoPen.h>

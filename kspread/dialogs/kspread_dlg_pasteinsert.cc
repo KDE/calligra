@@ -27,7 +27,7 @@
 #include <kbuttonbox.h>
 #include <kdebug.h>
 #include <qradiobutton.h>
-#include <qcheckbox.h>
+#include <QCheckBox>
 
 #include "kspread_dlg_pasteinsert.h"
 #include "kspread_canvas.h"

@@ -28,7 +28,7 @@
 
 #include <qptrlist.h>
 #include <qdict.h>
-#include <qstring.h>
+#include <QString>
 
 //#include "vgradient.h"
 #include "vpattern.h"

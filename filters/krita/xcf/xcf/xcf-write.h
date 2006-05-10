@@ -19,9 +19,9 @@
 #ifndef __XCF_WRITE_H__
 #define __XCF_WRITE_H__
 
-#include <qstring.h>
+#include <QString>
 #include <qstringlist.h>
-#include <qfile.h>
+#include <QFile>
 //Added by qt3to4:
 #include <Q3CString>
 

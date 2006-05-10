@@ -19,7 +19,7 @@
 #ifndef STENCILBARBUTTON_H
 #define STENCILBARBUTTON_H
 
-#include <qpushbutton.h>
+#include <QPushButton>
 
 class QPixmap;
 namespace Kivio {

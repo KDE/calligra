@@ -43,11 +43,11 @@
 #include <kpushbutton.h>
 
 #include <QFrame>
-#include <qlabel.h>
-#include <qlayout.h>
-#include <qlineedit.h>
-#include <qtooltip.h>
-#include <qvariant.h>
+#include <QLabel>
+#include <QLayout>
+#include <QLineEdit>
+#include <QToolTip>
+#include <QVariant>
 #include <QVBoxLayout>
 #include <QGridLayout>
 #include <QEvent>

@@ -25,9 +25,9 @@
 #include "kptdurationwidget.h"
 #include "relationpanel.h"
 
-#include <qlayout.h>
+#include <QLayout>
 #include <q3vbox.h>
-#include <qlabel.h>
+#include <QLabel>
 #include <q3buttongroup.h>
 #include <qradiobutton.h>
 

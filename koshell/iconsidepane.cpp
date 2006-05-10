@@ -25,12 +25,12 @@
 #include <qdrawutil.h>
 #include <qfontmetrics.h>
 #include <q3frame.h>
-#include <qlabel.h>
+#include <QLabel>
 #include <qobject.h>
 #include <qpainter.h>
 #include <q3ptrlist.h>
 #include <qstyle.h>
-#include <qtooltip.h>
+#include <QToolTip>
 #include <q3widgetstack.h>
 //Added by qt3to4:
 #include <QPixmap>

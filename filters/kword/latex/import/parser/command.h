@@ -24,8 +24,8 @@
 //#include "option.h"
 #include "element.h"
 
-#include <qstring.h>
-#include <qmap.h>
+#include <QString>
+#include <QMap>
 #include <q3ptrlist.h>
 
 class Command: public Element

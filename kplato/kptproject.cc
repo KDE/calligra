@@ -29,7 +29,7 @@
 #include "kptschedule.h"
 
 #include <qdom.h>
-#include <qstring.h>
+#include <QString>
 #include <qdatetime.h>
 #include <qbrush.h>
 #include <q3canvas.h>

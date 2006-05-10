@@ -1,13 +1,13 @@
-#include <qcheckbox.h>
-#include <qlabel.h>
-#include <qspinbox.h>
-#include <qlayout.h>
-#include <qlineedit.h>
-#include <qregexp.h>
+#include <QCheckBox>
+#include <QLabel>
+#include <QSpinBox>
+#include <QLayout>
+#include <QLineEdit>
+#include <QRegExp>
 
-#include <qtooltip.h>
+#include <QToolTip>
 #include <qvalidator.h>
-#include <qpushbutton.h>
+#include <QPushButton>
 //Added by qt3to4:
 #include <QKeyEvent>
 #include <QEvent>

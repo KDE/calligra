@@ -19,7 +19,7 @@
 #ifndef __rotationdialogimpl_h__
 #define __rotationdialogimpl_h__
 
-#include <qlabel.h>
+#include <QLabel>
 #include <kdialogbase.h>
 
 class KPrTextPreview;

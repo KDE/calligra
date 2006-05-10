@@ -47,13 +47,13 @@
 #include <kdebug.h>
 #include <kbuttonbox.h>
 #include <knumvalidator.h>
-#include <qcombobox.h>
+#include <QComboBox>
 #include <qevent.h>
 #include <q3listbox.h>
-#include <qlabel.h>
-#include <qpushbutton.h>
+#include <QLabel>
+#include <QPushButton>
 #include <klineedit.h>
-#include <qlayout.h>
+#include <QLayout>
 
 using namespace KSpread;
 

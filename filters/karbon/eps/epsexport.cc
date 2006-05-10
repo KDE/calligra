@@ -21,8 +21,8 @@
 #include <q3cstring.h>
 #include <qdatetime.h>	// For creation date/time.
 #include <qdom.h>
-#include <qfile.h>
-#include <qstring.h>
+#include <QFile>
+#include <QString>
 #include <q3valuelist.h>
 //Added by qt3to4:
 #include <QTextStream>

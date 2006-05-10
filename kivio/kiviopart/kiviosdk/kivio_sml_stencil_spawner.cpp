@@ -27,10 +27,10 @@
 #include "kivio_stencil_spawner_info.h"
 
 #include <qdom.h>
-#include <qfile.h>
+#include <QFile>
 #include <qiodevice.h>
 #include <qpainter.h>
-#include <qpoint.h>
+#include <QPoint>
 #include <qpixmap.h>
 #include <qrect.h>
 #include <qfileinfo.h>

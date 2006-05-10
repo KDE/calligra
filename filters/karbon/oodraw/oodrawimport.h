@@ -25,7 +25,7 @@
 
 #include <qdom.h>
 #include <q3dict.h>
-#include <qcolor.h>
+#include <QColor>
 //Added by qt3to4:
 #include <Q3CString>
 #include <KoStyleStack.h>

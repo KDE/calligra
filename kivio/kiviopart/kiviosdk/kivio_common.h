@@ -20,7 +20,7 @@
 #define KIVIO_COMMON_H
 
 #include <qdom.h>
-#include <qcolor.h>
+#include <QColor>
 
 class KivioConnectorPoint;
 class KoPoint;

@@ -20,10 +20,10 @@
 #include "kptintervaledit.h"
 #include "intervalitem.h"
 
-#include <qpushbutton.h>
-#include <qcombobox.h>
-#include <qlabel.h>
-#include <qlineedit.h>
+#include <QPushButton>
+#include <QComboBox>
+#include <QLabel>
+#include <QLineEdit>
 #include <q3datetimeedit.h>
 #include <qdatetime.h>
 #include <q3listview.h>

@@ -29,8 +29,8 @@
 #ifdef HAVE_PYTHON
 
 #include <qptrlist.h>
-#include <qcolor.h>
-#include <qfont.h>
+#include <QColor>
+#include <QFont>
 
 /* slots gets defined in Qt 3.2 and conflicts with python 2.3 headers */
 #undef slots

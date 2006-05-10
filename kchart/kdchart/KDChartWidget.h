@@ -32,7 +32,7 @@
 #include <KDChartGlobal.h>
 #include <KDChartTable.h>
 #include <KDChartDataRegion.h>
-#include <qwidget.h>
+#include <QWidget>
 #include <q3scrollview.h>
 #include <qpixmap.h>
 //Added by qt3to4:

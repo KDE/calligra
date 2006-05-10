@@ -23,7 +23,7 @@
 #include <unistd.h>
 #endif
 
-#include <qmap.h>
+#include <QMap>
 #include <qbuffer.h>
 #include <q3picture.h>
 #include <qxml.h>

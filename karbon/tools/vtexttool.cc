@@ -19,15 +19,15 @@
 
 #include <math.h>
 
-#include <qcheckbox.h>
-#include <qcombobox.h>
+#include <QCheckBox>
+#include <QComboBox>
 #include <qcursor.h>
-#include <qlabel.h>
-#include <qlayout.h>
-#include <qlineedit.h>
+#include <QLabel>
+#include <QLayout>
+#include <QLineEdit>
 #include <qpainter.h>
 #include <qpixmap.h>
-#include <qpushbutton.h>
+#include <QPushButton>
 #include <qtabwidget.h>
 
 #include <kdebug.h>

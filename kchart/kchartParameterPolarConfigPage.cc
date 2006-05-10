@@ -26,13 +26,13 @@
 #include <kdebug.h>
 #include <kdialog.h>
 
-#include <qlayout.h>
-#include <qlabel.h>
+#include <QLayout>
+#include <QLabel>
 #include <q3buttongroup.h>
-#include <qcheckbox.h>
-#include <qlineedit.h>
+#include <QCheckBox>
+#include <QLineEdit>
 #include <qradiobutton.h>
-#include <qspinbox.h>
+#include <QSpinBox>
 
 //Added by qt3to4:
 #include <Q3VBoxLayout>

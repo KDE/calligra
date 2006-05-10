@@ -27,7 +27,7 @@
 #include <qpainter.h>
 #include <q3pointarray.h>
 #include <q3ptrlist.h>
-#include <qpoint.h>
+#include <QPoint>
 
 #include <kdebug.h>
 

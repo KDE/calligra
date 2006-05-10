@@ -22,7 +22,7 @@
 #include <qdom.h>
 #include <qvaluelist.h>
 #include <qptrlist.h>
-#include <qstring.h>
+#include <QString>
 
 #include "kivio_connector_target.h"
 //#define protected public // ewww... what a gory hack

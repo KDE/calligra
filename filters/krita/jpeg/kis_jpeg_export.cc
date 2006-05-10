@@ -19,7 +19,7 @@
 
 #include "kis_jpeg_export.h"
 
-#include <qcheckbox.h>
+#include <QCheckBox>
 #include <qslider.h>
 //Added by qt3to4:
 #include <Q3CString>

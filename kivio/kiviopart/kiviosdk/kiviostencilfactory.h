@@ -23,7 +23,7 @@ class KivioStencil;
 class KivioStencilSpawnerInfo;
 class QPixmap;
 
-#include <qstring.h>
+#include <QString>
 #include <qobject.h>
 #include <qstringlist.h>
 #include <koffice_export.h>

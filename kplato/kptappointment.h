@@ -25,7 +25,7 @@
 
 #include <qdom.h>
 #include <q3intdict.h>
-#include <qstring.h>
+#include <QString>
 #include <q3ptrlist.h>
 
 #include <kdebug.h>

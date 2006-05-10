@@ -27,15 +27,15 @@
 #include "kpteffortcostmap.h"
 
 #include <qapplication.h>
-#include <qcombobox.h>
+#include <QComboBox>
 #include <qdatetime.h>
 #include <q3datetimeedit.h>
 #include <q3header.h>
-#include <qlabel.h>
-#include <qlayout.h>
+#include <QLabel>
+#include <QLayout>
 #include <qpainter.h>
 #include <qpalette.h>
-#include <qpushbutton.h>
+#include <QPushButton>
 #include <q3valuelist.h>
 #include <q3popupmenu.h>
 #include <qsizepolicy.h>

@@ -23,7 +23,7 @@
 
 #include <q3ptrlist.h>
 #include <q3memarray.h>
-#include <qstring.h>
+#include <QString>
 
 namespace WP
 {

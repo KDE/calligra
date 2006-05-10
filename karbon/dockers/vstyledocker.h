@@ -22,7 +22,7 @@
 #define __VSTYLEDOCKER_H__
 
 #include <koIconChooser.h>
-#include <qwidget.h>
+#include <QWidget>
 
 class QTabWidget;
 class KarbonView;

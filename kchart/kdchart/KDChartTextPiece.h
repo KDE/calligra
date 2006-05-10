@@ -29,8 +29,8 @@
 #ifndef __KDCHARTTEXTPIECE_H__
 #define __KDCHARTTEXTPIECE_H__
 
-#include <qstring.h>
-#include <qfont.h>
+#include <QString>
+#include <QFont>
 #include <qregion.h>
 #include <qpalette.h>
 #include <qobject.h>

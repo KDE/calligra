@@ -62,9 +62,9 @@
 #include <qclipboard.h>
 #include <q3dragobject.h>
 #include <qcursor.h>
-#include <qfile.h>
+#include <QFile>
 #include <q3progressdialog.h>
-#include <qregexp.h>
+#include <QRegExp>
 //Added by qt3to4:
 #include <QMouseEvent>
 #include <Q3MemArray>

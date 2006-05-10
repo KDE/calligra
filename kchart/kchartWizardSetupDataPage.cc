@@ -5,9 +5,9 @@
 #include "kchartWizard.h"
 
 #include <qradiobutton.h>
-#include <qcheckbox.h>
+#include <QCheckBox>
 #include <q3buttongroup.h>
-#include <qlabel.h>
+#include <QLabel>
 //Added by qt3to4:
 #include <Q3Frame>
 

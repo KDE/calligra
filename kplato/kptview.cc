@@ -26,13 +26,13 @@
 #include <qapplication.h>
 #include <qpainter.h>
 #include <qicon.h>
-#include <qlayout.h>
+#include <QLayout>
 #include <qsplitter.h>
 #include <q3canvas.h>
 #include <q3scrollview.h>
-#include <qcolor.h>
-#include <qlabel.h>
-#include <qstring.h>
+#include <QColor>
+#include <QLabel>
+#include <QString>
 #include <qstringlist.h>
 #include <q3vbox.h>
 #include <q3grid.h>

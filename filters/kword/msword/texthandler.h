@@ -24,7 +24,7 @@
 #include "versionmagic.h"
 
 #include <wv2/handlers.h>
-#include <qstring.h>
+#include <QString>
 #include <qobject.h>
 #include <qdom.h>
 

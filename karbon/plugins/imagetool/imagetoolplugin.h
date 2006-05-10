@@ -21,7 +21,7 @@
 #ifndef __IMAGETOOLPLUGIN_H__
 #define __IMAGETOOLPLUGIN_H__
 
-#include <qstring.h>
+#include <QString>
 
 #include <kparts/plugin.h>
 

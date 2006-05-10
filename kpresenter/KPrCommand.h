@@ -24,8 +24,8 @@
 
 #include <kcommand.h>
 #include <qptrlist.h>
-#include <qpoint.h>
-#include <qcolor.h>
+#include <QPoint>
+#include <QColor>
 #include <qsize.h>
 #include "global.h"
 #include <KoPictureCollection.h>
@@ -37,7 +37,7 @@
 #include <KoTextCommand.h>
 #include <KoPoint.h>
 #include <KoSize.h>
-#include <qvariant.h>
+#include <QVariant>
 #include <qvaluevector.h>
 #include "KPrBackground.h"
 #include "KPrVariableCollection.h"

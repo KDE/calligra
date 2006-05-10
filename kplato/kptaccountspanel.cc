@@ -22,11 +22,11 @@
 #include "kptcommand.h"
 #include "kptproject.h"
 
-#include <qcombobox.h>
+#include <QComboBox>
 #include <q3header.h>
 #include <q3listview.h>
-#include <qpushbutton.h>
-#include <qstring.h>
+#include <QPushButton>
+#include <QString>
 #include <qstringlist.h>
 
 #include <k3listview.h>

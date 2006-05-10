@@ -22,7 +22,7 @@
 #ifndef KPMARGINWIDGET_H
 #define KPMARGINWIDGET_H
 
-#include <qwidget.h>
+#include <QWidget>
 
 #include <KoUnit.h>
 

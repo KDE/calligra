@@ -22,7 +22,7 @@
 
 #include "element.h"
 
-#include <qstring.h>
+#include <QString>
 
 class Text: public Element
 {

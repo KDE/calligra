@@ -19,7 +19,7 @@
 
 #include <qcursor.h>
 #include <qevent.h>
-#include <qlabel.h>
+#include <QLabel>
 
 #include "karbon_part.h"
 #include "karbon_view.h"

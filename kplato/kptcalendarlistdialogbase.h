@@ -23,8 +23,8 @@
 
 #include "kptcalendarlistpanel.h"
 
-#include <qvariant.h>
-#include <qwidget.h>
+#include <QVariant>
+#include <QWidget>
 //Added by qt3to4:
 #include <Q3VBoxLayout>
 #include <Q3HBoxLayout>

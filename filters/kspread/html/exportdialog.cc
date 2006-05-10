@@ -17,11 +17,11 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <qcheckbox.h>
-#include <qcombobox.h>
+#include <QCheckBox>
+#include <QComboBox>
 #include <q3listbox.h>
 #include <qradiobutton.h>
-#include <qspinbox.h>
+#include <QSpinBox>
 #include <qtextcodec.h>
 
 #include <kapplication.h>

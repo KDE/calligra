@@ -20,9 +20,9 @@
 #ifndef APPLIXWORDIMPORT_H
 #define APPLIXWORDIMPORT_H
 
-#include <qstring.h>
+#include <QString>
 #include <qstringlist.h>
-#include <qfile.h>
+#include <QFile>
 #include <qobject.h>
 #include <qtextstream.h>
 //Added by qt3to4:

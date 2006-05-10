@@ -23,8 +23,8 @@
 #ifndef __KWORD_TEXTFORMAT_H__
 #define __KWORD_TEXTFORMAT_H__
 
-#include <qstring.h>
-#include <qcolor.h>
+#include <QString>
+#include <QColor>
 #include "format.h"
 
 enum _EAlign

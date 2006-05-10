@@ -20,7 +20,7 @@
 #ifndef KSPLOADINGINFO_H
 #define KSPLOADINGINFO_H
 
-#include <qpoint.h>
+#include <QPoint>
 #include <qstringlist.h>
 
 #include <KoPoint.h>

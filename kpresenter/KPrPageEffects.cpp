@@ -24,7 +24,7 @@
 #include "KPrPageEffects.h"
 
 #include <qpixmap.h>
-#include <qwidget.h>
+#include <QWidget>
 #include <qwmatrix.h>
 
 #include <kapplication.h>

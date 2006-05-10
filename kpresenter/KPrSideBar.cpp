@@ -27,7 +27,7 @@
 #include <qpopupmenu.h>
 #include <qimage.h>
 #include <qtabwidget.h>
-#include <qtooltip.h>
+#include <QToolTip>
 
 #include <kwordwrap.h>
 #include <kmessagebox.h>

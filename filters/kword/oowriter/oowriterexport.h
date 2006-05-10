@@ -32,7 +32,7 @@
 #ifndef OOWRITEREXPORT_H
 #define OOWRITEREXPORT_H
 
-#include <qstring.h>
+#include <QString>
 #include <q3cstring.h>
 
 #include <KoFilter.h>

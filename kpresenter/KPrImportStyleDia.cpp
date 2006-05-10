@@ -21,17 +21,17 @@
 #include <klocale.h>
 #include "KPrDocument.h"
 #include <qvbox.h>
-#include <qlayout.h>
-#include <qlineedit.h>
-#include <qpushbutton.h>
+#include <QLayout>
+#include <QLineEdit>
+#include <QPushButton>
 #include <qlistbox.h>
 #include <kmessagebox.h>
 #include "KPrImportStyleDia.h"
 #include <KoStore.h>
-#include <qfile.h>
+#include <QFile>
 #include <kfiledialog.h>
 #include <kdebug.h>
-#include <qlabel.h>
+#include <QLabel>
 #include "KPrTextObject.h"
 
 KPrImportStyleDia::KPrImportStyleDia( KPrDocument *_doc, KoStyleCollection* currentCollection,

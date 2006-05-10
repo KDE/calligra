@@ -29,12 +29,12 @@
 #include <kptcommand.h>
 
 #include <q3listbox.h>
-#include <qpushbutton.h>
-#include <qlineedit.h>
-#include <qstring.h>
-#include <qspinbox.h>
+#include <QPushButton>
+#include <QLineEdit>
+#include <QString>
+#include <QSpinBox>
 #include <qvalidator.h>
-#include <qcombobox.h>
+#include <QComboBox>
 #include <qdatetime.h>
 #include <q3datetimeedit.h>
 

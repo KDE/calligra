@@ -21,7 +21,7 @@
 #include "kivioaligndialog.moc"
 
 #include <qradiobutton.h>
-#include <qcheckbox.h>
+#include <QCheckBox>
 
 #include <klocale.h>
 

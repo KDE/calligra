@@ -22,15 +22,15 @@
 
 
 
-#include <qregexp.h>
+#include <QRegExp>
 #include <qapplication.h>
 #include <q3grid.h>
-#include <qlabel.h>
-#include <qlayout.h>
+#include <QLabel>
+#include <QLayout>
 #include <q3buttongroup.h>
 #include <qradiobutton.h>
 
-#include <qcheckbox.h>
+#include <QCheckBox>
 //Added by qt3to4:
 #include <Q3VBoxLayout>
 

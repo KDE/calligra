@@ -20,19 +20,19 @@
 #include "kptcalendarlistdialogbase.h"
 #include "kptcalendaredit.h"
 
-#include <qvariant.h>
+#include <QVariant>
 #include <q3frame.h>
 #include <q3groupbox.h>
 #include <q3header.h>
 #include <q3listview.h>
-#include <qlineedit.h>
-#include <qpushbutton.h>
+#include <QLineEdit>
+#include <QPushButton>
 #include <q3table.h>
-#include <qlayout.h>
-#include <qtooltip.h>
+#include <QLayout>
+#include <QToolTip>
 #include <q3whatsthis.h>
-#include <qlabel.h>
-#include <qcombobox.h>
+#include <QLabel>
+#include <QComboBox>
 //Added by qt3to4:
 #include <Q3VBoxLayout>
 

@@ -20,8 +20,8 @@
 
 
 #include <q3vbox.h>
-#include <qlayout.h>
-#include <qlineedit.h>
+#include <QLayout>
+#include <QLineEdit>
 //Added by qt3to4:
 #include <Q3VBoxLayout>
 

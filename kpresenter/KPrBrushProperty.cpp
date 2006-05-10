@@ -22,9 +22,9 @@
 #include "gradientpropertyui.h"
 #include "KPrPBPreview.h"
 
-#include <qcheckbox.h>
-#include <qlabel.h>
-#include <qlayout.h>
+#include <QCheckBox>
+#include <QLabel>
+#include <QLayout>
 #include <qslider.h>
 #include <qwhatsthis.h>
 #include <qwidgetstack.h>

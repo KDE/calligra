@@ -21,8 +21,8 @@
 #define _IMPORT_STYLE_H
 
 #include <q3valuelist.h>
-#include <qstring.h>
-#include <qmap.h>
+#include <QString>
+#include <QMap>
 
 class StyleData
 {

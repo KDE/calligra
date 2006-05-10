@@ -28,16 +28,16 @@
 #include <kdebug.h>
 #include <kinstance.h>
 #include <kvbox.h>
-#include <qcheckbox.h>
-#include <qlabel.h>
+#include <QCheckBox>
+#include <QLabel>
 
-#include <qcombobox.h>
+#include <QComboBox>
 
 
-#include <qpushbutton.h>
+#include <QPushButton>
 #include <q3listbox.h>
-#include <qlineedit.h>
-#include <qlayout.h>
+#include <QLineEdit>
+#include <QLayout>
 //Added by qt3to4:
 #include <QPixmap>
 #include <Q3GridLayout>

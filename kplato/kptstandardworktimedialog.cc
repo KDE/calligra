@@ -24,11 +24,11 @@
 #include "kptintervaledit.h"
 #include "kptpart.h"
 
-#include <qpushbutton.h>
-#include <qspinbox.h>
-#include <qcombobox.h>
-#include <qlabel.h>
-#include <qlineedit.h>
+#include <QPushButton>
+#include <QSpinBox>
+#include <QComboBox>
+#include <QLabel>
+#include <QLineEdit>
 #include <q3datetimeedit.h>
 #include <qdatetime.h>
 

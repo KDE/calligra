@@ -23,7 +23,7 @@
 #ifndef __KPRCANVAS__
 #define __KPRCANVAS__
 
-#include <qwidget.h>
+#include <QWidget>
 #include <qptrlist.h>
 #include <qpicture.h>
 #include <qvaluelist.h>

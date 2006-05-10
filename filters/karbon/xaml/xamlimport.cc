@@ -34,8 +34,8 @@
 #include <core/vgroup.h>
 #include <core/vimage.h>
 #include <core/vlayer.h>
-#include <qcolor.h>
-#include <qfile.h>
+#include <QColor>
+#include <QFile>
 //Added by qt3to4:
 #include <Q3ValueList>
 #include <Q3CString>

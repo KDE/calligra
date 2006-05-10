@@ -20,7 +20,7 @@
 #define BRUSHSTYLEWIDGET_H
 
 #include <qbrush.h>
-#include <qwidget.h>
+#include <QWidget>
 
 #include "KPrCommand.h"
 

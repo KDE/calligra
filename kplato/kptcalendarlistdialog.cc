@@ -23,12 +23,12 @@
 #include "kptcommand.h"
 #include "kptpart.h"
 
-#include <qpushbutton.h>
-#include <qcombobox.h>
+#include <QPushButton>
+#include <QComboBox>
 #include <q3header.h>
-#include <qlabel.h>
+#include <QLabel>
 #include <q3textedit.h>
-#include <qlineedit.h>
+#include <QLineEdit>
 #include <q3datetimeedit.h>
 #include <qdatetime.h>
 #include <qtabwidget.h>

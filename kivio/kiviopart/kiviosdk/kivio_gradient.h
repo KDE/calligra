@@ -20,7 +20,7 @@
 #define KIVIO_GRADIENT_H
 
 #include <qptrlist.h>
-#include <qcolor.h>
+#include <QColor>
 #include <qdom.h>
 class KivioPoint;
 

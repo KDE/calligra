@@ -22,7 +22,7 @@
 #ifndef __KWORD_LATEX_EXPORT_KEY_H__
 #define __KWORD_LATEX_EXPORT_KEY_H__
 
-#include <qstring.h>
+#include <QString>
 //Added by qt3to4:
 #include <QTextStream>
 

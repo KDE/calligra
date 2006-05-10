@@ -21,8 +21,8 @@
 #include <xsltexportdia.h>
 #include <xsltproc.h>
 
-#include <qdir.h>
-#include <qcombobox.h>
+#include <QDir>
+#include <QComboBox>
 //Added by qt3to4:
 #include <Q3CString>
 

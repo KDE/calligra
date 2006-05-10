@@ -25,9 +25,9 @@
 #include <limits.h>
 
 #include <q3cstring.h>
-#include <qfile.h>
+#include <QFile>
 #include <qiodevice.h>
-#include <qstring.h>
+#include <QString>
 #include <qtextcodec.h>
 #include <qtextstream.h>
 //Added by qt3to4:

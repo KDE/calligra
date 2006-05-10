@@ -18,7 +18,7 @@
 */
 
 #include <qcursor.h>
-#include <qlabel.h>
+#include <QLabel>
 
 #include <klocale.h>
 

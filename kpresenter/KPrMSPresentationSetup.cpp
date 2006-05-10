@@ -33,15 +33,15 @@
 #include <kio/netaccess.h>
 #include <ktempfile.h>
 
-#include <qdir.h>
+#include <QDir>
 #include <qframe.h>
 #include <qfileinfo.h>
 #include <qhbox.h>
-#include <qlabel.h>
-#include <qlayout.h>
+#include <QLabel>
+#include <QLayout>
 #include <qpixmap.h>
 #include <qpainter.h>
-#include <qpushbutton.h>
+#include <QPushButton>
 #include <qvbox.h>
 #include <qwhatsthis.h>
 

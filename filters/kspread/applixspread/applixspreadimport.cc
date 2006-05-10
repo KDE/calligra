@@ -25,7 +25,7 @@
 
 #include <qmessagebox.h>
 #include <qstringlist.h>
-#include <qregexp.h>
+#include <QRegExp>
 #include <q3ptrlist.h>
 //Added by qt3to4:
 #include <QTextStream>

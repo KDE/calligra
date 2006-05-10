@@ -21,8 +21,8 @@
 #define kiviocommand_h
 
 #include <kcommand.h>
-#include <qfont.h>
-#include <qcolor.h>
+#include <QFont>
+#include <QColor>
 #include <qvaluelist.h>
 #include <KoRect.h>
 #include <KoPageLayout.h>

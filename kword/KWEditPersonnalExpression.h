@@ -21,7 +21,7 @@
 #define __KWEditPersonnalExpression__
 
 #include <kdialogbase.h>
-#include <qmap.h>
+#include <QMap>
 #include <Q3ListBox>
 
 class QPushButton;

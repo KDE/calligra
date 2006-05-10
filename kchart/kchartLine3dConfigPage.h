@@ -20,7 +20,7 @@
 #ifndef __KCHARTLINE3DCONFIGPAGE_H__
 #define __KCHARTLINE3DCONFIGPAGE_H__
 
-#include <qwidget.h>
+#include <QWidget>
 #include <knuminput.h>
 
 class QCheckBox;

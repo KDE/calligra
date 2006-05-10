@@ -21,7 +21,7 @@
 #define kwviewmode_h
 
 #include <qrect.h>
-#include <qstring.h>
+#include <QString>
 class KWDocument;
 class QPainter;
 class QRegion;

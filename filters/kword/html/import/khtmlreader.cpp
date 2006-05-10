@@ -23,14 +23,14 @@
 #include <dom/dom_text.h>
 #include <dom/dom2_views.h>
 #include <dom/dom_doc.h>
-#include <qcolor.h>
+#include <QColor>
 #include <dom/dom_element.h>
 #include <dom/html_table.h>
 #include <khtmlview.h>
-#include <qwidget.h>
+#include <QWidget>
 #include <kapplication.h>
 #include <dom/html_misc.h>
-#include <qregexp.h>
+#include <QRegExp>
 
 KHTMLReader::KHTMLReader(KWDWriter *w){
 	_html=new KHTMLPart();

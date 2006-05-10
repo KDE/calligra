@@ -9,7 +9,7 @@
 #ifndef MPAGEDISPLAY_H
 #define MPAGEDISPLAY_H
 
-#include <qwidget.h>
+#include <QWidget>
 #include <qpainter.h>
 #include <qpixmap.h>
 #include <q3picture.h>

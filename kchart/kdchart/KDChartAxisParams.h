@@ -29,14 +29,14 @@
 #ifndef __KDCHARTAXISPARAMS_H__
 #define __KDCHARTAXISPARAMS_H__
 
-#include <qfont.h>
-#include <qcolor.h>
-#include <qmap.h>
+#include <QFont>
+#include <QColor>
+#include <QMap>
 #include <qobject.h>
 #include <qtextstream.h>
 #include <qstringlist.h>
 #include <qdatetime.h>
-#include <qvariant.h>
+#include <QVariant>
 #include <qrect.h>
 #include "KDChartGlobal.h"
 

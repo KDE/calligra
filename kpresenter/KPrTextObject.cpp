@@ -47,9 +47,9 @@
 #include <kdebug.h>
 #include <kdeversion.h>
 
-#include <qfont.h>
-#include <qfile.h>
-#include <qwidget.h>
+#include <QFont>
+#include <QFile>
+#include <QWidget>
 #include <qpicture.h>
 #include <qpainter.h>
 #include <qwmatrix.h>

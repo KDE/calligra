@@ -23,7 +23,7 @@
 
 
 #include <qptrlist.h>
-#include <qstring.h>
+#include <QString>
 
 #include "KoPoint.h"
 

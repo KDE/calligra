@@ -1,7 +1,7 @@
 #ifndef _kchartWIZARDSELECTSETUPDATAPAGE_H
 #define _kchartWIZARDSELECTSETUPDATAPAGE_H
 
-#include <qwidget.h>
+#include <QWidget>
 
 class QRadioButton;
 class QCheckBox;

@@ -21,22 +21,22 @@
 
 #include "kptcalendareditbase.h"
 
-#include <qvariant.h>
-#include <qpushbutton.h>
+#include <QVariant>
+#include <QPushButton>
 #include <q3groupbox.h>
 //Added by qt3to4:
 #include <Q3VBoxLayout>
 #include <Q3HBoxLayout>
 #include <Q3GridLayout>
 #include <kptcalendarpanel.h>
-#include <qlabel.h>
-#include <qcombobox.h>
+#include <QLabel>
+#include <QComboBox>
 #include <q3buttongroup.h>
 #include <q3header.h>
 #include <q3listview.h>
 #include <q3datetimeedit.h>
-#include <qlayout.h>
-#include <qtooltip.h>
+#include <QLayout>
+#include <QToolTip>
 #include <q3whatsthis.h>
 
 namespace KPlato

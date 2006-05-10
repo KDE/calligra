@@ -23,7 +23,7 @@
 #include <qcursor.h>
 #include <qsplitter.h>
 #include <q3iconview.h>
-#include <qlabel.h>
+#include <QLabel>
 #include <q3vbox.h>
 //Added by qt3to4:
 #include <Q3ValueList>

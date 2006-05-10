@@ -20,7 +20,7 @@
 #define KIVIO_FILL_STYLE_H
 
 #include <qbrush.h>
-#include <qcolor.h>
+#include <QColor>
 #include <qdom.h>
 
 #include <kimageeffect.h>

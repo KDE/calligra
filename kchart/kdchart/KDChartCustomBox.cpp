@@ -29,7 +29,7 @@
 #include <qpainter.h>
 #include <qregion.h>
 #include <qpalette.h>
-#include <qpoint.h>
+#include <QPoint>
 #include <q3simplerichtext.h>
 #include <q3paintdevicemetrics.h>
 

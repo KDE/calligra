@@ -31,13 +31,13 @@
 #include <kspread_view.h>
 #include <selection.h>
 
-#include <qcheckbox.h>
-#include <qlabel.h>
-#include <qlineedit.h>
+#include <QCheckBox>
+#include <QLabel>
+#include <QLineEdit>
 #include <qradiobutton.h>
 #include <q3buttongroup.h>
-#include <qcombobox.h>
-#include <qlayout.h>
+#include <QComboBox>
+#include <QLayout>
 #include <QGroupBox>
 //#include <qhgroupbox.h>
 //Added by qt3to4:

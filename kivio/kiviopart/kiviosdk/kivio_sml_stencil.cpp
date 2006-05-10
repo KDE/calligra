@@ -38,7 +38,7 @@
 #include <qdom.h>
 #include <qpainter.h>
 #include <qbrush.h>
-#include <qcolor.h>
+#include <QColor>
 #include <qpalette.h>
 #include <qrect.h>
 #include <qbitmap.h>

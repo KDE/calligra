@@ -20,7 +20,7 @@
 
 #include <qpixmap.h>
 #include <qslider.h>
-#include <qspinbox.h>
+#include <QSpinBox>
 #include <qframe.h>
 #include <qcursor.h>
 #include <qtoolbutton.h>

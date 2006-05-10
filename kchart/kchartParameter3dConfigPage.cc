@@ -23,9 +23,9 @@
 #include <kapplication.h>
 #include <kdialog.h>
 #include <klocale.h>
-#include <qlayout.h>
-#include <qlabel.h>
-#include <qcheckbox.h>
+#include <QLayout>
+#include <QLabel>
+#include <QCheckBox>
 #include <q3buttongroup.h>
 
 //Added by qt3to4:

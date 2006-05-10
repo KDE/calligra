@@ -19,7 +19,7 @@
 **
 */
 
-#include <qdir.h>
+#include <QDir>
 //Added by qt3to4:
 #include <QTextStream>
 #include <kdebug.h>		/* for kDebug() stream */

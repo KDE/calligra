@@ -19,10 +19,10 @@
 #ifndef __kivio_dlg_pageshow__
 #define __kivio_dlg_pageshow__
 
-#include <qpushbutton.h>
-#include <qlineedit.h>
+#include <QPushButton>
+#include <QLineEdit>
 #include <qlistbox.h>
-#include <qlabel.h>
+#include <QLabel>
 
 #include <kdialogbase.h>
 

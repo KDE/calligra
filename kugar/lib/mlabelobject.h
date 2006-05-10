@@ -9,7 +9,7 @@
 #ifndef MLABELOBJECT_H
 #define MLABELOBJECT_H
 
-#include <qstring.h>
+#include <QString>
 #include <qfontmetrics.h>
 
 #include "mreportobject.h"

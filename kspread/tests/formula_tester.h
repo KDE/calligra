@@ -20,7 +20,7 @@
 #ifndef KSPREAD_FORMULA_TESTER
 #define KSPREAD_FORMULA_TESTER
 
-#include <qstring.h>
+#include <QString>
 #include <kspread_value.h>
 
 #include "tester.h"

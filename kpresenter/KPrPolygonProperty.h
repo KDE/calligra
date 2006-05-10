@@ -20,7 +20,7 @@
 #ifndef POLYGONPROPERTY_H
 #define POLYGONPROPERTY_H
 
-#include <qwidget.h>
+#include <QWidget>
 
 #include "KPrCommand.h"
 

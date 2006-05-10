@@ -1,7 +1,7 @@
 #ifndef _kchartWIZARDSELECTDATAPAGE_H
 #define _kchartWIZARDSELECTDATAPAGE_H
 
-#include <qwidget.h>
+#include <QWidget>
 
 class QLineEdit;
 

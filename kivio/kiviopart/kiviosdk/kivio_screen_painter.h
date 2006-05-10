@@ -21,7 +21,7 @@
 
 #include "kivio_painter.h"
 
-#include <qfont.h>
+#include <QFont>
 #include <qpainter.h>
 #include <qpixmap.h>
 

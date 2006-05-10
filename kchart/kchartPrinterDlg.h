@@ -25,7 +25,7 @@
 
 #include <kdeprint/kprintdialogpage.h>
 #include <knuminput.h>
-#include <qlabel.h>
+#include <QLabel>
 namespace KChart
 {
 

@@ -20,7 +20,7 @@
 #include <stdlib.h>
 #include <time.h>
 
-#include <qfile.h>
+#include <QFile>
 
 #include <kcodecs.h>
 #include <ktempfile.h>

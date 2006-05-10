@@ -25,7 +25,7 @@
 
 #include <KoUnitWidgets.h>
 #include <klocale.h>
-#include <qlabel.h>
+#include <QLabel>
 #include <q3vbox.h>
 
 KWResizeTableDia::KWResizeTableDia( QWidget *parent, KWTableFrameSet *table, KWDocument *doc, int resizeColumn )

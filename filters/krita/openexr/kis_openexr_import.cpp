@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include <qstring.h>
-#include <qfile.h>
+#include <QString>
+#include <QFile>
 //Added by qt3to4:
 #include <Q3CString>
 #include <Q3MemArray>

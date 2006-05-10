@@ -25,15 +25,15 @@
 #include <sys/types.h>
 #include <netinet/in.h>
 
-#include <qstring.h>
-#include <qfile.h>
+#include <QString>
+#include <QFile>
 #include <qimage.h>
 #include <qradiobutton.h>
 #include <q3groupbox.h>
 #include <q3buttongroup.h>
-#include <qpushbutton.h>
-#include <qlabel.h>
-#include <qcheckbox.h>
+#include <QPushButton>
+#include <QLabel>
+#include <QCheckBox>
 #include <qapplication.h>
 #include <qcursor.h>
 #include <qeventloop.h>

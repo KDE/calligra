@@ -1,9 +1,9 @@
 #ifndef _kchartWIZARDSELECTCHARTTYPEPAGE_H
 #define _kchartWIZARDSELECTCHARTTYPEPAGE_H
 
-#include <qlayout.h>
+#include <QLayout>
 
-#include <qwidget.h>
+#include <QWidget>
 //Added by qt3to4:
 #include <QPixmap>
 #include <Q3GridLayout>

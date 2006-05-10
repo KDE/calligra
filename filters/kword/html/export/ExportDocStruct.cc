@@ -18,9 +18,9 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <qstring.h>
+#include <QString>
 #include <qtextcodec.h>
-#include <qfile.h>
+#include <QFile>
 
 #include <klocale.h>
 #include <kdebug.h>

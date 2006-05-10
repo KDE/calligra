@@ -22,7 +22,7 @@
 #include <q3ptrlist.h>
 #include <kdebug.h>
 #include <KoRect.h>
-#include <qmap.h>
+#include <QMap>
 
 class KWDocument;
 class KWFrameSet;

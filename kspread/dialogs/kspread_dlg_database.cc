@@ -35,25 +35,25 @@
 #include <knumvalidator.h>
 #include <kpushbutton.h>
 
-#include <qcheckbox.h>
-#include <qcombobox.h>
+#include <QCheckBox>
+#include <QComboBox>
 #include <QFrame>
 #include <QGridLayout>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
-#include <qlabel.h>
-#include <qlayout.h>
-#include <qlineedit.h>
-#include <qpushbutton.h>
+#include <QLabel>
+#include <QLayout>
+#include <QLineEdit>
+#include <QPushButton>
 #include <qradiobutton.h>
 #include <qsqldatabase.h>
 #include <qsqlerror.h>
 #include <qsqlfield.h>
 #include <qsqlquery.h>
 #include <qsqlrecord.h>
-#include <qtooltip.h>
-#include <qvariant.h>
-#include <qwidget.h>
+#include <QToolTip>
+#include <QVariant>
+#include <QWidget>
 //Added by qt3to4:
 #include <q3textedit.h>
 

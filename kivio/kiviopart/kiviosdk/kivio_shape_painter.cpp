@@ -8,7 +8,7 @@
 #include "kivio_shape_data.h"
 #include "kivio_shape_painter.h"
 
-#include <qcolor.h>
+#include <QColor>
 
 
 KivioShapePainter::KivioShapePainter( KivioPainter *p )

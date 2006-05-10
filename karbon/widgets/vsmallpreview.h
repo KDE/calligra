@@ -24,7 +24,7 @@
 #ifndef VSMALLPREVIEW_H
 #define VSMALLPREVIEW_H
 
-#include <qwidget.h>
+#include <QWidget>
 
 class QFrame;
 class QLabel;

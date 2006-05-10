@@ -17,12 +17,12 @@
 
 #include <KoFilter.h>
 #include <q3asciidict.h>
-#include <qcolor.h>
+#include <QColor>
 #include <q3cstring.h>
-#include <qfile.h>
-#include <qfont.h>
-#include <qmap.h>
-#include <qstring.h>
+#include <QFile>
+#include <QFont>
+#include <QMap>
+#include <QString>
 #include <q3valuelist.h>
 #include <q3valuestack.h>
 #include <qtextcodec.h>

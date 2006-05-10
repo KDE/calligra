@@ -33,10 +33,10 @@
 #include <math.h>
 
 #include <qbitmap.h>
-#include <qcheckbox.h>
+#include <QCheckBox>
 #include <QFrame>
-#include <qlabel.h>
-#include <qlayout.h>
+#include <QLabel>
+#include <QLayout>
 #include <q3listbox.h>
 #include <qfontdatabase.h>
 #include <QPainter>

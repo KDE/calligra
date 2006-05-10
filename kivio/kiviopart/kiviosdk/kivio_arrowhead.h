@@ -23,7 +23,7 @@
 #include <config.h>
 #endif
 
-#include <qcolor.h>
+#include <QColor>
 #include <qdom.h>
 #include <koffice_export.h>
 #define KIVIO_CUT_LENGTH         -1.0f

@@ -21,8 +21,8 @@
 #define _IMPORT_FORMATTING_H
 
 #include <q3ptrstack.h>
-#include <qstring.h>
-#include <qcolor.h>
+#include <QString>
+#include <QColor>
 #include <qxml.h>
 #include <qdom.h>
 //Added by qt3to4:

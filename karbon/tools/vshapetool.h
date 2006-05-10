@@ -20,7 +20,7 @@
 #ifndef __VSHAPETOOL_H__
 #define __VSHAPETOOL_H__
 
-#include <qstring.h>
+#include <QString>
 
 #include <KoPoint.h>
 

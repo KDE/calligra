@@ -22,7 +22,7 @@
 
 #include <qdom.h>
 #include <kdialogbase.h>
-#include <qwidget.h>
+#include <QWidget>
 
 #include "KWMailMergeDataSource.h"
 #include "KWQtSqlSerialDataSourceBase.h"

@@ -20,7 +20,7 @@
 #ifndef variable_h
 #define variable_h
 
-#include <qstring.h>
+#include <QString>
 #include <qdatetime.h>
 #include <q3asciidict.h>
 

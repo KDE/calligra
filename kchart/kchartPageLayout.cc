@@ -21,12 +21,12 @@
 #include "kchartPageLayout.moc"
 #include "kchart_params.h"
 #include <knumvalidator.h>
-#include <qlineedit.h>
-#include <qlayout.h>
+#include <QLineEdit>
+#include <QLayout>
 //Added by qt3to4:
 #include <Q3GridLayout>
 #include <klocale.h>
-#include <qlabel.h>
+#include <QLabel>
 #include <q3groupbox.h>
 
 namespace KChart

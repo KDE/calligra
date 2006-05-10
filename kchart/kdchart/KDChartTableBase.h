@@ -32,7 +32,7 @@
 
 class Q3Table;
 
-#include <qvariant.h>
+#include <QVariant>
 #include <qobject.h>
 #include <qdatetime.h>
 

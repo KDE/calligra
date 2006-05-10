@@ -19,11 +19,11 @@
 */
 #include "KPrGeneralProperty.h"
 
-#include <qcheckbox.h>
+#include <QCheckBox>
 #include <qgroupbox.h>
-#include <qlabel.h>
-#include <qlayout.h>
-#include <qlineedit.h>
+#include <QLabel>
+#include <QLayout>
+#include <QLineEdit>
 
 #include <knuminput.h>
 #include <klocale.h>

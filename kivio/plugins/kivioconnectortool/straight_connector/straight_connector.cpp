@@ -33,7 +33,7 @@
 #include "kivio_text_style.h"
 #include "tkmath.h"
 
-#include <qcolor.h>
+#include <QColor>
 #include <qpixmap.h>
 #include <kdebug.h>
 #include <KoZoomHandler.h>

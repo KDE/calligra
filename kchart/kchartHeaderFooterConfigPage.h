@@ -20,7 +20,7 @@
 #ifndef __KCHARTHEADERFOOTERCONFIGPAGE_H__
 #define __KCHARTHEADERFOOTERCONFIGPAGE_H__
 
-#include <qwidget.h>
+#include <QWidget>
 #include <kcolorbutton.h>
 
 class QLineEdit;

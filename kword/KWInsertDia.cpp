@@ -24,11 +24,11 @@
 
 #include <klocale.h>
 
-#include <qlabel.h>
-#include <qspinbox.h>
+#include <QLabel>
+#include <QSpinBox>
 #include <qradiobutton.h>
 #include <q3buttongroup.h>
-#include <qlayout.h>
+#include <QLayout>
 //Added by qt3to4:
 #include <Q3GridLayout>
 

@@ -22,7 +22,7 @@
 
 #include <qmatrix.h>
 #include <qevent.h>
-#include <qpoint.h>
+#include <QPoint>
 #include <q3canvas.h>
 #include <qaction.h>
 #include <qcursor.h>

@@ -23,7 +23,7 @@
 #include <wv2/functor.h>
 #include <wv2/word97_generated.h> // for TAP
 #include <wv2/handlers.h>
-#include <qstring.h>
+#include <QString>
 #include <q3valuelist.h>
 #include <qobject.h>
 //Added by qt3to4:

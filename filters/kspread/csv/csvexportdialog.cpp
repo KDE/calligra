@@ -25,11 +25,11 @@
 #include <kspread_sheet.h>
 
 #include <q3buttongroup.h>
-#include <qcheckbox.h>
-#include <qcombobox.h>
+#include <QCheckBox>
+#include <QComboBox>
 #include <qcursor.h>
-#include <qlabel.h>
-#include <qlineedit.h>
+#include <QLabel>
+#include <QLineEdit>
 #include <q3listview.h>
 #include <q3ptrlist.h>
 #include <qradiobutton.h>

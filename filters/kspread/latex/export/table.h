@@ -23,7 +23,7 @@
 #ifndef __KSPREAD_LATEX_TABLE_H__
 #define __KSPREAD_LATEX_TABLE_H__
 
-#include <qstring.h>
+#include <QString>
 #include <q3ptrlist.h>
 //Added by qt3to4:
 #include <QTextStream>

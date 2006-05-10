@@ -42,22 +42,22 @@ using std::queue;
 #include <q3ptrlist.h>
 #include <q3accel.h>
 #include <q3tabdialog.h>
-#include <qwidget.h>
+#include <QWidget>
 #include <qtimer.h>
 #include <qdialog.h>
 #include <qpixmap.h>
 #include <qapplication.h>
-#include <qfont.h>
-#include <qlabel.h>
+#include <QFont>
+#include <QLabel>
 #include <q3buttongroup.h>
-#include <qcheckbox.h>
+#include <QCheckBox>
 #include <q3frame.h>
 #include <q3groupbox.h>
-#include <qlineedit.h>
-#include <qpushbutton.h>
+#include <QLineEdit>
+#include <QPushButton>
 #include <qradiobutton.h>
-#include <qtooltip.h>
-#include <qstring.h>
+#include <QToolTip>
+#include <QString>
 #include <qrect.h>
 
 

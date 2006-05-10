@@ -26,8 +26,8 @@
 #include <klistbox.h>
 
 #include <q3buttongroup.h> 
-#include <qlayout.h>
-#include <qtooltip.h>
+#include <QLayout>
+#include <QToolTip>
 
 #include <QStackedWidget>
 //Added by qt3to4:

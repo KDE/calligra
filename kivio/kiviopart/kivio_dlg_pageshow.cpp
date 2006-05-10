@@ -26,7 +26,7 @@
 #include <kapplication.h>
 #include <klocale.h>
 #include <qstringlist.h>
-#include <qlayout.h>
+#include <QLayout>
 #include <kbuttonbox.h>
 #include <qstrlist.h>
 #include <qptrlist.h>

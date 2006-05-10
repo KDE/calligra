@@ -20,7 +20,7 @@
 #ifndef PDFDOCUMENT_H
 #define PDFDOCUMENT_H
 
-#include <qfile.h>
+#include <QFile>
 #include <qdom.h>
 //Added by qt3to4:
 #include <Q3CString>

@@ -24,8 +24,8 @@
 #include <qpainter.h>
 #include <qdrawutil.h>
 #include <qkeycode.h>
-#include <qregexp.h>
-#include <qpoint.h>
+#include <QRegExp>
+#include <QPoint>
 #include <qcursor.h>
 #include <qptrstack.h>
 #include <qbuffer.h>

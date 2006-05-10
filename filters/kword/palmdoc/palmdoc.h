@@ -21,7 +21,7 @@
 #define __PALMDOC_H
 
 #include "palmdb.h"
-#include <qstring.h>
+#include <QString>
 
 class PalmDoc: public PalmDB
 {

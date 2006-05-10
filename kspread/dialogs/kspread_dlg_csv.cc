@@ -22,17 +22,17 @@
 
 #include <QButtonGroup>
 #include <QGroupBox>
-#include <qcheckbox.h>
+#include <QCheckBox>
 #include <qclipboard.h>
-#include <qcombobox.h>
-#include <qlabel.h>
-#include <qlineedit.h>
+#include <QComboBox>
+#include <QLabel>
+#include <QLineEdit>
 #include <QMimeData>
 #include <QPainter>
-#include <qpushbutton.h>
+#include <QPushButton>
 #include <qradiobutton.h>
 #include <q3table.h>
-#include <qlayout.h>
+#include <QLayout>
 #include <QVector>
 //Added by qt3to4:
 #include <QTextStream>

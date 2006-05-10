@@ -1,8 +1,8 @@
 #include "export_page_dialog.h"
 
-#include <qcheckbox.h>
+#include <QCheckBox>
 #include <qradiobutton.h>
-#include <qspinbox.h>
+#include <QSpinBox>
 
 #include <klocale.h>
 

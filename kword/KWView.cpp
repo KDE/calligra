@@ -128,9 +128,9 @@
 #include <qclipboard.h>
 #include <qapplication.h>
 #include <q3groupbox.h>
-#include <qlayout.h>
+#include <QLayout>
 #include <q3progressdialog.h>
-#include <qregexp.h>
+#include <QRegExp>
 #include <qtimer.h>
 #include <qbuffer.h>
 //Added by qt3to4:

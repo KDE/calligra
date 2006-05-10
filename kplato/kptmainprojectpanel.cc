@@ -19,14 +19,14 @@
 
 #include "kptmainprojectpanel.h"
 
-#include <qcheckbox.h>
+#include <QCheckBox>
 #include <q3buttongroup.h>
 #include <qdatetime.h>
 #include <q3datetimeedit.h>
 #include <qradiobutton.h>
-#include <qpushbutton.h>
+#include <QPushButton>
 
-#include <qlabel.h>
+#include <QLabel>
 #include <klineedit.h>
 #include <ktextedit.h>
 #include <kdatewidget.h>

@@ -1,4 +1,4 @@
 
-#include <qstring.h>
+#include <QString>
 
 QString EscapeXmlDump( const QString& strIn );

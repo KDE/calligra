@@ -21,7 +21,7 @@
 /* vreference.cc */
 
 #include <qbuttongroup.h>
-#include <qlayout.h>
+#include <QLayout>
 #include <qradiobutton.h>
 
 #include "vreference.h"

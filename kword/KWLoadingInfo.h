@@ -20,7 +20,7 @@
 #ifndef KWLOADINGINFO_H
 #define KWLOADINGINFO_H
 
-#include <qstring.h>
+#include <QString>
 #include <q3valuelist.h>
 #include <q3dict.h>
 #include <KoPageLayout.h>

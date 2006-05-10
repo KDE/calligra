@@ -19,7 +19,7 @@
 
 #include <float.h>
 
-#include <qcolor.h>
+#include <QColor>
 
 #include <kdebug.h>
 #include <klocale.h>

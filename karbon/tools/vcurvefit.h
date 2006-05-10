@@ -1,7 +1,7 @@
 #ifndef __VCURVEFIT_H__
 #define __VCURVEFIT_H__
 
-#include <qstring.h>
+#include <QString>
 #include <qptrlist.h>
 #include "KoPoint.h"
 

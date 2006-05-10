@@ -23,7 +23,7 @@
 #ifndef TEXTPROPERTY_H
 #define TEXTPROPERTY_H
 
-#include <qwidget.h>
+#include <QWidget>
 
 #include <KoUnit.h>
 

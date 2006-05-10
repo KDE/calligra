@@ -22,7 +22,7 @@
 
 #include <stdio.h>
 
-#include <qfile.h>
+#include <QFile>
 
 #include <kapplication.h>
 #include <KoDocumentInfo.h>

@@ -17,14 +17,14 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <qcheckbox.h>
+#include <QCheckBox>
 #include <qimage.h>
-#include <qlabel.h>
-#include <qlayout.h>
-#include <qlineedit.h>
+#include <QLabel>
+#include <QLayout>
+#include <QLineEdit>
 #include <qpaintdevice.h>
 #include <qrect.h>
-#include <qwidget.h>
+#include <QWidget>
 //Added by qt3to4:
 #include <Q3VBoxLayout>
 #include <Q3GridLayout>

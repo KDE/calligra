@@ -23,7 +23,7 @@
 
 #include <qrect.h>
 #include <qpainter.h>
-#include <qregexp.h>
+#include <QRegExp>
 
 #include <koproperty/property.h>
 

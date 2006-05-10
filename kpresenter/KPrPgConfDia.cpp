@@ -25,17 +25,17 @@
 
 #include <qbuttongroup.h>
 #include <qhbuttongroup.h>
-#include <qcheckbox.h>
-#include <qcombobox.h>
+#include <QCheckBox>
+#include <QComboBox>
 #include <qhbox.h>
 #include <qvbox.h>
 #include <qgroupbox.h>
 #include <qheader.h>
-#include <qlabel.h>
-#include <qlayout.h>
+#include <QLabel>
+#include <QLayout>
 #include <qlistview.h>
 #include <qpen.h>
-#include <qpushbutton.h>
+#include <QPushButton>
 #include <qradiobutton.h>
 #include <qvaluelist.h>
 #include <qvbuttongroup.h>

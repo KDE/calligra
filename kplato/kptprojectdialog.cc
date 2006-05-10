@@ -17,11 +17,11 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <qpushbutton.h>
-#include <qcombobox.h>
-#include <qlabel.h>
+#include <QPushButton>
+#include <QComboBox>
+#include <QLabel>
 #include <q3textedit.h>
-#include <qlineedit.h>
+#include <QLineEdit>
 #include <q3datetimeedit.h>
 #include <qdatetime.h>
 #include <qtabwidget.h>

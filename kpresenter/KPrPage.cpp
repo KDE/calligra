@@ -62,8 +62,8 @@
 #include <KoXmlWriter.h>
 #include <ktempfile.h>
 #include <qbuffer.h>
-#include <qregexp.h>
-#include <qfile.h>
+#include <QRegExp>
+#include <QFile>
 
 struct listAnimation {
     KPrObject *obj;

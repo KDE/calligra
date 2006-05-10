@@ -27,10 +27,10 @@
 #include <dbaseimport.moc>
 #include <dbase.h>
 
-#include <qfile.h>
-#include <qfont.h>
+#include <QFile>
+#include <QFont>
 #include <qfontmetrics.h>
-#include <qstring.h>
+#include <QString>
 //Added by qt3to4:
 #include <Q3CString>
 

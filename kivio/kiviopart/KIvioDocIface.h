@@ -23,7 +23,7 @@
 #include <KoDocumentIface.h>
 #include <dcopref.h>
 
-#include <qstring.h>
+#include <QString>
 
 class KivioDoc;
 

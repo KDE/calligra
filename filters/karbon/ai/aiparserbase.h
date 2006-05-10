@@ -22,7 +22,7 @@
 
 #include "ailexer.h"
 
-#include <qstring.h>
+#include <QString>
 #include <q3valuestack.h>
 #include <q3valuevector.h>
 #include <q3valuelist.h>

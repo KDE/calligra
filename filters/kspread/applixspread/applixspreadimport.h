@@ -20,8 +20,8 @@
 #ifndef APPLIXSPREADIMPORT_H
 #define APPLIXSPREADIMPORT_H
 
-#include <qstring.h>
-#include <qfile.h>
+#include <QString>
+#include <QFile>
 #include <qobject.h>
 #include <qtextstream.h>
 #include <q3ptrlist.h>

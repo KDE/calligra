@@ -20,9 +20,9 @@
 #include <klocale.h>
 #include "KWDocument.h"
 #include <q3vbox.h>
-#include <qlayout.h>
-#include <qlineedit.h>
-#include <qpushbutton.h>
+#include <QLayout>
+#include <QLineEdit>
+#include <QPushButton>
 #include <q3listbox.h>
 //Added by qt3to4:
 #include <Q3GridLayout>

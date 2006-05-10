@@ -26,7 +26,7 @@
 
 // needed for MODE
 #include <qlist.h>
-#include <qmap.h>
+#include <QMap>
 
 using namespace KSpread;
 

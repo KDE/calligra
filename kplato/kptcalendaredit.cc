@@ -26,12 +26,12 @@
 
 #include <q3buttongroup.h>
 #include <q3header.h>
-#include <qpushbutton.h>
+#include <QPushButton>
 #include <qradiobutton.h>
-#include <qcombobox.h>
-#include <qlabel.h>
+#include <QComboBox>
+#include <QLabel>
 #include <q3textedit.h>
-#include <qlineedit.h>
+#include <QLineEdit>
 #include <q3datetimeedit.h>
 #include <qdatetime.h>
 #include <qtabwidget.h>
@@ -42,7 +42,7 @@
 #include <kabc/addressee.h>
 #include <kabc/addresseedialog.h>
 
-#include <qmap.h>
+#include <QMap>
 
 #include <kdebug.h>
 

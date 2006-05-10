@@ -23,8 +23,8 @@
 
 #include <qfileinfo.h>
 #include <q3ptrlist.h>
-#include <qstring.h>
-#include <qregexp.h>
+#include <QString>
+#include <QRegExp>
 
 using namespace WP;
 

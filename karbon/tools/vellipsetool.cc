@@ -19,7 +19,7 @@
 
 
 #include <qgroupbox.h>
-#include <qlabel.h>
+#include <QLabel>
 
 #include <klocale.h>
 #include "KoUnitWidgets.h"

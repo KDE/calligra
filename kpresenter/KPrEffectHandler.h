@@ -23,7 +23,7 @@
 
 #include <qpixmap.h>
 #include <qptrlist.h>
-#include <qstring.h>
+#include <QString>
 
 #include "global.h"
 #include "presstep.h"

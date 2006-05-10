@@ -19,7 +19,7 @@
 
 #include "kis_png_export.h"
 
-#include <qcheckbox.h>
+#include <QCheckBox>
 #include <qslider.h>
 
 #include <kapplication.h>

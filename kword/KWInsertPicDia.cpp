@@ -19,10 +19,10 @@
 */
 
 #include <qpainter.h>
-#include <qpushbutton.h>
+#include <QPushButton>
 #include <qbitmap.h>
-#include <qlayout.h>
-#include <qcheckbox.h>
+#include <QLayout>
+#include <QCheckBox>
 #include <q3scrollview.h>
 //Added by qt3to4:
 #include <Q3GridLayout>

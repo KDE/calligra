@@ -27,10 +27,10 @@
 #include <kapplication.h>
 #include <kcombobox.h>
 #include <kmessagebox.h>
-#include <qlabel.h>
-#include <qlayout.h>
+#include <QLabel>
+#include <QLayout>
 #include <qradiobutton.h>
-#include <qcheckbox.h>
+#include <QCheckBox>
 #include <kurlrequester.h>
 
 #include <ExportDialogUI.h>

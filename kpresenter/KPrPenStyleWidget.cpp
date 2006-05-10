@@ -23,8 +23,8 @@
 #include "penstyle.h"
 #include "KPrPBPreview.h"
 
-#include <qlayout.h>
-#include <qlabel.h>
+#include <QLayout>
+#include <QLabel>
 #include <qvbox.h>
 
 #include <kcolorbutton.h>

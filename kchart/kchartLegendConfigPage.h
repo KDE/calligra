@@ -21,9 +21,9 @@
 #ifndef __KCHARTLEGENDCONFIGPAGE_H__
 #define __KCHARTLEGENDCONFIGPAGE_H__
 
-#include <qwidget.h>
+#include <QWidget>
 #include <q3button.h>
-#include <qlayout.h>
+#include <QLayout>
 //Added by qt3to4:
 #include <Q3GridLayout>
 #include <Q3ButtonGroup>

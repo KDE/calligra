@@ -19,9 +19,9 @@
 
 #include "kivioarrowheadformatdlg.h"
 
-#include <qlabel.h>
+#include <QLabel>
 #include <qgroupbox.h>
-#include <qlayout.h>
+#include <QLayout>
 #include <qbitmap.h>
 #include <qpixmap.h>
 #include <qpainter.h>

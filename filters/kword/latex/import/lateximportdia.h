@@ -35,9 +35,9 @@
 #ifndef __LATEXIMPORTDIA_H__
 #define __LATEXIMPORTDIA_H__
 
-#include <qwidget.h>
-#include <qlabel.h>
-#include <qlayout.h>
+#include <QWidget>
+#include <QLabel>
+#include <QLayout>
 #include <qradiobutton.h>
 #include <qvbuttongroup.h>
 

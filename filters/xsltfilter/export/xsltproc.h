@@ -20,7 +20,7 @@
 #ifndef __XSLTPROC_H__
 #define __XSLTPROC_H__
 
-#include <qstring.h>
+#include <QString>
 //Added by qt3to4:
 #include <Q3CString>
 

@@ -39,13 +39,13 @@
 #include <kdebug.h>
 #include <kfontdialog.h>
 
-#include <qlabel.h>
+#include <QLabel>
 #include <qbuttongroup.h>
 #include <qgroupbox.h>
-#include <qcombobox.h>
-#include <qcheckbox.h>
+#include <QComboBox>
+#include <QCheckBox>
 #include <qradiobutton.h>
-#include <qlayout.h>
+#include <QLayout>
 #include <qtabwidget.h>
 
 // GuidesListViewItem::GuidesListViewItem(QListView* parent, KivioGuideLineData *gd, KoUnit::Unit u)

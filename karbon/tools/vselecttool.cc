@@ -21,7 +21,7 @@
 #include <stdlib.h>
 
 #include <qcursor.h>
-#include <qlabel.h>
+#include <QLabel>
 #include <qradiobutton.h>
 #include <qbuttongroup.h>
 

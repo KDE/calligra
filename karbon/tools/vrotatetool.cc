@@ -20,7 +20,7 @@
 #include <math.h>
 
 #include <qcursor.h>
-#include <qlabel.h>
+#include <QLabel>
 
 #include <klocale.h>
 #include <KoRect.h>

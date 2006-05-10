@@ -19,7 +19,7 @@
 #ifndef KIVIO_STENCIL_SPAWNER_INFO_H
 #define KIVIO_STENCIL_SPAWNER_INFO_H
 
-#include <qstring.h>
+#include <QString>
 #include <koffice_export.h>
 class QDomElement;
 class KIVIO_EXPORT KivioStencilSpawnerInfo

@@ -20,7 +20,7 @@
 #ifndef _VGRADIENTWIDGET_H_
 #define _VGRADIENTWIDGET_H_
 
-#include <qwidget.h>
+#include <QWidget>
 #include <koffice_export.h>
 class VGradient;
 class QPainter;

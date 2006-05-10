@@ -24,9 +24,9 @@
 #include <KoDocumentIface.h>
 #include <dcopref.h>
 
-#include <qstring.h>
+#include <QString>
 #include <qstringlist.h>
-#include <qcolor.h>
+#include <QColor>
 class KPrDocument;
 
 class KPrDocumentIface : public KoDocumentIface

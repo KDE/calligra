@@ -38,11 +38,11 @@
 
 #include <qgroupbox.h>
 #include <qvgroupbox.h>
-#include <qlabel.h>
-#include <qlayout.h>
+#include <QLabel>
+#include <QLayout>
 #include <qvbox.h>
-#include <qcheckbox.h>
-#include <qcombobox.h>
+#include <QCheckBox>
+#include <QComboBox>
 #include <qtabwidget.h>
 #include <qwhatsthis.h>
 
@@ -60,7 +60,7 @@
 
 #include <float.h>
 #include <knumvalidator.h>
-#include <qlineedit.h>
+#include <QLineEdit>
 #include "KPrCommand.h"
 #include <qvgroupbox.h>
 #include <kfontdialog.h>

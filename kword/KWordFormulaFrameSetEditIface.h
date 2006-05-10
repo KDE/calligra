@@ -23,8 +23,8 @@
 #include <KoDocumentIface.h>
 #include <dcopref.h>
 
-#include <qstring.h>
-#include <qcolor.h>
+#include <QString>
+#include <QColor>
 class KWFormulaFrameSetEdit;
 
 class KWordFormulaFrameSetEditIface : public DCOPObject

@@ -24,7 +24,7 @@
 #include <wv2/fields.h>
 
 #include <kdebug.h>
-#include <qregexp.h>
+#include <QRegExp>
 #include <qdom.h>
 #include <klocale.h>
 

@@ -23,11 +23,11 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <qcombobox.h>
-#include <qfile.h>
-#include <qlayout.h>
-#include <qlabel.h>
-#include <qpushbutton.h>
+#include <QComboBox>
+#include <QFile>
+#include <QLayout>
+#include <QLabel>
+#include <QPushButton>
 //Added by qt3to4:
 #include <QVBoxLayout>
 #include <QPixmap>

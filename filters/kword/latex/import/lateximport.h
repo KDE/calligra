@@ -20,9 +20,9 @@
 #ifndef __LATEXIMPORT_H__
 #define __LATEXIMPORT_H__
 
-#include <qstring.h>
+#include <QString>
 #include <qtextstream.h>
-#include <qfile.h>
+#include <QFile>
 #include <qobject.h>
 //Added by qt3to4:
 #include <Q3CString>

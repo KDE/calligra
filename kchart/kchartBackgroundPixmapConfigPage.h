@@ -20,7 +20,7 @@
 #ifndef __KCHARTBACKGROUNDPIXMAPCONFIGPAGE_H__
 #define __KCHARTBACKGROUNDPIXMAPCONFIGPAGE_H__
 
-#include <qwidget.h>
+#include <QWidget>
 #include <qpixmap.h>
 
 class QSpinBox;

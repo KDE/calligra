@@ -25,8 +25,8 @@
 #include <dcopobject.h>
 #include <dcopref.h>
 
-#include <qstring.h>
-#include <qcolor.h>
+#include <QString>
+#include <QColor>
 
 class KPrObject;
 

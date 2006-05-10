@@ -21,8 +21,8 @@
 #define __kspread_style__
 
 #include <qbrush.h>
-#include <qcolor.h>
-#include <qfont.h>
+#include <QColor>
+#include <QFont>
 #include <qpen.h>
 
 //#include "kspread_format.h"

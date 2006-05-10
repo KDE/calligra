@@ -21,13 +21,13 @@
 */
 
 // Qt includes
-#include <qlayout.h>
+#include <QLayout>
 
 // KDE includes
 #include <kdebug.h>
 #include <kdialog.h>
 #include <klocale.h>
-#include <qtooltip.h>
+#include <QToolTip>
 
 // local includes
 #include "KPrPrinterDlg.h"

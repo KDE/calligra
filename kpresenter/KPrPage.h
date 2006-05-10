@@ -22,14 +22,14 @@
 #ifndef KPRPAGE_H
 #define KPRPAGE_H
 
-#include <qwidget.h>
+#include <QWidget>
 #include <qptrlist.h>
 #include "global.h"
 #include <KoBrush.h>
 #include <KoPoint.h>
 #include <KoRect.h>
 #include <KoStyleCollection.h> // for KoStyleChangeDefMap
-#include <qvariant.h>
+#include <QVariant>
 #include <KoDocumentChild.h>
 #include <KoPictureCollection.h>
 

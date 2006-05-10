@@ -20,7 +20,7 @@
 #ifndef __KCHARTPARAMETERCONFIGPAGE_H__
 #define __KCHARTPARAMETERCONFIGPAGE_H__
 
-#include <qwidget.h>
+#include <QWidget>
 #include <kcolorbutton.h>
 
 class QSpinBox;

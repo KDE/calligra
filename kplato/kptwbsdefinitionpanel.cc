@@ -25,14 +25,14 @@
 #include <klocale.h>
 #include <kdebug.h>
 
-#include <qcombobox.h>
-#include <qlineedit.h>
-#include <qcheckbox.h>
+#include <QComboBox>
+#include <QLineEdit>
+#include <QCheckBox>
 #include <q3groupbox.h>
 #include <q3memarray.h>
-#include <qpushbutton.h>
+#include <QPushButton>
 #include <qstringlist.h>
-#include <qspinbox.h>
+#include <QSpinBox>
 #include <q3table.h>
 
 namespace KPlato

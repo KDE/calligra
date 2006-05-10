@@ -29,7 +29,7 @@
 #include "kptduration.h"
 #include "kptresource.h"
 
-#include <qmap.h>
+#include <QMap>
 #include <q3ptrlist.h>
 #include <q3dict.h>
 

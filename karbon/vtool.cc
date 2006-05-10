@@ -18,7 +18,7 @@
 */
 
 #include <qevent.h>
-#include <qlabel.h>
+#include <QLabel>
 
 #include <kdebug.h>
 #include <kiconloader.h>

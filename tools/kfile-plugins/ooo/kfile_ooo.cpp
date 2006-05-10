@@ -48,7 +48,7 @@
 #include <q3ptrstack.h>
 
 #include <qdom.h>
-#include <qfile.h>
+#include <QFile>
 #include <qdatetime.h>
 #include <qvalidator.h>
 //Added by qt3to4:

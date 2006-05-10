@@ -20,7 +20,7 @@
 #define KIVIO_GRID_DATA_H
 
 #include <KoSize.h>
-#include <qcolor.h>
+#include <QColor>
 #include <koffice_export.h>
 
 class QDomElement;

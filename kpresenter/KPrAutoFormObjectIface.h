@@ -24,7 +24,7 @@
 #include <dcopobject.h>
 #include <dcopref.h>
 #include "KPrObject2DIface.h"
-#include <qstring.h>
+#include <QString>
 
 class KPrAutoformObject;
 

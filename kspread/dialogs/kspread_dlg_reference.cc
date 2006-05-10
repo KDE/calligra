@@ -34,13 +34,13 @@
 #include "selection.h"
 #include "kspread_locale.h"
 
-#include <qvariant.h>
-#include <qcombobox.h>
-#include <qlabel.h>
-#include <qlineedit.h>
+#include <QVariant>
+#include <QComboBox>
+#include <QLabel>
+#include <QLineEdit>
 #include <qlist.h>
-#include <qpushbutton.h>
-#include <qlayout.h>
+#include <QPushButton>
+#include <QLayout>
 //Added by qt3to4:
 #include <QGridLayout>
 #include <QHBoxLayout>

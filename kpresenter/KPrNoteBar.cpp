@@ -19,11 +19,11 @@
 */
 
 
-#include <qlayout.h>
+#include <QLayout>
 #include <qpainter.h>
 #include <qpaintdevicemetrics.h>
 #include <qsimplerichtext.h>
-#include <qlabel.h>
+#include <QLabel>
 
 #include <kglobalsettings.h>
 #include <kprinter.h>

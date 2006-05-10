@@ -22,10 +22,10 @@
 #include "KPrCanvas.h"
 #include "KPrPage.h"
 #include "KPrDocument.h"
-#include <qlabel.h>
+#include <QLabel>
 #include <qheader.h>
 #include <qvbox.h>
-#include <qlayout.h>
+#include <QLayout>
 #include <k3listview.h>
 #include <kdebug.h>
 #include <klocale.h>

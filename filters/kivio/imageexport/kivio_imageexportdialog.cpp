@@ -19,8 +19,8 @@
 
 #include "kivio_imageexportdialog.h"
 
-#include <qspinbox.h>
-#include <qcheckbox.h>
+#include <QSpinBox>
+#include <QCheckBox>
 
 #include <kcombobox.h>
 #include <klocale.h>

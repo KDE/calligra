@@ -21,7 +21,7 @@
 
 #include <q3buttongroup.h>
 #include <qradiobutton.h>
-#include <qcheckbox.h>
+#include <QCheckBox>
 
 #include <klineedit.h>
 #include <ktextedit.h>

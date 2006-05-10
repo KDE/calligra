@@ -84,7 +84,7 @@
 #include <kspell2/settings.h>
 
 #include <qfileinfo.h>
-#include <qregexp.h>
+#include <QRegExp>
 #include <qtimer.h>
 #include <qbuffer.h>
 //Added by qt3to4:

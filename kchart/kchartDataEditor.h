@@ -3,7 +3,7 @@
 
 
 #include <q3strlist.h>
-#include <qspinbox.h>
+#include <QSpinBox>
 //Added by qt3to4:
 #include <QLabel>
 #include <QEvent>

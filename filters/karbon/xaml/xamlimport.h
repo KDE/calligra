@@ -22,7 +22,7 @@
 
 #include <KoFilter.h>
 #include <qdom.h>
-#include <qmap.h>
+#include <QMap>
 #include <q3ptrstack.h>
 //Added by qt3to4:
 #include <Q3CString>

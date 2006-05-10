@@ -25,7 +25,7 @@
 #endif
 
 #include <kdebug.h>
-#include <qfile.h>
+#include <QFile>
 #include <qtextstream.h>
 #include <qmessagebox.h>
 //Added by qt3to4:

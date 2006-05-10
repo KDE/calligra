@@ -4,7 +4,7 @@
  */
 
 
-#include <qfile.h>
+#include <QFile>
 #include <qpainter.h>
 #include <qcursor.h>
 #include <QMenu>

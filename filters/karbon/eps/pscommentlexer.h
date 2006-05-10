@@ -21,7 +21,7 @@
 #define PSCOMMENTLEXER_H
 
 #include <qiodevice.h>
-#include <qstring.h>
+#include <QString>
 
 /**
   *@author Dirk Schönberger

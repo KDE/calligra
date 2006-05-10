@@ -21,7 +21,7 @@
 #ifndef __VTEXTCMD_H__
 #define __VTEXTCMD_H__
 
-#include <qfont.h>
+#include <QFont>
 
 #include "vshapecmd.h"
 

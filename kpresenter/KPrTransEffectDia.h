@@ -24,7 +24,7 @@
 #define __TRANSEFFECTDIA_H
 
 #include <kdialogbase.h>
-#include <qlabel.h>
+#include <QLabel>
 #include <qtimer.h>
 #include "global.h"
 

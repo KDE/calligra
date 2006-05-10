@@ -22,8 +22,8 @@
 #ifndef __KWORD_VARIABLEFORMAT_H__
 #define __KWORD_VARIABLEFORMAT_H__
 
-#include <qstring.h>
-#include <qcolor.h>
+#include <QString>
+#include <QColor>
 #include "textzone.h"
 
 enum _EVarType

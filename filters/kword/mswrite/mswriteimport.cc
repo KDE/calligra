@@ -24,9 +24,9 @@
 #include <string.h>
 #include <stdarg.h>
 
-#include <qfile.h>
+#include <QFile>
 #include <qobject.h>
-#include <qstring.h>
+#include <QString>
 #include <qtextcodec.h>
 #include <qtextstream.h>
 //Added by qt3to4:

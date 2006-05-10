@@ -29,11 +29,11 @@
 #ifndef __KDCHARTPAINTER_H__
 #define __KDCHARTPAINTER_H__
 
-#include <qmap.h>
+#include <QMap>
 #include <qrect.h>
 #include <qdatetime.h>
 #include <qregion.h>
-#include <qstring.h>
+#include <QString>
 //Added by qt3to4:
 #include <Q3PointArray>
 

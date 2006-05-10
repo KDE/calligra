@@ -25,7 +25,7 @@
 #ifndef __KWORD_LATEX_ANCHOR_H__
 #define __KWORD_LATEX_ANCHOR_H__
 
-#include <qstring.h>
+#include <QString>
 //Added by qt3to4:
 #include <QTextStream>
 #include "format.h"

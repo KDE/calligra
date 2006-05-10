@@ -30,7 +30,7 @@
 #include <dcopref.h>
 
 #include <qrect.h>
-#include <qstring.h>
+#include <QString>
 
 namespace KSpread
 {

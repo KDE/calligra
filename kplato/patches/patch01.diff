@@ -135,12 +135,12 @@ Index: kptstandardworktimedialog.cc
  
 +#include <qgroupbox.h>
 +#include <qheader.h>
- #include <qpushbutton.h>
- #include <qspinbox.h>
- #include <qcombobox.h>
- #include <qlabel.h>
-+#include <qlayout.h>
- #include <qlineedit.h>
+ #include <QPushButton>
+ #include <QSpinBox>
+ #include <QComboBox>
+ #include <QLabel>
++#include <QLayout>
+ #include <QLineEdit>
  #include <qdatetimeedit.h>
  #include <qdatetime.h>
  
@@ -772,11 +772,11 @@ Index: kptintervaledit.cc
     modify it under the terms of the GNU Library General Public
 @@ -22,11 +22,14 @@
  
- #include <qpushbutton.h>
- #include <qcombobox.h>
+ #include <QPushButton>
+ #include <QComboBox>
 +#include <qheader.h>
- #include <qlabel.h>
- #include <qlineedit.h>
+ #include <QLabel>
+ #include <QLineEdit>
  #include <qdatetimeedit.h>
  #include <qdatetime.h>
  #include <qlistview.h>
@@ -946,10 +946,10 @@ Index: kptintervaledit.h
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
 @@ -27,6 +27,7 @@
- #include <qstring.h>
+ #include <QString>
  #include <qptrlist.h>
  #include <qpair.h>
-+#include <qwidget.h>
++#include <QWidget>
  
  namespace KPlato
  {

@@ -21,7 +21,7 @@
 #ifndef PIEPROPERTY_H
 #define PIEPROPERTY_H
 
-#include <qwidget.h>
+#include <QWidget>
 
 #include "KPrCommand.h"
 

@@ -20,10 +20,10 @@
 
 #include "KPrGotoPage.h"
 
-#include <qlabel.h>
+#include <QLabel>
 #include <qlistbox.h>
-#include <qlayout.h>
-#include <qpushbutton.h>
+#include <QLayout>
+#include <QPushButton>
 
 #include <klocale.h>
 #include <kdialog.h>

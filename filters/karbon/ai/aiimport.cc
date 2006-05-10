@@ -19,8 +19,8 @@
 
 #include <qdom.h>
 #include <q3cstring.h>
-#include <qfile.h>
-#include <qstring.h>
+#include <QFile>
+#include <QString>
 
 #include <kgenericfactory.h>
 #include <KoFilterChain.h>

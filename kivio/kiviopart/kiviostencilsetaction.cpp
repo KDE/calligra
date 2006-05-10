@@ -29,8 +29,8 @@
 #include <kiconloader.h>
 #include <klocale.h>
 
-#include <qfile.h>
-#include <qdir.h>
+#include <QFile>
+#include <QDir>
 #include <qpixmap.h>
 #include <qwhatsthis.h>
 #include <qmenubar.h>

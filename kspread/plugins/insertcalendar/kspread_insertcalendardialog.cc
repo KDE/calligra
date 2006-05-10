@@ -28,7 +28,7 @@
 #include <kdatewidget.h>
 #include <kdebug.h>
 
-#include <qpushbutton.h>
+#include <QPushButton>
 
 namespace KSpread
 {

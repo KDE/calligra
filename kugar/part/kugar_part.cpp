@@ -12,12 +12,12 @@
 #include <kstdaction.h>
 #include <kmessagebox.h>
 #include <kio/netaccess.h>
-#include <qfile.h>
+#include <QFile>
 //Added by qt3to4:
 #include <Q3PtrList>
 #include <kglobal.h>
 #include <kiconloader.h>
-#include <qwidget.h>
+#include <QWidget>
 #include <kfiledialog.h>
 #include <kdebug.h>
 #include <KoStore.h>

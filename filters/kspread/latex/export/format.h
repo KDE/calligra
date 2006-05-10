@@ -24,8 +24,8 @@
 #define __KSPREAD_LATEX_FORMAT_H__
 
 #include <qtextstream.h>
-#include <qstring.h>
-#include <qcolor.h>
+#include <QString>
+#include <QColor>
 #include "xmlparser.h"
 #include "pen.h"
 

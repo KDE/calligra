@@ -22,10 +22,10 @@
 
 //#include <stdio.h>
 
-#include <qcombobox.h>
+#include <QComboBox>
 #include <qcursor.h>
 #include <qstringlist.h>
-#include <qdir.h>
+#include <QDir>
 //Added by qt3to4:
 #include <Q3CString>
 

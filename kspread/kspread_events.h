@@ -22,7 +22,7 @@
 
 #include <qevent.h>
 #include <qrect.h>
-#include <qstring.h>
+#include <QString>
 
 #include <string.h>
 

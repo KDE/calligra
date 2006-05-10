@@ -24,8 +24,8 @@
 #ifndef KSPREAD_DOC_IFACE_H
 #define KSPREAD_DOC_IFACE_H
 
-#include <qstring.h>
-#include <qcolor.h>
+#include <QString>
+#include <QColor>
 #include <qstringlist.h>
 
 #include <dcopref.h>

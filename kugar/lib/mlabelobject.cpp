@@ -9,7 +9,7 @@
 ***************************************************************************/
 
 //#include <kglobalsettings.h>
-#include <qfont.h>
+#include <QFont>
 
 #include "mlabelobject.h"
 

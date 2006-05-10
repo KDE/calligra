@@ -44,7 +44,7 @@
 
 #include <qpopupmenu.h>
 #include <qclipboard.h>
-#include <qregexp.h>
+#include <QRegExp>
 #include <qfileinfo.h>
 #include <qdom.h>
 #include <qdict.h>

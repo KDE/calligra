@@ -21,11 +21,11 @@
 
 #include <qpainter.h>
 #include <qbitmap.h>
-#include <qlineedit.h>
-#include <qwidget.h>
-#include <qpoint.h>
+#include <QLineEdit>
+#include <QWidget>
+#include <QPoint>
 #include <qrect.h>
-#include <qstring.h>
+#include <QString>
 #include <qptrlist.h>
 
 #include <KoQueryTrader.h>

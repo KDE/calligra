@@ -27,7 +27,7 @@
  **
  **********************************************************************/
 #include <qpainter.h>
-#include <qlabel.h>
+#include <QLabel>
 
 #include <KDDrawText.h>
 #include "KDChartAxesPainter.h"

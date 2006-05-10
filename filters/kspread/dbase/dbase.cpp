@@ -20,9 +20,9 @@
 
 
 #include <qdatetime.h>
-#include <qdatastream.h>
-#include <qfile.h>
-#include <qstring.h>
+#include <QDataStream>
+#include <QFile>
+#include <QString>
 #include <qstringlist.h>
 #include <q3ptrlist.h>
 

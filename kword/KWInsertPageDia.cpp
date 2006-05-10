@@ -26,7 +26,7 @@
 
 #include <qradiobutton.h>
 #include <qgroupbox.h>
-#include <qlayout.h>
+#include <QLayout>
 
 KWInsertPageDia::KWInsertPageDia( QWidget *parent, const char* name )
     : KDialogBase( parent, name, true, i18n("Insert Page"), Ok|Cancel )

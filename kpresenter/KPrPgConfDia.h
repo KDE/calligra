@@ -24,7 +24,7 @@
 
 #include "global.h"
 
-#include <qmap.h>
+#include <QMap>
 #include <qpen.h>
 #include <qvaluelist.h>
 

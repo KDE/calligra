@@ -41,11 +41,11 @@
 #include <kdesktopfile.h>
 #include <kfiledialog.h>
 
-#include <qfile.h>
+#include <QFile>
 #include <qfileinfo.h>
 #include <q3header.h>
 #include <q3popupmenu.h>
-#include <qlayout.h>
+#include <QLayout>
 #include <qdom.h>
 #include <qstringlist.h>
 

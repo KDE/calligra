@@ -25,8 +25,8 @@
 
 #include <knuminput.h>
 #include <qradiobutton.h>
-#include <qcheckbox.h>
-#include <qlayout.h>
+#include <QCheckBox>
+#include <QLayout>
 
 KPrPictureProperty::KPrPictureProperty( QWidget *parent, const char *name, const QPixmap &pixmap,
                                   KPrPictureSettingCmd::PictureSettings pictureSettings )

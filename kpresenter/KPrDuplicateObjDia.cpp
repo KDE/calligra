@@ -20,14 +20,14 @@
 
 #include <klocale.h>
 #include <qvbox.h>
-#include <qlayout.h>
-#include <qlabel.h>
+#include <QLayout>
+#include <QLabel>
 #include <qbuttongroup.h>
 
 #include "KPrDuplicateObjDia.h"
 #include "KPrPage.h"
 #include <knuminput.h>
-#include <qlineedit.h>
+#include <QLineEdit>
 #include <KoUnit.h>
 #include <knumvalidator.h>
 #include "KPrDocument.h"

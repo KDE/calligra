@@ -14,7 +14,7 @@
 #include <qobject.h>
 #include <qpainter.h>
 #include <qpaintdevice.h>
-#include <qcolor.h>
+#include <QColor>
 
 /**Kugar report object baseclass
   *@author Mutiny Bay Software

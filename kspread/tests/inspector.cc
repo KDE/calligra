@@ -20,7 +20,7 @@
 #include "inspector.h"
 
 #include <QFrame>
-#include <qlayout.h>
+#include <QLayout>
 #include <q3listview.h>
 #include <qtextstream.h>
 //Added by qt3to4:

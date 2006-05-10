@@ -27,7 +27,7 @@
 #define __KWORD_VARIABLEZONE_H__
 
 #include <qtextstream.h>
-#include <qstring.h>
+#include <QString>
 #include "variableformat.h"
 
 /***********************************************************************/

@@ -20,7 +20,7 @@
 #ifndef AICOLOR_H
 #define AICOLOR_H
 
-#include <qstring.h>
+#include <QString>
 
 /**
   *@author 

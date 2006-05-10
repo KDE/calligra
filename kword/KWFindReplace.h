@@ -22,7 +22,7 @@
 #ifndef searchdia_h
 #define searchdia_h
 
-#include <qstring.h>
+#include <QString>
 #include <qstringlist.h>
 //Added by qt3to4:
 #include <QList>

@@ -19,7 +19,7 @@
 #ifndef KIVIO_STENCIL_SPAWNER_H
 #define KIVIO_STENCIL_SPAWNER_H
 
-#include <qstring.h>
+#include <QString>
 #include <qpixmap.h>
 #include <qdom.h>
 #include <qobject.h>

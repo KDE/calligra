@@ -1,7 +1,7 @@
 #ifndef KIVIO_STENCIL_GEOMETRY_PANEL_H
 #define KIVIO_STENCIL_GEOMETRY_PANEL_H
 
-#include <qwidget.h>
+#include <QWidget>
 #include <KoUnit.h>
 
 class KoPageLayout;

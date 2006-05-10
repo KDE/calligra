@@ -24,7 +24,7 @@
 */
 
 #include <kdebug.h>		/* for kDebug() stream */
-#include <qregexp.h>		/* for QRegExp() --> escapeLatin1 */
+#include <QRegExp>		/* for QRegExp() --> escapeLatin1 */
 //Added by qt3to4:
 #include <QTextStream>
 

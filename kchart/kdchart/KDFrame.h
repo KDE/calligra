@@ -30,11 +30,11 @@
 #define __KDFRAME_H__
 
 #include <qapplication.h>
-#include <qfont.h>
-#include <qcolor.h>
+#include <QFont>
+#include <QColor>
 #include <qpixmap.h>
 #include <qpen.h>
-#include <qmap.h>
+#include <QMap>
 #include <qobject.h>
 #include <qtextstream.h>
 #include <qdom.h>

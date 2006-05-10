@@ -18,7 +18,7 @@
  */
 #include "kivio_zoomaction.h"
 #include "tkcombobox.h"
-#include <qregexp.h>
+#include <QRegExp>
 
 #include <klocale.h>
 #include <q3tl.h>

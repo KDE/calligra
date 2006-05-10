@@ -28,17 +28,17 @@
 
 #include <q3buttongroup.h>
 
-#include <qcheckbox.h>
-#include <qcombobox.h>
+#include <QCheckBox>
+#include <QComboBox>
 #include <QGroupBox>
-#include <qlabel.h>
-#include <qlayout.h>
-#include <qlineedit.h>
-#include <qpushbutton.h>
+#include <QLabel>
+#include <QLayout>
+#include <QLineEdit>
+#include <QPushButton>
 #include <qradiobutton.h>
 #include <qrect.h>
 #include <qtabwidget.h>
-#include <qwidget.h>
+#include <QWidget>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QGridLayout>

@@ -20,7 +20,7 @@
 
 #include "KPrPolygonProperty.h"
 
-#include <qlayout.h>
+#include <QLayout>
 
 #include <kcombobox.h>
 #include <klocale.h>

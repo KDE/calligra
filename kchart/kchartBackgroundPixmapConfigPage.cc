@@ -27,14 +27,14 @@
 #include <kmessagebox.h>
 #include <kdebug.h>
 
-#include <qcombobox.h>
+#include <QComboBox>
 #include <qradiobutton.h>
 #include <q3buttongroup.h>
-#include <qspinbox.h>
-#include <qlayout.h>
+#include <QSpinBox>
+#include <QLayout>
 
-#include <qpushbutton.h>
-#include <qlabel.h>
+#include <QPushButton>
+#include <QLabel>
 
 #include <q3listbox.h>
 //Added by qt3to4:

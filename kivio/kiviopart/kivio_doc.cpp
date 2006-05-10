@@ -56,14 +56,14 @@
 #include <dirent.h>
 #include <sys/stat.h>
 #include <pwd.h>
-#include <qdir.h>
+#include <QDir>
 #include <qfileinfo.h>
-#include <qfile.h>
+#include <QFile>
 #include <qpixmap.h>
 
 #include <qpainter.h>
 #include <qpen.h>
-#include <qfont.h>
+#include <QFont>
 #include <qvaluelist.h>
 
 

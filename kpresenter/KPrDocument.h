@@ -57,7 +57,7 @@ class KoSavingContext;
 
 #include <qptrlist.h>
 #include <qobject.h>
-#include <qstring.h>
+#include <QString>
 #include <qvaluelist.h>
 #include <qdatetime.h>
 #include <qdict.h>

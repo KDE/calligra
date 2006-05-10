@@ -21,7 +21,7 @@
 #define __KCHARTCOLORCONFIGPAGE_H__
 
 
-#include <qwidget.h>
+#include <QWidget>
 #include <kcolorbutton.h>
 
 #include "koChart.h"

@@ -19,7 +19,7 @@
 
 #include <q3buttongroup.h>
 #include <qradiobutton.h>
-#include <qstring.h>
+#include <QString>
 #include <q3vbox.h>
 
 #include <klocale.h>

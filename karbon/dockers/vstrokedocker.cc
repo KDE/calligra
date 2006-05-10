@@ -19,11 +19,11 @@
 */
 
 #include <qhbuttongroup.h>
-#include <qlabel.h>
-#include <qlayout.h>
-#include <qpushbutton.h>
-#include <qwidget.h>
-#include <qtooltip.h>
+#include <QLabel>
+#include <QLayout>
+#include <QPushButton>
+#include <QWidget>
+#include <QToolTip>
 
 #include <kiconloader.h>
 #include <klocale.h>

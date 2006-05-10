@@ -25,9 +25,9 @@
 
 #include <KoImageResource.h>
 
-#include <qspinbox.h>
+#include <QSpinBox>
 #include <qtoolbutton.h>
-#include <qlayout.h>
+#include <QLayout>
 
 KPrRectProperty::KPrRectProperty( QWidget *parent, const char *name, KPrRectValueCmd::RectValues &rectValue )
 : QWidget( parent, name )

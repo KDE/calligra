@@ -26,7 +26,7 @@
 #include <KoQueryTrader.h>
 #include <ktabwidget.h>
 #include <q3ptrlist.h>
-#include <qmap.h>
+#include <QMap>
 #include <qtoolbutton.h>
 #include <q3valuelist.h>
 //Added by qt3to4:

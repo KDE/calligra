@@ -21,7 +21,7 @@
 #ifndef __VTRANSLATE_H__
 #define __VTRANSLATE_H__
 
-#include <qwidget.h>
+#include <QWidget>
 
 class QCheckBox;
 class QLabel;

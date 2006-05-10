@@ -20,7 +20,7 @@
 #ifndef __KCHARTDATACONFIGPAGE_H__
 #define __KCHARTDATACONFIGPAGE_H__
 
-#include <qwidget.h>
+#include <QWidget>
 #include <q3button.h>
 #include <q3listbox.h>
 #include <qpainter.h>

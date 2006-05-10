@@ -2,12 +2,12 @@
 #include "kchart_view.h"
 #include "kchart_part.h"
 
-#include <qlabel.h>
+#include <QLabel>
 #include <q3frame.h>
-#include <qlineedit.h>
-#include <qcheckbox.h>
+#include <QLineEdit>
+#include <QCheckBox>
 #include <q3groupbox.h>
-#include <qlayout.h>
+#include <QLayout>
 //Added by qt3to4:
 #include <Q3GridLayout>
 #include <QPaintEvent>
@@ -18,9 +18,9 @@
 #include <float.h>
 
 
-#include <qspinbox.h>
-#include <qpushbutton.h>
-#include <qcolor.h>
+#include <QSpinBox>
+#include <QPushButton>
+#include <QColor>
 
 #include "kchart_params.h"
 

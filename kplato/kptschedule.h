@@ -25,7 +25,7 @@
 
 #include <q3intdict.h>
 #include <q3ptrlist.h>
-#include <qstring.h>
+#include <QString>
 
 class QDomElement;
 

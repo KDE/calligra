@@ -21,7 +21,7 @@
 #include <klocale.h>
 #include <kinputdialog.h>
 
-#include <qmap.h>
+#include <QMap>
 #include <qpainter.h>
 
 #include <kdebug.h>

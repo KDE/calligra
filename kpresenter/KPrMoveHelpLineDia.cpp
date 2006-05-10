@@ -20,8 +20,8 @@
 
 #include <klocale.h>
 #include <qvbox.h>
-#include <qlayout.h>
-#include <qlabel.h>
+#include <QLayout>
+#include <QLabel>
 #include <knuminput.h>
 #include <qbuttongroup.h>
 #include <qradiobutton.h>

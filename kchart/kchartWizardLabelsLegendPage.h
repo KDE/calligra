@@ -1,7 +1,7 @@
 #ifndef _kchartWIZARDLABELSLEGENDPAGE_H
 #define _kchartWIZARDLABELSLEGENDPAGE_H
 
-#include <qwidget.h>
+#include <QWidget>
 //Added by qt3to4:
 #include <QPaintEvent>
 #include <kcolorbutton.h>

@@ -29,12 +29,12 @@
 #include <qtextstream.h>
 #include <assert.h>
 #include <qtoolbutton.h>
-#include <qtooltip.h>
-#include <qdir.h>
+#include <QToolTip>
+#include <QDir>
 #include <qclipboard.h>
 #include <qradiobutton.h>
 #include <qdragobject.h>
-#include <qfile.h>
+#include <QFile>
 
 #include "KPrPage.h"
 #include "KPrBackDia.h"
@@ -95,8 +95,8 @@
 #include <KoTemplateCreateDia.h>
 #include <tkcoloractions.h>
 #include <kaction.h>
-#include <qspinbox.h>
-#include <qcombobox.h>
+#include <QSpinBox>
+#include <QComboBox>
 #include <KoPartSelectAction.h>
 #include <KoTextZoomHandler.h>
 #include <Kolinestyleaction.h>
@@ -129,7 +129,7 @@
 #include "KPrTextDocument.h"
 
 #include <KoChangeCaseDia.h>
-#include <qregexp.h>
+#include <QRegExp>
 
 #include <KoSearchDia.h>
 #include "KPrFindReplace.h"

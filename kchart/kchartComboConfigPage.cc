@@ -24,8 +24,8 @@
 #include <klocale.h>
 #include <kdebug.h>
 #include <kdialog.h>
-#include <qlayout.h>
-#include <qlabel.h>
+#include <QLayout>
+#include <QLabel>
 #include <qradiobutton.h>
 #include <q3buttongroup.h>
 //Added by qt3to4:

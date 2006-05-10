@@ -23,7 +23,7 @@
 #include <unistd.h>
 #endif
 
-#include <qfile.h>
+#include <QFile>
 #include <qfileinfo.h>
 #include <qtextstream.h>
 //Added by qt3to4:

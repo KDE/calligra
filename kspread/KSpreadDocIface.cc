@@ -33,7 +33,7 @@
 
 #include <kapplication.h>
 #include <dcopclient.h>
-#include <qcolor.h>
+#include <QColor>
 #include <kdebug.h>
 
 using namespace KSpread;

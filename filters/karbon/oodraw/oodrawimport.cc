@@ -23,7 +23,7 @@
 
 #include <qdatetime.h>
 #include <qfileinfo.h>
-#include <qdir.h>
+#include <QDir>
 //Added by qt3to4:
 #include <Q3ValueList>
 #include <Q3CString>

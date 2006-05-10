@@ -17,7 +17,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <qlabel.h>
+#include <QLabel>
 #include <qgroupbox.h>
 
 #include <klocale.h>
