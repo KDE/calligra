@@ -100,7 +100,7 @@ void MLabelObject::draw( QPainter* p, int xoffset, int yoffset )
     QFont font( fontFamily, fontSize, fontWeight, fontItalic );
     QPen textPen( foregroundColor, 0, Qt::NoPen );
 
-    int tf;
+    int tf = 0;
 
     // Set the offsets
     int xcalc = xpos + xoffset;
