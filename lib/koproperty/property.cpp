@@ -394,16 +394,16 @@ Property::setValue(const QVariant &value, bool rememberOldValue, bool useCustomP
 	if (d->sets) {
 		for (QPtrDictIterator< QGuardedPtr<Set> > it(*d->sets); it.current(); ++it) {
 			if (it.current()) {//may be destroyed in the meantime
+				emit (*it.current())->propertyChanged();
 				emit (*it.current())->propertyChanged(**it.current(), *this, prevValue);
 				emit (*it.current())->propertyChanged(**it.current(), *this);
-				emit (*it.current())->propertyChanged();
 			}
 		}
 	}
 	else if (d->set) {
+		emit d->set->propertyChanged();
 		emit d->set->propertyChanged(*d->set, *this, prevValue);
 		emit d->set->propertyChanged(*d->set, *this);
-		emit d->set->propertyChanged();
 	}
 }
 
