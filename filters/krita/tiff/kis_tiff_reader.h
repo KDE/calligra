@@ -46,6 +46,7 @@ class TIFFStreamBase;
 class KisTIFFPostProcessor {
     public:
         KisTIFFPostProcessor(uint8 nbcolorssamples) : m_nbcolorssamples(nbcolorssamples) { }
+		virtual ~KisTIFFPostProcessor() {}
     public:
         virtual void postProcess8bit( quint8* ) { };
         virtual void postProcess16bit( quint16* ) { };
@@ -59,6 +60,7 @@ class KisTIFFPostProcessor {
 class KisTIFFPostProcessorInvert : public KisTIFFPostProcessor {
     public:
         KisTIFFPostProcessorInvert(uint8 nbcolorssamples) : KisTIFFPostProcessor(nbcolorssamples) {}
+		virtual ~KisTIFFPostProcessorInvert(){}
     public:
         virtual void postProcess8bit( quint8* data )
         {
@@ -88,6 +90,7 @@ class KisTIFFPostProcessorInvert : public KisTIFFPostProcessor {
 class KisTIFFPostProcessorICCLABtoCIELAB : public KisTIFFPostProcessor {
     public:
         KisTIFFPostProcessorICCLABtoCIELAB(uint8 nbcolorssamples) : KisTIFFPostProcessor(nbcolorssamples) {}
+		virtual ~KisTIFFPostProcessorICCLABtoCIELAB() {}
     public:
         void postProcess8bit(quint8* data)
         {
