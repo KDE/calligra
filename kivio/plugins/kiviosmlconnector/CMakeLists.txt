@@ -2,7 +2,7 @@ kde4_header()
 
 add_subdirectory( sml_connector )
 
-include_directories( ${CMAKE_SOURCE_DIR}/kivio/kiviopart/config ${CMAKE_SOURCE_DIR}/kivio/kiviopart ${CMAKE_SOURCE_DIR}/kivio/kiviopart/kiviosdk ${CMAKE_SOURCE_DIR}/kivio/kiviopart/tools ${CMAKE_SOURCE_DIR}/kivio/plugins/kiviosmlconnector/sml_connector ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
+include_directories( ${CMAKE_SOURCE_DIR}/kivio/kiviopart/config ${CMAKE_SOURCE_DIR}/kivio/kiviopart ${CMAKE_SOURCE_DIR}/kivio/kiviopart/kiviosdk ${CMAKE_SOURCE_DIR}/kivio/kiviopart/tools ${CMAKE_SOURCE_DIR}/kivio/plugins/kiviosmlconnector/sml_connector ${KDE4_INCLUDES}  )
 
 
 ########### next target ###############

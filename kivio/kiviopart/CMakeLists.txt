@@ -8,7 +8,7 @@ add_subdirectory( pics )
 add_subdirectory( tiles )
 add_subdirectory( stencils )
 
-include_directories( ${CMAKE_SOURCE_DIR}/lib/kformula ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
+include_directories( ${CMAKE_SOURCE_DIR}/lib/kformula ${KDE4_INCLUDES}  )
 
 
 ########### next target ###############

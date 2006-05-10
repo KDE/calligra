@@ -2,7 +2,7 @@ kde4_header()
 
 add_subdirectory( pics )
 
-include_directories( ${CMAKE_SOURCE_DIR}/lib/koscript ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
+include_directories( ${CMAKE_SOURCE_DIR}/lib/koscript ${KDE4_INCLUDES}  )
 
 
 ########### next target ###############
