@@ -82,8 +82,6 @@ class KexiMacroDesignView::Private
 		bool reloadsProperties;
 		/// Boolean flag to avoid infinite recursion.
 		bool updatesProperties;
-		/// Boolean flag to know if a propertyset got dirty and needsto be reloaded.
-		bool dirtyProperties;
 
 		/**
 		* Constructor.
@@ -95,7 +93,6 @@ class KexiMacroDesignView::Private
 			: propertyset(0)
 			, reloadsProperties(false)
 			, updatesProperties(false)
-			, dirtyProperties(false)
 		{
 		}
 
@@ -490,6 +487,7 @@ void KexiMacroDesignView::propertyChanged(KoProperty::Set& /*set*/, KoProperty::
 	pv->setName(name);
 	QStringList dirtyvarnames = macroitem->setVariable(name, KoMacro::Variable::Ptr(pv));
 
+	bool dirty = false;
 	bool reload = false;
 	for(QStringList::Iterator it = dirtyvarnames.begin(); it != dirtyvarnames.end(); ++it) {
 		KoMacro::Variable::Ptr variable = macroitem->variable(*it);
@@ -501,7 +499,7 @@ void KexiMacroDesignView::propertyChanged(KoProperty::Set& /*set*/, KoProperty::
 		if(! set.contains( (*it).latin1() )) {
 			// If there exist no such property yet, we need to add it.
 			if(updateSet(&set, macroitem, *it))
-				d->dirtyProperties = true; // we like to reload the whole set
+				reload = true; // we like to reload the whole set
 			continue;
 		}
 
@@ -519,7 +517,7 @@ void KexiMacroDesignView::propertyChanged(KoProperty::Set& /*set*/, KoProperty::
 			p.setListData( new KoProperty::Property::ListData(keys, names) );
 		}
 		p.setValue(variable->variant());
-		reload = true;
+		dirty = true;
 	}
 
 	// If there are expired aka not any longer needed properties around, we
@@ -529,32 +527,19 @@ void KexiMacroDesignView::propertyChanged(KoProperty::Set& /*set*/, KoProperty::
 		if(setit.currentKey().left(5) == QCString("this:")) continue; // don't remove internal properties
 		if(setit.currentKey() == QCString("newrow")) continue; // also an internal used property
 		if(action.data() && action->hasVariable(setit.currentKey())) continue; // the property is still valid
-		d->dirtyProperties = true; // we like to reload the whole set
+		reload = true; // we like to reload the whole set
 	}
 
 	// Only reload properties if it's really needed.
-	if(reload || d->dirtyProperties) {
+	if(dirty || reload) {
 		setDirty();
-		// It's needed to call this delayed else we may crash whyever. It
-		// seems we be the same problem like at the scripting-plugin :-/
-		QTimer::singleShot(50, this, SLOT( reloadProperties() ));
+		if(reload) {
+			updateProperties(row, &set, macroitem);
+		}
+		propertySetReloaded(true);
 	}
 
 	d->reloadsProperties = false;
-}
-
-void KexiMacroDesignView::reloadProperties()
-{
-	if(d->dirtyProperties) {
-//TODO this is only usefull for the current selected set, but not for
-//any other set. So, seems we need to differ between them :-(
-		// Seems someone requested to reload the whole set.
-		int row = d->propertyset->currentRow();
-		KoMacro::MacroItem::Ptr macroitem = macro()->items()[row];
-		updateProperties(row, d->propertyset->currentPropertySet(), macroitem);
-		d->dirtyProperties = false;
-	}
-	propertySetReloaded(true);
 }
 
 #include "keximacrodesignview.moc"

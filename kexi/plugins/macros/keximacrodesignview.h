@@ -97,8 +97,6 @@ class KexiMacroDesignView : public KexiMacroView
 		*/
 		void propertyChanged(KoProperty::Set&, KoProperty::Property&);
 
-		void reloadProperties();
-
 	private:
 		/// \internal d-pointer class.
 		class Private;
