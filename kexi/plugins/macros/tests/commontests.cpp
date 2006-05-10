@@ -135,7 +135,6 @@ void CommonTests::setUp()
 void CommonTests::tearDown()
 {
 	delete d->doomdocument;
-	delete d->testaction;
 	delete d->testobject;
 	delete d->xmlguiclient;
 }
