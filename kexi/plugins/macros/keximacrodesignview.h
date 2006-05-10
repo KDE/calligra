@@ -97,6 +97,11 @@ class KexiMacroDesignView : public KexiMacroView
 		*/
 		void propertyChanged(KoProperty::Set&, KoProperty::Property&);
 
+		/**
+		* Reloads the propertyset delayed.
+		*/
+		void reloadPropertyLater();
+
 	private:
 		/// \internal d-pointer class.
 		class Private;

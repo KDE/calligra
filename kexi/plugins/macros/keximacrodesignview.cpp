@@ -250,7 +250,7 @@ bool KexiMacroDesignView::loadData()
 
 KoProperty::Set* KexiMacroDesignView::propertySet()
 {
-	return d->propertyset ? d->propertyset->currentPropertySet() : 0;
+	return d->propertyset->currentPropertySet();
 }
 
 void KexiMacroDesignView::beforeCellChanged(KexiTableItem* item, int colnum, QVariant& newvalue, KexiDB::ResultInfo* result)
@@ -460,15 +460,14 @@ void KexiMacroDesignView::updateProperties(int row, KoProperty::Set* set, KoMacr
 	d->updatesProperties = false;
 }
 
-void KexiMacroDesignView::propertyChanged(KoProperty::Set& /*set*/, KoProperty::Property& property)
+void KexiMacroDesignView::propertyChanged(KoProperty::Set& set, KoProperty::Property& property)
 {
 	if(d->reloadsProperties) {
 		// be sure to don't update properties if we are still on reloading.
 		return;
 	}
 
-	kdDebug() << "KexiMacroDesignView::propertyChanged()" << endl;
-	KoProperty::Set& set = *d->propertyset->currentPropertySet();
+	//KoProperty::Set& set = *d->propertyset->currentPropertySet();
 	int row = d->propertyset->currentRow();
 
 	const QCString name = property.name();
@@ -477,7 +476,7 @@ void KexiMacroDesignView::propertyChanged(KoProperty::Set& /*set*/, KoProperty::
 		return;
 	}
 
-	kdDebug() << "KexiMacroDesignView::propertyChanged() name=" << name << endl;
+	kdDebug() << "KexiMacroDesignView::propertyChanged() name=" << name << " row=" << row << endl;
 	d->reloadsProperties = true;
 
 	KoMacro::MacroItem::Ptr macroitem = macro()->items()[row];
@@ -536,10 +535,18 @@ void KexiMacroDesignView::propertyChanged(KoProperty::Set& /*set*/, KoProperty::
 		if(reload) {
 			updateProperties(row, &set, macroitem);
 		}
-		propertySetReloaded(true);
+		// It's needed to call the reload delayed cause in KoProperty::Editor
+		// QTimer::singleShot(10, this, SLOT(selectItemLater())); may lead
+		// to crashes if we are to fast.
+		QTimer::singleShot(50, this, SLOT(reloadPropertyLater()));
 	}
 
 	d->reloadsProperties = false;
+}
+
+void KexiMacroDesignView::reloadPropertyLater()
+{
+	propertySetReloaded(true);
 }
 
 #include "keximacrodesignview.moc"
