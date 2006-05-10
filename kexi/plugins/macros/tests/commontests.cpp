@@ -78,17 +78,25 @@ namespace KoMacroTest {
 			*/
 			TestObject* testobject;
 
+			TestAction* testaction;
+
+			QDomDocument* doomdocument;
+
 			/**
 			* Constructor.
 			*/
 			Private()
 				: xmlguiclient(0)
 				, testobject(0)
+				, testaction(0)
+				, doomdocument(0)
 			{
 			}
 	};
 
 }
+
+typedef QValueList< KSharedPtr<KoMacro::MacroItem> >::size_type sizetype;
 
 CommonTests::CommonTests()
 	: KUnitTest::SlotTester()
@@ -109,10 +117,25 @@ void CommonTests::setUp()
 
 	d->testobject = new TestObject( this );
 	::KoMacro::Manager::self()->publishObject("TestObject", d->testobject);
+	
+	d->testaction = new TestAction();
+	::KoMacro::Manager::self()->publishAction(d->testaction);	
+
+	d->doomdocument = new QDomDocument();
+
+	QString const xml = QString("<!DOCTYPE macros>"
+				    "<macro>"
+				      "<item action=\"testaction\" >"
+				      "</item>"
+				    "</macro>");
+
+	d->doomdocument->setContent(xml);
 }
 
 void CommonTests::tearDown()
 {
+	delete d->doomdocument;
+	delete d->testaction;
 	delete d->testobject;
 	delete d->xmlguiclient;
 }
@@ -129,104 +152,81 @@ void CommonTests::testManager()
 
 void CommonTests::testAction()
 {
-	
+	//TODO: CLEANUP!!!!!!	
 	kdDebug()<<"===================== testAction() ======================" << endl;
 
-	/*
-		setVariable("teststring", "Stringtest", QString(""));
-		setVariable("testint", "Inttest", int(0));
-		setVariable("testbool", "Booltest", bool(true));
-	*/
-	QDomDocument domdocument = QDomDocument();
-
-	QString const xml = QString("<!DOCTYPE macros>"
-				    "<macro>"
-				      "<item action=\"testaction\" >"
-				      "</item>"
-				    "</macro>");
-
-	domdocument.setContent(xml);
-	
 	//Publish TestAction for the first time.
-	TestAction* testaction = new TestAction();
-	KoMacro::Manager::self()->publishAction(testaction);	
+		
+	QDomElement const domelement = d->doomdocument->documentElement();
 	
-	QDomElement const domelement = domdocument.documentElement();
-	
-	KSharedPtr<KoMacro::Macro> testmacro = KoMacro::Manager::self()->createMacro("testMacro");
+	KSharedPtr<KoMacro::Macro> macro = KoMacro::Manager::self()->createMacro("testMacro");
 	//Is our XML parseable ?
-	KOMACROTEST_ASSERT(testmacro->parseXML(domelement),true);
+	KOMACROTEST_ASSERT(macro->parseXML(domelement),true);
 	
+	macro->execute(this);
+
+	//create list of KSharedPtr from the childs of the macro
+	QValueList< KSharedPtr<KoMacro::MacroItem> >& items = macro->items();
+	//TODO: test manipulation of action and macroitem and context.
+		
+	//check that there is one
+	KOMACROTEST_ASSERT( items.count(), sizetype(1) );
+	//fetch the first one
+	KSharedPtr<KoMacro::Action> actionptr = items[0]->action();
+	//How do we know that an action exist ?	
+	//-> check that it is not null
+	KOMACROTEST_XASSERT(sizetype(actionptr.data()), sizetype(0));
+	//fetch the "teststring"-variable
+	KSharedPtr<KoMacro::Variable> variableptr = actionptr->variable("teststring");
+	//check that it is not null
+	KOMACROTEST_XASSERT(sizetype(variableptr.data()), sizetype(0));
+	//check that it is " "
+	KOMACROTEST_ASSERT(variableptr->variant().toString(),QString("testString"));
+
+	//fetch the "testint"-variable
+	variableptr = actionptr->variable("testint");
+	//check that it is not null
+	KOMACROTEST_XASSERT(sizetype(variableptr.data()), sizetype(0));
+	//check that it is " "
+	KOMACROTEST_ASSERT(variableptr->variant().toInt(),int(0));
 	
-	//TODO: How do we know that the execution has succeeded ?
-	testmacro->execute(this);
+	//fetch the "testbool"-variable
+	variableptr = actionptr->variable("testbool");
+	//check that it is not null
+	KOMACROTEST_XASSERT(sizetype(variableptr.data()), sizetype(0));
+	//check that it is " "
+	KOMACROTEST_ASSERT(variableptr->variant().toBool(),true);
 
-	//TODO: check defaultvalues ..
-	//create list of KsharedPtr from the childs of the macro
-	QValueList< KSharedPtr<KoMacro::MacroItem> >& testitems = testmacro->items();
-	{
-		//TODO: reduce code!! -> for()
-		//TODO: test manipulation of action and macroitem and context.
-		typedef QValueList< KSharedPtr<KoMacro::MacroItem> >::size_type sizetype;
-		//check that there are two
-		KOMACROTEST_ASSERT( testitems.count(), sizetype(1) );
-		//fetch the first one
-		KSharedPtr<KoMacro::Action> testactionptr = testitems[0]->action();
-		//How do we know that an action exist ?	
-		//-> check that it is not null
-		KOMACROTEST_XASSERT(sizetype(testactionptr.data()), sizetype(0));
-		//fetch the "teststring"-variable
-		KSharedPtr<KoMacro::Variable> testvariableptr = testactionptr->variable("teststring");
-		//check that it is not null
-		KOMACROTEST_XASSERT(sizetype(testvariableptr.data()), sizetype(0));
-		//check that it is " "
-		KOMACROTEST_ASSERT(testvariableptr->variant().toString(),QString("testString"));
+	actionptr->setVariable("teststring", "STRINGTEST", "TestString");
+	variableptr = actionptr->variable("teststring");
+	//check that it is not null
+	KOMACROTEST_XASSERT(sizetype(variableptr.data()), sizetype(0));
+	//check that it is " "
+	KOMACROTEST_ASSERT(variableptr->variant().toString(),QString("TestString"));
+	
+	//create new macroitem for testing
+	KoMacro::MacroItem* macroitem = new KoMacro::MacroItem();
+	//set the action
+	macroitem->setAction(d->testaction);
+	//append the macroitem to testitems
+	items.append(macroitem);
+	//increased ??
+	KOMACROTEST_ASSERT( items.count(), sizetype(2) );
+	
+	macroitem->setVariable("teststring", "TeStString");
 
-		//fetch the "testint"-variable
-		testvariableptr = testactionptr->variable("testint");
-		//check that it is not null
-		KOMACROTEST_XASSERT(sizetype(testvariableptr.data()), sizetype(0));
-		//check that it is " "
-		KOMACROTEST_ASSERT(testvariableptr->variant().toInt(),int(0));
+	variableptr = macroitem->variable("teststring");
+	KOMACROTEST_XASSERT(sizetype(variableptr.data()), sizetype(0));
+	//check that it is " "
+	KOMACROTEST_ASSERT(variableptr->variant().toString(),QString("TeStString"));
 		
-		//fetch the "testbool"-variable
-		testvariableptr = testactionptr->variable("testbool");
-		//check that it is not null
-		KOMACROTEST_XASSERT(sizetype(testvariableptr.data()), sizetype(0));
-		//check that it is " "
-		KOMACROTEST_ASSERT(testvariableptr->variant().toBool(),true);
+	//TODO: Int and Bool
 
-		testactionptr->setVariable("teststring", "STRINGTEST", "TestString");
-		testvariableptr = testactionptr->variable("teststring");
-		//check that it is not null
-		KOMACROTEST_XASSERT(sizetype(testvariableptr.data()), sizetype(0));
-		//check that it is " "
-		KOMACROTEST_ASSERT(testvariableptr->variant().toString(),QString("TestString"));
-		
-		//create new macroitem for testing
-		KoMacro::MacroItem* testmacroitem = new KoMacro::MacroItem();
-		//set the action
-		testmacroitem->setAction(testaction);
-		//append the macroitem to testitems
-		testitems.append(testmacroitem);
-		//increased ??
-		KOMACROTEST_ASSERT( testitems.count(), sizetype(2) );
-		
-		testmacroitem->setVariable("teststring", "TeStString");
-
-		testvariableptr = testmacroitem->variable("teststring");
-		KOMACROTEST_XASSERT(sizetype(testvariableptr.data()), sizetype(0));
-		//check that it is " "
-		KOMACROTEST_ASSERT(testvariableptr->variant().toString(),QString("TeStString"));
-			
-		//TODO: Int and Bool
-
-		//secondway for appending an macroitem
-		testmacro->addItem(testmacroitem);
-		//increased ??
-		KOMACROTEST_ASSERT( testitems.count(), sizetype(3));
-	}
-
+	//secondway for appending an macroitem
+	macro->addItem(macroitem);
+	//increased ??
+	KOMACROTEST_ASSERT( items.count(), sizetype(3));
+	
 /*
 	//create a QDomDocument
 	QDomDocument domdocument = QDomDocument();
@@ -262,6 +262,7 @@ void CommonTests::testAction()
 
 void CommonTests::testFunction()
 {
+//TODO: CLEANUP!!!!!!	
 /*
 	kdDebug()<<"===================== testFunction() ======================" << endl;
 	
@@ -383,6 +384,7 @@ void CommonTests::testFunction()
 
 void CommonTests::testIntFunction() 
 {
+//TODO: CLEANUP!!!!!!	
 /*
 	kdDebug()<<"===================== testIntFunction() ======================" << endl;
 
@@ -412,6 +414,7 @@ void CommonTests::testIntFunction()
 
 void CommonTests::testDoubleFunction() 
 {
+//TODO: CLEANUP!!!!!!	
 /*
 	kdDebug()<<"===================== testDoubleFunction() ======================" << endl;
 
@@ -441,6 +444,7 @@ void CommonTests::testDoubleFunction()
 
 void CommonTests::testQStringFunction() 
 {
+//TODO: CLEANUP!!!!!!	
 /*
 	kdDebug()<<"===================== testQStringFunction() ======================" << endl;
 
@@ -468,55 +472,66 @@ void CommonTests::testQStringFunction()
 
 void CommonTests::testMacro()
 {
+//TODO: CLEANUP!!!!!!	
 	kdDebug()<<"===================== testMacro() ======================" << endl;
-/*
-	//create a QDomDocument		
-	QDomDocument domdocument = QDomDocument();
 
-	//Fully fleged content this time with macro,function and action
-	domdocument.setContent(QString(
-		"<macro name=\"mymacro\" icon=\"myicon\" text=\"My Macro\" comment=\"Some comment to describe the Macro.\">"
-			"<action name=\"myaction\" text=\"My Action\" comment=\"Just some comment\" />"
-			"<function name=\"myfunc\" text=\"My Function\" comment=\"Describe what the function does\" receiver=\"TestObject\" slot=\"myslot(const QString &amp;)\">"
-				"<argument>The myfunc argument string</argument>"
-			"</function>"
-		"</macro>"
-	));
+	QDomElement const domelement = d->doomdocument->documentElement();
+	
+	KSharedPtr<KoMacro::Macro> macro = KoMacro::Manager::self()->createMacro("testMacro");
+	//Is our XML parseable ?
+	KOMACROTEST_ASSERT(macro->parseXML(domelement),true);
 
-	//create Macro
-	KSharedPtr<KoMacro::Action> macroptr = ::KoMacro::Manager::self()->createAction( domdocument.documentElement() );
-	//cast data to Macro
-	KoMacro::Macro* macro = dynamic_cast<KoMacro::Macro*>( macroptr.data() );
+// 	//create a QDomDocument		
+// 	QDomDocument domdocument = QDomDocument();
+// 
+// 	//Fully fleged content this time with macro,function and action
+// 	domdocument.setContent(QString(
+// 		"<macro name=\"mymacro\" icon=\"myicon\" text=\"My Macro\" comment=\"Some comment to describe the Macro.\">"
+// 			"<action name=\"myaction\" text=\"My Action\" comment=\"Just some comment\" />"
+// 			"<function name=\"myfunc\" text=\"My Function\" comment=\"Describe what the function does\" receiver=\"TestObject\" slot=\"myslot(const QString &amp;)\">"
+// 				"<argument>The myfunc argument string</argument>"
+// 			"</function>"
+// 		"</macro>"
+// 	));
+// 
+// 	//create Macro
+// // 	KSharedPtr<KoMacro::Action> macroptr = ::KoMacro::Manager::self()->createAction( domdocument.documentElement() );
+// 	//cast data to Macro
+// 	KoMacro::Macro* macro = dynamic_cast<KoMacro::Macro*>( macroptr.data() );
 	//check that it is not null
-	KOMACROTEST_XASSERT((int) macro, 0);
-
+	KOMACROTEST_XASSERT(sizetype(macro.data()), sizetype(0));
 	//check that domeElement given to manager is the sam as in the macro
-	KOMACROTEST_ASSERT( macro->domElement(), domdocument.documentElement() );
+//	KOMACROTEST_ASSERT( macro->toXML(), d->doomdocument->documentElement() );
 	//check the name
-	KOMACROTEST_ASSERT( QString(macro->name()), QString("mymacro") );
-	//check the tect
+	KOMACROTEST_ASSERT( QString(macro->name()), QString("testMacro") );
+	
+	/**
+	 @deprecated values no longer exist
+	
+	//check the text
 	KOMACROTEST_ASSERT( macro->text(), QString("My Macro") );
 	//check iconname
 	KOMACROTEST_ASSERT( QString(macro->icon()), QString("myicon") );
-	
-                                                                                    //check comment
+	//check comment
 	KOMACROTEST_ASSERT( macro->comment(), QString("Some comment to describe the Macro.") );
-
+	 */
+	
 	//create list of KsharedPtr from the childs of the macro
-	QValueList< KSharedPtr<KoMacro::Action> > children = macro->children();
-	//check that there are two
-	KOMACROTEST_ASSERT( children.count(), uint(2) );
+	QValueList< KSharedPtr<KoMacro::MacroItem> >& items = macro->items();
+	//check that there is one
+	KOMACROTEST_ASSERT( items.count(), sizetype(1) );
 	//fetch the first one
-	KSharedPtr<KoMacro::Action> myactionptr = children[0];
-	//check that it isn?t null
-	KOMACROTEST_XASSERT((int) myactionptr.data(), 0);
+	KSharedPtr<KoMacro::Action> actionptr = items[0]->action();
+	//How do we know that an action exist ?	
+	//-> check that it is not null
+	KOMACROTEST_XASSERT(sizetype(actionptr.data()), sizetype(0));
 	//check that it has the right name
-	KOMACROTEST_ASSERT( QString(myactionptr->name()), QString("myaction") );
+	KOMACROTEST_ASSERT( QString(actionptr->name()), QString("testaction") );
 	//check that it has the right text
-	KOMACROTEST_ASSERT( myactionptr->text(), QString("My Action") );
+	KOMACROTEST_ASSERT( actionptr->text(), QString("Test") );
 	//check that it has the right comment
-	KOMACROTEST_ASSERT( myactionptr->comment(), QString("Just some comment") );
-
+//	KOMACROTEST_ASSERT( actionptr->comment(), QString("") );
+/*
 	//fetch the second one
 	KSharedPtr<KoMacro::Action> myfuncptr = children[1];
 	//cast it to function
@@ -585,11 +600,12 @@ void CommonTests::testMacro()
 		//check the hasChildren function
 		KOMACROTEST_ASSERT(yanMacro->hasChildren(), true);
 	}
-*/
+*/	
+
 }
 
 void CommonTests::testDom() {
-
+//TODO: CLEANUP!!!!!!	
 	kdDebug()<<"===================== testDom() ======================" << endl;
 /*
 	//create a QDomDocument		
@@ -677,6 +693,7 @@ void CommonTests::testDom() {
 
 void CommonTests::testVariables()
 {
+//TODO: CLEANUP!!!!!!	
 	kdDebug()<<"===================== testVariables() ======================" << endl;
 /*
 	//create a QDomDocument		
