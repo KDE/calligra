@@ -1,8 +1,0 @@
-
-all:
-	@echo "This file was used for automake/unsermake, but the KDE build system has changed."
-	@echo "Please use cmake instead, see http://wiki.kde.org/tiki-index.php?page=KDECMakeIntro"
-	@echo ""
-
-.SILENT:
-.PHONY: all
