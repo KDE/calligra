@@ -1,1 +1,0 @@
-SUBDIRS = Wordprocessing Envelopes CardsAndLabels
