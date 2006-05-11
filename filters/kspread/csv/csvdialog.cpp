@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 1999 David Faure <faure@kde.org>
    Copyright (C) 2004 Nicolas GOUTTE <goutte@kde.org>
-   
+
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
@@ -135,7 +135,7 @@ void CSVDialog::fillTable( )
     inputStream.setCodec( m_codec );
 
     bool lastCharWasCr = false; // Last character was a Carriage Return
-    while (!inputStream.atEnd()) 
+    while (!inputStream.atEnd())
     {
         inputStream >> x; // read one char
 
@@ -296,19 +296,19 @@ void CSVDialog::fillTable( )
       ++row;
       field = QString::null;
     }
-    
+
     m_adjustCols = true;
     adjustRows( row - m_startRow );
     adjustCols( maxColumn - m_startCol );
-    m_dialog->m_colEnd->setMaxValue( maxColumn );
+    m_dialog->m_colEnd->setMaximum( maxColumn );
     if ( m_endCol == -1 )
       m_dialog->m_colEnd->setValue( maxColumn );
-    
+
 
     for (column = 0; column < m_dialog->m_sheet->numCols(); ++column)
     {
         const QString header = m_dialog->m_sheet->horizontalHeader()->label(column);
-        if ( m_formatList.find( header ) == m_formatList.end() )
+        if ( !m_formatList.contains( header ) )
             m_dialog->m_sheet->horizontalHeader()->setLabel(column, i18n("Text"));
 
         m_dialog->m_sheet->adjustColumn(column);
@@ -321,24 +321,24 @@ void CSVDialog::fillTable( )
 void CSVDialog::fillComboBox()
 {
   if ( m_endRow == -1 )
-    m_dialog->m_rowEnd->setValue( m_dialog->m_sheet->numRows() );  
+    m_dialog->m_rowEnd->setValue( m_dialog->m_sheet->numRows() );
   else
     m_dialog->m_rowEnd->setValue( m_endRow );
 
   if ( m_endCol == -1 )
     m_dialog->m_colEnd->setValue( m_dialog->m_sheet->numCols() );
   else
-    m_dialog->m_colEnd->setValue( m_endCol );  
+    m_dialog->m_colEnd->setValue( m_endCol );
 
-  m_dialog->m_rowEnd->setMinValue( 1 );
-  m_dialog->m_colEnd->setMinValue( 1 );
-  m_dialog->m_rowEnd->setMaxValue( m_dialog->m_sheet->numRows() );
-  m_dialog->m_colEnd->setMaxValue( m_dialog->m_sheet->numCols() );
+  m_dialog->m_rowEnd->setMinimum( 1 );
+  m_dialog->m_colEnd->setMinimum( 1 );
+  m_dialog->m_rowEnd->setMaximum( m_dialog->m_sheet->numRows() );
+  m_dialog->m_colEnd->setMaximum( m_dialog->m_sheet->numCols() );
 
-  m_dialog->m_rowStart->setMinValue( 1 );
-  m_dialog->m_colStart->setMinValue( 1 );
-  m_dialog->m_rowStart->setMaxValue( m_dialog->m_sheet->numRows() );
-  m_dialog->m_colStart->setMaxValue( m_dialog->m_sheet->numCols() );
+  m_dialog->m_rowStart->setMinimum( 1 );
+  m_dialog->m_colStart->setMinimum( 1 );
+  m_dialog->m_rowStart->setMaximum( m_dialog->m_sheet->numRows() );
+  m_dialog->m_colStart->setMaximum( m_dialog->m_sheet->numCols() );
 }
 
 int CSVDialog::getRows()
@@ -368,7 +368,7 @@ int CSVDialog::getCols()
 int CSVDialog::getHeader(int col)
 {
     QString header = m_dialog->m_sheet->horizontalHeader()->label(col);
-    
+
     if (header == i18n("Text"))
         return TEXT;
     else if (header == i18n("Number"))
@@ -398,7 +398,7 @@ void CSVDialog::setText(int row, int col, const QString& text)
     if ( ( row > ( m_endRow - m_startRow ) && m_endRow > 0 ) || ( col > ( m_endCol - m_startCol ) && m_endCol > 0 ) )
       return;
 
-    if ( m_dialog->m_sheet->numRows() < row ) 
+    if ( m_dialog->m_sheet->numRows() < row )
     {
         m_dialog->m_sheet->setNumRows( row + 5000 ); /* We add 5000 at a time to limit recalculations */
         m_adjustRows = true;
@@ -418,7 +418,7 @@ void CSVDialog::setText(int row, int col, const QString& text)
  */
 void CSVDialog::adjustRows(int iRows)
 {
-    if (m_adjustRows) 
+    if (m_adjustRows)
     {
         m_dialog->m_sheet->setNumRows( iRows );
         m_adjustRows = false;
@@ -427,8 +427,8 @@ void CSVDialog::adjustRows(int iRows)
 
 void CSVDialog::adjustCols(int iCols)
 {
-    if (m_adjustCols) 
-    {  
+    if (m_adjustCols)
+    {
         m_dialog->m_sheet->setNumCols( iCols );
         m_adjustCols = false;
 
@@ -466,7 +466,7 @@ void CSVDialog::formatChanged( const QString& newValue )
         for ( int j = select.leftCol(); j <= select.rightCol() ; ++j )
         {
             m_dialog->m_sheet->horizontalHeader()->setLabel( j, newValue );
-            
+
         }
     }
 }
@@ -521,7 +521,7 @@ void CSVDialog::updateClicked()
 
 bool CSVDialog::checkUpdateRange()
 {
-  if ( ( m_dialog->m_rowStart->value() > m_dialog->m_rowEnd->value() ) 
+  if ( ( m_dialog->m_rowStart->value() > m_dialog->m_rowEnd->value() )
        || ( m_dialog->m_colStart->value() > m_dialog->m_colEnd->value() ) )
   {
     KMessageBox::error( this, i18n( "Please check the ranges you specified. The start value must be lower than the end value." ) );
@@ -552,7 +552,7 @@ QTextCodec* CSVDialog::getCodec(void) const
     kDebug(30502) << "Encoding: " << strCodec << endl;
 
     bool ok = false;
-    QTextCodec* codec = QTextCodec::codecForName( strCodec.utf8() );
+    QTextCodec* codec = QTextCodec::codecForName( strCodec.toUtf8() );
 
     // If QTextCodec has not found a valid encoding, so try with KCharsets.
     if ( codec )

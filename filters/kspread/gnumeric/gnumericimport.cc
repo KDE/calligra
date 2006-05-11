@@ -178,8 +178,8 @@ void  convert_string_to_qcolor(QString color_string, QColor * color)
 
   bool number_ok;
 
-  first_col_pos  = color_string.find(":", 0);
-  second_col_pos = color_string.find(":", first_col_pos + 1);
+  first_col_pos  = color_string.indexOf(":", 0);
+  second_col_pos = color_string.indexOf(":", first_col_pos + 1);
 
   /* Fore="0:0:FF00" */
   /* If GNUmeric kicks out some invalid colors, we could crash. */
@@ -198,30 +198,30 @@ void areaNames( Doc * ksdoc, const QString &_name, QString _zone )
 {
 //Sheet2!$A$2:$D$8
     QString tableName;
-    int pos = _zone.find( '!' );
+    int pos = _zone.indexOf( '!' );
     if ( pos != -1 )
     {
         tableName = _zone.left( pos );
         _zone = _zone.right( _zone.length()-pos-1 );
-         pos = _zone.find( ':' );
+         pos = _zone.indexOf( ':' );
         QRect rect;
         if ( pos != -1 )
         {
             QString left = _zone.mid( 1, pos-1 );
             QString right = _zone.mid( pos+2, _zone.length()-pos-2 );
-            int pos = left.find( '$' );
+            int pos = left.indexOf( '$' );
 
             rect.setLeft( util_decodeColumnLabelText(left.left(pos ) ) );
             rect.setTop( left.right( left.length()-pos-1 ).toInt() );
 
-            pos = right.find( '$' );
+            pos = right.indexOf( '$' );
             rect.setRight( util_decodeColumnLabelText(right.left(pos ) ) );
             rect.setBottom( right.right( right.length()-pos-1 ).toInt() );
        }
         else
         {
             QString left = _zone;
-            int pos = left.find( '$' );
+            int pos = left.indexOf( '$' );
             int leftPos = util_decodeColumnLabelText(left.left(pos ) );
             rect.setLeft( leftPos );
             rect.setRight( leftPos );
@@ -267,15 +267,15 @@ void set_document_attributes( Doc * ksdoc, QDomElement * docElem)
         QDomNode gmr_value = attributeItem.namedItem("gmr:value");
         if (gmr_name.toElement().text() == "WorkbookView::show_horizontal_scrollbar")
         {
-            ksdoc->setShowHorizontalScrollBar( gmr_value.toElement().text().lower()=="true"? true : false );
+            ksdoc->setShowHorizontalScrollBar( gmr_value.toElement().text().toLower()=="true"? true : false );
         }
         else if ( gmr_name.toElement().text() == "WorkbookView::show_vertical_scrollbar")
         {
-            ksdoc->setShowVerticalScrollBar( gmr_value.toElement().text().lower()=="true"? true : false );
+            ksdoc->setShowVerticalScrollBar( gmr_value.toElement().text().toLower()=="true"? true : false );
         }
         else if ( gmr_name.toElement().text() == "WorkbookView::show_notebook_tabs")
         {
-            ksdoc->setShowTabBar(gmr_value.toElement().text().lower()=="true"? true : false );
+            ksdoc->setShowTabBar(gmr_value.toElement().text().toLower()=="true"? true : false );
         }
         else if ( gmr_name.toElement().text() == "WorkbookView::do_auto_completion")
         {
@@ -813,7 +813,7 @@ QString GNUMERICFilter::convertVars( QString const & str, Sheet * table ) const
 
   for ( uint i = 0; i < count; ++i )
   {
-    int n = result.find( list1[i] );
+    int n = result.indexOf( list1[i] );
 
     if ( n != -1 )
     {
@@ -982,7 +982,7 @@ void GNUMERICFilter::ParseFormat(QString const & formatString, Cell * kspread_ce
   {
     if ((formatString[0] == '[') && (formatString[1] == '$'))
     {
-      int n = formatString.find(']');
+      int n = formatString.indexOf(']');
       if (n != -1)
       {
         QString currency = formatString.mid(2, n - 2);
@@ -991,7 +991,7 @@ void GNUMERICFilter::ParseFormat(QString const & formatString, Cell * kspread_ce
       }
       lastPos = ++n;
     }
-    else if (formatString.find("E+0") != -1)
+    else if (formatString.indexOf("E+0") != -1)
     {
       kspread_cell->format()->setFormatType(Scientific_format);
     }
@@ -1003,7 +1003,7 @@ void GNUMERICFilter::ParseFormat(QString const & formatString, Cell * kspread_ce
       if ( setType(kspread_cell, formatString, content) )
         return;
 
-      if (formatString.find("?/?") != -1)
+      if (formatString.indexOf("?/?") != -1)
       {
         // TODO: fixme!
         kspread_cell->format()->setFormatType( fraction_three_digits );
@@ -1034,7 +1034,7 @@ void GNUMERICFilter::ParseFormat(QString const & formatString, Cell * kspread_ce
   while (formatString[lastPos] == ' ')
     ++lastPos;
 
-  int n = formatString.find( '.', lastPos );
+  int n = formatString.indexOf( '.', lastPos );
   if ( n != -1)
   {
     lastPos = n + 1;
@@ -1050,12 +1050,12 @@ void GNUMERICFilter::ParseFormat(QString const & formatString, Cell * kspread_ce
   }
 
   bool red = false;
-  if (formatString.find("[RED]", lastPos) != -1)
+  if (formatString.indexOf("[RED]", lastPos) != -1)
   {
     red = true;
     kspread_cell->format()->setFloatColor( Style::NegRed );
   }
-  if ( formatString.find('(', lastPos) != -1 )
+  if ( formatString.indexOf('(', lastPos) != -1 )
   {
     if ( red )
       kspread_cell->format()->setFloatColor( Style::NegRedBrackets );
@@ -1066,7 +1066,7 @@ void GNUMERICFilter::ParseFormat(QString const & formatString, Cell * kspread_ce
 
 void GNUMERICFilter::convertFormula( QString & formula ) const
 {
-  int n = formula.find( '=', 1 );
+  int n = formula.indexOf( '=', 1 );
 
   // TODO: check if we do not screw something up here...
   if ( n != -1 )
@@ -1832,11 +1832,11 @@ KoFilter::ConversionStatus GNUMERICFilter::convert( const QByteArray & from, con
     if ( !document )
         return KoFilter::StupidError;
 
-    kDebug(30521) << "here we go... " << document->className() << endl;
+    kDebug(30521) << "here we go... " << document->metaObject()->className() << endl;
 
     if ( !qobject_cast<const KSpread::Doc *>( document ) )  // it's safer that way :)
     {
-        kWarning(30521) << "document isn't a KSpread::Doc but a " << document->className() << endl;
+      kWarning(30521) << "document isn't a KSpread::Doc but a " << document->metaObject()->className() << endl;
         return KoFilter::NotImplemented;
     }
     if ( from != "application/x-gnumeric" || to != "application/x-kspread" )
@@ -2063,13 +2063,13 @@ KoFilter::ConversionStatus GNUMERICFilter::convert( const QByteArray & from, con
 		if (e.hasAttribute("ExprID"))
                 {
 		    // QString encoded_string(table->cellAt( column, row, false)->encodeFormula( row, column ).utf8());
-		    QString encoded_string(table->cellAt( column, row, false )->encodeFormula().latin1());
+		    QString encoded_string(table->cellAt( column, row, false )->encodeFormula().toLatin1());
 
 
-		    char * tmp_string = ( char * ) malloc( strlen( encoded_string.latin1() ) );
-		    strcpy( tmp_string, encoded_string.latin1() );
+		    char * tmp_string = ( char * ) malloc( strlen( encoded_string.toLatin1() ) );
+		    strcpy( tmp_string, encoded_string.toLatin1() );
 
-		    kDebug(30521) << encoded_string.latin1() << endl;
+		    kDebug(30521) << encoded_string.toLatin1() << endl;
 
 		    exprID_dict.insert(e.attribute("ExprID"), tmp_string);
 
@@ -2140,7 +2140,7 @@ KoFilter::ConversionStatus GNUMERICFilter::convert( const QByteArray & from, con
 
 		    kDebug(30521) << "FOO:" << column << row << endl;
 		    kDebug(30521) <<
-                           table->cellAt( column, row, false )->decodeFormula( expr, column, row ).latin1() << endl;
+                           table->cellAt( column, row, false )->decodeFormula( expr, column, row ).toLatin1() << endl;
 		    kDebug(30521) << expr << endl;
 
 		    table->setText(row, column,

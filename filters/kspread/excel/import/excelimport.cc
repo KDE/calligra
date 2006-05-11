@@ -116,7 +116,7 @@ KoFilter::ConversionStatus ExcelImport::convert( const QByteArray& from, const Q
 
   // open inputFile
   d->workbook = new Swinder::Workbook;
-  if( !d->workbook->load( d->inputFile.local8Bit() ) )
+  if( !d->workbook->load( d->inputFile.toLocal8Bit() ) )
   {
     delete d->workbook;
     d->workbook = 0;
@@ -546,7 +546,7 @@ static bool isPercentageFormat( QString valueFormat )
 
 static bool isDateFormat( QString valueFormat )
 {
-  QString vfu = valueFormat.upper();
+  QString vfu = valueFormat.toUpper();
 
   if( vfu == "M/D/YY" ) return true;
   if( vfu == "M/D/YYYY" ) return true;
@@ -1461,7 +1461,7 @@ KoXmlWriter* xmlWriter )
     xmlWriter->endElement();  // number:text
     xmlWriter->endElement();  // number:percentage-style
   }
-  else if( valueFormat.lower() == "m/d/yy")
+  else if( valueFormat.toLower() == "m/d/yy")
   {
     xmlWriter->startElement( "number:date-style" );
     xmlWriter->addAttribute( "style:name", refName );
@@ -1490,7 +1490,7 @@ KoXmlWriter* xmlWriter )
 
     xmlWriter->endElement();  // number:date-style
   }
-  else if( valueFormat.lower() == "m/d/yyyy")
+  else if( valueFormat.toLower() == "m/d/yyyy")
   {
     xmlWriter->startElement( "number:date-style" );
     xmlWriter->addAttribute( "style:name", refName );
@@ -1519,7 +1519,7 @@ KoXmlWriter* xmlWriter )
 
     xmlWriter->endElement();  // number:date-style
   }
-  else if( (valueFormat.lower() == "d-mmm-yy") || (valueFormat.lower() == "d\\-mmm\\-yy") )
+  else if( (valueFormat.toLower() == "d-mmm-yy") || (valueFormat.toLower() == "d\\-mmm\\-yy") )
   {
     xmlWriter->startElement( "number:date-style" );
     xmlWriter->addAttribute( "style:name", refName );
@@ -1548,7 +1548,7 @@ KoXmlWriter* xmlWriter )
 
     xmlWriter->endElement();  // number:date-style
   }
-  else if( (valueFormat.lower() == "d-mmm-yyyy") || (valueFormat.lower() == "d\\-mmm\\-yyyy") )
+  else if( (valueFormat.toLower() == "d-mmm-yyyy") || (valueFormat.toLower() == "d\\-mmm\\-yyyy") )
   {
     xmlWriter->startElement( "number:date-style" );
     xmlWriter->addAttribute( "style:name", refName );
@@ -1577,7 +1577,7 @@ KoXmlWriter* xmlWriter )
 
     xmlWriter->endElement();  // number:date-style
   }
-  else if( (valueFormat.lower() == "d-mmm") || (valueFormat.lower() == "d\\-mmm") )
+  else if( (valueFormat.toLower() == "d-mmm") || (valueFormat.toLower() == "d\\-mmm") )
   {
     xmlWriter->startElement( "number:date-style" );
     xmlWriter->addAttribute( "style:name", refName );
@@ -1598,7 +1598,7 @@ KoXmlWriter* xmlWriter )
 
     xmlWriter->endElement();  // number:date-style
   }
-  else if( (valueFormat.lower() == "d-mm") || (valueFormat.lower() == "d\\-mm") )
+  else if( (valueFormat.toLower() == "d-mm") || (valueFormat.toLower() == "d\\-mm") )
   {
     xmlWriter->startElement( "number:date-style" );
     xmlWriter->addAttribute( "style:name", refName );
@@ -1619,7 +1619,7 @@ KoXmlWriter* xmlWriter )
 
     xmlWriter->endElement();  // number:date-style
   }
-  else if( valueFormat.lower() == "mmm/d" )
+  else if( valueFormat.toLower() == "mmm/d" )
   {
     xmlWriter->startElement( "number:date-style" );
     xmlWriter->addAttribute( "style:name", refName );
@@ -1640,7 +1640,7 @@ KoXmlWriter* xmlWriter )
 
     xmlWriter->endElement();  // number:date-style
   }
-  else if( valueFormat.lower() == "mmm/dd" )
+  else if( valueFormat.toLower() == "mmm/dd" )
   {
     xmlWriter->startElement( "number:date-style" );
     xmlWriter->addAttribute( "style:name", refName );
@@ -1661,7 +1661,7 @@ KoXmlWriter* xmlWriter )
 
     xmlWriter->endElement();  // number:date-style
   }
-  else if( valueFormat.lower() == "mm/d" )
+  else if( valueFormat.toLower() == "mm/d" )
   {
     xmlWriter->startElement( "number:date-style" );
     xmlWriter->addAttribute( "style:name", refName );
@@ -1682,7 +1682,7 @@ KoXmlWriter* xmlWriter )
 
     xmlWriter->endElement();  // number:date-style
   }
-  else if( valueFormat.lower() == "mm/dd" )
+  else if( valueFormat.toLower() == "mm/dd" )
   {
     xmlWriter->startElement( "number:date-style" );
     xmlWriter->addAttribute( "style:name", refName );
@@ -1703,7 +1703,7 @@ KoXmlWriter* xmlWriter )
 
     xmlWriter->endElement();  // number:date-style
   }
-  else if( valueFormat.lower() == "mm/dd/yy" )
+  else if( valueFormat.toLower() == "mm/dd/yy" )
   {
     xmlWriter->startElement( "number:date-style" );
     xmlWriter->addAttribute( "style:name", refName );
@@ -1732,7 +1732,7 @@ KoXmlWriter* xmlWriter )
 
     xmlWriter->endElement();  // number:date-style
   }
-  else if( valueFormat.lower() == "mm/dd/yyyy" )
+  else if( valueFormat.toLower() == "mm/dd/yyyy" )
   {
     xmlWriter->startElement( "number:date-style" );
     xmlWriter->addAttribute( "style:name", refName );
@@ -1761,7 +1761,7 @@ KoXmlWriter* xmlWriter )
 
     xmlWriter->endElement();  // number:date-style
   }
-  else if( valueFormat.lower() == "yyyy/mm/dd" )
+  else if( valueFormat.toLower() == "yyyy/mm/dd" )
   {
     xmlWriter->startElement( "number:date-style" );
     xmlWriter->addAttribute( "style:name", refName );
@@ -1790,7 +1790,7 @@ KoXmlWriter* xmlWriter )
 
     xmlWriter->endElement();  // number:date-style
   }
-  else if( valueFormat.lower() == "yyyy/mm/d" )
+  else if( valueFormat.toLower() == "yyyy/mm/d" )
   {
     xmlWriter->startElement( "number:date-style" );
     xmlWriter->addAttribute( "style:name", refName );
@@ -1819,7 +1819,7 @@ KoXmlWriter* xmlWriter )
 
     xmlWriter->endElement();  // number:date-style
   }
-  else if( (valueFormat.lower() == "yyyy-mm-dd") || (valueFormat.lower() == "yyyy\\-mm\\-dd") )
+  else if( (valueFormat.toLower() == "yyyy-mm-dd") || (valueFormat.toLower() == "yyyy\\-mm\\-dd") )
   {
     xmlWriter->startElement( "number:date-style" );
     xmlWriter->addAttribute( "style:name", refName );
@@ -1848,7 +1848,7 @@ KoXmlWriter* xmlWriter )
 
     xmlWriter->endElement();  // number:date-style
   }
-  else if( (valueFormat.lower() == "yyyy-mm-d") || (valueFormat.lower() == "yyyy\\-mm\\-d") )
+  else if( (valueFormat.toLower() == "yyyy-mm-d") || (valueFormat.toLower() == "yyyy\\-mm\\-d") )
   {
     xmlWriter->startElement( "number:date-style" );
     xmlWriter->addAttribute( "style:name", refName );

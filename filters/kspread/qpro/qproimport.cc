@@ -105,11 +105,11 @@ KoFilter::ConversionStatus QpImport::convert( const QByteArray& from, const QByt
     if ( !document )
         return KoFilter::StupidError;
 
-    kDebug(30523) << "here we go... " << document->className() << endl;
+    kDebug(30523) << "here we go... " << document->metaObject()->className() << endl;
 
     if( !::qobject_cast<const KSpread::Doc *>( document ) )  // it's safer that way :)
     {
-        kWarning(30501) << "document isn't a KSpread::Doc but a " << document->className() << endl;
+        kWarning(30501) << "document isn't a KSpread::Doc but a " << document->metaObject()->className() << endl;
         return KoFilter::NotImplemented;
     }
     if(from!="application/x-quattropro" || to!="application/x-kspread")

@@ -522,13 +522,13 @@ QDomElement GNUMERICExport::GetLinkStyle(QDomDocument gnumeric_doc)
 
     path = linkUrl;
 
-    if (path.section(":",0,0).lower() == "http")
+    if (path.section(":",0,0).toLower() == "http")
         link_style.setAttribute("type","GnmHLinkURL");
-    else if (path.section(":",0,0).lower() == "mailto")
+    else if (path.section(":",0,0).toLower() == "mailto")
         link_style.setAttribute("type","GnmHLinkEMail");
-    else if (path.section(":",0,0).lower() == "file")
+    else if (path.section(":",0,0).toLower() == "file")
         link_style.setAttribute("type","GnmHLinkExternal");
-    else if (path.left(5).lower() == "sheet")
+    else if (path.left(5).toLower() == "sheet")
         link_style.setAttribute("type","GnmHLinkCurWB");
     else
         link_style.setAttribute("type","");
@@ -947,7 +947,6 @@ KoFilter::ConversionStatus GNUMERICExport::convert( const QByteArray& from, cons
 
     QDomDocument gnumeric_doc=QDomDocument();
 
-    Sheet* table;
     KoDocument* document = m_chain->inputDocument();
 
     if (!document)
@@ -955,7 +954,7 @@ KoFilter::ConversionStatus GNUMERICExport::convert( const QByteArray& from, cons
 
     if ( !qobject_cast<const KSpread::Doc *>( document ) )  // it's safer that way :)
     {
-      kWarning(30521) << "document isn't a KSpread::Doc but a " << document->className() << endl;
+      kWarning(30521) << "document isn't a KSpread::Doc but a " << document->metaObject()->className() << endl;
         return KoFilter::NotImplemented;
     }
     if (to != "application/x-gnumeric" || from != "application/x-kspread")

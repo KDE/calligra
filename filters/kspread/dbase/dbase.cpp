@@ -54,7 +54,7 @@ DBase::~DBase()
 bool DBase::load( const QString& filename )
 {
 
-  m_file.setName( filename );
+  m_file.setFileName( filename );
   if( !m_file.open(QIODevice::ReadOnly) )
     return false;
 
@@ -165,7 +165,7 @@ bool DBase::load( const QString& filename )
   }
 
   // set the index to the first record
-  m_stream.device()->at( m_headerLength );
+  m_stream.device()->seek( m_headerLength );
 
   return true;
 }

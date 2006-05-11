@@ -68,11 +68,11 @@ KoFilter::ConversionStatus CSVFilter::convert( const QByteArray& from, const QBy
     if ( !document )
         return KoFilter::StupidError;
 
-    kDebug(30501) << "here we go... " << document->className() << endl;
+    kDebug(30501) << "here we go... " << document->metaObject()->className() << endl;
 
     if ( !qobject_cast<const KSpread::Doc *>( document ) )
     {
-      kWarning(30501) << "document isn't a KSpread::Doc but a " << document->className() << endl;
+      kWarning(30501) << "document isn't a KSpread::Doc but a " << document->metaObject()->className() << endl;
         return KoFilter::NotImplemented;
     }
     if(from!="text/x-csv" && from!="text/plain" || to!="application/x-kspread")

@@ -124,7 +124,7 @@ KoFilter::ConversionStatus DBaseImport::convert( const QByteArray& from, const Q
     root += "<cell row=\"1\" column=\"" + QString::number(i+1) + "\" >\n";
     root += "<format><pen width=\"0\" style=\"1\" color=\"#000000\" />";
     root += "<font family=\"" + font.family() + "\"" +
-      " size=\"" + QString::number(font.pointSizeFloat()) + "\"" +
+      " size=\"" + QString::number(font.pointSizeF()) + "\"" +
       " weight=\"50\" />";
     root += "</format>\n";
     root += "<text>" + dbase.fields.at(i)->name + "</text></cell>\n";
@@ -138,13 +138,13 @@ KoFilter::ConversionStatus DBaseImport::convert( const QByteArray& from, const Q
     if( rec.count() )
     {
       row++;
-      for( unsigned i=0; i<rec.count(); i++ )
+      for( int i=0; i<rec.count(); i++ )
       {
         root += "<cell row=\"" + QString::number(row) + "\"" +
           "column=\"" + QString::number(i+1) + "\" >\n";
         root += "<format><pen width=\"0\" style=\"1\" color=\"#000000\" />";
         root += "<font family=\"" + font.family() + "\"" +
-          " size=\"" + QString::number(font.pointSizeFloat()) + "\"" +
+          " size=\"" + QString::number(font.pointSizeF()) + "\"" +
           " weight=\"50\" />";
         root += "</format>\n";
         root += "<text>" + rec[i] + "</text></cell>\n";
@@ -164,7 +164,7 @@ KoFilter::ConversionStatus DBaseImport::convert( const QByteArray& from, const Q
   // store output document
   if( out )
     {
-      Q3CString cstring = root.utf8();
+      Q3CString cstring = root.toUtf8();
       cstring.prepend( "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" );
       out->write( (const char*) cstring, cstring.length() );
     }
@@ -173,7 +173,7 @@ KoFilter::ConversionStatus DBaseImport::convert( const QByteArray& from, const Q
   out = m_chain->storageFile( "documentinfo.xml", KoStore::Write );
   if ( out )
     {
-       Q3CString cstring = documentInfo.utf8();
+       Q3CString cstring = documentInfo.toUtf8();
        cstring.prepend( "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" );
 
        out->write( (const char*) cstring, cstring.length() );
