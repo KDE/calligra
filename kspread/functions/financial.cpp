@@ -23,7 +23,7 @@
 #include <math.h>
 
 #include "functions.h"
-#include "kspread_functions_helper.h"
+#include "functions/helper.h"
 #include "valuecalc.h"
 #include "valueconverter.h"
 

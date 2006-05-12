@@ -84,7 +84,7 @@ KInstance* Factory::global()
 
       s_global->dirs()->addResourceType( "toolbar",
 				         KStandardDirs::kde_default("data") + "koffice/toolbar/");
-      s_global->dirs()->addResourceType( "extensions", KStandardDirs::kde_default("data") + "kspread/extensions/");
+      s_global->dirs()->addResourceType( "functions", KStandardDirs::kde_default("data") + "kspread/functions/");
       s_global->dirs()->addResourceType( "sheet-styles", KStandardDirs::kde_default("data") + "kspread/sheetstyles/");
       // Tell the iconloader about share/apps/koffice/icons
       s_global->iconLoader()->addAppDir("koffice");

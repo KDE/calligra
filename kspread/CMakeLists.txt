@@ -7,7 +7,7 @@ add_subdirectory( plugins )
 add_subdirectory( pics )
 add_subdirectory( dtd )
 add_subdirectory( toolbar )
-add_subdirectory( extensions )
+add_subdirectory( functions )
 add_subdirectory( sheetstyles )
 add_subdirectory( templates )
 if(KOFFICE_ENABLE_SCRIPTING)
@@ -89,19 +89,19 @@ set(kspreadcommon_LIB_SRCS ${libdialogs_SRCS} ${libtests_SRCS}
    kspread_events.cc
    kspread_factory.cc
    kspread_format.cc
-   kspread_functions_conversion.cc
-   kspread_functions_database.cc
-   kspread_functions_datetime.cc
-   kspread_functions_engineering.cc
-   kspread_functions_financial.cc
-   kspread_functions_helper.cc
-   kspread_functions_information.cc
-   kspread_functions_logic.cc
-   kspread_functions_math.cc
-   kspread_functions_reference.cc
-   kspread_functions_statistical.cc
-   kspread_functions_text.cc
-   kspread_functions_trig.cc
+   functions/conversion.cpp
+   functions/database.cpp
+   functions/datetime.cpp
+   functions/engineering.cpp
+   functions/financial.cpp
+   functions/helper.cpp
+   functions/information.cpp
+   functions/logic.cpp
+   functions/math.cpp
+   functions/reference.cpp
+   functions/statistical.cpp
+   functions/text.cpp
+   functions/trig.cpp
    kspread_handler.cc
    kspread_locale.cc
    kspread_map.cc
@@ -222,11 +222,11 @@ kde4_footer()
 #	formula.cc 	functions.cc kspread_autofill.cc kspread_canvas.cc \
 #	kspread_cell.cc kspread_cluster.cc kspread_condition.cc kspread_doc.cc \
 #	kspread_editors.cc kspread_events.cc kspread_factory.cc kspread_format.cc \
-#	kspread_functions_conversion.cc kspread_functions_database.cc kspread_functions_datetime.cc \
-#	kspread_functions_engineering.cc kspread_functions_financial.cc kspread_functions_helper.cc \
-#	kspread_functions_information.cc kspread_functions_logic.cc kspread_functions_math.cc \
-#	kspread_functions_reference.cc kspread_functions_statistical.cc kspread_functions_text.cc \
-#	kspread_functions_trig.cc kspread_handler.cc kspread_locale.cc kspread_map.cc \
+#	functions/conversion.cc functions/database.cc functions/datetime.cc \
+#	functions/engineering.cc functions/financial.cc functions/helper.cc \
+#	functions/information.cc functions/logic.cc functions/math.cc \
+#	functions/reference.cc functions/statistical.cc functions/text.cc \
+#	functions/trig.cc kspread_handler.cc kspread_locale.cc kspread_map.cc \
 #	kspread_numformat.cc kspread_object.cc kspread_style.cc kspread_style_manager.cc \
 #	kspread_undo.cc kspread_value.cc kspread_view.cc kspread_sheet.cc kspread_sheetprint.cc \
 #	kspread_util.cc kspread_toolbox.cc 	valuecalc.cc 	valueconverter.cc 	valueformatter.cc \
@@ -265,7 +265,7 @@ kde4_footer()
 #rcdir = $(kde_datadir)/kspread
 #rc_DATA = kspread.rc kspread_readonly.rc
 #
-#SUBDIRS = dialogs tests . plugins pics dtd toolbar extensions sheetstyles templates
+#SUBDIRS = dialogs tests . plugins pics dtd toolbar functions sheetstyles templates
 #
 #parser:
 #	flex lex.l
@@ -274,7 +274,7 @@ kde4_footer()
 #	bison -p dep -b dep -d yacc.dep.y
 #
 #messages: rc.cpp
-#	$(EXTRACTRC) --tag-group=koffice extensions/*.xml > xml_doc.cc
+#	$(EXTRACTRC) --tag-group=koffice functions/*.xml > xml_doc.cc
 #	$(EXTRACTRC) dialogs/*.ui >> rc.cpp
 #	$(XGETTEXT) rc.cpp *.cc kspread_aboutdata.h dialogs/*.cc tests/*.cc -o $(podir)/kspread.pot
 #	-rm xml_doc.cc

@@ -7849,12 +7849,14 @@ void Sheet::insertCell( Cell *_cell )
 {
   d->cells.insert( _cell, _cell->column(), _cell->row() );
 
+  // TODO Stefan: use a SheetDamage
+  //              124806: creating series takes extremely long time
   // Adjust the scrollbar range, if the max. dimension has changed.
-  if ( d->scrollBarUpdates )
+/*  if ( d->scrollBarUpdates )
   {
     checkRangeHBorder( _cell->column() );
     checkRangeVBorder( _cell->row() );
-  }
+  }*/
 }
 
 void Sheet::insertColumnFormat( ColumnFormat *l )

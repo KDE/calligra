@@ -19,7 +19,7 @@
 
 #include <qdatetime.h>
 
-#include "kspread_functions_helper.h"
+#include "helper.h"
 
 /*  DISABLED - we use KCalendarSystem instead
 void addMonths( QDate & date, int months )

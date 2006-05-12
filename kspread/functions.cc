@@ -209,7 +209,7 @@ FunctionRepository* FunctionRepository::self()
 
     // find all XML description files
     QStringList files = Factory::global()->dirs()->findAllResources
-        ("extensions", "*.xml", true);
+        ("functions", "*.xml", true);
 
     // load desc/help from XML file
     for( QStringList::Iterator it = files.begin(); it != files.end(); ++it )
