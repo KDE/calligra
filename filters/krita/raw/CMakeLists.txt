@@ -15,7 +15,7 @@ kde4_add_plugin(krita_raw_import WITH_PREFIX ${krita_raw_import_PART_SRCS})
 
 kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} krita_raw_import )
 
-target_link_libraries(krita_raw_import  ${KDE4_KDECORE_LIBS} kritacommon )
+target_link_libraries(krita_raw_import kritaui)
 
 install_targets(${PLUGIN_INSTALL_DIR} krita_raw_import )
 
@@ -40,15 +40,15 @@ kde4_footer()
 #	-I$(top_srcdir)/krita/ui \
 #	-I$(top_srcdir)/filters/krita/magick \
 #	$(KOFFICE_INCLUDES) \
-#	$(all_includes) 
+#	$(all_includes)
 #
-#kde_module_LTLIBRARIES = libkrita_raw_import.la 
+#kde_module_LTLIBRARIES = libkrita_raw_import.la
 #
 #libkrita_raw_import_la_LDFLAGS = $(KDE_PLUGIN) $(KDE_RPATH) $(all_libraries) -module -avoid-version -no-undefined
 #libkrita_raw_import_la_LIBADD = \
 #	$(KOFFICE_LIBS) \
 #	$(raw_LIBS) \
-#	$(top_builddir)/krita/libkritacommon.la 
+#	$(top_builddir)/krita/libkritacommon.la
 #
 #
 #service_DATA = krita_raw_import.desktop

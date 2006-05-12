@@ -13,7 +13,7 @@ kde4_add_plugin(kritamagickimport WITH_PREFIX ${kritamagickimport_PART_SRCS})
 
 kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritamagickimport )
 
-target_link_libraries(kritamagickimport kritacommon ${KDE4_KDECORE_LIBS} ${IMAGEMAGICK_LIBRARIES})
+target_link_libraries(kritamagickimport kritaui ${IMAGEMAGICK_LIBRARIES})
 
 install_targets(${PLUGIN_INSTALL_DIR} kritamagickimport )
 
@@ -28,7 +28,7 @@ kde4_add_plugin(kritamagickexport WITH_PREFIX ${kritamagickexport_PART_SRCS})
 
 kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritamagickexport )
 
-target_link_libraries(kritamagickexport kritacommon ${KDE4_KDECORE_LIBS} ${IMAGEMAGICK_LIBRARIES})
+target_link_libraries(kritamagickexport kritaui ${IMAGEMAGICK_LIBRARIES})
 
 install_targets(${PLUGIN_INSTALL_DIR} kritamagickexport )
 
@@ -69,7 +69,7 @@ kde4_footer()
 #	-I$(top_srcdir)/krita/ui \
 #        $(KOFFICE_INCLUDES) -I$(interfacedir) \
 #        $(KOPAINTER_INCLUDES) $(LIBMAGICK_CPPFLAGS) \
-#	$(all_includes) 
+#	$(all_includes)
 #
 #service_DATA = krita_magick_import.desktop krita_magick_export.desktop
 #servicedir = $(kde_servicesdir)

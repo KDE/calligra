@@ -15,7 +15,7 @@ kde4_add_plugin(kritaxcfimport WITH_PREFIX ${kritaxcfimport_PART_SRCS})
 
 kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritaxcfimport )
 
-target_link_libraries(kritaxcfimport  ${KDE4_KDECORE_LIBS} kritacommon )
+target_link_libraries(kritaxcfimport kritaui)
 
 install_targets(${PLUGIN_INSTALL_DIR} kritaxcfimport )
 
@@ -30,7 +30,7 @@ kde4_add_plugin(kritaxcfexport WITH_PREFIX ${kritaxcfexport_PART_SRCS})
 
 kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritaxcfexport )
 
-target_link_libraries(kritaxcfexport  ${KDE4_KDECORE_LIBS} kritacommon )
+target_link_libraries(kritaxcfexport kritaui)
 
 install_targets(${PLUGIN_INSTALL_DIR} kritaxcfexport )
 
@@ -70,12 +70,12 @@ kde4_footer()
 #	-I$(top_srcdir)/krita/ui \
 #        $(KOFFICE_INCLUDES) -I$(interfacedir) \
 #        $(KOPAINTER_INCLUDES) $(LIBMAGICK_CPPFLAGS) \
-#	$(all_includes) 
+#	$(all_includes)
 #
 #service_DATA = krita_xcf_import.desktop krita_xcf_export.desktop
 #servicedir = $(kde_servicesdir)
 #
-#libkritaxcfimport_la_SOURCES = xcfimport.cpp 
+#libkritaxcfimport_la_SOURCES = xcfimport.cpp
 #libkritaxcfexport_la_SOURCES = xcfexport.cpp
 #
 #METASOURCES = AUTO

@@ -23,7 +23,7 @@ kde4_add_plugin(krita_openexr_import WITH_PREFIX ${krita_openexr_import_PART_SRC
 
 kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} krita_openexr_import )
 
-target_link_libraries(krita_openexr_import  ${KDE4_KDECORE_LIBS} kritacommon krita_rgb_f32 krita_rgb_f16half ${OPENEXR_LIBRARIES} )
+target_link_libraries(krita_openexr_import kritaui krita_rgb_f32 krita_rgb_f16half ${OPENEXR_LIBRARIES} )
 
 install_targets(${PLUGIN_INSTALL_DIR} krita_openexr_import )
 
@@ -38,7 +38,7 @@ kde4_add_plugin(krita_openexr_export WITH_PREFIX ${krita_openexr_export_PART_SRC
 
 kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} krita_openexr_export )
 
-target_link_libraries(krita_openexr_export  ${KDE4_KDECORE_LIBS} kritacommon krita_rgb_f32 krita_rgb_f16half ${OPENEXR_LIBRARIES})
+target_link_libraries(krita_openexr_export kritaui krita_rgb_f32 krita_rgb_f16half ${OPENEXR_LIBRARIES})
 
 install_targets(${PLUGIN_INSTALL_DIR} krita_openexr_export )
 
@@ -67,7 +67,7 @@ kde4_footer()
 #        $(KOFFICE_INCLUDES) \
 #	-I$(interfacedir) \
 #        $(OPENEXR_CFLAGS) \
-#	$(all_includes) 
+#	$(all_includes)
 #
 #kde_module_LTLIBRARIES = libkrita_openexr_import.la libkrita_openexr_export.la
 #

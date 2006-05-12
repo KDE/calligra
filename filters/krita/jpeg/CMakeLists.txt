@@ -12,7 +12,7 @@ set(libkritaconverter_LIB_SRCS
     ${libkisexif_LIB_SRCS}
     )
 
-set(kritajpegimport_PART_SRCS 
+set(kritajpegimport_PART_SRCS
     kis_jpeg_import.cc
     ${libkritaconverter_LIB_SRCS}
     )
@@ -23,13 +23,13 @@ kde4_add_plugin(kritajpegimport WITH_PREFIX ${kritajpegimport_PART_SRCS})
 
 kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritajpegimport )
 
-target_link_libraries(kritajpegimport kritacommon ${KDE4_KDECORE_LIBS} jpeg exif)
+target_link_libraries(kritajpegimport kritaui jpeg exif)
 
 install_targets(${PLUGIN_INSTALL_DIR} kritajpegimport )
 
 ########### next target ###############
 
-set(kritajpegexport_PART_SRCS 
+set(kritajpegexport_PART_SRCS
     kis_jpeg_export.cc
     ${libkritaconverter_LIB_SRCS}
     )
@@ -42,7 +42,7 @@ kde4_add_plugin(kritajpegexport WITH_PREFIX ${kritajpegexport_PART_SRCS})
 
 kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritajpegexport )
 
-target_link_libraries(kritajpegexport kritacommon ${KDE4_KDECORE_LIBS} jpeg exif)
+target_link_libraries(kritajpegexport kritaui jpeg exif)
 
 install_targets(${PLUGIN_INSTALL_DIR} kritajpegexport )
 
@@ -86,7 +86,7 @@ kde4_footer()
 #	-I$(top_srcdir)/filters/krita/libkisexif \
 #        $(KOFFICE_INCLUDES) -I$(interfacedir) \
 #        $(KOPAINTER_INCLUDES) \
-#	$(all_includes) 
+#	$(all_includes)
 #
 #service_DATA = krita_jpeg_import.desktop krita_jpeg_export.desktop
 #servicedir = $(kde_servicesdir)

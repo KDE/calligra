@@ -7,7 +7,7 @@ set(libkritatiffconverter_LIB_SRCS
     kis_tiff_stream.cc
     kis_tiff_writer_visitor.cpp
     kis_tiff_reader.cc
-    kis_ycbcr_u8_colorspace.cpp 
+    kis_ycbcr_u8_colorspace.cpp
     kis_tiff_ycbcr_reader.cc
 	kis_ycbcr_u16_colorspace.cpp
     )
@@ -16,7 +16,7 @@ set(libkritatiffconverter_LIB_SRCS
 
 set(kritatiffimport_PART_SRCS
     ${libkritatiffconverter_LIB_SRCS}
-    kis_tiff_import.cc 
+    kis_tiff_import.cc
     )
 
 kde4_automoc(${kritatiffimport_PART_SRCS})
@@ -25,16 +25,16 @@ kde4_add_plugin(kritatiffimport WITH_PREFIX ${kritatiffimport_PART_SRCS})
 
 kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritatiffimport )
 
-target_link_libraries(kritatiffimport kritacommon ${KDE4_KDECORE_LIBS} tiff)
+target_link_libraries(kritatiffimport kritaui tiff)
 
 install_targets(${PLUGIN_INSTALL_DIR} kritatiffimport )
 
 
 ########### next target ###############
 
-set(kritatiffexport_PART_SRCS 
+set(kritatiffexport_PART_SRCS
     ${libkritatiffconverter_LIB_SRCS}
-    kis_tiff_export.cc 
+    kis_tiff_export.cc
     kis_dlg_options_tiff.cpp
     )
 
@@ -46,7 +46,7 @@ kde4_add_plugin(kritatiffexport WITH_PREFIX ${kritatiffexport_PART_SRCS})
 
 kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritatiffexport )
 
-target_link_libraries(kritatiffexport kritacommon ${KDE4_KDECORE_LIBS} tiff)
+target_link_libraries(kritatiffexport kritaui tiff)
 
 install_targets(${PLUGIN_INSTALL_DIR} kritatiffexport )
 
@@ -88,7 +88,7 @@ kde4_footer()
 #	-I$(top_srcdir)/krita/ui \
 #        $(KOFFICE_INCLUDES) -I$(interfacedir) \
 #        $(KOPAINTER_INCLUDES) \
-#	$(all_includes) 
+#	$(all_includes)
 #
 #
 #servicedir = $(kde_servicesdir)

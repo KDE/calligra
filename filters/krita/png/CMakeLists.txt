@@ -1,7 +1,7 @@
 kde4_header()
 
 set(kritapngimport_PART_SRCS
-    kis_png_import.cc 
+    kis_png_import.cc
     kis_png_converter.cc
     )
 
@@ -15,12 +15,12 @@ include_directories(${PNG_INCLUDE_DIR})
 
 add_definitions(${PNG_DEFINITIONS} ${KDE4_ENABLE_EXCEPTIONS})
 
-target_link_libraries(kritapngimport  ${KDE4_KDECORE_LIBS} kritacommon ${PNG_LIBRARIES})
+target_link_libraries(kritapngimport kritaui ${PNG_LIBRARIES})
 
 install_targets(${PLUGIN_INSTALL_DIR} kritapngimport )
 
-set(kritapngexport_PART_SRCS 
-    kis_png_export.cc 
+set(kritapngexport_PART_SRCS
+    kis_png_export.cc
     kis_png_converter.cc
     )
 
@@ -32,7 +32,7 @@ kde4_add_plugin(kritapngexport WITH_PREFIX ${kritapngexport_PART_SRCS})
 
 kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritapngexport )
 
-target_link_libraries(kritapngexport  ${KDE4_KDECORE_LIBS} kritacommon ${PNG_LIBRARIES})
+target_link_libraries(kritapngexport kritaui ${PNG_LIBRARIES})
 
 install_targets(${PLUGIN_INSTALL_DIR} kritapngexport )
 
@@ -68,7 +68,7 @@ kde4_footer()
 #	-I$(top_srcdir)/krita/ui \
 #        $(KOFFICE_INCLUDES) -I$(interfacedir) \
 #        $(KOPAINTER_INCLUDES) \
-#	$(all_includes) 
+#	$(all_includes)
 #
 #service_DATA = krita_png_import.desktop krita_png_export.desktop
 #servicedir = $(kde_servicesdir)
