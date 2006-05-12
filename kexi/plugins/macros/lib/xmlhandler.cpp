@@ -76,7 +76,15 @@ bool XMLHandler::parseXML(const QDomElement& element)
 		kdDebug() << QString("XMLHandler::parseXML() Invalid tagname \"%1\"").arg(element.tagName()) << endl;
 		return false;
 	}
-
+	
+	// To be flexible with the xml-scheme, we need a version-number for xml.
+	// If there is more than one version, parsing should update old macro-data, so that it
+	// could write out in the newer version in toXML().
+	if( element.attribute("xmlversion") != "1"){
+		kdDebug() << QString("XMLHandler::parseXML() Invalid xml-version \"%1\"").arg(element.attribute("xmlversion")) << endl;
+		return false;
+	}
+	
 	// Remove old items.
 	d->macro->clearItems();
 
@@ -159,6 +167,9 @@ QDomElement XMLHandler::toXML()
 
 	// Create the Macro-QDomElement. This element will be returned.
 	QDomElement macroelem = document.createElement("macro");
+
+	// Set the Macro-XML-Version, it should be the newest Version.
+	macroelem.setAttribute("xmlversion","1");
 
 	// Do we need to store the macro's name? Normaly the application
 	// could/should take care of it cause we don't know how the app
