@@ -472,7 +472,7 @@ void KPrMSPresentationSetup::finish()
         if ( KMessageBox::warningYesNo( 0,
                                    i18n( "You are about to overwrite an existing index "
                                          "file : %1.\n "
-                                         "Do you want to proceed?" ).arg( sppFile ),
+                                         "Do you want to proceed?", sppFile ),
                                    i18n( "Overwrite Presentation" ) )
              == KMessageBox::No) {
             path->setFocus();

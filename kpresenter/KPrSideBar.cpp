@@ -672,7 +672,7 @@ void OutlineSlideItem::updateTitle()
 {
     QString title = m_page->pageTitle();
     if ( ! m_page->isSlideSelected() )
-        title = i18n( "(%1)" ).arg( title );
+        title = i18n( "(%1)", title );
     setText( 0, title );
 }
 

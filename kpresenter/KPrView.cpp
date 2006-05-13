@@ -760,7 +760,7 @@ void KPrView::savePicture( const QString& oldName, KoPicture& picture)
                     else
                     {
                         KMessageBox::error(this,
-                                   i18n("Error during saving: could not open '%1' for writing.").arg ( url.path() ),
+                                   i18n("Error during saving: could not open '%1' for writing.", url.path() ),
                                    i18n("Save Picture"));
                     }
                 }

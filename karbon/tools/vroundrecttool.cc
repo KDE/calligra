@@ -40,7 +40,7 @@ VRoundRectTool::VRoundRectOptionsWidget::VRoundRectOptionsWidget( KarbonPart *pa
 	KoUnit::Unit unit = KoUnit::U_CM;
 	m_width = new KoUnitDoubleSpinBox( group, 0.0, KoUnit::fromUserValue( 1000.0, unit ), KoUnit::fromUserValue( 0.5, unit ), KoUnit::fromUserValue( 10.0, unit ), unit );
 
-	new QLabel( i18n( "Height (%1):" ).arg(KoUnit::unitName( m_part->unit() )), group );
+	new QLabel( i18n( "Height (%1):", KoUnit::unitName( m_part->unit() )), group );
 	m_height = new KoUnitDoubleSpinBox( group, 0.0, KoUnit::fromUserValue( 1000.0, unit ), KoUnit::fromUserValue( 0.5, unit ), KoUnit::fromUserValue( 10.0, unit ), unit );
 
 	new QLabel( i18n( "Edge radius X:" ), group );

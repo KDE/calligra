@@ -476,7 +476,7 @@ void KPrWebPresentation::createSlidesHTML( KProgress *progressBar )
             streamOut << "<a href=\"" << next << "\">";
 
 	    streamOut << "<img src=\"../pics/slide_" << pgNum << ".png\" border=\"0\" alt=\""
-                      << i18n( "Slide %1" ).arg( pgNum ) << "\"" << ( isXML() ?" /":"") << ">";
+                      << i18n( "Slide %1", pgNum ) << "\"" << ( isXML() ?" /":"") << ">";
 
 	    if ( i < slideInfos.count() - 1 )
                 streamOut << "</a>";
@@ -557,8 +557,8 @@ void KPrWebPresentation::createMainPage( KProgress *progressBar )
     // footer: author name, e-mail
     QString htmlAuthor = email.isEmpty() ? escapeHtmlText( codec, author ) :
                          QString("<a href=\"mailto:%1\">%2</a>").arg( escapeHtmlText( codec, email )).arg( escapeHtmlText( codec, author ));
-    streamOut << EscapeEncodingOnly ( codec, i18n( "Created on %1 by <i>%2</i> with <a href=\"http://www.koffice.org/kpresenter\">KPresenter</a>" )
-                                      .arg( KGlobal::locale()->formatDate ( QDate::currentDate() ) ).arg( htmlAuthor ) );
+    streamOut << EscapeEncodingOnly ( codec, i18n( "Created on %1 by <i>%2</i> with <a href=\"http://www.koffice.org/kpresenter\">KPresenter</a>"
+                                      , KGlobal::locale()->formatDate ( QDate::currentDate() ), htmlAuthor ) );
 
     streamOut << "</body>\n</html>\n";
     file.close();

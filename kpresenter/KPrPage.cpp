@@ -1888,7 +1888,7 @@ QString KPrPage::pageTitle( const QString &_title ) const
     {
         // MASTERPAGE
         if ( m_masterPage )
-            title = i18n( "Slide %1" ).arg( m_doc->pageList().findRef( this ) + 1 );
+            title = i18n( "Slide %1", m_doc->pageList().findRef( this ) + 1 );
         else
             title = i18n( "Slide Master" );
     }

@@ -174,7 +174,7 @@ QString KPrNoteBar::getNotesTextForPrinting(QValueList<int> _list) const
         if ( !firstText )
             allText += QString("\n\n");
 
-        allText += i18n( "Slide Note %1:\n" ).arg( pageCount );
+        allText += i18n( "Slide Note %1:\n", pageCount );
         if(noteIsEmpty && !doc->pageList().at(i)->noteText().isEmpty())
             noteIsEmpty = false;
         allText += doc->pageList().at(i)->noteText();

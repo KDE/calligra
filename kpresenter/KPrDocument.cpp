@@ -1602,7 +1602,7 @@ bool KPrDocument::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyles,
         if ( localName.isEmpty() )
             setErrorMessage( i18n( "Invalid OASIS OpenDocument file. No tag found inside office:body." ) );
         else
-            setErrorMessage( i18n( "This document is not a presentation, but a %1. Please try opening it with the appropriate application." ).arg( KoDocument::tagNameToDocumentType( localName ) ) );
+            setErrorMessage( i18n( "This document is not a presentation, but a %1. Please try opening it with the appropriate application.", KoDocument::tagNameToDocumentType( localName ) ) );
         return false;
     }
 
@@ -2234,7 +2234,7 @@ bool KPrDocument::loadXML( QIODevice * dev, const QDomDocument& doc )
                             << "  Line: " << errorLine << " Column: " << errorColumn << endl
                             << "  Message: " << errorMsg << endl;
             setErrorMessage( i18n( "parsing error in the main document (converted from an old KPresenter format) at line %1, column %2\nError message: %3" )
-                             .arg( errorLine ).arg( errorColumn ).arg( i18n ( errorMsg.toUtf8() ) ) );
+                             ,errorLine, errorColumn, i18n ( errorMsg.toUtf8() ) );
             return false;
         }
         b = loadXML( newdoc );

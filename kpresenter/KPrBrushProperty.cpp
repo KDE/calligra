@@ -57,14 +57,14 @@ KPrBrushProperty::KPrBrushProperty( QWidget *parent, const char *name, const KPr
 
     m_brushUI = new BrushPropertyUI( m_stack );
 
-    m_brushUI->styleCombo->insertItem( i18n( "%1% Fill Pattern" ).arg( 100 ) );
-    m_brushUI->styleCombo->insertItem( i18n( "%1% Fill Pattern" ).arg( 94 ) );
-    m_brushUI->styleCombo->insertItem( i18n( "%1% Fill Pattern" ).arg( 88 ) );
-    m_brushUI->styleCombo->insertItem( i18n( "%1% Fill Pattern" ).arg( 63 ) );
-    m_brushUI->styleCombo->insertItem( i18n( "%1% Fill Pattern" ).arg( 50 ) );
-    m_brushUI->styleCombo->insertItem( i18n( "%1% Fill Pattern" ).arg( 37 ) );
-    m_brushUI->styleCombo->insertItem( i18n( "%1% Fill Pattern" ).arg( 12 ) );
-    m_brushUI->styleCombo->insertItem( i18n( "%1% Fill Pattern" ).arg( 6 ) );
+    m_brushUI->styleCombo->insertItem( i18n( "%1% Fill Pattern", 100 ) );
+    m_brushUI->styleCombo->insertItem( i18n( "%1% Fill Pattern", 94 ) );
+    m_brushUI->styleCombo->insertItem( i18n( "%1% Fill Pattern", 88 ) );
+    m_brushUI->styleCombo->insertItem( i18n( "%1% Fill Pattern", 63 ) );
+    m_brushUI->styleCombo->insertItem( i18n( "%1% Fill Pattern", 50 ) );
+    m_brushUI->styleCombo->insertItem( i18n( "%1% Fill Pattern", 37 ) );
+    m_brushUI->styleCombo->insertItem( i18n( "%1% Fill Pattern", 12 ) );
+    m_brushUI->styleCombo->insertItem( i18n( "%1% Fill Pattern", 6 ) );
     m_brushUI->styleCombo->insertItem( i18n( "Horizontal Lines" ) );
     m_brushUI->styleCombo->insertItem( i18n( "Vertical Lines" ) );
     m_brushUI->styleCombo->insertItem( i18n( "Crossing Lines" ) );
