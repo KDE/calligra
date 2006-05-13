@@ -27,7 +27,7 @@
 #include <QStringList>
 #include <QDir>
 //Added by qt3to4:
-#include <Q3CString>
+#include <QByteArray>
 
 #include <kapplication.h>
 #include <klocale.h>
@@ -47,7 +47,7 @@
  *  The dialog will by default be modeless, unless you set 'modal' to
  *  TRUE to construct a modal dialog.
  */
-XSLTImportDia::XSLTImportDia(KoStore* out, const Q3CString &format, QWidget* parent,  const char* name_, bool modal, Qt::WFlags fl )
+XSLTImportDia::XSLTImportDia(KoStore* out, const QByteArray &format, QWidget* parent,  const char* name_, bool modal, Qt::WFlags fl )
     : XSLTDialog( parent, name_, modal, fl )
 {
 	int i = 0;

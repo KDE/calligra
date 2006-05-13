@@ -23,7 +23,7 @@
 #include <xsltdialog.h>
 #include <QStringList>
 //Added by qt3to4:
-#include <Q3CString>
+#include <QByteArray>
 #include <kurl.h>
 
 class KoStoreDevice;
@@ -37,7 +37,7 @@ class XSLTExportDia : public XSLTDialog
     KoStoreDevice* _in;
     /** xslt file current */
     KUrl _currentFile;
-    Q3CString _format;
+    QByteArray _format;
     KConfig* _config;
     /** List of the most recent xslt file used. */
     QStringList _recentList;
@@ -48,7 +48,7 @@ class XSLTExportDia : public XSLTDialog
     QStringList _namesList;
 
 public:
-    XSLTExportDia( KoStoreDevice*, const Q3CString &format, QWidget* parent = 0, const char* name = 0, bool modal = FALSE, Qt::WFlags fl = 0 );
+    XSLTExportDia( KoStoreDevice*, const QByteArray &format, QWidget* parent = 0, const char* name = 0, bool modal = FALSE, Qt::WFlags fl = 0 );
     ~XSLTExportDia();
 
     void setOutputFile(QString file) { _fileOut = file; }

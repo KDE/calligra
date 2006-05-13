@@ -25,7 +25,7 @@
 
 #include <xsltexportdia.h>
 //Added by qt3to4:
-#include <Q3CString>
+#include <QByteArray>
 
 typedef KGenericFactory<XSLTExport> XSLTExportFactory;
 K_EXPORT_COMPONENT_FACTORY( libxsltexport, XSLTExportFactory( "kofficefilters" ) )

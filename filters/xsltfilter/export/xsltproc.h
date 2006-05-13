@@ -22,7 +22,7 @@
 
 #include <QString>
 //Added by qt3to4:
-#include <Q3CString>
+#include <QByteArray>
 
 #include <libexslt/exslt.h>
 #include <libxslt/xsltconfig.h>
@@ -36,9 +36,9 @@
 
 class XSLTProc
 {
-	Q3CString    _fileIn;
-	Q3CString    _fileOut;
-	Q3CString    _stylesheet;
+	QByteArray    _fileIn;
+	QByteArray    _fileOut;
+	QByteArray    _stylesheet;
 
 	const char *params[NB_PARAMETER_MAX + 1];
 	int nbparams;
