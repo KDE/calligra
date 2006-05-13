@@ -41,7 +41,7 @@ AsciiImportDialog :: AsciiImportDialog(QWidget* parent)
     kapp->restoreOverrideCursor();
 
     QStringList encodings;
-    encodings << i18nc( "Descriptive encoding name", "Recommended ( %1 )" ).arg( "UTF-8" );
+    encodings << i18nc( "Descriptive encoding name", "Recommended ( %1 )", "UTF-8" );
     encodings << i18nc( "Descriptive encoding name", "Locale ( %1 )" ,QString(QTextCodec::codecForLocale()->name() ));
     encodings += KGlobal::charsets()->descriptiveEncodingNames();
     // Add a few non-standard encodings, which might be useful for text files
@@ -84,7 +84,7 @@ QTextCodec* AsciiImportDialog::getCodec(void) const
         // Default: UTF-8
         kWarning(30502) << "Cannot find encoding:" << strCodec << endl;
         // ### TODO: what parent to use?
-        KMessageBox::error( 0, i18n("Cannot find encoding: %1").arg( strCodec ) );
+        KMessageBox::error( 0, i18n("Cannot find encoding: %1", strCodec ) );
         return 0;
     }
 

@@ -131,7 +131,7 @@ Dialog::Dialog(uint nbPages, bool isEncrypted, QWidget *widget)
     gbox->setInsideSpacing(KDialogBase::spacingHint());
     top->addWidget(gbox);
     _group = new Q3ButtonGroup;
-    _allButton = new QRadioButton(i18n("All (%1 pages)").arg(nbPages), gbox);
+    _allButton = new QRadioButton(i18n("All (%1 pages)", nbPages), gbox);
     _allButton->setChecked(true);
     _group->insert(_allButton);
     KHBox *hbox = new KHBox(gbox);

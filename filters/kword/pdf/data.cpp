@@ -119,7 +119,7 @@ QDomElement Data::createFrameset(FramesetType type, const QString &n)
     QString name = n;
     if ( name.isNull() )
         name = (text ? i18n("Text Frameset %1")
-                : i18n("Picture %1")).arg(index);
+                : i18n("Picture %1"), index);
     frameset.setAttribute("name", name);
     frameset.setAttribute("frameInfo", 0);
 
