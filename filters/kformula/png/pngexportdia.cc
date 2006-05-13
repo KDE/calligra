@@ -42,8 +42,8 @@
 #include <knuminput.h>
 #include <kglobal.h>
 
-PNGExportDia::PNGExportDia( const QDomDocument &dom, const QString &outFile, QWidget *parent, const char *name )
-    : KDialogBase( parent, name, true, i18n("PNG Export Filter Parameters" ), Ok|Cancel ),
+PNGExportDia::PNGExportDia( const QDomDocument &dom, const QString &outFile, QWidget *parent )
+    : KDialog( parent, i18n("PNG Export Filter Parameters" ), KDialog::Ok|KDialog::Cancel ),
       _fileOut( outFile )
 {
     kapp->restoreOverrideCursor();

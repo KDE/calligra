@@ -32,15 +32,15 @@ namespace KFormula {
 
 #include <qdom.h>
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 
 
-class PNGExportDia : public KDialogBase
+class PNGExportDia : public KDialog
 {
     Q_OBJECT
 
 public:
-    PNGExportDia( const QDomDocument &dom, const QString &outFile, QWidget *parent=0L, const char *name=0L );
+    PNGExportDia( const QDomDocument &dom, const QString &outFile, QWidget *parent=0L );
     ~PNGExportDia();
 
 public slots:
