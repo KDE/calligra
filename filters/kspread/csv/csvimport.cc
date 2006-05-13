@@ -23,7 +23,7 @@
 #include <QFile>
 #include <QRegExp>
 //Added by qt3to4:
-#include <Q3CString>
+#include <QByteArray>
 #include <Q3MemArray>
 
 #include <kapplication.h>

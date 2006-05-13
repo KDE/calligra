@@ -26,7 +26,7 @@
 #include <QFile>
 #include <QStringList>
 //Added by qt3to4:
-#include <Q3CString>
+#include <QByteArray>
 
 #include <gnumericimport.h>
 #include <kmessagebox.h>

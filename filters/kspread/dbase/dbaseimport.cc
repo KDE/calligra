@@ -32,7 +32,7 @@
 #include <QFontMetrics>
 #include <QString>
 //Added by qt3to4:
-#include <Q3CString>
+#include <QByteArray>
 
 #include <kdebug.h>
 #include <KoFilterChain.h>
@@ -164,7 +164,7 @@ KoFilter::ConversionStatus DBaseImport::convert( const QByteArray& from, const Q
   // store output document
   if( out )
     {
-      Q3CString cstring = root.toUtf8();
+      QByteArray cstring = root.toUtf8();
       cstring.prepend( "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" );
       out->write( (const char*) cstring, cstring.length() );
     }
@@ -173,7 +173,7 @@ KoFilter::ConversionStatus DBaseImport::convert( const QByteArray& from, const Q
   out = m_chain->storageFile( "documentinfo.xml", KoStore::Write );
   if ( out )
     {
-       Q3CString cstring = documentInfo.toUtf8();
+       QByteArray cstring = documentInfo.toUtf8();
        cstring.prepend( "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" );
 
        out->write( (const char*) cstring, cstring.length() );

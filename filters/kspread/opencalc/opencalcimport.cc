@@ -28,7 +28,7 @@
 #include <QtXml>
 //Added by qt3to4:
 #include <Q3ValueList>
-#include <Q3CString>
+#include <QByteArray>
 
 #include "opencalcimport.h"
 
@@ -1543,11 +1543,11 @@ bool OpenCalcImport::parseBody( int numOfTables )
 
     if ( t.hasAttributeNS( ooNS::table, "protected" ) )
     {
-      Q3CString passwd( "" );
+      QByteArray passwd( "" );
       if ( t.hasAttributeNS( ooNS::table, "protection-key" ) )
       {
         QString p = t.attributeNS( ooNS::table, "protection-key", QString::null );
-        Q3CString str( p.toLatin1() );
+        QByteArray str( p.toLatin1() );
         kDebug(30518) << "Decoding password: " << str << endl;
         passwd = KCodecs::base64Decode( str );
       }
@@ -1563,11 +1563,11 @@ bool OpenCalcImport::parseBody( int numOfTables )
   QDomElement b = body.toElement();
   if ( b.hasAttributeNS( ooNS::table, "structure-protected" ) )
   {
-    Q3CString passwd( "" );
+    QByteArray passwd( "" );
     if ( b.hasAttributeNS( ooNS::table, "protection-key" ) )
     {
       QString p = b.attributeNS( ooNS::table, "protection-key", QString::null );
-      Q3CString str( p.toLatin1() );
+      QByteArray str( p.toLatin1() );
       kDebug(30518) << "Decoding password: " << str << endl;
       passwd = KCodecs::base64Decode( str );
     }

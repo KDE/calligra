@@ -37,7 +37,7 @@
 #include <qpro/record_factory.h>
 #include <QFile>
 //Added by qt3to4:
-#include <Q3CString>
+#include <QByteArray>
 
 using namespace KSpread;
 

@@ -34,7 +34,7 @@
 #include <QTextStream>
 //Added by qt3to4:
 #include <Q3ValueList>
-#include <Q3CString>
+#include <QByteArray>
 
 #include <kspread_map.h>
 #include <kspread_sheet.h>

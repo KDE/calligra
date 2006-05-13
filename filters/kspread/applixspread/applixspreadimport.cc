@@ -29,7 +29,7 @@
 #include <q3ptrlist.h>
 //Added by qt3to4:
 #include <QTextStream>
-#include <Q3CString>
+#include <QByteArray>
 #include <applixspreadimport.h>
 #include <kdebug.h>
 #include <math.h>
@@ -646,7 +646,7 @@ KoFilter::ConversionStatus APPLIXSPREADImport::convert( const QByteArray& from, 
         return KoFilter::StorageCreationError;
     }
 
-    Q3CString cstring = str.utf8();
+    QByteArray cstring = str.utf8();
     out->write ( cstring, cstring.length() );
 
     in.close  ();

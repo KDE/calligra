@@ -26,7 +26,7 @@
 #include <QTextCodec>
 //Added by qt3to4:
 #include <QTextStream>
-#include <Q3CString>
+#include <QByteArray>
 
 #include <kdebug.h>
 #include <kgenericfactory.h>

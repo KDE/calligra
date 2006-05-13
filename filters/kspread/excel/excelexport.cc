@@ -4,7 +4,7 @@
 #include <kdebug.h>
 #include <kgenericfactory.h>
 //Added by qt3to4:
-#include <Q3CString>
+#include <QByteArray>
 
 
 typedef KGenericFactory<ExcelExport> ExcelExportFactory;

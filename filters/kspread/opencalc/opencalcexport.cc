@@ -30,7 +30,7 @@
 #include <QRegExp>
 #include <q3valuelist.h>
 //Added by qt3to4:
-#include <Q3CString>
+#include <QByteArray>
 
 #include <kdebug.h>
 #include <kmessagebox.h>
@@ -433,11 +433,11 @@ bool OpenCalcExport::exportBody( QDomDocument & doc, QDomElement & content, cons
   {
     body.setAttribute( "table:structure-protected", "true" );
 
-    Q3CString passwd;
+    QByteArray passwd;
     ksdoc->map()->password( passwd );
     if ( passwd.length() > 0 )
     {
-      Q3CString str( KCodecs::base64Encode( passwd ) );
+      QByteArray str( KCodecs::base64Encode( passwd ) );
       body.setAttribute( "table:protection-key", QString( str.data() ) );
     }
   }
@@ -457,11 +457,11 @@ bool OpenCalcExport::exportBody( QDomDocument & doc, QDomElement & content, cons
     {
       tabElem.setAttribute( "table:protected", "true" );
 
-      Q3CString passwd;
+      QByteArray passwd;
       sheet->password( passwd );
       if ( passwd.length() > 0 )
       {
-        Q3CString str( KCodecs::base64Encode( passwd ) );
+        QByteArray str( KCodecs::base64Encode( passwd ) );
         tabElem.setAttribute( "table:protection-key", QString( str.data() ) );
       }
     }

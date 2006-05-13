@@ -23,7 +23,7 @@
 
 #include <QString>
 //Added by qt3to4:
-#include <Q3CString>
+#include <QByteArray>
 #include <KoFilter.h>
 
 namespace KSpread

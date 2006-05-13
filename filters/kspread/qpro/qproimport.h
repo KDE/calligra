@@ -23,7 +23,7 @@
 #include <KoFilter.h>
 #include <qpro/tablenames.h>
 //Added by qt3to4:
-#include <Q3CString>
+#include <QByteArray>
 
 namespace KSpread
 {
