@@ -27,7 +27,6 @@
 #include <q3vbox.h>
 //Added by qt3to4:
 #include <Q3ValueList>
-#include <Q3CString>
 #include <Q3PtrList>
 
 #include <assert.h>
@@ -180,7 +179,7 @@ bool KoShellWindow::openDocumentInternal( const KUrl &url, KoDocument* )
     tmpFile = new KTempFile;
 
     KoFilterManager *manager = new KoFilterManager( url.path() );
-    Q3CString mimetype;                                               // an empty mimetype means, that the "nearest"
+    QByteArray mimetype;                                               // an empty mimetype means, that the "nearest"
     KoFilter::ConversionStatus status = manager->exp0rt( tmpFile->name(), mimetype ); // KOffice part will be chosen
     delete manager;
 
