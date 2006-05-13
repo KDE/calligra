@@ -21,7 +21,7 @@
 #define KSPREAD_TESTER
 
 #include <QString>
-#include <qstringlist.h>
+#include <QStringList>
 
 namespace KSpread
 {

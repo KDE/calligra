@@ -6,7 +6,7 @@
 #ifdef USE_QT
 
 #include <QDataStream>
-#include <qbuffer.h>
+#include <QBuffer>
 
 typedef quint8  QP_UINT8;
 typedef qint8   QP_INT8;

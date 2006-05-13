@@ -20,8 +20,8 @@
 #ifndef KSPREAD_EVENTS
 #define KSPREAD_EVENTS
 
-#include <qevent.h>
-#include <qrect.h>
+#include <QEvent>
+#include <QRect>
 #include <QString>
 
 #include <string.h>

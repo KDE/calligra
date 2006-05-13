@@ -24,8 +24,8 @@
 #include <math.h>
 
 #include <QRegExp>
-#include <qdatetime.h>
-#include <qfileinfo.h>
+#include <QDateTime>
+#include <QFileInfo>
 #include <QDir>
 //Added by qt3to4:
 #include <Q3CString>

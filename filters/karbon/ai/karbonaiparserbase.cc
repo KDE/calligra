@@ -25,7 +25,7 @@
 #include <core/vclipgroup.h>
 #include <core/vvisitor.h>
 #include "aicolor.h"
-#include <qmatrix.h>
+#include <QMatrix>
 #include <commands/vtransformcmd.h>
 
 #include <KoPageLayout.h>

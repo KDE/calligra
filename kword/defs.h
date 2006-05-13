@@ -20,7 +20,7 @@
 #ifndef defs_h
 #define defs_h
 
-#include <qtextstream.h>
+#include <QTextStream>
 #include <QString>
 #include <KoGlobal.h>
 #include "KWFactory.h"

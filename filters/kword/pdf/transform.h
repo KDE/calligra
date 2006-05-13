@@ -20,7 +20,7 @@
 #ifndef TRANSFORM_H
 #define TRANSFORM_H
 
-#include <qpair.h>
+#include <QPair>
 #include "CharTypes.h"
 
 namespace PDFImport

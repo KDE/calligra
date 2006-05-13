@@ -22,7 +22,7 @@
 #ifndef __KSPREAD_LATEX_FILEHEADER_H__
 #define __KSPREAD_LATEX_FILEHEADER_H__
 
-#include <qtextstream.h>
+#include <QTextStream>
 
 #include "xmlparser.h"
 

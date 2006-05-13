@@ -25,7 +25,7 @@
 */
 
 #include <q3textbrowser.h>
-#include <qtabwidget.h>
+#include <QTabWidget>
 //Added by qt3to4:
 #include <QCloseEvent>
 #include <QGridLayout>
@@ -48,7 +48,7 @@
 #include <kbuttonbox.h>
 #include <knumvalidator.h>
 #include <QComboBox>
-#include <qevent.h>
+#include <QEvent>
 #include <q3listbox.h>
 #include <QLabel>
 #include <QPushButton>

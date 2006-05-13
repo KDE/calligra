@@ -23,15 +23,15 @@
 
 #include <q3table.h>
 #include <QCheckBox>
-#include <qcursor.h>
+#include <QCursor>
 #include <QLineEdit>
 #include <QComboBox>
 #include <QSpinBox>
-#include <qtextstream.h>
+#include <QTextStream>
 #include <q3buttongroup.h>
 #include <QPushButton>
-#include <qradiobutton.h>
-#include <qtextcodec.h>
+#include <QRadioButton>
+#include <QTextCodec>
 
 #include <kapplication.h>
 #include <kdebug.h>

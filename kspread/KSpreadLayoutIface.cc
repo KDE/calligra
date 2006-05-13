@@ -21,7 +21,7 @@
 */
 
 #include "KSpreadLayoutIface.h"
-#include <qbrush.h>
+#include <QBrush>
 #include "kspread_format.h"
 
 using namespace KSpread;

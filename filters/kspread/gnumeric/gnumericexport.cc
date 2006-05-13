@@ -27,11 +27,11 @@
 #include <kmessagebox.h>
 #include <kgenericfactory.h>
 #include <KoFilterChain.h>
-#include <qapplication.h>
+#include <QApplication>
 #include <q3ptrlist.h>
 #include <q3sortedlist.h>
 #include <QFile>
-#include <qtextstream.h>
+#include <QTextStream>
 //Added by qt3to4:
 #include <Q3ValueList>
 #include <Q3CString>

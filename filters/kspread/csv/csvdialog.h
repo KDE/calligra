@@ -21,7 +21,7 @@
 #ifndef CSVDIALOG_H
 #define CSVDIALOG_H
 
-#include <qstringlist.h>
+#include <QStringList>
 
 #include <kdialogbase.h>
 

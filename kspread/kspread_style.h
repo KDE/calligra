@@ -20,10 +20,10 @@
 #ifndef __kspread_style__
 #define __kspread_style__
 
-#include <qbrush.h>
+#include <QBrush>
 #include <QColor>
 #include <QFont>
-#include <qpen.h>
+#include <QPen>
 
 //#include "kspread_format.h"
 

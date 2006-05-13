@@ -20,7 +20,7 @@
 #ifndef __EPSIMPORT_H__
 #define __EPSIMPORT_H__
 
-#include <qobject.h>
+#include <QObject>
 //Added by qt3to4:
 #include <QTextStream>
 #include <Q3CString>

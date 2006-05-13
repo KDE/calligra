@@ -28,13 +28,13 @@
 
 #include <QPushButton>
 #include <QLineEdit>
-#include <qvalidator.h>
+#include <QValidator>
 //Added by qt3to4:
 #include <QResizeEvent>
 #include <Q3VBoxLayout>
 #include <klocale.h>
 #include <kdebug.h>
-#include <qtoolbutton.h>
+#include <QToolButton>
 #include <QToolTip>
 #include <kiconloader.h>
 #include <q3header.h>

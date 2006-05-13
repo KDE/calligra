@@ -23,7 +23,7 @@
 #ifndef __KSPREAD_LATEX_PEN_H__
 #define __KSPREAD_LATEX_PEN_H__
 
-#include <qtextstream.h>
+#include <QTextStream>
 #include <QString>
 #include <QColor>
 #include "xmlparser.h"

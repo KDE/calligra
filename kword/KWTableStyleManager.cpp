@@ -37,7 +37,7 @@
 #include <QPushButton>
 #include <QLabel>
 #include <q3groupbox.h>
-#include <qpainter.h>
+#include <QPainter>
 #include <QLineEdit>
 #include <QLayout>
 #include <QComboBox>

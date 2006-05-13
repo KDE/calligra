@@ -34,7 +34,7 @@
 
 #include "kspread_factory.h"
 
-#include <qdatetime.h>
+#include <QDateTime>
 #include <kdebug.h>
 
 

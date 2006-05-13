@@ -29,15 +29,15 @@
 #include <kparts/partmanager.h>
 #include <koChart.h>
 
-#include <qbitmap.h>
-#include <qbuffer.h>
-#include <qcursor.h>
+#include <QBitmap>
+#include <QBuffer>
+#include <QCursor>
 #include <qdom.h>
-#include <qfileinfo.h>
-#include <qimage.h>
-#include <qpainter.h>
-#include <qpixmap.h>
-#include <qmatrix.h>
+#include <QFileInfo>
+#include <QImage>
+#include <QPainter>
+#include <QPixmap>
+#include <QMatrix>
 
 #include <KoDocument.h>
 #include <KoDocumentChild.h>

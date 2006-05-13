@@ -24,7 +24,7 @@
 
 #include <opencalcexport.h>
 
-#include <qdatetime.h>
+#include <QDateTime>
 #include <qdom.h>
 #include <QFile>
 #include <QRegExp>

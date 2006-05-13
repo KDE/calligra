@@ -20,7 +20,7 @@
 #define KWDWRITER_H
 
 
-#include <qrect.h>
+#include <QRect>
 #include <KoStore.h>
 #include <qdom.h>
 

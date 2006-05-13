@@ -21,7 +21,7 @@
 #define __XSLTEXPORTDIA_H__
 
 #include <xsltdialog.h>
-#include <qstringlist.h>
+#include <QStringList>
 //Added by qt3to4:
 #include <Q3CString>
 #include <kurl.h>

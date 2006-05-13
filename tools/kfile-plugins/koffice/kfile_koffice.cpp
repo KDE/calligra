@@ -27,7 +27,7 @@
 
 #include <qdom.h>
 #include <QFile>
-#include <qdatetime.h>
+#include <QDateTime>
 
 typedef KGenericFactory<KOfficePlugin> KOfficeFactory;
 

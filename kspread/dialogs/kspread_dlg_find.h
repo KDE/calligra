@@ -22,7 +22,7 @@
 
 
 #include <kfinddialog.h>
-#include <qstringlist.h>
+#include <QStringList>
 #include <kreplacedialog.h>
 
 class QCheckBox;

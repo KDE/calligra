@@ -25,7 +25,7 @@
 #include <KoUserStyleCollection.h>
 
 #include "KoBorder.h"
-#include <qbrush.h>
+#include <QBrush>
 
 class QDomElement;
 class KoOasisContext;

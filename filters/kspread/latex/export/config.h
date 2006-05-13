@@ -22,8 +22,8 @@
 #ifndef __LATEX_CONFIG_H__
 #define __LATEX_CONFIG_H__
 
-#include <qtextstream.h>
-#include <qstringlist.h>
+#include <QTextStream>
+#include <QStringList>
 
 /***********************************************************************/
 /* Class: Config                                                       */

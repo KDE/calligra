@@ -20,9 +20,9 @@
 #include <QString>
 #include <q3dict.h>
 #include <QFile>
-#include <qbuffer.h>
+#include <QBuffer>
 #include <QColor>
-#include <qimage.h>
+#include <QImage>
 //Added by qt3to4:
 #include <Q3ValueList>
 

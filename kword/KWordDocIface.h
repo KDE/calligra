@@ -24,7 +24,7 @@
 #include <dcopref.h>
 
 #include <QString>
-#include <qstringlist.h>
+#include <QStringList>
 class KWDocument;
 
 class KWordDocIface : public KoDocumentIface

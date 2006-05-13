@@ -50,9 +50,9 @@ DESCRIPTION
 #include <kdebug.h>
 #include <klocale.h>
 #include <dcopobject.h>
-#include <qapplication.h>
+#include <QApplication>
 #include <q3popupmenu.h>
-#include <qclipboard.h>
+#include <QClipboard>
 //Added by qt3to4:
 #include <Q3MemArray>
 #include <Q3PtrList>

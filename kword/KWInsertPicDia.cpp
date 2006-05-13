@@ -18,9 +18,9 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <qpainter.h>
+#include <QPainter>
 #include <QPushButton>
-#include <qbitmap.h>
+#include <QBitmap>
 #include <QLayout>
 #include <QCheckBox>
 #include <q3scrollview.h>
@@ -38,7 +38,7 @@
 
 #include "KWDocument.h"
 #include "KWInsertPicDia.h"
-#include <qtimer.h>
+#include <QTimer>
 
 /**
  * This is the preview that appears on the right of the "Insert picture" dialog.

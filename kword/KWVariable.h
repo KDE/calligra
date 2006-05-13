@@ -21,7 +21,7 @@
 #define variable_h
 
 #include <QString>
-#include <qdatetime.h>
+#include <QDateTime>
 #include <q3asciidict.h>
 
 #include "defs.h"

@@ -19,7 +19,7 @@
 #include "KWPage.h"
 #include "KoZoomHandler.h"
 
-#include <qrect.h>
+#include <QRect>
 
 KWPage::KWPage(KWPageManager *parent, int pageNum) {
     m_parent = parent;

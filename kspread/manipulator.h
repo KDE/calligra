@@ -22,7 +22,7 @@
 #define KSPREAD_MANIPULATOR
 
 #include <QLinkedList>
-#include <qrect.h>
+#include <QRect>
 #include <QString>
 
 #include <kcommand.h>

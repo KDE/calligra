@@ -21,7 +21,7 @@
 #define __KSPREADLATEXEXPORTDIA_H__
 
 #include <latexexportdia.h>
-#include <qstringlist.h>
+#include <QStringList>
 #include <kurl.h>
 
 #include "latexexportIface.h"

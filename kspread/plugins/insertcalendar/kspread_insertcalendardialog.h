@@ -28,7 +28,7 @@
 #include <ui_kspread_insertcalendardialogbase.h>
 #include <koffice_export.h>
 
-#include <qdatetime.h>
+#include <QDateTime>
 
 class KDatePicker;
 

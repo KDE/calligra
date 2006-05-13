@@ -32,16 +32,16 @@
 #include <stdlib.h>
 #include <math.h>
 
-#include <qbitmap.h>
+#include <QBitmap>
 #include <QCheckBox>
 #include <QFrame>
 #include <QLabel>
 #include <QLayout>
 #include <q3listbox.h>
-#include <qfontdatabase.h>
+#include <QFontDatabase>
 #include <QPainter>
-#include <qradiobutton.h>
-#include <qslider.h>
+#include <QRadioButton>
+#include <QSlider>
 
 //Added by qt3to4:
 #include <QPaintEvent>

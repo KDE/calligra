@@ -29,7 +29,7 @@
 #ifndef __kspread_dlg_cons__
 #define __kspread_dlg_cons__
 
-#include <qstringlist.h>
+#include <QStringList>
 //Added by qt3to4:
 #include <QCloseEvent>
 #include <kdialogbase.h>

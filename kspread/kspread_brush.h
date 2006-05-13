@@ -21,7 +21,7 @@
 #ifndef KSPREADBRUSH_H
 #define KSPREADBRUSH_H
 
-#include <qbrush.h>
+#include <QBrush>
 
 #include "kspread_global.h"
 

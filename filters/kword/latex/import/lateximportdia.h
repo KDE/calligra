@@ -38,7 +38,7 @@
 #include <QWidget>
 #include <QLabel>
 #include <QLayout>
-#include <qradiobutton.h>
+#include <QRadioButton>
 #include <qvbuttongroup.h>
 
 #include <klocale.h>

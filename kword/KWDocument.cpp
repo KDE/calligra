@@ -83,10 +83,10 @@
 
 #include <kspell2/settings.h>
 
-#include <qfileinfo.h>
+#include <QFileInfo>
 #include <QRegExp>
-#include <qtimer.h>
-#include <qbuffer.h>
+#include <QTimer>
+#include <QBuffer>
 //Added by qt3to4:
 #include <Q3ValueList>
 #include <Q3PtrList>

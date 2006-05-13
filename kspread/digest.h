@@ -43,7 +43,7 @@
 #ifndef _DIGEST_
 #define _DIGEST_
 
-#include <qbytearray.h>
+#include <QByteArray>
 #include <QString>
 
 class SHA1

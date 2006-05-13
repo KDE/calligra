@@ -20,7 +20,7 @@
 #ifndef kwviewmode_h
 #define kwviewmode_h
 
-#include <qrect.h>
+#include <QRect>
 #include <QString>
 class KWDocument;
 class QPainter;

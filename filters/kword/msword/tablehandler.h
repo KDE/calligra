@@ -25,7 +25,7 @@
 #include <wv2/handlers.h>
 #include <QString>
 #include <q3valuelist.h>
-#include <qobject.h>
+#include <QObject>
 //Added by qt3to4:
 #include <Q3MemArray>
 #include <deque>

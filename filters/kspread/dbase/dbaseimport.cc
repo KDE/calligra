@@ -29,7 +29,7 @@
 
 #include <QFile>
 #include <QFont>
-#include <qfontmetrics.h>
+#include <QFontMetrics>
 #include <QString>
 //Added by qt3to4:
 #include <Q3CString>

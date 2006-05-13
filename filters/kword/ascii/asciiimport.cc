@@ -25,12 +25,12 @@
 #include <unistd.h>
 #endif
 
-#include <qobject.h>
+#include <QObject>
 #include <QString>
 // #include <QRegExp> // Currently not needed (due to disabled code)
-#include <qtextcodec.h>
+#include <QTextCodec>
 #include <QFile>
-#include <qtextstream.h>
+#include <QTextStream>
 #include <qdom.h>
 #include <qfontinfo.h>
 //Added by qt3to4:

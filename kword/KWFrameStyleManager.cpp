@@ -30,12 +30,12 @@
 #include <klocale.h>
 #include <kiconloader.h>
 
-#include <qtabwidget.h>
+#include <QTabWidget>
 #include <QPushButton>
 #include <QLabel>
-#include <qbrush.h>
+#include <QBrush>
 #include <q3groupbox.h>
-#include <qpainter.h>
+#include <QPainter>
 #include <QLayout>
 //Added by qt3to4:
 #include <QPaintEvent>

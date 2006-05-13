@@ -20,7 +20,7 @@
 #ifndef koconverter_h
 #define koconverter_h
 
-#include <qobject.h>
+#include <QObject>
 
 class ProgressObject : public QObject
 {

@@ -21,7 +21,7 @@
 #define CONVERSION_H
 
 #include <QString>
-#include <qpair.h>
+#include <QPair>
 
 // Static methods for simple OO<->KWord conversions
 // (enums etc.)

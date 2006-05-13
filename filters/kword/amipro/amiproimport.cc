@@ -24,7 +24,7 @@
 #endif
 
 #include <QRegExp>
-#include <qfileinfo.h>
+#include <QFileInfo>
 #include <q3valuelist.h>
 #include <QFont>
 //Added by qt3to4:

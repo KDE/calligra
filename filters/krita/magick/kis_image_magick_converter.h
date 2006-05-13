@@ -19,7 +19,7 @@
 #ifndef KIS_IMAGE_MAGICK_CONVERTER_H_
 #define KIS_IMAGE_MAGICK_CONVERTER_H_
 
-#include <qobject.h>
+#include <QObject>
 #include <q3valuevector.h>
 
 #include <kio/job.h>

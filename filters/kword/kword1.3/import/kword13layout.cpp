@@ -1,4 +1,4 @@
-#include <qtextstream.h>
+#include <QTextStream>
 
 #include "kword13utils.h"
 #include "kword13layout.h"

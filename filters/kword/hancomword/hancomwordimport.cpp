@@ -26,12 +26,12 @@
 #include <hancomwordimport.h>
 #include <hancomwordimport.moc>
 
-#include <qbuffer.h>
+#include <QBuffer>
 #include <q3cstring.h>
 #include <QFile>
 #include <QString>
-#include <qstringlist.h>
-#include <qtextstream.h>
+#include <QStringList>
+#include <QTextStream>
 
 #include <kdebug.h>
 #include <KoFilterChain.h>

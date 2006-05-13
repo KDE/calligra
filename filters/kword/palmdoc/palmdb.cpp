@@ -26,7 +26,7 @@
 
 #include <q3cstring.h>
 #include <QDataStream>
-#include <qdatetime.h>
+#include <QDateTime>
 #include <QFile>
 #include <q3memarray.h>
 #include <q3ptrlist.h>

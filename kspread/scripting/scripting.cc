@@ -20,7 +20,7 @@
  */
 #include "scripting.h"
 
-#include <qapplication.h>
+#include <QApplication>
 
 #include <kgenericfactory.h>
 #include <kstandarddirs.h>

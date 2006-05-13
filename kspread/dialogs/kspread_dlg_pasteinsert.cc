@@ -26,7 +26,7 @@
 #include <klocale.h>
 #include <kbuttonbox.h>
 #include <kdebug.h>
-#include <qradiobutton.h>
+#include <QRadioButton>
 #include <QCheckBox>
 
 #include "kspread_dlg_pasteinsert.h"

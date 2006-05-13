@@ -28,7 +28,7 @@
 #include <klineedit.h>
 #include <kpushbutton.h>
 #include <qsqldatabase.h>
-#include <qmessagebox.h>
+#include <QMessageBox>
 #include <kpassworddialog.h>
 #include <qsqlrecord.h>
 #include <q3sqlcursor.h>

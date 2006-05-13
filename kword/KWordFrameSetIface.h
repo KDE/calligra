@@ -25,7 +25,7 @@
 
 #include <QString>
 #include <QColor>
-#include <qbrush.h>
+#include <QBrush>
 class KWFrameSet;
 
 class KWordFrameSetIface : public DCOPObject

@@ -21,16 +21,16 @@
 */
 
 #include <QString>
-#include <qtextcodec.h>
+#include <QTextCodec>
 #include <QFile>
-#include <qfileinfo.h>
+#include <QFileInfo>
 #include <qfontinfo.h>
-#include <qfontdatabase.h>
+#include <QFontDatabase>
 #include <q3picture.h>
-#include <qimage.h>
+#include <QImage>
 #include <QRegExp>
 #include <QColor>
-#include <qdatetime.h>
+#include <QDateTime>
 //Added by qt3to4:
 #include <QTextStream>
 #include <Q3ValueList>

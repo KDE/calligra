@@ -22,7 +22,7 @@
 #ifndef __KWORD_FILEHEADER_H__
 #define __KWORD_FILEHEADER_H__
 
-#include <qtextstream.h>
+#include <QTextStream>
 
 #include "xmlparser.h"
 

@@ -23,7 +23,7 @@
 #include <exportdialog.h>
 
 #include <QFile>
-#include <qtextcodec.h>
+#include <QTextCodec>
 //Added by qt3to4:
 #include <QTextStream>
 #include <Q3CString>

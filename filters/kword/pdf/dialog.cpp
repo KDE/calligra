@@ -23,12 +23,12 @@
 
 
 #include <QRegExp>
-#include <qapplication.h>
+#include <QApplication>
 #include <q3grid.h>
 #include <QLabel>
 #include <QLayout>
 #include <q3buttongroup.h>
-#include <qradiobutton.h>
+#include <QRadioButton>
 
 #include <QCheckBox>
 //Added by qt3to4:

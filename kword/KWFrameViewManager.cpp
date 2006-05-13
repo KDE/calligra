@@ -23,8 +23,8 @@
 
 #include <kdebug.h>
 #include <kcursor.h>
-#include <qcursor.h>
-#include <qtimer.h>
+#include <QCursor>
+#include <QTimer>
 #include "q3popupmenu.h"
 //Added by qt3to4:
 #include <Q3ValueList>

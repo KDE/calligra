@@ -23,7 +23,7 @@
 #ifndef __KWORD_ELEMENT_H__
 #define __KWORD_ELEMENT_H__
 
-#include <qtextstream.h>
+#include <QTextStream>
 #include "xmlparser.h"
 #include "border.h"
 

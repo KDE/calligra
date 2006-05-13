@@ -25,7 +25,7 @@
 
 #include <wv2/handlers.h>
 #include <QString>
-#include <qobject.h>
+#include <QObject>
 #include <qdom.h>
 
 #include <string>

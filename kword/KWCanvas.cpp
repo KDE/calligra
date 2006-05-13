@@ -38,12 +38,12 @@
 #include "KWFrameView.h"
 #include "KWFrameViewManager.h"
 
-#include <qbuffer.h>
-#include <qtimer.h>
-#include <qclipboard.h>
+#include <QBuffer>
+#include <QTimer>
+#include <QClipboard>
 #include <q3progressdialog.h>
-#include <qobject.h>
-#include <qapplication.h>
+#include <QObject>
+#include <QApplication>
 #include <q3whatsthis.h>
 //Added by qt3to4:
 #include <QResizeEvent>

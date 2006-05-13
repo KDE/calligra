@@ -25,8 +25,8 @@ DESCRIPTION
 #include <QFile>
 #include <q3ptrlist.h>
 #include <q3pointarray.h>
-#include <qrect.h>
-#include <qsize.h>
+#include <QRect>
+#include <QSize>
 #include <msod.h>
 #include <zlib.h>
 

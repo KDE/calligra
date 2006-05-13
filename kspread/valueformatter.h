@@ -22,7 +22,7 @@
 
 #include "kspread_format.h"
 
-#include <qdatetime.h>
+#include <QDateTime>
 
 namespace KSpread
 {

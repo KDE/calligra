@@ -27,7 +27,7 @@ class KWTextFrameSet;
 
 #include "KoBgSpellCheck.h"
 
-#include <qobject.h>
+#include <QObject>
 class KWBgSpellCheck : public KoBgSpellCheck
 {
 public:

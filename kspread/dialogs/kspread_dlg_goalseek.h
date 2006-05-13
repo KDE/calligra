@@ -28,7 +28,7 @@
 
 #include <kdialog.h>
 #include <QPoint>
-#include <qrect.h>
+#include <QRect>
 //Added by qt3to4:
 #include <QVBoxLayout>
 #include <QHBoxLayout>

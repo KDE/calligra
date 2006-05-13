@@ -18,7 +18,7 @@
 
 #include <KoFilter.h>
 #include <q3cstring.h>
-#include <qstringlist.h>
+#include <QStringList>
 
 class KugarNOPImport : public KoFilter
 {

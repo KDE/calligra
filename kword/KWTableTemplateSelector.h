@@ -28,7 +28,7 @@
 #include <QPushButton>
 /*#include <QLayout>
 #include <QFont>
-#include <qbrush.h>
+#include <QBrush>
 */
 
 class Q3ListBox;

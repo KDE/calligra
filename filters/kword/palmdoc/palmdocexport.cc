@@ -24,8 +24,8 @@
 #endif
 
 #include <QFile>
-#include <qfileinfo.h>
-#include <qtextstream.h>
+#include <QFileInfo>
+#include <QTextStream>
 //Added by qt3to4:
 #include <Q3CString>
 

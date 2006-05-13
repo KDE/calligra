@@ -21,9 +21,9 @@
 #define MATHMLIMPORT_H
 
 #include <QString>
-#include <qtextstream.h>
+#include <QTextStream>
 #include <QFile>
-#include <qobject.h>
+#include <QObject>
 //Added by qt3to4:
 #include <Q3CString>
 

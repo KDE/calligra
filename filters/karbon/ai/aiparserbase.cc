@@ -21,7 +21,7 @@
 #include "ai88handler.h"
 #include "ai3handler.h"
 #include <QRegExp>
-#include <qstringlist.h>
+#include <QStringList>
 
 typedef struct {
   char* op;

@@ -23,14 +23,14 @@
 #include <QButtonGroup>
 #include <QGroupBox>
 #include <QCheckBox>
-#include <qclipboard.h>
+#include <QClipboard>
 #include <QComboBox>
 #include <QLabel>
 #include <QLineEdit>
 #include <QMimeData>
 #include <QPainter>
 #include <QPushButton>
-#include <qradiobutton.h>
+#include <QRadioButton>
 #include <q3table.h>
 #include <QLayout>
 #include <QVector>

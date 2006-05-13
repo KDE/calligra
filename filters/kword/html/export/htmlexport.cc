@@ -31,7 +31,7 @@
    License version 2.
 */
 
-#include <qtextcodec.h>
+#include <QTextCodec>
 //Added by qt3to4:
 #include <Q3CString>
 

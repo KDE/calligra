@@ -21,7 +21,7 @@
 #ifndef KSPREAD_VALUEPARSER
 #define KSPREAD_VALUEPARSER
 
-#include <qdatetime.h>
+#include <QDateTime>
 
 #include "kspread_global.h"
 

@@ -39,7 +39,7 @@
 #include <QComboBox>
 #include <QFile>
 #include <qdom.h>
-#include <qrect.h>
+#include <QRect>
 #include <q3ptrlist.h>
 #include <QLayout>
 //Added by qt3to4:

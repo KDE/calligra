@@ -19,7 +19,7 @@
 #ifndef KWOASISSAVER_H
 #define KWOASISSAVER_H
 
-#include <qbuffer.h>
+#include <QBuffer>
 //Added by qt3to4:
 #include <QList>
 #include <KoGenStyles.h>

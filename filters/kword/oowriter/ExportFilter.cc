@@ -31,9 +31,9 @@
 */
 
 #include <QMap>
-#include <qiodevice.h>
-#include <qbuffer.h>
-#include <qtextstream.h>
+#include <QIODevice>
+#include <QBuffer>
+#include <QTextStream>
 #include <qdom.h>
 //Added by qt3to4:
 #include <Q3ValueList>

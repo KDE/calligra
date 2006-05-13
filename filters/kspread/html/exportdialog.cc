@@ -20,9 +20,9 @@
 #include <QCheckBox>
 #include <QComboBox>
 #include <q3listbox.h>
-#include <qradiobutton.h>
+#include <QRadioButton>
 #include <QSpinBox>
-#include <qtextcodec.h>
+#include <QTextCodec>
 
 #include <kapplication.h>
 #include <kglobal.h>

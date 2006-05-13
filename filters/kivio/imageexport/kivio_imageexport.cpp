@@ -21,10 +21,10 @@
 
 #include <qdom.h>
 #include <q3cstring.h>
-#include <qpixmap.h>
-#include <qpainter.h>
-#include <qsize.h>
-#include <qstringlist.h>
+#include <QPixmap>
+#include <QPainter>
+#include <QSize>
+#include <QStringList>
 //Added by qt3to4:
 #include <Q3PtrList>
 

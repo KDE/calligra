@@ -72,7 +72,7 @@ using namespace KSpell2;
 #include <kglobal.h>
 #include <kurlrequesterdlg.h>
 #include <kfiledialog.h>
-#include <qtabwidget.h>
+#include <QTabWidget>
 #include <keditlistbox.h>
 #include <KoGlobal.h>
 #include <kvbox.h>

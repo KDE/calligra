@@ -19,7 +19,7 @@
 */
 
 #include <QString>
-#include <qtextcodec.h>
+#include <QTextCodec>
 #include <QFile>
 
 #include <klocale.h>

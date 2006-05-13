@@ -18,7 +18,7 @@
 */
 
 #include <q3buttongroup.h>
-#include <qradiobutton.h>
+#include <QRadioButton>
 #include <QString>
 #include <q3vbox.h>
 

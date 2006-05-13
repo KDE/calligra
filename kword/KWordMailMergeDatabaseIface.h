@@ -21,7 +21,7 @@
 #define  __KWordMailMergeDatabaseIface_h__
 
 #include <dcopobject.h>
-#include <qstringlist.h>
+#include <QStringList>
 //Added by qt3to4:
 /**
  * DCOP interface for the MailMergeDataBase class

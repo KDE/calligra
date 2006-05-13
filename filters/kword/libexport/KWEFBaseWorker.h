@@ -22,7 +22,7 @@
 #define KWEF_BASEWORKER_H
 
 #include <QString>
-#include <qiodevice.h>
+#include <QIODevice>
 //Added by qt3to4:
 #include <Q3ValueList>
 

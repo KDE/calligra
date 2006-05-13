@@ -30,7 +30,7 @@
 #include <klocale.h>
 #include <knuminput.h>
 
-#include <qradiobutton.h>
+#include <QRadioButton>
 
 #include <QLabel>
 #include <q3vbox.h>

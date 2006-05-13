@@ -20,12 +20,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <qbuffer.h>
+#include <QBuffer>
 #include <q3cstring.h>
 #include <QFile>
 #include <QFont>
-#include <qimage.h>
-#include <qtextcodec.h>
+#include <QImage>
+#include <QTextCodec>
 #include <q3valuelist.h>
 #include <q3valuestack.h>
 

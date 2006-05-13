@@ -47,8 +47,8 @@
 #include <klocale.h>
 #include <kdebug.h>
 
-#include <qxml.h>
-#include <qbuffer.h>
+#include <QtXml>
+#include <QBuffer>
 //Added by qt3to4:
 #include <Q3ValueList>
 #include <Q3PtrList>

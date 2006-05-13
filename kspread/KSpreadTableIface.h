@@ -29,7 +29,7 @@
 #include <dcopobject.h>
 #include <dcopref.h>
 
-#include <qrect.h>
+#include <QRect>
 #include <QString>
 
 namespace KSpread

@@ -26,7 +26,7 @@
 
 #include <QString>
 #include <QColor>
-#include <qstringlist.h>
+#include <QStringList>
 
 #include <dcopref.h>
 

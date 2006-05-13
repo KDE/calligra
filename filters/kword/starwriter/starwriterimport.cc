@@ -22,7 +22,7 @@
 #include <starwriterimport.h>
 
 #include <QDataStream>
-#include <qiodevice.h>
+#include <QIODevice>
 #include <QString>
 //Added by qt3to4:
 #include <Q3CString>

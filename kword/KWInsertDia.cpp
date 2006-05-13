@@ -26,7 +26,7 @@
 
 #include <QLabel>
 #include <QSpinBox>
-#include <qradiobutton.h>
+#include <QRadioButton>
 #include <q3buttongroup.h>
 #include <QLayout>
 //Added by qt3to4:

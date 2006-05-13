@@ -25,7 +25,7 @@
 #include "valueconverter.h"
 
 // needed for MODE
-#include <qlist.h>
+#include <QList>
 #include <QMap>
 
 using namespace KSpread;

@@ -21,7 +21,7 @@
 #include "pdfimport.moc"
 
 #include <qdom.h>
-#include <qdatetime.h> // debug
+#include <QDateTime> // debug
 //Added by qt3to4:
 #include <Q3CString>
 

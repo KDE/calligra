@@ -18,8 +18,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <qimage.h>
-#include <qpainter.h>
+#include <QImage>
+#include <QPainter>
 #include <QFile>
 //Added by qt3to4:
 #include <QPixmap>

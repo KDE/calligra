@@ -45,7 +45,7 @@
 #include <QMap>
 #include <QColor>
 #include <qdom.h>
-#include <qdatetime.h>
+#include <QDateTime>
 
 #include <KoPictureKey.h>
 #include <koffice_export.h>

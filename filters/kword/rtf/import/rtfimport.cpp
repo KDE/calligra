@@ -23,9 +23,9 @@
 #include <kgenericfactory.h>
 
 #include <q3cstring.h>
-#include <qstringlist.h>
+#include <QStringList>
 #include <QDir>
-#include <qfileinfo.h>
+#include <QFileInfo>
 #include <QRegExp>
 #include <q3valuelist.h>
 

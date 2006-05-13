@@ -29,7 +29,7 @@ Tomas
 #include <ctype.h>
 #include <math.h>
 
-#include <qdatetime.h>
+#include <QDateTime>
 #include <QMap>
 #include <QString>
 

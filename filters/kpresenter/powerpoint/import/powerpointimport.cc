@@ -26,11 +26,11 @@
 #include <powerpointimport.h>
 #include <powerpointimport.moc>
 
-#include <qbuffer.h>
+#include <QBuffer>
 #include <q3cstring.h>
 #include <QFile>
 #include <QString>
-#include <qtextstream.h>
+#include <QTextStream>
 
 #include <kdebug.h>
 #include <KoFilterChain.h>

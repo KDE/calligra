@@ -21,7 +21,7 @@
 #define __KFILE_OOO_H__
 
 #include <kfilemetainfo.h>
-#include <qiodevice.h>
+#include <QIODevice>
 #include <qdom.h>
 #include <karchive.h>
 class QStringList;

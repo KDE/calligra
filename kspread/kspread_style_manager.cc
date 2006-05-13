@@ -18,7 +18,7 @@
 */
 
 #include <qdom.h>
-#include <qstringlist.h>
+#include <QStringList>
 
 #include <kdebug.h>
 #include <klocale.h>

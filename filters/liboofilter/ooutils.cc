@@ -24,13 +24,13 @@
 #include <KoStyleStack.h>
 #include <qdom.h>
 #include <QColor>
-#include <qimage.h>
+#include <QImage>
 #include <KoUnit.h>
 #include <QRegExp>
 #include <kdebug.h>
 #include <kzip.h>
 #include <KoDom.h>
-#include <qxml.h>
+#include <QtXml>
 
 const char* const ooNS::office="http://openoffice.org/2000/office";
 const char* const ooNS::style="http://openoffice.org/2000/style";

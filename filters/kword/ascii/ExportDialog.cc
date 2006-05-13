@@ -18,8 +18,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <qtextcodec.h>
-#include <qradiobutton.h>
+#include <QTextCodec>
+#include <QRadioButton>
 #include <q3buttongroup.h>
 
 #include <kdebug.h>

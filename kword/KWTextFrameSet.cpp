@@ -59,9 +59,9 @@
 #include <kmessagebox.h>
 #include <kdebug.h>
 
-#include <qclipboard.h>
+#include <QClipboard>
 #include <q3dragobject.h>
-#include <qcursor.h>
+#include <QCursor>
 #include <QFile>
 #include <q3progressdialog.h>
 #include <QRegExp>
@@ -78,7 +78,7 @@
 #include <QPixmap>
 
 #include <assert.h>
-#include <qapplication.h>
+#include <QApplication>
 #include <q3tl.h>
 
 //#define DEBUG_MARGINS

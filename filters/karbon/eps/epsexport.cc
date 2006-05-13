@@ -17,9 +17,9 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <qapplication.h>
+#include <QApplication>
 #include <q3cstring.h>
-#include <qdatetime.h>	// For creation date/time.
+#include <QDateTime>	// For creation date/time.
 #include <qdom.h>
 #include <QFile>
 #include <QString>

@@ -35,9 +35,9 @@
 #include <QLayout>
 #include <QLineEdit>
 #include <QPushButton>
-#include <qradiobutton.h>
-#include <qrect.h>
-#include <qtabwidget.h>
+#include <QRadioButton>
+#include <QRect>
+#include <QTabWidget>
 #include <QWidget>
 #include <QVBoxLayout>
 #include <QHBoxLayout>

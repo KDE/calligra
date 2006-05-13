@@ -21,8 +21,8 @@
 
 #include <QFile>
 #include <QString>
-#include <qstringlist.h>
-#include <qtextstream.h>
+#include <QStringList>
+#include <QTextStream>
 
 const float AmiPro::LS_Single = -1;
 const float AmiPro::LS_OneAndHalf = -1.5;

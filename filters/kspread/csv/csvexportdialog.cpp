@@ -27,16 +27,16 @@
 #include <q3buttongroup.h>
 #include <QCheckBox>
 #include <QComboBox>
-#include <qcursor.h>
+#include <QCursor>
 #include <QLabel>
 #include <QLineEdit>
 #include <q3listview.h>
 #include <q3ptrlist.h>
-#include <qradiobutton.h>
-#include <qtextstream.h>
-#include <qtabwidget.h>
-#include <qtextcodec.h>
-#include <qvalidator.h>
+#include <QRadioButton>
+#include <QTextStream>
+#include <QTabWidget>
+#include <QTextCodec>
+#include <QValidator>
 
 #include <kapplication.h>
 #include <klocale.h>

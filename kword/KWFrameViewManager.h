@@ -17,7 +17,7 @@
  */
 #ifndef kwframeviewmanager_h
 #define kwframeviewmanager_h
-#include <qobject.h>
+#include <QObject>
 #include <q3ptrlist.h>
 #include <q3valuelist.h>
 #include <q3valuevector.h>

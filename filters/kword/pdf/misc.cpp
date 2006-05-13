@@ -20,8 +20,8 @@
 #include "misc.h"
 
 #include <math.h>
-#include <qfontmetrics.h>
-#include <qfontdatabase.h>
+#include <QFontMetrics>
+#include <QFontDatabase>
 #include <kglobal.h>
 #include <kdebug.h>
 

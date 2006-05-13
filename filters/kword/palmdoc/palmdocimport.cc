@@ -23,8 +23,8 @@
 #include <unistd.h>
 #endif
 
-#include <qfileinfo.h>
-#include <qstringlist.h>
+#include <QFileInfo>
+#include <QStringList>
 #include <QFont>
 //Added by qt3to4:
 #include <Q3CString>

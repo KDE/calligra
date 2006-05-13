@@ -20,7 +20,7 @@
 #ifndef KSPREADPEN_H
 #define KSPREADPEN_H
 
-#include <qpen.h>
+#include <QPen>
 
 class KoZoomHandler;
 

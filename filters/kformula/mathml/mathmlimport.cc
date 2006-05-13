@@ -25,7 +25,7 @@
 #include <kmessagebox.h>
 #include <KoFilterChain.h>
 
-#include <qtextcodec.h>
+#include <QTextCodec>
 //Added by qt3to4:
 #include <Q3CString>
 

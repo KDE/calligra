@@ -26,7 +26,7 @@
 
 #include <qdom.h>
 #include <QFile>
-#include <qdatetime.h>
+#include <QDateTime>
 #include <kdebug.h>
 
 typedef KGenericFactory<GnumericPlugin> GnumericFactory;

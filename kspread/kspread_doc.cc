@@ -33,10 +33,10 @@
 #include <dirent.h>
 #include <pwd.h>
 
-#include <qapplication.h>
-#include <qfileinfo.h>
+#include <QApplication>
+#include <QFileInfo>
 #include <QFont>
-#include <qpair.h>
+#include <QPair>
 //Added by qt3to4:
 #include <Q3ValueList>
 

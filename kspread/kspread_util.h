@@ -22,8 +22,8 @@
 #define __kspread_util_h__
 
 #include <QString>
-#include <qrect.h>
-#include <qdatetime.h>
+#include <QRect>
+#include <QDateTime>
 #include <QLinkedList>
 
 #include <koffice_export.h>

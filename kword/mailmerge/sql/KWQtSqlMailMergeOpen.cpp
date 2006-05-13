@@ -30,7 +30,7 @@
 #include <klineeditdlg.h>
 #include <kiconloader.h>
 #include <qsqldatabase.h>
-#include <qpointer.h>
+#include <QPointer>
 #include <klocale.h>
 
 /******************************************************************

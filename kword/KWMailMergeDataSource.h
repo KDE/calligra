@@ -24,7 +24,7 @@
 #include <qdom.h>
 #include <kinstance.h>
 #include <QMap>
-#include <qobject.h>
+#include <QObject>
 #include <dcopobject.h>
 #include <koffice_export.h>
 typedef QMap<QString,QString> DbRecord;

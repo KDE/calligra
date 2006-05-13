@@ -24,7 +24,7 @@
 
 #include "defs.h"
 #include <KoRect.h>
-#include <qbrush.h>
+#include <QBrush>
 #include "KoBorder.h"
 #include <q3ptrlist.h>
 

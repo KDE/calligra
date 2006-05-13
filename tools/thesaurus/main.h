@@ -28,7 +28,7 @@
 #include <QGroupBox>
 #include <QLabel>
 #include <QListWidget>
-#include <qobject.h>
+#include <QObject>
 #include <QRegExp>
 #include <QString>
 #include <QStringList>

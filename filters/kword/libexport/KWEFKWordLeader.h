@@ -21,7 +21,7 @@
 #ifndef KWEF_KWORDLEADER_H
 #define KWEF_KWORDLEADER_H
 
-#include <qiodevice.h>
+#include <QIODevice>
 //Added by qt3to4:
 #include <Q3ValueList>
 #include <Q3CString>

@@ -25,10 +25,10 @@
 #include <stdarg.h>
 
 #include <QFile>
-#include <qobject.h>
+#include <QObject>
 #include <QString>
-#include <qtextcodec.h>
-#include <qtextstream.h>
+#include <QTextCodec>
+#include <QTextStream>
 //Added by qt3to4:
 #include <Q3CString>
 

@@ -49,8 +49,8 @@
 
 #include <qdom.h>
 #include <QFile>
-#include <qdatetime.h>
-#include <qvalidator.h>
+#include <QDateTime>
+#include <QValidator>
 //Added by qt3to4:
 #include <Q3CString>
 #include <kdebug.h>

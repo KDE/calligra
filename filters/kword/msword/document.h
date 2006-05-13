@@ -27,8 +27,8 @@
 
 #include <QString>
 #include <qdom.h>
-#include <qobject.h>
-#include <qstringlist.h>
+#include <QObject>
+#include <QStringList>
 
 #include <queue>
 #include <string>

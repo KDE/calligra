@@ -20,9 +20,9 @@
 #ifndef KSPREAD_VALUE_H
 #define KSPREAD_VALUE_H
 
-#include <qdatetime.h>
+#include <QDateTime>
 #include <QString>
-#include <qtextstream.h>
+#include <QTextStream>
 
 #include <koffice_export.h>
 

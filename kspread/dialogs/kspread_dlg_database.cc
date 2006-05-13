@@ -45,7 +45,7 @@
 #include <QLayout>
 #include <QLineEdit>
 #include <QPushButton>
-#include <qradiobutton.h>
+#include <QRadioButton>
 #include <qsqldatabase.h>
 #include <qsqlerror.h>
 #include <qsqlfield.h>

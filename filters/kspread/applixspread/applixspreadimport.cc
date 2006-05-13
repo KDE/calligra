@@ -23,8 +23,8 @@
 #include <unistd.h>
 #endif
 
-#include <qmessagebox.h>
-#include <qstringlist.h>
+#include <QMessageBox>
+#include <QStringList>
 #include <QRegExp>
 #include <q3ptrlist.h>
 //Added by qt3to4:

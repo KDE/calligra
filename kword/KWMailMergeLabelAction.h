@@ -25,7 +25,7 @@
 #define _MAILMERGE_ACTIONS_
 
 #include <kaction.h>
-#include <qtoolbutton.h>
+#include <QToolButton>
 
 class KWMailMergeLabelAction : public KAction, public QActionWidgetFactory
 {

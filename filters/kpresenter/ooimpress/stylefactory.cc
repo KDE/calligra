@@ -20,7 +20,7 @@
 #include "stylefactory.h"
 
 #include <QColor>
-#include <qdatetime.h>
+#include <QDateTime>
 #include <KoUnit.h>
 #include <kdebug.h>
 

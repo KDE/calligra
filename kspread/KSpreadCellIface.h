@@ -29,7 +29,7 @@
 #define KSPREAD_CELL_IFACE_H
 
 #include <QPoint>
-#include <qstringlist.h>
+#include <QStringList>
 
 #include <dcopobject.h>
 

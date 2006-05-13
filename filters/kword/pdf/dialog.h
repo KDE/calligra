@@ -21,7 +21,7 @@
 #define DIALOG_H
 
 #include <q3valuevector.h>
-#include <qpair.h>
+#include <QPair>
 
 #include <kdialogbase.h>
 

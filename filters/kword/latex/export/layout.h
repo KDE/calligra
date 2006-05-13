@@ -23,7 +23,7 @@
 #ifndef __KWORD_LAYOUT_H__
 #define __KWORD_LAYOUT_H__
 
-#include <qtextstream.h>
+#include <QTextStream>
 #include <QString>
 #include <kdebug.h>
 #include "textformat.h"

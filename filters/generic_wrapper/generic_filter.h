@@ -21,7 +21,7 @@
 #define __GENERICFILTER_H__
 
 #include <q3cstring.h>
-#include <qstringlist.h>
+#include <QStringList>
 
 #include <kprocess.h>
 #include <KoFilter.h>

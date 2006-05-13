@@ -20,7 +20,7 @@
 #define __XCF_WRITE_H__
 
 #include <QString>
-#include <qstringlist.h>
+#include <QStringList>
 #include <QFile>
 //Added by qt3to4:
 #include <Q3CString>

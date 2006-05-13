@@ -19,11 +19,11 @@
 */
 
 
-#include <qdatetime.h>
+#include <QDateTime>
 #include <QDataStream>
 #include <QFile>
 #include <QString>
-#include <qstringlist.h>
+#include <QStringList>
 #include <q3ptrlist.h>
 
 #include <dbase.h>

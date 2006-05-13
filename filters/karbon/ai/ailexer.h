@@ -20,7 +20,7 @@
 #ifndef AILEXER_H
 #define AILEXER_H
 
-#include <qiodevice.h>
+#include <QIODevice>
 #include <QString>
 
 /**

@@ -24,11 +24,11 @@
 #endif
 
 #include <QMap>
-#include <qbuffer.h>
+#include <QBuffer>
 #include <q3picture.h>
-#include <qxml.h>
+#include <QtXml>
 #include <qdom.h>
-#include <qdatetime.h>
+#include <QDateTime>
 //Added by qt3to4:
 #include <Q3CString>
 

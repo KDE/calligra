@@ -18,7 +18,7 @@
 */
 
 #include <QString>
-#include <qtextstream.h>
+#include <QTextStream>
 #include <QFile>
 //Added by qt3to4:
 #include <Q3CString>

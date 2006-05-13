@@ -22,7 +22,7 @@
 #include <kdebug.h>
 
 #include <QString>
-#include <qtextstream.h>
+#include <QTextStream>
 
 #include <float.h>
 #include <math.h>

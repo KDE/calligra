@@ -21,7 +21,7 @@
 #ifndef KWORD_1_3_PARSER_H
 #define KWORD_1_3_PARSER_H
 
-#include <qxml.h>
+#include <QtXml>
 #include <q3ptrstack.h>
 
 class KWord13Paragraph;

@@ -18,7 +18,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <qtextcodec.h>
+#include <QTextCodec>
 
 #include <klocale.h>
 #include <kcharsets.h>
@@ -30,8 +30,8 @@
 #include <ImportDialog.h>
 #include <QLabel>
 #include <QLayout>
-#include <qradiobutton.h>
-#include <qbuttongroup.h>
+#include <QRadioButton>
+#include <QButtonGroup>
 #include <QComboBox>
 #include <QCheckBox>
 

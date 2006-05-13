@@ -20,7 +20,7 @@
 #ifndef PSCOMMENTLEXER_H
 #define PSCOMMENTLEXER_H
 
-#include <qiodevice.h>
+#include <QIODevice>
 #include <QString>
 
 /**

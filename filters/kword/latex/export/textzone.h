@@ -26,7 +26,7 @@
 #ifndef __KWORD_LATEX_TEXTZONE_H__
 #define __KWORD_LATEX_TEXTZONE_H__
 
-#include <qtextstream.h>
+#include <QTextStream>
 #include <QString>
 #include "textformat.h"
 

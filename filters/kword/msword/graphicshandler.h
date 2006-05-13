@@ -23,7 +23,7 @@
 #include <wv2/functor.h>
 #include <wv2/handlers.h>
 
-#include <qobject.h>
+#include <QObject>
 #include "document.h"
 #include "versionmagic.h"
 

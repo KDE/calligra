@@ -23,7 +23,7 @@
 #ifndef __KWORD_FORMAT_H__
 #define __KWORD_FORMAT_H__
 
-#include <qtextstream.h>
+#include <QTextStream>
 #include <QString>
 #include <QColor>
 #include "xmlparser.h"

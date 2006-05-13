@@ -11,8 +11,8 @@
 
 #include <stdio.h>
 
-#include <qdatetime.h>
-#include <qtextcodec.h>
+#include <QDateTime>
+#include <QTextCodec>
 #include <QColor>
 //Added by qt3to4:
 #include <Q3CString>

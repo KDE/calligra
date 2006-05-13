@@ -41,7 +41,7 @@
 #include <kmessagebox.h>
 #include <knumvalidator.h>
 
-#include <qradiobutton.h>
+#include <QRadioButton>
 #include <QCheckBox>
 #include <QLineEdit>
 

@@ -24,7 +24,7 @@
 #include <kgenericfactory.h>
 #include <kglobal.h>
 #include <klocale.h>
-#include <qtextcodec.h>
+#include <QTextCodec>
 //Added by qt3to4:
 #include <Q3CString>
 #include "xsltimportdia.h"

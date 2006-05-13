@@ -21,10 +21,10 @@
 #define APPLIXWORDIMPORT_H
 
 #include <QString>
-#include <qstringlist.h>
+#include <QStringList>
 #include <QFile>
-#include <qobject.h>
-#include <qtextstream.h>
+#include <QObject>
+#include <QTextStream>
 //Added by qt3to4:
 #include <Q3CString>
 

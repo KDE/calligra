@@ -23,8 +23,8 @@
 //#include <stdio.h>
 
 #include <QComboBox>
-#include <qcursor.h>
-#include <qstringlist.h>
+#include <QCursor>
+#include <QStringList>
 #include <QDir>
 //Added by qt3to4:
 #include <Q3CString>

@@ -21,7 +21,7 @@
 #define __PALMDB_H
 
 #include <q3cstring.h>
-#include <qdatetime.h>
+#include <QDateTime>
 #include <q3ptrlist.h>
 #include <QString>
 

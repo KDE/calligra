@@ -23,7 +23,7 @@
 #define __KSPREAD_LATEX_SPREADSHEET_H__
 
 #include <q3ptrlist.h>
-#include <qtextstream.h>
+#include <QTextStream>
 
 #include "map.h"
 #include "config.h"

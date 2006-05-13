@@ -22,10 +22,10 @@
 #define DBASE_H
 
 #include <QDataStream>
-#include <qdatetime.h>
+#include <QDateTime>
 #include <QFile>
 #include <QString>
-#include <qstringlist.h>
+#include <QStringList>
 //Added by qt3to4:
 #include <Q3PtrList>
 

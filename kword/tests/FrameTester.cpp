@@ -21,7 +21,7 @@
 #include <KWDocument.h>
 #include <kunittest/runner.h>
 #include <kunittest/module.h>
-#include <qapplication.h>
+#include <QApplication>
 
 using namespace KUnitTest;
 

@@ -18,7 +18,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <qiodevice.h>
+#include <QIODevice>
 //Added by qt3to4:
 #include <Q3ValueList>
 #include <QTextStream>

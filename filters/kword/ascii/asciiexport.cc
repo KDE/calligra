@@ -26,10 +26,10 @@
 
 #include <q3cstring.h>
 #include <QFile>
-#include <qiodevice.h>
+#include <QIODevice>
 #include <QString>
-#include <qtextcodec.h>
-#include <qtextstream.h>
+#include <QTextCodec>
+#include <QTextStream>
 //Added by qt3to4:
 #include <Q3ValueList>
 

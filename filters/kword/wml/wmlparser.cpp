@@ -18,7 +18,7 @@
 */
 
 #include <QString>
-#include <qxml.h>
+#include <QtXml>
 #include <QFile>
 #include <q3valuestack.h>
 

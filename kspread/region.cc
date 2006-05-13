@@ -17,7 +17,7 @@
 */
 
 #include <QRegExp>
-#include <qstringlist.h>
+#include <QStringList>
 
 #include <kdebug.h>
 

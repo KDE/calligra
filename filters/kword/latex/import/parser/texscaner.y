@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <QString>
-/*#include <qpair.h>
+/*#include <QPair>
 #include <QMap>*/
 #include "param.h"
 #include "element.h"

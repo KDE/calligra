@@ -19,7 +19,7 @@
 
 #include <stdlib.h>
 #include <ctype.h>
-#include <qstringlist.h>
+#include <QStringList>
 #include "pscommentlexer.h"
 
 #define CATEGORY_WHITESPACE -1

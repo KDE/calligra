@@ -19,7 +19,7 @@
 
 #include <ctype.h>
 #include <stdlib.h>
-#include <qstringlist.h>
+#include <QStringList>
 #include "ailexer.h"
 
 #define CATEGORY_WHITESPACE -1

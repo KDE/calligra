@@ -20,7 +20,7 @@
 #include "kis_ycbcr_u16_colorspace.h"
 #include "kis_ycbcr_colorspace.h"
 
-#include <qimage.h>
+#include <QImage>
 
 #include <klocale.h>
 

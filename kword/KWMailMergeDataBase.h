@@ -28,9 +28,9 @@
 
 #include <QMap>
 #include <QString>
-#include <qstringlist.h>
+#include <QStringList>
 #include <qdom.h>
-#include <qtextstream.h>
+#include <QTextStream>
 //Added by qt3to4:
 #include <QLabel>
 

@@ -28,9 +28,9 @@
 
 #include <kdialogbase.h>
 #include <QString>
-#include <qlist.h>
+#include <QList>
 #include <QColor>
-#include <qpen.h>
+#include <QPen>
 #include <QFont>
 //Added by qt3to4:
 #include <QLabel>

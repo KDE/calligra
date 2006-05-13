@@ -23,7 +23,7 @@
 #include <QString>
 #include <q3cstring.h>
 #include <QFile>
-#include <qobject.h>
+#include <QObject>
 
 #include <KoFilter.h>
 #include <KoStore.h>

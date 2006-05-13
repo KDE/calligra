@@ -23,10 +23,10 @@
 #include <unistd.h>
 #endif
 
-#include <qtextcodec.h>
+#include <QTextCodec>
 #include <QFile>
-#include <qfileinfo.h>
-#include <qtextstream.h>
+#include <QFileInfo>
+#include <QTextStream>
 #include <q3valuevector.h>
 //Added by qt3to4:
 #include <Q3CString>

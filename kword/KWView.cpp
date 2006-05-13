@@ -125,14 +125,14 @@
 #include <kseparatoraction.h>
 #include <kvbox.h>
 
-#include <qclipboard.h>
-#include <qapplication.h>
+#include <QClipboard>
+#include <QApplication>
 #include <q3groupbox.h>
 #include <QLayout>
 #include <q3progressdialog.h>
 #include <QRegExp>
-#include <qtimer.h>
-#include <qbuffer.h>
+#include <QTimer>
+#include <QBuffer>
 //Added by qt3to4:
 #include <QResizeEvent>
 #include <QMenu>

@@ -20,7 +20,7 @@
 #ifndef AIELEMENT_H
 #define AIELEMENT_H
 
-// #include <qvaluelist.h>
+// #include <Q3ValueList>
 #include <q3valuevector.h>
 //Added by qt3to4:
 #include <Q3CString>

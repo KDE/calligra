@@ -18,7 +18,7 @@
 */
 
 #include <qdom.h>
-#include <qbuffer.h>
+#include <QBuffer>
 
 #include <kdebug.h>
 #include <klocale.h>

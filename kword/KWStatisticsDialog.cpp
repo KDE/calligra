@@ -20,7 +20,7 @@
 #include "KWDocument.h"
 #include "KWFrameSet.h"
 #include <klocale.h>
-#include <qtabwidget.h>
+#include <QTabWidget>
 #include <q3vbox.h>
 #include <QLabel>
 #include <QLayout>

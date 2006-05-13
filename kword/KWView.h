@@ -37,7 +37,7 @@
 #include <kshortcut.h>
 #include <KoZoomMode.h>
 
-#include <qbrush.h>
+#include <QBrush>
 
 //Added by qt3to4:
 #include <Q3ValueList>

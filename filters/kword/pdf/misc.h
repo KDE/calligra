@@ -24,7 +24,7 @@
 
 #include <QColor>
 #include <qdom.h>
-#include <qsize.h>
+#include <QSize>
 #include <q3valuevector.h>
 #include <q3dict.h>
 #include <QMap>

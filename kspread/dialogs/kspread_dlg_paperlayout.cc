@@ -34,7 +34,7 @@
 #include <QCheckBox>
 #include <QLabel>
 #include <QLineEdit>
-#include <qradiobutton.h>
+#include <QRadioButton>
 #include <q3buttongroup.h>
 #include <QComboBox>
 #include <QLayout>

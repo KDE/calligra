@@ -25,7 +25,7 @@
 
 #include "element.h"
 #include <QString>
-#include <qtextstream.h>
+#include <QTextStream>
 
 /***********************************************************************/
 /* Class: Formula                                                      */

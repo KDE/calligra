@@ -18,7 +18,7 @@
 #ifndef _WMFIMPORTPARSER_H_
 #define _WMFIMPORTPARSER_H_
 
-#include <qpainter.h>
+#include <QPainter>
 #include <qdom.h>
 //Added by qt3to4:
 #include <Q3PointArray>

@@ -33,7 +33,7 @@
 #include <KoXmlNS.h>
 #include <kdebug.h>
 #include <qdom.h>
-#include <qbuffer.h>
+#include <QBuffer>
 
 #include "kspread_condition.h"
 

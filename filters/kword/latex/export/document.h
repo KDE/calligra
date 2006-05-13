@@ -23,7 +23,7 @@
 #define __KWORD_LATEX_DOCUMENT_H__
 
 #include <q3ptrlist.h>
-#include <qtextstream.h>
+#include <QTextStream>
 
 #include "listtable.h"		/* list of tables (another kind of list of elements). */
 #include "key.h"

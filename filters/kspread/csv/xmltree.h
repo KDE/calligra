@@ -22,7 +22,7 @@
 
 #include <qdom.h>
 #include <q3memarray.h>
-#include <qtextstream.h>
+#include <QTextStream>
 
 class XMLTree
 {

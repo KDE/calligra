@@ -24,7 +24,7 @@
 #include <magick/api.h>
 
 #include <QFile>
-#include <qfileinfo.h>
+#include <QFileInfo>
 #include <QString>
 
 #include <kdeversion.h>

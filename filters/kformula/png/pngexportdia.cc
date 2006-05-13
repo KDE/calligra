@@ -18,12 +18,12 @@
 */
 
 #include <QCheckBox>
-#include <qimage.h>
+#include <QImage>
 #include <QLabel>
 #include <QLayout>
 #include <QLineEdit>
 #include <qpaintdevice.h>
-#include <qrect.h>
+#include <QRect>
 #include <QWidget>
 //Added by qt3to4:
 #include <Q3VBoxLayout>

@@ -21,10 +21,10 @@
 #ifndef __kspread_format_h__
 #define __kspread_format_h__
 
-#include <qbrush.h>
+#include <QBrush>
 #include <QColor>
 #include <QFont>
-#include <qpen.h>
+#include <QPen>
 
 #include <koffice_export.h>
 

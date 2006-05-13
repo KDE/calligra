@@ -21,7 +21,7 @@
 #include "kwordfilter.h"
 #include "parser.h"
 
-#include <qfileinfo.h>
+#include <QFileInfo>
 #include <q3ptrlist.h>
 #include <QString>
 #include <QRegExp>

@@ -32,7 +32,7 @@ DESCRIPTION
 
 #include <q3ptrlist.h>
 #include <q3valuevector.h>
-#include <qobject.h>
+#include <QObject>
 #include <QString>
 //Added by qt3to4:
 #include <QDragLeaveEvent>

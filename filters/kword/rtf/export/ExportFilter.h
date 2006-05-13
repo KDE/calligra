@@ -23,7 +23,7 @@
 
 #include <q3valuestack.h>
 #include <q3valuelist.h>
-#include <qstringlist.h>
+#include <QStringList>
 //Added by qt3to4:
 #include <QTextStream>
 

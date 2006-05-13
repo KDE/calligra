@@ -22,8 +22,8 @@
 #ifndef __kspread_dlg_database__
 #define __kspread_dlg_database__
 
-#include <qdialog.h>
-#include <qrect.h>
+#include <QDialog>
+#include <QRect>
 //Added by qt3to4:
 #include <QGridLayout>
 #include <QFrame>

@@ -24,8 +24,8 @@
 #include <kvbox.h>
 #include <klocale.h>
 
-#include <qradiobutton.h>
-#include <qgroupbox.h>
+#include <QRadioButton>
+#include <QGroupBox>
 #include <QLayout>
 
 KWInsertPageDia::KWInsertPageDia( QWidget *parent, const char* name )

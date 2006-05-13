@@ -44,7 +44,7 @@
 #include <QCheckBox>
 #include <QComboBox>
 #include <QLabel>
-#include <qradiobutton.h>
+#include <QRadioButton>
 #include <q3listview.h>
 #include <q3buttongroup.h>
 #include <q3hbox.h>

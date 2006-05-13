@@ -25,7 +25,7 @@
 #include <QString>
 #include <q3valuelist.h>
 #include <q3valuestack.h>
-#include <qtextcodec.h>
+#include <QTextCodec>
 #include "rtfimport_dom.h"
 #include "rtfimport_tokenizer.h"
 #include <q3ptrlist.h>

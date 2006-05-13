@@ -22,7 +22,7 @@
 
 #include <kdialogbase.h>
 #include <KoImportStyleDia.h>
-#include <qstringlist.h>
+#include <QStringList>
 //Added by qt3to4:
 #include <Q3PtrList>
 

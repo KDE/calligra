@@ -22,7 +22,7 @@
 #include <QFile>
 #include <QString>
 #include <q3valuelist.h>
-#include <qimage.h>
+#include <QImage>
 
 #include <kgenericfactory.h>
 #include <KoFilter.h>

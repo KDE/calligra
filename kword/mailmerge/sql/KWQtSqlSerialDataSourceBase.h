@@ -23,7 +23,7 @@
 #include <qdom.h>
 #include <kdialogbase.h>
 #include <qsqldatabase.h>
-#include <qpointer.h>
+#include <QPointer>
 
 #include "KWMailMergeDataSource.h"
 #include "qtsqlopenwidget.h"

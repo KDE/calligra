@@ -27,18 +27,18 @@
 
 #include <QString>
 #include <QFile>
-#include <qimage.h>
-#include <qradiobutton.h>
+#include <QImage>
+#include <QRadioButton>
 #include <q3groupbox.h>
 #include <q3buttongroup.h>
 #include <QPushButton>
 #include <QLabel>
 #include <QCheckBox>
-#include <qapplication.h>
-#include <qcursor.h>
-#include <qeventloop.h>
+#include <QApplication>
+#include <QCursor>
+#include <QEventLoop>
 #include <q3progressdialog.h>
-#include <qtimer.h>
+#include <QTimer>
 //Added by qt3to4:
 #include <Q3CString>
 

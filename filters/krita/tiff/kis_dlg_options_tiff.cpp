@@ -21,7 +21,7 @@
 
 #include <QCheckBox>
 #include <q3groupbox.h>
-#include <qslider.h>
+#include <QSlider>
 #include <q3widgetstack.h>
 
 #include <kapplication.h>

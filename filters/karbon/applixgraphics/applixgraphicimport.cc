@@ -26,8 +26,8 @@
 
 #include <kdebug.h>
 #include <QFile>
-#include <qtextstream.h>
-#include <qmessagebox.h>
+#include <QTextStream>
+#include <QMessageBox>
 //Added by qt3to4:
 #include <Q3CString>
 #include <KoFilterChain.h>

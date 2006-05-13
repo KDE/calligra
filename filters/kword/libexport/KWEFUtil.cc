@@ -19,7 +19,7 @@
 */
 
 #include <QString>
-#include <qtextcodec.h>
+#include <QTextCodec>
 
 #include <KoPageLayout.h>
 

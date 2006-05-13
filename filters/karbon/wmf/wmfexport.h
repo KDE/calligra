@@ -19,8 +19,8 @@
 #ifndef WMFEXPORT_H
 #define WMFEXPORT_H
 
-#include <qpen.h>
-#include <qbrush.h>
+#include <QPen>
+#include <QBrush>
 #include <q3ptrlist.h>
 #include <q3pointarray.h>
 //Added by qt3to4:

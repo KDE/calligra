@@ -22,9 +22,9 @@
 #include <QColor>
 #include <QFile>
 #include <QFont>
-#include <qpen.h>
+#include <QPen>
 #include <QRegExp>
-#include <qimage.h>
+#include <QImage>
 //Added by qt3to4:
 #include <Q3CString>
 #include <Q3MemArray>

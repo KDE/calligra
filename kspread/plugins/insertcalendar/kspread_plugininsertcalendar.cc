@@ -40,7 +40,7 @@
 #include <kmessagebox.h>
 
 #include <QPoint>
-#include <qrect.h>
+#include <QRect>
 
 namespace KSpread
 {

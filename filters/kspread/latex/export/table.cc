@@ -20,7 +20,7 @@
 */
 
 #include <kdebug.h>		/* for kDebug stream */
-#include <qbitarray.h>
+#include <QBitArray>
 //Added by qt3to4:
 #include <QTextStream>
 #include "cell.h"

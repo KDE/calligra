@@ -18,7 +18,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <qtextcodec.h>
+#include <QTextCodec>
 
 #include <klocale.h>
 #include <kcharsets.h>
@@ -29,7 +29,7 @@
 #include <kmessagebox.h>
 #include <QLabel>
 #include <QLayout>
-#include <qradiobutton.h>
+#include <QRadioButton>
 #include <QCheckBox>
 #include <kurlrequester.h>
 

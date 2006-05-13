@@ -9,7 +9,7 @@
 
 #ifdef USE_QT
 
-#include <qbuffer.h>
+#include <QBuffer>
 
 QpIStream::QpIStream(unsigned char* pBuffer, unsigned int pLen)
    : cBuffer(pBuffer), cLen(pLen)

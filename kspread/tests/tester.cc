@@ -19,8 +19,8 @@
 
 #include "tester.h"
 
-#include <qstringlist.h>
-#include <qtextstream.h>
+#include <QStringList>
+#include <QTextStream>
 
 using namespace KSpread;
 

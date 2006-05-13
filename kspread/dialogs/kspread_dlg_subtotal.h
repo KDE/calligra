@@ -24,7 +24,7 @@
 #define __kspread_dlg_subtotal__
 
 #include <QPoint>
-#include <qrect.h>
+#include <QRect>
 
 #include <kdialogbase.h>
 

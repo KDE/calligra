@@ -19,9 +19,9 @@
 */
 
 #include <QString>
-#include <qtextcodec.h>
+#include <QTextCodec>
 #include <QFile>
-#include <qfileinfo.h>
+#include <QFileInfo>
 #include <QDir>
 #include <q3picture.h>
 //Added by qt3to4:

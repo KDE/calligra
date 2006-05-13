@@ -22,7 +22,7 @@
 #include "KWPage.h"
 #include "KWTextFrameSet.h"
 #include "KWDocument.h"
-#include <qtimer.h>
+#include <QTimer>
 
 // #define DEBUG_FRAMELAYOUT
 

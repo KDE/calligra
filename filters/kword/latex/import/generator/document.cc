@@ -18,7 +18,7 @@
  */
 
 #include <qdom.h>
-#include <qtextstream.h>
+#include <QTextStream>
 //Added by qt3to4:
 #include <Q3CString>
 #include <Q3PtrList>

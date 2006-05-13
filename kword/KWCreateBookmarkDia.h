@@ -21,7 +21,7 @@
 #define __KWCreateBookmarkDia__
 
 #include <kdialogbase.h>
-#include <qstringlist.h>
+#include <QStringList>
 class QLineEdit;
 class Q3ListBox;
 class KWDocument;

@@ -24,7 +24,7 @@
 
 #include <qdom.h>
 #include <q3ptrlist.h>
-#include <qbrush.h>
+#include <QBrush>
 
 class KWTableTemplate;
 class KWDocument;

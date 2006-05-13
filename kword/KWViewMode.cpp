@@ -29,7 +29,7 @@
 #include "KWPage.h"
 #include "KWFrameViewManager.h"
 #include "KWFrameView.h"
-#include <qapplication.h>
+#include <QApplication>
 #include <kdebug.h>
 
 const unsigned short KWViewMode::s_shadowOffset = 3;

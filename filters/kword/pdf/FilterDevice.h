@@ -20,7 +20,7 @@
 #ifndef FILTERDEVICE_H
 #define FILTERDEVICE_H
 
-#include <qimage.h>
+#include <QImage>
 //Added by qt3to4:
 #include <Q3ValueList>
 #include <Q3PtrList>

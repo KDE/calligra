@@ -27,12 +27,12 @@
 #include <excelimport.h>
 #include <excelimport.moc>
 
-#include <qbuffer.h>
+#include <QBuffer>
 #include <q3cstring.h>
-#include <qdatetime.h>
+#include <QDateTime>
 #include <QFile>
 #include <QString>
-#include <qtextstream.h>
+#include <QTextStream>
 
 #include <kdebug.h>
 #include <KoFilterChain.h>

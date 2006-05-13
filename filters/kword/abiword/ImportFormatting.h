@@ -23,7 +23,7 @@
 #include <q3ptrstack.h>
 #include <QString>
 #include <QColor>
-#include <qxml.h>
+#include <QtXml>
 #include <qdom.h>
 //Added by qt3to4:
 #include <Q3MemArray>
