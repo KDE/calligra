@@ -1123,8 +1123,8 @@ KWDocStruct::KWDocStruct(QWidget* parent, KWDocument* doc, KWGUI* gui)
 
     m_layout->addWidget(searchBar);
     m_layout->addWidget(m_tree);
-#endif
     m_tree->setup();
+#endif
     dirtyTreeTypes = 0;
 }
 
