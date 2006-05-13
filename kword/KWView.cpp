@@ -3079,18 +3079,18 @@ void KWView::changeZoomMenu( int zoom )
     }
     else
     {
-        lst << i18n("%1%").arg("33");
-        lst << i18n("%1%").arg("50");
-        lst << i18n("%1%").arg("75");
-        lst << i18n("%1%").arg("100");
-        lst << i18n("%1%").arg("125");
-        lst << i18n("%1%").arg("150");
-        lst << i18n("%1%").arg("200");
-        lst << i18n("%1%").arg("250");
-        lst << i18n("%1%").arg("350");
-        lst << i18n("%1%").arg("400");
-        lst << i18n("%1%").arg("450");
-        lst << i18n("%1%").arg("500");
+        lst << i18n("%1%", 33);
+        lst << i18n("%1%", 50);
+        lst << i18n("%1%", 75);
+        lst << i18n("%1%", 100);
+        lst << i18n("%1%", 125);
+        lst << i18n("%1%", 150);
+        lst << i18n("%1%", 200);
+        lst << i18n("%1%", 250);
+        lst << i18n("%1%", 350);
+        lst << i18n("%1%", 400);
+        lst << i18n("%1%", 450);
+        lst << i18n("%1%", 500);
     }
     m_actionViewZoom->setItems( lst );
 }
