@@ -4,7 +4,7 @@
  *
  * Copyright (C) 2002-2003 William Lachance (william.lachance@sympatico.ca)
  * Copyright (c) 2004 Fridrich Strba (fridrich.strba@bluewin.ch)
- * 
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
@@ -23,7 +23,7 @@
  *
  */
 
-/* "This product is not manufactured, approved, or supported by 
+/* "This product is not manufactured, approved, or supported by
  * Corel Corporation or Corel Corporation Limited."
  */
 #include "FilterInternal.hxx"
@@ -35,13 +35,10 @@
 double rint(double x);
 #endif /* _WIN32 */
 
-const float fDefaultSideMargin = 1.0f; // inches
-const float fDefaultPageWidth = 8.5f; // inches (OOo required default: we will handle this later)
-const float fDefaultPageHeight = 11.0f; // inches
 
-SectionStyle::SectionStyle(const WPXPropertyList &xPropList, 
-                           const WPXPropertyListVector &xColumns, 
-                           const char *psName) : 
+SectionStyle::SectionStyle(const WPXPropertyList &xPropList,
+                           const WPXPropertyListVector &xColumns,
+                           const char *psName) :
         Style(psName),
         mPropList(xPropList),
         mColumns(xColumns)
@@ -57,7 +54,7 @@ void SectionStyle::write(DocumentHandler &xHandler) const
 
 	// if the number of columns is <= 1, we will never come here. This is only an additional check
 	if (mColumns.count() > 1)
-	{		
+	{
 		// style properties
                 xHandler.startElement("style:properties", mPropList);
 
@@ -65,7 +62,7 @@ void SectionStyle::write(DocumentHandler &xHandler) const
                 WPXPropertyList columnProps;
                 columnProps.insert("fo:column-count", (int)mColumns.count());
                 xHandler.startElement("style:columns", columnProps);
-	
+
                 WPXPropertyListVector::Iter i(mColumns);
                 for (i.rewind(); i.next();)
 		{
