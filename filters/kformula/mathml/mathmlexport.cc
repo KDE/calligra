@@ -21,7 +21,7 @@
 #include <QTextStream>
 #include <QFile>
 //Added by qt3to4:
-#include <Q3CString>
+#include <QByteArray>
 
 #include <kapplication.h>
 #include <kdebug.h>

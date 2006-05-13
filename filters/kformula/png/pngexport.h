@@ -1,5 +1,5 @@
 //Added by qt3to4:
-#include <Q3CString>
+#include <QByteArray>
 /* This file is part of the KDE project
    Copyright (C) 2002 Ulrich Kuettler <ulrich.kuettler@mailbox.tu-dresden.de>
 
@@ -22,7 +22,7 @@
 #ifndef PNGEXPORT_H
 #define PNGEXPORT_H
 
-class Q3CString;
+class QByteArray;
 class QStringList;
 
 #include <KoFilter.h>
