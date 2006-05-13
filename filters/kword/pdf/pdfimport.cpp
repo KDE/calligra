@@ -23,7 +23,7 @@
 #include <qdom.h>
 #include <QDateTime> // debug
 //Added by qt3to4:
-#include <Q3CString>
+#include <QByteArray>
 
 #include <KoFilterChain.h>
 #include <kgenericfactory.h>

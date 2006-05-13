@@ -25,7 +25,7 @@
 #include <QIODevice>
 #include <QString>
 //Added by qt3to4:
-#include <Q3CString>
+#include <QByteArray>
 
 #include <KoFilterChain.h>
 #include <kgenericfactory.h>
@@ -101,7 +101,7 @@ KoFilter::ConversionStatus StarWriterImport::convert(const QByteArray& from, con
     // Prepare storage device and return
     KoStoreDevice *out = m_chain->storageFile("maindoc.xml", KoStore::Write);
     if (out) {
-        Q3CString cstring = maindoc.utf8();
+        QByteArray cstring = maindoc.utf8();
         cstring.prepend("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
         out->write((const char*) cstring, cstring.length());
     }

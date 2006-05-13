@@ -23,7 +23,7 @@
 #include <QFile>
 #include <qdom.h>
 //Added by qt3to4:
-#include <Q3CString>
+#include <QByteArray>
 
 #include <KoFilter.h>
 #include <KoPageLayout.h>
@@ -49,7 +49,7 @@ class Document
                     const QString &ownerPassword, const QString &userPassword);
     void clear();
 
-    QString info(const Q3CString &key) const;
+    QString info(const QByteArray &key) const;
     uint nbPages() const;
     KoOrientation paperOrientation() const;
     DRect paperSize(KoFormat &format) const;

@@ -34,7 +34,7 @@
 #include <qdom.h>
 #include <qfontinfo.h>
 //Added by qt3to4:
-#include <Q3CString>
+#include <QByteArray>
 
 #include <kdebug.h>
 #include <kglobal.h>

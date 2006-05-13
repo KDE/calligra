@@ -30,7 +30,7 @@
 #include <qdom.h>
 #include <QDateTime>
 //Added by qt3to4:
-#include <Q3CString>
+#include <QByteArray>
 
 #include <kdebug.h>
 #include <kcodecs.h>
@@ -709,7 +709,7 @@ bool StructureParser::EndElementD (StackItem* stackItem)
         // Unknown text format!
         kDebug(30506) << "Write character stream: " << stackItem->fontName << endl;
         // We strip the white space in front to avoid white space before a XML declaration
-        Q3CString strOut=stackItem->strTemp2.trimmed().utf8();
+        QByteArray strOut=stackItem->strTemp2.trimmed().utf8();
         out->write(strOut,strOut.length());
     }
 

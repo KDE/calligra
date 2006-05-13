@@ -31,7 +31,7 @@
 
 #include <stdio.h> // debug
 //Added by qt3to4:
-#include <Q3CString>
+#include <QByteArray>
 
 typedef KGenericFactory<WPImport> WPImportFactory;
 K_EXPORT_COMPONENT_FACTORY( libwpimport, WPImportFactory( "kofficefilters" ) )
@@ -309,7 +309,7 @@ KoFilter::ConversionStatus WPImport::convert( const QByteArray& from, const QByt
 
   if( out )
     {
-      Q3CString cstring = root.utf8();
+      QByteArray cstring = root.utf8();
       cstring.prepend( "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" );
       //qDebug("RESULT:\n%s", (const char*)cstring );
       out->write( (const char*) cstring, cstring.length() );

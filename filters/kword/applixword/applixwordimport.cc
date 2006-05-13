@@ -27,7 +27,7 @@
 #include <q3ptrlist.h>
 //Added by qt3to4:
 #include <QTextStream>
-#include <Q3CString>
+#include <QByteArray>
 #include <applixwordimport.h>
 #include <applixwordimport.moc>
 #include <kdebug.h>
@@ -430,7 +430,7 @@ KoFilter::ConversionStatus APPLIXWORDImport::convert( const QByteArray& from, co
         return KoFilter::StorageCreationError;
     }
 
-    Q3CString cstring = str.utf8 ();
+    QByteArray cstring = str.utf8 ();
 
     out->write ((const char*) cstring, cstring.length());
 

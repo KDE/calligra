@@ -27,7 +27,7 @@
 #include <klocale.h>
 #include <QTextCodec>
 //Added by qt3to4:
-#include <Q3CString>
+#include <QByteArray>
 #include "kwordlatexexportdia.h"
 
 typedef KGenericFactory<LATEXExport> LATEXExportFactory;

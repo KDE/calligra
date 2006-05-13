@@ -20,7 +20,7 @@
 #include <qdom.h>
 #include <QTextStream>
 //Added by qt3to4:
-#include <Q3CString>
+#include <QByteArray>
 #include <Q3PtrList>
 
 #include "kdebug.h"
@@ -87,7 +87,7 @@ bool Document::generate(KoStore* store)
 
 void Document::serialize(KoStore* store, QDomDocument doc)
 {
-	Q3CString str = doc.toCString();
+	QByteArray str = doc.toCString();
 	qWarning(str);
 	if(store->open("root"))
 	{

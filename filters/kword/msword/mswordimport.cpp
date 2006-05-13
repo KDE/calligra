@@ -23,7 +23,7 @@
 #include <qfontinfo.h>
 #include <QFile>
 //Added by qt3to4:
-#include <Q3CString>
+#include <QByteArray>
 
 #include <kdebug.h>
 #include <kgenericfactory.h>

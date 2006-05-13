@@ -26,7 +26,7 @@
 #include <QRegExp>
 #include <QImage>
 //Added by qt3to4:
-#include <Q3CString>
+#include <QByteArray>
 #include <Q3MemArray>
 
 #include "oowriterimport.h"
@@ -2109,7 +2109,7 @@ void OoWriterImport::appendField(QDomDocument& doc, QDomElement& outputFormats, 
     else if ( localName.startsWith( "sender-" ) )
     {
         int subtype = -1;
-        const Q3CString afterText( localName.latin1() + 5 );
+        const QByteArray afterText( localName.latin1() + 5 );
         if ( afterText == "sender-company" )
             subtype = 4; //VST_COMPANYNAME;
         else if ( afterText == "sender-firstname" )

@@ -37,7 +37,7 @@
 #include <qdom.h>
 //Added by qt3to4:
 #include <Q3ValueList>
-#include <Q3CString>
+#include <QByteArray>
 #include <Q3MemArray>
 #include <QBuffer>
 
@@ -233,7 +233,7 @@ bool OOWriterWorker::doOpenFile(const QString& filenameOut, const QString& )
     m_zip->setCompression( KZip::NoCompression );
     m_zip->setExtraField( KZip::NoExtraField );
 
-    const Q3CString appId( "application/vnd.sun.xml.writer" );
+    const QByteArray appId( "application/vnd.sun.xml.writer" );
 
     m_zip->writeFile( "mimetype", QString::null, QString::null,appId.data(), appId.length() );
 
@@ -277,15 +277,6 @@ bool OOWriterWorker::zipWriteData(const QByteArray& array)
     const uint size=array.size();
     m_size+=size;
     return m_zip->writeData(array.data(),size);
-}
-
-bool OOWriterWorker::zipWriteData(const Q3CString& cstr)
-{
-    if (!m_zip)
-        return false;
-    const uint size=cstr.length();
-    m_size+=size;
-    return m_zip->writeData(cstr.data(),size);
 }
 
 bool OOWriterWorker::zipWriteData(const QString& str)

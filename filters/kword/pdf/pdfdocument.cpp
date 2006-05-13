@@ -30,7 +30,7 @@
 #include "FilterDevice.h"
 #include "misc.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include <QByteArray>
 
 
 namespace PDFImport
@@ -89,7 +89,7 @@ void Document::clear()
     _imageIndex = 1;
 }
 
-QString Document::info(const Q3CString &key) const
+QString Document::info(const QByteArray &key) const
 {
     QString res;
     Object info;

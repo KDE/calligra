@@ -54,7 +54,7 @@ private:
 
     QFile *infile;
     QByteArray fileBuffer;
-    Q3CString tokenText;
+    QByteArray tokenText;
     uchar *fileBufferPtr;
     uchar *fileBufferEnd;
 };

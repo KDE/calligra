@@ -24,7 +24,7 @@
 #include <QIODevice>
 //Added by qt3to4:
 #include <Q3ValueList>
-#include <Q3CString>
+#include <QByteArray>
 
 #include <KoFilterChain.h>
 
@@ -42,7 +42,7 @@ class KOFFICEFILTER_EXPORT KWEFKWordLeader
         void setWorker ( KWEFBaseWorker *newWorker );
         KWEFBaseWorker *getWorker(void) const;
         KoFilter::ConversionStatus convert( KoFilterChain* chain,
-            const Q3CString& from, const Q3CString& to);
+            const QByteArray& from, const QByteArray& to);
     public: // ### TODO: where to put in the end?
         void createBookmarkFormatData( ParaData& paraData );
     public: // callbacks

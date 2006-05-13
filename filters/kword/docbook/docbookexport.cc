@@ -30,7 +30,7 @@
 #include <qdom.h>
 //Added by qt3to4:
 #include <Q3ValueList>
-#include <Q3CString>
+#include <QByteArray>
 
 #include <KoFilterChain.h>
 #include <KWEFStructures.h>

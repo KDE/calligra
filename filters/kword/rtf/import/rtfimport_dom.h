@@ -14,7 +14,7 @@
 
 #include <QString>
 //Added by qt3to4:
-#include <Q3CString>
+#include <QByteArray>
 
 class QColor;
 class QDateTime;
@@ -110,7 +110,7 @@ public:
     /**
      * Appends XML text to node
      */
-    void append( const Q3CString& cstr);
+    void append( const QByteArray& cstr);
     void append( const QString& _str);
     void append( const char ch);
     /**

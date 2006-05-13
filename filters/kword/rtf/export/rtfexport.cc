@@ -46,7 +46,7 @@
 #include <rtfexport.h>
 #include <rtfexport.moc>
 //Added by qt3to4:
-#include <Q3CString>
+#include <QByteArray>
 
 typedef KGenericFactory<RTFExport> RTFExportFactory;
 K_EXPORT_COMPONENT_FACTORY( librtfexport, RTFExportFactory( "kofficefilters" ) )

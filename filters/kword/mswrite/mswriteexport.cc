@@ -1811,7 +1811,7 @@ public:
 			// convert substring to windows-1251
 			//
 
-			Q3CString stringWin;
+			QByteArray stringWin;
 
 			// there is a codec, therefore there is an encoder...
 			if (m_codec)

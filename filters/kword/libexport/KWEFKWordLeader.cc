@@ -37,7 +37,7 @@
 #include <qdom.h>
 //Added by qt3to4:
 #include <Q3ValueList>
-#include <Q3CString>
+#include <QByteArray>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -1364,7 +1364,7 @@ bool KWEFKWordLeader::loadSubFile(const QString& fileName, QByteArray& array)
 }
 
 KoFilter::ConversionStatus KWEFKWordLeader::convert( KoFilterChain* chain,
-    const Q3CString& from, const Q3CString& to)
+    const QByteArray& from, const QByteArray& to)
 {
     if ( from != "application/x-kword" )
     {

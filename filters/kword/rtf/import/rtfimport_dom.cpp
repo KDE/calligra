@@ -15,7 +15,7 @@
 #include <QTextCodec>
 #include <QColor>
 //Added by qt3to4:
-#include <Q3CString>
+#include <QByteArray>
 
 #include <kdebug.h>
 
@@ -319,7 +319,7 @@ void DomNode::append( const QString& _str)
     str += _str;
 }
 
-void DomNode::append( const Q3CString& cstr)
+void DomNode::append( const QByteArray& cstr)
 {
     str += QString::fromUtf8(cstr);
 }

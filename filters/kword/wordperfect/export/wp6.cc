@@ -29,7 +29,7 @@
 #include <QTextStream>
 #include <q3valuevector.h>
 //Added by qt3to4:
-#include <Q3CString>
+#include <QByteArray>
 
 #include <KWEFBaseWorker.h>
 #include <KWEFKWordLeader.h>
@@ -140,9 +140,9 @@ bool WPSixWorker::doCloseDocument(void)
 // this helper functions "escape" plain Unicode string to WP-compliance string
 // what it does: converting spaces and tabs to hard-spaces and hard-tabs
 // TODO handle Unicode characters using WP charsets
-static Q3CString WPSixEscape( const QString& text )
+static QByteArray WPSixEscape( const QString& text )
 {
-  Q3CString result;
+  QByteArray result;
 
   for( unsigned int i=0; i < text.length(); i++ )
   {
@@ -218,7 +218,7 @@ bool WPSixWorker::doFullParagraph(const QString& paraText,
        }
 
        // the text itself, "escape" it first 
-       Q3CString out = WPSixEscape( paraText.mid( formatData.pos, formatData.len ) );
+       QByteArray out = WPSixEscape( paraText.mid( formatData.pos, formatData.len ) );
        output.writeRawBytes( (const char*)out, out.length() );
 
        // attribute off

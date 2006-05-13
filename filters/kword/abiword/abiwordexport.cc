@@ -36,7 +36,7 @@
 #include <qdom.h>
 //Added by qt3to4:
 #include <Q3ValueList>
-#include <Q3CString>
+#include <QByteArray>
 
 #include <kdebug.h>
 #include <kcodecs.h>
@@ -281,7 +281,7 @@ void AbiWordWorker::writePictureData(const QString& koStoreName, const QString& 
             << " base64=\"yes\""
             << " mime=\"image/png\">\n";
 
-        Q3CString base64=KCodecs::base64Encode(image,true);
+        QByteArray base64=KCodecs::base64Encode(image,true);
 
         *m_streamOut << base64 << "\n"; // QCString is taken as Latin1 by QTextStream
 

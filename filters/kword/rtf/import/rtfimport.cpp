@@ -702,7 +702,7 @@ KoFilter::ConversionStatus RTFImport::convert( const QByteArray& from, const QBy
 	int num=1;
 	for(RTFTextState* i=footnotes.first();i;i=footnotes.next())
 	{
-	    Q3CString str;
+	    QByteArray str;
 	    str.setNum(num);
 	    str.prepend("Footnote ");
 	    num++;
@@ -807,7 +807,7 @@ void RTFImport::ignoreKeyword( RTFProperty * )
 void RTFImport::setCodepage( RTFProperty * )
 {
     QTextCodec* oldCodec = textCodec;
-    Q3CString cp;
+    QByteArray cp;
     if ( token.value == 10000 )
     {
     	cp = "Apple Roman"; // ### TODO: how to support the other ones (Qt does not know them!)
@@ -871,7 +871,7 @@ void RTFImport::setFlagProperty( RTFProperty *property )
 
 void RTFImport::setCharset( RTFProperty *property )
 {
-    Q3CString cp;
+    QByteArray cp;
     switch(token.value) {
         case 0: cp = "CP1252"; break; // ANSI_CHARSET
         case 1: cp = "CP1252"; break; // DEFAULT_CHARSET
@@ -1510,7 +1510,7 @@ void RTFImport::parsePicture( RTFProperty * )
         pictName += QString::number(id);
         pictName += ext;
 
-        Q3CString frameName;
+        QByteArray frameName;
         frameName.setNum(id);
         frameName.prepend("Picture ");
 
@@ -1597,7 +1597,7 @@ void RTFImport::addImportedPicture( const QString& rawFileName )
     pictName += '.';
     pictName += pic.getExtension();
 
-    Q3CString frameName;
+    QByteArray frameName;
     frameName.setNum(id);
     frameName.prepend("Picture ");
 
@@ -2482,7 +2482,7 @@ void RTFImport::addParagraph( DomNode &node, bool frameBreak )
 void RTFImport::finishTable()
 {
     kDebug(30515) << "Starting TFImport::finishTable..." << endl;
-    Q3CString emptyArray;
+    QByteArray emptyArray;
     Q3ValueList<int> cellx;
     int left = 0, right = 0;
 

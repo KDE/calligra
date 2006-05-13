@@ -40,7 +40,7 @@
 //Added by qt3to4:
 #include <Q3ValueList>
 #include <QTextStream>
-#include <Q3CString>
+#include <QByteArray>
 
 #define STRICT_OOWRITER_VERSION_1
 
@@ -135,7 +135,6 @@ private: // ZIP methods
     bool zipDoneWriting(void);
     bool zipWriteData(const char* str);
     bool zipWriteData(const QByteArray& array);
-    bool zipWriteData(const Q3CString& cstr);
     bool zipWriteData(const QString& str); ///< Assumes UTF-8
 private:
     QTextStream* m_streamOut;

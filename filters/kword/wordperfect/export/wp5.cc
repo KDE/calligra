@@ -28,7 +28,7 @@
 #include <QFileInfo>
 #include <QTextStream>
 //Added by qt3to4:
-#include <Q3CString>
+#include <QByteArray>
 
 #include <KWEFBaseWorker.h>
 #include <KWEFKWordLeader.h>
@@ -139,9 +139,9 @@ bool WPFiveWorker::doCloseDocument(void)
 
 // quick-and-dirty escape function for WP 5.x chars
 // TODO fix it !
-static Q3CString WPFiveEscape( const QString& text )
+static QByteArray WPFiveEscape( const QString& text )
 {
-  Q3CString result;
+  QByteArray result;
 
   for( unsigned int i=0; i < text.length(); i++ )
   {
@@ -200,7 +200,7 @@ bool WPFiveWorker::doFullParagraph(const QString& paraText,
        }
 
        // the text itself, "escape" it first
-       Q3CString out = WPFiveEscape( paraText.mid( formatData.pos, formatData.len ) );
+       QByteArray out = WPFiveEscape( paraText.mid( formatData.pos, formatData.len ) );
        output.writeRawBytes( (const char*)out, out.length() );
 
        // attribute off

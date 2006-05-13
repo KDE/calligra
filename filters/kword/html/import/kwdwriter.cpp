@@ -20,7 +20,7 @@
 #include <stdlib.h>
 #include "qrect.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include <QByteArray>
 #include <KoTextZoomHandler.h>
 #include <qpaintdevice.h>
 

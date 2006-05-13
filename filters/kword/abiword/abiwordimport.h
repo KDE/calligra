@@ -37,7 +37,7 @@
 #include <QFile>
 #include <QObject>
 //Added by qt3to4:
-#include <Q3CString>
+#include <QByteArray>
 
 #include <KoFilter.h>
 #include <KoStore.h>

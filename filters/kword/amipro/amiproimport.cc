@@ -28,7 +28,7 @@
 #include <q3valuelist.h>
 #include <QFont>
 //Added by qt3to4:
-#include <Q3CString>
+#include <QByteArray>
 
 #include <kdebug.h>
 #include <KoFilterChain.h>

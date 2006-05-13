@@ -27,7 +27,7 @@
 #include <q3valuelist.h>
 #include <QFont>
 //Added by qt3to4:
-#include <Q3CString>
+#include <QByteArray>
 
 #include <kdebug.h>
 #include <KoFilterChain.h>
@@ -256,7 +256,7 @@ KoFilter::ConversionStatus WMLImport::convert( const QByteArray& from, const QBy
   // store output document
   if( out )
     {
-      Q3CString cstring = root.utf8();
+      QByteArray cstring = root.utf8();
       cstring.prepend( "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" );
       out->write( (const char*) cstring, cstring.length() );
     }
@@ -268,7 +268,7 @@ KoFilter::ConversionStatus WMLImport::convert( const QByteArray& from, const QBy
   out = m_chain->storageFile( "documentinfo.xml", KoStore::Write );
   if ( out )
     {
-       Q3CString cstring = documentInfo.utf8();
+       QByteArray cstring = documentInfo.utf8();
        cstring.prepend( "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" );
 
        out->write( (const char*) cstring, cstring.length() );

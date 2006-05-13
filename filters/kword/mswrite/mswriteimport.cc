@@ -30,7 +30,7 @@
 #include <QTextCodec>
 #include <QTextStream>
 //Added by qt3to4:
-#include <Q3CString>
+#include <QByteArray>
 
 #include <kdebug.h>
 #include <kgenericfactory.h>
@@ -282,7 +282,7 @@ private:
 
 	bool delayOutputFlush (void)
 	{
-		Q3CString strUtf8 = m_heldOutput.utf8 ();
+		QByteArray strUtf8 = m_heldOutput.utf8 ();
 		int strLength = strUtf8.length ();
 
 		if (m_outfile->write (strUtf8, strLength) != strLength)
@@ -1229,7 +1229,7 @@ public:
 		}
 		else
 		{
-			Q3CString strUtf8 = str.utf8 ();
+			QByteArray strUtf8 = str.utf8 ();
 			int strLength = strUtf8.length ();
 
 			if (m_outfile->write (strUtf8, strLength) != strLength)
