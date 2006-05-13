@@ -1,8 +1,0 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="KSpreadPluginCalculator" library="libkspreadcalc" version="2">
-<MenuBar>
- <Menu name="tools"><text>&amp;Tools</text>
-  <Action name="kspreadcalc" />
- </Menu>
-</MenuBar>
-</kpartgui>
