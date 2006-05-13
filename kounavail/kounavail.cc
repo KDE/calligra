@@ -21,8 +21,6 @@
 
 #include <qpainter.h>
 #include <qicon.h>
-//Added by qt3to4:
-#include <Q3CString>
 #include <QPaintEvent>
 #include <kaction.h>
 #include <kinstance.h>

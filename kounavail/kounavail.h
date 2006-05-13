@@ -21,14 +21,12 @@
 #define KOUNAVAIL_H
 
 #include <KoDocument.h>
-//Added by qt3to4:
-#include <Q3CString>
 #include <QPaintEvent>
 
 class KoUnavailPart : public KoDocument
 {
     Q_OBJECT
-    Q_PROPERTY( Q3CString mimetype READ nativeFormatMimeType WRITE setMimeType )
+    Q_PROPERTY( QByteArray mimetype READ nativeFormatMimeType WRITE setMimeType )
     Q_PROPERTY( QString unavailReason READ unavailReason WRITE setUnavailReason )
     Q_PROPERTY( QString realURL READ realURL WRITE setRealURL )
 public:
