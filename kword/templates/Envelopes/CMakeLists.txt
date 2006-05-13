@@ -1,4 +1,4 @@
-kde4_header()
+
 
 
 
@@ -9,7 +9,7 @@ install_files(  ${DATA_INSTALL_DIR}/kword/templates/Envelopes FILES  EnvelopeC6.
 install_files(  ${DATA_INSTALL_DIR}/kword/templates/Envelopes FILES  .directory EnvelopeC6.desktop EnvelopeDL.desktop )
 install_files( ${DATA_INSTALL_DIR}/kword/icons FILES  )
 
-kde4_footer()
+
 
 
 

@@ -1,4 +1,4 @@
-kde4_header()
+
 
 add_subdirectory( flattenpath )
 add_subdirectory( roundcorners )
@@ -14,7 +14,7 @@ add_subdirectory( imagetool )
 ########### install files ###############
 
 
-kde4_footer()
+
 
 
 

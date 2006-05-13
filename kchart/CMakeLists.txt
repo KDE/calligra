@@ -1,4 +1,4 @@
-kde4_header()
+
 project(kchart)
 
 add_subdirectory( kdchart )
@@ -101,7 +101,7 @@ install_files( ${APPLNK_INSTALL_DIR}/Office FILES  kchart.desktop )
 
 
 
-kde4_footer()
+
 
 
 

@@ -1,4 +1,4 @@
-kde4_header()
+
 project(kformula)
 add_subdirectory( pics )
 
@@ -54,7 +54,7 @@ install_files( ${APPLNK_INSTALL_DIR}/Office FILES  kformula.desktop )
 
 
 
-kde4_footer()
+
 
 
 

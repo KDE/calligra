@@ -1,4 +1,4 @@
-kde4_header()
+
 
 if(KDE4_BUILD_TESTS)
 
@@ -27,7 +27,7 @@ add_test(formula ${EXECUTABLE_OUTPUT_PATH}/formulatest)
 
 endif(KDE4_BUILD_TESTS)
 
-kde4_footer()
+
 
 
 

@@ -1,4 +1,4 @@
-kde4_header()
+
 
 
 
@@ -37,7 +37,7 @@ install_targets(${PLUGIN_INSTALL_DIR} amiproexport )
 
 install_files( ${SERVICES_INSTALL_DIR} FILES  kword_amipro_import.desktop kword_amipro_export.desktop )
 
-kde4_footer()
+
 
 
 

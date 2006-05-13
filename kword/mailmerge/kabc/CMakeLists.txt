@@ -1,4 +1,4 @@
-kde4_header()
+
 
 include_directories( ${CMAKE_SOURCE_DIR}/lib/kformula ${CMAKE_SOURCE_DIR}/kword ${KOTEXT_INCLUDES} ${KOFFICEUI_INCLUDES} )
 
@@ -24,7 +24,7 @@ install_targets(${PLUGIN_INSTALL_DIR} kwmailmerge_kabc )
 
 install_files( ${SERVICES_INSTALL_DIR} FILES  kwmailmerge_kabc.desktop )
 
-kde4_footer()
+
 
 
 

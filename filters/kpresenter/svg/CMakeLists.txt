@@ -1,4 +1,4 @@
-kde4_header()
+
 
 include_directories( ${CMAKE_SOURCE_DIR}/kpresenter ${CMAKE_SOURCE_DIR}/lib/kotext ${KDE4_INCLUDES}  )
 
@@ -22,7 +22,7 @@ install_targets(${PLUGIN_INSTALL_DIR} kpresentersvgexport )
 
 install_files( ${SERVICES_INSTALL_DIR} FILES  kpresenter_svg_export.desktop )
 
-kde4_footer()
+
 
 
 

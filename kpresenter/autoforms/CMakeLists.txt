@@ -1,4 +1,4 @@
-kde4_header()
+
 
 add_subdirectory( Arrows )
 add_subdirectory( Connections )
@@ -10,7 +10,7 @@ add_subdirectory( Connections )
 
 install_files( ${DATA_INSTALL_DIR}/kpresenter/autoforms FILES  .autoforms )
 
-kde4_footer()
+
 
 
 

@@ -1,4 +1,4 @@
-kde4_header()
+
 
 
 
@@ -7,7 +7,7 @@ kde4_header()
 
 install_files( ${DATA_INSTALL_DIR}/kexi/scripts/importxhtml FILES  ImportXHTML.py ImportXHTML.rc )
 
-kde4_footer()
+
 
 
 

@@ -1,4 +1,4 @@
-kde4_header()
+
 
 macro_optional_find_package(PNG)
 macro_optional_find_package(OpenEXR)
@@ -30,7 +30,7 @@ if(IMAGEMAGICK_FOUND)
 	add_subdirectory(magick)
 endif(IMAGEMAGICK_FOUND)
 
-kde4_footer()
+
 
 #original Makefile.am contents follow:
 

@@ -1,4 +1,4 @@
-kde4_header()
+
 
 add_subdirectory( kexisql3 )
 add_subdirectory( kexisql )
@@ -9,7 +9,7 @@ add_subdirectory( kexisql )
 ########### install files ###############
 
 
-kde4_footer()
+
 
 
 

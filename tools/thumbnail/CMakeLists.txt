@@ -1,4 +1,4 @@
-kde4_header()
+
 
 
 
@@ -37,7 +37,7 @@ install_targets(${PLUGIN_INSTALL_DIR} kofficethumbnail )
 
 install_files( ${SERVICES_INSTALL_DIR} FILES  clipartthumbnail.desktop kofficethumbnail.desktop )
 
-kde4_footer()
+
 
 
 

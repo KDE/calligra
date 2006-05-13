@@ -1,4 +1,4 @@
-kde4_header()
+
 
 add_subdirectory( rotate )
 
@@ -11,7 +11,7 @@ install_files( ${DATA_INSTALL_DIR}/kpresenter/pics FILES  webslideshow-sidebar.p
 
 kde4_install_icons( ${ICON_INSTALL_DIR}  hicolor )
 
-kde4_footer()
+
 
 
 

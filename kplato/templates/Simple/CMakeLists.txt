@@ -1,4 +1,4 @@
-kde4_header()
+
 
 
 
@@ -9,7 +9,7 @@ install_files( ${DATA_INSTALL_DIR}/kplato/icons FILES  )
 install_files( ${DATA_INSTALL_DIR}/kplato/templates/Simple/.source FILES  Plain.kplatot 8HourDay-40HourWeek.kplatot )
 install_files( ${DATA_INSTALL_DIR}/kplato/templates/Simple FILES  .directory Plain.desktop 8HourDay-40HourWeek.desktop )
 
-kde4_footer()
+
 
 
 

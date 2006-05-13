@@ -1,4 +1,4 @@
-kde4_header()
+
 
 add_subdirectory( Maps )
 add_subdirectory( Flags )
@@ -10,7 +10,7 @@ add_subdirectory( Flags )
 
 install_files( ${DATA_INSTALL_DIR}/kivio/stencils/Geographic FILES  desc icon.xpm )
 
-kde4_footer()
+
 
 
 

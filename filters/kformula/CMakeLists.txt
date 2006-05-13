@@ -1,4 +1,4 @@
-kde4_header()
+
 
 include_directories(${KOFFICEUI_INCLUDES} ${KFORMULA_INCLUDES})
 
@@ -13,7 +13,7 @@ add_subdirectory( svg )
 ########### install files ###############
 
 
-kde4_footer()
+
 
 
 

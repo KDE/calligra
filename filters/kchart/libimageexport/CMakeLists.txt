@@ -1,4 +1,4 @@
-kde4_header()
+
 
 include_directories(
 	${CMAKE_SOURCE_DIR}/kchart 
@@ -26,7 +26,7 @@ install_targets(${LIB_INSTALL_DIR} kchartimageexport )
 ########### install files ###############
 
 
-kde4_footer()
+
 
 
 

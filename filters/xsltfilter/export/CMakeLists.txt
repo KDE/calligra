@@ -1,4 +1,4 @@
-kde4_header()
+
 
 add_subdirectory( xsl )
 
@@ -27,7 +27,7 @@ install_targets(${PLUGIN_INSTALL_DIR} xsltexport )
 
 install_files( ${SERVICES_INSTALL_DIR} FILES  xslt_export.desktop )
 
-kde4_footer()
+
 
 
 

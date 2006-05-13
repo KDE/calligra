@@ -1,4 +1,4 @@
-kde4_header()
+
 
 include_directories( ${CMAKE_SOURCE_DIR}/kspread ${KDE4_INCLUDES}  )
 
@@ -20,7 +20,7 @@ install_targets(${LIB_INSTALL_DIR} kspreadexport )
 ########### install files ###############
 
 
-kde4_footer()
+
 
 
 

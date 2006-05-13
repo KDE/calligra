@@ -1,4 +1,4 @@
-kde4_header()
+
 
 
 include_directories( ${KDE4_INCLUDES} )
@@ -23,7 +23,7 @@ install_targets(${PLUGIN_INSTALL_DIR} thesaurustool )
 install_files( ${SERVICES_INSTALL_DIR} FILES  thesaurustool.desktop )
 install_files( ${DATA_INSTALL_DIR}/thesaurus FILES  thesaurus.txt )
 
-kde4_footer()
+
 
 
 

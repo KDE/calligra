@@ -1,4 +1,4 @@
-kde4_header()
+
 project(ascend)
 include_directories(
 	${KOFFICECORE_INCLUDES} 
@@ -43,7 +43,7 @@ install_files( ${SERVICES_INSTALL_DIR} FILES  writeuppart.desktop )
 install_files( ${DATA_INSTALL_DIR}/writeup FILES  writeup.rc writeup_readonly.rc )
 install_files( ${APPLNK_INSTALL_DIR}/Office FILES  writeup.desktop )
 
-kde4_footer()
+
 
 
 

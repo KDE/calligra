@@ -1,4 +1,4 @@
-kde4_header()
+
 
 
 
@@ -7,7 +7,7 @@ kde4_header()
 
 install_files( ${SERVICETYPES_INSTALL_DIR} FILES  kofilter.desktop koplugin.desktop  kofficepart.desktop kochart.desktop kofilterwrapper.desktop )
 
-kde4_footer()
+
 
 
 

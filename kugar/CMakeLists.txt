@@ -1,4 +1,4 @@
-kde4_header()
+
 project(kugar)
 include_directories( 
 	${CMAKE_SOURCE_DIR}/kugar/kudesigner_lib/ 
@@ -48,7 +48,7 @@ add_subdirectory( kudesigner )
 
 kde4_install_icons( ${ICON_INSTALL_DIR}  hicolor )
 
-kde4_footer()
+
 
 
 

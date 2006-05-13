@@ -1,4 +1,4 @@
-kde4_header()
+
 project(kivio)
 #add_subdirectory( kiviopart )
 #add_subdirectory( plugins )
@@ -12,7 +12,7 @@ add_subdirectory(src)
 
 
 
-kde4_footer()
+
 
 
 

@@ -1,4 +1,4 @@
-kde4_header()
+
 
 
 
@@ -41,7 +41,7 @@ install_targets(${PLUGIN_INSTALL_DIR} asciiexport )
 
 install_files( ${SERVICES_INSTALL_DIR} FILES  kword_ascii_import.desktop kword_ascii_export.desktop )
 
-kde4_footer()
+
 
 
 

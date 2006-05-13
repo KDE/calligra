@@ -1,4 +1,4 @@
-kde4_header()
+
 
 
 
@@ -8,7 +8,7 @@ kde4_header()
 install_files( ${MIME_INSTALL_DIR}/application FILES  x-sqlite2.desktop   x-sqlite3.desktop )
 install_files( ${CONFIG_INSTALL_DIR}/magic FILES  sqlite.magic msaccess.magic )
 
-kde4_footer()
+
 
 
 

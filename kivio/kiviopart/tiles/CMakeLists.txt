@@ -1,4 +1,4 @@
-kde4_header()
+
 
 
 
@@ -7,7 +7,7 @@ kde4_header()
 
 install_files( ${DATA_INSTALL_DIR}/kivio/pics FILES  tile_scissors1.xpm tile_skulls1.xpm tile_yellow_swirl.xpm  )
 
-kde4_footer()
+
 
 
 

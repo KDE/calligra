@@ -1,4 +1,4 @@
-kde4_header()
+
 
 include_directories( ${CMAKE_SOURCE_DIR}/kivio/kiviopart/config ${CMAKE_SOURCE_DIR}/kivio/kiviopart ${CMAKE_SOURCE_DIR}/kivio/kiviopart/kiviosdk ${CMAKE_SOURCE_DIR}/kivio/kiviopart/tools ${KDE4_INCLUDES}  )
 
@@ -27,7 +27,7 @@ install_files( ${DATA_INSTALL_DIR}/kivio/autoloadStencils FILES  Text.sml Text.x
 install_files( ${DATA_INSTALL_DIR}/kivio/kpartplugins FILES  kiviotexttool.rc )
 install_files( ${SERVICES_INSTALL_DIR} FILES  kiviotexttool.desktop )
 
-kde4_footer()
+
 
 
 

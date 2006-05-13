@@ -1,4 +1,4 @@
-kde4_header()
+
 
 include_directories(
     ${KOFFICECORE_INCLUDES}
@@ -26,7 +26,7 @@ install_targets(${PLUGIN_INSTALL_DIR} generickofilter )
 
 install_files( ${SERVICES_INSTALL_DIR} FILES  generic_filter.desktop )
 
-kde4_footer()
+
 
 
 

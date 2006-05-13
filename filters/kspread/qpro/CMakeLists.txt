@@ -1,4 +1,4 @@
-kde4_header()
+
 
 include_directories( ${CMAKE_SOURCE_DIR}/kspread ${CMAKE_CURRENT_SOURCE_DIR}/libqpro ${KDE4_INCLUDES} )
 
@@ -29,7 +29,7 @@ install_targets(${PLUGIN_INSTALL_DIR} qproimport )
 
 install_files( ${SERVICES_INSTALL_DIR} FILES  kspread_qpro_import.desktop )
 
-kde4_footer()
+
 
 
 

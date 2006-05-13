@@ -1,4 +1,4 @@
-kde4_header()
+
 
 add_subdirectory( People )
 add_subdirectory( Buildings )
@@ -14,7 +14,7 @@ add_subdirectory( ER )
 
 install_files( ${DATA_INSTALL_DIR}/kivio/stencils/Miscellaneous FILES  desc icon.xpm )
 
-kde4_footer()
+
 
 
 

@@ -1,4 +1,4 @@
-kde4_header()
+
 
 include_directories( ${CMAKE_SOURCE_DIR}/karbon ${CMAKE_SOURCE_DIR}/karbon/core ${KDE4_INCLUDES}  )
 
@@ -22,7 +22,7 @@ install_targets(${PLUGIN_INSTALL_DIR} oodrawimport )
 
 install_files( ${SERVICES_INSTALL_DIR} FILES  karbon_oodraw_import.desktop )
 
-kde4_footer()
+
 
 
 

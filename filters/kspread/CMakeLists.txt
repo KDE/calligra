@@ -1,4 +1,4 @@
-kde4_header()
+
 
 include_directories(
     ${KOTEXT_INCLUDES}
@@ -21,7 +21,7 @@ add_subdirectory( excel )
 ########### install files ###############
 
 
-kde4_footer()
+
 
 
 

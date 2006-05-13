@@ -1,4 +1,4 @@
-kde4_header()
+
 
 add_subdirectory( sqlite )
 add_subdirectory( sqlite2 )
@@ -22,7 +22,7 @@ ENDIF (POSTGRESQL_FOUND AND PQXX_FOUND)
 ########### install files ###############
 
 
-kde4_footer()
+
 
 
 

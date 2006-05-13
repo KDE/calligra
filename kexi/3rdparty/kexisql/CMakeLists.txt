@@ -1,4 +1,4 @@
-kde4_header()
+
 
 add_subdirectory( tool )
 add_subdirectory( src )
@@ -9,7 +9,7 @@ add_subdirectory( src )
 ########### install files ###############
 
 
-kde4_footer()
+
 
 
 

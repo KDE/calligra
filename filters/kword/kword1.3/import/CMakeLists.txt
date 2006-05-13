@@ -1,4 +1,4 @@
-kde4_header()
+
 
 
 
@@ -34,7 +34,7 @@ install_targets(${PLUGIN_INSTALL_DIR} kwordkword1dot3import )
 ########### install files ###############
 
 
-kde4_footer()
+
 
 
 

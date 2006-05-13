@@ -1,4 +1,4 @@
-kde4_header()
+
 
 include_directories(${CMAKE_SOURCE_DIR}/filters/krita/libkisexif ${KRITA_INCLUDES})
 
@@ -52,7 +52,7 @@ install_targets(${PLUGIN_INSTALL_DIR} kritajpegexport )
 install_files( ${SERVICES_INSTALL_DIR} FILES  krita_jpeg_import.desktop krita_jpeg_export.desktop )
 install_files( ${APPLNK_INSTALL_DIR}/Office FILES  krita_jpeg.desktop )
 
-kde4_footer()
+
 
 
 #original Makefile.am contents follow:

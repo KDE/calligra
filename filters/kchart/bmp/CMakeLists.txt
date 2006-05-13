@@ -1,4 +1,4 @@
-kde4_header()
+
 
 include_directories( ${CMAKE_SOURCE_DIR}/kchart ${CMAKE_SOURCE_DIR}/kchart/kdchart ${CMAKE_SOURCE_DIR}/interfaces ${CMAKE_SOURCE_DIR}/filters/libdialogfilter ${CMAKE_SOURCE_DIR}/filters/kchart/libimageexport ${KDE4_INCLUDES}  )
 
@@ -22,7 +22,7 @@ install_targets(${PLUGIN_INSTALL_DIR} kchartbmpexport )
 
 install_files( ${SERVICES_INSTALL_DIR} FILES  kchart_bmp_export.desktop )
 
-kde4_footer()
+
 
 
 

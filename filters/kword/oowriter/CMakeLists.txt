@@ -1,4 +1,4 @@
-kde4_header()
+
 
 include_directories(${CMAKE_SOURCE_DIR}/filters/liboofilter/)
 
@@ -43,7 +43,7 @@ install_targets(${PLUGIN_INSTALL_DIR} oowriterexport )
 
 install_files( ${SERVICES_INSTALL_DIR} FILES  kword_oowriter_import.desktop kword_oowriter_export.desktop )
 
-kde4_footer()
+
 
 
 

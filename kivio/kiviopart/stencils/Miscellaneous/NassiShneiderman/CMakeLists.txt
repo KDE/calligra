@@ -1,4 +1,4 @@
-kde4_header()
+
 
 
 
@@ -7,7 +7,7 @@ kde4_header()
 
 install_files( ${DATA_INSTALL_DIR}/kivio/stencils/Miscellaneous/NassiShneiderman FILES  block.png  block.sml  box.png  box.sml  call.png  call.sml  choice-add.png  choice-add.sml  choice.png  choice.sml  conditional.png  conditional.sml  desc  exit.png  exit.sml  footloop.png  footloop.sml  headloop.png  headloop.sml  icon.png  statement.png  statement.sml  conditional-head1.png  conditional-head1.sml  conditional-head2.png  conditional-head2.sml )
 
-kde4_footer()
+
 
 
 

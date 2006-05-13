@@ -1,4 +1,4 @@
-kde4_header()
+
 
 include_directories( ${CMAKE_SOURCE_DIR}/kspread ${CMAKE_SOURCE_DIR}/filters/liboofilter ${KDE4_INCLUDES} )
 
@@ -37,7 +37,7 @@ install_targets(${PLUGIN_INSTALL_DIR} opencalcexport )
 
 install_files( ${SERVICES_INSTALL_DIR} FILES  kspread_opencalc_import.desktop kspread_opencalc_export.desktop )
 
-kde4_footer()
+
 
 
 

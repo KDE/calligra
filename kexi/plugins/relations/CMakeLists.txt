@@ -1,4 +1,4 @@
-kde4_header()
+
 
 include_directories( ${CMAKE_SOURCE_DIR}/kexi/core ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/widget ${CMAKE_SOURCE_DIR}/kexi/widget/relations ${CMAKE_SOURCE_DIR}/kexi/tableview ${CMAKE_SOURCE_DIR}/kexi/kexidb ${KDE4_INCLUDES}  )
 
@@ -23,7 +23,7 @@ install_targets(${PLUGIN_INSTALL_DIR} kexihandler_relation )
 install_files( ${DATA_INSTALL_DIR}/kexi FILES  kexirelationpartui.rc kexirelationpartinstui.rc )
 install_files( ${SERVICES_INSTALL_DIR}/kexi FILES  kexirelationhandler.desktop )
 
-kde4_footer()
+
 
 
 

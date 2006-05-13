@@ -1,4 +1,4 @@
-kde4_header()
+
 
 add_subdirectory( insertcalendar )
 
@@ -8,7 +8,7 @@ add_subdirectory( insertcalendar )
 ########### install files ###############
 
 
-kde4_footer()
+
 
 
 

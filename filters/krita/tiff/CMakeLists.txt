@@ -1,4 +1,4 @@
-kde4_header()
+
 
 include_directories(${KRITA_INCLUDES})
 
@@ -59,7 +59,7 @@ install_targets(${PLUGIN_INSTALL_DIR} kritatiffexport )
 install_files( ${SERVICES_INSTALL_DIR} FILES  krita_tiff_export.desktop krita_tiff_import.desktop )
 install_files( ${APPLNK_INSTALL_DIR}/Office FILES  krita_tiff.desktop )
 
-kde4_footer()
+
 
 
 

@@ -1,10 +1,10 @@
-kde4_header()
+
 
 
 ########### install files ###############
 
 
-kde4_footer()
+
 
 
 

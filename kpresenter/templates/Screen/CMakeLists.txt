@@ -1,4 +1,4 @@
-kde4_header()
+
 
 
 
@@ -7,7 +7,7 @@ kde4_header()
 
 install_files( ${DATA_INSTALL_DIR}/kpresenter/templates/Screen/.source FILES  OneColumnLandscape.kpt   TitleLandscape.kpt   TwoColumnLandscape.kpt   emptyLandscape.kpt  )
 
-kde4_footer()
+
 
 
 

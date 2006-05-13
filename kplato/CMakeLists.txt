@@ -1,4 +1,4 @@
-kde4_header()
+
 project(kplato)
 
 add_subdirectory( templates )
@@ -134,7 +134,7 @@ install_files( ${SERVICES_INSTALL_DIR} FILES  kplatopart.desktop )
 install_files( ${DATA_INSTALL_DIR}/kplato FILES  kplato.rc kplato_readonly.rc )
 install_files( ${APPLNK_INSTALL_DIR}/Office FILES  kplato.desktop )
 
-kde4_footer()
+
 
 
 

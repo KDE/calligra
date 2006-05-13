@@ -1,4 +1,4 @@
-kde4_header()
+
 
 include_directories( ${CMAKE_SOURCE_DIR}/karbon ${CMAKE_SOURCE_DIR}/karbon/core ${KDE4_INCLUDES}  )
 
@@ -30,7 +30,7 @@ install_targets(${PLUGIN_INSTALL_DIR} karbonaiimport )
 
 install_files( ${SERVICES_INSTALL_DIR} FILES  karbon_ai_import.desktop )
 
-kde4_footer()
+
 
 
 

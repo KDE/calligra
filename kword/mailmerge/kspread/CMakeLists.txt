@@ -1,4 +1,4 @@
-kde4_header()
+
 
 include_directories( 
 	${CMAKE_SOURCE_DIR}/kspread 
@@ -26,7 +26,7 @@ install_targets(${PLUGIN_INSTALL_DIR} kwmailmerge_kspread )
 
 install_files( ${SERVICES_INSTALL_DIR} FILES  kwmailmerge_kspread.desktop )
 
-kde4_footer()
+
 
 
 

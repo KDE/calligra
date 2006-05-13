@@ -1,4 +1,4 @@
-kde4_header()
+
 
 add_subdirectory( widgets )
 
@@ -66,7 +66,7 @@ install_files( ${DATA_INSTALL_DIR}/kexi FILES  kexiformpartui.rc kexiformpartins
 install_files( ${SERVICES_INSTALL_DIR}/kformdesigner FILES  kformdesigner_kexidbfactory.desktop )
 install_files( ${SERVICES_INSTALL_DIR}/kexi FILES  kexiformhandler.desktop )
 
-kde4_footer()
+
 
 
 

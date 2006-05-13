@@ -1,4 +1,4 @@
-kde4_header()
+
 project(kspread)
 
 add_subdirectory( dialogs )
@@ -202,7 +202,7 @@ install_files( ${APPLNK_INSTALL_DIR}/Office FILES  kspread.desktop )
 
 
 
-kde4_footer()
+
 
 
 

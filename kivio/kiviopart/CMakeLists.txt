@@ -1,4 +1,4 @@
-kde4_header()
+
 
 add_subdirectory( config )
 add_subdirectory( ui )
@@ -100,7 +100,7 @@ install_files( ${SERVICES_INSTALL_DIR} FILES  kiviopart.desktop )
 
 kde4_install_icons( ${ICON_INSTALL_DIR}  hicolor )
 
-kde4_footer()
+
 
 
 

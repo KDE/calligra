@@ -1,4 +1,4 @@
-kde4_header()
+
 
 include_directories(${WPD_INCLUDE_DIR})
 
@@ -22,7 +22,7 @@ install_targets(${PLUGIN_INSTALL_DIR} wpimport )
 
 install_files( ${SERVICES_INSTALL_DIR} FILES  kword_wp_import.desktop  )
 
-kde4_footer()
+
 
 
 

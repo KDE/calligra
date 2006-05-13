@@ -1,4 +1,4 @@
-kde4_header()
+
 
 include_directories( 
 	${KOTEXT_INCLUDES}
@@ -45,7 +45,7 @@ install_targets(${PLUGIN_INSTALL_DIR} csvexport )
 
 install_files( ${SERVICES_INSTALL_DIR} FILES  kspread_csv_import.desktop kspread_csv_export.desktop )
 
-kde4_footer()
+
 
 
 

@@ -1,4 +1,4 @@
-kde4_header()
+
 
 add_subdirectory( parser )
 add_subdirectory( generator )
@@ -27,7 +27,7 @@ install_targets(${PLUGIN_INSTALL_DIR} kwordlateximport )
 
 install_files( ${SERVICES_INSTALL_DIR} FILES  kword_latex_import.desktop )
 
-kde4_footer()
+
 
 
 

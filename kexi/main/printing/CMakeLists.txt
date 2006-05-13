@@ -1,4 +1,4 @@
-kde4_header()
+
 
 include_directories( ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/main/printing ${CMAKE_SOURCE_DIR}/kexi/core ${CMAKE_SOURCE_DIR}/kexi/widget ${CMAKE_SOURCE_DIR}/lib/kofficeui ${CMAKE_SOURCE_DIR}/lib/kofficecore ${KDE4_INCLUDES}  )
 
@@ -9,7 +9,7 @@ include_directories( ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/main/prin
 ########### install files ###############
 
 
-kde4_footer()
+
 
 
 

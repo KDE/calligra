@@ -1,4 +1,4 @@
-kde4_header()
+
 
 include_directories( ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/plugins/forms ${CMAKE_SOURCE_DIR}/kexi/core ${KDE4_INCLUDES}  )
 
@@ -9,7 +9,7 @@ include_directories( ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/plugins/f
 ########### install files ###############
 
 
-kde4_footer()
+
 
 
 

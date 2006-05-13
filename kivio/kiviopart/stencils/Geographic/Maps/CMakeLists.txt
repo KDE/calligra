@@ -1,4 +1,4 @@
-kde4_header()
+
 
 
 
@@ -7,7 +7,7 @@ kde4_header()
 
 install_files( ${DATA_INSTALL_DIR}/kivio/stencils/Geographic/Maps FILES  Belgium.sml  Belgium.xpm  desc  Europe.sml  Europe.xpm  icon.xpm )
 
-kde4_footer()
+
 
 
 

@@ -1,4 +1,4 @@
-kde4_header()
+
 
 add_subdirectory( Dia )
 add_subdirectory( Flowcharting )
@@ -13,7 +13,7 @@ add_subdirectory( Hardware )
 ########### install files ###############
 
 
-kde4_footer()
+
 
 
 

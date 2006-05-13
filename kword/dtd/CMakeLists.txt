@@ -1,4 +1,4 @@
-kde4_header()
+
 
 
 
@@ -10,7 +10,7 @@ install_files( ${DATA_INSTALL_DIR}/kword/dtd FILES  framestyles.dtd )
 install_files( ${DATA_INSTALL_DIR}/kword/dtd FILES  tablestyles.dtd )
 install_files( ${DATA_INSTALL_DIR}/kword/dtd FILES  kword.dtd )
 
-kde4_footer()
+
 
 
 

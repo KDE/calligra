@@ -1,4 +1,4 @@
-kde4_header()
+
 
 add_subdirectory( xslfo )
 
@@ -8,7 +8,7 @@ add_subdirectory( xslfo )
 ########### install files ###############
 
 
-kde4_footer()
+
 
 
 

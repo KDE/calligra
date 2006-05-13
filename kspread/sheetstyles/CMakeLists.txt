@@ -1,4 +1,4 @@
-kde4_header()
+
 
 
 
@@ -7,7 +7,7 @@ kde4_header()
 
 install_files( ${DATA_INSTALL_DIR}/kspread/sheetstyles FILES  standard1.ksts standard1.png standard1.xml standard2.ksts standard2.png standard2.xml )
 
-kde4_footer()
+
 
 
 

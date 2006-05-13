@@ -1,4 +1,4 @@
-kde4_header()
+
 
 add_subdirectory( common_icon )
 add_subdirectory( Screenpresentations )
@@ -13,7 +13,7 @@ add_subdirectory( letter )
 ########### install files ###############
 
 
-kde4_footer()
+
 
 
 

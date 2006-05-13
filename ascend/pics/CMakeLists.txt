@@ -1,4 +1,4 @@
-kde4_header()
+
 
 
 
@@ -9,7 +9,7 @@ install_files( ${DATA_INSTALL_DIR}/writeup/pics FILES  hi128-app-writeup.png    
 
 kde4_install_icons( ${ICON_INSTALL_DIR}  hicolor )
 
-kde4_footer()
+
 
 
 

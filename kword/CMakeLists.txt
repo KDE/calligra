@@ -1,4 +1,4 @@
-kde4_header()
+
 
 project(kword)
 
@@ -171,7 +171,7 @@ install_files( /include/kword FILES  KWMailMergeDataSource.h )
 
 
 
-kde4_footer()
+
 
 
 

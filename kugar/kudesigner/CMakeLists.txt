@@ -1,4 +1,4 @@
-kde4_header()
+
 
 
 include_directories(
@@ -61,7 +61,7 @@ install_targets(/bin kudesigner )
 install_files( ${APPLNK_INSTALL_DIR}/Office FILES  kudesigner.desktop )
 install_files( ${DATA_INSTALL_DIR}/kudesigner FILES  kudesignerui.rc kudesigner_readonly.rc )
 
-kde4_footer()
+
 
 
 

@@ -1,4 +1,4 @@
-kde4_header()
+
 
 add_subdirectory( xcf )
 
@@ -39,7 +39,7 @@ install_targets(${PLUGIN_INSTALL_DIR} kritaxcfexport )
 
 install_files( ${SERVICES_INSTALL_DIR} FILES  krita_xcf_import.desktop krita_xcf_export.desktop )
 
-kde4_footer()
+
 
 
 

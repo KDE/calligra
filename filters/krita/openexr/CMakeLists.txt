@@ -1,4 +1,4 @@
-kde4_header()
+
 
 include_directories(
 	${OPENEXR_INCLUDE_DIR}
@@ -48,7 +48,7 @@ install_targets(${PLUGIN_INSTALL_DIR} krita_openexr_export )
 install_files( ${SERVICES_INSTALL_DIR} FILES  krita_openexr_import.desktop krita_openexr_export.desktop )
 install_files( ${APPLNK_INSTALL_DIR}/Office FILES  krita_openexr.desktop )
 
-kde4_footer()
+
 
 
 

@@ -1,4 +1,4 @@
-kde4_header()
+
 
 add_subdirectory( basic )
 
@@ -8,7 +8,7 @@ add_subdirectory( basic )
 ########### install files ###############
 
 
-kde4_footer()
+
 
 
 

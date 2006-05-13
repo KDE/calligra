@@ -1,4 +1,4 @@
-kde4_header()
+
 
 
 
@@ -7,7 +7,7 @@ kde4_header()
 
 install_files( ${DATA_INSTALL_DIR}/kivio/stencils/UML/ClassDiagrams FILES  ClassConceptual.sml  	icon.xpm  	Note.sml  	ClassConceptual.xpm  	Interface.sml  	Note.xpm  	Class.sml  	Interface.xpm  	TemplateClass.sml  	Class.xpm  	TemplateClass.xpm  	desc )
 
-kde4_footer()
+
 
 
 

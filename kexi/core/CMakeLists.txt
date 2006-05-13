@@ -1,4 +1,4 @@
-kde4_header()
+
 
 include_directories( ${CMAKE_SOURCE_DIR}/libs/kofficecore ${CMAKE_SOURCE_DIR}/libs ${CMAKE_SOURCE_DIR}/kexi ${KDE4_INCLUDES}  )
 
@@ -47,7 +47,7 @@ install_targets(${LIB_INSTALL_DIR} kexicore )
 ########### install files ###############
 
 
-kde4_footer()
+
 
 
 

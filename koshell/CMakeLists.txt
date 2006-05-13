@@ -1,4 +1,4 @@
-kde4_header()
+
 project(koshell)
 include_directories(${KOFFICEUI_INCLUDES})
 
@@ -30,7 +30,7 @@ kde4_install_icons( ${ICON_INSTALL_DIR}  hicolor )
 
 
 
-kde4_footer()
+
 
 
 

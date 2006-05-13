@@ -1,4 +1,4 @@
-kde4_header()
+
 
 
 
@@ -41,7 +41,7 @@ install_targets(${PLUGIN_INSTALL_DIR} kspreadlatexexport )
 
 install_files( ${SERVICES_INSTALL_DIR} FILES  kspread_latex_export.desktop )
 
-kde4_footer()
+
 
 
 

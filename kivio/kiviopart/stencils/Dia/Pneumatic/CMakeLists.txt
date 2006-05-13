@@ -1,4 +1,4 @@
-kde4_header()
+
 
 
 
@@ -7,7 +7,7 @@ kde4_header()
 
 install_files( ${DATA_INSTALL_DIR}/kivio/stencils/Dia/Pneumatic FILES  $(SHAPES) 	desc icon.xpm )
 
-kde4_footer()
+
 
 
 

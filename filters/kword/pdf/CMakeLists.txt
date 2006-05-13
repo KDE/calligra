@@ -1,4 +1,4 @@
-kde4_header()
+
 include_directories(${CMAKE_SOURCE_DIR}/filters/kword/pdf/xpdf/xpdf ${CMAKE_SOURCE_DIR}/filters/kword/pdf/xpdf/goo)
 
 set(libxpdf_SRCS
@@ -77,7 +77,7 @@ install_targets(${PLUGIN_INSTALL_DIR} pdfimport )
 
 install_files( ${SERVICES_INSTALL_DIR} FILES  kword_pdf_import.desktop )
 
-kde4_footer()
+
 
 
 

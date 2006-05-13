@@ -1,4 +1,4 @@
-kde4_header()
+
 
 include_directories(${LIBXML2_INCLUDE_DIR} ${LIBXSLT_INCLUDE_DIR})
 
@@ -24,7 +24,7 @@ install_targets(${PLUGIN_INSTALL_DIR} xsltimport )
 
 install_files( ${SERVICES_INSTALL_DIR} FILES  xslt_import.desktop )
 
-kde4_footer()
+
 
 
 

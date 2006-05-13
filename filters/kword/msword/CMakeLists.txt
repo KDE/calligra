@@ -1,4 +1,4 @@
-kde4_header()
+
 
 add_definitions(${WV2_INCLUDE_DIR})
 
@@ -28,7 +28,7 @@ install_targets(${PLUGIN_INSTALL_DIR} mswordimport )
 
 install_files( ${SERVICES_INSTALL_DIR} FILES  kword_msword_import.desktop )
 
-kde4_footer()
+
 
 
 

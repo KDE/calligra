@@ -1,4 +1,4 @@
-kde4_header()
+
 
 include_directories( ${CMAKE_SOURCE_DIR}/kexi/core ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/widget ${CMAKE_SOURCE_DIR}/kexi/widget/tableview ${CMAKE_SOURCE_DIR}/lib ${CMAKE_SOURCE_DIR}/lib/kofficecore ${CMAKE_SOURCE_DIR}/kexi/kexidb ${KDE4_INCLUDES}  )
 
@@ -28,7 +28,7 @@ install_targets(${PLUGIN_INSTALL_DIR} kexihandler_query )
 install_files( ${DATA_INSTALL_DIR}/kexi FILES  kexiquerypartui.rc kexiquerypartinstui.rc )
 install_files( ${SERVICES_INSTALL_DIR}/kexi FILES  kexiqueryhandler.desktop )
 
-kde4_footer()
+
 
 
 

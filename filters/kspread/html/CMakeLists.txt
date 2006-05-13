@@ -1,4 +1,4 @@
-kde4_header()
+
 
 include_directories( ${CMAKE_SOURCE_DIR}/kspread ${KDE4_INCLUDES}  )
 
@@ -24,7 +24,7 @@ install_targets(${PLUGIN_INSTALL_DIR} kspreadhtmlexport )
 
 install_files( ${SERVICES_INSTALL_DIR} FILES  kspread_html_export.desktop )
 
-kde4_footer()
+
 
 
 

@@ -1,4 +1,4 @@
-kde4_header()
+
 
 include_directories( ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/kexidb ${CMAKE_SOURCE_DIR}/kexi/3rdparty/kexisql/src ${CMAKE_BUILD_DIR}/kexi/kexidb/drivers/sqlite
 ${KDE4_INCLUDES}  )
@@ -30,7 +30,7 @@ install_targets(${PLUGIN_INSTALL_DIR} kexidb_sqlite2driver )
 
 install_files( ${SERVICES_INSTALL_DIR} FILES  kexidb_sqlite2driver.desktop )
 
-kde4_footer()
+
 
 
 

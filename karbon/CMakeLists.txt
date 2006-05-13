@@ -1,4 +1,4 @@
-kde4_header()
+
 project(karbon)
 
 add_subdirectory( commands )
@@ -81,7 +81,7 @@ install_targets(/bin karbon )
 
 
 
-kde4_footer()
+
 
 
 

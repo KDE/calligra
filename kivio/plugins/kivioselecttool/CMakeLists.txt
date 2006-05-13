@@ -1,4 +1,4 @@
-kde4_header()
+
 
 add_subdirectory( select_pics )
 
@@ -25,7 +25,7 @@ install_targets(${PLUGIN_INSTALL_DIR} kivioselecttool )
 install_files( ${DATA_INSTALL_DIR}/kivio/kpartplugins FILES  kivioselecttool.rc )
 install_files( ${SERVICES_INSTALL_DIR} FILES  kivioselecttool.desktop )
 
-kde4_footer()
+
 
 
 

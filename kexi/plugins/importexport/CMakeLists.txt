@@ -1,4 +1,4 @@
-kde4_header()
+
 
 add_subdirectory( csv )
 
@@ -8,7 +8,7 @@ add_subdirectory( csv )
 ########### install files ###############
 
 
-kde4_footer()
+
 
 
 

@@ -1,4 +1,4 @@
-kde4_header()
+
 
 
 
@@ -7,7 +7,7 @@ kde4_header()
 
 install_files( ${DATA_INSTALL_DIR}/kword/horizontalline FILES  line.png )
 
-kde4_footer()
+
 
 
 

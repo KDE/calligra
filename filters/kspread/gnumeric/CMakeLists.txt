@@ -1,4 +1,4 @@
-kde4_header()
+
 
 include_directories( ${CMAKE_SOURCE_DIR}/kspread ${KDE4_INCLUDES}  )
 
@@ -37,7 +37,7 @@ install_targets(${PLUGIN_INSTALL_DIR} gnumericimport )
 
 install_files( ${SERVICES_INSTALL_DIR} FILES  kspread_gnumeric_export.desktop kspread_gnumeric_import.desktop )
 
-kde4_footer()
+
 
 
 

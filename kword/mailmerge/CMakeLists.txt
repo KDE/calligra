@@ -1,4 +1,4 @@
-kde4_header()
+
 
 add_subdirectory( kabc )
 add_subdirectory( kspread )
@@ -26,7 +26,7 @@ install_targets(${PLUGIN_INSTALL_DIR} kwmailmerge_classic )
 
 install_files( ${SERVICES_INSTALL_DIR} FILES  kwserialletter_classic.desktop )
 
-kde4_footer()
+
 
 
 

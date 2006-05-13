@@ -1,4 +1,4 @@
-kde4_header()
+
 
 
 
@@ -25,7 +25,7 @@ install_targets(${PLUGIN_INSTALL_DIR} krita_raw_import )
 install_files( ${SERVICES_INSTALL_DIR} FILES  krita_raw_import.desktop )
 install_files( ${APPLNK_INSTALL_DIR}/Office FILES  krita_raw.desktop )
 
-kde4_footer()
+
 
 
 

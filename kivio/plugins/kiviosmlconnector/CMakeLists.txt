@@ -1,4 +1,4 @@
-kde4_header()
+
 
 add_subdirectory( sml_connector )
 
@@ -25,7 +25,7 @@ install_targets(${PLUGIN_INSTALL_DIR} kiviosmlconnector )
 install_files( ${DATA_INSTALL_DIR}/kivio/kpartplugins FILES  kiviosmlconnector.rc )
 install_files( ${SERVICES_INSTALL_DIR} FILES  kiviosmlconnector.desktop )
 
-kde4_footer()
+
 
 
 

@@ -1,4 +1,4 @@
-kde4_header()
+
 
 include_directories( ${CMAKE_SOURCE_DIR}/karbon ${CMAKE_SOURCE_DIR}/karbon/core ${CMAKE_SOURCE_DIR}/karbon/visitors ${KDE4_INCLUDES}  )
 
@@ -37,7 +37,7 @@ install_targets(${PLUGIN_INSTALL_DIR} karbonxamlimport )
 
 install_files( ${SERVICES_INSTALL_DIR} FILES  karbon_xaml_export.desktop karbon_xaml_import.desktop )
 
-kde4_footer()
+
 
 
 

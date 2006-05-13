@@ -1,4 +1,4 @@
-kde4_header()
+
 
 include_directories( ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/widget ${CMAKE_SOURCE_DIR}/kexi/core ${KDE4_INCLUDES}  )
 
@@ -20,7 +20,7 @@ target_link_libraries(kexidbtest  ${KDE4_KDECORE_LIBS} kexidb ) #kexiextendedwid
 ########### install files ###############
 
 
-kde4_footer()
+
 
 
 

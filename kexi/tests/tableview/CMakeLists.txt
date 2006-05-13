@@ -1,4 +1,4 @@
-kde4_header()
+
 
 include_directories( ${CMAKE_SOURCE_DIR}/kexi ${KDE4_INCLUDES}  )
 
@@ -31,7 +31,7 @@ target_link_libraries(kexitableviewtest  ${KDE4_KDECORE_LIBS} )
 ########### install files ###############
 
 
-kde4_footer()
+
 
 
 

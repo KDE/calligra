@@ -1,4 +1,4 @@
-kde4_header()
+
 
 include_directories( ${KOFFICECORE_INCLUDES})
 add_subdirectory( converter )
@@ -14,7 +14,7 @@ add_subdirectory( quickprint )
 ########### install files ###############
 
 
-kde4_footer()
+
 
 
 

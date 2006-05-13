@@ -1,4 +1,4 @@
-kde4_header()
+
 
 
 
@@ -8,7 +8,7 @@ kde4_header()
 install_files( ${TEMPLATES_INSTALL_DIR} FILES  Presentation.desktop TextDocument.desktop SpreadSheet.desktop Illustration.desktop )
 install_files( ${TEMPLATES_INSTALL_DIR}/.source FILES  Presentation.kpt TextDocument.kwt SpreadSheet.kst Illustration.karbon )
 
-kde4_footer()
+
 
 
 

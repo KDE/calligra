@@ -1,4 +1,4 @@
-kde4_header()
+
 
 
 
@@ -9,7 +9,7 @@ install_files( ${DATA_INSTALL_DIR}/kspread/icons FILES  )
 install_files( ${DATA_INSTALL_DIR}/kspread/templates/General/.source FILES  Worksheet.kst StudentIDCard.kst )
 install_files( ${DATA_INSTALL_DIR}/kspread/templates/General FILES  .directory Worksheet.desktop StudentIDCard.desktop )
 
-kde4_footer()
+
 
 
 

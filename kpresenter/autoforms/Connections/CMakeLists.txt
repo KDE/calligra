@@ -1,4 +1,4 @@
-kde4_header()
+
 
 
 
@@ -9,7 +9,7 @@ install_files( ${DATA_INSTALL_DIR}/kpresenter/autoforms/Connections/.icon FILES 
 install_files( ${DATA_INSTALL_DIR}/kpresenter/autoforms/Connections FILES  .directory Connection1.desktop Connection2.desktop  	Connection3.desktop Connection4.desktop  	Connection5.desktop Connection6.desktop  	Connection7.desktop Connection8.desktop  	Connection9.desktop Connection10.desktop  	Connection11.desktop Connection12.desktop  )
 install_files( ${DATA_INSTALL_DIR}/kpresenter/autoforms/Connections/.source FILES  Connection1.atf Connection2.atf  	Connection3.atf Connection4.atf  	Connection5.atf Connection6.atf  	Connection7.atf Connection8.atf  	Connection9.atf Connection10.atf  	Connection11.atf Connection12.atf  )
 
-kde4_footer()
+
 
 
 

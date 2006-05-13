@@ -1,4 +1,4 @@
-kde4_header()
+
 
 include_directories( ${KOFFICEUI_INCLUDES} ${KDE4_INCLUDES}  )
 
@@ -24,7 +24,7 @@ install_targets(${PLUGIN_INSTALL_DIR} kspreadinsertcalendar )
 
 install_files( ${DATA_INSTALL_DIR}/kspread/kpartplugins FILES  insertcalendar.rc )
 
-kde4_footer()
+
 
 
 

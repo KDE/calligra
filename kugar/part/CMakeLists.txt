@@ -1,4 +1,4 @@
-kde4_header()
+
 
 include_directories(${CMAKE_SOURCE_DIR}/kugar/lib/)
 
@@ -40,7 +40,7 @@ install_files( ${SERVICES_INSTALL_DIR} FILES  kugarpart.desktop )
 install_files( ${DATA_INSTALL_DIR}/kugar FILES  kugarpart.rc )
 install_files( ${DATA_INSTALL_DIR}/kugar/dtd FILES  kugartemplate.dtd )
 
-kde4_footer()
+
 
 
 

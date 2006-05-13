@@ -1,4 +1,4 @@
-kde4_header()
+
 
 include_directories( ${CMAKE_SOURCE_DIR}/kexi/core ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/lib ${CMAKE_SOURCE_DIR}/lib/kofficecore ${CMAKE_SOURCE_DIR}/kexi/widget/utils ${CMAKE_SOURCE_DIR}/kexi/widget ${CMAKE_SOURCE_DIR}/kexi/formeditor ${CMAKE_SOURCE_DIR}/kexi/plugins/forms ${KDE4_INCLUDES}  )
 
@@ -53,7 +53,7 @@ install_files( ${DATA_INSTALL_DIR}/kexi FILES  kexireportpartui.rc kexireportpar
 install_files( ${SERVICES_INSTALL_DIR}/kformdesigner FILES  kformdesigner_kexireportfactory.desktop )
 install_files( ${SERVICES_INSTALL_DIR}/kexi FILES  kexireporthandler.desktop )
 
-kde4_footer()
+
 
 
 

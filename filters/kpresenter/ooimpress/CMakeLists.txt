@@ -1,4 +1,4 @@
-kde4_header()
+
 
 
 
@@ -37,7 +37,7 @@ install_targets(${PLUGIN_INSTALL_DIR} ooimpressexport )
 
 install_files( ${SERVICES_INSTALL_DIR} FILES  kpresenter_ooimpress_import.desktop kpresenter_ooimpress_export.desktop )
 
-kde4_footer()
+
 
 
 

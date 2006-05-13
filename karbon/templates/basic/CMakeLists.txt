@@ -1,4 +1,4 @@
-kde4_header()
+
 
 
 
@@ -9,7 +9,7 @@ install_files( ${DATA_INSTALL_DIR}/karbon/icons FILES  )
 install_files( ${DATA_INSTALL_DIR}/karbon/templates/Basic/.source FILES  empty.karbon )
 install_files( ${DATA_INSTALL_DIR}/karbon/templates/Basic FILES  .directory empty.desktop )
 
-kde4_footer()
+
 
 
 

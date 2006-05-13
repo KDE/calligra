@@ -1,4 +1,4 @@
-kde4_header()
+
 
 
 
@@ -46,7 +46,7 @@ install_targets(${PLUGIN_INSTALL_DIR} kwmailmerge_qtsqldb_power )
 
 install_files( ${SERVICES_INSTALL_DIR} FILES  kwserialletter_qtsqldb_power.desktop )
 
-kde4_footer()
+
 
 
 

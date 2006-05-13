@@ -1,4 +1,4 @@
-kde4_header()
+
 
 include_directories(${IMAGEMAGICK_INCLUDE_DIR})
 
@@ -38,7 +38,7 @@ install_targets(${PLUGIN_INSTALL_DIR} kritamagickexport )
 install_files( ${SERVICES_INSTALL_DIR} FILES  krita_magick_import.desktop krita_magick_export.desktop )
 install_files( ${APPLNK_INSTALL_DIR}/Office FILES  krita_magick.desktop )
 
-kde4_footer()
+
 
 
 

@@ -1,4 +1,4 @@
-kde4_header()
+
 
 
 
@@ -9,7 +9,7 @@ install_files( ${DATA_INSTALL_DIR}/kword/templates/CardsAndLabels/  FILES  Busin
 install_files( ${DATA_INSTALL_DIR}/kword/templates/CardsAndLabels FILES  .directory BusinessCards10.desktop LabelsL16.desktop )
 install_files( ${DATA_INSTALL_DIR}/kword/icons FILES  )
 
-kde4_footer()
+
 
 
 

@@ -1,4 +1,4 @@
-kde4_header()
+
 
 add_subdirectory( utils )
 add_subdirectory( tableview )
@@ -44,7 +44,7 @@ install_targets(${LIB_INSTALL_DIR} kexiextendedwidgets )
 ########### install files ###############
 
 
-kde4_footer()
+
 
 
 

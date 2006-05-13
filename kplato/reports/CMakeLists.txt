@@ -1,4 +1,4 @@
-kde4_header()
+
 
 
 
@@ -8,7 +8,7 @@ kde4_header()
 install_files( ${DATA_INSTALL_DIR}/kplato/reports/.source FILES  resourcelist.ktf tasklist.ktf )
 install_files( ${DATA_INSTALL_DIR}/kplato/reports FILES  resourcelist.desktop tasklist.desktop )
 
-kde4_footer()
+
 
 
 

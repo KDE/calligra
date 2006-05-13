@@ -1,4 +1,4 @@
-kde4_header()
+
 
 set(kritapngimport_PART_SRCS
     kis_png_import.cc
@@ -39,7 +39,7 @@ install_targets(${PLUGIN_INSTALL_DIR} kritapngexport )
 install_files( ${SERVICES_INSTALL_DIR} FILES  krita_png_import.desktop krita_png_export.desktop )
 install_files( ${APPLNK_INSTALL_DIR}/Office FILES  krita_png.desktop )
 
-kde4_footer()
+
 
 #original Makefile.am contents follow:
 

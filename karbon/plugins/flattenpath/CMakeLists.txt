@@ -1,4 +1,4 @@
-kde4_header()
+
 
 include_directories( ${CMAKE_SOURCE_DIR}/karbon ${CMAKE_SOURCE_DIR}/karbon/core ${KDE4_INCLUDES}  )
 
@@ -22,7 +22,7 @@ install_targets(${PLUGIN_INSTALL_DIR} karbon_flattenpathplugin )
 
 install_files( ${DATA_INSTALL_DIR}/karbon/kpartplugins FILES  flattenpathplugin.rc )
 
-kde4_footer()
+
 
 
 

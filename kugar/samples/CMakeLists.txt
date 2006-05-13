@@ -1,4 +1,4 @@
-kde4_header()
+
 
 
 
@@ -7,7 +7,7 @@ kde4_header()
 
 install_files( ${DATA_INSTALL_DIR}/kugar/templates FILES  sample1.ktf sample2.ktf sample3.ktf sample1.kdf sample2.kdf sample3.kdf )
 
-kde4_footer()
+
 
 
 

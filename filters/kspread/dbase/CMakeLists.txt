@@ -1,4 +1,4 @@
-kde4_header()
+
 
 
 
@@ -22,7 +22,7 @@ install_targets(${PLUGIN_INSTALL_DIR} dbaseimport )
 
 install_files( ${SERVICES_INSTALL_DIR} FILES  kspread_dbase_import.desktop )
 
-kde4_footer()
+
 
 
 

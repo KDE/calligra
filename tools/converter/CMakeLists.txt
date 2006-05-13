@@ -1,4 +1,4 @@
-kde4_header()
+
 
 
 
@@ -19,7 +19,7 @@ install_targets(/bin koconverter )
 ########### install files ###############
 
 
-kde4_footer()
+
 
 
 

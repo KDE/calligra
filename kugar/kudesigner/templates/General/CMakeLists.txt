@@ -1,4 +1,4 @@
-kde4_header()
+
 
 
 
@@ -9,7 +9,7 @@ install_files( ${DATA_INSTALL_DIR}/kudesigner/templates/General/.source FILES  A
 install_files( ${DATA_INSTALL_DIR}/kudesigner/templates/General FILES  .directory A0.desktop  A5.desktop  B0.desktop   B4.desktop  B9.desktop         Folio.desktop      Tabloid.desktop  A1.desktop  A6.desktop  B1.desktop   B5.desktop  C5E.desktop        Ledger.desktop  A2.desktop  A7.desktop  B10.desktop  B6.desktop  Comm10E.desktop    Legal.desktop  A3.desktop  A8.desktop  B2.desktop   B7.desktop  DLE.desktop        Letter.desktop  A4.desktop  A9.desktop  B3.desktop   B8.desktop  Executive.desktop  NPageSize.desktop )
 install_files( ${DATA_INSTALL_DIR}/kudesigner/icons FILES  )
 
-kde4_footer()
+
 
 
 

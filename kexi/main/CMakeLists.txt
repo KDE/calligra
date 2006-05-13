@@ -1,4 +1,4 @@
-kde4_header()
+
 
 add_subdirectory( startup )
 add_subdirectory( printing )
@@ -30,7 +30,7 @@ install_targets(${LIB_INSTALL_DIR} keximain )
 ########### install files ###############
 
 
-kde4_footer()
+
 
 
 

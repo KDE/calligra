@@ -1,4 +1,4 @@
-kde4_header()
+
 
 include_directories( ${CMAKE_SOURCE_DIR}/kivio/kiviopart ${CMAKE_SOURCE_DIR}/kivio/kiviopart/kiviosdk ${KDE4_INCLUDES}  )
 
@@ -10,7 +10,7 @@ include_directories( ${CMAKE_SOURCE_DIR}/kivio/kiviopart ${CMAKE_SOURCE_DIR}/kiv
 
 install_files( ${DATA_INSTALL_DIR}/kivio FILES  kivio_tool.rc )
 
-kde4_footer()
+
 
 
 

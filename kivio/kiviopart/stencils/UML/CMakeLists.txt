@@ -1,4 +1,4 @@
-kde4_header()
+
 
 add_subdirectory( ActivityDiagrams )
 add_subdirectory( ClassDiagrams )
@@ -10,7 +10,7 @@ add_subdirectory( ClassDiagrams )
 
 install_files( ${DATA_INSTALL_DIR}/kivio/stencils/UML FILES  desc icon.xpm )
 
-kde4_footer()
+
 
 
 

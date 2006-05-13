@@ -1,4 +1,4 @@
-kde4_header()
+
 
 project(kivio)
 
@@ -52,4 +52,4 @@ install_targets(/bin kivio)
 install_files(${SERVICES_INSTALL_DIR} FILES  kiviopart.desktop)
 install_files(${XDG_APPS_DIR} FILES  kivio.desktop)
 
-kde4_footer()
+

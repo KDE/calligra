@@ -1,4 +1,4 @@
-kde4_header()
+
 
 
 
@@ -7,7 +7,7 @@ kde4_header()
 
 install_files( ${DATA_INSTALL_DIR}/kivio/stencils/Miscellaneous/Buildings FILES  desc  Factory.sml  Factory.xpm  House.sml  House.xpm  icon.xpm  Office2.xpm  Office.sml  Office.xpm )
 
-kde4_footer()
+
 
 
 

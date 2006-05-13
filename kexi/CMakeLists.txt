@@ -1,4 +1,4 @@
-kde4_header()
+
 project(kexi)
 
 add_subdirectory( 3rdparty )
@@ -38,7 +38,7 @@ install_files( ${APPLNK_INSTALL_DIR}/Office FILES  kexi.desktop )
 
 #kde4_create_doxygen_docs( EXCLUDE 3rdparty kexidb/parser/sqlparser.h kexidb/drivers/odbc  )
 
-kde4_footer()
+
 
 
 

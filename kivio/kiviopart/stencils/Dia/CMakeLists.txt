@@ -1,4 +1,4 @@
-kde4_header()
+
 
 add_subdirectory( Assorted )
 add_subdirectory( Circuit )
@@ -20,7 +20,7 @@ add_subdirectory( Sybase )
 
 install_files( ${DATA_INSTALL_DIR}/kivio/stencils/Dia FILES  desc icon.xpm )
 
-kde4_footer()
+
 
 
 

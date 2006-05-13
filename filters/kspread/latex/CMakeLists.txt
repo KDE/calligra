@@ -1,4 +1,4 @@
-kde4_header()
+
 
 add_subdirectory( export )
 
@@ -8,7 +8,7 @@ add_subdirectory( export )
 ########### install files ###############
 
 
-kde4_footer()
+
 
 
 

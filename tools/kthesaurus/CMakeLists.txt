@@ -1,4 +1,4 @@
-kde4_header()
+
 
 include_directories( ${KDE4_INCLUDES} )
 
@@ -22,7 +22,7 @@ install_targets(/bin kthesaurus )
 
 install_files( ${APPLNK_INSTALL_DIR}/Office FILES  KThesaurus.desktop )
 
-kde4_footer()
+
 
 
 

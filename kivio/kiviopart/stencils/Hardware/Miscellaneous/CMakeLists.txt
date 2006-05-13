@@ -1,4 +1,4 @@
-kde4_header()
+
 
 
 
@@ -7,7 +7,7 @@ kde4_header()
 
 install_files( ${DATA_INSTALL_DIR}/kivio/stencils/Hardware/Miscellaneous FILES  cd-rom.sml  cd-rom.xpm  CellPhone.sml  CellPhone.xpm  key.sml  key.xpm  desc  icon.xpm )
 
-kde4_footer()
+
 
 
 

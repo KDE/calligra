@@ -1,4 +1,4 @@
-kde4_header()
+
 
 include_directories( ${CMAKE_SOURCE_DIR}/kivio/kiviopart ${CMAKE_SOURCE_DIR}/kivio/kiviopart/kiviosdk ${CMAKE_SOURCE_DIR}/kivio/kiviopart/config ${KDE4_INCLUDES}  )
 
@@ -24,7 +24,7 @@ install_targets(${PLUGIN_INSTALL_DIR} kivioimageexport )
 
 install_files( ${SERVICES_INSTALL_DIR} FILES  kivio_image_export.desktop )
 
-kde4_footer()
+
 
 
 

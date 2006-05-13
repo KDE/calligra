@@ -1,4 +1,4 @@
-kde4_header()
+
 
 
 
@@ -9,7 +9,7 @@ install_files( ${DATA_INSTALL_DIR}/kword/templates/Normal/.source FILES  TwoColu
 install_files( ${DATA_INSTALL_DIR}/kword/templates/Normal FILES  .directory TwoColumns.desktop Letter.desktop A4.desktop Memo.desktop      TwoColumnsLetter.desktop ProfessionalLetter.desktop ProfessionalA4.desktop      FaxA4.desktop FaxLetter.desktop      ColorfulA4.desktop ColorfulLetter.desktop )
 install_files( ${DATA_INSTALL_DIR}/kword/icons FILES  )
 
-kde4_footer()
+
 
 
 

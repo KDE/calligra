@@ -1,4 +1,4 @@
-kde4_header()
+
 
 include_directories( ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/widget/utils ${KDE4_INCLUDES}  )
 
@@ -28,7 +28,7 @@ install_targets(${LIB_INSTALL_DIR} kexiguiutils )
 ########### install files ###############
 
 
-kde4_footer()
+
 
 
 

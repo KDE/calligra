@@ -1,4 +1,4 @@
-kde4_header()
+
 
 add_subdirectory( kexiscripting )
 add_subdirectory( kexiapp )
@@ -11,7 +11,7 @@ add_subdirectory( scripts )
 ########### install files ###############
 
 
-kde4_footer()
+
 
 
 

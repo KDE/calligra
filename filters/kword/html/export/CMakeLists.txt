@@ -1,4 +1,4 @@
-kde4_header()
+
 
 
 
@@ -30,7 +30,7 @@ install_targets(${PLUGIN_INSTALL_DIR} htmlexport )
 
 install_files( ${SERVICES_INSTALL_DIR} FILES  kword_html_export.desktop )
 
-kde4_footer()
+
 
 
 

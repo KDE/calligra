@@ -1,4 +1,4 @@
-kde4_header()
+
 
 include_directories( ${CMAKE_SOURCE_DIR}/kexi ${KDE4_INCLUDES}  )
 
@@ -21,7 +21,7 @@ install_targets(${PLUGIN_INSTALL_DIR} krosskexiapp )
 ########### install files ###############
 
 
-kde4_footer()
+
 
 
 

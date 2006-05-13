@@ -1,4 +1,4 @@
-kde4_header()
+
 
 add_subdirectory( kword )
 
@@ -8,7 +8,7 @@ add_subdirectory( kword )
 ########### install files ###############
 
 
-kde4_footer()
+
 
 
 

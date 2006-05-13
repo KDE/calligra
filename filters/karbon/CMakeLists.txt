@@ -1,4 +1,4 @@
-kde4_header()
+
 
 add_subdirectory( eps )
 add_subdirectory( ai )
@@ -16,7 +16,7 @@ add_subdirectory( oodraw )
 ########### install files ###############
 
 
-kde4_footer()
+
 
 
 

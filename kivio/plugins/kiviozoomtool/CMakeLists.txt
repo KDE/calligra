@@ -1,4 +1,4 @@
-kde4_header()
+
 
 add_subdirectory( zoom_pics )
 
@@ -25,7 +25,7 @@ install_targets(${PLUGIN_INSTALL_DIR} kiviozoomtool )
 install_files( ${DATA_INSTALL_DIR}/kivio/kpartplugins FILES  kiviozoomtool.rc )
 install_files( ${SERVICES_INSTALL_DIR} FILES  kiviozoomtool.desktop )
 
-kde4_footer()
+
 
 
 

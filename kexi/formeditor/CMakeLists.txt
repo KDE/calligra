@@ -1,4 +1,4 @@
-kde4_header()
+
 
 add_subdirectory( factories )
 
@@ -43,7 +43,7 @@ install_targets(${LIB_INSTALL_DIR} kformdesigner )
 
 install_files( ${SERVICETYPES_INSTALL_DIR} FILES  widgetfactory.desktop )
 
-kde4_footer()
+
 
 
 

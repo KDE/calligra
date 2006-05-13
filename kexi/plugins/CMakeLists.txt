@@ -1,4 +1,4 @@
-kde4_header()
+
 
 add_subdirectory( tables )
 add_subdirectory( relations )
@@ -19,7 +19,7 @@ message(STATUS "${CMAKE_CURRENT_SOURCE_DIR}: skipped subdir $(REPORTS)")
 ########### install files ###############
 
 
-kde4_footer()
+
 
 
 

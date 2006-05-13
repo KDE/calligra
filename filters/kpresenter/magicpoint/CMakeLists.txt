@@ -1,4 +1,4 @@
-kde4_header()
+
 
 
 
@@ -8,7 +8,7 @@ kde4_header()
 install_files( ${SERVICES_INSTALL_DIR} FILES  kpresenter_magicpoint_import.desktop )
 install_files(  FILES  mgp2kpr.py )
 
-kde4_footer()
+
 
 
 

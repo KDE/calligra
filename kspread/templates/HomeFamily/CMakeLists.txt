@@ -1,4 +1,4 @@
-kde4_header()
+
 
 
 
@@ -9,7 +9,7 @@ install_files( ${DATA_INSTALL_DIR}/kspread/icons FILES  )
 install_files( ${DATA_INSTALL_DIR}/kspread/templates/HomeFamily/.source FILES  BMI.kst MenuPlan.kst VacationChecklist.kst CreditCardTracker.kst )
 install_files( ${DATA_INSTALL_DIR}/kspread/templates/HomeFamily FILES  .directory BMI.desktop MenuPlan.desktop VacationChecklist.desktop CreditCardTracker.desktop )
 
-kde4_footer()
+
 
 
 

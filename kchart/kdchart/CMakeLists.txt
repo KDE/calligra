@@ -1,4 +1,4 @@
-kde4_header()
+
 
 ## KDE4 includes needed for kdemacros.h
 include_directories( ${KDE4_INCLUDES} )
@@ -53,7 +53,7 @@ install_targets(${LIB_INSTALL_DIR} kdchart )
 
 install_files( /include FILES KDChartTableBase.h KDChartListTable.h KDChartVectorTable.h KDChartTable.h KDChartParams.h KDFrameProfileSection.h KDChartPropertySet.h KDChartDataIntern.h KDChartDataRegion.h KDFrame.h KDChartGlobal.h KDChartWidget.h KDChartCustomBox.h KDChartEnums.h KDChartTextPiece.h KDChartAxisParams.h kdchart_export.h )
 
-kde4_footer()
+
 
 
 

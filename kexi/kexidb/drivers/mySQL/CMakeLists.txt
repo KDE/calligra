@@ -1,4 +1,4 @@
-kde4_header()
+
 
 include_directories( ${MYSQL_INCLUDE_DIR} 
 ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/kexidb ${KDE4_INCLUDES}  )
@@ -31,7 +31,7 @@ install_targets(${PLUGIN_INSTALL_DIR} kexidb_mysqldriver )
 
 install_files( ${SERVICES_INSTALL_DIR} FILES  kexidb_mysqldriver.desktop )
 
-kde4_footer()
+
 
 
 

@@ -1,4 +1,4 @@
-kde4_header()
+
 
 add_subdirectory( crystalsvg )
 
@@ -9,7 +9,7 @@ add_subdirectory( crystalsvg )
 
 install_files( ${DATA_INSTALL_DIR}/kspread/icons FILES  )
 
-kde4_footer()
+
 
 
 

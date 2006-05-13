@@ -1,4 +1,4 @@
-kde4_header()
+
 
 add_subdirectory( locolor )
 add_subdirectory( crystalsvg )
@@ -10,7 +10,7 @@ add_subdirectory( crystalsvg )
 
 install_files( ${DATA_INSTALL_DIR}/kchart/icons FILES  )
 
-kde4_footer()
+
 
 
 

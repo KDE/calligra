@@ -1,4 +1,4 @@
-kde4_header()
+
 
 
 
@@ -37,7 +37,7 @@ install_targets(${PLUGIN_INSTALL_DIR} kfomathmlimport )
 
 install_files( ${SERVICES_INSTALL_DIR} FILES  kformula_mathml_export.desktop kformula_mathml_import.desktop )
 
-kde4_footer()
+
 
 
 

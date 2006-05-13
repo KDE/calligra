@@ -1,4 +1,4 @@
-kde4_header()
+
 
 
 
@@ -22,7 +22,7 @@ install_targets(${PLUGIN_INSTALL_DIR} wpexport )
 
 install_files( ${SERVICES_INSTALL_DIR} FILES  kword_wp_export.desktop )
 
-kde4_footer()
+
 
 
 

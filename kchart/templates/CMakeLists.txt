@@ -1,4 +1,4 @@
-kde4_header()
+
 
 
 
@@ -9,7 +9,7 @@ install_files( ${DATA_INSTALL_DIR}/kchart/icons FILES  )
 install_files( ${DATA_INSTALL_DIR}/kchart/templates/chart/.source FILES  BarChart.chrt Empty.chrt )
 install_files( ${DATA_INSTALL_DIR}/kchart/templates/chart FILES  .directory BarChart.desktop Empty.desktop )
 
-kde4_footer()
+
 
 
 

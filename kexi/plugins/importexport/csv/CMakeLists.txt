@@ -1,4 +1,4 @@
-kde4_header()
+
 
 include_directories( ${CMAKE_SOURCE_DIR}/kexi/core ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/widget ${CMAKE_SOURCE_DIR}/kexi/migration ${CMAKE_SOURCE_DIR}/kexi/kexiDB ${KDE4_INCLUDES}  )
 
@@ -27,7 +27,7 @@ install_targets(${PLUGIN_INSTALL_DIR} kexihandler_csv_importexport )
 
 install_files( ${SERVICES_INSTALL_DIR}/kexi FILES  kexicsv_importexporthandler.desktop )
 
-kde4_footer()
+
 
 
 

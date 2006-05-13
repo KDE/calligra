@@ -1,4 +1,4 @@
-kde4_header()
+
 
 include_directories( ${KOFFICECORE_INCLUDES} )
 
@@ -22,7 +22,7 @@ install_targets(${PLUGIN_INSTALL_DIR} kounavailpart )
 
 install_files( ${SERVICES_INSTALL_DIR} FILES  kounavail.desktop )
 
-kde4_footer()
+
 
 
 

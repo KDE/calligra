@@ -1,4 +1,4 @@
-kde4_header()
+
 
 add_subdirectory( xrgbrender )
 
@@ -11,7 +11,7 @@ add_subdirectory( xrgbrender )
 ########### install files ###############
 
 
-kde4_footer()
+
 
 
 

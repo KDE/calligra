@@ -1,4 +1,4 @@
-kde4_header()
+
 
 include_directories(${KFORMULA_INCLUDES})
 
@@ -50,7 +50,7 @@ install_targets(${PLUGIN_INSTALL_DIR} kwordlatexexport )
 
 install_files( ${SERVICES_INSTALL_DIR} FILES  kword_latex_export.desktop )
 
-kde4_footer()
+
 
 
 

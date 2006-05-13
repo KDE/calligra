@@ -1,4 +1,4 @@
-kde4_header()
+
 
 add_subdirectory( parser )
 add_subdirectory( drivers )
@@ -59,7 +59,7 @@ install_targets(${LIB_INSTALL_DIR} kexidb )
 install_files( /include/kexidb FILES  connection.h connectiondata.h cursor.h    driver.h drivermanager.h    error.h expression.h field.h fieldlist.h global.h object.h    schemadata.h tableschema.h queryschema.h indexschema.h    relationship.h parser/parser.h transaction.h preparedstatement.h    kexidb_export.h )
 install_files( ${SERVICETYPES_INSTALL_DIR} FILES  kexidb_driver.desktop )
 
-kde4_footer()
+
 
 
 

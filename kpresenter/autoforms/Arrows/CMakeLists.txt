@@ -1,4 +1,4 @@
-kde4_header()
+
 
 
 
@@ -9,7 +9,7 @@ install_files( ${DATA_INSTALL_DIR}/kpresenter/autoforms/Arrows/.icon FILES  Arro
 install_files( ${DATA_INSTALL_DIR}/kpresenter/autoforms/Arrows FILES  .directory ArrowDown.desktop ArrowLeft.desktop  	ArrowLeftDown.desktop  ArrowLeftUp.desktop  	ArrowRight.desktop ArrowRightDown.desktop  	ArrowRightUp.desktop ArrowUp.desktop )
 install_files( ${DATA_INSTALL_DIR}/kpresenter/autoforms/Arrows/.source FILES  ArrowDown.atf ArrowLeft.atf  	ArrowLeftDown.atf ArrowLeftUp.atf  	ArrowRight.atf ArrowRightDown.atf  	ArrowRightUp.atf ArrowUp.atf )
 
-kde4_footer()
+
 
 
 

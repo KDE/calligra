@@ -1,4 +1,4 @@
-kde4_header()
+
 
 include_directories( ${CMAKE_SOURCE_DIR}/kchart ${CMAKE_SOURCE_DIR}/kchart/kdchart ${CMAKE_SOURCE_DIR}/interfaces ${KDE4_INCLUDES}  )
 
@@ -22,7 +22,7 @@ install_targets(${PLUGIN_INSTALL_DIR} kchartsvgexport )
 
 install_files( ${SERVICES_INSTALL_DIR} FILES  kchart_svg_export.desktop )
 
-kde4_footer()
+
 
 
 

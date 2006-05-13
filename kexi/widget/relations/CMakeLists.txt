@@ -1,4 +1,4 @@
-kde4_header()
+
 
 include_directories( ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/core ${KDE4_INCLUDES}  )
 
@@ -24,7 +24,7 @@ install_targets(${LIB_INSTALL_DIR} kexirelationsview )
 ########### install files ###############
 
 
-kde4_footer()
+
 
 
 

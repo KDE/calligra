@@ -1,4 +1,4 @@
-kde4_header()
+
 
 
 include_directories(${CMAKE_SOURCE_DIR}/libs/kwmf )
@@ -52,7 +52,7 @@ install_targets(${PLUGIN_INSTALL_DIR} mswriteexport )
 
 install_files( ${SERVICES_INSTALL_DIR} FILES  kword_mswrite_import.desktop kword_mswrite_export.desktop )
 
-kde4_footer()
+
 
 
 

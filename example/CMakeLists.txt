@@ -1,4 +1,4 @@
-kde4_header()
+
 
 include_directories( ${KOFFICEUI_INCLUDES} )
 
@@ -30,7 +30,7 @@ install_files( ${APPLNK_INSTALL_DIR}/Office FILES  example.desktop )
 
 
 
-kde4_footer()
+
 
 
 

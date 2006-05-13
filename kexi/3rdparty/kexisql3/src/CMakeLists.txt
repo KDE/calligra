@@ -1,4 +1,4 @@
-kde4_header()
+
 
 
 
@@ -69,7 +69,7 @@ install_targets(/bin ksqlite )
 
 install_files(  FILES  ./ksqlite2to3 )
 
-kde4_footer()
+
 
 
 

@@ -1,4 +1,4 @@
-kde4_header()
+
 
 add_subdirectory( kivioconnectortool )
 add_subdirectory( kiviotexttool )
@@ -12,7 +12,7 @@ add_subdirectory( kiviotargettool )
 ########### install files ###############
 
 
-kde4_footer()
+
 
 
 

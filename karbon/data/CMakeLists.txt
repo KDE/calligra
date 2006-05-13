@@ -1,4 +1,4 @@
-kde4_header()
+
 
 
 
@@ -11,7 +11,7 @@ install_files( ${SERVICES_INSTALL_DIR} FILES  karbonpart.desktop )
 install_files( ${DATA_INSTALL_DIR}/karbon FILES  karbon.rc karbon_readonly.rc )
 install_files( ${APPLNK_INSTALL_DIR}/Office FILES  karbon.desktop )
 
-kde4_footer()
+
 
 
 

@@ -1,4 +1,4 @@
-kde4_header()
+
 
 
 
@@ -9,7 +9,7 @@ install_files( ${DATA_INSTALL_DIR}/kivio/templates/Basic/.source FILES  empty.kf
 install_files( ${DATA_INSTALL_DIR}/kivio/templates/Basic FILES  .directory empty.desktop basicflow.desktop )
 install_files( ${DATA_INSTALL_DIR}/kivio/icons FILES  )
 
-kde4_footer()
+
 
 
 

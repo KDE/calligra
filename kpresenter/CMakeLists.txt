@@ -1,4 +1,4 @@
-kde4_header()
+
 
 project(kpresenter)
 add_subdirectory( autoformEdit )
@@ -190,7 +190,7 @@ install_files(  FILES  kprconverter.pl )
 
 
 
-kde4_footer()
+
 
 
 

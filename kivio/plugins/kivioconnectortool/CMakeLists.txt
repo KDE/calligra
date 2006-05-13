@@ -1,4 +1,4 @@
-kde4_header()
+
 
 add_subdirectory( straight_connector )
 
@@ -27,7 +27,7 @@ install_files( ${DATA_INSTALL_DIR}/kivio/icons FILES  )
 install_files( ${DATA_INSTALL_DIR}/kivio/kpartplugins FILES  kivioconnectortool.rc )
 install_files( ${SERVICES_INSTALL_DIR} FILES  kivioconnectortool.desktop )
 
-kde4_footer()
+
 
 
 

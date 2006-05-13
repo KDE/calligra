@@ -1,4 +1,4 @@
-kde4_header()
+
 
 include_directories( ${POSTGRESQL_INCLUDE_DIR} ${PQXX_INCLUDE_DIR} 
 ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/kexidb ${KDE4_INCLUDES}  )
@@ -32,7 +32,7 @@ install_targets(${PLUGIN_INSTALL_DIR} kexidb_pqxxsqldriver )
 
 install_files( ${SERVICES_INSTALL_DIR} FILES  kexidb_pqxxsqldriver.desktop )
 
-kde4_footer()
+
 
 
 

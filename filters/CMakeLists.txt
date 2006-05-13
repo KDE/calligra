@@ -1,4 +1,4 @@
-kde4_header()
+
 
 macro_optional_find_package(LibXml2)
 macro_optional_find_package(LibXslt)
@@ -35,7 +35,7 @@ message (status "readd karbon kivio kpresenter ")
 
 
 
-kde4_footer()
+
 
 
 

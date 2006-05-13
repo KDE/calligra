@@ -1,4 +1,4 @@
-kde4_header()
+
 
 
 
@@ -64,7 +64,7 @@ install_targets(/bin ksqlite2 )
 ########### install files ###############
 
 
-kde4_footer()
+
 
 
 

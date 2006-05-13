@@ -1,4 +1,4 @@
-kde4_header()
+
 
 macro_optional_find_package(WPD)
 macro_optional_find_package(WV2)
@@ -33,7 +33,7 @@ endif(WV2_FOUND)
 ########### install files ###############
 
 
-kde4_footer()
+
 
 
 

@@ -1,4 +1,4 @@
-kde4_header()
+
 
 
 
@@ -34,7 +34,7 @@ install_targets(${LIB_INSTALL_DIR} kugarlib )
 ########### install files ###############
 
 
-kde4_footer()
+
 
 
 

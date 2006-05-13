@@ -1,4 +1,4 @@
-kde4_header()
+
 
 
 
@@ -9,7 +9,7 @@ install_files( ${DATA_INSTALL_DIR}/kpresenter/templates/Screenpresentations/.sou
 install_files( ${DATA_INSTALL_DIR}/kpresenter/templates/Screenpresentations FILES  .directory GradientBlueRed.desktop  	kde.desktop kde2.desktop kde3.desktop classroom.desktop savannah.desktop  	SnowyMountains.desktop TotallyNewProduct.desktop  	BlueBreezeDouble.desktop BlueBreezePicture.desktop BlueBreezeSingle.desktop CopperPlain.desktop )
 install_files( ${DATA_INSTALL_DIR}/kpresenter/icons FILES  )
 
-kde4_footer()
+
 
 
 

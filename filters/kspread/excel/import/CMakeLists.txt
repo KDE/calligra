@@ -1,4 +1,4 @@
-kde4_header()
+
 
 include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/../sidewinder )
 
@@ -33,7 +33,7 @@ install_targets(${PLUGIN_INSTALL_DIR} excelimport )
 
 install_files( ${SERVICES_INSTALL_DIR} FILES  kspread_excel_import.desktop )
 
-kde4_footer()
+
 
 
 

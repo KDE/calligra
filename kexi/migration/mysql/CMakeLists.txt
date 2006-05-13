@@ -1,4 +1,4 @@
-kde4_header()
+
 
 include_directories( ${MYSQL_INCLUDE_DIR} ${CMAKE_SOURCE_DIR}/kexi ${KDE4_INCLUDES}  )
 
@@ -23,7 +23,7 @@ install_targets(${PLUGIN_INSTALL_DIR} keximigrate_mysql )
 
 install_files( ${SERVICES_INSTALL_DIR} FILES  keximigrate_mysql.desktop )
 
-kde4_footer()
+
 
 
 

@@ -1,4 +1,4 @@
-kde4_header()
+
 
 
 
@@ -26,7 +26,7 @@ install_targets(${PLUGIN_INSTALL_DIR} latexgenerator )
 ########### install files ###############
 
 
-kde4_footer()
+
 
 
 

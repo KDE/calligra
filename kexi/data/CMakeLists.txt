@@ -1,4 +1,4 @@
-kde4_header()
+
 
 message(STATUS "${CMAKE_CURRENT_SOURCE_DIR}: skipped subdir $(KDE34COMPAT)")
 
@@ -12,7 +12,7 @@ install_files( ${CONFIG_INSTALL_DIR}/magic FILES  kexi.magic  )
 install_files( ${DATA_INSTALL_DIR}/kexi FILES  kexiui.rc )
 install_files( ${MIME_INSTALL_DIR}/application FILES  x-kexiproject-sqlite.desktop  x-kexi-connectiondata.desktop  x-kexiproject-sqlite2.desktop  x-kexiproject-sqlite3.desktop  x-kexiproject-shortcut.desktop )
 
-kde4_footer()
+
 
 
 

@@ -1,4 +1,4 @@
-kde4_header()
+
 
 add_subdirectory( sidewinder )
 add_subdirectory( import )
@@ -10,7 +10,7 @@ include_directories( ${CMAKE_SOURCE_DIR}/kspread ${KDE4_INCLUDES}  )
 
 install_files( ${SERVICES_INSTALL_DIR} FILES  )
 
-kde4_footer()
+
 
 
 

@@ -1,4 +1,4 @@
-kde4_header()
+
 
 add_subdirectory( libimageexport )
 add_subdirectory( png )
@@ -18,7 +18,7 @@ add_subdirectory( powerpoint )
 ########### install files ###############
 
 
-kde4_footer()
+
 
 
 

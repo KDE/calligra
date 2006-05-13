@@ -1,4 +1,4 @@
-kde4_header()
+
 
 
 
@@ -21,7 +21,7 @@ INSTALL_FILES( ${DATA_INSTALL_DIR}/kspread/functions FILES
 	reference.xml
 )
 
-kde4_footer()
+
 
 
 

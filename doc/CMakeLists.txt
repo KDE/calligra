@@ -1,4 +1,4 @@
-kde4_header()
+
 
 
 
@@ -21,7 +21,7 @@ add_subdirectory(thesaurus)
 ########### install files ###############
 
 
-kde4_footer()
+
 
 
 

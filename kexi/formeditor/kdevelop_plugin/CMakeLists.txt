@@ -1,4 +1,4 @@
-kde4_header()
+
 
 include_directories( ${CMAKE_SOURCE_DIR}/kexi/formeditor ${CMAKE_SOURCE_DIR}/kexi/core ${KDE4_INCLUDES}  )
 
@@ -23,7 +23,7 @@ install_targets(${PLUGIN_INSTALL_DIR} kformdesigner_kdev_part )
 install_files( ${SERVICES_INSTALL_DIR} FILES  kformdesigner_kdev_part.desktop )
 install_files( ${DATA_INSTALL_DIR}/kformdesigner_kdev_part FILES  kformdesigner_part.rc kformdesigner_part_shell.rc )
 
-kde4_footer()
+
 
 
 

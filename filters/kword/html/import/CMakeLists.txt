@@ -1,4 +1,4 @@
-kde4_header()
+
 
 include_directories(${KOFFICEUI_INCLUDES} ${KOTEXT_INCLUDES})
 
@@ -22,7 +22,7 @@ install_targets(${PLUGIN_INSTALL_DIR} htmlimport )
 
 install_files( ${SERVICES_INSTALL_DIR} FILES  kword_html_import.desktop )
 
-kde4_footer()
+
 
 
 

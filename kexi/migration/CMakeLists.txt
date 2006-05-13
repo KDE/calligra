@@ -1,4 +1,4 @@
-kde4_header()
+
 
 include_directories( ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/core ${CMAKE_SOURCE_DIR}/kexi/widget ${CMAKE_SOURCE_DIR}/kexi/main/startup ${KDE4_INCLUDES}  )
 
@@ -48,7 +48,7 @@ target_link_libraries(keximigratetest  ${KDE4_KDECORE_LIBS} keximigrate kexicore
 install_files( /include/kexidb FILES  keximigrate.h keximigratedata.h migratemanager.h )
 install_files( ${SERVICETYPES_INSTALL_DIR} FILES  keximigration_driver.desktop )
 
-kde4_footer()
+
 
 
 
