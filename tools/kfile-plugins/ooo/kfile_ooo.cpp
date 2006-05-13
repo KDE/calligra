@@ -51,8 +51,6 @@
 #include <QFile>
 #include <QDateTime>
 #include <QValidator>
-//Added by qt3to4:
-#include <Q3CString>
 #include <kdebug.h>
 #include <kio/netaccess.h>
 
