@@ -118,7 +118,7 @@ void KivioLayerPanel::addItem()
 
   // Set the layer name to something a bit different. This isn't
   // guaranteed to be unique, but it's better than "Untitled"
-  layer->setName(i18n("Layer %1").arg(id));
+  layer->setName(i18n("Layer %1", id));
   page->addLayer(layer);
   page->setCurLayer(layer);
 

@@ -30,18 +30,18 @@ ZoomAction::ZoomAction(QObject* parent, const char* name)
 {
   setEditable(true);
   QStringList lst;
-  lst << i18n("%1%").arg("33");
-  lst << i18n("%1%").arg("50");
-  lst << i18n("%1%").arg("75");
-  lst << i18n("%1%").arg("100");
-  lst << i18n("%1%").arg("125");
-  lst << i18n("%1%").arg("150");
-  lst << i18n("%1%").arg("200");
-  lst << i18n("%1%").arg("250");
-  lst << i18n("%1%").arg("350");
-  lst << i18n("%1%").arg("400");
-  lst << i18n("%1%").arg("450");
-  lst << i18n("%1%").arg("500");
+  lst << i18n("%1%", "33");
+  lst << i18n("%1%", "50");
+  lst << i18n("%1%", "75");
+  lst << i18n("%1%", "100");
+  lst << i18n("%1%", "125");
+  lst << i18n("%1%", "150");
+  lst << i18n("%1%", "200");
+  lst << i18n("%1%", "250");
+  lst << i18n("%1%", "350");
+  lst << i18n("%1%", "400");
+  lst << i18n("%1%", "450");
+  lst << i18n("%1%", "500");
   setItems(lst);
 }
 
@@ -85,14 +85,14 @@ void ZoomAction::insertItem( int zoom )
 
   QStringList lst;
   for (QValueList<int>::Iterator it = list.begin() ; it != list.end() ; ++it)
-    lst.append( i18n("%1%").arg(*it) );
+    lst.append( i18n("%1%", *it) );
   setItems(lst);
-  setCurrentItem(lst.findIndex(i18n("%1%").arg(zoom)));
+  setCurrentItem(lst.findIndex(i18n("%1%", zoom)));
 }
 
 void ZoomAction::setEditZoom( int zoom )
 {
-  const QString zt(i18n("%1%").arg(zoom));
+  const QString zt(i18n("%1%", zoom));
   setEditText(zt);
 }
 #include "kivio_zoomaction.moc"

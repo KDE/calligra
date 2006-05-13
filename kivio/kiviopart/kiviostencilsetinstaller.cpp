@@ -74,7 +74,7 @@ namespace Kivio {
     QString tmpFile;
 
     if(!KIO::NetAccess::download(url, tmpFile, this)) {
-      KMessageBox::error(this, i18n("Could not find the stencil set archive %1.").arg(url.prettyURL()));
+      KMessageBox::error(this, i18n("Could not find the stencil set archive %1.", url.prettyURL()));
       return;
     }
 

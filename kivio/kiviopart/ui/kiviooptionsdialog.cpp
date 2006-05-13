@@ -260,10 +260,10 @@ void KivioOptionsDialog::defaultGrid()
 void KivioOptionsDialog::setLayoutText(const KoPageLayout& l)
 {
   KoUnit::Unit unit = static_cast<KoUnit::Unit>(m_unitCombo->currentItem());
-  QString txt = i18n("Format: %1, Width: %2 %4, Height: %3 %5").arg(
-    KoPageFormat::formatString(l.format)).arg(KoUnit::toUserValue(l.ptWidth, unit))
-    .arg(KoUnit::toUserValue(l.ptHeight, unit)).arg(KoUnit::unitName(unit)).arg(
-    KoUnit::unitName(unit));
+  QString txt = i18n("Format: %1, Width: %2 %4, Height: %3 %5",
+    KoPageFormat::formatString(l.format), KoUnit::toUserValue(l.ptWidth, unit)
+    , KoUnit::toUserValue(l.ptHeight, unit), KoUnit::unitName(unit)
+    , KoUnit::unitName(unit));
   m_layoutTxtLbl->setText(txt);
 }
 

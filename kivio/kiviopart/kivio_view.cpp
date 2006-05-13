@@ -153,7 +153,7 @@ KivioView::KivioView( QWidget *_parent, const char *_name, KivioDoc* doc )
 
   if(KStatusBar* sb = statusBar()) { // No statusbar in e.g. konqueror
     m_pageCountSLbl = new KStatusBarLabel(i18n("%1 current page, %2 total number of pages",
-                                          "Page %1/%2").arg(0).arg(0), PAGECOUNT_TEXT, sb);
+                                          "Page %1/%2", 0, 0), PAGECOUNT_TEXT, sb);
     addStatusBarItem(m_pageCountSLbl, 0, false);
 
     m_infoSLbl = new KStatusBarLabel("", INFO_TEXT, sb);
@@ -163,8 +163,8 @@ KivioView::KivioView( QWidget *_parent, const char *_name, KivioDoc* doc )
     QString unit = KoUnit::unitName(m_pDoc->unit());
     KoPoint xy(0, 0);
     QString text = i18n("%1 x coord, %2 y coord, %3 and %4 the unit",
-                        "X: %1 %3 Y: %2 %4").arg(KGlobal::_locale->formatNumber(xy.x(), 2))
-                        .arg(KGlobal::_locale->formatNumber(xy.y(), 2)).arg(unit).arg(unit);
+                        "X: %1 %3 Y: %2 %4", KGlobal::_locale->formatNumber(xy.x(), 2)
+                        , KGlobal::_locale->formatNumber(xy.y(), 2), unit, unit);
     m_coordSLbl = new KStatusBarLabel(text, MOUSEPOS_TEXT, sb);
     addStatusBarItem(m_coordSLbl, 0, true);
   }
@@ -1832,8 +1832,8 @@ void KivioView::setMousePos( int mx, int my )
     KoPoint xy = m_pCanvas->mapFromScreen(QPoint(mx, my));
     xy.setX(KoUnit::toUserValue(xy.x(), m_pDoc->unit()));
     xy.setY(KoUnit::toUserValue(xy.y(), m_pDoc->unit()));
-    QString text = i18n("X: %1 %3 Y: %2 %4").arg(KGlobal::_locale->formatNumber(xy.x(), 2))
-      .arg(KGlobal::_locale->formatNumber(xy.y(), 2)).arg(unit).arg(unit);
+    QString text = i18n("X: %1 %3 Y: %2 %4", KGlobal::_locale->formatNumber(xy.x(), 2)
+      , KGlobal::_locale->formatNumber(xy.y(), 2), unit, unit);
     m_coordSLbl->setText(text);
   }
 }
@@ -2179,7 +2179,7 @@ int KivioView::vTextAlign()
 
 void KivioView::updatePageStatusLabel()
 {
-  QString text = i18n("Page %1/%2").arg(m_pDoc->map()->pageList().find(activePage()) + 1).arg(m_pDoc->map()->count());
+  QString text = i18n("Page %1/%2", m_pDoc->map()->pageList().find(activePage()) + 1, m_pDoc->map()->count());
   m_pageCountSLbl->setText(text);
 }
 
