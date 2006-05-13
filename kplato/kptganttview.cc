@@ -501,10 +501,10 @@ void GanttView::modifySummaryTask(KDGanttViewItem *item, Task *task)
     } else {
         item->setText(QString());
     }
-    QString w = i18n("Name: %1").arg(task->name());
+    QString w = i18n("Name: %1", task->name());
     if (!task->notScheduled()) {
-        w += "\n" + i18n("Start: %1").arg(locale->formatDateTime(task->startTime()));
-        w += "\n" + i18n("End: %1").arg(locale->formatDateTime(task->endTime()));
+        w += "\n" + i18n("Start: %1", locale->formatDateTime(task->startTime()));
+        w += "\n" + i18n("End: %1", locale->formatDateTime(task->endTime()));
     }
     bool ok = true;
     if (task->notScheduled()) {
@@ -586,15 +586,15 @@ void GanttView::modifyTask(KDGanttViewItem *item, Task *task)
         item->setFloatEndTime(QDateTime());
     }
 #endif
-    QString w = i18n("Name: %1").arg(task->name());
+    QString w = i18n("Name: %1", task->name());
     if (!task->notScheduled()) {
-        w += "\n"; w += i18n("Start: %1").arg(locale->formatDateTime(task->startTime()));
-        w += "\n"; w += i18n("End: %1").arg(locale->formatDateTime(task->endTime()));
+        w += "\n"; w += i18n("Start: %1", locale->formatDateTime(task->startTime()));
+        w += "\n"; w += i18n("End: %1", locale->formatDateTime(task->endTime()));
         if (m_showProgress) {
-            w += "\n"; w += i18n("Completion: %1%").arg(task->progress().percentFinished);
+            w += "\n"; w += i18n("Completion: %1%", task->progress().percentFinished);
         }
         if (task->positiveFloat() > Duration::zeroDuration) {
-            w += "\n" + i18n("Float: %1").arg(task->positiveFloat().toString(Duration::Format_i18nDayTime));
+            w += "\n" + i18n("Float: %1", task->positiveFloat().toString(Duration::Format_i18nDayTime));
         }
         if (task->inCriticalPath()) {
             w += "\n" + i18n("Critical path");
@@ -687,12 +687,12 @@ void GanttView::modifyMilestone(KDGanttViewItem *item, Task *task)
 #endif
     //TODO: Show progress
 
-    QString w = i18n("Name: %1").arg(task->name());
+    QString w = i18n("Name: %1", task->name());
     if (!task->notScheduled()) {
-        w += "\n" + i18n("Time: %1").arg(locale->formatDateTime(task->startTime()));
+        w += "\n" + i18n("Time: %1", locale->formatDateTime(task->startTime()));
 
         if (task->positiveFloat() > Duration::zeroDuration) {
-            w += "\n" + i18n("Float: %1").arg(task->positiveFloat().toString(Duration::Format_i18nDayTime));
+            w += "\n" + i18n("Float: %1", task->positiveFloat().toString(Duration::Format_i18nDayTime));
         }
         if (task->inCriticalPath()) {
             w += "\n" + i18n("Critical path");

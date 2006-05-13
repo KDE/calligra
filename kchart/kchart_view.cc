@@ -679,8 +679,8 @@ void KChartView::importData()
     // Check to see if we can read the file.
     QFile  inFile(filename);
     if (!inFile.open(QIODevice::ReadOnly)) {
-	KMessageBox::sorry( 0, i18n("The file %1 could not be read.")
-			    .arg(filename) );
+	KMessageBox::sorry( 0, i18n("The file %1 could not be read."
+			    ,filename) );
 	inFile.close();
 	return;
     }

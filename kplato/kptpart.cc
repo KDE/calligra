@@ -197,14 +197,14 @@ bool Part::loadXML(QIODevice *, const QDomDocument &document) {
     }
     else if (value != "application/x-vnd.kde.kplato") {
         kError() << "Unknown mime type " << value << endl;
-        setErrorMessage(i18n("Invalid document. Expected mimetype application/x-vnd.kde.kplato, got %1").arg(value));
+        setErrorMessage(i18n("Invalid document. Expected mimetype application/x-vnd.kde.kplato, got %1", value));
         return false;
     }
     QString m_syntaxVersion = plan.attribute("version", CURRENT_SYNTAX_VERSION);
     if (m_syntaxVersion > CURRENT_SYNTAX_VERSION) {
         int ret = KMessageBox::warningContinueCancel(
             0, i18n("This document was created with a newer version of KPlato (syntax version: %1)\n"
-                    "Opening it in this version of KPlato will lose some information.").arg(m_syntaxVersion),
+                    "Opening it in this version of KPlato will lose some information.", m_syntaxVersion),
             i18n("File-Format Mismatch"), i18n("Continue") );
         if (ret == KMessageBox::Cancel)
         {

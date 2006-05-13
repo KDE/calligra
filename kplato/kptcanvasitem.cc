@@ -711,10 +711,10 @@ void GanttViewSummaryItem::insertRelations(GanttView *view)
 #endif
             KDGanttViewTaskLink *link = new KDGanttViewTaskLink(this, child /*, kdLinkType(it.current()->type())*/);
             //TODO i18n
-            QString t = i18n("From: %1").arg(this->listViewText(0));
-            t += "\n" + i18n("To: %1").arg(child->listViewText(0));
+            QString t = i18n("From: %1", this->listViewText(0));
+            t += "\n" + i18n("To: %1", child->listViewText(0));
             if (it.current()->lag() > Duration::zeroDuration) {
-                t += "\n" + i18n("Lag:  %1").arg(it.current()->lag().toString(Duration::Format_i18nDayTime));
+                t += "\n" + i18n("Lag:  %1", it.current()->lag().toString(Duration::Format_i18nDayTime));
             }
             link->setTooltipText(t);
             view->addTaskLink(link);
@@ -795,10 +795,10 @@ void GanttViewTaskItem::insertRelations(GanttView *view)
 #endif
             KDGanttViewTaskLink *link = new KDGanttViewTaskLink(this, child/*, kdLinkType(it.current()->type())*/);
             //TODO i18n
-            QString t = i18n("From: %1").arg(this->listViewText(0));
-            t += "\n" + i18n("To: %1").arg(child->listViewText(0));
+            QString t = i18n("From: %1", this->listViewText(0));
+            t += "\n" + i18n("To: %1", child->listViewText(0));
             if (it.current()->lag() > Duration::zeroDuration) {
-                t += "\n" + i18n("Lag:  %1").arg(it.current()->lag().toString(Duration::Format_i18nDayTime));
+                t += "\n" + i18n("Lag:  %1", it.current()->lag().toString(Duration::Format_i18nDayTime));
             }
             link->setTooltipText(t);
             view->addTaskLink(link);

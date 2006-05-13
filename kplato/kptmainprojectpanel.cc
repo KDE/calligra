@@ -62,7 +62,7 @@ MainProjectPanel::MainProjectPanel(Project &p, QWidget *parent, const char *name
     QString s = i18n("Scheduling");
     Schedule *sch = project.currentSchedule();
     if (sch) {
-        s = i18n("Scheduling (%1)").arg(sch->typeToString(true));
+        s = i18n("Scheduling (%1)", sch->typeToString(true));
     }
     schedulingGroup->setTitle(s);
     if (project.constraint() == Node::MustStartOn) {

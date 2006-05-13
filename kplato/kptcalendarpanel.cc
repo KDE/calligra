@@ -214,7 +214,7 @@ CalendarPanel::dateChangedSlot(QDate date)
 {
     //kDebug() << "CalendarPanel::dateChangedSlot: date changed (" << date.year() << "/" << date.month() << "/" << date.day() << ")." << endl;
     line->setText(KGlobal::locale()->formatDate(date, true));
-    d->selectWeek->setText(i18n("Week %1").arg(weekOfYear(date)));
+    d->selectWeek->setText(i18n("Week %1", weekOfYear(date)));
     selectMonth->setText(KGlobal::locale()->calendar()->monthName(date.month(), false));
     selectYear->setText(date.toString("yyyy"));
     emit(dateChanged(date));
@@ -247,7 +247,7 @@ CalendarPanel::setDate(const QDate& date)
 	QString temp;
 	// -----
 	table->setDate(date);
-	d->selectWeek->setText(i18n("Week %1").arg(weekOfYear(date)));
+	d->selectWeek->setText(i18n("Week %1", weekOfYear(date)));
 	selectMonth->setText(KGlobal::locale()->calendar()->monthName(date.month(), false));
 	temp.setNum(date.year());
 	selectYear->setText(temp);
