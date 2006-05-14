@@ -52,13 +52,13 @@ void Config::load() {
         config->setGroup("Task defaults");
         m_taskDefaults.setLeader(config->readEntry("Leader"));
         m_taskDefaults.setDescription(config->readEntry("Description"));
-        m_taskDefaults.setConstraint((Node::ConstraintType)config->readNumEntry("ConstraintType"));
-        m_taskDefaults.setConstraintStartTime(config->readDateTimeEntry("ConstraintStartTime"));
-        m_taskDefaults.setConstraintEndTime(config->readDateTimeEntry("ConstraintEndTime"));
-        m_taskDefaults.effort()->setType((Effort::Type)config->readNumEntry("EffortType"));
-        m_taskDefaults.effort()->set(Duration((qint64)config->readNumEntry("ExpectedEffort")));
-        m_taskDefaults.effort()->setPessimisticRatio(config->readNumEntry("PessimisticEffort"));
-        m_taskDefaults.effort()->setOptimisticRatio(config->readNumEntry("OptimisticEffort"));
+        m_taskDefaults.setConstraint((Node::ConstraintType)config->readEntry("ConstraintType",0));
+        m_taskDefaults.setConstraintStartTime(config->readEntry("ConstraintStartTime",QDateTime()));
+        m_taskDefaults.setConstraintEndTime(config->readEntry("ConstraintEndTime",QDateTime()));
+        m_taskDefaults.effort()->setType((Effort::Type)config->readEntry("EffortType",0));
+        m_taskDefaults.effort()->set(Duration((qint64)config->readEntry("ExpectedEffort",0)));
+        m_taskDefaults.effort()->setPessimisticRatio(config->readEntry("PessimisticEffort",0));
+        m_taskDefaults.effort()->setOptimisticRatio(config->readEntry("OptimisticEffort",0));
     }
 }
 
