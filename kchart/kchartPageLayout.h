@@ -29,11 +29,11 @@ namespace KChart
 
 class KChartView;
 class KChartParams;
-class KChartPageLayout : public KDialogBase
+class KChartPageLayout : public KDialog
 {
     Q_OBJECT
 public:
-    KChartPageLayout( KChartParams* _params, QWidget* parent, const char* name);
+    KChartPageLayout( KChartParams* _params, QWidget* parent);
 public slots:
     void slotOk();
     void slotApply();

@@ -32,8 +32,8 @@
 namespace KChart
 {
 
-KChartPageLayout::KChartPageLayout( KChartParams* _params, QWidget* parent, const char* name )
-	: KDialogBase( parent, name, TRUE,i18n("Page Layout"),KDialogBase::Ok | KDialogBase::Cancel | KDialogBase::User1 | KDialogBase::Apply , KDialogBase::Ok,true )
+KChartPageLayout::KChartPageLayout( KChartParams* _params, QWidget* parent)
+	: KDialog( parent,i18n("Page Layout"),KDialogBase::Ok | KDialogBase::Cancel | KDialogBase::User1 | KDialogBase::Apply  )
 {
     params=_params;
 #if 0
@@ -51,7 +51,7 @@ KChartPageLayout::KChartPageLayout( KChartParams* _params, QWidget* parent, cons
     // should be done though, and we should use the layout
     // capabilities of the groupbox instead..
 
-    setButtonText( KDialogBase::User1, i18n("&Reset") );
+    setButtonText( KDialog::User1, i18n("&Reset") );
 
     Q3GridLayout *grid = new Q3GridLayout(page, 4, 2, KDialog::marginHint(), KDialog::spacingHint());
 

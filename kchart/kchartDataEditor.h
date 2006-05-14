@@ -8,7 +8,7 @@
 #include <QLabel>
 #include <QEvent>
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 
 #include "kchart_part.h"
 
@@ -90,7 +90,7 @@ protected:
 // ----------------------------------------------------------------
 
 
-class kchartDataEditor : public KDialogBase
+class kchartDataEditor : public KDialog
 {
     Q_OBJECT
 public:

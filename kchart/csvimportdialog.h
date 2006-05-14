@@ -27,7 +27,7 @@
 
 class DialogUI;
 
-class CSVImportDialog : public KDialogBase
+class CSVImportDialog : public KDialog
 {
     Q_OBJECT
 public:

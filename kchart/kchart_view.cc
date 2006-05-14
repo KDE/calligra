@@ -611,8 +611,7 @@ void KChartView::updateButton()
 void KChartView::slotConfigPageLayout()
 {
     KChartParams      *params = ((KChartPart*)koDocument())->params();
-    KChartPageLayout  *dialog = new KChartPageLayout(params, this,
-						     "Page Layout");
+    KChartPageLayout  *dialog = new KChartPageLayout(params, this);
 
     connect( dialog, SIGNAL( dataChanged() ),
              this,   SLOT( slotRepaint() ) );

@@ -169,9 +169,8 @@ bool kchartDataTable::eventFilter( QObject *obj, QEvent *ev )
 #define COLUMNWIDTH  80
 
 kchartDataEditor::kchartDataEditor(QWidget* parent) :
-    KDialogBase(parent, "dataeditor", true, i18n("KChart Data Editor"), 
-		KDialogBase::Ok | KDialogBase::Cancel | KDialogBase::Apply,
-		KDialogBase::Ok, true)
+    KDialog(parent, i18n("KChart Data Editor"), 
+		KDialog::Ok | KDialog::Cancel | KDialog::Apply)
 {
     QWidget      *page = new QWidget( this );
     setMainWidget(page);
