@@ -45,7 +45,7 @@ XbmExport::~XbmExport()
 void XbmExport::extraImageAttribute()
 {
     ExportSizeDia  *exportDialog = new ExportSizeDia( width, height,
-						   0, "exportdialog");
+						   0);
     if (exportDialog->exec()) {
 	width  = exportDialog->width();
 	height = exportDialog->height();

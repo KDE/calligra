@@ -27,16 +27,16 @@ class KIntNumInput;
 class KDoubleNumInput;
 
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 
 
-class ExportSizeDia : public KDialogBase
+class ExportSizeDia : public KDialog
 {
     Q_OBJECT
 
 public:
     ExportSizeDia( int width, int height, 
-		  QWidget *parent=0L, const char *name=0L );
+		  QWidget *parent=0L);
     ~ExportSizeDia();
 
     int  width() const;

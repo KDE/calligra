@@ -39,9 +39,9 @@
 
 
 ExportSizeDia::ExportSizeDia( int width, int height, 
-			    QWidget *parent, const char *name )
-    : KDialogBase( parent, name, true,
-		   i18n("Export Filter Parameters" ), Ok|Cancel )
+			    QWidget *parent )
+    : KDialog( parent,
+		   i18n("Export Filter Parameters" ), KDialog::Ok|KDialog::Cancel )
 {
     kapp->restoreOverrideCursor();
 
