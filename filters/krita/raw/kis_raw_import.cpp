@@ -39,8 +39,6 @@
 #include <QEventLoop>
 #include <q3progressdialog.h>
 #include <QTimer>
-//Added by qt3to4:
-#include <Q3CString>
 
 #include <kglobal.h>
 #include <kconfig.h>

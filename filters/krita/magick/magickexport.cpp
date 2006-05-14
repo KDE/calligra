@@ -27,8 +27,6 @@
 #include <kis_annotation.h>
 #include <kis_types.h>
 #include <kis_image_magick_converter.h>
-//Added by qt3to4:
-#include <Q3CString>
 
 typedef KGenericFactory<MagickExport> MagickExportFactory;
 K_EXPORT_COMPONENT_FACTORY(libkritamagickexport, MagickExportFactory("kofficefilters"))

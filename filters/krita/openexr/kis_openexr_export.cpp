@@ -18,8 +18,6 @@
  */
 
 #include <QFile>
-//Added by qt3to4:
-#include <Q3CString>
 #include <Q3MemArray>
 
 #include <kmessagebox.h>

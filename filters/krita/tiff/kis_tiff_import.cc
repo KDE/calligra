@@ -29,8 +29,6 @@
 #include <kis_view.h>
 
 #include "kis_tiff_converter.h"
-//Added by qt3to4:
-#include <Q3CString>
 
 typedef KGenericFactory<KisTIFFImport> TIFFImportFactory;
 K_EXPORT_COMPONENT_FACTORY(libkritatiffimport, TIFFImportFactory("kofficefilters"))

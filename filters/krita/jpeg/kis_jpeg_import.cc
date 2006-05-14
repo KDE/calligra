@@ -29,8 +29,6 @@
 #include <kis_view.h>
 
 #include "kis_jpeg_converter.h"
-//Added by qt3to4:
-#include <Q3CString>
 
 typedef KGenericFactory<KisJPEGImport> JPEGImportFactory;
 K_EXPORT_COMPONENT_FACTORY(libkritajpegimport, JPEGImportFactory("kofficefilters"))

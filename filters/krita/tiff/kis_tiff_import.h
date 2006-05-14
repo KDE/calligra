@@ -20,8 +20,6 @@
 #define _KIS_TIFF_IMPORT_H_
 
 #include <KoFilter.h>
-//Added by qt3to4:
-#include <Q3CString>
 
 class KisTIFFImport : public KoFilter {
     Q_OBJECT

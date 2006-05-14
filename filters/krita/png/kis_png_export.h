@@ -21,8 +21,6 @@
 #define _KIS_PNG_EXPORT_H_
 
 #include <KoFilter.h>
-//Added by qt3to4:
-#include <Q3CString>
 
 class KisPNGExport : public KoFilter {
     Q_OBJECT

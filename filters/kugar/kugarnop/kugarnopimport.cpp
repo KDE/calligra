@@ -19,8 +19,6 @@
 #include <kgenericfactory.h>
 #include <kdebug.h>
 #include <QFile>
-//Added by qt3to4:
-#include <Q3CString>
 #include "KoDocument.h"
 #include <qdom.h>
 

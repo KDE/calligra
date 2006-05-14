@@ -21,8 +21,6 @@
 #define KIS_RAW_IMPORT_H_
 
 #include <KoFilter.h>
-//Added by qt3to4:
-#include <Q3CString>
 
 #include "imageviewer.h"
 #include "ui_wdgrawimport.h"

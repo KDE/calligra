@@ -20,8 +20,6 @@
 #define MAGICKIMPORT_H_
 
 #include <KoFilter.h>
-//Added by qt3to4:
-#include <Q3CString>
 
 class MagickImport : public KoFilter {
     Q_OBJECT

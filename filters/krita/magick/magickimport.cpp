@@ -17,8 +17,6 @@
  * Boston, MA 02110-1301, USA.
  */
 #include <QString>
-//Added by qt3to4:
-#include <Q3CString>
 
 #include <magickimport.h>
 #include <kgenericfactory.h>

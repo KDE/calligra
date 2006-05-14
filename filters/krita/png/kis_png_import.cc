@@ -29,8 +29,6 @@
 #include <kis_view.h>
 
 #include "kis_png_converter.h"
-//Added by qt3to4:
-#include <Q3CString>
 
 typedef KGenericFactory<KisPNGImport> PNGImportFactory;
 K_EXPORT_COMPONENT_FACTORY(libkritapngimport, PNGImportFactory("kofficefilters"))
