@@ -178,7 +178,7 @@ void Context::activate()
 			//d->exception->addTraceMessage("Action name=" + action->name());
 			QStringList variables = action->variableNames();
 			for(QStringList::Iterator vit = variables.begin(); vit != variables.end(); ++vit) {
-				Variable::Ptr v = action->variable(*vit);
+				Variable::Ptr v = d->macroitem->variable(*vit, true);
 				d->exception->addTraceMessage( QString("%1=%2").arg(*vit).arg(v->toString()) );
 			}
 			break; // abort execution
