@@ -98,6 +98,15 @@ static KCmdLineOptions options[] =
   { "edittext [<object_type>:]<object_name>", I18N_NOOP(
 	"\nLike --open, but the object will\n"
 	"be opened in Text Mode, if one is available."), 0 },
+  { "exec", 0, 0 },
+  { "execute [<object_type>:]<object_name>", I18N_NOOP(
+	"\nStart execution of object of type <object_type>\n"
+	"and name <object_name> on application start.\n"
+	"<object_type>: is optional, if omitted - macro\n"
+	"type is assumed.\n"
+	"Other object types can be script (may be more\n"
+	"or less, depending on your plugins installed).\n"
+	"Use \"\" chars to specify names containing spaces."), 0 },
   { "new <object_type>", I18N_NOOP(
 	"Start new object design of type <object_type>."), 0 },
   { "print [<object_type>:]<object_name>", I18N_NOOP(

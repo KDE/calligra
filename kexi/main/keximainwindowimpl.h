@@ -428,9 +428,9 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow, public KexiGUI
 		//! Receives "selectionChanged()" signal from navigator to update some actions.
 		void slotPartItemSelectedInNavigator(KexiPart::Item* item);
 
-		/*! Receives the "executeItem()" signal from navigator to execute the as
-		parameter passed \a KexiPart::Item */
-		void executeItem(KexiPart::Item* item);
+		/*! Receives the "executeItem" signal from navigator to perform "execute" action
+		 on \a item. \return true on success */
+		tristate executeItem(KexiPart::Item* item);
 
 		//! Shows "exports as data table" dialog for \a item.
 		void exportItemAsDataTable(KexiPart::Item* item);

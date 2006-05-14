@@ -1070,6 +1070,8 @@ void KexiMainWindowImpl::slotAutoOpenObjectsLater()
 					taskName = i18n("making print preview for");
 				else if (info["action"]=="print")
 					taskName = i18n("printing");
+				else if (info["action"]=="execute")
+					taskName = i18n("\"executing object\" action", "executing");
 				else 
 					taskName = i18n("opening");
 
@@ -1078,13 +1080,26 @@ void KexiMainWindowImpl::slotAutoOpenObjectsLater()
 					not_found_msg += i18n("table not found");
 				else if ("query"==info["type"].lower())
 					not_found_msg += i18n("query not found");
+				else if ("macro"==info["type"].lower())
+					not_found_msg += i18n("macro not found");
+				else if ("script"==info["type"].lower())
+					not_found_msg += i18n("script not found");
 				else
 					not_found_msg += i18n("object not found");
 				not_found_msg += (internalReason(d->prj)+"<br></li>");
 				continue;
 			}
-			// * PRINT, PRINT PREVIEW
-			if (info["action"]=="print") {
+			// * EXECUTE, PRINT, PRINT PREVIEW
+			if (info["action"]=="execute") {
+				tristate res = executeItem(item);
+				if (false == res) {
+					not_found_msg += "<li>";
+					not_found_msg += ( QString("<li>\"")+ info["name"] + "\" - " + i18n("cannot execute object")+
+					internalReason(d->prj)+"<br></li>" );
+				}
+				continue;
+			}
+			else if (info["action"]=="print") {
 				tristate res = printItem(item);
 				if (false == res) {
 					not_found_msg += "<li>";
@@ -3880,14 +3895,15 @@ tristate KexiMainWindowImpl::showProjectMigrationWizard(
 	return true;
 }
 
-void KexiMainWindowImpl::executeItem(KexiPart::Item* item)
+tristate KexiMainWindowImpl::executeItem(KexiPart::Item* item)
 {
 	KexiPart::Info *info = item ? Kexi::partManager().infoForMimeType(item->mimeType()) : 0;
 	if ( (! info) || (! info->isExecuteSupported()) )
-		return;
+		return false;
 	KexiPart::Part *part = Kexi::partManager().part(info);
-	if (part)
-		part->execute(item);
+	if (!part)
+		return false;
+	return part->execute(item);
 }
 
 void KexiMainWindowImpl::slotProjectImportDataTable()

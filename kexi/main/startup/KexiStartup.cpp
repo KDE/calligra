@@ -224,9 +224,15 @@ bool KexiStartupHandler::getAutoopenObjects(KCmdLineArgs *args, const QCString &
 			name_required = false;
 		}
 		else {//open, design, text...
-			//option with " " (default type == "table")
+			QString defaultType;
+			if (action_name=="execute")
+				defaultType = "macro";
+			else
+				defaultType = "table";
+
+			//option with " " (set default type)
 			if (stripQuotes(item, obj_name)) {
-				type_name = "table";
+				type_name = defaultType;
 			}
 			else if ((idx = item.find(':'))!=-1) {
 				//option with type name specified:
@@ -237,9 +243,9 @@ bool KexiStartupHandler::getAutoopenObjects(KCmdLineArgs *args, const QCString &
 					obj_name = obj_name.mid(1, obj_name.length()-2);
 			}
 			else {
-				//just obj. name: type name is "table" by default
+				//just obj. name: set default type name
 				obj_name = item;
-				type_name = "table";
+				type_name = defaultType;
 			}
 		}
 		if (type_name.isEmpty())
@@ -589,6 +595,7 @@ tristate KexiStartupHandler::init(int /*argc*/, char ** /*argv*/)
 	const bool atLeastOneAOOFound = getAutoopenObjects(args, "open")
 		|| getAutoopenObjects(args, "design")
 		|| getAutoopenObjects(args, "edittext")
+		|| getAutoopenObjects(args, "execute")
 		|| getAutoopenObjects(args, "new")
 		|| getAutoopenObjects(args, "print")
 		|| getAutoopenObjects(args, "print-preview");
