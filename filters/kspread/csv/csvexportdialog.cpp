@@ -48,11 +48,12 @@
 using namespace KSpread;
 
 CSVExportDialog::CSVExportDialog( QWidget * parent )
-  : KDialogBase( parent, 0, true, QString::null, Ok | Cancel, No, true ),
+  : KDialog( parent, QString::null, KDialog::Ok | KDialog::Cancel ),
     m_dialog( new ExportDialogUI( this ) ),
     m_delimiter( "," ),
     m_textquote('"')
 {
+  setDefaultButton(KDialog::No);
   kapp->restoreOverrideCursor();
 
   QStringList encodings;

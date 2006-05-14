@@ -20,15 +20,15 @@
 #ifndef EXPORTDIALOG_H
 #define EXPORTDIALOG_H
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 
 class ExportWidget;
 
-class ExportDialog : public KDialogBase
+class ExportDialog : public KDialog
 {
   Q_OBJECT
   public:
-    ExportDialog( QWidget *parent = 0, const char *name = 0 );
+    ExportDialog( QWidget *parent = 0 );
     ~ExportDialog();
 
     void setSheets( const QStringList & );

@@ -21,7 +21,7 @@
 #ifndef CSVEXPORTDIALOG_H
 #define CSVEXPORTDIALOG_H
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 
 class ExportDialogUI;
 class QValidator;
@@ -31,7 +31,7 @@ namespace KSpread
 class Map;
 }
 
-class CSVExportDialog : public KDialogBase
+class CSVExportDialog : public KDialog
 {
   Q_OBJECT
  public:

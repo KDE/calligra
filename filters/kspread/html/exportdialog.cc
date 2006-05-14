@@ -32,9 +32,10 @@
 #include <exportdialog.h>
 #include <exportwidget.h>
 
-ExportDialog::ExportDialog( QWidget *parent, const char *name )
-  : KDialogBase( parent, name, true, i18n("Export Sheet to HTML"), Ok|Cancel, No, true ), m_mainwidget( new ExportWidget( this ) )
+ExportDialog::ExportDialog( QWidget *parent )
+  : KDialog( parent, i18n("Export Sheet to HTML"), KDialog::Ok|KDialog::Cancel ), m_mainwidget( new ExportWidget( this ) )
 {
+  setDefaultButton(KDialog::No);
   kapp->restoreOverrideCursor();
 
   connect( m_mainwidget->mCustomButton, SIGNAL( toggled( bool ) ),

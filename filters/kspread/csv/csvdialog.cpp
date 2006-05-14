@@ -41,7 +41,7 @@
 #include <kcharsets.h>
 
 CSVDialog::CSVDialog(QWidget* parent, QByteArray& fileArray, const QString /*seperator*/)
-    : KDialogBase(parent, 0, true, QString::null, Ok|Cancel, No, true),
+    : KDialog(parent, QString::null, KDialog::Ok|KDialog::Cancel),
       m_adjustRows(false),
       m_adjustCols(false),
       m_startRow(0),
@@ -55,6 +55,7 @@ CSVDialog::CSVDialog(QWidget* parent, QByteArray& fileArray, const QString /*sep
       m_dialog(new DialogUI(this)),
       m_codec( QTextCodec::codecForName( "UTF-8" ) )
 {
+	setDefaultButton(KDialog::No);
     setCaption( i18n( "Import" ) );
     kapp->restoreOverrideCursor();
 

@@ -23,11 +23,11 @@
 
 #include <QStringList>
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 
 class DialogUI;
 
-class CSVDialog : public KDialogBase
+class CSVDialog : public KDialog
 {
     Q_OBJECT
 public:
