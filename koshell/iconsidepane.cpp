@@ -565,7 +565,7 @@ Navigator * IconSidePane::group(int _grp)
 
 void IconSidePane::updateAllWidgets()
 {
-  Q3ValueList<int>::iterator it;
+  QList<int>::iterator it;
   for ( it = mWidgetStackIds.begin(); it != mWidgetStackIds.end(); ++it )
     static_cast<Navigator*>(mWidgetstack->widget(*it))->triggerUpdate( true );
 }
@@ -573,7 +573,7 @@ void IconSidePane::updateAllWidgets()
 int IconSidePane::minWidth()
 {
   int width = 0;
-  Q3ValueList<int>::iterator it;
+  QList<int>::iterator it;
   Navigator *n;
   for ( it = mWidgetStackIds.begin(); it != mWidgetStackIds.end(); ++it )
   {
@@ -586,7 +586,7 @@ int IconSidePane::minWidth()
 
 void IconSidePane::resetWidth()
 {
-  Q3ValueList<int>::iterator it;
+  QList<int>::iterator it;
   Navigator *n;
   for ( it = mWidgetStackIds.begin(); it != mWidgetStackIds.end(); ++it )
   {

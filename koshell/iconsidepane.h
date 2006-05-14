@@ -210,7 +210,7 @@ class IconSidePane :public KVBox
 
   private:
     QStackedWidget *mWidgetstack;
-    Q3ValueList<int> mWidgetStackIds;
+    QList<int> mWidgetStackIds;
     Navigator *mCurrentNavigator;
     Q3ButtonGroup *m_buttongroup;
     KActionCollection *mActionCollection;

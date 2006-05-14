@@ -112,7 +112,7 @@ KoShellWindow::KoShellWindow()
       m_mapComponents[ id++ ] = *it;
   }
 
-  Q3ValueList<int> list;
+  QList<int> list;
   list.append( KoShellSettings::sidebarWidth() );
   list.append( this->width() - KoShellSettings::sidebarWidth() );
   m_pLayout->setSizes( list );
