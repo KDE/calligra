@@ -34,6 +34,7 @@ namespace KoMacro {
 	// Forward declarations.
 	class Manager;
 	class MacroItem;
+	class Context;
 
 	/**
 	* The Macro class implements all the action-handling. Internaly the
@@ -123,7 +124,7 @@ namespace KoMacro {
 			* @param context The @a Context this @a Macro should
 			* be executed in.
 			*/
-			virtual void execute(QObject* sender);
+			virtual KSharedPtr<Context> execute(QObject* sender);
 
 		private:
 			/// @internal d-pointer class.

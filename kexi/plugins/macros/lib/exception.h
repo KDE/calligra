@@ -67,7 +67,7 @@ namespace KoMacro {
 			* we finally catched the error to display it to the
 			* user.
 			*/
-			const QStringList traceMessages() const;
+			const QString traceMessages() const;
 
 			/**
 			* Add the message @p tracemessage to the list of traces.

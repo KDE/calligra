@@ -21,6 +21,7 @@
 #include "action.h"
 #include "macro.h"
 #include "macroitem.h"
+#include "exception.h"
 
 //#include <qtimer.h>
 #include <kdebug.h>
@@ -49,37 +50,44 @@ namespace KoMacro {
 			QValueList<MacroItem::Ptr> items;
 
 			/**
-			* The iterator pointing to the @a Action instance that should
-			* be executed next.
-			*/
-			QValueList<MacroItem::Ptr>::Iterator itemit;
-
-			/**
 			* The currently selected @a MacroItem or NULL if there
 			* is now @a MacroItem selected yet.
 			*/
 			MacroItem::Ptr macroitem;
 
 			/**
-			* Map of all @a Variable instance that are defined within this
-			* context.
+			* Map of all @a Variable instance that are defined within
+			* this context.
 			*/
 			QMap<QString, Variable::Ptr> variables;
 
+			/**
+			* The @a Exception instance thrown at the last @a activate()
+			* call or NULL if there was no exception thrown yet.
+			*/
+			Exception* exception;
+
+			/// Constructor.
+			explicit Private(Macro::Ptr m)
+				: macro(m) // remember the macro
+				, items(m->items()) // set d-pointer children to macro children
+				, exception(0) // no exception yet.
+			{
+			}
+
+			/// Destructor.
+			~Private()
+			{
+				delete exception;
+			}
 	};
 
 }
 //Construktor with initialization of our d-pointer
 Context::Context(Macro::Ptr macro)
 	: QObject()
-	, d( new Private() ) // create the private d-pointer instance.
+	, d( new Private(macro) ) // create the private d-pointer instance.
 {
-	// remember the macro
-	d->macro = macro;
-	//set d-pointer children to macro children
-	d->items = macro->items();
-	//set d-pointer iterator on first child
-	d->itemit = d->items.begin();
 }
 
 Context::~Context()
@@ -128,64 +136,70 @@ MacroItem::Ptr Context::macroItem() const
 	return d->macroitem;
 }
 
-//activate an action if there is one 
+bool Context::hadException() const
+{
+	return d->exception != 0;
+}
+
+Exception* Context::exception() const
+{
+	return d->exception;
+}
+
+//activate an action if there is one
 void Context::activate()
 {
 	kdDebug() << "Context::activate()" << endl;
+	//delete d->exception; d->exception = 0;
 	//Q_ASSIGN(d->macro);
 
-	//check if the iterator reached the end.
-	if(d->itemit == d->items.end()) {
-		//if that's the case, just don't execute. Note, that this makes
-		//Context a one-execution only container.
-		d->macroitem = MacroItem::Ptr(0);
-		return;
+	QValueList<MacroItem::Ptr>::ConstIterator it(d->items.constBegin()), end(d->items.constEnd());
+	for(;it != end; ++it) {
+		// fetch the MacroItem we are currently pointing to.
+		d->macroitem = MacroItem::Ptr(*it);
+		if(! d->macroitem.data()) {
+			kdDebug() << "Context::activate() Skipping empty MacroItem" << endl;
+			continue;
+		}
+
+		// fetch the Action, the MacroItem points to.
+		Action::Ptr action = d->macroitem->action();
+		if(! action.data()) {
+			kdDebug() << "Context::activate() Skipping MacroItem with no action" << endl;
+			continue;
+		}
+
+		try {
+			// activate the action
+			action->activate(this);
+		}
+		catch(Exception& e) {
+			d->exception = new Exception(e);
+			//d->exception->addTraceMessage("Action name=" + action->name());
+			QStringList variables = action->variableNames();
+			for(QStringList::Iterator vit = variables.begin(); vit != variables.end(); ++vit) {
+				Variable::Ptr v = action->variable(*vit);
+				d->exception->addTraceMessage( QString("%1=%2").arg(*vit).arg(v->toString()) );
+			}
+			break; // abort execution
+		}
 	}
 
-	//fetch the MacroItem we like to handle.
-	d->macroitem = MacroItem::Ptr(*d->itemit);
-
-	//increment iterator to point to the next MacroItem we like to handle
-	//after the current one is done.
-	++d->itemit;
-
-	//check if we really got a valid MacroItem
-	if(! d->macroitem.data()) {
-		kdWarning() << "Context::activate() MacroItem is NULL" << endl;
-		return;
-	}
-
-	//fetch the Action, the MacroItem points to.
-	Action* action = d->macroitem->action();
-	
-	//skip the MacroItem if it doesn't point to a valid Action
-	if(! action) {
-		kdDebug() << "Context::activate() Skipping empty MacroItem" << endl;
-		activate();
-		return;
-	}
-
-	if(action->isBlocking()) { // execution should be done synchron/blocking
-		//activate the action
-		action->activate(this);
-		//recursive call ourself to handle the next action.
-		activate();
-	}
-	else { // execution should be done asynchron/nonblocking
-		//connect action activated signal to our activate slot.
-		connect(action, SIGNAL(activated()), this, SLOT(activate()));
-		//QTimer::singleShot(1000, action, SLOT(activate())); //testcase
-		//activate the action
-		action->activate(this);
-	}
-
-	// The run is done. So, let's remove the currently selected item
-	// to outline, that we don't do anything yet.
+	// The run is done. So, let's remove the currently selected item to
+	// outline, that we did the job and there stays no dangling item.
 	d->macroitem = MacroItem::Ptr(0);
 }
 
 void Context::activate(Context::Ptr context)
 {
+	delete d->exception; d->exception = 0;
+	if(context->hadException()) {
+		// if the context this context should run in had an exception,
+		// we adopt this exception and abort the execution.
+		d->exception = new Exception( *context->exception() );
+		return;
+	}
+
 	// Merge the passed context into this context
 	Variable::Map variables = context->variables();
 	//copy variables

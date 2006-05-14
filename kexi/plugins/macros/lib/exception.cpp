@@ -37,7 +37,7 @@ namespace KoMacro {
 			const QString errormessage;
 
 			/// A more detailed list of tracemessages.
-			QStringList tracemessages;
+			QString tracemessages;
 
 			/**
 			* Constructor.
@@ -55,9 +55,7 @@ Exception::Exception(const QString& errormessage, const QString& tracemessage)
 	: d( new Private(errormessage) ) // create the private d-pointer instance.
 {
 	kdDebug() << QString("Exception errormessage=\"%1\" tracemessage=\"%2\"").arg(errormessage).arg(tracemessage) << endl;
-	if(! tracemessage.isNull()) {
-		d->tracemessages.append(tracemessage);
-	}
+	d->tracemessages = tracemessage;
 }
 
 Exception::Exception (const Exception& e)
@@ -76,13 +74,13 @@ const QString Exception::errorMessage() const
 	return d->errormessage;
 }
 
-const QStringList Exception::traceMessages() const
+const QString Exception::traceMessages() const
 {
 	return d->tracemessages;
 }
 
 void Exception::addTraceMessage(const QString& tracemessage)
 {
-	d->tracemessages.append(tracemessage);
+	d->tracemessages += "\n" + tracemessage;
 }
 

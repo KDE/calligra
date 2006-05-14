@@ -111,7 +111,7 @@ void Macro::connectSignal(const QObject* sender, const char* signal)
 	//TODO d->proxies.append( metaproxy );
 }
 
-void Macro::execute(QObject* sender)
+KSharedPtr<Context> Macro::execute(QObject* sender)
 {
 	kdDebug() << "Macro::execute(Context::Ptr)" << endl;
 
@@ -122,6 +122,8 @@ void Macro::execute(QObject* sender)
 	}
 	//connect(context, SIGNAL(activated()), this, SIGNAL(activated()));
 	c->activate( c );
+
+	return c;
 }
 
 #include "macro.moc"

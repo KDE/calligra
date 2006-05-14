@@ -113,16 +113,14 @@ KoMacro::Variable::List OpenAction::notifyUpdated(const QString& variablename, K
 void OpenAction::activate(KoMacro::Context::Ptr context)
 {
 	if(! mainWin()->project()) {
-		kdWarning() << "OpenAction::activate(KoMacro::Context::Ptr) Invalid project" << endl;
-		return;
+		throw KoMacro::Exception(i18n("No project loaded."), "OpenAction::activate(KoMacro::Context::Ptr)");
 	}
 
 	const QString objectname = context->variable("object")->variant().toString();
 	const QString name = context->variable("name")->variant().toString();
 	KexiPart::Item* item = mainWin()->project()->itemForMimeType( QString("kexi/%1").arg(objectname).latin1(), name );
 	if(! item) {
-		kdWarning() << "OpenAction::activate(KoMacro::Context::Ptr) Invalid item objectname=" << objectname << " name=" << name << endl;
-		return;
+		throw KoMacro::Exception(i18n("Invalid item \"%1\".").arg(name), "OpenAction::activate(KoMacro::Context::Ptr)");
 	}
 
 	// Determinate the viewmode.
@@ -135,15 +133,14 @@ void OpenAction::activate(KoMacro::Context::Ptr context)
 	else if(view == "text")
 		viewmode = Kexi::TextViewMode;
 	else {
-		kdWarning() << "OpenAction::activate(KoMacro::Context::Ptr) Invalid viewmode=" << view << endl;
-		return;
+		throw KoMacro::Exception(i18n("Invalid viewmode \"%1\".").arg(view), "OpenAction::activate(KoMacro::Context::Ptr)");
 	}
 
 	// Try to open the object now.
 	bool openingCancelled;
 	if(! mainWin()->openObject(item, viewmode, openingCancelled)) {
 		if(! openingCancelled) {
-			KMessageBox::error(mainWin(), i18n("Object of type \"%1\" with name \"%2\" could not be opened.").arg(objectname).arg(name));
+			throw KoMacro::Exception(i18n("Failed to open object \"%1\".").arg(name), "OpenAction::activate(KoMacro::Context::Ptr)");
 		}
 	}
 }

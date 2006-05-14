@@ -31,6 +31,7 @@
 
 #include "lib/macro.h"
 #include "lib/xmlhandler.h"
+#include "lib/exception.h"
 
 /**
 * \internal d-pointer class to be more flexible on future extension of the
@@ -158,7 +159,11 @@ tristate KexiMacroView::storeData(bool /*dontAsk*/)
 
 void KexiMacroView::execute(QObject* sender)
 {
-	d->macro->execute(sender);
+	KoMacro::Context::Ptr context = d->macro->execute(sender);
+	if(context->hadException()) {
+		KoMacro::Exception* exception = context->exception();
+		KMessageBox::detailedError(mainWin(), exception->errorMessage(), exception->traceMessages());
+	}
 }
 
 #include "keximacroview.moc"

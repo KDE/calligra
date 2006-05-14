@@ -54,16 +54,13 @@ namespace KoMacro {
 			/// Property to get/set the comment.
 			Q_PROPERTY(QString comment READ comment WRITE setComment)
 
-			/// Property to get/set the blocking enabled.
-			Q_PROPERTY(bool blocking READ isBlocking WRITE setBlocking)
-
 		public:
 
 			/**
 			* Shared pointer to implement reference-counting.
 			*/
 			typedef KSharedPtr<Action> Ptr;
-			
+
 			/**
 			* Shared pointer to implement reference-counting.
 			*/
@@ -117,19 +114,6 @@ namespace KoMacro {
 			* Set the @p comment associated with this action.
 			*/
 			void setComment(const QString& comment);
-
-			/**
-			 * @return true if this Action should be executed synchron (blocking)
-			 * or false if execution is asynchron (nonblocking).
-			 */
-			bool isBlocking() const;
-
-			/**
-			 * If @p blocking is true this Action will be executed synchron and
-			 * therefore blocking and if its false the execution is done
-			 * asynchron in a more nonblocking way.
-			 */
-			void setBlocking(bool blocking);
 
 			/**
 			* @return true if there exists a variable with the

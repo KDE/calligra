@@ -23,7 +23,6 @@
 #include <qobject.h>
 #include <ksharedptr.h>
 
-#include "exception.h"
 #include "variable.h"
 
 namespace KoMacro {
@@ -32,6 +31,7 @@ namespace KoMacro {
 	class Macro;
 	class MacroItem;
 	class Action;
+	class Exception;
 
 	/**
 	* The context of an execution. If a @a Macro got executed it creates
@@ -92,6 +92,19 @@ namespace KoMacro {
 			*/
 			KSharedPtr<MacroItem> macroItem() const;
 
+			/**
+			* @return true if the last @a activate() stopped with an
+			* exception else false is returned.
+			*/
+			bool hadException() const;
+
+			/**
+			* @return the @a Exception instance that was thrown on
+			* the last call of @a activate() . If there was no
+			* exception NULL is returned.
+			*/
+			Exception* exception() const;
+
 		private slots:
 
 			/**
@@ -110,14 +123,6 @@ namespace KoMacro {
 			* parent context for this context.
 			*/
 			virtual void activate(Context::Ptr context);
-
-		signals:
-
-			/**
-			* Once activated and the execution is done this signal
-			* got emitted.
-			*/
-			void activated();
 
 		private:
 			/// @internal d-pointer class.

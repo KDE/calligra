@@ -52,12 +52,6 @@ namespace KoMacro {
 			QString comment;
 
 			/**
-			 * Defines if this action should be executed synchron
-			 * (blocking) or asynchron (nonblocking).
-			 */
-			bool blocking;
-
-			/**
 			 * A map of @a Variable instances this @a Action
 			 * provides accessible by there QString name.
 			 */
@@ -69,14 +63,6 @@ namespace KoMacro {
 			* defined in the map above.
 			*/
 			QStringList varnames;
-
-			/**
-			* Constructor.
-			*/
-			Private()
-				: blocking(true)
-			{
-			}
 
 	};
 
@@ -133,16 +119,6 @@ const QString Action::comment() const
 void Action::setComment(const QString& comment)
 {
 	d->comment = comment;
-}
-
-bool Action::isBlocking() const
-{
-	return d->blocking;
-}
-
-void Action::setBlocking(bool blocking)
-{
-	d->blocking = blocking;
 }
 
 bool Action::hasVariable(const QString& name) const
