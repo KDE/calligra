@@ -610,8 +610,8 @@ void KWTextParag::load( QDomElement &attributes )
 void KWTextParag::loadFormatting( QDomElement &attributes, int offset, bool loadFootNote )
 {
 
-    Q3ValueList<int> removeLenList;
-    Q3ValueList<int> removePosList;
+    QList<int> removeLenList;
+    QList<int> removePosList;
 
     KWDocument * doc = kwTextDocument()->textFrameSet()->kWordDocument();
     QDomElement formatsElem = attributes.namedItem( "FORMATS" ).toElement();
@@ -739,7 +739,7 @@ void KWTextParag::loadFormatting( QDomElement &attributes, int offset, bool load
         }
     }
     for(int i=0; i < removeLenList.count(); i++) {
-        remove(*removePosList.at(i), *removeLenList.at(i));
+        remove(removePosList.at(i), removeLenList.at(i));
     }
 }
 

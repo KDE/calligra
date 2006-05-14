@@ -2669,7 +2669,7 @@ void KWView::decreaseAllZOrdersUnder(int refZOrder, int pageNum, const Q3PtrList
 
 int KWView::raiseFrame(const Q3PtrList<KWFrame>& frameSelection, const KWFrame *frame) {
     int newZOrder = 10000;
-    Q3ValueList<int> zorders;
+    QList<int> zorders;
     Q3PtrList<KWFrame> framesInPage = m_doc->framesInPage( frame->pageNumber(), false );
     for ( Q3PtrListIterator<KWFrame> frameIt( framesInPage ); frameIt.current(); ++frameIt ) {
         if(frameSelection.contains(frameIt.current()) > 0) continue; // ignore other frames we selected.
@@ -2689,7 +2689,7 @@ int KWView::raiseFrame(const Q3PtrList<KWFrame>& frameSelection, const KWFrame *
 
 int KWView::lowerFrame(const Q3PtrList<KWFrame>& frameSelection, const KWFrame *frame) {
     int newZOrder = -10000;
-    Q3ValueList<int> zorders;
+    QList<int> zorders;
     Q3PtrList<KWFrame> framesInPage = m_doc->framesInPage( frame->pageNumber(), false );
     for ( Q3PtrListIterator<KWFrame> frameIt( framesInPage ); frameIt.current(); ++frameIt ) {
         if(frameSelection.contains(frameIt.current()) > 0) continue; // ignore other frames we selected.
@@ -3054,7 +3054,7 @@ void KWView::changeZoomMenu( int zoom )
 
     if(zoom>0)
     {
-        Q3ValueList<int> list;
+        QList<int> list;
         bool ok;
         const QStringList itemsList ( m_actionViewZoom->items() );
         QRegExp regexp("(\\d+)"); // "Captured" non-empty sequence of digits
@@ -3074,7 +3074,7 @@ void KWView::changeZoomMenu( int zoom )
 
         qHeapSort( list );
 
-        for (Q3ValueList<int>::Iterator it = list.begin() ; it != list.end() ; ++it)
+        for (QList<int>::Iterator it = list.begin() ; it != list.end() ; ++it)
             lst.append( i18n("%1%",*it) );
     }
     else
@@ -7580,7 +7580,7 @@ KWGUI::KWGUI( const QString& viewMode, QWidget *parent, KWView *daView )
     m_canvas = new KWCanvas( viewMode, m_right, doc, this );
     gridLayout->addWidget( m_canvas, 1, 1 );
 
-    Q3ValueList<int> l;
+    QList<int> l;
     l << 10;
     l << 90;
     m_panner->setSizes( l );
@@ -7669,7 +7669,7 @@ void KWGUI::reorganize()
         if(m_docStruct->isHidden()) {
             m_docStruct->show();
             if(m_panner->sizes()[0] < 50) {
-                Q3ValueList<int> l;
+                QList<int> l;
                 l << 100;
                 l << width()-100;
                 m_panner->setSizes( l );

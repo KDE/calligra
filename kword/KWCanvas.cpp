@@ -227,12 +227,12 @@ void KWCanvas::print( QPainter *painter, KPrinter *printer )
     m_printing = true;
     KWViewMode *viewMode = new KWViewModePrint( m_doc, this );
     // Use page list specified in kdeprint dialogbox
-    Q3ValueList<int> pageList = printer->pageList();
+    QList<int> pageList = printer->pageList();
     Q3ProgressDialog progress( i18n( "Printing..." ), i18n( "Cancel" ),
                               pageList.count() + 1, this, 0, false, 0 );
     int j = 0;
     progress.setProgress( 0 );
-    Q3ValueList<int>::Iterator it = pageList.begin();
+    QList<int>::Iterator it = pageList.begin();
     for ( ; it != pageList.end(); ++it )
     {
         progress.setProgress( ++j );

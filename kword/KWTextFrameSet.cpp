@@ -2949,7 +2949,7 @@ void KWTextFrameSet::renumberFootNotes( bool repaint )
     Q3PtrListIterator< KWFootNoteVariable > vit( lst );
 
     //create a list with all manual footnotes numbers
-    Q3ValueList<int> addedNums;
+    QList<int> addedNums;
     for ( ; vit.current() ; ++vit )
     {
         KWFootNoteVariable* var = vit.current();
