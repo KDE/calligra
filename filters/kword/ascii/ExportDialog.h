@@ -23,11 +23,11 @@
 
 #include <QWidget>
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 
 class ExportDialogUI;
 
-class AsciiExportDialog : public KDialogBase
+class AsciiExportDialog : public KDialog
 {
     Q_OBJECT
 public:

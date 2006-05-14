@@ -36,10 +36,11 @@
 #include <QCheckBox>
 
 MSWriteImportDialog :: MSWriteImportDialog(QWidget* parent)
-    : KDialogBase(parent, 0, true,  i18n("KWord's MS Write Import Filter"), Ok|Cancel, No, true),
+    : KDialog(parent,  i18n("KWord's MS Write Import Filter"), KDialog::Ok|KDialog::Cancel),
       m_dialog(new ImportDialogUI(this))
 {
-    kapp->restoreOverrideCursor();
+ 	setDefaultButton(KDialog::No);
+	kapp->restoreOverrideCursor();
 
    m_dialog->comboBoxEncoding->insertStringList(KGlobal::charsets()->availableEncodingNames());
     //m_dialog->comboBoxEncoding->insertStringList(KGlobal::charsets()->descriptiveEncodingNames());

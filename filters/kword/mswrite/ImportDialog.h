@@ -23,10 +23,10 @@
 
 #include <QWidget>
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 
 class ImportDialogUI;
-class MSWriteImportDialog : public KDialogBase
+class MSWriteImportDialog : public KDialog
 {
     Q_OBJECT
 public:

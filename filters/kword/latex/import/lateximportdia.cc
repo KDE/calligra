@@ -46,9 +46,9 @@
 
 #include "generator/kwordgenerator.h"
 
-LATEXImportDia::LATEXImportDia(KoStore* out, QWidget *parent, const char *name) :
-						KDialogBase(parent, name, true, i18n("Latex Import Filter Parameters"),
-									Ok|Cancel),
+LATEXImportDia::LATEXImportDia(KoStore* out, QWidget *parent) :
+						KDialog(parent,i18n("Latex Import Filter Parameters"),
+									KDialog::Ok|KDialog::Cancel),
 						DCOPObject("FilterConfigDia"), _out(out)
 {
 	_out = out;

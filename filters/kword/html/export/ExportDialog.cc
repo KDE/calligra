@@ -37,10 +37,10 @@
 #include <ExportDialog.h>
 
 HtmlExportDialog :: HtmlExportDialog(QWidget* parent)
-    : KDialogBase(parent, 0, true, i18n("KWord's HTML Export Filter"), Ok|Cancel, No, true),
+    : KDialog(parent, i18n("KWord's HTML Export Filter"), KDialog::Ok|KDialog::Cancel),
       m_dialog(new ExportDialogUI(this))
 {
-
+	setDefaultButton(KDialog::No);
     kapp->restoreOverrideCursor();
 
     QStringList encodingList;

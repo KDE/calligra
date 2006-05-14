@@ -22,11 +22,11 @@
 #define EXPORT_DIALOG_H
 
 #include <QWidget>
-#include <kdialogbase.h>
+#include <kdialog.h>
 
 class ExportDialogUI;
 
-class HtmlExportDialog : public KDialogBase
+class HtmlExportDialog : public KDialog
 {
     Q_OBJECT
 public:

@@ -48,7 +48,7 @@
 #include <kdebug.h>
 #include <KoStore.h>
 
-class LATEXImportDia : public KDialogBase, public DCOPObject
+class LATEXImportDia : public KDialog, public DCOPObject
 {
 	K_DCOP
 	
@@ -59,7 +59,7 @@ class LATEXImportDia : public KDialogBase, public DCOPObject
 	KoStore* _out;	/* the zipped file containing all pictures, part, ... */
 
 	public:
-		LATEXImportDia(KoStore*, QWidget *parent=0L, const char *name=0L);
+		LATEXImportDia(KoStore*, QWidget *parent=0L);
 
 		virtual ~LATEXImportDia() {}
 		void createDialog();
