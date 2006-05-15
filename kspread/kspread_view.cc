@@ -674,7 +674,7 @@ void View::Private::initActions()
 
   actions->selectStyle = new KSelectAction( i18n( "St&yle" ), ac, "stylemenu" );
   actions->selectStyle->setToolTip( i18n( "Apply a predefined style to the selected cells" ) );
-  connect( actions->selectStyle, SIGNAL( activated( const QString & ) ),
+  connect( actions->selectStyle, SIGNAL( triggered( const QString & ) ),
                     view, SLOT( styleSelected( const QString & ) ) );
 
   actions->createStyle = new KAction( i18n( "Create Style From Cell..." ), ac, "createStyle" );
@@ -1069,11 +1069,11 @@ void View::Private::initActions()
   ((KSelectAction*) actions->formulaSelection)->setItems( lst );
   actions->formulaSelection->setComboWidth( 80 );
   actions->formulaSelection->setCurrentItem(0);
-  connect( actions->formulaSelection, SIGNAL( activated( const QString& ) ),
+  connect( actions->formulaSelection, SIGNAL( triggered( const QString& ) ),
       view, SLOT( formulaSelection( const QString& ) ) );
 
   actions->viewZoom = new KoZoomAction( i18n( "Zoom" ), "viewmag", 0, ac, "view_zoom" );
-  connect( actions->viewZoom, SIGNAL( zoomChanged( const QString & ) ),
+  connect( actions->viewZoom, SIGNAL( triggered( const QString & ) ),
       view, SLOT( viewZoom( const QString & ) ) );
 
   actions->consolidate = new KAction( i18n("&Consolidate..."), ac, "consolidate" );
