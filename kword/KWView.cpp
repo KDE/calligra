@@ -722,7 +722,7 @@ void KWView::setupActions()
     m_actionViewZoom = new KSelectAction( i18n( "Zoom" ), "viewmag", 0,
                                         actionCollection(), "view_zoom" );
 
-    connect( m_actionViewZoom, SIGNAL( activated( const QString & ) ),
+    connect( m_actionViewZoom, SIGNAL( triggered( const QString & ) ),
              this, SLOT( viewZoom( const QString & ) ) );
     m_actionViewZoom->setEditable(true);
     changeZoomMenu( );
@@ -914,7 +914,7 @@ void KWView::setupActions()
     m_actionFormatFontFamily = new KFontAction( KFontChooser::SmoothScalableFonts,
                                                 //i18n( "Font Family" ),
                                                 actionCollection(), "format_fontfamily" );
-    connect( m_actionFormatFontFamily, SIGNAL( activated( const QString & ) ),
+    connect( m_actionFormatFontFamily, SIGNAL( triggered( const QString & ) ),
              this, SLOT( textFontSelected( const QString & ) ) );
 
     m_actionFormatStyleMenu = new KActionMenu( i18n( "St&yle" ), actionCollection(), "format_stylemenu" );
