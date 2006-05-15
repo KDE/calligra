@@ -2333,7 +2333,9 @@ void KoTextParag::printRTDebug( int info )
         QRect pixr = pixelRect( textDocument()->paintingZoomHandler() );
         kdDebug(32500) << "  rect() : " << DEBUGRECT( rect() )
                   << "  pixelRect() : " << DEBUGRECT( pixr ) << endl;
-        kdDebug(32500) << "  topMargin()=" << topMargin() << " bottomMargin()=" << bottomMargin()
+        kdDebug(32500) << "  topMargin()=" << topMargin()
+                       << " breakableTopMargin()=" << breakableTopMargin()
+                       << " bottomMargin()=" << bottomMargin()
                   << " leftMargin()=" << leftMargin() << " firstLineMargin()=" << firstLineMargin()
                   << " rightMargin()=" << rightMargin() << endl;
         if ( kwLineSpacingType() != KoParagLayout::LS_SINGLE )
