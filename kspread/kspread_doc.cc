@@ -128,8 +128,6 @@ public:
 
   QColor pageBorderColor;
 
-  QList<Plugin*> plugins;
-
   QList<Reference> refs;
   KCompletion listCompletion;
 
@@ -576,13 +574,6 @@ QDomDocument Doc::saveXML()
     defaults.setAttribute( "row-height", Format::globalRowHeight() );
     defaults.setAttribute( "col-width", Format::globalColWidth() );
     spread.appendChild( defaults );
-
-    foreach ( Plugin* plugin, d->plugins )
-    {
-      QDomElement data( plugin->saveXML( doc ) );
-      if ( !data.isNull() )
-        spread.appendChild( data );
-    }
 
     QDomElement s = styleManager()->save( doc );
     spread.appendChild( s );
@@ -1211,16 +1202,6 @@ bool Doc::completeLoading( KoStore* /* _store */ )
   return true;
 }
 
-
-void Doc::registerPlugin( Plugin * plugin )
-{
-  d->plugins.append( plugin );
-}
-
-void Doc::deregisterPlugin( Plugin * plugin )
-{
-  d->plugins.removeAll( plugin );
-}
 
 bool Doc::docData( QString const & xmlTag, QDomElement & data )
 {

@@ -85,17 +85,6 @@ struct Reference
 };
 
 /**
- * \ingroup Plugins
- */
-class Plugin
-{
- public:
-  Plugin() {}
-  virtual ~Plugin() {}
-  virtual QDomElement saveXML( QDomDocument & doc ) const = 0;
-};
-
-/**
  * This class holds the data that makes up a spreadsheet.
  */
 class KSPREAD_EXPORT Doc : public KoDocument, public KoZoomHandler
@@ -590,17 +579,6 @@ public:
   bool isLoading() const;
 
   bool docData( QString const & xmlTag, QDomElement & data );
-
-
-  /**
-   * \ingroup Plugins
-   */
-  void deregisterPlugin( Plugin * plugin );
-
-  /**
-   * \ingroup Plugins
-   */
-  void registerPlugin( Plugin * plugin );
 
 
   /**
