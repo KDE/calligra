@@ -50,9 +50,6 @@ using namespace KSpread;
 // TODO Stefan: SortDec
 // TODO Stefan: FillSelection ?
 
-// TODO Stefan: RemoveComment (works, but not a manipulator yet)
-// TODO Stefan: ClearText (works, but not a manipulator yet)
-// TODO Stefan: ClearValidity (works, but not a manipulator yet)
 // TODO Stefan: Validity (works, but not a manipulator yet)
 // TODO Stefan: Conditional (works, but not a manipulator yet)
 // TODO Stefan: Copy (works, but not a manipulator yet)
@@ -119,14 +116,10 @@ void Manipulator::execute()
   m_sheet->doc()->setModified(true);
   m_sheet->doc()->setUndoLocked(true);
   m_sheet->doc()->emitBeginOperation();
+  m_sheet->setRegionPaintDirty( *this );
 
-  successfully = true;
-  Region::Iterator endOfList(cells().end());
-  for (Region::Iterator it = cells().begin(); it != endOfList; ++it)
-  {
-    successfully = successfully && process(*it);
-  }
-
+  // successfully = true;
+  successfully = mainProcessing();
   if (!successfully)
   {
     kWarning() << "Manipulator::execute(): processing was not successful!" << endl;
@@ -139,7 +132,6 @@ void Manipulator::execute()
     kWarning() << "Manipulator::execute(): postprocessing was not successful!" << endl;
   }
 
-  m_sheet->setRegionPaintDirty( *this );
   m_sheet->doc()->emitEndOperation();
   m_sheet->doc()->setUndoLocked(false);
 
@@ -222,6 +214,17 @@ bool Manipulator::process(Element* element)
     }
   }
   return true;
+}
+
+bool Manipulator::mainProcessing()
+{
+  bool successfully = true;
+  Region::Iterator endOfList(cells().end());
+  for (Region::Iterator it = cells().begin(); it != endOfList; ++it)
+  {
+    successfully = successfully && process(*it);
+  }
+  return successfully;
 }
 
 
@@ -1671,6 +1674,96 @@ QString HideShowManipulator::name() const
     name += "Rows";
   }
   return name;
+}
+
+
+
+/***************************************************************************
+  class RemovalManipulator
+****************************************************************************/
+
+bool RemovalManipulator::mainProcessing()
+{
+  QByteArray data;
+  if (m_reverse)
+  {
+    data = m_undoData;
+  }
+  else
+  {
+    if ( m_firstrun )
+    {
+      return Manipulator::mainProcessing();
+    }
+    else
+    {
+      data = m_redoData;
+    }
+  }
+
+  m_sheet->paste( data, boundingRect() );
+  return true;
+}
+
+bool RemovalManipulator::preProcessing()
+{
+  if (m_reverse)
+  {
+    if ( m_redoData.isEmpty() )
+    {
+      saveCellRegion( m_redoData );
+    }
+  }
+  else
+  {
+    if ( m_undoData.isEmpty() )
+    {
+      saveCellRegion( m_undoData );
+    }
+  }
+  return true;
+}
+
+bool RemovalManipulator::postProcessing()
+{
+  if (m_sheet->getAutoCalc())
+  {
+    m_sheet->recalc();
+  }
+  return true;
+}
+
+void RemovalManipulator::saveCellRegion( QByteArray& data )
+{
+  QDomDocument document = m_sheet->saveCellRegion( *this );
+  // Save to buffer
+  QTextStream stream( &data, QIODevice::WriteOnly );
+  stream.setCodec( "UTF-8" );
+  stream << document;
+}
+
+bool TextRemovalManipulator::process( Cell* cell )
+{
+  cell->setCellText( "" );
+  return true;
+}
+
+bool CommentRemovalManipulator::process( Cell* cell )
+{
+  cell->format()->setComment( "" );
+  return true;
+}
+
+bool ConditionRemovalManipulator::process( Cell* cell )
+{
+  cell->setConditionList( QLinkedList<Conditional>() );
+  return true;
+}
+
+bool ValidityRemovalManipulator::process( Cell* cell )
+{
+  cell->removeValidity();
+  return true;
 }
 
 

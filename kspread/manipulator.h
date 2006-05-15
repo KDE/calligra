@@ -99,6 +99,7 @@ protected:
   virtual bool process(Format*) { return true; }
 
   virtual bool preProcessing() { return true; }
+  virtual bool mainProcessing();
   virtual bool postProcessing() { return true; }
 
 
@@ -539,6 +540,85 @@ private:
   bool m_manipulateRows    : 1;
 };
 
+
+
+/**
+ * RemovalManipulator
+ */
+class RemovalManipulator : public Manipulator
+{
+public:
+
+protected:
+  virtual bool process( Cell* ) = 0;
+
+  virtual bool preProcessing();
+  virtual bool mainProcessing();
+  virtual bool postProcessing();
+
+  void saveCellRegion( QByteArray& bytearray );
+
+  QByteArray m_redoData;
+  QByteArray m_undoData;
+
+private:
+};
+
+/**
+ * TextRemovalManipulator
+ */
+class TextRemovalManipulator : public RemovalManipulator
+{
+public:
+
+protected:
+  virtual bool process( Cell* cell );
+  virtual QString name() const { return i18n( "Remove Text" ); }
+
+private:
+};
+
+/**
+ * CommentRemovalManipulator
+ */
+class CommentRemovalManipulator : public RemovalManipulator
+{
+public:
+
+protected:
+  virtual bool process( Cell* cell );
+  virtual QString name() const { return i18n( "Remove Comment" ); }
+
+private:
+};
+
+/**
+ * ConditionRemovalManipulator
+ */
+class ConditionRemovalManipulator : public RemovalManipulator
+{
+public:
+
+protected:
+  virtual bool process( Cell* cell );
+  virtual QString name() const { return i18n( "Remove Conditional Formatting" ); }
+
+private:
+};
+
+/**
+ * ValidityRemovalManipulator
+ */
+class ValidityRemovalManipulator : public RemovalManipulator
+{
+public:
+
+protected:
+  virtual bool process( Cell* cell );
+  virtual QString name() const { return i18n( "Remove Validity" ); }
+
+private:
+};
 
 
 

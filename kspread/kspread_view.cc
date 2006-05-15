@@ -3994,7 +3994,7 @@ void View::removeComment()
         return;
 
   doc()->emitBeginOperation(false);
-  d->activeSheet->setSelectionRemoveComment( selectionInfo() );
+  d->activeSheet->clearComment( selectionInfo() );
   updateEditWidget();
 
   markSelectionAsDirty();
@@ -5852,7 +5852,7 @@ void View::clearTextSelection()
 	    return;
 
     doc()->emitBeginOperation( false );
-    d->activeSheet->clearTextSelection( selectionInfo() );
+    d->activeSheet->clearText( selectionInfo() );
 
     updateEditWidget();
 
@@ -5866,7 +5866,7 @@ void View::clearCommentSelection()
 	    return;
 
     doc()->emitBeginOperation( false );
-    d->activeSheet->setSelectionRemoveComment( selectionInfo() );
+    d->activeSheet->clearComment( selectionInfo() );
 
     updateEditWidget();
 
@@ -5880,7 +5880,7 @@ void View::clearValiditySelection()
 	    return;
 
     doc()->emitBeginOperation( false );
-    d->activeSheet->clearValiditySelection( selectionInfo() );
+    d->activeSheet->clearValidity( selectionInfo() );
 
     updateEditWidget();
 
@@ -5894,7 +5894,7 @@ void View::clearConditionalSelection()
 	    return;
 
     doc()->emitBeginOperation( false );
-    d->activeSheet->clearConditionalSelection( selectionInfo() );
+    d->activeSheet->clearCondition( selectionInfo() );
 
     updateEditWidget();
 

@@ -2387,7 +2387,7 @@ void Canvas::processDeleteKey(QKeyEvent* /* event */)
     return;
   }
 
-  sheet->clearTextSelection( selectionInfo() );
+  sheet->clearText( selectionInfo() );
   d->editWidget->setText( "" );
 
   QPoint cursor = cursorPos();

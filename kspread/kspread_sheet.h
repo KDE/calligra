@@ -543,7 +543,7 @@ public:
 
     void setSelectionComment( Selection* selection,
                               const QString &_comment);
-    void setSelectionRemoveComment(Selection* selection);
+    void clearComment(Selection* selection);
 
     void setSelectionAngle(Selection* selection, int _value );
 
@@ -571,17 +571,17 @@ public:
     /**
      * @param selection the selection of cells to work on
      */
-    void clearTextSelection( Selection* selection );
+    void clearText( Selection* selection );
 
     /**
      * @param selection the selection of cells to work on
      */
-    void clearValiditySelection(Selection* selection );
+    void clearValidity(Selection* selection );
 
     /**
      * @param selection the selection of cells to work on
      */
-    void clearConditionalSelection(Selection* selection );
+    void clearCondition(Selection* selection );
 
     void fillSelection( Selection* selection, int direction );
 

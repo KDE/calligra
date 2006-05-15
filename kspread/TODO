@@ -152,9 +152,6 @@ Things to do after the release of KOffice 1.4
 
   + Manipulators						      2 ----
     Convert CellWorker/UndoActions/Commands to Manipulators.
-    - RemoveComment							----
-    - ClearText								----
-    - ClearValidity							----
     - Validity								----
     - Conditional							----
     - Copy								----

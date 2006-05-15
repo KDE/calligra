@@ -1277,7 +1277,7 @@ void Sheet::valueChanged (Cell *cell)
  setSelectionFirstLetterUpper (exceptions: no undo; no create-if-default; ### modifies default-cell?)
  setSelectionVerticalText
  setSelectionComment
- setSelectionRemoveComment (exeception: no create-if-default and work only on non-default-cells for cell regions)
+ clearComment (exeception: no create-if-default and work only on non-default-cells for cell regions)
  setSelectionBorderColor (exeception: no create-if-default and work only on non-default-cells for cell regions)
  setSelectionMultiRow
  setSelectionPrecision
@@ -1815,30 +1815,15 @@ void Sheet::setSelectionAngle( Selection* selectionInfo,
   manipulator->execute();
 }
 
-struct SetSelectionRemoveCommentWorker : public Sheet::CellWorker {
-    SetSelectionRemoveCommentWorker( ) : Sheet::CellWorker( false ) { }
-
-    class UndoAction* createUndoAction( Doc* doc, Sheet* sheet, const KSpread::Region& region ) {
-        QString title=i18n("Remove Comment");
-  return new UndoCellFormat( doc, sheet, region, title );
-    }
-    bool testCondition( Cell* cell ) {
-  return ( !cell->isPartOfMerged() );
-    }
-    void doWork( Cell* cell, bool, int, int ) {
-  cell->setDisplayDirtyFlag();
-  cell->format()->setComment( "" );
-  cell->clearDisplayDirtyFlag();
-    }
-};
-
-void Sheet::setSelectionRemoveComment( Selection* selectionInfo )
+void Sheet::clearComment( Selection* selectionInfo )
 {
   if (areaIsEmpty(*selectionInfo, Comment))
     return;
 
-  SetSelectionRemoveCommentWorker w;
-  workOnCells( selectionInfo, w );
+  Manipulator* manipulator = new CommentRemovalManipulator();
+  manipulator->setSheet(this);
+  manipulator->add(*selectionInfo);
+  manipulator->execute();
 }
 
 
@@ -4501,83 +4486,34 @@ void Sheet::adjustRow(const Region& region)
   manipulator->execute();
 }
 
-struct ClearTextSelectionWorker : public Sheet::CellWorker {
-    Sheet   * _s;
-
-    ClearTextSelectionWorker(  Sheet * s )
-      : Sheet::CellWorker( ),  _s( s ) { }
-
-    class UndoAction* createUndoAction( Doc* doc, Sheet* sheet, const KSpread::Region& region ) {
-  return new UndoChangeAreaTextCell( doc, sheet, region );
-    }
-    bool testCondition( Cell* cell ) {
-  return ( !cell->isObscured() );
-    }
-    void doWork( Cell* cell, bool, int, int )
-    {
-      cell->setCellText( "" );
-    }
-};
-
-void Sheet::clearTextSelection( Selection* selectionInfo )
+void Sheet::clearText( Selection* selectionInfo )
 {
   if (areaIsEmpty(*selectionInfo))
     return;
 
-  ClearTextSelectionWorker w( this );
-  workOnCells( selectionInfo, w );
+  Manipulator* manipulator = new TextRemovalManipulator();
+  manipulator->setSheet(this);
+  manipulator->add(*selectionInfo);
+  manipulator->execute();
 }
 
-
-struct ClearValiditySelectionWorker : public Sheet::CellWorker {
-    ClearValiditySelectionWorker( ) : Sheet::CellWorker( ) { }
-
-    class UndoAction* createUndoAction( Doc* doc, Sheet* sheet, const KSpread::Region& region ) {
-  return new UndoConditional( doc, sheet, region );
-    }
-    bool testCondition( Cell* cell ) {
-  return ( !cell->isObscured() );
-    }
-    void doWork( Cell* cell, bool, int, int ) {
-  cell->removeValidity();
-    }
-};
-
-void Sheet::clearValiditySelection( Selection* selectionInfo )
+void Sheet::clearValidity( Selection* selectionInfo )
 {
   if (areaIsEmpty(*selectionInfo, Validity))
     return;
 
-  ClearValiditySelectionWorker w;
-  workOnCells( selectionInfo, w );
+  Manipulator* manipulator = new ValidityRemovalManipulator();
+  manipulator->setSheet(this);
+  manipulator->add(*selectionInfo);
+  manipulator->execute();
 }
 
-
-struct ClearConditionalSelectionWorker : public Sheet::CellWorker
+void Sheet::clearCondition( Selection* selectionInfo )
 {
-  ClearConditionalSelectionWorker( ) : Sheet::CellWorker( ) { }
-
-  class UndoAction* createUndoAction( Doc* doc,
-               Sheet* sheet,
-               const KSpread::Region& region )
-  {
-    return new UndoConditional( doc, sheet, region );
-  }
-  bool testCondition( Cell* cell )
-  {
-    return ( !cell->isObscured() );
-  }
-  void doWork( Cell* cell, bool, int, int )
-  {
-    QLinkedList<Conditional> emptyList;
-    cell->setConditionList(emptyList);
-  }
-};
-
-void Sheet::clearConditionalSelection( Selection* selectionInfo )
-{
-  ClearConditionalSelectionWorker w;
-  workOnCells( selectionInfo, w );
+  Manipulator* manipulator = new ConditionRemovalManipulator();
+  manipulator->setSheet(this);
+  manipulator->add(*selectionInfo);
+  manipulator->execute();
 }
 
 void Sheet::fillSelection( Selection * selectionInfo, int direction )
