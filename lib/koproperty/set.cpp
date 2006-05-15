@@ -22,7 +22,6 @@
 #include "set.h"
 #include "property.h"
 
-#include <qapplication.h>
 #include <qasciidict.h>
 //#include <qvaluelist.h>
 
@@ -60,18 +59,41 @@ class SetPrivate
 //	static Property nonConstNull;
 	QCString prevSelection;
 	QString typeName;
-
-	inline KoProperty::Property& property(const QCString &name) const
+/*
+	bool contains(const QCString &name)
 	{
-		KoProperty::Property *p = dict.find(name);
-		if (p)
-			return *p;
-		Set_nonConstNull.setName(0); //to ensure returned property is null
-		kopropertywarn << "Set::property(): PROPERTY \"" << name << "\" NOT FOUND" << endl;
-		return Set_nonConstNull;
-	}
-};
+		PropertyList::iterator it = properties.begin();
+		for( ; it != properties.end(); ++it )
+			if ( ( *it )->name() == name )
+				return true;
 
+		return false;
+	}
+
+	Property* operator[](const QCString &name)
+	{
+		PropertyList::iterator it = properties.begin();
+		for( ; it != properties.end(); ++it )
+			if ( ( *it )->name() == name )
+				return ( *it );
+
+		return 0L;
+	}
+
+	Property* take(const QCString &name)
+	{
+		Property *p = 0L;
+		PropertyList::iterator it = properties.begin();
+		for( ; it != properties.end(); ++it )
+			if ( ( *it )->name() == name )
+			{
+				p = ( *it );
+				properties.remove( it );
+			}
+		return p;
+	}
+*/
+};
 }
 
 using namespace KoProperty;
@@ -200,7 +222,7 @@ Set::removeProperty(const QCString &name)
 	if(name.isNull())
 		return;
 
-	Property *p = d->dict.find(name);
+	Property *p = d->dict.take(name);
 	removeProperty(p);
 }
 
@@ -293,21 +315,29 @@ Set::setReadOnly(bool readOnly)
 }
 
 bool
-Set::contains(const QCString &name) const
+Set::contains(const QCString &name)
 {
 	return d->dict.find(name);
 }
 
 Property&
-Set::property(const QCString &name) const
+Set::property(const QCString &name)
 {
-	return d->property(name);
+	Property *p = d->dict[name];
+	if (p)
+		return *p;
+//		p = new Property();
+//		//addProperty(p); // maybe just return a null property
+//	}
+	Set_nonConstNull.setName(0); //to ensure returned property is null
+	kopropertywarn << "Set::property(): PROPERTY \"" << name << "\" NOT FOUND" << endl;
+	return Set_nonConstNull;
 }
 
 Property&
-Set::operator[](const QCString &name) const
+Set::operator[](const QCString &name)
 {
-	return d->property(name);
+	return property(name);
 }
 
 const Set&

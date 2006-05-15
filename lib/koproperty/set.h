@@ -68,12 +68,12 @@ class KOPROPERTY_EXPORT Set : public QObject
 				friend class Set;
 		};
 
-		explicit Set(QObject *parent=0, const QString &typeName=QString::null);
+		Set(QObject *parent=0, const QString &typeName=QString::null);
 
 		/*! Constreucts a deep copy of \a set. */
-		explicit Set(const Set& set);
+		Set(const Set& set);
 
-		virtual ~Set();
+		~Set();
 
 		/*! Adds the property to the set, in the group. You can use any group name, except "common"
 		  (which is already used for basic group). */
@@ -109,11 +109,11 @@ class KOPROPERTY_EXPORT Set : public QObject
 		void setReadOnly(bool readOnly);
 
 		/*! \return true if the set contains property names \a name. */
-		bool contains(const QCString &name) const;
+		bool contains(const QCString &name);
 
 		/*! \return property named with \a name. If no such property is found,
 		 null property (Property::null) is returned. */
-		Property& property( const QCString &name) const;
+		Property&  property( const QCString &name);
 
 		/*! Accesses a property by it's name. 
 		Property reference is returned, so all property modifications are allowed.
@@ -129,7 +129,7 @@ class KOPROPERTY_EXPORT Set : public QObject
 		set["myProperty"].setValue("My Value");
 		/endcode
 		\return \ref Property with given name. */
-		Property& operator[](const QCString &name) const;
+		Property&  operator[](const QCString &name);
 
 		/*! Creates a deep copy of \a set and assigns it to this property set. */
 		const Set& operator= (const Set &set);
