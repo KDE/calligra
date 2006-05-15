@@ -10,13 +10,13 @@ include_directories(${KRITA_INCLUDES})
 
 add_subdirectory( raw )
 
-if(JPEG_FOUND)
+if(JPEG_FOUND AND LIBEXIF_FOUND)
 	add_subdirectory(jpeg)
-endif(JPEG_FOUND)
+endif(JPEG_FOUND AND LIBEXIF_FOUND)
 
-if(TIFF_FOUND)
+if(TIFF_FOUND AND LIBEXIF_FOUND)
 	add_subdirectory(tiff)
-endif(TIFF_FOUND)		
+endif(TIFF_FOUND AND LIBEXIF_FOUND)
 
 if(PNG_FOUND)
     add_subdirectory(png)
