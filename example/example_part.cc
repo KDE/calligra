@@ -43,7 +43,7 @@ bool ExamplePart::initDoc(InitDocFlags flags, QWidget* parentWidget)
     KoTemplateChooseDia::ReturnType ret = KoTemplateChooseDia::choose(
      .... )
 */
-    return TRUE;
+    return true;
 }
 
 KoView* ExamplePart::createViewInstance( QWidget* parent, const char* name )
