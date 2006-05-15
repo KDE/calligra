@@ -515,7 +515,7 @@ void View::Private::initActions()
                     view, SLOT( strikeOut( bool ) ) );
 
   actions->selectFont = new KFontAction( i18n("Select Font..."), ac, "selectFont" );
-  connect( actions->selectFont, SIGNAL( activated( const QString& ) ),
+  connect( actions->selectFont, SIGNAL( triggered( const QString& ) ),
                     view, SLOT( fontSelected( const QString& ) ) );
 
   actions->selectFontSize = new KFontSizeAction( i18n("Select Font Size"), ac, "selectFontSize" );
