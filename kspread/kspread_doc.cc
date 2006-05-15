@@ -214,7 +214,7 @@ Doc::Doc( QWidget *parentWidget, QObject* parent, bool singleViewMode )
   d->undoLocked = 0;
 
   d->commandHistory = new KCommandHistory( actionCollection() );
-  connect( d->commandHistory, SIGNAL( commandExecuted() ), SLOT( commandExecuted() ) );
+  connect( d->commandHistory, SIGNAL( commandExecuted(KCommand *) ), SLOT( commandExecuted() ) );
   connect( d->commandHistory, SIGNAL( documentRestored() ), SLOT( documentRestored() ) );
 
 

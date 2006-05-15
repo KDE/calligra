@@ -1537,7 +1537,7 @@ View::View( QWidget *_parent, const char *_name,
     // build the DCOP object
     dcopObject();
 
-    connect( doc()->commandHistory(), SIGNAL( commandExecuted() ),
+    connect( doc()->commandHistory(), SIGNAL( commandExecuted(KCommand *) ),
         this, SLOT( commandExecuted() ) );
 
     // GUI Initializations
