@@ -113,7 +113,7 @@ reference::reference( View* parent, const char* name )
            SLOT(slotDoubleClicked(Q3ListBoxItem *)));
   connect( m_list, SIGNAL(highlighted ( Q3ListBoxItem * ) ), this,
            SLOT(slotHighlighted(Q3ListBoxItem * )));
-  m_rangeName->setText(i18n("Area: %1").arg(""));
+  m_rangeName->setText(i18n("Area: %1",QString("")));
 
   resize( 250, 200 );
 }
@@ -137,7 +137,7 @@ void reference::displayAreaValues(QString const & areaName)
     }
   }
 
-  tmpName = i18n("Area: %1").arg(tmpName);
+  tmpName = i18n("Area: %1",tmpName);
   m_rangeName->setText(tmpName);
 }
 
@@ -207,7 +207,7 @@ void reference::slotEdit()
   EditAreaName editDlg( m_pView, "EditArea", name );
   editDlg.exec();
 
-  m_rangeName->setText(i18n("Area: %1").arg(""));
+  m_rangeName->setText(i18n("Area: %1",QString("")));
   QString tmp = m_list->text(m_list->currentItem());
   if (!tmp.isEmpty())
     displayAreaValues( tmp );
