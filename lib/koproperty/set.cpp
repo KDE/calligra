@@ -361,7 +361,6 @@ Set::operator= (const Set &set)
 	d->ownProperty = set.d->ownProperty;
 	d->prevSelection = set.d->prevSelection;
 	d->groupsDescription = set.d->groupsDescription;
-	QValueList<QCString> _props = set.d->propertiesOfGroup.begin().data();
 
 	// Copy all properties in the list
 	for(Property::DictIterator it(set.d->dict); it.current(); ++it) {
