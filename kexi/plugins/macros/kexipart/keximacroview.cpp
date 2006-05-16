@@ -29,9 +29,9 @@
 #include <core/kexipartmanager.h>
 #include <core/kexipartinfo.h>
 
-#include "lib/macro.h"
-#include "lib/xmlhandler.h"
-#include "lib/exception.h"
+#include "../lib/macro.h"
+#include "../lib/xmlhandler.h"
+#include "../lib/exception.h"
 
 /**
 * \internal d-pointer class to be more flexible on future extension of the

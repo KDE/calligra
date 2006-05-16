@@ -33,14 +33,14 @@
 //#include <kconfig.h>
 //#include <kdebug.h>
 
-#include "lib/manager.h"
-#include "lib/macro.h"
-#include "lib/action.h"
+#include "../lib/manager.h"
+#include "../lib/macro.h"
+#include "../lib/action.h"
 
-#include "kexiactions/openaction.h"
-#include "kexiactions/executeaction.h"
-#include "kexiactions/navigateaction.h"
-#include "kexiactions/messageaction.h"
+#include "../kexiactions/openaction.h"
+#include "../kexiactions/executeaction.h"
+#include "../kexiactions/navigateaction.h"
+#include "../kexiactions/messageaction.h"
 
 /**
 * \internal d-pointer class to be more flexible on future extension of the

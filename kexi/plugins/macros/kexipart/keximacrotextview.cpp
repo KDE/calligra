@@ -23,8 +23,8 @@
 #include <kexidialogbase.h>
 #include <kexidb/connection.h>
 
-#include "lib/macro.h"
-#include "lib/xmlhandler.h"
+#include "../lib/macro.h"
+#include "../lib/xmlhandler.h"
 
 /**
 * \internal d-pointer class to be more flexible on future extension of the

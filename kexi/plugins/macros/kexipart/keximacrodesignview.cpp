@@ -16,6 +16,7 @@
 */
 
 #include "keximacrodesignview.h"
+#include "keximacroproperty.h"
 
 #include <qtimer.h>
 #include <qdom.h>
@@ -39,9 +40,9 @@
 #include <koproperty/set.h>
 #include <koproperty/property.h>
 
-#include "lib/macro.h"
-#include "lib/macroitem.h"
-#include "lib/xmlhandler.h"
+#include "../lib/macro.h"
+#include "../lib/macroitem.h"
+#include "../lib/xmlhandler.h"
 
 /// constants used to name columns instead of hardcoding indices
 #define COLUMN_ID_ACTION 0
@@ -163,6 +164,10 @@ KexiMacroDesignView::KexiMacroDesignView(KexiMainWindow *mainwin, QWidget *paren
 	d->tableview = d->datatable->tableView();
 	d->tableview->setSpreadSheetMode();
 	d->tableview->setColumnStretchEnabled( true, COLUMN_ID_COMMENT ); //last column occupies the rest of the area
+
+	// We need to register our KexiMacroPropertyFactory to use our own
+	// KoProperty::Property implementation.
+	KexiMacroPropertyFactory::initFactory();
 
 	// Create the propertyset.
 	d->propertyset = new KexiDataAwarePropertySet(this, d->tableview);
