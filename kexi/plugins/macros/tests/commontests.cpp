@@ -34,6 +34,7 @@
 #include "../lib/macroitem.h"
 
 #include <ostream>
+#include <climits>
 
 #include <qstringlist.h>
 #include <qdom.h>
@@ -124,7 +125,9 @@ void CommonTests::setUp()
 	d->doomdocument = new QDomDocument();
 
 	QString const xml = QString("<!DOCTYPE macros>"
-				   "<macro xmlversion=\"1\" >"
+
+				    "<macro xmlversion=\"1\">"
+
 				      "<item action=\"testaction\" >"
 				      "</item>"
 				    "</macro>");
@@ -279,6 +282,130 @@ void CommonTests::testAction()
 	//increased ??
 	KOMACROTEST_ASSERT( items.count(), sizetype(3));
 } */
+
+void CommonTests::testXmlhandler()
+{
+	kdDebug()<<"===================== testXmlhandler() ======================" << endl;
+
+	// Local Init
+	KSharedPtr<KoMacro::Macro> macro = KoMacro::Manager::self()->createMacro("testMacro");
+	QDomElement domelement;
+
+	// Save old doomdocument
+	QString xmlOld = d->doomdocument->toString();
+
+	// Part 1: From XML to a Macro.
+	// Test-XML-document with normal allocated variables.
+	QString xml = QString("<!DOCTYPE macros>"
+				    "<macro xmlversion=\"1\">"
+				      "<item action=\"testaction\" >"
+    					"<variable name=\"teststring\" >testString</variable>"
+						"<variable name=\"testint\" >0</variable>"
+						"<variable name=\"testbool\" >true</variable>"
+						"<variable name=\"testbla\" >somethingwrong</variable>" // TODO Is here a kdDebug-msg enough?
+						"<variable name=\"testdouble\" >0.6</variable>"
+				      "</item>"
+				    "</macro>");
+	// Set the XML-document with the above string.
+	d->doomdocument->setContent(xml);
+	domelement = d->doomdocument->documentElement();
+	//Is our XML parseable ?
+	KOMACROTEST_ASSERT(macro->parseXML(domelement),true);
+
+	// Test-XML-document with bad root element.
+	xml = QString("<!DOCTYPE macros>"
+				    "<maro xmlversion=\"1\">"
+				      "<item action=\"testaction\" >"
+    					"<variable name=\"teststring\" >testString</variable>"
+						"<variable name=\"testint\" >0</variable>"
+						"<variable name=\"testbool\" >true</variable>"
+						"<variable name=\"testdouble\" >0.6</variable>"
+				      "</item>"
+				    "</maro>");
+	d->doomdocument->setContent(xml);
+	domelement = d->doomdocument->documentElement();
+	KOMACROTEST_ASSERT(macro->parseXML(domelement),false);
+
+	// Test-XML-document with wrong macro-xmlversion.
+	xml = QString("<!DOCTYPE macros>"
+				    "<macro xmlversion=\"2\">"
+				      "<item action=\"testaction\" >"
+    					"<variable name=\"teststring\" >testString</variable>"
+						"<variable name=\"testint\" >0</variable>"
+						"<variable name=\"testbool\" >true</variable>"
+						"<variable name=\"testdouble\" >0.6</variable>"
+				      "</item>"
+				    "</macro>");
+	d->doomdocument->setContent(xml);
+	domelement = d->doomdocument->documentElement();
+	KOMACROTEST_ASSERT(macro->parseXML(domelement),false);
+
+	// TODO Test-XML-document if it has a wrong structure like wrong parathesis
+	// or missing end tag (is this critical??).
+	/*xml = QString("<!DOCTYPE macros>"
+				    "<macro xmlversion=\"1\">"
+				      "<item action=\"testaction\" >"
+    					"<variable name=\"teststring\" >testString</variable>"
+						"<variable name=\"testint\" >0</variable>"
+						"<variable name=\"testbool\" >true</variable>"
+				      "</item>"
+				    "</macro>");
+	d->doomdocument->setContent(xml);
+	domelement = d->doomdocument->documentElement();
+	KOMACROTEST_ASSERT(macro->parseXML(domelement),false);*/
+
+	// Test-XML-document with wrong item- and variable-tags.
+	// TODO Could this happen??
+	xml = QString("<!DOCTYPE macros>"
+				    "<macro xmlversion=\"1\">"
+				      "<iem action=\"testaction\" >"
+    					"<vle name=\"teststring\" >testString</variable>"
+						"<v name=\"testint\" >0</variable>"
+						"<variable name=\"testbool\" >true</variable>"
+						"<variable name=\"testdouble\" >0.6</variable>"
+				      "</item>"
+				    "</macro>");
+	d->doomdocument->setContent(xml);
+	domelement = d->doomdocument->documentElement();
+	KOMACROTEST_ASSERT(macro->parseXML(domelement),true);  //should be false?
+
+	// TODO Test-XML-document with maximum field-size.
+	xml = QString("<!DOCTYPE macros>"
+				    "<macro xmlversion=\"1\">"
+				      "<item action=\"testaction\" >"
+    					"<variable name=\"teststring\" >testString</variable>"
+						"<variable name=\"testint\" > 0 </variable>" // the value should be INT_MAX
+						"<variable name=\"testbool\" >true</variable>"
+						"<variable name=\"testdouble\" >0.6</variable>" // DBL_MAX
+				      "</item>"
+				    "</macro>");
+	d->doomdocument->setContent(xml);
+	domelement = d->doomdocument->documentElement();
+	KOMACROTEST_ASSERT(macro->parseXML(domelement),true);
+
+	// TODO Test-XML-document with minimum field-size.
+	xml = QString("<!DOCTYPE macros>"
+				    "<macro xmlversion=\"1\">"
+				      "<item action=\"testaction\" >"
+    					"<variable name=\"teststring\" >testString</variable>"
+						"<variable name=\"testint\" >0</variable>" // INT_MIN
+						"<variable name=\"testbool\" >true</variable>"
+						"<variable name=\"testdouble\" >0.6</variable>" // DBL_MIN
+				      "</item>"
+				    "</macro>");
+	d->doomdocument->setContent(xml);
+	domelement = d->doomdocument->documentElement();
+	KOMACROTEST_ASSERT(macro->parseXML(domelement),true);
+
+	// TODO Part 2: Read the parsen macro and make a comparison to the XML-document.
+
+	// TODO Part 3: From a Macro to XML.
+
+	// RODO Part 4: Compare the transformed XML with the given macro.
+
+	// Set back xml-string for other tests.
+	d->doomdocument->setContent(xmlOld);	
+}
 
 void CommonTests::testFunction()
 {

@@ -68,6 +68,11 @@ namespace KoMacroTest {
 			//void testAction();
 
 			/**
+			* Test the @a KoMacro::XmlHandler functionality.
+			*/
+			void testXmlhandler();
+
+			/**
 			* Test the @a KoMacro::Function functionality.
 			*/
 			void testFunction();

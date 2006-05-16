@@ -33,6 +33,7 @@ TestAction::TestAction()
 {
 	setVariable("teststring", "Stringtest", QString("testString"));
 	setVariable("testint", "Inttest", int(0));
+	setVariable("testdouble", "Inttest", double(0.5));
 	setVariable("testbool", "Booltest", bool(true));
 }
 
