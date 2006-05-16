@@ -5768,10 +5768,10 @@ void KWView::slotFrameSetEditChanged()
         goodleftMargin=(edit->currentLeftMargin()>0);
 
     m_actionFormatDecreaseIndent->setEnabled(goodleftMargin);
-    bool isFootNoteSelected = ((rw && edit && !edit->textFrameSet()->isFootEndNote())||(!edit&& rw));
-    m_actionFormatBullet->setEnabled(isFootNoteSelected);
-    m_actionFormatNumber->setEnabled(isFootNoteSelected);
-    m_actionFormatStyle->setEnabled(isFootNoteSelected);
+    const bool canChangeCounter = rw && ( !edit || !edit->textFrameSet()->isFootEndNote() );
+    m_actionFormatBullet->setEnabled(canChangeCounter);
+    m_actionFormatNumber->setEnabled(canChangeCounter);
+    m_actionFormatStyle->setEnabled(rw);
     m_actionFormatSpacingSingle->setEnabled(rw);
     m_actionFormatSpacingOneAndHalf->setEnabled(rw);
     m_actionFormatSpacingDouble->setEnabled(rw);
