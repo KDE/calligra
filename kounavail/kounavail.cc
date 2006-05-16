@@ -121,7 +121,7 @@ void KoUnavailView::paintEvent( QPaintEvent* ev )
     // ### TODO: Scaling
 
     // Let the document do the drawing
-    koDocument()->paintEverything( painter, ev->rect(), FALSE, this );
+    koDocument()->paintEverything( painter, ev->rect(), false, this );
 
     painter.end();
 }

@@ -32,7 +32,7 @@ class KoUnavailPart : public KoDocument
 public:
     KoUnavailPart( QWidget *parentWidget = 0, QObject* parent = 0 );
 
-    virtual void paintContent( QPainter& painter, const QRect& rect, bool transparent = FALSE, double zoomX = 1.0, double zoomY = 1.0 );
+    virtual void paintContent( QPainter& painter, const QRect& rect, bool transparent = false, double zoomX = 1.0, double zoomY = 1.0 );
 
     virtual bool initDoc(InitDocFlags, QWidget* = 0) { return true; }
     virtual bool loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles, const QDomDocument& settings, KoStore* );
