@@ -18,6 +18,7 @@ cycle:
 - kexi
 - krita
 - kdgantt
+- kplato
 
 It is up to the maintainer of those applications to merge their change
 with trunk, and with 1.5 for fixed bugs.  For all the rest of the
