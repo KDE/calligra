@@ -201,7 +201,8 @@ const ObjectStatus& ObjectStatus::status() const
 
 bool ObjectStatus::error() const
 {
-	return !message.isEmpty() || !message.isEmpty();
+	return !message.isEmpty() 
+		|| (dynamic_cast<KexiDB::Object*>((QObject*)dbObj) && dynamic_cast<KexiDB::Object*>((QObject*)dbObj)->error());
 }
 
 void ObjectStatus::setStatus(const QString& message, const QString& description)

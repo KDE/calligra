@@ -176,7 +176,7 @@ bool MigrateManagerInternal::lookupDrivers()
 
 	if (tlist.isEmpty())
 	{
-		setError(ERR_DRIVERMANAGER, i18n("Could not find any database drivers.") );
+		setError(ERR_DRIVERMANAGER, i18n("Could not find any import/export database drivers.") );
 		return false;
 	}
 	return true;
@@ -195,7 +195,7 @@ KexiMigrate* MigrateManagerInternal::driver(const QString& name)
 		return drv; //cached
 
 	if (!m_services_lcase.contains(name.lower())) {
-		setError(ERR_DRIVERMANAGER, i18n("Could not find database driver \"%1\".").arg(name) );
+		setError(ERR_DRIVERMANAGER, i18n("Could not find import/export database driver \"%1\".").arg(name) );
 		return 0;
 	}
 
@@ -207,7 +207,7 @@ KexiMigrate* MigrateManagerInternal::driver(const QString& name)
 		this, srv_name.latin1(), QStringList(),&m_serverResultNum);
 
 	if (!drv) {
-		setError(ERR_DRIVERMANAGER, i18n("Could not load database driver \"%1\".")
+		setError(ERR_DRIVERMANAGER, i18n("Could not load import/export database driver \"%1\".")
 				.arg(name) );
 		if (m_componentLoadingErrors.isEmpty()) {//fill errtable on demand
 			m_componentLoadingErrors[KParts::ComponentFactory::ErrNoServiceFound]="ErrNoServiceFound";

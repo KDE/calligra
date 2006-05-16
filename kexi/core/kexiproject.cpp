@@ -209,8 +209,14 @@ KexiProject::openInternal(bool *incompatibleWithKexi)
 			<< d->data->databaseName() <<" "<< d->data->connectionData()->driverName  << endl;
 
 		if (d->connection->errorNum() == ERR_NO_DB_PROPERTY) {
-			if (incompatibleWithKexi)
-				*incompatibleWithKexi = true;
+//! @todo <temp> this is temporary workaround as we have no import driver for SQLite
+			if (/*supported?*/ !d->data->connectionData()->driverName.lower().startsWith("sqlite")) {
+//! </temp> 
+				if (incompatibleWithKexi)
+					*incompatibleWithKexi = true;
+			}
+			else
+				setError(d->connection);
 			closeConnection();
 			return false;
 		}

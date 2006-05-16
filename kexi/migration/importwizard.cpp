@@ -21,7 +21,6 @@
 
 #include "importwizard.h"
 #include "keximigrate.h"
-#include "migratemanager.h"
 #include "importoptionsdlg.h"
 
 #include <qlabel.h>
@@ -611,8 +610,7 @@ QString ImportWizard::driverNameForSelectedSource()
 			//try by URL:
 			ptr = KMimeType::findByURL( m_srcConn->selectedFileName() );
 		}
-		MigrateManager manager;
-		return ptr ? manager.driverForMimeType( ptr.data()->name() ) : QString::null;
+		return ptr ? m_migrateManager.driverForMimeType( ptr.data()->name() ) : QString::null;
 	}
 
 	//server-based
@@ -706,31 +704,30 @@ KexiMigrate* ImportWizard::prepareImport(Kexi::ObjectStatus& result)
 	}
 
 	// Find a source (migration) driver name
-	MigrateManager migrateManager;
 	QString sourceDriverName;
 	if (!result.error())
 	{
 		sourceDriverName = driverNameForSelectedSource();
 		if (sourceDriverName.isEmpty())
 			result.setStatus(i18n("No appropriate migration driver found."), 
-				migrateManager.possibleProblemsInfoMsg());
+				m_migrateManager.possibleProblemsInfoMsg());
 	}
 
 	// Get a source (migration) driver
 	KexiMigrate* sourceDriver = 0;
 	if (!result.error())
 	{
-		sourceDriver = migrateManager.driver( sourceDriverName );
-		if(!sourceDriver || migrateManager.error()) {
+		sourceDriver = m_migrateManager.driver( sourceDriverName );
+		if(!sourceDriver || m_migrateManager.error()) {
 			kdDebug() << "Import migrate driver error..." << endl;
-			result.setStatus(&migrateManager);
+			result.setStatus(&m_migrateManager);
 		}
 	}
 
 	KexiUtils::removeWaitCursor();
 
 	// Set up source (migration) data required for connection
-	if (!result.error())
+	if (sourceDriver && !result.error())
 	{
 		// Setup progress feedback for the GUI
 		if(sourceDriver->progressSupported()) {
@@ -885,9 +882,8 @@ void ImportWizard::next()
 			return;
 		}
 
-		MigrateManager migrateManager;
-		KexiMigrate* import = migrateManager.driver( driverNameForSelectedSource() );
-		if(!import || migrateManager.error()) {
+		KexiMigrate* import = m_migrateManager.driver( driverNameForSelectedSource() );
+		if(!import || m_migrateManager.error()) {
 			QString dbname;
 			if (fileBasedSrcSelected())
 				dbname = m_srcConn->selectedFileName();
