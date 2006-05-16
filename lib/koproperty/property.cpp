@@ -64,6 +64,7 @@ class PropertyPrivate
 		{
 			delete caption;
 			caption = 0;
+			delete listData;
 			delete children;
 			delete relatedProperties;
 			delete custom;
