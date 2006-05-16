@@ -27,6 +27,8 @@
 #include <kapplication.h>
 
 #include <kexiutils/tristate.h> 
+#include "migratemanager.h"
+
 //Added by qt3to4:
 #include <Q3VBoxLayout>
 #include <QLabel>
@@ -144,6 +146,7 @@ private:
 	QMap<QString,QString> *m_args;
 	QString m_predefinedDatabaseName, m_predefinedMimeType;
 	KexiDB::ConnectionData *m_predefinedConnectionData;
+	MigrateManager m_migrateManager; //!< object lives here, so status messages can be globally preserved
 
 	//! Encoding for source db. Currently only used for MDB driver.
 //! @todo Hardcoded. Move to KexiMigrate driver's impl.
