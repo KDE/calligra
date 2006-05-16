@@ -1,9 +1,9 @@
 Begin4
 Title:          koffice
-Version:        1.4.98
-Entered-date:   2006-03-06
+Version:        1.5.1
+Entered-date:   2006-05-16
 Description:    Office Suite for the K Desktop Environment (KDE)
-Keywords:       KDE X11 desktop Qt 
+Keywords:       KDE X11 desktop Qt
 Author:         http://bugs.kde.org/ (KDE Bugtracking System)
 Primary-site:   http://www.kde.org/download/
 Platforms:      Unix, Qt
