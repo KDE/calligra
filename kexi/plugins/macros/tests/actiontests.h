@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
  ***************************************************************************/
 
-#ifndef KOMACROTEST_COMMONTESTS_H
-#define KOMACROTEST_COMMONTESTS_H
+#ifndef KOMACROTEST_ACTIONTESTS_H
+#define KOMACROTEST_ACTIONTESTS_H
 
 #include <kunittest/tester.h>
 
@@ -28,7 +28,7 @@ namespace KoMacroTest {
 	* The common testsuite used to test common @a KoMacro
 	* functionality.
 	*/
-	class CommonTests : public KUnitTest::SlotTester
+	class ActionTests : public KUnitTest::SlotTester
 	{
 			Q_OBJECT
 		public:
@@ -36,12 +36,12 @@ namespace KoMacroTest {
 			/**
 			* Constructor.
 			*/
-			CommonTests();
+			ActionTests();
 
 			/**
 			* Destructor.
 			*/
-			virtual ~CommonTests();
+			virtual ~ActionTests();
 
 		public slots:
 
@@ -58,48 +58,9 @@ namespace KoMacroTest {
 			void tearDown();
 
 			/**
-			* Test the @a KoMacro::Manager functionality.
-			*/
-			void testManager();
-
-			/**
 			* Test the @a KoMacro::Action functionality.
 			*/
-			//void testAction();
-
-			/**
-			* Test the @a KoMacro::Function functionality.
-			*/
-			void testFunction();
-
-			/**
-			* Test the @a KoMacro::Function functionality with an int.
-			*/
-			void testIntFunction();
-
-			/**
-			* Test the @a KoMacro::Function functionality with a double.
-			*/
-			void testDoubleFunction();
-
-			/**
-			* Test the  @a KoMacro::Function functionality with a QString.
-			*/
-			void testQStringFunction();
-
-			/**
-			* Test the @a KoMacro::Macro functionality.
-			*/
-			void testMacro();
-
-			/**
-			* Test the @a KoMacro::Dom functionality.
-			*/
-			void testDom();
-				/**
-			* Test the @a KoMacro::Variable functionality.
-			*/
-			void testVariables();
+			void testAction();
 
 		private:
 			/// @internal d-pointer class.
