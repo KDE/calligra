@@ -18,22 +18,35 @@
 #ifndef KEXIMACROPROPERTY_H
 #define KEXIMACROPROPERTY_H
 
+#include <ksharedptr.h>
 #include <koproperty/property.h>
 #include <koproperty/factory.h>
 #include <koproperty/customproperty.h>
 #include <koproperty/widget.h>
 
+namespace KoMacro {
+	class Variable;
+	class MacroItem;
+}
+
 /**
 * Implementation of a @a KoProperty::CustomProperty to have
 * more control about the handling of our macro-properties.
 */
-class KexiMacroProperty : public KoProperty::CustomProperty
+class KexiMacroProperty
+	: public QObject
+	, public KoProperty::CustomProperty
 {
+		Q_OBJECT
 	public:
+
 		/** Constructor. */
 		explicit KexiMacroProperty(KoProperty::Property* parent);
 		/** Destructor. */
 		virtual ~KexiMacroProperty();
+
+		/** @return the parent @a KoProperty::Property instance. */
+		KoProperty::Property* parentProperty() const;
 
 		/** This function is called by @ref KoProperty::Property::setValue() 
 		when a custom property is set.
@@ -51,6 +64,27 @@ class KexiMacroProperty : public KoProperty::CustomProperty
 		/** Tells whether CustomProperty should be used to get the property's value.
 		You should return true for child properties, and false for others. */
 		virtual bool handleValue() const;
+
+		
+		KSharedPtr<KoMacro::MacroItem> macroItem() const;
+		QString name() const;
+		KSharedPtr<KoMacro::Variable> variable() const;
+		bool set(KSharedPtr<KoMacro::MacroItem> macroitem, const QString& name);
+
+		/** Factory function to create a new @a KoProperty::Property instance
+		that will use a @a KexiMacroProperty as container. */
+		static KoProperty::Property* createProperty(KSharedPtr<KoMacro::MacroItem> macroitem, const QString& name);
+
+	signals:
+
+		/** Emitted if @a setValue was called and the value changed. */
+		void valueChanged();
+
+	private:
+		/** \internal d-pointer class. */
+		class Private;
+		/** \internal d-pointer instance. */
+		Private* const d;
 };
 
 /**
@@ -114,10 +148,12 @@ class KexiMacroPropertyWidget : public KoProperty::Widget
 		virtual void setReadOnlyInternal(bool readOnly);
 
 		//QString keyForValue(const QVariant &value);
-		//void fillBox();
 
 	private slots:
-		void slotComboboxChanged(int index);
+
+		/** Called if the value of a @a KexiMacroProperty changed to update
+		the widget and the displayed content. */
+		void propertyValueChanged();
 
 	private:
 		/** \internal d-pointer class. */

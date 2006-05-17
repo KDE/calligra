@@ -102,6 +102,49 @@ bool KexiMacroPart::execute(KexiPart::Item* item, QObject* sender)
 	return true;
 }
 
+class TestAction : public KoMacro::Action
+{
+		//Q_OBJECT
+	public:
+		TestAction() : KoMacro::Action("test") {
+			setText("Test");
+
+			KoMacro::Variable* intvar = new KoMacro::Variable(QVariant(12345));
+			intvar->setName("intvar");
+			intvar->setText("IntVar");
+			intvar->children().append(new KoMacro::Variable( "Int first" ));
+			intvar->children().append(new KoMacro::Variable( "Int second" ));
+			intvar->children().append(new KoMacro::Variable( "Int theird" ));
+			setVariable(intvar);
+
+			KoMacro::Variable* int2var = new KoMacro::Variable(QVariant(54321));
+			int2var->setName("int2var");
+			int2var->setText("Int2Var");
+			setVariable(int2var);
+
+			KoMacro::Variable* boolvar = new KoMacro::Variable(QVariant(true,0));
+			boolvar->setName("boolvar");
+			boolvar->setText("BoolVar");
+			boolvar->children().append(new KoMacro::Variable( "Bool first" ));
+			boolvar->children().append(new KoMacro::Variable( "Bool second" ));
+			boolvar->children().append(new KoMacro::Variable( "Bool theird" ));
+			setVariable(boolvar);
+
+			KoMacro::Manager::self()->publishAction( Action::Ptr(this) );
+		}
+		virtual ~TestAction() {}
+		virtual KoMacro::Variable::List notifyUpdated(const QString& variablename, KoMacro::Variable::Map variable) {
+			Q_UNUSED(variablename);
+			Q_UNUSED(variable);
+			return KoMacro::Variable::List();
+		}
+	public slots:
+		virtual void activate(KSharedPtr<KoMacro::Context> context) {
+			Q_UNUSED(context);
+		}
+};
+
+
 void KexiMacroPart::initPartActions()
 {
 	//kdDebug() << "KexiMacroPart::initPartActions()" << endl;
@@ -111,6 +154,8 @@ void KexiMacroPart::initPartActions()
 	new KexiMacro::ExecuteAction;
 	new KexiMacro::NavigateAction;
 	new KexiMacro::MessageAction;
+
+	new TestAction;
 }
 
 void KexiMacroPart::initInstanceActions()
