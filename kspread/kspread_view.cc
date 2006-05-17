@@ -5725,7 +5725,7 @@ void View::openPopupMenu( const QPoint & _point )
       }
     }
 
-    // Remove informations about the last tools we offered
+    // Remove information about the last tools we offered
     qDeleteAll( d->toolList );
     d->toolList.clear();
 

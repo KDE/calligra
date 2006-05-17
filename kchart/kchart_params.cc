@@ -311,7 +311,7 @@ bool KChartParams::loadOasis( const QDomElement     &chartElem,
         QFont font;
         QColor color;
         loadOasisFont( loadingContext, font, color );
-        //tz I didn't find that Oasis support seperate font/colors for the title and the rest of the legent
+        //tz I didn't find that Oasis support separate font/colors for the title and the rest of the legend
         setLegendFont( font, true );
         setLegendTitleFont( font, true );
         setLegendTextColor( color );

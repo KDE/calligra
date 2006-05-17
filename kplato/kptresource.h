@@ -87,7 +87,7 @@ class ResourceGroup {
 	        * (e.g. you can't add a person to a list of computers
 	        *
 	        * <p>Risks must always be associated with a resource, so there is no option
-	        * to manipulate risks (@ref Risk) seperately
+	        * to manipulate risks (@ref Risk) separately
 	        */
 	      void addResource(Resource*, Risk*);
           void insertResource( unsigned int index, Resource *resource );

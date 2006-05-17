@@ -37,14 +37,14 @@ public:
      * Constructor */
     KOfficePlugin( QObject *parent, const QStringList& args );
     /**
-     * Read informations from files and store info in KFileMetaInfo.
+     * Read information from files and store info in KFileMetaInfo.
      * We currently only parse meta.xml in OOo files.
-     * @param info informations to modify about current file
+     * @param info information to modify about current file
      * @param what What kind of parsing is needed ?
      */
     virtual bool readInfo( KFileMetaInfo& info, uint what);
     /**
-     * Write modified informations in meta.xml
+     * Write modified information in meta.xml
      * @param info Informations modified
      */
     virtual bool writeInfo( const KFileMetaInfo& info) const;
