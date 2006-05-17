@@ -637,7 +637,7 @@ QString KWFrame::saveOasisFrameStyle( KoGenStyles& mainStyles ) const
     if ( frameSet()->isProtectSize() ) // ## should be moved for frame
     {
         if ( !protect.isEmpty() )
-            protect+=" ";
+            protect+=' ';
         protect+="size";
     }
     if ( !protect.isEmpty() )

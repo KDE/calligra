@@ -83,7 +83,7 @@ bool KWMailMergeDataBase::isConfigDialogShown()
 bool KWMailMergeDataBase::loadPlugin(const QString &name,const QString &command)
 {
     if (rejectdcopcall)return false;
-    QString constrain=QString("[X-KDE-InternalName] =='"+name+"'");
+    QString constrain=QString("[X-KDE-InternalName] =='"+name+'\'');
     kDebug()<<constrain<<endl;
     KTrader::OfferList pluginOffers=KTrader::self()->query(QString::fromLatin1("KWord/MailMergePlugin"),constrain);
     KService::Ptr it=pluginOffers.first();
