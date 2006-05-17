@@ -170,7 +170,7 @@ class KFORMEDITOR_EXPORT LayoutPropertyCommand : public PropertyCommand
 
 /*! This command is used when inserting a widger using toolbar or menu. You only need to give
 the parent Container and the widget pos.
- The other informations are taken from FormManager. */
+ The other information is taken from FormManager. */
 class KFORMEDITOR_EXPORT InsertWidgetCommand : public Command
 {
 	public:

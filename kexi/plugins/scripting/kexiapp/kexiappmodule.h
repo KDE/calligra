@@ -33,7 +33,7 @@ namespace Kross {
 
 /**
  * Wrapper around the Kexi-application to access runtime
- * informations a running Kexi-application likes to
+ * information a running Kexi-application likes to
  * provide.
  */
 namespace KexiApp {

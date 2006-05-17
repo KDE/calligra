@@ -87,7 +87,7 @@ class KEXIDATATABLE_EXPORT KexiTableViewColumn {
 		 is in parent table of this query. \sa setReadOnly() */
 		inline bool isReadOnly() const { return m_readOnly; }
 
-//TODO: syncroize this with table view:
+//TODO: synchronize this with table view:
 		//! forces readOnly flag to be set to \a ro
 		inline void setReadOnly(bool ro) { m_readOnly=ro; }
 
