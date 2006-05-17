@@ -11,9 +11,11 @@ time of the release.
 The real development will happen in trunk, and will eventually lead to
 KOffice version 2.0, which will be based on Qt4 and kdelibs4.
 
-Here is the list of applications that will be developed in the 1.6
-cycle:
+Here is the list of applications and libraries that will be developed 
+in the 1.6 cycle:
 
+- lib/koproperty
+- lib/kross
 - kchart
 - kexi
 - krita
