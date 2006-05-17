@@ -175,7 +175,8 @@ void Context::activate()
 		}
 		catch(Exception& e) {
 			d->exception = new Exception(e);
-			//d->exception->addTraceMessage("Action name=" + action->name());
+			d->exception->addTraceMessage( QString("macro=%1").arg(d->macro->name()) );
+			d->exception->addTraceMessage( QString("action=%1").arg(action->name()) );
 			QStringList variables = action->variableNames();
 			for(QStringList::Iterator vit = variables.begin(); vit != variables.end(); ++vit) {
 				Variable::Ptr v = d->macroitem->variable(*vit, true);

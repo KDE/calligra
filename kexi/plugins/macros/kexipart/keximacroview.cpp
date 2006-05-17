@@ -162,7 +162,12 @@ void KexiMacroView::execute(QObject* sender)
 	KoMacro::Context::Ptr context = d->macro->execute(sender);
 	if(context->hadException()) {
 		KoMacro::Exception* exception = context->exception();
-		KMessageBox::detailedError(mainWin(), exception->errorMessage(), exception->traceMessages());
+		KMessageBox::detailedError(
+			mainWin(), //parent
+			i18n("<qt>Failed to execute the Macro \"%1\".<br>%2</qt>").arg( d->macro->name() ).arg( exception->errorMessage() ), //text
+			exception->traceMessages(), //details
+			i18n("Execution failed") //caption
+		);
 	}
 }
 
