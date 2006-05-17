@@ -323,21 +323,11 @@ double Canvas::yOffset() const
 void Canvas::setXOffset( double _xOffset )
 {
   d->xOffset = _xOffset;
- //kdDebug(36001) << "setXOffset(): XOffset before scrollToCell: "
- //		 << d->xOffset << endl;
-  scrollToCell( marker() );
- // kdDebug(36001) << "setXOffset(): XOffset after scrollToCell: "
- //		 << d->xOffset << endl;
 }
 
 void Canvas::setYOffset( double _yOffset )
 {
   d->yOffset = _yOffset;
-  //kdDebug(36001) << "setyOffset(): YOffset before scrollToCell: "
-  //		 << d->yOffset << endl;
-  scrollToCell( marker() );
-  //kdDebug(36001) << "setYOffset(): YOffset after scrollToCell: "
-  //		 << d->yOffset << endl;
 }
 
 const QPen& Canvas::defaultGridPen() const
@@ -622,6 +612,9 @@ void Canvas::scrollToCell(QPoint location) const
   if (sheet == NULL)
     return;
 
+  if (d->view->isLoading())
+    return;
+
  // kdDebug(36001) << "------------------------------------------------" << endl;
  // kdDebug(36001) << "scrollToCell(): at location [" << location.x() << ","
  // 		 << location.y() << "]" << endl;
@@ -707,6 +700,7 @@ void Canvas::scrollToCell(QPoint location) const
       horzScrollBar()->setValue( d->view->doc()->zoomItX( horzScrollBarValue ) );
     }
   }
+//   kdDebug() << "ltr: YPos: " << ypos << ", min: " << minY << ", maxY: " << maxY << endl;
 
   // do we need to scroll up
   if ( ypos < minY )
@@ -3724,20 +3718,8 @@ bool Canvas::createEditor( EditorType ed, bool addFocus, bool captureArrowKeys )
 {
   Sheet * sheet = activeSheet();
 
-  //Ensure that the choice always has a sheet associated
-  //with it.
-  //
-  //FIXME:  This really doesn't make sense.  The concept of
-  //the 'choice selection' having only one sheet is wrong - because
-  //different parts of the choice selection may be on different
-  //sheets (at least, this doesn't work at the moment, but it should
-  //do).  REVIEW after KSpread 1.5 has been released.
-  //
-  //This is a temporary workaround for now.  It fixes the problem
-  //where the editor would be hidden because the choice's sheet
-  //was not the active sheet.
-  if (!choice()->sheet())
-  	choice()->setSheet( activeSheet() );
+  // Set the starting sheet of the choice.
+  choice()->setSheet( activeSheet() );
 
   if ( !d->cellEditor )
   {
@@ -4146,84 +4128,59 @@ void Canvas::paintUpdates()
         QPen leftPen( cell->effLeftBorderPen( x, y ) );
         QPen topPen( cell->effTopBorderPen( x, y ) );
 
-        // paint right border if rightmost cell or if the pen is more "worth" than the left border pen
-        // of the cell on the left or if the cell on the right is not painted. In the latter case get
-        // the pen that is of more "worth"
+        // paint right border
+        // - if rightmost cell
+        // - if the pen is more "worth" than the left border pen of the cell
+        //   on the left
         if ( x >= KS_colMax )
-         // paintBordersRight = true;
-		paintBorder |= Cell::Border_Right;
-        else
-          if ( sheet->cellIsPaintDirty( QPoint( x + 1, y ) ) )
-          {
-            //paintBordersRight = true;
-		  paintBorder |= Cell::Border_Right;
-            if ( cell->effRightBorderValue( x, y ) < sheet->cellAt( x + 1, y )->effLeftBorderValue( x + 1, y ) )
-              rightPen = sheet->cellAt( x + 1, y )->effLeftBorderPen( x + 1, y );
-          }
+        {
+          paintBorder |= Cell::Border_Right;
+        }
         else
         {
-         // paintBordersRight = true;
-		paintBorder |= Cell::Border_Right;
-          if ( cell->effRightBorderValue( x, y ) < sheet->cellAt( x + 1, y )->effLeftBorderValue( x + 1, y ) )
+          paintBorder |= Cell::Border_Right;
+          if ( cell->effRightBorderValue( x, y ) <
+               sheet->cellAt( x + 1, y )->effLeftBorderValue( x + 1, y ) )
             rightPen = sheet->cellAt( x + 1, y )->effLeftBorderPen( x + 1, y );
         }
 
         // similiar for other borders...
         // bottom border:
         if ( y >= KS_rowMax )
-         // paintBordersBottom = true;
-		paintBorder |= Cell::Border_Bottom;
-        else
-          if ( sheet->cellIsPaintDirty( QPoint( x, y + 1 ) ) )
-          {
-            if ( cell->effBottomBorderValue( x, y ) > sheet->cellAt( x, y + 1 )->effTopBorderValue( x, y + 1 ) )
-             // paintBordersBottom = true;
-		    paintBorder |= Cell::Border_Bottom;
-          }
+        {
+          paintBorder |= Cell::Border_Bottom;
+        }
         else
         {
-          //paintBordersBottom = true;
-		paintBorder |= Cell::Border_Bottom;
-          if ( cell->effBottomBorderValue( x, y ) < sheet->cellAt( x, y + 1 )->effTopBorderValue( x, y + 1 ) )
+          paintBorder |= Cell::Border_Bottom;
+          if ( cell->effBottomBorderValue( x, y ) <
+               sheet->cellAt( x, y + 1 )->effTopBorderValue( x, y + 1 ) )
             bottomPen = sheet->cellAt( x, y + 1 )->effTopBorderPen( x, y + 1 );
         }
 
         // left border:
         if ( x == 1 )
-         // paintBordersLeft = true;
-		paintBorder |= Cell::Border_Left;
-        else
-          if ( sheet->cellIsPaintDirty( QPoint( x - 1, y ) ) )
-          {
-           // paintBordersLeft = true;
-		  paintBorder |= Cell::Border_Left;
-            if ( cell->effLeftBorderValue( x, y ) < sheet->cellAt( x - 1, y )->effRightBorderValue( x - 1, y ) )
-              leftPen = sheet->cellAt( x - 1, y )->effRightBorderPen( x - 1, y );
-          }
+        {
+          paintBorder |= Cell::Border_Left;
+        }
         else
         {
-		paintBorder |= Cell::Border_Left;
-          if ( cell->effLeftBorderValue( x, y ) < sheet->cellAt( x - 1, y )->effRightBorderValue( x - 1, y ) )
+          paintBorder |= Cell::Border_Left;
+          if ( cell->effLeftBorderValue( x, y ) <
+               sheet->cellAt( x - 1, y )->effRightBorderValue( x - 1, y ) )
             leftPen = sheet->cellAt( x - 1, y )->effRightBorderPen( x - 1, y );
         }
 
         // top border:
         if ( y == 1 )
-        //  paintBordersTop = true;
-		paintBorder |= Cell::Border_Top;
-        else
-          if ( sheet->cellIsPaintDirty( QPoint( x, y - 1 ) ) )
-          {
-          //  paintBordersTop = true;
-		  paintBorder |= Cell::Border_Top;
-            if ( cell->effTopBorderValue( x, y ) < sheet->cellAt( x, y - 1 )->effBottomBorderValue( x, y - 1 ) )
-              topPen = sheet->cellAt( x, y - 1 )->effBottomBorderPen( x, y - 1 );
-          }
+        {
+          paintBorder |= Cell::Border_Top;
+        }
         else
         {
-        //  paintBordersTop = true;
-		paintBorder |= Cell::Border_Top;
-          if ( cell->effTopBorderValue( x, y ) < sheet->cellAt( x, y - 1 )->effBottomBorderValue( x, y - 1 ) )
+          paintBorder |= Cell::Border_Top;
+          if ( cell->effTopBorderValue( x, y ) <
+               sheet->cellAt( x, y - 1 )->effBottomBorderValue( x, y - 1 ) )
             topPen = sheet->cellAt( x, y - 1 )->effBottomBorderPen( x, y - 1 );
         }
 
@@ -4231,8 +4188,6 @@ void Canvas::paintUpdates()
 			 QPoint( x, y), paintBorder,
 			 rightPen,bottomPen,leftPen,topPen,
 			 mergedCellsPainted);
-
-
       }
       dblCorner.setY( dblCorner.y() + sheet->rowFormat( y )->dblHeight( ) );
     }
@@ -6069,7 +6024,7 @@ void ToolTip::maybeTip( const QPoint& p )
     int row = sheet->topRow( (m_canvas->doc()->unzoomItY( p.y() ) +
                                    m_canvas->yOffset()), ypos );
 
-    Cell* cell = sheet->visibleCellAt( col, row );
+    const Cell* cell = sheet->visibleCellAt( col, row );
     if ( !cell )
         return;
 
@@ -6083,44 +6038,31 @@ void ToolTip::maybeTip( const QPoint& p )
     //  - cell comment
     //  - hyperlink
     QString tipText;
+    QString comment = cell->format()->comment( col, row );
 
     // If cell is too small, show the content
     if ( cell->testFlag( Cell::Flag_CellTooShortX ) ||
          cell->testFlag( Cell::Flag_CellTooShortY ) )
     {
         tipText = cell->strOutText();
-
-        //Add 2 extra lines and a text, when both should be in the tooltip
-        QString comment = cell->format()->comment( col, row );
-        if ( !comment.isEmpty() )
-            comment = "\n\n" + i18n("Comment:") + "\n" + comment;
-
-        tipText += comment;
-    }
-
-    // Show comment, if any
-    if( tipText.isEmpty() )
-    {
-      tipText = cell->format()->comment( col, row );
     }
 
     // Show hyperlink, if any
-    if( tipText.isEmpty() )
+    if ( tipText.isEmpty() )
     {
-        tipText = cell->link();
+      tipText = cell->link();
     }
 
     // Nothing to display, bail out
-    if( tipText.isEmpty() )
+    if ( tipText.isEmpty() && comment.isEmpty() )
       return;
 
     // Cut if the tip is ridiculously long
-    unsigned maxLen = 256;
-    if(tipText.length() > maxLen )
+    const unsigned maxLen = 256;
+    if ( tipText.length() > maxLen )
         tipText = tipText.left(maxLen).append("...");
 
     // Determine position and width of the current cell.
-    cell = sheet->cellAt( col, row );
     double u = cell->dblWidth( col );
     double v = cell->dblHeight( row );
 
@@ -6128,8 +6070,8 @@ void ToolTip::maybeTip( const QPoint& p )
     if ( cell->isObscured() && cell->isPartOfMerged() )
     {
       cell = cell->obscuringCells().first();
-      int moveX = cell->column();
-      int moveY = cell->row();
+      const int moveX = cell->column();
+      const int moveY = cell->row();
 
       // Use the obscuring cells dimensions
       u = cell->dblWidth( moveX );
@@ -6164,7 +6106,7 @@ void ToolTip::maybeTip( const QPoint& p )
     }
 
     // No use if mouse is somewhere else
-    if( !insideMarker )
+    if ( !insideMarker )
         return;
 
     // Find the tipLabel
@@ -6173,17 +6115,38 @@ void ToolTip::maybeTip( const QPoint& p )
 
     // Ensure that it is plain text
     // Not funny if (intentional or not) <a> appears as hyperlink
-    if( tipLabel )
+    if ( tipLabel )
          tipLabel->setTextFormat( Qt::PlainText );
 
+    QFontMetrics fm = tipLabel ? tipLabel->fontMetrics() : m_canvas->fontMetrics();
+    const QRect r( 0, 0, 200, -1 );
     // Wrap the text if too long
-    if( tipText.length() > 16 )
+    if ( tipText.length() > 16 )
     {
-        QFontMetrics fm = tipLabel? tipLabel->fontMetrics() : m_canvas->fontMetrics();
-        QRect r( 0, 0, 200, -1 );
         KWordWrap* wrap = KWordWrap::formatText( fm, r, 0, tipText );
         tipText = wrap->wrappedString();
         delete wrap;
+    }
+    // Wrap the comment if too long
+    if ( comment.length() > 16 )
+    {
+      KWordWrap* wrap = KWordWrap::formatText( fm, r, 0, comment );
+      comment = wrap->wrappedString();
+      delete wrap;
+    }
+
+    // Show comment, if any
+    if ( tipText.isEmpty() )
+    {
+      tipText = comment;
+    }
+    else if ( !comment.isEmpty() )
+    {
+      //Add 2 extra lines and a text, when both should be in the tooltip
+      if ( !comment.isEmpty() )
+        comment = "\n\n" + i18n("Comment:") + "\n" + comment;
+
+      tipText += comment;
     }
 
     // Now we shows the tip
@@ -6191,7 +6154,7 @@ void ToolTip::maybeTip( const QPoint& p )
 
     // Here we try to find the tip label again
     // Reason: the previous tip_findLabel might fail if no tip has ever shown yet
-    if( !tipLabel )
+    if ( !tipLabel )
     {
       tipLabel = tip_findLabel();
       if( tipLabel )

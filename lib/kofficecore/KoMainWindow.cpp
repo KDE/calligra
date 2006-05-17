@@ -295,7 +295,7 @@ KoMainWindow::KoMainWindow( KInstance *instance, const char* name )
         const int deskWidth = KGlobalSettings::desktopGeometry(this).width();
         if (deskWidth > 1100) // very big desktop ?
             resize( 1000, 800 );
-        else if (deskWidth > 850) // big desktop ?
+        if (deskWidth > 850) // big desktop ?
             resize( 800, 600 );
         else // small (800x600, 640x480) desktop
             resize( 600, 400 );
@@ -484,7 +484,7 @@ void KoMainWindow::reloadRecentFileList()
 KoDocument* KoMainWindow::createDoc() const
 {
     KoDocumentEntry entry = KoDocumentEntry( KoDocument::readNativeService() );
-    return entry.createDoc(); // no error handling, but how could it fail when it worked once before?
+    return entry.createDoc();
 }
 
 void KoMainWindow::updateCaption()
@@ -582,6 +582,8 @@ bool KoMainWindow::openDocumentInternal( const KURL & url, KoDocument *newdoc )
 
     if ( !newdoc )
         newdoc = createDoc();
+    if ( !newdoc )
+        return false;
 
     d->m_firstTime=true;
     connect(newdoc, SIGNAL(sigProgress(int)), this, SLOT(slotProgress(int)));
@@ -589,7 +591,7 @@ bool KoMainWindow::openDocumentInternal( const KURL & url, KoDocument *newdoc )
     connect(newdoc, SIGNAL(canceled( const QString & )), this, SLOT(slotLoadCanceled( const QString & )));
     newdoc->addShell( this ); // used by openURL
     bool openRet = (!isImporting ()) ? newdoc->openURL(url) : newdoc->import(url);
-    if(!newdoc || !openRet)
+    if(!openRet)
     {
         newdoc->removeShell(this);
         delete newdoc;

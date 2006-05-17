@@ -140,6 +140,10 @@ VRectangle::save( QDomElement& element ) const
 void
 VRectangle::saveOasis( KoStore *store, KoXmlWriter *docWriter, KoGenStyles &mainStyles, int &index ) const
 {
+	// do not save deleted objects
+	if( state() == deleted )
+		return;
+
 	// different rx/ry is not supported by oasis, so act like it is a normal path
 	if( m_rx != 0. && m_ry != 0. && m_rx != m_ry )
 		return VPath::saveOasis( store, docWriter, mainStyles, index );

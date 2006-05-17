@@ -461,6 +461,7 @@ QString FormulaDialog::createParameter( const QString& _text, int param )
 		if ( isNumber || _text.upper() =="FALSE" || _text.upper() == "TRUE" )
 			return _text;
 	}
+        // fall through
     case KSpread_String:
 	{
 	    // Does the text start with quotes?
@@ -675,25 +676,25 @@ void FormulaDialog::slotSelected( const QString& function )
       m_browser->setText (i18n ("Description is not available."));
       return;
     }
-  
+
     if( functions->currentItem() !=- 1 )
         selectFunction->setEnabled( TRUE );
-  
+
     // Lock
     refresh_result = false;
-  
+
     m_funcName = function;
     m_desc = desc;
-  
+
     // Set the help text
     m_browser->setText( m_desc->toQML() );
     m_browser->setContentsPos( 0, 0 );
-  
+
     m_focus=0;
-  
+
     m_tabwidget->setCurrentPage( 0 );
     m_tabwidget->setTabEnabled( m_input, FALSE );
-  
+
     // Unlock
     refresh_result=true;
 }

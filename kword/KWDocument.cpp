@@ -193,10 +193,6 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widname, QObject* pare
 
     m_footNoteSeparatorLinePos=SLP_LEFT;
 
-    m_iFootNoteSeparatorLineLength = 20; // 20%, i.e. 1/5th
-    m_footNoteSeparatorLineWidth = 2.0;
-    m_footNoteSeparatorLineType = SLT_SOLID;
-
     m_viewFormattingChars = false;
 
     m_viewFormattingEndParag = true;
@@ -745,6 +741,7 @@ void KWDocument::recalcFrames( int fromPage, int toPage /*-1 for all*/, uint fla
                 if ( isFooterVisible() ) {
                     evenFooter = dynamic_cast<KWTextFrameSet*>( fs );
                 } else { fs->setVisible( false ); fs->deleteAllCopies(); }
+                break;
             case KWFrameSet::FI_FOOTNOTE: {
                 KWFootNoteFrameSet* fnfs = dynamic_cast<KWFootNoteFrameSet *>(fs);
                 if ( fnfs && fnfs->isVisible() ) // not visible is when the footnote has been deleted
@@ -1126,7 +1123,7 @@ bool KWDocument::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles,
         KWTextFrameSet *fs = new KWTextFrameSet( this, i18n( "Main Text Frameset" ) );
         m_lstFrameSet.append( fs ); // don't use addFrameSet here. We'll call finalize() once and for all in completeLoading
         fs->loadOasisContent( body, context );
-        KWFrame* frame = new KWFrame( fs, 29, 42, 798-29, 566-42 );
+        KWFrame* frame = new KWFrame( fs, 29, 42, 566-29, 798-42 );
         frame->setFrameBehavior( KWFrame::AutoCreateNewFrame );
         frame->setNewFrameBehavior( KWFrame::Reconnect );
         fs->addFrame( frame );
@@ -1410,6 +1407,10 @@ void KWDocument::clear()
     m_pageColumns.ptColumnSpacing = m_defaultColumnSpacing;
     m_bHasEndNotes = false;
 
+    m_iFootNoteSeparatorLineLength = 20; // 20%, i.e. 1/5th
+    m_footNoteSeparatorLineWidth = 0.5; // like in OOo
+    m_footNoteSeparatorLineType = SLT_SOLID;
+
     m_lstFrameSet.clear();
 
     m_varColl->clear();
@@ -1536,7 +1537,8 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
         hf.ptFooterBodySpacing  = getAttribute( paper, "spFootBody", 0.0 );
         hf.ptFootNoteBodySpacing  = getAttribute( paper, "spFootNoteBody", 10.0 );
         m_iFootNoteSeparatorLineLength = getAttribute( paper, "slFootNoteLength", 20);
-        m_footNoteSeparatorLineWidth = getAttribute( paper, "slFootNoteWidth",2.0);
+        if ( paper.hasAttribute( "slFootNoteWidth" ) )
+            m_footNoteSeparatorLineWidth = paper.attribute( "slFootNoteWidth" ).toDouble();
         m_footNoteSeparatorLineType = static_cast<SeparatorLineLineType>(getAttribute( paper, "slFootNoteType",0));
 
         if ( paper.hasAttribute("slFootNotePosition"))
@@ -1728,7 +1730,7 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
     return true;
 }
 
-void KWDocument::endOfLoading()
+void KWDocument::endOfLoading() // called by both oasis and oldxml
 {
     // insert pages
     double maxBottom = 0;
@@ -2418,6 +2420,8 @@ bool KWDocument::completeLoading( KoStore *store )
 
     // This computes the number of pages (from the frames)
     // for the first time (and adds footers/headers/footnotes etc.)
+    // ## Note: with OASIS the frame loading appends pages as necessary,
+    // so maybe we don't need to calculate the pages from the frames anymore.
     recalcFrames();
 
     // Fix z orders on older documents
@@ -4606,6 +4610,7 @@ void KWDocument::deleteFrame( KWFrame * frame )
         break;
     case FT_CLIPART:
         kdError(32001) << "FT_CLIPART used! (in KWDocument::deleteFrame)" << endl;
+        break;
     case FT_PICTURE:
         cmdName=i18n("Delete Picture Frame");
         docItem=Pictures;

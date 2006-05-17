@@ -161,6 +161,10 @@ VEllipse::save( QDomElement& element ) const
 void
 VEllipse::saveOasis( KoStore *store, KoXmlWriter *docWriter, KoGenStyles &mainStyles, int &index ) const
 {
+	// do not save deleted objects
+	if( state() == deleted )
+		return;
+
 	docWriter->startElement( "draw:ellipse" );
 
 	//save all into pt

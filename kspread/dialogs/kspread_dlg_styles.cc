@@ -208,9 +208,9 @@ void StyleDlg::slotOk()
       m_view->doc()->emitBeginOperation( false );
       sheet->setSelectionStyle( m_view->selectionInfo(), s );
     }
-  }
 
-  m_view->slotUpdateView( m_view->activeSheet() );
+    m_view->slotUpdateView( m_view->activeSheet() );
+  }
   accept();
 }
 

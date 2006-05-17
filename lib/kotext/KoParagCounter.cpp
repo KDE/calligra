@@ -182,7 +182,7 @@ void KoParagCounter::loadOasis( KoOasisContext& context, int restartNumbering,
     const QDomElement listStyle = context.listStyleStack().currentListStyle();
     const QDomElement listStyleProperties = context.listStyleStack().currentListStyleProperties();
     const QDomElement listStyleTextProperties = context.listStyleStack().currentListStyleTextProperties();
-    loadOasisListStyle( listStyle, listStyleProperties, listStyleTextProperties, 
+    loadOasisListStyle( listStyle, listStyleProperties, listStyleTextProperties,
                         restartNumbering, orderedList, heading, level, loadingStyle );
 }
 
@@ -234,7 +234,7 @@ void KoParagCounter::loadOasisListStyle( const QDomElement& listStyle,
                 m_style = STYLE_BOXBULLET;
                 break;
             default:
-                kdWarning() << "Unhandled bullet code 0x" << QString::number( (uint)m_customBulletChar.unicode(), 16 ) << endl;
+                kdDebug() << "Unhandled bullet code 0x" << QString::number( (uint)m_customBulletChar.unicode(), 16 ) << endl;
                 // fallback
             case 0x2794: // arrow
             case 0x2717: // cross

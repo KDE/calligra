@@ -350,16 +350,16 @@ QString KWMailMergeKABC::getValue( const QString &name, int record ) const
         QString lat;
         QString longi;
         if(  geo.latitude()<0 )
-            lat =  i18n("%1 South").arg( -geo.latitude() );
+            lat = QString( i18n("%1 South") ).arg( -geo.latitude() );
         else
-            lat =  i18n("%1 North").arg( geo.latitude() );
+            lat = QString( i18n("%1 North") ).arg( geo.latitude() );
 
         if(  geo.longitude()<0 )
             // There is something going wrong, because "W" is replaced by "q ".
             // Needs fix.
-            longi = i18n("%1 West").arg( -geo.longitude() );
+            longi = QString( i18n("%1 West") ).arg( -geo.longitude() );
         else
-            longi = i18n("%1 East").arg( geo.longitude() );
+            longi = QString( i18n("%1 East") ).arg( geo.longitude() );
 
         return i18n( "Geographic coordinates", "%1, %2" ).arg ( lat, longi );
     }

@@ -153,6 +153,10 @@ VLayer::save( QDomElement& element ) const
 void
 VLayer::saveOasis( KoStore *store, KoXmlWriter *docWriter, KoGenStyles &mainStyles, int &index ) const
 {
+	// do not save deleted objects
+	if( state() == deleted )
+		return;
+
 	// save objects:
 	VObjectListIterator itr = m_objects;
 

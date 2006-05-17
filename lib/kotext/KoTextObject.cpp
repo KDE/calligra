@@ -143,8 +143,11 @@ void KoTextObject::slotParagraphCreated(KoTextParag * /*parag*/)
     m_needsSpellCheck = true;
 }
 
-void KoTextObject::slotParagraphDeleted(KoTextParag * /*parag*/)
+void KoTextObject::slotParagraphDeleted(KoTextParag * parag)
 {
+    if ( m_lastFormatted == parag )
+        m_lastFormatted = parag->next();
+
     // ### TODO: remove from kwbgspellcheck
     // not needed, since KoTextIterator takes care of that.
 }
@@ -1842,15 +1845,17 @@ bool KoTextObject::formatMore( int count /* = 10 */, bool emitAfterFormatting /*
     if ( emitAfterFormatting )
     {
         d->afterFormattingEmitted = true;
-        bool abort = false;
-        // Check if we need more space - for proper default value of 'abort'
+        bool needMoreSpace = false;
+        // Check if we need more space
         if ( ( bottom > m_availableHeight ) ||   // this parag is already off page
              ( m_lastFormatted && bottom + m_lastFormatted->rect().height() > m_availableHeight ) ) // or next parag will be off page
-            abort = true;
+            needMoreSpace = true;
+        // default value of 'abort' depends on need more space
+        bool abort = needMoreSpace;
         emit afterFormatting( bottom, m_lastFormatted, &abort );
         if ( abort )
             return false;
-        else if ( m_lastFormatted ) // we got more space, keep formatting then
+        else if ( needMoreSpace && m_lastFormatted ) // we got more space, keep formatting then
             return formatMore( 2 );
     }
 
@@ -2012,8 +2017,11 @@ KCommand *KoTextObject::changeCaseOfText(KoTextCursor *cursor,KoChangeCaseDia::T
             macroCmd->addCommand( changeCaseOfTextParag(0, p->length() - 1, _type, cursor, p ) );
             p = p->next();
         }
-        int endIndex = QMIN( p->length() - 1, end.index() );
-        macroCmd->addCommand( changeCaseOfTextParag(0, endIndex, _type, cursor, end.parag() ));
+        if ( p )
+        {
+            int endIndex = QMIN( p->length() - 1, end.index() );
+            macroCmd->addCommand( changeCaseOfTextParag(0, endIndex, _type, cursor, end.parag() ));
+        }
     }
     formatMore( 2 );
     emit repaintChanged( this );

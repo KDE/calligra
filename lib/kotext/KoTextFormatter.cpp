@@ -159,17 +159,17 @@ bool KoTextFormatterCore::format()
     int left = doc ? leftMargin( true, false ) : 0;
     int initialLMargin = leftMargin( true );
 
-    y = doc && doc->addMargins() ? parag->topMargin() : 0;
+    y = parag->breakableTopMargin();
     // #57555, top margin doesn't apply if parag at top of page
     // (but a portion of the margin can be needed, to complete the prev page)
     // So we apply formatVertically() on the top margin, to find where to break it.
     if ( !parag->prev() )
         y = 0; // no top margin on very first parag
-    else if ( parag->breakableTopMargin() )
+    else if ( y )
     {
         int shift = doc->flow()->adjustFlow( parag->rect().y(),
                                              0 /*w, unused*/,
-                                             parag->breakableTopMargin() );
+                                             y );
         if ( shift > 0 )
         {
             // The shift is in fact the amount of top-margin that should remain
@@ -331,7 +331,7 @@ bool KoTextFormatterCore::format()
         // Wrapping at end of line - one big if :)
         if (
              // Check if should break (i.e. we are after the max X for the end of the line)
-             ( /*wrapAtColumn() == -1 &&*/ x + ww > availableWidth &&
+             ( ( /*wrapAtColumn() == -1 &&*/ x + ww > availableWidth &&
                ( lastBreak != -1 || settings->allowBreakInWords() ) )
 
              // Allow two breakable chars next to each other (e.g. '  ') but not more
@@ -349,8 +349,9 @@ bool KoTextFormatterCore::format()
              // Hmm, it doesn't really do so. To be continued...
              /////////// && ( firstChar != c )
 
+             )
              // Or maybe we simply encountered a '\n'
-             || lastChr->c == '\n' && parag->isNewLinesAllowed() && lastBreak > -1 )
+             || ( lastChr && lastChr->c == '\n' && parag->isNewLinesAllowed() && lastBreak > -1 ) )
         {
 #ifdef DEBUG_FORMATTER
             kdDebug(32500) << "BREAKING" << endl;
@@ -870,10 +871,6 @@ KoTextParagLineStart *KoTextFormatterCore::koFormatLine(
             int toAddPix = zh->layoutUnitToPixelX( space );
             for ( int j = last; j >= start; --j ) {
                 KoTextStringChar &chr = string->at( j );
-                //// Start at last tab, if any - BR #40472.
-                if ( chr.c == '\t' ) {
-                    break;
-                }
                 moveChar( chr, zh, space, toAddPix );
             }
         } else if ( align & Qt::AlignJustify ) {

@@ -432,6 +432,7 @@ void KWFrameLayout::layout( KWFrameSet* mainTextFrameSet, int numColumns,
 
     if ( ! ( flags & DontRemovePages ) )
     {
+        m_doc->updateAllFrames( KWFrameSet::UpdateFramesInPage );
         // Check if the last page is now empty (e.g. this can happen when removing
         // some text above an endnote, so the endnote moves up)
         (void)m_doc->tryRemovingPages();
@@ -451,7 +452,9 @@ void KWFrameLayout::layout( KWFrameSet* mainTextFrameSet, int numColumns,
         // For the last main text frameset, we use m_lastMainFramePage, so that
         // there's no frame on the "end notes only" page(s).
         int lastFrame = m_lastMainFramePage * numColumns + (numColumns-1);
-//kdDebug() << "lastFrame: " << lastFrame << " due to " << m_lastMainFramePage << endl;
+#ifdef DEBUG_FRAMELAYOUT
+        kdDebug(32002) << "lastFrame: " << lastFrame << " due to " << m_lastMainFramePage << endl;
+#endif
         bool deleted = false;
         while ( (int)mainTextFrameSet->frameCount() - 1 > lastFrame ) {
 #ifdef DEBUG_FRAMELAYOUT

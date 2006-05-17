@@ -1623,12 +1623,11 @@ void Cell::setOutputText()
 
 void Cell::offsetAlign( int _col, int _row )
 {
-  int     a;
+  int       a;
   Format::AlignY  ay;
-  int     tmpAngle;
-  bool    tmpVerticalText;
-  bool    tmpMultiRow;
-  int     tmpTopBorderWidth = effTopBorderPen( _col, _row ).width();
+  int       tmpAngle;
+  bool      tmpVerticalText;
+  bool      tmpMultiRow;
 
   if ( d->hasExtra()
        && d->extra()->conditions
@@ -1680,133 +1679,180 @@ void Cell::offsetAlign( int _col, int _row )
     if ( d->extra()->extraYCells )  h = d->extra()->extraHeight;
   }
 
+  const double effTop = BORDER_SPACE + 0.5 * effTopBorderPen( _col, _row ).width();
+  const double effBottom = h - BORDER_SPACE - 0.5 * effBottomBorderPen( _col, _row ).width();
+
   // Calculate d->textY based on the vertical alignment and a few
   // other inputs.
-  switch( ay ) {
+  switch( ay )
+  {
   case Format::Top:
+  {
     if ( tmpAngle == 0 )
-      d->textY = tmpTopBorderWidth + BORDER_SPACE
-  + (double) d->fmAscent / format()->sheet()->doc()->zoomedResolutionY();
+    {
+      d->textY = effTop + (double) d->fmAscent / format()->sheet()->doc()->zoomedResolutionY();
+    }
     else if ( tmpAngle < 0 )
-      d->textY = tmpTopBorderWidth + BORDER_SPACE;
+    {
+      d->textY = effTop;
+    }
     else
-      d->textY = tmpTopBorderWidth + BORDER_SPACE
-  + ( (double)d->fmAscent * cos( tmpAngle * M_PI / 180 )
-      / format()->sheet()->doc()->zoomedResolutionY() );
-    break;
-
-  case Format::Bottom:
-    if ( !tmpVerticalText && !tmpMultiRow && !tmpAngle ) {
-      d->textY = h - BORDER_SPACE - effBottomBorderPen( _col, _row ).width();
-    }
-    else if ( tmpAngle != 0 ) {
-      if ( h - BORDER_SPACE - d->textHeight
-     - effBottomBorderPen( _col, _row ).width() > 0 )
-      {
-  if ( tmpAngle < 0 )
-    d->textY = h - BORDER_SPACE - d->textHeight
-      - effBottomBorderPen( _col, _row ).width();
-  else
-    d->textY = h - BORDER_SPACE - d->textHeight
-      - effBottomBorderPen( _col, _row ).width()
-      + ( (double) d->fmAscent * cos( tmpAngle * M_PI / 180 )
-    / format()->sheet()->doc()->zoomedResolutionY() );
-      }
-      else if ( tmpAngle < 0 )
-  d->textY = tmpTopBorderWidth + BORDER_SPACE ;
-      else
-  d->textY = tmpTopBorderWidth + BORDER_SPACE
-    + ( (double) d->fmAscent * cos( tmpAngle * M_PI / 180 )
-        / format()->sheet()->doc()->zoomedResolutionY() );
-    }
-    else if ( tmpMultiRow ) {
-      int tmpline = d->hasExtra() ? d->extra()->nbLines : 0;
-      if ( tmpline > 1 )
-  tmpline--;  //number of extra lines
-
-      if ( h - BORDER_SPACE - d->textHeight * d->extra()->nbLines
-     - effBottomBorderPen( _col, _row ).width() > 0 )
-  d->textY = h - BORDER_SPACE - d->textHeight * tmpline
-    - effBottomBorderPen( _col, _row ).width();
-      else
-  d->textY = tmpTopBorderWidth + BORDER_SPACE
-    + (double) d->fmAscent / format()->sheet()->doc()->zoomedResolutionY();
-    }
-    else {
-      if ( h - BORDER_SPACE - d->textHeight
-     - effBottomBorderPen( _col, _row ).width() > 0 )
-  d->textY = h - BORDER_SPACE - d->textHeight
-    - effBottomBorderPen( _col, _row ).width()
-    + (double)d->fmAscent / format()->sheet()->doc()->zoomedResolutionY();
-      else
-  d->textY = tmpTopBorderWidth + BORDER_SPACE
-    + (double) d->fmAscent / format()->sheet()->doc()->zoomedResolutionY();
-    }
-    break;
-
-  case Format::Middle:
-  case Format::UndefinedY:
-    if ( !tmpVerticalText && !tmpMultiRow && !tmpAngle ) {
-      d->textY = ( h - d->textHeight ) / 2
-  + (double) d->fmAscent / format()->sheet()->doc()->zoomedResolutionY();
-    }
-    else if ( tmpAngle != 0 ) {
-      if ( h - d->textHeight > 0 ) {
-  if ( tmpAngle < 0 )
-    d->textY = ( h - d->textHeight ) / 2 ;
-  else
-    d->textY = ( h - d->textHeight ) / 2 +
-      (double) d->fmAscent * cos( tmpAngle * M_PI / 180 ) /
-      format()->sheet()->doc()->zoomedResolutionY();
-      }
-      else {
-  if ( tmpAngle < 0 )
-    d->textY = tmpTopBorderWidth + BORDER_SPACE;
-  else
-    d->textY = tmpTopBorderWidth + BORDER_SPACE
-      + ( (double)d->fmAscent * cos( tmpAngle * M_PI / 180 )
-    / format()->sheet()->doc()->zoomedResolutionY() );
-      }
-    }
-    else if ( tmpMultiRow ) {
-      int tmpline = d->hasExtra() ? d->extra()->nbLines : 0;
-      if ( tmpline == 0 )
-  tmpline = 1;
-
-      if ( h - d->textHeight * tmpline > 0 )
-  d->textY = ( h - d->textHeight * tmpline ) / 2
-    + (double) d->fmAscent / format()->sheet()->doc()->zoomedResolutionY();
-      else
-  d->textY = tmpTopBorderWidth + BORDER_SPACE
-    + (double) d->fmAscent / format()->sheet()->doc()->zoomedResolutionY();
-    }
-    else {
-      if ( h - d->textHeight > 0 )
-  d->textY = ( h - d->textHeight ) / 2
-    + (double)d->fmAscent / format()->sheet()->doc()->zoomedResolutionY();
-      else
-  d->textY = tmpTopBorderWidth + BORDER_SPACE
-    + (double)d->fmAscent / format()->sheet()->doc()->zoomedResolutionY();
+    {
+      d->textY = effTop
+               + (double) d->fmAscent * cos( tmpAngle * M_PI / 180 ) / format()->sheet()->doc()->zoomedResolutionY();
     }
     break;
   }
+  case Format::Bottom:
+  {
+    if ( !tmpVerticalText && !tmpMultiRow && !tmpAngle )
+    {
+      d->textY = effBottom;
+    }
+    else if ( tmpAngle != 0 )
+    {
+      // Is enough place available?
+      if ( effBottom - effTop - d->textHeight > 0 )
+      {
+        if ( tmpAngle < 0 )
+        {
+          d->textY = effBottom - d->textHeight;
+        }
+        else
+        {
+          d->textY = effBottom - d->textHeight
+                   + ( (double) d->fmAscent * cos( tmpAngle * M_PI / 180 ) / format()->sheet()->doc()->zoomedResolutionY() );
+        }
+      }
+      else
+      {
+        if ( tmpAngle < 0 )
+        {
+          d->textY = effTop;
+        }
+        else
+        {
+          d->textY = effTop
+                  + ( (double) d->fmAscent * cos( tmpAngle * M_PI / 180 )
+                  / format()->sheet()->doc()->zoomedResolutionY() );
+        }
+      }
+    }
+    else if ( tmpMultiRow && !tmpVerticalText )
+    {
+      // Is enough place available?
+      if ( effBottom - effTop - d->textHeight > 0 )
+      {
+        d->textY = effBottom - d->textHeight
+                 + (double)d->fmAscent / format()->sheet()->doc()->zoomedResolutionY();
+      }
+      else
+      {
+        d->textY = effTop
+                 + (double) d->fmAscent / format()->sheet()->doc()->zoomedResolutionY();
+      }
+    }
+    else
+    {
+      // Is enough place available?
+      if ( effBottom - effTop - d->textHeight > 0 )
+      {
+        d->textY = effBottom - d->textHeight
+                 + (double)d->fmAscent / format()->sheet()->doc()->zoomedResolutionY();
+      }
+      else
+      {
+        d->textY = effTop
+                 + (double) d->fmAscent / format()->sheet()->doc()->zoomedResolutionY();
+      }
+    }
+    break;
+  }
+  case Format::Middle:
+  case Format::UndefinedY:
+  {
+    if ( !tmpVerticalText && !tmpMultiRow && !tmpAngle )
+    {
+      d->textY = ( h - d->textHeight ) / 2
+               + (double) d->fmAscent / format()->sheet()->doc()->zoomedResolutionY();
+    }
+    else if ( tmpAngle != 0 )
+    {
+      // Is enough place available?
+      if ( effBottom - effTop - d->textHeight > 0 )
+      {
+        if ( tmpAngle < 0 )
+        {
+          d->textY = ( h - d->textHeight ) / 2;
+        }
+        else
+        {
+          d->textY = ( h - d->textHeight ) / 2
+                   + (double) d->fmAscent * cos( tmpAngle * M_PI / 180 ) / format()->sheet()->doc()->zoomedResolutionY();
+        }
+      }
+      else
+      {
+        if ( tmpAngle < 0 )
+        {
+          d->textY = effTop;
+        }
+        else
+        {
+          d->textY = effTop
+                   + ( (double)d->fmAscent * cos( tmpAngle * M_PI / 180 ) / format()->sheet()->doc()->zoomedResolutionY() );
+        }
+      }
+    }
+    else if ( tmpMultiRow && !tmpVerticalText )
+    {
+      // Is enough place available?
+      if ( effBottom - effTop - d->textHeight > 0 )
+      {
+        d->textY = ( h - d->textHeight ) / 2
+                 + (double) d->fmAscent / format()->sheet()->doc()->zoomedResolutionY();
+      }
+      else
+      {
+        d->textY = effTop
+                 + (double) d->fmAscent / format()->sheet()->doc()->zoomedResolutionY();
+      }
+    }
+    else
+    {
+      // Is enough place available?
+      if ( effBottom - effTop - d->textHeight > 0 )
+      {
+        d->textY = ( h - d->textHeight ) / 2
+                 + (double) d->fmAscent / format()->sheet()->doc()->zoomedResolutionY();
+      }
+      else
+        d->textY = effTop
+                 + (double)d->fmAscent / format()->sheet()->doc()->zoomedResolutionY();
+    }
+    break;
+  }
+  }
 
   a = effAlignX();
-  if ( format()->sheet()->getShowFormula()
-       && !( format()->sheet()->isProtected() && format()->isHideFormula( _col, _row ) ) )
+  if ( format()->sheet()->getShowFormula() &&
+       !( format()->sheet()->isProtected() && format()->isHideFormula( _col, _row ) ) )
+  {
     a = Format::Left;
+  }
 
   // Calculate d->textX based on alignment and textwidth.
   switch ( a ) {
   case Format::Left:
-    d->textX = effLeftBorderPen( _col, _row ).width() + BORDER_SPACE;
+    d->textX = 0.5 * effLeftBorderPen( _col, _row ).width() + BORDER_SPACE;
     break;
   case Format::Right:
-    d->textX = ( w - BORDER_SPACE - d->textWidth
-     - effRightBorderPen( _col, _row ).width() );
+    d->textX = w - BORDER_SPACE - d->textWidth
+             - 0.5 * effRightBorderPen( _col, _row ).width();
     break;
   case Format::Center:
-    d->textX = ( w - d->textWidth ) / 2;
+    d->textX = 0.5 * ( w - BORDER_SPACE - d->textWidth -
+                       0.5 * effRightBorderPen( _col, _row ).width() );
     break;
   }
 }
@@ -1853,9 +1899,7 @@ void Cell::textSize( QPainter &_paint )
       ay = format()->alignY( _col, _row );
 
     if ( style->hasFeature( Style::SFontFlag, true ) )
-      fontUnderlined = ( style->fontFlags()
-       // FIXME: Should be & (uint)...?
-       && (uint) Style::FUnderline );
+      fontUnderlined = ( style->fontFlags() & (uint) Style::FUnderline );
     else
       fontUnderlined = format()->textFontUnderline( _col, _row );
   }
@@ -5449,7 +5493,10 @@ void Cell::saveOasisValue (KoXmlWriter &xmlWriter)
     case Value::fmt_Number:
     {
       xmlWriter.addAttribute( "office:value-type", "float" );
-      xmlWriter.addAttribute( "office:value", QString::number( value().asFloat() ) );
+      if (value().isInteger())
+        xmlWriter.addAttribute( "office:value", QString::number( value().asInteger() ) );
+      else
+        xmlWriter.addAttribute( "office:value", QString::number( value().asFloat(), 'g', DBL_DIG ) );
       break;
     }
     case Value::fmt_Percent:
@@ -5462,9 +5509,10 @@ void Cell::saveOasisValue (KoXmlWriter &xmlWriter)
     case Value::fmt_Money:
     {
       xmlWriter.addAttribute( "office:value-type", "currency" );
-      // TODO: add code of currency
-      //xmlWriter.addAttribute( "tableoffice:currency",
-      // locale()->currencySymbol() );
+      Format::Currency currency;
+      format()->currencyInfo(currency);
+      xmlWriter.addAttribute( "office:currency",
+                              Currency::getCurrencyCode(currency.type) );
       xmlWriter.addAttribute( "office:value",
           QString::number( value().asFloat() ) );
       break;
@@ -5689,7 +5737,13 @@ bool Cell::loadOasis( const QDomElement& element , KoOasisLoadingContext& oasisC
             double value = element.attributeNS( KoXmlNS::office, "value", QString::null ).toDouble( &ok );
             if ( !isFormula )
                 if( ok )
-                    setValue( value );
+                    setCellValue( value );
+
+            if ( !isFormula && d->strText.isEmpty())
+            {
+                QString str = locale()->formatNumber( value, 15 );
+                setCellText( str );
+            }
         }
 
         // currency value
@@ -5700,19 +5754,32 @@ bool Cell::loadOasis( const QDomElement& element , KoOasisLoadingContext& oasisC
             if( ok )
             {
                 if ( !isFormula )
-                    setValue( value );
-                format()->setCurrency( 1, element.attributeNS( KoXmlNS::office, "currency", QString::null ) );
+                    setCellValue( value );
+                if (element.hasAttributeNS( KoXmlNS::office, "currency" ) )
+                {
+                  Currency currency(element.attributeNS( KoXmlNS::office, "currency", QString::null ) );
+                  format()->setCurrency( currency.getIndex(), currency.getDisplayCode() );
+                }
                 format()->setFormatType (Money_format);
             }
         }
         else if( valuetype == "percentage" )
         {
             bool ok = false;
-            double value = element.attributeNS( KoXmlNS::office, "value", QString::null ).toDouble( &ok );
+            double v = element.attributeNS( KoXmlNS::office, "value", QString::null ).toDouble( &ok );
             if( ok )
             {
-                if ( !isFormula )
-                    setValue( value );
+                Value value;
+                value.setValue (v);
+                value.setFormat (Value::fmt_Percent);
+                setCellValue( value );
+
+                if ( !isFormula && d->strText.isEmpty())
+                {
+                    QString str = locale()->formatNumber( v, 15 );
+                    setCellText( str );
+                }
+
                 format()->setFormatType (Percentage_format);
             }
         }
@@ -5747,7 +5814,7 @@ bool Cell::loadOasis( const QDomElement& element , KoOasisLoadingContext& oasisC
 
             if ( ok )
             {
-                setValue( QDate( year, month, day ) );
+                setCellValue( QDate( year, month, day ) );
                 format()->setFormatType (ShortDate_format);
                 kdDebug() << "Set QDate: " << year << " - " << month << " - " << day << endl;
             }
@@ -5792,7 +5859,7 @@ bool Cell::loadOasis( const QDomElement& element , KoOasisLoadingContext& oasisC
             {
                 // Value kval( timeToNum( hours, minutes, seconds ) );
                 // cell->setValue( kval );
-                setValue( QTime( hours % 24, minutes, seconds ) );
+                setCellValue( QTime( hours % 24, minutes, seconds ) );
                 format()->setFormatType (Time_format);
             }
         }
@@ -5803,7 +5870,7 @@ bool Cell::loadOasis( const QDomElement& element , KoOasisLoadingContext& oasisC
             {
                 //if there is not string-value entry don't overwrite value stored into <text:p>
                 value = element.attributeNS( KoXmlNS::office, "string-value", QString::null );
-                setValue( value );
+                setCellValue( value );
             }
             format()->setFormatType (Text_format);
         }

@@ -10,4 +10,6 @@ libkivioconfig_la_METASOURCES = AUTO
 libkivioconfig_la_SOURCES = kivio_settings.kcfgc kivio_config.cpp
 noinst_HEADERS = kivio_config.h kivio_settings.h
 
+kivio_config.lo: kivio_settings.h
+
 kde_kcfg_DATA = kivio.kcfg

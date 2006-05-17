@@ -378,10 +378,12 @@ void KoParagLayout::loadParagLayout( KoParagLayout& layout, const QDomElement& p
         case 2: // KoParagLayout::SD_UP:
         case 3: // KoParagLayout::SD_RIGHT_UP:
             distanceX = - shadowDistance;
+            break;
         case 7: // KoParagLayout::SD_LEFT_BOTTOM:
         case 6: // KoParagLayout::SD_BOTTOM:
         case 5: // KoParagLayout::SD_RIGHT_BOTTOM:
             distanceX = shadowDistance;
+            break;
         }
         switch ( shadowDirection )
         {
@@ -389,10 +391,12 @@ void KoParagLayout::loadParagLayout( KoParagLayout& layout, const QDomElement& p
         case 8: // KoParagLayout::SD_LEFT:
         case 1: //KoParagLayout::SD_LEFT_UP:
             distanceY = - shadowDistance;
+            break;
         case 3: // KoParagLayout::SD_RIGHT_UP:
         case 4: // KoParagLayout::SD_RIGHT:
         case 5: // KoParagLayout::SD_RIGHT_BOTTOM:
             distanceY = shadowDistance;
+            break;
         }
         if ( !shadowCssCompat )
             shadowCssCompat = new QString;
@@ -535,6 +539,8 @@ void KoParagLayout::loadOasisParagLayout( KoParagLayout& layout, KoOasisContext&
 
             KoTabulator tab;
             tab.ptPos = KoUnit::parseValue( tabStop.attributeNS( KoXmlNS::style, "position", QString::null ) );
+            // Tab stop positions in the XML are relative to the left-margin
+            tab.ptPos += layout.margins[QStyleSheetItem::MarginLeft];
             if ( type == "center" )
                 tab.type = T_CENTER;
             else if ( type == "right" )
@@ -843,7 +849,9 @@ void KoParagLayout::saveOasis( KoGenStyle& gs, KoSavingContext& context, bool sa
     for ( ; it != m_tabList.end() ; it++ )
     {
         tabsWriter.startElement( "style:tab-stop" );
-        tabsWriter.addAttributePt( "style:position", (*it).ptPos );
+        // Tab stop positions in the XML are relative to the left-margin
+        double pos = (*it).ptPos - margins[QStyleSheetItem::MarginLeft];
+        tabsWriter.addAttributePt( "style:position", pos );
 
         switch ( (*it).type ) {
         case T_LEFT:

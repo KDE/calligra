@@ -166,14 +166,10 @@ bool KWStatisticsDialog::calcStats( QLabel **resultLabel, bool selection, bool u
         KWFrameSet *frameSet = framesetIt.current();
         if ( (frameSet->frameSetInfo() == KWFrameSet::FI_FOOTNOTE || frameSet->frameSetInfo() == KWFrameSet::FI_BODY) && frameSet->isVisible() )
         {
-            if ( (useFootEndNote && frameSet->frameSetInfo() == KWFrameSet::FI_FOOTNOTE) || frameSet->frameSetInfo() == KWFrameSet::FI_BODY )
-            {
-                if ( selection && false )
-                    paragraphs += frameSet->paragraphsSelected();
-                else
-                    paragraphs += frameSet->paragraphs();
+            if ( (useFootEndNote && frameSet->frameSetInfo() == KWFrameSet::FI_FOOTNOTE) ||
+                    frameSet->frameSetInfo() == KWFrameSet::FI_BODY ) {
+                paragraphs += frameSet->paragraphs();
             }
-
         }
     }
     QProgressDialog progress( i18n( "Counting..." ), i18n( "Cancel" ), paragraphs, this, "count", true );

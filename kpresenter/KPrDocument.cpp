@@ -131,7 +131,9 @@ KPrChild::~KPrChild()
 
 KoDocument *KPrChild::hitTest( const QPoint &, const QWMatrix & )
 {
-    return 0L;
+    // hitTest functionality is disabled because kpresenter handles activation
+    // of embedded parts by itself. See KPrPartObject::activate().
+    return 0;
 }
 
 KPrDocument::KPrDocument( QWidget *parentWidget, const char *widgetName, QObject* parent, const char* name,
@@ -1034,7 +1036,7 @@ bool KPrDocument::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
 //save page
 
     QMap<QString, int> pageNames;
-    
+
     if ( !_duplicatePage )
     {
         m_masterPage->saveOasisPage( store, stickyTmpWriter, 0, savingContext, indexObj, partIndexObj, manifestWriter, pageNames );
@@ -1048,7 +1050,7 @@ bool KPrDocument::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
         }
 
     }
-    
+
     if ( saveOnlyPage != -1 )
     {
         m_pageList.at( saveOnlyPage )->saveOasisPage( store, contentTmpWriter, ( saveOnlyPage+1 ), savingContext, indexObj, partIndexObj , manifestWriter, pageNames );
@@ -1457,7 +1459,7 @@ void KPrDocument::saveOasisPresentationCustomSlideShow( KoXmlWriter &contentTmpW
     //<presentation:show presentation:name="New Custom Slide Show" presentation:pages="page1,page1,page1,page1,page1"/>
 }
 
-void KPrDocument::saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyles, QFile* masterStyles, 
+void KPrDocument::saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyles, QFile* masterStyles,
                                            KoSavingContext & savingContext, SaveFlag saveFlag ) const
 {
     KoStoreDevice stylesDev( store );
@@ -1838,7 +1840,7 @@ void KPrDocument::loadOasisObject( KPrPage * newpage, QDomNode & drawPage, KoOas
                         else
                             newpage->appendObject(kppixmapobject);
                         break;
-                    } 
+                    }
                     else if ( localName == "object" )
                     {
                         KPrChild *ch = new KPrChild( this );
@@ -2162,17 +2164,20 @@ int KPrDocument::createPresentationAnimation(const QDomElement& element, int ord
 
 void KPrDocument::fillStyleStack( const QDomElement& object, KoOasisContext & context, const char* family )
 {
+    // See OpenDoc 9.2.15 Common Drawing Shape Attributes
+    // presentation:style-name is allways family presentation
     if ( object.hasAttributeNS( KoXmlNS::presentation, "style-name" ))
     {
-        context.fillStyleStack( object, KoXmlNS::presentation, "style-name", family );
+        context.fillStyleStack( object, KoXmlNS::presentation, "style-name", "presentation" );
     }
     if ( object.hasAttributeNS( KoXmlNS::draw, "style-name" ) )
     {
         context.fillStyleStack( object, KoXmlNS::draw, "style-name", family );
     }
+    // draw:tex-style-name is allways family paragraph
     if ( object.hasAttributeNS( KoXmlNS::draw, "text-style-name" ) )
     {
-        context.fillStyleStack( object, KoXmlNS::draw, "text-style-name", family );
+        context.fillStyleStack( object, KoXmlNS::draw, "text-style-name", "paragraph" );
     }
     if ( object.hasAttributeNS( KoXmlNS::text, "style-name" ) )
     {
@@ -3236,7 +3241,7 @@ void KPrDocument::loadUsedSoundFileFromStore( KoStore *_store, QStringList _list
             }
 
             _store->close();
-            delete data;
+            delete[] data;
         }
         else {
             kdDebug( 33001 ) << "Found this( " << soundFile << " ) file on disk" << endl;

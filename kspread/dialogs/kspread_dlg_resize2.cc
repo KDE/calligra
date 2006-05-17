@@ -106,7 +106,11 @@ void ResizeRow::slotOk()
 
 void ResizeRow::slotDefault()
 {
-    m_pHeight->setValue( POINT_TO_MM( heightOfRow ) );
+  Sheet* sheet = m_pView->activeSheet();
+  if (!sheet)
+    return;
+  double points = sheet->rowFormat(0)->dblHeight();
+  m_pHeight->setValue(KoUnit::toUserValue(points, m_pView->doc()->unit()));
 }
 
 ResizeColumn::ResizeColumn( View* parent, const char* name )
@@ -168,7 +172,11 @@ void ResizeColumn::slotOk()
 
 void ResizeColumn::slotDefault()
 {
-    m_pWidth->setValue( POINT_TO_MM(colWidth ) );
+  Sheet* sheet = m_pView->activeSheet();
+  if (!sheet)
+    return;
+  double points = sheet->columnFormat(0)->dblWidth();
+  m_pWidth->setValue(KoUnit::toUserValue(points, m_pView->doc()->unit()));
 }
 
 

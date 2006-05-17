@@ -40,7 +40,7 @@ class KOFFICECORE_EXPORT KoDocumentEntry
 
 public:
   KoDocumentEntry() { m_service = 0L; } // for QValueList
-  explicit KoDocumentEntry( KService::Ptr service );
+  KoDocumentEntry( KService::Ptr service );
   ~KoDocumentEntry() { }
 
   KService::Ptr service() const { return m_service; }
@@ -71,7 +71,6 @@ public:
    *  a document. If that is not possible, 0 is returned.
    */
   KoDocument* createDoc( KoDocument* parent = 0, const char* name = 0 ) const;
-  QString createDocErrorMessage() const { return m_createDocErrorMessage; }
 
   /**
    *  This function will query ksycoca to find all available components.
@@ -112,7 +111,6 @@ public:
 
 private:
   KService::Ptr m_service;
-  mutable QString m_createDocErrorMessage;
 };
 
 /**

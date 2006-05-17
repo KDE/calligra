@@ -325,7 +325,7 @@ Value& Value::operator=( const Value& _value )
 bool Value::operator==( const Value& v ) const
 {
   const ValueData* n = v.d;
-  if ( d->type != n->type )
+  if ( (uint)d->type != n->type )
     return false;
   switch( d->type )
   {
@@ -628,7 +628,7 @@ void Value::setFormat (Value::Format fmt)
 
 Value Value::element( unsigned column, unsigned row ) const
 {
-  if( d->type != Array ) return *this;
+  if( (uint)d->type != Array ) return *this;
   if( !d->pa ) return *this;
   Value* v = d->pa->at (column % columns(), row % rows());
   return v ? Value( *v ) : empty();
@@ -636,7 +636,7 @@ Value Value::element( unsigned column, unsigned row ) const
 
 void Value::setElement( unsigned column, unsigned row, const Value& v )
 {
-  if( d->type != Array ) return;
+  if( (uint)d->type != Array ) return;
   if( !d->pa ) return;
   detach();
   d->pa->set( column, row, new Value( v ) );
@@ -644,14 +644,14 @@ void Value::setElement( unsigned column, unsigned row, const Value& v )
 
 unsigned Value::columns() const
 {
-  if( d->type != Array ) return 1;
+  if( (uint)d->type != Array ) return 1;
   if( !d->pa ) return 1;
   return d->pa->columns;
 }
 
 unsigned Value::rows() const
 {
-  if( d->type != Array ) return 1;
+  if( (uint)d->type != Array ) return 1;
   if( !d->pa ) return 1;
   return d->pa->rows;
 }

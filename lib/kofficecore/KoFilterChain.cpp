@@ -636,11 +636,10 @@ KoDocument* KoFilterChain::createDocument( const QCString& mimeType )
     {
         kdError( 30500 ) << "Couldn't find a part that can handle mimetype " << mimeType << endl;
     }
-
-    KoDocument* doc = entry.createDoc();
+    
+    KoDocument* doc = entry.createDoc(); /*entries.first().createDoc();*/
     if ( !doc ) {
-        QString errorMsg = entry.createDocErrorMessage();
-        kdError( 30500 ) << "Couldn't create the document: " << errorMsg << endl;
+        kdError( 30500 ) << "Couldn't create the document" << endl;
         return 0;
     }
     return doc;
@@ -920,7 +919,7 @@ namespace KOffice {
                 QString key = *it;
                 if ( !key.isEmpty() ) {
                     Vertex* tmp = m_vertices[ key.latin1() ];
-                    if ( tmp && tmp->key() < v->key() )
+                    if ( !v || ( tmp && tmp->key() < v->key() ) )
                         v = tmp;
                 }
             }

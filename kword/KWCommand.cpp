@@ -316,11 +316,13 @@ KoTextCursor * KWOasisPasteCommand::unexecute( KoTextCursor *c )
     KWTextFrameSet * textFs = textdoc->textFrameSet();
 
     textFs->renumberFootNotes();
+#if 0
     if ( m_idx == 0 ) {
         Q_ASSERT( m_oldParagLayout );
         if ( m_oldParagLayout )
             firstParag->setParagLayout( *m_oldParagLayout );
     }
+#endif
     return c;
 }
 

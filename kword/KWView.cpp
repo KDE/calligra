@@ -208,7 +208,7 @@ class TableInfo {
 
         int tableCellsSelected() { return m_selected; }
         int amountRowsSelected() { return m_rows.count(); }
-        bool amountColumnsSelected() { return m_columns.count(); }
+        int amountColumnsSelected() { return m_columns.count(); }
         bool oneCellSelected() { return m_oneCellSelected; }
         bool protectContentEnabled() { return m_protectContent; }
         QValueList<uint> selectedRows() { return m_rows; }
@@ -1958,8 +1958,10 @@ void KWView::showFormat( const KoTextFormat &currentFormat )
 {
     // update the gui with the current format.
     //kdDebug() << "KWView::setFormat font family=" << currentFormat.font().family() << endl;
-    m_actionFormatFontFamily->setFont( currentFormat.font().family() );
-    m_actionFormatFontSize->setFontSize( currentFormat.pointSize() );
+    if (m_actionFormatFontFamily->font() != currentFormat.font().family())
+        m_actionFormatFontFamily->setFont( currentFormat.font().family() );
+    if (m_actionFormatFontSize->fontSize() != currentFormat.pointSize())
+        m_actionFormatFontSize->setFontSize( currentFormat.pointSize() );
     m_actionFormatBold->setChecked( currentFormat.font().bold());
     m_actionFormatItalic->setChecked( currentFormat.font().italic() );
     m_actionFormatUnderline->setChecked( currentFormat.underline());
@@ -5773,10 +5775,10 @@ void KWView::slotFrameSetEditChanged()
         goodleftMargin=(edit->currentLeftMargin()>0);
 
     m_actionFormatDecreaseIndent->setEnabled(goodleftMargin);
-    bool isFootNoteSelected = ((rw && edit && !edit->textFrameSet()->isFootEndNote())||(!edit&& rw));
-    m_actionFormatBullet->setEnabled(isFootNoteSelected);
-    m_actionFormatNumber->setEnabled(isFootNoteSelected);
-    m_actionFormatStyle->setEnabled(isFootNoteSelected);
+    const bool canChangeCounter = rw && ( !edit || !edit->textFrameSet()->isFootEndNote() );
+    m_actionFormatBullet->setEnabled(canChangeCounter);
+    m_actionFormatNumber->setEnabled(canChangeCounter);
+    m_actionFormatStyle->setEnabled(rw);
     m_actionFormatSpacingSingle->setEnabled(rw);
     m_actionFormatSpacingOneAndHalf->setEnabled(rw);
     m_actionFormatSpacingDouble->setEnabled(rw);

@@ -734,7 +734,7 @@ class KSPREAD_EXPORT Currency
 {
  public:
 
-  enum currencyFormat { Gnumeric, OpenCalc, ApplixSpread,
+  enum currencyFormat { Native, Gnumeric, OpenCalc, ApplixSpread,
                         GobeProductiveSpread, HancomSheet };
 
   Currency();
@@ -753,7 +753,7 @@ class KSPREAD_EXPORT Currency
    * currencyFormat: in Gnumeric the code is: [$EUR]
    *                 saves some work in the filter...
    */
-  Currency(QString const & code, currencyFormat format);
+  Currency(QString const & code, currencyFormat format = Native);
   Currency & operator=(int type);
   Currency & operator=(char const * code);
   bool operator==(Currency const & cur) const;

@@ -194,17 +194,17 @@ void PaperLayout::initScaleOptions( QWidget * tab, QVBoxLayout * vbox )
     QStringList lst;
     for( int i = 5; i < 500; i += 5 )
     {
-        lst.append( i18n( "%1%" ).arg( i ) );
+        lst.append( QString( i18n( "%1%" ) ).arg( i ) );
         if( qRound( print->zoom() * 100 ) > i &&
             qRound( print->zoom() * 100 ) < i + 5 )
         {
-            lst.append( i18n( "%1%" ).arg( qRound( print->zoom() * 100 ) ) );
+            lst.append( QString( i18n( "%1%" ) ).arg( qRound( print->zoom() * 100 ) ) );
         }
     }
     m_cZoom->insertStringList( lst );
 
     int number_of_entries = m_cZoom->count();
-    QString string = i18n( "%1%" ).arg( qRound( print->zoom() * 100 ) );
+    QString string = QString( i18n( "%1%" ) ).arg( qRound( print->zoom() * 100 ) );
     for (int i = 0; i < number_of_entries ; i++)
     {
         if ( string == (QString) m_cZoom->text(i) )

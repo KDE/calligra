@@ -216,6 +216,7 @@ KarbonResourceServer::addPattern( const QString& tilename )
 
 	if( pattern )
 	{
+		emit patternAdded( m_patterns.last() );
 		return static_cast<VPattern*>( m_patterns.last() );
 	}
 
@@ -228,7 +229,10 @@ KarbonResourceServer::removePattern( VPattern* pattern )
 	QFile file( pattern->tilename() );
 
 	if( file.remove() )
+	{
 		m_patterns.remove( pattern );
+		emit patternRemoved( pattern );
+	}
 } // KarbonResourceServer::removePattern
 
 VGradientListItem*
@@ -564,3 +568,4 @@ VClipartIconItem* VClipartIconItem::clone()
 	return new VClipartIconItem( *this );
 }
 
+#include "karbon_resourceserver.moc"

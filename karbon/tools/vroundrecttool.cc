@@ -35,7 +35,7 @@ VRoundRectTool::VRoundRectOptionsWidget::VRoundRectOptionsWidget( KarbonPart *pa
 	: KDialogBase( parent, name, true, i18n( "Insert Round Rect" ), Ok | Cancel ), m_part( part )
 {
 	QGroupBox *group = new QGroupBox( 2, Qt::Horizontal, i18n( "Properties" ), this );
-	new QLabel( i18n( "Width:" ), group );
+	new QLabel( i18n( "object width", "Width:" ), group );
 	
 	KoUnit::Unit unit = KoUnit::U_CM;
 	m_width = new KoUnitDoubleSpinBox( group, 0.0, KoUnit::fromUserValue( 1000.0, unit ), KoUnit::fromUserValue( 0.5, unit ), KoUnit::fromUserValue( 10.0, unit ), unit );

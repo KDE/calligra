@@ -177,25 +177,78 @@ void Style::loadOasisStyle( KoOasisStyles& oasisStyles, const QDomElement & elem
         //kdDebug()<< " oasisStyles.dataFormats()[...] prefix :"<< oasisStyles.dataFormats()[element.attributeNS( KoXmlNS::style, "data-style-name" , QString::null)].prefix<<endl;
         //kdDebug()<< " oasisStyles.dataFormats()[...] suffix :"<< oasisStyles.dataFormats()[element.attributeNS( KoXmlNS::style, "data-style-name" , QString::null)].suffix<<endl;
 
-        str = element.attributeNS( KoXmlNS::style, "data-style-name" , QString::null);
-
-        QString tmp = oasisStyles.dataFormats()[str].prefix;
-        if ( !tmp.isEmpty() )
+        const QString styleName = element.attributeNS( KoXmlNS::style, "data-style-name" , QString::null);
+        if (oasisStyles.dataFormats().contains(styleName) &&
+            oasisStyles.numericFormats().contains(styleName))
         {
+          const KoOasisStyles::NumericStyleFormat dataStyle = oasisStyles.dataFormats()[styleName];
+          const KoOasisNumericFormat numFormat = oasisStyles.numericFormats()[styleName];
+
+          QString tmp = dataStyle.prefix;
+          if ( !tmp.isEmpty() )
+          {
             m_prefix = tmp;
             m_featuresSet |= SPrefix;
-        }
-        tmp = oasisStyles.dataFormats()[str].suffix;
-        if ( !tmp.isEmpty() )
-        {
+          }
+          tmp = dataStyle.suffix;
+          if ( !tmp.isEmpty() )
+          {
             m_postfix = tmp;
             m_featuresSet |= SPostfix;
-        }
-        tmp = oasisStyles.dataFormats()[str].formatStr;
-        if ( !tmp.isEmpty() )
-        {
-            m_formatType = Style::formatType( tmp );
-            m_featuresSet |= SFormatType;
+          }
+          // determine data formatting
+          switch (numFormat.type)
+          {
+            case KoOasisNumericFormat::Number:
+              m_formatType = Number_format;
+              m_featuresSet |= SFormatType;
+              break;
+            case KoOasisNumericFormat::Scientific:
+              m_formatType = Scientific_format;
+              m_featuresSet |= SFormatType;
+              break;
+            case KoOasisNumericFormat::Currency:
+              kdDebug() << " currency-symbol: " << numFormat.currencySymbol << endl;
+              if (!numFormat.currencySymbol.isEmpty())
+              {
+                Currency currency(numFormat.currencySymbol);
+                m_currency.type = currency.getIndex();
+                m_currency.symbol = currency.getDisplayCode();
+              }
+              m_formatType = Money_format;
+              m_featuresSet |= SFormatType;
+              break;
+            case KoOasisNumericFormat::Percentage:
+              m_formatType = Percentage_format;
+              m_featuresSet |= SFormatType;
+              break;
+            case KoOasisNumericFormat::Fraction:
+            case KoOasisNumericFormat::Date:
+            case KoOasisNumericFormat::Time:
+              // determine format of fractions, dates and times by using the
+              // formatting string
+              tmp = dataStyle.formatStr;
+              if ( !tmp.isEmpty() )
+              {
+                m_formatType = Style::formatType( tmp );
+                m_featuresSet |= SFormatType;
+              }
+              break;
+            case KoOasisNumericFormat::Boolean:
+              m_formatType = Number_format;
+              m_featuresSet |= SFormatType;
+              break;
+            case KoOasisNumericFormat::Text:
+              m_formatType = Text_format;
+              m_featuresSet |= SFormatType;
+              break;
+          }
+
+          if (numFormat.precision > -1)
+          {
+            m_precision = numFormat.precision;
+            m_featuresSet |= SPrecision;
+          }
         }
     }
 
@@ -298,6 +351,10 @@ void Style::loadOasisStyle( KoOasisStyles& oasisStyles, const QDomElement & elem
             m_alignX = Format::Undefined;
         m_featuresSet |= SAlignX;
     }
+
+// NOTE Stefan: IMHO the formatting of numbers is always done
+//              by evaluating OASIS data styles
+#if 0
     if ( styleStack.hasAttributeNS( KoXmlNS::office, "value-type" ) )
     {
       m_formatType = Generic_format;
@@ -322,6 +379,7 @@ void Style::loadOasisStyle( KoOasisStyles& oasisStyles, const QDomElement & elem
       if ( m_formatType != Generic_format )
         m_featuresSet |= SFormatType;
     }
+#endif
 
     styleStack.setTypeProperties( "table-cell" );
     if ( styleStack.hasAttributeNS( KoXmlNS::style, "vertical-align" ) )
@@ -711,7 +769,7 @@ FormatType Style::formatType( const QString &_format )
 QString Style::saveOasisStyleNumeric( KoGenStyle &style, KoGenStyles &mainStyles,
                                       FormatType _style,
                                       const QString &_prefix, const QString &_postfix,
-                                      int _precision, const QString& /*symbol*/ )
+                                      int _precision, const QString& symbol )
 {
 //  kdDebug() << k_funcinfo << endl;
     QString styleName;
@@ -727,7 +785,7 @@ QString Style::saveOasisStyleNumeric( KoGenStyle &style, KoGenStyles &mainStyles
         valueType = "string";
         break;
     case Money_format:
-        styleName = saveOasisStyleNumericMoney( mainStyles,_style,_precision);
+        styleName = saveOasisStyleNumericMoney( mainStyles,_style,symbol,_precision);
         valueType = "currency";
         break;
     case Percentage_format:
@@ -802,6 +860,11 @@ QString Style::saveOasisStyleNumeric( KoGenStyle &style, KoGenStyles &mainStyles
         break;
     case Generic_format:
     case No_format:
+      if (_precision > -1 || !_prefix.isEmpty() || !_postfix.isEmpty())
+      {
+        styleName = saveOasisStyleNumericNumber( mainStyles, _style, _precision );
+        valueType = "float";
+      }
       break;
     }
     if ( !valueType.isEmpty() )
@@ -817,9 +880,21 @@ QString Style::saveOasisStyleNumeric( KoGenStyle &style, KoGenStyles &mainStyles
     return styleName;
 }
 
-QString Style::saveOasisStyleNumericNumber( KoGenStyles& /*mainStyles*/, FormatType /*_style*/, int /*_precision*/ )
+QString Style::saveOasisStyleNumericNumber( KoGenStyles& mainStyles, FormatType /*_style*/, int _precision )
 {
-    return "";
+  QString format;
+  if ( _precision == -1 )
+    format="0";
+  else
+  {
+    QString tmp;
+    for ( int i = 0; i <_precision; i++ )
+    {
+      tmp+="0";
+    }
+    format = "0."+tmp;
+  }
+  return KoOasisStyles::saveOasisNumberStyle( mainStyles, format );
 }
 
 QString Style::saveOasisStyleNumericText( KoGenStyles& /*mainStyles*/, FormatType /*_style*/, int /*_precision*/ )
@@ -827,10 +902,21 @@ QString Style::saveOasisStyleNumericText( KoGenStyles& /*mainStyles*/, FormatTyp
     return "";
 }
 
-QString Style::saveOasisStyleNumericMoney( KoGenStyles& mainStyles, FormatType /*_style*/, int /*_precision*/ )
+QString Style::saveOasisStyleNumericMoney( KoGenStyles& mainStyles, FormatType /*_style*/, const QString& symbol, int _precision )
 {
     QString format;
-    return KoOasisStyles::saveOasisCurrencyStyle( mainStyles, format, format );
+    if ( _precision == -1 )
+        format="0";
+    else
+    {
+        QString tmp;
+        for ( int i = 0; i <_precision; i++ )
+        {
+            tmp+="0";
+        }
+        format = "0."+tmp;
+    }
+    return KoOasisStyles::saveOasisCurrencyStyle( mainStyles, format, symbol );
 }
 
 QString Style::saveOasisStyleNumericPercentage( KoGenStyles&mainStyles, FormatType /*_style*/, int _precision )
@@ -842,7 +928,7 @@ QString Style::saveOasisStyleNumericPercentage( KoGenStyles&mainStyles, FormatTy
     //TODO add decimal etc.
     QString format;
     if ( _precision == -1 )
-        format="0.00";
+        format="0";
     else
     {
         QString tmp;
@@ -863,7 +949,7 @@ QString Style::saveOasisStyleNumericScientific( KoGenStyles&mainStyles, FormatTy
     //</number:number-style>
     QString format;
     if ( _precision == -1 )
-        format="0.0E+00";
+        format="0E+00";
     else
     {
         QString tmp;
@@ -1325,7 +1411,7 @@ void Style::saveOasisStyle( KoGenStyle &style, KoGenStyles &mainStyles )
     QString symbol;
     if ( featureSet( SFormatType ) && m_formatType == Money_format )
     {
-      symbol = m_currency.symbol;
+      symbol = Currency::getCurrencyCode(m_currency.type);
     }
 
     QString numericStyle = saveOasisStyleNumeric( style, mainStyles, m_formatType,

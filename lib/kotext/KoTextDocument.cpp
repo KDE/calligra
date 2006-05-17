@@ -53,7 +53,6 @@ KoTextDocument::KoTextDocument( KoTextZoomHandler *zoomHandler, KoTextFormatColl
     init(); // see korichtext.cpp
 
     m_drawingFlags = 0;
-    setAddMargins( true );                 // top margin and bottom are added, not max'ed
     if ( !formatter )
         formatter = new KoTextFormatter;
     setFormatter( formatter );
@@ -77,7 +76,6 @@ void KoTextDocument::init()
     //minw = 0;
     align = Qt::AlignAuto;
     nSelections = 2;
-    addMargs = FALSE;
 
     underlLinks = TRUE;
     backBrush = 0;
@@ -1216,11 +1214,11 @@ void KoTextDocument::drawWithoutDoubleBuffer( QPainter *p, const QRect &cr, cons
         if ( !parag->isValid() )
             parag->format();
 
-            QRect pr( parag->pixelRect( zoomHandler ) );
-            pr.setLeft( 0 );
-            pr.setWidth( QWIDGETSIZE_MAX );
-            // The cliprect is checked in layout units, in KoTextParag::paint
-            QRect crect_lu( parag->rect() );
+        QRect pr( parag->pixelRect( zoomHandler ) );
+        pr.setLeft( 0 );
+        pr.setWidth( QWIDGETSIZE_MAX );
+        // The cliprect is checked in layout units, in KoTextParag::paint
+        QRect crect_lu( parag->rect() );
 
         if ( !cr.isNull() && !cr.intersects( pr ) ) {
             parag = parag->next();

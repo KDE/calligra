@@ -48,7 +48,8 @@ KoFontDia::KoFontDia( const KoTextFormat& initialFormat,
     KSpell2::Broker::Ptr broker, QWidget* parent, const char* name )
     : KDialogBase( parent, name, true,
     i18n("Select Font"), Ok|Cancel|User1|Apply, Ok ),
-    m_initialFormat(initialFormat)
+    m_initialFormat(initialFormat),
+    m_changedFlags(KoTextFormat::NoFlags)
 {
     setButtonText( KDialogBase::User1, i18n("&Reset") );
 

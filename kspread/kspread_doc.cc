@@ -170,11 +170,6 @@ public:
 QValueList<Doc*> Doc::Private::s_docs;
 int Doc::Private::s_docId = 0;
 
-#define deleteLoadingInfo() { \
-        delete d->m_loadingInfo; \
-        d->m_loadingInfo = 0L; \
-}
-
 Doc::Doc( QWidget *parentWidget, const char *widgetName, QObject* parent, const char* name, bool singleViewMode )
   : KoDocument( parentWidget, widgetName, parent, name, singleViewMode )
 {
@@ -359,9 +354,11 @@ bool Doc::initDoc(InitDocFlags flags, QWidget* parentWidget)
         d->m_loadingInfo = new KSPLoadingInfo;
         d->m_loadingInfo->setLoadTemplate( true );
         bool ok = loadNativeFormat( f );
-        deleteLoadingInfo();
         if ( !ok )
+        {
             showLoadingErrorDialog();
+            deleteLoadingInfo();
+        }
         setEmpty();
         initConfig();
         return ok;
@@ -480,8 +477,14 @@ int Doc::syntaxVersion() const
 
 bool Doc::isLoading() const
 {
-  return d->isLoading;
+  return d->isLoading || KoDocument::isLoading();
 }
+
+void Doc::doNotPaint(bool status)
+{
+  d->isLoading = status;
+}
+
 
 QColor Doc::pageBorderColor() const
 {
@@ -695,6 +698,12 @@ bool Doc::saveOasisHelper( KoStore* store, KoXmlWriter* manifestWriter, SaveFlag
     it = styles.begin();
     for ( ; it != styles.end() ; ++it ) {
         (*it).style->writeStyle( contentWriter, mainStyles, "style:style", (*it).name, "style:table-cell-properties" );
+    }
+
+    styles = mainStyles.styles( KoGenStyle::STYLE_NUMERIC_NUMBER );
+    it = styles.begin();
+    for ( ; it != styles.end() ; ++it ) {
+      (*it).style->writeStyle( contentWriter, mainStyles, "number:number-style", (*it).name, 0 /*TODO ????*/  );
     }
 
     //TODO FIXME !!!!
@@ -1007,7 +1016,6 @@ bool Doc::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles, const 
 
     //display loading time
     kdDebug(36001) << "Loading took " << (float)(dt.elapsed()) / 1000.0 << " seconds" << endl;
-    deleteLoadingInfo();
     return true;
 }
 
@@ -2229,6 +2237,12 @@ void Doc::setDisplaySheet(Sheet *_sheet )
 KSPLoadingInfo * Doc::loadingInfo() const
 {
     return d->m_loadingInfo;
+}
+
+void Doc::deleteLoadingInfo()
+{
+    delete d->m_loadingInfo;
+    d->m_loadingInfo = 0;
 }
 
 Sheet * Doc::displaySheet() const

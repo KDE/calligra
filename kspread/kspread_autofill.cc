@@ -471,6 +471,7 @@ QString AutoFillSequenceItem::getPredecessor( int _no, double _delta )
       int k = j % day->count();
       erg = (*day->at( k ));
     }
+    break;
    case SHORTDAY:
     {
       int i = shortDay->findIndex( m_String );
@@ -699,7 +700,7 @@ void Sheet::fillSequence( QPtrList<Cell>& _srcList,
                                  bool down)
 {
     doc()->emitBeginOperation(true);
-	
+
     /* try finding an interval to use to fill the sequence */
     if (!FillSequenceWithInterval(_srcList, _destList, _seqList, down))
     {
@@ -755,7 +756,7 @@ bool Sheet::FillSequenceWithInterval(QPtrList<Cell>& _srcList,
     Cell * cell2 = _srcList.next();
 
     bool singleCellOnly = (cell2 == 0);
-    
+
     if ( cell->isDate() )
       type = AutoFillSequenceItem::DATE;
     else if ( cell->isTime() )
@@ -767,7 +768,7 @@ bool Sheet::FillSequenceWithInterval(QPtrList<Cell>& _srcList,
 
     while ( cell && (cell2 || singleCellOnly) )
     {
-      
+
       Value cellValue = cell->value();
       Value cell2Value;
 
@@ -790,8 +791,8 @@ bool Sheet::FillSequenceWithInterval(QPtrList<Cell>& _srcList,
       }
       else
       {
-	cell2Value = cell2->value();      
-	      
+	cell2Value = cell2->value();
+
       	// check if both cells contain the same type
       	if ( ( !cellValue.isNumber() )
            || ( cell2->isDate() && type != AutoFillSequenceItem::DATE )
@@ -803,8 +804,8 @@ bool Sheet::FillSequenceWithInterval(QPtrList<Cell>& _srcList,
       	}
       }
 
-      QVariant delta = getDiff(cellValue , cell2Value , type ); 
-      
+      QVariant delta = getDiff(cellValue , cell2Value , type );
+
       if (count < 1)
       {
         p = count;
@@ -884,12 +885,12 @@ bool Sheet::FillSequenceWithInterval(QPtrList<Cell>& _srcList,
           while ( i < 0)
             i += count;
         }
-	
+
 	QVariant currentDiff = diff.at( i );
-	
+
 	if (cellValue.type() == QVariant::Double)
         	if (down)
-            		cellValue = cellValue.asDouble() + currentDiff.asDouble();  	
+            		cellValue = cellValue.asDouble() + currentDiff.asDouble();
           	else
             		cellValue = cellValue.asDouble() -  currentDiff.asDouble();
 	else
@@ -912,7 +913,7 @@ bool Sheet::FillSequenceWithInterval(QPtrList<Cell>& _srcList,
 	}
 	else
         	dest->setCellText( cellValue.asString() );
-        
+
 	dest->copyFormat( src );
 
         if (down)
@@ -1136,7 +1137,7 @@ void Sheet::FillSequenceWithCopy(QPtrList<Cell>& _srcList,
           val = (_srcList.at( s )->value().asFloat() - (incr * factor));
         else
           val = (_srcList.at( s )->value().asFloat() + (incr * factor));
-        
+
         QString tmp;
         tmp = tmp.setNum(val);
         cell->setCellText( tmp );

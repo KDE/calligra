@@ -287,7 +287,7 @@ void KWFrameViewTester::testMouseMeaning() {
         }
     }
 
-    point.setY(50);
+    point.setX(50);
     point.setY(120);
     CHECK(fv->mouseMeaning(point, 0), MEANING_NONE);
 

@@ -202,6 +202,10 @@ void KWOasisLoader::loadOasisHeaderFooter( const QDomElement& headerFooter, bool
         context.styleStack().push( style );
     KWFrame* frame = new KWFrame( fs, 29, isHeader?0:567, 798-29, 41 );
     frame->loadCommonOasisProperties( context, fs, "header-footer" );
+    const QString minHeight = context.styleStack().attributeNS( KoXmlNS::fo, "min-height" );
+    if ( !minHeight.isEmpty() )
+        frame->setMinimumFrameHeight( KoUnit::parseValue( minHeight ) );
+
     frame->setFrameBehavior( KWFrame::AutoExtendFrame );
     frame->setNewFrameBehavior( KWFrame::Copy );
     fs->addFrame( frame );
@@ -264,7 +268,11 @@ KWFrame* KWOasisLoader::loadFrame( const QDomElement& frameTag, KoOasisContext& 
             double x = KoUnit::parseValue( frameTag.attributeNS( KoXmlNS::svg, "x", QString::null ) );
             double y = KoUnit::parseValue( frameTag.attributeNS( KoXmlNS::svg, "y", QString::null ) );
             int pageNum = frameTag.attributeNS( KoXmlNS::text, "anchor-page-number", QString::null ).toInt();
-            frame->moveTopLeft( KoPoint( x, y + m_doc->pageManager()->topOfPage(pageNum) ) );
+            // Ensure that we have enough pages
+            KWPageManager* pageManager = m_doc->pageManager();
+            while ( pageNum > pageManager->lastPageNumber() )
+                pageManager->appendPage();
+            frame->moveTopLeft( KoPoint( x, y + pageManager->topOfPage(pageNum) ) );
         }
         frame->moveBy( offset.x(), offset.y() );
     }

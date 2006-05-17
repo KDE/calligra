@@ -21,7 +21,6 @@
 
 #include <KoChild.h>
 #include <koffice_export.h>
-class KoView;
 class QDomDocument;
 class QDomElement;
 class KURL;
@@ -172,8 +171,7 @@ protected: // Should be private, but KWord needs access to the variables
 
 private:
   bool createUnavailDocument( KoStore* store, bool doOpenURL, const QString& mimeType );
-  bool createAndLoadDocument( KoStore* store, bool doOpenURL, bool oasis, const QString& mimeType );
-  bool finishLoadingDocument( KoStore* store, KoDocument* doc, bool doOpenURL, bool oasis );
+  bool loadDocumentInternal( KoStore* _store, const KoDocumentEntry& e, bool doOpenURL, bool oasis );
 
 private:
   KoDocumentChildPrivate *d;

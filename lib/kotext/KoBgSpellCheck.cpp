@@ -176,7 +176,8 @@ void KoBgSpellCheck::markWord( KoTextParag* parag, int pos, int length, bool mis
 
 void KoBgSpellCheck::checkerContinue()
 {
-    d->backSpeller->continueChecking();
+    if(enabled())
+        d->backSpeller->continueChecking();
 }
 
 void KoBgSpellCheck::spellCheckerDone()
@@ -205,6 +206,8 @@ void KoBgSpellCheck::stop()
 void KoBgSpellCheck::slotParagraphCreated( KoTextParag* parag )
 {
     parag->string()->setNeedsSpellCheck( true );
+    if ( !enabled() )
+        return;
     if ( !d->backSpeller->check( parag ) ) {
         d->paragCache.insert( parag, parag );
     }
@@ -214,6 +217,8 @@ void KoBgSpellCheck::slotParagraphModified( KoTextParag* parag, int /*ParagModif
                                             int pos, int length )
 {
     parag->string()->setNeedsSpellCheck( true );
+    if ( !enabled() )
+        return;
 
     if ( d->backSpeller->checking() ) {
         d->paragCache.insert( parag, parag );

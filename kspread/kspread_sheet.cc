@@ -1229,6 +1229,7 @@ void Sheet::recalc()
 
 void Sheet::recalc( bool force )
 {
+  ElapsedTime et( "Recalculating " + d->name, ElapsedTime::PrintOnlyTime );
   //  emitBeginOperation(true);
   //  setRegionPaintDirty(QRect(QPoint(1,1), QPoint(KS_colMax, KS_rowMax)));
   setCalcDirtyFlag();
@@ -1268,7 +1269,7 @@ void Sheet::recalc( bool force )
     // some debug output to get some idea how damn slow this is ...
     if (cur*100/count != percent) {
       percent = cur*100/count;
-      kdDebug() << "Recalc: " << percent << "%" << endl;
+//       kdDebug() << "Recalc: " << percent << "%" << endl;
     }
   }
 
@@ -2093,7 +2094,7 @@ void Sheet::setSeries( const QPoint &_marker, double start, double end, double s
   kdDebug() << "Saving undo information done" << endl;
 
   setRegionPaintDirty( undoRegion );
-  
+
   x = _marker.x();
   y = _marker.y();
 
@@ -5267,9 +5268,9 @@ bool Sheet::loadSelection(const QDomDocument& doc, const QRect& pasteArea,
         // Clear the existing columns
         int col = e.attribute("column").toInt();
         int width = e.attribute("count").toInt();
-        for ( int i = col; i < col + width; ++i )
+        if (!insert)
         {
-            if (!insert)
+            for ( int i = col; i < col + width; ++i )
             {
                 d->cells.clearColumn( _xshift + i );
                 d->columns.removeElement( _xshift + i );
@@ -5294,14 +5295,14 @@ bool Sheet::loadSelection(const QDomDocument& doc, const QRect& pasteArea,
     // entire rows given
     if (e.tagName() == "rows" && !isProtected())
     {
-      _xshift = 0;
+        _xshift = 0;
 
         // Clear the existing rows
         int row = e.attribute("row").toInt();
         int height = e.attribute("count").toInt();
-        for( int i = row; i < row + height; ++i )
+        if ( !insert )
         {
-          if (!insert)
+          for( int i = row; i < row + height; ++i )
           {
             d->cells.clearRow( _yshift + i );
             d->rows.removeElement( _yshift + i );
@@ -5417,7 +5418,8 @@ void Sheet::loadSelectionUndo(const QDomDocument& d, const QRect& loadArea,
 
   uint numCols = 0;
   uint numRows = 0;
-  Region region; // to store the current data, therefore shifted
+
+  Region region;
   for (QDomNode n = root.firstChild(); !n.isNull(); n = n.nextSibling())
   {
     QDomElement e = n.toElement(); // "columns", "rows" or "cell"
@@ -5428,7 +5430,7 @@ void Sheet::loadSelectionUndo(const QDomDocument& d, const QRect& loadArea,
       int width = e.attribute("count").toInt();
       for (int coff = 0; col + coff <= pasteWidth; coff += columnsInClpbrd)
       {
-        uint overlap = QMAX(0, (col + coff + width) - pasteWidth);
+        uint overlap = QMAX(0, (col - 1 + coff + width) - pasteWidth);
         uint effWidth = width - overlap;
         region.add(QRect(_xshift + col + coff, 1, effWidth, KS_rowMax));
         numCols += effWidth;
@@ -5441,7 +5443,7 @@ void Sheet::loadSelectionUndo(const QDomDocument& d, const QRect& loadArea,
       int height = e.attribute("count").toInt();
       for (int roff = 0; row + roff <= pasteHeight; roff += rowsInClpbrd)
       {
-        uint overlap = QMAX(0, (row + roff + height) - pasteHeight);
+        uint overlap = QMAX(0, (row - 1 + roff + height) - pasteHeight);
         uint effHeight = height - overlap;
         region.add(QRect(1, _yshift + row + roff, KS_colMax, effHeight));
         numRows += effHeight;
@@ -5471,28 +5473,27 @@ void Sheet::loadSelectionUndo(const QDomDocument& d, const QRect& loadArea,
   if (insert)
   {
     QRect rect = region.boundingRect();
-    if (insertTo == -1 || (insertTo == 0 && numRows == 0))
+    // shift cells to the right
+    if (insertTo == -1 && numCols == 0 && numRows == 0)
     {
-      rect.setWidth(rect.width() - numCols);
+      rect.setWidth(rect.width());
       shiftRow(rect, false);
     }
-    else if (insertTo == 1 || (insertTo == 0 && numCols == 0))
+    // shift cells to the bottom
+    else if (insertTo == 1 && numCols == 0 && numRows == 0)
     {
-      rect.setHeight(rect.height() - numRows);
-      shiftColumn(rect, false);
+      rect.setHeight(rect.height());
+      shiftColumn( rect, false );
     }
-
-    for (QDomNode n = root.firstChild(); !n.isNull(); n = n.nextSibling())
+    // insert columns
+    else if (insertTo == 0 && numCols == 0 && numRows > 0)
     {
-      QDomElement e = n.toElement(); // "columns", "rows" or "cell"
-      if (e.tagName() == "columns")
-      {
-        insertColumn(_xshift+1, e.attribute("count").toInt()-1, false);
-      }
-      else if (e.tagName() == "rows")
-      {
-        insertRow(_yshift+1, e.attribute("count").toInt()-1, false);
-      }
+      insertRow(rect.top(), rect.height() - 1, false);
+    }
+    // insert rows
+    else if (insertTo == 0 && numCols > 0 && numRows == 0)
+    {
+      insertColumn(rect.left(), rect.width() - 1, false);
     }
   }
 }
@@ -6417,7 +6418,10 @@ bool Sheet::loadOasis( const QDomElement& sheetElement, KoOasisLoadingContext& o
     int rowIndex = 1;
     int indexCol = 1;
     QDomNode rowNode = sheetElement.firstChild();
-    while( !rowNode.isNull() )
+    // Some spreadsheet programs may support more rows than
+    // KSpread so limit the number of repeated rows.
+    // FIXME POSSIBLE DATA LOSS!
+    while( !rowNode.isNull() && rowIndex <= KS_rowMax )
     {
         kdDebug()<<" rowIndex :"<<rowIndex<<" indexCol :"<<indexCol<<endl;
         QDomElement rowElement = rowNode.toElement();
@@ -6426,11 +6430,23 @@ bool Sheet::loadOasis( const QDomElement& sheetElement, KoOasisLoadingContext& o
             kdDebug()<<" Sheet::loadOasis rowElement.tagName() :"<<rowElement.localName()<<endl;
             if ( rowElement.namespaceURI() == KoXmlNS::table )
             {
-                if ( rowElement.localName()=="table-column" )
+                if ( rowElement.localName()=="table-column" && indexCol <= KS_colMax )
                 {
                     kdDebug ()<<" table-column found : index column before "<< indexCol<<endl;
                     loadColumnFormat( rowElement, oasisContext.oasisStyles(), indexCol , styleMap);
                     kdDebug ()<<" table-column found : index column after "<< indexCol<<endl;
+                }
+                else if ( rowElement.localName() == "table-header-rows" )
+                {
+                  QDomNode headerRowNode = rowElement.firstChild();
+                  while ( !headerRowNode.isNull() )
+                  {
+                    // NOTE Handle header rows as ordinary ones
+                    //      as long as they're not supported.
+                    loadRowFormat( headerRowNode.toElement(), rowIndex,
+                                   oasisContext, /*rowNode.isNull() ,*/ styleMap );
+                    headerRowNode = headerRowNode.nextSibling();
+                  }
                 }
                 else if( rowElement.localName() == "table-row" )
                 {
@@ -6668,9 +6684,12 @@ bool Sheet::loadColumnFormat(const QDomElement& column, const KoOasisStyles& oas
     if ( column.hasAttributeNS( KoXmlNS::table, "number-columns-repeated" ) )
     {
         bool ok = true;
-        number = column.attributeNS( KoXmlNS::table, "number-columns-repeated", QString::null ).toInt( &ok );
-        if ( !ok )
-            number = 1;
+        int n = column.attributeNS( KoXmlNS::table, "number-columns-repeated", QString::null ).toInt( &ok );
+        if ( ok )
+          // Some spreadsheet programs may support more rows than KSpread so
+          // limit the number of repeated rows.
+          // FIXME POSSIBLE DATA LOSS!
+          number = QMIN( n, KS_colMax - indexCol + 1 );
         kdDebug() << "Repeated: " << number << endl;
     }
 
@@ -6787,8 +6806,10 @@ bool Sheet::loadRowFormat( const QDomElement& row, int &rowIndex, KoOasisLoading
         bool ok = true;
         int n = row.attributeNS( KoXmlNS::table, "number-rows-repeated", QString::null ).toInt( &ok );
         if ( ok )
-	    //Some spreadsheet programs may support more rows than KSpread so limit the number of repeated rows
-            number = min(n,KS_rowMax);
+            // Some spreadsheet programs may support more rows than KSpread so
+            // limit the number of repeated rows.
+            // FIXME POSSIBLE DATA LOSS!
+            number = QMIN( n, KS_rowMax - rowIndex + 1 );
     }
     bool collapse = false;
     if ( row.hasAttributeNS( KoXmlNS::table, "visibility" ) )
@@ -6869,10 +6890,13 @@ bool Sheet::loadRowFormat( const QDomElement& row, int &rowIndex, KoOasisLoading
                 if( (number > 1) || cellElement.hasAttributeNS( KoXmlNS::table, "number-columns-repeated" ) )
                 {
                     bool ok = false;
-                    cols = cellElement.attributeNS( KoXmlNS::table, "number-columns-repeated", QString::null ).toInt( &ok );
+                    int n = cellElement.attributeNS( KoXmlNS::table, "number-columns-repeated", QString::null ).toInt( &ok );
 
-		    if (!ok)
-			    cols = 1;
+                    if (ok)
+                      // Some spreadsheet programs may support more rows than
+                      // KSpread so limit the number of repeated rows.
+                      // FIXME POSSIBLE DATA LOSS!
+                      cols = QMIN( n, KS_colMax - columnIndex + 1 );
 
 		    if ( !haveStyle && ( cell->isEmpty() && cell->format()->comment( columnIndex, backupRow ).isEmpty() ) )
                     {
@@ -7182,9 +7206,11 @@ void Sheet::loadOasisSettings( const KoOasisSettings::NamedMap &settings )
 
     int cursorX = items.parseConfigItemInt( "CursorPositionX" );
     int cursorY = items.parseConfigItemInt( "CursorPositionY" );
+    doc()->loadingInfo()->setCursorPosition( this, QPoint( cursorX, cursorY ) );
 
-    doc()->loadingInfo()->addMarkerSelection( this, QPoint( cursorX, cursorY ) );
-    kdDebug()<<"d->hideZero :"<<d->hideZero<<" d->showGrid :"<<d->showGrid<<" d->firstLetterUpper :"<<d->firstLetterUpper<<" cursorX :"<<cursorX<<" cursorY :"<<cursorY<< endl;
+    double offsetX = items.parseConfigItemDouble( "xOffset" );
+    double offsetY = items.parseConfigItemDouble( "yOffset" );
+    doc()->loadingInfo()->setScrollingOffset( this, KoPoint( offsetX, offsetY ) );
 
     d->showFormulaIndicator = items.parseConfigItemBool( "ShowFormulaIndicator" );
     d->showCommentIndicator = items.parseConfigItemBool( "ShowCommentIndicator" );
@@ -7192,32 +7218,22 @@ void Sheet::loadOasisSettings( const KoOasisSettings::NamedMap &settings )
     d->lcMode = items.parseConfigItemBool( "lcmode" );
     d->autoCalc = items.parseConfigItemBool( "autoCalc" );
     d->showColumnNumber = items.parseConfigItemBool( "ShowColumnNumber" );
-    d->firstLetterUpper = items.parseConfigItemBool( "FirstLetterUpper" );
 }
 
-void Sheet::saveOasisSettings( KoXmlWriter &settingsWriter, const QPoint& marker ) const
+void Sheet::saveOasisSettings( KoXmlWriter &settingsWriter ) const
 {
     //not into each page into oo spec
     settingsWriter.addConfigItem( "ShowZeroValues", d->hideZero );
     settingsWriter.addConfigItem( "ShowGrid", d->showGrid );
     //not define into oo spec
-
     settingsWriter.addConfigItem( "FirstLetterUpper", d->firstLetterUpper);
-
-    //<config:config-item config:name="CursorPositionX" config:type="int">3</config:config-item>
-    //<config:config-item config:name="CursorPositionY" config:type="int">34</config:config-item>
-    settingsWriter.addConfigItem( "CursorPositionX", marker.x() );
-    settingsWriter.addConfigItem( "CursorPositionY", marker.y() );
-
     settingsWriter.addConfigItem( "ShowFormulaIndicator", d->showFormulaIndicator );
     settingsWriter.addConfigItem( "ShowCommentIndicator", d->showCommentIndicator );
     settingsWriter.addConfigItem( "ShowPageBorders",d->showPageBorders );
     settingsWriter.addConfigItem( "lcmode", d->lcMode );
     settingsWriter.addConfigItem( "autoCalc", d->autoCalc );
     settingsWriter.addConfigItem( "ShowColumnNumber", d->showColumnNumber );
-    settingsWriter.addConfigItem( "FirstLetterUpper", d->firstLetterUpper );
 }
-
 
 bool Sheet::saveOasis( KoXmlWriter & xmlWriter, KoGenStyles &mainStyles, GenValidationStyles &valStyle, KoStore *store, KoXmlWriter* /*manifestWriter*/, int &indexObj, int &partIndexObj )
 {
@@ -7291,14 +7307,14 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
     int i = 1;
     while ( i <= maxCols )
     {
-        ColumnFormat * column = columnFormat( i );
-        KoGenStyle styleCurrent( Doc::STYLE_COLUMN, "table-column" );
-        styleCurrent.addPropertyPt( "style:column-width", column->dblWidth() );/*FIXME pt and not mm */
-        styleCurrent.addProperty( "fo:break-before", "auto" );/*FIXME auto or not ?*/
+        ColumnFormat* column = columnFormat( i );
+        KoGenStyle currentColumnStyle( Doc::STYLE_COLUMN, "table-column" );
+        currentColumnStyle.addPropertyPt( "style:column-width", column->dblWidth() );/*FIXME pt and not mm */
+        currentColumnStyle.addProperty( "fo:break-before", "auto" );/*FIXME auto or not ?*/
 
         //style default layout for column
-        KoGenStyle styleColCurrent; // the type is determined in saveOasisCellStyle
-        QString nameDefaultCellStyle = column->saveOasisCellStyle( styleColCurrent, mainStyles );
+        KoGenStyle currentDefaultCellStyle; // the type is determined in saveOasisCellStyle
+        QString currentDefaultCellStyleName = column->saveOasisCellStyle( currentDefaultCellStyle, mainStyles );
 
 
         bool hide = column->isHide();
@@ -7306,28 +7322,28 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
         int repeated = 1;
         while ( j <= maxCols )
         {
-            ColumnFormat *nextColumn = columnFormat( j );
-            KoGenStyle nextStyle( Doc::STYLE_COLUMN, "table-column" );
-            nextStyle.addPropertyPt( "style:column-width", nextColumn->dblWidth() );/*FIXME pt and not mm */
-            nextStyle.addProperty( "fo:break-before", "auto" );/*FIXME auto or not ?*/
+            ColumnFormat* nextColumn = columnFormat( j );
+            KoGenStyle nextColumnStyle( Doc::STYLE_COLUMN, "table-column" );
+            nextColumnStyle.addPropertyPt( "style:column-width", nextColumn->dblWidth() );/*FIXME pt and not mm */
+            nextColumnStyle.addProperty( "fo:break-before", "auto" );/*FIXME auto or not ?*/
 
-            KoGenStyle nextStyleCol; // the type is determined in saveOasisCellStyle
-            QString nextNameDefaultCellStyle = nextColumn->saveOasisCellStyle(nextStyleCol,mainStyles );
+            KoGenStyle nextDefaultCellStyle; // the type is determined in saveOasisCellStyle
+            QString nextDefaultCellStyleName = nextColumn->saveOasisCellStyle( nextDefaultCellStyle, mainStyles );
 
             //FIXME all the time repeate == 2
-            if ( ( nextStyle==styleCurrent ) && ( hide == nextColumn->isHide() ) && ( nextNameDefaultCellStyle == nameDefaultCellStyle ) )
+            if ( ( nextColumnStyle == currentColumnStyle ) && ( hide == nextColumn->isHide() ) && ( nextDefaultCellStyleName == currentDefaultCellStyleName ) )
                 ++repeated;
             else
                 break;
             ++j;
         }
         xmlWriter.startElement( "table:table-column" );
-        xmlWriter.addAttribute( "table:style-name", mainStyles.lookup( styleCurrent, "co" ) );
+        xmlWriter.addAttribute( "table:style-name", mainStyles.lookup( currentColumnStyle, "co" ) );
         //FIXME doesn't create format if it's default format
 
         // skip 'table:default-cell-style-name' attribute for the default style
-        if ( !styleColCurrent.isDefaultStyle() )
-            xmlWriter.addAttribute( "table:default-cell-style-name", nameDefaultCellStyle );
+        if ( !currentDefaultCellStyle.isDefaultStyle() )
+            xmlWriter.addAttribute( "table:default-cell-style-name", currentDefaultCellStyleName );
 
         if ( hide )
             xmlWriter.addAttribute( "table:visibility", "collapse" );
@@ -7340,13 +7356,13 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
 
     for ( i = 1; i <= maxRows; ++i )
     {
-        const RowFormat * row = rowFormat( i );
-        KoGenStyle rowStyle( Doc::STYLE_ROW, "table-row" );
-        rowStyle.addPropertyPt( "style:row-height", row->dblHeight());/*FIXME pt and not mm */
-        rowStyle.addProperty( "fo:break-before", "auto" );/*FIXME auto or not ?*/
+        const RowFormat* row = rowFormat( i );
+        KoGenStyle currentRowStyle( Doc::STYLE_ROW, "table-row" );
+        currentRowStyle.addPropertyPt( "style:row-height", row->dblHeight());/*FIXME pt and not mm */
+        currentRowStyle.addProperty( "fo:break-before", "auto" );/*FIXME auto or not ?*/
 
         xmlWriter.startElement( "table:table-row" );
-        xmlWriter.addAttribute( "table:style-name", mainStyles.lookup( rowStyle, "ro" ) );
+        xmlWriter.addAttribute( "table:style-name", mainStyles.lookup( currentRowStyle, "ro" ) );
         int repeated = 1;
         if ( !rowAsCell( i, maxCols ) )
         {
@@ -7355,12 +7371,12 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
             while ( j <= maxRows )
             {
                 const RowFormat *nextRow = rowFormat( j );
-                KoGenStyle nextStyle( Doc::STYLE_ROW, "table-row" );
-                nextStyle.addPropertyPt( "style:row-height", nextRow->dblHeight() );/*FIXME pt and not mm */
-                nextStyle.addProperty( "fo:break-before", "auto" );/*FIXME auto or not ?*/
+                KoGenStyle nextRowStyle( Doc::STYLE_ROW, "table-row" );
+                nextRowStyle.addPropertyPt( "style:row-height", nextRow->dblHeight() );/*FIXME pt and not mm */
+                nextRowStyle.addProperty( "fo:break-before", "auto" );/*FIXME auto or not ?*/
 
                 //FIXME all the time repeate == 2
-                if ( ( nextStyle==rowStyle ) && ( hide == nextRow->isHide() ) &&!rowAsCell( j, maxCols ) )
+                if ( ( nextRowStyle==currentRowStyle ) && ( hide == nextRow->isHide() ) &&!rowAsCell( j, maxCols ) )
                     ++repeated;
                 else
                     break;
@@ -7812,7 +7828,7 @@ void Sheet::insertCell( Cell *_cell )
 
   d->cells.insert( _cell, _cell->column(), _cell->row() );
 
-  //Not sure why this is here 
+  //Not sure why this is here
   /*if ( d->scrollBarUpdates )
   {
     checkRangeHBorder ( _cell->column() );
@@ -8293,21 +8309,24 @@ void Sheet::convertObscuringBorders()
 // TODO Stefan: these belong to View, even better Canvas
 void Sheet::setRegionPaintDirty( Region const & region )
 {
-  Manipulator* manipulator = new DilationManipulator();
-  manipulator->setSheet(this);
-  manipulator->add(region);
-  manipulator->execute();
+  DilationManipulator manipulator;
+  manipulator.setSheet(this);
+  manipulator.add(region);
+  manipulator.execute();
   // don't put it in the undo list! ;-)
-  d->paintDirtyList.add(*manipulator);
-  kdDebug() << "setRegionPaintDirty "<< static_cast<Region*>(manipulator)->name(this) << endl;
-  delete manipulator;
+  d->paintDirtyList.add(manipulator);
+  //kdDebug() << "setRegionPaintDirty "<< static_cast<Region*>(&manipulator)->name(this) << endl;
 }
 
 void Sheet::setRegionPaintDirty( QRect const & range )
 {
-
-    d->paintDirtyList.add(range);
-
+  DilationManipulator manipulator;
+  manipulator.setSheet(this);
+  manipulator.add(range);
+  manipulator.execute();
+  // don't put it in the undo list! ;-)
+  d->paintDirtyList.add(manipulator);
+  //kdDebug() << "setRegionPaintDirty "<< static_cast<Region*>(&manipulator)->name(this) << endl;
 }
 
 void Sheet::clearPaintDirtyData()

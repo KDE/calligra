@@ -775,7 +775,7 @@ void Format::loadOasisStyle( /*const QDomElement& style,*/ KoOasisLoadingContext
 /*  KoStyleStack styleStack;
   styleStack.push( style );
   styleStack.setTypeProperties( "table-cell" );*/
-  
+
   KoStyleStack& styleStack = context.styleStack();
   loadOasisStyleProperties( styleStack, context.oasisStyles() );
 /*  loadOasisStyleProperties( context.styleStack(), context.oasisStyles() );
@@ -3320,6 +3320,14 @@ namespace Currency_LNS
       return QString::fromUtf8( m_List[t].display );
     }
 
+    int getIndex(const QString& code) const
+    {
+      int index = 0;
+      while (m_List[index].code != 0 && m_List[index].code != code)
+        ++index;
+      return (m_List[index].code != 0) ? index : 1 /*undef*/;
+    }
+
    private:
     const Money * m_List;
   };
@@ -3382,6 +3390,7 @@ Currency::Currency(QString const & code, currencyFormat format)
     else if ( code.find( '$' ) != -1 )
       m_code = "$";
   } // end gnumeric
+  m_type = gCurrencyMap.getIndex( m_code );
 }
 
 Currency & Currency::operator=(int type)

@@ -636,7 +636,7 @@ void QtCalculator::EnterRecip()
 void QtCalculator::EnterInt()
 {
   eestate = false;
-        CALCAMNT work_amount1, work_amount2;
+  CALCAMNT work_amount1 = 0.0, work_amount2 = 0.0;
 
         last_input = OPERATION;
         if (!inverse){

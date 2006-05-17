@@ -1110,7 +1110,7 @@ void DocumentWrapper::initSymbolNamesAction()
         QStringList names = st.allNames();
         //QStringList i18nNames;
         QValueList<QFont> fonts;
-        QMemArray<uchar> chars( names.count() );
+        QMemArray<QChar> chars( names.count() );
 
         int i = 0;
         for ( QStringList::Iterator it = names.begin();

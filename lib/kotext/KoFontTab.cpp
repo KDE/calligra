@@ -24,6 +24,7 @@ KoFontTab::KoFontTab( uint fontListCriteria, QWidget* parent, const char* name, 
 {
     QStringList list;
     KFontChooser_local::getFontList(list, fontListCriteria);
+
     characterFont->setFamilyList( list );
     comparisonFont = characterFont->font();
     connect( characterFont, SIGNAL( fontSelected( const QFont & ) ), this, SLOT( slotFontChanged( const QFont & ) ) );

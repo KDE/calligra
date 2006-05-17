@@ -46,7 +46,7 @@ KudesignerDoc::KudesignerDoc( QWidget *parentWidget, const char *widgetName, QOb
 {
     setInstance( KudesignerFactory::global(), false );
     history = new KoCommandHistory( actionCollection() );
-    setTemplateType("kudesigner_template");
+
     //     connect( history, SIGNAL( documentRestored() ), this, SLOT( slotDocumentRestored() ) );
     //     connect( history, SIGNAL( commandExecuted() ), this, SLOT( slotCommandExecuted() ) );
     docCanvas = new Kudesigner::Canvas( 100, 100 );

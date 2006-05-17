@@ -167,7 +167,7 @@ parameterLocale::parameterLocale( View* _view, QVBox *box , char *name )
   m_money=new QLabel( tmpQGroupBox,"label3");
 
   updateToMatchLocale(locale);
-  
+
   m_updateButton=new QPushButton ( i18n("&Update Locale Settings"), tmpQGroupBox);
   connect(m_updateButton, SIGNAL(clicked()),this,SLOT(updateDefaultSystemConfig()));
 }
@@ -815,7 +815,7 @@ configureLayoutPage::configureLayoutPage( View* _view,QVBox *box , char *name )
 
   defaultOrientationPage=new QComboBox( tmpQGroupBox);
   label->setBuddy(defaultOrientationPage);
-  
+
   QStringList listType;
   listType+=i18n( "Portrait" );
   listType+=i18n( "Landscape" );
@@ -829,7 +829,7 @@ configureLayoutPage::configureLayoutPage( View* _view,QVBox *box , char *name )
   grid1->addWidget(label,4,0);
   defaultUnit=new QComboBox( tmpQGroupBox);
   label->setBuddy(defaultUnit);
-  
+
   defaultUnit->insertStringList(KoUnit::listOfUnitName());
   defaultUnit->setCurrentItem(0);
   QWhatsThis::add(defaultUnit, i18n( "Choose the default unit that will be used in your sheet.\nNote that you can overwrite the unit for the current sheet using the Format -> Page Layout... dialog." ) );
@@ -973,7 +973,7 @@ configureTTSPage::configureTTSPage( View *_view, QVBox *box, char *name )
     QHBox* hbAcceleratorPrefix = new QHBox(m_gbScreenReaderOptions);
     QWidget* spacer = new QWidget(hbAcceleratorPrefix);
     spacer->setMinimumWidth(2 * KDialog::marginHint());
-    m_lblAcceleratorPrefix = 
+    m_lblAcceleratorPrefix =
         new QLabel(i18n("A word spoken before another word", "Pr&efaced by the word:"),
         hbAcceleratorPrefix);
     m_leAcceleratorPrefixWord = new QLineEdit(i18n("Keyboard accelerator, such as Alt+F", "Accelerator"),
@@ -1034,7 +1034,7 @@ void configureTTSPage::apply()
 void configureTTSPage::screenReaderOptionChanged()
 {
     m_gbScreenReaderOptions->setEnabled(
-        m_cbSpeakPointerWidget->isChecked() | m_cbSpeakFocusWidget->isChecked());
+        m_cbSpeakPointerWidget->isChecked() || m_cbSpeakFocusWidget->isChecked());
     m_leAcceleratorPrefixWord->setEnabled(m_cbSpeakAccelerators->isChecked());
     m_lblAcceleratorPrefix->setEnabled(m_cbSpeakAccelerators->isChecked());
 }

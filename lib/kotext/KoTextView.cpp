@@ -351,8 +351,8 @@ void KoTextView::handleKeyPressEvent( QKeyEvent * e, QWidget *widget, const QPoi
                     }
                     showToolTipBox(m_cursor->parag(), m_cursor->index()-1, widget,pos);
                 }
-                else
-                    removeToolTipCompletion();
+                 else
+                     removeToolTipCompletion();
 
             }
             // We should use KAccel instead, to make this configurable !
@@ -392,7 +392,7 @@ void KoTextView::handleKeyPressEvent( QKeyEvent * e, QWidget *widget, const QPoi
         if ( d->m_backSpeller )
             d->m_backSpeller->setIntraWordEditing( 0, 0 );
     }
-    removeToolTipCompletion();
+
     textObject()->typingDone();
 }
 
@@ -880,8 +880,7 @@ bool KoTextView::insertParagraph(const QPoint &pos)
     for (int i = 0; i < nbParag ;i++)
     {
         KoTextParag *s=textDocument()->createParag( textDocument(), last );
-        if ( f )
-	    s->setFormat( 0, 1, f, TRUE );
+        s->setFormat( 0, 1, f, TRUE );
         if ( style )
             s->setStyle( style );
         s->setCounter( counter );
