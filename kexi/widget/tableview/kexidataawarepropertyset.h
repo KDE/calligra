@@ -39,16 +39,16 @@ class KexiDataAwareObjectInterface;
  and may be used for similar purposes, when each KexiDataAwareObjectInterface's
  row can be associated with single KoProperty::Set object, and given
  KexiDataAwareObjectInterface object has to inform the world about currently
- selected row/buffer.
+ selected row/property set.
 
  Following functionality is built-in:
  - auto-initializing after resetting of table view's data
- - destroying single buffer that is associated with deleted row
- - inserting single buffer that and associating it with new row
- - all buffers are cleared when view's data is cleared (using clear())
+ - destroying single property set that is associated with deleted row
+ - inserting single property set that and associating it with new row
+ - all property sets are cleared when view's data is cleared (using clear())
  - setting view's 'dirty' flag when needed
- - signalling via KexiVieBase::propertyBufferSwitched() that current property
-   buffer has changed (e.g. on moving to other row)
+ - signalling via KexiViewBase::propertySetSwitched() that current property
+   set has changed (e.g. on moving to other row)
 */
 class KEXIDATATABLE_EXPORT KexiDataAwarePropertySet : public QObject
 {
@@ -65,14 +65,22 @@ class KEXIDATATABLE_EXPORT KexiDataAwarePropertySet : public QObject
 		virtual ~KexiDataAwarePropertySet();
 
 		uint size() const;
+
 		KoProperty::Set* currentPropertySet() const;
+
 		uint currentRow() const;
+
 		inline KoProperty::Set* at(uint row) const { return m_sets[row]; }
 
-		/*! \return buffer assigned for \a item or null it \a item has no
-		 buffer assigned or it's not owned by assigned table view or
+		/*! \return a pointer to property set assigned for \a item or null if \a item has no
+		 property set assigned or it's not owned by assigned table view or
 		 if assigned table view has no data set. */
-		KoProperty::Set* listForItem(KexiTableItem& item);
+		KoProperty::Set* findPropertySetForItem(KexiTableItem& item);
+
+		/*! \return number of the first row containing \a propertyName property equal to \a value.
+		 This is used e.g. in the Table Designer to find a row by field name. 
+		 If no such row has been found, -1 is returned. */
+		int findRowForPropertyValue(const QCString& propertyName, const QVariant& value);
 
 	signals:
 		/*! Emmited when row is deleted.
@@ -90,21 +98,21 @@ class KEXIDATATABLE_EXPORT KexiDataAwarePropertySet : public QObject
 
 		void clear(uint minimumSize = 0);
 
-		/*! Inserts \a buf buffer at \a row position.
+		/*! Inserts \a set property set at \a row position.
 		 If there was a buffer at this position before, it will be destroyed.
-		 If \a newOne is true, the property buffer will be marked as newly created,
+		 If \a newOne is true, the property set will be marked as newly created,
 		 simply by adding "newrow" property.
 
-		 The buffer \a buf will be owned by this object, so you should not
-		 delete this buffer by hand but call removeCurrentPropertySet()
+		 The property set \a set will be owned by this object, so you should not
+		 delete this property set by hand but call removeCurrentPropertySet()
 		 or remove(uint) instead.
-		 Note that buffer's parent (QObject::parent()) must be null
+		 Note that property set's parent (QObject::parent()) must be null
 		 or qual to this KexiDataAwarePropertySet object, otherwise this method
 		 will fail with a warning.
 		*/
-		void insert(uint row, KoProperty::Set* buf, bool newOne = false);
+		void insert(uint row, KoProperty::Set* set, bool newOne = false);
 
-		/*! Removed a buffer at \a row position. */
+		/*! Removed a property set at \a row position. */
 		void remove(uint row);
 
 	protected slots:
@@ -123,11 +131,11 @@ class KEXIDATATABLE_EXPORT KexiDataAwarePropertySet : public QObject
 		//! Called on selecting another cell in a tableview.
 		void slotCellSelected(int, int row);
 
-		//! Called on clearing tableview's data: just clears all buffers.
+		//! Called on clearing tableview's data: just clears all property sets.
 		void slotReloadRequested();
 
 	protected:
-		SetVector m_sets; //!< prop. buffers vector
+		SetVector m_sets; //!< prop. sets vector
 
 		QGuardedPtr<KexiViewBase> m_view;
 		KexiDataAwareObjectInterface* m_dataObject;

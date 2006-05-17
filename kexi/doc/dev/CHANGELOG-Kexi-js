@@ -7,10 +7,105 @@
 -----------------------------------------------------------------------------
 
 For most important commits use: CCMAIL:kexi-devel@kde.org
-Use CCMAIL:###-done@bugs.kde.org
+
+For interesting commits use: 
+FEATURE: <desctiption>
+CCMAIL:danny@commit-digest.org
+
+For bugfixes use CCMAIL:###-done@bugs.kde.org
 
 TODO:
 - inform Raphael about koffice.org/1.5/ url, give him the php code
+
+~~~~~~~~~~~~~~~~ 1.0.1 bugfix release (with KOffice 1.5.1)  ~~~~~~~~~~~~~~~~
+
+2006-05-17
+Main Window
+- Project Navigator: remove Enter and CTRL+Enter accels, 
+  as these blocks other actions
+- Project Navigator: fix setting focus
+1.0/2.0: ported
+
+2006-05-16
+Migration
+- display error for not found import/export driver
+1.0/2.0: ported
+Startup
+- (temporary) do not propose importing broken SQLite databases files
+  as there is no import driver implemented yet; display error message instead
+1.0/2.0: ported
+Table Designer
+- fixed saving boolean types for table design
+1.0/2.0: ported
+
+2006-05-15
+General
+- -execute command line option added; useful for executing macros, scripts, etc.
+2.0: ported
+Table View
+- small API and source code improvements (s/buf/set)
+2.0: ported
+KoProperty
+- fixed making a deep copy of Set object containing custom properties
+- deep copy of Set object now maintains the original order
+- fixed possible crash on deleting Set object created by copy constructor
+1.0/2.0: ported
+
+2006-05-09
+KoProperty
+- API changed: a few methods are now const; optimization
+2.0: ported
+
+2006-05-08
+KexiDB
+- fixed converting floating-point values to SQL-compatible strings when the number 
+  was provided as string QVariant
+1.0/2.0: ported
+Forms
+- fixed entering floating-point values for locales where ',', not '.' is the fractional point
+1.0/2.0: ported
+Query Designer
+- show error message when switching to other view failed (i18n-safe)
+- just show empty editor when opening a design in text view and there is no sql 
+  statement found in the backend
+1.0/2.0: ported
+MDB Import
+- fixed importing decimal (numeric) values 
+  (by fixing setting fractional point's position and adding negative sign when needed)
+1.0: ported
+
+2006-05-05
+Table Designer
+- Undo/Redo actions added and integrated with table altering 
+Internal
+- "AlterTable" tab added to the "Kexi Internal Debugger" window
+
+~~~~~~~~~~~~~~~~ 2006.1 (OOPL) ~~~~~~~~~~~~~~~~
+
+2006-05-04
+Main Window
+- fixed crash when double (or single, depending on the settings) clicking 
+  on the empty area of the Project Browser
+1.0/2.0: ported
+Query Designer
+- fix saving design changes while in Data View
+1.0/2.0: ported
+
+2006-05-02
+CSV Import Dialog
+- fixed importing floating-point values where there are integer 
+  and floating-point values mixed
+1.0/2.0: ported
+MDB Import
+- fixed importing floating-point or decimal values (there is still a bug in mdbtools 
+  with fetching decimal values)
+KexiDB
+- fixed building SQL INSERT statements for "prepared statement"
+1.0/2.0: ported
+
+2006-05-01
+KexiDB
+- ported to Qt4; tests/newapi works
 
 2006-04-28
 KexiDB
@@ -27,6 +122,9 @@ General
 - "Kexi Internal Debugger" introduced to help in Kexi development; 
   "showKexiDBDebuger" in [General] should be set to true and KEXI_DEBUG_GUI defined
   to use this.
+Form Designer
+- fixed possible crash on closing form
+1.0/2.0: ported
 
 2006-04-27
 KexiDB

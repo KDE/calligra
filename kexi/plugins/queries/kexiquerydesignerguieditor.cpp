@@ -1303,7 +1303,7 @@ void KexiQueryDesignerGuiEditor::slotBeforeCellChanged(KexiTableItem *item, int 
 				}
 			}
 			bool saveOldValue = true;
-			KoProperty::Set *set = d->sets->listForItem(*item); //*propertyBuffer();
+			KoProperty::Set *set = d->sets->findPropertySetForItem(*item); //*propertyBuffer();
 			if (!set) {
 				saveOldValue = false; // no old val.
 				const int row = d->data->findRef(item);
@@ -1351,7 +1351,7 @@ void KexiQueryDesignerGuiEditor::slotBeforeCellChanged(KexiTableItem *item, int 
 			d->sets->removeCurrentPropertySet();
 		}
 		//update property
-		KoProperty::Set *set = d->sets->listForItem(*item);
+		KoProperty::Set *set = d->sets->findPropertySetForItem(*item);
 		if (set) {
 			if ((*set)["isExpression"].value().toBool()==false) {
 				(*set)["table"] = newValue;
@@ -1394,7 +1394,7 @@ void KexiQueryDesignerGuiEditor::slotBeforeCellChanged(KexiTableItem *item, int 
 //		KoProperty::Set &set = *propertySet();
 		int token;
 		QString field, table;
-		KoProperty::Set *set = d->sets->listForItem(*item); //*propertySet();
+		KoProperty::Set *set = d->sets->findPropertySetForItem(*item); //*propertySet();
 		if (set) {
 			field = (*set)["field"].value().toString();
 			table = (*set)["table"].value().toString();

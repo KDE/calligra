@@ -752,7 +752,7 @@ MDB Migration:
 === Kexi Web Site TODO ===
 - move to mediawiki (JJ?)
 - Add "Features" page like this http://www.agata.org.br/us/index.php?file=features.php
-- Extend "Creadits" page with Gold Users/Translators, etc. like here: 
+- Extend "Credits" page with Gold Users/Translators, etc. like here: 
    http://www.agata.org.br/us/index.php?file=thanks.php
 
 AUTOFIELD:
@@ -863,3 +863,7 @@ MDB Import
 
 TODO: table view
 - for FP numbers: allow to start entering value from "." or ","
+
+Forms TODO
+- add "navigationCaption" property to table and form, so "Records:" Label in the record nav. becomes e.g. "Bananas:"
+  see: http://blogs.msdn.com/thirdoffive/archive/2006/04/06/560454.aspx

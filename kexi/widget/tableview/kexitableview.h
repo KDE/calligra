@@ -298,7 +298,7 @@ public slots:
 	/*! Deletes currently selected record; does nothing if no record 
 	 is currently selected. If record is in edit mode, editing 
 	 is cancelled before deleting.  */
-	void deleteCurrentRow() { KexiDataAwareObjectInterface::deleteCurrentRow(); }
+	virtual void deleteCurrentRow() { KexiDataAwareObjectInterface::deleteCurrentRow(); }
 
 	/*! Inserts one empty row above row \a row. If \a row is -1 (the default),
 	 new row is inserted above the current row (or above 1st row if there is no current).
@@ -308,7 +308,7 @@ public slots:
 	 -read-only flag is set (see isReadOnly())
 	 \ return inserted row's data
 	*/
-	KexiTableItem *insertEmptyRow(int row = -1) 
+	virtual KexiTableItem *insertEmptyRow(int row = -1) 
 		{ return KexiDataAwareObjectInterface::insertEmptyRow(row); }
 
 	/*! Used when Return key is pressed on cell or "+" nav. button is clicked.
@@ -316,28 +316,28 @@ public slots:
 	 was displayed (in this case, \a setText is usually not empty, what means
 	 that text will be set in the cell replacing previous value).
 	*/
-	void startEditCurrentCell(const QString& setText = QString::null)
+	virtual void startEditCurrentCell(const QString& setText = QString::null)
 		{ KexiDataAwareObjectInterface::startEditCurrentCell(setText); }
 
 	/*! Deletes currently selected cell's contents, if allowed. 
 	 In most cases delete is not accepted immediately but "row editing" mode is just started. */
-	void deleteAndStartEditCurrentCell() 
+	virtual void deleteAndStartEditCurrentCell() 
 		{ KexiDataAwareObjectInterface::deleteAndStartEditCurrentCell(); }
 
 	/*! Cancels row editing All changes made to the editing 
 	 row during this current session will be undone. */
-	void cancelRowEdit() { KexiDataAwareObjectInterface::cancelRowEdit(); }
+	virtual void cancelRowEdit() { KexiDataAwareObjectInterface::cancelRowEdit(); }
 
 	/*! Accepts row editing. All changes made to the editing 
 	 row during this current session will be accepted (saved). 
 	 \return true if accepting was successfull, false otherwise 
 	 (e.g. when current row contain data that does not meet given constraints). */
-	bool acceptRowEdit() { return KexiDataAwareObjectInterface::acceptRowEdit(); }
+	virtual bool acceptRowEdit() { return KexiDataAwareObjectInterface::acceptRowEdit(); }
 
 	/*! Specifies, if this table view automatically accepts 
 	 row editing (using acceptRowEdit()) on accepting any cell's edit 
 	 (i.e. after acceptEditor()). \sa acceptsRowEditAfterCellAccepting() */
-	void setAcceptsRowEditAfterCellAccepting(bool set) 
+	virtual void setAcceptsRowEditAfterCellAccepting(bool set) 
 		{ KexiDataAwareObjectInterface::setAcceptsRowEditAfterCellAccepting(set); }
 
 	/*! Specifies, if this table accepts dropping data on the rows. 
@@ -346,9 +346,9 @@ public slots:
 	 - dragOverRow() signal will be emitted on dragging,
 	  -droppedAtRow() will be emitted on dropping
 	 By default this flag is set to false. */
-	void setDropsAtRowEnabled(bool set) { KexiDataAwareObjectInterface::setDropsAtRowEnabled(set); }
+	virtual void setDropsAtRowEnabled(bool set) { KexiDataAwareObjectInterface::setDropsAtRowEnabled(set); }
 
-	void cancelEditor() { KexiDataAwareObjectInterface::cancelEditor(); }
+	virtual void cancelEditor() { KexiDataAwareObjectInterface::cancelEditor(); }
 	virtual bool acceptEditor() { return KexiDataAwareObjectInterface::acceptEditor(); }
 
 signals:

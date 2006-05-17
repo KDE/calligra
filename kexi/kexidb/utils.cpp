@@ -590,40 +590,4 @@ QString KexiDB::formatNumberForVisibleDecimalPlaces(double value, int decimalPla
 	return KGlobal::locale()->formatNumber(value, decimalPlaces);
 }
 
-#include <ktabwidget.h>
-#include <klistview.h>
-#include <qheader.h>
-
-static KTabWidget* kexidbDebugWindow = 0;
-static KListView* kexidbCursorDebugPage = 0;
-
-#ifdef KEXI_DEBUG_GUI
-QWidget *KexiDB::createDebugWindow(QWidget *parent)
-{
-	// (this is internal code - do not use i18n() here)
-	kexidbDebugWindow = new KTabWidget(parent, "kexidbDebugWindow", Qt::WType_Dialog|Qt::WStyle_MinMax);
-	kexidbCursorDebugPage = new KListView(kexidbDebugWindow, "kexidbCursorDebugPage");
-	kexidbCursorDebugPage->addColumn("");
-	kexidbCursorDebugPage->header()->hide();
-	kexidbCursorDebugPage->setSorting(-1);
-	kexidbCursorDebugPage->setAllColumnsShowFocus ( true );
-	kexidbCursorDebugPage->setColumnWidthMode( 0, QListView::Maximum );
-	kexidbDebugWindow->addTab( kexidbCursorDebugPage, "DB Cursors" );
-	kexidbDebugWindow->resize(900, 600);
-
-	kexidbDebugWindow->setIcon( DesktopIcon("info") );
-	kexidbDebugWindow->setCaption("Kexi Internal Debugger");
-	kexidbDebugWindow->show();
-	return kexidbDebugWindow;
-}
-
-void KexiDB::addCursorDebug(const QString& text)
-{
-	if (!kexidbCursorDebugPage)
-		return;
-	KListViewItem * li = new KListViewItem( kexidbCursorDebugPage, kexidbCursorDebugPage->lastItem(), text );
-	li->setMultiLinesEnabled( true );
-}
-#endif //KEXI_DEBUG_GUI
-
 #include "utils_p.moc"

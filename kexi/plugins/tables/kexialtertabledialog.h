@@ -20,17 +20,36 @@
 #ifndef KEXIALTERTABLEDIALOG_H
 #define KEXIALTERTABLEDIALOG_H
 
+#include <koproperty/property.h>
+
 #include <kexidatatable.h>
 #include "kexitablepart.h"
 
 class KexiTableItem;
 class KexiAlterTableDialogPrivate;
+class KCommand;
 
 namespace KoProperty {
 	class Set;
-	class Property;
 }
 
+//! Design view of the Table Designer
+/*! Contains a spreadsheet-like space for entering field definitions.
+ Property editor is provided for altering field definitions.
+ 
+ The view also supports Undo and Redo operations.
+ These are connected to a factility creating a list of actions used 
+ by AlterTableHandler to perform required operation of altering the table.
+
+ Altering itself is performed upon design saving (storeData()). 
+ Saving unstored designs just creates a new table.
+ Saving changes made to empty (not filled with data) table is performed 
+ by physically deleting the previous table schema and recreating it
+ TODO: this will be not quite when we have db relationships supported.
+
+ Saving changes made to table containing data requires use of the AlterTableHandler
+ functionality.
+*/
 class KexiAlterTableDialog : public KexiDataTable
 {
 	Q_OBJECT
@@ -44,18 +63,42 @@ class KexiAlterTableDialog : public KexiDataTable
 
 		KexiTablePart::TempData* tempData() const;
 
-//		virtual QWidget* mainWidget();
-//		KexiDataTableView* tableView() const { return m_view; }
+		/*! Clears field informaton entered for row. 
+		 This is performed by removing values from caption and data type columns.
+		 Used by InsertFieldCommand to undo inserting a new field. */
+		void clearRow(int row);
 
-//		virtual QSize minimumSizeHint() const;
-//		virtual QSize sizeHint() const;
+		/*! Inserts a new \a field for \a row. 
+		 Property set is also created. If \a set is not 0 (the default), 
+		 it will be copied into the new set.
+		 Used by InsertFieldCommand to insert a new field. */
+		void insertField( int row/*, const KexiDB::Field& field*/, KoProperty::Set& set);
+
+		/*! Inserts a new empty row at position \a row. 
+		 Used by RemoveFieldCommand as a part of undo inserting a new field. */
+		void insertEmptyRow( int row );
+
+		/*! Inserts a field for \a row. All the subsequent fields are moved up.
+		 Property set is also deleted.
+		 Used by RemoveFieldCommand to remove a field. */
+		void deleteField( int row );
+
+		/*! Changes property \a propertyName to \a newValue for a field pointed by \a fieldUID.
+		 If \a listData is not NULL and not empty, a deep copy of it is passed to Property::setListData().
+		 If \a listData \a nlist if not NULL but empty, Property::setListData(0) is called.
+		 Used by ChangeFieldPropertyCommand to change field's property. */
+		void changeFieldProperty( int fieldUID, const QCString& propertyName, 
+			const QVariant& newValue, KoProperty::Property::ListData* const listData = 0 );
+
+		/*! Changes visibility of property \a propertyName to \a visible for a field pointed by \a fieldUID.
+		 Used by ChangePropertyVisibilityCommand. */
+		void changePropertyVisibility( int fieldUID, const QCString& propertyName, bool visible );
 
 	protected slots:
 		/*! Equivalent to updateActions(false). Called on row insert/delete
 		 in a KexiDataAwarePropertySet. */
 		void updateActions();
 
-//		void slotCellSelected(int col, int row);
 		virtual void slotUpdateRowActions(int row);
 
 		//! Called before cell change in tableview.
@@ -79,11 +122,14 @@ class KexiAlterTableDialog : public KexiDataTable
 		 Does nothing for empty row. */
 		void slotTogglePrimaryKey();
 
-/*		//! Called before row updating in tableview.
-		void slotAboutToUpdateRow(KexiTableItem* item,
-			KexiDB::RowEditBuffer* buffer, KexiDB::ResultInfo* result);
-*/
-//		void slotEmptyRowInserted(KexiTableItem*, uint index);
+		/*! Undoes the recently performed action. */
+		void slotUndo();
+
+		/*! Redoes the recently undoed action. */
+		void slotRedo();
+
+		/*! Reaction on command execution from the command history */
+		void slotCommandExecuted(KCommand *command);
 
 	protected:
 		virtual void updateActions(bool activated);
@@ -95,9 +141,10 @@ class KexiAlterTableDialog : public KexiDataTable
 		 The property set will be asigned to \a row, and owned by this dialog.
 		 If \a newOne is true, the property set will be marked as newly created.
 		 \return newly created property set. */
-		KoProperty::Set* createPropertySet( int row, KexiDB::Field *field, bool newOne = false );
+		KoProperty::Set* createPropertySet( int row, const KexiDB::Field& field, bool newOne = false );
 
 		virtual tristate beforeSwitchTo(int mode, bool &dontStore);
+
 		virtual tristate afterSwitchFrom(int mode);
 
 		/*! \return property set associated with currently selected row (i.e. field)
@@ -126,9 +173,17 @@ class KexiAlterTableDialog : public KexiDataTable
 		void getSubTypeListData(KexiDB::Field::TypeGroup fieldTypeGroup, 
 			QStringList& stringsList, QStringList& namesList);
 
+		void addHistoryCommand( KCommand* command, bool execute );
+
+		//! Updates undo/redo shared actions availability by looking at command history's action
+		void updateUndoRedoActions();
+
+#ifdef KEXI_DEBUG_GUI
+		void debugCommand( KCommand* command, int nestingLevel );
+#endif
+
 	private:
 		KexiAlterTableDialogPrivate *d;
 };
 
 #endif
-
