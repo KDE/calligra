@@ -55,7 +55,7 @@ bool convert( const KUrl & uIn, const QString & /*inputFormat*/, const KUrl & uO
 
     manager->setBatchMode( batch );
 
-    QByteArray mime( outputFormat.latin1() );
+    QByteArray mime( outputFormat.toLatin1() );
     KoFilter::ConversionStatus status = manager->exp0rt( uOut.path(), mime );
     progressObj.slotProgress(-1);
 

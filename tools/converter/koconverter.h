@@ -26,7 +26,7 @@ class ProgressObject : public QObject
 {
     Q_OBJECT
 public:
-    ProgressObject() : QObject( 0, 0 ) { }
+    ProgressObject() : QObject( 0 ) { }
 public slots:
     void slotProgress(int);
 };
