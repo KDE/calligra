@@ -158,6 +158,7 @@ KexiMacroPropertyWidget::~KexiMacroPropertyWidget()
 QVariant KexiMacroPropertyWidget::value() const
 {
 	//TODO
+	return QVariant();
 }
 
 void KexiMacroPropertyWidget::setValue(const QVariant& value, bool emitChange)
