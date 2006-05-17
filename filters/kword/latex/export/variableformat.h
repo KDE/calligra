@@ -49,7 +49,7 @@ typedef enum _EVarType EVarType;
 /***********************************************************************/
 
 /**
- * This class hold informations formating the textzone. It may be incorporated
+ * This class holds information formatting the textzone. It may be incorporated
  * in few time in textzone.
  */
 class VariableFormat: public TextZone

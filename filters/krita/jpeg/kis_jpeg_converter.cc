@@ -249,7 +249,7 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KUrl& uri)
     
     m_img->addLayer(KisLayerSP(layer.data()), m_img->rootLayer(), KisLayerSP(0));
     
-    // Read exif informations
+    // Read exif information
 
     kDebug(41008) << "Looking for exif information" << endl;
     
@@ -410,12 +410,12 @@ KisImageBuilder_Result KisJPEGConverter::buildFile(const KUrl& uri, KisPaintLaye
         unsigned char* exif_data;
         unsigned int exif_size;
         exifIO.saveExifToMem( &exif_data, &exif_size);
-        kDebug(41008) << "Exif informations size is " << exif_size << endl;
+        kDebug(41008) << "Exif information size is " << exif_size << endl;
         if (exif_size < MAX_DATA_BYTES_IN_MARKER)
         {
             jpeg_write_marker(&cinfo, JPEG_APP0 + 1, exif_data, exif_size);
         } else {
-            kDebug(41008) << "exif informations couldn't be saved." << endl;
+            kDebug(41008) << "exif information couldn't be saved." << endl;
         }
     }
     

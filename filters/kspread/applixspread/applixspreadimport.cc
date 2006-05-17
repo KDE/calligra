@@ -195,10 +195,10 @@ KoFilter::ConversionStatus APPLIXSPREADImport::convert( const QByteArray& from, 
           // Search for ':'
           pos = mystr.find (':');
 
-          // Copy cellnumber informations
+          // Copy cellnumber information
           cellnostr = mystr.left (pos);
 
-          // Delete cellnumber informations
+          // Delete cellnumber information
           mystr.remove (0, pos+1);
           // alllenght = alllenght - pos - 1;
 
@@ -206,10 +206,10 @@ KoFilter::ConversionStatus APPLIXSPREADImport::convert( const QByteArray& from, 
           // Split Table and Cell Number
           pos = cellnostr.find ('!');
 
-          // Copy tabnumber informations
+          // Copy tabnumber information
           tabnostr = cellnostr.left (pos);
 
-          // Delete cellnumber informations
+          // Delete cellnumber information
           cellnostr.remove (0, pos+1);
 
           int  len = cellnostr.length ();

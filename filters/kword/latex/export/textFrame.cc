@@ -82,7 +82,7 @@ void TextFrame::analyse(const QDomNode balise)
 		{
 			// 1. Create a paragraph :
 			Para *prg = new Para(this);
-			// 2. Add the informations :
+			// 2. Add the information :
 			prg->analyse(getChild(balise, index));
 			if(prg->getInfo() == EP_FOOTNOTE)
 			{

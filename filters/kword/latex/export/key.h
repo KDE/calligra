@@ -106,7 +106,7 @@ class Key: public XmlParser
 		 */
 
 		/**
-		 * Get informations from a markup tree.
+		 * Get information from a markup tree.
 		 */
 		void analyse         (const QDomNode);
 

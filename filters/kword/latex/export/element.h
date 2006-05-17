@@ -109,7 +109,7 @@ class Element: public XmlParser, public Border
 		_rows,
 		_cols;
 
-	/* USEFULL DATA */
+	/* USEFUL DATA */
 
 	public:
 		/**
@@ -158,11 +158,11 @@ class Element: public XmlParser, public Border
 		void setCols     (int         c)   { _cols      = c;   }
 
 		 /**
-		 * Helpfull functions
+		 * Helpful functions
 		 */
 
 		/**
-		 * Get informations about frameset markupt only from a
+		 * Get information about frameset markup only from a
 		 * markup tree.
 		 */
 		virtual void analyse(const QDomNode);

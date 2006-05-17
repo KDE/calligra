@@ -64,7 +64,7 @@ bool WMFImportParser::begin() {
     }
     else {
         // Placeable Wmf store the boundingRect() in pixel and the default DPI
-        // The placeable format doesn't have informations on witch Unit to use
+        // The placeable format doesn't have information on which Unit to use
         // so we choose millimeters by default
         mDoc->setUnit( KoUnit::U_MM );
         mDoc->setWidth( INCH_TO_POINT( (double)bounding.width() / defaultDpi() ) );  

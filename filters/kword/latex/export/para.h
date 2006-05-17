@@ -30,7 +30,7 @@
 
 /*#include "listeformat.h"*/	/* children class contents the zone (italic, footnote,
 				   variable. */
-#include "layout.h"		/* set of informations about the paragraph style. */
+#include "layout.h"		/* set of information about the paragraph style. */
 #include "element.h"		/* to use the father class. */
 #include "format.h"		/* child class */
 
@@ -143,7 +143,7 @@ class Para: public Layout
 		 */
 
 		/**
-		 * Get informations from a markup tree.
+		 * Get information from a markup tree.
 		 */
 		void analyse         (const QDomNode);
 

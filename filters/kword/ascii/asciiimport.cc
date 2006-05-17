@@ -614,7 +614,7 @@ bool ASCIIImport::Table( QString *Line, int *linecount, int no_lines,
    /* This method examines a paragraph for embedded tables.
       If none are found, it returns. If tables are found then it
       writes out the paragraph including the tables. It does not
-      check for embedded bullet or dash lists which is a seperate
+      check for embedded bullet or dash lists which is a separate
       method.
       Arguments
          QString *Line - pointer to the array of text lines in the paragraph.

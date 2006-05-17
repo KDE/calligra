@@ -199,7 +199,7 @@ XSLTProc::xsltProcess(xmlDocPtr doc, xsltStylesheetPtr cur, const char *filename
 #ifdef LIBXML_XINCLUDE_ENABLED
     printf("      --xinclude : do XInclude processing on document intput\n");
 #endif
-    printf("      --profile or --norman : dump profiling informations \n");
+    printf("      --profile or --norman : dump profiling information \n");
 }*/
 
 void XSLTProc::addParam(QString name, QString value)

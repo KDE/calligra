@@ -173,7 +173,7 @@ namespace {
             if (profile == (StringInfo *) NULL)
                 continue;
 
-            // XXX: icc will be written seperately?
+            // XXX: icc will be written separately?
             if (QString::compare(name, "icc") == 0)
                 continue;
 
@@ -415,7 +415,7 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KUrl& uri, bool isB
             Q_CHECK_PTR(m_img);
             m_img->blockSignals(true); // Don't send out signals while we're building the image
             
-            // XXX I'm assuming seperate layers won't have other profile things like EXIF
+            // XXX I'm assuming separate layers won't have other profile things like EXIF
             setAnnotationsForImage(image, m_img);
         }
 

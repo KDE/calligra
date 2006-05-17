@@ -115,7 +115,7 @@ class TextFrame: public Element
 		//Para* searchFootnote(const QString);
 
 		/**
-		 * Get informations from a markup tree.
+		 * Get information from a markup tree.
 		 */
 		void analyse(const QDomNode);
 
@@ -126,7 +126,7 @@ class TextFrame: public Element
 
 	private:
 		/**
-		 * Get informations from a markup tree (only parameters
+		 * Get information from a markup tree (only parameters
 		 * in a frame.
 		 */
 		void analyseParamFrame(const QDomNode);

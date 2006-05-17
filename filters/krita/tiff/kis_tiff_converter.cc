@@ -344,7 +344,7 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory( TIFF* image)
     }
     KisPaintLayer* layer = new KisPaintLayer(m_img.data(), m_img -> nextLayerName(), quint8_MAX);
     tdata_t buf = 0;
-    tdata_t* ps_buf = 0; // used only for planar configuration seperated
+    tdata_t* ps_buf = 0; // used only for planar configuration separated
     TIFFStreamBase* tiffstream;
     
     KisTIFFReaderBase* tiffReader = 0;
@@ -629,7 +629,7 @@ KisImageBuilder_Result KisTIFFConverter::buildFile(const KUrl& uri, KisImageSP i
         return (KisImageBuilder_RESULT_FAILURE);
     }
 
-    // Set the document informations
+    // Set the document information
     KoDocumentInfo * info = m_doc->documentInfo();
     QString title = info->aboutInfo("title");
     if(!title.isEmpty())

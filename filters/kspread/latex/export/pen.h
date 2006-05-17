@@ -75,7 +75,7 @@ class Pen: public XmlParser
 		 */
 
 		/**
-		 * Get informations from a markup tree (only param of a format).
+		 * Get information from a markup tree (only param of a format).
 		 */
 		virtual void analyse(const QDomNode);
 

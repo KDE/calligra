@@ -117,7 +117,7 @@ void Layout::analyseFollowing(const QDomNode balise)
 /*******************************************/
 /* analyseEnv                              */
 /*******************************************/
-/* Get informations about environment.     */
+/* Get information about environment.      */
 /*******************************************/
 void Layout::analyseEnv(const QDomNode balise)
 {
@@ -149,7 +149,7 @@ void Layout::analyseBreakLine(const QDomNode balise)
 /*******************************************/
 /* analyseCounter                          */
 /*******************************************/
-/* Get all informations about counter.     */
+/* Get all information about counter.      */
 /* If I use a counter, I must include a tex*/
 /* package.                                */
 /*******************************************/

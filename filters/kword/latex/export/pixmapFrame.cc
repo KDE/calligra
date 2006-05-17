@@ -61,8 +61,8 @@ void PixmapFrame::setKeepAspectRatio(const QString ratio)
 /*******************************************/
 /* analyse                                 */
 /*******************************************/
-/* Get informations about a pixmap stored  */
-/* in the tared file.                      */
+/* Get information about a pixmap stored   */
+/* in the tarred file.                     */
 /*******************************************/
 void PixmapFrame::analyse(const QDomNode balise)
 {
@@ -92,8 +92,8 @@ void PixmapFrame::analyse(const QDomNode balise)
 /*******************************************/
 /* getPixmap                               */
 /*******************************************/
-/* Get informations about a pixmap stored  */
-/* in the tared file.                      */
+/* Get information about a pixmap stored   */
+/* in the tarred file.                     */
 /*******************************************/
 void PixmapFrame::getPixmap(const QDomNode balise_initiale)
 {

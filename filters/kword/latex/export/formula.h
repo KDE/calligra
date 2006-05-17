@@ -94,7 +94,7 @@ class Formula: public Element
 		 */
 
 		/**
-		 * Get informations from a markup tree and put the formula
+		 * Get information from a markup tree and put the formula
 		 * in a QString.
 		 */
 		void analyse(const QDomNode);
