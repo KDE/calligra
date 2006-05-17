@@ -65,10 +65,20 @@ class KexiMacroProperty
 		You should return true for child properties, and false for others. */
 		virtual bool handleValue() const;
 
-		
+		/** \return the \a KoMacro::MacroItem this custom property has or
+		NULL if there was no item provided. */
 		KSharedPtr<KoMacro::MacroItem> macroItem() const;
+
+		/** \return the name the property has in the \a KoMacro::MacroItem
+		above. Is QString::null if there was no item provided. */
 		QString name() const;
+
+		/** \return the \a KoMacro::Variable which has the name @a name()
+		in the item @a macroItem() . If such a variable doesn't exists NULL
+		is returned. */
 		KSharedPtr<KoMacro::Variable> variable() const;
+
+		/** Set the @a macroItem() to @p macroitem and the @a name() to @p name . */
 		bool set(KSharedPtr<KoMacro::MacroItem> macroitem, const QString& name);
 
 		/** Factory function to create a new @a KoProperty::Property instance
@@ -139,15 +149,12 @@ class KexiMacroPropertyWidget : public KoProperty::Widget
 		the @p KoProperty::Widget::valueChanged signal will be emitted. */
 		virtual void setValue(const QVariant& value, bool emitChange=true);
 
-		//virtual void setProperty(Property *property);
 		//virtual void drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &value);
 
 	protected:
 
 		/** Called if the value should be read only. */
 		virtual void setReadOnlyInternal(bool readOnly);
-
-		//QString keyForValue(const QVariant &value);
 
 	private slots:
 
