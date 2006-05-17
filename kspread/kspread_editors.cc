@@ -29,6 +29,8 @@
 #include "functions.h"
 
 #include <kdebug.h>
+#include <kdialog.h>
+#include <kicon.h>
 #include <klistbox.h>
 #include <ktextedit.h>
 
@@ -45,6 +47,7 @@
 #include <QLabel>
 #include <QResizeEvent>
 #include <QTimer>
+#include <QToolButton>
 #include <QToolTip>
 #include <QVBoxLayout>
 //Added by qt3to4:
@@ -1568,5 +1571,182 @@ void EditWidget::setText( const QString& t )
 }
 
 
+
+/*****************************************************************************
+ *
+ * RegionSelector
+ *
+ ****************************************************************************/
+
+class RegionSelector::Private
+{
+  public:
+    View* view;
+    QDialog* parentDialog;
+    KDialog* dialog;
+    QLabel* label;
+    KTextEdit* textEdit;
+    QToolButton* button;
+    DisplayMode displayMode;
+    SelectionMode selectionMode;
+    static RegionSelector* s_focussedSelector;
+};
+
+RegionSelector* RegionSelector::Private::s_focussedSelector = 0;
+
+RegionSelector::RegionSelector( View* view, QDialog* parentDialog, QWidget* parent )
+  : QWidget( parent ? parent : parentDialog ),
+    d( new Private )
+{
+  setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Minimum );
+
+  d->displayMode = Widget;
+  d->parentDialog = parentDialog;
+  d->view = view;
+  d->dialog = 0;
+  d->label = 0; // construct on setting label text [setLabel(const QString&)]
+  d->button = new QToolButton( this );
+  d->button->setCheckable( true );
+  d->button->setIcon( KIcon( "selection" ) );
+  d->textEdit = new KTextEdit( this );
+  d->textEdit->setLineWrapMode( QTextEdit::NoWrap );
+  d->textEdit->setWordWrapMode( QTextOption::NoWrap );
+  d->textEdit->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Minimum );
+  d->textEdit->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
+  d->textEdit->setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
+  d->textEdit->setFixedHeight( d->button->height() ); // FIXME
+
+  QHBoxLayout* layout = new QHBoxLayout( this );
+  layout->setMargin( 0 );
+  layout->setSpacing( 2 );
+  layout->addWidget( d->textEdit );
+  layout->addWidget( d->button );
+
+  d->button->installEventFilter( this );
+  d->textEdit->installEventFilter( this );
+  connect( d->button, SIGNAL( toggled(bool) ),
+           this, SLOT( switchDisplayMode(bool) ) );
+  connect( d->view->choice(), SIGNAL( changed(const Region&) ),
+           this, SLOT( choiceChanged() ) );
+}
+
+RegionSelector::~RegionSelector()
+{
+  d->view->canvasWidget()->endChoose();
+  delete d;
+}
+
+void RegionSelector::setSelectionMode( SelectionMode mode )
+{
+  d->selectionMode = mode;
+  // TODO adjust selection
+}
+
+void RegionSelector::setLabel( const QString& text )
+{
+  if ( text.isEmpty() )
+  {
+    if ( d->label )
+    {
+      delete d->label;
+      d->label = 0;
+    }
+  }
+  else
+  {
+    if ( !d->label )
+    {
+      d->label = new QLabel( text, this );
+      d->label->setBuddy( d->textEdit );
+      static_cast<QHBoxLayout*>( layout() )->insertWidget( 0, d->label );
+    }
+  }
+}
+
+KTextEdit* RegionSelector::textEdit() const
+{
+  return d->textEdit;
+}
+
+bool RegionSelector::eventFilter( QObject* object, QEvent* event )
+{
+  if ( event->type() == QEvent::Close )
+  {
+    if ( object == d->dialog  && d->button->isChecked() )
+    {
+      // TODO Stefan: handle as button click
+//       d->button->toggle();
+      event->ignore();
+      return true; // eat it
+    }
+  }
+  else if ( event->type() == QEvent::FocusIn )
+  {
+    Private::s_focussedSelector = this;
+    d->view->canvasWidget()->startChoose();
+    // TODO Stefan: initialize choice
+  }
+  return QObject::eventFilter( object, event );
+}
+
+void RegionSelector::switchDisplayMode( bool state )
+{
+  Q_UNUSED(state)
+      kDebug() << k_funcinfo << endl;
+
+  if ( d->displayMode == Widget )
+  {
+    d->displayMode = Dialog;
+
+    d->dialog = new KDialog( d->parentDialog->parentWidget() );
+    d->dialog->resize( 400, 20 );
+    d->dialog->move( d->parentDialog->pos() );
+    d->dialog->setModal( false );
+
+    if ( d->selectionMode == SingleCell )
+    {
+      d->dialog->setCaption( i18n("Select Single Cell") );
+    }
+    else // if ( d->selectionMode == MultipleCells )
+    {
+      d->dialog->setCaption( i18n("Select Multiple Cells") );
+    }
+
+    QHBoxLayout* layout = new QHBoxLayout( d->dialog );
+    layout->setMargin( 0 );
+    layout->setSpacing( 0 );
+    layout->addWidget( d->textEdit );
+    layout->addWidget( d->button );
+
+    d->dialog->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Fixed );
+    d->dialog->installEventFilter( this );
+    d->parentDialog->hide();
+    d->dialog->show();
+  }
+  else
+  {
+    d->displayMode = Widget;
+
+    layout()->addWidget( d->textEdit );
+    layout()->addWidget( d->button );
+
+    d->parentDialog->move( d->dialog->pos() );
+    delete d->dialog;
+    d->dialog = 0;
+    d->parentDialog->show();
+  }
+}
+
+void RegionSelector::choiceChanged()
+{
+  if ( Private::s_focussedSelector != this )
+    return;
+
+  if ( d->view->choice()->isValid() )
+  {
+    QString area = d->view->choice()->name();
+    d->textEdit->setPlainText( area );
+  }
+}
 
 #include "kspread_editors.moc"

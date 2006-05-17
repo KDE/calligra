@@ -50,6 +50,7 @@ namespace KSpread
 {
 class Cell;
 class Point;
+class RegionSelector;
 class Sheet;
 class View;
 
@@ -62,15 +63,9 @@ class GoalSeekDialog : public KDialog
                       bool modal = false, Qt::WFlags fl = 0 );
    ~GoalSeekDialog();
 
-  /**
-   * Find out which widget got focus.
-   */
-  bool eventFilter( QObject* obj, QEvent* ev );
-
  public slots:
   void buttonOkClicked();
   void buttonCancelClicked();
-  void slotSelectionChanged();
 
  protected:
   virtual void closeEvent ( QCloseEvent * );
@@ -92,9 +87,6 @@ class GoalSeekDialog : public KDialog
   QString       m_sheetName;
 
   QFrame      * m_startFrame;
-  QLineEdit   * m_targetValueEdit;
-  QLineEdit   * m_targetEdit;
-  QLineEdit   * m_sourceEdit;
   QPushButton * m_buttonOk;
   QPushButton * m_buttonCancel;
   QFrame      * m_resultFrame;
@@ -104,12 +96,9 @@ class GoalSeekDialog : public KDialog
   QLabel      * m_currentValue;
   QLabel      * m_resultText;
 
-  /**
-   * Tells which of the lineedits has the logical focus currently.
-   * It may happen that a lineedit does not have qt focus but
-   * logical focus but not the other way round.
-   */
-  QLineEdit   * m_focus;
+  RegionSelector* m_selector1;
+  RegionSelector* m_selector2;
+  RegionSelector* m_selector3;
 
   QPoint        m_anchor;
   QPoint        m_marker;

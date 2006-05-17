@@ -319,6 +319,39 @@ private:
     bool isArray;
 };
 
+
+/**
+ * A minimizable line edit for choosing cell regions.
+ * \author Stefan Nikolaus <stefan.nikolaus@kdemail.net>
+ */
+class RegionSelector : public QWidget
+{
+  Q_OBJECT
+
+public:
+  enum SelectionMode { SingleCell, MutipleCells };
+  enum DisplayMode { Widget, Dialog };
+
+  RegionSelector( View* view, QDialog* parentDialog, QWidget* parent = 0 );
+  ~RegionSelector();
+
+  void setSelectionMode( SelectionMode mode );
+  void setLabel( const QString& text );
+
+  KTextEdit* textEdit() const;
+
+protected:
+  bool eventFilter( QObject* obj, QEvent* event );
+
+protected Q_SLOTS:
+  void switchDisplayMode( bool state );
+  void choiceChanged();
+
+private:
+  class Private;
+  Private * const d;
+};
+
 } // namespace KSpread
 
 #endif

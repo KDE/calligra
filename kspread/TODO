@@ -193,6 +193,12 @@ Things to do after the release of KOffice 1.4
     - Move sheet properties to separate dialog.
       They are currently part of KSpread config dialog.
   + Indent and multiline doesn't work together			      2 ----
+  + RegionSelector						      2 ----
+    - add syntax highlighting
+    - intialize choice on focus in events, if necessary
+    - fix the line edit height
+    - implement single cell restriction (maybe in Selection)
+    - jump back to parent dialog on closing the mini dialog
 
 
 * General features
