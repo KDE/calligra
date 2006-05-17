@@ -451,8 +451,9 @@ KexiMacroPropertyWidget::KexiMacroPropertyWidget(KoProperty::Property* property,
 
 	d->combobox->setFocusProxy( d->listbox->editItem()->widget() );
 	setFocusWidget(d->combobox);
-	connect(d->combobox, SIGNAL(activated(int)), this, SLOT(propertyValueChanged()));
-	connect(d->macroproperty, SIGNAL(valueChanged()), this, SLOT(propertyValueChanged()));
+	connect(d->combobox, SIGNAL(textChanged(const QString&)), this, SLOT(slotComboBoxChanged()));
+	connect(d->combobox, SIGNAL(activated(int)), this, SLOT(slotComboBoxActivated()));
+	connect(d->macroproperty, SIGNAL(valueChanged()), this, SLOT(slotPropertyValueChanged()));
 }
 
 KexiMacroPropertyWidget::~KexiMacroPropertyWidget()
@@ -484,7 +485,12 @@ void KexiMacroPropertyWidget::setReadOnlyInternal(bool readOnly)
 	//kdDebug()<<"KexiMacroPropertyWidget::setReadOnlyInternal() readOnly="<<readOnly<<endl;
 }
 
-void KexiMacroPropertyWidget::propertyValueChanged()
+void KexiMacroPropertyWidget::slotComboBoxChanged()
+{
+	slotPropertyValueChanged();
+}
+
+void KexiMacroPropertyWidget::slotComboBoxActivated()
 {
 	const int index = d->combobox->currentItem();
 
@@ -497,9 +503,23 @@ void KexiMacroPropertyWidget::propertyValueChanged()
 		text = d->combobox->text(index);
 	}
 
-	kdDebug()<<"KexiMacroPropertyWidget::propertyValueChanged() index="<<index<<" text="<<text<<endl;
+	kdDebug()<<"KexiMacroPropertyWidget::slotComboBoxActivated() index="<<index<<" text="<<text<<endl;
 	d->combobox->setCurrentText(text);
 	emit valueChanged(this);
+}
+
+void KexiMacroPropertyWidget::slotPropertyValueChanged()
+{
+	const int index = d->combobox->currentItem();
+
+	if(index == 0) {
+		Q_ASSERT( d->listbox->editItem()->widget() );
+		d->listbox->editItem()->widget()->setValue( value() );
+		kdDebug()<<"KexiMacroPropertyWidget::slotPropertyValueChanged() index="<<index<<" value="<<value()<<endl;
+	}
+	else {
+		kdDebug()<<"KexiMacroPropertyWidget::slotPropertyValueChanged() index="<<index<<" NOOOOOOOOOOOOOOOOOOOO"<<endl;
+	}
 }
 
 #include "keximacroproperty.moc"

@@ -158,9 +158,15 @@ class KexiMacroPropertyWidget : public KoProperty::Widget
 
 	private slots:
 
+		/** Called if the text in the KComboBox changed. */
+		void slotComboBoxChanged();
+
+		/** Called if an item in the QListBox of the KComboBox got activated. */
+		void slotComboBoxActivated();
+
 		/** Called if the value of a @a KexiMacroProperty changed to update
 		the widget and the displayed content. */
-		void propertyValueChanged();
+		void slotPropertyValueChanged();
 
 	private:
 		/** \internal d-pointer class. */
