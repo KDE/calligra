@@ -248,7 +248,7 @@ KWClassicMailMergeEditorList::KWClassicMailMergeEditorList( QWidget *parent, KWC
     setSorting( -1 );
     addColumn( i18n( "Name" ) );
     addColumn( i18n( "Value" ) );
-    header()->setMovingEnabled( FALSE );
+    header()->setMovingEnabled( false );
     connect( header(), SIGNAL( sizeChange( int, int, int ) ),
              this, SLOT( columnSizeChange( int, int, int ) ) );
 //     connect( header(), SIGNAL( sectionClicked( int ) ),
@@ -550,7 +550,7 @@ void KWClassicMailMergeEditor::removeRecord()
     } else
     {
         dbList->clear();
-        records->setEnabled( FALSE );
+        records->setEnabled( false );
     }
 
     if ( db->getNumRecords() == 0 )

@@ -117,7 +117,7 @@ public:
     void updateItems();
     void displayRecord( int i );
 
-    void setSorting( int, bool increasing = TRUE ) {
+    void setSorting( int, bool increasing = true ) {
         Q3ListView::setSorting( -1, increasing );
     }
 
