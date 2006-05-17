@@ -37,7 +37,7 @@ extern "C"
     }
 }
 
-bool ClipartCreator::create(const QString &path, int width, int height, QImage &img)
+bool ClipartCreator::create(const QString &path, int /*width*/, int /*height*/, QImage &img)
 {
     QPixmap pixmap;
     KoPicture picture;
@@ -48,11 +48,11 @@ bool ClipartCreator::create(const QString &path, int width, int height, QImage &
 
         QPainter p;
         p.begin( &pixmap );
-        p.setBackgroundColor( Qt::white );
+        p.setBackground( Qt::white );
 
         picture.draw(p, 0, 0, pixmap.width(), pixmap.height());
         p.end();
-        img = pixmap.convertToImage();
+        img = pixmap.toImage();
         return true;
     }
     else

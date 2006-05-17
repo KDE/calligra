@@ -88,8 +88,8 @@ bool KOfficeCreator::create(const QString &path, int width, int height, QImage &
         return false;
     m_completed = false;
     startTimer(5000);
-    while (!m_completed)
-        kapp->processOneEvent();
+//     while (!m_completed)
+//         kapp->processOneEvent();
     QAbstractEventDispatcher::instance()->unregisterTimers(this);
 
     // render the page on a bigger pixmap and use smoothScale,
@@ -104,7 +104,7 @@ bool KOfficeCreator::create(const QString &path, int width, int height, QImage &
         pix = m_doc->generatePreview(QSize(400, 400));
     }
 
-    img = pix.convertToImage();
+    img = pix.toImage();
     return true;
 }
 

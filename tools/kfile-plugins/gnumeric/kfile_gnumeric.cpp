@@ -59,7 +59,7 @@ void GnumericPlugin::init()
     setHint(item, KFileMimeTypeInfo::Description);
 }
 
-bool GnumericPlugin::readInfo( KFileMetaInfo& info, uint what)
+bool GnumericPlugin::readInfo( KFileMetaInfo& info, uint /*what*/)
 {
     if ( info.path().isEmpty() ) // remote file
         return false;

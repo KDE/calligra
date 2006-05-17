@@ -59,14 +59,14 @@ void AbiwordPlugin::init()
     setHint(item, KFileMimeTypeInfo::Description);
 }
 
-bool AbiwordPlugin::readInfo( KFileMetaInfo& info, uint what)
+bool AbiwordPlugin::readInfo( KFileMetaInfo& info, uint /*what*/)
 {
     if ( info.path().isEmpty() ) // remote file
         return false;
 
     //Find the last extension
     QString strExt;
-    const int result=info.path().findRev('.');
+    const int result=info.path().lastIndexOf('.');
     if (result>=0)
     {
         strExt=info.path().mid(result);

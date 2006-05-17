@@ -415,7 +415,7 @@ bool KOfficePlugin::writeInfo( const KFileMetaInfo& info) const
   for (int i = childs.length(); i >= 0; --i){
 	  metaKeyNode.removeChild( childs.item(i) );
   }
-  QStringList keywordList = QStringList::split(",", info[DocumentInfo][metakeyword].value().toString().trimmed(), false);
+  QStringList keywordList = info[DocumentInfo][metakeyword].value().toString().trimmed().split( ",", QString::SkipEmptyParts );
   for ( QStringList::Iterator it = keywordList.begin(); it != keywordList.end(); ++it ) {
 	QDomElement elem = doc.createElement(metakeyword);
 	metaKeyNode.appendChild(elem);
@@ -573,7 +573,7 @@ QValidator * KOfficePlugin::createValidator(const QString &,      /* mimetype */
 					    const QString & ,     /* group */
 					    const QString &key,
 					    QObject * parent,
-					    const char * name ) const
+					    const char * /*name*/ ) const
 {
 	if (key == dclanguage)
 		return new QRegExpValidator(QRegExp("[a-zA-Z-]{1,5}"),

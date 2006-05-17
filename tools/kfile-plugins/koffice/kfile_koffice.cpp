@@ -73,7 +73,7 @@ void KOfficePlugin::makeMimeTypeInfo(const QString& mimeType)
     setHint(item, KFileMimeTypeInfo::Description);
 }
 
-bool KOfficePlugin::readInfo( KFileMetaInfo& info, uint what)
+bool KOfficePlugin::readInfo( KFileMetaInfo& info, uint /*what*/)
 {
     if ( info.path().isEmpty() ) // remote file
         return false;
