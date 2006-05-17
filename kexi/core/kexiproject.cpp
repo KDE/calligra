@@ -956,7 +956,7 @@ tristate KexiProject::dropProject(KexiProjectData* data,
 
 	if (prj.dbConnection()->isReadOnly()) {
 		handler->showErrorMessage(
-			i18n("Could not drop this project. Database connection project is opened as read only."));
+			i18n("Could not drop this project. Database connection for this project has been opened as read only."));
 		return false;
 	}
 

@@ -234,6 +234,8 @@ QWidget *KexiUtils::createDebugWindow(QWidget *parent)
 
 void KexiUtils::addDBCursorDebug(const QString& text)
 {
+	if (!debugWindowTab)
+		return;
 	if (!kexiDbCursorDebugPage) {
 		kexiDbCursorDebugPage = new KListView(debugWindowTab, "kexiDbCursorDebugPage");
 		kexiDbCursorDebugPage->addColumn("");
@@ -255,6 +257,8 @@ void KexiUtils::addDBCursorDebug(const QString& text)
 
 void KexiUtils::addAlterTableActionDebug(const QString& text, int nestingLevel)
 {
+	if (!debugWindowTab)
+		return;
 	if (!kexiAlterTableActionDebugPage) {
 		kexiAlterTableActionDebugPage = new KListView(debugWindow, "kexiAlterTableActionDebugPage");
 		kexiAlterTableActionDebugPage->addColumn("");
