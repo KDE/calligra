@@ -51,7 +51,6 @@
 
 //! indices for table columns
 #define COLUMN_ID_PK 0
-//#define COLUMN_ID_NAME 1
 #define COLUMN_ID_CAPTION 1
 #define COLUMN_ID_TYPE 2
 #define COLUMN_ID_DESC 3
@@ -706,8 +705,8 @@ kdDebug() << "++++++++++" << slist << nlist << endl;
 //! @todo should we display (passive?) dialog informing about cleared pkey?
 			}
 		}
-		if (useListData)
-			subTypeProperty->setValue( subTypeValue, false/*!rememberOldValue*/ );
+//		if (useListData)
+		subTypeProperty->setValue( subTypeValue, false/*!rememberOldValue*/ );
 		if (updatePropertiesVisibility(fieldType, set) || forcePropertySetReload) {
 			//properties' visiblility changed: refresh prop. set
 			propertySetReloaded(true);
@@ -725,17 +724,20 @@ kdDebug() << "++++++++++" << slist << nlist << endl;
 
 void KexiAlterTableDialog::slotRowUpdated(KexiTableItem *item)
 {
+	const int row = d->view->data()->findRef(item);
+	if (row < 0)
+		return;
+
 	setDirty();
 
 	//-check if the row was empty before updating
 	//if yes: we want to add a property set for this new row (field)
 	QString fieldCaption( item->at(COLUMN_ID_CAPTION).toString() );
-//	const bool buffer_allowed = !fieldName.isEmpty() && !item->at(1).isNull();
 	const bool prop_set_allowed = !item->at(COLUMN_ID_TYPE).isNull();
 
 	if (!prop_set_allowed && propertySet()) {
 		//there is a property set, but it's not allowed - remove it:
-		d->sets->removeCurrentPropertySet();
+		d->sets->remove( row ); //d->sets->removeCurrentPropertySet();
 
 		//clear 'type' column:
 		d->view->data()->clearRowEditBuffer();
@@ -768,10 +770,10 @@ void KexiAlterTableDialog::slotRowUpdated(KexiTableItem *item)
 			/*width*/0);
 //		m_newTable->addField( field );
 
-		kdDebug() << "KexiAlterTableDialog::slotRowUpdated(): " << field.debugString() << endl;
+		kexipluginsdbg << "KexiAlterTableDialog::slotRowUpdated(): " << field.debugString() << endl;
 
 		//create a new property set:
-		createPropertySet( d->view->currentRow(), &field, true );
+		createPropertySet( row, &field, true );
 //moved
 		//add a special property indicating that this is brand new buffer,
 		//not just changed
@@ -1107,7 +1109,7 @@ tristate KexiAlterTableDialog::storeData(bool dontAsk)
 	res = buildSchema(*newTable);
 //	bool ok = buildSchema(*newTable, cancel) && !cancel;
 
-	kdDebug() << "KexiAlterTableDialog::storeData() : BUILD SCHEMA:" << endl;
+	kexipluginsdbg << "KexiAlterTableDialog::storeData() : BUILD SCHEMA:" << endl;
 	newTable->debug();
 
 	KexiDB::Connection *conn = mainWin()->project()->dbConnection();
