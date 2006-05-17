@@ -117,7 +117,7 @@ class KEXICORE_EXPORT KexiProject : public QObject, public KexiDB::Object
 		 Connection is created (accessible then with KexiProject::dbConnection()).
 
 		 Since KexiProject inherits KexiDB::Object, it is possible to get error message 
-		 and other informations on error.
+		 and other information on error.
 
 		 \return true on success, false on failure, and cancelled when database exists 
 		 but \a forceOverwrite is false. */

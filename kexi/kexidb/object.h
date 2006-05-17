@@ -61,7 +61,7 @@ class KEXI_DB_EXPORT Object
 
 		/*! KexiDB library offers detailed error numbers using errorNum()
 		 and detailed error i18n'd messages using errorMsg() -
-		 these informations are not engine-dependent (almost).
+		 this information is not engine-dependent (almost).
 		 Use this in your application to give users more information on what's up.
 		 
 		 This method returns (non-i18n'd !) engine-specific error message,

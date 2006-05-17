@@ -66,7 +66,7 @@ void KexiScriptEditor::initialize(Kross::Api::ScriptAction* scriptaction)
 
     QString code = d->scriptaction->getCode();
     if(code.isNull()) {
-        // If there is no code we just add some informations.
+        // If there is no code we just add some information.
 ///@todo remove after release
         code = "# " + QStringList::split("\n", i18n(
             "This note will appear for a user in the script's source code " 

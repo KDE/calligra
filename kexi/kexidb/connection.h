@@ -707,7 +707,7 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 				QString listenerInfoString;
 		};
 //TMP// TODO: will be more generic
-		/** Register \a listener for receiving (listening) informations about changes 
+		/** Register \a listener for receiving (listening) information about changes 
 		 in TableSchema object. Changes could be: altering and removing. */
 		void registerForTableSchemaChanges(TableSchemaChangeListenerInterface& listener, 
 			TableSchema& schema);
