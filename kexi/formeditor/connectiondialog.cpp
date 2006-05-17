@@ -102,7 +102,7 @@ void
 ConnectionDialog::initTable()
 {
 	KexiTableViewColumn *col0 = new KexiTableViewColumn(i18n("OK?"), KexiDB::Field::Text);
-	col0->field()->setSubType("K3Icon");
+	col0->field()->setSubType("KIcon");
 	col0->setReadOnly(true);
 	col0->field()->setDescription(i18n("Connection correctness"));
 	m_data->addColumn(col0);

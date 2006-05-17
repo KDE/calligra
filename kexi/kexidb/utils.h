@@ -265,12 +265,6 @@ namespace KexiDB
 	 @see KexiDB::Field::visibleDecimalPlaces() */
 	KEXI_DB_EXPORT QString formatNumberForVisibleDecimalPlaces(double value, int decimalPlaces);
 
-#ifdef KEXI_DEBUG_GUI
-	//! Creates debug window for convenient KexiDB-related debugging
-	KEXI_DB_EXPORT QWidget *createDebugWindow(QWidget *parent);
-
-	KEXI_DB_EXPORT void addCursorDebug(const QString& text);
-#endif
 }
 
 #endif

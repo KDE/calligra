@@ -233,7 +233,7 @@ class KEXIDATATABLE_EXPORT KexiDataAwareObjectInterface
 		/*! Deletes currently selected record; does nothing if no record 
 		 is currently selected. If record is in edit mode, editing 
 		 is cancelled before deleting.  */
-		void deleteCurrentRow();
+		virtual void deleteCurrentRow();
 
 		/*! Inserts one empty row above row \a row. If \a row is -1 (the default),
 		 new row is inserted above the current row (or above 1st row if there is no current).
@@ -243,7 +243,7 @@ class KEXIDATATABLE_EXPORT KexiDataAwareObjectInterface
 		 -read-only flag is set (see isReadOnly())
 		 \ return inserted row's data
 		*/
-		KexiTableItem *insertEmptyRow(int row = -1);
+		virtual KexiTableItem *insertEmptyRow(int row = -1);
 
 		/*! For reimplementation: called by deleteItem(). If returns false, deleting is aborted.
 		 Default implementation just returns true. */
@@ -300,7 +300,7 @@ class KEXIDATATABLE_EXPORT KexiDataAwareObjectInterface
 		/*! Specifies, if this object automatically accepts 
 		 row editing (using acceptRowEdit()) on accepting any cell's edit 
 		 (i.e. after acceptEditor()). \sa acceptsRowEditAfterCellAccepting() */
-		void setAcceptsRowEditAfterCellAccepting(bool set);
+		virtual void setAcceptsRowEditAfterCellAccepting(bool set);
 
 		/*! \return true, if this object automatically accepts 
 		 row editing (using acceptRowEdit()) on accepting any cell's edit 
@@ -322,7 +322,7 @@ class KEXIDATATABLE_EXPORT KexiDataAwareObjectInterface
 		 - dragOverRow() signal will be emitted on dragging,
 		  -droppedAtRow() will be emitted on dropping
 		 By default this flag is set to false. */
-		void setDropsAtRowEnabled(bool set);
+		virtual void setDropsAtRowEnabled(bool set);
 
 		/*! \return currently used data (field/cell) editor or 0 if there is no data editing. */
 		inline KexiDataItemInterface *editor() const { return m_editor; }

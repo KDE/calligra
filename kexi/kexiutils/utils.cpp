@@ -21,12 +21,18 @@
 #include "utils_p.h"
 
 #include <qregexp.h>
+#include <qheader.h>
+#include <qlayout.h>
 //Added by qt3to4:
 #include <Q3CString>
 
 #include <kdebug.h>
 #include <kcursor.h>
 #include <kapplication.h>
+#include <ktabwidget.h>
+#include <k3listview.h>
+#include <kiconloader.h>
+#include <kdialogbase.h>
 
 using namespace KexiUtils;
 
@@ -210,5 +216,91 @@ void KexiUtils::simpleDecrypt(QString& string)
 	for (int i=0; i<string.length(); i++)
 		string[i] = QChar( string[i].unicode() - 47 - i );
 }
+
+static DebugWindowDialog* debugWindow = 0;
+static KTabWidget* debugWindowTab = 0;
+static KListView* kexiDbCursorDebugPage = 0;
+static KListView* kexiAlterTableActionDebugPage = 0;
+
+#ifdef KEXI_DEBUG_GUI
+QWidget *KexiUtils::createDebugWindow(QWidget *parent)
+{
+	// (this is internal code - do not use i18n() here)
+	debugWindow = new DebugWindowDialog(parent);
+	debugWindow->setSizeGripEnabled( true );
+	QBoxLayout *lyr = new QVBoxLayout(debugWindow, KDialogBase::marginHint());
+	debugWindowTab = new KTabWidget(debugWindow, "debugWindowTab");
+	lyr->addWidget( debugWindowTab );
+	debugWindow->resize(900, 600);
+	debugWindow->setIcon( DesktopIcon("info") );
+	debugWindow->setCaption("Kexi Internal Debugger");
+	debugWindow->show();
+	return debugWindow;
+}
+
+void KexiUtils::addDBCursorDebug(const QString& text)
+{
+	if (!kexiDbCursorDebugPage) {
+		kexiDbCursorDebugPage = new KListView(debugWindowTab, "kexiDbCursorDebugPage");
+		kexiDbCursorDebugPage->addColumn("");
+		kexiDbCursorDebugPage->header()->hide();
+		kexiDbCursorDebugPage->setSorting(-1);
+		kexiDbCursorDebugPage->setAllColumnsShowFocus ( true );
+		kexiDbCursorDebugPage->setColumnWidthMode( 0, QListView::Maximum );
+		kexiDbCursorDebugPage->setRootIsDecorated( true );
+		debugWindowTab->addTab( kexiDbCursorDebugPage, "DB Cursors" );
+		debugWindowTab->showPage(kexiDbCursorDebugPage);
+		kexiDbCursorDebugPage->show();
+	}
+	//add \n after (about) every 30 characters
+//TODO	QString realText
+
+	KListViewItem * li = new KListViewItem( kexiDbCursorDebugPage, kexiDbCursorDebugPage->lastItem(), text );
+	li->setMultiLinesEnabled( true );
+}
+
+void KexiUtils::addAlterTableActionDebug(const QString& text, int nestingLevel)
+{
+	if (!kexiAlterTableActionDebugPage) {
+		kexiAlterTableActionDebugPage = new KListView(debugWindow, "kexiAlterTableActionDebugPage");
+		kexiAlterTableActionDebugPage->addColumn("");
+		kexiAlterTableActionDebugPage->header()->hide();
+		kexiAlterTableActionDebugPage->setSorting(-1);
+		kexiAlterTableActionDebugPage->setAllColumnsShowFocus ( true );
+		kexiAlterTableActionDebugPage->setColumnWidthMode( 0, QListView::Maximum );
+		kexiAlterTableActionDebugPage->setRootIsDecorated( true );
+		debugWindowTab->addTab( kexiAlterTableActionDebugPage, "AlterTable Actions" );
+		debugWindowTab->showPage(kexiAlterTableActionDebugPage);
+		kexiAlterTableActionDebugPage->show();
+	}
+	KListViewItem * li;
+//	if (childOfPreviousItem) {
+	int availableNestingLevels = 0;
+	// compute availableNestingLevels
+	QListViewItem * lastItem = kexiAlterTableActionDebugPage->lastItem();
+	while (lastItem) {
+		lastItem = lastItem->parent();
+		availableNestingLevels++;
+	}
+	//go up (availableNestingLevels-levelsToGoUp) levels
+	lastItem = kexiAlterTableActionDebugPage->lastItem();
+	int levelsToGoUp = availableNestingLevels - nestingLevel;
+	while (levelsToGoUp > 0 && lastItem) {
+		lastItem = lastItem->parent();
+		levelsToGoUp--;
+	}
+	if (lastItem)
+		li = new KListViewItem( lastItem, text ); //child
+	else {
+		lastItem = kexiAlterTableActionDebugPage->lastItem();
+		while (lastItem && lastItem->parent())
+			lastItem = lastItem->parent();
+		li = new KListViewItem( kexiAlterTableActionDebugPage, lastItem, text ); //after
+	}
+	li->setOpen(true);
+	li->setMultiLinesEnabled( true );
+}
+
+#endif //KEXI_DEBUG_GUI
 
 #include "utils_p.moc"

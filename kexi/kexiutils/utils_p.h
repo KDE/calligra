@@ -22,6 +22,7 @@
 
 #include <qtimer.h>
 #include <qapplication.h>
+#include <qdialog.h>
 
 /*! @internal */
 class DelayedCursorHandler : public QObject
@@ -35,6 +36,17 @@ class DelayedCursorHandler : public QObject
 		void show();
 	protected:
 		QTimer timer;
+};
+
+/*! @internal */
+class DebugWindowDialog : public QDialog
+{
+	public:
+		explicit DebugWindowDialog( QWidget * parent )
+		 : QDialog(parent, 0, false, Qt::WType_Dialog|Qt::WStyle_MinMax|Qt::WStyle_StaysOnTop)
+		{
+			setWindowState( Qt::WindowMinimized );
+		}
 };
 
 #endif

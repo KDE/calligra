@@ -33,7 +33,6 @@
 #include <kmessagebox.h>
 
 #include <koproperty/set.h>
-#include <koproperty/property.h>
 
 #include <kexidb/cursor.h>
 #include <kexidb/tableschema.h>
@@ -46,14 +45,15 @@
 #include <keximainwindow.h>
 #include <widget/tableview/kexidataawarepropertyset.h>
 #include <widget/kexicustompropertyfactory.h>
+#include <kexiutils/utils.h>
 #include <kexidialogbase.h>
 #include <kexitableview.h>
+#include "kexitabledesignercommands.h"
 
 //#define MAX_FIELDS 101 //nice prime number
 
 //! indices for table columns
 #define COLUMN_ID_PK 0
-//#define COLUMN_ID_NAME 1
 #define COLUMN_ID_CAPTION 1
 #define COLUMN_ID_TYPE 2
 #define COLUMN_ID_DESC 3
@@ -63,24 +63,191 @@
 //! @todo remove this when BLOBs are implemented
 #define KEXI_NO_BLOB_FIELDS
 
+using namespace KexiTableDesignerCommands;
+
+//----------------------------------------------
+
+//! @internal
+//! Command group, reimplemented to get access to commands()
+class CommandGroup : public KMacroCommand
+{
+	public:
+		CommandGroup( const QString & name )
+			: KMacroCommand(name)
+		{}
+		virtual ~CommandGroup() {} 
+		const QPtrList<KCommand>& commands() const { return m_commands; }
+};
+
+//----------------------------------------------
+
 //! @internal
 class KexiAlterTableDialogPrivate
 {
 	public:
-		KexiAlterTableDialogPrivate()
-		 : sets(0)
+		KexiAlterTableDialogPrivate(KexiAlterTableDialog* dialog)
+		 : dlg(dialog)
+		 , sets(0)
 		 , dontAskOnStoreData(false)
 		 , slotTogglePrimaryKeyCalled(false)
+		 , uniqueIdCounter(0)
 		 , primaryKeyExists(false)
-		 , slotPropertyChanged_primaryQt::Key_enabled(true)
+		 , slotPropertyChanged_primaryKey_enabled(true)
 		 , slotPropertyChanged_subType_enabled(true)
+		 , addHistoryCommand_in_slotPropertyChanged_enabled(true)
+		 , addHistoryCommand_in_slotRowUpdated_enabled(true)
+		 , slotBeforeCellChanged_enabled(true)
 		{
+			historyActionCollection = new KActionCollection((QWidget*)0,"");
+			history = new KCommandHistory(historyActionCollection, true);
 		}
 
 		~KexiAlterTableDialogPrivate() {
 			delete sets;
+			delete historyActionCollection;
+			delete history;
 		}
-		
+
+		int generateUniqueId()
+		{
+			return ++uniqueIdCounter;
+		}
+
+		/*! @internal
+		 Sets property \a propertyName in property set \a set to \a newValue.
+		 If \a commandGroup is not 0, a new ChangeFieldPropertyCommand object is added there as well. 
+		 While setting the new value, addHistoryCommand_in_slotPropertyChanged_enabled is set to false,
+		 so addHistoryCommand() wont be executed in slotPropertyChanged() as an answer to setting 
+		 the property. 
+
+		 If \a forceAddCommand is false (the default) and \a newValue does not differ from curent property value
+		 (set[propertyName].value()), ChangeFieldPropertyCommand command is not added to the \a commandGroup.
+		 Otherwise, command is always added.
+
+		 \a rememberOldValue argument is passed to Property::setValue()
+
+		 If \a slist and \a nlist if not NULL and not empty, these are passed to Property::setListData().
+		 If \a slist and \a nlist if not NULL but empty, Property::setListData(0) is called.
+
+		 addHistoryCommand_in_slotPropertyChanged_enabled is then set back to the original state.
+		 */
+		void setPropertyValueIfNeeded( const KoProperty::Set& set, const QCString& propertyName, 
+			const QVariant& newValue, CommandGroup* commandGroup, 
+			bool forceAddCommand = false, bool rememberOldValue = true,
+			QStringList* const slist = 0, QStringList* const nlist = 0)
+		{
+			KoProperty::Property& property = set[propertyName];
+			QVariant oldValue( property.value() );
+
+			KoProperty::Property::ListData *oldListData = property.listData() ? 
+				new KoProperty::Property::ListData(*property.listData()) : 0; //remember because we'll change list data soon
+			if (slist && nlist) {
+				if (slist->isEmpty() || nlist->isEmpty()) {
+					property.setListData(0);
+				}
+				else {
+					property.setListData(*slist, *nlist);
+				}
+			}
+			if (oldValue == newValue && !forceAddCommand)
+				return;
+
+			const bool prev_addHistoryCommand_in_slotPropertyChanged_enabled 
+				= addHistoryCommand_in_slotPropertyChanged_enabled; //remember
+			addHistoryCommand_in_slotPropertyChanged_enabled = false;
+			if (oldValue != newValue)
+				property.setValue( newValue, rememberOldValue );
+			if (commandGroup) {
+				commandGroup->addCommand(
+					new ChangeFieldPropertyCommand( dlg, set, propertyName, oldValue, newValue,
+						oldListData, property.listData()) );
+			}
+			delete oldListData;
+			addHistoryCommand_in_slotPropertyChanged_enabled 
+				= prev_addHistoryCommand_in_slotPropertyChanged_enabled; //restore
+		}
+
+		/*! @internal
+		 Used in updatePropertiesVisibility().
+		 Does nothing if visibility should not be changed, i.e. when prop->isVisible()==visible,
+		 otherwise sets changed to true and sets visibility of property \a prop to \a visible.
+		*/
+		void setVisibilityIfNeeded( const KoProperty::Set& set, KoProperty::Property* prop, 
+			bool visible, bool &changed, CommandGroup *commandGroup )
+		{
+			if (prop->isVisible() != visible) {
+				if (commandGroup) {
+					commandGroup->addCommand( 
+						new ChangePropertyVisibilityCommand( dlg, set, prop->name(), visible ) );
+				}
+				prop->setVisible( visible );
+				changed = true;
+			}
+		}
+
+		bool updatePropertiesVisibility(KexiDB::Field::Type fieldType, KoProperty::Set &set,
+			CommandGroup *commandGroup = 0)
+		{
+			bool changed = false;
+			KoProperty::Property *prop;
+			bool visible;
+			
+			prop = &set["subType"];
+			const bool isObjectTypeGroup = set["type"].value().toInt() == (int)KexiDB::Field::BLOB;
+			kexipluginsdbg << "subType=" << prop->value().toInt() << " type=" << set["type"].value().toInt()<< endl;
+			
+			//if there is no more than 1 subType name or it's a PK: hide the property
+			visible = (prop->listData() && prop->listData()->keys.count() > 1 || isObjectTypeGroup)
+				&& set["primaryKey"].value().toBool()==false;
+			setVisibilityIfNeeded( set, prop, visible, changed, commandGroup );
+
+			prop = &set["unsigned"];
+			visible = KexiDB::Field::isNumericType(fieldType);
+			setVisibilityIfNeeded( set, prop, visible, changed, commandGroup );
+
+			prop = &set["length"];
+			visible = (fieldType == KexiDB::Field::Text);
+			if (prop->isVisible()!=visible) {
+//				prop->setVisible( visible );
+				//update the length when it makes sense
+				const int lengthToSet = visible ? KexiDB::Field::defaultTextLength() : 0;
+				setPropertyValueIfNeeded( set, "length", lengthToSet, 
+					commandGroup, false, false /*!rememberOldValue*/ );
+		//		if (lengthToSet != prop->value().toInt())
+		//			prop->setValue( lengthToSet, false );
+//				changed = true;
+			}
+			setVisibilityIfNeeded( set, prop, visible, changed, commandGroup );
+		#ifndef KEXI_NO_UNFINISHED
+			prop = &set["precision"];
+			visible = KexiDB::Field::isFPNumericType(fieldType);
+			setVisibilityIfNeeded( set, prop, visible, changed, commandGroup );
+		#endif
+			prop = &set["visibleDecimalPlaces"];
+			visible = KexiDB::supportsVisibleDecimalPlacesProperty(fieldType);
+			setVisibilityIfNeeded( set, prop, visible, changed, commandGroup );
+
+			prop = &set["unique"];
+			visible = fieldType != KexiDB::Field::BLOB;
+			setVisibilityIfNeeded( set, prop, visible, changed, commandGroup );
+
+			prop = &set["indexed"];
+			visible = fieldType != KexiDB::Field::BLOB;
+			setVisibilityIfNeeded( set, prop, visible, changed, commandGroup );
+
+			prop = &set["allowEmpty"];
+			visible = KexiDB::Field::hasEmptyProperty(fieldType);
+			setVisibilityIfNeeded( set, prop, visible, changed, commandGroup );
+
+			prop = &set["autoIncrement"];
+			visible = KexiDB::Field::isAutoIncrementAllowed(fieldType);
+			setVisibilityIfNeeded( set, prop, visible, changed, commandGroup );
+
+			return changed;
+		}
+
+		KexiAlterTableDialog* dlg;
+
 		KexiTableView *view; //!< helper
 
 		KexiTableViewData *data;
@@ -91,6 +258,8 @@ class KexiAlterTableDialogPrivate
 
 		KToggleAction *action_toggle_pkey;
 
+		int uniqueIdCounter;
+
 		//! internal
 		int maxTypeNameTextWidth;
 		//! Set to true in beforeSwitchTo() to avoid asking again in storeData()
@@ -100,9 +269,18 @@ class KexiAlterTableDialogPrivate
 
 		bool primaryKeyExists : 1;
 		//! Used in slotPropertyChanged() to avoid infinite recursion
-		bool slotPropertyChanged_primaryQt::Key_enabled : 1;
+		bool slotPropertyChanged_primaryKey_enabled : 1;
 		//! Used in slotPropertyChanged() to avoid infinite recursion
 		bool slotPropertyChanged_subType_enabled : 1;
+		//! used in slotPropertyChanged() to disable addHistoryCommand()
+		bool addHistoryCommand_in_slotPropertyChanged_enabled : 1;
+		//! used in slotRowUpdated() to disable addHistoryCommand()
+		bool addHistoryCommand_in_slotRowUpdated_enabled : 1;
+		//! used to disable slotBeforeCellChanged()
+		bool slotBeforeCellChanged_enabled : 1;
+
+		KActionCollection* historyActionCollection;
+		KCommandHistory* history;
 };
 
 //----------------------------------------------
@@ -110,7 +288,7 @@ class KexiAlterTableDialogPrivate
 KexiAlterTableDialog::KexiAlterTableDialog(KexiMainWindow *win, QWidget *parent,
 	const char *name)
  : KexiDataTable(win, parent, name, false/*not db-aware*/)
- , d( new KexiAlterTableDialogPrivate() )
+ , d( new KexiAlterTableDialogPrivate(this) )
 {
 	//needed for custom "identifier" property editor widget
 	KexiCustomPropertyFactory::init();
@@ -124,7 +302,7 @@ KexiAlterTableDialog::KexiAlterTableDialog(KexiMainWindow *win, QWidget *parent,
 
 	KexiTableViewColumn *col = new KexiTableViewColumn("pk", KexiDB::Field::Text, i18n("Primary Key", "PK"),
 		i18n("Describes primary key for the field."));
-	col->field()->setSubType("K3Icon");
+	col->field()->setSubType("KIcon");
 	col->setReadOnly(true);
 	d->data->addColumn( col );
 
@@ -182,6 +360,14 @@ KexiAlterTableDialog::KexiAlterTableDialog(KexiMainWindow *win, QWidget *parent,
 	d->action_toggle_pkey = static_cast<KToggleAction*>( sharedAction("tablepart_toggle_pkey") );
 	d->action_toggle_pkey->plug(d->view->contextMenu(), 0); //add at the beg.
 	setAvailable("tablepart_toggle_pkey", !conn->isReadOnly());
+
+#ifndef KEXI_NO_UNDOREDO_ALTERTABLE
+	plugSharedAction("edit_undo", this, SLOT(slotUndo()));
+	plugSharedAction("edit_redo", this, SLOT(slotRedo()));
+	setAvailable("edit_undo", false);
+	setAvailable("edit_redo", false);
+	connect(d->history, SIGNAL(commandExecuted(KCommand*)), this, SLOT(slotCommandExecuted(KCommand*)));
+#endif
 }
 
 KexiAlterTableDialog::~KexiAlterTableDialog()
@@ -235,7 +421,7 @@ void KexiAlterTableDialog::initData()
 	if (tempData()->table) {
 		for(int i=0; i < tableFieldCount; i++) {
 			KexiDB::Field *field = tempData()->table->field(i);
-			createPropertySet( i, field );
+			createPropertySet( i, *field );
 		}
 	}
 
@@ -247,78 +433,6 @@ void KexiAlterTableDialog::initData()
 
 	setDirty(false);
 	d->view->setCursorPosition(0, COLUMN_ID_CAPTION); //set @ name column
-}
-
-static bool updatePropertiesVisibility(KexiDB::Field::Type fieldType, KoProperty::Set &set)
-{
-	bool changed = false;
-	KoProperty::Property *prop;
-	bool visible;
-	
-	prop = &set["subType"];
-	const bool isObjectTypeGroup = set["type"].value().toInt() == (int)KexiDB::Field::BLOB;
-	kDebug() << prop->value().toInt() << set["type"].value().toInt()<< endl;
-	
-	//if there is no more than 1 subType name or it's a PK: hide the property
-	visible = (prop->listData() && prop->listData()->keys.count() > 1 || isObjectTypeGroup)
-		&& set["primaryKey"].value().toBool()==false;
-	if (prop->isVisible()!=visible) {
-		prop->setVisible( visible );
-		changed = true;
-	}
-	prop = &set["unsigned"];
-	visible = KexiDB::Field::isNumericType(fieldType);
-	if (prop->isVisible()!=visible) {
-		prop->setVisible( visible );
-		changed = true;
-	}
-	prop = &set["length"];
-	visible = (fieldType == KexiDB::Field::Text);
-	if (prop->isVisible()!=visible) {
-		prop->setVisible( visible );
-		prop->setValue( visible ? KexiDB::Field::defaultTextLength() : 0, false );
-		changed = true;
-	}
-#ifndef KEXI_NO_UNFINISHED
-	prop = &set["precision"];
-	visible = KexiDB::Field::isFPNumericType(fieldType);
-	if (prop->isVisible()!=visible) {
-		prop->setVisible( visible );
-		changed = true;
-	}
-#endif
-	prop = &set["visibleDecimalPlaces"];
-	visible = KexiDB::supportsVisibleDecimalPlacesProperty(fieldType);
-	if (prop->isVisible()!=visible) {
-		prop->setVisible( visible );
-		changed = true;
-	}
-
-	prop = &set["unique"];
-	visible = fieldType != KexiDB::Field::BLOB;
-	if (prop->isVisible()!=visible) {
-		prop->setVisible( visible );
-		changed = true;
-	}
-	prop = &set["indexed"];
-	visible = fieldType != KexiDB::Field::BLOB;
-	if (prop->isVisible()!=visible) {
-		prop->setVisible( visible );
-		changed = true;
-	}
-	prop = &set["allowEmpty"];
-	visible = KexiDB::Field::hasEmptyProperty(fieldType);
-	if (prop->isVisible()!=visible) {
-		prop->setVisible( visible );
-		changed = true;
-	}
-	prop = &set["autoIncrement"];
-	visible = KexiDB::Field::isAutoIncrementAllowed(fieldType);
-	if (prop->isVisible()!=visible) {
-		prop->setVisible( visible );
-		changed = true;
-	}
-	return changed;
 }
 
 //! Gets subtype strings and names for type \a fieldType
@@ -336,14 +450,14 @@ KexiAlterTableDialog::getSubTypeListData(KexiDB::Field::TypeGroup fieldTypeGroup
 		stringsList = KexiDB::typeStringsForGroup(fieldTypeGroup);
 		namesList = KexiDB::typeNamesForGroup(fieldTypeGroup);
 	}
-	kDebug() << "KexiAlterTableDialog::getSubTypeListData(): subType strings: " << 
+	kexipluginsdbg << "KexiAlterTableDialog::getSubTypeListData(): subType strings: " << 
 		stringsList.join("|") << "\nnames: " << namesList.join("|") << endl;
 }
 
 KoProperty::Set *
-KexiAlterTableDialog::createPropertySet( int row, KexiDB::Field *field, bool newOne )
+KexiAlterTableDialog::createPropertySet( int row, const KexiDB::Field& field, bool newOne )
 {
-	QString typeName = "KexiDB::Field::" + field->typeGroupString();
+	QString typeName = "KexiDB::Field::" + field.typeGroupString();
 	KoProperty::Set *set = new KoProperty::Set(d->sets, typeName);
 	if (mainWin()->project()->dbConnection()->isReadOnly())
 		set->setReadOnly( true );
@@ -351,6 +465,9 @@ KexiAlterTableDialog::createPropertySet( int row, KexiDB::Field *field, bool new
 //		this, SLOT(slotPropertyChanged(KexiPropertyBuffer&,KexiProperty&)));
 
 	KoProperty::Property *prop;
+
+	set->addProperty(prop = new KoProperty::Property("uid", d->generateUniqueId(), ""));
+	prop->setVisible(false);
 
 	//meta-info for property editor
 	set->addProperty(prop = new KoProperty::Property("this:classString", i18n("Table field")) );
@@ -360,88 +477,88 @@ KexiAlterTableDialog::createPropertySet( int row, KexiDB::Field *field, bool new
 
 	//name
 	set->addProperty(prop 
-		= new KoProperty::Property("name", QVariant(field->name()), i18n("Name"), 
+		= new KoProperty::Property("name", QVariant(field.name()), i18n("Name"), 
 		QString::null, KexiCustomPropertyFactory::Identifier) );
 
 	//type
 	set->addProperty( prop 
-		= new KoProperty::Property("type", QVariant(field->type()), i18n("Type")) );
+		= new KoProperty::Property("type", QVariant(field.type()), i18n("Type")) );
 #ifndef KexiAlterTableDialog_DEBUG
 	prop->setVisible(false);//always hidden
 #endif
 
 	//subtype
 	QStringList slist, nlist;
-	getSubTypeListData(field->typeGroup(), slist, nlist);
+	getSubTypeListData(field.typeGroup(), slist, nlist);
 	QString subTypeValue;
-	if (field->typeGroup()==KexiDB::Field::BLOBGroup) {
+	if (field.typeGroup()==KexiDB::Field::BLOBGroup) {
 // special case: BLOB type uses "mime-based" subtypes
 //! @todo this should be retrieved from KexiDB::Field when BLOB supports many different mimetypes
 		subTypeValue = slist.first();
 	}
 	else {
-		subTypeValue = field->typeString();
+		subTypeValue = field.typeString();
 	}
 	set->addProperty(prop 
 		= new KoProperty::Property("subType", slist, nlist, subTypeValue, i18n("Subtype")));
 
 	set->addProperty( prop 
-		= new KoProperty::Property("caption", QVariant(field->caption()), i18n("Caption") ) );
+		= new KoProperty::Property("caption", QVariant(field.caption()), i18n("Caption") ) );
 	prop->setVisible(false);//always hidden
 
 	set->addProperty( prop 
-		= new KoProperty::Property("description", QVariant(field->description())) );
+		= new KoProperty::Property("description", QVariant(field.description())) );
 	prop->setVisible(false);//always hidden
 
 	set->addProperty(prop 
-		= new KoProperty::Property("unsigned", QVariant(field->isUnsigned(), 4), i18n("Unsigned Number")));
+		= new KoProperty::Property("unsigned", QVariant(field.isUnsigned(), 4), i18n("Unsigned Number")));
 
 	set->addProperty( prop 
-		= new KoProperty::Property("length", (int)field->length()/*200?*/, i18n("Length")));
+		= new KoProperty::Property("length", (int)field.length()/*200?*/, i18n("Length")));
 
 	set->addProperty( prop 
-		= new KoProperty::Property("precision", (int)field->precision()/*200?*/, i18n("Precision")));
+		= new KoProperty::Property("precision", (int)field.precision()/*200?*/, i18n("Precision")));
 #ifdef KEXI_NO_UNFINISHED
 	prop->setVisible(false);
 #endif
 	set->addProperty( prop 
-		= new KoProperty::Property("visibleDecimalPlaces", field->visibleDecimalPlaces(), i18n("Visible Decimal Places")));
+		= new KoProperty::Property("visibleDecimalPlaces", field.visibleDecimalPlaces(), i18n("Visible Decimal Places")));
 	prop->setOption("min", -1);
 	prop->setOption("minValueText", i18n("Auto Decimal Places","Auto"));
 
 //! @todo set reasonable default for column width
 	set->addProperty( prop 
-		= new KoProperty::Property("width", (int)field->width()/*200?*/, i18n("Column Width")));
+		= new KoProperty::Property("width", (int)field.width()/*200?*/, i18n("Column Width")));
 #ifdef KEXI_NO_UNFINISHED
 	prop->setVisible(false);
 #endif
 
 	set->addProperty( prop 
-		= new KoProperty::Property("defaultValue", field->defaultValue(), i18n("Default Value")));
+		= new KoProperty::Property("defaultValue", field.defaultValue(), i18n("Default Value")));
 //! @todo show this after we get properly working editor for QVariant
 	prop->setVisible(false);
 
 	set->addProperty(prop 
-		= new KoProperty::Property("primaryKey", QVariant(field->isPrimaryKey(), 4), i18n("Primary Key")));
+		= new KoProperty::Property("primaryKey", QVariant(field.isPrimaryKey(), 4), i18n("Primary Key")));
 	prop->setIcon("key");
 
 	set->addProperty(
-		new KoProperty::Property("unique", QVariant(field->isUniqueKey(), 4), i18n("Unique")));
+		new KoProperty::Property("unique", QVariant(field.isUniqueKey(), 4), i18n("Unique")));
 
 	set->addProperty(
-		new KoProperty::Property("notNull", QVariant(field->isNotNull(), 4), i18n("Required")));
+		new KoProperty::Property("notNull", QVariant(field.isNotNull(), 4), i18n("Required")));
 	
 	set->addProperty(
-		new KoProperty::Property("allowEmpty", QVariant(!field->isNotEmpty(), 4), i18n("Allow Zero\nSize")));
+		new KoProperty::Property("allowEmpty", QVariant(!field.isNotEmpty(), 4), i18n("Allow Zero\nSize")));
 
 	set->addProperty(prop 
-		= new KoProperty::Property("autoIncrement", QVariant(field->isAutoIncrement(), 4), i18n("Autonumber")));
+		= new KoProperty::Property("autoIncrement", QVariant(field.isAutoIncrement(), 4), i18n("Autonumber")));
 	prop->setIcon("autonumber");
 
 	set->addProperty(
-		new KoProperty::Property("indexed", QVariant(field->isIndexed(), 4), i18n("Indexed")));
+		new KoProperty::Property("indexed", QVariant(field.isIndexed(), 4), i18n("Indexed")));
 
-	updatePropertiesVisibility(field->type(), *set);
+	d->updatePropertiesVisibility(field.type(), *set);
 
 	connect(set, SIGNAL(propertyChanged(KoProperty::Set&, KoProperty::Property&)),
 		this, SLOT(slotPropertyChanged(KoProperty::Set&, KoProperty::Property&)));
@@ -635,7 +752,9 @@ void KexiAlterTableDialog::removeCurrentPropertySet()
 void KexiAlterTableDialog::slotBeforeCellChanged(
 	KexiTableItem *item, int colnum, QVariant& newValue, KexiDB::ResultInfo* /*result*/)
 {
-//	kDebug() << d->view->selectedItem() << " " << item 
+	if (!d->slotBeforeCellChanged_enabled)
+		return;
+//	kdDebug() << d->view->selectedItem() << " " << item 
 		//<< " " << d->sets->at( d->view->currentRow() ) << " " << propertySet() << endl;
 	if (colnum==COLUMN_ID_CAPTION) {//'caption'
 //		if (!item->at(1).toString().isEmpty() && item->at(1).isNull()) {
@@ -646,11 +765,32 @@ void KexiAlterTableDialog::slotBeforeCellChanged(
 		}
 
 		if (propertySet()) {
-			KoProperty::Set &set = *propertySet();
-			//update field caption and name
-			set["caption"] = newValue;
-			set["name"] = newValue; // "name" prop. is of custom type Identifier, so this assignment 
-			                        // will automatically convert newValue to an valid identifier
+			d->addHistoryCommand_in_slotPropertyChanged_enabled = false; //because we'll add the two changes as one KMacroCommand
+				KoProperty::Set &set = *propertySet();
+				QString oldName( set["name"].value().toString() );
+				QString oldCaption( set["caption"].value().toString() );
+
+				//update field caption and name
+				set["caption"] = newValue;
+				set["name"] = newValue; // "name" prop. is of custom type Identifier, so this assignment 
+										            // will automatically convert newValue to an valid identifier
+
+				//remember this action containing 2 subactions
+				CommandGroup *changeCaptionAndNameCommand = new CommandGroup(
+					i18n("Change \"%1\" field's name to \"%2\" and caption from \"%3\" to \"%4\"")
+						.arg(oldName).arg(set["name"].value().toString())
+						.arg(oldCaption).arg(newValue.toString() ));
+				changeCaptionAndNameCommand->addCommand(
+					new ChangeFieldPropertyCommand( this, set,
+							"caption", oldCaption, newValue)
+				);
+				changeCaptionAndNameCommand->addCommand(
+					new ChangeFieldPropertyCommand( this, set,
+							"name", oldName, set["name"].value().toString())
+				);
+				addHistoryCommand( changeCaptionAndNameCommand, false /* !execute */ );
+
+			d->addHistoryCommand_in_slotPropertyChanged_enabled = true;
 		}
 	}
 	else if (colnum==COLUMN_ID_TYPE) {//'type'
@@ -666,6 +806,7 @@ void KexiAlterTableDialog::slotBeforeCellChanged(
 			return;
 
 		KoProperty::Set &set = *propertySet();
+
 		//'type' col is changed (existed before)
 		//-get type group number
 		KexiDB::Field::TypeGroup fieldTypeGroup;
@@ -684,7 +825,7 @@ void KexiAlterTableDialog::slotBeforeCellChanged(
 		KexiDB::Field::Type fieldType = KexiDB::defaultTypeForGroup( fieldTypeGroup );
 		if (fieldType==KexiDB::Field::InvalidType)
 			fieldType = KexiDB::Field::Text;
-		set["type"] = (int)fieldType;
+//moved down		set["type"] = (int)fieldType;
 //		set["subType"] = KexiDB::Field::typeName(fieldType);
 		
 		//-get subtypes for this type: keys (slist) and names (nlist)
@@ -700,31 +841,55 @@ void KexiAlterTableDialog::slotBeforeCellChanged(
 			subTypeValue = KexiDB::Field::typeString(fieldType);
 		}
 		KoProperty::Property *subTypeProperty = &set["subType"];
-kDebug() << "++++++++++" << slist << nlist << endl;
+		kexipluginsdbg << subTypeProperty->value() << endl;
+		
+		// *** this action contains subactions ***
+		CommandGroup *changeDataTypeCommand = new CommandGroup(
+			i18n("Change data type for field \"%1\" to \"%2\"")
+				.arg(set["name"].value().toString()).arg( KexiDB::Field::typeName( fieldType ) ) );
+
+//kexipluginsdbg << "++++++++++" << slist << nlist << endl;
 
 		//update subtype list and value
-		const bool forcePropertySetReload = set["type"].value().toInt() != (int)fieldTypeGroup;
+		const bool forcePropertySetReload = (int)fieldType != (int)fieldTypeGroup; //<-- ?????
+//		const bool forcePropertySetReload = set["type"].value().toInt() != (int)fieldTypeGroup;
 		const bool useListData = slist.count() > 1 || fieldType==KexiDB::Field::BLOB;
-		if (useListData) {
+
+		if (!useListData) {
+			slist.clear(); //empty list will be passed
+			nlist.clear();
+		}
+		d->setPropertyValueIfNeeded( set, "type", (int)fieldType, changeDataTypeCommand,
+			false /*!forceAddCommand*/, true /*rememberOldValue*/);
+
+/*		if (useListData) {
+		{
 			subTypeProperty->setListData( slist, nlist );
 		}
 		else {
 			subTypeProperty->setListData( 0 );
-		}
+		}*/
 		if (set["primaryKey"].value().toBool()==true) {
 			//primary keys require big int, so if selected type is not integer- remove PK
 			if (fieldTypeGroup != KexiDB::Field::IntegerGroup) {
 				d->view->data()->updateRowEditBuffer(item, COLUMN_ID_PK, QVariant());
-				set["primaryKey"] = QVariant(false, 1);
+				//set["primaryKey"] = QVariant(false, 1);
+				d->setPropertyValueIfNeeded( set, "primaryKey", QVariant(false, 1), changeDataTypeCommand );
 //! @todo should we display (passive?) dialog informing about cleared pkey?
 			}
 		}
-		if (useListData)
-			subTypeProperty->setValue( subTypeValue, false/*!rememberOldValue*/ );
-		if (updatePropertiesVisibility(fieldType, set) || forcePropertySetReload) {
+//		if (useListData)
+//		subTypeProperty->setValue( subTypeValue, false/*!rememberOldValue*/ );
+		d->setPropertyValueIfNeeded( set, "subType", subTypeValue, 
+			changeDataTypeCommand, false, false /*!rememberOldValue*/,
+			&slist, &nlist );
+
+		if (d->updatePropertiesVisibility(fieldType, set, changeDataTypeCommand) || forcePropertySetReload) {
 			//properties' visiblility changed: refresh prop. set
 			propertySetReloaded(true);
 		}
+
+		addHistoryCommand( changeDataTypeCommand, false /* !execute */ );
 	}
 	else if (colnum==COLUMN_ID_DESC) {//'description'
 		if (!propertySet())
@@ -738,17 +903,20 @@ kDebug() << "++++++++++" << slist << nlist << endl;
 
 void KexiAlterTableDialog::slotRowUpdated(KexiTableItem *item)
 {
+	const int row = d->view->data()->findRef(item);
+	if (row < 0)
+		return;
+	
 	setDirty();
 
 	//-check if the row was empty before updating
 	//if yes: we want to add a property set for this new row (field)
 	QString fieldCaption( item->at(COLUMN_ID_CAPTION).toString() );
-//	const bool buffer_allowed = !fieldName.isEmpty() && !item->at(1).isNull();
 	const bool prop_set_allowed = !item->at(COLUMN_ID_TYPE).isNull();
 
 	if (!prop_set_allowed && propertySet()) {
 		//there is a property set, but it's not allowed - remove it:
-		d->sets->removeCurrentPropertySet();
+		d->sets->remove( row ); //d->sets->removeCurrentPropertySet();
 
 		//clear 'type' column:
 		d->view->data()->clearRowEditBuffer();
@@ -781,10 +949,10 @@ void KexiAlterTableDialog::slotRowUpdated(KexiTableItem *item)
 			/*width*/0);
 //		m_newTable->addField( field );
 
-		kDebug() << "KexiAlterTableDialog::slotRowUpdated(): " << field.debugString() << endl;
+		kexipluginsdbg << "KexiAlterTableDialog::slotRowUpdated(): " << field.debugString() << endl;
 
 		//create a new property set:
-		createPropertySet( d->view->currentRow(), &field, true );
+		createPropertySet( row, field, true );
 //moved
 		//add a special property indicating that this is brand new buffer,
 		//not just changed
@@ -794,6 +962,16 @@ void KexiAlterTableDialog::slotRowUpdated(KexiTableItem *item)
 
 		//refresh property editor:
 		propertySetSwitched();
+
+		if (row>=0) {
+			if (d->addHistoryCommand_in_slotRowUpdated_enabled) {
+				addHistoryCommand( new InsertFieldCommand( this, row, *propertySet() ), //, field /*will be copied*/ 
+					false /* !execute */ );
+			}
+		}
+		else {
+			kexipluginswarn << "KexiAlterTableDialog::slotRowUpdated() row # not found  !" << endl;
+		}
 	}
 }
 
@@ -804,28 +982,63 @@ void KexiAlterTableDialog::updateActions()
 
 void KexiAlterTableDialog::slotPropertyChanged(KoProperty::Set& set, KoProperty::Property& property)
 {
-	const Q3CString pname = property.name();
+	const QCString pname = property.name();
 	kexipluginsdbg << "KexiAlterTableDialog::slotPropertyChanged(): " << pname << " = " << property.value() << endl;
-	if (pname=="primaryKey" && d->slotPropertyChanged_primaryQt::Key_enabled) {
-		d->slotPropertyChanged_primaryQt::Key_enabled = false;
+
+	const bool changePrimaryKey = pname=="primaryKey" && d->slotPropertyChanged_primaryKey_enabled;
+
+	if (d->addHistoryCommand_in_slotPropertyChanged_enabled && !changePrimaryKey) {
+		addHistoryCommand( new ChangeFieldPropertyCommand(this, set, 
+				property.name(), property.oldValue() /* ??? */, property.value()), 
+			false /* !execute */ );
+	}
+
+	if (changePrimaryKey) {
+		d->slotPropertyChanged_primaryKey_enabled = false;
 		if (property.value().toBool()) {
 			//primary key implies some rules
-			set["unique"] = QVariant(true,1);
-			set["notNull"] = QVariant(true,1);
-			set["allowEmpty"] = QVariant(false,1);
-			set["indexed"] = QVariant(true,1);
+			const bool prev_addHistoryCommand_in_slotPropertyChanged_enabled = d->addHistoryCommand_in_slotPropertyChanged_enabled;
+//			d->addHistoryCommand_in_slotPropertyChanged_enabled = false;
+
+			//this action contains subactions
+			CommandGroup *setPrimaryKeyCommand = new CommandGroup(
+				i18n("Set primary key for field \"%1\"")
+					.arg(set["name"].value().toString()) );
+
+			d->setPropertyValueIfNeeded( set, "primaryKey", QVariant(true,1), setPrimaryKeyCommand, true /*forceAddCommand*/ );
+			d->setPropertyValueIfNeeded( set, "unique", QVariant(true,1), setPrimaryKeyCommand );
+			d->setPropertyValueIfNeeded( set, "notNull", QVariant(true,1), setPrimaryKeyCommand );
+			d->setPropertyValueIfNeeded( set, "allowEmpty", QVariant(false,1), setPrimaryKeyCommand );
+			d->setPropertyValueIfNeeded( set, "indexed", QVariant(true,1), setPrimaryKeyCommand );
 //! \todo: add setting for this: "Integer PKeys have autonumber set by default"
-			set["autoIncrement"] = QVariant(true,1);
+			d->setPropertyValueIfNeeded( set, "autoIncrement", QVariant(true,1), setPrimaryKeyCommand );
+
+/*				set["unique"] = QVariant(true,1);
+				set["notNull"] = QVariant(true,1);
+				set["allowEmpty"] = QVariant(false,1);
+				set["indexed"] = QVariant(true,1);
+				set["autoIncrement"] = QVariant(true,1);*/
+//			d->addHistoryCommand_in_slotPropertyChanged_enabled = prev_addHistoryCommand_in_slotPropertyChanged_enabled;
+			addHistoryCommand( setPrimaryKeyCommand, false /* !execute */ );
 		}
 		else {
-			set["autoIncrement"] = QVariant(false,1);
+			//remember this action containing 2 subactions
+			CommandGroup *setPrimaryKeyCommand = new CommandGroup(
+				i18n("Unset primary key for field \"%1\"")
+					.arg(set["name"].value().toString()) );
+
+			d->setPropertyValueIfNeeded( set, "primaryKey", QVariant(true,1), setPrimaryKeyCommand, true /*forceAddCommand*/ );
+			d->setPropertyValueIfNeeded( set, "autoIncrement", QVariant(false,1), setPrimaryKeyCommand );
+//			set["autoIncrement"] = QVariant(false,1);
+
+			addHistoryCommand( setPrimaryKeyCommand, false /* !execute */ );
 		}
 		setPrimaryKey(set, property.value().toBool(), true/*wasPKey*/);
-		updatePropertiesVisibility(
+		d->updatePropertiesVisibility(
 			KexiDB::Field::typeForString( set["subType"].value().toString() ), set);
 		//properties' visiblility changed: refresh prop. set
 		propertySetReloaded(true/*preservePrevSelection*/);
-		d->slotPropertyChanged_primaryQt::Key_enabled = true;
+		d->slotPropertyChanged_primaryKey_enabled = true;
 	}
 //TODO: perhaps show a hint in help panel telling what happens?
 	else if (property.value().toBool()==false
@@ -839,16 +1052,16 @@ void KexiAlterTableDialog::slotPropertyChanged(KoProperty::Set& set, KoProperty:
 	else if (pname=="subType" && d->slotPropertyChanged_subType_enabled) {
 		d->slotPropertyChanged_subType_enabled = false;
 		if (set["primaryKey"].value().toBool()==true && property.value().toString()!=KexiDB::Field::typeString(KexiDB::Field::BigInteger)) {
-			kDebug() << "INVALID " << property.value().toString() << endl;
+			kexipluginsdbg << "INVALID " << property.value().toString() << endl;
 //			if (KMessageBox::Yes == KMessageBox::questionYesNo(this, msg,
 //				i18n("This field has promary key assigned. Setting autonumber field"),
 //				KGuiItem(i18n("Create &Primary Key"), "key"), KStdGuiItem::cancel() ))
 
 		}
-//		kDebug() << property.value().toString() << endl;
-//		kDebug() << set["type"].value() << endl;
+//		kdDebug() << property.value().toString() << endl;
+//		kdDebug() << set["type"].value() << endl;
 		if (KexiDB::Field::typeGroup( set["type"].value().toInt() ) == (int)KexiDB::Field::TextGroup) {
-			updatePropertiesVisibility(KexiDB::Field::typeForString(property.value().toString()), set);
+			d->updatePropertiesVisibility(KexiDB::Field::typeForString(property.value().toString()), set);
 			//properties' visiblility changed: refresh prop. set
 			propertySetReloaded(true);
 		}
@@ -893,6 +1106,15 @@ void KexiAlterTableDialog::slotAboutToDeleteRow(
 	Q_UNUSED(repaint)
 	if (item[COLUMN_ID_PK].toString()=="key")
 		d->primaryKeyExists = false;
+
+	const int row = d->view->data()->findRef(&item);
+	KoProperty::Set *set = row >=0 ? d->sets->at(row) : 0;
+	if (set) {
+		addHistoryCommand( 
+			new RemoveFieldCommand( this, row, *set ),
+			false /* !execute */
+		);
+	}
 }
 
 tristate KexiAlterTableDialog::buildSchema(KexiDB::TableSchema &schema)
@@ -1122,7 +1344,7 @@ tristate KexiAlterTableDialog::storeData(bool dontAsk)
 	res = buildSchema(*newTable);
 //	bool ok = buildSchema(*newTable, cancel) && !cancel;
 
-	kDebug() << "KexiAlterTableDialog::storeData() : BUILD SCHEMA:" << endl;
+	kexipluginsdbg << "KexiAlterTableDialog::storeData() : BUILD SCHEMA:" << endl;
 	newTable->debug();
 
 	KexiDB::Connection *conn = mainWin()->project()->dbConnection();
@@ -1171,7 +1393,199 @@ KexiTablePart::TempData* KexiAlterTableDialog::tempData() const
 //	m_dirty = m_dirty | result->success;
 }*/
 
+#ifdef KEXI_DEBUG_GUI
+void KexiAlterTableDialog::debugCommand( KCommand* command, int nestingLevel )
+{
+	if (dynamic_cast<Command*>(command))
+		KexiUtils::addAlterTableActionDebug(dynamic_cast<Command*>(command)->debugString(), nestingLevel);
+	else
+		KexiUtils::addAlterTableActionDebug(command->name(), nestingLevel);
+	//show subcommands
+	if (dynamic_cast<CommandGroup*>(command)) {
+		for (QPtrListIterator<KCommand> it(dynamic_cast<CommandGroup*>(command)->commands()); it.current(); ++it) {
+			debugCommand(it.current(), nestingLevel + 1);
+		}
+	}
+}
+#endif
 
+void KexiAlterTableDialog::addHistoryCommand( KCommand* command, bool execute )
+{
+#ifndef KEXI_NO_UNDOREDO_ALTERTABLE
+# ifdef KEXI_DEBUG_GUI
+	debugCommand( command, 0 );
+# endif
+	d->history->addCommand( command, false /* ! execute */ );
+	updateUndoRedoActions();
+#endif
+}
+
+void KexiAlterTableDialog::updateUndoRedoActions()
+{
+#ifndef KEXI_NO_UNDOREDO_ALTERTABLE
+	setAvailable("edit_undo", d->historyActionCollection->action("edit_undo")->isEnabled());
+	setAvailable("edit_redo", d->historyActionCollection->action("edit_redo")->isEnabled());
+#endif
+}
+
+void KexiAlterTableDialog::slotUndo()
+{
+#ifndef KEXI_NO_UNDOREDO_ALTERTABLE
+# ifdef KEXI_DEBUG_GUI
+	KexiUtils::addAlterTableActionDebug(QString("UNDO:"));
+# endif
+	d->history->undo();
+	updateUndoRedoActions();
+#endif
+}
+
+void KexiAlterTableDialog::slotRedo()
+{
+#ifndef KEXI_NO_UNDOREDO_ALTERTABLE
+# ifdef KEXI_DEBUG_GUI
+	KexiUtils::addAlterTableActionDebug(QString("REDO:"));
+# endif
+	d->history->redo();
+	updateUndoRedoActions();
+#endif
+}
+
+void KexiAlterTableDialog::slotCommandExecuted(KCommand *command)
+{
+#ifdef KEXI_DEBUG_GUI
+	debugCommand( command, 1 );
+#endif
+}
+
+// -- actions used by undo/redo framework
+
+void KexiAlterTableDialog::clearRow(int row)
+{
+	if (!d->view->acceptRowEdit())
+		return;
+	KexiTableItem *item = d->view->itemAt(row);
+	if (!item)
+		return;
+	//remove from prop. set
+	d->sets->remove( row );
+	//clear row in table view
+	for (int i=0; i < (int)d->view->data()->columnsCount(); i++) {
+		d->view->data()->updateRowEditBuffer(item, i, QVariant());
+	}
+	d->view->data()->saveRowChanges(*item, true);
+}
+
+void KexiAlterTableDialog::insertField( int row, //const KexiDB::Field& field, 
+	KoProperty::Set& set )
+{
+	if (!d->view->acceptRowEdit())
+		return;
+	KexiTableItem *item = d->view->itemAt(row);
+	if (!item)
+		return;
+	d->addHistoryCommand_in_slotRowUpdated_enabled = false;
+	d->addHistoryCommand_in_slotPropertyChanged_enabled = false;
+		d->view->data()->updateRowEditBuffer(item, COLUMN_ID_CAPTION, set["caption"].value());//field.caption());
+		d->view->data()->updateRowEditBuffer(item, COLUMN_ID_TYPE, 
+			(int)KexiDB::Field::typeGroup( set["type"].value().toInt() )-1/*counting from 0*/);
+			//set["subType"].value());//QVariant((int)0));
+//		if (!field.description().isEmpty())
+		d->view->data()->updateRowEditBuffer(item, COLUMN_ID_DESC, set["description"].value());//field.description());
+		//this will create a new property set:
+		d->view->data()->saveRowChanges(*item);
+		KoProperty::Set *newSet = d->sets->at(row);
+		Q_ASSERT(newSet);
+		*newSet = set; //deep copy
+	d->addHistoryCommand_in_slotPropertyChanged_enabled = true;
+	d->addHistoryCommand_in_slotRowUpdated_enabled = true;
+	d->view->updateRow( row );
+	propertySetReloaded(true);
+}
+
+void KexiAlterTableDialog::insertEmptyRow( int row )
+{
+	d->view->insertEmptyRow( row );
+}
+
+void KexiAlterTableDialog::deleteField( int row )
+{
+	KexiTableItem *item = d->view->itemAt( row );
+	if (!item)
+		return;
+	if (!d->view->deleteItem(item))
+		return;
+}
+
+void KexiAlterTableDialog::changeFieldProperty( int fieldUID,
+ const QCString& propertyName, const QVariant& newValue, 
+ KoProperty::Property::ListData* const listData )
+{
+	KexiUtils::addAlterTableActionDebug(QString("changeFieldProperty: \"")
+		+ QString(propertyName) + "\" to \"" + newValue.toString() + "\"", 2/*nestingLevel*/);
+
+	if (!d->view->acceptRowEdit())
+		return;
+	//find a property by name
+	const int row = d->sets->findRowForPropertyValue("uid", fieldUID);
+	if (row<0)
+		return;
+	KoProperty::Set* set = d->sets->at( row );
+	if (!set || !set->contains(propertyName))
+		return;
+	d->addHistoryCommand_in_slotRowUpdated_enabled = false;
+	d->addHistoryCommand_in_slotPropertyChanged_enabled = false;
+		KoProperty::Property &property = set->property(propertyName);
+		if (listData) {
+			if (listData->keys.isEmpty())
+				property.setListData( 0 );
+			else
+				property.setListData( new KoProperty::Property::ListData(*listData) );
+		}
+		property.setValue(newValue);
+		KexiTableItem *item = d->view->itemAt(row);
+		Q_ASSERT(item);
+		//special cases: properties displayed within the data grid:
+		if (propertyName == "caption") {
+			d->view->data()->updateRowEditBuffer(item, COLUMN_ID_CAPTION, newValue);
+			d->view->data()->saveRowChanges(*item);
+		}
+		else if (propertyName == "type") {
+			d->slotBeforeCellChanged_enabled = false;
+			d->view->data()->updateRowEditBuffer(item, COLUMN_ID_TYPE, 
+				int( KexiDB::Field::typeGroup( newValue.toInt() ) )-1);
+			d->slotBeforeCellChanged_enabled = true;
+			d->view->data()->saveRowChanges(*item);
+		}
+		else if (propertyName == "description") {
+			//todo
+		}
+	d->addHistoryCommand_in_slotPropertyChanged_enabled = true;
+	d->addHistoryCommand_in_slotRowUpdated_enabled = true;
+	d->view->updateRow( row );
+}
+
+void KexiAlterTableDialog::changePropertyVisibility(
+	int fieldUID, const QCString& propertyName, bool visible )
+{
+	KexiUtils::addAlterTableActionDebug(QString("changePropertyVisibility: \"")
+		+ QString(propertyName) + "\" to \"" + (visible ? "true" : "false") + "\"", 2/*nestingLevel*/);
+
+	if (!d->view->acceptRowEdit())
+		return;
+
+	//find a property by name
+	const int row = d->sets->findRowForPropertyValue("uid", fieldUID);
+	if (row<0)
+		return;
+	KoProperty::Set* set = d->sets->at( row );
+	if (!set || !set->contains(propertyName))
+		return;
+
+	KoProperty::Property &property = set->property(propertyName);
+	if (property.isVisible() != visible) {
+		property.setVisible(visible);
+		propertySetReloaded(true);
+	}
+}
 
 #include "kexialtertabledialog.moc"
-

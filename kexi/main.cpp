@@ -36,7 +36,7 @@
 #include <core/kexi.h>
 #include <main/keximainwindowimpl.h>
 #include <main/startup/KexiStartup.h>
-#include <kexidb/utils.h>
+#include <kexiutils/utils.h>
 
 extern "C" int kdemain(int argc, char *argv[])
 {
@@ -63,7 +63,7 @@ extern "C" int kdemain(int argc, char *argv[])
 	QWidget* debugWindow = 0;
 	app.config()->setGroup("General");
 	if (app.config()->readBoolEntry("showKexiDBDebugger", false))
-		debugWindow = KexiDB::createDebugWindow(0);
+		debugWindow = KexiUtils::createDebugWindow(0);
 #endif
 
 	tristate res = Kexi::startupHandler().init(argc, argv);

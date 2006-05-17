@@ -252,7 +252,7 @@ void KexiTableView::initCellEditorFactories()
 	KexiCellEditorFactory::registerItem( *item, KexiDB::Field::Boolean );
 
 	item = new KexiKIconTableEditorFactoryItem();
-	KexiCellEditorFactory::registerItem( *item, KexiDB::Field::Text, "K3Icon" );
+	KexiCellEditorFactory::registerItem( *item, KexiDB::Field::Text, "KIcon" );
 
 	//default type
 	item = new KexiInputEditorFactoryItem();
