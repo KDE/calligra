@@ -143,27 +143,9 @@ void MacroTests::testMacro()
 	//Is our XML parseable ?
 	KOMACROTEST_ASSERT(macro->parseXML(domelement),true);
 
-// 	//create a QDomDocument		
-// 	QDomDocument domdocument = QDomDocument();
-// 
-// 	//Fully fleged content this time with macro,function and action
-// 	domdocument.setContent(QString(
-// 		"<macro name=\"mymacro\" icon=\"myicon\" text=\"My Macro\" comment=\"Some comment to describe the Macro.\">"
-// 			"<action name=\"myaction\" text=\"My Action\" comment=\"Just some comment\" />"
-// 			"<function name=\"myfunc\" text=\"My Function\" comment=\"Describe what the function does\" receiver=\"TestObject\" slot=\"myslot(const QString &amp;)\">"
-// 				"<argument>The myfunc argument string</argument>"
-// 			"</function>"
-// 		"</macro>"
-// 	));
-// 
-// 	//create Macro
-// // 	KSharedPtr<KoMacro::Action> macroptr = ::KoMacro::Manager::self()->createAction( domdocument.documentElement() );
-// 	//cast data to Macro
-// 	KoMacro::Macro* macro = dynamic_cast<KoMacro::Macro*>( macroptr.data() );
 	//check that it is not null
 	KOMACROTEST_XASSERT(sizetype(macro.data()), sizetype(0));
-	//check that domeElement given to manager is the sam as in the macro
-//	KOMACROTEST_ASSERT( macro->toXML(), d->doomdocument->documentElement() );
+
 	//check the name
 	KOMACROTEST_ASSERT( QString(macro->name()), QString("testMacro") );
 	
@@ -191,78 +173,13 @@ void MacroTests::testMacro()
 	KOMACROTEST_ASSERT( QString(actionptr->name()), QString("testaction") );
 	//check that it has the right text
 	KOMACROTEST_ASSERT( actionptr->text(), QString("Test") );
-	//check that it has the right comment
-//	KOMACROTEST_ASSERT( actionptr->comment(), QString("") );
-/*
-	//fetch the second one
-	KSharedPtr<KoMacro::Action> myfuncptr = children[1];
-	//cast it to function
-	
-                                                                                    KoMacro::Function* myfunc = dynamic_cast<KoMacro::Function*>( myfuncptr.data() );
-	//check that it isn?t null
-	KOMACROTEST_XASSERT((int) myfunc, 0);
 
-	//check it?s name
-	KOMACROTEST_ASSERT( QString(myfunc->name()), QString("myfunc"));
-	
-                                                                                    //check it?s text
-	KOMACROTEST_ASSERT( myfunc->text(), QString("My Function") );
-	//check it?s comment
-	KOMACROTEST_ASSERT( myfunc->comment(), QString("Describe what the function does") );
-	//check it?s receiver object
-	KOMACROTEST_ASSERT( myfunc->receiver(), QString("TestObject") );
-	//check it?s slot
-	KOMACROTEST_ASSERT( myfunc->slot(), QString("myslot(const QString&)") );
-	
-	//exceute it
-	myfunc->activate();
-*/	
 	//create another macro
 	KSharedPtr<KoMacro::Macro> yanMacro = KoMacro::Manager::self()->createMacro("testMacro2");
 	
 	KOMACROTEST_ASSERT(yanMacro->parseXML(domelement),true);
-	//create two more macros
-	//KSharedPtr<KoMacro::Action> yanActionptr2 = ::KoMacro::Manager::self()->createAction( domdocument.documentElement() );
-	//KSharedPtr<KoMacro::Action> yanActionptr3 = ::KoMacro::Manager::self()->createAction( domdocument.documentElement() );
 	
 	//check that they aren?t null
 	KOMACROTEST_XASSERT(sizetype(yanMacro.data()), sizetype(0));
-	//KOMACROTEST_XASSERT((int) yanActionptr2.data(), 0);
-	//KOMACROTEST_XASSERT((int) yanActionptr3.data(), 0);
-	
-	//create a list of the children from yanMacro
-	//QValueList< KSharedPtr<KoMacro::Action> > yanChildren = yanMacro->children();
-	//check that there are two
-	//KOMACROTEST_ASSERT(yanChildren.count(), uint(2));
-/*
-	{
-		//keep oldsize 
-		const int oldsize = yanChildren.count();
-		//add a new child to the macro
-		yanMacro->addChild(yanActionptr2);
-		//get the children
-		yanChildren = yanMacro->children();
-		//get count of children
-		const int size = yanChildren.count();
-		//check count has changed
-		KOMACROTEST_XASSERT(size, oldsize);
-	}
-
-	{
-		//keep oldsize 
-		const int oldsize = yanChildren.count();
-		//add a new child to the macro		
-		yanMacro->addChild(yanActionptr3);
-		//get the children
-		yanChildren = yanMacro->children();
-		//get count of children
-		const int size = yanChildren.count();
-		//check count has changed
-		KOMACROTEST_XASSERT(size, oldsize);
-		//check the hasChildren function
-		KOMACROTEST_ASSERT(yanMacro->hasChildren(), true);
-	}
-*/	
-
 }
 #include "macrotests.moc"

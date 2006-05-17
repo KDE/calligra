@@ -178,19 +178,19 @@ void ActionTests::testAction()
 	//check comment again
 	KOMACROTEST_ASSERT(actionptr->comment(),QString("Stringtest"));
 	//fetch the "teststring"-variable
-	KSharedPtr<KoMacro::Variable> variableptr = actionptr->variable("teststring");	
+	KSharedPtr<KoMacro::Variable> variableptr = actionptr->variable(testString);	
 	//So there is a variable, does hasVariable() work ?
-	KOMACROTEST_ASSERT(actionptr->hasVariable("teststring"),true);
+	KOMACROTEST_ASSERT(actionptr->hasVariable(testString),true);
 	//check count of variables
-	KOMACROTEST_ASSERT(sizetype(actionptr->variableNames().count()),sizetype(3));
+	KOMACROTEST_ASSERT(sizetype(actionptr->variableNames().count()),sizetype(4));
 	//remove one
-	actionptr->removeVariable("teststring");
+	actionptr->removeVariable(testString);
 	//Decreased ??
-	KOMACROTEST_ASSERT(sizetype(actionptr->variableNames().count()),sizetype(2));	
+	KOMACROTEST_ASSERT(sizetype(actionptr->variableNames().count()),sizetype(3));	
 	//add one
 	actionptr->setVariable(variableptr);
 	//increased ??
-	KOMACROTEST_ASSERT(sizetype(actionptr->variableNames().count()),sizetype(3));	
+	KOMACROTEST_ASSERT(sizetype(actionptr->variableNames().count()),sizetype(4));	
 	
 	//check that it is not null
 	KOMACROTEST_XASSERT(sizetype(variableptr.data()), sizetype(0));
@@ -199,7 +199,7 @@ void ActionTests::testAction()
 	
 
 	//fetch the "testint"-variable
-	variableptr = actionptr->variable("testint");
+	variableptr = actionptr->variable(testInt);
 	//check that it is not null
 	KOMACROTEST_XASSERT(sizetype(variableptr.data()), sizetype(0));
 	//check that it is " "
@@ -219,7 +219,7 @@ void ActionTests::testAction()
 	//check that it is " "
 	KOMACROTEST_ASSERT(variableptr->variant().toString(),QString("TestString"));
 	
-	actionptr->setVariable("testint","INTTEST",INT_MAX);
+	actionptr->setVariable(testInt,"INTTEST",INT_MAX);
 	variableptr = actionptr->variable("testint");
 	KOMACROTEST_XASSERT(sizetype(variableptr.data()), sizetype(0));
 	KOMACROTEST_ASSERT(sizetype(variableptr->variant().toInt()),sizetype(INT_MAX));
@@ -244,35 +244,29 @@ void ActionTests::testAction()
 	KOMACROTEST_XASSERT(sizetype(variableptr.data()), sizetype(0));
 	KOMACROTEST_ASSERT(variableptr->variant().toString(),QString("TeStString"));
 		
-	macroitem->setVariable("testint",INT_MIN);
-	variableptr = macroitem->variable("testint");
+	macroitem->setVariable(testInt,INT_MIN);
+	variableptr = macroitem->variable(testInt);
 	KOMACROTEST_XASSERT(sizetype(variableptr.data()), sizetype(0));
 	KOMACROTEST_ASSERT(sizetype(variableptr->variant().toInt()),sizetype(INT_MIN));
 	
-	macroitem->setVariable("testint",-1);
-	variableptr = macroitem->variable("testint");
+	macroitem->setVariable(testInt,-1);
+	variableptr = macroitem->variable(testInt);
 	KOMACROTEST_XASSERT(sizetype(variableptr.data()), sizetype(0));
 	KOMACROTEST_ASSERT(sizetype(variableptr->variant().toInt()),sizetype(-1));
 	
-	/*
-	commontests.cpp: In member function 'void KoMacroTest::CommonTests::testAction()':
-	commontests.cpp:249: error: call of overloaded 'setVariable(const char [8], int)' is ambiguous
-	../lib/macroitem.h:131: note: candidates are: QStringList KoMacro::MacroItem::setVariable(const QString&, KSharedPtr<KoMacro::Variable>)
-	../lib/macroitem.h:137: note:                 QStringList KoMacro::MacroItem::setVariable(const QString&, const QVariant&)
-
-	macroitem->setVariable("testint",(int) 0);
-	variableptr = macroitem->variable("testint");
+	macroitem->setVariable(testInt,QVariant(0));
+	variableptr = macroitem->variable(testInt);
 	KOMACROTEST_XASSERT(sizetype(variableptr.data()), sizetype(0));
 	KOMACROTEST_ASSERT(sizetype(variableptr->variant().toInt()),sizetype(0));
-	*/
 	
-	macroitem->setVariable("testint",1);
-	variableptr = macroitem->variable("testint");
+	
+	macroitem->setVariable(testInt,1);
+	variableptr = macroitem->variable(testInt);
 	KOMACROTEST_XASSERT(sizetype(variableptr.data()), sizetype(0));
 	KOMACROTEST_ASSERT(sizetype(variableptr->variant().toInt()),sizetype(1));
 	
-	macroitem->setVariable("testint",INT_MAX);
-	variableptr = macroitem->variable("testint");
+	macroitem->setVariable(testInt,INT_MAX);
+	variableptr = macroitem->variable(testInt);
 	KOMACROTEST_XASSERT(sizetype(variableptr.data()), sizetype(0));
 	KOMACROTEST_ASSERT(sizetype(variableptr->variant().toInt()),sizetype(INT_MAX));
 	

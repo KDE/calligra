@@ -97,7 +97,7 @@ bool XMLHandler::parseXML(const QDomElement& element)
 		// The tagname should be "item"
 		if(itemnode.nodeName() == "item") {
 			// The node is an element.
-			QDomElement itemelem = itemnode.toElement();
+			const QDomElement itemelem = itemnode.toElement();
 
 			// Create a new MacroItem
 			MacroItem* item = new MacroItem();
@@ -122,7 +122,7 @@ bool XMLHandler::parseXML(const QDomElement& element)
 				// The tagname should be "variable"
 				if(childnode.nodeName() == "variable") {
 					// The node is an element.
-					QDomElement childelem = childnode.toElement();
+					const QDomElement childelem = childnode.toElement();
 
 					// Create the new variable.
 					Variable* variable = new Variable();
@@ -131,6 +131,8 @@ bool XMLHandler::parseXML(const QDomElement& element)
 					const QString name = childelem.attribute("name");
 					variable->setName(name);
 
+					// TODO Refactor 1: simplier, 2: we should pass undetected
+					// variable through to loose no data
 					bool autodetect = true; // auto-detect variable type.
 					if(action.data()) {
 						// Try to restore the datatype by looking at
