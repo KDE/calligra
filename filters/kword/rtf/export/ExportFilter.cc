@@ -374,7 +374,7 @@ QString RTFWorker::ProcessParagraphData ( const QString &paraText,
         markup += "\\intbl";
 
 //lists
-if (layout.counter.style)
+    if (layout.counter.style)
         {
         markup += "{\\pntext\\pard\\plain";
         if( layout.formatData.text.fontSize >= 0)
@@ -724,18 +724,19 @@ if (layout.counter.style)
                     {
                         QString fstr;
                         QValueList<ParaData>::ConstIterator it;
-						QValueList<ParaData>::ConstIterator end(paraList->end());
+                        QValueList<ParaData>::ConstIterator end(paraList->end());
+                        const QString prefixSaved = m_prefix;
+                        m_prefix = QString::null;
                         for (it=paraList->begin();it!=end;++it)
                             fstr += ProcessParagraphData( (*it).text, (*it).layout,(*it).formattingList);
+                        m_prefix = prefixSaved;
                         content += "{\\super ";
                         content += automatic ? "\\chftn " : value;
                         content += "{\\footnote ";
                         content += "{\\super ";
                         content += automatic ? "\\chftn " : value;
                         content += fstr;
-                        content += " }";
-                        content += " }";
-                        content += " }";
+                        content += "}}}";
                     }
                 }
                 else
