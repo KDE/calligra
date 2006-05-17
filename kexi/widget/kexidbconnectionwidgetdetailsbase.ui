@@ -36,7 +36,6 @@
                     </property>
                     <property name="text">
                         <string>Use socket &amp;file instead of TCP/IP port:</string>
-                        <comment>socket: default</comment>
                     </property>
                 </widget>
                 <widget class="QLayoutWidget" row="1" column="0" rowspan="1" colspan="2">
