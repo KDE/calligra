@@ -265,12 +265,12 @@ QString RTFWorker::makeImage(const FrameAnchor& anchor)
             origWidth = (long) (MM_TO_TWIP(right-left)/100);
             origHeight = (long) (MM_TO_TWIP(bottom-top)/100);
 #warning "kde4 : port it"
-#if 0			
+#if 0
             // throw away WMF metaheader (22 bytes)
             for( uint i=0; i<image.size()-22; i++)
                 image.at(i)=image.at(i+22)); // As we use uint, we need at()  ( [] uses int only .)
             image.resize( image.size()-22 );
-#endif			
+#endif
         }
     }
     else
@@ -379,7 +379,7 @@ QString RTFWorker::ProcessParagraphData ( const QString &paraText,
         markup += "\\intbl";
 
 //lists
-if (layout.counter.style)
+    if (layout.counter.style)
         {
         markup += "{\\pntext\\pard\\plain";
         if( layout.formatData.text.fontSize >= 0)
@@ -729,18 +729,20 @@ if (layout.counter.style)
                     {
                         QString fstr;
                         Q3ValueList<ParaData>::ConstIterator it;
-						Q3ValueList<ParaData>::ConstIterator end(paraList->end());
+                        Q3ValueList<ParaData>::ConstIterator end(paraList->end());
+                        const QString prefixSaved = m_prefix;
+                        m_prefix.clear();
                         for (it=paraList->begin();it!=end;++it)
                             fstr += ProcessParagraphData( (*it).text, (*it).layout,(*it).formattingList);
+                        m_prefix = prefixSaved;
+
                         content += "{\\super ";
                         content += automatic ? "\\chftn " : value;
                         content += "{\\footnote ";
                         content += "{\\super ";
                         content += automatic ? "\\chftn " : value;
                         content += fstr;
-                        content += " }";
-                        content += " }";
-                        content += " }";
+                        content += "}}}";
                     }
                 }
                 else
