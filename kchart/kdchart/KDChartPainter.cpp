@@ -395,7 +395,7 @@ QRect KDChartPainter::trueFrameRect( const QRect& orgRect,
 {
     QRect rect( orgRect );
     if( settings ){
-        rect.moveBy( -settings->innerGapX(), -settings->innerGapY() );
+        rect.translate( -settings->innerGapX(), -settings->innerGapY() );
         rect.setWidth(  rect.width()  + 2*settings->innerGapX() );
         rect.setHeight( rect.height() + 2*settings->innerGapY() );
     }
@@ -659,7 +659,7 @@ void KDChartPainter::paintDataValues( QPainter* painter,
                 }
 
                 if ( rotation ) {
-		  anchor = painter->worldMatrix().map( anchor );
+		  anchor = painter->matrix().map( anchor );
 
                     //   Temporary solution for fixing the data labels size
                     // bug when in QPrinter::HighResolution mode:
@@ -860,7 +860,7 @@ the layout policy feature is implemented !!!
                             painter->setBrush( brush );
                             painter->setPen(   Qt::NoPen );
                             QRect rect( textRect );
-                            rect.moveBy( -2, 0 );
+                            rect.translate( -2, 0 );
                             rect.setWidth( rect.width() + 4 );
                             painter->drawRect( rect );
                         }
@@ -1645,7 +1645,7 @@ void KDChartPainter::paintHeaderFooter( QPainter* painter,
             int dXY = iHdFt < KDChartParams::HdFtPosFootersSTART
                 ? _hdLeading/3
                 : _ftLeading/3;
-            rect.moveBy(dXY, dXY);
+            rect.translate(dXY, dXY);
             rect.setWidth(  rect.width() -2*dXY +1 );
             rect.setHeight( rect.height()-2*dXY +1 );
             painter->drawText( rect,
@@ -2640,7 +2640,7 @@ KDChartDataRegion* KDChartPainter::drawMarker( QPainter* painter,
                                                 QRect rect( QPoint( p.x() - xsize2, p.y() - ysize2 ), QPoint( p.x() + xsize2, p.y() + ysize2 ) );
                                                 painter->drawRect( rect );
                                                 // Don't use rect for drawing after this!
-                                                rect.moveBy( deltaX, deltaY );
+                                                rect.translate( deltaX, deltaY );
                                                 if ( regions ){
                                                     datReg =
                                                         new KDChartDataRegion(
@@ -2676,7 +2676,7 @@ KDChartDataRegion* KDChartPainter::drawMarker( QPainter* painter,
                                                 QRect rect( p, p );
                                                 painter->drawRect( rect );
                                                 // Don't use rect for drawing after this!
-                                                rect.moveBy( deltaX, deltaY );
+                                                rect.translate( deltaX, deltaY );
                                                 if ( regions ){
                                                     datReg = new KDChartDataRegion(
                                                                     dataset, value,
@@ -2689,7 +2689,7 @@ KDChartDataRegion* KDChartPainter::drawMarker( QPainter* painter,
                                                 QRect rect( p, QPoint( p.x()+1, p.y()+1 ) );
                                                 painter->drawRect( rect );
                                                 // Don't use rect for drawing after this!
-                                                rect.moveBy( deltaX, deltaY );
+                                                rect.translate( deltaX, deltaY );
                                                 if ( regions ){
                                                     datReg = new KDChartDataRegion(
                                                                     dataset, value,
@@ -2774,7 +2774,7 @@ KDChartDataRegion* KDChartPainter::drawMarker( QPainter* painter,
                                                 QRect rect( QPoint( p.x() - 2, p.y() - 2 ),
                                                             QPoint( p.x() + 2, p.y() + 2 ) );
                                                 // Don't use rect for drawing after this!
-                                                rect.moveBy( deltaX, deltaY );
+                                                rect.translate( deltaX, deltaY );
                                                 if ( regions ){
                                                     datReg =
                                                         new KDChartDataRegion(

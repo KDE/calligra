@@ -369,7 +369,7 @@ bool KDChartPropertySet::loadXML( const QDomElement& element, KDChartPropertySet
                             set.mExtraMarkersStyle
                                 = KDChartParams::stringToLineMarkerStyle( element.attribute( "Style" ) );
                     } else {
-                        qDebug( "Unknown subelement of KDChartPropertySet found: %s", tagName.latin1() );
+                        qDebug( "Unknown subelement of KDChartPropertySet found: %s", tagName.toLatin1().constData() );
                     }
                 }
                 node = node.nextSibling();

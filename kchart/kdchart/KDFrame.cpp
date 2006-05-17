@@ -68,7 +68,7 @@ void KDFrame::paintBackground( QPainter& painter, const QRect& innerRect ) const
         QPoint oldOrig(  painter.brushOrigin() );
         QBrush oldBrush( painter.brush() );
         painter.setPen( Qt::NoPen );
-        const QPoint newTopLeft( painter.xForm( innerRect.topLeft() ) );
+        const QPoint newTopLeft( innerRect.topLeft() * painter.matrix() );
         painter.setBrushOrigin( newTopLeft.x(), newTopLeft.y() );
         painter.setBrush( _background );
         painter.drawRect( innerRect.x(), innerRect.y(),

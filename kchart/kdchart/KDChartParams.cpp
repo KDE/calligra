@@ -1518,13 +1518,13 @@ KDChartParams::SourceMode KDChartParams::chartSourceMode( uint dataset,
                  ( it != _dataSourceModeAndChart.end() ) && ( it.key() <= b );
                  ++it ){
                 if ( bStart ) {
-                    mode = it.data().mode();
-                    chart = it.data().chart();
+                    mode = it.value().mode();
+                    chart = it.value().chart();
                     bStart = false;
                 } else {
-                    if ( mode != it.data().mode() )
+                    if ( mode != it.value().mode() )
                         mode = UnknownMode;
-                    if ( chart != it.data().chart() )
+                    if ( chart != it.value().chart() )
                         chart = KDCHART_UNKNOWN_CHART;
                 }
             }
@@ -1580,9 +1580,9 @@ bool KDChartParams::findDataset( SourceMode mode,
         ModeAndChartMap::ConstIterator it;
         for ( it = _dataSourceModeAndChart.begin();
                 it != _dataSourceModeAndChart.end(); ++it ) {
-            if (    ( it.data().mode() == mode )
+            if (    ( it.value().mode() == mode )
                     && (    ( KDCHART_ALL_CHARTS == chart )
-                        || ( it.data().chart()  == chart ) ) ) {
+                        || ( it.value().chart()  == chart ) ) ) {
                 if ( bStart ) {
                     dataset = it.key();
                     bStart = false;
@@ -1827,7 +1827,7 @@ void KDChartParams::calculateShadowColors( QColor color,
         shadow2 = QColor();
     } else {
         int hue, saturation, value;
-        color.hsv( &hue, &saturation, &value );
+        color.getHsv( &hue, &saturation, &value );
         double v = value;
         v = v * 2.0 / 3.0 * shadowBrightnessFactor();
         if ( 255.0 < v )
@@ -1892,7 +1892,7 @@ void KDChartParams::recomputeShadowColors()
     // recomputation of the shadow colors.
     for( QMap<uint,QColor>::Iterator it = _dataColors.begin();
             it != _dataColors.end(); ++it ) {
-        setDataColor( it.key(), it.data() );
+        setDataColor( it.key(), it.value() );
     }
 }
 
@@ -9185,7 +9185,7 @@ void KDChartParams::insertDefaultAxisTitleBox( uint n,
        titleString = "<qt><center> </center></qt>";
 
 
-    const QString stripTitleString( titleString.simplified().upper() );
+    const QString stripTitleString( titleString.simplified().toUpper() );
     if( setTitle ){
         if( !stripTitleString.startsWith("<QT>" ) )
             titleString.prepend("<qt><center>");
@@ -9237,7 +9237,7 @@ void KDChartParams::setAxisTitle( uint n, const QString& axisTitle )
         KDChartCustomBox* box = (KDChartCustomBox*)customBox( boxID );
         if( box ){
 	  QString title = axisTitle;
-	  const QString stripTitleString( title.simplified().upper() );
+	  const QString stripTitleString( title.simplified().toUpper() );
 	  if( !stripTitleString.startsWith("<QT>" ) )
 	    title.prepend("<qt><center>");
 	  if( !stripTitleString.endsWith("</QT>" ) )

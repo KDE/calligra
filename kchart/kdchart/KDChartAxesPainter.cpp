@@ -677,7 +677,7 @@ void KDChartAxesPainter::paintAxes( QPainter* painter,
                                 anchor.setY( p2.y() + static_cast < int > ( pYDelta * (iLabel - 0.5) ) );
 
                                 // allow for shearing and/or scaling of the painter
-                                anchor = painter->worldMatrix().map( anchor );
+                                anchor = painter->matrix().map( anchor );
 
                                 QString text;
                                 if( cv.isDateTime ){
@@ -1740,7 +1740,7 @@ void KDChartAxesPainter::paintAxes( QPainter* painter,
 				  KDDrawText::drawRotatedText(
 						painter,
 						nRotation,
-						painter->worldMatrix().map(
+						painter->matrix().map(
                                                 QPoint( static_cast<int>( cv.pTextsX ),
                                                         static_cast<int>( cv.pTextsY ) ) ),
                                                 label,
@@ -2390,20 +2390,20 @@ void KDChartAxesPainter::calculateLabelTexts(
                 const bool testStart = !( QVariant::String == para.axisValueStart().type() );
                 const bool testEnd   = !( QVariant::String == para.axisValueEnd().type() );
                 QString sStart = testStart
-                    ? para.axisValueStart().toString().upper()
+                    ? para.axisValueStart().toString().toUpper()
                     : QString::null;
                 QString sEnd = testEnd
-                    ? para.axisValueEnd().toString().upper()
+                    ? para.axisValueEnd().toString().toUpper()
                     : QString::null;
 
                 uint i = 0;
                 for ( QStringList::Iterator it = tmpList.begin();
                         it != tmpList.end(); ++it, ++i ) {
                     if ( 0 == iStart &&
-                         0 == QString::compare( sStart, ( *it ).upper() ) ) {
+                         0 == QString::compare( sStart, ( *it ).toUpper() ) ) {
                         iStart = i;
                     }
-                    if ( 0 == QString::compare( sEnd, ( *it ).upper() ) ) {
+                    if ( 0 == QString::compare( sEnd, ( *it ).toUpper() ) ) {
                         iEnd = i;
                     }
                 }
@@ -2447,7 +2447,7 @@ void KDChartAxesPainter::calculateLabelTexts(
             // find 1st significant entry
             QStringList::Iterator it = positive
                 ? tmpList.begin()
-                : tmpList.fromLast();
+                : tmpList.isEmpty() ? tmpList.end() : --tmpList.end();
             if ( positive )
                 for ( int i = 0; i < (int)tmpList.count(); ++i ) {
                     if ( i >= iStart )
@@ -3605,7 +3605,7 @@ QString KDChartAxesPainter::truncateBehindComma( const double nVal,
     //qDebug("nVal: %f    sVal: "+sVal, nVal );
     //qDebug( QString("                     %1").arg(sVal));
     if ( bUseAutoDigits ) {
-        int comma = sVal.find( '.' );
+        int comma = sVal.indexOf( '.' );
         if ( -1 < comma ) {
             if ( bAutoDelta ) {
                 int i = sVal.length();
@@ -3626,7 +3626,7 @@ QString KDChartAxesPainter::truncateBehindComma( const double nVal,
                     if ( '.' == sDelta[ i - 1 ] )
                         trueBehindComma = 0;
                     else {
-                        int deltaComma = sDelta.find( '.' );
+                        int deltaComma = sDelta.indexOf( '.' );
                         if ( -1 < deltaComma )
                             trueBehindComma = sDelta.length() - deltaComma - 1;
                         else
@@ -3663,7 +3663,7 @@ QString KDChartAxesPainter::applyLabelsFormat( const double nVal,
                                         nDelta,
                                         trueBehindComma );
    
-    int posComma = sVal.find( '.' );
+    int posComma = sVal.indexOf( '.' );
     if( 0 <= posComma ){
         sVal.replace( posComma, 1, decimalPoint);
     }else{
@@ -3696,7 +3696,7 @@ QString KDChartAxesPainter::applyLabelsFormat( const double nVal,
      *and the user has set axisLabelsDigitsBehindComma() == 0
      *return an empty string 
      */
-    if ( behindComma == 0 && QString::number(nVal).find('.') > 0 )
+    if ( behindComma == 0 && QString::number(nVal).indexOf('.') > 0 )
       sVal = QString::null;//sVal = "";
     return sVal;
 }
@@ -3755,7 +3755,7 @@ void KDChartAxesPainter::calculateOrdinateFactors(
                 if ( 100.0 > nDist )
                     nDivisor = 1.0;
                 else {
-                    int comma = sDistDigis2.find( '.' );
+                    int comma = sDistDigis2.indexOf( '.' );
                     if ( -1 < comma )
                         sDistDigis2.truncate( comma );
                     nDivisor = fastPow10( (int)sDistDigis2.length() - 2 );
@@ -4311,7 +4311,7 @@ void KDChartAxesPainter::paintData( QPainter* painter,
     //ourClipRect.setLeft( ourClipRect.left() + 1 );
     //ourClipRect.setRight( ourClipRect.right() - 1 );
 
-    const QMatrix & world = painter->worldMatrix();
+    const QMatrix & world = painter->matrix();
     ourClipRect =
 #if COMPAT_QT_VERSION >= 0x030000
     world.mapRect( ourClipRect );

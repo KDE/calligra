@@ -978,7 +978,7 @@ void KDChartBarPainter::specificPaintData( QPainter* painter,
 			}
 			// Don't use rect for drawing after this!
 			if ( region ) {
-			  rect.moveBy( _dataRect.x(), _dataRect.y() );
+			  rect.translate( _dataRect.x(), _dataRect.y() );
 			  *region += QRegion( rect );
 			}
 		      }
@@ -1356,7 +1356,7 @@ void KDChartBarPainter::specificPaintData( QPainter* painter,
 			  // Don't use rect for drawing after this
 					
 			  if ( region ) {
-			    rect.moveBy( _dataRect.x(), _dataRect.y() );
+			    rect.translate( _dataRect.x(), _dataRect.y() );
 			    *region += QRegion( rect );
 			  }
 					 

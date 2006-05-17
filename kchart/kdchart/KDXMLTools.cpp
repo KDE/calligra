@@ -131,8 +131,8 @@ namespace KDXML {
         createColorNode( doc, brushElement, "Color", brush.color() );
         createStringNode( doc, brushElement, "Style",
                 KDXML::brushStyleToString( brush.style() ) );
-        if( brush.style() == Qt::TexturePattern && brush.pixmap() )
-            createPixmapNode( doc, brushElement, "Pixmap", *brush.pixmap() );
+        if( brush.style() == Qt::TexturePattern && !brush.texture().isNull() )
+            createPixmapNode( doc, brushElement, "Pixmap", brush.texture() );
     }
 
 
@@ -473,7 +473,7 @@ namespace KDXML {
             brush.setColor( tempColor );
             brush.setStyle( tempStyle );
             if( !tempPixmap.isNull() )
-                brush.setPixmap( tempPixmap );
+                brush.setTexture( tempPixmap );
         }
 
         return ok;
@@ -539,11 +539,11 @@ namespace KDXML {
                 image.loadFromData( (const uchar*)baunzip.data(), tempLength, "XPM" );
 
                 if( image.isNull() )
-                    pixmap.resize( 0, 0 ); // This is _not_ an error, we just read a NULL pixmap!
+                    pixmap = QPixmap( 0, 0 ); // This is _not_ an error, we just read a NULL pixmap!
                 else
-                    ok = ok & pixmap.convertFromImage( image, 0 );
+                    ok = ok & !QPixmap::fromImage( image /*, 0*/ ).isNull();
             } else
-                pixmap.resize( 0, 0 ); // This is _not_ an error, we just read a empty pixmap!
+                pixmap = QPixmap( 0, 0 ); // This is _not_ an error, we just read a empty pixmap!
         }
 
         return ok;

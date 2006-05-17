@@ -73,8 +73,8 @@
   \param name the widget name; passed on to QWidget
   */
 
-KDChartWidget::KDChartWidget( QWidget* parent, const char* name ) :
-QWidget( parent, name ),
+KDChartWidget::KDChartWidget( QWidget* parent ) :
+QWidget( parent ),
     _params( 0 ),
     _data( 0 ),
     _activeData( false ),
@@ -97,8 +97,8 @@ _mousePressedOnRegion( 0 )
 
 KDChartWidget::KDChartWidget( KDChartParams* params,
         KDChartTableDataBase* data,
-        QWidget* parent, const char* name ) :
-QWidget( parent, name ),
+        QWidget* parent  ) :
+QWidget( parent ),
     _params( params ),
     _data( data ),
     _activeData( false ),
@@ -238,7 +238,7 @@ void KDChartWidget::resizeEvent( QResizeEvent* /*event*/ )
     // if we use double-buffering, resize the buffer to the new size,
     // otherwise leave it alone
     if( _doubleBuffered )
-        _buffer.resize( size() );
+        _buffer = QPixmap( size() );
 }
 
 
@@ -297,11 +297,11 @@ void KDChartWidget::setDoubleBuffered( bool doublebuffered )
     if( doublebuffered ) {
         // turn double-buffering on
         // resize the buffer to the size of the widget
-        _buffer.resize( size() );
+        _buffer = QPixmap( size() );
     } else {
         // turn double-buffering off
         // minimize the buffer so that it does not take any memory
-        _buffer.resize( 0, 0 );
+        _buffer = QPixmap( 0, 0 );
     }
 }
 

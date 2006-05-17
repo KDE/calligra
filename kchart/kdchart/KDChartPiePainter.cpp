@@ -90,9 +90,9 @@ void KDChartPiePainter::paintData( QPainter* painter,
     uint chart = paint2nd ? 1 : 0;
 
     QRect ourClipRect( _dataRect );
-    ourClipRect.addCoords( -1,-1,1,1 );
+    ourClipRect.adjust( -1,-1,1,1 );
 
-    const QMatrix & world = painter->worldMatrix();
+    const QMatrix & world = painter->matrix();
     ourClipRect =
 #if COMPAT_QT_VERSION >= 0x030000
         world.mapRect( ourClipRect );
@@ -143,7 +143,7 @@ void KDChartPiePainter::paintData( QPainter* painter,
         int x = ( _dataRect.width() == _size ) ? 0 : ( ( _dataRect.width() - _size ) / 2 );
         int y = ( _dataRect.height() == _size ) ? 0 : ( ( _dataRect.height() - _size ) / 2 );
         _position = QRect( x, y, _size, _size );
-        _position.moveBy( _dataRect.left(), _dataRect.top() );
+        _position.translate( _dataRect.left(), _dataRect.top() );
     } else {
         // threeD: width is the maximum possible width; height is 1/2 of that
         int x = ( _dataRect.width() == _size ) ? 0 : ( ( _dataRect.width() - _size ) / 2 );
@@ -345,7 +345,7 @@ void KDChartPiePainter::drawOnePie( QPainter* painter,
 
                 double explodeX = explodeFactor * _size * cosAngle;
                 double explodeY = explodeFactor * _size * sinAngle;
-                drawPosition.moveBy( static_cast<int>( explodeX ), static_cast<int>( explodeY ) );
+                drawPosition.translate( static_cast<int>( explodeX ), static_cast<int>( explodeY ) );
             } else
                 drawPosition = _position;
         } else

@@ -576,7 +576,7 @@ void KDChartLinesPainter::specificPaintData( QPainter* painter,
                 // store the region
                 else if( regions ) {
                     QRect rect( QPoint( x-1, y-1 ), QPoint( x+1, y+1 ) );
-                    rect.moveBy( _dataRect.x(), _dataRect.y() );
+                    rect.translate( _dataRect.x(), _dataRect.y() );
                     regions->append(
                         new KDChartDataRegion(dataset, value, chart, rect) );
                 }

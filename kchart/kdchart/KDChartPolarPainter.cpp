@@ -91,7 +91,7 @@ void KDChartPolarPainter::paintData( QPainter* painter,
     // PENDING(khz) adjust the clip rect if neccessary...
     //
 
-    const QMatrix & world = painter->worldMatrix();
+    const QMatrix & world = painter->matrix();
     ourClipRect =
 #if COMPAT_QT_VERSION >= 0x030000
         world.mapRect( ourClipRect );
@@ -263,7 +263,7 @@ void KDChartPolarPainter::paintData( QPainter* painter,
             actFont = paraCircular.axisLabelsFont();
             if ( paraCircular.axisLabelsFontUseRelSize() ) {
 //qDebug("paraCircular.axisLabelsFontUseRelSize() is TRUE");
-                actFont.setPointSizeFloat( nTxtHeight );
+                actFont.setPointSizeF( nTxtHeight );
             }
             QFontMetrics fm( actFont );
             QString strMax;
@@ -279,7 +279,7 @@ void KDChartPolarPainter::paintData( QPainter* painter,
             while ( fm.width( strMax ) > pTextsW
                     && 6.0 < nTxtHeight ) {
                 nTxtHeight -= 0.5;
-                actFont.setPointSizeFloat( nTxtHeight );
+                actFont.setPointSizeF( nTxtHeight );
                 fm = QFontMetrics( actFont );
             }
             painter->setFont( actFont );
@@ -477,7 +477,7 @@ void KDChartPolarPainter::paintData( QPainter* painter,
                     // calculate font size
                     actFont = paraSagittal.axisLabelsFont();
                     if ( paraSagittal.axisLabelsFontUseRelSize() ) {
-                        actFont.setPointSizeFloat( nTxtHeight );
+                        actFont.setPointSizeF( nTxtHeight );
                     }
                     QFontMetrics fm( actFont );
                     QString strMax;
@@ -494,7 +494,7 @@ void KDChartPolarPainter::paintData( QPainter* painter,
                     }
                     while ( fm.width( strMax ) > pTextsW && 6.0 < nTxtHeight ) {
                         nTxtHeight -= 0.5;
-                        actFont.setPointSizeFloat( nTxtHeight );
+                        actFont.setPointSizeF( nTxtHeight );
                         fm = QFontMetrics( actFont );
                     }
                     painter->setFont( actFont );
@@ -540,7 +540,7 @@ void KDChartPolarPainter::paintData( QPainter* painter,
 
                 KDDrawText::drawRotatedText( painter,
                         currentAngle+90,
-                        painter->worldMatrix().map(pt3),
+                        painter->matrix().map(pt3),
                         label,
                         0,
                         Qt::AlignCenter );
@@ -675,7 +675,7 @@ void KDChartPolarPainter::paintCircularAxisLabel( QPainter* painter,
     KDDrawText::drawRotatedText(
             painter,
             rotate ? txtAngle - 90 : 0,
-            painter->worldMatrix().map(center - polarToXY( static_cast<int>( currentRadiusPPU ), txtAngle )),
+            painter->matrix().map(center - polarToXY( static_cast<int>( currentRadiusPPU ), txtAngle )),
             txt,
             0,
             step

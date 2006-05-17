@@ -252,7 +252,7 @@ void KDChartHiLoPainter::specificPaintData( QPainter* painter,
                     int nTxtHeight =
                         static_cast < int > ( params()->hiLoChartLowValuesFontRelSize()
                                 * averageValueP1000 );
-                    theFont.setPointSizeFloat( nTxtHeight );
+                    theFont.setPointSizeF( nTxtHeight );
                 }
                 KDChartTextPiece lowText( painter, QString::number( lowValue ),
                         theFont );
@@ -294,7 +294,7 @@ void KDChartHiLoPainter::specificPaintData( QPainter* painter,
                     int nTxtHeight =
                         static_cast < int > ( params()->hiLoChartHighValuesFontRelSize()
                                 * averageValueP1000 );
-                    theFont.setPointSizeFloat( nTxtHeight );
+                    theFont.setPointSizeF( nTxtHeight );
                 }
                 KDChartTextPiece highText( painter, QString::number( highValue ),
                         theFont );
@@ -335,7 +335,7 @@ void KDChartHiLoPainter::specificPaintData( QPainter* painter,
                     int nTxtHeight =
                         static_cast < int > ( params()->hiLoChartOpenValuesFontRelSize()
                                 * averageValueP1000 );
-                    theFont.setPointSizeFloat( nTxtHeight );
+                    theFont.setPointSizeF( nTxtHeight );
                 }
                 KDChartTextPiece openText( painter, QString::number( openValue ),
                         theFont );
@@ -364,7 +364,7 @@ void KDChartHiLoPainter::specificPaintData( QPainter* painter,
                     int nTxtHeight =
                         static_cast < int > ( params()->hiLoChartCloseValuesFontRelSize()
                                 * averageValueP1000 );
-                    theFont.setPointSizeFloat( nTxtHeight );
+                    theFont.setPointSizeF( nTxtHeight );
                 }
                 KDChartTextPiece closeText( painter, QString::number( closeValue ),
                         theFont );

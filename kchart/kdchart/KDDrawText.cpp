@@ -145,7 +145,7 @@ void KDDrawText::drawRotatedTxt( QPainter* painter,
             mustBackrotate = true;
     }
 
-    QPoint pos = useInfos ? infos->pos : painter->xFormDev( anchor );
+    QPoint pos = useInfos ? infos->pos : anchor * painter->matrix().inverted();
 
     if( useInfos )
     {
@@ -171,7 +171,7 @@ void KDDrawText::drawRotatedTxt( QPainter* painter,
                 int tw;
                 txtWidth = 0;
                 int i0  = 0;
-                int iLF = text.find('\n');
+                int iLF = text.indexOf('\n');
                 while( -1 != iLF ){
                     const QRect r(pFM->boundingRect( text.mid(i0, iLF-i0) ));
                     tw = r.width()+ 2;
@@ -179,7 +179,7 @@ void KDDrawText::drawRotatedTxt( QPainter* painter,
                     if( tw > txtWidth )
                         txtWidth = tw;
                     i0 = iLF+1;
-                    iLF = text.find('\n', i0);
+                    iLF = text.indexOf('\n', i0);
                 }
                 if( iLF < (int)text.length() ){
                     const QRect r(pFM->boundingRect( text.mid( i0 ) ));
@@ -252,7 +252,7 @@ void KDDrawText::drawRotatedTxt( QPainter* painter,
         }
     }
     if( infos && !useInfos ) {
-         painter->xForm( pos );
+        pos * painter->matrix();
         infos->x = x - 4;
         infos->y = y - 4;
         //PENDING Michel updating info using x , y from pos 
@@ -268,10 +268,10 @@ void KDDrawText::drawRotatedTxt( QPainter* painter,
                     text ) );
         //painter->fillRect (rect, Qt::blue );
         
-        QPoint topLeft(     painter->xForm( rect.topLeft()     ) );
-        QPoint topRight(    painter->xForm( rect.topRight()    ) );
-        QPoint bottomRight( painter->xForm( rect.bottomRight() ) );
-        QPoint bottomLeft(  painter->xForm( rect.bottomLeft()  ) );
+        QPoint topLeft(     rect.topLeft() * painter->matrix() );
+        QPoint topRight(    rect.topRight() * painter->matrix() );
+        QPoint bottomRight( rect.bottomRight() * painter->matrix() );
+        QPoint bottomLeft(  rect.bottomLeft() * painter->matrix() );
       
         int additor = addPercentOfHeightToRegion * txtHeight / 100;
         Q3PointArray points;

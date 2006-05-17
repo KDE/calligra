@@ -424,7 +424,7 @@ void KDChartBWPainter::specificPaintData( QPainter* painter,
             if( noBrush ) {
                 // use different color brightness for the Mean marker
                 int h,s,v;
-                color.hsv(&h,&s,&v);
+                color.getHsv(&h,&s,&v);
                 painter->setPen( QPen( 128 > v ? color.light(150) : color.dark(150),
                             lineWidthD2 ) );
             } else
@@ -446,11 +446,11 @@ void KDChartBWPainter::specificPaintData( QPainter* painter,
                 KDChartParams::BWStatVal i = (KDChartParams::BWStatVal)ii;
                 if( params()->bWChartPrintStatistics( i ) ) {
                     QFont statFont( params()->bWChartStatisticsFont( i ) );
-                    float nTxtHeight = statFont.pointSizeFloat();
+                    float nTxtHeight = statFont.pointSizeF();
                     if ( params()->bWChartStatisticsUseRelSize( i ) ) {
                         nTxtHeight = params()->bWChartStatisticsFontRelSize( i )
                             * boxWidth / 100;
-                        statFont.setPointSizeFloat( nTxtHeight );
+                        statFont.setPointSizeF( nTxtHeight );
                     }
                     double drawStat = pixelsPerUnit * stats[i];
                     KDChartTextPiece statText( painter, QString::number( stats[i] ),

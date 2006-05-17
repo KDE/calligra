@@ -56,10 +56,10 @@ class KDCHART_EXPORT KDChartWidget : public QWidget
     Q_PROPERTY( bool doubleBuffered READ isDoubleBuffered WRITE setDoubleBuffered )
 
 public:
-    KDChartWidget( QWidget* parent = 0, const char* name = 0 );
+    KDChartWidget( QWidget* parent = 0 );
     KDChartWidget( KDChartParams* params,
                    KDChartTableDataBase* data,
-                   QWidget* parent = 0, const char* name = 0 );
+                   QWidget* parent = 0 );
     ~KDChartWidget();
 
 public slots:

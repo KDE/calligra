@@ -95,7 +95,7 @@ float KDChartCustomBox::trueFontSize( double areaWidthP1000,
             size = targetLineSpacing;
             // step #1  -  try to make the right font size:
             QFont font( content().font() );
-            font.setPointSizeFloat( size );
+            font.setPointSizeF( size );
             QFontMetrics fm( font );
 	    //qDebug(QString("\nsize                   : ")+QString::number(size));
 	    //qDebug(QString("(float)rectHeight      : ")+QString::number((float)rectHeight));
@@ -103,7 +103,7 @@ float KDChartCustomBox::trueFontSize( double areaWidthP1000,
             size *= targetLineSpacing / fm.lineSpacing();
 	    //qDebug(QString("size                   : ")+QString::number(size));
             // step #2  -  make sure the font size is not too big:
-            font.setPointSizeFloat( size );
+            font.setPointSizeF( size );
             QFontMetrics fm2( font );
             size *= targetLineSpacing / fm2.lineSpacing();
 	    //qDebug(QString("(float)rectHeight      : ")+QString::number((float)rectHeight));
@@ -132,7 +132,7 @@ int KDChartCustomBox::trueFontLineSpacing( double areaWidthP1000,
                                            int rectHeight ) const
 {
     QFont font( content().font() );
-    font.setPointSizeFloat( trueFontSize( areaWidthP1000,areaHeightP1000, rectHeight ) );
+    font.setPointSizeF( trueFontSize( areaWidthP1000,areaHeightP1000, rectHeight ) );
     QFontMetrics fm( font );
     return fm.lineSpacing();
 }
@@ -186,14 +186,14 @@ QRect KDChartCustomBox::trueRect( QPoint anchor, double areaWidthP1000, double a
       //Now calculate the size of the box based upon the content!
         QFont font( content().font() );
         if ( _fontSize ) {
-            font.setPointSizeFloat(
+            font.setPointSizeF(
                 (0 > _fontSize)
             ? (_fontSize * qMin(areaWidthP1000, areaHeightP1000) * -1.0)//(areaWidthP1000 + areaHeightP1000) / -2.0
             : _fontSize );
 	    //qDebug("\n_fontSize * qMin(areaWidthP1000, areaHeightP1000)    %i * qMin(%f, %f) text: %s", _fontSize , areaWidthP1000, areaHeightP1000, content().text().latin1());
         }
         QString txt(     content().text() );
-        QString txtTest( txt.trimmed().lower() );
+        QString txtTest( txt.trimmed().toLower() );
 #if QT_VERSION >= 200 && QT_VERSION < 300
 // version 2.x
         if( !(txtTest.left(4) == "<qt>") )
@@ -306,9 +306,9 @@ qDebug("pdWidth: %i    box myRect w: %i  h %i",pdWidth,myRect.width(),myRect.hei
         if( _rotation ){
             getTrueShift( areaWidthP1000, areaHeightP1000, myRect.height(),
                           rotDX, rotDY );
-            myRect.moveBy( -rotDX, -rotDY );
+            myRect.translate( -rotDX, -rotDY );
             if( frame ) 
-                myFrameRect.moveBy( -rotDX, -rotDY );
+                myFrameRect.translate( -rotDX, -rotDY );
 //qDebug("\nrotDelta:  x %i  y %i",rotDX,rotDY);
 //qDebug("\nbox myRect center:  x %i  y %i",myRect.center().x(),myRect.center().y());
             myRect.moveCenter( QPoint( anchor.x() - trueRectAlignX(myRect),
@@ -327,7 +327,7 @@ qDebug("pdWidth: %i    box myRect w: %i  h %i",pdWidth,myRect.width(),myRect.hei
 	  QFont font( content().font() );
           
           float trueSize = trueFontSize(areaWidthP1000,areaHeightP1000, myRect.height() );
-          font.setPointSizeFloat( trueSize );  
+          font.setPointSizeF( trueSize );  
           //adjust the area height related to the font size 
           myRect.setHeight( (int)(trueSize )+ (int)(trueSize*0.5));     
 	  const KDChartTextPiece tmpTextPiece( painter, content().text(), font );
