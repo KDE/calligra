@@ -145,8 +145,9 @@ void KoTextObject::slotParagraphCreated(KoTextParag * /*parag*/)
 
 void KoTextObject::slotParagraphDeleted(KoTextParag * parag)
 {
-    if ( m_lastFormatted == parag )
-        m_lastFormatted = parag->next();
+    if ( m_lastFormatted == parag )
+        m_lastFormatted = parag->next();
+
     // ### TODO: remove from kwbgspellcheck
     // not needed, since KoTextIterator takes care of that.
 }

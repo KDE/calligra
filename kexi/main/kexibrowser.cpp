@@ -138,7 +138,7 @@ KexiBrowser::KexiBrowser(KexiMainWindow *mainWin)
 	//init popups
 	m_itemPopup = new KPopupMenu(this, "itemPopup");
 	m_itemPopupTitle_id = m_itemPopup->insertTitle("");
-	m_openAction = new KAction(i18n("&Open"), "fileopen", Key_Enter, this, 
+	m_openAction = new KAction(i18n("&Open"), "fileopen", 0/*Key_Enter conflict!*/, this, 
 		SLOT(slotOpenObject()), this, "open_object");
 	m_openAction->setToolTip(i18n("Open object"));
 	m_openAction->setWhatsThis(i18n("Opens object selected in the list"));
@@ -148,7 +148,7 @@ KexiBrowser::KexiBrowser(KexiMainWindow *mainWin)
 	KexiSmallToolButton *btn = new KexiSmallToolButton(this, m_openAction);
 	buttons_flyr->add(btn);
 
-	m_designAction = new KAction(i18n("&Design"), "edit", CTRL + Key_Enter, this, 
+	m_designAction = new KAction(i18n("&Design"), "edit", 0/*CTRL + Key_Enter conflict!*/, this, 
 		SLOT(slotDesignObject()), this, "design_object");
 	m_designAction->setToolTip(i18n("Design object"));
 	m_designAction->setWhatsThis(i18n("Starts designing of the object selected in the list"));
@@ -414,6 +414,19 @@ bool KexiBrowser::eventFilter ( QObject *o, QEvent * e )
 		if (e->type()==QEvent::Hide) 
 			itemRenameDone();
 	}
+	else if (e->type()==QEvent::KeyPress) {
+		QKeyEvent *ke = static_cast<QKeyEvent*>(e);
+		if (ke->key()==Qt::Key_Enter || ke->key()==Qt::Key_Return) {
+			if (0==(ke->state() & (Qt::ShiftButton|Qt::ControlButton|Qt::AltButton))) {
+				QListViewItem *it = m_list->selectedItem();
+				if (it)
+					slotExecuteItem(it);
+			}
+			else if (Qt::ControlButton==(ke->state() & (Qt::ShiftButton|Qt::ControlButton|Qt::AltButton))) {
+				slotDesignObject();
+			}
+		}
+	}
 	else if (e->type()==QEvent::AccelOverride) {
 		QKeyEvent *ke = static_cast<QKeyEvent*>(e);
 		//override delete action
@@ -427,7 +440,7 @@ bool KexiBrowser::eventFilter ( QObject *o, QEvent * e )
 			ke->accept();
 			return true;
 		}
-		else if (ke->key()==Key_Enter || ke->key()==Key_Return) {
+/*		else if (ke->key()==Key_Enter || ke->key()==Key_Return) {
 			if (ke->state()==ControlButton) {
 				slotDesignObject();
 			}
@@ -438,7 +451,7 @@ bool KexiBrowser::eventFilter ( QObject *o, QEvent * e )
 			}
 			ke->accept();
 			return true;
-		}
+		}*/
 	}
 	return false;
 }
@@ -538,6 +551,7 @@ void KexiBrowser::setFocus()
 {
 	if (!m_list->selectedItem() && m_list->firstChild())//select first
 		m_list->setSelected(m_list->firstChild(), true);
+	m_list->setFocus();
 }
 
 void KexiBrowser::updateItemName( KexiPart::Item& item, bool dirty )

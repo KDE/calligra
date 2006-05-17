@@ -150,11 +150,11 @@ Set::Set(QObject *parent, const QString &typeName)
 }
 
 
-Set::Set(const Set &l)
- : QObject(l.parent(), l.name())
+Set::Set(const Set &set)
+ : QObject(0 /* implicit sharing the parent is dangerous */, set.name())
 {
 	d = new SetPrivate();
-	*this = l;
+	*this = set;
 }
 
 Set::Set(bool propertyOwner)
@@ -176,7 +176,7 @@ Set::~Set()
 /////////////////////////////////////////////////////
 
 void
-Set::addProperty(Property *property, QCString group)
+Set::addPropertyInternal(Property *property, QCString group, bool updateSortingKey)
 {
 	if (group.isEmpty())
 		group = "common";
@@ -189,8 +189,8 @@ Set::addProperty(Property *property, QCString group)
 		return;
 	}
 
-	if(d->dict.find(property->name())) {
-		Property *p = d->dict[property->name()];
+	Property *p = d->dict.find(property->name());
+	if(p) {
 		p->addRelatedProperty(property);
 	}
 	else {
@@ -199,7 +199,14 @@ Set::addProperty(Property *property, QCString group)
 	}
 
 	property->addSet(this);
-	property->setSortingKey( d->dict.count() );
+	if (updateSortingKey)
+		property->setSortingKey( d->dict.count() );
+}
+
+void
+Set::addProperty(Property *property, QCString group)
+{
+	addPropertyInternal(property, group, true);
 }
 
 void
@@ -230,6 +237,7 @@ void
 Set::clear()
 {
 	aboutToBeCleared();
+	d->propertiesOfGroup.clear();
 	Property::DictIterator it(d->dict);
 	while (it.current())
 		removeProperty( it.current() );
@@ -341,23 +349,24 @@ Set::operator[](const QCString &name)
 }
 
 const Set&
-Set::operator= (const Set &l)
+Set::operator= (const Set &set)
 {
-	if(&l == this)
+	if(&set == this)
 		return *this;
 
 	d->dict.clear();
+	d->propertiesOfGroup.clear();
 	d->groupForProperty.clear();
 
-	d->ownProperty = l.d->ownProperty;
-	d->prevSelection = l.d->prevSelection;
-	d->groupsDescription = l.d->groupsDescription;
-	d->propertiesOfGroup = l.d->propertiesOfGroup;
+	d->ownProperty = set.d->ownProperty;
+	d->prevSelection = set.d->prevSelection;
+	d->groupsDescription = set.d->groupsDescription;
 
 	// Copy all properties in the list
-	for(Property::DictIterator it(l.d->dict); it.current(); ++it) {
+	for(Property::DictIterator it(set.d->dict); it.current(); ++it) {
 		Property *prop = new Property( *it.current() );
-		addProperty(prop, l.d->groupForProperty[ it.current() ] );
+		addPropertyInternal(prop, set.d->groupForProperty[ it.current() ], 
+			false /*!updateSortingKey, because the key is already set in Property copy ctor.*/ );
 	}
 
 	return *this;

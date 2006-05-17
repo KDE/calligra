@@ -53,7 +53,6 @@ KoTextDocument::KoTextDocument( KoTextZoomHandler *zoomHandler, KoTextFormatColl
     init(); // see korichtext.cpp
 
     m_drawingFlags = 0;
-    setAddMargins( true );                 // top margin and bottom are added, not max'ed
     if ( !formatter )
         formatter = new KoTextFormatter;
     setFormatter( formatter );
@@ -77,7 +76,6 @@ void KoTextDocument::init()
     //minw = 0;
     align = Qt::AlignAuto;
     nSelections = 2;
-    addMargs = FALSE;
 
     underlLinks = TRUE;
     backBrush = 0;
