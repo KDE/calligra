@@ -27,7 +27,9 @@ KexiDBCheckBox::KexiDBCheckBox(const QString &text, QWidget *parent, const char 
  : QCheckBox(text, parent, name), KexiFormDataItemInterface()
 {
 	m_invalidState = false;
+//! todo: tristate 
 	setTristate(true);
+	setFocusPolicy(QWidget::StrongFocus);
 	connect(this, SIGNAL(stateChanged(int)), this, SLOT(slotStateChanged(int)));
 }
 
@@ -56,13 +58,16 @@ KexiDBCheckBox::setEnabled(bool enabled)
 
 void KexiDBCheckBox::setValueInternal(const QVariant &add, bool )
 {
-	setState( add.isNull() ? NoChange : (add.toBool() ? On : Off) );
+//	setState( add.isNull() ? NoChange : (add.toBool() ? On : Off) );
+	setState( m_origValue.isNull() ? NoChange : (m_origValue.toBool() ? On : Off) );
 }
 
 QVariant
 KexiDBCheckBox::value()
 {
-	return QVariant( isChecked(), 3 );
+	if (state()==NoChange)
+		return QVariant();
+	return QVariant(state()==On, 1);
 }
 
 void KexiDBCheckBox::slotStateChanged(int )

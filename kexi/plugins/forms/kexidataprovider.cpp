@@ -96,7 +96,8 @@ void KexiFormDataProvider::fillDataItems(KexiTableItem& row)
  	for (KexiFormDataItemInterfaceToIntMap::ConstIterator it = m_fieldNumbersForDataItems.constBegin(); 
 		it!=m_fieldNumbersForDataItems.constEnd(); ++it)
 	{
-		kexipluginsdbg << "fill data of '" << it.key()->dataSource() <<  "' at idx=" << it.data() << endl;
+		kexipluginsdbg << "fill data of '" << it.key()->dataSource() <<  "' at idx=" << it.data() 
+			<< " data=" << row.at(it.data()) << endl;
 		it.key()->setValue( row.at(it.data()) );
 	}
 }
