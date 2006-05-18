@@ -222,6 +222,14 @@ Things to do after the release of KOffice 1.4
 
   + Locked areas (for formulas with a matrix as result)		      2 TOMA
 
+  + Function optimizer ('Solver')				      2 ----
+    - evaluate, if we're able to use linear methods (derivatives!)	----
+    - evaluate, how to include side conditions				----
+    - implemt: optimize to maximum, to specific value			----
+    - check wether the formula cell carries a valid formulas		----
+      and further checks of used cell contents
+
+
 * Major features (big effort)
   + Script, Script-Editor (like VBA in Excel)			      2 ----
     - Suggestion: Kross
