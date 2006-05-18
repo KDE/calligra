@@ -235,10 +235,12 @@ class ListBoxItem : public QListBoxText
 			: QListBoxText(listbox, text, after) {}
 		virtual ~ListBoxItem() {}
 		virtual int width(const QListBox* lb) const {
-			return lb->viewport()->width();
+			Q_ASSERT( dynamic_cast<KComboBox*>( lb->parent() ) );
+			return static_cast<KComboBox*>( lb->parent() )->lineEdit()->width() + 2;
 		}
 		virtual int height(const QListBox* lb) const {
-			return static_cast<QWidget*>( lb->parent() )->height();
+			Q_ASSERT( dynamic_cast<KComboBox*>( lb->parent() ) );
+			return static_cast<KComboBox*>( lb->parent() )->height() + 2;
 		}
 };
 
@@ -265,33 +267,31 @@ class EditListBoxItem : public ListBoxItem
 		}
 
 		virtual QString text() const {
-			kdDebug()<<"EditListBoxItem::text() text="<<m_variable->toString()<<endl;
-			Q_ASSERT(m_variable);
-			Q_ASSERT(m_variable->toString() != QString::null);
-			return m_variable->toString();
+			KoMacro::Variable::Ptr variable = m_macroproperty->variable();
+			Q_ASSERT( variable.data() );
+			kdDebug()<<"EditListBoxItem::text() text="<<variable->toString()<<endl;
+			Q_ASSERT( variable->toString() != QString::null );
+			return variable->toString();
 		}
 
 		KoProperty::Widget* widget() const { return m_widget; }
-		KoMacro::Variable::Ptr variable() const { return m_variable; }
+		KoMacro::Variable::Ptr variable() const { return m_macroproperty->variable(); }
 		KoMacro::Action::Ptr action() const { return m_action; }
 
 	protected:
 		virtual void paint(QPainter* p) {
 			if(! m_widget) return;
 			Q_ASSERT( dynamic_cast<KComboBox*>( listBox()->parent() ) );
-			int w = static_cast<KComboBox*>( listBox()->parent() )->lineEdit()->width();
-			int h = static_cast<QWidget*>(listBox()->parent())->height();
-			m_widget->setFixedSize(w - 1, h - 1);
-			p->drawPixmap(1, 1, QPixmap::grabWidget(m_widget), 0, 0, w, h);
+			int w = width(listBox());
+			int h = height(listBox());
+			m_widget->setFixedSize(w - 2, h - 2);
+			p->drawPixmap(0, 0, QPixmap::grabWidget(m_widget), 1, 1, w - 1, h - 1);
 		}
 
 	private:
 		void init() {
 			KoMacro::MacroItem::Ptr macroitem = m_macroproperty->macroItem();
-			if(! macroitem.data()) {
-				kdWarning() << "EditListBoxItem::EditListBoxItem() Skipped cause there exists no macroitem!" << endl;
-				return;
-			}
+			Q_ASSERT( macroitem.data() );
 			m_action = m_macroproperty->macroItem()->action();
 			if(! m_action.data()) {
 				kdWarning() << "EditListBoxItem::EditListBoxItem() Skipped cause there exists no action for macroproperty=" << m_macroproperty->name() << endl;
@@ -302,13 +302,13 @@ class EditListBoxItem : public ListBoxItem
 				kdWarning() << "EditListBoxItem::EditListBoxItem() No parentproperty defined" << endl;
 				return;
 			}
-			m_variable = m_macroproperty->variable();
-			if(! m_variable.data()) {
+			KoMacro::Variable::Ptr variable = m_macroproperty->variable();
+			if(! variable.data()) {
 				kdWarning() << "EditListBoxItem::EditListBoxItem() No variable defined for property=" << parentproperty->name() << endl;
 				return;
 			}
 
-			QVariant variant = m_variable->variant();
+			QVariant variant = variable->variant();
 
 			KoMacro::Variable::Ptr actionvariable = m_action->variable(m_macroproperty->name());
 			if(actionvariable.data()) {
@@ -329,15 +329,15 @@ class EditListBoxItem : public ListBoxItem
 					type = KoProperty::String;
 				} break;
 				default: {
-					kdWarning() << "EditListBoxItem::EditListBoxItem() name=" << m_variable->name() << " type=" << QVariant::typeToName(variant.type()) << endl;
+					kdWarning() << "EditListBoxItem::EditListBoxItem() name=" << variable->name() << " type=" << QVariant::typeToName(variant.type()) << endl;
 				} break;
 			}
 
-			Q_ASSERT(! m_variable->name().isNull());
+			Q_ASSERT(! variable->name().isNull());
 			m_prop = new KoProperty::Property(
-				m_variable->name().latin1(), // name
+				variable->name().latin1(), // name
 				variant, // value
-				m_variable->text(), // caption
+				variable->text(), // caption
 				QString::null, // description
 				type, // type
 				0 //parentproperty // parent
@@ -356,7 +356,6 @@ class EditListBoxItem : public ListBoxItem
 		KexiMacroProperty* m_macroproperty;
 		KoProperty::Property* m_prop;
 		KoProperty::Widget* m_widget;
-		KoMacro::Variable::Ptr m_variable;
 		KoMacro::Action::Ptr m_action;
 };
 
@@ -399,9 +398,8 @@ class ListBox : public QListBox
 
 			QListBoxItem* item = m_edititem;
 			const uint count = m_items.count();
-			for(uint i = 0; i < count; i++) {
-				new ListBoxItem(this, m_items[i], item);
-			}
+			for(uint i = 0; i < count; i++)
+				item = new ListBoxItem(this, m_items[i], item);
 		}
 
 		virtual ~ListBox() {}
@@ -443,10 +441,10 @@ KexiMacroPropertyWidget::KexiMacroPropertyWidget(KoProperty::Property* property,
 	d->combobox = new KComboBox(this);
 	layout->addWidget(d->combobox);
 	d->listbox = new ListBox(d->combobox, d->macroproperty);
+	d->combobox->setEditable(true);
 	d->combobox->setListBox(d->listbox);
 	d->combobox->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 	d->combobox->setMinimumHeight(5);
-	d->combobox->setEditable(true);
 	d->combobox->setInsertionPolicy(QComboBox::NoInsertion);
 	d->combobox->setMinimumSize(10, 0); // to allow the combo to be resized to a small size
 	d->combobox->setAutoCompletion(false);
@@ -466,10 +464,16 @@ KexiMacroPropertyWidget::KexiMacroPropertyWidget(KoProperty::Property* property,
 	kdDebug() << ">>> KexiMacroPropertyWidget::KexiMacroPropertyWidget() CurrentItem=" << d->combobox->currentItem() << endl;
 
 	d->combobox->setFocusProxy( d->listbox->editItem()->widget() );
-	setFocusWidget(d->combobox);
-	connect(d->combobox, SIGNAL(textChanged(const QString&)), this, SLOT(slotComboBoxChanged()));
-	connect(d->combobox, SIGNAL(activated(int)), this, SLOT(slotComboBoxActivated()));
-	connect(d->macroproperty, SIGNAL(valueChanged()), this, SLOT(slotPropertyValueChanged()));
+	setFocusWidget( d->combobox->lineEdit() );
+
+	connect(d->combobox, SIGNAL(textChanged(const QString&)), 
+	        this, SLOT(slotComboBoxChanged()));
+	connect(d->combobox, SIGNAL(activated(int)), 
+	        this, SLOT(slotComboBoxActivated()));
+	connect(d->listbox->editItem()->widget(), SIGNAL(valueChanged(Widget*)),
+	        this, SLOT(slotWidgetValueChanged()));
+	connect(d->macroproperty, SIGNAL(valueChanged()),
+	        this, SLOT(slotPropertyValueChanged()));
 }
 
 KexiMacroPropertyWidget::~KexiMacroPropertyWidget()
@@ -483,7 +487,7 @@ QVariant KexiMacroPropertyWidget::value() const
 	QVariant value = d->combobox->currentText();
 	Q_ASSERT( value.canCast( d->macroproperty->value().type() ) );
 	value.cast( d->macroproperty->value().type() );
-	kdDebug()<<"KexiMacroPropertyWidget::value() value="<<value<<endl;
+	kdDebug()<<"KexiMacroPropertyWidget::value() value="<<value<<" macroproperty="<<d->macroproperty->value()<<endl;
 	return value;
 }
 
@@ -509,33 +513,42 @@ void KexiMacroPropertyWidget::slotComboBoxChanged()
 
 void KexiMacroPropertyWidget::slotComboBoxActivated()
 {
+	Q_ASSERT( d->listbox->editItem()->widget() );
 	const int index = d->combobox->currentItem();
-
-	QString text;
-	if(index == 0) {
-		Q_ASSERT( d->listbox->editItem()->widget() );
-		text = d->listbox->editItem()->widget()->value().toString();
-	}
-	else {
-		text = d->combobox->text(index);
-	}
-
+	QString text = (index == 0)
+		? d->listbox->editItem()->widget()->value().toString()
+		: d->combobox->text(index);
 	kdDebug()<<"KexiMacroPropertyWidget::slotComboBoxActivated() index="<<index<<" text="<<text<<endl;
 	d->combobox->setCurrentText(text);
 	emit valueChanged(this);
 }
 
+void KexiMacroPropertyWidget::slotWidgetValueChanged()
+{
+	/*
+	Q_ASSERT( d->listbox->editItem()->widget() );
+	QVariant value = d->listbox->editItem()->widget()->value();
+	kdDebug()<<"KexiMacroPropertyWidget::slotWidgetValueChanged() value="<<value<<endl;
+	slotComboBoxActivated(); //d->combobox->setCurrentText( value.toString() );
+	*/
+}
+
 void KexiMacroPropertyWidget::slotPropertyValueChanged()
 {
 	const int index = d->combobox->currentItem();
-
 	if(index == 0) {
+		const QVariant v = value();
+kdDebug()<<"............ 1"<<endl;
+		//macroproperty->setValue(v);
+		property()->setValue(v);
+kdDebug()<<"............ 2"<<endl;
 		Q_ASSERT( d->listbox->editItem()->widget() );
-		d->listbox->editItem()->widget()->setValue( value() );
-		kdDebug()<<"KexiMacroPropertyWidget::slotPropertyValueChanged() index="<<index<<" value="<<value()<<endl;
+		d->listbox->editItem()->widget()->setValue(v);
+kdDebug()<<"............ 3"<<endl;
+		kdDebug()<<"KexiMacroPropertyWidget::slotPropertyValueChanged() index="<<index<<" value="<<v<<endl;
 	}
 	else {
-		kdDebug()<<"KexiMacroPropertyWidget::slotPropertyValueChanged() index="<<index<<" NOOOOOOOOOOOOOOOOOOOO"<<endl;
+		kdWarning()<<"KexiMacroPropertyWidget::slotPropertyValueChanged() index="<<index<<" NONE_VALUE !!!"<<endl;
 	}
 }
 

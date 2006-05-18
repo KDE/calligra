@@ -87,7 +87,16 @@ Variable::Map MacroItem::variables() const
 
 QStringList MacroItem::setVariable(const QString& name, const QVariant& variant)
 {
- 	return setVariable(name,new Variable(variant));
+	Variable* variable = d->action ? d->action->variable(name).data() : 0;
+	if(variable) { // try to preserve the type
+		const QVariant var = variable->variant();
+		if(variant.canCast(var.type())) {
+			QVariant v = variant;
+			if(v.cast(var.type()))
+				return setVariable(name, new Variable(v));
+		}
+	}
+ 	return setVariable(name, new Variable(variant));
 }
 
 QStringList MacroItem::setVariable(const QString& name, Variable::Ptr variable)
@@ -100,13 +109,13 @@ QStringList MacroItem::setVariable(const QString& name, Variable::Ptr variable)
 		v = d->action->variable( variable->name() );
 		if(! v.data()) {
 		*/
-		kdDebug() << QString("MacroItem::setVariable() No such variable \"%1\"").arg(name) << endl;
+		kdWarning() << QString("MacroItem::setVariable() No such variable \"%1\"").arg(name) << endl;
 		return QStringList();
 	}
 
 	// Check if the variable is valid.
 	if(! v->validVariable(variable)) {
-		kdDebug() << QString("MacroItem::setVariable() update for variable \"%1\" failed.").arg(name) 	<< endl;
+		kdWarning() << QString("MacroItem::setVariable() update for variable \"%1\" failed.").arg(name) 	<< endl;
 		return QStringList();
 	}
 

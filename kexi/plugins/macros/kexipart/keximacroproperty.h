@@ -164,6 +164,9 @@ class KexiMacroPropertyWidget : public KoProperty::Widget
 		/** Called if an item in the QListBox of the KComboBox got activated. */
 		void slotComboBoxActivated();
 
+		/** Called if the @a KoProperty::Widget of the EditListBoxItem got changed. */
+		void slotWidgetValueChanged();
+
 		/** Called if the value of a @a KexiMacroProperty changed to update
 		the widget and the displayed content. */
 		void slotPropertyValueChanged();
