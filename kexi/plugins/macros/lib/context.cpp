@@ -114,7 +114,6 @@ Variable::Ptr Context::variable(const QString& name) const
 		}
 	}
 	throw Exception(QString("Variable name='%1' does not exist.").arg(name), QString("Komacro::Context::variable"));
-	//return Variable::Ptr(0);
 }
 
 //return a map of our variables

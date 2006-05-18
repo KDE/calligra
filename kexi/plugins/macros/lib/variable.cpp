@@ -143,13 +143,8 @@ void Variable::setText(const QString& text)
 
 const QVariant Variable::variant() const
 {
-	if(type() != MetaParameter::TypeVariant) {
-		throw Exception(
-			QString("Variable is not a variant type."),
-			"KoMacro::Variable::variant()"
-		);
-	}
-
+	Q_ASSERT( type() == MetaParameter::TypeVariant );
+	Q_ASSERT( variantType() != QVariant::Invalid );
 	//if(variantType() == QVariant::Invalid) return QVariant();
 	return d->variant;
 }
@@ -164,13 +159,7 @@ void Variable::setVariant(const QVariant& variant, bool detecttype)
 
 const QObject* Variable::object() const
 {
-	if(! d->object) {
-		throw Exception(
-			QString("Variable is not a object type."),
-			"KoMacro::Variable::object()"
-		);
-	}
-
+	Q_ASSERT( ! d->object );
 	return d->object;
 }
 
