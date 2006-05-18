@@ -42,9 +42,6 @@ class SolverDialog : public KDialog, public Ui::Solver, public Ui::SolverDetails
 public:
   SolverDialog( View* view, QWidget* parent );
 
-protected:
-  void closeEvent( QCloseEvent* );
-
 protected Q_SLOTS:
   void finishDialog();
 };

@@ -27,6 +27,8 @@ SolverDialog::SolverDialog( View* view, QWidget* parent )
   : KDialog( parent, i18n("Function Optimizer"),
              KDialog::Ok|KDialog::Cancel|KDialog::Details )
 {
+  setAttribute( Qt::WA_DeleteOnClose );
+
   QWidget* widget = new QWidget( this );
   Ui::Solver::setupUi( widget );
   setMainWidget( widget );
@@ -44,11 +46,6 @@ SolverDialog::SolverDialog( View* view, QWidget* parent )
            this, SLOT( finishDialog() ) );
   connect( this, SIGNAL( cancelClicked() ),
            this, SLOT( finishDialog() ) );
-}
-
-void SolverDialog::closeEvent( QCloseEvent* )
-{
-  deleteLater();
 }
 
 void SolverDialog::finishDialog()
