@@ -96,6 +96,8 @@ class KexiAlterTableDialogPrivate
 		 , slotPropertyChanged_subType_enabled(true)
 		 , addHistoryCommand_in_slotPropertyChanged_enabled(true)
 		 , addHistoryCommand_in_slotRowUpdated_enabled(true)
+		 , addHistoryCommand_in_slotAboutToDeleteRow_enabled(true)
+		 , addHistoryCommand_in_slotRowInserted_enabled(true)
 		 , slotBeforeCellChanged_enabled(true)
 		{
 			historyActionCollection = new KActionCollection((QWidget*)0,"");
@@ -276,6 +278,11 @@ class KexiAlterTableDialogPrivate
 		bool addHistoryCommand_in_slotPropertyChanged_enabled : 1;
 		//! used in slotRowUpdated() to disable addHistoryCommand()
 		bool addHistoryCommand_in_slotRowUpdated_enabled : 1;
+		//! used in slotAboutToDeleteRow() to disable addHistoryCommand()
+		bool addHistoryCommand_in_slotAboutToDeleteRow_enabled : 1;
+		//! used in slotRowInserted() to disable addHistoryCommand()
+		bool addHistoryCommand_in_slotRowInserted_enabled : 1;
+
 		//! used to disable slotBeforeCellChanged()
 		bool slotBeforeCellChanged_enabled : 1;
 
@@ -344,8 +351,8 @@ KexiAlterTableDialog::KexiAlterTableDialog(KexiMainWindow *win, QWidget *parent,
 		this, SLOT(slotBeforeCellChanged(KexiTableItem*,int,QVariant&,KexiDB::ResultInfo*)));
 	connect(d->data, SIGNAL(rowUpdated(KexiTableItem*)),
 		this, SLOT(slotRowUpdated(KexiTableItem*)));
-	connect(d->data, SIGNAL(aboutToInsertRow(KexiTableItem*,KexiDB::ResultInfo*,bool)),
-		this, SLOT(slotAboutToInsertRow(KexiTableItem*,KexiDB::ResultInfo*,bool)));
+	//connect(d->data, SIGNAL(aboutToInsertRow(KexiTableItem*,KexiDB::ResultInfo*,bool)),
+	//	this, SLOT(slotAboutToInsertRow(KexiTableItem*,KexiDB::ResultInfo*,bool)));
 	connect(d->data, SIGNAL(aboutToDeleteRow(KexiTableItem&,KexiDB::ResultInfo*,bool)),
 		this, SLOT(slotAboutToDeleteRow(KexiTableItem&,KexiDB::ResultInfo*,bool)));
 
@@ -354,7 +361,7 @@ KexiAlterTableDialog::KexiAlterTableDialog(KexiMainWindow *win, QWidget *parent,
 
 	d->sets = new KexiDataAwarePropertySet( this, d->view );
 	connect(d->sets, SIGNAL(rowDeleted()), this, SLOT(updateActions()));
-	connect(d->sets, SIGNAL(rowInserted()), this, SLOT(updateActions()));
+	connect(d->sets, SIGNAL(rowInserted()), this, SLOT(slotRowInserted()));
 
 	plugSharedAction("tablepart_toggle_pkey", this, SLOT(slotTogglePrimaryKey()));
 	d->action_toggle_pkey = static_cast<KToggleAction*>( sharedAction("tablepart_toggle_pkey") );
@@ -764,29 +771,30 @@ void KexiAlterTableDialog::slotBeforeCellChanged(
 			d->view->data()->updateRowEditBuffer(item, COLUMN_ID_TYPE, QVariant((int)0));
 		}
 
-		if (propertySet()) {
+		KoProperty::Set *propertySetForItem = d->sets->findPropertySetForItem(*item);
+
+		if (propertySetForItem) {
 			d->addHistoryCommand_in_slotPropertyChanged_enabled = false; //because we'll add the two changes as one KMacroCommand
-				KoProperty::Set &set = *propertySet();
-				QString oldName( set["name"].value().toString() );
-				QString oldCaption( set["caption"].value().toString() );
+				QString oldName( propertySetForItem->property("name").value().toString() );
+				QString oldCaption( propertySetForItem->property("caption").value().toString() );
 
 				//update field caption and name
-				set["caption"] = newValue;
-				set["name"] = newValue; // "name" prop. is of custom type Identifier, so this assignment 
+				propertySetForItem->changeProperty("caption", newValue);
+				propertySetForItem->changeProperty("name", newValue); // "name" prop. is of custom type Identifier, so this assignment 
 										            // will automatically convert newValue to an valid identifier
 
 				//remember this action containing 2 subactions
 				CommandGroup *changeCaptionAndNameCommand = new CommandGroup(
 					i18n("Change \"%1\" field's name to \"%2\" and caption from \"%3\" to \"%4\"")
-						.arg(oldName).arg(set["name"].value().toString())
+						.arg(oldName).arg(propertySetForItem->property("name").value().toString())
 						.arg(oldCaption).arg(newValue.toString() ));
 				changeCaptionAndNameCommand->addCommand(
-					new ChangeFieldPropertyCommand( this, set,
+					new ChangeFieldPropertyCommand( this, *propertySetForItem,
 							"caption", oldCaption, newValue)
 				);
 				changeCaptionAndNameCommand->addCommand(
-					new ChangeFieldPropertyCommand( this, set,
-							"name", oldName, set["name"].value().toString())
+					new ChangeFieldPropertyCommand( this, *propertySetForItem,
+							"name", oldName, propertySetForItem->property("name").value().toString())
 				);
 				addHistoryCommand( changeCaptionAndNameCommand, false /* !execute */ );
 
@@ -796,16 +804,19 @@ void KexiAlterTableDialog::slotBeforeCellChanged(
 	else if (colnum==COLUMN_ID_TYPE) {//'type'
 		if (newValue.isNull()) {
 			//'type' col will be cleared: clear all other columns as well
-			d->view->data()->updateRowEditBuffer(item, COLUMN_ID_PK, QVariant());
-			d->view->data()->updateRowEditBuffer(item, COLUMN_ID_CAPTION, QVariant(QString::null));
-			d->view->data()->updateRowEditBuffer(item, COLUMN_ID_DESC, QVariant());
+			d->slotBeforeCellChanged_enabled = false;
+				d->view->data()->updateRowEditBuffer(item, COLUMN_ID_PK, QVariant());
+				d->view->data()->updateRowEditBuffer(item, COLUMN_ID_CAPTION, QVariant(QString::null));
+				d->view->data()->updateRowEditBuffer(item, COLUMN_ID_DESC, QVariant());
+			d->slotBeforeCellChanged_enabled = true;
 			return;
 		}
 
-		if (!propertySet())
+		KoProperty::Set *propertySetForItem = d->sets->findPropertySetForItem(*item);
+		if (!propertySetForItem) //propertySet())
 			return;
 
-		KoProperty::Set &set = *propertySet();
+		KoProperty::Set &set = *propertySetForItem; //propertySet();
 
 		//'type' col is changed (existed before)
 		//-get type group number
@@ -892,11 +903,12 @@ void KexiAlterTableDialog::slotBeforeCellChanged(
 		addHistoryCommand( changeDataTypeCommand, false /* !execute */ );
 	}
 	else if (colnum==COLUMN_ID_DESC) {//'description'
-		if (!propertySet())
+		KoProperty::Set *propertySetForItem = d->sets->findPropertySetForItem(*item);
+		if (propertySetForItem) //!propertySet())
 			return;
 
 		//update field desc.
-		KoProperty::Set &set = *propertySet();
+		KoProperty::Set &set = *propertySetForItem;//propertySet();
 		set["description"] = newValue; //item->at(COLUMN_ID_DESC);
 	}
 }
@@ -914,16 +926,17 @@ void KexiAlterTableDialog::slotRowUpdated(KexiTableItem *item)
 	QString fieldCaption( item->at(COLUMN_ID_CAPTION).toString() );
 	const bool prop_set_allowed = !item->at(COLUMN_ID_TYPE).isNull();
 
-	if (!prop_set_allowed && propertySet()) {
+	if (!prop_set_allowed && d->sets->at(row)/*propertySet()*/) {
 		//there is a property set, but it's not allowed - remove it:
 		d->sets->remove( row ); //d->sets->removeCurrentPropertySet();
 
 		//clear 'type' column:
 		d->view->data()->clearRowEditBuffer();
-		d->view->data()->updateRowEditBuffer(d->view->selectedItem(), COLUMN_ID_TYPE, QVariant());
-		d->view->data()->saveRowChanges(*d->view->selectedItem());
+//		d->view->data()->updateRowEditBuffer(d->view->selectedItem(), COLUMN_ID_TYPE, QVariant());
+		d->view->data()->updateRowEditBuffer(item, COLUMN_ID_TYPE, QVariant());
+		d->view->data()->saveRowChanges(*item);
 
-	} else if (prop_set_allowed && !propertySet()) {
+	} else if (prop_set_allowed && !d->sets->at(row)/*propertySet()*/) {
 		//-- create a new field:
 		KexiDB::Field::TypeGroup fieldTypeGroup = static_cast<KexiDB::Field::TypeGroup>( 
 			item->at(COLUMN_ID_TYPE).toInt()+1/*counting from 1*/ );
@@ -952,7 +965,7 @@ void KexiAlterTableDialog::slotRowUpdated(KexiTableItem *item)
 		kexipluginsdbg << "KexiAlterTableDialog::slotRowUpdated(): " << field.debugString() << endl;
 
 		//create a new property set:
-		createPropertySet( row, field, true );
+		KoProperty::Set *newSet = createPropertySet( row, field, true );
 //moved
 		//add a special property indicating that this is brand new buffer,
 		//not just changed
@@ -965,7 +978,7 @@ void KexiAlterTableDialog::slotRowUpdated(KexiTableItem *item)
 
 		if (row>=0) {
 			if (d->addHistoryCommand_in_slotRowUpdated_enabled) {
-				addHistoryCommand( new InsertFieldCommand( this, row, *propertySet() ), //, field /*will be copied*/ 
+				addHistoryCommand( new InsertFieldCommand( this, row, *newSet /*propertySet()*/ ), //, field /*will be copied*/ 
 					false /* !execute */ );
 			}
 		}
@@ -1092,11 +1105,17 @@ void KexiAlterTableDialog::slotPropertyChanged(KoProperty::Set& set, KoProperty:
 	}
 }
 
-void KexiAlterTableDialog::slotAboutToInsertRow(KexiTableItem* /*item*/,
-	KexiDB::ResultInfo* /*result*/, bool /*repaint*/)
+void KexiAlterTableDialog::slotRowInserted()
 {
-	setDirty();
-	//TODO
+	updateActions();
+
+	if (d->addHistoryCommand_in_slotRowInserted_enabled) {
+		const int row = d->view->currentRow();
+		if (row>=0) {
+			addHistoryCommand( new InsertEmptyRowCommand( this, row ), false /* !execute */ );
+		}
+	}
+	//TODO?
 }
 
 void KexiAlterTableDialog::slotAboutToDeleteRow(
@@ -1107,11 +1126,12 @@ void KexiAlterTableDialog::slotAboutToDeleteRow(
 	if (item[COLUMN_ID_PK].toString()=="key")
 		d->primaryKeyExists = false;
 
-	const int row = d->view->data()->findRef(&item);
-	KoProperty::Set *set = row >=0 ? d->sets->at(row) : 0;
-	if (set) {
+	if (d->addHistoryCommand_in_slotAboutToDeleteRow_enabled) {
+		const int row = d->view->data()->findRef(&item);
+		KoProperty::Set *set = row >=0 ? d->sets->at(row) : 0;
+		//set can be 0 here, what means "removing empty row"
 		addHistoryCommand( 
-			new RemoveFieldCommand( this, row, *set ),
+			new RemoveFieldCommand( this, row, set ),
 			false /* !execute */
 		);
 	}
@@ -1457,7 +1477,7 @@ void KexiAlterTableDialog::slotCommandExecuted(KCommand *command)
 #endif
 }
 
-// -- actions used by undo/redo framework
+// -- low-level actions used by undo/redo framework
 
 void KexiAlterTableDialog::clearRow(int row)
 {
@@ -1468,10 +1488,9 @@ void KexiAlterTableDialog::clearRow(int row)
 		return;
 	//remove from prop. set
 	d->sets->remove( row );
-	//clear row in table view
-	for (int i=0; i < (int)d->view->data()->columnsCount(); i++) {
-		d->view->data()->updateRowEditBuffer(item, i, QVariant());
-	}
+	//clear row in table view (just clear value in COLUMN_ID_TYPE column)
+//	for (int i=0; i < (int)d->view->data()->columnsCount(); i++) {
+	d->view->data()->updateRowEditBuffer(item, COLUMN_ID_TYPE, QVariant());
 	d->view->data()->saveRowChanges(*item, true);
 }
 
@@ -1485,17 +1504,23 @@ void KexiAlterTableDialog::insertField( int row, //const KexiDB::Field& field,
 		return;
 	d->addHistoryCommand_in_slotRowUpdated_enabled = false;
 	d->addHistoryCommand_in_slotPropertyChanged_enabled = false;
-		d->view->data()->updateRowEditBuffer(item, COLUMN_ID_CAPTION, set["caption"].value());//field.caption());
-		d->view->data()->updateRowEditBuffer(item, COLUMN_ID_TYPE, 
-			(int)KexiDB::Field::typeGroup( set["type"].value().toInt() )-1/*counting from 0*/);
+		d->slotBeforeCellChanged_enabled = false;
+			d->view->data()->updateRowEditBuffer(item, COLUMN_ID_CAPTION, set["caption"].value());//field.caption());
+			d->view->data()->updateRowEditBuffer(item, COLUMN_ID_TYPE, 
+				(int)KexiDB::Field::typeGroup( set["type"].value().toInt() )-1/*counting from 0*/);
 			//set["subType"].value());//QVariant((int)0));
 //		if (!field.description().isEmpty())
-		d->view->data()->updateRowEditBuffer(item, COLUMN_ID_DESC, set["description"].value());//field.description());
+			d->view->data()->updateRowEditBuffer(item, COLUMN_ID_DESC, set["description"].value());//field.description());
+		d->slotBeforeCellChanged_enabled = true;
 		//this will create a new property set:
 		d->view->data()->saveRowChanges(*item);
 		KoProperty::Set *newSet = d->sets->at(row);
-		Q_ASSERT(newSet);
-		*newSet = set; //deep copy
+		if (newSet) {
+			*newSet = set; //deep copy
+		}
+		else {
+			kexipluginswarn << "KexiAlterTableDialog::insertField() !newSet, row==" << row << endl;
+		}
 	d->addHistoryCommand_in_slotPropertyChanged_enabled = true;
 	d->addHistoryCommand_in_slotRowUpdated_enabled = true;
 	d->view->updateRow( row );
@@ -1504,7 +1529,16 @@ void KexiAlterTableDialog::insertField( int row, //const KexiDB::Field& field,
 
 void KexiAlterTableDialog::insertEmptyRow( int row )
 {
-	d->view->insertEmptyRow( row );
+	d->addHistoryCommand_in_slotRowInserted_enabled = false;
+		d->view->insertEmptyRow( row );
+	d->addHistoryCommand_in_slotRowInserted_enabled = true;
+}
+
+void KexiAlterTableDialog::deleteRow( int row )
+{
+	d->addHistoryCommand_in_slotAboutToDeleteRow_enabled = false;
+		d->view->deleteItem( d->view->data()->at(row) );
+	d->addHistoryCommand_in_slotAboutToDeleteRow_enabled = true;
 }
 
 void KexiAlterTableDialog::deleteField( int row )
@@ -1520,9 +1554,10 @@ void KexiAlterTableDialog::changeFieldProperty( int fieldUID,
  const QCString& propertyName, const QVariant& newValue, 
  KoProperty::Property::ListData* const listData )
 {
+#ifdef KEXI_DEBUG_GUI
 	KexiUtils::addAlterTableActionDebug(QString("changeFieldProperty: \"")
 		+ QString(propertyName) + "\" to \"" + newValue.toString() + "\"", 2/*nestingLevel*/);
-
+#endif
 	if (!d->view->acceptRowEdit())
 		return;
 	//find a property by name
@@ -1567,9 +1602,10 @@ void KexiAlterTableDialog::changeFieldProperty( int fieldUID,
 void KexiAlterTableDialog::changePropertyVisibility(
 	int fieldUID, const QCString& propertyName, bool visible )
 {
+#ifdef KEXI_DEBUG_GUI
 	KexiUtils::addAlterTableActionDebug(QString("changePropertyVisibility: \"")
 		+ QString(propertyName) + "\" to \"" + (visible ? "true" : "false") + "\"", 2/*nestingLevel*/);
-
+#endif
 	if (!d->view->acceptRowEdit())
 		return;
 

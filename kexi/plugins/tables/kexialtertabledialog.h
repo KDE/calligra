@@ -75,8 +75,12 @@ class KexiAlterTableDialog : public KexiDataTable
 		void insertField( int row/*, const KexiDB::Field& field*/, KoProperty::Set& set);
 
 		/*! Inserts a new empty row at position \a row. 
-		 Used by RemoveFieldCommand as a part of undo inserting a new field. */
+		 Used by RemoveFieldCommand as a part of undo inserting a new field;
+		 also used by InsertEmptyRowCommand. */
 		void insertEmptyRow( int row );
+
+		/*! Deleted \a row from the table view; used for undoing InsertEmptyRowCommand. */
+		void deleteRow( int row );
 
 		/*! Inserts a field for \a row. All the subsequent fields are moved up.
 		 Property set is also deleted.
@@ -109,7 +113,8 @@ class KexiAlterTableDialog : public KexiDataTable
 		void slotRowUpdated(KexiTableItem *item);
 
 		//! Called before row inserting in tableview.
-		void slotAboutToInsertRow(KexiTableItem* item, KexiDB::ResultInfo* result, bool repaint);
+		void slotRowInserted();
+//		void slotAboutToInsertRow(KexiTableItem* item, KexiDB::ResultInfo* result, bool repaint);
 
 		//! Called before row deleting in tableview.
 		void slotAboutToDeleteRow(KexiTableItem& item, KexiDB::ResultInfo* result, bool repaint);
