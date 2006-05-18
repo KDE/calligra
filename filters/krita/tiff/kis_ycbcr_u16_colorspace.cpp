@@ -30,10 +30,10 @@
 KisYCbCrU16ColorSpace::KisYCbCrU16ColorSpace(KisColorSpaceFactoryRegistry* parent, KisProfile* p)
     : KisU16BaseColorSpace(KisID("YCbCrAU16", "YCbCr (16-bit integer/channel)"), TYPE_YCbCr_16, icSigYCbCrData, parent, p)
 {
-    m_channels.push_back(new KisChannelInfo("Y", PIXEL_Y * sizeof(Q_UINT16), KisChannelInfo::COLOR, KisChannelInfo::UINT16, sizeof(Q_UINT16)));
-    m_channels.push_back(new KisChannelInfo("Cb", PIXEL_Cb * sizeof(Q_UINT16), KisChannelInfo::COLOR, KisChannelInfo::UINT16, sizeof(Q_UINT16)));
-    m_channels.push_back(new KisChannelInfo("Cr", PIXEL_Cr * sizeof(Q_UINT16), KisChannelInfo::COLOR, KisChannelInfo::UINT16, sizeof(Q_UINT16)));
-    m_channels.push_back(new KisChannelInfo(i18n("Alpha"), PIXEL_ALPHA * sizeof(Q_UINT16), KisChannelInfo::ALPHA, KisChannelInfo::UINT16, sizeof(Q_UINT16)));
+    m_channels.push_back(new KisChannelInfo("Y", "Y", PIXEL_Y * sizeof(Q_UINT16), KisChannelInfo::COLOR, KisChannelInfo::UINT16, sizeof(Q_UINT16)));
+    m_channels.push_back(new KisChannelInfo("Cb", "Cb", PIXEL_Cb * sizeof(Q_UINT16), KisChannelInfo::COLOR, KisChannelInfo::UINT16, sizeof(Q_UINT16)));
+    m_channels.push_back(new KisChannelInfo("Cr", "Cr", PIXEL_Cr * sizeof(Q_UINT16), KisChannelInfo::COLOR, KisChannelInfo::UINT16, sizeof(Q_UINT16)));
+    m_channels.push_back(new KisChannelInfo(i18n("Alpha"), "A", PIXEL_ALPHA * sizeof(Q_UINT16), KisChannelInfo::ALPHA, KisChannelInfo::UINT16, sizeof(Q_UINT16)));
 
     m_alphaPos = PIXEL_ALPHA * sizeof(Q_UINT16);
 }
