@@ -118,31 +118,15 @@ VWhirlPinchDlg::setRadius( double value )
 
 VWhirlPinchCmd::VWhirlPinchCmd( VDocument* doc,
 	double angle, double pinch, double radius )
-		: VCommand( doc, i18n( "Whirl Pinch" ) )
+	: VReplacingCmd( doc, i18n( "Whirl Pinch" ) )
 {
-	m_selection = document()->selection()->clone();
-
 	m_angle = angle;
 	m_pinch = pinch;
 	m_radius = radius;
-	m_center = m_selection->boundingBox().center();
+	m_center = document()->selection()->boundingBox().center();
 }
 
 VWhirlPinchCmd::~VWhirlPinchCmd()
-{
-	delete( m_selection );
-}
-
-void
-VWhirlPinchCmd::execute()
-{
-	VObjectListIterator itr( m_selection->objects() );
-	for ( ; itr.current() ; ++itr )
-		visit( *itr.current() );
-}
-
-void
-VWhirlPinchCmd::unexecute()
 {
 }
 
@@ -165,90 +149,46 @@ VWhirlPinchCmd::visitVSubpath( VSubpath& path )
 
 	path.first();
 
-	while( path.current() )
+	VSegment *curr = path.current();
+
+	while( curr )
 	{
 // TODO: selfmade this function since it's gone:
 //		path.current()->convertToCurve();
 
-
-		// Apply three times separately to each segment node.
-
-		delta = path.current()->knot() - m_center;
-		dist = sqrt( delta.x() * delta.x() + delta.y() * delta.y() );
-
-		if( dist < m_radius )
+		// Apply effect to each segment node.
+		for( int i = 0; i < curr->degree(); ++i )
 		{
-			m.reset();
-
-			dist /= m_radius;
-
-			// pinch:
-			m.translate( m_center.x(), m_center.y() );
-			m.scale(
-				pow( sin( VGlobal::pi_2 * dist ), -m_pinch ),
-				pow( sin( VGlobal::pi_2 * dist ), -m_pinch ) );
-
-			// whirl:
-			m.rotate( m_angle * ( 1.0 - dist ) * ( 1.0 - dist ) );
-			m.translate( -m_center.x(), -m_center.y() );
-
-			path.current()->setKnot( path.current()->knot().transform( m ) );
-		}
-
-		if( path.current()->isCurve() )
-		{
-			delta = path.current()->point( 0 ) - m_center;
+			// calculate distance from whirl center to actual point
+			delta = curr->point( i ) - m_center;
 			dist = sqrt( delta.x() * delta.x() + delta.y() * delta.y() );
-
+	
+			// check if point is inside the whirl radius
 			if( dist < m_radius )
 			{
 				m.reset();
-
+	
+				// normalize distance to whirl radius
 				dist /= m_radius;
-
-				// Pinch.
+	
+				double scale = pow( sin( VGlobal::pi_2 * dist ), -m_pinch );
+				// pinch:
 				m.translate( m_center.x(), m_center.y() );
-				m.scale(
-					pow( sin( VGlobal::pi_2 * dist ), -m_pinch ),
-					pow( sin( VGlobal::pi_2 * dist ), -m_pinch ) );
-
-				// Whirl.
+				m.scale( scale, scale );
+	
+				// whirl:
 				m.rotate( m_angle * ( 1.0 - dist ) * ( 1.0 - dist ) );
 				m.translate( -m_center.x(), -m_center.y() );
-
-				path.current()->setPoint( 0, path.current()->point(0).transform( m ) );
+	
+				path.current()->setPoint( i, curr->point( i ).transform( m ) );
 			}
 
-
-			delta = path.current()->point( 1 ) - m_center;
-			dist = sqrt( delta.x() * delta.x() + delta.y() * delta.y() );
-
-			if( dist < m_radius )
-			{
-				m.reset();
-
-				dist /= m_radius;
-
-				// Pinch.
-				m.translate( m_center.x(), m_center.y() );
-				m.scale(
-					pow( sin( VGlobal::pi_2 * dist ), -m_pinch ),
-					pow( sin( VGlobal::pi_2 * dist ), -m_pinch ) );
-
-				// Whirl.
-				m.rotate( m_angle * ( 1.0 - dist ) * ( 1.0 - dist ) );
-				m.translate( -m_center.x(), -m_center.y() );
-
-				path.current()->setPoint( 1, path.current()->point(1).transform( m ) );
-			}
 		}
-
 
 		if( !success() )
 			setSuccess();
 
-
-		path.next();
+		curr = path.next();
 	}
 
 	// Invalidate bounding box once.
