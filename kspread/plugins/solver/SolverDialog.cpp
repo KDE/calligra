@@ -40,8 +40,15 @@ SolverDialog::SolverDialog( View* view, QWidget* parent )
   Ui::SolverDetails::setupUi( detailsWidget );
   setDetailsWidget( detailsWidget );
 
-  connect( this, SIGNAL( finished() ),
+  connect( this, SIGNAL( okClicked() ),
            this, SLOT( finishDialog() ) );
+  connect( this, SIGNAL( cancelClicked() ),
+           this, SLOT( finishDialog() ) );
+}
+
+void SolverDialog::closeEvent( QCloseEvent* )
+{
+  deleteLater();
 }
 
 void SolverDialog::finishDialog()
