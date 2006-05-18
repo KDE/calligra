@@ -2426,11 +2426,13 @@ void KWView::pasteData( const QMimeData* mimeData, bool drop )
             QString result = KInputDialog::getItem( i18n("Paste"), i18n("Select paste format:"), list, 0, false, &ok );
             if (!ok)
                 return;
-            if ( result == list.first() )
-            {
+            if ( result == list.first() ) {
                 provides = ProvidesImage;
-                mimeData = QApplication::clipboard()->mimeData();
+            } else {
+                provides = ProvidesPlainText;
             }
+            if ( !drop ) // get it again, to avoid crashes
+                mimeData = QApplication::clipboard()->mimeData();
         }
         KWTextFrameSetEdit * edit = currentTextEdit();
         if ( edit && ( provides & ProvidesPlainText ) ) {

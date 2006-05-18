@@ -1523,6 +1523,7 @@ void KWCanvas::contentsDropEvent( QDropEvent *e )
     } else if ( KUrl::List::canDecode( mimeData ) ) {
 
         // TODO ask (with a popupmenu) between inserting a link and inserting the contents
+        // TODO fix khtml to export images when dragging an image+link (as it does when using "Copy")
 
         const KUrl::List lst = KUrl::List::fromMimeData( mimeData );
 
@@ -1566,7 +1567,11 @@ void KWCanvas::pasteImage( const QMimeData *mimeData, const KoPoint &docPoint )
     QImage i = mimeData->imageData().value<QImage>();
     KTempFile tmpFile( QString::null, ".png");
     tmpFile.setAutoDelete( true );
-    i.save(tmpFile.name(), "PNG");
+    if ( !i.save(tmpFile.name(), "PNG") ) {
+        kWarning() << "Couldn't save image to " << tmpFile.name() << endl;
+        return;
+    }
+
     m_pixmapSize = i.size();
     // Prepare things for mrCreatePixmap
     KoPictureKey key;
