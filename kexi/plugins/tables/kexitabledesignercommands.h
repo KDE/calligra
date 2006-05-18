@@ -40,7 +40,7 @@ class QCString;
 
 namespace KexiTableDesignerCommands {
 
-//! Base class for all Table Designer's commands
+//! @short Base class for all Table Designer's commands
 class Command : public KCommand
 {
 	public:
@@ -56,7 +56,7 @@ class Command : public KCommand
 		QGuardedPtr<KexiAlterTableDialog> m_view;
 };
 
-/*! This command is used when changing a property for a table field. */
+//! @short Undo/redo command used for when changing a property for a table field
 class ChangeFieldPropertyCommand : public Command
 {
 	public:
@@ -87,8 +87,59 @@ class ChangeFieldPropertyCommand : public Command
 		KoProperty::Property::ListData* m_oldListData, *m_listData;
 };
 
-/*! This command is used when property visibility is changed. 
- Internal command, only used in addition to property change. */
+//! @short Undo/redo command used when a field is removed from a table
+class RemoveFieldCommand : public Command
+{
+	public:
+		/*! Constructs RemoveFieldCommand object. 
+		 If \a set is 0, the action only means removing empty row (internal). */
+		RemoveFieldCommand( KexiAlterTableDialog* view, int fieldIndex, 
+			const KoProperty::Set* set);
+
+		virtual ~RemoveFieldCommand();
+
+		virtual QString name() const;
+		virtual void execute();
+		virtual void unexecute();
+		virtual const KexiDB::AlterTableHandler::ActionBase& action() { return m_alterTableAction; }
+
+		virtual QString debugString();
+
+	protected:
+		KexiDB::AlterTableHandler::RemoveFieldAction m_alterTableAction;
+		KoProperty::Set* m_set;
+		int m_fieldIndex;
+};
+
+//! @short Undo/redo command used when a new field is inserted into a table
+class InsertFieldCommand : public Command
+{
+	public:
+		InsertFieldCommand( KexiAlterTableDialog* view, 
+			int fieldIndex/*, const KexiDB::Field& field*/, const KoProperty::Set& set );
+		virtual ~InsertFieldCommand();
+
+		virtual QString name() const;
+		virtual void execute();
+		virtual void unexecute();
+		virtual const KexiDB::AlterTableHandler::ActionBase& action();
+
+		virtual QString debugString() { 
+			return name() + "\nAT ROW " + QString::number(m_fieldIndex) //m_alterTableAction.index()) 
+				+ ", FIELD: " + m_set["caption"].value().toString(); //m_alterTableAction.field().debugString(); 
+		}
+
+	protected:
+		int m_fieldIndex;
+		KexiDB::AlterTableHandler::InsertFieldAction *m_alterTableAction;
+		KoProperty::Set m_set;
+};
+
+
+/* ---- Internal commands follow (not used for building performing ALTER TABLE ---- */
+
+//! @short Undo/redo command used when property visibility is changed
+/*! Internal, only used in addition to property change. */
 class ChangePropertyVisibilityCommand : public Command
 {
 	public:
@@ -115,53 +166,24 @@ class ChangePropertyVisibilityCommand : public Command
 		bool m_oldVisibility;
 };
 
-/*! This command is used when a field is removed from a table. */
-class RemoveFieldCommand : public Command
+//! @short Undo/redo command used when property visibility is changed
+/*! Internal, only used in addition to property change. */
+class InsertEmptyRowCommand : public Command
 {
 	public:
-		RemoveFieldCommand( KexiAlterTableDialog* view, int fieldIndex, 
-			const KoProperty::Set& set);//, const KexiDB::Field& field );
-		virtual ~RemoveFieldCommand();
+		/*! Creates the InsertEmptyRowCommand object. */
+		InsertEmptyRowCommand( KexiAlterTableDialog* view, int row );
+		virtual ~InsertEmptyRowCommand();
 
 		virtual QString name() const;
 		virtual void execute();
 		virtual void unexecute();
+		//! Makes no sense: unused
 		virtual const KexiDB::AlterTableHandler::ActionBase& action() { return m_alterTableAction; }
 
-		virtual QString debugString() { 
-			return name() + "\nAT ROW " + QString::number(m_fieldIndex) 
-				+ ", FIELD: " + m_set["caption"].value().toString(); /*m_field.debugString();*/
-		}
-
 	protected:
-		KexiDB::AlterTableHandler::RemoveFieldAction m_alterTableAction;
-		KoProperty::Set m_set;
-//		KexiDB::Field m_field;
-		int m_fieldIndex;
-};
-
-/*! This command is used when a new field is inserted into a table. */
-class InsertFieldCommand : public Command
-{
-	public:
-		InsertFieldCommand( KexiAlterTableDialog* view, 
-			int fieldIndex/*, const KexiDB::Field& field*/, const KoProperty::Set& set );
-		virtual ~InsertFieldCommand();
-
-		virtual QString name() const;
-		virtual void execute();
-		virtual void unexecute();
-		virtual const KexiDB::AlterTableHandler::ActionBase& action();
-
-		virtual QString debugString() { 
-			return name() + "\nAT ROW " + QString::number(m_fieldIndex) //m_alterTableAction.index()) 
-				+ ", FIELD: " + m_set["caption"].value().toString(); //m_alterTableAction.field().debugString(); 
-		}
-
-	protected:
-		int m_fieldIndex;
-		KexiDB::AlterTableHandler::InsertFieldAction *m_alterTableAction;
-		KoProperty::Set m_set;
+		KexiDB::AlterTableHandler::ChangeFieldPropertyAction m_alterTableAction;
+		int m_row;
 };
 
 }

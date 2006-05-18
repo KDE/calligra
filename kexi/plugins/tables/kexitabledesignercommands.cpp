@@ -109,23 +109,25 @@ void ChangeFieldPropertyCommand::unexecute()
 //--------------------------------------------------------
 
 RemoveFieldCommand::RemoveFieldCommand( KexiAlterTableDialog* view, int fieldIndex, 
-	const KoProperty::Set& set)//, const KexiDB::Field& field )
+	const KoProperty::Set* set)
  : Command(view)
- , m_alterTableAction(set["name"].value().toString())
- , m_set(set /*deep copy*/)
-// , m_field(field /*deep copy*/)
+ , m_alterTableAction( set ? (*set)["name"].value().toString() : QString::null )
+ , m_set( set ? new KoProperty::Set(*set /*deep copy*/) : 0 )
  , m_fieldIndex(fieldIndex)
 {
 }
 
 RemoveFieldCommand::~RemoveFieldCommand()
 {
+	delete m_set;
 }
 
 QString RemoveFieldCommand::name() const
 {
-	return i18n("Remove table field \"%1\"")
-		.arg(m_alterTableAction.fieldName());
+	if (m_set)
+		return i18n("Remove table field \"%1\"").arg(m_alterTableAction.fieldName());
+
+	return QString("Remove empty row at position %1").arg(m_fieldIndex);
 }
 
 void RemoveFieldCommand::execute()
@@ -136,7 +138,17 @@ void RemoveFieldCommand::execute()
 void RemoveFieldCommand::unexecute()
 {
 	m_view->insertEmptyRow(m_fieldIndex);
-	m_view->insertField( m_fieldIndex, /*m_field,*/ m_set );
+	if (m_set)
+		m_view->insertField( m_fieldIndex, *m_set );
+}
+
+QString RemoveFieldCommand::debugString()
+{
+	if (!m_set)
+		return name();
+
+	return name() + "\nAT ROW " + QString::number(m_fieldIndex)
+		+ ", FIELD: " + (*m_set)["caption"].value().toString();
 }
 
 //--------------------------------------------------------
@@ -214,5 +226,34 @@ void ChangePropertyVisibilityCommand::unexecute()
 		m_fieldUID,
 		m_alterTableAction.propertyName().latin1(),
 		m_oldVisibility );
+}
+
+//--------------------------------------------------------
+
+InsertEmptyRowCommand::InsertEmptyRowCommand( KexiAlterTableDialog* view, int row )
+ : Command(view)
+ , m_alterTableAction(true) //unused, null action
+ , m_row(row)
+{
+}
+
+InsertEmptyRowCommand::~InsertEmptyRowCommand()
+{
+}
+
+QString InsertEmptyRowCommand::name() const
+{
+	return QString("Insert empty row at position %1").arg(m_row);
+}
+
+void InsertEmptyRowCommand::execute()
+{
+	m_view->insertEmptyRow( m_row );
+}
+
+void InsertEmptyRowCommand::unexecute()
+{
+	// let's assume the row is empty...
+	m_view->deleteRow( m_row );
 }
 
