@@ -86,6 +86,7 @@ void KexiMacroProperty::setValue(const QVariant &value, bool rememberOldValue)
 	Q_UNUSED(rememberOldValue);
 	kdDebug()<<"KexiMacroProperty::setValue name="<<d->name<<" value="<<value<<endl;
 	d->macroitem->setVariable(d->name, value);
+	m_property->setValue(value, true, false);
 	emit valueChanged();
 }
 
@@ -315,7 +316,7 @@ class EditListBoxItem : public ListBoxItem
 				QVariant actionvariant = actionvariable->variant();
 				Q_ASSERT( ! actionvariant.isNull() );
 				Q_ASSERT( variant.canCast( actionvariant.type()) );
-				variant.cast( actionvariant.type() ); //preserve type. FIXME: move to lib!
+				variant.cast( actionvariant.type() ); //preserve type.
 			}
 
 			int type = KoProperty::Auto;
@@ -484,11 +485,15 @@ KexiMacroPropertyWidget::~KexiMacroPropertyWidget()
 
 QVariant KexiMacroPropertyWidget::value() const
 {
+	kdDebug()<<"KexiMacroPropertyWidget::value() value="<<d->macroproperty->value()<<endl;
+	return d->macroproperty->value();
+/*
 	QVariant value = d->combobox->currentText();
 	Q_ASSERT( value.canCast( d->macroproperty->value().type() ) );
 	value.cast( d->macroproperty->value().type() );
 	kdDebug()<<"KexiMacroPropertyWidget::value() value="<<value<<" macroproperty="<<d->macroproperty->value()<<endl;
 	return value;
+*/
 }
 
 void KexiMacroPropertyWidget::setValue(const QVariant& value, bool emitChange)
@@ -508,7 +513,10 @@ void KexiMacroPropertyWidget::setReadOnlyInternal(bool readOnly)
 void KexiMacroPropertyWidget::slotComboBoxChanged()
 {
 	kdDebug()<<"KexiMacroPropertyWidget::slotComboBoxChanged()"<<endl;
-	slotPropertyValueChanged();
+	const QVariant v = d->combobox->currentText();
+	d->macroproperty->setValue(v, true);
+	//d->macroproperty->parentProperty()->setValue(v, true, true);
+	//property()->setValue(v, true, true);
 }
 
 void KexiMacroPropertyWidget::slotComboBoxActivated()
@@ -536,20 +544,14 @@ void KexiMacroPropertyWidget::slotWidgetValueChanged()
 void KexiMacroPropertyWidget::slotPropertyValueChanged()
 {
 	const int index = d->combobox->currentItem();
-	if(index == 0) {
-		const QVariant v = value();
-kdDebug()<<"............ 1"<<endl;
-		//macroproperty->setValue(v);
-		property()->setValue(v);
-kdDebug()<<"............ 2"<<endl;
-		Q_ASSERT( d->listbox->editItem()->widget() );
-		d->listbox->editItem()->widget()->setValue(v);
-kdDebug()<<"............ 3"<<endl;
-		kdDebug()<<"KexiMacroPropertyWidget::slotPropertyValueChanged() index="<<index<<" value="<<v<<endl;
-	}
-	else {
-		kdWarning()<<"KexiMacroPropertyWidget::slotPropertyValueChanged() index="<<index<<" NONE_VALUE !!!"<<endl;
-	}
+	const QVariant v = (index == 0)
+		? value()
+		: d->combobox->text(index);
+
+	//property()->setValue(v, true, false);
+	Q_ASSERT( d->listbox->editItem()->widget() );
+	d->listbox->editItem()->widget()->setValue(v);
+	kdDebug()<<"KexiMacroPropertyWidget::slotPropertyValueChanged() index="<<index<<" value="<<v<<endl;
 }
 
 #include "keximacroproperty.moc"

@@ -90,12 +90,40 @@ QStringList MacroItem::setVariable(const QString& name, const QVariant& variant)
 	Variable* variable = d->action ? d->action->variable(name).data() : 0;
 	if(variable) { // try to preserve the type
 		const QVariant var = variable->variant();
-		if(variant.canCast(var.type())) {
-			QVariant v = variant;
-			if(v.cast(var.type()))
-				return setVariable(name, new Variable(v));
+		QVariant v = variant;
+
+		//FIXME: why QVariant::canCast returns false positives for e.g. integers? :-(
+		bool ok = true;
+		switch( var.type() ) {
+			case QVariant::Bool: {
+				const QString s = variant.toString();
+				ok = (s == "true" || s == "false" || s == "0" || s == "1" || s == "-1");
+				v = variant.toBool();
+			} break;
+			case QVariant::Int: {
+				v = variant.toInt(&ok);
+			} break;
+			case QVariant::UInt: {
+				v = variant.toUInt(&ok);
+			} break;
+			case QVariant::LongLong: {
+				v = variant.toLongLong(&ok);
+			} break;
+			case QVariant::ULongLong: {
+				v = variant.toULongLong(&ok);
+			} break;
+			case QVariant::Double: {
+				v = variant.toDouble(&ok);
+			} break;
+			default: {
+				ok = v.cast( var.type() );
+				kdWarning()<<"MacroItem::setVariable() Unhandled type="<<var.type()<<" value="<<v<<endl;
+			} break;
 		}
+		if(ok)
+			return setVariable(name, new Variable(v));
 	}
+	kdDebug()<<"MacroItem::setVariable() variant="<<variant<<endl;
  	return setVariable(name, new Variable(variant));
 }
 

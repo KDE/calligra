@@ -38,6 +38,10 @@ using namespace KexiMacro;
 
 namespace KexiMacro {
 
+	static const QString DATAVIEW = "data";
+	static const QString DESIGNVIEW = "design";
+	static const QString TEXTVIEW = "text";
+
 	/**
 	* The ViewVariable class provide a list of viewmodes supported
 	* by a KexiPart::Part as @a KoMacro::Variable .
@@ -54,17 +58,18 @@ namespace KexiMacro {
 				if(part) {
 					int viewmodes = part->supportedViewModes();
 					if(viewmodes & Kexi::DataViewMode)
-						namelist << "data";
+						namelist << DATAVIEW;
 					if(viewmodes & Kexi::DesignViewMode)
-						namelist << "design";
+						namelist << DESIGNVIEW;
 					if(viewmodes & Kexi::TextViewMode)
-						namelist << "text";
+						namelist << TEXTVIEW;
 					for(QStringList::Iterator it = namelist.begin(); it != namelist.end(); ++it)
 						this->children().append( KoMacro::Variable::Ptr(new KoMacro::Variable(*it)) );
 				}
-				QString n = viewname;
-				if(n.isNull() || ! namelist.contains(n))
-					n = namelist.count() > 0 ? namelist[0] : "";
+				const QString n =
+					( viewname.isNull() || ! namelist.contains(viewname) )
+						? (namelist.count() > 0 ? namelist[0] : "")
+						: viewname;
 				this->setVariant(n);
 			}
 	};
@@ -113,34 +118,34 @@ KoMacro::Variable::List OpenAction::notifyUpdated(const QString& variablename, K
 void OpenAction::activate(KoMacro::Context::Ptr context)
 {
 	if(! mainWin()->project()) {
-		throw KoMacro::Exception(i18n("No project loaded."), "OpenAction::activate(KoMacro::Context::Ptr)");
+		throw KoMacro::Exception(i18n("No project loaded."), "OpenAction::activate");
 	}
 
 	const QString objectname = context->variable("object")->variant().toString();
 	const QString name = context->variable("name")->variant().toString();
 	KexiPart::Item* item = mainWin()->project()->itemForMimeType( QString("kexi/%1").arg(objectname).latin1(), name );
 	if(! item) {
-		throw KoMacro::Exception(i18n("Invalid item \"%1\".").arg(name), "OpenAction::activate(KoMacro::Context::Ptr)");
+		throw KoMacro::Exception(i18n("No such object \"%1.%2\".").arg(objectname).arg(name), "OpenAction::activate");
 	}
 
 	// Determinate the viewmode.
 	const QString view = context->variable("view")->variant().toString();
 	int viewmode;
-	if(view == "data")
+	if(view == DATAVIEW)
 		viewmode = Kexi::DataViewMode;
-	else if(view == "design")
+	else if(view == DESIGNVIEW)
 		viewmode = Kexi::DesignViewMode;
-	else if(view == "text")
+	else if(view == TEXTVIEW)
 		viewmode = Kexi::TextViewMode;
 	else {
-		throw KoMacro::Exception(i18n("Invalid viewmode \"%1\".").arg(view), "OpenAction::activate(KoMacro::Context::Ptr)");
+		throw KoMacro::Exception(i18n("No such viewmode \"%1\" in object \"%2.%3\".").arg(view).arg(objectname).arg(name), "OpenAction::activate");
 	}
 
 	// Try to open the object now.
 	bool openingCancelled;
 	if(! mainWin()->openObject(item, viewmode, openingCancelled)) {
 		if(! openingCancelled) {
-			throw KoMacro::Exception(i18n("Failed to open object \"%1\".").arg(name), "OpenAction::activate(KoMacro::Context::Ptr)");
+			throw KoMacro::Exception(i18n("Failed to open object \"%1.%2\".").arg(objectname).arg(name), "OpenAction::activate");
 		}
 	}
 }

@@ -121,22 +121,18 @@ void NavigateAction::activate(KoMacro::Context::Ptr context)
 {
 	KexiDialogBase* dialog = dynamic_cast<KexiDialogBase*>( mainWin()->activeWindow() );
 	if(! dialog) {
-		throw KoMacro::Exception(i18n("No window active."), "NavigateAction::activate()");
+		throw KoMacro::Exception(i18n("No window active."), "NavigateAction::activate");
 	}
 
 	KexiViewBase* view = dialog->selectedView();
 	if(! view) {
-		throw KoMacro::Exception(i18n("No view selected."), "NavigateAction::activate()");
+		throw KoMacro::Exception(i18n("No view selected for \"%1\".").arg(dialog->caption()), "NavigateAction::activate");
 	}
 
 	KexiDataAwareView* dbview = dynamic_cast<KexiDataAwareView*>( view );
+	KexiDataAwareObjectInterface* dbobj = dbview ? dbview->dataAwareObject() : 0;
 	if(! dbview) {
-		throw KoMacro::Exception(i18n("View is not dataaware."), "NavigateAction::activate()");
-	}
-
-	KexiDataAwareObjectInterface* dbobj = dbview->dataAwareObject();
-	if(! dbobj) {
-		throw KoMacro::Exception(i18n("View has no database object."), "NavigateAction::activate()");
+		throw KoMacro::Exception(i18n("The view for \"%1\" is not dataaware.").arg(dialog->caption()), "NavigateAction::activate");
 	}
 
 	const QString record = context->variable("record")->variant().toString();
@@ -170,7 +166,7 @@ void NavigateAction::activate(KoMacro::Context::Ptr context)
 		void sortAscending();
 		void sortDescending();
 		*/
-		throw KoMacro::Exception(i18n("Unknown record \"%1\".").arg(record), "NavigateAction::activate()");
+		throw KoMacro::Exception(i18n("Unknown record \"%1\" in view for \"%2\".").arg(record).arg(dialog->caption()), "NavigateAction::activate()");
 	}
 }
 

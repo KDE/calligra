@@ -80,12 +80,12 @@ void ExecuteAction::activate(KoMacro::Context::Ptr context)
 
 	KexiPart::Part* part = Kexi::partManager().partForMimeType(mimetype);
 	if(! part) {
-		throw KoMacro::Exception(i18n("Invalid mimetype \"%1\"").arg(mimetype), "ExecuteAction::activate(KoMacro::Context::Ptr)");
+		throw KoMacro::Exception(i18n("No such mimetype \"%1\"").arg(mimetype), "ExecuteAction::activate");
 	}
 
 	KexiPart::Item* item = mainWin()->project()->item(part->info(), name);
 	if(! item) {
-		throw KoMacro::Exception(i18n("Invalid part \"%1\"").arg(name), "ExecuteAction::activate(KoMacro::Context::Ptr)");
+		throw KoMacro::Exception(i18n("Failed to open part \"%1\" for mimetype \"%2\"").arg(name).arg(mimetype), "ExecuteAction::activate");
 	}
 
 	part->execute(item);
