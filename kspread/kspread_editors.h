@@ -36,6 +36,8 @@
 #include <klineedit.h>
 #include <ksharedptr.h>
 
+#include <koffice_export.h>
+
 class KTextEdit;
 class QFont;
 class QAbstractButton;
@@ -324,7 +326,7 @@ private:
  * A minimizable line edit for choosing cell regions.
  * \author Stefan Nikolaus <stefan.nikolaus@kdemail.net>
  */
-class RegionSelector : public QWidget
+class KSPREAD_EXPORT RegionSelector : public QWidget
 {
   Q_OBJECT
 
@@ -332,10 +334,12 @@ public:
   enum SelectionMode { SingleCell, MutipleCells };
   enum DisplayMode { Widget, Dialog };
 
-  RegionSelector( View* view, QDialog* parentDialog, QWidget* parent = 0 );
+  RegionSelector( QWidget* parent = 0 );
   ~RegionSelector();
 
   void setSelectionMode( SelectionMode mode );
+  void setView( View* view );
+  void setDialog( QDialog* dialog );
   void setLabel( const QString& text );
 
   KTextEdit* textEdit() const;

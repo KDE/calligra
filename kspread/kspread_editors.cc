@@ -1587,6 +1587,7 @@ class RegionSelector::Private
     QLabel* label;
     KTextEdit* textEdit;
     QToolButton* button;
+    FormulaEditorHighlighter* highlighter;
     DisplayMode displayMode;
     SelectionMode selectionMode;
     static RegionSelector* s_focussedSelector;
@@ -1594,17 +1595,18 @@ class RegionSelector::Private
 
 RegionSelector* RegionSelector::Private::s_focussedSelector = 0;
 
-RegionSelector::RegionSelector( View* view, QDialog* parentDialog, QWidget* parent )
-  : QWidget( parent ? parent : parentDialog ),
+RegionSelector::RegionSelector( QWidget* parent )
+  : QWidget( parent ),
     d( new Private )
 {
   setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Minimum );
 
   d->displayMode = Widget;
-  d->parentDialog = parentDialog;
-  d->view = view;
+  d->parentDialog = 0;
+  d->view = 0;
   d->dialog = 0;
   d->label = 0; // construct on setting label text [setLabel(const QString&)]
+  d->highlighter = 0;
   d->button = new QToolButton( this );
   d->button->setCheckable( true );
   d->button->setIcon( KIcon( "selection" ) );
@@ -1614,7 +1616,8 @@ RegionSelector::RegionSelector( View* view, QDialog* parentDialog, QWidget* pare
   d->textEdit->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Minimum );
   d->textEdit->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
   d->textEdit->setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
-  d->textEdit->setFixedHeight( d->button->height() ); // FIXME
+  d->textEdit->setFixedHeight( d->button->height() - 2*d->textEdit->frameWidth() ); // FIXME
+  d->textEdit->setTabChangesFocus( true );
 
   QHBoxLayout* layout = new QHBoxLayout( this );
   layout->setMargin( 0 );
@@ -1626,8 +1629,6 @@ RegionSelector::RegionSelector( View* view, QDialog* parentDialog, QWidget* pare
   d->textEdit->installEventFilter( this );
   connect( d->button, SIGNAL( toggled(bool) ),
            this, SLOT( switchDisplayMode(bool) ) );
-  connect( d->view->choice(), SIGNAL( changed(const Region&) ),
-           this, SLOT( choiceChanged() ) );
 }
 
 RegionSelector::~RegionSelector()
@@ -1640,6 +1641,19 @@ void RegionSelector::setSelectionMode( SelectionMode mode )
 {
   d->selectionMode = mode;
   // TODO adjust selection
+}
+
+void RegionSelector::setView( View* view )
+{
+  d->view = view;
+  d->highlighter = new FormulaEditorHighlighter( d->textEdit, view->canvasWidget() );
+  connect( d->view->choice(), SIGNAL( changed(const Region&) ),
+           this, SLOT( choiceChanged() ) );
+}
+
+void RegionSelector::setDialog( QDialog* dialog )
+{
+  d->parentDialog = dialog;
 }
 
 void RegionSelector::setLabel( const QString& text )

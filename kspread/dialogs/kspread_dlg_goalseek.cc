@@ -93,21 +93,27 @@ GoalSeekDialog::GoalSeekDialog( View * parent,  QPoint const & marker,
   QLabel* label1 = new QLabel( i18n( "Set cell:" ), m_startFrame );
   m_startFrameLayout->addWidget( label1, 0, 0 );
 
-  m_selector1 = new RegionSelector( m_pView, this, m_startFrame );
+  m_selector1 = new RegionSelector( m_startFrame );
+  m_selector1->setView( m_pView );
+  m_selector1->setDialog( this );
   m_selector1->setSelectionMode( RegionSelector::SingleCell );
   m_startFrameLayout->addWidget( m_selector1, 0, 1 );
 
   QLabel* label2 = new QLabel( i18n( "To value:" ), m_startFrame );
   m_startFrameLayout->addWidget( label2, 1, 0 );
 
-  m_selector2 = new RegionSelector( m_pView, this, m_startFrame );
+  m_selector2 = new RegionSelector( m_startFrame );
+  m_selector2->setView( m_pView );
+  m_selector2->setDialog( this );
   m_selector2->setSelectionMode( RegionSelector::SingleCell );
   m_startFrameLayout->addWidget( m_selector2, 1, 1 );
 
   QLabel* label3 = new QLabel( i18n( "By changing cell:" ), m_startFrame );
   m_startFrameLayout->addWidget( label3, 2, 0 );
 
-  m_selector3 = new RegionSelector( m_pView, this, m_startFrame );
+  m_selector3 = new RegionSelector( m_startFrame );
+  m_selector3->setView( m_pView );
+  m_selector3->setDialog( this );
   m_selector3->setSelectionMode( RegionSelector::SingleCell );
   m_startFrameLayout->addWidget( m_selector3, 2, 1 );
 
