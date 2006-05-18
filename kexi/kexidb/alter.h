@@ -180,6 +180,7 @@ class KEXI_DB_EXPORT AlterTableHandler : public Object
 			public:
 				ChangeFieldPropertyAction(const QString& fieldName, 
 					const QString& propertyName, const QVariant& newValue);
+				//! @internal, used for constructing null action
 				ChangeFieldPropertyAction(bool null);
 				virtual ~ChangeFieldPropertyAction();
 
