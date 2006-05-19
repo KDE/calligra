@@ -161,7 +161,7 @@ bool Manipulator::process(Element* element)
     return true;
   }
 
-  QRect range = element->rect().normalized();
+  QRect range = element->rect();
   if (m_format && element->isColumn())
   {
     for (int col = range.left(); col <= range.right(); ++col)
@@ -301,7 +301,7 @@ bool FormatManipulator::preProcessing ()
 bool FormatManipulator::process (Element *element)
 {
   // see what is selected; if nothing, take marker position
-  QRect range = element->rect().normalized();
+  QRect range = element->rect();
 
   if (!m_reverse) {
 
@@ -435,7 +435,7 @@ void FormatManipulator::copyFormat(QLinkedList<layoutCell> & list,
   Region::ConstIterator endOfList(cells().constEnd());
   for (Region::ConstIterator it = cells().constBegin(); it != endOfList; ++it)
   {
-    QRect range = (*it)->rect().normalized();
+    QRect range = (*it)->rect();
     int bottom = range.bottom();
     int right  = range.right();
 
@@ -817,7 +817,7 @@ bool MergeManipulator::process(Element* element)
     return false;
   }
 
-  QRect range = element->rect().normalized();
+  QRect range = element->rect();
   int left   = range.left();
   int right  = range.right();
   int top    = range.top();
@@ -932,7 +932,7 @@ bool MergeManipulator::preProcessing()
     for (ConstIterator it = constBegin(); it != endOfList; ++it)
     {
       Element* element = *it;
-      QRect range = element->rect().normalized();
+      QRect range = element->rect();
       int right = range.right();
       int bottom = range.bottom();
       for (int row = range.top(); row <= bottom; ++row)
@@ -1046,7 +1046,7 @@ void DilationManipulator::execute()
   for (ConstIterator it = cells().constBegin(); it != end; ++it)
   {
     Element* element = *it;
-  QRect area = element->rect().normalized();
+  QRect area = element->rect();
 
   ColumnFormat *col;
   RowFormat *rl;
@@ -1138,7 +1138,7 @@ ResizeColumnManipulator::~ResizeColumnManipulator()
 
 bool ResizeColumnManipulator::process(Element* element)
 {
-  QRect range = element->rect().normalized();
+  QRect range = element->rect();
   for (int col = range.right(); col >= range.left(); --col)
   {
     ColumnFormat *format = m_sheet->nonDefaultColumnFormat( col );
@@ -1163,7 +1163,7 @@ ResizeRowManipulator::~ResizeRowManipulator()
 
 bool ResizeRowManipulator::process(Element* element)
 {
-  QRect range = element->rect().normalized();
+  QRect range = element->rect();
   for (int row = range.bottom(); row >= range.top(); --row)
   {
     RowFormat* rl = m_sheet->nonDefaultRowFormat( row );
@@ -1210,7 +1210,7 @@ bool AdjustColumnRowManipulator::process(Element* element)
     widths = m_newWidths;
   }
 
-  QRect range = element->rect().normalized();
+  QRect range = element->rect();
   if (m_adjustColumn)
   {
     if (element->isRow())
@@ -1311,7 +1311,7 @@ bool AdjustColumnRowManipulator::preProcessing()
     for (ConstIterator it = cells().begin(); it != endOfList; ++it)
     {
       Element* element = *it;
-      QRect range = element->rect().normalized();
+      QRect range = element->rect();
       if (element->isColumn())
       {
         for (int col = range.left(); col <= range.right(); ++col)
@@ -1534,7 +1534,7 @@ HideShowManipulator::~HideShowManipulator()
 
 bool HideShowManipulator::process(Element* element)
 {
-  QRect range = element->rect().normalized();
+  QRect range = element->rect();
   if (m_manipulateColumns)
   {
     for (int col = range.left(); col <= range.right(); ++col)
@@ -1562,7 +1562,7 @@ bool HideShowManipulator::preProcessing()
   {
     if (m_reverse)
     {
-      QRect range = (*it)->rect().normalized();
+      QRect range = (*it)->rect();
       if (m_manipulateColumns)
       {
         if (range.left() > 1)

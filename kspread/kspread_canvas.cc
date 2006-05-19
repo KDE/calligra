@@ -1292,7 +1292,7 @@ bool Canvas::highlightRangeSizeGripAt(double x, double y)
   {
     // TODO Stefan: adapt to Selection::selectionHandleArea
     KoRect visibleRect;
-    sheetAreaToRect((*it)->rect().normalized(), visibleRect);
+    sheetAreaToRect((*it)->rect(), visibleRect);
 
     QPoint bottomRight((int) visibleRect.right(), (int) visibleRect.bottom());
     QRect handle( ( (int) bottomRight.x() - 6 ),
@@ -2944,7 +2944,7 @@ bool Canvas::formatKeyPress( QKeyEvent * _ev )
   Region::ConstIterator end(selectionInfo()->constEnd());
   for (Region::ConstIterator it = selectionInfo()->constBegin(); it != end; ++it)
   {
-    QRect rect = (*it)->rect().normalized();
+    QRect rect = (*it)->rect();
 
   int right  = rect.right();
   int bottom = rect.bottom();
@@ -4069,7 +4069,7 @@ void Canvas::paintUpdates()
   Region::ConstIterator end(paintDirtyList.constEnd());
   for (Region::ConstIterator it(paintDirtyList.constBegin()); it != end; ++it)
   {
-    QRect range = (*it)->rect().normalized() & visibleRect;
+    QRect range = (*it)->rect() & visibleRect;
     const double topPos = sheet->dblRowPos(range.top());
     const double leftPos = sheet->dblColumnPos(range.left());
     KoPoint dblCorner( leftPos - xOffset(), topPos - yOffset() );
@@ -4251,7 +4251,7 @@ void Canvas::paintChildren( QPainter& painter, QMatrix& /*matrix*/ )
       Region::ConstIterator end(paintDirtyList.constEnd());
       for (Region::ConstIterator it(paintDirtyList.constBegin()); it != end; ++it)
       {
-        QRect range = (*it)->rect().normalized() & cellsUnderObject;
+        QRect range = (*it)->rect() & cellsUnderObject;
         int right = range.right();
         for (int x = range.left(); x <= right; ++x)
         {
@@ -4285,7 +4285,7 @@ void Canvas::paintHighlightedRanges(QPainter& painter, const KoRect& /*viewRect*
       continue;
     }
 
-    QRect region = (*it)->rect().normalized();
+    QRect region = (*it)->rect();
 
 		//double positions[4];
 		//bool paintSides[4];
@@ -4346,7 +4346,7 @@ void Canvas::paintNormalMarker(QPainter& painter, const KoRect &viewRect)
 	if (!selectionInfo()->activeElement())
 			return;
 
-	QRect range=selectionInfo()->activeElement()->rect().normalized();
+	QRect range=selectionInfo()->activeElement()->rect();
 
   	double positions[4];
   	bool paintSides[4];

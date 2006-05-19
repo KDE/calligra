@@ -1639,7 +1639,7 @@ void Doc::paintCellRegions(QPainter& painter, const QRect &viewRect,
   Region::ConstIterator endOfList(region.constEnd());
   for (Region::ConstIterator it = region.constBegin(); it != endOfList; ++it)
   {
-    cellRegion = (*it)->rect().normalized();
+    cellRegion = (*it)->rect();
 
     paintRegion(painter, unzoomedViewRect, view, cellRegion, (*it)->sheet());
   }

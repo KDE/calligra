@@ -119,7 +119,7 @@ void Solver::optimize()
   Region::ConstIterator end( region.constEnd() );
   for ( Region::ConstIterator it( region.constBegin() ); it != end; ++it )
   {
-    QRect range = (*it)->rect().normalized();
+    QRect range = (*it)->rect();
     for ( int col = range.left(); col <= range.right(); ++col )
     {
       for ( int row = range.top(); row <= range.bottom(); ++row )

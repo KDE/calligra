@@ -5399,7 +5399,7 @@ void View::popupColumnMenu( const QPoint & _point )
       Region::ConstIterator endOfList = d->selection->constEnd();
       for (Region::ConstIterator it = d->selection->constBegin(); it != endOfList; ++it)
       {
-        QRect range = (*it)->rect().normalized();
+        QRect range = (*it)->rect();
         int col;
         for (col = range.left(); col < range.right(); ++col)
         {
@@ -5494,7 +5494,7 @@ void View::popupRowMenu( const QPoint & _point )
       Region::ConstIterator endOfList = d->selection->constEnd();
       for (Region::ConstIterator it = d->selection->constBegin(); it != endOfList; ++it)
       {
-        QRect range = (*it)->rect().normalized();
+        QRect range = (*it)->rect();
         int row;
         for (row = range.top(); row < range.bottom(); ++row)
         {

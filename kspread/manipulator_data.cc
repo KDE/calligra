@@ -39,7 +39,7 @@ AbstractDataManipulator::~AbstractDataManipulator ()
 
 bool AbstractDataManipulator::process (Element* element)
 {
-  QRect range = element->rect().normalized();
+  QRect range = element->rect();
   for (int col = range.left(); col <= range.right(); ++col)
     for (int row = range.top(); row <= range.bottom(); ++row) {
       Value val;
@@ -85,7 +85,7 @@ bool AbstractDataManipulator::preProcessing ()
   Region::Iterator endOfList(cells().end());
   for (Region::Iterator it = cells().begin(); it != endOfList; ++it)
   {
-    QRect range = (*it)->rect().normalized();
+    QRect range = (*it)->rect();
     for (int col = range.left(); col <= range.right(); ++col)
       for (int row = range.top(); row <= range.bottom(); ++row)
       {
@@ -123,7 +123,7 @@ Value DataManipulator::newValue (Element *element, int col, int row,
   *parsing = m_parsing;
   if (m_format != No_format)
     *formatType = m_format;
-  QRect range = element->rect().normalized();
+  QRect range = element->rect();
   int colidx = range.left() - col;
   int rowidx = range.top() - row;
   return data.element (colidx, rowidx);
@@ -142,7 +142,7 @@ Value ArrayFormulaManipulator::newValue (Element *element, int col, int row,
                                  bool *parsing, FormatType *)
 {
   *parsing = true;
-  QRect range = element->rect().normalized();
+  QRect range = element->rect();
   int colidx = col - range.left();
   int rowidx = row - range.top();
 
@@ -176,7 +176,7 @@ bool ProtectedCheck::check ()
   for (Region::Iterator it = cells().begin(); it != endOfList; ++it)
   {
     Region::Element *element = *it;
-    QRect range = element->rect().normalized();
+    QRect range = element->rect();
 
     for (int col = range.left(); col <= range.right(); ++col)
     {
