@@ -26,9 +26,8 @@
 #include "kexidatatableview.h"
 #include "keximainwindow.h"
 
-KexiTableDesigner_DataView::KexiTableDesigner_DataView(KexiMainWindow *win, QWidget *parent, 
-	/*KexiDB::TableSchema *table, */const char *name)
- : KexiDataTable(win, parent, name, true/*db-aware*/)
+KexiTableDesigner_DataView::KexiTableDesigner_DataView(KexiMainWindow *win, QWidget *parent)
+ : KexiDataTable(win, parent, "KexiTableDesigner_DataView", true/*db-aware*/)
 {
 }
 

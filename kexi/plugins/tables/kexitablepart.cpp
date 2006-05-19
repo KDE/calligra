@@ -30,8 +30,8 @@
 #include "kexipartinfo.h"
 #include "widget/kexidatatable.h"
 #include "widget/kexidatatableview.h"
-#include "kexialtertabledialog.h"
-#include "kexialtertable_dataview.h"
+#include "kexitabledesignerview.h"
+#include "kexitabledesigner_dataview.h"
 
 #include <kexidb/connection.h>
 #include <kexidb/cursor.h>
@@ -96,15 +96,15 @@ KexiViewBase* KexiTablePart::createView(QWidget *parent, KexiDialogBase* dialog,
 	}
 
 	if (viewMode == Kexi::DesignViewMode) {
-		KexiAlterTableDialog *t = new KexiAlterTableDialog(win, parent, "altertable");
+		KexiTableDesignerView *t = new KexiTableDesignerView(win, parent);
 		return t;
 	}
 	else if (viewMode == Kexi::DataViewMode) {
 		if(!temp->table)
 			return 0; //todo: message
 		//we're not setting table schema here -it will be forced to set 
-		// in KexiAlterTable_DataView::afterSwitchFrom()
-		KexiAlterTable_DataView *t = new KexiAlterTable_DataView(win, parent, "dataview");
+		// in KexiTableDesigner_DataView::afterSwitchFrom()
+		KexiTableDesigner_DataView *t = new KexiTableDesigner_DataView(win, parent);
 		return t;
 	}
 	return 0;
