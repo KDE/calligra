@@ -26,7 +26,7 @@
 #include "kexitablepart.h"
 
 class KexiTableItem;
-class KexiAlterTableDialogPrivate;
+class KexiTableDesignerViewPrivate;
 class KCommand;
 class CommandGroup;
 
@@ -51,16 +51,16 @@ namespace KoProperty {
  Saving changes made to table containing data requires use of the AlterTableHandler
  functionality.
 */
-class KexiAlterTableDialog : public KexiDataTable
+class KexiTableDesignerView : public KexiDataTable
 {
 	Q_OBJECT
 
 	public:
 		/*! Creates a new alter table dialog. */
-		KexiAlterTableDialog(KexiMainWindow *win, QWidget *parent,
+		KexiTableDesignerView(KexiMainWindow *win, QWidget *parent,
 			const char *name = 0);
 
-		virtual ~KexiAlterTableDialog();
+		virtual ~KexiTableDesignerView();
 
 		KexiTablePart::TempData* tempData() const;
 
@@ -191,7 +191,7 @@ class KexiAlterTableDialog : public KexiDataTable
 #endif
 
 	private:
-		KexiAlterTableDialogPrivate *d;
+		KexiTableDesignerViewPrivate *d;
 };
 
 #endif

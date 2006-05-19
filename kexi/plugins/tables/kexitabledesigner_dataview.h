@@ -17,20 +17,20 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KEXIALTERTABLEDATAVIEW_H
-#define KEXIALTERTABLEDATAVIEW_H
+#ifndef KEXITABLEDESIGNERDATAVIEW_H
+#define KEXITABLEDESIGNERDATAVIEW_H
 
 #include <kexidatatable.h>
 #include "kexitablepart.h"
 
-class KexiAlterTable_DataView : public KexiDataTable
+class KexiTableDesigner_DataView : public KexiDataTable
 {
 	Q_OBJECT
 
 	public:
-		KexiAlterTable_DataView(KexiMainWindow *win, QWidget *parent, const char *name = 0);
+		KexiTableDesigner_DataView(KexiMainWindow *win, QWidget *parent, const char *name = 0);
 
-		virtual ~KexiAlterTable_DataView();
+		virtual ~KexiTableDesigner_DataView();
 
 		KexiTablePart::TempData* tempData() const;
 
