@@ -67,8 +67,9 @@ using namespace KexiTableDesignerCommands;
 
 //----------------------------------------------
 
-//! @internal
-//! Command group, reimplemented to get access to commands()
+/*! @internal
+ Command group, reimplemented to get access to commands().
+ We need it to iterate through commands so we can perform a set of ALTER TABLE atomic actions. */
 class CommandGroup : public KMacroCommand
 {
 	public:
@@ -77,6 +78,44 @@ class CommandGroup : public KMacroCommand
 		{}
 		virtual ~CommandGroup() {} 
 		const QPtrList<KCommand>& commands() const { return m_commands; }
+};
+
+/*! @internal
+ Command history, reimplemented to get access to commands().
+ We need it to iterate through commands so we can perform a set of ALTER TABLE atomic actions. */
+class CommandHistory : public KCommandHistory
+{
+	public:
+		CommandHistory(KActionCollection *actionCollection, bool withMenus = true)
+		 : KCommandHistory(actionCollection, withMenus)
+		{
+		}
+
+		QPtrList<KCommand> commands() const { return m_commandsToUndo; }
+
+		void addCommand(KCommand *command, bool execute = true) {
+			KCommandHistory::addCommand(command, execute);
+			m_commandsToUndo.append(command);
+		}
+
+	public slots:
+		virtual void undo() {
+			if (!m_commandsToUndo.isEmpty()) {
+				KCommand * cmd = m_commandsToUndo.take( m_commandsToUndo.count()-1 );
+				m_commandsToRedo.append( cmd );
+			}
+			KCommandHistory::undo();
+		}
+		virtual void redo() {
+			if (!m_commandsToRedo.isEmpty()) {
+				KCommand * cmd = m_commandsToRedo.take( m_commandsToRedo.count()-1 );
+				m_commandsToUndo.append( cmd );
+			}
+			KCommandHistory::redo();
+		}
+
+	protected:
+		QPtrList<KCommand> m_commandsToUndo, m_commandsToRedo;
 };
 
 //----------------------------------------------
@@ -101,7 +140,7 @@ class KexiAlterTableDialogPrivate
 		 , slotBeforeCellChanged_enabled(true)
 		{
 			historyActionCollection = new KActionCollection((QWidget*)0,"");
-			history = new KCommandHistory(historyActionCollection, true);
+			history = new CommandHistory(historyActionCollection, true);
 		}
 
 		~KexiAlterTableDialogPrivate() {
@@ -287,7 +326,7 @@ class KexiAlterTableDialogPrivate
 		bool slotBeforeCellChanged_enabled : 1;
 
 		KActionCollection* historyActionCollection;
-		KCommandHistory* history;
+		CommandHistory* history;
 };
 
 //----------------------------------------------
@@ -602,14 +641,27 @@ void KexiAlterTableDialog::slotTogglePrimaryKey()
 		return;
 	KoProperty::Set &set = *propertySet();
 	bool isSet = !set["primaryKey"].value().toBool();
-	setPrimaryKey(set, isSet);
+	set.changeProperty("primaryKey", QVariant(isSet,1)); //this will update all related properties as well
+/*	CommandGroup *setPrimaryKeyCommand;
+	if (isSet) {
+		setPrimaryKeyCommand = new CommandGroup(i18n("Set primary key for field \"%1\"")
+			.arg(set["name"].value().toString()) );
+	}
+	else {
+		setPrimaryKeyCommand = new CommandGroup(i18n("Unset primary key for field \"%1\"")
+			.arg(set["name"].value().toString()) );
+	}
+	switchPrimaryKey(set, isSet, false, setPrimaryKeyCommand);*/
+	//addHistoryCommand( setPrimaryKeyCommand, false /* !execute */ );
 	d->slotTogglePrimaryKeyCalled = false;
 }
 
-void KexiAlterTableDialog::setPrimaryKey(KoProperty::Set &propertySet, bool set, bool aWasPKey)
+void KexiAlterTableDialog::switchPrimaryKey(KoProperty::Set &propertySet, 
+	bool set, bool aWasPKey, CommandGroup* commandGroup)
 {
 	const bool was_pkey = aWasPKey || propertySet["primaryKey"].value().toBool();
-	propertySet["primaryKey"] = QVariant(set, 1);
+//	propertySet["primaryKey"] = QVariant(set, 1);
+	d->setPropertyValueIfNeeded( propertySet, "primaryKey", QVariant(set,1), commandGroup );
 	if (&propertySet==this->propertySet()) {
 		//update action and icon @ column 0 (only if we're changing current property set)
 		d->action_toggle_pkey->setChecked(set);
@@ -635,8 +687,10 @@ void KexiAlterTableDialog::setPrimaryKey(KoProperty::Set &propertySet, bool set,
 				break;
 		}
 		if (i<count) {//remove
-			(*s)["autoIncrement"] = QVariant(false, 0);
-			(*s)["primaryKey"] = QVariant(false, 0);
+			//(*s)["autoIncrement"] = QVariant(false, 0);
+			d->setPropertyValueIfNeeded( *s, "autoIncrement", QVariant(false,0), commandGroup );
+			//(*s)["primaryKey"] = QVariant(false, 0);
+			d->setPropertyValueIfNeeded( *s, "primaryKey", QVariant(false,0), commandGroup );
 			//remove key from table
 			d->view->data()->clearRowEditBuffer();
 			KexiTableItem *item = d->view->itemAt(i);
@@ -647,15 +701,19 @@ void KexiAlterTableDialog::setPrimaryKey(KoProperty::Set &propertySet, bool set,
 		}
 		//set unsigned big-integer type
 //		d->view->data()->saveRowChanges(*d->view->selectedItem());
-		d->view->data()->clearRowEditBuffer();
-		d->view->data()->updateRowEditBuffer(d->view->selectedItem(), COLUMN_ID_TYPE,
+		d->slotBeforeCellChanged_enabled = false;
+			d->view->data()->clearRowEditBuffer();
+			d->view->data()->updateRowEditBuffer(d->view->selectedItem(), COLUMN_ID_TYPE,
 			QVariant(KexiDB::Field::IntegerGroup-1/*counting from 0*/));
 //			QVariant(KexiDB::Field::typeGroupName(KexiDB::Field::IntegerGroup)));
-		d->view->data()->saveRowChanges(*d->view->selectedItem(), true);
-//		propertySet["type"] = KexiDB::Field::typeGroupName(KexiDB::Field::IntegerGroup);
-//		propertySet["type"] = (int)KexiDB::Field::IntegerGroup;
-		propertySet["subType"] = KexiDB::Field::typeString(KexiDB::Field::BigInteger);
-		propertySet["unsigned"] = QVariant(true,4);
+			d->view->data()->saveRowChanges(*d->view->selectedItem(), true);
+		//propertySet["subType"] = KexiDB::Field::typeString(KexiDB::Field::BigInteger);
+			d->setPropertyValueIfNeeded( propertySet, "subType", KexiDB::Field::typeString(KexiDB::Field::BigInteger), 
+				commandGroup );
+		//propertySet["unsigned"] = QVariant(true,4);
+			d->setPropertyValueIfNeeded( propertySet, "unsigned", QVariant(true,4), commandGroup );
+/*todo*/
+		d->slotBeforeCellChanged_enabled = true;
 	}
 	updateActions();
 }
@@ -995,28 +1053,127 @@ void KexiAlterTableDialog::updateActions()
 
 void KexiAlterTableDialog::slotPropertyChanged(KoProperty::Set& set, KoProperty::Property& property)
 {
+//	if (!d->slotPropertyChanged_enabled)
+//		return;
 	const QCString pname = property.name();
 	kexipluginsdbg << "KexiAlterTableDialog::slotPropertyChanged(): " << pname << " = " << property.value() << endl;
 
-	const bool changePrimaryKey = pname=="primaryKey" && d->slotPropertyChanged_primaryKey_enabled;
+	// true is PK should be altered
+	bool changePrimaryKey = false;
+	// true is PK should be set to true, otherwise unset
+	bool setPrimaryKey = false;
 
-	if (d->addHistoryCommand_in_slotPropertyChanged_enabled && !changePrimaryKey) {
+	if (pname=="primaryKey" && d->slotPropertyChanged_primaryKey_enabled) {
+		changePrimaryKey = true;
+		setPrimaryKey = property.value().toBool();
+	}
+
+	//setting autonumber requires setting PK as well
+	CommandGroup *setAutonumberCommand = 0;
+	CommandGroup *toplevelCommand = 0;
+	if (property.value().toBool()==true && pname=="autoIncrement") {
+		if (set["primaryKey"].value().toBool()==false) {//we need PKEY here!
+			QString msg = QString("<p>")
+				+i18n("Setting autonumber requires primary key to be set for current field.")+"</p>";
+			if (d->primaryKeyExists)
+				msg += (QString("<p>")+ i18n("Previous primary key will be removed.")+"</p>");
+			msg += (QString("<p>")
+				+i18n("Do you want to create primary key for current field? "
+				"Click \"Cancel\" to cancel setting autonumber.")+"</p>");
+
+			if (KMessageBox::Yes == KMessageBox::questionYesNo(this, msg,
+				i18n("Setting autonumber field"),
+				KGuiItem(i18n("Create &Primary Key"), "key"), KStdGuiItem::cancel() ))
+			{
+				changePrimaryKey = true;
+				setPrimaryKey = true;
+				//switchPrimaryKey(set, true);
+				// this will be toplevel command 
+				setAutonumberCommand = new CommandGroup(
+					i18n("Assign autonumber for field \"%1\"").arg(set["name"].value().toString()) );
+				toplevelCommand = setAutonumberCommand;
+				d->setPropertyValueIfNeeded( set, "autoIncrement", QVariant(true,1), setAutonumberCommand );
+			}
+			else {
+				setAutonumberCommand = new CommandGroup(
+					i18n("Remove autonumber from field \"%1\"").arg(set["name"].value().toString()) );
+				//d->slotPropertyChanged_enabled = false;
+//					set["autoIncrement"].setValue( QVariant(false,1), false/*don't save old*/);
+//					d->slotPropertyChanged_enabled = true;
+				d->setPropertyValueIfNeeded( set, "autoIncrement", QVariant(false,1), setAutonumberCommand, 
+					true /*forceAddCommand*/, false/*rememberOldValue*/ );
+				addHistoryCommand( setAutonumberCommand, false /* !execute */ );
+				return;
+			}
+		}
+	}
+
+	//clear PK when these properies were set to false:
+	CommandGroup *unsetIndexedOrUniquOrNotNullCommand = 0;
+	if ((pname=="indexed" || pname=="unique" || pname=="notNull") && property.value().toBool()==false) {
+//TODO: perhaps show a hint in help panel telling what happens?
+		changePrimaryKey = true;
+		setPrimaryKey = false;
+		// this will be toplevel command 
+		unsetIndexedOrUniquOrNotNullCommand = new CommandGroup(
+			i18n("Set \"%1\" property for field \"%1\"").arg(property.caption()).arg(set["name"].value().toString()) );
+		toplevelCommand = unsetIndexedOrUniquOrNotNullCommand;
+		d->setPropertyValueIfNeeded( set, pname, QVariant(false,1), unsetIndexedOrUniquOrNotNullCommand );
+		if (pname=="notNull") {
+			d->setPropertyValueIfNeeded( set, "notNull", QVariant(true,1), unsetIndexedOrUniquOrNotNullCommand );
+		}
+	}
+
+	if (pname=="subType" && d->slotPropertyChanged_subType_enabled) {
+		d->slotPropertyChanged_subType_enabled = false;
+		if (set["primaryKey"].value().toBool()==true 
+			&& property.value().toString()!=KexiDB::Field::typeString(KexiDB::Field::BigInteger))
+		{
+			kexipluginsdbg << "INVALID " << property.value().toString() << endl;
+//			if (KMessageBox::Yes == KMessageBox::questionYesNo(this, msg,
+//				i18n("This field has promary key assigned. Setting autonumber field"),
+//				KGuiItem(i18n("Create &Primary Key"), "key"), KStdGuiItem::cancel() ))
+
+		}
+//		kdDebug() << property.value().toString() << endl;
+//		kdDebug() << set["type"].value() << endl;
+		if (KexiDB::Field::typeGroup( set["type"].value().toInt() ) == (int)KexiDB::Field::TextGroup) {
+			unsetIndexedOrUniquOrNotNullCommand = new CommandGroup(
+				i18n("Change type for field \"%1\" to \"%2\"").arg(set["name"].value().toString())
+				.arg( KexiDB::Field::typeName( KexiDB::Field::typeForString(property.value().toString()) )) );
+			d->setPropertyValueIfNeeded( set, "subType", property.value(), unsetIndexedOrUniquOrNotNullCommand );
+			
+			d->updatePropertiesVisibility(KexiDB::Field::typeForString(property.value().toString()), set);
+			//properties' visiblility changed: refresh prop. set
+			propertySetReloaded(true);
+			d->slotPropertyChanged_subType_enabled = true;
+			return;
+		}
+		d->slotPropertyChanged_subType_enabled = true;
+		return;
+	}
+
+	if (d->addHistoryCommand_in_slotPropertyChanged_enabled && !changePrimaryKey/*we'll add multiple commands for PK*/) {
 		addHistoryCommand( new ChangeFieldPropertyCommand(this, set, 
 				property.name(), property.oldValue() /* ??? */, property.value()), 
 			false /* !execute */ );
 	}
 
 	if (changePrimaryKey) {
-		d->slotPropertyChanged_primaryKey_enabled = false;
-		if (property.value().toBool()) {
+	  d->slotPropertyChanged_primaryKey_enabled = false;
+		if (setPrimaryKey) {
 			//primary key implies some rules
-			const bool prev_addHistoryCommand_in_slotPropertyChanged_enabled = d->addHistoryCommand_in_slotPropertyChanged_enabled;
+			//const bool prev_addHistoryCommand_in_slotPropertyChanged_enabled = d->addHistoryCommand_in_slotPropertyChanged_enabled;
 //			d->addHistoryCommand_in_slotPropertyChanged_enabled = false;
 
 			//this action contains subactions
 			CommandGroup *setPrimaryKeyCommand = new CommandGroup(
 				i18n("Set primary key for field \"%1\"")
 					.arg(set["name"].value().toString()) );
+			if (toplevelCommand)
+				toplevelCommand->addCommand( setPrimaryKeyCommand );
+			else
+				toplevelCommand = setPrimaryKeyCommand;
 
 			d->setPropertyValueIfNeeded( set, "primaryKey", QVariant(true,1), setPrimaryKeyCommand, true /*forceAddCommand*/ );
 			d->setPropertyValueIfNeeded( set, "unique", QVariant(true,1), setPrimaryKeyCommand );
@@ -1032,76 +1189,31 @@ void KexiAlterTableDialog::slotPropertyChanged(KoProperty::Set& set, KoProperty:
 				set["indexed"] = QVariant(true,1);
 				set["autoIncrement"] = QVariant(true,1);*/
 //			d->addHistoryCommand_in_slotPropertyChanged_enabled = prev_addHistoryCommand_in_slotPropertyChanged_enabled;
-			addHistoryCommand( setPrimaryKeyCommand, false /* !execute */ );
+//down			addHistoryCommand( toplevelCommand, false /* !execute */ );
 		}
-		else {
+		else {//! set PK to false
 			//remember this action containing 2 subactions
 			CommandGroup *setPrimaryKeyCommand = new CommandGroup(
 				i18n("Unset primary key for field \"%1\"")
 					.arg(set["name"].value().toString()) );
+			if (toplevelCommand)
+				toplevelCommand->addCommand( setPrimaryKeyCommand );
+			else
+				toplevelCommand = setPrimaryKeyCommand;
 
 			d->setPropertyValueIfNeeded( set, "primaryKey", QVariant(true,1), setPrimaryKeyCommand, true /*forceAddCommand*/ );
 			d->setPropertyValueIfNeeded( set, "autoIncrement", QVariant(false,1), setPrimaryKeyCommand );
 //			set["autoIncrement"] = QVariant(false,1);
 
-			addHistoryCommand( setPrimaryKeyCommand, false /* !execute */ );
+//down			addHistoryCommand( toplevelCommand, false /* !execute */ );
 		}
-		setPrimaryKey(set, property.value().toBool(), true/*wasPKey*/);
+		switchPrimaryKey(set, toplevelCommand/*property.value().toBool()*/, true/*wasPKey*/, toplevelCommand);
 		d->updatePropertiesVisibility(
-			KexiDB::Field::typeForString( set["subType"].value().toString() ), set);
+			KexiDB::Field::typeForString( set["subType"].value().toString() ), set, toplevelCommand);
+		addHistoryCommand( toplevelCommand, false /* !execute */ );
 		//properties' visiblility changed: refresh prop. set
 		propertySetReloaded(true/*preservePrevSelection*/);
-		d->slotPropertyChanged_primaryKey_enabled = true;
-	}
-//TODO: perhaps show a hint in help panel telling what happens?
-	else if (property.value().toBool()==false
-		&& (pname=="indexed" || pname=="unique" || pname=="notNull"))
-	{
-//			set["primaryKey"] = QVariant(false,1);
-		setPrimaryKey(set, false);
-		if (pname=="notNull")
-			set["allowEmpty"] = QVariant(true,1);
-	}
-	else if (pname=="subType" && d->slotPropertyChanged_subType_enabled) {
-		d->slotPropertyChanged_subType_enabled = false;
-		if (set["primaryKey"].value().toBool()==true && property.value().toString()!=KexiDB::Field::typeString(KexiDB::Field::BigInteger)) {
-			kexipluginsdbg << "INVALID " << property.value().toString() << endl;
-//			if (KMessageBox::Yes == KMessageBox::questionYesNo(this, msg,
-//				i18n("This field has promary key assigned. Setting autonumber field"),
-//				KGuiItem(i18n("Create &Primary Key"), "key"), KStdGuiItem::cancel() ))
-
-		}
-//		kdDebug() << property.value().toString() << endl;
-//		kdDebug() << set["type"].value() << endl;
-		if (KexiDB::Field::typeGroup( set["type"].value().toInt() ) == (int)KexiDB::Field::TextGroup) {
-			d->updatePropertiesVisibility(KexiDB::Field::typeForString(property.value().toString()), set);
-			//properties' visiblility changed: refresh prop. set
-			propertySetReloaded(true);
-		}
-		d->slotPropertyChanged_subType_enabled = true;
-	}
-	else {//prop==true:
-		if (property.value().toBool()==true && pname=="autoIncrement") {
-			if (set["primaryKey"].value().toBool()==false) {//we need PKEY here!
-				QString msg = QString("<p>")
-					+i18n("Setting autonumber requires primary key to be set for current field.")+"</p>";
-				if (d->primaryKeyExists)
-					msg += (QString("<p>")+ i18n("Previous primary key will be removed.")+"</p>");
-				msg += (QString("<p>")
-					+i18n("Do you want to create primary key for current field? "
-					"Click \"Cancel\" to cancel setting autonumber.")+"</p>");
-
-				if (KMessageBox::Yes == KMessageBox::questionYesNo(this, msg,
-					i18n("Setting autonumber field"),
-					KGuiItem(i18n("Create &Primary Key"), "key"), KStdGuiItem::cancel() ))
-				{
-					setPrimaryKey(set, true);
-				}
-				else {
-					set["autoIncrement"].setValue( QVariant(false,1), false/*don't save old*/);
-				}
-			}
-		}
+	  d->slotPropertyChanged_primaryKey_enabled = true;
 	}
 }
 
@@ -1555,7 +1667,7 @@ void KexiAlterTableDialog::changeFieldProperty( int fieldUID,
  KoProperty::Property::ListData* const listData )
 {
 #ifdef KEXI_DEBUG_GUI
-	KexiUtils::addAlterTableActionDebug(QString("changeFieldProperty: \"")
+	KexiUtils::addAlterTableActionDebug(QString("** changeFieldProperty: \"")
 		+ QString(propertyName) + "\" to \"" + newValue.toString() + "\"", 2/*nestingLevel*/);
 #endif
 	if (!d->view->acceptRowEdit())
@@ -1603,7 +1715,7 @@ void KexiAlterTableDialog::changePropertyVisibility(
 	int fieldUID, const QCString& propertyName, bool visible )
 {
 #ifdef KEXI_DEBUG_GUI
-	KexiUtils::addAlterTableActionDebug(QString("changePropertyVisibility: \"")
+	KexiUtils::addAlterTableActionDebug(QString("** changePropertyVisibility: \"")
 		+ QString(propertyName) + "\" to \"" + (visible ? "true" : "false") + "\"", 2/*nestingLevel*/);
 #endif
 	if (!d->view->acceptRowEdit())

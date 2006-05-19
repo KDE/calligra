@@ -28,6 +28,7 @@
 class KexiTableItem;
 class KexiAlterTableDialogPrivate;
 class KCommand;
+class CommandGroup;
 
 namespace KoProperty {
 	class Set;
@@ -171,8 +172,10 @@ class KexiAlterTableDialog : public KexiDataTable
 		/*! Helper, used for slotTogglePrimaryKey() and slotPropertyChanged().
 		 Assigns primary key icon and value for property set \a propertySet, 
 		 and deselects it from previous pkey's row. 
-		 \a aWasPKey is internal. */
-		void setPrimaryKey(KoProperty::Set &propertySet, bool set, bool aWasPKey = false);
+		 \a aWasPKey is internal. 
+		 If \a commandGroup is not 0, it is used as parent group for storing actions' history. */
+		void switchPrimaryKey(KoProperty::Set &propertySet, bool set, bool aWasPKey = false,
+			CommandGroup* commandGroup = 0);
 
 		//! Gets subtype strings and names for type \a fieldType.
 		void getSubTypeListData(KexiDB::Field::TypeGroup fieldTypeGroup, 
