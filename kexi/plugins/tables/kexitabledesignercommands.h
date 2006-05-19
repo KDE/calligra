@@ -29,8 +29,9 @@
 
 #include <kcommand.h>
 #include <kexidb/alter.h>
-#include <kexialtertabledialog.h>
 #include <koproperty/set.h>
+
+#include "kexitabledesignerview.h"
 
 class QWidget;
 class QRect;
