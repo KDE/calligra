@@ -1,0 +1,275 @@
+/***************************************************************************
+ * This file is part of the KDE project
+ * copyright (C) 2006 by Bernd Steindorff (bernd@itii.de)
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Library General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Library General Public License for more details.
+ * You should have received a copy of the GNU Library General Public License
+ * along with this program; see the file COPYING.  If not, write to
+ * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+ * Boston, MA 02110-1301, USA.
+ ***************************************************************************/
+
+#include "xmlhandlertests.h"
+#include "testobject.h"
+#include "testaction.h"
+#include "komacrotestbase.h"
+
+#include "../lib/action.h"
+#include "../lib/function.h"
+#include "../lib/manager.h"
+#include "../lib/macro.h"
+#include "../lib/variable.h"
+#include "../lib/metaobject.h"
+#include "../lib/metamethod.h"
+#include "../lib/metaparameter.h"
+#include "../lib/exception.h"
+#include "../lib/macroitem.h"
+
+#include <ostream>
+#include <cfloat>
+
+#include <qstringlist.h>
+#include <qdom.h>
+
+#include <kdebug.h>
+#include <kunittest/runner.h>
+#include <kxmlguiclient.h>
+#include <ksharedptr.h>
+
+using namespace KUnitTest;
+using namespace KoMacroTest;
+
+namespace KoMacroTest {
+
+	/**
+	* Register KoMacroTest::CommonTests as TestSuite.
+	*/
+	KUNITTEST_SUITE("KoMacroTestSuite")
+	KUNITTEST_REGISTER_TESTER(XMLHandlerTests);
+
+	class XMLHandlerTests::Private
+	{
+		public:		
+		/**
+		* An KXMLGUIClient instance created on @a setUp() and
+		* passed to the @a KoMacro::Manager to bridge to the
+		* app-functionality.
+		*/
+		KXMLGUIClient* xmlguiclient;
+
+		/**
+		* An @a TestObject instance used internaly to test
+		* handling and communication with from QObject
+		* inheritated instances.
+		*/
+		TestAction* testaction;
+
+		QDomDocument* doomdocument;
+
+		Private()
+			: xmlguiclient(0)
+			, testaction(0)
+			, doomdocument(0)
+		{
+		}
+	};
+}
+
+typedef QValueList< KSharedPtr<KoMacro::MacroItem> >::size_type sizetype;
+
+
+XMLHandlerTests::XMLHandlerTests()
+	: KUnitTest::SlotTester()
+	, d( new Private() ) // create the private d-pointer instance.
+{
+}
+
+XMLHandlerTests::~XMLHandlerTests()
+{
+	delete d->xmlguiclient;
+	delete d;
+}
+
+
+void XMLHandlerTests::setUp()
+{
+	d->xmlguiclient = new KXMLGUIClient();
+	
+	//Singelton more or less ...
+	if (::KoMacro::Manager::self() == 0) {	
+		::KoMacro::Manager::init( d->xmlguiclient );
+	}
+	
+	d->testaction = new TestAction();
+	::KoMacro::Manager::self()->publishAction(d->testaction);	
+
+	d->doomdocument = new QDomDocument();
+}
+
+void XMLHandlerTests::tearDown()
+{
+	delete d->doomdocument;
+	delete d->xmlguiclient;
+}
+
+void XMLHandlerTests::testParseXML()
+{
+	kdDebug()<<"===================== testParseXML() ======================" << endl;
+
+	// Local Init
+	KSharedPtr<KoMacro::Macro> macro = KoMacro::Manager::self()->createMacro("testMacro");
+	QDomElement domelement;
+
+	// Part 1: From XML to a Macro.
+	// Test-XML-document with normal allocated variables.
+	QString xml = QString("<!DOCTYPE macros>"
+				    "<macro xmlversion=\"1\">"
+				      "<item action=\"testaction\" >"
+    					"<variable name=\"teststring\" >testString</variable>"
+						"<variable name=\"testint\" >0</variable>"
+						"<variable name=\"testbool\" >true</variable>"
+						"<variable name=\"testbla\" >somethingwrong</variable>" // TODO Is here a kdDebug-msg enough?
+						"<variable name=\"testdouble\" >0.6</variable>"
+				      "</item>"
+				    "</macro>");
+	// Set the XML-document with the above string.
+	d->doomdocument->setContent(xml);
+	domelement = d->doomdocument->documentElement();
+	//Is our XML parseable ?
+	KOMACROTEST_ASSERT(macro->parseXML(domelement),true);
+
+	// Test-XML-document with bad root element.
+	xml = QString("<!DOCTYPE macros>"
+				    "<maro xmlversion=\"1\">"
+				      "<item action=\"testaction\" >"
+    					"<variable name=\"teststring\" >testString</variable>"
+						"<variable name=\"testint\" >0</variable>"
+						"<variable name=\"testbool\" >true</variable>"
+						"<variable name=\"testdouble\" >0.6</variable>"
+				      "</item>"
+				    "</maro>");
+	d->doomdocument->setContent(xml);
+	domelement = d->doomdocument->documentElement();
+	KOMACROTEST_ASSERT(macro->parseXML(domelement),false);
+
+	// Test-XML-document with wrong macro-xmlversion.
+	xml = QString("<!DOCTYPE macros>"
+				    "<macro xmlversion=\"2\">"
+				      "<item action=\"testaction\" >"
+    					"<variable name=\"teststring\" >testString</variable>"
+						"<variable name=\"testint\" >0</variable>"
+						"<variable name=\"testbool\" >true</variable>"
+						"<variable name=\"testdouble\" >0.6</variable>"
+				      "</item>"
+				    "</macro>");
+	d->doomdocument->setContent(xml);
+	domelement = d->doomdocument->documentElement();
+	KOMACROTEST_ASSERT(macro->parseXML(domelement),false);
+
+	// TODO Test-XML-document if it has a wrong structure like wrong parathesis
+	// or missing end tag (is this critical??).
+	/*xml = QString("<!DOCTYPE macros>"
+				    "<macro xmlversion=\"1\">"
+				      "<item action=\"testaction\" >"
+    					"<variable name=\"teststring\" >testString</variable>"
+						"<variable name=\"testint\" >0</variable>"
+						"<variable name=\"testbool\" >true</variable>"
+				      "</item>"
+				    "</macro>");
+	d->doomdocument->setContent(xml);
+	domelement = d->doomdocument->documentElement();
+	KOMACROTEST_ASSERT(macro->parseXML(domelement),false);*/
+
+	// Test-XML-document with wrong item- and variable-tags.
+	// TODO Could this happen??
+	xml = QString("<!DOCTYPE macros>"
+				    "<macro xmlversion=\"1\">"
+				      "<iem action=\"testaction\" >"
+    					"<vle name=\"teststring\" >testString</variable>"
+						"<v name=\"testint\" >0</variable>"
+						"<variable name=\"testbool\" >true</variable>"
+						"<variable name=\"testdouble\" >0.6</variable>"
+				      "</item>"
+				    "</macro>");
+	d->doomdocument->setContent(xml);
+	domelement = d->doomdocument->documentElement();
+	KOMACROTEST_ASSERT(macro->parseXML(domelement),true);  //should be false?
+
+	// Test-XML-document with maximum field-size.
+	xml = QString("<!DOCTYPE macros>"
+				    "<macro xmlversion=\"1\">"
+				      "<item action=\"testaction\" >"
+    					"<variable name=\"teststring\" >testString</variable>"
+						"<variable name=\"testint\" > %1 </variable>"
+						"<variable name=\"testbool\" >true</variable>"
+						"<variable name=\"testdouble\" > %2 </variable>"
+				      "</item>"
+				    "</macro>").arg(INT_MAX).arg(DBL_MAX);
+	d->doomdocument->setContent(xml);
+	domelement = d->doomdocument->documentElement();
+	KOMACROTEST_ASSERT(macro->parseXML(domelement),true);
+
+	// Test-XML-document with minimum field-size.
+	xml = QString("<!DOCTYPE macros>"
+				    "<macro xmlversion=\"1\">"
+				      "<item action=\"testaction\" >"
+    					"<variable name=\"teststring\" >testString</variable>"
+						"<variable name=\"testint\" > %1 </variable>"
+						"<variable name=\"testbool\" >true</variable>"
+						"<variable name=\"testdouble\" > %2 </variable>"
+				      "</item>"
+				    "</macro>").arg(INT_MIN).arg(DBL_MIN);
+	d->doomdocument->setContent(xml);
+	domelement = d->doomdocument->documentElement();
+	KOMACROTEST_ASSERT(macro->parseXML(domelement),true);
+
+	// TODO Test-XML-document with maximum +1 field-size.
+	// Test doesn't works because INT_MAX+1 jumps to INT_MIN
+	xml = QString("<!DOCTYPE macros>"
+				    "<macro xmlversion=\"1\">"
+				      "<item action=\"testaction\" >"
+    					"<variable name=\"teststring\" >testString</variable>"
+						"<variable name=\"testint\" > %1 </variable>"
+						"<variable name=\"testbool\" >true</variable>"
+						"<variable name=\"testdouble\" > %2 </variable>"
+				      "</item>"
+				    "</macro>").arg(INT_MAX+1).arg(DBL_MAX+1);
+	d->doomdocument->setContent(xml);
+	domelement = d->doomdocument->documentElement();
+	KOMACROTEST_ASSERT(macro->parseXML(domelement),true);
+
+	// TODO Test-XML-document with minimum-1 field-size.
+	// Test doesn't works because INT_MIN-1 jumps to INT_MAX
+	xml = QString("<!DOCTYPE macros>"
+				    "<macro xmlversion=\"1\">"
+				      "<item action=\"testaction\" >"
+    					"<variable name=\"teststring\" >testString</variable>"
+						"<variable name=\"testint\" > %1 </variable>"
+						"<variable name=\"testbool\" >true</variable>"
+						"<variable name=\"testdouble\" > %2 </variable>"
+				      "</item>"
+				    "</macro>").arg(INT_MIN-1).arg(DBL_MIN-1);
+	d->doomdocument->setContent(xml);
+	domelement = d->doomdocument->documentElement();
+	KOMACROTEST_ASSERT(macro->parseXML(domelement),true);
+
+	// TODO Part 2: Read the parsen macro and make a comparison to the XML-document.
+
+	// TODO clean up
+}
+
+void XMLHandlerTests::testToXML()
+{	
+	kdDebug()<<"===================== testToXML() ======================" << endl;
+	// TODO Part 3: From a Macro to XML.
+
+	// TODO Part 4: Compare the transformed XML with the given macro.
+}
+#include "xmlhandlertests.moc"
