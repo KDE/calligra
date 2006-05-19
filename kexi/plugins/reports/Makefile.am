@@ -5,24 +5,29 @@ kde_module_LTLIBRARIES = kexihandler_report.la kexireportwidgets.la
 kexihandler_report_la_SOURCES = kexireports.cpp
 kexihandler_report_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN) $(VER_INFO) -module -no-undefined
 kexihandler_report_la_LIBADD = ../../core/libkexicore.la \
-  ../../widget/utils/libkexiguiutils.la \
-  ../../widget/libkexiextendedwidgets.la \
-  ../../formeditor/libkformdesigner.la \
-  ../forms/libkexiformutils.la \
+  $(top_builddir)/kexi/widget/utils/libkexiguiutils.la \
+  $(top_builddir)/kexi/widget/libkexiextendedwidgets.la \
+	$(top_builddir)/kexi/formeditor/libkformdesigner.la \
+  $(top_builddir)/kexi/plugins/forms/libkexiformutils.la \
   ./libkexireportutils.la
 
-kexireportwidgets_la_LDFLAGS =  $(all_libraries) $(KDE_PLUGIN) $(VER_INFO) -module
+kexireportwidgets_la_LDFLAGS =  $(all_libraries) $(KDE_PLUGIN) $(VER_INFO) -module -no-undefined
 kexireportwidgets_la_SOURCES =   reportwidgets.cpp kexireportfactory.cpp
 kexireportwidgets_la_LIBADD = $(top_builddir)/kexi/formeditor/libkformdesigner.la \
+	$(top_builddir)/kexi/plugins/forms/libkexiformutils.la \
+	$(top_builddir)/kexi/plugins/forms/widgets/libkexiformutilswidgets.la \
+	$(top_builddir)/kexi/widget/libkexiextendedwidgets.la \
 	./libkexireportutils.la
 
 lib_LTLIBRARIES = libkexireportutils.la
 libkexireportutils_la_SOURCES = \
 	kexireportpart.cpp kexireportview.cpp kexireportform.cpp
-libkexireportutils_la_LDFLAGS = $(all_libraries) $(VER_INFO) -Wnounresolved
+libkexireportutils_la_LDFLAGS = $(all_libraries) $(VER_INFO) -no-undefined
 libkexireportutils_la_LIBADD = $(top_builddir)/kexi/core/libkexicore.la \
+	$(top_builddir)/kexi/formeditor/libkformdesigner.la \
+	$(top_builddir)/kexi/plugins/forms/widgets/libkexiformutilswidgets.la \
 	$(top_builddir)/kexi/widget/libkexiextendedwidgets.la \
-	$(top_builddir)/kexi/plugins/forms/widgets/libkexiformutilswidgets.la
+	$(top_builddir)/kexi/plugins/forms/libkexiformutils.la
 
 kformdesignerservicesdir=$(kde_servicesdir)/kformdesigner
 kformdesignerservices_DATA = kformdesigner_kexireportfactory.desktop
