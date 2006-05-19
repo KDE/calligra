@@ -44,7 +44,7 @@ namespace KexiTableDesignerCommands {
 class Command : public KCommand
 {
 	public:
-		Command(KexiAlterTableDialog* view);
+		Command(KexiTableDesignerView* view);
 		virtual ~Command();
 
 		//! Used to collect actions data for AlterTableHandler
@@ -53,7 +53,7 @@ class Command : public KCommand
 		virtual QString debugString() { return name(); }
 
 	protected:
-		QGuardedPtr<KexiAlterTableDialog> m_view;
+		QGuardedPtr<KexiTableDesignerView> m_view;
 };
 
 //! @short Undo/redo command used for when changing a property for a table field
@@ -67,7 +67,7 @@ class ChangeFieldPropertyCommand : public Command
 		 \a oldlistData and and \a newListData can be specified so Property::setListData() will be called
 		 on execute() and unexecute().
 		*/
-		ChangeFieldPropertyCommand( KexiAlterTableDialog* view,
+		ChangeFieldPropertyCommand( KexiTableDesignerView* view,
 			const KoProperty::Set& set, const QCString& propertyName, 
 			const QVariant& oldValue, const QVariant& newValue,
 			KoProperty::Property::ListData* const oldListData = 0, KoProperty::Property::ListData* const newListData = 0);
@@ -93,7 +93,7 @@ class RemoveFieldCommand : public Command
 	public:
 		/*! Constructs RemoveFieldCommand object. 
 		 If \a set is 0, the action only means removing empty row (internal). */
-		RemoveFieldCommand( KexiAlterTableDialog* view, int fieldIndex, 
+		RemoveFieldCommand( KexiTableDesignerView* view, int fieldIndex, 
 			const KoProperty::Set* set);
 
 		virtual ~RemoveFieldCommand();
@@ -115,7 +115,7 @@ class RemoveFieldCommand : public Command
 class InsertFieldCommand : public Command
 {
 	public:
-		InsertFieldCommand( KexiAlterTableDialog* view, 
+		InsertFieldCommand( KexiTableDesignerView* view, 
 			int fieldIndex/*, const KexiDB::Field& field*/, const KoProperty::Set& set );
 		virtual ~InsertFieldCommand();
 
@@ -148,7 +148,7 @@ class ChangePropertyVisibilityCommand : public Command
 		 for field by name when more than one filed exists with the same name 
 		 (it's invalid but allowed in design time). 
 		*/
-		ChangePropertyVisibilityCommand( KexiAlterTableDialog* view,
+		ChangePropertyVisibilityCommand( KexiTableDesignerView* view,
 			const KoProperty::Set& set, const QCString& propertyName, 
 			bool visible);
 
@@ -172,7 +172,7 @@ class InsertEmptyRowCommand : public Command
 {
 	public:
 		/*! Creates the InsertEmptyRowCommand object. */
-		InsertEmptyRowCommand( KexiAlterTableDialog* view, int row );
+		InsertEmptyRowCommand( KexiTableDesignerView* view, int row );
 		virtual ~InsertEmptyRowCommand();
 
 		virtual QString name() const;

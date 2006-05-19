@@ -17,7 +17,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "kexialtertable_dataview.h"
+#include "kexitabledesigner_dataview.h"
 
 #include <kexidb/connection.h>
 #include <kexidb/cursor.h>
@@ -26,13 +26,13 @@
 #include "kexidatatableview.h"
 #include "keximainwindow.h"
 
-KexiAlterTable_DataView::KexiAlterTable_DataView(KexiMainWindow *win, QWidget *parent, 
+KexiTableDesigner_DataView::KexiTableDesigner_DataView(KexiMainWindow *win, QWidget *parent, 
 	/*KexiDB::TableSchema *table, */const char *name)
  : KexiDataTable(win, parent, name, true/*db-aware*/)
 {
 }
 
-KexiAlterTable_DataView::~KexiAlterTable_DataView()
+KexiTableDesigner_DataView::~KexiTableDesigner_DataView()
 {
 	if (dynamic_cast<KexiDataTableView*>(tableView()) 
 		&& dynamic_cast<KexiDataTableView*>(tableView())->cursor())
@@ -42,7 +42,7 @@ KexiAlterTable_DataView::~KexiAlterTable_DataView()
 	}
 }
 
-tristate KexiAlterTable_DataView::beforeSwitchTo(int mode, bool &dontStore)
+tristate KexiTableDesigner_DataView::beforeSwitchTo(int mode, bool &dontStore)
 {
 	Q_UNUSED( dontStore );
 
@@ -57,7 +57,7 @@ tristate KexiAlterTable_DataView::beforeSwitchTo(int mode, bool &dontStore)
 	return true;
 }
 
-tristate KexiAlterTable_DataView::afterSwitchFrom(int mode)
+tristate KexiTableDesigner_DataView::afterSwitchFrom(int mode)
 {
 	Q_UNUSED( mode );
 
@@ -72,10 +72,9 @@ tristate KexiAlterTable_DataView::afterSwitchFrom(int mode)
 	return true;
 }
 
-KexiTablePart::TempData* KexiAlterTable_DataView::tempData() const
+KexiTablePart::TempData* KexiTableDesigner_DataView::tempData() const
 {
 	return static_cast<KexiTablePart::TempData*>(parentDialog()->tempData());
 }
 
-#include "kexialtertable_dataview.moc"
-
+#include "kexitabledesigner_dataview.moc"

@@ -36,7 +36,7 @@
 using namespace KexiTableDesignerCommands;
 
 
-Command::Command(KexiAlterTableDialog* view)
+Command::Command(KexiTableDesignerView* view)
  : KCommand()
  , m_view(view)
 {
@@ -48,7 +48,7 @@ Command::~Command()
 
 //--------------------------------------------------------
 
-ChangeFieldPropertyCommand::ChangeFieldPropertyCommand( KexiAlterTableDialog* view,
+ChangeFieldPropertyCommand::ChangeFieldPropertyCommand( KexiTableDesignerView* view,
 	const KoProperty::Set& set, const QCString& propertyName, const QVariant& oldValue, const QVariant& newValue,
 	KoProperty::Property::ListData* const oldListData, KoProperty::Property::ListData* const newListData)
  : Command(view)
@@ -108,7 +108,7 @@ void ChangeFieldPropertyCommand::unexecute()
 
 //--------------------------------------------------------
 
-RemoveFieldCommand::RemoveFieldCommand( KexiAlterTableDialog* view, int fieldIndex, 
+RemoveFieldCommand::RemoveFieldCommand( KexiTableDesignerView* view, int fieldIndex, 
 	const KoProperty::Set* set)
  : Command(view)
  , m_alterTableAction( set ? (*set)["name"].value().toString() : QString::null )
@@ -153,7 +153,7 @@ QString RemoveFieldCommand::debugString()
 
 //--------------------------------------------------------
 
-InsertFieldCommand::InsertFieldCommand( KexiAlterTableDialog* view,
+InsertFieldCommand::InsertFieldCommand( KexiTableDesignerView* view,
  int fieldIndex/*, const KexiDB::Field& field*/, const KoProperty::Set& set )
  : Command(view)
  , m_fieldIndex(fieldIndex)
@@ -190,7 +190,7 @@ const KexiDB::AlterTableHandler::ActionBase& InsertFieldCommand::action()
 
 //--------------------------------------------------------
 
-ChangePropertyVisibilityCommand::ChangePropertyVisibilityCommand( KexiAlterTableDialog* view,
+ChangePropertyVisibilityCommand::ChangePropertyVisibilityCommand( KexiTableDesignerView* view,
 	const KoProperty::Set& set, const QCString& propertyName, bool visible)
  : Command(view)
  , m_alterTableAction(set.property("name").value().toString(), propertyName, visible)
@@ -230,7 +230,7 @@ void ChangePropertyVisibilityCommand::unexecute()
 
 //--------------------------------------------------------
 
-InsertEmptyRowCommand::InsertEmptyRowCommand( KexiAlterTableDialog* view, int row )
+InsertEmptyRowCommand::InsertEmptyRowCommand( KexiTableDesignerView* view, int row )
  : Command(view)
  , m_alterTableAction(true) //unused, null action
  , m_row(row)

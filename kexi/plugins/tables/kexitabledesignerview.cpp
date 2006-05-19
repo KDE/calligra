@@ -17,7 +17,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "kexialtertabledialog.h"
+#include "kexitabledesignerview.h"
 
 #include <qlayout.h>
 #include <qlabel.h>
@@ -58,7 +58,7 @@
 #define COLUMN_ID_TYPE 2
 #define COLUMN_ID_DESC 3
 
-//#define KexiAlterTableDialog_DEBUG
+//#define KexiTableDesignerView_DEBUG
 
 //! @todo remove this when BLOBs are implemented
 #define KEXI_NO_BLOB_FIELDS
@@ -121,10 +121,10 @@ class CommandHistory : public KCommandHistory
 //----------------------------------------------
 
 //! @internal
-class KexiAlterTableDialogPrivate
+class KexiTableDesignerViewPrivate
 {
 	public:
-		KexiAlterTableDialogPrivate(KexiAlterTableDialog* dialog)
+		KexiTableDesignerViewPrivate(KexiTableDesignerView* dialog)
 		 : dlg(dialog)
 		 , sets(0)
 		 , dontAskOnStoreData(false)
@@ -143,7 +143,7 @@ class KexiAlterTableDialogPrivate
 			history = new CommandHistory(historyActionCollection, true);
 		}
 
-		~KexiAlterTableDialogPrivate() {
+		~KexiTableDesignerViewPrivate() {
 			delete sets;
 			delete historyActionCollection;
 			delete history;
@@ -287,7 +287,7 @@ class KexiAlterTableDialogPrivate
 			return changed;
 		}
 
-		KexiAlterTableDialog* dlg;
+		KexiTableDesignerView* dlg;
 
 		KexiTableView *view; //!< helper
 
@@ -331,10 +331,10 @@ class KexiAlterTableDialogPrivate
 
 //----------------------------------------------
 
-KexiAlterTableDialog::KexiAlterTableDialog(KexiMainWindow *win, QWidget *parent,
+KexiTableDesignerView::KexiTableDesignerView(KexiMainWindow *win, QWidget *parent,
 	const char *name)
  : KexiDataTable(win, parent, name, false/*not db-aware*/)
- , d( new KexiAlterTableDialogPrivate(this) )
+ , d( new KexiTableDesignerViewPrivate(this) )
 {
 	//needed for custom "identifier" property editor widget
 	KexiCustomPropertyFactory::init();
@@ -416,13 +416,13 @@ KexiAlterTableDialog::KexiAlterTableDialog(KexiMainWindow *win, QWidget *parent,
 #endif
 }
 
-KexiAlterTableDialog::~KexiAlterTableDialog()
+KexiTableDesignerView::~KexiTableDesignerView()
 {
 //	removeCurrentPropertySet();
 	delete d;
 }
 
-void KexiAlterTableDialog::initData()
+void KexiTableDesignerView::initData()
 {
 	//add column data
 //	d->data->clear();
@@ -483,7 +483,7 @@ void KexiAlterTableDialog::initData()
 
 //! Gets subtype strings and names for type \a fieldType
 void
-KexiAlterTableDialog::getSubTypeListData(KexiDB::Field::TypeGroup fieldTypeGroup, 
+KexiTableDesignerView::getSubTypeListData(KexiDB::Field::TypeGroup fieldTypeGroup, 
 	QStringList& stringsList, QStringList& namesList)
 {
 	if (fieldTypeGroup==KexiDB::Field::BLOBGroup) {
@@ -496,12 +496,12 @@ KexiAlterTableDialog::getSubTypeListData(KexiDB::Field::TypeGroup fieldTypeGroup
 		stringsList = KexiDB::typeStringsForGroup(fieldTypeGroup);
 		namesList = KexiDB::typeNamesForGroup(fieldTypeGroup);
 	}
-	kexipluginsdbg << "KexiAlterTableDialog::getSubTypeListData(): subType strings: " << 
+	kexipluginsdbg << "KexiTableDesignerView::getSubTypeListData(): subType strings: " << 
 		stringsList.join("|") << "\nnames: " << namesList.join("|") << endl;
 }
 
 KoProperty::Set *
-KexiAlterTableDialog::createPropertySet( int row, const KexiDB::Field& field, bool newOne )
+KexiTableDesignerView::createPropertySet( int row, const KexiDB::Field& field, bool newOne )
 {
 	QString typeName = "KexiDB::Field::" + field.typeGroupString();
 	KoProperty::Set *set = new KoProperty::Set(d->sets, typeName);
@@ -529,7 +529,7 @@ KexiAlterTableDialog::createPropertySet( int row, const KexiDB::Field& field, bo
 	//type
 	set->addProperty( prop 
 		= new KoProperty::Property("type", QVariant(field.type()), i18n("Type")) );
-#ifndef KexiAlterTableDialog_DEBUG
+#ifndef KexiTableDesignerView_DEBUG
 	prop->setVisible(false);//always hidden
 #endif
 
@@ -613,7 +613,7 @@ KexiAlterTableDialog::createPropertySet( int row, const KexiDB::Field& field, bo
 	return set;
 }
 
-void KexiAlterTableDialog::updateActions(bool activated)
+void KexiTableDesignerView::updateActions(bool activated)
 {
 	Q_UNUSED(activated);
 /*! \todo check if we can set pkey for this column type (eg. BLOB?) */
@@ -626,13 +626,13 @@ void KexiAlterTableDialog::updateActions(bool activated)
 	d->slotTogglePrimaryKeyCalled = false;
 }
 
-void KexiAlterTableDialog::slotUpdateRowActions(int row)
+void KexiTableDesignerView::slotUpdateRowActions(int row)
 {
 	KexiDataTable::slotUpdateRowActions(row);
 	updateActions();
 }
 
-void KexiAlterTableDialog::slotTogglePrimaryKey()
+void KexiTableDesignerView::slotTogglePrimaryKey()
 {
 	if (d->slotTogglePrimaryKeyCalled)
 		return;
@@ -656,7 +656,7 @@ void KexiAlterTableDialog::slotTogglePrimaryKey()
 	d->slotTogglePrimaryKeyCalled = false;
 }
 
-void KexiAlterTableDialog::switchPrimaryKey(KoProperty::Set &propertySet, 
+void KexiTableDesignerView::switchPrimaryKey(KoProperty::Set &propertySet, 
 	bool set, bool aWasPKey, CommandGroup* commandGroup)
 {
 	const bool was_pkey = aWasPKey || propertySet["primaryKey"].value().toBool();
@@ -718,7 +718,7 @@ void KexiAlterTableDialog::switchPrimaryKey(KoProperty::Set &propertySet,
 	updateActions();
 }
 
-/*void KexiAlterTableDialog::slotCellSelected(int, int row)
+/*void KexiTableDesignerView::slotCellSelected(int, int row)
 {
 	kDebug() << "KexiAlterTableDialog::slotCellSelected()" << endl;
 	if(row == m_row)
@@ -727,7 +727,7 @@ void KexiAlterTableDialog::switchPrimaryKey(KoProperty::Set &propertySet,
 	propertyBufferSwitched();
 }*/
 
-QString KexiAlterTableDialog::messageForSavingChanges(bool &emptyTable)
+QString KexiTableDesignerView::messageForSavingChanges(bool &emptyTable)
 {
 	KexiDB::Connection *conn = mainWin()->project()->dbConnection();
 	bool ok;
@@ -738,7 +738,7 @@ QString KexiAlterTableDialog::messageForSavingChanges(bool &emptyTable)
 //		QString("\n\n") + i18n("Note: This table is already filled with data which will be removed.") );
 }
 
-tristate KexiAlterTableDialog::beforeSwitchTo(int mode, bool &dontStore)
+tristate KexiTableDesignerView::beforeSwitchTo(int mode, bool &dontStore)
 {
 	if (!d->view->acceptRowEdit())
 		return false;
@@ -785,7 +785,7 @@ tristate KexiAlterTableDialog::beforeSwitchTo(int mode, bool &dontStore)
 	return res;
 }
 
-tristate KexiAlterTableDialog::afterSwitchFrom(int mode)
+tristate KexiTableDesignerView::afterSwitchFrom(int mode)
 {
 	if (mode==Kexi::NoViewMode || mode==Kexi::DataViewMode) {
 		initData();
@@ -793,13 +793,13 @@ tristate KexiAlterTableDialog::afterSwitchFrom(int mode)
 	return true;
 }
 
-KoProperty::Set *KexiAlterTableDialog::propertySet()
+KoProperty::Set *KexiTableDesignerView::propertySet()
 {
 	return d->sets ? d->sets->currentPropertySet() : 0;
 }
 
 /*
-void KexiAlterTableDialog::removeCurrentPropertySet()
+void KexiTableDesignerView::removeCurrentPropertySet()
 {
 	const int r = d->view->currentRow();
 	KoProperty::Set *buf = d->sets.at(r);
@@ -814,7 +814,7 @@ void KexiAlterTableDialog::removeCurrentPropertySet()
 }
 */
 
-void KexiAlterTableDialog::slotBeforeCellChanged(
+void KexiTableDesignerView::slotBeforeCellChanged(
 	KexiTableItem *item, int colnum, QVariant& newValue, KexiDB::ResultInfo* /*result*/)
 {
 	if (!d->slotBeforeCellChanged_enabled)
@@ -971,7 +971,7 @@ void KexiAlterTableDialog::slotBeforeCellChanged(
 	}
 }
 
-void KexiAlterTableDialog::slotRowUpdated(KexiTableItem *item)
+void KexiTableDesignerView::slotRowUpdated(KexiTableItem *item)
 {
 	const int row = d->view->data()->findRef(item);
 	if (row < 0)
@@ -1020,7 +1020,7 @@ void KexiAlterTableDialog::slotRowUpdated(KexiTableItem *item)
 			/*width*/0);
 //		m_newTable->addField( field );
 
-		kexipluginsdbg << "KexiAlterTableDialog::slotRowUpdated(): " << field.debugString() << endl;
+		kexipluginsdbg << "KexiTableDesignerView::slotRowUpdated(): " << field.debugString() << endl;
 
 		//create a new property set:
 		KoProperty::Set *newSet = createPropertySet( row, field, true );
@@ -1041,22 +1041,22 @@ void KexiAlterTableDialog::slotRowUpdated(KexiTableItem *item)
 			}
 		}
 		else {
-			kexipluginswarn << "KexiAlterTableDialog::slotRowUpdated() row # not found  !" << endl;
+			kexipluginswarn << "KexiTableDesignerView::slotRowUpdated() row # not found  !" << endl;
 		}
 	}
 }
 
-void KexiAlterTableDialog::updateActions()
+void KexiTableDesignerView::updateActions()
 {
 	updateActions(false);
 }
 
-void KexiAlterTableDialog::slotPropertyChanged(KoProperty::Set& set, KoProperty::Property& property)
+void KexiTableDesignerView::slotPropertyChanged(KoProperty::Set& set, KoProperty::Property& property)
 {
 //	if (!d->slotPropertyChanged_enabled)
 //		return;
 	const QCString pname = property.name();
-	kexipluginsdbg << "KexiAlterTableDialog::slotPropertyChanged(): " << pname << " = " << property.value() << endl;
+	kexipluginsdbg << "KexiTableDesignerView::slotPropertyChanged(): " << pname << " = " << property.value() << endl;
 
 	// true is PK should be altered
 	bool changePrimaryKey = false;
@@ -1217,7 +1217,7 @@ void KexiAlterTableDialog::slotPropertyChanged(KoProperty::Set& set, KoProperty:
 	}
 }
 
-void KexiAlterTableDialog::slotRowInserted()
+void KexiTableDesignerView::slotRowInserted()
 {
 	updateActions();
 
@@ -1230,7 +1230,7 @@ void KexiAlterTableDialog::slotRowInserted()
 	//TODO?
 }
 
-void KexiAlterTableDialog::slotAboutToDeleteRow(
+void KexiTableDesignerView::slotAboutToDeleteRow(
 	KexiTableItem& item, KexiDB::ResultInfo* result, bool repaint)
 {
 	Q_UNUSED(result)
@@ -1249,7 +1249,7 @@ void KexiAlterTableDialog::slotAboutToDeleteRow(
 	}
 }
 
-tristate KexiAlterTableDialog::buildSchema(KexiDB::TableSchema &schema)
+tristate KexiTableDesignerView::buildSchema(KexiDB::TableSchema &schema)
 {
 	if (!d->view->acceptRowEdit())
 		return cancelled;
@@ -1368,7 +1368,7 @@ tristate KexiAlterTableDialog::buildSchema(KexiDB::TableSchema &schema)
 //			KexiDB::Field::Type type;
 			if (type <= (int)KexiDB::Field::InvalidType || type > (int)KexiDB::Field::LastType) {//for sanity
 				type = KexiDB::Field::Text;
-				kexipluginswarn << "KexiAlterTableDialog::buildSchema(): invalid type " << type 
+				kexipluginswarn << "KexiTableDesignerView::buildSchema(): invalid type " << type 
 					<< ", moving back to Text type" << endl;
 			}
 //			else 
@@ -1414,7 +1414,7 @@ tristate KexiAlterTableDialog::buildSchema(KexiDB::TableSchema &schema)
 	return res;
 }
 
-KexiDB::SchemaData* KexiAlterTableDialog::storeNewData(const KexiDB::SchemaData& sdata, bool &cancel)
+KexiDB::SchemaData* KexiTableDesignerView::storeNewData(const KexiDB::SchemaData& sdata, bool &cancel)
 {
 	if (tempData()->table || m_dialog->schemaData()) //must not be
 		return 0;
@@ -1450,7 +1450,7 @@ KexiDB::SchemaData* KexiAlterTableDialog::storeNewData(const KexiDB::SchemaData&
 	return tempData()->table;
 }
 
-tristate KexiAlterTableDialog::storeData(bool dontAsk)
+tristate KexiTableDesignerView::storeData(bool dontAsk)
 {
 	if (!tempData()->table || !m_dialog->schemaData())
 		return 0;
@@ -1476,7 +1476,7 @@ tristate KexiAlterTableDialog::storeData(bool dontAsk)
 	res = buildSchema(*newTable);
 //	bool ok = buildSchema(*newTable, cancel) && !cancel;
 
-	kexipluginsdbg << "KexiAlterTableDialog::storeData() : BUILD SCHEMA:" << endl;
+	kexipluginsdbg << "KexiTableDesignerView::storeData() : BUILD SCHEMA:" << endl;
 	newTable->debug();
 
 	KexiDB::Connection *conn = mainWin()->project()->dbConnection();
@@ -1503,12 +1503,12 @@ tristate KexiAlterTableDialog::storeData(bool dontAsk)
 	return res;
 }
 
-KexiTablePart::TempData* KexiAlterTableDialog::tempData() const
+KexiTablePart::TempData* KexiTableDesignerView::tempData() const
 {
 	return static_cast<KexiTablePart::TempData*>(parentDialog()->tempData());
 }
 
-/*void KexiAlterTableDialog::slotAboutToUpdateRow(
+/*void KexiTableDesignerView::slotAboutToUpdateRow(
 	KexiTableItem* item, KexiDB::RowEditBuffer* buffer, KexiDB::ResultInfo* result)
 {
 	KexiDB::RowEditBuffer::SimpleMap map = buffer->simpleBuffer();
@@ -1526,7 +1526,7 @@ KexiTablePart::TempData* KexiAlterTableDialog::tempData() const
 }*/
 
 #ifdef KEXI_DEBUG_GUI
-void KexiAlterTableDialog::debugCommand( KCommand* command, int nestingLevel )
+void KexiTableDesignerView::debugCommand( KCommand* command, int nestingLevel )
 {
 	if (dynamic_cast<Command*>(command))
 		KexiUtils::addAlterTableActionDebug(dynamic_cast<Command*>(command)->debugString(), nestingLevel);
@@ -1541,7 +1541,7 @@ void KexiAlterTableDialog::debugCommand( KCommand* command, int nestingLevel )
 }
 #endif
 
-void KexiAlterTableDialog::addHistoryCommand( KCommand* command, bool execute )
+void KexiTableDesignerView::addHistoryCommand( KCommand* command, bool execute )
 {
 #ifndef KEXI_NO_UNDOREDO_ALTERTABLE
 # ifdef KEXI_DEBUG_GUI
@@ -1552,7 +1552,7 @@ void KexiAlterTableDialog::addHistoryCommand( KCommand* command, bool execute )
 #endif
 }
 
-void KexiAlterTableDialog::updateUndoRedoActions()
+void KexiTableDesignerView::updateUndoRedoActions()
 {
 #ifndef KEXI_NO_UNDOREDO_ALTERTABLE
 	setAvailable("edit_undo", d->historyActionCollection->action("edit_undo")->isEnabled());
@@ -1560,7 +1560,7 @@ void KexiAlterTableDialog::updateUndoRedoActions()
 #endif
 }
 
-void KexiAlterTableDialog::slotUndo()
+void KexiTableDesignerView::slotUndo()
 {
 #ifndef KEXI_NO_UNDOREDO_ALTERTABLE
 # ifdef KEXI_DEBUG_GUI
@@ -1571,7 +1571,7 @@ void KexiAlterTableDialog::slotUndo()
 #endif
 }
 
-void KexiAlterTableDialog::slotRedo()
+void KexiTableDesignerView::slotRedo()
 {
 #ifndef KEXI_NO_UNDOREDO_ALTERTABLE
 # ifdef KEXI_DEBUG_GUI
@@ -1582,7 +1582,7 @@ void KexiAlterTableDialog::slotRedo()
 #endif
 }
 
-void KexiAlterTableDialog::slotCommandExecuted(KCommand *command)
+void KexiTableDesignerView::slotCommandExecuted(KCommand *command)
 {
 #ifdef KEXI_DEBUG_GUI
 	debugCommand( command, 1 );
@@ -1591,7 +1591,7 @@ void KexiAlterTableDialog::slotCommandExecuted(KCommand *command)
 
 // -- low-level actions used by undo/redo framework
 
-void KexiAlterTableDialog::clearRow(int row)
+void KexiTableDesignerView::clearRow(int row)
 {
 	if (!d->view->acceptRowEdit())
 		return;
@@ -1606,7 +1606,7 @@ void KexiAlterTableDialog::clearRow(int row)
 	d->view->data()->saveRowChanges(*item, true);
 }
 
-void KexiAlterTableDialog::insertField( int row, //const KexiDB::Field& field, 
+void KexiTableDesignerView::insertField( int row, //const KexiDB::Field& field, 
 	KoProperty::Set& set )
 {
 	if (!d->view->acceptRowEdit())
@@ -1631,7 +1631,7 @@ void KexiAlterTableDialog::insertField( int row, //const KexiDB::Field& field,
 			*newSet = set; //deep copy
 		}
 		else {
-			kexipluginswarn << "KexiAlterTableDialog::insertField() !newSet, row==" << row << endl;
+			kexipluginswarn << "KexiTableDesignerView::insertField() !newSet, row==" << row << endl;
 		}
 	d->addHistoryCommand_in_slotPropertyChanged_enabled = true;
 	d->addHistoryCommand_in_slotRowUpdated_enabled = true;
@@ -1639,21 +1639,21 @@ void KexiAlterTableDialog::insertField( int row, //const KexiDB::Field& field,
 	propertySetReloaded(true);
 }
 
-void KexiAlterTableDialog::insertEmptyRow( int row )
+void KexiTableDesignerView::insertEmptyRow( int row )
 {
 	d->addHistoryCommand_in_slotRowInserted_enabled = false;
 		d->view->insertEmptyRow( row );
 	d->addHistoryCommand_in_slotRowInserted_enabled = true;
 }
 
-void KexiAlterTableDialog::deleteRow( int row )
+void KexiTableDesignerView::deleteRow( int row )
 {
 	d->addHistoryCommand_in_slotAboutToDeleteRow_enabled = false;
 		d->view->deleteItem( d->view->data()->at(row) );
 	d->addHistoryCommand_in_slotAboutToDeleteRow_enabled = true;
 }
 
-void KexiAlterTableDialog::deleteField( int row )
+void KexiTableDesignerView::deleteField( int row )
 {
 	KexiTableItem *item = d->view->itemAt( row );
 	if (!item)
@@ -1662,7 +1662,7 @@ void KexiAlterTableDialog::deleteField( int row )
 		return;
 }
 
-void KexiAlterTableDialog::changeFieldProperty( int fieldUID,
+void KexiTableDesignerView::changeFieldProperty( int fieldUID,
  const QCString& propertyName, const QVariant& newValue, 
  KoProperty::Property::ListData* const listData )
 {
@@ -1711,7 +1711,7 @@ void KexiAlterTableDialog::changeFieldProperty( int fieldUID,
 	d->view->updateRow( row );
 }
 
-void KexiAlterTableDialog::changePropertyVisibility(
+void KexiTableDesignerView::changePropertyVisibility(
 	int fieldUID, const QCString& propertyName, bool visible )
 {
 #ifdef KEXI_DEBUG_GUI
@@ -1736,4 +1736,4 @@ void KexiAlterTableDialog::changePropertyVisibility(
 	}
 }
 
-#include "kexialtertabledialog.moc"
+#include "kexitabledesignerview.moc"
