@@ -51,7 +51,7 @@ int KoShellApp::newInstance()
     // There can only be one main window
     if ( KMainWindow::canBeRestored( 1 ) ) {
       mMainWindow = new KoShellWindow();
-      setMainWidget( mMainWindow );
+//      setMainWidget( mMainWindow );
       mMainWindow->show();
       mMainWindow->restore( 1 );
     }
@@ -59,7 +59,7 @@ int KoShellApp::newInstance()
     if ( !mMainWindow ) {
       mMainWindow = new KoShellWindow();
       mMainWindow->show();
-      setMainWidget( mMainWindow );
+//      setMainWidget( mMainWindow );
     }
   }
   // Handle startup notification and window activation

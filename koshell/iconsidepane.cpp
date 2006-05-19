@@ -20,16 +20,15 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include <qbitmap.h>
-#include <qcursor.h>
-#include <qdrawutil.h>
-#include <qfontmetrics.h>
+#include <QBitmap>
+#include <QCursor>
+#include <QFontMetrics>
 #include <q3frame.h>
 #include <QLabel>
-#include <qobject.h>
-#include <qpainter.h>
+#include <QObject>
+#include <QPainter>
 #include <q3ptrlist.h>
-#include <qstyle.h>
+#include <QStyle>
 #include <QToolTip>
 #include <q3widgetstack.h>
 //Added by qt3to4:
@@ -133,13 +132,13 @@ void EntryItem::paint( QPainter *p )
 
     QBrush brush;
     if ( isCurrent() || isSelected() || mPaintActive )
-      brush = box->colorGroup().brush( QColorGroup::Highlight );
+      brush = box->palette().highlight();
     else
-      brush = box->colorGroup().highlight().light( 115 );
+      brush = box->palette().highlight().color().light( 115 );
     p->fillRect( 1, 0, w - 2, h - 1, brush );
     QPen pen = p->pen();
     QPen oldPen = pen;
-    pen.setColor( box->colorGroup().mid() );
+    pen.setColor( box->palette().color( QPalette::Mid) );
     p->setPen( pen );
 
     p->drawPoint( 1, 0 );
@@ -156,9 +155,9 @@ void EntryItem::paint( QPainter *p )
     p->drawPixmap( x, y, mPixmap );
   }
 
-  QColor shadowColor = listBox()->colorGroup().background().dark(115);
+  QColor shadowColor = listBox()->palette().color( QPalette::Background ).dark(115);
   if ( isCurrent() || isSelected() ) {
-    p->setPen( box->colorGroup().highlightedText() );
+    p->setPen( box->palette().color( QPalette::HighlightedText ) );
   }
 
   if ( !text().isEmpty() && navigator()->showText() ) {
@@ -183,13 +182,13 @@ void EntryItem::paint( QPainter *p )
     }
 
     if ( isCurrent() || isSelected() || mHasHover ) {
-      p->setPen( box->colorGroup().highlight().dark(115) );
+      p->setPen( box->palette().color( QPalette::Highlight ).dark(115) );
       p->drawText( x + ( QApplication::isRightToLeft() ? -1 : 1),
                    y + 1, text() );
-      p->setPen( box->colorGroup().highlightedText() );
+      p->setPen( box->palette().color( QPalette::HighlightedText ) );
     }
     else
-      p->setPen( box->colorGroup().text() );
+      p->setPen( box->palette().color( QPalette::Text ) );
 
     p->drawText( x, y, text() );
   }
@@ -214,7 +213,7 @@ Navigator::Navigator(bool _selectable, KMenu * menu, IconSidePane *_iconsidepane
   : KListBox( parent, name ), mSidePane( _iconsidepane ), mPopupMenu( menu )
 {
   setSelectionMode( KListBox::Single );
-  viewport()->setBackgroundMode( Qt::PaletteBackground );
+  viewport()->setAutoFillBackground( true );
   setFrameStyle( Q3Frame::NoFrame );
   setHScrollBarMode( Q3ScrollView::AlwaysOff );
   //setAcceptDrops( true );
@@ -231,7 +230,7 @@ Navigator::Navigator(bool _selectable, KMenu * menu, IconSidePane *_iconsidepane
             SLOT(  slotMouseOn( Q3ListBoxItem * ) ) );
   connect( this, SIGNAL( onViewport() ), SLOT(  slotMouseOff() ) );
 
-  QToolTip::remove( this );
+  setToolTip( "" );
   if ( !mSidePane->showText() )
     new EntryItemToolTip( this );
 }
@@ -410,7 +409,7 @@ IconSidePane::IconSidePane(QWidget *parent, const char *name )
       break;
   }
 
-  mPopupMenu->insertSeparator();
+  mPopupMenu->addSeparator();
 
   mShowIcons = mPopupMenu->addAction(i18n( "Show Icons" ));
   mShowIcons->setEnabled(m_bShowText);
@@ -458,7 +457,7 @@ void IconSidePane::changeStateMenu( QAction *choice)
     mShowText->setEnabled(showIcons());
     mShowIcons->setChecked(showIcons());
     toogleIcons();
-    QToolTip::remove( mCurrentNavigator );
+    mCurrentNavigator->setToolTip( "" );
   }
   else if(choice == mShowText )
   {
@@ -530,7 +529,7 @@ int IconSidePane::insertGroup(const QString &_text, bool _selectable, QObject *_
   KPushButton *b = new KPushButton( _text, m_buttongroup );
   m_buttongroup->insert( b, id );
   connect( b, SIGNAL( clicked() ), this, SLOT( buttonClicked() ) );
-  b->setToggleButton( true );
+  b->setCheckable( true );
   b->setFocusPolicy( Qt::NoFocus );
   if (m_buttongroup->count()==1)
   {

@@ -20,8 +20,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <qcursor.h>
-#include <qsplitter.h>
+#include <QCursor>
+#include <QSplitter>
 #include <q3iconview.h>
 #include <QLabel>
 #include <q3vbox.h>
@@ -76,7 +76,6 @@ KoShellWindow::KoShellWindow()
   m_pSidebar->setActionCollection( actionCollection() );
   m_grpFile = m_pSidebar->insertGroup(i18n("Components"), false, this, SLOT( slotSidebar_Part(int )));
   m_grpDocuments = m_pSidebar->insertGroup(i18n("Documents"), true, this, SLOT(slotSidebar_Document(int)));
-  m_pLayout->setResizeMode(m_pSidebar,QSplitter::FollowSizeHint);
 
   // Setup the tabbar
   m_pFrame = new KTabWidget( m_pLayout );
@@ -87,7 +86,7 @@ KoShellWindow::KoShellWindow()
   m_tabCloseButton = new QToolButton( m_pFrame );
   connect( m_tabCloseButton, SIGNAL( clicked() ),
            this, SLOT( slotFileClose() ) );
-  m_tabCloseButton->setIconSet( SmallIconSet( "tab_remove" ) );
+  m_tabCloseButton->setIcon( SmallIconSet( "tab_remove" ) );
   m_tabCloseButton->adjustSize();
   m_tabCloseButton->setToolTip( i18n("Close"));
   m_pFrame->setCornerWidget( m_tabCloseButton, Qt::BottomRight );
@@ -170,7 +169,7 @@ bool KoShellWindow::openDocumentInternal( const KUrl &url, KoDocument* )
   }*/
   
   KMimeType::Ptr mimeType = KMimeType::findByURL( url );
-  m_documentEntry = KoDocumentEntry::queryByMimeType( mimeType->name().latin1() );
+  m_documentEntry = KoDocumentEntry::queryByMimeType( mimeType->name().toLatin1() );
 
   KTempFile* tmpFile = 0;
   KUrl tmpUrl( url );  // we might have to load a converted temp. file
@@ -237,8 +236,8 @@ bool KoShellWindow::openDocumentInternal( const KUrl &url, KoDocument* )
     //correct (output) mime type: we need to set it to the non-native format
     //to make sure the user knows about saving to a non-native mime type
     //setConfirmNonNativeSave is set to true below
-    newdoc->setMimeType( mimeType->name().latin1() );
-    newdoc->setOutputMimeType( mimeType->name().latin1() );
+    newdoc->setMimeType( mimeType->name().toLatin1() );
+    newdoc->setOutputMimeType( mimeType->name().toLatin1() );
 
     //the next time the user saves the document he should be warned
     //because of mime type settings done above;
@@ -321,13 +320,13 @@ void KoShellWindow::saveAll()
   {
     if ( (*it).m_pDoc->isModified() )
     {
-      m_pFrame->showPage( (*it).m_pView );
+      m_pFrame->setCurrentWidget( (*it).m_pView );
       (*it).m_pView->shell()->slotFileSave();
       if ( (*it).m_pDoc->isModified() )
         break;
     }
   }
-  m_pFrame->showPage( currentView );
+  m_pFrame->setCurrentWidget( currentView );
 }
 
 void KoShellWindow::setRootDocument( KoDocument * doc )
@@ -407,7 +406,7 @@ void KoShellWindow::updateCaption()
             name.truncate( 17 );
             name += "...";
           }
-          m_pFrame->changeTab( m_pFrame->currentPage(), name );
+          m_pFrame->setTabText( m_pFrame->currentIndex(), name );
           m_pSidebar->renameItem(m_grpDocuments, (*m_activePage).m_id, name); //remove the document from the sidebar
         }
 
@@ -460,7 +459,7 @@ void KoShellWindow::slotSidebar_Document(int _item)
 
 void KoShellWindow::slotShowSidebar()
 {
-  if( m_pSidebar->isShown() )
+  if( m_pSidebar->isVisible() )
   {
     m_pSidebar->hide();
     m_pComponentsLabel->hide();
@@ -502,7 +501,7 @@ void KoShellWindow::switchToPage( Q3ValueList<Page>::Iterator it )
   // Select the item in the sidebar
   m_pSidebar->group(m_grpDocuments)->setSelected((*m_activePage).m_id,true);
   // Raise the new page
-  m_pFrame->showPage( v );
+  m_pFrame->setCurrentWidget( v );
   // Fix caption and set focus to the new view
   updateCaption();
   v->setFocus();
@@ -690,13 +689,13 @@ void KoShellWindow::tab_contextMenu(QWidget * w,const QPoint &p)
 
   if( choice == mnuClose )
   {
-    const int index = m_pFrame->currentPageIndex();
-    m_pFrame->setCurrentPage( tabnr );
+    const int index = m_pFrame->currentIndex();
+    m_pFrame->setCurrentIndex( tabnr );
     slotFileClose();
-    if ( index > m_pFrame->currentPageIndex() )
-      m_pFrame->setCurrentPage(index-1);
+    if ( index > m_pFrame->currentIndex() )
+      m_pFrame->setCurrentIndex(index-1);
     else
-      m_pFrame->setCurrentPage(index);
+      m_pFrame->setCurrentIndex(index);
   }
   else if ( choice == mnuSave )
   {
