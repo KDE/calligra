@@ -54,7 +54,7 @@ kde4_automoc(${kexiformutils_LIB_SRCS})
 
 kde4_add_library(kexiformutils SHARED ${kexiformutils_LIB_SRCS})
 
-target_link_libraries(kexiformutils  ${KDE4_KDECORE_LIBS} kexicore kexiextendedwidgets kexiformutilswidgets )
+target_link_libraries(kexiformutils  ${KDE4_KDECORE_LIBS} kexicore kexiextendedwidgets kexiformutilswidgets kformdesigner )
 
 set_target_properties(kexiformutils PROPERTIES VERSION 1.0.0 SOVERSION 1 )
 install_targets(${LIB_INSTALL_DIR} kexiformutils )

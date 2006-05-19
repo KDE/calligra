@@ -28,7 +28,8 @@ kde4_add_plugin(kexireportwidgets ${kexireportwidgets_PART_SRCS})
 
 kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kexireportwidgets )
 
-target_link_libraries(kexireportwidgets  ${KDE4_KDECORE_LIBS} kformdesigner kexireportutils )
+target_link_libraries(kexireportwidgets  ${KDE4_KDECORE_LIBS} kformdesigner kexireportutils
+kexiformutils kexiextendedwidgets kexiformutilswidgets )
 
 install_targets(${PLUGIN_INSTALL_DIR} kexireportwidgets )
 
@@ -41,7 +42,7 @@ kde4_automoc(${kexireportutils_LIB_SRCS})
 
 kde4_add_library(kexireportutils SHARED ${kexireportutils_LIB_SRCS})
 
-target_link_libraries(kexireportutils  ${KDE4_KDECORE_LIBS} kexicore kexiextendedwidgets kexiformutilswidgets )
+target_link_libraries(kexireportutils  ${KDE4_KDECORE_LIBS} kexicore kexiextendedwidgets kexiformutilswidgets kformdesigner kexiformutils )
 
 set_target_properties(kexireportutils PROPERTIES VERSION 1.0.0 SOVERSION 1 )
 install_targets(${LIB_INSTALL_DIR} kexireportutils )
