@@ -2,8 +2,8 @@ include $(top_srcdir)/kexi/Makefile.global
 
 kde_module_LTLIBRARIES = kexihandler_table.la
 
-kexihandler_table_la_SOURCES = kexitablepart.cpp kexialtertabledialog.cpp kexialtertable_dataview.cpp \
-	kexitabledesignercommands.cpp
+kexihandler_table_la_SOURCES = kexitablepart.cpp kexialtertabledialog.cpp kexialtertabledialog_p.cpp \
+	kexialtertable_dataview.cpp kexitabledesignercommands.cpp
 
 kexihandler_table_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN) $(VER_INFO) -module
 kexihandler_table_la_LIBADD = $(top_builddir)/kexi/core/libkexicore.la \
