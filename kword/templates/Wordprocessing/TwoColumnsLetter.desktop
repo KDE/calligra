@@ -85,6 +85,7 @@ Comment[sl]=Ustvari dokument velikosti »letter« z dvema stolpcema na stran.
 Comment[sr]=Прави документ писма са две колоне по страни
 Comment[sr@Latn]=Pravi dokument pisma sa dve kolone po strani
 Comment[sv]=Skapar ett US Letter-dokument med två kolumner per sida.
+Comment[uk]=Створює документ для паперу "letter" з двома стовпчиками на сторінку.
 Comment[uz]=Икки устунли бўш хат форматидаги ҳужжатни яратиш.
 Comment[zh_CN]=创建每页两栏的信函文档。
 Icon=template_twocolumns
