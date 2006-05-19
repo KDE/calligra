@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "kexialtertabledialog_p.h"
-#include "kexialtertabledialog.h"
+#include "kexitabledesignerview_p.h"
+#include "kexitabledesignerview.h"
 
 #include <qlayout.h>
 #include <qlabel.h>

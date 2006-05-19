@@ -57,8 +57,7 @@ class KexiTableDesignerView : public KexiDataTable
 
 	public:
 		/*! Creates a new alter table dialog. */
-		KexiTableDesignerView(KexiMainWindow *win, QWidget *parent,
-			const char *name = 0);
+		KexiTableDesignerView(KexiMainWindow *win, QWidget *parent);
 
 		virtual ~KexiTableDesignerView();
 
