@@ -1326,7 +1326,7 @@ bool LocationEditWidget::activateItem()
         if ((*it).ref_name == tmp)
         {
             QString tmp = (*it).sheet_name;
-            tmp += "!";
+            tmp += '!';
             tmp += util_rangeName((*it).rect);
             m_pView->selectionInfo()->initialize( Region(m_pView,tmp) );
             return true;

@@ -18,7 +18,7 @@
    Copyright 2000 Bernd Wuebben <wuebben@kde.org>
    Copyright 2000 Simon Hausmann <hausmann@kde.org
    Copyright 1999 Stephan Kulow <coolo@kde.org>
-   Copyright 1999 Michael Reiher <michael.reiher.gmx.de>
+   Copyright 1999 Michael Reiher <michael.reiher@gmx.de>
    Copyright 1999 Boris Wedl <boris.wedl@kfunigraz.ac.at>
    Copyright 1998-1999 Reginald Stadlbauer <reggie@kde.org>
 
@@ -1378,7 +1378,7 @@ void Cell::makeLayout( QPainter &_painter, int _col, int _row )
             pos1++;
 
             if ( pos1 != 0 && breakpos != -1 ) {
-            d->strOutText += "\n" + o.mid( pos1, breakpos - pos1 );
+            d->strOutText += '\n' + o.mid( pos1, breakpos - pos1 );
             lines++;
             }
             else
@@ -5838,7 +5838,7 @@ void Cell::loadOasisCellText( const QDomElement& parent )
                 cellText = textParagraphElement.text();
             else
             {
-                cellText += "\n"+textParagraphElement.text();
+                cellText += '\n' + textParagraphElement.text();
                 multipleTextParagraphsFound=true;
             }
 

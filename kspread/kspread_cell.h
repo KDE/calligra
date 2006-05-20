@@ -12,7 +12,7 @@
    Copyright 2000-2001 Werner Trobin <trobin@kde.org>
    Copyright 2000 Simon Hausmann <hausmann@kde.org
    Copyright 1998-1999 Torben Weis <weis@kde.org>
-   Copyright 1999 Michael Reiher <michael.reiher.gmx.de>
+   Copyright 1999 Michael Reiher <michael.reiher@gmx.de>
    Copyright 1999 Reginald Stadlbauer <reggie@kde.org>
 
    This library is free software; you can redistribute it and/or

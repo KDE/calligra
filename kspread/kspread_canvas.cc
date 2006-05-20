@@ -21,7 +21,7 @@
    Copyright 2000 Bernd Wuebben <wuebben@kde.org>
    Copyright 2000 Wilco Greven <greven@kde.org>
    Copyright 2000 Simon Hausmann <hausmann@kde.org
-   Copyright 1999 Michael Reiher <michael.reiher.gmx.de>
+   Copyright 1999 Michael Reiher <michael.reiher@gmx.de>
    Copyright 1999 Boris Wedl <boris.wedl@kfunigraz.ac.at>
    Copyright 1999 Reginald Stadlbauer <reggie@kde.org>
 
@@ -556,7 +556,7 @@ void Canvas::validateSelection()
             {
                 len = painter.fontMetrics().width( title );
                 hei = painter.fontMetrics().height();
-                resultText = title + "\n";
+                resultText = title + '\n';
             }
             if ( !message.isEmpty() )
             {
@@ -6107,7 +6107,7 @@ void Canvas::showToolTip( const QPoint& p )
     {
       //Add 2 extra lines and a text, when both should be in the tooltip
       if ( !comment.isEmpty() )
-        comment = "\n\n" + i18n("Comment:") + "\n" + comment;
+        comment = "\n\n" + i18n("Comment:") + '\n' + comment;
 
       tipText += comment;
     }

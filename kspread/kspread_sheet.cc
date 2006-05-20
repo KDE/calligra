@@ -4906,7 +4906,7 @@ QString Sheet::copyAsText( Selection* selectionInfo )
         Cell *cell = cellAt( x, y );
         result += cellAsText( cell, max );
       }
-      result += "\n";
+      result += '\n';
     }
 
     return result;

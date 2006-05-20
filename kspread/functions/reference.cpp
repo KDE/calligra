@@ -110,7 +110,7 @@ Value func_address (valVector args, ValueCalc *calc, FuncExtra *)
   if ( !sheetName.isEmpty() )
   {
     result += sheetName;
-    result += "!";
+    result += '!';
   }
 
   if ( r1c1 )
