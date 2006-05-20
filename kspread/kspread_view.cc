@@ -6112,8 +6112,8 @@ void View::propertiesOk()
 
 void View::styleDialog()
 {
-  StyleDlg dlg( this, doc()->styleManager() );
-  dlg.exec();
+  StyleDialog dialog( this, doc()->styleManager() );
+  dialog.exec();
 
   d->actions->selectStyle->setItems( doc()->styleManager()->styleNames() );
   if ( d->activeSheet )

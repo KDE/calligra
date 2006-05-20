@@ -34,7 +34,7 @@ class KoOasisStyles;
 namespace KSpread
 {
 class Sheet;
-class StyleDlg;
+class StyleDialog;
 class View;
 
 class KSPREAD_EXPORT StyleManager
@@ -85,7 +85,7 @@ class KSPREAD_EXPORT StyleManager
   static void releaseUnusedAutoStyles( Styles autoStyles );
 
  private:
-  friend class StyleDlg;
+  friend class StyleDialog;
   friend class View;
 
   CustomStyle * m_defaultStyle;

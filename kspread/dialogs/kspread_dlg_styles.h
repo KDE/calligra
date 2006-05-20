@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Laurent Montel <montel@kde.org>
-             (C) 2003 Norbert Andres <nandres@web.de>  
+             (C) 2003 Norbert Andres <nandres@web.de>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -39,7 +39,7 @@ class StyleWidget : public QWidget
   Q_OBJECT
 
  public:
-  StyleWidget( QWidget* parent = 0, const char* name = 0, Qt::WFlags fl = 0 );
+  StyleWidget( QWidget* parent = 0, Qt::WFlags fl = 0 );
   ~StyleWidget();
 
   K3ListView * m_styleList;
@@ -48,13 +48,12 @@ signals:
     void modifyStyle();
 };
 
-class StyleDlg : public KDialogBase
+class StyleDialog : public KDialog
 {
   Q_OBJECT
  public:
-  StyleDlg( View * parent, StyleManager * manager,
-                   const char * name = "StyleDlg" );
-  ~StyleDlg();
+  StyleDialog( View * parent, StyleManager * manager );
+  ~StyleDialog();
 
  protected slots:
   void slotOk();

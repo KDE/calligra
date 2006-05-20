@@ -164,11 +164,11 @@ GeneralTab::GeneralTab( QWidget* parent, CellFormatDialog * dlg )
 
   QGroupBox * groupBox = new QGroupBox( this );
   groupBox->setTitle( i18n( "Style" ) );
-  groupBox->layout()->setSpacing( KDialog::spacingHint() );
-  groupBox->layout()->setMargin( KDialog::marginHint() );
 
   QGridLayout * groupBoxLayout = new QGridLayout( groupBox );
   groupBoxLayout->setAlignment( Qt::AlignTop );
+  groupBoxLayout->setSpacing( KDialog::spacingHint() );
+  groupBoxLayout->setMargin( KDialog::marginHint() );
 
   QLabel * label1 = new QLabel( groupBox );
   label1->setText( i18n( "Name:" ) );

@@ -40,12 +40,10 @@
 
 using namespace KSpread;
 
-StyleWidget::StyleWidget( QWidget * parent, const char * name, Qt::WFlags fl )
-  : QWidget( parent, name, fl )
+StyleWidget::StyleWidget( QWidget * parent, Qt::WFlags fl )
+  : QWidget( parent, fl )
 {
   QVBoxLayout * layout = new QVBoxLayout( this );
-  layout->setMargin(11);
-  layout->setSpacing(6);
 
   m_styleList = new K3ListView( this);
   m_styleList->addColumn( i18n( "Styles" ) );
@@ -53,7 +51,6 @@ StyleWidget::StyleWidget( QWidget * parent, const char * name, Qt::WFlags fl )
   layout->addWidget( m_styleList );
 
   m_displayBox = new KComboBox( false, this );
-  m_displayBox->setObjectName( "m_displayBox" );
   layout->addWidget( m_displayBox );
 
   m_styleList->header()->setLabel( 0, i18n( "Styles" ) );
@@ -72,16 +69,16 @@ StyleWidget::~StyleWidget()
 
 
 
-StyleDlg::StyleDlg( View * parent, StyleManager * manager,
-                                  const char * name )
-  : KDialogBase( KDialogBase::Plain, Qt::Dialog, parent, name, true, "",
-                 KDialogBase::Ok | KDialogBase::User1 | KDialogBase::User2 | KDialogBase::User3 | KDialogBase::Close,
-                 KDialogBase::Ok, false, KGuiItem( i18n( "&New..." ) ), KGuiItem( i18n( "&Modify..." ) ), KGuiItem( i18n( "&Delete" ) ) ),
+StyleDialog::StyleDialog( View * parent, StyleManager * manager )
+  : KDialog( parent, i18n( "Style Manager" ),
+             Ok|User1|User2|User3|Close, 0,
+             KGuiItem( i18n( "&New..." ) ),
+             KGuiItem( i18n( "&Modify..." ) ),
+             KGuiItem( i18n( "&Delete" ) ) ),
     m_view( parent ),
     m_styleManager( manager ),
     m_dlg( new StyleWidget( this ) )
 {
-  setWindowTitle( i18n( "Style Manager" ) );
   setButtonBoxOrientation( Qt::Vertical );
   setMainWidget( m_dlg );
 
@@ -92,16 +89,23 @@ StyleDlg::StyleDlg( View * parent, StyleManager * manager,
 
   connect( m_dlg->m_styleList, SIGNAL( selectionChanged( Q3ListViewItem * ) ),
            this, SLOT( slotSelectionChanged( Q3ListViewItem * ) ) );
-  connect( m_dlg->m_displayBox, SIGNAL( activated( int ) ), this, SLOT( slotDisplayMode( int ) ) );
-  connect( this, SIGNAL( user3Clicked() ), this, SLOT( slotUser3() ) );
-  connect( m_dlg, SIGNAL( modifyStyle() ), this, SLOT( slotUser2()));
+  connect( m_dlg->m_displayBox, SIGNAL( activated( int ) ),
+           this, SLOT( slotDisplayMode( int ) ) );
+  connect( this, SIGNAL( user1Clicked() ),
+           this, SLOT( slotUser1() ) );
+  connect( this, SIGNAL( user2Clicked() ),
+           this, SLOT( slotUser2() ) );
+  connect( this, SIGNAL( user3Clicked() ),
+           this, SLOT( slotUser3() ) );
+  connect( m_dlg, SIGNAL( modifyStyle() ),
+           this, SLOT( slotUser2()));
 }
 
-StyleDlg::~StyleDlg()
+StyleDialog::~StyleDialog()
 {
 }
 
-void StyleDlg::fillComboBox()
+void StyleDialog::fillComboBox()
 {
   class Map : public QMap<CustomStyle *, K3ListViewItem *> {};
   Map entries;
@@ -133,7 +137,7 @@ void StyleDlg::fillComboBox()
   entries.clear();
 }
 
-void StyleDlg::slotDisplayMode( int mode )
+void StyleDialog::slotDisplayMode( int mode )
 {
   m_dlg->m_styleList->clear();
 
@@ -178,7 +182,7 @@ void StyleDlg::slotDisplayMode( int mode )
   }
 }
 
-void StyleDlg::slotOk()
+void StyleDialog::slotOk()
 {
   K3ListViewItem * item = (K3ListViewItem *) m_dlg->m_styleList->currentItem();
 
@@ -217,7 +221,7 @@ void StyleDlg::slotOk()
   accept();
 }
 
-void StyleDlg::slotUser1()
+void StyleDialog::slotUser1()
 {
   CustomStyle * s = 0;
 
@@ -246,6 +250,7 @@ void StyleDlg::slotUser1()
   style->setType( Style::TENTATIVE );
 
   CellFormatDialog dlg( m_view, style, m_styleManager, m_view->doc() );
+  dlg.exec();
 
   if ( style->type() == Style::TENTATIVE )
   {
@@ -258,7 +263,7 @@ void StyleDlg::slotUser1()
   slotDisplayMode( m_dlg->m_displayBox->currentIndex() );
 }
 
-void StyleDlg::slotUser2()
+void StyleDialog::slotUser2()
 {
   K3ListViewItem * item = (K3ListViewItem *) m_dlg->m_styleList->currentItem();
 
@@ -280,7 +285,7 @@ void StyleDlg::slotUser2()
   slotDisplayMode( m_dlg->m_displayBox->currentIndex() );
 }
 
-void StyleDlg::slotUser3()
+void StyleDialog::slotUser3()
 {
   K3ListViewItem * item = (K3ListViewItem *) m_dlg->m_styleList->currentItem();
 
@@ -307,7 +312,7 @@ void StyleDlg::slotUser3()
   slotDisplayMode( m_dlg->m_displayBox->currentIndex() );
 }
 
-void StyleDlg::slotSelectionChanged( Q3ListViewItem * item )
+void StyleDialog::slotSelectionChanged( Q3ListViewItem * item )
 {
   if ( !item )
     return;
