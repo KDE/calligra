@@ -4122,7 +4122,7 @@ void View::subtotals()
     return;
   }
 
-  SubtotalDialog dlg(this, selection, "SubtotalDialog" );
+  SubtotalDialog dlg( this, selection );
   if ( dlg.exec() )
   {
     doc()->emitBeginOperation( false );

@@ -37,15 +37,17 @@
 
 using namespace KSpread;
 
-SubtotalDialog::SubtotalDialog( View * parent, QRect const & selection, const char * name )
-  : KDialogBase(KDialogBase::Plain, Qt::Dialog, parent, name, true, i18n( "Subtotals" ), Ok | Cancel | User1, Ok, true, KGuiItem(i18n( "Remove All" )) ),
+SubtotalDialog::SubtotalDialog( View * parent, QRect const & selection )
+  : KDialog( parent, i18n( "Subtotals" ), Ok|Cancel|User1, 0, KGuiItem(i18n( "Remove All" )) ),
     m_pView( parent ),
     m_pSheet( m_pView->activeSheet() ),
-    m_selection( selection ),
-    m_widget( new SubtotalWidget( this ) )
+    m_selection( selection )
 {
   setButtonBoxOrientation( Qt::Vertical );
-  setMainWidget( m_widget );
+
+  QWidget* widget = new QWidget( this );
+  setupUi( widget );
+  setMainWidget( widget );
 
   fillColumnBoxes();
   fillFunctionBox();
@@ -63,7 +65,7 @@ void SubtotalDialog::slotOk()
   int n = 0;
   bool empty = true;
   int left = m_selection.left();
-  for ( Q3ListViewItem * item = m_widget->m_columnList->firstChild(); item; item = item->nextSibling() )
+  for ( Q3ListViewItem * item = m_columnList->firstChild(); item; item = item->nextSibling() )
   {
     if ( ((Q3CheckListItem * ) item)->isOn() )
     {
@@ -81,10 +83,10 @@ void SubtotalDialog::slotOk()
     return;
   }
 
-  if ( m_widget->m_replaceSubtotals->isChecked() )
+  if ( m_replaceSubtotals->isChecked() )
     removeSubtotalLines();
 
-  int mainCol = left + m_widget->m_columnBox->currentIndex();
+  int mainCol = left + m_columnBox->currentIndex();
   int bottom = m_selection.bottom();
   int top    = m_selection.top();
   left       = m_selection.left();
@@ -94,9 +96,9 @@ void SubtotalDialog::slotOk()
   int lastChangedRow = top;
 
   m_pView->doc()->emitBeginOperation( false );
-  bool ignoreEmptyCells = m_widget->m_IgnoreBox->isChecked();
+  bool ignoreEmptyCells = m_IgnoreBox->isChecked();
   bool addRow;
-  if ( !m_widget->m_summaryOnly->isChecked() )
+  if ( !m_summaryOnly->isChecked() )
   {
     int y = top + 1;
     kDebug() << "Starting in row " << y << endl;
@@ -152,7 +154,7 @@ void SubtotalDialog::slotOk()
     ++y;
   }
 
-  if ( m_widget->m_summaryBelow->isChecked() )
+  if ( m_summaryBelow->isChecked() )
   {
     addRow = true;
     int bottom = m_selection.bottom();
@@ -246,13 +248,13 @@ void SubtotalDialog::fillColumnBoxes()
       text = col.arg( Cell::columnName( i ) );
     }
 
-    m_widget->m_columnBox->insertItem( index++, text );
+    m_columnBox->insertItem( index++, text );
 
-    item = new Q3CheckListItem( m_widget->m_columnList,
+    item = new Q3CheckListItem( m_columnList,
                                text,
                                Q3CheckListItem::CheckBox );
     item->setOn(false);
-    m_widget->m_columnList->insertItem( item );
+    m_columnList->insertItem( item );
   }
 }
 
@@ -270,7 +272,7 @@ void SubtotalDialog::fillFunctionBox()
     lst << i18n( "Sum" );
     lst << i18n( "Var" );
     lst << i18n( "VarP" );
-    m_widget->m_functionBox->insertItems(0, lst);
+    m_functionBox->insertItems(0, lst);
 }
 
 bool SubtotalDialog::addSubtotal( int mainCol, int column, int row, int topRow,
@@ -296,7 +298,7 @@ bool SubtotalDialog::addSubtotal( int mainCol, int column, int row, int topRow,
   QString colName = Cell::columnName( column );
 
   QString formula("=SUBTOTAL(");
-  formula += QString::number( m_widget->m_functionBox->currentIndex() + 1 );
+  formula += QString::number( m_functionBox->currentIndex() + 1 );
   formula += "; ";
   formula += colName;
   formula += QString::number( topRow );

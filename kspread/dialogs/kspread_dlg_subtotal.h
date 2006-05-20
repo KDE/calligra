@@ -26,7 +26,7 @@
 #include <QPoint>
 #include <QRect>
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 
 #include "ui_kspreadsubtotal.h"
 
@@ -37,19 +37,12 @@ namespace KSpread
 class Sheet;
 class View;
 
-class SubtotalWidget : public QWidget, public Ui::SubtotalWidget
-{
- public:
-  SubtotalWidget(QWidget* parent) : QWidget(parent) { setupUi(this); }
-};
-
-class SubtotalDialog : public KDialogBase
+class SubtotalDialog : public KDialog, public Ui::SubtotalWidget
 {
   Q_OBJECT
 
  public:
-  SubtotalDialog( View * parent, QRect const & selection,
-                      const char * name );
+  SubtotalDialog( View * parent, QRect const & selection );
   ~SubtotalDialog();
 
   QRect const & selection() const { return m_selection; }
@@ -64,7 +57,6 @@ class SubtotalDialog : public KDialogBase
   View  *          m_pView;
   Sheet *          m_pSheet;
   QRect            m_selection;
-  SubtotalWidget * m_widget;
 
   void fillColumnBoxes();
   void fillFunctionBox();
