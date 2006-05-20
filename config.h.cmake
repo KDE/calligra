@@ -72,12 +72,6 @@
 /* Define if you have support for long double in printf */
 /* #undef HAVE_LONG_DOUBLE */
 
-/* ImageMagick is available */
-#define HAVE_MAGICK 1
-
-/* ImageMagick Version 6 */
-#define HAVE_MAGICK6 1
-
 /* Define to 1 if you have the <memory.h> header file. */
 #cmakedefine HAVE_MEMORY_H 1
 

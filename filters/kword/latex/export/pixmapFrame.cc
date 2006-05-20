@@ -24,6 +24,7 @@
 #include <QTextStream>
 #include <kdebug.h>		/* for kDebug() stream */
 #include <config.h>
+#include <config-filters.h>
 /* Needed to convert picture in eps file. Use ImageMagick. */
 #ifdef HAVE_MAGICK
 #        include <stdio.h>

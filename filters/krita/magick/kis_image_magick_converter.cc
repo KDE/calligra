@@ -54,6 +54,7 @@
 #include "kis_paint_device.h"
 
 #include "../../../config.h"
+#include <config-filters.h>
 
 namespace {
 
