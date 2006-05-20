@@ -106,9 +106,6 @@
 /* Define to 1 if you have the `popen' function. */
 #define HAVE_POPEN 1
 
-/* Define if you have the development files for python */
-#define HAVE_PYTHON 1
-
 /* define if you have libreadline available */
 #define HAVE_READLINE 1
 

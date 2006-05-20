@@ -15,6 +15,7 @@
 
 /* Implementation : PYTHON */
 #include <config.h>
+#include <kivio-config.h>
 
 #ifdef HAVE_PYTHON
 

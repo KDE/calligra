@@ -25,6 +25,7 @@
 
 #include "kivio_stencil_spawner.h"
 #include <config.h>
+#include <config-kivio.h>
 
 #ifdef HAVE_PYTHON
 
