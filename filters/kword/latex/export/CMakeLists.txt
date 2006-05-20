@@ -1,8 +1,8 @@
 
 
-include_directories(${KFORMULA_INCLUDES})
+include_directories(${KFORMULA_INCLUDES} ${CMAKE_BINARY_DIR}/filters/)
 
-
+MESSAGE(STATUS "CMAKE_CURRENT_BINARY_DIR :<${CMAKE_BINARY_DIR}")
 ########### next target ###############
 
 set(kwordlatexexport_PART_SRCS 
