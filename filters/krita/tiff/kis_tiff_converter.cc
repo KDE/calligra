@@ -47,9 +47,6 @@
 #include "kis_tiff_stream.h"
 #include "kis_tiff_writer_visitor.h"
 
-#include <kis_ycbcr_u8_colorspace.h> // TODO: in the future YCbCrU8/16 will be moved in a plugins and we won't need anymore that cludge
-#include <kis_ycbcr_u16_colorspace.h>
-
 namespace {
 
     QString getColorSpaceForColorType(uint16 color_type, uint16 color_nb_bits, TIFF *image, uint16 &nbchannels, uint16 &extrasamplescount, uint8 &destDepth) {
@@ -238,23 +235,7 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory( TIFF* image)
     
     // Retrieve a pointer to the colorspace
     KisColorSpace* cs = 0;
-    if( csName == "YCbCrAU8" ) { // TODO: in the future YCbCrU8/16 will be moved in a plugins and we won't need anymore that cludge
-        if (profile && profile->isSuitableForOutput())
-        {
-            kDebug(41008) << "image has embedded profile: " << profile -> productName() << "\n";
-            cs = new KisYCbCrU8ColorSpace( KisMetaRegistry::instance()->csRegistry(), profile);
-        } else {
-            cs = new KisYCbCrU8ColorSpace( KisMetaRegistry::instance()->csRegistry(), 0);
-        }
-    } else if( csName == "YCbCrAU16") {
-        if (profile && profile->isSuitableForOutput())
-        {
-            kDebug(41008) << "image has embedded profile: " << profile -> productName() << "\n";
-            cs = new KisYCbCrU16ColorSpace( KisMetaRegistry::instance()->csRegistry(), profile);
-        } else {
-            cs = new KisYCbCrU16ColorSpace( KisMetaRegistry::instance()->csRegistry(), 0);
-        }
-    } else if (profile && profile->isSuitableForOutput())
+    if (profile && profile->isSuitableForOutput())
     {
         kDebug(41008) << "image has embedded profile: " << profile -> productName() << "\n";
         cs = KisMetaRegistry::instance()->csRegistry()->getColorSpace(csName, profile);
@@ -566,15 +547,6 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory( TIFF* image)
         delete[] ps_buf;
     }
     
-    // Convert YCbCr to RGB
-    if( csName == "YCbCrAU8" ) { // TODO: in the future YCbCrU8/16 will be moved in a plugins and we won't need anymore that cludge
-        KisColorSpace * dstCS = KisMetaRegistry::instance()->csRegistry()->getColorSpace(KisID("RGBA", ""), "");
-        m_img->convertTo(dstCS);
-    } else if( csName == "YCbCrAU16") {
-        KisColorSpace * dstCS = KisMetaRegistry::instance()->csRegistry()->getColorSpace(KisID("RGBA16", ""), "");
-        m_img->convertTo(dstCS);
-    }
-
     m_img->addLayer(KisLayerSP(layer), m_img->rootLayer(), KisLayerSP(0));
     return KisImageBuilder_RESULT_OK;
 }

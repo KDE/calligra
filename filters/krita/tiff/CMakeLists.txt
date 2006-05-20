@@ -7,9 +7,7 @@ set(libkritatiffconverter_LIB_SRCS
     kis_tiff_stream.cc
     kis_tiff_writer_visitor.cpp
     kis_tiff_reader.cc
-    kis_ycbcr_u8_colorspace.cpp
     kis_tiff_ycbcr_reader.cc
-	kis_ycbcr_u16_colorspace.cpp
     )
 
 ########## next target ###############
