@@ -41,9 +41,6 @@
 /* Define to 1 if you have the `ftell64' function. */
 /* #undef HAVE_FTELL64 */
 
-/* Define if you have isinf */
-#define HAVE_FUNC_ISINF 1
-
 /* Define to 1 if you have the <ieeefp.h> header file. */
 #cmakedefine HAVE_IEEEFP_H 1
 
