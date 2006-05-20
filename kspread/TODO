@@ -176,9 +176,7 @@ Things to do after the release of KOffice 1.4
 
   + code cleanups						      3 ----
     - Merge Cell::checkForNamedAreas() into Oasis::decodeFormula().	----
-    - Move Cell::convertFormulaToOasisFormat() to			----
-      Oasis::encodeFormula() to reduce the size of kspread_cell.cc
-      and to have encoding/decoding in one place.
+      Caution: also used by OpenCalc filter
     - Check if all logic of Point and Range is materialized in Region.	----
       Replace all occurences of Point and Range by Region.
     - All util_foo() functions that act on Point/Ranges should become	----
@@ -189,9 +187,6 @@ Things to do after the release of KOffice 1.4
       them, e.g. Sheet::paste(). bools -> QFlags, static variables
 
 * GUI
-  + Sheet layout:						      2 ----
-    - Move sheet properties to separate dialog.
-      They are currently part of KSpread config dialog.
   + Indent and multiline doesn't work together			      2 ----
   + RegionSelector						      2 ----
     - add syntax highlighting
