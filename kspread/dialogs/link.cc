@@ -140,7 +140,6 @@ LinkDialog::LinkDialog( QWidget*, const char* )
         BarIcon( "misc",K3Icon::SizeMedium ) );
     QVBoxLayout* cLayout = new QVBoxLayout( d->cellPage );
     cLayout->setSpacing( spacingHint() );
-    cLayout->addWidget( new QLabel( i18n("Text to display:" ), d->filePage ) );
     cLayout->addWidget( new QLabel( i18n("Text to display:" ), d->cellPage ) );
     d->cellText = new KLineEdit( d->cellPage );
     cLayout->addWidget( d->cellText );
