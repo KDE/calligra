@@ -23,7 +23,7 @@
 #ifndef __kspread_dlg_conditional__
 #define __kspread_dlg_conditional__
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 #include <QWidget>
 
 #include "kspread_condition.h"
@@ -66,7 +66,7 @@ class ConditionalWidget : public QWidget
 };
 
 
-class ConditionalDialog : public KDialogBase
+class ConditionalDialog : public KDialog
 {
   Q_OBJECT
  public:

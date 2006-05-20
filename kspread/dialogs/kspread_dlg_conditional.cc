@@ -53,12 +53,8 @@ ConditionalWidget::ConditionalWidget( QWidget* parent, const char* /*name*/, Qt:
     : QWidget( parent, fl )
 {
   QGridLayout * Form1Layout = new QGridLayout( this );
-  Form1Layout->setMargin(11);
-  Form1Layout->setSpacing(6);
 
   QGroupBox * groupBox1_3 = new QGroupBox( this );
-  groupBox1_3->layout()->setSpacing( KDialog::spacingHint() );
-  groupBox1_3->layout()->setMargin( KDialog::marginHint() );
   QGridLayout * groupBox1_3Layout = new QGridLayout( groupBox1_3 );
   groupBox1_3Layout->setAlignment( Qt::AlignTop );
 
@@ -91,8 +87,6 @@ ConditionalWidget::ConditionalWidget( QWidget* parent, const char* /*name*/, Qt:
   Form1Layout->addWidget( groupBox1_3, 2, 0 );
 
   QGroupBox * groupBox1_2 = new QGroupBox( this );
-  groupBox1_2->layout()->setSpacing( KDialog::spacingHint() );
-  groupBox1_2->layout()->setMargin( KDialog::marginHint() );
 
   QGridLayout * groupBox1_2Layout = new QGridLayout( groupBox1_2 );
   groupBox1_2Layout->setAlignment( Qt::AlignTop );
@@ -127,8 +121,6 @@ ConditionalWidget::ConditionalWidget( QWidget* parent, const char* /*name*/, Qt:
   Form1Layout->addWidget( groupBox1_2, 1, 0 );
 
   QGroupBox * groupBox1_1 = new QGroupBox( this );
-  groupBox1_1->layout()->setSpacing( KDialog::spacingHint() );
-  groupBox1_1->layout()->setMargin( KDialog::marginHint() );
 
   QGridLayout * groupBox1_1Layout = new QGridLayout( groupBox1_1 );
   groupBox1_1Layout->setAlignment( Qt::AlignTop );
@@ -161,8 +153,6 @@ ConditionalWidget::ConditionalWidget( QWidget* parent, const char* /*name*/, Qt:
 
   Form1Layout->addWidget( groupBox1_1, 0, 0 );
   resize( QSize(702, 380).expandedTo( minimumSizeHint() ) );
-#warning "kde4: port it"
-  //clearWState( WState_Polished );
 
   QStringList list;
   list += i18n( "<none>" );
@@ -281,8 +271,8 @@ void ConditionalWidget::slotTextChanged3( const QString & text )
  */
 ConditionalDialog::ConditionalDialog( View * parent, const char * name,
                                               const QRect & marker )
-  : KDialogBase( KDialogBase::Tabbed, Qt::Dialog, parent, name, true, "", KDialogBase::Ok | KDialogBase::Cancel,
-                 KDialogBase::Ok, false ),
+  : KDialog( parent, i18n( "Conditional Cell Attributes" ),
+             KDialog::Ok|KDialog::Cancel ),
     m_view( parent ),
     m_dlg( new ConditionalWidget( this ) ),
     m_marker( marker )
@@ -293,7 +283,6 @@ ConditionalDialog::ConditionalDialog( View * parent, const char * name,
   m_dlg->m_style_2->insertItems( 0, list );
   m_dlg->m_style_3->insertItems( 0, list );
 
-  setWindowTitle( i18n( "Conditional Cell Attributes" ) );
   setButtonBoxOrientation( Qt::Vertical );
   setMainWidget( m_dlg );
 
