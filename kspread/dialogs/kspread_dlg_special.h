@@ -1,9 +1,10 @@
 /* This file is part of the KDE project
-   Copyright (C) 1999-2004 Laurent Montel <montel@kde.org>
+   Copyright (C) 2006 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
+             (C) 1999-2004 Laurent Montel <montel@kde.org>
              (C) 2003 Norbert Andres <nandres@web.de>
              (C) 2002 Philipp Mueller <philipp.mueller@gmx.de>
              (C) 2002 John Dailey <dailey@vt.edu>
-             (C) 1998-1999 Torben Weis <weis@kde.org>   
+             (C) 1998-1999 Torben Weis <weis@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -24,7 +25,9 @@
 #ifndef __kspread_dlg_special__
 #define __kspread_dlg_special__
 
-#include <kdialogbase.h>
+#include <kdialog.h>
+
+#include "ui_SpecialPasteWidget.h"
 
 class QRadioButton;
 
@@ -33,11 +36,11 @@ namespace KSpread
 class Sheet;
 class View;
 
-class SpecialDialog : public KDialogBase
+class SpecialPasteDialog : public KDialog, public Ui::SpecialPaste
 {
     Q_OBJECT
 public:
-    SpecialDialog( View* parent, const char* name );
+    SpecialPasteDialog( View* parent );
 
 public slots:
     void slotOk();
@@ -45,9 +48,6 @@ public slots:
 
 private:
     View* m_pView;
-    QRadioButton *rb1, *rb2, *rb3, *rb4, *rb5;
-    QRadioButton *rb6, *rb7, *rb8;
-    QRadioButton *rb9, *rb10, *rb11;
 };
 
 } // namespace KSpread

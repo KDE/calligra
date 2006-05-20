@@ -3974,7 +3974,7 @@ void View::specialPaste()
   if ( !d->activeSheet )
     return;
 
-  SpecialDialog dlg( this, "Special Paste" );
+  SpecialPasteDialog dlg( this );
   if ( dlg.exec() )
   {
     if ( d->activeSheet->getAutoCalc() )

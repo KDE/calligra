@@ -1,4 +1,3 @@
-
 project(kspread)
 
 add_subdirectory( dialogs )
@@ -60,6 +59,7 @@ kde4_add_ui_files(libdialogs_SRCS
 	${CMAKE_SOURCE_DIR}/kspread/dialogs/font_cell_format.ui
 	${CMAKE_SOURCE_DIR}/kspread/dialogs/protection_cell_format.ui
 	${CMAKE_SOURCE_DIR}/kspread/dialogs/SheetSelectWidget.ui
+	${CMAKE_SOURCE_DIR}/kspread/dialogs/SpecialPasteWidget.ui
 	)
 
 

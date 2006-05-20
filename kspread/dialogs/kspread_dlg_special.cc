@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
-   Copyright (C) 1999-2004 Laurent Montel <montel@kde.org>
+   Copyright (C) 2006 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
+             (C) 1999-2004 Laurent Montel <montel@kde.org>
              (C) 2003 Norbert Andres <nandres@web.de>
              (C) 2002 Philipp Mueller <philipp.mueller@gmx.de>
              (C) 2002 John Dailey <dailey@vt.edu>
@@ -20,11 +21,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <QLayout>
-#include <q3buttongroup.h>
 #include <QRadioButton>
-//Added by qt3to4:
-#include <QVBoxLayout>
 
 #include <klocale.h>
 
@@ -38,86 +35,58 @@
 
 using namespace KSpread;
 
-SpecialDialog::SpecialDialog( View* parent, const char* name )
-  : KDialogBase( KDialogBase::Plain, Qt::Dialog, parent, name, true,i18n("Special Paste"),Ok|Cancel  )
+SpecialPasteDialog::SpecialPasteDialog( View* parent )
+  : KDialog( parent, i18n( "Special Paste" ), Ok|Cancel ),
+    m_pView( parent )
 {
-    m_pView = parent;
-    QWidget *page = plainPage();
-    QVBoxLayout *lay1 = new QVBoxLayout( page );
-    lay1->setMargin(0);
-    lay1->setSpacing(spacingHint());
+  QWidget* widget = new QWidget( this );
+  setupUi( widget );
+  setMainWidget( widget );
 
-    Q3ButtonGroup *grp = new Q3ButtonGroup( 1, Qt::Horizontal, i18n( "Paste What" ),page );
-    grp->setRadioButtonExclusive( true );
-    grp->layout();
-    lay1->addWidget(grp);
-    rb1 = new QRadioButton( i18n("Everything"), grp );
-    rb2 = new QRadioButton( i18n("Text"), grp );
-    rb3 = new QRadioButton( i18n("Format"), grp );
-    rb10 = new QRadioButton( i18n("Comment"), grp );
-    rb11 = new QRadioButton( i18n("Result"), grp );
-
-    rb4 = new QRadioButton( i18n("Everything without border"), grp );
-    rb1->setChecked(true);
-
-    grp = new Q3ButtonGroup( 1, Qt::Horizontal, i18n("Operation"),page);
-    grp->setRadioButtonExclusive( true );
-    grp->layout();
-    lay1->addWidget(grp);
-
-
-    rb5 = new QRadioButton( i18n("Overwrite"), grp );
-    rb6 = new QRadioButton( i18n("Addition"), grp );
-    rb7 = new QRadioButton( i18n("Subtraction"), grp );
-    rb8 = new QRadioButton( i18n("Multiplication"), grp );
-    rb9 = new QRadioButton( i18n("Division"), grp );
-    rb5->setChecked(true);
-
-    // cb = new QCheckBox(i18n("Transpose"),this);
-    // cb->layout();
-    // lay1->addWidget(cb);
-
-    connect( this, SIGNAL( okClicked() ), this, SLOT( slotOk() ) );
-    connect( rb3, SIGNAL( toggled( bool ) ), this, SLOT( slotToggled( bool ) ) );
-    connect( rb10, SIGNAL( toggled( bool ) ), this, SLOT( slotToggled( bool ) ) );
+  connect( this, SIGNAL( okClicked() ),
+           this, SLOT( slotOk() ) );
+  connect( formatButton, SIGNAL( toggled( bool ) ),
+           this, SLOT( slotToggled( bool ) ) );
+  connect( commentButton, SIGNAL( toggled( bool ) ),
+           this, SLOT( slotToggled( bool ) ) );
 }
 
-void SpecialDialog::slotOk()
+void SpecialPasteDialog::slotOk()
 {
   Paste::Mode sp = Paste::Normal;
   Paste::Operation op = Paste::OverWrite;
 
-    /* if( rb1->isChecked() )
+    /* if( everythingButton->isChecked() )
 	sp = cb->isChecked() ? NormalAndTranspose : Normal;
-    else if( rb2->isChecked() )
+    else if( textButton->isChecked() )
 	sp = cb->isChecked() ? TextAndTranspose : Text;
-    else if( rb3->isChecked() )
+    else if( formatButton->isChecked() )
 	sp = cb->isChecked() ? FormatAndTranspose : Format;
-    else if( rb4->isChecked() )
+    else if( noBorderButton->isChecked() )
     sp = cb->isChecked() ? NoBorderAndTranspose : NoBorder; */
 
-    if( rb1->isChecked() )
+    if( everythingButton->isChecked() )
       sp = Paste::Normal;
-    else if( rb2->isChecked() )
+    else if( textButton->isChecked() )
       sp = Paste::Text;
-    else if( rb3->isChecked() )
+    else if( formatButton->isChecked() )
       sp = Paste::Format;
-    else if( rb4->isChecked() )
+    else if( noBorderButton->isChecked() )
       sp = Paste::NoBorder;
-    else if( rb10->isChecked() )
+    else if( commentButton->isChecked() )
       sp = Paste::Comment;
-    else if( rb11->isChecked() )
+    else if( resultButton->isChecked() )
       sp = Paste::Result;
 
-    if( rb5->isChecked() )
+    if( overwriteButton->isChecked() )
       op = Paste::OverWrite;
-    if( rb6->isChecked() )
+    if( additionButton->isChecked() )
       op = Paste::Add;
-    if( rb7->isChecked() )
+    if( substractionButton->isChecked() )
       op = Paste::Sub;
-    if( rb8->isChecked() )
+    if( multiplicationButton->isChecked() )
       op = Paste::Mul;
-    if( rb9->isChecked() )
+    if( divisionButton->isChecked() )
       op = Paste::Div;
 
     m_pView->doc()->emitBeginOperation( false );
@@ -126,13 +95,13 @@ void SpecialDialog::slotOk()
     accept();
 }
 
-void SpecialDialog::slotToggled( bool b )
+void SpecialPasteDialog::slotToggled( bool b )
 {
-    rb5->setEnabled( !b );
-    rb6->setEnabled( !b );
-    rb7->setEnabled( !b );
-    rb8->setEnabled( !b );
-    rb9->setEnabled( !b );
+    overwriteButton->setEnabled( !b );
+    additionButton->setEnabled( !b );
+    substractionButton->setEnabled( !b );
+    multiplicationButton->setEnabled( !b );
+    divisionButton->setEnabled( !b );
 }
 
 #include "kspread_dlg_special.moc"
