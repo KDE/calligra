@@ -1,6 +1,6 @@
 
 
-include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/../sidewinder )
+include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/../sidewinder ${CMAKE_BINARY_DIR}/filters/)
 
 
 ########### next target ###############
