@@ -44,32 +44,35 @@ VSelectNodes::visitVSubpath( VSubpath& path )
 		{
 			if( m_exclusive )
 			{
+				// we are in exclusive mode, so deselect all nodes first
 				for( int i = 0; i < curr->degree(); i++ )
 					curr->selectPoint( i, false );
 			}
 
 			if( curr->isCurve() )
 			{
-				if( m_rect.contains( curr->point( 0 ) ) )
+				// select all control points inside the selection rect
+				for( int i = 0; i < curr->degree()-1; ++i )
 				{
-					curr->selectPoint( 0, m_select );
-					setSuccess();
+					if( m_rect.contains( curr->point( i ) ) )
+					{
+						curr->selectPoint( i, m_select );
+						setSuccess();
+					}
 				}
-
-				if( m_rect.contains( curr->point( 1 ) ) )
-				{
-					curr->selectPoint( 1, m_select );
-					setSuccess();
-				}
-			}
+				// if previous segment's knot is selected, select the current segment's first node as well
+				VSegment* prev = curr->prev();
+				if( prev && prev->isCurve() && prev->knotIsSelected() )
+					curr->selectPoint( 0 );
+			}	
 
 			if( m_rect.contains( curr->knot() ) )
 			{
 				curr->selectKnot( m_select );
+				// select the last control point before the knot. if segment is curve
 				if( curr->isCurve() )
-				{
-					curr->selectPoint( 1, m_select );
-				}
+					curr->selectPoint( curr->degree()-2, m_select );
+
 				// select first bezier point of next segment if:
 				// - next segment is a curve and
 				// - next segment is smooth or the current segment is the first one
@@ -80,7 +83,7 @@ VSelectNodes::visitVSubpath( VSubpath& path )
 				setSuccess();
 			}
 		}
-		curr = path.next();
+		curr = curr->next();
 	}
 	// select first node as well
 	if( path.isClosed() && path.getLast()->knotIsSelected() )

@@ -142,7 +142,7 @@ VSelectNodesTool::mouseButtonPress()
 
 	KoRect selrect = calcSelRect( m_current );
 
-	// get segments inside selection rect
+	// get segments with control points inside selection rect
 	QPtrList<VSegment> segments = selection->getSegments( selrect );
 	if( segments.count() > 0 )
 	{
@@ -156,12 +156,12 @@ VSelectNodesTool::mouseButtonPress()
 				m_state = movingbezier1;
 				seg->selectPoint( 1, false );
 			}
-			else
+			else if( selrect.contains( seg->point( 0 ) ) )
 			{
 				m_state = movingbezier2;
 				seg->selectPoint( 0, false );
 			}
-			selection->append( selrect.normalize(), false, true );
+			selection->append( selrect.normalize(), false, false );
 		}
 		else
 		{
@@ -328,7 +328,7 @@ VSelectNodesTool::mouseDragRelease()
 			view()->part()->document().selection()->append();	// select all
 			view()->part()->document().selection()->append(
 				KoRect( fp.x(), fp.y(), lp.x() - fp.x(), lp.y() - fp.y() ).normalize(),
-				false );
+				false, true );
 		}
 		else
 		{
