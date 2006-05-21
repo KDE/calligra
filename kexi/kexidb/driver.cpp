@@ -67,13 +67,12 @@ DriverBehaviour::DriverBehaviour()
 
 //---------------------------------------------
 
-Driver::Driver( QObject *parent, const char *name, const QStringList & )
+Driver::Driver( QObject *parent, const QStringList & )
 	: QObject( parent )
 	, Object()
 	, beh( new DriverBehaviour() )
 	, d( new DriverPrivate() )
 {
-	setObjectName( name );
 	d->connections.setAutoDelete(false);
 	//TODO: reasonable size
 	d->connections.resize(101);
@@ -179,10 +178,10 @@ Connection *Driver::createConnection( ConnectionData &conn_data, int options )
 	clearError();
 	if (!isValid())
 		return 0;
-
 	if (d->isFileDriver) {
 		if (conn_data.fileName().isEmpty()) {
-			setError(ERR_MISSING_DB_LOCATION, i18n("File name expected for file-based database driver.") );
+			setError(ERR_MISSING_DB_LOCATION, 
+			         i18n("File name expected for file-based database driver.") );
 			return 0;
 		}
 	}

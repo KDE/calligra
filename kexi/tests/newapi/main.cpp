@@ -116,7 +116,7 @@ int main(int argc, char** argv)
 		RETURN(0);
 	}*/
 	QFileInfo info=QFileInfo(argv[0]);
-	prgname = info.baseName().latin1();
+	prgname = info.baseName().toLatin1();
 	
 	KCmdLineArgs::init(argc, argv, 
 		new KAboutData( prgname, "KexiDBTest",
@@ -191,6 +191,7 @@ int main(int argc, char** argv)
 	//open connection
 	if (args->count() >= 2)
 		db_name = args->arg(1);
+
 	if (db_name_required && db_name.isEmpty()) {
 		kDebug() << prgname << ": database name?" << endl;
 		RETURN(1);

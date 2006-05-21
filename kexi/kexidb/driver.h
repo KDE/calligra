@@ -303,7 +303,7 @@ class KEXI_DB_EXPORT Driver : public QObject, public KexiDB::Object
 		 You may also want to change options in DriverBehaviour *beh member.
 		 See drivers/mySQL/mysqldriver.cpp for usage example.
 		 */
-		Driver( QObject *parent, const char *name, const QStringList &args = QStringList() );
+		Driver( QObject *parent, const QStringList &args = QStringList() );
 
 		/*! For reimplemenation: creates and returns connection object 
 		 with additional structures specific for a given driver.

@@ -50,8 +50,8 @@ class KexiDB::SQLiteDriverPrivate
 };
 
 //PgSqlDB::PgSqlDB(QObject *parent, const char *name, const QStringList &) 
-SQLiteDriver::SQLiteDriver( QObject *parent, const char *name, const QStringList &args )
-	: Driver( parent, name, args )
+SQLiteDriver::SQLiteDriver( QObject *parent, const QStringList &args )
+	: Driver( parent, args )
 	,dp( new SQLiteDriverPrivate() )
 {
 	d->isFileDriver = true;
@@ -113,14 +113,15 @@ SQLiteDriver::drv_createConnection( ConnectionData &conn_data )
 
 bool SQLiteDriver::isSystemObjectName( const QString& n ) const
 {
-	return Driver::isSystemObjectName(n) || n.lower().startsWith("sqlite_");
+	return Driver::isSystemObjectName(n) || n.toLower().startsWith("sqlite_");
 }
 
 bool SQLiteDriver::drv_isSystemFieldName( const QString& n ) const
 {
-	return n.lower()=="_rowid_"
-		|| n.lower()=="rowid"
-		|| n.lower()=="oid";
+	QString lcName = n.toLower();
+	return ( lcName == "_rowid_" )
+		|| ( lcName =="rowid" )
+		|| ( lcName == "oid");
 }
 
 QString SQLiteDriver::escapeString(const QString& str) const

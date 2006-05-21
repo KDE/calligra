@@ -6,7 +6,7 @@ include_directories( ${CMAKE_SOURCE_DIR}/kexi/core ${CMAKE_SOURCE_DIR}/kexi ${CM
 
 ########### next target ###############
 
-set(kexihandler_table_PART_SRCS kexitablepart.cpp kexitabledesignerview.cpp kexitabledesignerview_p.cpp
+set(kexihandler_table_PART_SRCS kexitablepart.cpp kexitabledesignerview.cpp
 	kexitabledesigner_dataview.cpp kexitabledesignercommands.cpp )
 
 kde4_automoc(${kexihandler_table_PART_SRCS})

@@ -55,7 +55,8 @@ KEXIDB_DRIVER_INFO( MySqlDriver, mysql )
  *
  * See: http://dev.mysql.com/doc/mysql/en/Column_types.html
  */
-MySqlDriver::MySqlDriver(QObject *parent, const char *name, const QStringList &args) : Driver(parent, name,args)
+MySqlDriver::MySqlDriver(QObject *parent, const QStringList &args) :
+	Driver(parent, args)
 {
 //	KexiDBDrvDbg << "MySqlDriver::MySqlDriver()" << endl;
 

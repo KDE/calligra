@@ -223,7 +223,7 @@ Driver* DriverManagerInternal::driver(const QString& name)
 		this,
 		QStringList(),
 		&m_serverResultNum);
-	//drv->setObjectName( srv_name.toLatin1().constData() );
+	drv->setObjectName( srv_name );
 
 	if (!drv) {
 		setError(ERR_DRIVERMANAGER, i18n("Could not load database driver \"%1\".")

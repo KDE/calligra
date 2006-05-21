@@ -35,7 +35,7 @@ class MySqlDriver : public Driver
 	KEXIDB_DRIVER
 
 	public:
-		MySqlDriver(QObject *parent, const char *name, const QStringList &args=QStringList());
+		MySqlDriver(QObject *parent, const QStringList &args=QStringList());
 		virtual ~MySqlDriver();
 		
 		virtual bool isSystemDatabaseName( const QString &n ) const;
