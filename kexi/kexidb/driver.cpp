@@ -138,7 +138,7 @@ QString Driver::defaultFileBasedDriverMimeType()
 QString Driver::defaultFileBasedDriverName()
 {
 	DriverManager dm;
-	return dm.lookupByMime(Driver::defaultFileBasedDriverMimeType()).lower();
+	return dm.lookupByMime(Driver::defaultFileBasedDriverMimeType()).toLower();
 }
 
 const KService* Driver::service() const
@@ -231,15 +231,16 @@ bool Driver::isSystemObjectName( const QString& n ) const
 
 bool Driver::isKexiDBSystemObjectName( const QString& n )
 {
-	if (!n.lower().startsWith("kexi__"))
+	QString lcName = n.toLower();
+	if (!lcName.startsWith("kexi__"))
 		return false;
 	const QStringList list( Connection::kexiDBSystemTableNames() );
-	return list.find(n.lower())!=list.constEnd();
+	return list.indexOf( lcName ) != -1;
 }
 
 bool Driver::isSystemFieldName( const QString& n ) const
 {
-	if (!beh->ROW_ID_FIELD_NAME.isEmpty() && n.lower()==beh->ROW_ID_FIELD_NAME.lower())
+	if (!beh->ROW_ID_FIELD_NAME.isEmpty() && n.toLower()==beh->ROW_ID_FIELD_NAME.toLower())
 		return true;
 	return drv_isSystemFieldName(n);
 }
@@ -278,8 +279,8 @@ QString Driver::valueToSQL( uint ftype, const QVariant& v ) const
 		case Field::DateTime:
 			return dateTimeToSQL( v.toDateTime() );
 		case Field::BLOB: {
-			if (v.type()==QVariant::String)
-				return escapeBLOB(v.toString().utf8());
+			if ( v.type()==QVariant::String )
+				return escapeBLOB( v.toString().toUtf8() );
 			return escapeBLOB(v.toByteArray());
 		}
 		case Field::InvalidType:
@@ -293,12 +294,12 @@ QString Driver::valueToSQL( uint ftype, const QVariant& v ) const
 
 QVariant Driver::propertyValue( const Q3CString& propName ) const
 {
-	return d->properties[propName.lower()];
+	return d->properties[propName.toLower()];
 }
 
 QString Driver::propertyCaption( const Q3CString& propName ) const
 {
-	return d->propertyCaptions[propName.lower()];
+	return d->propertyCaptions[propName.toLower()];
 }
 
 Q3ValueList<Q3CString> Driver::propertyNames() const
@@ -310,7 +311,7 @@ Q3ValueList<Q3CString> Driver::propertyNames() const
 
 QString Driver::escapeIdentifier(const QString& str, int options) const
 {
-	Q3CString cstr = str.latin1();
+	Q3CString cstr = str.toLatin1();
 	return QString(escapeIdentifier(cstr, options));
 }
 
@@ -337,7 +338,7 @@ Q3CString Driver::escapeIdentifier(const Q3CString& str, int options) const
 		needOuterQuotes = true;
 
 // ... or if the identifier has a space in it...
-  else if(str.find(' ') != -1)
+  else if(str.indexOf(' ') != -1)
 		needOuterQuotes = true;
 
 	if(needOuterQuotes && (options & EscapeKexi)) {
@@ -345,7 +346,7 @@ Q3CString Driver::escapeIdentifier(const Q3CString& str, int options) const
 		return quote + Q3CString(str).replace( quote, "\"\"" ) + quote;
 	}
 	else if (needOuterQuotes) {
-		const char quote = beh->QUOTATION_MARKS_FOR_IDENTIFIER.latin1();
+		const char quote = beh->QUOTATION_MARKS_FOR_IDENTIFIER.toLatin1();
 		return quote + drv_escapeIdentifier(str) + quote;
 	} else {
 		return drv_escapeIdentifier(str);
@@ -382,12 +383,12 @@ QString Driver::escapeBLOBInternal(const QByteArray& array, int type) const
 		str = QString::fromLatin1("0x");
 	else if (type == BLOB_ESCAPING_TYPE_USE_OCTAL)
 		str = QString::fromLatin1("'");
-	
+
 	int new_length = str.length(); //after X' or 0x, etc.
 	if (type == BLOB_ESCAPING_TYPE_USE_OCTAL) {
 		// only escape nonprintable characters as in Table 8-7:
 		// http://www.postgresql.org/docs/8.1/interactive/datatype-binary.html
-		// i.e. escape for bytes: < 32, >= 127, 39 ('), 92(\). 
+		// i.e. escape for bytes: < 32, >= 127, 39 ('), 92(\).
 		for (int i = 0; i < size; i++) {
 			const unsigned char val = array[i];
 			if (val<32 || val>=127 || val==39 || val==92) {

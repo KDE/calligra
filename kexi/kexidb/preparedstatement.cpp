@@ -57,7 +57,7 @@ Q3CString PreparedStatement::generateStatementString()
 				first = false;
 			else
 				s.append(", ");
-			s.append(it.current()->name().latin1());
+			s.append(it.current()->name().toLatin1());
 		}
 		first = true;
 		s.append(" WHERE ");
@@ -77,7 +77,7 @@ Q3CString PreparedStatement::generateStatementString()
 				continue;
 			}
 			m_whereFields->append(f);
-			s.append((*it).latin1());
+			s.append((*it).toLatin1());
 			s.append("=?");
 		}
 	}
@@ -96,16 +96,16 @@ Q3CString PreparedStatement::generateStatementString()
 			if (first) {
 				s.append( "?" );
 				if (!allTableFieldsUsed)
-					namesList = it.current()->name().latin1();
+					namesList = it.current()->name().toLatin1();
 				first = false;
 			} else {
 				s.append( ",?" );
 				if (!allTableFieldsUsed)
-					namesList.append(Q3CString(", ")+it.current()->name().latin1());
+					namesList.append(Q3CString(", ")+it.current()->name().toLatin1());
 			}
 		}
 		s.append(")");
-		s.prepend(Q3CString("INSERT INTO ") + table->name().latin1()
+		s.prepend(Q3CString("INSERT INTO ") + table->name().toLatin1()
 			+ (allTableFieldsUsed ? "" : (" (" + namesList + ")"))
 			+ " VALUES (");
 	}

@@ -22,7 +22,7 @@
 
 #include "connection.h"
 
-#include <qvaluelist.h>
+#include <q3valuelist.h>
 
 namespace KexiDB
 {
@@ -157,10 +157,10 @@ class KEXI_DB_EXPORT AlterTableHandler : public Object
 		};
 
 		//! Defines a type for action list.
-		typedef QValueList<ActionBase> ActionList;
+		typedef Q3ValueList<ActionBase> ActionList;
 
 		//! Defines a type for action list's iterator.
-		typedef QValueListIterator<ActionBase> ActionListIterator;
+		typedef Q3ValueListIterator<ActionBase> ActionListIterator;
 
 		//! Abstract base class used for implementing table field-related actions.
 		class KEXI_DB_EXPORT FieldActionBase : public ActionBase {

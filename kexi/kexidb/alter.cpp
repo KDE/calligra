@@ -28,7 +28,7 @@ class AlterTableHandler::Private
 		~Private()
 		{}
 		ActionList actions;
-		QGuardedPtr<Connection> conn;
+		QPointer<Connection> conn;
 };
 }
 

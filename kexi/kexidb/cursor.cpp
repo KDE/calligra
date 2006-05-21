@@ -108,7 +108,7 @@ Cursor::~Cursor()
 		KexiUtils::addDBCursorDebug(QString("~ Delete cursor: ")+m_rawStatement);
 #endif
 /*	if (!m_query)
-		KexiDBDbg << "Cursor::~Cursor() '" << m_rawStatement.latin1() << "'" << endl;
+		KexiDBDbg << "Cursor::~Cursor() '" << m_rawStatement.toLatin1() << "'" << endl;
 	else
 		KexiDBDbg << "Cursor::~Cursor() " << endl;*/
 

@@ -249,9 +249,9 @@ const QueryColumnInfo::Vector TableOrQuerySchema::columns(bool unique)
 Q3CString TableOrQuerySchema::name() const
 {
 	if (m_table)
-		return m_table->name().latin1();
+		return m_table->name().toLatin1();
 	if (m_query)
-		return m_query->name().latin1();
+		return m_query->name().toLatin1();
 	return m_name;
 }
 

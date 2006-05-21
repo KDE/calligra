@@ -570,7 +570,7 @@ bool VariableExpr::validate(ParseInfo& parseInfo)
 		bool covered = true;
 		for (; it!=tPositions.constEnd() && covered; ++it) {
 			tableAlias = parseInfo.querySchema->tableAlias(*it);
-			if (tableAlias.isEmpty() || tableAlias.lower()==tableName.latin1())
+			if (tableAlias.isEmpty() || tableAlias.lower()==tableName.toLatin1())
 				covered = false; //uncovered
 			KexiDBDbg << " --" << "covered by " << tableAlias << " alias" << endl;
 		}
@@ -585,7 +585,7 @@ bool VariableExpr::validate(ParseInfo& parseInfo)
 	
 	int tablePosition = -1;
 	if (!ts) {//try to find tableAlias
-		tablePosition = parseInfo.querySchema->tablePositionForAlias( tableName.latin1() );
+		tablePosition = parseInfo.querySchema->tablePositionForAlias( tableName.toLatin1() );
 		if (tablePosition>=0) {
 			ts = parseInfo.querySchema->tables()->at(tablePosition);
 			if (ts) {
@@ -670,7 +670,7 @@ FunctionExpr::FunctionExpr( const QString& _name, NArgExpr* args_ )
  , name(_name)
  , args(args_)
 {
-	if (isBuiltInAggregate(name.latin1()))
+	if (isBuiltInAggregate(name.toLatin1()))
 		m_cl = KexiDBExpr_Aggregation;
 	else
 		m_cl = KexiDBExpr_Function;
