@@ -60,8 +60,12 @@ class KEXI_DB_EXPORT QueryColumnInfo
 		{
 		}
 		//! \return alias if it's not empty, field's name otherwise.
-		inline Q3CString aliasOrName() const { 
-			return alias.isEmpty() ? field->name().latin1() : (const char*)alias; 
+		inline Q3CString aliasOrName() const {
+			if ( alias.isEmpty() ) {
+				return Q3CString( field->name().toLatin1() );
+			} else {
+				return Q3CString( (const char*)alias );
+			}
 		}
 
 		//! \return field's caption if it's not empty, field's alias otherwise.

@@ -89,9 +89,9 @@ void yyerror(const char *str)
 	parser->setOperation(Parser::OP_Error);
 
 	const bool otherError = (qstrnicmp(str, "other error", 11)==0);
-	
-	if (parser->error().type().isEmpty() 
-		&& (str==0 || strlen(str)==0 
+
+	if (parser->error().type().isEmpty()
+		&& (str==0 || strlen(str)==0
 		|| qstrnicmp(str, "syntax error", 12)==0 || qstrnicmp(str, "parse error", 11)==0)
 		|| otherError)
 	{
@@ -125,31 +125,37 @@ void yyerror(const char *str)
 //						KexiDBDbg << "**" << captured.at(2) << endl;
 					}
 				}
-					
-					
-					
+
+
+
 //			 IDENTIFIER, expecting '")) {
 				e = errtypestr.mid(47);
 				KexiDBDbg << e <<endl;
 //				,' or ')'
 //		lexerErr i18n("identifier was expected");
-				
-			} else 
+
+			} else
 #endif
 			if (errtypestr.startsWith("parse error, expecting `IDENTIFIER'"))
 				lexerErr = i18n("identifier was expected");
 		}
-		
+
 		if (!otherError) {
 			if (!lexerErr.isEmpty())
 				lexerErr.prepend(": ");
 
-			if (parser->isReservedKeyword(ctoken.latin1()))
-				parser->setError( ParserError(i18n("Syntax Error"), 
-					i18n("\"%1\" is a reserved keyword").arg(ctoken)+lexerErr, ctoken, current) );
-			else
-				parser->setError( ParserError(i18n("Syntax Error"), 
-					i18n("Syntax Error near \"%1\"").arg(ctoken)+lexerErr, ctoken, current) );
+			if ( parser->isReservedKeyword( ctoken.toLatin1() ) ) {
+				parser->setError( ParserError(i18n("Syntax Error"),
+				                                   i18n("\"%1\" is a reserved keyword")
+				                                        .arg( ctoken ) + lexerErr,
+				                                   ctoken, current) );
+			}
+			else {
+				parser->setError( ParserError(i18n("Syntax Error"),
+				                  i18n("Syntax Error near \"%1\"")
+				                       .arg( ctoken ) + lexerErr,
+				                  ctoken, current) );
+			}
 		}
 	}
 }
@@ -157,7 +163,7 @@ void yyerror(const char *str)
 void setError(const QString& errName, const QString& errDesc)
 {
 	parser->setError( ParserError(errName, errDesc, ctoken, current) );
-	yyerror(errName.latin1());
+	yyerror( errName.toLatin1() );
 }
 
 void setError(const QString& errDesc)
@@ -200,7 +206,7 @@ bool parseData(Parser *p, const char *data)
 /*			TableSchema *ts;
 			for(QDictIterator<TableSchema> it(tableDict); TableSchema *s = tableList.first(); s; s = tableList.next())
 			{
-				KexiDBDbg << "  " << s->name() << endl;
+				KexiDBDbg << "	" << s->name() << endl;
 			}*/
 /*removed
 			Field::ListIterator it = parser->select()->fieldsIterator();
@@ -227,7 +233,7 @@ bool parseData(Parser *p, const char *data)
 	return ok;
 }
 
-	
+
 /* Adds \a column to \a querySchema. \a column can be in a form of
  table.field, tableAlias.field or field
 */
@@ -249,7 +255,7 @@ bool addColumn( ParseInfo& parseInfo, BaseExpr* columnExpr )
 			parseInfo.querySchema->addAsterisk( new QueryAsterisk(parseInfo.querySchema) );
 		}
 		else if (v_e->tableForQueryAsterisk) {//one-table asterisk
-			parseInfo.querySchema->addAsterisk( 
+			parseInfo.querySchema->addAsterisk(
 				new QueryAsterisk(parseInfo.querySchema, v_e->tableForQueryAsterisk) );
 		}
 		else if (v_e->field) {//"table.field" or "field" (bound to a table or not)
@@ -290,7 +296,7 @@ bool addColumn( ParseInfo& parseInfo, BaseExpr* columnExpr )
 						firstField = f;
 					} else if (f->table()!=firstField->table()) {
 						//ambiguous field name
-						setError(i18n("Ambiguous field name"), 
+						setError(i18n("Ambiguous field name"),
 							i18n("Both table \"%1\" and \"%2\" have defined \"%3\" field. "
 								"Use \"<tableName>.%4\" notation to specify table name.")
 								.arg(firstField->table()->name()).arg(f->table()->name())
@@ -300,7 +306,7 @@ bool addColumn( ParseInfo& parseInfo, BaseExpr* columnExpr )
 				}
 			}
 			if (!firstField) {
-					setError(i18n("Field not found"), 
+					setError(i18n("Field not found"),
 						i18n("Table containing \"%1\" field not found").arg(fieldName));
 					return false;
 			}
@@ -309,7 +315,7 @@ bool addColumn( ParseInfo& parseInfo, BaseExpr* columnExpr )
 		}
 	}
 	else {//table.fieldname or tableAlias.fieldname
-		tableName = tableName.lower();
+		tableName = tableName.toLower();
 		TableSchema *ts = parseInfo.querySchema->table( tableName );
 		if (ts) {//table.fieldname
 			//check if "table" is covered by an alias
@@ -318,20 +324,22 @@ bool addColumn( ParseInfo& parseInfo, BaseExpr* columnExpr )
 			Q3CString tableAlias;
 			bool covered = true;
 			for (; it!=tPositions.constEnd() && covered; ++it) {
-				tableAlias = parseInfo.querySchema->tableAlias(*it);
-				if (tableAlias.isEmpty() || tableAlias.lower()==tableName.latin1())
+				tableAlias = parseInfo.querySchema->tableAlias(*it).toLower();
+				if (tableAlias.isEmpty() || tableAlias == tableName.toLatin1())
 					covered = false; //uncovered
 				KexiDBDbg << " --" << "covered by " << tableAlias << " alias" << endl;
 			}
 			if (covered) {
-				setError(i18n("Could not access the table directly using its name"), 
+				setError(i18n("Could not access the table directly using its name"),
 					i18n("Table \"%1\" is covered by aliases. Instead of \"%2\", "
-					"you can write \"%3\"").arg(tableName)
-					.arg(tableName+"."+fieldName).arg(tableAlias+"."+fieldName.latin1()));
+					"you can write \"%3\"")
+					.arg( tableName )
+					.arg( tableName + "." + fieldName)
+					.arg( tableAlias + "." + fieldName.toLatin1() ));
 				return false;
 			}
 		}
-		
+
 		int tablePosition = -1;
 		if (!ts) {//try to find tableAlias
 			tablePosition = parseInfo.querySchema->tablePositionForAlias( tableName.latin1() );
@@ -403,16 +411,16 @@ bool addColumn( ParseInfo& parseInfo, BaseExpr* columnExpr )
 	delete colViews; \
 	delete tablesList
 
-QuerySchema* parseSelect( 
+QuerySchema* parseSelect(
 	QuerySchema* querySchema, NArgExpr* colViews, NArgExpr* tablesList, BaseExpr* whereExpr )
 {
 	ParseInfo parseInfo(querySchema);
-	
+
 	//-------tables list
 //	assert( tablesList ); //&& tablesList->exprClass() == KexiDBExpr_TableList );
 
 	uint columnNum = 0;
-/*TODO: use this later if there are columns that use database fields, 
+/*TODO: use this later if there are columns that use database fields,
         e.g. "SELECT 1 from table1 t, table2 t") is ok however. */
 	//used to collect information about first repeated table name or alias:
 //	QDict<char> tableNamesAndTableAliases(997, false);
@@ -429,16 +437,16 @@ QuerySchema* parseSelect(
 				assert(t_with_alias->right()->exprClass() == KexiDBExpr_Variable
 					&& (t_with_alias->token()==AS || t_with_alias->token()==0));
 				t_e = t_with_alias->left()->toVariable();
-				aliasString = t_with_alias->right()->toVariable()->name.latin1();
+				aliasString = t_with_alias->right()->toVariable()->name.toLatin1();
 			}
 			else {
 				t_e = e->toVariable();
 			}
 			assert(t_e);
-			QString tname = t_e->name.latin1();
+			QString tname = t_e->name.toLatin1();
 			TableSchema *s = parser->db()->tableSchema(tname);
 			if(!s) {
-				setError(//i18n("Field List Error"), 
+				setError(//i18n("Field List Error"),
 					i18n("Table \"%1\" does not exist").arg(tname));
 	//			yyerror("fieldlisterror");
 				CLEANUP;
@@ -519,9 +527,9 @@ QuerySchema* parseSelect(
 					return 0;
 				}
 			}
-	
+
 			const int c = columnExpr->exprClass();
-			const bool isExpressionField = 
+			const bool isExpressionField =
 					c == KexiDBExpr_Const
 				|| c == KexiDBExpr_Unary
 				|| c == KexiDBExpr_Arithm
@@ -530,7 +538,7 @@ QuerySchema* parseSelect(
 				|| c == KexiDBExpr_Const
 				|| c == KexiDBExpr_Function
 				|| c == KexiDBExpr_Aggregation;
-	
+
 			if (c == KexiDBExpr_Variable) {
 				//just a variable, do nothing, addColumn() will handle this
 			}
@@ -549,16 +557,16 @@ QuerySchema* parseSelect(
 				CLEANUP;
 				return 0;
 			}
-	
+
 			if (!addColumn( parseInfo, columnExpr )) {
 				CLEANUP;
 				return 0;
 			}
-			
+
 			if (aliasVariable) {
-//				KexiDBDbg << "ALIAS \"" << aliasVariable->name << "\" set for column " 
+//				KexiDBDbg << "ALIAS \"" << aliasVariable->name << "\" set for column "
 //					<< columnNum << endl;
-				querySchema->setColumnAlias(columnNum, aliasVariable->name.latin1());
+				querySchema->setColumnAlias(columnNum, aliasVariable->name.toLatin1());
 			}
 	/*		if (e->exprClass() == KexiDBExpr_SpecialBinary && dynamic_cast<BinaryExpr*>(e)
 				&& (e->type()==AS || e->type()==0))
@@ -570,11 +578,11 @@ QuerySchema* parseSelect(
 					setError(i18n("Invalid column alias definition")); //ok?
 					return 0;
 				}
-				kDebug() << "ALIAS \"" << aliasVariable->name << "\" set for column " 
+				kDebug() << "ALIAS \"" << aliasVariable->name << "\" set for column "
 					<< columnNum << endl;
 				querySchema->setColumnAlias(columnNum, aliasVariable->name.latin1());
 			}*/
-	
+
 			if (moveNext) {
 				colViews->list.next();
 //				++it;
@@ -593,7 +601,7 @@ QuerySchema* parseSelect(
 
 //	KexiDBDbg << "Select ColViews=" << (colViews ? colViews->debugString() : QString::null)
 //		<< " Tables=" << (tablesList ? tablesList->debugString() : QString::null) << endl;
-	
+
 	CLEANUP;
 	return querySchema;
 }

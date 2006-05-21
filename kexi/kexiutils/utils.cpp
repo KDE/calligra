@@ -21,7 +21,7 @@
 #include "utils_p.h"
 
 #include <qregexp.h>
-#include <qheader.h>
+#include <Q3Header>
 #include <qlayout.h>
 //Added by qt3to4:
 #include <Q3CString>
@@ -219,8 +219,8 @@ void KexiUtils::simpleDecrypt(QString& string)
 
 static DebugWindowDialog* debugWindow = 0;
 static KTabWidget* debugWindowTab = 0;
-static KListView* kexiDbCursorDebugPage = 0;
-static KListView* kexiAlterTableActionDebugPage = 0;
+static K3ListView* kexiDbCursorDebugPage = 0;
+static K3ListView* kexiAlterTableActionDebugPage = 0;
 
 #ifdef KEXI_DEBUG_GUI
 QWidget *KexiUtils::createDebugWindow(QWidget *parent)
