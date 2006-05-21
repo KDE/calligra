@@ -32,7 +32,7 @@ namespace KexiDB {
 //! @internal
 class ConnectionData::Private {
 public:
-	Private() { 
+	Private() {
 		dummy=false;
 	}
 	~Private() {}
@@ -86,8 +86,8 @@ void ConnectionData::setFileName( const QString& fn )
 {
 	QFileInfo file(fn);
 	if (!fn.isEmpty() && m_fileName != file.absoluteFilePath()) {
-		m_fileName = QDir::convertSeparators(file.absoluteFilePath());
-		m_dbPath = QDir::convertSeparators(file.dirPath(true));
+		m_fileName = QDir::convertSeparators( file.canonicalFilePath() );
+		m_dbPath = QDir::convertSeparators( file.canonicalPath() );
 		m_dbFileName = file.fileName();
 	}
 }
@@ -95,18 +95,18 @@ void ConnectionData::setFileName( const QString& fn )
 QString ConnectionData::serverInfoString(bool addUser) const
 {
 	const QString& i18nFile = i18n("file");
-	
+
 	if (!m_dbFileName.isEmpty())
-		return i18nFile+": "+(m_dbPath.isEmpty() ? "" : m_dbPath 
+		return i18nFile+": "+(m_dbPath.isEmpty() ? "" : m_dbPath
 			+ QDir::separator()) + m_dbFileName;
-	
+
 	DriverManager man;
 	if (!driverName.isEmpty()) {
 		Driver::Info info = man.driverInfo(driverName);
 		if (!info.name.isEmpty() && info.fileBased)
 			return QString("<")+i18nFile+">";
 	}
-	
+
 	return ( (userName.isEmpty() || !addUser) ? QString("") : (userName+"@"))
 		+ (hostName.isEmpty() ? QString("localhost") : hostName)
 		+ (port!=0 ? (QString(":")+QString::number(port)) : QString::null);

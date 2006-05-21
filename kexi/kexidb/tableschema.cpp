@@ -50,7 +50,7 @@ TableSchema::TableSchema(const QString& name)
 	, m_query(0)
 	, m_isKexiDBSystem(false)
 {
-	m_name = name.lower();
+	m_name = name.toLower();
 	init();
 }
 

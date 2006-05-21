@@ -70,7 +70,7 @@ Field::Field(const QString& name, Type ctype,
  QVariant defaultValue, const QString& caption, const QString& description,
  uint width)
 	: m_parent(0)
-	,m_name(name.lower())
+	,m_name(name.toLower())
 	,m_length(length)
 	,m_precision(precision)
 	,m_visibleDecimalPlaces(-1)
@@ -313,7 +313,7 @@ Field::setQuery(QuerySchema *querySchema)
 void
 Field::setName(const QString& n)
 {
-	m_name = n.lower();
+	m_name = n.toLower();
 }
 
 void

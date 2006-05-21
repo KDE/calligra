@@ -515,7 +515,7 @@ bool VariableExpr::validate(ParseInfo& parseInfo)
 
 /* taken from parser's addColumn(): */
 	KexiDBDbg << "checking variable name: " << name << endl;
-	int dotPos = name.find('.');
+	int dotPos = name.indexOf('.');
 	QString tableName, fieldName;
 //TODO: shall we also support db name?
 	if (dotPos>0) {
@@ -560,7 +560,7 @@ bool VariableExpr::validate(ParseInfo& parseInfo)
 	}
 
 	//table.fieldname or tableAlias.fieldname
-	tableName = tableName.lower();
+	tableName = tableName.toLower();
 	TableSchema *ts = parseInfo.querySchema->table( tableName );
 	if (ts) {//table.fieldname
 		//check if "table" is covered by an alias

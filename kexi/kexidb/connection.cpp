@@ -8,7 +8,7 @@
 
    This program is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	 See the GNU
    Library General Public License for more details.
 
    You should have received a copy of the GNU Library General Public License
@@ -327,7 +327,7 @@ bool Connection::drv_databaseExists( const QString &dbName, bool ignoreErrors )
 		return false;
 	}
 
-	if (list.find( dbName )==list.end()) {
+	if (list.indexOf( dbName ) == -1) {
 		if (!ignoreErrors)
 			setError(ERR_OBJECT_NOT_FOUND, i18n("The database \"%1\" does not exist.").arg(dbName));
 		return false;
@@ -408,7 +408,7 @@ bool Connection::createDatabase( const QString &dbName )
 		return false;
 	}
 	if (m_driver->isSystemDatabaseName( dbName )) {
-		setError(ERR_SYSTEM_NAME_RESERVED, 
+		setError(ERR_SYSTEM_NAME_RESERVED,
 			i18n("Cannot create database \"%1\". This name is reserved for system database.").arg(dbName) );
 		return false;
 	}
@@ -464,7 +464,7 @@ bool Connection::createDatabase( const QString &dbName )
 	//-physically create system tables
 	for (Q3PtrDictIterator<TableSchema> it(m_kexiDBSystemTables); it.current(); ++it) {
 		if (!drv_createTable( it.current()->name() ))
- 			createDatabase_ERROR;
+			createDatabase_ERROR;
 	}
 
 /* moved to KexiProject...
@@ -544,7 +544,7 @@ bool Connection::useDatabase( const QString &dbName, bool kexiCompatible, bool *
 	if (!setupKexiDBSystemSchema())
 		return false;
 
-	if (kexiCompatible && my_dbName.lower()!=anyAvailableDatabaseName().lower()) {
+	if (kexiCompatible && my_dbName.toLower()!=anyAvailableDatabaseName().toLower()) {
 		//-get global database information
 		int num;
 		bool ok;
@@ -643,7 +643,7 @@ bool Connection::useTemporaryDatabaseIfNeeded(QString &tmpdbName)
 		bool ret = useDatabase(tmpdbName, false);
 		d->skip_databaseExists_check_in_useDatabase = orig_skip_databaseExists_check_in_useDatabase;
 		if (!ret) {
-			setError(errorNum(), 
+			setError(errorNum(),
 				i18n("Error during starting temporary connection using \"%1\" database name.")
 				.arg(tmpdbName) );
 			return false;
@@ -715,7 +715,7 @@ QStringList Connection::objectNames(int objType, bool* ok)
 	QStringList list;
 
 	if (!checkIsDatabaseUsed()) {
-		if(ok) 
+		if(ok)
 			*ok = false;
 		return list;
 	}
@@ -728,7 +728,7 @@ QStringList Connection::objectNames(int objType, bool* ok)
 
 	Cursor *c = executeQuery(sql);
 	if (!c) {
-		if(ok) 
+		if(ok)
 			*ok = false;
 		return list;
 	}
@@ -892,9 +892,9 @@ QString Connection::createTableStatement( const KexiDB::TableSchema& tableSchema
 #define V_A(a) +","+m_driver->valueToSQL( \
 	tableSchema.field(a) ? tableSchema.field(a)->type() : Field::Text, c ## a )
 
-//		KexiDBDbg << "******** " << QString("INSERT INTO ") + 
-//			escapeIdentifier(tableSchema.name()) + 
-//			" VALUES (" + vals + ")" <<endl; 
+//		KexiDBDbg << "******** " << QString("INSERT INTO ") +
+//			escapeIdentifier(tableSchema.name()) +
+//			" VALUES (" + vals + ")" <<endl;
 
 #define C_INS_REC(args, vals) \
 	bool Connection::insertRecord(KexiDB::TableSchema &tableSchema args) {\
@@ -1027,8 +1027,8 @@ QString Connection::selectStatement( KexiDB::QuerySchema& querySchema,
 	if (!querySchema.statement().isEmpty())
 		return querySchema.statement();
 
-//! @todo looking at singleTable is visually nice but a field name can conflict 
-//!       with function or variable name...
+//! @todo looking at singleTable is visually nice but a field name can conflict
+//!	  with function or variable name...
 	const bool singleTable = querySchema.tables()->count() <= 1;
 
 	QString sql;
@@ -1186,7 +1186,7 @@ quint64 Connection::lastInsertedAutoIncValue(const QString& aiFieldName, const Q
 		+ QString::fromLatin1(" WHERE ") + m_driver->beh->ROW_ID_FIELD_NAME + QString::fromLatin1("=") + QString::number(row_id), rdata))
 	{
 //		KexiDBDbg << "Connection::lastInsertedAutoIncValue(): row_id<=0 || true!=querySingleRecord()" << endl;
-	 	return (quint64)-1; //ULL;
+		return (quint64)-1; //ULL;
 	}
 	return rdata[0].toULongLong();
 }
@@ -1202,7 +1202,7 @@ quint64 Connection::lastInsertedAutoIncValue(const QString& aiFieldName,
 	  setError(this, i18n("Creating table failed.")); \
 	  rollbackAutoCommitTransaction(tg.transaction()); \
 	  return false; }
-		//setError( errorNum(), i18n("Creating table failed.") + " " + errorMsg()); 
+		//setError( errorNum(), i18n("Creating table failed.") + " " + errorMsg());
 
 //! Creates a table according to the given schema
 /*! Creates a table according to the given TableSchema, adding the table and
@@ -1225,7 +1225,7 @@ bool Connection::createTable( KexiDB::TableSchema* tableSchema, bool replaceExis
 	}
 	const bool internalTable = dynamic_cast<InternalTableSchema*>(tableSchema);
 
-	const QString &tableName = tableSchema->name().lower();
+	const QString &tableName = tableSchema->name().toLower();
 
 	if (!internalTable) {
 		if (m_driver->isSystemObjectName( tableName )) {
@@ -1254,7 +1254,7 @@ bool Connection::createTable( KexiDB::TableSchema* tableSchema, bool replaceExis
 		if (existingTable) {
 			if (existingTable == tableSchema) {
 				clearError();
-				setError(ERR_OBJECT_EXISTS, 
+				setError(ERR_OBJECT_EXISTS,
 					i18n("Could not create the same table \"%1\" twice.").arg(tableSchema->name()) );
 				return false;
 			}
@@ -1357,7 +1357,7 @@ bool Connection::createTable( KexiDB::TableSchema* tableSchema, bool replaceExis
 				extendedTableSchemaFieldPropertyEl.setAttribute("name", "visibleDecimalPlaces");
 				QDomElement extendedTableSchemaFieldPropertyValueEl = doc.createElement("number");
 				extendedTableSchemaFieldPropertyEl.appendChild( extendedTableSchemaFieldPropertyValueEl );
-				extendedTableSchemaFieldPropertyValueEl.appendChild( 
+				extendedTableSchemaFieldPropertyValueEl.appendChild(
 					doc.createTextNode(QString::number(f->visibleDecimalPlaces())) );
 			}
 
@@ -1399,7 +1399,7 @@ bool Connection::createTable( KexiDB::TableSchema* tableSchema, bool replaceExis
 			}
 			//store one schema object locally:
 			m_tables.insert(tableSchema->id(), tableSchema);
-			m_tables_byname.insert(tableSchema->name().lower(), tableSchema);
+			m_tables_byname.insert(tableSchema->name().toLower(), tableSchema);
 		}
 		//ok, this table is not created by the connection
 		tableSchema->m_conn = this;
@@ -1549,8 +1549,8 @@ bool Connection::alterTableName(TableSchema& tableSchema, const QString& newName
 		setError(ERR_INVALID_IDENTIFIER, i18n("Invalid table name \"%1\"").arg(newName));
 		return false;
 	}
-	const QString& newTableName = newName.lower().trimmed();
-	if (tableSchema.name().lower().trimmed() == newTableName) {
+	const QString& newTableName = newName.toLower().trimmed();
+	if (tableSchema.name().toLower().trimmed() == newTableName) {
 		setError(ERR_OBJECT_THE_SAME, i18n("Could rename table \"%1\" using the same name.")
 			.arg(newTableName));
 		return false;
@@ -1864,7 +1864,7 @@ bool Connection::rollbackTransaction(const Transaction trans, bool ignore_inacti
 	}
 	bool ret = true;
 	if (! (m_driver->d->features & Driver::IgnoreTransactions) )
-	 	ret = drv_rollbackTransaction(t.m_data);
+		ret = drv_rollbackTransaction(t.m_data);
 	if (t.m_data)
 		t.m_data->m_active = false; //now this transaction if inactive
 	if (!d->dont_remove_transactions) //true=transaction obj will be later removed from list
@@ -2054,7 +2054,7 @@ tristate Connection::loadObjectSchemaData( int objectType, const QString& object
 	RowData data;
 	if (true!=querySingleRecord(QString::fromLatin1("SELECT o_id, o_type, o_name, o_caption, o_desc "
 		"FROM kexi__objects WHERE o_type=%1 AND lower(o_name)=%2")
-		.arg(objectType).arg(m_driver->valueToSQL(Field::Text, objectName.lower())), data))
+		.arg(objectType).arg(m_driver->valueToSQL(Field::Text, objectName.toLower())), data))
 		return cancelled;
 	return setupObjectSchemaData( data, sdata );
 }
@@ -2067,8 +2067,10 @@ bool Connection::storeObjectSchemaData( SchemaData &sdata, bool newObject )
 	if (newObject) {
 		int existingID;
 		if (querySingleNumber(QString::fromLatin1(
-			"SELECT o_id FROM kexi__objects WHERE o_type=%1 AND lower(o_name)=%2")
-			.arg(sdata.type()).arg(m_driver->valueToSQL(Field::Text, sdata.name().lower())), existingID))
+		        "SELECT o_id FROM kexi__objects WHERE o_type=%1 AND lower(o_name)=%2")
+		          .arg(sdata.type())
+		          .arg(m_driver->valueToSQL(Field::Text, sdata.name().toLower())),
+		        existingID))
 		{
 			//we already have stored a schema data with the same name and type:
 			//just update it's properties as it would be existing object
@@ -2224,13 +2226,13 @@ bool Connection::resultExists(const QString& sql, bool &success)
 	//optimization
 	if (m_driver->beh->SELECT_1_SUBQUERY_SUPPORTED) {
 		//this is at least for sqlite
-		if (sql.left(6).upper() == "SELECT")
+		if (sql.left(6).toUpper() == "SELECT")
 			m_sql = QString("SELECT 1 FROM (") + sql + ") LIMIT 1"; // is this safe?;
 		else
 			m_sql = sql;
 	}
 	else {
-		if (sql.left(6).upper() == "SELECT")
+		if (sql.left(6).toUpper() == "SELECT")
 			m_sql = sql + " LIMIT 1"; //not always safe!
 		else
 			m_sql = sql;
@@ -2294,7 +2296,7 @@ bool Connection::loadExtendedTableSchemaData(TableSchema& t)
 			.arg(errorMsg).arg(errorLine).arg(errorColumn) + extendedTableSchemaString.left(1024));
 
 //! @todo look at the current format version (KEXIDB_EXTENDED_TABLE_SCHEMA_VERSION)
-	
+
 	if (doc.doctype().name()!="EXTENDED_TABLE_SCHEMA")
 		loadExtendedTableSchemaData_ERR3( extendedTableSchemaString );
 
@@ -2309,7 +2311,7 @@ bool Connection::loadExtendedTableSchemaData(TableSchema& t)
 			if (f) {
 				//set properties of the field:
 //! @todo more properties
-				for (QDomNode propNode = fieldEl.firstChild(); 
+				for (QDomNode propNode = fieldEl.firstChild();
 					!propNode.isNull(); propNode = propNode.nextSibling())
 				{
 					QDomElement propEl = propNode.toElement();
@@ -2328,7 +2330,7 @@ bool Connection::loadExtendedTableSchemaData(TableSchema& t)
 				}
 			}
 			else {
-				KexiDBWarn << "Connection::loadExtendedTableSchemaData(): no such field \"" 
+				KexiDBWarn << "Connection::loadExtendedTableSchemaData(): no such field \""
 					<< fieldEl.attribute("name") << "\" in table \"" << t.name() << "\"" << endl;
 			}
 		}
@@ -2367,7 +2369,7 @@ KexiDB::TableSchema* Connection::setupTableSchema( const RowData &data )
 		return 0;
 	}
 	KexiDBDbg << "Connection::setupTableSchema(): cursor->fieldCount()==" << cursor->fieldCount()<<endl;
-	
+
 	// For each field: load its schema
 	bool ok;
 	while (!cursor->eof()) {
@@ -2422,13 +2424,13 @@ KexiDB::TableSchema* Connection::setupTableSchema( const RowData &data )
 	}
 	//store locally:
 	m_tables.insert(t->m_id, t);
-	m_tables_byname.insert(t->m_name.lower(), t);
+	m_tables_byname.insert(t->m_name.toLower(), t);
 	return t;
 }
 
 TableSchema* Connection::tableSchema( const QString& tableName )
 {
-	QString m_tableName = tableName.lower();
+	QString m_tableName = tableName.toLower();
 	TableSchema *t = m_tables_byname[m_tableName];
 	if (t)
 		return t;
@@ -2508,7 +2510,7 @@ KexiDB::QuerySchema* Connection::setupQuerySchema( const RowData &data )
 		return false;
 	QString sqlText;
 	if (!loadDataBlock( objID, sqlText, "sql" )) {
-		setError(ERR_OBJECT_NOT_FOUND, 
+		setError(ERR_OBJECT_NOT_FOUND,
 			i18n("Could not find definition for query \"%1\". Removing this query is recommended.")
 			.arg(data[2].toString()));
 		return 0;
@@ -2517,7 +2519,7 @@ KexiDB::QuerySchema* Connection::setupQuerySchema( const RowData &data )
 	KexiDB::QuerySchema *query = d->parser()->query();
 	//error?
 	if (!query) {
-		setError(ERR_SQL_PARSE_ERROR, 
+		setError(ERR_SQL_PARSE_ERROR,
 			i18n("<p>Could not load definition for query \"%1\". "
 			"SQL statement for this query is invalid:<br><tt>%2</tt></p>\n"
 			"<p>You can open this query in Text View and correct it.</p>").arg(data[2].toString())
@@ -2535,7 +2537,7 @@ KexiDB::QuerySchema* Connection::setupQuerySchema( const RowData &data )
 
 QuerySchema* Connection::querySchema( const QString& queryName )
 {
-	QString m_queryName = queryName.lower();
+	QString m_queryName = queryName.toLower();
 	QuerySchema *q = m_queries_byname[m_queryName];
 	if (q)
 		return q;
@@ -2577,15 +2579,15 @@ bool Connection::setQuerySchemaObsolete( const QString& queryName )
 
 TableSchema* Connection::newKexiDBSystemTableSchema(const QString& tsname)
 {
-	TableSchema *ts = new TableSchema(tsname.lower());
+	TableSchema *ts = new TableSchema(tsname.toLower());
 	insertInternalTableSchema( ts );
 	return ts;
 }
 
 bool Connection::isInternalTableSchema(const QString& tableName)
 {
-	return (m_kexiDBSystemTables[ m_tables_byname[tableName] ]) 
-		// these are here for compatiblility because we're no longer instantiate 
+	return (m_kexiDBSystemTables[ m_tables_byname[tableName] ])
+		// these are here for compatiblility because we're no longer instantiate
 		// them but can exist in projects created with previous Kexi versions:
 		|| tableName=="kexi__final" || tableName=="kexi__useractions";
 }
@@ -3079,7 +3081,7 @@ tristate Connection::closeAllTableSchemaChangeListeners(TableSchema& tableSchema
 	return res;
 }
 
-/*PreparedStatement::Ptr Connection::prepareStatement(PreparedStatement::StatementType, 
+/*PreparedStatement::Ptr Connection::prepareStatement(PreparedStatement::StatementType,
 		TableSchema&)
 {
 	//safe?

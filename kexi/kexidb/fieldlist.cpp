@@ -77,7 +77,7 @@ FieldList& FieldList::insertField(uint index, KexiDB::Field *field)
 	if (!m_fields.insert(index, field))
 		return *this;
 	if (!field->name().isEmpty())
-		m_fields_by_name.insert(field->name().lower(),field);
+		m_fields_by_name.insert(field->name().toLower(),field);
 	m_sqlFields = QString::null;
 	return *this;
 }
@@ -184,10 +184,10 @@ QStringList FieldList::names() const
 {
 	QStringList r;
 //	for (QDictIterator<Field> it(m_fields_by_name);it.current();++it) {
-//		r += it.currentKey().lower();
+//		r += it.currentKey().toLower();
 //	}
 	for (Field::ListIterator it(m_fields); it.current(); ++it) {
-		r += it.current()->name().lower();
+		r += it.current()->name().toLower();
 	}
 	return r;
 }

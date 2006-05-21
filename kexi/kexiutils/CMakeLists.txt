@@ -9,8 +9,8 @@ set(kexiutils_LIB_SRCS identifier.cpp validator.cpp utils.cpp )
 
 kde4_automoc(${kexiutils_LIB_SRCS})
 
+add_definitions( -DMAKE_KEXIUTILS_LIB )
 kde4_add_library(kexiutils SHARED ${kexiutils_LIB_SRCS})
-
 target_link_libraries(kexiutils  ${KDE4_KDECORE_LIBS} ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS} )
 
 set_target_properties(kexiutils PROPERTIES VERSION 1.0.0 SOVERSION 1 )

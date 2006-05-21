@@ -68,11 +68,12 @@ DriverBehaviour::DriverBehaviour()
 //---------------------------------------------
 
 Driver::Driver( QObject *parent, const char *name, const QStringList & )
-	: QObject( parent, name )
+	: QObject( parent )
 	, Object()
 	, beh( new DriverBehaviour() )
 	, d( new DriverPrivate() )
 {
+	setObjectName( name );
 	d->connections.setAutoDelete(false);
 	//TODO: reasonable size
 	d->connections.resize(101);
@@ -104,9 +105,9 @@ bool Driver::isValid()
 	{
 		setError(ERR_INCOMPAT_DRIVER_VERSION,
 		i18n("Incompatible database driver's \"%1\" version: found version %2, expected version %3.")
-		.arg(name())
-		.arg(QString("%1.%2").arg(versionMajor()).arg(versionMinor()))
-		.arg(QString("%1.%2").arg(KexiDB::versionMajor()).arg(KexiDB::versionMinor())));
+		.arg( objectName() )
+		.arg( QString("%1.%2").arg(versionMajor()).arg(versionMinor()) )
+		.arg( QString("%1.%2").arg(KexiDB::versionMajor()).arg(KexiDB::versionMinor())) );
 		return false;
 	}
 

@@ -579,7 +579,7 @@ TableSchema* QuerySchema::masterTable() const
 	int num = 0;
 	QString tableNameLower;
 	for (TableSchema::ListIterator it(d->tables); it.current(); ++it, num++) {
-		if (!tableNameLower.isEmpty() && it.current()->name().lower()!=tableNameLower) {
+		if (!tableNameLower.isEmpty() && it.current()->name().toLower()!=tableNameLower) {
 			//two or more different tables
 			return 0;
 		}
@@ -610,11 +610,11 @@ void QuerySchema::addTable(TableSchema *table, const Q3CString& alias)
 	//-it has alias
 	//-it has no alias but there is no such table on the list
 	if (alias.isEmpty() && d->tables.findRef(table)!=-1) {
-		const QString& tableNameLower = table->name().lower();
-		const QString& aliasLower = QString(alias.lower());
+		const QString& tableNameLower = table->name().toLower();
+		const QString& aliasLower = QString(alias.toLower());
 		int num = 0;
 		for (TableSchema::ListIterator it(d->tables); it.current(); ++it, num++) {
-			if (it.current()->name().lower()==tableNameLower) {
+			if (it.current()->name().toLower()==tableNameLower) {
 				const QString& tAlias = tableAlias(num);
 				if (tAlias == aliasLower) {
 					KexiDBWarn << "QuerySchema::addTable(): table with \"" 
@@ -645,7 +645,7 @@ TableSchema* QuerySchema::table(const QString& tableName) const
 {
 //TODO: maybe use tables_byname?
 	for (TableSchema::ListIterator it(d->tables); it.current(); ++it) {
-		if (it.current()->name().lower()==tableName.lower())
+		if (it.current()->name().toLower()==tableName.toLower())
 			return it.current();
 	}
 	return 0;
@@ -713,7 +713,7 @@ int QuerySchema::tablePosition(const QString& tableName) const
 {
 	int num = 0;
 	for (TableSchema::ListIterator it(d->tables); it.current(); ++it, num++) {
-		if (it.current()->name().lower()==tableName.lower())
+		if (it.current()->name().toLower()==tableName.toLower())
 			return num;
 	}
 	return -1;
@@ -723,9 +723,9 @@ Q3ValueList<int> QuerySchema::tablePositions(const QString& tableName) const
 {
 	int num = 0;
 	Q3ValueList<int> result;
-	const QString& tableNameLower = tableName.lower();
+	const QString& tableNameLower = tableName.toLower();
 	for (TableSchema::ListIterator it(d->tables); it.current(); ++it, num++) {
-		if (it.current()->name().lower()==tableNameLower) {
+		if (it.current()->name().toLower()==tableNameLower) {
 			result += num;
 		}
 	}
