@@ -388,12 +388,12 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		void deleteWidgetLaterTimeout();
 
 		/*! Slot called when a buddy is choosed in the buddy list. Sets the label buddy. */
-		void buddyChoosed(int id);
+		void buddyChosen(int id);
 
 		/*! Slot called when the user chooses an item in signal (or slot) menu.
 		 The \ref createdConnection() is updated, and the connection created
 		 (for the signal menu). */
-		void menuSignalChoosed(int id);
+		void menuSignalChosen(int id);
 
 		/*! Slot called when the user changes current style using combbox in toolbar or menu. */
 		void slotStyle();

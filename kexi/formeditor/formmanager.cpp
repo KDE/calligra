@@ -798,7 +798,7 @@ FormManager::createSignalMenu(QWidget *w)
 	if(result == -1)
 		resetCreatedConnection();
 	else
-		menuSignalChoosed(result);
+		menuSignalChosen(result);
 
 	delete m_sigSlotMenu;
 	m_sigSlotMenu = 0;
@@ -829,7 +829,7 @@ FormManager::createSlotMenu(QWidget *w)
 	if(result == -1)
 		resetCreatedConnection();
 	else
-		menuSignalChoosed(result);
+		menuSignalChosen(result);
 
 	delete m_sigSlotMenu;
 	m_sigSlotMenu = 0;
@@ -922,7 +922,7 @@ FormManager::createContextMenu(QWidget *w, Container *container, bool popupAtCur
 
 		/*int id =*/ m_popup->insertItem(i18n("Choose Buddy..."), sub);
 //		menuIds->append(id);
-		connect(sub, SIGNAL(activated(int)), this, SLOT(buddyChoosed(int)));
+		connect(sub, SIGNAL(activated(int)), this, SLOT(buddyChosen(int)));
 
 		separatorNeeded = true;
 	}
@@ -945,7 +945,7 @@ FormManager::createContextMenu(QWidget *w, Container *container, bool popupAtCur
 //		menuIds->append(id);
 		if(list.isEmpty())
 			m_popup->setItemEnabled(id, false);
-		connect(sigMenu, SIGNAL(activated(int)), this, SLOT(menuSignalChoosed(int)));
+		connect(sigMenu, SIGNAL(activated(int)), this, SLOT(menuSignalChosen(int)));
 		separatorNeeded = true;
 	}
 #endif
@@ -993,7 +993,7 @@ FormManager::createContextMenu(QWidget *w, Container *container, bool popupAtCur
 }
 
 void
-FormManager::buddyChoosed(int id)
+FormManager::buddyChosen(int id)
 {
 	if(!m_menuWidget)
 		return;
@@ -1012,7 +1012,7 @@ FormManager::buddyChoosed(int id)
 }
 
 void
-FormManager::menuSignalChoosed(int id)
+FormManager::menuSignalChosen(int id)
 {
 	if (m_options & HideSignalSlotConnections)
 		return;
