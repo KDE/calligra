@@ -254,7 +254,8 @@ Region::Element* Region::add(const QPoint& point, Sheet* sheet)
   {
     return 0;
   }
-  return *insert(d->cells.end(), point, sheet, false);
+  Iterator it = insert(d->cells.end(), point, sheet, false);
+  return (it == d->cells.end()) ? 0 : *it;
 }
 
 Region::Element* Region::add(const QRect& range, Sheet* sheet)
@@ -267,7 +268,8 @@ Region::Element* Region::add(const QRect& range, Sheet* sheet)
   {
     return add(range.topLeft(), sheet);
   }
-  return *insert(d->cells.end(), range, sheet, false);
+  Iterator it = insert(d->cells.end(), range, sheet, false);
+  return (it == d->cells.end()) ? 0 : *it;
 }
 
 Region::Element* Region::add(const Region& region)

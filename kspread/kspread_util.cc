@@ -356,8 +356,8 @@ void Point::init(const QString & _str)
 
 bool util_isPointValid( QPoint point )
 {
-    if (    point.x() >= 0
-        &&  point.y() >= 0
+    if (    point.x() >= 1
+        &&  point.y() >= 1
         &&  point.x() <= KS_colMax
         &&  point.y() <= KS_rowMax
        )
