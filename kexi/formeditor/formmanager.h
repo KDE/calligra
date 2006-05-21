@@ -387,7 +387,7 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 	protected slots:
 		void deleteWidgetLaterTimeout();
 
-		/*! Slot called when a buddy is choosed in the buddy list. Sets the label buddy. */
+		/*! Slot called when a buddy is chosen in the buddy list. Sets the label buddy. */
 		void buddyChosen(int id);
 
 		/*! Slot called when the user chooses an item in signal (or slot) menu.

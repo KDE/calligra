@@ -193,7 +193,7 @@ public:
 	/* NULL by default. After succesful validate() it will point to a field,
 	 if the variable is of a form "tablename.fieldname" or "fieldname", 
 	 otherwise (eg. for asterisks) -still NULL.
-	 Only meaningfull for column expressions within a query. */
+	 Only meaningful for column expressions within a query. */
 	Field *field;
 
 	/* -1 by default. After succesful validate() it will contain a position of a table
@@ -201,7 +201,7 @@ public:
 	 This value can be either be -1 if no binding is needed.
 	 This value is used in the Parser to call 
 	  QuerySchema::addField(Field* field, int bindToTable);
-	 Only meaningfull for column expressions within a query. */
+	 Only meaningful for column expressions within a query. */
 	int tablePositionForField;
 
 	/*! NULL by default. After succesful validate() it will point to a table

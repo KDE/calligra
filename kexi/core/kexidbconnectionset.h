@@ -42,7 +42,7 @@ public:
 	 If \a filename is not empty, it will be kept for use in saveConnectionData(). 
 	 saveConnectionData() is called automatically, if there's no \a filename provided 
 	 or the filename is already used, a new unique will be generated. 
-	 \return true on successfull creating corresponding .kexic file */
+	 \return true on successful creating corresponding .kexic file */
 	bool addConnectionData(KexiDB::ConnectionData *data, const QString& filename = QString::null);
 
 	/*! Saves changes made to \a oldData to a file which name has been provided by addConnectionData(). 

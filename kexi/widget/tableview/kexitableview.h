@@ -342,7 +342,7 @@ public slots:
 
 	/*! Accepts row editing. All changes made to the editing 
 	 row during this current session will be accepted (saved). 
-	 \return true if accepting was successfull, false otherwise 
+	 \return true if accepting was successful, false otherwise 
 	 (e.g. when current row contain data that does not meet given constraints). */
 	virtual bool acceptRowEdit() { return KexiDataAwareObjectInterface::acceptRowEdit(); }
 

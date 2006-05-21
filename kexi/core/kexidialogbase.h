@@ -158,7 +158,7 @@ class KEXICORE_EXPORT KexiDialogBase :
 
 		/*! Switches this dialog to \a newViewMode.
 		 \a viewMode is one of Kexi::ViewMode enum elements.
-		 \return true for successfull switching
+		 \return true for successful switching
 		 True is returned also if user has cancelled switching
 		 (rarely, but for any reason) - cancelled is returned.
 		 */

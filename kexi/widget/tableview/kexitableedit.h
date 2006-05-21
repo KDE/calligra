@@ -76,7 +76,7 @@ class KEXIDATATABLE_EXPORT KexiTableEdit : public QWidget, public KexiDataItemIn
 		inline virtual void showWidget() { show(); }
 
 		/*! Paints a border for the cell described by \a x, \a y, \a w, \a h on \a p painter.
-		 The cell's value is \a val (may be usefull if you want to reimplement this method).
+		 The cell's value is \a val (may be useful if you want to reimplement this method).
 		*/
 		virtual void paintFocusBorders( QPainter *p, QVariant &cal, int x, int y, int w, int h );
 

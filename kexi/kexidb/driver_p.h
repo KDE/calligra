@@ -165,7 +165,7 @@ class DriverPrivate
 		/*! Internal constant flag: Set this in subclass if driver is a file driver */
 		bool isFileDriver : 1;
 
-		/*! Internal constant flag: Set this in subclass if after successfull
+		/*! Internal constant flag: Set this in subclass if after successful
 		 drv_createDatabased() database is in opened state (as after useDatabase()). 
 		 For most engines this is not true. */
 		bool isDBOpenedAfterCreate : 1;

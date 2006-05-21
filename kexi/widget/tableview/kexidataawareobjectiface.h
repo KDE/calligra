@@ -309,7 +309,7 @@ class KEXIDATATABLE_EXPORT KexiDataAwareObjectInterface
 		 Not that if the query for this table has given constraints defined,
 		 like NOT NULL / NOT EMPTY for more than one field - editing a record would 
 		 be impossible for the flag set to true, because of constraints violation.
-		 However, setting this flag to true can be usefull especially for not-db-aware
+		 However, setting this flag to true can be useful especially for not-db-aware
 		 data set (it's used e.g. in Kexi Alter Table's field editor). */
 		bool acceptsRowEditAfterCellAccepting() const { return m_acceptsRowEditAfterCellAccepting; }
 
@@ -333,7 +333,7 @@ class KEXIDATATABLE_EXPORT KexiDataAwareObjectInterface
 
 		/*! Accepts row editing. All changes made to the editing 
 		 row during this current session will be accepted (saved). 
-		 \return true if accepting was successfull, false otherwise 
+		 \return true if accepting was successful, false otherwise 
 		 (e.g. when current row contain data that does not meet given constraints). */
 		virtual bool acceptRowEdit();
 
