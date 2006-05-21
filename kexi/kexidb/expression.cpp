@@ -56,7 +56,7 @@ KEXI_DB_EXPORT QString KexiDB::exprClassName(int c)
 		return "Aggregation";
 	else if (c==KexiDBExpr_TableList)
 		return "TableList";
-	
+
 	return "Unknown";
 }
 
@@ -64,7 +64,7 @@ using namespace KexiDB;
 
 //=========================================
 
-BaseExpr::BaseExpr(int token) 
+BaseExpr::BaseExpr(int token)
  : m_cl(KexiDBExpr_Unknown)
  , m_par(0)
  , m_token(token)
@@ -158,7 +158,7 @@ QString NArgExpr::toString()
 
 BaseExpr* NArgExpr::arg(int nr)
 {
-	return list.at(nr); 
+	return list.at(nr);
 }
 
 void NArgExpr::add(BaseExpr *expr)
@@ -208,9 +208,9 @@ UnaryExpr::~UnaryExpr()
 
 QString UnaryExpr::debugString()
 {
-	return "UnaryExpr('" 
+	return "UnaryExpr('"
 		+ tokenToDebugString() + "', "
-		+ (m_arg ? m_arg->debugString() : QString("<NONE>")) 
+		+ (m_arg ? m_arg->debugString() : QString("<NONE>"))
 		+ QString(",type=%1)").arg(Driver::defaultSQLTypeName(type()));
 }
 
@@ -280,7 +280,7 @@ bool UnaryExpr::validate(ParseInfo& parseInfo)
 	}
 #endif
 }
-	
+
 //=========================================
 BinaryExpr::BinaryExpr(int aClass, BaseExpr *left_expr, int token, BaseExpr *right_expr)
  : BaseExpr(token)
@@ -342,9 +342,9 @@ QString BinaryExpr::debugString()
 {
 	return QString("BinaryExpr(")
 		+ "class=" + exprClassName(m_cl)
-		+ "," + (m_larg ? m_larg->debugString() : QString("<NONE>")) 
+		+ "," + (m_larg ? m_larg->debugString() : QString("<NONE>"))
 		+ ",'" + tokenToDebugString() + "',"
-		+ (m_rarg ? m_rarg->debugString() : QString("<NONE>")) 
+		+ (m_rarg ? m_rarg->debugString() : QString("<NONE>"))
 		+ QString(",type=%1)").arg(Driver::defaultSQLTypeName(type()));
 }
 
@@ -498,7 +498,7 @@ Field::Type VariableExpr::type()
 {
 	if (field)
 		return field->type();
-	
+
 	//BTW, asterisks are not stored in VariableExpr outside of parser, so ok.
 	return Field::InvalidType;
 }
@@ -570,7 +570,7 @@ bool VariableExpr::validate(ParseInfo& parseInfo)
 		bool covered = true;
 		for (; it!=tPositions.constEnd() && covered; ++it) {
 			tableAlias = parseInfo.querySchema->tableAlias(*it);
-			if (tableAlias.isEmpty() || tableAlias.lower()==tableName.toLatin1())
+			if (tableAlias.isEmpty() || tableAlias.toLower()==tableName.toLatin1())
 				covered = false; //uncovered
 			KexiDBDbg << " --" << "covered by " << tableAlias << " alias" << endl;
 		}
@@ -582,7 +582,7 @@ bool VariableExpr::validate(ParseInfo& parseInfo)
 			return false;
 		}
 	}
-	
+
 	int tablePosition = -1;
 	if (!ts) {//try to find tableAlias
 		tablePosition = parseInfo.querySchema->tablePositionForAlias( tableName.toLatin1() );
@@ -653,7 +653,7 @@ bool VariableExpr::validate(ParseInfo& parseInfo)
 
 //=========================================
 static Q3ValueList<Q3CString> FunctionExpr_builtIns;
-static const char* FunctionExpr_builtIns_[] = 
+static const char* FunctionExpr_builtIns_[] =
 {"SUM", "MIN", "MAX", "AVG", "COUNT", "STD", "STDDEV", "VARIANCE", 0 };
 
 Q3ValueList<Q3CString> FunctionExpr::builtInAggregates()
@@ -754,7 +754,7 @@ RelationalExpr::RelationalExpr(BaseExpr *l_n, int typ, BaseExpr *r_n)
 {
 }
 
-void RelationalExpr::check() 
+void RelationalExpr::check()
 {
 	BinaryExpr::check();
 	BaseExpr *l_n = l.at(0);
@@ -806,7 +806,7 @@ void RelationalExpr::check()
 	}
 	else
 		errop=1;
-	
+
 	if (errop) {
 		ERR("Niepoprawne argumenty typu '%s' i '%s' dla operatora relacyjnego '%s'",
 			l_n->nodeTypeName(),

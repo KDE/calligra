@@ -47,8 +47,9 @@ set(kexidb_LIB_SRCS
 
 kde4_automoc(${kexidb_LIB_SRCS})
 
-kde4_add_library(kexidb SHARED ${kexidb_LIB_SRCS})
 
+link_directories(${CMAKE_CURRENT_BUILD_DIR}/../kexiutils)
+kde4_add_library(kexidb SHARED ${kexidb_LIB_SRCS})
 target_link_libraries(kexidb  ${KDE4_KDECORE_LIBS} ${KDE4_KIO_LIBS} kexiutils )
 
 set_target_properties(kexidb PROPERTIES VERSION 1.0.0 SOVERSION 1 )
