@@ -43,6 +43,12 @@ CustomProperty::~CustomProperty()
 {
 }
 
+void
+CustomProperty::emitPropertyChanged()
+{
+	m_property->emitPropertyChanged();
+}
+
 ///////////////  SizeCustomProperty /////////////////////
 
 SizeCustomProperty::SizeCustomProperty(Property *property)
