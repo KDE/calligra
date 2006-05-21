@@ -334,7 +334,7 @@ class KEXI_DB_EXPORT Cursor: public QObject, public Object
 		bool m_buffering_completed : 1;   //! true if we already have all records stored in the buffer
 		//</members related to buffering>
 
-		//! Usefull e.g. for value(int) method when we need access to schema def.
+		//! Useful e.g. for value(int) method when we need access to schema def.
 		QueryColumnInfo::Vector* m_fieldsExpanded;
 
 		//! Used by setOrderByColumnList()

@@ -417,7 +417,7 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow, public KexiGUI
 		virtual void switchToChildframeMode();
 		void switchToChildframeMode(bool showMessage);
 
-		/*! Shows Project Migration Wizard. \return true on successfull migration, 
+		/*! Shows Project Migration Wizard. \return true on successful migration, 
 		 cancelled on cancellation, and false on failure.
 		 If \a mimeType and \a databaseName are not empty, the wizard will only ask about 
 		 parameters of destination project and skip pages related to source project. 

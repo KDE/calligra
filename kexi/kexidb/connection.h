@@ -76,7 +76,7 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 
 		/*! 
 		\brief Connects to driver with given parameters. 
-		\return true if successfull. */
+		\return true if successful. */
 		bool connect();
 
 		/*! \return true, if connection is properly established. */
@@ -232,7 +232,7 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		 If default is not present, false is returned (when ignore_inactive is 
 		 false, the default), or true is returned (when ignore_inactive is true).
 		 
-		 On successfull commit, \a trans object will be destroyed.
+		 On successful commit, \a trans object will be destroyed.
 		 If this was default transaction, there is no default transaction for now.
 		*/
 		bool commitTransaction( Transaction trans = Transaction::null,
@@ -246,7 +246,7 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		 
 		 or any error occured, false is returned.
 			
-		 On successfull rollback, \a trans object will be destroyed.
+		 On successful rollback, \a trans object will be destroyed.
 		 If this was default transaction, there is no default transaction for now.
 		*/
 		bool rollbackTransaction( Transaction trans = Transaction::null,
@@ -284,7 +284,7 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		 every sql functional statement (statement that changes 
 		 data in the database implicitly starts a new transaction. 
 		 This transaction is automatically commited 
-		 after successfull statement execution or rolled back on error.
+		 after successful statement execution or rolled back on error.
 		 
 		 For drivers that do not support transactions (see Driver::features())
 		 this method shouldn't be called because it does nothing ans always returns false.

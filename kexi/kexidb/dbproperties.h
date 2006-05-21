@@ -37,7 +37,7 @@ class KEXI_DB_EXPORT DatabaseProperties : public KexiDB::Object
 		/*! Sets \a value for property \a name. Optional caption can be also set.
 		 If there's no such property defined, it will be added. Existing value will be overwritten.
 		 Note that to execute this method, database must be opened in read-write mode. 
-		 \return true on successfull data. Connection */
+		 \return true on successful data. Connection */
 		bool setValue( const QString& name, const QVariant& value );
 
 		/*! Sets \a caption for for property \a name. 

@@ -90,7 +90,7 @@ class KEXIUTILS_EXPORT Validator : public QValidator
 
 /*! MultiValidator behaves like normal KexiUtils::Validator,
  but it allows to add define more than one different validator.
- Given validation is successfull if every subvalidator accepted given value.
+ Given validation is successful if every subvalidator accepted given value.
 
  - acceptsEmptyValue() is used globally here 
    (no matter what is defined in subvalidators).
