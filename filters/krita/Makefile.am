@@ -22,5 +22,9 @@ if have_exif
 LIBKISEXIF=libkisexif
 endif
 
+if include_PDF
+KFILE_PDF_SUBDIR=pdf
+endif
+
 SUBDIRS = $(IMAGEMAGICK_SUBDIR) $(OPENEXR_SUBDIR) $(PNG_SUBDIR) $(LIBKISEXIF) \
-	$(JPEG_SUBDIR) $(TIFF_SUBDIR) raw 
+		$(JPEG_SUBDIR) $(TIFF_SUBDIR) raw pdf

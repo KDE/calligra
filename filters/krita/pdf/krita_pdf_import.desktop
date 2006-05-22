@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Service
+Name=Krita PDF Import Filter
+Comment=
+ServiceTypes=KOfficeFilter
+X-KDE-Available=
+X-KDE-Export=application/x-krita
+X-KDE-Import=application/pdf
+X-KDE-Weight=1
+X-KDE-Library=libkritapdfimport
