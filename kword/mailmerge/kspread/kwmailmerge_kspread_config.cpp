@@ -46,7 +46,7 @@ KWMailMergeKSpreadConfig::KWMailMergeKSpreadConfig( QWidget *parent, KWMailMerge
 
   initGUI();
 
-  _urlRequester->setURL( _object->url().url() );
+  _urlRequester->setUrl( _object->url().url() );
   _initialPage = _object->spreadSheetNumber();
 
   connect( _urlRequester, SIGNAL( urlSelected( const QString& ) ),

@@ -66,8 +66,8 @@ KWMailMergeDataBase::KWMailMergeDataBase( KWDocument *doc_ )
 QStringList KWMailMergeDataBase::availablePlugins()
 {
     QStringList tmp;
-    KTrader::OfferList pluginOffers=KTrader::self()->query(QString::fromLatin1("KWord/MailMergePlugin"),QString::null);
-    for (KTrader::OfferList::Iterator it=pluginOffers.begin();*it;++it)
+	KService::List pluginOffers=KServiceTypeTrader::self()->query(QString::fromLatin1("KWord/MailMergePlugin"),QString::null);
+    for (KService::List::ConstIterator it=pluginOffers.begin();*it;++it)
     {
         tmp.append((*it)->property("X-KDE-InternalName").toString());
         kDebug()<<"Found mail merge plugin: "<< (*it)->name()<<endl;
@@ -85,7 +85,7 @@ bool KWMailMergeDataBase::loadPlugin(const QString &name,const QString &command)
     if (rejectdcopcall)return false;
     QString constrain=QString("[X-KDE-InternalName] =='"+name+'\'');
     kDebug()<<constrain<<endl;
-    KTrader::OfferList pluginOffers=KTrader::self()->query(QString::fromLatin1("KWord/MailMergePlugin"),constrain);
+	KService::List pluginOffers=KServiceTypeTrader::self()->query(QString::fromLatin1("KWord/MailMergePlugin"),constrain);
     KService::Ptr it=pluginOffers.first();
 
     QVariant verProp=it->property("X-KDE-PluginVersion");
@@ -124,10 +124,10 @@ KWMailMergeDataSource *KWMailMergeDataBase::openPluginFor(int type,int &version)
     KWMailMergeDataSource *ret=0;
     QString constrain=QString("'%1' in [X-KDE-Capabilities]").arg(((type==KWSLCreate)?KWSLCreate_text:KWSLOpen_text));
     kDebug()<<constrain<<endl;
-    KTrader::OfferList pluginOffers=KTrader::self()->query(QString::fromLatin1("KWord/MailMergePlugin"),constrain);
+	KService::List pluginOffers=KServiceTypeTrader::self()->query(QString::fromLatin1("KWord/MailMergePlugin"),constrain);
 
     //Only for debugging
-    for (KTrader::OfferList::Iterator it=pluginOffers.begin();*it;++it)
+    for (KService::List::ConstIterator it=pluginOffers.begin();*it;++it)
     {
         kDebug()<<"Found mail merge plugin: "<< (*it)->name()<<endl;
     }
@@ -334,7 +334,7 @@ int KWMailMergeDataBase::version() {
  *
  ******************************************************************/
 
-KWMailMergeChoosePluginDialog::KWMailMergeChoosePluginDialog( KTrader::OfferList offers )
+KWMailMergeChoosePluginDialog::KWMailMergeChoosePluginDialog( KService::List offers )
     : KDialogBase( Plain, i18n( "Mail Merge Setup" ), Ok | Cancel, Ok,
       /*parent*/ 0, "", true ), pluginOffers( offers )
 {
@@ -351,7 +351,7 @@ KWMailMergeChoosePluginDialog::KWMailMergeChoosePluginDialog( KTrader::OfferList
   descriptionLabel->setFrameShadow( Q3Frame::Sunken );
 
   QSize old_sizeHint;
-  for ( KTrader::OfferList::Iterator it = pluginOffers.begin(); *it; ++it )
+  for ( KService::List::Iterator it = pluginOffers.begin(); *it; ++it )
   {
     chooser->insertItem( (*it)->name() );
     old_sizeHint = descriptionLabel->sizeHint();

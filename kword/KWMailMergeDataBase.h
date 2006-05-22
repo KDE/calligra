@@ -23,7 +23,6 @@
 #define mailmerge_h
 
 #include <kdialogbase.h>
-#include <ktrader.h>
 
 
 #include <QMap>
@@ -33,6 +32,7 @@
 #include <QTextStream>
 //Added by qt3to4:
 #include <QLabel>
+#include <kservicetypetrader.h>
 
 #include "KWMailMergeDataSource.h"
 #include "KWordMailMergeDatabaseIface.h"
@@ -101,7 +101,7 @@ class KWMailMergeChoosePluginDialog : public KDialogBase
   Q_OBJECT
 
   public:
-    KWMailMergeChoosePluginDialog( KTrader::OfferList );
+    KWMailMergeChoosePluginDialog( KService::List );
     ~KWMailMergeChoosePluginDialog();
 
     int currentPlugin() const;    
@@ -112,7 +112,7 @@ class KWMailMergeChoosePluginDialog : public KDialogBase
   private:
     class QComboBox *chooser;
     class QLabel *descriptionLabel;
-    KTrader::OfferList pluginOffers;
+	KService::List pluginOffers;
 };
 
 class KWMailMergeConfigDialog : public KDialogBase
