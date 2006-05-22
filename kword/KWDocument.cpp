@@ -551,7 +551,7 @@ bool KWDocument::initDoc(InitDocFlags flags, QWidget* parentWidget)
         setEmpty();
     } else if ( ret == KoTemplateChooseDia::File ) {
         KUrl url( file );
-        //kDebug() << "KWDocument::initDoc opening URL " << url.prettyURL() << endl;
+        //kDebug() << "KWDocument::initDoc opening URL " << url.prettyUrl() << endl;
         ok = openURL( url );
     } else if ( ret == KoTemplateChooseDia::Empty ) {
         QString fileName( locate( "kword_template", "Normal/.source/PlainText.kwt" , KWFactory::instance() ) );

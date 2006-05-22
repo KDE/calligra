@@ -164,7 +164,7 @@ void KugarPart::slotPreferredTemplate( const QString &tpl )
                 if ( KIO::NetAccess::download( tmpURL, localtpl,0L) )
                     isTemp = true;
                 else
-                    KMessageBox::sorry( 0, i18n( "Unable to download template file: %1" , url.prettyURL() ) );
+                    KMessageBox::sorry( 0, i18n( "Unable to download template file: %1" , url.prettyUrl() ) );
             }
             else
                 localtpl = tpl;
@@ -181,7 +181,7 @@ void KugarPart::slotPreferredTemplate( const QString &tpl )
                 if ( KIO::NetAccess::download( tmpURL, localtpl,0L ) )
                     isTemp = true;
                 else
-                    KMessageBox::sorry( 0, i18n( "Unable to download template file: %1" , url.prettyURL() ) );
+                    KMessageBox::sorry( 0, i18n( "Unable to download template file: %1" , url.prettyUrl() ) );
             }
         }
     }
@@ -190,7 +190,7 @@ void KugarPart::slotPreferredTemplate( const QString &tpl )
         if ( KIO::NetAccess::download( url, localtpl,0L ) )
             isTemp = true;
         else
-            KMessageBox::sorry( 0, i18n( "Unable to download template file: %1" ,url.prettyURL() ) );
+            KMessageBox::sorry( 0, i18n( "Unable to download template file: %1" ,url.prettyUrl() ) );
     }
 
 /*    kDebug() << "localtpl: " << localtpl.latin1() << endl;*/

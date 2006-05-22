@@ -3596,8 +3596,8 @@ QString KPrDocument::templateFileName( bool chooseTemplate, const QString &theFi
         src.setPath( fileName );
         dest.setPath( locateLocal( "appdata", "default.kpr" ) );
         kDebug(33001) << "Copying template  (in KPrDocument::templateFileName)" << endl
-                       << "  from: " << src.prettyURL() << endl
-                       << "  to: " << dest.prettyURL() << endl;
+                       << "  from: " << src.prettyUrl() << endl
+                       << "  to: " << dest.prettyUrl() << endl;
         KIO::NetAccess::file_copy( src,
 				   dest,
 				   -1, /* default permissions */

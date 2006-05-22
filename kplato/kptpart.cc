@@ -120,7 +120,7 @@ bool Part::initDoc(InitDocFlags flags, QWidget* parentWidget) {
             showLoadingErrorDialog();
     } else if (ret == KoTemplateChooseDia::File) {
         KUrl url(templateDoc);
-        kDebug() << "Part::initDoc opening URL " << url.prettyURL() <<endl;
+        kDebug() << "Part::initDoc opening URL " << url.prettyUrl() <<endl;
         result = openURL(url);
     } else if (ret == KoTemplateChooseDia::Empty) {
         // Make a fresh project and let the user enter some info

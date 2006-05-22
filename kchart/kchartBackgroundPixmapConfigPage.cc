@@ -103,7 +103,7 @@ KChartBackgroundPixmapConfigPage::KChartBackgroundPixmapConfigPage( KChartParams
 
     for( QStringList::ConstIterator it = list.begin(); it != list.end(); it++ )
 	wallCB->insertItem( ( (*it).at(0)=='/' ) ?        // if absolute path
-                            KUrl::fromPathOrURL( *it ).fileName() :    // then only fileName
+                            KUrl::fromPathOrUrl( *it ).fileName() :    // then only fileName
                             (*it) );
 
     QPushButton* browsePB = new QPushButton( i18n("&Browse..."), this );

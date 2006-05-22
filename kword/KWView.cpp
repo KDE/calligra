@@ -6146,7 +6146,7 @@ void KWView::savePicture()
                             if ( !KIO::NetAccess::upload( tempFile.name(), url, this ) )
                             {
                               KMessageBox::sorry( this, i18n(
-                                  "Unable to save the file to '%1'. %2.", url.prettyURL() ,KIO::NetAccess::lastErrorString() ),
+                                  "Unable to save the file to '%1'. %2.", url.prettyUrl() ,KIO::NetAccess::lastErrorString() ),
                                   i18n("Save Failed") );
                             }
                         }
@@ -6162,7 +6162,7 @@ void KWView::savePicture()
                 }
             }
             else
-                KMessageBox::sorry( this, i18n("URL %1 is invalid.", url.prettyURL() ), i18n("Save Picture") );
+                KMessageBox::sorry( this, i18n("URL %1 is invalid.", url.prettyUrl() ), i18n("Save Picture") );
         }
     }
 }

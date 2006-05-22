@@ -656,14 +656,14 @@ void ReportView::getTemplateFile(const QString &tpl) {
 
 	if (!url.isValid())
 	{
-			KMessageBox::sorry(this,i18n("Malformed template filename: %1", url.prettyURL()));
+			KMessageBox::sorry(this,i18n("Malformed template filename: %1", url.prettyUrl()));
 	}
 	else
 	{
 		if (KIO::NetAccess::download(url,localtpl,this))
 			isTemp = true;
 		else
-			KMessageBox::sorry(this,i18n("Unable to download template file: %1", url.prettyURL()));
+			KMessageBox::sorry(this,i18n("Unable to download template file: %1", url.prettyUrl()));
 	}
 
 	if (!localtpl.isNull())

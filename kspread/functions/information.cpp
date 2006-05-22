@@ -274,7 +274,7 @@ Value func_type (valVector args, ValueCalc *, FuncExtra *)
 
 Value func_filename (valVector, ValueCalc *calc, FuncExtra *)
 {
-  return Value (calc->doc()->url().prettyURL());
+  return Value (calc->doc()->url().prettyUrl());
 }
 
 // Function: N

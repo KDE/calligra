@@ -57,7 +57,7 @@ bool KoUnavailPart::loadXML( QIODevice *, const QDomDocument &doc )
 
 bool KoUnavailPart::saveFile()
 {
-    kDebug() << "KoUnavailPart::saveFile m_url=" << m_url.prettyURL() << endl;
+    kDebug() << "KoUnavailPart::saveFile m_url=" << m_url.prettyUrl() << endl;
     // This is called if the part points to an external file
     // In that case we have nothing to save, the file was unavailable !
     return true;

@@ -92,7 +92,7 @@ protected:
     void leaveEvent( QEvent* ) {};
 #if 0
     void dragEnterEvent( QDragEnterEvent *ev ) {
-        if ( m_mw && KURL::List::canDecode( ev->mimeData() ) )
+        if ( m_mw && KUrl::List::canDecode( ev->mimeData() ) )
             ev->acceptAction();
     }
     void dropEvent( QDropEvent* ev ) {

@@ -631,7 +631,7 @@ QStringList KPrViewIface::exportPage( int _nPage,
             if( canvas->exportPage( nPage,
                                     qMax(8, _nWidth),
                                     qMax(8, _nHeight),
-                                    KUrl::fromPathOrURL( _fileName ),
+                                    KUrl::fromPathOrUrl( _fileName ),
                                     _format.isEmpty() ? "PNG" : _format.toLatin1(),
                                     qMax(-1, qMin(100, _quality))) ){
                 if( 0 < _verbose ){

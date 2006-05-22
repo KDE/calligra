@@ -778,7 +778,7 @@ void KPrView::savePicture( const QString& oldName, KoPicture& picture)
                             if ( !KIO::NetAccess::upload( tempFile.name(), url, this ) )
                             {
                                 KMessageBox::sorry( this, i18n(
-                                   "Unable to save the file to '%1'. %2.").arg( url.prettyURL() ).arg( KIO::NetAccess::lastErrorString() ),
+                                   "Unable to save the file to '%1'. %2.").arg( url.prettyUrl() ).arg( KIO::NetAccess::lastErrorString() ),
                                    i18n("Save Failed") );
                             }
                         }

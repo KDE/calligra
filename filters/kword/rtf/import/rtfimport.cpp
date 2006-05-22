@@ -1580,7 +1580,7 @@ void RTFImport::addImportedPicture( const QString& rawFileName )
     KUrl url;
     url.setPath(dir.filePath( rawFileName ));
 
-    kDebug(30515) << "Path: " << url.prettyURL() << endl;
+    kDebug(30515) << "Path: " << url.prettyUrl() << endl;
 
     KoPicture pic;
     pic.setKeyAndDownloadPicture(url, 0); // ### TODO: find a better parent if possible

@@ -117,7 +117,7 @@ int main( int argc, char **argv )
         KMimeType::Ptr inputMimetype = KMimeType::findByURL( uIn );
         if ( inputMimetype->name() == KMimeType::defaultMimeType() )
         {
-            kError() << i18n("Mimetype for input file %1 not found!",uIn.prettyURL()) << endl;
+            kError() << i18n("Mimetype for input file %1 not found!",uIn.prettyUrl()) << endl;
             return 1;
         }
         KMimeType::Ptr outputMimetype;
