@@ -30,7 +30,6 @@
 #define __KDCHARTPROPERTYSET__
 
 
-#include <KDXMLTools.h>
 #include <KDChartEnums.h>
 #include <kdchart_export.h>
 

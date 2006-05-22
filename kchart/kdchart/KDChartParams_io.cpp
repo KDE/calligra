@@ -27,6 +27,7 @@
  **
  **********************************************************************/
 #include "KDChartParams.h"
+#include "KDXMLTools.h"
 
 #include <qintdict.h>
 

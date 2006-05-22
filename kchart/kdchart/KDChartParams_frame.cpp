@@ -28,7 +28,7 @@
  **********************************************************************/
 
 #include "KDChartParams.h"
-
+#include "KDXMLTools.h"
 
 /**
   \class KDChartParams::KDChartFrameSettings KDChartParams.h

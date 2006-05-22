@@ -28,6 +28,7 @@
  **********************************************************************/
 #include "KDChartRingPainter.h"
 #include "KDChartParams.h"
+#include "KDXMLTools.h"
 
 #include <qpainter.h>
 #include <qvaluestack.h>
