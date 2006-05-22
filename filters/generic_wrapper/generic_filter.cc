@@ -29,10 +29,9 @@
 #include <kgenericfactory.h>
 #include <kglobal.h>
 #include <klocale.h>
-#include <ktrader.h>
 #include <kservice.h>
 #include <ktempfile.h>
-
+#include <kservicetypetrader.h>
 #include "generic_filter.h"
 
 typedef KGenericFactory<GenericFilter> GenericFilterFactory;
@@ -47,13 +46,13 @@ KoFilter::ConversionStatus GenericFilter::convert( const QByteArray &from, const
 {
 
     //find the right script to use
-    KTrader::OfferList offers = KTrader::self()->query("KOfficeGenericFilter",
+		KService::List offers = KServiceTypeTrader::self()->query("KOfficeGenericFilter",
                                 "(Type == 'Service') and ('KOfficeGenericFilter' in ServiceTypes) and (exist Exec)");
 
     if (offers.isEmpty())
         return KoFilter::NotImplemented;
 
-    KTrader::OfferList::ConstIterator it;
+	KService::List::ConstIterator it;
     for (it=offers.begin(); it!=offers.end(); ++it)
     {
         kDebug() << "Got a filter script, exec: " << (*it)->exec() <<
