@@ -124,7 +124,7 @@ void XMLHandlerTests::testParseXML()
 	kdDebug()<<"===================== testParseXML() ======================" << endl;
 
 	// Local Init
-	KSharedPtr<KoMacro::Macro> macro = KoMacro::Manager::self()->createMacro("testMacro");
+	KoMacro::Macro::Ptr macro = KoMacro::Manager::self()->createMacro("testMacro");
 	QDomElement domelement;
 
 	// Part 1: From XML to a Macro.
@@ -144,6 +144,7 @@ void XMLHandlerTests::testParseXML()
 	domelement = d->doomdocument->documentElement();
 	//Is our XML parseable ?
 	KOMACROTEST_ASSERT(macro->parseXML(domelement),true);
+	KOMACROTEST_XASSERT(isMacroContentEqToXML(macro,domelement),true);
 
 	// Test-XML-document with bad root element.
 	xml = QString("<!DOCTYPE macros>"
@@ -173,22 +174,37 @@ void XMLHandlerTests::testParseXML()
 	domelement = d->doomdocument->documentElement();
 	KOMACROTEST_ASSERT(macro->parseXML(domelement),false);
 
-	// TODO Test-XML-document if it has a wrong structure like wrong parathesis
-	// or missing end tag (is this critical??).
-	/*xml = QString("<!DOCTYPE macros>"
-				    "<macro xmlversion=\"1\">"
+	// Test-XML-document with wrong macro-xmlversion - 2 .
+	xml = QString("<!DOCTYPE macros>"
+				    "<macro sion=\"2\">"
 				      "<item action=\"testaction\" >"
     					"<variable name=\"teststring\" >testString</variable>"
 						"<variable name=\"testint\" >0</variable>"
 						"<variable name=\"testbool\" >true</variable>"
+						"<variable name=\"testdouble\" >0.6</variable>"
 				      "</item>"
 				    "</macro>");
 	d->doomdocument->setContent(xml);
 	domelement = d->doomdocument->documentElement();
-	KOMACROTEST_ASSERT(macro->parseXML(domelement),false);*/
+	KOMACROTEST_ASSERT(macro->parseXML(domelement),false);
 
-	// Test-XML-document with wrong item- and variable-tags.
-	// TODO Could this happen??
+	// TODO Test-XML-document if it has a wrong structure like wrong parathesis
+	// or missing end tag (is this critical??).
+	xml = QString("<!DOCTYPE macros>"
+				    "<macro xmlversion=\"1\">"
+				      "<item action=\"testaction\" >"
+    					"<variable name=\"teststring\" >testString</variable>"
+						"<variable name=\"testint\" >0</variable>"
+				    "</macro>");
+	d->doomdocument->setContent(xml);
+	domelement = d->doomdocument->documentElement();
+	KOMACROTEST_ASSERT(macro->parseXML(domelement),true);
+	//KOMACROTEST_ASSERT(d->doomdocument->isDocument(),true);
+	//KOMACROTEST_ASSERT(domelement.isElement(),true);
+
+	/*// Test-XML-document with wrong item- and variable-tags.
+	// Could this happen?? It could, but concerning to high performance
+	// we accept that the tags maybe wrong.
 	xml = QString("<!DOCTYPE macros>"
 				    "<macro xmlversion=\"1\">"
 				      "<iem action=\"testaction\" >"
@@ -200,7 +216,8 @@ void XMLHandlerTests::testParseXML()
 				    "</macro>");
 	d->doomdocument->setContent(xml);
 	domelement = d->doomdocument->documentElement();
-	KOMACROTEST_ASSERT(macro->parseXML(domelement),true);  //should be false?
+	KOMACROTEST_ASSERT(macro->parseXML(domelement),false); 
+	// is true, because there is no syntax-parsing for item and variable. */
 
 	// Test-XML-document with maximum field-size.
 	xml = QString("<!DOCTYPE macros>"
@@ -262,8 +279,26 @@ void XMLHandlerTests::testParseXML()
 
 	// TODO Part 2: Read the parsen macro and make a comparison to the XML-document.
 
-	// TODO clean up
 }
+
+bool XMLHandlerTests::isMacroContentEqToXML(const KoMacro::Macro::Ptr macro, const QDomElement& domelement)
+{
+	
+	QValueList<KoMacro::MacroItem::Ptr> macroitems = macro->items();
+	QDomNode itemnode = domelement.firstChild();
+	// TODO BIGTODO	
+	QValueList<KoMacro::MacroItem::Ptr>::ConstIterator it(macroitems.constBegin()), end(macroitems.constEnd());
+	for(;it != end; it++) {
+		// Read Action in MacroItem
+		KoMacro::MacroItem * item = *it;
+		KoMacro::Action::Ptr action = item->action().data();
+		if(action->name() != "test") return false;
+	}
+	itemnode = itemnode.nextSibling();
+	
+	return true;
+}
+
 
 void XMLHandlerTests::testToXML()
 {	

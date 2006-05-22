@@ -20,6 +20,7 @@
 #define KOMACROTEST_XMLHandlerTests_H
 
 #include <kunittest/tester.h>
+#include "../lib/macro.h"
 
 namespace KoMacroTest {
 
@@ -72,6 +73,8 @@ namespace KoMacroTest {
 			class Private;
 			/// @internal d-pointer instance.
 			Private* const d;
+			// Compares a parsen XML-Element with the filled Macro.
+			bool isMacroContentEqToXML(const KSharedPtr<KoMacro::Macro> macro, const QDomElement& domelement);
 	};
 
 }
