@@ -29,7 +29,6 @@
 
 #include <kapplication.h>
 #include <kfileitem.h>
-#include <ktrader.h>
 #include <klibloader.h>
 #include <kparts/part.h>
 #include <kparts/componentfactory.h>
