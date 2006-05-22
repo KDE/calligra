@@ -4353,10 +4353,10 @@ void Canvas::paintNormalMarker(QPainter& painter, const KoRect &viewRect)
   if (d->cellEditor)
 	return;
 
-	if (!selectionInfo()->activeElement())
-			return;
-
-	QRect range=selectionInfo()->activeElement()->rect();
+  Region::ConstIterator end(selectionInfo()->constEnd());
+  for (Region::ConstIterator it(selectionInfo()->constBegin()); it != end; ++it)
+  {
+    QRect range = (*it)->rect().normalize();
 
   	double positions[4];
   	bool paintSides[4];
@@ -4452,6 +4452,7 @@ void Canvas::paintNormalMarker(QPainter& painter, const KoRect &viewRect)
         }
       }
     }
+  }
 }
 
 void Canvas::sheetAreaToRect(const QRect& sheetArea, KoRect& rect)
