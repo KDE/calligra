@@ -69,16 +69,16 @@ Region::Region(View* view, const QString& string, Sheet* sheet)
   QStringList::ConstIterator end = substrings.constEnd();
   for (QStringList::ConstIterator it = substrings.constBegin(); it != end; ++it)
   {
-    int delimiterPos = (*it).find(':');
+    QString sRegion = *it;
+    if (!sheet)
+    {
+      sheet = filterSheetName(sRegion);
+    }
+
+    int delimiterPos = sRegion.find(':');
     if (delimiterPos > -1)
     {
       // range
-      QString sRegion = *it;
-      if (!sheet)
-      {
-        sheet = filterSheetName(sRegion);
-      }
-
       Point ul(sRegion.left(delimiterPos));
       Point lr(sRegion.mid(delimiterPos + 1));
 
@@ -104,11 +104,6 @@ Region::Region(View* view, const QString& string, Sheet* sheet)
     else
     {
       // single cell
-      QString sRegion = *it;
-      if (!sheet)
-      {
-        sheet = filterSheetName(sRegion);
-      }
       Point* point = createPoint(sRegion);
       point->setSheet(sheet);
       d->cells.append(point);
