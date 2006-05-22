@@ -110,7 +110,8 @@ class Canvas::Private
     KSpread::CellEditor *cellEditor;
 
     View *view;
-    QTimer* scrollTimer;
+// FIXME Stefan: Still needed?
+//     QTimer* scrollTimer;
 
     // Non visible range left from current screen
     // Example: If the first visible column is 'E', then xOffset stores
@@ -266,8 +267,9 @@ Canvas::Canvas(View *view)
   d->prevSpokenRow = -1;
   d->prevSpokenCol = -1;
 
-  d->scrollTimer = new QTimer( this );
-  connect (d->scrollTimer, SIGNAL( timeout() ), this, SLOT( doAutoScroll() ) );
+// TODO Stefan: Still neeeded?
+//   d->scrollTimer = new QTimer( this );
+//   connect (d->scrollTimer, SIGNAL( timeout() ), this, SLOT( doAutoScroll() ) );
 
   if( d->view)
   {
@@ -283,7 +285,8 @@ Canvas::Canvas(View *view)
 
 Canvas::~Canvas()
 {
-  delete d->scrollTimer;
+// FIXME Stefan: Still needed?
+//   delete d->scrollTimer;
   delete d->validationInfo;
   delete d;
 }
@@ -1165,8 +1168,9 @@ void Canvas::mouseReleaseEvent( QMouseEvent* /*_ev*/)
   if (!sheet)
     return;
 
-  if ( d->scrollTimer->isActive() )
-    d->scrollTimer->stop();
+// TODO Stefan: Still needed?
+//   if ( d->scrollTimer->isActive() )
+//     d->scrollTimer->stop();
 
   d->mousePressed = false;
   d->view->disableAutoScroll();
@@ -1427,7 +1431,8 @@ void Canvas::mousePressEvent( QMouseEvent * _ev )
     deleteEditor( true ); // save changes
   }
 
-  d->scrollTimer->start( 50 );
+// FIXME Stefan: Still needed?
+//   d->scrollTimer->start( 50 );
 
   // Did we click in the lower right corner of the marker/marked-area ?
   if ( selectionInfo()->selectionHandleArea().contains( QPoint( d->view->doc()->zoomItX( ev_PosX ),
@@ -1719,8 +1724,9 @@ void Canvas::focusInEvent( QFocusEvent* )
 
 void Canvas::focusOutEvent( QFocusEvent* )
 {
-    if ( d->scrollTimer->isActive() )
-        d->scrollTimer->stop();
+// FIXME Stefan: Still needed?
+//     if ( d->scrollTimer->isActive() )
+//         d->scrollTimer->stop();
     d->mousePressed = false;
     d->view->disableAutoScroll();
 }
@@ -1761,15 +1767,17 @@ void Canvas::dragMoveEvent( QDragMoveEvent * _ev )
 
 void Canvas::dragLeaveEvent( QDragLeaveEvent * )
 {
-  if ( d->scrollTimer->isActive() )
-    d->scrollTimer->stop();
+// FIXME Stefan: Still needed?
+//   if ( d->scrollTimer->isActive() )
+//     d->scrollTimer->stop();
 }
 
 void Canvas::dropEvent( QDropEvent * _ev )
 {
   d->dragging = false;
-  if ( d->scrollTimer->isActive() )
-    d->scrollTimer->stop();
+// FIXME Stefan: Still needed?
+//   if ( d->scrollTimer->isActive() )
+//     d->scrollTimer->stop();
   register Sheet * const sheet = activeSheet();
   if ( !sheet || sheet->isProtected() )
   {
@@ -3178,6 +3186,8 @@ void Canvas::slotAutoScroll(const QPoint &scrollDistance)
   vertScrollBar()->setValue( vertScrollBar()->value() + d.y() );
 }
 
+// TODO Stefan: Still needed?
+#if 0
 void Canvas::doAutoScroll()
 {
     if ( !d->mousePressed )
@@ -3250,7 +3260,7 @@ double Canvas::autoScrollAccelerationY( int offset )
         default: return d->view->doc()->unzoomItY( (int) (height() * 5.0) );
     }
 }
-
+#endif
 
 KSpread::EmbeddedObject *Canvas::getObject( const QPoint &pos, Sheet *_sheet )
 {

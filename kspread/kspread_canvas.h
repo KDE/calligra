@@ -442,7 +442,8 @@ private slots:
      */
     void slotAutoScroll(const QPoint &scrollDist);
 
-    void doAutoScroll();
+// FIXME Stefan: Still needed?
+//     void doAutoScroll();
 
 private:
     virtual bool eventFilter( QObject *o, QEvent *e );
