@@ -4356,7 +4356,7 @@ void Canvas::paintNormalMarker(QPainter& painter, const KoRect &viewRect)
   Region::ConstIterator end(selectionInfo()->constEnd());
   for (Region::ConstIterator it(selectionInfo()->constBegin()); it != end; ++it)
   {
-    QRect range = (*it)->rect().normalize();
+    QRect range = (*it)->rect();
 
   	double positions[4];
   	bool paintSides[4];
