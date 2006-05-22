@@ -1257,13 +1257,13 @@ void View::Private::adjustActions( bool mode )
   actions->insertPart->setEnabled( mode );
   actions->createStyle->setEnabled( mode );
   actions->selectStyle->setEnabled( mode );
+  actions->insertChartFrame->setEnabled( mode );
 
   actions->autoFormat->setEnabled( false );
   actions->sort->setEnabled( false );
   actions->mergeCell->setEnabled( false );
   actions->mergeCellHorizontal->setEnabled( false );
   actions->mergeCellVertical->setEnabled( false );
-  actions->insertChartFrame->setEnabled( false );
   actions->sortDec->setEnabled( false );
   actions->sortInc->setEnabled( false );
 //   actions->transform->setEnabled( false );
@@ -2710,7 +2710,6 @@ void View::initialPosition()
 
     // make paint effective:
     doc()->decreaseNumOperation();
-    d->actions->insertChartFrame->setEnabled(false);
 
     QRect vr( activeSheet()->visibleRect( d->canvas ) );
 
@@ -7022,7 +7021,6 @@ void View::slotChangeSelection(const KSpread::Region& changedRegion)
     d->actions->fillUp->setEnabled( !simpleSelection );
     d->actions->fillDown->setEnabled( !simpleSelection );
     d->actions->fillLeft->setEnabled( !simpleSelection );
-    d->actions->insertChartFrame->setEnabled( !simpleSelection );
     d->actions->sortDec->setEnabled( !simpleSelection );
     d->actions->sortInc->setEnabled( !simpleSelection);
     d->actions->createStyle->setEnabled( simpleSelection ); // just from one cell
