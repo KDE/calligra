@@ -224,7 +224,7 @@ KWDocument::KWDocument(QWidget *parentWidget, QObject* parent, bool singleViewMo
 
     m_commandHistory = new KWCommandHistory( this );
     connect( m_commandHistory, SIGNAL( documentRestored() ), this, SLOT( slotDocumentRestored() ) );
-    connect( m_commandHistory, SIGNAL( commandExecuted() ), this, SLOT( slotCommandExecuted() ) );
+    connect( m_commandHistory, SIGNAL( commandExecuted(KCommand *) ), this, SLOT( slotCommandExecuted() ) );
 
     //styleMask = U_FONT_FAMILY_ALL_SIZE | U_COLOR | U_BORDER | U_INDENT |
     //                     U_NUMBERING | U_ALIGN | U_TABS | U_SMART;
