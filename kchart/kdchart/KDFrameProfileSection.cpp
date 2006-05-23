@@ -75,7 +75,7 @@ bool KDFrameProfileSection::readFrameProfileSectionNode( const QDomElement& elem
                 tempCurvature = stringToCurvature( value );
             } else if( tagName == "Width" ) {
                 ok = ok & KDXML::readIntNode( element, tempWidth );
-            } else if( tagName == "Pen" ) {
+            } else if( tagName == "Style" || tagName == "Pen" ) {
                 ok = ok & KDXML::readPenNode( element, tempPen );
             } else {
                 qDebug( "Unknown tag in frame" );
