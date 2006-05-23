@@ -127,7 +127,7 @@ class KisTIFFReaderBase {
         {
             
         }
-        virtual KisTIFFReaderBase::~KisTIFFReaderBase() {}
+        virtual ~KisTIFFReaderBase() {}
     public:
         /**
          * This function copy data from the tiff stream to the paint device starting at the given position.
