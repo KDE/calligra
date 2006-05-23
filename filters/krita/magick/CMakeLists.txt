@@ -1,6 +1,6 @@
 
 
-include_directories(${IMAGEMAGICK_INCLUDE_DIR})
+include_directories(${IMAGEMAGICK_INCLUDE_DIR} ${CMAKE_BINARY_DIR}/filters/)
 
 
 ########### next target ###############

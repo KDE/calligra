@@ -28,7 +28,7 @@ if(LIBXML2_FOUND AND LIBXSLT_FOUND)
 	add_subdirectory(xsltfilter)
 endif(LIBXML2_FOUND AND LIBXSLT_FOUND)	
 
-message (status "readd karbon kivio kpresenter ")
+message (STATUS "Re-add karbon kivio kpresenter filters")
 
 
 ########### install files ###############
