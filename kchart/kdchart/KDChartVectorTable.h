@@ -206,12 +206,17 @@ public slots:
     uint rows() const {
         return sh->row_count;
     }
+    // WARNING: The KDChartData class is an internal class now,
+    //          and nobody supposed to use it any longer.
+    // Instead, please use cellCoord(), cellProp(), setCell(), setProp(), ...
+    // (khz, 2006-05-23)
 /*
     KDChartData& cell( uint _row, uint _col ) {
         detach();
         return sh->cell( _row, _col );
     }
 */
+
     virtual bool cellCoord( uint _row, uint _col,
                             QVariant& _value,
                             int coordinate=1 ) const
