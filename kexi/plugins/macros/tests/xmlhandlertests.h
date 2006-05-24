@@ -73,8 +73,8 @@ namespace KoMacroTest {
 			class Private;
 			/// @internal d-pointer instance.
 			Private* const d;
-			// Compares a parsen XML-Element with the filled Macro.
-			bool isMacroContentEqToXML(const KSharedPtr<KoMacro::Macro> macro, const QDomElement& domelement);
+			// Compares a XML-Element with a Macro.
+			bool isMacroContentEqToXML(const KoMacro::Macro::Ptr macro, const QDomElement& domelement);
 	};
 
 }

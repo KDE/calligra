@@ -22,8 +22,6 @@
 
 #include "komacro_export.h"
 
-#include <ksharedptr.h>
-
 class QObject;
 class QDomElement;
 

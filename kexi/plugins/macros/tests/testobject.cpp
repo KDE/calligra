@@ -30,7 +30,6 @@
 
 #include <kdebug.h>
 //#include <kxmlguiclient.h>
-//#include <ksharedptr.h>
 
 using namespace KoMacroTest;
 

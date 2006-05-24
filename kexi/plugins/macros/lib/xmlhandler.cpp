@@ -132,7 +132,8 @@ bool XMLHandler::parseXML(const QDomElement& element)
 					variable->setName(name);
 
 					// TODO Refactor 1: simplier, 2: we should pass undetected
-					// variable through to loose no data
+					// variable through to loose no data as a string-var.
+					// Should work with number-types, which are independend of the Operating System.
 					bool autodetect = true; // auto-detect variable type.
 					if(action.data()) {
 						// Try to restore the datatype by looking at

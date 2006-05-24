@@ -64,7 +64,7 @@ namespace KoMacroTest {
 			* Called if the @a Action should be executed within the
 			* defined @p context .
 			*/
-			virtual void activate(KSharedPtr<KoMacro::Context> context);
+			virtual void activate(KoMacro::Context::Ptr context);
 
 	};
 }

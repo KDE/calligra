@@ -35,16 +35,18 @@
 #include <ostream>
 #include <cfloat>
 
-#include <qstringlist.h>
 #include <qdom.h>
 
 #include <kdebug.h>
 #include <kunittest/runner.h>
 #include <kxmlguiclient.h>
-#include <ksharedptr.h>
 
 using namespace KUnitTest;
 using namespace KoMacroTest;
+
+// TODO QUESTIONS???
+// -Why is the debug-print always twice?
+// -Why can I call parseXML on a Macro??
 
 namespace KoMacroTest {
 
@@ -82,9 +84,6 @@ namespace KoMacroTest {
 	};
 }
 
-typedef QValueList< KSharedPtr<KoMacro::MacroItem> >::size_type sizetype;
-
-
 XMLHandlerTests::XMLHandlerTests()
 	: KUnitTest::SlotTester()
 	, d( new Private() ) // create the private d-pointer instance.
@@ -119,6 +118,9 @@ void XMLHandlerTests::tearDown()
 	delete d->xmlguiclient;
 }
 
+/**
+* Test the @a KoMacro::XMLHandler parseXML()-function.
+*/
 void XMLHandlerTests::testParseXML()
 {
 	kdDebug()<<"===================== testParseXML() ======================" << endl;
@@ -142,9 +144,10 @@ void XMLHandlerTests::testParseXML()
 	// Set the XML-document with the above string.
 	d->doomdocument->setContent(xml);
 	domelement = d->doomdocument->documentElement();
-	//Is our XML parseable ?
+	// Is our XML parseable ?
 	KOMACROTEST_ASSERT(macro->parseXML(domelement),true);
-	KOMACROTEST_XASSERT(isMacroContentEqToXML(macro,domelement),true);
+	// Is the parsen content in the Macro correct ?
+	KOMACROTEST_ASSERT(isMacroContentEqToXML(macro,domelement),true);
 
 	// Test-XML-document with bad root element.
 	xml = QString("<!DOCTYPE macros>"
@@ -158,7 +161,9 @@ void XMLHandlerTests::testParseXML()
 				    "</maro>");
 	d->doomdocument->setContent(xml);
 	domelement = d->doomdocument->documentElement();
-	KOMACROTEST_ASSERT(macro->parseXML(domelement),false);
+	KOMACROTEST_XASSERT(macro->parseXML(domelement),true);
+	macro->clearItems();
+	KOMACROTEST_XASSERT(isMacroContentEqToXML(macro,domelement),true);
 
 	// Test-XML-document with wrong macro-xmlversion.
 	xml = QString("<!DOCTYPE macros>"
@@ -277,34 +282,43 @@ void XMLHandlerTests::testParseXML()
 	domelement = d->doomdocument->documentElement();
 	KOMACROTEST_ASSERT(macro->parseXML(domelement),true);
 
-	// TODO Part 2: Read the parsen macro and make a comparison to the XML-document.
-
 }
 
+// Compares a XML-Element with a Macro by value.
+// TODO Should I compare the types?
 bool XMLHandlerTests::isMacroContentEqToXML(const KoMacro::Macro::Ptr macro, const QDomElement& domelement)
-{
-	
-	QValueList<KoMacro::MacroItem::Ptr> macroitems = macro->items();
+{	
+	// Make an Iterator over the MacroItems of the Macro.
+	const QValueList<KoMacro::MacroItem::Ptr> macroitems = macro->items();
+	QValueList<KoMacro::MacroItem::Ptr>::ConstIterator mIt(macroitems.constBegin()), end(macroitems.constEnd());
+	if(macroitems.empty()) return false;
+
+	// Make an Iterator over the item-elements of the domelement.
 	QDomNode itemnode = domelement.firstChild();
-	// TODO BIGTODO	
-	QValueList<KoMacro::MacroItem::Ptr>::ConstIterator it(macroitems.constBegin()), end(macroitems.constEnd());
-	for(;it != end; it++) {
-		// Read Action in MacroItem
-		KoMacro::MacroItem * item = *it;
-		KoMacro::Action::Ptr action = item->action().data();
-		if(action->name() != "test") return false;
+
+	while(mIt != end && ! itemnode.isNull()){
+		const KoMacro::MacroItem* macroitem = *mIt;
+		const QDomElement itemelem = itemnode.toElement();
+		//Is the Action-name equal?
+		if(macroitem->action()->name() != itemelem.attribute("action")) {
+			kdDebug() << "Action-name not equal: " << macroitem->action()->name() << " != " << itemelem.attribute("action") << endl;
+			return false;
+		}
+		mIt++;
+		itemnode = itemnode.nextSibling();
+		// TODO go down to MacroItem->Variable and item->variable and compare them.
 	}
-	itemnode = itemnode.nextSibling();
-	
+
 	return true;
 }
 
-
+/**
+* Test the @a KoMacro::XMLHandler toXML()-function.
+*/
 void XMLHandlerTests::testToXML()
 {	
 	kdDebug()<<"===================== testToXML() ======================" << endl;
-	// TODO Part 3: From a Macro to XML.
+	// TODO Part 2: From a Macro to XML.
 
-	// TODO Part 4: Compare the transformed XML with the given macro.
 }
 #include "xmlhandlertests.moc"
