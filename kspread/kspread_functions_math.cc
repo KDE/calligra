@@ -200,13 +200,13 @@ void RegisterMathFunctions()
   f->setParamCount (2);
   repo->add (f);
   f = new Function ("ROUND",         func_round);
-  f->setParamCount (2);
+  f->setParamCount (1, 2);
   repo->add (f);
   f = new Function ("ROUNDDOWN",     func_rounddown);
-  f->setParamCount (2);
+  f->setParamCount (1, 2);
   repo->add (f);
   f = new Function ("ROUNDUP",       func_roundup);
-  f->setParamCount (2);
+  f->setParamCount (1, 2);
   repo->add (f);
   f = new Function ("SIGN",          func_sign);
   repo->add (f);

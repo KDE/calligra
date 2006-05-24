@@ -336,6 +336,13 @@ void FormulaEvalTester::run()
   CHECK_EVAL("=DAY(\"5-21-06\")", Value(21));  // row 136
 */
 
+  // functions with optional arguments
+  CHECK_EVAL("=ROUND(0.1)", Value(0));
+  CHECK_EVAL("=ROUND(0.11;1)", Value(0.1));
+  CHECK_EVAL("=ROUNDUP(0.1)", Value(1));
+  CHECK_EVAL("=ROUNDUP(0.01;1)", Value(0.1));
+  CHECK_EVAL("=ROUNDDOWN(0.9)", Value(0));
+  CHECK_EVAL("=ROUNDDOWN(0.19;1)", Value(0.1));
 }
 
 
