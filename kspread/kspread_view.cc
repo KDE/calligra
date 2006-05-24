@@ -4418,6 +4418,9 @@ void View::findPrevious()
 
 void View::replace()
 {
+  if (!d->activeSheet)
+    return;
+
     SearchDlg dlg( this, "Replace", d->findOptions, d->findStrings, d->replaceStrings );
     dlg.setHasSelection( !d->selection->isSingular() );
     dlg.setHasCursor( true );
@@ -4432,11 +4435,19 @@ void View::replace()
     delete d->find;
     delete d->replace;
     d->find = 0;
+    // NOTE Stefan: Avoid beginning of line replacements with nothing which
+    //              will lead to an infinite loop (Bug #125535). The reason
+    //              for this is unclear to me, but who cares and who would
+    //              want to do something like this, häh?!
+    if (dlg.pattern() == "^" && dlg.replacement().isEmpty())
+      return;
     d->replace = new KReplace( dlg.pattern(), dlg.replacement(), dlg.options() );
+
+    d->searchInSheets.currentSheet = activeSheet();
+    d->searchInSheets.firstSheet = d->searchInSheets.currentSheet;
     initFindReplace();
-    connect(
-        d->replace, SIGNAL( replace( const QString &, int, int, int ) ),
-        this, SLOT( slotReplace( const QString &, int, int, int ) ) );
+    connect( d->replace, SIGNAL( replace( const QString &, int, int, int ) ),
+             this, SLOT( slotReplace( const QString &, int, int, int ) ) );
 
     if ( !doc()->undoLocked() )
     {
