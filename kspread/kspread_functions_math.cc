@@ -217,7 +217,7 @@ void RegisterMathFunctions()
   f = new Function ("TRUNC",         func_trunc);
   f->setParamCount (1, 2);
   repo->add (f);
-  
+
   // functions that operate over arrays
   f = new Function ("COUNT",         func_count);
   f->setParamCount (1, -1);
@@ -362,7 +362,7 @@ Value func_ceiling (valVector args, ValueCalc *calc, FuncExtra *)
     res = args[1];
   else
     res = calc->gequal (number, 0.0) ? 1.0 : -1.0;
-  
+
   if (calc->isZero(res))
     return Value::errorDIV0();
 
@@ -526,7 +526,7 @@ Value func_randexp (valVector args, ValueCalc *calc, FuncExtra *)
 Value func_randbinom (valVector args, ValueCalc *calc, FuncExtra *)
 {
   // this function will not support arbitrary precision
-  
+
   double d  = calc->conv()->asFloat (args[0]).asFloat();
   int    tr = calc->conv()->asInteger (args[1]).asInteger();
 
@@ -555,7 +555,7 @@ Value func_randbinom (valVector args, ValueCalc *calc, FuncExtra *)
 Value func_randnegbinom (valVector args, ValueCalc *calc, FuncExtra *)
 {
   // this function will not support arbitrary precision
-  
+
   double d  = calc->conv()->asFloat (args[0]).asFloat();
   int    f = calc->conv()->asInteger (args[1]).asInteger();
 
@@ -834,7 +834,7 @@ Lucas' formula for the nth Fibonacci number F(n) is given by
   Value u1 = calc->pow (calc->div (calc->add (1, s), 2), n);
   // u2 = ((1-sqrt(5))/2)^n
   Value u2 = calc->pow (calc->div (calc->sub (1, s), 2), n);
-  
+
   Value result = calc->div (calc->sub (u1, u2), s);
   return result;
 }
@@ -901,7 +901,7 @@ Value determinant (ValueCalc *calc, Value matrix)
   // using this for something bigger than 10x10 or so = suicide :P
   // but I'm too lazy to adjust gnumeric's code - remains as a TODO then
   // as a note, gnumeric uses LUP decomposition to compute this
-  
+
   // take first row, generate smaller matrices, recursion, multiply
   Value res = 0.0;
   int n = matrix.columns();
@@ -909,7 +909,7 @@ Value determinant (ValueCalc *calc, Value matrix)
   if (n == 2) return calc->sub (
       calc->mul (matrix.element (1,1), matrix.element (0,0)),
       calc->mul (matrix.element (1,0), matrix.element (0,1)));
-  
+
   // n >= 3
   for (int i = 0; i < n; ++i) {
     Value smaller (n-1, n-1);
@@ -936,7 +936,7 @@ Value func_mdeterm (valVector args, ValueCalc *calc, FuncExtra *)
   unsigned c = m.columns ();
   if (r != c)   // must be a square matrix
     return Value::errorVALUE();
-  
+
   return determinant (calc, args[0]);
 }
 
@@ -951,10 +951,10 @@ Value func_mmult (valVector args, ValueCalc *calc, FuncExtra *)
   unsigned c2 = m2.columns ();
   if (c1 != r2)  // row/column counts must match
     return Value::errorVALUE();
-  
+
   // create the resulting matrix
   Value res (c2, r1);
-  
+
   // perform the multiplication - O(n^3) algorithm
   for (uint row = 0; row < r1; ++row)
     for (uint col = 0; col < c2; ++col) {
@@ -982,7 +982,7 @@ Value func_subtotal (valVector args, ValueCalc *calc, FuncExtra *e)
     r2 = e->ranges[1].row2;
     c2 = e->ranges[1].col2;
   }
-  
+
   // if we have a range, run through it, and put an empty value to the place
   // of all occurences of the SUBTOTAL function
   Value empty;
