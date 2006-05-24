@@ -21,6 +21,9 @@ in the 1.6 cycle:
 - krita
 - kdgantt
 - kplato
+- doc
+- kformula
+- lib/kformula
 
 It is up to the maintainer of those applications to merge their change
 with trunk, and with 1.5 for fixed bugs.  For all the rest of the
