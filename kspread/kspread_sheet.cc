@@ -6914,13 +6914,10 @@ bool Sheet::loadRowFormat( const QDomElement& row, int &rowIndex, KoOasisLoading
 
 				for ( int newRow = backupRow; newRow < endRow;++newRow )
 				{
-				    if ( targetStyle && (targetStyle->features() != 0 ) )
-				    {
                                     	Cell* target = nonDefaultCell( columnIndex, newRow );
 
 					if (cell != target)
 						target->copyAll( cell );
-				    }
                                 }
 			    }
                     }
