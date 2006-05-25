@@ -13,7 +13,7 @@ kde4_add_library(karbonxrgbrender ${karbonxrgbrender_SRCS})
 
 kde4_install_libtool_file( ${LIB_INSTALL_DIR} karbonxrgbrender )
 
-target_link_libraries(karbonxrgbrender ${LIBART_LIBS} )
+target_link_libraries(karbonxrgbrender ${LIBART_LIBRARIES} )
 
 install_targets(${LIB_INSTALL_DIR} karbonxrgbrender )
 

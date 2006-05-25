@@ -36,7 +36,7 @@
 #include <Q3PtrList>
 
 #include <kaction.h>
-#include <k3colordrag.h>
+#include <kcolormimedata.h>
 #include <klocale.h>
 #include <kiconloader.h>
 #include <kmessagebox.h>
@@ -372,11 +372,11 @@ void
 KarbonView::dropEvent( QDropEvent *e )
 {
 	//Accepts QColor - from Color Manager's KColorPatch
-	QColor color;
 	VColor realcolor;
 	VObjectList selection;
 
-	if( K3ColorDrag::decode( e, color ) )
+	QColor color = KColorMimeData::fromMimeData( e->mimeData() );
+	if ( color.isValid() )
 	{
 		float r = color.red() / 255.0;
 		float g = color.green() / 255.0;

@@ -43,7 +43,7 @@
 
 #include <kdebug.h>
 #include <klocale.h>
-#include <k3colordrag.h>
+#include <kcolormimedata.h>
 
 int
 VCanvas::pageOffsetX() const
@@ -375,7 +375,7 @@ VCanvas::slotContentsMoving( int /*x*/, int /*y*/ )
 void
 VCanvas::dragEnterEvent( QDragEnterEvent *e )
 {
-	e->accept( KarbonDrag::canDecode( e ) || K3ColorDrag::canDecode( e ) );
+	e->accept( KarbonDrag::canDecode( e ) || KColorMimeData::canDecode( e->mimeData() ) );
 }
 
 void
