@@ -41,7 +41,7 @@ namespace {
             color_type = PHOTOMETRIC_RGB;
             return true;
         }
-        if ( cs->id() == KisID("CMYKA") || cs->id() == KisID("CMYKA16") )
+        if ( cs->id() == KisID("CMYK") || cs->id() == KisID("CMYKA16") )
         {
             color_type = PHOTOMETRIC_SEPARATED;
             TIFFSetField(image, TIFFTAG_INKSET, INKSET_CMYK);
