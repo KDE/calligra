@@ -23,7 +23,7 @@
 #include <QLayout>
 #include <qtabwidget.h>
 #include <qradiobutton.h>
-#include <qvbuttongroup.h>
+#include <Q3ButtonGroup>
 //Added by qt3to4:
 #include <Q3HBoxLayout>
 #include <Q3VBoxLayout>

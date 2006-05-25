@@ -50,7 +50,7 @@ VColorTab::VColorTab( const VColor &c, QWidget* parent, const char* name )
 	mainLayout->addMultiCellWidget(mColorSelector, 0, 2, 0, 0 );
 
 	//Selector
-	mSelector = new KGradientSelector( KSelector::Vertical, mRGBWidget );
+	mSelector = new KGradientSelector( Qt::Vertical, mRGBWidget );
 	mSelector->setColors( QColor( "white" ), QColor( "black" ) );
 	mSelector->setMinimumWidth( 20 );
 	//TODO: Make it autochange color if the solid-filled object is selected (also for QSpinBoxes)
@@ -76,20 +76,22 @@ VColorTab::VColorTab( const VColor &c, QWidget* parent, const char* name )
 	new QLabel( i18n( "R:" ), cgroupbox );
 	new QLabel( i18n( "G:" ), cgroupbox );
 	new QLabel( i18n( "B:" ), cgroupbox );
-	mRed = new KIntSpinBox( 0, 255, 1, 0, 10, cgroupbox );
-	mGreen = new KIntSpinBox( 0, 255, 1, 0, 10, cgroupbox );
-	mBlue = new KIntSpinBox( 0, 255, 1, 0, 10, cgroupbox );
+	mRed = new KIntSpinBox( 0, 255, 1, 0, cgroupbox );
+	mGreen = new KIntSpinBox( 0, 255, 1, 0, cgroupbox );
+	mBlue = new KIntSpinBox( 0, 255, 1, 0, cgroupbox );
 	connect( mRed, SIGNAL( valueChanged(int) ), this, SLOT( slotUpdateFromRGBSpinBoxes() ) );
 	connect( mGreen, SIGNAL( valueChanged(int) ), this, SLOT( slotUpdateFromRGBSpinBoxes() ) );
 	connect( mBlue, SIGNAL( valueChanged(int) ), this, SLOT( slotUpdateFromRGBSpinBoxes() ) );
 
 	//--->HSV
+/* TODO: i18n needs porting:
 	new QLabel( i18n( "Hue:", "H:" ), cgroupbox );
 	new QLabel( i18n( "Saturation:", "S:" ), cgroupbox );
 	new QLabel( i18n( "Value:", "V:" ), cgroupbox );
-	mHue = new KIntSpinBox( 0, 359, 1, 0, 10, cgroupbox );
-	mSaturation = new KIntSpinBox( 0, 255, 1, 0, 10, cgroupbox );
-	mValue = new KIntSpinBox( 0, 255, 1, 0, 10, cgroupbox );
+*/
+	mHue = new KIntSpinBox( 0, 359, 1, 0, cgroupbox );
+	mSaturation = new KIntSpinBox( 0, 255, 1, 0, cgroupbox );
+	mValue = new KIntSpinBox( 0, 255, 1, 0, cgroupbox );
 	connect( mHue, SIGNAL( valueChanged(int) ), this, SLOT( slotUpdateFromHSVSpinBoxes() ) );
 	connect( mSaturation, SIGNAL( valueChanged(int) ), this, SLOT( slotUpdateFromHSVSpinBoxes() ) );
 	connect( mValue, SIGNAL( valueChanged(int) ), this, SLOT( slotUpdateFromHSVSpinBoxes() ) );

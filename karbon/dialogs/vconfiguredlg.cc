@@ -23,7 +23,7 @@
 #include <q3groupbox.h>
 #include <QLabel>
 #include <QLayout>
-#include <qvgroupbox.h>
+#include <QGroupBox>
 #include <QComboBox>
 #include <q3grid.h>
 //Added by qt3to4:
@@ -37,6 +37,7 @@
 #include <kcolorbutton.h>
 #include <KoUnitWidgets.h>
 #include <kvbox.h>
+#include <kinstance.h>
 
 #include "karbon_view.h"
 #include "karbon_part.h"
@@ -106,7 +107,7 @@ void VConfigureDlg::slotDefault()
 
 
 VConfigInterfacePage::VConfigInterfacePage( KarbonView* view,
-		Q3VBox* box, char* name )
+		KVBox* box, char* name )
 		: QObject( box->parent(), name )
 {
 	m_view = view;
@@ -117,7 +118,7 @@ VConfigInterfacePage::VConfigInterfacePage( KarbonView* view,
 	m_oldDockerFontSize = 8;
 	bool oldShowStatusBar = true;
 
-	QVGroupBox* tmpQGroupBox = new QVGroupBox( i18n( "Interface" ), box );
+	QGroupBox* tmpQGroupBox = new QGroupBox( i18n( "Interface" ), box );
 
 	m_config->setGroup( "" );
 
@@ -211,7 +212,7 @@ void VConfigInterfacePage::slotDefault()
 }
 
 
-VConfigMiscPage::VConfigMiscPage( KarbonView* view, Q3VBox* box, char* name )
+VConfigMiscPage::VConfigMiscPage( KarbonView* view, KVBox* box, char* name )
 		: QObject( box->parent(), name )
 {
     m_view = view;
@@ -284,7 +285,7 @@ void VConfigMiscPage::slotDefault()
     m_unit->setCurrentItem( 0 );
 }
 
-VConfigGridPage::VConfigGridPage( KarbonView* view, Q3VBox* page, char* name )
+VConfigGridPage::VConfigGridPage( KarbonView* view, KVBox* page, char* name )
 		: QObject( page->parent(), name )
 {
 	m_view = view;
@@ -319,16 +320,16 @@ VConfigGridPage::VConfigGridPage( KarbonView* view, Q3VBox* page, char* name )
 	m_snapVertUSpin = new KoUnitDoubleSpinBox( snapGrp, 0.0, fh, 0.1, sh, unit );
 	snapVertLbl->setBuddy( m_snapVertUSpin );
 
-	Q3GridLayout* gl = new Q3GridLayout();
+	QGridLayout* gl = new QGridLayout();
 	gl->setSpacing( KDialog::spacingHint() );
-	gl->addMultiCellWidget( m_gridChBox, 0, 0, 0, 2 );
-	gl->addMultiCellWidget( m_snapChBox, 1, 1, 0, 2 );
+	gl->addWidget( m_gridChBox, 0, 0, 0, 2 );
+	gl->addWidget( m_snapChBox, 1, 1, 0, 2 );
 	gl->addWidget( gridColorLbl, 2, 0) ;
 	gl->addWidget( m_gridColorBtn, 2, 1 );
 	gl->addItem( new QSpacerItem( 0, 0 ), 2, 2 );
-	gl->addMultiCellWidget( spacingGrp, 3, 3, 0, 2 );
-	gl->addMultiCellWidget( snapGrp, 4, 4, 0, 2 );
-	gl->addMultiCell( new QSpacerItem( 0, 0 ), 5, 5, 0, 2 );
+	gl->addWidget( spacingGrp, 3, 3, 0, 2 );
+	gl->addWidget( snapGrp, 4, 4, 0, 2 );
+	gl->addItem( new QSpacerItem( 0, 0 ), 5, 5, 0, 2 );
 
 	connect( m_spaceHorizUSpin, SIGNAL( valueChanged( double ) ), SLOT( setMaxHorizSnap( double ) ) );
 	connect( m_spaceVertUSpin, SIGNAL( valueChanged( double ) ), SLOT( setMaxVertSnap( double ) ) ) ;
@@ -379,17 +380,18 @@ void VConfigGridPage::slotDefault()
 }
 
 VConfigDefaultPage::VConfigDefaultPage( KarbonView* view,
-                                        Q3VBox* box, char* name )
+                                        KVBox* box, char* name )
     : QObject( box->parent(), name )
 {
     m_view = view;
 
     m_config = KarbonFactory::instance()->config();
 
-    QVGroupBox* gbDocumentSettings = new QVGroupBox(
+    QGroupBox* gbDocumentSettings = new QGroupBox(
         i18n( "Document Settings" ), box );
-    gbDocumentSettings->setMargin( KDialog::marginHint() );
-    gbDocumentSettings->setInsideSpacing( KDialog::spacingHint() );
+    // TODO: needs porting:
+    //gbDocumentSettings->setMargin( KDialog::marginHint() );
+    //gbDocumentSettings->setInsideSpacing( KDialog::spacingHint() );
 
     m_oldAutoSave = m_view->part()->defaultAutoSave() / 60;
 
