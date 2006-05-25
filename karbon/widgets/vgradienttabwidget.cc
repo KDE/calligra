@@ -48,7 +48,8 @@ VGradientListItem::VGradientListItem( const VGradient& gradient, QString filenam
 
 	m_pixmap.resize( 200, 16 );
 	VKoPainter gp( &m_pixmap, m_pixmap.width(), m_pixmap.height() );
-	gp.setRasterOp( Qt::XorROP );
+	// Port to Qt4:
+	// gp.setRasterOp( Qt::XorROP );
 	gp.newPath();
 	VGradient grad( *m_gradient );
 	grad.setOrigin( KoPoint( 0, 0 ) );
@@ -58,11 +59,13 @@ VGradientListItem::VGradientListItem( const VGradient& gradient, QString filenam
 	fill.gradient() = grad;
 	fill.setType( VFill::grad );
 	gp.setBrush( fill );
+/* Port to Qt4:
 	gp.moveTo( KoPoint( 0, 0 ) );
 	gp.lineTo( KoPoint( 0, m_pixmap.height() - 1 ) );
 	gp.lineTo( KoPoint( m_pixmap.width() - 1, m_pixmap.height() - 1 ) );
 	gp.lineTo( KoPoint( m_pixmap.width() - 1, 0 ) );
 	gp.lineTo( KoPoint( 0, 0 ) );
+*/
 	gp.fillPath();
 	gp.end();
 
@@ -91,7 +94,8 @@ int VGradientListItem::width( const Q3ListBox* lb ) const
 void VGradientListItem::paint( QPainter* painter )
 {
 	painter->save();
-	painter->setRasterOp( Qt::CopyROP );
+	// Port to Qt4:
+	// painter->setRasterOp( Qt::CopyROP );
 	QRect r ( 0, 0, width( listBox() ), height( listBox() ) );
 	painter->scale( ( (float)( width( listBox() ) ) ) / 200., 1. );
 	painter->drawPixmap( 0, 0, m_pixmap );
@@ -101,7 +105,8 @@ void VGradientListItem::paint( QPainter* painter )
 	else
 		painter->setPen( listBox()->colorGroup().base() );
 	painter->drawRect( r );
-	painter->flush();
+	// Port to Qt4:
+	// painter->flush();
 } // VGradientListItem::paint
 
 VGradientPreview::VGradientPreview( VGradient& gradient, double& opacity, QWidget* parent, const char* name )
@@ -119,7 +124,8 @@ void VGradientPreview::paintEvent( QPaintEvent* )
 {
 	QPixmap pixmap( width(), height() );
 	VKoPainter gp( &pixmap, width(), height() );
-	gp.setRasterOp( Qt::XorROP );
+	// Port to Qt4:
+	// gp.setRasterOp( Qt::XorROP );
 	gp.newPath();
 	VGradient gradient( *m_gradient );
 	if( gradient.type() == VGradient::radial || gradient.type() == VGradient::conic )
@@ -145,17 +151,20 @@ void VGradientPreview::paintEvent( QPaintEvent* )
 	c.setOpacity( *m_opacity );
 	fill.setColor( c, false );
 	gp.setBrush( fill );
+	/* Port to Qt4:
 	gp.moveTo( KoPoint( 2, 2 ) );
 	gp.lineTo( KoPoint( 2, height() - 2 ) );
 	gp.lineTo( KoPoint( width() - 2, height() - 2 ) );
 	gp.lineTo( KoPoint( width() - 2, 2 ) );
 	gp.lineTo( KoPoint( 2, 2 ) );
+	*/
 	gp.fillPath();
 	gp.end();
 
 	QPainter p( &pixmap );
 
 	p.setPen( colorGroup().light() );
+	/* Port to Qt4:
 	p.moveTo( 1, height() - 1 );
 	p.lineTo( 1, 1 );
 	p.lineTo( width() - 1, 1 );
@@ -167,7 +176,7 @@ void VGradientPreview::paintEvent( QPaintEvent* )
 	p.lineTo( width() - 1, 0 );
 	p.moveTo( width() - 2, 2 );
 	p.lineTo( width() - 2, height() - 2 );
-	p.lineTo( 2, height() - 2 );
+	p.lineTo( 2, height() - 2 );*/
 	bitBlt( this, 0, 0, &pixmap, 0, 0, width(), height() );
 } // VGradientPreview::paintEvent
 

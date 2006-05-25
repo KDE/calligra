@@ -98,7 +98,8 @@ VSmallPreview::drawFill( const VFill &f )
 
 	m_painter->begin();
 	m_painter->setPen( Qt::NoPen );
-	fill.setColor( Qt::white );
+	// TODO: needs porting:
+	// fill.setColor( Qt::white );
 	m_painter->setBrush( fill );
 	m_painter->drawRect( KoRect( 0, 0, m_fillFrame->width(), m_fillFrame->height() ) );
 	
@@ -154,10 +155,12 @@ VSmallPreview::drawFill( const VFill &f )
 		default: //None or unknown
 		{
 			m_fillLabel->setText( i18n( "Fill: None") );
-			fill.setColor( Qt::white );
+			// TODO: needs porting
+			// fill.setColor( Qt::white );
 			m_painter->setBrush( fill );
 			m_painter->drawRect( KoRect( 0, 0, m_fillFrame->width(), m_fillFrame->height() ) );
-			stroke.setColor( Qt::red );
+			// TODO: needs porting
+			// stroke.setColor( Qt::red );
 			stroke.setLineWidth( 2.0 );
 			m_painter->setPen( stroke );
 			m_painter->newPath();
@@ -176,7 +179,8 @@ VSmallPreview::drawFill( const VFill &f )
 
 	m_painter->end();
 
-	bitBlt( m_fillFrame, m_fillFrame->frameWidth(), m_fillFrame->frameWidth(), &m_pixmap, m_fillFrame->frameWidth(), m_fillFrame->frameWidth(), m_fillFrame->width() - m_fillFrame->frameWidth(), m_fillFrame->height() - m_fillFrame->frameWidth(), CopyROP );
+	// TODO: Port to Qt4:
+	// bitBlt( m_fillFrame, m_fillFrame->frameWidth(), m_fillFrame->frameWidth(), &m_pixmap, m_fillFrame->frameWidth(), m_fillFrame->frameWidth(), m_fillFrame->width() - m_fillFrame->frameWidth(), m_fillFrame->height() - m_fillFrame->frameWidth(), CopyROP );
 
 	delete ( m_painter );
 }
@@ -193,7 +197,8 @@ VSmallPreview::drawStroke( const VStroke &s )
 
 	m_painter->begin();
 	m_painter->setPen( Qt::NoPen );
-	fill.setColor( Qt::white );
+	// TODO: needs porting
+	// fill.setColor( Qt::white );
 	m_painter->setBrush( fill );
 	m_painter->drawRect( KoRect( 0, 0, m_strokeFrame->width(), m_strokeFrame->height() ) );
 	
@@ -249,10 +254,12 @@ VSmallPreview::drawStroke( const VStroke &s )
 		default: //None or unknown
 		{
 			m_strokeLabel->setText( i18n( "Stroke: None") );
-			fill.setColor( Qt::white );
+			// TODO: needs porting
+			// fill.setColor( Qt::white );
 			m_painter->setBrush( fill );
 			m_painter->drawRect( KoRect( 0, 0, m_strokeFrame->width(), m_strokeFrame->height() ) );
-			stroke.setColor( Qt::red );
+			// TODO: needs porting
+			// stroke.setColor( Qt::red );
 			stroke.setLineWidth( 2.0 );
 			m_painter->setPen( stroke );
 			m_painter->newPath();
@@ -271,7 +278,8 @@ VSmallPreview::drawStroke( const VStroke &s )
 
 	m_painter->end();
 
-	bitBlt( m_strokeFrame, m_strokeFrame->frameWidth(), m_strokeFrame->frameWidth(), &m_pixmap, m_strokeFrame->frameWidth(), m_strokeFrame->frameWidth(), m_strokeFrame->width() - m_strokeFrame->frameWidth(), m_strokeFrame->height() - m_strokeFrame->frameWidth(), CopyROP );
+	// TODO: need to be ported to Qt4
+	// bitBlt( m_strokeFrame, m_strokeFrame->frameWidth(), m_strokeFrame->frameWidth(), &m_pixmap, m_strokeFrame->frameWidth(), m_strokeFrame->frameWidth(), m_strokeFrame->width() - m_strokeFrame->frameWidth(), m_strokeFrame->height() - m_strokeFrame->frameWidth(), CopyROP );
 
 	delete ( m_painter );
 }

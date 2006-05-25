@@ -102,7 +102,8 @@ void VGradientWidget::paintEvent( QPaintEvent* )
 
 	QPixmap pixmap( width(), height() );
 	VKoPainter gp( &pixmap, width(), height() );
-	gp.setRasterOp( Qt::XorROP );
+	// Port to Qt4:
+	// gp.setRasterOp( Qt::XorROP );
 	VGradient gradient( *m_gradient );
 	gradient.setType( VGradient::linear );
 	gradient.setOrigin( KoPoint( 2, 2 ) );
@@ -124,6 +125,7 @@ void VGradientWidget::paintEvent( QPaintEvent* )
 
 	p.setPen( colorGroup().light() );
 	// light frame around widget
+/* Needs porting to Qt4
 	p.moveTo( 1, height() - 1 );
 	p.lineTo( 1, 1 );
 	p.lineTo( width() - 1, 1 );
@@ -154,6 +156,8 @@ void VGradientWidget::paintEvent( QPaintEvent* )
 	p.lineTo( width() - 2, height() - 2 );
 	p.lineTo( 2, height() - 2 );
 	
+*/
+
 	m_pntArea.setRect( 2, height() - ph - 2, w, ph );
 	// clear point area
 	p.fillRect( m_pntArea.x(), m_pntArea.y(), m_pntArea.width(), m_pntArea.height(), colorGroup().background() );

@@ -37,27 +37,36 @@ VSelectToolBar::VSelectToolBar( KarbonView *view, const char* name ) : KToolBar(
 {
 	setCaption( i18n( "Object Properties" ) );
 	QLabel *x_label = new QLabel( i18n( "X:" ), this, "kde toolbar widget" );
-	insertWidget( 0, x_label->width(), x_label );
+	// needs porting:
+	//insertWidget( 0, x_label->width(), x_label );
 	m_x = new KoUnitDoubleSpinBox( this, 0.0, 1000.0, 0.5 );
 	connect( m_x, SIGNAL( valueChanged( double ) ), this, SLOT( slotXChanged( double ) ) );
-	insertWidget( 1, m_x->width(), m_x );
+	// needs porting:
+	// insertWidget( 1, m_x->width(), m_x );
 	QLabel *y_label = new QLabel( i18n( "Y:" ), this, "kde toolbar widget" );
-	insertWidget( 2, y_label->width(), y_label );
+	// needs porting:
+	// insertWidget( 2, y_label->width(), y_label );
 	m_y = new KoUnitDoubleSpinBox( this, 0.0, 1000.0, 0.5 );
 	connect( m_y, SIGNAL( valueChanged( double ) ), this, SLOT( slotYChanged( double ) ) );
-	insertWidget( 3, m_y->width(), m_y );
+	// needs porting:
+	// insertWidget( 3, m_y->width(), m_y );
 	
-	insertSeparator( 4 );
+	// needs porting:
+	// insertSeparator(4);
 	QLabel *w_label = new QLabel( i18n( "Width:" ), this, "kde toolbar widget" );
-	insertWidget( 5, w_label->width(), w_label );
+	// needs porting:
+	// insertWidget( 5, w_label->width(), w_label );
 	m_width = new KoUnitDoubleSpinBox( this, 0.0, 1000.0, 0.5 );
 	connect( m_width, SIGNAL( valueChanged( double ) ), this, SLOT( slotWidthChanged( double ) ) );
-	insertWidget( 6, m_width->width(), m_width );
+	// needs porting:
+	// insertWidget( 6, m_width->width(), m_width );
 	QLabel *h_label = new QLabel( i18n( "Height:" ), this, "kde toolbar widget" );
-	insertWidget( 7, h_label->width(), h_label );
+	// needs porting:
+	// insertWidget( 7, h_label->width(), h_label );
 	m_height = new KoUnitDoubleSpinBox( this, 0.0, 1000.0, 0.5 );
 	connect( m_height, SIGNAL( valueChanged( double ) ), this, SLOT( slotHeightChanged( double ) ) );
-	insertWidget( 8, m_height->width(), m_height );
+	// needs porting:
+	// insertWidget( 8, m_height->width(), m_height );
 
 	connect( m_view, SIGNAL( selectionChange() ), this, SLOT( slotSelectionChanged() ) );
 }

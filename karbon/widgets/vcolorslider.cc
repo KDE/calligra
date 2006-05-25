@@ -59,7 +59,7 @@ void VColorSlider::init()
 	Q3HBoxLayout *layout = new Q3HBoxLayout( this, 3 );
 
 	m_label = new QLabel( this );
-	m_gradientSelect = new KGradientSelector( KSelector::Horizontal, this );
+	m_gradientSelect = new KGradientSelector( Qt::Horizontal, this );
 	m_spinBox = new KIntSpinBox( this );
 
 	layout->addWidget( m_label );

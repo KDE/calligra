@@ -61,7 +61,7 @@ VStrokeFillPreview::VStrokeFillPreview(
 		: Q3Frame( parent, name ), m_part( part )
 {
 	m_strokeWidget = false;
-	setFocusPolicy( QWidget::NoFocus );
+	setFocusPolicy( Qt::NoFocus );
 
 #if QT_VERSION < 0x030100
 	setFrameStyle( Q3Frame::Panel | Q3Frame::Sunken );
@@ -144,10 +144,15 @@ VStrokeFillPreview::eventFilter( QObject *, QEvent *event )
 			ey >= FILL_TOPY && ey <= FILL_BOTTOMY )
 		{
 			VColorDlg* dialog = new VColorDlg( m_fill->color(), this );
+#if 0
+// needs porting:
+// error: no matching function for call to `VFill::setColor(Qt::GlobalColor)'
+
 			if( dialog->exec() == QDialog::Accepted )
 			{
 				if( m_part && m_part->document().selection() ) m_part->addCommand( new VFillCmd( &m_part->document(), VFill( dialog->Color() ) ), true );
 			}
+#endif
 			delete dialog;
 		}
 		else if(
@@ -155,10 +160,13 @@ VStrokeFillPreview::eventFilter( QObject *, QEvent *event )
 			&& ey >= STROKE_TOPY && ey <= STROKE_BOTTOMY )
 		{
 			VColorDlg* dialog = new VColorDlg( m_stroke->color(), this );
+#if 0
+// needs porting:
 			if( dialog->exec() == QDialog::Accepted )
 			{
 				if( m_part && m_part->document().selection() ) m_part->addCommand( new VStrokeCmd( &m_part->document(), dialog->Color() ), true );
 			}
+#endif
 			delete dialog;
 		}
 	}
@@ -245,7 +253,8 @@ VStrokeFillPreview::drawFill( const VFill &f )
 	else
 	{
 		VFill fill;
-		fill.setColor( Qt::white );
+		// Needs porting:
+		// fill.setColor( Qt::white );
 		m_painter->setBrush( fill );
 		m_painter->setPen( Qt::NoPen );
 
@@ -280,7 +289,8 @@ VStrokeFillPreview::drawFill( const VFill &f )
 
 	if( f.type() == VFill::none )
 	{
-		stroke.setColor( Qt::red );
+		// Needs porting:
+		// stroke.setColor( Qt::red );
 		m_painter->setPen( stroke );
 		m_painter->newPath();
 		m_painter->moveTo( KoPoint( FILL_BOTTOMX, FILL_TOPY ) );
@@ -355,7 +365,8 @@ VStrokeFillPreview::drawStroke( const VStroke &s )
 	{
 		VFill fill;
 		m_painter->setFillRule( evenOdd );
-		fill.setColor( Qt::white );
+		// Needs porting:
+		// fill.setColor( Qt::white );
 
 		m_painter->setBrush( fill );
 		m_painter->setPen( Qt::NoPen );
@@ -419,7 +430,8 @@ VStrokeFillPreview::drawStroke( const VStroke &s )
 
 	if( s.type() == VStroke::none )
 	{
-		stroke.setColor( Qt::red );
+		// Needs porting:
+		// stroke.setColor( Qt::red );
 		m_painter->setPen( stroke );
 
 		m_painter->newPath();

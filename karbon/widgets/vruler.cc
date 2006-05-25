@@ -46,7 +46,8 @@ const char *VRuler::m_nums[] = {
 
 VRuler::VRuler(Qt::Orientation o, QWidget *parent, const char *name) : super(parent, name, Qt::WNoAutoErase | Qt::WResizeNoErase), m_pixmapNums(m_nums)
 {
-    setBackgroundMode(NoBackground);
+    // TODO: needs porting to Qt4
+    // setBackgroundMode(NoBackground);
     setFrameStyle(Box | Sunken);
     setLineWidth(1);
     setMidLineWidth(0);
@@ -77,7 +78,8 @@ void VRuler::initMarker(qint32 w, qint32 h)
 
     m_pixmapMarker.resize(w, h);
     p.begin(&m_pixmapMarker);
-    p.setPen(blue);
+    // TODO: needs porting
+    // p.setPen(Qt::Blue);
     p.eraseRect(0, 0, w, h);
     p.drawLine(0, 0, w - 1, h - 1);
     p.end();

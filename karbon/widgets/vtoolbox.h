@@ -21,6 +21,7 @@
 #ifndef __VTOOLBOX_H__
 #define __VTOOLBOX_H__
 #include <KoToolBox.h>
+#include <kinstance.h>
 class VTool;
 
 /// This class...

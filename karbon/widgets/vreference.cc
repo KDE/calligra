@@ -32,7 +32,7 @@
 VReference::VReference( QWidget *parent, const char *name ) : Q3Frame ( parent, name )
 {
 	Q3VBoxLayout* layout = new Q3VBoxLayout( this );
-	mButtonGroup = new Q3ButtonGroup (3, Vertical, this );
+	mButtonGroup = new Q3ButtonGroup (3, Qt::Vertical, this );
 	QRadioButton* radio = new QRadioButton ( mButtonGroup );
 	mButtonGroup->insert( radio, TopLeft );
 	radio = new QRadioButton ( mButtonGroup );
