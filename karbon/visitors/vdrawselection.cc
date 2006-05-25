@@ -110,46 +110,36 @@ VDrawSelection::visitVPath( VPath &composite )
 				if( ( editnodes || composite.state() == VObject::selected && m_nodeediting ) &&
 						jtr.current()->isCurve() )
 				{
+					VSegment* curr = jtr.current();
+					VSegment* next = curr->next();
+					VSegment* prev = curr->prev();
+
 					// Draw control lines.
-					if(
-						jtr.current()->pointIsSelected( 1 ) ||
-						jtr.current()->knotIsSelected() ||
-						( jtr.current()->next() &&
-						  jtr.current()->next()->pointIsSelected( 0 ) &&
-						  jtr.current()->isSmooth() ) )
+					if ( curr->pointIsSelected( curr->degree()-2 ) || curr->knotIsSelected() 
+					|| ( next && next->isCurve() && next->pointIsSelected( 0 ) && curr->isSmooth() ) )
 					{
 						m_painter->newPath();
-						m_painter->moveTo(
-							jtr.current()->point( 1 ) );
-						m_painter->lineTo(
-							jtr.current()->knot() );
-
+						m_painter->moveTo( curr->point( curr->degree()-2 ) );
+						m_painter->lineTo( curr->knot() );
 						m_painter->strokePath();
 						// Draw control node2:
 						m_painter->newPath();
 						m_painter->setBrush( editnodes ? Qt::yellow : Qt::blue );
-						m_painter->drawNode( jtr.current()->point( 1 ), m_nodeSize );
+						m_painter->drawNode( curr->point( curr->degree()-2 ), m_nodeSize );
 						m_painter->strokePath();
 					}
 
-					if(
-						jtr.current()->prev() &&
-						( ( jtr.current()->prev()->knotIsSelected() ||
-						  jtr.current()->pointIsSelected( 0 ) ) ||
-						( jtr.current()->prev()->pointIsSelected( 1 ) &&
-						  jtr.current()->prev()->isSmooth() ) ) )
+					if ( prev && ( ( prev->knotIsSelected() || curr->pointIsSelected( 0 ) ) 
+					|| ( prev->isCurve() && prev->pointIsSelected( prev->degree()-2 ) && prev->isSmooth() ) ) )
 					{
 						m_painter->newPath();
-						m_painter->moveTo(
-							jtr.current()->prev()->knot() );
-						m_painter->lineTo(
-							jtr.current()->point( 0 ) );
-
+						m_painter->moveTo( prev->knot() );
+						m_painter->lineTo( curr->point( 0 ) );
 						m_painter->strokePath();
 						// Draw control node1:
 						m_painter->newPath();
 						m_painter->setBrush( editnodes ? Qt::yellow : Qt::blue );
-						m_painter->drawNode( jtr.current()->point( 0 ), m_nodeSize );
+						m_painter->drawNode( curr->point( 0 ), m_nodeSize );
 						m_painter->strokePath();
 					}
 				}
