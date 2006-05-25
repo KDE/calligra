@@ -30,8 +30,8 @@
 typedef KGenericFactory<ZoomToolPlugin> ZoomToolPluginFactory;
 K_EXPORT_COMPONENT_FACTORY( karbon_zoomtoolplugin, ZoomToolPluginFactory( "karbonzoomtoolplugin" ) )
 
-ZoomToolPlugin::ZoomToolPlugin(QObject *parent, const char *name, const QStringList &)
-	: KParts::Plugin(parent, name)
+ZoomToolPlugin::ZoomToolPlugin(QObject *parent, const QStringList &)
+	: KParts::Plugin(parent)
 {
 	setInstance(ZoomToolPluginFactory::instance());
 

@@ -31,7 +31,7 @@ class WhirlPinchPlugin : public KParts::Plugin
 {
 	Q_OBJECT
 public:
-	WhirlPinchPlugin( KarbonView *parent, const char* name, const QStringList & );
+	WhirlPinchPlugin( KarbonView *parent, const QStringList & );
 	virtual ~WhirlPinchPlugin() {}
 
 private slots:

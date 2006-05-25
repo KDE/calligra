@@ -32,7 +32,7 @@ class ZoomToolPlugin : public KParts::Plugin
 {
 	Q_OBJECT
 public:
-	ZoomToolPlugin(QObject *parent, const char *name, const QStringList &);
+	ZoomToolPlugin(QObject *parent, const QStringList &);
 	virtual ~ZoomToolPlugin();
 };
 

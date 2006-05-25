@@ -37,8 +37,8 @@
 typedef KGenericFactory<ShadowEffectPlugin, KarbonView> ShadowEffectPluginFactory;
 K_EXPORT_COMPONENT_FACTORY( karbon_shadoweffectplugin, ShadowEffectPluginFactory( "karbonshadoweffectplugin" ) )
 
-ShadowEffectPlugin::ShadowEffectPlugin( KarbonView *parent, const char* name, const QStringList & )
-: Plugin( parent, name )
+ShadowEffectPlugin::ShadowEffectPlugin( KarbonView *parent, const QStringList & )
+: Plugin( parent )
 {
 	new KAction(
 		i18n( "&Shadow Effect..." ), "shadowRB", 0, this,
@@ -61,6 +61,7 @@ VShadowEffectDlg::VShadowEffectDlg( QWidget* parent, const char* name )
 	: KDialogBase( parent, name, true,  i18n( "Create Shadow Effect" ), Ok | Cancel )
 {
 	// add input fields on the left:
+/* TODO qgroupbox needs porting/fixing -> parent
 	QGroupBox* group = new QGroupBox( 2, Qt::Horizontal, i18n( "Properties" ), this );
 	new QLabel( i18n( "Distance:" ), group );
 	m_distance = new KIntNumInput( group );
@@ -81,7 +82,7 @@ VShadowEffectDlg::VShadowEffectDlg( QWidget* parent, const char* name )
 	connect( this, SIGNAL( okClicked() ), this, SLOT( accept() ) );
 	connect( this, SIGNAL( cancelClicked() ), this, SLOT( reject() ) );
 
-	setMainWidget( group );
+	setMainWidget( group );*/
 }
 
 void

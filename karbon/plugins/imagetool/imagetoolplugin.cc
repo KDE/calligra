@@ -31,7 +31,7 @@
 typedef KGenericFactory<ImageToolPlugin> ImageToolPluginFactory;
 K_EXPORT_COMPONENT_FACTORY( karbon_imagetoolplugin, ImageToolPluginFactory( "karbonimagetoolplugin" ) )
 
-ImageToolPlugin::ImageToolPlugin(QObject *parent, const char *name, const QStringList &) : KParts::Plugin(parent, name)
+ImageToolPlugin::ImageToolPlugin(QObject *parent, const QStringList &) : KParts::Plugin(parent)
 {
 	setInstance(ImageToolPluginFactory::instance());
 

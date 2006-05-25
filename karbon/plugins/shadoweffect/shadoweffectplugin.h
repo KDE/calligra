@@ -32,7 +32,7 @@ class ShadowEffectPlugin : public KParts::Plugin
 {
 	Q_OBJECT
 public:
-	ShadowEffectPlugin( KarbonView *parent, const char* name, const QStringList & );
+	ShadowEffectPlugin( KarbonView *parent, const QStringList & );
 	virtual ~ShadowEffectPlugin() {}
 
 private slots:

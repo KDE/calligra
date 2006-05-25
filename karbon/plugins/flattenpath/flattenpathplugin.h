@@ -30,7 +30,7 @@ class FlattenPathPlugin : public KParts::Plugin
 {
 	Q_OBJECT
 public:
-	FlattenPathPlugin( KarbonView *parent, const char* name, const QStringList & );
+	FlattenPathPlugin( KarbonView *parent, const QStringList & );
 	virtual ~FlattenPathPlugin() {}
 
 private slots:

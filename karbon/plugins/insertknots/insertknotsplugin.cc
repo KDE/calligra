@@ -33,7 +33,7 @@
 typedef KGenericFactory<InsertKnotsPlugin, KarbonView> InsertKnotsPluginFactory;
 K_EXPORT_COMPONENT_FACTORY( karbon_insertknotsplugin, InsertKnotsPluginFactory( "karboninsertknotsplugin" ) )
 
-InsertKnotsPlugin::InsertKnotsPlugin( KarbonView *parent, const char* name, const QStringList & ) : Plugin( parent, name )
+InsertKnotsPlugin::InsertKnotsPlugin( KarbonView *parent, const QStringList & ) : Plugin( parent )
 {
 	new KAction(
 		i18n( "&Insert Knots..." ), "14_insertknots", 0, this,
@@ -54,6 +54,7 @@ VInsertKnotsDlg::VInsertKnotsDlg( QWidget* parent, const char* name )
 	: KDialogBase( parent, name, true,  i18n( "Insert Knots" ), Ok | Cancel )
 {
 	// add input fields:
+/* TODO needs porting: parent of QGroupBox
 	QGroupBox* group = new QGroupBox( 2, Qt::Horizontal, i18n( "Properties" ), this );
 
 	new QLabel( i18n( "Knots:" ), group );
@@ -66,7 +67,7 @@ VInsertKnotsDlg::VInsertKnotsDlg( QWidget* parent, const char* name )
 	connect( this, SIGNAL( cancelClicked() ), this, SLOT( reject() ) );
 
 	setMainWidget( group );
-	setFixedSize( baseSize() );
+	setFixedSize( baseSize() );*/
 }
 
 uint

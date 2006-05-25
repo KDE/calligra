@@ -32,7 +32,7 @@
 typedef KGenericFactory<VRoundCornersPlugin, KarbonView> VRoundCornersPluginFactory;
 K_EXPORT_COMPONENT_FACTORY( karbon_roundcornersplugin, VRoundCornersPluginFactory( "karbonroundcornersplugin" ) )
 
-VRoundCornersPlugin::VRoundCornersPlugin( KarbonView *parent, const char* name, const QStringList & ) : Plugin( parent, name )
+VRoundCornersPlugin::VRoundCornersPlugin( KarbonView *parent, const QStringList & ) : Plugin( parent )
 {
 	new KAction(
 		i18n( "&Round Corners..." ), "14_roundcorners", 0, this,
@@ -59,6 +59,7 @@ VRoundCornersDlg::VRoundCornersDlg( QWidget* parent, const char* name )
 	: KDialogBase( parent, name, true,  i18n( "Polygonize" ), Ok | Cancel  )
 {
 	// add input:
+/* TODO needs porting (parent of QGroubBox)
 	QGroupBox* group = new QGroupBox( 2, Qt::Horizontal, i18n( "Properties" ), this );
 
 	new QLabel( i18n( "Round corners:" ), group );
@@ -71,6 +72,7 @@ VRoundCornersDlg::VRoundCornersDlg( QWidget* parent, const char* name )
 
 	setMainWidget( group );
 	setFixedSize( baseSize() );
+*/
 }
 
 double

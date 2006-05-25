@@ -33,8 +33,8 @@
 typedef KGenericFactory<FlattenPathPlugin, KarbonView> FlattenPathPluginFactory;
 K_EXPORT_COMPONENT_FACTORY( karbon_flattenpathplugin, FlattenPathPluginFactory( "karbonflattenpathplugin" ) )
 
-FlattenPathPlugin::FlattenPathPlugin( KarbonView *parent, const char* name, const QStringList & )
-: Plugin( parent, name )
+FlattenPathPlugin::FlattenPathPlugin( KarbonView *parent, const QStringList & )
+: Plugin( parent/*, name*/ )
 {
 	new KAction(
 		i18n( "&Flatten Path..." ), "14_flatten", 0, this,
@@ -56,6 +56,7 @@ VFlattenDlg::VFlattenDlg( QWidget* parent, const char* name )
 	: KDialogBase( parent, name, true,  i18n( "Flatten Path" ), Ok | Cancel )
 {
 	// add input fields on the left:
+	/* TODO needs porting
 	QGroupBox* group = new QGroupBox( 2, Qt::Horizontal, i18n( "Properties" ), this );
 	new QLabel( i18n( "Flatness:" ), group );
 	m_flatness = new KDoubleNumInput( group );
@@ -66,7 +67,7 @@ VFlattenDlg::VFlattenDlg( QWidget* parent, const char* name )
 	connect( this, SIGNAL( cancelClicked() ), this, SLOT( reject() ) );
 
 	setMainWidget( group );
-	setFixedSize( baseSize() );
+	setFixedSize( baseSize() );*/
 }
 
 double

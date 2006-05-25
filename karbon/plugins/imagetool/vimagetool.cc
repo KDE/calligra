@@ -30,6 +30,8 @@
 #include <core/vselection.h>
 #include <core/vcursor.h>
 
+#include <kactioncollection.h>
+
 VImageTool::VImageTool( KarbonView *view ) : VTool( view, "tool_image_plugin" )
 {
 	registerTool( this );
@@ -119,13 +121,13 @@ VImageTool::VInsertImageCmd::unexecute()
 void
 VImageTool::setup( KActionCollection *collection )
 {
-	m_action = static_cast<KRadioAction *>(collection -> action( name() ) );
+	m_action = static_cast<KAction *>(collection -> action( name() ) );
 
 	if( m_action == 0 )
 	{
-		m_action = new KRadioAction( i18n( "Image Tool" ), "14_image", Qt::SHIFT+Qt::Key_H, this, SLOT( activate() ), collection, name() );
+		m_action = new KAction( i18n( "Image Tool" ), "14_image", Qt::SHIFT+Qt::Key_H, this, SLOT( activate() ), collection, name() );
 		m_action->setToolTip( i18n( "Image" ) );
-		m_action->setExclusiveGroup( "misc" );
+		// TODO needs porting: m_action->setExclusiveGroup( "misc" );
 		//m_ownAction = true;
 	}
 }

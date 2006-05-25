@@ -32,6 +32,8 @@
 #include <render/vpainterfactory.h>
 #include <core/vcursor.h>
 
+#include <kactioncollection.h>
+
 VZoomTool::VZoomTool(KarbonView *view ): VTool( view, "tool_zoom_plugin" )
 {
 	m_plusCursor = new QCursor( VCursor::createCursor( VCursor::ZoomPlus ) );
@@ -76,17 +78,20 @@ void
 VZoomTool::draw()
 {
 	VPainter *painter = view()->painterFactory()->editpainter();
-	painter->setRasterOp( Qt::NotROP );
+	// TODO rasterops need porting
+	// painter->setRasterOp( Qt::NotROP );
 
 	if( isDragging() )
 	{
 		painter->setPen( Qt::DotLine );
 		painter->newPath();
+/* TODO lineto and moveto need porting
 		painter->moveTo( KoPoint( first().x(), first().y() ) );
 		painter->lineTo( KoPoint( m_current.x(), first().y() ) );
 		painter->lineTo( KoPoint( m_current.x(), m_current.y() ) );
 		painter->lineTo( KoPoint( first().x(), m_current.y() ) );
 		painter->lineTo( KoPoint( first().x(), first().y() ) );
+*/
 		painter->strokePath();
 	}
 }
@@ -157,13 +162,13 @@ VZoomTool::recalc()
 void
 VZoomTool::setup( KActionCollection *collection )
 {
-	m_action = static_cast<KRadioAction *>(collection -> action( name() ) );
+	m_action = static_cast<KAction *>(collection -> action( name() ) );
 
 	if( m_action == 0 )
 	{
-		m_action = new KRadioAction( i18n( "Zoom Tool" ), "14_zoom", Qt::SHIFT+Qt::Key_H, this, SLOT( activate() ), collection, name() );
+		m_action = new KAction( i18n( "Zoom Tool" ), "14_zoom", Qt::SHIFT+Qt::Key_H, this, SLOT( activate() ), collection, name() );
 		m_action->setToolTip( i18n( "Zoom" ) );
-		m_action->setExclusiveGroup( "misc" );
+		// TODO needs porting: m_action->setExclusiveGroup( "misc" );
 		//m_ownAction = true;
 	}
 }

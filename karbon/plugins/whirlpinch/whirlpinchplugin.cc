@@ -38,7 +38,7 @@
 typedef KGenericFactory<WhirlPinchPlugin, KarbonView> WhirlPinchPluginFactory;
 K_EXPORT_COMPONENT_FACTORY( karbon_whirlpinchplugin, WhirlPinchPluginFactory( "karbonwhirlpinchplugin" ) )
 
-WhirlPinchPlugin::WhirlPinchPlugin( KarbonView *parent, const char* name, const QStringList & ) : Plugin( parent, name )
+WhirlPinchPlugin::WhirlPinchPlugin( KarbonView *parent, const QStringList & ) : Plugin( parent )
 {
 	new KAction(
 		i18n( "&Whirl/Pinch..." ), "14_whirl", 0, this,
@@ -62,6 +62,7 @@ VWhirlPinchDlg::VWhirlPinchDlg( QWidget* parent, const char* name )
 	: KDialogBase( parent, name, true, i18n( "Whirl Pinch" ), Ok | Cancel )
 {
 	// add input fields:
+/* TODO needs porting: parent of qgroupbox
 	QGroupBox* group = new QGroupBox( 2, Qt::Horizontal, i18n( "Properties" ), this );
 
 	new QLabel( i18n( "Angle:" ), group );
@@ -77,7 +78,7 @@ VWhirlPinchDlg::VWhirlPinchDlg( QWidget* parent, const char* name )
 	connect( this, SIGNAL( cancelClicked() ), this, SLOT( reject() ) );
 
 	setMainWidget( group );
-	setFixedSize( baseSize() );
+	setFixedSize( baseSize() );*/
 }
 
 double

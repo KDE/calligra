@@ -31,7 +31,7 @@ class ImageToolPlugin : public KParts::Plugin
 {
 	Q_OBJECT
 public:
-	ImageToolPlugin(QObject *parent, const char *name, const QStringList &);
+	ImageToolPlugin(QObject *parent, const QStringList &);
 	virtual ~ImageToolPlugin();
 };
 
