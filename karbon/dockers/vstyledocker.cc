@@ -22,7 +22,7 @@
 #include <QLayout>
 #include <qtabwidget.h>
 #include <qsize.h>
-#include <qhbuttongroup.h>
+#include <Q3HButtonGroup>
 #include <qtoolbutton.h>
 //Added by qt3to4:
 #include <QMouseEvent>
@@ -251,7 +251,9 @@ ClipartWidget::importClipart()
 {
 	QStringList filter;
 	filter << "application/x-karbon" << "image/svg+xml" << "image/x-wmf" << "image/x-eps" << "application/postscript";
-	KFileDialog *dialog = new KFileDialog( "foo", QString::null, 0L, "Choose Graphic to Add", true);
+	KFileDialog *dialog = new KFileDialog( "foo", "", 0);
+	dialog->setCaption("Choose Graphic to Add");
+	dialog->setModal(true);
 	dialog->setMimeFilter( filter, "application/x-karbon" );
 	if( dialog->exec()!=QDialog::Accepted )
 	{

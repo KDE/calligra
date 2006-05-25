@@ -17,7 +17,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <qhbuttongroup.h>
+#include <Q3HButtonGroup>
 #include <qinputdialog.h>
 #include <QLayout>
 #include <QCheckBox>
@@ -43,7 +43,6 @@
 #include <KoMainWindow.h>
 #include <kdebug.h>
 #include <kiconloader.h>
-#include <klineeditdlg.h>
 #include <kinputdialog.h>
 
 #include "karbon_part.h"
