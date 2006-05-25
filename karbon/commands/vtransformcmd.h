@@ -22,6 +22,7 @@
 #define __VTRANSFORMCMD_H__
 
 #include <q3valuevector.h>
+#include <QMap>
 #include "vcommand.h"
 #include "vgroup.h"
 #include <koffice_export.h>

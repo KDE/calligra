@@ -89,18 +89,18 @@ VDistributeCmd::execute()
 	double pos = 0.0, step = space / double(objs.count() - 1);
 
 	VTranslateCmd *trafoCmd = 0L;
-	QMapIterator<double,VObject*> it = sortedPos.begin(), et = sortedPos.end();
+	QMapIterator<double,VObject*> it(sortedPos); // = sortedPos.begin(), et = sortedPos.end();
 
-	for( ; it != et; ++it )	
+	while(it.hasNext())	
 	{
-		if( it.data() == first || it.data() == last )
+		if( it.value() == first || it.value() == last )
 			continue;
 
 		pos += step;
 
 		document()->selection()->clear();
 		
-		bbox = it.data()->boundingBox();
+		bbox = it.value()->boundingBox();
 
 		switch( m_distribute )
 		{
@@ -139,7 +139,7 @@ VDistributeCmd::execute()
 				dy = first->boundingBox().top() + pos - bbox.top();
 			break;
 		};
-		document()->selection()->append( it.data() );
+		document()->selection()->append( it.value() );
 		trafoCmd = new VTranslateCmd( document(), dx, dy );
 		m_trafoCmds.append( trafoCmd );
 		trafoCmd->execute();
