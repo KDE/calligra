@@ -28,6 +28,9 @@ extern "C" {
 #include <qfile.h>
 
 #include <kapplication.h>
+#include <kmessagebox.h>
+#include <klocale.h>
+
 #include <KoDocumentInfo.h>
 
 #include <kio/netaccess.h>
@@ -70,7 +73,7 @@ namespace {
         {
             return JCS_CMYK;
         }
-        kdDebug(41008) << "Cannot export images in " + cs->id().name() + " yet.\n";
+        KMessageBox::error(0, i18n("Cannot export images in %1.\n").arg(cs->id().name()) ) ;
         return JCS_UNKNOWN;
     }
 
