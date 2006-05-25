@@ -19,6 +19,9 @@
 
 #include "kis_tiff_writer_visitor.h"
 
+#include <kmessagebox.h>
+#include <klocale.h>
+
 #include <kis_annotation.h>
 #include <kis_colorspace.h>
 #include <kis_group_layer.h>
@@ -53,7 +56,7 @@ namespace {
             return true;
         }
 
-        kdDebug(41008) << "Cannot export images in " + cs->id().name() + " yet.\n";
+        KMessageBox::error(0, i18n("Cannot export images in %1.\n").arg(cs->id().name()) ) ;
         return false;
 
     }
