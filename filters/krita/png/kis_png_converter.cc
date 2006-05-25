@@ -25,6 +25,9 @@
 #include <QFile>
 
 #include <kapplication.h>
+#include <kmessagebox.h>
+#include <klocale.h>
+
 #include <KoDocumentInfo.h>
 
 #include <kio/netaccess.h>
@@ -59,7 +62,7 @@ namespace {
             return alpha ? PNG_COLOR_TYPE_RGB_ALPHA : PNG_COLOR_TYPE_RGB;
         }
 
-        kDebug(41008) << "Cannot export images in " + cs->id().name() + " yet.\n";
+        KMessageBox::error(0, i18n("Cannot export images in %1.\n").arg(cs->id().name()) ) ;
         return -1;
 
     }
