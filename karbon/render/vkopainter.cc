@@ -88,7 +88,8 @@ VKoPainter::VKoPainter( QPaintDevice *target, unsigned int w, unsigned int h, bo
 	xlib_rgb_init_with_depth( target->x11Display(), XScreenOfDisplay( target->x11Display(),
 							  target->x11Screen() ), target->x11Depth() );
 
-	gc = XCreateGC( target->x11Display(), target->handle(), 0, 0 );
+	// Needs porting: error: 'class QPaintDevice' has no member named 'handle'
+	// gc = XCreateGC( target->x11Display(), target->handle(), 0, 0 );
 
 	m_zoomFactor = 1;
 }
@@ -156,8 +157,9 @@ VKoPainter::end()
 {
 	//xlib_draw_rgb_image( m_target->handle(), gc, 0, 0, m_width, m_height,
 	//					 XLIB_RGB_DITHER_NONE, m_buffer, m_width * 4 );
-	xlib_draw_rgb_32_image( m_target->handle(), gc, 0, 0, m_width, m_height,
-						 XLIB_RGB_DITHER_NONE, m_buffer, m_width * 4 );
+	// Needs porting: error: 'class QPaintDevice' has no member named 'handle'	
+	/* xlib_draw_rgb_32_image( m_target->handle(), gc, 0, 0, m_width, m_height,
+						 XLIB_RGB_DITHER_NONE, m_buffer, m_width * 4 );*/
 	/*xlib_draw_rgb_image( pix.handle(), gc, 0, 0, m_width, m_height,
 						 XLIB_RGB_DITHER_NONE, m_buffer, m_width * 3 );
 	bitBlt( m_target, 0, 0, &pix, 0, 0, m_width, m_height );*/
@@ -170,10 +172,12 @@ VKoPainter::blit( const KoRect &r )
 	//kDebug(38000) << "m_height : " << m_height << endl;
 	int x		= qMax( 0, int( r.x() ) );
 	int y		= qMax( 0, int( r.y() ) );
-	int width	= qMin( m_width,	(unsigned int)KMAX( 0, int( r.x() + r.width() ) ) );
-	int height	= qMin( m_height,	(unsigned int)KMAX( 0, int( r.y() + r.height() ) ) );
-	xlib_draw_rgb_32_image( m_target->handle(), gc, x, y, width - x, height - y,
-							XLIB_RGB_DITHER_NONE, m_buffer + (x * 4) + (y * m_width * 4), m_width * 4 );
+	// TODO: Needs porting: kmax
+	// int width	= qMin( m_width,	(unsigned int)kMax( 0, int( r.x() + r.width() ) ) );
+	// int height	= qMin( m_height,	(unsigned int)kMax( 0, int( r.y() + r.height() ) ) );
+        // TODO: Needs porting: error: 'class QPaintDevice' has no member named 'handle'
+	/*xlib_draw_rgb_32_image( m_target->handle(), gc, x, y, width - x, height - y,
+							XLIB_RGB_DITHER_NONE, m_buffer + (x * 4) + (y * m_width * 4), m_width * 4 );*/
 }
 
 void
@@ -196,14 +200,15 @@ VKoPainter::clear( const KoRect &r, const QColor &c )
 	unsigned int color = c.rgb();
 	int x		= qMax( 0, int( r.x() ) );
 	int y		= qMax( 0, int( r.y() ) );
-	int width	= qMin( m_width,	(unsigned int)KMAX( 0, int( r.x() + r.width() ) ) );
-	int height	= qMin( m_height,	(unsigned int)KMAX( 0, int( r.y() + r.height() ) ) );
+	// TODO: Needs porting: kmax
+	/* int width	= qMin( m_width,	(unsigned int)KMAX( 0, int( r.x() + r.width() ) ) );
+	 int height	= qMin( m_height,	(unsigned int)KMAX( 0, int( r.y() + r.height() ) ) );
 	if( m_buffer )
 	{
 		for( int i = y;i < height;i++)
 			memset( m_buffer + int( x * 4) + int( i * ( m_width * 4 ) ),
 					qRgba( qRed( color ), qGreen( color ), qBlue( color ), 100 ), int( width * 4 ) );
-	}
+	}*/
 }
 
 void
@@ -373,9 +378,9 @@ VKoPainter::setPen( const QColor &c )
 	delete m_stroke;
 	m_stroke = new VStroke;
 
-	float r = static_cast<float>( c.Qt::red()   ) / 255.0;
-	float g = static_cast<float>( c.Qt::green() ) / 255.0;
-	float b = static_cast<float>( c.Qt::blue()  ) / 255.0;
+	float r = static_cast<float>( c.red()   ) / 255.0;
+	float g = static_cast<float>( c.green() ) / 255.0;
+	float b = static_cast<float>( c.blue()  ) / 255.0;
 
 	VColor color;
 	color.set( r, g, b );
@@ -398,9 +403,9 @@ VKoPainter::setBrush( const QColor &c )
 	delete m_fill;
 	m_fill = new VFill;
 
-	float r = static_cast<float>( c.Qt::red()   ) / 255.0;
-	float g = static_cast<float>( c.Qt::green() ) / 255.0;
-	float b = static_cast<float>( c.Qt::blue()  ) / 255.0;
+	float r = static_cast<float>( c.red()   ) / 255.0;
+	float g = static_cast<float>( c.green() ) / 255.0;
+	float b = static_cast<float>( c.blue()  ) / 255.0;
 
 	VColor color;
 	color.set( r, g, b );
@@ -435,10 +440,12 @@ VKoPainter::restore()
 {
 }
 
+/* needs porting to Qt4
 void
 VKoPainter::setRasterOp( Qt::RasterOp  )
 {
 }
+*/
 
 void
 VKoPainter::clampToViewport( int &x0, int &y0, int &x1, int &y1 )
@@ -506,7 +513,7 @@ VKoPainter::drawVPath( ArtVpath *vec )
 	{
 		color = m_fill->color();
 		af = qRound( 255 * m_fill->color().opacity() );
-		fillColor = ( 0 << 24 ) | ( color.Qt::blue() << 16 ) | ( color.Qt::green() << 8 ) | color.Qt::red();
+		fillColor = ( 0 << 24 ) | ( color.blue() << 16 ) | ( color.green() << 8 ) | color.red();
 
 		ArtSvpWriter *swr;
 		ArtSVP *temp;
@@ -533,7 +540,7 @@ VKoPainter::drawVPath( ArtVpath *vec )
 
 		color = m_stroke->color();
 		as = qRound( 255 * m_stroke->color().opacity() );
-		strokeColor = ( 0 << 24 ) | ( color.Qt::blue() << 16 ) | ( color.Qt::green() << 8 ) | color.Qt::red();
+		strokeColor = ( 0 << 24 ) | ( color.blue() << 16 ) | ( color.green() << 8 ) | color.red();
 
 		double ratio = m_zoomFactor;//sqrt(pow(affine[0], 2) + pow(affine[3], 2)) / sqrt(2);
 		if( m_stroke->dashPattern().array().count() > 0 )
@@ -886,9 +893,9 @@ VKoPainter::drawNode( const KoPoint& p, int width )
 	{
 		for( int j = 0; j < x2 - x1; j++ )
 		{
-			m_buffer[ baseindex + 4 * j + ( m_width * 4 * i ) ] = color.Qt::red();
-			m_buffer[ baseindex + 4 * j + ( m_width * 4 * i ) + 1 ] = color.Qt::green();
-			m_buffer[ baseindex + 4 * j + ( m_width * 4 * i ) + 2 ] = color.Qt::blue();
+			m_buffer[ baseindex + 4 * j + ( m_width * 4 * i ) ] = color.red();
+			m_buffer[ baseindex + 4 * j + ( m_width * 4 * i ) + 1 ] = color.green();
+			m_buffer[ baseindex + 4 * j + ( m_width * 4 * i ) + 2 ] = color.blue();
 			m_buffer[ baseindex + 4 * j + ( m_width * 4 * i ) + 3 ] = 0xFF;
 		}
 	}

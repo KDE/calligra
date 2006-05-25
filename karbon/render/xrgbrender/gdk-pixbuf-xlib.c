@@ -38,7 +38,7 @@ int gdk_pixbuf_screen = -1;
 void
 gdk_pixbuf_xlib_init (Display *display, int screen_num)
 {
-    xlib_rgb_init (display, ScreenOfDisplay (display, screen_num));
+    /*xlib_rgb_init (display, ScreenOfDisplay (display, screen_num));*/
     gdk_pixbuf_dpy = display;
     gdk_pixbuf_screen = screen_num;
 }
@@ -56,8 +56,8 @@ void
 gdk_pixbuf_xlib_init_with_depth (Display *display,
 				 int screen_num, int prefDepth)
 {
-    xlib_rgb_init_with_depth (display, ScreenOfDisplay (display, screen_num),
-			      prefDepth);
+    /*xlib_rgb_init_with_depth (display, ScreenOfDisplay (display, screen_num),
+			      prefDepth);*/
     gdk_pixbuf_dpy = display;
     gdk_pixbuf_screen = screen_num;
 }

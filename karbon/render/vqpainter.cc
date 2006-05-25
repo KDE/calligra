@@ -245,11 +245,13 @@ VQPainter::restore()
 	m_painter->restore();
 }
 
+/* TODO: Needs to be ported to Qt4
 void
 VQPainter::setRasterOp( Qt::RasterOp r )
 {
 	m_painter->setRasterOp( r );
 }
+*/
 
 void
 VQPainter::drawNode( const KoPoint &p, int width )
