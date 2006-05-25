@@ -75,7 +75,8 @@ void
 VShapeTool::draw()
 {
 	VPainter* painter = view()->painterFactory()->editpainter();
-	painter->setRasterOp( Qt::NotROP );
+	// TODO: rasterops need porting
+	// painter->setRasterOp( Qt::NotROP );
 
 	VPath* composite = shape();
 	composite->setState( VPath::edit );

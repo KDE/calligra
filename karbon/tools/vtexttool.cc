@@ -56,10 +56,13 @@
 #include <render/vkopainter.h>
 #include "vtexttool.h"
 
+#include <kactioncollection.h>
+
 
 static void
 traceShape( VKoPainter* p, int x, int y, int w, int h )
 {
+/* TODO lineto and moveto need porting
 	p->newPath();
 	p->moveTo( KoPoint( x + w , y + h ) );
 	p->lineTo( KoPoint( x + w / 3, y + h ) );
@@ -71,7 +74,7 @@ traceShape( VKoPainter* p, int x, int y, int w, int h )
 	p->lineTo( KoPoint( x + ( w / 3 ) * 2, y ) );
 	p->lineTo( KoPoint( x + ( w / 3 ) * 2, y + ( h / 3 ) * 2 ) );
 	p->lineTo( KoPoint( x , y + ( h / 3 ) * 2 ) );
-	p->lineTo( KoPoint( x , y ) );
+	p->lineTo( KoPoint( x , y ) );*/
 }
 
 ShadowPreview::ShadowPreview( ShadowWidget* parent )
@@ -173,6 +176,7 @@ ShadowPreview::paintEvent( QPaintEvent* )
 
 	if( !m_parent->useShadow() )
 	{
+/* TODO moveto and lineto need porting
 		p.newPath();
 		p.moveTo( KoPoint( 0, 0 ) );
 		p.lineTo( KoPoint( 0, h ) );
@@ -182,11 +186,12 @@ ShadowPreview::paintEvent( QPaintEvent* )
 		VColor c( colorGroup().background() );
 		c.setOpacity( .8 );
 		p.setBrush( VFill( c ) );
-		p.fillPath();
+		p.fillPath();*/
 	}
 
 	p.end();
 
+/* TODO moveto and lineto need porting
 	QPainter painter( this );
 	painter.drawPixmap( 2, 2, pm );
 	painter.setPen( colorGroup().light() );
@@ -204,7 +209,7 @@ ShadowPreview::paintEvent( QPaintEvent* )
 	painter.lineTo( 2, height() - 2 );
 	painter.setPen( Qt::black );
 	painter.drawLine( width() / 2 - 2, height() / 2, width() / 2 + 2, height() / 2 );
-	painter.drawLine( width() / 2, height() / 2 - 2, width() / 2, height() / 2 + 2 );
+	painter.drawLine( width() / 2, height() / 2 - 2, width() / 2, height() / 2 + 2 );*/
 }
 
 ShadowWidget::ShadowWidget( QWidget* parent, const char* name, int angle, int distance, bool translucent )
@@ -393,13 +398,14 @@ VTextOptionsWidget::VTextOptionsWidget( VTextTool* tool, QWidget *parent )
 
 	m_convertToShapes->setEnabled( true );
 
+	/* TODO i18 needs porting
 	m_textAlignment->insertItem( i18n( "Horizontal alignment", "Left") );
 	m_textAlignment->insertItem( i18n( "Horizontal alignment", "Center") );
 	m_textAlignment->insertItem( i18n( "Horizontal alignment", "Right") );
 
 	m_textPosition->insertItem( i18n( "Vertical alignment", "Above") );
 	m_textPosition->insertItem( i18n( "Vertical alignment", "On") );
-	m_textPosition->insertItem( i18n( "Vertical alignment", "Under") );
+	m_textPosition->insertItem( i18n( "Vertical alignment", "Under") );*/
 
 	m_textOffset->setRange( 0.0, 100.0, 1.0, true );
 
@@ -649,13 +655,16 @@ VTextTool::drawPathCreation()
 
 	painter->setZoomFactor( view()->zoom() );
 
-	painter->setRasterOp( Qt::NotROP );
+	// TODO rasterops need porting
+	// painter->setRasterOp( Qt::NotROP );
 	painter->newPath();
 	painter->setPen( Qt::DotLine );
 	painter->setBrush( Qt::NoBrush );
 
+/* TODO moveto and lineto need porting
 	painter->moveTo( first() );
-	painter->lineTo( m_last );
+	painter->lineTo( m_last );*/
+
 	painter->strokePath();
 }
 
@@ -1150,13 +1159,13 @@ VTextTool::mouseDragShiftReleased()
 void
 VTextTool::setup( KActionCollection *collection )
 {
-	m_action = static_cast<KRadioAction *>(collection -> action( name() ) );
+	m_action = static_cast<KAction *>(collection -> action( name() ) );
 
 	if( m_action == 0 )
 	{
-		m_action = new KRadioAction( i18n( "Text Tool" ), "14_text", Qt::SHIFT+Qt::Key_T, this, SLOT( activate() ), collection, name() );
+		m_action = new KAction( i18n( "Text Tool" ), "14_text", Qt::SHIFT+Qt::Key_T, this, SLOT( activate() ), collection, name() );
 		m_action->setToolTip( i18n( "Text Tool" ) );
-		m_action->setExclusiveGroup( "misc" );
+		// TODO needs porting: m_action->setExclusiveGroup( "misc" );
 		//m_ownAction = true;
 	}
 }

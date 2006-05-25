@@ -37,6 +37,8 @@
 
 #include <kdebug.h>
 
+#include <kactioncollection.h>
+
 VGradientTool::VGradientOptionsWidget::VGradientOptionsWidget( VGradient& gradient )
 	: KDialogBase( 0L, "", true, i18n( "Edit Gradient" ), Ok | Cancel )
 {
@@ -194,9 +196,10 @@ VGradientTool::draw( VPainter* painter )
 	m_vector = KoRect( e.x()-m_handleSize, e.y()-m_handleSize, 2*m_handleSize, 2*m_handleSize );
 	m_center = KoRect( f.x()-m_handleSize, f.y()-m_handleSize, 2*m_handleSize, 2*m_handleSize );
 
+	/* TODO porting required
 	painter->setPen( Qt::blue.light() );
 	painter->setBrush( Qt::blue.light() );
-	painter->setRasterOp( Qt::XorROP );
+	painter->setRasterOp( Qt::XorROP );*/
 
 	// draw the gradient vector
 	painter->newPath();
@@ -231,7 +234,8 @@ VGradientTool::draw()
 		return;
 
 	VPainter *painter = view()->painterFactory()->editpainter();
-	painter->setRasterOp( Qt::NotROP );
+	// TODO: rasterops need porting
+	// painter->setRasterOp( Qt::NotROP );
 
 	painter->setPen( Qt::DotLine );
 	painter->newPath();
@@ -472,13 +476,13 @@ VGradientTool::showDialog() const
 void
 VGradientTool::setup( KActionCollection *collection )
 {
-	m_action = static_cast<KRadioAction *>(collection -> action( name() ) );
+	m_action = static_cast<KAction *>(collection -> action( name() ) );
 
 	if( m_action == 0 )
 	{
-		m_action = new KRadioAction( i18n( "Gradient Tool" ), "14_gradient", Qt::Key_G, this, SLOT( activate() ), collection, name() );
+		m_action = new KAction( i18n( "Gradient Tool" ), "14_gradient", Qt::Key_G, this, SLOT( activate() ), collection, name() );
 		m_action->setToolTip( i18n( "Gradient" ) );
-		m_action->setExclusiveGroup( "misc" );
+		// TODO needs porting: m_action->setExclusiveGroup( "misc" );
 		//m_ownAction = true;
 	}
 }

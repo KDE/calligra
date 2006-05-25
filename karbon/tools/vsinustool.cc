@@ -31,6 +31,7 @@
 #include "vsinustool.h"
 #include "KoUnitWidgets.h"
 
+#include <kactioncollection.h>
 
 VSinusTool::VSinusOptionsWidget::VSinusOptionsWidget( KarbonPart *part, QWidget* parent, const char* name )
 	: KDialogBase( parent, name, true, i18n( "Insert Sinus" ), Ok | Cancel ), m_part( part )
@@ -149,13 +150,13 @@ VSinusTool::showDialog() const
 void
 VSinusTool::setup( KActionCollection *collection )
 {
-	m_action = static_cast<KRadioAction *>(collection -> action( name() ) );
+	m_action = static_cast<KAction *>(collection -> action( name() ) );
 
 	if( m_action == 0 )
 	{
-		m_action = new KRadioAction( i18n( "Sinus Tool" ), "14_sinus", Qt::SHIFT+Qt::Key_S, this, SLOT( activate() ), collection, name() );
+		m_action = new KAction( i18n( "Sinus Tool" ), "14_sinus", Qt::SHIFT+Qt::Key_S, this, SLOT( activate() ), collection, name() );
 		m_action->setToolTip( i18n( "Sinus" ) );
-		m_action->setExclusiveGroup( "shapes" );
+		// TODO needs porting: m_action->setExclusiveGroup( "shapes" );
 		//m_ownAction = true;
 	}
 }

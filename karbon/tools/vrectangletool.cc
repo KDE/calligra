@@ -29,6 +29,7 @@
 #include "vrectangletool.h"
 #include <KoUnitWidgets.h>
 
+#include <kactioncollection.h>
 
 VRectangleTool::VRectangleOptionsWidget::VRectangleOptionsWidget( KarbonPart *part, QWidget* parent, const char* name )
 	: KDialogBase( parent, name, true, i18n( "Insert Rectangle" ), Ok | Cancel ), m_part( part )
@@ -130,13 +131,13 @@ VRectangleTool::showDialog() const
 void
 VRectangleTool::setup( KActionCollection *collection )
 {
-	m_action = static_cast<KRadioAction *>(collection -> action( name() ) );
+	m_action = static_cast<KAction *>(collection -> action( name() ) );
 
 	if( m_action == 0 )
 	{
-		m_action = new KRadioAction( i18n( "Rectangle Tool" ), "14_rectangle", Qt::Key_Plus+Qt::Key_F9, this, SLOT( activate() ), collection, name() );
+		m_action = new KAction( i18n( "Rectangle Tool" ), "14_rectangle", Qt::Key_Plus+Qt::Key_F9, this, SLOT( activate() ), collection, name() );
 		m_action->setToolTip( i18n( "Rectangle" ) );
-		m_action->setExclusiveGroup( "shapes" );
+		// TODO needs porting: m_action->setExclusiveGroup( "shapes" );
 		//m_ownAction = true;
 	}
 }

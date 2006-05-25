@@ -43,6 +43,8 @@
 #include <commands/vdeletenodescmd.h>
 #include <widgets/vcanvas.h>
 
+#include <kactioncollection.h>
+
 #include <kdebug.h>
 
 VSelectNodesTool::VSelectNodesTool( KarbonView* view )
@@ -84,7 +86,8 @@ VSelectNodesTool::draw()
 {
 	VPainter *painter = view()->painterFactory()->editpainter();
 	painter->setZoomFactor( view()->zoom() );
-	painter->setRasterOp( Qt::NotROP );
+	// TODO: port to Qt4
+	// painter->setRasterOp( Qt::NotROP );
 
 	VSelection* selection = view()->part()->document().selection();
 
@@ -384,13 +387,13 @@ VSelectNodesTool::recalc()
 void
 VSelectNodesTool::setup( KActionCollection *collection )
 {
-	m_action = static_cast<KRadioAction *>(collection -> action( name() ) );
+	m_action = static_cast<KAction *>(collection -> action( name() ) );
 
 	if( m_action == 0 )
 	{
-		m_action = new KRadioAction( i18n( "Select Nodes Tool" ), "14_selectnodes", Qt::SHIFT+Qt::Key_H, this, SLOT( activate() ), collection, name() );
+		m_action = new KAction( i18n( "Select Nodes Tool" ), "14_selectnodes", Qt::SHIFT+Qt::Key_H, this, SLOT( activate() ), collection, name() );
 		m_action->setToolTip( i18n( "Select Nodes" ) );
-		m_action->setExclusiveGroup( "select" );
+		// TODO port: m_action->setExclusiveGroup( "select" );
 		//m_ownAction = true;
 	}
 }

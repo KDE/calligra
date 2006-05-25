@@ -31,6 +31,8 @@
 
 #include <kgenericfactory.h>
 
+#include <kactioncollection.h>
+
 VRoundRectTool::VRoundRectOptionsWidget::VRoundRectOptionsWidget( KarbonPart *part, QWidget* parent, const char* name )
 	: KDialogBase( parent, name, true, i18n( "Insert Round Rect" ), Ok | Cancel ), m_part( part )
 {
@@ -166,13 +168,13 @@ VRoundRectTool::showDialog() const
 void
 VRoundRectTool::setup( KActionCollection *collection )
 {
-	m_action = static_cast<KRadioAction *>(collection -> action( name() ) );
+	m_action = static_cast<KAction *>(collection -> action( name() ) );
 
 	if( m_action == 0 )
 	{
-		m_action = new KRadioAction( i18n( "Round Rectangle Tool" ), "14_roundrect", Qt::SHIFT+Qt::Key_H, this, SLOT( activate() ), collection, name() );
+		m_action = new KAction( i18n( "Round Rectangle Tool" ), "14_roundrect", Qt::SHIFT+Qt::Key_H, this, SLOT( activate() ), collection, name() );
 		m_action->setToolTip( i18n( "Round Rectangle" ) );
-		m_action->setExclusiveGroup( "shapes" );
+		// TODO needs porting: m_action->setExclusiveGroup( "shapes" );
 		//m_ownAction = true;
 	}
 }

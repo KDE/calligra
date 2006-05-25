@@ -30,6 +30,8 @@
 #include "vspiraltool.h"
 #include "KoUnitWidgets.h"
 
+#include <kactioncollection.h>
+
 
 VSpiralTool::VSpiralOptionsWidget::VSpiralOptionsWidget( KarbonPart *part, QWidget* parent, const char* name )
 	: KDialogBase( parent, name, true, i18n( "Insert Spiral" ), Ok | Cancel ), m_part( part )
@@ -200,13 +202,13 @@ VSpiralTool::showDialog() const
 void
 VSpiralTool::setup( KActionCollection *collection )
 {
-	m_action = static_cast<KRadioAction *>(collection -> action( name() ) );
+	m_action = static_cast<KAction *>(collection -> action( name() ) );
 
 	if( m_action == 0 )
 	{
-		m_action = new KRadioAction( i18n( "Spiral Tool" ), "14_spiral", Qt::SHIFT+Qt::Key_H, this, SLOT( activate() ), collection, name() );
+		m_action = new KAction( i18n( "Spiral Tool" ), "14_spiral", Qt::SHIFT+Qt::Key_H, this, SLOT( activate() ), collection, name() );
 		m_action->setToolTip( i18n( "Spiral" ) );
-		m_action->setExclusiveGroup( "shapes" );
+		// TODO needs porting: m_action->setExclusiveGroup( "shapes" );
 		//m_ownAction = true;
 	}
 }

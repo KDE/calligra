@@ -30,6 +30,8 @@
 #include "vstartool.h"
 #include "KoUnitWidgets.h"
 
+#include <kactioncollection.h>
+
 
 VStarOptionsWidget::VStarOptionsWidget( KarbonPart *part, QWidget* parent, const char* name )
 	: KDialogBase( parent, name, true, i18n( "Insert Star" ), Ok | Cancel ), m_part( part )
@@ -233,15 +235,15 @@ VStarTool::showDialog() const
 void
 VStarTool::setup( KActionCollection *collection )
 {
-	m_action = static_cast<KRadioAction *>(collection -> action( name() ) );
+	m_action = static_cast<KAction *>(collection -> action( name() ) );
 
 	if( m_action == 0 )
 	{
 		KShortcut shortcut( Qt::Key_Plus );
 		shortcut.append(KShortcut( Qt::Key_F9 ) );
-		m_action = new KRadioAction( i18n( "Star Tool" ), "14_star", shortcut, this, SLOT( activate() ), collection, name() );
+		m_action = new KAction( i18n( "Star Tool" ), "14_star", shortcut, this, SLOT( activate() ), collection, name() );
 		m_action->setToolTip( i18n( "Draw a star" ) );
-		m_action->setExclusiveGroup( "shapes" );
+		// TODO needs porting: m_action->setExclusiveGroup( "shapes" );
 		//m_ownAction = true;
 	}
 }

@@ -39,6 +39,8 @@
 #include <commands/vcommand.h>
 #include <widgets/vcanvas.h>
 
+#include <kactioncollection.h>
+
 VPolylineTool::VPolylineTool( KarbonView *view )
 	: VTool( view, "tool_polyline" )
 {
@@ -140,7 +142,8 @@ void
 VPolylineTool::draw()
 {
 	VPainter* painter = view()->painterFactory()->editpainter();
-	painter->setRasterOp( Qt::NotROP );
+	// TODO: rasterops need porting
+	// painter->setRasterOp( Qt::NotROP );
 
 	if( m_bezierPoints.count() > 2 )
 	{
@@ -173,7 +176,8 @@ VPolylineTool::drawBezierVector( KoPoint& start, KoPoint& end )
 
 	float zoomFactor = view()->zoom();
 
-	painter->setRasterOp( Qt::NotROP );
+	// TODO: rasterops need porting
+	// painter->setRasterOp( Qt::NotROP );
 	painter->newPath();
 /*  VStroke stroke( Qt::blue, 0L, 1.0 );
 	QValueList<float> array;
@@ -185,7 +189,8 @@ VPolylineTool::drawBezierVector( KoPoint& start, KoPoint& end )
 	painter->moveTo( start ); 
 	painter->lineTo( end );
 	painter->strokePath();
-	painter->setRasterOp( Qt::XorROP );
+	// TODO: rasterops need porting
+	// painter->setRasterOp( Qt::XorROP );
 	painter->newPath();
 	painter->setPen( Qt::yellow );
 
@@ -262,9 +267,11 @@ VPolylineTool::mouseButtonRelease()
 		VPainter* painter = view()->painterFactory()->editpainter();
 		painter->save();
 		painter->setZoomFactor( view()->zoom() );
-		painter->setRasterOp( Qt::XorROP );
-		VStroke stroke( Qt::yellow, 0L, 1.0 );
-		painter->setPen( stroke );
+		// TODO: rasterops need porting
+		// painter->setRasterOp( Qt::XorROP );
+		// TODO: color needs porting
+		// VStroke stroke( Qt::yellow, 0L, 1.0 );
+		// painter->setPen( stroke );
 		painter->setBrush( Qt::yellow );
 		painter->newPath();
 		painter->drawNode( m_lastVectorStart, 2 );
@@ -479,15 +486,15 @@ VPolylineTool::accept()
 void
 VPolylineTool::setup( KActionCollection *collection )
 {
-	m_action = static_cast<KRadioAction *>(collection -> action( name() ) );
+	m_action = static_cast<KAction *>(collection -> action( name() ) );
 
 	if( m_action == 0 )
 	{
 	        KShortcut shortcut( Qt::Key_Plus );
       		shortcut.append( KShortcut( Qt::Key_F9 ) );
-		m_action = new KRadioAction( i18n( "Polyline Tool" ), "14_polyline", shortcut, this, SLOT( activate() ), collection, name() );
+		m_action = new KAction( i18n( "Polyline Tool" ), "14_polyline", shortcut, this, SLOT( activate() ), collection, name() );
 		m_action->setToolTip( i18n( "Polyline" ) );
-		m_action->setExclusiveGroup( "freehand" );
+		// TODO needs porting: m_action->setExclusiveGroup( "freehand" );
 		//m_ownAction = true;
 	}
 }

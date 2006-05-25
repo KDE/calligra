@@ -30,6 +30,8 @@
 #include <shapes/vstar.h>
 #include "vpolygontool.h"
 
+#include <kactioncollection.h>
+
 VPolygonTool::VPolygonOptionsWidget::VPolygonOptionsWidget( KarbonView *view, QWidget* parent, const char* name )
 	: KDialogBase( parent, name, true, i18n( "Insert Polygon" ), Ok | Cancel ), m_view(view)
 {
@@ -150,15 +152,15 @@ VPolygonTool::showDialog() const
 void
 VPolygonTool::setup( KActionCollection *collection )
 {
-	m_action = static_cast<KRadioAction *>(collection -> action( name() ) );
+	m_action = static_cast<KAction *>(collection -> action( name() ) );
 
 	if( m_action == 0 )
 	{
 		KShortcut shortcut( Qt::Key_Plus );
 		shortcut.append(KShortcut( Qt::Key_F9 ) );
-		m_action = new KRadioAction( i18n( "Polygon Tool" ), "14_polygon", shortcut, this, SLOT( activate() ), collection, name() );
+		m_action = new KAction( i18n( "Polygon Tool" ), "14_polygon", shortcut, this, SLOT( activate() ), collection, name() );
 		m_action->setToolTip( i18n( "Polygon" ) );
-		m_action->setExclusiveGroup( "shapes" );
+		// TODO needs porting: m_action->setExclusiveGroup( "shapes" );
 		//m_ownAction = true;
 	}
 }

@@ -33,6 +33,8 @@
 #include "vellipsetool.h"
 #include "vglobal.h"
 
+#include <kactioncollection.h>
+
 
 VEllipseOptionsWidget::VEllipseOptionsWidget( KarbonPart *part, QWidget *parent, const char *name )
 	: KDialogBase( parent, name, true, i18n( "Insert Ellipse" ), Ok | Cancel ), m_part( part )
@@ -264,13 +266,13 @@ VEllipseTool::showDialog() const
 void
 VEllipseTool::setup( KActionCollection *collection )
 {
-	m_action = static_cast<KRadioAction *>(collection -> action( name() ) );
+	m_action = static_cast<KAction *>(collection -> action( name() ) );
 
 	if( m_action == 0 )
 	{
-		m_action = new KRadioAction( i18n( "Ellipse Tool" ), "14_ellipse", Qt::SHIFT+Qt::Key_H, this, SLOT( activate() ), collection, name() );
+		m_action = new KAction( i18n( "Ellipse Tool" ), "14_ellipse", Qt::SHIFT+Qt::Key_H, this, SLOT( activate() ), collection, name() );
 		m_action->setToolTip( i18n( "Ellipse" ) );
-		m_action->setExclusiveGroup( "shapes" );
+		// TODO needs porting: m_action->setExclusiveGroup( "shapes" );
 		//m_ownAction = true;
 	}
 }

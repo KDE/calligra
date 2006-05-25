@@ -78,8 +78,7 @@ KarbonFactory::~KarbonFactory()
 }
 
 KParts::Part*
-KarbonFactory::createPartObject( QWidget* parentWidget, const char* widgetName,
-								 QObject* parent, const char* name, const char* classname, const QStringList& )
+KarbonFactory::createPartObject( QWidget* parentWidget, QObject* parent, const char* classname, const QStringList& )
 {
 	// If classname is "KoDocument", our host is a koffice application
 	// otherwise, the host wants us as a simple part, so switch to readonly and
@@ -89,7 +88,7 @@ KarbonFactory::createPartObject( QWidget* parentWidget, const char* widgetName,
 	// parentWidget and widgetName are used by KoDocument for the
 	// "readonly+singleView" case.
 	KarbonPart* part =
-		new KarbonPart( parentWidget, widgetName, parent, name, !bWantKoDocument );
+		new KarbonPart( parentWidget, 0, parent, 0, !bWantKoDocument );
 
 	if( !bWantKoDocument )
 		part->setReadWrite( false );

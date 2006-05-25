@@ -47,8 +47,8 @@
 typedef KGenericFactory<VDefaultTools> VDefaultToolsFactory;
 K_EXPORT_COMPONENT_FACTORY( karbon_defaulttools, VDefaultToolsFactory( "karbon_defaulttools" ) )
 
-VDefaultTools::VDefaultTools(QObject *parent, const char *name, const QStringList &)
-	: KParts::Plugin(parent, name)
+VDefaultTools::VDefaultTools(QObject *parent, const QStringList &)
+	: KParts::Plugin(parent/*, name*/)
 {
 	setInstance(VDefaultToolsFactory::instance());
 

@@ -40,6 +40,8 @@
 #include <visitors/vselectobjects.h>
 #include <widgets/vcanvas.h>
 
+#include <kactioncollection.h>
+
 VSelectOptionsWidget::VSelectOptionsWidget( KarbonPart *part )
 	: KDialogBase( 0L, "", true, i18n( "Selection" ), Ok | Cancel ), m_part( part )
 {
@@ -116,7 +118,9 @@ VSelectTool::draw()
 {
 	VPainter *painter = view()->painterFactory()->editpainter();
 	//painter->setZoomFactor( view()->zoom() );
-	painter->setRasterOp( Qt::NotROP );
+
+	// TODO: rasterops need porting to Qt4
+	// painter->setRasterOp( Qt::NotROP );
 
 	KoRect rect = view()->part()->document().selection()->boundingBox();
 
@@ -424,7 +428,10 @@ VSelectTool::updateStatusBar() const
 		double b = KoUnit::toUserValue( rect.bottom(), view()->part()->unit() );
 
 		// print bottom-left (%1,%2), top-right (%3,%4) corner of selection bounding box and document unit (%5)
-		QString selectMessage = i18n( "[(left,bottom), (right,top)] (actual unit)", "Selection [(%1, %2), (%3, %4)] (%5)", ( x, 0, 'f', 1 ), ( y, 0, 'f', 1 ), ( r, 0, 'f', 1 ), ( b, 0, 'f', 1 ), ( view()->part()->unitName() ) );
+		
+		// TODO: i18n needs porting
+QString selectMessage = "";
+		//QString selectMessage = i18n( "[(left,bottom), (right,top)] (actual unit)", "Selection [(%1, %2), (%3, %4)] (%5)", ( x, 0, 'f', 1 ), ( y, 0, 'f', 1 ), ( r, 0, 'f', 1 ), ( b, 0, 'f', 1 ), ( view()->part()->unitName() ) );
 
 		VSelectionDescription selectionDesc;
 		selectionDesc.visit( *view()->part()->document().selection() );
@@ -599,13 +606,13 @@ VSelectTool::refreshUnit()
 void
 VSelectTool::setup( KActionCollection *collection )
 {
-       m_action = static_cast<KRadioAction *>(collection -> action( name() ) );
+       m_action = static_cast<KAction *>(collection -> action( name() ) );
 
 	if( m_action == 0 )
 	{
-		m_action = new KRadioAction( i18n( "Select Tool" ), "14_select", Qt::SHIFT+Qt::Key_H, this, SLOT( activate() ), collection, name() );
+		m_action = new KAction( i18n( "Select Tool" ), "14_select", Qt::SHIFT+Qt::Key_H, this, SLOT( activate() ), collection, name() );
 		m_action->setToolTip( i18n( "Select" ) );
-		m_action->setExclusiveGroup( "select" );
+		// TODO port: m_action->setExclusiveGroup( "select" );
 		//m_ownAction = true;
 	}
 }

@@ -33,6 +33,8 @@
 #include <render/vpainterfactory.h>
 #include <commands/vtransformcmd.h>
 
+#include <kactioncollection.h>
+
 #include <kdebug.h>
 
 VRotateTool::VRotateTool( KarbonView *view )
@@ -67,7 +69,9 @@ VRotateTool::draw()
 {
 	VPainter* painter = view()->painterFactory()->editpainter();
 	//painter->setZoomFactor( view()->zoom() );
-	painter->setRasterOp( Qt::NotROP );
+
+	// TODO: Port to Qt4
+	//painter->setRasterOp( Qt::NotROP );
 
 	VObjectListIterator itr = m_objects;
 	for( ; itr.current(); ++itr )
@@ -162,13 +166,13 @@ VRotateTool::recalc()
 void
 VRotateTool::setup( KActionCollection *collection )
 {
-	m_action = static_cast<KRadioAction *>(collection -> action( name() ) );
+	m_action = static_cast<KAction *>(collection -> action( name() ) );
 
 	if( m_action == 0 )
 	{
-		m_action = new KRadioAction( i18n( "Rotate Tool" ), "14_rotate", Qt::SHIFT+Qt::Key_H, this, SLOT( activate() ), collection, name() );
+		m_action = new KAction( i18n( "Rotate Tool" ), "14_rotate", Qt::SHIFT+Qt::Key_H, this, SLOT( activate() ), collection, name() );
 		m_action->setToolTip( i18n( "Rotate" ) );
-		m_action->setExclusiveGroup( "manipulation" );
+		// TODO porting: m_action->setExclusiveGroup( "manipulation" );
 		//m_ownAction = true;
 	}
 }

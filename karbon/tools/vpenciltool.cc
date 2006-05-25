@@ -32,6 +32,7 @@
 
 #include <klocale.h>
 #include <knuminput.h>
+#include <kactioncollection.h>
 //#include <KoUnitWidgets.h>
 
 #include <karbon_part.h>
@@ -79,7 +80,7 @@ VPencilOptionsWidget::VPencilOptionsWidget( KarbonView*view, QWidget* parent, co
 	Q3VBox *vbox2 = new Q3VBox( group2 );
 
 	m_optimizeCurve = new QCheckBox( i18n( "Optimize" ), vbox2 );
-	m_fittingError = new KDoubleNumInput( 0.0, 400.0, 4.00, 0.50, 3, vbox2 );
+	m_fittingError = new KDoubleNumInput( 0.0, 400.0, 4.00, vbox2, 0.50, 3 );
 	m_fittingError->setLabel( i18n( "Exactness:" ) );
 
 	group2->setInsideMargin( 4 );
@@ -88,7 +89,7 @@ VPencilOptionsWidget::VPencilOptionsWidget( KarbonView*view, QWidget* parent, co
 	Q3GroupBox *group3 = new Q3GroupBox( 2, Qt::Horizontal, i18n( "Properties" ), m_widgetStack );
 	m_widgetStack->addWidget( group3, 3 );
 
-	m_combineAngle = new KDoubleNumInput( 0.0, 360.0, 0.10, 0.50, 3, group3 );
+	m_combineAngle = new KDoubleNumInput( 0.0, 360.0, 0.10, group3, 0.50, 3 );
 	m_combineAngle->setSuffix( " deg" );
 	m_combineAngle->setLabel( i18n( "Combine angle:" ) );
 
@@ -275,7 +276,8 @@ void
 VPencilTool::draw()
 {
 	VPainter* painter = view()->painterFactory()->editpainter();
-	painter->setRasterOp( Qt::NotROP );
+	// TODO rasterops need porting
+	// painter->setRasterOp( Qt::NotROP );
 
 	m_mode = m_optionWidget->currentMode();
 	m_optimize = m_optionWidget->optimize();
@@ -400,13 +402,13 @@ VPencilTool::showDialog() const
 void
 VPencilTool::setup( KActionCollection *collection )
 {
-	m_action = static_cast<KRadioAction *>(collection -> action( name() ) );
+	m_action = static_cast<KAction *>(collection -> action( name() ) );
 
 	if( m_action == 0 )
 	{
-		m_action = new KRadioAction( i18n( "Pencil Tool" ), "14_pencil", Qt::SHIFT+Qt::Key_P, this, SLOT( activate() ), collection, name() );
+		m_action = new KAction( i18n( "Pencil Tool" ), "14_pencil", Qt::SHIFT+Qt::Key_P, this, SLOT( activate() ), collection, name() );
 		m_action->setToolTip( i18n( "Pencil" ) );
-		m_action->setExclusiveGroup( "freehand" );
+		// TODO needs porting: m_action->setExclusiveGroup( "freehand" );
 		//m_ownAction = true;
 	}
 }

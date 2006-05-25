@@ -33,6 +33,8 @@
 #include "vsheartool.h"
 #include <commands/vtransformcmd.h>
 
+#include <kactioncollection.h>
+
 VShearTool::VShearTool( KarbonView *view ) : VTool( view, "sheartool" )
 {
 	setName( "tool_shear" );
@@ -63,7 +65,9 @@ void
 VShearTool::draw()
 {
 	VPainter* painter = view()->painterFactory()->editpainter();
-	painter->setRasterOp( Qt::NotROP );
+
+	// TODO: rasterops need porting to Qt4
+	// painter->setRasterOp( Qt::NotROP );
 
 	VObjectListIterator itr = m_objects;
 	for( ; itr.current(); ++itr )
@@ -206,13 +210,13 @@ VShearTool::recalc()
 void
 VShearTool::setup( KActionCollection *collection )
 {
-	m_action = static_cast<KRadioAction *>(collection -> action( name() ) );
+	m_action = static_cast<KAction *>(collection -> action( name() ) );
 
 	if( m_action == 0 )
 	{
-		m_action = new KRadioAction( i18n( "Shear Tool" ), "14_shear", Qt::SHIFT+Qt::Key_H, this, SLOT( activate() ), collection, name() );
+		m_action = new KAction( i18n( "Shear Tool" ), "14_shear", Qt::SHIFT+Qt::Key_H, this, SLOT( activate() ), collection, name() );
 		m_action->setToolTip( i18n( "Shear" ) );
-		m_action->setExclusiveGroup( "manipulation" );
+		// TODO porting needed: m_action->setExclusiveGroup( "manipulation" );
 		//m_ownAction = true;
 	}
 }

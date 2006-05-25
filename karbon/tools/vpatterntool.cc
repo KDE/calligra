@@ -21,7 +21,7 @@
 
 #include <qtoolbutton.h>
 #include <q3frame.h>
-#include <qhbuttongroup.h>
+#include <Q3ButtonGroup>
 #include <QLayout>
 #include <qfileinfo.h>
 #include <QLabel>
@@ -47,6 +47,8 @@
 #include <commands/vfillcmd.h>
 #include <commands/vstrokecmd.h>
 #include <widgets/vstrokefillpreview.h>
+
+#include <kactioncollection.h>
 
 VPatternWidget::VPatternWidget( Q3PtrList<KoIconItem>* patterns, VTool*, QWidget* parent )
 	: KDialogBase( parent, "", true, i18n( "Choose Pattern" ), Ok | Cancel ), m_pattern( 0 )
@@ -196,7 +198,8 @@ void VPatternTool::draw()
 		return;
 
 	VPainter *painter = view()->painterFactory()->editpainter();
-	painter->setRasterOp( Qt::NotROP );
+	// TODO rasterops need porting
+	// painter->setRasterOp( Qt::NotROP );
 
 	painter->setPen( Qt::DotLine );
 	
@@ -269,9 +272,11 @@ VPatternTool::draw( VPainter* painter )
 	m_origin = KoRect( s.x()-m_handleSize, s.y()-m_handleSize, 2*m_handleSize, 2*m_handleSize );
 	m_vector = KoRect( e.x()-m_handleSize, e.y()-m_handleSize, 2*m_handleSize, 2*m_handleSize );
 
+	/* this needs porting
 	painter->setPen( Qt::blue.light() );
 	painter->setBrush( Qt::blue.light() );
 	painter->setRasterOp( Qt::XorROP );
+*/
 
 	// draw the pattern vector
 	painter->newPath();
@@ -454,13 +459,13 @@ VPatternTool::showDialog() const
 void
 VPatternTool::setup( KActionCollection *collection )
 {
-	m_action = static_cast<KRadioAction *>(collection -> action( name() ) );
+	m_action = static_cast<KAction *>(collection -> action( name() ) );
 
 	if( m_action == 0 )
 	{
-		m_action = new KRadioAction( i18n( "Pattern Tool" ), "14_pattern", Qt::SHIFT+Qt::Key_H, this, SLOT( activate() ), collection, name() );
+		m_action = new KAction( i18n( "Pattern Tool" ), "14_pattern", Qt::SHIFT+Qt::Key_H, this, SLOT( activate() ), collection, name() );
 		m_action->setToolTip( i18n( "Pattern" ) );
-		m_action->setExclusiveGroup( "misc" );
+		// TODO needs porting: m_action->setExclusiveGroup( "misc" );
 		//m_ownAction = true;
 	}
 }
