@@ -73,7 +73,7 @@ namespace {
         {
             return JCS_CMYK;
         }
-        KMessageBox::error(0, i18n("Cannot export images in %1.\n").arg(cs->id().name()) ) ;
+        KMessageBox::error(0, i18n("The selected image format does not support the colorspace of the image (%1)\nPlease choose another format or convert to a different colorspace").arg(cs->id().name()) ) ;
         return JCS_UNKNOWN;
     }
 
