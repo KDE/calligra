@@ -18,9 +18,11 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <qgroupbox.h>
+#include <q3groupbox.h>
 #include <QLabel>
 #include <QLayout>
+//Added by qt3to4:
+#include <Q3GridLayout>
 
 #include <kcolordialog.h>
 #include <klocale.h>
@@ -37,10 +39,10 @@
 VColorTab::VColorTab( const VColor &c, QWidget* parent, const char* name )
 	: QTabWidget( parent, name )
 {
-	QGridLayout *mainLayout;
+	Q3GridLayout *mainLayout;
 
 	mRGBWidget = new QWidget( this );
-	mainLayout = new QGridLayout( mRGBWidget, 3, 3 );
+	mainLayout = new Q3GridLayout( mRGBWidget, 3, 3 );
 	mColorSelector = new KHSSelector( mRGBWidget );
 	mColorSelector->setMinimumHeight( 165 );
 	mColorSelector->setMinimumWidth( 165 );
@@ -56,7 +58,7 @@ VColorTab::VColorTab( const VColor &c, QWidget* parent, const char* name )
 	mainLayout->addMultiCellWidget( mSelector, 0, 2, 1, 1 );
 
 	//Reference
-	QGroupBox* groupbox = new QGroupBox( 2, Vertical, i18n( "Reference" ), mRGBWidget );
+	Q3GroupBox* groupbox = new Q3GroupBox( 2, Qt::Vertical, i18n( "Reference" ), mRGBWidget );
 	new QLabel( i18n( "Old:" ), groupbox );
 	new QLabel( i18n( "New:" ), groupbox );
 	mOldColor = new KColorPatch( groupbox );
@@ -68,7 +70,7 @@ VColorTab::VColorTab( const VColor &c, QWidget* parent, const char* name )
 	mainLayout->addWidget( groupbox, 0, 2 );
 
 	//Components
-	QGroupBox* cgroupbox = new QGroupBox( 3, Vertical, i18n( "Components" ), mRGBWidget );
+	Q3GroupBox* cgroupbox = new Q3GroupBox( 3, Qt::Vertical, i18n( "Components" ), mRGBWidget );
 
 	//--->RGB
 	new QLabel( i18n( "R:" ), cgroupbox );
@@ -94,7 +96,7 @@ VColorTab::VColorTab( const VColor &c, QWidget* parent, const char* name )
 	mainLayout->addWidget( cgroupbox, 1, 2 );
 
 	//--->Opacity
-	QGroupBox* ogroupBox = new QGroupBox( 1, Vertical, i18n( "Opacity" ), mRGBWidget );
+	Q3GroupBox* ogroupBox = new Q3GroupBox( 1, Qt::Vertical, i18n( "Opacity" ), mRGBWidget );
 	mOpacity = new KIntNumInput( 100, ogroupBox );
 	mOpacity->setRange( 0, 100, 1, true );
 	mOpacity->setValue( int( c.opacity() * 100.0 ) );

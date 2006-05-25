@@ -23,8 +23,8 @@
 // kopainter/libart wrapper
 
 #include "vpainter.h"
-#include <qwmatrix.h>
-#include <qptrlist.h>
+#include <qmatrix.h>
+#include <q3ptrlist.h>
 #include <koffice_export.h>
 class QPainter;
 struct _ArtVpath;
@@ -87,7 +87,9 @@ public:
 	virtual void restore();
 
 	//
+	/* Port to Qt4
 	virtual void setRasterOp( Qt::RasterOp );
+	*/
 
 	virtual QPaintDevice *device() { return m_target; } 
 	unsigned char *buffer() { return m_buffer; }
@@ -114,7 +116,7 @@ private:
 	VFill *m_fill;
 	VFillRule m_fillRule;
 	double m_zoomFactor;
-	QPtrList<_ArtSVP> m_clipPaths;
+	Q3PtrList<_ArtSVP> m_clipPaths;
 
 	bool m_bDrawNodes;
 

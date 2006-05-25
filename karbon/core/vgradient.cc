@@ -19,6 +19,8 @@
 
 #include <qdom.h>
 #include <qbuffer.h>
+//Added by qt3to4:
+#include <Q3PtrList>
 
 #include "vdocument.h"
 #include "vglobal.h"
@@ -28,7 +30,7 @@
 #include <KoXmlWriter.h>
 #include <KoXmlNS.h>
 
-int VGradient::VColorStopList::compareItems( QPtrCollection::Item item1, QPtrCollection::Item item2 )
+int VGradient::VColorStopList::compareItems( Q3PtrCollection::Item item1, Q3PtrCollection::Item item2 )
 {
 	float r1 = ( (VColorStop*)item1 )->rampPoint;
 	float r2 = ( (VColorStop*)item2 )->rampPoint;
@@ -66,7 +68,7 @@ VGradient::VGradient( const VGradient& gradient )
 	m_repeatMethod	= gradient.m_repeatMethod;
 
 	m_colorStops.clear();
-	QPtrVector<VColorStop> cs = gradient.colorStops();
+	Q3PtrVector<VColorStop> cs = gradient.colorStops();
 	for( uint i = 0; i < cs.count(); i++ )
 		m_colorStops.append( new VColorStop( *cs[i] ) );
 	m_colorStops.sort();
@@ -86,7 +88,7 @@ VGradient& VGradient::operator=( const VGradient& gradient )
 	m_repeatMethod	= gradient.m_repeatMethod;
 
 	m_colorStops.clear();
-	QPtrVector<VColorStop> cs = gradient.colorStops();
+	Q3PtrVector<VColorStop> cs = gradient.colorStops();
 	for( uint i = 0; i < cs.count(); i++ )
 		m_colorStops.append( new VColorStop( *cs[i] ) );
 	m_colorStops.sort();
@@ -94,9 +96,9 @@ VGradient& VGradient::operator=( const VGradient& gradient )
 	return *this;
 } // VGradient::operator=
 
-const QPtrVector<VColorStop> VGradient::colorStops() const
+const Q3PtrVector<VColorStop> VGradient::colorStops() const
 { 
-	QPtrVector<VColorStop> v;
+	Q3PtrVector<VColorStop> v;
 	m_colorStops.toVector( &v );
 	v.setAutoDelete( false );
 	return v;
@@ -155,7 +157,7 @@ VGradient::save( QDomElement& element ) const
 
 	// save stops
 	VColorStop* colorstop;
-	QPtrList<VColorStop>& colorStops = const_cast<VColorStopList&>( m_colorStops );
+	Q3PtrList<VColorStop>& colorStops = const_cast<VColorStopList&>( m_colorStops );
 	for( colorstop = colorStops.first(); colorstop; colorstop = colorStops.next() )
 	{
 		QDomElement stop = element.ownerDocument().createElement( "COLORSTOP" );
@@ -204,7 +206,7 @@ VGradient::saveOasis( KoGenStyles &mainStyles ) const
 
 	// save stops
 	VColorStop* colorstop;
-	QPtrList<VColorStop>& colorStops = const_cast<VColorStopList&>( m_colorStops );
+	Q3PtrList<VColorStop>& colorStops = const_cast<VColorStopList&>( m_colorStops );
 	for( colorstop = colorStops.first(); colorstop; colorstop = colorStops.next() )
 	{
 		elementWriter.startElement( "svg:stop" );

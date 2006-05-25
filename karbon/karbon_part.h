@@ -21,7 +21,7 @@
 #define __KARBON_PART_H__
 
 
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 
 #include <KoDocument.h>
 #include <KoUnit.h>

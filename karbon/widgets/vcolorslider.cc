@@ -22,6 +22,9 @@
 
 #include <QLayout>
 #include <QLabel>
+//Added by qt3to4:
+#include <QEvent>
+#include <Q3HBoxLayout>
 #include <knuminput.h>
 #include <kselector.h>
 
@@ -53,7 +56,7 @@ VColorSlider::~VColorSlider()
 void VColorSlider::init()
 {
 	m_isDragging = false;
-	QHBoxLayout *layout = new QHBoxLayout( this, 3 );
+	Q3HBoxLayout *layout = new Q3HBoxLayout( this, 3 );
 
 	m_label = new QLabel( this );
 	m_gradientSelect = new KGradientSelector( KSelector::Horizontal, this );

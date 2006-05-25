@@ -23,6 +23,9 @@
 #define VCOLORSLIDER_H
 
 #include <QWidget>
+//Added by qt3to4:
+#include <QEvent>
+#include <QLabel>
 
 class QLabel;
 class KIntSpinBox;

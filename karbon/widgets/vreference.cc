@@ -20,16 +20,19 @@
 
 /* vreference.cc */
 
-#include <qbuttongroup.h>
+#include <q3buttongroup.h>
 #include <QLayout>
 #include <qradiobutton.h>
+//Added by qt3to4:
+#include <Q3VBoxLayout>
+#include <Q3Frame>
 
 #include "vreference.h"
 
-VReference::VReference( QWidget *parent, const char *name ) : QFrame ( parent, name )
+VReference::VReference( QWidget *parent, const char *name ) : Q3Frame ( parent, name )
 {
-	QVBoxLayout* layout = new QVBoxLayout( this );
-	mButtonGroup = new QButtonGroup (3, Vertical, this );
+	Q3VBoxLayout* layout = new Q3VBoxLayout( this );
+	mButtonGroup = new Q3ButtonGroup (3, Vertical, this );
 	QRadioButton* radio = new QRadioButton ( mButtonGroup );
 	mButtonGroup->insert( radio, TopLeft );
 	radio = new QRadioButton ( mButtonGroup );

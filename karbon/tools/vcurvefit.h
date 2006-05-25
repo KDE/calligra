@@ -2,10 +2,10 @@
 #define __VCURVEFIT_H__
 
 #include <QString>
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 #include "KoPoint.h"
 
-VPath *bezierFit(QPtrList<KoPoint> &points,float error);
+VPath *bezierFit(Q3PtrList<KoPoint> &points,float error);
 
 #endif
 

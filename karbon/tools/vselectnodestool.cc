@@ -21,6 +21,8 @@
 
 #include <qcursor.h>
 #include <QLabel>
+//Added by qt3to4:
+#include <Q3PtrList>
 
 #include <klocale.h>
 #include <KoPoint.h>
@@ -88,7 +90,7 @@ VSelectNodesTool::draw()
 
 	KoRect selrect = calcSelRect( last() );	
 
-	QPtrList<VSegment> segments = selection->getSegments( selrect );
+	Q3PtrList<VSegment> segments = selection->getSegments( selrect );
 	if( selection->objects().count() > 0 &&
 		m_state != dragging && ( m_state >= moving || segments.count() > 0 ) )
 	{
@@ -145,7 +147,7 @@ VSelectNodesTool::setCursor() const
 
 	KoRect selrect = calcSelRect( last() );
 
-	QPtrList<VSegment> segments = view()->part()->document().selection()->getSegments( selrect );
+	Q3PtrList<VSegment> segments = view()->part()->document().selection()->getSegments( selrect );
 	if( segments.count() > 0 &&
 		( segments.at( 0 )->knotIsSelected() ||
 		  segments.at( 0 )->pointIsSelected( 0 ) ||
@@ -277,7 +279,7 @@ VSelectNodesTool::mouseDragRelease()
 	{
 		view()->part()->document().selection()->setState( VObject::selected );
 		VCommand *cmd;
-		QPtrList<VSegment> segments;
+		Q3PtrList<VSegment> segments;
 		if( m_state == movingbezier1 || m_state == movingbezier2 )
 		{
 			KoRect selrect = calcSelRect( first() );

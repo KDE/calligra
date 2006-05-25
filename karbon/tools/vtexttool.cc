@@ -29,6 +29,12 @@
 #include <qpixmap.h>
 #include <QPushButton>
 #include <qtabwidget.h>
+//Added by qt3to4:
+#include <Q3HBoxLayout>
+#include <Q3GridLayout>
+#include <QMouseEvent>
+#include <Q3VBoxLayout>
+#include <QPaintEvent>
 
 #include <kdebug.h>
 #include <kfontcombo.h>
@@ -202,12 +208,12 @@ ShadowPreview::paintEvent( QPaintEvent* )
 }
 
 ShadowWidget::ShadowWidget( QWidget* parent, const char* name, int angle, int distance, bool translucent )
-		: QGroupBox( parent, name )
+		: Q3GroupBox( parent, name )
 {
 	setTitle( i18n( "Shadow" ) );
 	setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Minimum ) );
 
-	QGridLayout* layout = new QGridLayout( this );
+	Q3GridLayout* layout = new Q3GridLayout( this );
 	layout->addRowSpacing( 0, 12 );
 	layout->setMargin( 3 );
 	layout->setSpacing( 2 );
@@ -320,7 +326,7 @@ VTextOptionsWidget::VTextOptionsWidget( VTextTool* tool, QWidget *parent )
 	//setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Minimum ) );
 	//setFrameStyle( Box | Sunken );
 	QWidget *base = new QWidget( this );
-	QVBoxLayout* mainLayout = new QVBoxLayout( base );
+	Q3VBoxLayout* mainLayout = new Q3VBoxLayout( base );
 	mainLayout->setMargin( 3 );
 
 	mainLayout->add( m_tabWidget = new QTabWidget( base ) );
@@ -329,7 +335,7 @@ VTextOptionsWidget::VTextOptionsWidget( VTextTool* tool, QWidget *parent )
 
 	QWidget* textWidget = new QWidget( m_tabWidget );
 
-	QGridLayout* textLayout = new QGridLayout( textWidget );
+	Q3GridLayout* textLayout = new Q3GridLayout( textWidget );
 
 	QStringList list;
 	KFontChooser::getFontList( list, KFontChooser::SmoothScalableFonts );
@@ -346,7 +352,7 @@ VTextOptionsWidget::VTextOptionsWidget( VTextTool* tool, QWidget *parent )
 
 	QWidget* posWidget = new QWidget( m_tabWidget );
 	
-	QGridLayout* posLayout = new QGridLayout( posWidget );
+	Q3GridLayout* posLayout = new Q3GridLayout( posWidget );
 	textLayout->setMargin( 3 );
 	posLayout->setSpacing( 2 );
 	posLayout->addWidget( new QLabel( i18n( "Alignment:" ), posWidget ), 0, 0 );
@@ -362,13 +368,13 @@ VTextOptionsWidget::VTextOptionsWidget( VTextTool* tool, QWidget *parent )
 
 	QWidget* fxWidget = new QWidget( m_tabWidget );
 
-	QVBoxLayout* fxLayout = new QVBoxLayout( fxWidget );
+	Q3VBoxLayout* fxLayout = new Q3VBoxLayout( fxWidget );
 
 	fxLayout->setMargin( 3 );
 	fxLayout->setSpacing( 2 );
 	fxLayout->add( m_shadow = new ShadowWidget( fxWidget, 0L, 315, 4, true ) );
 
-	QHBoxLayout* fxLayout2 = new QHBoxLayout( fxLayout );
+	Q3HBoxLayout* fxLayout2 = new Q3HBoxLayout( fxLayout );
 
 	fxLayout2->setSpacing( 2 );
 	fxLayout2->addWidget( m_editBasePath = new QPushButton( i18n( "Edit Base Path" ), fxWidget ) );

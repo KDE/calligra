@@ -22,6 +22,8 @@
 
 #include "vgroup_iface.h"
 #include "vgroup.h"
+//Added by qt3to4:
+#include <Q3ValueList>
 
 VGroupIface::VGroupIface( VGroup *group )
 	: VObjectIface( group ), m_group( group )
@@ -34,10 +36,10 @@ VGroupIface::clear()
 	m_group->clear();
 }
 
-QValueList<DCOPRef>
+Q3ValueList<DCOPRef>
 VGroupIface::objects()
 {
-	QValueList<DCOPRef> lst;
+	Q3ValueList<DCOPRef> lst;
 	VObjectListIterator itr = m_group->objects();
 	for( ; itr.current(); ++itr )
 		lst.append( DCOPRef( kapp->dcopClient()->appId(), itr.current()->dcopObject()->objId() ) );

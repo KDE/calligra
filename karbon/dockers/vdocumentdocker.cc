@@ -21,13 +21,22 @@
 #include <qinputdialog.h>
 #include <QLayout>
 #include <QCheckBox>
-#include <qlistview.h>
-#include <qptrvector.h>
+#include <q3listview.h>
+#include <q3ptrvector.h>
 #include <qtoolbutton.h>
 #include <qpainter.h>
 #include <qtabwidget.h>
 #include <QLabel>
 #include <qcursor.h>
+//Added by qt3to4:
+#include <Q3GridLayout>
+#include <Q3PtrList>
+#include <QPixmap>
+#include <Q3Frame>
+#include <QMouseEvent>
+#include <QEvent>
+#include <Q3VBoxLayout>
+#include <QPaintEvent>
 
 #include <klocale.h>
 #include <kglobal.h>
@@ -144,7 +153,7 @@ VDocumentPreview::eventFilter( QObject* object, QEvent* event )
 		{
 			KoPoint p3( mouseEvent->pos().x() / scaleFactor - xoffset,
 						( height() - mouseEvent->pos().y() ) / scaleFactor - yoffset );
-			setCursor( rect.contains( p3 ) ? QCursor::SizeAllCursor : QCursor( Qt::ArrowCursor ) );
+			setCursor( rect.contains( p3 ) ? Qt::SizeAllCursor : QCursor( Qt::ArrowCursor ) );
 		}
 	}
 
@@ -223,19 +232,19 @@ VDocumentPreview::paintEvent( QPaintEvent* )
 VDocumentTab::VDocumentTab( KarbonView* view, QWidget* parent )
 		: QWidget( parent, "DocumentTab" ), m_view( view )
 {
-	QFrame* frame;
-	QGridLayout* layout = new QGridLayout( this );
+	Q3Frame* frame;
+	Q3GridLayout* layout = new Q3GridLayout( this );
 	layout->setMargin( 3 );
 	layout->setSpacing( 2 );
 	layout->addMultiCellWidget( m_documentPreview = new VDocumentPreview( m_view, this ), 0, 7, 2, 2 );
 	layout->addWidget( new QLabel( i18n( "Width:" ), this ), 0, 0 );
 	layout->addWidget( new QLabel( i18n( "Height:" ), this ), 1, 0 );
-	layout->addMultiCellWidget( frame = new QFrame( this ), 2, 2, 0, 1 );
-	frame->setFrameShape( QFrame::HLine );
+	layout->addMultiCellWidget( frame = new Q3Frame( this ), 2, 2, 0, 1 );
+	frame->setFrameShape( Q3Frame::HLine );
 	layout->addWidget( new QLabel( i18n( "Layers:" ), this ), 3, 0 );
 	layout->addWidget( new QLabel( i18n( "Format:" ), this ), 4, 0 );
-	layout->addMultiCellWidget( frame = new QFrame( this ), 5, 5, 0, 1 );
-	frame->setFrameShape( QFrame::HLine );
+	layout->addMultiCellWidget( frame = new Q3Frame( this ), 5, 5, 0, 1 );
+	frame->setFrameShape( Q3Frame::HLine );
 	//layout->addMultiCellWidget( new QLabel( i18n( "Zoom factor:" ), this ), 6, 6, 0, 1 );
 	layout->addWidget( m_width = new QLabel( this ), 0, 1 );
 	layout->addWidget( m_height = new QLabel( this ), 1, 1 );
@@ -247,10 +256,10 @@ VDocumentTab::VDocumentTab( KarbonView* view, QWidget* parent )
 	layout->setColStretch( 2, 2 );
 	//layout->addWidget(
 
-	m_width->setAlignment( AlignRight );
-	m_height->setAlignment( AlignRight );
-	m_layers->setAlignment( AlignRight );
-	m_format->setAlignment( AlignRight );
+	m_width->setAlignment( Qt::AlignRight );
+	m_height->setAlignment( Qt::AlignRight );
+	m_layers->setAlignment( Qt::AlignRight );
+	m_format->setAlignment( Qt::AlignRight );
 
 	connect( view->part()->commandHistory(), SIGNAL( commandAdded( VCommand* ) ), this, SLOT( slotCommandAdded( VCommand* ) ) );
 	connect( view->part()->commandHistory(), SIGNAL( commandExecuted() ), this, SLOT( slotCommandExecuted() ) );
@@ -303,8 +312,8 @@ VDocumentTab::slotCommandExecuted()
  *  Layers tab                                                           *
  *************************************************************************/
 
-VObjectListViewItem::VObjectListViewItem( QListViewItem* parent, VObject* object, VDocument *doc, uint key, QPtrDict<VObjectListViewItem> *map )
-	: QListViewItem( parent, 0L ), m_object( object ), m_document( doc ), m_key( key ), m_map( map )
+VObjectListViewItem::VObjectListViewItem( Q3ListViewItem* parent, VObject* object, VDocument *doc, uint key, Q3PtrDict<VObjectListViewItem> *map )
+	: Q3ListViewItem( parent, 0L ), m_object( object ), m_document( doc ), m_key( key ), m_map( map )
 {
 	update();
 	// add itself to object list item map
@@ -363,15 +372,15 @@ VObjectListViewItem::update()
 }
 
 int 
-VObjectListViewItem::compare( QListViewItem *i, int /*col*/, bool /*ascending*/ ) const
+VObjectListViewItem::compare( Q3ListViewItem *i, int /*col*/, bool /*ascending*/ ) const
 {
 	VObjectListViewItem *objectItem = dynamic_cast<VObjectListViewItem*>(i);
 	if( ! objectItem ) return 0;
 	return m_key < objectItem->m_key ? -1 : 1;
 }
 
-VLayerListViewItem::VLayerListViewItem( QListView* parent, VLayer* layer, VDocument *doc, QPtrDict<VLayerListViewItem> *map )
-	: QCheckListItem( parent, 0L, CheckBox ), m_layer( layer ), m_document( doc), m_map( map )
+VLayerListViewItem::VLayerListViewItem( Q3ListView* parent, VLayer* layer, VDocument *doc, Q3PtrDict<VLayerListViewItem> *map )
+	: Q3CheckListItem( parent, 0L, CheckBox ), m_layer( layer ), m_document( doc), m_map( map )
 {
 	update();
 	// add itself to layer list item map
@@ -442,7 +451,7 @@ VLayerListViewItem::key( int, bool ) const
 }
 
 int 
-VLayerListViewItem::compare( QListViewItem *i, int /*col*/, bool /*ascending*/ ) const
+VLayerListViewItem::compare( Q3ListViewItem *i, int /*col*/, bool /*ascending*/ ) const
 {
 	VLayerListViewItem *layerItem = dynamic_cast<VLayerListViewItem*>(i);
 	if( ! layerItem ) return 0;
@@ -454,9 +463,9 @@ VLayersTab::VLayersTab( KarbonView* view, QWidget* parent )
 {
 
 	QToolButton* button;
-	QVBoxLayout* layout = new QVBoxLayout( this, 1 );
-	layout->addWidget( m_layersListView = new QListView( this ), 1 );
-	m_buttonGroup = new QHButtonGroup( this );
+	Q3VBoxLayout* layout = new Q3VBoxLayout( this, 1 );
+	layout->addWidget( m_layersListView = new Q3ListView( this ), 1 );
+	m_buttonGroup = new Q3HButtonGroup( this );
 	m_buttonGroup->setInsideMargin( 3 );
 	button = new QToolButton( m_buttonGroup );
 	button->setIconSet( SmallIcon( "14_layer_newlayer" ) );
@@ -482,16 +491,16 @@ VLayersTab::VLayersTab( KarbonView* view, QWidget* parent )
 	m_layersListView->addColumn( i18n( "Item" ), 120 );
 	m_layersListView->addColumn( i18n( "L" ), 20 );
 	m_layersListView->addColumn( i18n( "V" ), 20 );
-	m_layersListView->setColumnWidthMode( 0, QListView::Maximum );
+	m_layersListView->setColumnWidthMode( 0, Q3ListView::Maximum );
 	m_layersListView->setColumnAlignment( 1, Qt::AlignCenter );
 	m_layersListView->setColumnAlignment( 2, Qt::AlignCenter );
-	m_layersListView->setResizeMode( QListView::NoColumn );
+	m_layersListView->setResizeMode( Q3ListView::NoColumn );
 	m_layersListView->setSorting( 0, false );
 	m_layersListView->setRootIsDecorated( true );
-	m_layersListView->setSelectionMode( QListView::Extended );
+	m_layersListView->setSelectionMode( Q3ListView::Extended );
 
-	connect( m_layersListView, SIGNAL( clicked( QListViewItem*, const QPoint&, int ) ), this, SLOT( itemClicked( QListViewItem*, const QPoint&, int ) ) );
-	connect( m_layersListView, SIGNAL( rightButtonClicked( QListViewItem*, const QPoint&, int ) ), this, SLOT( renameItem( QListViewItem*, const QPoint&, int ) ) );
+	connect( m_layersListView, SIGNAL( clicked( Q3ListViewItem*, const QPoint&, int ) ), this, SLOT( itemClicked( Q3ListViewItem*, const QPoint&, int ) ) );
+	connect( m_layersListView, SIGNAL( rightButtonClicked( Q3ListViewItem*, const QPoint&, int ) ), this, SLOT( renameItem( Q3ListViewItem*, const QPoint&, int ) ) );
 	connect( m_layersListView, SIGNAL( selectionChanged() ), this, SLOT( selectionChangedFromList() ) );
 	connect( m_view, SIGNAL( selectionChange() ), this, SLOT( selectionChangedFromTool() ) );
 	connect( m_buttonGroup, SIGNAL( clicked( int ) ), this, SLOT( slotButtonClicked( int ) ) );
@@ -524,7 +533,7 @@ VLayersTab::slotButtonClicked( int ID )
 void 
 VLayersTab::resetSelection()
 {
-	QListViewItemIterator it( m_layersListView );
+	Q3ListViewItemIterator it( m_layersListView );
 
 	// iterates over all list items and deselects them manually
 	// to avoid the list views selectionChanged signal
@@ -540,7 +549,7 @@ VLayersTab::selectActiveLayer()
 {
 	if( ! m_layers[ m_document->activeLayer() ] )
 	{
-		QPtrVector<VLayer> vector;
+		Q3PtrVector<VLayer> vector;
 		m_document->layers().toVector( &vector );
 		// find another layer to set active
 		for( int i = vector.count() - 1; i >= 0; i-- )
@@ -552,7 +561,7 @@ VLayersTab::selectActiveLayer()
 	}
 
 	// deselect all other layers
-	QPtrDictIterator<VLayerListViewItem> it( m_layers );
+	Q3PtrDictIterator<VLayerListViewItem> it( m_layers );
 	for(; it.current(); ++it )
 	{
 		it.current()->setSelected( false );
@@ -606,9 +615,9 @@ VLayersTab::selectionChangedFromTool()
 }
 
 void 
-VLayersTab::updateChildItems( QListViewItem *item )
+VLayersTab::updateChildItems( Q3ListViewItem *item )
 {
-	QListViewItemIterator it( item );
+	Q3ListViewItemIterator it( item );
 
 	// iterator points to item, so make the next item current first
 	for( ++it; it.current(); ++it )
@@ -659,7 +668,7 @@ VLayersTab::toggleState( VObject *obj, int col )
 }
 
 void
-VLayersTab::itemClicked( QListViewItem* item, const QPoint &, int col )
+VLayersTab::itemClicked( Q3ListViewItem* item, const QPoint &, int col )
 {
 	if( item )
 	{
@@ -719,7 +728,7 @@ VLayersTab::selectionChangedFromList()
 {
 	m_document->selection()->clear();
 
-	QListViewItemIterator it( m_layersListView );
+	Q3ListViewItemIterator it( m_layersListView );
 
 	// iterate over all list items and add their corresponding object 
 	// to the documents selection if the list item is selected and not hidden or locked or both
@@ -749,7 +758,7 @@ VLayersTab::selectionChangedFromList()
 }
 
 void
-VLayersTab::renameItem( QListViewItem* item, const QPoint&, int col )
+VLayersTab::renameItem( Q3ListViewItem* item, const QPoint&, int col )
 {
 	if ( ( item ) && col == 0 )
 	{
@@ -802,7 +811,7 @@ VLayersTab::raiseItem()
 {
 	VCommand *cmd = 0L;
 	//QListViewItem *newselection = 0L;
-	QListViewItemIterator it( m_layersListView );
+	Q3ListViewItemIterator it( m_layersListView );
 
 	for(; it.current(); ++it )
 	{
@@ -842,7 +851,7 @@ void
 VLayersTab::lowerItem()
 {
 	VCommand *cmd = 0L;
-	QListViewItemIterator it( m_layersListView );
+	Q3ListViewItemIterator it( m_layersListView );
 
 	for(; it.current(); ++it )
 	{
@@ -873,9 +882,9 @@ void
 VLayersTab::deleteItem()
 {
 	VCommand *cmd = 0L;
-	QListViewItemIterator it( m_layersListView );
+	Q3ListViewItemIterator it( m_layersListView );
 
-	QPtrList<QListViewItem> deleteItems;
+	Q3PtrList<Q3ListViewItem> deleteItems;
 	deleteItems.setAutoDelete( false );
 
 	// collect all selected items because they get deselected
@@ -946,7 +955,7 @@ VLayersTab::updateLayers()
 {
 	removeDeletedObjectsFromList();	
 
-	QPtrVector<VLayer> vector;
+	Q3PtrVector<VLayer> vector;
 	m_document->layers().toVector( &vector );
 	VLayerListViewItem* item = 0L;
 	for( int i = vector.count() - 1; i >= 0; i-- )
@@ -972,7 +981,7 @@ VLayersTab::updateLayers()
 } // VLayersTab::updateLayers
 
 void
-VLayersTab::updateObjects( VObject *object, QListViewItem *item )
+VLayersTab::updateObjects( VObject *object, Q3ListViewItem *item )
 {
 	VObjectListIterator itr = dynamic_cast<VGroup *>( object )->objects();
 
@@ -1005,7 +1014,7 @@ VLayersTab::updateObjects( VObject *object, QListViewItem *item )
 void
 VLayersTab::removeDeletedObjectsFromList()
 {
-	QPtrDictIterator<VObjectListViewItem> it( m_objects );
+	Q3PtrDictIterator<VObjectListViewItem> it( m_objects );
 
 	// iterate over all object items and delete the following items:
 	// - items representing deleted objects
@@ -1055,7 +1064,7 @@ VLayersTab::removeDeletedObjectsFromList()
 		++it;
 	}
 
-	QPtrDictIterator<VLayerListViewItem> itr( m_layers );
+	Q3PtrDictIterator<VLayerListViewItem> itr( m_layers );
 
 	// iterate over all layer items and delete the following items:
 	// - items representing deleted layers
@@ -1089,8 +1098,8 @@ VLayersTab::slotCommandExecuted( VCommand* command )
  *  History tab                                                          *
  *************************************************************************/
 
-VHistoryGroupItem::VHistoryGroupItem( VHistoryItem* item, QListView* parent, QListViewItem* after )
-		: QListViewItem( parent, after )
+VHistoryGroupItem::VHistoryGroupItem( VHistoryItem* item, Q3ListView* parent, Q3ListViewItem* after )
+		: Q3ListViewItem( parent, after )
 {
 	setPixmap( 0, *item->pixmap( 0 ) );
 	setText( 0, item->text( 0 ) );
@@ -1121,7 +1130,7 @@ VHistoryGroupItem::paintCell( QPainter* p, const QColorGroup& cg, int column, in
 	{
 		p->fillRect( 0, 0, width, height(), cg.base() );
 		if ( n > 0 )
-			p->fillRect( 0, 0, width, height(), QBrush( cg.base().dark( 140 ), QBrush::BDiagPattern ) );
+			p->fillRect( 0, 0, width, height(), QBrush( cg.base().dark( 140 ), Qt::BDiagPattern ) );
 	}
 	else
 		p->fillRect( 0, 0, width, height(), cg.base().dark( 140 ) );
@@ -1149,14 +1158,14 @@ VHistoryGroupItem::paintFocus( QPainter*, const QColorGroup&, const QRect& )
 
 } // VHistoryGroupItem::paintFocus
 
-VHistoryItem::VHistoryItem( VCommand* command, QListView* parent, QListViewItem* after )
-		: QListViewItem( parent, after ), m_command( command )
+VHistoryItem::VHistoryItem( VCommand* command, Q3ListView* parent, Q3ListViewItem* after )
+		: Q3ListViewItem( parent, after ), m_command( command )
 {
 	init();
 } // VHistoryItem::VHistoryItem
 
-VHistoryItem::VHistoryItem( VCommand* command, VHistoryGroupItem* parent, QListViewItem* after )
-		: QListViewItem( parent, after ), m_command( command )
+VHistoryItem::VHistoryItem( VCommand* command, VHistoryGroupItem* parent, Q3ListViewItem* after )
+		: Q3ListViewItem( parent, after ), m_command( command )
 {
 	init();
 } // VHistoryItem::VHistoryItem
@@ -1207,21 +1216,21 @@ VHistoryItem::paintFocus( QPainter*, const QColorGroup&, const QRect& )
 VHistoryTab::VHistoryTab( KarbonPart* part, QWidget* parent )
 		: QWidget( parent ), m_part( part )
 {
-	QVBoxLayout* layout = new QVBoxLayout( this );
+	Q3VBoxLayout* layout = new Q3VBoxLayout( this );
 	layout->setMargin( 3 );
 	layout->setSpacing( 2 );
-	layout->add( m_history = new QListView( this ) );
-	m_history->setVScrollBarMode( QListView::AlwaysOn );
-	m_history->setSelectionMode( QListView::NoSelection );
+	layout->add( m_history = new Q3ListView( this ) );
+	m_history->setVScrollBarMode( Q3ListView::AlwaysOn );
+	m_history->setSelectionMode( Q3ListView::NoSelection );
 	m_history->addColumn( i18n( "Commands" ) );
-	m_history->setResizeMode( QListView::AllColumns );
+	m_history->setResizeMode( Q3ListView::AllColumns );
 	m_history->setRootIsDecorated( true );
 	layout->add( m_groupCommands = new QCheckBox( i18n( "Group commands" ), this ) );
 
 	m_history->setSorting( 0, true );
 	VHistoryGroupItem* group = 0;
 	VHistoryItem* last = 0;
-	QPtrVector<VCommand> cmds;
+	Q3PtrVector<VCommand> cmds;
 	part->commandHistory()->commands()->toVector( &cmds );
 	int c = cmds.count();
 	for ( int i = 0; i < c; i++ )
@@ -1229,7 +1238,7 @@ VHistoryTab::VHistoryTab( KarbonPart* part, QWidget* parent )
 		if ( ( i > 0 ) && ( cmds[ i ]->name() == cmds[ i - 1 ]->name() ) )
 			if ( group )
 			{
-				QListViewItem* prev = group->firstChild();
+				Q3ListViewItem* prev = group->firstChild();
 				while ( prev && prev->nextSibling() )
 					prev = prev->nextSibling();
 				new VHistoryItem( cmds[ i ], group, prev );
@@ -1247,7 +1256,7 @@ VHistoryTab::VHistoryTab( KarbonPart* part, QWidget* parent )
 	}
 	m_history->sort();
 
-	connect( m_history, SIGNAL( mouseButtonClicked( int, QListViewItem*, const QPoint&, int ) ), this, SLOT( commandClicked( int, QListViewItem*, const QPoint&, int ) ) );
+	connect( m_history, SIGNAL( mouseButtonClicked( int, Q3ListViewItem*, const QPoint&, int ) ), this, SLOT( commandClicked( int, Q3ListViewItem*, const QPoint&, int ) ) );
 	connect( m_groupCommands, SIGNAL( stateChanged( int ) ), this, SLOT( groupingChanged( int ) ) );
 	connect( part->commandHistory(), SIGNAL( historyCleared() ), this, SLOT( historyCleared() ) );
 	connect( part->commandHistory(), SIGNAL( commandAdded( VCommand* ) ), this, SLOT( slotCommandAdded( VCommand* ) ) );
@@ -1279,13 +1288,13 @@ VHistoryTab::historyCleared()
 void
 VHistoryTab::commandExecuted( VCommand* command )
 {
-	QListViewItem* item = m_history->firstChild();
+	Q3ListViewItem* item = m_history->firstChild();
 	bool found = false;
 	while ( !found && item )
 	{
 		if ( item->rtti() == 1001 )
 		{
-			QListViewItem* child = item->firstChild();
+			Q3ListViewItem* child = item->firstChild();
 			while ( !found && child )
 			{
 				found = ( ( (VHistoryItem*)child )->command() == command );
@@ -1314,7 +1323,7 @@ VHistoryTab::slotCommandAdded( VCommand* command )
 	if ( !command )
 		return;
 
-	QListViewItem* last = m_history->firstChild();
+	Q3ListViewItem* last = m_history->firstChild();
 	while ( last && last->nextSibling() )
 		last = last->nextSibling();
 
@@ -1324,7 +1333,7 @@ VHistoryTab::slotCommandAdded( VCommand* command )
 		{
 			if( last->rtti() == 1002 )
 			{
-				QListViewItem* prevSibling;
+				Q3ListViewItem* prevSibling;
 				if( m_history->childCount() > 1 )
 				{
 					prevSibling = m_history->firstChild();
@@ -1335,7 +1344,7 @@ VHistoryTab::slotCommandAdded( VCommand* command )
 					prevSibling = m_history->firstChild();
 				last = new VHistoryGroupItem( (VHistoryItem*)last, m_history, prevSibling );
 			}
-			QListViewItem* prev = last->firstChild();
+			Q3ListViewItem* prev = last->firstChild();
 			while ( prev && prev->nextSibling() )
 				prev = prev->nextSibling();
 			m_history->setCurrentItem( new VHistoryItem( command, (VHistoryGroupItem*)last, prev ) );
@@ -1374,7 +1383,7 @@ VHistoryTab::removeLastCommand()
 {
 	if ( m_history->childCount() > 0 )
 	{
-		QListViewItem* last = m_history->firstChild();
+		Q3ListViewItem* last = m_history->firstChild();
 		while ( last && last->nextSibling() )
 			last = last->nextSibling();
 		if ( last->rtti() == 1002 )
@@ -1396,7 +1405,7 @@ VHistoryTab::removeLastCommand()
 } // VHistoryTab::removeLastCommand
 
 void
-VHistoryTab::commandClicked( int button, QListViewItem* item, const QPoint&, int )
+VHistoryTab::commandClicked( int button, Q3ListViewItem* item, const QPoint&, int )
 {
 	if ( !item || item->rtti() == 1001 )
 		return;
@@ -1419,9 +1428,9 @@ VHistoryTab::groupingChanged( int )
 {
 	if ( m_groupCommands->isChecked() && m_history->childCount() > 1 )
 	{
-		QListViewItem* s2last = 0;
-		QListViewItem* last = m_history->firstChild();
-		QListViewItem* item = last->nextSibling();
+		Q3ListViewItem* s2last = 0;
+		Q3ListViewItem* last = m_history->firstChild();
+		Q3ListViewItem* item = last->nextSibling();
 		while ( item )
 			if ( last->text( 0 ) == item->text( 0 ) )
 			{
@@ -1440,11 +1449,11 @@ VHistoryTab::groupingChanged( int )
 	}
 	else
 	{
-		QListViewItem* item = m_history->firstChild();
+		Q3ListViewItem* item = m_history->firstChild();
 		while ( item )
 			if ( item->rtti() == 1001 )
 			{
-				QListViewItem* child;
+				Q3ListViewItem* child;
 				while ( ( child = item->firstChild() ) )
 				{
 					item->takeItem( child );

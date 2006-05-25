@@ -19,6 +19,10 @@
 
 #include <qevent.h>
 #include <QLabel>
+//Added by qt3to4:
+#include <QPixmap>
+#include <QMouseEvent>
+#include <QKeyEvent>
 
 #include <kdebug.h>
 #include <kiconloader.h>
@@ -96,7 +100,7 @@ VTool::mouseEvent( QMouseEvent* mouseEvent, const KoPoint &canvasCoordinate )
 		m_firstPoint.setX( canvasCoordinate.x() );
 		m_firstPoint.setY( canvasCoordinate.y() );
 
-		if( mouseEvent->button() == QEvent::RightButton )
+		if( mouseEvent->button() == Qt::RightButton )
 			rightMouseButtonPress();
 		else
 			mouseButtonPress();
@@ -131,7 +135,7 @@ VTool::mouseEvent( QMouseEvent* mouseEvent, const KoPoint &canvasCoordinate )
 			m_isDragging = false;
 		}
 		else if( m_mouseButtonIsDown )	// False if canceled.
-			if( mouseEvent->button() == QEvent::RightButton )
+			if( mouseEvent->button() == Qt::RightButton )
 				rightMouseButtonRelease();
 			else
 				mouseButtonRelease();

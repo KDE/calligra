@@ -22,8 +22,10 @@
 #define __VPOLYLINETOOL_H__
 
 
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 #include <QString>
+//Added by qt3to4:
+#include <QLabel>
 
 #include "KoPoint.h"
 
@@ -92,7 +94,7 @@ class VPolylineTool : public VTool
 		/**
 		 * The list of this polyline points.
 		 */
-		QPtrList<KoPoint> m_bezierPoints;
+		Q3PtrList<KoPoint> m_bezierPoints;
 
 		/**
 		 * The start of the last drawn vector.

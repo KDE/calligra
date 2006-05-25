@@ -21,7 +21,9 @@
 #include <qdom.h>
 #include <qfileinfo.h>
 #include <qpainter.h>
-#include <qpaintdevicemetrics.h>
+#include <q3paintdevicemetrics.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 #include <kconfig.h>
 #include <kdebug.h>
@@ -59,7 +61,7 @@
 
 KarbonPart::KarbonPart( QWidget* parentWidget, const char* widgetName,
 						QObject* parent, const char* name, bool singleViewMode )
-		: KoDocument( parentWidget, widgetName, parent, name, singleViewMode )
+		: KoDocument( parentWidget, parent, singleViewMode )
 {
 	setInstance( KarbonFactory::instance(), false );
 	setTemplateType( "karbon_template" );
@@ -383,8 +385,8 @@ KarbonPart::saveOasis( KoStore *store, KoXmlWriter *manifestWriter )
 
     docWriter->startElement( "office:automatic-styles" );
 
-    QValueList<KoGenStyles::NamedStyle> styles = mainStyles.styles( VDocument::STYLE_GRAPHICAUTO );
-    QValueList<KoGenStyles::NamedStyle>::const_iterator it = styles.begin();
+    Q3ValueList<KoGenStyles::NamedStyle> styles = mainStyles.styles( VDocument::STYLE_GRAPHICAUTO );
+    Q3ValueList<KoGenStyles::NamedStyle>::const_iterator it = styles.begin();
     for( ; it != styles.end() ; ++it )
         (*it).style->writeStyle( docWriter, mainStyles, "style:style", (*it).name , "style:graphic-properties"  );
 
@@ -425,7 +427,7 @@ KarbonPart::saveOasis( KoStore *store, KoXmlWriter *manifestWriter )
 
     styleWriter->startElement( "office:automatic-styles" );
 
-    QValueList<KoGenStyles::NamedStyle> styleList = mainStyles.styles( KoGenStyle::STYLE_PAGELAYOUT );
+    Q3ValueList<KoGenStyles::NamedStyle> styleList = mainStyles.styles( KoGenStyle::STYLE_PAGELAYOUT );
     it = styleList.begin();
 
     for( ; it != styleList.end(); ++it )
@@ -574,7 +576,7 @@ KarbonPart::paintContent( QPainter& painter, const QRect& rect,
 	p->setMatrix( mat );
 
 	m_doc.selection()->clear();
-	QPtrListIterator<VLayer> itr( m_doc.layers() );
+	Q3PtrListIterator<VLayer> itr( m_doc.layers() );
 
 	for( ; itr.current(); ++itr )
 	{

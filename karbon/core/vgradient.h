@@ -20,8 +20,8 @@
 #ifndef __VGRADIENT_H__
 #define __VGRADIENT_H__
 
-#include <qptrlist.h>
-#include <qptrvector.h>
+#include <q3ptrlist.h>
+#include <q3ptrvector.h>
 
 #include <koffice_export.h>
 #include <KoPoint.h>
@@ -74,10 +74,10 @@ public:
 		repeat  = 2
 	};
 
-	class VColorStopList : public QPtrList<VColorStop>
+	class VColorStopList : public Q3PtrList<VColorStop>
 	{
 		protected:
-			virtual int compareItems( QPtrCollection::Item item1, QPtrCollection::Item item2 );
+			virtual int compareItems( Q3PtrCollection::Item item1, Q3PtrCollection::Item item2 );
 	}; // VColorStopList
 
 	VGradient( VGradientType type = linear );
@@ -91,7 +91,7 @@ public:
 	VGradientRepeatMethod repeatMethod() const { return m_repeatMethod; }
 	void setRepeatMethod( VGradientRepeatMethod repeatMethod ) { m_repeatMethod = repeatMethod; }
 
-	const QPtrVector<VColorStop> colorStops() const;
+	const Q3PtrVector<VColorStop> colorStops() const;
 	void addStop( const VColorStop& colorStop );
 	void addStop( const VColor &color, float rampPoint, float midPoint );
 	void removeStop( const VColorStop& colorStop );

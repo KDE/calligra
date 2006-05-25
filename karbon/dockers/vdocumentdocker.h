@@ -20,10 +20,15 @@
 #ifndef __VDOCUMENTDOCKER_H__
 #define __VDOCUMENTDOCKER_H__
 
-#include <qlistview.h>
-#include <qptrdict.h>
+#include <q3listview.h>
+#include <q3ptrdict.h>
+//Added by qt3to4:
+#include <QPaintEvent>
+#include <QPixmap>
+#include <QLabel>
+#include <QEvent>
 
-class QHButtonGroup;
+class Q3HButtonGroup;
 class QPoint;
 class QLabel;
 class QPixmap;
@@ -89,17 +94,17 @@ class VDocumentTab : public QWidget
  *  Layers Tab                                                           *
  *************************************************************************/
 
-class VLayerListViewItem : public QCheckListItem
+class VLayerListViewItem : public Q3CheckListItem
 {
 public:
-	VLayerListViewItem( QListView* parent, VLayer* layer, VDocument *doc, QPtrDict<VLayerListViewItem> *map );
+	VLayerListViewItem( Q3ListView* parent, VLayer* layer, VDocument *doc, Q3PtrDict<VLayerListViewItem> *map );
 	virtual ~VLayerListViewItem();
 
 	VLayer* layer() { return m_layer; }
 	int pos();
 	void update();
 	virtual QString key( int column, bool ascending ) const;
-	virtual int compare( QListViewItem *i, int col, bool ascending ) const;
+	virtual int compare( Q3ListViewItem *i, int col, bool ascending ) const;
 	void setKey( uint key ) { m_key = key; }
 
 protected:
@@ -109,25 +114,25 @@ private:
 	VLayer		*m_layer;
 	VDocument	*m_document;
 	uint		 m_key;
-	QPtrDict<VLayerListViewItem> *m_map;
+	Q3PtrDict<VLayerListViewItem> *m_map;
 }; // VLayerListViewItem
 
-class VObjectListViewItem : public QListViewItem
+class VObjectListViewItem : public Q3ListViewItem
 {
 public:
-	VObjectListViewItem( QListViewItem* parent, VObject* object, VDocument *doc, uint key, QPtrDict<VObjectListViewItem> *map );
+	VObjectListViewItem( Q3ListViewItem* parent, VObject* object, VDocument *doc, uint key, Q3PtrDict<VObjectListViewItem> *map );
 	virtual ~VObjectListViewItem();
 
 	VObject* object() { return m_object; }
 	void update();
 	virtual QString key( int column, bool ascending ) const;
-	virtual int compare( QListViewItem *i, int col, bool ascending ) const;
+	virtual int compare( Q3ListViewItem *i, int col, bool ascending ) const;
 	void setKey( uint key ) { m_key = key; }
 private:
 	VObject		*m_object;
 	VDocument	*m_document;
 	uint		 m_key;
-	QPtrDict<VObjectListViewItem> *m_map;
+	Q3PtrDict<VObjectListViewItem> *m_map;
 };
 
 class VLayersTab : public QWidget
@@ -142,10 +147,10 @@ public slots:
 	void updatePreviews();
 	void updateLayers();
 
-	void itemClicked( QListViewItem* item, const QPoint&, int col );
+	void itemClicked( Q3ListViewItem* item, const QPoint&, int col );
 	void selectionChangedFromList();
 	void selectionChangedFromTool();
-	void renameItem( QListViewItem* item, const QPoint&, int col );
+	void renameItem( Q3ListViewItem* item, const QPoint&, int col );
 	void addLayer();
 	void raiseItem();
 	void lowerItem();
@@ -155,22 +160,22 @@ public slots:
 private slots:
 	void slotButtonClicked( int ID );
 	void removeDeletedObjectsFromList();
-	void updateChildItems( QListViewItem *item );
+	void updateChildItems( Q3ListViewItem *item );
 	void toggleState( VObject *obj, int col );
 
 protected:
 	VLayerListViewItem* listItem( int pos );
-	void updateObjects( VObject *object, QListViewItem *item );
+	void updateObjects( VObject *object, Q3ListViewItem *item );
 	void resetSelection();
 	void selectActiveLayer();
 
 private:
-	QListView						*m_layersListView;
-	QHButtonGroup					*m_buttonGroup;
+	Q3ListView						*m_layersListView;
+	Q3HButtonGroup					*m_buttonGroup;
 	KarbonView						*m_view;
 	VDocument						*m_document;
-	QPtrDict<VLayerListViewItem>	m_layers;
-	QPtrDict<VObjectListViewItem>	m_objects;
+	Q3PtrDict<VLayerListViewItem>	m_layers;
+	Q3PtrDict<VObjectListViewItem>	m_objects;
 }; // VLayersTab
 
 /*************************************************************************
@@ -179,10 +184,10 @@ private:
 
 class VHistoryItem;
  
-class VHistoryGroupItem : public QListViewItem
+class VHistoryGroupItem : public Q3ListViewItem
 {
 	public:
-		VHistoryGroupItem( VHistoryItem* item, QListView* parent, QListViewItem* after );
+		VHistoryGroupItem( VHistoryItem* item, Q3ListView* parent, Q3ListViewItem* after );
 		~VHistoryGroupItem();
 
 		void paintCell( QPainter* p, const QColorGroup& cg, int column, int width, int align );
@@ -195,11 +200,11 @@ class VHistoryGroupItem : public QListViewItem
 		QString	m_key;
 }; // VHistoryGroupItem
  
-class VHistoryItem : public QListViewItem
+class VHistoryItem : public Q3ListViewItem
 {
 	public:
-		VHistoryItem( VCommand* command, QListView* parent, QListViewItem* after );
-		VHistoryItem( VCommand* command, VHistoryGroupItem* parent, QListViewItem* after );
+		VHistoryItem( VCommand* command, Q3ListView* parent, Q3ListViewItem* after );
+		VHistoryItem( VCommand* command, VHistoryGroupItem* parent, Q3ListViewItem* after );
 		~VHistoryItem();
 
 		VCommand* command() { return m_command; }
@@ -234,7 +239,7 @@ class VHistoryTab : public QWidget
 		void removeFirstCommand();
 		void removeLastCommand();
 
-		void commandClicked( int button, QListViewItem* item, const QPoint& point, int col );
+		void commandClicked( int button, Q3ListViewItem* item, const QPoint& point, int col );
 		void groupingChanged( int );
 
 	signals:
@@ -244,8 +249,8 @@ class VHistoryTab : public QWidget
 		void redoCommandsTo( VCommand* command );
 
 	private:
-		QListView*      m_history;
-		QListViewItem*  m_lastCommand;
+		Q3ListView*      m_history;
+		Q3ListViewItem*  m_lastCommand;
 		QCheckBox*      m_groupCommands;
 		long            m_lastCommandIndex;
 

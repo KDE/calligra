@@ -25,7 +25,9 @@
 #include "vcolor.h"
 #include "vstroke.h"
 
-#include <qvaluevector.h>
+#include <q3valuevector.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 #include <koffice_export.h>
 // Stroke object(s)
 
@@ -37,7 +39,7 @@ public:
 	VStrokeCmd( VDocument *doc, VPattern * );
 	VStrokeCmd( VDocument *doc, const VColor & );
 	VStrokeCmd( VDocument *doc, double );
-	VStrokeCmd( VDocument *doc, const QValueList<float>& );
+	VStrokeCmd( VDocument *doc, const Q3ValueList<float>& );
 	virtual ~VStrokeCmd();
 
 	virtual void execute();
@@ -62,7 +64,7 @@ protected:
 	State					m_state;
 	VSelection				*m_selection;
 	VStroke					m_stroke;
-	QValueVector<VStroke>			m_oldstrokes;
+	Q3ValueVector<VStroke>			m_oldstrokes;
 };
 
 #endif

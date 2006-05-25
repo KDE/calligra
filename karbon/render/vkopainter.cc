@@ -27,7 +27,7 @@
 
 #include <qpaintdevice.h>
 #include <qpixmap.h>
-#include <qpointarray.h>
+#include <q3pointarray.h>
 #include <qimage.h>
 
 #include "libart_lgpl/art_vpath.h"
@@ -373,9 +373,9 @@ VKoPainter::setPen( const QColor &c )
 	delete m_stroke;
 	m_stroke = new VStroke;
 
-	float r = static_cast<float>( c.red()   ) / 255.0;
-	float g = static_cast<float>( c.green() ) / 255.0;
-	float b = static_cast<float>( c.blue()  ) / 255.0;
+	float r = static_cast<float>( c.Qt::red()   ) / 255.0;
+	float g = static_cast<float>( c.Qt::green() ) / 255.0;
+	float b = static_cast<float>( c.Qt::blue()  ) / 255.0;
 
 	VColor color;
 	color.set( r, g, b );
@@ -398,9 +398,9 @@ VKoPainter::setBrush( const QColor &c )
 	delete m_fill;
 	m_fill = new VFill;
 
-	float r = static_cast<float>( c.red()   ) / 255.0;
-	float g = static_cast<float>( c.green() ) / 255.0;
-	float b = static_cast<float>( c.blue()  ) / 255.0;
+	float r = static_cast<float>( c.Qt::red()   ) / 255.0;
+	float g = static_cast<float>( c.Qt::green() ) / 255.0;
+	float b = static_cast<float>( c.Qt::blue()  ) / 255.0;
 
 	VColor color;
 	color.set( r, g, b );
@@ -506,7 +506,7 @@ VKoPainter::drawVPath( ArtVpath *vec )
 	{
 		color = m_fill->color();
 		af = qRound( 255 * m_fill->color().opacity() );
-		fillColor = ( 0 << 24 ) | ( color.blue() << 16 ) | ( color.green() << 8 ) | color.red();
+		fillColor = ( 0 << 24 ) | ( color.Qt::blue() << 16 ) | ( color.Qt::green() << 8 ) | color.Qt::red();
 
 		ArtSvpWriter *swr;
 		ArtSVP *temp;
@@ -533,7 +533,7 @@ VKoPainter::drawVPath( ArtVpath *vec )
 
 		color = m_stroke->color();
 		as = qRound( 255 * m_stroke->color().opacity() );
-		strokeColor = ( 0 << 24 ) | ( color.blue() << 16 ) | ( color.green() << 8 ) | color.red();
+		strokeColor = ( 0 << 24 ) | ( color.Qt::blue() << 16 ) | ( color.Qt::green() << 8 ) | color.Qt::red();
 
 		double ratio = m_zoomFactor;//sqrt(pow(affine[0], 2) + pow(affine[3], 2)) / sqrt(2);
 		if( m_stroke->dashPattern().array().count() > 0 )
@@ -809,7 +809,7 @@ ArtGradientStop *
 VKoPainter::buildStopArray( VGradient &gradient, int &offsets )
 {
 	// TODO : make this generic
-	QPtrVector<VColorStop> colorStops = gradient.colorStops();
+	Q3PtrVector<VColorStop> colorStops = gradient.colorStops();
 	offsets = colorStops.count();
 
 	ArtGradientStop *stopArray = art_new( ArtGradientStop, offsets * 2 - 1 );
@@ -886,9 +886,9 @@ VKoPainter::drawNode( const KoPoint& p, int width )
 	{
 		for( int j = 0; j < x2 - x1; j++ )
 		{
-			m_buffer[ baseindex + 4 * j + ( m_width * 4 * i ) ] = color.red();
-			m_buffer[ baseindex + 4 * j + ( m_width * 4 * i ) + 1 ] = color.green();
-			m_buffer[ baseindex + 4 * j + ( m_width * 4 * i ) + 2 ] = color.blue();
+			m_buffer[ baseindex + 4 * j + ( m_width * 4 * i ) ] = color.Qt::red();
+			m_buffer[ baseindex + 4 * j + ( m_width * 4 * i ) + 1 ] = color.Qt::green();
+			m_buffer[ baseindex + 4 * j + ( m_width * 4 * i ) + 2 ] = color.Qt::blue();
 			m_buffer[ baseindex + 4 * j + ( m_width * 4 * i ) + 3 ] = 0xFF;
 		}
 	}

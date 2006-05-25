@@ -24,6 +24,9 @@
 #include <QPushButton>
 #include <QWidget>
 #include <QToolTip>
+//Added by qt3to4:
+#include <Q3GridLayout>
+#include <Q3Frame>
 
 #include <kiconloader.h>
 #include <klocale.h>
@@ -46,7 +49,7 @@ VStrokeDocker::VStrokeDocker( KarbonPart* part, KarbonView* parent, const char* 
 
 	QPushButton *button;
 
-	QGridLayout *mainLayout = new QGridLayout( this, 4, 2 );
+	Q3GridLayout *mainLayout = new Q3GridLayout( this, 4, 2 );
 	
 	QLabel* widthLabel = new QLabel( i18n ( "Width:" ), this );
 	mainLayout->addWidget( widthLabel, 0, 0 );
@@ -59,8 +62,8 @@ VStrokeDocker::VStrokeDocker( KarbonPart* part, KarbonView* parent, const char* 
 	
 	QLabel* capLabel = new QLabel( i18n ( "Cap:" ), this );
 	mainLayout->addWidget( capLabel, 1, 0 );
-	m_capGroup = new QHButtonGroup( this );
-	m_capGroup->setFrameShape( QFrame::NoFrame );
+	m_capGroup = new Q3HButtonGroup( this );
+	m_capGroup->setFrameShape( Q3Frame::NoFrame );
 	m_capGroup->setInsideMargin( 1 );
 	m_capGroup->setExclusive( true );
 	button = new QPushButton( "", m_capGroup );
@@ -84,8 +87,8 @@ VStrokeDocker::VStrokeDocker( KarbonPart* part, KarbonView* parent, const char* 
 	QLabel* joinLabel = new QLabel( i18n ( "Join:" ), this );
 	mainLayout->addWidget( joinLabel, 2, 0 );
 	
-	m_joinGroup = new QHButtonGroup( this );
-	m_joinGroup->setFrameShape( QFrame::NoFrame );
+	m_joinGroup = new Q3HButtonGroup( this );
+	m_joinGroup->setFrameShape( Q3Frame::NoFrame );
 	m_joinGroup->setInsideMargin( 1 );
 	m_joinGroup->setExclusive( true );
 	button = new QPushButton( "", m_joinGroup );

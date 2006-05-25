@@ -22,6 +22,8 @@
 #define __VTRANSLATE_H__
 
 #include <QWidget>
+//Added by qt3to4:
+#include <QLabel>
 
 class QCheckBox;
 class QLabel;

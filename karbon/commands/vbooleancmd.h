@@ -22,7 +22,7 @@
 #define __VBOOLEANCMD_H__
 
 
-#include <qvaluelist.h>
+#include <q3valuelist.h>
 
 #include "vcommand.h"
 
@@ -62,7 +62,7 @@ public:
 	virtual void visitVSubpath( VSubpath& path );
 
 protected:
-	typedef QValueList<double> VParamList;
+	typedef Q3ValueList<double> VParamList;
 
 	void recursiveSubdivision(
 		const VSegment& segment1, double t0_1, double t1_1,

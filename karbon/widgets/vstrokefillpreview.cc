@@ -18,6 +18,11 @@
 */
 
 #include <QColor>
+//Added by qt3to4:
+#include <QPaintEvent>
+#include <Q3Frame>
+#include <QMouseEvent>
+#include <QEvent>
 
 #include <kdebug.h>
 #include <KoPoint.h>
@@ -53,15 +58,15 @@
 
 VStrokeFillPreview::VStrokeFillPreview(
 	KarbonPart *part, QWidget* parent, const char* name )
-		: QFrame( parent, name ), m_part( part )
+		: Q3Frame( parent, name ), m_part( part )
 {
 	m_strokeWidget = false;
 	setFocusPolicy( QWidget::NoFocus );
 
 #if QT_VERSION < 0x030100
-	setFrameStyle( QFrame::Panel | QFrame::Sunken );
+	setFrameStyle( Q3Frame::Panel | Q3Frame::Sunken );
 #else
-	setFrameStyle( QFrame::GroupBoxPanel | QFrame::Sunken );
+	setFrameStyle( Q3Frame::GroupBoxPanel | Q3Frame::Sunken );
 #endif
 
 	installEventFilter( this );
@@ -82,7 +87,7 @@ VStrokeFillPreview::paintEvent( QPaintEvent* event )
 		&m_pixmap,
                 0, 0, (int)PANEL_SIZEX, (int)PANEL_SIZEY );
 
-	QFrame::paintEvent( event );
+	Q3Frame::paintEvent( event );
 }
 
 bool

@@ -26,6 +26,8 @@
 
 
 #include "vshapetool.h"
+//Added by qt3to4:
+#include <QLabel>
 
 class KarbonView;
 class KarbonPart;

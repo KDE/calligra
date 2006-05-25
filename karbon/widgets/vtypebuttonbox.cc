@@ -218,7 +218,7 @@ static const char* const buttonpattern[]={
 
 VTypeButtonBox::VTypeButtonBox( KarbonPart *part, 
 								QWidget* parent, const char* name )
-	: QHButtonGroup( parent, name ),
+	: Q3HButtonGroup( parent, name ),
 	  m_part( part ), m_isStrokeManipulator( false )
 {
 	setMaximumWidth( parent->width() - 2 );

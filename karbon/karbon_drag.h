@@ -20,7 +20,9 @@
 #ifndef KARBON_DRAG_H
 #define KARBON_DRAG_H
 
-#include <qdragobject.h>
+#include <q3dragobject.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 #include "vgroup.h"
 
@@ -29,7 +31,7 @@ class VDocument;
 #define NumEncodeFmts 1
 #define NumDecodeFmts 1
 
-class KarbonDrag : public QDragObject
+class KarbonDrag : public Q3DragObject
 {
 	Q_OBJECT
 public:
@@ -41,8 +43,8 @@ public:
 	void setObjectList( VObjectList l );
 
 private:
-	static QCString m_encodeFormats[NumEncodeFmts];
-	static QCString m_decodeFormats[NumDecodeFmts];
+	static Q3CString m_encodeFormats[NumEncodeFmts];
+	static Q3CString m_decodeFormats[NumDecodeFmts];
 	VObjectList m_objects;
 };
 

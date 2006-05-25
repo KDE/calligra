@@ -21,7 +21,7 @@
 #ifndef __VSTROKE_H__
 #define __VSTROKE_H__
 
-#include <qvaluelist.h>
+#include <q3valuelist.h>
 
 #include "vcolor.h"
 #include "vdashpattern.h"

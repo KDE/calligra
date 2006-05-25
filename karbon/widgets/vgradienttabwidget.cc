@@ -20,10 +20,14 @@
 #include <QLabel>
 #include <qpainter.h>
 #include <QLayout>
-#include <qgroupbox.h>
+#include <q3groupbox.h>
 #include <QPushButton>
 #include <qfileinfo.h>
 #include <qpixmap.h>
+//Added by qt3to4:
+#include <QPaintEvent>
+#include <Q3GridLayout>
+#include <Q3PtrList>
 
 #include <knuminput.h>
 #include <kcombobox.h>
@@ -38,7 +42,7 @@
 #include "vfill.h"
 
 VGradientListItem::VGradientListItem( const VGradient& gradient, QString filename )
-		: QListBoxItem( 0L ), m_filename( filename )
+		: Q3ListBoxItem( 0L ), m_filename( filename )
 {
 	m_gradient = new VGradient( gradient );
 
@@ -66,7 +70,7 @@ VGradientListItem::VGradientListItem( const VGradient& gradient, QString filenam
 } // VGradientListItem::VGradientListItem
 
 VGradientListItem::VGradientListItem( const VGradientListItem& gradient )
-		: QListBoxItem( 0L )
+		: Q3ListBoxItem( 0L )
 {
 	m_pixmap = gradient.m_pixmap;
 	m_delete = gradient.m_delete;
@@ -79,7 +83,7 @@ VGradientListItem::~VGradientListItem()
 	delete m_gradient;
 } // VGradientListItem::~VGradientListItem
 
-int VGradientListItem::width( const QListBox* lb ) const
+int VGradientListItem::width( const Q3ListBox* lb ) const
 {
 	return lb->width() - 25;
 } // VGradientListItem::width
@@ -181,8 +185,8 @@ VGradientTabWidget::~VGradientTabWidget()
 
 void VGradientTabWidget::setupUI()
 {
-	m_editGroup = new QGroupBox( i18n( "Edit Gradient" ) );
-	QGridLayout* editLayout = new QGridLayout( m_editGroup, 7, 3 );
+	m_editGroup = new Q3GroupBox( i18n( "Edit Gradient" ) );
+	Q3GridLayout* editLayout = new Q3GridLayout( m_editGroup, 7, 3 );
 	editLayout->setSpacing( 3 );
 	editLayout->setMargin( 6 );
 	editLayout->addRowSpacing( 0, 12 );
@@ -210,8 +214,8 @@ void VGradientTabWidget::setupUI()
 	editLayout->addMultiCellWidget( m_opacity, 5, 5, 1, 2 );
 	addTab( m_editGroup, i18n( "Edit" ) );
 
-	QGroupBox* predefGroup  = new QGroupBox( i18n( "Predefined Gradients" ) );
-	QGridLayout* predefLayout = new QGridLayout( predefGroup, 3, 2 );
+	Q3GroupBox* predefGroup  = new Q3GroupBox( i18n( "Predefined Gradients" ) );
+	Q3GridLayout* predefLayout = new Q3GridLayout( predefGroup, 3, 2 );
 	predefLayout->setSpacing( 3 );
 	predefLayout->setMargin( 6 );
 	predefLayout->addRowSpacing( 0, 12 );
@@ -228,7 +232,7 @@ void VGradientTabWidget::setupConnections()
 	connect( m_gradientRepeat,		SIGNAL( activated( int ) ),				this, SLOT( combosChange( int ) ) );
 	connect( m_gradientWidget,		SIGNAL( changed() ),					m_gradientPreview, SLOT( update() ) );
 	connect( m_addToPredefs,		SIGNAL( clicked() ),					this, SLOT( addGradientToPredefs() ) );
-	connect( m_predefGradientsView, SIGNAL( doubleClicked( QListBoxItem *, const QPoint & ) ),	this, SLOT( changeToPredef( QListBoxItem* ) ) );
+	connect( m_predefGradientsView, SIGNAL( doubleClicked( Q3ListBoxItem *, const QPoint & ) ),	this, SLOT( changeToPredef( Q3ListBoxItem* ) ) );
 	connect( m_predefDelete,		SIGNAL( clicked() ),					this, SLOT( deletePredef() ) );
 	connect( m_opacity,				SIGNAL( valueChanged( int ) ),			this, SLOT( opacityChanged( int ) ) );
 } // VGradientTabWidget::setupConnection
@@ -241,7 +245,7 @@ void VGradientTabWidget::initUI()
 	m_opacity->setValue( 100 );
 
 	m_predefGradientsView->clear();
-	QPtrList<VGradientListItem>* gradientList = m_resourceServer->gradients();
+	Q3PtrList<VGradientListItem>* gradientList = m_resourceServer->gradients();
 	if( gradientList->count() > 0 )
 		for( VGradientListItem* g = gradientList->first(); g != NULL; g = gradientList->next() )
 			m_predefGradientsView->insertItem( new VGradientListItem( *g ) );
@@ -306,7 +310,7 @@ void VGradientTabWidget::addGradientToPredefs()
 	m_predefGradientsView->insertItem( item );
 } // VGradientTabWidget::addGradientToPredefs()
 
-void VGradientTabWidget::predefSelected( QListBoxItem* item )
+void VGradientTabWidget::predefSelected( Q3ListBoxItem* item )
 {
 	if( item )
 	{
@@ -315,7 +319,7 @@ void VGradientTabWidget::predefSelected( QListBoxItem* item )
 	}
 } // VGradientTabWidget::predefSelected
 
-void VGradientTabWidget::changeToPredef( QListBoxItem* item )
+void VGradientTabWidget::changeToPredef( Q3ListBoxItem* item )
 {
 	if( item )
 	{

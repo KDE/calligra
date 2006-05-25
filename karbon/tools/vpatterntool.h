@@ -25,8 +25,10 @@
 #include "vtool.h"
 #include "vpattern.h"
 #include "KoRect.h"
+//Added by qt3to4:
+#include <Q3PtrList>
 
-class QHButtonGroup;
+class Q3HButtonGroup;
 class QToolButton;
 class KoIconChooser;
 
@@ -35,7 +37,7 @@ class VPatternWidget : public KDialogBase
 Q_OBJECT
 
 public:
-	VPatternWidget( QPtrList<KoIconItem>* patterns, VTool* tool, QWidget* parent = 0L );
+	VPatternWidget( Q3PtrList<KoIconItem>* patterns, VTool* tool, QWidget* parent = 0L );
 	~VPatternWidget();
 
 	VPattern* selectedPattern();
@@ -49,7 +51,7 @@ public slots:
 
 private:
 	KoIconChooser*        m_patternChooser;
-	QHButtonGroup*        m_buttonGroup;
+	Q3HButtonGroup*        m_buttonGroup;
 	QToolButton*          m_importPatternButton;
 	QToolButton*          m_deletePatternButton;
 	VTool*                m_tool;

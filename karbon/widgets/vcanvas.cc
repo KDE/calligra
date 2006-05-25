@@ -20,6 +20,14 @@
 #include <qcursor.h>
 #include <qpainter.h>
 #include <qpixmap.h>
+//Added by qt3to4:
+#include <QDropEvent>
+#include <QPaintEvent>
+#include <QResizeEvent>
+#include <QFocusEvent>
+#include <QMouseEvent>
+#include <QEvent>
+#include <QDragEnterEvent>
 
 #include "karbon_view.h"
 #include "karbon_part.h"
@@ -94,8 +102,8 @@ KoPoint VCanvas::snapToGrid( const KoPoint &point )
 
 
 VCanvas::VCanvas( QWidget *parent, KarbonView* view, KarbonPart* part )
-    : QScrollView( parent, "canvas", WStaticContents/*WNorthWestGravity*/ | WResizeNoErase  |
-	  WRepaintNoErase ), m_part( part ), m_view( view )
+    : Q3ScrollView( parent, "canvas", Qt::WStaticContents/*WNorthWestGravity*/ | Qt::WResizeNoErase  |
+	  Qt::WNoAutoErase ), m_part( part ), m_view( view )
 {
 	connect(this, SIGNAL( contentsMoving( int, int ) ), this, SLOT( slotContentsMoving( int, int ) ) );
 	viewport()->setFocusPolicy( Qt::StrongFocus );
@@ -104,7 +112,7 @@ VCanvas::VCanvas( QWidget *parent, KarbonView* view, KarbonPart* part )
 	setMouseTracking( true );
 
 	viewport()->setBackgroundColor( Qt::white );
-	viewport()->setBackgroundMode( QWidget::NoBackground );
+	viewport()->setBackgroundMode( Qt::NoBackground );
 	viewport()->installEventFilter( this );
 
 	resizeContents( 800, 600 );
@@ -132,10 +140,10 @@ VCanvas::setPos( const KoPoint& p )
 bool
 VCanvas::eventFilter( QObject* object, QEvent* event )
 {
-	QScrollView::eventFilter( object, event );
+	Q3ScrollView::eventFilter( object, event );
 
-	if( event->type() == QEvent::AccelOverride || event->type() == QEvent::Accel )
-		return QScrollView::eventFilter( object, event );
+	if( event->type() == QEvent::ShortcutOverride || event->type() == QEvent::Shortcut )
+		return Q3ScrollView::eventFilter( object, event );
 
 	if( event->type() == QEvent::KeyPress || event->type() == QEvent::KeyRelease )
 		return m_view->keyEvent( event );
@@ -346,7 +354,7 @@ VCanvas::resizeEvent( QResizeEvent* event )
 	double centerX = double( contentsX() + 0.5 * visibleWidth() ) / double( contentsWidth() );
 	double centerY = double( contentsY() + 0.5 * visibleHeight() ) / double( contentsHeight() );
 
-	QScrollView::resizeEvent( event );
+	Q3ScrollView::resizeEvent( event );
 	if( !m_pixmap )
 		m_pixmap = new QPixmap( width(), height() );
 	else

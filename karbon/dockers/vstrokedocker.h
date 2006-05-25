@@ -21,7 +21,7 @@
 #ifndef __VSTROKEDOCKER_H__
 #define __VSTROKEDOCKER_H__
 
-class QHButtonGroup;
+class Q3HButtonGroup;
 class QWidget;
 
 class KoUnitDoubleSpinBox;
@@ -42,8 +42,8 @@ public slots:
 	virtual void setUnit( KoUnit::Unit unit );
 
 private:
-	QHButtonGroup *m_capGroup;
-	QHButtonGroup *m_joinGroup;
+	Q3HButtonGroup *m_capGroup;
+	Q3HButtonGroup *m_joinGroup;
 	KarbonPart *m_part;
 	KarbonView *m_view;
 	KoUnitDoubleSpinBox *m_setLineWidth;

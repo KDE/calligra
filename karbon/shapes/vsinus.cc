@@ -18,7 +18,7 @@
 */
 
 
-#include <qwmatrix.h>
+#include <qmatrix.h>
 
 #include "vglobal.h"
 #include "vsinus.h"

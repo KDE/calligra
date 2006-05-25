@@ -23,6 +23,9 @@
 #include "vtoolcontroller.h"
 #include "vtool.h"
 #include "vtoolbox.h"
+//Added by qt3to4:
+#include <QMouseEvent>
+#include <QEvent>
 
 VToolController::VToolController( KarbonView *view ) : m_view( view ), m_currentTool( 0L ), m_setup( false )
 {
@@ -57,7 +60,7 @@ VToolController::setCurrentTool( VTool *tool )
 			return;
 
 		m_currentTool->action()->setChecked( true );
-		m_currentTool->action()->activate();
+		m_currentTool->action()->trigger();
 	}
 	m_toolBox->slotSetTool( tool->name() );
 }
@@ -74,7 +77,7 @@ void
 VToolController::unregisterTool( VTool *tool )
 {
 	// tool->name() is not valid in VTool destructor
-	QDictIterator<VTool> it( m_tools );
+	Q3DictIterator<VTool> it( m_tools );
 	for( ; it.current(); ++it )
 		if (it.current() == tool)
 		{
@@ -116,7 +119,7 @@ VToolController::setUp( KActionCollection *ac, VToolBox * toolbox )
 
 	m_toolBox = toolbox;
 
-	QDictIterator<VTool> it( m_tools );
+	Q3DictIterator<VTool> it( m_tools );
 	for( ; it.current(); ++it )
 		toolbox->registerTool( it.current() );
 
@@ -133,7 +136,7 @@ VToolController::resetToolBox( VToolBox * toolbox )
 {
 	m_toolBox = toolbox;
 
-	QDictIterator<VTool> it( m_tools );
+	Q3DictIterator<VTool> it( m_tools );
 	for( ; it.current(); ++it )
 		toolbox->registerTool( it.current() );
 
@@ -151,7 +154,7 @@ VTool *
 VToolController::findTool( const QString &toolName ) const
 {
 	VTool *tool = 0;
-	QDictIterator<VTool> it( m_tools );
+	Q3DictIterator<VTool> it( m_tools );
 	for( ; it.current(); ++it )
 		if( it.current()->name() == toolName )
 			return it.current();

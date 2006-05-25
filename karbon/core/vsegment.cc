@@ -20,6 +20,8 @@
 #include <math.h>
 
 #include <qdom.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 #include "vpainter.h"
 #include "vpath.h"
@@ -584,7 +586,7 @@ kDebug(38000) << newCurve.getLast()->p( i ).x() << " "
 kDebug(38000) << endl;
 
 	// Find roots.
-	QValueList<double> params;
+	Q3ValueList<double> params;
 
 	newCurve.getLast()->rootParams( params );
 
@@ -601,7 +603,7 @@ kDebug(38000) << endl;
 	resultParam = 0.0;
 
 	// Iterate over the found candidate params.
-	for( QValueListConstIterator<double> itr = params.begin(); itr != params.end(); ++itr )
+	for( Q3ValueListConstIterator<double> itr = params.begin(); itr != params.end(); ++itr )
 	{
 		pointDerivativesAt( *itr, &dist );
 		dist -= p;
@@ -625,7 +627,7 @@ kDebug(38000) << endl;
 }
 
 void
-VSegment::rootParams( QValueList<double>& params ) const
+VSegment::rootParams( Q3ValueList<double>& params ) const
 {
 	if( !prev() )
 	{

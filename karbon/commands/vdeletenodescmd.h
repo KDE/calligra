@@ -23,6 +23,8 @@
 
 #include "vcommand.h"
 #include <koffice_export.h>
+//Added by qt3to4:
+#include <Q3PtrList>
 
 class VSegment;
 class VSubpath;
@@ -39,7 +41,7 @@ public:
 	virtual void visitVSubpath( VSubpath& path );
 
 protected:
-	QPtrList<VSegment> m_segments;
+	Q3PtrList<VSegment> m_segments;
 };
 
 #endif

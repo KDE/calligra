@@ -23,7 +23,7 @@
 #include <qcursor.h>
 #include <QLabel>
 #include <qradiobutton.h>
-#include <qbuttongroup.h>
+#include <q3buttongroup.h>
 
 #include <KoPoint.h>
 #include <KoRect.h>
@@ -43,7 +43,7 @@
 VSelectOptionsWidget::VSelectOptionsWidget( KarbonPart *part )
 	: KDialogBase( 0L, "", true, i18n( "Selection" ), Ok | Cancel ), m_part( part )
 {
-	QButtonGroup *group = new QButtonGroup( 1, Qt::Horizontal, i18n( "Selection Mode" ), this );
+	Q3ButtonGroup *group = new Q3ButtonGroup( 1, Qt::Horizontal, i18n( "Selection Mode" ), this );
 
 	new QRadioButton( i18n( "Select in current layer" ), group );
 	new QRadioButton( i18n( "Select in visible layers" ), group );

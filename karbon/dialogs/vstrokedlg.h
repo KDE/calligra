@@ -24,7 +24,7 @@
 #include <kdialogbase.h>
 
 class QComboBox;
-class QVButtonGroup;
+class Q3VButtonGroup;
 
 class KarbonPart;
 class KoUnitDoubleSpinBox;
@@ -43,9 +43,9 @@ private:
 	KarbonPart *m_part;
 	KoUnitDoubleSpinBox *m_setLineWidth;
 	QComboBox *m_styleCombo;
-	QVButtonGroup *m_typeOption;
-	QVButtonGroup *m_capOption;
-	QVButtonGroup *m_joinOption;
+	Q3VButtonGroup *m_typeOption;
+	Q3VButtonGroup *m_capOption;
+	Q3VButtonGroup *m_joinOption;
 
 protected:
 	VStroke m_stroke;

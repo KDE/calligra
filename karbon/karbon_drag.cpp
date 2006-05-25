@@ -19,17 +19,17 @@
 
 #include "karbon_drag.h"
 
-#include <qcstring.h>
+#include <q3cstring.h>
 #include <qdom.h>
 #include <qtextstream.h>
 
 #include "vdocument.h"
 
-QCString KarbonDrag::m_encodeFormats[NumEncodeFmts];
-QCString KarbonDrag::m_decodeFormats[NumDecodeFmts];
+Q3CString KarbonDrag::m_encodeFormats[NumEncodeFmts];
+Q3CString KarbonDrag::m_decodeFormats[NumDecodeFmts];
 
 KarbonDrag::KarbonDrag( QWidget *dragSource, const char *name )
- : QDragObject( dragSource, name )
+ : Q3DragObject( dragSource, name )
 {
 	m_encodeFormats[0] = "application/vnd.kde.karbon";
 	m_decodeFormats[0] = "application/vnd.kde.karbon";
@@ -48,7 +48,7 @@ KarbonDrag::format( int i ) const
 QByteArray
 KarbonDrag::encodedData( const char* mimetype ) const
 {
-	QCString result;
+	Q3CString result;
 
 	if( m_encodeFormats[0] == mimetype )
 	{
@@ -86,7 +86,7 @@ KarbonDrag::decode( QMimeSource* e, VObjectList& sl, VDocument& vdoc )
 	{
 		QDomDocument doc( "clip" );
 		QByteArray data = e->encodedData( m_decodeFormats[0] );
-		doc.setContent( QCString( data, data.size()+1 ) );
+		doc.setContent( Q3CString( data, data.size()+1 ) );
 		QDomElement clip = doc.documentElement();
 		// Try to parse the clipboard data
 		if( clip.tagName() == "clip" )

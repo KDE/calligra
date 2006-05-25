@@ -20,12 +20,15 @@
 #include "vpatterntool.h"
 
 #include <qtoolbutton.h>
-#include <qframe.h>
+#include <q3frame.h>
 #include <qhbuttongroup.h>
 #include <QLayout>
 #include <qfileinfo.h>
 #include <QLabel>
 #include <qcursor.h>
+//Added by qt3to4:
+#include <Q3PtrList>
+#include <Q3VBoxLayout>
 
 #include <kiconloader.h>
 #include <koIconChooser.h>
@@ -45,13 +48,13 @@
 #include <commands/vstrokecmd.h>
 #include <widgets/vstrokefillpreview.h>
 
-VPatternWidget::VPatternWidget( QPtrList<KoIconItem>* patterns, VTool*, QWidget* parent )
+VPatternWidget::VPatternWidget( Q3PtrList<KoIconItem>* patterns, VTool*, QWidget* parent )
 	: KDialogBase( parent, "", true, i18n( "Choose Pattern" ), Ok | Cancel ), m_pattern( 0 )
 {
 	QWidget *base = new QWidget( this );
-	QVBoxLayout* layout = new QVBoxLayout( base );
+	Q3VBoxLayout* layout = new Q3VBoxLayout( base );
 	layout->addWidget( m_patternChooser = new KoIconChooser( QSize( 32, 32 ), base ) );
-	layout->addWidget( m_buttonGroup = new QHButtonGroup( base ) );
+	layout->addWidget( m_buttonGroup = new Q3HButtonGroup( base ) );
 	m_buttonGroup->insert( m_importPatternButton = new QToolButton( m_buttonGroup ) );
 	m_buttonGroup->insert( m_deletePatternButton = new QToolButton( m_buttonGroup ) );
 	m_patternChooser->setFixedSize( 180, 120 );
@@ -123,7 +126,7 @@ void VPatternWidget::patternSelected( KoIconItem* item )
 VPatternTool::VPatternTool( KarbonView *view )
 	: VTool( view, "tool_pattern" ), m_state( normal ), m_handleSize( 3 ), m_active( false )
 {
-	QPtrList<KoIconItem> patterns = KarbonFactory::rServer()->patterns();
+	Q3PtrList<KoIconItem> patterns = KarbonFactory::rServer()->patterns();
 	m_optionsWidget = new VPatternWidget( &patterns, this );
 	registerTool( this );
 } // VPatternTool::VPatternTool

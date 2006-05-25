@@ -20,10 +20,13 @@
 
 /* vsmallpreview.cc */
 #include <QColor>
-#include <qframe.h>
+#include <q3frame.h>
 #include <QLabel>
 #include <QLayout>
 #include <qpixmap.h>
+//Added by qt3to4:
+#include <Q3HBoxLayout>
+#include <QPaintEvent>
 
 #include <klocale.h>
 #include <KoPoint.h>
@@ -43,18 +46,18 @@ VSmallPreview::VSmallPreview( QWidget* parent, const char* name )
 	: QWidget( parent, name )
 {
 	/* Create widget layout */
-	QHBoxLayout *layout = new QHBoxLayout( this, 4 );
+	Q3HBoxLayout *layout = new Q3HBoxLayout( this, 4 );
 	m_strokeLabel = new QLabel( i18n( "Stroke: None" ), this );
 	layout->addWidget( m_strokeLabel );
-	m_strokeFrame = new QFrame( this );
+	m_strokeFrame = new Q3Frame( this );
 	m_strokeFrame->setFixedWidth ( FRAMEWIDTH );
-	m_strokeFrame->setFrameStyle( QFrame::GroupBoxPanel | QFrame::Plain );
+	m_strokeFrame->setFrameStyle( QFrame::StyledPanel | Q3Frame::Plain );
 	layout->addWidget( m_strokeFrame );
 	m_fillLabel = new QLabel( i18n( "Fill: None" ), this );
 	layout->addWidget( m_fillLabel );
-	m_fillFrame = new QFrame( this );
+	m_fillFrame = new Q3Frame( this );
 	m_fillFrame->setFixedWidth ( FRAMEWIDTH );
-	m_fillFrame->setFrameStyle( QFrame::GroupBoxPanel | QFrame::Plain );
+	m_fillFrame->setFrameStyle( QFrame::StyledPanel | Q3Frame::Plain );
 	layout->addWidget( m_fillFrame );
 	layout->activate();
 

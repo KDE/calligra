@@ -26,9 +26,11 @@
 #define __KARBONRESOURCESERVER_H__
 
 
-#include <qptrlist.h>
-#include <qdict.h>
+#include <q3ptrlist.h>
+#include <q3dict.h>
 #include <QString>
+//Added by qt3to4:
+#include <QPixmap>
 
 //#include "vgradient.h"
 #include "vpattern.h"
@@ -52,7 +54,7 @@ public:
 		return m_patterns.count();
 	}
 
-	QPtrList<KoIconItem> patterns()
+	Q3PtrList<KoIconItem> patterns()
 	{
 		return m_patterns;
 	}
@@ -65,7 +67,7 @@ public:
 		return m_gradients->count();
 	}
 
-	QPtrList<VGradientListItem>* gradients()
+	Q3PtrList<VGradientListItem>* gradients()
 	{
 		return m_gradients;
 	}
@@ -78,7 +80,7 @@ public:
 		return m_cliparts->count();
 	}
 
-	QPtrList<VClipartIconItem>* cliparts()
+	Q3PtrList<VClipartIconItem>* cliparts()
 	{
 		return m_cliparts;
 	}
@@ -98,10 +100,10 @@ protected:
 	void saveClipart( VObject* object, double width, double height, const QString& filename );
 
 private:
-	QPtrList<KoIconItem> m_patterns;
-	QPtrList<VGradientListItem>* m_gradients;
-	QPtrList<VClipartIconItem>* m_cliparts;
-	QDict<QPixmap> m_pixmaps;
+	Q3PtrList<KoIconItem> m_patterns;
+	Q3PtrList<VGradientListItem>* m_gradients;
+	Q3PtrList<VClipartIconItem>* m_cliparts;
+	Q3Dict<QPixmap> m_pixmaps;
 };
 
 class VClipartIconItem : public KoIconItem

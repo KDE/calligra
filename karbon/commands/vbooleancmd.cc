@@ -19,8 +19,8 @@
 */
 
 
-#include <qptrlist.h>
-#include <qvaluelist.h>
+#include <q3ptrlist.h>
+#include <q3valuelist.h>
 
 #include <klocale.h>
 #include <q3tl.h>

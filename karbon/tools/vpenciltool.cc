@@ -22,11 +22,13 @@
 #include <qcursor.h>
 #include <qevent.h>
 #include <QLabel>
-#include <qgroupbox.h>
+#include <q3groupbox.h>
 #include <QComboBox>
 #include <QCheckBox>
-#include <qvbox.h>
-#include <qwidgetstack.h>
+#include <q3vbox.h>
+#include <q3widgetstack.h>
+//Added by qt3to4:
+#include <Q3PtrList>
 
 #include <klocale.h>
 #include <knuminput.h>
@@ -54,7 +56,7 @@
 VPencilOptionsWidget::VPencilOptionsWidget( KarbonView*view, QWidget* parent, const char* name )
 	: KDialogBase( parent, name, true, i18n( "Pencil Settings" ), Ok | Cancel ), m_view( view )
 {
-	QVBox *vbox = new QVBox( this );
+	Q3VBox *vbox = new Q3VBox( this );
 
 	m_combo = new QComboBox( vbox );
 
@@ -62,19 +64,19 @@ VPencilOptionsWidget::VPencilOptionsWidget( KarbonView*view, QWidget* parent, co
 	m_combo->insertItem( i18n( "Curve" ) );
 	m_combo->insertItem( i18n( "Straight" ) );
 
-	m_widgetStack  = new QWidgetStack( vbox );
+	m_widgetStack  = new Q3WidgetStack( vbox );
 
-	QGroupBox *group1 = new QGroupBox( 2, Qt::Horizontal, i18n( "Properties" ), m_widgetStack );
+	Q3GroupBox *group1 = new Q3GroupBox( 2, Qt::Horizontal, i18n( "Properties" ), m_widgetStack );
 	m_widgetStack->addWidget( group1, 1 );
 	m_optimizeRaw = new QCheckBox( i18n( "Optimize" ), group1 );
 
 	group1->setInsideMargin( 4 );
 	group1->setInsideSpacing( 2 );
 
-	QGroupBox *group2 = new QGroupBox( 2, Qt::Horizontal, i18n( "Properties" ), m_widgetStack );
+	Q3GroupBox *group2 = new Q3GroupBox( 2, Qt::Horizontal, i18n( "Properties" ), m_widgetStack );
 	m_widgetStack->addWidget( group2, 2 );
 
-	QVBox *vbox2 = new QVBox( group2 );
+	Q3VBox *vbox2 = new Q3VBox( group2 );
 
 	m_optimizeCurve = new QCheckBox( i18n( "Optimize" ), vbox2 );
 	m_fittingError = new KDoubleNumInput( 0.0, 400.0, 4.00, 0.50, 3, vbox2 );
@@ -83,7 +85,7 @@ VPencilOptionsWidget::VPencilOptionsWidget( KarbonView*view, QWidget* parent, co
 	group2->setInsideMargin( 4 );
 	group2->setInsideSpacing( 2 );
 
-	QGroupBox *group3 = new QGroupBox( 2, Qt::Horizontal, i18n( "Properties" ), m_widgetStack );
+	Q3GroupBox *group3 = new Q3GroupBox( 2, Qt::Horizontal, i18n( "Properties" ), m_widgetStack );
 	m_widgetStack->addWidget( group3, 3 );
 
 	m_combineAngle = new KDoubleNumInput( 0.0, 360.0, 0.10, 0.50, 3, group3 );
@@ -185,8 +187,8 @@ VPencilTool::deactivate()
 
 	VPath* line = 0L;
 
-	QPtrList<KoPoint> complete;
-	QPtrList<KoPoint> *points = &m_Points;
+	Q3PtrList<KoPoint> complete;
+	Q3PtrList<KoPoint> *points = &m_Points;
 
 	if( m_Points.count() > 1 )
 	{

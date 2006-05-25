@@ -28,6 +28,8 @@
 #include <qpainter.h>
 #include <qpaintdevice.h>
 #include <qpen.h>
+//Added by qt3to4:
+#include <Q3PointArray>
 
 #include <KoPoint.h>
 #include <kdebug.h>
@@ -128,13 +130,13 @@ void
 VQPainter::curveTo( const KoPoint &p1, const KoPoint &p2, const KoPoint &p3 )
 {
 	// calculate cubic bezier using a temp QPointArray
-	QPointArray pa( 4 );
+	Q3PointArray pa( 4 );
 	pa.setPoint( 0, m_pa.point( m_index - 1 ).x(), m_pa.point( m_index - 1 ).y() );
 	pa.setPoint( 1, static_cast<int>(p1.x() * m_zoomFactor), static_cast<int>(p1.y() * m_zoomFactor) );
 	pa.setPoint( 2, static_cast<int>(p2.x() * m_zoomFactor), static_cast<int>(p2.y() * m_zoomFactor) );
 	pa.setPoint( 3, static_cast<int>(p3.x() * m_zoomFactor), static_cast<int>(p3.y() * m_zoomFactor) );
 
-	QPointArray pa2( pa.cubicBezier() );
+	Q3PointArray pa2( pa.cubicBezier() );
 
 	m_pa.resize( m_index + pa2.size() );
 	m_pa.putPoints( m_index, pa2.size(), pa2 );

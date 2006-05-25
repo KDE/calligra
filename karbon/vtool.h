@@ -21,11 +21,14 @@
 #define __VTOOL_H__
 
 #include <qobject.h>
+//Added by qt3to4:
+#include <QEvent>
+#include <QMouseEvent>
 #include <kaction.h>
 #include <klocale.h>
 #include <KoPoint.h>
 #include <koffice_export.h>
-class KRadioAction;
+class KAction;
 class KarbonPart;
 class KarbonView;
 class QEvent;
@@ -115,7 +118,7 @@ public:
 	/**
 	 * The tool icon name.
 	 */
-	QString icon() { return m_action->icon(); }
+	QString icon() { return ""; } // kiconengine contains the name --- previous: m_action->icon();
 
 	/**
 	 * This function processes every important mouse event.
@@ -147,7 +150,7 @@ public:
 	 *
 	 * @return the associated action
 	 */
-	KRadioAction *action() const { return m_action; }
+	KAction *action() const { return m_action; }
 
 	/**
 	 * Draws the actual tool state.
@@ -305,7 +308,8 @@ protected:
 	bool altPressed() const { return m_altPressed; }
 
 	/** The tool's action object. */
-	KRadioAction *m_action;
+	// note: should this be a toggle action ?
+	KAction *m_action;
 
 	/** Helper function. Returns the parent view's toolcontroller. */
 	VToolController *toolController() const;

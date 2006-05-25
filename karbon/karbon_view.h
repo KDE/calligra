@@ -30,6 +30,12 @@
 #include <kxmlguibuilder.h>
 #include <KoUnit.h>
 #include <koffice_export.h>
+//Added by qt3to4:
+#include <QDropEvent>
+#include <QResizeEvent>
+#include <QLabel>
+#include <QMouseEvent>
+#include <QEvent>
 class DCOPObject;
 class QLabel;
 

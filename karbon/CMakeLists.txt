@@ -1,5 +1,6 @@
-
 project(karbon)
+
+include_directories( ${KDE4_INCLUDE_DIR} ${QT_INCLUDES} ${KOFFICEUI_INCLUDES} ${KOPAINTER_INCLUDES} ${CMAKE_SOURCE_DIR}/karbon/core ${CMAKE_BINARY_DIR}/karbon/core ${CMAKE_SOURCE_DIR}/karbon/widgets ${CMAKE_BINARY_DIR}/karbon/widgets ${CMAKE_SOURCE_DIR}/karbon/render ${CMAKE_BINARY_DIR}/karbon/render ${CMAKE_SOURCE_DIR}/karbon/commands ${CMAKE_BINARY_DIR}/karbon/commands ${CMAKE_SOURCE_DIR}/karbon/dockers ${CMAKE_BINARY_DIR}/karbon/dockers ${CMAKE_SOURCE_DIR}/karbon/dialogs ${CMAKE_BINARY_DIR}/karbon/dialogs)
 
 add_subdirectory( commands )
 add_subdirectory( visitors )

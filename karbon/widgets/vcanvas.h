@@ -21,7 +21,15 @@
 #define __VCANVAS_H__
 
 
-#include <qscrollview.h>
+#include <q3scrollview.h>
+//Added by qt3to4:
+#include <QPixmap>
+#include <QResizeEvent>
+#include <QEvent>
+#include <QDragEnterEvent>
+#include <QDropEvent>
+#include <QPaintEvent>
+#include <QFocusEvent>
 #include <koffice_export.h>
 class KarbonPart;
 class KarbonView;
@@ -31,7 +39,7 @@ class VPainter;
 
 // The canvas is a QScrollView.
 
-class KARBONCOMMON_EXPORT VCanvas : public QScrollView
+class KARBONCOMMON_EXPORT VCanvas : public Q3ScrollView
 {
 	Q_OBJECT
 public:

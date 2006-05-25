@@ -19,6 +19,8 @@
 
 #include <qdom.h>
 #include <QFile>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 #include <kdebug.h>
 #include <KoPoint.h>
@@ -512,8 +514,8 @@ VText::traceText()
 
 		// storing glyphs.
 	float l = 0;
-	QValueList<float> glyphXAdvance;
-	QValueList<float> glyphYAdvance;
+	Q3ValueList<float> glyphXAdvance;
+	Q3ValueList<float> glyphYAdvance;
 	for( unsigned int i = 0; i < m_text.length(); i++ )
 	{
 		// get the glyph index for the current character
@@ -577,9 +579,9 @@ VText::traceText()
 	
 	switch( m_alignment )
 	{
-		case Left: x += 0; break;
+		case Qt::DockLeft: x += 0; break;
 		case Center: x -=  0.5 * l; break;
-		case Right: x -= l; break;
+		case Qt::DockRight: x -= l; break;
 	}
 	float y = 0;
 	float dx = 0;

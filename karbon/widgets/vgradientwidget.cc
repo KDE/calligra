@@ -19,8 +19,13 @@
 */
 
 #include <QLabel>
-#include <qframe.h>
+#include <q3frame.h>
 #include <qbitmap.h>
+//Added by qt3to4:
+#include <QPaintEvent>
+#include <QPixmap>
+#include <QMouseEvent>
+#include <Q3PtrList>
 
 #include <kcolorbutton.h>
 #include <kcombobox.h>
@@ -156,7 +161,7 @@ void VGradientWidget::paintEvent( QPaintEvent* )
 	p.setClipRect( m_pntArea.x(), m_pntArea.y(), m_pntArea.width(), m_pntArea.height() );
 	p.translate( m_pntArea.x(), m_pntArea.y() );
 	
-	QPtrList<VColorStop>& colorStops = m_gradient->m_colorStops;
+	Q3PtrList<VColorStop>& colorStops = m_gradient->m_colorStops;
 	if( colorStops.count() > 1 )
 	{
 		VColorStop* stop, *nextstop;
@@ -177,7 +182,7 @@ void VGradientWidget::mousePressEvent( QMouseEvent* e )
 	if( ! m_pntArea.contains( e->x(), e->y() ) )
 		return;
 
-	QPtrList<VColorStop>& colorStops = m_gradient->m_colorStops;
+	Q3PtrList<VColorStop>& colorStops = m_gradient->m_colorStops;
 
 	currentPoint = 0;
 
@@ -272,7 +277,7 @@ void VGradientWidget::mouseMoveEvent( QMouseEvent* e )
 	if( e->state() & Qt::RightButton )
 		return;
 
-	QPtrList<VColorStop>& colorStops = m_gradient->m_colorStops;
+	Q3PtrList<VColorStop>& colorStops = m_gradient->m_colorStops;
 
 	if( currentPoint >= colorStops.count() * 2 )
 		return;

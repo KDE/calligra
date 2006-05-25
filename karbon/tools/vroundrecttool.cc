@@ -18,7 +18,7 @@
 */
 
 
-#include <qgroupbox.h>
+#include <q3groupbox.h>
 #include <QLabel>
 
 #include <knuminput.h>
@@ -34,7 +34,7 @@
 VRoundRectTool::VRoundRectOptionsWidget::VRoundRectOptionsWidget( KarbonPart *part, QWidget* parent, const char* name )
 	: KDialogBase( parent, name, true, i18n( "Insert Round Rect" ), Ok | Cancel ), m_part( part )
 {
-	QGroupBox *group = new QGroupBox( 2, Qt::Horizontal, i18n( "Properties" ), this );
+	Q3GroupBox *group = new Q3GroupBox( 2, Qt::Horizontal, i18n( "Properties" ), this );
 	new QLabel( i18n( "Width:" ), group );
 	
 	KoUnit::Unit unit = KoUnit::U_CM;

@@ -24,7 +24,7 @@
 // qpainter wrapper
 
 #include "vpainter.h"
-#include "qpointarray.h"
+#include "q3pointarray.h"
 
 class QPainter;
 
@@ -78,14 +78,16 @@ public:
 	virtual void drawRect( const KoRect & );
 
 	//
+	/* Port to Qt4
 	virtual void setRasterOp( Qt::RasterOp );
+	*/
 
 	virtual QPaintDevice *device() { return m_target; }
 
 private:
 	double m_zoomFactor;
 	unsigned int m_index;
-	QPointArray m_pa;
+	Q3PointArray m_pa;
 	QPainter *m_painter;
 	QPaintDevice *m_target;
 	unsigned int m_width;

@@ -21,8 +21,8 @@
 #include <math.h>
 
 #include <qdom.h>
-#include <qvaluelist.h>
-#include <qwmatrix.h>
+#include <q3valuelist.h>
+#include <qmatrix.h>
 
 #include "vpath.h"
 #include "vsegment.h"
@@ -53,7 +53,7 @@ public:
 			m_list->push_front( itr );
 		else
 		{
-			m_list = new QValueList<VSubpathIterator*>;
+			m_list = new Q3ValueList<VSubpathIterator*>;
 			m_list->push_front( itr );
 		}
 	}
@@ -87,7 +87,7 @@ public:
 		if( m_list )
 		{
 			for(
-				QValueList<VSubpathIterator*>::Iterator itr = m_list->begin();
+				Q3ValueList<VSubpathIterator*>::Iterator itr = m_list->begin();
 				itr != m_list->end();
 				++itr )
 			{
@@ -110,7 +110,7 @@ public:
 		if( m_list )
 		{
 			for(
-				QValueList<VSubpathIterator*>::Iterator itr = m_list->begin();
+				Q3ValueList<VSubpathIterator*>::Iterator itr = m_list->begin();
 				itr != m_list->end();
 				++itr )
 			{
@@ -121,7 +121,7 @@ public:
 	}
 
 private:
-	QValueList<VSubpathIterator*>* m_list;
+	Q3ValueList<VSubpathIterator*>* m_list;
 	VSubpathIterator* m_iterator;
 };
 
@@ -482,7 +482,7 @@ VSubpath::pointIsInside( const KoPoint& p ) const
 	// cache the closed evaluation
 	bool closed = isClosed() || getLast()->knot() == getFirst()->knot();
 
-	QValueList<double> rparams;
+	Q3ValueList<double> rparams;
 
 	VSegment* segment = getFirst()->next();
 
@@ -529,7 +529,7 @@ VSubpath::pointIsInside( const KoPoint& p ) const
 	// sort all intersections
 	qHeapSort( rparams );
 
-	QValueList<double>::iterator itr, etr = rparams.end();
+	Q3ValueList<double>::iterator itr, etr = rparams.end();
 	
 	for( itr = rparams.begin(); itr != etr; ++itr )
 		kDebug(38000) << "intersection: " << *itr << endl;

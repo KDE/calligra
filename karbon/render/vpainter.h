@@ -93,7 +93,9 @@ public:
 	virtual void restore() = 0;
 
 	// we have to see how this fits in
+	/* Port to Qt4
 	virtual void setRasterOp( Qt::RasterOp ) = 0;
+	*/
 
 	// access to device
 	virtual QPaintDevice *device() = 0;

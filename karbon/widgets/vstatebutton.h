@@ -22,7 +22,9 @@
 
 #include <QPushButton>
 #include <qpixmap.h>
-#include <qptrlist.h>
+#include <q3ptrlist.h>
+//Added by qt3to4:
+#include <QMouseEvent>
 
 class VStateButton : public QPushButton
 {
@@ -37,7 +39,7 @@ public:
 private:
 	void mouseReleaseEvent( QMouseEvent * );
 
-	QPtrList<QPixmap> m_pixmaps;
+	Q3PtrList<QPixmap> m_pixmaps;
 	unsigned int m_index;
 };
 

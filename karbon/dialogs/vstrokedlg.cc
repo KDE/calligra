@@ -24,6 +24,9 @@
 #include <qtabwidget.h>
 #include <qradiobutton.h>
 #include <qvbuttongroup.h>
+//Added by qt3to4:
+#include <Q3HBoxLayout>
+#include <Q3VBoxLayout>
 
 #include <kiconloader.h>
 #include <klocale.h>
@@ -44,9 +47,9 @@ VStrokeDlg::VStrokeDlg( KarbonPart* part, QWidget* parent, const char* name )
 {
 	enableButtonSeparator( true );
 	QTabWidget *mainWidget = new QTabWidget( this, "strokemain" );
-	QHBoxLayout *mainLayout = new QHBoxLayout (mainWidget, 3);
+	Q3HBoxLayout *mainLayout = new Q3HBoxLayout (mainWidget, 3);
 
-	QVBoxLayout *leftLayout = new QVBoxLayout( mainLayout, 4 );
+	Q3VBoxLayout *leftLayout = new Q3VBoxLayout( mainLayout, 4 );
 
 	QLabel* widthLabel = new QLabel( i18n ( "Width:" ), mainWidget );
 	leftLayout->addWidget ( widthLabel );
@@ -62,7 +65,7 @@ VStrokeDlg::VStrokeDlg( KarbonPart* part, QWidget* parent, const char* name )
 	// <- Dashing - reserved for later
 
 	QRadioButton* button;
-	m_typeOption = new QVButtonGroup ( mainWidget );
+	m_typeOption = new Q3VButtonGroup ( mainWidget );
 	button = new QRadioButton ( i18n( "None" ), m_typeOption );
 	m_typeOption->insert( button );
 	button = new QRadioButton ( i18n( "Stroke" ), m_typeOption );
@@ -73,7 +76,7 @@ VStrokeDlg::VStrokeDlg( KarbonPart* part, QWidget* parent, const char* name )
 	mainLayout->addWidget( m_typeOption );
 	connect( m_typeOption, SIGNAL( clicked( int ) ), this, SLOT( slotTypeChanged( int ) ) );
 
-	m_capOption = new QVButtonGroup ( mainWidget );
+	m_capOption = new Q3VButtonGroup ( mainWidget );
 	//button = new QRadioButton ( i18n( "Butt" ), m_capOption );	                                                          
 	button = new QRadioButton ( m_capOption );
 	button->setPixmap( DesktopIcon( "cap_butt" ) );
@@ -88,7 +91,7 @@ VStrokeDlg::VStrokeDlg( KarbonPart* part, QWidget* parent, const char* name )
 	mainLayout->addWidget( m_capOption );
 	connect( m_capOption, SIGNAL( clicked( int ) ), this, SLOT( slotCapChanged( int ) ) );
 
-	m_joinOption = new QVButtonGroup ( mainWidget );
+	m_joinOption = new Q3VButtonGroup ( mainWidget );
 	button = new QRadioButton ( m_joinOption );
 	button->setPixmap( DesktopIcon( "join_miter" ) );
 	m_joinOption->insert( button );

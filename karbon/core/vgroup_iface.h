@@ -20,7 +20,7 @@
 #ifndef __VGROUP_IFACE_H__
 #define __VGROUP_IFACE_H__
 
-#include <qvaluelist.h>
+#include <q3valuelist.h>
 
 #include "vobject_iface.h"
 
@@ -44,7 +44,7 @@ k_dcop:
 	//virtual void insertInfrontOf( VObject* newObject, VObject* oldObject );
 
 	void clear();
-	QValueList<DCOPRef> objects();
+	Q3ValueList<DCOPRef> objects();
 
 private:
 	VGroup *m_group;

@@ -18,7 +18,7 @@
 */
 
 
-#include <qgroupbox.h>
+#include <q3groupbox.h>
 #include <QLabel>
 #include <QLayout>
 
@@ -35,7 +35,7 @@
 VSinusTool::VSinusOptionsWidget::VSinusOptionsWidget( KarbonPart *part, QWidget* parent, const char* name )
 	: KDialogBase( parent, name, true, i18n( "Insert Sinus" ), Ok | Cancel ), m_part( part )
 {
-	QGroupBox *group = new QGroupBox( 2, Qt::Horizontal, i18n( "Properties" ), this );
+	Q3GroupBox *group = new Q3GroupBox( 2, Qt::Horizontal, i18n( "Properties" ), this );
 
 	// add width/height-input:
 	m_widthLabel = new QLabel( i18n( "Width:" ), group );

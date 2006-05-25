@@ -20,7 +20,7 @@
 #ifndef __VTRANSFORMNODES_H__
 #define __VTRANSFORMNODES_H__
 
-#include <qwmatrix.h>
+#include <qmatrix.h>
 #include <koffice_export.h>
 #include "vvisitor.h"
 

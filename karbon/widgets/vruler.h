@@ -20,8 +20,11 @@
 #ifndef VRULER_H_
 #define VRULER_H_
 
-#include <qframe.h>
+#include <q3frame.h>
 #include <qpixmap.h>
+//Added by qt3to4:
+#include <QPaintEvent>
+#include <QResizeEvent>
 #include <KoUnit.h>
 
 // XXX: Make this look more like the KOffice ruler -- the KOffice
@@ -30,9 +33,9 @@
 
 class QPainter;
 
-class VRuler : public QFrame {
+class VRuler : public Q3Frame {
     Q_OBJECT
-    typedef QFrame super;
+    typedef Q3Frame super;
 
 public:
     VRuler(Qt::Orientation, QWidget *parent = 0, const char *name = 0);

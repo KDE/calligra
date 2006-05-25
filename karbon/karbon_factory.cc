@@ -24,7 +24,7 @@
 #include <kinstance.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
-#include <ktrader.h>
+//#include <ktrader.h>
 #include <kparts/componentfactory.h>
 #include <kparts/plugin.h>
 
@@ -49,7 +49,9 @@ KarbonFactory::KarbonFactory( QObject* parent, const char* name )
 	KarbonToolRegistry::instance();
 
 	// Load plugins
-	KTrader::OfferList offers = KTrader::self() -> query(QString::fromLatin1("Karbon/CoreModule"),
+
+	// Disabled untill ported to KDE4
+	/*KTrader::OfferList offers = KTrader::self() -> query(QString::fromLatin1("Karbon/CoreModule"),
                                     QString::fromLatin1("Type == 'Service'"));
 
 	KTrader::OfferList::ConstIterator iter;
@@ -62,7 +64,7 @@ KarbonFactory::KarbonFactory( QObject* parent, const char* name )
 		KParts::ComponentFactory::createInstanceFromService<KParts::Plugin> ( service, this, 0, QStringList(), &errCode);
 		if ( plugin )
 			kDebug() << "found plugin " << service -> property("Name").toString() << "\n";
-	}
+	}*/
 }
 
 KarbonFactory::~KarbonFactory()

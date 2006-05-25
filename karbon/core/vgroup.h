@@ -20,12 +20,12 @@
 #ifndef __VGROUP_H__
 #define __VGROUP_H__
 
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 
 #include "vobject.h"
 #include <koffice_export.h>
-typedef QPtrList<VObject> VObjectList;
-typedef QPtrListIterator<VObject> VObjectListIterator;
+typedef Q3PtrList<VObject> VObjectList;
+typedef Q3PtrListIterator<VObject> VObjectListIterator;
 
 /**
  * Base class for all sort of VObject conglomerats.

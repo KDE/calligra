@@ -21,6 +21,9 @@
 #define _VGRADIENTWIDGET_H_
 
 #include <QWidget>
+//Added by qt3to4:
+#include <QPaintEvent>
+#include <QMouseEvent>
 #include <koffice_export.h>
 class VGradient;
 class QPainter;

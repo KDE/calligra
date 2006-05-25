@@ -21,7 +21,7 @@
 #define __VCOMPOSITE_H__
 
 
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 
 #include <KoPoint.h>
 
@@ -36,8 +36,8 @@ class VSegment;
 class VVisitor;
 class VSubpath;
 
-typedef QPtrList<VSubpath> VSubpathList;
-typedef QPtrListIterator<VSubpath> VSubpathListIterator;
+typedef Q3PtrList<VSubpath> VSubpathList;
+typedef Q3PtrListIterator<VSubpath> VSubpathListIterator;
 
 
 /**

@@ -22,7 +22,7 @@
 #define __VSELECTION_H__
 
 
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 
 #include <KoRect.h>
 
@@ -35,8 +35,8 @@ class VPainter;
 class VVisitor;
 class VSegment;
 
-typedef QPtrList<VObject> VObjectList;
-typedef QPtrListIterator<VObject> VObjectListIterator;
+typedef Q3PtrList<VObject> VObjectList;
+typedef Q3PtrListIterator<VObject> VObjectListIterator;
 
 
 /// Ids of manipulation nodes.
@@ -141,7 +141,7 @@ public:
 	 * @param rect the selection rect
 	 * @return the list of segments
 	 */
-	QPtrList<VSegment> getSegments( const KoRect& rect );
+	Q3PtrList<VSegment> getSegments( const KoRect& rect );
 
 	/**
 	 * Selects or deselects all nodes.

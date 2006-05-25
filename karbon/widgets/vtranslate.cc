@@ -22,6 +22,9 @@
 #include <QLabel>
 #include <QLayout>
 #include <QString>
+//Added by qt3to4:
+#include <Q3VBoxLayout>
+#include <Q3GridLayout>
 #include <klocale.h>
 #include <knuminput.h>
 #include <kstdguiitem.h>
@@ -34,10 +37,10 @@ VTranslate::VTranslate( QWidget* parent, const char* name )
 {
 	setCaption( i18n( "Translate" ) );
 
-	QVBoxLayout *mainlayout = new QVBoxLayout(this, 7);
+	Q3VBoxLayout *mainlayout = new Q3VBoxLayout(this, 7);
 	mainlayout->addSpacing(5);
 
-	QGridLayout *inputlayout = new QGridLayout(this, 5, 3);
+	Q3GridLayout *inputlayout = new Q3GridLayout(this, 5, 3);
 	mainlayout->addLayout(inputlayout);
 	m_labelX = new QLabel(i18n("X:"), this);
 	inputlayout->addWidget(m_labelX, 0, 0);

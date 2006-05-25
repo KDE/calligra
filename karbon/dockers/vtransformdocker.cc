@@ -21,8 +21,10 @@
 #include <QLabel>
 #include <QLayout>
 #include <QWidget>
-#include <qwmatrix.h>
+#include <qmatrix.h>
 #include <QToolTip>
+//Added by qt3to4:
+#include <Q3GridLayout>
 
 #include <klocale.h>
 #include <KoMainWindow.h>
@@ -42,7 +44,7 @@ VTransformDocker::VTransformDocker( KarbonPart* part, KarbonView* parent, const 
 {
 	setCaption( i18n( "Transform" ) );
 
-	QGridLayout *mainLayout = new QGridLayout( this, 5, 5 );
+	Q3GridLayout *mainLayout = new Q3GridLayout( this, 5, 5 );
 
 	//X: (TODO: Set 5000 limit to real Karbon14 limit)
 	QLabel* xLabel = new QLabel( i18n ( "X:" ), this );

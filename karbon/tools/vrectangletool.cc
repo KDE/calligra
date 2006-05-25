@@ -18,7 +18,7 @@
 */
 
 #include <QLabel>
-#include <qgroupbox.h>
+#include <q3groupbox.h>
 
 #include <klocale.h>
 #include <knuminput.h>
@@ -33,7 +33,7 @@
 VRectangleTool::VRectangleOptionsWidget::VRectangleOptionsWidget( KarbonPart *part, QWidget* parent, const char* name )
 	: KDialogBase( parent, name, true, i18n( "Insert Rectangle" ), Ok | Cancel ), m_part( part )
 {
-	QGroupBox *group = new QGroupBox( 2, Qt::Horizontal, i18n( "Properties" ), this );
+	Q3GroupBox *group = new Q3GroupBox( 2, Qt::Horizontal, i18n( "Properties" ), this );
 	// add width/height-input:
 	m_widthLabel = new QLabel( i18n( "Width:" ), group );
 	m_width = new KoUnitDoubleSpinBox( group, 0.0, 1000.0, 0.5, 100.0, KoUnit::U_MM );

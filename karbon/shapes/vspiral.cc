@@ -20,7 +20,7 @@
 
 #include <math.h>
 
-#include <qwmatrix.h>
+#include <qmatrix.h>
 #include <qdom.h>
 
 #include "vglobal.h"

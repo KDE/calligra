@@ -20,15 +20,18 @@
 #ifndef __VSTROKEFILLPREVIEW_H__
 #define __VSTROKEFILLPREVIEW_H__
 
-#include <qframe.h>
+#include <q3frame.h>
 #include <qpixmap.h>
+//Added by qt3to4:
+#include <QPaintEvent>
+#include <QEvent>
 
 class VKoPainter;
 class VFill;
 class VStroke;
 class KarbonPart;
 
-class VStrokeFillPreview : public QFrame
+class VStrokeFillPreview : public Q3Frame
 {
 	Q_OBJECT
 

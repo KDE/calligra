@@ -19,13 +19,21 @@
 
 #include "karbon_view.h"
 
-#include <qdragobject.h>
-#include <qiconset.h>
+#include <q3dragobject.h>
+#include <qicon.h>
 #include <qapplication.h>
 #include <qclipboard.h>
-#include <qpopupmenu.h>
-#include <qpaintdevicemetrics.h>
+#include <q3popupmenu.h>
+#include <q3paintdevicemetrics.h>
 #include <qpainter.h>
+//Added by qt3to4:
+#include <QResizeEvent>
+#include <QPixmap>
+#include <QMouseEvent>
+#include <Q3ValueList>
+#include <QEvent>
+#include <QDropEvent>
+#include <Q3PtrList>
 
 #include <kaction.h>
 #include <k3colordrag.h>
@@ -34,6 +42,10 @@
 #include <kmessagebox.h>
 #include <kdeversion.h>
 #include <kprinter.h>
+#include <kinstance.h>
+#include <kactionclasses.h>
+#include <kactioncollection.h>
+#include <kxmlguifactory.h>
 
 #include <KoMainWindow.h>
 #include <KoFilterManager.h>
@@ -128,11 +140,11 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent, const char* name )
 
 	// set up status bar message
 	m_status = new KStatusBarLabel( QString::null, 0, statusBar() );
-	m_status->setAlignment( AlignLeft | AlignVCenter );
+	m_status->setAlignment( Qt::AlignLeft | Qt::AlignVCenter );
 	m_status->setMinimumWidth( 300 );
 	addStatusBarItem( m_status, 1 );
 	m_cursorCoords = new KStatusBarLabel( QString::null, 0, statusBar() );
-	m_cursorCoords->setAlignment( AlignLeft | AlignVCenter );
+	m_cursorCoords->setAlignment( Qt::AlignLeft | Qt::AlignVCenter );
 	m_cursorCoords->setMinimumWidth( 50 );
 	addStatusBarItem( m_cursorCoords, 0 );
 	m_smallPreview = new VSmallPreview( this, name );
@@ -227,8 +239,10 @@ KarbonView::~KarbonView()
 	delete m_toolController;
 }
 
-static Qt::Dock stringToDock( const QString& attrPosition )
+static Qt::ToolBarArea stringToDock( const QString& attrPosition )
 {
+	/* Port to KDE/Qt 4
+
 	KToolBar::Dock dock = KToolBar::DockTop;
 	if ( !attrPosition.isEmpty() ) {
 		if ( attrPosition == "top" )
@@ -246,6 +260,10 @@ static Qt::Dock stringToDock( const QString& attrPosition )
 	}
 
 	return dock;
+	*/
+	
+	return Qt::TopToolBarArea;
+
 }
 
 QWidget *
@@ -257,10 +275,14 @@ KarbonView::createContainer( QWidget *parent, int index, const QDomElement &elem
 		toolController()->setUp( actionCollection(), m_toolbox );
 
 		kDebug() << "Toolbox position: " << element.attribute( "position" ) << "\n";
-	        Dock dock = stringToDock( element.attribute( "position" ).lower() );
+	        Qt::ToolBarArea dock = stringToDock( element.attribute( "position" ).lower() );
 
-	        mainWindow()->addDockWindow( m_toolbox, dock, false);
+	        /* Port to KDE/Qt 4
+		
+		mainWindow()->addDockWindow( m_toolbox, dock, false);
 	        mainWindow()->moveDockWindow( m_toolbox, dock, false, 0, 0 );
+		*/
+
 
 		//connect( m_toolbox, SIGNAL( activeToolChanged( VTool * ) ), this, SLOT( slotActiveToolChanged( VTool * ) ) );
 
@@ -389,7 +411,7 @@ KarbonView::print( KPrinter &printer )
 	// TODO : ultimately use plain QPainter here as that is better suited to print system
 	kDebug(38000) << "KarbonView::print" << endl;
 	
-	QPaintDeviceMetrics metrics( ( QPaintDevice * ) & printer );
+	Q3PaintDeviceMetrics metrics( ( QPaintDevice * ) & printer );
 	printer.setFullPage( true );
 	
 	// we are using 72 dpi internally
@@ -433,7 +455,9 @@ KarbonView::fileImportGraphic()
 {
 	QStringList filter;
 	filter << "application/x-karbon" << "image/svg+xml" << "image/x-wmf" << "image/x-eps" << "application/postscript";
-	KFileDialog *dialog = new KFileDialog( "foo", QString::null, 0L, "Choose Graphic to Add", true);
+	KFileDialog *dialog = new KFileDialog("foo", "", 0);
+	dialog->setCaption("Choose Graphic to Add");
+	dialog->setModal(true);
 	dialog->setMimeFilter( filter, "application/x-karbon" );
 	if(dialog->exec()!=QDialog::Accepted) {
 		delete dialog;
@@ -878,7 +902,7 @@ KarbonView::zoomChanged( const KoPoint &p )
 void
 KarbonView::setLineStyle( int style )
 {
-	QValueList<float> dashes;
+	Q3ValueList<float> dashes;
 	if( style == Qt::NoPen )
 		part()->addCommand( new VStrokeCmd( &part()->document(), dashes << 0 << 20 ), true );
 	else if( style == Qt::SolidLine )
@@ -1072,10 +1096,12 @@ KarbonView::initActions()
 	m_showRulerAction->setCheckedState(i18n("Hide Rulers"));
 	m_showRulerAction->setToolTip( i18n( "Shows or hides rulers" ) );
 	m_showRulerAction->setChecked( false );
-	m_showGridAction = new KToggleAction( i18n( "Show Grid" ), "view_grid", this, SLOT( showGrid() ), actionCollection(), "view_show_grid" );
+	/* port
+m_showGridAction = new KToggleAction( i18n( "Show Grid" ), "view_grid", this, SLOT( showGrid() ), actionCollection(), "view_show_grid" );
 	m_showGridAction->setCheckedState(i18n("Hide Grid"));
 	m_showGridAction->setToolTip( i18n( "Shows or hides grid" ) );
 	//m_showGridAction->setChecked( true );
+*/
 	m_snapGridAction = new KToggleAction( i18n( "Snap to Grid" ), 0, this, SLOT( snapToGrid() ), actionCollection(), "view_snap_to_grid" );
 	m_snapGridAction->setToolTip( i18n( "Snaps to grid" ) );
 	//m_snapGridAction->setChecked( true );
@@ -1091,11 +1117,14 @@ KarbonView::initActions()
 	// object <-----
 
 	// line style (dashes)
-	m_lineStyleAction = new KoLineStyleAction( i18n( "Line Style" ), "linestyle", this, SLOT( setLineStyle( int ) ), actionCollection(), "setLineStyle" );
-
+	/* port
+m_lineStyleAction = new KoLineStyleAction( i18n( "Line Style" ), "linestyle", this, SLOT( setLineStyle( int ) ), actionCollection(), "setLineStyle" );
+*/
 	// line width
 	m_setLineWidth = new KoUnitDoubleSpinComboBox( this, 0.0, 1000.0, 0.5, 1.0, KoUnit::U_PT, 1 );
-	new KWidgetAction( m_setLineWidth, i18n( "Set Line Width" ), 0, this, SLOT( setLineWidth() ), actionCollection(), "setLineWidth" );
+	/* port
+new KWidgetAction( m_setLineWidth, i18n( "Set Line Width" ), 0, this, SLOT( setLineWidth() ), actionCollection(), "setLineWidth" );
+*/
 	m_setLineWidth->insertItem( 0.25 );
 	m_setLineWidth->insertItem( 0.5 );
 	m_setLineWidth->insertItem( 0.75 );
@@ -1267,7 +1296,7 @@ KarbonView::snapToGrid()
 void
 KarbonView::showSelectionPopupMenu( const QPoint &pos )
 {
-	QPtrList<KAction> actionList;
+	QList<KAction*> actionList;
 	if( m_groupObjects->isEnabled() )
 		actionList.append( m_groupObjects );
 	else if( m_ungroupObjects->isEnabled() )
@@ -1275,7 +1304,7 @@ KarbonView::showSelectionPopupMenu( const QPoint &pos )
 	if( m_closePath->isEnabled() )
 		actionList.append( m_closePath );
 	plugActionList( "selection_type_action", actionList );
-	((QPopupMenu *)factory()->container( "selection_popup", this ) )->exec( pos );
+	((Q3PopupMenu *)factory()->container( "selection_popup", this ) )->exec( pos );
 	unplugActionList( "selection_type_action" );
 }
 

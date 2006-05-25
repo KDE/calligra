@@ -69,7 +69,7 @@ VDeleteNodeCmd::execute()
 void
 VDeleteNodeCmd::unexecute()
 {
-	QPtrListIterator<VSegment> itr( m_segments );
+	Q3PtrListIterator<VSegment> itr( m_segments );
 	for( ; itr.current() ; ++itr )
 		itr.current()->setState( VSegment::normal );
 	setSuccess( false );

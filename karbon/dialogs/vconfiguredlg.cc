@@ -20,13 +20,14 @@
 #include <float.h>
 
 #include <QCheckBox>
-#include <qgroupbox.h>
+#include <q3groupbox.h>
 #include <QLabel>
 #include <QLayout>
-#include <qvbox.h>
 #include <qvgroupbox.h>
 #include <QComboBox>
-#include <qgrid.h>
+#include <q3grid.h>
+//Added by qt3to4:
+#include <Q3GridLayout>
 
 #include <kiconloader.h>
 #include <kconfig.h>
@@ -35,6 +36,7 @@
 #include <knuminput.h>
 #include <kcolorbutton.h>
 #include <KoUnitWidgets.h>
+#include <kvbox.h>
 
 #include "karbon_view.h"
 #include "karbon_part.h"
@@ -49,7 +51,7 @@ VConfigureDlg::VConfigureDlg( KarbonView* parent )
 					   KDialogBase::Ok, parent )
 
 {
-	QVBox * page = addVBoxPage(
+	KVBox * page = addVBoxPage(
 					   i18n( "Interface" ), i18n( "Interface" ),
 					   BarIcon( "misc", K3Icon::SizeMedium ) );
 
@@ -104,7 +106,7 @@ void VConfigureDlg::slotDefault()
 
 
 VConfigInterfacePage::VConfigInterfacePage( KarbonView* view,
-		QVBox* box, char* name )
+		Q3VBox* box, char* name )
 		: QObject( box->parent(), name )
 {
 	m_view = view;
@@ -209,7 +211,7 @@ void VConfigInterfacePage::slotDefault()
 }
 
 
-VConfigMiscPage::VConfigMiscPage( KarbonView* view, QVBox* box, char* name )
+VConfigMiscPage::VConfigMiscPage( KarbonView* view, Q3VBox* box, char* name )
 		: QObject( box->parent(), name )
 {
     m_view = view;
@@ -217,11 +219,11 @@ VConfigMiscPage::VConfigMiscPage( KarbonView* view, QVBox* box, char* name )
 
     KoUnit::Unit unit = view->part()->unit();
 
-    QGroupBox* tmpQGroupBox = new QGroupBox( 0, Qt::Vertical, i18n( "Misc" ), box, "GroupBox" );
+    Q3GroupBox* tmpQGroupBox = new Q3GroupBox( 0, Qt::Vertical, i18n( "Misc" ), box, "GroupBox" );
     tmpQGroupBox->layout()->setSpacing(KDialog::spacingHint());
     tmpQGroupBox->layout()->setMargin(KDialog::marginHint());
 
-    QGridLayout* grid = new QGridLayout(tmpQGroupBox->layout(), 4, 2 );
+    Q3GridLayout* grid = new Q3GridLayout(tmpQGroupBox->layout(), 4, 2 );
 
     m_oldUndoRedo = 30;
 
@@ -282,7 +284,7 @@ void VConfigMiscPage::slotDefault()
     m_unit->setCurrentItem( 0 );
 }
 
-VConfigGridPage::VConfigGridPage( KarbonView* view, QVBox* page, char* name )
+VConfigGridPage::VConfigGridPage( KarbonView* view, Q3VBox* page, char* name )
 		: QObject( page->parent(), name )
 {
 	m_view = view;
@@ -302,14 +304,14 @@ VConfigGridPage::VConfigGridPage( KarbonView* view, QVBox* page, char* name )
 	QLabel* gridColorLbl = new QLabel( i18n( "Grid &color:" ), page);
 	m_gridColorBtn = new KColorButton( gd.color, page );
 	gridColorLbl->setBuddy( m_gridColorBtn );
-	QGroupBox* spacingGrp = new QGroupBox( 2, Qt::Horizontal, i18n( "Spacing" ), page );
+	Q3GroupBox* spacingGrp = new Q3GroupBox( 2, Qt::Horizontal, i18n( "Spacing" ), page );
 	QLabel* spaceHorizLbl = new QLabel( i18n( "&Horizontal:" ), spacingGrp );
 	m_spaceHorizUSpin = new KoUnitDoubleSpinBox( spacingGrp, 0.0, pgw, 0.1, fw, unit );
 	spaceHorizLbl->setBuddy( m_spaceHorizUSpin );
 	QLabel* spaceVertLbl = new QLabel( i18n( "&Vertical:" ), spacingGrp );
 	m_spaceVertUSpin = new KoUnitDoubleSpinBox( spacingGrp, 0.0, pgh, 0.1, fh, unit );
 	spaceVertLbl->setBuddy( m_spaceVertUSpin );
-	QGroupBox* snapGrp = new QGroupBox( 2, Qt::Horizontal, i18n( "Snap Distance" ), page );
+	Q3GroupBox* snapGrp = new Q3GroupBox( 2, Qt::Horizontal, i18n( "Snap Distance" ), page );
 	QLabel* snapHorizLbl = new QLabel( i18n( "H&orizontal:" ), snapGrp );
 	m_snapHorizUSpin = new KoUnitDoubleSpinBox( snapGrp, 0.0, fw, 0.1, sw, unit );
 	snapHorizLbl->setBuddy( m_snapHorizUSpin );
@@ -317,7 +319,7 @@ VConfigGridPage::VConfigGridPage( KarbonView* view, QVBox* page, char* name )
 	m_snapVertUSpin = new KoUnitDoubleSpinBox( snapGrp, 0.0, fh, 0.1, sh, unit );
 	snapVertLbl->setBuddy( m_snapVertUSpin );
 
-	QGridLayout* gl = new QGridLayout();
+	Q3GridLayout* gl = new Q3GridLayout();
 	gl->setSpacing( KDialog::spacingHint() );
 	gl->addMultiCellWidget( m_gridChBox, 0, 0, 0, 2 );
 	gl->addMultiCellWidget( m_snapChBox, 1, 1, 0, 2 );
@@ -377,7 +379,7 @@ void VConfigGridPage::slotDefault()
 }
 
 VConfigDefaultPage::VConfigDefaultPage( KarbonView* view,
-                                        QVBox* box, char* name )
+                                        Q3VBox* box, char* name )
     : QObject( box->parent(), name )
 {
     m_view = view;

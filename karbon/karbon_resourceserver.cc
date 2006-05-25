@@ -22,6 +22,10 @@
 #include <QFile>
 #include <qfileinfo.h>
 #include <qstringlist.h>
+//Added by qt3to4:
+#include <QPixmap>
+#include <Q3PtrList>
+#include <QTextStream>
 
 #include <kdebug.h>
 #include <kglobal.h>
@@ -88,7 +92,7 @@ KarbonResourceServer::KarbonResourceServer()
 
 	// GRADIENTS
 	kDebug(38000) << "Loading gradients:" << endl;
-	m_gradients = new QPtrList<VGradientListItem>();
+	m_gradients = new Q3PtrList<VGradientListItem>();
 	m_gradients->setAutoDelete( true );
 
 	formats.clear();
@@ -117,7 +121,7 @@ KarbonResourceServer::KarbonResourceServer()
 
 	// CLIPARTS
 	kDebug(38000) << "Loading cliparts:" << endl;
-	m_cliparts = new QPtrList<VClipartIconItem>();
+	m_cliparts = new Q3PtrList<VClipartIconItem>();
 	m_cliparts->setAutoDelete( true );
 
 	formats.clear();

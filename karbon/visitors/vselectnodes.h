@@ -25,6 +25,8 @@
 
 #include "vvisitor.h"
 #include "vsegment.h"
+//Added by qt3to4:
+#include <Q3PtrList>
 
 class VSelectNodes : public VVisitor
 {
@@ -59,11 +61,11 @@ public:
 	virtual void visitVSubpath( VSubpath& path );
 	virtual void visitVLayer( VLayer& layer );
 
-	QPtrList<VSegment> &result() { return m_segments; }
+	Q3PtrList<VSegment> &result() { return m_segments; }
 
 private:
 	KoRect m_rect;
-	QPtrList<VSegment>	m_segments;
+	Q3PtrList<VSegment>	m_segments;
 };
 
 #endif

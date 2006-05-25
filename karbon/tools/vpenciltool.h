@@ -22,8 +22,10 @@
 #define __VPENCILTOOL_H__
 
 
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 #include <QString>
+//Added by qt3to4:
+#include <QLabel>
 
 #include <klocale.h>
 #include <kdialogbase.h>
@@ -37,7 +39,7 @@ class QWidget;
 class VPath;
 class KarbonView;
 class QCheckBox;
-class QWidgetStack;
+class Q3WidgetStack;
 class QComboBox;
 class KDoubleNumInput;
 class QCursor;
@@ -62,7 +64,7 @@ class VPencilOptionsWidget : public KDialogBase
 		QCheckBox			*m_optimizeCurve;
 		KDoubleNumInput			*m_combineAngle;
 		KDoubleNumInput			*m_fittingError;
-		QWidgetStack			*m_widgetStack;
+		Q3WidgetStack			*m_widgetStack;
 		QComboBox			*m_combo;
 		int				m_mode;
 };
@@ -124,7 +126,7 @@ class VPencilTool : public VTool
 		/**
 		 * The list of this polyline points.
 		 */
-		QPtrList<KoPoint> m_Points;
+		Q3PtrList<KoPoint> m_Points;
 
 		/**
 		 * The start of the last drawn vector.

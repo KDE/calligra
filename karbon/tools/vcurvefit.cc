@@ -39,6 +39,8 @@
 
 
 #include "vcurvefit.h"
+//Added by qt3to4:
+#include <Q3PtrList>
 
 #define MAXPOINTS	1000		/* The most points you can have */
 
@@ -104,7 +106,7 @@ double distance(KoPoint *p1,KoPoint *p2){
 }
 
 
-FitVector ComputeLeftTangent(QPtrList<KoPoint> &points,int end){
+FitVector ComputeLeftTangent(Q3PtrList<KoPoint> &points,int end){
 	FitVector tHat1(*points.at(end+1),*points.at(end));
 
 	tHat1.normalize();
@@ -112,7 +114,7 @@ FitVector ComputeLeftTangent(QPtrList<KoPoint> &points,int end){
 	return tHat1;
 }
 
-FitVector ComputeRightTangent(QPtrList<KoPoint> &points,int end){
+FitVector ComputeRightTangent(Q3PtrList<KoPoint> &points,int end){
 	FitVector tHat1(*points.at(end-1),*points.at(end));
 
 	tHat1.normalize();
@@ -125,7 +127,7 @@ FitVector ComputeRightTangent(QPtrList<KoPoint> &points,int end){
  *	Assign parameter values to digitized points 
  *	using relative distances between points.
  */
-static double *ChordLengthParameterize(QPtrList<KoPoint> points,int first,int last)
+static double *ChordLengthParameterize(Q3PtrList<KoPoint> points,int first,int last)
 {
     int		i;	
     double	*u;			/*  Parameterization		*/
@@ -165,7 +167,7 @@ static FitVector VectorSub(FitVector a,FitVector b)
     return (c);
 }
 
-static FitVector ComputeCenterTangent(QPtrList<KoPoint> points,int center)
+static FitVector ComputeCenterTangent(Q3PtrList<KoPoint> points,int center)
 {
     FitVector V1, V2, tHatCenter;
     
@@ -214,7 +216,7 @@ static double B3(double u)
  *  Use least-squares method to find Bezier control points for region.
  *
  */
-KoPoint* GenerateBezier(QPtrList<KoPoint> &points, int first, int last, double *uPrime,FitVector tHat1,FitVector tHat2)
+KoPoint* GenerateBezier(Q3PtrList<KoPoint> &points, int first, int last, double *uPrime,FitVector tHat1,FitVector tHat2)
 {
     int 	i;
     FitVector	A[MAXPOINTS][2];	/* Precomputed rhs for eqn	*/
@@ -359,7 +361,7 @@ static KoPoint BezierII(int degree,KoPoint *V, double t)
  *	Find the maximum squared distance of digitized points
  *	to fitted curve.
 */
-static double ComputeMaxError(QPtrList<KoPoint> points,int first,int last,KoPoint *curve,double *u,int *splitPoint)
+static double ComputeMaxError(Q3PtrList<KoPoint> points,int first,int last,KoPoint *curve,double *u,int *splitPoint)
 {
     int		i;
     double	maxDist;		/*  Maximum error		*/
@@ -429,7 +431,7 @@ static double NewtonRaphsonRootFind(KoPoint *Q,KoPoint P,double u)
  *   a better parameterization.
  *
  */
-static double *Reparameterize(QPtrList<KoPoint> points,int first,int last,double *u,KoPoint *curve)
+static double *Reparameterize(Q3PtrList<KoPoint> points,int first,int last,double *u,KoPoint *curve)
 {
     int 	nPts = last-first+1;	
     int 	i;
@@ -443,7 +445,7 @@ static double *Reparameterize(QPtrList<KoPoint> points,int first,int last,double
     return (uPrime);
 }
 
-KoPoint *FitCubic(QPtrList<KoPoint> &points,int first,int last,FitVector tHat1,FitVector tHat2,float error,int &width){
+KoPoint *FitCubic(Q3PtrList<KoPoint> &points,int first,int last,FitVector tHat1,FitVector tHat2,float error,int &width){
 	double *u;
 	double *uPrime;
 	double maxError;
@@ -538,7 +540,7 @@ KoPoint *FitCubic(QPtrList<KoPoint> &points,int first,int last,FitVector tHat1,F
 }
 
 
-VPath *bezierFit(QPtrList<KoPoint> &points,float error){
+VPath *bezierFit(Q3PtrList<KoPoint> &points,float error){
 	FitVector tHat1, tHat2;
 
 	tHat1 = ComputeLeftTangent(points,0);

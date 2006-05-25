@@ -25,7 +25,7 @@
 #include "vfill.h"
 #include "vgroup.h"
 
-#include <qvaluevector.h>
+#include <q3valuevector.h>
 #include <koffice_export.h>
 class VSelection;
 
@@ -55,7 +55,7 @@ protected:
 
 	VFill m_fill;
 
-	QValueVector<VFill> m_oldfills;
+	Q3ValueVector<VFill> m_oldfills;
 };
 
 #endif

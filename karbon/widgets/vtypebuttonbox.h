@@ -20,11 +20,11 @@
 #ifndef __VTYPEBUTTONBOX_H__
 #define __VTYPEBUTTONBOX_H__
 
-#include <qhbuttongroup.h>
+#include <Q3HButtonGroup>
 
 class KarbonPart;
 
-class VTypeButtonBox : public QHButtonGroup
+class VTypeButtonBox : public Q3HButtonGroup
 {
 	Q_OBJECT
 

@@ -25,6 +25,8 @@
 #include "vgradient.h"
 #include "vstrokecmd.h"
 #include "vdocument.h"
+//Added by qt3to4:
+#include <Q3ValueList>
 
 VStrokeCmd::VStrokeCmd( VDocument *doc, const VStroke *stroke, const QString& icon )
     : VCommand( doc, i18n( "Stroke Objects" ), icon ), m_stroke( *stroke )
@@ -74,7 +76,7 @@ VStrokeCmd::VStrokeCmd( VDocument *doc, const VColor &color )
 	m_stroke.setColor( color );
 }
 
-VStrokeCmd::VStrokeCmd( VDocument *doc, const QValueList<float>& array )
+VStrokeCmd::VStrokeCmd( VDocument *doc, const Q3ValueList<float>& array )
 	: VCommand( doc, i18n( "Dash Pattern" ), "linewidth" )
 {
 	m_selection = document()->selection()->clone();

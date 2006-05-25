@@ -21,6 +21,8 @@
 #define __VDISTRIBUTECMD_H__
 
 #include "vcommand.h"
+//Added by qt3to4:
+#include <Q3PtrList>
 
 class VTranslateCmd;
 
@@ -51,7 +53,7 @@ protected:
 	double getAvailableSpace( VObject *first, VObject *last, double extent );
 
 	Distribute				m_distribute;
-	QPtrList<VTranslateCmd>	m_trafoCmds;
+	Q3PtrList<VTranslateCmd>	m_trafoCmds;
 };
 
 #endif

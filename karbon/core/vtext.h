@@ -24,7 +24,7 @@
 #include <config.h>
 #endif
 
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 #include <QString>
 #include <QFont>
 #include <koffice_export.h>
@@ -34,8 +34,8 @@
 
 class VGroup;
 
-typedef QPtrList<VPath> VPathList;
-typedef QPtrListIterator<VPath> VPathListIterator;
+typedef Q3PtrList<VPath> VPathList;
+typedef Q3PtrListIterator<VPath> VPathListIterator;
 
 #ifdef Above
 #undef Above

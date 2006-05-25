@@ -19,6 +19,8 @@
 
 #include "vcursor.h"
 #include <qbitmap.h>
+//Added by qt3to4:
+#include <QPixmap>
 
 static const char* const cminus[] = {
 "16 16 6 1",

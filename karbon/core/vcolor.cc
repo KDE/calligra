@@ -52,9 +52,9 @@ VColor::VColor( const QColor& color )
 	m_colorSpace = rgb;
 	m_opacity = 1.0;
 
-	m_value[0] = color.red() / 255.0;
-	m_value[1] = color.green() / 255.0;
-	m_value[2] = color.blue() / 255.0;
+	m_value[0] = color.Qt::red() / 255.0;
+	m_value[1] = color.Qt::green() / 255.0;
+	m_value[2] = color.Qt::blue() / 255.0;
 }
 
 VColor::operator QColor() const
@@ -157,7 +157,7 @@ VColor::convertToColorSpace( const VColorSpace colorSpace )
 				m_value[2] = b;
 			}
 		}
-		else if( m_colorSpace == gray )
+		else if( m_colorSpace == Qt::gray )
 		{
 			m_value[0] = m_value[0];	// For readability.
 			m_value[1] = m_value[0];
@@ -181,7 +181,7 @@ VColor::convertToColorSpace( const VColorSpace colorSpace )
 		{
 // TODO
 		}
-		else if( m_colorSpace == gray )
+		else if( m_colorSpace == Qt::gray )
 		{
 			m_value[1] = 0.0;
 			m_value[2] = 0.0;
@@ -257,14 +257,14 @@ VColor::convertToColorSpace( const VColorSpace colorSpace )
 		{
 			// Do nothing.
 		}
-		else if( m_colorSpace == gray )
+		else if( m_colorSpace == Qt::gray )
 		{
 			m_value[1] = 0.0;
 			m_value[2] = m_value[0];
 			m_value[0] = 0.0;
 		}
 	}
-	else if( colorSpace == gray )
+	else if( colorSpace == Qt::gray )
 	{
 		if( m_colorSpace == rgb )
 		{
@@ -286,7 +286,7 @@ VColor::convertToColorSpace( const VColorSpace colorSpace )
 		{
 			m_value[0] = m_value[2];
 		}
-		else if( m_colorSpace == gray )
+		else if( m_colorSpace == Qt::gray )
 		{
 			// Do nothing.
 		}
@@ -304,7 +304,7 @@ VColor::save( QDomElement& element ) const
 	if( m_opacity != 1.0 )
 		me.setAttribute( "opacity", m_opacity );
 
-	if( m_colorSpace == gray )
+	if( m_colorSpace == Qt::gray )
 		me.setAttribute( "v", m_value[0] );
 	else
 	{
@@ -327,14 +327,14 @@ VColor::load( const QDomElement& element )
 		case 2:
 			m_colorSpace = hsb; break;
 		case 3:
-			m_colorSpace = gray; break;
+			m_colorSpace = Qt::gray; break;
 		default:
 			m_colorSpace = rgb;
 	}
 
 	m_opacity = element.attribute( "opacity", "1.0" ).toFloat();
 
-	if( m_colorSpace == gray )
+	if( m_colorSpace == Qt::gray )
 		m_value[0] = element.attribute( "v", "0.0" ).toFloat();
 	else
 	{

@@ -24,9 +24,9 @@
 #ifndef VREFERENCE_H
 #define VREFERENCE_H
 
-#include <qframe.h>
+#include <q3frame.h>
 
-class QButtonGroup;
+class Q3ButtonGroup;
 
 enum Choice
 {
@@ -41,7 +41,7 @@ enum Choice
 	BottomRight
 };
 
-class VReference : public QFrame
+class VReference : public Q3Frame
 {
 	Q_OBJECT
 public:
@@ -52,7 +52,7 @@ public slots:
 
 private:
 	int m_referencePoint;
-	QButtonGroup* mButtonGroup;
+	Q3ButtonGroup* mButtonGroup;
 signals:
 	void referencePointChanged( int referencePoint );
 };

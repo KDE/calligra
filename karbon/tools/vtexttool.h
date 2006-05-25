@@ -27,9 +27,12 @@
 
 #include <kdialogbase.h>
 
-#include "qframe.h"
-#include "qgroupbox.h"
+#include "q3frame.h"
+#include "q3groupbox.h"
 #include "qcombobox.h"
+//Added by qt3to4:
+#include <QPaintEvent>
+#include <QMouseEvent>
 
 #include "vcommand.h"
 #include "vtext.h"
@@ -65,7 +68,7 @@ private:
 };
 
 
-class ShadowWidget : public QGroupBox
+class ShadowWidget : public Q3GroupBox
 {
 	Q_OBJECT
 

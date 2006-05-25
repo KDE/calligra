@@ -24,6 +24,10 @@
 #include <qsize.h>
 #include <qhbuttongroup.h>
 #include <qtoolbutton.h>
+//Added by qt3to4:
+#include <QMouseEvent>
+#include <Q3PtrList>
+#include <Q3VBoxLayout>
 
 #include <klocale.h>
 #include <kiconloader.h>
@@ -90,7 +94,7 @@ VStyleDocker::VStyleDocker( KarbonPart* part, KarbonView* parent, const char* /*
 	ClipartWidget *pClipartWidget = new ClipartWidget( KarbonFactory::rServer()->cliparts(), part, mTabWidget );
 	mTabWidget->addTab( pClipartWidget, i18n( "Clipart" ) );
 
-	QVBoxLayout *mainWidgetLayout = new QVBoxLayout( this, 2 );
+	Q3VBoxLayout *mainWidgetLayout = new Q3VBoxLayout( this, 2 );
 	mainWidgetLayout->addWidget( mTabWidget );
 	mainWidgetLayout->activate();
 	setMinimumHeight( 174 );
@@ -121,14 +125,14 @@ VStyleDocker::mouseReleaseEvent( QMouseEvent * )
 {
 }
 
-ClipartWidget::ClipartWidget( QPtrList<VClipartIconItem>* clipartItems, KarbonPart *part, QWidget* parent )
+ClipartWidget::ClipartWidget( Q3PtrList<VClipartIconItem>* clipartItems, KarbonPart *part, QWidget* parent )
 	: QWidget( parent ), m_part( part )
 {
 	KIconLoader il;
 
-	QVBoxLayout* layout = new QVBoxLayout( this );
+	Q3VBoxLayout* layout = new Q3VBoxLayout( this );
 	layout->addWidget( m_clipartChooser = new ClipartChooser( QSize( 32, 32 ), this ) );
-	layout->addWidget( m_buttonGroup = new QHButtonGroup( this ) );
+	layout->addWidget( m_buttonGroup = new Q3HButtonGroup( this ) );
 	QToolButton* m_addClipartButton;
 	m_buttonGroup->insert( m_addClipartButton = new QToolButton( m_buttonGroup ) );
 	m_buttonGroup->insert( m_importClipartButton = new QToolButton( m_buttonGroup ) );
@@ -197,7 +201,7 @@ ClipartWidget::addClipart()
 
 	if( selection->objects().count() > 1 )
 	{
-		QPtrVector<VObject> objects;
+		Q3PtrVector<VObject> objects;
 		selection->objects().toVector( &objects );
 		VGroup* group = new VGroup( 0L );
 

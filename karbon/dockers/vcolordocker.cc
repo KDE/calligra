@@ -25,7 +25,10 @@
 #include <QColor>
 #include <QToolTip>
 #include <qevent.h>
-#include <qptrlist.h>
+#include <q3ptrlist.h>
+//Added by qt3to4:
+#include <Q3VBoxLayout>
+#include <QMouseEvent>
 
 #include <klocale.h>
 #include <KoMainWindow.h>
@@ -92,7 +95,7 @@ VColorDocker::VColorDocker( KarbonPart* part, KarbonView* parent, const char* /*
 	connect( mOpacity, SIGNAL( valueChanged ( int ) ), this, SLOT( updateOpacity() ) );
 	mOpacity->setToolTip( i18n( "Alpha (opacity)" ) );
 
-	QVBoxLayout *mainWidgetLayout = new QVBoxLayout( this, 3 );
+	Q3VBoxLayout *mainWidgetLayout = new Q3VBoxLayout( this, 3 );
 	mainWidgetLayout->addWidget( mTabWidget );
 	mainWidgetLayout->addWidget( mOpacity );
 	mainWidgetLayout->activate();
@@ -119,7 +122,7 @@ void VColorDocker::updateFgColor(const QColor &c)
 	v.setOpacity( m_opacity );
 
 	VCommandHistory* history = m_part->commandHistory();
-	const QPtrList<VCommand>* commandList = history->commands();
+	const Q3PtrList<VCommand>* commandList = history->commands();
 	VStrokeCmd* command = dynamic_cast<VStrokeCmd*>(commandList->getLast());
 
 	if(command == 0 || m_strokeCmd == 0)
@@ -130,8 +133,8 @@ void VColorDocker::updateFgColor(const QColor &c)
 	else
 	{
 
-		QPtrList<VObject> VOldObjectList = command->getSelection()->objects();
-		QPtrList<VObject> VNewObjectList = m_part->document().selection()->objects();
+		Q3PtrList<VObject> VOldObjectList = command->getSelection()->objects();
+		Q3PtrList<VObject> VNewObjectList = m_part->document().selection()->objects();
 
 		if( VOldObjectList == VNewObjectList )
 		{
@@ -166,7 +169,7 @@ void VColorDocker::updateBgColor(const QColor &c)
 	v.setOpacity( m_opacity );
 
 	VCommandHistory* history = m_part->commandHistory();
-	const QPtrList<VCommand>* commandList = history->commands();
+	const Q3PtrList<VCommand>* commandList = history->commands();
 	VFillCmd* command = dynamic_cast<VFillCmd*>(commandList->getLast());
 
 	if(command == 0 || m_fillCmd == 0)
@@ -177,8 +180,8 @@ void VColorDocker::updateBgColor(const QColor &c)
 	else
 	{
 
-		QPtrList<VObject> VOldObjectList = command->getSelection()->objects();
-		QPtrList<VObject> VNewObjectList = m_part->document().selection()->objects();
+		Q3PtrList<VObject> VOldObjectList = command->getSelection()->objects();
+		Q3PtrList<VObject> VNewObjectList = m_part->document().selection()->objects();
 
 		if( VOldObjectList == VNewObjectList )
 		{

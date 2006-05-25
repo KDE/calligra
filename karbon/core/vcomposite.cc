@@ -19,7 +19,7 @@
 
 #include <qdom.h>
 #include <qpainter.h>
-#include <qwmatrix.h>
+#include <qmatrix.h>
 #include <QRegExp>
 
 #include <KoPoint.h>

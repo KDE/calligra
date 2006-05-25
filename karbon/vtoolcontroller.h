@@ -20,7 +20,10 @@
 #ifndef __VTOOLCONTROLLER_H__
 #define __VTOOLCONTROLLER_H__
 
-#include <qdict.h>
+#include <q3dict.h>
+//Added by qt3to4:
+#include <QMouseEvent>
+#include <QEvent>
 #include <KoPoint.h>
 
 class QEvent;
@@ -46,7 +49,7 @@ public:
 	bool mouseEvent( QMouseEvent* event, const KoPoint& );
 	bool keyEvent( QEvent* event );
 
-	const QDict<VTool> &tools() { return m_tools; }
+	const Q3Dict<VTool> &tools() { return m_tools; }
 
 	void setUp( KActionCollection *ac, VToolBox * toolbox );
 	void resetToolBox( VToolBox * toolbox );
@@ -58,7 +61,7 @@ public:
 private:
 	KarbonView		*m_view;
 	VTool			*m_currentTool;
-	QDict<VTool>		 m_tools;
+	Q3Dict<VTool>		 m_tools;
 	VToolBox 		*m_toolBox;
 	bool			 m_setup;
 };

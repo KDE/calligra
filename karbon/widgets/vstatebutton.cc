@@ -18,6 +18,8 @@
 */
 
 #include "vstatebutton.h"
+//Added by qt3to4:
+#include <QMouseEvent>
 
 VStateButton::VStateButton( QWidget* parent, const char* name )
 		: QPushButton( parent, name )

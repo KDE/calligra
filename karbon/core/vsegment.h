@@ -20,8 +20,8 @@
 #ifndef __VSEGMENT_H__
 #define __VSEGMENT_H__
 
-#include <qptrlist.h>
-#include <qvaluelist.h>
+#include <q3ptrlist.h>
+#include <q3valuelist.h>
 
 #include <KoPoint.h>
 #include <KoRect.h>
@@ -384,7 +384,7 @@ private:
 	 * Calculates the solutions of y(x) = 0 where 0 <= x <= 1. The
 	 * returned parameters are not ordered.
 	 */
-	void rootParams( QValueList<double>& params ) const;
+	void rootParams( Q3ValueList<double>& params ) const;
 
 	/**
 	 * Calculates how often the control polygon crosses the x-axis.

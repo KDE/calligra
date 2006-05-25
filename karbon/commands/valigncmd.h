@@ -22,6 +22,8 @@
 #define __VALIGNCMD_H__
 
 #include "vcommand.h"
+//Added by qt3to4:
+#include <Q3PtrList>
 
 class VTranslateCmd;
 
@@ -47,7 +49,7 @@ public:
 
 protected:
 	Align					m_align;
-	QPtrList<VTranslateCmd>	m_trafoCmds;
+	Q3PtrList<VTranslateCmd>	m_trafoCmds;
 };
 
 #endif

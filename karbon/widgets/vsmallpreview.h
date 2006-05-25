@@ -25,8 +25,12 @@
 #define VSMALLPREVIEW_H
 
 #include <QWidget>
+//Added by qt3to4:
+#include <QPaintEvent>
+#include <Q3Frame>
+#include <QLabel>
 
-class QFrame;
+class Q3Frame;
 class QLabel;
 class VFill;
 class VStroke;
@@ -46,8 +50,8 @@ protected:
 private:
 	void drawFill( const VFill & );
 	void drawStroke( const VStroke & );
-	QFrame *m_fillFrame;
-	QFrame *m_strokeFrame;
+	Q3Frame *m_fillFrame;
+	Q3Frame *m_strokeFrame;
 	QLabel *m_fillLabel;
 	QLabel *m_strokeLabel;
 	VFill m_fill;

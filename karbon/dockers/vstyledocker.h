@@ -23,11 +23,14 @@
 
 #include <koIconChooser.h>
 #include <QWidget>
+//Added by qt3to4:
+#include <QMouseEvent>
+#include <Q3PtrList>
 
 class QTabWidget;
 class KarbonView;
 class KarbonPart;
-class QHButtonGroup;
+class Q3HButtonGroup;
 class QToolButton;
 
 class VClipartIconItem;
@@ -44,7 +47,7 @@ class ClipartWidget : public QWidget
 	Q_OBJECT
 
 public:
-	ClipartWidget( QPtrList<VClipartIconItem>* clipartItems, KarbonPart *part, QWidget* parent = 0L );
+	ClipartWidget( Q3PtrList<VClipartIconItem>* clipartItems, KarbonPart *part, QWidget* parent = 0L );
 	~ClipartWidget();
 
 	VClipartIconItem* selectedClipart();
@@ -59,7 +62,7 @@ public slots:
 
 private:
 	ClipartChooser* m_clipartChooser;
-	QHButtonGroup* m_buttonGroup;
+	Q3HButtonGroup* m_buttonGroup;
 	QToolButton* m_importClipartButton;
 	QToolButton* m_deleteClipartButton;
 	KarbonPart* m_part;

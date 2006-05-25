@@ -20,7 +20,7 @@
 #ifndef __VDASHPATTERN_H__
 #define __VDASHPATTERN_H__
 
-#include <qvaluelist.h>
+#include <q3valuelist.h>
 #include <koffice_export.h>
 
 class QDomElement;
@@ -42,8 +42,8 @@ class KARBONBASE_EXPORT VDashPattern
 public:
 	VDashPattern( double dashOffset = 0.0 );
 
-	const QValueList<float>& array() const { return m_array; }
-	void setArray( const QValueList<float>& array )
+	const Q3ValueList<float>& array() const { return m_array; }
+	void setArray( const Q3ValueList<float>& array )
 		{ m_array = array; }
 
 	// dash offset:
@@ -54,7 +54,7 @@ public:
 	void load( const QDomElement& element );
 
 private:
-	QValueList<float> m_array;
+	Q3ValueList<float> m_array;
 	float m_offset;
 };
 

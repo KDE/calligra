@@ -39,7 +39,7 @@ VDashPattern::save( QDomElement& element ) const
 
 		QDomElement dash;
 
-		QValueListConstIterator<float> itr;
+		Q3ValueListConstIterator<float> itr;
 		for( itr = m_array.begin(); itr != m_array.end(); ++itr )
 		{
 			dash = element.ownerDocument().createElement( "DASH" );

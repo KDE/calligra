@@ -37,7 +37,7 @@ class VConfigInterfacePage : public QObject
 
 public:
 	VConfigInterfacePage(
-		KarbonView* view, QVBox *box = 0L, char* name = 0L );
+		KarbonView* view, KVBox *box = 0L, char* name = 0L );
 
 	void apply();
 
@@ -67,7 +67,7 @@ class VConfigMiscPage : public QObject
 
 public:
 	VConfigMiscPage(
-		KarbonView* view, QVBox* box, char* name = 0L );
+		KarbonView* view, KVBox* box, char* name = 0L );
 
 	void apply();
 
@@ -93,7 +93,7 @@ class VConfigDefaultPage : public QObject
 
 public:
 	VConfigDefaultPage(
-		KarbonView* view, QVBox* box, char* name = 0L );
+		KarbonView* view, KVBox* box, char* name = 0L );
 
 	void apply();
 
@@ -118,7 +118,7 @@ class VConfigGridPage : public QObject
 
 public:
 	VConfigGridPage(
-		KarbonView* view, QVBox* box, char* name = 0L );
+		KarbonView* view, KVBox* box, char* name = 0L );
 
 	void apply();
 

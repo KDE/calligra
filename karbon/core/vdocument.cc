@@ -18,6 +18,8 @@
 */
 
 #include <qdom.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 #include "vdocument.h"
 #include "vselection.h"
@@ -113,7 +115,7 @@ VDocument::drawPage( VPainter *p, const KoPageLayout &pl, bool showPageMargins )
 
 		VStroke s( 0, 1 );
 		s.setColor( Qt::blue );
-		QValueList<float> dashes;
+		Q3ValueList<float> dashes;
 		s.dashPattern().setArray( dashes << 5 << 5 );
 		p->setPen( s );
 		p->setBrush( Qt::NoBrush );
@@ -124,7 +126,7 @@ VDocument::drawPage( VPainter *p, const KoPageLayout &pl, bool showPageMargins )
 void
 VDocument::draw( VPainter *painter, const KoRect* rect ) const
 {
-	QPtrListIterator<VLayer> itr = m_layers;
+	Q3PtrListIterator<VLayer> itr = m_layers;
 
 	for ( ; itr.current(); ++itr )
 	{

@@ -21,7 +21,7 @@
 #ifndef __VTRANSFORMCMD_H__
 #define __VTRANSFORMCMD_H__
 
-#include <qvaluevector.h>
+#include <q3valuevector.h>
 #include "vcommand.h"
 #include "vgroup.h"
 #include <koffice_export.h>
@@ -128,7 +128,7 @@ protected:
 	void translatePoints();
 
 	QMatrix m_mat;
-	QMap<VSegment*, QValueVector<int> > m_segPnts;
+	QMap<VSegment*, Q3ValueVector<int> > m_segPnts;
 	VObjectList m_subpaths;
 };
 

@@ -25,7 +25,7 @@
 //#include <assert.h>
 
 #include <qobject.h>
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 
 #include "vvisitor.h"
 
@@ -219,7 +219,7 @@ public:
 	 *
 	 * @return pointer to the list of commands
 	 */
-	const QPtrList<VCommand>* commands() const
+	const Q3PtrList<VCommand>* commands() const
 	{
 		return & m_commands;
 	}
@@ -310,7 +310,7 @@ private:
 	unsigned int m_redoLimit;
 	KAction *m_undo;
 	KAction *m_redo;
-	QPtrList<VCommand> m_commands;
+	Q3PtrList<VCommand> m_commands;
 	int m_savedPos;
 };
 

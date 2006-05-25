@@ -29,6 +29,8 @@
 #include "vcolor.h"
 #include "vfill.h"
 #include "vstroke.h"
+//Added by qt3to4:
+#include <Q3PtrList>
 
 uint VSelection::m_handleNodeSize = 3;
 
@@ -302,7 +304,7 @@ VSelection::handleNode( const KoPoint &point ) const
 	return node_none;
 }
 
-QPtrList<VSegment>
+Q3PtrList<VSegment>
 VSelection::getSegments( const KoRect& rect )
 {
 	VTestNodes op( rect );

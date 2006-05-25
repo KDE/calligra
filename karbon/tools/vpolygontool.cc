@@ -19,7 +19,7 @@
 
 
 #include <QLabel>
-#include <qgroupbox.h>
+#include <q3groupbox.h>
 
 #include <kdialogbase.h>
 #include <klocale.h>
@@ -33,7 +33,7 @@
 VPolygonTool::VPolygonOptionsWidget::VPolygonOptionsWidget( KarbonView *view, QWidget* parent, const char* name )
 	: KDialogBase( parent, name, true, i18n( "Insert Polygon" ), Ok | Cancel ), m_view(view)
 {
-	QGroupBox *group = new QGroupBox( 2, Qt::Horizontal, i18n( "Properties" ), this );
+	Q3GroupBox *group = new Q3GroupBox( 2, Qt::Horizontal, i18n( "Properties" ), this );
 
 	new QLabel( i18n( "Radius:" ), group );
 	m_radius = new KoUnitDoubleSpinBox( group, 0.0, 1000.0, 0.5, 50.0, KoUnit::U_MM );

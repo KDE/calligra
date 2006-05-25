@@ -23,7 +23,10 @@
 
 #include <QWidget>
 #include <qtabwidget.h>
-#include <qlistbox.h>
+#include <q3listbox.h>
+//Added by qt3to4:
+#include <QPixmap>
+#include <QPaintEvent>
 #include <koffice_export.h>
 #include "vgradient.h"
 
@@ -32,11 +35,11 @@ class VGradientWidget;
 class KListBox;
 class KIntNumInput;
 class QPushButton;
-class QGroupBox;
+class Q3GroupBox;
 class KarbonResourceServer;
 
 
-class VGradientListItem : public QListBoxItem
+class VGradientListItem : public Q3ListBoxItem
 {
 public:
 	VGradientListItem( const VGradient& gradient, QString filename );
@@ -48,8 +51,8 @@ public:
 	QString filename() { return m_filename; }
 	bool canDelete() { return m_delete; }
 
-	virtual int height( const QListBox* ) const { return 16; }
-	virtual int width( const QListBox* lb ) const;
+	virtual int height( const Q3ListBox* ) const { return 16; }
+	virtual int width( const Q3ListBox* lb ) const;
 
 protected:
 	virtual void paint( QPainter* p );
@@ -99,8 +102,8 @@ class KARBONBASE_EXPORT VGradientTabWidget : public QTabWidget
 	public slots:
 		void combosChange( int );
 		void addGradientToPredefs();
-		void changeToPredef( QListBoxItem* );
-		void predefSelected( QListBoxItem* );
+		void changeToPredef( Q3ListBoxItem* );
+		void predefSelected( Q3ListBoxItem* );
 		void deletePredef();
 		void opacityChanged( int );
 
@@ -110,7 +113,7 @@ class KARBONBASE_EXPORT VGradientTabWidget : public QTabWidget
 		void setupConnections();
 		
 	private:
-		QGroupBox				*m_editGroup;
+		Q3GroupBox				*m_editGroup;
 		VGradientWidget			*m_gradientWidget;
 		KComboBox				*m_gradientTarget;
 		KComboBox				*m_gradientRepeat;

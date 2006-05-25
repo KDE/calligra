@@ -24,8 +24,8 @@
 #include <KoUnit.h>
 
 #include <QString>
-#include <qptrlist.h>
-#include <qptrdict.h>
+#include <q3ptrlist.h>
+#include <q3ptrdict.h>
 
 #include "vobject.h"
 
@@ -38,8 +38,8 @@ class VSelection;
 class VLayer;
 class KoPageLayout;
 
-typedef QPtrList<VLayer> VLayerList;
-typedef QPtrListIterator<VLayer> VLayerListIterator;
+typedef Q3PtrList<VLayer> VLayerList;
+typedef Q3PtrListIterator<VLayer> VLayerListIterator;
 
 
 /**

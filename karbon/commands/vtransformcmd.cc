@@ -450,7 +450,7 @@ VTranslatePointCmd::visitVSubpath( VSubpath& path )
 	// save indices of selected points for all segments
 	while( segment )
 	{
-		QValueVector<int> pnts;
+		Q3ValueVector<int> pnts;
 
 		for( unsigned short i = 0; i < segment->degree(); ++i )
 		{
@@ -471,13 +471,13 @@ VTranslatePointCmd::visitVSubpath( VSubpath& path )
 void
 VTranslatePointCmd::translatePoints()
 {
-	QMap<VSegment*, QValueVector<int> >::iterator it, et = m_segPnts.end();
+	QMap<VSegment*, Q3ValueVector<int> >::iterator it, et = m_segPnts.end();
 
 	// iterate over the segments and transform all selected points
 	for( it = m_segPnts.begin(); it != et; ++it )
 	{
 		VSegment *segment = it.key();
-		QValueVector<int> &pnts = it.data();
+		Q3ValueVector<int> &pnts = it.data();
 
 		int pntCnt = pnts.size();
 		for( int i = 0; i < pntCnt; ++i )

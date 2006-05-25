@@ -155,7 +155,7 @@ VDistributeCmd::execute()
 void
 VDistributeCmd::unexecute()
 {
-	QPtrListIterator<VTranslateCmd> itr( m_trafoCmds );
+	Q3PtrListIterator<VTranslateCmd> itr( m_trafoCmds );
 	for( ; itr.current() ; ++itr )
 		itr.current()->unexecute();
 	setSuccess( false );
