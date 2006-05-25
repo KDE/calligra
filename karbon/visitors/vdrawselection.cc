@@ -52,8 +52,10 @@ VDrawSelection::visitVPath( VPath &composite )
 		// paint fill:
 		m_painter->newPath();
 
+		/* TODO: port rasterops to Qt4
 		if( editnodes )
 			m_painter->setRasterOp( Qt::XorROP );
+		*/
 
 		m_painter->setPen( editnodes ? Qt::yellow : Qt::blue );
 		m_painter->setBrush( Qt::NoBrush );
@@ -88,8 +90,10 @@ VDrawSelection::visitVPath( VPath &composite )
 
 			for( ; jtr.current(); ++jtr )
 			{
+				/* TODO: port rasterops to Qt4
 				if( editnodes )
 					m_painter->setRasterOp( Qt::XorROP );
+				*/
 
 				VColor color;
 				color.set( 0.5, 0.5, 1.0 );
@@ -173,7 +177,8 @@ VDrawSelection::visitVPath( VPath &composite )
 	if( composite.drawCenterNode() && composite.state() == VObject::selected && !m_nodeediting )
 	{
 		m_painter->setPen( Qt::NoPen );
-		m_painter->setBrush( Qt::blue.light() );
+		// TODO: this needs porting:
+		// m_painter->setBrush( Qt::blue.light() );
 		m_painter->drawNode( composite.boundingBox().center(), m_nodeSize );
 	}
 
