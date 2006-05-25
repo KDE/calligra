@@ -242,7 +242,8 @@ VText::draw( VPainter* painter, const KoRect* /*rect*/ ) const
 	if( state() == edit )//|| state() == selected )
 	{
 		painter->newPath();
-		painter->setRasterOp( Qt::XorROP );
+		// TODO: Needs porting to Qt4
+		// painter->setRasterOp( Qt::XorROP );
 		painter->setPen( Qt::yellow );
 		painter->setBrush( Qt::NoBrush );
 

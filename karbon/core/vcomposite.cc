@@ -124,7 +124,8 @@ VPath::draw( VPainter* painter, const KoRect *rect ) const
 			if( !itr.current()->isEmpty() )
 			{
 				painter->newPath();
-				painter->setRasterOp( Qt::XorROP );
+				// TODO: needs porting to Qt4
+				// painter->setRasterOp( Qt::XorROP );
 				painter->setPen( Qt::yellow );
 				painter->setBrush( Qt::NoBrush );
 
@@ -156,7 +157,8 @@ VPath::draw( VPainter* painter, const KoRect *rect ) const
 			}
 		}
 
-		painter->setRasterOp( Qt::CopyROP );
+		// TODO: needs porting to Qt4
+		// painter->setRasterOp( Qt::CopyROP );
 		painter->setPen( Qt::NoPen );
 		painter->setBrush( *fill() );
 		painter->fillPath();

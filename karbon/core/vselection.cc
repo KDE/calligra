@@ -244,17 +244,22 @@ VSelection::draw( VPainter* painter, double zoomFactor ) const
 	if( !m_showhandle ) return;
 
 	// draw handle rect:
-	painter->setPen( Qt::blue.light() );
+
+	// TODO: needs porting to Qt4
+	// painter->setPen( Qt::blue.light() );
 	painter->setBrush( Qt::NoBrush );
 
 	painter->drawRect( KoRect( m_handleRect[ 0 ].x() * zoomFactor, m_handleRect[ 0 ].y() * zoomFactor,
 							  m_handleRect[ 0 ].width() * zoomFactor, m_handleRect[ 0 ].height() * zoomFactor ) );
-	painter->setPen( Qt::blue.light() );
+	
+	// TODO: needs porting to Qt4
+	// painter->setPen( Qt::blue.light() );
 
 	// draw nodes:
 	if( state() == VObject::selected )
 	{
-		painter->setPen( Qt::blue.light() );
+		// TODO: needs porting to Qt4
+		// painter->setPen( Qt::blue.light() );
 		painter->setBrush( Qt::white );
 
 		KoRect temp;

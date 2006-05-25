@@ -24,6 +24,7 @@
 #include <KoUnit.h>
 
 #include <QString>
+#include <QMap>
 #include <q3ptrlist.h>
 #include <q3ptrdict.h>
 

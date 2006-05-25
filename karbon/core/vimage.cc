@@ -70,7 +70,9 @@ VImage::draw( VPainter *painter, const KoRect * ) const
 	    painter->lineTo( bl );
 	    painter->lineTo( tl );
 
-		painter->setRasterOp( Qt::XorROP );
+		// TODO: Needs porting to Qt4
+		// painter->setRasterOp( Qt::XorROP );
+
 		//painter->setPen( stroke() );
 		painter->setPen( Qt::yellow );
 		painter->setBrush( Qt::NoBrush );

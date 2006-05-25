@@ -52,9 +52,9 @@ VColor::VColor( const QColor& color )
 	m_colorSpace = rgb;
 	m_opacity = 1.0;
 
-	m_value[0] = color.Qt::red() / 255.0;
-	m_value[1] = color.Qt::green() / 255.0;
-	m_value[2] = color.Qt::blue() / 255.0;
+	m_value[0] = color.red() / 255.0;
+	m_value[1] = color.green() / 255.0;
+	m_value[2] = color.blue() / 255.0;
 }
 
 VColor::operator QColor() const
@@ -327,7 +327,7 @@ VColor::load( const QDomElement& element )
 		case 2:
 			m_colorSpace = hsb; break;
 		case 3:
-			m_colorSpace = Qt::gray; break;
+			m_colorSpace = gray; break;
 		default:
 			m_colorSpace = rgb;
 	}
