@@ -927,7 +927,7 @@ KCommand *KWCanvas::createTextBox( const KoRect & rect )
             emit currentFrameSetEditChanged();
         return cmd;
     }
-    return 0L;
+    return 0;
 }
 
 void KWCanvas::mrCreateText()
@@ -2052,7 +2052,7 @@ void KWCanvas::updateCanvas(const QRectF& rc) {
 }
 
 KoViewConverter *KWCanvas::viewConverter() {
-    return 0; // not available yet..
+    return static_cast<KoViewConverter*> (m_doc);
 }
 
 // ************** InteractionPolicy ***********************
