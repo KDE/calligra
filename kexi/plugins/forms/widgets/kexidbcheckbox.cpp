@@ -64,6 +64,7 @@ KexiDBCheckBox::setReadOnly(bool readOnly)
 
 void KexiDBCheckBox::setValueInternal(const QVariant &add, bool )
 {
+	Q_UNUSED(add);
 //	setState( add.isNull() ? NoChange : (add.toBool() ? On : Off) );
 	setState( m_origValue.isNull() ? NoChange : (m_origValue.toBool() ? On : Off) );
 }

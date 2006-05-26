@@ -1228,13 +1228,12 @@ tristate KexiTableDesignerView::storeData(bool dontAsk)
 //		KMessageBox::information(this, i18n("Saving changes for existing table design is not yet supported."));
 //		cancel = true;
 
-	KexiDB::TableSchema *newTable = 0;
 	KexiDB::Connection *conn = mainWin()->project()->dbConnection();
 
 
 #ifdef KEXI_NO_UNDOREDO_ALTERTABLE
 	//keep old behaviour
-	newTable = new KexiDB::TableSchema();
+	KexiDB::TableSchema *newTable = new KexiDB::TableSchema();
 	//copy schema data
 	static_cast<KexiDB::SchemaData&>(*newTable) = static_cast<KexiDB::SchemaData&>(*tempData()->table);
 	res = buildSchema(*newTable);
@@ -1344,7 +1343,7 @@ void KexiTableDesignerView::addHistoryCommand( KCommand* command, bool execute )
 # ifdef KEXI_DEBUG_GUI
 	debugCommand( command, 0 );
 # endif
-	d->history->addCommand( command, false /* ! execute */ );
+	d->history->addCommand( command, execute );
 	updateUndoRedoActions();
 #endif
 }
