@@ -2292,11 +2292,11 @@ bool Connection::storeExtendedTableSchemaData(TableSchema& tableSchema)
 	// Store extended schema information (see ExtendedTableSchemaInformation in Kexi Wiki)
 	if (extendedTableSchemaStringIsEmpty) {
 		if (!removeDataBlock( tableSchema.id(), "extended_schema"))
-			false;
+			return false;
 	}
 	else {
 		if (!storeDataBlock( tableSchema.id(), doc.toString(1), "extended_schema" ))
-			false;
+			return false;
 	}
 	return true;
 }
@@ -2305,7 +2305,7 @@ bool Connection::storeExtendedTableSchemaData(TableSchema& tableSchema)
 static QVariant loadFieldPropertyFromExtendedTableSchemaData(
 	const QDomElement& propEl, QByteArray& propertyName)
 {
-	propertyName = propEl.attribute("name");
+	propertyName = propEl.attribute("name").latin1();
 	QByteArray valueType = propEl.firstChild().nodeName().latin1();
 	if (valueType.isEmpty())
 		return QVariant();
@@ -2329,7 +2329,7 @@ static QVariant loadFieldPropertyFromExtendedTableSchemaData(
 				return val;
 			int valLong = text.toLongLong(&ok);
 			if (ok)
-				return val;
+				return valLong;
 		}
 	}
 	else if (valueType == "bool") {
@@ -2354,7 +2354,6 @@ bool Connection::loadExtendedTableSchemaData(TableSchema& tableSchema)
 
 	// Load extended schema information, if present (see ExtendedTableSchemaInformation in Kexi Wiki)
 	QString extendedTableSchemaString;
-	bool extendedTableSchemaStringLoadingResult = true;
 	tristate res = loadDataBlock( tableSchema.id(), extendedTableSchemaString, "extended_schema" );
 	if (!res)
 		loadExtendedTableSchemaData_ERR;
