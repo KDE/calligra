@@ -30,8 +30,8 @@
 #include <Q3Frame>
 
 
-KPrPicturePreview::KPrPicturePreview( QWidget* parent, const char* name)
-: Q3Frame( parent, name )
+KPrPicturePreview::KPrPicturePreview( QWidget* parent)
+: Q3Frame( parent )
 , mirrorType( PM_NORMAL )
 , depth( 0 )
 , swapRGB( false )

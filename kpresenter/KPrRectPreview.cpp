@@ -25,8 +25,8 @@
 //Added by qt3to4:
 #include <Q3Frame>
 
-KPrRectPreview::KPrRectPreview( QWidget* parent, const char* name )
-    : Q3Frame( parent, name )
+KPrRectPreview::KPrRectPreview( QWidget* parent )
+    : Q3Frame( parent )
 {
     setFrameStyle( WinPanel | Sunken );
     setBackgroundColor( Qt::white );

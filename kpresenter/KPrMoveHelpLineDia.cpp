@@ -29,7 +29,7 @@
 #include <klineedit.h>
 #include <knumvalidator.h>
 #include <KoUnitWidgets.h>
-
+#include <khbox.h>
 #include "KPrMoveHelpLineDia.h"
 #include "KPrDocument.h"
 

@@ -116,7 +116,7 @@ KPrBrushProperty::KPrBrushProperty( QWidget *parent, const char *name, const KPr
              this, SLOT( slotYFactorChanged() ) );
 
     m_stack->addWidget( m_gradientUI, 1 );
-    m_stack->addWidget( new Q3Frame(), 2 ); // the transparent case
+    m_stack->addWidget( new Q3Frame(this), 2 ); // the transparent case
 
     slotReset();
 }
@@ -143,46 +143,46 @@ QBrush KPrBrushProperty::getQBrush() const
     switch ( m_brushUI->styleCombo->currentItem() )
     {
         case 0:
-            brush.setStyle( SolidPattern );
+            brush.setStyle( Qt::SolidPattern );
             break;
         case 1:
-            brush.setStyle( Dense1Pattern );
+            brush.setStyle( Qt::Dense1Pattern );
             break;
         case 2:
-            brush.setStyle( Dense2Pattern );
+            brush.setStyle( Qt::Dense2Pattern );
             break;
         case 3:
-            brush.setStyle( Dense3Pattern );
+            brush.setStyle( Qt::Dense3Pattern );
             break;
         case 4:
-            brush.setStyle( Dense4Pattern );
+            brush.setStyle( Qt::Dense4Pattern );
             break;
         case 5:
-            brush.setStyle( Dense5Pattern );
+            brush.setStyle( Qt::Dense5Pattern );
             break;
         case 6:
-            brush.setStyle( Dense6Pattern );
+            brush.setStyle( Qt::Dense6Pattern );
             break;
         case 7:
-            brush.setStyle( Dense7Pattern );
+            brush.setStyle( Qt::Dense7Pattern );
             break;
         case 8:
-            brush.setStyle( HorPattern );
+            brush.setStyle( Qt::HorPattern );
             break;
         case 9:
-            brush.setStyle( VerPattern );
+            brush.setStyle( Qt::VerPattern );
             break;
         case 10:
-            brush.setStyle( CrossPattern );
+            brush.setStyle( Qt::CrossPattern );
             break;
         case 11:
-            brush.setStyle( BDiagPattern );
+            brush.setStyle( Qt::BDiagPattern );
             break;
         case 12:
-            brush.setStyle( FDiagPattern );
+            brush.setStyle( Qt::FDiagPattern );
             break;
         case 13:
-            brush.setStyle( DiagCrossPattern );
+            brush.setStyle( Qt::DiagCrossPattern );
             break;
     }
     if( m_typeCombo->currentItem() == 2)
@@ -344,52 +344,52 @@ void KPrBrushProperty::setQBrush( const QBrush &brush )
 {
     switch ( brush.style() )
     {
-        case NoBrush:
+			case Qt::NoBrush:
             // TODO
             break;
-        case SolidPattern:
+			case Qt::SolidPattern:
             m_brushUI->styleCombo->setCurrentItem( 0 );
             break;
-        case Dense1Pattern:
+			case Qt::Dense1Pattern:
             m_brushUI->styleCombo->setCurrentItem( 1 );
             break;
-        case Dense2Pattern:
+			case Qt::Dense2Pattern:
             m_brushUI->styleCombo->setCurrentItem( 2 );
             break;
-        case Dense3Pattern:
+			case Qt::Dense3Pattern:
             m_brushUI->styleCombo->setCurrentItem( 3 );
             break;
-        case Dense4Pattern:
+			case Qt::Dense4Pattern:
             m_brushUI->styleCombo->setCurrentItem( 4 );
             break;
-        case Dense5Pattern:
+			case Qt::Dense5Pattern:
             m_brushUI->styleCombo->setCurrentItem( 5 );
             break;
-        case Dense6Pattern:
+			case Qt::Dense6Pattern:
             m_brushUI->styleCombo->setCurrentItem( 6 );
             break;
-        case Dense7Pattern:
+			case Qt::Dense7Pattern:
             m_brushUI->styleCombo->setCurrentItem( 7 );
             break;
-        case HorPattern:
+			case Qt::HorPattern:
             m_brushUI->styleCombo->setCurrentItem( 8 );
             break;
-        case VerPattern:
+			case Qt::VerPattern:
             m_brushUI->styleCombo->setCurrentItem( 9 );
             break;
-        case CrossPattern:
+			case Qt::CrossPattern:
             m_brushUI->styleCombo->setCurrentItem( 10 );
             break;
-        case BDiagPattern:
+			case Qt::BDiagPattern:
             m_brushUI->styleCombo->setCurrentItem( 11 );
             break;
-        case FDiagPattern:
+			case Qt::FDiagPattern:
             m_brushUI->styleCombo->setCurrentItem( 12 );
             break;
-        case DiagCrossPattern:
+			case Qt::DiagCrossPattern:
             m_brushUI->styleCombo->setCurrentItem( 13 );
             break;
-        case CustomPattern:
+			case Qt::CustomPattern:
             break;
     }
 

@@ -107,25 +107,25 @@ void KPrPenStyleWidget::setPen( const KoPen &pen )
 
     switch ( pen.style() )
     {
-        case NoPen:
+			case Qt::NoPen:
             m_ui->styleCombo->setCurrentItem( 0 );
             break;
-        case SolidLine:
+			case Qt::SolidLine:
             m_ui->styleCombo->setCurrentItem( 1 );
             break;
-        case DashLine:
+			case Qt::DashLine:
             m_ui->styleCombo->setCurrentItem( 2 );
             break;
-        case DotLine:
+			case Qt::DotLine:
             m_ui->styleCombo->setCurrentItem( 3 );
             break;
-        case DashDotLine:
+			case Qt::DashDotLine:
             m_ui->styleCombo->setCurrentItem( 4 );
             break;
-        case DashDotDotLine:
+			case Qt::DashDotDotLine:
             m_ui->styleCombo->setCurrentItem( 5 );
             break;
-        case MPenStyle:
+			case Qt::MPenStyle:
             break; // not supported.
     }
 
@@ -155,22 +155,22 @@ KoPen KPrPenStyleWidget::getKPPen() const
     switch ( m_ui->styleCombo->currentItem() )
     {
         case 0:
-            pen.setStyle( NoPen );
+            pen.setStyle( Qt::NoPen );
             break;
         case 1:
-            pen.setStyle( SolidLine );
+            pen.setStyle( Qt::SolidLine );
             break;
         case 2:
-            pen.setStyle( DashLine );
+            pen.setStyle( Qt::DashLine );
             break;
         case 3:
-            pen.setStyle( DotLine );
+            pen.setStyle( Qt::DotLine );
             break;
         case 4:
-            pen.setStyle( DashDotLine );
+            pen.setStyle( Qt::DashDotLine );
             break;
         case 5:
-            pen.setStyle( DashDotDotLine );
+            pen.setStyle( Qt::DashDotDotLine );
             break;
     }
 
@@ -250,8 +250,8 @@ void KPrPenStyleWidget::apply()
 void KPrPenStyleWidget::slotReset()
 {
     setPen( m_pen.pen );
-    m_ui->widthLabel->setEnabled( m_pen.pen.style() != NoPen );
-    m_ui->widthInput->setEnabled( m_pen.pen.style() != NoPen );
+    m_ui->widthLabel->setEnabled( m_pen.pen.style() != Qt::NoPen );
+    m_ui->widthInput->setEnabled( m_pen.pen.style() != Qt::NoPen );
 
     setLineBegin( m_pen.lineBegin );
     setLineEnd( m_pen.lineEnd );
@@ -261,8 +261,8 @@ void KPrPenStyleWidget::slotReset()
 void KPrPenStyleWidget::slotPenChanged()
 {
     KoPen pen = getKPPen();
-    m_ui->widthLabel->setEnabled( pen.style() != NoPen );
-    m_ui->widthInput->setEnabled( pen.style() != NoPen );
+    m_ui->widthLabel->setEnabled( pen.style() != Qt::NoPen );
+    m_ui->widthInput->setEnabled( pen.style() != Qt::NoPen );
     m_ui->pbPreview->setPen( pen );
 }
 

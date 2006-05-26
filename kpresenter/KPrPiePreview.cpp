@@ -26,8 +26,8 @@
 //Added by qt3to4:
 #include <Q3Frame>
 
-KPrPiePreview::KPrPiePreview( QWidget* parent, const char* name )
-    : Q3Frame( parent, name )
+KPrPiePreview::KPrPiePreview( QWidget* parent )
+    : Q3Frame( parent )
 {
     setFrameStyle( WinPanel | Sunken );
     setBackgroundColor( Qt::white );

@@ -33,6 +33,7 @@
 #include <qfileinfo.h>
 //Added by qt3to4:
 #include <QPixmap>
+#include <QBuffer>
 
 #include <KoRichText.h>
 #include <KoTextObject.h>
@@ -454,7 +455,7 @@ void KPrBackGround::load( const QDomElement &element )
                 backPicture.setKey(key);
                 QByteArray rawData=_data.toUtf8(); // XPM is normally ASCII, therefore UTF-8
                 rawData[rawData.size()-1]=char(10); // Replace the NULL character by a LINE FEED
-                QBuffer buffer(rawData);
+                QBuffer buffer(&rawData);
                 backPicture.loadXpm(&buffer);
             }
 

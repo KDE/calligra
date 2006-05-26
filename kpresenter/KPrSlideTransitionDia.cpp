@@ -142,7 +142,7 @@ KPrSlideTransitionDia::KPrSlideTransitionDia( QWidget *parent, const char *name,
 
     // set up sound
     m_dialog->soundCheckBox->setChecked( m_soundEffect );
-    m_dialog->soundRequester->setURL( m_soundFileName );
+    m_dialog->soundRequester->setUrl( m_soundFileName );
     soundEffectChanged();
     m_dialog->playButton->setIconSet( SmallIconSet( "player_play" ) );
     m_dialog->stopButton->setIconSet( SmallIconSet( "player_stop" ) );

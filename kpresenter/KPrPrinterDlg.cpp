@@ -37,17 +37,17 @@
 #include "KPrPrinterDlg.h"
 
  KPrPrinterDlg::KPrPrinterDlg( QWidget *parent, const char *name )
-  : KPrintDialogPage( parent, name )
+  : KPrintDialogPage( parent )
 {
   setTitle( i18n( "KPresenter Options" ) );
   Q3GridLayout *layout = new Q3GridLayout( this, 2, 1, 11, 6 );
   txtRows = new KIntNumInput(this );
-  txtRows->setMinValue(1);
-  txtRows->setMaxValue(5);
+  txtRows->setMinimum(1);
+  txtRows->setMaximum(5);
   txtRows->setValue(1);
   txtColumns = new KIntNumInput(this );
-  txtColumns->setMinValue(1);
-  txtColumns->setMaxValue(5);
+  txtColumns->setMinimum(1);
+  txtColumns->setMaximum(5);
   txtColumns->setValue(1);
   connect( txtRows, SIGNAL( valueChanged( int ) ), this, SLOT( txtRows_valueChanged( int ) ) );
   connect( txtColumns, SIGNAL( valueChanged( int ) ), this, SLOT( txtColumns_valueChanged( int ) ) );

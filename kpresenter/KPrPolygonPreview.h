@@ -35,7 +35,7 @@ class KPrPolygonPreview : public Q3Frame
     Q_OBJECT
 
 public:
-    KPrPolygonPreview( QWidget* parent, const char*);
+    KPrPolygonPreview( QWidget* parent);
     ~KPrPolygonPreview() {}
 
     void setPenBrush( const QPen &_pen, const QBrush &_brush )

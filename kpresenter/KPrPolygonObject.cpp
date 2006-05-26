@@ -212,7 +212,8 @@ void KPrPolygonObject::paint( QPainter* _painter,KoTextZoomHandler*_zoomHandler,
         Q3PointArray pointArray2 = points.zoomPointArray( _zoomHandler );
         QPen pen3( Qt::black, 1, Qt::DotLine );
         _painter->setPen( pen3 );
-        _painter->setRasterOp( Qt::NotXorROP );
+#warning "kde4: port it"		
+        //_painter->setRasterOp( Qt::NotXorROP );
         _painter->drawPolygon( pointArray2 );
         return;
     }

@@ -30,8 +30,8 @@
 
 #include <math.h>
 
-KPrPolygonPreview::KPrPolygonPreview( QWidget* parent, const char* name)
-    : Q3Frame( parent, name )
+KPrPolygonPreview::KPrPolygonPreview( QWidget* parent)
+    : Q3Frame( parent )
 {
     setFrameStyle( WinPanel | Sunken );
     setBackgroundColor( Qt::white );

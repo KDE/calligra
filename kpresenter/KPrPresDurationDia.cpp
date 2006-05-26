@@ -50,7 +50,7 @@ KPrPresDurationDia::KPrPresDurationDia( QWidget *parent, const char *name,
     slides->setSelected( slides->firstChild(), true );
 
     label = new QLabel( i18n( "Presentation duration: " ) + _durationString, page );
-    label->setAlignment( AlignVCenter );
+    label->setAlignment( Qt::AlignVCenter );
     topLayout->addWidget( label );
 
     setMinimumSize( 600, 400 );
@@ -74,7 +74,7 @@ void KPrPresDurationDia::setupSlideList( QWidget *_page )
             K3ListViewItem *item = new K3ListViewItem( slides );
             item->setPixmap( 0, KPBarIcon( "slide" ) );
             item->setText( 0, QString( "%1" ).arg( i + 1 ) );
-            item->setText( 1, *m_durationListString.at( i ) );
+            item->setText( 1, m_durationListString.at( i ) );
             item->setText( 2, doc->pageList().at( i )->pageTitle() );
         }
     }

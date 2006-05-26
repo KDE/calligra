@@ -32,7 +32,7 @@ class KPrRectPreview : public Q3Frame
     Q_OBJECT
 
 public:
-    KPrRectPreview( QWidget* parent, const char* );
+    KPrRectPreview( QWidget* parent );
     ~KPrRectPreview() {}
 
     void setRnds( int _rx, int _ry )
