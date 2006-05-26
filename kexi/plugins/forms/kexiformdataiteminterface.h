@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2005 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2005-2006 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -65,6 +65,11 @@ class KEXIFORMUTILS_EXPORT KexiFormDataItemInterface : public KexiDataItemInterf
 		 should display \a displayText too.
 		*/
 		virtual void setInvalidState( const QString& displayText ) = 0;
+
+		/*! Changes 'read only' flag, for this widget.
+		 Typically this flag can be passed to a widget itself, 
+		 e.g. KLineEdit::setReadOnly(bool). */
+		virtual void setReadOnly( bool readOnly ) = 0;
 
 		//! \return database column information for this item
 		virtual KexiDB::Field* field() const;

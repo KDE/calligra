@@ -56,6 +56,12 @@ KexiDBCheckBox::setEnabled(bool enabled)
 	QCheckBox::setEnabled(enabled);
 }
 
+void
+KexiDBCheckBox::setReadOnly(bool readOnly)
+{
+	setEnabled(!readOnly);
+}
+
 void KexiDBCheckBox::setValueInternal(const QVariant &add, bool )
 {
 //	setState( add.isNull() ? NoChange : (add.toBool() ? On : Off) );

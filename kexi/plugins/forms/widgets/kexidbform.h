@@ -107,6 +107,9 @@ class KEXIFORMUTILS_EXPORT KexiDBForm :
 		inline void setDataSource(const QString &ds) { KexiFormDataItemInterface::setDataSource(ds); }
 		inline void setDataSourceMimeType(const QCString &ds) { KexiFormDataItemInterface::setDataSourceMimeType(ds); }
 
+		//! This implementation just disables read only widget
+		virtual void setReadOnly( bool readOnly );
+
 		//! @internal for sizeInternal property
 		QSize sizeInternal() const { return KexiDBFormBase::size(); }
 
@@ -124,6 +127,8 @@ class KEXIFORMUTILS_EXPORT KexiDBForm :
 		virtual void dragMoveEvent( QDragMoveEvent *e );
 		virtual void dropEvent( QDropEvent *e );
 
+		//! called from KexiFormScrollView::initDataContents()
+		void updateReadOnlyFlags();
 //		virtual void paintEvent( QPaintEvent * );
 
 		//! Points to a currently edited data item. 

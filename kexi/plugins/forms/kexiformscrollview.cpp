@@ -459,6 +459,8 @@ void KexiFormScrollView::initDataContents()
 			recordNavigator()->setEditingIndicatorEnabled( !isReadOnly() );
 			recordNavigator()->showEditingIndicator(false);
 		}
+
+		dbFormWidget()->updateReadOnlyFlags();
 	}
 }
 

@@ -298,6 +298,7 @@ void KexiDBForm::updateTabStopsOrder(KFormDesigner::Form* form)
 			if (dataItem && !dataItem->dataSource().isEmpty()) {
 				kexipluginsdbg << "#" << numberOfDataAwareWidgets << ": " 
 					<< dataItem->dataSource() << " (" << it.current()->widget()->name() << ")" << endl;
+
 //	/*! @todo d->indicesForDataAwareWidgets SHOULDNT BE UPDATED HERE BECAUSE
 //	THERE CAN BE ALSO NON-TABSTOP DATA WIDGETS!
 //	*/
@@ -331,6 +332,18 @@ void KexiDBForm::updateTabStopsOrder()
 			d->orderedFocusWidgets.remove( it.current() );
 		else
 			++it;
+	}
+}
+
+void KexiDBForm::updateReadOnlyFlags()
+{
+	for (QPtrListIterator<QWidget> it(d->orderedDataAwareWidgets); it.current(); ++it) {
+		KexiFormDataItemInterface* dataItem = dynamic_cast<KexiFormDataItemInterface*>( it.current() );
+		if (dataItem && !dataItem->dataSource().isEmpty()) {
+			if (dataAwareObject()->isReadOnly()) {
+				dataItem->setReadOnly( true );
+			}
+		}
 	}
 }
 
@@ -469,6 +482,12 @@ bool KexiDBForm::isReadOnly() const
 		return d->dataAwareObject->isReadOnly();
 //! @todo ?
 	return false;
+}
+
+void KexiDBForm::setReadOnly( bool readOnly )
+{
+	if (d->dataAwareObject)
+		d->dataAwareObject->setReadOnly( readOnly ); //???
 }
 
 QWidget* KexiDBForm::widget()

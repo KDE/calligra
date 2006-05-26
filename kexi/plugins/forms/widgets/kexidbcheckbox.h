@@ -67,6 +67,9 @@ class KEXIFORMUTILS_EXPORT KexiDBCheckBox : public QCheckBox, public KexiFormDat
 		inline void setDataSourceMimeType(const QCString &ds) { KexiFormDataItemInterface::setDataSourceMimeType(ds); }
 		void slotStateChanged(int state);
 
+		//! This implementation just disables read only widget
+		virtual void setReadOnly( bool readOnly );
+
 	protected:
 		virtual void setValueInternal(const QVariant& add, bool removeOld);
 

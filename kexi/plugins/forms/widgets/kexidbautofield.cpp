@@ -252,14 +252,14 @@ KexiDBAutoField::isReadOnly() const
 	else
 		return false;
 }
-/*
+
 void
-KexiDBAutoField::setReadOnly(bool state)
+KexiDBAutoField::setReadOnly( bool readOnly )
 {
 	KexiFormDataItemInterface *iface = dynamic_cast<KexiFormDataItemInterface*>(m_editor);
 	if(iface)
-		iface->setReadOnly(state);
-}*/
+		iface->setReadOnly(readOnly);
+}
 
 void
 KexiDBAutoField::setValueInternal(const QVariant& add, bool removeOld)

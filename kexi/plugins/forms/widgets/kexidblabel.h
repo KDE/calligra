@@ -107,6 +107,8 @@ class KEXIFORMUTILS_EXPORT KexiDBLabel : public QLabel, protected KexiDBTextWidg
 //		void setPaletteForegroundColor( const QColor& color );
 
 	protected slots:
+		//! empty
+		virtual void setReadOnly( bool readOnly );
 		void updatePixmap();
 
 	protected:

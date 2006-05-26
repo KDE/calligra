@@ -19,13 +19,16 @@
 */
 
 #include "kexidbtextedit.h"
+#include "kexidblineedit.h"
 
 #include <kexidb/queryschema.h>
+#include <kapplication.h>
 
 KexiDBTextEdit::KexiDBTextEdit(QWidget *parent, const char *name)
  : KTextEdit(parent, name)
  , KexiDBTextWidgetInterface()
  , KexiFormDataItemInterface()
+ , m_menuExtender(this, this)
 {
 	connect(this, SIGNAL(textChanged()), this, SLOT(slotTextChanged()));
 }
@@ -40,20 +43,20 @@ void KexiDBTextEdit::setInvalidState( const QString& displayText )
 //! @todo move this to KexiDataItemInterface::setInvalidStateInternal() ?
 	if (focusPolicy() & TabFocus)
 		setFocusPolicy(QWidget::ClickFocus);
-	setText(displayText);
+	KTextEdit::setText(displayText);
 }
 
 void KexiDBTextEdit::setValueInternal(const QVariant& add, bool removeOld)
 {
 	if (m_columnInfo && m_columnInfo->field->type()==KexiDB::Field::Boolean) {
 //! @todo temporary solution for booleans!
-		setText( add.toBool() ? "1" : "0" );
+		KTextEdit::setText( add.toBool() ? "1" : "0" );
 	}
 	else {
 		if (removeOld)
-			setText( add.toString() );
+			KTextEdit::setText( add.toString() );
 		else
-			setText( m_origValue.toString() + add.toString() );
+			KTextEdit::setText( m_origValue.toString() + add.toString() );
 	}
 }
 
@@ -82,6 +85,22 @@ bool KexiDBTextEdit::isReadOnly() const
 	return KTextEdit::isReadOnly();
 }
 
+void KexiDBTextEdit::setReadOnly( bool readOnly )
+{
+	KTextEdit::setReadOnly( readOnly );
+	QPalette p = palette();
+	QColor c(readOnly ? lighterGrayBackgroundColor(kapp->palette()) : p.color(QPalette::Normal, QColorGroup::Base));
+	setPaper( c );
+	p.setColor(QColorGroup::Base, c);
+	p.setColor(QColorGroup::Background, c);
+	setPalette( p );
+}
+
+void KexiDBTextEdit::setText( const QString & text, const QString & context )
+{
+	KTextEdit::setText(text, context);
+}
+
 QWidget* KexiDBTextEdit::widget()
 {
 	return this;
@@ -103,7 +122,7 @@ bool KexiDBTextEdit::cursorAtEnd()
 
 void KexiDBTextEdit::clear()
 {
-	setText(QString::null);
+	setText(QString::null, QString::null);
 }
 
 void KexiDBTextEdit::setColumnInfo(KexiDB::QueryColumnInfo* cinfo)
@@ -118,6 +137,13 @@ void KexiDBTextEdit::paintEvent ( QPaintEvent *pe )
 {
 	KTextEdit::paintEvent( pe );
 	KexiDBTextWidgetInterface::paintEvent( this, text().isEmpty(), alignment(), hasFocus() );
+}
+
+QPopupMenu * KexiDBTextEdit::createPopupMenu(const QPoint & pos)
+{
+	QPopupMenu *contextMenu = KTextEdit::createPopupMenu(pos);
+	m_menuExtender.createTitle(contextMenu);
+	return contextMenu;
 }
 
 #include "kexidbtextedit.moc"

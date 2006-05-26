@@ -24,9 +24,28 @@
 #include <knumvalidator.h>
 #include <kdatetbl.h>
 
+#include <qpopupmenu.h>
+
 #include <kexiutils/utils.h>
 #include <kexidb/queryschema.h>
 #include <kexiutils/utils.h>
+
+//! @todo reenable as an app aption
+//#define USE_KLineEdit_setReadOnly
+
+//! @internal A validator used for read only flag to disable editing
+class KexiDBLineEdit_ReadOnlyValidator : public QValidator
+{
+	public:
+		KexiDBLineEdit_ReadOnlyValidator( QObject * parent ) 
+		 : QValidator(parent)
+		{
+		}
+		~KexiDBLineEdit_ReadOnlyValidator() {}
+		virtual State validate( QString &, int & ) const { return Invalid; }
+};
+
+//-----
 
 KexiDBLineEdit::KexiDBLineEdit(QWidget *parent, const char *name)
  : KLineEdit(parent, name)
@@ -34,8 +53,16 @@ KexiDBLineEdit::KexiDBLineEdit(QWidget *parent, const char *name)
  , KexiFormDataItemInterface()
  , m_dateFormatter(0)
  , m_timeFormatter(0)
-// , m_autonumberDisplayParameters(0)
+ , m_menuExtender(this, this)
+ , m_internalReadOnly(false)
 {
+#ifdef USE_KLineEdit_setReadOnly
+//! @todo reenable as an app aption
+	QPalette p(widget->palette());
+	p.setColor( lighterGrayBackgroundColor(palette()) );
+	widget->setPalette(p);
+#endif
+
 	connect(this, SIGNAL(textChanged(const QString&)), this, SLOT(slotTextChanged(const QString&)));
 }
 
@@ -48,7 +75,7 @@ KexiDBLineEdit::~KexiDBLineEdit()
 
 void KexiDBLineEdit::setInvalidState( const QString& displayText )
 {
-	setReadOnly(true);
+	KLineEdit::setReadOnly(true);
 //! @todo move this to KexiDataItemInterface::setInvalidStateInternal() ?
 	if (focusPolicy() & TabFocus)
 		setFocusPolicy(QWidget::ClickFocus);
@@ -189,8 +216,37 @@ bool KexiDBLineEdit::valueIsValid()
 
 bool KexiDBLineEdit::isReadOnly() const
 {
-	return KLineEdit::isReadOnly();
+	return m_internalReadOnly;
 }
+
+void KexiDBLineEdit::setReadOnly( bool readOnly )
+{
+#ifdef USE_KLineEdit_setReadOnly
+//! @todo reenable as an app aption
+	return KLineEdit::setReadOnly( readOnly );
+#else
+	m_internalReadOnly = readOnly;
+	if (m_internalReadOnly) {
+		m_readWriteValidator = validator();
+		if (!m_readOnlyValidator)
+			m_readOnlyValidator = new KexiDBLineEdit_ReadOnlyValidator(this);
+		setValidator( m_readOnlyValidator );
+	}
+	else {
+		//revert to r/w validator
+		setValidator( m_readWriteValidator );
+	}
+	m_menuExtender.updatePopupMenuActions();
+#endif
+}
+
+QPopupMenu * KexiDBLineEdit::createPopupMenu()
+{
+	QPopupMenu *contextMenu = KLineEdit::createPopupMenu();
+	m_menuExtender.createTitle(contextMenu);
+	return contextMenu;
+}
+
 
 QWidget* KexiDBLineEdit::widget()
 {
@@ -209,7 +265,8 @@ bool KexiDBLineEdit::cursorAtEnd()
 
 void KexiDBLineEdit::clear()
 {
-	setText(QString::null);
+	if (!m_internalReadOnly)
+		KLineEdit::clear();
 }
 
 

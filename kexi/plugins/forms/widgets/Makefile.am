@@ -3,6 +3,7 @@ include $(top_srcdir)/kexi/Makefile.global
 noinst_LTLIBRARIES = libkexiformutilswidgets.la
 
 libkexiformutilswidgets_la_SOURCES = \
+  kexidbutils.cpp \
   kexidbautofield.cpp \
   kexidbform.cpp \
   kexidbsubform.cpp \

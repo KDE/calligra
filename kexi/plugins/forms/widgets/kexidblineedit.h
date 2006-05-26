@@ -22,13 +22,20 @@
 #define KexiDBLineEdit_H
 
 #include <klineedit.h>
+#include <qvalidator.h>
 
 #include "kexiformdataiteminterface.h"
 #include "kexidbtextwidgetinterface.h"
+#include "kexidbutils.h"
 #include <widget/utils/kexidatetimeformatter.h>
 
 class KexiDateFormatter;
 class KexiTimeFormatter;
+class KexiDBWidgetContextMenuExtender;
+
+/*! @internal Utility: alter background color to be a blended color 
+ of the background and base (usually lighter gray). Used for read-only mode. */
+void setLighterGrayBackgroundColor(QWidget* widget);
 
 //! @short Line edit widget for Kexi forms
 /*! Handles many data types. User input is validated by using validators 
@@ -42,6 +49,7 @@ class KEXIFORMUTILS_EXPORT KexiDBLineEdit :
 	Q_OBJECT
 	Q_PROPERTY(QString dataSource READ dataSource WRITE setDataSource DESIGNABLE true)
 	Q_PROPERTY(QCString dataSourceMimeType READ dataSourceMimeType WRITE setDataSourceMimeType DESIGNABLE true)
+	Q_OVERRIDE(bool readOnly READ isReadOnly WRITE setReadOnly DESIGNABLE true)
 
 	public:
 		KexiDBLineEdit(QWidget *parent, const char *name=0);
@@ -80,6 +88,7 @@ class KEXIFORMUTILS_EXPORT KexiDBLineEdit :
 	public slots:
 		inline void setDataSource(const QString &ds) { KexiFormDataItemInterface::setDataSource(ds); }
 		inline void setDataSourceMimeType(const QCString &ds) { KexiFormDataItemInterface::setDataSourceMimeType(ds); }
+		virtual void setReadOnly( bool readOnly );
 
 	protected slots:
 		void slotTextChanged(const QString&);
@@ -97,11 +106,26 @@ class KEXIFORMUTILS_EXPORT KexiDBLineEdit :
 			return m_timeFormatter ? m_timeFormatter : m_timeFormatter = new KexiTimeFormatter();
 		}
 
+		virtual QPopupMenu * createPopupMenu();
+
 		//! Used for date and date/time types
 		KexiDateFormatter* m_dateFormatter;
 
 		//! Used for time and date/time types
 		KexiTimeFormatter* m_timeFormatter;
+
+		//! Used for read only flag to disable editing
+		QGuardedPtr<const QValidator> m_readOnlyValidator;
+
+		//! Used to remember the previous validator used forf r/w mode, after setting the read only flag
+		QGuardedPtr<const QValidator> m_readWriteValidator;
+
+		//! Used for extending context menu
+		KexiDBWidgetContextMenuExtender m_menuExtender;
+
+		//! Used in isReadOnly, as sometimes we want to have the flag set tot true when KLineEdit::isReadOnly 
+		//! is still false.
+		bool m_internalReadOnly : 1;
 };
 
 #endif
