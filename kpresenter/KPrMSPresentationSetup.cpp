@@ -80,7 +80,7 @@ KPrMSPresentation::KPrMSPresentation( const KPrMSPresentation &msPres )
     view = msPres.view;
 }
 
-void KPrMSPresentation::initCreation( KProgress *progressBar )
+void KPrMSPresentation::initCreation( KProgressBar *progressBar )
 {
     int p;
 
@@ -158,7 +158,7 @@ void KPrMSPresentation::initCreation( KProgress *progressBar )
 
 }
 
-void KPrMSPresentation::createSlidesPictures( KProgress *progressBar )
+void KPrMSPresentation::createSlidesPictures( KProgressBar *progressBar )
 {
     if ( slideInfos.isEmpty() )
         return;
@@ -181,7 +181,7 @@ void KPrMSPresentation::createSlidesPictures( KProgress *progressBar )
     }
 }
 
-void KPrMSPresentation::createIndexFile( KProgress *progressBar )
+void KPrMSPresentation::createIndexFile( KProgressBar *progressBar )
 {
     int p;
     KTempFile sppFile;
@@ -599,7 +599,7 @@ void KPrMSPresentationCreateDialog::setupGUI()
     line->setFrameStyle( Q3Frame::HLine | Q3Frame::Sunken );
     line->setMaximumHeight( 20 );
 
-    progressBar = new KProgress( back );
+    progressBar = new KProgressBar( back );
 
     line = new Q3Frame( back );
     line->setFrameStyle( Q3Frame::HLine | Q3Frame::Sunken );

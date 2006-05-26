@@ -287,7 +287,7 @@ KPrTransEffectDia::KPrTransEffectDia( QWidget *parent, const char *name,
 
     lSoundEffect = new QLabel( i18n( "File name:" ), soundgrp );
     requester = new KUrlRequester( soundgrp );
-    requester->setURL( soundFileName );
+    requester->setUrl( soundFileName );
     connect( requester, SIGNAL( openFileDialog( KUrlRequester * ) ),
              this, SLOT( slotRequesterClicked( KUrlRequester * ) ) );
     connect( requester, SIGNAL( textChanged( const QString& ) ),

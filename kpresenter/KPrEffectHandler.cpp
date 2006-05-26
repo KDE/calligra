@@ -1009,7 +1009,8 @@ void KPrEffectHandler::drawObject( KPrObject *object, int x, int y, QPixmap *scr
     p.begin( screen );
     if ( clipRect )
     {
-        p.setClipRect( *clipRect, QPainter::CoordPainter );
+#warning "kde4: port it"			
+        //p.setClipRect( *clipRect, Qt::CoordPainter );
     }
 
     p.translate( x, y );

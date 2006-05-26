@@ -224,7 +224,8 @@ void KPrLineObject::paint( QPainter* _painter, KoTextZoomHandler*_zoomHandler,
     QPen pen2;
     if ( drawContour ) {
         pen2 = QPen( Qt::black, 1, Qt::DotLine );
-        _painter->setRasterOp( Qt::NotXorROP );
+#warning "kde4: port it"		
+        //_painter->setRasterOp( Qt::NotXorROP );
     }
     else {
         pen2 = pen.zoomedPen( _zoomHandler );

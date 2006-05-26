@@ -81,6 +81,7 @@
 #include <kstdaction.h>
 #include <kapplication.h>
 #include <kio/netaccess.h>
+#include <kfontsizeaction.h>
 
 #include "KPrView.h"
 #include "KPrDocument.h"
@@ -158,7 +159,7 @@
 #include <KoDocumentInfo.h>
 #include <kaccelgen.h>
 #include "KPrImportStyleDia.h"
-#include <kurldrag.h>
+#include <k3urldrag.h>
 #include <config.h>
 #include <KoStore.h>
 #include <KoStoreDrag.h>
@@ -4030,17 +4031,17 @@ void KPrView::updateObjectStatusBarItem()
             //QString unitName = m_pKPresenterDoc->unitName();
             KPrObject * obj = m_canvas->getSelectedObj();
             KoSize size = obj->getSize();
-            m_sbObjectLabel->setText( ' ' + i18n( "Statusbar info", "%1: %2, %3 - %4, %5 (width: %6, height: %7)" )
-                    .arg( /*frame->frameSet()->name()*/obj->getObjectName() )
-                    .arg( KoUnit::toUserStringValue( obj->getOrig().x(), unit ) )
-                    .arg( KoUnit::toUserStringValue( obj->getOrig().y() , unit) )
-                    .arg( KoUnit::toUserStringValue( obj->getOrig().x() + size.width(), unit ) )
-                    .arg( KoUnit::toUserStringValue( obj->getOrig().y() + size.height(), unit ) )
-                    .arg( KoUnit::toUserStringValue( size.width(), unit ) )
-                    .arg( KoUnit::toUserStringValue( size.height(), unit ) ) );
+            m_sbObjectLabel->setText( ' ' + i18n( "Statusbar info", "%1: %2, %3 - %4, %5 (width: %6, height: %7)" ,
+                     /*frame->frameSet()->name()*/obj->getObjectName()
+                    ,KoUnit::toUserStringValue( obj->getOrig().x(), unit ) 
+                    , KoUnit::toUserStringValue( obj->getOrig().y() , unit) 
+                    , KoUnit::toUserStringValue( obj->getOrig().x() + size.width(), unit ) 
+                    , KoUnit::toUserStringValue( obj->getOrig().y() + size.height(), unit ) 
+                    , KoUnit::toUserStringValue( size.width(), unit ) 
+                    , KoUnit::toUserStringValue( size.height(), unit ) ) );
         }
         else
-            m_sbObjectLabel->setText( i18n("1 object selected", "%n objects selected", nbSelected) );
+            m_sbObjectLabel->setText( i18nc("1 object selected", "%n objects selected", nbSelected) );
     }
     else if ( sb && m_sbObjectLabel )
         m_sbObjectLabel->setText( QString::null );

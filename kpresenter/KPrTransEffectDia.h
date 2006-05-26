@@ -29,7 +29,7 @@
 //Added by qt3to4:
 #include <QPixmap>
 #include "global.h"
-
+#include <Q3ListBox>
 class KPrDocument;
 class KPrView;
 class QCheckBox;

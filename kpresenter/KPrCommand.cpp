@@ -1894,7 +1894,7 @@ KoTextCursor * KPrOasisPasteTextCommand::execute( KoTextCursor *c )
     c->setParag( firstParag );
     c->setIndex( m_idx );
     
-    QBuffer buffer( m_data );
+    QBuffer buffer( &m_data );
     KoStore * store = KoStore::createStore( &buffer, KoStore::Read ); 
 
     if ( store->bad() || !store->hasFile( "content.xml" ) )

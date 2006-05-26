@@ -29,6 +29,9 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 
 #include <config.h>
 
+#warning "kde4: readd it"
+#define WITHOUT_ARTS
+
 #ifndef WITHOUT_ARTS
 #include <kartsdispatcher.h>
 #include <kplayobjectfactory.h>

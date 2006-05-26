@@ -173,7 +173,7 @@ KPrEffectDia::KPrEffectDia( QWidget* parent, const char* name, const Q3PtrList<K
     upperRow->addWidget( lSoundEffect1, 6, 0 );
 
     requester1 = new KUrlRequester( grp1 );
-    requester1->setURL( obj->getAppearSoundEffectFileName() );
+    requester1->setUrl( obj->getAppearSoundEffectFileName() );
     upperRow->addWidget( requester1, 6, 1 );
 
     connect( requester1, SIGNAL( openFileDialog( KUrlRequester * ) ),
@@ -277,7 +277,7 @@ KPrEffectDia::KPrEffectDia( QWidget* parent, const char* name, const Q3PtrList<K
     lowerRow->addWidget( lSoundEffect2, 5, 0 );
 
     requester2 = new KUrlRequester( grp2 );
-    requester2->setURL( obj->getDisappearSoundEffectFileName() );
+    requester2->setUrl( obj->getDisappearSoundEffectFileName() );
     lowerRow->addWidget( requester2, 5, 1 );
 
     connect( requester2, SIGNAL( openFileDialog( KUrlRequester * ) ),

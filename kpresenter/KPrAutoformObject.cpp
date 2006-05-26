@@ -37,6 +37,7 @@
 #include <kdebug.h>
 #include <KoTextZoomHandler.h>
 #include <math.h>
+#include <kinstance.h>
 using namespace std;
 
 KPrAutoformObject::KPrAutoformObject()
@@ -147,7 +148,7 @@ QDomDocumentFragment KPrAutoformObject::save( QDomDocument& doc, double offset )
     // bad, so we simply remove everything but the last dir and the name.
     // e.g. /my/local/path/to/kpresenter/Arrow/.source/Arrow1.atf -> Arrow/.source/Arrow1.atf
     QStringList afDirs = KPrFactory::global()->dirs()->resourceDirs("autoforms");
-    Q3ValueList<QString>::ConstIterator it=afDirs.begin();
+    QStringList::ConstIterator it=afDirs.begin();
     QString str;
     for( ; it!=afDirs.end(); ++it) {
         if(filename.startsWith(*it)) {
@@ -249,9 +250,11 @@ void KPrAutoformObject::paint( QPainter* _painter, KoTextZoomHandler *_zoomHandl
 
                     // Intersect with current clipregion (whereas setupClipRegion unites)
                     if ( _painter->hasClipping() )
-                        clipregion = _painter->clipRegion(QPainter::CoordPainter).intersect( clipregion );
+						{
+                        //clipregion = _painter->clipRegion(QPainter::CoordPainter).intersect( clipregion );
+						}
 
-                    _painter->setClipRegion( clipregion, QPainter::CoordPainter );
+                    //_painter->setClipRegion( clipregion, QPainter::CoordPainter );
 
                     gradient->setSize( size );
                     _painter->drawPixmap( 0, 0, gradient->pixmap() );
@@ -272,7 +275,8 @@ void KPrAutoformObject::paint( QPainter* _painter, KoTextZoomHandler *_zoomHandl
 
                         QPainter p;
                         p.begin( &m_gradientPix );
-                        p.setClipRegion( clipregion , QPainter::CoordPainter);
+#warning "kde4: port it"						
+                        //p.setClipRegion( clipregion , QPainter::CoordPainter);
                         p.drawPixmap( 0, 0, gradient->pixmap() );
                         p.end();
 

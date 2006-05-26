@@ -61,7 +61,7 @@
 #include <kdebug.h>
 #include <KoGlobal.h>
 #include <kapplication.h>
-#include <kurldrag.h>
+#include <k3urldrag.h>
 #include <ktempfile.h>
 #include <klocale.h>
 #include <kfiledialog.h>
@@ -106,7 +106,7 @@
 #include "KPrNoteBar.h"
 #include "KPrBgSpellCheck.h"
 #include <kglobalsettings.h>
-#include <KoCommandHistory.h>
+#include <kcommand.h>
 #include "KoApplication.h"
 #include <KoOasisStyles.h>
 #include <KoOasisContext.h>
@@ -142,7 +142,7 @@ KoDocument *KPrChild::hitTest( const QPoint &, const QMatrix & )
 
 KPrDocument::KPrDocument( QWidget *parentWidget, const char *widgetName, QObject* parent, const char* name,
                               bool singleViewMode )
-    : KoDocument( parentWidget,widgetName, parent, name, singleViewMode ),
+    : KoDocument( parentWidget, parent, singleViewMode ),
       _gradientCollection(), m_customListTest( 0L ),
       m_childCountBeforeInsert( 0 )
 {
@@ -210,8 +210,8 @@ KPrDocument::KPrDocument( QWidget *parentWidget, const char *widgetName, QObject
     tmpSoundFileList = Q3PtrList<KTempFile>();
     _xRnd = 20;
     _yRnd = 20;
-    _txtBackCol = lightGray;
-    _otxtBackCol = lightGray;
+    _txtBackCol = Qt::lightGray;
+    _otxtBackCol = Qt::lightGray;
 
     m_bShowRuler=true;
     m_bAllowAutoFormat = true;
@@ -259,7 +259,7 @@ KPrDocument::KPrDocument( QWidget *parentWidget, const char *widgetName, QObject
     m_bInsertDirectCursor = false;
 
     objStartY = 0;
-    _presPen = QPen( red, 3, SolidLine );
+    _presPen = QPen( Qt::red, 3, Qt::SolidLine );
     ignoreSticky = true;
 
     m_gridColor=Qt::black;
@@ -2239,8 +2239,8 @@ bool KPrDocument::loadXML( QIODevice * dev, const QDomDocument& doc )
             kError (33001) << "Parsing Error! Aborting! (in KPrDocument::loadXML)" << endl
                             << "  Line: " << errorLine << " Column: " << errorColumn << endl
                             << "  Message: " << errorMsg << endl;
-            setErrorMessage( i18n( "parsing error in the main document (converted from an old KPresenter format) at line %1, column %2\nError message: %3" )
-                             ,errorLine, errorColumn, i18n ( errorMsg.toUtf8() ) );
+            setErrorMessage( i18n( "parsing error in the main document (converted from an old KPresenter format) at line %1, column %2\nError message: %3" 
+                             ,errorLine, errorColumn, i18n ( errorMsg.toUtf8()  )));
             return false;
         }
         b = loadXML( newdoc );
@@ -2520,17 +2520,17 @@ bool KPrDocument::loadXML( const QDomDocument &doc )
 
         }
         else if(elem.tagName()=="BACKGROUND") {
-            int Qt::red=0, Qt::green=0, Qt::blue=0;
+            int red=0, green=0, blue=0;
             if(elem.hasAttribute("xRnd"))
                 _xRnd = elem.attribute("xRnd").toInt();
             if(elem.hasAttribute("yRnd"))
                 _yRnd = elem.attribute("yRnd").toInt();
             if(elem.hasAttribute("bred"))
-                Qt::red = elem.attribute("bred").toInt();
+                red = elem.attribute("bred").toInt();
             if(elem.hasAttribute("bgreen"))
-                Qt::green = elem.attribute("bgreen").toInt();
+                green = elem.attribute("bgreen").toInt();
             if(elem.hasAttribute("bblue"))
-                Qt::blue = elem.attribute("bblue").toInt();
+                blue = elem.attribute("bblue").toInt();
             loadBackground(elem);
         } else if(elem.tagName()=="HEADER") {
             if ( _clean /*don't reload header footer, header/footer was created at the beginning || !hasHeader()*/ ) {
@@ -3224,7 +3224,7 @@ void KPrDocument::loadUsedSoundFileFromStore( KoStore *_store, QStringList _list
             QString tmpFileName = tmpFile->name();
             tmpSoundFileList.append( tmpFile );
 
-            QString _fileName = *haveNotOwnDiskSoundFile.at( i );
+            QString _fileName = haveNotOwnDiskSoundFile.at( i );
             ++i;
 
             Q3PtrListIterator<KPrPage> it( m_pageList );
@@ -3941,14 +3941,14 @@ void KPrDocument::copyPageToClipboard( int pgnum )
     KUrl url; url.setPath( tempFile.name() );
     KUrl::List lst;
     lst.append( url );
-    QApplication::clipboard()->setData( new KURLDrag( lst ) );
+    QApplication::clipboard()->setData( new K3URLDrag( lst ) );
     m_tempFileInClipboard = tempFile.name(); // do this last, the above calls clipboardDataChanged
 }
 
 void KPrDocument::pastePage( const QMimeSource * data, int pgnum )
 {
     KUrl::List lst;
-    if ( KURLDrag::decode( data, lst ) && !lst.isEmpty() )
+    if ( K3URLDrag::decode( data, lst ) && !lst.isEmpty() )
     {
         insertNewPage(i18n("Paste Slide"),  pgnum, IP_BEFORE, false, lst.first().path() );
         //selectPage( pgnum, true /* should be part of the file ? */ );

@@ -356,9 +356,9 @@ void KPrObject::saveOasisPosObject( KoXmlWriter &xmlWriter, int indexObj ) const
         KoPoint rot( rotX, rotY );
         KoPoint trans( center - rot + orig );
 
-        Q3CString transX;
+        QString transX;
         transX.setNum( trans.x(), 'g', DBL_DIG );
-        Q3CString transY;
+        QString transY;
         transY.setNum( trans.y(), 'g', DBL_DIG );
         QString str = QString( "rotate(%1) translate(%2pt %3pt)" ).arg( angInRad ).arg( transX ).arg( transY );
         xmlWriter.addAttribute( "draw:transform", str );
@@ -1484,6 +1484,8 @@ DCOPObject* KPrObject::dcopObject()
 
 void KPrObject::setupClipRegion( QPainter *painter, const QRegion &clipRegion )
 {
+#warning "kde4: port it"		
+#if 0		
     QRegion region = painter->clipRegion( QPainter::CoordPainter );
     if ( region.isEmpty() )
         region = clipRegion;
@@ -1491,6 +1493,7 @@ void KPrObject::setupClipRegion( QPainter *painter, const QRegion &clipRegion )
         region.unite( clipRegion );
 
     painter->setClipRegion( region, QPainter::CoordPainter );
+#endif	
 }
 
 QDomElement KPrObject::createValueElement(const QString &tag, int value, QDomDocument &doc) {

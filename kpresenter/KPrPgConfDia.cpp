@@ -24,7 +24,6 @@
 #include "KPrPage.h"
 
 #include <q3buttongroup.h>
-#include <qhbuttongroup.h>
 #include <QCheckBox>
 #include <QComboBox>
 #include <q3hbox.h>
@@ -38,7 +37,6 @@
 #include <QPushButton>
 #include <qradiobutton.h>
 #include <q3valuelist.h>
-#include <qvbuttongroup.h>
 #include <q3whatsthis.h>
 //Added by qt3to4:
 #include <Q3GridLayout>
