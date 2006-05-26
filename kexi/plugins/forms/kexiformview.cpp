@@ -499,6 +499,7 @@ void KexiFormView::initDataSource()
 	KexiDB::TableSchema *tableSchema = 0;
 	KexiDB::Connection *conn = 0;
 	QStringList sources;
+	bool forceReadOnlyDataSource = false;
 
 	if (ok) {
 //		m_previousDataSourceString = dataSourceString;
@@ -534,6 +535,9 @@ void KexiFormView::initDataSource()
 				ok = m_query != 0;
 				if (ok && dataSourceMimeTypeString.isEmpty())
 					m_dbform->setDataSourceMimeType("kexi/query"); //update for compatibility
+				// query results are read-only
+//! @todo There can be read-write queries, e.g. simple "SELECT * FROM...". Add a checking function to KexiDB.
+				forceReadOnlyDataSource = true;
 			}
 			else //no other mime types supported
 				ok = false;
@@ -593,6 +597,8 @@ void KexiFormView::initDataSource()
 //! @todo PRIMITIVE!! data setting:
 //! @todo KexiTableViewData is not great name for data class here... rename/move?
 		KexiTableViewData* data = new KexiTableViewData(m_cursor);
+		if (forceReadOnlyDataSource)
+			data->setReadOnly(true);
 		data->preloadAllRows();
 
 ///*! @todo few backends return result count for free! - no need to reopen() */

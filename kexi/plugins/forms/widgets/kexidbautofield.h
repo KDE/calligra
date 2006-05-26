@@ -71,6 +71,7 @@ class KEXIFORMUTILS_EXPORT KexiDBAutoField :
 
 		virtual void setInvalidState(const QString& text);
 		virtual bool isReadOnly() const;
+		virtual void setReadOnly( bool readOnly );
 
 		virtual QVariant value();
 		virtual bool valueIsNull();

@@ -532,6 +532,11 @@ bool KexiDBLabel::isReadOnly() const
 	return true;
 }
 
+void KexiDBLabel::setReadOnly( bool readOnly )
+{
+	Q_UNUSED(readOnly);
+}
+
 QWidget* KexiDBLabel::widget()
 {
 	return this;

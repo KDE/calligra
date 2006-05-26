@@ -23,6 +23,7 @@
 
 #include "kexiformdataiteminterface.h"
 #include "kexidbtextwidgetinterface.h"
+#include "kexidbutils.h"
 #include <ktextedit.h>
 //Added by qt3to4:
 #include <Q3CString>
@@ -72,6 +73,8 @@ class KEXIFORMUTILS_EXPORT KexiDBTextEdit :
 	public slots:
 		inline void setDataSource(const QString &ds) { KexiFormDataItemInterface::setDataSource(ds); }
 		inline void setDataSourceMimeType(const Q3CString &ds) { KexiFormDataItemInterface::setDataSourceMimeType(ds); }
+		virtual void setReadOnly( bool readOnly );
+		virtual void setText( const QString & text, const QString & context );
 
 	protected slots:
 		void slotTextChanged();
@@ -79,6 +82,10 @@ class KEXIFORMUTILS_EXPORT KexiDBTextEdit :
 	protected:
 		virtual void paintEvent ( QPaintEvent * );
 		virtual void setValueInternal(const QVariant& add, bool removeOld);
+		QPopupMenu * createPopupMenu(const QPoint & pos);
+
+		//! Used for extending context menu
+		KexiDBWidgetContextMenuExtender m_menuExtender;
 };
 
 #endif
