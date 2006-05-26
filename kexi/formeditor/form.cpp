@@ -461,7 +461,7 @@ Form::addWidgetToTabStops(ObjectTreeItem *c)
 	if(!(w->focusPolicy() & Qt::TabFocus))
 	{
 		if(!w->children())
-		return;
+			return;
 
 		// For composed widgets, we check if one of the child can have focus
 		QObjectList list = *(w->children());

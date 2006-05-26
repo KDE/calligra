@@ -181,7 +181,7 @@ class KFORMEDITOR_EXPORT InsertWidgetCommand : public Command
 		/*! This ctor allows to set explicit class name and position.
 		 Used for dropping widgets on the form surface. 
 		 If \a namePrefix is empty, widget's unique name is constructed using 
-		 hint for \a className (WIdgetLibrary::namePrefix()),
+		 hint for \a className (WidgetLibrary::namePrefix()),
 		 otherwise, \a namePrefix is used to generate widget's name.
 		 This allows e.g. inserting a widgets having name constructed using 
 		 */
