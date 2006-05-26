@@ -195,6 +195,7 @@ bool Manipulator::process(Element* element)
     kdDebug() << "Processing cell(s) at " << range << "." << endl;
     for (int col = range.left(); col <= range.right(); ++col)
     {
+      sheet->enableScrollBarUpdates(false);
       for (int row = range.top(); row <= range.bottom(); ++row)
       {
         Cell* cell = sheet->cellAt(col, row);
@@ -219,7 +220,10 @@ bool Manipulator::process(Element* element)
           }
         }
       }
+      sheet->enableScrollBarUpdates(true);
+      sheet->checkRangeVBorder(range.bottom());
     }
+    sheet->checkRangeHBorder(range.right());
   }
   return true;
 }

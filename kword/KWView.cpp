@@ -1742,18 +1742,6 @@ int KWView::checkClipboard( QMimeSource *data )
     for (int i=0; (fmt = data->format(i)); i++)
         formats.append( QCString( fmt ) );
 
-#if 0 // not needed anymore
-    // QImageDrag::canDecode( data ) is very very slow in Qt 2 (n*m roundtrips)
-    // Workaround....
-    QStrList fileFormats = QImageIO::inputFormats();
-    for ( fileFormats.first() ; fileFormats.current() && !provides ; fileFormats.next() )
-    {
-        QCString format = fileFormats.current();
-        QCString type = "image/" + format.lower();
-        if ( ( formats.findIndex( type ) != -1 ) )
-            provides |= ProvidesImage;
-    }
-#endif
     if ( QImageDrag::canDecode( data ) )
         provides |= ProvidesImage;
     if ( formats.findIndex( KFormula::MimeSource::selectionMimeType() ) != -1 )
@@ -2429,8 +2417,11 @@ void KWView::pasteData( QMimeSource* data, bool drop )
             if ( result == list.first() )
             {
                 provides = ProvidesImage;
-                data = QApplication::clipboard()->data();
+            } else {
+                provides = ProvidesPlainText;
             }
+            if ( !drop ) // get it again, to avoid crashes
+                data = QApplication::clipboard()->data();
         }
         KWTextFrameSetEdit * edit = currentTextEdit();
         if ( edit && ( provides & ProvidesPlainText ) ) {

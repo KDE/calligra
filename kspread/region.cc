@@ -69,16 +69,16 @@ Region::Region(View* view, const QString& string, Sheet* sheet)
   QStringList::ConstIterator end = substrings.constEnd();
   for (QStringList::ConstIterator it = substrings.constBegin(); it != end; ++it)
   {
-    int delimiterPos = (*it).find(':');
+    QString sRegion = *it;
+    if (!sheet)
+    {
+      sheet = filterSheetName(sRegion);
+    }
+
+    int delimiterPos = sRegion.find(':');
     if (delimiterPos > -1)
     {
       // range
-      QString sRegion = *it;
-      if (!sheet)
-      {
-        sheet = filterSheetName(sRegion);
-      }
-
       Point ul(sRegion.left(delimiterPos));
       Point lr(sRegion.mid(delimiterPos + 1));
 
@@ -104,11 +104,6 @@ Region::Region(View* view, const QString& string, Sheet* sheet)
     else
     {
       // single cell
-      QString sRegion = *it;
-      if (!sheet)
-      {
-        sheet = filterSheetName(sRegion);
-      }
       Point* point = createPoint(sRegion);
       point->setSheet(sheet);
       d->cells.append(point);
@@ -254,7 +249,8 @@ Region::Element* Region::add(const QPoint& point, Sheet* sheet)
   {
     return 0;
   }
-  return *insert(d->cells.end(), point, sheet, false);
+  Iterator it = insert(d->cells.end(), point, sheet, false);
+  return (it == d->cells.end()) ? 0 : *it;
 }
 
 Region::Element* Region::add(const QRect& range, Sheet* sheet)
@@ -267,7 +263,8 @@ Region::Element* Region::add(const QRect& range, Sheet* sheet)
   {
     return add(range.topLeft(), sheet);
   }
-  return *insert(d->cells.end(), range, sheet, false);
+  Iterator it = insert(d->cells.end(), range, sheet, false);
+  return (it == d->cells.end()) ? 0 : *it;
 }
 
 Region::Element* Region::add(const Region& region)

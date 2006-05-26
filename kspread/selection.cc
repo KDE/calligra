@@ -307,11 +307,14 @@ void Selection::initialize(const Region& region, Sheet* sheet)
   d->marker = bottomRight;
 
   d->activeElement = --cells().end();
+  d->activeSubRegionStart = 0;
+  d->activeSubRegionLength = cells().count();
 
   if (changedRegion == *this)
   {
     return;
   }
+  changedRegion.add( region );
 
   emit changed(changedRegion);
 }

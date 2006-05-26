@@ -22,7 +22,7 @@
 
 #include <kdialogbase.h>
 #include <kparts/plugin.h>
-#include <commands/vcommand.h>
+#include <commands/vreplacingcmd.h>
 
 class KarbonView;
 class VWhirlPinchDlg;
@@ -67,22 +67,19 @@ class VPath;
 class VSubpath;
 class VSelection;
 
-class VWhirlPinchCmd : public VCommand
+class VWhirlPinchCmd : public VReplacingCmd
 {
 public:
 	VWhirlPinchCmd( VDocument* doc,
 		double angle, double pinch, double radius );
 	virtual ~VWhirlPinchCmd();
 
-	virtual void execute();
-	virtual void unexecute();
-
 	virtual void visitVPath( VPath& composite );
 	virtual void visitVSubpath( VSubpath& path );
 
-protected:
-	VSelection* m_selection;
+	virtual bool changesSelection() const { return true; }
 
+protected:
 	KoPoint m_center;
 	double m_angle;
 	double m_pinch;

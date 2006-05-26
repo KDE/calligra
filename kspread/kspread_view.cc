@@ -1257,13 +1257,13 @@ void View::Private::adjustActions( bool mode )
   actions->insertPart->setEnabled( mode );
   actions->createStyle->setEnabled( mode );
   actions->selectStyle->setEnabled( mode );
+  actions->insertChartFrame->setEnabled( mode );
 
   actions->autoFormat->setEnabled( false );
   actions->sort->setEnabled( false );
   actions->mergeCell->setEnabled( false );
   actions->mergeCellHorizontal->setEnabled( false );
   actions->mergeCellVertical->setEnabled( false );
-  actions->insertChartFrame->setEnabled( false );
   actions->sortDec->setEnabled( false );
   actions->sortInc->setEnabled( false );
 //   actions->transform->setEnabled( false );
@@ -1896,6 +1896,10 @@ View::~View()
     d->insertHandler = 0L;
 
     delete d->actions;
+    // NOTE Stefan: Delete the Canvas explicitly, even if it has this view as
+    //              parent. Otherwise, it leads to crashes, because it tries to
+    //              access this View in some events (Bug #126492).
+    delete d->canvas;
     delete d;
 }
 
@@ -2710,7 +2714,6 @@ void View::initialPosition()
 
     // make paint effective:
     doc()->decreaseNumOperation();
-    d->actions->insertChartFrame->setEnabled(false);
 
     QRect vr( activeSheet()->visibleRect( d->canvas ) );
 
@@ -4705,6 +4708,9 @@ void View::findPrevious()
 
 void View::replace()
 {
+  if (!d->activeSheet)
+    return;
+
     SearchDlg dlg( this, "Replace", d->findOptions, d->findStrings, d->replaceStrings );
     dlg.setHasSelection( !d->selection->isSingular() );
     dlg.setHasCursor( true );
@@ -4719,11 +4725,19 @@ void View::replace()
     delete d->find;
     delete d->replace;
     d->find = 0L;
+    // NOTE Stefan: Avoid beginning of line replacements with nothing which
+    //              will lead to an infinite loop (Bug #125535). The reason
+    //              for this is unclear to me, but who cares and who would
+    //              want to do something like this, häh?!
+    if (dlg.pattern() == "^" && dlg.replacement().isEmpty())
+      return;
     d->replace = new KReplace( dlg.pattern(), dlg.replacement(), dlg.options() );
+
+    d->searchInSheets.currentSheet = activeSheet();
+    d->searchInSheets.firstSheet = d->searchInSheets.currentSheet;
     initFindReplace();
-    connect(
-        d->replace, SIGNAL( replace( const QString &, int, int, int ) ),
-        this, SLOT( slotReplace( const QString &, int, int, int ) ) );
+    connect( d->replace, SIGNAL( replace( const QString &, int, int, int ) ),
+             this, SLOT( slotReplace( const QString &, int, int, int ) ) );
 
     if ( !doc()->undoLocked() )
     {
@@ -7022,7 +7036,6 @@ void View::slotChangeSelection(const KSpread::Region& changedRegion)
     d->actions->fillUp->setEnabled( !simpleSelection );
     d->actions->fillDown->setEnabled( !simpleSelection );
     d->actions->fillLeft->setEnabled( !simpleSelection );
-    d->actions->insertChartFrame->setEnabled( !simpleSelection );
     d->actions->sortDec->setEnabled( !simpleSelection );
     d->actions->sortInc->setEnabled( !simpleSelection);
     d->actions->createStyle->setEnabled( simpleSelection ); // just from one cell

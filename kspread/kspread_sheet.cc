@@ -1096,6 +1096,10 @@ RowFormat* Sheet::nonDefaultRowFormat( int _row, bool force_creation )
 Cell* Sheet::nonDefaultCell( int _column, int _row,
                                            bool _scrollbar_update, Style * _style )
 {
+  // NOTE Stefan: _scrollbar_update defaults to false and this function
+  //              is never called with it being true. So, this here is
+  //              actually never processed. I'll leave this in here for the
+  //              case I'm mistaken, but will remove it for 2.0.
   if ( _scrollbar_update && d->scrollBarUpdates )
   {
     checkRangeHBorder( _column );
@@ -1694,6 +1698,7 @@ Sheet::SelectionType Sheet::workOnCells( Selection* selectionInfo, CellWorker & 
   {
     for ( int x = left; x <= right; ++x )
     {
+      enableScrollBarUpdates(false);
       for ( int y = top; y <= bottom; ++y )
       {
         cell = cellAt( x, y );
@@ -1711,7 +1716,10 @@ Sheet::SelectionType Sheet::workOnCells( Selection* selectionInfo, CellWorker & 
           }
         }
       }
+      enableScrollBarUpdates(true);
+      checkRangeVBorder(bottom);
     }
+    checkRangeHBorder(right);
     result = CellRegion;
   }
 
@@ -2066,7 +2074,7 @@ void Sheet::setSeries( const QPoint &_marker, double start, double end, double s
     {
       /* see the code above for a column series for a description of
          what is going on here. */
-      cell = cellAt( x,_marker.y() );
+      cell = cellAt( x,_marker.y(), false );
 
       if ( cell->isPartOfMerged() )
       {
@@ -5866,6 +5874,7 @@ QDomDocument Sheet::saveCellRegion(const Region& region, bool copy, bool era)
     //but I remove cell which is inserted.
     Cell* cell;
     bool insert;
+    enableScrollBarUpdates(false);
     for (int col = range.left(); col <= range.right(); ++col)
     {
       for (int row = range.top(); row <= range.bottom(); ++row)
@@ -5885,6 +5894,7 @@ QDomDocument Sheet::saveCellRegion(const Region& region, bool copy, bool era)
         }
       }
     }
+    enableScrollBarUpdates(true);
   }
   return dd;
 }
@@ -6914,13 +6924,10 @@ bool Sheet::loadRowFormat( const QDomElement& row, int &rowIndex, KoOasisLoading
 
 				for ( int newRow = backupRow; newRow < endRow;++newRow )
 				{
-				    if ( targetStyle && (targetStyle->features() != 0 ) )
-				    {
                                     	Cell* target = nonDefaultCell( columnIndex, newRow );
 
 					if (cell != target)
 						target->copyAll( cell );
-				    }
                                 }
 			    }
                     }
@@ -7828,12 +7835,12 @@ void Sheet::insertCell( Cell *_cell )
 
   d->cells.insert( _cell, _cell->column(), _cell->row() );
 
-  //Not sure why this is here
-  /*if ( d->scrollBarUpdates )
+  // Adjust the scrollbar range, if the max. dimension has changed.
+  if ( d->scrollBarUpdates )
   {
     checkRangeHBorder ( _cell->column() );
     checkRangeVBorder ( _cell->row() );
-  }*/
+  }
 }
 
 void Sheet::insertColumnFormat( ColumnFormat *l )

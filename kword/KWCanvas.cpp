@@ -1513,6 +1513,7 @@ void KWCanvas::contentsDropEvent( QDropEvent *e )
     } else if ( KURLDrag::canDecode( e ) ) {
 
         // TODO ask (with a popupmenu) between inserting a link and inserting the contents
+        // TODO fix khtml to export images when dragging an image+link (as it does when using "Copy")
 
         KURL::List lst;
         KURLDrag::decode( e, lst );
@@ -1555,10 +1556,16 @@ void KWCanvas::contentsDropEvent( QDropEvent *e )
 void KWCanvas::pasteImage( QMimeSource *e, const KoPoint &docPoint )
 {
     QImage i;
-    QImageDrag::decode(e, i);
+    if ( !QImageDrag::decode(e, i) ) {
+        kdWarning() << "Couldn't decode image" << endl;
+        return;
+    }
     KTempFile tmpFile( QString::null, ".png");
     tmpFile.setAutoDelete( true );
-    i.save(tmpFile.name(), "PNG");
+    if ( !i.save(tmpFile.name(), "PNG") ) {
+        kdWarning() << "Couldn't save image to " << tmpFile.name() << endl;
+        return;
+    }
     m_pixmapSize = i.size();
     // Prepare things for mrCreatePixmap
     KoPictureKey key;
