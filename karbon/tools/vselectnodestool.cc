@@ -107,18 +107,24 @@ VSelectNodesTool::draw()
 void
 VSelectNodesTool::setCursor() const
 {
-	if( m_state == moving ) return;
+	if( m_state >= moving ) 
+	{
+		view()->setCursor( VCursor::needleMoveArrow() );
+		return;
+	}
 
 	KoRect selrect = calcSelRect( last() );
 
 	QPtrList<VSegment> segments = view()->part()->document().selection()->getSegments( selrect );
-	if( segments.count() > 0 &&
-		( segments.at( 0 )->knotIsSelected() ||
-		  segments.at( 0 )->pointIsSelected( 0 ) ||
-		  segments.at( 0 )->pointIsSelected( 1 ) ||
-		  selrect.contains( segments.at( 0 )->knot() ) ) )
+	if( segments.count() > 0  )
 	{
-		view()->setCursor( VCursor::needleMoveArrow() );
+		VSegment* seg = segments.at( 0 );
+		for( int i = 0; i < seg->degree(); ++i )
+			if( seg->pointIsSelected( i ) && selrect.contains( seg->point( i ) ) )
+			{
+				view()->setCursor( VCursor::needleMoveArrow() );
+				break;
+			}
 	}
 	else
 		view()->setCursor( VCursor::needleArrow() );
@@ -147,35 +153,60 @@ VSelectNodesTool::mouseButtonPress()
 	if( segments.count() > 0 )
 	{
 		VSegment *seg = segments.at( 0 );
-		// allow moving bezier points only if one segment is selected 
-		// and one of the bezier points is within the selection rect
-		if( segments.count() == 1 && !selrect.contains( seg->knot() ) )
+		VSegment* prev = seg->prev();
+		VSegment* next = seg->next();
+
+		// allow moving bezier points only if one of the bezier points is within the selection rect
+		// and no neighboring knot is selected
+		if( segments.count() == 1 && ! selrect.contains( seg->knot() ) && ! seg->knotIsSelected() 
+		&& ( prev && ! prev->knotIsSelected() ) )
 		{
 			if( selrect.contains( seg->point( 1 ) ) )
 			{
 				m_state = movingbezier1;
-				seg->selectPoint( 1, false );
+				if( next )
+					next->selectPoint( 0, false );
 			}
 			else if( selrect.contains( seg->point( 0 ) ) )
 			{
 				m_state = movingbezier2;
-				seg->selectPoint( 0, false );
+				if( prev ) 
+					prev->selectPoint( 1, false );
 			}
-			selection->append( selrect.normalize(), false, false );
 		}
 		else
 		{
-			m_state = moving;
-			selection->append( selrect.normalize(), false, false );
+			for( VSegment *seg = segments.first(); seg; seg = segments.next() )
+			{
+				for( int i = 0; i < seg->degree(); ++i )
+				{
+					if( seg->pointIsSelected( i ) && selrect.contains( seg->point( i ) ) )
+					{
+						m_state = moving;
+						break;
+					}
+				}
+				if( m_state == moving )
+					break;
+			}
 		}
 
-		// use the first control point of the first segment as starting point
-		for( int i = 0; i < seg->degree(); ++i )
+		double minDist = -1.0;
+		// use the nearest control point of all the segments as starting point
+		for( VSegment *seg = segments.first(); seg; seg = segments.next() )
 		{
-			if( selrect.contains( seg->point( i ) ) )
+			for( int i = 0; i < seg->degree(); ++i )
 			{
-				m_first = seg->point( i );
-				break;
+				if( selrect.contains( seg->point( i ) ) )
+				{
+					KoPoint vDist = seg->point( i ) - m_current;
+					double dist = vDist.x()*vDist.x() + vDist.y()*vDist.y();
+					if( minDist < 0.0 || dist < minDist )
+					{
+						m_first = seg->point( i );
+						minDist = dist;
+					}
+				}
 			}
 		}
 		recalc();

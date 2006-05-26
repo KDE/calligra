@@ -60,25 +60,33 @@ VSelectNodes::visitVSubpath( VSubpath& path )
 						setSuccess();
 					}
 				}
-				// if previous segment's knot is selected, select the current segment's first node as well
 				VSegment* prev = curr->prev();
-				if( prev && prev->isCurve() && prev->knotIsSelected() )
-					curr->selectPoint( 0 );
+				// make sure the last control point of the previous segment and the first control point
+				// of the current segment are selected if:
+				// - both segments are curves with a smooth transition and
+				// - the previous segment's knot is selected or
+				// - one of the above mentioned control points is already selected
+				if( prev )
+				{
+					if( curr->pointIsSelected( 0 ) == m_select )
+					{
+						if( prev->isCurve() && prev->isSmooth() )
+							prev->selectPoint( prev->degree()-2, m_select );
+					}
+					else
+					{
+						if( prev->knotIsSelected() || ( prev->isCurve() && prev->isSmooth() && prev->pointIsSelected( prev->degree()-2 ) ) )
+							curr->selectPoint( 0, m_select );
+					}
+				}
 			}	
 
 			if( m_rect.contains( curr->knot() ) )
 			{
 				curr->selectKnot( m_select );
-				// select the last control point before the knot. if segment is curve
-				if( curr->isCurve() )
-					curr->selectPoint( curr->degree()-2, m_select );
-
-				// select first bezier point of next segment if:
-				// - next segment is a curve and
-				// - next segment is smooth or the current segment is the first one
-				VSegment* next = curr->next();
-				if( next && next->isCurve() && ( curr->isSmooth() || curr == path.getFirst() ) )
-					next->selectPoint( 0, m_select );
+				// select the last control point before the knot, if segment is curve
+				if( curr->isCurve() && m_select )
+					curr->selectPoint( curr->degree()-2 );
 
 				setSuccess();
 			}
@@ -87,7 +95,7 @@ VSelectNodes::visitVSubpath( VSubpath& path )
 	}
 	// select first node as well
 	if( path.isClosed() && path.getLast()->knotIsSelected() )
-		path.getFirst()->selectKnot();
+		path.getFirst()->selectKnot( m_select );
 }
 
 void
@@ -115,11 +123,13 @@ VTestNodes::visitVSubpath( VSubpath& path )
 	{
 		for( int i = 0; i < path.current()->degree(); i++ )
 			if( m_rect.contains( path.current()->point( i ) ) ) //&&
-				//path.current()->pointIsSelected( i ) )
-				{
-					m_segments.append( path.current() );
-					setSuccess();
-				}
+              //path.current()->pointIsSelected( i ) )
+			{
+				m_segments.append( path.current() );
+				setSuccess();
+				// only add a segment once
+				break;
+			}
 
 		path.next();
 	}
