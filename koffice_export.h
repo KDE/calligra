@@ -139,6 +139,16 @@
 # endif
 #endif
 
+#ifndef FLAKE_EXPORT
+# ifdef MAKE_FLAKE_LIB
+#  define FLAKE_EXPORT KDE_EXPORT
+# elif KDE_MAKE_LIB
+#  define FLAKE_EXPORT KDE_IMPORT
+# else
+#  define FLAKE_EXPORT
+# endif
+#endif
+
 
 #define KPRESENTER_EXPORT KDE_EXPORT
 #define KCHART_EXPORT KDE_EXPORT
@@ -196,7 +206,7 @@
 # define KOPROPERTY_EXPORT KDE_EXPORT
 #endif
 #define EXAMPLE_EXPORT KDE_EXPORT
-
+#define FLAKE_EXPORT KDE_EXPORT
 #endif /* not windows */
 
 #endif /* _KOFFICE_EXPORT_H */
