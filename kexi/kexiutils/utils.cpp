@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003-2005 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2006 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -23,6 +23,7 @@
 #include <qregexp.h>
 #include <qheader.h>
 #include <qlayout.h>
+#include <qlayout.h>
 
 #include <kdebug.h>
 #include <kcursor.h>
@@ -31,6 +32,8 @@
 #include <klistview.h>
 #include <kiconloader.h>
 #include <kdialogbase.h>
+#include <kpushbutton.h>
+#include <kguiitem.h>
 
 using namespace KexiUtils;
 
@@ -234,18 +237,29 @@ QWidget *KexiUtils::createDebugWindow(QWidget *parent)
 
 void KexiUtils::addDBCursorDebug(const QString& text)
 {
+	// (this is internal code - do not use i18n() here)
 	if (!debugWindowTab)
 		return;
 	if (!kexiDbCursorDebugPage) {
-		kexiDbCursorDebugPage = new KListView(debugWindowTab, "kexiDbCursorDebugPage");
+		QWidget *page = new QWidget(debugWindowTab);
+		QVBoxLayout *vbox = new QVBoxLayout(page);
+		QHBoxLayout *hbox = new QHBoxLayout(page);
+		vbox->addLayout(hbox);
+		hbox->addStretch(1);
+		KPushButton *btn_clear = new KPushButton(KGuiItem("Clear", "clear_left"), page);
+		hbox->addWidget(btn_clear);
+
+		kexiDbCursorDebugPage = new KListView(page, "kexiDbCursorDebugPage");
+		QObject::connect(btn_clear, SIGNAL(clicked()), kexiDbCursorDebugPage, SLOT(clear()));
+		vbox->addWidget(kexiDbCursorDebugPage);
 		kexiDbCursorDebugPage->addColumn("");
 		kexiDbCursorDebugPage->header()->hide();
 		kexiDbCursorDebugPage->setSorting(-1);
 		kexiDbCursorDebugPage->setAllColumnsShowFocus ( true );
 		kexiDbCursorDebugPage->setColumnWidthMode( 0, QListView::Maximum );
 		kexiDbCursorDebugPage->setRootIsDecorated( true );
-		debugWindowTab->addTab( kexiDbCursorDebugPage, "DB Cursors" );
-		debugWindowTab->showPage(kexiDbCursorDebugPage);
+		debugWindowTab->addTab( page, "DB Cursors" );
+		debugWindowTab->showPage(page);
 		kexiDbCursorDebugPage->show();
 	}
 	//add \n after (about) every 30 characters
@@ -257,29 +271,46 @@ void KexiUtils::addDBCursorDebug(const QString& text)
 
 void KexiUtils::addAlterTableActionDebug(const QString& text, int nestingLevel)
 {
+	// (this is internal code - do not use i18n() here)
 	if (!debugWindowTab)
 		return;
 	if (!kexiAlterTableActionDebugPage) {
-		kexiAlterTableActionDebugPage = new KListView(debugWindow, "kexiAlterTableActionDebugPage");
+		QWidget *page = new QWidget(debugWindowTab);
+		QVBoxLayout *vbox = new QVBoxLayout(page);
+		QHBoxLayout *hbox = new QHBoxLayout(page);
+		vbox->addLayout(hbox);
+		hbox->addStretch(1);
+		KPushButton *btn_clear = new KPushButton(KGuiItem("Clear", "clear_left"), page);
+		hbox->addWidget(btn_clear);
+		KPushButton *btn_sim = new KPushButton(KGuiItem("Simulate Execution", "exec"), page);
+		btn_sim->setName("simulateAlterTableExecution");
+		hbox->addWidget(btn_sim);
+
+		kexiAlterTableActionDebugPage = new KListView(page, "kexiAlterTableActionDebugPage");
+		QObject::connect(btn_clear, SIGNAL(clicked()), kexiAlterTableActionDebugPage, SLOT(clear()));
+		vbox->addWidget(kexiAlterTableActionDebugPage);
 		kexiAlterTableActionDebugPage->addColumn("");
 		kexiAlterTableActionDebugPage->header()->hide();
 		kexiAlterTableActionDebugPage->setSorting(-1);
 		kexiAlterTableActionDebugPage->setAllColumnsShowFocus ( true );
 		kexiAlterTableActionDebugPage->setColumnWidthMode( 0, QListView::Maximum );
 		kexiAlterTableActionDebugPage->setRootIsDecorated( true );
-		debugWindowTab->addTab( kexiAlterTableActionDebugPage, "AlterTable Actions" );
-		debugWindowTab->showPage(kexiAlterTableActionDebugPage);
-		kexiAlterTableActionDebugPage->show();
+		debugWindowTab->addTab( page, "AlterTable Actions" );
+		debugWindowTab->showPage(page);
+		page->show();
 	}
+	if (text.isEmpty()) //don't move up!
+		return;
 	KListViewItem * li;
-//	if (childOfPreviousItem) {
 	int availableNestingLevels = 0;
 	// compute availableNestingLevels
 	QListViewItem * lastItem = kexiAlterTableActionDebugPage->lastItem();
+	//kdDebug() << "lastItem: " << (lastItem ? lastItem->text(0) : QString::null) << endl;
 	while (lastItem) {
 		lastItem = lastItem->parent();
 		availableNestingLevels++;
 	}
+	//kdDebug() << "availableNestingLevels: " << availableNestingLevels << endl;
 	//go up (availableNestingLevels-levelsToGoUp) levels
 	lastItem = kexiAlterTableActionDebugPage->lastItem();
 	int levelsToGoUp = availableNestingLevels - nestingLevel;
@@ -287,16 +318,35 @@ void KexiUtils::addAlterTableActionDebug(const QString& text, int nestingLevel)
 		lastItem = lastItem->parent();
 		levelsToGoUp--;
 	}
-	if (lastItem)
-		li = new KListViewItem( lastItem, text ); //child
+	//kdDebug() << "lastItem2: " << (lastItem ? lastItem->text(0) : QString::null) << endl;
+	if (lastItem) {
+		QListViewItem *after = lastItem->firstChild(); //find last child so we can insert a new item after it
+		while (after && after->nextSibling())
+			after = after->nextSibling();
+		if (after)
+			li = new KListViewItem( lastItem, after, text ); //child, after
+		else
+			li = new KListViewItem( lastItem, text ); //1st child
+	}
 	else {
 		lastItem = kexiAlterTableActionDebugPage->lastItem();
 		while (lastItem && lastItem->parent())
 			lastItem = lastItem->parent();
+		//kdDebug() << "lastItem2: " << (lastItem ? lastItem->text(0) : QString::null) << endl;
 		li = new KListViewItem( kexiAlterTableActionDebugPage, lastItem, text ); //after
 	}
 	li->setOpen(true);
 	li->setMultiLinesEnabled( true );
+}
+
+void KexiUtils::connectPushButtonActionForDebugWindow(const char* actionName, 
+	const QObject *receiver, const char* slot)
+{
+	if (debugWindow) {
+		KPushButton* btn = findFirstChild<KPushButton>(debugWindow, "KPushButton", actionName);
+		if (btn)
+			QObject::connect(btn, SIGNAL(clicked()), receiver, slot);
+	}
 }
 
 #endif //KEXI_DEBUG_GUI

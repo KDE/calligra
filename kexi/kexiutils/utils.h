@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003-2005 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2006 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -53,13 +53,14 @@ namespace KexiUtils
 	}
 
 	//! \return first found child of \a o, that inherit \a className.
+	//! If objName is 0 (the default), all object names match. 
 	//! Returned pointer type is casted.
 	template<class type>
-	type* findFirstChild(QObject *o, const char* className)
+	type* findFirstChild(QObject *o, const char* className, const char* objName = 0)
 	{
 		if (!o || !className || className[0]=='\0')
 			return 0;
-		QObjectList *l = o->queryList( className );
+		QObjectList *l = o->queryList( className, objName );
 		QObjectListIt it( *l );
 		return static_cast<type*>(it.current());
 	}
@@ -163,6 +164,11 @@ namespace KexiUtils
 
 	//! Adds debug line for for Table Designer (Alter Table actions)
 	KEXIUTILS_EXPORT void addAlterTableActionDebug(const QString& text, int nestingLevel = 0);
+
+	//! Connects push button action to \a receiver and its \a slot. This allows to execute debug-related actions
+	//! using buttons displayed in the debug window.
+	KEXIUTILS_EXPORT void connectPushButtonActionForDebugWindow(const char* actionName, 
+		const QObject *receiver, const char* slot);
 #endif
 
 }
