@@ -1,11 +1,12 @@
 
 
-include_directories( ${CMAKE_SOURCE_DIR}/karbon ${CMAKE_SOURCE_DIR}/karbon/core ${KDE4_INCLUDES}  )
-
+include_directories( 
+		${CMAKE_SOURCE_DIR}/filters/liboofilter
+)
 
 ########### next target ###############
 
-set(oodrawimport_PART_SRCS oodrawimport.cc )
+set(oodrawimport_PART_SRCS oodrawimport.cc ${liboofilter_SRCS})
 
 kde4_automoc(${oodrawimport_PART_SRCS})
 
@@ -13,7 +14,7 @@ kde4_add_plugin(oodrawimport WITH_PREFIX ${oodrawimport_PART_SRCS})
 
 kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} oodrawimport )
 
-target_link_libraries(oodrawimport  ${KDE4_KDECORE_LIBS} oofilter karboncommon )
+target_link_libraries(oodrawimport  ${KDE4_KDECORE_LIBS}  karboncommon )
 
 install_targets(${PLUGIN_INSTALL_DIR} oodrawimport )
 

@@ -22,7 +22,7 @@
 #include <QPen>
 #include <QBrush>
 #include <q3ptrlist.h>
-#include <q3pointarray.h>
+#include <QPolygon>
 //Added by qt3to4:
 #include <Q3CString>
 #include <KoFilter.h>
@@ -67,7 +67,7 @@ private:
     int       mDpi;
     double    mScaleX;
     double    mScaleY;
-    Q3PtrList<Q3PointArray> mListPa;
+    Q3PtrList<QPolygon> mListPa;
 };
 
 #endif

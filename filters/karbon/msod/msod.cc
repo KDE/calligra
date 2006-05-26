@@ -456,7 +456,7 @@ void Msod::invokeHandler(
             QDataStream *body;
 
             operands.readRawBytes(record->data(), bytes);
-            body = new QDataStream(*record, QIODevice::ReadOnly);
+            body = new QDataStream(record, QIODevice::ReadOnly);
             body->setByteOrder(QDataStream::LittleEndian);
             (this->*result)(op, bytes, *body);
             delete body;
@@ -745,7 +745,7 @@ void Msod::opBse(Header &op, quint32, QDataStream &operands)
         {
             QByteArray bytes;
             bytes.setRawData(m_delayStream + data.foDelay, data.size);
-            QDataStream stream(bytes, QIODevice::ReadOnly);
+            QDataStream stream(&bytes, QIODevice::ReadOnly);
             stream.setByteOrder(QDataStream::LittleEndian);
             walk(data.size, stream);
             bytes.resetRawData(m_delayStream + data.foDelay, data.size);
@@ -962,7 +962,7 @@ void Msod::opSpcontainer(Header &, quint32 bytes, QDataStream &operands)
     QByteArray  a;
 
     a.setRawData(m_shape.data, m_shape.length);
-    QDataStream s(a, QIODevice::ReadOnly);
+    QDataStream s(&a, QIODevice::ReadOnly);
     s.setByteOrder(QDataStream::LittleEndian); // Great, I love Qt !
     drawShape(m_shape.type, m_shape.length, s);
     a.resetRawData(m_shape.data, m_shape.length);
@@ -1189,7 +1189,7 @@ void Msod::Options::walk(quint32 bytes, QDataStream &operands)
                     {
                         QByteArray  a;
                         a.setRawData(image->data, image->length);
-                        QDataStream s(a, QIODevice::ReadOnly);
+                        QDataStream s(&a, QIODevice::ReadOnly);
                         m_parent.KWmf::parse(s, image->length);
                         a.resetRawData(image->data, image->length);
                     }

@@ -37,8 +37,7 @@ K_EXPORT_COMPONENT_FACTORY( libmsodimport, MSODImportFactory( "kofficefilters" )
 const int MSODImport::s_area = 30505;
 
 MSODImport::MSODImport(
-    KoFilter *,
-    const char *,
+    QObject *,
     const QStringList&) :
         KoEmbeddingFilter(), Msod(100)
 {
@@ -212,7 +211,7 @@ void MSODImport::gotPicture(
 
 void MSODImport::gotPolygon(
     const DrawContext &dc,
-    const Q3PointArray &points)
+    const QPolygon &points)
 {
     kDebug(s_area) << "MSODImport::gotPolygon" << endl;
     kDebug(s_area) << QString::number(dc.m_penWidth, 16) << endl;
@@ -243,7 +242,7 @@ void MSODImport::gotPolygon(
 
 void MSODImport::gotPolyline(
     const DrawContext &dc,
-    const Q3PointArray &points)
+    const QPolygon &points)
 {
 	kDebug(s_area) << "MSODImport::gotPolyline" << endl;
 	return; // ### TODO
@@ -258,7 +257,7 @@ void MSODImport::gotPolyline(
 
 void MSODImport::gotRectangle(
     const DrawContext &dc,
-    const Q3PointArray &points)
+    const QPolygon &points)
 {
 // ### TODO
 #if 0

@@ -36,8 +36,7 @@ class MSODImport :
 
 public:
     MSODImport(
-        KoFilter *parent,
-        const char *name,
+        QObject *parent,
         const QStringList&);
     virtual ~MSODImport();
 
@@ -59,13 +58,13 @@ protected:
         const char *data);
     virtual void gotPolygon(
         const DrawContext &dc,
-        const Q3PointArray &points);
+        const QPolygon &points);
     virtual void gotPolyline(
         const DrawContext &dc,
-        const Q3PointArray &points);
+        const QPolygon &points);
     virtual void gotRectangle(
         const DrawContext &dc,
-        const Q3PointArray &points);
+        const QPolygon &points);
 
 signals:
     // Communication signals to the parent filters

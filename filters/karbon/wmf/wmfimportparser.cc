@@ -120,9 +120,6 @@ void WMFImportParser::setBackgroundMode( Qt::BGMode mode ) {
 }
 
 
-void WMFImportParser::setRasterOp( Qt::RasterOp  ) {
-}
-
 
 void WMFImportParser::setWindowOrg( int left, int top ) {
     mCurrentOrg.setX( left );
@@ -245,7 +242,7 @@ void WMFImportParser::drawChord( int x, int y, int w, int h, int aStart, int aLe
 }
 
 
-void WMFImportParser::drawPolyline( const Q3PointArray &pa ) {
+void WMFImportParser::drawPolyline( const QPolygon &pa ) {
     VPath *polyline = new VPath( mDoc );
     appendPen( *polyline );
     appendPoints( *polyline, pa );
@@ -254,7 +251,7 @@ void WMFImportParser::drawPolyline( const Q3PointArray &pa ) {
 }
 
 
-void WMFImportParser::drawPolygon( const Q3PointArray &pa, bool ) {
+void WMFImportParser::drawPolygon( const QPolygon &pa, bool ) {
     VPath *polygon = new VPath( mDoc );
     appendPen( *polygon );
     appendBrush( *polygon );
@@ -265,7 +262,7 @@ void WMFImportParser::drawPolygon( const Q3PointArray &pa, bool ) {
 }
 
 
-void WMFImportParser::drawPolyPolygon( Q3PtrList<Q3PointArray>& listPa, bool ) {
+void WMFImportParser::drawPolyPolygon( Q3PtrList<QPolygon>& listPa, bool ) {
     VPath *path = new VPath( mDoc );
     
     if ( listPa.count() > 0 ) {
@@ -361,6 +358,10 @@ void WMFImportParser::appendBrush( VObject& obj )
     obj.setFill( fill );
 }
 
+void  WMFImportParser::setCompositionMode( QPainter::CompositionMode )
+{
+		//TODO
+}
 
 void WMFImportParser::appendPoints(VPath &path, const Q3PointArray& pa)
 {

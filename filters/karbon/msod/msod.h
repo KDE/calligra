@@ -1,5 +1,3 @@
-//Added by qt3to4:
-#include <Q3PointArray>
 /*
     Copyright (C) 2000, S.R.Haque <shaheedhaque@hotmail.com>.
     This file is part of the KDE project
@@ -34,6 +32,7 @@ class QString;
 class Q3PointArray;
 #include <kwmf.h>
 #include <q3ptrvector.h>
+#include <QPolygon>
 
 class Msod :
     private KWmf
@@ -88,13 +87,13 @@ protected:
         const char *data) = 0;
     virtual void gotPolygon(
         const DrawContext &dc,
-        const Q3PointArray &points) = 0;
+        const QPolygon &points) = 0;
     virtual void gotPolyline(
         const DrawContext &dc,
-        const Q3PointArray &points) = 0;
+        const QPolygon &points) = 0;
     virtual void gotRectangle(
         const DrawContext &dc,
-        const Q3PointArray &points) = 0;
+        const QPolygon &points) = 0;
 
 private:
     Msod(const Msod &);

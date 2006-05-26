@@ -36,7 +36,7 @@ typedef KGenericFactory<WMFImport> WMFImportFactory;
 K_EXPORT_COMPONENT_FACTORY( libwmfimport, WMFImportFactory( "kofficefilters" ) )
 
 
-WMFImport::WMFImport( KoFilter *, const char *, const QStringList&) :
+WMFImport::WMFImport( QObject *parent, const QStringList&) :
         KoFilter(parent)
 {
 }
@@ -67,7 +67,7 @@ KoFilter::ConversionStatus WMFImport::convert( const QByteArray& from, const QBy
         return KoFilter::StorageCreationError;
     }
     QDomDocument outdoc = document.saveXML();
-    Q3CString content = outdoc.toCString();
+    QByteArray content = outdoc.toByteArray();
     // kDebug() << " content : " << content << endl;
     out->write( content , content.length() );
 

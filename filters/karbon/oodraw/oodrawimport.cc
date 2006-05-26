@@ -53,7 +53,7 @@ typedef KGenericFactory<OoDrawImport> OoDrawImportFactory;
 K_EXPORT_COMPONENT_FACTORY( liboodrawimport, OoDrawImportFactory( "kofficefilters" ) )
 
 
-OoDrawImport::OoDrawImport( KoFilter *, const char *, const QStringList & )
+OoDrawImport::OoDrawImport( QObject *parent, const QStringList & )
     : KoFilter(parent),
       m_styles( 23, true ),
       m_styleStack( ooNS::style, ooNS::fo )
@@ -110,7 +110,7 @@ out->write( info , info.length() );
     KoStoreDevice* out = m_chain->storageFile( "documentinfo.xml", KoStore::Write );
     if( out )
     {
-        Q3CString info = docinfo.toCString();
+        QByteArray info = docinfo.toByteArray();
         //kDebug(30518) << " info :" << info << endl;
         // WARNING: we cannot use KoStore::write(const QByteArray&) because it gives an extra NULL character at the end.
         out->write( info , info.length() );
@@ -129,7 +129,7 @@ out->write( info , info.length() );
     out = m_chain->storageFile( "maindoc.xml", KoStore::Write );
     if( out )
     {
-        Q3CString content = outdoc.toCString();
+        QByteArray content = outdoc.toByteArray();
         kDebug() << " content :" << content << endl;
         out->write( content , content.length() );
     }

@@ -64,7 +64,8 @@ private:
     // Drawing attributes/modes
     void  setBackgroundColor( const QColor &c );
     void  setBackgroundMode( Qt::BGMode mode );
-    void  setRasterOp( Qt::RasterOp op );
+	
+	void  setCompositionMode( QPainter::CompositionMode );
 
     /**
      * Change logical Coordinate
@@ -90,13 +91,13 @@ private:
     void  drawArc( int x, int y, int w, int h, int a, int alen );
     void  drawPie( int x, int y, int w, int h, int a, int alen );
     void  drawChord( int x, int y, int w, int h, int a, int alen );
-    void  drawPolyline( const Q3PointArray &pa );
-    void  drawPolygon( const Q3PointArray &pa, bool winding=FALSE );
+    void  drawPolyline( const QPolygon &pa );
+    void  drawPolygon( const QPolygon &pa, bool winding=FALSE );
     /**
      * drawPolyPolygon draw the XOR of a list of polygons
      * listPa : list of polygons
      */
-    void  drawPolyPolygon( Q3PtrList<Q3PointArray>& listPa, bool winding=FALSE );
+    void  drawPolyPolygon( Q3PtrList<QPolygon>& listPa, bool winding=FALSE );
     void  drawImage( int x, int y, const QImage &, int sx = 0, int sy = 0, int sw = -1, int sh = -1 );
 
     // Text drawing 

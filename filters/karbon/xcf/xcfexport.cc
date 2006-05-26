@@ -45,7 +45,7 @@ typedef KGenericFactory<XcfExport> XcfExportFactory;
 K_EXPORT_COMPONENT_FACTORY( libkarbonxcfexport, XcfExportFactory( "kofficefilters" ) )
 
 
-XcfExport::XcfExport( KoFilter*, const char*, const QStringList& )
+XcfExport::XcfExport( QObject*parent, const QStringList& )
 	: KoFilter(parent)
 {
 	m_zoomX = 1.0;

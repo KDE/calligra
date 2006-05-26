@@ -41,7 +41,7 @@
 typedef KGenericFactory<KontourImport> KontourImportFactory;
 K_EXPORT_COMPONENT_FACTORY( libkarbonkontourimport, KontourImportFactory( "kofficefilters" ) )
 
-KontourImport::KontourImport(KoFilter *, const char *, const QStringList&) :
+KontourImport::KontourImport(QObject *parent, const QStringList&) :
     KoFilter(parent),
     outdoc( "DOC" )
 {
@@ -77,7 +77,7 @@ KoFilter::ConversionStatus KontourImport::convert(const QByteArray& from, const 
 		kError(30502) << "Unable to open output file!" << endl;
 		return KoFilter::StorageCreationError;
 	}
-	Q3CString cstring = outdoc.toCString(); // utf-8 already
+	QByteArray cstring = outdoc.toByteArray(); // utf-8 already
 	out->write( cstring.data(), cstring.length() );
 
 	return KoFilter::OK; // was successful

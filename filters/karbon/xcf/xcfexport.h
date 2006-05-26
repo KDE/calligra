@@ -38,7 +38,7 @@ class XcfExport : public KoFilter, private VVisitor
 	Q_OBJECT
 
 public:
-	XcfExport( KoFilter* parent, const char* name, const QStringList& );
+	XcfExport( QObject* parent, const QStringList& );
 	virtual ~XcfExport() {}
 
 	virtual KoFilter::ConversionStatus convert( const QByteArray& from, const QByteArray& to );
