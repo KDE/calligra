@@ -26,6 +26,7 @@
 #include <kdebug.h>
 #include <qgroupbox.h>
 #include <QLabel>
+#include <QHBoxLayout>
 
 #include <knuminput.h>
 
@@ -59,11 +60,15 @@ VRoundCornersDlg::VRoundCornersDlg( QWidget* parent, const char* name )
 	: KDialogBase( parent, name, true,  i18n( "Polygonize" ), Ok | Cancel  )
 {
 	// add input:
-/* TODO needs porting (parent of QGroubBox)
-	QGroupBox* group = new QGroupBox( 2, Qt::Horizontal, i18n( "Properties" ), this );
+	QGroupBox* group = new QGroupBox( i18n( "Properties" ), this );
 
-	new QLabel( i18n( "Round corners:" ), group );
+	QHBoxLayout* layout = new QHBoxLayout;
+
+	layout->addWidget(new QLabel( i18n( "Round corners:" )));
 	m_radius = new KDoubleNumInput( group );
+	layout->addWidget(m_radius);
+
+	group->setLayout(layout);
 	group->setMinimumWidth( 300 );
 
 	// signals and slots:
@@ -72,7 +77,6 @@ VRoundCornersDlg::VRoundCornersDlg( QWidget* parent, const char* name )
 
 	setMainWidget( group );
 	setFixedSize( baseSize() );
-*/
 }
 
 double

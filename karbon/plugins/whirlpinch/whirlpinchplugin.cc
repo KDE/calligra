@@ -32,6 +32,7 @@
 
 #include <qgroupbox.h>
 #include <QLabel>
+#include <QGridLayout>
 
 #include <knuminput.h>
 
@@ -62,15 +63,23 @@ VWhirlPinchDlg::VWhirlPinchDlg( QWidget* parent, const char* name )
 	: KDialogBase( parent, name, true, i18n( "Whirl Pinch" ), Ok | Cancel )
 {
 	// add input fields:
-/* TODO needs porting: parent of qgroupbox
-	QGroupBox* group = new QGroupBox( 2, Qt::Horizontal, i18n( "Properties" ), this );
+	QGroupBox* group = new QGroupBox( i18n( "Properties" ), this );
 
-	new QLabel( i18n( "Angle:" ), group );
+	QGridLayout* layout = new QGridLayout;
+
+	layout->addWidget(new QLabel( i18n( "Angle:" )), 0, 0);
 	m_angle = new KDoubleNumInput( group );
-	new QLabel( i18n( "Pinch:" ), group );
+	layout->addWidget(m_angle, 0, 1);
+
+	layout->addWidget(new QLabel( i18n( "Pinch:" )), 1, 0);
 	m_pinch = new KDoubleNumInput( group );
-	new QLabel( i18n( "Radius:" ), group );
+	layout->addWidget(m_pinch, 1, 1);
+
+	layout->addWidget(new QLabel( i18n( "Radius:" )), 2, 0);
 	m_radius = new KDoubleNumInput( group );
+	layout->addWidget(m_radius, 2, 1);
+
+	group->setLayout(layout);
 	group->setMinimumWidth( 300 );
 
 	// signals and slots:
@@ -78,7 +87,7 @@ VWhirlPinchDlg::VWhirlPinchDlg( QWidget* parent, const char* name )
 	connect( this, SIGNAL( cancelClicked() ), this, SLOT( reject() ) );
 
 	setMainWidget( group );
-	setFixedSize( baseSize() );*/
+	setFixedSize( baseSize() );
 }
 
 double

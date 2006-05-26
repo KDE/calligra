@@ -25,6 +25,7 @@
 #include <kdebug.h>
 #include <qgroupbox.h>
 #include <QLabel>
+#include <QHBoxLayout>
 
 #include <knuminput.h>
 #include <commands/vflattencmd.h>
@@ -56,10 +57,15 @@ VFlattenDlg::VFlattenDlg( QWidget* parent, const char* name )
 	: KDialogBase( parent, name, true,  i18n( "Flatten Path" ), Ok | Cancel )
 {
 	// add input fields on the left:
-	/* TODO needs porting
-	QGroupBox* group = new QGroupBox( 2, Qt::Horizontal, i18n( "Properties" ), this );
-	new QLabel( i18n( "Flatness:" ), group );
-	m_flatness = new KDoubleNumInput( group );
+	QGroupBox* group = new QGroupBox( i18n( "Properties" ), this );
+
+	QHBoxLayout* layout = new QHBoxLayout;
+
+	layout->addWidget(new QLabel( i18n( "Flatness:" )));
+	m_flatness = new KDoubleNumInput(group);
+	layout->addWidget(m_flatness);
+
+	group->setLayout(layout);
 	group->setMinimumWidth( 300 );
 
 	// signals and slots:
@@ -67,7 +73,7 @@ VFlattenDlg::VFlattenDlg( QWidget* parent, const char* name )
 	connect( this, SIGNAL( cancelClicked() ), this, SLOT( reject() ) );
 
 	setMainWidget( group );
-	setFixedSize( baseSize() );*/
+	setFixedSize( baseSize() );
 }
 
 double

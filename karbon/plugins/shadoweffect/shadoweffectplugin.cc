@@ -25,6 +25,7 @@
 #include <kdebug.h>
 #include <qgroupbox.h>
 #include <QLabel>
+#include <QGridLayout>
 
 #include <knuminput.h>
 #include <core/vgroup.h>
@@ -61,20 +62,29 @@ VShadowEffectDlg::VShadowEffectDlg( QWidget* parent, const char* name )
 	: KDialogBase( parent, name, true,  i18n( "Create Shadow Effect" ), Ok | Cancel )
 {
 	// add input fields on the left:
-/* TODO qgroupbox needs porting/fixing -> parent
-	QGroupBox* group = new QGroupBox( 2, Qt::Horizontal, i18n( "Properties" ), this );
-	new QLabel( i18n( "Distance:" ), group );
+	QGroupBox* group = new QGroupBox( i18n( "Properties" ), this );
+
+	QGridLayout* layout = new QGridLayout;
+
+	layout->addWidget(new QLabel( i18n( "Distance:" )), 0, 0);
 	m_distance = new KIntNumInput( group );
 	m_distance->setRange( -1000, 1000, 1, true );
 	m_distance->setValue( 2 );
-	new QLabel( i18n( "Angle:" ), group );
+	layout->addWidget(m_distance, 0, 1);
+
+	layout->addWidget(new QLabel( i18n( "Angle:" )), 1, 0);
 	m_angle = new KIntNumInput( group );
 	m_angle->setRange( 0, 360, 10, true );
 	m_angle->setValue( 0 );
-	new QLabel( i18n( "Opacity:" ), group );
+	layout->addWidget(m_angle, 1, 1);
+
+	layout->addWidget(new QLabel( i18n( "Opacity:" )), 2, 0);
 	m_opacity = new KIntNumInput( group );
 	m_opacity->setRange( 0, 100, 1, true );
 	m_opacity->setValue( 100 );
+	layout->addWidget(m_opacity, 2, 1);
+
+	group->setLayout(layout);
 	group->setMinimumWidth( 300 );
 	m_opacity->setSuffix(i18n("%"));
 
@@ -82,7 +92,7 @@ VShadowEffectDlg::VShadowEffectDlg( QWidget* parent, const char* name )
 	connect( this, SIGNAL( okClicked() ), this, SLOT( accept() ) );
 	connect( this, SIGNAL( cancelClicked() ), this, SLOT( reject() ) );
 
-	setMainWidget( group );*/
+	setMainWidget( group );
 }
 
 void
