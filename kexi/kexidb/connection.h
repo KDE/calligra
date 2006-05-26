@@ -1074,10 +1074,18 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		 Only works if connection is not yet established. */
 		void setReadOnly(bool set);
 
-		/*! @internal used by Driver::createConnection(). 
-		 Load extended schema information for table \a t, 
-		 if present (see ExtendedTableSchemaInformation in Kexi Wiki). */
-		bool loadExtendedTableSchemaData(TableSchema& t);
+		/*! Loads extended schema information for table \a tableSchema, 
+		 if present (see ExtendedTableSchemaInformation in Kexi Wiki). 
+		 \return true on success */
+		bool loadExtendedTableSchemaData(TableSchema& tableSchema);
+
+		/*! Stores extended schema information for table \a tableSchema, 
+		 (see ExtendedTableSchemaInformation in Kexi Wiki). 
+		 The action is performed within the current transaction, 
+		 so it's up to you to commit. 
+		 Used, e.g. by createTable(), within its transaction.
+		 \return true on success */
+		bool storeExtendedTableSchemaData(TableSchema& tableSchema);
 
 		QPointer<ConnectionData> m_data;
 		QString m_name;
