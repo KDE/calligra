@@ -47,7 +47,7 @@ class CommandHistory : public KCommandHistory
 	public:
 		CommandHistory(KActionCollection *actionCollection, bool withMenus = true);
 
-		QPtrList<KCommand> commands() const { return m_commandsToUndo; }
+		const QPtrList<KCommand>& commands() const { return m_commandsToUndo; }
 
 		void addCommand(KCommand *command, bool execute = true);
 
@@ -65,7 +65,7 @@ class CommandHistory : public KCommandHistory
 class KexiTableDesignerViewPrivate
 {
 	public:
-		KexiTableDesignerViewPrivate(KexiTableDesignerView* dialog);
+		KexiTableDesignerViewPrivate(KexiTableDesignerView* aDesignerView);
 		~KexiTableDesignerViewPrivate();
 
 		int generateUniqueId();
@@ -104,7 +104,9 @@ class KexiTableDesignerViewPrivate
 		bool updatePropertiesVisibility(KexiDB::Field::Type fieldType, KoProperty::Set &set,
 			CommandGroup *commandGroup = 0);
 
-		KexiTableDesignerView* dlg;
+		QString messageForSavingChanges(bool &emptyTable);
+
+		KexiTableDesignerView* designerView;
 
 		KexiTableView *view; //!< helper
 

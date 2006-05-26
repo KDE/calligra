@@ -58,12 +58,14 @@ CommandHistory::CommandHistory(KActionCollection *actionCollection, bool withMen
 {
 }
 
-void CommandHistory::addCommand(KCommand *command, bool execute) {
+void CommandHistory::addCommand(KCommand *command, bool execute)
+{
 	KCommandHistory::addCommand(command, execute);
 	m_commandsToUndo.append(command);
 }
 
-void CommandHistory::undo() {
+void CommandHistory::undo()
+{
 	if (!m_commandsToUndo.isEmpty()) {
 		KCommand * cmd = m_commandsToUndo.take( m_commandsToUndo.count()-1 );
 		m_commandsToRedo.append( cmd );
@@ -71,7 +73,8 @@ void CommandHistory::undo() {
 	KCommandHistory::undo();
 }
 
-void CommandHistory::redo() {
+void CommandHistory::redo()
+{
 	if (!m_commandsToRedo.isEmpty()) {
 		KCommand * cmd = m_commandsToRedo.take( m_commandsToRedo.count()-1 );
 		m_commandsToUndo.append( cmd );
@@ -81,8 +84,8 @@ void CommandHistory::redo() {
 
 //----------------------------------------------
 
-KexiTableDesignerViewPrivate::KexiTableDesignerViewPrivate(KexiTableDesignerView* dialog)
- : dlg(dialog)
+KexiTableDesignerViewPrivate::KexiTableDesignerViewPrivate(KexiTableDesignerView* aDesignerView)
+ : designerView(aDesignerView)
  , sets(0)
  , dontAskOnStoreData(false)
  , slotTogglePrimaryKeyCalled(false)
@@ -139,7 +142,7 @@ void KexiTableDesignerViewPrivate::setPropertyValueIfNeeded( const KoProperty::S
 		property.setValue( newValue, rememberOldValue );
 	if (commandGroup) {
 		commandGroup->addCommand(
-			new ChangeFieldPropertyCommand( dlg, set, propertyName, oldValue, newValue,
+			new ChangeFieldPropertyCommand( designerView, set, propertyName, oldValue, newValue,
 				oldListData, property.listData()) );
 	}
 	delete oldListData;
@@ -153,7 +156,7 @@ void KexiTableDesignerViewPrivate::setVisibilityIfNeeded( const KoProperty::Set&
 	if (prop->isVisible() != visible) {
 		if (commandGroup) {
 			commandGroup->addCommand( 
-				new ChangePropertyVisibilityCommand( dlg, set, prop->name(), visible ) );
+				new ChangePropertyVisibilityCommand( designerView, set, prop->name(), visible ) );
 		}
 		prop->setVisible( visible );
 		changed = true;
@@ -219,6 +222,17 @@ bool KexiTableDesignerViewPrivate::updatePropertiesVisibility(KexiDB::Field::Typ
 	setVisibilityIfNeeded( set, prop, visible, changed, commandGroup );
 
 	return changed;
+}
+
+QString KexiTableDesignerViewPrivate::messageForSavingChanges(bool &emptyTable)
+{
+	KexiDB::Connection *conn = designerView->mainWin()->project()->dbConnection();
+	bool ok;
+	emptyTable = conn->isEmpty( *designerView->tempData()->table, ok ) && ok;
+	return i18n("Do you want to save the design now?")
+	+ ( emptyTable ? QString::null :
+		(QString("\n\n") + designerView->part()->i18nMessage(":additional message before saving design", 
+		designerView->parentDialog())) );
 }
 
 #include "kexitabledesignerview_p.moc"

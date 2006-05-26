@@ -147,6 +147,12 @@ KexiTableDesignerView::KexiTableDesignerView(KexiMainWindow *win, QWidget *paren
 	setAvailable("edit_redo", false);
 	connect(d->history, SIGNAL(commandExecuted(KCommand*)), this, SLOT(slotCommandExecuted(KCommand*)));
 #endif
+
+#ifdef KEXI_DEBUG_GUI
+	KexiUtils::addAlterTableActionDebug(QString::null); //to create the tab
+	KexiUtils::connectPushButtonActionForDebugWindow( 
+		"simulateAlterTableExecution", this, SLOT(slotSimulateAlterTableExecution()));
+#endif
 }
 
 KexiTableDesignerView::~KexiTableDesignerView()
@@ -460,17 +466,6 @@ void KexiTableDesignerView::switchPrimaryKey(KoProperty::Set &propertySet,
 	propertyBufferSwitched();
 }*/
 
-QString KexiTableDesignerView::messageForSavingChanges(bool &emptyTable)
-{
-	KexiDB::Connection *conn = mainWin()->project()->dbConnection();
-	bool ok;
-	emptyTable = conn->isEmpty( *tempData()->table, ok ) && ok;
-	return i18n("Do you want to save the design now?")
-	+ ( emptyTable ? QString::null :
-		(QString("\n\n") + part()->i18nMessage(":additional message before saving design", parentDialog())) );
-//		QString("\n\n") + i18n("Note: This table is already filled with data which will be removed.") );
-}
-
 tristate KexiTableDesignerView::beforeSwitchTo(int mode, bool &dontStore)
 {
 	if (!d->view->acceptRowEdit())
@@ -495,7 +490,7 @@ tristate KexiTableDesignerView::beforeSwitchTo(int mode, bool &dontStore)
 			bool emptyTable;
 			int r = KMessageBox::warningYesNoCancel(this,
 				i18n("Saving changes for existing table design is now required.")
-				+"\n"+messageForSavingChanges(emptyTable), QString::null,
+				+ "\n" + d->messageForSavingChanges(emptyTable), QString::null,
 				KStdGuiItem::save(), KStdGuiItem::discard(), QString::null, 
 				KMessageBox::Notify|KMessageBox::Dangerous);
 			if (r == KMessageBox::Cancel)
@@ -569,6 +564,10 @@ void KexiTableDesignerView::slotBeforeCellChanged(
 				QString oldName( propertySetForItem->property("name").value().toString() );
 				QString oldCaption( propertySetForItem->property("caption").value().toString() );
 
+				//we need to create the action now as set["name"] will be changed soon..
+				ChangeFieldPropertyCommand *changeCaptionCommand
+					= new ChangeFieldPropertyCommand( this, *propertySetForItem, "caption", oldCaption, newValue);
+
 				//update field caption and name
 				propertySetForItem->changeProperty("caption", newValue);
 				propertySetForItem->changeProperty("name", newValue); // "name" prop. is of custom type Identifier, so this assignment 
@@ -579,10 +578,10 @@ void KexiTableDesignerView::slotBeforeCellChanged(
 					i18n("Change \"%1\" field's name to \"%2\" and caption from \"%3\" to \"%4\"")
 						.arg(oldName).arg(propertySetForItem->property("name").value().toString())
 						.arg(oldCaption).arg(newValue.toString() ));
-				changeCaptionAndNameCommand->addCommand(
-					new ChangeFieldPropertyCommand( this, *propertySetForItem,
-							"caption", oldCaption, newValue)
-				);
+				changeCaptionAndNameCommand->addCommand( changeCaptionCommand );
+//					new ChangeFieldPropertyCommand( this, *propertySetForItem,
+	//						"caption", oldCaption, newValue)
+		//		);
 				changeCaptionAndNameCommand->addCommand(
 					new ChangeFieldPropertyCommand( this, *propertySetForItem,
 							"name", oldName, propertySetForItem->property("name").value().toString())
@@ -982,6 +981,51 @@ void KexiTableDesignerView::slotAboutToDeleteRow(
 	}
 }
 
+KexiDB::Field * KexiTableDesignerView::buildField( const KoProperty::Set &set )
+{
+	kexipluginsdbg << set["subType"].value().toString() << endl;
+	QString subTypeString( set["subType"].value().toString() );
+	KexiDB::Field::Type type = KexiDB::Field::typeForString(subTypeString);
+	if (type <= (int)KexiDB::Field::InvalidType || type > (int)KexiDB::Field::LastType) {//for sanity
+		type = KexiDB::Field::Text;
+		kexipluginswarn << "KexiTableDesignerView::buildSchema(): invalid type " << type 
+			<< ", moving back to Text type" << endl;
+	}
+
+	uint constraints = 0;
+	uint options = 0;
+	if (set["primaryKey"].value().toBool())
+		constraints |= KexiDB::Field::PrimaryKey;
+	if (set["autoIncrement"].value().toBool() && KexiDB::Field::isAutoIncrementAllowed(type))
+		constraints |= KexiDB::Field::AutoInc;
+	if (set["unique"].value().toBool())
+		constraints |= KexiDB::Field::Unique;
+	if (set["notnull"].value().toBool())
+		constraints |= KexiDB::Field::NotNull;
+	if (!set["allowEmpty"].value().toBool())
+		constraints |= KexiDB::Field::NotEmpty;
+
+	if (set["unsigned"].value().toBool())
+		options |= KexiDB::Field::Unsigned;
+
+	KexiDB::Field *f = new KexiDB::Field(
+		set["name"].value().toString(),
+		type,
+		constraints,
+		options,
+		set["length"].value().toInt(),
+		set["precision"].value().toInt(),
+		set["defaultValue"].value(),
+		set["caption"].value().toString(),
+		set["description"].value().toString(),
+		set["width"].value().toInt()
+	);
+	if (KexiDB::supportsVisibleDecimalPlacesProperty(f->type()) && set.contains("visibleDecimalPlaces"))
+		f->setVisibleDecimalPlaces(set["visibleDecimalPlaces"].value().toInt());
+
+	return f;
+}
+
 tristate KexiTableDesignerView::buildSchema(KexiDB::TableSchema &schema)
 {
 	if (!d->view->acceptRowEdit())
@@ -1085,66 +1129,45 @@ tristate KexiTableDesignerView::buildSchema(KexiDB::TableSchema &schema)
 			KoProperty::Set *s = d->sets->at(i);
 			if (!s)
 				continue;
-			KoProperty::Set &set = *s;
-
-			kexipluginsdbg << set["subType"].value().toString() << endl;
-//			int i_type = set["type"].value().toInt();
-			QString subTypeString( set["subType"].value().toString() );
-/*			if (type == (int)KexiDB::Field::BLOB) {
-//! @todo hardcoded! image is the only subtype for now
-			}
-			else {
-				QString subTypeString = set["subType"].value().toString();
-				KexiDB::Field::Type type = KexiDB::Field::typeForString(subTypeString);
-			}*/
-			KexiDB::Field::Type type = KexiDB::Field::typeForString(subTypeString);
-//			KexiDB::Field::Type type;
-			if (type <= (int)KexiDB::Field::InvalidType || type > (int)KexiDB::Field::LastType) {//for sanity
-				type = KexiDB::Field::Text;
-				kexipluginswarn << "KexiTableDesignerView::buildSchema(): invalid type " << type 
-					<< ", moving back to Text type" << endl;
-			}
-//			else 
-//				type = (KexiDB::Field::Type)i_type;
-
-			uint constraints = 0;
-			uint options = 0;
-			if (set["primaryKey"].value().toBool())
-				constraints |= KexiDB::Field::PrimaryKey;
-			if (set["autoIncrement"].value().toBool() && KexiDB::Field::isAutoIncrementAllowed(type))
-				constraints |= KexiDB::Field::AutoInc;
-			if (set["unique"].value().toBool())
-				constraints |= KexiDB::Field::Unique;
-			if (set["notnull"].value().toBool())
-				constraints |= KexiDB::Field::NotNull;
-			if (!set["allowEmpty"].value().toBool())
-				constraints |= KexiDB::Field::NotEmpty;
-
-			if (set["unsigned"].value().toBool())
-				options |= KexiDB::Field::Unsigned;
-
-	//		int type = set["type"].value().toInt();
-	//		if (type < 0 || type > (int)KexiDB::Field::LastType)
-	//			type = KexiDB::Field::Text;
-
-			KexiDB::Field *f = new KexiDB::Field(
-				set["name"].value().toString(),
-				type,
-				constraints,
-				options,
-				set["length"].value().toInt(),
-				set["precision"].value().toInt(),
-				set["defaultValue"].value(),
-				set["caption"].value().toString(),
-				set["description"].value().toString(),
-				set["width"].value().toInt()
-			);
-			if (KexiDB::supportsVisibleDecimalPlacesProperty(f->type()) && set.contains("visibleDecimalPlaces"))
-				f->setVisibleDecimalPlaces(set["visibleDecimalPlaces"].value().toInt());
+			KexiDB::Field * f = buildField( *s );
+			if (!f)
+				continue;
 			schema.addField(f);
 		}
 	}
 	return res;
+}
+
+//! @internal
+//! A recursive function for copying alter table actions from undo/redo commands.
+static void copyAlterTableActions(KCommand* command, KexiDB::AlterTableHandler::ActionList &actions)
+{
+	CommandGroup* cmdGroup = dynamic_cast<CommandGroup*>( command );
+	if (cmdGroup) {//command group: flatten it
+		for (QPtrListIterator<KCommand> it(cmdGroup->commands()); it.current(); ++it)
+			copyAlterTableActions(it.current(), actions);
+		return;
+	}
+	Command* cmd = dynamic_cast<Command*>( command );
+	if (!cmd) {
+		kexipluginswarn << "KexiTableDesignerView::buildAlterTableActions(): cmd is not of type 'Command'!" << endl;
+		return;
+	}
+	KexiDB::AlterTableHandler::ActionBase* action = cmd->createAction();
+	//some commands can contain null actions, e.g. "set visibility" command
+	if (action)
+		actions.append( action );
+}
+
+tristate KexiTableDesignerView::buildAlterTableActions(KexiDB::AlterTableHandler::ActionList &actions)
+{
+	actions.clear();
+	kexipluginsdbg << "KexiTableDesignerView::buildAlterTableActions(): " << d->history->commands().count()
+		<< " top-level command(s) to process..." << endl;
+	for (QPtrListIterator<KCommand> it(d->history->commands()); it.current(); ++it) {
+		copyAlterTableActions(it.current(), actions);
+	}
+	return true;
 }
 
 KexiDB::SchemaData* KexiTableDesignerView::storeNewData(const KexiDB::SchemaData& sdata, bool &cancel)
@@ -1191,7 +1214,7 @@ tristate KexiTableDesignerView::storeData(bool dontAsk)
 	tristate res = true;
 	if (!d->dontAskOnStoreData && !dontAsk) {
 		bool emptyTable;
-		const QString msg = messageForSavingChanges(emptyTable);
+		const QString msg = d->messageForSavingChanges(emptyTable);
 		if (!emptyTable) {
 			if (KMessageBox::No == KMessageBox::questionYesNo(this, msg))
 				res = cancelled;
@@ -1203,16 +1226,27 @@ tristate KexiTableDesignerView::storeData(bool dontAsk)
 //		KMessageBox::information(this, i18n("Saving changes for existing table design is not yet supported."));
 //		cancel = true;
 
-	KexiDB::TableSchema *newTable = new KexiDB::TableSchema();
+	KexiDB::TableSchema *newTable = 0;
+	KexiDB::Connection *conn = mainWin()->project()->dbConnection();
+
+
+#ifdef KEXI_NO_UNDOREDO_ALTERTABLE
+	//keep old behaviour
+	newTable = new KexiDB::TableSchema();
 	//copy schema data
 	static_cast<KexiDB::SchemaData&>(*newTable) = static_cast<KexiDB::SchemaData&>(*tempData()->table);
 	res = buildSchema(*newTable);
-//	bool ok = buildSchema(*newTable, cancel) && !cancel;
 
 	kexipluginsdbg << "KexiTableDesignerView::storeData() : BUILD SCHEMA:" << endl;
 	newTable->debug();
+#else
+	KexiDB::AlterTableHandler::ActionList actions;
+	res = buildAlterTableActions( actions );
+//todo: result?
+	KexiDB::AlterTableHandler alterTableHandler( *conn );
+	alterTableHandler.setActions(actions);
+#endif
 
-	KexiDB::Connection *conn = mainWin()->project()->dbConnection();
 	if (res) {
 		res = KexiTablePart::askForClosingObjectsUsingTableSchema(
 			this, *conn, *tempData()->table,
@@ -1221,19 +1255,47 @@ tristate KexiTableDesignerView::storeData(bool dontAsk)
 			.arg(tempData()->table->name()));
 	}
 	if (res) {
+#ifdef KEXI_NO_UNDOREDO_ALTERTABLE
+		//keep old behaviour
 		res = conn->alterTable(*tempData()->table, *newTable);
 		if (!res)
 			parentDialog()->setStatus(conn, "");
-	}
-	if (res) {
-		//change current schema
-		tempData()->table = newTable;
-		tempData()->tableSchemaChangedInPreviousView = true;
-	}
-	else {
-		delete newTable;
+		if (res) {
+			//change current schema
+			tempData()->table = newTable;
+			tempData()->tableSchemaChangedInPreviousView = true;
+		}
+		else {
+			delete newTable;
+		}
+#else
+		res = alterTableHandler.execute(tempData()->table->name());
+		if (!res)
+			parentDialog()->setStatus(&alterTableHandler, "");
+//todo: result?
+#endif
 	}
 	return res;
+}
+
+void KexiTableDesignerView::slotSimulateAlterTableExecution()
+{
+#ifndef KEXI_NO_UNDOREDO_ALTERTABLE
+# ifdef KEXI_DEBUG_GUI
+	if (mainWin()->activeWindow() != parentDialog()) //to avoid executing for multiple alter table views
+		return;
+	if (!tempData()->table || !m_dialog->schemaData())
+		return;
+	KexiDB::Connection *conn = mainWin()->project()->dbConnection();
+	KexiDB::AlterTableHandler::ActionList actions;
+	tristate res = buildAlterTableActions( actions );
+//todo: result?
+	KexiDB::AlterTableHandler alterTableHandler( *conn );
+	alterTableHandler.setActions(actions);
+
+	res = alterTableHandler.execute(tempData()->table->name(), /*simulate*/true);
+# endif
+#endif
 }
 
 KexiTablePart::TempData* KexiTableDesignerView::tempData() const
