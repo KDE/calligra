@@ -23,6 +23,9 @@
 #include "connection.h"
 
 #include <qvaluelist.h>
+#include <qasciidict.h>
+
+#include <kdebug.h>
 
 namespace KexiDB
 {
@@ -88,16 +91,16 @@ class ConnectionData;
   AlterTable::ActionList list;
 
   // 1. rename the "city" field to "town"
-  list << ChangeFieldPropertyAction("city", "name", "town")
+  list << new ChangeFieldPropertyAction("city", "name", "town")
 
   // 2. change type of "town" field to "LongText"
-    << ChangeFieldPropertyAction("town", "type", "LongText")
+    << new ChangeFieldPropertyAction("town", "type", "LongText")
 
   // 3. set caption of "town" field to "Town"
-    << ChangeFieldPropertyAction("town", "caption", "Town")
+    << new ChangeFieldPropertyAction("town", "caption", "Town")
 
   // 4. set visible decimal places to 4 for "cost" field
-    << ChangeFieldPropertyAction("cost", "visibleDecimalPlaces", 4)
+    << new ChangeFieldPropertyAction("cost", "visibleDecimalPlaces", 4)
 
   AlterTableHandler::execute( *conn );
 
@@ -113,6 +116,33 @@ class KEXI_DB_EXPORT AlterTableHandler : public Object
 		class InsertFieldAction;
 		class MoveFieldPositionAction;
 
+		//! Defines flags for possible altering requirements; can be combined.
+		enum AlteringRequirements {
+			/*! Physical table altering is required; e.g. ALTER TABLE ADD COLUMN. */
+			PhysicalAlteringRequired = 1,
+
+			/*! Data conversion is required; e.g. converting integer 
+			 values to string after changing column type from integer to text. */
+			DataConversionRequired = 2,
+
+			/* Only changes to extended table schema (or kexi__fields) required,
+			 this does not require physical changes for the table; 
+			 e.g. changing value of the "visibleDecimalPlaces" property. */
+			ExtendedSchemaAlteringRequired = 4
+		};
+
+		class ActionBase;
+		typedef QAsciiDict<ActionBase> ActionDict;
+		typedef QAsciiDict< ActionDict > ActionDictDict;
+		typedef QAsciiDictIterator<ActionBase> ActionDictIterator;
+		typedef QAsciiDictIterator< ActionDict > ActionDictDictIterator;
+
+		//! Defines a type for action list.
+		typedef QPtrList<ActionBase> ActionList;
+
+		//! Defines a type for action list's iterator.
+		typedef QPtrListIterator<ActionBase> ActionListIterator;
+
 		//! Abstract base class used for implementing all the AlterTable actions.
 		class KEXI_DB_EXPORT ActionBase {
 			public:
@@ -123,44 +153,36 @@ class KEXI_DB_EXPORT AlterTableHandler : public Object
 				RemoveFieldAction& toRemoveFieldAction();
 				InsertFieldAction& toInsertFieldAction();
 				MoveFieldPositionAction& toMoveFieldPositionAction();
-
-				//! Defines flags for possible altering requirements; can be combined.
-				enum AlteringRequirements {
-					/*! physical table altering is required; e.g. ALTER TABLE ADD COLUMN. */
-					PhysicalAlteringRequired = 1,
-
-					/*! data conversion is required; e.g. converting integer values to string
-					 after changing column type from integer to text. */
-					DataConversionRequired = 2,
-
-					/* Changes to extended table schema required,
-					 this does not require physical changes
-					 for the table; e.g. changing value of 
-					 the "visibleDecimalPlaces" property. */
-					ExtendedSchemaAlteringRequired = 4
-				};
 				
-				//! \return requirements for altering
-				int alteringRequirements() const { return m_alteringRequirements; }
-
-				//! \return fieldrequirements for altering
-				QString fieldName() const { return m_fieldName; }
-
+				//! \return true if the action is NULL; used in the Table Designer 
+				//! for temporarily collecting actions that have no effect at all.
 				bool isNull() const { return m_null; }
 
+				virtual QString debugString() { return "ActionBase"; }
+				void debug() { KexiDBDbg << debugString() << " (req = " << alteringRequirements() << ")" << endl; }
+
 			protected:
-				//! requirements for altering
+				//! Sets requirements for altering; used internally by AlterTableHandler object
+				void setAlteringRequirements( int alteringRequirements )
+					{ m_alteringRequirements = alteringRequirements; }
+
+				int alteringRequirements() const { return m_alteringRequirements; }
+
+				virtual void updateAlteringRequirements() {};
+
+				virtual void simplifyActions(ActionDictDict &fieldActions);
+
+			private:
+				//! requirements for altering; used internally by AlterTableHandler object
 				int m_alteringRequirements;
-				
-				QString m_fieldName;
+
+				//! @internal used for "simplify" algorithm
+				int m_order;
+
 				bool m_null : 1;
+
+			friend class AlterTableHandler;
 		};
-
-		//! Defines a type for action list.
-		typedef QValueList<ActionBase> ActionList;
-
-		//! Defines a type for action list's iterator.
-		typedef QValueListIterator<ActionBase> ActionListIterator;
 
 		//! Abstract base class used for implementing table field-related actions.
 		class KEXI_DB_EXPORT FieldActionBase : public ActionBase {
@@ -176,6 +198,14 @@ class KEXI_DB_EXPORT AlterTableHandler : public Object
 				QString m_fieldName;
 		};
 
+		/*! Defines an action for changing a single property value of a table field.
+		 Supported properties are currently:
+		 "name", "type", "caption", "description", "unsigned", "length", "precision", 
+		 "width", "defaultValue", "primaryKey", "unique", "notNull", "allowEmpty",
+		 "autoIncrement", "indexed", "visibleDecimalPlaces"
+
+		 More to come.
+		*/
 		class KEXI_DB_EXPORT ChangeFieldPropertyAction : public FieldActionBase {
 			public:
 				ChangeFieldPropertyAction(const QString& fieldName, 
@@ -186,33 +216,50 @@ class KEXI_DB_EXPORT AlterTableHandler : public Object
 
 				QString propertyName() const { return m_propertyName; }
 				QVariant newValue() const { return m_newValue; }
+				virtual QString debugString();
+
+				virtual void simplifyActions(ActionDictDict &fieldActions);
 
 			protected:
+				virtual void updateAlteringRequirements();
+
 				QString m_propertyName;
 				QVariant m_newValue;
 		};
 
+		//! Defines an action for removing a single table field.
 		class KEXI_DB_EXPORT RemoveFieldAction : public FieldActionBase {
 			public:
 				RemoveFieldAction(const QString& fieldName);
 				RemoveFieldAction(bool);
 				virtual ~RemoveFieldAction();
+
+				virtual QString debugString();
+
+			protected:
+				virtual void updateAlteringRequirements();
 		};
 
+		//! Defines an action for inserting a single table field.
 		class KEXI_DB_EXPORT InsertFieldAction : public FieldActionBase {
 			public:
 				InsertFieldAction(int fieldIndex, KexiDB::Field *newField);
 				InsertFieldAction(bool);
-				~InsertFieldAction();
+				virtual ~InsertFieldAction();
 
 				int index() const { return m_index; }
 				KexiDB::Field& field() const { return *m_field; }
+				virtual QString debugString();
 
 			protected:
+				virtual void updateAlteringRequirements();
+
 				int m_index;
 				KexiDB::Field *m_field;
 		};
 
+		/*! Defines an action for moving a single table field to a different 
+		 position within table schema. */
 		class KEXI_DB_EXPORT MoveFieldPositionAction : public FieldActionBase {
 			public:
 				MoveFieldPositionAction(int fieldIndex, const QString& fieldName);
@@ -220,8 +267,11 @@ class KEXI_DB_EXPORT AlterTableHandler : public Object
 				virtual ~MoveFieldPositionAction();
 
 				int index() const { return m_index; }
+				virtual QString debugString();
 
 			protected:
+				virtual void updateAlteringRequirements();
+
 				int m_index;
 		};
 
@@ -230,10 +280,10 @@ class KEXI_DB_EXPORT AlterTableHandler : public Object
 		virtual ~AlterTableHandler();
 
 		/*! Appends \a action for the alter table tool. */
-		void addAction(const ActionBase& action);
+		void addAction(ActionBase* action);
 
 		/*! Provided for convenience, @see addAction(const ActionBase& action). */
-		AlterTableHandler& operator<< ( const ActionBase& action );
+		AlterTableHandler& operator<< ( ActionBase* action );
 
 		/*! Removes an action from the alter table tool at index \a index. */
 		void removeAction(int index);
@@ -241,15 +291,31 @@ class KEXI_DB_EXPORT AlterTableHandler : public Object
 		/*! Removes all actions from the alter table tool. */
 		void clear();
 
+		/*! Sets \a actions for the alter table tool. Previous actions are cleared. 
+		 \a actions will be owned by the AlterTableHandler object. */
+		void setActions(const ActionList& actions);
+
 		/*! \return a list of actions for this AlterTable object. 
 		 Use ActionBase::ListIterator to iterate over the list items. */
 		const ActionList& actions() const;
 
-		/*! Performs table alteration using predefined actions.
-		 \return true on success, false on failure 
+		/*! Performs table alteration using predefined actions for table named \a tableName,
+		 assuming it already exists. The Connection object passed to the constructor must exist,
+		 must be connected and a database must be used. The connection must not be read-only.
 
-		 (then you can get error status from the AdminTools object). */
-		bool execute();
+		 If \a simulate is true, the execution is only simulated, i.e. al lactions are processed 
+		 like for regular execution but no changes are performed physically. 
+		 THis mode is used only for debugging purposes.
+
+	@todo For some cases, table schema can completely change, so it will be needed 
+		 to refresh all objects depending on it.
+		 Implement this!
+
+		 \return true on success, false on failure or when the above requirements are not met
+		 (then, you can detailed get error message from KexiDB::Object). */
+		bool execute(const QString& tableName, bool simulate = false);
+
+		void debug();
 
 	protected:
 

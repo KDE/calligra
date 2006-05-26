@@ -1284,11 +1284,6 @@ bool Connection::createTable( KexiDB::TableSchema* tableSchema, bool replaceExis
 	if (!drv_createTable(*tableSchema))
 		createTable_ERR;
 
-	//todo: future: save in older versions if neeed
-	QDomDocument doc("EXTENDED_TABLE_SCHEMA");
-	QDomElement extendedTableSchemaMainEl;
-	bool extendedTableSchemaStringIsEmpty = true;
-
 	//add schema data to kexi__* tables
 	if (!internalTable) {
 		//update kexi__objects
@@ -1318,10 +1313,9 @@ bool Connection::createTable( KexiDB::TableSchema* tableSchema, bool replaceExis
 		if (!fl)
 			return false;
 
-		Field::List *fields = tableSchema->fields();
-		Field *f = fields->first();
 		int order = 0;
-		while (f) {
+		Field *f;
+		for (Field::ListIterator it( *tableSchema->fields() ); (f = it.current()); ++it, order++) {
 			QValueList<QVariant> vals;
 			vals
 			<< QVariant(tableSchema->id())//obj_id)
@@ -1338,40 +1332,11 @@ bool Connection::createTable( KexiDB::TableSchema* tableSchema, bool replaceExis
 
 			if (!insertRecord(*fl, vals ))
 				createTable_ERR;
-
-			if (f->visibleDecimalPlaces()>=0 && KexiDB::supportsVisibleDecimalPlacesProperty(f->type())) {
-				if (extendedTableSchemaStringIsEmpty) {//init document
-					extendedTableSchemaMainEl = doc.createElement("EXTENDED_TABLE_SCHEMA");
-					doc.appendChild( extendedTableSchemaMainEl );
-					extendedTableSchemaMainEl.setAttribute("version", QString::number(KEXIDB_EXTENDED_TABLE_SCHEMA_VERSION));
-					extendedTableSchemaStringIsEmpty = false;
-				}
-				QDomElement extendedTableSchemaFieldEl = doc.createElement("field");
-				extendedTableSchemaMainEl.appendChild( extendedTableSchemaFieldEl );
-				extendedTableSchemaFieldEl.setAttribute("name", f->name());
-				QDomElement extendedTableSchemaFieldPropertyEl = doc.createElement("property");
-				extendedTableSchemaFieldEl.appendChild( extendedTableSchemaFieldPropertyEl );
-				extendedTableSchemaFieldPropertyEl.setAttribute("name", "visibleDecimalPlaces");
-				QDomElement extendedTableSchemaFieldPropertyValueEl = doc.createElement("number");
-				extendedTableSchemaFieldPropertyEl.appendChild( extendedTableSchemaFieldPropertyValueEl );
-				extendedTableSchemaFieldPropertyValueEl.appendChild( 
-					doc.createTextNode(QString::number(f->visibleDecimalPlaces())) );
-			}
-
-			f = fields->next();
-			order++;
 		}
 		delete fl;
 
-		// Store extended schema information (see ExtendedTableSchemaInformation in Kexi Wiki)
-		if (extendedTableSchemaStringIsEmpty) {
-			if (!removeDataBlock( tableSchema->id(), "extended_schema"))
-				createTable_ERR;
-		}
-		else {
-			if (!storeDataBlock( tableSchema->id(), doc.toString(1), "extended_schema" ))
-				createTable_ERR;
-		}
+		if (!storeExtendedTableSchemaData(*tableSchema))
+			createTable_ERR;
 	}
 
 	//finally:
@@ -2261,7 +2226,118 @@ int Connection::resultCount(const QString& sql)
 	return count;
 }
 
-bool Connection::loadExtendedTableSchemaData(TableSchema& t)
+//! @internal used by storeExtendedTableSchemaData()
+static void addFieldPropertyToExtendedTableSchemaData( 
+	Field *f, char* propertyName, const QVariant& propertyValue, 
+	QDomDocument& doc, QDomElement& extendedTableSchemaMainEl, bool& extendedTableSchemaStringIsEmpty )
+{
+	if (extendedTableSchemaStringIsEmpty) {//init document
+		extendedTableSchemaMainEl = doc.createElement("EXTENDED_TABLE_SCHEMA");
+		doc.appendChild( extendedTableSchemaMainEl );
+		extendedTableSchemaMainEl.setAttribute("version", QString::number(KEXIDB_EXTENDED_TABLE_SCHEMA_VERSION));
+		extendedTableSchemaStringIsEmpty = false;
+	}
+	QDomElement extendedTableSchemaFieldEl = doc.createElement("field");
+	extendedTableSchemaMainEl.appendChild( extendedTableSchemaFieldEl );
+	extendedTableSchemaFieldEl.setAttribute("name", f->name());
+	QDomElement extendedTableSchemaFieldPropertyEl = doc.createElement("property");
+	extendedTableSchemaFieldEl.appendChild( extendedTableSchemaFieldPropertyEl );
+	extendedTableSchemaFieldPropertyEl.setAttribute("name", propertyName);
+	QDomElement extendedTableSchemaFieldPropertyValueEl;
+	switch (propertyValue.type()) {
+	case QVariant::String:
+		extendedTableSchemaFieldPropertyValueEl = doc.createElement("string");
+		break;
+	case QVariant::CString:
+		extendedTableSchemaFieldPropertyValueEl = doc.createElement("cstring");
+		break;
+	case QVariant::Int:
+	case QVariant::Double:
+	case QVariant::UInt:
+	case QVariant::LongLong:
+	case QVariant::ULongLong:
+		extendedTableSchemaFieldPropertyValueEl = doc.createElement("number");
+		break;
+	case QVariant::Bool:
+		extendedTableSchemaFieldPropertyValueEl = doc.createElement("bool");
+		break;
+	default:
+//! @todo add more QVariant types
+		KexiDBFatal << "addFieldPropertyToExtendedTableSchemaData(): impl. error" << endl;
+	}
+	extendedTableSchemaFieldPropertyEl.appendChild( extendedTableSchemaFieldPropertyValueEl );
+	extendedTableSchemaFieldPropertyValueEl.appendChild( 
+		doc.createTextNode( propertyValue.toString() ) );
+}
+
+bool Connection::storeExtendedTableSchemaData(TableSchema& tableSchema)
+{
+	//todo: future: save in older versions if neeed
+	QDomDocument doc("EXTENDED_TABLE_SCHEMA");
+	QDomElement extendedTableSchemaMainEl;
+	bool extendedTableSchemaStringIsEmpty = true;
+
+	//for each field:
+	Field *f;
+	for (Field::ListIterator it( *tableSchema.fields() ); (f = it.current()); ++it) {
+		if (f->visibleDecimalPlaces()>=0 && KexiDB::supportsVisibleDecimalPlacesProperty(f->type())) {
+			addFieldPropertyToExtendedTableSchemaData( 
+				f, "visibleDecimalPlaces", f->visibleDecimalPlaces(), doc, extendedTableSchemaMainEl, extendedTableSchemaStringIsEmpty );
+		}
+	}
+
+	// Store extended schema information (see ExtendedTableSchemaInformation in Kexi Wiki)
+	if (extendedTableSchemaStringIsEmpty) {
+		if (!removeDataBlock( tableSchema.id(), "extended_schema"))
+			false;
+	}
+	else {
+		if (!storeDataBlock( tableSchema.id(), doc.toString(1), "extended_schema" ))
+			false;
+	}
+	return true;
+}
+
+//! @internal used by loadExtendedTableSchemaData()
+static QVariant loadFieldPropertyFromExtendedTableSchemaData(
+	const QDomElement& propEl, QCString& propertyName)
+{
+	propertyName = propEl.attribute("name");
+	QCString valueType = propEl.firstChild().nodeName().latin1();
+	if (valueType.isEmpty())
+		return QVariant();
+	const QString text( propEl.firstChild().toElement().text() );
+	bool ok;
+	if (valueType == "string") {
+		return text;
+	}
+	if (valueType == "cstring") {
+		return QCString(text.latin1());
+	}
+	else if (valueType == "number") { // integer or double
+		if (text.find('.')!=-1) {
+			double val = text.toDouble(&ok);
+			if (ok)
+				return val;
+		}
+		else {
+			int val = text.toInt(&ok);
+			if (ok)
+				return val;
+			int valLong = text.toLongLong(&ok);
+			if (ok)
+				return val;
+		}
+	}
+	else if (valueType == "bool") {
+		return QVariant(text.lower()=="true" || text=="1", 1);
+	}
+//! @todo add more QVariant types
+	KexiDBWarn << "loadFieldPropertyFromExtendedTableSchemaData(): unknown type" << endl;
+	return QVariant();
+}
+
+bool Connection::loadExtendedTableSchemaData(TableSchema& tableSchema)
 {
 #define loadExtendedTableSchemaData_ERR \
 	{ setError(i18n("Error while loading extended table schema information.")); \
@@ -2276,7 +2352,7 @@ bool Connection::loadExtendedTableSchemaData(TableSchema& t)
 	// Load extended schema information, if present (see ExtendedTableSchemaInformation in Kexi Wiki)
 	QString extendedTableSchemaString;
 	bool extendedTableSchemaStringLoadingResult = true;
-	tristate res = loadDataBlock( t.id(), extendedTableSchemaString, "extended_schema" );
+	tristate res = loadDataBlock( tableSchema.id(), extendedTableSchemaString, "extended_schema" );
 	if (!res)
 		loadExtendedTableSchemaData_ERR;
 	// extendedTableSchemaString will be just empty if there is no such data block
@@ -2302,7 +2378,7 @@ bool Connection::loadExtendedTableSchemaData(TableSchema& t)
 	for (QDomNode n = docEl.firstChild(); !n.isNull(); n = n.nextSibling()) {
 		QDomElement fieldEl = n.toElement();
 		if (fieldEl.tagName()=="field") {
-			Field *f = t.field( fieldEl.attribute("name") );
+			Field *f = tableSchema.field( fieldEl.attribute("name") );
 			if (f) {
 				//set properties of the field:
 //! @todo more properties
@@ -2311,22 +2387,24 @@ bool Connection::loadExtendedTableSchemaData(TableSchema& t)
 				{
 					QDomElement propEl = propNode.toElement();
 					bool ok;
-					int visibleDecimalPlaces;
+					int intValue;
 					if (propEl.tagName()=="property") {
-						if (propEl.attribute("name")=="visibleDecimalPlaces"
-							&& KexiDB::supportsVisibleDecimalPlacesProperty(f->type())
-							&& propEl.firstChild().nodeName()=="number")
+						QCString propertyName;
+						QVariant value = loadFieldPropertyFromExtendedTableSchemaData(propEl, propertyName);
+						if (propertyName == "visibleDecimalPlaces"
+							&& KexiDB::supportsVisibleDecimalPlacesProperty(f->type()))
 						{
-							visibleDecimalPlaces = propEl.firstChild().toElement().text().toInt(&ok);
+							intValue = value.toInt(&ok);
 							if (ok)
-								f->setVisibleDecimalPlaces(visibleDecimalPlaces);
+								f->setVisibleDecimalPlaces(intValue);
 						}
+//! @more properties...
 					}
 				}
 			}
 			else {
 				KexiDBWarn << "Connection::loadExtendedTableSchemaData(): no such field \"" 
-					<< fieldEl.attribute("name") << "\" in table \"" << t.name() << "\"" << endl;
+					<< fieldEl.attribute("name") << "\" in table \"" << tableSchema.name() << "\"" << endl;
 			}
 		}
 	}
