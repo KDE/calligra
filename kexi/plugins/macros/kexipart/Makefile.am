@@ -3,7 +3,7 @@ include $(top_srcdir)/kexi/Makefile.global
 kde_module_LTLIBRARIES = kexihandler_macro.la
 
 kexihandler_macro_la_SOURCES = \
-    keximacropart.cpp keximacroview.cpp keximacroproperty.cpp keximacrodesignview.cpp keximacrotextview.cpp
+    keximacropart.cpp keximacroview.cpp keximacroproperty.cpp keximacrodesignview.cpp keximacrotextview.cpp keximacroerrorbase.ui keximacroerror.cpp
 
 kexihandler_macro_la_LDFLAGS = \
     $(KDE_PLUGIN) -module -no-undefined -Wnounresolved $(all_libraries) $(VER_INFO)
@@ -28,4 +28,4 @@ SUBDIRS = .
 METASOURCES = AUTO
 
 noinst_HEADERS = \
-    keximacropart.h keximacroview.h keximacrodesignview.h keximacrotextview.h
+    keximacropart.h keximacroview.h keximacrodesignview.h keximacrotextview.h keximacroerror.h

@@ -129,7 +129,13 @@ void Context::setVariable(const QString& name, Variable::Ptr variable)
 	d->variables.replace(name, variable);
 }
 
-//return the currently selected MacroItem
+//return the associated Macro
+Macro::Ptr Context::macro() const
+{
+	return d->macro;
+}
+
+// //return the currently selected MacroItem
 MacroItem::Ptr Context::macroItem() const
 {
 	return d->macroitem;
@@ -146,13 +152,12 @@ Exception* Context::exception() const
 }
 
 //activate an action if there is one
-void Context::activate()
+void Context::activate(QValueList<MacroItem::Ptr>::ConstIterator it)
 {
 	kdDebug() << "Context::activate()" << endl;
-	//delete d->exception; d->exception = 0;
 	//Q_ASSIGN(d->macro);
 
-	QValueList<MacroItem::Ptr>::ConstIterator it(d->items.constBegin()), end(d->items.constEnd());
+	QValueList<MacroItem::Ptr>::ConstIterator end(d->items.constEnd());
 	for(;it != end; ++it) {
 		// fetch the MacroItem we are currently pointing to.
 		d->macroitem = MacroItem::Ptr(*it);
@@ -181,7 +186,7 @@ void Context::activate()
 				Variable::Ptr v = d->macroitem->variable(*vit, true);
 				d->exception->addTraceMessage( QString("%1=%2").arg(*vit).arg(v->toString()) );
 			}
-			break; // abort execution
+			return; // abort execution
 		}
 	}
 
@@ -208,7 +213,18 @@ void Context::activate(Context::Ptr context)
 		setVariable(it.key(), it.data());
 	
 	//activate copied context.
-	activate();
+	activate(d->items.constBegin());
+}
+
+void Context::activateNext()
+{	
+	delete d->exception; d->exception = 0;
+
+	QValueList<MacroItem::Ptr>::ConstIterator it(d->items.constBegin()), end(d->items.constEnd());
+	for(;it != end; ++it) {
+		if(*it != d->macroitem) continue;
+		activate(++it);
+	}
 }
 
 #include "context.moc"

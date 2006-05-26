@@ -87,6 +87,11 @@ namespace KoMacro {
 			void setVariable(const QString& name, Variable::Ptr variable);
 
 			/**
+			* @return the associated macro 
+			*/
+			KSharedPtr<Macro> macro() const;
+
+			/**
 			* @return the currently selected @a MacroItem instance
 			* or NULL if there is no @a MacroItem selected yet.
 			*/
@@ -113,7 +118,7 @@ namespace KoMacro {
 			* remembers what @a Action should be executed next and
 			* calling this slot just activates those @a Action .
 			*/
-			virtual void activate();
+			virtual void activate(QValueList<KSharedPtr <MacroItem> >::ConstIterator it);
 
 		public slots:
 
@@ -123,6 +128,11 @@ namespace KoMacro {
 			* parent context for this context.
 			*/
 			virtual void activate(Context::Ptr context);
+
+			/**
+			* This slot continues execution.
+			*/
+			virtual void activateNext();
 
 		private:
 			/// @internal d-pointer class.

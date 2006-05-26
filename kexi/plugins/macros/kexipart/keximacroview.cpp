@@ -33,6 +33,8 @@
 #include "../lib/xmlhandler.h"
 #include "../lib/exception.h"
 
+#include "keximacroerror.h"
+
 /**
 * \internal d-pointer class to be more flexible on future extension of the
 * functionality without to much risk to break the binary compatibility.
@@ -161,13 +163,14 @@ void KexiMacroView::execute(QObject* sender)
 {
 	KoMacro::Context::Ptr context = d->macro->execute(sender);
 	if(context->hadException()) {
-		KoMacro::Exception* exception = context->exception();
-		KMessageBox::detailedError(
-			mainWin(), //parent
-			i18n("<qt>Failed to execute the Macro \"%1\".<br>%2</qt>").arg( d->macro->name() ).arg( exception->errorMessage() ), //text
-			exception->traceMessages(), //details
-			i18n("Execution failed") //caption
-		);
+		
+		KexiMacroError* error = new KexiMacroError(
+				     mainWin(), //parent
+ 				     "keximacroerror",
+				     0,
+				     context 
+				    );
+		error->show();
 	}
 }
 
