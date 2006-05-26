@@ -31,9 +31,9 @@ extern int gdk_pixbuf_screen;
 #define KSVG_LITTLE_ENDIAN 1
 #define KSVG_BIG_ENDIAN 2
 
-/*#if X_BYTE_ORDER == X_BIG_ENDIAN*/
+/*#if X_BYTE_ORDER == X_BIG_ENDIAN
 #define KSVG_BYTE_ORDER KSVG_BIG_ENDIAN
-/*#else
+#else*/
 #define KSVG_BYTE_ORDER KSVG_LITTLE_ENDIAN
-#endif */
+/*#endif */
 #endif

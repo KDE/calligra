@@ -355,17 +355,26 @@ KarbonView::resizeEvent( QResizeEvent* /*event*/ )
 	if(!m_showRulerAction)
 		return;
 
-	if( shell() && m_showRulerAction->isChecked())
+/* crash problems with m_showRulerAction:
+backtrace:
+
+#0  0x00002aaaadb67040 in QAction::d_func (this=0xe0) at qaction.h:60
+#1  0x00002aaaadb65f69 in QAction::isChecked (this=0xe0) at qaction.cpp:802
+#2  0x00002aaaaad2d98e in KarbonView::resizeEvent (this=0x7b3140) at /home/kde4dev/kde/src/koffice/karbon/karbon_view.cc:358
+
+*/
+
+	/*if( shell() && m_showRulerAction->isChecked())
 	{
 		m_canvas->setGeometry( rulerWidth, rulerHeight, width() - rulerWidth, height() - rulerHeight );
 		updateRuler();
 	}
 	else
-	{
+	{*/
 		m_horizRuler->hide();
 		m_vertRuler->hide();
 		m_canvas->setGeometry( 0, 0, width(), height() );
-	}
+	//}
 
 	zoomChanged();
 	reorganizeGUI();
