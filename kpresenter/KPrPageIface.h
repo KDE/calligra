@@ -27,6 +27,7 @@
 #include <QString>
 #include <QColor>
 #include "global.h"
+#include <QRect>
 class KPrPage;
 
 class KPrPageIface :public DCOPObject

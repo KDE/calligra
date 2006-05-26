@@ -281,10 +281,10 @@
                                 <property name="suffix">
                                     <string> %</string>
                                 </property>
-                                <property name="maxValue">
+                                <property name="maximum">
                                     <number>100</number>
                                 </property>
-                                <property name="minValue">
+                                <property name="minimum">
                                     <number>-100</number>
                                 </property>
                             </widget>
@@ -395,7 +395,7 @@
                                 <property name="value">
                                     <number>0.3</number>
                                 </property>
-                                <property name="maxValue">
+                                <property name="maximum">
                                     <number>1</number>
                                 </property>
                             </widget>
@@ -506,7 +506,7 @@
                                 <property name="suffix">
                                     <string> %</string>
                                 </property>
-                                <property name="maxValue">
+                                <property name="maximum">
                                     <number>100</number>
                                 </property>
                                 <property name="value">
@@ -558,7 +558,7 @@
                                 <property name="value">
                                     <number>0.3</number>
                                 </property>
-                                <property name="maxValue">
+                                <property name="maximum">
                                     <number>1</number>
                                 </property>
                             </widget>
@@ -604,10 +604,10 @@
                                 <property name="name">
                                     <cstring>contrast_value</cstring>
                                 </property>
-                                <property name="maxValue">
+                                <property name="maximum">
                                     <number>255</number>
                                 </property>
-                                <property name="minValue">
+                                <property name="minimum">
                                     <number>-255</number>
                                 </property>
                             </widget>
@@ -701,7 +701,7 @@
                                 <property name="name">
                                     <cstring>threshold_value</cstring>
                                 </property>
-                                <property name="maxValue">
+                                <property name="maximum">
                                     <number>256</number>
                                 </property>
                                 <property name="value">
@@ -753,7 +753,7 @@
                                 <property name="value">
                                     <number>10</number>
                                 </property>
-                                <property name="maxValue">
+                                <property name="maximum">
                                     <number>99.9</number>
                                 </property>
                             </widget>
@@ -850,7 +850,7 @@
                                 <property name="value">
                                     <number>50</number>
                                 </property>
-                                <property name="maxValue">
+                                <property name="maximum">
                                     <number>99.9</number>
                                 </property>
                                 <property name="suffix">
@@ -981,7 +981,7 @@
                                 <property name="value">
                                     <number>50</number>
                                 </property>
-                                <property name="maxValue">
+                                <property name="maximum">
                                     <number>99.9</number>
                                 </property>
                                 <property name="suffix">
@@ -1033,7 +1033,7 @@
                                 <property name="value">
                                     <number>50</number>
                                 </property>
-                                <property name="maxValue">
+                                <property name="maximum">
                                     <number>99.9</number>
                                 </property>
                                 <property name="suffix">
@@ -1085,7 +1085,7 @@
                                 <property name="value">
                                     <number>30</number>
                                 </property>
-                                <property name="maxValue">
+                                <property name="maximum">
                                     <number>99.9</number>
                                 </property>
                                 <property name="suffix">
@@ -1183,7 +1183,7 @@
                                 <property name="value">
                                     <number>30</number>
                                 </property>
-                                <property name="maxValue">
+                                <property name="maximum">
                                     <number>99.9</number>
                                 </property>
                                 <property name="suffix">
@@ -1360,7 +1360,7 @@
                                 <property name="value">
                                     <number>50</number>
                                 </property>
-                                <property name="maxValue">
+                                <property name="maximum">
                                     <number>359.9</number>
                                 </property>
                             </widget>

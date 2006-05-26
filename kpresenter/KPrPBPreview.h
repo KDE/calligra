@@ -48,7 +48,7 @@ public:
         Gradient
     };
 
-    KPrPBPreview( QWidget* parent, const char* name, PaintType _paintType = Pen );
+    KPrPBPreview( QWidget* parent, PaintType _paintType = Pen );
     ~KPrPBPreview();
     void setPen( const KoPen &_pen ) { pen = _pen; repaint( true ); }
     void setBrush( const QBrush &_brush ) { brush = _brush; repaint( true ); }

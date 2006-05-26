@@ -76,7 +76,7 @@ KPrBrushProperty::KPrBrushProperty( QWidget *parent, const char *name, const KPr
     m_brushUI->styleCombo->insertItem( i18n( "Diagonal Lines ( \\ )" ) );
     m_brushUI->styleCombo->insertItem( i18n( "Diagonal Crossing Lines" ) );
 
-    m_preview_color = new KPrPBPreview( m_brushUI->previewPanel, 0, KPrPBPreview::Brush );
+    m_preview_color = new KPrPBPreview( m_brushUI->previewPanel, KPrPBPreview::Brush );
     Q3HBoxLayout *hbox = new Q3HBoxLayout( m_brushUI->previewPanel );
     Q3WhatsThis::add(m_preview_color, i18n( "This displays a preview of your choices." ) );
     hbox->addWidget(m_preview_color);
@@ -98,7 +98,7 @@ KPrBrushProperty::KPrBrushProperty( QWidget *parent, const char *name, const KPr
     m_gradientUI->styleCombo->insertItem( i18n( "PipeCross" ) );
     m_gradientUI->styleCombo->insertItem( i18n( "Pyramid" ) );
 
-    m_preview_gradient = new KPrPBPreview( m_gradientUI->previewPanel, 0, KPrPBPreview::Gradient );
+    m_preview_gradient = new KPrPBPreview( m_gradientUI->previewPanel, KPrPBPreview::Gradient );
     hbox = new Q3HBoxLayout( m_gradientUI->previewPanel );
     hbox->addWidget(m_preview_gradient);
 

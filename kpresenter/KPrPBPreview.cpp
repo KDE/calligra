@@ -28,8 +28,8 @@
 #include <KoTextZoomHandler.h>
 #include "KPrUtils.h"
 
-KPrPBPreview::KPrPBPreview( QWidget* parent, const char* name, PaintType _paintType )
-    : Q3Frame( parent, name )
+KPrPBPreview::KPrPBPreview( QWidget* parent, PaintType _paintType )
+    : Q3Frame( parent )
 {
     //FIXME zoom
     _zoomHandler=new KoTextZoomHandler();
