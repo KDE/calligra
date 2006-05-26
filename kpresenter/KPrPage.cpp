@@ -1011,7 +1011,8 @@ void KPrPage::pasteObjs( const QByteArray & data,int nbCopy, double angle,
     int num = m_objectList.count();
     if ( !data.size() )
         return;
-    QBuffer buffer( data );
+	QByteArray tmp(data);
+    QBuffer buffer( &tmp );
     KoStore* store = KoStore::createStore( &buffer, KoStore::Read );
     int nbNewObject = -1 ;
     KMacroCommand *macro = 0L;

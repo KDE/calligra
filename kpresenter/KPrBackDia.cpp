@@ -38,6 +38,7 @@
 #include <QShowEvent>
 #include <Q3Frame>
 #include <Q3VBoxLayout>
+#include <Q3VBox>
 
 #include <kcolorbutton.h>
 #include <klocale.h>
@@ -193,7 +194,7 @@ KPrBackDialog::KPrBackDialog( QWidget* parent, const char* name,
     picChooseLabel = new QLabel( i18n("&Location:"), picTab );
     picChooseLabel->setFixedHeight( picChooseLabel->sizeHint().height() );
 
-    picChoose = new KUrlRequester( picTab, "picChoose" );
+    picChoose = new KUrlRequester( picTab );
     picChoose->setFixedHeight( picChoose->sizeHint().height() );
     picChoose->setMode( KFile::ExistingOnly );
     connect( picChoose, SIGNAL( openFileDialog( KUrlRequester * ) ),
@@ -245,9 +246,9 @@ void KPrBackDialog::slotReset()
     m_picture=m_oldpicture;
 
     if ( !m_picture.isNull() )
-        picChoose->setURL( m_picture.getKey().filename() );
+        picChoose->setUrl( m_picture.getKey().filename() );
     else
-        picChoose->setURL( QString::null );
+        picChoose->setUrl( KUrl(""));
 
     picView->setCurrentItem( (int)oldBackPicView );
     unbalanced->setChecked( oldUnbalanced );

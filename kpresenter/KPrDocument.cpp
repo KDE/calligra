@@ -70,6 +70,7 @@
 #include <kmessagebox.h>
 #include <kprocess.h>
 #include <kio/netaccess.h>
+#include <kcommand.h>
 
 #include <KoTemplateChooseDia.h>
 #include <KoRuler.h>
@@ -277,7 +278,7 @@ KPrDocument::KPrDocument( QWidget *parentWidget, const char *widgetName, QObject
     connect( QApplication::clipboard(), SIGNAL( dataChanged() ),
              this, SLOT( clipboardDataChanged() ) );
 
-    m_commandHistory = new KoCommandHistory( actionCollection(),  true ) ;
+    m_commandHistory = new KCommandHistory( actionCollection(),  true ) ;
     initConfig();
 
     connect( m_commandHistory, SIGNAL( documentRestored() ), this, SLOT( slotDocumentRestored() ) );

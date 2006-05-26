@@ -47,7 +47,7 @@ class Q3HBox;
 
 class Q3ListViewItem;
 class QCloseEvent;
-class KProgress;
+class KProgressBar;
 class QLabel;
 
 class QCheckBox;
@@ -126,10 +126,10 @@ public:
     int slides2Steps() { return slideInfos.count(); }
     int mainSteps() const { return 1; }
 
-    void initCreation( KProgress *progressBar );
-    void createSlidesPictures( KProgress *progressBar );
-    void createSlidesHTML( KProgress *progressBar );
-    void createMainPage( KProgress *progressBar );
+    void initCreation( KProgressBar *progressBar );
+    void createSlidesPictures( KProgressBar *progressBar );
+    void createSlidesHTML( KProgressBar *progressBar );
+    void createMainPage( KProgressBar *progressBar );
 
 protected:
     void init();
@@ -220,7 +220,7 @@ protected:
     KPrDocument *doc;
     KPrWebPresentation webPres;
 
-    KProgress *progressBar;
+    KProgressBar *progressBar;
     QLabel *step1, *step2, *step3, *step4, *step5;    
     QPushButton *bDone, *bSave;
     Q3VBox *back;

@@ -31,6 +31,8 @@
 #include <qapplication.h>
 //Added by qt3to4:
 #include <Q3CString>
+#include <QScrollBar>
+#include <QDesktopWidget>
 #include <QWheelEvent>
 #include <Q3PtrList>
 #include <QPaintEvent>
@@ -66,7 +68,7 @@
 #include <kmessagebox.h>
 #include <kconfig.h>
 #include <kurl.h>
-#include <kurldrag.h>
+#include <k3urldrag.h>
 #include <kio/netaccess.h>
 
 #include <KoParagCounter.h>
@@ -3932,7 +3934,7 @@ void KPrCanvas::dragEnterEvent( QDragEnterEvent *e )
         m_currentTextObjectView->dragEnterEvent( e );
     else if ( Q3TextDrag::canDecode( e )
               || Q3ImageDrag::canDecode( e )
-              || KURLDrag::canDecode(e)) {
+              || K3URLDrag::canDecode(e)) {
         e->accept();
     }
     else
@@ -3956,7 +3958,7 @@ void KPrCanvas::dragMoveEvent( QDragMoveEvent *e )
     }
     else if ( Q3TextDrag::canDecode( e )
               || Q3ImageDrag::canDecode( e )
-              || KURLDrag::canDecode(e)) {
+              || K3URLDrag::canDecode(e)) {
         e->accept();
     }
     else
@@ -4003,12 +4005,12 @@ void KPrCanvas::dropEvent( QDropEvent *e )
     if ( Q3ImageDrag::canDecode( e ) ) {
         dropImage( e, true, e->pos().x(), e->pos().y() );
         e->accept();
-    } else if ( KURLDrag::canDecode( e ) ) {
+    } else if ( K3URLDrag::canDecode( e ) ) {
         setToolEditMode( TEM_MOUSE );
         deSelectAllObj();
 
         KUrl::List lst;
-        KURLDrag::decode( e, lst );
+        K3URLDrag::decode( e, lst );
 
         KUrl::List::ConstIterator it = lst.begin();
         for ( ; it != lst.end(); ++it ) {

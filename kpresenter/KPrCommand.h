@@ -453,7 +453,7 @@ public:
         GradientBalanced = 64,
         GradientXFactor = 128,
         GradientYFactor = 256,
-        All = BrushColor | Qt::BrushStyle | BrushGradientSelect | GradientColor1 | GradientColor2 | GradientType | GradientBalanced | GradientXFactor | GradientYFactor
+        All = BrushColor | BrushStyle | BrushGradientSelect | GradientColor1 | GradientColor2 | GradientType | GradientBalanced | GradientXFactor | GradientYFactor
     };
 
     KPrBrushCmd( const QString &_name, Q3PtrList<KPrObject> &_objects, Brush _newBrush,

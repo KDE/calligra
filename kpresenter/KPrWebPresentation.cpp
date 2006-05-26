@@ -266,7 +266,7 @@ void KPrWebPresentation::saveConfig()
     cfg.writeEntry( "Encoding", m_encoding );
 }
 
-void KPrWebPresentation::initCreation( KProgress *progressBar )
+void KPrWebPresentation::initCreation( KProgressBar *progressBar )
 {
     QString cmd;
     int p;
@@ -302,7 +302,7 @@ void KPrWebPresentation::initCreation( KProgress *progressBar )
     }
 }
 
-void KPrWebPresentation::createSlidesPictures( KProgress *progressBar )
+void KPrWebPresentation::createSlidesPictures( KProgressBar *progressBar )
 {
     if ( slideInfos.isEmpty() )
         return;
@@ -387,7 +387,7 @@ void KPrWebPresentation::writeStartOfHeader(QTextStream& streamOut, QTextCodec *
     // ### TODO: transform documentinfo.xml into many <META> elements (at least the author!)
 }
 
-void KPrWebPresentation::createSlidesHTML( KProgress *progressBar )
+void KPrWebPresentation::createSlidesHTML( KProgressBar *progressBar )
 {
     QTextCodec *codec = KGlobal::charsets()->codecForName( m_encoding );
 
@@ -530,7 +530,7 @@ void KPrWebPresentation::createSlidesHTML( KProgress *progressBar )
     }
 }
 
-void KPrWebPresentation::createMainPage( KProgress *progressBar )
+void KPrWebPresentation::createMainPage( KProgressBar *progressBar )
 {
     QTextCodec *codec = KGlobal::charsets()->codecForName( m_encoding );
     KTempFile tmp;
@@ -1258,7 +1258,7 @@ void KPrWebPresentationCreateDialog::setupGUI()
     line->setFrameStyle( Q3Frame::HLine | Q3Frame::Sunken );
     line->setMaximumHeight( 20 );
 
-    progressBar = new KProgress( back );
+    progressBar = new KProgressBar( back );
 
     line = new Q3Frame( back );
     line->setFrameStyle( Q3Frame::HLine | Q3Frame::Sunken );
@@ -1290,8 +1290,8 @@ void KPrWebPresentationCreateDialog::saveConfig()
     else
         filename = QString::null;
 
-    KFileDialog fd (filename, i18n("*.kpweb|KPresenter Web-Presentation (*.kpweb)"),
-                    0/*parent*/, 0/*name*/, true/*modal*/);
+    KFileDialog fd (filename, i18n("*.kpweb|KPresenter Web-Presentation (*.kpweb)")
+                    );
     fd.setCaption (i18n ("Save Web Presentation Configuration"));
     fd.setOperationMode (KFileDialog::Saving);
     fd.setMode (KFile::File | KFile::LocalOnly);

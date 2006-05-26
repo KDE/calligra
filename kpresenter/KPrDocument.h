@@ -53,6 +53,7 @@ class KoOasisSettings;
 class KoXmlWriter;
 class QFile;
 class KoSavingContext;
+class KCommandHistory;
 
 #include <KoDocument.h>
 #include <KoDocumentChild.h>
@@ -71,7 +72,6 @@ class KoSavingContext;
 #include "KPrGradientCollection.h"
 #include <KoTextZoomHandler.h>
 #include <KoStyleCollection.h> // for KoStyleChangeDefMap
-#include <KoCommandHistory.h>
 
 class KoDocumentEntry;
 class KPrTextObject;
@@ -456,7 +456,7 @@ class KPrDocument : public KoDocument
     void setSpellCheckIgnoreList( const QStringList& lst );
     void addSpellCheckIgnoreWord( const QString & );
 
-    KoCommandHistory * commandHistory()const { return m_commandHistory; }
+    KCommandHistory * commandHistory()const { return m_commandHistory; }
     void updateObjectStatusBarItem();
     void updateObjectSelected();
     void layout(KPrObject *kpobject);
@@ -651,7 +651,7 @@ protected:
     QString m_tempFileInClipboard;
     bool ignoreSticky;
 
-    KoCommandHistory * m_commandHistory;
+    KCommandHistory * m_commandHistory;
     KoTextZoomHandler* m_zoomHandler;
     QFont m_defaultFont;
     KoAutoFormat * m_autoFormat;

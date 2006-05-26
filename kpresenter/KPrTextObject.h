@@ -248,9 +248,12 @@ public:
 
     void keyPressEvent( QKeyEvent * );
     void keyReleaseEvent( QKeyEvent * );
-    void imStartEvent( QIMEvent * );
+#warning "kde4 reapply it"	
+#if 0
+	void imStartEvent( QIMEvent * );
     void imComposeEvent( QIMEvent * );
     void imEndEvent( QIMEvent * );
+#endif	
     void mousePressEvent( QMouseEvent *, const QPoint &);
     void mouseMoveEvent( QMouseEvent *, const QPoint & );
     void mouseReleaseEvent( QMouseEvent *, const QPoint & );

@@ -76,7 +76,7 @@ public:
     virtual void setSize( const KoSize & _size )
         { setSize( _size.width(), _size.height() ); }
     virtual void setSize(double _width, double _height )
-        { ext = KoSize( qMax( MIN_SIZE, _width ), qMax( MIN_SIZE, _height ) ); } // no object is smaller than 10x10
+        { ext = KoSize( qMax( (double)MIN_SIZE, _width ), qMax( (double)MIN_SIZE, _height ) ); } // no object is smaller than 10x10
     virtual void setOrig( const KoPoint & _point )
         { orig = _point; }
     virtual void setOrig( double _x, double _y )
