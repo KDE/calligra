@@ -1,7 +1,11 @@
 
 
 project(kpresenter)
-include_directories( ${KOTEXT_INCLUDES} ${CMAKE_SOURCE_DIR}/libs/kformula ${KOFFICEUI_INCLUDES} )
+include_directories( 
+		${KOTEXT_INCLUDES} 
+		${CMAKE_SOURCE_DIR}/libs/kformula 
+		${KOFFICEUI_INCLUDES} 
+		${KOPAINTER_INCLUDES})
 
 add_subdirectory( autoformEdit )
 add_subdirectory( autoforms )
@@ -15,20 +19,25 @@ add_subdirectory( toolbar )
 
 
 ########### next target ###############
+set(libaf_SRCS 
+		autoformEdit/ATFInterpreter.cpp 
+		autoformEdit/AFChoose.cpp
+		)
 
-set(kpresenterprivate_LIB_SRCS 
+
+set(kpresenterprivate_LIB_SRCS ${libaf_SRCS}
    KoPointArray.cpp 
-   KPrCanvas.cpp 
-   KPrPage.cpp 
+   #KPrCanvas.cpp 
+   #KPrPage.cpp 
    KPrFindReplace.cpp 
    KPrBackDia.cpp 
-   KPrWebPresentation.cpp 
-   KPrView.cpp 
-   KPrMSPresentationSetup.cpp 
+   #KPrWebPresentation.cpp 
+   #KPrView.cpp 
+   #KPrMSPresentationSetup.cpp 
    KPrBrush.cpp 
    KPrDocument.cpp 
    KPrSoundPlayer.cpp 
-   KPrPgConfDia.cpp 
+   #KPrPgConfDia.cpp 
    KPrEffectDia.cpp 
    KPrCommand.cpp 
    KPrUtils.cpp 
@@ -40,13 +49,13 @@ set(kpresenterprivate_LIB_SRCS
    KPrRectObject.cpp 
    KPrEllipseObject.cpp 
    KPrAutoformObject.cpp 
-   KPrTextObject.cpp 
-   KPrPixmapObject.cpp 
+   #KPrTextObject.cpp 
+   #KPrPixmapObject.cpp 
    KPrPieObject.cpp 
-   KPrPartObject.cpp 
+   #KPrPartObject.cpp 
    KPrGroupObject.cpp 
    KPrBackground.cpp 
-   KPrGradient.cpp 
+   #KPrGradient.cpp 
    KPrGradientCollection.cpp 
    KPrGotoPage.cpp 
    KPrFactory.cpp 
@@ -54,8 +63,8 @@ set(kpresenterprivate_LIB_SRCS
    KPrViewIface.cpp 
    KPrObjectIface.cpp 
    KPrPageIface.cpp 
-   KPrSideBar.cpp 
-   KPrConfig.cpp 
+   #KPrSideBar.cpp 
+   #KPrConfig.cpp 
    KPrVariableCollection.cpp 
    KPrTextDocument.cpp 
    KPrPointObject.cpp 
@@ -63,7 +72,7 @@ set(kpresenterprivate_LIB_SRCS
    KPrPolylineObject.cpp 
    KPrBezierCurveObject.cpp 
    KPrPolygonObject.cpp 
-   KPrNoteBar.cpp 
+   #KPrNoteBar.cpp 
    KPrTextObjectIface.cpp 
    KPrTextViewIface.cpp 
    KPrPresDurationDia.cpp 
@@ -83,22 +92,22 @@ set(kpresenterprivate_LIB_SRCS
    KPrFreehandObjectIface.cpp 
    KPrStyleManager.cpp 
    KPrBgSpellCheck.cpp 
-   KPrMoveHelpLineDia.cpp 
+   #KPrMoveHelpLineDia.cpp 
    KPrPolyLineObjectIface.cpp 
-   KPrDuplicateObjDia.cpp 
+   #KPrDuplicateObjDia.cpp 
    KPrClosedLineObject.cpp 
    KPrImportStyleDia.cpp 
-   KPrImageEffectDia.cpp 
+   #KPrImageEffectDia.cpp 
    KPrCustomSlideShowDia.cpp 
    KPrPBPreview.cpp 
-   KPrPenStyleWidget.cpp 
+   #KPrPenStyleWidget.cpp 
    KPrRectPreview.cpp 
    KPrRectProperty.cpp 
    KPrPiePreview.cpp 
    KPrPolygonPreview.cpp 
    KPrPicturePreview.cpp 
    KPrBrushProperty.cpp 
-   KPrGeneralProperty.cpp 
+   #KPrGeneralProperty.cpp 
    KPrPolygonProperty.cpp 
    KPrPieProperty.cpp 
    KPrPictureProperty.cpp 
@@ -147,7 +156,7 @@ kde4_add_dcop_skels(kpresenterprivate_LIB_SRCS
 
 kde4_add_library(kpresenterprivate SHARED ${kpresenterprivate_LIB_SRCS})
 
-target_link_libraries(kpresenterprivate  ${KDE4_KDECORE_LIBS} af kofficeui kotext kopainter )
+target_link_libraries(kpresenterprivate  ${KDE4_KDECORE_LIBS} kofficeui kotext kopainter )
 
 set_target_properties(kpresenterprivate PROPERTIES VERSION 4.0.0 SOVERSION 4 )
 install_targets(${LIB_INSTALL_DIR} kpresenterprivate )
