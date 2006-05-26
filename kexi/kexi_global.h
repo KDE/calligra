@@ -45,7 +45,7 @@
 
 /*! nonconst version of foreach iterator */
 #define foreach_nonconst(_class, _variable, _list) \
-	for (_class _variable = _list.begin(); variable!=_list.end(); ++_variable)
+	for (_class _variable = _list.begin(); _variable!=_list.end(); ++_variable)
 
 /*! a shortcut for iterating over QPtrList and QPtrDict */
 #define foreach_list(_class, _variable, _list) \
