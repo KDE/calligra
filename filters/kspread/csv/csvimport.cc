@@ -160,13 +160,13 @@ KoFilter::ConversionStatus CSVFilter::convert( const QByteArray& from, const QBy
                //I will use this approach only for the TEXT format in the CSV import filter... (raphael)
                //### FIXME: long term solution is to allow to select Generic format ("autodetect") in the dialog and make it the default
 
-               cell = sheet->nonDefaultCell( col + 1, row + 1, false, s );
+               cell = sheet->nonDefaultCell( col + 1, row + 1, s );
                cell->setCellText( text );
 
                cell->format()->setFormatType (Generic_format);
 
                /* old code
-              cell = sheet->nonDefaultCell( col + 1, row + 1, false, s );
+              cell = sheet->nonDefaultCell( col + 1, row + 1, s );
               cell->setCellText( text, true );
                */
               break;
@@ -180,12 +180,12 @@ KoFilter::ConversionStatus CSVFilter::convert( const QByteArray& from, const QBy
                         d = text.toDouble( &ok );
                     if ( !ok )
                     {
-                        cell = sheet->nonDefaultCell( col + 1, row + 1, false, s );
+                        cell = sheet->nonDefaultCell( col + 1, row + 1, s );
                         cell->setCellText( text, true );
                     }
                     else
                     {
-                        cell = sheet->nonDefaultCell( col + 1, row + 1, false, s );
+                        cell = sheet->nonDefaultCell( col + 1, row + 1, s );
                         cell->setNumber( d );
                     }
                     cell->format()->setPrecision( 2 );
@@ -201,12 +201,12 @@ KoFilter::ConversionStatus CSVFilter::convert( const QByteArray& from, const QBy
                     const double d = tmp.toDouble( &ok );
                     if ( !ok )
                     {
-                        cell = sheet->nonDefaultCell( col + 1, row + 1, false, s );
+                        cell = sheet->nonDefaultCell( col + 1, row + 1, s );
                         cell->setCellText( text, true );
                     }
                     else
                     {
-                        cell = sheet->nonDefaultCell( col + 1, row + 1, false, s );
+                        cell = sheet->nonDefaultCell( col + 1, row + 1, s );
                         cell->setNumber( d );
                     }
                     cell->format()->setPrecision( 2 );
@@ -222,24 +222,24 @@ KoFilter::ConversionStatus CSVFilter::convert( const QByteArray& from, const QBy
                     const double d = tmp.toDouble( &ok );
                     if ( !ok )
                     {
-                        cell = sheet->nonDefaultCell( col + 1, row + 1, false, s );
+                        cell = sheet->nonDefaultCell( col + 1, row + 1, s );
                         cell->setCellText( text,  true );
                     }
                     else
                     {
-                        cell = sheet->nonDefaultCell( col + 1, row + 1, false, s );
+                        cell = sheet->nonDefaultCell( col + 1, row + 1, s );
                         cell->setNumber( d );
                     }
                     cell->format()->setPrecision( 2 );
                     break;
                 }
              case CSVDialog::DATE:
-              cell = sheet->nonDefaultCell( col + 1, row + 1, false, s );
+              cell = sheet->nonDefaultCell( col + 1, row + 1, s );
               cell->setCellText( text );
               cell->format()->setFormatType( ShortDate_format );
               break;
              case CSVDialog::CURRENCY:
-              cell = sheet->nonDefaultCell( col + 1, row + 1, false, s );
+              cell = sheet->nonDefaultCell( col + 1, row + 1, s );
               cell->setCellText( text, false );
               cell->format()->setFormatType( Money_format );
               cell->format()->setPrecision( 2 );

@@ -3685,7 +3685,7 @@ void Canvas::createEditor(bool captureArrowKeys)
   if (!sheet)
     return;
 
-  Cell * cell = sheet->nonDefaultCell( markerColumn(), markerRow(), false );
+  Cell * cell = sheet->nonDefaultCell( markerColumn(), markerRow() );
 
   if ( !createEditor( CellEditor , true , captureArrowKeys ) )
       return;
@@ -3704,7 +3704,7 @@ bool Canvas::createEditor( EditorType ed, bool addFocus, bool captureArrowKeys )
 
   if ( !d->cellEditor )
   {
-    Cell * cell = sheet->nonDefaultCell( marker().x(), marker().y(), false );
+    Cell * cell = sheet->nonDefaultCell( marker().x(), marker().y() );
 
     if ( sheet->isProtected() && !cell->format()->notProtected( marker().x(), marker().y() ) )
       return false;

@@ -1011,15 +1011,8 @@ RowFormat* Sheet::nonDefaultRowFormat( int _row, bool force_creation )
     return p;
 }
 
-Cell* Sheet::nonDefaultCell( int _column, int _row,
-                                           bool _scrollbar_update, Style * _style )
+Cell* Sheet::nonDefaultCell( int _column, int _row, Style* _style )
 {
-  if ( _scrollbar_update && d->scrollBarUpdates )
-  {
-    checkRangeHBorder( _column );
-    checkRangeVBorder( _row );
-  }
-
   Cell * p = d->cells.lookup( _column, _row );
   if ( p != 0 )
     return p;
@@ -1505,7 +1498,7 @@ Sheet::SelectionType Sheet::workOnCells( Selection* selectionInfo, CellWorker & 
       {
         for ( int col = left; col <= right; ++col )
         {
-          cell = nonDefaultCell( col, rw->row(), false, s );
+          cell = nonDefaultCell( col, rw->row(), s );
         }
       }
     }
@@ -1599,7 +1592,7 @@ Sheet::SelectionType Sheet::workOnCells( Selection* selectionInfo, CellWorker & 
         {
           for ( int i = left; i <= right; ++i )
           {
-            cell = nonDefaultCell( i, rw->row(), false, s );
+            cell = nonDefaultCell( i, rw->row(), s );
             worker.doWork( cell, false, i, rw->row() );
           }
         }
@@ -1612,6 +1605,7 @@ Sheet::SelectionType Sheet::workOnCells( Selection* selectionInfo, CellWorker & 
   {
     for ( int x = left; x <= right; ++x )
     {
+      enableScrollBarUpdates(false);
       for ( int y = top; y <= bottom; ++y )
       {
         cell = cellAt( x, y );
@@ -1629,7 +1623,10 @@ Sheet::SelectionType Sheet::workOnCells( Selection* selectionInfo, CellWorker & 
           }
         }
       }
+      enableScrollBarUpdates(true);
+      checkRangeVBorder(bottom);
     }
+    checkRangeHBorder(right);
     result = CellRegion;
   }
 
@@ -1969,7 +1966,7 @@ void Sheet::setSeries( const QPoint &_marker, double start, double end, double s
     {
       /* see the code above for a column series for a description of
          what is going on here. */
-      cell = cellAt( x,_marker.y() );
+      cell = cellAt( x,_marker.y(), false );
 
       if ( cell->isPartOfMerged() )
       {
@@ -2008,7 +2005,7 @@ void Sheet::setSeries( const QPoint &_marker, double start, double end, double s
   {
     for ( incr = start; incr <= end; )
     {
-      cell = nonDefaultCell( x, y, false, s );
+      cell = nonDefaultCell( x, y, s );
 
       if ( cell->isPartOfMerged() )
       {
@@ -2056,7 +2053,7 @@ void Sheet::setSeries( const QPoint &_marker, double start, double end, double s
   {
     for ( incr = start; incr >= end; )
     {
-      cell = nonDefaultCell( x, y, false, s );
+      cell = nonDefaultCell( x, y, s );
 
       if (cell->isPartOfMerged())
       {
@@ -2102,7 +2099,7 @@ void Sheet::setSeries( const QPoint &_marker, double start, double end, double s
   {
     for ( incr = start; incr <= end; )
     {
-      cell = nonDefaultCell( x, y, false, s );
+      cell = nonDefaultCell( x, y, s );
 
       if (cell->isPartOfMerged())
       {
@@ -4690,7 +4687,7 @@ void Sheet::setConditional( Selection* selectionInfo,
     {
       for (int y = t; y <= b; ++y)
       {
-        cell = nonDefaultCell( x, y, false, s );
+        cell = nonDefaultCell( x, y, s );
         cell->setConditionList( newConditions );
         cell->setDisplayDirtyFlag();
       }
@@ -5742,6 +5739,7 @@ QDomDocument Sheet::saveCellRegion(const Region& region, bool copy, bool era)
     //but I remove cell which is inserted.
     Cell* cell;
     bool insert;
+    enableScrollBarUpdates(false);
     for (int col = range.left(); col <= range.right(); ++col)
     {
       for (int row = range.top(); row <= range.bottom(); ++row)
@@ -5761,6 +5759,7 @@ QDomDocument Sheet::saveCellRegion(const Region& region, bool copy, bool era)
         }
       }
     }
+    enableScrollBarUpdates(true);
   }
   return dd;
 }
@@ -7785,11 +7784,11 @@ void Sheet::insertCell( Cell *_cell )
   // TODO Stefan: use a SheetDamage
   //              124806: creating series takes extremely long time
   // Adjust the scrollbar range, if the max. dimension has changed.
-/*  if ( d->scrollBarUpdates )
+  if ( d->scrollBarUpdates )
   {
     checkRangeHBorder( _cell->column() );
     checkRangeVBorder( _cell->row() );
-  }*/
+  }
 }
 
 void Sheet::insertColumnFormat( ColumnFormat *l )

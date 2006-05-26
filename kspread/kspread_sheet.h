@@ -350,16 +350,18 @@ public:
      *
      * @param _column the cell's column index
      * @param _row the cell's row index
-     * @param _scrollbar_update will change the scrollbar if set to true disregarding
-     *                          whether _column/_row are bigger than
-     *                          m_iMaxRow/m_iMaxColumn. May be overruled by
-     *                          Sheet::Private::scrollbarUpdates .
      * @param _style if a new cell is created, this Style is used
      * @return a non default Cell for the position.
      */
-    Cell* nonDefaultCell( int _column, int _row, bool _scrollbar_update = false, Style * _style = 0 );
-    Cell* nonDefaultCell( QPoint const & cellRef, bool scroll = false )
-      { return nonDefaultCell( cellRef.x(), cellRef.y(), scroll ); }
+    Cell* nonDefaultCell( int _column, int _row, Style* _style = 0 );
+
+    /**
+     * Convenience function.
+     * \param cellRef the cell's location
+     * \see nonDefaultCell(int, int, Style*)
+     */
+    Cell* nonDefaultCell( QPoint const & cellRef )
+      { return nonDefaultCell( cellRef.x(), cellRef.y() ); }
 
     Cell* defaultCell() const;
 
@@ -911,20 +913,25 @@ public:
     Sheet *findSheet( const QString & _name );
 
     /**
-     * Inserts the @p _cell into the sheet.
+     * Inserts the \p cell into the sheet.
      * All cells depending on this cell will be actualized.
-     * The border range will be actualized, when the cell is out of current range.
+     * The max. scroll range will be actualized, when the cell exceeds the
+     * current max. range.
+     * \warning If you process many cells, you should disable the scroll
+     *          range update by using enableScrollBarUpdates() and update
+     *          the range explicitly by using checkRangeHBorder() and
+     *          checkRangeVBorder() ONCE after the processing is done.
      */
     void insertCell( Cell *_cell );
+
     /**
      * Used by Undo.
-     *
      * @see UndoDeleteColumn
      */
     void insertColumnFormat( ColumnFormat *_l );
+
     /**
      * Used by Undo.
-     *
      * @see UndoDeleteRow
      */
     void insertRowFormat( RowFormat *_l );

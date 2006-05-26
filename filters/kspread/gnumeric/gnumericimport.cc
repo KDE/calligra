@@ -1138,7 +1138,7 @@ void GNUMERICFilter::setStyleInfo(QDomNode * sheet, Sheet * table)
                     QDomElement style_element = style.toElement(); // try to convert the node to an element.
 
                     kDebug(30521) << "Style valid for kspread" << endl;
-                    kspread_cell = table->nonDefaultCell( column, row, false );
+                    kspread_cell = table->nonDefaultCell( column, row );
 
                     if (style_element.hasAttribute("Fore"))
                     {
