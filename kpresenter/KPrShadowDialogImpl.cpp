@@ -1,8 +1,10 @@
 // -*- Mode: c++; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 #include <QSpinBox>
-#include <qgroupbox.h>
+#include <q3groupbox.h>
 #include <QLayout>
-#include <qbuttongroup.h>
+#include <q3buttongroup.h>
+//Added by qt3to4:
+#include <Q3HBoxLayout>
 
 #include <kcolorbutton.h>
 #include <klocale.h>
@@ -14,7 +16,7 @@ KPrShadowDialogImpl::KPrShadowDialogImpl( QWidget *parent, const char* name )
     : ShadowDialogBase( parent, name )
 {
     _preview = new KPrTextPreview( previewPanel );
-    QHBoxLayout *lay = new QHBoxLayout( previewPanel, previewPanel->lineWidth(), 0 );
+    Q3HBoxLayout *lay = new Q3HBoxLayout( previewPanel, previewPanel->lineWidth(), 0 );
     lay->addWidget( _preview );
     distanceSpinBox->setSuffix(i18n("pt"));
     ltButton->setPixmap( BarIcon( "shadowLU" ) );

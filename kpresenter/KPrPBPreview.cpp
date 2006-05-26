@@ -21,18 +21,21 @@
 #include "KPrPBPreview.h"
 
 #include <qpainter.h>
+//Added by qt3to4:
+#include <QResizeEvent>
+#include <Q3Frame>
 
 #include <KoTextZoomHandler.h>
 #include "KPrUtils.h"
 
 KPrPBPreview::KPrPBPreview( QWidget* parent, const char* name, PaintType _paintType )
-    : QFrame( parent, name )
+    : Q3Frame( parent, name )
 {
     //FIXME zoom
     _zoomHandler=new KoTextZoomHandler();
     paintType = _paintType;
-    pen = KoPen( black, 1, SolidLine );
-    brush = QBrush( white, SolidPattern );
+    pen = KoPen( Qt::black, 1, Qt::SolidLine );
+    brush = QBrush( Qt::white, Qt::SolidPattern );
     gradient = new KPrGradient( Qt::red, Qt::green, BCT_GHORZ, false, 100, 100 );
     savedGradient = gradient;
 
@@ -50,7 +53,7 @@ KPrPBPreview::KPrPBPreview( QWidget* parent, const char* name, PaintType _paintT
 
 void KPrPBPreview::resizeEvent( QResizeEvent *e )
 {
-    QFrame::resizeEvent( e );
+    Q3Frame::resizeEvent( e );
     if ( gradient )
     {
 #if 1

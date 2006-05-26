@@ -26,7 +26,12 @@
 #include <k3wizard.h>
 
 #include <qdialog.h>
-#include <qvaluelist.h>
+#include <q3valuelist.h>
+//Added by qt3to4:
+#include <QResizeEvent>
+#include <Q3VBoxLayout>
+#include <QLabel>
+#include <QCloseEvent>
 
 
 class KPrDocument;
@@ -39,15 +44,15 @@ class KIntNumInput;
 class KLineEdit;
 class KComboBox;
 
-class QVBox;
-class QHBox;
+class Q3VBox;
+class Q3HBox;
 
-class QListViewItem;
+class Q3ListViewItem;
 class QCloseEvent;
 class KProgress;
 class QLabel;
-class QGroupBox;
-class QVBoxLayout;
+class Q3GroupBox;
+class Q3VBoxLayout;
 
 class KPrMSPresentation
 {
@@ -73,7 +78,7 @@ public:
     struct SlideInfo {
         int pageNumber; /* 0-based */
     };
-    QValueList<SlideInfo> getSlideInfos() const { return slideInfos; }
+    Q3ValueList<SlideInfo> getSlideInfos() const { return slideInfos; }
 
     int initSteps() const { return 7; }
     int slidesSteps() { return slideInfos.count(); }
@@ -90,7 +95,7 @@ protected:
     KPrView *view;
 
     QString title;
-    QValueList<SlideInfo> slideInfos;
+    Q3ValueList<SlideInfo> slideInfos;
     QColor backColour, textColour;
     QString path;
     QString slidePath; // directory relative to path, containing slides 
@@ -114,8 +119,8 @@ protected:
 
     KLineEdit *title;
     KColorButton *textColour, *backColour;
-    QGroupBox *colourGroup;
-    QVBoxLayout *mainLayout;
+    Q3GroupBox *colourGroup;
+    Q3VBoxLayout *mainLayout;
     KUrlRequester *path;
 
 protected slots:
@@ -152,7 +157,7 @@ protected:
     KProgress *progressBar;
     QLabel *step1, *step2, *step3;
     QPushButton *bDone;
-    QVBox *back;
+    Q3VBox *back;
 
 };
 #endif

@@ -30,9 +30,14 @@
 #include <qslider.h>
 #include <QLayout>
 #include <qtabwidget.h>
-#include <qvbox.h>
+#include <q3vbox.h>
 #include <QCheckBox>
 #include <qdatetime.h>
+//Added by qt3to4:
+#include <Q3HBoxLayout>
+#include <QShowEvent>
+#include <Q3Frame>
+#include <Q3VBoxLayout>
 
 #include <kcolorbutton.h>
 #include <klocale.h>
@@ -44,7 +49,7 @@
 #include <KoPicture.h>
 
 KPrBackPreview::KPrBackPreview( QWidget *parent, KPrPage *page )
-    : QFrame( parent )
+    : Q3Frame( parent )
 {
     setFrameStyle( WinPanel | Sunken );
     back = new KPrBackGround( page );
@@ -58,7 +63,7 @@ KPrBackPreview::~KPrBackPreview()
 
 void KPrBackPreview::drawContents( QPainter *p )
 {
-    QFrame::drawContents( p );
+    Q3Frame::drawContents( p );
     p->save();
     p->translate( contentsRect().x(), contentsRect().y() );
     back->drawBackground( p, contentsRect().size(), contentsRect(), false );
@@ -89,12 +94,12 @@ KPrBackDialog::KPrBackDialog( QWidget* parent, const char* name,
 
     QWidget *page = new QWidget( this );
     setMainWidget(page);
-    QVBoxLayout *layout = new QVBoxLayout( page, 0, spacingHint() );
+    Q3VBoxLayout *layout = new Q3VBoxLayout( page, 0, spacingHint() );
 
 
-    QHBoxLayout *hbox = new QHBoxLayout( layout );
+    Q3HBoxLayout *hbox = new Q3HBoxLayout( layout );
     hbox->setSpacing( KDialog::spacingHint() );
-    QVBoxLayout *vbox = new QVBoxLayout( hbox );
+    Q3VBoxLayout *vbox = new Q3VBoxLayout( hbox );
     vbox->setSpacing( KDialog::spacingHint() );
 
     if ( !m_page->isMasterPage() )
@@ -121,7 +126,7 @@ KPrBackDialog::KPrBackDialog( QWidget* parent, const char* name,
 
     // color/gradient tab ---------------
 
-    QVBox *colorTab = new QVBox( tabWidget );
+    Q3VBox *colorTab = new Q3VBox( tabWidget );
     colorTab->setSpacing( KDialog::spacingHint() );
     colorTab->setMargin( 5 );
 
@@ -170,7 +175,7 @@ KPrBackDialog::KPrBackDialog( QWidget* parent, const char* name,
 
     // picture tab ---------------------
 
-    QVBox *picTab = new QVBox( tabWidget );
+    Q3VBox *picTab = new Q3VBox( tabWidget );
     picTab->setSpacing( KDialog::spacingHint() );
     picTab->setMargin( 5 );
 

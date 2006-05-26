@@ -22,17 +22,32 @@
 #include <stdlib.h>
 #include <math.h>
 
-#include <qprogressdialog.h>
+#include <q3progressdialog.h>
 #include <QFile>
 #include <qtextstream.h>
 #include <qpainter.h>
-#include <qpaintdevicemetrics.h>
-#include <qwmatrix.h>
+#include <q3paintdevicemetrics.h>
+#include <qmatrix.h>
 #include <qapplication.h>
+//Added by qt3to4:
+#include <Q3CString>
+#include <QWheelEvent>
+#include <Q3PtrList>
+#include <QPaintEvent>
+#include <QDragMoveEvent>
+#include <Q3PointArray>
+#include <QKeyEvent>
+#include <QResizeEvent>
+#include <QEvent>
+#include <QDropEvent>
+#include <QDragEnterEvent>
+#include <Q3ValueList>
+#include <QPixmap>
+#include <QMouseEvent>
 #include <kmenu.h>
 #include <qimage.h>
 #include <qdatetime.h>
-#include <qdropsite.h>
+#include <q3dropsite.h>
 #include <qrect.h>
 #include <qsize.h>
 #include <QPoint>
@@ -91,7 +106,7 @@ const int KPrCanvas::MOUSE_SNAP_DISTANCE = 4;
 const int KPrCanvas::KEY_SNAP_DISTANCE = 2;
 
 KPrCanvas::KPrCanvas( QWidget *parent, const char *name, KPrView *_view )
-: QWidget( parent, name, WStaticContents|WResizeNoErase|WRepaintNoErase )
+: QWidget( parent, name, Qt::WStaticContents|Qt::WResizeNoErase|Qt::WNoAutoErase )
 , buffer( size() )
 , m_gl( _view, _view->zoomHandler() )
 , m_paintGuides( false )
@@ -227,7 +242,7 @@ bool KPrCanvas::eventFilter( QObject *o, QEvent *e )
         }
         if ( m_currentTextObjectView &&
                 (keyev->key()==Qt::Key_Home ||keyev->key()==Qt::Key_End
-                 || keyev->key()==Qt::Key_Tab || keyev->key()==Qt::Key_Prior
+                 || keyev->key()==Qt::Key_Tab || keyev->key()==Qt::Key_PageUp
                  || keyev->key()==Qt::Key_PageDown || keyev->key() == Qt::Key_Backtab) )
         {
             m_currentTextObjectView->keyPressEvent( keyev );
@@ -240,12 +255,12 @@ bool KPrCanvas::eventFilter( QObject *o, QEvent *e )
         }
         break;
     }
-    case QEvent::AccelOverride:
+    case QEvent::ShortcutOverride:
     {
 #ifndef NDEBUG
         QKeyEvent * keyev = static_cast<QKeyEvent *>(e);
         // Debug keys
-        if ( ( keyev->state() & Qt::ControlButton ) && ( keyev->state() & Qt::ShiftButton ) )
+        if ( ( keyev->state() & Qt::ControlModifier ) && ( keyev->state() & Qt::ShiftModifier ) )
         {
             switch ( keyev->key() ) {
             case Qt::Key_P: // 'P' -> paragraph debug
@@ -298,9 +313,9 @@ void KPrCanvas::paintEvent( QPaintEvent* paintEvent )
             //kDebug(33001) << "KPrCanvas::paintEvent after applying diffx/diffy: " << DEBUGRECT( crect ) << endl;
 
             if ( editMode || !fillBlack )
-                bufPainter.fillRect( crect, white );
+                bufPainter.fillRect( crect, Qt::white );
             else
-                bufPainter.fillRect( crect, black );
+                bufPainter.fillRect( crect, Qt::black );
 
             KPrPage * page = editMode ? m_activePage : doc->pageList().at( m_step.m_pageNumber );
             drawBackground( &bufPainter, crect, page, editMode );
@@ -372,7 +387,7 @@ void KPrCanvas::paintEvent( QPaintEvent* paintEvent )
             case MT_NONE:
                 if ( drawRubber )
                 {
-                    topPainter.setPen( QPen( black, 0, DotLine ) );
+                    topPainter.setPen( QPen( Qt::black, 0, Qt::DotLine ) );
                     topPainter.drawRect( m_view->zoomHandler()->zoomRect( m_rubber ) );
                 }
                 break;
@@ -417,7 +432,7 @@ void KPrCanvas::paintEvent( QPaintEvent* paintEvent )
             case INS_POLYLINE:
             case INS_CLOSED_POLYLINE:
                 {
-                    QPointArray pointArray = m_pointArray.zoomPointArray( m_view->zoomHandler() );
+                    Q3PointArray pointArray = m_pointArray.zoomPointArray( m_view->zoomHandler() );
                     topPainter.drawPolyline( pointArray );
                     topPainter.drawLine( m_view->zoomHandler()->zoomPoint( m_startPoint ),
                             m_view->zoomHandler()->zoomPoint( m_endPoint ) );
@@ -508,10 +523,10 @@ void KPrCanvas::eraseEmptySpace( QPainter * painter, const QRegion & emptySpaceR
 }
 
 
-void KPrCanvas::drawObjects( QPainter *painter, const QPtrList<KPrObject> &objects, SelectionMode selectionMode,
+void KPrCanvas::drawObjects( QPainter *painter, const Q3PtrList<KPrObject> &objects, SelectionMode selectionMode,
                              bool contour, KPrTextView * textView, int pageNum ) const
 {
-    QPtrListIterator<KPrObject> it( objects );
+    Q3PtrListIterator<KPrObject> it( objects );
     for ( ; it.current(); ++it )
     {
         SelectionMode selMode = selectionMode;
@@ -535,11 +550,11 @@ void KPrCanvas::drawObjects( QPainter *painter, const QPtrList<KPrObject> &objec
 }
 
 
-void KPrCanvas::drawObjectsPres( QPainter *painter, const QPtrList<KPrObject> &_objects, PresStep step ) const
+void KPrCanvas::drawObjectsPres( QPainter *painter, const Q3PtrList<KPrObject> &_objects, PresStep step ) const
 {
-    QPtrList<KPrObject> objects;
+    Q3PtrList<KPrObject> objects;
 
-    QPtrListIterator<KPrObject> it( _objects );
+    Q3PtrListIterator<KPrObject> it( _objects );
     for ( ; it.current(); ++it )
     {
         if ( objectIsAHeaderFooterHidden(it.current()) )
@@ -565,13 +580,13 @@ void KPrCanvas::drawObjectsPres( QPainter *painter, const QPtrList<KPrObject> &_
 }
 
 
-void KPrCanvas::drawObjectsEdit( QPainter *painter, const KoRect &rect, const QPtrList<KPrObject> &_objects,
+void KPrCanvas::drawObjectsEdit( QPainter *painter, const KoRect &rect, const Q3PtrList<KPrObject> &_objects,
                                  SelectionMode selectionMode, int pageNum ) const
 {
-    QPtrList<KPrObject> objects;
+    Q3PtrList<KPrObject> objects;
 
     KPrTextView * textView = NULL;
-    QPtrListIterator<KPrObject> it( _objects );
+    Q3PtrListIterator<KPrObject> it( _objects );
     for ( ; it.current(); ++it )
     {
         if ( objectIsAHeaderFooterHidden(it.current()) )
@@ -644,9 +659,9 @@ void KPrCanvas::drawGrid(QPainter *painter, const QRect &rect2) const
 
 // This one is used to generate the pixmaps for the HTML presentation,
 // for the pres-structure-dialog, for the sidebar previews, for template icons.
-void KPrCanvas::drawAllObjectsInPage( QPainter *painter, const QPtrList<KPrObject> & obj, int pageNum ) const
+void KPrCanvas::drawAllObjectsInPage( QPainter *painter, const Q3PtrList<KPrObject> & obj, int pageNum ) const
 {
-    QPtrListIterator<KPrObject> it( obj );
+    Q3PtrListIterator<KPrObject> it( obj );
     for ( ; it.current(); ++it ) {
         if ( objectIsAHeaderFooterHidden( it.current() ) )
             continue;
@@ -656,9 +671,9 @@ void KPrCanvas::drawAllObjectsInPage( QPainter *painter, const QPtrList<KPrObjec
 
 void KPrCanvas::recalcAutoGuides( )
 {
-    QValueList<double> horizontalPos;
-    QValueList<double> verticalPos;
-    QPtrListIterator<KPrObject> it( m_activePage->objectList() );
+    Q3ValueList<double> horizontalPos;
+    Q3ValueList<double> verticalPos;
+    Q3PtrListIterator<KPrObject> it( m_activePage->objectList() );
     for ( ; it.current(); ++it )
     {
         if( ! it.current()->isSelected() )
@@ -698,7 +713,7 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
                 m_view->disableAutoScroll();
                 mousePressed=false;
             }
-            else if( e->button() == MidButton )
+            else if( e->button() == Qt::MidButton )
             {
                 QApplication::clipboard()->setSelectionMode( true );
                 m_currentTextObjectView->paste();
@@ -711,12 +726,12 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
 
     KPrObject *kpobject = 0;
 
-    m_disableSnapping = e->state() & Qt::ShiftButton;
+    m_disableSnapping = e->state() & Qt::ShiftModifier;
 
     exitEditMode();
 
     if ( editMode ) {
-        if ( e->button() == LeftButton ) {
+        if ( e->button() == Qt::LeftButton ) {
             mousePressed = true;
             m_view->enableAutoScroll();
 
@@ -806,9 +821,9 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
 
                 if ( kpobject ) {
                     // use ctrl + Button to select / deselect object
-                    if ( e->state() & Qt::ControlButton && kpobject->isSelected() )
+                    if ( e->state() & Qt::ControlModifier && kpobject->isSelected() )
                         deSelectObj( kpobject );
-                    else if ( e->state() & Qt::ControlButton )
+                    else if ( e->state() & Qt::ControlModifier )
                     {
                         selectObj( kpobject );
                         raiseObject( kpobject );
@@ -878,7 +893,7 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
                     }
                     else {
                         modType = MT_NONE;
-                        if ( !( e->state() & Qt::ShiftButton ) && !( e->state() & Qt::ControlButton ) )
+                        if ( !( e->state() & Qt::ShiftModifier ) && !( e->state() & Qt::ControlModifier ) )
                             deSelectAllObj();
 
                         drawRubber = true;
@@ -977,8 +992,8 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
             if( m_indexPointArray > 1)
             {
                 QPainter p( this );
-                p.setPen( QPen( black, 1, SolidLine ) );
-                p.setBrush( NoBrush );
+                p.setPen( QPen( Qt::black, 1, Qt::SolidLine ) );
+                p.setBrush( Qt::NoBrush );
                 p.translate( -diffx(), -diffy() );
                 p.save();
                 p.setRasterOp( NotROP );
@@ -1003,8 +1018,8 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
             else if( m_indexPointArray == 1)
             {
                 QPainter p( this );
-                p.setPen( QPen( black, 1, SolidLine ) );
-                p.setBrush( NoBrush );
+                p.setPen( QPen( Qt::black, 1, Qt::SolidLine ) );
+                p.setBrush( Qt::NoBrush );
                 p.setRasterOp( NotROP );
                 p.translate( -diffx(), -diffy() );
                 p.drawLine( m_view->zoomHandler()->zoomPoint( m_startPoint ),
@@ -1049,7 +1064,7 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
                 QPoint pnt = QCursor::pos();
                 mousePressed = false;
                 m_view->disableAutoScroll();
-                bool state=!( e->state() & Qt::ShiftButton ) && !( e->state() & Qt::ControlButton ) && !kpobject->isSelected();
+                bool state=!( e->state() & Qt::ShiftModifier ) && !( e->state() & Qt::ControlModifier ) && !kpobject->isSelected();
 
                 if ( state )
                     deSelectAllObj();
@@ -1075,17 +1090,17 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
             setToolEditMode( TEM_MOUSE );
         }
     } else {
-        if ( e->button() == LeftButton ) {
+        if ( e->button() == Qt::LeftButton ) {
             if ( m_drawMode ) {
                 setCursor( KPrUtils::penCursor() );
                 m_drawLineInDrawMode = true;
                 m_drawModeLineIndex = 0;
-                m_drawModeLines.append( QPointArray() );
+                m_drawModeLines.append( Q3PointArray() );
                 m_drawModeLines[m_drawModeLines.count() - 1].putPoints( m_drawModeLineIndex++, 1, e->x(), e->y() );
             }
             else
                 m_view->screenNext();
-        } else if ( e->button() == MidButton )
+        } else if ( e->button() == Qt::MidButton )
             m_view->screenPrev();
         else if ( e->button() == Qt::RightButton ) {
             if ( !m_drawMode && !spManualSwitch() )
@@ -1095,7 +1110,7 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
                 m_view->stopAutoPresTimer();
             }
 
-            setCursor( arrowCursor );
+            setCursor( Qt::arrowCursor );
             QPoint pnt = QCursor::pos();
             int ret = m_presMenu->exec( pnt );
             // we have to continue the timer if the menu was canceled and we draw mode is not active
@@ -1116,7 +1131,7 @@ KoRect KPrCanvas::getAlignBoundingRect() const
 {
     KoRect boundingRect;
 
-    QPtrListIterator<KPrObject> it( m_activePage->objectList() );
+    Q3PtrListIterator<KPrObject> it( m_activePage->objectList() );
     for ( ; it.current() ; ++it )
     {
         if ( it.current() == m_view->kPresenterDoc()->header() ||
@@ -1145,7 +1160,7 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
         return;
     }
 
-    if ( e->button() != LeftButton )
+    if ( e->button() != Qt::LeftButton )
         return;
 
     if ( m_drawMode ) {
@@ -1154,7 +1169,7 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
         return;
     }
 
-    QPtrList<KPrObject> _objects;
+    Q3PtrList<KPrObject> _objects;
     _objects.setAutoDelete( false );
 
     if ( ( m_drawPolyline && ( toolEditMode == INS_POLYLINE || toolEditMode == INS_CLOSED_POLYLINE ) )
@@ -1175,7 +1190,7 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
                 QPainter p;
                 p.begin( this );
                 p.setRasterOp( NotROP );
-                p.setPen( QPen( black, 0, DotLine ) );
+                p.setPen( QPen( Qt::black, 0, Qt::DotLine ) );
                 p.translate( -diffx(), -diffy() );
                 p.drawRect( m_view->zoomHandler()->zoomRect( m_rubber ) );
                 p.end();
@@ -1183,7 +1198,7 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
 
                 m_rubber = m_rubber.normalize();
 
-                QPtrListIterator<KPrObject> it( getObjectList() );
+                Q3PtrListIterator<KPrObject> it( getObjectList() );
                 for ( ; it.current() ; ++it )
                 {
                     if ( it.current()->intersects( m_rubber ) )
@@ -1259,7 +1274,7 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
             QPainter p;
             p.begin( this );
             p.setRasterOp( NotROP );
-            p.setPen( QPen( black, 0, DotLine ) );
+            p.setPen( QPen( Qt::black, 0, Qt::DotLine ) );
             p.translate( -diffx(), -diffy() );
             p.drawRect( m_view->zoomHandler()->zoomRect( m_rubber ) );
             p.end();
@@ -1281,7 +1296,7 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
         if ( !m_rotateObject )
             break;
         if ( m_angleBeforeRotate != m_rotateObject->getAngle() ) {
-            QPtrList<KPrObject> objects;
+            Q3PtrList<KPrObject> objects;
             objects.append( m_rotateObject );
 
             /* As the object is allready rotated set the angle to
@@ -1396,7 +1411,7 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
             setCursor(Qt::PointingHandCursor);
             return;
         }
-        setCursor( arrowCursor );
+        setCursor( Qt::arrowCursor );
 
         KPrTextObject *txtObj=m_currentTextObjectView->kpTextObject();
         Q_ASSERT(txtObj);
@@ -1425,7 +1440,7 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
         }
     }
 
-    m_disableSnapping = e->state() & Qt::ShiftButton;
+    m_disableSnapping = e->state() & Qt::ShiftModifier;
 
     if ( editMode ) {
         m_view->setRulerMousePos( e->x(), e->y() );
@@ -1453,7 +1468,7 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
             }
 
             if ( !cursorAlreadySet )
-                setCursor( arrowCursor );
+                setCursor( Qt::arrowCursor );
             else
                 return;
         } else if ( mousePressed ) {
@@ -1466,7 +1481,7 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
                         QPainter p;
                         p.begin( this );
                         p.setRasterOp( NotROP );
-                        p.setPen( QPen( black, 0, DotLine ) );
+                        p.setPen( QPen( Qt::black, 0, Qt::DotLine ) );
                         p.translate( -diffx(), -diffy() );
                         p.drawRect( m_view->zoomHandler()->zoomRect( m_rubber ) );
                         m_rubber.setRight( docPoint.x() );
@@ -1481,7 +1496,7 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
                         m_moveStartPoint = objectRect( false ).topLeft();
                         m_isMoving = true;
                     }
-                    moveObjectsByMouse( docPoint, e->state() & AltButton || e->state() & Qt::ControlButton );
+                    moveObjectsByMouse( docPoint, e->state() & Qt::AltModifier || e->state() & Qt::ControlModifier );
                 } else if ( modType != MT_NONE && m_resizeObject ) {
                     if ( !m_isResizing )
                     {
@@ -1491,12 +1506,12 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
                     KoPoint sp( snapPoint( docPoint, false ) );
 
                     bool keepRatio = m_resizeObject->isKeepRatio();
-                    if ( e->state() & AltButton )
+                    if ( e->state() & Qt::AltModifier )
                     {
                         keepRatio = true;
                     }
                     bool scaleAroundCenter = false;
-                    if ( e->state() & Qt::ControlButton )
+                    if ( e->state() & Qt::ControlModifier )
                     {
                         scaleAroundCenter = true;
                     }
@@ -1509,7 +1524,7 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
                     QPainter p;
                     p.begin( this );
                     p.setRasterOp( NotROP );
-                    p.setPen( QPen( black, 0, DotLine ) );
+                    p.setPen( QPen( Qt::black, 0, Qt::DotLine ) );
                     p.translate( -diffx(), -diffy() );
                     p.drawRect( m_view->zoomHandler()->zoomRect( m_rubber ) );
                     m_rubber.setRight( docPoint.x() );
@@ -1549,8 +1564,8 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
             case INS_TEXT:
             {
                 QPainter p( this );
-                p.setPen( QPen( black, 1, SolidLine ) );
-                p.setBrush( NoBrush );
+                p.setPen( QPen( Qt::black, 1, Qt::SolidLine ) );
+                p.setBrush( Qt::NoBrush );
                 p.setRasterOp( NotROP );
                 p.translate( -diffx(), -diffy() );
 
@@ -1565,8 +1580,8 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
             } break;
             case INS_ELLIPSE: {
                 QPainter p( this );
-                p.setPen( QPen( black, 1, SolidLine ) );
-                p.setBrush( NoBrush );
+                p.setPen( QPen( Qt::black, 1, Qt::SolidLine ) );
+                p.setBrush( Qt::NoBrush );
                 p.setRasterOp( NotROP );
                 p.translate( -diffx(), -diffy() );
 
@@ -1581,8 +1596,8 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
             } break;
             case INS_RECT: {
                 QPainter p( this );
-                p.setPen( QPen( black, 1, SolidLine ) );
-                p.setBrush( NoBrush );
+                p.setPen( QPen( Qt::black, 1, Qt::SolidLine ) );
+                p.setBrush( Qt::NoBrush );
                 p.setRasterOp( NotROP );
                 p.translate( -diffx(), -diffy() );
 
@@ -1597,8 +1612,8 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
             } break;
             case INS_LINE: {
                 QPainter p( this );
-                p.setPen( QPen( black, 1, SolidLine ) );
-                p.setBrush( NoBrush );
+                p.setPen( QPen( Qt::black, 1, Qt::SolidLine ) );
+                p.setBrush( Qt::NoBrush );
                 p.setRasterOp( NotROP );
                 p.translate( -diffx(), -diffy() );
 
@@ -1608,7 +1623,7 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
                 p.drawLine( m_view->zoomHandler()->zoomPoint( m_startPoint ),
                             m_view->zoomHandler()->zoomPoint( oldEndPoint ) );
 
-                if ( e->state() & AltButton )
+                if ( e->state() & Qt::AltModifier )
                 {
                     m_startPoint += m_endPoint - oldEndPoint;
                 }
@@ -1622,8 +1637,8 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
             } break;
             case INS_PIE: {
                 QPainter p( this );
-                p.setPen( QPen( black, 1, SolidLine ) );
-                p.setBrush( NoBrush );
+                p.setPen( QPen( Qt::black, 1, Qt::SolidLine ) );
+                p.setBrush( Qt::NoBrush );
                 p.setRasterOp( NotROP );
                 p.translate( -diffx(), -diffy() );
 
@@ -1643,14 +1658,14 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
                 if ( m_endPoint != m_startPoint )
                 {
                     QPainter p( this );
-                    p.setPen( QPen( black, 1, SolidLine ) );
-                    p.setBrush( NoBrush );
+                    p.setPen( QPen( Qt::black, 1, Qt::SolidLine ) );
+                    p.setBrush( Qt::NoBrush );
                     p.setRasterOp( NotROP );
                     p.translate( -diffx(), -diffy() );
 
-                    if ( e->state() & AltButton )
+                    if ( e->state() & Qt::AltModifier )
                     {
-                        QPointArray pointArray = m_pointArray.zoomPointArray( m_view->zoomHandler() );
+                        Q3PointArray pointArray = m_pointArray.zoomPointArray( m_view->zoomHandler() );
                         // erase
                         p.drawPolyline( pointArray );
                         m_pointArray.translate( m_endPoint.x() - m_startPoint.x(), 
@@ -1675,8 +1690,8 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
             } break;
             case INS_POLYLINE: case INS_CLOSED_POLYLINE: {
                 QPainter p( this );
-                p.setPen( QPen( black, 1, SolidLine ) );
-                p.setBrush( NoBrush );
+                p.setPen( QPen( Qt::black, 1, Qt::SolidLine ) );
+                p.setBrush( Qt::NoBrush );
                 p.setRasterOp( NotROP );
                 p.translate( -diffx(), -diffy() );
 
@@ -1686,9 +1701,9 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
                 p.drawLine( m_view->zoomHandler()->zoomPoint( m_startPoint ),
                             m_view->zoomHandler()->zoomPoint( oldEndPoint ) );
 
-                if ( e->state() & AltButton )
+                if ( e->state() & Qt::AltModifier )
                 {
-                    QPointArray pointArray = m_pointArray.zoomPointArray( m_view->zoomHandler() );
+                    Q3PointArray pointArray = m_pointArray.zoomPointArray( m_view->zoomHandler() );
                     // erase
                     p.drawPolyline( pointArray );
                     m_pointArray.translate( m_endPoint.x() - oldEndPoint.x(), 
@@ -1709,8 +1724,8 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
             case INS_CUBICBEZIERCURVE: case INS_QUADRICBEZIERCURVE:
             case INS_CLOSED_CUBICBEZIERCURVE: case INS_CLOSED_QUADRICBEZIERCURVE:{
                 QPainter p( this );
-                p.setPen( QPen( black, 1, SolidLine ) );
-                p.setBrush( NoBrush );
+                p.setPen( QPen( Qt::black, 1, Qt::SolidLine ) );
+                p.setBrush( Qt::NoBrush );
                 p.setRasterOp( NotROP );
                 p.translate( -diffx(), -diffy() );
 
@@ -1718,7 +1733,7 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
 
                 drawCubicBezierCurve( p, m_oldCubicBezierPointArray );
 
-                if ( e->state() & AltButton )
+                if ( e->state() & Qt::AltModifier )
                 {
                     // erase
                     redrawCubicBezierCurve( p );
@@ -1778,8 +1793,8 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
             } break;
             case INS_POLYGON: {
                 QPainter p( this );
-                p.setPen( QPen( black, 1, SolidLine ) );
-                p.setBrush( NoBrush );
+                p.setPen( QPen( Qt::black, 1, Qt::SolidLine ) );
+                p.setBrush( Qt::NoBrush );
                 p.setRasterOp( NotROP );
                 p.translate( -diffx(), -diffy() );
 
@@ -1805,7 +1820,7 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
     }
 
     if ( !editMode && !m_drawMode && !m_presMenu->isVisible() && fillBlack )
-        setCursor( blankCursor );
+        setCursor( Qt::blankCursor );
 }
 
 void KPrCanvas::mouseDoubleClickEvent( QMouseEvent *e )
@@ -1865,7 +1880,7 @@ void KPrCanvas::mouseDoubleClickEvent( QMouseEvent *e )
                 m_currentTextObjectView=kptextobject->createKPTextView(this);
 
                 //setTextBackground( kptextobject );
-                setCursor( arrowCursor );
+                setCursor( Qt::arrowCursor );
                 m_editObject = kpobject;
             }
         }
@@ -2010,12 +2025,12 @@ void KPrCanvas::keyPressEvent( QKeyEvent *e )
 
         if ( mouseSelectedObject )
         {
-            m_disableSnapping = e->state() & Qt::ShiftButton;
+            m_disableSnapping = e->state() & Qt::ShiftModifier;
 
             int offsetx = 1;
             int offsety = 1;
 
-            if ( e->state() & Qt::ControlButton )
+            if ( e->state() & Qt::ControlModifier )
             {
                 offsetx = qMax(1,m_view->zoomHandler()->zoomItX(10));
                 offsety = qMax(1,m_view->zoomHandler()->zoomItY(10));
@@ -2109,7 +2124,7 @@ void KPrCanvas::keyPressEvent( QKeyEvent *e )
                     // undo snapping for move by mouse
                     if ( e->state() & Qt::LeftButton && m_isMoving )
                     {
-                        moveObjectsByMouse( m_origMousePos, e->state() & AltButton || e->state() & Qt::ControlButton );
+                        moveObjectsByMouse( m_origMousePos, e->state() & Qt::AltModifier || e->state() & Qt::ControlModifier );
                     }
                     break;
                 }
@@ -2244,7 +2259,7 @@ void KPrCanvas::deSelectObj( KPrObject *kpobject )
 
 void KPrCanvas::selectAllObj()
 {
-    QPtrListIterator<KPrObject> it( m_activePage->objectList() );
+    Q3PtrListIterator<KPrObject> it( m_activePage->objectList() );
     for ( ; it.current() ; ++it )
     {
         if ( !objectIsAHeaderFooterHidden(it.current()) )
@@ -2336,7 +2351,7 @@ bool KPrCanvas::exportPage( int nPage,
 {
     bool res = false;
     const QCursor oldCursor( cursor() );
-    setCursor( waitCursor );
+    setCursor( Qt::waitCursor );
     QPixmap pix( nWidth, nHeight );
     drawPageInPix( pix, nPage, 0, true, nWidth, nHeight );
     if( !pix.isNull() ){
@@ -2384,10 +2399,10 @@ void KPrCanvas::savePicture()
 
 void KPrCanvas::setTextFormat(const KoTextFormat &format, int flags)
 {
-    QPtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
+    Q3PtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
     if ( lst.isEmpty() ) return;
     KMacroCommand* macroCmd = new KMacroCommand( i18n("Change Text Font") );
-    QPtrListIterator<KoTextFormatInterface> it( lst );
+    Q3PtrListIterator<KoTextFormatInterface> it( lst );
     for ( ; it.current() ; ++it ) {
         KCommand *cmd = it.current()->setFormatCommand(&format, flags, true);
 
@@ -2399,9 +2414,9 @@ void KPrCanvas::setTextFormat(const KoTextFormat &format, int flags)
 
 void KPrCanvas::setTextColor( const QColor &color )
 {
-    QPtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
+    Q3PtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
     if ( lst.isEmpty() ) return;
-    QPtrListIterator<KoTextFormatInterface> it( lst );
+    Q3PtrListIterator<KoTextFormatInterface> it( lst );
     KMacroCommand* macroCmd = new KMacroCommand( i18n("Set Text Color") );
     for ( ; it.current() ; ++it ) {
         KCommand* cmd = it.current()->setTextColorCommand( color );
@@ -2413,9 +2428,9 @@ void KPrCanvas::setTextColor( const QColor &color )
 
 void KPrCanvas::setTextBackgroundColor( const QColor &color )
 {
-    QPtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
+    Q3PtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
     if ( lst.isEmpty() ) return;
-    QPtrListIterator<KoTextFormatInterface> it( lst );
+    Q3PtrListIterator<KoTextFormatInterface> it( lst );
     KMacroCommand* macroCmd = 0L;
     for ( ; it.current() ; ++it ) {
         KCommand* cmd = it.current()->setTextBackgroundColorCommand( color );
@@ -2432,9 +2447,9 @@ void KPrCanvas::setTextBackgroundColor( const QColor &color )
 
 void KPrCanvas::setTextBold( bool b )
 {
-    QPtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
+    Q3PtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
     if ( lst.isEmpty() ) return;
-    QPtrListIterator<KoTextFormatInterface> it( lst );
+    Q3PtrListIterator<KoTextFormatInterface> it( lst );
     KMacroCommand* macroCmd = 0L;
     for ( ; it.current() ; ++it ) {
         KCommand* cmd = it.current()->setBoldCommand( b );
@@ -2451,9 +2466,9 @@ void KPrCanvas::setTextBold( bool b )
 
 void KPrCanvas::setTextItalic( bool b )
 {
-    QPtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
+    Q3PtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
     if ( lst.isEmpty() ) return;
-    QPtrListIterator<KoTextFormatInterface> it( lst );
+    Q3PtrListIterator<KoTextFormatInterface> it( lst );
     KMacroCommand* macroCmd = 0L;
     for ( ; it.current() ; ++it ) {
         KCommand* cmd = it.current()->setItalicCommand( b );
@@ -2470,9 +2485,9 @@ void KPrCanvas::setTextItalic( bool b )
 
 void KPrCanvas::setTextUnderline( bool b )
 {
-    QPtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
+    Q3PtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
     if ( lst.isEmpty() ) return;
-    QPtrListIterator<KoTextFormatInterface> it( lst );
+    Q3PtrListIterator<KoTextFormatInterface> it( lst );
     KMacroCommand* macroCmd = 0L;
     for ( ; it.current() ; ++it ) {
         KCommand* cmd = it.current()->setUnderlineCommand( b );
@@ -2489,10 +2504,10 @@ void KPrCanvas::setTextUnderline( bool b )
 
 void KPrCanvas::setTextStrikeOut( bool b )
 {
-    QPtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
+    Q3PtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
     if ( lst.isEmpty() ) return;
     KMacroCommand* macroCmd = 0L;
-    QPtrListIterator<KoTextFormatInterface> it( lst );
+    Q3PtrListIterator<KoTextFormatInterface> it( lst );
     for ( ; it.current() ; ++it ) {
         KCommand *cmd = it.current()->setStrikeOutCommand( b );
         if ( cmd )
@@ -2508,10 +2523,10 @@ void KPrCanvas::setTextStrikeOut( bool b )
 
 void KPrCanvas::setTextFamily( const QString &f )
 {
-    QPtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
+    Q3PtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
     if ( lst.isEmpty() ) return;
     KMacroCommand* macroCmd = 0L;
-    QPtrListIterator<KoTextFormatInterface> it( lst );
+    Q3PtrListIterator<KoTextFormatInterface> it( lst );
     for ( ; it.current() ; ++it ) {
         KCommand* cmd = it.current()->setFamilyCommand( f );
         if ( cmd )
@@ -2527,10 +2542,10 @@ void KPrCanvas::setTextFamily( const QString &f )
 
 void KPrCanvas::setTextPointSize( int s )
 {
-    QPtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
+    Q3PtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
     if ( lst.isEmpty() ) return;
     KMacroCommand* macroCmd = 0L;
-    QPtrListIterator<KoTextFormatInterface> it( lst );
+    Q3PtrListIterator<KoTextFormatInterface> it( lst );
     for ( ; it.current() ; ++it ) {
         KCommand* cmd = it.current()->setPointSizeCommand( s );
         if ( cmd )
@@ -2547,9 +2562,9 @@ void KPrCanvas::setTextPointSize( int s )
 
 void KPrCanvas::setTextSubScript( bool b )
 {
-    QPtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
+    Q3PtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
     if ( lst.isEmpty() ) return;
-    QPtrListIterator<KoTextFormatInterface> it( lst );
+    Q3PtrListIterator<KoTextFormatInterface> it( lst );
     KMacroCommand* macroCmd = 0L;
     for ( ; it.current() ; ++it ) {
         KCommand* cmd = it.current()->setTextSubScriptCommand( b );
@@ -2566,9 +2581,9 @@ void KPrCanvas::setTextSubScript( bool b )
 
 void KPrCanvas::setTextSuperScript( bool b )
 {
-    QPtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
+    Q3PtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
     if ( lst.isEmpty() ) return;
-    QPtrListIterator<KoTextFormatInterface> it( lst );
+    Q3PtrListIterator<KoTextFormatInterface> it( lst );
     KMacroCommand* macroCmd = 0L;
     for ( ; it.current() ; ++it ) {
         KCommand* cmd = it.current()->setTextSuperScriptCommand( b );
@@ -2585,9 +2600,9 @@ void KPrCanvas::setTextSuperScript( bool b )
 
 void KPrCanvas::setTextDefaultFormat( )
 {
-    QPtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
+    Q3PtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
     if ( lst.isEmpty() ) return;
-    QPtrListIterator<KoTextFormatInterface> it( lst );
+    Q3PtrListIterator<KoTextFormatInterface> it( lst );
     KMacroCommand* macroCmd = 0L;
     for ( ; it.current() ; ++it ) {
         KCommand* cmd = it.current()->setDefaultFormatCommand( );
@@ -2604,9 +2619,9 @@ void KPrCanvas::setTextDefaultFormat( )
 
 void KPrCanvas::setIncreaseFontSize()
 {
-    QPtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
+    Q3PtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
     if ( lst.isEmpty() ) return;
-    QPtrListIterator<KoTextFormatInterface> it( lst );
+    Q3PtrListIterator<KoTextFormatInterface> it( lst );
     int size = it.current()->currentFormat()->pointSize();
     KMacroCommand* macroCmd =0L;
     for ( ; it.current() ; ++it ) {
@@ -2624,9 +2639,9 @@ void KPrCanvas::setIncreaseFontSize()
 
 void KPrCanvas::setDecreaseFontSize()
 {
-    QPtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
+    Q3PtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
     if ( lst.isEmpty() ) return;
-    QPtrListIterator<KoTextFormatInterface> it( lst );
+    Q3PtrListIterator<KoTextFormatInterface> it( lst );
     int size = it.current()->currentFormat()->pointSize();
     KMacroCommand* macroCmd = 0L;
     for ( ; it.current() ; ++it ) {
@@ -2644,9 +2659,9 @@ void KPrCanvas::setDecreaseFontSize()
 
 void KPrCanvas::setTextAlign( int align )
 {
-    QPtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
+    Q3PtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
     if ( lst.isEmpty() ) return;
-    QPtrListIterator<KoTextFormatInterface> it( lst );
+    Q3PtrListIterator<KoTextFormatInterface> it( lst );
     KMacroCommand* macroCmd = 0L;
     for ( ; it.current() ; ++it ) {
         KCommand* cmd = it.current()->setAlignCommand(align);
@@ -2663,9 +2678,9 @@ void KPrCanvas::setTextAlign( int align )
 
 void KPrCanvas::setTabList( const KoTabulatorList & tabList )
 {
-    QPtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
+    Q3PtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
     if ( lst.isEmpty() ) return;
-    QPtrListIterator<KoTextFormatInterface> it( lst );
+    Q3PtrListIterator<KoTextFormatInterface> it( lst );
     KMacroCommand* macroCmd = 0L;
     for ( ; it.current() ; ++it ) {
         KCommand* cmd = it.current()->setTabListCommand(tabList );
@@ -2682,17 +2697,17 @@ void KPrCanvas::setTabList( const KoTabulatorList & tabList )
 
 void KPrCanvas::setTextDepthPlus()
 {
-    QPtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
+    Q3PtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
     if ( lst.isEmpty() ) return;
     double leftMargin=0.0;
     if(!lst.isEmpty())
-        leftMargin=lst.first()->currentParagLayoutFormat()->margins[QStyleSheetItem::MarginLeft];
+        leftMargin=lst.first()->currentParagLayoutFormat()->margins[Q3StyleSheetItem::MarginLeft];
     double indent = m_view->kPresenterDoc()->getIndentValue();
     double newVal = leftMargin + indent;
-    QPtrListIterator<KoTextFormatInterface> it( lst );
+    Q3PtrListIterator<KoTextFormatInterface> it( lst );
     KMacroCommand* macroCmd = 0L;
     for ( ; it.current() ; ++it ) {
-      KCommand* cmd = it.current()->setMarginCommand(QStyleSheetItem::MarginLeft, newVal);
+      KCommand* cmd = it.current()->setMarginCommand(Q3StyleSheetItem::MarginLeft, newVal);
         if ( cmd )
         {
             if ( !macroCmd )
@@ -2705,24 +2720,24 @@ void KPrCanvas::setTextDepthPlus()
     if(!lst.isEmpty())
     {
         const KoParagLayout *layout=lst.first()->currentParagLayoutFormat();
-        m_view->showRulerIndent( layout->margins[QStyleSheetItem::MarginLeft], layout->margins[QStyleSheetItem::MarginFirstLine],
-                                 layout->margins[QStyleSheetItem::MarginRight], lst.first()->rtl());
+        m_view->showRulerIndent( layout->margins[Q3StyleSheetItem::MarginLeft], layout->margins[Q3StyleSheetItem::MarginFirstLine],
+                                 layout->margins[Q3StyleSheetItem::MarginRight], lst.first()->rtl());
     }
 }
 
 void KPrCanvas::setTextDepthMinus()
 {
-    QPtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
+    Q3PtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
     if ( lst.isEmpty() ) return;
     double leftMargin=0.0;
     if(!lst.isEmpty())
-        leftMargin=lst.first()->currentParagLayoutFormat()->margins[QStyleSheetItem::MarginLeft];
+        leftMargin=lst.first()->currentParagLayoutFormat()->margins[Q3StyleSheetItem::MarginLeft];
     double indent = m_view->kPresenterDoc()->getIndentValue();
-    QPtrListIterator<KoTextFormatInterface> it( lst );
+    Q3PtrListIterator<KoTextFormatInterface> it( lst );
     double newVal = leftMargin - indent;
     KMacroCommand* macroCmd = 0L;
     for ( ; it.current() ; ++it ) {
-        KCommand* cmd = it.current()->setMarginCommand(QStyleSheetItem::MarginLeft, qMax( newVal, 0 ));
+        KCommand* cmd = it.current()->setMarginCommand(Q3StyleSheetItem::MarginLeft, qMax( newVal, 0 ));
         if ( cmd )
         {
             if ( !macroCmd )
@@ -2735,19 +2750,19 @@ void KPrCanvas::setTextDepthMinus()
     if(!lst.isEmpty())
     {
         const KoParagLayout *layout=lst.first()->currentParagLayoutFormat();
-        m_view->showRulerIndent( layout->margins[QStyleSheetItem::MarginLeft], layout->margins[QStyleSheetItem::MarginFirstLine],
-                                 layout->margins[QStyleSheetItem::MarginRight], lst.first()->rtl());
+        m_view->showRulerIndent( layout->margins[Q3StyleSheetItem::MarginLeft], layout->margins[Q3StyleSheetItem::MarginFirstLine],
+                                 layout->margins[Q3StyleSheetItem::MarginRight], lst.first()->rtl());
     }
 }
 
 void KPrCanvas::setNewFirstIndent(double _firstIndent)
 {
-    QPtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
+    Q3PtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
     if ( lst.isEmpty() ) return;
-    QPtrListIterator<KoTextFormatInterface> it( lst );
+    Q3PtrListIterator<KoTextFormatInterface> it( lst );
     KMacroCommand* macroCmd = 0L;
     for ( ; it.current() ; ++it ) {
-        KCommand* cmd = it.current()->setMarginCommand(QStyleSheetItem::MarginFirstLine, _firstIndent);
+        KCommand* cmd = it.current()->setMarginCommand(Q3StyleSheetItem::MarginFirstLine, _firstIndent);
         if ( cmd )
         {
             if ( !macroCmd )
@@ -2761,12 +2776,12 @@ void KPrCanvas::setNewFirstIndent(double _firstIndent)
 
 void KPrCanvas::setNewLeftIndent(double _leftIndent)
 {
-    QPtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
+    Q3PtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
     if ( lst.isEmpty() ) return;
-    QPtrListIterator<KoTextFormatInterface> it( lst );
+    Q3PtrListIterator<KoTextFormatInterface> it( lst );
     KMacroCommand* macroCmd = 0L;
     for ( ; it.current() ; ++it ) {
-        KCommand* cmd = it.current()->setMarginCommand(QStyleSheetItem::MarginLeft, _leftIndent);
+        KCommand* cmd = it.current()->setMarginCommand(Q3StyleSheetItem::MarginLeft, _leftIndent);
         if ( cmd )
         {
             if ( !macroCmd )
@@ -2780,12 +2795,12 @@ void KPrCanvas::setNewLeftIndent(double _leftIndent)
 
 void KPrCanvas::setNewRightIndent(double _rightIndent)
 {
-    QPtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
+    Q3PtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
     if ( lst.isEmpty() ) return;
-    QPtrListIterator<KoTextFormatInterface> it( lst );
+    Q3PtrListIterator<KoTextFormatInterface> it( lst );
     KMacroCommand* macroCmd = 0L;
     for ( ; it.current() ; ++it ) {
-        KCommand* cmd = it.current()->setMarginCommand(QStyleSheetItem::MarginRight, _rightIndent);
+        KCommand* cmd = it.current()->setMarginCommand(Q3StyleSheetItem::MarginRight, _rightIndent);
         if ( cmd )
         {
             if ( !macroCmd )
@@ -2844,9 +2859,9 @@ bool KPrCanvas::haveASelectedPixmapObj() const
     return m_activePage->haveASelectedPixmapObj();
 }
 
-QPtrList<KPrTextObject> KPrCanvas::applicableTextObjects() const
+Q3PtrList<KPrTextObject> KPrCanvas::applicableTextObjects() const
 {
-    QPtrList<KPrTextObject> lst;
+    Q3PtrList<KPrTextObject> lst;
     // If we're editing a text object, then that's the one we return
     if ( m_currentTextObjectView )
         lst.append( m_currentTextObjectView->kpTextObject() );
@@ -2855,10 +2870,10 @@ QPtrList<KPrTextObject> KPrCanvas::applicableTextObjects() const
     return lst;
 }
 
-QPtrList<KoTextFormatInterface> KPrCanvas::applicableTextInterfaces() const
+Q3PtrList<KoTextFormatInterface> KPrCanvas::applicableTextInterfaces() const
 {
-    QPtrList<KoTextFormatInterface> lst;
-    QPtrList<KPrObject> lstObj;
+    Q3PtrList<KoTextFormatInterface> lst;
+    Q3PtrList<KPrObject> lstObj;
     // If we're editing a text object, then that's the one we return
     if ( m_currentTextObjectView )
     {
@@ -2868,7 +2883,7 @@ QPtrList<KoTextFormatInterface> KPrCanvas::applicableTextInterfaces() const
     else
     {
         m_activePage->getAllObjectSelectedList(lstObj);
-        QPtrListIterator<KPrObject> it(lstObj);
+        Q3PtrListIterator<KPrObject> it(lstObj);
         for ( ; it.current(); ++it ) {
             if ( it.current()->getType() == OT_TEXT )
             {
@@ -2881,10 +2896,10 @@ QPtrList<KoTextFormatInterface> KPrCanvas::applicableTextInterfaces() const
     return lst;
 }
 
-QPtrList<KPrTextObject> KPrCanvas::selectedTextObjs() const
+Q3PtrList<KPrTextObject> KPrCanvas::selectedTextObjs() const
 {
-    QPtrList<KPrTextObject> lst;
-    QPtrListIterator<KPrObject> it(getObjectList());
+    Q3PtrList<KPrTextObject> lst;
+    Q3PtrListIterator<KPrObject> it(getObjectList());
     for ( ; it.current(); ++it ) {
         if ( it.current()->isSelected() && it.current()->getType() == OT_TEXT )
             lst.append( static_cast<KPrTextObject*>( it.current() ) );
@@ -2899,7 +2914,7 @@ void KPrCanvas::startScreenPresentation( double zoomX, double zoomY, int curPgNu
     //setup presentation menu
     m_presMenu->setItemChecked( PM_DM, false );
 
-    setCursor( waitCursor );
+    setCursor( Qt::waitCursor );
 
     exitEditMode();
 
@@ -2924,8 +2939,8 @@ void KPrCanvas::startScreenPresentation( double zoomX, double zoomY, int curPgNu
 
     // add all selected slides
     m_presentationSlides.clear();
-    QValueList<int> selected = doc->displaySelectedSlides();
-    for ( QValueList<int>::Iterator it = selected.begin() ; it != selected.end(); ++ it )
+    Q3ValueList<int> selected = doc->displaySelectedSlides();
+    for ( Q3ValueList<int>::Iterator it = selected.begin() ; it != selected.end(); ++ it )
     {
         // ARGLLLRGLRLGRLG selectedSlides gets us 0-based numbers,
         // and here we want 1-based numbers !
@@ -2950,7 +2965,7 @@ void KPrCanvas::startScreenPresentation( double zoomX, double zoomY, int curPgNu
             break;
         }
 
-    setCursor( blankCursor );
+    setCursor( Qt::blankCursor );
 
     m_step.m_pageNumber = (unsigned int) -1; // force gotoPage to do something
     gotoPage( slide );
@@ -2960,7 +2975,7 @@ void KPrCanvas::startScreenPresentation( double zoomX, double zoomY, int curPgNu
 void KPrCanvas::stopScreenPresentation()
 {
     //kDebug(33001) << "KPrCanvas::stopScreenPresentation m_showOnlyPage=" << m_showOnlyPage << endl;
-    setCursor( waitCursor );
+    setCursor( Qt::waitCursor );
 
     KPrDocument * doc = m_view->kPresenterDoc();
     doc->zoomHandler()->setZoomAndResolution( m_zoomBeforePresentation,
@@ -2972,7 +2987,7 @@ void KPrCanvas::stopScreenPresentation()
     m_drawMode = false;
     repaint( false );
     setToolEditMode( toolEditMode );
-    setWFlags( WResizeNoErase );
+    setWFlags( Qt::WResizeNoErase );
 }
 
 bool KPrCanvas::pNext( bool gotoNextPage )
@@ -2995,7 +3010,7 @@ bool KPrCanvas::pNext( bool gotoNextPage )
 
         // First try to go one sub-step further, if any object requires it
         // ### should we also objects on the sticky page be checked for sub steps?
-        QPtrListIterator<KPrObject> oit( doc->pageList().at( m_step.m_pageNumber )->objectList() );
+        Q3PtrListIterator<KPrObject> oit( doc->pageList().at( m_step.m_pageNumber )->objectList() );
         for ( int i = 0 ; oit.current(); ++oit, ++i )
         {
             KPrObject *kpobject = oit.current();
@@ -3015,7 +3030,7 @@ bool KPrCanvas::pNext( bool gotoNextPage )
         // Then try to see if there is still one step to do in the current page
         if ( m_step.m_step < *( --m_pageEffectSteps.end() ) )
         {
-            QValueList<int>::ConstIterator it = m_pageEffectSteps.find( m_step.m_step );
+            Q3ValueList<int>::ConstIterator it = m_pageEffectSteps.find( m_step.m_step );
             m_step.m_step = *( ++it );
             m_step.m_subStep = 0;
             //kDebug(33001) << "Page::pNext setting currentEffectStep to " << m_step.m_step << endl;
@@ -3044,7 +3059,7 @@ bool KPrCanvas::pNext( bool gotoNextPage )
     }
 
     // No more steps in this page, try to go to the next page
-    QValueList<int>::ConstIterator test(  m_presentationSlidesIterator );
+    Q3ValueList<int>::ConstIterator test(  m_presentationSlidesIterator );
     if ( ++test != m_presentationSlides.end() )
     {
         if ( !spManualSwitch() && m_setPageTimer )
@@ -3071,7 +3086,7 @@ bool KPrCanvas::pNext( bool gotoNextPage )
         QPixmap _pix2( desk.width(), desk.height() );
         drawCurrentPageInPix( _pix2 );
 
-        QValueList<int>::ConstIterator it( m_presentationSlidesIterator );
+        Q3ValueList<int>::ConstIterator it( m_presentationSlidesIterator );
         --it;
 
         KPrPage * page = doc->pageList().at( ( *it ) - 1 );
@@ -3119,8 +3134,8 @@ bool KPrCanvas::pNext( bool gotoNextPage )
         QPainter p( &lastSlide );
 
         p.setFont( font );
-        p.setPen( white );
-        p.fillRect( p.viewport(), black );
+        p.setPen( Qt::white );
+        p.fillRect( p.viewport(), Qt::black );
         p.drawText( 50, 50, i18n( "End of presentation. Click to exit." ) );
         bitBlt( this, 0, 0, &lastSlide, 0, 0, lastSlide.width(), lastSlide.height() );
         showingLastSlide = true;
@@ -3150,7 +3165,7 @@ bool KPrCanvas::pPrev( bool gotoPreviousPage )
     m_drawModeLines.clear();
 
     if ( !gotoPreviousPage && m_step.m_step > *m_pageEffectSteps.begin() ) {
-        QValueList<int>::ConstIterator it = m_pageEffectSteps.find( m_step.m_step );
+        Q3ValueList<int>::ConstIterator it = m_pageEffectSteps.find( m_step.m_step );
         m_step.m_step = *( --it );
         //hopefully there are never more than 1000 sub steps :-)
         m_step.m_subStep = 1000;
@@ -3191,9 +3206,9 @@ bool KPrCanvas::pPrev( bool gotoPreviousPage )
     return false;
 }
 
-bool KPrCanvas::canAssignEffect( QPtrList<KPrObject> &objs ) const
+bool KPrCanvas::canAssignEffect( Q3PtrList<KPrObject> &objs ) const
 {
-    QPtrListIterator<KPrObject> oIt( m_activePage->objectList() );
+    Q3PtrListIterator<KPrObject> oIt( m_activePage->objectList() );
     for (; oIt.current(); ++oIt )
     {
         //can't assign a effect to header/footer
@@ -3327,7 +3342,7 @@ void KPrCanvas::printPage( QPainter* painter, PresStep step, KPrinter *printer, 
     int height = rect.height();
     int width = rect.width();
     
-    QPaintDeviceMetrics metrics( printer );
+    Q3PaintDeviceMetrics metrics( printer );
     int begin_left = ( metrics.width() - rect.width() );
     int begin_top = ( metrics.height() - rect.height() );
 
@@ -3399,11 +3414,11 @@ void KPrCanvas::doObjEffects( bool isAllreadyPainted )
         bitBlt( &screen_orig, 0, 0, this );
     }
 
-    QPtrList<KPrObject> allObjects;
+    Q3PtrList<KPrObject> allObjects;
     // master slide objects are below the objects of the normal slide
     if ( page->displayObjectFromMasterPage() )
     {
-        QPtrListIterator<KPrObject> it( page->masterPage()->objectList() );
+        Q3PtrListIterator<KPrObject> it( page->masterPage()->objectList() );
         for ( ; it.current(); ++it ) {
             if ( objectIsAHeaderFooterHidden( it.current() ) )
                 continue;
@@ -3412,7 +3427,7 @@ void KPrCanvas::doObjEffects( bool isAllreadyPainted )
         }
     }
 
-    QPtrListIterator<KPrObject> it( page->objectList() );
+    Q3PtrListIterator<KPrObject> it( page->objectList() );
     for ( ; it.current(); ++it ) 
     {
         allObjects.append( it.current() );
@@ -3537,7 +3552,7 @@ void KPrCanvas::print( QPainter *painter, KPrinter *printer, float /*left_margin
     //m_view->setDiffX( -static_cast<int>( MM_TO_POINT( left_margin ) ) );
     //m_view->setDiffY( -static_cast<int>( MM_TO_POINT( top_margin ) ) );
 
-    QProgressDialog progress( i18n( "Printing..." ), i18n( "Cancel" ),
+    Q3ProgressDialog progress( i18n( "Printing..." ), i18n( "Cancel" ),
                               printer->pageList().count() + 2, this );
 
     int j = 0;
@@ -3557,8 +3572,8 @@ void KPrCanvas::print( QPainter *painter, KPrinter *printer, float /*left_margin
       m_view->setDiffY( ( printer->fromPage() - 1 ) * ( getPageRect( 1, 1.0, false ).height() ) -
       (int)MM_TO_POINT( top_margin ) );*/
     int current_slide = 0;
-    QValueList<int> list=printer->pageList(); // 1-based
-    QValueList<int>::iterator it;
+    Q3ValueList<int> list=printer->pageList(); // 1-based
+    Q3ValueList<int>::iterator it;
     for( it=list.begin();it!=list.end();++it)
     {
         i=(*it);
@@ -3577,7 +3592,7 @@ void KPrCanvas::print( QPainter *painter, KPrinter *printer, float /*left_margin
             printer->newPage();
 
         painter->resetXForm();
-        painter->fillRect( m_view->kPresenterDoc()->pageList().at( m_step.m_pageNumber )->getZoomPageRect(), white );
+        painter->fillRect( m_view->kPresenterDoc()->pageList().at( m_step.m_pageNumber )->getZoomPageRect(), Qt::white );
 
         printPage( painter, step, printer, rows, cols );
         kapp->processEvents();
@@ -3620,7 +3635,7 @@ void KPrCanvas::print( QPainter *painter, KPrinter *printer, float /*left_margin
 
 void KPrCanvas::updateInsertRect( const KoPoint &point, Qt::ButtonState state )
 {
-    if ( state & AltButton )
+    if ( state & Qt::AltModifier )
     {
         m_insertRect.moveBottomRight( point );
     }
@@ -3779,7 +3794,7 @@ void KPrCanvas::insertPicture( const KoRect &rect )
     QString file = m_activePage->insPictureFile();
 
     QCursor c = cursor();
-    setCursor( waitCursor );
+    setCursor( Qt::waitCursor );
     if ( !file.isEmpty() ) {
         if ( rect.width() > 10 && rect.height() > 10 )
         {
@@ -3822,7 +3837,7 @@ void KPrCanvas::setToolEditMode( ToolEditMode _m, bool updateView )
 
     if ( toolEditMode == TEM_MOUSE )
     {
-        setCursor( arrowCursor );
+        setCursor( Qt::arrowCursor );
         QPoint pos = QCursor::pos();
         // ### missing some coord transformation here?
         KoPoint docPoint( m_view->zoomHandler()->unzoomPoint( pos ) );
@@ -3835,7 +3850,7 @@ void KPrCanvas::setToolEditMode( ToolEditMode _m, bool updateView )
     else if ( toolEditMode == TEM_ROTATE )
         setCursor( KPrUtils::rotateCursor() );
     else
-        setCursor( crossCursor );
+        setCursor( Qt::crossCursor );
 
     if ( updateView )
         m_view->setTool( toolEditMode );
@@ -3915,8 +3930,8 @@ void KPrCanvas::dragEnterEvent( QDragEnterEvent *e )
 {
     if ( m_currentTextObjectView )
         m_currentTextObjectView->dragEnterEvent( e );
-    else if ( QTextDrag::canDecode( e )
-              || QImageDrag::canDecode( e )
+    else if ( Q3TextDrag::canDecode( e )
+              || Q3ImageDrag::canDecode( e )
               || KURLDrag::canDecode(e)) {
         e->accept();
     }
@@ -3939,8 +3954,8 @@ void KPrCanvas::dragMoveEvent( QDragMoveEvent *e )
                 emit currentObjectEditChanged();
         }
     }
-    else if ( QTextDrag::canDecode( e )
-              || QImageDrag::canDecode( e )
+    else if ( Q3TextDrag::canDecode( e )
+              || Q3ImageDrag::canDecode( e )
               || KURLDrag::canDecode(e)) {
         e->accept();
     }
@@ -3954,7 +3969,7 @@ void KPrCanvas::dropImage( QMimeSource * data, bool resizeImageToOriginalSize, i
     deSelectAllObj();
 
     QImage pix;
-    QImageDrag::decode( data, pix );
+    Q3ImageDrag::decode( data, pix );
 
     KTempFile tmpFile;
     tmpFile.setAutoDelete(true);
@@ -3964,7 +3979,7 @@ void KPrCanvas::dropImage( QMimeSource * data, bool resizeImageToOriginalSize, i
 
     pix.save( tmpFile.name(), "PNG" );
     QCursor c = cursor();
-    setCursor( waitCursor );
+    setCursor( Qt::waitCursor );
 
     QPoint pos( posX + diffx(), posY + diffy() );
     KoPoint docPoint( m_view->zoomHandler()->unzoomPoint( pos ) );
@@ -3985,7 +4000,7 @@ void KPrCanvas::dropEvent( QDropEvent *e )
     if ( !m_activePage->getZoomPageRect().contains(e->pos()))
         return;
 
-    if ( QImageDrag::canDecode( e ) ) {
+    if ( Q3ImageDrag::canDecode( e ) ) {
         dropImage( e, true, e->pos().x(), e->pos().y() );
         e->accept();
     } else if ( KURLDrag::canDecode( e ) ) {
@@ -4013,12 +4028,12 @@ void KPrCanvas::dropEvent( QDropEvent *e )
                 QString mimetype = res->mimeType();
                 if ( mimetype.contains( "image" ) ) {
                     QCursor c = cursor();
-                    setCursor( waitCursor );
+                    setCursor( Qt::waitCursor );
                     m_activePage->insertPicture( filename, docPoint );
                     setCursor( c );
                 } else if ( mimetype.contains( "text" ) ) {
                     QCursor c = cursor();
-                    setCursor( waitCursor );
+                    setCursor( Qt::waitCursor );
                     QFile f( filename );
                     QTextStream t( &f );
                     QString text = QString::null, tmp;
@@ -4045,12 +4060,12 @@ void KPrCanvas::dropEvent( QDropEvent *e )
     {
         m_currentTextObjectView->dropEvent( e );
     }
-    else if ( QTextDrag::canDecode( e ) ) {
+    else if ( Q3TextDrag::canDecode( e ) ) {
         setToolEditMode( TEM_MOUSE );
         deSelectAllObj();
 
         QString text;
-        QTextDrag::decode( e, text );
+        Q3TextDrag::decode( e, text );
         //kDebug()<<" QTextDrag::decode( e, text ); :"<<text<<endl;
         m_activePage->insertTextObject( m_view->zoomHandler()->unzoomRect( QRect( e->pos().x(), e->pos().y(), 250, 250 )),
                                         text, m_view );
@@ -4119,7 +4134,7 @@ void KPrCanvas::copyOasisObjs()
 {
     //todo copy object from selected object
     KoStoreDrag *kd = new KoStoreDrag( "application/vnd.oasis.opendocument.presentation", 0L );
-    QDragObject* dragObject = kd;
+    Q3DragObject* dragObject = kd;
     QByteArray arr;
     QBuffer buffer(arr);
     KoStore* store = KoStore::createStore( &buffer, KoStore::Write, "application/vnd.oasis.opendocument.presentation" );
@@ -4138,10 +4153,10 @@ void KPrCanvas::copyObjs()
 
     doc.appendChild(presenter);
 
-    QPtrList<KoDocumentChild> embeddedObjectsActivePage;
+    Q3PtrList<KoDocumentChild> embeddedObjectsActivePage;
 
     KoStoreDrag *kd = new KoStoreDrag( "application/x-kpresenter", 0L );
-    QDragObject* dragObject = kd;
+    Q3DragObject* dragObject = kd;
     QByteArray arr;
     QBuffer buffer(arr);
     KoStore* store = KoStore::createStore( &buffer, KoStore::Write, "application/x-kpresenter" );
@@ -4150,8 +4165,8 @@ void KPrCanvas::copyObjs()
 
     // Save internal embedded objects first, since it might change their URL
     int i = 0;
-    QValueList<KoPictureKey> savePictures;
-    QPtrListIterator<KoDocumentChild> chl( embeddedObjectsActivePage );
+    Q3ValueList<KoPictureKey> savePictures;
+    Q3PtrListIterator<KoDocumentChild> chl( embeddedObjectsActivePage );
     for( ; chl.current(); ++chl ) {
         KoDocument* childDoc = chl.current()->document();
         if ( childDoc && !childDoc->isStoredExtern() )
@@ -4175,7 +4190,7 @@ void KPrCanvas::copyObjs()
         if ( savePictures.count() == 1 )
         {
             KoPicture pic = kprdoc->pictureCollection()->findPicture( savePictures.first() );
-            QDragObject* picDrag = pic.dragObject( 0L );
+            Q3DragObject* picDrag = pic.dragObject( 0L );
             if ( picDrag ) {
                 KMultipleDrag* multipleDrag = new KMultipleDrag( 0L );
                 multipleDrag->addDragObject( kd );
@@ -4187,7 +4202,7 @@ void KPrCanvas::copyObjs()
 
     if ( store->open( "root" ) )
     {
-        QCString s = doc.toCString(); // this is already Utf8!
+        Q3CString s = doc.toCString(); // this is already Utf8!
         //kDebug(33001) << "KPrCanvas::copyObject: " << s << endl;
         (void)store->write( s.data(), s.size()-1 );
         store->close();
@@ -4221,12 +4236,12 @@ void KPrCanvas::leaveEvent( QEvent * /*e*/ )
     m_view->setRulerMouseShow( false );
 }
 
-QPtrList<KPrObject> KPrCanvas::objectList() const
+Q3PtrList<KPrObject> KPrCanvas::objectList() const
 {
     return m_activePage->objectList();
 }
 
-const QPtrList<KPrObject> &KPrCanvas::getObjectList() const
+const Q3PtrList<KPrObject> &KPrCanvas::getObjectList() const
 {
     return m_activePage->objectList();
 }
@@ -4297,7 +4312,7 @@ void KPrCanvas::setSwitchingMode( bool continueTimer )
     // we don't want to see the cursor nor the automatic pesentation stopped
     m_drawMode = false;
     m_drawLineInDrawMode = false;
-    setCursor( blankCursor );
+    setCursor( Qt::blankCursor );
 
     if ( continueTimer && !spManualSwitch() )
         m_view->continueAutoPresTimer();
@@ -4452,7 +4467,7 @@ void KPrCanvas::setTextBackground( KPrTextObject */*obj*/ )
     QPixmap bpix( obj->getSize().toQSize() ); // ## zoom it !
     bitBlt( &bpix, 0, 0, &pix, obj->getOrig().x(), obj->getOrig().y() -
             m_activePage->getZoomPageRect().height() * ( m_view->getCurrPgNum() - 1 ), bpix.width(), bpix.height() );
-    QBrush b( white, bpix );
+    QBrush b( Qt::white, bpix );
     QPalette pal( obj->textObjectView()->palette() );
     pal.setBrush( QColorGroup::Base, b );
     obj->textObjectView()->setPalette( pal );
@@ -4963,9 +4978,9 @@ void KPrCanvas::lowerObject()
     m_objectDisplayAbove = 0;
 }
 
-const QPtrList<KPrObject> KPrCanvas::displayObjectList() const
+const Q3PtrList<KPrObject> KPrCanvas::displayObjectList() const
 {
-    QPtrList<KPrObject> list = objectList();
+    Q3PtrList<KPrObject> list = objectList();
     list.setAutoDelete( false );
 
     if ( m_objectDisplayAbove )
@@ -5285,10 +5300,10 @@ void KPrCanvas::ensureVisible( int x, int y, int xmargin, int ymargin )
 // "Extend Contents to Object Height"
 void KPrCanvas::textContentsToHeight()
 {
-    QPtrList<KPrTextObject> lst = applicableTextObjects();
+    Q3PtrList<KPrTextObject> lst = applicableTextObjects();
     if ( lst.isEmpty() )
         return;
-    QPtrListIterator<KPrTextObject> it( lst );
+    Q3PtrListIterator<KPrTextObject> it( lst );
     KMacroCommand * macro = 0L;
     for ( ; it.current() ; ++it ) {
         KCommand *cmd= it.current()->textContentsToHeight();
@@ -5311,10 +5326,10 @@ void KPrCanvas::textContentsToHeight()
 // "Resize Object to fit Contents"
 void KPrCanvas::textObjectToContents()
 {
-    QPtrList<KPrTextObject> lst = applicableTextObjects();
+    Q3PtrList<KPrTextObject> lst = applicableTextObjects();
     if ( lst.isEmpty() )
         return;
-    QPtrListIterator<KPrTextObject> it( lst );
+    Q3PtrListIterator<KPrTextObject> it( lst );
     KMacroCommand * macro = 0L;
     for ( ; it.current() ; ++it ) {
         KCommand *cmd= it.current()->textObjectToContents();
@@ -5337,8 +5352,8 @@ void KPrCanvas::textObjectToContents()
 
 void KPrCanvas::flipObject( bool _horizontal )
 {
-    QPtrList<KPrObject> lst;
-    QPtrListIterator<KPrObject> it(getObjectList());
+    Q3PtrList<KPrObject> lst;
+    Q3PtrListIterator<KPrObject> it(getObjectList());
     for ( ; it.current(); ++it ) {
         if ( it.current()->isSelected() &&
              it.current()->getType() != OT_AUTOFORM &&
@@ -5370,10 +5385,10 @@ void KPrCanvas::raiseObjs( bool forward )
     m_activePage->raiseObjs( forward );
 }
 
-QPtrList<KPrTextObject> KPrCanvas::listOfTextObjs() const
+Q3PtrList<KPrTextObject> KPrCanvas::listOfTextObjs() const
 {
-    QPtrList<KPrTextObject> lst;
-    QPtrListIterator<KPrObject> it(getObjectList());
+    Q3PtrList<KPrTextObject> lst;
+    Q3PtrListIterator<KPrObject> it(getObjectList());
     for ( ; it.current(); ++it ) {
         if ( it.current()->getType() == OT_TEXT )
         {
@@ -5388,8 +5403,8 @@ QPtrList<KPrTextObject> KPrCanvas::listOfTextObjs() const
 
 KPrTextObject* KPrCanvas::textUnderMouse( const QPoint & point )
 {
-    QPtrList<KPrTextObject> obj = listOfTextObjs();
-    QPtrListIterator<KPrTextObject> it2(obj );
+    Q3PtrList<KPrTextObject> obj = listOfTextObjs();
+    Q3PtrListIterator<KPrTextObject> it2(obj );
     for ( ; it2.current() ; ++it2 ) {
         QRect outerRect( m_view->kPresenterDoc()->zoomHandler()->zoomRect( it2.current()->getRect()) );
         if ( !it2.current()->isProtectContent() && outerRect.contains( point) )
@@ -5449,9 +5464,9 @@ void KPrCanvas::alignObjects( AlignType at )
             break;
     }
 
-    QPtrList<KPrObject> objects;
+    Q3PtrList<KPrObject> objects;
 
-    QPtrListIterator<KPrObject> it( m_activePage->objectList() );
+    Q3PtrListIterator<KPrObject> it( m_activePage->objectList() );
     for ( ; it.current() ; ++it )
     {
         if ( it.current() == m_view->kPresenterDoc()->header() ||
@@ -5478,8 +5493,8 @@ bool KPrCanvas::canMoveOneObject() const
 
 void KPrCanvas::closeObject(bool /*close*/)
 {
-    QPtrList<KPrObject> lst;
-    QPtrListIterator<KPrObject> it(getObjectList());
+    Q3PtrList<KPrObject> lst;
+    Q3PtrListIterator<KPrObject> it(getObjectList());
     for ( ; it.current(); ++it ) {
         if ( it.current()->isSelected()
              && (it.current()->getType() == OT_POLYLINE || it.current()->getType() == OT_FREEHAND
@@ -5497,7 +5512,7 @@ void KPrCanvas::closeObject(bool /*close*/)
 
 void KPrCanvas::layout()
 {
-    QPtrListIterator<KPrObject> it(getObjectList());
+    Q3PtrListIterator<KPrObject> it(getObjectList());
     for ( ; it.current(); ++it ) {
         if ( it.current()->getType() == OT_TEXT )
             static_cast<KPrTextObject *>( it.current() )->layout();
@@ -5633,7 +5648,7 @@ void KPrCanvas::popupContextMenu()
             finishPageEffect();
             m_view->stopAutoPresTimer();
         }
-        setCursor( arrowCursor );
+        setCursor( Qt::arrowCursor );
         QPoint p( width()/2, height()/2 );
         int ret = m_presMenu->exec( p );
         // we have to continue the timer if the menu was canceled and draw mode is not active

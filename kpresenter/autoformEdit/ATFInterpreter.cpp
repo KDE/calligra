@@ -20,8 +20,11 @@
 
 #include "ATFInterpreter.h"
 
-#include <qvaluestack.h>
+#include <q3valuestack.h>
 #include <QFile>
+//Added by qt3to4:
+#include <Q3PointArray>
+#include <Q3PtrList>
 
 const char ATFInterpreter::PNT_BG[]   = "POINT {";
 const char ATFInterpreter::X_BG[]     = "X {";
@@ -112,14 +115,14 @@ void ATFInterpreter::load(const QString & fileName)
     }
 }
 
-QPointArray ATFInterpreter::getPointArray(int wid,int heig)
+Q3PointArray ATFInterpreter::getPointArray(int wid,int heig)
 {
     unsigned int px = 0,py = 0,a = 0,b = 0,c = 0,d = 0,e = 0,f = 0;
     unsigned int tmp = 0,num = 0;
     bool calc = false,res = false;
     char op = OP_EQUAL,var = VAR_1;
-    QPtrList<Sign> slp;
-    QPointArray pntArray(coordList.count());
+    Q3PtrList<Sign> slp;
+    Q3PointArray pntArray(coordList.count());
 
     if (!coordList.isEmpty())
     {
@@ -205,7 +208,7 @@ QPointArray ATFInterpreter::getPointArray(int wid,int heig)
     return pntArray;
 }
 
-QPtrList<ATFInterpreter::AttribList> ATFInterpreter::getAttribList()
+Q3PtrList<ATFInterpreter::AttribList> ATFInterpreter::getAttribList()
 {
     if(!attrLs.isEmpty())
         return attrLs;
@@ -228,7 +231,7 @@ QPtrList<ATFInterpreter::AttribList> ATFInterpreter::getAttribList()
 
 void ATFInterpreter::interpret()
 {
-    QValueStack<int> level;
+    Q3ValueStack<int> level;
     Value value;
     bool v = false;
     int pw = 1;
@@ -357,9 +360,9 @@ void ATFInterpreter::interpret()
     }
 }
 
-QPtrList<ATFInterpreter::Sign> ATFInterpreter::getVar(const QString &s)
+Q3PtrList<ATFInterpreter::Sign> ATFInterpreter::getVar(const QString &s)
 {
-    QPtrList<Sign> list;
+    Q3PtrList<Sign> list;
 
     for (unsigned int i=1; i<s.length(); ++i)
     {

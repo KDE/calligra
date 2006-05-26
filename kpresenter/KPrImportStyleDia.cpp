@@ -20,11 +20,13 @@
 
 #include <klocale.h>
 #include "KPrDocument.h"
-#include <qvbox.h>
+#include <q3vbox.h>
 #include <QLayout>
 #include <QLineEdit>
 #include <QPushButton>
-#include <qlistbox.h>
+#include <q3listbox.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 #include <kmessagebox.h>
 #include "KPrImportStyleDia.h"
 #include <KoStore.h>
@@ -83,7 +85,7 @@ void KPrImportStyleDia::loadFile()
             {
                 //todo
                 //duplicate code try to remove it !
-                QValueList<QString> followingStyles;
+                Q3ValueList<QString> followingStyles;
                 QDomNodeList listStyles = stylesElem.elementsByTagName( "STYLE" );
                 for (unsigned int item = 0; item < listStyles.count(); item++)
                 {
@@ -125,7 +127,7 @@ void KPrImportStyleDia::loadFile()
                 Q_ASSERT( m_styleList.count() >= 0 && followingStyles.count() == uint( m_styleList.count() ) );
 
                 unsigned int i=0;
-                for( QValueList<QString>::Iterator it = followingStyles.begin(); it != followingStyles.end(); ++it ) {
+                for( Q3ValueList<QString>::Iterator it = followingStyles.begin(); it != followingStyles.end(); ++it ) {
                     QString newName =*it;
                     if ( insertStyle.contains( *it ) )
                         newName = (insertStyle)[ *it ];

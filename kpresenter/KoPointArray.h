@@ -20,18 +20,20 @@
 #ifndef KOPOINTARRAY_H
 #define KOPOINTARRAY_H
 
-#include <qmemarray.h>
+#include <q3memarray.h>
+//Added by qt3to4:
+#include <Q3PointArray>
 #include <KoPoint.h>
 #include <KoRect.h>
 
 class KoZoomHandler;
-class KoPointArray : public QMemArray<KoPoint>
+class KoPointArray : public Q3MemArray<KoPoint>
 {
 public:
     KoPointArray() {}
     ~KoPointArray() {}
-    KoPointArray( int size ) : QMemArray<KoPoint>( size ) {}
-    KoPointArray( const KoPointArray &a ) : QMemArray<KoPoint>( a ) {}
+    KoPointArray( int size ) : Q3MemArray<KoPoint>( size ) {}
+    KoPointArray( const KoPointArray &a ) : Q3MemArray<KoPoint>( a ) {}
 
     KoPointArray &operator=( const KoPointArray &a )
         { return (KoPointArray&)assign( a ); }
@@ -51,10 +53,10 @@ public:
     KoPointArray cubicBezier() const;
     static void cleanBuffers();
 
-    QPointArray zoomPointArray( const KoZoomHandler* zoomHandler ) const;
+    Q3PointArray zoomPointArray( const KoZoomHandler* zoomHandler ) const;
     // Zoom the point array, taking into account the width of the pen
     // (reducing the figure as necessary)
-    QPointArray zoomPointArray( const KoZoomHandler* zoomHandler, int penWidth ) const;
+    Q3PointArray zoomPointArray( const KoZoomHandler* zoomHandler, int penWidth ) const;
 
 protected:
     static uint splen;

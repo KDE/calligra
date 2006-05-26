@@ -33,11 +33,13 @@
 #include "KPrCommand.h"
 #include <KoPoint.h>
 #include <KoRect.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 KPrPageIface::KPrPageIface( KPrPage *_page, int pgnum )
     // Make up a nice DCOPObject name like "Document-0 Page-1".
     // ### But the page number will be stale if pages are added/removed/moved around....
-    : DCOPObject( QCString( _page->kPresenterDoc()->dcopObject()->objId() ) + " Page-" + QString::number( pgnum ).toLatin1() )
+    : DCOPObject( Q3CString( _page->kPresenterDoc()->dcopObject()->objId() ) + " Page-" + QString::number( pgnum ).toLatin1() )
 {
     m_page = _page;
 }

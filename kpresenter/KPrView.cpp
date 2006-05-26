@@ -23,17 +23,29 @@
 #include <kglobalsettings.h>
 #include <qpainter.h>
 #include <qscrollbar.h>
-#include <qpopupmenu.h>
+#include <q3popupmenu.h>
 #include <qcursor.h>
 #include <qfileinfo.h>
 #include <qtextstream.h>
+//Added by qt3to4:
+#include <Q3CString>
+#include <QWheelEvent>
+#include <Q3PtrList>
+#include <QDragMoveEvent>
+#include <QDragLeaveEvent>
+#include <QKeyEvent>
+#include <QResizeEvent>
+#include <QDropEvent>
+#include <QDragEnterEvent>
+#include <Q3ValueList>
+#include <QPixmap>
 #include <assert.h>
 #include <qtoolbutton.h>
 #include <QToolTip>
 #include <QDir>
 #include <qclipboard.h>
 #include <qradiobutton.h>
-#include <qdragobject.h>
+#include <q3dragobject.h>
 #include <QFile>
 
 #include "KPrPage.h"
@@ -135,7 +147,7 @@
 #include "KPrFindReplace.h"
 #include "KPrVariableCollection.h"
 #include "KPrCanvas.h"
-#include <qpaintdevicemetrics.h>
+#include <q3paintdevicemetrics.h>
 #include <KoStyleCollection.h>
 #include "KPrStyleManager.h"
 #include "KPrPixmapObject.h"
@@ -483,7 +495,7 @@ void KPrView::print( KPrinter &prt )
         m_pKPresenterDoc->recalcVariables( VT_ALL );
     }
 
-    QPaintDeviceMetrics metrics( &prt );
+    Q3PaintDeviceMetrics metrics( &prt );
     unZoomDocument(dpiX,dpiY);
     if ( m_pKPresenterDoc->pageLayout().format == PG_SCREEN )
     {
@@ -583,7 +595,7 @@ void KPrView::editPaste()
             emit objectSelectedChanged();
         }
 #endif
-        else if (QImageDrag::canDecode (data)) {
+        else if (Q3ImageDrag::canDecode (data)) {
             m_canvas->dropImage( data );
         }
     } else {
@@ -1404,7 +1416,7 @@ void KPrView::screenAssignEffect()
 {
     m_canvas->setToolEditMode( TEM_MOUSE );
 
-    QPtrList<KPrObject> objs;
+    Q3PtrList<KPrObject> objs;
     if ( m_canvas->canAssignEffect( objs ) ) {
         KPrEffectDia *effectDia = new KPrEffectDia( this, "Object Effect", objs, this );
         effectDia->setCaption( i18n( "Object Effect" ) );
@@ -1438,7 +1450,7 @@ void KPrView::startScreenPres( int pgNum /*1-based*/ )
     if ( m_canvas && !presStarted ) {
         QByteArray data;
         QByteArray replyData;
-        QCString replyType;
+        Q3CString replyType;
         m_screenSaverWasEnabled = false;
         // is screensaver enabled?
         if (kapp->dcopClient()->call("kdesktop", "KScreensaverIface", "isEnabled()", data, replyType, replyData)
@@ -1784,8 +1796,8 @@ void KPrView::slotCounterStyleSelected()
             }
         }
 
-        QPtrList<KoTextFormatInterface> lst = m_canvas->applicableTextInterfaces();
-        QPtrListIterator<KoTextFormatInterface> it( lst );
+        Q3PtrList<KoTextFormatInterface> lst = m_canvas->applicableTextInterfaces();
+        Q3PtrListIterator<KoTextFormatInterface> it( lst );
         KMacroCommand* macroCmd = 0L;
         for ( ; it.current() ; ++it )
         {
@@ -2223,7 +2235,7 @@ void KPrView::setupActions()
              actionEditPaste, SLOT( setEnabled( bool ) ) );
     m_pKPresenterDoc->clipboardDataChanged(); // set paste's initial state
 
-    actionEditDelete = new KAction( i18n( "&Delete" ), "editdelete", CTRL + Qt::Key_Delete,
+    actionEditDelete = new KAction( i18n( "&Delete" ), "editdelete", Qt::CTRL + Qt::Key_Delete,
                                     this, SLOT( editDelete() ),
                                     actionCollection(), "edit_delete" );
     actionEditSelectAll = KStdAction::selectAll( this, SLOT( editSelectAll() ), actionCollection(), "edit_selectall" );
@@ -2441,15 +2453,15 @@ void KPrView::setupActions()
     connect( actionTextFontFamily , SIGNAL( activated( const QString & ) ),
              this, SLOT( fontSelected( const QString & ) ) );
 
-    actionTextBold = new KToggleAction( i18n( "&Bold" ), "text_bold", CTRL + Qt::Key_B,
+    actionTextBold = new KToggleAction( i18n( "&Bold" ), "text_bold", Qt::CTRL + Qt::Key_B,
                                         this, SLOT( textBold() ),
                                         actionCollection(), "text_bold" );
 
-    actionTextItalic = new KToggleAction( i18n( "&Italic" ), "text_italic", CTRL + Qt::Key_I,
+    actionTextItalic = new KToggleAction( i18n( "&Italic" ), "text_italic", Qt::CTRL + Qt::Key_I,
                                           this, SLOT( textItalic() ),
                                           actionCollection(), "text_italic" );
 
-    actionTextUnderline = new KToggleAction( i18n( "&Underline" ), "text_under", CTRL + Qt::Key_U,
+    actionTextUnderline = new KToggleAction( i18n( "&Underline" ), "text_under", Qt::CTRL + Qt::Key_U,
                                              this, SLOT( textUnderline() ),
                                              actionCollection(), "text_underline" );
 
@@ -2463,23 +2475,23 @@ void KPrView::setupActions()
     actionTextColor->setDefaultColor(QColor());
 
 
-    actionTextAlignLeft = new KToggleAction( i18n( "Align &Left" ), "text_left", ALT + Qt::Key_L,
+    actionTextAlignLeft = new KToggleAction( i18n( "Align &Left" ), "text_left", Qt::ALT + Qt::Key_L,
                                              this, SLOT( textAlignLeft() ),
                                              actionCollection(), "text_alignleft" );
     actionTextAlignLeft->setExclusiveGroup( "align" );
     actionTextAlignLeft->setChecked( true );
 
-    actionTextAlignCenter = new KToggleAction( i18n( "Align &Center" ), "text_center", ALT + Qt::Key_C,
+    actionTextAlignCenter = new KToggleAction( i18n( "Align &Center" ), "text_center", Qt::ALT + Qt::Key_C,
                                                this, SLOT( textAlignCenter() ),
                                                actionCollection(), "text_aligncenter" );
     actionTextAlignCenter->setExclusiveGroup( "align" );
 
-    actionTextAlignRight = new KToggleAction( i18n( "Align &Right" ), "text_right", ALT + Qt::Key_R,
+    actionTextAlignRight = new KToggleAction( i18n( "Align &Right" ), "text_right", Qt::ALT + Qt::Key_R,
                                               this, SLOT( textAlignRight() ),
                                               actionCollection(), "text_alignright" );
     actionTextAlignRight->setExclusiveGroup( "align" );
 
-    actionTextAlignBlock = new KToggleAction( i18n( "Align &Block" ), "text_block", CTRL + Qt::Key_J,
+    actionTextAlignBlock = new KToggleAction( i18n( "Align &Block" ), "text_block", Qt::CTRL + Qt::Key_J,
                                               this, SLOT( textAlignBlock() ),
                                               actionCollection(), "text_alignblock" );
     actionTextAlignBlock->setExclusiveGroup( "align" );
@@ -2489,9 +2501,9 @@ void KPrView::setupActions()
     actionFormatNumber->setDelayed( false );
     actionFormatBullet = new KActionMenu( i18n( "Bullet" ), "unsortedList", actionCollection(), "format_bullet" );
     actionFormatBullet->setDelayed( false );
-    QPtrList<KoCounterStyleWidget::StyleRepresenter> stylesList;
+    Q3PtrList<KoCounterStyleWidget::StyleRepresenter> stylesList;
     KoCounterStyleWidget::makeCounterRepresenterList( stylesList );
-    QPtrListIterator<KoCounterStyleWidget::StyleRepresenter> styleIt( stylesList );
+    Q3PtrListIterator<KoCounterStyleWidget::StyleRepresenter> styleIt( stylesList );
     for ( ; styleIt.current() ; ++styleIt ) {
         // Dynamically create toggle-actions for each list style.
         // This approach allows to edit toolbars and extract separate actions from this menu
@@ -2509,11 +2521,11 @@ void KPrView::setupActions()
             actionFormatNumber->insert( act );
     }
     actionTextDepthPlus = new KAction( i18n( "&Increase Depth" ),  QApplication::isRightToLeft() ?"format_decreaseindent" : "format_increaseindent",
-                                       CTRL + Qt::Key_Plus, this, SLOT( textDepthPlus() ),
+                                       Qt::CTRL + Qt::Key_Plus, this, SLOT( textDepthPlus() ),
                                        actionCollection(), "text_depthPlus" );
 
     actionTextDepthMinus = new KAction( i18n( "&Decrease Depth" ), QApplication::isRightToLeft() ?"format_increaseindent" : "format_decreaseindent",
-                                        CTRL + Qt::Key_Minus, this, SLOT( textDepthMinus() ),
+                                        Qt::CTRL + Qt::Key_Minus, this, SLOT( textDepthMinus() ),
                                         actionCollection(), "text_depthMinus" );
 
     actionTextExtentCont2Height = new KAction( i18n( "Extend Contents to Object &Height" ), 0,
@@ -2539,10 +2551,10 @@ void KPrView::setupActions()
     actionExtraArrangePopup->setDelayed( false ); 
 
     actionExtraRaise = new KAction( i18n( "Ra&ise Objects" ), "raise",
-                                    CTRL+Qt::SHIFT+Qt::Key_R, this, SLOT( extraRaise() ),
+                                    Qt::CTRL+Qt::SHIFT+Qt::Key_R, this, SLOT( extraRaise() ),
                                     actionCollection(), "extra_raise" );
 
-    actionExtraLower = new KAction( i18n( "&Lower Objects" ), "lower", CTRL +Qt::SHIFT+ Qt::Key_L,
+    actionExtraLower = new KAction( i18n( "&Lower Objects" ), "lower", Qt::CTRL +Qt::SHIFT+ Qt::Key_L,
                                     this, SLOT( extraLower() ),
                                     actionCollection(), "extra_lower" );
 
@@ -2785,7 +2797,7 @@ void KPrView::setupActions()
 
 
     actionInsertSpecialChar = new KAction( i18n( "Sp&ecial Character..." ), "char",
-                                           ALT + Qt::SHIFT + Qt::Key_C,
+                                           Qt::ALT + Qt::SHIFT + Qt::Key_C,
                                            this, SLOT( insertSpecialChar() ),
                                            actionCollection(), "insert_specialchar" );
 
@@ -2804,7 +2816,7 @@ void KPrView::setupActions()
                         actionCollection(), "extra_autocorrection" );
     actionExtraSpellCheck = KStdAction::spelling( this, SLOT( slotSpellCheck() ), actionCollection(), "extra_spellcheck" );
 
-    actionFormatParag = new KAction( i18n( "&Paragraph..." ), ALT + CTRL + Qt::Key_P,
+    actionFormatParag = new KAction( i18n( "&Paragraph..." ), Qt::ALT + Qt::CTRL + Qt::Key_P,
                                      this, SLOT( formatParagraph() ),
                                      actionCollection(), "format_paragraph" );
 
@@ -2883,7 +2895,7 @@ void KPrView::setupActions()
     actionViewZoom->setEditable(true);
     changeZoomMenu( );
 
-    actionFormatStylist = new KAction( i18n( "&Style Manager" ), ALT + CTRL + Qt::Key_S,
+    actionFormatStylist = new KAction( i18n( "&Style Manager" ), Qt::ALT + Qt::CTRL + Qt::Key_S,
                                        this, SLOT( extraStylist() ),
                                        actionCollection(), "format_stylist" );
 
@@ -2904,20 +2916,20 @@ void KPrView::setupActions()
     actionAllowAutoFormat->setCheckedState(i18n("Disable Autocorrection"));
 
     // ------------------- Actions with a key binding and no GUI item
-    new KAction( i18n( "Insert Non-Breaking Space" ), CTRL+Qt::Key_Space,
+    new KAction( i18n( "Insert Non-Breaking Space" ), Qt::CTRL+Qt::Key_Space,
                  this, SLOT( slotNonbreakingSpace() ), actionCollection(), "nonbreaking_space" );
-    new KAction( i18n( "Insert Non-Breaking Hyphen" ), CTRL+Qt::SHIFT+Qt::Key_Minus,
+    new KAction( i18n( "Insert Non-Breaking Hyphen" ), Qt::CTRL+Qt::SHIFT+Qt::Key_Minus,
                  this, SLOT( slotNonbreakingHyphen() ), actionCollection(), "nonbreaking_hyphen" );
-    new KAction( i18n( "Insert Soft Hyphen" ), CTRL+Qt::Key_Minus,
+    new KAction( i18n( "Insert Soft Hyphen" ), Qt::CTRL+Qt::Key_Minus,
                  this, SLOT( slotSoftHyphen() ), actionCollection(), "soft_hyphen" );
     new KAction( i18n( "Line Break" ), Qt::SHIFT+Qt::Key_Return,
                  this, SLOT( slotLineBreak() ), actionCollection(), "line_break" );
     new KAction( i18n( "Completion" ), KStdAccel::shortcut(KStdAccel::TextCompletion),
                  this, SLOT( slotCompletion() ), actionCollection(), "completion" );
 
-    new KAction( i18n( "Increase Numbering Level" ), ALT+Qt::Key_Right,
+    new KAction( i18n( "Increase Numbering Level" ), Qt::ALT+Qt::Key_Right,
                  this, SLOT( slotIncreaseNumberingLevel() ), actionCollection(), "increase_numbering_level" );
-    new KAction( i18n( "Decrease Numbering Level" ), ALT+Qt::Key_Left,
+    new KAction( i18n( "Decrease Numbering Level" ), Qt::ALT+Qt::Key_Left,
                  this, SLOT( slotDecreaseNumberingLevel() ), actionCollection(), "decrease_numbering_level" );
 
 
@@ -3211,7 +3223,7 @@ void KPrView::propertiesOk()
 
 void KPrView::pgConfOk()
 {
-    QValueList<bool> selectedSlides;
+    Q3ValueList<bool> selectedSlides;
     for( unsigned i = 0; i < kPresenterDoc()->pageList().count(); i++ ) {
         selectedSlides.append( kPresenterDoc()->pageList().at( i )->isSlideSelected() );
     }
@@ -3231,7 +3243,7 @@ void KPrView::pgConfOk()
     pgConfCmd->execute();
     kPresenterDoc()->addCommand( pgConfCmd );
 
-    QPtrListIterator<KPrPage> it( kPresenterDoc()->pageList() );
+    Q3PtrListIterator<KPrPage> it( kPresenterDoc()->pageList() );
     for ( ; it.current(); ++it )
         updateSideBarItem( it.current() );
 }
@@ -3265,7 +3277,7 @@ void KPrView::recalcCurrentPageNum()
 {
     KPrPage *activePage = m_canvas->activePage();
 
-    QPtrList<KPrPage> pageList( m_pKPresenterDoc->pageList() );
+    Q3PtrList<KPrPage> pageList( m_pKPresenterDoc->pageList() );
 
     int pos = pageList.findRef( activePage );
 
@@ -3516,11 +3528,11 @@ void KPrView::doAutomaticScreenPres()
 void KPrView::updateReadWrite( bool readwrite )
 {
     // First disable or enable everything
-    QValueList<KAction*> actions = actionCollection()->actions();
+    Q3ValueList<KAction*> actions = actionCollection()->actions();
     // Also grab actions from the document
     actions += m_pKPresenterDoc->actionCollection()->actions();
-    QValueList<KAction*>::ConstIterator aIt = actions.begin();
-    QValueList<KAction*>::ConstIterator aEnd = actions.end();
+    Q3ValueList<KAction*>::ConstIterator aIt = actions.begin();
+    Q3ValueList<KAction*>::ConstIterator aEnd = actions.end();
     for (; aIt != aEnd; ++aIt )
         (*aIt)->setEnabled( readwrite );
 
@@ -3555,7 +3567,7 @@ void KPrView::updateReadWrite( bool readwrite )
 void KPrView::setupPopupMenus()
 {
     // create right button line begin
-    rb_lbegin = new QPopupMenu();
+    rb_lbegin = new Q3PopupMenu();
     Q_CHECK_PTR( rb_lbegin );
     rb_lbegin->insertItem( KPBarIcon("line_normal_begin" ), this, SLOT( extraLineBeginNormal() ) );
     rb_lbegin->insertSeparator();
@@ -3576,7 +3588,7 @@ void KPrView::setupPopupMenus()
     rb_lbegin->setCheckable( false );
 
     // create right button line end
-    rb_lend = new QPopupMenu();
+    rb_lend = new Q3PopupMenu();
     Q_CHECK_PTR( rb_lend );
     rb_lend->insertItem( KPBarIcon("line_normal_end" ), this, SLOT( extraLineEndNormal() ) );
     rb_lend->insertSeparator();
@@ -3597,7 +3609,7 @@ void KPrView::setupPopupMenus()
     rb_lend->setCheckable( false );
 
     // create arrange-objects popup
-    m_arrangeObjectsPopup = new QPopupMenu();
+    m_arrangeObjectsPopup = new Q3PopupMenu();
     Q_CHECK_PTR(m_arrangeObjectsPopup);
     m_arrangeObjectsPopup->insertItem(KPBarIcon("lower"), this, SLOT(extraLower()));
     m_arrangeObjectsPopup->insertSeparator();
@@ -3643,8 +3655,8 @@ void KPrView::setupPopupMenus()
 
 void KPrView::setupScrollbars()
 {
-    vert = new QScrollBar( QScrollBar::Vertical, pageBase );
-    horz = new QScrollBar( QScrollBar::Horizontal, pageBase );
+    vert = new QScrollBar( Qt::Vertical, pageBase );
+    horz = new QScrollBar( Qt::Horizontal, pageBase );
     vert->show();
     horz->show();
     QObject::connect( vert, SIGNAL( valueChanged( int ) ), this, SLOT( scrollV( int ) ) );
@@ -4129,7 +4141,7 @@ void KPrView::openPopupMenuMenuPage( const QPoint & _point )
 {
     if(!koDocument()->isReadWrite() || !factory())
         return;
-    QPtrList<KAction> actionList= QPtrList<KAction>();
+    Q3PtrList<KAction> actionList= Q3PtrList<KAction>();
     KSeparatorAction *separator=new KSeparatorAction();
     switch( m_canvas->activePage()->getBackType())
     {
@@ -4145,7 +4157,7 @@ void KPrView::openPopupMenuMenuPage( const QPoint & _point )
     if ( actionList.count()>0)
         plugActionList( "picture_action", actionList );
     m_mousePos = m_canvas->mapFromGlobal( _point );
-    QPopupMenu* menu = dynamic_cast<QPopupMenu*>(factory()->container("menupage_popup",this));
+    Q3PopupMenu* menu = dynamic_cast<Q3PopupMenu*>(factory()->container("menupage_popup",this));
     if ( menu )
         menu->exec(_point);
     m_mousePos = QPoint( 0, 0 );
@@ -4157,14 +4169,14 @@ void KPrView::openPopupMenuObject( const QString & name, const QPoint & _point )
 {
     if(!koDocument()->isReadWrite() || !factory())
         return;
-    dynamic_cast<QPopupMenu*>(factory()->container(name, this))->popup(_point);
+    dynamic_cast<Q3PopupMenu*>(factory()->container(name, this))->popup(_point);
 }
 
 void KPrView::openPopupMenuSideBar(const QPoint & _point)
 {
     if(!koDocument()->isReadWrite() || !factory())
         return;
-    dynamic_cast<QPopupMenu*>(factory()->container("sidebarmenu_popup", this))->popup(_point);
+    dynamic_cast<Q3PopupMenu*>(factory()->container("sidebarmenu_popup", this))->popup(_point);
 }
 
 void KPrView::renamePageTitle()
@@ -4442,7 +4454,7 @@ void KPrView::slotSpellCheck()
     //m_doc->setReadWrite(false); // prevent editing text - not anymore
     m_spell.macroCmdSpellCheck = 0L;
     m_spell.replaceAll.clear();
-    QValueList<KoTextObject *> objects;
+    Q3ValueList<KoTextObject *> objects;
     KPrTextView *edit=m_canvas->currentTextObjectView();
     int options = 0;
     if ( edit && edit->textObject()->hasSelection() )
@@ -4453,7 +4465,7 @@ void KPrView::slotSpellCheck()
     else
     {
         objects = spellAddTextObject();
-        QPtrList<KPrObject> lstObj;
+        Q3PtrList<KPrObject> lstObj;
     }
     if ( ! objects.empty() )
     {
@@ -4462,12 +4474,12 @@ void KPrView::slotSpellCheck()
     }
 }
 
-QValueList<KoTextObject *> KPrView::spellAddTextObject() const
+Q3ValueList<KoTextObject *> KPrView::spellAddTextObject() const
 {
-    QValueList<KoTextObject *> lst;
-    QPtrList<KPrObject> lstObj;
+    Q3ValueList<KoTextObject *> lst;
+    Q3PtrList<KPrObject> lstObj;
     m_canvas->activePage()->getAllObjectSelectedList(lstObj, true);
-    QPtrListIterator<KPrObject> it( lstObj );
+    Q3PtrListIterator<KPrObject> it( lstObj );
     for ( ; it.current() ; ++it )
     {
         if(it.current()->getType()==OT_TEXT)
@@ -4633,10 +4645,10 @@ void KPrView::formatParagraph()
 
 void KPrView::showParagraphDialog(int initialPage, double initialTabPos)
 {
-    QPtrList<KoTextFormatInterface> lst = m_canvas->applicableTextInterfaces();
+    Q3PtrList<KoTextFormatInterface> lst = m_canvas->applicableTextInterfaces();
     if ( lst.isEmpty() )
         return;
-    QPtrList<KPrTextObject> lstObjects = m_canvas->applicableTextObjects();
+    Q3PtrList<KPrTextObject> lstObjects = m_canvas->applicableTextObjects();
     if ( lstObjects.isEmpty() )
         return;
 
@@ -4668,10 +4680,10 @@ void KPrView::showParagraphDialog(int initialPage, double initialTabPos)
 
 void KPrView::slotApplyParag()
 {
-    QPtrList<KoTextFormatInterface> lst = m_canvas->applicableTextInterfaces();
+    Q3PtrList<KoTextFormatInterface> lst = m_canvas->applicableTextInterfaces();
     Q_ASSERT( !lst.isEmpty() );
     if ( lst.isEmpty() ) return;
-    QPtrListIterator<KoTextFormatInterface> it( lst );
+    Q3PtrListIterator<KoTextFormatInterface> it( lst );
     KMacroCommand * macroCommand = new KMacroCommand( i18n( "Paragraph Settings" ) );
     KoParagLayout newLayout = m_paragDlg->paragLayout();
     int flags = m_paragDlg->changedFlags();
@@ -4709,11 +4721,11 @@ void KPrView::changeNbOfRecentFiles(int _nb)
         shell()->setMaxRecentItems( _nb );
 }
 
-QPopupMenu * KPrView::popupMenu( const QString& name )
+Q3PopupMenu * KPrView::popupMenu( const QString& name )
 {
     Q_ASSERT(factory());
     if ( factory() )
-        return ((QPopupMenu*)factory()->container( name, this ));
+        return ((Q3PopupMenu*)factory()->container( name, this ));
     return 0L;
 }
 
@@ -4747,9 +4759,9 @@ void KPrView::addVariableActions( int type, const QStringList & texts,
 void KPrView::refreshCustomMenu()
 {
     KActionPtrList lst2 = actionCollection()->actions("custom-variable-action");
-    QValueList<KAction *> actions = lst2;
-    QValueList<KAction *>::ConstIterator it2 = lst2.begin();
-    QValueList<KAction *>::ConstIterator end = lst2.end();
+    Q3ValueList<KAction *> actions = lst2;
+    Q3ValueList<KAction *>::ConstIterator it2 = lst2.begin();
+    Q3ValueList<KAction *>::ConstIterator end = lst2.end();
     QMap<QString, KShortcut> shortCuts;
 
     for (; it2 != end; ++it2 )
@@ -4766,7 +4778,7 @@ void KPrView::refreshCustomMenu()
 
 
     actionInsertCustom->popupMenu()->clear();
-    QPtrListIterator<KoVariable> it( m_pKPresenterDoc->getVariableCollection()->getVariables() );
+    Q3PtrListIterator<KoVariable> it( m_pKPresenterDoc->getVariableCollection()->getVariables() );
     KAction * act=0;
     QStringList lst;
     QString varName;
@@ -4780,7 +4792,7 @@ void KPrView::refreshCustomMenu()
             if ( !lst.contains( varName) )
             {
                 lst.append( varName );
-                QCString name = QString("custom-action_%1").arg(i).toLatin1();
+                Q3CString name = QString("custom-action_%1").arg(i).toLatin1();
                 act = new KAction( varName, shortCuts[varName], this,
                                    SLOT( insertCustomVariable() ), actionCollection(), name );
 
@@ -4851,7 +4863,7 @@ void KPrView::editCustomVars()
 {
     KoCustomVariablesDia dia( this, m_pKPresenterDoc->getVariableCollection()->getVariables() );
     QStringList listOldCustomValue;
-    QPtrListIterator<KoVariable> oldIt( m_pKPresenterDoc->getVariableCollection()->getVariables() );
+    Q3PtrListIterator<KoVariable> oldIt( m_pKPresenterDoc->getVariableCollection()->getVariables() );
     for ( ; oldIt.current() ; ++oldIt )
     {
         if(oldIt.current()->type()==VT_CUSTOM)
@@ -4860,7 +4872,7 @@ void KPrView::editCustomVars()
     if(dia.exec())
     {
         m_pKPresenterDoc->recalcVariables( VT_CUSTOM );
-        QPtrListIterator<KoVariable> it( m_pKPresenterDoc->getVariableCollection()->getVariables() );
+        Q3PtrListIterator<KoVariable> it( m_pKPresenterDoc->getVariableCollection()->getVariables() );
         KMacroCommand * macroCommand = 0L;
         int i=0;
         for ( ; it.current() ; ++it )
@@ -5009,9 +5021,9 @@ void KPrView::slotHRulerDoubleClicked()
 
 void KPrView::changeCaseOfText()
 {
-    QPtrList<KoTextFormatInterface> lst = m_canvas->applicableTextInterfaces();
+    Q3PtrList<KoTextFormatInterface> lst = m_canvas->applicableTextInterfaces();
     if ( lst.isEmpty() ) return;
-    QPtrListIterator<KoTextFormatInterface> it( lst );
+    Q3PtrListIterator<KoTextFormatInterface> it( lst );
     KoChangeCaseDia *caseDia=new KoChangeCaseDia( this,"change case" );
     if(caseDia->exec())
     {
@@ -5042,9 +5054,9 @@ void KPrView::editFind()
     KoSearchDia dialog( m_canvas, "find", m_searchEntry, hasSelection, hasCursor );
 
     /// KoFindReplace needs a QValueList<KoTextObject *>...
-    QValueList<KoTextObject *> list;
-    QPtrList<KoTextObject> list2 = m_pKPresenterDoc->allTextObjects();
-    QPtrListIterator<KoTextObject> it( list2 );
+    Q3ValueList<KoTextObject *> list;
+    Q3PtrList<KoTextObject> list2 = m_pKPresenterDoc->allTextObjects();
+    Q3PtrListIterator<KoTextObject> it( list2 );
     for ( ; it.current() ; ++it )
         list.append(it.current());
 
@@ -5072,9 +5084,9 @@ void KPrView::editReplace()
     KoReplaceDia dialog( m_canvas, "replace", m_searchEntry, m_replaceEntry, hasSelection, hasCursor );
 
     /// KoFindReplace needs a QValueList<KoTextObject *>...
-    QValueList<KoTextObject *> list;
-    QPtrList<KoTextObject> list2 = m_pKPresenterDoc->allTextObjects();
-    QPtrListIterator<KoTextObject> it( list2 );
+    Q3ValueList<KoTextObject *> list;
+    Q3PtrList<KoTextObject> list2 = m_pKPresenterDoc->allTextObjects();
+    Q3PtrListIterator<KoTextObject> it( list2 );
     for ( ; it.current() ; ++it )
         list.append(it.current());
 
@@ -5122,7 +5134,7 @@ void KPrView::changeZoomMenu( int zoom )
 
     if(zoom>0)
     {
-        QValueList<int> list;
+        Q3ValueList<int> list;
         bool ok;
         const QStringList itemsList ( actionViewZoom->items() );
         QRegExp regexp("(\\d+)"); // "Captured" non-empty sequence of digits
@@ -5142,7 +5154,7 @@ void KPrView::changeZoomMenu( int zoom )
 
         qHeapSort( list );
 
-        for (QValueList<int>::Iterator it = list.begin() ; it != list.end() ; ++it)
+        for (Q3ValueList<int>::Iterator it = list.begin() ; it != list.end() ; ++it)
             lst.append( i18n("%1%").arg(*it) );
     }
     else
@@ -5277,7 +5289,7 @@ void KPrView::openThePresentationDurationDialog()
 {
     int totalTime = 0;
     QStringList presentationDurationStringList;
-    for ( QValueList<int>::Iterator it = m_presentationDurationList.begin();
+    for ( Q3ValueList<int>::Iterator it = m_presentationDurationList.begin();
           it != m_presentationDurationList.end(); ++it ) {
         int _time = *it;
         QString presentationDurationString = presentationDurationDataFormatChange( _time );
@@ -5368,9 +5380,9 @@ void KPrView::updateStyleList()
     QMap<QString, KShortcut> shortCuts;
 
     KActionPtrList lst2 = actionCollection()->actions("styleList");
-    QValueList<KAction *> actions = lst2;
-    QValueList<KAction *>::ConstIterator it = lst2.begin();
-    QValueList<KAction *>::ConstIterator end = lst2.end();
+    Q3ValueList<KAction *> actions = lst2;
+    Q3ValueList<KAction *>::ConstIterator it = lst2.begin();
+    Q3ValueList<KAction *>::ConstIterator end = lst2.end();
     for (; it != end; ++it )
     {
         shortCuts.insert( QString::fromUtf8( (*it)->name() ), (*it)->shortcut() );
@@ -5444,12 +5456,12 @@ void KPrView::textStyleSelected( KoParagStyle *_sty )
     }
     else
     {
-        QPtrList<KPrTextObject> selectedFrames = m_canvas->selectedTextObjs();
+        Q3PtrList<KPrTextObject> selectedFrames = m_canvas->selectedTextObjs();
 
         if (selectedFrames.count() <= 0)
             return; // nope, no frames are selected.
         // yes, indeed frames are selected.
-        QPtrListIterator<KPrTextObject> it( selectedFrames );
+        Q3PtrListIterator<KPrTextObject> it( selectedFrames );
         KMacroCommand *globalCmd = 0L;
         for ( ; it.current() ; ++it )
         {
@@ -5666,7 +5678,7 @@ void KPrView::openPopupMenuZoom( const QPoint & _point )
     actionZoomSelectedObject->setEnabled( m_canvas->isOneObjectSelected());
     int nbObj = m_canvas->activePage()->objectList().count();
     actionZoomAllObject->setEnabled( nbObj > 0);
-    static_cast<QPopupMenu*>(factory()->container("zoom_popup",this))->popup(_point);
+    static_cast<Q3PopupMenu*>(factory()->container("zoom_popup",this))->popup(_point);
 }
 
 void KPrView::zoomMinus()
@@ -5809,7 +5821,7 @@ void KPrView::slotObjectEditChanged()
     bool hasSelection = false ;
     if(edit)
     {
-        double leftMargin =edit->currentParagLayout().margins[QStyleSheetItem::MarginLeft];
+        double leftMargin =edit->currentParagLayout().margins[Q3StyleSheetItem::MarginLeft];
         actionTextDepthMinus->setEnabled(val && leftMargin>0);
         hasSelection = edit->textObject()->hasSelection();
         actionEditCut->setEnabled(hasSelection);
@@ -5864,7 +5876,7 @@ void KPrView::duplicateObj()
         m_canvas->setToolEditMode( TEM_MOUSE );
         deSelectAllObjects();
         QMimeSource *data = QApplication::clipboard()->data();
-        QCString clip_str = KoStoreDrag::mimeType("application/x-kpresenter");
+        Q3CString clip_str = KoStoreDrag::mimeType("application/x-kpresenter");
         if ( data->provides( clip_str ) )
         {
             m_canvas->activePage()->pasteObjs( data->encodedData(clip_str),
@@ -5901,7 +5913,7 @@ void KPrView::applyAutoFormat()
     KMacroCommand *macro = 0L;
     m_switchPage=m_pKPresenterDoc->pageList().findRef(m_canvas->activePage());
     m_initSwitchPage=m_switchPage;
-    QPtrList<KoTextObject> list=m_canvas->activePage()->allTextObjects();
+    Q3PtrList<KoTextObject> list=m_canvas->activePage()->allTextObjects();
 
     KCommand * cmd2 = applyAutoFormatToCurrentPage( list );
     if ( cmd2 )
@@ -5943,11 +5955,11 @@ bool KPrView::switchInOtherPage( const QString & text )
     return true;
 }
 
-KCommand * KPrView::applyAutoFormatToCurrentPage( const QPtrList<KoTextObject> & lst)
+KCommand * KPrView::applyAutoFormatToCurrentPage( const Q3PtrList<KoTextObject> & lst)
 {
     KMacroCommand *macro = 0L;
-    QPtrList<KoTextObject> list(lst);
-    QPtrListIterator<KoTextObject> fit(list);
+    Q3PtrList<KoTextObject> list(lst);
+    Q3PtrListIterator<KoTextObject> fit(list);
     for ( ; fit.current() ; ++fit )
     {
         KCommand *cmd = m_pKPresenterDoc->getAutoFormat()->applyAutoFormat( fit.current() );
@@ -6263,9 +6275,9 @@ void KPrView::spellAddAutoCorrect (const QString & originalword, const QString &
     m_pKPresenterDoc->getAutoFormat()->addAutoFormatEntry( originalword, newword );
 }
 
-QPtrList<KAction> KPrView::listOfResultOfCheckWord( const QString &word )
+Q3PtrList<KAction> KPrView::listOfResultOfCheckWord( const QString &word )
 {
-    QPtrList<KAction> listAction;
+    Q3PtrList<KAction> listAction;
     DefaultDictionary *dict = m_broker->defaultDictionary();
     QStringList lst = dict->suggest( word );
     if ( !lst.contains( word ))
@@ -6321,7 +6333,7 @@ void KPrView::initialLayoutOfSplitter()
     }
 
     QSplitter* splitterVertical = static_cast<QSplitter*>( notebar->parent() );
-    QValueList<int> tmpList;
+    Q3ValueList<int> tmpList;
     int noteHeight = height() / 25;
     tmpList << height() - noteHeight << noteHeight;
     splitterVertical->setSizes( tmpList );

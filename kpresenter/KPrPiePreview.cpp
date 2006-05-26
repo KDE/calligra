@@ -23,16 +23,18 @@
 #include "KPrPiePreview.h"
 
 #include <qpainter.h>
+//Added by qt3to4:
+#include <Q3Frame>
 
 KPrPiePreview::KPrPiePreview( QWidget* parent, const char* name )
-    : QFrame( parent, name )
+    : Q3Frame( parent, name )
 {
     setFrameStyle( WinPanel | Sunken );
-    setBackgroundColor( white );
+    setBackgroundColor( Qt::white );
     angle = 720; //45 * 16
     len = 1440; //90 * 16
-    pen = QPen( black );
-    brush = QBrush( white );
+    pen = QPen( Qt::black );
+    brush = QBrush( Qt::white );
     type = PT_PIE;
 
     setMinimumSize( 200, 100 );

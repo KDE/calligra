@@ -20,6 +20,12 @@
 #define __rotationdialogimpl_h__
 
 #include <QLabel>
+//Added by qt3to4:
+#include <QMouseEvent>
+#include <Q3Frame>
+#include <QEvent>
+#include <Q3PtrList>
+#include <QPixmap>
 #include <kdialogbase.h>
 
 class KPrTextPreview;
@@ -99,7 +105,7 @@ private:
 /**
  * A button-group equivalent for a set of KPrCircleToggle classes.
  */
-class KPrCircleGroup : public QFrame
+class KPrCircleGroup : public Q3Frame
 {
     Q_OBJECT
 public:
@@ -129,7 +135,7 @@ private slots:
     void selectionChanged(int buttonId);
 
 private:
-    QPtrList<KPrCircleToggle> m_buttons;
+    Q3PtrList<KPrCircleToggle> m_buttons;
     bool noSignals;
 };
 

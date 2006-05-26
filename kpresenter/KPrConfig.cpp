@@ -36,15 +36,19 @@
 #include <tkcoloractions.h>
 
 
-#include <qgroupbox.h>
+#include <q3groupbox.h>
 #include <qvgroupbox.h>
 #include <QLabel>
 #include <QLayout>
-#include <qvbox.h>
+#include <q3vbox.h>
 #include <QCheckBox>
 #include <QComboBox>
 #include <qtabwidget.h>
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
+//Added by qt3to4:
+#include <Q3GridLayout>
+#include <Q3Frame>
+#include <Q3VBoxLayout>
 
 #include "KPrPenStyleWidget.h"
 #include "KPrBrushProperty.h"
@@ -85,7 +89,7 @@ KPrConfig::KPrConfig( KPrView* parent )
 
 {
     m_doc = parent->kPresenterDoc();
-    QVBox *page = addVBoxPage( i18n("Interface"), i18n("Interface"),
+    Q3VBox *page = addVBoxPage( i18n("Interface"), i18n("Interface"),
                                BarIcon("misc", K3Icon::SizeMedium) );
     _interfacePage=new KPrConfigureInterfacePage( parent, page );
     page = addVBoxPage( i18n("Color"), i18n("Color"),
@@ -196,7 +200,7 @@ void KPrConfig::slotDefault()
 KPrConfigureInterfacePage::KPrConfigureInterfacePage( KPrView *_view, QWidget *parent , char *name )
     :QWidget ( parent,name )
 {
-    QVBoxLayout *box = new QVBoxLayout( this, 0, 0 );
+    Q3VBoxLayout *box = new Q3VBoxLayout( this, 0, 0 );
 
     m_pView=_view;
     config = KPrFactory::global()->config();
@@ -218,12 +222,12 @@ KPrConfigureInterfacePage::KPrConfigureInterfacePage( KPrView *_view, QWidget *p
     }
 
     showRuler= new QCheckBox(i18n("Show rulers"),this);
-    QWhatsThis::add(showRuler, i18n( "When checked, both vertical and horizontal rulers are shown on the KPresenter slide (this is the default). When unchecked, the rulers are not shown on any slide." ) );
+    Q3WhatsThis::add(showRuler, i18n( "When checked, both vertical and horizontal rulers are shown on the KPresenter slide (this is the default). When unchecked, the rulers are not shown on any slide." ) );
     showRuler->setChecked(bShowRuler);
     box->addWidget(showRuler);
 
     showStatusBar = new QCheckBox(i18n("Show status bar"),this);
-    QWhatsThis::add(showStatusBar, i18n( "Toggle the statusbar, which is shown by default." ) );
+    Q3WhatsThis::add(showStatusBar, i18n( "Toggle the statusbar, which is shown by default." ) );
     showStatusBar->setChecked(oldShowStatusBar);
     box->addWidget(showStatusBar);
 
@@ -231,7 +235,7 @@ KPrConfigureInterfacePage::KPrConfigureInterfacePage( KPrView *_view, QWidget *p
     recentFiles=new KIntNumInput( oldNbRecentFiles, this);
     recentFiles->setRange(1, 20, 1);
     recentFiles->setLabel(i18n("Number of recent files:"));
-    QWhatsThis::add(recentFiles, i18n( "Set the number of recent files which will be opened using the File->Open Recent menu. Default is to remember 10 filenames. The maximum you can set is 20 and the minimum is 1." ) );
+    Q3WhatsThis::add(recentFiles, i18n( "Set the number of recent files which will be opened using the File->Open Recent menu. Default is to remember 10 filenames. The maximum you can set is 20 and the minimum is 1." ) );
 
     box->addWidget(recentFiles);
 
@@ -243,7 +247,7 @@ KPrConfigureInterfacePage::KPrConfigureInterfacePage( KPrView *_view, QWidget *p
 
     indent->setSuffix( suffix );
     indent->setLabel(i18n("Text indentation depth:"));
-    QWhatsThis::add(indent, i18n( "This setting is used by Increase Depth and Decrease Depth menu items (in the Text menu) to change the indentation depth. The Default is 1 centimeter." ) );
+    Q3WhatsThis::add(indent, i18n( "This setting is used by Increase Depth and Decrease Depth menu items (in the Text menu) to change the indentation depth. The Default is 1 centimeter." ) );
 
     box->addWidget(indent);
 
@@ -310,11 +314,11 @@ KPrConfigureColorBackground::KPrConfigureColorBackground( KPrView* _view, QWidge
 
     oldBgColor = m_pView->kPresenterDoc()->txtBackCol();
     oldGridColor = m_pView->kPresenterDoc()->gridColor();
-    QVBoxLayout *box = new QVBoxLayout( this, 0, 0 );
+    Q3VBoxLayout *box = new Q3VBoxLayout( this, 0, 0 );
 
     QLabel *lab = new QLabel( this, "label20" );
     lab->setText( i18n( "Background object color:" ) );
-    QWhatsThis::add(lab, i18n( "Change the background color of the text box. The background is white by default. If you have a dark background color and you want to put some white text on it, you can change the color of the text box so that you can see what you are typing. When you have finished, the area around the text will revert to the background color. The Defaults button restores the original settings." ) );
+    Q3WhatsThis::add(lab, i18n( "Change the background color of the text box. The background is white by default. If you have a dark background color and you want to put some white text on it, you can change the color of the text box so that you can see what you are typing. When you have finished, the area around the text will revert to the background color. The Defaults button restores the original settings." ) );
     box->addWidget(lab);
 
     bgColor = new KColorButton( oldBgColor,
@@ -326,7 +330,7 @@ KPrConfigureColorBackground::KPrConfigureColorBackground( KPrView* _view, QWidge
 
     lab = new QLabel( this, "label20" );
     lab->setText( i18n( "Grid color:" ) );
-    QWhatsThis::add(lab, i18n( "Here you can change the grid color, which is black by default." ) );
+    Q3WhatsThis::add(lab, i18n( "Here you can change the grid color, which is black by default." ) );
     box->addWidget(lab);
 
     gridColor = new KColorButton( oldGridColor,
@@ -403,15 +407,15 @@ void KPrConfigureSpellPage::slotDefault()
 KPrConfigureMiscPage::KPrConfigureMiscPage( KPrView *_view, QWidget *parent, char *name )
     : QWidget( parent, name )
 {
-    QVBoxLayout *box = new QVBoxLayout( this, 0, 0 );
+    Q3VBoxLayout *box = new Q3VBoxLayout( this, 0, 0 );
 
     m_pView=_view;
     config = KPrFactory::global()->config();
 
-    QGroupBox* tmpQGroupBox = new QGroupBox( 0, Qt::Vertical, i18n("Misc"), this, "GroupBox" );
+    Q3GroupBox* tmpQGroupBox = new Q3GroupBox( 0, Qt::Vertical, i18n("Misc"), this, "GroupBox" );
     tmpQGroupBox->layout()->setSpacing(KDialog::spacingHint());
     tmpQGroupBox->layout()->setMargin(KDialog::marginHint());
-    QGridLayout *grid = new QGridLayout( tmpQGroupBox->layout(), 8, 1 );
+    Q3GridLayout *grid = new Q3GridLayout( tmpQGroupBox->layout(), 8, 1 );
 
     m_oldNbRedo=30;
     m_printNotes=true;
@@ -425,47 +429,47 @@ KPrConfigureMiscPage::KPrConfigureMiscPage( KPrView *_view, QWidget *parent, cha
     m_undoRedoLimit=new KIntNumInput( m_oldNbRedo, tmpQGroupBox );
     m_undoRedoLimit->setLabel(i18n("Undo/redo limit:"));
     m_undoRedoLimit->setRange(10, 60, 1);
-    QWhatsThis::add(m_undoRedoLimit, i18n( "Set the number of actions you can undo and redo (how many actions KPresenter keeps in its Undo buffer). This ranges from a minimum of 10 to a maximum of 60 (the default is 30). Once the number of actions reaches the number set here, earlier actions will be forgotten." ) );
+    Q3WhatsThis::add(m_undoRedoLimit, i18n( "Set the number of actions you can undo and redo (how many actions KPresenter keeps in its Undo buffer). This ranges from a minimum of 10 to a maximum of 60 (the default is 30). Once the number of actions reaches the number set here, earlier actions will be forgotten." ) );
     grid->addWidget(m_undoRedoLimit,0,0);
 
     KPrDocument* doc = m_pView->kPresenterDoc();
 
     m_displayLink=new QCheckBox(i18n("Display links"),tmpQGroupBox);
-    QWhatsThis::add(m_displayLink, i18n( "When you want to include a link in your slide, you can use the Insert->Link... menu, which allows you to insert URL, mail or file links. If the option Display links is checked, all links will be active and displayed in a different color (this is the default behavior). If the option is unchecked, the links will be inactive and the same color as the text. This affects both the edited slides and the slide show." ) );
+    Q3WhatsThis::add(m_displayLink, i18n( "When you want to include a link in your slide, you can use the Insert->Link... menu, which allows you to insert URL, mail or file links. If the option Display links is checked, all links will be active and displayed in a different color (this is the default behavior). If the option is unchecked, the links will be inactive and the same color as the text. This affects both the edited slides and the slide show." ) );
     grid->addWidget(m_displayLink,3,0);
     m_displayLink->setChecked(doc->getVariableCollection()->variableSetting()->displayLink());
 
     m_underlineLink=new QCheckBox(i18n("&Underline all links"),tmpQGroupBox);
     m_underlineLink->setChecked(doc->getVariableCollection()->variableSetting()->underlineLink());
-    QWhatsThis::add(m_underlineLink, i18n( "If this is checked, all links will be underlined (this is the default). If it is not checked, the links will not be underlined." ) );
+    Q3WhatsThis::add(m_underlineLink, i18n( "If this is checked, all links will be underlined (this is the default). If it is not checked, the links will not be underlined." ) );
     grid->addWidget(m_underlineLink,4,0);
 
 
     m_displayComment=new QCheckBox(i18n("Display comments"),tmpQGroupBox);
     m_displayComment->setChecked(doc->getVariableCollection()->variableSetting()->displayComment());
-    QWhatsThis::add(m_displayComment, i18n( "Comments are inserted in the text at the cursor using the Insert->Comment... menu. Comments can only be viewed in edit mode and not in the slide show. If this option is checked (default) then each comment will be shown as a small yellow rectangle. You can then right-click on them to edit them, remove them or copy the text." ) );
+    Q3WhatsThis::add(m_displayComment, i18n( "Comments are inserted in the text at the cursor using the Insert->Comment... menu. Comments can only be viewed in edit mode and not in the slide show. If this option is checked (default) then each comment will be shown as a small yellow rectangle. You can then right-click on them to edit them, remove them or copy the text." ) );
     grid->addWidget(m_displayComment,5,0);
 
     m_displayFieldCode=new QCheckBox(i18n("Display field code"),tmpQGroupBox);
     m_displayFieldCode->setChecked(doc->getVariableCollection()->variableSetting()->displayFieldCode());
-    QWhatsThis::add(m_displayFieldCode, i18n( "In editor mode (not in slide show) this option will display all the variable codes as well as Link at links location. This is very useful to see what variable is displayed. Variables are inserted using the Insert -> Variable menu." ) );
+    Q3WhatsThis::add(m_displayFieldCode, i18n( "In editor mode (not in slide show) this option will display all the variable codes as well as Link at links location. This is very useful to see what variable is displayed. Variables are inserted using the Insert -> Variable menu." ) );
     grid->addWidget(m_displayFieldCode,6,0);
 
     m_cbPrintNotes=new QCheckBox(i18n("Print slide notes"),tmpQGroupBox);
     m_cbPrintNotes->setChecked(m_printNotes);
-    QWhatsThis::add(m_cbPrintNotes, i18n( "If checked, all notes will be printed on paper. The notes will all be printed separately on the last page, from the first slide to the last and finally the Master Page Note. You can see the notes for each slide using the View->Show notebar menu." ) );
+    Q3WhatsThis::add(m_cbPrintNotes, i18n( "If checked, all notes will be printed on paper. The notes will all be printed separately on the last page, from the first slide to the last and finally the Master Page Note. You can see the notes for each slide using the View->Show notebar menu." ) );
     grid->addWidget(m_cbPrintNotes,7,0);
 
     box->addWidget(tmpQGroupBox);
 
-    tmpQGroupBox = new QGroupBox( 0, Qt::Vertical, i18n("Grid"), this, "GroupBox" );
+    tmpQGroupBox = new Q3GroupBox( 0, Qt::Vertical, i18n("Grid"), this, "GroupBox" );
     tmpQGroupBox->layout()->setSpacing(KDialog::spacingHint());
     tmpQGroupBox->layout()->setMargin(KDialog::marginHint());
-    grid = new QGridLayout( tmpQGroupBox->layout(), 8, 1 );
+    grid = new Q3GridLayout( tmpQGroupBox->layout(), 8, 1 );
 
     KoRect rect = doc->masterPage()->getPageRect();
     QLabel *lab=new QLabel(i18n("Horizontal grid size:"), tmpQGroupBox);
-    QWhatsThis::add(lab, i18n( "Set the space in millimeters between two horizontal points on the grid. Default is 5 millimeters." ) );
+    Q3WhatsThis::add(lab, i18n( "Set the space in millimeters between two horizontal points on the grid. Default is 5 millimeters." ) );
     grid->addWidget(lab,0,0);
     KoUnit::Unit unit = doc->unit();
     resolutionX = new KoUnitDoubleSpinBox(tmpQGroupBox, 5.0,rect.width(),1,doc->getGridX() );
@@ -474,7 +478,7 @@ KPrConfigureMiscPage::KPrConfigureMiscPage( KPrView *_view, QWidget *parent, cha
     grid->addWidget(resolutionX,1,0);
 
     lab=new QLabel(i18n("Vertical grid size:"), tmpQGroupBox);
-    QWhatsThis::add(lab, i18n( "Set the space in millimeters between two vertical points on the grid. Default is 5 millimeters." ) );
+    Q3WhatsThis::add(lab, i18n( "Set the space in millimeters between two vertical points on the grid. Default is 5 millimeters." ) );
     grid->addWidget(lab,2,0);
 
     resolutionY = new KoUnitDoubleSpinBox(tmpQGroupBox, 5.0,rect.height(),1,doc->getGridY() );
@@ -581,7 +585,7 @@ void KPrConfigureMiscPage::slotDefault()
 KPrConfigureDefaultDocPage::KPrConfigureDefaultDocPage(KPrView *_view, QWidget *parent, char *name )
     : QWidget( parent, name )
 {
-    QVBoxLayout *box = new QVBoxLayout( this, 0, 0 );
+    Q3VBoxLayout *box = new Q3VBoxLayout( this, 0, 0 );
 
     m_pView=_view;
     config = KPrFactory::global()->config();
@@ -603,7 +607,7 @@ KPrConfigureDefaultDocPage::KPrConfigureDefaultDocPage(KPrView *_view, QWidget *
     gbDocumentDefaults->setInsideSpacing( 5 );
 
     QWidget *fontContainer = new QWidget(gbDocumentDefaults);
-    QGridLayout * fontLayout = new QGridLayout(fontContainer, 1, 3);
+    Q3GridLayout * fontLayout = new Q3GridLayout(fontContainer, 1, 3);
 
     fontLayout->setColStretch(0, 0);
     fontLayout->setColStretch(1, 1);
@@ -616,10 +620,10 @@ KPrConfigureDefaultDocPage::KPrConfigureDefaultDocPage(KPrView *_view, QWidget *
     QString labelName = font->family() + ' ' + QString::number(font->pointSize());
     fontName = new QLabel(labelName, fontContainer);
     fontName->setFont(*font);
-    fontName->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
+    fontName->setFrameStyle(Q3Frame::StyledPanel | Q3Frame::Sunken);
 
     QPushButton *chooseButton = new QPushButton(i18n("Choose..."), fontContainer);
-    QWhatsThis::add(chooseButton, i18n( "Click here if you want to set a new font. The KDE default Select Font dialog will then be displayed." ) );
+    Q3WhatsThis::add(chooseButton, i18n( "Click here if you want to set a new font. The KDE default Select Font dialog will then be displayed." ) );
     connect(chooseButton, SIGNAL(clicked()), this, SLOT(selectNewDefaultFont()));
 
     fontLayout->addWidget(fontTitle, 0, 0);
@@ -627,13 +631,13 @@ KPrConfigureDefaultDocPage::KPrConfigureDefaultDocPage(KPrView *_view, QWidget *
     fontLayout->addWidget(chooseButton, 0, 2);
 
     QWidget *languageContainer = new QWidget(gbDocumentDefaults);
-    QGridLayout * languageLayout = new QGridLayout(languageContainer, 1, 3);
+    Q3GridLayout * languageLayout = new Q3GridLayout(languageContainer, 1, 3);
 
     languageLayout->setColStretch(0, 0);
     languageLayout->setColStretch(1, 1);
 
     QLabel *languageTitle = new QLabel(i18n("Global language:"), languageContainer);
-    QWhatsThis::add(languageTitle, i18n( "Use this drop down box to determine the default language for the document. This setting is used by the hyphenation and spelling tools." ) );
+    Q3WhatsThis::add(languageTitle, i18n( "Use this drop down box to determine the default language for the document. This setting is used by the hyphenation and spelling tools." ) );
 
     m_globalLanguage = new QComboBox( languageContainer );
     m_globalLanguage->insertStringList( KoGlobal::listOfLanguages() );
@@ -643,7 +647,7 @@ KPrConfigureDefaultDocPage::KPrConfigureDefaultDocPage(KPrView *_view, QWidget *
     languageLayout->addWidget(m_globalLanguage, 0, 1);
 
     m_autoHyphenation = new QCheckBox( i18n("Automatic hyphenation"), gbDocumentDefaults);
-    QWhatsThis::add(m_autoHyphenation, i18n( "Check this box if you want KPresenter to automatically hyphenate long words when it determines the word wrap in text frames. This is not set by default." ) );
+    Q3WhatsThis::add(m_autoHyphenation, i18n( "Check this box if you want KPresenter to automatically hyphenate long words when it determines the word wrap in text frames. This is not set by default." ) );
     m_autoHyphenation->setChecked( m_oldHyphenation );
 
     box->addWidget(gbDocumentDefaults);
@@ -653,7 +657,7 @@ KPrConfigureDefaultDocPage::KPrConfigureDefaultDocPage(KPrView *_view, QWidget *
     gbDocumentSettings->setInsideSpacing( KDialog::spacingHint() );
 
     m_createBackupFile = new QCheckBox( i18n("Create backup file"), gbDocumentSettings);
-    QWhatsThis::add(m_createBackupFile, i18n( "If checked, this will create a .<name>.kpr.autosave.kpr in the folder where your file is. This backup file can then be used in case of a problem.\nThe backup file is updated every time you save your document or every time there is an autosave." ) );
+    Q3WhatsThis::add(m_createBackupFile, i18n( "If checked, this will create a .<name>.kpr.autosave.kpr in the folder where your file is. This backup file can then be used in case of a problem.\nThe backup file is updated every time you save your document or every time there is an autosave." ) );
     m_createBackupFile->setChecked( m_oldBackupFile );
 
 
@@ -662,14 +666,14 @@ KPrConfigureDefaultDocPage::KPrConfigureDefaultDocPage(KPrView *_view, QWidget *
     autoSave->setLabel( i18n("Autosave (min):") );
     autoSave->setSpecialValueText( i18n("No autosave") );
     autoSave->setSuffix( i18n("min") );
-    QWhatsThis::add(autoSave, i18n( "You can use this to adjust how often KPresenter saves a temporary file. If you set this value to No autosave, KPresenter will not autosave. You can adjust the autosave from 1 to 60 minutes." ) );
+    Q3WhatsThis::add(autoSave, i18n( "You can use this to adjust how often KPresenter saves a temporary file. If you set this value to No autosave, KPresenter will not autosave. You can adjust the autosave from 1 to 60 minutes." ) );
 
     new QLabel(i18n("Starting page number:"), gbDocumentSettings);
     m_oldStartingPage=doc->getVariableCollection()->variableSetting()->startingPageNumber();
     m_variableNumberOffset=new KIntNumInput(gbDocumentSettings);
     m_variableNumberOffset->setRange(1, 9999, 1, false);
     m_variableNumberOffset->setValue(m_oldStartingPage);
-    QWhatsThis::add(m_variableNumberOffset, i18n( "Here you can change the number for the first page. It is set to 1 by default.\nTip: this is helpful if you have split a single document into multiple files." ) );
+    Q3WhatsThis::add(m_variableNumberOffset, i18n( "Here you can change the number for the first page. It is set to 1 by default.\nTip: this is helpful if you have split a single document into multiple files." ) );
 
     new QLabel(i18n("Tab stop:"), gbDocumentSettings);
     m_oldTabStopWidth = doc->tabStopValue();
@@ -678,7 +682,7 @@ KPrConfigureDefaultDocPage::KPrConfigureDefaultDocPage(KPrView *_view, QWidget *
 
     m_tabStopWidth->setUnit( doc->unit() );
 
-    QWhatsThis::add(m_tabStopWidth, i18n( "Each KPresenter document has a default set of tab stops. If you add tab stops to your document, the newly added tab stops override the default ones. You can use this text box to define the spacing between default tab stops. As an example, if you enter 1.5 in this text box, and the unit of measurement is in centimeters, the first default tab stop will be located 1.5 cm to the right of the frame's left-hand margin. The second default tab stop will be located at 3 cm from the left-hand margin, and so on." ) );
+    Q3WhatsThis::add(m_tabStopWidth, i18n( "Each KPresenter document has a default set of tab stops. If you add tab stops to your document, the newly added tab stops override the default ones. You can use this text box to define the spacing between default tab stops. As an example, if you enter 1.5 in this text box, and the unit of measurement is in centimeters, the first default tab stop will be located 1.5 cm to the right of the frame's left-hand margin. The second default tab stop will be located at 3 cm from the left-hand margin, and so on." ) );
 
     box->addWidget(gbDocumentSettings);
     QVGroupBox* gbDocumentCursor = new QVGroupBox( i18n("Cursor"), this );
@@ -687,11 +691,11 @@ KPrConfigureDefaultDocPage::KPrConfigureDefaultDocPage(KPrView *_view, QWidget *
 
     m_cursorInProtectedArea= new QCheckBox(i18n("Cursor in protected area"),gbDocumentCursor);
     m_cursorInProtectedArea->setChecked(doc->cursorInProtectedArea());
-    QWhatsThis::add(m_cursorInProtectedArea, i18n( "When this box is checked and you click in a protected frame within your document, a cursor will appear. When this box is unchecked, and you click in a protected frame, no cursor will be visible." ) );
+    Q3WhatsThis::add(m_cursorInProtectedArea, i18n( "When this box is checked and you click in a protected frame within your document, a cursor will appear. When this box is unchecked, and you click in a protected frame, no cursor will be visible." ) );
 
     m_directInsertCursor= new QCheckBox(i18n("Direct insert cursor"),gbDocumentCursor);
     m_directInsertCursor->setChecked(doc->insertDirectCursor());
-    QWhatsThis::add(m_directInsertCursor, i18n( "When this box is checked, you can select a section of text using your mouse. Move the mouse to a new area in your document and click once with the middle mouse button and a copy of the selected text will be copied and pasted to the new location in the document.\nWhen this box is unchecked, in order to copy text from one section to another, you must select the text, manually copy the text to the clipboard, then manually paste the text in the new location." ) );
+    Q3WhatsThis::add(m_directInsertCursor, i18n( "When this box is checked, you can select a section of text using your mouse. Move the mouse to a new area in your document and click once with the middle mouse button and a copy of the selected text will be copied and pasted to the new location in the document.\nWhen this box is unchecked, in order to copy text from one section to another, you must select the text, manually copy the text to the clipboard, then manually paste the text in the new location." ) );
     box->addWidget(gbDocumentCursor);
 
     QSpacerItem* spacer = new QSpacerItem( 20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding );
@@ -804,7 +808,7 @@ void KPrConfigureDefaultDocPage::selectNewDefaultFont() {
 KPrConfigureToolsPage::KPrConfigureToolsPage( KPrView *_view, QWidget *parent, char *name )
     : QWidget( parent, name )
 {
-    QVBoxLayout *box = new QVBoxLayout( this, 0, 0 );
+    Q3VBoxLayout *box = new Q3VBoxLayout( this, 0, 0 );
 
     m_pView = _view;
     config = KPrFactory::global()->config();
@@ -894,11 +898,11 @@ void KPrConfigureToolsPage::apply()
 
 void KPrConfigureToolsPage::slotDefault()
 {
-    KoPenCmd::Pen pen( KoPen(black, 1.0, SolidLine), L_NORMAL, L_NORMAL );
+    KoPenCmd::Pen pen( KoPen(Qt::black, 1.0, Qt::SolidLine), L_NORMAL, L_NORMAL );
     m_confPenDia->setPen( pen );
     m_pView->getActionPenColor()->setCurrentColor( pen.pen.color() );
 
-    KPrBrushCmd::Brush brush( QBrush( white, SolidPattern ), red, green,
+    KPrBrushCmd::Brush brush( QBrush( Qt::white, Qt::SolidPattern ), Qt::red, Qt::green,
                            BCT_GHORZ, FT_BRUSH, false, 100, 100 );
     m_brushProperty->setBrush( brush );
     m_pView->getActionBrushColor()->setCurrentColor( brush.brush.color() );
@@ -923,41 +927,41 @@ void KPrConfigureToolsPage::slotDefault()
 KPrConfigurePathPage::KPrConfigurePathPage( KPrView *_view, QWidget *parent, char *name )
     : QWidget( parent, name )
 {
-    QVBoxLayout *box = new QVBoxLayout( this, 0, 0 );
+    Q3VBoxLayout *box = new Q3VBoxLayout( this, 0, 0 );
 
     m_pView=_view;
     KPrDocument* doc = m_pView->kPresenterDoc();
     config = KPrFactory::global()->config();
 
     m_pPathView = new K3ListView( this );
-    m_pPathView->setResizeMode(QListView::NoColumn);
+    m_pPathView->setResizeMode(Q3ListView::NoColumn);
     m_pPathView->addColumn( i18n( "Type" ) );
     m_pPathView->addColumn( i18n( "Path" ) );
-    (void) new QListViewItem( m_pPathView, i18n("Picture Path"),doc->picturePath() );
-    (void) new QListViewItem( m_pPathView, i18n("Backup Path"),doc->backupPath() );
-    QWhatsThis::add(m_pPathView, i18n( "There are two paths that are set here: the Backup Path and the Picture Path. The Backup path is the folder where your backup files are saved and the Picture Path is the folder where your pictures are saved." ) );
+    (void) new Q3ListViewItem( m_pPathView, i18n("Picture Path"),doc->picturePath() );
+    (void) new Q3ListViewItem( m_pPathView, i18n("Backup Path"),doc->backupPath() );
+    Q3WhatsThis::add(m_pPathView, i18n( "There are two paths that are set here: the Backup Path and the Picture Path. The Backup path is the folder where your backup files are saved and the Picture Path is the folder where your pictures are saved." ) );
     box->addWidget(m_pPathView);
 
     m_modifyPath = new QPushButton( i18n("Modify Path..."), this);
     connect( m_modifyPath, SIGNAL( clicked ()), this, SLOT( slotModifyPath()));
-    connect( m_pPathView, SIGNAL( doubleClicked (QListViewItem *, const QPoint &, int )),
+    connect( m_pPathView, SIGNAL( doubleClicked (Q3ListViewItem *, const QPoint &, int )),
              this, SLOT( slotModifyPath()));
-    connect( m_pPathView, SIGNAL( selectionChanged ( QListViewItem * )),
-             this, SLOT( slotSelectionChanged(QListViewItem * )));
+    connect( m_pPathView, SIGNAL( selectionChanged ( Q3ListViewItem * )),
+             this, SLOT( slotSelectionChanged(Q3ListViewItem * )));
     slotSelectionChanged(m_pPathView->currentItem());
-    QWhatsThis::add(m_modifyPath, i18n( "When you click this button, a small dialog will appear and, if Default path is unchecked, you can either enter a path yourself or choose one using the standard KDE file dialog." ) );
+    Q3WhatsThis::add(m_modifyPath, i18n( "When you click this button, a small dialog will appear and, if Default path is unchecked, you can either enter a path yourself or choose one using the standard KDE file dialog." ) );
     box->addWidget(m_modifyPath);
 
 }
 
-void KPrConfigurePathPage::slotSelectionChanged(QListViewItem * item)
+void KPrConfigurePathPage::slotSelectionChanged(Q3ListViewItem * item)
 {
     m_modifyPath->setEnabled( item );
 }
 
 void KPrConfigurePathPage::slotModifyPath()
 {
-    QListViewItem *item = m_pPathView->currentItem ();
+    Q3ListViewItem *item = m_pPathView->currentItem ();
     if ( item )
     {
         if ( item->text(0)==i18n("Picture Path"))
@@ -982,7 +986,7 @@ void KPrConfigurePathPage::slotModifyPath()
 
 void KPrConfigurePathPage::slotDefault()
 {
-    QListViewItem * item = m_pPathView->findItem(i18n("Picture Path"), 0);
+    Q3ListViewItem * item = m_pPathView->findItem(i18n("Picture Path"), 0);
     if ( item )
         item->setText(1, KGlobalSettings::documentPath());
     item = m_pPathView->findItem(i18n("Backup Path"), 0);
@@ -992,7 +996,7 @@ void KPrConfigurePathPage::slotDefault()
 
 void KPrConfigurePathPage::apply()
 {
-    QListViewItem *item = m_pPathView->findItem(i18n("Backup Path"), 0);
+    Q3ListViewItem *item = m_pPathView->findItem(i18n("Backup Path"), 0);
     if ( item )
     {
         QString res = item->text(1 );

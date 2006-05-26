@@ -27,7 +27,7 @@
 
 #include <qbuffer.h>
 #include <qpainter.h>
-#include <qwmatrix.h>
+#include <qmatrix.h>
 #include <qfileinfo.h>
 #include <qpixmap.h>
 #include <qdom.h>

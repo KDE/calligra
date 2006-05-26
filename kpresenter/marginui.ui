@@ -91,7 +91,7 @@
                                         <cstring>topLabel</cstring>
                                     </property>
                                     <property name="text">
-                                        <string>&amp;Top:</string>
+                                        <string>&amp;Qt::DockTop:</string>
                                     </property>
                                     <property name="buddy" stdset="0">
                                         <cstring>topInput</cstring>
@@ -102,7 +102,7 @@
                                         <cstring>bottomLabel</cstring>
                                     </property>
                                     <property name="text">
-                                        <string>&amp;Bottom:</string>
+                                        <string>&amp;Qt::DockBottom:</string>
                                     </property>
                                     <property name="buddy" stdset="0">
                                         <cstring>bottomInput</cstring>
@@ -123,7 +123,7 @@
                                         <cstring>leftLabel</cstring>
                                     </property>
                                     <property name="text">
-                                        <string>&amp;Left:</string>
+                                        <string>&amp;Qt::DockLeft:</string>
                                     </property>
                                     <property name="buddy" stdset="0">
                                         <cstring>leftInput</cstring>

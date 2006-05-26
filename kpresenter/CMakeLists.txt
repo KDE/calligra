@@ -1,6 +1,8 @@
 
 
 project(kpresenter)
+include_directories( ${KOTEXT_INCLUDES} ${CMAKE_SOURCE_DIR}/libs/kformula ${KOFFICEUI_INCLUDES} )
+
 add_subdirectory( autoformEdit )
 add_subdirectory( autoforms )
 add_subdirectory( pics )

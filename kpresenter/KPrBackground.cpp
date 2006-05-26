@@ -29,8 +29,10 @@
 #include "KPrBrush.h"
 
 #include <qpainter.h>
-#include <qpicture.h>
+#include <q3picture.h>
 #include <qfileinfo.h>
+//Added by qt3to4:
+#include <QPixmap>
 
 #include <KoRichText.h>
 #include <KoTextObject.h>
@@ -365,7 +367,7 @@ void KPrBackGround::load( const QDomElement &element )
         if(e.hasAttribute("color"))
             setBackColor1(QColor(e.attribute("color")));
         else
-            setBackColor1(QColor(red, green, blue));
+            setBackColor1(QColor(Qt::red, Qt::green, Qt::blue));
     }
     e=element.namedItem("BACKCOLOR2").toElement();
     if(!e.isNull()) {
@@ -379,7 +381,7 @@ void KPrBackGround::load( const QDomElement &element )
         if(e.hasAttribute("color"))
             setBackColor2(QColor(e.attribute("color")));
         else
-            setBackColor2(QColor(red, green, blue));
+            setBackColor2(QColor(Qt::red, Qt::green, Qt::blue));
     }
     e=element.namedItem("BGRADIENT").toElement();
     if(!e.isNull()) {

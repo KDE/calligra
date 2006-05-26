@@ -23,7 +23,9 @@
 
 #include "global.h"
 
-#include <qframe.h>
+#include <q3frame.h>
+//Added by qt3to4:
+#include <QResizeEvent>
 
 #include "KPrGradient.h"
 #include <KoBrush.h>
@@ -35,7 +37,7 @@ class KoTextZoomHandler;
 /* class Pen and Brush preview                                    */
 /******************************************************************/
 
-class KPrPBPreview : public QFrame
+class KPrPBPreview : public Q3Frame
 {
     Q_OBJECT
 

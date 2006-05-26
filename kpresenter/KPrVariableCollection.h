@@ -22,7 +22,7 @@
 #define kprvariable_h
 
 #include <QString>
-#include <qasciidict.h>
+#include <q3asciidict.h>
 #include <KoVariable.h>
 
 #include "KPrTextDocument.h"

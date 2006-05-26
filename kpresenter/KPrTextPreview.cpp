@@ -4,14 +4,16 @@
 
 #include <qpainter.h>
 #include <QFont>
+//Added by qt3to4:
+#include <Q3Frame>
 
 KPrTextPreview::KPrTextPreview( QWidget* parent, const char* name )
-    : QFrame( parent, name ),
+    : Q3Frame( parent, name ),
       shadowDirection( SD_LEFT_BOTTOM ),
       shadowDistance( 0 ),
       angle( 0 )
 {
-    setBackgroundColor( white );
+    setBackgroundColor( Qt::white );
     setFrameStyle( NoFrame );
 }
 
@@ -93,7 +95,7 @@ void KPrTextPreview::drawContents( QPainter* painter )
 	painter->setPen( shadowColor );
 	painter->drawText( sx, sy, "KOffice" );
     }
-    painter->setPen( blue );
+    painter->setPen( Qt::blue );
     painter->drawText( x, y, "KOffice" );
 
     painter->restore();

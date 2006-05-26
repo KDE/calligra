@@ -25,7 +25,9 @@
 
 #include <QLayout>
 #include <QLabel>
-#include <qvbox.h>
+#include <q3vbox.h>
+//Added by qt3to4:
+#include <Q3VBoxLayout>
 
 #include <kcolorbutton.h>
 #include <kcombobox.h>
@@ -37,7 +39,7 @@ KPrPenStyleWidget::KPrPenStyleWidget( QWidget *parent, const char *name, const K
 : QWidget( parent, name )
 , m_pen( pen )
 {
-    QVBoxLayout *layout = new QVBoxLayout( this );
+    Q3VBoxLayout *layout = new Q3VBoxLayout( this );
     layout->addWidget( m_ui = new PenStyleUI( this ) );
 
     QSpacerItem* spacer = new QSpacerItem( 20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding );

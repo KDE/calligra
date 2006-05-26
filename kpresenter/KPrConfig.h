@@ -23,6 +23,8 @@
 #define __kpresenter_dlg_config__
 
 #include <kdialogbase.h>
+//Added by qt3to4:
+#include <QLabel>
 
 class KPrView;
 class KPrDocument;
@@ -170,7 +172,7 @@ public:
     void apply();
 private slots:
     void slotModifyPath();
-    void slotSelectionChanged(QListViewItem *);
+    void slotSelectionChanged(Q3ListViewItem *);
 private:
     KPrView* m_pView;
     KConfig* config;

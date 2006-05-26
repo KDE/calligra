@@ -22,23 +22,25 @@
 #define gotopage_h
 
 #include <kdialogbase.h>
-#include <qvaluelist.h>
+#include <q3valuelist.h>
+//Added by qt3to4:
+#include <QResizeEvent>
 
 class QWidget;
 class QObject;
 class QResizeEvent;
-class QListBox;
+class Q3ListBox;
 class KPrDocument;
 
 class KPrGotoPage : public KDialogBase
 {
 public:
     KPrGotoPage( const KPrDocument *doc,
-                const QValueList<int> &slides, int start,
+                const Q3ValueList<int> &slides, int start,
                 QWidget *parent = 0L, const char *name = 0L );
 
     static int gotoPage( const KPrDocument *doc,
-                         const QValueList<int> &slides, int start,
+                         const Q3ValueList<int> &slides, int start,
                          QWidget *parent = 0L );
 
     int page() const;
@@ -46,7 +48,7 @@ public:
 private:
     void resetCursor();
 
-    QListBox *spinbox;
+    Q3ListBox *spinbox;
     int oldPage;
 };
 

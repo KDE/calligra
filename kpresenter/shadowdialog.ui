@@ -143,7 +143,7 @@
                                 </sizepolicy>
                             </property>
                             <property name="title">
-                                <string>Direction</string>
+                                <string>Qt::Orientation</string>
                             </property>
                             <property name="exclusive">
                                 <bool>true</bool>
@@ -362,7 +362,7 @@
                 <enum>Sunken</enum>
             </property>
             <property name="orientation">
-                <enum>Horizontal</enum>
+                <enum>Qt::Horizontal</enum>
             </property>
         </widget>
         <widget class="QLayoutWidget">
@@ -381,10 +381,10 @@
                 </property>
                 <spacer>
                     <property name="name">
-                        <cstring>Horizontal Spacing2</cstring>
+                        <cstring>Qt::Horizontal Spacing2</cstring>
                     </property>
                     <property name="orientation">
-                        <enum>Horizontal</enum>
+                        <enum>Qt::Horizontal</enum>
                     </property>
                     <property name="sizeType">
                         <enum>Expanding</enum>

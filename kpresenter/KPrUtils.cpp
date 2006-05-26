@@ -32,7 +32,7 @@
 #include <KoPoint.h>
 
 #include <qpainter.h>
-#include <qpointarray.h>
+#include <q3pointarray.h>
 #include <QPoint>
 #include <QColor>
 #include <qsize.h>
@@ -40,6 +40,8 @@
 #include <qcursor.h>
 #include <qdatetime.h>
 #include <qdom.h>
+//Added by qt3to4:
+#include <QPixmap>
 
 void drawFigure( LineEnd figure, QPainter* painter, const KoPoint &coord, const QColor &color,
                  int _w, float angle, KoZoomHandler* _zoomHandler)
@@ -77,7 +79,7 @@ void drawFigure( LineEnd figure, QPainter* painter, const KoPoint &coord, const 
         KoPoint p1( -10 - _w, -3 - _w / 2 );
         KoPoint p2( 0 , 0 );
         KoPoint p3( -10 - _w, 3 + _w / 2 );
-        QPointArray pArray( 3 );
+        Q3PointArray pArray( 3 );
         pArray.setPoint( 0, _zoomHandler->zoomPoint(p1) );
         pArray.setPoint( 1, _zoomHandler->zoomPoint(p2) );
         pArray.setPoint( 2, _zoomHandler->zoomPoint(p3) );
@@ -125,7 +127,7 @@ void drawFigure( LineEnd figure, QPainter* painter, const KoPoint &coord, const 
         KoPoint p5( -10, 0 );
         KoPoint p6( -20 - _w, 3 + _w / 2 );
 
-        QPointArray pArray( 3 );
+        Q3PointArray pArray( 3 );
         pArray.setPoint( 0, _zoomHandler->zoomPoint(p1) );
         pArray.setPoint( 1, _zoomHandler->zoomPoint(p2) );
         pArray.setPoint( 2, _zoomHandler->zoomPoint(p3) );

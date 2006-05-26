@@ -26,6 +26,8 @@
 
 #include <qdatetime.h>
 #include <QVariant>
+//Added by qt3to4:
+#include <QPixmap>
 
 #include "KPrObject.h"
 #include <KoPictureCollection.h>

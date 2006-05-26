@@ -108,7 +108,7 @@
                         <cstring>topLabel</cstring>
                     </property>
                     <property name="text">
-                        <string>&amp;Top:</string>
+                        <string>&amp;Qt::DockTop:</string>
                     </property>
                     <property name="buddy" stdset="0">
                         <cstring>yInput</cstring>
@@ -119,7 +119,7 @@
                         <cstring>leftLabel</cstring>
                     </property>
                     <property name="text">
-                        <string>&amp;Left:</string>
+                        <string>&amp;Qt::DockLeft:</string>
                     </property>
                     <property name="buddy" stdset="0">
                         <cstring>xInput</cstring>
@@ -152,7 +152,7 @@
                 <cstring>spacer1</cstring>
             </property>
             <property name="orientation">
-                <enum>Vertical</enum>
+                <enum>Qt::Vertical</enum>
             </property>
             <property name="sizeType">
                 <enum>Expanding</enum>

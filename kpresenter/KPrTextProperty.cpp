@@ -24,6 +24,8 @@
 
 #include <QCheckBox>
 #include <QLayout>
+//Added by qt3to4:
+#include <Q3GridLayout>
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -37,7 +39,7 @@ KPrTextProperty::KPrTextProperty( QWidget *parent, const char *name, const Margi
 , m_unit( unit )
 , m_protectContent( protectContent )
 {
-    QGridLayout *layout = new QGridLayout( this, 1, 1, 11, 6 );
+    Q3GridLayout *layout = new Q3GridLayout( this, 1, 1, 11, 6 );
 
     layout->addWidget( m_protectContentCheck = new QCheckBox( i18n( "Protect content" ), this ), 0, 0 );
     layout->addWidget( m_margins = new KPrMarginWidget( this, name, m_unit ), 1, 0 );

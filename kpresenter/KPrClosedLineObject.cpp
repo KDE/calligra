@@ -29,8 +29,10 @@
 #include <qregion.h>
 #include <QRegExp>
 #include <qdom.h>
-#include <qpicture.h>
+#include <q3picture.h>
 #include <qpainter.h>
+//Added by qt3to4:
+#include <Q3PointArray>
 #include <KoOasisContext.h>
 #include <math.h>
 #include <KoUnit.h>
@@ -55,7 +57,7 @@ KPrClosedLineObject::KPrClosedLineObject( const KoPointArray &_points, const KoS
 }
 
 KPrClosedLineObject::KPrClosedLineObject( const KPrPointObject &object )
-: KPr2DObject( object.getPen(), QBrush::NoBrush, FT_BRUSH, QColor(), QColor(), BCT_PLAIN, false, 0, 0 )
+: KPr2DObject( object.getPen(), Qt::NoBrush, FT_BRUSH, QColor(), QColor(), BCT_PLAIN, false, 0, 0 )
 {
     ext = object.getSize();
     orig = object.getOrig();
@@ -200,7 +202,7 @@ void KPrClosedLineObject::paint( QPainter* _painter,KoTextZoomHandler*_zoomHandl
     int _w = ( pen.style() == Qt::NoPen ) ? 1 : int( pen.pointWidth() );
 
     if ( drawContour ) {
-        QPointArray pointArray2 = points.zoomPointArray( _zoomHandler );
+        Q3PointArray pointArray2 = points.zoomPointArray( _zoomHandler );
         QPen pen3( Qt::black, 1, Qt::DotLine );
         _painter->setPen( pen3 );
         _painter->setRasterOp( Qt::NotXorROP );
@@ -208,7 +210,7 @@ void KPrClosedLineObject::paint( QPainter* _painter,KoTextZoomHandler*_zoomHandl
         return;
     }
 
-    QPointArray pointArray = points.zoomPointArray( _zoomHandler, _w );
+    Q3PointArray pointArray = points.zoomPointArray( _zoomHandler, _w );
     QPen pen2 = pen.zoomedPen( _zoomHandler );
 
     if ( drawingShadow || getFillType() == FT_BRUSH || !gradient ) {

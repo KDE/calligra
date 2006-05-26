@@ -27,13 +27,16 @@
 #include <qradiobutton.h>
 #include <QCheckBox>
 #include <QLayout>
+//Added by qt3to4:
+#include <QPixmap>
+#include <Q3VBoxLayout>
 
 KPrPictureProperty::KPrPictureProperty( QWidget *parent, const char *name, const QPixmap &pixmap,
                                   KPrPictureSettingCmd::PictureSettings pictureSettings )
 : QWidget( parent, name )
 , m_pictureSettings( pictureSettings )
 {
-    QVBoxLayout *layout = new QVBoxLayout( this );
+    Q3VBoxLayout *layout = new Q3VBoxLayout( this );
     layout->addWidget( m_ui = new PicturePropertyUI( this ) );
 
     connect( m_ui->depth0, SIGNAL( clicked() ), m_ui->picturePreview, SLOT( slotPictureDepth0() ) );

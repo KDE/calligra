@@ -28,13 +28,15 @@
 #include <QSpinBox>
 #include <qtoolbutton.h>
 #include <QLayout>
+//Added by qt3to4:
+#include <Q3VBoxLayout>
 
 KPrRectProperty::KPrRectProperty( QWidget *parent, const char *name, KPrRectValueCmd::RectValues &rectValue )
 : QWidget( parent, name )
 , m_rectValue( rectValue )
 {
     formerVerticalValue = 0;
-    QVBoxLayout *layout = new QVBoxLayout( this );
+    Q3VBoxLayout *layout = new Q3VBoxLayout( this );
     layout->addWidget( m_ui = new RectPropertyUI( this ) );
     KoImageResource kir;
     m_ui->combineButton->setPixmap(kir.chain());

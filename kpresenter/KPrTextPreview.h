@@ -1,10 +1,10 @@
 #ifndef __textpreview_h__
 #define __textpreview_h__
 
-#include <qframe.h>
+#include <q3frame.h>
 #include "global.h"
 
-class KPrTextPreview : public QFrame
+class KPrTextPreview : public Q3Frame
 {
     Q_OBJECT
 

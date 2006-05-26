@@ -37,7 +37,7 @@
 #include <kstdguiitem.h>
 
 KPrPropertyEditor::KPrPropertyEditor( QWidget *parent, const char *name, KPrPage *page, KPrDocument *doc )
-    : QTabDialog( parent, name, true )
+    : Q3TabDialog( parent, name, true )
     , m_page( page )
     , m_doc( doc )
     , m_objects( page->getSelectedObjects() )
@@ -275,7 +275,7 @@ KCommand * KPrPropertyEditor::getCommand()
                     macro = new KMacroCommand( i18n( "Apply Properties" ) );
                 }
 
-                QPtrListIterator<KPrObject> it( m_objects );
+                Q3PtrListIterator<KPrObject> it( m_objects );
                 for ( ; it.current(); ++it )
                 {
                     KoRect oldRect = it.current()->getRect();
@@ -438,7 +438,7 @@ KPrGeneralProperty::GeneralValue KPrPropertyEditor::getGeneralValue()
     bool keepRatio = false;
     generalValue.m_keepRatio = STATE_OFF;
 
-    QPtrListIterator<KPrObject> it( m_objects );
+    Q3PtrListIterator<KPrObject> it( m_objects );
     if ( it.current() )
     {
         protect = it.current()->isProtect();

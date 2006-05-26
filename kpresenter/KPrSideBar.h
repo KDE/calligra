@@ -25,15 +25,19 @@
 #include <qstringlist.h>
 #include <qtabwidget.h>
 #include <qvalidator.h>
+//Added by qt3to4:
+#include <QPixmap>
+#include <QDropEvent>
+#include <Q3PopupMenu>
 
 #include <k3iconview.h>
 #include <k3listview.h>
 
-class QListViewItem;
+class Q3ListViewItem;
 class KPrDocument;
 class KPrView;
 class QDropEvent;
-class QPopupMenu;
+class Q3PopupMenu;
 class KPrOutline;
 class OutlineSlideItem;
 class KPrThumbBar;
@@ -87,7 +91,7 @@ public slots:
     void rebuildItems();
 
 private slots:
-    void itemClicked(QIconViewItem *i);
+    void itemClicked(Q3IconViewItem *i);
     void slotContentsMoving(int x, int y);
     void slotRefreshItems();
 
@@ -115,11 +119,11 @@ public:
 
 protected:
     void contentsDropEvent( QDropEvent *e );
-    void moveItem( QListViewItem *i, QListViewItem *firstAfter, QListViewItem *newAfter );
+    void moveItem( Q3ListViewItem *i, Q3ListViewItem *firstAfter, Q3ListViewItem *newAfter );
     OutlineSlideItem* slideItem( int pageNumber );
     bool acceptDrag( QDropEvent* e ) const;
 
-    virtual QDragObject* dragObject();
+    virtual Q3DragObject* dragObject();
 
 signals: // all page numbers 0-based
     void showPage( int i );
@@ -131,13 +135,13 @@ public slots:
     void renamePageTitle();
 
 private slots:
-    void itemClicked( QListViewItem *i );
-    void slotDropped( QDropEvent *e, QListViewItem *parent, QListViewItem *target );
-    void rightButtonPressed( QListViewItem *i, const QPoint &pnt, int c );
-    void slotContextMenu( K3ListView*, QListViewItem *item, const QPoint &p );
+    void itemClicked( Q3ListViewItem *i );
+    void slotDropped( QDropEvent *e, Q3ListViewItem *parent, Q3ListViewItem *target );
+    void rightButtonPressed( Q3ListViewItem *i, const QPoint &pnt, int c );
+    void slotContextMenu( K3ListView*, Q3ListViewItem *item, const QPoint &p );
 
 private:
-    QListViewItem *m_movedItem, *m_movedAfter;
+    Q3ListViewItem *m_movedItem, *m_movedAfter;
 };
 
 class KPrSideBar: public QTabWidget

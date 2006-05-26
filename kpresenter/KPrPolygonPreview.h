@@ -24,13 +24,13 @@
 #ifndef POLYGONPREVIEW_H
 #define POLYGONPREVIEW_H
 
-#include <qframe.h>
+#include <q3frame.h>
 #include <qpen.h>
 #include <qbrush.h>
 
 class QPainter;
 
-class KPrPolygonPreview : public QFrame
+class KPrPolygonPreview : public Q3Frame
 {
     Q_OBJECT
 

@@ -25,7 +25,7 @@
 #include "KPrUtils.h"
 #include <KoTextZoomHandler.h>
 #include <qpainter.h>
-#include <qwmatrix.h>
+#include <qmatrix.h>
 #include <qdom.h>
 #include "KoPointArray.h"
 #include <kdebug.h>

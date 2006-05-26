@@ -25,12 +25,14 @@
 #include "KPrGradient.h"
 
 #include <qbitmap.h>
-#include <qpointarray.h>
-#include <qptrlist.h>
+#include <q3pointarray.h>
+#include <q3ptrlist.h>
 #include <qregion.h>
 #include <qdom.h>
 #include <qpainter.h>
-#include <qwmatrix.h>
+#include <qmatrix.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 #include <kstandarddirs.h>
 #include <kdebug.h>
 #include <KoTextZoomHandler.h>
@@ -83,7 +85,7 @@ bool KPrAutoformObject::saveOasisObjectAttributes( KPOasisSaveContext &sc ) cons
     sc.xmlWriter.addAttribute( "svg:viewBox", QString( "0 0 %1 %2" ).arg( size.width() )
                                                                     .arg( size.height() ) );
 
-    QPointArray points = const_cast<ATFInterpreter &>( atfInterp ).getPointArray( size.width(), size.height() );
+    Q3PointArray points = const_cast<ATFInterpreter &>( atfInterp ).getPointArray( size.width(), size.height() );
 
     unsigned int pointCount = points.size();
     unsigned int pos = 0;
@@ -117,7 +119,7 @@ void KPrAutoformObject::fillStyle( KoGenStyle& styleObjectAuto, KoGenStyles& mai
     kDebug(33001) << "KPr2DObject::fillStyle" << endl;
     KPrShadowObject::fillStyle( styleObjectAuto, mainStyles );
 
-    QPointArray points = const_cast<ATFInterpreter &>( atfInterp ).getPointArray( int( ext.width() * 100 ),
+    Q3PointArray points = const_cast<ATFInterpreter &>( atfInterp ).getPointArray( int( ext.width() * 100 ),
                                                                                   int( ext.height() * 100 ) );
 
     // if it is a closed object save the background
@@ -145,7 +147,7 @@ QDomDocumentFragment KPrAutoformObject::save( QDomDocument& doc, double offset )
     // bad, so we simply remove everything but the last dir and the name.
     // e.g. /my/local/path/to/kpresenter/Arrow/.source/Arrow1.atf -> Arrow/.source/Arrow1.atf
     QStringList afDirs = KPrFactory::global()->dirs()->resourceDirs("autoforms");
-    QValueList<QString>::ConstIterator it=afDirs.begin();
+    Q3ValueList<QString>::ConstIterator it=afDirs.begin();
     QString str;
     for( ; it!=afDirs.end(); ++it) {
         if(filename.startsWith(*it)) {
@@ -208,10 +210,10 @@ void KPrAutoformObject::paint( QPainter* _painter, KoTextZoomHandler *_zoomHandl
     if ( !drawContour )
         _painter->setBrush( getBrush() );
 
-    QPointArray pntArray = atfInterp.getPointArray( _zoomHandler->zoomItX( ext.width()),
+    Q3PointArray pntArray = atfInterp.getPointArray( _zoomHandler->zoomItX( ext.width()),
                                                     _zoomHandler->zoomItY( ext.height() ) );
-    QPtrList<ATFInterpreter::AttribList> atrLs = atfInterp.getAttribList();
-    QPointArray pntArray2( pntArray.size() );
+    Q3PtrList<ATFInterpreter::AttribList> atrLs = atfInterp.getAttribList();
+    Q3PointArray pntArray2( pntArray.size() );
     int ex = _zoomHandler->zoomItX(ext.width());
     int ey = _zoomHandler->zoomItY(ext.height());
     for ( unsigned int i = 0; i < pntArray.size(); i++ )
@@ -240,7 +242,7 @@ void KPrAutoformObject::paint( QPainter* _painter, KoTextZoomHandler *_zoomHandl
                     //int ox = _painter->viewport().x() + static_cast<int>( _painter->worldMatrix().dx() );
                     //int oy = _painter->viewport().y() + static_cast<int>( _painter->worldMatrix().dy() );
 
-                    QPointArray pntArray3 = pntArray2.copy();
+                    Q3PointArray pntArray3 = pntArray2.copy();
                     _painter->save();
 
                     QRegion clipregion( pntArray3 );

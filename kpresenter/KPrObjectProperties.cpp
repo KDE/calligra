@@ -30,8 +30,10 @@
 #include "KPrPointObject.h"
 #include "KPrBezierCurveObject.h"
 #include "KPrTextObject.h"
+//Added by qt3to4:
+#include <Q3PtrList>
 
-KPrObjectProperties::KPrObjectProperties( const QPtrList<KPrObject> &objects )
+KPrObjectProperties::KPrObjectProperties( const Q3PtrList<KPrObject> &objects )
 : m_objects( objects )
 , m_flags( 0 )
 , m_pen( KoPen( Qt::black, 1.0, Qt::SolidLine ), L_NORMAL, L_NORMAL )
@@ -46,9 +48,9 @@ KPrObjectProperties::~KPrObjectProperties()
 }
 
 
-void KPrObjectProperties::getProperties( const QPtrList<KPrObject> &objects )
+void KPrObjectProperties::getProperties( const Q3PtrList<KPrObject> &objects )
 {
-    QPtrListIterator<KPrObject> it( objects );
+    Q3PtrListIterator<KPrObject> it( objects );
     for ( ; it.current() ; ++it )
     {
         switch ( it.current()->getType() )

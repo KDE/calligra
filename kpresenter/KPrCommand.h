@@ -23,13 +23,13 @@
 #define kprcommand_h
 
 #include <kcommand.h>
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 #include <QPoint>
 #include <QColor>
 #include <qsize.h>
 #include "global.h"
 #include <KoPictureCollection.h>
-#include <qvaluelist.h>
+#include <q3valuelist.h>
 #include <qpen.h>
 #include <qbrush.h>
 #include <KoPageLayoutDia.h>
@@ -38,7 +38,7 @@
 #include <KoPoint.h>
 #include <KoSize.h>
 #include <QVariant>
-#include <qvaluevector.h>
+#include <q3valuevector.h>
 #include "KPrBackground.h"
 #include "KPrVariableCollection.h"
 #include <KoPen.h>
@@ -70,8 +70,8 @@ public:
         QColor shadowColor;
     };
 
-    KPrShadowCmd( const QString &_name, QPtrList<ShadowValues> &_oldShadow, ShadowValues _newShadow,
-               QPtrList<KPrObject> &_objects, KPrDocument *_doc );
+    KPrShadowCmd( const QString &_name, Q3PtrList<ShadowValues> &_oldShadow, ShadowValues _newShadow,
+               Q3PtrList<KPrObject> &_objects, KPrDocument *_doc );
     ~KPrShadowCmd();
 
     virtual void execute();
@@ -79,8 +79,8 @@ public:
 
 protected:
     KPrDocument *doc;
-    QPtrList<ShadowValues> oldShadow;
-    QPtrList<KPrObject> objects;
+    Q3PtrList<ShadowValues> oldShadow;
+    Q3PtrList<KPrObject> objects;
     ShadowValues newShadow;
     KPrPage *m_page;
 };
@@ -88,7 +88,7 @@ protected:
 class KPrSetOptionsCmd : public KNamedCommand
 {
 public:
-    KPrSetOptionsCmd( const QString &_name, QValueList<KoPoint> &_diffs, QPtrList<KPrObject> &_objects,
+    KPrSetOptionsCmd( const QString &_name, Q3ValueList<KoPoint> &_diffs, Q3PtrList<KPrObject> &_objects,
                    double _rastX, double _rastY, double _orastX, double _orastY,
                    const QColor &_txtBackCol, const QColor &_otxtBackCol, KPrDocument *_doc );
     ~KPrSetOptionsCmd();
@@ -98,8 +98,8 @@ public:
 
 protected:
 
-    QValueList<KoPoint> diffs;
-    QPtrList<KPrObject> objects;
+    Q3ValueList<KoPoint> diffs;
+    Q3PtrList<KPrObject> objects;
     double gridX;
     double gridY;
     double oldGridX;
@@ -139,7 +139,7 @@ public:
         float angle;
     };
 
-    KPrRotateCmd( const QString &_name, float newAngle, QPtrList<KPrObject> &objects,
+    KPrRotateCmd( const QString &_name, float newAngle, Q3PtrList<KPrObject> &objects,
                KPrDocument *doc, bool addAngle = false );
     ~KPrRotateCmd();
 
@@ -148,8 +148,8 @@ public:
 
 protected:
     KPrDocument *m_doc;
-    QPtrList<RotateValues> m_oldAngles;
-    QPtrList<KPrObject> m_objects;
+    Q3PtrList<RotateValues> m_oldAngles;
+    Q3PtrList<KPrObject> m_objects;
     float m_newAngle;
     //necessary for duplicate object, we can duplicated and add angle.
     bool m_addAngle;
@@ -195,7 +195,7 @@ protected:
 class KPrDeleteCmd : public KNamedCommand
 {
 public:
-    KPrDeleteCmd( const QString &_name, QPtrList<KPrObject> &_objects, KPrDocument *_doc,
+    KPrDeleteCmd( const QString &_name, Q3PtrList<KPrObject> &_objects, KPrDocument *_doc,
                KPrPage *_page);
     ~KPrDeleteCmd();
 
@@ -203,8 +203,8 @@ public:
     virtual void unexecute();
 
 protected:
-    QPtrList<KPrObject> m_oldObjectList;
-    QPtrList<KPrObject> m_objectsToDelete;
+    Q3PtrList<KPrObject> m_oldObjectList;
+    Q3PtrList<KPrObject> m_objectsToDelete;
     KPrDocument *m_doc;
     KPrPage *m_page;
 };
@@ -225,8 +225,8 @@ public:
         QString a_fileName, d_fileName;
     };
 
-    KPrEffectCmd( const QString &_name, const QPtrList<KPrObject> &_objs,
-               const QValueList<EffectStruct> &_oldEffects, EffectStruct _newEffect );
+    KPrEffectCmd( const QString &_name, const Q3PtrList<KPrObject> &_objs,
+               const Q3ValueList<EffectStruct> &_oldEffects, EffectStruct _newEffect );
     ~KPrEffectCmd();
 
     virtual void execute();
@@ -234,16 +234,16 @@ public:
 
 protected:
 
-    QValueList<EffectStruct> oldEffects;
+    Q3ValueList<EffectStruct> oldEffects;
     EffectStruct newEffect;
-    QPtrList<KPrObject> objs;
+    Q3PtrList<KPrObject> objs;
 };
 
 class KPrGroupObjCmd : public KNamedCommand
 {
 public:
     KPrGroupObjCmd( const QString &_name,
-                 const QPtrList<KPrObject> &_objects,
+                 const Q3PtrList<KPrObject> &_objects,
                  KPrDocument *_doc, KPrPage *_page );
     ~KPrGroupObjCmd();
 
@@ -252,8 +252,8 @@ public:
 
 protected:
 
-    QPtrList<KPrObject> m_objectsToGroup;
-    QPtrList<KPrObject> m_oldObjectList;
+    Q3PtrList<KPrObject> m_objectsToGroup;
+    Q3PtrList<KPrObject> m_oldObjectList;
     KPrDocument *m_doc;
     KPrGroupObject *m_groupObject;
     KPrPage *m_page;
@@ -273,7 +273,7 @@ public:
 
 protected:
 
-    QPtrList<KPrObject> m_groupedObjects;
+    Q3PtrList<KPrObject> m_groupedObjects;
     KPrGroupObject *m_groupObject;
     KPrDocument *m_doc;
     KPrPage *m_page;
@@ -283,7 +283,7 @@ protected:
 class KPrInsertCmd : public KNamedCommand
 {
 public:
-    KPrInsertCmd( const QString &name, const QValueList<KPrObject *> objects, KPrDocument *doc, KPrPage *page );
+    KPrInsertCmd( const QString &name, const Q3ValueList<KPrObject *> objects, KPrDocument *doc, KPrPage *page );
     KPrInsertCmd( const QString &name, KPrObject *object, KPrDocument *doc, KPrPage *page );
     ~KPrInsertCmd();
 
@@ -291,7 +291,7 @@ public:
     virtual void unexecute();
 
 protected:
-    QValueList<KPrObject *> m_objects;
+    Q3ValueList<KPrObject *> m_objects;
     KPrObject *m_object;
     KPrDocument *m_doc;
     KPrPage *m_page;
@@ -301,8 +301,8 @@ protected:
 class KPrLowerRaiseCmd : public KNamedCommand
 {
 public:
-    KPrLowerRaiseCmd( const QString &_name, const QPtrList<KPrObject>& _oldList,
-                   const QPtrList<KPrObject>& _newList,
+    KPrLowerRaiseCmd( const QString &_name, const Q3PtrList<KPrObject>& _oldList,
+                   const Q3PtrList<KPrObject>& _newList,
                    KPrDocument *_doc, KPrPage *_page );
     ~KPrLowerRaiseCmd();
 
@@ -311,7 +311,7 @@ public:
 
 protected:
 
-    QPtrList<KPrObject> oldList, newList;
+    Q3PtrList<KPrObject> oldList, newList;
     KPrDocument *doc;
     KPrPage *m_page;
 };
@@ -319,7 +319,7 @@ protected:
 class KPrMoveByCmd : public KNamedCommand
 {
 public:
-    KPrMoveByCmd( const QString &_name, const KoPoint &_diff, QPtrList<KPrObject> &_objects,
+    KPrMoveByCmd( const QString &_name, const KoPoint &_diff, Q3PtrList<KPrObject> &_objects,
                KPrDocument *_doc, KPrPage *_page );
     ~KPrMoveByCmd();
 
@@ -329,7 +329,7 @@ public:
 protected:
 
     KoPoint diff;
-    QPtrList<KPrObject> objects;
+    Q3PtrList<KPrObject> objects;
     KPrDocument *doc;
     KPrPage *m_page;
 };
@@ -340,15 +340,15 @@ protected:
 class KPrAlignCmd : public KNamedCommand
 {
 public:
-    KPrAlignCmd( const QString &_name, QPtrList<KPrObject> &_objects, AlignType _at, KPrDocument *_doc );
+    KPrAlignCmd( const QString &_name, Q3PtrList<KPrObject> &_objects, AlignType _at, KPrDocument *_doc );
     ~KPrAlignCmd();
 
     virtual void execute();
     virtual void unexecute();
 
 protected:
-    QPtrList<KoPoint> diffs;
-    QPtrList<KPrObject> objects;
+    Q3PtrList<KoPoint> diffs;
+    Q3PtrList<KPrObject> objects;
     KPrDocument *doc;
     KPrPage *m_page;
 };
@@ -384,7 +384,7 @@ public:
         All = LineBegin | LineEnd | Color | Width | Style
     };
 
-    KoPenCmd( const QString &_name, QPtrList<KPrObject> &_objects, Pen _newPen,
+    KoPenCmd( const QString &_name, Q3PtrList<KPrObject> &_objects, Pen _newPen,
             KPrDocument *_doc, KPrPage *_page, int _flags = All);
     ~KoPenCmd();
 
@@ -392,13 +392,13 @@ public:
     virtual void unexecute();
 
 protected:
-    void addObjects( const QPtrList<KPrObject> &_objects );
+    void addObjects( const Q3PtrList<KPrObject> &_objects );
     void applyPen( KPrObject *object, Pen *tmpPen );
 
     KPrDocument *doc;
     KPrPage *m_page;
-    QPtrList<Pen> oldPen;
-    QPtrList<KPrObject> objects;
+    Q3PtrList<Pen> oldPen;
+    Q3PtrList<KPrObject> objects;
     Pen newPen;
     int flags;
 };
@@ -453,10 +453,10 @@ public:
         GradientBalanced = 64,
         GradientXFactor = 128,
         GradientYFactor = 256,
-        All = BrushColor | BrushStyle | BrushGradientSelect | GradientColor1 | GradientColor2 | GradientType | GradientBalanced | GradientXFactor | GradientYFactor
+        All = BrushColor | Qt::BrushStyle | BrushGradientSelect | GradientColor1 | GradientColor2 | GradientType | GradientBalanced | GradientXFactor | GradientYFactor
     };
 
-    KPrBrushCmd( const QString &_name, QPtrList<KPrObject> &_objects, Brush _newBrush,
+    KPrBrushCmd( const QString &_name, Q3PtrList<KPrObject> &_objects, Brush _newBrush,
               KPrDocument *_doc, KPrPage *_page, int _flags = All );
     ~KPrBrushCmd();
 
@@ -464,12 +464,12 @@ public:
     virtual void unexecute();
 
 protected:
-    void addObjects( const QPtrList<KPrObject> &_objects );
+    void addObjects( const Q3PtrList<KPrObject> &_objects );
     void applyBrush( KPr2DObject *object, Brush *tmpBrush );
 
     KPrDocument *doc;
-    QPtrList<Brush> oldBrush;
-    QPtrList<KPr2DObject> objects;
+    Q3PtrList<Brush> oldBrush;
+    Q3PtrList<KPr2DObject> objects;
     Brush newBrush;
     KPrPage *m_page;
     int flags;
@@ -480,10 +480,10 @@ class KPrPgConfCmd : public KNamedCommand
 public:
     KPrPgConfCmd( const QString &_name, bool _manualSwitch, bool _infiniteLoop,
                bool _showPresentationDuration, QPen _pen,
-               QValueList<bool> _selectedSlides, const QString & _presentationName,
+               Q3ValueList<bool> _selectedSlides, const QString & _presentationName,
                bool _oldManualSwitch, bool _oldInfiniteLoop,
                bool _oldShowPresentationDuration, QPen _oldPen,
-               QValueList<bool> _oldSelectedSlides, const QString & _oldPresentationName,
+               Q3ValueList<bool> _oldSelectedSlides, const QString & _oldPresentationName,
                KPrDocument *_doc );
 
     virtual void execute();
@@ -494,7 +494,7 @@ protected:
     bool infiniteLoop, oldInfiniteLoop;
     bool showPresentationDuration, oldShowPresentationDuration;
     QPen pen, oldPen;
-    QValueList<bool> selectedSlides, oldSelectedSlides;
+    Q3ValueList<bool> selectedSlides, oldSelectedSlides;
     QString oldPresentationName, presentationName;
 
     KPrDocument *doc;
@@ -513,7 +513,7 @@ public:
         void applyTo( KPrPage * );
     };
     // TODO also pass a flag to know which settings need to be applied (especially for "all pages")
-    KPrTransEffectCmd( QValueVector<PageEffectSettings> oldSettings,
+    KPrTransEffectCmd( Q3ValueVector<PageEffectSettings> oldSettings,
                     PageEffectSettings newSettings,
                     KPrPage* page, KPrDocument* doc );
 
@@ -525,7 +525,7 @@ private:
     void exec( KPrPage* page );
     void unexec( KPrPage* page );
 
-    QValueVector<PageEffectSettings> m_oldSettings;
+    Q3ValueVector<PageEffectSettings> m_oldSettings;
     PageEffectSettings m_newSettings;
     KPrPage *m_page;
     KPrDocument *m_doc;
@@ -564,22 +564,22 @@ public:
     };
 
     KPrPieValueCmd( const QString &name, PieValues newValues,
-                 QPtrList<KPrObject> &objects, KPrDocument *doc,
+                 Q3PtrList<KPrObject> &objects, KPrDocument *doc,
                  KPrPage *page, int flags = All );
-    KPrPieValueCmd( const QString &_name, QPtrList<PieValues> &_oldValues, PieValues _newValues,
-                 QPtrList<KPrObject> &_objects, KPrDocument *_doc, KPrPage *_page, int _flags = All );
+    KPrPieValueCmd( const QString &_name, Q3PtrList<PieValues> &_oldValues, PieValues _newValues,
+                 Q3PtrList<KPrObject> &_objects, KPrDocument *_doc, KPrPage *_page, int _flags = All );
     ~KPrPieValueCmd();
 
     virtual void execute();
     virtual void unexecute();
 
 protected:
-    void addObjects( const QPtrList<KPrObject> &objects );
+    void addObjects( const Q3PtrList<KPrObject> &objects );
 
     KPrDocument *m_doc;
     KPrPage *m_page;
-    QPtrList<PieValues> m_oldValues;
-    QPtrList<KPrObject> m_objects;
+    Q3PtrList<PieValues> m_oldValues;
+    Q3PtrList<KPrObject> m_objects;
     PieValues m_newValues;
     int m_flags;
 };
@@ -603,7 +603,7 @@ public:
     };
 
     KPrPolygonSettingCmd( const QString &name, PolygonSettings newSettings,
-                          QPtrList<KPrObject> &objects, KPrDocument *doc,
+                          Q3PtrList<KPrObject> &objects, KPrDocument *doc,
                           KPrPage *page, int flags = All );
     ~KPrPolygonSettingCmd();
 
@@ -611,12 +611,12 @@ public:
     virtual void unexecute();
 
 protected:
-    void addObjects( const QPtrList<KPrObject> &objects );
+    void addObjects( const Q3PtrList<KPrObject> &objects );
 
     KPrDocument *m_doc;
     KPrPage *m_page;
-    QPtrList<PolygonSettings> m_oldSettings;
-    QPtrList<KPrObject> m_objects;
+    Q3PtrList<PolygonSettings> m_oldSettings;
+    Q3PtrList<KPrObject> m_objects;
     PolygonSettings m_newSettings;
     int m_flags;
 };
@@ -643,10 +643,10 @@ public:
     };
 
     KPrPictureSettingCmd( const QString &name, PictureSettings newSettings,
-                       QPtrList<KPrObject> &objects, KPrDocument *doc,
+                       Q3PtrList<KPrObject> &objects, KPrDocument *doc,
                        KPrPage *page, int flags = All );
-    KPrPictureSettingCmd( const QString &_name, QPtrList<PictureSettings> &_oldSettings,
-                       PictureSettings _newSettings, QPtrList<KPrObject> &_objects,
+    KPrPictureSettingCmd( const QString &_name, Q3PtrList<PictureSettings> &_oldSettings,
+                       PictureSettings _newSettings, Q3PtrList<KPrObject> &_objects,
                        KPrDocument *_doc, int flags = All );
     ~KPrPictureSettingCmd();
 
@@ -654,11 +654,11 @@ public:
     virtual void unexecute();
 
 protected:
-    void addObjects( const QPtrList<KPrObject> &_objects );
+    void addObjects( const Q3PtrList<KPrObject> &_objects );
 
     KPrDocument *m_doc;
-    QPtrList<PictureSettings> m_oldValues;
-    QPtrList<KPrObject> m_objects;
+    Q3PtrList<PictureSettings> m_oldValues;
+    Q3PtrList<KPrObject> m_objects;
     PictureSettings m_newSettings;
     KPrPage *m_page;
     int m_flags;
@@ -675,8 +675,8 @@ public:
         QVariant param3;
     };
 
-    KPrImageEffectCmd(const QString &_name, QPtrList<ImageEffectSettings> &_oldSettings,
-                   ImageEffectSettings _newSettings, QPtrList<KPrObject> &_objects,
+    KPrImageEffectCmd(const QString &_name, Q3PtrList<ImageEffectSettings> &_oldSettings,
+                   ImageEffectSettings _newSettings, Q3PtrList<KPrObject> &_objects,
                    KPrDocument *_doc );
     ~KPrImageEffectCmd();
 
@@ -685,8 +685,8 @@ public:
 
 protected:
     KPrDocument *doc;
-    QPtrList<ImageEffectSettings> oldSettings;
-    QPtrList<KPrObject> objects;
+    Q3PtrList<ImageEffectSettings> oldSettings;
+    Q3PtrList<KPrObject> objects;
     ImageEffectSettings newSettings;
     KPrPage *m_page;
 
@@ -707,9 +707,9 @@ public:
         All = XRnd | YRnd
     };
 
-    KPrRectValueCmd( const QString &_name, QPtrList<RectValues> &_oldValues, RectValues _newValues,
-                  QPtrList<KPrObject> &_objects, KPrDocument *_doc, KPrPage *_page, int _flags = All );
-    KPrRectValueCmd( const QString &_name, QPtrList<KPrObject> &_objects, RectValues _newValues,
+    KPrRectValueCmd( const QString &_name, Q3PtrList<RectValues> &_oldValues, RectValues _newValues,
+                  Q3PtrList<KPrObject> &_objects, KPrDocument *_doc, KPrPage *_page, int _flags = All );
+    KPrRectValueCmd( const QString &_name, Q3PtrList<KPrObject> &_objects, RectValues _newValues,
                   KPrDocument *_doc, KPrPage *_page, int _flags = All );
     ~KPrRectValueCmd();
 
@@ -717,12 +717,12 @@ public:
     virtual void unexecute();
 
 protected:
-    void addObjects( const QPtrList<KPrObject> &_objects );
+    void addObjects( const Q3PtrList<KPrObject> &_objects );
 
     KPrDocument *m_doc;
     KPrPage *m_page;
-    QPtrList<RectValues> m_oldValues;
-    QPtrList<KPrObject> m_objects;
+    Q3PtrList<RectValues> m_oldValues;
+    Q3PtrList<KPrObject> m_objects;
     RectValues m_newValues;
     int m_flags;
 };
@@ -941,14 +941,14 @@ class KPrFlipObjectCommand : public KNamedCommand
 {
 public:
     KPrFlipObjectCommand( const QString &name, KPrDocument *_doc, bool _horizontal ,
-                          QPtrList<KPrObject> &_objects );
+                          Q3PtrList<KPrObject> &_objects );
     ~KPrFlipObjectCommand();
     void execute();
     void unexecute();
 protected:
     void flipObjects();
     KPrDocument *m_doc;
-    QPtrList<KPrObject> objects;
+    Q3PtrList<KPrObject> objects;
     bool horizontal;
     KPrPage *m_page;
 };
@@ -957,9 +957,9 @@ class KPrGeometryPropertiesCommand : public KNamedCommand
 {
 public:
     enum KgpType { ProtectSize, KeepRatio};
-    KPrGeometryPropertiesCommand( const QString &name, QPtrList<KPrObject> &objects,
+    KPrGeometryPropertiesCommand( const QString &name, Q3PtrList<KPrObject> &objects,
                                   bool newValue, KgpType type, KPrDocument *_doc );
-    KPrGeometryPropertiesCommand( const QString &name, QValueList<bool> &lst, QPtrList<KPrObject> &objects,
+    KPrGeometryPropertiesCommand( const QString &name, Q3ValueList<bool> &lst, Q3PtrList<KPrObject> &objects,
                                   bool newValue, KgpType type, KPrDocument *_doc );
     ~KPrGeometryPropertiesCommand();
 
@@ -967,8 +967,8 @@ public:
     virtual void unexecute();
 
 protected:
-    QValueList<bool> m_oldValue;
-    QPtrList<KPrObject> m_objects;
+    Q3ValueList<bool> m_oldValue;
+    Q3PtrList<KPrObject> m_objects;
     bool m_newValue;
     KgpType m_type;
     KPrDocument *m_doc;
@@ -977,7 +977,7 @@ protected:
 class KPrProtectContentCommand : public KNamedCommand
 {
 public:
-    KPrProtectContentCommand( const QString &name, QPtrList<KPrObject> &objects,
+    KPrProtectContentCommand( const QString &name, Q3PtrList<KPrObject> &objects,
                               bool protectContent, KPrDocument *doc );
     KPrProtectContentCommand( const QString &name, bool protectContent,
                               KPrTextObject *obj, KPrDocument *doc );
@@ -987,18 +987,18 @@ public:
     virtual void unexecute();
 
 protected:
-    void addObjects( const QPtrList<KPrObject> &objects );
+    void addObjects( const Q3PtrList<KPrObject> &objects );
 
-    QPtrList<KPrTextObject> m_objects;
+    Q3PtrList<KPrTextObject> m_objects;
     bool m_protectContent;
-    QValueList<bool> m_oldValues;
+    Q3ValueList<bool> m_oldValues;
     KPrDocument *m_doc;
 };
 
 class KPrCloseObjectCommand : public KNamedCommand
 {
 public:
-    KPrCloseObjectCommand( const QString &name, QPtrList<KPrObject> objects, KPrDocument *doc );
+    KPrCloseObjectCommand( const QString &name, Q3PtrList<KPrObject> objects, KPrDocument *doc );
 
     ~KPrCloseObjectCommand();
     virtual void execute();
@@ -1007,8 +1007,8 @@ public:
 protected:
     void closeObject(bool close);
 
-    QPtrList<KPrObject> m_openObjects;
-    QPtrList<KPrObject> m_closedObjects;
+    Q3PtrList<KPrObject> m_openObjects;
+    Q3PtrList<KPrObject> m_closedObjects;
     KPrDocument * m_doc;
     KPrPage *m_page;
 };
@@ -1026,16 +1026,16 @@ struct MarginsStruct {
 class KPrChangeMarginCommand : public KNamedCommand
 {
 public:
-    KPrChangeMarginCommand( const QString &name, QPtrList<KPrObject> &objects, MarginsStruct newMargins,
+    KPrChangeMarginCommand( const QString &name, Q3PtrList<KPrObject> &objects, MarginsStruct newMargins,
                             KPrDocument *doc, KPrPage *page );
     ~KPrChangeMarginCommand();
 
     virtual void execute();
     virtual void unexecute();
 protected:
-    void addObjects( const QPtrList<KPrObject> &objects );
-    QPtrList<MarginsStruct> m_oldMargins;
-    QPtrList<KPrTextObject> m_objects;
+    void addObjects( const Q3PtrList<KPrObject> &objects );
+    Q3PtrList<MarginsStruct> m_oldMargins;
+    Q3PtrList<KPrTextObject> m_objects;
     MarginsStruct m_newMargins;
     KPrPage *m_page;
     KPrDocument *m_doc;

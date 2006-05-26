@@ -20,13 +20,15 @@
 
 #include "KPrGradient.h"
 #include <qpainter.h>
+//Added by qt3to4:
+#include <QPixmap>
 #include <kpixmapeffect.h>
 #include <kdebug.h>
 #include <KoTextZoomHandler.h>
 
 KPrGradient::KPrGradient( const QColor &_color1, const QColor &_color2, BCType _bcType,
                         bool _unbalanced, int _xfactor, int _yfactor )
-    : color1( _color1 ), color2( _color2 ), bcType( _bcType ),
+    : Qt::color1( _color1 ), color2( _color2 ), bcType( _bcType ),
       m_pixmap(), refCount( 0 ),
       xFactor( _xfactor ), yFactor( _yfactor ),
       unbalanced( _unbalanced ), m_bDirty( true )

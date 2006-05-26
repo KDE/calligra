@@ -22,7 +22,7 @@
 #define EFFECTHANDLER_H
 
 #include <qpixmap.h>
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 #include <QString>
 
 #include "global.h"
@@ -45,7 +45,7 @@ public:
    * objects all objects of the page
    * view    pointer to the active KPrView
    */
-  KPrEffectHandler( PresStep step, bool back, QPaintDevice *dst, QPixmap *src, const QPtrList<KPrObject> &objects, KPrView *view, int _presSpeed );
+  KPrEffectHandler( PresStep step, bool back, QPaintDevice *dst, QPixmap *src, const Q3PtrList<KPrObject> &objects, KPrView *view, int _presSpeed );
 
   /**
    * Delete the KPrEffectHandler.
@@ -291,20 +291,20 @@ protected:
   /**
    * List of all objects of the current page
    */
-  QPtrList<KPrObject> m_objects;
+  Q3PtrList<KPrObject> m_objects;
 
   /**
    * List of all objects which appear in the current step.
    * If a object has reached its final position it is removed from
    * this list
    */
-  QPtrList<KPrObject> m_appearEffectObjects;
+  Q3PtrList<KPrObject> m_appearEffectObjects;
 
   /**
    * List of all objects which disappear in the current step.
    * If a object has disappeared it is removed from this list
    */
-  QPtrList<KPrObject> m_disappearEffectObjects;
+  Q3PtrList<KPrObject> m_disappearEffectObjects;
 
   /// the active KPrView
   KPrView *m_view;
@@ -322,13 +322,13 @@ protected:
   /**
    * The rects which have to be bitblt
    */
-  QPtrList<QRect> m_repaintRects;
+  Q3PtrList<QRect> m_repaintRects;
 
   /**
    * The rects which have to be bitblt as the objects
    * are no longer there.
    */
-  QPtrList<QRect> m_lastRepaintRects;
+  Q3PtrList<QRect> m_lastRepaintRects;
 
   /**
    * The filename of the sound file which should be played during the effect.

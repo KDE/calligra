@@ -1,3 +1,5 @@
+//Added by qt3to4:
+#include <QPixmap>
 // -*- Mode: c++; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
@@ -55,12 +57,12 @@ class KoSavingContext;
 #include <KoDocument.h>
 #include <KoDocumentChild.h>
 
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 #include <qobject.h>
 #include <QString>
-#include <qvaluelist.h>
+#include <q3valuelist.h>
 #include <qdatetime.h>
-#include <qdict.h>
+#include <q3dict.h>
 #include <KoPageLayoutDia.h>
 
 #include "global.h"
@@ -175,13 +177,13 @@ class KPrDocument : public KoDocument
     void createHeaderFooter();
     void updateHeaderFooterPosition();
 
-    const QPtrList<KPrPage> & getPageList() const {return m_pageList;}
+    const Q3PtrList<KPrPage> & getPageList() const {return m_pageList;}
 
     // @return the master page
     KPrPage * masterPage() const { return m_masterPage; }
     KPrPage * activePage()const;
     // We need one that's not const, due to QPtrList::at() not being const
-    QPtrList<KPrPage>& pageList() { return m_pageList;}
+    Q3PtrList<KPrPage>& pageList() { return m_pageList;}
 
     void insertPixmapKey( KoPictureKey key );
 
@@ -243,7 +245,7 @@ class KPrDocument : public KoDocument
      * return the list of steps for the selected page
      * where objects appear/disappear.
      */
-    QValueList<int> getPageEffectSteps( unsigned int );
+    Q3ValueList<int> getPageEffectSteps( unsigned int );
 
     QPen presPen() const { return _presPen; }
     void setPresPen( QPen p ) {_presPen = p; }
@@ -285,7 +287,7 @@ class KPrDocument : public KoDocument
     // Returns true if the slide pgNum (0 based)
     bool isSlideSelected( int pgNum) ;
     // Returns the list of selected slides. Slide numbers are 0-based.
-    QValueList<int> selectedSlides();
+    Q3ValueList<int> selectedSlides();
     QString selectedForPrinting();
 
     virtual DCOPObject* dcopObject();
@@ -367,7 +369,7 @@ class KPrDocument : public KoDocument
 
     void updateSideBarItem( KPrPage * page );
     KPrPage * findPage(KPrObject *object);
-    KPrPage * findPage(QPtrList<KPrObject> &objects);
+    KPrPage * findPage(Q3PtrList<KPrObject> &objects);
 
     void refreshAllNoteBar(int page, const QString &text, KPrView *exceptView);
     void refreshAllNoteBarMasterPage(const QString &text, KPrView *exceptView);
@@ -380,11 +382,11 @@ class KPrDocument : public KoDocument
 
     //refresh obj when we active or disactive
     void reactivateBgSpellChecking(bool refreshTextObj=false);
-    QPtrList<KoTextObject> allTextObjects() const;
-    QValueList<KoTextObject *> visibleTextObjects( ) const;
+    Q3PtrList<KoTextObject> allTextObjects() const;
+    Q3ValueList<KoTextObject *> visibleTextObjects( ) const;
 
     /// Reimplementation from KoDocument.
-    virtual QValueList<KoTextDocument *> allTextDocuments() const;
+    virtual Q3ValueList<KoTextDocument *> allTextDocuments() const;
 
     bool allowAutoFormat() const { return m_bAllowAutoFormat; }
     void setAllowAutoFormat(bool _b){ m_bAllowAutoFormat=_b; }
@@ -403,28 +405,28 @@ class KPrDocument : public KoDocument
      *
      * @return list of positions of the horizontal guide lines
      */
-    QValueList<double> &horizontalGuideLines() { return m_hGuideLines; }
+    Q3ValueList<double> &horizontalGuideLines() { return m_hGuideLines; }
 
     /**
      * @brief Get the positions of the vertical guide lines
      *
      * @return list of positions of the vertical guide lines
      */
-    QValueList<double> &verticalGuideLines() { return m_vGuideLines; }
+    Q3ValueList<double> &verticalGuideLines() { return m_vGuideLines; }
 
     /**
      * @brief Set the positions of the horizontal guide lines
      *
      * @param lines a list of positions of the horizontal guide lines
      */
-    void horizontalGuideLines( const QValueList<double> &lines );
+    void horizontalGuideLines( const Q3ValueList<double> &lines );
 
     /**
      * @brief Set the positions of the vertical guide lines
      *
      * @param lines a list of positions of the vertical guide lines
      */
-    void verticalGuideLines( const QValueList<double> &lines );
+    void verticalGuideLines( const Q3ValueList<double> &lines );
 
     /**
      * @brief Add a guide line
@@ -489,13 +491,13 @@ class KPrDocument : public KoDocument
     void addWordToDictionary( const QString & word);
 
     void loadImagesFromStore( KoStore *_store );
-    void saveEmbeddedObject(KPrPage *page, const QPtrList<KoDocumentChild>& childList ,QDomDocument &doc,QDomElement &presenter );
+    void saveEmbeddedObject(KPrPage *page, const Q3PtrList<KoDocumentChild>& childList ,QDomDocument &doc,QDomElement &presenter );
     void insertEmbedded( KoStore *store, QDomElement elem, KMacroCommand * macroCmd, KPrPage *page, int pos );
 
     KPrBgSpellCheck* backSpeller() const { return m_bgSpellCheck; }
 
     void setCustomSlideShows( const CustomSlideShowMap & customSlideShows );
-    QValueList <KPrPage *> customListPage( const QStringList & lst, bool loadOasis=false );
+    Q3ValueList <KPrPage *> customListPage( const QStringList & lst, bool loadOasis=false );
 
 
     QString presentationName() const { return m_presentationName; }
@@ -505,9 +507,9 @@ class KPrDocument : public KoDocument
     //return list of slide which be displaying:
     //return selected slide when presentation name is empty
     //otherwise return list of custom slide show
-    QValueList<int> displaySelectedSlides();
-    QValueList<int> listOfDisplaySelectedSlides( const QValueList<KPrPage*>& lst );
-    void testCustomSlideShow( const QValueList<KPrPage *> &pages, KPrView *view );
+    Q3ValueList<int> displaySelectedSlides();
+    Q3ValueList<int> listOfDisplaySelectedSlides( const Q3ValueList<KPrPage*>& lst );
+    void testCustomSlideShow( const Q3ValueList<KPrPage *> &pages, KPrView *view );
     void clearTestCustomSlideShow();
 
     const CustomSlideShowMap & customSlideShows() { return m_customListSlideShow; }
@@ -640,9 +642,9 @@ protected:
 
     QString urlIntern;
 
-    QValueList<KoPictureKey> usedPictures;
+    Q3ValueList<KoPictureKey> usedPictures;
     QStringList usedSoundFile, haveNotOwnDiskSoundFile;
-    QPtrList<KTempFile> tmpSoundFileList;
+    Q3PtrList<KTempFile> tmpSoundFileList;
     DCOPObject *dcop;
 
     int saveOnlyPage;
@@ -674,12 +676,12 @@ protected:
     bool _duplicatePage;
 private:
     /// list of positions of horizontal guide lines
-    QValueList<double> m_hGuideLines;
+    Q3ValueList<double> m_hGuideLines;
     /// list of positions of vertical guide lines
-    QValueList<double> m_vGuideLines;
+    Q3ValueList<double> m_vGuideLines;
 
-    QPtrList<KPrPage> m_pageList;
-    QPtrList<KPrPage> m_deletedPageList;
+    Q3PtrList<KPrPage> m_pageList;
+    Q3PtrList<KPrPage> m_deletedPageList;
 
     QStringList m_spellCheckIgnoreList; // per-document
     QStringList m_spellCheckPersonalDict; // per-user
@@ -701,7 +703,7 @@ private:
     QString m_presentationName;
     bool m_bGlobalHyphenation;
     KPrLoadingInfo *m_loadingInfo;
-    QValueList<int> *m_customListTest;
+    Q3ValueList<int> *m_customListTest;
 
     /// here the amount of existing children before inserting a page/file
     /// is saved, so that we load the correct children

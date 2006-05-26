@@ -22,6 +22,8 @@
 #define presdurationdia_h
 
 #include <kdialogbase.h>
+//Added by qt3to4:
+#include <QLabel>
 
 class KPrDocument;
 class K3ListView;

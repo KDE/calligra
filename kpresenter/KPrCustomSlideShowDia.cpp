@@ -20,11 +20,18 @@
 #include <QLabel>
 #include <QLayout>
 #include <QLineEdit>
-#include <qlistbox.h>
+#include <q3listbox.h>
 #include <QPushButton>
 #include <qtoolbutton.h>
 #include <qapplication.h>
 #include <QLayout>
+//Added by qt3to4:
+#include <Q3HBoxLayout>
+#include <Q3GridLayout>
+#include <Q3ValueList>
+#include <Q3PtrList>
+#include <QHideEvent>
+#include <Q3VBoxLayout>
 #include <kdebug.h>
 #include <kmessagebox.h>
 #include <klocale.h>
@@ -43,9 +50,9 @@ KPrCustomSlideShowDia::KPrCustomSlideShowDia( KPrView* _view, KPrDocument *_doc,
   QWidget* page = new QWidget( this );
   setMainWidget( page );
 
-  QGridLayout *grid1 = new QGridLayout( page,10,3,KDialog::marginHint(), KDialog::spacingHint());
+  Q3GridLayout *grid1 = new Q3GridLayout( page,10,3,KDialog::marginHint(), KDialog::spacingHint());
 
-  list=new QListBox(page);
+  list=new Q3ListBox(page);
   grid1->addMultiCellWidget(list,0,8,0,0);
 
   m_pAdd=new QPushButton(i18n("&Add..."),page);
@@ -70,8 +77,8 @@ KPrCustomSlideShowDia::KPrCustomSlideShowDia( KPrView* _view, KPrDocument *_doc,
   connect( m_pCopy, SIGNAL( clicked() ), this, SLOT( slotCopy() ) );
   connect( m_pTest, SIGNAL( clicked() ), this, SLOT( slotTest() ) );
 
-  connect( list, SIGNAL(doubleClicked(QListBoxItem *)),this,SLOT(slotDoubleClicked(QListBoxItem *)));
-  connect( list, SIGNAL(clicked ( QListBoxItem * )),this,SLOT(slotTextClicked(QListBoxItem * )));
+  connect( list, SIGNAL(doubleClicked(Q3ListBoxItem *)),this,SLOT(slotDoubleClicked(Q3ListBoxItem *)));
+  connect( list, SIGNAL(clicked ( Q3ListBoxItem * )),this,SLOT(slotTextClicked(Q3ListBoxItem * )));
 
   connect( m_view, SIGNAL( presentationFinished() ), this, SLOT( slotPresentationFinished() ) );
 
@@ -107,12 +114,12 @@ void KPrCustomSlideShowDia::updateButton()
     m_pTest->setEnabled( state );
 }
 
-void KPrCustomSlideShowDia::slotTextClicked(QListBoxItem*)
+void KPrCustomSlideShowDia::slotTextClicked(Q3ListBoxItem*)
 {
     updateButton();
 }
 
-void KPrCustomSlideShowDia::slotDoubleClicked(QListBoxItem *)
+void KPrCustomSlideShowDia::slotDoubleClicked(Q3ListBoxItem *)
 {
     updateButton();
     slotModify();
@@ -131,7 +138,7 @@ void KPrCustomSlideShowDia::hideEvent( QHideEvent* )
 
 void KPrCustomSlideShowDia::slotTest()
 {
-    QListBoxItem *item = list->selectedItem();
+    Q3ListBoxItem *item = list->selectedItem();
     if ( item )
     {
         m_doc->testCustomSlideShow( m_customSlideShowMap[item->text()], m_view );
@@ -178,7 +185,7 @@ void KPrCustomSlideShowDia::slotOk()
 
 void KPrCustomSlideShowDia::slotModify()
 {
-    QListBoxItem *item = list->selectedItem();
+    Q3ListBoxItem *item = list->selectedItem();
     if ( item )
     {
         QStringList listCustomName;
@@ -205,7 +212,7 @@ void KPrCustomSlideShowDia::slotModify()
 
 void KPrCustomSlideShowDia::slotCopy()
 {
-    QListBoxItem *item = list->selectedItem();
+    Q3ListBoxItem *item = list->selectedItem();
     if ( item )
     {
         QString str( list->selectedItem()->text() );
@@ -235,48 +242,48 @@ bool KPrCustomSlideShowDia::uniqueName( int val, const QString & name ) const
 }
 
 
-KPrCustomSlideShowItem::KPrCustomSlideShowItem( QListBox * listbox, KPrPage * page )
-: QListBoxText( listbox, page->pageTitle() )
+KPrCustomSlideShowItem::KPrCustomSlideShowItem( Q3ListBox * listbox, KPrPage * page )
+: Q3ListBoxText( listbox, page->pageTitle() )
 , m_page( page )    
 {
 }
 
 KPrCustomSlideShowItem::KPrCustomSlideShowItem( KPrPage * page )
-: QListBoxText( page->pageTitle() )
+: Q3ListBoxText( page->pageTitle() )
 , m_page( page )    
 {
 }
 
-KPrCustomSlideShowItem::KPrCustomSlideShowItem( QListBox * listbox, KPrPage * page, QListBoxItem * after )
-: QListBoxText( listbox, page->pageTitle(), after )
+KPrCustomSlideShowItem::KPrCustomSlideShowItem( Q3ListBox * listbox, KPrPage * page, Q3ListBoxItem * after )
+: Q3ListBoxText( listbox, page->pageTitle(), after )
 , m_page( page )    
 {
 }
 
 KPrDefineCustomSlideShow::KPrDefineCustomSlideShow( QWidget* parent, QStringList &_listNameSlideShow, 
-                                                    const QPtrList<KPrPage> &pages, const char *name )
+                                                    const Q3PtrList<KPrPage> &pages, const char *name )
 : KDialogBase( parent, name, true, i18n("Define Custom Slide Show"), Ok|Cancel )
 , listNameCustomSlideShow( _listNameSlideShow )
 {
     init();
-    for ( QPtrList<KPrPage>::ConstIterator it = pages.begin(); it != pages.end(); ++it )
+    for ( Q3PtrList<KPrPage>::ConstIterator it = pages.begin(); it != pages.end(); ++it )
     {
         listSlide->insertItem( new KPrCustomSlideShowItem( *it ) );
     }
 }
 
 KPrDefineCustomSlideShow::KPrDefineCustomSlideShow( QWidget* parent, const QString &_customName, QStringList &_listNameSlideShow, 
-                                                    const QPtrList<KPrPage> &pages, QValueList<KPrPage *> &customPages, const char* name )
+                                                    const Q3PtrList<KPrPage> &pages, Q3ValueList<KPrPage *> &customPages, const char* name )
 : KDialogBase( parent, name, true, i18n("Define Custom Slide Show"), Ok|Cancel )
 , listNameCustomSlideShow( _listNameSlideShow )
 {
     init();
     m_name->setText( _customName );
-    for ( QPtrList<KPrPage>::ConstIterator it = pages.begin(); it != pages.end(); ++it )
+    for ( Q3PtrList<KPrPage>::ConstIterator it = pages.begin(); it != pages.end(); ++it )
     {
         listSlide->insertItem( new KPrCustomSlideShowItem( *it ) );
     }
-    for ( QValueList<KPrPage *>::ConstIterator it = customPages.begin(); it != customPages.end(); ++it )
+    for ( Q3ValueList<KPrPage *>::ConstIterator it = customPages.begin(); it != customPages.end(); ++it )
     {
         listSlideShow->insertItem( new KPrCustomSlideShowItem( *it ) );
     }
@@ -287,26 +294,26 @@ void KPrDefineCustomSlideShow::init()
   QWidget* page = new QWidget( this );
   setMainWidget( page );
 
-  QVBoxLayout *lov = new QVBoxLayout( page );
+  Q3VBoxLayout *lov = new Q3VBoxLayout( page );
   lov->setSpacing( KDialog::spacingHint() );
-  QHBoxLayout *loh = new QHBoxLayout( lov );
+  Q3HBoxLayout *loh = new Q3HBoxLayout( lov );
 
   QLabel *lab = new QLabel( i18n( "Name:" ), page );
   loh->addWidget( lab );
   m_name = new QLineEdit( page );
   loh->addWidget( m_name );
 
-  QHBoxLayout *lo = new QHBoxLayout( lov );
+  Q3HBoxLayout *lo = new Q3HBoxLayout( lov );
   lo->setSpacing( KDialog::spacingHint() );
 
-  QVBoxLayout *loAv = new QVBoxLayout( lo );
+  Q3VBoxLayout *loAv = new Q3VBoxLayout( lo );
   lab = new QLabel( i18n("Existing slides:"), page );
   loAv->addWidget( lab );
-  listSlide = new QListBox( page );
+  listSlide = new Q3ListBox( page );
   loAv->addWidget( listSlide );
   lab->setBuddy( listSlide );
 
-  QVBoxLayout *loHBtns = new QVBoxLayout( lo );
+  Q3VBoxLayout *loHBtns = new Q3VBoxLayout( lo );
   loHBtns->addStretch( 1 );
   m_insertSlide = new QToolButton( page );
   loHBtns->addWidget( m_insertSlide );
@@ -314,14 +321,14 @@ void KPrDefineCustomSlideShow::init()
   loHBtns->addWidget( m_removeSlide );
   loHBtns->addStretch( 1 );
 
-  QVBoxLayout *loS = new QVBoxLayout( lo );
+  Q3VBoxLayout *loS = new Q3VBoxLayout( lo );
   lab = new QLabel( i18n("Selected slides:"), page );
   loS->addWidget( lab );
-  listSlideShow = new QListBox( page );
+  listSlideShow = new Q3ListBox( page );
   loS->addWidget( listSlideShow );
   lab->setBuddy( listSlideShow );
 
-  QVBoxLayout *loVBtns = new QVBoxLayout( lo );
+  Q3VBoxLayout *loVBtns = new Q3VBoxLayout( lo );
   loVBtns->addStretch( 1 );
   m_moveUpSlide = new QToolButton( page );
   m_moveUpSlide->setAutoRepeat( true );
@@ -339,10 +346,10 @@ void KPrDefineCustomSlideShow::init()
   connect( m_moveUpSlide, SIGNAL(clicked()), this, SLOT( slotMoveUpSlide() ) );
   connect( m_moveDownSlide, SIGNAL(clicked()), this, SLOT(slotMoveDownSlide()) );
   connect(  m_name, SIGNAL( textChanged ( const QString & ) ), this, SLOT( slideNameChanged( const QString & ) ) );
-  connect( listSlideShow, SIGNAL( clicked ( QListBoxItem * ) ), this, SLOT( updateButton() ) );
-  connect( listSlide, SIGNAL( clicked ( QListBoxItem * ) ), this, SLOT( updateButton() ) );
-  connect( listSlide, SIGNAL( doubleClicked ( QListBoxItem * ) ), this, SLOT( slotMoveInsertSlide() ) );
-  connect( listSlideShow, SIGNAL( doubleClicked( QListBoxItem * ) ), this, SLOT( slotMoveRemoveSlide() ) );
+  connect( listSlideShow, SIGNAL( clicked ( Q3ListBoxItem * ) ), this, SLOT( updateButton() ) );
+  connect( listSlide, SIGNAL( clicked ( Q3ListBoxItem * ) ), this, SLOT( updateButton() ) );
+  connect( listSlide, SIGNAL( doubleClicked ( Q3ListBoxItem * ) ), this, SLOT( slotMoveInsertSlide() ) );
+  connect( listSlideShow, SIGNAL( doubleClicked( Q3ListBoxItem * ) ), this, SLOT( slotMoveRemoveSlide() ) );
   m_insertSlide->setIconSet( SmallIconSet( ( QApplication::isRightToLeft() ? "back" : "forward" ) ) );
   m_removeSlide->setIconSet( SmallIconSet( ( QApplication::isRightToLeft() ? "forward" : "back") ) );
   m_moveUpSlide->setIconSet( SmallIconSet( "up" ) );
@@ -372,7 +379,7 @@ void KPrDefineCustomSlideShow::slotMoveUpSlide()
 {
     int c = listSlideShow->currentItem();
     if ( c < 1 ) return;
-    QListBoxItem *item = listSlideShow->item( c );
+    Q3ListBoxItem *item = listSlideShow->item( c );
     listSlideShow->takeItem( item );
     listSlideShow->insertItem( item, c-1 );
     listSlideShow->setCurrentItem( item );
@@ -384,7 +391,7 @@ void KPrDefineCustomSlideShow::slotMoveDownSlide()
 {
     int c = listSlideShow->currentItem();
     if ( c < 0 || c == int( listSlideShow->count() ) - 1 ) return;
-    QListBoxItem *item = listSlideShow->item( c );
+    Q3ListBoxItem *item = listSlideShow->item( c );
     listSlideShow->takeItem( item );
     listSlideShow->insertItem( item, c+1 );
     listSlideShow->setCurrentItem( item );
@@ -394,7 +401,7 @@ void KPrDefineCustomSlideShow::slotMoveDownSlide()
 void KPrDefineCustomSlideShow::slotMoveRemoveSlide()
 {
     // move all selected items from selected to available listbox
-    QListBoxItem *item = listSlideShow->firstItem();
+    Q3ListBoxItem *item = listSlideShow->firstItem();
     while ( item ) {
         if ( item->isSelected() ) {
             listSlideShow->takeItem( item );
@@ -406,7 +413,7 @@ void KPrDefineCustomSlideShow::slotMoveRemoveSlide()
 
 void KPrDefineCustomSlideShow::slotMoveInsertSlide()
 {
-    QListBoxItem *item = listSlide->firstItem();
+    Q3ListBoxItem *item = listSlide->firstItem();
     while ( item ) {
         if ( item->isSelected() ) {
             KPrCustomSlideShowItem * i = dynamic_cast<KPrCustomSlideShowItem *>( item );
@@ -421,10 +428,10 @@ void KPrDefineCustomSlideShow::slotMoveInsertSlide()
     updateButton();
 }
 
-QValueList<KPrPage *> KPrDefineCustomSlideShow::customSlides()
+Q3ValueList<KPrPage *> KPrDefineCustomSlideShow::customSlides()
 {
-    QValueList<KPrPage *> pages;
-    QListBoxItem *item = listSlideShow->firstItem();
+    Q3ValueList<KPrPage *> pages;
+    Q3ListBoxItem *item = listSlideShow->firstItem();
     while ( item ) 
     {
         KPrCustomSlideShowItem * i = dynamic_cast<KPrCustomSlideShowItem *>( item );

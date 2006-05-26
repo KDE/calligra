@@ -26,12 +26,15 @@
 #include "KPrUtils.h"
 
 #include <qpainter.h>
-#include <qwmatrix.h>
-#include <qpointarray.h>
+#include <qmatrix.h>
+#include <q3pointarray.h>
 #include <qregion.h>
 #include <qdom.h>
 #include <qbuffer.h>
 #include <QRegExp>
+//Added by qt3to4:
+#include <Q3ValueList>
+#include <Q3CString>
 
 #include <kapplication.h>
 #include <KoOasisContext.h>
@@ -353,9 +356,9 @@ void KPrObject::saveOasisPosObject( KoXmlWriter &xmlWriter, int indexObj ) const
         KoPoint rot( rotX, rotY );
         KoPoint trans( center - rot + orig );
 
-        QCString transX;
+        Q3CString transX;
         transX.setNum( trans.x(), 'g', DBL_DIG );
-        QCString transY;
+        Q3CString transY;
         transY.setNum( trans.y(), 'g', DBL_DIG );
         QString str = QString( "rotate(%1) translate(%2pt %3pt)" ).arg( angInRad ).arg( transX ).arg( transY );
         xmlWriter.addAttribute( "draw:transform", str );
@@ -1408,7 +1411,7 @@ void KPrObject::paintSelection( QPainter *_painter, KoTextZoomHandler *_zoomHand
 
     _painter->save();
     _painter->translate( _zoomHandler->zoomItX(orig.x()), _zoomHandler->zoomItY(orig.y()) );
-    _painter->setPen( QPen( Qt::black, 1, QPen::SolidLine ) );
+    _painter->setPen( QPen( Qt::black, 1, Qt::SolidLine ) );
     _painter->setBrush( kapp->palette().color( QPalette::Active, QColorGroup::Highlight ) );
 
     KoRect r = getRealRect();
@@ -1622,7 +1625,7 @@ void KPrObject::getRealSizeAndOrigFromPoints( KoPointArray &points, float angle,
     orig.setY( orig.y() + mid_y + min_y );
 }
 
-void KPrObject::addSelfToGuides(QValueList<double> &horizontalPos, QValueList<double> &verticalPos )
+void KPrObject::addSelfToGuides(Q3ValueList<double> &horizontalPos, Q3ValueList<double> &verticalPos )
 {
     KoRect bounds = getRealRect();
 

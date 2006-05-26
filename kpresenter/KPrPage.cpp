@@ -56,6 +56,9 @@
 #include <KoTextParag.h>
 #include <KoRect.h>
 #include <qapplication.h>
+//Added by qt3to4:
+#include <Q3ValueList>
+#include <Q3PtrList>
 #include <KoStyleCollection.h>
 #include <KoVariable.h>
 #include <KoGenStyles.h>
@@ -71,7 +74,7 @@ struct listAnimation {
     bool appear;
 };
 
-typedef QMap<int, QPtrList<listAnimation> > lstMap;
+typedef QMap<int, Q3PtrList<listAnimation> > lstMap;
 
 
 KPrPage::KPrPage(KPrDocument *_doc, KPrPage *masterPage )
@@ -133,7 +136,7 @@ void KPrPage::saveOasisObject( KoStore *store, KoXmlWriter &xmlWriter, KoSavingC
     QFile* tmpFile = animationTmpFile.file();
     KoXmlWriter animationTmpWriter( tmpFile );
     lstMap listObjectAnimation;
-    QPtrListIterator<KPrObject> it( m_objectList );
+    Q3PtrListIterator<KPrObject> it( m_objectList );
     for ( ; it.current() ; ++it )
     {
         if ( it.current()== m_doc->header() || it.current()== m_doc->footer())
@@ -161,7 +164,7 @@ void KPrPage::saveOasisObject( KoStore *store, KoXmlWriter &xmlWriter, KoSavingC
                 else
                 {
                     //kDebug()<<" create new list \n";
-                    QPtrList<listAnimation> tmp2;
+                    Q3PtrList<listAnimation> tmp2;
                     tmp2.append( lstappear );
                     listObjectAnimation.insert( it.current()->getAppearStep(), tmp2 );
                 }
@@ -184,7 +187,7 @@ void KPrPage::saveOasisObject( KoStore *store, KoXmlWriter &xmlWriter, KoSavingC
                 else
                 {
                     //kDebug()<<" create new list \n";
-                    QPtrList<listAnimation> tmp2;
+                    Q3PtrList<listAnimation> tmp2;
                     tmp2.append( lstappear );
                     listObjectAnimation.insert( it.current()->getDisappearStep(), tmp2 );
                 }
@@ -212,7 +215,7 @@ void KPrPage::saveOasisObject( KoStore *store, KoXmlWriter &xmlWriter, KoSavingC
             }
             else if ( it.data().count() > 1 )
             {
-                QPtrList<listAnimation> list = it.data();
+                Q3PtrList<listAnimation> list = it.data();
                 animationTmpWriter.startElement( "presentation:animation-group" );
                 for ( uint i = 0; i < list.count(); ++i )
                 {
@@ -848,8 +851,8 @@ KPrObject *KPrPage::getObject(int num)
 /*
  * Check if object name already exists.
  */
-bool KPrPage::objectNameExists( KPrObject *object, QPtrList<KPrObject> &list ) {
-    QPtrListIterator<KPrObject> it( list );
+bool KPrPage::objectNameExists( KPrObject *object, Q3PtrList<KPrObject> &list ) {
+    Q3PtrListIterator<KPrObject> it( list );
 
     for ( it.toFirst(); it.current(); ++it ) {
         // object name can exist in current object.
@@ -858,7 +861,7 @@ bool KPrPage::objectNameExists( KPrObject *object, QPtrList<KPrObject> &list ) {
             return true;
         }
         else if ( it.current()->getType() == OT_GROUP ) {
-            QPtrList<KPrObject> objectList( static_cast<KPrGroupObject*>(it.current())->getObjects() );
+            Q3PtrList<KPrObject> objectList( static_cast<KPrGroupObject*>(it.current())->getObjects() );
             if ( objectNameExists( object, objectList ) ) {
                 return true;
             }
@@ -873,7 +876,7 @@ void KPrPage::unifyObjectName( KPrObject *object ) {
     }
     QString objectName( object->getObjectName() );
 
-    QPtrList<KPrObject> list( m_objectList );
+    Q3PtrList<KPrObject> list( m_objectList );
 
     int count = 1;
 
@@ -894,10 +897,10 @@ void KPrPage::appendObject(KPrObject *_obj)
     m_objectList.append(_obj);
 }
 
-void KPrPage::appendObjects( const QValueList<KPrObject *> &objects )
+void KPrPage::appendObjects( const Q3ValueList<KPrObject *> &objects )
 {
     QMap <QString, int> usedPageNames;
-    QPtrListIterator<KPrObject> it( m_objectList );
+    Q3PtrListIterator<KPrObject> it( m_objectList );
     // find the biggest number 
     for ( ; it.current() ; ++it )
     {
@@ -919,7 +922,7 @@ void KPrPage::appendObjects( const QValueList<KPrObject *> &objects )
         }
     }
 
-    QValueListConstIterator<KPrObject *> oIt( objects.begin() );
+    Q3ValueListConstIterator<KPrObject *> oIt( objects.begin() );
     for ( ; oIt != objects.end(); ++oIt )
     {
         QString objectName( ( *oIt )->getObjectName() );
@@ -963,7 +966,7 @@ void KPrPage::insertObject( KPrObject *object, int pos )
 
 KCommand * KPrPage::deleteSelectedObjects()
 {
-    QPtrList<KPrObject> objects = getSelectedObjects( true );
+    Q3PtrList<KPrObject> objects = getSelectedObjects( true );
 
     KPrDeleteCmd *deleteCmd=0L;
 
@@ -977,12 +980,12 @@ KCommand * KPrPage::deleteSelectedObjects()
     return deleteCmd ;
 }
 
-void KPrPage::copyObjs(QDomDocument &doc, QDomElement &presenter, QValueList<KoPictureKey> & savePictures) const
+void KPrPage::copyObjs(QDomDocument &doc, QDomElement &presenter, Q3ValueList<KoPictureKey> & savePictures) const
 {
     if ( !numSelected() )
         return;
 
-    QPtrListIterator<KPrObject> it( m_objectList );
+    Q3PtrListIterator<KPrObject> it( m_objectList );
     for ( ; it.current() ; ++it )
     {
         if(it.current()->isSelected())
@@ -1082,7 +1085,7 @@ void KPrPage::pasteObjs( const QByteArray & data,int nbCopy, double angle,
     }
     if ( increaseX != 0.0 || increaseY != 0.0 )
     {
-        QPtrListIterator<KPrObject> it( m_objectList );
+        Q3PtrListIterator<KPrObject> it( m_objectList );
         for ( ; it.current() ; ++it )
         {
             if(it.current()->isSelected())
@@ -1114,7 +1117,7 @@ void KPrPage::pasteObjs( const QByteArray & data,int nbCopy, double angle,
 KPrTextObject * KPrPage::textFrameSet ( unsigned int _num ) const
 {
     unsigned int i = 0;
-    QPtrListIterator<KPrObject> it( m_objectList );
+    Q3PtrListIterator<KPrObject> it( m_objectList );
     for ( ; it.current() ; ++it )
     {
         if(it.current()->getType()==OT_TEXT)
@@ -1131,7 +1134,7 @@ int KPrPage::numSelected() const
 {
     int num = 0;
 
-    QPtrListIterator<KPrObject> it( m_objectList );
+    Q3PtrListIterator<KPrObject> it( m_objectList );
     for ( ; it.current() ; ++it )
     {
         if(it.current()->isSelected())
@@ -1145,7 +1148,7 @@ int KPrPage::numTextObject() const
 {
     int num = 0;
 
-    QPtrListIterator<KPrObject> it( m_objectList );
+    Q3PtrListIterator<KPrObject> it( m_objectList );
     for ( ; it.current() ; ++it )
     {
         if(it.current()->getType()==OT_TEXT)
@@ -1157,7 +1160,7 @@ int KPrPage::numTextObject() const
 
 KPrObject* KPrPage::getSelectedObj() const
 {
-    QPtrListIterator<KPrObject> it( m_objectList );
+    Q3PtrListIterator<KPrObject> it( m_objectList );
     for ( ; it.current() ; ++it )
     {
         if(it.current()->isSelected())
@@ -1167,10 +1170,10 @@ KPrObject* KPrPage::getSelectedObj() const
 }
 
 
-QPtrList<KPrObject> KPrPage::getSelectedObjects( bool withoutHeaderFooter ) const
+Q3PtrList<KPrObject> KPrPage::getSelectedObjects( bool withoutHeaderFooter ) const
 {
-    QPtrList<KPrObject> objects;
-    QPtrListIterator<KPrObject> it( m_objectList );
+    Q3PtrList<KPrObject> objects;
+    Q3PtrListIterator<KPrObject> it( m_objectList );
     for ( ; it.current() ; ++it )
     {
         if( it.current()->isSelected()
@@ -1186,7 +1189,7 @@ QPtrList<KPrObject> KPrPage::getSelectedObjects( bool withoutHeaderFooter ) cons
 
 void KPrPage::groupObjects()
 {
-    QPtrList<KPrObject> objects( getSelectedObjects( true ) );
+    Q3PtrList<KPrObject> objects( getSelectedObjects( true ) );
 
     if ( objects.count() > 1 ) {
         KPrGroupObjCmd *groupObjCmd = new KPrGroupObjCmd( i18n( "Group Objects" ), objects, m_doc,this );
@@ -1197,8 +1200,8 @@ void KPrPage::groupObjects()
 
 void KPrPage::ungroupObjects( KMacroCommand ** macro )
 {
-    QPtrList<KPrObject> objects( getSelectedObjects( true ) );
-    QPtrListIterator<KPrObject> it( objects );
+    Q3PtrList<KPrObject> objects( getSelectedObjects( true ) );
+    Q3PtrListIterator<KPrObject> it( objects );
     for ( ; it.current() ; ++it )
     {
         KPrObject *object = it.current();
@@ -1219,7 +1222,7 @@ void KPrPage::lowerObjs(bool backward)
 {
     KPrObject *kpobject = 0;
 
-    QPtrList<KPrObject> _new;
+    Q3PtrList<KPrObject> _new;
 
     for ( unsigned int j = 0; j < m_objectList.count(); j++ )
         _new.append( m_objectList.at( j ) );
@@ -1256,7 +1259,7 @@ void KPrPage::raiseObjs(bool forward)
 {
     KPrObject *kpobject = 0;
 
-    QPtrList<KPrObject> _new;
+    Q3PtrList<KPrObject> _new;
 
     for ( unsigned int j = 0; j < m_objectList.count(); j++ )
         _new.append( m_objectList.at( j ) );
@@ -1477,10 +1480,10 @@ KCommand* KPrPage::setPen( const KoPen &pen, LineEnd lb, LineEnd le, int flags )
 
     KoPenCmd::Pen _newPen( pen, lb, le);
 
-    QPtrList<KPrObject> _objects;
+    Q3PtrList<KPrObject> _objects;
     _objects.setAutoDelete( false );
 
-    QPtrListIterator<KPrObject> it( m_objectList );
+    Q3PtrListIterator<KPrObject> it( m_objectList );
     for ( ; it.current() ; ++it )
     {
         if( it.current()->isSelected() )
@@ -1513,10 +1516,10 @@ KCommand * KPrPage::setBrush( const QBrush &brush, FillType ft, const QColor &g1
     _newBrush.xfactor = xfactor;
     _newBrush.yfactor = yfactor;
 
-    QPtrList<KPrObject> _objects;
+    Q3PtrList<KPrObject> _objects;
     _objects.setAutoDelete( false );
 
-    QPtrListIterator<KPrObject> it( m_objectList );
+    Q3PtrListIterator<KPrObject> it( m_objectList );
     for ( ; it.current() ; ++it )
     {
         if( it.current()->isSelected() )
@@ -1535,7 +1538,7 @@ KCommand * KPrPage::setBrush( const QBrush &brush, FillType ft, const QColor &g1
 
 void KPrPage::slotRepaintVariable()
 {
-    QPtrListIterator<KPrObject> it( m_objectList );
+    Q3PtrListIterator<KPrObject> it( m_objectList );
     for ( ; it.current() ; ++it )
     {
         if ( it.current()->getType() == OT_TEXT )
@@ -1545,7 +1548,7 @@ void KPrPage::slotRepaintVariable()
 
 void KPrPage::recalcPageNum()
 {
-    QPtrListIterator<KPrObject> it( m_objectList );
+    Q3PtrListIterator<KPrObject> it( m_objectList );
     for ( ; it.current() ; ++it )
     {
         if ( it.current()->getType() == OT_TEXT ) {
@@ -1561,7 +1564,7 @@ void KPrPage::changePicture( const KUrl & url, QWidget *parent )
     // so we know it exists
     KoPicture image = m_doc->pictureCollection()->downloadPicture( url, parent );
 
-    QPtrListIterator<KPrObject> it( m_objectList );
+    Q3PtrListIterator<KPrObject> it( m_objectList );
     for ( ; it.current() ; ++it )
     {
         if(it.current()->isSelected() && it.current()->getType()==OT_PICTURE)
@@ -1625,7 +1628,7 @@ void KPrPage::insertPicture( const QString &_file, const KoRect &_rect )
 void KPrPage::enableEmbeddedParts( bool f )
 {
     KPrPartObject *obj=0L;
-    QPtrListIterator<KPrObject> it( m_objectList );
+    Q3PtrListIterator<KPrObject> it( m_objectList );
     for ( ; it.current() ; ++it )
     {
         if(it.current()->getType()==OT_PART)
@@ -1777,7 +1780,7 @@ QRect KPrPage::getZoomPageRect() const
 
 void KPrPage::completeLoading( bool _clean, int lastObj )
 {
-    QPtrListIterator<KPrObject> it( m_objectList );
+    Q3PtrListIterator<KPrObject> it( m_objectList );
     for ( ; it.current() ; ++it )
     {
         // Pictures and cliparts have been loaded from the store, we can now
@@ -1808,7 +1811,7 @@ void KPrPage::completeLoadingForGroupObject( KPrObject *_obj )
     KPrGroupObject *_groupObj = static_cast<KPrGroupObject*>( _obj );
 
     if ( _groupObj ) {
-        QPtrListIterator<KPrObject> it( _groupObj->objectList() );
+        Q3PtrListIterator<KPrObject> it( _groupObj->objectList() );
         for ( ; it.current(); ++it ) {
             if ( ( it.current()->getType() == OT_PICTURE )
                  || ( it.current()->getType() == OT_CLIPART ) ) {
@@ -1832,8 +1835,8 @@ KCommand * KPrPage::replaceObjs( bool createUndoRedo, double _orastX,double _ora
 {
     KPrObject *kpobject = 0;
     double ox=0, oy=0;
-    QPtrList<KPrObject> _objects;
-    QValueList<KoPoint> _diffs;
+    Q3PtrList<KPrObject> _objects;
+    Q3ValueList<KoPoint> _diffs;
     _objects.setAutoDelete( false );
 
     for ( int i = 0; i < static_cast<int>( m_objectList.count() ); i++ ) {
@@ -1872,11 +1875,11 @@ QString KPrPage::pageTitle( const QString &_title ) const
     if ( !m_manualTitle.isEmpty() )
         return m_manualTitle;
 
-    QPtrList<KPrTextObject> objs;
+    Q3PtrList<KPrTextObject> objs;
 
     // Create list of text objects in this page
 
-    QPtrListIterator<KPrObject> it( m_objectList );
+    Q3PtrListIterator<KPrObject> it( m_objectList );
     for ( ; it.current() ; ++it )
     {
         if(it.current()->getType()==OT_TEXT)
@@ -1932,7 +1935,7 @@ QString KPrPage::noteText() const
 
 void KPrPage::makeUsedPixmapList()
 {
-    QPtrListIterator<KPrObject> it( m_objectList );
+    Q3PtrListIterator<KPrObject> it( m_objectList );
     for ( ; it.current() ; ++it )
     {
         if( it.current()->getType()==OT_PICTURE || it.current()->getType()==OT_CLIPART)
@@ -1950,7 +1953,7 @@ void KPrPage::makeUsedPixmapListForGroupObject( KPrObject *_obj )
     KPrGroupObject *_groupObj = static_cast<KPrGroupObject*>( _obj );
 
     if ( _groupObj ) {
-        QPtrListIterator<KPrObject> it( _groupObj->objectList() );
+        Q3PtrListIterator<KPrObject> it( _groupObj->objectList() );
         for ( ; it.current(); ++it ) {
             if ( ( it.current()->getType() == OT_PICTURE )
                  || ( it.current()->getType() == OT_CLIPART ) )
@@ -1962,12 +1965,12 @@ void KPrPage::makeUsedPixmapListForGroupObject( KPrObject *_obj )
 }
 
 
-QValueList<int> KPrPage::getEffectSteps() const
+Q3ValueList<int> KPrPage::getEffectSteps() const
 {
     QMap<int,bool> stepmap;
     stepmap[0] = true;
 
-    QPtrListIterator<KPrObject> it( m_objectList );
+    Q3PtrListIterator<KPrObject> it( m_objectList );
     for ( ; it.current(); ++it )
     {
         stepmap[it.current()->getAppearStep()] = true;
@@ -1984,7 +1987,7 @@ QValueList<int> KPrPage::getEffectSteps() const
 
 void KPrPage::deSelectAllObj()
 {
-    QPtrListIterator<KPrObject> sIt( m_objectList );
+    Q3PtrListIterator<KPrObject> sIt( m_objectList );
     for ( ; sIt.current() ; ++sIt )
     {
         if(sIt.current()->isSelected())
@@ -2001,7 +2004,7 @@ void KPrPage::deSelectObj( KPrObject *kpobject )
 QDomElement KPrPage::saveObjects( QDomDocument &doc, QDomElement &objects, double yoffset,
                                   int saveOnlyPage ) const
 {
-    QPtrListIterator<KPrObject> oIt(m_objectList);
+    Q3PtrListIterator<KPrObject> oIt(m_objectList);
     for (; oIt.current(); ++oIt )
     {
         //don't store header/footer (store in header/footer section)
@@ -2026,9 +2029,9 @@ QDomElement KPrPage::saveObjects( QDomDocument &doc, QDomElement &objects, doubl
 
 bool KPrPage::oneObjectTextExist(bool forceAllTextObject)
 {
-    QPtrList<KPrObject> lst;
+    Q3PtrList<KPrObject> lst;
     getAllObjectSelectedList(lst,forceAllTextObject );
-    QPtrListIterator<KPrObject> it( lst );
+    Q3PtrListIterator<KPrObject> it( lst );
     for ( ; it.current() ; ++it )
     {
         if ( (it.current() == m_doc->header() && !hasHeader())
@@ -2053,9 +2056,9 @@ bool KPrPage::isOneObjectSelected()
 
 bool KPrPage::haveASelectedPartObj()
 {
-    QPtrList<KPrObject> lst;
+    Q3PtrList<KPrObject> lst;
     getAllObjectSelectedList(lst );
-    QPtrListIterator<KPrObject> it( lst );
+    Q3PtrListIterator<KPrObject> it( lst );
     for ( ; it.current(); ++it ) {
         if (it.current()->getType() == OT_PART )
             return true;
@@ -2065,8 +2068,8 @@ bool KPrPage::haveASelectedPartObj()
 
 bool KPrPage::haveASelectedGroupObj()
 {
-    QPtrList<KPrObject> objects( getSelectedObjects( true ) );
-    QPtrListIterator<KPrObject> it( objects );
+    Q3PtrList<KPrObject> objects( getSelectedObjects( true ) );
+    Q3PtrListIterator<KPrObject> it( objects );
     for ( ; it.current(); ++it ) {
         if ( it.current()->getType() == OT_GROUP )
             return true;
@@ -2076,9 +2079,9 @@ bool KPrPage::haveASelectedGroupObj()
 
 bool KPrPage::haveASelectedPixmapObj()
 {
-    QPtrList<KPrObject> lst;
+    Q3PtrList<KPrObject> lst;
     getAllObjectSelectedList(lst );
-    QPtrListIterator<KPrObject> it( lst );
+    Q3PtrListIterator<KPrObject> it( lst );
     for ( ; it.current() ; ++it ) {
         if (( it.current()->getType() == OT_PICTURE )
             || ( it.current()->getType() == OT_CLIPART ) )
@@ -2091,7 +2094,7 @@ KoRect KPrPage::getRealRect( bool all ) const
 {
     KoRect rect;
 
-    QPtrListIterator<KPrObject> it( m_objectList );
+    Q3PtrListIterator<KPrObject> it( m_objectList );
     for ( ; it.current() ; ++it )
     {
         if ( it.current()== m_doc->header() || it.current()== m_doc->footer())
@@ -2107,7 +2110,7 @@ KoRect KPrPage::getRealRect( bool all ) const
 //return true if we change picture
 bool KPrPage::chPic( KPrView *_view)
 {
-    QPtrListIterator<KPrObject> it( m_objectList );
+    Q3PtrListIterator<KPrObject> it( m_objectList );
     for ( ; it.current() ; ++it )
     {
         if ( it.current()->isSelected() &&
@@ -2127,7 +2130,7 @@ bool KPrPage::chPic( KPrView *_view)
 
 bool KPrPage::savePicture( KPrView *_view ) const
 {
-    QPtrListIterator<KPrObject> it( m_objectList );
+    Q3PtrListIterator<KPrObject> it( m_objectList );
     for ( ; it.current() ; ++it )
     {
         if ( it.current()->isSelected() &&
@@ -2150,9 +2153,9 @@ KCommand *KPrPage::moveObject(KPrView *_view, double diffx, double diffy)
 {
     bool createCommand=false;
     KPrMoveByCmd *moveByCmd=0L;
-    QPtrList<KPrObject> _objects;
+    Q3PtrList<KPrObject> _objects;
     _objects.setAutoDelete( false );
-    QPtrListIterator<KPrObject> it( m_objectList );
+    Q3PtrListIterator<KPrObject> it( m_objectList );
     for ( ; it.current() ; ++it )
     {
         //don't move a header/footer
@@ -2179,10 +2182,10 @@ KCommand *KPrPage::moveObject(KPrView *_view, double diffx, double diffy)
 
 KCommand *KPrPage::moveObject(KPrView *m_view,const KoPoint &_move,bool key)
 {
-    QPtrList<KPrObject> _objects;
+    Q3PtrList<KPrObject> _objects;
     _objects.setAutoDelete( false );
     KPrMoveByCmd *moveByCmd=0L;
-    QPtrListIterator<KPrObject> it( m_objectList );
+    Q3PtrListIterator<KPrObject> it( m_objectList );
     for ( ; it.current() ; ++it )
     {
         //don't move a header/footer
@@ -2209,7 +2212,7 @@ KCommand *KPrPage::moveObject(KPrView *m_view,const KoPoint &_move,bool key)
 
 void KPrPage::repaintObj()
 {
-    QPtrListIterator<KPrObject> it( m_objectList );
+    Q3PtrListIterator<KPrObject> it( m_objectList );
     for ( ; it.current() ; ++it )
     {
         if(it.current()->isSelected())
@@ -2221,10 +2224,10 @@ KCommand *KPrPage::rotateSelectedObjects( float _newAngle, bool addAngle )
 {
     KPrRotateCmd * cmd = NULL;
 
-    QPtrList<KPrObject> _objects;
+    Q3PtrList<KPrObject> _objects;
     _objects.setAutoDelete( false );
 
-    QPtrListIterator<KPrObject> it( m_objectList );
+    Q3PtrListIterator<KPrObject> it( m_objectList );
     for ( ; it.current() ; ++it )
     {
         if ( it.current()== m_doc->header() || it.current()== m_doc->footer() )
@@ -2248,8 +2251,8 @@ KCommand *KPrPage::shadowObj(ShadowDirection dir,int dist, const QColor &col)
 {
     KPrShadowCmd *shadowCmd=0L;
     bool newShadow=false;
-    QPtrList<KPrObject> _objects;
-    QPtrList<KPrShadowCmd::ShadowValues> _oldShadow;
+    Q3PtrList<KPrObject> _objects;
+    Q3PtrList<KPrShadowCmd::ShadowValues> _oldShadow;
     KPrShadowCmd::ShadowValues _newShadow, *tmp;
 
     _objects.setAutoDelete( false );
@@ -2259,7 +2262,7 @@ KCommand *KPrPage::shadowObj(ShadowDirection dir,int dist, const QColor &col)
     _newShadow.shadowDistance = dist;
     _newShadow.shadowColor = col;
 
-    QPtrListIterator<KPrObject> it( m_objectList );
+    Q3PtrListIterator<KPrObject> it( m_objectList );
     for ( ; it.current() ; ++it )
     {
         //don't shadow a header/footer
@@ -2295,16 +2298,16 @@ KCommand *KPrPage::shadowObj(ShadowDirection dir,int dist, const QColor &col)
     return shadowCmd;
 }
 
-QPtrList<KoTextObject> KPrPage::allTextObjects() const
+Q3PtrList<KoTextObject> KPrPage::allTextObjects() const
 {
-    QPtrList<KoTextObject> lst;
+    Q3PtrList<KoTextObject> lst;
     addTextObjects( lst );
     return lst;
 }
 
-void KPrPage::addTextObjects(QPtrList<KoTextObject>& lst) const
+void KPrPage::addTextObjects(Q3PtrList<KoTextObject>& lst) const
 {
-    QPtrListIterator<KPrObject> it( m_objectList );
+    Q3PtrListIterator<KPrObject> it( m_objectList );
     for ( ; it.current() ; ++it )
         it.current()->addTextObjects( lst );
 }
@@ -2316,7 +2319,7 @@ KPrObject * KPrPage::getCursor( const QPoint &pos )
 
 KPrObject * KPrPage::getCursor(const KoPoint &pos )
 {
-    QPtrListIterator<KPrObject> it( m_objectList );
+    Q3PtrListIterator<KPrObject> it( m_objectList );
     KPrObject *kpobject = it.toLast();
     while ( kpobject ) {
         if ( kpobject->contains( pos ) && kpobject->isSelected() )
@@ -2328,7 +2331,7 @@ KPrObject * KPrPage::getCursor(const KoPoint &pos )
 
 KPrObject* KPrPage::getObjectAt( const KoPoint &pos, bool withoutProtected ) const
 {
-    QPtrListIterator<KPrObject> it( m_objectList );
+    Q3PtrListIterator<KPrObject> it( m_objectList );
     KPrObject *o = 0;
     //tz Check first if there is a selected object at this pos!
     for ( int i = 0; i < 2; ++i )
@@ -2353,7 +2356,7 @@ KPrObject* KPrPage::getObjectAt( const KoPoint &pos, bool withoutProtected ) con
 KPrPixmapObject * KPrPage::picViewOrigHelper() const
 {
     KPrPixmapObject *obj=0L;
-    QPtrListIterator<KPrObject> it( m_objectList );
+    Q3PtrListIterator<KPrObject> it( m_objectList );
     for ( ; it.current() ; ++it )
     {
         if ( it.current()->isSelected() &&
@@ -2369,9 +2372,9 @@ KPrPixmapObject * KPrPage::picViewOrigHelper() const
 
 void KPrPage::applyStyleChange( KoStyleChangeDefMap changed )
 {
-    QPtrList<KPrObject> lst;
+    Q3PtrList<KPrObject> lst;
     getAllObjectSelectedList(lst,true /*force*/ );
-    QPtrListIterator<KPrObject> it( lst );
+    Q3PtrListIterator<KPrObject> it( lst );
 
     for ( ; it.current() ; ++it )
     {
@@ -2383,9 +2386,9 @@ void KPrPage::applyStyleChange( KoStyleChangeDefMap changed )
 
 void KPrPage::reactivateBgSpellChecking(bool refreshTextObj)
 {
-    QPtrList<KPrObject> lst;
+    Q3PtrList<KPrObject> lst;
     getAllObjectSelectedList(lst,true /*force*/ );
-    QPtrListIterator<KPrObject> oIt( lst );
+    Q3PtrListIterator<KPrObject> oIt( lst );
 
     for ( ; oIt.current() ; ++oIt )
     {
@@ -2400,7 +2403,7 @@ void KPrPage::reactivateBgSpellChecking(bool refreshTextObj)
 
 bool KPrPage::canMoveOneObject() const
 {
-    QPtrListIterator<KPrObject> it( m_objectList );
+    Q3PtrListIterator<KPrObject> it( m_objectList );
     for ( ; it.current() ; ++it )
     {
         //don't test header/footer all the time sticky
@@ -2415,9 +2418,9 @@ bool KPrPage::canMoveOneObject() const
 KCommand *KPrPage::alignVertical( VerticalAlignmentType _type )
 {
     KMacroCommand *macro = 0L;
-    QPtrList<KPrObject> lst;
+    Q3PtrList<KPrObject> lst;
     getAllObjectSelectedList(lst );
-    QPtrListIterator<KPrObject> it( lst );
+    Q3PtrListIterator<KPrObject> it( lst );
     for ( ; it.current() ; ++it )
     {
         if(it.current()->getType()==OT_TEXT)
@@ -2439,9 +2442,9 @@ KCommand *KPrPage::alignVertical( VerticalAlignmentType _type )
 
 void KPrPage::changeTabStopValue ( double _tabStop )
 {
-    QPtrList<KPrObject> lst;
+    Q3PtrList<KPrObject> lst;
     getAllObjectSelectedList(lst,true /*force*/ );
-    QPtrListIterator<KPrObject> it( lst );
+    Q3PtrListIterator<KPrObject> it( lst );
     for ( ; it.current() ; ++it )
     {
         if(it.current()->getType()==OT_TEXT)
@@ -2493,16 +2496,16 @@ bool KPrPage::findTextObject( KPrObject *obj )
     return (m_objectList.findRef( obj )>=0 );
 }
 
-void KPrPage::getAllObjectSelectedList(QPtrList<KPrObject> &lst, bool force )
+void KPrPage::getAllObjectSelectedList(Q3PtrList<KPrObject> &lst, bool force )
 {
-    QPtrListIterator<KPrObject> it( m_objectList );
+    Q3PtrListIterator<KPrObject> it( m_objectList );
     for ( ; it.current() ; ++it )
         it.current()->getAllObjectSelectedList( lst,force );
 }
 
-void KPrPage::getAllEmbeddedObjectSelected(QPtrList<KoDocumentChild> &embeddedObjects )
+void KPrPage::getAllEmbeddedObjectSelected(Q3PtrList<KoDocumentChild> &embeddedObjects )
 {
-    QPtrListIterator<KPrObject> it( m_objectList );
+    Q3PtrListIterator<KPrObject> it( m_objectList );
     for ( ; it.current() ; ++it )
     {
         if ( it.current()->isSelected() && it.current()->getType() == OT_PART )
@@ -2513,7 +2516,7 @@ void KPrPage::getAllEmbeddedObjectSelected(QPtrList<KoDocumentChild> &embeddedOb
 KPrPixmapObject* KPrPage::getSelectedImage() const
 {
     KPrPixmapObject *obj=0L;
-    QPtrListIterator<KPrObject> it( m_objectList );
+    Q3PtrListIterator<KPrObject> it( m_objectList );
     for ( ; it.current() ; ++it )
     {
         if ( it.current()->isSelected() && it.current()->getType() == OT_PICTURE )
@@ -2529,8 +2532,8 @@ KCommand * KPrPage::setImageEffect(ImageEffect eff, QVariant param1, QVariant pa
 {
     bool changed = false;
     KPrImageEffectCmd *imageEffectCmd = 0L;
-    QPtrList<KPrObject> _objects;
-    QPtrList<KPrImageEffectCmd::ImageEffectSettings> _oldSettings;
+    Q3PtrList<KPrObject> _objects;
+    Q3PtrList<KPrImageEffectCmd::ImageEffectSettings> _oldSettings;
     KPrImageEffectCmd::ImageEffectSettings _newSettings, *tmp;
 
     _objects.setAutoDelete( false );
@@ -2541,7 +2544,7 @@ KCommand * KPrPage::setImageEffect(ImageEffect eff, QVariant param1, QVariant pa
     _newSettings.param2 = param2;
     _newSettings.param3 = param3;
 
-    QPtrListIterator<KPrObject> it( m_objectList );
+    Q3PtrListIterator<KPrObject> it( m_objectList );
     for ( ; it.current(); ++it ) {
         if ( it.current()->getType() == OT_PICTURE && it.current()->isSelected()) {
             tmp = new KPrImageEffectCmd::ImageEffectSettings;

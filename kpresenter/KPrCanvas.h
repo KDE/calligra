@@ -24,13 +24,24 @@
 #define __KPRCANVAS__
 
 #include <QWidget>
-#include <qptrlist.h>
-#include <qpicture.h>
-#include <qvaluelist.h>
+#include <q3ptrlist.h>
+#include <q3picture.h>
+#include <q3valuelist.h>
 #include <qpixmap.h>
-#include <qpointarray.h>
-#include <qvaluevector.h>
+#include <q3pointarray.h>
+#include <q3valuevector.h>
 #include <qtimer.h>
+//Added by qt3to4:
+#include <QKeyEvent>
+#include <QDragEnterEvent>
+#include <QDragMoveEvent>
+#include <QDropEvent>
+#include <QResizeEvent>
+#include <QFocusEvent>
+#include <QMouseEvent>
+#include <QEvent>
+#include <QPaintEvent>
+#include <QWheelEvent>
 
 #include <KoGuides.h>
 #include <KoRuler.h>
@@ -160,7 +171,7 @@ public:
     int numPresSteps() const { return m_pageEffectSteps.count(); }
     int numPresPages() const { return m_presentationSlides.count(); }
 
-    bool canAssignEffect( QPtrList<KPrObject> &objs ) const;
+    bool canAssignEffect( Q3PtrList<KPrObject> &objs ) const;
 
     void print( QPainter*, KPrinter*, float, float );
 
@@ -232,17 +243,17 @@ exportPage( 0, s, 800, 600, "/home/khz/page0.png", "PNG", 100 );
     bool oneObjectTextSelected() const;
     bool isOneObjectSelected() const;
     /** Returns the list of selected text objects */
-    QPtrList<KPrTextObject> selectedTextObjs() const;
+    Q3PtrList<KPrTextObject> selectedTextObjs() const;
     /**
      * Returns the list of interfaces to use for changing the text format.
      * This can be either the currently edited text object,
      * or the list of text objects currently selected
      */
-    QPtrList<KoTextFormatInterface> applicableTextInterfaces() const;
+    Q3PtrList<KoTextFormatInterface> applicableTextInterfaces() const;
     /**
      * Returns the list of text objects, either selected or activated.
      */
-    QPtrList<KPrTextObject> applicableTextObjects() const;
+    Q3PtrList<KPrTextObject> applicableTextObjects() const;
 
     void setMouseSelectedObject(bool b);
 
@@ -252,10 +263,10 @@ exportPage( 0, s, 800, 600, "/home/khz/page0.png", "PNG", 100 );
 
     KPrTextView *currentTextObjectView() const { return m_currentTextObjectView; }
 
-    QPtrList<KPrObject> objectList() const;
+    Q3PtrList<KPrObject> objectList() const;
 
     // get - set data
-    const QPtrList<KPrObject> & getObjectList() const;
+    const Q3PtrList<KPrObject> & getObjectList() const;
 
     void playSound( const QString &soundFileName );
     void stopSound();
@@ -355,7 +366,7 @@ exportPage( 0, s, 800, 600, "/home/khz/page0.png", "PNG", 100 );
     void alignObjects( AlignType at );
 
     bool canMoveOneObject()const;
-    QPtrList<KPrTextObject> listOfTextObjs() const;
+    Q3PtrList<KPrTextObject> listOfTextObjs() const;
 
     QPixmap getPicturePixmap() const;
     void closeObject(bool _close);
@@ -430,7 +441,7 @@ signals:
 protected:
     struct PicCache
     {
-        QPicture pic;
+        Q3Picture pic;
         int num;
         int subPresStep;
     };
@@ -450,20 +461,20 @@ protected:
     /**
      * Draw obj to painter.
      */
-    void drawAllObjectsInPage( QPainter *painter, const QPtrList<KPrObject> & obj, int pageNum ) const;
+    void drawAllObjectsInPage( QPainter *painter, const Q3PtrList<KPrObject> & obj, int pageNum ) const;
 
     /**
      * Draw _objects shown at step to painter.
      * This method is used for presentation mode, printing.
      */
-    void drawObjectsPres( QPainter *painter, const QPtrList<KPrObject> &_objects, PresStep step ) const;
+    void drawObjectsPres( QPainter *painter, const Q3PtrList<KPrObject> &_objects, PresStep step ) const;
 
     /**
      * Draw _objects to painter.
      * Only rect is painted.
      * This method is used for edit mode.
      */
-    void drawObjectsEdit( QPainter *painter, const KoRect &rect, const QPtrList<KPrObject> &_objects,
+    void drawObjectsEdit( QPainter *painter, const KoRect &rect, const Q3PtrList<KPrObject> &_objects,
                           SelectionMode selectionMode, int page ) const;
 
     /**
@@ -473,7 +484,7 @@ protected:
      * textView if set print editable textobject (used by drawObjectsEdit)
      * This method is used by drawObjectsPres and drawObjectsEdit.
      */
-    void drawObjects( QPainter *painter, const QPtrList<KPrObject> &objects, SelectionMode selectionMode,
+    void drawObjects( QPainter *painter, const Q3PtrList<KPrObject> &objects, SelectionMode selectionMode,
                       bool contour, KPrTextView * textView, int pageNum ) const;
 
     /**
@@ -654,7 +665,7 @@ private:
      *
      * @return List of objects
      */
-    const QPtrList<KPrObject> displayObjectList() const; 
+    const Q3PtrList<KPrObject> displayObjectList() const; 
 
     /**
      * This is used in automatic presentation mode.
@@ -810,7 +821,7 @@ private:
      * This is used for paint events.
      * Used in drawing mode.
      */
-    QValueVector<QPointArray> m_drawModeLines;
+    Q3ValueVector<Q3PointArray> m_drawModeLines;
 
     /**
      * Index into the QPointArray for the next point of the line in draw mode.
@@ -824,11 +835,11 @@ private:
     float _presFakt;
     int m_showOnlyPage; // 1-based (-1 = all)
     /// list of all effect steps occuring on the active page
-    QValueList<int> m_pageEffectSteps;
+    Q3ValueList<int> m_pageEffectSteps;
     /// List of the slides used in the presentation
-    QValueList<int> m_presentationSlides;
+    Q3ValueList<int> m_presentationSlides;
     /// Iterator over the slides of a presentation
-    QValueList<int>::Iterator m_presentationSlidesIterator;
+    Q3ValueList<int>::Iterator m_presentationSlidesIterator;
     /// KPrEffectHandler for object effects
     KPrEffectHandler *m_effectHandler;
 

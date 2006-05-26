@@ -21,15 +21,18 @@
 #ifndef AFCHOOSE_H
 #define AFCHOOSE_H
 
-#include <qtabdialog.h>
-#include <qptrlist.h>
+#include <q3tabdialog.h>
+#include <q3ptrlist.h>
 #include <QMap>
 #include <qfileinfo.h>
+//Added by qt3to4:
+#include <QCloseEvent>
+#include <QLabel>
 
 class QLabel;
 class KIconCanvas;
 
-class AFChoose : public QTabDialog
+class AFChoose : public Q3TabDialog
 {
     Q_OBJECT
 
@@ -61,7 +64,7 @@ private:
     // ********** variables **********
 
     // list of groups and a pointer to a group
-    QPtrList<Group> groupList;
+    Q3PtrList<Group> groupList;
     Group *grpPtr;
 
 private slots:

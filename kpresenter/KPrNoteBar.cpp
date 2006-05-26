@@ -21,9 +21,12 @@
 
 #include <QLayout>
 #include <qpainter.h>
-#include <qpaintdevicemetrics.h>
-#include <qsimplerichtext.h>
+#include <q3paintdevicemetrics.h>
+#include <q3simplerichtext.h>
 #include <QLabel>
+//Added by qt3to4:
+#include <Q3VBoxLayout>
+#include <Q3ValueList>
 
 #include <kglobalsettings.h>
 #include <kprinter.h>
@@ -42,7 +45,7 @@ KPrNoteBar::KPrNoteBar( QWidget *_parent, KPrView *_view )
       view( _view ),
       initialize( true )
 {
-    QBoxLayout *topLayout = new QVBoxLayout( this, KDialog::marginHint(), KDialog::spacingHint() );
+    Q3BoxLayout *topLayout = new Q3VBoxLayout( this, KDialog::marginHint(), KDialog::spacingHint() );
 
     label = new QLabel(i18n("Note"), this);
 
@@ -120,12 +123,12 @@ void KPrNoteBar::slotRedoAvailable( bool /*yes*/ )
     //kDebug(33001) << "slotRedoAvailable( " << yes << " )" << endl;
 }
 
-void KPrNoteBar::printNotes( QPainter *_painter, KPrinter *_printer, QValueList<int> _list )
+void KPrNoteBar::printNotes( QPainter *_painter, KPrinter *_printer, Q3ValueList<int> _list )
 {
     // base code from $QTDIR/example/textedit/textedit.cpp
     _painter->save();
 
-    QPaintDeviceMetrics metrics( _painter->device() );
+    Q3PaintDeviceMetrics metrics( _painter->device() );
     int dpix = metrics.logicalDpiX();
     int dpiy = metrics.logicalDpiY();
 
@@ -136,10 +139,10 @@ void KPrNoteBar::printNotes( QPainter *_painter, KPrinter *_printer, QValueList<
 
     QFont font = KoGlobal::defaultFont();
     QString allText = getNotesTextForPrinting(_list);
-    QString str = QStyleSheet::convertFromPlainText( allText );
+    QString str = Q3StyleSheet::convertFromPlainText( allText );
 
-    QSimpleRichText richText( str, font, QString::null, QStyleSheet::defaultSheet(),
-                              QMimeSourceFactory::defaultFactory(), body.height() );
+    Q3SimpleRichText richText( str, font, QString::null, Q3StyleSheet::defaultSheet(),
+                              Q3MimeSourceFactory::defaultFactory(), body.height() );
 
     richText.setWidth( _painter, body.width() );
 
@@ -159,7 +162,7 @@ void KPrNoteBar::printNotes( QPainter *_painter, KPrinter *_printer, QValueList<
     _painter->restore();
 }
 
-QString KPrNoteBar::getNotesTextForPrinting(QValueList<int> _list) const
+QString KPrNoteBar::getNotesTextForPrinting(Q3ValueList<int> _list) const
 {
     QString allText = QString::null;
     bool firstText = true;

@@ -26,7 +26,9 @@
 
 #include <QMap>
 #include <qpen.h>
-#include <qvaluelist.h>
+#include <q3valuelist.h>
+//Added by qt3to4:
+#include <QLabel>
 
 #include <kdialogbase.h>
 
@@ -35,7 +37,7 @@ class KPrDocument;
 class QCheckBox;
 class QComboBox;
 class QColor;
-class QListView;
+class Q3ListView;
 class QRadioButton;
 class QSpinBox;
 
@@ -55,7 +57,7 @@ public:
     bool getManualSwitch() const;
     bool getPresentationDuration() const;
     QPen getPen() const;
-    QValueList<bool> getSelectedSlides() const;
+    Q3ValueList<bool> getSelectedSlides() const;
 
     QString presentationName() const;
 
@@ -68,7 +70,7 @@ protected:
     KColorButton* penColor;
     QSpinBox* penWidth;
     QComboBox *m_customSlideCombobox;
-    QListView *slides;
+    Q3ListView *slides;
     QRadioButton *m_customSlide, *m_selectedSlide;
     QLabel *m_labelCustomSlide;
     void setupPageGeneral();

@@ -26,7 +26,7 @@
 #include <qbitmap.h>
 #include <qregion.h>
 #include <qdom.h>
-#include <qpicture.h>
+#include <q3picture.h>
 #include <qpainter.h>
 #include <KoTextZoomHandler.h>
 #include <KoOasisContext.h>

@@ -33,6 +33,8 @@
 #include <qbitmap.h>
 #include <qdom.h>
 #include <qpainter.h>
+//Added by qt3to4:
+#include <Q3PointArray>
 
 KPrRectObject::KPrRectObject()
     : KPr2DObject()
@@ -140,7 +142,7 @@ double KPrRectObject::load(const QDomElement &element)
     return offset;
 }
 
-QPointArray KPrRectObject::boundingRegion( int x, int y, int w, int h, int _xRnd, int _yRnd) const
+Q3PointArray KPrRectObject::boundingRegion( int x, int y, int w, int h, int _xRnd, int _yRnd) const
 {
     w--;
     h--;
@@ -153,12 +155,12 @@ QPointArray KPrRectObject::boundingRegion( int x, int y, int w, int h, int _xRnd
         ryy = h/200*_yRnd;
     int rxx2 = 2*rxx;
     int ryy2 = 2*ryy;
-    QPointArray a[4];
+    Q3PointArray a[4];
     a[0].makeArc( x, y, rxx2, ryy2, 1440, 1440); // ..., 1*16*90, 16*90);
     a[1].makeArc( x, y+h-ryy2, rxx2, ryy2, 2880, 1440); // ..., 2*16*90, 16*90);
     a[2].makeArc( x+w-rxx2, y+h-ryy2, rxx2, ryy2, 4320, 1440); // ..., 3*16*90, 16*90);
     a[3].makeArc( x+w-rxx2, y, rxx2, ryy2, 0, 1440); // ..., 0*16*90, 16*90);
-    QPointArray aa;
+    Q3PointArray aa;
     aa.resize( a[0].size() + a[1].size() + a[2].size() + a[3].size() );
     uint j = 0;
     for ( int k=0; k<4; k++ ) {
@@ -198,7 +200,7 @@ void KPrRectObject::paint( QPainter* _painter, KoTextZoomHandler*_zoomHandler,
         if ( m_redrawGradientPix || gradient->size() != size ) {
             m_redrawGradientPix = false;
             gradient->setSize( size );
-            QPointArray arr = boundingRegion( 0, 0, ow - pw + 1, oh - pw + 1, xRnd, yRnd );
+            Q3PointArray arr = boundingRegion( 0, 0, ow - pw + 1, oh - pw + 1, xRnd, yRnd );
             QRegion clipregion(arr);
             m_gradientPix.resize ( ow, oh );
             m_gradientPix.fill( Qt::white );

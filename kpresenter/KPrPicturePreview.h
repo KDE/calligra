@@ -24,11 +24,13 @@
 #ifndef PICTUREPREVIEW_H
 #define PICTUREPREVIEW_H
 
-#include <qframe.h>
+#include <q3frame.h>
+//Added by qt3to4:
+#include <QPixmap>
 
 #include "global.h"
 
-class KPrPicturePreview : public QFrame
+class KPrPicturePreview : public Q3Frame
 {
     Q_OBJECT
 

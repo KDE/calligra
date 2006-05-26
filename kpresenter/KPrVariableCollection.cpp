@@ -131,7 +131,7 @@ void KPrStatisticVariable::recalc()
     KPrPage *page = m_doc->activePage();
     if( !page) //When we load activePage is null
 	    return;
-    QPtrListIterator<KPrObject> objIt( page->objectList() );
+    Q3PtrListIterator<KPrObject> objIt( page->objectList() );
 
     for ( objIt.toFirst(); objIt.current(); ++objIt )
     {

@@ -24,14 +24,17 @@
 #include "KPrPolygonPreview.h"
 
 #include <qpainter.h>
+//Added by qt3to4:
+#include <Q3Frame>
+#include <Q3PointArray>
 
 #include <math.h>
 
 KPrPolygonPreview::KPrPolygonPreview( QWidget* parent, const char* name)
-    : QFrame( parent, name )
+    : Q3Frame( parent, name )
 {
     setFrameStyle( WinPanel | Sunken );
-    setBackgroundColor( white );
+    setBackgroundColor( Qt::white );
 
     setMinimumSize( 200, 100 );
 }
@@ -48,7 +51,7 @@ void KPrPolygonPreview::drawContents( QPainter *painter )
     painter->setPen( pen );
     painter->setBrush( brush );
 
-    QPointArray points( isConcave ? nCorners * 2 : nCorners );
+    Q3PointArray points( isConcave ? nCorners * 2 : nCorners );
     points.setPoint( 0, 0, qRound( -radius ) );
 
     if ( isConcave ) {

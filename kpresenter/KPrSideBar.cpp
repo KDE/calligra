@@ -22,12 +22,15 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <qheader.h>
+#include <q3header.h>
 #include <qtimer.h>
-#include <qpopupmenu.h>
+#include <q3popupmenu.h>
 #include <qimage.h>
 #include <qtabwidget.h>
 #include <QToolTip>
+//Added by qt3to4:
+#include <QPixmap>
+#include <QDropEvent>
 
 #include <kwordwrap.h>
 #include <kmessagebox.h>
@@ -121,14 +124,14 @@ private:
     KPrObject* m_object;
 };
 
-class ThumbItem : public QIconViewItem
+class ThumbItem : public Q3IconViewItem
 {
 public:
-    ThumbItem( QIconView *parent, const QString & text, const QPixmap & icon )
-        : QIconViewItem( parent, text, icon )
+    ThumbItem( Q3IconView *parent, const QString & text, const QPixmap & icon )
+        : Q3IconViewItem( parent, text, icon )
         { uptodate = true; }
-    ThumbItem( QIconView *parent, QIconViewItem *after, const QString & text, const QPixmap & icon )
-        : QIconViewItem( parent, after, text, icon )
+    ThumbItem( Q3IconView *parent, Q3IconViewItem *after, const QString & text, const QPixmap & icon )
+        : Q3IconViewItem( parent, after, text, icon )
         { uptodate = true; }
 
     virtual bool isUptodate() { return uptodate; };
@@ -240,16 +243,16 @@ KPrThumbBar::KPrThumbBar(QWidget *parent, KPrDocument *d, KPrView *v)
     m_offsetX = 0;
     m_offsetY = 0;
 
-    setArrangement(QIconView::LeftToRight);
+    setArrangement(Q3IconView::LeftToRight);
     setAutoArrange(true);
     setSorting(false);
     setItemsMovable(false);
-    setResizeMode(QIconView::Adjust);
+    setResizeMode(Q3IconView::Adjust);
 
     m_thumbTip = new ThumbToolTip(this);
 
-    connect(this, SIGNAL(currentChanged(QIconViewItem *)),
-            this, SLOT(itemClicked(QIconViewItem *)));
+    connect(this, SIGNAL(currentChanged(Q3IconViewItem *)),
+            this, SLOT(itemClicked(Q3IconViewItem *)));
     connect(this, SIGNAL(contentsMoving(int, int)),
             this, SLOT(slotContentsMoving(int, int)));
 }
@@ -261,7 +264,7 @@ KPrThumbBar::~KPrThumbBar()
 
 void KPrThumbBar::setCurrentPage( int pg )
 {
-    for ( QIconViewItem *it = firstItem(); it; it = it->nextItem() )
+    for ( Q3IconViewItem *it = firstItem(); it; it = it->nextItem() )
     {
         if ( it->text().toInt() - 1 == pg ) {
             blockSignals( true );
@@ -277,7 +280,7 @@ void KPrThumbBar::setCurrentPage( int pg )
 
 QRect KPrThumbBar::tip(const QPoint &pos, QString &title)
 {
-    QIconViewItem *item = findItem(viewportToContents(pos));
+    Q3IconViewItem *item = findItem(viewportToContents(pos));
     if (!item)
         return QRect(0, 0, -1, -1);
 
@@ -343,7 +346,7 @@ void KPrThumbBar::rebuildItems()
             p.setPen(Qt::black);
             p.drawRect(pix.rect());
 
-            ThumbItem *item = new ThumbItem(static_cast<QIconView *>(this), QString::number(i+1), pix);
+            ThumbItem *item = new ThumbItem(static_cast<Q3IconView *>(this), QString::number(i+1), pix);
             item->setUptodate( false );
             item->setDragEnabled(false);  //no dragging for now
         }
@@ -363,7 +366,7 @@ void KPrThumbBar::refreshItems(bool offset)
     else
         vRect.moveBy( contentsX(), contentsY() );
 
-    QIconViewItem *it = findFirstVisibleItem( vRect );
+    Q3IconViewItem *it = findFirstVisibleItem( vRect );
     while ( it )
     {
         kDebug(33001) << "visible page = " << it->text().toInt() << endl;
@@ -394,7 +397,7 @@ void KPrThumbBar::updateItem( int pagenr /* 0-based */, bool sticky )
     vRect.moveBy( contentsX(), contentsY() );
 
     // Find icon
-    QIconViewItem *it = firstItem();
+    Q3IconViewItem *it = firstItem();
     do
     {
         if ( it == findFirstVisibleItem( vRect ) ) {
@@ -431,18 +434,18 @@ void KPrThumbBar::addItem( int pos )
 {
     kDebug(33001)<< "KPrThumbBar::addItem" << endl;
     int page = 0;
-    for ( QIconViewItem *it = firstItem(); it; it = it->nextItem() ) {
+    for ( Q3IconViewItem *it = firstItem(); it; it = it->nextItem() ) {
         // find page which should move
         // do stuff because a item can not be insert at the beginning
         if ( pos == 0 && page == pos ){
-            ThumbItem *item = new ThumbItem(static_cast<QIconView *>(this), it, QString::number(2), getSlideThumb(1));
+            ThumbItem *item = new ThumbItem(static_cast<Q3IconView *>(this), it, QString::number(2), getSlideThumb(1));
             item->setDragEnabled(false);  //no dragging for now
             it->setPixmap(getSlideThumb( 0 ));
             // move on to next item as we have inserted one
             it = it->nextItem();
         }
         else if ( (page + 1) == pos ) {
-            ThumbItem *item = new ThumbItem(static_cast<QIconView *>(this), it, QString::number(pos+1), getSlideThumb(pos));
+            ThumbItem *item = new ThumbItem(static_cast<Q3IconView *>(this), it, QString::number(pos+1), getSlideThumb(pos));
             item->setDragEnabled(false);  //no dragging for now
             it = it->nextItem();
         }
@@ -458,9 +461,9 @@ void KPrThumbBar::moveItem( int oldPos, int newPos )
 {
     kDebug(33001)<< "KPrThumbBar::moveItem " << oldPos << " to " << newPos << endl;
     int page = 0;
-    QIconViewItem *after = 0;
-    QIconViewItem *take = 0;
-    for ( QIconViewItem *it = firstItem(); it; it = it->nextItem() ) {
+    Q3IconViewItem *after = 0;
+    Q3IconViewItem *take = 0;
+    for ( Q3IconViewItem *it = firstItem(); it; it = it->nextItem() ) {
         // find page which should move
         if ( page == oldPos )
             take = it;
@@ -479,7 +482,7 @@ void KPrThumbBar::moveItem( int oldPos, int newPos )
     // TODO remove workaround when qt 3.1.2 comes out tz
     //takeItem( take );
     //insertItem( take, after);
-    ThumbItem *item = new ThumbItem( static_cast<QIconView *>(this), after, QString::number( newPos ), *(take->pixmap()) );
+    ThumbItem *item = new ThumbItem( static_cast<Q3IconView *>(this), after, QString::number( newPos ), *(take->pixmap()) );
     item->setDragEnabled(false);  //no dragging for now
     delete take;
     // update the thumbs if new pos was 0
@@ -495,7 +498,7 @@ void KPrThumbBar::moveItem( int oldPos, int newPos )
     int lowPage = oldPos > newPos ? newPos : oldPos;
     int highPage = oldPos < newPos ? newPos : oldPos;
     page = 0;
-    for ( QIconViewItem *it = firstItem(); it; it = it->nextItem() ) {
+    for ( Q3IconViewItem *it = firstItem(); it; it = it->nextItem() ) {
         if ( page >= lowPage && page <= highPage)
             it->setText( QString::number(page+1) );
         page++;
@@ -507,9 +510,9 @@ void KPrThumbBar::removeItem( int pos )
     kDebug(33001)<< "KPrThumbBar::removeItem" << endl;
     int page = 0;
     bool change = false;
-    QIconViewItem *itemToDelete = 0;
+    Q3IconViewItem *itemToDelete = 0;
 
-    for ( QIconViewItem *it = firstItem(); it; it = it->nextItem() ) {
+    for ( Q3IconViewItem *it = firstItem(); it; it = it->nextItem() ) {
         if ( page == pos ) {
             itemToDelete = it;
             if ( it->nextItem() )
@@ -546,7 +549,7 @@ QPixmap KPrThumbBar::getSlideThumb(int slideNr) const
         h = 130;
     }
 
-    const QImage img(pix.convertToImage().smoothScale( w, h, QImage::ScaleMin ));
+    const QImage img(pix.convertToImage().smoothScale( w, h, Qt::KeepAspectRatio ));
     pix.convertFromImage(img);
 
     // draw a frame around the thumb to show its size
@@ -557,7 +560,7 @@ QPixmap KPrThumbBar::getSlideThumb(int slideNr) const
     return pix;
 }
 
-void KPrThumbBar::itemClicked(QIconViewItem *i)
+void KPrThumbBar::itemClicked(Q3IconViewItem *i)
 {
     if ( !i )
         return;
@@ -614,7 +617,7 @@ void OutlineSlideItem::update()
     // keep selected object
     ooi = 0;
 
-    QPtrListIterator<KPrObject> it( m_page->objectList() );
+    Q3PtrListIterator<KPrObject> it( m_page->objectList() );
 
     if ( !m_masterPage )
     {
@@ -764,16 +767,16 @@ KPrOutline::KPrOutline( QWidget *parent, KPrDocument *d, KPrView *v )
     addColumn( i18n( "Slide" ) );
     setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Expanding ) );
 
-    connect( this, SIGNAL( currentChanged( QListViewItem * ) ), this, SLOT( itemClicked( QListViewItem * ) ) );
-    connect( this, SIGNAL( rightButtonPressed( QListViewItem *, const QPoint &, int ) ),
-             this, SLOT( rightButtonPressed( QListViewItem *, const QPoint &, int ) ) );
-    connect( this, SIGNAL( contextMenu( K3ListView*, QListViewItem*, const QPoint& ) ),
-             this, SLOT( slotContextMenu( K3ListView*, QListViewItem*, const QPoint&) ) );
+    connect( this, SIGNAL( currentChanged( Q3ListViewItem * ) ), this, SLOT( itemClicked( Q3ListViewItem * ) ) );
+    connect( this, SIGNAL( rightButtonPressed( Q3ListViewItem *, const QPoint &, int ) ),
+             this, SLOT( rightButtonPressed( Q3ListViewItem *, const QPoint &, int ) ) );
+    connect( this, SIGNAL( contextMenu( K3ListView*, Q3ListViewItem*, const QPoint& ) ),
+             this, SLOT( slotContextMenu( K3ListView*, Q3ListViewItem*, const QPoint&) ) );
 
-    connect( this, SIGNAL( doubleClicked ( QListViewItem * )),
+    connect( this, SIGNAL( doubleClicked ( Q3ListViewItem * )),
              this, SLOT(renamePageTitle()));
-    connect( this, SIGNAL( dropped( QDropEvent*, QListViewItem*, QListViewItem* ) ),
-             this, SLOT( slotDropped( QDropEvent*, QListViewItem*, QListViewItem*  ) ));
+    connect( this, SIGNAL( dropped( QDropEvent*, Q3ListViewItem*, Q3ListViewItem* ) ),
+             this, SLOT( slotDropped( QDropEvent*, Q3ListViewItem*, Q3ListViewItem*  ) ));
 
     setItemsMovable( false );
     setDragEnabled( true );
@@ -809,7 +812,7 @@ void KPrOutline::rebuildItems()
 // returns 0 upon stupid things (e.g. invalid page number)
 OutlineSlideItem* KPrOutline::slideItem( int pageNumber )
 {
-    QListViewItem* item = firstChild();
+    Q3ListViewItem* item = firstChild();
     for( int index = 0; item; ++index, item = item->nextSibling() ) {
         if( index == pageNumber )
             return dynamic_cast<OutlineSlideItem*>( item );
@@ -831,7 +834,7 @@ void KPrOutline::updateItem( int pagenr /* 0-based */, bool sticky )
         }
     } else {
         blockSignals(true);
-        for( QListViewItem *item = this->firstChild(); item; item = item->nextSibling() )
+        for( Q3ListViewItem *item = this->firstChild(); item; item = item->nextSibling() )
             dynamic_cast<OutlineSlideItem*>(item)->update();
         blockSignals(false);
     }
@@ -866,8 +869,8 @@ void KPrOutline::moveItem( int oldPos, int newPos )
     int highPage = oldPos < newPos ? newPos : oldPos;
 
     OutlineSlideItem *item = dynamic_cast<OutlineSlideItem*>( firstChild() );
-    QListViewItem *itemToMove = 0;
-    QListViewItem *itemAfter = 0;
+    Q3ListViewItem *itemToMove = 0;
+    Q3ListViewItem *itemAfter = 0;
 
     // moving backwards
     if ( newPos < oldPos )
@@ -900,7 +903,7 @@ void KPrOutline::removeItem( int pos )
         item->updateTitle();
 }
 
-void KPrOutline::itemClicked( QListViewItem *item )
+void KPrOutline::itemClicked( Q3ListViewItem *item )
 {
     if( !item ) return;
 
@@ -946,7 +949,7 @@ void KPrOutline::itemClicked( QListViewItem *item )
  * When an item is about to move (using drag-and-drop), it makes shure that
  * it's not moved right after an object.
  */
-void KPrOutline::slotDropped( QDropEvent * /* e */, QListViewItem *parent, QListViewItem *target )
+void KPrOutline::slotDropped( QDropEvent * /* e */, Q3ListViewItem *parent, Q3ListViewItem *target )
 {
     kDebug(33001) << "slotDropped" << endl;
     /* slide doesn't have parent (always 0)
@@ -955,7 +958,7 @@ void KPrOutline::slotDropped( QDropEvent * /* e */, QListViewItem *parent, QList
         return;
 
     // This code is taken from K3ListView
-    for (QListViewItem *i = firstChild(), *iNext = 0; i != 0; i = iNext)
+    for (Q3ListViewItem *i = firstChild(), *iNext = 0; i != 0; i = iNext)
     {
         iNext = i->itemBelow();
         if ( !i->isSelected() )
@@ -999,12 +1002,12 @@ void KPrOutline::setCurrentPage( int pg )
 
 void KPrOutline::contentsDropEvent( QDropEvent *e )
 {
-    disconnect( this, SIGNAL( currentChanged( QListViewItem * ) ), this, SLOT( itemClicked( QListViewItem * ) ) );
+    disconnect( this, SIGNAL( currentChanged( Q3ListViewItem * ) ), this, SLOT( itemClicked( Q3ListViewItem * ) ) );
     K3ListView::contentsDropEvent( e );
-    connect( this, SIGNAL( currentChanged( QListViewItem * ) ), this, SLOT( itemClicked( QListViewItem * ) ) );
+    connect( this, SIGNAL( currentChanged( Q3ListViewItem * ) ), this, SLOT( itemClicked( Q3ListViewItem * ) ) );
 }
 
-void KPrOutline::moveItem( QListViewItem *i, QListViewItem *, QListViewItem *newAfter )
+void KPrOutline::moveItem( Q3ListViewItem *i, Q3ListViewItem *, Q3ListViewItem *newAfter )
 {
     OutlineSlideItem* srcItem = dynamic_cast<OutlineSlideItem*>( i );
     if ( !srcItem )
@@ -1028,11 +1031,11 @@ void KPrOutline::moveItem( QListViewItem *i, QListViewItem *, QListViewItem *new
         m_doc->movePage( num, numNow );
 }
 
-void KPrOutline::rightButtonPressed( QListViewItem *, const QPoint &pnt, int )
+void KPrOutline::rightButtonPressed( Q3ListViewItem *, const QPoint &pnt, int )
 {
     if ( !m_doc->isReadWrite() || m_viewMasterPage ) return;
 
-    QListViewItem *item = QListView::selectedItem();
+    Q3ListViewItem *item = Q3ListView::selectedItem();
     if( !item ) return;
 
     OutlineSlideItem* slideItem = dynamic_cast<OutlineSlideItem*>(item);
@@ -1058,14 +1061,14 @@ void KPrOutline::rightButtonPressed( QListViewItem *, const QPoint &pnt, int )
     }
 }
 
-void KPrOutline::slotContextMenu( K3ListView*, QListViewItem* item, const QPoint& p )
+void KPrOutline::slotContextMenu( K3ListView*, Q3ListViewItem* item, const QPoint& p )
 {
     rightButtonPressed( item, p, 0 );
 }
 
 void KPrOutline::renamePageTitle()
 {
-    QListViewItem *item = QListView::selectedItem();
+    Q3ListViewItem *item = Q3ListView::selectedItem();
     if( !item || m_viewMasterPage) return;
 
     OutlineSlideItem* slideItem = dynamic_cast<OutlineSlideItem*>(item);
@@ -1099,7 +1102,7 @@ void KPrOutline::renamePageTitle()
     }
 }
 
-QDragObject* KPrOutline::dragObject()
+Q3DragObject* KPrOutline::dragObject()
 {
     if( !selectedItem()->dragEnabled() ) {
       return 0;

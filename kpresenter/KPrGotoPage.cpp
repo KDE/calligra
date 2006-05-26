@@ -21,9 +21,13 @@
 #include "KPrGotoPage.h"
 
 #include <QLabel>
-#include <qlistbox.h>
+#include <q3listbox.h>
 #include <QLayout>
 #include <QPushButton>
+//Added by qt3to4:
+#include <Q3VBoxLayout>
+#include <Q3ValueList>
+#include <Q3PtrList>
 
 #include <klocale.h>
 #include <kdialog.h>
@@ -32,7 +36,7 @@
 #include "KPrPage.h"
 
 KPrGotoPage::KPrGotoPage( const KPrDocument *doc,
-                        const QValueList<int> &slides, int start,
+                        const Q3ValueList<int> &slides, int start,
                         QWidget *parent, const char *name )
     : KDialogBase( parent, name, true, i18n("Goto Slide..."), Ok|Cancel),
       oldPage(start)
@@ -40,19 +44,19 @@ KPrGotoPage::KPrGotoPage( const KPrDocument *doc,
 
     QWidget *page = new QWidget( this );
     setMainWidget(page);
-    QVBoxLayout *ml = new QVBoxLayout( page, KDialog::marginHint(),
+    Q3VBoxLayout *ml = new Q3VBoxLayout( page, KDialog::marginHint(),
                                        KDialog::spacingHint());
     QLabel *label = new QLabel( i18n( "Go to slide:" ), page );
     ml->addWidget( label );
-    spinbox = new QListBox( page );
-    connect( spinbox, SIGNAL(doubleClicked( QListBoxItem* )),
+    spinbox = new Q3ListBox( page );
+    connect( spinbox, SIGNAL(doubleClicked( Q3ListBoxItem* )),
              this, SLOT(accept()) );
-    connect( spinbox, SIGNAL(returnPressed( QListBoxItem* )),
+    connect( spinbox, SIGNAL(returnPressed( Q3ListBoxItem* )),
              this, SLOT(accept()) );
     ml->addWidget( spinbox );
 
-    QPtrList<KPrPage> pageList = doc->getPageList(); // because of const doc, we can't do doc->pageList()->at()
-    QValueList<int>::ConstIterator it = slides.begin();
+    Q3PtrList<KPrPage> pageList = doc->getPageList(); // because of const doc, we can't do doc->pageList()->at()
+    Q3ValueList<int>::ConstIterator it = slides.begin();
     for ( ; it != slides.end(); ++it ) {
         QString t( pageList.at( (*it) - 1 )->pageTitle() );
         // cut ultra long titles...
@@ -70,7 +74,7 @@ KPrGotoPage::KPrGotoPage( const KPrDocument *doc,
 }
 
 int KPrGotoPage::gotoPage( const KPrDocument *doc,
-                          const QValueList<int> &slides, int start,
+                          const Q3ValueList<int> &slides, int start,
                           QWidget *parent)
 {
     KPrGotoPage dia( doc, slides, start,parent, 0L );

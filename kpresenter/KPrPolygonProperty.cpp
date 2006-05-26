@@ -21,6 +21,8 @@
 #include "KPrPolygonProperty.h"
 
 #include <QLayout>
+//Added by qt3to4:
+#include <Q3VBoxLayout>
 
 #include <kcombobox.h>
 #include <klocale.h>
@@ -33,7 +35,7 @@ KPrPolygonProperty::KPrPolygonProperty( QWidget *parent, const char *name, KPrPo
 : QWidget( parent, name )
 , m_polygonSettings( polygonSettings )
 {
-    QVBoxLayout *layout = new QVBoxLayout( this );
+    Q3VBoxLayout *layout = new Q3VBoxLayout( this );
     layout->addWidget( m_ui = new PolygonPropertyUI( this ) );
 
     m_ui->typeCombo->insertItem( i18n( "Polygon" ) );

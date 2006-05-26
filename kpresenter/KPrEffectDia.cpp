@@ -28,16 +28,21 @@
 #include <QPushButton>
 #include <QComboBox>
 #include <QLabel>
-#include <qgroupbox.h>
+#include <q3groupbox.h>
 #include <QCheckBox>
 #include <QLineEdit>
-#include <qvaluelist.h>
+#include <q3valuelist.h>
 #include <QLayout>
 #include <QSpinBox>
 #include <qstringlist.h>
 #include <QDir>
 #include <QToolTip>
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
+//Added by qt3to4:
+#include <QResizeEvent>
+#include <Q3GridLayout>
+#include <Q3PtrList>
+#include <Q3VBoxLayout>
 
 #include <klocale.h>
 #include <kglobal.h>
@@ -48,7 +53,7 @@
 #include <kstandarddirs.h>
 #include <kfiledialog.h>
 
-KPrEffectDia::KPrEffectDia( QWidget* parent, const char* name, const QPtrList<KPrObject>& _objs,
+KPrEffectDia::KPrEffectDia( QWidget* parent, const char* name, const Q3PtrList<KPrObject>& _objs,
                       KPrView *_view )
     : KDialogBase( parent, name, true ), objs( _objs )
 {
@@ -59,16 +64,16 @@ KPrEffectDia::KPrEffectDia( QWidget* parent, const char* name, const QPtrList<KP
 
     QWidget *page = new QWidget( this );
     setMainWidget(page);
-    topLayout = new QVBoxLayout( page, 0, spacingHint() );
+    topLayout = new Q3VBoxLayout( page, 0, spacingHint() );
 
-    QGroupBox *grp1 = new QGroupBox(0, Qt::Vertical, i18n( "Appear" ), page );
+    Q3GroupBox *grp1 = new Q3GroupBox(0, Qt::Vertical, i18n( "Appear" ), page );
     grp1->layout()->setSpacing(KDialog::spacingHint());
     grp1->layout()->setMargin(KDialog::marginHint());
     topLayout->addWidget(grp1);
-    QGridLayout *upperRow = new QGridLayout(grp1->layout(), 6, 4);
+    Q3GridLayout *upperRow = new Q3GridLayout(grp1->layout(), 6, 4);
 
     lAppear = new QLabel( i18n( "Order of appearance:" ), grp1 );
-    lAppear->setAlignment( AlignVCenter );
+    lAppear->setAlignment( Qt::AlignVCenter );
     upperRow->addWidget(lAppear, 0, 0);
 
     eAppearStep = new QSpinBox( 0, 100, 1, grp1 );
@@ -79,7 +84,7 @@ KPrEffectDia::KPrEffectDia( QWidget* parent, const char* name, const QPtrList<KP
     //( void )new QWidget( grp1 );
 
     lEffect = new QLabel( i18n( "Effect (appearing):" ), grp1 );
-    lEffect->setAlignment( AlignVCenter );
+    lEffect->setAlignment( Qt::AlignVCenter );
     upperRow->addWidget(lEffect, 1, 0);
 
     cEffect = new QComboBox( false, grp1, "cEffect" );
@@ -102,7 +107,7 @@ KPrEffectDia::KPrEffectDia( QWidget* parent, const char* name, const QPtrList<KP
     connect( cEffect, SIGNAL( activated( int ) ), this, SLOT( appearEffectChanged( int ) ) );
 
     lAppearSpeed = new QLabel( i18n( "Speed:" ), grp1 );
-    lAppearSpeed->setAlignment( AlignVCenter );
+    lAppearSpeed->setAlignment( Qt::AlignVCenter );
     upperRow->addWidget(lAppearSpeed, 2, 0);
 
     cAppearSpeed = new QComboBox( false, grp1, "cEffect" );
@@ -114,7 +119,7 @@ KPrEffectDia::KPrEffectDia( QWidget* parent, const char* name, const QPtrList<KP
     appearEffectChanged( cEffect->currentItem() );
 
     lEffect2 = new QLabel( i18n( "Effect (object specific):" ), grp1 );
-    lEffect2->setAlignment( AlignVCenter );
+    lEffect2->setAlignment( Qt::AlignVCenter );
     upperRow->addWidget(lEffect2, 3, 0);
 
     cEffect2 = new QComboBox( false, grp1, "cEffect2" );
@@ -144,7 +149,7 @@ KPrEffectDia::KPrEffectDia( QWidget* parent, const char* name, const QPtrList<KP
     }
 
     QLabel *lTimerOfAppear = new QLabel( i18n( "Timer of the object:" ), grp1 );
-    lTimerOfAppear->setAlignment( AlignVCenter );
+    lTimerOfAppear->setAlignment( Qt::AlignVCenter );
     upperRow->addWidget( lTimerOfAppear, 4, 0 );
 
     timerOfAppear = new KIntNumInput( obj->getAppearTimer(), grp1 );
@@ -164,7 +169,7 @@ KPrEffectDia::KPrEffectDia( QWidget* parent, const char* name, const QPtrList<KP
     connect( appearSoundEffect, SIGNAL( clicked() ), this, SLOT( appearSoundEffectChanged() ) );
 
     lSoundEffect1 = new QLabel( i18n( "File name:" ), grp1 );
-    lSoundEffect1->setAlignment( AlignVCenter );
+    lSoundEffect1->setAlignment( Qt::AlignVCenter );
     upperRow->addWidget( lSoundEffect1, 6, 0 );
 
     requester1 = new KUrlRequester( grp1 );
@@ -196,14 +201,14 @@ KPrEffectDia::KPrEffectDia( QWidget* parent, const char* name, const QPtrList<KP
     disappear->setChecked( obj->getDisappear() );
     topLayout->addWidget(disappear);
 
-    QGroupBox *grp2 = new QGroupBox(0, Qt::Vertical, i18n( "Disappear" ), page);
+    Q3GroupBox *grp2 = new Q3GroupBox(0, Qt::Vertical, i18n( "Disappear" ), page);
     grp2->layout()->setSpacing(KDialog::spacingHint());
     grp2->layout()->setMargin(KDialog::marginHint());
     topLayout->addWidget(grp2);
-    QGridLayout *lowerRow = new QGridLayout(grp2->layout(), 5, 4);
+    Q3GridLayout *lowerRow = new Q3GridLayout(grp2->layout(), 5, 4);
 
     lDisappear = new QLabel( i18n( "Order of disappearance:" ), grp2 );
-    lDisappear->setAlignment( AlignVCenter );
+    lDisappear->setAlignment( Qt::AlignVCenter );
     lowerRow->addWidget(lDisappear, 0, 0);
 
     eDisappearStep = new QSpinBox( 0, 100, 1, grp2 );
@@ -211,7 +216,7 @@ KPrEffectDia::KPrEffectDia( QWidget* parent, const char* name, const QPtrList<KP
     lowerRow->addWidget(eDisappearStep, 0, 1);
 
     lDEffect = new QLabel( i18n( "Effect (disappearing):" ), grp2 );
-    lDEffect->setAlignment( AlignVCenter );
+    lDEffect->setAlignment( Qt::AlignVCenter );
     lowerRow->addWidget(lDEffect, 1, 0);
 
     cDisappear = new QComboBox( false, grp2, "cDisappear" );
@@ -234,7 +239,7 @@ KPrEffectDia::KPrEffectDia( QWidget* parent, const char* name, const QPtrList<KP
     connect( cDisappear, SIGNAL( activated( int ) ), this, SLOT( disappearEffectChanged( int ) ) );
 
     lDisappearSpeed = new QLabel( i18n( "Speed:" ), grp2 );
-    lDisappearSpeed->setAlignment( AlignVCenter );
+    lDisappearSpeed->setAlignment( Qt::AlignVCenter );
     lowerRow->addWidget(lDisappearSpeed, 2, 0);
 
     cDisappearSpeed = new QComboBox( false, grp2, "cEffect" );
@@ -247,7 +252,7 @@ KPrEffectDia::KPrEffectDia( QWidget* parent, const char* name, const QPtrList<KP
     //appearEffectChanged( cEffect->currentItem() );
 
     QLabel *lTimerOfDisappear = new QLabel( i18n( "Timer of the object:" ), grp2 );
-    lTimerOfDisappear->setAlignment( AlignVCenter );
+    lTimerOfDisappear->setAlignment( Qt::AlignVCenter );
     lowerRow->addWidget( lTimerOfDisappear, 3, 0 );
 
     timerOfDisappear = new KIntNumInput( obj->getDisappearTimer(), grp2 );
@@ -268,7 +273,7 @@ KPrEffectDia::KPrEffectDia( QWidget* parent, const char* name, const QPtrList<KP
     connect( disappearSoundEffect, SIGNAL( clicked() ), this, SLOT( disappearSoundEffectChanged() ) );
 
     lSoundEffect2 = new QLabel( i18n( "File name:" ), grp2 );
-    lSoundEffect2->setAlignment( AlignVCenter );
+    lSoundEffect2->setAlignment( Qt::AlignVCenter );
     lowerRow->addWidget( lSoundEffect2, 5, 0 );
 
     requester2 = new KUrlRequester( grp2 );
@@ -316,7 +321,7 @@ KPrEffectDia::~KPrEffectDia()
 
 void KPrEffectDia::slotEffectDiaOk()
 {
-    QValueList<KPrEffectCmd::EffectStruct> oldEffects;
+    Q3ValueList<KPrEffectCmd::EffectStruct> oldEffects;
     for ( unsigned int i = 0; i < objs.count(); ++i ) {
         KPrObject *o = objs.at( i );
         KPrEffectCmd::EffectStruct e;

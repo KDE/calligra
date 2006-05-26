@@ -1,3 +1,5 @@
+//Added by qt3to4:
+#include <Q3PtrList>
 // -*- Mode: c++; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
@@ -33,7 +35,7 @@ class KPrGroupObject : public KPrObject
 {
 public:
     KPrGroupObject();
-    KPrGroupObject( const QPtrList<KPrObject> &objs );
+    KPrGroupObject( const Q3PtrList<KPrObject> &objs );
     virtual ~KPrGroupObject() {}
 
     KPrGroupObject &operator=( const KPrGroupObject & );
@@ -80,11 +82,11 @@ public:
     void setUpdateObjects( bool b )
         { updateObjs = b; }
 
-    QPtrList<KPrObject> getObjects()
+    Q3PtrList<KPrObject> getObjects()
         { return objects; }
-    const QPtrList<KPrObject> &objectList() const
+    const Q3PtrList<KPrObject> &objectList() const
         { return objects; }
-    virtual void addTextObjects( QPtrList<KoTextObject> & ) const;
+    virtual void addTextObjects( Q3PtrList<KoTextObject> & ) const;
 
     void selectAllObj();
     void deSelectAllObj();
@@ -92,7 +94,7 @@ public:
     virtual void setOwnClipping( bool _ownClipping );
     virtual void setSubPresStep( int _subPresStep );
     virtual void doSpecificEffects( bool _specEffects, bool _onlyCurrStep = true );
-    virtual void getAllObjectSelectedList(QPtrList<KPrObject> &lst,bool force=false );
+    virtual void getAllObjectSelectedList(Q3PtrList<KPrObject> &lst,bool force=false );
 
     virtual void flip( bool horizontal );
     virtual void removeFromObjList();
@@ -108,7 +110,7 @@ protected:
     void updateSizes( double fx, double fy );
     void updateCoords( double dx, double dy );
 
-    QPtrList<KPrObject> objects;
+    Q3PtrList<KPrObject> objects;
     bool updateObjs;
 
 };

@@ -31,7 +31,7 @@
 #include <kdebug.h>
 
 #include <qregion.h>
-#include <qpicture.h>
+#include <q3picture.h>
 #include <qdom.h>
 #include <qpainter.h>
 #include <qbitmap.h>

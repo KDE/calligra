@@ -26,8 +26,10 @@
 #include <qbitmap.h>
 #include <qregion.h>
 #include <qdom.h>
-#include <qpicture.h>
+#include <q3picture.h>
 #include <qpainter.h>
+//Added by qt3to4:
+#include <Q3PointArray>
 #include "KPrPolygonObjectIface.h"
 #include <KoUnit.h>
 #include <KoOasisContext.h>
@@ -207,7 +209,7 @@ void KPrPolygonObject::paint( QPainter* _painter,KoTextZoomHandler*_zoomHandler,
     int _w = ( pen.style() == Qt::NoPen ) ? 1 : pen.width();//pen.width();
 
     if ( drawContour ) {
-        QPointArray pointArray2 = points.zoomPointArray( _zoomHandler );
+        Q3PointArray pointArray2 = points.zoomPointArray( _zoomHandler );
         QPen pen3( Qt::black, 1, Qt::DotLine );
         _painter->setPen( pen3 );
         _painter->setRasterOp( Qt::NotXorROP );
@@ -215,7 +217,7 @@ void KPrPolygonObject::paint( QPainter* _painter,KoTextZoomHandler*_zoomHandler,
         return;
     }
 
-    QPointArray pointArray = points.zoomPointArray( _zoomHandler, _w );
+    Q3PointArray pointArray = points.zoomPointArray( _zoomHandler, _w );
     QPen pen2 = pen.zoomedPen( _zoomHandler );
 
     if ( drawingShadow || getFillType() == FT_BRUSH || !gradient ) {

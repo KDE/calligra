@@ -26,8 +26,12 @@
 #include <QLabel>
 #include <QLayout>
 #include <qslider.h>
-#include <qwhatsthis.h>
-#include <qwidgetstack.h>
+#include <q3whatsthis.h>
+#include <q3widgetstack.h>
+//Added by qt3to4:
+#include <Q3HBoxLayout>
+#include <Q3GridLayout>
+#include <Q3Frame>
 
 #include <klocale.h>
 #include <kcolorbutton.h>
@@ -37,20 +41,20 @@ KPrBrushProperty::KPrBrushProperty( QWidget *parent, const char *name, const KPr
     : QWidget( parent, name )
     , m_brush( brush )
 {
-    QGridLayout *layout = new QGridLayout( this, 1, 1, KDialog::marginHint(), KDialog::spacingHint() );
+    Q3GridLayout *layout = new Q3GridLayout( this, 1, 1, KDialog::marginHint(), KDialog::spacingHint() );
 
     m_typeCombo = new KComboBox( this );
     layout->addWidget( m_typeCombo, 0, 1 );
     m_typeCombo->insertItem( i18n( "Single Color" ) );
     m_typeCombo->insertItem( i18n( "Gradient" ) );
     m_typeCombo->insertItem( i18n( "Transparent" ) );
-    QWhatsThis::add(m_typeCombo, i18n( "You can choose between Single Color, Gradient or Transparent as the type." ) );
+    Q3WhatsThis::add(m_typeCombo, i18n( "You can choose between Single Color, Gradient or Transparent as the type." ) );
 
     QLabel *typeLabel = new QLabel( i18n( "&Type:" ), this );
     layout->addWidget( typeLabel, 0, 0 );
     typeLabel->setBuddy( m_typeCombo );
 
-    m_stack = new QWidgetStack( this );
+    m_stack = new Q3WidgetStack( this );
     layout->addMultiCellWidget( m_stack, 1, 1, 0, 1 );
     connect( m_typeCombo, SIGNAL( activated( int ) ),
              this, SLOT( slotTypeChanged( int ) ) );
@@ -73,8 +77,8 @@ KPrBrushProperty::KPrBrushProperty( QWidget *parent, const char *name, const KPr
     m_brushUI->styleCombo->insertItem( i18n( "Diagonal Crossing Lines" ) );
 
     m_preview_color = new KPrPBPreview( m_brushUI->previewPanel, 0, KPrPBPreview::Brush );
-    QHBoxLayout *hbox = new QHBoxLayout( m_brushUI->previewPanel );
-    QWhatsThis::add(m_preview_color, i18n( "This displays a preview of your choices." ) );
+    Q3HBoxLayout *hbox = new Q3HBoxLayout( m_brushUI->previewPanel );
+    Q3WhatsThis::add(m_preview_color, i18n( "This displays a preview of your choices." ) );
     hbox->addWidget(m_preview_color);
 
     connect( m_brushUI->styleCombo, SIGNAL( activated( int ) ),
@@ -95,7 +99,7 @@ KPrBrushProperty::KPrBrushProperty( QWidget *parent, const char *name, const KPr
     m_gradientUI->styleCombo->insertItem( i18n( "Pyramid" ) );
 
     m_preview_gradient = new KPrPBPreview( m_gradientUI->previewPanel, 0, KPrPBPreview::Gradient );
-    hbox = new QHBoxLayout( m_gradientUI->previewPanel );
+    hbox = new Q3HBoxLayout( m_gradientUI->previewPanel );
     hbox->addWidget(m_preview_gradient);
 
     connect( m_gradientUI->styleCombo, SIGNAL( activated( int ) ),
@@ -112,7 +116,7 @@ KPrBrushProperty::KPrBrushProperty( QWidget *parent, const char *name, const KPr
              this, SLOT( slotYFactorChanged() ) );
 
     m_stack->addWidget( m_gradientUI, 1 );
-    m_stack->addWidget( new QFrame(), 2 ); // the transparent case
+    m_stack->addWidget( new Q3Frame(), 2 ); // the transparent case
 
     slotReset();
 }
@@ -182,7 +186,7 @@ QBrush KPrBrushProperty::getQBrush() const
             break;
     }
     if( m_typeCombo->currentItem() == 2)
-        brush.setStyle( QBrush::NoBrush );
+        brush.setStyle( Qt::NoBrush );
 
     brush.setColor( m_brushUI->colorChooser->color() );
 
@@ -430,7 +434,7 @@ void KPrBrushProperty::slotReset()
                  m_brush.yfactor );
 
     int panelIndex;
-    if( m_brush.fillType == FT_BRUSH && m_brush.brush.style() == QBrush::NoBrush )
+    if( m_brush.fillType == FT_BRUSH && m_brush.brush.style() == Qt::NoBrush )
         panelIndex = 2;
     else
         panelIndex = (int)m_brush.fillType;

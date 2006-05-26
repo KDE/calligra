@@ -28,7 +28,7 @@ class BrushPropertyUI;
 class GradientPropertyUI;
 class KPrPBPreview;
 
-class QWidgetStack;
+class Q3WidgetStack;
 
 class KComboBox;
 
@@ -64,7 +64,7 @@ protected:
     void setUnbalancedEnabled( bool state );
 
     KComboBox *m_typeCombo;
-    QWidgetStack *m_stack;
+    Q3WidgetStack *m_stack;
     BrushPropertyUI *m_brushUI;
     GradientPropertyUI *m_gradientUI;
     KPrPBPreview *m_preview_color;

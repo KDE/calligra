@@ -22,6 +22,10 @@
 
 // Qt includes
 #include <QLayout>
+//Added by qt3to4:
+#include <Q3VBoxLayout>
+#include <Q3GridLayout>
+#include <QLabel>
 
 // KDE includes
 #include <kdebug.h>
@@ -36,7 +40,7 @@
   : KPrintDialogPage( parent, name )
 {
   setTitle( i18n( "KPresenter Options" ) );
-  QGridLayout *layout = new QGridLayout( this, 2, 1, 11, 6 );
+  Q3GridLayout *layout = new Q3GridLayout( this, 2, 1, 11, 6 );
   txtRows = new KIntNumInput(this );
   txtRows->setMinValue(1);
   txtRows->setMaxValue(5);
@@ -51,12 +55,12 @@
   QLabel *caption = new QLabel(i18n("Slides in the pages:"), this );
   caption->setToolTip( i18n("Choose how many rows and columns with slides you want to have on all pages") );
   layout->addMultiCellWidget( caption, 0, 0, 0, 1 );
-  QVBoxLayout *l2 = new QVBoxLayout( 0, 0, 6 );
+  Q3VBoxLayout *l2 = new Q3VBoxLayout( 0, 0, 6 );
   l2->addWidget( new QLabel(i18n("Rows: "), this) );
   l2->addWidget( new QLabel(i18n("Columns: "), this) );
   layout->addLayout( l2, 1, 0 );
 
-  QVBoxLayout *l3 = new QVBoxLayout( 0, 0, 6 );
+  Q3VBoxLayout *l3 = new Q3VBoxLayout( 0, 0, 6 );
   l3->addWidget( txtRows );
   l3->addWidget( txtColumns );
   layout->addLayout( l3, 1, 1 );

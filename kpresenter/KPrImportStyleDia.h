@@ -25,7 +25,7 @@
 #include <KoImportStyleDia.h>
 #include <qstringlist.h>
 class QLineEdit;
-class QListBox;
+class Q3ListBox;
 class KPrDocument;
 class QPushButton;
 class KoParagStyle;

@@ -22,6 +22,9 @@
 #define KPOBJECTPROPERTIES_H
 
 #include "KPrCommand.h"
+//Added by qt3to4:
+#include <QPixmap>
+#include <Q3PtrList>
 
 class KPrObjectProperties
 {
@@ -39,7 +42,7 @@ public:
         PtPenWidth = 512    
     };
 
-    KPrObjectProperties( const QPtrList<KPrObject> &objects );
+    KPrObjectProperties( const Q3PtrList<KPrObject> &objects );
     ~KPrObjectProperties();
 
     int getPropertyFlags() { return m_flags; }
@@ -62,7 +65,7 @@ public:
     PropValue getProtectContent() { return m_protectContent; }
 
 protected:
-    void getProperties( const QPtrList<KPrObject> &objects );
+    void getProperties( const Q3PtrList<KPrObject> &objects );
 
     void getPenProperties( KPrObject *object );
     void getLineEndsProperties( KPrObject *object );
@@ -74,7 +77,7 @@ protected:
     void getTextProperties( KPrObject *object );
 
 private:
-    QPtrList<KPrObject> m_objects;
+    Q3PtrList<KPrObject> m_objects;
     int m_flags;
 
     /// pen properties

@@ -31,19 +31,23 @@
 #include "KPrSoundPlayer.h"
 
 #include <qsplitter.h>
-#include <qheader.h>
-#include <qwmatrix.h>
-#include <qvbox.h>
+#include <q3header.h>
+#include <qmatrix.h>
+#include <q3vbox.h>
 #include <QLayout>
 #include <qimage.h>
 #include <QPushButton>
 #include <QCheckBox>
 #include <qslider.h>
 #include <QToolTip>
-#include <qwhatsthis.h>
-#include <qframe.h>
+#include <q3whatsthis.h>
+#include <q3frame.h>
 #include <QLabel>
 #include <QComboBox>
+//Added by qt3to4:
+#include <Q3HBoxLayout>
+#include <QPixmap>
+#include <Q3VBoxLayout>
 
 #include <kdebug.h>
 #include <kurlrequester.h>
@@ -83,7 +87,7 @@ void KPrEffectPreview::setPixmap( const QPixmap& pixmap )
     setMinimumSize( w, h );
 
     // create smaller pixmap for preview
-    const QImage img( pixmap.convertToImage().smoothScale( w, h, QImage::ScaleFree ) );
+    const QImage img( pixmap.convertToImage().smoothScale( w, h, Qt::IgnoreAspectRatio ) );
     m_pixmap.convertFromImage( img );
 
     QLabel::setPixmap( m_pixmap );
@@ -152,7 +156,7 @@ KPrTransEffectDia::KPrTransEffectDia( QWidget *parent, const char *name,
     QWidget *page = new QWidget( this );
     setMainWidget(page);
 
-    QBoxLayout *topLayout = new QHBoxLayout( page, KDialog::marginHint(), KDialog::spacingHint() );
+    Q3BoxLayout *topLayout = new Q3HBoxLayout( page, KDialog::marginHint(), KDialog::spacingHint() );
     QWidget* leftpart = new QWidget( page );
     topLayout->addWidget( leftpart );
     QWidget* rightpart = new QWidget( page );
@@ -160,7 +164,7 @@ KPrTransEffectDia::KPrTransEffectDia( QWidget *parent, const char *name,
 
     // right-side of the dialog, for showing effect preview
 
-    QVBoxLayout *rightlayout = new QVBoxLayout( rightpart, KDialog::marginHint(), KDialog::spacingHint() );
+    Q3VBoxLayout *rightlayout = new Q3VBoxLayout( rightpart, KDialog::marginHint(), KDialog::spacingHint() );
     rightlayout->setAutoAdd( true );
 
     effectPreview = new KPrEffectPreview( rightpart, doc, view );
@@ -178,12 +182,12 @@ KPrTransEffectDia::KPrTransEffectDia( QWidget *parent, const char *name,
     pageEffect = pg->getPageEffect();
     speed = pg->getPageEffectSpeed();
 
-    QVBoxLayout *leftlayout = new QVBoxLayout( leftpart, KDialog::marginHint(), KDialog::spacingHint() );
+    Q3VBoxLayout *leftlayout = new Q3VBoxLayout( leftpart, KDialog::marginHint(), KDialog::spacingHint() );
     leftlayout->setAutoAdd( true );
 
     new QLabel( i18n("Effect:"), leftpart );
 
-    effectList = new QListBox( leftpart );
+    effectList = new Q3ListBox( leftpart );
     effectList->insertItem( i18n( "No Effect" ) );
     effectList->insertItem( i18n( "Close Horizontal" ) );
     effectList->insertItem( i18n( "Close Vertical" ) );
@@ -233,12 +237,12 @@ KPrTransEffectDia::KPrTransEffectDia( QWidget *parent, const char *name,
         effectList->setCurrentItem( effectList->count()-1 );
 
     connect( effectList, SIGNAL(highlighted(int)), this, SLOT(effectChanged(int)) );
-    connect( effectList, SIGNAL( doubleClicked ( QListBoxItem *) ), this, SLOT( effectChanged()) );
+    connect( effectList, SIGNAL( doubleClicked ( Q3ListBoxItem *) ), this, SLOT( effectChanged()) );
 
     new QLabel( i18n("Speed:"), leftpart );
 
     QWidget* sp = new QWidget( leftpart );
-    QBoxLayout* speedLayout = new QHBoxLayout( sp, KDialog::marginHint(), KDialog::spacingHint() );
+    Q3BoxLayout* speedLayout = new Q3HBoxLayout( sp, KDialog::marginHint(), KDialog::spacingHint() );
     speedLayout->setAutoAdd( true );
 
     speedCombo = new QComboBox( sp );
@@ -253,7 +257,7 @@ KPrTransEffectDia::KPrTransEffectDia( QWidget *parent, const char *name,
 
 
     QWidget* previewgrp = new QWidget( leftpart );
-    QBoxLayout* previewLayout = new QHBoxLayout( previewgrp, KDialog::marginHint(), KDialog::spacingHint() );
+    Q3BoxLayout* previewLayout = new Q3HBoxLayout( previewgrp, KDialog::marginHint(), KDialog::spacingHint() );
     previewLayout->setAutoAdd( true );
 
     automaticPreview = new QCheckBox( i18n( "Automatic preview" ), previewgrp );
@@ -267,8 +271,8 @@ KPrTransEffectDia::KPrTransEffectDia( QWidget *parent, const char *name,
     previewButton->setText( i18n("Preview") );
     connect( previewButton, SIGNAL(clicked()), this, SLOT(preview()) );
 
-    QFrame* line = new QFrame( leftpart );
-    line->setFrameStyle( QFrame::HLine | QFrame::Sunken );
+    Q3Frame* line = new Q3Frame( leftpart );
+    line->setFrameStyle( Q3Frame::HLine | Q3Frame::Sunken );
 
     soundFileName = pg->getPageSoundFileName();
     soundEffect = pg->getPageSoundEffect();
@@ -278,7 +282,7 @@ KPrTransEffectDia::KPrTransEffectDia( QWidget *parent, const char *name,
     connect( checkSoundEffect, SIGNAL( clicked() ), this, SLOT( soundEffectChanged() ) );
 
     QWidget* soundgrp = new QWidget( leftpart );
-    QBoxLayout* soundLayout = new QHBoxLayout( soundgrp, KDialog::marginHint(), KDialog::spacingHint() );
+    Q3BoxLayout* soundLayout = new Q3HBoxLayout( soundgrp, KDialog::marginHint(), KDialog::spacingHint() );
     soundLayout->setAutoAdd( true );
 
     lSoundEffect = new QLabel( i18n( "File name:" ), soundgrp );

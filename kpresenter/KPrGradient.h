@@ -22,6 +22,8 @@
 #define kpgradient_h
 
 #include <QColor>
+//Added by qt3to4:
+#include <QPixmap>
 #include <KoBrush.h>
 #include <kpixmap.h>
 #include "global.h"

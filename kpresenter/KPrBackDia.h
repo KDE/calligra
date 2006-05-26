@@ -22,8 +22,11 @@
 #define BACKDIA_H
 
 #include <kdialogbase.h>
-#include <qframe.h>
+#include <q3frame.h>
 #include <qdatetime.h>
+//Added by qt3to4:
+#include <QShowEvent>
+#include <QLabel>
 
 #include "global.h"
 #include "KPrBackground.h"
@@ -42,7 +45,7 @@ class KPrPage;
 class KUrlRequester;
 
 
-class KPrBackPreview : public QFrame
+class KPrBackPreview : public Q3Frame
 {
     Q_OBJECT
 

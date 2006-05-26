@@ -23,6 +23,8 @@
 
 #include "KPrTextObject.h"
 #include <KoSearchDia.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 class KPrCanvas;
 class KMacroCommand;
@@ -48,9 +50,9 @@ public:
      * scrolls up/down when using the scrollbars (hehe, cool effect).
      */
     KPrFindReplace( QWidget* parent, KPrCanvas * canvas, KoSearchDia * dialog,
-                    const QValueList<KoTextObject *> & lstObjects, KPrTextView *textView );
+                    const Q3ValueList<KoTextObject *> & lstObjects, KPrTextView *textView );
     KPrFindReplace( QWidget* parent, KPrCanvas * canvas, KoReplaceDia * dialog,
-                    const QValueList<KoTextObject *> & lstObjects, KPrTextView *textView );
+                    const Q3ValueList<KoTextObject *> & lstObjects, KPrTextView *textView );
     ~KPrFindReplace();
 
     virtual void emitNewCommand(KCommand *);

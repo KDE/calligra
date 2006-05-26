@@ -20,7 +20,9 @@
 #ifndef PROPERTYEDITOR_H
 #define PROPERTYEDITOR_H
 
-#include <qtabdialog.h>
+#include <q3tabdialog.h>
+//Added by qt3to4:
+#include <Q3PtrList>
 #include <KPrGeneralProperty.h>
 
 class KCommand;
@@ -36,7 +38,7 @@ class KPrPictureProperty;
 class KPrTextProperty;
 class KPrObjectProperties;
 
-class KPrPropertyEditor : public QTabDialog
+class KPrPropertyEditor : public Q3TabDialog
 {
     Q_OBJECT
 
@@ -64,7 +66,7 @@ private:
 
     KPrPage *m_page;
     KPrDocument *m_doc;
-    QPtrList<KPrObject> m_objects;
+    Q3PtrList<KPrObject> m_objects;
 
     KPrPenStyleWidget *m_penProperty;
     KPrBrushProperty *m_brushProperty;

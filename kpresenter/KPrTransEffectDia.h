@@ -26,6 +26,8 @@
 #include <kdialogbase.h>
 #include <QLabel>
 #include <qtimer.h>
+//Added by qt3to4:
+#include <QPixmap>
 #include "global.h"
 
 class KPrDocument;
@@ -103,7 +105,7 @@ protected:
 
     KPrEffectPreview *effectPreview;
 
-    QListBox *effectList;
+    Q3ListBox *effectList;
     QComboBox *speedCombo;
 
     QCheckBox *automaticPreview;

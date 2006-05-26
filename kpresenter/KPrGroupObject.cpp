@@ -38,15 +38,17 @@
 #include <KoOasisContext.h>
 
 #include <qpainter.h>
+//Added by qt3to4:
+#include <Q3PtrList>
 using namespace std;
 
 KPrGroupObject::KPrGroupObject()
-    : KPrObject(), objects( QPtrList<KPrObject>() ), updateObjs( false )
+    : KPrObject(), objects( Q3PtrList<KPrObject>() ), updateObjs( false )
 {
     objects.setAutoDelete( false );
 }
 
-KPrGroupObject::KPrGroupObject( const QPtrList<KPrObject> &objs )
+KPrGroupObject::KPrGroupObject( const Q3PtrList<KPrObject> &objs )
     : KPrObject(), objects( objs ), updateObjs( false )
 {
     objects.setAutoDelete( false );
@@ -59,14 +61,14 @@ KPrGroupObject &KPrGroupObject::operator=( const KPrGroupObject & )
 
 void KPrGroupObject::selectAllObj()
 {
-    QPtrListIterator<KPrObject> it( objects );
+    Q3PtrListIterator<KPrObject> it( objects );
     for ( ; it.current() ; ++it )
         it.current()->setSelected(true);
 }
 
 void KPrGroupObject::deSelectAllObj()
 {
-    QPtrListIterator<KPrObject> it( objects );
+    Q3PtrListIterator<KPrObject> it( objects );
     for ( ; it.current() ; ++it )
         it.current()->setSelected(false);
 }
@@ -118,7 +120,7 @@ QDomDocumentFragment KPrGroupObject::save( QDomDocument& doc, double offset )
     QDomDocumentFragment fragment=KPrObject::save(doc, offset);
     QDomElement objs=doc.createElement("OBJECTS");
     fragment.appendChild(objs);
-    QPtrListIterator<KPrObject> it( objects );
+    Q3PtrListIterator<KPrObject> it( objects );
     for ( ; it.current() ; ++it )
     {
         if ( it.current()->getType() == OT_PART )
@@ -134,7 +136,7 @@ QDomDocumentFragment KPrGroupObject::save( QDomDocument& doc, double offset )
 
 bool KPrGroupObject::saveOasisObjectAttributes( KPOasisSaveContext &sc ) const
 {
-    QPtrListIterator<KPrObject> it( objects );
+    Q3PtrListIterator<KPrObject> it( objects );
     for ( ; it.current() ; ++it )
     {
         //TODO what to do with parts?
@@ -160,7 +162,7 @@ void KPrGroupObject::loadOasisGroupObject( KPrDocument *_doc, KPrPage * newpage,
     //KPrObject::loadOasis( element, context, info );
     updateObjs = false;
     _doc->loadOasisObject( newpage,element, context, this);
-    QPtrListIterator<KPrObject> it( objects );
+    Q3PtrListIterator<KPrObject> it( objects );
     KoRect r=KoRect();
     for ( ; it.current() ; ++it )
     {
@@ -291,7 +293,7 @@ double KPrGroupObject::load( const QDomElement &element, KPrDocument *doc)
 void KPrGroupObject::draw( QPainter *_painter,KoTextZoomHandler *_zoomhandler,
                           int pageNum, SelectionMode selectionMode, bool drawContour )
 {
-    QPtrListIterator<KPrObject> it( objects );
+    Q3PtrListIterator<KPrObject> it( objects );
     for ( ; it.current() ; ++it )
         it.current()->draw( _painter, _zoomhandler, pageNum, selectionMode, drawContour );
 
@@ -303,7 +305,7 @@ void KPrGroupObject::updateSizes( double fx, double fy )
     if ( !updateObjs )
         return;
     KoRect r = KoRect();
-    QPtrListIterator<KPrObject> it( objects );
+    Q3PtrListIterator<KPrObject> it( objects );
     for ( ; it.current() ; ++it )
     {
         double _x = ( it.current()->getOrig().x() - orig.x() ) * fx + orig.x();
@@ -320,7 +322,7 @@ void KPrGroupObject::updateCoords( double dx, double dy )
 {
     if ( !updateObjs )
         return;
-    QPtrListIterator<KPrObject> it( objects );
+    Q3PtrListIterator<KPrObject> it( objects );
     for ( ; it.current() ; ++it )
         it.current()->moveBy( dx, dy );
 }
@@ -339,7 +341,7 @@ void KPrGroupObject::rotate( float _angle )
 
     if ( !updateObjs )
         return;
-    QPtrListIterator<KPrObject> it( objects );
+    Q3PtrListIterator<KPrObject> it( objects );
     for ( ; it.current() ; ++it ) {
         // find distance of object center to group center
         double px = it.current()->getOrig().x() + it.current()->getSize().width() / 2.0 - centerx;
@@ -364,7 +366,7 @@ void KPrGroupObject::setShadowParameter( int _distance, ShadowDirection _directi
 
     if ( !updateObjs )
         return;
-    QPtrListIterator<KPrObject> it( objects );
+    Q3PtrListIterator<KPrObject> it( objects );
     for ( ; it.current() ; ++it )
         it.current()->setShadowParameter( _distance, _direction, _color );
 }
@@ -375,7 +377,7 @@ void KPrGroupObject::setShadowDistance( int _distance )
 
     if ( !updateObjs )
         return;
-    QPtrListIterator<KPrObject> it( objects );
+    Q3PtrListIterator<KPrObject> it( objects );
     for ( ; it.current() ; ++it )
         it.current()->setShadowDistance( _distance );
 }
@@ -386,7 +388,7 @@ void KPrGroupObject::setShadowDirection( ShadowDirection _direction )
 
     if ( !updateObjs )
         return;
-    QPtrListIterator<KPrObject> it( objects );
+    Q3PtrListIterator<KPrObject> it( objects );
     for ( ; it.current() ; ++it )
         it.current()->setShadowDirection( _direction );
 }
@@ -397,7 +399,7 @@ void KPrGroupObject::setShadowColor( const QColor &_color )
     kDebug(33001) << "KPrGroupObject::setShadowColor"<<updateObjs << endl;
     if ( !updateObjs )
         return;
-    QPtrListIterator<KPrObject> it( objects );
+    Q3PtrListIterator<KPrObject> it( objects );
     for ( ; it.current() ; ++it )
         it.current()->setShadowColor( _color );
 }
@@ -408,7 +410,7 @@ void KPrGroupObject::setEffect( Effect _effect )
 
     if ( !updateObjs )
         return;
-    QPtrListIterator<KPrObject> it( objects );
+    Q3PtrListIterator<KPrObject> it( objects );
     for ( ; it.current() ; ++it )
         it.current()->setEffect( _effect );
 }
@@ -419,7 +421,7 @@ void KPrGroupObject::setEffect2( Effect2 _effect2 )
 
     if ( !updateObjs )
         return;
-    QPtrListIterator<KPrObject> it( objects );
+    Q3PtrListIterator<KPrObject> it( objects );
     for ( ; it.current() ; ++it )
         it.current()->setEffect2( _effect2 );
 }
@@ -430,7 +432,7 @@ void KPrGroupObject::setAppearStep( int _appearStep )
 
     if ( !updateObjs )
         return;
-    QPtrListIterator<KPrObject> it( objects );
+    Q3PtrListIterator<KPrObject> it( objects );
     for ( ; it.current() ; ++it )
         it.current()->setAppearStep( _appearStep );
 }
@@ -441,7 +443,7 @@ void KPrGroupObject::setDisappear( bool b )
 
     if ( !updateObjs )
         return;
-    QPtrListIterator<KPrObject> it( objects );
+    Q3PtrListIterator<KPrObject> it( objects );
     for ( ; it.current() ; ++it )
         it.current()->setDisappear( b );
 }
@@ -452,7 +454,7 @@ void KPrGroupObject::setDisappearStep( int _disappearStep )
 
     if ( !updateObjs )
         return;
-    QPtrListIterator<KPrObject> it( objects );
+    Q3PtrListIterator<KPrObject> it( objects );
     for ( ; it.current() ; ++it )
         it.current()->setDisappearStep( _disappearStep );
 }
@@ -463,7 +465,7 @@ void KPrGroupObject::setEffect3( Effect3 _effect3)
 
     if ( !updateObjs )
         return;
-    QPtrListIterator<KPrObject> it( objects );
+    Q3PtrListIterator<KPrObject> it( objects );
     for ( ; it.current() ; ++it )
         it.current()->setEffect3( _effect3 );
 }
@@ -474,7 +476,7 @@ void KPrGroupObject::setAppearTimer( int _appearTimer )
 
     if ( !updateObjs )
         return;
-    QPtrListIterator<KPrObject> it( objects );
+    Q3PtrListIterator<KPrObject> it( objects );
     for ( ; it.current() ; ++it )
         it.current()->setAppearTimer( _appearTimer );
 }
@@ -485,7 +487,7 @@ void KPrGroupObject::setDisappearTimer( int _disappearTimer )
 
     if ( !updateObjs )
         return;
-    QPtrListIterator<KPrObject> it( objects );
+    Q3PtrListIterator<KPrObject> it( objects );
     for ( ; it.current() ; ++it )
         it.current()->setDisappearTimer( _disappearTimer );
 }
@@ -496,7 +498,7 @@ void KPrGroupObject::setOwnClipping( bool _ownClipping )
 
     if ( !updateObjs )
         return;
-    QPtrListIterator<KPrObject> it( objects );
+    Q3PtrListIterator<KPrObject> it( objects );
     for ( ; it.current() ; ++it )
         it.current()->setOwnClipping( _ownClipping );
 }
@@ -507,7 +509,7 @@ void KPrGroupObject::setSubPresStep( int _subPresStep )
 
     if ( !updateObjs )
         return;
-    QPtrListIterator<KPrObject> it( objects );
+    Q3PtrListIterator<KPrObject> it( objects );
     for ( ; it.current() ; ++it )
         it.current()->setSubPresStep( _subPresStep );
 }
@@ -518,7 +520,7 @@ void KPrGroupObject::doSpecificEffects( bool _specEffects, bool _onlyCurrStep )
 
     if ( !updateObjs )
         return;
-    QPtrListIterator<KPrObject> it( objects );
+    Q3PtrListIterator<KPrObject> it( objects );
     for ( ; it.current() ; ++it )
         it.current()->doSpecificEffects( _specEffects, _onlyCurrStep );
 }
@@ -529,7 +531,7 @@ void KPrGroupObject::setAppearSoundEffect( bool b )
 
     if ( !updateObjs )
         return;
-    QPtrListIterator<KPrObject> it( objects );
+    Q3PtrListIterator<KPrObject> it( objects );
     for ( ; it.current() ; ++it )
         it.current()->setAppearSoundEffect( b );
 }
@@ -540,7 +542,7 @@ void KPrGroupObject::setDisappearSoundEffect( bool b )
 
     if ( !updateObjs )
         return;
-    QPtrListIterator<KPrObject> it( objects);
+    Q3PtrListIterator<KPrObject> it( objects);
     for ( ; it.current() ; ++it )
         it.current()->setDisappearSoundEffect( b );
 }
@@ -551,7 +553,7 @@ void KPrGroupObject::setAppearSoundEffectFileName( const QString &_a_fileName )
 
     if ( !updateObjs )
         return;
-    QPtrListIterator<KPrObject> it( objects);
+    Q3PtrListIterator<KPrObject> it( objects);
     for ( ; it.current() ; ++it )
         it.current()->setAppearSoundEffectFileName( _a_fileName );
 }
@@ -562,30 +564,30 @@ void KPrGroupObject::setDisappearSoundEffectFileName( const QString &_d_fileName
 
     if ( !updateObjs )
         return;
-    QPtrListIterator<KPrObject> it( objects);
+    Q3PtrListIterator<KPrObject> it( objects);
     for ( ; it.current() ; ++it )
         it.current()->setDisappearSoundEffectFileName( _d_fileName );
 }
 
-void KPrGroupObject::getAllObjectSelectedList(QPtrList<KPrObject> &lst,bool force )
+void KPrGroupObject::getAllObjectSelectedList(Q3PtrList<KPrObject> &lst,bool force )
 {
     if ( selected || force)
     {
-        QPtrListIterator<KPrObject> it( objects);
+        Q3PtrListIterator<KPrObject> it( objects);
         for ( ; it.current() ; ++it )
             it.current()->getAllObjectSelectedList( lst, true );
     }
 }
 
-void KPrGroupObject::addTextObjects( QPtrList<KoTextObject> &lst ) const
+void KPrGroupObject::addTextObjects( Q3PtrList<KoTextObject> &lst ) const
 {
-    QPtrListIterator<KPrObject> it( objects);
+    Q3PtrListIterator<KPrObject> it( objects);
     for ( ; it.current() ; ++it )
         it.current()->addTextObjects( lst );
 }
 
 void KPrGroupObject::flip( bool horizontal ) {
-    QPtrListIterator<KPrObject> it( objects );
+    Q3PtrListIterator<KPrObject> it( objects );
     for ( ; it.current() ; ++it ) {
         it.current()->flip( horizontal );
         double mx = 0;
@@ -609,7 +611,7 @@ void KPrGroupObject::flip( bool horizontal ) {
 void KPrGroupObject::removeFromObjList()
 {
     inObjList = false; 
-    QPtrListIterator<KPrObject> it( objects );
+    Q3PtrListIterator<KPrObject> it( objects );
     for ( ; it.current() ; ++it ) 
         it.current()->removeFromObjList();
 }
@@ -617,14 +619,14 @@ void KPrGroupObject::removeFromObjList()
 void KPrGroupObject::addToObjList()
 { 
     inObjList = true; 
-    QPtrListIterator<KPrObject> it( objects );
+    Q3PtrListIterator<KPrObject> it( objects );
     for ( ; it.current() ; ++it ) 
         it.current()->addToObjList();
 }
 
 void KPrGroupObject::incCmdRef()
 { 
-    QPtrListIterator<KPrObject> it( objects );
+    Q3PtrListIterator<KPrObject> it( objects );
     for ( ; it.current() ; ++it ) 
         it.current()->incCmdRef();
 
@@ -633,7 +635,7 @@ void KPrGroupObject::incCmdRef()
 
 void KPrGroupObject::decCmdRef()
 { 
-    QPtrListIterator<KPrObject> it( objects );
+    Q3PtrListIterator<KPrObject> it( objects );
     for ( ; it.current() ; ++it ) 
         it.current()->decCmdRef();
 

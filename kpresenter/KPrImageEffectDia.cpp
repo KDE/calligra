@@ -21,9 +21,12 @@
 #include <QComboBox>
 #include <QLabel>
 #include <QSpinBox>
-#include <qwidgetstack.h>
+#include <q3widgetstack.h>
 #include <QCheckBox>
 #include <qimage.h>
+//Added by qt3to4:
+#include <QShowEvent>
+#include <QPixmap>
 
 #include <kimageeffect.h>
 #include <klocale.h>

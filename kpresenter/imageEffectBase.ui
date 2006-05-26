@@ -61,7 +61,7 @@
                         <bool>true</bool>
                     </property>
                     <property name="alignment">
-                        <set>AlignCenter</set>
+                        <set>Qt::AlignCenter</set>
                     </property>
                 </widget>
             </grid>
@@ -240,7 +240,7 @@
                         <enum>Sunken</enum>
                     </property>
                     <property name="orientation">
-                        <enum>Horizontal</enum>
+                        <enum>Qt::Horizontal</enum>
                     </property>
                 </widget>
                 <widget class="QWidgetStack">
@@ -331,7 +331,7 @@
                                     <cstring>Spacer1</cstring>
                                 </property>
                                 <property name="orientation">
-                                    <enum>Vertical</enum>
+                                    <enum>Qt::Vertical</enum>
                                 </property>
                                 <property name="sizeType">
                                     <enum>Expanding</enum>
@@ -404,7 +404,7 @@
                                     <cstring>Spacer2</cstring>
                                 </property>
                                 <property name="orientation">
-                                    <enum>Vertical</enum>
+                                    <enum>Qt::Vertical</enum>
                                 </property>
                                 <property name="sizeType">
                                     <enum>Expanding</enum>
@@ -466,7 +466,7 @@
                                     <cstring>Spacer3</cstring>
                                 </property>
                                 <property name="orientation">
-                                    <enum>Vertical</enum>
+                                    <enum>Qt::Vertical</enum>
                                 </property>
                                 <property name="sizeType">
                                     <enum>Expanding</enum>
@@ -518,7 +518,7 @@
                                     <cstring>Spacer4</cstring>
                                 </property>
                                 <property name="orientation">
-                                    <enum>Vertical</enum>
+                                    <enum>Qt::Vertical</enum>
                                 </property>
                                 <property name="sizeType">
                                     <enum>Expanding</enum>
@@ -567,7 +567,7 @@
                                     <cstring>Spacer8</cstring>
                                 </property>
                                 <property name="orientation">
-                                    <enum>Vertical</enum>
+                                    <enum>Qt::Vertical</enum>
                                 </property>
                                 <property name="sizeType">
                                     <enum>Expanding</enum>
@@ -616,7 +616,7 @@
                                     <cstring>Spacer5</cstring>
                                 </property>
                                 <property name="orientation">
-                                    <enum>Vertical</enum>
+                                    <enum>Qt::Vertical</enum>
                                 </property>
                                 <property name="sizeType">
                                     <enum>Expanding</enum>
@@ -649,7 +649,7 @@
                                     <string>This effect has no options.</string>
                                 </property>
                                 <property name="alignment">
-                                    <set>AlignTop</set>
+                                    <set>Qt::AlignTop</set>
                                 </property>
                             </widget>
                         </vbox>
@@ -673,7 +673,7 @@
                                     <string>This effect has no options.</string>
                                 </property>
                                 <property name="alignment">
-                                    <set>AlignTop</set>
+                                    <set>Qt::AlignTop</set>
                                 </property>
                             </widget>
                         </vbox>
@@ -713,7 +713,7 @@
                                     <cstring>Spacer6</cstring>
                                 </property>
                                 <property name="orientation">
-                                    <enum>Vertical</enum>
+                                    <enum>Qt::Vertical</enum>
                                 </property>
                                 <property name="sizeType">
                                     <enum>Expanding</enum>
@@ -762,7 +762,7 @@
                                     <cstring>Spacer9</cstring>
                                 </property>
                                 <property name="orientation">
-                                    <enum>Vertical</enum>
+                                    <enum>Qt::Vertical</enum>
                                 </property>
                                 <property name="sizeType">
                                     <enum>Expanding</enum>
@@ -795,7 +795,7 @@
                                     <string>This effect has no options.</string>
                                 </property>
                                 <property name="alignment">
-                                    <set>AlignTop</set>
+                                    <set>Qt::AlignTop</set>
                                 </property>
                             </widget>
                         </vbox>
@@ -819,7 +819,7 @@
                                     <string>This effect has no options.</string>
                                 </property>
                                 <property name="alignment">
-                                    <set>AlignTop</set>
+                                    <set>Qt::AlignTop</set>
                                 </property>
                             </widget>
                         </vbox>
@@ -862,7 +862,7 @@
                                     <cstring>Spacer10</cstring>
                                 </property>
                                 <property name="orientation">
-                                    <enum>Vertical</enum>
+                                    <enum>Qt::Vertical</enum>
                                 </property>
                                 <property name="sizeType">
                                     <enum>Expanding</enum>
@@ -941,7 +941,7 @@
                                     <cstring>Spacer11</cstring>
                                 </property>
                                 <property name="orientation">
-                                    <enum>Vertical</enum>
+                                    <enum>Qt::Vertical</enum>
                                 </property>
                                 <property name="sizeType">
                                     <enum>Expanding</enum>
@@ -993,7 +993,7 @@
                                     <cstring>Spacer12</cstring>
                                 </property>
                                 <property name="orientation">
-                                    <enum>Vertical</enum>
+                                    <enum>Qt::Vertical</enum>
                                 </property>
                                 <property name="sizeType">
                                     <enum>Expanding</enum>
@@ -1045,7 +1045,7 @@
                                     <cstring>Spacer12_2</cstring>
                                 </property>
                                 <property name="orientation">
-                                    <enum>Vertical</enum>
+                                    <enum>Qt::Vertical</enum>
                                 </property>
                                 <property name="sizeType">
                                     <enum>Expanding</enum>
@@ -1097,7 +1097,7 @@
                                     <cstring>Spacer12_3</cstring>
                                 </property>
                                 <property name="orientation">
-                                    <enum>Vertical</enum>
+                                    <enum>Qt::Vertical</enum>
                                 </property>
                                 <property name="sizeType">
                                     <enum>Expanding</enum>
@@ -1143,7 +1143,7 @@
                                     <cstring>Spacer15</cstring>
                                 </property>
                                 <property name="orientation">
-                                    <enum>Vertical</enum>
+                                    <enum>Qt::Vertical</enum>
                                 </property>
                                 <property name="sizeType">
                                     <enum>Expanding</enum>
@@ -1195,7 +1195,7 @@
                                     <cstring>Spacer12_4</cstring>
                                 </property>
                                 <property name="orientation">
-                                    <enum>Vertical</enum>
+                                    <enum>Qt::Vertical</enum>
                                 </property>
                                 <property name="sizeType">
                                     <enum>Expanding</enum>
@@ -1241,7 +1241,7 @@
                                     <cstring>Spacer15_2</cstring>
                                 </property>
                                 <property name="orientation">
-                                    <enum>Vertical</enum>
+                                    <enum>Qt::Vertical</enum>
                                 </property>
                                 <property name="sizeType">
                                     <enum>Expanding</enum>
@@ -1320,7 +1320,7 @@
                                     <cstring>Spacer18</cstring>
                                 </property>
                                 <property name="orientation">
-                                    <enum>Vertical</enum>
+                                    <enum>Qt::Vertical</enum>
                                 </property>
                                 <property name="sizeType">
                                     <enum>Expanding</enum>
@@ -1369,7 +1369,7 @@
                                     <cstring>Spacer19</cstring>
                                 </property>
                                 <property name="orientation">
-                                    <enum>Vertical</enum>
+                                    <enum>Qt::Vertical</enum>
                                 </property>
                                 <property name="sizeType">
                                     <enum>Expanding</enum>
@@ -1431,7 +1431,7 @@
                                     <cstring>Spacer20</cstring>
                                 </property>
                                 <property name="orientation">
-                                    <enum>Vertical</enum>
+                                    <enum>Qt::Vertical</enum>
                                 </property>
                                 <property name="sizeType">
                                     <enum>Expanding</enum>

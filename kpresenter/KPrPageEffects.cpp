@@ -25,7 +25,7 @@
 
 #include <qpixmap.h>
 #include <QWidget>
-#include <qwmatrix.h>
+#include <qmatrix.h>
 
 #include <kapplication.h>
 #include <kdebug.h>
@@ -1421,7 +1421,7 @@ bool KPrPageEffects::effectDissolve()
         --dissove;
 
         int index = random.getLong( m_list.count() );
-        QValueListIterator<int> it = m_list.at( index );
+        Q3ValueListIterator<int> it = m_list.at( index );
         
         unsigned int x = ( *it % colno ) * blockSize;
         unsigned int y = ( *it / colno ) * blockSize;
@@ -1558,7 +1558,7 @@ bool KPrPageEffects::effectMelting()
 
     int w = ( m_width + count - 1 ) / count;
 
-    QValueListIterator<int> it = m_list.begin();
+    Q3ValueListIterator<int> it = m_list.begin();
 
     int finished = 32;
     for ( int c = 0; c < count; c++ )

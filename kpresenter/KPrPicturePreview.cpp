@@ -25,10 +25,13 @@
 
 #include <qimage.h>
 #include <qpainter.h>
+//Added by qt3to4:
+#include <QPixmap>
+#include <Q3Frame>
 
 
 KPrPicturePreview::KPrPicturePreview( QWidget* parent, const char* name)
-: QFrame( parent, name )
+: Q3Frame( parent, name )
 , mirrorType( PM_NORMAL )
 , depth( 0 )
 , swapRGB( false )
@@ -45,7 +48,7 @@ void KPrPicturePreview::drawContents( QPainter *painter )
     QSize ext = contentsRect().size();
 
     QPixmap _pix = origPixmap;
-    QImage img( _pix.convertToImage().smoothScale( ext.width(),ext.height(), QImage::ScaleMin ) );
+    QImage img( _pix.convertToImage().smoothScale( ext.width(),ext.height(), Qt::KeepAspectRatio ) );
 
     bool _horizontal = false;
     bool _vertical = false;

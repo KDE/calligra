@@ -20,10 +20,12 @@
 #include "KPrGeneralProperty.h"
 
 #include <QCheckBox>
-#include <qgroupbox.h>
+#include <q3groupbox.h>
 #include <QLabel>
 #include <QLayout>
 #include <QLineEdit>
+//Added by qt3to4:
+#include <Q3VBoxLayout>
 
 #include <knuminput.h>
 #include <klocale.h>
@@ -37,7 +39,7 @@ KPrGeneralProperty::KPrGeneralProperty( QWidget *parent, const char *name, Gener
 , m_generalValue( generalValue )
 , m_unit( unit )
 {
-    QVBoxLayout *layout = new QVBoxLayout( this );
+    Q3VBoxLayout *layout = new Q3VBoxLayout( this );
     layout->addWidget( m_ui = new KoGeneralPropertyUI( this ) );
 
     QSpacerItem* spacer = new QSpacerItem( 20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding );

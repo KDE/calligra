@@ -18,11 +18,17 @@
 */
 #include <qtoolbutton.h>
 #include <qslider.h>
-#include <qgroupbox.h>
+#include <q3groupbox.h>
 #include <QLayout>
-#include <qbuttongroup.h>
+#include <q3buttongroup.h>
 #include <qobject.h>
 #include <qevent.h>
+//Added by qt3to4:
+#include <Q3GridLayout>
+#include <Q3HBoxLayout>
+#include <QLabel>
+#include <QMouseEvent>
+#include <Q3Frame>
 
 #include <kiconloader.h>
 #include <kdebug.h>
@@ -39,15 +45,15 @@ KPrRotationDialogImpl::KPrRotationDialogImpl( QWidget *parent, const char* name 
 {
     noSignals = false;
     m_preview = new KPrTextPreview( m_dialog->previewPanel );
-    QHBoxLayout *lay = new QHBoxLayout( m_dialog->previewPanel, m_dialog->previewPanel->lineWidth(), 0 );
+    Q3HBoxLayout *lay = new Q3HBoxLayout( m_dialog->previewPanel, m_dialog->previewPanel->lineWidth(), 0 );
     lay->addWidget( m_preview );
 
-    QHBoxLayout *hbox = new QHBoxLayout(m_dialog->angleFrame);
+    Q3HBoxLayout *hbox = new Q3HBoxLayout(m_dialog->angleFrame);
     m_angleGroup = new KPrCircleGroup(m_dialog->angleFrame);
     hbox->addWidget(m_angleGroup);
 
     // Draw the circle of checkboxes.
-    QGridLayout *circleLayout = new QGridLayout(m_angleGroup, 4, 5);
+    Q3GridLayout *circleLayout = new Q3GridLayout(m_angleGroup, 4, 5);
     circleLayout->addItem(new QSpacerItem ( 1, 1 , QSizePolicy::MinimumExpanding ), 0, 0);
     circleLayout->addItem(new QSpacerItem ( 1, 1 , QSizePolicy::MinimumExpanding ), 0, 5);
     KPrCircleToggle *r0 = new KPrCircleToggle(m_angleGroup, "tm", 0);
@@ -144,7 +150,7 @@ void KPrCircleToggle::setChecked(bool on) {
 }
 
 KPrCircleGroup::KPrCircleGroup(QWidget *parent)
-    : QFrame(parent), m_buttons()
+    : Q3Frame(parent), m_buttons()
 {
     noSignals=false;
 }

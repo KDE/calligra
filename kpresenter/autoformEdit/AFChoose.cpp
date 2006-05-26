@@ -21,10 +21,13 @@
 #include "AFChoose.h"
 
 #include <QLabel>
-#include <qvbox.h>
+#include <q3vbox.h>
 #include <qtextstream.h>
 #include <QDir>
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
+//Added by qt3to4:
+#include <QCloseEvent>
+#include <QPixmap>
 
 #include <klocale.h>
 #include <ksimpleconfig.h>
@@ -35,7 +38,7 @@
 #include <KPrFactory.h>
 
 AFChoose::AFChoose(QWidget *parent, const QString &caption, const char *name)
-    : QTabDialog(parent,name,true)
+    : Q3TabDialog(parent,name,true)
 {
     setCaption(caption);
     setCancelButton(i18n("&Cancel"));
@@ -85,8 +88,8 @@ void AFChoose::setupTabs()
     {
         for (grpPtr=groupList.first();grpPtr != 0;grpPtr=groupList.next())
         {
-            grpPtr->tab = new QVBox(this);
-            QWhatsThis::add(grpPtr->tab, i18n( "Choose a predefined shape by clicking on it then clicking the OK button (or just double-click on the shape). You can then insert the shape onto your slide by drawing the area with the mouse pointer." ) );
+            grpPtr->tab = new Q3VBox(this);
+            Q3WhatsThis::add(grpPtr->tab, i18n( "Choose a predefined shape by clicking on it then clicking the OK button (or just double-click on the shape). You can then insert the shape onto your slide by drawing the area with the mouse pointer." ) );
             grpPtr->loadWid = new KIconCanvas(grpPtr->tab);
             // Changes for the new KIconCanvas (Werner)
             QDir d( grpPtr->dir.absoluteFilePath() );
@@ -129,7 +132,7 @@ void AFChoose::setupTabs()
                         }
                         QPixmap pic;
                         pic.convertFromImage(img);
-                        QIconViewItem *item = new QIconViewItem(grpPtr->loadWid, text, pic);
+                        Q3IconViewItem *item = new Q3IconViewItem(grpPtr->loadWid, text, pic);
                         item->setKey(text);
                         item->setDragEnabled(false);
                         item->setDropEnabled(false);
@@ -138,13 +141,13 @@ void AFChoose::setupTabs()
                 }
             }
             grpPtr->loadWid->setBackgroundColor(colorGroup().base());
-            grpPtr->loadWid->setResizeMode(QIconView::Adjust);
+            grpPtr->loadWid->setResizeMode(Q3IconView::Adjust);
             grpPtr->loadWid->sort();
             connect(grpPtr->loadWid,SIGNAL(nameChanged(QString)),
                     this,SLOT(nameChanged(QString)));
             connect(this, SIGNAL(currentChanged(QWidget *)), this,
                     SLOT(tabChanged(QWidget*)));
-            connect(grpPtr->loadWid,SIGNAL( doubleClicked ( QIconViewItem *)),this,
+            connect(grpPtr->loadWid,SIGNAL( doubleClicked ( Q3IconViewItem *)),this,
                     SLOT(slotDoubleClick()));
             grpPtr->label = new QLabel(grpPtr->tab);
             grpPtr->label->setText(" ");
@@ -196,7 +199,7 @@ void AFChoose::cancelClicked()
 void AFChoose::closeEvent ( QCloseEvent *e )
 {
     emit afchooseCanceled();
-    QTabDialog::closeEvent ( e );
+    Q3TabDialog::closeEvent ( e );
 }
 
 #include "AFChoose.moc"

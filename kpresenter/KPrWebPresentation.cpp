@@ -34,24 +34,30 @@
 
 #include <QFile>
 #include <qtextstream.h>
-#include <qvbox.h>
-#include <qhbox.h>
+#include <q3vbox.h>
+#include <q3hbox.h>
 #include <QLabel>
 #include <QPushButton>
 #include <qfileinfo.h>
-#include <qframe.h>
+#include <q3frame.h>
 #include <QFont>
 #include <qpixmap.h>
 #include <qdatetime.h>
 #include <QDir>
-#include <qheader.h>
-#include <qwmatrix.h>
+#include <q3header.h>
+#include <qmatrix.h>
 #include <qtextcodec.h>
 #include <QRegExp>
 #include <qimage.h>
 #include <QLayout>
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
 #include <QCheckBox>
+//Added by qt3to4:
+#include <Q3ValueList>
+#include <Q3GridLayout>
+#include <Q3PtrList>
+#include <QResizeEvent>
+#include <QCloseEvent>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -488,7 +494,7 @@ void KPrWebPresentation::createSlidesHTML( KProgress *progressBar )
 	if (m_bWriteFooter) {
 	    	streamOut << brtag << "<hr noshade=\"noshade\"" << ( isXML() ?" /":"") << ">\n";
 
-            QPtrList<KPrPage> _tmpList( doc->getPageList() );
+            Q3PtrList<KPrPage> _tmpList( doc->getPageList() );
             QString note ( escapeHtmlText( codec, _tmpList.at(i)->noteText() ) );
             if ( !note.isEmpty() ) {
                 streamOut << "  <b>" << escapeHtmlText( codec, i18n( "Note" ) ) << "</b>\n";
@@ -644,8 +650,8 @@ void KPrWebPresentationWizard::createWebPresentation( const QString &_config, KP
 
 void KPrWebPresentationWizard::setupPage1()
 {
-    page1 = new QHBox( this );
-    QWhatsThis::add( page1, i18n("This page allows you to specify some of the key"
+    page1 = new Q3HBox( this );
+    Q3WhatsThis::add( page1, i18n("This page allows you to specify some of the key"
                                  " values for how your presentation will be shown"
                                  " in HTML. Select individual items for more help"
                                  " on what they do.") );
@@ -655,12 +661,12 @@ void KPrWebPresentationWizard::setupPage1()
     QLabel* sidebar = new QLabel( page1 );
     sidebar->setMinimumSize( 106, 318 );
     sidebar->setMaximumSize( 106, 318 );
-    sidebar->setFrameShape( QFrame::Panel );
-    sidebar->setFrameShadow( QFrame::Sunken );
+    sidebar->setFrameShape( Q3Frame::Panel );
+    sidebar->setFrameShadow( Q3Frame::Sunken );
     sidebar->setPixmap(locate("data", "kpresenter/pics/webslideshow-sidebar.png"));
 
     QWidget* canvas = new QWidget( page1 );
-    QGridLayout *layout = new QGridLayout( canvas, 7, 2,
+    Q3GridLayout *layout = new Q3GridLayout( canvas, 7, 2,
                                            KDialog::marginHint(), KDialog::spacingHint() );
 
     QLabel *helptext = new QLabel( canvas );
@@ -675,45 +681,45 @@ void KPrWebPresentationWizard::setupPage1()
 
     QLabel *label1 = new QLabel( i18n("Author:"), canvas );
     label1->setAlignment( Qt::AlignVCenter | Qt::AlignRight );
-    QWhatsThis::add( label1, i18n("This is where you enter the name of the person or "
+    Q3WhatsThis::add( label1, i18n("This is where you enter the name of the person or "
                                   "organization that should be named as the author of "
                                   "the presentation.") );
     layout->addWidget( label1, 2, 0 );
 
     QLabel *label2 = new QLabel( i18n("Title:"), canvas );
     label2->setAlignment( Qt::AlignVCenter | Qt::AlignRight );
-    QWhatsThis::add( label2, i18n("This is where you enter the title of the overall "
+    Q3WhatsThis::add( label2, i18n("This is where you enter the title of the overall "
                                   "presentation." ) );
     layout->addWidget( label2, 3, 0 );
 
     QLabel *label3 = new QLabel( i18n("Email address:"), canvas );
     label3->setAlignment( Qt::AlignVCenter | Qt::AlignRight );
-    QWhatsThis::add( label3, i18n("This is where you enter the email address of the "
+    Q3WhatsThis::add( label3, i18n("This is where you enter the email address of the "
                                   "person or organization that is responsible for "
                                   "the presentation.") );
     layout->addWidget( label3, 4, 0 );
 
     QLabel *label4 = new QLabel( i18n("Path:"), canvas );
     label4->setAlignment( Qt::AlignVCenter | Qt::AlignRight );
-    QWhatsThis::add( label4, i18n("The value entered for the path is the directory "
+    Q3WhatsThis::add( label4, i18n("The value entered for the path is the directory "
                                   "where the presentation will be saved. If it does "
                                   "not exist, you'll be asked if you want to create "
                                   "the directory or abort the creation.") );
     layout->addWidget( label4, 5, 0 );
 
     author = new KLineEdit( webPres.getAuthor(), canvas );
-    QWhatsThis::add( author, i18n("This is where you enter the name of the person or "
+    Q3WhatsThis::add( author, i18n("This is where you enter the name of the person or "
                                   "organization that should be named as the author of "
                                   "the presentation.") );
     layout->addWidget( author, 2, 1 );
 
     title = new KLineEdit( webPres.getTitle(), canvas );
-    QWhatsThis::add( title, i18n("This is where you enter the title of the overall "
+    Q3WhatsThis::add( title, i18n("This is where you enter the title of the overall "
                                  "presentation." ) );
     layout->addWidget( title, 3, 1 );
 
     email = new KLineEdit( webPres.getEmail(), canvas );
-    QWhatsThis::add( email, i18n("This is where you enter the email address of the "
+    Q3WhatsThis::add( email, i18n("This is where you enter the email address of the "
                                  "person or organization that is responsible for "
                                  "the presentation.") );
     layout->addWidget( email, 4, 1 );
@@ -721,7 +727,7 @@ void KPrWebPresentationWizard::setupPage1()
     path=new KUrlRequester( canvas );
     path->setMode( KFile::Directory);
     path->lineEdit()->setText(webPres.getPath());
-    QWhatsThis::add( path, i18n("The value entered for the path is the directory "
+    Q3WhatsThis::add( path, i18n("The value entered for the path is the directory "
                                 "where the presentation will be saved. If it does "
                                 "not exist, you'll be asked if you want to create "
                                 "the directory or abort the creation.") );
@@ -743,8 +749,8 @@ void KPrWebPresentationWizard::setupPage1()
 
 void KPrWebPresentationWizard::setupPage2()
 {
-    page2 = new QHBox( this );
-    QWhatsThis::add( page2, i18n("This page allows you to specify how the HTML "
+    page2 = new Q3HBox( this );
+    Q3WhatsThis::add( page2, i18n("This page allows you to specify how the HTML "
                                  "for your presentation will be displayed. Select "
                                  "individual items for more help on what they do.") );
     page2->setSpacing( KDialog::spacingHint() );
@@ -753,12 +759,12 @@ void KPrWebPresentationWizard::setupPage2()
     QLabel* sidebar = new QLabel( page2 );
     sidebar->setMinimumSize( 106, 318 );
     sidebar->setMaximumSize( 106, 318 );
-    sidebar->setFrameShape( QFrame::Panel );
-    sidebar->setFrameShadow( QFrame::Sunken );
+    sidebar->setFrameShape( Q3Frame::Panel );
+    sidebar->setFrameShadow( Q3Frame::Sunken );
     sidebar->setPixmap(locate("data", "kpresenter/pics/webslideshow-sidebar.png"));
 
     QWidget* canvas = new QWidget( page2 );
-    QGridLayout *layout = new QGridLayout( canvas, 6, 2,
+    Q3GridLayout *layout = new Q3GridLayout( canvas, 6, 2,
                                            KDialog::marginHint(), KDialog::spacingHint() );
 
     QLabel *helptext = new QLabel( canvas );
@@ -773,7 +779,7 @@ void KPrWebPresentationWizard::setupPage2()
 
     QLabel *label1 = new QLabel( i18n("Zoom:"), canvas );
     label1->setAlignment( Qt::AlignVCenter | Qt::AlignRight );
-    QWhatsThis::add( label1, i18n( "This selection allows you to specify "
+    Q3WhatsThis::add( label1, i18n( "This selection allows you to specify "
                                    "the size of the slide image." ) );
     layout->addWidget( label1, 2, 0 );
 
@@ -787,7 +793,7 @@ void KPrWebPresentationWizard::setupPage2()
     layout->addWidget( label3, 4, 0 );
 
     zoom = new KIntNumInput( webPres.getZoom(), canvas );
-    QWhatsThis::add( zoom, i18n( "This selection allows you to specify "
+    Q3WhatsThis::add( zoom, i18n( "This selection allows you to specify "
                                  "the size of the slide image." ) );
     layout->addWidget( zoom, 2, 1 );
     zoom->setSuffix( " %" );
@@ -832,8 +838,8 @@ void KPrWebPresentationWizard::setupPage2()
 
 void KPrWebPresentationWizard::setupPage3()
 {
-    page3 = new QHBox( this );
-    QWhatsThis::add( page3, i18n("This page allows you to specify the colors for "
+    page3 = new Q3HBox( this );
+    Q3WhatsThis::add( page3, i18n("This page allows you to specify the colors for "
                                  "your presentation display. Select individual "
                                  "items for more help on what they do.") );
 
@@ -843,12 +849,12 @@ void KPrWebPresentationWizard::setupPage3()
     QLabel* sidebar = new QLabel( page3 );
     sidebar->setMinimumSize( 106, 318 );
     sidebar->setMaximumSize( 106, 318 );
-    sidebar->setFrameShape( QFrame::Panel );
-    sidebar->setFrameShadow( QFrame::Sunken );
+    sidebar->setFrameShape( Q3Frame::Panel );
+    sidebar->setFrameShadow( Q3Frame::Sunken );
     sidebar->setPixmap(locate("data", "kpresenter/pics/webslideshow-sidebar.png"));
 
     QWidget* canvas = new QWidget( page3 );
-    QGridLayout *layout = new QGridLayout( canvas, 6, 2,
+    Q3GridLayout *layout = new Q3GridLayout( canvas, 6, 2,
                                            KDialog::marginHint(), KDialog::spacingHint() );
 
     QLabel *helptext = new QLabel( canvas );
@@ -890,8 +896,8 @@ void KPrWebPresentationWizard::setupPage3()
 
 void KPrWebPresentationWizard::setupPage4()
 {
-    page4 = new QHBox( this );
-    QWhatsThis::add( page4, i18n("This page allows you to modify the titles of "
+    page4 = new Q3HBox( this );
+    Q3WhatsThis::add( page4, i18n("This page allows you to modify the titles of "
                                  "each slide, if required. You normally do not need "
                                  "to do this, but it is available if required.") );
     page4->setSpacing( KDialog::spacingHint() );
@@ -900,12 +906,12 @@ void KPrWebPresentationWizard::setupPage4()
     QLabel* sidebar = new QLabel( page4 );
     sidebar->setMinimumSize( 106, 318 );
     sidebar->setMaximumSize( 106, 318 );
-    sidebar->setFrameShape( QFrame::Panel );
-    sidebar->setFrameShadow( QFrame::Sunken );
+    sidebar->setFrameShape( Q3Frame::Panel );
+    sidebar->setFrameShadow( Q3Frame::Sunken );
     sidebar->setPixmap(locate("data", "kpresenter/pics/webslideshow-sidebar.png"));
 
     QWidget* canvas = new QWidget( page4 );
-    QGridLayout *layout = new QGridLayout( canvas, 3, 2,
+    Q3GridLayout *layout = new Q3GridLayout( canvas, 3, 2,
                                            KDialog::marginHint(), KDialog::spacingHint() );
 
     QLabel *helptext = new QLabel( canvas );
@@ -932,14 +938,14 @@ void KPrWebPresentationWizard::setupPage4()
     layout->addMultiCellWidget( slideTitles, 2, 2, 0, 1 );
     slideTitles->addColumn( i18n( "No." ) );
     slideTitles->addColumn( i18n( "Slide Title" ) );
-    connect( slideTitles, SIGNAL( selectionChanged( QListViewItem * ) ), this,
-             SLOT( slideTitleChanged( QListViewItem * ) ) );
+    connect( slideTitles, SIGNAL( selectionChanged( Q3ListViewItem * ) ), this,
+             SLOT( slideTitleChanged( Q3ListViewItem * ) ) );
     slideTitles->setSorting( -1 );
     slideTitles->setAllColumnsShowFocus( true );
-    slideTitles->setResizeMode( QListView::LastColumn );
+    slideTitles->setResizeMode( Q3ListView::LastColumn );
     slideTitles->header()->setMovingEnabled( false );
 
-    QValueList<KPrWebPresentation::SlideInfo> infos = webPres.getSlideInfos();
+    Q3ValueList<KPrWebPresentation::SlideInfo> infos = webPres.getSlideInfos();
     for ( int i = infos.count() - 1; i >= 0; --i ) {
         K3ListViewItem *item = new K3ListViewItem( slideTitles );
         item->setText( 0, QString::number( i + 1 ) );
@@ -956,8 +962,8 @@ void KPrWebPresentationWizard::setupPage4()
 
 void KPrWebPresentationWizard::setupPage5()
 {
-    page5 = new QHBox( this );
-    QWhatsThis::add( page5, i18n("This page allows you to specify some options for "
+    page5 = new Q3HBox( this );
+    Q3WhatsThis::add( page5, i18n("This page allows you to specify some options for "
                                  "presentations which run unattended, such as time "
                                  "elapsed before advancing to the next slide, looping "
                                  "and the presence of headers. If you do not want "
@@ -968,12 +974,12 @@ void KPrWebPresentationWizard::setupPage5()
     QLabel* sidebar = new QLabel( page5 );
     sidebar->setMinimumSize( 106, 318 );
     sidebar->setMaximumSize( 106, 318 );
-    sidebar->setFrameShape( QFrame::Panel );
-    sidebar->setFrameShadow( QFrame::Sunken );
+    sidebar->setFrameShape( Q3Frame::Panel );
+    sidebar->setFrameShadow( Q3Frame::Sunken );
     sidebar->setPixmap(locate("data", "kpresenter/pics/webslideshow-sidebar.png"));
 
     QWidget* canvas = new QWidget( page5 );
-    QGridLayout *layout = new QGridLayout( canvas, 6, 2,
+    Q3GridLayout *layout = new Q3GridLayout( canvas, 6, 2,
                                            KDialog::marginHint(), KDialog::spacingHint() );
 
     QLabel *helptext = new QLabel( canvas );
@@ -989,13 +995,13 @@ void KPrWebPresentationWizard::setupPage5()
 
     QLabel *label1 = new QLabel( i18n("Advance after:"), canvas );
     label1->setAlignment( Qt::AlignVCenter | Qt::AlignRight );
-    QWhatsThis::add( label1, i18n( "This selection allows you to specify "
+    Q3WhatsThis::add( label1, i18n( "This selection allows you to specify "
                                    "the time between slides." ) );
     layout->addWidget( label1, 2, 0 );
 
     timeBetweenSlides = new KIntNumInput( webPres.getTimeBetweenSlides(), canvas );
     timeBetweenSlides->setSpecialValueText(i18n( "Disabled" ));
-    QWhatsThis::add( timeBetweenSlides, i18n( "This selection allows you to specify "
+    Q3WhatsThis::add( timeBetweenSlides, i18n( "This selection allows you to specify "
                                  "the time between slides." ) );
     layout->addWidget( timeBetweenSlides, 2, 1 );
     timeBetweenSlides->setSuffix( " seconds" );
@@ -1004,21 +1010,21 @@ void KPrWebPresentationWizard::setupPage5()
     layout->addMultiCell( new QSpacerItem( 1, 10 ), 1, 1, 0, 1 );
 
     writeHeader=new QCheckBox( i18n("Write header to the slides"), canvas);
-    QWhatsThis::add( writeHeader, i18n( "This checkbox allows you to specify if you "
+    Q3WhatsThis::add( writeHeader, i18n( "This checkbox allows you to specify if you "
                                        "want to write the navigation buttons on top "
                                        "of the slide." ) );
     writeHeader->setChecked( webPres.wantHeader() );
     layout->addWidget( writeHeader, 3, 1);
 
     writeFooter=new QCheckBox( i18n("Write footer to the slides"), canvas);
-    QWhatsThis::add( writeFooter, i18n( "This checkbox allows you to specify if you "
+    Q3WhatsThis::add( writeFooter, i18n( "This checkbox allows you to specify if you "
                                        "want to write an imprint consisting on the author "
                                        "and the software used to create these slides." ) );
     writeFooter->setChecked( webPres.wantFooter() );
     layout->addWidget( writeFooter, 4, 1);
 
     loopSlides=new QCheckBox( i18n("Loop presentation"), canvas);
-    QWhatsThis::add( loopSlides, i18n( "This checkbox allows you to specify if you "
+    Q3WhatsThis::add( loopSlides, i18n( "This checkbox allows you to specify if you "
                                        "want the presentation to start again once "
                                        "the latest slide is reached." ) );
     loopSlides->setChecked( webPres.wantLoopSlides() );
@@ -1041,7 +1047,7 @@ void KPrWebPresentationWizard::finish()
     webPres.setEMail( email->text() );
     webPres.setTitle( title->text() );
 
-    QListViewItemIterator it( slideTitles );
+    Q3ListViewItemIterator it( slideTitles );
     for ( ; it.current(); ++it )
         webPres.setSlideTitle( it.current()->text( 0 ).toInt() - 1, it.current()->text( 1 ) );
 
@@ -1109,7 +1115,7 @@ void KPrWebPresentationWizard::slideTitleChanged( const QString &s )
         slideTitles->currentItem()->setText( 1, s );
 }
 
-void KPrWebPresentationWizard::slideTitleChanged( QListViewItem *i )
+void KPrWebPresentationWizard::slideTitleChanged( Q3ListViewItem *i )
 {
     if ( !i ) return;
 
@@ -1156,12 +1162,12 @@ void KPrWebPresentationCreateDialog::createWebPresentation( KPrDocument *_doc, K
 
 void KPrWebPresentationCreateDialog::start()
 {
-    setCursor( waitCursor );
+    setCursor( Qt::waitCursor );
     initCreation();
     createSlidesPictures();
     createSlidesHTML();
     createMainPage();
-    setCursor( arrowCursor );
+    setCursor( Qt::arrowCursor );
 
     bDone->setEnabled( true );
     bSave->setEnabled( true );
@@ -1233,13 +1239,13 @@ void KPrWebPresentationCreateDialog::createMainPage()
 
 void KPrWebPresentationCreateDialog::setupGUI()
 {
-    back = new QVBox( this );
+    back = new Q3VBox( this );
     back->setMargin( KDialog::marginHint() );
 
-    QFrame *line;
+    Q3Frame *line;
 
-    line = new QFrame( back );
-    line->setFrameStyle( QFrame::HLine | QFrame::Sunken );
+    line = new Q3Frame( back );
+    line->setFrameStyle( Q3Frame::HLine | Q3Frame::Sunken );
     line->setMaximumHeight( 20 );
 
     step1 = new QLabel( i18n( "Initialize (create file structure, etc.)" ), back );
@@ -1248,14 +1254,14 @@ void KPrWebPresentationCreateDialog::setupGUI()
     step4 = new QLabel( i18n( "Create Main Page (Table of Contents)" ), back );
     step5 = new QLabel( i18n( "Options for Unattended Presentations" ), back);
 
-    line = new QFrame( back );
-    line->setFrameStyle( QFrame::HLine | QFrame::Sunken );
+    line = new Q3Frame( back );
+    line->setFrameStyle( Q3Frame::HLine | Q3Frame::Sunken );
     line->setMaximumHeight( 20 );
 
     progressBar = new KProgress( back );
 
-    line = new QFrame( back );
-    line->setFrameStyle( QFrame::HLine | QFrame::Sunken );
+    line = new Q3Frame( back );
+    line->setFrameStyle( Q3Frame::HLine | Q3Frame::Sunken );
     line->setMaximumHeight( 20 );
 
     KButtonBox *bb = new KButtonBox( back );

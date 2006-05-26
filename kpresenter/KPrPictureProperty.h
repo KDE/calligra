@@ -22,6 +22,8 @@
 #define PICTUREPROPERTY_H
 
 #include <QWidget>
+//Added by qt3to4:
+#include <QPixmap>
 
 #include "KPrCommand.h"
 

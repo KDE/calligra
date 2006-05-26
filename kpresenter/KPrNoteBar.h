@@ -22,6 +22,9 @@
 #define NOTEBAR_H
 
 #include <QWidget>
+//Added by qt3to4:
+#include <QLabel>
+#include <Q3ValueList>
 
 class QPainter;
 class QLabel;
@@ -42,9 +45,9 @@ public:
     void setCurrentNoteText( const QString &_text );
 
     // print
-    void printNotes( QPainter *_painter, KPrinter *_printer, QValueList<int> );
+    void printNotes( QPainter *_painter, KPrinter *_printer, Q3ValueList<int> );
 
-    QString getNotesTextForPrinting(QValueList<int>) const;
+    QString getNotesTextForPrinting(Q3ValueList<int>) const;
 
 private slots:
     void slotTextChanged();

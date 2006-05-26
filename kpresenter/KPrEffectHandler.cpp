@@ -30,19 +30,22 @@
 
 #include <qpainter.h>
 #include <qpaintdevice.h>
+//Added by qt3to4:
+#include <QPixmap>
+#include <Q3PtrList>
 
 #include <unistd.h>
 
 
 KPrEffectHandler::KPrEffectHandler( PresStep step, bool back, QPaintDevice *dst, QPixmap *src,
-                              const QPtrList<KPrObject> &objects, KPrView *view, int _presSpeed )
+                              const Q3PtrList<KPrObject> &objects, KPrView *view, int _presSpeed )
 : m_effectStep(0), m_step(step), m_back(back), m_dst(dst),
   m_paint(*src), m_objects(objects), m_view(view), m_soundEffect(QString::null),
   m_objectTimer(1)
 {
     m_src = new QPixmap( *src );
 
-    QPtrListIterator<KPrObject> it( m_objects );
+    Q3PtrListIterator<KPrObject> it( m_objects );
     for ( ; it.current(); ++it )
     {
         KPrObject *object = it.current();
@@ -107,10 +110,10 @@ bool KPrEffectHandler::doEffect()
     }
     if ( !m_appearEffectObjects.isEmpty() || !m_disappearEffectObjects.isEmpty() )
     {
-        QPtrList<QRect> m_removeRects;
+        Q3PtrList<QRect> m_removeRects;
         KPrObject *appearObject = m_appearEffectObjects.first();
         KPrObject *disappearObject = m_disappearEffectObjects.first();
-        QPtrListIterator<KPrObject> it( m_objects );
+        Q3PtrListIterator<KPrObject> it( m_objects );
         KPrObject *object;
 
         while ( ( object = it.current() ) != 0 )
@@ -172,7 +175,7 @@ bool KPrEffectHandler::doEffect()
         ++m_effectStep;
         QRect *r;
 #if 0 // used for debugging effects
-        QPtrListIterator<QRect> it_debug(m_repaintRects);
+        Q3PtrListIterator<QRect> it_debug(m_repaintRects);
         while( ( r = it_debug.current() ) != 0 )
         {
             ++it_debug;
@@ -182,7 +185,7 @@ bool KPrEffectHandler::doEffect()
             p.drawRect( *r );
         }
 
-        QPtrListIterator<QRect> it_debug2(m_lastRepaintRects);
+        Q3PtrListIterator<QRect> it_debug2(m_lastRepaintRects);
         while( ( r = it_debug2.current() ) != 0 )
         {
             ++it_debug2;
@@ -194,7 +197,7 @@ bool KPrEffectHandler::doEffect()
         sleep( 1 );
 #endif
 
-        QPtrListIterator<QRect> it_r(m_repaintRects);
+        Q3PtrListIterator<QRect> it_r(m_repaintRects);
 #if 1
         while( ( r = it_r.current() ) != 0 )
         {
@@ -202,7 +205,7 @@ bool KPrEffectHandler::doEffect()
             //bitBlt( m_dst, r->x(), r->y(), &m_paint, r->x(), r->y(), r->width(), r->height() );
             bitBlt( m_dst, r->x() - 5, r->y() - 5, &m_paint, r->x() - 5, r->y() - 5, r->width() + 10, r->height() + 10 );
         }
-        QPtrListIterator<QRect> it2(m_lastRepaintRects);
+        Q3PtrListIterator<QRect> it2(m_lastRepaintRects);
         while( ( r = it2.current() ) != 0 )
         {
             ++it2;
@@ -214,7 +217,7 @@ bool KPrEffectHandler::doEffect()
 #endif
 
         m_lastRepaintRects = m_repaintRects;
-        QPtrListIterator<QRect> it3(m_removeRects);
+        Q3PtrListIterator<QRect> it3(m_removeRects);
         while( ( r = it3.current() ) != 0 )
         {
             ++it3;
@@ -240,7 +243,7 @@ void KPrEffectHandler::finish()
 {
     KPrObject *appearObject = m_appearEffectObjects.first();
     KPrObject *disappearObject = m_disappearEffectObjects.first();
-    QPtrListIterator<KPrObject> it( m_objects );
+    Q3PtrListIterator<KPrObject> it( m_objects );
     KPrObject *object;
 
     while ( ( object = it.current() ) != 0 )

@@ -22,7 +22,7 @@
 #ifndef kppolygonobject_h
 #define kppolygonobject_h
 
-#include <qpointarray.h>
+#include <q3pointarray.h>
 #include "KoPointArray.h"
 #include "KPrObject.h"
 

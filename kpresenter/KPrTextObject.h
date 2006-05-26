@@ -27,8 +27,16 @@
 #include <KoTextView.h>
 #include <KoStyleCollection.h> // for KoStyleChangeDefMap
 #include <KoStyleStack.h>
+//Added by qt3to4:
+#include <QKeyEvent>
+#include <Q3ValueList>
+#include <Q3PtrList>
+#include <QDragEnterEvent>
+#include <QDragMoveEvent>
+#include <QDropEvent>
+#include <QMouseEvent>
 
-class QDragObject;
+class Q3DragObject;
 
 class KoSavingContext;
 class KPrView;
@@ -101,7 +109,7 @@ public:
 
     /** Return the contained text object */
     KoTextObject * textObject() const { return m_textobj; }
-    virtual void addTextObjects( QPtrList<KoTextObject> &lst ) const {
+    virtual void addTextObjects( Q3PtrList<KoTextObject> &lst ) const {
         if ( !isProtectContent() )
             lst.append( m_textobj );
     }
@@ -134,7 +142,7 @@ public:
     KCommand *textObjectToContents();
     void setProtectContent ( bool _protect ) { textObject()->setProtectContent(_protect);}
     bool isProtectContent() const { return textObject()->protectContent();}
-    void loadVariable( QValueList<QDomElement> & listVariable,KoTextParag *lastParag, int offset=0 );
+    void loadVariable( Q3ValueList<QDomElement> & listVariable,KoTextParag *lastParag, int offset=0 );
 
     void layout();
 
@@ -256,7 +264,7 @@ public:
     virtual void drawCursor( bool b );
 
     const KoParagLayout & currentParagLayout() const { return m_paragLayout; }
-    void showPopup( KPrView *view, const QPoint &point, QPtrList<KAction> &actionList );
+    void showPopup( KPrView *view, const QPoint &point, Q3PtrList<KAction> &actionList );
     void insertVariable( int type, int subtype = 0 );
     void insertCustomVariable( const QString &name);
     void insertLink(const QString &_linkName, const QString & hrefName);
@@ -288,7 +296,7 @@ protected slots:
 
 protected:
     bool canDecode( QMimeSource *e );
-    QDragObject * newDrag( QWidget * parent );
+    Q3DragObject * newDrag( QWidget * parent );
     // Reimplemented from KoTextView
     virtual void doAutoFormat( KoTextCursor* cursor, KoTextParag *parag, int index, QChar ch );
     virtual bool doIgnoreDoubleSpace(KoTextParag * parag, int index,QChar ch );
@@ -305,7 +313,7 @@ protected:
     KPrTextObject *m_kptextobj;
     KPrCanvas *m_canvas;
     KoParagLayout m_paragLayout;
-    QPtrList<KAction> m_actionList; // for the kodatatools
+    Q3PtrList<KAction> m_actionList; // for the kodatatools
 };
 
 

@@ -28,6 +28,8 @@
 #include "KoTextObject.h"
 
 #include <kspell2/broker.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 using namespace KSpell2;
 
 #include <kdebug.h>
@@ -48,7 +50,7 @@ KPrBgSpellCheck::~KPrBgSpellCheck()
 
 KoTextIterator *KPrBgSpellCheck::createWholeDocIterator() const
 {
-    QValueList<KoTextObject *> objects = m_doc->visibleTextObjects( );
+    Q3ValueList<KoTextObject *> objects = m_doc->visibleTextObjects( );
 
     kDebug()<<"Number of visible text objects = "<< objects.count() << endl;
 

@@ -22,7 +22,7 @@
 #ifndef kpclosedlineoject_h
 #define kpclosedlineoject_h
 
-#include <qpointarray.h>
+#include <q3pointarray.h>
 #include "KoPointArray.h"
 #include "KPrObject.h"
 

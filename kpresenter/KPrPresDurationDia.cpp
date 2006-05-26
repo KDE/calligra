@@ -23,9 +23,11 @@
 #include "KPrPage.h"
 #include "KPrDocument.h"
 #include <QLabel>
-#include <qheader.h>
-#include <qvbox.h>
+#include <q3header.h>
+#include <q3vbox.h>
 #include <QLayout>
+//Added by qt3to4:
+#include <Q3VBoxLayout>
 #include <k3listview.h>
 #include <kdebug.h>
 #include <klocale.h>
@@ -41,7 +43,7 @@ KPrPresDurationDia::KPrPresDurationDia( QWidget *parent, const char *name,
 
     QWidget *page = new QWidget( this );
     setMainWidget( page );
-    QVBoxLayout *topLayout = new QVBoxLayout( page, 2 );
+    Q3VBoxLayout *topLayout = new Q3VBoxLayout( page, 2 );
 
     setupSlideList( page );
     topLayout->addWidget( slides );

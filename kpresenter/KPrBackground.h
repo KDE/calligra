@@ -24,6 +24,8 @@
 
 #include <qsize.h>
 #include <qdatetime.h>
+//Added by qt3to4:
+#include <QPixmap>
 #include <KoBrush.h>
 #include <KoStyleStack.h>
 #include <KoOasisStyles.h>

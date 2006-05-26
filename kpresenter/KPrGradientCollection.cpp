@@ -21,6 +21,8 @@
 #include "KPrGradientCollection.h"
 #include "KPrGradient.h"
 #include <QString>
+//Added by qt3to4:
+#include <QPixmap>
 
 const QPixmap& KPrGradientCollection::getGradient( const QColor &_color1, const QColor &_color2,
                                                   BCType _bcType, const QSize &_size,
@@ -60,7 +62,7 @@ KPrGradient* KPrGradientCollection::inGradientList( const QColor &_color1, const
                                                   BCType _bcType, const QSize &_size,
                                                   bool _unbalanced, int _xfactor, int _yfactor ) const
 {
-    QPtrListIterator<KPrGradient> it( gradientList );
+    Q3PtrListIterator<KPrGradient> it( gradientList );
     for ( ; it.current() ; ++it ) {
         KPrGradient *kpgradient = it.current();
         if ( kpgradient->getColor1() == _color1 && kpgradient->getColor2() == _color2 &&

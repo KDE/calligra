@@ -19,10 +19,10 @@
 */
 
 #include <klocale.h>
-#include <qvbox.h>
+#include <q3vbox.h>
 #include <QLayout>
 #include <QLabel>
-#include <qbuttongroup.h>
+#include <q3buttongroup.h>
 
 #include "KPrDuplicateObjDia.h"
 #include "KPrPage.h"

@@ -22,9 +22,11 @@
 
 #include "KPrMarginWidget.h"
 
-#include <qgroupbox.h>
+#include <q3groupbox.h>
 #include <QCheckBox>
 #include <QLayout>
+//Added by qt3to4:
+#include <Q3VBoxLayout>
 
 #include <klocale.h>
 #include <knuminput.h>
@@ -38,7 +40,7 @@ KPrMarginWidget::KPrMarginWidget( QWidget *parent, const char *name, const KoUni
 , m_changed( false )
 , m_noSignal( false )
 {
-    QVBoxLayout *layout = new QVBoxLayout( this );
+    Q3VBoxLayout *layout = new Q3VBoxLayout( this );
 
     m_ui = new MarginUI( this );
     layout->addWidget( m_ui );

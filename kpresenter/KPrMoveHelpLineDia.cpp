@@ -19,11 +19,11 @@
 */
 
 #include <klocale.h>
-#include <qvbox.h>
+#include <q3vbox.h>
 #include <QLayout>
 #include <QLabel>
 #include <knuminput.h>
-#include <qbuttongroup.h>
+#include <q3buttongroup.h>
 #include <qradiobutton.h>
 #include <KoUnit.h>
 #include <klineedit.h>
@@ -72,7 +72,7 @@ KPrInsertHelpLineDia::KPrInsertHelpLineDia( QWidget *parent, const KoRect & _pag
     m_doc=_doc;
     setCaption( i18n("Add New Help Line") );
     KVBox *page = makeVBoxMainWidget();
-    QButtonGroup *group = new QButtonGroup( 1, QGroupBox::Horizontal,i18n("Orientation"), page );
+    Q3ButtonGroup *group = new Q3ButtonGroup( 1, Qt::Horizontal,i18n("Orientation"), page );
     group->setRadioButtonExclusive( true );
     group->layout();
     m_rbHoriz = new QRadioButton( i18n("Horizontal"), group );

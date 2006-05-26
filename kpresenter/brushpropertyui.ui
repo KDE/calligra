@@ -49,7 +49,7 @@
                 <string></string>
             </property>
             <property name="whatsThis" stdset="0">
-                <string>Choose the color (white is the default). Clicking on the color will display the standard KDE color chooser dialog.</string>
+                <string>Choose the color (Qt::white is the default). Clicking on the color will display the standard KDE color chooser dialog.</string>
             </property>
         </widget>
         <widget class="QLabel" row="1" column="0">

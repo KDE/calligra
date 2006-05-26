@@ -22,6 +22,9 @@
 #include <KoRect.h>
 #include <stdarg.h>
 #include <KoZoomHandler.h>
+//Added by qt3to4:
+#include <Q3MemArray>
+#include <Q3PointArray>
 
 void KoPointArray::translate( double dx, double dy )
 {
@@ -36,7 +39,7 @@ void KoPointArray::translate( double dx, double dy )
 
 void KoPointArray::point( uint index, double *x, double *y ) const
 {
-    KoPoint p = QMemArray<KoPoint>::at( index );
+    KoPoint p = Q3MemArray<KoPoint>::at( index );
     if ( x )
         *x = (double)p.x();
     if ( y )
@@ -45,12 +48,12 @@ void KoPointArray::point( uint index, double *x, double *y ) const
 
 KoPoint KoPointArray::point( uint index ) const
 { // #### index out of bounds
-    return QMemArray<KoPoint>::at( index );
+    return Q3MemArray<KoPoint>::at( index );
 }
 
 void KoPointArray::setPoint( uint index, double x, double y )
 { // #### index out of bounds
-    QMemArray<KoPoint>::at( index ) = KoPoint( x, y );
+    Q3MemArray<KoPoint>::at( index ) = KoPoint( x, y );
 }
 
 
@@ -287,9 +290,9 @@ KoPointArray KoPointArray::cubicBezier() const
     }
 }
 
-QPointArray KoPointArray::zoomPointArray( const KoZoomHandler* zoomHandler ) const
+Q3PointArray KoPointArray::zoomPointArray( const KoZoomHandler* zoomHandler ) const
 {
-    QPointArray tmpPoints(size());
+    Q3PointArray tmpPoints(size());
     for ( uint i= 0; i<size();i++ ) {
         KoPoint p = at( i );
         tmpPoints.putPoints( i, 1, zoomHandler->zoomItX(p.x()),zoomHandler->zoomItY(p.y()) );
@@ -297,7 +300,7 @@ QPointArray KoPointArray::zoomPointArray( const KoZoomHandler* zoomHandler ) con
     return tmpPoints;
 }
 
-QPointArray KoPointArray::zoomPointArray( const KoZoomHandler* zoomHandler, int penWidth ) const
+Q3PointArray KoPointArray::zoomPointArray( const KoZoomHandler* zoomHandler, int penWidth ) const
 {
     double fx;
     double fy;
@@ -308,7 +311,7 @@ QPointArray KoPointArray::zoomPointArray( const KoZoomHandler* zoomHandler, int 
     fy = (double)( zoomHandler->zoomItY(ext.height()) - 2 * pw ) / ext.height();
 
     unsigned int index = 0;
-    QPointArray tmpPoints;
+    Q3PointArray tmpPoints;
     KoPointArray::ConstIterator it;
     for ( it = begin(); it != end(); ++it, ++index ) {
         int tmpX = qRound((*it).x() * fx + pw);

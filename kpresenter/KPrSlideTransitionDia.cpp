@@ -347,13 +347,13 @@ void KPrSlideTransitionDia::apply( bool global )
         newSettings.slideTime = slideTime;
 
         // Collect info about current settings
-        QValueVector<KPrTransEffectCmd::PageEffectSettings> oldSettings;
+        Q3ValueVector<KPrTransEffectCmd::PageEffectSettings> oldSettings;
         KPrPage *page = 0;
         if ( global )
         {
             oldSettings.resize( m_view->kPresenterDoc()->getPageList().count() );
             int i = 0;
-            for( QPtrListIterator<KPrPage> it( m_view->kPresenterDoc()->getPageList() ); *it; ++it, ++i )
+            for( Q3PtrListIterator<KPrPage> it( m_view->kPresenterDoc()->getPageList() ); *it; ++it, ++i )
             {
                 oldSettings[i].pageEffect = it.current()->getPageEffect();
                 oldSettings[i].effectSpeed = it.current()->getPageEffectSpeed();

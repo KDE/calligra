@@ -21,7 +21,11 @@
 #define __CUSTOM_SLIDE_SHOW__
 
 #include <kdialogbase.h>
-#include <qlistbox.h>
+#include <q3listbox.h>
+//Added by qt3to4:
+#include <QHideEvent>
+#include <Q3ValueList>
+#include <Q3PtrList>
 #include "global.h"
 
 class QLineEdit;
@@ -40,8 +44,8 @@ public:
     ~KPrCustomSlideShowDia();
 public slots:
     virtual void slotOk();
-    void slotDoubleClicked(QListBoxItem *);
-    void slotTextClicked(QListBoxItem*);
+    void slotDoubleClicked(Q3ListBoxItem *);
+    void slotTextClicked(Q3ListBoxItem*);
     void slotRemove();
     void slotAdd();
     void slotModify();
@@ -56,7 +60,7 @@ protected:
     void updateButton();
     bool uniqueName( int val, const QString & name ) const;
 
-    QListBox * list;
+    Q3ListBox * list;
     QPushButton* m_pRemove;
     QPushButton* m_pAdd;
     QPushButton* m_pModify;
@@ -69,12 +73,12 @@ protected:
     QStringList listPageName;
 };
 
-class KPrCustomSlideShowItem : public QListBoxText
+class KPrCustomSlideShowItem : public Q3ListBoxText
 {
 public:
-    KPrCustomSlideShowItem( QListBox * listbox, KPrPage * page );
+    KPrCustomSlideShowItem( Q3ListBox * listbox, KPrPage * page );
     KPrCustomSlideShowItem( KPrPage * page );
-    KPrCustomSlideShowItem( QListBox * listbox, KPrPage * page, QListBoxItem * after );
+    KPrCustomSlideShowItem( Q3ListBox * listbox, KPrPage * page, Q3ListBoxItem * after );
 
     KPrPage * getPage() { return m_page; }
 private:
@@ -85,12 +89,12 @@ class KPrDefineCustomSlideShow : public KDialogBase
 {
     Q_OBJECT
 public:
-    KPrDefineCustomSlideShow( QWidget* parent, QStringList &_listNameSlideShow, const QPtrList<KPrPage> &pages, const char *name = 0L);
+    KPrDefineCustomSlideShow( QWidget* parent, QStringList &_listNameSlideShow, const Q3PtrList<KPrPage> &pages, const char *name = 0L);
     KPrDefineCustomSlideShow( QWidget* parent, const QString &_customName, QStringList &_listNameSlideShow, 
-                              const QPtrList<KPrPage> &pages, QValueList<KPrPage *> &customPages, const char* name = 0L );
+                              const Q3PtrList<KPrPage> &pages, Q3ValueList<KPrPage *> &customPages, const char* name = 0L );
 
     QString customSlideShowName() const;
-    QValueList<KPrPage *> customSlides();
+    Q3ValueList<KPrPage *> customSlides();
 
 protected slots:
     void slotMoveUpSlide();
@@ -104,8 +108,8 @@ protected slots:
 protected:
     void init();
     QStringList listNameCustomSlideShow;
-    QListBox *listSlide;
-    QListBox *listSlideShow;
+    Q3ListBox *listSlide;
+    Q3ListBox *listSlideShow;
     QToolButton *m_insertSlide;
     QToolButton *m_removeSlide;
     QToolButton *m_moveUpSlide;

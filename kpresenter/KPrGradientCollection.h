@@ -21,7 +21,9 @@
 #ifndef kpgradientcollection_h
 #define kpgradientcollection_h
 
-#include <qptrlist.h>
+#include <q3ptrlist.h>
+//Added by qt3to4:
+#include <QPixmap>
 #include "global.h"
 #include "KPrGradient.h"
 
@@ -57,7 +59,7 @@ protected:
                                 bool _unbalanced, int _xfactor, int _yfactor ) const;
 
 private:
-    QPtrList<KPrGradient> gradientList;
+    Q3PtrList<KPrGradient> gradientList;
 };
 
 #endif

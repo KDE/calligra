@@ -50,14 +50,24 @@
 #include <QFont>
 #include <QFile>
 #include <QWidget>
-#include <qpicture.h>
+#include <q3picture.h>
 #include <qpainter.h>
-#include <qwmatrix.h>
+#include <qmatrix.h>
 #include <qdom.h>
 #include <qapplication.h>
 #include <qfontdatabase.h>
-#include <qpopupmenu.h>
+#include <q3popupmenu.h>
 #include <qclipboard.h>
+//Added by qt3to4:
+#include <QPixmap>
+#include <QMouseEvent>
+#include <Q3ValueList>
+#include <QDragEnterEvent>
+#include <QKeyEvent>
+#include <QDropEvent>
+#include <QDragMoveEvent>
+#include <Q3CString>
+#include <Q3PtrList>
 
 #include <KoParagCounter.h>
 #include <kaction.h>
@@ -688,7 +698,7 @@ void KPrTextObject::loadKTextObject( const QDomElement &elem )
     int topBorder = 0;
 
     while ( !e.isNull() ) {
-        QValueList<QDomElement> listVariable;
+        Q3ValueList<QDomElement> listVariable;
         listVariable.clear();
 
         if ( e.tagName() == tagP ) {
@@ -707,7 +717,7 @@ void KPrTextObject::loadKTextObject( const QDomElement &elem )
             double depth = 0.0;
             if( e.hasAttribute(attrDepth) ) {
                 depth = e.attribute( attrDepth ).toDouble();
-                paragLayout.margins[QStyleSheetItem::MarginLeft] = depth * MM_TO_POINT(10.0);
+                paragLayout.margins[Q3StyleSheetItem::MarginLeft] = depth * MM_TO_POINT(10.0);
             }
 
             //kDebug(33001) << k_funcinfo << "old bullet depth is: " << depth  << endl;
@@ -741,10 +751,10 @@ void KPrTextObject::loadKTextObject( const QDomElement &elem )
             // Apply values coming from 1.0 or 1.1 documents
             if ( paragLayout.lineSpacingValue() == 0 )
                 paragLayout.setLineSpacingValue(lineSpacing);
-            if ( paragLayout.margins[ QStyleSheetItem::MarginTop ] == 0 )
-                paragLayout.margins[ QStyleSheetItem::MarginTop ] = topBorder;
-            if ( paragLayout.margins[ QStyleSheetItem::MarginBottom ] == 0 )
-                paragLayout.margins[ QStyleSheetItem::MarginBottom ] = bottomBorder;
+            if ( paragLayout.margins[ Q3StyleSheetItem::MarginTop ] == 0 )
+                paragLayout.margins[ Q3StyleSheetItem::MarginTop ] = topBorder;
+            if ( paragLayout.margins[ Q3StyleSheetItem::MarginBottom ] == 0 )
+                paragLayout.margins[ Q3StyleSheetItem::MarginBottom ] = bottomBorder;
             lastParag->setParagLayout( paragLayout );
             //lastParag->setAlign(Qt::AlignLeft);
 
@@ -814,10 +824,10 @@ void KPrTextObject::loadKTextObject( const QDomElement &elem )
     }
 }
 
-void KPrTextObject::loadVariable( QValueList<QDomElement> & listVariable,KoTextParag *lastParag, int offset )
+void KPrTextObject::loadVariable( Q3ValueList<QDomElement> & listVariable,KoTextParag *lastParag, int offset )
 {
-    QValueList<QDomElement>::Iterator it = listVariable.begin();
-    QValueList<QDomElement>::Iterator end = listVariable.end();
+    Q3ValueList<QDomElement>::Iterator it = listVariable.begin();
+    Q3ValueList<QDomElement>::Iterator end = listVariable.end();
     for ( ; it != end ; ++it )
     {
         QDomElement elem = *it;
@@ -1006,17 +1016,17 @@ KoParagLayout KPrTextObject::loadParagLayout( QDomElement & parentElem, KPrDocum
         double val=0.0;
         if(element.hasAttribute("first"))
             val=element.attribute("first").toDouble();
-        layout.margins[QStyleSheetItem::MarginFirstLine] = val;
+        layout.margins[Q3StyleSheetItem::MarginFirstLine] = val;
         val=0.0;
         if(element.hasAttribute( "left"))
             // The GUI prevents a negative indent, so let's fixup broken docs too
             val=qMax(0, element.attribute( "left").toDouble());
-        layout.margins[QStyleSheetItem::MarginLeft] = val;
+        layout.margins[Q3StyleSheetItem::MarginLeft] = val;
         val=0.0;
         if(element.hasAttribute("right"))
             // The GUI prevents a negative indent, so let's fixup broken docs too
             val=qMax(0, element.attribute("right").toDouble());
-        layout.margins[QStyleSheetItem::MarginRight] = val;
+        layout.margins[Q3StyleSheetItem::MarginRight] = val;
     }
     element = parentElem.namedItem( "LINESPACING" ).toElement();
     if ( !element.isNull() )
@@ -1078,11 +1088,11 @@ KoParagLayout KPrTextObject::loadParagLayout( QDomElement & parentElem, KPrDocum
         double val =0.0;
         if(element.hasAttribute("before"))
             val=qMax(0, element.attribute("before").toDouble());
-        layout.margins[QStyleSheetItem::MarginTop] = val;
+        layout.margins[Q3StyleSheetItem::MarginTop] = val;
         val = 0.0;
         if(element.hasAttribute("after"))
             val=qMax(0, element.attribute("after").toDouble());
-        layout.margins[QStyleSheetItem::MarginBottom] = val;
+        layout.margins[Q3StyleSheetItem::MarginBottom] = val;
     }
 
 
@@ -1156,30 +1166,30 @@ void KPrTextObject::saveParagLayout( const KoParagLayout& layout, QDomElement & 
         kWarning() << "KWTextParag::saveParagLayout: style==0L!" << endl;
 
 
-    if ( layout.margins[QStyleSheetItem::MarginFirstLine] != 0 ||
-         layout.margins[QStyleSheetItem::MarginLeft] != 0 ||
-         layout.margins[QStyleSheetItem::MarginRight] != 0 )
+    if ( layout.margins[Q3StyleSheetItem::MarginFirstLine] != 0 ||
+         layout.margins[Q3StyleSheetItem::MarginLeft] != 0 ||
+         layout.margins[Q3StyleSheetItem::MarginRight] != 0 )
     {
         element = doc.createElement( "INDENTS" );
         parentElem.appendChild( element );
-        if ( layout.margins[QStyleSheetItem::MarginFirstLine] != 0 )
-            element.setAttribute( "first", layout.margins[QStyleSheetItem::MarginFirstLine] );
-        if ( layout.margins[QStyleSheetItem::MarginLeft] != 0 )
-            element.setAttribute( "left", layout.margins[QStyleSheetItem::MarginLeft] );
-        if ( layout.margins[QStyleSheetItem::MarginRight] != 0 )
-            element.setAttribute( "right", layout.margins[QStyleSheetItem::MarginRight] );
+        if ( layout.margins[Q3StyleSheetItem::MarginFirstLine] != 0 )
+            element.setAttribute( "first", layout.margins[Q3StyleSheetItem::MarginFirstLine] );
+        if ( layout.margins[Q3StyleSheetItem::MarginLeft] != 0 )
+            element.setAttribute( "left", layout.margins[Q3StyleSheetItem::MarginLeft] );
+        if ( layout.margins[Q3StyleSheetItem::MarginRight] != 0 )
+            element.setAttribute( "right", layout.margins[Q3StyleSheetItem::MarginRight] );
     }
 
 
-    if ( layout.margins[QStyleSheetItem::MarginTop] != 0 ||
-         layout.margins[QStyleSheetItem::MarginBottom] != 0 )
+    if ( layout.margins[Q3StyleSheetItem::MarginTop] != 0 ||
+         layout.margins[Q3StyleSheetItem::MarginBottom] != 0 )
     {
         element = doc.createElement( "OFFSETS" );
         parentElem.appendChild( element );
-        if ( layout.margins[QStyleSheetItem::MarginTop] != 0 )
-            element.setAttribute( "before", layout.margins[QStyleSheetItem::MarginTop] );
-        if ( layout.margins[QStyleSheetItem::MarginBottom] != 0 )
-            element.setAttribute( "after", layout.margins[QStyleSheetItem::MarginBottom] );
+        if ( layout.margins[Q3StyleSheetItem::MarginTop] != 0 )
+            element.setAttribute( "before", layout.margins[Q3StyleSheetItem::MarginTop] );
+        if ( layout.margins[Q3StyleSheetItem::MarginBottom] != 0 )
+            element.setAttribute( "after", layout.margins[Q3StyleSheetItem::MarginBottom] );
     }
 
     if ( layout.lineSpacingType != KoParagLayout::LS_SINGLE )
@@ -1260,7 +1270,7 @@ void KPrTextObject::recalcPageNum( KPrPage *page )
     int pgnum=m_doc->pageList().findRef(page);
 
     pgnum+=1;
-    QPtrListIterator<KoTextCustomItem> cit( textDocument()->allCustomItems() );
+    Q3PtrListIterator<KoTextCustomItem> cit( textDocument()->allCustomItems() );
     for ( ; cit.current() ; ++cit )
     {
         KPrPgNumVariable * var = dynamic_cast<KPrPgNumVariable *>( cit.current() );
@@ -1818,7 +1828,7 @@ void KPrTextView::copy()
 {
     //kDebug(33001)<<"void KPrTextView::copy() "<<endl;
     if ( textDocument()->hasSelection( KoTextDocument::Standard ) ) {
-        QDragObject *drag = newDrag( 0 );
+        Q3DragObject *drag = newDrag( 0 );
         QApplication::clipboard()->setData( drag );
     }
 }
@@ -1828,7 +1838,7 @@ void KPrTextView::paste()
     //kDebug(33001) << "KPrTextView::paste()" << endl;
 
     QMimeSource *data = QApplication::clipboard()->data();
-    QCString returnedMimeType = KoTextObject::providesOasis( data );
+    Q3CString returnedMimeType = KoTextObject::providesOasis( data );
     if ( !returnedMimeType.isEmpty() )
     {
         QByteArray arr = data->encodedData( returnedMimeType );
@@ -1902,17 +1912,17 @@ void KPrTextView::updateUI( bool updateFormat, bool force  )
         m_canvas->getView()->showStyle( m_paragLayout.style->name() );
     }
 
-    if( m_paragLayout.margins[QStyleSheetItem::MarginLeft] != parag->margin(QStyleSheetItem::MarginLeft)
-        || m_paragLayout.margins[QStyleSheetItem::MarginFirstLine] != parag->margin(QStyleSheetItem::MarginFirstLine)
-        || m_paragLayout.margins[QStyleSheetItem::MarginRight] != parag->margin(QStyleSheetItem::MarginRight)
+    if( m_paragLayout.margins[Q3StyleSheetItem::MarginLeft] != parag->margin(Q3StyleSheetItem::MarginLeft)
+        || m_paragLayout.margins[Q3StyleSheetItem::MarginFirstLine] != parag->margin(Q3StyleSheetItem::MarginFirstLine)
+        || m_paragLayout.margins[Q3StyleSheetItem::MarginRight] != parag->margin(Q3StyleSheetItem::MarginRight)
         || force )
     {
-        m_paragLayout.margins[QStyleSheetItem::MarginFirstLine] = parag->margin(QStyleSheetItem::MarginFirstLine);
-        m_paragLayout.margins[QStyleSheetItem::MarginLeft] = parag->margin(QStyleSheetItem::MarginLeft);
-        m_paragLayout.margins[QStyleSheetItem::MarginRight] = parag->margin(QStyleSheetItem::MarginRight);
-        m_canvas->getView()->showRulerIndent( m_paragLayout.margins[QStyleSheetItem::MarginLeft],
-                                              m_paragLayout.margins[QStyleSheetItem::MarginFirstLine],
-                                              m_paragLayout.margins[QStyleSheetItem::MarginRight],
+        m_paragLayout.margins[Q3StyleSheetItem::MarginFirstLine] = parag->margin(Q3StyleSheetItem::MarginFirstLine);
+        m_paragLayout.margins[Q3StyleSheetItem::MarginLeft] = parag->margin(Q3StyleSheetItem::MarginLeft);
+        m_paragLayout.margins[Q3StyleSheetItem::MarginRight] = parag->margin(Q3StyleSheetItem::MarginRight);
+        m_canvas->getView()->showRulerIndent( m_paragLayout.margins[Q3StyleSheetItem::MarginLeft],
+                                              m_paragLayout.margins[Q3StyleSheetItem::MarginFirstLine],
+                                              m_paragLayout.margins[Q3StyleSheetItem::MarginRight],
                                               parag->string()->isRightToLeft() );
     }
 
@@ -1996,7 +2006,7 @@ void KPrTextView::textIncreaseIndent()
 
 bool KPrTextView::textDecreaseIndent()
 {
-  if (m_paragLayout.margins[QStyleSheetItem::MarginLeft]>0)
+  if (m_paragLayout.margins[Q3StyleSheetItem::MarginLeft]>0)
   {
   	m_canvas->setTextDepthMinus();
   	return true;
@@ -2031,12 +2041,12 @@ void KPrTextView::startDrag()
 {
     textView()->dragStarted();
     m_canvas->dragStarted();
-    QDragObject *drag = newDrag( m_canvas );
+    Q3DragObject *drag = newDrag( m_canvas );
     if ( !kpTextObject()->kPresenterDocument()->isReadWrite() )
         drag->dragCopy();
     else
     {
-        if ( drag->drag() && QDragObject::target() != m_canvas  )
+        if ( drag->drag() && Q3DragObject::target() != m_canvas  )
             textObject()->removeSelectedText( cursor() );
     }
 }
@@ -2208,14 +2218,14 @@ void KPrTextView::mouseReleaseEvent( QMouseEvent *, const QPoint & )
     handleMouseReleaseEvent();
 }
 
-void KPrTextView::showPopup( KPrView *view, const QPoint &point, QPtrList<KAction>& actionList )
+void KPrTextView::showPopup( KPrView *view, const QPoint &point, Q3PtrList<KAction>& actionList )
 {
     QString word = wordUnderCursor( *cursor() );
     view->unplugActionList( "datatools" );
     view->unplugActionList( "datatools_link" );
     view->unplugActionList( "spell_result_action" );
     view->unplugActionList( "variable_action" );
-    QPtrList<KAction> &variableList = view->variableActionList();
+    Q3PtrList<KAction> &variableList = view->variableActionList();
     variableList.clear();
     actionList.clear();
 
@@ -2229,7 +2239,7 @@ void KPrTextView::showPopup( KPrView *view, const QPoint &point, QPtrList<KActio
     if( variableList.count()>0)
     {
         view->plugActionList( "variable_action", variableList );
-        QPopupMenu * popup = view->popupMenu("variable_popup");
+        Q3PopupMenu * popup = view->popupMenu("variable_popup");
         Q_ASSERT(popup);
         if (popup)
             popup->popup( point ); // using exec() here breaks the spellcheck tool (event loop pb)
@@ -2241,7 +2251,7 @@ void KPrTextView::showPopup( KPrView *view, const QPoint &point, QPtrList<KActio
         actionList = dataToolActionList(view->kPresenterDoc()->instance(), word, singleWord);
         //kDebug(33001) << "KWView::openPopupMenuInsideFrame plugging actionlist with " << actionList.count() << " actions" << endl;
         KoLinkVariable* linkVar = dynamic_cast<KoLinkVariable *>( var );
-        QPopupMenu * popup;
+        Q3PopupMenu * popup;
         if ( !linkVar )
         {
             view->plugActionList( "datatools", actionList );
@@ -2256,7 +2266,7 @@ void KPrTextView::showPopup( KPrView *view, const QPoint &point, QPtrList<KActio
             {
                 if ( singleWord )
                 {
-                    QPtrList<KAction> actionCheckSpellList =view->listOfResultOfCheckWord( word );
+                    Q3PtrList<KAction> actionCheckSpellList =view->listOfResultOfCheckWord( word );
                     if ( actionCheckSpellList.count()>0)
                     {
                         view->plugActionList( "spell_result_action", actionCheckSpellList );
@@ -2359,13 +2369,13 @@ void KPrTextView::insertVariable( KoVariable *var, KoTextFormat *format, bool re
 
 bool KPrTextView::canDecode( QMimeSource *e )
 {
-    return kpTextObject()->kPresenterDocument()->isReadWrite() && ( KoTextObject::providesOasis( e ) || QTextDrag::canDecode( e ) );
+    return kpTextObject()->kPresenterDocument()->isReadWrite() && ( KoTextObject::providesOasis( e ) || Q3TextDrag::canDecode( e ) );
 }
 
-QDragObject * KPrTextView::newDrag( QWidget * parent )
+Q3DragObject * KPrTextView::newDrag( QWidget * parent )
 {
     QBuffer buffer;
-    const QCString mimeType = "application/vnd.oasis.opendocument.text";
+    const Q3CString mimeType = "application/vnd.oasis.opendocument.text";
     KoStore * store = KoStore::createStore( &buffer, KoStore::Write, mimeType );
     Q_ASSERT( store );
     Q_ASSERT( !store->bad() );
@@ -2414,7 +2424,7 @@ QDragObject * KPrTextView::newDrag( QWidget * parent )
 
     KMultipleDrag* multiDrag = new KMultipleDrag( parent );
     if (  !plainText.isEmpty() )
-        multiDrag->addDragObject( new QTextDrag( plainText, 0 ) );
+        multiDrag->addDragObject( new Q3TextDrag( plainText, 0 ) );
     KoStoreDrag* storeDrag = new KoStoreDrag( mimeType, 0 );
     kDebug() << k_funcinfo << "setting zip data: " << buffer.buffer().size() << " bytes." << endl;
     storeDrag->setEncodedData( buffer.buffer() );
@@ -2484,7 +2494,7 @@ void KPrTextView::dropEvent( QDropEvent * e )
             textDocument()->removeSelection( KoTextDocument::Standard );
             textObject()->selectionChangedNotify();
         }
-        QCString returnedTypeMime = KoTextObject::providesOasis( e );
+        Q3CString returnedTypeMime = KoTextObject::providesOasis( e );
         if ( !returnedTypeMime.isEmpty() )
         {
             QByteArray arr = e->encodedData( returnedTypeMime );
@@ -2501,7 +2511,7 @@ void KPrTextView::dropEvent( QDropEvent * e )
         else
         {
             QString text;
-            if ( QTextDrag::decode( e, text ) )
+            if ( Q3TextDrag::decode( e, text ) )
                 textObject()->pasteText( cursor(), text, currentFormat(),
                                          false /*do not remove selected text*/ );
         }

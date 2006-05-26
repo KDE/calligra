@@ -23,7 +23,9 @@
 #define KPRPAGE_H
 
 #include <QWidget>
-#include <qptrlist.h>
+#include <q3ptrlist.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 #include "global.h"
 #include <KoBrush.h>
 #include <KoPoint.h>
@@ -149,7 +151,7 @@ public:
      *
      * @return object list
      */
-    const QPtrList<KPrObject> & objectList() const { return m_objectList; }
+    const Q3PtrList<KPrObject> & objectList() const { return m_objectList; }
 
     /**
      * @brief Get object at position
@@ -178,7 +180,7 @@ public:
      *
      * @param obj objects to append
      */
-    void appendObjects( const QValueList<KPrObject *> &objects );
+    void appendObjects( const Q3ValueList<KPrObject *> &objects );
 
     /**
      * @brief Replaces an object
@@ -255,7 +257,7 @@ public:
      *
      * @param list of objects
      */
-    void setObjectList( QPtrList<KPrObject> objectLlist ) {
+    void setObjectList( Q3PtrList<KPrObject> objectLlist ) {
         m_objectList.setAutoDelete( false ); m_objectList = objectLlist; m_objectList.setAutoDelete( false );
     }
 
@@ -308,7 +310,7 @@ public:
     /**
      * @brief
      */
-    void copyObjs(QDomDocument &doc, QDomElement &presenter, QValueList<KoPictureKey> & lst) const;
+    void copyObjs(QDomDocument &doc, QDomElement &presenter, Q3ValueList<KoPictureKey> & lst) const;
 
     /**
      * @brief Get the first selected object
@@ -326,7 +328,7 @@ public:
      *
      * @return list of selected objets.
      */
-    QPtrList<KPrObject> getSelectedObjects( bool withoutHeaderFooter = false ) const;
+    Q3PtrList<KPrObject> getSelectedObjects( bool withoutHeaderFooter = false ) const;
 
     /**
      * @brief Get the first selected pictur
@@ -461,7 +463,7 @@ public:
     /**
      * return the list of steps where objects appear/disappear.
      */
-    QValueList<int> getEffectSteps() const;
+    Q3ValueList<int> getEffectSteps() const;
 
     bool isSlideSelected() const {return  m_selectedSlides;}
     void slideSelected(bool _b){m_selectedSlides=_b;}
@@ -500,8 +502,8 @@ public:
     KCommand *rotateSelectedObjects(float _newAngle, bool addAngle=false);
     KCommand *shadowObj(ShadowDirection dir,int dist, const QColor &col);
 
-    QPtrList<KoTextObject> allTextObjects() const;
-    void addTextObjects(QPtrList<KoTextObject>& lst) const;
+    Q3PtrList<KoTextObject> allTextObjects() const;
+    void addTextObjects(Q3PtrList<KoTextObject>& lst) const;
 
     void repaintObj();
 
@@ -527,8 +529,8 @@ public:
     bool findTextObject( KPrObject *obj );
     KPrObject *nextTextObject(KPrTextObject *obj);
 
-    void getAllObjectSelectedList(QPtrList<KPrObject> &lst,bool force = false );
-    void getAllEmbeddedObjectSelected(QPtrList<KoDocumentChild> &embeddedObjects );
+    void getAllObjectSelectedList(Q3PtrList<KPrObject> &lst,bool force = false );
+    void getAllEmbeddedObjectSelected(Q3PtrList<KoDocumentChild> &embeddedObjects );
 
     void load( const QDomElement &element );
     void loadOasis( KoOasisContext & context );
@@ -558,12 +560,12 @@ public:
 private:
     void makeUsedPixmapListForGroupObject( KPrObject *_obj );
     void completeLoadingForGroupObject( KPrObject *_obj );
-    bool objectNameExists( KPrObject *object, QPtrList<KPrObject> &list );
+    bool objectNameExists( KPrObject *object, Q3PtrList<KPrObject> &list );
     void saveOasisObject( KoStore *store, KoXmlWriter &xmlWriter, KoSavingContext& context, int & indexObj, int &partIndexObj,  KoXmlWriter* manifestWriter ) const;
 
 
     // list of objects
-    QPtrList<KPrObject> m_objectList;
+    Q3PtrList<KPrObject> m_objectList;
     KPrDocument *m_doc;
     KPrPage *m_masterPage;
     KPrBackGround *m_kpbackground;

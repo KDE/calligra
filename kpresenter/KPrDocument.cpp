@@ -42,12 +42,17 @@
 #include "KPrClosedLineObject.h"
 #include "KPrSVGPathParser.h"
 
-#include <qpopupmenu.h>
+#include <q3popupmenu.h>
 #include <qclipboard.h>
 #include <QRegExp>
 #include <qfileinfo.h>
 #include <qdom.h>
-#include <qdict.h>
+#include <q3dict.h>
+//Added by qt3to4:
+#include <Q3CString>
+#include <Q3PtrList>
+#include <Q3ValueList>
+#include <QPixmap>
 
 #include <KoDom.h>
 #include <KoXmlNS.h>
@@ -201,7 +206,7 @@ KPrDocument::KPrDocument( QWidget *parentWidget, const char *widgetName, QObject
     _spInfiniteLoop = false;
     _spManualSwitch = true;
     _showPresentationDuration = false;
-    tmpSoundFileList = QPtrList<KTempFile>();
+    tmpSoundFileList = Q3PtrList<KTempFile>();
     _xRnd = 20;
     _yRnd = 20;
     _txtBackCol = lightGray;
@@ -441,16 +446,16 @@ bool KPrDocument::saveChildren( KoStore* _store )
 {
     int i = 0;
 
-    QPtrListIterator<KoDocumentChild> it( children() );
+    Q3PtrListIterator<KoDocumentChild> it( children() );
     for( ; it.current(); ++it ) {
         // Don't save children that are only in the undo/redo history
         // but not anymore in the presentation
-        QPtrListIterator<KPrPage> pageIt( m_pageList );
+        Q3PtrListIterator<KPrPage> pageIt( m_pageList );
         for ( int pagePos = 0; pageIt.current(); ++pageIt, ++pagePos )
         {
             if ( saveOnlyPage == -1 || pagePos == saveOnlyPage )
             {
-                QPtrListIterator<KPrObject> oIt(pageIt.current()->objectList());
+                Q3PtrListIterator<KPrObject> oIt(pageIt.current()->objectList());
                 for (; oIt.current(); ++oIt )
                 {
                     if ( oIt.current()->getType() == OT_PART &&
@@ -465,7 +470,7 @@ bool KPrDocument::saveChildren( KoStore* _store )
         }
         if ( saveOnlyPage == -1 )
         {
-            QPtrListIterator<KPrObject> oIt(m_masterPage->objectList());
+            Q3PtrListIterator<KPrObject> oIt(m_masterPage->objectList());
             for (; oIt.current(); ++oIt )
             {
                 if ( oIt.current()->getType() == OT_PART &&
@@ -596,7 +601,7 @@ QDomDocument KPrDocument::saveXML()
         {
             QMap<KPrPage *, QString> page2name;
             int pos = 1;
-            for ( QPtrListIterator<KPrPage> it( m_pageList ); it.current(); ++it )
+            for ( Q3PtrListIterator<KPrPage> it( m_pageList ); it.current(); ++it )
             {
                 page2name.insert( it.current(), "page" + QString::number( pos++ ) ) ;
             }
@@ -608,7 +613,7 @@ QDomDocument KPrDocument::saveXML()
                 QDomElement slide=doc.createElement("CUSTOMSLIDESHOW");
                 slide.setAttribute("name", it.key() );
                 QString tmp;
-                QValueListIterator<KPrPage*> itPage ;
+                Q3ValueListIterator<KPrPage*> itPage ;
                 for( itPage = ( *it ).begin(); itPage != ( *it ).end(); ++itPage )
                 {
                     int posPage = m_pageList.find( *itPage );
@@ -655,8 +660,8 @@ QDomDocument KPrDocument::saveXML()
     {
         QDomElement styles = doc.createElement( "STYLES" );
         presenter.appendChild( styles );
-        QValueList<KoUserStyle *> styleList(m_styleColl->styleList());
-        for ( QValueList<KoUserStyle *>::const_iterator it = styleList.begin(), end = styleList.end();
+        Q3ValueList<KoUserStyle *> styleList(m_styleColl->styleList());
+        for ( Q3ValueList<KoUserStyle *>::const_iterator it = styleList.begin(), end = styleList.end();
               it != end ; ++it )
             saveStyle( static_cast<KoParagStyle *>( *it ), styles );
 
@@ -664,7 +669,7 @@ QDomDocument KPrDocument::saveXML()
     }
 
     // Write "OBJECT" tag for every child
-    QPtrListIterator<KoDocumentChild> chl( children() );
+    Q3PtrListIterator<KoDocumentChild> chl( children() );
     for( ; chl.current(); ++chl ) {
         // Don't save children that are only in the undo/redo history
         // but not anymore in the presentation
@@ -704,10 +709,10 @@ QDomDocument KPrDocument::saveXML()
     return doc;
 }
 
-void KPrDocument::saveEmbeddedObject(KPrPage *page, const QPtrList<KoDocumentChild>& childList,
+void KPrDocument::saveEmbeddedObject(KPrPage *page, const Q3PtrList<KoDocumentChild>& childList,
                                        QDomDocument &doc,QDomElement &presenter )
 {
-    QPtrListIterator<KoDocumentChild> chl( childList );
+    Q3PtrListIterator<KoDocumentChild> chl( childList );
     double offset = 0.0;
     // we need no offset for objects on the master page and when we copy a page
     if ( m_pageList.findRef( page ) )
@@ -721,7 +726,7 @@ void KPrDocument::saveEmbeddedObject(KPrPage *page, const QPtrList<KoDocumentChi
 void KPrDocument::saveEmbeddedObject(KPrPage *page, KoDocumentChild *chl, QDomDocument &doc,
                                        QDomElement &presenter, double offset )
 {
-    QPtrListIterator<KPrObject> oIt(page->objectList());
+    Q3PtrListIterator<KPrObject> oIt(page->objectList());
     for ( int pos = 0; oIt.current(); ++oIt, ++pos )
     {
         if ( oIt.current()->getType() == OT_PART &&
@@ -746,7 +751,7 @@ void KPrDocument::saveEmbeddedObject(KPrPage *page, KoDocumentChild *chl, QDomDo
             settings.setAttribute( "z-index", pos );
             if ( page == m_masterPage )
                 settings.setAttribute("sticky", 1 );
-            QPtrListIterator<KPrObject> setOIt(page->objectList());
+            Q3PtrListIterator<KPrObject> setOIt(page->objectList());
             for (; setOIt.current(); ++setOIt )
             {
                 if ( setOIt.current()->getType() == OT_PART &&
@@ -795,7 +800,7 @@ void KPrDocument::compatibilityFromOldFileFormat()
 
 void KPrDocument::enableEmbeddedParts( bool f )
 {
-    QPtrListIterator<KPrPage> it( m_pageList );
+    Q3PtrListIterator<KPrPage> it( m_pageList );
     for ( ; it.current(); ++it )
         it.current()->enableEmbeddedParts(f);
 }
@@ -968,7 +973,7 @@ bool KPrDocument::loadChildren( KoStore* _store )
 {
     if ( objStartY == 0 && _clean) // Don't do this when inserting a template or a page...
     {
-        QPtrListIterator<KoDocumentChild> it( children() );
+        Q3PtrListIterator<KoDocumentChild> it( children() );
         for( ; it.current(); ++it ) {
             if ( !((KoDocumentChild*)it.current())->loadDocument( _store ) )
                 return false;
@@ -976,7 +981,7 @@ bool KPrDocument::loadChildren( KoStore* _store )
     }
     else // instead load form the correct child on, m_childCountBeforeInsert has the be set
     {
-        QPtrListIterator<KoDocumentChild> it( children() );
+        Q3PtrListIterator<KoDocumentChild> it( children() );
         for( int i = 0; it.current(); ++it, ++i ) {
             if ( i < m_childCountBeforeInsert )
                 continue;
@@ -1040,8 +1045,8 @@ bool KPrDocument::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
         m_masterPage->saveOasisPage( store, stickyTmpWriter, 0, savingContext, indexObj, partIndexObj, manifestWriter, pageNames );
 
         // Now mark all autostyles as "for styles.xml" since headers/footers need them
-        QValueList<KoGenStyles::NamedStyle> autoStyles = mainStyles.styles(  KoGenStyle::STYLE_AUTO );
-        for ( QValueList<KoGenStyles::NamedStyle>::const_iterator it = autoStyles.begin();
+        Q3ValueList<KoGenStyles::NamedStyle> autoStyles = mainStyles.styles(  KoGenStyle::STYLE_AUTO );
+        for ( Q3ValueList<KoGenStyles::NamedStyle>::const_iterator it = autoStyles.begin();
                 it != autoStyles.end(); ++it ) {
             kDebug() << "marking for styles.xml:" << (  *it ).name << endl;
             mainStyles.markStyleForStylesXml(  ( *it ).name );
@@ -1159,7 +1164,7 @@ bool KPrDocument::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
 void KPrDocument::saveOasisCustomFied( KoXmlWriter &writer )const
 {
     bool customVariableFound = false;
-    QPtrListIterator<KoVariable> it( m_varColl->getVariables() );
+    Q3PtrListIterator<KoVariable> it( m_varColl->getVariables() );
     for ( ; it.current() ; ++it )
     {
         if ( it.current()->type() == VT_CUSTOM )
@@ -1199,8 +1204,8 @@ void KPrDocument::writeAutomaticStyles( KoXmlWriter& contentWriter, KoGenStyles&
     {
         contentWriter.startElement( "office:automatic-styles" );
     }
-    QValueList<KoGenStyles::NamedStyle> styles = mainStyles.styles( KoGenStyle::STYLE_AUTO, stylesDotXml );
-    QValueList<KoGenStyles::NamedStyle>::const_iterator it = styles.begin();
+    Q3ValueList<KoGenStyles::NamedStyle> styles = mainStyles.styles( KoGenStyle::STYLE_AUTO, stylesDotXml );
+    Q3ValueList<KoGenStyles::NamedStyle>::const_iterator it = styles.begin();
     for ( ; it != styles.end() ; ++it ) {
         (*it).style->writeStyle( &contentWriter, mainStyles, "style:style", (*it).name, "style:paragraph-properties" );
     }
@@ -1266,13 +1271,13 @@ void KPrDocument::saveOasisSettings( KoXmlWriter &settingsWriter )
     //<config:config-item config:name="SnapLinesDrawing" config:type="string">H2260V14397H7693H12415H15345H1424</config:config-item>
     QString guideLinesOasis;
     //save in mm as in oo
-    for( QValueList<double>::Iterator it = m_vGuideLines.begin(); it != m_vGuideLines.end(); ++it )
+    for( Q3ValueList<double>::Iterator it = m_vGuideLines.begin(); it != m_vGuideLines.end(); ++it )
     {
         int tmpX = ( int ) ( KoUnit::toMM( *it  )*100 );
         guideLinesOasis += "V" + QString::number( tmpX );
     }
 
-    for( QValueList<double>::Iterator it = m_hGuideLines.begin(); it != m_hGuideLines.end(); ++it )
+    for( Q3ValueList<double>::Iterator it = m_hGuideLines.begin(); it != m_hGuideLines.end(); ++it )
     {
         int tmpY = ( int ) ( KoUnit::toMM( *it  )*100 );
         guideLinesOasis += "H" + QString::number( tmpY );
@@ -1389,14 +1394,14 @@ void KPrDocument::loadOasisPresentationCustomSlideShow( QDomNode &settingsDoc )
     for ( QDomNode element = settingsDoc.firstChild(); !element.isNull(); element = element.nextSibling() )
     {
         QDomElement e = element.toElement();
-        QCString tagName = e.tagName().toLatin1();
+        Q3CString tagName = e.tagName().toLatin1();
         //kDebug()<<" tagName :"<<tagName<<endl;
         if ( tagName == "show" && e.namespaceURI() == KoXmlNS::presentation )
         {
             //kDebug()<<" e.attribute(presentation:name) :"<<e.attributeNS( KoXmlNS::presentation, "name", QString::null)<< " e.attribute(presentation:pages) :"<<e.attributeNS( KoXmlNS::presentation, "pages", QString::null)<<endl;
             QString name = e.attributeNS( KoXmlNS::presentation, "name", QString::null );
             QStringList tmp = QStringList::split( ",", e.attributeNS( KoXmlNS::presentation, "pages", QString::null) );
-            QValueList<KPrPage *> pageList;
+            Q3ValueList<KPrPage *> pageList;
             for ( QStringList::Iterator it = tmp.begin(); it != tmp.end(); ++it )
             {
                 if ( m_loadingInfo->m_name2page.contains( *it ) )
@@ -1439,7 +1444,7 @@ void KPrDocument::saveOasisPresentationCustomSlideShow( KoXmlWriter &contentTmpW
         contentTmpWriter.startElement( "presentation:show" );
         contentTmpWriter.addAttribute( "presentation:name", it.key() );
         QString tmp;
-        QValueListIterator<KPrPage*> itPage ;
+        Q3ValueListIterator<KPrPage*> itPage ;
         for( itPage = ( *it ).begin(); itPage != ( *it ).end(); ++itPage )
         {
             int posPage = m_pageList.find(*itPage );
@@ -1464,8 +1469,8 @@ void KPrDocument::saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyl
     KoXmlWriter* stylesWriter = createOasisXmlWriter( &stylesDev, "office:document-styles" );
 
     stylesWriter->startElement( "office:styles" );
-    QValueList<KoGenStyles::NamedStyle> styles = mainStyles.styles( KoGenStyle::STYLE_USER );
-    QValueList<KoGenStyles::NamedStyle>::const_iterator it = styles.begin();
+    Q3ValueList<KoGenStyles::NamedStyle> styles = mainStyles.styles( KoGenStyle::STYLE_USER );
+    Q3ValueList<KoGenStyles::NamedStyle>::const_iterator it = styles.begin();
     for ( ; it != styles.end() ; ++it ) {
         (*it).style->writeStyle( stylesWriter, mainStyles, "style:style", (*it).name, "style:paragraph-properties" );
     }
@@ -2119,7 +2124,7 @@ int KPrDocument::createPresentationAnimation(const QDomElement& element, int ord
     for ( QDomNode n = element.firstChild(); !n.isNull(); n = n.nextSibling() )
     {
         QDomElement e = n.toElement();
-        QCString tagName = e.tagName().toLatin1();
+        Q3CString tagName = e.tagName().toLatin1();
         if ( ! tagName.isEmpty() ) // only tags that open
         {
             const bool isPresentationNS = e.namespaceURI() == KoXmlNS::presentation;
@@ -2314,7 +2319,7 @@ void KPrDocument::insertEmbedded( KoStore *store, QDomElement topElem, KMacroCom
             macroCmd->addCommand( insertCmd );
             if ( pos != 0 )
             {
-                const QPtrList<KPrObject>& oldList( page->objectList() );
+                const Q3PtrList<KPrObject>& oldList( page->objectList() );
                 // tz TODO this is not 100% correct
                 if ( static_cast<int>( oldList.count() ) > pos + zIndex )
                 {
@@ -2514,17 +2519,17 @@ bool KPrDocument::loadXML( const QDomDocument &doc )
 
         }
         else if(elem.tagName()=="BACKGROUND") {
-            int red=0, green=0, blue=0;
+            int Qt::red=0, Qt::green=0, Qt::blue=0;
             if(elem.hasAttribute("xRnd"))
                 _xRnd = elem.attribute("xRnd").toInt();
             if(elem.hasAttribute("yRnd"))
                 _yRnd = elem.attribute("yRnd").toInt();
             if(elem.hasAttribute("bred"))
-                red = elem.attribute("bred").toInt();
+                Qt::red = elem.attribute("bred").toInt();
             if(elem.hasAttribute("bgreen"))
-                green = elem.attribute("bgreen").toInt();
+                Qt::green = elem.attribute("bgreen").toInt();
             if(elem.hasAttribute("bblue"))
-                blue = elem.attribute("bblue").toInt();
+                Qt::blue = elem.attribute("bblue").toInt();
             loadBackground(elem);
         } else if(elem.tagName()=="HEADER") {
             if ( _clean /*don't reload header footer, header/footer was created at the beginning || !hasHeader()*/ ) {
@@ -2614,7 +2619,7 @@ bool KPrDocument::loadXML( const QDomDocument &doc )
             if ( _clean ) {
                 QMap<QString, KPrPage *> name2page;
                 int pos = 1;
-                for ( QPtrListIterator<KPrPage> it( m_pageList ); it.current(); ++it )
+                for ( Q3PtrListIterator<KPrPage> it( m_pageList ); it.current(); ++it )
                 {
                     name2page.insert( "page" + QString::number( pos++ ), it.current() ) ;
                 }
@@ -2623,7 +2628,7 @@ bool KPrDocument::loadXML( const QDomDocument &doc )
                 while(!slide.isNull()) {
                     if(slide.tagName()=="CUSTOMSLIDESHOW") {
                         QStringList tmp = QStringList::split( ",", slide.attribute( "pages" ) );
-                        QValueList<KPrPage *> pageList;
+                        Q3ValueList<KPrPage *> pageList;
                         for ( QStringList::Iterator it = tmp.begin(); it != tmp.end(); ++it )
                         {
                             if ( name2page.contains( *it ) )
@@ -2747,7 +2752,7 @@ KCommand *KPrDocument::loadObjects( const QDomElement &element, bool paste )
 {
     ObjType t = OT_LINE;
     QDomElement obj=element.firstChild().toElement();
-    QValueList<KPrObject *> pasteObjects;
+    Q3ValueList<KPrObject *> pasteObjects;
     while(!obj.isNull()) {
         if(obj.tagName()=="OBJECT" ) {
             bool sticky=false;
@@ -3165,7 +3170,7 @@ bool KPrDocument::completeLoading( KoStore* _store )
         if ( saveOnlyPage == -1 ) {
             // ### following call independant of saveOnlyPage's value?
             m_masterPage->completeLoading( _clean, lastObj );
-            QPtrListIterator<KPrPage> it( m_pageList );
+            Q3PtrListIterator<KPrPage> it( m_pageList );
             for ( ; it.current(); ++it )
                 it.current()->completeLoading( _clean, lastObj );
         }
@@ -3221,13 +3226,13 @@ void KPrDocument::loadUsedSoundFileFromStore( KoStore *_store, QStringList _list
             QString _fileName = *haveNotOwnDiskSoundFile.at( i );
             ++i;
 
-            QPtrListIterator<KPrPage> it( m_pageList );
+            Q3PtrListIterator<KPrPage> it( m_pageList );
             for ( ; it.current(); ++it ) {
                 QString _file = it.current()->getPageSoundFileName();
                 if ( !_file.isEmpty() && _file == _fileName )
                     it.current()->setPageSoundFileName( tmpFileName );
 
-                QPtrListIterator<KPrObject> oIt( it.current()->objectList() );
+                Q3PtrListIterator<KPrObject> oIt( it.current()->objectList() );
                 for ( ; oIt.current(); ++oIt ) {
                     _file = oIt.current()->getAppearSoundEffectFileName();
                     if ( !_file.isEmpty() && _file == _fileName )
@@ -3424,7 +3429,7 @@ void KPrDocument::repaint( KPrObject *kpobject )
     repaint( m_zoomHandler->zoomRect( kpobject->getRepaintRect() ) );
 }
 
-QValueList<int> KPrDocument::getPageEffectSteps( unsigned int num )
+Q3ValueList<int> KPrDocument::getPageEffectSteps( unsigned int num )
 {
     return m_pageList.at(num)->getEffectSteps();
 }
@@ -3653,7 +3658,7 @@ void KPrDocument::savePage( const QString &file, int pgnum, bool ignore )
 void KPrDocument::replaceObjs( bool createUndoRedo )
 {
     KMacroCommand * macroCmd = 0L;
-    QPtrListIterator<KPrPage> oIt(m_pageList);
+    Q3PtrListIterator<KPrPage> oIt(m_pageList);
     for (; oIt.current(); ++oIt )
     {
         KCommand *cmd=oIt.current()->replaceObjs( createUndoRedo, oldGridX,oldGridY,_txtBackCol, _otxtBackCol);
@@ -3790,13 +3795,13 @@ void KPrDocument::makeUsedSoundFileList()
 
     usedSoundFile.clear();
 
-    QPtrListIterator<KPrPage> it( m_pageList );
+    Q3PtrListIterator<KPrPage> it( m_pageList );
     for ( ; it.current(); ++it ) {
         QString _file = it.current()->getPageSoundFileName();
         if ( !_file.isEmpty() && usedSoundFile.findIndex( _file ) == -1 )
             usedSoundFile.append( _file );
 
-        QPtrListIterator<KPrObject> oIt( it.current()->objectList() );
+        Q3PtrListIterator<KPrObject> oIt( it.current()->objectList() );
         for ( ; oIt.current(); ++oIt ) {
             _file = oIt.current()->getAppearSoundEffectFileName();
             if ( !_file.isEmpty() && usedSoundFile.findIndex( _file ) == -1 )
@@ -3842,7 +3847,7 @@ void KPrDocument::paintContent( QPainter& painter, const QRect& rect,
         KPrPage *masterPage = page->masterPage();
         if ( masterPage )
         {
-            QPtrListIterator<KPrObject> it( masterPage->objectList() );
+            Q3PtrListIterator<KPrObject> it( masterPage->objectList() );
             //draw objects on master slide
             for ( ; it.current() ; ++it )
             {
@@ -3852,7 +3857,7 @@ void KPrDocument::paintContent( QPainter& painter, const QRect& rect,
             }
         }
     }
-    QPtrListIterator<KPrObject> it( page->objectList() );
+    Q3PtrListIterator<KPrObject> it( page->objectList() );
     for ( ; it.current() ; ++it )
         it.current()->draw( &painter, zoomHandler(), pageNum, SM_NONE );
 }
@@ -3980,15 +3985,15 @@ void KPrDocument::selectPage( int pgNum /* 0-based */, bool select )
 
 KPrPage * KPrDocument::findPage(KPrObject *object)
 {
-    QPtrList<KPrObject> masterObjects( m_masterPage->objectList() );
+    Q3PtrList<KPrObject> masterObjects( m_masterPage->objectList() );
     if ( masterObjects.findRef( object ) != -1 )
     {
         //kDebug(33001) << "Object is on the master page" << endl;
         return m_masterPage;
     }
-    QPtrListIterator<KPrPage> it( m_pageList );
+    Q3PtrListIterator<KPrPage> it( m_pageList );
     for ( ; it.current(); ++it ) {
-        QPtrList<KPrObject> list( it.current()->objectList() );
+        Q3PtrList<KPrObject> list( it.current()->objectList() );
         if ( list.findRef( object ) != -1 ) {
             //kDebug(33001) << "Object is on page " << m_pageList.findRef(it.current()) + 1 << endl;
             return it.current();
@@ -3998,11 +4003,11 @@ KPrPage * KPrDocument::findPage(KPrObject *object)
     return 0L;
 }
 
-KPrPage * KPrDocument::findPage(QPtrList<KPrObject> &objects)
+KPrPage * KPrDocument::findPage(Q3PtrList<KPrObject> &objects)
 {
     KPrObject *object;
     for ( object = objects.first(); object; object=objects.next() ) {
-        QPtrList<KPrObject> list( m_masterPage->objectList() );
+        Q3PtrList<KPrObject> list( m_masterPage->objectList() );
         if ( list.findRef( object ) != -1 )
         {
             //kDebug(33001) << "Object is on the master page" << endl;
@@ -4011,7 +4016,7 @@ KPrPage * KPrDocument::findPage(QPtrList<KPrObject> &objects)
     }
     object = objects.first();
     for ( KPrPage *page=m_pageList.first(); page; page=m_pageList.next() ) {
-        QPtrList<KPrObject> list( page->objectList() );
+        Q3PtrList<KPrObject> list( page->objectList() );
         if ( list.findRef( object ) != -1 ) {
             //kDebug(33001) << "The Objects are on page " << m_pageList.findRef(page) + 1 << endl;
             return page;
@@ -4034,11 +4039,11 @@ bool KPrDocument::isSlideSelected( int pgNum /* 0-based */ )
     return m_pageList.at(pgNum)->isSlideSelected();
 }
 
-QValueList<int> KPrDocument::listOfDisplaySelectedSlides( const QValueList<KPrPage*> & lst) /* returned list is 0-based */
+Q3ValueList<int> KPrDocument::listOfDisplaySelectedSlides( const Q3ValueList<KPrPage*> & lst) /* returned list is 0-based */
 {
-    QValueList<int> result;
-    QValueListConstIterator<KPrPage*> itPage;
-    QValueListConstIterator<KPrPage*> itPageEnd = lst.end();
+    Q3ValueList<int> result;
+    Q3ValueListConstIterator<KPrPage*> itPage;
+    Q3ValueListConstIterator<KPrPage*> itPageEnd = lst.end();
     for( itPage =  lst.begin() ; itPage != itPageEnd; ++itPage )
     {
         int pageNum = m_pageList.find(*itPage );
@@ -4052,9 +4057,9 @@ QValueList<int> KPrDocument::listOfDisplaySelectedSlides( const QValueList<KPrPa
 }
 
 
-QValueList<int> KPrDocument::displaySelectedSlides()  /* returned list is 0-based */
+Q3ValueList<int> KPrDocument::displaySelectedSlides()  /* returned list is 0-based */
 {
-    QValueList<int> result;
+    Q3ValueList<int> result;
     if ( m_customListTest )
         return *m_customListTest;
     if ( m_presentationName.isEmpty() )
@@ -4067,9 +4072,9 @@ QValueList<int> KPrDocument::displaySelectedSlides()  /* returned list is 0-base
     return result;
 }
 
-QValueList<int> KPrDocument::selectedSlides() /* returned list is 0-based */
+Q3ValueList<int> KPrDocument::selectedSlides() /* returned list is 0-based */
 {
-    QValueList<int> result;
+    Q3ValueList<int> result;
     for ( int i = 0; i < static_cast<int>( m_pageList.count() ); i++ ) {
         if(m_pageList.at(i)->isSlideSelected())
             result <<i;
@@ -4123,12 +4128,12 @@ void KPrDocument::slotRepaintChanged( KPrTextObject *kptextobj )
 void KPrDocument::recalcVariables( int type )
 {
     recalcPageNum();
-    QValueList<KoVariable* > modifiedVariables = m_varColl->recalcVariables(type);
+    Q3ValueList<KoVariable* > modifiedVariables = m_varColl->recalcVariables(type);
     if ( modifiedVariables.isEmpty() )
         return;
 
     // TODO use the return value from recalcVariables to only repaint what has changed.
-    QPtrListIterator<KPrPage> it( m_pageList );
+    Q3PtrListIterator<KPrPage> it( m_pageList );
     for ( ; it.current(); ++it )
         it.current()->slotRepaintVariable();
     m_masterPage->slotRepaintVariable();
@@ -4176,7 +4181,7 @@ void KPrDocument::updateRuler()
 
 void KPrDocument::recalcPageNum()
 {
-    QPtrListIterator<KPrPage> it( m_pageList );
+    Q3PtrListIterator<KPrPage> it( m_pageList );
     for ( ; it.current(); ++it )
         it.current()->recalcPageNum();
     m_masterPage->recalcPageNum();
@@ -4249,9 +4254,9 @@ void KPrDocument::updateZoomRuler()
 
 void KPrDocument::newZoomAndResolution( bool updateViews, bool /*forPrint*/ )
 {
-    QPtrListIterator<KPrPage> it( m_pageList );
+    Q3PtrListIterator<KPrPage> it( m_pageList );
     for ( ; it.current(); ++it ) {
-        QPtrListIterator<KPrObject> oit(it.current()->objectList());
+        Q3PtrListIterator<KPrObject> oit(it.current()->objectList());
         for ( ; oit.current(); ++oit ) {
             if ( oit.current()->getType() == OT_TEXT )
                 static_cast<KPrTextObject *>( oit.current() )->textDocument()->formatCollection()->zoomChanged();
@@ -4315,7 +4320,7 @@ void KPrDocument::refreshAllNoteBar(int page, const QString &text, KPrView *exce
 
 void KPrDocument::loadStyleTemplates( const QDomElement &stylesElem )
 {
-    QValueList<QString> followingStyles;
+    Q3ValueList<QString> followingStyles;
 
     QDomNodeList listStyles = stylesElem.elementsByTagName( "STYLE" );
     if( listStyles.count() > 0) { // we are going to import at least one style.
@@ -4351,7 +4356,7 @@ void KPrDocument::loadStyleTemplates( const QDomElement &stylesElem )
 
     Q_ASSERT( followingStyles.count() == m_styleColl->styleList().count() );
     unsigned int i=0;
-    for( QValueList<QString>::Iterator it = followingStyles.begin(); it != followingStyles.end(); ++it ) {
+    for( Q3ValueList<QString>::Iterator it = followingStyles.begin(); it != followingStyles.end(); ++it ) {
         KoParagStyle * style = m_styleColl->findStyle(*it);
         m_styleColl->styleAt( i++)->setFollowingStyle( style );
     }
@@ -4366,7 +4371,7 @@ void KPrDocument::updateAllStyleLists()
 
 void KPrDocument::applyStyleChange( KoStyleChangeDefMap changed )
 {
-    QPtrListIterator<KPrPage> it( m_pageList );
+    Q3PtrListIterator<KPrPage> it( m_pageList );
     for ( ; it.current(); ++it )
         it.current()->applyStyleChange( changed );
     m_masterPage->applyStyleChange( changed );
@@ -4411,7 +4416,7 @@ bool KPrDocument::backgroundSpellCheckEnabled() const
 
 void KPrDocument::reactivateBgSpellChecking(bool refreshTextObj)
 {
-    QPtrListIterator<KPrPage> it( m_pageList );
+    Q3PtrListIterator<KPrPage> it( m_pageList );
 #if 0
     if(m_kpresenterView && m_kpresenterView->getCanvas())
         activePage=m_kpresenterView->getCanvas()->activePage();
@@ -4428,31 +4433,31 @@ void KPrDocument::reactivateBgSpellChecking(bool refreshTextObj)
     startBackgroundSpellCheck();
 }
 
-QPtrList<KoTextObject> KPrDocument::allTextObjects() const
+Q3PtrList<KoTextObject> KPrDocument::allTextObjects() const
 {
-    QPtrList<KoTextObject> lst;
-    QPtrListIterator<KPrPage> it( m_pageList );
+    Q3PtrList<KoTextObject> lst;
+    Q3PtrListIterator<KPrPage> it( m_pageList );
     for ( ; it.current(); ++it )
         it.current()->addTextObjects( lst );
     m_masterPage->addTextObjects( lst );
     return lst;
 }
 
-QValueList<KoTextDocument *> KPrDocument::allTextDocuments() const
+Q3ValueList<KoTextDocument *> KPrDocument::allTextDocuments() const
 {
-    QValueList<KoTextDocument *> lst;
-    const QPtrList<KoTextObject> textObjects = allTextObjects();
-    QPtrListIterator<KoTextObject> it( textObjects );
+    Q3ValueList<KoTextDocument *> lst;
+    const Q3PtrList<KoTextObject> textObjects = allTextObjects();
+    Q3PtrListIterator<KoTextObject> it( textObjects );
     for ( ; it.current() ; ++it ) {
         lst.append( it.current()->textDocument() );
     }
     return lst;
 }
 
-QValueList<KoTextObject *> KPrDocument::visibleTextObjects( ) const
+Q3ValueList<KoTextObject *> KPrDocument::visibleTextObjects( ) const
 {
-    QValueList<KoTextObject *> lst;
-    QPtrList<KoTextObject> textFramesets = allTextObjects(  );
+    Q3ValueList<KoTextObject *> lst;
+    Q3PtrList<KoTextObject> textFramesets = allTextObjects(  );
 
     KoTextObject *frm;
     for ( frm=textFramesets.first(); frm != 0; frm=textFramesets.next() ) {
@@ -4470,12 +4475,12 @@ void KPrDocument::setShowGuideLines( bool b )
     setModified( true );
 }
 
-void KPrDocument::horizontalGuideLines( const QValueList<double> &lines )
+void KPrDocument::horizontalGuideLines( const Q3ValueList<double> &lines )
 {
     m_hGuideLines = lines;
 }
 
-void KPrDocument::verticalGuideLines( const QValueList<double> &lines )
+void KPrDocument::verticalGuideLines( const Q3ValueList<double> &lines )
 {
     m_vGuideLines = lines;
 }
@@ -4527,14 +4532,14 @@ void KPrDocument::loadGuideLines( const QDomElement &element )
 
 void KPrDocument::saveGuideLines( QDomDocument &doc, QDomElement& element )
 {
-    for(QValueList<double>::Iterator it = m_vGuideLines.begin(); it != m_vGuideLines.end(); ++it)
+    for(Q3ValueList<double>::Iterator it = m_vGuideLines.begin(); it != m_vGuideLines.end(); ++it)
     {
         QDomElement lines=doc.createElement("Vertical");
         lines.setAttribute("value", (double)*it);
         element.appendChild( lines );
     }
 
-    for(QValueList<double>::Iterator it = m_hGuideLines.begin(); it != m_hGuideLines.end(); ++it)
+    for(Q3ValueList<double>::Iterator it = m_hGuideLines.begin(); it != m_hGuideLines.end(); ++it)
     {
         QDomElement lines=doc.createElement("Horizontal");
         lines.setAttribute("value", *it);
@@ -4579,7 +4584,7 @@ void KPrDocument::updateObjectSelected()
 void KPrDocument::setTabStopValue ( double _tabStop )
 {
     m_tabStop = _tabStop;
-    QPtrListIterator<KPrPage> it( m_pageList );
+    Q3PtrListIterator<KPrPage> it( m_pageList );
     for ( ; it.current(); ++it )
         it.current()->changeTabStopValue( m_tabStop );
     //styckypage
@@ -4733,10 +4738,10 @@ void KPrDocument::addWordToDictionary( const QString & word)
     }
 }
 
-QValueList <KPrPage *> KPrDocument::customListPage( const QStringList & lst, bool loadOasis )
+Q3ValueList <KPrPage *> KPrDocument::customListPage( const QStringList & lst, bool loadOasis )
 {
     QStringList tmp( lst );
-    QValueList <KPrPage *> tmpValueList;
+    Q3ValueList <KPrPage *> tmpValueList;
     for ( QStringList::Iterator itList = tmp.begin(); itList != tmp.end(); ++itList )
     {
         for ( int i = 0; i < static_cast<int>( m_pageList.count() ); i++ )
@@ -4785,10 +4790,10 @@ QStringList KPrDocument::presentationList()
     return lst;
 }
 
-void KPrDocument::testCustomSlideShow( const QValueList<KPrPage *> &pages, KPrView *view )
+void KPrDocument::testCustomSlideShow( const Q3ValueList<KPrPage *> &pages, KPrView *view )
 {
     delete m_customListTest;
-    m_customListTest = new QValueList<int>( listOfDisplaySelectedSlides( pages ) );
+    m_customListTest = new Q3ValueList<int>( listOfDisplaySelectedSlides( pages ) );
     if ( view )
         view->screenStartFromFirst();
 

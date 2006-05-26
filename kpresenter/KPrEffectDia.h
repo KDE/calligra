@@ -22,7 +22,10 @@
 #define EFFECTDIA_H
 
 #include <kdialogbase.h>
-#include <qptrlist.h>
+#include <q3ptrlist.h>
+//Added by qt3to4:
+#include <QResizeEvent>
+#include <QLabel>
 
 class KPrView;
 class QWidget;
@@ -30,7 +33,7 @@ class QComboBox;
 class QLabel;
 class QPushButton;
 class QCheckBox;
-class QBoxLayout;
+class Q3BoxLayout;
 class QResizeEvent;
 class QLineEdit;
 class KPrObject;
@@ -44,7 +47,7 @@ class KPrEffectDia : public KDialogBase
     Q_OBJECT
 
 public:
-    KPrEffectDia( QWidget* parent, const char*, const QPtrList<KPrObject> &_objs,
+    KPrEffectDia( QWidget* parent, const char*, const Q3PtrList<KPrObject> &_objs,
                KPrView* );
 
     ~KPrEffectDia();
@@ -58,7 +61,7 @@ protected:
     QLabel *lEffect, *lEffect2, *lAppear, *lDisappear, *lDEffect, * lAppearSpeed, *lDisappearSpeed;
     QSpinBox *eAppearStep,*eDisappearStep;
     QCheckBox *disappear;
-    QBoxLayout *topLayout;
+    Q3BoxLayout *topLayout;
     KIntNumInput *timerOfAppear, *timerOfDisappear;
 
     QCheckBox *appearSoundEffect, *disappearSoundEffect;
@@ -70,7 +73,7 @@ protected:
     KPrSoundPlayer *soundPlayer1, *soundPlayer2;
 
     KPrView *view;
-    QPtrList<KPrObject> objs;
+    Q3PtrList<KPrObject> objs;
 
 public slots:
     void slotEffectDiaOk();

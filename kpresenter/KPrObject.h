@@ -24,6 +24,10 @@
 
 #include <qbrush.h>
 #include <qcursor.h>
+//Added by qt3to4:
+#include <Q3ValueList>
+#include <Q3PtrList>
+#include <QPixmap>
 
 #include "global.h"
 
@@ -292,10 +296,10 @@ public:
      * (KPrTextObject returns the object it contains,
      * a KPrGroupObject returns all the text objects it contains)
      */
-    virtual void addTextObjects( QPtrList<KoTextObject> & ) const {}
+    virtual void addTextObjects( Q3PtrList<KoTextObject> & ) const {}
 
     virtual KPrTextObject *nextTextObject() { return 0L;} // deprecated
-    virtual void getAllObjectSelectedList(QPtrList<KPrObject> &lst, bool force = false )
+    virtual void getAllObjectSelectedList(Q3PtrList<KPrObject> &lst, bool force = false )
         { if (selected || force ) lst.append( this );}
     virtual KoPen getPen() const;
 
@@ -304,7 +308,7 @@ public:
     /**
      * Adds its edges to the KoGuides objectCollect all textobjects.
      */
-    void addSelfToGuides( QValueList<double> &horizontalPos, QValueList<double> &verticalPos );
+    void addSelfToGuides( Q3ValueList<double> &horizontalPos, Q3ValueList<double> &verticalPos );
 
 protected:
     /**

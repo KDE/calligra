@@ -34,16 +34,20 @@
 #include <ktempfile.h>
 
 #include <QDir>
-#include <qframe.h>
+#include <q3frame.h>
 #include <qfileinfo.h>
-#include <qhbox.h>
+#include <q3hbox.h>
 #include <QLabel>
 #include <QLayout>
 #include <qpixmap.h>
 #include <qpainter.h>
 #include <QPushButton>
-#include <qvbox.h>
-#include <qwhatsthis.h>
+#include <q3vbox.h>
+#include <q3whatsthis.h>
+//Added by qt3to4:
+#include <Q3HBoxLayout>
+#include <QResizeEvent>
+#include <Q3VBoxLayout>
 
 #include <kapplication.h>
 #include <kbuttonbox.h>
@@ -310,7 +314,7 @@ KPrMSPresentationSetup::KPrMSPresentationSetup( KPrDocument *_doc, KPrView *_vie
     path->setMode( KFile::Directory);
     path->lineEdit()->setText(msPres.getPath());
     lable2->setBuddy(path);
-    QHBoxLayout *pathLayout = new QHBoxLayout;
+    Q3HBoxLayout *pathLayout = new Q3HBoxLayout;
     pathLayout->addWidget(lable2);
     pathLayout->addWidget(path);
 
@@ -326,61 +330,61 @@ KPrMSPresentationSetup::KPrMSPresentationSetup( KPrDocument *_doc, KPrView *_vie
     // add a number after it until there isn't.
     title = new KLineEdit( msPres.getTitle(), this );
     lable1->setBuddy( title );
-    QHBoxLayout *titleLayout = new QHBoxLayout;
+    Q3HBoxLayout *titleLayout = new Q3HBoxLayout;
     titleLayout->addWidget( lable1 );
     titleLayout->addWidget( title );
 
-    QHBox *moreBox = new QHBox( this );
+    Q3HBox *moreBox = new Q3HBox( this );
     QPushButton *showColourButton = new QPushButton( i18n("&Set Colors"), moreBox );
     showColourButton->setToggleButton( true );
     connect( showColourButton, SIGNAL( toggled(bool) ), this, SLOT( showColourGroup(bool) ) );
 
-    QVBoxLayout *topLayout = new QVBoxLayout;
+    Q3VBoxLayout *topLayout = new Q3VBoxLayout;
     topLayout->addWidget( helptext );
     topLayout->addSpacing( 10 );
     topLayout->addLayout( pathLayout );
     topLayout->addLayout( titleLayout );
     topLayout->addWidget( moreBox );
 
-    colourGroup = new QGroupBox( 2, Qt::Vertical,
+    colourGroup = new Q3GroupBox( 2, Qt::Vertical,
                                             i18n("Preliminary Slides"),
                                             this , "colourBox" );
-    QWhatsThis::add( colourGroup,
+    Q3WhatsThis::add( colourGroup,
                      i18n( "This section allows you to set the colors for "
                            "the preliminary slides; it does not affect the "
                            "presentation in any way, and it is normal to "
                            "leave these set to the default.") );
-    QHBox *textColourLayout = new QHBox( colourGroup );
+    Q3HBox *textColourLayout = new Q3HBox( colourGroup );
     QLabel *lable3 = new QLabel( i18n("Text color:"), textColourLayout );
     lable3->setAlignment( Qt::AlignVCenter | Qt::AlignRight );
     textColour = new KColorButton( msPres.getTextColour(), textColourLayout );
     lable3->setBuddy( textColour );
 
-    QHBox *backgroundColourLayout = new QHBox( colourGroup );
+    Q3HBox *backgroundColourLayout = new Q3HBox( colourGroup );
     QLabel *lable4 = new QLabel( i18n("Background color:"), backgroundColourLayout );
     lable4->setAlignment( Qt::AlignVCenter | Qt::AlignRight );
     backColour = new KColorButton( msPres.getBackColour(), backgroundColourLayout );
     lable4->setBuddy( backColour );
     colourGroup->setHidden( true );
 
-    QHBox *buttonLayout = new QHBox( this );
+    Q3HBox *buttonLayout = new Q3HBox( this );
     KPushButton *helpButton = new KPushButton( KStdGuiItem::help(), buttonLayout );
-    QWhatsThis::add( helpButton,
+    Q3WhatsThis::add( helpButton,
                      i18n( "Selecting this button will take you to the KPresenter "
                            "documentation that provides more information on how "
                            "to use the Memory Stick export function. ") );
     KPushButton *createButton = new KPushButton( KStdGuiItem::ok(), buttonLayout );
-    QWhatsThis::add( createButton,
+    Q3WhatsThis::add( createButton,
                      i18n( "Selecting this button will proceed to generating "
                            "the presentation in the special Sony format." ) );
     KPushButton *cancelButton = new KPushButton( KStdGuiItem::cancel(), buttonLayout );
-    QWhatsThis::add( cancelButton,
+    Q3WhatsThis::add( cancelButton,
                      i18n( "Selecting this button will cancel out of the "
                            "generation of the presentation, and return "
                            "to the normal KPresenter view. No files will "
                            "be affected." ) );
 
-    mainLayout = new QVBoxLayout( this );
+    mainLayout = new Q3VBoxLayout( this );
     mainLayout->setMargin(11);
     mainLayout->setSpacing(6);
     mainLayout->addLayout(topLayout);
@@ -522,11 +526,11 @@ void KPrMSPresentationCreateDialog::createMSPresentation( KPrDocument *_doc, KPr
 
 void KPrMSPresentationCreateDialog::start()
 {
-    setCursor( waitCursor );
+    setCursor( Qt::waitCursor );
     initCreation();
     createSlidesPictures();
     createIndexFile();
-    setCursor( arrowCursor );
+    setCursor( Qt::arrowCursor );
 
     bDone->setEnabled( true );
 }
@@ -582,23 +586,23 @@ void KPrMSPresentationCreateDialog::createIndexFile()
 
 void KPrMSPresentationCreateDialog::setupGUI()
 {
-    back = new QVBox( this );
+    back = new Q3VBox( this );
     back->setMargin( KDialog::marginHint() );
 
-    QFrame *line;
+    Q3Frame *line;
 
     step1 = new QLabel( i18n( "Create directory structure" ), back );
     step2 = new QLabel( i18n( "Create pictures of the slides" ), back );
     step3 = new QLabel( i18n( "Create index file" ), back );
 
-    line = new QFrame( back );
-    line->setFrameStyle( QFrame::HLine | QFrame::Sunken );
+    line = new Q3Frame( back );
+    line->setFrameStyle( Q3Frame::HLine | Q3Frame::Sunken );
     line->setMaximumHeight( 20 );
 
     progressBar = new KProgress( back );
 
-    line = new QFrame( back );
-    line->setFrameStyle( QFrame::HLine | QFrame::Sunken );
+    line = new Q3Frame( back );
+    line->setFrameStyle( Q3Frame::HLine | Q3Frame::Sunken );
     line->setMaximumHeight( 20 );
 
     KButtonBox *bb = new KButtonBox( back );

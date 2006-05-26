@@ -49,7 +49,7 @@ public:
         m_animationsShowDict.insert( id , element );
     }
     void clearAnimationShowDict() {
-        QDictIterator<lstAnimation> it( m_animationsShowDict ); // See QDictIterator
+        Q3DictIterator<lstAnimation> it( m_animationsShowDict ); // See QDictIterator
         for( ; it.current(); ++it )
         {
             delete it.current()->element;
@@ -64,7 +64,7 @@ public:
         m_animationsHideDict.insert( id , element );
     }
     void clearAnimationHideDict() {
-        QDictIterator<lstAnimation> it( m_animationsHideDict ); // See QDictIterator
+        Q3DictIterator<lstAnimation> it( m_animationsHideDict ); // See QDictIterator
         for( ; it.current(); ++it )
         {
             delete it.current()->element;
@@ -78,8 +78,8 @@ public:
     bool m_footer;
     bool m_headerFooterByPage;
 private:
-    QDict<lstAnimation> m_animationsShowDict;
-    QDict<lstAnimation> m_animationsHideDict;
+    Q3Dict<lstAnimation> m_animationsShowDict;
+    Q3Dict<lstAnimation> m_animationsHideDict;
     bool m_oldFormat;
 };
 

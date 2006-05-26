@@ -26,6 +26,8 @@
 #include <KoUnit.h>
 #include <qdom.h>
 #include <qpainter.h>
+//Added by qt3to4:
+#include <Q3PointArray>
 #include <KoStyleStack.h>
 #include <KoOasisContext.h>
 #include <KoXmlNS.h>
@@ -208,13 +210,13 @@ void KPrPointObject::paint( QPainter* _painter, KoTextZoomHandler*_zoomHandler,
     }
     _painter->setPen( pen2 );
 
-    QPointArray pointArray = getDrawingPoints().zoomPointArray( _zoomHandler, _w );
+    Q3PointArray pointArray = getDrawingPoints().zoomPointArray( _zoomHandler, _w );
     _painter->drawPolyline( pointArray );
 
     if ( lineBegin != L_NORMAL && !drawContour ) {
         QPoint startPoint;
         bool first = true;
-        QPointArray::ConstIterator it1;
+        Q3PointArray::ConstIterator it1;
         for ( it1 = pointArray.begin(); it1 != pointArray.end(); ++it1 ) {
             if ( first ) {
                 startPoint = (*it1);
@@ -234,7 +236,7 @@ void KPrPointObject::paint( QPainter* _painter, KoTextZoomHandler*_zoomHandler,
     if ( lineEnd != L_NORMAL && !drawContour ) {
         QPoint endPoint;
         bool last = true;
-        QPointArray::ConstIterator it2 = pointArray.end();
+        Q3PointArray::ConstIterator it2 = pointArray.end();
         for ( it2 = it2 - 1; it2 != pointArray.begin(); --it2 ) {
             if ( last ) {
                 endPoint = (*it2);

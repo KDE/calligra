@@ -21,6 +21,8 @@
 #include "KPrPieProperty.h"
 
 #include <QLayout>
+//Added by qt3to4:
+#include <Q3VBoxLayout>
 
 #include <kcombobox.h>
 #include <klocale.h>
@@ -35,7 +37,7 @@ KPrPieProperty::KPrPieProperty( QWidget *parent, const char *name, KPrPieValueCm
 : QWidget( parent, name )
 , m_pieValues( pieValues )
 {
-    QVBoxLayout *layout = new QVBoxLayout( this );
+    Q3VBoxLayout *layout = new Q3VBoxLayout( this );
     layout->addWidget( m_ui = new PiePropertyUI( this ) );
 
     m_ui->typeCombo->insertItem( i18n( "Pie" ) );

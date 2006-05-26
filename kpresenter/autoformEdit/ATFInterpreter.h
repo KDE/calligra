@@ -21,8 +21,8 @@
 #ifndef ATFINTERP_H
 #define ATFINTERP_H
 
-#include <qpointarray.h>
-#include <qptrlist.h>
+#include <q3pointarray.h>
+#include <q3ptrlist.h>
 #include <qstringlist.h>
 
 class ATFInterpreter {
@@ -67,13 +67,13 @@ public:
     // structure of values
     struct Value
     {
-        QPtrList<Sign> var1;
-        QPtrList<Sign> var2;
-        QPtrList<Sign> var3;
-        QPtrList<Sign> var4;
-        QPtrList<Sign> var5;
-        QPtrList<Sign> var6;
-        QPtrList<Sign> result;
+        Q3PtrList<Sign> var1;
+        Q3PtrList<Sign> var2;
+        Q3PtrList<Sign> var3;
+        Q3PtrList<Sign> var4;
+        Q3PtrList<Sign> var5;
+        Q3PtrList<Sign> var6;
+        Q3PtrList<Sign> result;
     };
 
     // constructure - destructure
@@ -84,8 +84,8 @@ public:
     void load(const QString &);
 
     // get pointarray/attribute list/points
-    QPointArray getPointArray(int,int);
-    QPtrList<AttribList> getAttribList();
+    Q3PointArray getPointArray(int,int);
+    Q3PtrList<AttribList> getAttribList();
 
 protected:
 
@@ -157,13 +157,13 @@ protected:
     void interpret();
 
     // get varaible of a line
-    QPtrList<Sign> getVar(const QString&);
+    Q3PtrList<Sign> getVar(const QString&);
 
     // ********** variables **********
 
     // list of coordinates and pointers to coordinate/sign/value
-    QPtrList<Coord> coordList;
-    QPtrList<AttribList> attrLs;
+    Q3PtrList<Coord> coordList;
+    Q3PtrList<AttribList> attrLs;
     Coord *coordPtr;
     Sign *signPtr;
     Value *valuePtr;

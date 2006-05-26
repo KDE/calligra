@@ -25,9 +25,21 @@
 #include <config.h>
 #endif
 
-#include <qguardedptr.h>
+#include <qpointer.h>
 #include <qtimer.h>
 #include <qdatetime.h>
+//Added by qt3to4:
+#include <QResizeEvent>
+#include <QLabel>
+#include <QWheelEvent>
+#include <QDragLeaveEvent>
+#include <Q3ValueList>
+#include <QDragEnterEvent>
+#include <QKeyEvent>
+#include <QDropEvent>
+#include <QDragMoveEvent>
+#include <Q3PopupMenu>
+#include <Q3PtrList>
 
 #include <KoView.h>
 #include "global.h"
@@ -35,7 +47,7 @@
 #include <KoPen.h>
 #include <KoRuler.h>
 
-class QPopupMenu;
+class Q3PopupMenu;
 class QSplitter;
 class QLabel;
 class DCOPObject;
@@ -169,7 +181,7 @@ public:
     void insertFile(const QString &path);
     void testAndCloseAllTextObjectProtectedContent();
     void updateRulerInProtectContentMode();
-    QPtrList<KAction> listOfResultOfCheckWord( const QString &word );
+    Q3PtrList<KAction> listOfResultOfCheckWord( const QString &word );
 
     /**
      * Returns the KPresenter global KSpell2 Broker object.
@@ -620,7 +632,7 @@ public:
 
     void showCounter( KoParagCounter &c );
 
-    QPopupMenu * popupMenu( const QString& name );
+    Q3PopupMenu * popupMenu( const QString& name );
 
     void showRulerIndent( double _leftMargin, double _firstLine, double _rightMargin, bool rtl );
 
@@ -630,9 +642,9 @@ public:
     KPrNoteBar *getNoteBar() const { return notebar; }
 
     // Used by Page to plug/unplug the datatool actions
-    QPtrList<KAction>& actionList() { return m_actionList; }
+    Q3PtrList<KAction>& actionList() { return m_actionList; }
     // Used by Page to plug/unplug the variable actions
-    QPtrList<KAction> &variableActionList() { return m_variableActionList; }
+    Q3PtrList<KAction> &variableActionList() { return m_variableActionList; }
 
     // for Polygon object
     bool getCheckConcavePolygon() const { return checkConcavePolygon; }
@@ -783,7 +795,7 @@ protected:
 
     void showParagraphDialog( int initialPage = -1, double initialTabPos = 0.0 );
 
-    QValueList<KoTextObject *> spellAddTextObject() const;
+    Q3ValueList<KoTextObject *> spellAddTextObject() const;
 
     bool switchInOtherPage( const QString & text );
 
@@ -792,7 +804,7 @@ protected:
 
     int getZoomEntirePage() const;
 
-    KCommand * applyAutoFormatToCurrentPage( const QPtrList<KoTextObject> & lst);
+    KCommand * applyAutoFormatToCurrentPage( const Q3PtrList<KoTextObject> & lst);
     void textStyleSelected( KoParagStyle *_sty );
 
     /*
@@ -827,10 +839,10 @@ private:
     bool m_screenSaverWasEnabled;
 
     // right button popup menus
-    QPopupMenu *rb_lbegin, *rb_lend;
-    QPopupMenu *m_arrangeObjectsPopup;
-    QPtrList<KAction> m_actionList; // for the kodatatools
-    QPtrList<KAction> m_variableActionList;
+    Q3PopupMenu *rb_lbegin, *rb_lend;
+    Q3PopupMenu *m_arrangeObjectsPopup;
+    Q3PtrList<KAction> m_actionList; // for the kodatatools
+    Q3PtrList<KAction> m_variableActionList;
 
     // scrollbars
     QScrollBar *vert, *horz;
@@ -1154,7 +1166,7 @@ private:
     /// timer for duration of a page
     QTime m_duration;
     /// list for saving the duration of the pages
-    QValueList<int> m_presentationDurationList;
+    Q3ValueList<int> m_presentationDurationList;
 
     KoCharSelectDia *m_specialCharDlg;
 

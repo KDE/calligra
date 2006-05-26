@@ -22,12 +22,14 @@
 #include "KPrRectPreview.h"
 
 #include <qpainter.h>
+//Added by qt3to4:
+#include <Q3Frame>
 
 KPrRectPreview::KPrRectPreview( QWidget* parent, const char* name )
-    : QFrame( parent, name )
+    : Q3Frame( parent, name )
 {
     setFrameStyle( WinPanel | Sunken );
-    setBackgroundColor( white );
+    setBackgroundColor( Qt::white );
     xRnd = 0;
     yRnd = 0;
 

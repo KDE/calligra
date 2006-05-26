@@ -24,7 +24,12 @@
 #include <k3wizard.h>
 
 #include <qdialog.h>
-#include <qvaluelist.h>
+#include <q3valuelist.h>
+//Added by qt3to4:
+#include <QCloseEvent>
+#include <QResizeEvent>
+#include <QLabel>
+#include <QTextStream>
 
 
 class KPrDocument;
@@ -37,10 +42,10 @@ class KIntNumInput;
 class KLineEdit;
 class KComboBox;
 
-class QVBox;
-class QHBox;
+class Q3VBox;
+class Q3HBox;
 
-class QListViewItem;
+class Q3ListViewItem;
 class QCloseEvent;
 class KProgress;
 class QLabel;
@@ -104,7 +109,7 @@ public:
     };
     // Each entry in this list is a page (number+title).
     // This allows to skip pages.
-    QValueList<SlideInfo> getSlideInfos() const { return slideInfos; }
+    Q3ValueList<SlideInfo> getSlideInfos() const { return slideInfos; }
 
     void setSlideTitle( int i, const QString &slideTitle )
         { slideInfos[i].slideTitle = slideTitle; }
@@ -136,7 +141,7 @@ protected:
     KPrView *view;
     QString config;
     QString author, title, email;
-    QValueList<SlideInfo> slideInfos;
+    Q3ValueList<SlideInfo> slideInfos;
     QColor backColor, titleColor, textColor;
     QString path;    
     bool xml;
@@ -171,7 +176,7 @@ protected:
     KPrView *view;
     KPrWebPresentation webPres;
 
-    QHBox *page1, *page2, *page3, *page4, *page5; // PAU
+    Q3HBox *page1, *page2, *page3, *page4, *page5; // PAU
     QCheckBox *writeHeader, *writeFooter, *loopSlides; // PAU
     KLineEdit *author, *title, *email;
     KColorButton *textColor, *titleColor, *backColor;
@@ -186,7 +191,7 @@ protected slots:
     void pageChanged();
     void slotChoosePath(const QString &);
     void slideTitleChanged( const QString & );
-    void slideTitleChanged( QListViewItem * );
+    void slideTitleChanged( Q3ListViewItem * );
 
 };
 
@@ -218,7 +223,7 @@ protected:
     KProgress *progressBar;
     QLabel *step1, *step2, *step3, *step4, *step5;    
     QPushButton *bDone, *bSave;
-    QVBox *back;
+    Q3VBox *back;
 
 protected slots:
     void saveConfig();

@@ -25,6 +25,8 @@
 #include <KoBrush.h>
 
 #include "KPrObject.h"
+//Added by qt3to4:
+#include <Q3PointArray>
 
 class KPrGradient;
 class DCOPObject;
@@ -69,7 +71,7 @@ private:
        Returns a bounding region for a rounded-corners rectangle. Useful for setting
        further clipping (e.g. to draw a pixmap on such a rectangle).
     */
-    QPointArray boundingRegion( int x, int y, int w, int h, int _xRnd, int _yRnd) const;
+    Q3PointArray boundingRegion( int x, int y, int w, int h, int _xRnd, int _yRnd) const;
 };
 
 #endif

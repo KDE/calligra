@@ -23,23 +23,27 @@
 #include "KPrDocument.h"
 #include "KPrPage.h"
 
-#include <qbuttongroup.h>
+#include <q3buttongroup.h>
 #include <qhbuttongroup.h>
 #include <QCheckBox>
 #include <QComboBox>
-#include <qhbox.h>
-#include <qvbox.h>
-#include <qgroupbox.h>
-#include <qheader.h>
+#include <q3hbox.h>
+#include <q3vbox.h>
+#include <q3groupbox.h>
+#include <q3header.h>
 #include <QLabel>
 #include <QLayout>
-#include <qlistview.h>
+#include <q3listview.h>
 #include <qpen.h>
 #include <QPushButton>
 #include <qradiobutton.h>
-#include <qvaluelist.h>
+#include <q3valuelist.h>
 #include <qvbuttongroup.h>
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
+//Added by qt3to4:
+#include <Q3GridLayout>
+#include <Q3Frame>
+#include <Q3VBoxLayout>
 
 #include <kcolorbutton.h>
 #include <kglobal.h>
@@ -61,18 +65,18 @@ KPrPgConfDia::KPrPgConfDia( QWidget* parent, KPrDocument* doc )
 
 void KPrPgConfDia::setupPageGeneral()
 {
-    QFrame* generalPage = addPage( i18n("&General") );
-    QWhatsThis::add( generalPage, i18n("<p>This dialog allows you to configure how the slideshow "
+    Q3Frame* generalPage = addPage( i18n("&General") );
+    Q3WhatsThis::add( generalPage, i18n("<p>This dialog allows you to configure how the slideshow "
 				       "will be displayed, including whether the slides are "
 				       "automatically sequenced or manually controlled, and also "
 				       "allows you to configure a <em>drawing pen</em> that can "
 				       "be used during the display of the presentation to add "
 				       "additional information or to emphasise particular points.</p>") );
-    QVBoxLayout *generalLayout = new QVBoxLayout( generalPage, 0, KDialog::spacingHint() );
+    Q3VBoxLayout *generalLayout = new Q3VBoxLayout( generalPage, 0, KDialog::spacingHint() );
     generalLayout->setAutoAdd( true );
 
-    QVButtonGroup *switchGroup = new QVButtonGroup( i18n("&Transition Type"), generalPage );
-    QWhatsThis::add( switchGroup, i18n("<li><p>If you select <b>Manual transition to next step or slide</b> "
+    Q3VButtonGroup *switchGroup = new Q3VButtonGroup( i18n("&Transition Type"), generalPage );
+    Q3WhatsThis::add( switchGroup, i18n("<li><p>If you select <b>Manual transition to next step or slide</b> "
 					  "then each transition and effect on a slide, or transition from "
 					  "one slide to the next, will require an action. Typically this "
 					  "action will be a mouse click, or the space bar.</p></li>"
@@ -89,7 +93,7 @@ void KPrPgConfDia::setupPageGeneral()
     m_autoButton->setChecked( !m_doc->spManualSwitch() );
 
     infiniteLoop = new QCheckBox( i18n( "&Infinite loop" ), generalPage );
-    QWhatsThis::add( infiniteLoop, i18n("<p>If this checkbox is selected, then the slideshow "
+    Q3WhatsThis::add( infiniteLoop, i18n("<p>If this checkbox is selected, then the slideshow "
 					"will restart at the first slide after the last slide "
 					"has been displayed. It is only available if the "
 					"<b>Automatic transition to next step or slide</b> "
@@ -100,7 +104,7 @@ void KPrPgConfDia::setupPageGeneral()
     connect( m_autoButton, SIGNAL( toggled(bool) ), infiniteLoop, SLOT( setEnabled(bool) ) );
 
     presentationDuration = new QCheckBox( i18n( "Measure presentation &duration" ), generalPage );
-    QWhatsThis::add( presentationDuration, i18n("<p>If this checkbox is selected, the time that "
+    Q3WhatsThis::add( presentationDuration, i18n("<p>If this checkbox is selected, the time that "
 						"each slide was displayed for, and the total time "
 						"for the presentation will be measured.</p> "
 						"<p>The times will be displayed at the end of the "
@@ -113,15 +117,15 @@ void KPrPgConfDia::setupPageGeneral()
 
     // presentation pen (color and width)
 
-    QGroupBox* penGroup = new QGroupBox( i18n("Presentation Pen") , generalPage );
-    QWhatsThis::add( penGroup, i18n("<p>This part of the dialog allows you to configure the "
+    Q3GroupBox* penGroup = new Q3GroupBox( i18n("Presentation Pen") , generalPage );
+    Q3WhatsThis::add( penGroup, i18n("<p>This part of the dialog allows you to configure the "
 				    "<em>drawing mode</em>, which allows you to add additional "
 				    "information, emphasise particular content, or to correct "
 				    "errors during the presentation by drawing on the slides "
 				    "using the mouse.</p>"
 				    "<p>You can configure the color of the drawing pen and the "
 				    "width of the pen.</p>" ) );
-    QGridLayout *grid = new QGridLayout(penGroup, 2, 2, KDialog::marginHint(), KDialog::spacingHint());
+    Q3GridLayout *grid = new Q3GridLayout(penGroup, 2, 2, KDialog::marginHint(), KDialog::spacingHint());
 
     grid->addWidget( new QLabel( i18n( "Color:" ), penGroup ), 0, 0 );
     penColor = new KColorButton( m_doc->presPen().color(), m_doc->presPen().color(), penGroup );
@@ -139,22 +143,22 @@ void KPrPgConfDia::setupPageGeneral()
 
 void KPrPgConfDia::setupPageSlides()
 {
-    QFrame* slidesPage = addPage( i18n("&Slides") );
-    QWhatsThis::add( slidesPage, i18n("<p>This dialog allows you to configure which slides "
+    Q3Frame* slidesPage = addPage( i18n("&Slides") );
+    Q3WhatsThis::add( slidesPage, i18n("<p>This dialog allows you to configure which slides "
 				      "are used in the presentation. Slides that are not "
 				      "selected will not be displayed during the slide "
 				      "show.</p>") );
-    QGridLayout *slidesLayout = new QGridLayout( slidesPage,7 , 2, 0, KDialog::spacingHint());
+    Q3GridLayout *slidesLayout = new Q3GridLayout( slidesPage,7 , 2, 0, KDialog::spacingHint());
 
 
-    QButtonGroup *group=new QVButtonGroup( slidesPage );
+    Q3ButtonGroup *group=new Q3VButtonGroup( slidesPage );
     group->setRadioButtonExclusive( true );
 
     m_customSlide = new QRadioButton( i18n( "Custom slide show" ), group, "customslide" );
 
     connect( m_customSlide, SIGNAL( clicked () ), this, SLOT( radioButtonClicked() ) );
 
-    QHBox *box = new QHBox( group );
+    Q3HBox *box = new Q3HBox( group );
 
     m_labelCustomSlide = new QLabel( i18n( "Custom slide:" ),box );
 
@@ -165,7 +169,7 @@ void KPrPgConfDia::setupPageSlides()
     slidesLayout->addMultiCellWidget( group, 0,2,0,1 );
     connect( m_selectedSlide, SIGNAL( clicked () ), this, SLOT( radioButtonClicked() ) );
 
-    slides = new QListView( slidesPage );
+    slides = new Q3ListView( slidesPage );
     slidesLayout->addMultiCellWidget( slides, 3, 6, 0, 1 );
     slides->addColumn( i18n("Slide") );
     slides->setSorting( -1 );
@@ -174,13 +178,13 @@ void KPrPgConfDia::setupPageSlides()
     for ( int i = m_doc->getPageNums() - 1; i >= 0; --i )
     {
         KPrPage *page=m_doc->pageList().at( i );
-        QCheckListItem* item = new QCheckListItem( slides,
+        Q3CheckListItem* item = new Q3CheckListItem( slides,
                                                    page->pageTitle(),
-                                                   QCheckListItem::CheckBox );
+                                                   Q3CheckListItem::CheckBox );
         item->setOn( page->isSlideSelected() );
     }
 
-    QHBox* buttonGroup = new QHBox( slidesPage );
+    Q3HBox* buttonGroup = new Q3HBox( slidesPage );
     buttonGroup->setSpacing( KDialog::spacingHint() );
 
     QPushButton* selectAllButton = new QPushButton( i18n( "Select &All" ), buttonGroup );
@@ -251,14 +255,14 @@ QPen KPrPgConfDia::getPen() const
     return QPen( penColor->color(), penWidth->value() );
 }
 
-QValueList<bool> KPrPgConfDia::getSelectedSlides() const
+Q3ValueList<bool> KPrPgConfDia::getSelectedSlides() const
 {
-    QValueList<bool> selectedSlides;
+    Q3ValueList<bool> selectedSlides;
 
-    QListViewItem *item = slides->firstChild();
+    Q3ListViewItem *item = slides->firstChild();
     while( item )
     {
-        QCheckListItem *checkItem = dynamic_cast<QCheckListItem*>( item );
+        Q3CheckListItem *checkItem = dynamic_cast<Q3CheckListItem*>( item );
         bool selected = false;
         if( checkItem ) selected = checkItem->isOn();
         item = item->nextSibling();
@@ -269,10 +273,10 @@ QValueList<bool> KPrPgConfDia::getSelectedSlides() const
 
 void KPrPgConfDia::selectAllSlides()
 {
-    QListViewItem *item = slides->firstChild();
+    Q3ListViewItem *item = slides->firstChild();
     while( item )
     {
-        QCheckListItem *checkItem = dynamic_cast<QCheckListItem*>( item );
+        Q3CheckListItem *checkItem = dynamic_cast<Q3CheckListItem*>( item );
         if( checkItem ) checkItem->setOn( true );
         item = item->nextSibling();
     }
@@ -280,10 +284,10 @@ void KPrPgConfDia::selectAllSlides()
 
 void KPrPgConfDia::deselectAllSlides()
 {
-    QListViewItem *item = slides->firstChild();
+    Q3ListViewItem *item = slides->firstChild();
     while( item )
     {
-        QCheckListItem *checkItem = dynamic_cast<QCheckListItem*>( item );
+        Q3CheckListItem *checkItem = dynamic_cast<Q3CheckListItem*>( item );
         if( checkItem ) checkItem->setOn( false );
         item = item->nextSibling();
     }
