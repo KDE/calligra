@@ -52,7 +52,9 @@ ChangeFieldPropertyCommand::ChangeFieldPropertyCommand( KexiTableDesignerView* v
 	const KoProperty::Set& set, const QCString& propertyName, const QVariant& oldValue, const QVariant& newValue,
 	KoProperty::Property::ListData* const oldListData, KoProperty::Property::ListData* const newListData)
  : Command(view)
- , m_alterTableAction(set.property("name").value().toString(), propertyName, newValue)
+ , m_alterTableAction(
+		propertyName=="name" ? oldValue.toString() : set.property("name").value().toString(), 
+		propertyName, newValue)
  , m_oldValue(oldValue)
  , m_fieldUID(set["uid"].value().toInt())
  , m_oldListData( oldListData ? new KoProperty::Property::ListData(*oldListData) : 0 )
@@ -106,6 +108,11 @@ void ChangeFieldPropertyCommand::unexecute()
 		m_oldValue, m_oldListData );
 }
 
+KexiDB::AlterTableHandler::ActionBase* ChangeFieldPropertyCommand::createAction()
+{
+	return new KexiDB::AlterTableHandler::ChangeFieldPropertyAction( m_alterTableAction );
+}
+
 //--------------------------------------------------------
 
 RemoveFieldCommand::RemoveFieldCommand( KexiTableDesignerView* view, int fieldIndex, 
@@ -151,15 +158,24 @@ QString RemoveFieldCommand::debugString()
 		+ ", FIELD: " + (*m_set)["caption"].value().toString();
 }
 
+KexiDB::AlterTableHandler::ActionBase* RemoveFieldCommand::createAction()
+{
+	return new KexiDB::AlterTableHandler::RemoveFieldAction( m_alterTableAction );
+}
+
 //--------------------------------------------------------
 
 InsertFieldCommand::InsertFieldCommand( KexiTableDesignerView* view,
  int fieldIndex/*, const KexiDB::Field& field*/, const KoProperty::Set& set )
  : Command(view)
- , m_fieldIndex(fieldIndex)
  , m_alterTableAction(0) //fieldIndex, new KexiDB::Field(field) /*deep copy*/)
  , m_set( set ) //? new KoProperty::Set(*set) : 0 )
 {
+	KexiDB::Field *f = view->buildField( m_set );
+	if (f)
+		m_alterTableAction = new KexiDB::AlterTableHandler::InsertFieldAction(fieldIndex, f);
+	else //null action
+		m_alterTableAction = new KexiDB::AlterTableHandler::InsertFieldAction(true);
 }
 
 InsertFieldCommand::~InsertFieldCommand()
@@ -169,23 +185,22 @@ InsertFieldCommand::~InsertFieldCommand()
 
 QString InsertFieldCommand::name() const
 {
-	return i18n("Insert table field \"%1\"").arg(m_set["caption"].value().toString());//m_alterTableAction.field().name());
+	return i18n("Insert table field \"%1\"").arg(m_set["caption"].value().toString());
 }
 
 void InsertFieldCommand::execute()
 {
-	m_view->insertField( m_fieldIndex, /*m_alterTableAction.field(),*/ m_set );
+	m_view->insertField( m_alterTableAction->index(), /*m_alterTableAction.field(),*/ m_set );
 }
 
 void InsertFieldCommand::unexecute()
 {
-	m_view->clearRow( m_fieldIndex );//m_alterTableAction.index() );
+	m_view->clearRow( m_alterTableAction->index() );//m_alterTableAction.index() );
 }
 
-const KexiDB::AlterTableHandler::ActionBase& InsertFieldCommand::action()
+KexiDB::AlterTableHandler::ActionBase* InsertFieldCommand::createAction()
 {
-	//todo
-	return *m_alterTableAction;
+	return new KexiDB::AlterTableHandler::InsertFieldAction(*m_alterTableAction);
 }
 
 //--------------------------------------------------------

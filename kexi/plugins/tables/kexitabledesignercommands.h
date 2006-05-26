@@ -48,7 +48,7 @@ class Command : public KCommand
 		virtual ~Command();
 
 		//! Used to collect actions data for AlterTableHandler
-		virtual const KexiDB::AlterTableHandler::ActionBase& action() = 0;
+		virtual KexiDB::AlterTableHandler::ActionBase* createAction() { return 0; }
 
 		virtual QString debugString() { return name(); }
 
@@ -77,7 +77,7 @@ class ChangeFieldPropertyCommand : public Command
 		virtual QString name() const;
 		virtual void execute();
 		virtual void unexecute();
-		virtual const KexiDB::AlterTableHandler::ActionBase& action() { return m_alterTableAction; }
+		virtual KexiDB::AlterTableHandler::ActionBase* createAction();
 		virtual QString debugString();
 
 	protected:
@@ -101,7 +101,7 @@ class RemoveFieldCommand : public Command
 		virtual QString name() const;
 		virtual void execute();
 		virtual void unexecute();
-		virtual const KexiDB::AlterTableHandler::ActionBase& action() { return m_alterTableAction; }
+		virtual KexiDB::AlterTableHandler::ActionBase* createAction();
 
 		virtual QString debugString();
 
@@ -122,15 +122,14 @@ class InsertFieldCommand : public Command
 		virtual QString name() const;
 		virtual void execute();
 		virtual void unexecute();
-		virtual const KexiDB::AlterTableHandler::ActionBase& action();
+		virtual KexiDB::AlterTableHandler::ActionBase* createAction();
 
 		virtual QString debugString() { 
-			return name() + "\nAT ROW " + QString::number(m_fieldIndex) //m_alterTableAction.index()) 
+			return name() + "\nAT ROW " + QString::number(m_alterTableAction->index()) //m_alterTableAction.index()) 
 				+ ", FIELD: " + m_set["caption"].value().toString(); //m_alterTableAction.field().debugString(); 
 		}
 
 	protected:
-		int m_fieldIndex;
 		KexiDB::AlterTableHandler::InsertFieldAction *m_alterTableAction;
 		KoProperty::Set m_set;
 };
@@ -157,8 +156,6 @@ class ChangePropertyVisibilityCommand : public Command
 		virtual QString name() const;
 		virtual void execute();
 		virtual void unexecute();
-		//! Makes no sense: unused
-		virtual const KexiDB::AlterTableHandler::ActionBase& action() { return m_alterTableAction; }
 
 	protected:
 		KexiDB::AlterTableHandler::ChangeFieldPropertyAction m_alterTableAction;
@@ -178,8 +175,6 @@ class InsertEmptyRowCommand : public Command
 		virtual QString name() const;
 		virtual void execute();
 		virtual void unexecute();
-		//! Makes no sense: unused
-		virtual const KexiDB::AlterTableHandler::ActionBase& action() { return m_alterTableAction; }
 
 	protected:
 		KexiDB::AlterTableHandler::ChangeFieldPropertyAction m_alterTableAction;

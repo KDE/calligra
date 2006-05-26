@@ -21,6 +21,7 @@
 #define KEXIALTERTABLEDIALOG_H
 
 #include <koproperty/property.h>
+#include <kexidb/alter.h>
 
 #include <kexidatatable.h>
 #include "kexitablepart.h"
@@ -98,6 +99,9 @@ class KexiTableDesignerView : public KexiDataTable
 		 Used by ChangePropertyVisibilityCommand. */
 		void changePropertyVisibility( int fieldUID, const QCString& propertyName, bool visible );
 
+		/*! Builds table field's schema by looking at the \a set. */
+		KexiDB::Field * buildField( const KoProperty::Set &set );
+
 	protected slots:
 		/*! Equivalent to updateActions(false). Called on row insert/delete
 		 in a KexiDataAwarePropertySet. */
@@ -136,6 +140,9 @@ class KexiTableDesignerView : public KexiDataTable
 		/*! Reaction on command execution from the command history */
 		void slotCommandExecuted(KCommand *command);
 
+		/*! Simulates real execution of the Alter Table. For debugging. */
+		void slotSimulateAlterTableExecution();
+
 	protected:
 		virtual void updateActions(bool activated);
 
@@ -158,15 +165,22 @@ class KexiTableDesignerView : public KexiDataTable
 
 		void removeCurrentPropertySet();
 
-		/*! Reimplemented from KexiViewBase, because tables creation is more complex. */
+		/*! Reimplemented from KexiViewBase, because tables creation is more complex. 
+		 No table schema altering is required, so just buildSchema() is used to create a new schema.
+		*/
 		virtual KexiDB::SchemaData* storeNewData(const KexiDB::SchemaData& sdata, bool &cancel);
 
-		/*! Reimplemented from KexiViewBase, because table storage is more complex. */
+		/*! Reimplemented from KexiViewBase, because table storage is more complex. 
+		 Table schema altering may be required, so just buildSchema() is used to create a new schema.
+		*/
 		virtual tristate storeData(bool dontAsk = false);
 
+		/*! Builds table schema by looking at the current design. Used in storeNewData() */
 		tristate buildSchema(KexiDB::TableSchema &schema);
 
-		QString messageForSavingChanges(bool &emptyTable);
+		/*! Builds action list usable for KexiDB::AlterTableHandler by looking at undo buffer 
+		 of commands' history. Used in storeData() */
+		tristate buildAlterTableActions(KexiDB::AlterTableHandler::ActionList &actions);
 
 		/*! Helper, used for slotTogglePrimaryKey() and slotPropertyChanged().
 		 Assigns primary key icon and value for property set \a propertySet, 
