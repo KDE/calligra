@@ -84,7 +84,7 @@ protected:
 K_EXPORT_COMPONENT_FACTORY( libkarbonepsexport, EpsExportFactory() )
 
 
-EpsExport::EpsExport( KoFilter*, const char*, const QStringList& )
+EpsExport::EpsExport( QObject* parent, const QStringList& )
 	: KoFilter(parent)
 {
 }
@@ -196,16 +196,13 @@ EpsExport::visitVDocument( VDocument& document )
 		KoDocumentInfo docInfo;
 		docInfo.load( domIn );
 
-		KoDocumentInfoAuthor* authorPage =
-			static_cast<KoDocumentInfoAuthor*>( docInfo.page( "author" ) );
-
 		// Get creation date/time = "now".
 		QDateTime now( QDateTime::currentDateTime() );
 
 		*m_stream <<
 			"%%CreationDate: (" << now.toString( Qt::LocalDate ) << ")\n"
-			"%%For: (" << authorPage->fullName() << ") (" << authorPage->company() << ")\n"
-			"%%Title: (" << docInfo.title() << ")"
+			"%%For: (" << docInfo.authorInfo("name") << ") (" << docInfo.authorInfo("company") << ")\n"
+			"%%Title: (" << docInfo.authorInfo("title") << ")"
 		<< endl;
 	}
 

@@ -35,7 +35,7 @@ class EpsImport : public KoFilter
 	Q_OBJECT
 
 public:
-	EpsImport( KoFilter* parent, const char* name, const QStringList& );
+	EpsImport( QObject* parent, const QStringList& );
 	virtual ~EpsImport();
 
 	virtual KoFilter::ConversionStatus convert( const QByteArray& from, const QByteArray& to );

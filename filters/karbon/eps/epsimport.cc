@@ -48,7 +48,7 @@ protected:
 
 K_EXPORT_COMPONENT_FACTORY( libkarbonepsimport, EpsImportFactory() )
 
-EpsImport::EpsImport( KoFilter*, const char*, const QStringList& )
+EpsImport::EpsImport( QObject*parent, const QStringList& )
 	: KoFilter(parent)
 {
 }

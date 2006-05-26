@@ -47,7 +47,7 @@ protected:
 
 K_EXPORT_COMPONENT_FACTORY( libkarbonaiimport, AiImportFactory() )
 
-AiImport::AiImport( KoFilter*, const char*, const QStringList& )
+AiImport::AiImport( QObject*parent, const QStringList& )
 	: KoFilter(parent)
 {
 }

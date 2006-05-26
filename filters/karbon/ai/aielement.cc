@@ -21,6 +21,7 @@
 #include <qglobal.h>
 //Added by qt3to4:
 #include <Q3CString>
+#include <QString>
 
 AIElement::Private::Private()
 {
@@ -566,7 +567,7 @@ const QByteArray AIElement::toByteArray() const
    if ( d->typ != f ) *this = AIElement( to##f() ); else detach(); return *((Q##f*)d->value.ptr);}
 
 Q_VARIANT_AS(String)
-Q_VARIANT_AS(CString)
+//Q_VARIANT_AS(CString)
 
 /*!
   Returns the aielement's value as int reference.
@@ -742,9 +743,12 @@ bool AIElement::cast( Type t )
     case AIElement::Double:
 	    asDouble();
 	    break;
+#warning "KDE4: TODO how port it"
+#if 0		
     case AIElement::CString:
 	    asCString();
 	    break;
+#endif		
     case AIElement::Byte:
 	    asByte();
 	    break;

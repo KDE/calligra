@@ -42,7 +42,7 @@ typedef KGenericFactory<PngExport> PngExportFactory;
 K_EXPORT_COMPONENT_FACTORY( libkarbonpngexport, PngExportFactory( "kofficefilters" ) )
 
 
-PngExport::PngExport( KoFilter*, const char*, const QStringList& )
+PngExport::PngExport( QObject*parent, const QStringList& )
 	: KoFilter(parent)
 {
 }

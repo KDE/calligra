@@ -20,7 +20,7 @@
 #include <q3buttongroup.h>
 #include <QRadioButton>
 #include <QString>
-#include <q3vbox.h>
+#include <kvbox.h>
 
 #include <klocale.h>
 #include <knuminput.h>

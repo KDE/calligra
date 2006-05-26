@@ -63,7 +63,7 @@ typedef KGenericFactory<SvgExport> SvgExportFactory;
 K_EXPORT_COMPONENT_FACTORY( libkarbonsvgexport, SvgExportFactory( "kofficefilters" ) )
 
 
-SvgExport::SvgExport( KoFilter*, const char*, const QStringList& )
+SvgExport::SvgExport( QObject*parent, const QStringList& )
 	: KoFilter(parent), m_indent( 0 ), m_indent2( 0 ), m_trans( 0L )
 {
 	m_gc.setAutoDelete( true );

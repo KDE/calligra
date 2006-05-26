@@ -1,4 +1,11 @@
-
+include_directories(
+        ${KOTEXT_INCLUDES}
+        ${KOFFICECORE_INCLUDES}
+        ${KOPAINTER_INCLUDES}
+        ${CMAKE_SOURCE_DIR}/karbon
+        ${CMAKE_SOURCE_DIR}/karbon/core
+        ${CMAKE_SOURCE_DIR}/karbon/visitors
+        ${KDE4_INCLUDES}  )
 
 add_subdirectory( eps )
 add_subdirectory( ai )

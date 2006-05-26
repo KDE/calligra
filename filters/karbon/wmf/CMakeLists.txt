@@ -1,6 +1,6 @@
 
 
-include_directories( ${CMAKE_SOURCE_DIR}/karbon ${CMAKE_SOURCE_DIR}/karbon/core ${CMAKE_SOURCE_DIR}/karbon/commands ${KDE4_INCLUDES}  )
+include_directories( ${KWMF_INCLUDES} ${CMAKE_SOURCE_DIR}/karbon/commands/ )
 
 
 ########### next target ###############

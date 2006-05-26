@@ -35,7 +35,7 @@ class AiImport : public KoFilter
 	Q_OBJECT
 
 public:
-	AiImport( KoFilter* parent, const char* name, const QStringList& );
+	AiImport( QObject* parent, const QStringList& );
 	virtual ~AiImport();
 
 	virtual KoFilter::ConversionStatus convert( const QByteArray& from, const QByteArray& to );

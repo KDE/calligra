@@ -45,7 +45,7 @@ class EpsExport : public KoFilter, private VVisitor
 	Q_OBJECT
 
 public:
-	EpsExport( KoFilter* parent, const char* name, const QStringList& );
+	EpsExport( QObject* parent, const QStringList& );
 	virtual ~EpsExport() {}
 
 	virtual KoFilter::ConversionStatus convert( const QByteArray& from, const QByteArray& to );

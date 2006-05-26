@@ -45,7 +45,7 @@
 typedef KGenericFactory<SvgImport> SvgImportFactory;
 K_EXPORT_COMPONENT_FACTORY( libkarbonsvgimport, SvgImportFactory( "kofficefilters" ) )
 
-SvgImport::SvgImport(KoFilter *, const char *, const QStringList&) :
+SvgImport::SvgImport(QObject*parent, const QStringList&) :
     KoFilter(parent),
     outdoc( "DOC" )
 {
@@ -121,7 +121,7 @@ KoFilter::ConversionStatus SvgImport::convert(const QByteArray& from, const QByt
 		kError(30514) << "Unable to open output file!" << endl;
 		return KoFilter::StorageCreationError;
 	}
-	Q3CString cstring = outdoc.toCString(); // utf-8 already
+	QByteArray cstring = outdoc.toByteArray(); // utf-8 already
 	out->write( cstring.data(), cstring.length() );
 
 	return KoFilter::OK; // was successful
@@ -477,7 +477,7 @@ void SvgImport::parseColor( VColor &color, const QString &s )
 		}
 
 		QColor c( r.toInt(), g.toInt(), b.toInt() );
-		color.set( c.Qt::red() / 255.0, c.Qt::green() / 255.0, c.Qt::blue() / 255.0 );
+		color.set( c.red() / 255.0, c.green() / 255.0, c.blue() / 255.0 );
 	}
 	else if( s == "currentColor" )
 	{
@@ -492,7 +492,7 @@ void SvgImport::parseColor( VColor &color, const QString &s )
 			c.setNamedColor( rgbColor );
 		else
 			c = parseColor( rgbColor );
-		color.set( c.Qt::red() / 255.0, c.Qt::green() / 255.0, c.Qt::blue() / 255.0 );
+		color.set( c.red() / 255.0, c.green() / 255.0, c.blue() / 255.0 );
 	}
 }
 

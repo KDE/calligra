@@ -50,7 +50,7 @@ typedef KGenericFactory<WmfExport> WmfExportFactory;
 K_EXPORT_COMPONENT_FACTORY( libwmfexport, WmfExportFactory( "kofficefilters" ) )
 
 
-WmfExport::WmfExport( KoFilter *, const char *, const QStringList&) :
+WmfExport::WmfExport( QObject*parent, const QStringList&) :
         KoFilter(parent)
 {
 }
