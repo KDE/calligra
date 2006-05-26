@@ -111,7 +111,7 @@ void KexiFormDataProvider::fillDuplicatedDataItems(
 		QMap<KexiDB::Field*,int> tmpDuplicatedItems;
 		QMapIterator<KexiDB::Field*,int> it_dup;
 		for (QPtrListIterator<KexiFormDataItemInterface> it(m_dataItems); it.current(); ++it) {
-			KexiDB::QueryColumnInfo *cii = it.current()->columnInfo();
+//			KexiDB::QueryColumnInfo *cii = it.current()->columnInfo();
 			kdDebug() << " ** " << it.current()->columnInfo()->field << endl;
 			it_dup = tmpDuplicatedItems.find( it.current()->columnInfo()->field );
 			uint count;
