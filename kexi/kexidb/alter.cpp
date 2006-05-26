@@ -192,7 +192,7 @@ static AlterTableHandler::ActionDict* createActionDict(
 {
 	AlterTableHandler::ActionDict* dict = new AlterTableHandler::ActionDict(101, false);
 	dict->setAutoDelete(true);
-	fieldActions.insert( forFieldName, dict );
+	fieldActions.insert( forFieldName.latin1(), dict );
 	return dict;
 }
 
@@ -231,7 +231,7 @@ void AlterTableHandler::ChangeFieldPropertyAction::simplifyActions(ActionDictDic
 		// special case: name1 -> name2, i.e. rename action
 		QString newName( newValue().toString() );
 		// try to find rename(newName, otherName) action
-		ActionDict *actionsLikeThis = fieldActions[ newName ];
+		ActionDict *actionsLikeThis = fieldActions[ newName.latin1() ];
 		ActionBase *renameActionLikeThis = actionsLikeThis ? actionsLikeThis->find( "name" ) : 0;
 		if (dynamic_cast<ChangeFieldPropertyAction*>(renameActionLikeThis)) {
 			// 1. instead of having rename(fieldName(), newValue()) action,
@@ -242,7 +242,7 @@ void AlterTableHandler::ChangeFieldPropertyAction::simplifyActions(ActionDictDic
 			// 2. (m_order is the same as in newAction)
 			// 3. replace prev. rename action (if any)
 			actionsLikeThis->remove( "name" );
-			ActionDict *adict = fieldActions[ fieldName() ];
+			ActionDict *adict = fieldActions[ fieldName().latin1() ];
 			if (!adict)
 				adict = createActionDict( fieldActions, fieldName() );
 			adict->insert(m_propertyName.latin1(), newRenameAction);
@@ -271,8 +271,9 @@ void AlterTableHandler::ChangeFieldPropertyAction::simplifyActions(ActionDictDic
 	// e.g. [ setCaption(A, "captionA"), setCaption(A, "captionB") ]
 	//  becomes: [ setCaption(A, "captionB") ]
 	// because adding this action does nothing
-	ActionDict *nextActionsLikeThis = fieldActions[ fieldName() ];
-	if (!nextActionsLikeThis || !nextActionsLikeThis->find( m_propertyName )) { //no such action, add this
+	ActionDict *nextActionsLikeThis = fieldActions[ fieldName().latin1() ];
+	if (!nextActionsLikeThis || !nextActionsLikeThis->find( m_propertyName.latin1() )) { 
+		//no such action, add this
 		AlterTableHandler::ChangeFieldPropertyAction* newAction 
 			= new AlterTableHandler::ChangeFieldPropertyAction( *this );
 		if (!nextActionsLikeThis)
