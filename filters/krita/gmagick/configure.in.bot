@@ -1,0 +1,23 @@
+if test -z "$LIBGMAGICK_LIBS" -a -z "$LIBMAGICK_LIBS"; then
+  echo ""
+  echo "You're missing GraphicsMagick (>=1.1.7). krita's GraphicsMagick import/export"
+  echo "filter will not be compiled. You can download GraphicsMagick from"
+  echo "http://www.graphicsmagick.org/. The GraphicsMagick filter allows krita to"
+  echo "read and write XCF, PSD, GIF, BMP, and many other image formats."
+  echo ""
+  echo "If you have problems compiling GraphicsMagick, please try configuring it using"
+  echo "the --without-magick-plus-plus flag, the C++ API isn't needed for krita."
+  echo ""
+  all_tests=bad
+  AC_DEFINE([include_imagemagick_filter],"",[don't use magick filter])
+fi
+
+if test -z "$LIBGMAGICK_LIBS" -a ! -z "$LIBMAGICK_LIBS"; then
+
+  echo ""
+  echo "You're missing GraphicsMagick (>=1.1.7). krita's GraphicsMagick import/export"
+  echo "filter will not be compiled. But ImageMagick was found, which mean that krita"
+  echo "will be able to read and write XCF, PSD, GIF, BMP, and many other image formats."
+  echo "But the ImageMagick filter is deprecated and we strongly advise you to install"
+  echo "GraphicsMagick either from your distribution or from http://www.graphicsmagick.org/"
+fi

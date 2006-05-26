@@ -11,6 +11,47 @@ AC_CHECK_KDEMAXPATHLEN
 
 KDE_INIT_DOXYGEN([The KOffice API Reference], [Version $VERSION])
 
+# Check for GraphicsMagick...
+
+have_graphicsmagick=no
+KDE_FIND_PATH(GraphicsMagick-config, GRAPHICS_MAGICK_CONFIG, [${prefix}/bin ${exec_prefix}/bin /usr/local/bin /opt/local/bin], [
+  AC_MSG_WARN([Could not find GraphicsMagick anywhere, check http://www.graphicsmagick.org/ for GraphicsMagick >= 1.1.7.])
+])
+
+if test -n "$GRAPHICS_MAGICK_CONFIG"; then
+ vers=`$GRAPHICS_MAGICK_CONFIG --version 2>/dev/null | $AWK 'BEGIN { FS = "."; } { printf "%d", ($1 * 1000 + $2) * 1000 + $3;}'`
+  if test -n "$vers" && test "$vers" -ge 1001007;  then
+     LIBGMAGICK_LIBS="`$GRAPHICS_MAGICK_CONFIG --libs`"
+     LIBGMAGICK_LDFLAGS="`$GRAPHICS_MAGICK_CONFIG --ldflags`"
+     LIBGMAGICK_RPATH=
+     for args in $LIBGMAGICK_LIBS; do
+	  case $args in
+	    -L*)
+  	       LIBGMAGICK_RPATH="$LIBMAGICK_RPATH $args"
+ 	       ;;
+          esac
+     done
+     LIBGMAGICK_RPATH=`echo $LIBGMAGICK_RPATH | $SED -e "s/-L/-R/g"`
+     LIBGMAGICK_CPPFLAGS="`$GRAPHICS_MAGICK_CONFIG --cppflags`"
+     AC_DEFINE(HAVE_GMAGICK,1, [GraphicsMagick is available])
+     have_graphicsmagick=yes
+  else
+     AC_MSG_WARN([You need at least GraphicsMagick 1.1.7])
+  fi
+
+fi
+
+if test ! "$USE_RPATH" = "yes"; then
+    LIBGMAGICK_RPATH=
+fi
+
+AC_SUBST(LIBGMAGICK_LIBS)
+AC_SUBST(LIBGMAGICK_LDFLAGS)
+AC_SUBST(LIBGMAGICK_CPPFLAGS)
+AC_SUBST(LIBGMAGICK_RPATH)
+AM_CONDITIONAL(include_graphicsmagick_filter, test "$have_graphicsmagick" = "yes" -a HAVE_GMAGICK)
+
+# End of GraphicsMagick check
 
 # Check for ImageMagick...
 
@@ -58,7 +99,7 @@ AC_SUBST(LIBMAGICK_LIBS)
 AC_SUBST(LIBMAGICK_LDFLAGS)
 AC_SUBST(LIBMAGICK_CPPFLAGS)
 AC_SUBST(LIBMAGICK_RPATH)
-AM_CONDITIONAL(include_imagemagick_filter, test "$have_imagemagick" = "yes" -a HAVE_MAGICK61)
+AM_CONDITIONAL(include_imagemagick_filter, test "$have_imagemagick" = "yes" -a HAVE_MAGICK61 -a ! "$have_graphicsmagick" = "yes" -a ! HAVE_GMAGICK)
 
 # End of ImageMagick check
 
