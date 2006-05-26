@@ -593,6 +593,10 @@ void Sheet::autofill( QRect &src, QRect &dest )
       doc()->addCommand( undo );
     }
 
+    // disable the update of the max sroll range on each cell insertion
+    // Bug 124806: creating series takes extremely long time
+    enableScrollBarUpdates(false);
+
     // Fill from left to right
     if ( src.left() == dest.left() && src.right() < dest.right() )
     {
@@ -688,6 +692,11 @@ void Sheet::autofill( QRect &src, QRect &dest )
             fillSequence( srcList, destList, seqList, false );
         }
     }
+
+    // update the max sroll range ONCE here
+    enableScrollBarUpdates(true);
+    checkRangeHBorder(dest.right());
+    checkRangeVBorder(dest.bottom());
 
     emit sig_updateView( this );
     // doc()->emitEndOperation();
