@@ -1634,6 +1634,10 @@ View::~View()
     d->insertHandler = 0;
 
     delete d->actions;
+    // NOTE Stefan: Delete the Canvas explicitly, even if it has this view as
+    //              parent. Otherwise, it leads to crashes, because it tries to
+    //              access this View in some events (Bug #126492).
+    delete d->canvas;
     delete d;
 }
 
