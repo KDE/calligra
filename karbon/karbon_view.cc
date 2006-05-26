@@ -352,6 +352,9 @@ KarbonView::canvas() const
 void
 KarbonView::resizeEvent( QResizeEvent* /*event*/ )
 {
+	if(!m_showRulerAction)
+		return;
+
 	if( shell() && m_showRulerAction->isChecked())
 	{
 		m_canvas->setGeometry( rulerWidth, rulerHeight, width() - rulerWidth, height() - rulerHeight );
