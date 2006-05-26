@@ -589,7 +589,7 @@ void Canvas::validateSelection()
                                    ypos - yOffset()+v,
                                    len,
                                    hei );
-            QRect marker( d->view->doc()->zoomRect( unzoomedMarker ) );
+            QRect marker( d->view->doc()->zoomRectOld( unzoomedMarker ) );
 
             d->validationInfo->setGeometry( marker );
             d->validationInfo->show();
@@ -624,8 +624,8 @@ void Canvas::scrollToCell(QPoint location) const
   Cell* cell = sheet->cellAt(location.x(), location.y(), true);
   Q_UNUSED(cell);
 
-  double  unzoomedWidth  = d->view->doc()->unzoomItX( width() );
-  double  unzoomedHeight = d->view->doc()->unzoomItY( height() );
+  double  unzoomedWidth  = d->view->doc()->unzoomItXOld( width() );
+  double  unzoomedHeight = d->view->doc()->unzoomItYOld( height() );
 
   // xpos is the position of the cell in the current window in unzoomed
   // document coordinates.
@@ -650,7 +650,7 @@ void Canvas::scrollToCell(QPoint location) const
     // Do we need to scroll left?
     if ( xpos > minX )
       horzScrollBar()->setValue( horzScrollBar()->maximum() -
-                                  d->view->doc()->zoomItX( xOffset() - xpos + minX ) );
+                                  d->view->doc()->zoomItXOld( xOffset() - xpos + minX ) );
 
     // Do we need to scroll right?
     else if ( xpos < maxX )
@@ -663,7 +663,7 @@ void Canvas::scrollToCell(QPoint location) const
         horzScrollBarValue = horzScrollBarValueMax;
 
       horzScrollBar()->setValue( horzScrollBar()->maximum() -
-                                  d->view->doc()->zoomItX( horzScrollBarValue ) );
+                                  d->view->doc()->zoomItXOld( horzScrollBarValue ) );
     }
   }
   else {
@@ -674,7 +674,7 @@ void Canvas::scrollToCell(QPoint location) const
 
     // Do we need to scroll left?
     if ( xpos < minX )
-      horzScrollBar()->setValue( d->view->doc()->zoomItX( xOffset() + xpos - minX ) );
+      horzScrollBar()->setValue( d->view->doc()->zoomItXOld( xOffset() + xpos - minX ) );
 
     // Do we need to scroll right?
     else if ( xpos > maxX )
@@ -686,7 +686,7 @@ void Canvas::scrollToCell(QPoint location) const
       if ( horzScrollBarValue > horzScrollBarValueMax )
         horzScrollBarValue = horzScrollBarValueMax;
 
-      horzScrollBar()->setValue( d->view->doc()->zoomItX( horzScrollBarValue ) );
+      horzScrollBar()->setValue( d->view->doc()->zoomItXOld( horzScrollBarValue ) );
     }
   }
 
@@ -705,7 +705,7 @@ void Canvas::scrollToCell(QPoint location) const
 
   // do we need to scroll up
   if ( ypos < minY )
-    vertScrollBar()->setValue( d->view->doc()->zoomItY( yOffset() + ypos - minY ) );
+    vertScrollBar()->setValue( d->view->doc()->zoomItYOld( yOffset() + ypos - minY ) );
 
   // do we need to scroll down
   else if ( ypos > maxY )
@@ -717,7 +717,7 @@ void Canvas::scrollToCell(QPoint location) const
     if ( vertScrollBarValue > vertScrollBarValueMax )
       vertScrollBarValue = vertScrollBarValueMax;
 
-    vertScrollBar()->setValue( d->view->doc()->zoomItY( vertScrollBarValue ) );
+    vertScrollBar()->setValue( d->view->doc()->zoomItYOld( vertScrollBarValue ) );
   }
 }
 
@@ -733,8 +733,8 @@ void Canvas::slotScrollHorz( int _value )
   if ( sheet->layoutDirection()==Sheet::RightToLeft )
     _value = horzScrollBar()->maximum() - _value;
 
-  double unzoomedValue = d->view->doc()->unzoomItX( _value );
-  double dwidth = d->view->doc()->unzoomItX( width() );
+  double unzoomedValue = d->view->doc()->unzoomItXOld( _value );
+  double dwidth = d->view->doc()->unzoomItXOld( width() );
 
   d->view->doc()->emitBeginOperation(false);
 
@@ -752,7 +752,7 @@ void Canvas::slotScrollHorz( int _value )
   sheet->enableScrollBarUpdates( false );
 
   // Relative movement
-  int dx = d->view->doc()->zoomItX( d->xOffset - unzoomedValue );
+  int dx = d->view->doc()->zoomItXOld( d->xOffset - unzoomedValue );
 
 
   /* what cells will need painted now? */
@@ -797,7 +797,7 @@ void Canvas::slotScrollVert( int _value )
     return;
 
   d->view->doc()->emitBeginOperation(false);
-  double unzoomedValue = d->view->doc()->unzoomItY( _value );
+  double unzoomedValue = d->view->doc()->unzoomItYOld( _value );
 
   if ( unzoomedValue < 0 )
   {
@@ -813,7 +813,7 @@ void Canvas::slotScrollVert( int _value )
   sheet->enableScrollBarUpdates( false );
 
   // Relative movement
-  int dy = d->view->doc()->zoomItY( d->yOffset - unzoomedValue );
+  int dy = d->view->doc()->zoomItYOld( d->yOffset - unzoomedValue );
 
 
   /* what cells will need painted now? */
@@ -827,7 +827,7 @@ void Canvas::slotScrollVert( int _value )
   else
   {
     area.setTop(area.bottom());
-    area.setBottom(sheet->bottomRow(d->view->doc()->unzoomItY(height()) +
+    area.setBottom(sheet->bottomRow(d->view->doc()->unzoomItYOld(height()) +
                                             unzoomedValue));
   }
 
@@ -851,14 +851,14 @@ void Canvas::slotMaxColumn( int _max_column )
 
   int oldValue = horzScrollBar()->maximum() - horzScrollBar()->value();
   double xpos = sheet->dblColumnPos( qMin( KS_colMax, _max_column + 10 ) ) - xOffset();
-  double unzoomWidth = d->view->doc()->unzoomItX( width() );
+  double unzoomWidth = d->view->doc()->unzoomItXOld( width() );
 
   //Don't go beyond the maximum column range (KS_colMax)
   double sizeMaxX = sheet->sizeMaxX();
   if ( xpos > sizeMaxX - xOffset() - unzoomWidth )
     xpos = sizeMaxX - xOffset() - unzoomWidth;
 
-  horzScrollBar()->setRange( 0, d->view->doc()->zoomItX( xpos + xOffset() ) );
+  horzScrollBar()->setRange( 0, d->view->doc()->zoomItXOld( xpos + xOffset() ) );
 
   if ( sheet->layoutDirection()==Sheet::RightToLeft )
     horzScrollBar()->setValue( horzScrollBar()->maximum() - oldValue );
@@ -871,14 +871,14 @@ void Canvas::slotMaxRow( int _max_row )
     return;
 
   double ypos = sheet->dblRowPos( qMin( KS_rowMax, _max_row + 10 ) ) - yOffset();
-  double unzoomHeight = d->view->doc()->unzoomItY( height() );
+  double unzoomHeight = d->view->doc()->unzoomItYOld( height() );
 
   //Don't go beyond the maximum row range (KS_rowMax)
   double sizeMaxY = sheet->sizeMaxY();
   if ( ypos > sizeMaxY - yOffset() - unzoomHeight )
     ypos = sizeMaxY - yOffset() - unzoomHeight;
 
-  vertScrollBar()->setRange( 0, d->view->doc()->zoomItY( ypos + yOffset() ) );
+  vertScrollBar()->setRange( 0, d->view->doc()->zoomItYOld( ypos + yOffset() ) );
 }
 
 void Canvas::mouseMoveEvent( QMouseEvent * _ev )
@@ -889,7 +889,7 @@ void Canvas::mouseMoveEvent( QMouseEvent * _ev )
 
   if ( d->mousePressed && d->modType != MT_NONE )
   {
-    KoPoint docPoint ( doc()->unzoomPoint( _ev->pos() ) );
+    KoPoint docPoint ( doc()->unzoomPointOld( _ev->pos() ) );
     docPoint += KoPoint( xOffset(), yOffset() );
 
     if ( d->modType == MT_MOVE )
@@ -911,7 +911,7 @@ void Canvas::mouseMoveEvent( QMouseEvent * _ev )
       {
         keepRatio = true;
       }
-      docPoint  = KoPoint( doc()->unzoomPoint( _ev->pos() ) );
+      docPoint  = KoPoint( doc()->unzoomPointOld( _ev->pos() ) );
       resizeObject( d->modType, docPoint, keepRatio );
     }
     return;
@@ -938,7 +938,7 @@ void Canvas::mouseMoveEvent( QMouseEvent * _ev )
     }
     else
     {
-      drawingRect = doc()->zoomRect( calculateNewGeometry(d->modType,  _ev->pos().x(), _ev->pos().y() ) );
+      drawingRect = doc()->zoomRectOld( calculateNewGeometry(d->modType,  _ev->pos().x(), _ev->pos().y() ) );
       drawingRect.moveBy( (int)( -xOffset() * doc()->zoomedResolutionX() ) , (int)( -yOffset() * doc()->zoomedResolutionY() ) );
     }
 
@@ -1019,7 +1019,7 @@ void Canvas::mouseMoveEvent( QMouseEvent * _ev )
     if ( ( obj = getObject( p, sheet ) ) && obj->isSelected() )
     {
       KoRect const bound = obj->geometry();
-      QRect zoomedBound = doc()->zoomRect( KoRect(bound.left(), bound.top(),
+      QRect zoomedBound = doc()->zoomRectOld( KoRect(bound.left(), bound.top(),
       bound.width(),
       bound.height() ) );
       zoomedBound.translate( (int)(-xOffset() * doc()->zoomedResolutionX() ), (int)(-yOffset() * doc()->zoomedResolutionY() ));
@@ -1028,17 +1028,17 @@ void Canvas::mouseMoveEvent( QMouseEvent * _ev )
     }
   }
 
-  double dwidth = d->view->doc()->unzoomItX( width() );
+  double dwidth = d->view->doc()->unzoomItXOld( width() );
   double ev_PosX;
   if ( sheet->layoutDirection()==Sheet::RightToLeft )
   {
-    ev_PosX = dwidth - d->view->doc()->unzoomItX( _ev->pos().x() ) + xOffset();
+    ev_PosX = dwidth - d->view->doc()->unzoomItXOld( _ev->pos().x() ) + xOffset();
   }
   else
   {
-    ev_PosX = d->view->doc()->unzoomItX( _ev->pos().x() ) + xOffset();
+    ev_PosX = d->view->doc()->unzoomItXOld( _ev->pos().x() ) + xOffset();
   }
-  double ev_PosY = d->view->doc()->unzoomItY( _ev->pos().y() ) + yOffset();
+  double ev_PosY = d->view->doc()->unzoomItYOld( _ev->pos().y() ) + yOffset();
 
   // In which cell did the user click ?
   double xpos;
@@ -1099,13 +1099,13 @@ void Canvas::mouseMoveEvent( QMouseEvent * _ev )
     QString anchor;
     if ( sheet->layoutDirection()==Sheet::RightToLeft )
     {
-      anchor = cell->testAnchor( d->view->doc()->zoomItX( cell->dblWidth() - ev_PosX + xpos ),
-                                 d->view->doc()->zoomItY( ev_PosY - ypos ) );
+      anchor = cell->testAnchor( d->view->doc()->zoomItXOld( cell->dblWidth() - ev_PosX + xpos ),
+                                 d->view->doc()->zoomItYOld( ev_PosY - ypos ) );
     }
     else
     {
-      anchor = cell->testAnchor( d->view->doc()->zoomItX( ev_PosX - xpos ),
-                                 d->view->doc()->zoomItY( ev_PosY - ypos ) );
+      anchor = cell->testAnchor( d->view->doc()->zoomItXOld( ev_PosX - xpos ),
+                                 d->view->doc()->zoomItYOld( ev_PosY - ypos ) );
     }
     if ( !anchor.isEmpty() && anchor != d->anchor )
     {
@@ -1117,13 +1117,13 @@ void Canvas::mouseMoveEvent( QMouseEvent * _ev )
 
   // Test wether mouse is over the selection handle
   QRect selectionHandle = d->view->selectionInfo()->selectionHandleArea();
-  if ( selectionHandle.contains( QPoint( d->view->doc()->zoomItX( ev_PosX ),
-                                         d->view->doc()->zoomItY( ev_PosY ) ) ) )
+  if ( selectionHandle.contains( QPoint( d->view->doc()->zoomItXOld( ev_PosX ),
+                                         d->view->doc()->zoomItYOld( ev_PosY ) ) ) )
   {
     //If the cursor is over the handle, than it might be already on the next cell.
     //Recalculate the cell!
-    col  = sheet->leftColumn( ev_PosX - d->view->doc()->unzoomItX( 2 ), xpos );
-    row  = sheet->topRow( ev_PosY - d->view->doc()->unzoomItY( 2 ), ypos );
+    col  = sheet->leftColumn( ev_PosX - d->view->doc()->unzoomItXOld( 2 ), xpos );
+    row  = sheet->topRow( ev_PosY - d->view->doc()->unzoomItYOld( 2 ), ypos );
 
     if ( !sheet->isProtected() )
     {
@@ -1369,7 +1369,7 @@ void Canvas::mousePressEvent( QMouseEvent * _ev )
         d->m_rectBeforeResize = obj->geometry();
       }
 
-      KoPoint docPoint ( doc()->unzoomPoint( _ev->pos() ) );
+      KoPoint docPoint ( doc()->unzoomPointOld( _ev->pos() ) );
       docPoint += KoPoint( xOffset(), yOffset() );
       d->m_origMousePos = docPoint;
       d->m_moveStartPosMouse = objectRect( false ).topLeft();
@@ -1385,17 +1385,17 @@ void Canvas::mousePressEvent( QMouseEvent * _ev )
 
   // Get info about where the event occurred - this is duplicated
   // in ::mouseMoveEvent, needs to be separated into one function
-  double dwidth = d->view->doc()->unzoomItX( width() );
+  double dwidth = d->view->doc()->unzoomItXOld( width() );
   double ev_PosX;
   if ( sheet->layoutDirection()==Sheet::RightToLeft )
   {
-    ev_PosX = dwidth - d->view->doc()->unzoomItX( _ev->pos().x() ) + xOffset();
+    ev_PosX = dwidth - d->view->doc()->unzoomItXOld( _ev->pos().x() ) + xOffset();
   }
   else
   {
-    ev_PosX = d->view->doc()->unzoomItX( _ev->pos().x() ) + xOffset();
+    ev_PosX = d->view->doc()->unzoomItXOld( _ev->pos().x() ) + xOffset();
   }
-  double ev_PosY = d->view->doc()->unzoomItY( _ev->pos().y() ) + yOffset();
+  double ev_PosY = d->view->doc()->unzoomItYOld( _ev->pos().y() ) + yOffset();
 
   // In which cell did the user click ?
   double xpos;
@@ -1435,8 +1435,8 @@ void Canvas::mousePressEvent( QMouseEvent * _ev )
 //   d->scrollTimer->start( 50 );
 
   // Did we click in the lower right corner of the marker/marked-area ?
-  if ( selectionInfo()->selectionHandleArea().contains( QPoint( d->view->doc()->zoomItX( ev_PosX ),
-                                                                d->view->doc()->zoomItY( ev_PosY ) ) ) )
+  if ( selectionInfo()->selectionHandleArea().contains( QPoint( d->view->doc()->zoomItXOld( ev_PosX ),
+                                                                d->view->doc()->zoomItYOld( ev_PosY ) ) ) )
   {
     processClickSelectionHandle( _ev );
     return;
@@ -1665,8 +1665,8 @@ void Canvas::paintEvent( QPaintEvent* event )
 
   // ElapsedTime et( "Canvas::paintEvent" );
 
-  double dwidth = d->view->doc()->unzoomItX( width() );
-  KoRect rect = d->view->doc()->unzoomRect( paintRect & QWidget::rect() );
+  double dwidth = d->view->doc()->unzoomItXOld( width() );
+  KoRect rect = d->view->doc()->unzoomRectOld( paintRect & QWidget::rect() );
   if ( sheet->layoutDirection()==Sheet::RightToLeft )
     rect.moveBy( -xOffset(), yOffset() );
   else
@@ -1745,7 +1745,7 @@ void Canvas::dragMoveEvent( QDragMoveEvent * _ev )
   _ev->setAccepted( mimeData->hasText() ||
                     mimeData->hasFormat( "application/x-kspread-snippet" ) );
 
-  double dwidth = d->view->doc()->unzoomItX( width() );
+  double dwidth = d->view->doc()->unzoomItXOld( width() );
   double xpos = sheet->dblColumnPos( selectionInfo()->lastRange().left() );
   double ypos = sheet->dblRowPos( selectionInfo()->lastRange().top() );
   double width  = sheet->columnFormat( selectionInfo()->lastRange().left() )->dblWidth( this );
@@ -1755,11 +1755,11 @@ void Canvas::dragMoveEvent( QDragMoveEvent * _ev )
 
   double ev_PosX;
   if (sheet->layoutDirection()==Sheet::RightToLeft)
-    ev_PosX = dwidth - d->view->doc()->unzoomItX( _ev->pos().x() ) + xOffset();
+    ev_PosX = dwidth - d->view->doc()->unzoomItXOld( _ev->pos().x() ) + xOffset();
   else
-    ev_PosX = d->view->doc()->unzoomItX( _ev->pos().x() ) + xOffset();
+    ev_PosX = d->view->doc()->unzoomItXOld( _ev->pos().x() ) + xOffset();
 
-  double ev_PosY = d->view->doc()->unzoomItY( _ev->pos().y() ) + yOffset();
+  double ev_PosY = d->view->doc()->unzoomItYOld( _ev->pos().y() ) + yOffset();
 
   if ( r1.contains( QPoint ((int) ev_PosX, (int) ev_PosY) ) )
     _ev->ignore( r1 );
@@ -1785,7 +1785,7 @@ void Canvas::dropEvent( QDropEvent * _ev )
     return;
   }
 
-  double dwidth = d->view->doc()->unzoomItX( width() );
+  double dwidth = d->view->doc()->unzoomItXOld( width() );
   double xpos = sheet->dblColumnPos( selectionInfo()->lastRange().left() );
   double ypos = sheet->dblRowPos( selectionInfo()->lastRange().top() );
   double width  = sheet->columnFormat( selectionInfo()->lastRange().left() )->dblWidth( this );
@@ -1795,11 +1795,11 @@ void Canvas::dropEvent( QDropEvent * _ev )
 
   double ev_PosX;
   if (sheet->layoutDirection()==Sheet::RightToLeft)
-    ev_PosX = dwidth - d->view->doc()->unzoomItX( _ev->pos().x() ) + xOffset();
+    ev_PosX = dwidth - d->view->doc()->unzoomItXOld( _ev->pos().x() ) + xOffset();
   else
-    ev_PosX = d->view->doc()->unzoomItX( _ev->pos().x() ) + xOffset();
+    ev_PosX = d->view->doc()->unzoomItXOld( _ev->pos().x() ) + xOffset();
 
-  double ev_PosY = d->view->doc()->unzoomItY( _ev->pos().y() ) + yOffset();
+  double ev_PosY = d->view->doc()->unzoomItYOld( _ev->pos().y() ) + yOffset();
 
   if ( r1.contains( QPoint ((int) ev_PosX, (int) ev_PosY) ) )
   {
@@ -1862,8 +1862,8 @@ void Canvas::resizeEvent( QResizeEvent* _ev )
   if (!sheet)
     return;
 
-    double ev_Width = d->view->doc()->unzoomItX( _ev->size().width() );
-    double ev_Height = d->view->doc()->unzoomItY( _ev->size().height() );
+    double ev_Width = d->view->doc()->unzoomItXOld( _ev->size().width() );
+    double ev_Height = d->view->doc()->unzoomItYOld( _ev->size().height() );
 
     // workaround to allow horizontal resizing and zoom changing when sheet
     // direction and interface direction don't match (e.g. an RTL sheet on an
@@ -1885,9 +1885,9 @@ void Canvas::resizeEvent( QResizeEvent* _ev )
         int oldValue = horzScrollBar()->maximum() - horzScrollBar()->value();
 
         if ( ( xOffset() + ev_Width ) >
-               d->view->doc()->zoomItX( sheet->sizeMaxX() ) )
+               d->view->doc()->zoomItXOld( sheet->sizeMaxX() ) )
         {
-          horzScrollBar()->setRange( 0, d->view->doc()->zoomItX( sheet->sizeMaxX() - ev_Width ) );
+          horzScrollBar()->setRange( 0, d->view->doc()->zoomItXOld( sheet->sizeMaxX() - ev_Width ) );
           if ( sheet->layoutDirection()==Sheet::RightToLeft )
             horzScrollBar()->setValue( horzScrollBar()->maximum() - oldValue );
         }
@@ -1898,9 +1898,9 @@ void Canvas::resizeEvent( QResizeEvent* _ev )
         int oldValue = horzScrollBar()->maximum() - horzScrollBar()->value();
 
         if ( horzScrollBar()->maximum() ==
-             int( d->view->doc()->zoomItX( sheet->sizeMaxX() ) - ev_Width ) )
+             int( d->view->doc()->zoomItXOld( sheet->sizeMaxX() ) - ev_Width ) )
         {
-          horzScrollBar()->setRange( 0, d->view->doc()->zoomItX( sheet->sizeMaxX() - ev_Width ) );
+          horzScrollBar()->setRange( 0, d->view->doc()->zoomItXOld( sheet->sizeMaxX() - ev_Width ) );
           if ( sheet->layoutDirection()==Sheet::RightToLeft )
             horzScrollBar()->setValue( horzScrollBar()->maximum() - oldValue );
         }
@@ -1910,18 +1910,18 @@ void Canvas::resizeEvent( QResizeEvent* _ev )
     if ( _ev->size().height() > _ev->oldSize().height() )
     {
         if ( ( yOffset() + ev_Height ) >
-             d->view->doc()->zoomItY( sheet->sizeMaxY() ) )
+             d->view->doc()->zoomItYOld( sheet->sizeMaxY() ) )
         {
-            vertScrollBar()->setRange( 0, d->view->doc()->zoomItY( sheet->sizeMaxY() - ev_Height ) );
+            vertScrollBar()->setRange( 0, d->view->doc()->zoomItYOld( sheet->sizeMaxY() - ev_Height ) );
         }
     }
     // If we lower vertically, then check if the range should represent the maximum range
     else if ( _ev->size().height() < _ev->oldSize().height() )
     {
         if ( vertScrollBar()->maximum() ==
-             int( d->view->doc()->zoomItY( sheet->sizeMaxY() ) - ev_Height ) )
+             int( d->view->doc()->zoomItYOld( sheet->sizeMaxY() ) - ev_Height ) )
         {
-          vertScrollBar()->setRange( 0, d->view->doc()->zoomItY( sheet->sizeMaxY() - ev_Height ) );
+          vertScrollBar()->setRange( 0, d->view->doc()->zoomItYOld( sheet->sizeMaxY() - ev_Height ) );
         }
     }
 }
@@ -2174,7 +2174,7 @@ void Canvas::processEscapeKey(QKeyEvent * event)
       case MT_RESIZE_RU:
       case MT_RESIZE_RD:
       {
-        QRect oldBoundingRect = doc()->zoomRect( d->m_resizeObject->geometry()/*getRepaintRect()*/);
+        QRect oldBoundingRect = doc()->zoomRectOld( d->m_resizeObject->geometry()/*getRepaintRect()*/);
         d->m_resizeObject->setGeometry( d->m_rectBeforeResize );
         oldBoundingRect.translate( (int)( -xOffset()*doc()->zoomedResolutionX() ) ,
                             (int)( -yOffset() * doc()->zoomedResolutionY()) );
@@ -2816,7 +2816,7 @@ void Canvas::keyPressEvent ( QKeyEvent * _ev )
     int row = markerRow();
     int col = markerColumn();
     KoPoint kop(sheet->columnPos(col, this), sheet->rowPos(row, this));
-    QPoint p = d->view->doc()->zoomPoint(kop);
+    QPoint p = d->view->doc()->zoomPointOld(kop);
     p = mapToGlobal(p);
     d->view->openPopupMenu( p );
   }
@@ -3243,9 +3243,9 @@ double Canvas::autoScrollAccelerationX( int offset )
     {
         case 0: return 5.0;
         case 1: return 20.0;
-        case 2: return d->view->doc()->unzoomItX( width() );
-        case 3: return d->view->doc()->unzoomItX( width() );
-        default: return d->view->doc()->unzoomItX( (int) (width() * 5.0) );
+        case 2: return d->view->doc()->unzoomItXOld( width() );
+        case 3: return d->view->doc()->unzoomItXOld( width() );
+        default: return d->view->doc()->unzoomItXOld( (int) (width() * 5.0) );
     }
 }
 
@@ -3255,9 +3255,9 @@ double Canvas::autoScrollAccelerationY( int offset )
     {
         case 0: return 5.0;
         case 1: return 20.0;
-        case 2: return d->view->doc()->unzoomItY( height() );
-        case 3: return d->view->doc()->unzoomItY( height() );
-        default: return d->view->doc()->unzoomItY( (int) (height() * 5.0) );
+        case 2: return d->view->doc()->unzoomItYOld( height() );
+        case 3: return d->view->doc()->unzoomItYOld( height() );
+        default: return d->view->doc()->unzoomItYOld( (int) (height() * 5.0) );
     }
 }
 #endif
@@ -3272,7 +3272,7 @@ KSpread::EmbeddedObject *Canvas::getObject( const QPoint &pos, Sheet *_sheet )
     if ( object->sheet() == _sheet )
     {
         KoRect const bound = ( object )->geometry();
-        QRect zoomedBound = doc()->zoomRect( KoRect(bound.left(), bound.top(),
+        QRect zoomedBound = doc()->zoomRectOld( KoRect(bound.left(), bound.top(),
                                 bound.width(),
                                 bound.height() ) );
         zoomedBound.translate( (int)( -xOffset() * doc()->zoomedResolutionX() ), (int)( -yOffset() * doc()->zoomedResolutionY() ) );
@@ -3410,7 +3410,7 @@ void Canvas::resizeObject( ModifyType _modType, const KoPoint & point, bool keep
 
     KoRect objRect = obj->geometry();
     objRect.moveBy( -xOffset(), -yOffset() );
-    QRect oldBoundingRect( doc()->zoomRect( objRect ) );
+    QRect oldBoundingRect( doc()->zoomRectOld( objRect ) );
 
     bool left = false;
     bool right = false;
@@ -3745,7 +3745,7 @@ bool Canvas::createEditor( EditorType ed, bool addFocus, bool captureArrowKeys )
     // paint editor above correct cell if sheet direction is RTL
     if ( sheetDir == Sheet::RightToLeft )
     {
-      double dwidth = d->view->doc()->unzoomItX( width() );
+      double dwidth = d->view->doc()->unzoomItXOld( width() );
       double w2 = qMax( w, min_w );
       xpos = dwidth - w2 - xpos;
     }
@@ -3771,14 +3771,14 @@ bool Canvas::createEditor( EditorType ed, bool addFocus, bool captureArrowKeys )
     KoRect rect( xpos, ypos, w, h ); //needed to circumvent rounding issue with height/width
 
 
-    QRect zoomedRect=d->view->doc()->zoomRect( rect );
+    QRect zoomedRect=d->view->doc()->zoomRectOld( rect );
 	/*zoomedRect.setLeft(zoomedRect.left()-2);
 	zoomedRect.setRight(zoomedRect.right()+4);
 	zoomedRect.setTop(zoomedRect.top()-1);
 	zoomedRect.setBottom(zoomedRect.bottom()+2);*/
 
     d->cellEditor->setGeometry( zoomedRect );
-    d->cellEditor->setMinimumSize( QSize( d->view->doc()->zoomItX( min_w ), d->view->doc()->zoomItY( min_h ) ) );
+    d->cellEditor->setMinimumSize( QSize( d->view->doc()->zoomItXOld( min_w ), d->view->doc()->zoomItYOld( min_h ) ) );
     d->cellEditor->show();
     //kDebug(36001) << "FOCUS1" << endl;
     //Laurent 2001-12-05
@@ -3800,7 +3800,7 @@ bool Canvas::createEditor( EditorType ed, bool addFocus, bool captureArrowKeys )
 void Canvas::repaintObject( EmbeddedObject *obj )
 {
 	//Calculate where the object appears on the canvas widget and then repaint that part of the widget
-	QRect canvasRelativeGeometry = doc()->zoomRect( obj->geometry() );
+	QRect canvasRelativeGeometry = doc()->zoomRectOld( obj->geometry() );
 	canvasRelativeGeometry.translate( (int)( -xOffset()*doc()->zoomedResolutionX() ) ,
 			   			(int)( -yOffset() * doc()->zoomedResolutionY()) );
 
@@ -3810,7 +3810,7 @@ void Canvas::repaintObject( EmbeddedObject *obj )
   {
     KoRect g = obj->geometry();
     g.moveBy( -xOffset(), -yOffset() );
-    QRect geometry( doc()->zoomRect( g ) );
+    QRect geometry( doc()->zoomRectOld( g ) );
 
     update( geometry );
   }
@@ -4009,7 +4009,7 @@ QRect Canvas::cellsInArea( const QRect area ) const
   if (!sheet)
     return QRect();
 
-  KoRect unzoomedRect = d->view->doc()->unzoomRect( area );
+  KoRect unzoomedRect = d->view->doc()->unzoomRectOld( area );
   unzoomedRect.moveBy( (int)xOffset(), (int)yOffset() );
 
   	double tmp;
@@ -4060,7 +4060,7 @@ void Canvas::paintUpdates()
   painter.save();
   clipoutChildren( painter );
 
-  KoRect unzoomedRect = d->view->doc()->unzoomRect( QRect( 0, 0, width(), height() ) );
+  KoRect unzoomedRect = d->view->doc()->unzoomRectOld( QRect( 0, 0, width(), height() ) );
   // unzoomedRect.translate( xOffset(), yOffset() );
 
 #if 0
@@ -4202,7 +4202,7 @@ void Canvas::clipoutChildren( QPainter& painter ) const
   {
     if ( ( object )->sheet() == activeSheet() )
     {
-	QRect childGeometry = doc()->zoomRect( object->geometry());
+	QRect childGeometry = doc()->zoomRectOld( object->geometry());
 
 	//The clipping region is given in device coordinates
 	//so subtract the current offset (scroll position) of the canvas
@@ -4211,7 +4211,7 @@ void Canvas::clipoutChildren( QPainter& painter ) const
 	if (painter.window().intersects(childGeometry))
 		rgn -= childGeometry;
 
-      //painter.fillRect( doc()->zoomRect( object->geometry() ), QColor("red" ) );
+      //painter.fillRect( doc()->zoomRectOld( object->geometry() ), QColor("red" ) );
     }
   }
 
@@ -4243,7 +4243,7 @@ void Canvas::paintChildren( QPainter& painter, QMatrix& /*matrix*/ )
 
   foreach ( EmbeddedObject* object, doc()->embeddedObjects() )
   {
-    QRect const zoomedObjectGeometry = doc()->zoomRect( object->geometry() );
+    QRect const zoomedObjectGeometry = doc()->zoomRectOld( object->geometry() );
     if ( ( object )->sheet() == sheet &&
            zoomedWindowGeometry.intersects( zoomedObjectGeometry ) )
     {
@@ -4312,10 +4312,10 @@ void Canvas::paintHighlightedRanges(QPainter& painter, const KoRect& /*viewRect*
 
 		QRect zoomedRect;
 
-		zoomedRect.setCoords (	d->view->doc()->zoomItX(unzoomedRect.left()),
-					d->view->doc()->zoomItY(unzoomedRect.top()),
-					d->view->doc()->zoomItX(unzoomedRect.right()),
-					d->view->doc()->zoomItY(unzoomedRect.bottom()) );
+		zoomedRect.setCoords (	d->view->doc()->zoomItXOld(unzoomedRect.left()),
+					d->view->doc()->zoomItYOld(unzoomedRect.top()),
+					d->view->doc()->zoomItXOld(unzoomedRect.right()),
+					d->view->doc()->zoomItYOld(unzoomedRect.bottom()) );
 
 		//Now adjust the highlight rectangle is slightly inside the cell borders (this means that multiple highlighted cells
 		//look nicer together as the borders do not clash)
@@ -4387,37 +4387,37 @@ void Canvas::paintNormalMarker(QPainter& painter, const KoRect &viewRect)
 
     if ( paintTop )
     {
-      painter.drawLine( d->view->doc()->zoomItX( left ) - l,      d->view->doc()->zoomItY( top ),
-                        d->view->doc()->zoomItX( right ) + l, d->view->doc()->zoomItY( top ) );
+      painter.drawLine( d->view->doc()->zoomItXOld( left ) - l,      d->view->doc()->zoomItYOld( top ),
+                        d->view->doc()->zoomItXOld( right ) + l, d->view->doc()->zoomItYOld( top ) );
     }
     if ( activeSheet()->layoutDirection()==Sheet::RightToLeft )
     {
       if ( paintRight )
       {
-        painter.drawLine( d->view->doc()->zoomItX( right ), d->view->doc()->zoomItY( top ),
-                          d->view->doc()->zoomItX( right ), d->view->doc()->zoomItY( bottom ) );
+        painter.drawLine( d->view->doc()->zoomItXOld( right ), d->view->doc()->zoomItYOld( top ),
+                          d->view->doc()->zoomItXOld( right ), d->view->doc()->zoomItYOld( bottom ) );
       }
       if ( paintLeft && paintBottom && current )
       {
         /* then the 'handle' in the bottom left corner is visible. */
-        painter.drawLine( d->view->doc()->zoomItX( left ), d->view->doc()->zoomItY( top ),
-                          d->view->doc()->zoomItX( left ), d->view->doc()->zoomItY( bottom ) - 3 );
-        painter.drawLine( d->view->doc()->zoomItX( left ) + 4,  d->view->doc()->zoomItY( bottom ),
-                          d->view->doc()->zoomItX( right ) + l + 1, d->view->doc()->zoomItY( bottom ) );
-        painter.fillRect( d->view->doc()->zoomItX( left ) - 2, d->view->doc()->zoomItY( bottom ) -2, 5, 5,
+        painter.drawLine( d->view->doc()->zoomItXOld( left ), d->view->doc()->zoomItYOld( top ),
+                          d->view->doc()->zoomItXOld( left ), d->view->doc()->zoomItYOld( bottom ) - 3 );
+        painter.drawLine( d->view->doc()->zoomItXOld( left ) + 4,  d->view->doc()->zoomItYOld( bottom ),
+                          d->view->doc()->zoomItXOld( right ) + l + 1, d->view->doc()->zoomItYOld( bottom ) );
+        painter.fillRect( d->view->doc()->zoomItXOld( left ) - 2, d->view->doc()->zoomItYOld( bottom ) -2, 5, 5,
                           painter.pen().color() );
       }
       else
       {
         if ( paintLeft )
         {
-          painter.drawLine( d->view->doc()->zoomItX( left ), d->view->doc()->zoomItY( top ),
-                            d->view->doc()->zoomItX( left ), d->view->doc()->zoomItY( bottom ) );
+          painter.drawLine( d->view->doc()->zoomItXOld( left ), d->view->doc()->zoomItYOld( top ),
+                            d->view->doc()->zoomItXOld( left ), d->view->doc()->zoomItYOld( bottom ) );
         }
         if ( paintBottom )
         {
-          painter.drawLine( d->view->doc()->zoomItX( left ) - l,  d->view->doc()->zoomItY( bottom ),
-                            d->view->doc()->zoomItX( right ) + l + 1, d->view->doc()->zoomItY( bottom ));
+          painter.drawLine( d->view->doc()->zoomItXOld( left ) - l,  d->view->doc()->zoomItYOld( bottom ),
+                            d->view->doc()->zoomItXOld( right ) + l + 1, d->view->doc()->zoomItYOld( bottom ));
         }
       }
     }
@@ -4425,30 +4425,30 @@ void Canvas::paintNormalMarker(QPainter& painter, const KoRect &viewRect)
     {
       if ( paintLeft )
       {
-        painter.drawLine( d->view->doc()->zoomItX( left ), d->view->doc()->zoomItY( top ),
-                          d->view->doc()->zoomItX( left ), d->view->doc()->zoomItY( bottom ) );
+        painter.drawLine( d->view->doc()->zoomItXOld( left ), d->view->doc()->zoomItYOld( top ),
+                          d->view->doc()->zoomItXOld( left ), d->view->doc()->zoomItYOld( bottom ) );
       }
       if ( paintRight && paintBottom && current )
       {
         /* then the 'handle' in the bottom right corner is visible. */
-        painter.drawLine( d->view->doc()->zoomItX( right ), d->view->doc()->zoomItY( top ),
-                          d->view->doc()->zoomItX( right ), d->view->doc()->zoomItY( bottom ) - 3 );
-        painter.drawLine( d->view->doc()->zoomItX( left ) - l,  d->view->doc()->zoomItY( bottom ),
-                          d->view->doc()->zoomItX( right ) - 3, d->view->doc()->zoomItY( bottom ) );
-        painter.fillRect( d->view->doc()->zoomItX( right ) - 2, d->view->doc()->zoomItY( bottom ) - 2, 5, 5,
+        painter.drawLine( d->view->doc()->zoomItXOld( right ), d->view->doc()->zoomItYOld( top ),
+                          d->view->doc()->zoomItXOld( right ), d->view->doc()->zoomItYOld( bottom ) - 3 );
+        painter.drawLine( d->view->doc()->zoomItXOld( left ) - l,  d->view->doc()->zoomItYOld( bottom ),
+                          d->view->doc()->zoomItXOld( right ) - 3, d->view->doc()->zoomItYOld( bottom ) );
+        painter.fillRect( d->view->doc()->zoomItXOld( right ) - 2, d->view->doc()->zoomItYOld( bottom ) - 2, 5, 5,
                           painter.pen().color() );
       }
       else
       {
         if ( paintRight )
         {
-          painter.drawLine( d->view->doc()->zoomItX( right ), d->view->doc()->zoomItY( top ),
-                            d->view->doc()->zoomItX( right ), d->view->doc()->zoomItY( bottom ) );
+          painter.drawLine( d->view->doc()->zoomItXOld( right ), d->view->doc()->zoomItYOld( top ),
+                            d->view->doc()->zoomItXOld( right ), d->view->doc()->zoomItYOld( bottom ) );
         }
         if ( paintBottom )
         {
-          painter.drawLine( d->view->doc()->zoomItX( left ) - l,  d->view->doc()->zoomItY( bottom ),
-                            d->view->doc()->zoomItX( right ) + l + 1, d->view->doc()->zoomItY( bottom ) );
+          painter.drawLine( d->view->doc()->zoomItXOld( left ) - l,  d->view->doc()->zoomItYOld( bottom ),
+                            d->view->doc()->zoomItXOld( right ) + l + 1, d->view->doc()->zoomItYOld( bottom ) );
         }
       }
     }
@@ -4485,7 +4485,7 @@ void Canvas::sheetAreaToVisibleRect( const QRect& sheetArea,
 	if (!sheet)
 		return;
 
-	double dwidth=d->view->doc()->unzoomItX(width());
+	double dwidth=d->view->doc()->unzoomItXOld(width());
 	double xpos;
 	double x;
 
@@ -4544,7 +4544,7 @@ void Canvas::retrieveMarkerInfo( const QRect &marker,
   if (!sheet)
     return;
 
-  double dWidth = d->view->doc()->unzoomItX( width() );
+  double dWidth = d->view->doc()->unzoomItXOld( width() );
 
   double xpos;
   double x;
@@ -4661,8 +4661,8 @@ void VBorder::mousePressEvent( QMouseEvent * _ev )
   if ( _ev->button() == Qt::LeftButton )
     m_bMousePressed = true;
 
-  double ev_PosY = m_pCanvas->d->view->doc()->unzoomItY( _ev->pos().y() ) + m_pCanvas->yOffset();
-  double dHeight = m_pCanvas->d->view->doc()->unzoomItY( height() );
+  double ev_PosY = m_pCanvas->d->view->doc()->unzoomItYOld( _ev->pos().y() ) + m_pCanvas->yOffset();
+  double dHeight = m_pCanvas->d->view->doc()->unzoomItYOld( height() );
   m_bResize = false;
   m_bSelection = false;
 
@@ -4763,7 +4763,7 @@ void VBorder::mouseReleaseEvent( QMouseEvent * _ev )
     if (!sheet)
 	    return;
 
-    double ev_PosY = m_pCanvas->d->view->doc()->unzoomItY( _ev->pos().y() ) + m_pCanvas->yOffset();
+    double ev_PosY = m_pCanvas->d->view->doc()->unzoomItYOld( _ev->pos().y() ) + m_pCanvas->yOffset();
 
     if ( m_bResize )
     {
@@ -4902,8 +4902,8 @@ void VBorder::mouseMoveEvent( QMouseEvent * _ev )
   if (!sheet)
     return;
 
-  double ev_PosY = m_pCanvas->d->view->doc()->unzoomItY( _ev->pos().y() ) + m_pCanvas->yOffset();
-  double dHeight = m_pCanvas->d->view->doc()->unzoomItY( height() );
+  double ev_PosY = m_pCanvas->d->view->doc()->unzoomItYOld( _ev->pos().y() ) + m_pCanvas->yOffset();
+  double dHeight = m_pCanvas->d->view->doc()->unzoomItYOld( height() );
 
   // The button is pressed and we are resizing ?
   if ( m_bResize )
@@ -4926,14 +4926,14 @@ void VBorder::mouseMoveEvent( QMouseEvent * _ev )
     m_pView->selectionInfo()->update(newMarker);
 
     if ( _ev->pos().y() < 0 )
-      m_pCanvas->vertScrollBar()->setValue( m_pCanvas->d->view->doc()->zoomItY( ev_PosY ) );
+      m_pCanvas->vertScrollBar()->setValue( m_pCanvas->d->view->doc()->zoomItYOld( ev_PosY ) );
     else if ( _ev->pos().y() > m_pCanvas->height() )
     {
       if ( row < KS_rowMax )
       {
         RowFormat *rl = sheet->rowFormat( row + 1 );
         y = sheet->dblRowPos( row + 1 );
-        m_pCanvas->vertScrollBar()->setValue ((int) (m_pCanvas->d->view->doc()->zoomItY
+        m_pCanvas->vertScrollBar()->setValue ((int) (m_pCanvas->d->view->doc()->zoomItYOld
               (ev_PosY + rl->dblHeight()) - dHeight));
       }
     }
@@ -4943,11 +4943,11 @@ void VBorder::mouseMoveEvent( QMouseEvent * _ev )
   {
 
      //What is the internal size of 1 pixel
-    const double unzoomedPixel = m_pCanvas->d->view->doc()->unzoomItY( 1 );
+    const double unzoomedPixel = m_pCanvas->d->view->doc()->unzoomItYOld( 1 );
     double y;
     int tmpRow = sheet->topRow( m_pCanvas->yOffset(), y );
 
-    while ( y < m_pCanvas->d->view->doc()->unzoomItY( height() ) + m_pCanvas->yOffset() )
+    while ( y < m_pCanvas->d->view->doc()->unzoomItYOld( height() ) + m_pCanvas->yOffset() )
     {
       double h = sheet->rowFormat( tmpRow )->dblHeight();
       //if col is hide and it's the first column
@@ -5011,7 +5011,7 @@ void VBorder::paintSizeIndicator( int mouseY, bool firstTime )
     m_iResizePos = mouseY;
 
     // Dont make the row have a height < 2 pixel.
-    int y = m_pCanvas->d->view->doc()->zoomItY( sheet->dblRowPos( m_iResizedRow ) - m_pCanvas->yOffset() );
+    int y = m_pCanvas->d->view->doc()->zoomItYOld( sheet->dblRowPos( m_iResizedRow ) - m_pCanvas->yOffset() );
     if ( m_iResizePos < y + 2 )
         m_iResizePos = y;
 
@@ -5021,7 +5021,7 @@ void VBorder::paintSizeIndicator( int mouseY, bool firstTime )
 
     QString tmpSize;
     if ( m_iResizePos != y )
-        tmpSize = i18n("Height: %1 %2", KoUnit::toUserValue( m_pCanvas->doc()->unzoomItY( m_iResizePos - y ), m_pView->doc()->unit() ) , m_pView->doc()->unitName() );
+        tmpSize = i18n("Height: %1 %2", KoUnit::toUserValue( m_pCanvas->doc()->unzoomItYOld( m_iResizePos - y ), m_pView->doc()->unit() ) , m_pView->doc()->unitName() );
     else
         tmpSize = i18n( "Hide Row" );
 
@@ -5117,21 +5117,21 @@ void VBorder::paintEvent( QPaintEvent* event )
 
   double yPos;
   //Get the top row and the current y-position
-  int y = sheet->topRow( (m_pCanvas->d->view->doc()->unzoomItY( paintRect.y() ) + m_pCanvas->yOffset()), yPos );
+  int y = sheet->topRow( (m_pCanvas->d->view->doc()->unzoomItYOld( paintRect.y() ) + m_pCanvas->yOffset()), yPos );
   //Align to the offset
   yPos = yPos - m_pCanvas->yOffset();
-  int width = m_pCanvas->d->view->doc()->zoomItX( YBORDER_WIDTH );
+  int width = m_pCanvas->d->view->doc()->zoomItXOld( YBORDER_WIDTH );
 
 
   //Loop through the rows, until we are out of range
-  while ( yPos <= m_pCanvas->d->view->doc()->unzoomItY( paintRect.bottom() ) )
+  while ( yPos <= m_pCanvas->d->view->doc()->unzoomItYOld( paintRect.bottom() ) )
   {
     const bool selected = (m_pView->selectionInfo()->isRowSelected(y));
     const bool highlighted = (!selected && m_pView->selectionInfo()->isRowAffected(y));
 
     const RowFormat* rowFormat = sheet->rowFormat( y );
-    const int zoomedYPos = m_pCanvas->d->view->doc()->zoomItY( yPos );
-    const int height = m_pCanvas->d->view->doc()->zoomItY( yPos + rowFormat->dblHeight() ) - zoomedYPos;
+    const int zoomedYPos = m_pCanvas->d->view->doc()->zoomItYOld( yPos );
+    const int height = m_pCanvas->d->view->doc()->zoomItYOld( yPos + rowFormat->dblHeight() ) - zoomedYPos;
 
     qDrawPlainRect ( &painter, 0, zoomedYPos, width, height + 1,
                      backgroundColor.dark(150), 1, &backgroundBrush );
@@ -5230,18 +5230,18 @@ void HBorder::mousePressEvent( QMouseEvent * _ev )
   m_scrollTimer->start( 50 );
 
   double ev_PosX;
-  double dWidth = m_pCanvas->d->view->doc()->unzoomItX( width() );
+  double dWidth = m_pCanvas->d->view->doc()->unzoomItXOld( width() );
   if ( sheet->layoutDirection()==Sheet::RightToLeft )
-    ev_PosX = dWidth - m_pCanvas->d->view->doc()->unzoomItX( _ev->pos().x() ) + m_pCanvas->xOffset();
+    ev_PosX = dWidth - m_pCanvas->d->view->doc()->unzoomItXOld( _ev->pos().x() ) + m_pCanvas->xOffset();
   else
-    ev_PosX = m_pCanvas->d->view->doc()->unzoomItX( _ev->pos().x() ) + m_pCanvas->xOffset();
+    ev_PosX = m_pCanvas->d->view->doc()->unzoomItXOld( _ev->pos().x() ) + m_pCanvas->xOffset();
   m_bResize = false;
   m_bSelection = false;
 
   // Find the first visible column and the x position of this column.
   double x;
 
-  const double unzoomedPixel = m_pCanvas->d->view->doc()->unzoomItX( 1 );
+  const double unzoomedPixel = m_pCanvas->d->view->doc()->unzoomItXOld( 1 );
   if ( sheet->layoutDirection()==Sheet::RightToLeft )
   {
     int tmpCol = sheet->leftColumn( m_pCanvas->xOffset(), x );
@@ -5386,7 +5386,7 @@ void HBorder::mouseReleaseEvent( QMouseEvent * _ev )
 
     if ( m_bResize )
     {
-        double dWidth = m_pCanvas->d->view->doc()->unzoomItX( width() );
+        double dWidth = m_pCanvas->d->view->doc()->unzoomItXOld( width() );
         double ev_PosX;
 
         // Remove size indicator painted by paintSizeIndicator
@@ -5414,9 +5414,9 @@ void HBorder::mouseReleaseEvent( QMouseEvent * _ev )
         double x;
 
         if ( sheet->layoutDirection()==Sheet::RightToLeft )
-          ev_PosX = dWidth - m_pCanvas->d->view->doc()->unzoomItX( _ev->pos().x() ) + m_pCanvas->xOffset();
+          ev_PosX = dWidth - m_pCanvas->d->view->doc()->unzoomItXOld( _ev->pos().x() ) + m_pCanvas->xOffset();
         else
-          ev_PosX = m_pCanvas->d->view->doc()->unzoomItX( _ev->pos().x() ) + m_pCanvas->xOffset();
+          ev_PosX = m_pCanvas->d->view->doc()->unzoomItXOld( _ev->pos().x() ) + m_pCanvas->xOffset();
 
         x = sheet->dblColumnPos( m_iResizedColumn );
 
@@ -5532,12 +5532,12 @@ void HBorder::mouseMoveEvent( QMouseEvent * _ev )
   if (!sheet)
     return;
 
-  double dWidth = m_pCanvas->d->view->doc()->unzoomItX( width() );
+  double dWidth = m_pCanvas->d->view->doc()->unzoomItXOld( width() );
   double ev_PosX;
   if ( sheet->layoutDirection()==Sheet::RightToLeft )
-    ev_PosX = dWidth - m_pCanvas->d->view->doc()->unzoomItX( _ev->pos().x() ) + m_pCanvas->xOffset();
+    ev_PosX = dWidth - m_pCanvas->d->view->doc()->unzoomItXOld( _ev->pos().x() ) + m_pCanvas->xOffset();
   else
-    ev_PosX = m_pCanvas->d->view->doc()->unzoomItX( _ev->pos().x() ) + m_pCanvas->xOffset();
+    ev_PosX = m_pCanvas->d->view->doc()->unzoomItXOld( _ev->pos().x() ) + m_pCanvas->xOffset();
 
   // The button is pressed and we are resizing ?
   if ( m_bResize )
@@ -5567,15 +5567,15 @@ void HBorder::mouseMoveEvent( QMouseEvent * _ev )
         ColumnFormat *cl = sheet->columnFormat( col + 1 );
         x = sheet->dblColumnPos( col + 1 );
         m_pCanvas->horzScrollBar()->setValue ( m_pCanvas->horzScrollBar()->maximum() - (int)
-            (m_pCanvas->d->view->doc()->zoomItX (ev_PosX + cl->dblWidth()) - m_pCanvas->d->view->doc()->unzoomItX( m_pCanvas->width() )));
+            (m_pCanvas->d->view->doc()->zoomItXOld (ev_PosX + cl->dblWidth()) - m_pCanvas->d->view->doc()->unzoomItXOld( m_pCanvas->width() )));
       }
       else if ( _ev->pos().x() > width() )
-        m_pCanvas->horzScrollBar()->setValue( m_pCanvas->horzScrollBar()->maximum() - m_pCanvas->d->view->doc()->zoomItX( ev_PosX - dWidth + m_pCanvas->d->view->doc()->unzoomItX( m_pCanvas->width() ) ) );
+        m_pCanvas->horzScrollBar()->setValue( m_pCanvas->horzScrollBar()->maximum() - m_pCanvas->d->view->doc()->zoomItXOld( ev_PosX - dWidth + m_pCanvas->d->view->doc()->unzoomItXOld( m_pCanvas->width() ) ) );
     }
     else
     {
       if ( _ev->pos().x() < 0 )
-        m_pCanvas->horzScrollBar()->setValue( m_pCanvas->d->view->doc()->zoomItX( ev_PosX ) );
+        m_pCanvas->horzScrollBar()->setValue( m_pCanvas->d->view->doc()->zoomItXOld( ev_PosX ) );
       else if ( _ev->pos().x() > m_pCanvas->width() )
       {
         if ( col < KS_colMax )
@@ -5583,7 +5583,7 @@ void HBorder::mouseMoveEvent( QMouseEvent * _ev )
           ColumnFormat *cl = sheet->columnFormat( col + 1 );
           x = sheet->dblColumnPos( col + 1 );
           m_pCanvas->horzScrollBar()->setValue ((int)
-              (m_pCanvas->d->view->doc()->zoomItX (ev_PosX + cl->dblWidth()) - dWidth));
+              (m_pCanvas->d->view->doc()->zoomItXOld (ev_PosX + cl->dblWidth()) - dWidth));
         }
       }
     }
@@ -5593,7 +5593,7 @@ void HBorder::mouseMoveEvent( QMouseEvent * _ev )
   else
   {
      //What is the internal size of 1 pixel
-    const double unzoomedPixel = m_pCanvas->d->view->doc()->unzoomItX( 1 );
+    const double unzoomedPixel = m_pCanvas->d->view->doc()->unzoomItXOld( 1 );
     double x;
 
     if ( sheet->layoutDirection()==Sheet::RightToLeft )
@@ -5622,7 +5622,7 @@ void HBorder::mouseMoveEvent( QMouseEvent * _ev )
     {
       int tmpCol = sheet->leftColumn( m_pCanvas->xOffset(), x );
 
-      while ( x < m_pCanvas->d->view->doc()->unzoomItY( width() ) + m_pCanvas->xOffset() )
+      while ( x < m_pCanvas->d->view->doc()->unzoomItYOld( width() ) + m_pCanvas->xOffset() )
       {
         double w = sheet->columnFormat( tmpCol )->dblWidth();
         //if col is hide and it's the first column
@@ -5710,7 +5710,7 @@ void HBorder::paintSizeIndicator( int mouseX, bool firstTime )
       m_iResizePos = mouseX;
 
     // Dont make the column have a width < 2 pixels.
-    int x = m_pCanvas->d->view->doc()->zoomItX( sheet->dblColumnPos( m_iResizedColumn ) - m_pCanvas->xOffset() );
+    int x = m_pCanvas->d->view->doc()->zoomItXOld( sheet->dblColumnPos( m_iResizedColumn ) - m_pCanvas->xOffset() );
 
     if ( sheet->layoutDirection()==Sheet::RightToLeft )
     {
@@ -5731,7 +5731,7 @@ void HBorder::paintSizeIndicator( int mouseX, bool firstTime )
 
     QString tmpSize;
     if ( m_iResizePos != x )
-        tmpSize = i18n("Width: %1 %2", KGlobal::locale()->formatNumber( KoUnit::toUserValue( m_pCanvas->doc()->unzoomItX( (sheet->layoutDirection()==Sheet::RightToLeft) ? x - m_iResizePos : m_iResizePos - x ),m_pView->doc()->unit() )), m_pView->doc()->unitName() );
+        tmpSize = i18n("Width: %1 %2", KGlobal::locale()->formatNumber( KoUnit::toUserValue( m_pCanvas->doc()->unzoomItXOld( (sheet->layoutDirection()==Sheet::RightToLeft) ? x - m_iResizePos : m_iResizePos - x ),m_pView->doc()->unit() )), m_pView->doc()->unitName() );
     else
         tmpSize = i18n( "Hide Column" );
 
@@ -5827,19 +5827,19 @@ void HBorder::paintEvent( QPaintEvent* event )
   if ( sheet->layoutDirection()==Sheet::RightToLeft )
   {
     //Get the left column and the current x-position
-    x = sheet->leftColumn( int( m_pCanvas->d->view->doc()->unzoomItX( width() ) - m_pCanvas->d->view->doc()->unzoomItX( paintRect.x() ) + m_pCanvas->xOffset() ), xPos );
+    x = sheet->leftColumn( int( m_pCanvas->d->view->doc()->unzoomItXOld( width() ) - m_pCanvas->d->view->doc()->unzoomItXOld( paintRect.x() ) + m_pCanvas->xOffset() ), xPos );
     //Align to the offset
-    xPos = m_pCanvas->d->view->doc()->unzoomItX( width() ) - xPos + m_pCanvas->xOffset();
+    xPos = m_pCanvas->d->view->doc()->unzoomItXOld( width() ) - xPos + m_pCanvas->xOffset();
   }
   else
   {
     //Get the left column and the current x-position
-    x = sheet->leftColumn( int( m_pCanvas->d->view->doc()->unzoomItX( paintRect.x() ) + m_pCanvas->xOffset() ), xPos );
+    x = sheet->leftColumn( int( m_pCanvas->d->view->doc()->unzoomItXOld( paintRect.x() ) + m_pCanvas->xOffset() ), xPos );
     //Align to the offset
     xPos = xPos - m_pCanvas->xOffset();
   }
 
-  int height = m_pCanvas->d->view->doc()->zoomItY( Format::globalRowHeight() + 2 );
+  int height = m_pCanvas->d->view->doc()->zoomItYOld( Format::globalRowHeight() + 2 );
 
 
   if ( sheet->layoutDirection()==Sheet::RightToLeft )
@@ -5850,14 +5850,14 @@ void HBorder::paintEvent( QPaintEvent* event )
     xPos -= sheet->columnFormat( x )->dblWidth();
 
     //Loop through the columns, until we are out of range
-    while ( xPos <= m_pCanvas->d->view->doc()->unzoomItX( paintRect.right() ) )
+    while ( xPos <= m_pCanvas->d->view->doc()->unzoomItXOld( paintRect.right() ) )
     {
       bool selected = (m_pView->selectionInfo()->isColumnSelected(x));
       bool highlighted = (!selected && m_pView->selectionInfo()->isColumnAffected(x));
 
       const ColumnFormat * col_lay = sheet->columnFormat( x );
-      int zoomedXPos = m_pCanvas->d->view->doc()->zoomItX( xPos );
-      int width = m_pCanvas->d->view->doc()->zoomItX( xPos + col_lay->dblWidth() ) - zoomedXPos;
+      int zoomedXPos = m_pCanvas->d->view->doc()->zoomItXOld( xPos );
+      int width = m_pCanvas->d->view->doc()->zoomItXOld( xPos + col_lay->dblWidth() ) - zoomedXPos;
 
       qDrawPlainRect ( &painter, zoomedXPos, 0, width + 1, height,
                        backgroundColor.dark(150), 1, &backgroundBrush );
@@ -5902,14 +5902,14 @@ void HBorder::paintEvent( QPaintEvent* event )
   else
   {
     //Loop through the columns, until we are out of range
-    while ( xPos <= m_pCanvas->d->view->doc()->unzoomItX( paintRect.right() ) )
+    while ( xPos <= m_pCanvas->d->view->doc()->unzoomItXOld( paintRect.right() ) )
     {
       bool selected = (m_pView->selectionInfo()->isColumnSelected(x));
       bool highlighted = (!selected && m_pView->selectionInfo()->isColumnAffected(x));
 
       const ColumnFormat *col_lay = sheet->columnFormat( x );
-      int zoomedXPos = m_pCanvas->d->view->doc()->zoomItX( xPos );
-      int width = m_pCanvas->d->view->doc()->zoomItX( xPos + col_lay->dblWidth() ) - zoomedXPos;
+      int zoomedXPos = m_pCanvas->d->view->doc()->zoomItXOld( xPos );
+      int width = m_pCanvas->d->view->doc()->zoomItXOld( xPos + col_lay->dblWidth() ) - zoomedXPos;
 
       QColor backgroundColor = palette().window().color();
       qDrawPlainRect ( &painter, zoomedXPos, 0, width+1, height,
@@ -5985,17 +5985,17 @@ void Canvas::showToolTip( const QPoint& p )
 
     // Over which cell is the mouse ?
     double ypos, xpos;
-    double dwidth = doc()->unzoomItX( width() );
+    double dwidth = doc()->unzoomItXOld( width() );
     int col;
     if ( sheet->layoutDirection()==Sheet::RightToLeft )
-      col = sheet->leftColumn( (dwidth - doc()->unzoomItX( p.x() ) +
+      col = sheet->leftColumn( (dwidth - doc()->unzoomItXOld( p.x() ) +
                                               xOffset()), xpos );
     else
-      col = sheet->leftColumn( (doc()->unzoomItX( p.x() ) +
+      col = sheet->leftColumn( (doc()->unzoomItXOld( p.x() ) +
                                      xOffset()), xpos );
 
 
-    int row = sheet->topRow( (doc()->unzoomItY( p.y() ) +
+    int row = sheet->topRow( (doc()->unzoomItYOld( p.y() ) +
                                    yOffset()), ypos );
 
     const Cell* cell = sheet->visibleCellAt( col, row );
@@ -6065,7 +6065,7 @@ void Canvas::showToolTip( const QPoint& p )
                              u,
                              v );
 
-      marker = doc()->zoomRect( unzoomedMarker );
+      marker = doc()->zoomRectOld( unzoomedMarker );
       insideMarker = marker.contains( p );
     }
     else
@@ -6075,7 +6075,7 @@ void Canvas::showToolTip( const QPoint& p )
                              u,
                              v );
 
-      marker = doc()->zoomRect( unzoomedMarker );
+      marker = doc()->zoomRectOld( unzoomedMarker );
       insideMarker = marker.contains( p );
     }
 

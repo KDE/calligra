@@ -474,7 +474,7 @@ public:
 
     void setFrameCoords( double x, double y, double w, double h );
 
-    void addCommand( KCommand * cmd );
+    void addCommand( KCommand * cmd, bool execute = false);
 
     KCommandHistory * commandHistory() const { return m_commandHistory; }
     KoAutoFormat * autoFormat() const { return m_autoFormat; }

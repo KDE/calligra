@@ -67,7 +67,7 @@ int KivioCanvas::pageWidth() const
   // TODO Implement this correctly
   KoZoomHandler zoomHandler;
   KoPageLayout pageLayout = KoPageLayout::standardLayout();
-  return zoomHandler.zoomItX(pageLayout.ptWidth);
+  return zoomHandler.zoomItXOld(pageLayout.ptWidth);
 }
 
 int KivioCanvas::pageHeight() const
@@ -75,7 +75,7 @@ int KivioCanvas::pageHeight() const
   // TODO Implement this correctly
   KoZoomHandler zoomHandler;
   KoPageLayout pageLayout = KoPageLayout::standardLayout();
-  return zoomHandler.zoomItY(pageLayout.ptHeight);
+  return zoomHandler.zoomItYOld(pageLayout.ptHeight);
 }
 
 void KivioCanvas::paintEvent(QPaintEvent* event)
@@ -87,8 +87,8 @@ void KivioCanvas::paintEvent(QPaintEvent* event)
   painter.translate(-offsetX(), -offsetY());
 
   KoZoomHandler zoomHandler;
-  int pageWidth = zoomHandler.zoomItX(pageLayout.ptWidth);
-  int pageHeight = zoomHandler.zoomItY(pageLayout.ptHeight);
+  int pageWidth = zoomHandler.zoomItXOld(pageLayout.ptWidth);
+  int pageHeight = zoomHandler.zoomItYOld(pageLayout.ptHeight);
   qreal pageX = 0.0;
   qreal pageY = 0.0;
 

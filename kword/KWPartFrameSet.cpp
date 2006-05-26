@@ -112,8 +112,8 @@ void KWPartFrameSet::drawFrameContents( KWFrame* frame, QPainter * painter, cons
         // Does it define the area to be repainted only? (no, that's the painter clip rect)
         // So it defines the whole area covered by the embedded document, in pixels.
         QRect rframe( 0, 0,
-                      zh->zoomItX( frame->innerWidth() ),
-                      zh->zoomItY( frame->innerHeight() ) );
+                      zh->zoomItXOld( frame->innerWidth() ),
+                      zh->zoomItYOld( frame->innerHeight() ) );
         //kDebug(32001) << "rframe=" << rframe << endl;
 
         double zoomX = static_cast<double>( zh->zoom() ) / 100;

@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
    Copyright (C) 2002-2006 David Faure <faure@kde.org>
-   Copyright (C) 2005 Thomas Zander <zander@kde.org>
+   Copyright (C) 2005-2006 Thomas Zander <zander@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -78,6 +78,7 @@ KWCanvas::KWCanvas(const QString& viewMode, QWidget *parent, KWDocument *d, KWGU
 {
     m_frameViewManager = new KWFrameViewManager(d);
     m_gui = lGui;
+    m_shapeManager = new KoShapeManager(this);
     m_currentFrameSetEdit = 0L;
     m_mouseMeaning = MEANING_NONE;
     m_mousePressed = false;
@@ -181,6 +182,7 @@ KWCanvas::KWCanvas(const QString& viewMode, QWidget *parent, KWDocument *d, KWGU
 KWCanvas::~KWCanvas()
 {
     delete m_interactionPolicy;
+    m_interactionPolicy = 0;
     delete m_currentFrameSetEdit;
     m_currentFrameSetEdit = 0;
     delete m_viewMode;
@@ -191,6 +193,8 @@ KWCanvas::~KWCanvas()
         m_doc, SLOT(framesChanged(const Q3ValueList<KWFrame*>&)));
     delete m_frameViewManager;
     m_frameViewManager = 0;
+    delete m_shapeManager;
+    m_shapeManager = 0;
 }
 
 void KWCanvas::repaintChanged( KWFrameSet * fs, bool resetChanged )
@@ -246,7 +250,7 @@ void KWCanvas::print( QPainter *painter, KPrinter *printer )
 
         painter->save();
         int pgNum = (*it);
-        int yOffset = m_doc->zoomItY( m_doc->pageManager()->topOfPage( pgNum ) );
+        int yOffset = m_doc->zoomItYOld( m_doc->pageManager()->topOfPage( pgNum ) );
         kDebug(32001) << "printing page " << pgNum << " yOffset=" << yOffset << endl;
         QRect pageRect = m_doc->pageManager()->page(pgNum)->zoomedRect(m_doc);
         painter->fillRect( pageRect, Qt::white );
@@ -265,6 +269,7 @@ void KWCanvas::print( QPainter *painter, KPrinter *printer )
 
 void KWCanvas::drawContents( QPainter *painter, int cx, int cy, int cw, int ch )
 {
+    m_shapeManager->paint(*painter, *viewConverter(), false);
   if ( isUpdatesEnabled() )
   {
     // Note: in drawContents, the painter is already translated to the contents coordinates
@@ -367,7 +372,7 @@ void KWCanvas::switchViewMode( const QString& newViewMode )
 
 void KWCanvas::mpCreate( const QPoint& normalPoint, bool noGrid )
 {
-    KoPoint docPoint = m_doc->unzoomPoint( normalPoint );
+    KoPoint docPoint = m_doc->unzoomPointOld( normalPoint );
     if ( m_doc->snapToGrid() && !noGrid )
         applyGrid( docPoint );
     m_insRect.setCoords( docPoint.x(), docPoint.y(), 0, 0 );
@@ -379,7 +384,7 @@ void KWCanvas::mpCreatePixmap( const QPoint& normalPoint, bool noGrid  )
     if ( !m_kopicture.isNull() )
     {
         // Apply grid for the first corner only
-        KoPoint docPoint = m_doc->unzoomPoint( normalPoint );
+        KoPoint docPoint = m_doc->unzoomPointOld( normalPoint );
         if ( m_doc->snapToGrid() && ! noGrid )
             applyGrid( docPoint );
         int pageNum = m_doc->pageManager()->pageNumber( docPoint );
@@ -391,8 +396,8 @@ void KWCanvas::mpCreatePixmap( const QPoint& normalPoint, bool noGrid  )
             // This ensures 1-1 at 100% on screen, but allows zooming and printing with correct DPI values
             uint width = qRound( (double)m_pixmapSize.width() * m_doc->zoomedResolutionX() / POINT_TO_INCH( KoGlobal::dpiX() ) );
             uint height = qRound( (double)m_pixmapSize.height() * m_doc->zoomedResolutionY() / POINT_TO_INCH( KoGlobal::dpiY() ) );
-            m_insRect.setWidth( m_doc->unzoomItX( width ) );
-            m_insRect.setHeight( m_doc->unzoomItY( height ) );
+            m_insRect.setWidth( m_doc->unzoomItXOld( width ) );
+            m_insRect.setHeight( m_doc->unzoomItYOld( height ) );
             // Apply reasonable limits
             width = qMin( width, m_doc->paperWidth(pageNum) - normalPoint.x() - 5 );
             height = qMin( height, m_doc->paperHeight(pageNum) - normalPoint.y() - 5 );
@@ -403,8 +408,8 @@ void KWCanvas::mpCreatePixmap( const QPoint& normalPoint, bool noGrid  )
                 applyAspectRatio( ratio, m_insRect );
             }
 
-            QPoint nPoint( normalPoint.x() + m_doc->zoomItX( m_insRect.width() ),
-                           normalPoint.y() + m_doc->zoomItY( m_insRect.height() ) );
+            QPoint nPoint( normalPoint.x() + m_doc->zoomItXOld( m_insRect.width() ),
+                           normalPoint.y() + m_doc->zoomItYOld( m_insRect.height() ) );
             QPoint vPoint = m_viewMode->normalToView( nPoint );
             vPoint = contentsToViewport( vPoint );
             QRect viewportRect( contentsX(), contentsY(), visibleWidth(), visibleHeight() );
@@ -420,7 +425,7 @@ void KWCanvas::mpCreatePixmap( const QPoint& normalPoint, bool noGrid  )
 void KWCanvas::contentsMousePressEvent( QMouseEvent *e )
 {
     QPoint normalPoint = m_viewMode->viewToNormal( e->pos() );
-    KoPoint docPoint = m_doc->unzoomPoint( normalPoint );
+    KoPoint docPoint = m_doc->unzoomPointOld( normalPoint );
 
 
     if ( e->button() == Qt::LeftButton )
@@ -688,10 +693,10 @@ void KWCanvas::drawGrid( QPainter &p, const QRect& rect )
         // To convert back to view coordinates later we can calculate the offset for each
         // point again, or we can do it one time for the page and re-use the answer.
         KoPoint pageTopLeft (0, m_doc->pageManager()->topOfPage(pgNum) + 2); // +2 to get around rounding problems..
-        QPoint pageTopLeftView = m_viewMode->normalToView( m_doc->zoomPoint(pageTopLeft) );
+        QPoint pageTopLeftView = m_viewMode->normalToView( m_doc->zoomPointOld(pageTopLeft) );
 
         // docRect is the part of the document that needs to be painted.. Coordinates in pt
-        const KoRect docRect = m_doc->unzoomRect( m_viewMode->viewToNormal( crect ) );
+        const KoRect docRect = m_doc->unzoomRectOld( m_viewMode->viewToNormal( crect ) );
         // kDebug() << "drawGrid page " << pgNum << " pageRect=" << pageRect << " crect=" << crect << " docRect=" << docRect << endl;
 
         // the following is effectively a docRect.y() modulo offsetY
@@ -699,9 +704,9 @@ void KWCanvas::drawGrid( QPainter &p, const QRect& rect )
         const double bottom = docRect.bottom() - pageTopLeft.y();
 
         for ( double x = 0; x <= docRect.right(); x += offsetX ) {
-            const int zoomedX = m_doc->zoomItX( x ) + pageTopLeftView.x();
+            const int zoomedX = m_doc->zoomItXOld( x ) + pageTopLeftView.x();
             for ( double y = firstOffsetY; y <= bottom; y += offsetY ) {
-                const int zoomedY = m_doc->zoomItY( y ) + pageTopLeftView.y();
+                const int zoomedY = m_doc->zoomItYOld( y ) + pageTopLeftView.y();
                 p.drawPoint( zoomedX, zoomedY );
             }
         }
@@ -742,7 +747,7 @@ void KWCanvas::mmCreate( const QPoint& normalPoint, bool noGrid ) // Mouse move 
     KoRect oldRect = m_insRect;
 
     // Resize the rectangle
-    KoPoint docPoint = m_doc->unzoomPoint( normalPoint );
+    KoPoint docPoint = m_doc->unzoomPointOld( normalPoint );
     if ( m_doc->snapToGrid() && m_mouseMode != MM_CREATE_PIX && !noGrid )
         applyGrid( docPoint );
 
@@ -756,7 +761,7 @@ void KWCanvas::mmCreate( const QPoint& normalPoint, bool noGrid ) // Mouse move 
         // Even better would be to go to the limit of the page boundary, so that the result,
         // when moving the mouse of the page, doesn't depend on how fast we're moving it...
         m_insRect = oldRect;
-        // #### QCursor::setPos( viewport()->mapToGlobal( zoomPoint( m_insRect.bottomRight() ) ) );
+        // #### QCursor::setPos( viewport()->mapToGlobal( zoomPointOld( m_insRect.bottomRight() ) ) );
     }
 
     // Apply keep-aspect-ratio feature
@@ -774,7 +779,7 @@ void KWCanvas::mmCreate( const QPoint& normalPoint, bool noGrid ) // Mouse move 
 void KWCanvas::drawMovingRect( QPainter & p )
 {
     p.setPen( Qt::black );
-    p.drawRect( m_viewMode->normalToView( m_doc->zoomRect( m_insRect ) ) );
+    p.drawRect( m_viewMode->normalToView( m_doc->zoomRectOld( m_insRect ) ) );
 }
 
 void KWCanvas::deleteMovingRect()
@@ -798,7 +803,7 @@ void KWCanvas::contentsMouseMoveEvent( QMouseEvent *e )
     QPoint normalPoint = m_viewMode->viewToNormal( e->pos() );
     if(normalPoint.x() == -1) // e->pos() is an exceptional state...
         return;
-    KoPoint docPoint = m_doc->unzoomPoint( normalPoint );
+    KoPoint docPoint = m_doc->unzoomPointOld( normalPoint );
 
     if ( m_mousePressed ) {
         //doAutoScroll();
@@ -813,18 +818,18 @@ void KWCanvas::contentsMouseMoveEvent( QMouseEvent *e )
                 if ( m_mouseMeaning == MEANING_RESIZE_COLUMN || m_mouseMeaning == MEANING_RESIZE_ROW )
                 {
                     // TODO undo/redo support (esp. in mouse-release)
-                    QRect oldRect( m_viewMode->normalToView( m_doc->zoomRect( m_currentTable->boundingRect() ) ) );
+                    QRect oldRect( m_viewMode->normalToView( m_doc->zoomRectOld( m_currentTable->boundingRect() ) ) );
                     if ( m_mouseMeaning == MEANING_RESIZE_ROW )
                         m_currentTable->resizeRow( m_rowColResized, docPoint.y() );
                     else
                         m_currentTable->resizeColumn( m_rowColResized, docPoint.x() );
                     // Repaint only the changed rects (oldRect U newRect)
-                    QRect newRect( m_viewMode->normalToView( m_doc->zoomRect( m_currentTable->boundingRect() ) ) );
+                    QRect newRect( m_viewMode->normalToView( m_doc->zoomRectOld( m_currentTable->boundingRect() ) ) );
                     repaintContents( QRegion(oldRect).unite(newRect).boundingRect(), false );
                 }
                 else if (m_interactionPolicy) {
                     m_interactionPolicy->handleMouseMove(e->state(),
-                            m_doc->unzoomPoint( normalPoint ));
+                            m_doc->unzoomPointOld( normalPoint ));
                     m_interactionPolicy->hadDragEvents();
                 }
             } break;
@@ -897,7 +902,7 @@ void KWCanvas::mrEditFrame() {
         m_interactionPolicy->finishInteraction();
         KCommand *cmd = m_interactionPolicy->createCommand();
         if(cmd)
-            m_doc->addCommand(cmd);
+            addCommand(cmd, false);
         delete(m_interactionPolicy);
         m_interactionPolicy = 0;
         if ( !m_doc->showGrid() && m_doc->snapToGrid() )
@@ -978,7 +983,7 @@ void KWCanvas::mrCreatePixmap()
         fs->addFrame( frame, false );
         m_doc->addFrameSet( fs );
         KWCreateFrameCommand *cmd=new KWCreateFrameCommand( i18n("Insert Picture"), frame );
-        m_doc->addCommand(cmd);
+        addCommand(cmd, false);
         m_doc->frameChanged( frame );
         frameViewManager()->view(frame)->setSelected(true);
     }
@@ -1008,7 +1013,7 @@ void KWCanvas::mrCreateFormula()
         frameset->addFrame( frame, false );
         m_doc->addFrameSet( frameset );
         KWCreateFrameCommand *cmd=new KWCreateFrameCommand( i18n("Create Formula Frame"), frame );
-        m_doc->addCommand(cmd);
+        addCommand(cmd, false);
         m_doc->frameChanged( frame );
     }
     setMouseMode( MM_EDIT );
@@ -1034,7 +1039,7 @@ void KWCanvas::mrCreateTable()
                 KWTableTemplateCommand *ttCmd=new KWTableTemplateCommand( "Apply template to table", table, m_table.tt );
                 macroCmd->addCommand(ttCmd);
             }
-            m_doc->addCommand(macroCmd);
+            addCommand(macroCmd, false);
             macroCmd->execute();
 
             emit docStructChanged(Tables);
@@ -1081,7 +1086,7 @@ void KWCanvas::contentsMouseReleaseEvent( QMouseEvent * e )
             deleteMovingRect();
 
         QPoint normalPoint = m_viewMode->viewToNormal( e->pos() );
-        KoPoint docPoint = m_doc->unzoomPoint( normalPoint );
+        KoPoint docPoint = m_doc->unzoomPointOld( normalPoint );
 
         if(m_insRect.bottom()==0 && m_insRect.right()==0) {
             // if the user did not drag, just click; make a 200x150 square for him.
@@ -1103,13 +1108,13 @@ void KWCanvas::contentsMouseReleaseEvent( QMouseEvent * e )
                   if ( m_mouseMeaning == MEANING_RESIZE_COLUMN )
                   {
                     KWResizeColumnCommand *cmd = new KWResizeColumnCommand( m_currentTable, m_rowColResized, m_previousTableSize, docPoint.x() );
-                    m_doc->addCommand(cmd);
+                    addCommand(cmd, false);
                     cmd->execute();
                   }
                   else if ( m_mouseMeaning == MEANING_RESIZE_ROW )
                   {
                     KWResizeRowCommand *cmd = new KWResizeRowCommand( m_currentTable, m_rowColResized, m_previousTableSize, docPoint.y() );
-                    m_doc->addCommand(cmd);
+                    addCommand(cmd, false);
                     cmd->execute();
                   }
                   else
@@ -1145,7 +1150,7 @@ void KWCanvas::contentsMouseDoubleClickEvent( QMouseEvent * e )
     if ( m_printing )
         return;
     QPoint normalPoint = m_viewMode->viewToNormal( e->pos() );
-    KoPoint docPoint = m_doc->unzoomPoint( normalPoint );
+    KoPoint docPoint = m_doc->unzoomPointOld( normalPoint );
     switch ( m_mouseMode ) {
         case MM_EDIT:
             if ( m_currentFrameSetEdit )
@@ -1199,7 +1204,7 @@ void KWCanvas::setFrameBackgroundColor( const QBrush &_backColor )
     if(colorChanged)
     {
         KWFrameBackGroundColorCommand *cmd=new KWFrameBackGroundColorCommand(i18n("Change Frame Background Color"),frameindexList,oldColor,_backColor);
-        m_doc->addCommand(cmd);
+        addCommand(cmd, false);
         m_doc->repaintAllViews();
     }
     else
@@ -1419,7 +1424,7 @@ void KWCanvas::setMouseMode( MouseMode newMouseMode )
     case MM_EDIT: {
         QPoint mousep = mapFromGlobal(QCursor::pos()) + QPoint( contentsX(), contentsY() );
         QPoint normalPoint = m_viewMode->viewToNormal( mousep );
-        KoPoint docPoint = m_doc->unzoomPoint( normalPoint );
+        KoPoint docPoint = m_doc->unzoomPointOld( normalPoint );
         viewport()->setCursor( m_frameViewManager->mouseCursor( docPoint, 0 ) );
         m_frameInline = false;
     } break;
@@ -1448,7 +1453,7 @@ void KWCanvas::insertPictureDirect( const KoPicture& picture, const KoPoint& pos
     // Prepare things for mrCreatePixmap
     m_pixmapSize = sz.isEmpty() ? picture.getOriginalSize() : sz;
     m_kopicture = picture;
-    m_insRect = KoRect( pos.x(), pos.y(), m_doc->unzoomItX( m_pixmapSize.width() ), m_doc->unzoomItY( m_pixmapSize.height() ) );
+    m_insRect = KoRect( pos.x(), pos.y(), m_doc->unzoomItXOld( m_pixmapSize.width() ), m_doc->unzoomItYOld( m_pixmapSize.height() ) );
     m_keepRatio = true;
     mrCreatePixmap();
 }
@@ -1486,7 +1491,7 @@ void KWCanvas::contentsDragMoveEvent( QDragMoveEvent *e )
     if ( !m_imageDrag /*&& m_currentFrameSetEdit*/ )
     {
         QPoint normalPoint = m_viewMode->viewToNormal( e->pos() );
-        KoPoint docPoint = m_doc->unzoomPoint( normalPoint );
+        KoPoint docPoint = m_doc->unzoomPointOld( normalPoint );
         KWFrameView *view = m_frameViewManager->view(docPoint, KWFrameViewManager::frameOnTop);
         KWFrame *frame = view ? view->frame() : 0;
         KWFrameSet * fs = frame ? frame->frameSet() : 0L;
@@ -1515,7 +1520,7 @@ void KWCanvas::contentsDragLeaveEvent( QDragLeaveEvent *e )
 void KWCanvas::contentsDropEvent( QDropEvent *e )
 {
     QPoint normalPoint = m_viewMode->viewToNormal( e->pos() );
-    KoPoint docPoint = m_doc->unzoomPoint( normalPoint );
+    KoPoint docPoint = m_doc->unzoomPointOld( normalPoint );
 
     const QMimeData* mimeData = e->mimeData();
     if ( mimeData->hasImage() ) {
@@ -1580,7 +1585,7 @@ void KWCanvas::pasteImage( const QMimeData *mimeData, const KoPoint &docPoint )
     newKoPicture.setKey( key );
     newKoPicture.loadFromFile( tmpFile.name() );
     m_kopicture = newKoPicture;
-    m_insRect = KoRect( docPoint.x(), docPoint.y(), m_doc->unzoomItX( i.width() ), m_doc->unzoomItY( i.height() ) );
+    m_insRect = KoRect( docPoint.x(), docPoint.y(), m_doc->unzoomItXOld( i.width() ), m_doc->unzoomItYOld( i.height() ) );
     m_keepRatio = true;
     mrCreatePixmap();
 }
@@ -1672,7 +1677,7 @@ void KWCanvas::scrollToOffset( const KoPoint & d )
     if ( blinking )
         stopBlinkCursor();
 #endif
-    QPoint nPoint = m_doc->zoomPoint( d );
+    QPoint nPoint = m_doc->zoomPointOld( d );
     QPoint cPoint = m_viewMode->normalToView( nPoint );
     setContentsPos( cPoint.x(), cPoint.y() );
 
@@ -1784,7 +1789,7 @@ bool KWCanvas::eventFilter( QObject *o, QEvent *e )
                     // The popups are not available in readonly mode, since the GUI isn't built...
                     if(!m_doc->isReadWrite()) return true;
                     if (m_mouseMode != MM_EDIT) return true;
-                    KoPoint docPoint = m_doc->unzoomPoint( QCursor::pos() );
+                    KoPoint docPoint = m_doc->unzoomPointOld( QCursor::pos() );
 
                     if ( viewMode()->type()=="ModeText") {
                         KWFrameView *view = m_frameViewManager->view(m_doc->frameSet( 0 )->frame(0));
@@ -1808,7 +1813,7 @@ bool KWCanvas::eventFilter( QObject *o, QEvent *e )
                     if (m_lastCaretPos.isNull()) return true;
                     int page = m_doc->pageManager()->pageNumber(m_lastCaretPos);
                     if(page == -1) return true;
-                    QPoint normalPoint = m_doc->zoomPoint(m_lastCaretPos);
+                    QPoint normalPoint = m_doc->zoomPointOld(m_lastCaretPos);
                     // Coordinate is at the very top of the caret.  In the case of an
                     // inline frame, adjust slightly down and to the right in order
                     // to avoid "clicking" the frame border.
@@ -1835,7 +1840,7 @@ bool KWCanvas::eventFilter( QObject *o, QEvent *e )
                         // reset cursor
                         QPoint mousep = mapFromGlobal(QCursor::pos()) + QPoint( contentsX(), contentsY() );
                         QPoint normalPoint = m_viewMode->viewToNormal( mousep );
-                        KoPoint docPoint = m_doc->unzoomPoint( normalPoint );
+                        KoPoint docPoint = m_doc->unzoomPointOld( normalPoint );
                         viewport()->setCursor( m_frameViewManager->mouseCursor( docPoint, keyev->stateAfter() ) );
                         if ( !m_doc->showGrid() && m_doc->snapToGrid() )
                             repaintContents();
@@ -1871,7 +1876,7 @@ bool KWCanvas::eventFilter( QObject *o, QEvent *e )
                 {
                     QPoint mousep = mapFromGlobal(QCursor::pos()) + QPoint( contentsX(), contentsY() );
                     QPoint normalPoint = m_viewMode->viewToNormal( mousep );
-                    KoPoint docPoint = m_doc->unzoomPoint( normalPoint );
+                    KoPoint docPoint = m_doc->unzoomPointOld( normalPoint );
                     viewport()->setCursor( m_frameViewManager->mouseCursor( docPoint, keyev->stateAfter() ) );
                 }
                 else if ( (keyev->key() == Qt::Key_Delete || keyev->key() ==Qt::Key_Backspace )
@@ -1885,7 +1890,7 @@ bool KWCanvas::eventFilter( QObject *o, QEvent *e )
                 {
                     QPoint mousep = mapFromGlobal(QCursor::pos()) + QPoint( contentsX(), contentsY() );
                     QPoint normalPoint = m_viewMode->viewToNormal( mousep );
-                    KoPoint docPoint = m_doc->unzoomPoint( normalPoint );
+                    KoPoint docPoint = m_doc->unzoomPointOld( normalPoint );
                     viewport()->setCursor( m_frameViewManager->mouseCursor( docPoint, keyev->stateAfter() ) );
                 }
 
@@ -2023,10 +2028,32 @@ KoPoint KWCanvas::caretPos()
     viewP.rx() += contentsX();
     viewP.ry() += contentsY();
     QPoint normalP = m_viewMode->viewToNormal(viewP);
-    KoPoint docP = m_doc->unzoomPoint(normalP);
+    KoPoint docP = m_doc->unzoomPointOld(normalP);
     return docP;
 }
 
+void KWCanvas::gridSize(double *horizontal, double *vertical) const {
+    *horizontal = m_doc->gridX();
+    *vertical = m_doc->gridY();
+}
+
+bool KWCanvas::snapToGrid() const {
+    return m_doc->snapToGrid();
+}
+
+void KWCanvas::addCommand(KCommand *command, bool execute) {
+    m_doc->addCommand(command, execute);
+}
+
+void KWCanvas::updateCanvas(const QRectF& rc) {
+    QRect clipRect(viewConverter()->normalToView(rc).toRect());
+    clipRect.adjust(-2, -2, 2, 2); // grow for to anti-aliasing
+    update(clipRect);
+}
+
+KoViewConverter *KWCanvas::viewConverter() {
+    return 0; // not available yet..
+}
 
 // ************** InteractionPolicy ***********************
 InteractionPolicy::InteractionPolicy(KWCanvas *parent, bool doInit, bool includeInlineFrames) {
@@ -2452,7 +2479,7 @@ FrameSelectPolicy::FrameSelectPolicy(KWCanvas *parent, MouseMeaning meaning, KoP
             point.setY(qMin(point.y(), view->frame()->bottom()));
 
             // convert point to the view coordinate system.
-            QPoint normalPoint = parent->kWordDocument()->zoomPoint(point);
+            QPoint normalPoint = parent->kWordDocument()->zoomPointOld(point);
             QPoint mousePos = parent->viewMode()->normalToView(normalPoint);
             QMouseEvent *me = new QMouseEvent(QEvent::MouseButtonPress, mousePos,
                     buttonState, keyState);

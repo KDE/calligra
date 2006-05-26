@@ -201,7 +201,7 @@ void EmbeddedObject::paintSelection( QPainter *_painter, SelectionMode mode )
   _painter->save();
   KoRect bound( geometry().left(), geometry().top(),
                 geometry().width() , geometry().height() );
-  QRect zoomedBound = sheet()->doc()->zoomRect( bound ) ;
+  QRect zoomedBound = sheet()->doc()->zoomRectOld( bound ) ;
 
   //_painter->setPen( QPen( Qt::black, 1, QPen::SolidLine ) );
   _painter->setPen( pen );
@@ -209,12 +209,12 @@ void EmbeddedObject::paintSelection( QPainter *_painter, SelectionMode mode )
 
   //KoRect r = rotateRectObject(); // TODO: rotation
   KoRect r = /*KoRect::fromQRect*/( bound );
-  int x = sheet()->doc()->zoomItX( r.left() /*- orig.x()*/);
-  int y = sheet()->doc()->zoomItY( r.top() /*- orig.y()*/);
-  int zX6 = /*sheet()->doc()->zoomItX*/( 6 );
-  int zY6 = /*sheet()->doc()->zoomItY*/( 6 );
-  int w = sheet()->doc()->zoomItX(r.width()) - 6;
-  int h = sheet()->doc()->zoomItY(r.height()) - 6;
+  int x = sheet()->doc()->zoomItXOld( r.left() /*- orig.x()*/);
+  int y = sheet()->doc()->zoomItYOld( r.top() /*- orig.y()*/);
+  int zX6 = /*sheet()->doc()->zoomItXOld*/( 6 );
+  int zY6 = /*sheet()->doc()->zoomItYOld*/( 6 );
+  int w = sheet()->doc()->zoomItXOld(r.width()) - 6;
+  int h = sheet()->doc()->zoomItYOld(r.height()) - 6;
 
   if ( mode == SM_MOVERESIZE ) {
     _painter->drawRect( x, y,  zX6, zY6 );
@@ -263,16 +263,16 @@ void EmbeddedObject::paintSelection( QPainter *_painter, SelectionMode mode )
 
 QCursor EmbeddedObject::getCursor( const QPoint &_point, ModifyType &_modType, QRect &geometry) const
 {
-    int px = /*sheet()->doc()->zoomItX*/(_point.x());
-    int py = /*sheet()->doc()->zoomItY*/(_point.y());
-    int ox = /*sheet()->doc()->zoomItX*/(/*orig*/geometry.x());
-    int oy = /*sheet()->doc()->zoomItY*/(/*orig*/geometry.y());
-    int ow = /*sheet()->doc()->zoomItX*/(/*ext*/geometry.width());
-    int oh = /*sheet()->doc()->zoomItY*/(/*ext*/geometry.height());
+    int px = /*sheet()->doc()->zoomItXOld*/(_point.x());
+    int py = /*sheet()->doc()->zoomItYOld*/(_point.y());
+    int ox = /*sheet()->doc()->zoomItXOld*/(/*orig*/geometry.x());
+    int oy = /*sheet()->doc()->zoomItYOld*/(/*orig*/geometry.y());
+    int ow = /*sheet()->doc()->zoomItXOld*/(/*ext*/geometry.width());
+    int oh = /*sheet()->doc()->zoomItYOld*/(/*ext*/geometry.height());
 
 //     if ( angle != 0.0 )
 //     {
-//         QRect rr = sheet()->doc()->zoomRect( rotateRectObject() );
+//         QRect rr = sheet()->doc()->zoomRectOld( rotateRectObject() );
 //         ox = rr.x();
 //         oy = rr.y();
 //         ow = rr.width();
@@ -447,11 +447,11 @@ void EmbeddedKOfficeObject::draw( QPainter *_painter )
   int const penw = pen.width() ;
   KoRect bound( 0, 0,
                 geometry().width() - ( 2 * penw ), geometry().height() - ( 2 * penw ) );
-  QRect const zoomedBound = sheet()->doc()->zoomRect( bound );
+  QRect const zoomedBound = sheet()->doc()->zoomRectOld( bound );
 
   _painter->save();
-  int const xOffset = sheet()->doc()->zoomItX( geometry().left() + penw);
-  int const yOffset = sheet()->doc()->zoomItY( geometry().top() + penw );
+  int const xOffset = sheet()->doc()->zoomItXOld( geometry().left() + penw);
+  int const yOffset = sheet()->doc()->zoomItYOld( geometry().top() + penw );
 
   QRect new_geometry = zoomedBound;
 
@@ -516,10 +516,10 @@ void EmbeddedKOfficeObject::deactivate()
 void EmbeddedKOfficeObject::updateChildGeometry()
 {
 //   KoZoomHandler* zh = m_sheet->doc();
-//   embeddedObject()->setGeometry( zh->zoomRect( geometry() ), true );
+//   embeddedObject()->setGeometry( zh->zoomRectOld( geometry() ), true );
 
 //   return;
-//   QRect r = sheet()->doc()->zoomRect( geometry() );
+//   QRect r = sheet()->doc()->zoomRectOld( geometry() );
 //   if ( _canvas )
 //   {
 //     kDebug() << "_canvas->xOffset():" << _canvas->xOffset() << endl;
@@ -1150,15 +1150,15 @@ void EmbeddedPictureObject::drawShadow( QPainter* /*_painter*/,  KoZoomHandler* 
 //
 //     getShadowCoords( sx, sy );
 //
-//     _painter->translate( _zoomHandler->zoomItX( ox ), _zoomHandler->zoomItY( oy ) );
+//     _painter->translate( _zoomHandler->zoomItXOld( ox ), _zoomHandler->zoomItYOld( oy ) );
 //     _painter->setPen( QPen( shadowColor ) );
 //     _painter->setBrush( shadowColor );
 //     if ( qAbs(angle) <= DBL_EPSILON )
-//         _painter->drawRect( _zoomHandler->zoomItX( sx ), _zoomHandler->zoomItY( sy ),
-//                             _zoomHandler->zoomItX( ext.width() ), _zoomHandler->zoomItY( ext.height() ) );
+//         _painter->drawRect( _zoomHandler->zoomItXOld( sx ), _zoomHandler->zoomItYOld( sy ),
+//                             _zoomHandler->zoomItXOld( ext.width() ), _zoomHandler->zoomItYOld( ext.height() ) );
 //     else
 //     {
-//         QSize bs = QSize( _zoomHandler->zoomItX( ow ), _zoomHandler->zoomItY( oh ) );
+//         QSize bs = QSize( _zoomHandler->zoomItXOld( ow ), _zoomHandler->zoomItYOld( oh ) );
 //         QRect br = QRect( 0, 0, bs.width(), bs.height() );
 //         int pw = br.width();
 //         int ph = br.height();
@@ -1171,8 +1171,8 @@ void EmbeddedPictureObject::drawShadow( QPainter* /*_painter*/,  KoZoomHandler* 
 //         QMatrix m;
 //         m.translate( pw / 2, ph / 2 );
 //         m.rotate( angle );
-//         m.translate( rr.left() + pixXPos + _zoomHandler->zoomItX( sx ),
-//                      rr.top() + pixYPos + _zoomHandler->zoomItY( sy ) );
+//         m.translate( rr.left() + pixXPos + _zoomHandler->zoomItXOld( sx ),
+//                      rr.top() + pixYPos + _zoomHandler->zoomItYOld( sy ) );
 //
 //         _painter->setMatrix( m, true );
 //
@@ -1191,9 +1191,9 @@ QPixmap EmbeddedPictureObject::toPixmap( double xZoom , double yZoom )
 
 QPixmap EmbeddedPictureObject::generatePixmap(KoZoomHandler*_zoomHandler)
 {
-    const double penw = _zoomHandler->zoomItX( ( ( pen.style() == Qt::NoPen ) ? 1 : pen.width() ) / 2.0 );
+    const double penw = _zoomHandler->zoomItXOld( ( ( pen.style() == Qt::NoPen ) ? 1 : pen.width() ) / 2.0 );
 
-    QSize size( _zoomHandler->zoomSize( m_geometry.size() /*ext*/ ) );
+    QSize size( _zoomHandler->zoomSizeOld( m_geometry.size() /*ext*/ ) );
     //kDebug(33001) << "EmbeddedPictureObject::generatePixmap size= " << size << endl;
     QPixmap pixmap(size);
     QPainter paint;
@@ -1206,8 +1206,8 @@ QPixmap EmbeddedPictureObject::generatePixmap(KoZoomHandler*_zoomHandler)
     paint.setBrush( getBrush() );
 
     QRect rect( (int)( penw ), (int)( penw ),
-                 (int)( _zoomHandler->zoomItX( /*ext*/m_geometry.width() ) - 2.0 * penw ),
-                 (int)( _zoomHandler->zoomItY( /*ext*/m_geometry.height() ) - 2.0 * penw ) );
+                 (int)( _zoomHandler->zoomItXOld( /*ext*/m_geometry.width() ) - 2.0 * penw ),
+                 (int)( _zoomHandler->zoomItYOld( /*ext*/m_geometry.height() ) - 2.0 * penw ) );
 
 //      if ( getFillType() == FT_BRUSH || !gradient )
          paint.drawRect( rect );
@@ -1216,8 +1216,8 @@ QPixmap EmbeddedPictureObject::generatePixmap(KoZoomHandler*_zoomHandler)
 //         gradient->setSize( size );
 //         paint.drawPixmap( (int)( penw ), (int)( penw ),
 //                           gradient->pixmap(), 0, 0,
-//                           (int)( _zoomHandler->zoomItX( m_geometry/*ext*/.width() ) - 2 * penw ),
-//                           (int)( _zoomHandler->zoomItY( m_geometry/*ext*/.height() ) - 2 * penw ) );
+//                           (int)( _zoomHandler->zoomItXOld( m_geometry/*ext*/.width() ) - 2 * penw ),
+//                           (int)( _zoomHandler->zoomItYOld( m_geometry/*ext*/.height() ) - 2 * penw ) );
 //    }
 
 
@@ -1249,14 +1249,14 @@ void EmbeddedPictureObject::draw( QPainter *_painter/*, KoZoomHandler*_zoomHandl
     const double oy = /*orig*/m_geometry.y();
     const double ow = /*ext*/m_geometry.width();
     const double oh = /*ext*/m_geometry.height();
-    //const double penw = _zoomHandler->zoomItX( ( ( pen.style() == Qt::NoPen ) ? 1.0 : pen.width() ) / 2.0 );
+    //const double penw = _zoomHandler->zoomItXOld( ( ( pen.style() == Qt::NoPen ) ? 1.0 : pen.width() ) / 2.0 );
 
     _painter->save();
 
-    _painter->translate( _zoomHandler->zoomItX( ox ), _zoomHandler->zoomItY( oy ) );
+    _painter->translate( _zoomHandler->zoomItXOld( ox ), _zoomHandler->zoomItYOld( oy ) );
 
     if ( qAbs(angle)> DBL_EPSILON ) {
-        QSize bs = QSize( _zoomHandler->zoomItX( ow ), _zoomHandler->zoomItY( oh ) );
+        QSize bs = QSize( _zoomHandler->zoomItXOld( ow ), _zoomHandler->zoomItYOld( oh ) );
         QRect br = QRect( 0, 0, bs.width(), bs.height() );
         int pw = br.width();
         int ph = br.height();
@@ -1275,8 +1275,8 @@ void EmbeddedPictureObject::draw( QPainter *_painter/*, KoZoomHandler*_zoomHandl
 
     if ( !drawContour )
     {
-        QRect rect( 0, 0, (int)( _zoomHandler->zoomItX( ow ) ),
-                    (int)( _zoomHandler->zoomItY(  oh ) ) );
+        QRect rect( 0, 0, (int)( _zoomHandler->zoomItXOld( ow ) ),
+                    (int)( _zoomHandler->zoomItYOld(  oh ) ) );
         // ### HACK QT seems not to be able to correctly compare QVariant
         bool variants1;
         if (m_ie_par1.isNull())
@@ -1340,13 +1340,13 @@ void EmbeddedPictureObject::draw( QPainter *_painter/*, KoZoomHandler*_zoomHandl
 //     }
 //     else {
 //         pen2 = pen;
-//         pen2.setWidth( _zoomHandler->zoomItX( ( pen.style() == Qt::NoPen ) ? 1.0 : (double)pen.width() ) );
+//         pen2.setWidth( _zoomHandler->zoomItXOld( ( pen.style() == Qt::NoPen ) ? 1.0 : (double)pen.width() ) );
 //     }
 //     _painter->setPen( pen2 );
 //     _painter->setBrush( Qt::NoBrush );
 //     _painter->drawRect( (int)( penw ), (int)( penw ),
-//                         (int)( _zoomHandler->zoomItX( ow ) - 2.0 * penw ),
-//                         (int)( _zoomHandler->zoomItY( oh ) - 2.0 * penw ) );
+//                         (int)( _zoomHandler->zoomItXOld( ow ) - 2.0 * penw ),
+//                         (int)( _zoomHandler->zoomItYOld( oh ) - 2.0 * penw ) );
 
 
     _painter->restore();

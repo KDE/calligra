@@ -5996,9 +5996,9 @@ KCommand *Sheet::moveObject(View *_view, double diffx, double diffy)
             _objects.append( object );
             KoRect geometry = object->geometry();
             geometry.moveBy( -canvas->xOffset(), -canvas->yOffset() );
-            QRect br = doc()->zoomRect( geometry/*object->geometry()*/ );
-            br.translate( doc()->zoomItX( diffx ), doc()->zoomItY( diffy ) );
-            br.translate( doc()->zoomItX( -canvas->xOffset() ), doc()->zoomItY( -canvas->yOffset() ) );
+            QRect br = doc()->zoomRectOld( geometry/*object->geometry()*/ );
+            br.translate( doc()->zoomItXOld( diffx ), doc()->zoomItYOld( diffy ) );
+            br.translate( doc()->zoomItXOld( -canvas->xOffset() ), doc()->zoomItYOld( -canvas->yOffset() ) );
             canvas->repaint( br ); // Previous position
             canvas->repaintObject( object ); // New position
             createCommand=true;
@@ -6024,7 +6024,7 @@ KCommand *Sheet::moveObject(View *_view,const KoPoint &_move,bool key)
 
             KoRect geometry = object->geometry();
             geometry.moveBy( -canvas->xOffset(), -canvas->yOffset() );
-            QRect oldBoundingRect = doc()->zoomRect( geometry );
+            QRect oldBoundingRect = doc()->zoomRectOld( geometry );
 
 
             KoRect r = object->geometry();

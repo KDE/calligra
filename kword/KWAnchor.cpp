@@ -124,7 +124,7 @@ void KWAnchor::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, 
     KoRect crectPt( topLeftPt, bottomRightPt );
 
     // Convert crect to view coords
-    QRect crect = fs->currentViewMode()->normalToView( zh->zoomRect( crectPt ) );
+    QRect crect = fs->currentViewMode()->normalToView( zh->zoomRectOld( crectPt ) );
     // and add 1 to right and bottom, to avoid rounding errors (and due to qrect semantics)
     crect.rBottom() += 2; // HACK: 1 doesn't do it, it leaves a white line along window borders
     crect.rRight() += 1;
@@ -161,7 +161,7 @@ void KWAnchor::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, 
     if ( containingFrame ) // 0 in the textviewmode
         topLeftParagPt.ry() -= containingFrame->internalY();
 
-    QPoint topLeftParag = fs->currentViewMode()->normalToView( zh->zoomPoint( topLeftParagPt ) );
+    QPoint topLeftParag = fs->currentViewMode()->normalToView( zh->zoomPointOld( topLeftParagPt ) );
 
     // Finally, make the painter go back to view coord system
     // (this is exactly the opposite of the code in KWFrameSet::drawContents)

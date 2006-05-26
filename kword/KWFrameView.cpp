@@ -157,7 +157,7 @@ void KWFrameView::paintFrameAttributes(QPainter *painter, const QRect &crect, KW
         }
     };
 
-    const QRect frameRect = vm->normalToView( zh->zoomRect( *frame() ) );
+    const QRect frameRect = vm->normalToView( zh->zoomRectOld( *frame() ) );
     if ( crect.intersects( frameRect ) )
     {
         ResizeHandle handle(this);

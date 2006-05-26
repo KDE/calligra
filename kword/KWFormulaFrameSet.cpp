@@ -467,7 +467,7 @@ void KWFormulaFrameSetEdit::cursorChanged( bool visible, bool /*selecting*/ )
         if ( m_currentFrame )
         {
             // Add the cursor position to the (zoomed) frame position
-            QPoint nPoint = frameSet()->kWordDocument()->zoomPoint( m_currentFrame->topLeft() );
+            QPoint nPoint = frameSet()->kWordDocument()->zoomPointOld( m_currentFrame->topLeft() );
             nPoint += formulaView->getCursorPoint();
             // Apply viewmode conversion
             QPoint p = m_canvas->viewMode()->normalToView( nPoint );

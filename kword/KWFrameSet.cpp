@@ -202,15 +202,15 @@ void KWFrameSet::drawPadding( KWFrame *frame, QPainter *p, const QRect &crect, c
 #endif
         return;
     }
-    QRect frameRect( viewMode->normalToView( m_doc->zoomRect( *frame ) ) );
+    QRect frameRect( viewMode->normalToView( m_doc->zoomRectOld( *frame ) ) );
     p->save();
     QBrush bgBrush( frame->backgroundColor() );
     bgBrush.setColor( KWDocument::resolveBgColor( bgBrush.color(), p ) );
     p->setBrush( bgBrush );
-    int leftMargin = m_doc->zoomItX(frame->paddingLeft());
-    int topMargin = m_doc->zoomItY(frame->paddingTop());
-    int rightMargin = m_doc->zoomItX(frame->paddingRight());
-    int bottomMargin = m_doc->zoomItY(frame->paddingBottom());
+    int leftMargin = m_doc->zoomItXOld(frame->paddingLeft());
+    int topMargin = m_doc->zoomItYOld(frame->paddingTop());
+    int rightMargin = m_doc->zoomItXOld(frame->paddingRight());
+    int bottomMargin = m_doc->zoomItYOld(frame->paddingBottom());
     //kDebug(32001) << "KWFrameSet::drawPadding leftMargin=" << leftMargin << " topMargin=" << topMargin << " rightMargin=" << rightMargin << " bottomMargin=" << bottomMargin << endl;
 
     if ( topMargin != 0 )
@@ -250,7 +250,7 @@ void KWFrameSet::drawFrameBorder( QPainter *painter, KWFrame *frame, KWFrame *se
         return;
     }
 
-    QRect frameRect( viewMode->normalToView( m_doc->zoomRect(  *frame ) ) );
+    QRect frameRect( viewMode->normalToView( m_doc->zoomRectOld(  *frame ) ) );
 
     painter->save();
     QBrush bgBrush( settingsFrame->backgroundColor() );
@@ -706,14 +706,14 @@ void KWFrameSet::drawFrameAndBorders( KWFrame *frame,
         if ( !settingsFrame )
             settingsFrame = this->settingsFrame( frame );
 
-        QRect normalInnerFrameRect( m_doc->zoomRect( frame->innerRect() ) );
+        QRect normalInnerFrameRect( m_doc->zoomRectOld( frame->innerRect() ) );
         QRect innerFrameRect( viewMode->normalToView( normalInnerFrameRect ) );
 
         // This translates the coordinates in the document contents
         // ( frame and r are up to here in this system )
         // into the frame's own coordinate system.
         int offsetX = normalInnerFrameRect.left();
-        int offsetY = normalInnerFrameRect.top() - m_doc->zoomItY( frame->internalY() );
+        int offsetY = normalInnerFrameRect.top() - m_doc->zoomItYOld( frame->internalY() );
 
         QRect innerCRect = outerCRect.intersect( innerFrameRect );
         if ( !innerCRect.isEmpty() )
@@ -721,7 +721,7 @@ void KWFrameSet::drawFrameAndBorders( KWFrame *frame,
             QRect fcrect = viewMode->viewToNormal( innerCRect );
 #ifdef DEBUG_DRAW
             kDebug(32001) << "                    (inner) normalFrameRect=" << normalInnerFrameRect << " frameRect=" << innerFrameRect << endl;
-            //kDebug(32001) << "                    crect after view-to-normal:" << fcrect << "." << " Will move by (" << -offsetX << ", -(" << normalInnerFrameRect.top() << "-" << m_doc->zoomItY(frame->internalY()) << ") == " << -offsetY << ")." << endl;
+            //kDebug(32001) << "                    crect after view-to-normal:" << fcrect << "." << " Will move by (" << -offsetX << ", -(" << normalInnerFrameRect.top() << "-" << m_doc->zoomItYOld(frame->internalY()) << ") == " << -offsetY << ")." << endl;
 #endif
             fcrect.moveBy( -offsetX, -offsetY );
             Q_ASSERT( fcrect.x() >= 0 );
@@ -1167,7 +1167,7 @@ bool KWFrameSet::isFrameAtPos( const KWFrame* frame, const QPoint& point, bool b
     outerRect.rBottom() += margin;
     if ( outerRect.contains( point ) ) {
         if(borderOfFrameOnly) {
-            QRect innerRect( m_doc->zoomRect( *frame ) );
+            QRect innerRect( m_doc->zoomRectOld( *frame ) );
             innerRect.rLeft() += margin;
             innerRect.rTop() += margin;
             innerRect.rRight() -= margin;

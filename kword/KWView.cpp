@@ -3346,8 +3346,8 @@ void KWView::insertPicture( const KoPicture& picture, const bool makeInline, con
 
         // This ensures 1-1 at 100% on screen, but allows zooming and printing with correct DPI values
         // ### TODO/FIXME: is the qRound really necessary?
-        double width = m_doc->unzoomItX( qRound( (double)pixmapSize.width() * m_doc->zoomedResolutionX() / POINT_TO_INCH( KoGlobal::dpiX() ) ) );
-        double height = m_doc->unzoomItY( qRound( (double)pixmapSize.height() * m_doc->zoomedResolutionY() / POINT_TO_INCH( KoGlobal::dpiY() ) ) );
+        double width = m_doc->unzoomItXOld( qRound( (double)pixmapSize.width() * m_doc->zoomedResolutionX() / POINT_TO_INCH( KoGlobal::dpiX() ) ) );
+        double height = m_doc->unzoomItYOld( qRound( (double)pixmapSize.height() * m_doc->zoomedResolutionY() / POINT_TO_INCH( KoGlobal::dpiY() ) ) );
 
         frameset->setKeepAspectRatio( keepRatio);
 
@@ -3415,7 +3415,7 @@ bool KWView::insertInlinePicture()
 
         m_doc->addFrameSet( m_fsInline, false ); // done first since the frame number is stored in the undo/redo
 #if 0
-        KWFrame *frame = new KWFrame( m_fsInline, 0, 0, m_doc->unzoomItX( width ), m_doc->unzoomItY( height ) );
+        KWFrame *frame = new KWFrame( m_fsInline, 0, 0, m_doc->unzoomItXOld( width ), m_doc->unzoomItYOld( height ) );
         m_fsInline->addFrame( frame, false );
 #endif
         edit->insertFloatingFrameSet( m_fsInline, i18n("Insert Picture Inline") );
@@ -7707,12 +7707,12 @@ void KWGUI::unitChanged( KoUnit::Unit u )
 
 QPoint KWView::applyViewTransformations( const QPoint& p ) const
 {
-    return viewMode()->normalToView( m_doc->zoomPoint( KoPoint( p ) ) );
+    return viewMode()->normalToView( m_doc->zoomPointOld( KoPoint( p ) ) );
 }
 
 QPoint KWView::reverseViewTransformations( const QPoint& p ) const
 {
-    return m_doc->unzoomPoint( viewMode()->viewToNormal( p ) ).toQPoint();
+    return m_doc->unzoomPointOld( viewMode()->viewToNormal( p ) ).toQPoint();
 }
 
 int KWView::currentPage() const {

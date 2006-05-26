@@ -141,8 +141,8 @@ void KWDocStructParagItem::selectItem()
     QPoint iPoint = m_parag->rect().topLeft(); // small bug if a paragraph is cut between two pages.
     KoPoint dPoint;
     fs->internalToDocument(iPoint, dPoint);
-    QPoint nPoint = fs->kWordDocument()->zoomPoint(dPoint);
-    gui()->canvasWidget()->scrollToOffset(fs->kWordDocument()->unzoomPoint(nPoint));
+    QPoint nPoint = fs->kWordDocument()->zoomPointOld(dPoint);
+    gui()->canvasWidget()->scrollToOffset(fs->kWordDocument()->unzoomPointOld(nPoint));
 
 }
 

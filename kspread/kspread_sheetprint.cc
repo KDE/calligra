@@ -194,11 +194,11 @@ bool SheetPrint::pageNeedsPrinting( QRect& page_range )
 
     //Page empty, but maybe children on it?
 
-        QRect intView = QRect( QPoint( m_pDoc->zoomItX( m_pSheet->dblColumnPos( page_range.left() ) ),
-                                       m_pDoc->zoomItY( m_pSheet->dblRowPos( page_range.top() ) ) ),
-                               QPoint( m_pDoc->zoomItX( m_pSheet->dblColumnPos( page_range.right() ) +
+        QRect intView = QRect( QPoint( m_pDoc->zoomItXOld( m_pSheet->dblColumnPos( page_range.left() ) ),
+                                       m_pDoc->zoomItYOld( m_pSheet->dblRowPos( page_range.top() ) ) ),
+                               QPoint( m_pDoc->zoomItXOld( m_pSheet->dblColumnPos( page_range.right() ) +
                                                         m_pSheet->columnFormat( page_range.right() )->dblWidth() ),
-                                       m_pDoc->zoomItY( m_pSheet->dblRowPos( page_range.bottom() ) +
+                                       m_pDoc->zoomItYOld( m_pSheet->dblRowPos( page_range.bottom() ) +
                                                         m_pSheet->rowFormat( page_range.bottom() )->dblHeight() ) ) );
 
         Q3PtrListIterator<KoDocumentChild> it( m_pDoc->children() );
@@ -296,11 +296,11 @@ bool SheetPrint::print( QPainter &painter, KPrinter *_printer )
            ( obj->getType() == OBJECT_CHART && m_bPrintCharts ) ) )
         continue;
 
-      QRect zoomRect = m_pDoc->zoomRect( object->geometry() );
-      QPixmap *p = new QPixmap( zoomRect.size() );
+      QRect zoomRectOld = m_pDoc->zoomRectOld( object->geometry() );
+      QPixmap *p = new QPixmap( zoomRectOld.size() );
       QPainter painter(p);
       painter.fillRect( p->rect(), QColor("white") );
-      painter.translate( -zoomRect.x(), -zoomRect.y() ); //we cant to paint at (0,0)
+      painter.translate( -zoomRectOld.x(), -zoomRectOld.y() ); //we cant to paint at (0,0)
       bool const isSelected = object->isSelected();
       object->setSelected( false );
       object->draw( &painter );
@@ -333,18 +333,18 @@ bool SheetPrint::print( QPainter &painter, KPrinter *_printer )
 
         for( ; it != page_list.end(); ++it, ++fit, ++fito, ++pageNo )
         {
-            painter.setClipRect( 0, 0, m_pDoc->zoomItX( paperWidthPts() ),
-                                    m_pDoc->zoomItY( paperHeightPts() ) );
+            painter.setClipRect( 0, 0, m_pDoc->zoomItXOld( paperWidthPts() ),
+                                    m_pDoc->zoomItYOld( paperHeightPts() ) );
             printHeaderFooter( painter, pageNo );
 
-            painter.translate( m_pDoc->zoomItX( leftBorderPts() ),
-                            m_pDoc->zoomItY( topBorderPts() ) );
+            painter.translate( m_pDoc->zoomItXOld( leftBorderPts() ),
+                            m_pDoc->zoomItYOld( topBorderPts() ) );
 
             // Print the page
             printPage( painter, *it, *fit, *fito );
 
-            painter.translate( - m_pDoc->zoomItX( leftBorderPts() ),
-                            - m_pDoc->zoomItY( topBorderPts()  ) );
+            painter.translate( - m_pDoc->zoomItXOld( leftBorderPts() ),
+                            - m_pDoc->zoomItYOld( topBorderPts()  ) );
 
             if ( pageNo < (int)page_list.count() )
                 _printer->newPage();
@@ -374,10 +374,10 @@ void SheetPrint::printPage( QPainter &_painter, const QRect& page_range,
       << "  offsety: " << _childOffset.y() <<"  view-x: "<<view.x()<< endl;
 
     //Don't paint on the page borders
-    QRegion clipRegion( m_pDoc->zoomItX( leftBorderPts() ),
-                        m_pDoc->zoomItY( topBorderPts() ),
-                        m_pDoc->zoomItX( view.width() + _childOffset.x() ),
-                        m_pDoc->zoomItY( view.height() + _childOffset.y() ) );
+    QRegion clipRegion( m_pDoc->zoomItXOld( leftBorderPts() ),
+                        m_pDoc->zoomItYOld( topBorderPts() ),
+                        m_pDoc->zoomItXOld( view.width() + _childOffset.x() ),
+                        m_pDoc->zoomItYOld( view.height() + _childOffset.y() ) );
     _painter.setClipRegion( clipRegion );
 
     //
@@ -578,7 +578,7 @@ void SheetPrint::printRect( QPainter& painter, const KoPoint& topLeft,
     //
     // Draw the children
     //
-    QRect zoomedView = m_pDoc->zoomRect( view );
+    QRect zoomedView = m_pDoc->zoomRectOld( view );
     //QPtrListIterator<KoDocumentChild> it( m_pDoc->children() );
     //QPtrListIterator<EmbeddedObject> itObject( m_pDoc->embeddedObjects() );
 
@@ -594,7 +594,7 @@ void SheetPrint::printRect( QPainter& painter, const KoPoint& topLeft,
 //        kDebug(36001)<<tmp<<" offset "<<_childOffset.x()<<"/"<<_childOffset.y()<<endl;
 
           KoRect const bound = obj->geometry();
-          QRect zoomedBound = m_pDoc->zoomRect( KoRect(bound.left(), bound.top(),
+          QRect zoomedBound = m_pDoc->zoomRectOld( KoRect(bound.left(), bound.top(),
               bound.width(),
               bound.height() ) );
 #if 1
@@ -611,11 +611,11 @@ void SheetPrint::printRect( QPainter& painter, const KoPoint& topLeft,
     {
             painter.save();
 
-            painter.translate( -zoomedView.left() + m_pDoc->zoomItX( topLeft.x() ),
-                                -zoomedView.top() + m_pDoc->zoomItY( topLeft.y() ) );
+            painter.translate( -zoomedView.left() + m_pDoc->zoomItXOld( topLeft.x() ),
+                                -zoomedView.top() + m_pDoc->zoomItYOld( topLeft.y() ) );
 
             //obj->draw( &painter );
-            painter.drawPixmap( m_pDoc->zoomRect( obj->geometry() ).topLeft(), *(*itObject)->p ); //draw the cached object
+            painter.drawPixmap( m_pDoc->zoomRectOld( obj->geometry() ).topLeft(), *(*itObject)->p ); //draw the cached object
 
             //painter.fillRect(zoomedBound, QBrush("red")); //for debug purpose
             painter.restore();
@@ -623,10 +623,10 @@ void SheetPrint::printRect( QPainter& painter, const KoPoint& topLeft,
     }
 
     //Don't let obscuring cells and children overpaint this area
-    clipRegion -= QRegion ( m_pDoc->zoomItX( leftBorderPts() + topLeft.x() ),
-                            m_pDoc->zoomItY( topBorderPts() + topLeft.y() ),
-                            m_pDoc->zoomItX( xpos ),
-                            m_pDoc->zoomItY( ypos ) );
+    clipRegion -= QRegion ( m_pDoc->zoomItXOld( leftBorderPts() + topLeft.x() ),
+                            m_pDoc->zoomItYOld( topBorderPts() + topLeft.y() ),
+                            m_pDoc->zoomItXOld( xpos ),
+                            m_pDoc->zoomItYOld( ypos ) );
     painter.setClipRegion( clipRegion );
 }
 
@@ -644,46 +644,46 @@ void SheetPrint::printHeaderFooter( QPainter &painter, int pageNo )
     // print head line left
     w = fm.width( headLeft( pageNo, m_pSheet->sheetName() ) ) / m_dZoom;
     if ( w > 0 )
-        painter.drawText( m_pDoc->zoomItX( leftBorderPts() ),
-                          m_pDoc->zoomItY( headFootDistance ),
+        painter.drawText( m_pDoc->zoomItXOld( leftBorderPts() ),
+                          m_pDoc->zoomItYOld( headFootDistance ),
                           headLeft( pageNo, m_pSheet->sheetName() ) );
     // print head line middle
     w = fm.width( headMid( pageNo, m_pSheet->sheetName() ) ) / m_dZoom;
     if ( w > 0 )
-        painter.drawText( (int) ( m_pDoc->zoomItX( leftBorderPts() ) +
-                          ( m_pDoc->zoomItX( prinsheetWidthPts() ) -
+        painter.drawText( (int) ( m_pDoc->zoomItXOld( leftBorderPts() ) +
+                          ( m_pDoc->zoomItXOld( prinsheetWidthPts() ) -
                             w ) / 2.0 ),
-                          m_pDoc->zoomItY( headFootDistance ),
+                          m_pDoc->zoomItYOld( headFootDistance ),
                           headMid( pageNo, m_pSheet->sheetName() ) );
     // print head line right
     w = fm.width( headRight( pageNo, m_pSheet->sheetName() ) ) / m_dZoom;
     if ( w > 0 )
-        painter.drawText( m_pDoc->zoomItX( leftBorderPts() +
+        painter.drawText( m_pDoc->zoomItXOld( leftBorderPts() +
                                            prinsheetWidthPts() ) - (int) w,
-                          m_pDoc->zoomItY( headFootDistance ),
+                          m_pDoc->zoomItYOld( headFootDistance ),
                           headRight( pageNo, m_pSheet->sheetName() ) );
 
     // print foot line left
     w = fm.width( footLeft( pageNo, m_pSheet->sheetName() ) ) / m_dZoom;
     if ( w > 0 )
-        painter.drawText( m_pDoc->zoomItX( leftBorderPts() ),
-                          m_pDoc->zoomItY( paperHeightPts() - headFootDistance ),
+        painter.drawText( m_pDoc->zoomItXOld( leftBorderPts() ),
+                          m_pDoc->zoomItYOld( paperHeightPts() - headFootDistance ),
                           footLeft( pageNo, m_pSheet->sheetName() ) );
     // print foot line middle
     w = fm.width( footMid( pageNo, m_pSheet->sheetName() ) ) / m_dZoom;
     if ( w > 0 )
-        painter.drawText( (int) ( m_pDoc->zoomItX( leftBorderPts() ) +
-                          ( m_pDoc->zoomItX( prinsheetWidthPts() ) -
+        painter.drawText( (int) ( m_pDoc->zoomItXOld( leftBorderPts() ) +
+                          ( m_pDoc->zoomItXOld( prinsheetWidthPts() ) -
                             w ) / 2.0 ),
-                          m_pDoc->zoomItY( paperHeightPts() - headFootDistance ),
+                          m_pDoc->zoomItYOld( paperHeightPts() - headFootDistance ),
                           footMid( pageNo, m_pSheet->sheetName() ) );
     // print foot line right
     w = fm.width( footRight( pageNo, m_pSheet->sheetName() ) ) / m_dZoom;
     if ( w > 0 )
-        painter.drawText( m_pDoc->zoomItX( leftBorderPts() +
+        painter.drawText( m_pDoc->zoomItXOld( leftBorderPts() +
                                            prinsheetWidthPts() ) -
                                            (int) w,
-                          m_pDoc->zoomItY( paperHeightPts() - headFootDistance ),
+                          m_pDoc->zoomItYOld( paperHeightPts() - headFootDistance ),
                           footRight( pageNo, m_pSheet->sheetName() ) );
 }
 

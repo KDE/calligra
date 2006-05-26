@@ -676,8 +676,8 @@ QRect Selection::selectionHandleArea() const
   double width = cell->dblWidth( column );
   double height = cell->dblHeight( row );
 
-  QPoint rightBottom( d->view->doc()->zoomItX( xpos + width ),
-                      d->view->doc()->zoomItY( ypos + height ) );
+  QPoint rightBottom( d->view->doc()->zoomItXOld( xpos + width ),
+                      d->view->doc()->zoomItYOld( ypos + height ) );
 
   QRect handle( ( rightBottom.x() - 2 ),
                   ( rightBottom.y() - 2 ),

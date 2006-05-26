@@ -37,7 +37,7 @@ const unsigned short KWViewMode::s_shadowOffset = 3;
 QSize KWViewMode::availableSizeForText( KWTextFrameSet* textfs )
 {
     KWFrame* frame = textfs->frameIterator().getLast();
-    return m_doc->zoomSize( KoSize( frame->innerWidth(), frame->internalY() + frame->innerHeight() ) );
+    return m_doc->zoomSizeOld( KoSize( frame->innerWidth(), frame->internalY() + frame->innerHeight() ) );
 
 }
 
@@ -130,7 +130,7 @@ QRect KWViewMode::rulerFrameRect()
     }
     if ( frame )
     {
-        QRect r = normalToView( m_doc->zoomRect( frame->innerRect() ) );
+        QRect r = normalToView( m_doc->zoomRectOld( frame->innerRect() ) );
 
         // Calculate page corner (see pageCorner above)
         int pageNum = frame->pageNumber();
@@ -185,7 +185,7 @@ KWViewMode * KWViewMode::create( const QString & viewModeType, KWDocument *doc, 
 QSize KWViewModeNormal::contentsSize()
 {
     return QSize( m_doc->paperWidth(m_doc->startPage()),
-                  m_doc->zoomItY( m_doc->pageManager()->bottomOfPage(m_doc->lastPage()) ) );
+                  m_doc->zoomItYOld( m_doc->pageManager()->bottomOfPage(m_doc->lastPage()) ) );
 }
 
 QRect KWViewModeNormal::viewPageRect( int pgNum )
@@ -198,7 +198,7 @@ QRect KWViewModeNormal::viewPageRect( int pgNum )
 
 QPoint KWViewModeNormal::normalToView( const QPoint & nPoint )
 {
-    double unzoomedY = m_doc->unzoomItY( nPoint.y() );
+    double unzoomedY = m_doc->unzoomItYOld( nPoint.y() );
     KWPage *page = m_doc->pageManager()->page(unzoomedY);   // quotient
     if( !page) {
         kWarning(31001) << "KWViewModeNormal::normalToView request for conversion out of the document! Check your input data.. ("<< nPoint << ")" << endl;
@@ -212,7 +212,7 @@ QPoint KWViewModeNormal::viewToNormal( const QPoint & vPoint )
 {
     // Opposite of the above
     // The Y is unchanged by the centering so we can use it to get the page.
-    double unzoomedY = m_doc->unzoomItY( vPoint.y() );
+    double unzoomedY = m_doc->unzoomItYOld( vPoint.y() );
     KWPage *page = m_doc->pageManager()->page(unzoomedY);   // quotient
     if( !page) {
         kWarning(31001) << "KWViewModeNormal::normalToView request for conversion out of the document! Check your input data.. ("<< vPoint << ")" << endl;
@@ -226,7 +226,7 @@ int KWViewModeNormal::xOffset(KWPage *page, int canvasWidth /* = -1 */) {
     // Center horizontally
     if(canvasWidth < 0)
         canvasWidth = canvas()->visibleWidth();
-    return qMax( 0, ( canvasWidth - m_doc->zoomItX( page->width() ) ) / 2 );
+    return qMax( 0, ( canvasWidth - m_doc->zoomItXOld( page->width() ) ) / 2 );
 }
 
 void KWViewModeNormal::drawPageBorders( QPainter * painter, const QRect & crect, const QRegion & emptySpaceRegion )
@@ -245,8 +245,8 @@ void KWViewModeNormal::drawPageBorders( QPainter * painter, const QRect & crect,
     {
         KWPage *page = m_doc->pageManager()->page(pageNr);
 
-        int pageWidth = m_doc->zoomItX( page->width() );
-        int pageHeight = m_doc->zoomItY( pagePosPt + page->height() ) - topOfPage;
+        int pageWidth = m_doc->zoomItXOld( page->width() );
+        int pageHeight = m_doc->zoomItYOld( pagePosPt + page->height() ) - topOfPage;
         if ( crect.bottom() < topOfPage )
             break;
         // Center horizontally
@@ -356,7 +356,7 @@ QSize KWViewModePreview::contentsSize()
 QPoint KWViewModePreview::normalToView( const QPoint & nPoint )
 {
     // Can't use nPoint.y() / m_doc->paperHeight() since this would be a rounding problem
-    double unzoomedY = m_doc->unzoomItY( nPoint.y() );
+    double unzoomedY = m_doc->unzoomItYOld( nPoint.y() );
     KWPage *page = m_doc->pageManager()->page(unzoomedY);   // quotient
     if( !page) {
         kWarning(31001) << "KWViewModePreview::normalToView request for conversion out of the document! Check your input data.. ("<< nPoint << ")" << endl;
@@ -373,7 +373,7 @@ QPoint KWViewModePreview::normalToView( const QPoint & nPoint )
     return QPoint( leftSpacing() + col * ( m_doc->paperWidth(page->pageNumber()) +
                                            m_spacing ) + nPoint.x(),
                    topSpacing() + row * ( m_doc->paperHeight(page->pageNumber()) +
-                                          m_spacing ) + m_doc->zoomItY( yInPagePt ) );
+                                          m_spacing ) + m_doc->zoomItYOld( yInPagePt ) );
 }
 
 QRect KWViewModePreview::viewPageRect( int pgNum )
@@ -581,8 +581,8 @@ void KWViewModeText::setPageLayout( KoRuler* hRuler, KoRuler* vRuler, const KoPa
     layout.format = PG_CUSTOM;
     layout.orientation = PG_PORTRAIT;
     QSize cSize = contentsSize();
-    layout.ptWidth = m_doc->unzoomItX( cSize.width() );
-    layout.ptHeight = m_doc->unzoomItY( cSize.height() );
+    layout.ptWidth = m_doc->unzoomItXOld( cSize.width() );
+    layout.ptHeight = m_doc->unzoomItYOld( cSize.height() );
     //kDebug() << "KWViewModeText::setPageLayout layout size " << layout.ptWidth << "x" << layout.ptHeight << endl;
     layout.ptLeft = OFFSET;
     layout.ptRight = 0;

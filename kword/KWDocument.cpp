@@ -4466,11 +4466,11 @@ void KWDocument::removeFrameSet( KWFrameSet *f )
     emit sigFrameSetRemoved(f);
 }
 
-void KWDocument::addCommand( KCommand * cmd )
+void KWDocument::addCommand( KCommand * cmd, bool execute )
 {
     Q_ASSERT( cmd );
     //kDebug(32001) << "KWDocument::addCommand " << cmd->name() << endl;
-    m_commandHistory->addCommand( cmd, false );
+    m_commandHistory->addCommand( cmd, execute );
     setModified( true );
 }
 
@@ -5384,15 +5384,15 @@ void KWDocument::updateGridButton()
 }
 
 unsigned int KWDocument::paperHeight(int pageNum) const {
-    return static_cast<unsigned int>(zoomItY( pageManager()->pageLayout(pageNum).ptHeight ));
+    return static_cast<unsigned int>(zoomItYOld( pageManager()->pageLayout(pageNum).ptHeight ));
 }
 
 unsigned int KWDocument::paperWidth(int pageNum) const {
-    return static_cast<unsigned int>(zoomItX( pageManager()->pageLayout(pageNum).ptWidth ));
+    return static_cast<unsigned int>(zoomItXOld( pageManager()->pageLayout(pageNum).ptWidth ));
 }
 
 unsigned int KWDocument::pageTop( int pgNum ) const {
-    return zoomItY( pageManager()->topOfPage( pgNum ) );
+    return zoomItYOld( pageManager()->topOfPage( pgNum ) );
 }
 
 int KWDocument::pageCount() const {

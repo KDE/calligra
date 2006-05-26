@@ -40,6 +40,10 @@
 #include <KoQueryTrader.h>
 #include <KoPicture.h>
 
+#include <KoShapeManager.h>
+#include <KoViewConverter.h>
+#include <KoCanvasBase.h>
+
 #include "KWTextParag.h"
 #include "KWFrame.h"
 #include "KWVariable.h"
@@ -67,7 +71,7 @@ class KWFrameView;
  * the screen as well as the interaction with the user via mouse
  * and keyboard. There is one per view.
  */
-class KWCanvas : public Q3ScrollView
+class KWCanvas : public Q3ScrollView, public KoCanvasBase
 {
     Q_OBJECT
 
@@ -265,6 +269,15 @@ protected:
     void terminateCurrentEdit();
     bool insertInlineTable();
 
+    // KoCanvasBase interface methods.
+    void gridSize(double *horizontal, double *vertical) const;
+    bool snapToGrid() const;
+    void addCommand(KCommand *command, bool execute = true);
+    KoShapeManager *shapeManager() const { return m_shapeManager; }
+    void updateCanvas(const QRectF& rc);
+    KoTool* activeTool() { return 0; }
+    KoViewConverter *viewConverter();
+
 signals:
     // Emitted when the current frameset edit changes
     void currentFrameSetEditChanged();
@@ -364,6 +377,8 @@ private:
     } m_table;
     KWTableFrameSet *m_currentTable;
     InteractionPolicy *m_interactionPolicy;
+
+    KoShapeManager *m_shapeManager;
 
     struct
     {

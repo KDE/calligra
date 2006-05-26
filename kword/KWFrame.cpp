@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999, 2000 Reginald Stadlbauer <reggie@kde.org>
    Copyright (C) 2000-2006 David Faure <faure@kde.org>
-   Copyright (C) 2005 Thomas Zander <zander@kde.org>
+   Copyright (C) 2005-2006 Thomas Zander <zander@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -185,7 +185,7 @@ void KWFrame::updateRulerHandles(){
 QRect KWFrame::outerRect( KWViewMode* viewMode ) const
 {
     KWDocument *doc = m_frameSet->kWordDocument();
-    QRect outerRect( doc->zoomRect( *this ) );
+    QRect outerRect( doc->zoomRectOld( *this ) );
     if ( viewMode && !m_frameSet->groupmanager() ) {
         int minBorder = viewMode->drawFrameBorders() ? 1 : 0;
         KWFrame* settingsFrame = m_frameSet->settingsFrame( this );

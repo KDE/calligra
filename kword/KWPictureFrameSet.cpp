@@ -225,9 +225,9 @@ void KWPictureFrameSet::drawFrameContents( KWFrame *frame, QPainter *painter, co
                                            const QColorGroup &, bool, bool, KWFrameSetEdit *, KWViewMode * )
 {
 #ifdef DEBUG_DRAW
-    kDebug(32001) << "KWPictureFrameSet::drawFrameContents crect=" << crect << " size=" << kWordDocument()->zoomItX( frame->innerWidth() ) << "x" << kWordDocument()->zoomItY( frame->innerHeight() ) << endl;
+    kDebug(32001) << "KWPictureFrameSet::drawFrameContents crect=" << crect << " size=" << kWordDocument()->zoomItXOld( frame->innerWidth() ) << "x" << kWordDocument()->zoomItYOld( frame->innerHeight() ) << endl;
 #endif
-    m_picture.draw( *painter, 0, 0, kWordDocument()->zoomItX( frame->innerWidth() ), kWordDocument()->zoomItY( frame->innerHeight() ),
+    m_picture.draw( *painter, 0, 0, kWordDocument()->zoomItXOld( frame->innerWidth() ), kWordDocument()->zoomItYOld( frame->innerHeight() ),
                   crect.x(), crect.y(), crect.width(), crect.height(), !m_finalSize);
 }
 

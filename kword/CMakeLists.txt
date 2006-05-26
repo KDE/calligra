@@ -11,7 +11,7 @@ add_subdirectory( expression )
 add_subdirectory( data )
 add_subdirectory( tests )
 
-include_directories( ${KOTEXT_INCLUDES} ${CMAKE_SOURCE_DIR}/libs/kformula ${KOFFICEUI_INCLUDES} )
+include_directories( ${KOTEXT_INCLUDES} ${CMAKE_SOURCE_DIR}/libs/kformula ${KOFFICEUI_INCLUDES} ${FLAKE_INCLUDES} )
 
 
 ########### next target ###############
@@ -140,7 +140,7 @@ kde4_add_dcop_skels(kwordprivate_LIB_SRCS
 
 kde4_add_library(kwordprivate SHARED ${kwordprivate_LIB_SRCS})
 
-target_link_libraries(kwordprivate  ${KDE4_KDECORE_LIBS} kofficeui kotext kformulalib kwmailmerge_interface )
+target_link_libraries(kwordprivate  ${KDE4_KDECORE_LIBS} flake kofficeui kotext kformulalib kwmailmerge_interface )
 
 set_target_properties(kwordprivate PROPERTIES VERSION 4.0.0 SOVERSION 4 )
 install_targets(${LIB_INSTALL_DIR} kwordprivate )

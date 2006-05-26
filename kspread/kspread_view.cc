@@ -4791,7 +4791,7 @@ void View::insertChart( const QRect& _geometry, KoDocumentEntry& _e )
       return;
 
     // Transform the view coordinates to document coordinates
-    KoRect unzoomedRect = doc()->unzoomRect( _geometry );
+    KoRect unzoomedRect = doc()->unzoomRectOld( _geometry );
     unzoomedRect.moveBy( d->canvas->xOffset(), d->canvas->yOffset() );
 
     InsertObjectCommand *cmd = 0;
@@ -4813,7 +4813,7 @@ void View::insertChild( const QRect& _geometry, KoDocumentEntry& _e )
     return;
 
   // Transform the view coordinates to document coordinates
-  KoRect unzoomedRect = doc()->unzoomRect( _geometry );
+  KoRect unzoomedRect = doc()->unzoomRectOld( _geometry );
   unzoomedRect.moveBy( d->canvas->xOffset(), d->canvas->yOffset() );
 
   InsertObjectCommand *cmd = new InsertObjectCommand( unzoomedRect, _e, d->canvas );
@@ -5249,7 +5249,7 @@ KoDocument * View::hitTest( const QPoint& /*pos*/ )
 
 int View::leftBorder() const
 {
-  return int( d->canvas->doc()->zoomItX( YBORDER_WIDTH ) );
+  return int( d->canvas->doc()->zoomItXOld( YBORDER_WIDTH ) );
 }
 
 int View::rightBorder() const
@@ -5259,7 +5259,7 @@ int View::rightBorder() const
 
 int View::topBorder() const
 {
-  return d->toolWidget->height() + int( d->canvas->doc()->zoomItX( Format::globalRowHeight() + 2 ) );
+  return d->toolWidget->height() + int( d->canvas->doc()->zoomItXOld( Format::globalRowHeight() + 2 ) );
 }
 
 int View::bottomBorder() const
@@ -5300,9 +5300,9 @@ void View::refreshView()
   d->canvas->updatePosWidget();
 
   d->hBorderWidget->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Minimum );
-  d->hBorderWidget->setMinimumHeight( doc()->zoomItY( Format::globalRowHeight() + 2 ) );
+  d->hBorderWidget->setMinimumHeight( doc()->zoomItYOld( Format::globalRowHeight() + 2 ) );
   d->vBorderWidget->setSizePolicy( QSizePolicy::Minimum, QSizePolicy::Expanding );
-  d->vBorderWidget->setMinimumWidth( doc()->zoomItX( YBORDER_WIDTH ) );
+  d->vBorderWidget->setMinimumWidth( doc()->zoomItXOld( YBORDER_WIDTH ) );
 
   Sheet::LayoutDirection sheetDir = sheet->layoutDirection();
   bool interfaceIsRTL = QApplication::isRightToLeft();

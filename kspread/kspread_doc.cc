@@ -1567,10 +1567,10 @@ void Doc::paintContent( QPainter& painter, const QRect& rect, bool /*transparent
 
     double xpos;
     double ypos;
-    int left_col   = sheet->leftColumn( unzoomItX( rect.x() ), xpos );
-    int right_col  = sheet->rightColumn( unzoomItX( rect.right() ) );
-    int top_row    = sheet->topRow( unzoomItY( rect.y() ), ypos );
-    int bottom_row = sheet->bottomRow( unzoomItY( rect.bottom() ) );
+    int left_col   = sheet->leftColumn( unzoomItXOld( rect.x() ), xpos );
+    int right_col  = sheet->rightColumn( unzoomItXOld( rect.right() ) );
+    int top_row    = sheet->topRow( unzoomItYOld( rect.y() ), ypos );
+    int bottom_row = sheet->bottomRow( unzoomItYOld( rect.bottom() ) );
     QPen pen;
     pen.setWidth( 1 );
     painter.setPen( pen );
@@ -1634,7 +1634,7 @@ void Doc::paintCellRegions(QPainter& painter, const QRect &viewRect,
   painter.setPen( pen );
 
   QRect cellRegion;
-  KoRect unzoomedViewRect = unzoomRect( viewRect );
+  KoRect unzoomedViewRect = unzoomRectOld( viewRect );
 
   Region::ConstIterator endOfList(region.constEnd());
   for (Region::ConstIterator it = region.constBegin(); it != endOfList; ++it)
@@ -2248,7 +2248,7 @@ void Doc::repaint( const KoRect& rect )
   {
     Canvas* canvas = static_cast<View*>( view )->canvasWidget();
 
-    r = zoomRect( rect );
+    r = zoomRectOld( rect );
     r.translate( (int)( -canvas->xOffset()*zoomedResolutionX() ) ,
                         (int)( -canvas->yOffset() *zoomedResolutionY()) );
     canvas->update( r );

@@ -533,7 +533,7 @@ void KWTextFrameSet::drawContents( QPainter *p, const QRect & crect, const QColo
                             break;
                         }
 
-                        QRect flatRect = viewMode->normalToView( m_doc->zoomRect( rect ) );
+                        QRect flatRect = viewMode->normalToView( m_doc->zoomRectOld( rect ) );
                         //kDebug() << " KWTextFrameSet::drawContents rect=" << rect << " zoomed:" << flatRect << endl;
                         flatRect.setBottom( flatRect.top() + 1 ); // #!@!@!& QRect....
                         if ( flatRect.intersects( crect ) ) {
@@ -699,7 +699,7 @@ void KWTextFrameSet::drawCursor( QPainter *p, KoTextCursor *cursor, bool cursorV
 
     QRect normalFrameRect;
     if (hasFrames)
-        normalFrameRect = m_doc->zoomRect( theFrame->innerRect() );
+        normalFrameRect = m_doc->zoomRectOld( theFrame->innerRect() );
     else
         normalFrameRect = QRect( QPoint(0, 0), m_currentViewMode->contentsSize() );
 
@@ -723,10 +723,10 @@ void KWTextFrameSet::drawCursor( QPainter *p, KoTextCursor *cursor, bool cursorV
     {
 #ifdef DEBUG_CURSOR
         kDebug() << " dPoint(doc, pts)=" << dPoint.x() << "," << dPoint.y() << endl;
-        QPoint debugPt = m_doc->zoomPoint( dPoint );
+        QPoint debugPt = m_doc->zoomPointOld( dPoint );
         kDebug() << " zoomed dPoint(doc, pixels)=" << debugPt.x() << "," << debugPt.y() << endl;
 #endif
-        QPoint vPoint = m_currentViewMode->normalToView( m_doc->zoomPoint( dPoint ) ); // from doc to view contents
+        QPoint vPoint = m_currentViewMode->normalToView( m_doc->zoomPointOld( dPoint ) ); // from doc to view contents
 #ifdef DEBUG_CURSOR
         kDebug() << " vPoint(view, pixels)=" << vPoint.x() << "," << vPoint.y() << endl;
 #endif
@@ -775,9 +775,9 @@ void KWTextFrameSet::drawCursor( QPainter *p, KoTextCursor *cursor, bool cursorV
                 // translate to qrt coords - after setting the clip region !
                 // see internalToDocumentWithHint
                 int translationX = viewFrameRect.left();
-                int translationY = viewFrameRect.top() - m_doc->zoomItY( theFrame->internalY() );
+                int translationY = viewFrameRect.top() - m_doc->zoomItYOld( theFrame->internalY() );
 #ifdef DEBUG_CURSOR
-                kDebug() << "        translating Y by viewFrameRect.top()-internalY in pixelY= " << viewFrameRect.top() << "-" << m_doc->zoomItY( theFrame->internalY() ) << "=" << viewFrameRect.top() - m_doc->zoomItY( theFrame->internalY() ) << endl;
+                kDebug() << "        translating Y by viewFrameRect.top()-internalY in pixelY= " << viewFrameRect.top() << "-" << m_doc->zoomItYOld( theFrame->internalY() ) << "=" << viewFrameRect.top() - m_doc->zoomItYOld( theFrame->internalY() ) << endl;
 #endif
                 p->translate( translationX, translationY );
                 p->setBrushOrigin( p->brushOrigin().x() + translationX, p->brushOrigin().y() + translationY );
@@ -2575,7 +2575,7 @@ void KWTextFrameSet::updateViewArea( QWidget * w, KWViewMode* viewMode, const QP
 #endif
 
     // Find last page that is visible
-    int maxPage = m_doc->pageManager()->pageNumber(m_doc->unzoomItY( nPointBottom.y() ));
+    int maxPage = m_doc->pageManager()->pageNumber(m_doc->unzoomItYOld( nPointBottom.y() ));
     int maxY = 0;
     if ( maxPage < m_firstPage || maxPage >= (int)m_framesInPage.size() + m_firstPage )
         maxY = ah;
@@ -2738,9 +2738,9 @@ QRect KWTextFrameSet::paragRect( KoTextParag * parag ) const
     // we shouldn't use it for more precise stuff.
     KoPoint p;
     (void)internalToDocument( parag->rect().topLeft(), p );
-    QPoint topLeft = m_doc->zoomPoint( p );
+    QPoint topLeft = m_doc->zoomPointOld( p );
     (void)internalToDocument( parag->rect().bottomRight(), p );
-    QPoint bottomRight = m_doc->zoomPoint( p );
+    QPoint bottomRight = m_doc->zoomPointOld( p );
     return QRect( topLeft, bottomRight );
 }
 
@@ -3369,7 +3369,7 @@ void KWTextFrameSetEdit::ensureCursorVisible()
         m_currentFrame = theFrame;
         m_canvas->gui()->getView()->updatePageInfo();
     }
-    QPoint cursorPos = textFrameSet()->kWordDocument()->zoomPoint( pt );
+    QPoint cursorPos = textFrameSet()->kWordDocument()->zoomPointOld( pt );
     cursorPos = m_canvas->viewMode()->normalToView( cursorPos );
     areaLeft = textFrameSet()->kWordDocument()->layoutUnitToPixelX( areaLeft ) + 1;
     areaRight = textFrameSet()->kWordDocument()->layoutUnitToPixelX( areaRight ) + 1;
@@ -3531,7 +3531,7 @@ void KWTextFrameSetEdit::mouseMoveEvent( QMouseEvent * e, const QPoint & nPoint,
         return; // Ignore clicks completely outside of the page (e.g. in the gray area, or ruler)
 
     QPoint iPoint;
-    KoPoint dPoint = frameSet()->kWordDocument()->unzoomPoint( nPoint );
+    KoPoint dPoint = frameSet()->kWordDocument()->unzoomPointOld( nPoint );
     KWTextFrameSet::RelativePosition relPos;
     if ( nPoint.y() > 0 && textFrameSet()->documentToInternalMouseSelection( dPoint, iPoint, relPos , m_canvas->viewMode()) )
     {
@@ -3609,7 +3609,7 @@ void KWTextFrameSetEdit::dragMoveEvent( QDragMoveEvent * e, const QPoint &nPoint
     if ( provides & ( KWView::ProvidesOasis | KWView::ProvidesPlainText | KWView::ProvidesFormula ) )
     {
         QPoint iPoint;
-        KoPoint dPoint = frameSet()->kWordDocument()->unzoomPoint( nPoint );
+        KoPoint dPoint = frameSet()->kWordDocument()->unzoomPointOld( nPoint );
         if ( textFrameSet()->documentToInternal( dPoint, iPoint ) )
         {
             textObject()->emitHideCursor();
@@ -3633,7 +3633,7 @@ void KWTextFrameSetEdit::dropEvent( QDropEvent * e, const QPoint & nPoint, const
         e->acceptAction();
         KoTextCursor dropCursor( textDocument() );
         QPoint dropPoint;
-        KoPoint dPoint = frameSet()->kWordDocument()->unzoomPoint( nPoint );
+        KoPoint dPoint = frameSet()->kWordDocument()->unzoomPointOld( nPoint );
         if ( !textFrameSet()->documentToInternal( dPoint, dropPoint ) )
             return; // Don't know where to paste
 
@@ -4081,7 +4081,7 @@ QPoint KWTextFrameSet::cursorPos( KoTextCursor *cursor, KWCanvas* canvas, KWFram
     KoPoint hintDPoint = currentFrame ? currentFrame->innerRect().topLeft() : KoPoint();
     if ( internalToDocumentWithHint( iPoint, dPoint, hintDPoint ) )
     {
-        vPoint = viewMode->normalToView( m_doc->zoomPoint( dPoint ) ); // from doc to view contents
+        vPoint = viewMode->normalToView( m_doc->zoomPointOld( dPoint ) ); // from doc to view contents
         vPoint.rx() -= canvas->contentsX();
         vPoint.ry() -= canvas->contentsY();
     } // else ... ?
