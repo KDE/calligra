@@ -42,8 +42,9 @@ class Set;
 class Widget;
 class EditorItem;
 
-//! \brief A listview to edit properties
-/*! Editor uses property options using Property::option(const char *)
+
+/*!  \brief A listview to edit properties
+    Editor uses property options using Property::option(const char *)
     to override default behaviour of editor items.
     Currently supported options are:
     <ul><li> min: integer setting for minimum value of IntEdit and DoubleEdit item. Default is 0.

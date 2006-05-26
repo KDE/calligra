@@ -78,7 +78,7 @@ class EditorPrivate
 			previouslyCollapsedGroupItem = 0;
 			childFormPreviouslyCollapsedGroupItem = 0;
 			slotPropertyChanged_enabled = true;
-			QObject::connect(&changeSetLaterTimer, SIGNAL(timeout()), 
+			QObject::connect(&changeSetLaterTimer, SIGNAL(timeout()),
 				editor, SLOT(changeSetLater()));
 		}
 		~EditorPrivate()
@@ -637,12 +637,12 @@ Editor::clearWidgetCache()
 void
 Editor::updateEditorGeometry(bool forceUndoButtonSettings, bool undoButtonVisible)
 {
-	updateEditorGeometry(d->currentItem, d->currentWidget, 
+	updateEditorGeometry(d->currentItem, d->currentWidget,
 		forceUndoButtonSettings, undoButtonVisible);
 }
 
 void
-Editor::updateEditorGeometry(EditorItem *item, Widget* widget, 
+Editor::updateEditorGeometry(EditorItem *item, Widget* widget,
   bool forceUndoButtonSettings, bool undoButtonVisible)
 {
 	if(!item || !widget)
@@ -707,7 +707,7 @@ Editor::showUndoButton( bool show )
 	}
 
 	QPoint p = contentsToViewport(QPoint(0, geometry.y()));
-	d->undoButton->move(geometry.x() + geometry.width() 
+	d->undoButton->move(geometry.x() + geometry.width()
 		-((d->currentWidget && d->currentWidget->hasBorders())?1:0)/*editor is moved by 1 to left*/
 		- d->undoButton->width(), p.y());
 //  if (d->currentWidget) {
@@ -762,9 +762,9 @@ Editor::slotColumnSizeChanged(int section, int oldSize, int newSize)
 	Q_UNUSED(newSize);
 	updateEditorGeometry();
 	for (QListViewItemIterator it(this); it.current(); ++it) {
-//		if (section == 0 && dynamic_cast<EditorGroupItem*>(it.current())) {
-//			it.current()->repaint();
-//	}
+		if (section == 0 && dynamic_cast<EditorGroupItem*>(it.current())) {
+			it.current()->repaint();
+	}
 	}
 /*
 	if(d->currentWidget) {

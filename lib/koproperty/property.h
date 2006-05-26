@@ -30,15 +30,17 @@ template<class U> class QAsciiDictIterator;
 
 /*! \brief Namespace for a set of classes implementing generic properties framework.
 
- Main classes of this framework:
-  - Property, representing a single property with it's own type and value
+ Main classes of this framework are:
+  - Property, representing a single property with its own type and value
   - Set, a set of properties
-  - Editor, a widget for displaying and editing properies provided by a Set object. 
-    Every property has it's own row displayed using EditorItem object, within Editor widget. 
+  - Editor, a widget for displaying and editing properties provided by a Set object.
+    Every property has its own row displayed using EditorItem object, within Editor widget.
     Widget class provides editing feature for EditorItem objects if a user selects a given item.
 
- KoProperty framework also supports adding custom property types 
- and custom property editor types using CustomPropertyFactory.
+ KoProperty framework also supports adding custom property types
+ and custom property editor types using Custom Property and CustomPropertyFactory.
+
+ Take a look at the test application, available in /koproperty/test to see how to use KoProperty.
 
  \author Cedric Pasteur <cedric.pasteur@free.fr>
  \author Alexander Dymo <cloudtemple@mskat.net>
@@ -149,9 +151,9 @@ enum PropertyType {
 
 	Sometimes, for longer property captions or these with more words, e.g. "Allow Zero Size",
 	it's usable to provide newline characters, e.g. "Allow Zero\nSize".
-	If caption argument of the constructors contains newline characters, 
+	If caption argument of the constructors contains newline characters,
 	caption() will return this text with substituted these characters with spaces.
-	In such cases, captionForDisplaying() is used to get the original caption text usable 
+	In such cases, captionForDisplaying() is used to get the original caption text usable
 	(with newline, if any) for displaying within a property editor.
 
 	\author Cedric Pasteur <cedric.pasteur@free.fr>
@@ -201,16 +203,16 @@ class KOPROPERTY_EXPORT Property
 		/*! Constructs a null property. */
 		Property();
 
-		/*! Constructs property of simple type. 
-		 If \a caption contains newline characters, caption() will return \a caption with substituted 
-		 these with spaces. captionForDisplaying() is used to get original caption text usable 
+		/*! Constructs property of simple type.
+		 If \a caption contains newline characters, caption() will return \a caption with substituted
+		 these with spaces. captionForDisplaying() is used to get original caption text usable
 		 (with newline, if any) for displaying within a property editor. */
 		Property(const QCString &name, const QVariant &value = QVariant(),
 			const QString &caption = QString::null, const QString &description = QString::null,
 			int type = Auto, Property* parent = 0);
 
 		/*! Constructs property of \ref ValueFromList type. */
-		Property(const QCString &name, const QStringList &keys, const QStringList &strings, 
+		Property(const QCString &name, const QStringList &keys, const QStringList &strings,
 			const QVariant &value = QVariant(),
 			const QString &caption = QString::null, const QString &description = QString::null,
 			int type = ValueFromList, Property* parent = 0);
@@ -236,13 +238,13 @@ class KOPROPERTY_EXPORT Property
 		/*! \return the caption of the property.*/
 		QString caption() const;
 
-		/*! \return the caption text of the property for displaying. 
-		 It is similar to caption() but if the property caption contains newline characters, 
+		/*! \return the caption text of the property for displaying.
+		 It is similar to caption() but if the property caption contains newline characters,
 		 these are not substituted with spaces. */
 		QString captionForDisplaying() const;
 
-		/*! Sets the name of the property. If the caption contains newline characters, 
-		 these are replaced by spaces. You can use captionForDisplaying() 
+		/*! Sets the name of the property. If the caption contains newline characters,
+		 these are replaced by spaces. You can use captionForDisplaying()
 		 to access the original caption text you passed here.*/
 		void setCaption(const QString &caption);
 
@@ -267,11 +269,11 @@ class KOPROPERTY_EXPORT Property
 		/*! Sets the value of the property.*/
 		void setValue(const QVariant &value, bool rememberOldValue = true, bool useCustomProperty=true);
 
-		/*! Resets the value of the property to the old value. 
+		/*! Resets the value of the property to the old value.
 		 @see oldValue() */
 		void resetValue();
 
-		/*! \return the qstring-to-value correspondence list of the property. 
+		/*! \return the qstring-to-value correspondence list of the property.
 		 used to create comboboxes-like property editors.*/
 		ListData* listData() const;
 
@@ -305,7 +307,7 @@ class KOPROPERTY_EXPORT Property
 		no custom property defined. */
 		CustomProperty* customProperty() const;
 
-		/*! Sets custom property \a prop for this property. 
+		/*! Sets custom property \a prop for this property.
 		 @see CustomPropertyFactory */
 		void setCustomProperty(CustomProperty *prop);
 
@@ -318,14 +320,14 @@ class KOPROPERTY_EXPORT Property
 		//! \return true if this property value is changed.
 		bool isModified() const;
 
-		/*! \return true if the property is read-only. 
-		 The property can be read-write but still not editable because the property 
-		 set containing it may be set to read-only. 
+		/*! \return true if the property is read-only.
+		 The property can be read-write but still not editable because the property
+		 set containing it may be set to read-only.
 		 By default the property is read-write.
 		 See Set::isReadOnly() for more details. */
 		bool isReadOnly() const;
 
-		/*! Sets this property to be read-only. 
+		/*! Sets this property to be read-only.
 		 @see isReadOnly() */
 		void setReadOnly(bool readOnly);
 
@@ -344,16 +346,16 @@ class KOPROPERTY_EXPORT Property
 		void setStorable(bool storable);
 
 		/*! \return 1 if the property should be synced automatically in Property Editor
-		as soon as editor contents change (e.g. when the user types text). 
-		If autoSync() == 0, property value will be updated when the user presses Enter 
+		as soon as editor contents change (e.g. when the user types text).
+		If autoSync() == 0, property value will be updated when the user presses Enter
 		or when another editor gets the focus.
 		Property follows Property Editor's global rule if autoSync() !=0 and !=1 (the default).
 		*/
 		int autoSync() const;
 
 		/*! if \a sync is 1, the property will be synced automatically in the Property Editor
-		as soon as editor's contents change (e.g. when the user types text). 
-		If \a sync is 0, property value will be updated when the user presses 
+		as soon as editor's contents change (e.g. when the user types text).
+		If \a sync is 0, property value will be updated when the user presses
 		Enter or when another editor gets the focus.
 		Property follows Property Editor's global rule if sync !=0 and !=1 (the default).
 		*/
@@ -381,9 +383,9 @@ class KOPROPERTY_EXPORT Property
 		/*! Compares two properties.*/
 		bool operator ==(const Property &prop) const;
 
-		/*! \return a key used for sorting. 
+		/*! \return a key used for sorting.
 		 Usually it's set by Set::addProperty() and Property::addChild() t oa unique value,
-		 so that this property can be sorted in a property editor in original order. 
+		 so that this property can be sorted in a property editor in original order.
 		 \see EditorItem::compare() */
 		int sortingKey() const;
 

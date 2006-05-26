@@ -36,8 +36,8 @@
 
 using namespace KoProperty;
 
-test::test()
-    : KMainWindow( 0, "test" )
+Test::Test()
+ : KMainWindow(0,"koproperty_test")
 {
 	KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
 	const bool flat = args->isSet("flat");
@@ -48,15 +48,15 @@ test::test()
 	f.setPixelSize(f.pixelSize()*2/3);
 	setFont(f);
 
-//  Simple
+/*  First, create the Set which will hold the properties.  */
 	m_set = new Set(this, "test");
-	m_set->setReadOnly( readOnly );
+	m_set->setReadOnly(readOnly);
 	QCString group;
 	if (!flat)
 		group = "SimpleGroup";
 	m_set->addProperty(new Property("Name", "Name"), group);
 	(*m_set)["Name"].setAutoSync(1);
-	
+
 	m_set->addProperty(new Property("Int", 2, "Int"), group);
 	m_set->addProperty(new Property("Double", 3.1415,"Double"), group);
 	m_set->addProperty(new Property("Bool", QVariant(true, 4), "Bool"), group);
@@ -98,7 +98,7 @@ test::test()
 	edit->setFocus();
 }
 
-test::~test()
+Test::~Test()
 {
 }
 

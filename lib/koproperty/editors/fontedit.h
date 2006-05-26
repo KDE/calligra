@@ -22,11 +22,11 @@
 #ifndef KPROPERTY_FONTEDIT_H
 #define KPROPERTY_FONTEDIT_H
 
-#include "../widget.h"
-
-class FontEditRequester;
+#include "widget.h"
 
 namespace KoProperty {
+
+class FontEditRequester;
 
 class KOPROPERTY_EXPORT FontEdit : public Widget
 {

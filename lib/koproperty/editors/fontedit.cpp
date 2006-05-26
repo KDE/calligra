@@ -43,6 +43,9 @@
 
 //! @internal
 //! reimplemented to better button and label's positioning
+
+namespace KoProperty {
+
 class FontEditRequester : public KFontRequester
 {
 	public:
@@ -53,7 +56,7 @@ class FontEditRequester : public KFontRequester
 			label()->setMinimumWidth(0);
 			label()->setFrameShape(QFrame::Box);
 			label()->setIndent(-1);
-#if KDE_VERSION >= KDE_MAKE_VERSION(3,4,0) 
+#if KDE_VERSION >= KDE_MAKE_VERSION(3,4,0)
 			label()->setFocusPolicy(ClickFocus);
 			KAcceleratorManager::setNoAccel(label());
 #endif
@@ -76,6 +79,8 @@ class FontEditRequester : public KFontRequester
 			button()->setFixedSize(button()->width(), height());
 		}
 };
+
+}
 
 using namespace KoProperty;
 
