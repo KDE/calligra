@@ -17,6 +17,44 @@ For bugfixes use CCMAIL:###-done@bugs.kde.org
 TODO:
 - inform Raphael about koffice.org/1.5/ url, give him the php code
 
+TODO: fix setting PK
+
+2006-05-26
+KexiDB
+- improved handling extended table schema information
+- improved alter table
+2.0: ported
+Table Designer
+- improved undo/redo actions; prepared for reuse
+  in the table-altering machinery of KexiDB
+2.0: ported
+
+2006-05-25
+Forms
+- set the data source readonly if it comes from query
+1.0/2.0: ported
+- "Read only" property is now supported by all data-aware widgets, 
+  and form itself
+2.0: ported
+- background color of the line edit in read-only mode is blended with white
+  to get lighter gray
+2.0: ported
+- accessibility+usability: read only line edit widget now shows the caret
+2.0: ported
+- display field caption as title for editor's context menu
+2.0: ported
+
+~~~~~~~~~~~~~~~~ 2006.1.1 (OOPL, bugfix) ~~~~~~~~~~~~~~~~
+
+2006-05-18
+Table Designer
+- improved support Undo/Redo actions
+2.0: ported
+Forms
+- fixed saving data changes for db-aware checkboxes
+  (fixed by setting StrongFocus policy as default)
+1.0/2.0: ported
+
 ~~~~~~~~~~~~~~~~ 1.0.1 bugfix release (with KOffice 1.5.1)  ~~~~~~~~~~~~~~~~
 
 2006-05-17

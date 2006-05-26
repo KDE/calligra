@@ -867,3 +867,19 @@ TODO: table view
 Forms TODO
 - add "navigationCaption" property to table and form, so "Records:" Label in the record nav. becomes e.g. "Bananas:"
   see: http://blogs.msdn.com/thirdoffive/archive/2006/04/06/560454.aspx
+
+TV TODO
+- display [null]  values in boolean fields, e.g. as [?]
+
+Forms TODO
+- Checkbox widget with focus policy set to Tab has problems with KexiDataAwareObjectInterface::acceptEditor() 
+  because m_editor is set to _currently focused_ widget (problem where there are e.g. >1 checkboxes)
+  Partially fixed by setting StrongFocus policy as default; 
+ FIX THIS for other focus policies too...
+
+Table View TODO:
+- Add icons for conditional formatting: http://blogs.msdn.com/excel/archive/2006/05/09/594200.aspx
+  (displaying icons is already possible using custom properties, BTW)
+
+TODO:
+table designer: clear PK when selecting non-integer type
