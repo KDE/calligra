@@ -36,6 +36,7 @@
 #include <qapplication.h>
 #include <qeventloop.h>
 #include <qtimer.h>
+#include <qlabel.h>
 
 #ifdef QT_ONLY
 #else
@@ -229,6 +230,7 @@ Editor::fill()
 		setCurrentItem(firstChild());
 		setSelected(firstChild(), true);
 		slotClicked(firstChild());
+		updateGroupLabelsPosition();
 	}
 	setUpdatesEnabled(true);
 	// aaah, call this instead of update() as explained here http://lists.trolltech.com/qt-interest/2000-06/thread00337-0.html
@@ -672,6 +674,22 @@ Editor::updateEditorGeometry(EditorItem *item, Widget* widget,
 }
 
 void
+Editor::updateGroupLabelsPosition()
+{
+	if(!d->topItem)
+		return;
+
+	EditorGroupItem *group = dynamic_cast<EditorGroupItem*>(d->topItem->firstChild());
+	while(group) {
+		QRect r = itemRect((QListViewItem*) group);
+		r.setX(20);
+		if(group->label())
+			group->label()->setGeometry(r);
+		group = dynamic_cast<EditorGroupItem*>(group->nextSibling());
+	}
+}
+
+void
 Editor::hideEditor()
 {
 	d->currentItem = 0;
@@ -731,6 +749,7 @@ Editor::slotExpanded(QListViewItem *item)
 			slotClicked(selectedItem());
 	}
 	updateEditorGeometry();
+	updateGroupLabelsPosition();
 }
 
 void
@@ -752,6 +771,7 @@ Editor::slotCollapsed(QListViewItem *item)
 		}
 	}
 	updateEditorGeometry();
+	updateGroupLabelsPosition();
 }
 
 void
@@ -761,11 +781,11 @@ Editor::slotColumnSizeChanged(int section, int oldSize, int newSize)
 	Q_UNUSED(oldSize);
 	Q_UNUSED(newSize);
 	updateEditorGeometry();
-	for (QListViewItemIterator it(this); it.current(); ++it) {
+	/*for (QListViewItemIterator it(this); it.current(); ++it) {
 		if (section == 0 && dynamic_cast<EditorGroupItem*>(it.current())) {
 			it.current()->repaint();
 	}
-	}
+	}*/
 /*
 	if(d->currentWidget) {
 		if(section == 0)
@@ -843,6 +863,7 @@ Editor::resizeEvent(QResizeEvent *ev)
 	if(d->undoButton->isVisible())
 		showUndoButton(true);
 	update();
+	updateGroupLabelsPosition();
 }
 
 bool
@@ -922,6 +943,7 @@ Editor::updateFont()
 		showUndoButton(d->undoButton->isVisible());
 		updateEditorGeometry();
 	}
+	updateGroupLabelsPosition();
 }
 
 bool

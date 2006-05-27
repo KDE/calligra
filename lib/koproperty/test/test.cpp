@@ -65,14 +65,18 @@ Test::Test()
 	m_set->addProperty(new Property("DateTime", QDateTime::currentDateTime(),"DateTime"), group);
 
 	QStringList list;//keys
-	list.append("myitem");
-	list.append("otheritem");
-	list.append("3rditem");
+	list << "myitem" << "otheritem" << "3rditem";
 	QStringList name_list; //strings
-	name_list.append("My Item");
-	name_list.append("Other Item");
-	name_list.append("Third Item");
+	name_list << "My Item" << "Other Item" << "Third Item";
 	m_set->addProperty(new Property("List", list, name_list, "otheritem", "List"), group);
+
+	// A valueFromList property matching strings with ints (could be any type supported by QVariant)
+	QValueList<QVariant> keys;
+	keys.append(1);
+	keys.append(2);
+	keys.append(3);
+	Property::ListData *listData = new Property::ListData(keys, name_list);
+	m_set->addProperty(new Property("List2", listData, "otheritem", "List2"), group);
 
 //  Complex
 	group = flat ? "" : "ComplexGroup";

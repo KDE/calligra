@@ -29,6 +29,7 @@
 #include <qpixmap.h>
 #include <qheader.h>
 #include <qstyle.h>
+#include  <qlabel.h>
 
 #ifdef QT_ONLY
 #else
@@ -343,21 +344,27 @@ EditorItem::setHeight( int height )
 //////////////////////////////////////////////////////
 
 EditorGroupItem::EditorGroupItem(EditorItem *parent, const QString &text)
- : EditorItem(parent, text)
+ : EditorItem(parent, text), m_label(0)
 {
 	setOpen(true);
 	setSelectable(false);
+	m_label = new QLabel("<b>"+text+"</b>", listView()->viewport());
+	m_label->setBackgroundMode(Qt::PaletteBase);
+	m_label->show();
 }
 
 EditorGroupItem::~EditorGroupItem()
-{}
+{
+	delete m_label;
+}
 
 void
-EditorGroupItem::paintCell(QPainter *p, const QColorGroup & cg, int column, int width, int /*align*/)
+EditorGroupItem::paintCell(QPainter *p, const QColorGroup & cg, int column, int /*width*/, int /*align*/)
 {
+	//no need to draw anything since there's a label on top of it
 	//if(column == 1)
 	//	return;
-	p->setPen( KPROPEDITOR_ITEM_BORDER_COLOR ); //! \todo custom color?
+	/*p->setPen( KPROPEDITOR_ITEM_BORDER_COLOR ); //! \todo custom color?
 
 	p->setClipRect(listView()->itemRect(this));
 	if(column == 1)
@@ -376,10 +383,10 @@ EditorGroupItem::paintCell(QPainter *p, const QColorGroup & cg, int column, int 
 		QListViewItem::paintCell(p, cg, column, width, align);
 #else
 		KListViewItem::paintCell(p, cg, column, width, align);
-#endif*/
+#endif
 	p->setPen(cg.text());
 	p->drawText(QRect(0,0, totalWidth, height()),
-		Qt::AlignLeft | Qt::AlignVCenter | Qt::SingleLine, text(0));
+		Qt::AlignLeft | Qt::AlignVCenter | Qt::SingleLine, text(0));*/
 }
 
 void

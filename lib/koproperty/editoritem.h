@@ -34,7 +34,7 @@
 #define KPROPEDITOR_ITEM_BORDER_COLOR QColor(200,200,200) //! \todo custom color?
 
 template<class U> class QAsciiDict;
-
+class QLabel;
 
 namespace KoProperty {
 
@@ -96,10 +96,15 @@ class EditorGroupItem : public EditorItem
 		EditorGroupItem(EditorItem *parent, const QString &text);
 		virtual ~EditorGroupItem();
 
+		void  setLabel(QLabel *label) { m_label = label; }
+		QLabel*  label()  { return m_label; }
+
 	protected:
 		/*! Reimplemented from KListViewItem to draw custom contents. */
 		virtual void paintCell(QPainter *p, const QColorGroup & cg, int column, int width, int align);
 		virtual void setup();
+
+	QLabel  *m_label;
 };
 
 //! @internal
