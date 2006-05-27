@@ -1,6 +1,6 @@
 project(karbon)
 
-find_package(LibArt REQUIRED)
+macro_optional_find_package(LibArt)
 find_package(Freetype REQUIRED)
 find_package(Fontconfig REQUIRED)
 
