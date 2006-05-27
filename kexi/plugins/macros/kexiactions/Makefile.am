@@ -10,7 +10,7 @@ libkeximacroactions_la_SOURCES = \
 
 libkeximacroactions_la_CXXFLAGS = $(USE_EXCEPTIONS)
 
-libkeximacroactions_la_LDFLAGS = $(all_libraries) -Wnounresolved
+libkeximacroactions_la_LDFLAGS = $(all_libraries)
 libkeximacroactions_la_LIBADD = \
     $(top_builddir)/kexi/plugins/macros/lib/libkomacro.la \
     $(top_builddir)/kexi/core/libkexicore.la \

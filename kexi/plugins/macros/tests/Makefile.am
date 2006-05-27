@@ -1,5 +1,5 @@
 if include_kunittestgui
-#  GUIBINPROGRAM = komacrotestgui
+  GUIBINPROGRAM = komacrotestgui
 endif
 
 bin_PROGRAMS = komacrotest $(GUIBINPROGRAM)

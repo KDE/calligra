@@ -163,14 +163,11 @@ void KexiMacroView::execute(QObject* sender)
 {
 	KoMacro::Context::Ptr context = d->macro->execute(sender);
 	if(context->hadException()) {
-		
 		KexiMacroError* error = new KexiMacroError(
-				     mainWin(), //parent
- 				     "keximacroerror",
-				     0,
-				     context 
-				    );
-		error->show();
+			mainWin(), // The parent QWidget
+			context // The KoMacro::Context where the error occured.
+		);
+		error->exec();
 	}
 }
 

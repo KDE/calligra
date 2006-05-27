@@ -1,10 +1,12 @@
 # Check for kunittest
 AC_MSG_CHECKING([for kunittest])
 
+# First we check if the console unittester could be compiled
 have_kunittest_header="no"
 KDE_CHECK_HEADER(kunittest/tester.h, have_kunittest_header="yes", , )
 AM_CONDITIONAL(include_kunittest, test "$have_kunittest_header" = "yes")
 
+# Second we check if the GUI-unittester could be compiled
 have_kunittestgui_header="no"
 KDE_CHECK_HEADER(kunittest/runnergui.h, have_kunittestgui_header="yes", , )
 AM_CONDITIONAL(include_kunittestgui, test "$have_kunittestgui_header" = "yes")

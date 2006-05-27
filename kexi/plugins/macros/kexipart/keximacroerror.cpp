@@ -1,3 +1,24 @@
+/***************************************************************************
+ * This file is part of the KDE project
+ * copyright (C) 2006 by Tobi Krebs (tobi.krebs@gmail.com)
+ * copyright (C) 2006 by Bernd Steindorff (bernd@itii.de)
+ * copyright (C) 2006 by Sascha Kupper (kusato@kfnv.de)
+ * copyright (C) 2006 by Sebastian Sauer (mail@dipe.org)
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Library General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Library General Public License for more details.
+ * You should have received a copy of the GNU Library General Public License
+ * along with this program; see the file COPYING.  If not, write to
+ * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+ * Boston, MA 02110-1301, USA.
+ ***************************************************************************/
+
 #include "keximacroerror.h"
 
 #include <qtimer.h>
@@ -16,23 +37,18 @@ class KexiMacroError::Private
 		{
 		}
 };
-KexiMacroError::KexiMacroError(QWidget* parent, const char* name, WFlags fl,KoMacro::Context::Ptr context)
-	: KexiMacroErrorBase(parent,name,fl)
-	, d ( new Private(context))
+
+KexiMacroError::KexiMacroError(QWidget* parent, KoMacro::Context::Ptr context)
+	: KexiMacroErrorBase(parent, "KexiMacroError" , /*WFlags*/ Qt::WDestructiveClose)
+	, d(new Private(context))
 {
+	//setText(i18n("Execution failed")); //caption
 	//errortext, errorlist, continuebtn,cancelbtn, designerbtn
 	
 	KoMacro::Exception* exception = context->exception();
 
-	/*KMessageBox::detailedError(
-			mainWin(), //parent
-			i18n("<qt>Failed to execute the Macro \"%1\".<br>%2</qt>").arg( d->macro->name() ).arg( exception->errorMessage() ), //text
-			exception->traceMessages(), //details
-			i18n("Execution failed") //caption
-	);*/
-
-	iconlbl->setPixmap(KGlobal::instance()->iconLoader()->loadIcon( "messagebox_critical", KIcon::Small, 48));
-	errorlbl->setText(i18n("<qt>Failed to execute the Macro \"%1\".<br>%2</qt>").arg( context->macro()->name() ).arg( exception->errorMessage() ));
+	iconlbl->setPixmap(KGlobal::instance()->iconLoader()->loadIcon("messagebox_critical", KIcon::Small, 32));
+	errorlbl->setText(i18n("<qt>Failed to execute the macro \"%1\".<br>%2</qt>").arg( context->macro()->name() ).arg( exception->errorMessage() ));
 
 	int i = 1;
 	KoMacro::MacroItem::List items = context->macro()->items();
@@ -43,33 +59,25 @@ KexiMacroError::KexiMacroError(QWidget* parent, const char* name, WFlags fl,KoMa
 		qlistviewitem->setText(1,"Action");
 		KoMacro::MacroItem::Ptr macroitem = *mit;
 
-		if (macroitem != 0)
+		if (macroitem != 0 && macroitem->action() != 0)
 		{
-			if (macroitem->action() != 0)
-			{
 			qlistviewitem->setText(2,macroitem->action()->name());
-			}
-			else {
-				qlistviewitem->setText(2,i18n("No such action."));
-			}
-	
 		}
 
 		if(macroitem == context->macroItem())
 		{
 			qlistviewitem->setOpen(true);
 			qlistviewitem->setSelected(true);
+			errorlist->ensureItemVisible(qlistviewitem);
 		}
 		
 		KoMacro::Variable::Map variables = macroitem->variables();
 		KoMacro::Variable::Map::ConstIterator vit;
-		//for ( it = variables.constBegin(); it != variables.constEnd(); ++it ) {
 		for ( vit = variables.begin(); vit != variables.end(); ++vit ) {
 			QListViewItem* child = new QListViewItem (qlistviewitem);
 			child->setText(1,vit.key());		
 			child->setText(2,vit.data()->toString());
 		}
-
 	}
 	
 	connect(designerbtn, SIGNAL(clicked()), this, SLOT(designbtnClicked()));
@@ -83,7 +91,7 @@ KexiMacroError::~KexiMacroError()
 
 void KexiMacroError::designbtnClicked()
 {
-	
+	//TODO
 }
 
 void KexiMacroError::continuebtnClicked()
