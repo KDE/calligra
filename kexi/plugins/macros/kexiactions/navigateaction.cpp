@@ -71,6 +71,14 @@ NavigateAction::NavigateAction()
 {
 	KoMacro::Variable* navvar = new NavigateVariable<NavigateAction>(this);
 	setVariable(KoMacro::Variable::Ptr( navvar ));
+
+	KoMacro::Variable* rowvar = new KexiVariable<NavigateAction>(this, "rownr", i18n("Row"));
+	rowvar->setVariant(0);
+	setVariable(KoMacro::Variable::Ptr(rowvar));
+
+	KoMacro::Variable* colvar = new KexiVariable<NavigateAction>(this, "colnr", i18n("Column"));
+	colvar->setVariant(0);
+	setVariable(KoMacro::Variable::Ptr(colvar));
 }
 
 NavigateAction::~NavigateAction() 

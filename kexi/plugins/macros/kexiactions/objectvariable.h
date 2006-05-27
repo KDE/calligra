@@ -73,6 +73,8 @@ namespace KexiMacro {
 					this->setVariant( this->children()[0]->variant() );
 				else
 					this->setVariant( QString::null );
+
+				kdDebug()<<"##################### KexiActions::ObjectVariable() variant="<<this->variant()<<endl;
 			}
 
 	};

@@ -67,9 +67,10 @@ namespace KexiMacro {
 						this->children().append( KoMacro::Variable::Ptr(new KoMacro::Variable(*it)) );
 				}
 				const QString n =
-					( viewname.isNull() || ! namelist.contains(viewname) )
-						? (namelist.count() > 0 ? namelist[0] : "")
-						: viewname;
+					namelist.contains(viewname)
+						? viewname
+						: namelist.count() > 0 ? namelist[0] : "";
+
 				this->setVariant(n);
 			}
 	};
@@ -79,7 +80,7 @@ namespace KexiMacro {
 OpenAction::OpenAction()
 	: KexiAction("open", i18n("Open"))
 {
-	int conditions = ObjectVariable<OpenAction>::VisibleInNav;
+	const int conditions = ObjectVariable<OpenAction>::VisibleInNav;
 	KoMacro::Variable* objvar = new ObjectVariable<OpenAction>(this, conditions);
 	setVariable(KoMacro::Variable::Ptr( objvar ));
 
@@ -97,25 +98,34 @@ OpenAction::~OpenAction()
 {
 }
 
-#if 0
-bool OpenAction::notifyUpdated(const QString& variablename, KoMacro::MacroItem* macroitem)
+bool OpenAction::notifyUpdated(KSharedPtr<KoMacro::MacroItem> macroitem, const QString& name)
 {
-	//kdDebug()<<"OpenAction::notifyUpdated() name="<<variable->name()<<" value="<< variable->variant().toString() <<endl;
+	kdDebug()<<"OpenAction::notifyUpdated() name="<<name<<" macroitem.action="<<(macroitem->action() ? macroitem->action()->name() : "NOACTION")<<endl;
 
-	KoMacro::Variable::List list;
-	if(variablename == "object") {
-		const QString objectname = variablemap["object"]->variant().toString(); // e.g. "table" or "query"
-
-		const QString name = variablemap.contains("name") ? variablemap["name"]->variant().toString() : QString::null;
-		list.append( KoMacro::Variable::Ptr(new ObjectNameVariable<OpenAction>(this, objectname, name)) );
-
-		const QString viewname = variablemap.contains("view") ? variablemap["view"]->variant().toString() : QString::null;
-		list.append( KoMacro::Variable::Ptr(new ViewVariable<OpenAction>(this, objectname, viewname)) );
+	KoMacro::Variable::Ptr variable = macroitem->variable(name, true);
+	if(! variable) {
+		kdWarning()<<"OpenAction::notifyUpdated() No such variable="<<name<<" in macroitem."<<endl;
+		return false;
 	}
 
-	return list;
+	variable->children().clear();
+	if(name == "object") {
+		const QString objectvalue = macroitem->variant("object", true).toString(); // e.g. "table" or "query"
+		const QString objectname = macroitem->variant("name", true).toString();
+		const QString viewname = macroitem->variant("view", true).toString();
+
+		kdDebug()<<"OpenAction::notifyUpdated() objectvalue="<<objectvalue<<" objectname="<<objectname<<" viewname="<<viewname<<endl;
+
+		variable->children().append(
+			KoMacro::Variable::Ptr(new ObjectNameVariable<OpenAction>(this, objectvalue, objectname))
+		);
+		variable->children().append(
+			KoMacro::Variable::Ptr(new ViewVariable<OpenAction>(this, objectvalue, viewname))
+		);
+	}
+
+	return true;
 }
-#endif
 
 void OpenAction::activate(KoMacro::Context::Ptr context)
 {

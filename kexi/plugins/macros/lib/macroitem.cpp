@@ -71,6 +71,12 @@ void MacroItem::setAction(KSharedPtr<Action> action)
 	d->action = action;
 }
 
+QVariant MacroItem::variant(const QString& name, bool checkaction) const
+{
+	Variable::Ptr v = variable(name, checkaction);
+	return v.data() ? v->variant() : QVariant();
+}
+
 Variable::Ptr MacroItem::variable(const QString& name, bool checkaction) const
 {
 	if(d->variables.contains(name))

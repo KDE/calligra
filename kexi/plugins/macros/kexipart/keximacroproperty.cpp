@@ -92,7 +92,7 @@ void KexiMacroProperty::init()
 	m_property->setName( d->name.latin1() );
 	m_property->setCaption( actionvariable->text() );
 	m_property->setDescription( action->comment() );
-	m_property->setValue( variable->variant(), false );
+	m_property->setValue( variable->variant(), true );
 	m_property->setType( KEXIMACRO_PROPERTYEDITORTYPE ); // use our own propertytype
 }
 
@@ -376,16 +376,27 @@ class ListBox : public QListBox
 			KoMacro::Variable::Ptr variable = m_edititem->variable();
 			if(variable.data()) {
 				// try to handle the children the variable has.
+				KoMacro::Variable::List children;
 
-				KoMacro::Variable::List children = variable->children();
-				if(children.count() <= 0) {
+				{ // let's first add the list of children inherited from the action.
 					KoMacro::Action::Ptr action = m_edititem->action();
 					if(action.data()) {
 						KoMacro::Variable::Ptr v = action->variable( macroproperty->name() );
-						if(v.data())
-							children = v->children();
+							if(v.data())
+								children = v->children();
 					}
 				}
+
+				/*
+				{ // then add the variables that are children of our variable.
+					KoMacro::Variable::List list = variable->children();
+					KoMacro::Variable::List::ConstIterator listit(list.constBegin()), listend(list.constEnd());
+					for(; listit != listend; ++listit) {
+						children.append( *listit );
+					}
+				}
+				*/
+
 				if(children.count() > 0) {
 					KoMacro::Variable::List::Iterator childit(children.begin()), childend(children.end());
 					for(; childit != childend; ++childit) {
@@ -485,7 +496,7 @@ KexiMacroPropertyWidget::KexiMacroPropertyWidget(KoProperty::Property* property,
 	}
 	else {
 		Q_ASSERT( d->listbox->editItem()->widget() != 0 );
-		d->listbox->editItem()->widget()->setValue( d->macroproperty->value(), false );
+		d->listbox->editItem()->widget()->setValue( d->macroproperty->value(), true );
 		//d->combobox->setCurrentItem(0);
 	}
 	kdDebug() << ">>> KexiMacroPropertyWidget::KexiMacroPropertyWidget() CurrentItem=" << d->combobox->currentItem() << endl;

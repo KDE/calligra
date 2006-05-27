@@ -409,8 +409,9 @@ void KexiMacroDesignView::updateProperties(int row, KoProperty::Set* set, KoMacr
 void KexiMacroDesignView::propertyChanged(KoProperty::Set& set, KoProperty::Property& property)
 {
 	Q_UNUSED(set);
-	kdDebug() << "KexiMacroDesignView::propertyChanged() propertyname=" << property.name() << endl;
+	kdDebug() << "!!!!! KexiMacroDesignView::propertyChanged() propertyname=" << property.name() << endl;
 	setDirty();
+
 #if 0
 	if(d->reloadsProperties) { // be sure to don't update properties if we are still on reloading.
 		return;

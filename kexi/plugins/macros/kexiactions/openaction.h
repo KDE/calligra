@@ -46,8 +46,6 @@ namespace KexiMacro {
 
 			/**
 			* Constructor.
-			*
-			* @param mainwin Kexi's main window implementation.
 			*/
 			OpenAction();
 			
@@ -55,6 +53,19 @@ namespace KexiMacro {
 			* Destructor.
 			*/
 			virtual ~OpenAction();
+
+			/**
+			* This function is called, when the @a KoMacro::Variable
+			* with name @p name used within the @a KoMacro::MacroItem
+			* @p macroitem got changed.
+			*
+			* @param macroitem The @a KoMacro::MacroItem instance where
+			* the variable defined with @p name is located in.
+			* @param name The name the @a KoMacro::Variable has.
+			* @return true if the update was successfully else false
+			* is returned.
+			*/
+			virtual bool notifyUpdated(KSharedPtr<KoMacro::MacroItem> macroitem, const QString& name);
 
 		public slots:
 

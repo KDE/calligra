@@ -108,6 +108,11 @@ namespace KoMacro {
 			void setAction(KSharedPtr<Action> action);
 
 			/**
+			* @return the Variable as QVariant.
+			*/
+			QVariant variant(const QString& name, bool checkaction = false) const;
+
+			/**
 			* @return the @a Variable instance identified with
 			* the name @p name . If this @a MacroItem doesn't
 			* have a @a Variable with that name NULL is
