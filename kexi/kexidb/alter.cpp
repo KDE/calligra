@@ -110,15 +110,15 @@ AlterTableHandler::FieldActionBase::~FieldActionBase()
 
 //--------------------------------------------------------
 
-static KStaticDeleter< QMap<QCString,int> > KexiDB_alteringTypeForProperty_deleter;
-QMap<QCString,int> *KexiDB_alteringTypeForProperty = 0;
+static KStaticDeleter< QMap<Q3CString,int> > KexiDB_alteringTypeForProperty_deleter;
+QMap<Q3CString,int> *KexiDB_alteringTypeForProperty = 0;
 
 //! @internal
 static int alteringTypeForProperty(const char *propertyName)
 {
 	if (!KexiDB_alteringTypeForProperty) {
 		KexiDB_alteringTypeForProperty_deleter.setObject( KexiDB_alteringTypeForProperty, 
-			new QMap<QCString,int>() );
+			new QMap<Q3CString,int>() );
 #define I(name, type) \
 	KexiDB_alteringTypeForProperty->insert(name, AlterTableHandler::type)
 #define I2(name, type1, type2) \
@@ -261,7 +261,7 @@ void AlterTableHandler::ChangeFieldPropertyAction::simplifyActions(ActionDictDic
 			//    is related to newName
 			//    e.g. if there is setCaption("B", "captionA") action after rename("A","B"),
 			//    replace setCaption action with setCaption("A", "captionA")
-			foreach_dict (ActionDictIterator, it, *actionsLikeThis) {
+			foreach_dict (ActionDictIterator,  it, *actionsLikeThis) {
 				dynamic_cast<ChangeFieldPropertyAction*>(it.current())->m_fieldName = fieldName();
 			}
 		}

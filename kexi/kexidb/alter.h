@@ -23,7 +23,7 @@
 #include "connection.h"
 
 #include <q3valuelist.h>
-#include <qasciidict.h>
+#include <q3asciidict.h>
 
 #include <kdebug.h>
 
@@ -132,16 +132,16 @@ class KEXI_DB_EXPORT AlterTableHandler : public Object
 		};
 
 		class ActionBase;
-		typedef QAsciiDict<ActionBase> ActionDict;
-		typedef QAsciiDict< ActionDict > ActionDictDict;
-		typedef QAsciiDictIterator<ActionBase> ActionDictIterator;
-		typedef QAsciiDictIterator< ActionDict > ActionDictDictIterator;
+		typedef Q3AsciiDict<ActionBase> ActionDict;
+		typedef Q3AsciiDict< ActionDict > ActionDictDict;
+		typedef Q3AsciiDictIterator<ActionBase> ActionDictIterator;
+		typedef Q3AsciiDictIterator< ActionDict > ActionDictDictIterator;
 
 		//! Defines a type for action list.
-		typedef QPtrList<ActionBase> ActionList;
+		typedef Q3PtrList<ActionBase> ActionList;
 
 		//! Defines a type for action list's iterator.
-		typedef QPtrListIterator<ActionBase> ActionListIterator;
+		typedef Q3PtrListIterator<ActionBase> ActionListIterator;
 
 		//! Abstract base class used for implementing all the AlterTable actions.
 		class KEXI_DB_EXPORT ActionBase {

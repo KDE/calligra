@@ -28,7 +28,7 @@
 
 #include <klibloader.h>
 #include <kparts/componentfactory.h>
-#include <ktrader.h>
+#include <kservicetypetrader.h>
 #include <kdebug.h>
 #include <klocale.h>
 #include <kservice.h>
@@ -97,8 +97,8 @@ bool DriverManagerInternal::lookupDrivers()
 
 	lookupDriversNeeded = false;
 	clearError();
-	KTrader::OfferList tlist = KTrader::self()->query("Kexi/DBDriver");
-	KTrader::OfferList::ConstIterator it(tlist.constBegin());
+	KService::List tlist = KServiceTypeTrader::self()->query("Kexi/DBDriver");
+	KService::List::ConstIterator it(tlist.constBegin());
 	for(; it != tlist.constEnd(); ++it)
 	{
 		KService::Ptr ptr = (*it);
