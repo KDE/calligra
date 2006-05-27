@@ -29,9 +29,6 @@
 /* Define to 1 if you have the <floatingpoint.h> header file. */
 #cmakedefine HAVE_FLOATINGPOINT_H 1
 
-/* Defines if your system has the libfontconfig library */
-#define HAVE_FONTCONFIG 1
-
 /* Define to 1 if you have the `fseek64' function. */
 /* #undef HAVE_FSEEK64 */
 
