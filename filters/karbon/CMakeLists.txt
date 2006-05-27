@@ -5,6 +5,7 @@ include_directories(
         ${CMAKE_SOURCE_DIR}/karbon
         ${CMAKE_SOURCE_DIR}/karbon/core
         ${CMAKE_SOURCE_DIR}/karbon/visitors
+        ${CMAKE_BINARY_DIR}/karbon
         ${KDE4_INCLUDES}  )
 
 add_subdirectory( eps )

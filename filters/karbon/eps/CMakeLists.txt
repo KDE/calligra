@@ -32,7 +32,9 @@ install_targets(${PLUGIN_INSTALL_DIR} karbonepsimport )
 
 ########### install files ###############
 
-install_files( ${SERVICES_INSTALL_DIR} FILES  karbon_eps_export.desktop  	karbon_eps_import.desktop  	karbon_ps_import.desktop )
+install_files( ${SERVICES_INSTALL_DIR} FILES  karbon_eps_export.desktop  
+	karbon_eps_import.desktop
+  	karbon_ps_import.desktop )
 
 
 
