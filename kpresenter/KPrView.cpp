@@ -47,7 +47,9 @@
 #include <qradiobutton.h>
 #include <q3dragobject.h>
 #include <QFile>
-
+#include <kactioncollection.h>
+#include <kfontaction.h>
+#include <kxmlguifactory.h>
 #include "KPrPage.h"
 #include "KPrBackDia.h"
 #include "autoformEdit/AFChoose.h"
@@ -2084,7 +2086,7 @@ void KPrView::createGUI()
         splitter->setResizeMode( sidebar, QSplitter::KeepSize );
     }
 
-    QSplitter *splitterVertical = new QSplitter( QSplitter::Vertical, splitter );
+    QSplitter *splitterVertical = new QSplitter( Qt::Vertical, splitter );
 
     // setup page
     pageBase = new PageBase( splitterVertical, this );
@@ -3341,20 +3343,20 @@ void KPrView::alignChanged( int align )
 {
     if ( align != tbAlign ) {
         tbAlign = align;
-        if ( ( align & AlignLeft ) == AlignLeft ) {
+        if ( ( align & Qt::AlignLeft ) == Qt::AlignLeft ) {
             actionTextAlignLeft->blockSignals( true );
             actionTextAlignLeft->setChecked( true );
             actionTextAlignLeft->blockSignals( false );
-        } else if ( ( align & AlignHCenter ) == AlignHCenter ||
-                    ( align & AlignCenter ) == AlignCenter ) {
+        } else if ( ( align & Qt::AlignHCenter ) == Qt::AlignHCenter ||
+                    ( align & Qt::AlignCenter ) == Qt::AlignCenter ) {
             actionTextAlignCenter->blockSignals( true );
             actionTextAlignCenter->setChecked( true );
             actionTextAlignCenter->blockSignals( false );
-        } else if ( ( align & AlignRight ) == AlignRight ) {
+        } else if ( ( align & Qt::AlignRight ) == Qt::AlignRight ) {
             actionTextAlignRight->blockSignals( true );
             actionTextAlignRight->setChecked( true );
             actionTextAlignRight->blockSignals( false );
-        } else if ( (align & AlignJustify ) == AlignJustify ) {
+        } else if ( (align & Qt::AlignJustify ) == Qt::AlignJustify ) {
             actionTextAlignBlock->blockSignals( true );
             actionTextAlignBlock->setChecked( true );
             actionTextAlignBlock->blockSignals( false );
@@ -4880,13 +4882,13 @@ void KPrView::editCustomVars()
         {
             if(it.current()->type() == VT_CUSTOM )
             {
-                if(((KoCustomVariable*)it.current())->value()!=*(listOldCustomValue.at(i)))
+                if(((KoCustomVariable*)it.current())->value()!=(listOldCustomValue.at(i)))
                 {
                     if(!macroCommand)
                         macroCommand = new KMacroCommand( i18n( "Change Custom Variable" ) );
                     KPrChangeCustomVariableValue *cmd=
                         new KPrChangeCustomVariableValue(i18n( "Change Custom Variable" ), m_pKPresenterDoc,
-                                                         *(listOldCustomValue.at(i)),
+                                                         (listOldCustomValue.at(i)),
                                                          ((KoCustomVariable*)it.current())->value(),
                                                          ((KoCustomVariable*)it.current()));
                     macroCommand->addCommand(cmd);
@@ -5241,7 +5243,7 @@ void KPrView::setZoomRect( const KoRect & rect )
     viewZoom( QString::number( zoom ) );
 
     m_canvas->setToolEditMode( TEM_MOUSE );
-    m_canvas->scrollTopLeftPoint( zoomHandler()->>zoomPointOldd( rect.topLeft() ) );
+    m_canvas->scrollTopLeftPoint( zoomHandler()->zoomPointOld( rect.topLeft() ) );
     m_canvas->setUpdatesEnabled( true );
     m_canvas->repaint();
 }
@@ -5747,7 +5749,7 @@ void KPrView::zoomAllObject()
     viewZoom( QString::number(zoom ) );
 
     m_canvas->setToolEditMode( TEM_MOUSE );
-    m_canvas->scrollTopLeftPoint( zoomHandler()->>zoomPointOldd( rect.topLeft()) );
+    m_canvas->scrollTopLeftPoint( zoomHandler()->zoomPointOld( rect.topLeft()) );
 }
 
 void KPrView::flipHorizontal()

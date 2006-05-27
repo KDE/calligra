@@ -32,7 +32,7 @@ set(kpresenterprivate_LIB_SRCS ${libaf_SRCS}
    KPrFindReplace.cpp 
    KPrBackDia.cpp 
    KPrWebPresentation.cpp 
-   #KPrView.cpp 
+   KPrView.cpp 
    KPrMSPresentationSetup.cpp 
    KPrBrush.cpp 
    KPrDocument.cpp 
@@ -55,7 +55,7 @@ set(kpresenterprivate_LIB_SRCS ${libaf_SRCS}
    KPrPartObject.cpp 
    KPrGroupObject.cpp 
    KPrBackground.cpp 
-   #KPrGradient.cpp 
+   KPrGradient.cpp 
    KPrGradientCollection.cpp 
    KPrGotoPage.cpp 
    KPrFactory.cpp 
@@ -63,7 +63,7 @@ set(kpresenterprivate_LIB_SRCS ${libaf_SRCS}
    KPrViewIface.cpp 
    KPrObjectIface.cpp 
    KPrPageIface.cpp 
-   #KPrSideBar.cpp 
+   KPrSideBar.cpp 
    KPrConfig.cpp 
    KPrVariableCollection.cpp 
    KPrTextDocument.cpp 

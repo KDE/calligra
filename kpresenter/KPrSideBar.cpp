@@ -68,7 +68,7 @@ QValidator::State KPrRenamePageValidator::validate( QString & input, int& ) cons
   else
     return Intermediate;
 }
-
+#if 0
 class ThumbToolTip : public QToolTip
 {
 public:
@@ -90,7 +90,7 @@ protected:
 private:
     KPrThumbBar *m_thumbBar;
 };
-
+#endif
 
 class OutlineSlideItem: public K3ListViewItem
 {
@@ -249,7 +249,8 @@ KPrThumbBar::KPrThumbBar(QWidget *parent, KPrDocument *d, KPrView *v)
     setItemsMovable(false);
     setResizeMode(Q3IconView::Adjust);
 
-    m_thumbTip = new ThumbToolTip(this);
+#warning "port it: qtooltip"
+    //m_thumbTip = new ThumbToolTip(this);
 
     connect(this, SIGNAL(currentChanged(Q3IconViewItem *)),
             this, SLOT(itemClicked(Q3IconViewItem *)));
@@ -259,7 +260,7 @@ KPrThumbBar::KPrThumbBar(QWidget *parent, KPrDocument *d, KPrView *v)
 
 KPrThumbBar::~KPrThumbBar()
 {
-    delete m_thumbTip;
+    //delete m_thumbTip;
 }
 
 void KPrThumbBar::setCurrentPage( int pg )
@@ -1087,9 +1088,10 @@ void KPrOutline::renamePageTitle()
         page_titles.append( it->pageTitle() );
 
     KPrRenamePageValidator validator( page_titles );
+#warning "kde4: port to KPrRenamePageValidator"
     QString newTitle = KInputDialog::getText( i18n("Rename Slide"),
-                                              i18n("Slide title:"), activeTitle, &ok, this, 0,
-                                              &validator );
+                                              i18n("Slide title:"), activeTitle/*, &ok, this, 0,
+                                              &validator );*/);
 
     // Have a different name ?
     if ( ok ) { // User pushed an OK button.
