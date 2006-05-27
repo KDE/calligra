@@ -2580,7 +2580,7 @@ bool KDChartParams::moveDataRegionFrame( uint oldDataRow,
             frame->setDataCol( newDataCol );
             frame->setData3rd( 0 ); // newData3rd );
             _areaDict.setAutoDelete( TRUE );
-            _areaDict.insert(
+            _areaDict.replace(
                 dataRegionFrameAreaName( newDataRow, newDataCol, 0 ), //data3rd 5 ),
                 frame );
         }

@@ -1426,6 +1426,9 @@ bool KChartPart::loadXML( QIODevice*, const QDomDocument& doc )
 {
     kdDebug(35001) << "kchart loadXML called" << endl;
 
+    // Set some sensible defaults.
+    setChartDefaults();
+
     // First try to load the KDChart parameters.
     bool  result = m_params->loadXML( doc );
 
@@ -1459,7 +1462,9 @@ bool KChartPart::loadXML( QIODevice*, const QDomDocument& doc )
 	    m_rowLabels = params.axisLabelStringList();
 	}
 
-	setChartDefaults();
+// together with two bugs in the drawing engine,
+// the (now commented out) was setChartDefaults() causing bug 125428:
+	//setChartDefaults();
     }
 
     m_params->setDrawSolidExcessArrows(true);

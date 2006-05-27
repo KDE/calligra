@@ -1001,6 +1001,10 @@ QDomDocument KDChartParams::saveXML( bool withPI ) const
     {
         QDictIterator<KDChartFrameSettings> it( _areaDict );
         for( ; it.current(); ++it ){
+            /*
+            qDebug("storing frame: %s",
+            it.currentKey().left(5).stripWhiteSpace().latin1());
+            */
             KDChartFrameSettings::createFrameSettingsNode( doc, areaMapElement,
                     "FrameSettings",
                     it.current(),
@@ -2191,7 +2195,13 @@ bool KDChartParams::loadXML( const QDomDocument& doc )
                                               .arg( 0, 5 );//frameSettings->data3rd(), 5 );
                                 else
                                     str = QString( "%1/-----/-----/-----" ).arg( areaId, 5 );
-                                _areaDict.insert( str, frameSettings );
+                                /*
+                                const QPixmap* backPixmap;
+                                KDFrame::BackPixmapMode backPixmapMode;
+                                qDebug("inserting frame: %s   %s",str.latin1(),frameSettings->frame()
+                                .background(backPixmap, backPixmapMode).color().name().latin1());
+                                */
+                                _areaDict.replace( str, frameSettings );
                             }
                         }
                         else

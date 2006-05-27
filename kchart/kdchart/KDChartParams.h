@@ -388,8 +388,14 @@ public slots:
                    bool           addFrameWidthToLayout = true,
                    bool           addFrameHeightToLayout = true )
         {
+            /*
+            const QPixmap* backPixmap;
+            KDFrame::BackPixmapMode backPixmapMode;
+            qDebug("setFrame   area: %i", area);
+            qDebug("setFrame   backcolor: %s", frame.background(backPixmap, backPixmapMode).color().name().latin1());
+            */
             _areaDict.setAutoDelete( TRUE );
-            _areaDict.insert( QString( "%1/-----/-----/-----" ).arg( area, 5 ),
+            _areaDict.replace( QString( "%1/-----/-----/-----" ).arg( area, 5 ),
                               new KDChartFrameSettings(0,0,0,
                                                        frame,
                                                        outerGapX,
@@ -432,7 +438,7 @@ public slots:
                      shadowWidth,
                            sunPos );
 
-            _areaDict.insert( QString( "%1/-----/-----/-----" ).arg( area, 5 ),
+            _areaDict.replace( QString( "%1/-----/-----/-----" ).arg( area, 5 ),
                               new KDChartFrameSettings( 0,0,0, frame,
                                                         outerGapX,
                                                         outerGapY,
@@ -471,7 +477,7 @@ public slots:
                            shadowWidth,
                            sunPos );
 
-            _areaDict.insert(
+            _areaDict.replace(
                 dataRegionFrameAreaName( dataRow, dataCol, 0 ), //data3rd 5 ),
                 new KDChartFrameSettings( dataRow,
                                           dataCol,
