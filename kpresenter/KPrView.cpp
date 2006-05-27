@@ -49,6 +49,7 @@
 #include <QFile>
 #include <kactioncollection.h>
 #include <kfontaction.h>
+#include <kseparatoraction.h>
 #include <kxmlguifactory.h>
 #include "KPrPage.h"
 #include "KPrBackDia.h"
@@ -240,12 +241,12 @@ KPrView::KPrView( KPrDocument* _doc, QWidget *_parent, const char *_name )
     presDurationDia = 0;
     v_ruler = 0;
     h_ruler = 0;
-    pen = KoPen( black, 1.0, SolidLine );
-    brush = QBrush( white, SolidPattern );
+    pen = KoPen( Qt::black, 1.0, Qt::SolidLine );
+    brush = QBrush( Qt::white, Qt::SolidPattern );
     lineBegin = L_NORMAL;
     lineEnd = L_NORMAL;
-    gColor1 = red;
-    gColor2 = green;
+    gColor1 = Qt::red;
+    gColor2 = Qt::green;
     gType = BCT_GHORZ;
     gUnbalanced = false;
     gXFactor = 100;
@@ -283,7 +284,7 @@ KPrView::KPrView( KPrDocument* _doc, QWidget *_parent, const char *_name )
     sharpnessValue = 0;
     tbAlign = Qt::AlignLeft;
     tbFont = font();
-    tbColor = black;
+    tbColor = Qt::black;
 
     mirrorType = PM_NORMAL;
     depth = 0;
@@ -358,23 +359,23 @@ KPrView::KPrView( KPrDocument* _doc, QWidget *_parent, const char *_name )
     if ( sb ) // No statusbar in e.g. konqueror
     {
         m_sbPageLabel = new KStatusBarLabel( QString::null, 0, sb );
-        m_sbPageLabel->setAlignment( AlignLeft | AlignVCenter );
+        m_sbPageLabel->setAlignment( Qt::AlignLeft | Qt::AlignVCenter );
         addStatusBarItem( m_sbPageLabel, 0 );
 
         m_sbModifiedLabel = new KStatusBarLabel( "   ", 0, sb );
-        m_sbModifiedLabel->setAlignment( AlignLeft | AlignVCenter );
+        m_sbModifiedLabel->setAlignment( Qt::AlignLeft | Qt::AlignVCenter );
         addStatusBarItem( m_sbModifiedLabel, 0 );
 
         m_sbObjectLabel = new KStatusBarLabel( QString::null, 0, sb );
-        m_sbObjectLabel->setAlignment( AlignLeft | AlignVCenter );
+        m_sbObjectLabel->setAlignment( Qt::AlignLeft | Qt::AlignVCenter );
         addStatusBarItem( m_sbObjectLabel, 1 );
 
         m_sbZoomLabel = new KStatusBarLabel( ' ' + QString::number( m_pKPresenterDoc->zoomHandler()->zoom() ) + "% ", 0, sb );
-        m_sbZoomLabel->setAlignment( AlignHCenter | AlignVCenter );
+        m_sbZoomLabel->setAlignment( Qt::AlignHCenter | Qt::AlignVCenter );
         addStatusBarItem( m_sbZoomLabel, 0 );
 
         m_sbUnitLabel = new KStatusBarLabel( ' ' + KoUnit::unitDescription( m_pKPresenterDoc->unit() ) + ' ', 0, sb );
-        m_sbUnitLabel->setAlignment( AlignHCenter | AlignVCenter );
+        m_sbUnitLabel->setAlignment( Qt::AlignHCenter | Qt::AlignVCenter );
         addStatusBarItem( m_sbUnitLabel, 0 );
     }
 
@@ -1453,7 +1454,7 @@ void KPrView::startScreenPres( int pgNum /*1-based*/ )
     if ( m_canvas && !presStarted ) {
         QByteArray data;
         QByteArray replyData;
-        Q3CString replyType;
+        DCOPCString replyType;
         m_screenSaverWasEnabled = false;
         // is screensaver enabled?
         if (kapp->dcopClient()->call("kdesktop", "KScreensaverIface", "isEnabled()", data, replyType, replyData)
@@ -3370,7 +3371,7 @@ void KPrView::changePicture( const QString & filename )
     mimetypes += KImageIO::mimeTypes( KImageIO::Reading );
     mimetypes += KoPictureFilePreview::clipartMimeTypes();
 
-    KFileDialog fd( filename, QString::null, this, 0, true );
+    KFileDialog fd( filename, QString::null, this );
     fd.setCaption(i18n("Select New Picture"));
     fd.setMimeFilter( mimetypes );
     fd.setPreviewWidget( new KoPictureFilePreview( &fd ) );
