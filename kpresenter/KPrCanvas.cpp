@@ -54,7 +54,7 @@
 #include <qsize.h>
 #include <QPoint>
 #include <qclipboard.h>
-
+#include <QBuffer>
 #include <kapplication.h>
 #include <kmimemagic.h>
 #include <klocale.h>
@@ -383,7 +383,7 @@ void KPrCanvas::paintEvent( QPaintEvent* paintEvent )
         }
 
         topPainter.setPen( QPen( Qt::black, 1, Qt::SolidLine ) );
-        topPainter.setRasterOp( NotROP );
+        //topPainter.setRasterOp( NotROP );
         switch ( toolEditMode )
         {
             case MT_NONE:
@@ -718,9 +718,9 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
             }
             else if( e->button() == Qt::MidButton )
             {
-                QApplication::clipboard()->setSelectionMode( true );
+                //QApplication::clipboard()->setSelectionMode( true );
                 m_currentTextObjectView->paste();
-                QApplication::clipboard()->setSelectionMode( false );
+                //QApplication::clipboard()->setSelectionMode( false );
             }
             return;
         }
@@ -755,7 +755,7 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
                     QPainter p( this );
                     p.setPen( QPen( Qt::black, 1, Qt::SolidLine ) );
                     p.setBrush( Qt::NoBrush );
-                    p.setRasterOp( Qt::NotROP );
+                    //p.setRasterOp( Qt::NotROP );
 
                     p.translate( -diffx(), -diffy() );
                     KoPoint newStartPoint = snapPoint( docPoint );
@@ -776,7 +776,7 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
                     QPen _pen = QPen( Qt::black, 1, Qt::DashLine );
                     p.setPen( _pen );
                     p.setBrush( Qt::NoBrush );
-                    p.setRasterOp( Qt::NotROP );
+                    //p.setRasterOp( Qt::NotROP );
 
                     p.translate( -diffx(), -diffy() );
                     p.save();
@@ -999,7 +999,7 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
                 p.setBrush( Qt::NoBrush );
                 p.translate( -diffx(), -diffy() );
                 p.save();
-                p.setRasterOp( NotROP );
+                //p.setRasterOp( NotROP );
 
                 // remove old line
                 p.drawLine( m_view->zoomHandler()->zoomPointOld( m_startPoint ),
@@ -1023,7 +1023,7 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
                 QPainter p( this );
                 p.setPen( QPen( Qt::black, 1, Qt::SolidLine ) );
                 p.setBrush( Qt::NoBrush );
-                p.setRasterOp( NotROP );
+                //p.setRasterOp( NotROP );
                 p.translate( -diffx(), -diffy() );
                 p.drawLine( m_view->zoomHandler()->zoomPointOld( m_startPoint ),
                             m_view->zoomHandler()->zoomPointOld( m_endPoint ) );
@@ -1192,7 +1192,7 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
                 // used for selecting multiple object in with the mouse
                 QPainter p;
                 p.begin( this );
-                p.setRasterOp( NotROP );
+                //p.setRasterOp( NotROP );
                 p.setPen( QPen( Qt::black, 0, Qt::DotLine ) );
                 p.translate( -diffx(), -diffy() );
                 p.drawRect( m_view->zoomHandler()->zoomRectOld( m_rubber ) );
@@ -1276,7 +1276,7 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
         {
             QPainter p;
             p.begin( this );
-            p.setRasterOp( NotROP );
+            //p.setRasterOp( NotROP );
             p.setPen( QPen( Qt::black, 0, Qt::DotLine ) );
             p.translate( -diffx(), -diffy() );
             p.drawRect( m_view->zoomHandler()->zoomRectOld( m_rubber ) );
@@ -1483,7 +1483,7 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
                     {
                         QPainter p;
                         p.begin( this );
-                        p.setRasterOp( NotROP );
+                        //p.setRasterOp( NotROP );
                         p.setPen( QPen( Qt::black, 0, Qt::DotLine ) );
                         p.translate( -diffx(), -diffy() );
                         p.drawRect( m_view->zoomHandler()->zoomRectOld( m_rubber ) );
@@ -1526,7 +1526,7 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
                 if ( drawRubber ) {
                     QPainter p;
                     p.begin( this );
-                    p.setRasterOp( NotROP );
+                    //p.setRasterOp( NotROP );
                     p.setPen( QPen( Qt::black, 0, Qt::DotLine ) );
                     p.translate( -diffx(), -diffy() );
                     p.drawRect( m_view->zoomHandler()->zoomRectOld( m_rubber ) );
@@ -1569,7 +1569,7 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
                 QPainter p( this );
                 p.setPen( QPen( Qt::black, 1, Qt::SolidLine ) );
                 p.setBrush( Qt::NoBrush );
-                p.setRasterOp( NotROP );
+                //p.setRasterOp( NotROP );
                 p.translate( -diffx(), -diffy() );
 
                 KoPoint sp( snapPoint( docPoint ) );
@@ -1585,7 +1585,7 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
                 QPainter p( this );
                 p.setPen( QPen( Qt::black, 1, Qt::SolidLine ) );
                 p.setBrush( Qt::NoBrush );
-                p.setRasterOp( NotROP );
+                //p.setRasterOp( NotROP );
                 p.translate( -diffx(), -diffy() );
 
                 KoPoint sp( snapPoint( docPoint ) );
@@ -1601,7 +1601,7 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
                 QPainter p( this );
                 p.setPen( QPen( Qt::black, 1, Qt::SolidLine ) );
                 p.setBrush( Qt::NoBrush );
-                p.setRasterOp( NotROP );
+                //p.setRasterOp( NotROP );
                 p.translate( -diffx(), -diffy() );
 
                 KoPoint sp( snapPoint( docPoint ) );
@@ -1617,7 +1617,7 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
                 QPainter p( this );
                 p.setPen( QPen( Qt::black, 1, Qt::SolidLine ) );
                 p.setBrush( Qt::NoBrush );
-                p.setRasterOp( NotROP );
+                //p.setRasterOp( NotROP );
                 p.translate( -diffx(), -diffy() );
 
                 KoPoint oldEndPoint( m_endPoint );
@@ -1642,7 +1642,7 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
                 QPainter p( this );
                 p.setPen( QPen( Qt::black, 1, Qt::SolidLine ) );
                 p.setBrush( Qt::NoBrush );
-                p.setRasterOp( NotROP );
+                //p.setRasterOp( NotROP );
                 p.translate( -diffx(), -diffy() );
 
                 KoPoint sp( snapPoint( docPoint ) );
@@ -1663,7 +1663,7 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
                     QPainter p( this );
                     p.setPen( QPen( Qt::black, 1, Qt::SolidLine ) );
                     p.setBrush( Qt::NoBrush );
-                    p.setRasterOp( NotROP );
+                    //p.setRasterOp( NotROP );
                     p.translate( -diffx(), -diffy() );
 
                     if ( e->state() & Qt::AltModifier )
@@ -1695,7 +1695,7 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
                 QPainter p( this );
                 p.setPen( QPen( Qt::black, 1, Qt::SolidLine ) );
                 p.setBrush( Qt::NoBrush );
-                p.setRasterOp( NotROP );
+                //p.setRasterOp( NotROP );
                 p.translate( -diffx(), -diffy() );
 
                 KoPoint oldEndPoint( m_endPoint );
@@ -1729,7 +1729,7 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
                 QPainter p( this );
                 p.setPen( QPen( Qt::black, 1, Qt::SolidLine ) );
                 p.setBrush( Qt::NoBrush );
-                p.setRasterOp( NotROP );
+                //p.setRasterOp( NotROP );
                 p.translate( -diffx(), -diffy() );
 
                 KoPoint newEndPoint( snapPoint( docPoint ) );
@@ -1798,7 +1798,7 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
                 QPainter p( this );
                 p.setPen( QPen( Qt::black, 1, Qt::SolidLine ) );
                 p.setBrush( Qt::NoBrush );
-                p.setRasterOp( NotROP );
+                //p.setRasterOp( NotROP );
                 p.translate( -diffx(), -diffy() );
 
                 KoPoint sp( snapPoint( docPoint ) );
@@ -2990,7 +2990,7 @@ void KPrCanvas::stopScreenPresentation()
     m_drawMode = false;
     repaint( false );
     setToolEditMode( toolEditMode );
-    setWFlags( Qt::WResizeNoErase );
+    //setWFlags( Qt::WResizeNoErase );
 }
 
 bool KPrCanvas::pNext( bool gotoNextPage )
