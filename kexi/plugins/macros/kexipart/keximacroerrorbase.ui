@@ -150,7 +150,7 @@
                                 <cstring>designerbtn</cstring>
                             </property>
                             <property name="text">
-                                <string>Open Macrodesigner</string>
+                                <string>Open in design view</string>
                             </property>
                             <property name="accel">
                                 <string></string>
@@ -172,7 +172,7 @@
                                 <cstring>cancelbtn</cstring>
                             </property>
                             <property name="text">
-                                <string>Cancel</string>
+                                <string>Abort</string>
                             </property>
                         </widget>
                     </hbox>

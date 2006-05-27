@@ -164,7 +164,7 @@ void KexiMacroView::execute(QObject* sender)
 	KoMacro::Context::Ptr context = d->macro->execute(sender);
 	if(context->hadException()) {
 		KexiMacroError* error = new KexiMacroError(
-			mainWin(), // The parent QWidget
+			mainWin(), // The parent KexiMainWindow
 			context // The KoMacro::Context where the error occured.
 		);
 		error->exec();

@@ -21,6 +21,9 @@
 
 #include "keximacroerror.h"
 
+#include <core/kexiproject.h>
+#include <core/keximainwindow.h>
+
 #include <qtimer.h>
 
 /**
@@ -30,17 +33,19 @@
 class KexiMacroError::Private
 {
 	public:
+		KexiMainWindow* const mainwin;
 		KoMacro::Context::Ptr context;
 
-		Private(KoMacro::Context* const c)
-			: context(c)
+		Private(KexiMainWindow* const m, KoMacro::Context* const c)
+			: mainwin(m)
+			, context(c)
 		{
 		}
 };
 
-KexiMacroError::KexiMacroError(QWidget* parent, KoMacro::Context::Ptr context)
-	: KexiMacroErrorBase(parent, "KexiMacroError" , /*WFlags*/ Qt::WDestructiveClose)
-	, d(new Private(context))
+KexiMacroError::KexiMacroError(KexiMainWindow* mainwin, KoMacro::Context::Ptr context)
+	: KexiMacroErrorBase(mainwin, "KexiMacroError" , /*WFlags*/ Qt::WDestructiveClose)
+	, d(new Private(mainwin, context))
 {
 	//setText(i18n("Execution failed")); //caption
 	//errortext, errorlist, continuebtn,cancelbtn, designerbtn
@@ -91,7 +96,30 @@ KexiMacroError::~KexiMacroError()
 
 void KexiMacroError::designbtnClicked()
 {
-	//TODO
+	if(! d->mainwin->project()) {
+		kdWarning() << QString("KexiMacroError::designbtnClicked(): No project open.") << endl;
+		return;
+	}
+
+	// We need to determinate the KexiPart::Item which should be opened.
+	KoMacro::Macro::Ptr macro = d->context->macro();
+	const QString name = macro->name();
+	KexiPart::Item* item = d->mainwin->project()->itemForMimeType("kexi/macro", name);
+	if(! item) {
+		kdWarning() << QString("KexiMacroError::designbtnClicked(): No such macro \"%1\"").arg(name) << endl;
+		return;
+	}
+
+	// Try to open the KexiPart::Item now.
+	bool openingCancelled;
+	if(! d->mainwin->openObject(item, Kexi::DesignViewMode, openingCancelled)) {
+		if(! openingCancelled) {
+			kdWarning() << QString("KexiMacroError::designbtnClicked(): Open macro \"%1\" in designview failed.").arg(name) << endl;
+			return;
+		}
+	}
+
+	close();
 }
 
 void KexiMacroError::continuebtnClicked()

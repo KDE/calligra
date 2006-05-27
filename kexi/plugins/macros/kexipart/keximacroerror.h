@@ -39,6 +39,9 @@
 
 #include "keximacroerrorbase.h"
 
+// Forward-declarations.
+class KexiMainWindow;
+
 /**
 * An error dialog used to displayed more detailed informations about
 * a @a KoMacro::Exception that got thrown within a @a KoMacro::Context
@@ -53,10 +56,10 @@ class KexiMacroError : public KexiMacroErrorBase
 		/**
 		* Constructor.
 		*
-		* @param parent The parent QWidget this Dialog is child of.
+		* @param mainwin The parent @a KexiMainWindow instance.
 		* @param context The @a KoMacro::Context where the error happened.
 		*/
-		KexiMacroError(QWidget* parent, KoMacro::Context::Ptr context);
+		KexiMacroError(KexiMainWindow* mainwin, KoMacro::Context::Ptr context);
 		
 		/**
 		* Destructor.
