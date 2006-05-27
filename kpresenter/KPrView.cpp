@@ -2313,24 +2313,24 @@ void KPrView::setupActions()
                                        actionCollection(), "insert_picture" );
 
     // ----------------- tools actions
-
+	QActionGroup* toolsGroup = new QActionGroup( this );
     actionToolsMouse = new KToggleAction( i18n( "Select" ), "select", 0,
                                           this, SLOT( toolsMouse() ),
                                           actionCollection(), "tools_mouse" );
-    actionToolsMouse->setExclusiveGroup( "tools" );
+    actionToolsMouse->setActionGroup( toolsGroup );
     actionToolsMouse->setChecked( true );
 
     actionToolsRotate = new KToggleAction( i18n( "&Rotate" ), "rotate", 0,
                                            this, SLOT( toolsRotate() ),
                                            actionCollection(), "tools_rotate" );
-    actionToolsRotate->setExclusiveGroup( "tools" );
+    actionToolsRotate->setActionGroup( toolsGroup );
 
     actionToolsZoom = new KToggleAction( i18n( "&Zoom" ), "viewmag", 0,
                                          this, SLOT( toolsZoom() ),
                                          actionCollection(), "tools_zoom" );
-    actionToolsZoom->setExclusiveGroup( "tools" );
+    actionToolsZoom->setActionGroup( toolsGroup );
 
-    actionToolsShapePopup = new KActionMenu( i18n( "&Shape" ), "rectangle",
+    actionToolsShapePopup = new KActionMenu( KIcon("rectangle"),i18n( "&Shape" ),
                                              actionCollection(), "tools_shapepopup" );
     actionToolsShapePopup->setDelayed(true);
     connect(actionToolsShapePopup, SIGNAL(activated()), this, SLOT(toolsShapePopup()));
@@ -2338,43 +2338,43 @@ void KPrView::setupActions()
     actionToolsRectangle = new KToggleAction( i18n( "&Rectangle" ), "rectangle",
                                               0, this, SLOT( toolsRectangle() ),
                                               actionCollection(), "tools_rectangle" );
-    actionToolsRectangle->setExclusiveGroup( "tools" );
+    actionToolsRectangle->setActionGroup( toolsGroup );
 
     actionToolsCircleOrEllipse = new KToggleAction( i18n( "&Circle/Ellipse" ), "circle",
                                                     0, this, SLOT( toolsCircleOrEllipse() ),
                                                     actionCollection(), "tools_circle" );
-    actionToolsCircleOrEllipse->setExclusiveGroup( "tools" );
+    actionToolsCircleOrEllipse->setActionGroup( toolsGroup );
 
     actionToolsPie = new KToggleAction( i18n( "&Pie/Arc/Chord" ), "pie", 0,
                                         this, SLOT( toolsPie() ),
                                         actionCollection(), "tools_pie" );
-    actionToolsPie->setExclusiveGroup( "tools" );
+    actionToolsPie->setActionGroup( toolsGroup );
 
     actionToolsText = new KToggleAction( i18n( "&Text" ), "frame_text", Qt::Key_F10, // same shortcut as KWord
                                          this, SLOT( toolsText() ),
                                          actionCollection(), "tools_text" );
-    actionToolsText->setExclusiveGroup( "tools" );
+    actionToolsText->setActionGroup( toolsGroup );
 
     actionToolsAutoform = new KToggleAction( i18n( "&Arrows && Connections" ), "autoform",
                                              0, this, SLOT( toolsAutoform() ),
                                              actionCollection(), "tools_autoform" );
-    actionToolsAutoform->setExclusiveGroup( "tools" );
+    actionToolsAutoform->setActionGroup( toolsGroup );
 
     actionToolsDiagramm = new KToggleAction( i18n( "&Chart" ), "frame_chart", 0,
                                              this, SLOT( toolsDiagramm() ),
                                              actionCollection(), "tools_diagramm" );
-    actionToolsDiagramm->setExclusiveGroup( "tools" );
+    actionToolsDiagramm->setActionGroup( toolsGroup );
 
     actionToolsTable = new KToggleAction( i18n( "Ta&ble"), "frame_spreadsheet", Qt::Key_F5 /*same as kword*/,
                                           this, SLOT( toolsTable() ),
                                           actionCollection(), "tools_table" );
-    actionToolsTable->setExclusiveGroup( "tools" );
+    actionToolsTable->setActionGroup( toolsGroup );
 
     actionToolsObject = new KoPartSelectAction( i18n( "&Object" ), "frame_query",
                                                 this, SLOT( toolsObject() ),
                                                 actionCollection(), "tools_object" );
 
-    actionToolsLinePopup = new KActionMenu( i18n( "&Line" ), "line",
+    actionToolsLinePopup = new KActionMenu( KIcon("line"),i18n( "&Line" ),
                                             actionCollection(), "tools_linepopup" );
     actionToolsLinePopup->setDelayed(true);
     connect(actionToolsLinePopup, SIGNAL(activated()), this, SLOT(toolsLinePopup()));
@@ -2382,35 +2382,35 @@ void KPrView::setupActions()
     actionToolsLine = new KToggleAction( i18n( "&Line" ), "line", 0,
                                          this, SLOT( toolsLine() ),
                                          actionCollection(), "tools_line" );
-    actionToolsLine->setExclusiveGroup( "tools" );
+    actionToolsLine->setActionGroup( toolsGroup );
 
     actionToolsFreehand = new KToggleAction( i18n( "&Freehand" ), "freehand", 0,
                                              this, SLOT( toolsFreehand() ),
                                              actionCollection(), "tools_freehand" );
-    actionToolsFreehand->setExclusiveGroup( "tools" );
+    actionToolsFreehand->setActionGroup( toolsGroup );
 
     actionToolsPolyline = new KToggleAction( i18n( "Po&lyline" ), "polyline", 0,
                                              this, SLOT( toolsPolyline() ),
                                              actionCollection(), "tools_polyline" );
-    actionToolsPolyline->setExclusiveGroup( "tools" );
+    actionToolsPolyline->setActionGroup( toolsGroup );
 
     actionToolsQuadricBezierCurve = new KToggleAction( i18n( "&Quadric Bezier Curve" ), "quadricbeziercurve", 0,
                                                        this, SLOT( toolsQuadricBezierCurve() ),
                                                        actionCollection(), "tools_quadricbeziercurve" );
-    actionToolsQuadricBezierCurve->setExclusiveGroup( "tools" );
+    actionToolsQuadricBezierCurve->setActionGroup( toolsGroup );
 
     actionToolsCubicBezierCurve = new KToggleAction( i18n( "C&ubic Bezier Curve" ), "cubicbeziercurve", 0,
                                                      this, SLOT( toolsCubicBezierCurve() ),
                                                      actionCollection(), "tools_cubicbeziercurve" );
-    actionToolsCubicBezierCurve->setExclusiveGroup( "tools" );
+    actionToolsCubicBezierCurve->setActionGroup( toolsGroup );
 
     actionToolsConvexOrConcavePolygon = new KToggleAction( i18n( "Co&nvex/Concave Polygon" ), "polygon", 0,
                                                            this, SLOT( toolsConvexOrConcavePolygon() ),
                                                            actionCollection(), "tools_polygon" );
-    actionToolsConvexOrConcavePolygon->setExclusiveGroup( "tools" );
+    actionToolsConvexOrConcavePolygon->setActionGroup( toolsGroup );
 
 
-    actionToolsClosedLinePopup = new KActionMenu( i18n( "&Closed Line" ), "closed_freehand",
+    actionToolsClosedLinePopup = new KActionMenu( KIcon("closed_freehand"),i18n( "&Closed Line" ),
                                                   actionCollection(), "tools_closed_linepopup" );
     actionToolsClosedLinePopup->setDelayed(true);
     connect(actionToolsClosedLinePopup, SIGNAL(activated()), this, SLOT(toolsClosedLinePopup()));
@@ -2418,25 +2418,25 @@ void KPrView::setupActions()
     actionToolsClosedFreehand = new KToggleAction( i18n( "Closed &Freehand" ), "closed_freehand", 0,
                                                    this, SLOT( toolsClosedFreehand() ),
                                                    actionCollection(), "tools_closed_freehand" );
-    actionToolsClosedFreehand->setExclusiveGroup( "tools" );
+    actionToolsClosedFreehand->setActionGroup( toolsGroup );
 
 
     actionToolsClosedPolyline = new KToggleAction( i18n( "Closed Po&lyline" ), "closed_polyline", 0,
                                                    this, SLOT( toolsClosedPolyline() ),
                                                    actionCollection(), "tools_closed_polyline" );
-    actionToolsClosedPolyline->setExclusiveGroup( "tools" );
+    actionToolsClosedPolyline->setActionGroup( toolsGroup );
 
 
     actionToolsClosedQuadricBezierCurve = new KToggleAction( i18n( "Closed &Quadric Bezier Curve" ), "closed_quadricbeziercurve", 0,
                                                              this, SLOT( toolsClosedQuadricBezierCurve() ),
                                                              actionCollection(), "tools_closed_quadricbeziercurve" );
-    actionToolsClosedQuadricBezierCurve->setExclusiveGroup( "tools" );
+    actionToolsClosedQuadricBezierCurve->setActionGroup( toolsGroup );
 
 
     actionToolsClosedCubicBezierCurve = new KToggleAction( i18n( "Closed C&ubic Bezier Curve" ), "closed_cubicbeziercurve", 0,
                                                            this, SLOT( toolsClosedCubicBezierCurve() ),
                                                            actionCollection(), "tools_closed_cubicbeziercurve" );
-    actionToolsClosedCubicBezierCurve->setExclusiveGroup( "tools" );
+    actionToolsClosedCubicBezierCurve->setActionGroup( toolsGroup );
 
     // ----------------- text actions
 
@@ -2452,7 +2452,7 @@ void KPrView::setupActions()
                                             i18n( "Font Family" ), 0,
                                             actionCollection(), "text_fontfamily" );
 #else
-    actionTextFontFamily = new KFontAction( i18n( "Font Family" ), 0,
+    actionTextFontFamily = new KFontAction( i18n( "Font Family" ),
                                             actionCollection(), "text_fontfamily" );
 #endif
     connect( actionTextFontFamily , SIGNAL( activated( const QString & ) ),
@@ -2503,20 +2503,21 @@ void KPrView::setupActions()
     actionTextAlignBlock->setActionGroup( alignGroup );
 
 
-    actionFormatNumber = new KActionMenu( i18n( "Number" ), "enumList", actionCollection(), "format_number" );
+    actionFormatNumber = new KActionMenu( KIcon("enumList"),i18n( "Number" ), actionCollection(), "format_number" );
     actionFormatNumber->setDelayed( false );
-    actionFormatBullet = new KActionMenu( i18n( "Bullet" ), "unsortedList", actionCollection(), "format_bullet" );
+    actionFormatBullet = new KActionMenu( KIcon("unsortedList"),i18n( "Bullet" ), actionCollection(), "format_bullet" );
     actionFormatBullet->setDelayed( false );
     Q3PtrList<KoCounterStyleWidget::StyleRepresenter> stylesList;
     KoCounterStyleWidget::makeCounterRepresenterList( stylesList );
     Q3PtrListIterator<KoCounterStyleWidget::StyleRepresenter> styleIt( stylesList );
-    for ( ; styleIt.current() ; ++styleIt ) {
+    QActionGroup* counterGroup = new QActionGroup( this );
+	for ( ; styleIt.current() ; ++styleIt ) {
         // Dynamically create toggle-actions for each list style.
         // This approach allows to edit toolbars and extract separate actions from this menu
         KToggleAction* act = new KToggleAction( styleIt.current()->name(), /*TODO icon,*/
                                                 0, this, SLOT( slotCounterStyleSelected() ),
                                                 actionCollection(), QString("counterstyle_%1").arg( styleIt.current()->style() ).toLatin1() );
-        act->setExclusiveGroup( "counterstyle" );
+        act->setActionGroup( counterGroup);
         // Add to the right menu: both for "none", bullet for bullets, numbers otherwise
         if ( styleIt.current()->style() == KoParagCounter::STYLE_NONE ) {
             actionFormatBullet->insert( act );
@@ -2552,7 +2553,7 @@ void KPrView::setupActions()
                                          this, SLOT( extraProperties() ),
                                          actionCollection(), "extra_properties" );
 
-    actionExtraArrangePopup = new KActionMenu( i18n( "Arra&nge Objects" ), "arrange",
+    actionExtraArrangePopup = new KActionMenu( KIcon("arrange"),i18n( "Arra&nge Objects" ), 
                                                actionCollection(), "extra_arrangepopup" );
     actionExtraArrangePopup->setDelayed( false ); 
 
@@ -2651,7 +2652,7 @@ void KPrView::setupActions()
                                               this, SLOT( extraDefaultTemplate() ),
                                               actionCollection(), "extra_defaulttemplate" );
 
-    actionExtraAlignObjsPopup = new KActionMenu( i18n("Align O&bjects"), "alignobjs", 
+    actionExtraAlignObjsPopup = new KActionMenu( KIcon("alignobjs"),i18n("Align O&bjects"),
                                             actionCollection(), "extra_alignobjs" );
     actionExtraAlignObjsPopup->setDelayed( false );
 
@@ -2905,11 +2906,11 @@ void KPrView::setupActions()
                                        this, SLOT( extraStylist() ),
                                        actionCollection(), "format_stylist" );
 
-    actionFormatStyleMenu = new KActionMenu( i18n( "St&yle" ), 0,
+    actionFormatStyleMenu = new KActionMenu( i18n( "St&yle" ),
                                              actionCollection(), "format_stylemenu" );
 
 
-    actionFormatStyle = new KSelectAction( i18n( "St&yle" ), 0,
+    actionFormatStyle = new KSelectAction( i18n( "St&yle" ),
                                            actionCollection(), "format_style" );
     connect( actionFormatStyle, SIGNAL( activated( int ) ),
              this, SLOT( textStyleSelected( int ) ) );
@@ -4743,7 +4744,7 @@ void KPrView::addVariableActions( int type, const QStringList & texts,
     // For multiple items we create a submenu.
     if ( texts.count() > 1 && !menuText.isEmpty() )
     {
-        KActionMenu * subMenu = new KActionMenu( menuText, actionCollection() );
+        KActionMenu * subMenu = new KActionMenu( actionCollection() ,menuText );
         parentMenu->insert( subMenu );
         parentMenu = subMenu;
     }
