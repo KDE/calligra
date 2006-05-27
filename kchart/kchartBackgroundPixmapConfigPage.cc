@@ -225,6 +225,7 @@ void KChartBackgroundPixmapConfigPage::init()
     if( bFound )
     {
         const QPixmap* backPixmap;
+        bool isTiledMode = false;
         KDFrame::BackPixmapMode backPixmapMode;
         const QBrush& background = innerFrame->frame().background( backPixmap, backPixmapMode );
 
@@ -232,6 +233,8 @@ void KChartBackgroundPixmapConfigPage::init()
         {
             // A pixmap can be in the brush, if used as Tile.
             backPixmap = background.pixmap();
+            if( backPixmap )
+                isTiledMode = true;
         }
 
         if( !backPixmap || backPixmap->isNull() ) //color as background
@@ -245,19 +248,22 @@ void KChartBackgroundPixmapConfigPage::init()
             _backgroundCB->setEnabled( false );
             wallWidget->setPaletteBackgroundPixmap( *backPixmap );
             wallCB->setCurrentItem( 1 );
-
-            switch( backPixmapMode ){
-                case KDFrame::PixCentered:
-                    centeredRB->setChecked( true );
-                    break;
-                case KDFrame::PixScaled:
-                    scaledRB->setChecked( true );
-                    break;
-                case KDFrame::PixStretched:
-                    stretchedRB->setChecked( true );
-                    break;
-                default:
-                    tiledRB->setChecked( true );
+            if( isTiledMode )
+            {
+                tiledRB->setChecked( true );
+            }
+            else
+            {
+                switch( backPixmapMode ){
+                    case KDFrame::PixCentered:
+                        centeredRB->setChecked( true );
+                        break;
+                    case KDFrame::PixScaled:
+                        scaledRB->setChecked( true );
+                        break;
+                    default:
+                        stretchedRB->setChecked( true );
+                }
             }
         }
     }
