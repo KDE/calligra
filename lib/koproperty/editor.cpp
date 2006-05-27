@@ -676,7 +676,7 @@ Editor::updateEditorGeometry(EditorItem *item, Widget* widget,
 void
 Editor::updateGroupLabelsPosition()
 {
-	if(!d->topItem)
+	if(!d->topItem || d->itemDict.isEmpty())
 		return;
 
 	EditorGroupItem *group = dynamic_cast<EditorGroupItem*>(d->topItem->firstChild());
