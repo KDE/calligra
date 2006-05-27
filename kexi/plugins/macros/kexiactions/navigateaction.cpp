@@ -51,24 +51,16 @@ namespace KexiMacro {
 			NavigateVariable(ACTIONIMPL* actionimpl)
 				: KexiVariable<ACTIONIMPL>(actionimpl, "record", i18n("Record"))
 			{
-				this->children().append( KoMacro::Variable::Ptr(new KoMacro::Variable( "first" )) );
-				this->children().append( KoMacro::Variable::Ptr(new KoMacro::Variable( "previous" )) );
-				this->children().append( KoMacro::Variable::Ptr(new KoMacro::Variable( "next" )) );
-				this->children().append( KoMacro::Variable::Ptr(new KoMacro::Variable( "last" )) );
-				this->children().append( KoMacro::Variable::Ptr(new KoMacro::Variable( "goto" )) );
+				QStringList list;
+				list << "first" << "previous" << "next" << "last" << "goto";
+				this->children().append( KoMacro::Variable::Ptr( new KoMacro::Variable(list, "@list") ) );
 
 				/*TODO should this actions belong to navigate? maybe it would be more wise to have
 				such kind of functionality in an own e.g. "Modify" action to outline, that
 				we are manipulating the database that way... */
-				//this->children().append( KoMacro::Variable::Ptr(new KoMacro::Variable( "add" )) );
-				//this->children().append( KoMacro::Variable::Ptr(new KoMacro::Variable( "save" )) );
-				//this->children().append( KoMacro::Variable::Ptr(new KoMacro::Variable( "delete" )) );
-				//this->children().append( KoMacro::Variable::Ptr(new KoMacro::Variable( "query" )) );
-				//this->children().append( KoMacro::Variable::Ptr(new KoMacro::Variable( "execute" )) );
-				//this->children().append( KoMacro::Variable::Ptr(new KoMacro::Variable( "cancel" )) );
-				//this->children().append( KoMacro::Variable::Ptr(new KoMacro::Variable( "reload" )) );
+				//"add" << "save" << "delete" << "query" << "execute" << "cancel" << "reload"
 
-				this->setVariant( this->children()[0]->variant() );
+				this->setVariant( list[0] );
 			}
 	};
 
@@ -85,7 +77,8 @@ NavigateAction::~NavigateAction()
 {
 }
 
-KoMacro::Variable::List NavigateAction::notifyUpdated(const QString& variablename, KoMacro::Variable::Map variablemap)
+#if 0
+bool NavigateAction::notifyUpdated(const QString& variablename, KoMacro::MacroItem* macroitem)
 {
 	Q_UNUSED(variablename);
 	Q_UNUSED(variablemap);
@@ -116,6 +109,7 @@ KoMacro::Variable::List NavigateAction::notifyUpdated(const QString& variablenam
 
 	return list;
 }
+#endif
 
 void NavigateAction::activate(KoMacro::Context::Ptr context)
 {

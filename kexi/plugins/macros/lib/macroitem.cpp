@@ -85,14 +85,20 @@ Variable::Map MacroItem::variables() const
 	return d->variables;
 }
 
-QStringList MacroItem::setVariable(const QString& name, const QVariant& variant)
+bool MacroItem::setVariant(const QString& name, const QVariant& variant)
 {
-	Variable* variable = d->action ? d->action->variable(name).data() : 0;
-	if(variable) { // try to preserve the type
-		const QVariant var = variable->variant();
-		QVariant v = variant;
+	// The QVariant v holds our new variant value while the variant itself
+	// contains the original value.
+	QVariant v = variant;
 
-		//FIXME: why QVariant::canCast returns false positives for e.g. integers? :-(
+	// Let's look if there is an action defined for the variable. If that's
+	// the case, we try to use that action to preserve the type of the variant.
+	Variable::Ptr actionvariable = d->action ? d->action->variable(name) : Variable::Ptr(0);
+	if(actionvariable.data()) {
+		const QVariant var = actionvariable->variant();
+
+		// We can't use QVariant::canCast() cause it returns "false positives"
+		// for e.g. integers. So, let's check explicit if casting is possible.
 		bool ok = true;
 		switch( var.type() ) {
 			case QVariant::Bool: {
@@ -100,33 +106,60 @@ QStringList MacroItem::setVariable(const QString& name, const QVariant& variant)
 				ok = (s == "true" || s == "false" || s == "0" || s == "1" || s == "-1");
 				v = variant.toBool();
 			} break;
-			case QVariant::Int: {
-				v = variant.toInt(&ok);
-			} break;
-			case QVariant::UInt: {
-				v = variant.toUInt(&ok);
-			} break;
-			case QVariant::LongLong: {
-				v = variant.toLongLong(&ok);
-			} break;
-			case QVariant::ULongLong: {
-				v = variant.toULongLong(&ok);
-			} break;
-			case QVariant::Double: {
-				v = variant.toDouble(&ok);
-			} break;
+			case QVariant::Int: v = variant.toInt(&ok); break;
+			case QVariant::UInt: v = variant.toUInt(&ok); break;
+			case QVariant::LongLong: v = variant.toLongLong(&ok); break;
+			case QVariant::ULongLong: v = variant.toULongLong(&ok); break;
+			case QVariant::Double: v = variant.toDouble(&ok); break;
+			case QVariant::String: v = variant.toString(); break;
 			default: {
 				ok = v.cast( var.type() );
 				kdWarning()<<"MacroItem::setVariable() Unhandled type="<<var.type()<<" value="<<v<<endl;
 			} break;
 		}
-		if(ok)
-			return setVariable(name, new Variable(v));
+		if(! ok)
+			v = variant; // ignore casting result
 	}
-	kdDebug()<<"MacroItem::setVariable() variant="<<variant<<endl;
- 	return setVariable(name, new Variable(variant));
+
+	Variable::Ptr variable = d->variables[name];
+	if(! variable.data()) {
+		// if there exists no such variable yet, create one.
+		kdDebug() << "MacroItem::setVariable() Creating new variable name=" << name << endl;
+
+		variable = Variable::Ptr( new Variable() );
+		variable->setName(name);
+		d->variables.replace(name, variable);
+	}
+
+	const QVariant oldvar = variable->variant();
+	//if(oldvar == v) return false; // check if an update is really needed
+	variable->setVariant(v);
+
+	if(! d->action->notifyUpdated(this, name)) {
+		kdWarning() << "MacroItem::setVariable() Notify failed for variable name=" << name << endl;
+		variable->setVariant(oldvar);
+		return false;
+	}
+
+	return true;
 }
 
+bool MacroItem::setVariable(const QString& name, const QVariant& variant)
+{
+	return setVariant(name, variant);
+}
+
+Variable::Ptr MacroItem::addVariable(const QString& name, const QVariant& value)
+{
+	Q_ASSERT(! d->variables.contains(name) );
+	Variable::Ptr variable = Variable::Ptr( new Variable() );
+	variable->setName(name);
+	d->variables.replace(name, variable);
+	this->setVariant(name, value);
+	return variable;
+}
+
+#if 0
 QStringList MacroItem::setVariable(const QString& name, Variable::Ptr variable)
 {
 	// First try to find the matching in the action defined variable.
@@ -146,11 +179,14 @@ QStringList MacroItem::setVariable(const QString& name, Variable::Ptr variable)
 		kdWarning() << QString("MacroItem::setVariable() update for variable \"%1\" failed.").arg(name) 	<< endl;
 		return QStringList();
 	}
-
 	kdDebug() << "MacroItem::setVariable() name=" << name << " variable=" << variable->variant().toString() << endl;
 
+//TODO
 	// remember the new variable.
 	d->variables.replace(name, variable);
+
+	// notify the action that we updated a variable.
+	return d->action->notifyUpdated(name, this);
 
 	// Notify the variable, that we updated it.
 	//v->updated(this);
@@ -176,8 +212,8 @@ QStringList MacroItem::setVariable(const QString& name, Variable::Ptr variable)
 		}
 		*/
 	}
-
 	return sl;
 }
+#endif
 
 #include "macroitem.moc"

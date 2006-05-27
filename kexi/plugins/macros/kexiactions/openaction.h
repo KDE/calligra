@@ -56,12 +56,6 @@ namespace KexiMacro {
 			*/
 			virtual ~OpenAction();
 
-			/**
-			* This function is called, when a @a Variable provided by this
-			* @a OpenAction is changed.
-			*/
-			virtual KoMacro::Variable::List notifyUpdated(const QString& variablename, KoMacro::Variable::Map variable);
-
 		public slots:
 
 			/**

@@ -42,13 +42,6 @@ MessageAction::~MessageAction()
 {
 }
 
-KoMacro::Variable::List MessageAction::notifyUpdated(const QString& variablename, KoMacro::Variable::Map variablemap)
-{
-	Q_UNUSED(variablename);
-	Q_UNUSED(variablemap);
-	return KoMacro::Variable::List();
-}
-
 void MessageAction::activate(KoMacro::Context::Ptr context)
 {
 	kdDebug() << "MessageAction::activate(Context::Ptr)" << endl;

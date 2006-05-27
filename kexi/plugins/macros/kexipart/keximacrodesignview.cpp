@@ -184,6 +184,7 @@ KexiMacroDesignView::KexiMacroDesignView(KexiMainWindow *mainwin, QWidget *paren
 
 	// Everything is ready. So, update the data now.
 	updateData();
+	setDirty(false);
 }
 
 KexiMacroDesignView::~KexiMacroDesignView()
@@ -282,7 +283,7 @@ void KexiMacroDesignView::beforeCellChanged(KexiTableItem* item, int colnum, QVa
 		return;
 	}
 
-	// Handle the column thatshould be changed
+	// Handle the column that should be changed
 	switch(colnum) {
 		case COLUMN_ID_ACTION: { // The "Action" column
 			QString actionname;
@@ -381,10 +382,8 @@ void KexiMacroDesignView::updateProperties(int row, KoProperty::Set* set, KoMacr
 		// if there exists no such propertyset yet, create one.
 		set = new KoProperty::Set(d->propertyset, action->name());
 		d->propertyset->insert(row, set, true);
-//#if 0
-	    connect(set, SIGNAL(propertyChanged(KoProperty::Set&, KoProperty::Property&)),
-	            this, SLOT(propertyChanged(KoProperty::Set&, KoProperty::Property&)));
-//#endif
+		connect(set, SIGNAL(propertyChanged(KoProperty::Set&, KoProperty::Property&)),
+		        this, SLOT(propertyChanged(KoProperty::Set&, KoProperty::Property&)));
 	}
 
 	// The caption.
@@ -398,7 +397,9 @@ void KexiMacroDesignView::updateProperties(int row, KoProperty::Set* set, KoMacr
 		if(updateSet(set, macroitem, *it)) {
 			KoMacro::Variable::Ptr variable = macroitem->variable(*it, true);
 			kdDebug()<<"KexiMacroDesignView::updateProperties() name=" << *it << " variable=" << variable->variant().toString() << endl;
+#if 0
 			macroitem->setVariable(*it, variable);
+#endif
 		}
 	}
 
@@ -407,8 +408,11 @@ void KexiMacroDesignView::updateProperties(int row, KoProperty::Set* set, KoMacr
 
 void KexiMacroDesignView::propertyChanged(KoProperty::Set& set, KoProperty::Property& property)
 {
-	if(d->reloadsProperties) {
-		// be sure to don't update properties if we are still on reloading.
+	Q_UNUSED(set);
+	kdDebug() << "KexiMacroDesignView::propertyChanged() propertyname=" << property.name() << endl;
+	setDirty();
+#if 0
+	if(d->reloadsProperties) { // be sure to don't update properties if we are still on reloading.
 		return;
 	}
 
@@ -416,7 +420,7 @@ void KexiMacroDesignView::propertyChanged(KoProperty::Set& set, KoProperty::Prop
 	int row = d->propertyset->currentRow();
 
 	const QCString name = property.name();
-	if(row < 0 || uint(row) >= macro()->items().count()) {
+	if(row < 0 || uint(row) >= macro()->items().count()) { // prevent invalid rows
 		kdWarning() << "KexiMacroDesignView::propertyChanged() name=" << name << " out of bounds." << endl;
 		return;
 	}
@@ -424,18 +428,24 @@ void KexiMacroDesignView::propertyChanged(KoProperty::Set& set, KoProperty::Prop
 	kdDebug() << "KexiMacroDesignView::propertyChanged() name=" << name << " row=" << row << endl;
 	d->reloadsProperties = true;
 
+	// The MacroItem which should be changed.
 	KoMacro::MacroItem::Ptr macroitem = macro()->items()[row];
+	// The MacroItem may point to an action.
 	KoMacro::Action::Ptr action = macroitem->action();
 
-	KoMacro::Variable* pv = new KoMacro::Variable( property.value() );
-	pv->setName(name);
+	// Set the new value. MacroItem will take care of calling
+	// action->notifyUpdated().
+	if(! macroitem->setVariant(name, property.value())) {
+		d->reloadsProperties = false;
+		return;
+	}
 
+//TODO reload is only needed if something changed!
+bool dirty = true; bool reload = true;//dirtyvarnames.count()>0;
+
+#endif
+#if 0
 	QStringList dirtyvarnames = macroitem->setVariable(name, KoMacro::Variable::Ptr(pv));
-
-
-
-//bool dirty = true; bool reload = false;
-//#if 0
 	bool dirty = false;
 	bool reload = false;
 	for(QStringList::Iterator it = dirtyvarnames.begin(); it != dirtyvarnames.end(); ++it) {
@@ -478,8 +488,8 @@ void KexiMacroDesignView::propertyChanged(KoProperty::Set& set, KoProperty::Prop
 		if(action.data() && action->hasVariable(setit.currentKey())) continue; // the property is still valid
 		reload = true; // we like to reload the whole set
 	}
-//#endif
-
+#endif
+#if 0
 	// Only reload properties if it's really needed.
 	if(dirty || reload) {
 		setDirty();
@@ -493,7 +503,9 @@ void KexiMacroDesignView::propertyChanged(KoProperty::Set& set, KoProperty::Prop
 	}
 
 	d->reloadsProperties = false;
+#endif
 }
+
 
 void KexiMacroDesignView::reloadPropertyLater()
 {

@@ -51,6 +51,7 @@ ExecuteAction::~ExecuteAction()
 {
 }
 
+#if 0
 KoMacro::Variable::List ExecuteAction::notifyUpdated(const QString& variablename, KoMacro::Variable::Map variablemap)
 {
 	Q_UNUSED(variablename);
@@ -67,6 +68,7 @@ KoMacro::Variable::List ExecuteAction::notifyUpdated(const QString& variablename
 
 	return list;
 }
+#endif
 
 void ExecuteAction::activate(KoMacro::Context::Ptr context)
 {

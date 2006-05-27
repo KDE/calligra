@@ -26,6 +26,7 @@
 //#include "kexiproject.h"
 
 #include <qdom.h>
+#include <qstringlist.h>
 #include <kgenericfactory.h>
 #include <kexipartitem.h>
 //#include <kxmlguiclient.h>
@@ -35,6 +36,7 @@
 
 #include "../lib/manager.h"
 #include "../lib/macro.h"
+#include "../lib/macroitem.h"
 #include "../lib/action.h"
 
 #include "../kexiactions/openaction.h"
@@ -105,23 +107,29 @@ bool KexiMacroPart::execute(KexiPart::Item* item, QObject* sender)
 class TestAction : public KoMacro::Action
 {
 		//Q_OBJECT
+	private:
+		KoMacro::Variable* intvar;
 	public:
 		TestAction() : KoMacro::Action("test") {
 			setText("Test");
 
-			KoMacro::Variable* intvar = new KoMacro::Variable(QVariant(12345));
+			intvar = new KoMacro::Variable(QVariant(12345));
 			intvar->setName("intvar");
 			intvar->setText("IntVar");
-			intvar->children().append(new KoMacro::Variable( "Int first" ));
-			intvar->children().append(new KoMacro::Variable( "Int second" ));
-			intvar->children().append(new KoMacro::Variable( "Int theird" ));
+
+			QStringList list;
+			list << "FirstItem" << "SecondItem" << "TheirdItem";
+			intvar->children().append( KoMacro::Variable::Ptr( new KoMacro::Variable(list, "@list") ) );
+			intvar->children().append(new KoMacro::Variable( "First Child","firstvar","First Var" ));
+			intvar->children().append(new KoMacro::Variable( QVariant(12345),"secondvar","Second Var" ));
+			intvar->children().append(new KoMacro::Variable( QVariant(true,0),"theirdvar","Theird Var" ));
 			setVariable(intvar);
 
 			KoMacro::Variable* int2var = new KoMacro::Variable(QVariant(54321));
 			int2var->setName("int2var");
 			int2var->setText("Int2Var");
 			setVariable(int2var);
-
+/*
 			KoMacro::Variable* boolvar = new KoMacro::Variable(QVariant(true,0));
 			boolvar->setName("boolvar");
 			boolvar->setText("BoolVar");
@@ -129,14 +137,21 @@ class TestAction : public KoMacro::Action
 			boolvar->children().append(new KoMacro::Variable( "Bool second" ));
 			boolvar->children().append(new KoMacro::Variable( "Bool theird" ));
 			setVariable(boolvar);
+*/
 
 			KoMacro::Manager::self()->publishAction( Action::Ptr(this) );
 		}
 		virtual ~TestAction() {}
-		virtual KoMacro::Variable::List notifyUpdated(const QString& variablename, KoMacro::Variable::Map variable) {
-			Q_UNUSED(variablename);
-			Q_UNUSED(variable);
-			return KoMacro::Variable::List();
+		virtual bool notifyUpdated(KSharedPtr<KoMacro::MacroItem> macroitem, const QString& name) {
+			kdDebug()<<"===================> TestAction::notifyUpdated() macroitem="<<macroitem->name()<<" variablename="<<name<<endl;
+			/*
+			KoMacro::Variable::Ptr iv = variable["int2var"];
+			if(iv)
+				iv->setEnabled(false);
+			else
+				kdWarning()<<"%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%"<<endl;
+			*/
+			return true;
 		}
 	public slots:
 		virtual void activate(KSharedPtr<KoMacro::Context> context) {
@@ -144,24 +159,22 @@ class TestAction : public KoMacro::Action
 		}
 };
 
-
 void KexiMacroPart::initPartActions()
 {
 	//kdDebug() << "KexiMacroPart::initPartActions()" << endl;
 
-	::KoMacro::Manager::init(m_mainWin);
+	KoMacro::Manager::init(m_mainWin);
 	new KexiMacro::OpenAction;
 	new KexiMacro::ExecuteAction;
 	new KexiMacro::NavigateAction;
 	new KexiMacro::MessageAction;
 
-	new TestAction;
+	new TestAction; // testcase above
 }
 
 void KexiMacroPart::initInstanceActions()
 {
 	//kdDebug() << "KexiMacroPart::initInstanceActions()" << endl;
-
 	//createSharedAction(Kexi::DesignViewMode, i18n("Execute Macro"), "exec", 0, "data_execute");
 }
 

@@ -22,6 +22,8 @@
 
 #include "../lib/action.h"
 #include "../lib/context.h"
+#include "../lib/macroitem.h"
+#include "../lib/variable.h"
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -34,18 +36,18 @@ TestAction::TestAction()
 	setVariable("teststring", "Stringtest", QString("testString"));
 	setVariable("testint", "Inttest", int(0));
 	setVariable("testdouble", "Doubletest", double(0.5));
-	setVariable("testbool", "Booltest", bool(true));
+	setVariable("testbool", "Booltest", QVariant(true,0));
 }
 
 TestAction::~TestAction() 
 {
 }
 
-KoMacro::Variable::List TestAction::notifyUpdated(const QString& variablename, KoMacro::Variable::Map variablemap)
+bool TestAction::notifyUpdated(KSharedPtr<KoMacro::MacroItem> macroitem, const QString& name)
 {
-	Q_UNUSED(variablename);
-	Q_UNUSED(variablemap);
-	return KoMacro::Variable::List();
+	Q_UNUSED(macroitem);
+	Q_UNUSED(name);
+	return true;
 }
 
 void TestAction::activate(KoMacro::Context::Ptr context)

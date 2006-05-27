@@ -71,24 +71,6 @@ namespace KexiMacro {
 			}
 
 			/**
-			* This function is called, when a @a Variable provided by this
-			* @a OpenObject is changed.
-			*
-			* Classes inherited from this class need to provide an
-			* implementation for this method.
-			*/
-			//virtual KoMacro::Variable::List notifyUpdated(const QString& variablename, KoMacro::Variable::Map variable) = 0;
-
-			/**
-			* Called if the @a Action should be executed within the
-			* defined @p context .
-			*
-			* Classes inherited from this class need to provide an
-			* implementation for this method.
-			*/
-			//virtual void activate(KSharedPtr<KoMacro::Context> context) = 0;
-
-			/**
 			* @return the @a KexiMainWindow instance we are
 			* running in.
 			*/

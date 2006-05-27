@@ -97,7 +97,8 @@ OpenAction::~OpenAction()
 {
 }
 
-KoMacro::Variable::List OpenAction::notifyUpdated(const QString& variablename, KoMacro::Variable::Map variablemap)
+#if 0
+bool OpenAction::notifyUpdated(const QString& variablename, KoMacro::MacroItem* macroitem)
 {
 	//kdDebug()<<"OpenAction::notifyUpdated() name="<<variable->name()<<" value="<< variable->variant().toString() <<endl;
 
@@ -114,6 +115,7 @@ KoMacro::Variable::List OpenAction::notifyUpdated(const QString& variablename, K
 
 	return list;
 }
+#endif
 
 void OpenAction::activate(KoMacro::Context::Ptr context)
 {

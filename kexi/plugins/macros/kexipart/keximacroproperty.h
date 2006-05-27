@@ -29,6 +29,8 @@ namespace KoMacro {
 	class MacroItem;
 }
 
+class KexiMacroPropertyWidget;
+
 /**
 * Implementation of a @a KoProperty::CustomProperty to have
 * more control about the handling of our macro-properties.
@@ -38,10 +40,13 @@ class KexiMacroProperty
 	, public KoProperty::CustomProperty
 {
 		Q_OBJECT
+
+		friend class KexiMacroPropertyWidget;
+
 	public:
 
 		/** Constructor. */
-		explicit KexiMacroProperty(KoProperty::Property* parent);
+		explicit KexiMacroProperty(KoProperty::Property* parent, KSharedPtr<KoMacro::MacroItem> macroitem, const QString& name);
 		/** Destructor. */
 		virtual ~KexiMacroProperty();
 
@@ -78,9 +83,6 @@ class KexiMacroProperty
 		is returned. */
 		KSharedPtr<KoMacro::Variable> variable() const;
 
-		/** Set the @a macroItem() to @p macroitem and the @a name() to @p name . */
-		bool set(KSharedPtr<KoMacro::MacroItem> macroitem, const QString& name);
-
 		/** Factory function to create a new @a KoProperty::Property instance
 		that will use a @a KexiMacroProperty as container. */
 		static KoProperty::Property* createProperty(KSharedPtr<KoMacro::MacroItem> macroitem, const QString& name);
@@ -95,6 +97,8 @@ class KexiMacroProperty
 		class Private;
 		/** \internal d-pointer instance. */
 		Private* const d;
+
+		inline void init();
 };
 
 /**

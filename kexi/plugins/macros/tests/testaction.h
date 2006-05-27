@@ -21,19 +21,20 @@
 #ifndef KOMACROTEST_TESTACTION_H
 #define KOMACROTEST_TESTACTION_H
 
-#include "../lib/variable.h"
+#include <ksharedptr.h>
+
 #include "../lib/action.h"
 
 namespace KoMacro {
 	class Context;
+	class MacroItem;
 }
 
 namespace KoMacroTest {
 
 	/**
-	* The ExecuteObject class implements a @a KoMacro::Action
-	* to provide functionality to execute an object like
-	* e.g. a script or a macro.
+	* This TestAction implements a @a KoMacro::Action to
+	* test the functionality provided by this class.
 	*/
 	class TestAction : public KoMacro::Action
 	{
@@ -42,8 +43,6 @@ namespace KoMacroTest {
 
 			/**
 			* Constructor.
-			*
-			* @param mainwin Kexi's main window implementation.
 			*/
 			TestAction();
 			
@@ -53,10 +52,17 @@ namespace KoMacroTest {
 			virtual ~TestAction();
 
 			/**
-			* This function is called, when a @a Variable provided by this
-			* @a OpenObject is changed.
+			* This function is called, when the @a KoMacro::Variable
+			* with name @p name used within the @a KoMacro::MacroItem
+			* @p macroitem got changed.
+			*
+			* @param macroitem The @a KoMacro::MacroItem instance where
+			* the variable defined with @p name is located in.
+			* @param name The name the @a KoMacro::Variable has.
+			* @return true if the update was successfully else false
+			* is returned.
 			*/
-			virtual KoMacro::Variable::List notifyUpdated(const QString& variablename, KoMacro::Variable::Map variable);
+			virtual bool notifyUpdated(KSharedPtr<KoMacro::MacroItem> macroitem, const QString& name);
 
 		public slots:
 

@@ -160,15 +160,20 @@ namespace KoMacro {
 			void removeVariable(const QString& name);
 
 			/**
-			* This function is called, when a @a Variable provided by this
-			* @a Action is changed.
+			* This function is called, when the @a KoMacro::Variable
+			* with name @p name used within the @a KoMacro::MacroItem
+			* @p macroitem got changed.
+			*
+			* @param macroitem The @a KoMacro::MacroItem instance where
+			* the variable defined with @p name is located in.
+			* @param name The name the @a KoMacro::Variable has.
+			* @return true if the update was successfully else false
+			* is returned.
 			*/
-			virtual Variable::List notifyUpdated(const QString& variablename, Variable::Map variablemap) {
-				Q_UNUSED(variablename);
-				Q_UNUSED(variablemap);
-				// The default implementation does nothing.
-				// So, an empty list is returned.
-				return Variable::List();
+			virtual bool notifyUpdated(KSharedPtr<MacroItem> macroitem, const QString& name) {
+				Q_UNUSED(macroitem);
+				Q_UNUSED(name);
+				return true; // The default implementation does nothing.
 			}
 
 		public slots:

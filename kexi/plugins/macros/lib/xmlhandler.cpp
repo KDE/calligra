@@ -124,36 +124,14 @@ bool XMLHandler::parseXML(const QDomElement& element)
 					// The node is an element.
 					const QDomElement childelem = childnode.toElement();
 
-					// Create the new variable.
-					Variable* variable = new Variable();
-
-					// The name the variable has.
-					const QString name = childelem.attribute("name");
-					variable->setName(name);
-
-					// TODO Refactor 1: simplier, 2: we should pass undetected
-					// variable through to loose no data as a string-var.
-					// Should work with number-types, which are independend of the Operating System.
-					bool autodetect = true; // auto-detect variable type.
-					if(action.data()) {
-						// Try to restore the datatype by looking at
-						// the datatype of the matching Action instance.
-						Variable::Ptr actionvariable = action->variable(name);
-						if(actionvariable.data()) {
-							variable->setType( actionvariable->type() );
-							if( actionvariable->type() == MetaParameter::TypeVariant ) {
-								variable->setVariantType( actionvariable->variantType() );
-							}
-							autodetect = false;
-						}
-					}
-
+ 					// The name the variable has.
+ 					const QString name = childelem.attribute("name");
 					// The value the variable has.
 					const QString value = childelem.text();
-					variable->setVariant(value, autodetect);
 
-					// Add the variable to the MacroItem.
-					item->setVariable(name, Variable::Ptr(variable));
+					// Store the new variable in our macroitem.
+					Variable::Ptr variable = item->addVariable(name, value);
+					Q_UNUSED(variable);
 				}
 			}
 		}

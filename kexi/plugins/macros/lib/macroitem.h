@@ -125,20 +125,29 @@ namespace KoMacro {
 			QMap<QString, KSharedPtr<Variable> > variables() const;
 
 			/**
-			* Set the @a Variable @p variable with the variablename
-			* @p name .
-			*/
-			QStringList setVariable(const QString& name, KSharedPtr<Variable> variable);
-			
-			/**
 			* Set the @a QVariant @p variant as variable with the variablename
 			* @p name .
 			*/
-			QStringList setVariable(const QString& name, const QVariant& variant);
+			bool setVariant(const QString& name, const QVariant& variant);
+
+			/**
+			* @deprecated Use setVariant above.
+			*/
+			bool setVariable(const QString& name, const QVariant& variant);
+
+			/**
+			* Add a new variable to our @a MacroItem instance.
+			*/
+			Variable::Ptr addVariable(const QString& name, const QVariant& value);
+
+			//bool isDirty() const;
+			//void setDirty(bool dirty);
 
 		/*
 		public slots:
 			void activate() {}
+		signals:
+			void updatedVariables();
 		*/
 
 		private:

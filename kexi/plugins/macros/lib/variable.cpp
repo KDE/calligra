@@ -61,6 +61,16 @@ namespace KoMacro {
 			* Optional list of children this @a Variable has.
 			*/
 			Variable::List children;
+
+			/**
+			* Defines if the variable is enabled or disabled.
+			*/
+			bool enabled;
+
+			explicit Private()
+				: enabled(true)
+			{
+			}
 	};
 
 }
@@ -73,13 +83,15 @@ Variable::Variable()
 	d->object = 0;
 }
 
-Variable::Variable(const QVariant& variant)
+Variable::Variable(const QVariant& variant, const QString& name, const QString& text)
 	: MetaParameter()
 	, d( new Private() ) // create the private d-pointer instance.
 {
 	setVariantType(variant.type());
 	d->variant = variant;
 	d->object = 0;
+	d->name = name;
+	d->text = text;
 }
 
 Variable::Variable(const QObject* object)
@@ -203,6 +215,16 @@ int Variable::toInt() const
 Variable::List& Variable::children() const
 {
 	return d->children;
+}
+
+bool Variable::isEnabled() const
+{
+	return d->enabled;
+}
+
+void Variable::setEnabled(bool enabled)
+{
+	d->enabled = enabled;
 }
 
 //#include "variable.moc"

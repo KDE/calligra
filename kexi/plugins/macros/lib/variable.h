@@ -79,8 +79,10 @@ namespace KoMacro {
 			* Constructor from the QVariant @p variant .
 			* 
 			* @param variant The value this variable has.
+			* @param name The unique @a name() this variable has.
+			* @param text The describing @a text() this variable has.
 			*/
-			Variable(const QVariant& variant);
+			Variable(const QVariant& variant, const QString& name = QString::null, const QString& text = QString::null);
 
 			/**
 			* Constructor from the QObject @p object .
@@ -179,6 +181,18 @@ namespace KoMacro {
 			* that are children of this @a Variable .
 			*/
 			Variable::List& children() const;
+
+			/**
+			* @return true if this @a Variable is enabled else
+			* false is returned.
+			*/
+			bool isEnabled() const;
+
+			/**
+			* Set this @a Variable to be enabled if @p enabled is
+			* true else the variable is disabled.
+			*/
+			void setEnabled(bool enabled);
 
 		private:
 			/// @internal d-pointer class.
