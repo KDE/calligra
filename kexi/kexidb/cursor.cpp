@@ -103,7 +103,7 @@ Cursor::~Cursor()
 {
 #ifdef KEXI_DEBUG_GUI
 	if (m_query)
-		KexiUtils::addDBCursorDebug(QString("~ Delete cursor for query \"%1\": ").arg(m_query->name())+m_query->debugString());
+		KexiUtils::addDBCursorDebug(QString("~ Delete cursor for query"));
 	else
 		KexiUtils::addDBCursorDebug(QString("~ Delete cursor: ")+m_rawStatement);
 #endif
