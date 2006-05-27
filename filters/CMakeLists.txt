@@ -21,14 +21,16 @@ add_subdirectory(kchart)
 add_subdirectory(kword)
 #add_subdirectory(kpresenter)
 add_subdirectory(kformula)
-add_subdirectory(karbon)
+if(LIBART_FOUND)
+	add_subdirectory(karbon)
+endif(LIBART_FOUND)
 add_subdirectory(krita)
 #add_subdirectory(kivio)
 if(LIBXML2_FOUND AND LIBXSLT_FOUND)
 	add_subdirectory(xsltfilter)
 endif(LIBXML2_FOUND AND LIBXSLT_FOUND)	
 
-message (STATUS "Re-add karbon kivio kpresenter filters")
+message (STATUS "Re-add kivio kpresenter filters")
 
 
 ########### install files ###############
