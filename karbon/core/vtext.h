@@ -20,6 +20,8 @@
 #ifndef __VTEXT_H__
 #define __VTEXT_H__
 
+#include <config-karbon.h>
+
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif

@@ -18,7 +18,7 @@
 */
 
 #include <math.h>
-
+#include <config-karbon.h>
 #include <QCheckBox>
 #include <QComboBox>
 #include <qcursor.h>

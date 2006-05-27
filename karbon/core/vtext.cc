@@ -17,6 +17,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#include <config-karbon.h>
 #include <qdom.h>
 #include <QFile>
 //Added by qt3to4:

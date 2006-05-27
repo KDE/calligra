@@ -47,9 +47,6 @@
 /* Define to 1 if you have the <inttypes.h> header file. */
 #cmakedefine HAVE_INTTYPES_H 1
 
-/* Defines if your system has the fontconfig and freetype libraries */
-#define HAVE_KARBONTEXT 1
-
 /* Defines if your system has the libart library */
 #define HAVE_LIBART 1
 

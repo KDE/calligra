@@ -4,11 +4,15 @@ find_package(LibArt REQUIRED)
 find_package(Freetype REQUIRED)
 find_package(Fontconfig REQUIRED)
 
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config-karbon.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-karbon.h )
+
+
 include_directories( 
 		${KDE4_INCLUDE_DIR} 
 		${QT_INCLUDES} 
 		${KOFFICEUI_INCLUDES} 
-		${KOPAINTER_INCLUDES} 
+		${KOPAINTER_INCLUDES}
+		${CMAKE_BINARY_DIR}/karbon/
 		${CMAKE_SOURCE_DIR}/karbon/core 
 		${CMAKE_BINARY_DIR}/karbon/core 
 		${CMAKE_SOURCE_DIR}/karbon/widgets 
