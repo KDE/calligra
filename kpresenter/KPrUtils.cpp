@@ -80,9 +80,9 @@ void drawFigure( LineEnd figure, QPainter* painter, const KoPoint &coord, const 
         KoPoint p2( 0 , 0 );
         KoPoint p3( -10 - _w, 3 + _w / 2 );
         Q3PointArray pArray( 3 );
-        pArray.setPoint( 0, _zoomHandler->>zoomPointOldd(p1) );
-        pArray.setPoint( 1, _zoomHandler->>zoomPointOldd(p2) );
-        pArray.setPoint( 2, _zoomHandler->>zoomPointOldd(p3) );
+        pArray.setPoint( 0, _zoomHandler->zoomPointOld(p1) );
+        pArray.setPoint( 1, _zoomHandler->zoomPointOld(p2) );
+        pArray.setPoint( 2, _zoomHandler->zoomPointOld(p3) );
 
         painter->translate( _zoomHandler->zoomItXOld(coord.x()),_zoomHandler->zoomItYOld( coord.y()) );
         painter->rotate( angle );
@@ -128,13 +128,13 @@ void drawFigure( LineEnd figure, QPainter* painter, const KoPoint &coord, const 
         KoPoint p6( -20 - _w, 3 + _w / 2 );
 
         Q3PointArray pArray( 3 );
-        pArray.setPoint( 0, _zoomHandler->>zoomPointOldd(p1) );
-        pArray.setPoint( 1, _zoomHandler->>zoomPointOldd(p2) );
-        pArray.setPoint( 2, _zoomHandler->>zoomPointOldd(p3) );
+        pArray.setPoint( 0, _zoomHandler->zoomPointOld(p1) );
+        pArray.setPoint( 1, _zoomHandler->zoomPointOld(p2) );
+        pArray.setPoint( 2, _zoomHandler->zoomPointOld(p3) );
         painter->drawPolygon( pArray );
-        pArray.setPoint( 0, _zoomHandler->>zoomPointOldd(p4) );
-        pArray.setPoint( 1, _zoomHandler->>zoomPointOldd(p5) );
-        pArray.setPoint( 2, _zoomHandler->>zoomPointOldd(p6) );
+        pArray.setPoint( 0, _zoomHandler->zoomPointOld(p4) );
+        pArray.setPoint( 1, _zoomHandler->zoomPointOld(p5) );
+        pArray.setPoint( 2, _zoomHandler->zoomPointOld(p6) );
         painter->drawPolygon( pArray );
 
     }break;

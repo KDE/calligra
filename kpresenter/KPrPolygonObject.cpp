@@ -227,7 +227,7 @@ void KPrPolygonObject::paint( QPainter* _painter,KoTextZoomHandler*_zoomHandler,
         _painter->drawPolygon( pointArray );
     }
     else {
-        QSize size( _zoomHandler->zoomSize( ext ) );
+        QSize size( _zoomHandler->zoomSizeOld( ext ) );
         if ( m_redrawGradientPix || gradient->size() != size )
         {
             m_redrawGradientPix = false;

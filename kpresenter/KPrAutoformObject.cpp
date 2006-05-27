@@ -198,7 +198,7 @@ void KPrAutoformObject::paint( QPainter* _painter, KoTextZoomHandler *_zoomHandl
 {
     unsigned int pw = 0, pwOrig = 0, px, py;
     QPen pen2;
-    QSize size( _zoomHandler->zoomSize( ext ) );
+    QSize size( _zoomHandler->zoomSizeOld( ext ) );
 
     if ( drawContour )
         pen2 = QPen( Qt::black, 1, Qt::DotLine );

@@ -219,7 +219,7 @@ void KPrPieObject::paint( QPainter* _painter, KoTextZoomHandler*_zoomHandler,
         {
             if ( pieType != PT_ARC )
             {
-                QSize size( _zoomHandler->zoomSize( ext ) );
+                QSize size( _zoomHandler->zoomSizeOld( ext ) );
 
                 if ( m_redrawGradientPix || gradient->size() != size )
                 {

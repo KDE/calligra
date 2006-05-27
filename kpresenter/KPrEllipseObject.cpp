@@ -62,7 +62,7 @@ void KPrEllipseObject::paint( QPainter* _painter, KoTextZoomHandler *_zoomHandle
 {
     int ow = _zoomHandler->zoomItXOld( ext.width() );
     int oh = _zoomHandler->zoomItYOld( ext.height() );
-    QSize size( _zoomHandler->zoomSize( ext ) );
+    QSize size( _zoomHandler->zoomSizeOld( ext ) );
 
     if ( drawContour ) {
         QPen pen3( Qt::black, 1, Qt::DotLine );

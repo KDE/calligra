@@ -220,7 +220,7 @@ void KPrClosedLineObject::paint( QPainter* _painter,KoTextZoomHandler*_zoomHandl
         _painter->drawPolygon( pointArray );
     }
     else {
-        QSize size( _zoomHandler->zoomSize( ext ) );
+        QSize size( _zoomHandler->zoomSizeOld( ext ) );
         if ( m_redrawGradientPix || gradient->size() != size )
         {
             m_redrawGradientPix = false;
