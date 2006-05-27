@@ -874,7 +874,7 @@ void KPrView::toolsLine()
         m_canvas->setToolEditMode( INS_LINE, false );
         deSelectAllObjects();
         m_currentLineTool = LtLine;
-        actionToolsLinePopup->setIcon("line");
+        actionToolsLinePopup->setIcon(KIcon("line"));
     }
     else
         actionToolsLine->setChecked(true);
@@ -906,7 +906,7 @@ void KPrView::toolsRectangle()
         deSelectAllObjects();
         m_canvas->setToolEditMode( INS_RECT, false );
         m_currentShapeTool = StRectangle;
-        actionToolsShapePopup->setIcon("rectangle");
+        actionToolsShapePopup->setIcon(KIcon("rectangle"));
     }
     else
         actionToolsRectangle->setChecked(true);
@@ -919,7 +919,7 @@ void KPrView::toolsCircleOrEllipse()
         deSelectAllObjects();
         m_canvas->setToolEditMode( INS_ELLIPSE, false );
         m_currentShapeTool = StCircle;
-        actionToolsShapePopup->setIcon("circle");
+        actionToolsShapePopup->setIcon(KIcon("circle"));
     }
     else
         actionToolsCircleOrEllipse->setChecked(true);
@@ -932,7 +932,7 @@ void KPrView::toolsPie()
         deSelectAllObjects();
         m_canvas->setToolEditMode( INS_PIE, false );
         m_currentShapeTool = StPie;
-        actionToolsShapePopup->setIcon("pie");
+        actionToolsShapePopup->setIcon(KIcon("pie"));
     }
     else
         actionToolsPie->setChecked(true);
@@ -1056,7 +1056,7 @@ void KPrView::toolsFreehand()
         m_canvas->setToolEditMode( INS_FREEHAND, false );
         deSelectAllObjects();
         m_currentLineTool = LtFreehand;
-        actionToolsLinePopup->setIcon("freehand");
+        actionToolsLinePopup->setIcon(KIcon("freehand"));
     }
     else
         actionToolsFreehand->setChecked(true);
@@ -1068,7 +1068,7 @@ void KPrView::toolsPolyline()
         m_canvas->setToolEditMode( INS_POLYLINE, false );
         deSelectAllObjects();
         m_currentLineTool = LtPolyline;
-        actionToolsLinePopup->setIcon("polyline");
+        actionToolsLinePopup->setIcon(KIcon("polyline"));
     }
     else
         actionToolsPolyline->setChecked(true);
@@ -1080,7 +1080,7 @@ void KPrView::toolsQuadricBezierCurve()
         m_canvas->setToolEditMode( INS_QUADRICBEZIERCURVE, false );
         deSelectAllObjects();
         m_currentLineTool = LtQuadricBezier;
-        actionToolsLinePopup->setIcon("quadricbeziercurve");
+        actionToolsLinePopup->setIcon(KIcon("quadricbeziercurve"));
     }
     else
         actionToolsQuadricBezierCurve->setChecked(true);
@@ -1092,7 +1092,7 @@ void KPrView::toolsCubicBezierCurve()
         m_canvas->setToolEditMode( INS_CUBICBEZIERCURVE, false );
         deSelectAllObjects();
         m_currentLineTool = LtCubicBezier;
-        actionToolsLinePopup->setIcon("cubicbeziercurve");
+        actionToolsLinePopup->setIcon(KIcon("cubicbeziercurve"));
     }
     else
         actionToolsCubicBezierCurve->setChecked(true);
@@ -1104,7 +1104,7 @@ void KPrView::toolsConvexOrConcavePolygon()
         m_canvas->setToolEditMode( INS_POLYGON, false );
         deSelectAllObjects();
         m_currentShapeTool = StPolygon;
-        actionToolsShapePopup->setIcon("polygon");
+        actionToolsShapePopup->setIcon(KIcon("polygon"));
     }
     else
         actionToolsConvexOrConcavePolygon->setChecked(true);
@@ -1135,7 +1135,7 @@ void KPrView::toolsClosedFreehand()
         m_canvas->setToolEditMode( INS_CLOSED_FREEHAND, false );
         deSelectAllObjects();
         m_currentClosedLineTool = CltFreehand;
-        actionToolsClosedLinePopup->setIcon("closed_freehand");
+        actionToolsClosedLinePopup->setIcon(KIcon("closed_freehand"));
     }
     else
         actionToolsClosedFreehand->setChecked( true );
@@ -1147,7 +1147,7 @@ void KPrView::toolsClosedPolyline()
         m_canvas->setToolEditMode( INS_CLOSED_POLYLINE, false );
         deSelectAllObjects();
         m_currentClosedLineTool = CltPolyline;
-        actionToolsClosedLinePopup->setIcon("closed_polyline");
+        actionToolsClosedLinePopup->setIcon(KIcon("closed_polyline"));
     }
     else
         actionToolsClosedPolyline->setChecked( true );
@@ -1159,7 +1159,7 @@ void KPrView::toolsClosedQuadricBezierCurve()
         m_canvas->setToolEditMode( INS_CLOSED_QUADRICBEZIERCURVE, false );
         deSelectAllObjects();
         m_currentClosedLineTool = CltQuadricBezier;
-        actionToolsClosedLinePopup->setIcon("closed_quadricbeziercurve");
+        actionToolsClosedLinePopup->setIcon(KIcon("closed_quadricbeziercurve"));
     }
     else
         actionToolsClosedQuadricBezierCurve->setChecked( true );
@@ -1171,7 +1171,7 @@ void KPrView::toolsClosedCubicBezierCurve()
         m_canvas->setToolEditMode( INS_CLOSED_CUBICBEZIERCURVE, false );
         deSelectAllObjects();
         m_currentClosedLineTool = CltCubicBezier;
-        actionToolsClosedLinePopup->setIcon("closed_cubicbeziercurve");
+        actionToolsClosedLinePopup->setIcon(KIcon("closed_cubicbeziercurve"));
     }
     else
         actionToolsClosedCubicBezierCurve->setChecked( true );
@@ -4038,7 +4038,7 @@ void KPrView::updateObjectStatusBarItem()
             //QString unitName = m_pKPresenterDoc->unitName();
             KPrObject * obj = m_canvas->getSelectedObj();
             KoSize size = obj->getSize();
-            m_sbObjectLabel->setText( ' ' + i18n( "Statusbar info", "%1: %2, %3 - %4, %5 (width: %6, height: %7)" ,
+            m_sbObjectLabel->setText( ' ' + i18nc( "Statusbar info", "%1: %2, %3 - %4, %5 (width: %6, height: %7)" ,
                      /*frame->frameSet()->name()*/obj->getObjectName()
                     ,KoUnit::toUserStringValue( obj->getOrig().x(), unit ) 
                     , KoUnit::toUserStringValue( obj->getOrig().y() , unit) 
@@ -4661,7 +4661,7 @@ void KPrView::showParagraphDialog(int initialPage, double initialTabPos)
         return;
 
     delete m_paragDlg;
-    m_paragDlg = new KoParagDia( this, "",
+    m_paragDlg = new KoParagDia( this,
                                  KoParagDia::PD_SPACING | KoParagDia::PD_ALIGN |
                                  KoParagDia::PD_DECORATION | KoParagDia::PD_NUMBERING |
                                  KoParagDia::PD_TABS,
