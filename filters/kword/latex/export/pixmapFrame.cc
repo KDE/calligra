@@ -152,7 +152,7 @@ void PixmapFrame::convert()
 	InitializeMagick(NULL);
 	GetExceptionInfo(&exception);
 	image_info = CloneImageInfo((ImageInfo *) NULL);
-	// 8 characters are deleted when readign the file picture name
+	// 8 characters are deleted when reading the file picture name
 	QString filename = "file:///" + getRoot()->extractData(getKey());
 	strncpy(image_info->filename, filename.latin1(), filename.length());
 	image = ReadImage(image_info, &exception);
