@@ -32,7 +32,7 @@
 #include <khbox.h>
 #include "KPrMoveHelpLineDia.h"
 #include "KPrDocument.h"
-
+#include <kvbox.h>
 
 KPrMoveHelpLineDia::KPrMoveHelpLineDia( QWidget *parent, double value, double limitTop, double limitBottom,
                                         KPrDocument *_doc, const char *name)

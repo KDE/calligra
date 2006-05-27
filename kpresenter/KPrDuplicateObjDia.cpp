@@ -24,6 +24,7 @@
 #include <QLabel>
 #include <q3buttongroup.h>
 
+#include <kvbox.h>
 #include "KPrDuplicateObjDia.h"
 #include "KPrPage.h"
 #include <knuminput.h>
@@ -53,7 +54,7 @@ KPrDuplicatObjDia::KPrDuplicatObjDia( QWidget *parent, KPrDocument * _doc, const
     KSeparator *tmp=new KSeparator(page);
     lab=new QLabel(i18n("Rotation angle:"), page);
 
-    m_rotation = new KDoubleNumInput( page, "customInput" );
+    m_rotation = new KDoubleNumInput( page );
     m_rotation->setRange(0.0, 360, 1, false);
 
     tmp=new KSeparator(page);
@@ -103,22 +104,22 @@ double KPrDuplicatObjDia::angle() const
 
 double KPrDuplicatObjDia::increaseX() const
 {
-    return qMax(0, m_increaseX->value());
+    return qMax(0.0, m_increaseX->value());
 }
 
 double KPrDuplicatObjDia::increaseY() const
 {
-    return qMax(0, m_increaseY->value());
+    return qMax(0.0, m_increaseY->value());
 }
 
 double KPrDuplicatObjDia::moveX() const
 {
-    return qMax(0, m_moveX->value());
+    return qMax(0.0, m_moveX->value());
 }
 
 double KPrDuplicatObjDia::moveY() const
 {
-    return qMax(0, m_moveY->value());
+    return qMax(0.0, m_moveY->value());
 }
 
 

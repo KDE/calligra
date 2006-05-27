@@ -24,6 +24,8 @@
 #include <q3paintdevicemetrics.h>
 #include <q3simplerichtext.h>
 #include <QLabel>
+#include <Q3StyleSheet>
+#include <Q3MimeSourceFactory>
 //Added by qt3to4:
 #include <Q3VBoxLayout>
 #include <Q3ValueList>

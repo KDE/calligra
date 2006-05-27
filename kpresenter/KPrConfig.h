@@ -25,7 +25,7 @@
 #include <kdialogbase.h>
 //Added by qt3to4:
 #include <QLabel>
-
+#include <Q3ListViewItem>
 class KPrView;
 class KPrDocument;
 class KIntNumInput;

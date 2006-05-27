@@ -37,7 +37,6 @@
 
 
 #include <q3groupbox.h>
-#include <qvgroupbox.h>
 #include <QLabel>
 #include <QLayout>
 #include <q3vbox.h>
@@ -66,7 +65,6 @@
 #include <knumvalidator.h>
 #include <QLineEdit>
 #include "KPrCommand.h"
-#include <qvgroupbox.h>
 #include <kfontdialog.h>
 #include <klineedit.h>
 #include <KoRect.h>

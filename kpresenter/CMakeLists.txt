@@ -27,7 +27,7 @@ set(libaf_SRCS
 
 set(kpresenterprivate_LIB_SRCS ${libaf_SRCS}
    KoPointArray.cpp 
-   KPrCanvas.cpp 
+   #KPrCanvas.cpp 
    KPrPage.cpp 
    KPrFindReplace.cpp 
    KPrBackDia.cpp 
@@ -72,7 +72,7 @@ set(kpresenterprivate_LIB_SRCS ${libaf_SRCS}
    KPrPolylineObject.cpp 
    KPrBezierCurveObject.cpp 
    KPrPolygonObject.cpp 
-   #KPrNoteBar.cpp 
+   KPrNoteBar.cpp 
    KPrTextObjectIface.cpp 
    KPrTextViewIface.cpp 
    KPrPresDurationDia.cpp 
@@ -92,12 +92,12 @@ set(kpresenterprivate_LIB_SRCS ${libaf_SRCS}
    KPrFreehandObjectIface.cpp 
    KPrStyleManager.cpp 
    KPrBgSpellCheck.cpp 
-   #KPrMoveHelpLineDia.cpp 
+   KPrMoveHelpLineDia.cpp 
    KPrPolyLineObjectIface.cpp 
-   #KPrDuplicateObjDia.cpp 
+   KPrDuplicateObjDia.cpp 
    KPrClosedLineObject.cpp 
    KPrImportStyleDia.cpp 
-   #KPrImageEffectDia.cpp 
+   KPrImageEffectDia.cpp 
    KPrCustomSlideShowDia.cpp 
    KPrPBPreview.cpp 
    #KPrPenStyleWidget.cpp 
