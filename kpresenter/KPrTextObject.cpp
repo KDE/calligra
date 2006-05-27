@@ -208,8 +208,8 @@ void KPrTextObject::resizeTextDocument( bool widthChanged, bool heightChanged )
 
 void KPrTextObject::setSize( double _width, double _height )
 {
-    bool widthModified = KABS( _width - ext.width() ) > DBL_EPSILON ; // floating-point equality test
-    bool heightModified = KABS( _height - ext.height() ) > DBL_EPSILON;
+    bool widthModified = QABS( _width - ext.width() ) > DBL_EPSILON ; // floating-point equality test
+    bool heightModified = QABS( _height - ext.height() ) > DBL_EPSILON;
     if ( widthModified || heightModified )
     {
         KPrObject::setSize( _width, _height );
@@ -418,7 +418,7 @@ void KPrTextObject::paint( QPainter *_painter, KoTextZoomHandler*_zoomHandler,
     if ( drawContour ) {
         QPen pen3( Qt::black, 1, Qt::DotLine );
         _painter->setPen( pen3 );
-        _painter->setRasterOp( Qt::NotXorROP );
+        //_painter->setRasterOp( Qt::NotXorROP );
         _painter->drawRect( _zoomHandler->zoomItXOld(pw), _zoomHandler->zoomItYOld(pw),
                             _zoomHandler->zoomItXOld(ow), _zoomHandler->zoomItYOld( oh) );
 
@@ -441,7 +441,7 @@ void KPrTextObject::paint( QPainter *_painter, KoTextZoomHandler*_zoomHandler,
             _painter->setBrush( getBrush() );
         }
         else {
-            QSize size( _zoomHandler->zoomSize( ext ) );
+            QSize size( _zoomHandler->zoomSizeOld( ext ) );
             gradient->setSize( size );
             _painter->drawPixmap( _zoomHandler->zoomItXOld(pw), _zoomHandler->zoomItXOld(pw), gradient->pixmap(), 0, 0,
                                   _zoomHandler->zoomItXOld( ow - 2 * pw ),
@@ -470,7 +470,7 @@ void KPrTextObject::paint( QPainter *_painter, KoTextZoomHandler*_zoomHandler,
 
         _painter->setPen( QPen( Qt::gray, 1, Qt::DotLine ) );
         _painter->setBrush( Qt::NoBrush );
-        _painter->setRasterOp( Qt::NotXorROP );
+        //_painter->setRasterOp( Qt::NotXorROP );
         _painter->drawRect( 0, 0, _zoomHandler->zoomItXOld(ow), _zoomHandler->zoomItYOld( oh) );
 
         _painter->restore();
@@ -1664,7 +1664,7 @@ KCommand * KPrTextObject::textContentsToHeight()
     double lineSpacing = ( innerHeight() - textHeight ) /  numLines; // this gives the linespacing diff to apply, in pt
     //kDebug(33001) << k_funcinfo << "lineSpacing=" << lineSpacing << endl;
 
-    if ( KABS( innerHeight() - textHeight ) < DBL_EPSILON ) // floating-point equality test
+    if ( QABS( innerHeight() - textHeight ) < DBL_EPSILON ) // floating-point equality test
         return 0L; // nothing to do
     bool oneLine =(textDocument()->firstParag() == textDocument()->lastParag() && numLines == 1);
     if ( lineSpacing < 0  || oneLine) // text object is too small
@@ -1838,11 +1838,11 @@ void KPrTextView::paste()
 {
     //kDebug(33001) << "KPrTextView::paste()" << endl;
 
-    QMimeSource *data = QApplication::clipboard()->data();
-    Q3CString returnedMimeType = KoTextObject::providesOasis( data );
+    const QMimeData *data = QApplication::clipboard()->mimeData();
+    QString returnedMimeType = KoTextObject::providesOasis( data );
     if ( !returnedMimeType.isEmpty() )
     {
-        QByteArray arr = data->encodedData( returnedMimeType );
+        QByteArray arr = data->data( returnedMimeType );
         if ( arr.size() )
         {
 #if 0
@@ -2089,7 +2089,7 @@ void KPrTextView::keyReleaseEvent( QKeyEvent *e )
 {
     handleKeyReleaseEvent(e);
 }
-
+#if 0
 void KPrTextView::imStartEvent( QIMEvent *e )
 {
     handleImStartEvent(e);
@@ -2104,7 +2104,7 @@ void KPrTextView::imEndEvent( QIMEvent *e )
 {
     handleImEndEvent(e);
 }
-
+#endif
 void KPrTextView::clearSelection()
 {
     if ( textDocument()->hasSelection( KoTextDocument::Standard ) )
@@ -2219,14 +2219,14 @@ void KPrTextView::mouseReleaseEvent( QMouseEvent *, const QPoint & )
     handleMouseReleaseEvent();
 }
 
-void KPrTextView::showPopup( KPrView *view, const QPoint &point, Q3PtrList<KAction>& actionList )
+void KPrTextView::showPopup( KPrView *view, const QPoint &point, QList<KAction*>& actionList )
 {
     QString word = wordUnderCursor( *cursor() );
     view->unplugActionList( "datatools" );
     view->unplugActionList( "datatools_link" );
     view->unplugActionList( "spell_result_action" );
     view->unplugActionList( "variable_action" );
-    Q3PtrList<KAction> &variableList = view->variableActionList();
+    QList<KAction*> &variableList = view->variableActionList();
     variableList.clear();
     actionList.clear();
 
@@ -2370,7 +2370,7 @@ void KPrTextView::insertVariable( KoVariable *var, KoTextFormat *format, bool re
 
 bool KPrTextView::canDecode( QMimeSource *e )
 {
-    return kpTextObject()->kPresenterDocument()->isReadWrite() && ( KoTextObject::providesOasis( e ) || Q3TextDrag::canDecode( e ) );
+    return kpTextObject()->kPresenterDocument()->isReadWrite() && ( KoTextObject::providesOasis( e->mimeData() ) || Q3TextDrag::canDecode( e ) );
 }
 
 Q3DragObject * KPrTextView::newDrag( QWidget * parent )
@@ -2495,10 +2495,10 @@ void KPrTextView::dropEvent( QDropEvent * e )
             textDocument()->removeSelection( KoTextDocument::Standard );
             textObject()->selectionChangedNotify();
         }
-        Q3CString returnedTypeMime = KoTextObject::providesOasis( e );
+        QString returnedTypeMime = KoTextObject::providesOasis( e->mimeData() );
         if ( !returnedTypeMime.isEmpty() )
         {
-            QByteArray arr = e->encodedData( returnedTypeMime );
+            QByteArray arr = e->data( returnedTypeMime );
             if ( arr.size() )
             {
                 KCommand *cmd = kpTextObject()->pasteOasis( cursor(), arr, false );

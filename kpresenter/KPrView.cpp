@@ -6279,9 +6279,9 @@ void KPrView::spellAddAutoCorrect (const QString & originalword, const QString &
     m_pKPresenterDoc->getAutoFormat()->addAutoFormatEntry( originalword, newword );
 }
 
-Q3PtrList<KAction> KPrView::listOfResultOfCheckWord( const QString &word )
+QList<KAction*> KPrView::listOfResultOfCheckWord( const QString &word )
 {
-    Q3PtrList<KAction> listAction;
+    QList<KAction*> listAction;
     DefaultDictionary *dict = m_broker->defaultDictionary();
     QStringList lst = dict->suggest( word );
     if ( !lst.contains( word ))

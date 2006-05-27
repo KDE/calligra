@@ -182,7 +182,7 @@ public:
     void insertFile(const QString &path);
     void testAndCloseAllTextObjectProtectedContent();
     void updateRulerInProtectContentMode();
-    Q3PtrList<KAction> listOfResultOfCheckWord( const QString &word );
+    QList<KAction*> listOfResultOfCheckWord( const QString &word );
 
     /**
      * Returns the KPresenter global KSpell2 Broker object.
@@ -643,9 +643,9 @@ public:
     KPrNoteBar *getNoteBar() const { return notebar; }
 
     // Used by Page to plug/unplug the datatool actions
-    Q3PtrList<KAction>& actionList() { return m_actionList; }
+    QList<KAction*>& actionList() { return m_actionList; }
     // Used by Page to plug/unplug the variable actions
-    Q3PtrList<KAction> &variableActionList() { return m_variableActionList; }
+    QList<KAction*> &variableActionList() { return m_variableActionList; }
 
     // for Polygon object
     bool getCheckConcavePolygon() const { return checkConcavePolygon; }
@@ -842,8 +842,8 @@ private:
     // right button popup menus
     Q3PopupMenu *rb_lbegin, *rb_lend;
     Q3PopupMenu *m_arrangeObjectsPopup;
-    Q3PtrList<KAction> m_actionList; // for the kodatatools
-    Q3PtrList<KAction> m_variableActionList;
+    QList<KAction*> m_actionList; // for the kodatatools
+    QList<KAction*> m_variableActionList;
 
     // scrollbars
     QScrollBar *vert, *horz;

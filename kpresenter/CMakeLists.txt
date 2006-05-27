@@ -32,7 +32,7 @@ set(kpresenterprivate_LIB_SRCS ${libaf_SRCS}
    KPrFindReplace.cpp 
    KPrBackDia.cpp 
    KPrWebPresentation.cpp 
-   KPrView.cpp 
+   #KPrView.cpp 
    KPrMSPresentationSetup.cpp 
    KPrBrush.cpp 
    KPrDocument.cpp 
@@ -49,7 +49,7 @@ set(kpresenterprivate_LIB_SRCS ${libaf_SRCS}
    KPrRectObject.cpp 
    KPrEllipseObject.cpp 
    KPrAutoformObject.cpp 
-   #KPrTextObject.cpp 
+   KPrTextObject.cpp 
    KPrPixmapObject.cpp 
    KPrPieObject.cpp 
    KPrPartObject.cpp 
