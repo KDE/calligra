@@ -187,7 +187,7 @@ public:
     /**
      * Returns the KPresenter global KSpell2 Broker object.
      */
-    KSpell2::Broker *broker() const;
+	KSpell2::Broker::Ptr broker() const;
     bool editMaster() const { return m_editMaster;}
 
 signals:

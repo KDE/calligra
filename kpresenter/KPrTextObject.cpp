@@ -2249,7 +2249,8 @@ void KPrTextView::showPopup( KPrView *view, const QPoint &point, QList<KAction*>
     else
     {
         bool singleWord= false;
-        actionList = dataToolActionList(view->kPresenterDoc()->instance(), word, singleWord);
+#warning "kde4: port it!!!!!!!!!!"
+		//actionList = dataToolActionList(view->kPresenterDoc()->instance(), word, singleWord);
         //kDebug(33001) << "KWView::openPopupMenuInsideFrame plugging actionlist with " << actionList.count() << " actions" << endl;
         KoLinkVariable* linkVar = dynamic_cast<KoLinkVariable *>( var );
         Q3PopupMenu * popup;
@@ -2370,7 +2371,9 @@ void KPrTextView::insertVariable( KoVariable *var, KoTextFormat *format, bool re
 
 bool KPrTextView::canDecode( QMimeSource *e )
 {
-    return kpTextObject()->kPresenterDocument()->isReadWrite() && ( KoTextObject::providesOasis( e->mimeData() ) || Q3TextDrag::canDecode( e ) );
+#warning "kde4 port it";
+		return false;
+    //return kpTextObject()->kPresenterDocument()->isReadWrite() && ( KoTextObject::providesOasis( e->mimeData() ) || Q3TextDrag::canDecode( e ) );
 }
 
 Q3DragObject * KPrTextView::newDrag( QWidget * parent )
@@ -2422,7 +2425,8 @@ Q3DragObject * KPrTextView::newDrag( QWidget * parent )
         return false;
 
     delete store;
-
+#warning "kde4: port it!"
+#if 0
     KMultipleDrag* multiDrag = new KMultipleDrag( parent );
     if (  !plainText.isEmpty() )
         multiDrag->addDragObject( new Q3TextDrag( plainText, 0 ) );
@@ -2431,6 +2435,8 @@ Q3DragObject * KPrTextView::newDrag( QWidget * parent )
     storeDrag->setEncodedData( buffer.buffer() );
     multiDrag->addDragObject( storeDrag );
     return multiDrag;
+#endif
+	return 0L;
 }
 
 void KPrTextView::dragEnterEvent( QDragEnterEvent *e )
@@ -2498,7 +2504,9 @@ void KPrTextView::dropEvent( QDropEvent * e )
         QString returnedTypeMime = KoTextObject::providesOasis( e->mimeData() );
         if ( !returnedTypeMime.isEmpty() )
         {
-            QByteArray arr = e->data( returnedTypeMime );
+#warning "kde4: port it !"
+#if 0
+				QByteArray arr = e->data( returnedTypeMime );
             if ( arr.size() )
             {
                 KCommand *cmd = kpTextObject()->pasteOasis( cursor(), arr, false );
@@ -2508,7 +2516,8 @@ void KPrTextView::dropEvent( QDropEvent * e )
                     addMacroCmd = true;
                 }
             }
-        }
+#endif
+		}
         else
         {
             QString text;

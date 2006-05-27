@@ -265,7 +265,7 @@ void KPrConfigureInterfacePage::apply()
     double newIndent = KoUnit::fromUserValue( indent->value(), doc->unit() );
     if( newIndent != doc->getIndentValue() )
     {
-        config->writeEntry( "Indent", newIndent, true, false, 'g', DBL_DIG /* 6 is not enough */ );
+        config->writeEntry( "Indent", newIndent );
         doc->setIndentValue( newIndent );
     }
     int nbRecent=recentFiles->value();
@@ -600,8 +600,8 @@ KPrConfigureDefaultDocPage::KPrConfigureDefaultDocPage(KPrView *_view, QWidget *
         m_oldHyphenation = config->readBoolEntry( "hyphenation", m_oldHyphenation);
     }
 
-    QVGroupBox* gbDocumentDefaults = new QVGroupBox( i18n("Document Defaults"), this, "GroupBox" );
-    gbDocumentDefaults->setMargin( KDialog::marginHint() );
+    Q3GroupBox* gbDocumentDefaults = new Q3GroupBox( i18n("Document Defaults"), this, "GroupBox" );
+    //gbDocumentDefaults->setMargin( KDialog::marginHint() );
     gbDocumentDefaults->setInsideSpacing( 5 );
 
     QWidget *fontContainer = new QWidget(gbDocumentDefaults);
@@ -650,9 +650,9 @@ KPrConfigureDefaultDocPage::KPrConfigureDefaultDocPage(KPrView *_view, QWidget *
 
     box->addWidget(gbDocumentDefaults);
 
-    QVGroupBox* gbDocumentSettings = new QVGroupBox( i18n("Document Settings"), this );
-    gbDocumentSettings->setMargin( KDialog::marginHint() );
-    gbDocumentSettings->setInsideSpacing( KDialog::spacingHint() );
+    Q3GroupBox* gbDocumentSettings = new Q3GroupBox( i18n("Document Settings"), this );
+    //gbDocumentSettings->setMargin( KDialog::marginHint() );
+    //gbDocumentSettings->setInsideSpacing( KDialog::spacingHint() );
 
     m_createBackupFile = new QCheckBox( i18n("Create backup file"), gbDocumentSettings);
     Q3WhatsThis::add(m_createBackupFile, i18n( "If checked, this will create a .<name>.kpr.autosave.kpr in the folder where your file is. This backup file can then be used in case of a problem.\nThe backup file is updated every time you save your document or every time there is an autosave." ) );
@@ -683,9 +683,9 @@ KPrConfigureDefaultDocPage::KPrConfigureDefaultDocPage(KPrView *_view, QWidget *
     Q3WhatsThis::add(m_tabStopWidth, i18n( "Each KPresenter document has a default set of tab stops. If you add tab stops to your document, the newly added tab stops override the default ones. You can use this text box to define the spacing between default tab stops. As an example, if you enter 1.5 in this text box, and the unit of measurement is in centimeters, the first default tab stop will be located 1.5 cm to the right of the frame's left-hand margin. The second default tab stop will be located at 3 cm from the left-hand margin, and so on." ) );
 
     box->addWidget(gbDocumentSettings);
-    QVGroupBox* gbDocumentCursor = new QVGroupBox( i18n("Cursor"), this );
-    gbDocumentCursor->setMargin( KDialog::marginHint() );
-    gbDocumentCursor->setInsideSpacing( KDialog::spacingHint() );
+    Q3GroupBox* gbDocumentCursor = new Q3GroupBox( i18n("Cursor"), this );
+    //gbDocumentCursor->setMargin( KDialog::marginHint() );
+    //gbDocumentCursor->setInsideSpacing( KDialog::spacingHint() );
 
     m_cursorInProtectedArea= new QCheckBox(i18n("Cursor in protected area"),gbDocumentCursor);
     m_cursorInProtectedArea->setChecked(doc->cursorInProtectedArea());
@@ -791,7 +791,7 @@ void KPrConfigureDefaultDocPage::slotDefault()
 void KPrConfigureDefaultDocPage::selectNewDefaultFont() {
     QStringList list;
     KFontChooser::getFontList(list, KFontChooser::SmoothScalableFonts);
-    KFontDialog dlg( this, "Font Selector", false, true, list, true );
+    KFontDialog dlg( this, false, true, list, true );
     dlg.setFont(*font);
     int result = dlg.exec();
     if (KDialog::Accepted == result) {
@@ -964,8 +964,7 @@ void KPrConfigurePathPage::slotModifyPath()
     {
         if ( item->text(0)==i18n("Picture Path"))
         {
-            KUrlRequesterDlg * dlg = new KUrlRequesterDlg( item->text(1), 0L,
-                                                           "picture path dlg");
+            KUrlRequesterDlg * dlg = new KUrlRequesterDlg( item->text(1), 0L);
             dlg->fileDialog()->setMode(KFile::Directory | KFile::LocalOnly);
             if ( dlg->exec() )
                 item->setText( 1, dlg->selectedURL().path());

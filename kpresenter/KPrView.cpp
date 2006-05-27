@@ -6356,7 +6356,7 @@ void KPrView::slotChildActivated(bool a)
   KoView::slotChildActivated( a );
 }
 
-Broker *KPrView::broker() const
+KSpell2::Broker::Ptr KPrView::broker() const
 {
     return m_broker;
 }
