@@ -77,7 +77,7 @@
 #include "vconfiguredlg.h"
 
 // Dockers.
-#include <kopalettemanager.h>
+#include "kopalettemanager.h"
 #include "vcolordocker.h"
 #include "vdocumentdocker.h"
 #include "vstrokedocker.h"

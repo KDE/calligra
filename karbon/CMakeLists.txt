@@ -12,6 +12,7 @@ include_directories(
 		${QT_INCLUDES} 
 		${KOFFICEUI_INCLUDES} 
 		${KOPAINTER_INCLUDES}
+		${KOPALETTE_INCLUDES}
 		${CMAKE_BINARY_DIR}/karbon/
 		${CMAKE_SOURCE_DIR}/karbon/core 
 		${CMAKE_BINARY_DIR}/karbon/core 
