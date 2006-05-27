@@ -61,7 +61,7 @@ KexiMacroError::KexiMacroError(KexiMainWindow* mainwin, KoMacro::Context::Ptr co
 	{
 		KListViewItem* listviewitem = new KListViewItem(errorlist);
 		listviewitem->setText(0,QString("%1").arg(i++));
-		listviewitem->setText(1,"Action");
+		listviewitem->setText(1,i18n("Action"));
 		KoMacro::MacroItem::Ptr macroitem = *mit;
 
 		if (macroitem != 0 && macroitem->action() != 0)
