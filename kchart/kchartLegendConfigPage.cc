@@ -28,6 +28,7 @@
 
 #include <qlabel.h>
 #include <qbuttongroup.h>
+#include <qvbuttongroup.h>
 #include <qradiobutton.h>
 #include <qlineedit.h>
 #include <qtooltip.h> 
@@ -45,7 +46,7 @@ KChartLegendConfigPage::KChartLegendConfigPage( KChartParams* params,
     QWidget( parent ),_params( params )
 {
   //Layout for 4 blocks
-  QGridLayout* layout = new QGridLayout( this, 2, 2, KDialog::marginHint(), KDialog::spacingHint() );
+  QGridLayout* layout = new QGridLayout( this, 3, 2, KDialog::marginHint(), KDialog::spacingHint() );
 
   //1. Block: General settings
   QButtonGroup* gb = new QButtonGroup( 0, Qt::Vertical, i18n("General"), this );
@@ -60,7 +61,7 @@ KChartLegendConfigPage::KChartLegendConfigPage( KChartParams* params,
   grid2->addWidget( lab, 0, 0 );
 
   title = new QLineEdit( gb );
-  grid2->addWidget( title, 1, 0 );
+  grid2->addWidget( title, 0, 1 );
 
   // 2. Block: Legend position
   gb = new QButtonGroup( 0, Qt::Vertical, i18n("Legend Position"), this );
@@ -95,7 +96,7 @@ KChartLegendConfigPage::KChartLegendConfigPage( KChartParams* params,
   lBottomRight      = addButton( grid1, gb, i18n("Bottom-Right"),        "chart_legend_bottomright",      4, 4 );
 
   gb->setAlignment( Qt::AlignLeft );
-  layout->addWidget( gb, 1, 0 );
+  layout->addMultiCellWidget( gb, 1,2, 0,0 );
 
   // 3. Block: Font
   gb = new QButtonGroup( 0, Qt::Vertical, i18n("Font"), this );
@@ -126,12 +127,23 @@ KChartLegendConfigPage::KChartLegendConfigPage( KChartParams* params,
   connect( textLegendFontButton, SIGNAL(clicked()),
 	   this, SLOT(changeTextLegendFont()));
 
-  // 4. Block: Text Colors
+  // 4. Block: Orientation
+  orientationGroup = new QVButtonGroup( i18n("Orientation"), this );
+  QWhatsThis::add(orientationGroup, i18n("Select, if the legend's items should be dxrawn next to each other, or below each other."));
+  orientationGroup->setRadioButtonExclusive(true);
+  orientationGroup->layout()->setSpacing(KDialog::spacingHint());
+  orientationGroup->layout()->setMargin(KDialog::marginHint());
+  layout->addWidget( orientationGroup, 1, 1 );
+
+  QRadioButton* orientationVertical = new QRadioButton( i18n("Vertically"), orientationGroup );
+  QRadioButton* orientationHorizontal = new QRadioButton( i18n("Horizontally"), orientationGroup );
+
+  // 5. Block: Text Colors
   gb = new QButtonGroup( 0, Qt::Vertical, i18n("Color"), this );
   QWhatsThis::add(gb, i18n("This Color box can be used to set different colors for the legend title and text."));
   gb->layout()->setSpacing(KDialog::spacingHint());
   gb->layout()->setMargin(KDialog::marginHint());
-  layout->addWidget( gb, 1, 1 );
+  layout->addWidget( gb, 2, 1 );
 
   QGridLayout *grid3 = new QGridLayout( gb->layout(), 4, 2 );
 
@@ -219,6 +231,11 @@ void KChartLegendConfigPage::init()
     legendTitleColor->setColor(_params->legendTitleTextColor());
     legendTextColor->setColor(_params->legendTextColor());
 
+    if( _params->legendOrientation() == Qt::Vertical )
+        orientationGroup->setButton(0);
+    else
+        orientationGroup->setButton(1);
+
     titleLegend = _params->legendTitleFont();
     titleLegendIsRelative = _params->legendTitleFontUseRelSize()
                           ? QButton::On
@@ -288,6 +305,11 @@ void KChartLegendConfigPage::apply()
         _params->setLegendPosition( KDChartParams::LegendBottomLeftLeft );
     else
         _params->setLegendPosition( KDChartParams::LegendRight );
+
+    if( orientationGroup->selectedId() == 0 )
+        _params->setLegendOrientation( Qt::Vertical );
+    else
+        _params->setLegendOrientation( Qt::Horizontal );
 
     _params->setLegendTitleText(title->text());
     _params->setLegendTitleTextColor(legendTitleColor->color());

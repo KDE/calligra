@@ -25,6 +25,7 @@
 #include <qbutton.h>
 #include <qlayout.h>
 
+class QVButtonGroup;
 class QRadioButton;
 class QLineEdit;
 class KColorButton;
@@ -56,6 +57,7 @@ private:
                 *lBottomLeftLeft,                                                     *lBottomRightRight,
                 *lBottomLeft,     *lBottomLeftBottom, *lBottom,  *lBottomRightBottom, *lBottomRight;
     QLineEdit *title;
+    QVButtonGroup* orientationGroup;
     KColorButton *legendTitleColor, *legendTextColor;
     QFont titleLegend, textLegend;
     QPushButton *titleLegendFontButton, *textLegendFontButton;
