@@ -58,7 +58,7 @@ private:
                 *lBottomLeft,     *lBottomLeftBottom, *lBottom,  *lBottomRightBottom, *lBottomRight;
     QLineEdit *title;
     QVButtonGroup* orientationGroup;
-    KColorButton *legendTitleColor, *legendTextColor;
+    KColorButton *legendTitleColor, *legendTextColor, *legendFrameColor;
     QFont titleLegend, textLegend;
     QPushButton *titleLegendFontButton, *textLegendFontButton;
     QButton::ToggleState titleLegendIsRelative, textLegendIsRelative;

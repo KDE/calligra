@@ -37,6 +37,9 @@
 #include "kchart_params.h"
 #include "kchart_factory.h"
 
+#include "KDFrameProfileSection.h"
+
+
 namespace KChart
 {
 
@@ -135,8 +138,9 @@ KChartLegendConfigPage::KChartLegendConfigPage( KChartParams* params,
   orientationGroup->layout()->setMargin(KDialog::marginHint());
   layout->addWidget( orientationGroup, 1, 1 );
 
-  QRadioButton* orientationVertical = new QRadioButton( i18n("Vertically"), orientationGroup );
-  QRadioButton* orientationHorizontal = new QRadioButton( i18n("Horizontally"), orientationGroup );
+  QRadioButton* orientation = new QRadioButton( i18n("Vertically"), orientationGroup );
+  orientation = new QRadioButton( i18n("Horizontally"), orientationGroup );
+  Q_UNUSED(orientation);
 
   // 5. Block: Text Colors
   gb = new QButtonGroup( 0, Qt::Vertical, i18n("Color"), this );
@@ -145,7 +149,7 @@ KChartLegendConfigPage::KChartLegendConfigPage( KChartParams* params,
   gb->layout()->setMargin(KDialog::marginHint());
   layout->addWidget( gb, 2, 1 );
 
-  QGridLayout *grid3 = new QGridLayout( gb->layout(), 4, 2 );
+  QGridLayout *grid3 = new QGridLayout( gb->layout(), 6, 2 );
 
   lab = new QLabel( i18n("Legend title color:"), gb );
   grid3->addWidget( lab, 0, 0 );
@@ -160,8 +164,16 @@ KChartLegendConfigPage::KChartLegendConfigPage( KChartParams* params,
 
   legendTextColor = new KColorButton( gb );
   QWhatsThis::add(legendTextColor, i18n("Click here to display the KDE Select Color dialog. You will be able to change the color for the legend text."));
-
   grid3->addWidget( legendTextColor, 3, 0 );
+
+
+  lab = new QLabel( i18n("Legend frame color:"), gb );
+  grid3->addWidget( lab, 4, 0 );
+
+  legendFrameColor = new KColorButton( gb );
+  QWhatsThis::add(legendFrameColor, i18n("Click here to display the KDE Select Color dialog. You will be able to change the color for the legend frame."));
+
+  grid3->addWidget( legendFrameColor, 5, 0 );
 
   //it's not good but I don't know how
   //to reduce space
@@ -227,9 +239,25 @@ void KChartLegendConfigPage::init()
         lRight->setOn( true );
         break;
     }
+
     title->setText(_params->legendTitleText());
+
     legendTitleColor->setColor(_params->legendTitleTextColor());
+
     legendTextColor->setColor(_params->legendTextColor());
+
+    QColor frameColor(Qt::black);
+    bool bFound;
+    const KDChartParams::KDChartFrameSettings * legendFrame =
+        _params->frameSettings( KDChartEnums::AreaLegend, bFound );
+    if( bFound )
+    {
+        const KDFrameProfileSection * top =
+            const_cast<KDFrameProfile&>(legendFrame->frame().profile( KDFrame::ProfileTop )).first();
+        if( top )
+            frameColor = top->pen().color();
+    }
+    legendFrameColor->setColor(frameColor);
 
     if( _params->legendOrientation() == Qt::Vertical )
         orientationGroup->setButton(0);
@@ -314,6 +342,19 @@ void KChartLegendConfigPage::apply()
     _params->setLegendTitleText(title->text());
     _params->setLegendTitleTextColor(legendTitleColor->color());
     _params->setLegendTextColor(legendTextColor->color());
+
+    const QColor frameColor(legendFrameColor->color());
+    if( frameColor == Qt::black )
+        _params->removeFrame( KDChartEnums::AreaLegend );
+    else
+        _params->setSimpleFrame( KDChartEnums::AreaLegend,
+            0,0,  0,0,
+            true,
+            true,
+            KDFrame::FrameFlat,
+            1,
+            0,
+            frameColor );
 
     _params->setLegendTitleFont(titleLegend, QButton::Off == titleLegendIsRelative);
     if( QButton::On == titleLegendIsRelative )

@@ -2628,6 +2628,24 @@ const KDChartParams::KDChartFrameSettings* KDChartParams::frameSettings( uint ar
 
 
 /**
+  Remove the last frame, that was specified for this chart area.
+  If you have more than one frame attached to the same area,
+  make sure to call this method repeatedly, if you want
+  to remove all of them.
+
+  \note This method can be used to remove frames, that were specified
+  via setFrame (or via setSimpleFrame, resp.), but if can not be used
+  to remove frames, that were specified using setDataRegionFrame.
+
+  \sa nextFrameSettings, setSimpleFrame, setFrame
+  */
+bool KDChartParams::removeFrame( uint area )
+{
+    return _areaDict.remove( QString( "%1/-----/-----/-----" ).arg( area, 5 ) );
+}
+
+
+/**
   Return the next frame settings specified for the same area type
   as the frame that was retrieved by previous calls of \c frameSettings()
   or \c nextFrameSettings().

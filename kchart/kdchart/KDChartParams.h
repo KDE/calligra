@@ -449,6 +449,8 @@ public slots:
             emit changed();
         }
 
+    bool removeFrame( uint area );
+
 
     // Note if you change the parameters here, then you must also change them in wrappers/KDChartParametersWrapper.h
     void setDataRegionFrame( uint dataRow,
