@@ -1,5 +1,5 @@
 
-
+find_package(ImageMagick)
 macro_optional_find_package(LibXml2)
 macro_optional_find_package(LibXslt)
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config-filters.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-filters.h )
