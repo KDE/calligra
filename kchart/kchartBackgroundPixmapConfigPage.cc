@@ -228,6 +228,12 @@ void KChartBackgroundPixmapConfigPage::init()
         bool isTiledMode = false;
         KDFrame::BackPixmapMode backPixmapMode;
         const QBrush& background = innerFrame->frame().background( backPixmap, backPixmapMode );
+        const QColor backColor( background.color() );
+
+        // Bg color has to be be set in any case,
+        // even when a (tiled) pixmap is specified:
+        _backgroundCB->setColor( backColor );
+
 
         if( !backPixmap || backPixmap->isNull() )
         {
@@ -239,7 +245,6 @@ void KChartBackgroundPixmapConfigPage::init()
 
         if( !backPixmap || backPixmap->isNull() ) //color as background
         {
-            _backgroundCB->setColor( background.color() );
             right->setEnabled( false );
             wallCB->setCurrentItem( 0 );
         }
