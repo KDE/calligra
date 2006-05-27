@@ -159,19 +159,19 @@ KChartBackgroundPixmapConfigPage::KChartBackgroundPixmapConfigPage( KChartParams
                            "is larger then the area, you will only see the "
                            "middle part of it." ) );
 
-//     tiledRB = new QRadioButton( i18n( "Tiled" ), right );
-//     QWhatsThis::add( tiledRB,
-//                      i18n( "If you check this box, the selected image will "
-//                            "be used as a background tile. If the image is "
-//                            "larger then the selected area, you will only see "
-//                            "the upper left part of it." ) );
+    tiledRB = new QRadioButton( i18n( "Tiled" ), right );
+    QWhatsThis::add( tiledRB,
+                     i18n( "If you check this box, the selected image will "
+                           "be used as a background tile. If the image is "
+                           "larger then the selected area, you will only see "
+                           "the upper left part of it." ) );
     QButtonGroup* alignmentBG;
     alignmentBG = new QButtonGroup( right, "GroupBox_Alignment" );
     alignmentBG->setFrameStyle( QFrame::NoFrame );
     alignmentBG->insert( stretchedRB );
     alignmentBG->insert( scaledRB );
     alignmentBG->insert( centeredRB );
-//     alignmentBG->insert( tiledRB );
+    alignmentBG->insert( tiledRB );
 
     intensitySB->hide(); //the property doesn't work atm
 }
@@ -227,6 +227,13 @@ void KChartBackgroundPixmapConfigPage::init()
         const QPixmap* backPixmap;
         KDFrame::BackPixmapMode backPixmapMode;
         const QBrush& background = innerFrame->frame().background( backPixmap, backPixmapMode );
+
+        if( !backPixmap || backPixmap->isNull() )
+        {
+            // A pixmap can be in the brush, if used as Tile.
+            backPixmap = background.pixmap();
+        }
+
         if( !backPixmap || backPixmap->isNull() ) //color as background
         {
             _backgroundCB->setColor( background.color() );
@@ -238,17 +245,21 @@ void KChartBackgroundPixmapConfigPage::init()
             _backgroundCB->setEnabled( false );
             wallWidget->setPaletteBackgroundPixmap( *backPixmap );
             wallCB->setCurrentItem( 1 );
-        }
 
-        if ( backPixmapMode == KDFrame::PixCentered )
-            centeredRB->setChecked( true );
-        else if ( backPixmapMode == KDFrame::PixScaled )
-            scaledRB->setChecked( true );
-        else // PixStretched
-            stretchedRB->setChecked( true );
-        // pending KHZ
-        // else
-        //     ..  // set the background pixmap
+            switch( backPixmapMode ){
+                case KDFrame::PixCentered:
+                    centeredRB->setChecked( true );
+                    break;
+                case KDFrame::PixScaled:
+                    scaledRB->setChecked( true );
+                    break;
+                case KDFrame::PixStretched:
+                    stretchedRB->setChecked( true );
+                    break;
+                default:
+                    tiledRB->setChecked( true );
+            }
+        }
     }
     else
         _backgroundCB->setColor(QColor(230, 222, 222) );
@@ -291,24 +302,34 @@ void KChartBackgroundPixmapConfigPage::apply()
 // 	_params->backgroundPixmapIsDirty = true;
 //     }
 
-    const QColor backColor( _backgroundCB->color() );
     //
     // temp. hack: the background is removed if "None" is selected in the combo box
     //
     //             For KOffice 1.5/2.0 this is to be removed by a checkbox.
-        bool bFound;
-        const KDChartParams::KDChartFrameSettings * innerFrame =
-            _params->frameSettings( KDChartEnums::AreaInnermost, bFound );
-        if( bFound )
+    bool bFound;
+    const KDChartParams::KDChartFrameSettings * innerFrame =
+        _params->frameSettings( KDChartEnums::AreaInnermost, bFound );
+    if( bFound )
+    {
+        const QColor backColor( _backgroundCB->color() );
+        KDFrame& frame( const_cast<KDFrame&>(innerFrame->frame()) );
+        if ( wallCB->currentItem() == 0 )
         {
-            KDFrame& frame( (KDFrame&)innerFrame->frame() );
-            if ( wallCB->currentItem() == 0 )
-            {
-                frame.setBackPixmap( 0  );
-                frame.setBackground( _backgroundCB->color() );
-            }
-            else
-            {
+            frame.setBackPixmap( 0 );
+            frame.setBackground( backColor );
+        }
+        else
+        {
+            const QPixmap* pixmap = wallWidget->paletteBackgroundPixmap();
+            if ( tiledRB->isChecked() ){
+                // We remove the frame's extra pixmap,
+                frame.setBackPixmap( 0 );
+                // because a tiled image is set via a QBrush.
+                if( pixmap )
+                    frame.setBackground( QBrush( backColor, *pixmap ) );
+                else
+                    frame.setBackground( backColor );
+            }else{
                 KDFrame::BackPixmapMode backPixmapMode;
                 if ( centeredRB->isChecked() )
                     backPixmapMode = KDFrame::PixCentered;
@@ -316,9 +337,13 @@ void KChartBackgroundPixmapConfigPage::apply()
                     backPixmapMode = KDFrame::PixScaled;
                 else
                     backPixmapMode = KDFrame::PixStretched;
-                frame.setBackPixmap( wallWidget->paletteBackgroundPixmap(), backPixmapMode );
+                // We reset the background color, removing any tiled brush,
+                frame.setBackground( backColor );
+                // because we specify an extra pixmap instead.
+                frame.setBackPixmap( pixmap, backPixmapMode );
             }
         }
+    }
 }
 
 
