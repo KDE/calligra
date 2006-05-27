@@ -24,9 +24,9 @@
 
 #include <qwidget.h>
 #include <qlabel.h>
-#include <qlistview.h>
 #include <qpushbutton.h>
 
+#include <klistview.h>
 #include <klocale.h>
 #include <kiconloader.h>
 #include <kglobal.h>

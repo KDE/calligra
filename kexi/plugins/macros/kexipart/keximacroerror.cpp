@@ -59,28 +59,29 @@ KexiMacroError::KexiMacroError(KexiMainWindow* mainwin, KoMacro::Context::Ptr co
 	KoMacro::MacroItem::List items = context->macro()->items();
 	for (KoMacro::MacroItem::List::ConstIterator mit = items.begin(); mit != items.end(); mit++)
 	{
-		QListViewItem* qlistviewitem = new QListViewItem (errorlist);
-		qlistviewitem->setText(0,QString("%1").arg(i++));
-		qlistviewitem->setText(1,"Action");
+		KListViewItem* listviewitem = new KListViewItem(errorlist);
+		listviewitem->setText(0,QString("%1").arg(i++));
+		listviewitem->setText(1,"Action");
 		KoMacro::MacroItem::Ptr macroitem = *mit;
 
 		if (macroitem != 0 && macroitem->action() != 0)
 		{
-			qlistviewitem->setText(2,macroitem->action()->name());
+			listviewitem->setText(2,macroitem->action()->name());
 		}
 
 		if(macroitem == context->macroItem())
 		{
-			qlistviewitem->setOpen(true);
-			qlistviewitem->setSelected(true);
-			errorlist->ensureItemVisible(qlistviewitem);
+			listviewitem->setOpen(true);
+			listviewitem->setSelected(true);
+			errorlist->setSelected(listviewitem, true);
+			errorlist->ensureItemVisible(listviewitem);
 		}
 		
 		KoMacro::Variable::Map variables = macroitem->variables();
 		KoMacro::Variable::Map::ConstIterator vit;
 		for ( vit = variables.begin(); vit != variables.end(); ++vit ) {
-			QListViewItem* child = new QListViewItem (qlistviewitem);
-			child->setText(1,vit.key());		
+			KListViewItem* child = new KListViewItem(listviewitem);
+			child->setText(1,vit.key());
 			child->setText(2,vit.data()->toString());
 		}
 	}
