@@ -757,7 +757,7 @@ void KPrView::savePicture( const QString& oldName, KoPicture& picture)
     QStringList mimetypes;
     mimetypes << mimetype;
 
-    KFileDialog fd( oldFile, QString::null, this, 0, true );
+    KFileDialog fd( oldFile, QString::null, this );
     fd.setMimeFilter( mimetypes );
     fd.setCaption(i18n("Save Picture"));
     fd.setOperationMode(KFileDialog::Saving);
@@ -2480,26 +2480,27 @@ void KPrView::setupActions()
     actionTextColor->setDefaultColor(QColor());
 
 
+	QActionGroup* alignGroup = new QActionGroup( this );
     actionTextAlignLeft = new KToggleAction( i18n( "Align &Left" ), "text_left", Qt::ALT + Qt::Key_L,
                                              this, SLOT( textAlignLeft() ),
                                              actionCollection(), "text_alignleft" );
-    actionTextAlignLeft->setExclusiveGroup( "align" );
+    actionTextAlignLeft->setActionGroup( alignGroup );
     actionTextAlignLeft->setChecked( true );
 
     actionTextAlignCenter = new KToggleAction( i18n( "Align &Center" ), "text_center", Qt::ALT + Qt::Key_C,
                                                this, SLOT( textAlignCenter() ),
                                                actionCollection(), "text_aligncenter" );
-    actionTextAlignCenter->setExclusiveGroup( "align" );
+    actionTextAlignCenter->setActionGroup( alignGroup );
 
     actionTextAlignRight = new KToggleAction( i18n( "Align &Right" ), "text_right", Qt::ALT + Qt::Key_R,
                                               this, SLOT( textAlignRight() ),
                                               actionCollection(), "text_alignright" );
-    actionTextAlignRight->setExclusiveGroup( "align" );
+    actionTextAlignRight->setActionGroup( alignGroup );
 
     actionTextAlignBlock = new KToggleAction( i18n( "Align &Block" ), "text_block", Qt::CTRL + Qt::Key_J,
                                               this, SLOT( textAlignBlock() ),
                                               actionCollection(), "text_alignblock" );
-    actionTextAlignBlock->setExclusiveGroup( "align" );
+    actionTextAlignBlock->setActionGroup( alignGroup );
 
 
     actionFormatNumber = new KActionMenu( i18n( "Number" ), "enumList", actionCollection(), "format_number" );
@@ -2790,15 +2791,15 @@ void KPrView::setupActions()
     actionImageEffect = new KAction( i18n("Image &Effect..."), 0, this,
                                      SLOT(imageEffect()), actionCollection(), "image_effect");
 
-
+	QActionGroup* valignGroup = new QActionGroup( this );
     actionFormatSuper = new KToggleAction( i18n( "Superscript" ), "super", 0,
                                            this, SLOT( textSuperScript() ),
                                            actionCollection(), "format_super" );
-    actionFormatSuper->setExclusiveGroup( "valign" );
+    actionFormatSuper->setActionGroup(valignGroup );
     actionFormatSub = new KToggleAction( i18n( "Subscript" ), "sub", 0,
                                          this, SLOT( textSubScript() ),
                                          actionCollection(), "format_sub" );
-    actionFormatSub->setExclusiveGroup( "valign" );
+    actionFormatSub->setActionGroup(valignGroup );
 
 
     actionInsertSpecialChar = new KAction( i18n( "Sp&ecial Character..." ), "char",
@@ -3009,23 +3010,24 @@ void KPrView::setupActions()
                                      this, SLOT( closeObject()),
                                      actionCollection(), "close_object" );
 
-
+	QActionGroup* verticalAlignment = new QActionGroup( this );
+	verticalAlignment->setExclusive( true );
     actionAlignVerticalTop = new KToggleAction( i18n( "Align Top" ), 0,
                                                 this, SLOT( alignVerticalTop() ),
                                                 actionCollection(), "align_top" );
-    actionAlignVerticalTop->setExclusiveGroup( "vertical_alignment" );
+    actionAlignVerticalTop->setActionGroup( verticalAlignment );
     actionAlignVerticalTop->setChecked( true );
 
 
     actionAlignVerticalBottom = new KToggleAction( i18n( "Align Bottom" ), 0,
                                                    this, SLOT( alignVerticalBottom() ),
                                                    actionCollection(), "align_bottom" );
-    actionAlignVerticalBottom->setExclusiveGroup( "vertical_alignment" );
+    actionAlignVerticalBottom->setActionGroup( verticalAlignment );
 
     actionAlignVerticalCenter = new KToggleAction( i18n( "Align Middle" ), 0,
                                                    this, SLOT( alignVerticalCenter() ),
                                                    actionCollection(), "align_center" );
-    actionAlignVerticalCenter->setExclusiveGroup( "vertical_alignment" );
+    actionAlignVerticalCenter->setActionGroup( verticalAlignment );
 
 
     actionSavePicture= new KAction( i18n("Save Picture..."), 0,
@@ -4637,7 +4639,7 @@ void KPrView::showCounter( KoParagCounter &c )
     QString styleStr("counterstyle_");
     styleStr += QString::number( c.style() );
     //kDebug(33001) << "KWView::showCounter styleStr=" << styleStr << endl;
-    KToggleAction* act = static_cast<KToggleAction *>( actionCollection()->action( styleStr.toLatin1() ) );
+    KToggleAction* act = static_cast<KToggleAction *>( actionCollection()->action( styleStr ) );
     Q_ASSERT( act );
     if ( act )
         act->setChecked( true );
@@ -6292,7 +6294,7 @@ QList<KAction*> KPrView::listOfResultOfCheckWord( const QString &word )
         {
             if ( !(*it).isEmpty() ) // in case of removed subtypes or placeholders
             {
-                KAction * act = new KAction( (*it));
+                KAction * act = new KAction(actionCollection(), (*it));
                 connect( act, SIGNAL(activated()), this, SLOT(slotCorrectWord()) );
                 listAction.append( act );
             }
