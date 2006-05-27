@@ -220,10 +220,13 @@ void Context::activateNext()
 {	
 	delete d->exception; d->exception = 0;
 
-	QValueList<MacroItem::Ptr>::ConstIterator it(d->items.constBegin()), end(d->items.constEnd());
-	for(;it != end; ++it) {
-		if(*it != d->macroitem) continue;
-		activate(++it);
+	if(! d->macroitem) { // if no MacroItem is defined, we don't need to try to continue execution
+		return;
+	}
+
+	QValueList<MacroItem::Ptr>::ConstIterator it = d->items.find(d->macroitem);
+	if (it != d->items.constEnd()) {
+		activate(++it); // try to continue the execution.
 	}
 }
 
