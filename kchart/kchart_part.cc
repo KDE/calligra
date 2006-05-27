@@ -1462,9 +1462,6 @@ bool KChartPart::loadXML( QIODevice*, const QDomDocument& doc )
 	    m_rowLabels = params.axisLabelStringList();
 	}
 
-// together with two bugs in the drawing engine,
-// the (now commented out) was setChartDefaults() causing bug 125428:
-	//setChartDefaults();
     }
 
     m_params->setDrawSolidExcessArrows(true);
