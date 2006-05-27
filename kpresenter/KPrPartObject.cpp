@@ -48,9 +48,9 @@ KPrPartObject &KPrPartObject::operator=( const KPrPartObject & )
 void KPrPartObject::updateChildGeometry()
 {
     KoTextZoomHandler* zh = child->parent()->zoomHandler();
-    child->setGeometry( zh->zoomRect( getRect() ), true );
-    child->setRotationPoint( QPoint( zh->zoomItX( getOrig().x() + getSize().width() / 2 ),
-                                     zh->zoomItY( getOrig().y() + getSize().height() / 2 ) ) );
+    child->setGeometry( zh->zoomRectOld( getRect() ), true );
+    child->setRotationPoint( QPoint( zh->zoomItXOld( getOrig().x() + getSize().width() / 2 ),
+                                     zh->zoomItYOld( getOrig().y() + getSize().height() / 2 ) ) );
 }
 
 void KPrPartObject::rotate( float _angle )
@@ -59,8 +59,8 @@ void KPrPartObject::rotate( float _angle )
 
     child->setRotation( _angle );
     KoTextZoomHandler* zh = child->parent()->zoomHandler();
-    child->setRotationPoint( QPoint( zh->zoomItX( getOrig().x() + getSize().width() / 2 ),
-                                     zh->zoomItY( getOrig().y() + getSize().height() / 2 ) ) );
+    child->setRotationPoint( QPoint( zh->zoomItXOld( getOrig().x() + getSize().width() / 2 ),
+                                     zh->zoomItYOld( getOrig().y() + getSize().height() / 2 ) ) );
 }
 
 bool KPrPartObject::saveOasisObjectAttributes( KPOasisSaveContext &sc ) const
@@ -116,33 +116,33 @@ void KPrPartObject::draw( QPainter *_painter, KoTextZoomHandler *_zoomhandler,
 
     if ( angle == 0 ) {
         if ( getFillType() == FT_BRUSH || !gradient )
-            _painter->drawRect( penw, penw, _zoomhandler->zoomItX( ext.width() - 2 * penw ),
-                                _zoomhandler->zoomItY( ext.height() - 2 * penw ) );
+            _painter->drawRect( penw, penw, _zoomhandler->zoomItXOld( ext.width() - 2 * penw ),
+                                _zoomhandler->zoomItYOld( ext.height() - 2 * penw ) );
         else {
             gradient->setSize( size );
             _painter->drawPixmap( penw, penw, gradient->pixmap(), 0, 0,
-                                  _zoomhandler->zoomItX( ow - 2 * penw ),
-                                  _zoomhandler->zoomItY( oh - 2 * penw ) );
+                                  _zoomhandler->zoomItXOld( ow - 2 * penw ),
+                                  _zoomhandler->zoomItYOld( oh - 2 * penw ) );
         }
     }
     else
     {
         if ( getFillType() == FT_BRUSH || !gradient )
-            _painter->drawRect( _zoomhandler->zoomItX( penw ), _zoomhandler->zoomItY( penw ),
-                                _zoomhandler->zoomItX( ext.width() - 2 * penw ),
-                                _zoomhandler->zoomItY( ext.height() - 2 * penw ) );
+            _painter->drawRect( _zoomhandler->zoomItXOld( penw ), _zoomhandler->zoomItYOld( penw ),
+                                _zoomhandler->zoomItXOld( ext.width() - 2 * penw ),
+                                _zoomhandler->zoomItYOld( ext.height() - 2 * penw ) );
         else {
             gradient->setSize( size );
             _painter->drawPixmap( penw, penw, gradient->pixmap(), 0, 0,
-                                  _zoomhandler->zoomItX( ow - 2 * penw ),
-                                  _zoomhandler->zoomItY( oh - 2 * penw ) );
+                                  _zoomhandler->zoomItXOld( ow - 2 * penw ),
+                                  _zoomhandler->zoomItYOld( oh - 2 * penw ) );
         }
     }
 
     _painter->setPen( pen2 );
     _painter->setBrush( Qt::NoBrush );
-    _painter->drawRect( _zoomhandler->zoomItX( penw ), _zoomhandler->zoomItY( penw ),
-                        _zoomhandler->zoomItX( ow - 2 * penw ), _zoomhandler->zoomItY( oh - 2 * penw ) );
+    _painter->drawRect( _zoomhandler->zoomItXOld( penw ), _zoomhandler->zoomItYOld( penw ),
+                        _zoomhandler->zoomItXOld( ow - 2 * penw ), _zoomhandler->zoomItYOld( oh - 2 * penw ) );
     paint( _painter, _zoomhandler, pageNum, selectionMode, drawContour );
     _painter->restore();
 
@@ -152,7 +152,7 @@ void KPrPartObject::draw( QPainter *_painter, KoTextZoomHandler *_zoomhandler,
 void KPrPartObject::slot_changed( KoChild *_koChild )
 {
     KoTextZoomHandler* zh = child->parent()->zoomHandler();
-    KoRect g = zh->unzoomRect( _koChild->geometry() );
+    KoRect g = zh->unzoomRectOld( _koChild->geometry() );
     KPrObject::setOrig( g.x(), g.y() );
     KPrObject::setSize( g.width(), g.height() );
 }
@@ -167,7 +167,7 @@ void KPrPartObject::paint( QPainter *_painter, KoTextZoomHandler *_zoomHandler,
         _painter->setPen( pen3 );
 #warning "kde4: port it"		
         //_painter->setRasterOp( Qt::NotXorROP );
-        _painter->drawRect( _zoomHandler->zoomRect( KoRect( KoPoint( 0.0, 0.0 ), getSize() ) ) );
+        _painter->drawRect( _zoomHandler->zoomRectOld( KoRect( KoPoint( 0.0, 0.0 ), getSize() ) ) );
         return;
     }
 
@@ -180,7 +180,7 @@ void KPrPartObject::paint( QPainter *_painter, KoTextZoomHandler *_zoomHandler,
     double zoomX = static_cast<double>( _zoomHandler->zoom() ) / 100;
     double zoomY = static_cast<double>( _zoomHandler->zoom() ) / 100;
     child->document()->paintEverything( *_painter,
-                                        _zoomHandler->zoomRect( r ),
+                                        _zoomHandler->zoomRectOld( r ),
                                         true, // flicker?
                                         0 /* View isn't known from here - is that a problem? */,
                                         zoomX,

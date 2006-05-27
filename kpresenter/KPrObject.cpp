@@ -1240,9 +1240,9 @@ void KPrObject::rotateObject(QPainter *paint,KoTextZoomHandler *_zoomHandler)
     KoRect rr = KoRect( 0, 0, ext.width(), ext.height() );
     rr.moveTopLeft( KoPoint( -ext.width() / 2.0, -ext.height() / 2.0 ) );
     QMatrix m;
-    m.translate( _zoomHandler->zoomItX(ext.width() / 2.0), _zoomHandler->zoomItY(ext.height() / 2.0 ));
+    m.translate( _zoomHandler->zoomItXOld(ext.width() / 2.0), _zoomHandler->zoomItYOld(ext.height() / 2.0 ));
     m.rotate( angle );
-    m.translate( _zoomHandler->zoomItX(rr.left()), _zoomHandler->zoomItY(rr.top()) );
+    m.translate( _zoomHandler->zoomItXOld(rr.left()), _zoomHandler->zoomItYOld(rr.top()) );
 
     paint->setMatrix( m, true );
 }
@@ -1261,10 +1261,10 @@ QCursor KPrObject::getCursor( const KoPoint &_point, ModifyType &_modType,
                              KPrDocument *doc ) const
 {
     KoTextZoomHandler * zh = doc->zoomHandler();
-    int px = zh->zoomItX(_point.x());
-    int py = zh->zoomItY(_point.y());
+    int px = zh->zoomItXOld(_point.x());
+    int py = zh->zoomItYOld(_point.y());
 
-    QRect rect = zh->zoomRect( getRealRect() );
+    QRect rect = zh->zoomRectOld( getRealRect() );
     int ox = rect.left();
     int oy = rect.top();
     int ow = rect.width();
@@ -1410,18 +1410,18 @@ void KPrObject::paintSelection( QPainter *_painter, KoTextZoomHandler *_zoomHand
         return;
 
     _painter->save();
-    _painter->translate( _zoomHandler->zoomItX(orig.x()), _zoomHandler->zoomItY(orig.y()) );
+    _painter->translate( _zoomHandler->zoomItXOld(orig.x()), _zoomHandler->zoomItYOld(orig.y()) );
     _painter->setPen( QPen( Qt::black, 1, Qt::SolidLine ) );
     _painter->setBrush( kapp->palette().color( QPalette::Active, QColorGroup::Highlight ) );
 
     KoRect r = getRealRect();
 
-    int x = _zoomHandler->zoomItX( r.left() - orig.x());
-    int y = _zoomHandler->zoomItY( r.top() - orig.y());
-    int zX6 = /*_zoomHandler->zoomItX(*/ 6 ;
-    int zY6 = /*_zoomHandler->zoomItY(*/ 6 ;
-    int w = _zoomHandler->zoomItX(r.width()) - 6;
-    int h = _zoomHandler->zoomItY(r.height()) - 6;
+    int x = _zoomHandler->zoomItXOld( r.left() - orig.x());
+    int y = _zoomHandler->zoomItYOld( r.top() - orig.y());
+    int zX6 = /*_zoomHandler->zoomItXOld(*/ 6 ;
+    int zY6 = /*_zoomHandler->zoomItYOld(*/ 6 ;
+    int w = _zoomHandler->zoomItXOld(r.width()) - 6;
+    int h = _zoomHandler->zoomItYOld(r.height()) - 6;
 
     if ( mode == SM_MOVERESIZE ) {
         _painter->drawRect( x, y,  zX6, zY6 );
@@ -1941,7 +1941,7 @@ void KPrShadowObject::draw( QPainter *_painter, KoTextZoomHandler*_zoomHandler,
         double sy = oy;
         getShadowCoords( sx, sy );
 
-        _painter->translate( _zoomHandler->zoomItX( sx ), _zoomHandler->zoomItY( sy ) );
+        _painter->translate( _zoomHandler->zoomItXOld( sx ), _zoomHandler->zoomItYOld( sy ) );
 
         if ( angle != 0 )
         {
@@ -1954,7 +1954,7 @@ void KPrShadowObject::draw( QPainter *_painter, KoTextZoomHandler*_zoomHandler,
         _painter->restore();
     }
 
-    _painter->translate( _zoomHandler->zoomItX(ox), _zoomHandler->zoomItY(oy) );
+    _painter->translate( _zoomHandler->zoomItXOld(ox), _zoomHandler->zoomItYOld(oy) );
 
     if ( angle != 0 )
         rotateObject(_painter,_zoomHandler);
@@ -2126,7 +2126,7 @@ void KPr2DObject::draw( QPainter *_painter, KoTextZoomHandler*_zoomHandler,
         double sy = oy;
         getShadowCoords( sx, sy );
 
-        _painter->translate( _zoomHandler->zoomItX( sx ), _zoomHandler->zoomItY( sy ) );
+        _painter->translate( _zoomHandler->zoomItXOld( sx ), _zoomHandler->zoomItYOld( sy ) );
 
         if ( angle != 0 )
         {
@@ -2140,7 +2140,7 @@ void KPr2DObject::draw( QPainter *_painter, KoTextZoomHandler*_zoomHandler,
         _painter->restore();
     }
 
-    _painter->translate( _zoomHandler->zoomItX(ox), _zoomHandler->zoomItY(oy) );
+    _painter->translate( _zoomHandler->zoomItXOld(ox), _zoomHandler->zoomItYOld(oy) );
 
     if ( angle != 0 )
         rotateObject(_painter,_zoomHandler);

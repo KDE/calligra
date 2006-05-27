@@ -3781,7 +3781,7 @@ void KPrView::refreshPageButton()
 
 void KPrView::showObjectRect( const KPrObject * object )
 {
-    QRect r = zoomHandler()->zoomRect( object->getRealRect() );
+    QRect r = zoomHandler()->zoomRectOld( object->getRealRect() );
     if ( ! QRect( getCanvas()->diffx(),
                   getCanvas()->diffy(),
                   getCanvas()->width(),
@@ -4970,7 +4970,7 @@ void KPrView::slotUpdateRuler()
         KPrTextObject *txtobj= m_canvas->applicableTextObjects().first();
         if ( txtobj )
         {
-            QRect r= zoomHandler()->zoomRect(txtobj->getRealRect());
+            QRect r= zoomHandler()->zoomRectOld(txtobj->getRealRect());
             getHRuler()->setFrameStartEnd( r.left() /*+ m_canvas->diffx()*//*- pc.x()*/, r.right()/*+m_canvas->diffx()*/ /*- pc.x()*/ );
             getVRuler()->setFrameStartEnd( r.top()/*+ m_canvas->diffy()*//*- pc.y()*/, r.bottom()/*+m_canvas->diffy()*//*- pc.y()*/ );
             if( getHRuler())
@@ -5241,7 +5241,7 @@ void KPrView::setZoomRect( const KoRect & rect )
     viewZoom( QString::number( zoom ) );
 
     m_canvas->setToolEditMode( TEM_MOUSE );
-    m_canvas->scrollTopLeftPoint( zoomHandler()->zoomPoint( rect.topLeft() ) );
+    m_canvas->scrollTopLeftPoint( zoomHandler()->>zoomPointOldd( rect.topLeft() ) );
     m_canvas->setUpdatesEnabled( true );
     m_canvas->repaint();
 }
@@ -5650,7 +5650,7 @@ void KPrView::addGuideLine()
 {
     KoRect rect( m_canvas->activePage()->getPageRect() );
 
-    KoPoint pos( zoomHandler()->unzoomPoint( m_mousePos + QPoint( m_canvas->diffx(), m_canvas->diffy() ) ) );
+    KoPoint pos( zoomHandler()->unzoomPointOld( m_mousePos + QPoint( m_canvas->diffx(), m_canvas->diffy() ) ) );
     KoGuideLineDia dia( 0, pos, rect, m_pKPresenterDoc->unit() );
     if ( dia.exec() == QDialog::Accepted )
     {
@@ -5747,7 +5747,7 @@ void KPrView::zoomAllObject()
     viewZoom( QString::number(zoom ) );
 
     m_canvas->setToolEditMode( TEM_MOUSE );
-    m_canvas->scrollTopLeftPoint( zoomHandler()->zoomPoint( rect.topLeft()) );
+    m_canvas->scrollTopLeftPoint( zoomHandler()->>zoomPointOldd( rect.topLeft()) );
 }
 
 void KPrView::flipHorizontal()

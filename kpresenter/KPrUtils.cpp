@@ -56,23 +56,23 @@ void drawFigure( LineEnd figure, QPainter* painter, const KoPoint &coord, const 
     {
         int _h = _w;
         if ( _h % 2 == 0 ) _h--;
-        painter->translate( _zoomHandler->zoomItX(coord.x()), _zoomHandler->zoomItY( coord.y()) );
+        painter->translate( _zoomHandler->zoomItXOld(coord.x()), _zoomHandler->zoomItYOld( coord.y()) );
         painter->rotate( angle );
         painter->scale( 1, 1 );
-        painter->fillRect( _zoomHandler->zoomItX( -6 - _w ),
-                           _zoomHandler->zoomItY( -3 - _h / 2),
-                           _zoomHandler->zoomItX( 6 + _w),
-                           _zoomHandler->zoomItY( 6 + _h), color );
+        painter->fillRect( _zoomHandler->zoomItXOld( -6 - _w ),
+                           _zoomHandler->zoomItYOld( -3 - _h / 2),
+                           _zoomHandler->zoomItXOld( 6 + _w),
+                           _zoomHandler->zoomItYOld( 6 + _h), color );
     } break;
     case L_CIRCLE:
     {
-        painter->translate( _zoomHandler->zoomItX(coord.x()), _zoomHandler->zoomItY(coord.y()) );
+        painter->translate( _zoomHandler->zoomItXOld(coord.x()), _zoomHandler->zoomItYOld(coord.y()) );
         painter->rotate( angle );
         painter->setBrush( color );
-        painter->drawEllipse( _zoomHandler->zoomItX( -6 - _w ),
-                              _zoomHandler->zoomItY( -3 - _w / 2 ),
-                              _zoomHandler->zoomItX( 6 + _w),
-                              _zoomHandler->zoomItY(6 + _w) );
+        painter->drawEllipse( _zoomHandler->zoomItXOld( -6 - _w ),
+                              _zoomHandler->zoomItYOld( -3 - _w / 2 ),
+                              _zoomHandler->zoomItXOld( 6 + _w),
+                              _zoomHandler->zoomItYOld(6 + _w) );
     } break;
     case L_ARROW:
     {
@@ -80,11 +80,11 @@ void drawFigure( LineEnd figure, QPainter* painter, const KoPoint &coord, const 
         KoPoint p2( 0 , 0 );
         KoPoint p3( -10 - _w, 3 + _w / 2 );
         Q3PointArray pArray( 3 );
-        pArray.setPoint( 0, _zoomHandler->zoomPoint(p1) );
-        pArray.setPoint( 1, _zoomHandler->zoomPoint(p2) );
-        pArray.setPoint( 2, _zoomHandler->zoomPoint(p3) );
+        pArray.setPoint( 0, _zoomHandler->>zoomPointOldd(p1) );
+        pArray.setPoint( 1, _zoomHandler->>zoomPointOldd(p2) );
+        pArray.setPoint( 2, _zoomHandler->>zoomPointOldd(p3) );
 
-        painter->translate( _zoomHandler->zoomItX(coord.x()),_zoomHandler->zoomItY( coord.y()) );
+        painter->translate( _zoomHandler->zoomItXOld(coord.x()),_zoomHandler->zoomItYOld( coord.y()) );
         painter->rotate( angle );
         painter->scale( 1, 1 );
         painter->setBrush( color );
@@ -92,29 +92,29 @@ void drawFigure( LineEnd figure, QPainter* painter, const KoPoint &coord, const 
     } break;
     case L_LINE_ARROW:
     {
-        painter->translate( _zoomHandler->zoomItX(coord.x()),_zoomHandler->zoomItY( coord.y()) );
-        painter->setPen( QPen(color , _zoomHandler->zoomItX( _w )) );
+        painter->translate( _zoomHandler->zoomItXOld(coord.x()),_zoomHandler->zoomItYOld( coord.y()) );
+        painter->setPen( QPen(color , _zoomHandler->zoomItXOld( _w )) );
         painter->rotate( angle );
         painter->scale( 1, 1 );
-        QPoint p1( _zoomHandler->zoomItX(-10 - _w), _zoomHandler->zoomItY(-3 - _w / 2) );
-        QPoint p2( _zoomHandler->zoomItX(0), _zoomHandler->zoomItY(0) );
-        QPoint p3( _zoomHandler->zoomItX(-10 - _w), _zoomHandler->zoomItY(3 + _w / 2) );
+        QPoint p1( _zoomHandler->zoomItXOld(-10 - _w), _zoomHandler->zoomItYOld(-3 - _w / 2) );
+        QPoint p2( _zoomHandler->zoomItXOld(0), _zoomHandler->zoomItYOld(0) );
+        QPoint p3( _zoomHandler->zoomItXOld(-10 - _w), _zoomHandler->zoomItYOld(3 + _w / 2) );
         painter->drawLine( p2, p1);
         painter->drawLine( p2, p3);
     }break;
     case L_DIMENSION_LINE:
     {
-        painter->translate( _zoomHandler->zoomItX(coord.x()),_zoomHandler->zoomItY( coord.y()) );
-        painter->setPen( QPen(color , _zoomHandler->zoomItX( _w )) );
+        painter->translate( _zoomHandler->zoomItXOld(coord.x()),_zoomHandler->zoomItYOld( coord.y()) );
+        painter->setPen( QPen(color , _zoomHandler->zoomItXOld( _w )) );
         painter->rotate( angle );
         painter->scale( 1, 1 );
-        QPoint p1( _zoomHandler->zoomItX(- _w / 2), _zoomHandler->zoomItY(-5 - _w / 2) );
-        QPoint p2( _zoomHandler->zoomItX(- _w / 2), _zoomHandler->zoomItY(5 + _w / 2 ) );
+        QPoint p1( _zoomHandler->zoomItXOld(- _w / 2), _zoomHandler->zoomItYOld(-5 - _w / 2) );
+        QPoint p2( _zoomHandler->zoomItXOld(- _w / 2), _zoomHandler->zoomItYOld(5 + _w / 2 ) );
         painter->drawLine( p1, p2);
     }break;
     case L_DOUBLE_ARROW:
     {
-        painter->translate( _zoomHandler->zoomItX(coord.x()),_zoomHandler->zoomItY( coord.y()) );
+        painter->translate( _zoomHandler->zoomItXOld(coord.x()),_zoomHandler->zoomItYOld( coord.y()) );
         painter->rotate( angle );
         painter->scale( 1, 1 );
         painter->setBrush( color );
@@ -128,31 +128,31 @@ void drawFigure( LineEnd figure, QPainter* painter, const KoPoint &coord, const 
         KoPoint p6( -20 - _w, 3 + _w / 2 );
 
         Q3PointArray pArray( 3 );
-        pArray.setPoint( 0, _zoomHandler->zoomPoint(p1) );
-        pArray.setPoint( 1, _zoomHandler->zoomPoint(p2) );
-        pArray.setPoint( 2, _zoomHandler->zoomPoint(p3) );
+        pArray.setPoint( 0, _zoomHandler->>zoomPointOldd(p1) );
+        pArray.setPoint( 1, _zoomHandler->>zoomPointOldd(p2) );
+        pArray.setPoint( 2, _zoomHandler->>zoomPointOldd(p3) );
         painter->drawPolygon( pArray );
-        pArray.setPoint( 0, _zoomHandler->zoomPoint(p4) );
-        pArray.setPoint( 1, _zoomHandler->zoomPoint(p5) );
-        pArray.setPoint( 2, _zoomHandler->zoomPoint(p6) );
+        pArray.setPoint( 0, _zoomHandler->>zoomPointOldd(p4) );
+        pArray.setPoint( 1, _zoomHandler->>zoomPointOldd(p5) );
+        pArray.setPoint( 2, _zoomHandler->>zoomPointOldd(p6) );
         painter->drawPolygon( pArray );
 
     }break;
     case L_DOUBLE_LINE_ARROW:
     {
-        painter->translate( _zoomHandler->zoomItX(coord.x()),_zoomHandler->zoomItY( coord.y()) );
-        painter->setPen( QPen(color , _zoomHandler->zoomItX( _w )) );
+        painter->translate( _zoomHandler->zoomItXOld(coord.x()),_zoomHandler->zoomItYOld( coord.y()) );
+        painter->setPen( QPen(color , _zoomHandler->zoomItXOld( _w )) );
         painter->rotate( angle );
         painter->scale( 1, 1 );
-        QPoint p1( _zoomHandler->zoomItX(-10 - _w), _zoomHandler->zoomItY(-3 - _w / 2) );
-        QPoint p2( _zoomHandler->zoomItX(0), _zoomHandler->zoomItY(0) );
-        QPoint p3( _zoomHandler->zoomItX(-10 - _w), _zoomHandler->zoomItY(3 + _w / 2) );
+        QPoint p1( _zoomHandler->zoomItXOld(-10 - _w), _zoomHandler->zoomItYOld(-3 - _w / 2) );
+        QPoint p2( _zoomHandler->zoomItXOld(0), _zoomHandler->zoomItYOld(0) );
+        QPoint p3( _zoomHandler->zoomItXOld(-10 - _w), _zoomHandler->zoomItYOld(3 + _w / 2) );
         painter->drawLine( p2, p1);
         painter->drawLine( p2, p3);
 
-        p1.setX( _zoomHandler->zoomItX(-20 - _w));
-        p2.setX( _zoomHandler->zoomItX(-10));
-        p3.setX( _zoomHandler->zoomItX(-20 - _w));
+        p1.setX( _zoomHandler->zoomItXOld(-20 - _w));
+        p2.setX( _zoomHandler->zoomItXOld(-10));
+        p3.setX( _zoomHandler->zoomItXOld(-20 - _w));
         painter->drawLine( p2, p1);
         painter->drawLine( p2, p3);
     }break;
@@ -166,7 +166,7 @@ void drawFigureWithOffset( LineEnd figure, QPainter* painter, const QPoint &coor
 {
     KoSize diff = getOffset( figure, _w, angle );
     KoPoint offsetPoint(diff.width(), diff.height());
-    offsetPoint += _zoomHandler->unzoomPoint( coord );
+    offsetPoint += _zoomHandler->unzoomPointOld( coord );
     drawFigure( figure, painter, offsetPoint, color, _w, angle,_zoomHandler );
 }
 
@@ -190,25 +190,25 @@ KoSize getBoundingSize( LineEnd figure, int _w, const KoZoomHandler*_zoomHandler
     {
         int _h = (int)_w;
         if ( _h % 2 == 0 ) _h--;
-        return KoSize( _zoomHandler->zoomItX( 10 + _w), _zoomHandler->zoomItY( 10 + _h) );
+        return KoSize( _zoomHandler->zoomItXOld( 10 + _w), _zoomHandler->zoomItYOld( 10 + _h) );
     } break;
     case L_CIRCLE:
-        return KoSize(  _zoomHandler->zoomItX(10 + _w), _zoomHandler->zoomItY(10 + _w) );
+        return KoSize(  _zoomHandler->zoomItXOld(10 + _w), _zoomHandler->zoomItYOld(10 + _w) );
         break;
     case L_ARROW:
-        return KoSize( _zoomHandler->zoomItX( 14 + _w),_zoomHandler->zoomItY( 14 + _w) );
+        return KoSize( _zoomHandler->zoomItXOld( 14 + _w),_zoomHandler->zoomItYOld( 14 + _w) );
         break;
     case L_LINE_ARROW:
-        return KoSize( _zoomHandler->zoomItX( 14 + _w),_zoomHandler->zoomItY( 14 + _w) );
+        return KoSize( _zoomHandler->zoomItXOld( 14 + _w),_zoomHandler->zoomItYOld( 14 + _w) );
         break;
     case L_DIMENSION_LINE:
-        return KoSize( _zoomHandler->zoomItX( 14 +_w),_zoomHandler->zoomItY( 14 + _w) );
+        return KoSize( _zoomHandler->zoomItXOld( 14 +_w),_zoomHandler->zoomItYOld( 14 + _w) );
         break;
     case L_DOUBLE_ARROW:
-        return KoSize( _zoomHandler->zoomItX( 28 + _w),_zoomHandler->zoomItY( 14 + _w) );
+        return KoSize( _zoomHandler->zoomItXOld( 28 + _w),_zoomHandler->zoomItYOld( 14 + _w) );
         break;
     case L_DOUBLE_LINE_ARROW:
-        return KoSize( _zoomHandler->zoomItX( 28 + _w),_zoomHandler->zoomItY( 14 + _w) );
+        return KoSize( _zoomHandler->zoomItXOld( 28 + _w),_zoomHandler->zoomItYOld( 14 + _w) );
         break;
     default: break;
     }

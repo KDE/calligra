@@ -211,12 +211,12 @@ void KPrAutoformObject::paint( QPainter* _painter, KoTextZoomHandler *_zoomHandl
     if ( !drawContour )
         _painter->setBrush( getBrush() );
 
-    Q3PointArray pntArray = atfInterp.getPointArray( _zoomHandler->zoomItX( ext.width()),
-                                                    _zoomHandler->zoomItY( ext.height() ) );
+    Q3PointArray pntArray = atfInterp.getPointArray( _zoomHandler->zoomItXOld( ext.width()),
+                                                    _zoomHandler->zoomItYOld( ext.height() ) );
     Q3PtrList<ATFInterpreter::AttribList> atrLs = atfInterp.getAttribList();
     Q3PointArray pntArray2( pntArray.size() );
-    int ex = _zoomHandler->zoomItX(ext.width());
-    int ey = _zoomHandler->zoomItY(ext.height());
+    int ex = _zoomHandler->zoomItXOld(ext.width());
+    int ey = _zoomHandler->zoomItYOld(ext.height());
     for ( unsigned int i = 0; i < pntArray.size(); i++ )
     {
         px = pntArray.at( i ).x();
@@ -269,7 +269,7 @@ void KPrAutoformObject::paint( QPainter* _painter, KoTextZoomHandler *_zoomHandl
                         gradient->setSize( size );
                         m_redrawGradientPix = false;
                         QRegion clipregion( pntArray2 );
-                        m_gradientPix.resize ( _zoomHandler->zoomItX(ext.width()),_zoomHandler->zoomItY(ext.height()) );
+                        m_gradientPix.resize ( _zoomHandler->zoomItXOld(ext.width()),_zoomHandler->zoomItYOld(ext.height()) );
                         m_gradientPix.fill( Qt::white );
 
 
@@ -337,7 +337,7 @@ void KPrAutoformObject::paint( QPainter* _painter, KoTextZoomHandler *_zoomHandl
                         break;
                     }
 
-                    drawFigure( lineBegin, _painter, _zoomHandler->unzoomPoint( pnt3 ), pen2.color(), _w, _angle, _zoomHandler );
+                    drawFigure( lineBegin, _painter, _zoomHandler->unzoomPointOld( pnt3 ), pen2.color(), _w, _angle, _zoomHandler );
                 }
 
                 if ( lineEnd != L_NORMAL && !drawContour )
@@ -373,7 +373,7 @@ void KPrAutoformObject::paint( QPainter* _painter, KoTextZoomHandler *_zoomHandl
                         break;
                     }
 
-                    drawFigure( lineEnd, _painter, _zoomHandler->unzoomPoint( pnt3 ), pen2.color(), _w, _angle,_zoomHandler );
+                    drawFigure( lineEnd, _painter, _zoomHandler->unzoomPointOld( pnt3 ), pen2.color(), _w, _angle,_zoomHandler );
                 }
             }
 

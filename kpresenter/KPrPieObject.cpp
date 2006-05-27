@@ -239,15 +239,15 @@ void KPrPieObject::paint( QPainter* _painter, KoTextZoomHandler*_zoomHandler,
                     p.setBrush( QBrush( Qt::color1 ) );
                     if ( pieType == PT_CHORD )
                     {
-                        p.drawChord( _zoomHandler->zoomItX(pw), _zoomHandler->zoomItY(pw),
-                                     _zoomHandler->zoomItX(ow - 2 * pw),
-                                     _zoomHandler->zoomItY(oh - 2 * pw), p_angle, p_len );
+                        p.drawChord( _zoomHandler->zoomItXOld(pw), _zoomHandler->zoomItYOld(pw),
+                                     _zoomHandler->zoomItXOld(ow - 2 * pw),
+                                     _zoomHandler->zoomItYOld(oh - 2 * pw), p_angle, p_len );
                     }
                     else
                     {
-                        p.drawPie( _zoomHandler->zoomItX(pw), _zoomHandler->zoomItY(pw),
-                                   _zoomHandler->zoomItX( ow - 2 * pw),
-                                   _zoomHandler->zoomItY( oh - 2 * pw), p_angle, p_len );
+                        p.drawPie( _zoomHandler->zoomItXOld(pw), _zoomHandler->zoomItYOld(pw),
+                                   _zoomHandler->zoomItXOld( ow - 2 * pw),
+                                   _zoomHandler->zoomItYOld( oh - 2 * pw), p_angle, p_len );
                     }
                     p.end();
                     m_gradientPix.setMask( mask );
@@ -293,19 +293,19 @@ void KPrPieObject::paint( QPainter* _painter, KoTextZoomHandler*_zoomHandler,
     switch ( pieType )
     {
     case PT_PIE:
-        _painter->drawPie( _zoomHandler->zoomItX(pw), _zoomHandler->zoomItY( pw),
-                           _zoomHandler->zoomItX( ow - 2 * pw),
-                           _zoomHandler->zoomItY( oh - 2 * pw), p_angle, p_len );
+        _painter->drawPie( _zoomHandler->zoomItXOld(pw), _zoomHandler->zoomItYOld( pw),
+                           _zoomHandler->zoomItXOld( ow - 2 * pw),
+                           _zoomHandler->zoomItYOld( oh - 2 * pw), p_angle, p_len );
         break;
     case PT_ARC:
-        _painter->drawArc( _zoomHandler->zoomItX(pw), _zoomHandler->zoomItY(pw),
-                           _zoomHandler->zoomItX(ow - 2 * pw),
-                           _zoomHandler->zoomItY(oh - 2 * pw), p_angle, p_len );
+        _painter->drawArc( _zoomHandler->zoomItXOld(pw), _zoomHandler->zoomItYOld(pw),
+                           _zoomHandler->zoomItXOld(ow - 2 * pw),
+                           _zoomHandler->zoomItYOld(oh - 2 * pw), p_angle, p_len );
         break;
     case PT_CHORD:
-        _painter->drawChord( _zoomHandler->zoomItX(pw), _zoomHandler->zoomItY(pw),
-                             _zoomHandler->zoomItX(ow - 2 * pw),
-                             _zoomHandler->zoomItY(oh - 2 * pw), p_angle, p_len );
+        _painter->drawChord( _zoomHandler->zoomItXOld(pw), _zoomHandler->zoomItYOld(pw),
+                             _zoomHandler->zoomItXOld(ow - 2 * pw),
+                             _zoomHandler->zoomItYOld(oh - 2 * pw), p_angle, p_len );
         break;
     default: break;
     }

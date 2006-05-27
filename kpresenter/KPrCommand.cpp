@@ -380,7 +380,7 @@ void KPrDeleteCmd::execute()
 
     for ( itDelete.toFirst(); itDelete.current(); ++itDelete )
     {
-        QRect oldRect = m_doc->zoomHandler()->zoomRect( itDelete.current()->getRepaintRect() );
+        QRect oldRect = m_doc->zoomHandler()->zoomRectOld( itDelete.current()->getRepaintRect() );
         m_doc->repaint( oldRect );
     }
     if(textObj)
@@ -669,7 +669,7 @@ void KPrInsertCmd::unexecute()
 {
     if ( m_object )
     {
-        QRect oldRect = m_doc->zoomHandler()->zoomRect( m_object->getRepaintRect() );
+        QRect oldRect = m_doc->zoomHandler()->zoomRectOld( m_object->getRepaintRect() );
         Q3PtrList<KPrObject> list(m_page->objectList());
         if ( list.findRef( m_object ) != -1 ) {
             m_page->takeObject( m_object );
@@ -779,7 +779,7 @@ void KPrMoveByCmd::execute()
     QRect oldRect;
 
     for ( unsigned int i = 0; i < objects.count(); i++ ) {
-        oldRect = doc->zoomHandler()->zoomRect( objects.at( i )->getRepaintRect() );
+        oldRect = doc->zoomHandler()->zoomRectOld( objects.at( i )->getRepaintRect() );
         objects.at( i )->moveBy( diff );
         if ( objects.at( i )->getType() == OT_TEXT )
         {
@@ -799,7 +799,7 @@ void KPrMoveByCmd::unexecute()
     QRect oldRect;
 
     for ( unsigned int i = 0; i < objects.count(); i++ ) {
-        oldRect = doc->zoomHandler()->zoomRect( objects.at( i )->getRepaintRect() );
+        oldRect = doc->zoomHandler()->zoomRectOld( objects.at( i )->getRepaintRect() );
         objects.at( i )->moveBy( -diff.x(), -diff.y() );
         if ( objects.at( i )->getType() == OT_TEXT )
         {
@@ -883,7 +883,7 @@ void KPrAlignCmd::execute()
     QRect oldRect;
 
     for ( unsigned int i = 0; i < objects.count(); i++ ) {
-        oldRect = doc->zoomHandler()->zoomRect( objects.at( i )->getRepaintRect() );
+        oldRect = doc->zoomHandler()->zoomRectOld( objects.at( i )->getRepaintRect() );
         objects.at( i )->moveBy( *diffs.at( i ) );
         if ( objects.at( i )->getType() == OT_TEXT )
         {
@@ -903,7 +903,7 @@ void KPrAlignCmd::unexecute()
     QRect oldRect;
 
     for ( unsigned int i = 0; i < objects.count(); i++ ) {
-        oldRect = doc->zoomHandler()->zoomRect(objects.at( i )->getRepaintRect() );
+        oldRect = doc->zoomHandler()->zoomRectOld(objects.at( i )->getRepaintRect() );
         objects.at( i )->moveBy( -diffs.at( i )->x(), -diffs.at( i )->y() );
         if ( objects.at( i )->getType() == OT_TEXT )
         {
@@ -1834,7 +1834,7 @@ void KPrResizeCmd::execute()
 {
     QRect oldRect;
 
-    oldRect = doc->zoomHandler()->zoomRect( object->getRepaintRect() );
+    oldRect = doc->zoomHandler()->zoomRectOld( object->getRepaintRect() );
     object->moveBy( m_diff );
     object->resizeBy( r_diff );
     if ( object->getType() == OT_TEXT )
@@ -1855,7 +1855,7 @@ void KPrResizeCmd::unexecute()
 {
     QRect oldRect;
 
-    oldRect = doc->zoomHandler()->zoomRect( object->getRepaintRect() );
+    oldRect = doc->zoomHandler()->zoomRectOld( object->getRepaintRect() );
     object->moveBy( -m_diff.x(), -m_diff.y() );
     object->resizeBy( -r_diff.width(), -r_diff.height() );
     if ( object->getType() == OT_TEXT )

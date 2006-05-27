@@ -390,20 +390,20 @@ void KPrCanvas::paintEvent( QPaintEvent* paintEvent )
                 if ( drawRubber )
                 {
                     topPainter.setPen( QPen( Qt::black, 0, Qt::DotLine ) );
-                    topPainter.drawRect( m_view->zoomHandler()->zoomRect( m_rubber ) );
+                    topPainter.drawRect( m_view->zoomHandler()->zoomRectOld( m_rubber ) );
                 }
                 break;
             case INS_RECT:
                 if ( !m_insertRect.isNull() )
                 {
-                    topPainter.drawRoundRect( m_view->zoomHandler()->zoomRect( m_insertRect.normalize() ),
+                    topPainter.drawRoundRect( m_view->zoomHandler()->zoomRectOld( m_insertRect.normalize() ),
                             m_view->getRndX(), m_view->getRndY() );
                 }
                 break;
             case INS_ELLIPSE:
                 if ( !m_insertRect.isNull() )
                 {
-                    topPainter.drawEllipse( m_view->zoomHandler()->zoomRect( m_insertRect.normalize() ) );
+                    topPainter.drawEllipse( m_view->zoomHandler()->zoomRectOld( m_insertRect.normalize() ) );
                 }
                 break;
             case INS_AUTOFORM:
@@ -416,7 +416,7 @@ void KPrCanvas::paintEvent( QPaintEvent* paintEvent )
             case INS_TEXT:
                 if ( !m_insertRect.isNull() )
                 {
-                    topPainter.drawRect( m_view->zoomHandler()->zoomRect( m_insertRect.normalize() ) );
+                    topPainter.drawRect( m_view->zoomHandler()->zoomRectOld( m_insertRect.normalize() ) );
                 }
                 break;
             case INS_PIE:
@@ -426,8 +426,8 @@ void KPrCanvas::paintEvent( QPaintEvent* paintEvent )
                 }
                 break;
             case INS_LINE:
-                topPainter.drawLine( m_view->zoomHandler()->zoomPoint( m_startPoint ),
-                        m_view->zoomHandler()->zoomPoint( m_endPoint ) );
+                topPainter.drawLine( m_view->zoomHandler()->>zoomPointOldd( m_startPoint ),
+                        m_view->zoomHandler()->>zoomPointOldd( m_endPoint ) );
                 break;
             case INS_FREEHAND:
             case INS_CLOSED_FREEHAND:
@@ -436,8 +436,8 @@ void KPrCanvas::paintEvent( QPaintEvent* paintEvent )
                 {
                     Q3PointArray pointArray = m_pointArray.zoomPointArray( m_view->zoomHandler() );
                     topPainter.drawPolyline( pointArray );
-                    topPainter.drawLine( m_view->zoomHandler()->zoomPoint( m_startPoint ),
-                            m_view->zoomHandler()->zoomPoint( m_endPoint ) );
+                    topPainter.drawLine( m_view->zoomHandler()->>zoomPointOldd( m_startPoint ),
+                            m_view->zoomHandler()->>zoomPointOldd( m_endPoint ) );
                 } break;
             case INS_QUADRICBEZIERCURVE:
             case INS_CUBICBEZIERCURVE:
@@ -611,7 +611,7 @@ void KPrCanvas::drawObjectsEdit( QPainter *painter, const KoRect &rect, const Q3
 void KPrCanvas::drawEditPage( QPainter *painter, const QRect &_rect,
                               KPrPage *page, SelectionMode selectionMode ) const
 {
-    KoRect rect = m_view->zoomHandler()->unzoomRect(_rect);
+    KoRect rect = m_view->zoomHandler()->unzoomRectOld(_rect);
 
     int pageNum = m_view->kPresenterDoc()->pageList().findRef( page );
     //objects on master page
@@ -624,7 +624,7 @@ void KPrCanvas::drawEditPage( QPainter *painter, const QRect &_rect,
 
 void KPrCanvas::drawPresPage( QPainter *painter, const QRect &_rect, PresStep step ) const
 {
-    KoRect rect = m_view->zoomHandler()->unzoomRect(_rect);
+    KoRect rect = m_view->zoomHandler()->unzoomRectOld(_rect);
 
     KPrPage * page = m_view->kPresenterDoc()->pageList().at(step.m_pageNumber);
     //objects on master page
@@ -650,8 +650,8 @@ void KPrCanvas::drawGrid(QPainter *painter, const QRect &rect2) const
     double offsetX = doc->getGridX();
     double offsetY = doc->getGridY();
 
-    for ( double i = offsetX; ( zoomedX = m_view->zoomHandler()->zoomItX( i )+pageRect.left() ) < pageRect.right(); i += offsetX )
-        for ( double j = offsetY; ( zoomedY = m_view->zoomHandler()->zoomItY( j )+pageRect.top() ) < pageRect.bottom(); j += offsetY )
+    for ( double i = offsetX; ( zoomedX = m_view->zoomHandler()->zoomItXOld( i )+pageRect.left() ) < pageRect.right(); i += offsetX )
+        for ( double j = offsetY; ( zoomedY = m_view->zoomHandler()->zoomItYOld( j )+pageRect.top() ) < pageRect.bottom(); j += offsetY )
             if( rect2.contains( zoomedX, zoomedY ) )
                 painter->drawPoint( zoomedX, zoomedY );
 
@@ -688,7 +688,7 @@ void KPrCanvas::recalcAutoGuides( )
 void KPrCanvas::mousePressEvent( QMouseEvent *e )
 {
     QPoint contentsPoint( e->pos().x()+diffx(), e->pos().y()+diffy() );
-    KoPoint docPoint = m_view->zoomHandler()->unzoomPoint( contentsPoint );
+    KoPoint docPoint = m_view->zoomHandler()->unzoomPointOld( contentsPoint );
     m_insertRect = KoRect();
 
     if(!m_view->koDocument()->isReadWrite())
@@ -759,8 +759,8 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
                     p.translate( -diffx(), -diffy() );
                     KoPoint newStartPoint = snapPoint( docPoint );
 
-                    p.drawLine( m_view->zoomHandler()->zoomPoint( m_startPoint ),
-                                m_view->zoomHandler()->zoomPoint( newStartPoint ) );
+                    p.drawLine( m_view->zoomHandler()->>zoomPointOldd( m_startPoint ),
+                                m_view->zoomHandler()->>zoomPointOldd( newStartPoint ) );
 
                     m_startPoint = newStartPoint;
                     p.end();
@@ -788,8 +788,8 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
 
                     p.restore();
 
-                    p.drawLine( m_view->zoomHandler()->zoomPoint( m_startPoint ),
-                                m_view->zoomHandler()->zoomPoint( endPoint ) );// erase old line
+                    p.drawLine( m_view->zoomHandler()->>zoomPointOldd( m_startPoint ),
+                                m_view->zoomHandler()->>zoomPointOldd( endPoint ) );// erase old line
 
                     m_symmetricEndPoint = m_startPoint * 2 - endPoint;
 
@@ -800,8 +800,8 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
 
                     p.restore();
 
-                    p.drawLine( m_view->zoomHandler()->zoomPoint( m_startPoint ),
-                                m_view->zoomHandler()->zoomPoint( m_symmetricEndPoint ) );// erase old line
+                    p.drawLine( m_view->zoomHandler()->>zoomPointOldd( m_startPoint ),
+                                m_view->zoomHandler()->>zoomPointOldd( m_symmetricEndPoint ) );// erase old line
 
                     m_pointArray.putPoints( m_indexPointArray, 3, m_CubicBezierSecondPoint.x(), m_CubicBezierSecondPoint.y(),
                                             m_CubicBezierThirdPoint.x(), m_CubicBezierThirdPoint.y(),
@@ -1001,19 +1001,19 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
                 p.setRasterOp( NotROP );
 
                 // remove old line
-                p.drawLine( m_view->zoomHandler()->zoomPoint( m_startPoint ),
-                            m_view->zoomHandler()->zoomPoint( m_endPoint ) );
+                p.drawLine( m_view->zoomHandler()->>zoomPointOldd( m_startPoint ),
+                            m_view->zoomHandler()->>zoomPointOldd( m_endPoint ) );
 
-                p.drawLine( m_view->zoomHandler()->zoomPoint( m_startPoint ),
-                            m_view->zoomHandler()->zoomPoint( m_pointArray.at( m_indexPointArray - 2 ) ) );
+                p.drawLine( m_view->zoomHandler()->>zoomPointOldd( m_startPoint ),
+                            m_view->zoomHandler()->>zoomPointOldd( m_pointArray.at( m_indexPointArray - 2 ) ) );
                 p.restore();
 
                 m_indexPointArray = qMax( 1, m_indexPointArray - 1 );
                 m_pointArray.resize( m_indexPointArray );
                 m_startPoint = m_pointArray.at( m_indexPointArray - 1 );
 
-                p.drawLine( m_view->zoomHandler()->zoomPoint( m_startPoint ),
-                            m_view->zoomHandler()->zoomPoint( m_endPoint ) );
+                p.drawLine( m_view->zoomHandler()->>zoomPointOldd( m_startPoint ),
+                            m_view->zoomHandler()->>zoomPointOldd( m_endPoint ) );
 
                 p.end();
             }
@@ -1024,8 +1024,8 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
                 p.setBrush( Qt::NoBrush );
                 p.setRasterOp( NotROP );
                 p.translate( -diffx(), -diffy() );
-                p.drawLine( m_view->zoomHandler()->zoomPoint( m_startPoint ),
-                            m_view->zoomHandler()->zoomPoint( m_endPoint ) );
+                p.drawLine( m_view->zoomHandler()->>zoomPointOldd( m_startPoint ),
+                            m_view->zoomHandler()->>zoomPointOldd( m_endPoint ) );
                 p.end();
                 m_pointArray = KoPointArray();
                 m_indexPointArray = 0;
@@ -1194,7 +1194,7 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
                 p.setRasterOp( NotROP );
                 p.setPen( QPen( Qt::black, 0, Qt::DotLine ) );
                 p.translate( -diffx(), -diffy() );
-                p.drawRect( m_view->zoomHandler()->zoomRect( m_rubber ) );
+                p.drawRect( m_view->zoomHandler()->zoomRectOld( m_rubber ) );
                 p.end();
                 drawRubber = false;
 
@@ -1278,7 +1278,7 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
             p.setRasterOp( NotROP );
             p.setPen( QPen( Qt::black, 0, Qt::DotLine ) );
             p.translate( -diffx(), -diffy() );
-            p.drawRect( m_view->zoomHandler()->zoomRect( m_rubber ) );
+            p.drawRect( m_view->zoomHandler()->zoomRectOld( m_rubber ) );
             p.end();
             drawRubber = false;
             m_rubber = m_rubber.normalize();
@@ -1405,7 +1405,7 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
         return;
 
     QPoint contentsPoint( e->pos().x()+diffx(), e->pos().y()+diffy() );
-    KoPoint docPoint = m_view->zoomHandler()->unzoomPoint( contentsPoint );
+    KoPoint docPoint = m_view->zoomHandler()->unzoomPointOld( contentsPoint );
     if(m_currentTextObjectView)
     {
         if (m_currentTextObjectView->isLinkVariable(e->pos()) )
@@ -1485,10 +1485,10 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
                         p.setRasterOp( NotROP );
                         p.setPen( QPen( Qt::black, 0, Qt::DotLine ) );
                         p.translate( -diffx(), -diffy() );
-                        p.drawRect( m_view->zoomHandler()->zoomRect( m_rubber ) );
+                        p.drawRect( m_view->zoomHandler()->zoomRectOld( m_rubber ) );
                         m_rubber.setRight( docPoint.x() );
                         m_rubber.setBottom( docPoint.y() );
-                        p.drawRect( m_view->zoomHandler()->zoomRect( m_rubber ) );
+                        p.drawRect( m_view->zoomHandler()->zoomRectOld( m_rubber ) );
                         p.end();
                     }
                 } else if ( modType == MT_MOVE ) {
@@ -1528,10 +1528,10 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
                     p.setRasterOp( NotROP );
                     p.setPen( QPen( Qt::black, 0, Qt::DotLine ) );
                     p.translate( -diffx(), -diffy() );
-                    p.drawRect( m_view->zoomHandler()->zoomRect( m_rubber ) );
+                    p.drawRect( m_view->zoomHandler()->zoomRectOld( m_rubber ) );
                     m_rubber.setRight( docPoint.x() );
                     m_rubber.setBottom( docPoint.y() );
-                    p.drawRect( m_view->zoomHandler()->zoomRect( m_rubber ) );
+                    p.drawRect( m_view->zoomHandler()->zoomRectOld( m_rubber ) );
                     p.end();
                     m_zoomRubberDraw = true;
                 }
@@ -1572,9 +1572,9 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
                 p.translate( -diffx(), -diffy() );
 
                 KoPoint sp( snapPoint( docPoint ) );
-                p.drawRect( m_view->zoomHandler()->zoomRect( m_insertRect.normalize() ) );
+                p.drawRect( m_view->zoomHandler()->zoomRectOld( m_insertRect.normalize() ) );
                 updateInsertRect( sp, e->state() );
-                p.drawRect( m_view->zoomHandler()->zoomRect( m_insertRect.normalize() ) );
+                p.drawRect( m_view->zoomHandler()->zoomRectOld( m_insertRect.normalize() ) );
 
                 p.end();
 
@@ -1588,9 +1588,9 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
                 p.translate( -diffx(), -diffy() );
 
                 KoPoint sp( snapPoint( docPoint ) );
-                p.drawEllipse( m_view->zoomHandler()->zoomRect( m_insertRect.normalize() ) );
+                p.drawEllipse( m_view->zoomHandler()->zoomRectOld( m_insertRect.normalize() ) );
                 updateInsertRect( sp, e->state() );
-                p.drawEllipse( m_view->zoomHandler()->zoomRect( m_insertRect.normalize() ) );
+                p.drawEllipse( m_view->zoomHandler()->zoomRectOld( m_insertRect.normalize() ) );
 
                 p.end();
 
@@ -1604,9 +1604,9 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
                 p.translate( -diffx(), -diffy() );
 
                 KoPoint sp( snapPoint( docPoint ) );
-                p.drawRoundRect( m_view->zoomHandler()->zoomRect( m_insertRect.normalize() ), m_view->getRndX(), m_view->getRndY() );
+                p.drawRoundRect( m_view->zoomHandler()->zoomRectOld( m_insertRect.normalize() ), m_view->getRndX(), m_view->getRndY() );
                 updateInsertRect( sp, e->state() );
-                p.drawRoundRect( m_view->zoomHandler()->zoomRect( m_insertRect.normalize() ), m_view->getRndX(), m_view->getRndY() );
+                p.drawRoundRect( m_view->zoomHandler()->zoomRectOld( m_insertRect.normalize() ), m_view->getRndX(), m_view->getRndY() );
 
                 p.end();
 
@@ -1622,8 +1622,8 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
                 KoPoint oldEndPoint( m_endPoint );
                 m_endPoint = snapPoint( docPoint );
                 //remove the old line
-                p.drawLine( m_view->zoomHandler()->zoomPoint( m_startPoint ),
-                            m_view->zoomHandler()->zoomPoint( oldEndPoint ) );
+                p.drawLine( m_view->zoomHandler()->>zoomPointOldd( m_startPoint ),
+                            m_view->zoomHandler()->>zoomPointOldd( oldEndPoint ) );
 
                 if ( e->state() & Qt::AltModifier )
                 {
@@ -1631,8 +1631,8 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
                 }
 
                 // print the new line
-                p.drawLine( m_view->zoomHandler()->zoomPoint( m_startPoint ),
-                            m_view->zoomHandler()->zoomPoint( m_endPoint ) );
+                p.drawLine( m_view->zoomHandler()->>zoomPointOldd( m_startPoint ),
+                            m_view->zoomHandler()->>zoomPointOldd( m_endPoint ) );
                 p.end();
 
                 mouseSelectedObject = true;
@@ -1678,8 +1678,8 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
                     }
                     else
                     {
-                        p.drawLine( m_view->zoomHandler()->zoomPoint( m_startPoint ),
-                                    m_view->zoomHandler()->zoomPoint( m_endPoint ) );
+                        p.drawLine( m_view->zoomHandler()->>zoomPointOldd( m_startPoint ),
+                                    m_view->zoomHandler()->>zoomPointOldd( m_endPoint ) );
                     }
                     p.end();
 
@@ -1700,8 +1700,8 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
                 KoPoint oldEndPoint( m_endPoint );
                 m_endPoint = snapPoint( docPoint );
                 //remove the old line
-                p.drawLine( m_view->zoomHandler()->zoomPoint( m_startPoint ),
-                            m_view->zoomHandler()->zoomPoint( oldEndPoint ) );
+                p.drawLine( m_view->zoomHandler()->>zoomPointOldd( m_startPoint ),
+                            m_view->zoomHandler()->>zoomPointOldd( oldEndPoint ) );
 
                 if ( e->state() & Qt::AltModifier )
                 {
@@ -1717,8 +1717,8 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
                 }
 
                 // print the new line
-                p.drawLine( m_view->zoomHandler()->zoomPoint( m_startPoint ),
-                            m_view->zoomHandler()->zoomPoint( m_endPoint ) );
+                p.drawLine( m_view->zoomHandler()->>zoomPointOldd( m_startPoint ),
+                            m_view->zoomHandler()->>zoomPointOldd( m_endPoint ) );
                 p.end();
 
                 mouseSelectedObject = true;
@@ -1830,7 +1830,7 @@ void KPrCanvas::mouseDoubleClickEvent( QMouseEvent *e )
     if(!m_view->koDocument()->isReadWrite())
         return;
     QPoint contentsPoint( e->pos().x()+diffx(), e->pos().y()+diffy() );
-    KoPoint docPoint = m_view->zoomHandler()->unzoomPoint( contentsPoint );
+    KoPoint docPoint = m_view->zoomHandler()->unzoomPointOld( contentsPoint );
     if(m_currentTextObjectView)
     {
         KPrTextObject *txtObj=m_currentTextObjectView->kpTextObject();
@@ -1903,7 +1903,7 @@ void KPrCanvas::mouseDoubleClickEvent( QMouseEvent *e )
 
 void KPrCanvas::drawPieObject( QPainter *p, const KoRect & rect )
 {
-    QRect pRect( m_view->zoomHandler()->zoomRect( rect ) );
+    QRect pRect( m_view->zoomHandler()->zoomRectOld( rect ) );
     switch ( m_view->getPieType() ) {
     case PT_PIE:
         p->drawPie( pRect.x(), pRect.y(), pRect.width() - 2,
@@ -2034,8 +2034,8 @@ void KPrCanvas::keyPressEvent( QKeyEvent *e )
 
             if ( e->state() & Qt::ControlModifier )
             {
-                offsetx = qMax(1,m_view->zoomHandler()->zoomItX(10));
-                offsety = qMax(1,m_view->zoomHandler()->zoomItY(10));
+                offsetx = qMax(1,m_view->zoomHandler()->zoomItXOld(10));
+                offsety = qMax(1,m_view->zoomHandler()->zoomItYOld(10));
             }
 
             if ( !m_keyPressEvent )
@@ -2079,7 +2079,7 @@ void KPrCanvas::keyPressEvent( QKeyEvent *e )
                       case MT_RESIZE_RU:
                       case MT_RESIZE_RD:
                       {
-                        QRect oldBoundingRect = m_view->zoomHandler()->zoomRect( m_resizeObject->getRepaintRect() );
+                        QRect oldBoundingRect = m_view->zoomHandler()->zoomRectOld( m_resizeObject->getRepaintRect() );
                         m_resizeObject->setOrig( m_rectBeforeResize.topLeft() );
                         m_resizeObject->setSize( m_rectBeforeResize.size() );
                         drawContour = false;
@@ -3485,7 +3485,7 @@ void KPrCanvas::slotDoPageEffect()
 
 void KPrCanvas::slotAutoScroll(const QPoint &scrollDistance)
 {
-    //QPoint d = m_view->zoomHandler()->zoomPoint( scrollDistance );
+    //QPoint d = m_view->zoomHandler()->>zoomPointOldd( scrollDistance );
     QPoint d = scrollDistance;
     m_view->getHScrollBar()->setValue( m_view->getHScrollBar()->value() + d.x() );
     m_view->getVScrollBar()->setValue( m_view->getVScrollBar()->value() + d.y() );
@@ -3842,7 +3842,7 @@ void KPrCanvas::setToolEditMode( ToolEditMode _m, bool updateView )
         setCursor( Qt::arrowCursor );
         QPoint pos = QCursor::pos();
         // ### missing some coord transformation here?
-        KoPoint docPoint( m_view->zoomHandler()->unzoomPoint( pos ) );
+        KoPoint docPoint( m_view->zoomHandler()->unzoomPointOld( pos ) );
         KPrObject *obj=m_activePage->getCursor( pos);
         if(obj)
             setCursor( obj->getCursor( docPoint, modType, m_view->kPresenterDoc() ) );
@@ -3984,7 +3984,7 @@ void KPrCanvas::dropImage( QMimeSource * data, bool resizeImageToOriginalSize, i
     setCursor( Qt::waitCursor );
 
     QPoint pos( posX + diffx(), posY + diffy() );
-    KoPoint docPoint( m_view->zoomHandler()->unzoomPoint( pos ) );
+    KoPoint docPoint( m_view->zoomHandler()->unzoomPointOld( pos ) );
 
     m_activePage->insertPicture( tmpFile.name(), docPoint  );
 
@@ -3998,7 +3998,7 @@ void KPrCanvas::dropImage( QMimeSource * data, bool resizeImageToOriginalSize, i
 void KPrCanvas::dropEvent( QDropEvent *e )
 {
     //disallow dropping objects outside the "page"
-    KoPoint docPoint = m_view->zoomHandler()->unzoomPoint( e->pos()+QPoint(diffx(),diffy()) );
+    KoPoint docPoint = m_view->zoomHandler()->unzoomPointOld( e->pos()+QPoint(diffx(),diffy()) );
     if ( !m_activePage->getZoomPageRect().contains(e->pos()))
         return;
 
@@ -4049,7 +4049,7 @@ void KPrCanvas::dropEvent( QDropEvent *e )
                         f.close();
                     }
                     kDebug()<<" text :"<<endl;
-                    m_activePage->insertTextObject( m_view->zoomHandler()->unzoomRect(QRect( e->pos().x(), e->pos().y(), 250, 250 )),
+                    m_activePage->insertTextObject( m_view->zoomHandler()->unzoomRectOld(QRect( e->pos().x(), e->pos().y(), 250, 250 )),
                                                     text, m_view );
 
                     setCursor( c );
@@ -4069,7 +4069,7 @@ void KPrCanvas::dropEvent( QDropEvent *e )
         QString text;
         Q3TextDrag::decode( e, text );
         //kDebug()<<" QTextDrag::decode( e, text ); :"<<text<<endl;
-        m_activePage->insertTextObject( m_view->zoomHandler()->unzoomRect( QRect( e->pos().x(), e->pos().y(), 250, 250 )),
+        m_activePage->insertTextObject( m_view->zoomHandler()->unzoomRectOld( QRect( e->pos().x(), e->pos().y(), 250, 250 )),
                                         text, m_view );
         e->accept();
     } else
@@ -4528,8 +4528,8 @@ void KPrCanvas::moveObjectsByKey( int x, int y )
     KPrDocument *doc( m_view->kPresenterDoc() );
 
     KoRect rect( objectRect( false ) );
-    double diffx = m_view->zoomHandler()->unzoomItX( x );
-    double diffy = m_view->zoomHandler()->unzoomItY( y );
+    double diffx = m_view->zoomHandler()->unzoomItXOld( x );
+    double diffy = m_view->zoomHandler()->unzoomItYOld( y );
     KoPoint move( diffx, diffy );
 
     bool snapToGrid = doc->snapToGrid() && !m_disableSnapping;
@@ -4735,7 +4735,7 @@ void KPrCanvas::resizeObject( ModifyType _modType, const KoPoint & point, bool k
 {
     KPrObject *kpobject = m_resizeObject;
 
-    QRect oldBoundingRect( m_view->zoomHandler()->zoomRect( kpobject->getRepaintRect() ) );
+    QRect oldBoundingRect( m_view->zoomHandler()->zoomRectOld( kpobject->getRepaintRect() ) );
 
     KoRect objRect = kpobject->getRealRect();
     KoGuides::SnapStatus snapStatus( KoGuides::SNAP_NONE );
@@ -5060,8 +5060,8 @@ void KPrCanvas::drawCubicBezierCurve( QPainter &p, KoPointArray &points )
         double angle = KoPoint::getAngle( m_endPoint, m_startPoint );
         drawFigure( L_SQUARE, &p, m_endPoint, pen.color(), pen.width(), angle,m_view->zoomHandler() );
 
-        p.drawLine( m_view->zoomHandler()->zoomPoint( m_startPoint ),
-                    m_view->zoomHandler()->zoomPoint( m_endPoint ) );
+        p.drawLine( m_view->zoomHandler()->>zoomPointOldd( m_startPoint ),
+                    m_view->zoomHandler()->>zoomPointOldd( m_endPoint ) );
 
         KoPoint symmetricEndPoint = m_startPoint * 2 - m_endPoint;
 
@@ -5069,8 +5069,8 @@ void KPrCanvas::drawCubicBezierCurve( QPainter &p, KoPointArray &points )
         drawFigure( L_SQUARE, &p, symmetricEndPoint, pen.color(), pen.width(), angle,m_view->zoomHandler() );
 
         // TODO only 1 draw line
-        p.drawLine( m_view->zoomHandler()->zoomPoint( m_startPoint ),
-                    m_view->zoomHandler()->zoomPoint( symmetricEndPoint ) );
+        p.drawLine( m_view->zoomHandler()->>zoomPointOldd( m_startPoint ),
+                    m_view->zoomHandler()->>zoomPointOldd( symmetricEndPoint ) );
 
         p.save();
         p.setPen( QPen( Qt::black, 1, Qt::SolidLine ) );
@@ -5081,8 +5081,8 @@ void KPrCanvas::drawCubicBezierCurve( QPainter &p, KoPointArray &points )
     {
         KoPoint startPoint( m_pointArray.at( m_indexPointArray - 1 ) );
 
-        p.drawLine( m_view->zoomHandler()->zoomPoint( startPoint ),
-                    m_view->zoomHandler()->zoomPoint( m_endPoint ) );
+        p.drawLine( m_view->zoomHandler()->>zoomPointOldd( startPoint ),
+                    m_view->zoomHandler()->>zoomPointOldd( m_endPoint ) );
     }
     p.restore();
 }
@@ -5408,7 +5408,7 @@ KPrTextObject* KPrCanvas::textUnderMouse( const QPoint & point )
     Q3PtrList<KPrTextObject> obj = listOfTextObjs();
     Q3PtrListIterator<KPrTextObject> it2(obj );
     for ( ; it2.current() ; ++it2 ) {
-        QRect outerRect( m_view->kPresenterDoc()->zoomHandler()->zoomRect( it2.current()->getRect()) );
+        QRect outerRect( m_view->kPresenterDoc()->zoomHandler()->zoomRectOld( it2.current()->getRect()) );
         if ( !it2.current()->isProtectContent() && outerRect.contains( point) )
             return it2.current();
     }
@@ -5662,7 +5662,7 @@ void KPrCanvas::popupContextMenu()
         // TODO: Better to popup at caret position.
         // KoTextCursor* cursor = m_currentTextObjectView->cursor();
         KoPoint kop = m_currentTextObjectView->kpTextObject()->getOrig();
-        QPoint p = m_view->zoomHandler()->zoomPoint( kop );
+        QPoint p = m_view->zoomHandler()->>zoomPointOldd( kop );
         p = mapToGlobal( p );
         m_currentTextObjectView->showPopup( m_view, p, m_view->actionList() );
         return;
@@ -5671,7 +5671,7 @@ void KPrCanvas::popupContextMenu()
     KPrObject* obj = m_activePage->getSelectedObj();
     if (obj) {
         KoPoint kop = obj->getOrig();
-        QPoint p = m_view->zoomHandler()->zoomPoint( kop );
+        QPoint p = m_view->zoomHandler()->>zoomPointOldd( kop );
         p = mapToGlobal( p );
         objectPopup( obj, p );
     } else {

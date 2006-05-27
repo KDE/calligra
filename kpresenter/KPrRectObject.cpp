@@ -175,8 +175,8 @@ Q3PointArray KPrRectObject::boundingRegion( int x, int y, int w, int h, int _xRn
 void KPrRectObject::paint( QPainter* _painter, KoTextZoomHandler*_zoomHandler,
                           int /* pageNum */, bool drawingShadow, bool drawContour )
 {
-    int ow = _zoomHandler->zoomItX( ext.width() );
-    int oh = _zoomHandler->zoomItY( ext.height() );
+    int ow = _zoomHandler->zoomItXOld( ext.width() );
+    int oh = _zoomHandler->zoomItYOld( ext.height() );
 
     if ( drawContour ) {
         QPen pen3( Qt::black, 1, Qt::DotLine );

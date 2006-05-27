@@ -398,7 +398,7 @@ void KPrTextObject::paintEdited( QPainter *_painter, KoTextZoomHandler*_zoomHand
                                 bool onlyChanged, KoTextCursor* cursor, bool resetChanged )
 {
     _painter->save();
-    _painter->translate( _zoomHandler->zoomItX(orig.x()), _zoomHandler->zoomItY(orig.y()) );
+    _painter->translate( _zoomHandler->zoomItXOld(orig.x()), _zoomHandler->zoomItYOld(orig.y()) );
 
     if ( angle != 0 )
         rotateObject(_painter,_zoomHandler);
@@ -418,15 +418,15 @@ void KPrTextObject::paint( QPainter *_painter, KoTextZoomHandler*_zoomHandler,
         QPen pen3( Qt::black, 1, Qt::DotLine );
         _painter->setPen( pen3 );
         _painter->setRasterOp( Qt::NotXorROP );
-        _painter->drawRect( _zoomHandler->zoomItX(pw), _zoomHandler->zoomItY(pw),
-                            _zoomHandler->zoomItX(ow), _zoomHandler->zoomItY( oh) );
+        _painter->drawRect( _zoomHandler->zoomItXOld(pw), _zoomHandler->zoomItYOld(pw),
+                            _zoomHandler->zoomItXOld(ow), _zoomHandler->zoomItYOld( oh) );
 
         return;
     }
 
     _painter->save();
     QPen pen2 = pen.zoomedPen(_zoomHandler);
-    //QRect clip=QRect(_zoomHandler->zoomItX(pw), _zoomHandler->zoomItY(pw), _zoomHandler->zoomItX( ow - 2 * pw),_zoomHandler->zoomItY( oh - 2 * pw));
+    //QRect clip=QRect(_zoomHandler->zoomItXOld(pw), _zoomHandler->zoomItYOld(pw), _zoomHandler->zoomItXOld( ow - 2 * pw),_zoomHandler->zoomItYOld( oh - 2 * pw));
     //setupClipRegion( _painter, clip );
     //for debug
     //_painter->fillRect( clip, Qt::blue );
@@ -442,17 +442,17 @@ void KPrTextObject::paint( QPainter *_painter, KoTextZoomHandler*_zoomHandler,
         else {
             QSize size( _zoomHandler->zoomSize( ext ) );
             gradient->setSize( size );
-            _painter->drawPixmap( _zoomHandler->zoomItX(pw), _zoomHandler->zoomItX(pw), gradient->pixmap(), 0, 0,
-                                  _zoomHandler->zoomItX( ow - 2 * pw ),
-                                  _zoomHandler->zoomItY( oh - 2 * pw ) );
+            _painter->drawPixmap( _zoomHandler->zoomItXOld(pw), _zoomHandler->zoomItXOld(pw), gradient->pixmap(), 0, 0,
+                                  _zoomHandler->zoomItXOld( ow - 2 * pw ),
+                                  _zoomHandler->zoomItYOld( oh - 2 * pw ) );
         }
     }
     if ( !editingTextObj || !onlyChanged )
     {
         /// #### Port this to KoBorder, see e.g. kword/kwframe.cc:590
         // (so that the border gets drawn OUTSIDE of the object area)
-        _painter->drawRect( _zoomHandler->zoomItX(pw), _zoomHandler->zoomItX(pw), _zoomHandler->zoomItX( ow - 2 * pw),
-                            _zoomHandler->zoomItY( oh - 2 * pw) );
+        _painter->drawRect( _zoomHandler->zoomItXOld(pw), _zoomHandler->zoomItXOld(pw), _zoomHandler->zoomItXOld( ow - 2 * pw),
+                            _zoomHandler->zoomItYOld( oh - 2 * pw) );
     }
 
     drawText( _painter, _zoomHandler, onlyChanged, cursor, resetChanged );
@@ -470,7 +470,7 @@ void KPrTextObject::paint( QPainter *_painter, KoTextZoomHandler*_zoomHandler,
         _painter->setPen( QPen( Qt::gray, 1, Qt::DotLine ) );
         _painter->setBrush( Qt::NoBrush );
         _painter->setRasterOp( Qt::NotXorROP );
-        _painter->drawRect( 0, 0, _zoomHandler->zoomItX(ow), _zoomHandler->zoomItY( oh) );
+        _painter->drawRect( 0, 0, _zoomHandler->zoomItXOld(ow), _zoomHandler->zoomItYOld( oh) );
 
         _painter->restore();
     }
@@ -484,13 +484,13 @@ void KPrTextObject::drawText( QPainter* _painter, KoTextZoomHandler *zoomHandler
     recalcVerticalAlignment();
     QColorGroup cg = QApplication::palette().active();
     _painter->save();
-    _painter->translate( m_doc->zoomHandler()->zoomItX( bLeft()), m_doc->zoomHandler()->zoomItY( bTop()+alignVertical));
+    _painter->translate( m_doc->zoomHandler()->zoomItXOld( bLeft()), m_doc->zoomHandler()->zoomItYOld( bTop()+alignVertical));
     if ( !editingTextObj || (_painter->device() && _painter->device()->devType() == QInternal::Printer))
         cg.setBrush( QColorGroup::Base, NoBrush );
     else
         cg.setColor( QColorGroup::Base, m_doc->txtBackCol() );
 
-    QRect r = zoomHandler->zoomRect( KoRect( 0, 0, innerWidth(), innerHeight() ) );
+    QRect r = zoomHandler->zoomRectOld( KoRect( 0, 0, innerWidth(), innerHeight() ) );
     bool editMode = false;
     if( m_doc->firstView() && m_doc->firstView()->getCanvas())
         editMode = m_doc->firstView()->getCanvas()->getEditMode();
@@ -1331,7 +1331,7 @@ void KPrTextObject::drawParags( QPainter *painter, KoTextZoomHandler* zoomHandle
     if( m_doc->firstView() && m_doc->firstView()->getCanvas())
         editMode = m_doc->firstView()->getCanvas()->getEditMode();
 
-    QRect r = zoomHandler->zoomRect( KoRect( 0, 0, innerWidth(), innerHeight() ) );
+    QRect r = zoomHandler->zoomRectOld( KoRect( 0, 0, innerWidth(), innerHeight() ) );
     KoTextParag *parag = textDocument()->firstParag();
     while ( parag ) {
         if ( !parag->isValid() )
@@ -1360,7 +1360,7 @@ void KPrTextObject::drawCursor( QPainter *p, KoTextCursor *cursor, bool cursorVi
 {
     // The implementation is very related to KWord's KWTextFrameSet::drawCursor
     KoTextZoomHandler *zh = m_doc->zoomHandler();
-    QPoint origPix = zh->zoomPoint( orig+KoPoint(bLeft(), bTop()+alignVertical) );
+    QPoint origPix = zh->>zoomPointOldd( orig+KoPoint(bLeft(), bTop()+alignVertical) );
     // Painter is already translated for diffx/diffy, but not for the object yet
     p->translate( origPix.x(), origPix.y() );
     if ( angle != 0 )
@@ -1491,7 +1491,7 @@ void KPrTextObject::highlightPortion( KoTextParag * parag, int index, int length
                 kWarning(33001) << "object " << this << " not found in any page!?" << endl;
         }
         // Now ensure text is fully visible
-        QRect rect = m_doc->zoomHandler()->zoomRect( getRect() );
+        QRect rect = m_doc->zoomHandler()->zoomRectOld( getRect() );
         QRect expose = m_doc->zoomHandler()->layoutUnitToPixel( parag->rect() );
         expose.moveBy( rect.x(), rect.y() );
         canvas->ensureVisible( (expose.left()+expose.right()) / 2,  // point = center of the rect
@@ -1765,7 +1765,7 @@ void KPrTextObject::recalcVerticalAlignment()
 QPoint KPrTextObject::cursorPos(KPrCanvas *canvas, KoTextCursor *cursor) const
 {
   KoTextZoomHandler *zh = m_doc->zoomHandler();
-  QPoint origPix = zh->zoomPoint( orig+KoPoint(bLeft(), bTop()+alignVertical) );
+  QPoint origPix = zh->>zoomPointOldd( orig+KoPoint(bLeft(), bTop()+alignVertical) );
   KoTextParag* parag = cursor->parag();
   QPoint topLeft = parag->rect().topLeft();         // in QRT coords
   int lineY = 0;
@@ -1953,7 +1953,7 @@ void KPrTextView::ensureCursorVisible()
     pt.setX( doc->zoomHandler()->layoutUnitPtToPt( doc->zoomHandler()->pixelXToPt( x) ) +pt.x());
     pt.setY( doc->zoomHandler()->layoutUnitPtToPt( doc->zoomHandler()->pixelYToPt( y ))+pt.y() );
 
-    QPoint p = m_kptextobj->kPresenterDocument()->zoomHandler()->zoomPoint( pt );
+    QPoint p = m_kptextobj->kPresenterDocument()->zoomHandler()->>zoomPointOldd( pt );
     w = m_kptextobj->kPresenterDocument()->zoomHandler()->layoutUnitToPixelX( w );
     h = m_kptextobj->kPresenterDocument()->zoomHandler()->layoutUnitToPixelY( h );
     m_canvas->ensureVisible( p.x(), p.y() + h / 2, w, h / 2 + 2 );
@@ -2137,14 +2137,14 @@ QPoint KPrTextView::viewToInternal( const QPoint & pos ) const
     KoTextZoomHandler* zh = kpTextObject()->kPresenterDocument()->zoomHandler();
     QPoint tmp(pos);
     QMatrix m;
-    m.translate( zh->zoomItX(kpTextObject()->getSize().width() / 2.0),
-                 zh->zoomItY(kpTextObject()->getSize().height() /  2.0) );
+    m.translate( zh->zoomItXOld(kpTextObject()->getSize().width() / 2.0),
+                 zh->zoomItYOld(kpTextObject()->getSize().height() /  2.0) );
     m.rotate( kpTextObject()->getAngle() );
 
 
 
-    m.translate( zh->zoomItX(kpTextObject()->getOrig().x()),
-                 zh->zoomItY(kpTextObject()->getOrig().y()) );
+    m.translate( zh->zoomItXOld(kpTextObject()->getOrig().x()),
+                 zh->zoomItYOld(kpTextObject()->getOrig().y()) );
     //m = m.invert();
     tmp = m * pos;
 
@@ -2158,11 +2158,11 @@ QPoint KPrTextView::viewToInternal( const QPoint & pos ) const
     double xPos = -rr.x();
     rr.moveTopLeft( KoPoint( -rr.width() / 2.0, -rr.height() / 2.0 ) );
 
-    m.translate( zh->zoomItX(pw / 2.0),
-                 zh->zoomItY(ph / 2.0 ));
+    m.translate( zh->zoomItXOld(pw / 2.0),
+                 zh->zoomItYOld(ph / 2.0 ));
     m.rotate( kpTextObject()->getAngle() );
-    m.translate( zh->zoomItX(rr.left() + xPos),
-                 zh->zoomItY(rr.top() + yPos) );
+    m.translate( zh->zoomItXOld(rr.left() + xPos),
+                 zh->zoomItYOld(rr.top() + yPos) );
 
     m = m.invert();
 
@@ -2584,7 +2584,7 @@ KoPen KPrTextObject::defaultPen() const
 QPoint KPrTextObject::viewToInternal( const QPoint & pos, KPrCanvas* canvas ) const
 {
     KoTextZoomHandler* zh = kPresenterDocument()->zoomHandler();
-    QPoint iPoint = pos - zh->zoomPoint(
+    QPoint iPoint = pos - zh->>zoomPointOldd(
         getOrig() + KoPoint( bLeft(),
                              bTop() + alignmentValue()) );
     iPoint = zh->pixelToLayoutUnit(

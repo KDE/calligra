@@ -81,12 +81,12 @@ void KPrPBPreview::drawContents( QPainter *painter )
             diff2 = getOffset( lineEnd, _w, 0 );
 
         if ( lineBegin != L_NORMAL )
-            drawFigure( lineBegin, painter, KoPoint( 5, _zoomHandler->unzoomItY( contentsRect().height() ) / 2 ),
+            drawFigure( lineBegin, painter, KoPoint( 5, _zoomHandler->unzoomItYOld( contentsRect().height() ) / 2 ),
                         pen.color(), _w, 180.0, _zoomHandler );
 
         if ( lineEnd != L_NORMAL )
-            drawFigure( lineEnd, painter, KoPoint( _zoomHandler->unzoomItX( contentsRect().width() - 7 ) ,
-                                                   _zoomHandler->unzoomItY( contentsRect().height() ) / 2 ),
+            drawFigure( lineEnd, painter, KoPoint( _zoomHandler->unzoomItXOld( contentsRect().width() - 7 ) ,
+                                                   _zoomHandler->unzoomItYOld( contentsRect().height() ) / 2 ),
                         pen.color(), _w, 0.0, _zoomHandler );
 
         painter->setPen( pen.zoomedPen( _zoomHandler ) );

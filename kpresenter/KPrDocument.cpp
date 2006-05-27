@@ -738,10 +738,10 @@ void KPrDocument::saveEmbeddedObject(KPrPage *page, KoDocumentChild *chl, QDomDo
 
             // geometry is no zoom value !
             QRect _rect = curr->geometry();
-            int tmpX = (int)zoomHandler()->unzoomItX( _rect.x() );
-            int tmpY = (int)zoomHandler()->unzoomItY( _rect.y() );
-            int tmpWidth = (int)zoomHandler()->unzoomItX( _rect.width() );
-            int tmpHeight = (int)zoomHandler()->unzoomItY( _rect.height() );
+            int tmpX = (int)zoomHandler()->unzoomItXOld( _rect.x() );
+            int tmpY = (int)zoomHandler()->unzoomItYOld( _rect.y() );
+            int tmpWidth = (int)zoomHandler()->unzoomItXOld( _rect.width() );
+            int tmpHeight = (int)zoomHandler()->unzoomItYOld( _rect.height() );
             curr->setGeometry( QRect( tmpX, tmpY, tmpWidth, tmpHeight ) );
 
             embedded.appendChild(curr->save(doc, true));
@@ -3273,13 +3273,13 @@ void KPrDocument::setPageLayout( const KoPageLayout &pgLayout )
 void KPrDocument::updateHeaderFooterPosition( )
 {
     KoRect pageRect=m_masterPage->getPageRect();
-    QRect oldBoundingRect = zoomHandler()->zoomRect( _header->getRepaintRect() );
+    QRect oldBoundingRect = zoomHandler()->zoomRectOld( _header->getRepaintRect() );
     _header->setOrig(pageRect.topLeft ());
     _header->setSize(pageRect.width(),_header->getSize().height());
     repaint( oldBoundingRect );
     repaint(_header);
 
-    oldBoundingRect = zoomHandler()->zoomRect( _footer->getRepaintRect() );
+    oldBoundingRect = zoomHandler()->zoomRectOld( _footer->getRepaintRect() );
     _footer->setOrig(pageRect.left(),pageRect.bottom()-_footer->getSize().height());
     _footer->setSize(pageRect.width(),_footer->getSize().height());
     repaint(oldBoundingRect);
@@ -3427,7 +3427,7 @@ void KPrDocument::layout()
 
 void KPrDocument::repaint( KPrObject *kpobject )
 {
-    repaint( m_zoomHandler->zoomRect( kpobject->getRepaintRect() ) );
+    repaint( m_zoomHandler->zoomRectOld( kpobject->getRepaintRect() ) );
 }
 
 Q3ValueList<int> KPrDocument::getPageEffectSteps( unsigned int num )

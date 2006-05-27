@@ -80,7 +80,7 @@ void KPrBackGround::setBackPicture ( const KoPictureKey& key )
 void KPrBackGround::drawBackground( QPainter *_painter, const KoTextZoomHandler* zoomHandler,
                                    const QRect& _crect, bool _drawBorders )
 {
-    QRect pageRect = zoomHandler->zoomRect( m_page->getPageRect() );
+    QRect pageRect = zoomHandler->zoomRectOld( m_page->getPageRect() );
     QRect crect = pageRect.intersect( _crect );
     if ( crect.isEmpty() )
         return;

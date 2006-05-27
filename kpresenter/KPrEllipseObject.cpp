@@ -60,8 +60,8 @@ DCOPObject* KPrEllipseObject::dcopObject()
 void KPrEllipseObject::paint( QPainter* _painter, KoTextZoomHandler *_zoomHandler,
                              int /* pageNum */, bool drawingShadow, bool drawContour )
 {
-    int ow = _zoomHandler->zoomItX( ext.width() );
-    int oh = _zoomHandler->zoomItY( ext.height() );
+    int ow = _zoomHandler->zoomItXOld( ext.width() );
+    int oh = _zoomHandler->zoomItYOld( ext.height() );
     QSize size( _zoomHandler->zoomSize( ext ) );
 
     if ( drawContour ) {

@@ -511,15 +511,15 @@ void KPrPixmapObject::drawShadow( QPainter* _painter, KoZoomHandler* _zoomHandle
 
     getShadowCoords( sx, sy );
 
-    _painter->translate( _zoomHandler->zoomItX( ox ), _zoomHandler->zoomItY( oy ) );
+    _painter->translate( _zoomHandler->zoomItXOld( ox ), _zoomHandler->zoomItYOld( oy ) );
     _painter->setPen( QPen( shadowColor ) );
     _painter->setBrush( shadowColor );
     if ( qAbs(angle) <= DBL_EPSILON )
-        _painter->drawRect( _zoomHandler->zoomItX( sx ), _zoomHandler->zoomItY( sy ),
-                            _zoomHandler->zoomItX( ext.width() ), _zoomHandler->zoomItY( ext.height() ) );
+        _painter->drawRect( _zoomHandler->zoomItXOld( sx ), _zoomHandler->zoomItYOld( sy ),
+                            _zoomHandler->zoomItXOld( ext.width() ), _zoomHandler->zoomItYOld( ext.height() ) );
     else
     {
-        QSize bs = QSize( _zoomHandler->zoomItX( ow ), _zoomHandler->zoomItY( oh ) );
+        QSize bs = QSize( _zoomHandler->zoomItXOld( ow ), _zoomHandler->zoomItYOld( oh ) );
         QRect br = QRect( 0, 0, bs.width(), bs.height() );
         int pw = br.width();
         int ph = br.height();
@@ -532,8 +532,8 @@ void KPrPixmapObject::drawShadow( QPainter* _painter, KoZoomHandler* _zoomHandle
         QMatrix m;
         m.translate( pw / 2, ph / 2 );
         m.rotate( angle );
-        m.translate( rr.left() + pixXPos + _zoomHandler->zoomItX( sx ),
-                     rr.top() + pixYPos + _zoomHandler->zoomItY( sy ) );
+        m.translate( rr.left() + pixXPos + _zoomHandler->zoomItXOld( sx ),
+                     rr.top() + pixYPos + _zoomHandler->zoomItYOld( sy ) );
 
         _painter->setMatrix( m, true );
 
@@ -545,7 +545,7 @@ void KPrPixmapObject::drawShadow( QPainter* _painter, KoZoomHandler* _zoomHandle
 
 QPixmap KPrPixmapObject::generatePixmap(KoZoomHandler*_zoomHandler)
 {
-    const double penw = _zoomHandler->zoomItX( ( ( pen.style() == Qt::NoPen ) ? 1 : pen.width() ) / 2.0 );
+    const double penw = _zoomHandler->zoomItXOld( ( ( pen.style() == Qt::NoPen ) ? 1 : pen.width() ) / 2.0 );
 
     QSize size( _zoomHandler->zoomSize( ext ) );
     //kDebug(33001) << "KPrPixmapObject::generatePixmap size= " << size << endl;
@@ -560,8 +560,8 @@ QPixmap KPrPixmapObject::generatePixmap(KoZoomHandler*_zoomHandler)
     paint.setBrush( getBrush() );
 
     QRect rect( (int)( penw ), (int)( penw ),
-                (int)( _zoomHandler->zoomItX( ext.width() ) - 2.0 * penw ),
-                (int)( _zoomHandler->zoomItY( ext.height() ) - 2.0 * penw ) );
+                (int)( _zoomHandler->zoomItXOld( ext.width() ) - 2.0 * penw ),
+                (int)( _zoomHandler->zoomItYOld( ext.height() ) - 2.0 * penw ) );
 
     if ( getFillType() == FT_BRUSH || !gradient )
         paint.drawRect( rect );
@@ -570,8 +570,8 @@ QPixmap KPrPixmapObject::generatePixmap(KoZoomHandler*_zoomHandler)
         gradient->setSize( size );
         paint.drawPixmap( (int)( penw ), (int)( penw ),
                           gradient->pixmap(), 0, 0,
-                          (int)( _zoomHandler->zoomItX( ext.width() ) - 2 * penw ),
-                          (int)( _zoomHandler->zoomItY( ext.height() ) - 2 * penw ) );
+                          (int)( _zoomHandler->zoomItXOld( ext.width() ) - 2 * penw ),
+                          (int)( _zoomHandler->zoomItYOld( ext.height() ) - 2 * penw ) );
     }
 
 
@@ -599,14 +599,14 @@ void KPrPixmapObject::draw( QPainter *_painter, KoTextZoomHandler*_zoomHandler,
     const double oy = orig.y();
     const double ow = ext.width();
     const double oh = ext.height();
-    const double penw = _zoomHandler->zoomItX( ( ( pen.style() == Qt::NoPen ) ? 1.0 : pen.width() ) / 2.0 );
+    const double penw = _zoomHandler->zoomItXOld( ( ( pen.style() == Qt::NoPen ) ? 1.0 : pen.width() ) / 2.0 );
 
     _painter->save();
 
-    _painter->translate( _zoomHandler->zoomItX( ox ), _zoomHandler->zoomItY( oy ) );
+    _painter->translate( _zoomHandler->zoomItXOld( ox ), _zoomHandler->zoomItYOld( oy ) );
 
     if ( qAbs(angle)> DBL_EPSILON ) {
-        QSize bs = QSize( _zoomHandler->zoomItX( ow ), _zoomHandler->zoomItY( oh ) );
+        QSize bs = QSize( _zoomHandler->zoomItXOld( ow ), _zoomHandler->zoomItYOld( oh ) );
         QRect br = QRect( 0, 0, bs.width(), bs.height() );
         int pw = br.width();
         int ph = br.height();
@@ -625,8 +625,8 @@ void KPrPixmapObject::draw( QPainter *_painter, KoTextZoomHandler*_zoomHandler,
 
     if ( !drawContour )
     {
-        QRect rect( 0, 0, (int)( _zoomHandler->zoomItX( ow ) ),
-                    (int)( _zoomHandler->zoomItY(  oh ) ) );
+        QRect rect( 0, 0, (int)( _zoomHandler->zoomItXOld( ow ) ),
+                    (int)( _zoomHandler->zoomItYOld(  oh ) ) );
         // ### HACK QT seems not to be able to correctly compare QVariant
         bool variants1;
         if (m_ie_par1.isNull())
@@ -689,13 +689,13 @@ void KPrPixmapObject::draw( QPainter *_painter, KoTextZoomHandler*_zoomHandler,
     }
     else {
         pen2 = pen;
-        pen2.setWidth( _zoomHandler->zoomItX( ( pen.style() == Qt::NoPen ) ? 1.0 : (double)pen.width() ) );
+        pen2.setWidth( _zoomHandler->zoomItXOld( ( pen.style() == Qt::NoPen ) ? 1.0 : (double)pen.width() ) );
     }
     _painter->setPen( pen2 );
     _painter->setBrush( Qt::NoBrush );
     _painter->drawRect( (int)( penw ), (int)( penw ),
-                        (int)( _zoomHandler->zoomItX( ow ) - 2.0 * penw ),
-                        (int)( _zoomHandler->zoomItY( oh ) - 2.0 * penw ) );
+                        (int)( _zoomHandler->zoomItXOld( ow ) - 2.0 * penw ),
+                        (int)( _zoomHandler->zoomItYOld( oh ) - 2.0 * penw ) );
 
     _painter->restore();
 

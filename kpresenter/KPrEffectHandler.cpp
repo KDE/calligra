@@ -253,7 +253,7 @@ void KPrEffectHandler::finish()
         {
             bool next = true;
 
-            QRect objectRect = m_view->zoomHandler()->zoomRect( object->getRealRect() );
+            QRect objectRect = m_view->zoomHandler()->zoomRectOld( object->getRealRect() );
             m_repaintRects.append( new QRect( objectRect ) );
 
             if ( appearObject != m_appearEffectObjects.getLast() )
@@ -399,7 +399,7 @@ bool KPrEffectHandler::doDisappearEffectStep( KPrObject *object )
 
 bool KPrEffectHandler::appearNone( KPrObject *object )
 {
-    QRect objectRect = m_view->zoomHandler()->zoomRect( object->getRealRect() );
+    QRect objectRect = m_view->zoomHandler()->zoomRectOld( object->getRealRect() );
     m_repaintRects.append( new QRect( objectRect ) );
     drawObject( object, 0, 0, &m_paint );
     return true;
@@ -408,8 +408,8 @@ bool KPrEffectHandler::appearNone( KPrObject *object )
 
 bool KPrEffectHandler::appearComeLeft( KPrObject *object )
 {
-    QRect objectRect = m_view->zoomHandler()->zoomRect( object->getRealRect() );
-    QRect repaintRect = m_view->zoomHandler()->zoomRect( object->getRepaintRect() );
+    QRect objectRect = m_view->zoomHandler()->zoomRectOld( object->getRealRect() );
+    QRect repaintRect = m_view->zoomHandler()->zoomRectOld( object->getRepaintRect() );
     int ox = objectRect.x();
     int xdiff = repaintRect.x() - ox;
 
@@ -432,8 +432,8 @@ bool KPrEffectHandler::appearComeLeft( KPrObject *object )
 
 bool KPrEffectHandler::appearComeTop( KPrObject *object )
 {
-    QRect objectRect = m_view->zoomHandler()->zoomRect( object->getRealRect() );
-    QRect repaintRect = m_view->zoomHandler()->zoomRect( object->getRepaintRect() );
+    QRect objectRect = m_view->zoomHandler()->zoomRectOld( object->getRealRect() );
+    QRect repaintRect = m_view->zoomHandler()->zoomRectOld( object->getRepaintRect() );
     int oy = objectRect.y();
     int ydiff = repaintRect.y() - oy;
 
@@ -456,8 +456,8 @@ bool KPrEffectHandler::appearComeTop( KPrObject *object )
 
 bool KPrEffectHandler::appearComeRight( KPrObject *object )
 {
-    QRect objectRect = m_view->zoomHandler()->zoomRect( object->getRealRect() );
-    QRect repaintRect = m_view->zoomHandler()->zoomRect( object->getRepaintRect() );
+    QRect objectRect = m_view->zoomHandler()->zoomRectOld( object->getRealRect() );
+    QRect repaintRect = m_view->zoomHandler()->zoomRectOld( object->getRepaintRect() );
     int ox = objectRect.x();
     int xdiff = repaintRect.x() - ox;
 
@@ -480,8 +480,8 @@ bool KPrEffectHandler::appearComeRight( KPrObject *object )
 
 bool KPrEffectHandler::appearComeBottom( KPrObject *object )
 {
-    QRect objectRect = m_view->zoomHandler()->zoomRect( object->getRealRect() );
-    QRect repaintRect = m_view->zoomHandler()->zoomRect( object->getRepaintRect() );
+    QRect objectRect = m_view->zoomHandler()->zoomRectOld( object->getRealRect() );
+    QRect repaintRect = m_view->zoomHandler()->zoomRectOld( object->getRepaintRect() );
     int oy = objectRect.y();
     int ydiff = repaintRect.y() - oy;
 
@@ -504,8 +504,8 @@ bool KPrEffectHandler::appearComeBottom( KPrObject *object )
 
 bool KPrEffectHandler::appearComeLeftTop( KPrObject *object )
 {
-    QRect objectRect = m_view->zoomHandler()->zoomRect( object->getRealRect() );
-    QRect repaintRect = m_view->zoomHandler()->zoomRect( object->getRepaintRect() );
+    QRect objectRect = m_view->zoomHandler()->zoomRectOld( object->getRealRect() );
+    QRect repaintRect = m_view->zoomHandler()->zoomRectOld( object->getRepaintRect() );
     int ox = objectRect.x();
     int oy = objectRect.y();
     int xdiff = repaintRect.x() - ox;
@@ -537,8 +537,8 @@ bool KPrEffectHandler::appearComeLeftTop( KPrObject *object )
 
 bool KPrEffectHandler::appearComeLeftBottom( KPrObject *object )
 {
-    QRect objectRect = m_view->zoomHandler()->zoomRect( object->getRealRect() );
-    QRect repaintRect = m_view->zoomHandler()->zoomRect( object->getRepaintRect() );
+    QRect objectRect = m_view->zoomHandler()->zoomRectOld( object->getRealRect() );
+    QRect repaintRect = m_view->zoomHandler()->zoomRectOld( object->getRepaintRect() );
     int ox = objectRect.x();
     int oy = objectRect.y();
     int xdiff = repaintRect.x() - ox;
@@ -570,8 +570,8 @@ bool KPrEffectHandler::appearComeLeftBottom( KPrObject *object )
 
 bool KPrEffectHandler::appearComeRightTop( KPrObject *object )
 {
-    QRect objectRect = m_view->zoomHandler()->zoomRect( object->getRealRect() );
-    QRect repaintRect = m_view->zoomHandler()->zoomRect( object->getRepaintRect() );
+    QRect objectRect = m_view->zoomHandler()->zoomRectOld( object->getRealRect() );
+    QRect repaintRect = m_view->zoomHandler()->zoomRectOld( object->getRepaintRect() );
     int ox = objectRect.x();
     int oy = objectRect.y();
     int xdiff = repaintRect.x() - ox;
@@ -603,8 +603,8 @@ bool KPrEffectHandler::appearComeRightTop( KPrObject *object )
 
 bool KPrEffectHandler::appearComeRightBottom( KPrObject *object )
 {
-    QRect objectRect = m_view->zoomHandler()->zoomRect( object->getRealRect() );
-    QRect repaintRect = m_view->zoomHandler()->zoomRect( object->getRepaintRect() );
+    QRect objectRect = m_view->zoomHandler()->zoomRectOld( object->getRealRect() );
+    QRect repaintRect = m_view->zoomHandler()->zoomRectOld( object->getRepaintRect() );
     int ox = objectRect.x();
     int oy = objectRect.y();
     int xdiff = repaintRect.x() - ox;
@@ -636,7 +636,7 @@ bool KPrEffectHandler::appearComeRightBottom( KPrObject *object )
 
 bool KPrEffectHandler::appearWipeLeft( KPrObject *object )
 {
-    QRect repaintRect = m_view->zoomHandler()->zoomRect( object->getRepaintRect() );
+    QRect repaintRect = m_view->zoomHandler()->zoomRectOld( object->getRepaintRect() );
     int ow = repaintRect.width();
 
     bool positionReached = false;
@@ -656,7 +656,7 @@ bool KPrEffectHandler::appearWipeLeft( KPrObject *object )
 
 bool KPrEffectHandler::appearWipeRight( KPrObject *object )
 {
-    QRect repaintRect = m_view->zoomHandler()->zoomRect( object->getRepaintRect() );
+    QRect repaintRect = m_view->zoomHandler()->zoomRectOld( object->getRepaintRect() );
     int ow = repaintRect.width();
 
     bool positionReached = false;
@@ -677,7 +677,7 @@ bool KPrEffectHandler::appearWipeRight( KPrObject *object )
 
 bool KPrEffectHandler::appearWipeTop( KPrObject *object )
 {
-    QRect repaintRect = m_view->zoomHandler()->zoomRect( object->getRepaintRect() );
+    QRect repaintRect = m_view->zoomHandler()->zoomRectOld( object->getRepaintRect() );
     int oh = repaintRect.height();
 
     bool positionReached = false;
@@ -698,7 +698,7 @@ bool KPrEffectHandler::appearWipeTop( KPrObject *object )
 
 bool KPrEffectHandler::appearWipeBottom( KPrObject *object )
 {
-    QRect repaintRect = m_view->zoomHandler()->zoomRect( object->getRepaintRect() );
+    QRect repaintRect = m_view->zoomHandler()->zoomRectOld( object->getRepaintRect() );
     int oh = repaintRect.height();
 
     bool positionReached = false;
@@ -719,8 +719,8 @@ bool KPrEffectHandler::appearWipeBottom( KPrObject *object )
 
 bool KPrEffectHandler::disappearGoLeft( KPrObject *object )
 {
-    QRect objectRect = m_view->zoomHandler()->zoomRect( object->getRealRect() );
-    QRect repaintRect = m_view->zoomHandler()->zoomRect( object->getRepaintRect() );
+    QRect objectRect = m_view->zoomHandler()->zoomRectOld( object->getRealRect() );
+    QRect repaintRect = m_view->zoomHandler()->zoomRectOld( object->getRepaintRect() );
     int ox = objectRect.x();
 
     bool positionReached = false;
@@ -743,8 +743,8 @@ bool KPrEffectHandler::disappearGoLeft( KPrObject *object )
 
 bool KPrEffectHandler::disappearGoTop( KPrObject *object )
 {
-    QRect objectRect = m_view->zoomHandler()->zoomRect( object->getRealRect() );
-    QRect repaintRect = m_view->zoomHandler()->zoomRect( object->getRepaintRect() );
+    QRect objectRect = m_view->zoomHandler()->zoomRectOld( object->getRealRect() );
+    QRect repaintRect = m_view->zoomHandler()->zoomRectOld( object->getRepaintRect() );
     int oy = objectRect.y();
 
     bool positionReached = false;
@@ -767,8 +767,8 @@ bool KPrEffectHandler::disappearGoTop( KPrObject *object )
 
 bool KPrEffectHandler::disappearGoRight( KPrObject *object )
 {
-    int ox = m_view->zoomHandler()->zoomItX( object->getRealRect().x() );
-    QRect repaintRect = m_view->zoomHandler()->zoomRect( object->getRepaintRect() );
+    int ox = m_view->zoomHandler()->zoomItXOld( object->getRealRect().x() );
+    QRect repaintRect = m_view->zoomHandler()->zoomRectOld( object->getRepaintRect() );
 
     bool positionReached = false;
     int x = m_effectStep * m_stepWidth;
@@ -790,8 +790,8 @@ bool KPrEffectHandler::disappearGoRight( KPrObject *object )
 
 bool KPrEffectHandler::disappearGoBottom( KPrObject *object )
 {
-    int oy = m_view->zoomHandler()->zoomItY( object->getRealRect().y() );
-    QRect repaintRect = m_view->zoomHandler()->zoomRect( object->getRepaintRect() );
+    int oy = m_view->zoomHandler()->zoomItYOld( object->getRealRect().y() );
+    QRect repaintRect = m_view->zoomHandler()->zoomRectOld( object->getRepaintRect() );
 
     bool positionReached = false;
     int y = m_effectStep * m_stepHeight;
@@ -813,8 +813,8 @@ bool KPrEffectHandler::disappearGoBottom( KPrObject *object )
 
 bool KPrEffectHandler::disappearGoLeftTop( KPrObject *object )
 {
-    QRect objectRect = m_view->zoomHandler()->zoomRect( object->getRealRect() );
-    QRect repaintRect = m_view->zoomHandler()->zoomRect( object->getRepaintRect() );
+    QRect objectRect = m_view->zoomHandler()->zoomRectOld( object->getRealRect() );
+    QRect repaintRect = m_view->zoomHandler()->zoomRectOld( object->getRepaintRect() );
     int ox = objectRect.x();
     int oy = objectRect.y();
 
@@ -839,8 +839,8 @@ bool KPrEffectHandler::disappearGoLeftTop( KPrObject *object )
 
 bool KPrEffectHandler::disappearGoLeftBottom( KPrObject *object )
 {
-    QRect objectRect = m_view->zoomHandler()->zoomRect( object->getRealRect() );
-    QRect repaintRect = m_view->zoomHandler()->zoomRect( object->getRepaintRect() );
+    QRect objectRect = m_view->zoomHandler()->zoomRectOld( object->getRealRect() );
+    QRect repaintRect = m_view->zoomHandler()->zoomRectOld( object->getRepaintRect() );
     int ox = objectRect.x();
     int oy = objectRect.y();
 
@@ -865,8 +865,8 @@ bool KPrEffectHandler::disappearGoLeftBottom( KPrObject *object )
 
 bool KPrEffectHandler::disappearGoRightTop( KPrObject *object )
 {
-    QRect objectRect = m_view->zoomHandler()->zoomRect( object->getRealRect() );
-    QRect repaintRect = m_view->zoomHandler()->zoomRect( object->getRepaintRect() );
+    QRect objectRect = m_view->zoomHandler()->zoomRectOld( object->getRealRect() );
+    QRect repaintRect = m_view->zoomHandler()->zoomRectOld( object->getRepaintRect() );
     int ox = objectRect.x();
     int oy = objectRect.y();
 
@@ -891,8 +891,8 @@ bool KPrEffectHandler::disappearGoRightTop( KPrObject *object )
 
 bool KPrEffectHandler::disappearGoRightBottom( KPrObject *object )
 {
-    QRect objectRect = m_view->zoomHandler()->zoomRect( object->getRealRect() );
-    QRect repaintRect = m_view->zoomHandler()->zoomRect( object->getRepaintRect() );
+    QRect objectRect = m_view->zoomHandler()->zoomRectOld( object->getRealRect() );
+    QRect repaintRect = m_view->zoomHandler()->zoomRectOld( object->getRepaintRect() );
     int ox = objectRect.x();
     int oy = objectRect.y();
 
@@ -917,7 +917,7 @@ bool KPrEffectHandler::disappearGoRightBottom( KPrObject *object )
 
 bool KPrEffectHandler::disappearWipeLeft( KPrObject *object )
 {
-    QRect repaintRect = m_view->zoomHandler()->zoomRect( object->getRepaintRect() );
+    QRect repaintRect = m_view->zoomHandler()->zoomRectOld( object->getRepaintRect() );
     int ow = repaintRect.width();
 
     bool positionReached = false;
@@ -939,7 +939,7 @@ bool KPrEffectHandler::disappearWipeLeft( KPrObject *object )
 
 bool KPrEffectHandler::disappearWipeRight( KPrObject *object )
 {
-    QRect repaintRect = m_view->zoomHandler()->zoomRect( object->getRepaintRect() );
+    QRect repaintRect = m_view->zoomHandler()->zoomRectOld( object->getRepaintRect() );
     int ow = repaintRect.width();
 
     bool positionReached = false;
@@ -961,7 +961,7 @@ bool KPrEffectHandler::disappearWipeRight( KPrObject *object )
 
 bool KPrEffectHandler::disappearWipeTop( KPrObject *object )
 {
-    QRect repaintRect = m_view->zoomHandler()->zoomRect( object->getRepaintRect() );
+    QRect repaintRect = m_view->zoomHandler()->zoomRectOld( object->getRepaintRect() );
     int oh = repaintRect.height();
 
     bool positionReached = false;
@@ -983,7 +983,7 @@ bool KPrEffectHandler::disappearWipeTop( KPrObject *object )
 
 bool KPrEffectHandler::disappearWipeBottom( KPrObject *object )
 {
-    QRect repaintRect = m_view->zoomHandler()->zoomRect( object->getRepaintRect() );
+    QRect repaintRect = m_view->zoomHandler()->zoomRectOld( object->getRepaintRect() );
     int oh = repaintRect.height();
 
     bool positionReached = false;
@@ -1039,7 +1039,7 @@ void KPrEffectHandler::drawObject( KPrObject *object, int x, int y, QPixmap *scr
         if ( ( obj->getAppearStep() < m_step.m_step
             || obj->getAppearStep() == m_step.m_step && !m_appearEffectObjects.containsRef( obj ) )
             && ( ( obj->getDisappear() && obj->getDisappearStep() > m_step.m_step ) || ! obj->getDisappear() )
-            && m_view->zoomHandler()->zoomRect( obj->getRealRect()).intersects(*m_repaintRects.getLast()) )
+            && m_view->zoomHandler()->zoomRectOld( obj->getRealRect()).intersects(*m_repaintRects.getLast()) )
         {
             if ( obj->getAppearStep() == m_step.m_step && ! m_back )
             {

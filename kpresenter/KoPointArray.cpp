@@ -295,7 +295,7 @@ Q3PointArray KoPointArray::zoomPointArray( const KoZoomHandler* zoomHandler ) co
     Q3PointArray tmpPoints(size());
     for ( uint i= 0; i<size();i++ ) {
         KoPoint p = at( i );
-        tmpPoints.putPoints( i, 1, zoomHandler->zoomItX(p.x()),zoomHandler->zoomItY(p.y()) );
+        tmpPoints.putPoints( i, 1, zoomHandler->zoomItXOld(p.x()),zoomHandler->zoomItYOld(p.y()) );
     }
     return tmpPoints;
 }
@@ -305,10 +305,10 @@ Q3PointArray KoPointArray::zoomPointArray( const KoZoomHandler* zoomHandler, int
     double fx;
     double fy;
     KoSize ext = boundingRect().size();
-    int pw = zoomHandler->zoomItX( penWidth ) / 2;
+    int pw = zoomHandler->zoomItXOld( penWidth ) / 2;
 
-    fx = (double)( zoomHandler->zoomItX(ext.width()) - 2 * pw ) / ext.width();
-    fy = (double)( zoomHandler->zoomItY(ext.height()) - 2 * pw ) / ext.height();
+    fx = (double)( zoomHandler->zoomItXOld(ext.width()) - 2 * pw ) / ext.width();
+    fy = (double)( zoomHandler->zoomItYOld(ext.height()) - 2 * pw ) / ext.height();
 
     unsigned int index = 0;
     Q3PointArray tmpPoints;

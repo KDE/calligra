@@ -1776,7 +1776,7 @@ KoRect KPrPage::getPageRect() const
 
 QRect KPrPage::getZoomPageRect() const
 {
-    return m_doc->zoomHandler()->zoomRect(getPageRect());
+    return m_doc->zoomHandler()->zoomRectOld(getPageRect());
 }
 
 void KPrPage::completeLoading( bool _clean, int lastObj )
@@ -2165,8 +2165,8 @@ KCommand *KPrPage::moveObject(KPrView *_view, double diffx, double diffy)
         if ( it.current()->isSelected() && !it.current()->isProtect())
         {
             _objects.append( it.current() );
-            QRect br = _view->zoomHandler()->zoomRect( it.current()->getRepaintRect() );
-            br.moveBy( _view->zoomHandler()->zoomItX( diffx ), _view->zoomHandler()->zoomItY( diffy ) );
+            QRect br = _view->zoomHandler()->zoomRectOld( it.current()->getRepaintRect() );
+            br.moveBy( _view->zoomHandler()->zoomItXOld( diffx ), _view->zoomHandler()->zoomItYOld( diffy ) );
             m_doc->repaint( br ); // Previous position
             m_doc->repaint( it.current() ); // New position
             createCommand=true;
@@ -2194,7 +2194,7 @@ KCommand *KPrPage::moveObject(KPrView *m_view,const KoPoint &_move,bool key)
             continue;
         if ( it.current()->isSelected() && !it.current()->isProtect()) {
 
-            QRect oldBoundingRect = m_view->zoomHandler()->zoomRect( it.current()->getRepaintRect() );
+            QRect oldBoundingRect = m_view->zoomHandler()->zoomRectOld( it.current()->getRepaintRect() );
 
             it.current()->moveBy( _move );
             _objects.append( it.current() );
@@ -2315,7 +2315,7 @@ void KPrPage::addTextObjects(Q3PtrList<KoTextObject>& lst) const
 
 KPrObject * KPrPage::getCursor( const QPoint &pos )
 {
-    return getCursor( m_doc->zoomHandler()->unzoomPoint( pos ) );
+    return getCursor( m_doc->zoomHandler()->unzoomPointOld( pos ) );
 }
 
 KPrObject * KPrPage::getCursor(const KoPoint &pos )
