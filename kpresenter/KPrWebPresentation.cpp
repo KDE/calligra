@@ -221,7 +221,7 @@ void KPrWebPresentation::loadConfig()
             if ( cfg.hasKey( key ) )
             {
                 // We'll assume that the selected pages haven't changed... Hmm.
-                slideInfos[ i ].slideTitle = cfg.readEntry( key );
+                slideInfos[ i ].slideTitle = cfg.readEntry( key, QString() );
                 kDebug(33001) << "KPrWebPresentation::loadConfig key=" << key << " data=" << slideInfos[i].slideTitle << endl;
             } else kDebug(33001) << " key not found " << key << endl;
         }
@@ -273,15 +273,15 @@ void KPrWebPresentation::initCreation( KProgressBar *progressBar )
     KUrl str(  path + "/html"  );
     KIO::NetAccess::mkdir( str,( QWidget* )0L  );
 
-    p = progressBar->progress();
-    progressBar->setProgress( ++p );
+    p = progressBar->value();
+    progressBar->setValue( ++p );
     kapp->processEvents();
 
     str = path + "/pics";
     KIO::NetAccess::mkdir( str,( QWidget* )0L );
 
-    p = progressBar->progress();
-    progressBar->setProgress( ++p );
+    p = progressBar->value();
+    progressBar->setValue( ++p );
     kapp->processEvents();
 
     const char *pics[] = { "home", "first", "next", "prev", "last", 0 };
@@ -296,8 +296,8 @@ void KPrWebPresentation::initCreation( KProgressBar *progressBar )
         desturl = path;
         desturl.addPath( "/pics/" + filename );
         KIO::NetAccess::file_copy( srcurl, desturl, -1, true /*overwrite*/);
-        p = progressBar->progress();
-        progressBar->setProgress( ++p );
+        p = progressBar->value();
+        progressBar->setValue( ++p );
         kapp->processEvents();
     }
 }
@@ -319,8 +319,8 @@ void KPrWebPresentation::createSlidesPictures( KProgressBar *progressBar )
 
         KIO::NetAccess::file_move( tmp.name(), filename, -1, true /*overwrite*/);
 
-        p = progressBar->progress();
-        progressBar->setProgress( ++p );
+        p = progressBar->value();
+        progressBar->setValue( ++p );
         kapp->processEvents();
     }
 }
@@ -524,8 +524,8 @@ void KPrWebPresentation::createSlidesHTML( KProgressBar *progressBar )
 
         KIO::NetAccess::file_move( tmp.name(), dest, -1, true /*overwrite*/);
 
-        int p = progressBar->progress();
-        progressBar->setProgress( ++p );
+        int p = progressBar->value();
+        progressBar->setValue( ++p );
         kapp->processEvents();
     }
 }
@@ -572,7 +572,7 @@ void KPrWebPresentation::createMainPage( KProgressBar *progressBar )
     KIO::NetAccess::file_move( tmp.name(), dest, -1, true /*overwrite*/);
 
 
-    progressBar->setProgress( progressBar->totalSteps() );
+    progressBar->setValue( progressBar->maximum() );
     kapp->processEvents();
 }
 
@@ -580,13 +580,12 @@ void KPrWebPresentation::init()
 {
 
     KoDocumentInfo * info = doc->documentInfo();
-    KoDocumentInfoAuthor * authorPage = static_cast<KoDocumentInfoAuthor *>(info->page( "author" ));
-    if ( !authorPage )
-        kWarning() << "Author information not found in documentInfo !" << endl;
+    if ( !info )
+        kWarning() << "Author information not found in document Info !" << endl;
     else
     {
-        author = authorPage->fullName();
-        email = authorPage->email();
+        author = info->authorInfo( "creator" );
+        email = info->authorInfo( "email" );
     }
 
     title = i18n("Slideshow");
@@ -1179,13 +1178,13 @@ void KPrWebPresentationCreateDialog::initCreation()
     f.setBold( true );
     step1->setFont( f );
 
-    progressBar->setProgress( 0 );
-    progressBar->setTotalSteps( webPres.initSteps() );
+    progressBar->setValue( 0 );
+    progressBar->setMaximum( webPres.initSteps() );
 
     webPres.initCreation( progressBar );
 
     step1->setFont( f2 );
-    progressBar->setProgress( progressBar->totalSteps() );
+    progressBar->setValue( progressBar->maximum() );
 }
 
 void KPrWebPresentationCreateDialog::createSlidesPictures()
@@ -1194,15 +1193,15 @@ void KPrWebPresentationCreateDialog::createSlidesPictures()
     f.setBold( true );
     step2->setFont( f );
 
-    progressBar->setProgress( 0 );
+    progressBar->setValue( 0 );
     if ( webPres.slides1Steps() > 0 )
     {
-        progressBar->setTotalSteps( webPres.slides1Steps() );
+        progressBar->setMaximum( webPres.slides1Steps() );
         webPres.createSlidesPictures( progressBar );
     }
 
     step2->setFont( f2 );
-    progressBar->setProgress( progressBar->totalSteps() );
+    progressBar->setValue( progressBar->maximum() );
 }
 
 void KPrWebPresentationCreateDialog::createSlidesHTML()
@@ -1211,15 +1210,15 @@ void KPrWebPresentationCreateDialog::createSlidesHTML()
     f.setBold( true );
     step3->setFont( f );
 
-    progressBar->setProgress( 0 );
+    progressBar->setValue( 0 );
     if ( webPres.slides1Steps() > 0 )
     {
-        progressBar->setTotalSteps( webPres.slides1Steps() );
+        progressBar->setMaximum( webPres.slides1Steps() );
         webPres.createSlidesHTML( progressBar );
     }
 
     step3->setFont( f2 );
-    progressBar->setProgress( progressBar->totalSteps() );
+    progressBar->setValue( progressBar->maximum() );
 }
 
 void KPrWebPresentationCreateDialog::createMainPage()
@@ -1228,13 +1227,13 @@ void KPrWebPresentationCreateDialog::createMainPage()
     f.setBold( true );
     step4->setFont( f );
 
-    progressBar->setProgress( 0 );
-    progressBar->setTotalSteps( webPres.slides1Steps() );
+    progressBar->setValue( 0 );
+    progressBar->setMaximum( webPres.slides1Steps() );
 
     webPres.createMainPage( progressBar );
 
     step4->setFont( f2 );
-    progressBar->setProgress( progressBar->totalSteps() );
+    progressBar->setValue( progressBar->maximum() );
 }
 
 void KPrWebPresentationCreateDialog::setupGUI()
@@ -1290,7 +1289,7 @@ void KPrWebPresentationCreateDialog::saveConfig()
     else
         filename = QString::null;
 
-    KFileDialog fd (filename, i18n("*.kpweb|KPresenter Web-Presentation (*.kpweb)")
+    KFileDialog fd (filename, i18n("*.kpweb|KPresenter Web-Presentation (*.kpweb)"), this
                     );
     fd.setCaption (i18n ("Save Web Presentation Configuration"));
     fd.setOperationMode (KFileDialog::Saving);

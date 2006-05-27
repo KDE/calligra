@@ -44,6 +44,7 @@
 #include <QPushButton>
 #include <q3vbox.h>
 #include <q3whatsthis.h>
+#include <Q3GroupBox>
 //Added by qt3to4:
 #include <Q3HBoxLayout>
 #include <QResizeEvent>
@@ -91,8 +92,8 @@ void KPrMSPresentation::initCreation( KProgressBar *progressBar )
     KUrl str(  path + "/DCIM"  );
     KIO::NetAccess::mkdir( str,( QWidget* )0L  );
 
-    p = progressBar->progress();
-    progressBar->setProgress( ++p );
+    p = progressBar->value();
+    progressBar->setValue( ++p );
     kapp->processEvents();
 
     for (int dirNum = 101; dirNum < 999; dirNum++) {
@@ -101,29 +102,29 @@ void KPrMSPresentation::initCreation( KProgressBar *progressBar )
             break;
     }
 
-    p = progressBar->progress();
-    progressBar->setProgress( ++p );
+    p = progressBar->value();
+    progressBar->setValue( ++p );
     kapp->processEvents();
 
     str = (  path + slidePath );
     KIO::NetAccess::mkdir( str,( QWidget* )0L  );
-    p = progressBar->progress();
-    progressBar->setProgress( ++p );
+    p = progressBar->value();
+    progressBar->setValue( ++p );
     kapp->processEvents();
 
     // now do the SPP file directory
     str = (  path + "/MSSONY" );
     KIO::NetAccess::mkdir( str,( QWidget* )0L  );
 
-    p = progressBar->progress();
-    progressBar->setProgress( ++p );
+    p = progressBar->value();
+    progressBar->setValue( ++p );
     kapp->processEvents();
     str = (  path + "/MSSONY/PJ" );
     KIO::NetAccess::mkdir( str,( QWidget* )0L  );
 
 
-    p = progressBar->progress();
-    progressBar->setProgress( ++p );
+    p = progressBar->value();
+    progressBar->setValue( ++p );
     kapp->processEvents();
 
     // create the title slides
@@ -137,8 +138,8 @@ void KPrMSPresentation::initCreation( KProgressBar *progressBar )
     titleSlide.save( tmp.name(), "JPEG" );
     KIO::NetAccess::file_move( tmp.name(), filename, -1, true /*overwrite*/);
 
-    p = progressBar->progress();
-    progressBar->setProgress( ++p );
+    p = progressBar->value();
+    progressBar->setValue( ++p );
     kapp->processEvents();
 
     // and put the specified title string on the first slide
@@ -152,8 +153,8 @@ void KPrMSPresentation::initCreation( KProgressBar *progressBar )
     titleSlide.save( tmp2.name(), "JPEG" );
     KIO::NetAccess::file_move( tmp2.name(), filename, -1, true /*overwrite*/);
 
-    p = progressBar->progress();
-    progressBar->setProgress( ++p );
+    p = progressBar->value();
+    progressBar->setValue( ++p );
     kapp->processEvents();
 
 }
@@ -175,8 +176,8 @@ void KPrMSPresentation::createSlidesPictures( KProgressBar *progressBar )
 
         KIO::NetAccess::file_move( tmp.name(), ( path + slidePath + filename ), -1, true /*overwrite*/);
 
-        p = progressBar->progress();
-        progressBar->setProgress( ++p );
+        p = progressBar->value();
+        progressBar->setValue( ++p );
         kapp->processEvents();
     }
 }
@@ -190,8 +191,8 @@ void KPrMSPresentation::createIndexFile( KProgressBar *progressBar )
 
     QDataStream sppStream( sppFile.file() );
     sppStream.setByteOrder(QDataStream::LittleEndian);
-    p = progressBar->progress();
-    progressBar->setProgress( ++p );
+    p = progressBar->value();
+    progressBar->setValue( ++p );
     kapp->processEvents();
 
     // We are doing little endian
@@ -214,8 +215,8 @@ void KPrMSPresentation::createIndexFile( KProgressBar *progressBar )
     sppStream << (quint32)0x00000000; // more nulls
     sppStream << (quint32)0x00000000; // more nulls
     sppStream << (quint32)0x00000000; // more nulls
-    p = progressBar->progress();
-    progressBar->setProgress( ++p );
+    p = progressBar->value();
+    progressBar->setValue( ++p );
     kapp->processEvents();
 
     // title 1, 16 bytes null padded
@@ -243,8 +244,8 @@ void KPrMSPresentation::createIndexFile( KProgressBar *progressBar )
     for (int i = 0; i < (296/4); i++) {
         sppStream << (quint32)0x00000000;
     }
-    p = progressBar->progress();
-    progressBar->setProgress( ++p );
+    p = progressBar->value();
+    progressBar->setValue( ++p );
     kapp->processEvents();
 
     // Add in the slide filenames
@@ -254,8 +255,8 @@ void KPrMSPresentation::createIndexFile( KProgressBar *progressBar )
         strncpy( buff, filename.ascii(), 63 );
         buff[64] = 0x00;
         sppStream.writeRawBytes( buff, 64 );
-        p = progressBar->progress();
-        progressBar->setProgress( ++p );
+        p = progressBar->value();
+        progressBar->setValue( ++p );
         kapp->processEvents();
     }
 
@@ -266,8 +267,8 @@ void KPrMSPresentation::createIndexFile( KProgressBar *progressBar )
         sppStream << (quint32)0x00000000;
     }
 
-    p = progressBar->progress();
-    progressBar->setProgress( ++p );
+    p = progressBar->value();
+    progressBar->setValue( ++p );
     kapp->processEvents();
 
     sppFile.close();
@@ -541,13 +542,13 @@ void KPrMSPresentationCreateDialog::initCreation()
     f.setBold( true );
     step1->setFont( f );
 
-    progressBar->setProgress( 0 );
-    progressBar->setTotalSteps( msPres.initSteps() );
+    progressBar->setValue( 0 );
+    progressBar->setMaximum( msPres.initSteps() );
 
     msPres.initCreation( progressBar );
 
     step1->setFont( f2 );
-    progressBar->setProgress( progressBar->totalSteps() );
+    progressBar->setValue( progressBar->maximum() );
 }
 
 void KPrMSPresentationCreateDialog::createSlidesPictures()
@@ -556,15 +557,15 @@ void KPrMSPresentationCreateDialog::createSlidesPictures()
     f.setBold( true );
     step2->setFont( f );
 
-    progressBar->setProgress( 0 );
+    progressBar->setValue( 0 );
     if ( msPres.slidesSteps() > 0 )
     {
-        progressBar->setTotalSteps( msPres.slidesSteps() );
+        progressBar->setMaximum( msPres.slidesSteps() );
         msPres.createSlidesPictures( progressBar );
     }
 
     step2->setFont( f2 );
-    progressBar->setProgress( progressBar->totalSteps() );
+    progressBar->setValue( progressBar->maximum() );
 }
 
 void KPrMSPresentationCreateDialog::createIndexFile()
@@ -573,15 +574,15 @@ void KPrMSPresentationCreateDialog::createIndexFile()
     f.setBold( true );
     step3->setFont( f );
 
-    progressBar->setProgress( 0 );
+    progressBar->setValue( 0 );
     if ( msPres.indexFileSteps() > 0 )
     {
-        progressBar->setTotalSteps( msPres.indexFileSteps() );
+        progressBar->setMaximum( msPres.indexFileSteps() );
         msPres.createIndexFile( progressBar );
     }
 
     step3->setFont( f2 );
-    progressBar->setProgress( progressBar->totalSteps() );
+    progressBar->setValue( progressBar->maximum() );
 }
 
 void KPrMSPresentationCreateDialog::setupGUI()

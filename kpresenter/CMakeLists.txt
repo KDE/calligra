@@ -27,17 +27,17 @@ set(libaf_SRCS
 
 set(kpresenterprivate_LIB_SRCS ${libaf_SRCS}
    KoPointArray.cpp 
-   #KPrCanvas.cpp 
-   #KPrPage.cpp 
+   KPrCanvas.cpp 
+   KPrPage.cpp 
    KPrFindReplace.cpp 
    KPrBackDia.cpp 
-   #KPrWebPresentation.cpp 
+   KPrWebPresentation.cpp 
    #KPrView.cpp 
-   #KPrMSPresentationSetup.cpp 
+   KPrMSPresentationSetup.cpp 
    KPrBrush.cpp 
    KPrDocument.cpp 
    KPrSoundPlayer.cpp 
-   #KPrPgConfDia.cpp 
+   KPrPgConfDia.cpp 
    KPrEffectDia.cpp 
    KPrCommand.cpp 
    KPrUtils.cpp 

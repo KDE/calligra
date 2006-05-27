@@ -63,7 +63,7 @@ KPrPgConfDia::KPrPgConfDia( QWidget* parent, KPrDocument* doc )
 
 void KPrPgConfDia::setupPageGeneral()
 {
-    Q3Frame* generalPage = addPage( i18n("&General") );
+    QFrame* generalPage = addPage( i18n("&General") );
     Q3WhatsThis::add( generalPage, i18n("<p>This dialog allows you to configure how the slideshow "
 				       "will be displayed, including whether the slides are "
 				       "automatically sequenced or manually controlled, and also "
@@ -141,7 +141,7 @@ void KPrPgConfDia::setupPageGeneral()
 
 void KPrPgConfDia::setupPageSlides()
 {
-    Q3Frame* slidesPage = addPage( i18n("&Slides") );
+    QFrame* slidesPage = addPage( i18n("&Slides") );
     Q3WhatsThis::add( slidesPage, i18n("<p>This dialog allows you to configure which slides "
 				      "are used in the presentation. Slides that are not "
 				      "selected will not be displayed during the slide "
