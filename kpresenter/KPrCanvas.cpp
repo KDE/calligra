@@ -373,7 +373,8 @@ void KPrCanvas::paintEvent( QPaintEvent* paintEvent )
 
 
         QPixmap topBuffer( buffer );
-        QPainter topPainter( &topBuffer, &buffer );
+#warning "kde4: port it!"
+		QPainter topPainter;//( &topBuffer, &buffer );
         topPainter.translate( -diffx(), -diffy() );
         topPainter.setBrushOrigin( -diffx(), -diffy() );
 
@@ -1115,11 +1116,14 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
 
             setCursor( Qt::arrowCursor );
             QPoint pnt = QCursor::pos();
-            int ret = m_presMenu->exec( pnt );
+#warning "kde4: port it to qaction"
+#if 0
+			int ret = m_presMenu->exec( pnt );
             // we have to continue the timer if the menu was canceled and we draw mode is not active
             if ( ret == -1 && !m_presMenu->isItemChecked( PM_DM ) && !spManualSwitch() )
                 m_view->continueAutoPresTimer();
-        }
+#endif
+		}
     }
 
 
@@ -2188,7 +2192,8 @@ void KPrCanvas::keyReleaseEvent( QKeyEvent *e )
         }
     }
 }
-
+#warning "kde4 port it"
+#if 0
 void KPrCanvas::imStartEvent( QIMEvent * e )
 {
     if ( m_editObject && m_currentTextObjectView )
@@ -2217,7 +2222,7 @@ void KPrCanvas::imEndEvent( QIMEvent * e )
             m_currentTextObjectView->imEndEvent( e );
     }
 }
-
+#endif
 void KPrCanvas::resizeEvent( QResizeEvent *e )
 {
     if ( editMode )
@@ -2308,7 +2313,7 @@ void KPrCanvas::setupMenus()
     m_presMenu = new KMenu();
     Q_CHECK_PTR( m_presMenu );
     m_presMenu->setCheckable( true );
-    m_presMenu->insertTitle( i18n( "Slide Show" ) );
+    m_presMenu->addTitle( i18n( "Slide Show" ) );
     m_presMenu->insertItem( i18n( "&Continue" ), this, SLOT( setSwitchingMode() ) );
     PM_DM = m_presMenu->insertItem( i18n( "&Drawing Mode" ), this, SLOT( setDrawingMode() ) );
     m_presMenu->insertSeparator();
@@ -2376,7 +2381,7 @@ bool KPrCanvas::exportPage( int nPage,
         if( !bLocalFile )
             tmpFile->setAutoDelete( true );
         if( bLocalFile || 0 == tmpFile->status() ){
-            QFile file( bLocalFile ? fileURL.path(0) : tmpFile->name() );
+            QFile file( bLocalFile ? fileURL.path(KUrl::LeaveTrailingSlash) : tmpFile->name() );
             if ( file.open( QIODevice::ReadWrite ) ) {
                 res = pix.save( &file, format, quality );
                 file.close();
@@ -2740,7 +2745,7 @@ void KPrCanvas::setTextDepthMinus()
     double newVal = leftMargin - indent;
     KMacroCommand* macroCmd = 0L;
     for ( ; it.current() ; ++it ) {
-        KCommand* cmd = it.current()->setMarginCommand(Q3StyleSheetItem::MarginLeft, qMax( newVal, 0 ));
+        KCommand* cmd = it.current()->setMarginCommand(Q3StyleSheetItem::MarginLeft, qMax( newVal, 0.0 ));
         if ( cmd )
         {
             if ( !macroCmd )
@@ -3556,7 +3561,7 @@ void KPrCanvas::print( QPainter *painter, KPrinter *printer, float /*left_margin
     //m_view->setDiffY( -static_cast<int>( MM_TO_POINT( top_margin ) ) );
 
     Q3ProgressDialog progress( i18n( "Printing..." ), i18n( "Cancel" ),
-                              printer->pageList().count() + 2, this );
+                              printer->pageList().count() + 2, this,0 );
 
     int j = 0;
     progress.setProgress( 0 );
@@ -4139,7 +4144,7 @@ void KPrCanvas::copyOasisObjs()
     KoStoreDrag *kd = new KoStoreDrag( "application/vnd.oasis.opendocument.presentation", 0L );
     Q3DragObject* dragObject = kd;
     QByteArray arr;
-    QBuffer buffer(arr);
+    QBuffer buffer(&arr);
     KoStore* store = KoStore::createStore( &buffer, KoStore::Write, "application/vnd.oasis.opendocument.presentation" );
 
     delete store;
@@ -4161,7 +4166,7 @@ void KPrCanvas::copyObjs()
     KoStoreDrag *kd = new KoStoreDrag( "application/x-kpresenter", 0L );
     Q3DragObject* dragObject = kd;
     QByteArray arr;
-    QBuffer buffer(arr);
+    QBuffer buffer(&arr);
     KoStore* store = KoStore::createStore( &buffer, KoStore::Write, "application/x-kpresenter" );
 
     m_activePage->getAllEmbeddedObjectSelected(embeddedObjectsActivePage );
@@ -4195,17 +4200,20 @@ void KPrCanvas::copyObjs()
             KoPicture pic = kprdoc->pictureCollection()->findPicture( savePictures.first() );
             Q3DragObject* picDrag = pic.dragObject( 0L );
             if ( picDrag ) {
+#warning "kde4: port it"
+#if 0
                 KMultipleDrag* multipleDrag = new KMultipleDrag( 0L );
                 multipleDrag->addDragObject( kd );
                 multipleDrag->addDragObject( picDrag );
                 dragObject = multipleDrag;
-            }
+#endif
+			}
         }
     }
 
     if ( store->open( "root" ) )
     {
-        Q3CString s = doc.toCString(); // this is already Utf8!
+        QByteArray s = doc.toByteArray(); // this is already Utf8!
         //kDebug(33001) << "KPrCanvas::copyObject: " << s << endl;
         (void)store->write( s.data(), s.size()-1 );
         store->close();
@@ -5024,7 +5032,8 @@ void KPrCanvas::stopSound()
 
 void KPrCanvas::setXimPosition( int x, int y, int w, int h, QFont *f )
 {
-    QWidget::setMicroFocusHint( x - diffx(), y - diffy(), w, h, true, f );
+#warning "kde4 : port it"
+//    QWidget::setMicroFocusHint( x - diffx(), y - diffy(), w, h, true, f );
 }
 
 void KPrCanvas::createEditing( KPrTextObject *textObj )
@@ -5653,11 +5662,14 @@ void KPrCanvas::popupContextMenu()
         }
         setCursor( Qt::arrowCursor );
         QPoint p( width()/2, height()/2 );
-        int ret = m_presMenu->exec( p );
+#warning "kde4: port to qaction"
+#if 0
+		int ret = m_presMenu->exec( p );
         // we have to continue the timer if the menu was canceled and draw mode is not active
         if ( ret == -1 && !m_presMenu->isItemChecked( PM_DM ) && !spManualSwitch() )
             m_view->continueAutoPresTimer();
-        return;
+#endif
+		return;
     }
     if ( m_currentTextObjectView ) {
         // TODO: Better to popup at caret position.

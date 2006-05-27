@@ -278,7 +278,8 @@ KPrView::KPrView( KPrDocument* _doc, QWidget *_parent, const char *_name )
     m_broker = Broker::openBroker( KSharedConfig::openConfig( "kpresenterrc" ) );
 
     m_autoPresTimerConnected = false;
-    m_actionList.setAutoDelete( true );
+#warning "kde4: delete it"
+	//m_actionList.setAutoDelete( true );
     checkConcavePolygon = false;
     cornersValue = 3;
     sharpnessValue = 0;
@@ -704,7 +705,7 @@ void KPrView::insertPicture()
     mimetypes += KImageIO::mimeTypes( KImageIO::Reading );
     mimetypes += KoPictureFilePreview::clipartMimeTypes();
 
-    KFileDialog fd( m_pKPresenterDoc->picturePath(), QString::null, this, 0, true );
+    KFileDialog fd( m_pKPresenterDoc->picturePath(), QString::null, this );
     fd.setCaption( i18n( "Insert Picture" ) );
     fd.setMimeFilter( mimetypes );
     fd.setPreviewWidget( new KoPictureFilePreview( &fd ) );
@@ -2442,7 +2443,7 @@ void KPrView::setupActions()
     actionTextFont = new KAction( i18n( "&Font..." ), 0, this, SLOT( mtextFont() ),
                                   actionCollection(), "text_font" );
 
-    actionTextFontSize = new KFontSizeAction( i18n( "Font Size" ), 0, actionCollection(), "text_fontsize" );
+    actionTextFontSize = new KFontSizeAction( i18n( "Font Size" ), actionCollection(), "text_fontsize" );
     connect( actionTextFontSize, SIGNAL( fontSizeChanged( int ) ),
              this, SLOT( sizeSelected( int ) ) );
 
@@ -4145,7 +4146,7 @@ void KPrView::openPopupMenuMenuPage( const QPoint & _point )
 {
     if(!koDocument()->isReadWrite() || !factory())
         return;
-    Q3PtrList<KAction> actionList= Q3PtrList<KAction>();
+    QList<KAction*> actionList= QList<KAction*>();
     KSeparatorAction *separator=new KSeparatorAction();
     switch( m_canvas->activePage()->getBackType())
     {
@@ -6064,7 +6065,7 @@ void KPrView::autoSpellCheck()
 
 void KPrView::insertFile(  )
 {
-    KFileDialog fd( QString::null, QString::null, this, 0, true );
+    KFileDialog fd( QString::null, QString::null, this );
     QStringList filter;
     filter<<"application/x-kpresenter";
     filter<<"application/vnd.oasis.opendocument.presentation";
