@@ -61,7 +61,7 @@ KPrClosedLineObject::KPrClosedLineObject( const KPrPointObject &object )
 {
     ext = object.getSize();
     orig = object.getOrig();
-    objectName = object.getObjectName();
+    m_objectName = object.getObjectName();
     points = object.getPoints().copy();
     points.putPoints( points.count(), 1, points.at( 0 ).x(), points.at( 0 ).y() );
     switch ( object.getType() )

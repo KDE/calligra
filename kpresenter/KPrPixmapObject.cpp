@@ -64,7 +64,8 @@ KPrPixmapObject::KPrPixmapObject( KoPictureCollection *_imageCollection )
     m_ie_par2 = QVariant();
     m_ie_par3 = QVariant();
     // Forbid QPixmap to cache the X-Window resources (Yes, it is slower!)
-    m_cachedPixmap.setOptimization(QPixmap::MemoryOptim);
+#warning "kde4: port it"
+	//m_cachedPixmap.setOptimization(QPixmap::MemoryOptim);
     keepRatio = true;
 }
 
@@ -85,7 +86,8 @@ KPrPixmapObject::KPrPixmapObject( KoPictureCollection *_imageCollection, const K
     m_ie_par2 = QVariant();
     m_ie_par3 = QVariant();
     // Forbid QPixmap to cache the X-Window resources (Yes, it is slower!)
-    m_cachedPixmap.setOptimization(QPixmap::MemoryOptim);
+#warning "kde4: port it"
+	//m_cachedPixmap.setOptimization(QPixmap::MemoryOptim);
 
     setPicture( key );
 }
@@ -431,7 +433,7 @@ double KPrPixmapObject::load(const QDomElement &element)
                 image.setKey(key);
                 QByteArray rawData=_data.toUtf8(); // XPM is normally ASCII, therefore UTF-8
                 rawData[rawData.size()-1]=char(10); // Replace the NULL character by a LINE FEED
-                QBuffer buffer(rawData); // ### TODO: open?
+                QBuffer buffer(&rawData); // ### TODO: open?
                 image.loadXpm(&buffer);
             }
         }
@@ -547,7 +549,7 @@ QPixmap KPrPixmapObject::generatePixmap(KoZoomHandler*_zoomHandler)
 {
     const double penw = _zoomHandler->zoomItXOld( ( ( pen.style() == Qt::NoPen ) ? 1 : pen.width() ) / 2.0 );
 
-    QSize size( _zoomHandler->zoomSize( ext ) );
+    QSize size( _zoomHandler->zoomSizeOld( ext ) );
     //kDebug(33001) << "KPrPixmapObject::generatePixmap size= " << size << endl;
     QPixmap pixmap(size);
     QPainter paint;
@@ -580,7 +582,8 @@ QPixmap KPrPixmapObject::generatePixmap(KoZoomHandler*_zoomHandler)
 
     image.setAlphaBuffer(true);
     QBitmap tmpMask;
-    tmpMask = image.createAlphaMask().scale(size);
+#warning "kde4: port it"	
+    //tmpMask = image.createAlphaMask().scale(size);
     pixmap.setMask(tmpMask);
 
     paint.end();
@@ -685,7 +688,8 @@ void KPrPixmapObject::draw( QPainter *_painter, KoTextZoomHandler*_zoomHandler,
     QPen pen2;
     if ( drawContour ) {
         pen2 = QPen( Qt::black, 1, Qt::DotLine );
-        _painter->setRasterOp( Qt::NotXorROP );
+#warning "kde4: port it"		
+        //_painter->setRasterOp( Qt::NotXorROP );
     }
     else {
         pen2 = pen;
@@ -814,11 +818,11 @@ QPixmap KPrPixmapObject::changePictureSettings( QPixmap _tmpPixmap )
         break;
     }
     case IE_FADE: {
-        _tmpImage = KImageEffect::fade(_tmpImage, m_ie_par1.toDouble(), m_ie_par2.toColor());
+        _tmpImage = KImageEffect::fade(_tmpImage, m_ie_par1.toDouble(), m_ie_par2.value<QColor>());
         break;
     }
     case IE_FLATTEN: {
-        _tmpImage = KImageEffect::flatten(_tmpImage, m_ie_par1.toColor(), m_ie_par2.toColor());
+        _tmpImage = KImageEffect::flatten(_tmpImage, m_ie_par1.value<QColor>(), m_ie_par2.value<QColor>());
         break;
     }
     case IE_INTENSITY: {

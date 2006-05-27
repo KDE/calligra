@@ -238,7 +238,7 @@ KPrObject::KPrObject()
     disappearSoundEffect = false;
     a_fileName = QString::null;
     d_fileName = QString::null;
-    objectName = QString::null;
+    m_objectName = QString::null;
     angle = 0.0;
     shadowDirection = SD_RIGHT_BOTTOM;
     shadowDistance = 0;
@@ -318,9 +318,9 @@ QDomDocumentFragment KPrObject::save( QDomDocument& doc, double offset )
         elem.setAttribute("disappearSoundFileName", d_fileName);
         fragment.appendChild(elem);
     }
-    if( !objectName.isEmpty() ) {
+    if( !m_objectName.isEmpty() ) {
         elem=doc.createElement("OBJECTNAME");
-        elem.setAttribute("objectName", objectName);
+        elem.setAttribute("objectName", m_objectName);
         fragment.appendChild(elem);
     }
     if(protect) {
@@ -617,7 +617,7 @@ bool KPrObject::saveOasisObjectStyleHideAnimation( KoXmlWriter &animation, int o
 void KPrObject::loadOasis(const QDomElement &element, KoOasisContext & context, KPrLoadingInfo *info)
 {
     if(element.hasAttributeNS( KoXmlNS::draw, "name" ))
-       objectName = element.attributeNS( KoXmlNS::draw, "name", QString::null);
+       m_objectName = element.attributeNS( KoXmlNS::draw, "name", QString::null);
     orig.setX( KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "x", QString::null ) ) );
     orig.setY( KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "y", QString::null ) ) );
     ext.setWidth(KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "width", QString::null )) );
@@ -946,8 +946,8 @@ bool KPrObject::saveOasisObject( KPOasisSaveContext &sc ) const
     sc.xmlWriter.startElement( getOasisElementName() );
     sc.xmlWriter.addAttribute( sc.onMaster ? "presentation:style-name": "draw:style-name", getStyle( sc ) );
     saveOasisPosObject( sc.xmlWriter, sc.indexObj );
-    if( !objectName.isEmpty())
-        sc.xmlWriter.addAttribute( "draw:name", objectName );
+    if( !m_objectName.isEmpty())
+        sc.xmlWriter.addAttribute( "draw:name", m_objectName );
 
     saveOasisObjectAttributes( sc );
 
@@ -1119,10 +1119,10 @@ double KPrObject::load(const QDomElement &element) {
     e=element.namedItem("OBJECTNAME").toElement();
     if(!e.isNull()) {
         if(e.hasAttribute("objectName"))
-            objectName = e.attribute("objectName");
+            m_objectName = e.attribute("objectName");
     }
     else {
-        objectName = QString::null;
+        m_objectName = QString::null;
     }
     e=element.namedItem("PROTECT").toElement();
     if (!e.isNull())

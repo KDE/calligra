@@ -85,13 +85,13 @@ void KPrImageEffectDia::effectChanged(int eff)
     case IE_FADE: {
         m_param1 = QVariant(base->fade_value->value());
         m_param2 = QVariant(base->fade_color->color());
-        _tmpImage = KImageEffect::fade(_tmpImage, m_param1.toDouble(), m_param2.toColor());
+        _tmpImage = KImageEffect::fade(_tmpImage, m_param1.toDouble(), m_param2.value<QColor>());
         break;
     }
     case IE_FLATTEN: {
         m_param1 = QVariant(base->flatten_color1->color());
         m_param2 = QVariant(base->flatten_color2->color());
-        _tmpImage = KImageEffect::flatten(_tmpImage, m_param1.toColor(), m_param2.toColor());
+        _tmpImage = KImageEffect::flatten(_tmpImage, m_param1.value<QColor>(), m_param2.value<QColor>());
         break;
     }
     case IE_INTENSITY: {
@@ -238,12 +238,12 @@ void KPrImageEffectDia::setEffect(ImageEffect eff, QVariant p1, QVariant p2, QVa
     }
     case IE_FADE: {
         base->fade_value->setValue(m_param1.toDouble());
-        base->fade_color->setColor(m_param2.toColor());
+        base->fade_color->setColor(m_param2.value<QColor>());
         break;
     }
     case IE_FLATTEN: {
-        base->flatten_color1->setColor(m_param1.toColor());
-        base->flatten_color2->setColor(m_param2.toColor());
+        base->flatten_color1->setColor(m_param1.value<QColor>());
+        base->flatten_color2->setColor(m_param2.value<QColor>());
         break;
     }
     case IE_INTENSITY: {

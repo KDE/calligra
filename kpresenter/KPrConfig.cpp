@@ -22,7 +22,6 @@
 #include <config.h>
 #endif
 
-
 #include <kapplication.h>
 #include <KoUnitWidgets.h>
 #include <klocale.h>
@@ -40,6 +39,7 @@
 #include <QLabel>
 #include <QLayout>
 #include <q3vbox.h>
+#include <kvbox.h>
 #include <QCheckBox>
 #include <QComboBox>
 #include <qtabwidget.h>
@@ -87,7 +87,7 @@ KPrConfig::KPrConfig( KPrView* parent )
 
 {
     m_doc = parent->kPresenterDoc();
-    Q3VBox *page = addVBoxPage( i18n("Interface"), i18n("Interface"),
+    KVBox *page = addVBoxPage( i18n("Interface"), i18n("Interface"),
                                BarIcon("misc", K3Icon::SizeMedium) );
     _interfacePage=new KPrConfigureInterfacePage( parent, page );
     page = addVBoxPage( i18n("Color"), i18n("Color"),

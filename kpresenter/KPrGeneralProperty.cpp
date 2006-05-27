@@ -152,10 +152,10 @@ void KPrGeneralProperty::apply()
 
 KoRect KPrGeneralProperty::getRect() const
 {
-    double x = qMax( 0, m_ui->xInput->value() );
-    double y = qMax( 0, m_ui->yInput->value() );
-    double w = qMax( 0, m_ui->widthInput->value() );
-    double h = qMax( 0, m_ui->heightInput->value() );
+    double x = qMax( 0.0, m_ui->xInput->value() );
+    double y = qMax( 0.0, m_ui->yInput->value() );
+    double w = qMax( 0.0, m_ui->widthInput->value() );
+    double h = qMax( 0.0, m_ui->heightInput->value() );
 
     KoRect rect( x, y, w, h );
     return rect;

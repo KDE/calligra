@@ -133,9 +133,9 @@ public:
         { d_fileName = _d_fileName; }
 
     virtual void setObjectName( const QString &_objectName )
-        { objectName = _objectName; }
+        { m_objectName = _objectName; }
     virtual QString getObjectName() const
-        { return objectName; }
+        { return m_objectName; }
 
     virtual QDomDocumentFragment save( QDomDocument& doc, double offset );
     virtual double load(const QDomElement &element);
@@ -366,7 +366,7 @@ protected:
     EffectSpeed m_disappearSpeed;
     int appearTimer, disappearTimer;
     QString a_fileName, d_fileName;
-    QString objectName;
+    QString m_objectName;
     // step when objects appears/disappears
     int appearStep, disappearStep;
 

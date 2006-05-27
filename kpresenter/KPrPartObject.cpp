@@ -89,7 +89,7 @@ void KPrPartObject::loadOasis(const QDomElement &element, KoOasisContext&context
     QDomElement objectElement = KoDom::namedItemNS( element, KoXmlNS::draw, "object" );
     child->loadOasis( element, objectElement );
     if(element.hasAttributeNS( KoXmlNS::draw, "name" ))
-        objectName = element.attributeNS( KoXmlNS::draw, "name", QString::null);
+        m_objectName = element.attributeNS( KoXmlNS::draw, "name", QString::null);
     (void)child->loadOasisDocument( context.store(), context.manifestDocument() );
 }
 
@@ -100,7 +100,7 @@ void KPrPartObject::draw( QPainter *_painter, KoTextZoomHandler *_zoomhandler,
     double ow = ext.width();
     double oh = ext.height();
 
-    QSize size( _zoomhandler->zoomSize( ext ) );
+    QSize size( _zoomhandler->zoomSizeOld( ext ) );
     int penw = ( ( pen.style() == Qt::NoPen ) ? 1 : int( pen.pointWidth() ) ) / 2;
 
     QPen pen2;

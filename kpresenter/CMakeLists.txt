@@ -50,9 +50,9 @@ set(kpresenterprivate_LIB_SRCS ${libaf_SRCS}
    KPrEllipseObject.cpp 
    KPrAutoformObject.cpp 
    #KPrTextObject.cpp 
-   #KPrPixmapObject.cpp 
+   KPrPixmapObject.cpp 
    KPrPieObject.cpp 
-   #KPrPartObject.cpp 
+   KPrPartObject.cpp 
    KPrGroupObject.cpp 
    KPrBackground.cpp 
    #KPrGradient.cpp 
@@ -64,7 +64,7 @@ set(kpresenterprivate_LIB_SRCS ${libaf_SRCS}
    KPrObjectIface.cpp 
    KPrPageIface.cpp 
    #KPrSideBar.cpp 
-   #KPrConfig.cpp 
+   KPrConfig.cpp 
    KPrVariableCollection.cpp 
    KPrTextDocument.cpp 
    KPrPointObject.cpp 
@@ -100,14 +100,14 @@ set(kpresenterprivate_LIB_SRCS ${libaf_SRCS}
    KPrImageEffectDia.cpp 
    KPrCustomSlideShowDia.cpp 
    KPrPBPreview.cpp 
-   #KPrPenStyleWidget.cpp 
+   KPrPenStyleWidget.cpp 
    KPrRectPreview.cpp 
    KPrRectProperty.cpp 
    KPrPiePreview.cpp 
    KPrPolygonPreview.cpp 
    KPrPicturePreview.cpp 
    KPrBrushProperty.cpp 
-   #KPrGeneralProperty.cpp 
+   KPrGeneralProperty.cpp 
    KPrPolygonProperty.cpp 
    KPrPieProperty.cpp 
    KPrPictureProperty.cpp 

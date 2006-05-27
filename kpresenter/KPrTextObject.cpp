@@ -21,6 +21,7 @@
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
+#include <QBuffer>
 #include "KPrTextObject.h"
 #include "KPrTextObject.moc"
 #include "KPrGradient.h"
@@ -486,7 +487,7 @@ void KPrTextObject::drawText( QPainter* _painter, KoTextZoomHandler *zoomHandler
     _painter->save();
     _painter->translate( m_doc->zoomHandler()->zoomItXOld( bLeft()), m_doc->zoomHandler()->zoomItYOld( bTop()+alignVertical));
     if ( !editingTextObj || (_painter->device() && _painter->device()->devType() == QInternal::Printer))
-        cg.setBrush( QColorGroup::Base, NoBrush );
+        cg.setBrush( QColorGroup::Base, Qt::NoBrush );
     else
         cg.setColor( QColorGroup::Base, m_doc->txtBackCol() );
 
@@ -1020,12 +1021,12 @@ KoParagLayout KPrTextObject::loadParagLayout( QDomElement & parentElem, KPrDocum
         val=0.0;
         if(element.hasAttribute( "left"))
             // The GUI prevents a negative indent, so let's fixup broken docs too
-            val=qMax(0, element.attribute( "left").toDouble());
+            val=qMax(0.0, element.attribute( "left").toDouble());
         layout.margins[Q3StyleSheetItem::MarginLeft] = val;
         val=0.0;
         if(element.hasAttribute("right"))
             // The GUI prevents a negative indent, so let's fixup broken docs too
-            val=qMax(0, element.attribute("right").toDouble());
+            val=qMax(0.0, element.attribute("right").toDouble());
         layout.margins[Q3StyleSheetItem::MarginRight] = val;
     }
     element = parentElem.namedItem( "LINESPACING" ).toElement();
@@ -1087,11 +1088,11 @@ KoParagLayout KPrTextObject::loadParagLayout( QDomElement & parentElem, KPrDocum
     {
         double val =0.0;
         if(element.hasAttribute("before"))
-            val=qMax(0, element.attribute("before").toDouble());
+            val=qMax(0.0, element.attribute("before").toDouble());
         layout.margins[Q3StyleSheetItem::MarginTop] = val;
         val = 0.0;
         if(element.hasAttribute("after"))
-            val=qMax(0, element.attribute("after").toDouble());
+            val=qMax(0.0, element.attribute("after").toDouble());
         layout.margins[Q3StyleSheetItem::MarginBottom] = val;
     }
 
@@ -1360,7 +1361,7 @@ void KPrTextObject::drawCursor( QPainter *p, KoTextCursor *cursor, bool cursorVi
 {
     // The implementation is very related to KWord's KWTextFrameSet::drawCursor
     KoTextZoomHandler *zh = m_doc->zoomHandler();
-    QPoint origPix = zh->>zoomPointOldd( orig+KoPoint(bLeft(), bTop()+alignVertical) );
+    QPoint origPix = zh->zoomPointOld( orig+KoPoint(bLeft(), bTop()+alignVertical) );
     // Painter is already translated for diffx/diffy, but not for the object yet
     p->translate( origPix.x(), origPix.y() );
     if ( angle != 0 )
@@ -1765,7 +1766,7 @@ void KPrTextObject::recalcVerticalAlignment()
 QPoint KPrTextObject::cursorPos(KPrCanvas *canvas, KoTextCursor *cursor) const
 {
   KoTextZoomHandler *zh = m_doc->zoomHandler();
-  QPoint origPix = zh->>zoomPointOldd( orig+KoPoint(bLeft(), bTop()+alignVertical) );
+  QPoint origPix = zh->zoomPointOld( orig+KoPoint(bLeft(), bTop()+alignVertical) );
   KoTextParag* parag = cursor->parag();
   QPoint topLeft = parag->rect().topLeft();         // in QRT coords
   int lineY = 0;
@@ -1953,7 +1954,7 @@ void KPrTextView::ensureCursorVisible()
     pt.setX( doc->zoomHandler()->layoutUnitPtToPt( doc->zoomHandler()->pixelXToPt( x) ) +pt.x());
     pt.setY( doc->zoomHandler()->layoutUnitPtToPt( doc->zoomHandler()->pixelYToPt( y ))+pt.y() );
 
-    QPoint p = m_kptextobj->kPresenterDocument()->zoomHandler()->>zoomPointOldd( pt );
+    QPoint p = m_kptextobj->kPresenterDocument()->zoomHandler()->zoomPointOld( pt );
     w = m_kptextobj->kPresenterDocument()->zoomHandler()->layoutUnitToPixelX( w );
     h = m_kptextobj->kPresenterDocument()->zoomHandler()->layoutUnitToPixelY( h );
     m_canvas->ensureVisible( p.x(), p.y() + h / 2, w, h / 2 + 2 );
@@ -2266,7 +2267,7 @@ void KPrTextView::showPopup( KPrView *view, const QPoint &point, Q3PtrList<KActi
             {
                 if ( singleWord )
                 {
-                    Q3PtrList<KAction> actionCheckSpellList =view->listOfResultOfCheckWord( word );
+                    QList<KAction*> actionCheckSpellList =view->listOfResultOfCheckWord( word );
                     if ( actionCheckSpellList.count()>0)
                     {
                         view->plugActionList( "spell_result_action", actionCheckSpellList );
@@ -2584,7 +2585,7 @@ KoPen KPrTextObject::defaultPen() const
 QPoint KPrTextObject::viewToInternal( const QPoint & pos, KPrCanvas* canvas ) const
 {
     KoTextZoomHandler* zh = kPresenterDocument()->zoomHandler();
-    QPoint iPoint = pos - zh->>zoomPointOldd(
+    QPoint iPoint = pos - zh->zoomPointOld(
         getOrig() + KoPoint( bLeft(),
                              bTop() + alignmentValue()) );
     iPoint = zh->pixelToLayoutUnit(

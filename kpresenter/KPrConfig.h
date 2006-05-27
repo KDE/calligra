@@ -26,6 +26,7 @@
 //Added by qt3to4:
 #include <QLabel>
 #include <Q3ListViewItem>
+#include <k3listview.h>
 class KPrView;
 class KPrDocument;
 class KIntNumInput;
