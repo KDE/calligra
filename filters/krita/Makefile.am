@@ -6,6 +6,10 @@ if include_imagemagick_filter
 IMAGEMAGICK_SUBDIR=magick
 endif
 
+if include_imagemagick_filter
+GRAPHICSMAGICK_SUBDIR=gmagick
+endif
+
 if have_png
 PNG_SUBDIR=png
 endif
@@ -27,4 +31,4 @@ PDF_SUBDIR=pdf
 endif
 
 SUBDIRS = $(IMAGEMAGICK_SUBDIR) $(OPENEXR_SUBDIR) $(PNG_SUBDIR) $(LIBKISEXIF) \
-		$(JPEG_SUBDIR) $(TIFF_SUBDIR) raw $(PDF_SUBDIR) gmagick
+		$(JPEG_SUBDIR) $(TIFF_SUBDIR) raw $(PDF_SUBDIR) $(GRAPHICSMAGICK_SUBDIR)
