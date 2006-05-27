@@ -64,24 +64,35 @@ KChartLegendConfigPage::KChartLegendConfigPage( KChartParams* params,
 
   // 2. Block: Legend position
   gb = new QButtonGroup( 0, Qt::Vertical, i18n("Legend Position"), this );
-  QWhatsThis::add(gb, i18n("<qt>Choose the location of the legend on the chart by clicking a location button.\nUse the central button to <b>hide</b> the legend.</qt>"));
+  QWhatsThis::add(gb, i18n("<qt>Choose the location of the legend on the chart by "
+      "clicking a location button.\nUse the central button to <b>hide</b> the legend.</qt>"));
   gb->layout()->setSpacing(KDialog::spacingHint());
   gb->layout()->setMargin(KDialog::marginHint());
   gb->setExclusive( true );
 
-  QGridLayout *grid1 = new QGridLayout( gb->layout(), 3, 3 );
+  QGridLayout *grid1 = new QGridLayout( gb->layout(), 5, 5 );
 
-  lTopLeft  = addButton( grid1, gb, i18n("Top-Left"),  "chart_legend_topleft",  0, 0 );
-  lTop      = addButton( grid1, gb, i18n("Top"),       "chart_legend_top",      0, 1 );
-  lTopRight = addButton( grid1, gb, i18n("Top-Right"), "chart_legend_topright", 0, 2 );
+  lTopLeft          = addButton( grid1, gb, i18n("Top-Left"),      "chart_legend_topleft",     0, 0 );
+  lTopLeftTop       = addButton( grid1, gb, i18n("Top-Left-Top"),  "chart_legend_toplefttop",  0, 1 );
+  lTop              = addButton( grid1, gb, i18n("Top"),           "chart_legend_top",         0, 2 );
+  lTopRightTop      = addButton( grid1, gb, i18n("Top-Right-Top"), "chart_legend_toprighttop", 0, 3 );
+  lTopRight         = addButton( grid1, gb, i18n("Top-Right"),     "chart_legend_topright",    0, 4 );
 
-  lLeft    = addButton( grid1, gb, i18n("Left"),      "chart_legend_left",     1, 0 );
-  noLegend = addButton( grid1, gb, i18n("No Legend"), "chart_legend_nolegend", 1, 1 );
-  lRight   = addButton( grid1, gb, i18n("Right"),     "chart_legend_right",    1, 2 );
+  lTopLeftLeft      = addButton( grid1, gb, i18n("Top-Left-Left"),   "chart_legend_topleftleft",   1, 0 );
+  lTopRightRight    = addButton( grid1, gb, i18n("Top-Right-Right"), "chart_legend_toprightright", 1, 4 );
 
-  lBottomLeft  = addButton( grid1, gb, i18n("Bottom-Left"),  "chart_legend_bottomleft",  2, 0 );
-  lBottom      = addButton( grid1, gb, i18n("Bottom"),       "chart_legend_bottom",      2, 1 );
-  lBottomRight = addButton( grid1, gb, i18n("Bottom-Right"), "chart_legend_bottomright", 2, 2 );
+  lLeft             = addButton( grid1, gb, i18n("Left"),      "chart_legend_left",     2, 0 );
+  noLegend          = addButton( grid1, gb, i18n("No Legend"), "chart_legend_nolegend", 2, 2 );
+  lRight            = addButton( grid1, gb, i18n("Right"),     "chart_legend_right",    2, 4 );
+
+  lBottomLeftLeft   = addButton( grid1, gb, i18n("Bottom-Left-Left"),    "chart_legend_bottomleftleft",   3, 0 );
+  lBottomRightRight = addButton( grid1, gb, i18n("Bottom-Right-Right"),  "chart_legend_bottomrightright", 3, 4 );
+
+  lBottomLeft       = addButton( grid1, gb, i18n("Bottom-Left"),         "chart_legend_bottomleft",       4, 0 );
+  lBottomLeftBottom = addButton( grid1, gb, i18n("Bottom-Left-Bottom"),  "chart_legend_bottomleftbottom", 4, 1 );
+  lBottom           = addButton( grid1, gb, i18n("Bottom"),              "chart_legend_bottom",           4, 2 );
+  lBottomRightBottom= addButton( grid1, gb, i18n("Bottom-Right-Bottom"), "chart_legend_bottomrightbottom",4, 3 );
+  lBottomRight      = addButton( grid1, gb, i18n("Bottom-Right"),        "chart_legend_bottomright",      4, 4 );
 
   gb->setAlignment( Qt::AlignLeft );
   layout->addWidget( gb, 1, 0 );
@@ -167,14 +178,38 @@ void KChartLegendConfigPage::init()
     case KDChartParams::LegendTopLeft:
         lTopLeft->setOn( true );
         break;
+    case KDChartParams::LegendTopLeftTop:
+        lTopLeftTop->setOn( true );
+        break;
+    case KDChartParams::LegendTopLeftLeft:
+        lTopLeftLeft->setOn( true );
+        break;
     case KDChartParams::LegendTopRight:
         lTopRight->setOn( true );
+        break;
+    case KDChartParams::LegendTopRightTop:
+        lTopRightTop->setOn( true );
+        break;
+    case KDChartParams::LegendTopRightRight:
+        lTopRightRight->setOn( true );
         break;
     case KDChartParams::LegendBottomRight:
         lBottomRight->setOn( true );
         break;
+    case KDChartParams::LegendBottomRightBottom:
+        lBottomRightBottom->setOn( true );
+        break;
+    case KDChartParams::LegendBottomRightRight:
+        lBottomRightRight->setOn( true );
+        break;
     case  KDChartParams::LegendBottomLeft:
         lBottomLeft->setOn( true );
+        break;
+    case  KDChartParams::LegendBottomLeftBottom:
+        lBottomLeftBottom->setOn( true );
+        break;
+    case  KDChartParams::LegendBottomLeftLeft:
+        lBottomLeftLeft->setOn( true );
         break;
     default:
         lRight->setOn( true );
@@ -229,12 +264,28 @@ void KChartLegendConfigPage::apply()
         _params->setLegendPosition( KDChartParams::LegendRight );
     else if( lTopLeft->isOn() )
         _params->setLegendPosition( KDChartParams::LegendTopLeft );
+    else if( lTopLeftTop->isOn() )
+        _params->setLegendPosition( KDChartParams::LegendTopLeftTop );
+    else if( lTopLeftLeft->isOn() )
+        _params->setLegendPosition( KDChartParams::LegendTopLeftLeft );
     else if( lTopRight->isOn() )
         _params->setLegendPosition( KDChartParams::LegendTopRight );
+    else if( lTopRightTop->isOn() )
+        _params->setLegendPosition( KDChartParams::LegendTopRightTop );
+    else if( lTopRightRight->isOn() )
+        _params->setLegendPosition( KDChartParams::LegendTopRightRight );
     else if( lBottomRight->isOn() )
         _params->setLegendPosition( KDChartParams::LegendBottomRight );
+    else if( lBottomRightBottom->isOn() )
+        _params->setLegendPosition( KDChartParams::LegendBottomRightBottom );
+    else if( lBottomRightRight->isOn() )
+        _params->setLegendPosition( KDChartParams::LegendBottomRightRight );
     else if( lBottomLeft->isOn() )
         _params->setLegendPosition( KDChartParams::LegendBottomLeft );
+    else if( lBottomLeftBottom->isOn() )
+        _params->setLegendPosition( KDChartParams::LegendBottomLeftBottom );
+    else if( lBottomLeftLeft->isOn() )
+        _params->setLegendPosition( KDChartParams::LegendBottomLeftLeft );
     else
         _params->setLegendPosition( KDChartParams::LegendRight );
 

@@ -50,9 +50,11 @@ public slots:
 
 private:
     KChartParams* _params;
-    QPushButton *lTopLeft,    *lTop,     *lTopRight,
-                *lLeft,       *noLegend, *lRight,
-                *lBottomLeft, *lBottom,  *lBottomRight;
+    QPushButton *lTopLeft,        *lTopLeftTop,       *lTop,     *lTopRightTop,       *lTopRight,
+                *lTopLeftLeft,                                                        *lTopRightRight,
+                *lLeft,                               *noLegend,                      *lRight,
+                *lBottomLeftLeft,                                                     *lBottomRightRight,
+                *lBottomLeft,     *lBottomLeftBottom, *lBottom,  *lBottomRightBottom, *lBottomRight;
     QLineEdit *title;
     KColorButton *legendTitleColor, *legendTextColor;
     QFont titleLegend, textLegend;
