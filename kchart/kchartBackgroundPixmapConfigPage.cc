@@ -311,9 +311,9 @@ void KChartBackgroundPixmapConfigPage::apply()
             {
                 KDFrame::BackPixmapMode backPixmapMode;
                 if ( centeredRB->isChecked() )
-                    backPixmapMode = KDFrame::PixScaled;
-                else if ( scaledRB->isChecked() )
                     backPixmapMode = KDFrame::PixCentered;
+                else if ( scaledRB->isChecked() )
+                    backPixmapMode = KDFrame::PixScaled;
                 else
                     backPixmapMode = KDFrame::PixStretched;
                 frame.setBackPixmap( wallWidget->paletteBackgroundPixmap(), backPixmapMode );
