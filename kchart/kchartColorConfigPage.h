@@ -52,8 +52,6 @@ public:
     QColor gridColor() const;
     void setLineColor( QColor color );
     QColor lineColor() const;
-    void setTitleColor( QColor color );
-    QColor titleColor() const;
     void setXTitleColor( QColor color );
     QColor xTitleColor() const;
     void setYTitleColor( QColor color );
@@ -64,8 +62,17 @@ public:
 #endif
     void setXLabelColor( QColor color );
     QColor xLabelColor() const;
+    void setXLineColor( QColor color );
+    QColor xLineColor() const;
+    void setXZeroLineColor( QColor color );
+    QColor xZeroLineColor() const;
+
     void setYLabelColor( QColor color );
     QColor yLabelColor() const;
+    void setYLineColor( QColor color );
+    QColor yLineColor() const;
+    void setYZeroLineColor( QColor color );
+    QColor yZeroLineColor() const;
 #if 0
     void setYLabel2Color( QColor color );
     QColor yLabel2Color() const;
@@ -97,8 +104,19 @@ private:
 #if 0
     KColorButton* _ylabel2CB;
 #endif
-    //KColorButton* _edgeCB;
-//    KColorButton* _dataCB[NUMDATACOLORS];
+    KColorButton* _xlineCB;
+    KColorButton* _ylineCB;
+#if 0
+    KColorButton* _yline2CB;
+#endif
+    KColorButton* _xzerolineCB;
+    KColorButton* _yzerolineCB;
+#if 0
+    KColorButton* _yzeroline2CB;
+#endif
+
+//  KColorButton* _edgeCB;
+//  KColorButton* _dataCB[NUMDATACOLORS];
     KListBox* _dataColorLB;
     KColorButton* _dataColorCB;
     KChartColorArray extColor;
@@ -196,13 +214,72 @@ inline void KChartColorConfigPage::setYLabel2Color( QColor color )
 {
     _ylabel2CB->setColor( color );
 }
-
-
 inline QColor KChartColorConfigPage::yLabel2Color() const
 {
     return _ylabel2CB->color();
 }
 #endif
+
+
+inline void KChartColorConfigPage::setXLineColor( QColor color )
+{
+    _xlineCB->setColor( color );
+}
+inline QColor KChartColorConfigPage::xLineColor() const
+{
+    return _xlineCB->color();
+}
+
+inline void KChartColorConfigPage::setYLineColor( QColor color )
+{
+    _ylineCB->setColor( color );
+}
+inline QColor KChartColorConfigPage::yLineColor() const
+{
+    return _ylineCB->color();
+}
+
+#if 0
+inline void KChartColorConfigPage::setYLine2Color( QColor color )
+{
+    _yline2CB->setColor( color );
+}
+inline QColor KChartColorConfigPage::yLine2Color() const
+{
+    return _yline2CB->color();
+}
+#endif
+
+
+inline void KChartColorConfigPage::setXZeroLineColor( QColor color )
+{
+    _xzerolineCB->setColor( color );
+}
+inline QColor KChartColorConfigPage::xZeroLineColor() const
+{
+    return _xzerolineCB->color();
+}
+
+inline void KChartColorConfigPage::setYZeroLineColor( QColor color )
+{
+    _yzerolineCB->setColor( color );
+}
+inline QColor KChartColorConfigPage::yZeroLineColor() const
+{
+    return _yzerolineCB->color();
+}
+
+#if 0
+inline void KChartColorConfigPage::setYZeroLine2Color( QColor color )
+{
+    _yzeroline2CB->setColor( color );
+}
+inline QColor KChartColorConfigPage::yZeroLine2Color() const
+{
+    return _yzeroline2CB->color();
+}
+#endif
+
 
 /*inline void KChartColorConfigPage::setEdgeColor( QColor color )
 {

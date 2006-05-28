@@ -222,6 +222,16 @@ void KChartConfigDialog::init()
 #if 0
         _colorpage->setYLabel2Color( rightparams.axisLabelsColor() );
 #endif
+        _colorpage->setXLineColor( bottomparams.axisLineColor() );
+        _colorpage->setYLineColor( leftparams.axisLineColor() );
+#if 0
+        _colorpage->setYLine2Color( rightparams.axisLineColor() );
+#endif
+        _colorpage->setXZeroLineColor( bottomparams.axisZeroLineColor() );
+        _colorpage->setYZeroLineColor( leftparams.axisZeroLineColor() );
+#if 0
+        _colorpage->setYZeroLine2Color( rightparams.axisZeroLineColor() );
+#endif
         // PENDING(kalle) Replace with KDChart equivalents
         //     _colorpage->setBackgroundColor( m_params->BGColor );
         //     _colorpage->setPlotColor( m_params->PlotColor );
@@ -298,6 +308,7 @@ void KChartConfigDialog::apply()
         leftparams = m_params->axisParams( KDChartAxisParams::AxisPosLeft );
         leftparams.setAxisGridColor( _colorpage->gridColor() );
         m_params->setOutlineDataColor( _colorpage->lineColor() );
+
         KDChartAxisParams rightparams;
         rightparams = m_params->axisParams( KDChartAxisParams::AxisPosRight );
         KDChartAxisParams bottomparams;
@@ -316,10 +327,23 @@ void KChartConfigDialog::apply()
         else
             rightparams.setAxisLineColor( QColor() );
 #endif
+
         bottomparams.setAxisLabelsColor( _colorpage->xLabelColor() );
         leftparams.setAxisLabelsColor( _colorpage->yLabelColor() );
 #if 0
         rightparams.setAxisLabelsColor( _colorpage->yLabel2Color() );
+#endif
+
+        bottomparams.setAxisLineColor( _colorpage->xLineColor() );
+        leftparams.setAxisLineColor( _colorpage->yLineColor() );
+#if 0
+        rightparams.setAxisLineColor( _colorpage->yLine2Color() );
+#endif
+
+        bottomparams.setAxisZeroLineColor( _colorpage->xZeroLineColor() );
+        leftparams.setAxisZeroLineColor( _colorpage->yZeroLineColor() );
+#if 0
+        rightparams.setAxisZeroLineColor( _colorpage->yZeroLine2Color() );
 #endif
         m_params->setAxisParams( KDChartAxisParams::AxisPosBottom, bottomparams );
         m_params->setAxisParams( KDChartAxisParams::AxisPosLeft,   leftparams );

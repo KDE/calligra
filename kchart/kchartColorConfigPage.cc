@@ -49,7 +49,7 @@ KChartColorConfigPage::KChartColorConfigPage( KChartParams* params,
                                  "part of the chart can be assigned a "
                                  "different color." ) );
 
-    QVBoxLayout* toplevel = new QVBoxLayout( this, 10 );
+    QVBoxLayout* toplevel = new QVBoxLayout( this, 14 );
     QButtonGroup* gb = new QButtonGroup( 0, Qt::Vertical, i18n("Colors"), this );
     gb->layout()->setSpacing(KDialog::spacingHint());
     gb->layout()->setMargin(KDialog::marginHint());
@@ -57,106 +57,78 @@ KChartColorConfigPage::KChartColorConfigPage( KChartParams* params,
     QString wtstr;
     QGridLayout* grid = new QGridLayout( gb->layout(), 8, 3 );
 
-    QLabel* lineLA = new QLabel( i18n( "&Line color:" ), gb );
-    lineLA->setAlignment( AlignRight | AlignVCenter );
-    grid->addWidget( lineLA, 0, 0 );
-    _lineCB = new KColorButton( gb );
-    lineLA->setBuddy( _lineCB );
-    grid->addWidget( _lineCB, 0, 1 );
-    wtstr = i18n( "This is the color that is used for drawing lines like axes." );
-    QWhatsThis::add( lineLA, wtstr );
-    QWhatsThis::add( _lineCB, wtstr );
-
-    QLabel* gridLA = new QLabel( i18n( "&Grid color:" ), gb );
-    gridLA->setAlignment( AlignRight | AlignVCenter );
-    grid->addWidget( gridLA, 1, 0 );
-    _gridCB = new KColorButton( gb );
-    gridLA->setBuddy( _gridCB );
-    grid->addWidget( _gridCB, 1, 1 );
-    wtstr = i18n( "Here you can configure the color that is used for the "
-                  "chart grid. Of course, this setting will only "
-                  "take effect if grid drawing is turned on." );
-    QWhatsThis::add( gridLA, wtstr );
-    QWhatsThis::add( _gridCB, wtstr );
-
-    QLabel* xtitleLA = new QLabel( i18n("&X-title color:" ), gb );
-    xtitleLA->setAlignment( AlignRight | AlignVCenter );
-    grid->addWidget( xtitleLA, 2, 0 );
-    _xtitleCB = new KColorButton( gb );
-    xtitleLA->setBuddy( _xtitleCB );
-    grid->addWidget( _xtitleCB, 2, 1 );
-    wtstr = i18n( "This color is used for displaying titles for the "
-                  "X (horizontal) axis. This setting overrides the setting "
-                  "<i>Title Color</i>." );
-    QWhatsThis::add( xtitleLA, wtstr );
-    QWhatsThis::add( _xtitleCB, wtstr );
-
-    QLabel* ytitleLA = new QLabel( i18n("&Y-title color:" ), gb );
-    ytitleLA->setAlignment( AlignRight | AlignVCenter );
-    grid->addWidget( ytitleLA, 3, 0 );
-    _ytitleCB = new KColorButton( gb );
-    ytitleLA->setBuddy( _ytitleCB );
-    grid->addWidget( _ytitleCB, 3, 1 );
-    wtstr = i18n( "This color is used for displaying titles for the "
-                  "Y (vertical) axis. This setting overrides the setting "
-                  "<i>Title Color</i>." );
-    QWhatsThis::add( ytitleLA, wtstr );
-    QWhatsThis::add( _ytitleCB, wtstr );
-
+    const int labelAlign = AlignRight | AlignVCenter;
+    int row = -1;
+#define ADD_COLOR_BTN(btn,title,whatsthis) \
+{                                          \
+    ++row;                                 \
+    QLabel* l = new QLabel( title, gb );   \
+    l->setAlignment( labelAlign );         \
+    grid->addWidget( l, row, 0 );          \
+    btn = new KColorButton( gb );          \
+    l->setBuddy( btn );                    \
+    grid->addWidget( btn, row, 1 );        \
+    QWhatsThis::add( l, whatsthis );       \
+    QWhatsThis::add( btn, whatsthis );     \
+}
+    ADD_COLOR_BTN(_lineCB, i18n( "&Line color:" ),
+        i18n( "This is the color that is used for drawing lines like axes." ))
+    ADD_COLOR_BTN(_gridCB, i18n( "&Grid color:" ),
+        i18n( "Here you can configure the color that is used for the "
+              "chart grid. Of course, this setting will only "
+              "take effect if grid drawing is turned on." ))
+    ADD_COLOR_BTN(_xtitleCB, i18n( "&X-title color:" ),
+        i18n( "This color is used for displaying titles for the "
+              "X (horizontal) axis." ))
+    ADD_COLOR_BTN(_ytitleCB, i18n( "&Y-title color:" ),
+        i18n( "This color is used for displaying titles for the "
+              "Y (vertical) axis." ))
 #if 0
-    QLabel* ytitle2LA = new QLabel( i18n( "Y-title color (2nd axis):" ), gb );
-    ytitle2LA->setAlignment( AlignRight | AlignVCenter );
-    grid->addWidget( ytitle2LA, 4, 0 );
-    _ytitle2CB = new KColorButton( gb );
-    ytitle2LA->setBuddy( _ytitle2CB );
-    grid->addWidget( _ytitle2CB, 4, 1 );
-    wtstr = i18n( "This color is used for displaying titles for the "
-                  "second Y (vertical) axis. It only takes effect if the "
-                  "chart is configured to have a second Y axis. This setting "
-                  "overrides the setting <i>Title Color</i>." );
-    QWhatsThis::add( ytitle2LA, wtstr );
-    QWhatsThis::add( _ytitle2CB, wtstr );
+    ADD_COLOR_BTN(_ytitle2CB, i18n( "Y-title color (2nd axis):" ),
+        i18n( "This color is used for displaying titles for the "
+              "second Y (vertical) axis. It only takes effect if the "
+              "chart is configured to have a second Y axis." ))
 #endif
-
-    QLabel* xlabelLA = new QLabel( i18n( "X-label color:" ), gb );
-    xlabelLA->setAlignment( AlignRight | AlignVCenter );
-    grid->addWidget( xlabelLA, 4, 0 );
-    _xlabelCB = new KColorButton( gb );
-    xlabelLA->setBuddy( _xlabelCB );
-    grid->addWidget( _xlabelCB, 4, 1 );
-    wtstr = i18n( "Here you can configure the color that is used for "
-                  "labeling the X (horizontal) axis" );
-    QWhatsThis::add( xlabelLA, wtstr );
-    QWhatsThis::add( _xlabelCB, wtstr );
-
-    QLabel* ylabelLA = new QLabel( i18n( "Y-label color:" ), gb );
-    ylabelLA->setAlignment( AlignRight | AlignVCenter );
-    grid->addWidget( ylabelLA, 5, 0 );
-    _ylabelCB = new KColorButton( gb );
-    ylabelLA->setBuddy( _ylabelCB );
-    grid->addWidget( _ylabelCB, 5, 1 );
-    wtstr = i18n( "Here you can configure the color that is used for "
-                  "labeling the Y (vertical) axis" );
-    QWhatsThis::add( ylabelLA, wtstr );
-    QWhatsThis::add( _ylabelCB, wtstr );
-
+    ADD_COLOR_BTN(_xlabelCB, i18n( "X-label color:" ),
+        i18n( "Here you can configure the color that is used for "
+              "labeling the X (horizontal) axis" ))
+    ADD_COLOR_BTN(_ylabelCB, i18n( "Y-label color:" ),
+        i18n( "Here you can configure the color that is used for "
+              "labeling the Y (vertical) axis" ))
 #if 0
-    QLabel* ylabel2LA = new QLabel( i18n( "Y-label color (2nd axis):" ), gb );
-    ylabel2LA->setAlignment( AlignRight | AlignVCenter );
-    grid->addWidget( ylabel2LA, 7, 0 );
-    _ylabel2CB = new KColorButton( gb );
-    ylabel2LA->setBuddy( _ylabel2CB );
-    grid->addWidget( _ylabel2CB, 7, 1 );
-    wtstr = i18n( "Here you can configure the color that is used for "
-                  "labeling the second Y (vertical) axis. Of course, "
-                  "this setting only takes effect if the chart is "
-                  "configured to have two vertical axes." );
-    QWhatsThis::add( ylabel2LA, wtstr );
-    QWhatsThis::add( _ylabel2CB, wtstr );
+    ADD_COLOR_BTN(_ylabel2CB, i18n( "Y-label color (2nd axis):" ),
+        i18n( "Here you can configure the color that is used for "
+              "labeling the second Y (vertical) axis. Of course, "
+              "this setting only takes effect if the chart is "
+              "configured to have two vertical axes." ))
+#endif
+    ADD_COLOR_BTN(_xlineCB, i18n( "X-line color:" ),
+        i18n( "Here you can configure the line color of the X (horizontal) axis" ))
+    ADD_COLOR_BTN(_ylineCB, i18n( "Y-line color:" ),
+        i18n( "Here you can configure the line color of the Y (vertical) axis" ))
+#if 0
+    ADD_COLOR_BTN(_yline2CB, i18n( "Y-line color (2nd axis):" ),
+        i18n( "Here you can configure the line color of "
+              "the second Y (vertical) axis. Of course, "
+              "this setting only takes effect if the chart is "
+              "configured to have two vertical axes." ))
+#endif
+    ADD_COLOR_BTN(_xzerolineCB, i18n( "X-Zero-line color:" ),
+        i18n( "Here you can configure the zero-line's color of the X "
+              "(horizontal) axis. Of course, this setting only takes "
+              "effect if the abscissa is displaying a Zero-line." ))
+    ADD_COLOR_BTN(_yzerolineCB, i18n( "Y-Zero-line color:" ),
+        i18n( "Here you can configure the zero-line's color of the Y (vertical) axis" ))
+#if 0
+    ADD_COLOR_BTN(_yzeroline2CB, i18n( "Y-Zero-line color (2nd axis):" ),
+        i18n( "Here you can configure the color that is used for "
+              "the Zero-line of the second Y (vertical) axis. Of course, "
+              "this setting only takes effect if the chart is "
+              "configured to have two vertical axes." ))
 #endif
 
     QHBox* dataColorHB = new QHBox( gb );
-    grid->addMultiCellWidget( dataColorHB,  0, 7, 2, 2 );
+    grid->addMultiCellWidget( dataColorHB,  0, row, 2, 2 );
     _dataColorLB = new KListBox(dataColorHB);
     _dataColorCB = new KColorButton( dataColorHB);
     wtstr = i18n( "Choose a row/column in the list on the left and change its color using this button.");
