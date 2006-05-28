@@ -87,10 +87,10 @@
             <property name="value">
                 <number>0</number>
             </property>
-            <property name="minValue">
+            <property name="minimum">
                 <number>-1000</number>
             </property>
-            <property name="maxValue">
+            <property name="maximum">
                 <number>1000</number>
             </property>
             <property name="suffix">
