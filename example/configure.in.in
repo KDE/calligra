@@ -1,4 +1,0 @@
-dnl This is here so that example isn't compiled and intalled by default.
-dnl Do NOT put this file in your application, if you want it compiled !
-
-DO_NOT_COMPILE="$DO_NOT_COMPILE example"
