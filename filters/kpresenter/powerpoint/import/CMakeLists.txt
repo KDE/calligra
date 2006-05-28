@@ -5,7 +5,7 @@
 
 ########### next target ###############
 
-set(powerpointimport_PART_SRCS powerpointimport.cc )
+set(powerpointimport_PART_SRCS powerpointimport.cc ${libppt_SRCS} )
 
 kde4_automoc(${powerpointimport_PART_SRCS})
 
@@ -13,7 +13,7 @@ kde4_add_plugin(powerpointimport WITH_PREFIX ${powerpointimport_PART_SRCS})
 
 kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} powerpointimport )
 
-target_link_libraries(powerpointimport  ${KDE4_KDECORE_LIBS} ppt )
+target_link_libraries(powerpointimport  ${KDE4_KDECORE_LIBS} kofficecore )
 
 install_targets(${PLUGIN_INSTALL_DIR} powerpointimport )
 

@@ -28,6 +28,7 @@
 
 #include <QBuffer>
 #include <q3cstring.h>
+#include <QColor>
 #include <QFile>
 #include <QString>
 #include <QTextStream>
@@ -154,7 +155,7 @@ QByteArray PowerPointImport::createStyles()
 {
   KoXmlWriter* stylesWriter;
   QByteArray stylesData;
-  QBuffer stylesBuffer( stylesData );
+  QBuffer stylesBuffer( &stylesData );
 
   QString pageWidth = QString("%1pt").arg( d->presentation->masterSlide()->pageWidth() );
   QString pageHeight = QString("%1pt").arg( d->presentation->masterSlide()->pageHeight() );
@@ -245,13 +246,14 @@ QByteArray PowerPointImport::createStyles()
   stylesWriter->endElement();  // office:document-styles
   stylesWriter->endDocument();
   delete stylesWriter;
-
+#warning "kde4 port it"
+#if 0
   // for troubleshooting only !!
   QString dbg;
   for( unsigned i=0; i<stylesData.size(); i++ )
     dbg.append( stylesData[i] );
   qDebug("\nstyles.xml:\n%s\n", dbg.latin1() );
-
+#endif
   return stylesData;
 }
 
@@ -260,7 +262,7 @@ QByteArray PowerPointImport::createContent()
 {
   KoXmlWriter* contentWriter;
   QByteArray contentData;
-  QBuffer contentBuffer( contentData );
+  QBuffer contentBuffer( &contentData );
 
   contentBuffer.open( QIODevice::WriteOnly );
   contentWriter = new KoXmlWriter( &contentBuffer );
@@ -306,13 +308,14 @@ QByteArray PowerPointImport::createContent()
   contentWriter->endElement();  // office:document-content
   contentWriter->endDocument();
   delete contentWriter;
-
+#warning "kde4 port it"
+#if 0
   // for troubleshooting only !!
   QString dbg;
   for( unsigned i=0; i<contentData.size(); i++ )
     dbg.append( contentData[i] );
   qDebug("\ncontent.xml:\n%s\n", dbg.latin1() );
-
+#endif
   return contentData;
 }
 
@@ -320,7 +323,7 @@ QByteArray PowerPointImport::createManifest()
 {
   KoXmlWriter* manifestWriter;
   QByteArray manifestData;
-  QBuffer manifestBuffer( manifestData );
+  QBuffer manifestBuffer( &manifestData );
 
   manifestBuffer.open( QIODevice::WriteOnly );
   manifestWriter = new KoXmlWriter( &manifestBuffer );
@@ -337,13 +340,14 @@ QByteArray PowerPointImport::createManifest()
   manifestWriter->endElement();
   manifestWriter->endDocument();
   delete manifestWriter;
-
+#warning "kde4: port it"
+#if 0
   // for troubleshooting only !!
   QString dbg;
   for( unsigned i=0; i<manifestData.size(); i++ )
     dbg.append( manifestData[i] );
   qDebug("\nmanifest.xml:\n%s\n", dbg.latin1() );
-
+#endif
   return manifestData;
 }
 
@@ -1441,7 +1445,7 @@ void PowerPointImport::processGroupObjectForStyle( GroupObject* groupObject, KoX
 
 QString hexname( const Color &c )
 {
-  QColor qc( c.Qt::red, c.Qt::green, c.Qt::blue );
+  QColor qc( c.red, c.green, c.blue );
   return qc.name();
 }
 
