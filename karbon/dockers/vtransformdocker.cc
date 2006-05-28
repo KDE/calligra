@@ -78,11 +78,9 @@ VTransformDocker::VTransformDocker( KarbonPart* part, KarbonView* parent, const 
 	//ROTATE: (TODO: Set 5000 limit to real Karbon14 limit)
 	QLabel* rLabel = new QLabel( i18n ( "R:" ), this );
 	mainLayout->addWidget( rLabel, 3, 0 );
-	/* port:
-m_rotate = new KDoubleSpinBox( -360.0, 360.0, 1.0, 10.0, 1, this );
+	m_rotate = new KDoubleSpinBox( -360.0, 360.0, 1.0, 10.0, this, 1 );
 	mainLayout->addWidget( m_rotate, 3, 1 );
 	m_rotate->setToolTip( i18n("Rotate actual selection") );
-*/
 
 	//X-Shear: (TODO: Set 5000 limit to real Karbon14 limit)
 	QLabel* sxLabel = new QLabel( i18n ( "SX:" ), this );
