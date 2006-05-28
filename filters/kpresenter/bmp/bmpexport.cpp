@@ -36,8 +36,8 @@
 typedef KGenericFactory<BmpExport> bmpExportFactory;
 K_EXPORT_COMPONENT_FACTORY( libkpresenterbmpexport, bmpExportFactory( "bmpexport" ) )
 
-BmpExport::BmpExport(KoFilter *fil, const char *name, const QStringList&lst)
-    : ImageExport(fil,name,lst)
+BmpExport::BmpExport(QObject *fil, const QStringList&lst)
+    : ImageExport(fil,lst)
 {
 }
 
@@ -48,7 +48,7 @@ BmpExport::~BmpExport()
 bool BmpExport::extraImageAttribute()
 {
     ExportSizeDia  *exportDialog = new ExportSizeDia( width, height,
-  						   0, "exportdialog");
+  						   0);
     bool ret = false;
     if (exportDialog->exec()) {
 	width  = exportDialog->width();

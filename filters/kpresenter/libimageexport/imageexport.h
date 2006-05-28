@@ -23,10 +23,10 @@
 #include <KoFilter.h>
 //Added by qt3to4:
 #include <QPixmap>
-#include <Q3CString>
+#include <koffice_export.h>
 
 class QPixmap;
-class ImageExport : public KoFilter
+class KOFFICEFILTER_EXPORT ImageExport : public KoFilter
 {
     Q_OBJECT
 

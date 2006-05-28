@@ -40,7 +40,7 @@
 typedef KGenericFactory<SvgExport> SvgExportFactory;
 K_EXPORT_COMPONENT_FACTORY( libkpresentersvgexport, SvgExportFactory( "svgexport" ) )
 
-SvgExport::SvgExport(KoFilter *, const char *, const QStringList&) 
+SvgExport::SvgExport(QObject *parent, const QStringList&) 
     : KoFilter(parent)
 {
 }

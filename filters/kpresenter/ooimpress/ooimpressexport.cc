@@ -35,7 +35,7 @@ typedef KGenericFactory<OoImpressExport> OoImpressExportFactory;
 K_EXPORT_COMPONENT_FACTORY( libooimpressexport, OoImpressExportFactory( "kofficefilters" ) )
 
 
-OoImpressExport::OoImpressExport( KoFilter *, const char *, const QStringList & )
+OoImpressExport::OoImpressExport( QObject *parent, const QStringList & )
     : KoFilter(parent)
     , m_currentPage( 0 )
     , m_objectIndex( 0 )
@@ -95,7 +95,7 @@ KoFilter::ConversionStatus OoImpressExport::convert( const QByteArray & from,
         return KoFilter::CreationError;
     }
 
-    Q3CString metaString = meta.toCString();
+    QByteArray metaString = meta.toByteArray();
     //kDebug(30518) << "meta :" << metaString << endl;
     m_storeout->write( metaString , metaString.length() );
     m_storeout->close();
@@ -116,7 +116,7 @@ KoFilter::ConversionStatus OoImpressExport::convert( const QByteArray & from,
         return KoFilter::CreationError;
     }
 
-    Q3CString contentString = content.toCString();
+    QByteArray contentString = content.toByteArray();
     //kDebug(30518) << "content :" << contentString << endl;
     m_storeout->write( contentString , contentString.length() );
     m_storeout->close();
@@ -134,7 +134,7 @@ KoFilter::ConversionStatus OoImpressExport::convert( const QByteArray & from,
         return KoFilter::CreationError;
     }
 
-    Q3CString settingsString = settings.toCString();
+    QByteArray settingsString = settings.toByteArray();
     //kDebug(30518) << "content :" << settingsString << endl;
     m_storeout->write( settingsString , settingsString.length() );
     m_storeout->close();
@@ -153,7 +153,7 @@ KoFilter::ConversionStatus OoImpressExport::convert( const QByteArray & from,
         return KoFilter::CreationError;
     }
 
-    Q3CString stylesString = styles.toCString();
+    QByteArray stylesString = styles.toByteArray();
     //kDebug(30518) << "styles :" << stylesString << endl;
     m_storeout->write( stylesString , stylesString.length() );
     m_storeout->close();
@@ -172,7 +172,7 @@ KoFilter::ConversionStatus OoImpressExport::convert( const QByteArray & from,
         return KoFilter::CreationError;
     }
 
-    Q3CString manifestString = manifest.toCString();
+    QByteArray manifestString = manifest.toByteArray();
     //kDebug(30518) << "manifest :" << manifestString << endl;
     m_storeout->write( manifestString , manifestString.length() );
     m_storeout->close();

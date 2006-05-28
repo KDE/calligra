@@ -50,6 +50,7 @@
 #include "global.h"
 #include <KoRect.h>
 #include <KoTextFormat.h>
+#include <koffice_export.h>
 #include "presstep.h"
 
 class KUrl;
@@ -90,7 +91,7 @@ class KPrPageEffects;
  *
  * It manages the graphical representation of all the objects.
  */
-class KPrCanvas : public QWidget
+class KPRESENTER_EXPORT KPrCanvas : public QWidget
 {
     Q_OBJECT
 

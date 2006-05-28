@@ -69,7 +69,7 @@ public:
 };
 
 
-PowerPointImport::PowerPointImport ( QObject*, const char*, const QStringList& )
+PowerPointImport::PowerPointImport ( QObject*parent, const QStringList& )
     : KoFilter(parent)
 {
   d = new Private;

@@ -1,4 +1,4 @@
-
+include_directories(${CMAKE_SOURCE_DIR}/filters/kword/libexport ${KOFFICECORE_INCLUDES} ${KOFFICEUI_INCLUDES} ${KOTEXT_INCLUDES})
 
 add_subdirectory( libimageexport )
 add_subdirectory( png )
@@ -12,16 +12,3 @@ add_subdirectory( kword )
 add_subdirectory( ooimpress )
 add_subdirectory( powerpoint )
 
-
-
-
-########### install files ###############
-
-
-
-
-
-
-#original Makefile.am contents follow:
-
-#SUBDIRS = libimageexport png bmp xbm xpm mng svg jpeg kword ooimpress powerpoint

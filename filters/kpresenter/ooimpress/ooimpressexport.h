@@ -35,7 +35,7 @@ class OoImpressExport : public KoFilter
 {
     Q_OBJECT
 public:
-    OoImpressExport( KoFilter * parent, const char * name, const QStringList & );
+    OoImpressExport( QObject * parent,const QStringList & );
     virtual ~OoImpressExport();
 
     virtual KoFilter::ConversionStatus convert( const QByteArray & from,

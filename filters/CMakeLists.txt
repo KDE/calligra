@@ -19,7 +19,7 @@ add_subdirectory( liboofilter )
 add_subdirectory(kspread)
 add_subdirectory(kchart)
 add_subdirectory(kword)
-#add_subdirectory(kpresenter)
+add_subdirectory(kpresenter)
 add_subdirectory(kformula)
 if(LIBART_FOUND)
 	add_subdirectory(karbon)
@@ -30,7 +30,7 @@ if(LIBXML2_FOUND AND LIBXSLT_FOUND)
 	add_subdirectory(xsltfilter)
 endif(LIBXML2_FOUND AND LIBXSLT_FOUND)	
 
-message (STATUS "Re-add kivio kpresenter filters")
+message (STATUS "Re-add kivio filters")
 
 
 ########### install files ###############

@@ -34,7 +34,7 @@
 #include "KPrCanvas.h"
 #include "imageexport.h"
 
-ImageExport::ImageExport(KoFilter *, const char *, const QStringList&)
+ImageExport::ImageExport(QObject *parent, const QStringList&)
     : KoFilter(parent)
 {
 }

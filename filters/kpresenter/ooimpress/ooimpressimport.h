@@ -28,7 +28,6 @@
 #include <q3dict.h>
 #include <QColor>
 //Added by qt3to4:
-#include <Q3CString>
 #include <KoStyleStack.h>
 #include <liststylestack.h>
 
@@ -44,7 +43,7 @@ class OoImpressImport : public KoFilter
 {
     Q_OBJECT
 public:
-    OoImpressImport( KoFilter * parent, const char * name, const QStringList & );
+    OoImpressImport( QObject * parent, const QStringList & );
     virtual ~OoImpressImport();
 
     virtual KoFilter::ConversionStatus convert( QByteArray const & from, QByteArray const & to );

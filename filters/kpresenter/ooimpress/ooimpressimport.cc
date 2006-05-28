@@ -48,7 +48,7 @@ typedef KGenericFactory<OoImpressImport> OoImpressImportFactory;
 K_EXPORT_COMPONENT_FACTORY( libooimpressimport, OoImpressImportFactory( "kofficefilters" ) )
 
 
-OoImpressImport::OoImpressImport( KoFilter *, const char *, const QStringList & )
+OoImpressImport::OoImpressImport( QObject*parent, const QStringList & )
     : KoFilter(parent),
       m_numPicture( 1 ),
       m_numSound(1),
@@ -105,7 +105,7 @@ KoFilter::ConversionStatus OoImpressImport::convert( QByteArray const & from, QB
     KoStoreDevice* out = m_chain->storageFile( "documentinfo.xml", KoStore::Write );
     if( out )
     {
-        Q3CString info = docinfo.toCString();
+        QByteArray info = docinfo.toByteArray();
         //kDebug(30518) << " info :" << info << endl;
         // WARNING: we cannot use KoStore::write(const QByteArray&) because it gives an extra NULL character at the end.
         out->write( info , info.length() );
@@ -118,7 +118,7 @@ KoFilter::ConversionStatus OoImpressImport::convert( QByteArray const & from, QB
     out = m_chain->storageFile( "maindoc.xml", KoStore::Write );
     if( out )
     {
-        Q3CString content = doccontent.toCString();
+        QByteArray content = doccontent.toByteArray();
         kDebug(30518) << " content :" << content << endl;
         out->write( content , content.length() );
     }

@@ -33,8 +33,8 @@
 typedef KGenericFactory<PngExport> PngExportFactory;
 K_EXPORT_COMPONENT_FACTORY( libkpresenterpngexport, PngExportFactory( "pngexport" ) )
 
-PngExport::PngExport(KoFilter *fil, const char *name, const QStringList&lst)
-    : ImageExport(fil,name,lst)
+PngExport::PngExport(QObject *fil, const QStringList&lst)
+    : ImageExport(fil,lst)
 {
 }
 
@@ -46,7 +46,7 @@ bool PngExport::extraImageAttribute()
 {
     bool ret = false;
     ExportSizeDia  *exportDialog = new ExportSizeDia( width, height,
-						   0, "exportdialog");
+						   0);
     if (exportDialog->exec()) {
 	width  = exportDialog->width();
 	height = exportDialog->height();

@@ -36,7 +36,7 @@ class PowerPointImport : public KoFilter
 Q_OBJECT
 
 public:
-  PowerPointImport ( QObject *parent, const char* name, const QStringList& );
+  PowerPointImport ( QObject *parent, const QStringList& );
   virtual ~PowerPointImport();
   virtual KoFilter::ConversionStatus convert( const QByteArray& from, 
         const QByteArray& to );

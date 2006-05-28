@@ -47,6 +47,7 @@
 #include <KoBrush.h>
 #include <KoPen.h>
 #include <KoRuler.h>
+#include <koffice_export.h>
 
 class Q3PopupMenu;
 class QSplitter;
@@ -124,7 +125,7 @@ private:
 };
 
 
-class KPrView : public KoView
+class KPRESENTER_EXPORT KPrView : public KoView
 {
     friend class PageBase;
     Q_OBJECT

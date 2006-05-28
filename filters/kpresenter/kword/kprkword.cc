@@ -34,7 +34,7 @@
 typedef KGenericFactory<KprKword> KprKwordFactory;
 K_EXPORT_COMPONENT_FACTORY( libkprkword, KprKwordFactory( "kofficefilters" ) )
 
-KprKword::KprKword(KoFilter *, const char *, const QStringList&) :
+KprKword::KprKword(QObject *parent,const QStringList&) :
     KoFilter(parent),
     outdoc( "DOC" )
 {
@@ -149,7 +149,7 @@ KoFilter::ConversionStatus KprKword::convert( const QByteArray& from, const QByt
         kError(30502) << "Unable to open output file!" << endl;
         return KoFilter::StorageCreationError;
     }
-    Q3CString cstring = outdoc.toCString(); // utf-8 already
+    QByteArray cstring = outdoc.toByteArray(); // utf-8 already
     out->write( cstring.data(), cstring.length() );
     return KoFilter::OK;
 }
@@ -327,9 +327,9 @@ void KprKword::convert()
                     QColor col;
                     col.setNamedColor(textElem.attribute( "color" ));
                     QDomElement e = outdoc.createElement("COLOR");
-                    e.setAttribute( "red", col.Qt::red() );
-                    e.setAttribute( "green", col.Qt::green() );
-                    e.setAttribute( "blue", col.Qt::blue() );
+                    e.setAttribute( "red", col.red() );
+                    e.setAttribute( "green", col.green() );
+                    e.setAttribute( "blue", col.blue() );
                     outFormatElem.appendChild( e );
                 }
                 if ( !textElem.attribute("textbackcolor").isEmpty())
@@ -337,9 +337,9 @@ void KprKword::convert()
                     QColor col;
                     col.setNamedColor(textElem.attribute( "textbackcolor" ));
                     QDomElement e = outdoc.createElement("TEXTBACKGROUNDCOLOR");
-                    e.setAttribute( "red", col.Qt::red() );
-                    e.setAttribute( "green", col.Qt::green() );
-                    e.setAttribute( "blue", col.Qt::blue() );
+                    e.setAttribute( "red", col.red() );
+                    e.setAttribute( "green", col.green() );
+                    e.setAttribute( "blue", col.blue() );
                     outFormatElem.appendChild( e );
                 }
 

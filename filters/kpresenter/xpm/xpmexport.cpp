@@ -33,8 +33,8 @@
 typedef KGenericFactory<XpmExport> xpmExportFactory;
 K_EXPORT_COMPONENT_FACTORY( libkpresenterxpmexport, xpmExportFactory( "xpmexport" ) )
 
-XpmExport::XpmExport(KoFilter *fil, const char *name, const QStringList&lst)
-    : ImageExport(fil,name,lst)
+XpmExport::XpmExport(QObject *fil, const QStringList&lst)
+    : ImageExport(fil,lst)
 {
 }
 
@@ -46,7 +46,7 @@ bool XpmExport::extraImageAttribute()
 {
     bool ret = false;
     ExportSizeDia  *exportDialog = new ExportSizeDia( width, height,
-						   0, "exportdialog");
+						   0);
     if (exportDialog->exec()) {
 	width  = exportDialog->width();
 	height = exportDialog->height();

@@ -5,7 +5,7 @@ include_directories( ${CMAKE_SOURCE_DIR}/kpresenter ${CMAKE_SOURCE_DIR}/lib/kote
 
 ########### next target ###############
 
-set(kpresentermngexport_PART_SRCS mngexport.cpp )
+set(kpresentermngexport_PART_SRCS mngexport.cpp ${libdialogfilter_SRCS})
 
 kde4_automoc(${kpresentermngexport_PART_SRCS})
 
@@ -13,7 +13,7 @@ kde4_add_plugin(kpresentermngexport WITH_PREFIX ${kpresentermngexport_PART_SRCS}
 
 kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kpresentermngexport )
 
-target_link_libraries(kpresentermngexport  ${KDE4_KDECORE_LIBS} kpresenterprivate dialogfilter kpresenterimageexport )
+target_link_libraries(kpresentermngexport  ${KDE4_KDECORE_LIBS} kpresenterprivate kpresenterimageexport )
 
 install_targets(${PLUGIN_INSTALL_DIR} kpresentermngexport )
 
