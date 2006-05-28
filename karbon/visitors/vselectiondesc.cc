@@ -31,10 +31,8 @@ VSelectionDescription::visitVSelection( VSelection& selection )
 {
 	if( selection.objects().count() == 1 )
 		VVisitor::visitVSelection( selection );
-	/* TODO: i18n function needs porting
 	else
-		m_desc = i18n( "One object", "%n objects", selection.objects().count() );
-	*/
+		m_desc = i18np( "One object", "%n objects", selection.objects().count() );
 }
 
 void
@@ -46,8 +44,7 @@ VSelectionDescription::visitVPath( VPath& composite )
 void
 VSelectionDescription::visitVGroup( VGroup &group )
 {
-	// TODO: i18n function needs porting
-	// m_desc = i18n( "One group, containing one object", "One group, containing %n objects", group.objects().count() );
+	m_desc = i18np( "One group, containing one object", "One group, containing %n objects", group.objects().count() );
 	m_shortdesc = !group.name().isEmpty() ? group.name() : i18n( "group" );
 }
 
