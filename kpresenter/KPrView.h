@@ -79,8 +79,6 @@ class TKSelectColorAction;
 class KoPartSelectAction;
 class KoPicture;
 class KoParagStyle;
-class KoLineStyleAction;
-class KoLineWidthAction;
 class KoRect;
 
 class KoCharSelectDia;
@@ -1015,8 +1013,9 @@ private:
     KAction *actionExtraLineEnd;
     KAction *actionExtraGroup;
     KAction *actionExtraUnGroup;
-    KoLineStyleAction *actionExtraPenStyle;
-    KoLineWidthAction *actionExtraPenWidth;
+    //KoLineStyleAction *actionExtraPenStyle;
+#warning "kde4: disable it"
+	//KoLineWidthAction *actionExtraPenWidth;
 
     KAction *actionScreenConfigPages;
     KAction *actionScreenAssignEffect;

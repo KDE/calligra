@@ -128,8 +128,8 @@ class KPrDocument : public KoDocument
 
   public:
     // constructor - destructor
-    KPrDocument( QWidget *parentWidget = 0, const char *widgetName = 0, QObject* doc = 0,
-                   const char* name = 0, bool singleViewMode = false );
+    KPrDocument( QWidget *parentWidget = 0, QObject* doc = 0,
+                   bool singleViewMode = false );
     ~KPrDocument();
 
     // Drawing

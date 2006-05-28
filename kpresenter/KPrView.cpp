@@ -115,8 +115,6 @@
 #include <QComboBox>
 #include <KoPartSelectAction.h>
 #include <KoTextZoomHandler.h>
-#include <Kolinestyleaction.h>
-#include <Kolinewidthaction.h>
 
 #include <stdlib.h>
 #include <signal.h>
@@ -847,7 +845,9 @@ void KPrView::toolsZoom()
 
 void KPrView::toolsLinePopup()
 {
-    switch (m_currentLineTool)
+#warning "kde4 port it"
+#if 0
+		switch (m_currentLineTool)
     {
     case LtLine:
         actionToolsLine->activate();
@@ -865,6 +865,7 @@ void KPrView::toolsLinePopup()
         actionToolsCubicBezierCurve->activate();
         break;
     }
+#endif
 }
 
 void KPrView::toolsLine()
@@ -882,6 +883,8 @@ void KPrView::toolsLine()
 
 void KPrView::toolsShapePopup()
 {
+#warning "kde4 port it"
+#if 0
     switch (m_currentShapeTool)
     {
     case StRectangle:
@@ -897,6 +900,7 @@ void KPrView::toolsShapePopup()
         actionToolsConvexOrConcavePolygon->activate();
         break;
     }
+#endif
 }
 
 void KPrView::toolsRectangle()
@@ -1112,6 +1116,8 @@ void KPrView::toolsConvexOrConcavePolygon()
 
 void KPrView::toolsClosedLinePopup()
 {
+#warning "kde4 port it"
+#if 0
     switch (m_currentClosedLineTool)
     {
     case CltFreehand:
@@ -1127,6 +1133,7 @@ void KPrView::toolsClosedLinePopup()
         actionToolsClosedCubicBezierCurve->activate();
         break;
     }
+#endif
 }
 
 void KPrView::toolsClosedFreehand()
@@ -2663,12 +2670,12 @@ void KPrView::setupActions()
     actionExtraLineEnd = new KAction( i18n("Line End"), "line_end", 0,
                                       this, SLOT( extraLineEnd() ),
                                       actionCollection(), "extra_lineend" );
-
+#warning "kde4 disable it"
+#if 0
     actionExtraPenStyle = new KoLineStyleAction( i18n("Outline Style"), "pen_style",
                                        this, SLOT( extraPenStyle(int) ),
                                        actionCollection(), "extra_penstyle" );
     actionExtraPenStyle->setShowCurrentSelection(false);
-
     actionExtraPenWidth = new KoLineWidthAction( i18n("Outline Width"), "pen_width",
                                        this, SLOT( extraPenWidth(double) ),
                                        actionCollection(), "extra_penwidth" );
@@ -2676,7 +2683,7 @@ void KPrView::setupActions()
     actionExtraPenWidth->setShowCurrentSelection(false);
     connect( kPresenterDoc(), SIGNAL( unitChanged( KoUnit::Unit ) ),
              actionExtraPenWidth, SLOT( setUnit( KoUnit::Unit ) ) );
-
+#endif
     actionExtraGroup = new KAction( i18n( "&Group Objects" ), "group", 
                                     QKeySequence( "Ctrl+G" ),
                                     this, SLOT( extraGroup() ),
@@ -3150,7 +3157,7 @@ void KPrView::objectSelectedChanged()
     actionBrushColor->setEnabled( !state || ( flags & KPrObjectProperties::PtBrush ) ); 
     actionExtraLineBegin->setEnabled( !state || ( flags & KPrObjectProperties::PtLineEnds ) ); 
     actionExtraLineEnd->setEnabled( !state || ( flags & KPrObjectProperties::PtLineEnds ) ); 
-    actionExtraPenWidth->setEnabled( !state || ( flags & KPrObjectProperties::PtPenWidth ) );
+    //actionExtraPenWidth->setEnabled( !state || ( flags & KPrObjectProperties::PtPenWidth ) );
 
     actionExtraProperties->setEnabled(state && !headerfooterselected);
     actionExtraRotate->setEnabled(state && !headerfooterselected);
@@ -4766,17 +4773,12 @@ void KPrView::addVariableActions( int type, const QStringList & texts,
 
 void KPrView::refreshCustomMenu()
 {
-    KActionPtrList lst2 = actionCollection()->actions("custom-variable-action");
-    Q3ValueList<KAction *> actions = lst2;
-    Q3ValueList<KAction *>::ConstIterator it2 = lst2.begin();
-    Q3ValueList<KAction *>::ConstIterator end = lst2.end();
-    QMap<QString, KShortcut> shortCuts;
-
-    for (; it2 != end; ++it2 )
-    {
-        shortCuts.insert((*it2)->text(), (*it2)->shortcut());
-        delete *it2;
-    }
+	QMap<QString, KShortcut> shortCuts;
+   QList<KAction *> actions = actionCollection()->actions("custom-variable-action");
+   for (int actNdx = 0; actNdx < actions.count(); ++actNdx) {
+		shortCuts.insert((actions[actNdx])->text(), (actions[actNdx])->shortcut());
+        delete actions[actNdx];
+    } 
 
     delete actionInsertCustom;
     actionInsertCustom = new KActionMenu( i18n( "&Custom" ),
@@ -4803,8 +4805,8 @@ void KPrView::refreshCustomMenu()
                 Q3CString name = QString("custom-action_%1").arg(i).toLatin1();
                 act = new KAction( varName, shortCuts[varName], this,
                                    SLOT( insertCustomVariable() ), actionCollection(), name );
-
-                act->setGroup( "custom-variable-action" );
+#warning "kde4 port it"
+                //act->setGroup( "custom-variable-action" );
                 actionInsertCustom->insert( act );
                 i++;
             }
@@ -4816,7 +4818,8 @@ void KPrView::refreshCustomMenu()
 
     act = new KAction( i18n("New..."), 0, this, SLOT( insertNewCustomVariable() ), actionCollection(),
                        QString("custom-action_%1").arg(i).toLatin1() );
-    act->setGroup( "custom-variable-action" );
+#warning "kde4: port it"
+	//act->setGroup( "custom-variable-action" );
     actionInsertCustom->insert( act );
 
     actionInsertCustom->popupMenu()->insertSeparator();
@@ -5387,19 +5390,16 @@ void KPrView::updateStyleList()
     KAccelGen::generate( lst, lstWithAccels );
     QMap<QString, KShortcut> shortCuts;
 
-    KActionPtrList lst2 = actionCollection()->actions("styleList");
-    Q3ValueList<KAction *> actions = lst2;
-    Q3ValueList<KAction *>::ConstIterator it = lst2.begin();
-    Q3ValueList<KAction *>::ConstIterator end = lst2.end();
-    for (; it != end; ++it )
-    {
-        shortCuts.insert( QString::fromUtf8( (*it)->name() ), (*it)->shortcut() );
-        actionFormatStyleMenu->remove( *it );
-        delete *it;
-    }
+	QList<KAction *> actions = actionCollection()->actions("styleList");
+    for (int actNdx = 0; actNdx < actions.count(); ++actNdx) {
+		shortCuts.insert( QString::fromUtf8( (actions[actNdx])->name() ), (actions[actNdx])->shortcut() );
+		actionFormatStyleMenu->remove( actions[actNdx] );
+		delete actions[actNdx];
+	}
 
 
     uint i = 0;
+	QActionGroup* styleGroup = new QActionGroup( this );
     for ( QStringList::Iterator it = lstWithAccels.begin(); it != lstWithAccels.end(); ++it, ++i )
     {
         KoParagStyle *style = m_pKPresenterDoc->styleCollection()->styleAt( i );
@@ -5409,9 +5409,10 @@ void KPrView::updateStyleList()
             KToggleAction* act = new KToggleAction( (*it),
                                      shortCuts[name], this, SLOT( slotStyleSelected() ),
                                      actionCollection(), name.toUtf8() );
-            act->setGroup( "styleList" );
-            act->setExclusiveGroup( "styleListAction" );
-            act->setToolTip( i18n( "Apply a paragraph style" ) );
+            //act->setGroup( "styleList" );
+            act->setActionGroup(styleGroup);
+            
+			act->setToolTip( i18n( "Apply a paragraph style" ) );
             actionFormatStyleMenu->insert( act );
         }
     }
@@ -5513,11 +5514,10 @@ void KPrView::insertComment()
         return;
     QString authorName;
     KoDocumentInfo * info = m_pKPresenterDoc->documentInfo();
-    KoDocumentInfoAuthor * authorPage = static_cast<KoDocumentInfoAuthor *>(info->page( "author" ));
-    if ( !authorPage )
+    if ( !info )
         kWarning() << "Author information not found in documentInfo !" << endl;
     else
-        authorName = authorPage->fullName();
+        authorName = info->authorInfo( "creator" );
 
     KoCommentDia *commentDia = new KoCommentDia( this, QString::null,authorName );
     if( commentDia->exec() )
@@ -5536,11 +5536,10 @@ void KPrView::editComment()
         {
             QString authorName;
             KoDocumentInfo * info = m_pKPresenterDoc->documentInfo();
-            KoDocumentInfoAuthor * authorPage = static_cast<KoDocumentInfoAuthor *>(info->page( "author" ));
-            if ( !authorPage )
+            if ( !info )
                 kWarning() << "Author information not found in documentInfo !" << endl;
             else
-                authorName = authorPage->fullName();
+                authorName = info->authorInfo( "creator" );
             QString oldValue = var->note();
             QString createDate = var->createdNote();
             KoCommentDia *commentDia = new KoCommentDia( this, oldValue, authorName, createDate);

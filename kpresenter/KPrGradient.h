@@ -25,7 +25,7 @@
 //Added by qt3to4:
 #include <QPixmap>
 #include <KoBrush.h>
-#include <kpixmap.h>
+#include <qpixmap.h>
 #include "global.h"
 
 class QPainter;
@@ -89,7 +89,7 @@ protected:
     QColor color1, color2;
     BCType bcType;
 
-    KPixmap m_pixmap;
+    QPixmap m_pixmap;
     int refCount;
     int xFactor, yFactor;
     bool unbalanced;

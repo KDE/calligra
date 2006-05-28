@@ -181,6 +181,7 @@ private:
     QPushButton *m_modifyPath;
 };
 
+#if 0
 class KPrConfigureTTSPage : public QWidget
 {
   Q_OBJECT
@@ -203,7 +204,7 @@ private:
   QLineEdit* m_leAcceleratorPrefixWord;
   KIntNumInput* m_iniPollingInterval;
 };
-
+#endif
 
 class KPrConfig : public KDialogBase
 {

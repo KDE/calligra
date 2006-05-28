@@ -156,7 +156,7 @@ kde4_add_dcop_skels(kpresenterprivate_LIB_SRCS
 
 kde4_add_library(kpresenterprivate SHARED ${kpresenterprivate_LIB_SRCS})
 
-target_link_libraries(kpresenterprivate  ${KDE4_KDECORE_LIBS} kofficeui kotext kopainter )
+target_link_libraries(kpresenterprivate  ${KDE4_KDE3SUPPORT_LIBS} kofficeui kotext kopainter )
 
 set_target_properties(kpresenterprivate PROPERTIES VERSION 4.0.0 SOVERSION 4 )
 install_targets(${LIB_INSTALL_DIR} kpresenterprivate )
@@ -172,7 +172,7 @@ kde4_add_plugin(kpresenterpart WITH_PREFIX ${kpresenterpart_PART_SRCS})
 
 kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kpresenterpart )
 
-target_link_libraries(kpresenterpart  ${KDE4_KDECORE_LIBS} kpresenterprivate )
+target_link_libraries(kpresenterpart  ${KDE4_KDE3SUPPORT_LIBS} kpresenterprivate kofficecore kofficeui)
 
 install_targets(${PLUGIN_INSTALL_DIR} kpresenterpart )
 
@@ -185,7 +185,7 @@ kde4_automoc(${kpresenter_KDEINIT_SRCS})
 
 kde4_add_kdeinit_executable( kpresenter ${kpresenter_KDEINIT_SRCS})
 
-target_link_libraries(kdeinit_kpresenter  ${KDE4_KDECORE_LIBS} kofficecore )
+target_link_libraries(kdeinit_kpresenter  ${KDE4_KDE3SUPPORT_LIBS} kofficecore kofficeui )
 
 install_targets(${LIB_INSTALL_DIR} kdeinit_kpresenter )
 

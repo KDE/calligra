@@ -140,7 +140,7 @@ KoDocument *KPrChild::hitTest( const QPoint &, const QMatrix & )
     return 0L;
 }
 
-KPrDocument::KPrDocument( QWidget *parentWidget, const char *widgetName, QObject* parent, const char* name,
+KPrDocument::KPrDocument( QWidget *parentWidget, QObject* parent,
                               bool singleViewMode )
     : KoDocument( parentWidget, parent, singleViewMode ),
       _gradientCollection(), m_customListTest( 0L ),

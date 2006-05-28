@@ -22,19 +22,19 @@
 #define KPRESENTER_FACTORY_H
 
 #include <KoFactory.h>
+#include <koffice_export.h>
 class KAboutData;
 
-class KPrFactory : public KoFactory
+class KPRESENTER_EXPORT KPrFactory : public KoFactory
 {
     Q_OBJECT
 public:
     KPrFactory( QObject* parent = 0, const char* name = 0 );
     ~KPrFactory();
 
-    virtual KParts::Part *createPartObject( QWidget *parentWidget = 0, const char *widgetName = 0, QObject *parent = 0,
-                                            const char *name = 0, const char *classname = "KoDocument",
+    virtual KParts::Part *createPartObject( QWidget *parentWidget = 0, QObject *parent = 0,
+                                            const char *classname = "KoDocument",
                                             const QStringList &args = QStringList() );
-
     static KInstance* global();
 
     // _Creates_ a KAboutData but doesn't keep ownership
