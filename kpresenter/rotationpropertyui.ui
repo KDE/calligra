@@ -26,10 +26,10 @@
             <property name="name">
                 <cstring>angleSlider</cstring>
             </property>
-            <property name="minValue">
+            <property name="minimum">
                 <number>-180</number>
             </property>
-            <property name="maxValue">
+            <property name="maximum">
                 <number>180</number>
             </property>
             <property name="lineStep">
@@ -77,10 +77,10 @@
                     <property name="value">
                         <number>0</number>
                     </property>
-                    <property name="minValue">
+                    <property name="minimum">
                         <number>-180</number>
                     </property>
-                    <property name="maxValue">
+                    <property name="maximum">
                         <number>180</number>
                     </property>
                     <property name="suffix">
