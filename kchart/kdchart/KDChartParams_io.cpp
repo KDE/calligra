@@ -2219,7 +2219,7 @@ bool KDChartParams::loadXML( const QDomDocument& doc )
                         QString tagName = element.tagName();
                         if( tagName == "Number" ) {
                             KDXML::readIntNode( element, curNumber );
-                        } else if( tagName == "FrameSettings" ) {
+                        } else if( tagName == "CustomBox" ) {
                             Q_ASSERT( curNumber != -1 ); // there was a Dataset tag before
                             KDChartCustomBox customBox;
                             KDChartCustomBox::readCustomBoxNode( element,

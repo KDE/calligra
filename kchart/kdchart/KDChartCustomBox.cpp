@@ -353,35 +353,35 @@ void KDChartCustomBox::createCustomBoxNode( QDomDocument& document,
 {
     QDomElement customBoxElement = document.createElement( elementName );
     parent.appendChild( customBoxElement );
-    KDXML::createIntNode( document, parent, "Rotation", custombox->_rotation );
-    KDXML::createStringNode( document, parent, "ContentText",
+    KDXML::createIntNode( document, customBoxElement, "Rotation", custombox->_rotation );
+    KDXML::createStringNode( document, customBoxElement, "ContentText",
             custombox->_content.text() );
-    KDXML::createFontNode( document, parent, "ContentFont",
+    KDXML::createFontNode( document, customBoxElement, "ContentFont",
             custombox->_content.font() );
-    KDXML::createIntNode( document, parent, "FontSize", custombox->_fontSize );
-    KDXML::createBoolNode( document, parent, "FontScaleGlobal",
+    KDXML::createIntNode( document, customBoxElement, "FontSize", custombox->_fontSize );
+    KDXML::createBoolNode( document, customBoxElement, "FontScaleGlobal",
             custombox->_fontScaleGlobal );
-    KDXML::createIntNode( document, parent, "DeltaX", custombox->_deltaX );
-    KDXML::createIntNode( document, parent, "DeltaY", custombox->_deltaY );
-    KDXML::createIntNode( document, parent, "Width", custombox->_width );
-    KDXML::createIntNode( document, parent, "Height", custombox->_height );
-    KDXML::createColorNode( document, parent, "Color", custombox->_color );
-    KDXML::createBrushNode( document, parent, "Paper", custombox->_paper );
-    KDXML::createIntNode( document, parent, "AnchorArea",
+    KDXML::createIntNode( document, customBoxElement, "DeltaX", custombox->_deltaX );
+    KDXML::createIntNode( document, customBoxElement, "DeltaY", custombox->_deltaY );
+    KDXML::createIntNode( document, customBoxElement, "Width", custombox->_width );
+    KDXML::createIntNode( document, customBoxElement, "Height", custombox->_height );
+    KDXML::createColorNode( document, customBoxElement, "Color", custombox->_color );
+    KDXML::createBrushNode( document, customBoxElement, "Paper", custombox->_paper );
+    KDXML::createIntNode( document, customBoxElement, "AnchorArea",
             custombox->_anchorArea );
-    KDXML::createStringNode( document, parent, "AnchorPos",
+    KDXML::createStringNode( document, customBoxElement, "AnchorPos",
             KDChartEnums::positionFlagToString( custombox->_anchorPos ) );
-    KDXML::createIntNode( document, parent, "AnchorAlign",
+    KDXML::createIntNode( document, customBoxElement, "AnchorAlign",
             custombox->_anchorAlign );
-    KDXML::createIntNode( document, parent, "DataRow",
+    KDXML::createIntNode( document, customBoxElement, "DataRow",
             custombox->_dataRow );
-    KDXML::createIntNode( document, parent, "DataCol",
+    KDXML::createIntNode( document, customBoxElement, "DataCol",
             custombox->_dataCol );
-    KDXML::createIntNode( document, parent, "Data3rd",
+    KDXML::createIntNode( document, customBoxElement, "Data3rd",
             custombox->_data3rd );
-    KDXML::createIntNode( document, parent, "DeltaAlign",
+    KDXML::createIntNode( document, customBoxElement, "DeltaAlign",
             custombox->_deltaAlign );
-    KDXML::createBoolNode( document, parent, "DeltaScaleGlobal",
+    KDXML::createBoolNode( document, customBoxElement, "DeltaScaleGlobal",
             custombox->_deltaScaleGlobal );
 }
 
