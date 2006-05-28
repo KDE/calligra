@@ -114,8 +114,7 @@ VDocument::drawPage( VPainter *p, const KoPageLayout &pl, bool showPageMargins )
 		int mb = int( pl.ptBottom );
 
 		VStroke s( 0, 1 );
-		// TODO: needs porting:
-		// s.setColor( Qt::blue );
+		s.setColor( QColor( "blue" ) );
 		Q3ValueList<float> dashes;
 		s.dashPattern().setArray( dashes << 5 << 5 );
 		p->setPen( s );
