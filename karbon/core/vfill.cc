@@ -132,7 +132,7 @@ VFill::load( const QDomElement& element )
 
 	// load color:
 	QDomNodeList list = element.childNodes();
-	for( uint i = 0; i < list.count(); ++i )
+	for( int i = 0; i < list.count(); ++i )
 	{
 		if( list.item( i ).isElement() )
 		{

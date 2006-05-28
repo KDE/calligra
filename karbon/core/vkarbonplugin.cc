@@ -19,7 +19,7 @@
 
 #include "vkarbonplugin.h"
 
-VKarbonPlugin::VKarbonPlugin( QObject *parent, const char* name ) : Plugin( parent/*, name*/ )
+VKarbonPlugin::VKarbonPlugin( QObject *parent, const char* /*name*/ ) : Plugin( parent/*, name*/ )
 {
 }
 

@@ -422,7 +422,7 @@ VPath::transformByViewbox( const QDomElement &element, QString viewbox )
 	if( ! viewbox.isEmpty() )
 	{
 		// allow for viewbox def with ',' or whitespace
-		QStringList points = QStringList::split( ' ', viewbox.replace( ',', ' ' ).simplified() );
+		QStringList points = viewbox.replace( ',', ' ' ).simplified().split( ' ', QString::SkipEmptyParts );
 
 		double w = KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "width", QString::null ) );
 		double h = KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "height", QString::null ) );
@@ -459,7 +459,7 @@ VPath::loadOasis( const QDomElement &element, KoOasisLoadingContext &context )
 	else if( element.localName() == "custom-shape" )
 	{
 		QDomNodeList list = element.childNodes();
-		for( uint i = 0; i < list.count(); ++i )
+		for( int i = 0; i < list.count(); ++i )
 		{
 			if( list.item( i ).isElement() )
 			{
@@ -502,7 +502,7 @@ VPath::load( const QDomElement& element )
 	}
 	m_fillRule = element.attribute( "fillRule" ) == 0 ? evenOdd : winding;
 	QDomNodeList list = element.childNodes();
-	for( uint i = 0; i < list.count(); ++i )
+	for( int i = 0; i < list.count(); ++i )
 	{
 		if( list.item( i ).isElement() )
 		{
@@ -597,17 +597,17 @@ VPath::parseTransform( const QString &transform )
 	QMatrix result;
 
 	// Split string for handling 1 transform statement at a time
-	QStringList subtransforms = QStringList::split(')', transform);
+	QStringList subtransforms = transform.split(')', QString::SkipEmptyParts);
 	QStringList::ConstIterator it = subtransforms.begin();
 	QStringList::ConstIterator end = subtransforms.end();
 	for(; it != end; ++it)
 	{
-		QStringList subtransform = QStringList::split('(', (*it));
+		QStringList subtransform = (*it).split('(', QString::SkipEmptyParts);
 
-		subtransform[0] = subtransform[0].trimmed().lower();
+		subtransform[0] = subtransform[0].trimmed().toLower();
 		subtransform[1] = subtransform[1].simplified();
 		QRegExp reg("[,( ]");
-		QStringList params = QStringList::split(reg, subtransform[1]);
+		QStringList params = subtransform[1].split(reg, QString::SkipEmptyParts);
 
 		if(subtransform[0].startsWith(";") || subtransform[0].startsWith(","))
 			subtransform[0] = subtransform[0].right(subtransform[0].length() - 1);
@@ -662,17 +662,17 @@ VPath::parseOasisTransform( const QString &transform )
 	QMatrix result;
 
 	// Split string for handling 1 transform statement at a time
-	QStringList subtransforms = QStringList::split(')', transform);
+	QStringList subtransforms = transform.split(')', QString::SkipEmptyParts);
 	QStringList::ConstIterator it = subtransforms.begin();
 	QStringList::ConstIterator end = subtransforms.end();
 	for(; it != end; ++it)
 	{
-		QStringList subtransform = QStringList::split('(', (*it));
+		QStringList subtransform = (*it).split('(', QString::SkipEmptyParts);
 
-		subtransform[0] = subtransform[0].trimmed().lower();
+		subtransform[0] = subtransform[0].trimmed().toLower();
 		subtransform[1] = subtransform[1].simplified();
 		QRegExp reg("[,( ]");
-		QStringList params = QStringList::split(reg, subtransform[1]);
+		QStringList params = subtransform[1].split(reg, QString::SkipEmptyParts);
 
 		if(subtransform[0].startsWith(";") || subtransform[0].startsWith(","))
 			subtransform[0] = subtransform[0].right(subtransform[0].length() - 1);

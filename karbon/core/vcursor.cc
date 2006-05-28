@@ -19,7 +19,7 @@
 
 #include "vcursor.h"
 #include <qbitmap.h>
-//Added by qt3to4:
+#include <QSize>
 #include <QPixmap>
 
 static const char* const cminus[] = {
@@ -112,7 +112,7 @@ QCursor VCursor::crossHair()
 		0x80, 0x00, 0xff, 0x7f, 0x80, 0x00, 0x80, 0x00, 0x80, 0x00, 0x80, 0x00,
 		0x80, 0x00, 0x80, 0x00, 0x80, 0x00};
 
-	QBitmap b = QBitmap( 15, 15, cross_bits, true );
+	QBitmap b = QBitmap::fromData( QSize(15, 15), cross_bits);
 	QBitmap m = b.createHeuristicMask( false );
 
     return QCursor( b, m, 7, 7 );
@@ -125,7 +125,7 @@ QCursor VCursor::needleArrow()
 		0x80, 0x03, 0x80, 0x07, 0x00, 0x0f, 0x00, 0x1f, 0x00, 0x3e, 0x00, 0x7e,
 		0x00, 0x7c, 0x00, 0x1c, 0x00, 0x18, 0x00, 0x00};
 
-	QBitmap b = QBitmap( 16, 16, needle_bits, true );
+	QBitmap b = QBitmap::fromData( QSize(16, 16), needle_bits );
 	QBitmap m = b.createHeuristicMask( false );
 
     return QCursor( b, m, 2, 0 );
@@ -138,7 +138,7 @@ QCursor VCursor::needleMoveArrow()
 		0x80, 0x03, 0x80, 0x07, 0x10, 0x0f, 0x38, 0x1f, 0x54, 0x3e, 0xfe, 0x7e,
 		0x54, 0x7c, 0x38, 0x1c, 0x10, 0x18, 0x00, 0x00};
 
-	QBitmap b = QBitmap( 16, 16, needle_move_bits, true );
+	QBitmap b = QBitmap::fromData( QSize(16, 16), needle_move_bits );
 	QBitmap m = b.createHeuristicMask( false );
 
     return QCursor( b, m, 2, 0 );
@@ -161,7 +161,7 @@ QCursor VCursor::horzMove()
 		0x0c, 0x18, 0xfe, 0x3f, 0x0c, 0x18, 0x08, 0x08, 0x00, 0x00, 0x00, 0x00,
 		0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 
-	QBitmap b = QBitmap( 15, 15, horzMove_bits, true );
+	QBitmap b = QBitmap::fromData( QSize(15, 15), horzMove_bits );
 	QBitmap m = b.createHeuristicMask( false );
 
     return QCursor( b, m, 7, 7 );

@@ -24,10 +24,11 @@ VImage::VImage( VObject *parent, const QString &fname ) : VObject( parent ), m_i
 	m_fill = new VFill();
 	m_image = new QImage( m_fname );
 	if( m_image->depth() != 32 )
-        *m_image = m_image->convertDepth( 32 );
-	m_image->setAlphaBuffer( true );
-	*m_image = m_image->swapRGB();
-	*m_image = m_image->mirror( false, true );
+        *m_image = m_image->convertToFormat( QImage::Format_ARGB32 );
+	// TODO: Check if the inversion also needs to include the alpha channel !!!
+	// Previous, in Qt3, the swapRGB function was used.
+	m_image->invertPixels(QImage::InvertRgb);
+	*m_image = m_image->mirrored( false /*horizontal*/, true /*vertical*/ );
 }
 
 VImage::VImage( const VImage &other ) : VObject( other )
@@ -145,14 +146,15 @@ VImage::load( const QDomElement& element )
 						element.attribute( "m22", "1.0" ).toDouble(),
 						element.attribute( "dx", "0.0" ).toDouble(),
 						element.attribute( "dy", "0.0" ).toDouble() );
-	kDebug(38000) << "VImage::load : " << m_fname.latin1() << endl;
+	kDebug(38000) << "VImage::load : " << m_fname.toLatin1() << endl;
 	delete m_image;
 	m_image = new QImage( m_fname );
 	if( m_image->depth() != 32 )
-        *m_image = m_image->convertDepth( 32 );
-	m_image->setAlphaBuffer( true );
-	*m_image = m_image->swapRGB();
-	*m_image = m_image->mirror( false, true );
+        *m_image = m_image->convertToFormat( QImage::Format_ARGB32 );
+	// TODO: Check if the inversion also needs to include the alpha channel !!!
+	// Previous, in Qt3, the swapRGB function was used.
+	m_image->invertPixels(QImage::InvertRgb);
+	*m_image = m_image->mirrored( false /*horizontal*/ , true /*vertical*/ );
 	m_boundingBox = QRectF( 0, 0, m_image->width(), m_image->height() );
 }
 

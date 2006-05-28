@@ -57,7 +57,7 @@ VDashPattern::load( const QDomElement& element )
 	float value;
 
 	QDomNodeList list = element.childNodes();
-	for( uint i = 0; i < list.count(); ++i )
+	for( int i = 0; i < list.count(); ++i )
 	{
 		if( list.item( i ).isElement() )
 		{

@@ -48,8 +48,8 @@ VPattern::load( const QString &tilename )
 		return;
 	}
  
-	m_image = m_image.convertDepth( 32 );
-	m_pixmap.convertFromImage(m_image, Qt::AutoColor);
+	m_image = m_image.convertToFormat( QImage::Format_ARGB32 );
+	m_pixmap.fromImage(m_image, Qt::AutoColor);
 	if( m_image.width() > THUMB_SIZE || m_image.height() > THUMB_SIZE )
 	{
 		int xsize = THUMB_SIZE;
@@ -69,8 +69,8 @@ VPattern::load( const QString &tilename )
 			if(xsize > 30) xsize = 30;
 		}
 
-		QImage thumbImg = m_image.smoothScale( xsize, ysize );
-		m_pixmapThumb.convertFromImage( thumbImg );
+		QImage thumbImg = m_image.scaled( xsize, ysize, Qt::IgnoreAspectRatio );
+		m_pixmapThumb.fromImage( thumbImg );
 		validThumb = true;
 	}
 	m_valid = !m_image.isNull();

@@ -290,7 +290,7 @@ void
 VDocument::loadDocumentContent( const QDomElement& doc )
 {
 	QDomNodeList list = doc.childNodes();
-	for( uint i = 0; i < list.count(); ++i )
+	for( int i = 0; i < list.count(); ++i )
 	{
 		if( list.item( i ).isElement() )
 		{
@@ -322,5 +322,5 @@ QString
 VDocument::objectName( const VObject *obj ) const
 {
 	QMap<const VObject *, QString>::ConstIterator it = m_objectNames.find( obj );
-	return it == m_objectNames.end() ? 0L : it.data();
+	return it == m_objectNames.end() ? 0L : it.value();
 }

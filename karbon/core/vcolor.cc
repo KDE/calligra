@@ -157,7 +157,7 @@ VColor::convertToColorSpace( const VColorSpace colorSpace )
 				m_value[2] = b;
 			}
 		}
-		else if( m_colorSpace == Qt::gray )
+		else if( m_colorSpace == gray )
 		{
 			m_value[0] = m_value[0];	// For readability.
 			m_value[1] = m_value[0];
@@ -181,7 +181,7 @@ VColor::convertToColorSpace( const VColorSpace colorSpace )
 		{
 // TODO
 		}
-		else if( m_colorSpace == Qt::gray )
+		else if( m_colorSpace == gray )
 		{
 			m_value[1] = 0.0;
 			m_value[2] = 0.0;
@@ -257,14 +257,14 @@ VColor::convertToColorSpace( const VColorSpace colorSpace )
 		{
 			// Do nothing.
 		}
-		else if( m_colorSpace == Qt::gray )
+		else if( m_colorSpace == gray )
 		{
 			m_value[1] = 0.0;
 			m_value[2] = m_value[0];
 			m_value[0] = 0.0;
 		}
 	}
-	else if( colorSpace == Qt::gray )
+	else if( colorSpace == gray )
 	{
 		if( m_colorSpace == rgb )
 		{
@@ -286,7 +286,7 @@ VColor::convertToColorSpace( const VColorSpace colorSpace )
 		{
 			m_value[0] = m_value[2];
 		}
-		else if( m_colorSpace == Qt::gray )
+		else if( m_colorSpace == gray )
 		{
 			// Do nothing.
 		}
@@ -304,7 +304,7 @@ VColor::save( QDomElement& element ) const
 	if( m_opacity != 1.0 )
 		me.setAttribute( "opacity", m_opacity );
 
-	if( m_colorSpace == Qt::gray )
+	if( m_colorSpace == gray )
 		me.setAttribute( "v", m_value[0] );
 	else
 	{
@@ -334,7 +334,7 @@ VColor::load( const QDomElement& element )
 
 	m_opacity = element.attribute( "opacity", "1.0" ).toFloat();
 
-	if( m_colorSpace == Qt::gray )
+	if( m_colorSpace == gray )
 		m_value[0] = element.attribute( "v", "0.0" ).toFloat();
 	else
 	{

@@ -314,7 +314,7 @@ VGradient::loadOasis( const QDomElement &object, KoStyleStack &/*stack*/, VObjec
 	
 		// load stops
 		QDomNodeList list = object.childNodes();
-		for( uint i = 0; i < list.count(); ++i )
+		for( int i = 0; i < list.count(); ++i )
 		{
 			if( list.item( i ).isElement() )
 			{
@@ -348,7 +348,7 @@ VGradient::load( const QDomElement& element )
 
 	// load stops
 	QDomNodeList list = element.childNodes();
-	for( uint i = 0; i < list.count(); ++i )
+	for( int i = 0; i < list.count(); ++i )
 	{
 		if( list.item( i ).isElement() )
 		{

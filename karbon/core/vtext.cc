@@ -377,7 +377,7 @@ VText::load( const QDomElement& element )
 	}
 
 	// load text glyphs:
-	for( uint i = startElement; i < list.count(); ++i )
+	for( int i = startElement; i < list.count(); ++i )
 	{
 		if( list.item( i ).isElement() )
 		{
@@ -459,7 +459,7 @@ VText::traceText()
 	QString filename = buildRequest( m_font.family(), weight, slant, m_font.pointSize(), id );
 	m_glyphs.clear();
 
-	kDebug(38000) << "Loading " << filename.latin1() << " for requested font \"" << m_font.family().latin1() << "\", " << m_font.pointSize() << " pt." << endl;
+	kDebug(38000) << "Loading " << filename.toLatin1() << " for requested font \"" << m_font.family().toLatin1() << "\", " << m_font.pointSize() << " pt." << endl;
 
 	FT_UInt glyphIndex;
 	FT_Face fontFace;
@@ -517,7 +517,7 @@ VText::traceText()
 	float l = 0;
 	Q3ValueList<float> glyphXAdvance;
 	Q3ValueList<float> glyphYAdvance;
-	for( unsigned int i = 0; i < m_text.length(); i++ )
+	for( int i = 0; i < m_text.length(); i++ )
 	{
 		// get the glyph index for the current character
 		QChar character = m_text.at( i );
@@ -583,6 +583,7 @@ VText::traceText()
 		case Qt::DockLeft: x += 0; break;
 		case Center: x -=  0.5 * l; break;
 		case Qt::DockRight: x -= l; break;
+		default: break;
 	}
 	float y = 0;
 	float dx = 0;
@@ -598,7 +599,7 @@ VText::traceText()
 	float fsx = 0;
 	float yoffset = ( m_position == Above ? 0 : ( m_position == On ? m_font.pointSize() / 3 : m_font.pointSize() / 1.5 ) );
 	kDebug(38000) << "Position: " << m_position << " -> " << yoffset << endl;
-	for( unsigned int i = 0; i < m_text.length(); i++ )
+	for( int i = 0; i < m_text.length(); i++ )
 	{
 		VPath* composite = m_glyphs.at( i );
 		if( ! composite ) 
@@ -663,7 +664,7 @@ VText::buildRequest( QString family, int weight, int slant, double size, int &id
 {
 	// Strip those stupid [Xft or whatever]...
 	int pos;
-	if( ( pos = family.find( '[' ) ) )
+	if( ( pos = family.indexOf( '[' ) ) )
 		family = family.left( pos );
 
 	// Use FontConfig to locate & select fonts and use  FreeType2 to open them
@@ -675,7 +676,7 @@ VText::buildRequest( QString family, int weight, int slant, double size, int &id
 							  FC_SIZE, FcTypeDouble, size, NULL );
 
 	// Add font name
-	FcPatternAddString( pattern, FC_FAMILY, reinterpret_cast<const FcChar8 *>( family.latin1() ) );
+	FcPatternAddString( pattern, FC_FAMILY, reinterpret_cast<const FcChar8 *>( family.toLatin1().data() ) );
 
 	// Disable hinting
 	FcPatternAddBool( pattern, FC_HINTING, FcFalse );
@@ -712,7 +713,7 @@ VText::buildRequest( QString family, int weight, int slant, double size, int &id
 				if(	FcPatternGetString(pattern, FC_FILE, 0, &temp) != FcResultMatch ||
 					FcPatternGetInteger(pattern, FC_INDEX, 0, &id) != FcResultMatch )
 				{
-					kDebug(38000) << "VText::buildRequest(), could not load font file for requested font \"" << family.latin1() << "\"" << endl;
+					kDebug(38000) << "VText::buildRequest(), could not load font file for requested font \"" << family.toLatin1() << "\"" << endl;
 					return QString::null;
 				}
 		

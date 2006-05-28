@@ -196,7 +196,7 @@ VGroup::loadOasis( const QDomElement &element, KoOasisLoadingContext &context )
 	m_objects.setAutoDelete( false );
 
 	QDomNodeList list = element.childNodes();
-	for( uint i = 0; i < list.count(); ++i )
+	for( int i = 0; i < list.count(); ++i )
 	{
 		if( list.item( i ).isElement() )
 		{
@@ -265,7 +265,7 @@ VGroup::load( const QDomElement& element )
 	VObject::load( element );
 
 	QDomNodeList list = element.childNodes();
-	for( uint i = 0; i < list.count(); ++i )
+	for( int i = 0; i < list.count(); ++i )
 	{
 		if( list.item( i ).isElement() )
 		{
